@@ -6,21 +6,16 @@ from explainer.cs import *  # noqa: F403
 from videos.cs.cs37.common import (DATA, HEAD, KERN, LAM, NO, PART, YES, box, grid_table, load, log_axes)
 
 
-class Cdn(VoiceoverScene):
+class Cdn(WatchScene):
     def construct(self):
         self.card()
         self.edge()
         self.zipf()
-        self.caches()
 
     def card(self):
-        card = chapter_card(14, r"Caches at the edge", r"Why serve the world from a thousand places?",
-                            lit=(1998, 2002), extra=((1998, r"Akamai"), (1999, r"Breslau et al.: \ Zipf-like "
+        self.chapter(14, r"Caches at the edge", r"Why serve the world from a thousand places?", lit=(1998, 2002), extra=((1998, r"Akamai"), (1999, r"Breslau et al.: \ Zipf-like "
                                                                                r"requests"),
-                                                     (2002, r"Che, Tung and Wang")), part=PART)
-        with self.voiceover("Chapter fourteen. Caches at the edge."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+                                                     (2002, r"Che, Tung and Wang")), part=PART, said="Chapter fourteen. Caches at the edge.")
 
     def edge(self):
         head = label(r"Move the bytes closer", font_size=36).to_edge(UP, buff=0.3)
@@ -64,6 +59,10 @@ class Cdn(VoiceoverScene):
         self.clear_scene()
 
     def zipf(self):
+        self.ask(r"The $k$-th most common word of the novels \\ appears in proportion to...", [r"$1$", r"$1/k$",
+                 r"$e^{-k}$"], 1,
+                 say="Rank the words of the novels by frequency. How often does the k-th most common appear?",
+                 reveal="Roughly one over k: Zipf's law. A small cache catches most requests.")
         c = load("cdn")
         head = label(r"Zipf's law, \ in the novels", font_size=36).to_edge(UP, buff=0.3)
         g = log_axes([0, 5, 1], [0, 6, 1], x_length=6.4, y_length=4.0, x_label=r"rank of the word",
@@ -106,54 +105,6 @@ class Cdn(VoiceoverScene):
         self.wait(0.4)
         self.clear_scene()
 
-    def caches(self):
-        c = load("cdn")
-        head = label(r"An LRU cache on the novels", font_size=36).to_edge(UP, buff=0.3)
-        rows = [[f"{r['size']:,}", f"{r['size'] / c['distinct'] * 100:.2g}\\%", f"{r['ideal'] * 100:.1f}\\%",
-                 f"{r['che'] * 100:.1f}\\%", f"{r['lru'] * 100:.1f}\\%"] for r in c["rows"]]
-        tab = grid_table([r"cache size, \ words", r"of the vocabulary", r"best static", r"Che's formula",
-                          r"LRU, \ measured"], rows, widths=[2.6, 2.4, 1.9, 2.2, 2.2], row_h=0.44, font_size=20,
-                         mono_cols=())
-        tab.next_to(head, DOWN, buff=0.45).set_x(0)
-        for k in range(1, len(rows) + 1):
-            tab.cells[k][3].set_color(KERN)
-            tab.cells[k][4].set_color(YES)
-        lines = VGroup(
-            wrapped_label(r"requests: \ the first two million words of the novels, \ in order; \ the cache keeps "
-                          r"the most recently used words", 12.4, font_size=20, color=GREY_A),
-            MathTex(r"\text{Che: } \sum_i \big(1 - e^{-p_i T}\big) = \text{size}, \qquad \text{hit rate} = \sum_i "
-                    r"p_i\big(1 - e^{-p_i T}\big)", font_size=30, color=KERN),
-            wrapped_label(r"a cache holding 1.7\% of the vocabulary answers 79\% of requests: \ that is Zipf's law "
-                          r"at work", 12.4, font_size=21, color=WHITE),
-            wrapped_label(r"LRU beats Che's prediction because text is not independent draws: \ \texttt{whale} "
-                          r"comes in bursts, \ as real web traffic does, \ and recency captures it", 12.4,
-                          font_size=21, color=YES),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.22).next_to(tab, DOWN, buff=0.35)
-        lines[1].set_x(0)
-        with self.voiceover(
-            "Treat each word of the novels, in order, as a request, and put a cache in front of it that keeps the "
-            "most recently used words: least-recently-used replacement, as in Part 9. <bookmark mark='a'/> A cache "
-            "of a thousand words, under two percent of the vocabulary, answers seventy-nine percent of the "
-            "requests. That is Zipf's law at work. <bookmark mark='b'/> In 2002 Hao Che and his colleagues found a "
-            "simple, accurate way to predict an LRU cache's hit rate when requests are independent: each object "
-            "stays in the cache for about the same characteristic time T, set so that the expected number of "
-            "objects in it equals its size. <bookmark mark='c'/> Here the formula underestimates, by up to ten "
-            "points. The reason is in the text: words are not independent draws. Whale comes in bursts, in the "
-            "chapters about whales, and recency captures that, just as it captures the bursts of real web traffic "
-            "when something becomes popular. At ten thousand words, LRU matches the best static choice of the most "
-            "common words."
-        ) as vo:
-            self.play(FadeIn(head), FadeIn(VGroup(*tab.cells[0])), Create(tab.rule), FadeIn(lines[0]))
-            self.play(LaggedStart(*[FadeIn(VGroup(*tab.cells[k][:3])) for k in range(1, 5)], lag_ratio=0.2))
-            self.play(LaggedStart(*[FadeIn(tab.cells[k][4]) for k in range(1, 5)], lag_ratio=0.2))
-            vo.wait_until("a")
-            self.play(FadeIn(lines[2]))
-            vo.wait_until("b")
-            self.play(Write(lines[1]), LaggedStart(*[FadeIn(tab.cells[k][3]) for k in range(1, 5)], lag_ratio=0.2))
-            vo.wait_until("c")
-            self.play(FadeIn(lines[3]))
-        self.wait(0.4)
-        self.clear_scene()
 
 
 _ = (HEAD, NO)

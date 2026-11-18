@@ -23,11 +23,11 @@ def hbars(rows, width=7.0, h=0.5, gap=0.32, vmax=None, font=20, unit=" s"):
     return g
 
 
-class Hook(VoiceoverScene):
+class Hook(WatchScene):
     def construct(self):
         self.fetch()
         self.windows()
-        self.plan()
+        self.title(PART)
 
     def fetch(self):
         j = load("job")
@@ -108,31 +108,6 @@ class Hook(VoiceoverScene):
         self.wait(0.5)
         self.clear_scene()
 
-    def plan(self):
-        title = label(rf"Part {PART}: \ Networks II: \ Reliable Conversation", font_size=38).to_edge(UP, buff=0.3)
-        smap = series_map(current=PART, done=PART - 1).scale(0.92).next_to(title, DOWN, buff=0.35)
-        obj = objectives_card([
-            r"reliability from scratch: \ stop-and-wait, \ sliding windows, \ and the sequence space they need",
-            r"TCP: \ the handshake, \ cumulative ACKs, \ timers that learn the round trip",
-            r"October 1986: \ the Internet's congestion collapse, \ and Jacobson's cure",
-            r"AIMD, \ proved fair; \ the Mathis formula; \ queues, \ bufferbloat, \ CoDel",
-            r"CUBIC, \ BBR, \ and TCP as an optimization algorithm",
-            r"above TCP: \ DNS, \ HTTP/2 and QUIC, \ caches and Zipf's law",
-        ], font_size=25).move_to(DOWN * 0.2)
-        with self.voiceover(
-            "This is Part 37 of Computer Science, Built: Networks, reliable conversation. <bookmark mark='a'/> We "
-            "build reliable delivery from nothing, prove how many sequence numbers it needs, and then build TCP: its "
-            "handshake, its acknowledgements, and timers that learn the round trip. We reproduce the collapse of "
-            "October 1986, when the Internet's throughput fell a thousandfold, and the cure, additive increase and "
-            "multiplicative decrease, which we prove fair. We derive the throughput of a TCP flow from its loss rate, "
-            "watch queues swell, and meet CUBIC and BBR, and the theorem that TCP is quietly solving an optimization "
-            "problem. Then we climb: names, the web, and caches."
-        ) as vo:
-            self.play(FadeIn(title), FadeIn(smap))
-            vo.wait_until("a")
-            self.play(FadeOut(smap), FadeIn(obj))
-        self.wait(0.5)
-        self.clear_scene()
 
 
 _ = (ACKC, LOSS, YES)

@@ -5,22 +5,16 @@ from videos.cs.cs37.common import (ACKC, DATA, HEAD, KERN, LAM, NO, PART, SEG, W
                                    seq_diagram)
 
 
-class Tcp(VoiceoverScene):
+class Tcp(WatchScene):
     def construct(self):
         self.card()
         self.header()
         self.handshake()
-        self.cookies()
-        self.teardown()
         self.flow_control()
 
     def card(self):
-        card = chapter_card(4, r"TCP", r"What does a real reliable stream need?", lit=(1974, 1996),
-                            extra=((1981, r"RFC 793"), (1992, r"window scaling"), (1996, r"Bernstein: \ SYN "
-                                                                                       r"cookies")), part=PART)
-        with self.voiceover("Chapter four. TCP."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(4, r"TCP", r"What does a real reliable stream need?", lit=(1974, 1996), extra=((1981, r"RFC 793"), (1992, r"window scaling"), (1996, r"Bernstein: \ SYN "
+                                                                                       r"cookies")), part=PART, said="Chapter four. TCP.")
 
     def header(self):
         head = label(r"Twenty bytes of header", font_size=36).to_edge(UP, buff=0.3)
@@ -72,6 +66,10 @@ class Tcp(VoiceoverScene):
         self.clear_scene()
 
     def handshake(self):
+        self.ask(r"A new TCP connection, then a request. \\ The response's first byte arrives after...",
+                 [r"half a round trip", r"one round trip", r"two round trips"], 2,
+                 say="A client opens a TCP connection and sends a request. When does the first byte of the response arrive?",
+                 reveal="After two round trips: one for the handshake, one for the request.")
         h = load("handshake")
         head = label(r"The three-way handshake", font_size=36).to_edge(UP, buff=0.3)
         ev = [(0.0, 1.0, r"SYN, \ seq = $x$", True, SEG), (1.0, 2.0, r"SYN+ACK, \ seq = $y$, \ ack = $x{+}1$",
@@ -108,100 +106,7 @@ class Tcp(VoiceoverScene):
         self.wait(0.4)
         self.clear_scene()
 
-    def cookies(self):
-        h = load("handshake")
-        c = h["cookie"]
-        head = label(r"SYN floods, \ and cookies", font_size=36).to_edge(UP, buff=0.3)
-        flood = VGroup(
-            wrapped_label(r"1996: \ attackers send SYNs from forged addresses \ and never answer the SYN+ACK", 12.2,
-                          font_size=21, color=NO),
-            wrapped_label(r"each half-open connection holds a slot in a table of a few hundred: \ a few packets a "
-                          r"second fill it, \ and real clients are turned away", 12.2, font_size=21, color=GREY_A),
-            wrapped_label(r"Bernstein's fix: \ \textbf{keep no state} until the third packet. \ Encode it in the "
-                          r"server's sequence number, \ which the client must echo back:", 12.2, font_size=21,
-                          color=YES),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.22).next_to(head, DOWN, buff=0.4)
-        bits = VGroup()
-        for n, w, col, txt in ((5, 1.4, KERN, rf"time $\bmod$ 32 \\ = {c['t']}"),
-                               (3, 1.0, WIN, rf"MSS \\ {c['mss']}"),
-                               (24, 6.4, HEAD, rf"24 bits of a keyed hash of the \\ four addresses and ports and the "
-                                               rf"time \\ = {c['hash']:,}")):
-            r = Rectangle(width=w, height=1.0, stroke_color=col, stroke_width=2, fill_color=col, fill_opacity=0.18)
-            t = label(txt, font_size=17, color=col).move_to(r)
-            if t.width > w - 0.1:
-                t.width = w - 0.1
-            nb = label(f"{n} bits", font_size=15, color=GREY_B).next_to(r, UP, buff=0.06)
-            bits.add(VGroup(r, t, nb))
-        bits.arrange(RIGHT, buff=0).next_to(flood, DOWN, buff=0.5)
-        isn = mono(f"server's initial sequence number = 0x{c['hex']}", 22, CODE_C).next_to(bits, DOWN, buff=0.35)
-        foot = wrapped_label(r"when the ACK returns with this number $+1$, \ the server recomputes the hash: \ if it "
-                             r"matches, \ the client is real and the connection is created then", 12.2, font_size=20,
-                             color=WHITE).to_edge(DOWN, buff=0.35)
-        with self.voiceover(
-            "The handshake has a weakness, exploited in 1996 against internet providers in New York. A server must "
-            "remember each connection that has sent a SYN but not yet the final ACK. <bookmark mark='a'/> An "
-            "attacker sends SYNs from forged addresses, which never answer. The table of half-open connections, a "
-            "few hundred entries, fills in seconds, and real clients are turned away. <bookmark mark='b'/> Dan "
-            "Bernstein's answer was to remember nothing. The server puts the state it needs into the one number the "
-            "client must send back: its own initial sequence number. <bookmark mark='c'/> Five bits of the time, "
-            "three bits for the packet size the client asked for, and twenty-four bits of a keyed hash of the "
-            "addresses, the ports and the time. Here is one, built the way Linux builds it. "
-            "<bookmark mark='d'/> When the final ACK comes back carrying this number plus one, the server "
-            "recomputes the hash. If it matches, the client really received the SYN+ACK, and the connection is "
-            "created only then. A forger who cannot see the replies cannot guess twenty-four bits."
-        ) as vo:
-            self.play(FadeIn(head))
-            vo.wait_until("a")
-            self.play(FadeIn(flood[0]), FadeIn(flood[1]))
-            vo.wait_until("b")
-            self.play(FadeIn(flood[2]))
-            vo.wait_until("c")
-            self.play(LaggedStart(*[FadeIn(b) for b in bits], lag_ratio=0.3), FadeIn(isn))
-            vo.wait_until("d")
-            self.play(FadeIn(foot))
-        self.wait(0.4)
-        self.clear_scene()
 
-    def teardown(self):
-        h = load("handshake")
-        tw = h["time_wait"]
-        head = label(r"Closing, \ and TIME\_WAIT", font_size=36).to_edge(UP, buff=0.3)
-        ev = [(0.0, 1.0, r"FIN", True, SEG), (1.0, 2.0, r"ACK", False, ACKC), (2.4, 3.4, r"FIN", False, ACKC),
-              (3.4, 4.4, r"ACK", True, SEG)]
-        sd = seq_diagram(ev, t_max=6.0, height=4.6, gap=4.6, names=(r"client", r"server")).move_to([-3.0, -0.5, 0])
-        wait = Line(sd.arrows[3][0].get_start(), sd.arrows[3][0].get_start() + DOWN * 1.3, color=KERN, stroke_width=6)
-        wl = label(r"TIME\_WAIT: \\ $2 \times$ MSL", font_size=18, color=KERN).next_to(wait, DOWN, buff=0.1)
-        side = VGroup(
-            wrapped_label(r"each direction is closed separately, \ with a FIN that is itself acknowledged", 5.0,
-                          font_size=20, color=WHITE),
-            wrapped_label(r"the side that closes first then waits twice the maximum segment lifetime: \ in case its "
-                          r"last ACK was lost, \ and so that stray segments of this connection die before the same "
-                          r"four numbers are reused", 5.0, font_size=20, color=KERN),
-            wrapped_label(rf"Linux: \ {tw['wait']} s. \ A client with {tw['ports']:,} ephemeral ports can open at "
-                          rf"most {tw['per_second']:.0f} connections a second to one server address and port", 5.0,
-                          font_size=20, color=NO),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.3).move_to([3.6, -0.4, 0])
-        with self.voiceover(
-            "Closing takes four segments, because each direction closes on its own. <bookmark mark='a'/> The client "
-            "sends FIN: it has no more to say. The server acknowledges, may keep sending, and eventually sends its "
-            "own FIN, which the client acknowledges. <bookmark mark='b'/> Then the side that closed first does "
-            "something odd: it waits. For twice the maximum segment lifetime, it keeps the connection's four numbers "
-            "reserved. If its final ACK was lost, the server will resend its FIN and must get an answer; and any "
-            "stray segment of this connection must die before a new connection with the same addresses and ports "
-            "could mistake it for its own. That is the alternating-bit failure again, prevented by time. "
-            "<bookmark mark='c'/> On Linux the wait is sixty seconds, so a client opening many short connections to "
-            "one server runs out of port numbers at about five hundred and fifty a second, which is why busy "
-            "services reuse connections."
-        ) as vo:
-            self.play(FadeIn(head), FadeIn(sd[:4]))
-            vo.wait_until("a")
-            self.play(LaggedStart(*[FadeIn(a) for a in sd.arrows], lag_ratio=0.4), FadeIn(side[0]))
-            vo.wait_until("b")
-            self.play(Create(wait), FadeIn(wl), FadeIn(side[1]))
-            vo.wait_until("c")
-            self.play(FadeIn(side[2]))
-        self.wait(0.4)
-        self.clear_scene()
 
     def flow_control(self):
         h = load("handshake")
@@ -248,6 +153,11 @@ class Tcp(VoiceoverScene):
             self.play(FadeIn(side[2]))
         self.wait(0.4)
         self.clear_scene()
+        self.checkpoint(
+            [(r"Why does the alternating bit fail on the Internet?", r"Old packets can arrive late"),
+             (r"How large must a window be to fill a pipe?", r"One bandwidth-delay product")],
+            narration="Checkpoint. Why does the alternating-bit protocol fail on the Internet? And how big must a window be to fill the pipe?",
+            answers_narration="An old copy delayed in a queue can arrive with the right bit. And one bandwidth-delay product.")
 
 
 CODE_C = DATA

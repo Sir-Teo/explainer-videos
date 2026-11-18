@@ -6,7 +6,7 @@ from explainer.cs import *  # noqa: F403
 from videos.cs.cs37.common import (CCC, DATA, HEAD, KERN, LAM, NO, PART, WIN, YES, axes, grid_table, load)
 
 
-class Mathis(VoiceoverScene):
+class Mathis(WatchScene):
     def construct(self):
         self.card()
         self.derive()
@@ -14,14 +14,14 @@ class Mathis(VoiceoverScene):
         self.unfair()
 
     def card(self):
-        card = chapter_card(8, r"The Mathis formula", r"How fast can a TCP go, given its loss rate?",
-                            lit=(1997, 1998), extra=((1997, r"Mathis, Semke, \\ Mahdavi and Ott"),
-                                                     (1998, r"Padhye et al.: \ with timeouts")), part=PART)
-        with self.voiceover("Chapter eight. The Mathis formula."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(8, r"The Mathis formula", r"How fast can a TCP go, given its loss rate?", lit=(1997, 1998), extra=((1997, r"Mathis, Semke, \\ Mahdavi and Ott"),
+                                                     (1998, r"Padhye et al.: \ with timeouts")), part=PART, said="Chapter eight. The Mathis formula.")
 
     def derive(self):
+        self.ask(r"A Reno flow, random loss rate $p$. \\ Throughput falls like...", [r"$1/p$", r"$1/\sqrt{p}$",
+                 r"$e^{-p}$"], 1,
+                 say="A Reno flow loses a fraction p of its packets at random. How does its throughput fall with p?",
+                 reveal="Like one over the square root of p, and one over the round trip.")
         head = label(r"One tooth of the sawtooth", font_size=36).to_edge(UP, buff=0.3)
         ax = Axes(x_range=[0, 3.2, 1], y_range=[0, 1.15, 0.5], x_length=6.0, y_length=3.4,
                   axis_config={"color": GREY_D, "include_numbers": False, "include_ticks": False}).move_to(
@@ -167,6 +167,12 @@ class Mathis(VoiceoverScene):
             self.play(FadeIn(lines[3]))
         self.wait(0.4)
         self.clear_scene()
+        self.checkpoint(
+            [(r"Why AIMD, not AIAD?", r"Only multiplicative decrease converges to fairness"),
+             (r"Why does Reno favour near flows?", r"Throughput falls as one over the round trip")],
+            narration="Checkpoint. Why additive increase with multiplicative decrease? And why does Reno favour flows that are close?",
+            answers_narration="Among linear rules, only it converges to the fair share. And throughput falls as one over the "
+                              "round trip.")
 
 
 _ = (HEAD,)

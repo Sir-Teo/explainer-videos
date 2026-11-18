@@ -18,7 +18,7 @@ def phase_plane(center=ORIGIN, side=4.6):
     return g
 
 
-class Aimd(VoiceoverScene):
+class Aimd(WatchScene):
     def construct(self):
         self.card()
         self.model()
@@ -26,11 +26,7 @@ class Aimd(VoiceoverScene):
         self.proof()
 
     def card(self):
-        card = chapter_card(7, r"AIMD", r"Why add slowly and cut in half?", lit=(1989, 1989),
-                            extra=((1989, r"Chiu and Jain: \ the phase plot"),), part=PART)
-        with self.voiceover("Chapter seven. Additive increase, multiplicative decrease."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(7, r"AIMD", r"Why add slowly and cut in half?", lit=(1989, 1989), extra=((1989, r"Chiu and Jain: \ the phase plot"),), part=PART, said="Chapter seven. Additive increase, multiplicative decrease.")
 
     def model(self):
         head = label(r"Two users, \ one bit of feedback", font_size=36).to_edge(UP, buff=0.3)
@@ -81,6 +77,10 @@ class Aimd(VoiceoverScene):
         self.clear_scene()
 
     def trajectories(self):
+        self.ask(r"Two flows, additive increase, multiplicative decrease, \\ starting unequal. They converge to...",
+                 [r"unequal shares", r"the fair share"], 1,
+                 say="Two flows start with unequal rates, both using additive increase and multiplicative decrease. Where do they end up?",
+                 reveal="At the fair share, and at full use of the link.")
         c = load("chiujain")
         head = label(r"Four rules, \ from the same start", font_size=36).to_edge(UP, buff=0.3)
         planes = VGroup()

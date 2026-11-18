@@ -6,7 +6,7 @@ from explainer.cs import *  # noqa: F403
 from videos.cs.cs37.common import (CCC, DATA, HEAD, KERN, LAM, NO, PART, SEG, WIN, YES, axes, load, trace)
 
 
-class Collapse(VoiceoverScene):
+class Collapse(WatchScene):
     def construct(self):
         self.card()
         self.story()
@@ -15,14 +15,11 @@ class Collapse(VoiceoverScene):
         self.slow_start()
 
     def card(self):
-        card = chapter_card(6, r"Congestion collapse", r"What happens when everyone sends as fast as the receiver "
+        self.chapter(6, r"Congestion collapse", r"What happens when everyone sends as fast as the receiver "
                             r"allows?", lit=(1984, 1988), extra=((1984, r"Nagle: \ congestion collapse"),
                                                                  (1986, r"October: \ 32 kb/s $\to$ 40 b/s"),
                                                                  (1988, r"Jacobson: \ Congestion Avoidance \\ and "
-                                                                        r"Control")), part=PART)
-        with self.voiceover("Chapter six. Congestion collapse."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+                                                                        r"Control")), part=PART, said="Chapter six. Congestion collapse.")
 
     def story(self):
         c = load("collapse")
@@ -61,6 +58,10 @@ class Collapse(VoiceoverScene):
         self.clear_scene()
 
     def ours(self):
+        self.ask(r"Four senders retransmit on timeouts, never backing off. \\ As load grows, goodput...",
+                 [r"levels off", r"collapses"], 1,
+                 say="Four senders share a link and retransmit on every timeout, without ever slowing down. As load grows, what happens to useful throughput?",
+                 reveal="It collapses: the link fills with copies of packets that will be dropped.")
         c = load("collapse")
         head = label(r"1986 in miniature", font_size=36).to_edge(UP, buff=0.3)
         rows = c["rows"]
@@ -116,6 +117,12 @@ class Collapse(VoiceoverScene):
         self.clear_scene()
 
     def jacobson(self):
+        self.wrong_idea(r"a lost packet means a bad link",
+                        r"on the Internet, a loss almost always \\ means a full queue: congestion",
+                        narration="A natural reading: when a packet is lost, the link must be noisy.",
+                        right_narration="Wired links almost never corrupt packets. A loss almost always means a queue "
+                                        "overflowed. Jacobson's insight was to treat every loss as a signal to slow down.")
+        self.clear_scene()
         head = label(r"Jacobson's principle: \ conservation of packets", font_size=34).to_edge(UP, buff=0.3)
         pipe = RoundedRectangle(width=9.0, height=1.0, corner_radius=0.5, stroke_color=GREY_C, stroke_width=2)
         pipe.move_to([0, 1.5, 0])

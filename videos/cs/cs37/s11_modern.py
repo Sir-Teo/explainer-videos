@@ -5,24 +5,19 @@ from videos.cs.cs37.common import (CCC, CCN, DATA, HEAD, KERN, LAM, NO, PART, WI
                                    trace)
 
 
-class Modern(VoiceoverScene):
+class Modern(WatchScene):
     def construct(self):
         self.card()
         self.cubic()
         self.kleinrock()
         self.bbr()
         self.compare()
-        self.coexist()
 
     def card(self):
-        card = chapter_card(10, r"Modern congestion control", r"Must a sender fill the queue to find the pipe?",
-                            lit=(1994, 2016), extra=((1994, r"Brakmo and Peterson: \ Vegas"),
+        self.chapter(10, r"Modern congestion control", r"Must a sender fill the queue to find the pipe?", lit=(1994, 2016), extra=((1994, r"Brakmo and Peterson: \ Vegas"),
                                                      (2008, r"Ha, Rhee and Xu: \ CUBIC"),
                                                      (2010, r"Alizadeh et al.: \ DCTCP"),
-                                                     (2016, r"Cardwell et al.: \ BBR")), part=PART)
-        with self.voiceover("Chapter ten. Modern congestion control."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+                                                     (2016, r"Cardwell et al.: \ BBR")), part=PART, said="Chapter ten. Modern congestion control.")
 
     def cubic(self):
         head = label(r"CUBIC: \ grow with the clock", font_size=36).to_edge(UP, buff=0.3)
@@ -72,6 +67,10 @@ class Modern(VoiceoverScene):
         self.clear_scene()
 
     def kleinrock(self):
+        self.ask(r"The ideal amount of data in flight:", [r"as much as the buffers hold",
+                 r"one bandwidth-delay product"], 1,
+                 say="What is the ideal amount of data to keep in flight?",
+                 reveal="One bandwidth-delay product: the pipe full, the queue empty.")
         m = load("modern")
         head = label(r"Kleinrock's operating point", font_size=36).to_edge(UP, buff=0.3)
         kl = m["kleinrock"]
@@ -208,60 +207,6 @@ class Modern(VoiceoverScene):
         self.wait(0.4)
         self.clear_scene()
 
-    def coexist(self):
-        m = load("modern")
-        head = label(r"Sharing: \ the hard part", font_size=36).to_edge(UP, buff=0.3)
-        rows = [[rf"{x['mult']:g} $\times$ BDP", f"{x['bbr']:.1f}", f"{x['cubic']:.1f}"] for x in m["mixed"]]
-        tab = grid_table([r"buffer", r"BBR, \ Mb/s", r"CUBIC, \ Mb/s"], rows, widths=[2.4, 2.2, 2.2], row_h=0.44,
-                         font_size=20, mono_cols=())
-        tab.move_to([-3.4, 1.0, 0])
-        for k in range(1, 4):
-            tab.cells[k][1].set_color(CCC["bbr"])
-            tab.cells[k][2].set_color(CCC["cubic"])
-        v = m["vegas"]
-        vt = grid_table([r"Vegas alone", r"Vegas with Reno", r"Reno"],
-                        [[f"{v['mbps']:.1f} Mb/s, \\ {v['queue_pkts']:.1f} queued", f"{v['with_reno'][0]:.1f}",
-                          f"{v['with_reno'][1]:.1f}"]], widths=[3.4, 2.4, 1.4], row_h=0.44, font_size=19,
-                        mono_cols=())
-        vt.move_to([-3.0, -1.4, 0])
-        vt.cells[1][1].set_color(NO)
-        notes = VGroup(
-            wrapped_label(r"BBR beside CUBIC on 50 Mb/s: \ in shallow buffers BBR's loss-blind pacing takes almost "
-                          r"everything; \ in deep ones CUBIC's queue inflates BBR's RTT estimate and it backs off", 5.4,
-                          font_size=19, color=WHITE),
-            wrapped_label(r"\textbf{Vegas} \ (1994) \ backs off when \textit{it} sees delay; \ Reno, \ beside it, \ "
-                          r"fills the queue and takes the link", 5.4, font_size=19, color=CCC["vegas"]),
-            wrapped_label(r"a polite algorithm loses to a greedy one: \ which is why delay-based control spread only "
-                          r"where one owner controls every sender: \ \textbf{DCTCP} in data centres, \ marking "
-                          r"packets with ECN instead of dropping them", 5.4, font_size=19, color=HEAD),
-            wrapped_label(r"BBRv2 and v3 now react to loss and ECN as well", 5.4, font_size=19, color=GREY_A),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.22).move_to([3.5, -0.2, 0])
-        with self.voiceover(
-            "The hardest problem in congestion control is not one flow; it is different algorithms sharing a link. "
-            "<bookmark mark='a'/> Put BBR and CUBIC together on fifty megabits a second. With a shallow buffer, "
-            "BBR, which ignores the losses that keep CUBIC down, takes forty-seven megabits and leaves CUBIC one "
-            "point three. With a buffer four times the product, CUBIC fills the queue, BBR's round trip estimate "
-            "inflates, and the split is thirty to eighteen. Neither is fair. <bookmark mark='b'/> The older story "
-            "runs the other way. TCP Vegas, by Lawrence Brakmo and Larry Peterson in 1994, was the first "
-            "delay-based algorithm: it slows down as soon as it sees its own packets queueing, keeping about four "
-            "in the queue. Alone, it fills the link with a near-empty queue. Beside Reno, which keeps filling the "
-            "queue, Vegas sees only delay, backs off, and gets nothing at all. <bookmark mark='c'/> A polite "
-            "algorithm loses to a greedy one. So delay-based control spread where one owner controls every sender: "
-            "in data centres, DCTCP has switches mark packets instead of dropping them, and senders back off in "
-            "proportion to the marks, keeping queues tiny. <bookmark mark='d'/> Newer versions of BBR now respond "
-            "to loss and marks too."
-        ) as vo:
-            self.play(FadeIn(head))
-            vo.wait_until("a")
-            self.play(FadeIn(tab), FadeIn(notes[0]))
-            vo.wait_until("b")
-            self.play(FadeIn(vt), FadeIn(notes[1]))
-            vo.wait_until("c")
-            self.play(FadeIn(notes[2]))
-            vo.wait_until("d")
-            self.play(FadeIn(notes[3]))
-        self.wait(0.4)
-        self.clear_scene()
 
 
 _ = (LAM, WIN)

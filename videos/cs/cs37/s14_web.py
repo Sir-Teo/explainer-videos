@@ -7,21 +7,16 @@ MC = {"http1": KERN, "http2": NO, "quic": YES}
 MN = {"http1": r"HTTP/1.1, \ 6 connections", "http2": r"HTTP/2, \ one TCP connection", "quic": r"HTTP/3 over QUIC"}
 
 
-class Web(VoiceoverScene):
+class Web(WatchScene):
     def construct(self):
         self.card()
         self.http()
         self.hol()
-        self.measured()
         self.quic()
 
     def card(self):
-        card = chapter_card(13, r"The web's transport", r"Why did the web move off TCP?", lit=(1991, 2022),
-                            extra=((1997, r"HTTP/1.1"), (2015, r"HTTP/2"), (2017, r"Langley et al.: \ QUIC"),
-                                   (2021, r"RFC 9000")), part=PART)
-        with self.voiceover("Chapter thirteen. The web's transport."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(13, r"The web's transport", r"Why did the web move off TCP?", lit=(1991, 2022), extra=((1997, r"HTTP/1.1"), (2015, r"HTTP/2"), (2017, r"Langley et al.: \ QUIC"),
+                                   (2021, r"RFC 9000")), part=PART, said="Chapter thirteen. The web's transport.")
 
     def http(self):
         head = label(r"A page is many objects", font_size=36).to_edge(UP, buff=0.3)
@@ -59,6 +54,10 @@ class Web(VoiceoverScene):
         self.clear_scene()
 
     def hol(self):
+        self.ask(r"HTTP/2 on one TCP connection: a packet of stream 2 is lost. \\ Streams 1 and 3...",
+                 [r"carry on", r"wait too"], 1,
+                 say="HTTP two multiplexes streams on one TCP connection. A packet of stream two is lost. What happens to streams one and three?",
+                 reveal="They wait too: TCP delivers bytes in order. That's head-of-line blocking.")
         head = label(r"Head-of-line blocking, \ again", font_size=36).to_edge(UP, buff=0.3)
         cols = [DATA, LAM, KERN, YES]
         seq = [0, 1, 2, 3, 0, 1, 2, 3, 0, 1, 2, 3]
@@ -103,51 +102,6 @@ class Web(VoiceoverScene):
         self.wait(0.4)
         self.clear_scene()
 
-    def measured(self):
-        w = load("web")
-        head = label(r"Measured: \ the page over a lossy path", font_size=36).to_edge(UP, buff=0.3)
-        g = axes([0, 5, 1], [100, 360, 50], x_length=6.6, y_length=3.8, x_label=r"loss, \ \%",
-                 y_label=r"mean time until an object is usable, \ ms", xticks=range(0, 6), yticks=(150, 200, 250,
-                                                                                                 300, 350),
-                 fx=lambda v: f"{v:g}").move_to([-3.0, -0.5, 0])
-        ax = g.ax
-        rows = w["rows"]
-        lines = {}
-        for m in ("http1", "http2", "quic"):
-            lines[m] = VGroup(trace(ax, [(r["loss"] * 100, r[m]) for r in rows], MC[m], width=3),
-                              *[Dot(ax.c2p(r["loss"] * 100, r[m]), radius=0.06, color=MC[m]) for r in rows])
-        leg = VGroup(*[label(MN[m], font_size=19, color=MC[m]) for m in ("http1", "http2", "quic")]).arrange(
-            DOWN, aligned_edge=LEFT, buff=0.15).move_to([3.7, 1.5, 0])
-        last = rows[-1]
-        notes = VGroup(
-            wrapped_label(rf"41 objects, \ {w['packets']} packets, \ RTT {w['rtt_ms']:.0f} ms, \ 200 trials a "
-                          r"point; \ handshakes and slow starts not modelled", 5.4, font_size=18, color=GREY_A),
-            wrapped_label(rf"no loss: \ HTTP/2 and QUIC are identical, \ {rows[0]['quic']:.0f} ms", 5.4,
-                          font_size=19, color=WHITE),
-            wrapped_label(rf"5\% loss: \ HTTP/2 \ {last['http2']:.0f} ms, \ QUIC \ {last['quic']:.0f} ms: \ a loss "
-                          r"delays only its own stream", 5.4, font_size=19, color=YES),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.25).move_to([3.7, -1.2, 0])
-        with self.voiceover(
-            "We measured it: forty-one objects fetched across our hundred-and-eight-millisecond path, two hundred "
-            "times at each loss rate, timing when each object becomes usable. <bookmark mark='a'/> HTTP one point "
-            "one's six connections share the link six ways and send in parallel. In our model they do well, because "
-            "it leaves out their six handshakes and six slow starts, which in practice cost them dearly. "
-            "<bookmark mark='b'/> HTTP/2 on one "
-            "connection is as good as anything when nothing is lost, but every loss stalls every stream, and its "
-            "mean climbs from two hundred and nine milliseconds to three hundred and thirty-six at five percent "
-            "loss. <bookmark mark='c'/> The third line keeps the streams but gives each its own order, so a loss "
-            "delays only the stream it belongs to: two hundred and twenty-seven milliseconds at five percent. That "
-            "is QUIC."
-        ) as vo:
-            self.play(FadeIn(head), FadeIn(g), FadeIn(notes[0]))
-            vo.wait_until("a")
-            self.play(Create(lines["http1"]), FadeIn(leg[0]))
-            vo.wait_until("b")
-            self.play(Create(lines["http2"]), FadeIn(leg[1]), FadeIn(notes[1]))
-            vo.wait_until("c")
-            self.play(Create(lines["quic"]), FadeIn(leg[2]), FadeIn(notes[2]))
-        self.wait(0.4)
-        self.clear_scene()
 
     def quic(self):
         h = load("handshake")
