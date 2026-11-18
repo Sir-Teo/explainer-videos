@@ -269,6 +269,45 @@ class WatchScene(VoiceoverScene, MovingCameraScene):
 
         self.play(frame_home(self), run_time=run_time)
 
+    def rewrite(self, terms, focus=None, counter: str | None = None, run_time: float = 0.9, hold: float = 0.25,
+                first=None):
+        """A chain of terms (a derivation, a reduction, a proof's lines) played in one place: each term morphs into
+        the next with its shared symbols flying to their new places (``TransformMatchingShapes``), instead of a
+        stack of lines fading in.
+
+        ``terms`` are mobjects; each is moved to where the first stands.  ``focus(k)`` may return the submobject of
+        ``terms[k]`` rewritten next (a redex, the rule's left side): it is boxed before the step.  ``counter`` labels
+        a step count shown under the chain (``"step"`` gives "step 3"); ``first`` is the first term's entrance
+        (``Write`` for a short formula, else a fade).  Returns the last term, on screen."""
+        terms = list(terms)
+        place = terms[0].get_center()
+        for t in terms[1:]:
+            t.move_to(place)
+        cur = terms[0]
+        self.play(first(cur) if first else lively(FadeIn(cur)), run_time=0.8)
+        count = None
+        if counter:
+            n = ValueTracker(0)
+            count = always_redraw(lambda: Text(f"{counter} {int(round(n.get_value()))}", font="DejaVu Sans",
+                                               font_size=18, color=GREY_B).next_to(cur, DOWN, buff=0.3))
+            self.add(count)
+        for k, nxt in enumerate(terms[1:]):
+            part = focus(k) if focus else None
+            if part is not None:
+                box = SurroundingRectangle(part, color=PREDICT, buff=0.06, stroke_width=3)
+                self.play(Create(box), run_time=0.35)
+                self.play(FadeOut(box), run_time=0.2)
+            anims = [TransformMatchingShapes(cur, nxt, path_arc=0.6)]
+            if count is not None:
+                anims.append(n.animate.set_value(k + 1))
+            self.play(*anims, run_time=run_time)
+            cur = nxt
+            if hold:
+                self.wait(hold)
+        if count is not None:
+            count.clear_updaters()  # the final count stays until the section clears
+        return cur
+
     def ask(self, question: str, options, answer: int, say: str | None = None, reveal: str | None = None,
             room=None, where: str = "right"):
         """The retrofit's prediction in one call: ask (``say`` aloud), count down, park the card in a corner, and

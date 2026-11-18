@@ -45,7 +45,7 @@ MOTION_CALLS = {"Transform", "ReplacementTransform", "TransformFromCopy", "Trans
                 "MoveAlongPath", "Rotate", "Rotating", "Homotopy", "ApplyMatrix", "ApplyPointwiseFunction",
                 "ValueTracker", "always_redraw", "frame_to", "frame_home", "morph", "Wiggle", "CyclicReplace",
                 "Swap", "GrowArrow", "GrowFromEdge", "GrowFromPoint", "GrowFromCenter", "SpinInFromNothing"}
-MOTION_METHODS = {"add_updater", "zoom", "home", "advance", "cycle", "become", "move_camera"}
+MOTION_METHODS = {"add_updater", "zoom", "home", "advance", "cycle", "become", "move_camera", "rewrite"}
 NARRATED = {"predict", "reveal", "checkpoint", "wrong_idea", "ask", "chapter"}  # kit calls that speak
 HEDGES = [r"\bnot an? (measured|physical|recording|proof|guarantee|certification|silicon)\b", r"\bassumed\b",
           r"\billustrative\b", r"\bthis does not (mean|prove|test)\b", r"\bnot an absolute\b",
