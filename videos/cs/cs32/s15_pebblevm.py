@@ -20,7 +20,7 @@ HANDLER = [
 ]
 
 
-class PebbleVM(VoiceoverScene):
+class PebbleVM(WatchScene):
     def construct(self):
         self.card()
         self.kernel()
@@ -29,11 +29,7 @@ class PebbleVM(VoiceoverScene):
         self.pipeline()
 
     def card(self):
-        card = chapter_card(14, r"PebbleOS gains virtual memory", r"What did our kernel need?", lit=(),
-                            extra=(), part=PART)
-        with self.voiceover("Chapter fourteen. PebbleOS gains virtual memory."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(14, r"PebbleOS gains virtual memory", r"What did our kernel need?", lit=(), extra=(), part=PART, said="Chapter fourteen. PebbleOS gains virtual memory.")
 
     def kernel(self):
         d = load("pebblevm")
@@ -130,6 +126,10 @@ class PebbleVM(VoiceoverScene):
         self.clear_scene()
 
     def four(self):
+        self.ask(r"A PebbleOS process writes to its own code page. \\ What happens?", [r"the write succeeds",
+                 r"a protection fault"], 1,
+                 say="A process on PebbleOS writes into its own code page. What happens?",
+                 reveal="A protection fault. The hardware reports it; the kernel decides.")
         p = load("protect")
         head = label(r"Four processes, \ one machine", font_size=36).to_edge(UP, buff=0.3)
         pr = {q["name"]: q for q in p["procs"]}

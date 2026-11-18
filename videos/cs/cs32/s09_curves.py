@@ -20,7 +20,7 @@ def faults_axes(xmax, ymin, ymax, xstep, xlabel):
     return ax, VGroup(ax, xt, yt, xl)
 
 
-class Curves(VoiceoverScene):
+class Curves(WatchScene):
     def construct(self):
         self.card()
         self.job()
@@ -30,13 +30,8 @@ class Curves(VoiceoverScene):
         self.thrash()
 
     def card(self):
-        card = chapter_card(8, r"Working sets and thrashing", r"How much memory does a program need?",
-                            lit=(1968, 1970), extra=((1968, r"Denning: \ the working set"), (1970, r"Mattson's stack "
-                                                                                                  r"algorithms")),
-                            part=PART)
-        with self.voiceover("Chapter eight. Working sets, and thrashing."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(8, r"Working sets and thrashing", r"How much memory does a program need?", lit=(1968, 1970), extra=((1968, r"Denning: \ the working set"), (1970, r"Mattson's stack "
+                                                                                                  r"algorithms")), part=PART, said="Chapter eight. Working sets, and thrashing.")
 
     def job(self):
         d = load("curves")
@@ -153,6 +148,10 @@ class Curves(VoiceoverScene):
         self.clear_scene()
 
     def scans(self):
+        self.ask(r"Twenty hot pages, then a scan of sixty used once. \\ Under LRU, the hot pages...",
+                 [r"stay in memory", r"are pushed out by the scan"], 1,
+                 say="Twenty hot pages are used over and over, then a scan reads sixty pages once each. What does LRU do to the hot pages?",
+                 reveal="It evicts them: the scan's pages are all more recent.")
         d = load("curves")
         head = label(r"A scan flushes LRU", font_size=34).to_edge(UP, buff=0.3)
         sz = d["scan_sizes"]
@@ -282,3 +281,8 @@ class Curves(VoiceoverScene):
                 self.play(FadeIn(n_))
         self.wait(0.3)
         self.clear_scene()
+        self.checkpoint(
+            [(r"What is Belady's anomaly?", r"FIFO faulting more with more frames"),
+             (r"What causes thrashing?", r"Working sets that don't fit in memory")],
+            narration="Checkpoint. What is Belady's anomaly? And what causes thrashing?",
+            answers_narration="First in first out faulting more with more memory. And working sets that together don't fit.")

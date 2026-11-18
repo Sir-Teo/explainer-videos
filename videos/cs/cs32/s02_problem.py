@@ -16,20 +16,22 @@ def region_bar(parts, y, total=6.0, x0=-5.5, h=0.6):
     return g
 
 
-class Problem(VoiceoverScene):
+class Problem(WatchScene):
     def construct(self):
         self.card()
         self.why()
         self.atlas()
 
     def card(self):
-        card = chapter_card(1, r"Protection and relocation", r"Why not let programs use physical addresses?",
-                            lit=(1962,), extra=((1962, r"Atlas: \ paging"),), part=PART)
-        with self.voiceover("Chapter one. Protection, and relocation."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(1, r"Protection and relocation", r"Why not let programs use physical addresses?", lit=(1962,), extra=((1962, r"Atlas: \ paging"),), part=PART, said="Chapter one. Protection, and relocation.")
 
     def why(self):
+        self.wrong_idea(r"virtual memory means using the disk as memory",
+                        r"virtual memory is translation: \\ every address is virtual, disk or no disk",
+                        narration="Many people think virtual memory means swapping to disk when RAM runs out.",
+                        right_narration="Swapping is one use. Virtual memory itself is translation: every address a program "
+                                        "uses is mapped by hardware, even on a phone with no swap at all.")
+        self.clear_scene()
         head = label(r"What Part 31's PebbleOS could not do", font_size=34).to_edge(UP, buff=0.3)
         bar = region_bar([(r"kernel", 1, KERN), (r"tok \ (linked at 1 MiB)", 1, DATA), (r"job \ (linked at 2 MiB)", 1,
                                                                                           HEAD),
@@ -65,6 +67,10 @@ class Problem(VoiceoverScene):
         self.clear_scene()
 
     def atlas(self):
+        self.ask(r"Atlas: a small fast core and a drum six times larger. \\ Programs saw...",
+                 [r"two memories to manage", r"one big memory"], 1,
+                 say="Atlas had a small fast core and a drum six times bigger. What did its programs see?",
+                 reveal="One big memory. The machine moved pages between the two by itself.")
         head = label(r"Atlas, \ Manchester, \ 1962: \ the one-level store", font_size=34).to_edge(UP, buff=0.3)
         core = Rectangle(width=2.6, height=1.6, stroke_color=YES, stroke_width=2.5, fill_color=BG, fill_opacity=1)
         drum = Rectangle(width=5.2, height=1.6, stroke_color=LAM, stroke_width=2.5, fill_color=BG, fill_opacity=1)

@@ -14,18 +14,14 @@ def space(title, parts, color, pos, w=3.2):
     return VGroup(label(title, font_size=20, color=color).next_to(col, UP, buff=0.12), col)
 
 
-class KernelMap(VoiceoverScene):
+class KernelMap(WatchScene):
     def construct(self):
         self.card()
         self.shared()
         self.meltdown()
 
     def card(self):
-        card = chapter_card(10, r"The kernel's own mapping", r"Where does the kernel live?", lit=(2018,),
-                            extra=((2018, r"Meltdown; \ KPTI"),), part=PART)
-        with self.voiceover("Chapter ten. The kernel's own mapping."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(10, r"The kernel's own mapping", r"Where does the kernel live?", lit=(2018,), extra=((2018, r"Meltdown; \ KPTI"),), part=PART, said="Chapter ten. The kernel's own mapping.")
 
     def shared(self):
         p = load("protect")
@@ -63,6 +59,9 @@ class KernelMap(VoiceoverScene):
         self.clear_scene()
 
     def meltdown(self):
+        self.ask(r"A user load from a kernel address faults. \\ Can the data still leak?", [r"no", r"yes"], 1,
+                 say="A user program loads from a kernel address, and the load faults. Can the data still leak?",
+                 reveal="Yes: the out-of-order core used it first, and left a trace in the cache.")
         k = load("kernelmap")
         head = label(r"Meltdown, \ 2018, \ and KPTI", font_size=36).to_edge(UP, buff=0.3)
         u = space(r"user mode", [(r"process", 2.0, DATA, 0.25), (r"a few kernel entry pages", 0.5, KERN, 0.35)],

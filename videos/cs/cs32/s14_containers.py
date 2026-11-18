@@ -14,7 +14,7 @@ def stack(title, layers, color):
     return VGroup(label(title, font_size=22, color=color).next_to(g, UP, buff=0.15), g)
 
 
-class Containers(VoiceoverScene):
+class Containers(WatchScene):
     def construct(self):
         self.card()
         self.compare()
@@ -22,15 +22,13 @@ class Containers(VoiceoverScene):
         self.cost()
 
     def card(self):
-        card = chapter_card(13, r"Containers", r"Can you isolate programs without a second kernel?",
-                            lit=(1979, 2000, 2008, 2013),
-                            extra=((1979, r"chroot"), (2000, r"FreeBSD jails"), (2008, r"Linux cgroups"),
-                                   (2013, r"Docker")), part=PART)
-        with self.voiceover("Chapter thirteen. Containers."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(13, r"Containers", r"Can you isolate programs without a second kernel?", lit=(1979, 2000, 2008, 2013), extra=((1979, r"chroot"), (2000, r"FreeBSD jails"), (2008, r"Linux cgroups"),
+                                   (2013, r"Docker")), part=PART, said="Chapter thirteen. Containers.")
 
     def compare(self):
+        self.ask(r"A container and a virtual machine. \\ Containers share...", [r"nothing", r"the host's kernel"], 1,
+                 say="What do containers on one machine share that virtual machines don't?",
+                 reveal="The host's kernel. That makes them fast to start, and their isolation thinner.")
         head = label(r"A virtual machine, \ and a container", font_size=36).to_edge(UP, buff=0.3)
         vm = stack(r"virtual machines", [(r"app \quad\quad app", DATA, 4.6), (r"guest kernel \quad guest kernel", HEAD,
                                                                               4.6),

@@ -18,7 +18,7 @@ def table_box(title, rows, color, hl):
     return VGroup(t, g)
 
 
-class Paging(VoiceoverScene):
+class Paging(WatchScene):
     def construct(self):
         self.card()
         self.split()
@@ -26,13 +26,12 @@ class Paging(VoiceoverScene):
         self.walk()
 
     def card(self):
-        card = chapter_card(3, r"Paging", r"How do you translate an address in pieces?", lit=(1962,),
-                            extra=((1962, r"Atlas"),), part=PART)
-        with self.voiceover("Chapter three. Paging."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(3, r"Paging", r"How do you translate an address in pieces?", lit=(1962,), extra=((1962, r"Atlas"),), part=PART, said="Chapter three. Paging.")
 
     def split(self):
+        self.ask(r"4 KiB pages, 32-bit addresses. \\ Bits of offset within a page:", [r"$4$", r"$12$", r"$20$"], 1,
+                 say="Pages of four kibibytes, addresses of thirty-two bits. How many bits are the offset within the page?",
+                 reveal="Twelve, because two to the twelve is four thousand and ninety-six. The other twenty name the page.")
         d = load("sameva")
         va = d["va"]
         head = label(r"A virtual address, \ in three parts", font_size=36).to_edge(UP, buff=0.3)
