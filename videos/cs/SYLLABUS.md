@@ -3473,7 +3473,7 @@ Parts over an hour moved their least necessary chapters to the notes and labs; e
 ratio, which the gate counts in the source. At render time `explainer/cs/watch.py`'s `lively` gives every plain
 fade-in the entrance its content suggests (arrows grow, lines and curves draw, short formulas write, groups arrive
 in a lagged cascade), but chapters built as fade-in slides still want rebuilding on the live instruments, worst
-first (Parts 14, 24, 27, 31, 25, 26, 36, 38 and 40 are under 0.04). The Chinese edition covers every retrofitted line:
+first (Parts 14, 24, 27, 31, 25, 26, 36, 38 and 40 are under 0.04). The rebuilds have begun: `self.rewrite` plays a derivation as one term morphing in place (Part 14's reductions, numerals and typed steps), and Part 24's Fenwick query and update are walked by a pointer whose bits morph as the coverage tiles the prefix. The Chinese edition covers every retrofitted line:
 spoken lines in each part's `zh_watch.json` (folded into `zh_lines.py`), on-screen ones in its `text_zh.json`
 (`tools/zh_watch.py csN` lists anything left; what remains are Latin names such as TAGE, BFS and 4 KiB).
 
