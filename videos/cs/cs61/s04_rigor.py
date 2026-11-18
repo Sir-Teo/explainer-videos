@@ -34,7 +34,7 @@ M = load("means")
 NARROW = T["narrowing"]
 
 
-class Rigor(VoiceoverScene):
+class Rigor(WatchScene):
     def construct(self):
         self.card()
         self.runs()
@@ -44,13 +44,9 @@ class Rigor(VoiceoverScene):
         self.means()
 
     def card(self):
-        card = chapter_card(3, r"Measuring rigorously", r"How many runs, \ and how sure can you be?",
-                            lit=(1979, 2007), extra=((1979, r"Efron: \ the bootstrap"),
+        self.chapter(3, r"Measuring rigorously", r"How many runs, \ and how sure can you be?", lit=(1979, 2007), extra=((1979, r"Efron: \ the bootstrap"),
                                                      (1986, r"Fleming and Wallace: \ geometric means"),
-                                                     (2007, r"Georges, \ Buytaert and Eeckhout")), part=PART)
-        with self.voiceover("Chapter three. Measuring rigorously."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+                                                     (2007, r"Georges, \ Buytaert and Eeckhout")), part=PART, said="Chapter three. Measuring rigorously.")
 
     def runs(self):
         head = label(r"One run is an anecdote", font_size=36).to_edge(UP, buff=0.3)
@@ -341,6 +337,9 @@ class Rigor(VoiceoverScene):
         self.clear_scene()
 
     def means(self):
+        self.ask(r"Summarize speedups across benchmarks \\ with which mean?", [r"arithmetic", r"geometric"], 1,
+                 say="Two programs, timed on several benchmarks. Which mean of the speedup ratios gives a consistent answer?",
+                 reveal="The geometric mean: it doesn't depend on which machine you call the reference.")
         head = label(r"Averaging speedups", font_size=36).to_edge(UP, buff=0.3)
         a, b = M["times_a"], M["times_b"]
         rba, rab = M["ratios_b_over_a"], [x / y for x, y in zip(a, b)]
@@ -415,6 +414,12 @@ class Rigor(VoiceoverScene):
         self.wait(0.4)
         self.clear_scene()
         _ = (body, arith)
+        self.checkpoint(
+            [(r"What is measurement bias?", r"A setup choice that shifts results systematically"),
+             (r"What does the bootstrap give?", r"An interval without assuming a bell curve")],
+            narration="Checkpoint. What is measurement bias? And what does the bootstrap give you?",
+            answers_narration="An innocent-looking choice in the setup that moves the result systematically. And a confidence "
+                              "interval, by resampling, without assuming a bell curve.")
 
 
 _ = (BG, DATA, LAM)

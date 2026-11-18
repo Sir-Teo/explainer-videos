@@ -147,21 +147,15 @@ NWORDS = JOB["lanes"][0]["words"]
 TITLES = list(BOOKS.values())
 
 
-class Bridges(VoiceoverScene):
+class Bridges(WatchScene):
     def construct(self):
         self.card()
         self.shelf()
         self.towers()
         self.descent()
-        self.web()
 
     def card(self):
-        card = chapter_card(10, r"Where the series meet",
-                            r"What does computer science share with learning, \ and with analysis?",
-                            lit=(1936, 1948), part=PART)
-        with self.voiceover("Chapter ten. Where the series meet."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(10, r"Where the series meet", r"What does computer science share with learning, \ and with analysis?", lit=(1936, 1948), part=PART, said="Chapter ten. Where the series meet.")
 
     # ------------------------------------------------------------------
     def shelf(self):
@@ -283,6 +277,10 @@ class Bridges(VoiceoverScene):
 
     # ------------------------------------------------------------------
     def descent(self):
+        self.ask(r"Gradient descent on a loss whose slope changes \\ at most $L$ per step. Safe step sizes:",
+                 [r"any", r"below $2/L$"], 1,
+                 say="Gradient descent on a smooth loss whose gradient changes by at most L. Which step sizes are safe?",
+                 reveal="Below two over L: the same inequality in all three series.")
         head = label(r"One step, \ three towers", font_size=36).to_edge(UP, buff=0.3)
         eqs = [
             MathTex(r"f(x+h)", r"=", r"f(x)", r"+", r"f'(x)\,h", r"+", r"\tfrac{1}{2}f''(\xi)\,h^2", font_size=36),
@@ -355,34 +353,6 @@ class Bridges(VoiceoverScene):
         self.wait(0.4)
         self.clear_scene()
 
-    # ------------------------------------------------------------------
-    def web(self):
-        head = label(r"Seven crossings, \ and more", font_size=36).to_edge(UP, buff=0.3)
-        tw = {k: series_tower(k) for k in TOWERS}
-        lit = towers_with(AI_BRIDGES + AN_BRIDGES, tw)
-        n_cs, _, w_cs, _, _, _ = TOWERS["cs"]
-        n_ai, x_ai, w_ai, _, _, _ = TOWERS["ai"]
-        extra = VGroup(*[DashedLine([-w_cs / 2, floor_y(n_cs, a), 0], [x_ai + w_ai / 2, floor_y(n_ai, b), 0],
-                                    color=LAM, stroke_width=1.6, dash_length=0.08) for a, b in EXTRA])
-        extra.set_z_index(-1)
-        foot = wrapped_label(r"dashed: \ Part 18's PageRank, \ a Markov chain of \textit{AI, Built} Part 5; \ Part 20's "
-                             r"random projections, \ Part 3's Johnson--Lindenstrauss; \ Part 54's proof assistants, "
-                             r"\ Part 25's Lean", 12.6, font_size=19, color=GREY_A).to_edge(DOWN, buff=0.25)
-        with self.voiceover(
-            "Draw every crossing at once, and three buildings start to look like one. <bookmark mark='a'/> There are "
-            "more than these seven. Part 18's PageRank is a Markov chain from AI, Built's Part 5; Part 20's random "
-            "projections are the Johnson-Lindenstrauss lemma of its Part 3; Part 54's proof assistants are the Lean "
-            "of its Part 25. <bookmark mark='b'/> And a good research problem often lives on a bridge: a tool that "
-            "is routine on one side, and not yet tried on the other."
-        ) as vo:
-            self.play(FadeIn(head), *[FadeIn(t) for t in tw.values()], FadeIn(lit), run_time=1.5)
-            vo.wait_until("a")
-            self.play(LaggedStart(*[Create(e) for e in extra], lag_ratio=0.4), FadeIn(foot), run_time=2.0)
-            vo.wait_until("b")
-            self.play(*[Indicate(b.line, color=HEAD, scale_factor=1.0) for b in lit],
-                      *[Indicate(b.topic[1], color=HEAD) for b in lit], run_time=1.5)
-        self.wait(0.6)
-        self.clear_scene()
 
 
 _ = (BG, DATA, HEAD, KERN, LAM, NO, YES)

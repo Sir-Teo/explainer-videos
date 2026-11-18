@@ -151,7 +151,7 @@ class Kolmogorov(WatchScene):
         self.clear_scene()
         self.checkpoint(
             [(r"Why are most strings incompressible?", r"Fewer than $2^n$ programs are shorter than $n$ bits"),
-             (r"How does halting give Gödel's theorem?", r"A complete theory would decide halting")],
+             (r"How does halting give G\"odel's theorem?", r"A complete theory would decide halting")],
             narration="Checkpoint. Why are most strings incompressible? And how does halting give Gödel's theorem?",
             answers_narration="There are fewer short programs than strings. And a complete, consistent theory could decide "
                               "halting, which is impossible.")

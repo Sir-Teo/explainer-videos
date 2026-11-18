@@ -70,7 +70,7 @@ class ProbMethod(WatchScene):
         self.clear_scene()
 
     def table(self):
-        self.ask(r"Erdős showed big graphs exist with no large one-colour clique. \\ Did he build one?",
+        self.ask(r"Erd\H{o}s showed big graphs exist with no large one-colour clique. \\ Did he build one?",
                  [r"yes", r"no: he showed a random colouring usually works"], 1,
                  say="Erdős proved that large colourings without big one-colour cliques exist. Did he construct one?",
                  reveal="No. He showed a random colouring works with positive probability, and nobody can build one as good.")

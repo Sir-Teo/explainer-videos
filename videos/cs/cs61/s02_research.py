@@ -49,24 +49,22 @@ def page(blocks, width=3.4, color=GREY_B, size=16):
 B = load("bias")
 
 
-class Research(VoiceoverScene):
+class Research(WatchScene):
     def construct(self):
         self.card()
         self.question()
         self.evidence()
         self.shape()
-        self.venues()
         self.ours()
 
     def card(self):
-        card = chapter_card(1, r"What research is", r"What turns a question into a result?", lit=(1934, 1991),
-                            extra=((1934, r"Popper: \ falsifiability"), (1954, r"Journal of the ACM"),
-                                   (1991, r"arXiv")), part=PART)
-        with self.voiceover("Chapter one. What research is."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(1, r"What research is", r"What turns a question into a result?", lit=(1934, 1991), extra=((1934, r"Popper: \ falsifiability"), (1954, r"Journal of the ACM"),
+                                   (1991, r"arXiv")), part=PART, said="Chapter one. What research is.")
 
     def question(self):
+        self.ask(r"A research question must, above all, be...", [r"interesting", r"falsifiable"], 1,
+                 say="Does the environment affect a program's speed? What must a research question be, above all?",
+                 reveal="Falsifiable: some possible observation must be able to prove it wrong. That's Popper.")
         head = label(r"A question that could come out wrong", font_size=36).to_edge(UP, buff=0.3)
         vague = box(r"Does the environment affect speed?", GREY_B, size=24, h=0.9)
         st = wrapped_label(r"Does growing an unused environment variable from 0 to 4{,}096 bytes move our word-count program's median "
@@ -224,64 +222,6 @@ class Research(VoiceoverScene):
         self.wait(0.4)
         self.clear_scene()
 
-    def venues(self):
-        head = label(r"Conferences and journals", font_size=36).to_edge(UP, buff=0.3)
-
-        def lane(items, color, y):
-            g = VGroup(*[box(t, color, size=19, h=0.62) for t in items]).arrange(RIGHT, buff=0.32)
-            g.move_to([0.6, y, 0])
-            arr = VGroup(*[Arrow(g[i].get_right(), g[i + 1].get_left(), buff=0.04, color=GREY_B, stroke_width=2,
-                                 max_tip_length_to_length_ratio=0.35) for i in range(len(g) - 1)])
-            return VGroup(g, arr)
-        conf = lane([r"deadline", r"3+ reviews", r"rebuttal", r"accept \ / \ reject", r"talk, \ proceedings"], DATA,
-                    1.75)
-        jour = lane([r"submit any time", r"reviews", r"revise", r"reviews", r"revise", r"accept"], LAM, 0.25)
-        cl = VGroup(label(r"conference", font_size=22, color=DATA), label(r"a few months", font_size=17,
-                                                                          color=GREY_A)).arrange(DOWN, buff=0.06)
-        jl = VGroup(label(r"journal", font_size=22, color=LAM), label(r"months to years", font_size=17,
-                                                                     color=GREY_A)).arrange(DOWN, buff=0.06)
-        cl.next_to(conf, LEFT, buff=0.3)
-        jl.next_to(jour, LEFT, buff=0.3)
-        for lb, ln in ((cl, conf), (jl, jour)):
-            if lb.get_left()[0] < -6.8:
-                VGroup(lb, ln).shift(RIGHT * (-6.8 - lb.get_left()[0]))
-        firsts = VGroup(
-            wrapped_label(r"in computer science the selective conferences are the main venue: \ SOSP \ (since "
-                          r"1967), \ STOC \ (1969), \ POPL \ (1973); \ many accept fewer than one paper in four", 12.4,
-                          font_size=19, color=WHITE),
-            wrapped_label(r"journals \ (the \textit{Journal of the ACM}, \ since 1954) \ carry longer, \ fuller "
-                          r"versions; \ preprints go to arXiv \ (since 1991) \ first", 12.4, font_size=19,
-                          color=GREY_A),
-            wrapped_label(r"Fortnow \ (2009): \ ``time for computer science to grow up'', \ back toward journals; \ "
-                          r"the debate continues", 12.4, font_size=19, color=HEAD),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.2).to_edge(DOWN, buff=0.35)
-        with self.voiceover(
-            "Where do papers go? In most sciences, to journals. Computer science is unusual. "
-            "<bookmark mark='a'/> Its main venues are selective conferences. A paper meets a fixed deadline, is "
-            "read by three or more members of a programme committee, the authors may answer in a short rebuttal, "
-            "and within a few months it is accepted or rejected, then presented in a talk and printed in the "
-            "proceedings. <bookmark mark='b'/> Many have long histories: the Symposium on Operating Systems "
-            "Principles since 1967, the theory symposium STOC since 1969, and the programming-languages symposium "
-            "POPL since 1973; many accept fewer than one paper in four. <bookmark mark='c'/> Journals work "
-            "differently: submit any time, and go through rounds of review and revision that can take months or "
-            "years. In computer science they often hold the longer, fuller version of a conference paper, and "
-            "preprints appear on arXiv first. <bookmark mark='d'/> In 2009 Lance Fortnow argued that the field "
-            "should grow up and move back toward journals. The debate continues."
-        ) as vo:
-            self.play(FadeIn(head))
-            vo.wait_until("a")
-            self.play(FadeIn(cl), LaggedStart(*[FadeIn(b, shift=RIGHT * 0.15) for b in conf[0]], lag_ratio=0.35),
-                      Create(conf[1]), run_time=3)
-            vo.wait_until("b")
-            self.play(FadeIn(firsts[0]))
-            vo.wait_until("c")
-            self.play(FadeIn(jl), LaggedStart(*[FadeIn(b, shift=RIGHT * 0.15) for b in jour[0]], lag_ratio=0.35),
-                      Create(jour[1]), run_time=3)
-            self.play(FadeIn(firsts[1]))
-            vo.wait_until("d")
-            self.play(FadeIn(firsts[2]))
-        self.wait(0.4)
-        self.clear_scene()
 
     def ours(self):
         head = label(r"This part's experiment, \ as a paper", font_size=36).to_edge(UP, buff=0.3)

@@ -47,7 +47,7 @@ NULL_MED = float(np.median(NULL))
 NULL_ABOVE = float(np.mean(NULL >= B["env_spread"]))
 
 
-class Bias(VoiceoverScene):
+class Bias(WatchScene):
     def construct(self):
         self.card()
         self.stack()
@@ -57,14 +57,16 @@ class Bias(VoiceoverScene):
         self.verdict()
 
     def card(self):
-        card = chapter_card(2, r"Measurement bias", r"Can a variable nobody reads change a program's speed?",
-                            lit=(2009, 2013), extra=((2009, r"Mytkowicz et al.: \ wrong data"),
-                                                     (2013, r"Curtsinger and Berger: \ Stabilizer")), part=PART)
-        with self.voiceover("Chapter two. Measurement bias."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(2, r"Measurement bias", r"Can a variable nobody reads change a program's speed?", lit=(2009, 2013), extra=((2009, r"Mytkowicz et al.: \ wrong data"),
+                                                     (2013, r"Curtsinger and Berger: \ Stabilizer")), part=PART, said="Chapter two. Measurement bias.")
 
     def stack(self):
+        self.wrong_idea(r"one careful measurement settles a speed question",
+                        r"the setup itself biases the result; \\ randomize it, and measure many",
+                        narration="It is tempting to think that one careful timing of two versions tells you which is faster.",
+                        right_narration="The setup itself, environment, link order, alignment, can bias the result by more "
+                                        "than the change. Randomize the setup and measure many times.")
+        self.clear_scene()
         head = label(r"Where the environment lives", font_size=36).to_edge(UP, buff=0.3)
 
         def column(env_h):
@@ -147,6 +149,10 @@ class Bias(VoiceoverScene):
         self.clear_scene()
 
     def env_size(self):
+        self.ask(r"Change only the size of an environment variable \\ the program never reads. Running time...",
+                 [r"identical", r"shifts measurably"], 1,
+                 say="Change nothing but the size of an environment variable the program never reads. Does its running time change?",
+                 reveal="It shifts measurably: the stack moves, and with it alignment and caching.")
         head = label(r"Experiment one: \ the environment grows", font_size=36).to_edge(UP, buff=0.3)
         lo, hi = 0.125, 0.165
         ax = Axes(x_range=[0, 4096, 1024], y_range=[lo, hi, 0.01], x_length=7.4, y_length=4.4,
