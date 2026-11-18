@@ -9,7 +9,7 @@ def lit_tex(l):
     return rf"x_{l}" if l > 0 else rf"\bar x_{-l}"
 
 
-class Sumcheck(VoiceoverScene):
+class Sumcheck(WatchScene):
     def construct(self):
         self.card()
         self.arith()
@@ -18,11 +18,7 @@ class Sumcheck(VoiceoverScene):
         self.ipspace()
 
     def card(self):
-        card = chapter_card(6, r"Sum-check and IP = PSPACE", r"How can a verifier check an exponential sum?",
-                            lit=(1990,), extra=((1990, r"Lund--Fortnow--Karloff--Nisan; \ Shamir"),), part=PART)
-        with self.voiceover("Chapter six. Sum-check and IP equals PSPACE."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(6, r"Sum-check and IP = PSPACE", r"How can a verifier check an exponential sum?", lit=(1990,), extra=((1990, r"Lund--Fortnow--Karloff--Nisan; \ Shamir"),), part=PART, said="Chapter six. Sum-check and IP equals PSPACE.")
 
     def arith(self):
         s = load("sumcheck")
@@ -60,6 +56,9 @@ class Sumcheck(VoiceoverScene):
         self.clear_scene()
 
     def rounds(self):
+        self.ask(r"A sum over $2^n$ points. \\ How many rounds does sum-check need?", [r"$2^n$", r"$n$", r"$1$"], 1,
+                 say="The claim is a sum over two to the n points. How many rounds of conversation does sum-check need?",
+                 reveal="n: one round per variable.")
         s = load("sumcheck")
         head = label(r"One variable at a time", font_size=34).to_edge(UP, buff=0.3)
         log = [r for r in s["log"] if "round" in r]
@@ -86,7 +85,7 @@ class Sumcheck(VoiceoverScene):
                   font_size=20, color=HEAD),
         ).arrange(DOWN, buff=0.18).next_to(tab, DOWN, buff=0.4)
         with self.voiceover(
-            "The verifier reduces the claimed sum one variable at a time. <bookmark mark='a'/> In each round the prover sends a univariate polynomial as six values at distinct field points, fixing a degree-at-most-five polynomial. <bookmark mark='b'/> The values at zero and one must add to the current claim. Only after receiving the message does the verifier draw an independent uniform challenge and update the claim by interpolation. The table contains the actual retained transcript. <bookmark mark='c'/> After four rounds, the verifier evaluates the original arithmetized formula at the four challenges and compares it with the final claim. <bookmark mark='d'/> Communication and verifier arithmetic are polynomial in the number of variables, the degree bound and field-element bit length. This teaching Lagrange evaluator performs degree-dependent work; the prover still does exponential suffix summation."
+            "The verifier reduces the claimed sum one variable at a time. <bookmark mark='a'/> In each round the prover sends a univariate polynomial as six values at distinct field points, fixing a degree-at-most-five polynomial. <bookmark mark='b'/> The values at zero and one must add to the current claim. Only after receiving the message does the verifier draw an independent uniform challenge and update the claim by interpolation. <bookmark mark='c'/> After four rounds, the verifier evaluates the original arithmetized formula at the four challenges and compares it with the final claim. <bookmark mark='d'/> Communication and verifier arithmetic are polynomial in the number of variables, the degree bound and field-element bit length."
         ) as vo:
             self.play(FadeIn(head), FadeIn(VGroup(*tab.cells[0])), FadeIn(tab.rule))
             vo.wait_until("a")
@@ -120,7 +119,7 @@ class Sumcheck(VoiceoverScene):
                   font_size=22, color=YES),
         ).arrange(DOWN, buff=0.32).next_to(head, DOWN, buff=0.55)
         with self.voiceover(
-            "Soundness concerns every prover strategy, including adaptive ones. <bookmark mark='a'/> If the current claim is false, any polynomial that passes the sum-at-zero-and-one check must differ from the true polynomial. <bookmark mark='b'/> Two distinct polynomials of degree at most d agree at no more than d field points. <bookmark mark='c'/> Therefore, conditioned on any earlier transcript where the claim is still false, the next independent uniform challenge repairs that false claim with probability at most d divided by the field size. <bookmark mark='d'/> If no round repairs it, the final direct evaluation rejects. A union bound gives n d divided by the field size; a sequential conditional argument also gives one minus one minus d over p to the n. Independence between success events is unnecessary. <bookmark mark='e'/> Our specific cheating strategy adds a polynomial with chosen roots. Its measured frequency comes from three thousand trials, with ordinary sampling uncertainty. It is not a counterexample when a sample proportion lies above a theoretical probability bound. <bookmark mark='f'/> A larger field lowers the soundness bound. No observed success in three hundred trials remains a finite observation, not zero soundness error."
+            "Soundness concerns every prover strategy, including adaptive ones. <bookmark mark='a'/> If the current claim is false, any polynomial that passes the sum-at-zero-and-one check must differ from the true polynomial. <bookmark mark='b'/> Two distinct polynomials of degree at most d agree at no more than d field points. <bookmark mark='c'/> Therefore, conditioned on any earlier transcript where the claim is still false, the next independent uniform challenge repairs that false claim with probability at most d divided by the field size. <bookmark mark='d'/> If no round repairs it, the final direct evaluation rejects. A union bound gives n d divided by the field size; a sequential conditional argument also gives one minus one minus d over p to the n. Independence between success events is unnecessary. <bookmark mark='e'/> Our specific cheating strategy adds a polynomial with chosen roots. Its measured frequency comes from three thousand trials, with ordinary sampling uncertainty. It is not a counterexample when a sample proportion lies above a theoretical probability bound. <bookmark mark='f'/> A larger field lowers the soundness bound."
         ) as vo:
             self.play(FadeIn(head))
             for mk, ln in zip("abcdef", lines):

@@ -4,10 +4,10 @@ from explainer.cs import *  # noqa: F403
 from videos.cs.cs27.common import (BG, CTRL, DATA, HEAD, LAM, NO, PART, YES, fit_right, load, mono, words)
 
 
-class Hook(VoiceoverScene):
+class Hook(WatchScene):
     def construct(self):
         self.three()
-        self.plan()
+        self.title(PART)
 
     def pic_bits(self):
         sq = VGroup(*[Square(side_length=0.17, stroke_color=GREY_D, stroke_width=0.5,
@@ -67,39 +67,18 @@ class Hook(VoiceoverScene):
         moral = label(r"each trades certainty for a probability of error that can be made as small as you like",
                       font_size=23, color=LAM).next_to(cards, DOWN, buff=0.35)
         with self.voiceover(
-            "A proof can be more than a document read from beginning to end. This part studies three precise alternatives. <bookmark mark='a'/> A probabilistically checkable proof uses a robust encoding. True statements have an accepting proof; every proof of a false statement is rejected with bounded probability. <bookmark mark='b'/> Sum-check turns a claimed exponential sum into a conversation about low-degree polynomials over a finite field. Our small experiment checks complete transcripts; its sample frequencies do not establish the theorem. <bookmark mark='c'/> A zero-knowledge protocol can convince a verifier without revealing additional efficiently usable information about a secret colouring, under its stated definition and commitment assumptions. The graph and statement remain public. <bookmark mark='d'/> We will distinguish perfect completeness, soundness error, computational assumptions and actual finite measurements throughout."
+            "I can convince you that a statement is true while you read only a handful of bits of my proof. "
+            "<bookmark mark='a'/> Write the proof in a robust code, and a wrong proof is wrong almost everywhere. A few random spot checks catch it. "
+            f"<bookmark mark='b'/> Or we can talk. I claim a formula has {s['true']} satisfying assignments. You ask me random questions about polynomials, and a liar gets caught. "
+            "<bookmark mark='c'/> Or I can convince you that a graph is three-colourable, and show you nothing about the colouring. "
+            "<bookmark mark='d'/> Each one trades certainty for an error you can make as small as you like. How can that possibly work?"
         ) as vo:
             self.play(FadeIn(head))
             for mk, c in zip("abc", cards):
                 vo.wait_until(mk)
-                self.play(FadeIn(c, shift=UP * 0.15))
+                self.play(GrowFromEdge(c, DOWN), run_time=0.9)
             vo.wait_until("d")
-            self.play(FadeIn(moral))
+            self.play(Write(moral))
         self.wait(0.3)
         self.clear_scene()
 
-    def plan(self):
-        title = label(rf"Part {PART}: \ Proofs and Randomness", font_size=46).to_edge(UP, buff=0.4)
-        smap = series_map(current=PART, done=PART - 1).scale(0.92).next_to(title, DOWN, buff=0.35)
-        obj = objectives_card([
-            r"randomized classes, \ amplification, \ and hardness against randomness",
-            r"circuit lower bounds: \ the switching lemma, \ measured; \ communication complexity",
-            r"interactive proofs: \ graph non-isomorphism, \ sum-check, \ IP = PSPACE",
-            r"zero knowledge, \ the PCP theorem, \ and why approximation is hard",
-            r"the Unique Games Conjecture; \ fine-grained and parameterized complexity",
-            r"counting and the permanent; \ average case; \ MIP* = RE",
-        ], font_size=26).move_to(DOWN * 0.2)
-        with self.voiceover(
-            "Part 27 of Computer Science, Built: Proofs and Randomness. <bookmark mark='a'/> In this part: the "
-            "complexity classes of randomized algorithms, and why randomness may not add power after all; lower "
-            "bounds for circuits, including the switching lemma, which we measure; communication between two "
-            "parties; interactive proofs, from graph non-isomorphism to the sum-check protocol and IP equals PSPACE; "
-            "zero knowledge; the PCP theorem, and why it makes approximation hard; the Unique Games Conjecture; "
-            "fine-grained and parameterized complexity; counting; and a 2020 result connecting proofs with quantum "
-            "entanglement and the halting problem."
-        ) as vo:
-            self.play(FadeIn(title), FadeIn(smap))
-            vo.wait_until("a")
-            self.play(FadeOut(smap), FadeIn(obj))
-        self.wait(0.5)
-        self.clear_scene()

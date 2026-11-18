@@ -17,7 +17,7 @@ def tile(content, caption, color, TW=3.6, TH=2.3):
     return Group(frame, content, cap)
 
 
-class Outro(VoiceoverScene):
+class Outro(WatchScene):
     def construct(self):
         self.recap()
         self.payoffs()
@@ -39,12 +39,18 @@ class Outro(VoiceoverScene):
             tile(MathTex(r"2^k, \ \mathrm{perm}", font_size=50, color=CTRL), r"fine-grained; \ FPT; \ \#P", CTRL),
         ).arrange_in_grid(rows=2, cols=3, buff=(0.35, 0.35)).move_to(DOWN * 0.2)
         with self.voiceover(
-            'This part built executable examples of amplification, fingerprints, random restrictions, interactive proofs and sum-check; checked salted-hash commitments and opened-colour marginals; explored PCP and approximation theorems, unique games, fine-grained and parameterized algorithms; and compared exact counting with average-case experiments. Full finite inputs, models and transcripts support the measurements. Theorems retain their model, completeness, soundness and security assumptions. A marginal simulator histogram and a small hash-challenge demonstration do not independently establish cryptographic security.'
+            'This part built executable examples of amplification, fingerprints, random restrictions, interactive proofs and sum-check; checked salted-hash commitments and opened-colour marginals; explored PCP and approximation theorems, unique games, fine-grained and parameterized algorithms; and compared exact counting with average-case experiments. Full finite inputs, models and transcripts support the measurements. A marginal simulator histogram and a small hash-challenge demonstration do not independently establish cryptographic security.'
         ):
             self.play(FadeIn(head))
             self.play(LaggedStart(*[FadeIn(t, shift=UP * 0.15) for t in tiles], lag_ratio=0.25), run_time=4.0)
         self.wait(0.5)
         self.clear_scene()
+        self.checkpoint(
+            [(r"What does zero knowledge mean?", r"A simulator could produce the verifier's view alone"),
+             (r"What does SETH predict for orthogonal vectors?", r"No $n^{2-\epsilon}$ algorithm")],
+            narration="Last checkpoint. What does zero knowledge mean? And what does SETH predict for orthogonal vectors?",
+            answers_narration="Whatever the verifier sees, it could have simulated alone. And no algorithm beats n squared by a "
+                              "polynomial factor.")
 
     def payoffs(self):
         card = payoff_card([

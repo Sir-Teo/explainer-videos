@@ -4,7 +4,7 @@ from explainer.cs import *  # noqa: F403
 from videos.cs.cs27.common import (BG, CTRL, DATA, HEAD, LAM, NO, PART, YES, fit_right, grid_table, load)
 
 
-class Approx(VoiceoverScene):
+class Approx(WatchScene):
     def construct(self):
         self.card()
         self.gap()
@@ -12,12 +12,8 @@ class Approx(VoiceoverScene):
         self.table()
 
     def card(self):
-        card = chapter_card(9, r"Hardness of approximation", r"Why can't some approximations be improved?",
-                            lit=(1991, 2001), extra=((1991, r"Feige--Goldwasser--Lov\'asz--Safra--Szegedy"),
-                                                     (2001, r"H\aa stad")), part=PART)
-        with self.voiceover("Chapter nine. Hardness of approximation."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(9, r"Hardness of approximation", r"Why can't some approximations be improved?", lit=(1991, 2001), extra=((1991, r"Feige--Goldwasser--Lov\'asz--Safra--Szegedy"),
+                                                     (2001, r"H\aa stad")), part=PART, said="Chapter nine. Hardness of approximation.")
 
     def gap(self):
         head = label(r"A PCP is a gap", font_size=34).to_edge(UP, buff=0.35)
@@ -55,6 +51,10 @@ class Approx(VoiceoverScene):
         self.clear_scene()
 
     def maxsat(self):
+        self.ask(r"Each clause has three distinct variables. \\ A random assignment satisfies on average...",
+                 [r"$1/2$", r"$7/8$", r"all"], 1,
+                 say="Every clause has three distinct variables. What fraction does a random assignment satisfy on average?",
+                 reveal="Seven eighths. And Hastad proved that beating seven eighths by any constant is NP-hard.")
         m = load("maxsat")
         head = label(r"MAX-3SAT: \ a coin is optimal", font_size=34).to_edge(UP, buff=0.35)
         rows = [[f"{r['ratio']:g}", f"{r['random'] * 100:.1f}\\%", f"{r['walksat'] * 100:.1f}\\%"] for r in m["rows"]]
@@ -74,7 +74,7 @@ class Approx(VoiceoverScene):
                   font_size=21, color=YES),
         ).arrange(DOWN, buff=0.22).next_to(tl, DOWN, buff=0.35)
         with self.voiceover(
-            "Consider MAX-E3SAT with three distinct variables in each clause. <bookmark mark='a'/> A uniform random assignment satisfies each such clause with probability seven eighths, so linearity of expectation guarantees that fraction on average. Conditional expectation can derandomize this guarantee. <bookmark mark='b'/> Our finite random formulas and bounded WalkSAT runs are retained in full. Their better scores concern this sample distribution and do not improve a worst-case approximation guarantee. <bookmark mark='c'/> Håstad proved that for every fixed positive epsilon, distinguishing satisfiable instances from instances with optimum at most seven eighths plus epsilon is NP-hard. <bookmark mark='d'/> Consequently, a deterministic polynomial-time algorithm beating that threshold would imply P equals NP. Randomized algorithms require the corresponding randomized complexity qualification. Sampling success on easy instances does not establish such a uniform algorithm."
+            "Consider MAX-E3SAT with three distinct variables in each clause. <bookmark mark='a'/> A uniform random assignment satisfies each such clause with probability seven eighths, so linearity of expectation guarantees that fraction on average. Conditional expectation can derandomize this guarantee. <bookmark mark='b'/> Their better scores concern this sample distribution and do not improve a worst-case approximation guarantee. <bookmark mark='c'/> Håstad proved that for every fixed positive epsilon, distinguishing satisfiable instances from instances with optimum at most seven eighths plus epsilon is NP-hard. <bookmark mark='d'/> Consequently, a deterministic polynomial-time algorithm beating that threshold would imply P equals NP."
         ) as vo:
             self.play(FadeIn(head), FadeIn(tab), FadeIn(tl))
             for mk, ln in zip("abcd", lines):
@@ -112,3 +112,8 @@ class Approx(VoiceoverScene):
             self.play(FadeIn(note))
         self.wait(0.3)
         self.clear_scene()
+        self.checkpoint(
+            [(r"What does sum-check reduce at each round?", r"One variable of the claimed sum"),
+             (r"What does the PCP theorem give approximation?", r"A gap: some ratios are NP-hard to beat")],
+            narration="Checkpoint. What does each round of sum-check remove? And what does the PCP theorem give approximation?",
+            answers_narration="One variable of the sum. And a gap: approximating beyond certain ratios is NP-hard.")
