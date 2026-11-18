@@ -4,7 +4,7 @@ from explainer.cs import *  # noqa: F403
 from videos.cs.cs15.common import (BG, BLACK_OBJ, CODE, COST, CTRL, DATA, FUNC, GRAY_OBJ, HEAD, LAM, NO, PART,
                                    WHITE_OBJ, YES, grid_table, load, mono, words)
 
-from .measurements import barrier_color_witness
+from videos.cs.cs15.measurements import barrier_color_witness
 
 POS = {"R": (-4.5, 0.6), "A": (-2.0, 0.6), "B": (0.5, 1.6), "C": (3.0, 0.6)}
 FILL = {0: WHITE_OBJ, 1: GRAY_OBJ, 2: BLACK_OBJ}
