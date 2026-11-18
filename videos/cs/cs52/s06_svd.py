@@ -31,23 +31,18 @@ def log_ticks(ax, x0, ys, size=20):
                     for p in ys])
 
 
-class Svd(VoiceoverScene):
+class Svd(WatchScene):
     def construct(self):
         self.card()
         self.geometry()
         self.rank()
         self.naive()
         self.truncate()
-        self.lastresort()
 
     def card(self):
-        card = chapter_card(5, r"The SVD", r"What is left when a matrix is nearly singular?",
-                            lit=(1873, 1936, 1965), extra=((1873, r"Beltrami: \ the decomposition"),
+        self.chapter(5, r"The SVD", r"What is left when a matrix is nearly singular?", lit=(1873, 1936, 1965), extra=((1873, r"Beltrami: \ the decomposition"),
                                                            (1936, r"Eckart and Young: \ best low rank"),
-                                                           (1965, r"Golub and Kahan: \ computing it")), part=PART)
-        with self.voiceover("Chapter five. The singular value decomposition."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+                                                           (1965, r"Golub and Kahan: \ computing it")), part=PART, said="Chapter five. The singular value decomposition.")
 
     def geometry(self):
         head = label(r"Rotate, \ stretch, \ rotate", font_size=36).to_edge(UP, buff=0.3)
@@ -216,6 +211,10 @@ class Svd(VoiceoverScene):
         return VMobject(color=color, stroke_width=width).set_points_as_corners(pts)
 
     def naive(self):
+        self.ask(r"Deblur by inverting the blur exactly; \\ the data carry noise of one part in a thousand. Result:",
+                 [r"the sharp signal", r"noise, enormously amplified"], 1,
+                 say="Undo a blur by inverting its matrix exactly, when the data carry noise of one part in a thousand. What comes out?",
+                 reveal="Noise, amplified by the tiny singular values.")
         d = load("svd")
         head = label(r"Undoing a blur", font_size=36).to_edge(UP, buff=0.3)
         ax, yt = self.signal_axes()
@@ -331,56 +330,6 @@ class Svd(VoiceoverScene):
         self.wait(0.4)
         self.clear_scene()
 
-    def lastresort(self):
-        head = label(r"Computing it, \ and when to reach for it", font_size=36).to_edge(UP, buff=0.3)
-        steps = VGroup(pattern(["xxxx", "xxxx", "xxxx", "xxxx", "xxxx"]),
-                       MathTex(r"\xrightarrow{H_1 \,\cdot\,}", font_size=30),
-                       pattern(["xxxx", "0xxx", "0xxx", "0xxx", "0xxx"]),
-                       MathTex(r"\xrightarrow{\,\cdot\, G_1}", font_size=30),
-                       pattern(["xx00", "0xxx", "0xxx", "0xxx", "0xxx"]),
-                       MathTex(r"\xrightarrow{\ \cdots\ }", font_size=30),
-                       pattern(["xx00", "0xx0", "00xx", "000x", "0000"], color=YES))
-        steps.arrange(RIGHT, buff=0.2).scale_to_fit_width(10.6).next_to(head, DOWN, buff=0.45)
-        caps = VGroup(
-            label(r"a mirror from the left clears a column", font_size=17, color=GREY_B).next_to(steps[2], DOWN,
-                                                                                                buff=0.15),
-            label(r"one from the right clears a row", font_size=17, color=GREY_B).next_to(steps[4], DOWN, buff=0.15),
-            label(r"bidiagonal: \ same $\sigma_i$", font_size=17, color=YES).next_to(steps[6], DOWN, buff=0.15),
-        )
-        cols = {r"\Sigma^{+}": HEAD}
-        pinv = cmath(r"x^{+}", r"=", r"V", r"\Sigma^{+}", r"U^{\mathsf T} b", r",\qquad",
-                     r"\sigma_i^{+} = \begin{cases} 1/\sigma_i & \sigma_i > \text{tol} \\ 0 & \text{otherwise}"
-                     r"\end{cases}", colors=cols, font_size=32)
-        pinv.next_to(caps, DOWN, buff=0.55)
-        pl = label(r"the pseudo-inverse: \ the shortest least-squares solution, \ even when $A$ is rank deficient",
-                   font_size=19, color=WHITE).next_to(pinv, DOWN, buff=0.2)
-        uses = wrapped_label(r"the SVD costs several times as much as QR, \ so it is kept for when the others are not "
-                             r"enough: \ numerical rank, \ rank-deficient least squares, \ ill-posed problems, \ "
-                             r"principal components \ (\textit{AI, Built} 3), \ and low-rank approximation "
-                             r"\ (randomized, \ in Chapter 15)", 12.4, font_size=20, color=HEAD)
-        uses.next_to(pl, DOWN, buff=0.7)
-        with self.voiceover(
-            "How is it computed? Not from A transposed A, which would square the condition number again. "
-            "<bookmark mark='a'/> Gene Golub and William Kahan, in 1965, applied Householder mirrors alternately "
-            "from the left and the right, clearing a column, then a row. <bookmark mark='b'/> What is left is "
-            "bidiagonal, with the same singular values, and a variant of the next chapter's QR algorithm finds "
-            "them. <bookmark mark='c'/> The payoff is the pseudo-inverse: invert only the singular values above a "
-            "tolerance, and you get the shortest least-squares solution even when the matrix is rank deficient. "
-            "<bookmark mark='d'/> The SVD costs several times as much as QR, so it is the tool of last resort: "
-            "when other methods fail, it says exactly how much the data can tell you."
-        ) as vo:
-            self.play(FadeIn(head), FadeIn(steps[0]))
-            vo.wait_until("a")
-            self.play(FadeIn(steps[1]), FadeIn(steps[2]), FadeIn(caps[0]))
-            self.play(FadeIn(steps[3]), FadeIn(steps[4]), FadeIn(caps[1]))
-            vo.wait_until("b")
-            self.play(FadeIn(steps[5]), FadeIn(steps[6]), FadeIn(caps[2]))
-            vo.wait_until("c")
-            self.play(Write(pinv), FadeIn(pl))
-            vo.wait_until("d")
-            self.play(FadeIn(uses))
-        self.wait(0.4)
-        self.clear_scene()
 
 
 _ = (BG, DATA, KERN, LAM, NO)

@@ -23,24 +23,18 @@ def mat(rows, size=32, h=0.8, v=0.65, color=WHITE):
     return m
 
 
-class Lu(VoiceoverScene):
+class Lu(WatchScene):
     def construct(self):
         self.card()
         self.elimination()
         self.cost()
         self.pivot()
         self.growth()
-        self.cholesky()
 
     def card(self):
-        card = chapter_card(3, r"Gaussian elimination", r"How do we solve $Ax = b$, \ and why swap rows?",
-                            lit=(1948, 1961, 1990), extra=((1948, r"Turing: \ elimination is $LU$"),
+        self.chapter(3, r"Gaussian elimination", r"How do we solve $Ax = b$, \ and why swap rows?", lit=(1948, 1961, 1990), extra=((1948, r"Turing: \ elimination is $LU$"),
                                                            (1961, r"Wilkinson: \ the growth bound"),
-                                                           (1990, r"Trefethen and Schreiber: \ average growth")),
-                            part=PART)
-        with self.voiceover("Chapter three. Gaussian elimination."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+                                                           (1990, r"Trefethen and Schreiber: \ average growth")), part=PART, said="Chapter three. Gaussian elimination.")
 
     def elimination(self):
         head = label(r"Elimination is a factorization", font_size=36).to_edge(UP, buff=0.3)
@@ -173,6 +167,10 @@ class Lu(VoiceoverScene):
         self.clear_scene()
 
     def pivot(self):
+        self.ask(r"Eliminate with a tiny pivot $\epsilon$, \\ without swapping rows. The answer:", [r"fine",
+                 r"garbage"], 1,
+                 say="Eliminate with a tiny pivot, epsilon, without swapping rows. What happens to the answer?",
+                 reveal="Garbage: one over epsilon swamps everything else. Swap rows to the largest pivot.")
         rows = load("pivot")["rows"]
         head = label(r"A tiny pivot, \ and the cure", font_size=36).to_edge(UP, buff=0.3)
         cols = {r"\tfrac{1}{\varepsilon}": NO, r"1 - \tfrac{1}{\varepsilon}": NO, r"-10^{20}": NO}
@@ -314,72 +312,6 @@ class Lu(VoiceoverScene):
         self.wait(0.4)
         self.clear_scene()
 
-    def cholesky(self):
-        head = label(r"Symmetric and positive definite: \ Cholesky", font_size=36).to_edge(UP, buff=0.3)
-        rows = VGroup(
-            MathTex(r"\begin{bmatrix} a & b \\ b & c \end{bmatrix}", r"=",
-                    r"\begin{bmatrix} \ell_{11} & 0 \\ \ell_{21} & \ell_{22} \end{bmatrix}",
-                    r"\begin{bmatrix} \ell_{11} & \ell_{21} \\ 0 & \ell_{22} \end{bmatrix}", font_size=32),
-            MathTex(r"\ell_{11}^2 = a", r",\quad", r"\ell_{11}\,\ell_{21} = b", r",\quad",
-                    r"\ell_{21}^2 + \ell_{22}^2 = c", font_size=32),
-            MathTex(r"\ell_{11} = \sqrt{a}", r",\quad", r"\ell_{21} = b/\sqrt{a}", r",\quad",
-                    r"\ell_{22} = \sqrt{c - b^2/a}", font_size=32),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.45).next_to(head, DOWN, buff=0.45).to_edge(LEFT, buff=0.6)
-        rows[0][2].set_color(DATA)
-        rows[2].set_color(YES)
-        whys = VGroup(label(r"$A = LL^{\mathsf T}$", font_size=20, color=GREY_B),
-                      label(r"match the entries", font_size=20, color=GREY_B),
-                      label(r"solve in order", font_size=20, color=GREY_B))
-        for w, r in zip(whys, rows):
-            w.next_to(r, RIGHT, buff=0.5)
-        x0 = max(w.get_left()[0] for w in whys)
-        for w in whys:
-            w.align_to([x0, 0, 0], LEFT)
-        pos = label(r"positive definite \ $\iff$ \ every square root is of a positive number", font_size=19,
-                    color=YES).next_to(rows[2], DOWN, buff=0.25).align_to(rows[2], LEFT)
-        # the flop counts, as bars of n^3
-        specs = [(r"Cholesky", 1 / 3, YES, r"$n^3/3$"), (r"LU", 2 / 3, DATA, r"$2n^3/3$"),
-                 (r"Householder QR \ (next chapter)", 4 / 3, LAM, r"$4n^3/3$")]
-        bars = VGroup()
-        for name, v, c, t in specs:
-            b = Rectangle(width=v * 4.2, height=0.36, stroke_width=0, fill_color=c, fill_opacity=0.85)
-            nm = label(name, font_size=19, color=c)
-            vt = label(t, font_size=19, color=c)
-            bars.add(VGroup(nm, b, vt))
-        for row in bars:
-            row[0].move_to([-3.3, 0, 0], aligned_edge=RIGHT)
-            row[1].next_to(row[0], RIGHT, buff=0.3)
-            row[2].next_to(row[1], RIGHT, buff=0.2)
-        bars.arrange(DOWN, aligned_edge=LEFT, buff=0.22)
-        for row in bars:
-            row[0].align_to([-3.4, 0, 0], RIGHT)
-            row[1].next_to([-3.1, row[0].get_y(), 0], RIGHT, buff=0)
-            row[2].next_to(row[1], RIGHT, buff=0.2)
-        bars.next_to(pos, DOWN, buff=0.5).set_x(0)
-        bcap = note(r"flops for an $n \times n$ matrix, \ leading terms", font_size=17).next_to(bars, DOWN, buff=0.15)
-        with self.voiceover(
-            "When A is symmetric and positive definite, as covariance matrices are, "
-            "elimination can be halved. <bookmark mark='a'/> Write A as L times L transposed. "
-            "<bookmark mark='b'/> Match the entries: l one one squared is a, l one one times l two one is b, and "
-            "the corner gives c. <bookmark mark='c'/> Solve in order: square roots and a division. Positive "
-            "definiteness is exactly the condition that every square root is of a positive number. Each entry of "
-            "L is bounded by the square root of a diagonal entry of A, so nothing can grow, and no pivoting is "
-            "needed. <bookmark mark='d'/> André-Louis Cholesky's method costs a third of n cubed operations, half "
-            "of LU."
-        ) as vo:
-            self.play(FadeIn(head))
-            vo.wait_until("a")
-            self.play(Write(rows[0]), FadeIn(whys[0]))
-            vo.wait_until("b")
-            self.play(FadeIn(rows[1], shift=DOWN * 0.1), FadeIn(whys[1]))
-            vo.wait_until("c")
-            self.play(TransformMatchingTex(rows[1].copy(), rows[2]), FadeIn(whys[2]))
-            self.play(FadeIn(pos))
-            vo.wait_until("d")
-            self.play(LaggedStart(*[AnimationGroup(FadeIn(r[0]), GrowFromEdge(r[1], LEFT), FadeIn(r[2]))
-                                    for r in bars], lag_ratio=0.3), FadeIn(bcap))
-        self.wait(0.4)
-        self.clear_scene()
 
 
 _ = (BG, KERN, LAM)

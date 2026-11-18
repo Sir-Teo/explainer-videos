@@ -20,24 +20,18 @@ def sci(v: float, digits: int = 1) -> str:
     return rf"{v / 10 ** e:.{digits}f} \times 10^{{{e}}}"
 
 
-class Speed(VoiceoverScene):
+class Speed(WatchScene):
     def construct(self):
         self.card()
         self.levels()
         self.measured()
         self.blocking()
         self.refinement()
-        self.hpl()
 
     def card(self):
-        card = chapter_card(14, r"Speed: \ BLAS, \ LAPACK and mixed precision",
-                            r"Why is the fastest code always matrix multiplication?",
-                            lit=(1979, 1990, 1992, 1993), extra=((1979, r"BLAS level 1; \ LINPACK"),
+        self.chapter(14, r"Speed: \ BLAS, \ LAPACK and mixed precision", r"Why is the fastest code always matrix multiplication?", lit=(1979, 1990, 1992, 1993), extra=((1979, r"BLAS level 1; \ LINPACK"),
                                                                  (1990, r"BLAS level 3"), (1992, r"LAPACK"),
-                                                                 (1993, r"the first Top500")), part=PART)
-        with self.voiceover("Chapter fourteen. Speed: BLAS, LAPACK, and mixed precision."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+                                                                 (1993, r"the first Top500")), part=PART, said="Chapter fourteen. Speed: BLAS, LAPACK, and mixed precision.")
 
     def levels(self):
         b = load("blas")["rows"][0]
@@ -248,6 +242,9 @@ class Speed(VoiceoverScene):
         self.clear_scene()
 
     def refinement(self):
+        self.ask(r"Factor in single precision, \\ refine with residuals in double. Accuracy:", [r"single", r"double"], 1,
+                 say="Factor the matrix in fast single precision, then correct with residuals computed in double. What accuracy do we get?",
+                 reveal="Double, for a well-conditioned matrix, at near single-precision cost.")
         rows_ = load("refine")["rows"]
         r = next(x for x in rows_ if round(math.log10(x["kappa"])) == 5)
         head = label(r"Mixed precision: \ fast factors, \ exact corrections", font_size=36).to_edge(UP, buff=0.3)
@@ -318,74 +315,6 @@ class Speed(VoiceoverScene):
         self.wait(0.4)
         self.clear_scene()
 
-    def hpl(self):
-        rows_ = load("blas")["rows"]
-        big = rows_[-1]
-        head = label(r"Linpack and the Top500", font_size=36).to_edge(UP, buff=0.3)
-        rate = cmath(r"\text{rate}", r"=", r"\frac{\tfrac23 n^3 + 2n^2}{\text{time}}", font_size=34)
-        rate.next_to(head, DOWN, buff=0.45)
-        rw = wrapped_label(r"High-Performance Linpack: \ a dense random $Ax = b$ by LU with partial pivoting "
-                           r"\ (Chapter 3), \ $n$ as large as memory allows; \ almost all of it is \texttt{gemm}",
-                           11.0, font_size=19, color=GREY_B).next_to(rate, DOWN, buff=0.2)
-        x0, x1, lo, hi = -5.8, 5.8, 8.0, 19.0
-        y = -1.35
-
-        def X(p):
-            return x0 + (x1 - x0) * (p - lo) / (hi - lo)
-        axis = Line([x0, y, 0], [x1, y, 0], color=GREY_C, stroke_width=2)
-        ticks = VGroup(*[VGroup(Line([X(p), y - 0.08, 0], [X(p), y + 0.08, 0], color=GREY_C),
-                                MathTex(rf"10^{{{p}}}", font_size=20, color=GREY_B).next_to([X(p), y, 0], DOWN,
-                                                                                            buff=0.15))
-                         for p in range(8, 20, 2)])
-        al = label(r"floating-point operations per second \ (log scale)", font_size=17, color=GREY_A).next_to(
-            ticks, DOWN, buff=0.12)
-        ratio = 1.102e18 / (big["gemm_gflops"] * 1e9)
-        pts = [(big["axpy_gflops"] * 1e9, [r"this machine, \ \texttt{axpy}"], KERN, 1.35),
-               (big["gemm_gflops"] * 1e9, [r"this machine, \ \texttt{gemm}"], YES, 0.6),
-               (1.102e18, [r"Frontier, \ June 2022: \ the first exaflop",
-                           rf"$\times\, {sci(ratio)}$ our \texttt{{gemm}}"], HEAD, 0.6)]
-        marks = VGroup()
-        for v, ts, c, hgt in pts:
-            p = math.log10(v)
-            d = Dot([X(p), y, 0], radius=0.1, color=c)
-            stem = Line([X(p), y, 0], [X(p), y + hgt, 0], color=c, stroke_width=2)
-            tx = VGroup(label(ts[0], font_size=18, color=c), MathTex(sci(v), font_size=22, color=c),
-                        *[label(t, font_size=18, color=c) for t in ts[1:]]).arrange(DOWN, buff=0.06)
-            tx.next_to(stem, UP, buff=0.08)
-            if tx.get_right()[0] > 6.9:
-                tx.shift(LEFT * (tx.get_right()[0] - 6.9))
-            if tx.get_left()[0] < -6.9:
-                tx.shift(RIGHT * (-6.9 - tx.get_left()[0]))
-            marks.add(VGroup(d, stem, tx))
-        foot = wrapped_label(r"the Top500 list, \ twice a year since 1993, \ ranks by this one number; \ HPCG, \ a "
-                             r"conjugate-gradient benchmark, \ sparse and memory-bound, \ reaches only a few percent of "
-                             r"the same machines' peak: \ Part 9's roofline, \ at the scale of a building", 12.4,
-                             font_size=19, color=WHITE).to_edge(DOWN, buff=0.15)
-        with self.voiceover(
-            "Since 1993 the world's fastest computers have been ranked twice a year, in the Top500 list, "
-            "by one program: High-Performance Linpack, descended from the LINPACK library that Jack "
-            "Dongarra co-wrote in 1979. <bookmark mark='a'/> It solves a dense random system by "
-            "elimination with partial pivoting, and divides two thirds n cubed operations by the time. "
-            "Almost all of it is matrix multiplication, so it measures a machine at its best. <bookmark "
-            "mark='b'/> On this scale, our machine's level-one speed sits here, and its matrix "
-            "multiplication here. <bookmark mark='c'/> In June 2022 Frontier, at Oak Ridge, became the "
-            "first to pass ten to the eighteen operations per second: about "
-            f"{ratio / 1e6:.0f} million times our matrix multiplication. <bookmark mark='d'/> A conjugate-gradient benchmark, sparse and memory-"
-            "bound like most real simulations, reaches only a few percent of the same machines' peak."
-        ) as vo:
-            self.play(FadeIn(head))
-            vo.wait_until("a")
-            self.play(Write(rate), FadeIn(rw))
-            vo.wait_until("b")
-            self.play(Create(axis), FadeIn(ticks), FadeIn(al))
-            self.play(FadeIn(marks[0]))
-            self.play(FadeIn(marks[1]))
-            vo.wait_until("c")
-            self.play(FadeIn(marks[2]))
-            vo.wait_until("d")
-            self.play(FadeIn(foot))
-        self.wait(0.4)
-        self.clear_scene()
 
 
 _ = (BG, DATA, HEAD, KERN, LAM, NO, YES)

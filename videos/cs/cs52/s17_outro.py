@@ -17,7 +17,7 @@ def tile(content, caption, color, TW=3.6, TH=2.3):
     return Group(frame, content, cap)
 
 
-class Outro(VoiceoverScene):
+class Outro(WatchScene):
     def construct(self):
         self.recap()
         self.payoffs()
@@ -51,6 +51,12 @@ class Outro(VoiceoverScene):
             self.play(LaggedStart(*[FadeIn(t, shift=UP * 0.15) for t in tiles], lag_ratio=0.25), run_time=4.0)
         self.wait(0.5)
         self.clear_scene()
+        self.checkpoint(
+            [(r"Why are stiff problems hard for explicit methods?", r"Stability, not accuracy, limits the step"),
+             (r"Why do symplectic methods suit orbits?", r"Energy error stays bounded")],
+            narration="Last checkpoint. Why are stiff equations hard for explicit methods? And why do symplectic methods suit orbits?",
+            answers_narration="Stability, not accuracy, forces a tiny step. And their energy error stays bounded over millions "
+                              "of steps instead of drifting.")
 
     def payoffs(self):
         card = payoff_card([

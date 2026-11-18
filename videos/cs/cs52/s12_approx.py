@@ -36,22 +36,16 @@ def runge_f(x):
     return 1 / (1 + 25 * x * x)
 
 
-class Approx(VoiceoverScene):
+class Approx(WatchScene):
     def construct(self):
         self.card()
         self.runge()
         self.chebyshev()
         self.convergence()
-        self.barycentric()
-        self.chebfun()
 
     def card(self):
-        card = chapter_card(11, r"Approximation", r"Which polynomial should stand in for a function?",
-                            lit=(1901, 2004), extra=((1901, r"Runge's phenomenon"),
-                                                     (2004, r"Battles and Trefethen: \ Chebfun")), part=PART)
-        with self.voiceover("Chapter eleven. Approximation."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(11, r"Approximation", r"Which polynomial should stand in for a function?", lit=(1901, 2004), extra=((1901, r"Runge's phenomenon"),
+                                                     (2004, r"Battles and Trefethen: \ Chebfun")), part=PART, said="Chapter eleven. Approximation.")
 
     def chart(self, center, x_length=7.0, y_length=4.2, lo=-1.0, hi=2.0):
         ax = Axes(x_range=[-1, 1, 0.5], y_range=[lo, hi, 1], x_length=x_length, y_length=y_length, tips=False,
@@ -64,6 +58,10 @@ class Approx(VoiceoverScene):
         return ax, VGroup(xt, yt)
 
     def runge(self):
+        self.ask(r"Interpolate $1/(1 + 25x^2)$ at more and more \\ equally spaced points. Near the ends, the error...",
+                 [r"shrinks", r"explodes"], 1,
+                 say="Pass a polynomial through more and more equally spaced samples of Runge's function. What happens near the ends?",
+                 reveal="The error explodes. Chebyshev points fix it.")
         r = load("runge")
         rows_ = {row["n"]: row for row in r["rows"]}
         c10, c20 = r["curves"]["10"], r["curves"]["20"]
@@ -253,127 +251,7 @@ class Approx(VoiceoverScene):
         self.wait(0.4)
         self.clear_scene()
 
-    def barycentric(self):
-        head = label(r"Evaluating it: \ the barycentric formula", font_size=36).to_edge(UP, buff=0.3)
-        cols = {r"\ell(x)": HEAD, r"\frac{w_j}{x - x_j}": KERN}
-        left = VGroup(
-            cmath(r"p(x)", r"=", r"\sum_j f_j\, \ell_j(x)", r",\quad", r"\ell_j(x) = \prod_{k \ne j}"
-                  r"\frac{x - x_k}{x_j - x_k}", font_size=30),
-            cmath(r"\ell_j(x)", r"=", r"\ell(x)", r"\frac{w_j}{x - x_j}", r",\quad",
-                  r"w_j = \frac{1}{\prod_{k \ne j} (x_j - x_k)}", colors=cols, font_size=30),
-            cmath(r"p(x)", r"=", r"\ell(x)", r"\sum_j", r"\frac{w_j}{x - x_j}", r"f_j", colors=cols, font_size=30),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.85).move_to([-3.3, 0.55, 0])
-        right = VGroup(
-            cmath(r"1", r"=", r"\ell(x)", r"\sum_j", r"\frac{w_j}{x - x_j}", colors=cols, font_size=30),
-            cmath(r"p(x)", r"=", r"\frac{\sum_j \frac{w_j}{x - x_j} f_j}{\sum_j \frac{w_j}{x - x_j}}", font_size=34),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.95).move_to([3.7, 0.75, 0])
-        lw = VGroup(label(r"Lagrange: \ $O(n^2)$ work at every $x$", font_size=18, color=GREY_B),
-                    label(r"factor out the node polynomial", font_size=18, color=GREY_B),
-                    label(r"the first barycentric form", font_size=18, color=GREY_B))
-        rw = VGroup(label(r"interpolate the constant 1: \ exact", font_size=18, color=GREY_B),
-                    label(r"divide: \ $\ell(x)$ cancels; \ $O(n)$ work at every $x$", font_size=18, color=YES))
-        for w, rr in list(zip(lw, left)) + list(zip(rw, right)):
-            w.next_to(rr, DOWN, buff=0.12).align_to(rr, LEFT)
-        box = SurroundingRectangle(right[1], color=YES, buff=0.15, stroke_width=2)
-        rw[1].next_to(box, DOWN, buff=0.1).align_to(right[1], LEFT)
-        foot = wrapped_label(r"for Chebyshev points the weights are just $\pm 1$, \ halved at the two ends "
-                             r"\ (Salzer, \ 1972); \ Higham \ (2004) \ proved the formula stable; \ every curve in this "
-                             r"chapter was evaluated with it", 12.4, font_size=20, color=WHITE).to_edge(DOWN, buff=0.4)
-        with self.voiceover(
-            "How should a computer evaluate the interpolating polynomial? <bookmark mark='a'/> Lagrange's formula "
-            "costs order n squared operations at every point, and has a reputation for instability. "
-            "<bookmark mark='b'/> Pull the node polynomial out of each Lagrange basis function: what is left is a "
-            "weight over x minus x j. <bookmark mark='c'/> That gives the first barycentric form. "
-            "<bookmark mark='d'/> Now interpolate the constant function one, which any interpolant reproduces "
-            "exactly. <bookmark mark='e'/> Divide the first equation by this one, and the node polynomial cancels. "
-            "What remains costs order n per point. <bookmark mark='f'/> For Chebyshev points the weights are just "
-            "plus and minus one, halved at the ends, and Nicholas Higham proved in 2004 that the formula is stable. "
-            "Every curve in this chapter was evaluated this way."
-        ) as vo:
-            self.play(FadeIn(head))
-            vo.wait_until("a")
-            self.play(Write(left[0]), FadeIn(lw[0]))
-            vo.wait_until("b")
-            self.play(FadeIn(left[1]), FadeIn(lw[1]))
-            vo.wait_until("c")
-            self.play(TransformMatchingTex(left[1].copy(), left[2]), FadeIn(lw[2]))
-            vo.wait_until("d")
-            self.play(TransformMatchingTex(left[2].copy(), right[0]), FadeIn(rw[0]))
-            vo.wait_until("e")
-            self.play(FadeIn(right[1]), Create(box), FadeIn(rw[1]))
-            vo.wait_until("f")
-            self.play(FadeIn(foot))
-        self.wait(0.4)
-        self.clear_scene()
 
-    def chebfun(self):
-        head = label(r"Computing with functions: \ Chebfun", font_size=36).to_edge(UP, buff=0.3)
-        rho = (1 + math.sqrt(26)) / 5
-        nchop = 16 * math.log(10) / math.log(rho)
-        ax = CornerAxes(x_range=[0, 260, 50], y_range=[-18, 0, 4], x_length=5.6, y_length=3.6, tips=False,
-                        axis_config={"stroke_color": GREY_C})
-        ax.move_to([-3.2, 0.35, 0])
-        yt = VGroup(*[MathTex(rf"10^{{{p}}}", font_size=20, color=GREY_B).next_to(ax.c2p(0, p), LEFT, buff=0.1)
-                      for p in (-16, -12, -8, -4, 0)])
-        xt = VGroup(*[label(f"{v}", font_size=16, color=GREY_B).next_to(ax.c2p(v, -18), DOWN, buff=0.1)
-                      for v in (0, 50, 100, 150, 200, 250)])
-        xl = label(r"Chebyshev coefficient $k$", font_size=17, color=GREY_A).next_to(xt, DOWN, buff=0.08)
-        yl = label(r"$|a_k|$ \ (schematic: \ $\rho^{-k}$, \ then rounding noise)", font_size=17,
-                   color=GREY_A).next_to(ax, UP, buff=0.15).align_to(ax, LEFT)
-        rng = np.random.default_rng(1)          # illustrative noise floor only
-        pts = []
-        for k in range(0, 258, 2):
-            v = -k * math.log10(rho)
-            if v < -16:
-                v = -16 + 0.6 * (rng.random() - 0.5)
-            pts.append(ax.c2p(k, v))
-        coef = VGroup(*[Dot(p, radius=0.03, color=DATA) for p in pts])
-        grids = VGroup(*[DashedLine(ax.c2p(m, -18), ax.c2p(m, 0), color=GREY_D, stroke_width=1)
-                         for m in (17, 33, 65, 129, 257)])
-        gl = label(r"samples: \ 17, \ 33, \ 65, \ 129, \ 257 points", font_size=17, color=GREY_B).next_to(
-            xl, DOWN, buff=0.15)
-        chop = Line(ax.c2p(nchop, -18), ax.c2p(nchop, 0), color=HEAD, stroke_width=2.5)
-        cl = label(rf"chop: \ $n \approx \frac{{16 \ln 10}}{{\ln \rho}} \approx {nchop:.0f}$", font_size=18,
-                   color=HEAD).next_to(ax.c2p(nchop, -2), RIGHT, buff=0.12)
-        ops = VGroup(*[VGroup(RoundedRectangle(width=5.4, height=0.62, corner_radius=0.1, stroke_color=c,
-                                               stroke_width=1.6, fill_color=BG, fill_opacity=1),
-                              label(t, font_size=20, color=c)) for t, c in (
-            (r"\texttt{sum(f)}: \ the integral, \ from the coefficients", DATA),
-            (r"\texttt{diff(f)}: \ the derivative, \ another chebfun", LAM),
-            (r"\texttt{max(f)}: \ the maximum, \ via the roots of $f'$", KERN),
-            (r"\texttt{roots(f)}: \ eigenvalues of a colleague matrix", YES))])
-        for o in ops:
-            o[1].move_to(o[0])
-        ops.arrange(DOWN, buff=0.22).move_to([3.7, 0.55, 0])
-        ot = label(r"then compute with $f$ itself, \ to about 15 digits", font_size=19, color=GREY_A).next_to(
-            ops, UP, buff=0.25)
-        foot = wrapped_label(r"``numerical computing with functions'': \ Battles and Trefethen \ (2004); \ "
-                             r"Trefethen's \textit{Approximation Theory and Approximation Practice} is written "
-                             r"with it", 12.4, font_size=20, color=WHITE).to_edge(DOWN, buff=0.35)
-        with self.voiceover(
-            "Zachary Battles and Lloyd Trefethen took this to its conclusion in 2004, with Chebfun. "
-            "<bookmark mark='a'/> Represent a function by its values at Chebyshev points, enough of them that its "
-            "Chebyshev coefficients have fallen to rounding level: try seventeen points, then thirty-three, "
-            "sixty-five, and so on, until the tail is noise, and chop it there. <bookmark mark='b'/> For Runge's "
-            "function, the rate we just found predicts about a hundred and eighty-five. <bookmark mark='c'/> "
-            "Then compute with the function itself, to about fifteen digits: integrate it, differentiate it, find "
-            "its maximum, and find all its roots at once, as the eigenvalues of a matrix built from its "
-            "coefficients, chapter six again. <bookmark mark='d'/> Numerical computing with functions, not just "
-            "numbers."
-        ) as vo:
-            self.play(FadeIn(head), Create(ax), FadeIn(yt), FadeIn(xt), FadeIn(xl), FadeIn(yl))
-            vo.wait_until("a")
-            self.play(Create(grids), FadeIn(gl))
-            self.play(LaggedStart(*[FadeIn(d) for d in coef], lag_ratio=0.02), run_time=2)
-            vo.wait_until("b")
-            self.play(Create(chop), FadeIn(cl))
-            vo.wait_until("c")
-            self.play(FadeIn(ot))
-            self.play(LaggedStart(*[FadeIn(o, shift=LEFT * 0.2) for o in ops], lag_ratio=0.4), run_time=2)
-            vo.wait_until("d")
-            self.play(FadeIn(foot))
-        self.wait(0.4)
-        self.clear_scene()
 
 
 _ = (BG, DATA, HEAD, KERN, LAM, NO, YES)

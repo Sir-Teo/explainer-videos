@@ -57,23 +57,18 @@ def size_text(b: int) -> str:
     return f"{b / 1e6:,.0f} MB" if b >= 1e6 else f"{b / 1e3:,.1f} kB"
 
 
-class Sparse(VoiceoverScene):
+class Sparse(WatchScene):
     def construct(self):
         self.card()
         self.poisson()
-        self.csr()
         self.fill()
         self.orderings()
         self.measured()
 
     def card(self):
-        card = chapter_card(8, r"Sparse matrices", r"How do we store and factor a matrix that is almost all zeros?",
-                            lit=(1957, 1961, 1973), extra=((1957, r"Markowitz: \ sparse pivoting"),
+        self.chapter(8, r"Sparse matrices", r"How do we store and factor a matrix that is almost all zeros?", lit=(1957, 1961, 1973), extra=((1957, r"Markowitz: \ sparse pivoting"),
                                                            (1961, r"Parter: \ elimination as a graph"),
-                                                           (1973, r"George: \ nested dissection")), part=PART)
-        with self.voiceover("Chapter eight. Sparse matrices."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+                                                           (1973, r"George: \ nested dissection")), part=PART, said="Chapter eight. Sparse matrices.")
 
     def poisson(self):
         head = label(r"Where sparse matrices come from: \ Poisson's equation", font_size=36).to_edge(UP, buff=0.3)
@@ -139,72 +134,12 @@ class Sparse(VoiceoverScene):
         self.wait(0.4)
         self.clear_scene()
 
-    def csr(self):
-        rows_ = load("fill")["rows"]
-        head = label(r"Storing only the nonzeros: \ CSR", font_size=36).to_edge(UP, buff=0.3)
-        A = poisson_dense(2)
-        M = Matrix([[f"{v:g}" for v in r] for r in A], element_to_mobject_config={"font_size": 26},
-                   h_buff=0.75, v_buff=0.5)
-        for e, v in zip(M.get_entries(), [v for r in A for v in r]):
-            e.set_color(HEAD if v != 0 else GREY_D)
-        val, col, ptr = [], [], [0]
-        for r in A:
-            for j, v in enumerate(r):
-                if v != 0:
-                    val.append(v)
-                    col.append(j)
-            ptr.append(len(val))
-        arr = VGroup(mono("val = [" + " ".join(f"{v:>2g}" for v in val) + "]", size=17, color=HEAD),
-                     mono("col = [" + " ".join(f"{v:>2d}" for v in col) + "]", size=17, color=DATA),
-                     mono("ptr = [" + " ".join(f"{v:>2d}" for v in ptr) + "]", size=17, color=YES))
-        arr.arrange(DOWN, aligned_edge=LEFT, buff=0.18)
-        names = VGroup(label(r"the nonzeros, \ row by row", font_size=17, color=GREY_B),
-                       label(r"their column numbers", font_size=17, color=GREY_B),
-                       label(r"where each row starts", font_size=17, color=GREY_B))
-        for nm, a in zip(names, arr):
-            nm.next_to(a, RIGHT, buff=0.3)
-        Ml = label(r"a $2 \times 2$ grid's matrix", font_size=17, color=GREY_A).next_to(M, DOWN, buff=0.12)
-        top = VGroup(VGroup(M, Ml), VGroup(arr, names)).arrange(RIGHT, buff=0.6).next_to(head, DOWN, buff=0.4)
-        code = code_block(["for i in range(n):", "    s = 0.0", "    for k in range(ptr[i], ptr[i + 1]):",
-                           "        s += val[k] * x[col[k]]", "    y[i] = s"], size=15)
-        code[3].set_color(KERN)
-        cnote = wrapped_label(r"two flops per nonzero; \ \texttt{x[col[k]]} is a scattered load, \ so the product "
-                              r"is limited by memory bandwidth \ (Part 9)", 4.6, font_size=17, color=KERN)
-        left = VGroup(code, cnote).arrange(DOWN, aligned_edge=LEFT, buff=0.25)
-        trs = [[f"{r['m']} $\\times$ {r['m']}", f"{r['n']:,}", f"{r['nnz_A']:,}", size_text(r["csr_bytes"]),
-                size_text(r["dense_bytes"])] for r in rows_]
-        tab = grid_table([r"grid", r"unknowns", r"nonzeros", r"CSR", r"dense"], trs,
-                         widths=[1.4, 1.3, 1.35, 1.25, 1.25], row_h=0.44, font_size=18, mono_cols=())
-        for c in tab.cells[1:]:
-            c[3].set_color(YES)
-            c[4].set_color(NO)
-        tcap = label(r"the Poisson matrix, \ computed", font_size=17, color=GREY_A)
-        right = VGroup(tcap, tab).arrange(DOWN, buff=0.2)
-        VGroup(left, right).arrange(RIGHT, buff=0.7, aligned_edge=UP).next_to(top, DOWN, buff=0.55)
-        big = rows_[-1]
-        with self.voiceover(
-            "Number the grid points row by row, and almost every entry of the matrix is zero. "
-            "<bookmark mark='a'/> Compressed sparse row format stores only the nonzeros: their values, row by row, "
-            "<bookmark mark='b'/> their column numbers, <bookmark mark='c'/> and where each row starts. "
-            "<bookmark mark='d'/> Multiplying by a vector walks those arrays once, two operations per nonzero. "
-            "Each load of x at a column number lands somewhere unpredictable, so the product is limited by memory "
-            "bandwidth, as in Part 9. <bookmark mark='e'/> For a sixty-four by sixty-four grid, four thousand and "
-            f"ninety-six unknowns, the matrix has {big['nnz_A']:,} nonzeros: about two hundred and sixty kilobytes "
-            "in this format, against a hundred and thirty-four megabytes stored densely."
-        ) as vo:
-            self.play(FadeIn(head), FadeIn(M), FadeIn(Ml))
-            for mk, a, nm in zip("abc", arr, names):
-                vo.wait_until(mk)
-                self.play(FadeIn(a, shift=RIGHT * 0.1), FadeIn(nm))
-            vo.wait_until("d")
-            self.play(FadeIn(left))
-            vo.wait_until("e")
-            self.play(FadeIn(tcap), FadeIn(tab.rule), FadeIn(VGroup(*tab.cells[0])),
-                      LaggedStart(*[FadeIn(VGroup(*c)) for c in tab.cells[1:]], lag_ratio=0.3))
-        self.wait(0.4)
-        self.clear_scene()
 
     def fill(self):
+        self.ask(r"An arrow matrix: one hub coupled to all. \\ Eliminate the hub first, or last?", [r"it doesn't matter",
+                 r"first fills everything in"], 1,
+                 say="An arrow matrix, with one hub coupled to every other unknown. Does it matter whether elimination takes the hub first or last?",
+                 reveal="Enormously. First, and the factor fills in completely. Last, and nothing fills.")
         rows_ = load("fill")["rows"]
         big = rows_[-1]
         head = label(r"Fill-in: \ the order of elimination matters", font_size=36).to_edge(UP, buff=0.3)

@@ -29,7 +29,7 @@ def window(img, meta, c, w, color=WHITE):
     return Square(side_length=w / W * img.width, color=color, stroke_width=2.5).move_to(p)
 
 
-class Roots(VoiceoverScene):
+class Roots(WatchScene):
     def construct(self):
         self.card()
         self.bisection()
@@ -38,13 +38,8 @@ class Roots(VoiceoverScene):
         self.fractal()
 
     def card(self):
-        card = chapter_card(10, r"Roots and Newton's fractal", r"How fast can we find where a function is zero?",
-                            lit=(1690, 1879), extra=((1690, r"Raphson: \ Newton's method as we write it"),
-                                                     (1879, r"Cayley: \ Newton's method on complex numbers")),
-                            part=PART)
-        with self.voiceover("Chapter ten. Roots, and Newton's fractal."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(10, r"Roots and Newton's fractal", r"How fast can we find where a function is zero?", lit=(1690, 1879), extra=((1690, r"Raphson: \ Newton's method as we write it"),
+                                                     (1879, r"Cayley: \ Newton's method on complex numbers")), part=PART, said="Chapter ten. Roots, and Newton's fractal.")
 
     def graph(self, x0=0.9, x1=2.1, center=(-3.4, 0.2)):
         ax = Axes(x_range=[x0, x1, 0.5], y_range=[-1.5, 2.5, 1], x_length=5.8, y_length=4.0, tips=False,
@@ -182,6 +177,10 @@ class Roots(VoiceoverScene):
         self.clear_scene()
 
     def race(self):
+        self.ask(r"Newton's method near a simple root. \\ Correct digits per step...", [r"add a constant",
+                 r"double"], 1,
+                 say="Near a simple root, what does each step of Newton's method do to the number of correct digits?",
+                 reveal="Doubles it: quadratic convergence.")
         r = load("roots")
         head = label(r"The race, \ computed", font_size=36).to_edge(UP, buff=0.3)
         ax = CornerAxes(x_range=[0, 20, 5], y_range=[0, 16, 4], x_length=6.2, y_length=4.0, tips=False,
