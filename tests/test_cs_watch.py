@@ -73,3 +73,23 @@ def test_pipeline_flow_reads_the_chart(manim):
     f = PipelineFlow(chart)
     assert f.state(2) == {"IF": None, "ID": 1, "EX": 0, "MEM": None, "WB": None}  # "?" past halt is empty
     assert f.state(5)["IF"] is None
+
+
+def test_a_shortened_line_keeps_its_translation(tmp_path, monkeypatch):
+    """A line with a hedge cut (the watch retrofit) is spoken in Chinese from the line it was cut from."""
+    import json
+
+    from explainer import lang
+
+    table = {"title": "", "chapters": {}, "lines": {
+        "k1": {"scene": "Hook", "en": "The core is fast. <bookmark mark='a'/> This is a model, not a measured clock. "
+                                     "It wins.", "zh": "核心很快。<bookmark mark='a'/>这是模型。它赢了。"},
+        "k2": {"scene": "Other", "en": "The core is fast. <bookmark mark='a'/> It wins.", "zh": "别的场景。<bookmark mark='a'/>"}}}
+    (tmp_path / "narration_zh.json").write_text(json.dumps(table, ensure_ascii=False))
+    monkeypatch.setattr(lang, "LANG", "zh")
+    lang._table.cache_clear()
+    out = lang._shortened("The core is fast. <bookmark mark='a'/> It wins.", tmp_path, "Hook")
+    assert out == table["lines"]["k1"]["zh"]
+    assert lang._shortened("Something else entirely. <bookmark mark='a'/>", tmp_path, "Hook") is None
+    assert lang._shortened("The core is fast. It wins.", tmp_path, "Hook") is None  # the bookmark went missing
+    lang._table.cache_clear()

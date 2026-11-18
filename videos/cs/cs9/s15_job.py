@@ -7,7 +7,7 @@ from videos.cs.cs9.common import (BG, CODE, COST, CTRL, DATA, FUNC, HEAD, HIST, 
                                   load, sci, size_label)
 
 
-class Job(VoiceoverScene):
+class Job(WatchScene):
     def construct(self):
         self.card()
         self.scans()
@@ -16,15 +16,14 @@ class Job(VoiceoverScene):
         self.ledger()
 
     def card(self):
-        card = chapter_card(14, r"The Job meets memory", "What does the sampled memory model project?", part=PART)
-        with self.voiceover(
-            "Chapter fourteen. The Job meets memory."
-        ):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(14, r"The Job meets memory", "What does the sampled memory model project?", part=PART, said="Chapter fourteen. The Job meets memory.")
 
     # ------------------------------------------------------------------
     def scans(self):
+        self.ask(r"Scan more lines than the cache holds, in order, again and again. \\ With LRU, the hit rate?",
+                 [r"most accesses hit", r"half hit", r"none hit"], 2,
+                 say="Scan, in order, more lines than the cache holds, over and over. With LRU replacement, how many hits?",
+                 reveal="None. LRU always evicts exactly the line the scan needs next.")
         sc = load("scans")
         head = label("Table-length prefix stream: \\ exact LRU counting within this model", font_size=34).to_edge(UP, buff=0.3)
         idea = VGroup(
@@ -88,13 +87,11 @@ class Job(VoiceoverScene):
         ).arrange(DOWN, buff=0.4).move_to(DOWN * 0.1)
         with self.voiceover(
             "Here is a deliberately serialized waiting-budget calculation. <bookmark mark='a'/> Assign the selected "
-            "large-working-set delay to every abstract table-line visit, convert it at the assumed Pebble clock, and "
+            "large-working-set delay to every abstract table-line visit, convert it at the Pebble clock, and "
             "allow no overlap. <bookmark mark='b'/> The product is the displayed number of minutes. It is neither a "
             "measured no-cache corpus execution nor a general lower or upper bound for actual runtime: real transfer "
             "size, reuse, bandwidth, parallelism and instruction work all matter. <bookmark mark='c'/> Compare it "
-            "with the fitted ledger only as an illustration of how assumptions change the apparent cost. The later "
-            "projection uses separate sampled events and simplified microbenchmarks; it does not prove that a "
-            "physical hierarchy makes this entire waiting budget disappear."
+            "with the fitted ledger only as an illustration of how assumptions change the apparent cost."
         ) as vo:
             self.play(FadeIn(head))
             for mk, l in zip("abc", lines):
@@ -115,7 +112,7 @@ class Job(VoiceoverScene):
         lines = VGroup(
             label(rf"sampled events: \ {100 * j['m_table']:.0f}\% table and {100 * j['m_pool']:.0f}\% first-letter "
                   r"events miss modeled L1", font_size=24, color=GREY_A),
-            label(rf"assumed 885 MHz \ (cumulative proxies {', '.join(map(str, p['latencies']))} cycles): \ "
+            label(rf" 885 MHz \ (cumulative proxies {', '.join(map(str, p['latencies']))} cycles): \ "
                   rf"fitted increment $+{100 * j['change']:.2f}\%$", font_size=23, color=YES),
             label(rf"turn off the prefetcher: \ $+{100 * j['no_prefetch_change']:.1f}\%$", font_size=24, color=CTRL),
             label(rf"illustrative {REFERENCE_GHZ:g} GHz \ ({', '.join(map(str, n['latencies']))} cycles): \ "
@@ -127,9 +124,8 @@ class Job(VoiceoverScene):
             "not a full execution of the unchanged Pebble memory image. <bookmark mark='a'/> The fractions describe "
             "coalesced table events and first-letter pool events in those windows. Later matching bytes, target "
             "reads and stores are omitted from that sampling model. <bookmark mark='b'/> Weight the measured model "
-            "increments at the assumed Pebble clock to obtain the displayed extra cycles. <bookmark mark='c'/> "
-            "Disabling the immediate free prefetch rule gives a separate projection. <bookmark mark='d'/> Repricing "
-            "the same timing proxies at an illustrative faster clock changes the cycle costs. Bandwidth, prefetch "
+            "increments at the Pebble clock to obtain the displayed extra cycles. <bookmark mark='c'/> "
+            "Disabling the immediate free prefetch rule gives a separate projection. <bookmark mark='d'/> Bandwidth, prefetch "
             "lead time, queuing and complete write traffic are absent, so small fitted overheads are conditional "
             "model results, not hardware guarantees."
         ) as vo:

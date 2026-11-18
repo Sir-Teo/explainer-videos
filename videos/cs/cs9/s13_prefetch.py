@@ -7,7 +7,7 @@ from videos.cs.cs9.common import (BG, CODE, COST, CTRL, DATA, FUNC, HEAD, HIST, 
                                   load, mono)
 
 
-class Prefetch(VoiceoverScene):
+class Prefetch(WatchScene):
     def construct(self):
         self.card()
         self.idea()
@@ -15,13 +15,7 @@ class Prefetch(VoiceoverScene):
         self.software()
 
     def card(self):
-        card = chapter_card(12, r"Prefetching", r"Can the cache fetch a line before it is asked?", lit=(1995,),
-                            extra=((1995, r"stride prefetchers"),), part=PART)
-        with self.voiceover(
-            "Chapter twelve. Prefetching."
-        ):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(12, r"Prefetching", r"Can the cache fetch a line before it is asked?", lit=(1995,), extra=((1995, r"stride prefetchers"),), part=PART, said="Chapter twelve. Prefetching.")
 
     def idea(self):
         head = label(r"Guess the next address, \ fetch it early", font_size=36).to_edge(UP, buff=0.4)
@@ -69,8 +63,7 @@ class Prefetch(VoiceoverScene):
                      rf"{r['no prefetch']['cold_pass']:.2f} \ without", font_size=22, color=GREY_A).to_edge(DOWN, buff=0.4)
         with self.voiceover(
             "Replay a synthetic scan on the functional core, with a table larger than its assigned L2 but still "
-            "within the assigned third-level capacity. The hierarchy uses selected host timing proxies at the "
-            "assumed Pebble clock. <bookmark mark='a'/> The ideal-memory bar is the core's default load model. "
+            "within the assigned third-level capacity. <bookmark mark='a'/> The ideal-memory bar is the core's default load model. "
             "<bookmark mark='b'/> The next bar adds immediate, uncharged stride-prefetch fills. A similar result "
             "therefore shows what these assumptions can hide, not what a finite hardware prefetch engine will always "
             "hide. <bookmark mark='c'/> The third bar disables that prefetch rule. The warm estimate subtracts a "
@@ -90,6 +83,9 @@ class Prefetch(VoiceoverScene):
         self.clear_scene()
 
     def software(self):
+        self.ask(r"Random reads, \\ but the indices are known in advance. \\ Can prefetch hints help?", [r"no", r"yes"], 1,
+                 say="The reads are random, but the program knows the indices in advance. Can prefetch hints help?",
+                 reveal="Yes: request each line well before it's needed, and the waiting overlaps.")
         d = load("swprefetch")
         head = label(r"Software prefetch: \ a cautionary measurement", font_size=34).to_edge(UP, buff=0.4)
         code = VGroup(mono("for (i = 0; i < n; i++) {", 20),

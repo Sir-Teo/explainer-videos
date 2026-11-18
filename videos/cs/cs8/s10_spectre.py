@@ -16,7 +16,7 @@ VICTIM = ["victim: lw   t2, 0(s1)       # array1_size",
           "out:    ret"]
 
 
-class Spectre(VoiceoverScene):
+class Spectre(WatchScene):
     def construct(self):
         self.card()
         self.channel()
@@ -27,11 +27,7 @@ class Spectre(VoiceoverScene):
         self.world()
 
     def card(self):
-        card = chapter_card(9, r"Spectre", "Can squashed execution leave a cache trace?", lit=(2014, 2018),
-                            extra=((2014, r"Flush+Reload"), (2018, r"Spectre and Meltdown")), part=PART)
-        with self.voiceover("Chapter nine. Spectre."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(9, r"Spectre", "Can squashed execution leave a cache trace?", lit=(2014, 2018), extra=((2014, r"Flush+Reload"), (2018, r"Spectre and Meltdown")), part=PART, said="Chapter nine. Spectre.")
 
     # ------------------------------------------------------------------
     def channel(self):
@@ -81,6 +77,10 @@ class Spectre(VoiceoverScene):
 
     # ------------------------------------------------------------------
     def gadget(self):
+        self.ask(r"The bounds check rejects an out-of-range index. \\ Can the byte out there still leak?", [r"no",
+                 r"yes, through the cache"], 1,
+                 say="The bounds check rejects the index. Can the secret byte out there still leak?",
+                 reveal="Yes. The core ran ahead before the check finished, and the cache remembers what it touched.")
         head = label(r"The victim: \ a bounds check", font_size=36).to_edge(UP, buff=0.3)
         c = VGroup(mono("if (x < array1_size)", 24), mono("    y = probe[array1[x] * 64];", 24)).arrange(
             DOWN, aligned_edge=LEFT, buff=0.15).move_to(UP * 2.0)
@@ -156,7 +156,7 @@ class Spectre(VoiceoverScene):
             "path while the size is delayed. A transient byte load reads P and a dependent access selects its probe "
             "line. The timing diagram illustrates that overlap; it is not a gate-level timing trace. <bookmark "
             "mark='d'/> Once the size arrives, the branch rejects the index and squashes younger architectural "
-            "results. The selected probe line remains warm in this model. That observable cache effect is exactly "
+            "results. The selected probe line remains warm. That observable cache effect is exactly "
             "why saying the access never happened would be wrong."
         ) as vo:
             self.play(FadeIn(head))
@@ -203,7 +203,7 @@ class Spectre(VoiceoverScene):
             "around one probe access. <bookmark mark='b'/> In the first round, line eighty, ASCII P, is the "
             "uniquely fast tested line. It takes five measured cycles versus sixty-three for the other tested "
             "lines, including timing overhead. <bookmark mark='c'/> Repeating the procedure recovers the six "
-            "supplied nonzero secret bytes, PEBBLE, in this model. That is a concrete simulated witness under the "
+            "supplied nonzero secret bytes, PEBBLE. That is a concrete simulated witness under the "
             "stated shared-memory and timing capabilities, not evidence of a leak from arbitrary host memory."
         ) as vo:
             self.play(FadeIn(head), Create(ax), FadeIn(xl), FadeIn(yl))
@@ -253,7 +253,7 @@ class Spectre(VoiceoverScene):
             "otherwise. <bookmark mark='c'/> Here array element zero exists, so the out-of-bounds transient path is "
             "redirected to a valid element. Compilers and hardware must preserve the dependency for such hardening "
             "to work. <bookmark mark='d'/> Both tested runs fail to recover the supplied secret from the nonzero "
-            "probe lines. That finite result is not a proof against every speculative channel. <bookmark mark='e'/> "
+            "probe lines. <bookmark mark='e'/> "
             "The benign-call costs shown below are specific to this program and model. Real applications need their "
             "own correctness, performance and threat-model evaluation."
         ) as vo:
@@ -303,3 +303,9 @@ class Spectre(VoiceoverScene):
                 self.play(FadeIn(it, shift=UP * 0.1))
         self.wait(0.3)
         self.clear_scene()
+        self.checkpoint(
+            [(r"Why does a reorder buffer make exceptions precise?", r"Results commit in program order; younger ones can be discarded"),
+             (r"How did Spectre leak a secret?", r"Speculative loads left traces in the cache, read back by timing")],
+            narration="Checkpoint. How does the reorder buffer make exceptions precise? And how did Spectre leak a secret?",
+            answers_narration="Results commit in program order, so anything younger than a fault can be discarded. And "
+                              "speculative loads left traces in the cache that timing could read back.")

@@ -7,7 +7,7 @@ from videos.cs.cs9.common import (BG, CODE, COST, CTRL, DATA, FUNC, HEAD, HIST, 
                                   load)
 
 
-class Frontier(VoiceoverScene):
+class Frontier(WatchScene):
     """The research tier (videos/cs/SYLLABUS.md 1.1): how close can a real replacement policy come to Belady, and
     what do learned policies do?"""
 
@@ -18,16 +18,13 @@ class Frontier(VoiceoverScene):
         self.now()
 
     def card(self):
-        card = chapter_card(15, r"Frontier: \ learning to replace", r"How close can a cache come to the crystal ball?",
-                            lit=(2007, 2016, 2019), extra=((2007, r"adaptive insertion"), (2016, r"Hawkeye"),
-                                                           (2019, r"Glider")), part=PART)
-        with self.voiceover(
-            "Chapter fifteen. Frontier: learning to replace."
-        ):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(15, r"Frontier: \ learning to replace", r"How close can a cache come to the crystal ball?", lit=(2007, 2016, 2019), extra=((2007, r"adaptive insertion"), (2016, r"Hawkeye"),
+                                                           (2019, r"Glider")), part=PART, said="Chapter fifteen. Frontier: learning to replace.")
 
     def insertion(self):
+        self.ask(r"Same scan, but insert new lines at the LRU end. \\ Hits?", [r"still none", r"some"], 1,
+                 say="Same endless scan. Now insert each new line where it will be evicted first. Any hits?",
+                 reveal="Some: part of the table stays put, and every pass hits it.")
         d = load("frontier")
         head = label(r"Where to put a new line? \ The Job's scans, \ scaled down", font_size=32).to_edge(UP, buff=0.3)
         r = d["rows"]

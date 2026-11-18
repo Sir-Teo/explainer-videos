@@ -7,7 +7,7 @@ from videos.cs.cs8.common import (BG, CODE, COST, CTRL, DATA, FUNC, HEAD, HIST, 
                                   mono, sci)
 
 
-class Job(VoiceoverScene):
+class Job(WatchScene):
     def construct(self):
         self.card()
         self.stack()
@@ -15,13 +15,14 @@ class Job(VoiceoverScene):
         self.corpus()
 
     def card(self):
-        card = chapter_card(14, r"The Job out of order", r"Where do the Job's cycles go now?", part=PART)
-        with self.voiceover("Chapter fourteen. The Job out of order."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(14, r"The Job out of order", r"Where do the Job's cycles go now?", part=PART, said="Chapter fourteen. The Job out of order.")
 
     # ------------------------------------------------------------------
     def stack(self):
+        self.ask(r"The Job on the out-of-order core, \\ against Part 7's pipeline. Faster by about...",
+                 [r"$1.2\times$", r"$2.5\times$", r"$10\times$"], 1,
+                 say="The Job on the out-of-order core. How much faster than Part 7's pipeline?",
+                 reveal="About two and a half times.")
         sp = load("speculate")["rows"]
         h = load("hook")
         head = label("Chapter 1 CPI: counterfactual accounting, not unique causes", font_size=34).to_edge(UP, buff=0.3)
@@ -153,10 +154,9 @@ class Job(VoiceoverScene):
             "every instruction through this core. <bookmark mark='b'/> Converting them to time additionally assumes "
             "Part 7's teaching clock budget, about eight hundred eighty-five megahertz. This out-of-order design "
             "has no gate-level timing result establishing that frequency. The projected runtime is about "
-            "fifty-seven seconds. <bookmark mark='c'/> At the shared assumed clock, the previous fitted pipeline "
+            "fifty-seven seconds. <bookmark mark='c'/> the previous fitted pipeline "
             "row is about two and a half times slower. Both the cycle extrapolation and frequency assumptions "
-            "travel with that ratio. The ledger is a transparent model comparison, not a measured complete-corpus "
-            "hardware benchmark."
+            "travel with that ratio."
         ) as vo:
             self.play(FadeIn(head), FadeIn(steps[0]))
             vo.wait_until("a")

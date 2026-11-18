@@ -20,25 +20,24 @@ def squash_times(tl):
     return out
 
 
-class Rob(VoiceoverScene):
+class Rob(WatchScene):
     def construct(self):
         self.card()
         self.idea()
         self.ring()
         self.precise()
-        self.pipeline()
-        self.checked()
 
     def card(self):
-        card = chapter_card(5, r"The reorder buffer", r"How can a machine run out of order, \ yet stop in order?",
-                            lit=(1985, 1995), extra=((1985, r"Smith and Pleszkun"), (1995, r"Pentium Pro")),
-                            part=PART)
-        with self.voiceover("Chapter five. The reorder buffer."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(5, r"The reorder buffer", r"How can a machine run out of order, \ yet stop in order?", lit=(1985, 1995), extra=((1985, r"Smith and Pleszkun"), (1995, r"Pentium Pro")), part=PART, said="Chapter five. The reorder buffer.")
 
     # ------------------------------------------------------------------
     def idea(self):
+        self.wrong_idea(r"An out-of-order processor \\ changes the order of your program",
+                        r"It executes out of order, \\ but commits in order: the program can't tell",
+                        narration="Out of order sounds alarming. Does the processor change the order of your program?",
+                        right_narration="No. It executes out of order, but it commits results in program order, so the program "
+                                        "can never tell.")
+        self.clear_scene()
         head = label(r"In order, \ out of order, \ in order", font_size=38).to_edge(UP, buff=0.4)
         a = box(3.2, 1.0, r"\text{fetch, \ rename}", DATA, 26)
         b = box(3.2, 1.0, r"\text{execute}", FUNC, 26)
@@ -59,10 +58,9 @@ class Rob(VoiceoverScene):
             "in order, execute them when their operands, resources and ordering constraints permit, and retire "
             "architectural effects in program order. <bookmark mark='b'/> Execution results may already be in "
             "temporary storage or a physical register file, and dependent instructions may use them before "
-            "retirement. Retirement makes the architectural result official; it is not necessarily the first "
-            "physical write. <bookmark mark='c'/> A precise exception exposes a valid architectural prefix of the "
+            "retirement. <bookmark mark='c'/> A precise exception exposes a valid architectural prefix of the "
             "program, with the faulting instruction handled according to its specified policy. Cache and predictor "
-            "effects require separate reasoning. Precise architectural state alone does not guarantee secrecy."
+            "effects require separate reasoning."
         ) as vo:
             self.play(FadeIn(head))
             self.play(FadeIn(a), FadeIn(tags[0]))
@@ -179,6 +177,10 @@ class Rob(VoiceoverScene):
 
     # ------------------------------------------------------------------
     def precise(self):
+        self.ask(r"A divide faults after younger instructions have already finished. \\ What must the machine do?",
+                 [r"keep their results", r"discard them, and report the divide", r"retry the divide"], 1,
+                 say="A divide faults, but younger instructions have already finished. What must the machine do?",
+                 reveal="Throw their results away, and report the divide, as if they never ran.")
         d = load("rob")["divzero"]
         head = label(r"A precise exception", font_size=36).to_edge(UP, buff=0.3)
         ch = OooChart(d["timeline"], cw=0.34, ch=0.4, label_width=2.6, label_size=16, c0=3).move_to(DOWN * 0.1 +
@@ -223,83 +225,4 @@ class Rob(VoiceoverScene):
         self.wait(0.3)
         self.clear_scene()
 
-    # ------------------------------------------------------------------
-    def pipeline(self):
-        head = label(r"The modern out-of-order pipeline", font_size=36).to_edge(UP, buff=0.3)
-        stages = [(r"fetch", DATA, r"predict \\ the path"), (r"decode", DATA, r""),
-                  (r"rename", CTRL, r"RAT, \\ free list"), (r"dispatch", CTRL, r"ROB, \ IQ, \\ LSQ entries"),
-                  (r"issue", FUNC, r"oldest \\ ready first"), (r"execute", FUNC, r"ALUs, \\ memory ports"),
-                  (r"write back", INF, r"broadcast \\ the tag"), (r"commit", YES, r"in order, \\ from the head")]
-        boxes = VGroup(*[box(1.45, 0.75, rf"\text{{{s}}}", c, 19) for s, c, _ in stages]).arrange(RIGHT, buff=0.12)
-        boxes.move_to(UP * 1.4)
-        subs = VGroup(*[label(t, font_size=16, color=GREY_B).next_to(b, DOWN, buff=0.18) for (_, _, t), b in
-                        zip(stages, boxes)])
-        brace_in = BraceBetweenPoints(boxes[0].get_left() + DOWN * 1.3, boxes[3].get_right() + DOWN * 1.3,
-                                      direction=DOWN, color=DATA)
-        t_in = label(r"in order", font_size=20, color=DATA).next_to(brace_in, DOWN, buff=0.1)
-        brace_out = BraceBetweenPoints(boxes[4].get_left() + DOWN * 1.3, boxes[6].get_right() + DOWN * 1.3,
-                                       direction=DOWN, color=FUNC)
-        t_out = label(r"out of order", font_size=20, color=FUNC).next_to(brace_out, DOWN, buff=0.1)
-        t_c = label(r"in order", font_size=20, color=YES).next_to(boxes[7], DOWN, buff=1.45)
-        two = VGroup(
-            label(r"our core, \ like the Pentium Pro (1995): \ results wait in the reorder buffer, \ copied to the "
-                  r"registers at commit", font_size=21, color=GREY_A),
-            label("PRF designs write speculative values early; \\\\ the ROB also tracks completion, exceptions and recovery", font_size=21, color=GREY_A),
-        ).arrange(DOWN, buff=0.16).to_edge(DOWN, buff=0.35)
-        with self.voiceover(
-            "This diagram separates stages often found in out-of-order cores. <bookmark mark='a'/> Fetch follows a "
-            "predicted path, decode identifies operations, and ordered rename and dispatch allocate tracking "
-            "resources. Our width parameter limits fetch, rename and retirement to four per cycle. <bookmark "
-            "mark='b'/> Ready operations compete for execution resources. This implementation can start up to six "
-            "total operations in a cycle, with at most four ALU starts and two memory operations, plus its "
-            "multiplier and divider restrictions. Width must therefore name a particular stage. <bookmark "
-            "mark='c'/> Completed results wake dependents; architectural retirement remains ordered. Oldest-ready "
-            "selection is our policy, not a requirement for every processor. <bookmark mark='d'/> Our model holds "
-            "results in instruction records and copies register results at retirement. Other designs write "
-            "speculative physical registers earlier and commit mappings later. Their reorder buffers track more "
-            "than just pointers: completion, exception and recovery metadata also matter."
-        ) as vo:
-            self.play(FadeIn(head))
-            self.play(LaggedStart(*[FadeIn(VGroup(boxes[k], subs[k])) for k in range(4)], lag_ratio=0.25),
-                      FadeIn(brace_in), FadeIn(t_in))
-            vo.wait_until("a")
-            vo.wait_until("b")
-            self.play(LaggedStart(*[FadeIn(VGroup(boxes[k], subs[k])) for k in range(4, 7)], lag_ratio=0.25),
-                      FadeIn(brace_out), FadeIn(t_out))
-            vo.wait_until("c")
-            self.play(FadeIn(VGroup(boxes[7], subs[7])), FadeIn(t_c))
-            vo.wait_until("d")
-            self.play(LaggedStart(*[FadeIn(t) for t in two], lag_ratio=0.5))
-        self.wait(0.3)
-        self.clear_scene()
 
-    # ------------------------------------------------------------------
-    def checked(self):
-        head = label(r"Our core, \ checked", font_size=38).to_edge(UP, buff=0.4)
-        lines = VGroup(
-            label(r"\texttt{explainer/cs/pebble/ooo.py}: \ about 700 lines, \ cycle by cycle", font_size=24,
-                  color=GREY_A),
-            label(r"120 random programs \ $\times$ \ 6 configurations, \ and the Job: \ the same registers, \ memory, "
-                  r"\ output \ and instruction count as the emulator", font_size=24, color=YES),
-            label(r"a divide by zero, \ a store that must not happen, \ a load that must wait: \ all precise",
-                  font_size=24, color=YES),
-            label("values are computed in the model, \\ including on wrong paths", font_size=24,
-                  color=HEAD),
-        ).arrange(DOWN, buff=0.38).move_to(DOWN * 0.1)
-        with self.voiceover(
-            "The cycle-by-cycle functional core is implemented in the repository. Its values are computed by the "
-            "simulator, rather than read from the offline scheduling oracle. <bookmark mark='a'/> The current test "
-            "suite compares a hundred twenty generated programs across six configurations with the instruction "
-            "emulator. A Job paragraph is checked in two predictor configurations. Final registers, memory, output "
-            "and committed instruction counts must match. These finite tests are evidence, not a proof for every "
-            "program. <bookmark mark='b'/> Directed cases exercise divide-zero state, memory-order replay, partial "
-            "store forwarding and this modeled Spectre gadget. <bookmark mark='c'/> Wrong-path loads access the "
-            "model's byte array and optional cache. That distinction between uncommitted architectural work and "
-            "persistent modeled cache effects will drive the security chapter."
-        ) as vo:
-            self.play(FadeIn(head), FadeIn(lines[0]))
-            for mk, l in zip("abc", lines[1:]):
-                vo.wait_until(mk)
-                self.play(FadeIn(l, shift=UP * 0.1))
-        self.wait(0.3)
-        self.clear_scene()

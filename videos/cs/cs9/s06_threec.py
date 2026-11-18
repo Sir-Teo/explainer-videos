@@ -7,22 +7,20 @@ from videos.cs.cs9.common import (BG, CODE, COST, CTRL, DATA, FUNC, HEAD, HIST, 
                                   load)
 
 
-class ThreeC(VoiceoverScene):
+class ThreeC(WatchScene):
     def construct(self):
         self.card()
         self.kinds()
         self.table()
 
     def card(self):
-        card = chapter_card(5, r"Three kinds of miss", r"Why did that access miss?", lit=(1987,),
-                            extra=((1987, r"Hill's three Cs"),), part=PART)
-        with self.voiceover(
-            "Chapter five. Three kinds of miss."
-        ):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(5, r"Three kinds of miss", r"Why did that access miss?", lit=(1987,), extra=((1987, r"Hill's three Cs"),), part=PART, said="Chapter five. Three kinds of miss.")
 
     def kinds(self):
+        self.ask(r"Make the cache fully associative, \\ same size, \\ and the miss disappears. It was a...",
+                 [r"compulsory miss", r"capacity miss", r"conflict miss"], 2,
+                 say="Keep the size, but let any line go anywhere, and a miss disappears. What kind of miss was it?",
+                 reveal="A conflict miss: the line was evicted by another that mapped to the same set.")
         head = label(r"Mark Hill's three Cs \ (1987)", font_size=36).to_edge(UP, buff=0.4)
         items = VGroup(
             label("first touch: \\ initially empty, \\ fixed line size, \\ no prior prefetch", font_size=25,
@@ -91,3 +89,9 @@ class ThreeC(VoiceoverScene):
             self.play(FadeIn(notes[1]))
         self.wait(0.3)
         self.clear_scene()
+        self.checkpoint(
+            [(r"Why do caches work at all?", r"Locality: programs reuse recent data, and its neighbours"),
+             (r"Name the three kinds of miss.", r"Compulsory, capacity, conflict")],
+            narration="Checkpoint. Why do caches work at all? And what are the three kinds of miss?",
+            answers_narration="Locality: programs reuse data they touched recently, and data near it. And misses are "
+                              "compulsory, capacity, or conflict.")

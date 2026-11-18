@@ -173,7 +173,10 @@ def apply(video: str, spec: dict) -> None:
     for mod, sec in spec.get("trim", []):
         files[mod] = trim(get(mod), sec)
     for mod, sent in spec.get("drop", []):
-        files[mod] = drop(get(mod), sent)
+        try:
+            files[mod] = drop(get(mod), sent)
+        except KeyError as err:  # most often: the sentence was in a section the spec trimmed
+            print(f"  note: {mod}: {err}")
     for mod, old, new in spec.get("replace", []):
         s = get(mod)
         if s.count(old) != 1:

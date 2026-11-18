@@ -26,23 +26,21 @@ CORES = [
 VENDOR = {"Intel": DATA, "AMD": NO, "Apple": GREY_A, "MIPS": YES, "DEC": CTRL}
 
 
-class Cores(VoiceoverScene):
+class Cores(WatchScene):
     def construct(self):
         self.card()
         self.windows()
         self.widths()
-        self.reading()
 
     def card(self):
-        card = chapter_card(13, r"Modern cores in numbers", r"How far have real machines taken all this?",
-                            lit=(1995, 2021), extra=((1995, r"Pentium Pro: \ 40"), (2021, r"Golden Cove: \ 512")),
-                            part=PART)
-        with self.voiceover("Chapter thirteen. Modern cores in numbers."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(13, r"Modern cores in numbers", r"How far have real machines taken all this?", lit=(1995, 2021), extra=((1995, r"Pentium Pro: \ 40"), (2021, r"Golden Cove: \ 512")), part=PART, said="Chapter thirteen. Modern cores in numbers.")
 
     # ------------------------------------------------------------------
     def windows(self):
+        self.ask(r"A big 2024 core's reorder buffer. \\ About how many instructions in flight?",
+                 [r"about 32", r"about 500", r"about 50{,}000"], 1,
+                 say="How many instructions can a big core from 2024 keep in flight at once?",
+                 reveal="Around five hundred.")
         head = label("Reported retirement capacities, \\ 1995 to 2024: \\ counted units vary", font_size=32).to_edge(UP,
                                                                                                      buff=0.3)
         ax = Axes(x_range=[1994, 2026, 4], y_range=[0, 700, 100], x_length=10.5, y_length=4.6, tips=False,
@@ -124,34 +122,3 @@ class Cores(VoiceoverScene):
         self.wait(0.3)
         self.clear_scene()
 
-    # ------------------------------------------------------------------
-    def reading(self):
-        head = label(r"Reading a real core", font_size=38).to_edge(UP, buff=0.4)
-        items = VGroup(
-            label(r"vendor optimization manuals: \ Intel, \ AMD, \ Arm", font_size=24, color=GREY_A),
-            label(r"Agner Fog's microarchitecture guide and instruction tables", font_size=24, color=GREY_A),
-            label("uops.info: \\ measured properties of many x86 instructions and cores", font_size=24,
-                  color=GREY_A),
-            label(r"independent measurement: \ Chips and Cheese, \ Dougall Johnson's Apple notes", font_size=24,
-                  color=GREY_A),
-            label(r"your own: \ \texttt{perf stat}, \ \texttt{perf record}, \ and the performance counters",
-                  font_size=24, color=HEAD),
-        ).arrange(DOWN, buff=0.32, aligned_edge=LEFT).move_to(DOWN * 0.1)
-        with self.voiceover(
-            "Check numbers against the source and the exact core model. <bookmark mark='a'/> Vendor manuals "
-            "describe supported architectures and implementation guidance. Agner Fog's guide and independent "
-            "measurements cover many designs. The uops.info project reports measured instruction properties for "
-            "most instructions on many recent x86 microarchitectures, not every instruction on every processor. "
-            "Reverse-engineered capacities should be labeled as estimates and their counted structures identified. "
-            "<bookmark mark='b'/> Linux perf can expose supported performance events when hardware, kernel "
-            "configuration and permissions allow. Events and definitions differ across vendors and models. Counters "
-            "can test selected performance hypotheses, but they do not reveal every internal state shown by this "
-            "simulator."
-        ) as vo:
-            self.play(FadeIn(head))
-            vo.wait_until("a")
-            self.play(LaggedStart(*[FadeIn(i) for i in items[:4]], lag_ratio=0.5), run_time=6.0)
-            vo.wait_until("b")
-            self.play(FadeIn(items[4]))
-        self.wait(0.3)
-        self.clear_scene()

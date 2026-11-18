@@ -7,22 +7,17 @@ from videos.cs.cs8.common import (BG, CODE, COST, CTRL, DATA, FUNC, HEAD, HIST, 
                                   box, fmt, load, mono, phase_legend)
 
 
-class Memory(VoiceoverScene):
+class Memory(WatchScene):
     def construct(self):
         self.card()
         self.problem()
         self.queues()
         self.violation()
-        self.histogram()
         self.job()
 
     def card(self):
-        card = chapter_card(8, r"Loads, \ stores, \ and their order", r"When may a load overtake a store?",
-                            lit=(1997, 1998), extra=((1997, r"Moshovos: \ dependence prediction"),
-                                                     (1998, r"store sets; \ the Alpha 21264")), part=PART)
-        with self.voiceover("Chapter eight. Loads, stores, and their order."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(8, r"Loads, \ stores, \ and their order", r"When may a load overtake a store?", lit=(1997, 1998), extra=((1997, r"Moshovos: \ dependence prediction"),
+                                                     (1998, r"store sets; \ the Alpha 21264")), part=PART, said="Chapter eight. Loads, stores, and their order.")
 
     # ------------------------------------------------------------------
     def problem(self):
@@ -108,6 +103,11 @@ class Memory(VoiceoverScene):
 
     # ------------------------------------------------------------------
     def violation(self):
+        self.ask(r"A load runs before an older store \\ whose address isn't known yet. They turn out to match. Then...",
+                 [r"the hardware had waited anyway", r"the load read stale data, and is squashed and replayed"], 1,
+                 say="A load runs before an older store whose address isn't known yet. The addresses turn out to be the same. "
+                     "What happens?",
+                 reveal="The load read stale data. The core catches the conflict, squashes the load, and replays it.")
         d = load("memory")["demo"]
         head = label(r"Caught out: \ a memory-order violation", font_size=34).to_edge(UP, buff=0.25)
         tl = d["speculative"]["timeline"][6:]
@@ -150,52 +150,6 @@ class Memory(VoiceoverScene):
         self.wait(0.3)
         self.clear_scene()
 
-    # ------------------------------------------------------------------
-    def histogram(self):
-        d = load("memory")["histogram"]
-        m = d["modes"]
-        head = label(r"Where it matters: \ counting samples that miss the cache", font_size=32).to_edge(UP, buff=0.3)
-        code = VGroup(*[mono(s, 17) for s in (
-            "loop: lbu  a0, 0(s0)     # a sample: a cache miss, 60 cycles",
-            "      slli a0, a0, 2",
-            "      add  a0, a0, s1",
-            "      lw   t0, 0(a0)     # count[sample]",
-            "      addi t0, t0, 1",
-            "      sw   t0, 0(a0)     # its address waits for the miss",
-            "      addi s0, s0, 64",
-            "      bne  s0, s2, loop")]).arrange(DOWN, aligned_edge=LEFT, buff=0.08).to_corner(UL, buff=0.4).shift(
-            DOWN * 0.6)
-        keys = ["conservative", "speculative", "wait-table"]
-        vals = [m[k]["cycles"] / 1000 for k in keys]
-        ch = bar_chart(vals, [r"conservative", r"speculative", r"wait table"], [NO, DATA, YES], height=3.0, bar_w=1.0,
-                       gap=0.9, font_size=20, fmt_=lambda v: f"{v:.1f}K").to_corner(DR, buff=0.6).shift(UP * 0.4)
-        yl = note(rf"cycles for {d['n']:,} samples", font_size=20).next_to(ch, UP, buff=0.3)
-        viol = VGroup(*[label(rf"{m[k]['violations']} violations", font_size=18, color=GREY_B).next_to(
-            ch.names[i], DOWN, buff=0.12) for i, k in enumerate(keys)])
-        punch = label(rf"{m['conservative']['cycles'] / m['wait-table']['cycles']:.0f} times faster, \ by guessing "
-                      r"that a load and a store do not collide", font_size=24, color=HEAD).to_edge(DOWN, buff=0.3)
-        with self.voiceover(
-            "Now use a histogram workload with fifteen hundred fixed-seed samples. Each sample sits on a separate "
-            "modeled cache line, and its value selects the counter to update. <bookmark mark='a'/> A sample miss "
-            "delays the older store's counter address. Waiting behind every such unknown address makes this "
-            "conservative run expensive. <bookmark mark='b'/> Speculating allows later loads to overlap those "
-            "misses, greatly reducing this workload's modeled cycles. <bookmark mark='c'/> The twenty-three "
-            "violations are dynamic detected events across the run, not twenty-three distinct static load "
-            "instructions. The wait-table run changes which loads wait after observed violations. <bookmark "
-            "mark='d'/> These results depend on the generated samples, cache model and queue policy. Real processor "
-            "memory-order recovery events have architecture-specific counters and meanings; availability and access "
-            "permissions must be checked on the particular machine."
-        ) as vo:
-            self.play(FadeIn(head), FadeIn(code))
-            vo.wait_until("a")
-            self.play(Indicate(code[5], color=INF), Indicate(code[0], color=INF))
-            self.play(FadeIn(yl), FadeIn(ch[0]))
-            for mk, k in (("b", 0), ("c", 1), ("d", 2)):
-                vo.wait_until(mk)
-                self.play(GrowFromEdge(ch.bars[k], DOWN), FadeIn(ch.vals[k]), FadeIn(ch.names[k]), FadeIn(viol[k]))
-            self.play(FadeIn(punch))
-        self.wait(0.3)
-        self.clear_scene()
 
     # ------------------------------------------------------------------
     def job(self):

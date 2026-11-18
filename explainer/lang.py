@@ -118,6 +118,11 @@ def translate(text: str, video_dir: Path, scene: str) -> str:
         out = tr(" ".join(text.split()))
         if out is not None and BOOKMARK.findall(out) == BOOKMARK.findall(text):
             return zh_numbers(out)
+    # a line shortened by the watch retrofit (spoken hedges cut, videos/cs/SYLLABUS.md 1.2): the translation of the
+    # line it was cut from, which says the same and a little more
+    out = _shortened(text, video_dir, scene)
+    if out is not None:
+        return zh_numbers(out) if LANG == "zh" else out
     if COLLECT:
         with open(COLLECT, "a") as f:
             f.write(json.dumps({"key": k, "scene": scene, "en": " ".join(text.split())}, ensure_ascii=False) + "\n")
@@ -127,6 +132,36 @@ def translate(text: str, video_dir: Path, scene: str) -> str:
 
 
 BOOKMARK = re.compile(r"<bookmark\s+mark\s*=\s*['\"]([^'\"]+)['\"]\s*/>")
+
+
+def _plain(s: str) -> str:
+    return " ".join(BOOKMARK.sub(" ", s).split()).lower()
+
+
+def _shortened(text: str, video_dir: Path, scene: str) -> str | None:
+    """The translation of the table line this English ``text`` was shortened from: the same scene, the same
+    bookmarks, every word of ``text`` in order inside the old line, and at least a third of it kept."""
+    import difflib
+
+    new = _plain(text)
+    marks = BOOKMARK.findall(text)
+    best, score = None, 0.0
+    for entry in _table(str(video_dir), LANG)["lines"].values():
+        if entry.get("scene") not in (None, scene) or not entry.get(LANG) or not entry.get("en"):
+            continue
+        if BOOKMARK.findall(entry["en"]) != marks or BOOKMARK.findall(entry[LANG]) != marks:
+            continue
+        old = _plain(entry["en"])
+        if len(new) < 0.35 * len(old) or len(new) > len(old):
+            continue
+        sm = difflib.SequenceMatcher(None, old.split(), new.split(), autojunk=False)
+        kept = sum(b.size for b in sm.get_matching_blocks())
+        if kept < len(new.split()):  # every new word must come from the old line, in order
+            continue
+        r = kept / max(1, len(old.split()))
+        if r > score:
+            best, score = entry[LANG], r
+    return best
 _ZH_UNIT = re.compile(r"(\d+(?:\.\d+)?)\s*(百万|千万|十亿)")
 
 

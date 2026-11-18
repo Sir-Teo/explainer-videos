@@ -8,21 +8,14 @@ from videos.cs.cs8.common import (BG, CODE, COST, CTRL, DATA, FUNC, HEAD, INF, N
 DEP_COLOR = {"RAW": YES, "WAR": CTRL, "WAW": NO}
 
 
-class Rename(VoiceoverScene):
+class Rename(WatchScene):
     def construct(self):
         self.card()
         self.kinds()
-        self.counts()
         self.renaming()
-        self.limit()
 
     def card(self):
-        card = chapter_card(2, r"False dependences, \ and renaming", r"Which orderings are real?", lit=(1967, 1975),
-                            extra=((1967, r"Tomasulo renames registers"), (1975, r"Keller's look-ahead processors")),
-                            part=PART)
-        with self.voiceover("Chapter two. False dependences, and renaming."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(2, r"False dependences, \ and renaming", r"Which orderings are real?", lit=(1967, 1975), extra=((1967, r"Tomasulo renames registers"), (1975, r"Keller's look-ahead processors")), part=PART, said="Chapter two. False dependences, and renaming.")
 
     # ------------------------------------------------------------------
     def listing(self, lines, y=1.0):
@@ -78,54 +71,13 @@ class Rename(VoiceoverScene):
         self.wait(0.3)
         self.clear_scene()
 
-    # ------------------------------------------------------------------
-    def counts(self):
-        d = load("rename")["counts"]
-        head = label(r"On the Job's first chapter", font_size=36).to_edge(UP, buff=0.35)
-        n = d["instructions"]
-        vals = [(r"read after write", d["raw"], YES), (r"write after read", d["war"], CTRL),
-                (r"write after write", d["waw"], NO)]
-        rows = VGroup()
-        mx = max(v for _, v, _ in vals)
-        for name, v, c in vals:
-            bar = Rectangle(width=7.0 * v / mx, height=0.5, stroke_width=0, fill_color=c, fill_opacity=0.8)
-            rows.add(VGroup(label(name, font_size=24, color=c), bar,
-                            label(rf"{v:,}", font_size=22, color=GREY_A)))
-        for r in rows:
-            r[1].next_to(ORIGIN, RIGHT, buff=0)
-            r[0].next_to(r[1], LEFT, buff=0.3)
-            r[2].next_to(r[1], RIGHT, buff=0.2)
-        rows.arrange(DOWN, buff=0.45, aligned_edge=LEFT)
-        for r in rows:
-            r[0].next_to(r[1], LEFT, buff=0.3)
-        rows.move_to(DOWN * 0.2 + RIGHT * 0.8)
-        cap = note(rf"operand-use and name-reuse events, \ over {n:,} retired instructions", font_size=22).next_to(
-            rows, UP, buff=0.5)
-        why = label("15 writable registers, \\ plus constant zero; \\ names are reused", font_size=26,
-                    color=HEAD).to_edge(DOWN, buff=0.45)
-        with self.voiceover(
-            "Count register uses over the Job's eight hundred twenty-seven thousand instructions. The counting "
-            "convention matters. <bookmark mark='a'/> About nine hundred eighty-one thousand source-operand uses "
-            "refer to an earlier writer; repeated operands count separately. <bookmark mark='b'/> The other bars "
-            "count roughly four hundred fifty-seven thousand read-since-write reuse events, and about as many "
-            "successive-writer events. They are not all possible pairs of dependent instructions. <bookmark "
-            "mark='c'/> Pebble has fifteen writable architectural registers plus a constant zero register. Reusing "
-            "those writable names creates anti and output hazards. Renaming separates live register versions, while "
-            "genuine value dependencies and memory or control constraints remain."
-        ) as vo:
-            self.play(FadeIn(head), FadeIn(cap))
-            self.play(FadeIn(rows[0][0]), GrowFromEdge(rows[0][1], LEFT), FadeIn(rows[0][2]))
-            vo.wait_until("a")
-            vo.wait_until("b")
-            self.play(*[FadeIn(r[0]) for r in rows[1:]], *[GrowFromEdge(r[1], LEFT) for r in rows[1:]],
-                      *[FadeIn(r[2]) for r in rows[1:]])
-            vo.wait_until("c")
-            self.play(FadeIn(why))
-        self.wait(0.3)
-        self.clear_scene()
 
     # ------------------------------------------------------------------
     def renaming(self):
+        self.ask(r"Two instructions write the same register, \\ but share no data. \\ Must the second one wait?",
+                 [r"yes, always", r"no, once the register is renamed"], 1,
+                 say="Two instructions write the same register, but no value passes between them. Must the second one wait?",
+                 reveal="No. Give each write its own physical register, and the false dependence disappears.")
         d = load("rename")
         head = label(r"Renaming: \ a new register for every new value", font_size=34).to_edge(UP, buff=0.3)
         code, nums = self.listing(d["example"], y=0.9)
@@ -185,37 +137,3 @@ class Rename(VoiceoverScene):
         self.wait(0.3)
         self.clear_scene()
 
-    # ------------------------------------------------------------------
-    def limit(self):
-        d = load("rename")["limit"]
-        head = label(r"What renaming is worth, \ in the limit", font_size=36).to_edge(UP, buff=0.35)
-        a = label(rf"an oracle machine, \ every name its own register: \ IPC {d['renamed']:,.0f}", font_size=28,
-                  color=YES)
-        b = label(rf"the same oracle, \ held to the false dependences: \ IPC {d['not renamed']:.2f}", font_size=28,
-                  color=NO)
-        g = VGroup(a, b).arrange(DOWN, buff=0.5).move_to(UP * 0.4)
-        ratio = label(rf"a factor of {d['renamed'] / d['not renamed']:,.0f}", font_size=40, color=HEAD).next_to(
-            g, DOWN, buff=0.6)
-        cav = note("whole trace, future paths/word addresses, unlimited starts; \\\\ realistic device/I/O ordering omitted", font_size=22).to_edge(
-            DOWN, buff=0.4)
-        with self.voiceover(
-            "This comparison uses an offline scheduler of the complete recorded execution, not a functional "
-            "processor. It knows future paths and memory word addresses, assumes the listed operation latencies, "
-            "and has unlimited start width and lookahead. It also omits realistic device and I/O ordering. "
-            "<bookmark mark='a'/> With separate register versions, that particular oracle schedule averages about "
-            "two thousand four hundred instructions per modeled cycle. It can overlap work whose future inputs were "
-            "supplied by the recorded trace. <bookmark mark='b'/> Adding the scheduler's register-name constraints "
-            "reduces this to about three point seven. <bookmark mark='c'/> The ratio shows how strongly these "
-            "artificial name constraints affect this oracle. It is not a feasible hardware speedup, a bound across "
-            "algorithms, or a claim that real cores approach either number. Register renaming is widely used in "
-            "high-performance out-of-order designs because it removes name hazards within finite resources."
-        ) as vo:
-            self.play(FadeIn(head))
-            self.play(FadeIn(a))
-            vo.wait_until("a")
-            vo.wait_until("b")
-            self.play(FadeIn(b))
-            vo.wait_until("c")
-            self.play(FadeIn(ratio), FadeIn(cav))
-        self.wait(0.3)
-        self.clear_scene()

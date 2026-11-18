@@ -10,7 +10,7 @@ IJK = ["for i: for j: for k:", "    C[i][j] += A[i][k] * B[k][j]   # B walks dow
 IKJ = ["for i: for k: for j:", "    C[i][j] += A[i][k] * B[k][j]   # every array walks along a row"]
 
 
-class Programming(VoiceoverScene):
+class Programming(WatchScene):
     def construct(self):
         self.card()
         self.order()
@@ -19,16 +19,15 @@ class Programming(VoiceoverScene):
         self.layout()
 
     def card(self):
-        card = chapter_card(8, r"Programming for caches", "How does address order change data reuse?",
-                            part=PART)
-        with self.voiceover(
-            "Chapter eight. Programming for caches."
-        ):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(8, r"Programming for caches", "How does address order change data reuse?", part=PART, said="Chapter eight. Programming for caches.")
 
     # ------------------------------------------------------------------
     def order(self):
+        self.ask(r"Matrix multiply: the same arithmetic, \\ two loop orders. \\ The speed...",
+                 [r"is the same: it's the same arithmetic", r"can differ a lot"], 1,
+                 say="Two matrix multiplications do exactly the same arithmetic, in different loop orders. Can their speed "
+                     "differ?",
+                 reveal="A lot. The address stream changes, and the caches notice.")
         d = load("matmul")["sim"]
         head = label(r"Matrix multiply: \ the same operations, \ two orders", font_size=34).to_edge(UP, buff=0.35)
         a = VGroup(*[mono(s, 20) for s in IJK]).arrange(DOWN, aligned_edge=LEFT, buff=0.1)
@@ -107,8 +106,7 @@ class Programming(VoiceoverScene):
             "and <bookmark mark='c'/> the fixed-tile kernel have their own curves. Their rankings and slopes are "
             "observations from these runs, not universal size trends. Each C variant is timed once, and zero "
             "initialization is included in some variants. <bookmark mark='d'/> NumPy's BLAS result uses a separate "
-            "library implementation and timing path. Vectorization, packing, threading and compiler choices can all "
-            "differ; this comparison does not isolate one optimization or verify use of every core."
+            "library implementation and timing path."
         ) as vo:
             self.play(FadeIn(head), Create(ax), FadeIn(xt))
             for mk, k in zip("abc", range(3)):
@@ -192,8 +190,7 @@ class Programming(VoiceoverScene):
             "universally better. <bookmark mark='b'/> This loop reads only the x field. The structure has sixty-four "
             "bytes per object, while the compact float array stores x values consecutively, reducing the address "
             "footprint and unused fields brought in. The displayed best-of-five times come from the same specified "
-            "summation and compiler options. Cache state, vectorization, translation and bandwidth can all "
-            "contribute, so timing alone does not isolate one cause. Workloads that use several fields together may "
+            "summation and compiler options. Workloads that use several fields together may "
             "favor a different layout or a blocked hybrid."
         ) as vo:
             self.play(FadeIn(head))

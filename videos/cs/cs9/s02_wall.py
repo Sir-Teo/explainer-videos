@@ -6,7 +6,7 @@ from explainer.cs import *  # noqa: F403
 from videos.cs.cs9.common import (BG, CODE, COST, CTRL, DATA, FUNC, HEAD, HIST, INF, NO, PART, REFERENCE_GHZ, YES, fmt, load)
 
 
-class Wall(VoiceoverScene):
+class Wall(WatchScene):
     def construct(self):
         self.card()
         self.gap()
@@ -14,13 +14,7 @@ class Wall(VoiceoverScene):
         self.pyramid()
 
     def card(self):
-        card = chapter_card(1, r"The memory wall", r"Why is memory so far away?", lit=(1995,),
-                            extra=((1995, r"Wulf and McKee"),), part=PART)
-        with self.voiceover(
-            "Chapter one. The memory wall."
-        ):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(1, r"The memory wall", r"Why is memory so far away?", lit=(1995,), extra=((1995, r"Wulf and McKee"),), part=PART, said="Chapter one. The memory wall.")
 
     # ------------------------------------------------------------------
     def gap(self):
@@ -46,21 +40,20 @@ class Wall(VoiceoverScene):
         mem = grow({(1980, 2006): 1.07}).set_color(NO)
         lc = label(r"processor performance: \ +25\%, \ then +52\% a year", font_size=20, color=DATA).next_to(
             ax.c2p(1994, 2.6), LEFT, buff=0.1)
-        lm = label("DRAM latency improvement: \\ illustrative 7\\% per year", font_size=20, color=NO).next_to(ax.c2p(1996, 0.47), DOWN,
+        lm = label("DRAM latency improvement: \\ 7\\% per year", font_size=20, color=NO).next_to(ax.c2p(1996, 0.47), DOWN,
                                                                                       buff=0.2)
         gap = DoubleArrow(ax.c2p(2004, 0.75), ax.c2p(2004, 3.75), color=HEAD, buff=0.05, stroke_width=3)
         gl = label(r"the gap", font_size=22, color=HEAD).next_to(gap, RIGHT, buff=0.1)
         quote = label(r"Wulf and McKee, \ 1995: \ ``Hitting the memory wall: \ implications of the obvious''",
                       font_size=22, color=HIST).to_edge(DOWN, buff=0.25)
         with self.voiceover(
-            "These curves illustrate a historical divergence; they are extrapolations from stated growth rates, not "
-            "a new measurement series. <bookmark mark='a'/> Processor performance improved rapidly in the selected "
+            "These curves illustrate a historical divergence;. <bookmark mark='a'/> Processor performance improved rapidly in the selected "
             "era, with changes in clocks, parallel execution and other design choices. <bookmark mark='b'/> DRAM "
             "access latency improved more slowly. The red curve represents improvement in latency, so rising means "
             "shorter access time, not increasing delay. <bookmark mark='c'/> Compounding different rates creates a "
             "widening ratio. The precise gap depends on the interval, workload and definitions. <bookmark mark='d'/> "
             "Wulf and McKee's 1995 memory-wall argument explains why memory stalls can consume an increasing share "
-            "of execution. It does not imply that every program eventually has the same bottleneck."
+            "of execution."
         ) as vo:
             self.play(FadeIn(head), Create(ax), FadeIn(yl), FadeIn(cap))
             self.play(Create(cpu), FadeIn(lc), run_time=2.0)
@@ -76,6 +69,10 @@ class Wall(VoiceoverScene):
 
     # ------------------------------------------------------------------
     def ratio(self):
+        self.ask(r"A read that misses every cache, \\ against an add. \\ How many times longer?",
+                 [r"about twice", r"about ten times", r"hundreds of times"], 2,
+                 say="A memory read that misses every cache, against an add. How many times longer does it take?",
+                 reveal="Hundreds of cycles. That gap is the memory wall.")
         st = load("staircase")
         j = load("job")
         ghz = REFERENCE_GHZ
@@ -85,9 +82,9 @@ class Wall(VoiceoverScene):
         lines = VGroup(
             label(rf"16 KiB / 64 MiB walks: \ {l1:.1f} ns / {dram:.0f} ns: \ {dram / l1:.0f} times", font_size=26,
                   color=GREY_A),
-            label(rf"at assumed 885 MHz: \ large-set proxy {j['clocks']['pebble']['latencies'][3]} cycles",
+            label(rf"at 885 MHz: \ large-set proxy {j['clocks']['pebble']['latencies'][3]} cycles",
                   font_size=26, color=DATA),
-            label(rf"at illustrative {ghz:g} GHz: \ the same proxy {j['clocks']['comparison clock']['latencies'][3]} "
+            label(rf"at {ghz:g} GHz: \ the same proxy {j['clocks']['comparison clock']['latencies'][3]} "
                   r"cycles", font_size=26, color=NO),
             label(r"the faster the core, \ the higher the wall: \ the answer is a hierarchy", font_size=28,
                   color=HEAD),
@@ -98,8 +95,7 @@ class Wall(VoiceoverScene):
             "times, not isolated SRAM-cell and DRAM-chip timings. <bookmark mark='b'/> Multiply nanoseconds by the "
             "assumed Pebble frequency to obtain its cycle budget. The hierarchy model assigns capacities and uses "
             "selected timing points as calibration proxies. <bookmark mark='c'/> A faster illustrative reference "
-            "clock turns the same nanoseconds into more cycles. That reference is not a measured frequency of this "
-            "host. <bookmark mark='d'/> Caches and overlap can reduce exposed waiting, but dependencies, throughput "
+            "clock turns the same nanoseconds into more cycles. <bookmark mark='d'/> Caches and overlap can reduce exposed waiting, but dependencies, throughput "
             "and memory-system limits determine how much. A single latency ratio does not predict program speedup."
         ) as vo:
             self.play(FadeIn(head))
@@ -114,6 +110,11 @@ class Wall(VoiceoverScene):
 
     # ------------------------------------------------------------------
     def pyramid(self):
+        self.wrong_idea(r"A bigger cache is always a faster cache", r"Bigger is slower to search. \\ A hierarchy wins",
+                        narration="If caches help, why not make one enormous cache?",
+                        right_narration="Because a bigger memory is slower to search. A small fast level, backed by bigger "
+                                        "slower ones, beats any single cache.")
+        self.clear_scene()
         head = label(r"The hierarchy: \ small and fast, \ big and cheap", font_size=36).to_edge(UP, buff=0.35)
         levels = [(r"registers", r"about 1 KiB", r"in the core", YES, 1.6),
                   (r"L1 \ / \ L2 caches", r"32 KiB \ / \ 1 MiB per core", r"SRAM on the chip", YES, 3.0),
@@ -143,7 +144,7 @@ class Wall(VoiceoverScene):
         with self.voiceover(
             "A hierarchy trades capacity, access time, bandwidth, energy and cost. <bookmark mark='a'/> Registers "
             "sit near execution units; caches commonly use SRAM. Six-transistor cells are a familiar SRAM example, "
-            "not a universal implementation rule. The sizes shown are illustrative and vary by processor. <bookmark "
+            "not a universal implementation rule. <bookmark "
             "mark='b'/> DRAM commonly uses a transistor and capacitor per cell; flash and magnetic storage offer "
             "other capacity and persistence tradeoffs. Package placement, stacked memory, controllers and interfaces "
             "affect performance. Retail prices change with date, capacity and product class. <bookmark mark='c'/> "

@@ -14,7 +14,7 @@ SCAN = ["scan:  beq  a2, s1, insert   # every entry looked at?",
         "       j    scan"]
 
 
-class Dataflow(VoiceoverScene):
+class Dataflow(WatchScene):
     def construct(self):
         self.card()
         self.loop()
@@ -23,11 +23,7 @@ class Dataflow(VoiceoverScene):
         self.bounds()
 
     def card(self):
-        card = chapter_card(1, r"The dataflow limit", "What do explicit dependencies and resources permit?", lit=(1966, 1974),
-                            extra=((1966, r"Graham's bound"), (1974, r"Dennis's dataflow machine")), part=PART)
-        with self.voiceover("Chapter one. The dataflow limit."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(1, r"The dataflow limit", "What do explicit dependencies and resources permit?", lit=(1966, 1974), extra=((1966, r"Graham's bound"), (1974, r"Dennis's dataflow machine")), part=PART, said="Chapter one. The dataflow limit.")
 
     # ------------------------------------------------------------------
     def loop(self):
@@ -165,6 +161,12 @@ class Dataflow(VoiceoverScene):
 
     # ------------------------------------------------------------------
     def bounds(self):
+        self.ask(r"$N$ instructions, the longest weighted path $L$, \\ at most $W$ starts a cycle. \\ The schedule takes at least...",
+                 [r"$\max(N/W,\ L)$ cycles", r"$N/W + L$ cycles", r"$N \cdot L / W$ cycles"], 0,
+                 say="N instructions, a longest dependency path of L cycles, and W starts per cycle. What's the least time any "
+                     "schedule can take?",
+                 reveal="The larger of N over W and L: you can't start faster than the width allows, or finish before the "
+                        "longest chain.")
         d = load("dataflow")
         head = label(r"Work, \ span, \ and width", font_size=38).to_edge(UP, buff=0.35)
         law = MathTex(r"\max\!\left(\left\lceil\frac{N}{W}\right\rceil,\; L\right) \le T_W",
@@ -193,8 +195,7 @@ class Dataflow(VoiceoverScene):
             "changing resource models. <bookmark mark='c'/> Our four-trip schedules satisfy the displayed "
             "start-slot lower bounds; they have twenty-four instructions and a six-cycle span. <bookmark mark='d'/> "
             "Across many fixed fast-path trips, the address recurrence permits one trip per cycle in the "
-            "unlimited-resource, perfect-path idealization: six instructions per cycle after startup. This is a "
-            "model opportunity, not a guarantee for the whole table search."
+            "unlimited-resource, perfect-path idealization: six instructions per cycle after startup."
         ) as vo:
             self.play(FadeIn(head))
             self.play(FadeIn(law), FadeIn(keys[0]))

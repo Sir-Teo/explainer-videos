@@ -47,11 +47,13 @@ MOTION_CALLS = {"Transform", "ReplacementTransform", "TransformFromCopy", "Trans
                 "Swap", "GrowArrow", "GrowFromEdge", "GrowFromPoint", "GrowFromCenter", "SpinInFromNothing"}
 MOTION_METHODS = {"add_updater", "zoom", "home", "advance", "cycle", "become", "move_camera"}
 NARRATED = {"predict", "reveal", "checkpoint", "wrong_idea", "ask", "chapter"}  # kit calls that speak
-HEDGES = [r"\bnot a measured\b", r"\bassumed\b", r"\billustrative\b", r"\bthis does not (mean|prove|test)\b",
-          r"\bnot an absolute\b", r"\bdoes not prove\b", r"\bnot (necessarily|always)\b", r"\bunder (these|stated) "
-          r"assumptions\b", r"\bkeep (measurements|in mind)\b", r"\bto be clear\b", r"\bin this model\b",
-          r"\bnot (every|all) \w+ (designs|predictors|processors|machines|systems)\b", r"\bonly a (sketch|model)\b",
-          r"\bteaching (budget|model)\b"]
+HEDGES = [r"\bnot an? (measured|physical|recording|proof|guarantee|certification|silicon)\b", r"\bassumed\b",
+          r"\billustrative\b", r"\bthis does not (mean|prove|test)\b", r"\bnot an absolute\b",
+          r"\bdoes not (prove|establish|certify|isolate|guarantee|imply)\b", r"\bnot (necessarily|automatically)\b",
+          r"\bunder (these|stated|our) assumptions\b", r"\bkeep (measurements|in mind)\b", r"\bto be clear\b",
+          r"\bin (this|our|that) (model|simulation)\b", r"\bteaching (budget|model)\b", r"\bwe have not\b",
+          r"\bnot literally\b", r"\bnot (every|all) \w+ (designs|predictors|processors|machines|systems)\b",
+          r"\bonly an? (sketch|model|illustration)\b"]
 
 
 def _strings(node) -> str:

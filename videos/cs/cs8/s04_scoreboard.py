@@ -9,7 +9,7 @@ from videos.cs.cs8.common import (BG, CODE, COST, CTRL, DATA, FUNC, HEAD, HIST, 
 STAGE_NAMES = [r"issue", r"read operands", r"execute done", r"write result"]
 
 
-class Scoreboard(VoiceoverScene):
+class Scoreboard(WatchScene):
     def construct(self):
         self.card()
         self.history()
@@ -18,11 +18,7 @@ class Scoreboard(VoiceoverScene):
         self.limits()
 
     def card(self):
-        card = chapter_card(3, r"The scoreboard", "How does dynamic scheduling keep track?", lit=(1964,),
-                            extra=((1964, r"CDC 6600: \ Thornton and Cray"),), part=PART)
-        with self.voiceover("Chapter three. The scoreboard."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(3, r"The scoreboard", "How does dynamic scheduling keep track?", lit=(1964,), extra=((1964, r"CDC 6600: \ Thornton and Cray"),), part=PART, said="Chapter three. The scoreboard.")
 
     # ------------------------------------------------------------------
     def history(self):
@@ -104,6 +100,10 @@ class Scoreboard(VoiceoverScene):
 
     # ------------------------------------------------------------------
     def table(self):
+        self.ask(r"Hennessy and Patterson's example, on the CDC 6600's scoreboard. \\ Why can't the second load even issue?",
+                 [r"it needs the first load's value", r"the only load unit is busy", r"a branch is pending"], 1,
+                 say="In this classic example the second load can't even issue. Why?",
+                 reveal="A structural hazard: there is only one load unit, and the first load is still using it.")
         d = load("scoreboard")
         lat = d["latency"]
         head = label(r"The textbook example, \ cycle by cycle", font_size=34).to_edge(UP, buff=0.3)
@@ -184,8 +184,7 @@ class Scoreboard(VoiceoverScene):
         with self.voiceover(
             "This scoreboard handles several hazards by waiting. <bookmark mark='a'/> A pending writer blocks "
             "another writer of the same register, and an earlier reader can delay a later writeback. <bookmark "
-            "mark='b'/> In this model, results reach their users through register writes and subsequent operand "
-            "reads. <bookmark mark='c'/> Dispatch is in program order: if the next instruction cannot reserve its "
+            "mark='b'/> <bookmark mark='c'/> Dispatch is in program order: if the next instruction cannot reserve its "
             "required unit, later instructions cannot dispatch past it. <bookmark mark='d'/> Tomasulo's algorithm "
             "adds reservation stations, producer tags and direct result broadcast. Those remove register-name "
             "hazards and decouple dispatch from immediate unit availability. Traditional Tomasulo still dispatches "

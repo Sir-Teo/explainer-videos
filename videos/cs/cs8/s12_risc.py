@@ -7,21 +7,15 @@ from videos.cs.cs8.common import (BG, CODE, COST, CTRL, DATA, FUNC, HEAD, HIST, 
                                   fmt, load, mono)
 
 
-class Risc(VoiceoverScene):
+class Risc(WatchScene):
     def construct(self):
         self.card()
         self.history()
         self.mix()
-        self.inside()
         self.today()
 
     def card(self):
-        card = chapter_card(11, r"RISC and CISC", r"Should instructions be simple, \ or powerful?", lit=(1980, 2017),
-                            extra=((1980, r"Patterson and Ditzel"), (2017, r"Turing Award: \ Hennessy, \ Patterson")),
-                            part=PART)
-        with self.voiceover("Chapter eleven. RISC and CISC."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(11, r"RISC and CISC", r"Should instructions be simple, \ or powerful?", lit=(1980, 2017), extra=((1980, r"Patterson and Ditzel"), (2017, r"Turing Award: \ Hennessy, \ Patterson")), part=PART, said="Chapter eleven. RISC and CISC.")
 
     # ------------------------------------------------------------------
     def history(self):
@@ -97,7 +91,7 @@ class Risc(VoiceoverScene):
                      r"compare plus jump still counts as two; no instruction savings established",
                      font_size=23, color=HEAD).to_edge(DOWN, buff=0.5)
         with self.voiceover(
-            "This is the Job's dynamic instruction mix on Pebble, not a measured translation to another ISA. "
+            " "
             "<bookmark mark='a'/> Its arithmetic, branches, loads and jumps dominate the recorded chapter. "
             "<bookmark mark='b'/> An x86 compare can read a memory operand directly, but the conditional jump still "
             "remains. Our Pebble load followed by a combined compare-and-branch can therefore map to a memory "
@@ -118,48 +112,13 @@ class Risc(VoiceoverScene):
         self.wait(0.3)
         self.clear_scene()
 
-    # ------------------------------------------------------------------
-    def inside(self):
-        head = label("Architectural instructions and internal operations", font_size=38).to_edge(UP, buff=0.35)
-        x86 = mono("add  [rbx+8], eax", 26, color=INF)
-        uops = VGroup(mono("load   tmp  <- [rbx+8]", 22, color=YES), mono("add    tmp  <- tmp + eax", 22, color=YES),
-                      mono("store  [rbx+8] <- tmp", 22, color=YES)).arrange(DOWN, aligned_edge=LEFT, buff=0.1)
-        row = VGroup(x86, MathTex(r"\xrightarrow{\text{decode}}", font_size=40, color=GREY_C), uops).arrange(
-            RIGHT, buff=0.5).move_to(UP * 0.8)
-        facts = VGroup(
-            label("many x86 implementations decode instructions into internal micro-operations",
-                  font_size=24, color=GREY_A),
-            label("out-of-order designs can rename and schedule implementation-specific micro-ops", font_size=24,
-                  color=YES),
-            label("load-operation micro-fusion differs from compare-branch macro-fusion", font_size=24, color=GREY_A),
-            label("x86 encodings: \\ 1 to 15 bytes; \\ some RISC ISAs also mix lengths", font_size=24,
-                  color=NO),
-        ).arrange(DOWN, buff=0.22).to_edge(DOWN, buff=0.5)
-        with self.voiceover(
-            "Many modern x86 implementations decode architectural instructions into internal micro-operations. "
-            "<bookmark mark='a'/> This conceptual read-modify-write example separates memory reading, arithmetic "
-            "and memory writing; exact micro-operations and flags behavior depend on the implementation. <bookmark "
-            "mark='b'/> An out-of-order design can rename and schedule those internal operations. They are not "
-            "literally a separate RISC instruction set, and not every x86 processor uses the same organization. "
-            "<bookmark mark='c'/> Some designs fuse a load with an operation for part of the pipeline; macro-fusion "
-            "of a compare and conditional branch is a different mechanism. Architectural instruction counts, "
-            "reorder-buffer entries and execution operations can therefore differ. <bookmark mark='d'/> Encoding is "
-            "another independent choice. x86 uses variable-length encodings; some RISC ISAs also mix lengths, "
-            "including Thumb and compressed RISC-V. A base instruction-set category does not specify every pipeline "
-            "detail."
-        ) as vo:
-            self.play(FadeIn(head))
-            self.play(FadeIn(row[0]), FadeIn(row[1]), LaggedStart(*[FadeIn(u) for u in uops], lag_ratio=0.3),
-                      FadeIn(facts[0]))
-            vo.wait_until("a")
-            for mk, f in zip("bcd", facts[1:]):
-                vo.wait_until(mk)
-                self.play(FadeIn(f))
-        self.wait(0.3)
-        self.clear_scene()
 
     # ------------------------------------------------------------------
     def today(self):
+        self.ask(r"How does a modern x86 core run x86 instructions?", [r"directly, as written",
+                 r"translated into simpler internal operations"], 1,
+                 say="Inside a modern x86 core, how are its complicated instructions executed?",
+                 reveal="Mostly translated into simpler internal operations, which the out-of-order core schedules.")
         head = label(r"Where the instruction sets went", font_size=36).to_edge(UP, buff=0.35)
         rows = VGroup(
             label("x86 compatibility: \\ extensive, \\ but mode and extension dependent", font_size=24, color=INF),
@@ -172,10 +131,7 @@ class Risc(VoiceoverScene):
         award = label(r"2017 Turing Award: \ Hennessy and Patterson, \ for the quantitative approach to architecture",
                       font_size=24, color=HEAD).to_edge(DOWN, buff=0.55)
         with self.voiceover(
-            "Instruction sets preserve software investments while implementations evolve. <bookmark mark='a'/> x86 "
-            "compatibility is extensive, but availability depends on execution mode, extensions and "
-            "operating-system support; not literally every instruction from 1978 runs unchanged in every modern "
-            "mode. <bookmark mark='b'/> Arm designs span many implementations and markets, with distinct "
+            "Instruction sets preserve software investments while implementations evolve. <bookmark mark='a'/> <bookmark mark='b'/> Arm designs span many implementations and markets, with distinct "
             "instruction-set states and encoding choices. <bookmark mark='c'/> RISC-V provides an open ISA that can "
             "be implemented without an ISA license royalty. That does not remove every other IP, implementation or "
             "compliance cost. <bookmark mark='d'/> MIPS and other architectures also shaped processors and teaching "

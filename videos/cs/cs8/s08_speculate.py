@@ -7,20 +7,15 @@ from videos.cs.cs8.common import (BG, CODE, COST, CTRL, DATA, FUNC, HEAD, HIST, 
                                   box, fmt, load, mono, phase_legend)
 
 
-class Speculate(VoiceoverScene):
+class Speculate(WatchScene):
     def construct(self):
         self.card()
         self.idea()
         self.recorded()
         self.numbers()
-        self.drain()
 
     def card(self):
-        card = chapter_card(7, r"Speculation", r"How does a machine run ahead of what it knows?", lit=(1995,),
-                            extra=((1995, r"Pentium Pro: \ 40 in flight"),), part=PART)
-        with self.voiceover("Chapter seven. Speculation."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(7, r"Speculation", r"How does a machine run ahead of what it knows?", lit=(1995,), extra=((1995, r"Pentium Pro: \ 40 in flight"),), part=PART, said="Chapter seven. Speculation.")
 
     # ------------------------------------------------------------------
     def idea(self):
@@ -99,6 +94,10 @@ class Speculate(VoiceoverScene):
 
     # ------------------------------------------------------------------
     def numbers(self):
+        self.ask(r"Branch prediction improves from 90\% to 99\%. \\ The cycles lost to mispredictions fall by about...",
+                 [r"10\%", r"90\%"], 1,
+                 say="Prediction improves from ninety to ninety-nine percent right. How much do mispredictions cost now?",
+                 reveal="Ninety percent less: one miss in a hundred instead of ten. That's why the last few percent matter.")
         d = load("speculate")["rows"]
         head = label(r"The Job's first chapter, \ with four predictors", font_size=34).to_edge(UP, buff=0.3)
         keys = ["always taken", "2-bit", "tournament", "perfect"]
@@ -139,49 +138,3 @@ class Speculate(VoiceoverScene):
         self.wait(0.3)
         self.clear_scene()
 
-    # ------------------------------------------------------------------
-    def drain(self):
-        d = load("speculate")["rows"]
-        h = load("hook")
-        t = d["tournament"]
-        n = t["committed"]
-        m = t["stats"]["mispredicts"]
-        b = t["stats"]["branches"]
-        head = label("Aggregate ratios are not lookahead bounds", font_size=36).to_edge(UP, buff=0.35)
-        run = n / m
-        eq1 = MathTex(r"\frac{\text{retired instructions}}{\text{counted redirects}} = "
-                      rf"\frac{{{n:,}}}{{{m:,}}} \approx {run:.0f}".replace(",", "{,}"), font_size=36).move_to(UP * 1.6)
-        cpi_p = 1 / d["perfect"]["ipc"]
-        cpi_t = 1 / t["ipc"]
-        pen = (cpi_t - cpi_p) * n / m
-        eq2 = MathTex(r"\text{CPI}_{\text{tournament}} := \text{CPI}_{\text{oracle}} + \frac{\text{redirects}}{N} P_{\text{effective}}", font_size=36)
-        eq3 = MathTex(rf"{cpi_t:.3f} \approx {cpi_p:.3f} + \frac{{1}}{{{run:.0f}}} \times P_{{\text{{effective}}}} \quad\Rightarrow\quad "
-                      rf"P_{{\text{{effective}}}} \approx {pen:.1f} \text{{ cycles}}", font_size=34, color=HEAD)
-        g = VGroup(eq2, eq3).arrange(DOWN, buff=0.3).move_to(DOWN * 0.2)
-        punch = label(rf"mean occupancy {h['occupancy']['mean']:.1f} entries; \\ "
-                      r"neither ratio is a hard lookahead limit or a unique causal cost", font_size=24,
-                      color=NO).to_edge(DOWN, buff=0.5)
-        with self.voiceover(
-            "Two useful ratios summarize these runs, but neither is a hard lookahead bound. <bookmark mark='a'/> "
-            "Retired instructions divided by the model's counted branch redirects is about thirty-seven. Redirects "
-            "include some wrong-path branches, so this is an aggregate ratio, not the exact spacing of correct-path "
-            "prediction misses. Miss spacing and branch-resolution latency vary; a core can have several unresolved "
-            "branches in flight. <bookmark mark='b'/> Define an effective penalty P from the CPI difference between "
-            "tournament and oracle-assisted runs, normalized by that redirect rate. <bookmark mark='c'/> The "
-            "resulting P is about seven point nine cycles. It summarizes the entire configuration comparison, "
-            "including interactions with resource use, cache state and memory-order recovery; it is not a unique "
-            "measured cost of every redirect. <bookmark mark='d'/> The low mean occupancy and flat capacity sweep "
-            "are observations about this workload. Better prediction helps here, while a larger window can help "
-            "under other dependencies and miss patterns."
-        ) as vo:
-            self.play(FadeIn(head))
-            self.play(Write(eq1))
-            vo.wait_until("a")
-            vo.wait_until("b")
-            self.play(Write(eq2))
-            vo.wait_until("c")
-            self.play(Write(eq3))
-            vo.wait_until("d")
-            self.play(FadeIn(punch))
-        self.wait(0.3)
-        self.clear_scene()

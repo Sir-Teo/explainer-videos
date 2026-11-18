@@ -20,7 +20,7 @@ def tile(content, caption, color, TW=3.6, TH=2.3):
     return Group(frame, content, cap)
 
 
-class Outro(VoiceoverScene):
+class Outro(WatchScene):
     def construct(self):
         self.recap()
         self.payoffs()
@@ -67,7 +67,7 @@ class Outro(VoiceoverScene):
             "reuse, while recursive layouts illustrated cache-oblivious ideas under explicit assumptions. The "
             "red-blue pebble example now checks its fast-memory occupancy, and the classical multiplication "
             "comparison counts fills and dirty write-backs. The Job's ledger combines a relocated abstract event "
-            "model with short core benchmarks and assumed clocks. Its small projected overhead belongs to those "
+            "model with short core benchmarks. Its small projected overhead belongs to those "
             "assumptions; the billions of table-line visits are not billions of physical DRAM misses. These "
             "distinctions let us connect a visualization to a calculation without claiming more than either "
             "establishes."
@@ -76,6 +76,12 @@ class Outro(VoiceoverScene):
             self.play(LaggedStart(*[FadeIn(t, shift=UP * 0.15) for t in tiles], lag_ratio=0.25), run_time=4.0)
         self.wait(0.5)
         self.clear_scene()
+        self.checkpoint(
+            [(r"Why does LRU fail on a big cyclic scan?", r"It evicts exactly the line needed next"),
+             (r"What did Hong and Kung prove?", r"A lower bound on data movement for matrix multiply")],
+            narration="Last checkpoint. Why does LRU fail on a large repeated scan? And what did Hong and Kung prove?",
+            answers_narration="It always evicts the line the scan needs next. And that classical matrix multiply must move "
+                              "order n cubed over root M words, whatever the schedule.")
 
     def payoffs(self):
         card = payoff_card([
@@ -165,8 +171,7 @@ class Outro(VoiceoverScene):
             "Next, parallel machines. Power and scaling constraints slowed the earlier pace of clock-frequency "
             "growth, while multicore designs and vector units became increasingly important. Part 10 studies SIMD, "
             "shared-memory execution, coherence and GPU organization, and evaluates parallel versions of the Job "
-            "under stated workloads and resource limits. More cores do not automatically remove dependencies, serial "
-            "work, communication or bandwidth bottlenecks. The memory models from this part give us a starting point "
+            "under stated workloads and resource limits. The memory models from this part give us a starting point "
             "for measuring those tradeoffs."
         ):
             self.play(FadeIn(nxt), LaggedStart(*[FadeIn(c) for c in cores], lag_ratio=0.2), FadeIn(shared),

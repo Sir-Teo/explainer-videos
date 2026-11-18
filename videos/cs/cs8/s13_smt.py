@@ -26,7 +26,7 @@ def slots(counts, width=4, cw=0.42, ch=0.42, colors=(DATA,)):
     return g
 
 
-class Smt(VoiceoverScene):
+class Smt(WatchScene):
     def construct(self):
         self.card()
         self.empty()
@@ -34,11 +34,7 @@ class Smt(VoiceoverScene):
         self.numbers()
 
     def card(self):
-        card = chapter_card(12, r"Simultaneous multithreading", r"Who uses the empty slots?", lit=(1995, 2002),
-                            extra=((1995, r"Tullsen, \ Eggers, \ Levy"), (2002, r"Hyper-Threading")), part=PART)
-        with self.voiceover("Chapter twelve. Simultaneous multithreading."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(12, r"Simultaneous multithreading", r"Who uses the empty slots?", lit=(1995, 2002), extra=((1995, r"Tullsen, \ Eggers, \ Levy"), (2002, r"Hyper-Threading")), part=PART, said="Chapter twelve. Simultaneous multithreading.")
 
     # ------------------------------------------------------------------
     def empty(self):
@@ -79,6 +75,11 @@ class Smt(VoiceoverScene):
 
     # ------------------------------------------------------------------
     def share(self):
+        self.ask(r"Two threads share one core's execution units. \\ Combined throughput, against one thread alone?",
+                 [r"the same", r"higher", r"half"], 1,
+                 say="Let two threads share one core. Compared with one thread alone, is the combined throughput the same, "
+                     "higher, or half?",
+                 reveal="Higher: one thread's stalls leave slots the other can fill.")
         d = load("smt")
         head = label(r"Two programs, \ one core", font_size=36).to_edge(UP, buff=0.35)
         g = slots(d["slots_both"], colors=(DATA, CTRL)).move_to(UP * 0.9)

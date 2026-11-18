@@ -7,7 +7,7 @@ from videos.cs.cs9.common import (BG, CODE, COST, CTRL, DATA, FUNC, HEAD, HIST, 
                                   size_label)
 
 
-class Oblivious(VoiceoverScene):
+class Oblivious(WatchScene):
     def construct(self):
         self.card()
         self.model()
@@ -15,13 +15,7 @@ class Oblivious(VoiceoverScene):
         self.veb()
 
     def card(self):
-        card = chapter_card(9, r"Cache-oblivious algorithms", r"Can code be fast for every cache at once?", lit=(1999,),
-                            extra=((1999, r"Frigo, \ Leiserson, \ Prokop, \ Ramachandran"),), part=PART)
-        with self.voiceover(
-            "Chapter nine. Cache-oblivious algorithms."
-        ):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(9, r"Cache-oblivious algorithms", r"Can code be fast for every cache at once?", lit=(1999,), extra=((1999, r"Frigo, \ Leiserson, \ Prokop, \ Ramachandran"),), part=PART, said="Chapter nine. Cache-oblivious algorithms.")
 
     def model(self):
         head = label(r"The ideal-cache model \ (1999)", font_size=36).to_edge(UP, buff=0.4)
@@ -38,7 +32,7 @@ class Oblivious(VoiceoverScene):
             "ideal-cache model specifies a fully associative fast memory of M words, B-word transfers and optimal "
             "replacement. <bookmark mark='b'/> Analysis counts transfers under that model and stated initial/output "
             "conditions. <bookmark mark='c'/> A recursive algorithm can discover useful subproblem sizes without "
-            "testing M or B directly. Avoiding the parameters alone does not prove optimality. <bookmark mark='d'/> "
+            "testing M or B directly. <bookmark mark='d'/> "
             "Bounds for specific algorithms may require a tall-cache assumption and regularity conditions. They can "
             "extend across suitably modeled memory levels, and LRU can have related guarantees with appropriate "
             "resource comparisons. None of this promises the exact fewest misses at every real cache level, where "
@@ -55,6 +49,9 @@ class Oblivious(VoiceoverScene):
         self.clear_scene()
 
     def transpose(self):
+        self.ask(r"Can an algorithm use the cache well \\ without knowing its size?", [r"no", r"yes"], 1,
+                 say="Can an algorithm use a cache well without knowing how big the cache is?",
+                 reveal="Yes: divide the problem recursively, and some level of the recursion fits every cache.")
         d = load("oblivious")
         head = label(rf"Transpose {d['n']} $\times$ {d['n']}: \ line fills per data reference", font_size=32).to_edge(
             UP, buff=0.3)
@@ -87,8 +84,7 @@ class Oblivious(VoiceoverScene):
             "thirty-two-by-thirty-two block changes the curve, reaching the cold line-fill floor from four kibibytes "
             "in this experiment. <bookmark mark='c'/> The recursive traversal reaches that floor across all "
             "displayed capacities. One eighth here means one fill per eight references, or one quarter of a fill per "
-            "output element. This LRU experiment illustrates locality; it does not establish exact transfer "
-            "optimality for every size and cache."
+            "output element."
         ) as vo:
             self.play(FadeIn(head), Create(ax), FadeIn(xt), FadeIn(xl), Create(ideal), FadeIn(il))
             for mk, k in zip("abc", range(3)):
