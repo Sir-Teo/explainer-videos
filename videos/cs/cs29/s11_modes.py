@@ -4,7 +4,7 @@ from explainer.cs import *  # noqa: F403
 from videos.cs.cs29.common import (block_image, BG, DATA, HEAD, NO, PART, YES, load, mono, pixel_image)
 
 
-class Modes(VoiceoverScene):
+class Modes(WatchScene):
     def construct(self):
         self.card()
         self.four()
@@ -12,12 +12,8 @@ class Modes(VoiceoverScene):
         self.oracle_run()
 
     def card(self):
-        card = chapter_card(10, r"Modes of operation", r"How do you encrypt more than 16 bytes?", lit=(1980, 2002),
-                            extra=((1980, r"FIPS 81: \ ECB, CBC, \ldots"), (2002, r"Vaudenay's padding oracle"),
-                                   (2014, r"POODLE")), part=PART)
-        with self.voiceover("Chapter ten. Modes of operation."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(10, r"Modes of operation", r"How do you encrypt more than 16 bytes?", lit=(1980, 2002), extra=((1980, r"FIPS 81: \ ECB, CBC, \ldots"), (2002, r"Vaudenay's padding oracle"),
+                                   (2014, r"POODLE")), part=PART, said="Chapter ten. Modes of operation.")
 
     def four(self):
         p = load("penguin")
@@ -68,6 +64,10 @@ class Modes(VoiceoverScene):
         self.clear_scene()
 
     def oracle_idea(self):
+        self.ask(r"A server only says ``bad padding'' or ``ok''. \\ Can an attacker decrypt the message?",
+                 [r"no", r"yes, byte by byte"], 1,
+                 say="A server answers one bit: was the padding good or bad? Can an attacker use that to decrypt a message?",
+                 reveal="Yes, byte by byte, with at most two hundred and fifty-six guesses each.")
         head = label(r"A server that says too much", font_size=34).to_edge(UP, buff=0.3)
         pad = VGroup(*[mono(t, 20, c) for t, c in (("... 41 54 21", WHITE), ("05 05 05 05 05", HEAD))]).arrange(
             RIGHT, buff=0.15)
@@ -170,3 +170,9 @@ class Modes(VoiceoverScene):
             self.play(FadeIn(lines[3]))
         self.wait(0.3)
         self.clear_scene()
+        self.checkpoint(
+            [(r"What does IND-CPA security ask?", r"No efficient attacker tells which message was encrypted"),
+             (r"Why is ECB insecure?", r"Equal blocks give equal ciphertext")],
+            narration="Checkpoint. What does chosen-plaintext security ask? And why is ECB mode insecure?",
+            answers_narration="No efficient attacker can tell which of two messages was encrypted. And equal blocks encrypt to "
+                              "equal blocks, as the penguin showed.")

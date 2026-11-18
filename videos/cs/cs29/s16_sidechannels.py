@@ -6,7 +6,7 @@ from explainer.cs import *  # noqa: F403
 from videos.cs.cs29.common import (BG, DATA, HEAD, LAM, NO, PART, YES, code, load, mono)
 
 
-class SideChannels(VoiceoverScene):
+class SideChannels(WatchScene):
     def construct(self):
         self.card()
         self.timing()
@@ -14,15 +14,14 @@ class SideChannels(VoiceoverScene):
         self.randomness()
 
     def card(self):
-        card = chapter_card(15, r"Side channels and bad randomness", r"What leaks besides the ciphertext?",
-                            lit=(1996, 2008), extra=((1996, r"Kocher: \ timing attacks"), (1999, r"power analysis"),
-                                                     (2005, r"cache attacks on AES"), (2008, r"Debian's OpenSSL")),
-                            part=PART)
-        with self.voiceover("Chapter fifteen. Side channels, and bad randomness."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(15, r"Side channels and bad randomness", r"What leaks besides the ciphertext?", lit=(1996, 2008), extra=((1996, r"Kocher: \ timing attacks"), (1999, r"power analysis"),
+                                                     (2005, r"cache attacks on AES"), (2008, r"Debian's OpenSSL")), part=PART, said="Chapter fifteen. Side channels, and bad randomness.")
 
     def timing(self):
+        self.ask(r"A server compares a tag byte by byte, \\ stopping at the first mismatch. The attacker learns...",
+                 [r"nothing", r"the tag, one byte at a time"], 1,
+                 say="A server compares your tag byte by byte and stops at the first mismatch. What can an attacker learn?",
+                 reveal="The tag, one byte at a time, from how long each rejection takes.")
         t = load("timing")["rows"]
         head = label(r"A comparison that leaks", font_size=34).to_edge(UP, buff=0.3)
         early = code(["def equal(a, b):", "    for x, y in zip(a, b):", "        if x != y:",
@@ -68,8 +67,7 @@ class SideChannels(VoiceoverScene):
             "guess one byte at a time: roughly sixteen times two hundred and fifty-six candidate guesses. Real "
             "timing attacks generally require repeated measurements and statistical analysis, not one query per "
             "guess. <bookmark mark='d'/> The second loop visits every pair of bytes, ORs the XORs, and decides at "
-            "the end. This illustrates removing early exit; Python does not guarantee its running time is "
-            "independent of secrets. Kocher's 1996 work demonstrated timing attacks on RSA and Diffie-Hellman. "
+            "the end. Kocher's 1996 work demonstrated timing attacks on RSA and Diffie-Hellman. "
             "For tag comparisons use the standard hmac.compare_digest implementation."
         ) as vo:
             self.play(FadeIn(head), FadeIn(codes[0]))

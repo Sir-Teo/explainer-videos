@@ -6,7 +6,7 @@ from explainer.cs import *  # noqa: F403
 from videos.cs.cs29.common import (DATA, HEAD, LAM, NO, PART, YES, fit_right, flow_box, grid_table, load)
 
 
-class Hashes(VoiceoverScene):
+class Hashes(WatchScene):
     def construct(self):
         self.card()
         self.birthday()
@@ -15,15 +15,15 @@ class Hashes(VoiceoverScene):
         self.sponge()
 
     def card(self):
-        card = chapter_card(12, r"Hash functions", r"Can a short fingerprint stand for any file?",
-                            lit=(1989, 2004, 2017), extra=((1989, r"Merkle and Damg\aa rd"),
+        self.chapter(12, r"Hash functions", r"Can a short fingerprint stand for any file?", lit=(1989, 2004, 2017), extra=((1989, r"Merkle and Damg\aa rd"),
                                                            (2004, r"Wang: \ MD5 collisions"), (2015, r"SHA-3"),
-                                                           (2017, r"SHAttered")), part=PART)
-        with self.voiceover("Chapter twelve. Hash functions."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+                                                           (2017, r"SHAttered")), part=PART, said="Chapter twelve. Hash functions.")
 
     def birthday(self):
+        self.ask(r"A 64-bit hash. Hash random inputs until two collide. \\ Roughly how many?", [r"$2^{32}$",
+                 r"$2^{63}$", r"$2^{64}$"], 0,
+                 say="A sixty-four-bit hash. Hash random inputs until two collide. Roughly how many do you need?",
+                 reveal="About two to the thirty-two: the birthday bound, the square root of the space.")
         h = load("hashes")
         head = label(r"Collisions, \ by the birthday bound", font_size=34).to_edge(UP, buff=0.3)
         ax = Axes(x_range=[14, 34, 4], y_range=[6, 18, 2], x_length=5.6, y_length=3.6,

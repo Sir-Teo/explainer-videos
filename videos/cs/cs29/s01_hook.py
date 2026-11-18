@@ -4,11 +4,11 @@ from explainer.cs import *  # noqa: F403
 from videos.cs.cs29.common import (block_image, CTRL, DATA, HEAD, LAM, NO, PART, YES, load, pixel_image)
 
 
-class Hook(VoiceoverScene):
+class Hook(WatchScene):
     def construct(self):
         self.penguin()
         self.story()
-        self.plan()
+        self.title(PART)
 
     def penguin(self):
         p = load("penguin")
@@ -107,26 +107,3 @@ class Hook(VoiceoverScene):
         self.wait(0.3)
         self.clear_scene()
 
-    def plan(self):
-        title = label(rf"Part {PART}: \ Secrets", font_size=46).to_edge(UP, buff=0.4)
-        smap = series_map(current=PART, done=PART - 1).scale(0.92).next_to(title, DOWN, buff=0.35)
-        obj = objectives_card([
-            r"frequency analysis, \ Vigen\`ere, \ Enigma and Rejewski's theorem",
-            r"perfect secrecy, \ and what ``secure'' means against a bounded attacker",
-            r"pseudorandom generators, \ functions and permutations",
-            r"AES from scratch, \ the avalanche, \ and the modes that make it safe",
-            r"MACs, \ hash functions, \ Merkle trees and password hashing",
-            r"attacks: \ differential, \ timing, \ bad randomness; \ the frontier",
-        ], font_size=26).move_to(DOWN * 0.2)
-        with self.voiceover(
-            "Part 29 of Computer Science, Built: Secrets. <bookmark mark='a'/> In this part: the classical ciphers "
-            "and how they fell, ending with Enigma; Shannon's perfect secrecy, and what security can mean when keys "
-            "are short; pseudorandom generators, functions and permutations, the objects the rest is built from; AES, "
-            "from scratch, on Part 28's field of bytes; the modes, message authentication codes and hash functions "
-            "that make it safe to use; and the attacks: differential cryptanalysis, timing, and bad randomness."
-        ) as vo:
-            self.play(FadeIn(title), FadeIn(smap))
-            vo.wait_until("a")
-            self.play(FadeOut(smap), FadeIn(obj))
-        self.wait(0.5)
-        self.clear_scene()

@@ -4,7 +4,7 @@ from explainer.cs import *  # noqa: F403
 from videos.cs.cs29.common import (CTRL, DATA, HEAD, NO, PART, YES, flow_box)
 
 
-class Definitions(VoiceoverScene):
+class Definitions(WatchScene):
     def construct(self):
         self.card()
         self.bounded()
@@ -12,12 +12,8 @@ class Definitions(VoiceoverScene):
         self.reductions()
 
     def card(self):
-        card = chapter_card(5, r"What secure means", r"What can we promise if keys are short?", lit=(1883, 1982),
-                            extra=((1883, r"Kerckhoffs's principles"), (1982, r"Goldwasser--Micali: \ semantic "
-                                                                             r"security")), part=PART)
-        with self.voiceover("Chapter five. What secure means."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(5, r"What secure means", r"What can we promise if keys are short?", lit=(1883, 1982), extra=((1883, r"Kerckhoffs's principles"), (1982, r"Goldwasser--Micali: \ semantic "
+                                                                             r"security")), part=PART, said="Chapter five. What secure means.")
 
     def bounded(self):
         head = label(r"An attacker with limited computing", font_size=34).to_edge(UP, buff=0.3)
@@ -68,6 +64,10 @@ class Definitions(VoiceoverScene):
         self.clear_scene()
 
     def game(self):
+        self.ask(r"Can a \emph{deterministic} encryption scheme \\ hide which of two messages was sent?",
+                 [r"yes, with a long key", r"no, not after one query"], 1,
+                 say="The attacker may ask for encryptions of messages it chooses. Can a deterministic scheme then hide which of two messages was sent?",
+                 reveal="No: it encrypts both, and compares. Secure encryption must be randomized, or use a nonce.")
         head = label(r"Security as a game: \ IND-CPA", font_size=34).to_edge(UP, buff=0.3)
         L = label(r"challenger \\ (holds $k$, \ flips $b$)", font_size=20, color=HEAD).move_to([-3.6, 2.2, 0])
         R = label(r"adversary $\mathcal{A}$", font_size=20, color=NO).move_to([3.6, 2.2, 0])

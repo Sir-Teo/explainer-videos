@@ -15,7 +15,7 @@ def chi2(col, shift):
     return sum((obs[i] - n * K.ENGLISH_FREQ[A2Z[i]]) ** 2 / (n * K.ENGLISH_FREQ[A2Z[i]]) for i in range(26))
 
 
-class Vigenere(VoiceoverScene):
+class Vigenere(WatchScene):
     def construct(self):
         self.card()
         self.many()
@@ -23,12 +23,8 @@ class Vigenere(VoiceoverScene):
         self.columns()
 
     def card(self):
-        card = chapter_card(2, r"Vigen\`ere and the index of coincidence", r"What if every letter has its own shift?",
-                            lit=(1854, 1863, 1922), extra=((1854, r"Babbage breaks Vigen\`ere"), (1863, r"Kasiski"),
-                                                           (1922, r"Friedman: \ coincidence")), part=PART)
-        with self.voiceover("Chapter two. Vigenère, and the index of coincidence."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(2, r"Vigen\`ere and the index of coincidence", r"What if every letter has its own shift?", lit=(1854, 1863, 1922), extra=((1854, r"Babbage breaks Vigen\`ere"), (1863, r"Kasiski"),
+                                                           (1922, r"Friedman: \ coincidence")), part=PART, said="Chapter two. Vigenère, and the index of coincidence.")
 
     def many(self):
         v = load("vigenere")
@@ -82,6 +78,10 @@ class Vigenere(VoiceoverScene):
         self.clear_scene()
 
     def coincidence(self):
+        self.ask(r"Shift a Vigen\`ere ciphertext against itself. \\ Matching letters spike when the shift is...",
+                 [r"random", r"a multiple of the key length"], 1,
+                 say="Slide a Vigenere ciphertext against itself and count matching letters. When do the matches spike?",
+                 reveal="At multiples of the key length, where the same shift lines up.")
         v = load("vigenere")
         head = label(r"The index of coincidence", font_size=34).to_edge(UP, buff=0.3)
         sc = {int(k): s for k, s in v["scores"].items()}

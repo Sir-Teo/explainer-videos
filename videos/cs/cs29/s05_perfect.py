@@ -4,7 +4,7 @@ from explainer.cs import *  # noqa: F403
 from videos.cs.cs29.common import (DATA, HEAD, NO, PART, YES, bit_row, grid_table, load, mono)
 
 
-class Perfect(VoiceoverScene):
+class Perfect(WatchScene):
     def construct(self):
         self.card()
         self.pad()
@@ -12,13 +12,13 @@ class Perfect(VoiceoverScene):
         self.twotime()
 
     def card(self):
-        card = chapter_card(4, r"Perfect secrecy", r"Can a cipher be unbreakable?", lit=(1917, 1943, 1949),
-                            extra=((1917, r"Vernam's tape"), (1943, r"VENONA begins")), part=PART)
-        with self.voiceover("Chapter four. Perfect secrecy."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(4, r"Perfect secrecy", r"Can a cipher be unbreakable?", lit=(1917, 1943, 1949), extra=((1917, r"Vernam's tape"), (1943, r"VENONA begins")), part=PART, said="Chapter four. Perfect secrecy.")
 
     def pad(self):
+        self.ask(r"A one-time pad ciphertext, and unlimited computing. \\ What can you learn about the message?",
+                 [r"its first letter", r"its length, and nothing else"], 1,
+                 say="A one-time pad ciphertext, and a computer with unlimited time. What can you learn about the message?",
+                 reveal="Only its length. Every message of that length is equally likely.")
         head = label(r"The one-time pad", font_size=34).to_edge(UP, buff=0.3)
         m = [0, 1, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 1]
         k = [1, 1, 0, 1, 0, 0, 1, 0, 1, 0, 1, 1, 0, 1, 1, 0]
@@ -182,3 +182,9 @@ class Perfect(VoiceoverScene):
             self.play(FadeIn(lines[3]))
         self.wait(0.3)
         self.clear_scene()
+        self.checkpoint(
+            [(r"Why does frequency analysis break substitution?", r"Each letter always maps to the same letter"),
+             (r"Why must a one-time pad never repeat?", r"XOR of two ciphertexts cancels the key")],
+            narration="Checkpoint. Why does counting break a substitution cipher? And why must a one-time pad never be reused?",
+            answers_narration="Each letter always becomes the same letter, so frequencies survive. And XORing two ciphertexts "
+                              "cancels the key.")

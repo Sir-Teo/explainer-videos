@@ -4,59 +4,21 @@ from explainer.cs import *  # noqa: F403
 from videos.cs.cs29.common import (DATA, HEAD, LAM, NO, PART, YES, grid_table, load, mono, state_grid)
 
 
-class Aes(VoiceoverScene):
+class Aes(WatchScene):
     def construct(self):
         self.card()
-        self.contest()
         self.steps()
         self.rounds()
 
     def card(self):
-        card = chapter_card(8, r"AES", r"What is inside the cipher everyone uses?", lit=(1977, 1998, 2001),
-                            extra=((1977, r"DES"), (1998, r"Deep Crack"), (2001, r"AES")), part=PART)
-        with self.voiceover("Chapter eight. The Advanced Encryption Standard."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(8, r"AES", r"What is inside the cipher everyone uses?", lit=(1977, 1998, 2001), extra=((1977, r"DES"), (1998, r"Deep Crack"), (2001, r"AES")), part=PART, said="Chapter eight. The Advanced Encryption Standard.")
 
-    def contest(self):
-        head = label(r"From DES to AES", font_size=34).to_edge(UP, buff=0.3)
-        tab = grid_table([r"", r"DES \ (1977)", r"AES \ (2001)"], [
-            [r"designed by", r"IBM, \ with the NSA", r"Daemen and Rijmen \ (Rijndael)"],
-            [r"chosen by", r"the US standards bureau", r"an open contest: \ 15 entries, \ 3 years"],
-            [r"block", r"64 bits", r"128 bits"],
-            [r"key", r"56 bits", r"128, \ 192 or 256 bits"],
-            [r"structure", r"16 Feistel rounds", r"10, \ 12 or 14 rounds of an SPN"],
-            [r"fate", r"every key tried in 56 hours \ (1998)", r"no attack much better than $2^{128}$"],
-        ], widths=[2.0, 4.2, 4.8], row_h=0.58, font_size=21, mono_cols=())
-        tab.next_to(head, DOWN, buff=0.55)
-        for r, row in enumerate(tab.cells[1:], 1):
-            row[0].set_color(GREY_A)
-            row[1].set_color(NO if r == 6 else WHITE)
-            row[2].set_color(YES if r == 6 else WHITE)
-        note = label(r"\textbf{SPN}: \ substitution--permutation network: \ a nonlinear S-box layer, \ a linear mixing "
-                     r"layer, \ a key, \ repeated", font_size=21, color=HEAD).to_edge(DOWN, buff=0.5)
-        with self.voiceover(
-            "DES, the Data Encryption Standard, was designed at IBM and published in 1977, with a fifty-six-bit key "
-            "that critics said from the start was too short. <bookmark mark='a'/> In 1998 the Electronic Frontier "
-            "Foundation built Deep Crack, a machine of custom chips, for a quarter of a million dollars, and it "
-            "found a DES key in fifty-six hours. <bookmark mark='b'/> The replacement was chosen in the open. From "
-            "1997 the US standards institute ran a contest: fifteen designs from around the world, three years of "
-            "public attack. The winner was Rijndael, by two Belgian cryptographers, Joan Daemen and Vincent Rijmen, "
-            "published as AES in 2001. <bookmark mark='c'/> It is not a Feistel network but a "
-            "substitution-permutation network: a layer of nonlinear substitutions, a layer of linear mixing, a round "
-            "key, repeated ten times for a hundred-and-twenty-eight-bit key. Twenty-five years on, nothing much "
-            "better than trying every key is known."
-        ) as vo:
-            self.play(FadeIn(head), FadeIn(tab.cells[0][1]), FadeIn(tab.cells[0][2]), FadeIn(tab.rule),
-                      *[FadeIn(VGroup(row[0], row[1])) for row in tab.cells[1:]])
-            vo.wait_until("b")
-            self.play(LaggedStart(*[FadeIn(row[2]) for row in tab.cells[1:]], lag_ratio=0.25))
-            vo.wait_until("c")
-            self.play(FadeIn(note))
-        self.wait(0.3)
-        self.clear_scene()
 
     def steps(self):
+        self.ask(r"AES has four steps per round. \\ Which one is nonlinear?", [r"ShiftRows", r"MixColumns",
+                 r"SubBytes"], 2,
+                 say="AES runs four steps in each round. Which one is the only nonlinear step?",
+                 reveal="SubBytes, the S-box: inversion in the field of bytes.")
         a = load("aes")
         st = dict(a["steps"])
         head = label(r"One round, \ on FIPS-197's example", font_size=34).to_edge(UP, buff=0.3)
