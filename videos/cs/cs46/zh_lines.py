@@ -439,3 +439,10 @@ ZH = {
 
 PHRASES = {"one": "一", "two": "两", "three": "三", "four": "四", "five": "五", "six": "六", "seven": "七",
            "eight": "八", "nine": "九", "ten": "十"}
+
+import json as _json  # noqa: E402
+from pathlib import Path as _Path  # noqa: E402
+
+_watch = _Path(__file__).with_name("zh_watch.json")
+if _watch.exists():  # the watch retrofit's lines (tools/zh_watch.py)
+    ZH.update(_json.loads(_watch.read_text()))
