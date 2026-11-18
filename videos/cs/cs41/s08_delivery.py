@@ -4,7 +4,7 @@ from explainer.cs import *  # noqa: F403
 from videos.cs.cs41.common import (BG, DATA, HEAD, KERN, LAM, NO, PART, YES, axes, load, module_box, trace)
 
 
-class Delivery(VoiceoverScene):
+class Delivery(WatchScene):
     def construct(self):
         self.card()
         self.strategies()
@@ -16,12 +16,8 @@ class Delivery(VoiceoverScene):
         self.pipeline()
 
     def card(self):
-        card = chapter_card(7, r"Continuous delivery", r"How do you change a running system safely?",
-                            lit=(2010, 2016), extra=((2010, r"Humble and Farley: \ Continuous Delivery"),
-                                                     (2016, r"Google: \ the SRE book")), part=PART)
-        with self.voiceover("Chapter seven. Continuous delivery."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(7, r"Continuous delivery", r"How do you change a running system safely?", lit=(2010, 2016), extra=((2010, r"Humble and Farley: \ Continuous Delivery"),
+                                                     (2016, r"Google: \ the SRE book")), part=PART, said="Chapter seven. Continuous delivery.")
 
     def strategies(self):
         head = label(r"Releasing a little at a time", font_size=36).to_edge(UP, buff=0.3)
@@ -89,6 +85,10 @@ class Delivery(VoiceoverScene):
         self.clear_scene()
 
     def canary(self):
+        self.ask(r"A bug fails one request in 10,000. \\ A canary of 3,000 requests catches it...", [r"almost always",
+                 r"rarely"], 1,
+                 say="A new release fails one request in ten thousand. A canary sees three thousand requests. How often does it catch the bug?",
+                 reveal="Rarely: seven percent of the time. Thirty thousand requests catch it four times in five.")
         c = load("canary")
         head = label(r"Is the canary sick?", font_size=36).to_edge(UP, buff=0.3)
         import math

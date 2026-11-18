@@ -4,7 +4,7 @@ from explainer.cs import *  # noqa: F403
 from videos.cs.cs41.common import (DATA, HEAD, KERN, LAM, NO, PART, YES, grid_table, load)
 
 
-class Ci(VoiceoverScene):
+class Ci(WatchScene):
     def construct(self):
         self.card()
         self.trunk()
@@ -13,14 +13,14 @@ class Ci(VoiceoverScene):
         self.savings()
 
     def card(self):
-        card = chapter_card(6, r"Continuous integration", r"How does a busy main branch stay green?",
-                            lit=(1999, 2020), extra=((1999, r"Beck: \ Extreme Programming"),
-                                                     (2019, r"Uber: \ SubmitQueue")), part=PART)
-        with self.voiceover("Chapter six. Continuous integration."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(6, r"Continuous integration", r"How does a busy main branch stay green?", lit=(1999, 2020), extra=((1999, r"Beck: \ Extreme Programming"),
+                                                     (2019, r"Uber: \ SubmitQueue")), part=PART, said="Chapter six. Continuous integration.")
 
     def merge_queue(self):
+        self.ask(r"Two changes each pass their tests alone. \\ Merged together, they can...", [r"never break main",
+                 r"break main"], 1,
+                 say="Two changes each pass all their tests on their own. Merged together, can they break the main line?",
+                 reveal="Yes. A merge queue tests them in the order they will land.")
         q = load("queue")
         head = label(r"A merge queue", font_size=36).to_edge(UP, buff=0.3)
         bs = (1, 4, 16, 64)

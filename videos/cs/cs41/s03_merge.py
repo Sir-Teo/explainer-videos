@@ -6,7 +6,7 @@ from explainer.cs import *  # noqa: F403
 from videos.cs.cs41.common import (DATA, HEAD, KERN, LAM, NO, PART, YES, code_block, commit_dot, grid_table, load, mono)
 
 
-class Merge(VoiceoverScene):
+class Merge(WatchScene):
     def construct(self):
         self.card()
         self.bases()
@@ -18,12 +18,8 @@ class Merge(VoiceoverScene):
         self.bisect()
 
     def card(self):
-        card = chapter_card(2, r"Merging and bisecting", r"How do two lines of work become one?",
-                            lit=(1986, 2021), extra=((1986, r"Myers: \ the O(ND) diff"),
-                                                     (2021, r"git's ort merge")), part=PART)
-        with self.voiceover("Chapter two. Merging and bisecting."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(2, r"Merging and bisecting", r"How do two lines of work become one?", lit=(1986, 2021), extra=((1986, r"Myers: \ the O(ND) diff"),
+                                                     (2021, r"git's ort merge")), part=PART, said="Chapter two. Merging and bisecting.")
 
     def bases(self):
         b = load("bases")
@@ -146,6 +142,10 @@ class Merge(VoiceoverScene):
         self.clear_scene()
 
     def bisect(self):
+        self.ask(r"A thousand commits between good and bad. \\ Tests needed to find the culprit:", [r"about $10$",
+                 r"about $500$"], 0,
+                 say="A thousand commits lie between a good version and a bad one. How many tests does bisection need?",
+                 reveal="About ten: binary search over history.")
         b = load("bisect")
         ex = b["example"]
         head = label(r"Bisect: \ binary search over history", font_size=36).to_edge(UP, buff=0.3)
@@ -356,6 +356,12 @@ class Merge(VoiceoverScene):
                 self.play(FadeIn(l))
         self.wait(0.4)
         self.clear_scene()
+        self.checkpoint(
+            [(r"Why is a commit's name trustworthy?", r"It hashes everything, history included"),
+             (r"What does a three-way merge compare?", r"Both branches against their merge base")],
+            narration="Checkpoint. Why can you trust a commit's name? And what does a three-way merge compare?",
+            answers_narration="It is the hash of the commit's content, which names its tree and its parents, all the way "
+                              "back. And each branch against their common ancestor.")
 
 
 _ = (KERN, math)

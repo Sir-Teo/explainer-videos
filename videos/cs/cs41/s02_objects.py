@@ -4,7 +4,7 @@ from explainer.cs import *  # noqa: F403
 from videos.cs.cs41.common import (DATA, HEAD, KERN, LAM, NO, PART, YES, code_block, load, mono)
 
 
-class Objects(VoiceoverScene):
+class Objects(WatchScene):
     def construct(self):
         self.card()
         self.kinds()
@@ -14,13 +14,15 @@ class Objects(VoiceoverScene):
         self.three_trees()
 
     def card(self):
-        card = chapter_card(1, r"Git's objects", r"What is a commit, \ exactly?", lit=(1979, 2005),
-                            extra=((1979, r"Merkle: \ hash trees"), (2005, r"Torvalds: \ git")), part=PART)
-        with self.voiceover("Chapter one. Git's objects."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(1, r"Git's objects", r"What is a commit, \ exactly?", lit=(1979, 2005), extra=((1979, r"Merkle: \ hash trees"), (2005, r"Torvalds: \ git")), part=PART, said="Chapter one. Git's objects.")
 
     def kinds(self):
+        self.wrong_idea(r"git stores the differences between versions",
+                        r"git stores whole snapshots; \\ deltas are only compression",
+                        narration="A common belief: git stores each commit as a list of changes.",
+                        right_narration="Every commit names a complete snapshot of the tree. Differences are computed when "
+                                        "you ask, and deltas appear only later, as compression inside pack files.")
+        self.clear_scene()
         o = load("objects")
         head = label(r"Four kinds of object", font_size=36).to_edge(UP, buff=0.3)
         blob = code_block(["blob 43\\0The Job: count the words in", "thirty novels."], size=15)
@@ -159,6 +161,10 @@ class Objects(VoiceoverScene):
         self.clear_scene()
 
     def integrity(self):
+        self.ask(r"Flip one bit of a file git has stored. \\ Does git notice?", [r"only sometimes",
+                 r"always"], 1,
+                 say="A failing disk flips one bit of a file git has stored. Does git notice?",
+                 reveal="Always: the content no longer hashes to its name.")
         c = load("corrupt")
         head = label(r"Integrity for free", font_size=36).to_edge(UP, buff=0.3)
         rows = VGroup(
