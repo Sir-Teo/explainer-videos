@@ -10,7 +10,7 @@ the series leaves out.
 Both *Parts* columns are found, not typed. *Planned* lists the parts whose entry in
 [`SYLLABUS.md`](SYLLABUS.md) names the book or paper; *Built* lists the parts whose scenes, compute step or
 README cite it (a dot: none yet). Fuller notes (editions, chapters, what each source was used for) are in each
-part's README, under *Sources*. Built so far: Parts 1–11.
+part's README, under *Sources*. Built so far: Parts 1–12.
 
 ## 1. The textbook spine
 
@@ -37,7 +37,7 @@ part's README, under *Sources*. Built so far: Parts 1–11.
 | Osborne | M. Osborne, *An Introduction to Game Theory* (2004) | 11 | 11 |
 | Krugman–Obstfeld–Melitz | P. Krugman, M. Obstfeld and M. Melitz, *International Economics* (12th ed., 2022) | 34–35 | · |
 | Mishkin | F. Mishkin, *The Economics of Money, Banking, and Financial Markets* (13th ed., 2022) | 26 | · |
-| Cabral | L. Cabral, *Introduction to Industrial Organization* (2nd ed., 2017) | 12 | · |
+| Cabral | L. Cabral, *Introduction to Industrial Organization* (2nd ed., 2017) | 12 | 12 |
 | Borjas | G. Borjas, *Labor Economics* (8th ed., 2020) | 38 | · |
 | Gruber | J. Gruber, *Public Finance and Public Policy* (7th ed., 2022) | 15, 41–42, 50 | 7 |
 | Ray | D. Ray, *Development Economics* (1998) | 46 | · |
@@ -48,16 +48,16 @@ part's README, under *Sources*. Built so far: Parts 1–11.
 | Short name | Book | Planned | Built |
 |---|---|---|---|
 | MWG | A. Mas-Colell, M. Whinston and J. Green, *Microeconomic Theory* (1995) | 5–9, 11, 13, 15, 18, 56 | 5–11 |
-| Kreps | D. Kreps, *Microeconomic Foundations I* (2013) | 5, 7, 9, 11, 56 | 5, 7, 9, 11 |
+| Kreps | D. Kreps, *Microeconomic Foundations I* (2013) | 5, 7, 9, 11, 56 | 5, 7, 9, 11–12 |
 | Jehle–Reny | G. Jehle and P. Reny, *Advanced Microeconomic Theory* (3rd ed., 2011) | 5, 9 | 5–6, 9 |
-| Fudenberg–Tirole | D. Fudenberg and J. Tirole, *Game Theory* (1991) | 11, 53 | 11 |
+| Fudenberg–Tirole | D. Fudenberg and J. Tirole, *Game Theory* (1991) | 11, 53 | 11–12 |
 | Osborne–Rubinstein | M. Osborne and A. Rubinstein, *A Course in Game Theory* (1994) | 11 | 11 |
 | Bolton–Dewatripont | P. Bolton and M. Dewatripont, *Contract Theory* (2005) | 13–14 | · |
 | Krishna | V. Krishna, *Auction Theory* (2nd ed., 2010) | 16 | · |
 | Milgrom | P. Milgrom, *Putting Auction Theory to Work* (2004) | 16 | · |
 | Roth–Sotomayor | A. Roth and M. Sotomayor, *Two-Sided Matching* (1990) | 17 | · |
 | Börgers | T. Börgers, *An Introduction to the Theory of Mechanism Design* (2015) | 17 | · |
-| Tirole IO | J. Tirole, *The Theory of Industrial Organization* (1988) | 10–12, 53 | 10 |
+| Tirole IO | J. Tirole, *The Theory of Industrial Organization* (1988) | 10–12, 53 | 10, 12 |
 
 ### Graduate macro
 
@@ -152,7 +152,7 @@ part's README, under *Sources*. Built so far: Parts 1–11.
 | Model or result | Paper | Planned | Built |
 |---|---|---|---|
 | equilibrium in games | Nash (1950, 1951) | 11 | 11 |
-| oligopoly in quantities and prices | Cournot (1838); Bertrand (1883) | 12 | 6 |
+| oligopoly in quantities and prices | Cournot (1838); Bertrand (1883) | 12 | 6, 12 |
 | demand estimation with differentiated products | Berry, Levinsohn and Pakes (1995) | 43 | · |
 
 ### Information and design
@@ -277,6 +277,8 @@ part's README, under *Sources*. Built so far: Parts 1–11.
 **Part 10, *The Price Maker*.** Books: Jean Tirole, *The Theory of Industrial Organization* (1988), chs. 1–4; Paul Belleflamme and Martin Peitz, *Industrial Organization: Markets and Strategies* (2015); Hal Varian, *Intermediate Microeconomics*: monopoly, monopoly behaviour, factor markets; Kalyan Talluri and Garrett van Ryzin, *The Theory and Practice of Revenue Management* (2004). Papers: Dupuit (1844, 1849); Pigou (1920); Robinson (1933); Lerner (1934); Harberger (1954); Posner (1975); Schmalensee (1981); Varian (1985); Mussa and Rosen (1978); Maskin and Riley (1984); Deneckere and McAfee (1996); Oi (1971); Stigler (1963); Adams and Yellen (1976); McAfee, McMillan and Whinston (1989); Coase (1972); Stokey (1981); Bulow (1982, 1986); Gul, Sonnenschein and Wilson (1986); Ramsey (1927); Boiteux (1956); Averch and Johnson (1962); Littlechild (1983); Littlewood (1972); Nakamura and Zerom (2010); Weyl and Fabinger (2013); Hall (1988); De Loecker and Warzynski (2012); De Loecker, Eeckhout and Unger (2020); Traina (2018); Dubé and Misra (2023); Calvano et al. (2020); Assad et al. (2024).
 
 **Part 11, *Games*.** Books: Martin Osborne, *An Introduction to Game Theory* (2004); Osborne and Rubinstein, *A Course in Game Theory* (1994); Drew Fudenberg and Jean Tirole, *Game Theory* (1991), chs. 1–5; Robert Gibbons, *A Primer in Game Theory* (1992); Thomas Schelling, *The Strategy of Conflict* (1960); Robert Axelrod, *The Evolution of Cooperation* (1984); Colin Camerer, *Behavioral Game Theory* (2003); Martin Nowak, *Evolutionary Dynamics* (2006). Papers: von Neumann (1928); Nash (1950, 1951); Flood (1952); Selten (1965, 1978); Harsanyi (1967–68); Aumann (1974); Maynard Smith and Price (1973); Brown (1951); Robinson (1951); Shapley (1964); Friedman (1971); Rubinstein (1982); Kreps, Milgrom, Roberts and Wilson (1982); Fudenberg and Maskin (1986); Axelrod (1980); Nowak and Sigmund (1993); Rosenthal (1981); McKelvey and Palfrey (1992); Güth, Schmittberger and Schwarze (1982); Henrich et al. (2001); Nagel (1995); Stahl and Wilson (1994); Camerer, Ho and Chong (2004); Chiappori, Levitt and Groseclose (2002); Palacios-Huerta (2003); Walker and Wooders (2001); Hart and Mas-Colell (2000); Erev and Roth (1998); Bowling et al. (2015); Brown and Sandholm (2018, 2019).
+
+**Part 12, *Competition among the Few*.** Books: Jean Tirole, *The Theory of Industrial Organization* (1988), chs. 5–9; Luís Cabral, *Introduction to Industrial Organization* (2nd ed., 2017); Dennis Carlton and Jeffrey Perloff, *Modern Industrial Organization*; Belleflamme and Peitz, *Industrial Organization: Markets and Strategies*; Massimo Motta, *Competition Policy: Theory and Practice* (2004); Whinston, *Lectures on Antitrust Economics* (2006); John Connor, *Global Price Fixing* (2nd ed., 2008); Kurt Eichenwald, *The Informant* (2000). Papers: Cournot (1838); Bertrand (1883); Edgeworth (1897); Hotelling (1929); Chamberlin (1933); Robinson (1933); von Stackelberg (1934); Stigler (1964); Williamson (1968); Friedman (1971); Dixit and Stiglitz (1977); Salop (1979); d'Aspremont, Gabszewicz and Thisse (1979); Dixit (1980); Kreps and Scheinkman (1983); Porter (1983); Salant, Switzer and Reynolds (1983); Green and Porter (1984); Fudenberg and Tirole (1984); Farrell and Shapiro (1990); Cowling and Waterson (1976); McGee (1958); Baumol, Panzar and Willig (1982); Milgrom and Roberts (1982); Kreps and Wilson (1982); Borenstein, Cameron and Gilbert (1997); Connor (1998, 2014); Levenstein and Suslow (2006); Boyer and Kotchoni (2015); O'Brien and Salop (2000); Azar, Schmalz and Tecu (2018); Dennis, Gerardi and Schenone (2022); Calvano et al. (2020); Assad et al. (2024).
 
 ## 4. What the series leaves out
 

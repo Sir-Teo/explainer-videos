@@ -123,11 +123,15 @@ FRED_SERIES["MCOILWTICO"] = ("Crude oil prices: West Texas Intermediate (WTI) - 
 FRED_SERIES["APU0000717311"] = ("Average price: coffee, 100%, ground roast, all sizes (cost per pound/453.6 grams) in "
                                 "U.S. city average", "dollars per pound, not seasonally adjusted", "monthly",
                                 "U.S. Bureau of Labor Statistics")
+# Part 12: rockets and feathers: the average retail price of regular unleaded gasoline (BLS), against WTI crude
+FRED_SERIES["APU000074714"] = ("Average price: gasoline, unleaded regular (cost per gallon/3.785 liters) in U.S. city "
+                               "average", "dollars per gallon, not seasonally adjusted", "monthly",
+                               "U.S. Bureau of Labor Statistics")
 # The date each series was retrieved (its vintage); a series not listed was retrieved on DATASETS["fred"]["vintage"]
 FRED_RETRIEVED = {s: "2026-11-19" for s in (
     "GDPA", "GDIA", "PCECA", "GPDIA", "GCEA", "EXPGSA", "IMPGSA", "A033RC1A027NBEA", "A191RD3A086NBEA", "U1RATE",
     "U2RATE", "U4RATE", "U5RATE", "U6RATE", "CIVPART", "EMRATIO", "CPIAUCSL", "SUUR0000SA0", "PCEPI",
-    "LABSHPUSA156NRUG", "B230RC0A052NBEA", "PCECCA", "DPCERG3A086NBEA", "TB3MS", "MCOILBRENTEU", "MCOILWTICO", "APU0000717311", *(f"{c}{t}" for c in PCE_CATEGORIES for t in ("RG3A086NBEA",
+    "LABSHPUSA156NRUG", "B230RC0A052NBEA", "PCECCA", "DPCERG3A086NBEA", "TB3MS", "MCOILBRENTEU", "MCOILWTICO", "APU0000717311", "APU000074714", *(f"{c}{t}" for c in PCE_CATEGORIES for t in ("RG3A086NBEA",
                                                                                          "RC1A027NBEA")))}
 
 SPF_FILES = ("median_rgdp_level", "median_rgdp_growth", "median_recess_level")

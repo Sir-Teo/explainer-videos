@@ -109,4 +109,17 @@ CALLS = {c.key: c for c in [
          "wrong",
          ("R. Nagel, American Economic Review 85(5) (1995), section IV and Figure 1",
           "R. Thaler's Financial Times contest (1997), as reported in Chicago Booth Review (2015)")),
+    Call("stigler_cheating", 12, "George Stigler, \"A Theory of Oligopoly\" (1964)", "1964",
+         "collusion is a problem of policing: cartels fail when members can cut prices in secret, so what breaks "
+         "them is cheating that goes undetected",
+         "each member gains by shading its price to a few buyers; the cartel survives only if it can detect the "
+         "shading from what buyers do",
+         "Levenstein and Suslow's survey of the empirical studies (2006) found that cartels break up occasionally "
+         "from cheating or weak monitoring, but most often from entry and from bargaining problems among the "
+         "members; and many cartels survive for years (the durations they found are bimodal: many short-lived "
+         "cartels, many long-lived ones)",
+         "partly right",
+         ("G. J. Stigler, Journal of Political Economy 72(1) (1964): 44-61",
+          "M. C. Levenstein and V. Y. Suslow, Journal of Economic Literature 44(1) (2006): 43-95, abstract and "
+          "conclusion")),
 ]}

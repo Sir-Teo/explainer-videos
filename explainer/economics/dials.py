@@ -262,6 +262,22 @@ DIALS = {d.key: d for d in [
                       "the tau whose mean is 18.9 (Agora's fit)", 4.07, where="the reported mean; tau fitted in Agora",
                       checked="2026-11-19"),
          )),
+    Dial("cartel_overcharge", "cartel overcharge", "percent by which a cartel's price exceeds the price without it",
+         (12, 59), status="contested", checked="2026-11-19",
+         meaning="a cartel that is caught has typically raised prices by something between a sixth and a quarter; "
+                 "the low end argues for fines and damages of a few times the overcharge, the high end for more, and "
+                 "whether the estimates in the literature are biased upward is itself the dispute",
+         estimates=(
+             Estimate("Connor", 2014, "review", "hundreds of cartels' published overcharge estimates: the long-run "
+                      "median (the mean is at least 49 percent)", 23.0, where="Research in Law and Economics 26, "
+                      "abstract", checked="2026-11-19"),
+             Estimate("Boyer and Kotchoni", 2015, "meta-analysis", "Connor's database, corrected for estimation, "
+                      "publication and endogeneity biases: the median (the mean 15.47)", 16.01,
+                      where="Review of Industrial Organization 47(2), abstract", checked="2026-11-19"),
+             Estimate("Connor", 1998, "narrative", "the lysine cartel of 1992-95, from the overcharge on direct "
+                      "buyers ($65-140 million) and sales ($495-550 million)", 20.0, 12.0, 28.0,
+                      where="Choices 13(3), p. 17", checked="2026-11-19"),
+         )),
     Dial("return_schooling", "return to a year of school", "proportional rise in earnings per year of schooling",
          (4, 38), status="settled within a range", checked="2026-11-19",
          meaning="a year of school raises earnings by roughly 6 to 15 percent, a return few investments match; "
@@ -604,6 +620,20 @@ SHOWN = {
          "regret matching is run in Agora"),
         ("nuclear warhead stockpiles (FAS via Our World in Data)", "data for the intermission and the arms-control "
          "section, shown as history, not entered as dial rows"),
+    ],    12: [
+        ("Cournot (1838); Bertrand (1883); Edgeworth (1897); Kreps and Scheinkman (1983); Hotelling (1929); Salop "
+         "(1979); Chamberlin (1933); Dixit and Stiglitz (1977); von Stackelberg (1934); Dixit (1980); Fudenberg and "
+         "Tirole (1984)", "theory, stated; every model is solved in Agora"),
+        ("Stigler (1964); Friedman (1971); Green and Porter (1984); Porter (1983); Ellison (1994)", "collusion: "
+         "theory and the railroad cartel's history, stated; the price wars are simulated in Agora"),
+        ("Borenstein, Cameron and Gilbert (1997)", "rockets and feathers, stated as their finding with weekly data; "
+         "the intermission's monthly BLS and EIA prices are checked in Agora and shown not to resolve it"),
+        ("Salant, Switzer and Reynolds (1983); Farrell and Shapiro (1990); Williamson (1968); the Merger Guidelines",
+         "mergers: theorems and thresholds (the guidelines a transcribed table); the merger paradox is computed"),
+        ("Baumol, Panzar and Willig (1982); McGee (1958); Milgrom and Roberts (1982); Kreps and Wilson (1982)",
+         "contestability, limit pricing and predation, stated"),
+        ("Azar, Schmalz and Tecu (2018); O'Brien and Salop (2000); Calvano et al. (2020); Assad et al. (2024)",
+         "the frontier, stated with its dispute; the modified HHI is computed, no estimate is entered as a dial row"),
     ],
 }
 

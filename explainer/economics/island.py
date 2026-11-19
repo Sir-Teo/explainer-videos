@@ -369,6 +369,33 @@ TRUTHS = {
         # bargaining (chapter 15): Rubinstein's alternating offers, patience 0.9 a round
         "bargain": {"delta": 0.9},
     },
+    12: {
+        # the boat market (chapters 1-3, 7, 11): Crusoe's yard and Dara's, inverse demand P = 100 - Q boats a year,
+        # each boat costs 10 to build
+        "boats": {"a": 100.0, "b": 1.0, "c": 10.0, "n_max": 20},
+        # Play it (chapter 3): Crusoe asks $40 for a boat repair that costs either yard $10; the fares on offer
+        "playit": {"rival": 40.0, "cost": 10.0, "prices": (45.0, 40.0, 39.0, 25.0, 10.0)},
+        # differentiated boats (chapter 4): q_i = 90 - 2 p_i + p_j, cost 10
+        "diff": {"alpha": 90.0, "beta": 2.0, "gamma": 1.0, "c": 10.0},
+        # the beach (chapter 5): ice sellers on a line of length 1, transport cost 1; the coast as a circle with an
+        # entry cost of 0.01
+        "beach": {"t": 1.0, "c": 0.0, "F": 0.01},
+        # monopolistic competition (chapter 6): elasticity of substitution 4, fixed cost 1, marginal cost 1, 100
+        # workers
+        "variety": {"sigma": 4.0, "f": 1.0, "c": 1.0, "L": 100.0},
+        # entry deterrence (chapter 7): a boat's capacity costs 30 to build, running it 10 more; the entrant's fixed
+        # cost 144 (it deters at 36 boats, a profit of 864 against 450 from sharing)
+        "deter": {"a": 100.0, "b": 1.0, "c": 10.0, "r": 30.0, "F": 144.0},
+        # collusion (chapters 8-9): numbers of firms; Green and Porter's price wars
+        "collusion": {"ns": (2, 3, 4, 5, 6, 8, 10), "periods": 300, "seed": 1984},
+        # leniency (chapter 9): a fine of 100, a 20% chance the authorities find the cartel unaided
+        "leniency": {"fine": 100.0, "caught": 0.2},
+        # mergers (chapter 11): three symmetric Cournot yards; Williamson's trade-off with demand elasticity 2
+        "merger": {"n": 3, "eps": 2.0, "dp": 0.10},
+        # common ownership (chapter 15): two airlines with half the market each; four funds own 7% of each, and the
+        # rest of each airline is held either by one owner or by a thousand small ones
+        "common": {"shares": (0.5, 0.5), "funds": 4, "stake": 0.07, "small": 1000},
+    },
 }
 
 

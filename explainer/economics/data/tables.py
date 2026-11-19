@@ -1319,6 +1319,83 @@ AXELROD_1980 = Table(
 PART11 = (NAGEL_1995, THALER_FT_1997, FLOOD_1952, HENRICH_2001, CHC_2004, AXELROD_1980)
 
 
+# ---------------------------------------------------------------------------------------------------------------
+# Part 12: competition among the few
+
+LYSINE_CONNOR_1998 = Table(
+    key="lysine_connor_1998",
+    cite="John M. Connor, \"Lysine: A Case Study in International Price-Fixing\", Choices 13(3), Third Quarter 1998, "
+         "pp. 13-19",
+    tag="Connor, Choices 13(3) (1998)",
+    where="the chronology and the section on injuries (text, not the figure)",
+    read="the article (National Agricultural Law Center reprint)",
+    checked="2026-11-19",
+    data={
+        # US lysine prices, dollars a pound, as the text states them; months between are not stated
+        "points": (("1990", 1.30), ("1991-01", 1.20), ("1992-07", 0.64)),
+        "spans": (("1992-11", "1993-01", 0.98, 0.98), ("1993-10", "1994-08", 1.08, 1.13)),
+        "after_1994_08": "rose again to about $1.20 for another six months",
+        "asian_price_late_1980s": (1.00, 2.00),
+        "adm_cost": (0.65, 0.70),
+        "adm_plant": {"committed": 1989, "cost_musd": 150, "production": "1991-02", "town": "Decatur, Illinois"},
+        "first_meeting": ("1992-06", "Mexico City"),
+        "mole": ("1992-11", "1995-06"),
+        "raid": "the night of 28 June 1995, more than 70 FBI agents",
+        "adm_fine_musd": 70,
+        "overcharge_musd": (65, 140),
+        "sales_musd": (495, 550),
+        "overcharge_pct": (12, 28),
+        "stock_fall": "24 percent ($2.4 billion) in the three months after the raid",
+    },
+    note="Connor's text says the first price war took prices to the $0.60-0.70 range for about a year after ADM's "
+         "plant opened in 1991, and that output growth was held to half its historical rate.",
+)
+
+CONNOR_2014 = Table(
+    key="connor_2014",
+    cite="John M. Connor, \"Price-Fixing Overcharges: Revised 3rd Edition\" (SSRN, 2014); published as \"Cartel "
+         "Overcharges\", in The Law and Economics of Class Actions, Research in Law and Economics 26 (2014): 249-387",
+    tag="Connor, Research in Law and Economics 26 (2014)",
+    where="the abstract, as quoted by Boyer and Kotchoni (2015)",
+    read="the abstract and its citations",
+    checked="2026-11-19",
+    data={"median_pct": 23.0, "mean_pct_at_least": 49.0, "scope": "all cartels of all times, long run"},
+    note="Connor's later fourth edition reports a median of 25 percent; the film uses the 2014 figure that Boyer and "
+         "Kotchoni corrected.",
+)
+
+BOYER_KOTCHONI_2015 = Table(
+    key="boyer_kotchoni_2015",
+    cite="Marcel Boyer and Rachidi Kotchoni, \"How Much Do Cartels Overcharge?\", Review of Industrial Organization "
+         "47(2) (2015): 119-153",
+    tag="Boyer and Kotchoni, RIO 47(2) (2015)",
+    where="the abstract",
+    read="the abstract (journal and RePEc)",
+    checked="2026-11-19",
+    data={"bias_corrected_mean_pct": 15.47, "bias_corrected_median_pct": 16.01,
+          "corrects": "estimation, publication and endogeneity biases in Connor's database"},
+    note="The raw estimates in the same database are substantially higher; the authors' earlier working papers are "
+         "withdrawn in favour of the published article.",
+)
+
+MERGER_GUIDELINES = Table(
+    key="merger_guidelines",
+    cite="U.S. Department of Justice and Federal Trade Commission, Merger Guidelines (18 December 2023); Horizontal "
+         "Merger Guidelines (19 August 2010)",
+    tag="DOJ and FTC, Merger Guidelines (2023)",
+    where="Guideline 1 (2023); section 5.3 (2010)",
+    read="the guidelines",
+    checked="2026-11-19",
+    data={"2023": {"highly_concentrated": 1800, "presumption_delta": 100, "share_test": (30, 100)},
+          "2010": {"highly_concentrated": 2500, "presumption_delta": 200}},
+    note="In 2023 a merger is presumed to lessen competition substantially if it leaves a highly concentrated market "
+         "(HHI above 1,800) and raises the HHI by more than 100, or creates a firm with more than 30 percent of the "
+         "market with a change above 100.  Before 2010 the threshold for a highly concentrated market was also 1,800.",
+)
+
+PART12 = (LYSINE_CONNOR_1998, CONNOR_2014, BOYER_KOTCHONI_2015, MERGER_GUIDELINES)
+
+
 PART7 = (BERNOULLI_1738, SAMUELSON_1937, ALLAIS_1953, ELLSBERG_1961, RABIN_2000, THALER_1981, HOLT_LAURY_2005,
          HAYDEN_PLATT_2009, MADRIAN_SHEA_2001, THALER_BENARTZI_2004, BARSKY_1997, POST_2008, MEHRA_PRESCOTT_1985)
-ALL = {t.key: t for t in (*PART1, *PART3, *PART4, *PART5, *PART6, *PART7, *PART8, *PART9, *PART10, *PART11)}
+ALL = {t.key: t for t in (*PART1, *PART3, *PART4, *PART5, *PART6, *PART7, *PART8, *PART9, *PART10, *PART11, *PART12)}
