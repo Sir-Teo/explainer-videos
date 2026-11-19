@@ -39,12 +39,14 @@ import numpy as np
 SR = 48_000
 GAP_MIN = 2.8  # seconds of silence before the bed comes in
 BED_EDGE = 0.4  # the bed starts this long after the voice stops, and ends this long before it returns
-THEME_LUFS = -24.0  # the theme and the close, under the cold open's and the outro's narration
-STING_LUFS = -26.0  # the chapter stings, under "Chapter six. Incentives."
+THEME_LUFS = -26.0  # the theme and the close, under the cold open's and the outro's narration
+STING_LUFS = -28.0  # the chapter stings, under "Chapter six. Incentives."
+# (both were 2 LU louder until Part 2: a sting or the close landing in phase with a narration peak took the mix
+# over the -1 dBTP ceiling; under speech, 10 to 12 LU below the voice is room enough)
 BED_LUFS = -34.0  # the bed, alone in the room
 MELODY_LUFS = -20.0  # a data melody, which plays with no narration over it
 PEAK_DB = -3.0  # no clip peaks above this (the master's ceiling is -1.5 dBTP)
-VERSION = "economics_score_v1"
+VERSION = "economics_score_v2"
 
 # D dorian, the series' home: the scale degrees as semitones above D
 DORIAN = (0, 2, 3, 5, 7, 9, 10)
