@@ -8,6 +8,12 @@ from videos.stats.stats3.common import *  # noqa: F403
 class Transforms(StatsScene, TreeMixin):
     def construct(self):
         self.card()
+        self.ask(r"Take $-\log U$ for a uniform random number $U$. Its distribution?",
+                 ["normal", "exponential", "uniform"], 1,
+                 say="Take a uniform random number between zero and one, and compute minus its logarithm. What "
+                     "distribution do you get?",
+                 reveal="The exponential. Transform a uniform and you can make almost any distribution; Part 7 "
+                        "turns this into a machine.")
         self.cdf_method()
         self.jacobian()
         self.box_muller()
@@ -15,6 +21,7 @@ class Transforms(StatsScene, TreeMixin):
         self.tree_voiceover("Four arrows from transformations: <bookmark mark='t'/> minus the log of a uniform is "
                             "exponential; Box and Muller turn two uniforms into normals; e to a normal is log-normal; "
                             "and e to an exponential is a Pareto.", 7)
+        self.answer()
 
     def card(self):
         self.chapter(7, r"Transformations", r"If $X$ has a distribution, what does $g(X)$ have?", lit=(), part=PART, said="Chapter seven. Transformations.")

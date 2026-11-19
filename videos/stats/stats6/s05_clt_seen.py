@@ -9,10 +9,17 @@ from videos.stats.stats6.common import *  # noqa: F403
 class CLTSeen(StatsScene):
     def construct(self):
         self.card()
+        self.ask("Average 50 draws of a lopsided variable, many times over. The averages look...",
+                 ["lopsided, like the original", "close to a bell curve", "uniform"], 1,
+                 say="A lopsided variable, nothing like a bell. Average fifty draws, and do it again and again. "
+                     "What does the histogram of the averages look like?",
+                 reveal="Close to a bell curve. That's the central limit theorem, and it asks only for a finite "
+                        "variance. How close depends on the skew.")
         self.convolution()
         self.cumulants()
         self.board()
         self.universal()
+        self.answer()
 
     def card(self):
         self.chapter(4, r"The central limit theorem, seen", r"Why the bell curve, \ from almost anything", lit=(1733, 1810), part=PART, said="Chapter four. The central limit theorem, seen.")

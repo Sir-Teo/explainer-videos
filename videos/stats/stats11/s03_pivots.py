@@ -8,11 +8,18 @@ from videos.stats.stats11.common import *  # noqa: F403
 class Pivots(StatsScene):
     def construct(self):
         self.card()
+        self.ask(r"Normal data, $\sigma$ unknown. Which is a pivot for $\mu$?",
+                 [r"$\bar x$", r"$(\bar x - \mu)/(s/\sqrt n)$", "$s$"], 1,
+                 say="A pivot is a quantity whose distribution doesn't depend on the parameter. For a normal mean "
+                     "with unknown sigma, which of these is one?",
+                 reveal="The t statistic, x bar minus mu over s over root n. Its law is Student's t whatever mu and "
+                        "sigma are, so it can be turned round into an interval.")
         self.idea()
         self.catalogue()
         self.shortest()
         self.tanks()
         self.approximate()
+        self.answer()
 
     def card(self):
         self.chapter(2, r"Pivots", r"A quantity whose distribution does not depend on $\theta$", part=PART, said="Chapter two. Pivots.")

@@ -8,11 +8,18 @@ from videos.stats.stats5.common import *  # noqa: F403
 class Predictor(StatsScene):
     def construct(self):
         self.card()
+        self.ask("Judged by mean squared error, the best prediction of $Y$ from $X$ is...",
+                 [r"$E[Y \mid X]$", "the median of $Y$ given $X$", "the least-squares line"], 0,
+                 say="We're judged by mean squared error. What's the best possible prediction of Y from X: the "
+                     "conditional mean, the conditional median, or the least-squares line?",
+                 reveal="The conditional mean. It's the projection of Y onto everything X can tell you. Change the "
+                        "scoring to absolute error and the median wins.")
         self.incomes()
         self.proof()
         self.tower()
         self.projection()
         self.median()
+        self.answer()
 
     def card(self):
         self.chapter(3, r"Conditional expectation", r"The best possible prediction of $Y$ from $X$", lit=(), part=PART, said="Chapter three. Conditional expectation.")

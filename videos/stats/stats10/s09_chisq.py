@@ -8,6 +8,12 @@ from videos.stats.stats10.common import *  # noqa: F403
 class ChiSq(StatsScene):
     def construct(self):
         self.card()
+        self.ask(r"A $2 \times 2$ table gives $p = 0.001$. This shows...",
+                 ["an association", "a cause", "a large effect"], 0,
+                 say="A two by two table of treatment and outcome gives a chi-squared p-value of point zero zero "
+                     "one. What does that show: an association, a cause, or a large effect?",
+                 reveal="An association, and nothing about why. A lurking variable can even reverse its sign. "
+                        "Causes belong to Parts 35 to 37.")
         self.pearson()
         self.statistic()
         self.mendel()
@@ -15,6 +21,7 @@ class ChiSq(StatsScene):
         self.too_good()
         self.independence()
         self.confounded()
+        self.answer()
 
     def card(self):
         self.chapter(8, r"Pearson's $\chi^2$", r"Do the counts fit the model?", lit=(1900,), part=PART, said="Chapter eight. Pearson's chi-squared.")

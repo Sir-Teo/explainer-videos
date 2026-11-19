@@ -11,10 +11,17 @@ SHAPES = [("line", r"line"), ("parabola", r"parabola"), ("circle", r"circle"), (
 class Measures(StatsScene):
     def construct(self):
         self.card()
+        self.ask("On a perfect parabola $y = x^2$, which measure detects the dependence?",
+                 ["Pearson's $r$", r"Spearman's $\rho$", "distance correlation"], 2,
+                 say="Six shapes, five measures of dependence. On a perfect parabola, which detects the dependence: "
+                     "Pearson's r, Spearman's rho, or distance correlation?",
+                 reveal="Distance correlation. Pearson and Spearman both look for a monotone trend, and a symmetric "
+                        "parabola has none.")
         self.gallery()
         self.ranks()
         self.monotone()
         self.dcor_mi()
+        self.answer()
 
     def card(self):
         self.chapter(13, r"Measuring dependence", r"One number for a relationship: \ which one?", lit=(), part=PART, said="Chapter thirteen. Measuring dependence.")

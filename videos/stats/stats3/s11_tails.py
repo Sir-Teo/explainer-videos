@@ -10,10 +10,17 @@ LS, MLE = S.RESID, S.LIK
 class Tails(StatsScene, TreeMixin):
     def construct(self):
         self.card()
+        self.ask("Estimating a power-law exponent from a straight line on a log--log histogram is...",
+                 ["the standard method", "systematically misleading", "exact in large samples"], 1,
+                 say="To estimate a power law's exponent, fit a straight line to the histogram on log-log axes. Is "
+                     "that the standard method, systematically misleading, or exact in large samples?",
+                 reveal="Systematically misleading. Clauset, Shalizi and Newman showed it; maximum likelihood does "
+                        "the job, and a test decides whether it's a power law at all.")
         self.pareto()
         self.zipf()
         self.pareto_rule()
         self.fitting()
+        self.answer()
 
     def card(self):
         self.chapter(10, r"Heavy tails", r"Power laws, and how not to fit them", lit=(), part=PART, said="Chapter ten. Heavy tails.")

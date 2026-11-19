@@ -8,11 +8,21 @@ from videos.stats.stats6.common import *  # noqa: F403
 class Maxima(StatsScene):
     def construct(self):
         self.card()
+        self.ask("Suitably scaled, the maximum of $n$ draws can converge to how many types of limit?",
+                 ["one", "three, in one family", "infinitely many"], 1,
+                 say="The largest of n draws, suitably centred and scaled. How many kinds of limit can it have?",
+                 reveal="Three: Gumbel, Fréchet and Weibull, joined in one family, the generalized extreme value "
+                        "law. It's the central limit theorem for maxima.")
         self.power()
         self.gumbel()
         self.seen()
         self.families()
         self.gev()
+        self.answer()
+        self.checkpoint([("Running means of Cauchy draws?", "never settle: there's no mean"),
+                         ("Hoeffding against the CLT?", "Hoeffding holds at every $n$; the CLT only in the limit")],
+                        narration="Checkpoint. Limits of the limit theorems.",
+                        answers_narration="They never settle. And Hoeffding's guarantee holds at every sample size.")
 
     def card(self):
         self.chapter(12, r"The law of maxima", r"Not the typical value, \ but the largest", lit=(1928,), part=PART, said="Chapter twelve. The law of maxima.")

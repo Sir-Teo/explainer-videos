@@ -8,11 +8,19 @@ from videos.stats.stats9.common import *  # noqa: F403
 class Recipes(StatsScene):
     def construct(self):
         self.card()
+        self.ask("Captured tanks carry serials 19, 40, 42 and 60. Estimate how many were made.",
+                 ["60", "about 74", "about 120"], 1,
+                 say="Tanks are numbered one, two, three, up to N. Four captured tanks carry the serials nineteen, "
+                     "forty, forty-two and sixty. How many tanks were made: sixty, about seventy-four, or about a "
+                     "hundred and twenty?",
+                 reveal="About seventy-four: the largest serial plus the average gap below it. The biggest you've "
+                        "seen is surely too small.")
         self.vocabulary()
         self.three_factories()
         self.sampling()
         self.rates()
         self.sources()
+        self.answer()
 
     def card(self):
         self.chapter(1, r"Estimators as recipes", r"What is an estimator, \ and how do we grade one?", part=PART, said="Chapter one. Estimators as recipes.")

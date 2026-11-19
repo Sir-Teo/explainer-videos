@@ -8,11 +8,22 @@ from videos.stats.stats1.common import *  # noqa: F403
 class Center(StatsScene):
     def construct(self):
         self.card()
+        self.ask("Which single number minimizes the total absolute distance to nine incomes?",
+                 ["the mean", "the median", "the midrange"], 1,
+                 say="Replace nine incomes by one number, and charge yourself the total absolute distance to them. "
+                     "Which number makes that charge smallest: the mean, the median, or the midrange?",
+                 reveal="The median. Absolute distances choose the median; squared distances choose the mean. A "
+                        "centre is the answer to an optimization problem, and the problem decides which centre.")
         self.squares()
         self.absolute()
         self.lp()
         self.mode()
         self.clock()
+        self.answer()
+        self.checkpoint([("Which centre minimizes the sum of squared distances?", "the mean"),
+                         ("And the sum of absolute distances?", "the median")],
+                        narration="Checkpoint. Two questions about centres.",
+                        answers_narration="Squared distances choose the mean; absolute distances choose the median.")
 
     def card(self):
         self.chapter(4, r"The centre as an optimization", r"Which single number best stands for all of them?", lit=(1805,), part=PART, said="Chapter four. The centre as an optimization.")

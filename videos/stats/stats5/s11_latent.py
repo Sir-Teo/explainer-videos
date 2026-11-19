@@ -10,10 +10,17 @@ MEN, WOMEN = "#6FA8DC", "#E59AB8"
 class Latent(StatsScene):
     def construct(self):
         self.card()
+        self.ask("Heights: men and women, means 13 cm apart, each SD 7 cm. The histogram has...",
+                 ["two humps", "one hump", "a flat top"], 1,
+                 say="All the World's heights: a blend of men and women, means thirteen centimetres apart, each "
+                     "with a standard deviation of seven. How many humps does the histogram have?",
+                 reveal="One. Two normals of the same spread make two humps only when their means are more than two "
+                        "standard deviations apart, and thirteen is less than fourteen.")
         self.heights()
         self.marginalize()
         self.posterior()
         self.simpson()
+        self.answer()
 
     def card(self):
         self.chapter(10, r"Latent variables", r"A variable you never see, \ shaping the ones you do", lit=(1894,), part=PART, said="Chapter ten. Latent variables.")

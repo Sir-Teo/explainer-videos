@@ -11,10 +11,17 @@ def rows8():
 class Board(StatsScene):
     def construct(self):
         self.card()
+        self.ask(r"A nominal 95\% interval covers the truth 99.5\% of the time. Verdict?",
+                 ["better than promised", "conservative: wider than it needs to be", "impossible"], 1,
+                 say="A ninety-five percent interval that covers the truth ninety-nine point five percent of the "
+                     "time. Is that better than promised?",
+                 reveal="Not really: it's conservative. It keeps its promise by being wider than it needs to be, so "
+                        "it gives away precision.")
         self.protocol()
         self.stack()
         self.board()
         self.read()
+        self.answer()
 
     def card(self):
         self.chapter(11, r"The Coverage Board opens", r"Promises, tested on a population we know", part=PART, said="Chapter eleven. The Coverage Board opens.")

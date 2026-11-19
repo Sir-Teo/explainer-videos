@@ -8,6 +8,19 @@ from videos.stats.stats3.common import *  # noqa: F403
 class Normal(StatsScene, TreeMixin):
     def construct(self):
         self.card()
+        self.wrong_idea("Most measurements in nature are normally distributed",
+                        "Sums of many small independent effects are; incomes, counts and waits often are not",
+                        narration="A common idea: the bell curve is the shape of nature, so most measurements are "
+                                  "normally distributed.",
+                        right_narration="No. The normal is the law of sums of many small independent effects. "
+                                        "Incomes, counts and waiting times are often far from it, and their tails "
+                                        "fail it badly.")
+        self.ask(r"Toss 10,000 coins. About 95\% of the time, the heads count falls within...",
+                 ["4,900 to 5,100", "4,990 to 5,010", "4,500 to 5,500"], 0,
+                 say="Toss ten thousand fair coins. About ninety-five percent of the time, where does the number of "
+                     "heads land?",
+                 reveal="Between four thousand nine hundred and five thousand one hundred: two standard deviations "
+                        "of fifty either side. De Moivre's curve, found as an approximation.")
         self.demoivre()
         self.gauss()
         self.herschel()
@@ -15,6 +28,7 @@ class Normal(StatsScene, TreeMixin):
         self.rule()
         self.tree_voiceover("Two arrows into the normal: <bookmark mark='t'/> de Moivre's, from the binomial with many "
                             "trials, and the Poisson with a large mean, which is a sum of many small Poissons.", 6)
+        self.answer()
 
     def card(self):
         self.chapter(6, r"The normal, three ways", r"One curve, reached from three directions", lit=(1733,), part=PART, said="Chapter six. The normal, three ways.")

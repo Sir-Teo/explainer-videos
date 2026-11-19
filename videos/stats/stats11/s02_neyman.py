@@ -9,6 +9,20 @@ from videos.stats.stats11.common import *  # noqa: F403
 class Neyman(StatsScene):
     def construct(self):
         self.card()
+        self.wrong_idea(r"A computed 95\% interval contains $\theta$ with probability 0.95",
+                        r"95\% of intervals from repeated samples contain $\theta$: the promise is the procedure's",
+                        narration="Here's the most common misreading in statistics. Once you've computed a "
+                                  "ninety-five percent interval, it contains theta with probability point nine "
+                                  "five.",
+                        right_narration="Not in Neyman's theory. Theta is fixed, and this interval either contains "
+                                        "it or doesn't. The ninety-five percent belongs to the procedure: over "
+                                        "repeated samples, ninety-five percent of its intervals cover.")
+        self.ask(r"Two candidates. One share's margin of error is $\pm 3$ points. The margin for their gap?",
+                 [r"$\pm 3$", r"$\pm 4.2$", r"$\pm 6$"], 2,
+                 say="A poll with two candidates. The margin of error on one candidate's share is plus or minus "
+                     "three points. What's the margin on the gap between them?",
+                 reveal="Plus or minus six. With two exhaustive choices, one share's gain is the other's loss, so "
+                        "the gap moves twice as far.")
         self.history()
         self.definition()
         self.rain()
@@ -16,6 +30,7 @@ class Neyman(StatsScene):
         self.one_sided()
         self.levels()
         self.planning()
+        self.answer()
 
     def card(self):
         self.chapter(1, r"Neyman's promise", r"What does ``95\% confident'' mean?", lit=(1937,), part=PART, said="Chapter one. Neyman's promise.")

@@ -8,10 +8,17 @@ from videos.stats.stats4.common import *  # noqa: F403
 class Pinv(StatsScene):
     def construct(self):
         self.card()
+        self.ask("One equation, two unknowns: $x_1 + x_2 = 2$. The pseudoinverse picks...",
+                 ["$(2, 0)$", "$(1, 1)$", "no solution"], 1,
+                 say="One equation, two unknowns: x one plus x two equals two. Infinitely many solutions. Which "
+                     "does the pseudoinverse pick?",
+                 reveal="One, one: the solution of smallest length. And ridge regression's answers converge to it "
+                        "as the penalty vanishes.")
         self.minimum_norm()
         self.definition()
         self.dummy()
         self.ridge()
+        self.answer()
 
     def card(self):
         self.chapter(7, r"Generalized inverses", r"When $A^\top A$ has no inverse", lit=(1955,), part=PART, said="Chapter seven. Generalized inverses.")

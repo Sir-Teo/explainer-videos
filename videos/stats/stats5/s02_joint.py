@@ -8,11 +8,18 @@ from videos.stats.stats5.common import *  # noqa: F403
 class Joint(StatsScene):
     def construct(self):
         self.card()
+        self.ask("Two dice. The larger shows 2. Chance the smaller is 1?",
+                 ["$1/2$", "$2/3$", "$1/3$"], 1,
+                 say="Two dice. You learn the larger of the two shows a two. What's the chance the smaller shows a "
+                     "one?",
+                 reveal="Two thirds. Three cells have a maximum of two, and two of them hold a one. A conditional "
+                        "distribution is one row of the joint table, rescaled.")
         self.discrete()
         self.surface()
         self.slicing()
         self.bayes()
         self.dice()
+        self.answer()
 
     def card(self):
         self.chapter(1, r"Joint, marginal, conditional", r"Three ways to read one table", lit=(1886,), part=PART, said="Chapter one. Joint, marginal, conditional.")

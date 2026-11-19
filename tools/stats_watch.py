@@ -225,16 +225,16 @@ def apply_scene(src: str, cls: str, entry: dict) -> str:
     tree = ast.parse(src)
     fn = _construct(tree, cls)
     body_src = "\n".join(src.split("\n")[fn.lineno - 1:fn.end_lineno])
-    if "self.ask(" in body_src or "self.wrong_idea(" in body_src:
-        return src  # applied before
-    head, tail = [], []
-    if "wrong" in entry:
+    head, tail = [], []  # each set piece is added once: a scene that already has one keeps it
+    if "wrong" in entry and "self.wrong_idea(" not in body_src:
         head.append(wrong_code(*entry["wrong"]))
-    if "ask" in entry:
+    if "ask" in entry and "self.ask(" not in body_src:
         head.append(ask_code(*entry["ask"]))
         tail.append(PAD + "self.answer()")
-    if "checkpoint" in entry:
+    if "checkpoint" in entry and "self.checkpoint(" not in body_src:
         tail.append(checkpoint_code(*entry["checkpoint"]))
+    if not head and not tail:
+        return src
     lines = src.split("\n")
     first = fn.body[0]
     if isinstance(first, ast.Expr) and isinstance(first.value, ast.Constant):
@@ -250,6 +250,28 @@ def apply_scene(src: str, cls: str, entry: dict) -> str:
     return out
 
 
+def by_chapter(spec: dict, scenes) -> dict:
+    """A compact spec, in chapter order, as entries keyed by scene class:
+
+    ``{"asks": [ask for chapter 1, ask for chapter 2, ...], "checkpoints": {4: (...), 8: (...)},
+    "wrong": {7: (...)}}`` (chapter numbers as the manifest numbers them)."""
+    numbered = [cls for _, cls, ch in scenes if re.match(r"\s*\d+\.", ch)]
+    out: dict[str, dict] = {}
+    asks = spec.get("asks", [])
+    if asks and len(asks) != len(numbered):
+        raise ValueError(f"{len(asks)} asks for {len(numbered)} numbered chapters")
+    for cls, a in zip(numbered, asks):
+        if a is not None:
+            out.setdefault(cls, {})["ask"] = a
+    for key, name in (("checkpoints", "checkpoint"), ("wrong", "wrong")):
+        for n, entry in spec.get(key, {}).items():
+            out.setdefault(numbered[n - 1], {})[name] = entry
+    for cls, entry in spec.items():
+        if cls not in ("asks", "checkpoints", "wrong"):
+            out.setdefault(cls, {}).update(entry)
+    return out
+
+
 def apply(video: str, spec: dict) -> list[str]:
     import importlib
 
@@ -257,6 +279,7 @@ def apply(video: str, spec: dict) -> list[str]:
 
     manifest = importlib.import_module(f"{video_package(video)}.manifest")
     module_of = {cls: mod for mod, cls, _ in manifest.SCENES}
+    spec = by_chapter(spec, manifest.SCENES)
     d = video_dir(video)
     files: dict[str, str] = {}
     for cls, entry in spec.items():

@@ -9,11 +9,18 @@ from videos.stats.stats10.common import *  # noqa: F403
 class Neyman(StatsScene):
     def construct(self):
         self.card()
+        self.ask(r"Lower $\alpha$ from 5\% to 1\%, same sample size. The power...",
+                 ["rises", "falls", "stays the same"], 1,
+                 say="Neyman and Pearson's two kinds of error. Make the test stricter, alpha from five percent to "
+                     "one, with the same sample size. What happens to the power?",
+                 reveal="It falls. Fewer false alarms means more misses: with the data fixed, the two errors trade "
+                        "against each other.")
         self.history()
         self.table()
         self.curves()
         self.power_n()
         self.philosophies()
+        self.answer()
 
     def card(self):
         self.chapter(4, r"Two kinds of error", r"Neyman and Pearson's theory of tests", lit=(1933,), part=PART, said="Chapter four. Two kinds of error.")

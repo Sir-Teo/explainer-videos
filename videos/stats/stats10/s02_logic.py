@@ -11,12 +11,20 @@ from videos.stats.stats10.common import *  # noqa: F403
 class Logic(StatsScene):
     def construct(self):
         self.card()
+        self.ask("If boys and girls were equally likely, the chance of 82 boy-majority years in a row?",
+                 ["about 1 in 82", "about 1 in $10^{25}$", "about 1 in a million"], 1,
+                 say="London's christenings showed more boys than girls for eighty-two years running. If each year "
+                     "were a fair coin, what's the chance of that: about one in eighty-two, one in ten to the "
+                     "twenty-five, or one in a million?",
+                 reveal="About one in ten to the twenty-five: a half to the eighty-second power. Arbuthnot, in "
+                        "1710, ran the first significance test.")
         self.ingredients()
         self.sign_test()
         self.disjunction()
         self.which_null()
         self.bernoulli()
         self.five_percent()
+        self.answer()
 
     def card(self):
         self.chapter(1, r"Fisher's logic", r"A null, \ a statistic, \ a tail probability", lit=(1710,), part=PART, said="Chapter one. Fisher's logic.")

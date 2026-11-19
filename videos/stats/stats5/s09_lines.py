@@ -8,9 +8,16 @@ from videos.stats.stats5.common import *  # noqa: F403
 class Lines(StatsScene):
     def construct(self):
         self.card()
+        self.ask("Regress child on parent, then parent on child. The two lines...",
+                 ["coincide", r"differ unless $r = \pm 1$", "are perpendicular"], 1,
+                 say="Regress child on parent; then regress parent on child. Do the two lines coincide, differ, or "
+                     "cross at right angles?",
+                 reveal="They differ unless the correlation is plus or minus one. Each predicts one variable from "
+                        "the other, and the major axis is a third line still.")
         self.three()
         self.why_differ()
         self.attenuation()
+        self.answer()
 
     def card(self):
         self.chapter(8, r"Three lines through one ellipse", r"$Y$ on $X$, \ $X$ on $Y$, \ and the major axis", lit=(1886,), part=PART, said="Chapter eight. Three lines through one ellipse.")

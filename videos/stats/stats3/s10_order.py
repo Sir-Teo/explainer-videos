@@ -10,12 +10,22 @@ K_COLS = {"1": "#7EC8F5", "3": "#7BD88F", "8": "#F2C14E", "10": "#FF9F5A"}
 class Order(StatsScene, TreeMixin):
     def construct(self):
         self.card()
+        self.ask("Ten uniform draws on $(0, 1)$. The expected largest?",
+                 ["$1/2$", "$10/11$", "$1$"], 1,
+                 say="Ten uniform draws between zero and one. What's the expected value of the largest?",
+                 reveal="Ten elevenths. The sorted draws split the interval into eleven pieces of the same expected "
+                        "length.")
         self.density()
         self.beta()
         self.median()
         self.tanks()
         self.tree_voiceover("Two arrows into the beta: <bookmark mark='t'/> the order statistics of uniforms, and the "
                             "share X over X plus Y of two independent gammas with the same scale.", 9)
+        self.answer()
+        self.checkpoint([(r"$-\log U$ for a uniform $U$ has which law?", "exponential(1)"),
+                         ("A normal over the root of a scaled chi-squared?", "Student's $t$")],
+                        narration="Checkpoint. Transformations and the sampling family.",
+                        answers_narration="Exponential. And Student's t.")
 
     def card(self):
         self.chapter(9, r"Order statistics", r"The smallest, the largest, and everything in between", lit=(), part=PART, said="Chapter nine. Order statistics.")

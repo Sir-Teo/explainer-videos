@@ -8,10 +8,29 @@ from videos.stats.stats1.common import *  # noqa: F403
 class Shape(StatsScene):
     def construct(self):
         self.card()
+        self.wrong_idea("A straight line on log-log axes proves a power law",
+                        "Log-normal tails can look straight for a long way: it takes a test",
+                        narration="Here's a tempting idea. If a tail looks like a straight line on log-log axes, it "
+                                  "follows a power law.",
+                        right_narration="Not so. Clauset, Shalizi and Newman showed that log-normal tails can look "
+                                        "straight for a long way. The line is a hint; telling the two apart takes a "
+                                        "test.")
+        self.ask("Incomes have a long right tail. Which is larger?",
+                 ["the mean", "the median", "they're equal"], 0,
+                 say="Incomes have a long right tail: a few people earn far more than everyone else. Which is "
+                     "larger, the mean or the median?",
+                 reveal="The mean. The long right tail pulls it up past the median. That gap is what right skew "
+                        "looks like in two numbers.")
         self.skew()
         self.unstable()
         self.logscale()
         self.pareto()
+        self.answer()
+        self.checkpoint([("Chebyshev: at most what share lies beyond three SDs?", "one ninth"),
+                         ("Right skew: which is usually bigger, the mean or the median?", "the mean")],
+                        narration="Checkpoint. Spread and shape.",
+                        answers_narration="One over three squared, a ninth. And in right skew the long tail pulls "
+                                          "the mean above the median.")
 
     def card(self):
         self.chapter(7, r"Shape: skew, tails and power laws", r"How lopsided, and how heavy at the edges?", lit=(), part=PART, said="Chapter seven. Shape: skew, tails and power laws.")

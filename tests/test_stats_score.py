@@ -106,3 +106,11 @@ def test_build_finds_the_score():
     sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "tools"))
     build = importlib.import_module("build")
     assert build.series_score("stats12") is score
+
+
+def test_chapter_numbers():
+    assert score.chapter_number("7. The bootstrap") == 7
+    assert score.chapter_number("III. Testing and asymptotics: Problems 5-6") == 3
+    assert score.chapter_number("IV. Empirical processes") == 4 and score.chapter_number("IX. x") == 9
+    assert score.chapter_number("Ceres, lost and found") is None
+    assert score.chapter_number("Recap, problems, and the road ahead") is None

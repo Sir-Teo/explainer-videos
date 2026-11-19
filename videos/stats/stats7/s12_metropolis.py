@@ -10,6 +10,12 @@ SDS = [("0.1", BAD), ("1.5", GOOD), ("20.0", S.POST)]
 class Metropolis(StatsScene):
     def construct(self):
         self.card()
+        self.ask("Metropolis proposes a move to a less likely state. It accepts it...",
+                 ["never", "with chance equal to the density ratio", "always"], 1,
+                 say="The Metropolis walk proposes a move to a less likely state. Does it accept never, always, or "
+                     "with some chance?",
+                 reveal="With chance equal to the ratio of the densities. Uphill moves always; downhill ones "
+                        "sometimes. That balance makes the target the walk's long-run law.")
         self.history()
         self.algorithm()
         self.proof()
@@ -17,6 +23,7 @@ class Metropolis(StatsScene):
         self.histogram()
         self.gibbs()
         self.lessons()
+        self.answer()
 
     def card(self):
         self.chapter(11, r"The Metropolis algorithm", r"A walk whose long-run law is the one you want", lit=(1953,), part=PART, said="Chapter eleven. The Metropolis algorithm, first look.")

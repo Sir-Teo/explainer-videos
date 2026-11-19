@@ -9,10 +9,17 @@ from videos.stats.stats10.common import *  # noqa: F403
 class Peeking(StatsScene):
     def construct(self):
         self.card()
+        self.ask("Test after every new observation; stop at $p < 0.05$. No true effect. False-positive rate?",
+                 [r"5\%", r"well above 5\%", r"below 5\%"], 1,
+                 say="An experimenter runs a t-test after every new observation and stops as soon as p drops below "
+                     "point zero five. There's no real effect. What's the false-positive rate?",
+                 reveal="Well above five percent. Every look is another chance to cross a fixed line, and a random "
+                        "walk keeps trying until it does.")
         self.paths()
         self.climb()
         self.history()
         self.board()
+        self.answer()
 
     def card(self):
         self.chapter(10, r"The peeking problem", r"Look after every observation, \ stop when $p < 0.05$", lit=(1945,), part=PART, said="Chapter ten. The peeking problem.")

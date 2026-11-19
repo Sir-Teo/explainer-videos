@@ -11,11 +11,23 @@ ADV, RET = "#E3B98A", "#9AA3AE"
 class Integrity(StatsScene):
     def construct(self):
         self.card()
+        self.ask("Bars for 100 and 102, the axis starting at 99. The second bar looks...",
+                 [r"2\% taller", "three times as tall", "twice as tall"], 1,
+                 say="Two bars, for one hundred and for one hundred and two, on an axis that starts at ninety-nine. "
+                     "How much taller does the second bar look?",
+                 reveal="Three times as tall, for a difference of two percent. A bar's length is a claim about an "
+                        "amount, so bars start at zero.")
         self.playfair()
         self.nightingale()
         self.minard()
         self.perception()
         self.lie_factor()
+        self.answer()
+        self.checkpoint([("Better in every group, worse overall: its name?", "Simpson's paradox"),
+                         ("Where should a bar chart's axis start?", "at zero")],
+                        narration="Checkpoint. Traps.",
+                        answers_narration="Simpson's paradox. And bars start at zero, because their length is the "
+                                          "claim.")
 
     def card(self):
         self.chapter(13, r"Honest pictures", r"A graph is an argument. Make it a fair one.", lit=(1786, 1858, 1869), part=PART, said="Chapter thirteen. Honest pictures.")

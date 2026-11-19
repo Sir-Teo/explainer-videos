@@ -10,11 +10,17 @@ F_COLS = {"2,10": S.RESID, "5,10": S.POST, "10,10": S.LIK, "30,30": SIM}
 class FDist(StatsScene):
     def construct(self):
         self.card()
+        self.ask("If $T$ has Student's $t$ with $k$ degrees of freedom, $T^2$ has...",
+                 ["$F_{1,k}$", r"$\chi^2_k$", "$F_{k,1}$"], 0,
+                 say="T has Student's t with k degrees of freedom. What's the law of t squared?",
+                 reveal="F with one and k degrees of freedom: a squared normal over an independent chi-squared over "
+                        "k. A t-test is an F-test with one numerator degree of freedom.")
         self.definition()
         self.shapes()
         self.world()
         self.anova()
         self.relations()
+        self.answer()
 
     def card(self):
         self.chapter(6, r"The $F$ distribution", r"Comparing two variances", part=PART, said="Chapter six. The F distribution.")

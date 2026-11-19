@@ -8,12 +8,24 @@ from videos.stats.stats4.common import *  # noqa: F403
 class Numerics(StatsScene):
     def construct(self):
         self.card()
+        self.ask(r"Computing least squares by inverting $X^\top X$...",
+                 ["is the standard method", "squares the condition number", "is exact on a computer"], 1,
+                 say="Every formula in least squares has an inverse in it. Should the computer invert X transpose "
+                     "X?",
+                 reveal="No: forming X transpose X squares the condition number, and digits drain away. Solve with "
+                        "QR, or the SVD.")
         self.float_()
         self.condition()
         self.experiment()
         self.centring()
         self.cancellation()
         self.practice()
+        self.answer()
+        self.checkpoint([(r"$\mathbf z^\top P\mathbf z$ for a rank-$k$ projection?", r"$\chi^2_k$"),
+                         (r"Why not invert $X^\top X$?", "it squares the condition number: use QR")],
+                        narration="Checkpoint. Normal vectors and numerics.",
+                        answers_narration="Chi-squared with k degrees of freedom. And solve with QR rather than "
+                                          "inverting.")
 
     def card(self):
         self.chapter(12, r"Conditioning and numerics", r"Why you should never invert $X^\top X$", lit=(1947,), part=PART, said="Chapter twelve. Conditioning and numerics.")

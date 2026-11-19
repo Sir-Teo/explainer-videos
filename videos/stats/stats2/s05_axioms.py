@@ -12,12 +12,19 @@ A_COL, B_COL = PA, PB
 class Axioms(StatsScene):
     def construct(self):
         self.card()
+        self.ask(r"From the axioms, $P(A \text{ or } B)$ is...",
+                 ["$P(A) + P(B)$", r"$P(A) + P(B) - P(A \text{ and } B)$", "the larger of $P(A)$ and $P(B)$"], 1,
+                 say="Three axioms, and everything else follows. What does the chance of A or B come to: the two "
+                     "chances added, added minus the overlap, or the larger of the two?",
+                 reveal="Added, minus the overlap you counted twice. It follows from additivity in two lines, and "
+                        "so does every other rule of probability.")
         self.kolmogorov()
         self.consequences()
         self.mere_again()
         self.hats()
         self.series()
         self.continuity()
+        self.answer()
 
     def card(self):
         self.chapter(4, r"Kolmogorov's axioms", r"Three rules from which everything else follows", lit={1933: "Kolmogorov's axioms"}, part=PART, said="Chapter four. Kolmogorov's axioms.")

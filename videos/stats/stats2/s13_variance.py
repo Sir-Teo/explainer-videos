@@ -8,11 +8,23 @@ from videos.stats.stats2.common import *  # noqa: F403
 class Variance(StatsScene):
     def construct(self):
         self.card()
+        self.ask("Heads first at toss $k$ pays $2^k$. The game's expected payout?",
+                 [r"\$2", r"\$10", "infinite"], 2,
+                 say="A coin game. If the first head comes on toss k, you win two to the k ducats. What's the "
+                     "game's expected payout: two, ten, or infinite?",
+                 reveal="Infinite: each possible toss adds one to the sum, forever. Yet nobody pays much to play. "
+                        "The expectation of money is not the value of money.")
         self.definition()
         self.sums()
         self.petersburg()
         self.running()
         self.utility()
+        self.answer()
+        self.checkpoint([("Fifty stickers: about how many packs?", "about 225: $n H_n$"),
+                         ("St Petersburg's expected payout?", "infinite: yet the game is worth little to anyone")],
+                        narration="Checkpoint. Expectation.",
+                        answers_narration="About two hundred and twenty-five packs. And an infinite expectation, "
+                                          "for a game nobody values highly.")
 
     def card(self):
         self.chapter(12, r"Variance, and a game worth infinity", r"How far from its expectation does a "

@@ -8,12 +8,19 @@ from videos.stats.stats6.common import *  # noqa: F403
 class Floods(StatsScene):
     def construct(self):
         self.card()
+        self.ask("The chance of at least one 100-year flood in a century?",
+                 [r"100\%", r"about 63\%", r"1\%"], 1,
+                 say="A sea wall built for the hundred-year flood. What's the chance of at least one such flood in "
+                     "a century?",
+                 reveal="About sixty-three percent: one minus point nine nine to the hundredth. A hundred-year "
+                        "flood is a one percent chance each year, not a schedule.")
         self.flood()
         self.data()
         self.fit()
         self.levels()
         self.profile()
         self.dantzig()
+        self.answer()
 
     def card(self):
         self.chapter(13, r"Floods and return levels", r"Predicting the worst from what we have seen", part=PART, said="Chapter thirteen. Floods and return levels.")

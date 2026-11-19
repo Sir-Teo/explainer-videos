@@ -8,12 +8,19 @@ from videos.stats.stats11.common import *  # noqa: F403
 class Prediction(StatsScene):
     def construct(self):
         self.card()
+        self.ask(r"A 95\% interval for the mean height of 10 men. Will the next man be inside it?",
+                 [r"95\% of the time", "only about half the time", "always"], 1,
+                 say="You've measured ten men and computed a ninety-five percent confidence interval for their mean "
+                     "height. Will the next man you meet be inside it?",
+                 reveal="Only about half the time. The interval is about the mean, not about a man. For the next "
+                        "observation you need a prediction interval, and it's far wider.")
         self.confusion()
         self.formula()
         self.skewed()
         self.log_scale()
         self.wilks()
         self.tolerance()
+        self.answer()
 
     def card(self):
         self.chapter(9, r"Prediction and tolerance", r"Where will the next observation fall?", part=PART, said="Chapter nine. Prediction and tolerance intervals.")

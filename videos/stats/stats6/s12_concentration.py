@@ -8,11 +8,18 @@ from videos.stats.stats6.common import *  # noqa: F403
 class Concentration(StatsScene):
     def construct(self):
         self.card()
+        self.ask("1,000 values in $[0, 1]$. Hoeffding: chance the mean strays over 0.05 is at most...",
+                 [r"about 1.3\%", r"about 25\%", r"about 0.0001\%"], 0,
+                 say="A thousand independent values between zero and one. Hoeffding's inequality: at most what "
+                     "chance that their mean strays more than zero point zero five from its expectation?",
+                 reveal="About one point three percent: two e to the minus five, at this sample size and every "
+                        "other. Chebyshev only promises ten percent.")
         self.statement()
         self.proof()
         self.compare()
         self.union()
         self.large_dev()
+        self.answer()
 
     def card(self):
         self.chapter(11, r"Concentration", r"Guarantees for every $n$, \ not just in the limit", part=PART, said="Chapter eleven. Concentration.")

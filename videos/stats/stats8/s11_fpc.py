@@ -8,10 +8,23 @@ from videos.stats.stats8.common import *  # noqa: F403
 class FPC(StatsScene):
     def construct(self):
         self.card()
+        self.wrong_idea("A bigger sample is always a better sample",
+                        "Size is no substitute for randomness",
+                        narration="An idea that sounds obviously right: a bigger sample is always a better sample.",
+                        right_narration="Not when it's biased. In 1936 the Literary Digest got two point four "
+                                        "million replies and missed the election by twenty points. A huge biased "
+                                        "sample measures its own bias very precisely.")
+        self.ask("Sample 1,000 from a nation of 300 million, or from a city of 300,000. The precision...",
+                 ["is much worse for the nation", "is about the same", "is much worse for the city"], 1,
+                 say="A random sample of a thousand from a nation of three hundred million, or from a city of three "
+                     "hundred thousand. Which is more precise?",
+                 reveal="About the same. What matters is the sample's size, not the population's; the finite "
+                        "population correction only bites when the sample is a sizeable share.")
         self.derive()
         self.curve_()
         self.planning()
         self.surprise()
+        self.answer()
 
     def card(self):
         self.chapter(10, r"Finite populations", r"When the sample is a sizeable share of everyone", part=PART, said="Chapter ten. Finite populations.")

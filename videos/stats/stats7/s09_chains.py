@@ -15,12 +15,19 @@ def node_positions():
 class Chains(StatsScene):
     def construct(self):
         self.card()
+        self.ask("In Pushkin's verse, a vowel follows a vowel...",
+                 ["about as often as after a consonant", "much less often", "much more often"], 1,
+                 say="In 1913 Markov counted twenty thousand letters of Pushkin. How often does a vowel follow a "
+                     "vowel: about as often as after a consonant, much less often, or much more often?",
+                 reveal="Much less often: about thirteen percent of the time after a vowel, sixty-six after a "
+                        "consonant. Letters have a memory of one step.")
         self.markov()
         self.onegin()
         self.graph()
         self.flow()
         self.rate()
         self.ergodic()
+        self.answer()
 
     def card(self):
         self.chapter(8, r"Markov chains", r"Randomness with a memory of one step", part=PART, said="Chapter eight. Markov chains.")

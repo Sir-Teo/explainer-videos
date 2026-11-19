@@ -8,11 +8,18 @@ from videos.stats.stats1.common import *  # noqa: F403
 class Simpson(StatsScene):
     def construct(self):
         self.card()
+        self.ask("A treatment helps in every age group. Can the pooled data show it harmful?",
+                 ["never", "yes", "only with tiny groups"], 1,
+                 say="A treatment helps patients in every age group. Can the pooled data, all ages together, show "
+                     "it doing harm?",
+                 reveal="Yes. If the treated were mostly the sicker patients, pooling reverses the comparison. "
+                        "That's Simpson's paradox, and the World's clinic just did it.")
         self.overall()
         self.split()
         self.weights()
         self.which()
         self.ecological()
+        self.answer()
 
     def card(self):
         self.chapter(12, r"The trap of aggregation", r"Better in every group, worse overall?", lit=(), part=PART, said="Chapter twelve. The trap of aggregation.")

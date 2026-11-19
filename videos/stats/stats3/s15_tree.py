@@ -16,8 +16,15 @@ GROUPS = [
 class Tree(StatsScene):
     def construct(self):
         self.card()
+        self.ask("A Poisson whose rate is gamma-distributed becomes...",
+                 ["a normal", "a negative binomial", "a gamma"], 1,
+                 say="One more arrow before we walk the tree. A Poisson whose rate is itself gamma-distributed: "
+                     "what does it become?",
+                 reveal="A negative binomial: the mixture arrow. Sums, limits, transformations and mixtures connect "
+                        "the whole family.")
         self.tour()
         self.reference()
+        self.answer()
 
     def card(self):
         self.chapter(14, r"The family tree", r"Sums, limits, transformations and mixtures", lit=(), part=PART, said="Chapter fourteen. The family tree.")

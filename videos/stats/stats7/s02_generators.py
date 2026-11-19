@@ -8,12 +8,27 @@ from videos.stats.stats7.common import *  # noqa: F403
 class Generators(StatsScene):
     def construct(self):
         self.card()
+        self.wrong_idea("A generator that passes the tests is random",
+                        "A test can only reject: passing is evidence, never proof",
+                        narration="A natural idea: once a generator has passed a battery of statistical tests, its "
+                                  "numbers are random.",
+                        right_narration="A test can only reject. Passing is evidence, never proof, which is why "
+                                        "modern generators face over a hundred tests, and RANDU passed many before "
+                                        "its planes were found.")
+        self.ask("Consecutive triples from a multiply-and-remainder generator, plotted in 3D, lie...",
+                 ["evenly everywhere", "on a few parallel planes", "on one line"], 1,
+                 say="Lehmer's generator: multiply, add, take the remainder. Plot consecutive triples of its "
+                     "numbers as points in a cube. Do they fill the cube evenly, fall on a few parallel planes, or "
+                     "lie on a line?",
+                 reveal="On parallel planes. Marsaglia proved it in 1968, and RANDU's triples sit on just fifteen. "
+                        "Arithmetic only looks like chance.")
         self.lehmer()
         self.clock()
         self.lattice()
         self.pcg()
         self.twister()
         self.tests()
+        self.answer()
 
     def card(self):
         self.chapter(1, r"Pseudo-random generators", r"Arithmetic that looks like chance", lit=(1949,), part=PART, said="Chapter one. Pseudo-random generators.")

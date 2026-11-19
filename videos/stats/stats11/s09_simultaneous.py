@@ -9,12 +9,23 @@ from videos.stats.stats11.common import *  # noqa: F403
 class Simultaneous(StatsScene):
     def construct(self):
         self.card()
+        self.ask(r"10 independent 95\% intervals. The chance all ten cover?",
+                 [r"95\%", r"about 60\%", r"about 5\%"], 1,
+                 say="Ten independent intervals, each ninety-five percent. What's the chance all ten cover their "
+                     "targets?",
+                 reveal="About sixty percent: point nine five to the tenth. Several promises at once need wider, "
+                        "simultaneous intervals.")
         self.joint()
         self.bonferroni()
         self.joint_sim()
         self.scheffe()
         self.dkw()
         self.band_vs_points()
+        self.answer()
+        self.checkpoint([(r"Zero events in $n$ trials: the 95\% upper bound?", "about $3/n$"),
+                         (r"10 independent 95\% intervals all cover with chance?", r"about 60\%")],
+                        narration="Checkpoint. Intervals at the edges.",
+                        answers_narration="Three over n. And about sixty percent.")
 
     def card(self):
         self.chapter(8, r"Simultaneous intervals", r"When several promises must hold at once", part=PART, said="Chapter eight. Simultaneous intervals.")

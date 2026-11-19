@@ -8,11 +8,18 @@ from videos.stats.stats2.common import *  # noqa: F403
 class Monty(StatsScene):
     def construct(self):
         self.card()
+        self.ask("Monty opens a goat door. Should you switch?",
+                 ["stay", "switch", "it's fifty--fifty"], 1,
+                 say="You pick a door. The host, who knows where the car is, opens another door on a goat and "
+                     "offers a swap. Stay, switch, or doesn't it matter?",
+                 reveal="Switch. It wins two times in three, because the host always shows a goat on purpose. How "
+                        "the evidence reached you is part of the evidence.")
         self.game()
         self.history()
         self.tree()
         self.simulate()
         self.protocols()
+        self.answer()
 
     def card(self):
         self.chapter(8, r"Monty Hall", r"What does an opened door tell you?", lit=(1763,), part=PART, said="Chapter eight. Monty Hall.")

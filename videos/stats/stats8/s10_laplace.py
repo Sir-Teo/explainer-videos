@@ -9,11 +9,18 @@ from videos.stats.stats8.compute import histogram_density
 class Laplace(StatsScene):
     def construct(self):
         self.card()
+        self.ask("The SE of a ratio of two estimates needs...",
+                 ["the two SEs only", "the two SEs and their correlation", "nothing more"], 1,
+                 say="Laplace counted France as total births times a ratio estimated from a sample. What does the "
+                     "standard error of a ratio need?",
+                 reveal="Both standard errors and the correlation between the two estimates. Births and population "
+                        "move together, and the correlation shrinks the ratio's error.")
         self.history()
         self.ratio()
         self.delta()
         self.design()
         self.world()
+        self.answer()
 
     def card(self):
         self.chapter(9, r"Standard errors for ratios", r"Laplace counts France", lit=(1802,), part=PART, said="Chapter nine. Standard errors for ratios, and Laplace's census of France.")

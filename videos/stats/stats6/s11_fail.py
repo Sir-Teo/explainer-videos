@@ -8,10 +8,17 @@ from videos.stats.stats6.common import *  # noqa: F403
 class Fail(StatsScene):
     def construct(self):
         self.card()
+        self.ask("Running means of Cauchy draws, as $n$ grows...",
+                 ["settle at 0", "never settle", "settle slowly"], 1,
+                 say="Running means of draws from the Cauchy, a bell-shaped law with heavy tails. As n grows, do "
+                     "they settle at zero, settle slowly, or never settle?",
+                 reveal="They never settle. The Cauchy has no mean, and the average of n Cauchys is Cauchy again, "
+                        "for every n.")
         self.cauchy()
         self.why_cauchy()
         self.pareto()
         self.stable()
+        self.answer()
 
     def card(self):
         self.chapter(10, r"When averages fail", r"Heavy tails, \ and the limits of the limit theorems", part=PART, said="Chapter ten. When averages fail.")

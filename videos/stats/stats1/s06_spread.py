@@ -8,10 +8,17 @@ from videos.stats.stats1.common import *  # noqa: F403
 class Spread(StatsScene):
     def construct(self):
         self.card()
+        self.ask("Of any data, at most what share can lie more than two SDs from the mean?",
+                 [r"5\%", r"25\%", r"50\%"], 1,
+                 say="Here's a promise that holds for every dataset there is. At most what share of the data can "
+                     "lie more than two standard deviations from the mean: five percent, a quarter, or a half?",
+                 reveal="A quarter: one over k squared, with k equal to two, for any data whatsoever. For a bell "
+                        "curve the real share is about five percent. Chebyshev's bound never fails, but it's loose.")
         self.squares()
         self.pythagoras()
         self.robust()
         self.chebyshev()
+        self.answer()
 
     def card(self):
         self.chapter(5, r"Spread, and why squares", r"How far from the centre is typical?", lit=(), part=PART, said="Chapter five. Spread, and why squares.")

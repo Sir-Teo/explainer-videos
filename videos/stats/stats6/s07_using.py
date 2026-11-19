@@ -9,10 +9,22 @@ from videos.stats.stats6.common import *  # noqa: F403
 class Using(StatsScene):
     def construct(self):
         self.card()
+        self.ask(r"Normal approximation to a binomial $P(X \le 55)$: evaluate the normal CDF at...",
+                 ["$55$", "$55.5$", "$54.5$"], 1,
+                 say="Approximating a binomial chance of fifty-five or fewer by a normal curve. Where should you "
+                     "evaluate the normal: at fifty-five, fifty-five and a half, or fifty-four and a half?",
+                 reveal="At fifty-five and a half. Each count owns a bar a unit wide, and the bar for fifty-five "
+                        "reaches to fifty-five and a half: the continuity correction.")
         self.demoivre()
         self.local()
         self.continuity()
         self.rare()
+        self.answer()
+        self.checkpoint([("What does the CLT ask of the variance?", "that it's finite and positive"),
+                         ("The normal approximation to a binomial: a rule of thumb?", r"$npq \ge 10$; for rare events, Poisson")],
+                        narration="Checkpoint. The central limit theorem.",
+                        answers_narration="A finite, positive variance. And n p q of ten or more, or else the "
+                                          "Poisson.")
 
     def card(self):
         self.chapter(6, r"Using it", r"The normal approximation, \ and how to apply it well", lit=(1733,), part=PART, said="Chapter six. Using the normal approximation.")

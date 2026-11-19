@@ -28,10 +28,16 @@ def staircase(ax, xs, F, color, stroke_width=3, x_lo=None, x_hi=None):
 class Variables(StatsScene):
     def construct(self):
         self.card()
+        self.ask("Two dice. Which sum is most likely?",
+                 ["6", "7", "12"], 1,
+                 say="Write the sum of two dice in each of the thirty-six cells. Which sum is most likely: six, "
+                     "seven, or twelve?",
+                 reveal="Seven: six of the thirty-six cells. That table of chances is the sum's distribution.")
         self.function()
         self.cdf()
         self.kinds()
         self.cantor()
+        self.answer()
 
     def card(self):
         self.chapter(10, r"Random variables", r"Numbers that depend on chance, and their distributions", lit={1933: "Kolmogorov: probability foundations"}, part=PART, said="Chapter ten. Random variables.")

@@ -16,10 +16,23 @@ LONG, SHORT = S.ACCENT, "#55657A"
 class Bertrand(StatsScene):
     def construct(self):
         self.card()
+        self.ask("A chord of a circle drawn at random. Chance it's longer than the inscribed triangle's side?",
+                 ["$1/3$", "$1/2$", "$1/4$", "it depends what ``at random'' means"], 3,
+                 say="Draw a chord of a circle at random. What's the chance it's longer than a side of the "
+                     "inscribed equilateral triangle: a third, a half, a quarter, or does it depend on what at "
+                     "random means?",
+                 reveal="It depends. Three natural ways to pick a chord give a third, a half and a quarter. On a "
+                        "continuum, equally likely is a choice of measure.")
         self.setup_q()
         self.three()
         self.midpoints()
         self.resolution()
+        self.answer()
+        self.checkpoint([("Three dice: which total is more likely, 9 or 10?", "10: 27 throws against 25"),
+                         ("Why does Bertrand's chord have three answers?", "``at random'' needs a measure, and there are several")],
+                        narration="Checkpoint. Two questions about equally likely cases.",
+                        answers_narration="Ten, twenty-seven throws to twenty-five. And at random needs a measure; "
+                                          "Bertrand found three.")
 
     def card(self):
         self.chapter(3, r"Bertrand's paradox", r"Draw a chord of a circle at random. How likely is it to be "

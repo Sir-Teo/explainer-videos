@@ -8,12 +8,19 @@ from videos.stats.stats11.common import *  # noqa: F403
 class Credible(StatsScene):
     def construct(self):
         self.card()
+        self.ask(r"Plenty of data, a regular model. 95\% credible and confidence intervals...",
+                 ["nearly agree", "differ widely", "are identical by definition"], 0,
+                 say="A Bayesian credible interval and a frequentist confidence interval answer different "
+                     "questions. With plenty of data in a regular model, how do they compare?",
+                 reveal="They nearly agree: the posterior becomes normal around the maximum likelihood estimate. "
+                        "They part ways with little data, strong priors, or boundaries.")
         self.credible()
         self.coverage()
         self.hpd()
         self.welch()
         self.welch_numbers()
         self.moral()
+        self.answer()
 
     def card(self):
         self.chapter(10, r"Credible vs confidence", r"Where they agree, \ and where they part", part=PART, said="Chapter ten. Credible intervals versus confidence intervals.")

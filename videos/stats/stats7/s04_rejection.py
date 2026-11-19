@@ -11,11 +11,18 @@ from videos.stats.stats7.common import *  # noqa: F403
 class Rejection(StatsScene):
     def construct(self):
         self.card()
+        self.ask("Beta(2, 5) peaks at 2.46. Uniform darts in the box below the peak: share kept?",
+                 [r"about 41\%", r"about 90\%", r"about 10\%"], 0,
+                 say="The beta two, five density peaks at two point four six. Throw uniform darts into the box "
+                     "under that peak and keep those under the curve. What share do you keep?",
+                 reveal="About forty-one percent: the curve's area, one, over the box's, two point four six. In "
+                        "high dimensions that share collapses.")
         self.darts()
         self.proof()
         self.envelope()
         self.adaptive()
         self.dimension()
+        self.answer()
 
     def card(self):
         self.chapter(3, r"Rejection sampling", r"Throw darts, \ keep the ones under the curve", lit=(1951,), part=PART, said="Chapter three. Rejection sampling.")

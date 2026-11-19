@@ -11,6 +11,12 @@ FISH = "#5C7A99"
 class Capture(StatsScene, TreeMixin):
     def construct(self):
         self.card()
+        self.ask("Tag 500 fish. Later, 40 of 400 caught are tagged. How many fish?",
+                 ["4,000", "5,000", "20,000"], 1,
+                 say="Tag five hundred fish and let them go. Later you catch four hundred, and forty carry tags. "
+                     "How many fish are in the lake?",
+                 reveal="About five thousand. A tenth of the catch is tagged, so the five hundred tagged fish are "
+                        "about a tenth of the lake. That's capture-recapture.")
         self.lake()
         self.hypergeometric()
         self.estimate()
@@ -18,6 +24,7 @@ class Capture(StatsScene, TreeMixin):
         self.tree_voiceover("The fourth arrow: <bookmark mark='t'/> sampling without replacement from a population "
                             "much larger than the sample is almost the same as sampling with replacement, so the "
                             "hypergeometric becomes the binomial.", 4)
+        self.answer()
 
     def card(self):
         self.chapter(4, r"Without replacement", r"How many fish are in the lake?", lit=(1898,), part=PART, said="Chapter four. Without replacement.")

@@ -15,10 +15,21 @@ MODELS = [("uniform", (r"the textbook:", r"uniform capture")), ("newer", (r"newe
 class Compare(StatsScene):
     def construct(self):
         self.card()
+        self.ask("Tank problem: can a biased estimator have smaller MSE than the best unbiased one?",
+                 ["no, never", "yes"], 1,
+                 say="The tank problem again. Can a slightly biased estimator have smaller mean squared error than "
+                     "the best unbiased one?",
+                 reveal="Yes. Shrink the unbiased estimator a little, and the variance you save outweighs the bias "
+                        "you add. Unbiasedness is a constraint we chose, not a virtue.")
         self.board()
         self.multiplier()
         self.game()
         self.lessons()
+        self.answer()
+        self.checkpoint([(r"The Cram\'er--Rao bound for unbiased estimators?", r"$1/(nI(\theta))$"),
+                         ("Must the best estimator be unbiased?", "no: a little bias can buy a smaller MSE")],
+                        narration="Checkpoint. How good can an estimator be?",
+                        answers_narration="One over n I of theta. And no: bias can be worth paying for.")
 
     def card(self):
         self.chapter(11, r"Comparing estimators", r"Which recipe would you send to war?", part=PART, said="Chapter eleven. Comparing estimators.")

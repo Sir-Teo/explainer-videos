@@ -8,12 +8,18 @@ from videos.stats.stats10.common import *  # noqa: F403
 class Lemma(StatsScene):
     def construct(self):
         self.card()
+        self.ask("The most powerful test of one distribution against another rejects when...",
+                 ["the likelihood ratio is large", "the p-value is small", "the mean is far from zero"], 0,
+                 say="One null distribution against one alternative. Which test is most powerful at a given size?",
+                 reveal="Reject where the likelihood ratio is largest: buy the outcomes with the most power per "
+                        "unit of size, like filling a knapsack.")
         self.statement()
         self.dice()
         self.knapsack()
         self.frontier()
         self.proof()
         self.consequences()
+        self.answer()
 
     def card(self):
         self.chapter(5, r"The Neyman--Pearson lemma", r"The most powerful test is a knapsack", lit=(1933,), part=PART, said="Chapter five. The Neyman–Pearson lemma.")

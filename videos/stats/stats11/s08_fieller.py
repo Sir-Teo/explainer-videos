@@ -8,11 +8,18 @@ from videos.stats.stats11.common import *  # noqa: F403
 class Fieller(StatsScene):
     def construct(self):
         self.card()
+        self.ask(r"A ratio whose denominator may be near zero. An honest 95\% interval can be...",
+                 ["always a finite interval", "infinite, or two pieces", "empty"], 1,
+                 say="A ratio of two means whose denominator might be near zero. What can an honest ninety-five "
+                     "percent interval for it look like?",
+                 reveal="Infinite, or two separate pieces. Fieller's interval does exactly this, and any interval "
+                        "that is always finite must break its promise near a zero denominator.")
         self.problem()
         self.derivation()
         self.shapes()
         self.g_rule()
         self.impossible()
+        self.answer()
 
     def card(self):
         self.chapter(7, r"Ratios: \ Fieller", r"When the denominator might be near zero", part=PART, said="Chapter seven. Ratios, and Fieller's interval.")

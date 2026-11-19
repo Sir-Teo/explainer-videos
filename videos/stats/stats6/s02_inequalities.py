@@ -8,11 +8,18 @@ from videos.stats.stats6.common import *  # noqa: F403
 class Inequalities(StatsScene):
     def construct(self):
         self.card()
+        self.ask("Incomes are never negative and average 49,000. At most what share exceed 490,000?",
+                 [r"1\%", r"10\%", r"50\%"], 1,
+                 say="All you know: incomes are never negative, and they average forty-nine thousand. At most what "
+                     "share of people can earn more than four hundred and ninety thousand?",
+                 reveal="Ten percent: the mean divided by the threshold. That's Markov's inequality, and the mean "
+                        "alone can promise nothing tighter.")
         self.markov_picture()
         self.markov_world()
         self.chebyshev()
         self.tight()
         self.jensen()
+        self.answer()
 
     def card(self):
         self.chapter(1, r"Markov, Chebyshev, Jensen", r"What does a mean alone guarantee?", lit=(1867,), part=PART, said="Chapter one. Three inequalities.")

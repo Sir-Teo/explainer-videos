@@ -11,11 +11,22 @@ COLS = [S.EST, S.LIK, S.POST, S.PRIOR, S.ACCENT, S.ALT]
 class Special(StatsScene):
     def construct(self):
         self.card()
+        self.ask("Box--Muller turns two independent uniforms into...",
+                 ["one normal", "two independent normals", "a normal and a uniform"], 1,
+                 say="Box and Muller's trick turns two independent uniforms into what: one normal, two independent "
+                     "normals, or a normal and a uniform?",
+                 reveal="Two independent normals: one uniform becomes an angle, the other a radius, and rotational "
+                        "symmetry does the rest.")
         self.box_muller()
         self.box_proof()
         self.gamma()
         self.alias()
         self.cholesky()
+        self.answer()
+        self.checkpoint([("$F(X)$, for continuous $X$ with CDF $F$?", "uniform on $(0, 1)$"),
+                         ("Rejection sampling's acceptance rate?", "1 over the envelope's constant $M$")],
+                        narration="Checkpoint. Sampling.",
+                        answers_narration="Uniform. And one over M.")
 
     def card(self):
         self.chapter(4, r"Special methods", r"Clever transformations, \ one distribution at a time", part=PART, said="Chapter four. Special methods.")

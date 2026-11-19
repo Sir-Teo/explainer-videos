@@ -8,11 +8,22 @@ from videos.stats.stats10.common import *  # noqa: F403
 class PValues(StatsScene):
     def construct(self):
         self.card()
+        self.ask("Under the null, a continuous test's p-value is distributed...",
+                 ["around 0.5", "uniformly on $(0, 1)$", "mostly near 0"], 1,
+                 say="A p-value is a statistic like any other, so it has a distribution. When the null is true and "
+                     "the test is continuous, what is it?",
+                 reveal="Uniform between zero and one. That's why a five percent threshold rejects true nulls five "
+                        "percent of the time, and why one p-value of point zero four is weak evidence.")
         self.definition()
         self.uniform_proof()
         self.histograms()
         self.discrete()
         self.surprise()
+        self.answer()
+        self.checkpoint([("Tea test: chance of all four right by guessing?", "$1/70$"),
+                         ("A p-value's law under a continuous null?", "uniform on $(0, 1)$")],
+                        narration="Checkpoint. Fisher's tests.",
+                        answers_narration="One in seventy. And uniform.")
 
     def card(self):
         self.chapter(3, r"The $p$-value", r"What is its distribution?", part=PART, said="Chapter three. The p-value.")

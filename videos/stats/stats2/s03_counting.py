@@ -22,11 +22,18 @@ def stars_bars(counts, star_color=EVENT, size=0.34) -> VGroup:
 class Counting(StatsScene):
     def construct(self):
         self.card()
+        self.ask("How many orderings does a ten-card deck have?",
+                 ["100", "about 3.6 million", "about 10 billion"], 1,
+                 say="How many different orderings does a deck of just ten cards have: a hundred, about three point "
+                     "six million, or about ten billion?",
+                 reveal="About three point six million: ten factorial. Ten choices for the first card, nine for the "
+                        "second, and so on. That's the multiplication rule.")
         self.multiply()
         self.permutations()
         self.combinations()
         self.triangle()
         self.stars()
+        self.answer()
 
     def card(self):
         self.chapter(2, r"Counting", r"How many equally likely cases are there?", lit=(1654,), part=PART, said="Chapter two. Counting.")

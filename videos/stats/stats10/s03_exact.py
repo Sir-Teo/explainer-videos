@@ -8,6 +8,12 @@ from videos.stats.stats10.common import *  # noqa: F403
 class Exact(StatsScene):
     def construct(self):
         self.card()
+        self.ask("Eight cups, four milk-first. If she's guessing, the chance she names all four?",
+                 ["$1/16$", "$1/70$", "$1/256$"], 1,
+                 say="The lady tasting tea. Eight cups, four with the milk poured first, and she must pick those "
+                     "four. If she's guessing, what's the chance she gets all four right?",
+                 reveal="One in seventy: there are seventy ways to choose four cups of eight. The randomization "
+                        "itself makes the null distribution.")
         self.tea_null()
         self.designs()
         self.table()
@@ -15,6 +21,7 @@ class Exact(StatsScene):
         self.flips()
         self.machine()
         self.why_random()
+        self.answer()
 
     def card(self):
         self.chapter(2, r"Exact tests by design", r"Randomization makes the null distribution", lit=(1935,), part=PART, said="Chapter two. Exact tests by design.")

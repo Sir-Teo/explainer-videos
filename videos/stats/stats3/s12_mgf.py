@@ -8,11 +8,18 @@ from videos.stats.stats3.common import *  # noqa: F403
 class MGF(StatsScene):
     def construct(self):
         self.card()
+        self.ask("Which of these has no moment generating function?",
+                 ["the normal", "the exponential", "the Cauchy"], 2,
+                 say="Which of these has no moment generating function near zero: the normal, the exponential, or "
+                     "the Cauchy?",
+                 reveal="The Cauchy: its tails are too heavy for any exponential moment. Its characteristic "
+                        "function still exists, and that's the tool that always works.")
         self.definition()
         self.normal()
         self.sums()
         self.gamma_sum()
         self.cf()
+        self.answer()
 
     def card(self):
         self.chapter(11, r"Generating functions", r"Part 2's polynomials, \ grown up", lit=(1810,), part=PART, said="Chapter eleven. Generating functions.")

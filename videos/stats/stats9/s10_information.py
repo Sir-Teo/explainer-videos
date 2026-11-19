@@ -8,6 +8,11 @@ from videos.stats.stats9.common import *  # noqa: F403
 class Information(StatsScene):
     def construct(self):
         self.card()
+        self.ask("$n$ independent observations carry how much Fisher information, against one?",
+                 ["the same", "$n$ times as much", r"$\sqrt n$ times as much"], 1,
+                 say="Fisher information measures how much an observation says about theta. How much do n "
+                     "independent observations carry compared with one?",
+                 reveal="N times as much: information adds. That's why standard errors shrink like one over root n.")
         self.mean_zero()
         self.variance()
         self.scores()
@@ -16,6 +21,11 @@ class Information(StatsScene):
         self.reparam()
         self.matrix()
         self.kl_curvature()
+        self.answer()
+        self.checkpoint([("Rao--Blackwellization does what to the variance?", "never increases it"),
+                         ("The information in $n$ i.i.d. observations?", r"$n I(\theta)$")],
+                        narration="Checkpoint. Improving estimators.",
+                        answers_narration="It never increases it. And n times the information of one.")
 
     def card(self):
         self.chapter(9, r"Fisher information", r"How much does one observation say about $\theta$?", part=PART, said="Chapter nine. Fisher information.")

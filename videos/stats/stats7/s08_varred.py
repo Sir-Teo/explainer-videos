@@ -9,12 +9,23 @@ from videos.stats.stats7.common import *  # noqa: F403
 class VarRed(StatsScene):
     def construct(self):
         self.card()
+        self.ask("Pair each uniform $U$ with $1 - U$ for a monotone integrand. The variance...",
+                 ["goes up", "goes down", "stays the same"], 1,
+                 say="Variance reduction. Pair each uniform U with one minus U before averaging a monotone "
+                     "function. Does the variance go up, go down, or stay the same?",
+                 reveal="It goes down. The pair is negatively correlated, so its errors partly cancel: antithetic "
+                        "variates.")
         self.antithetic()
         self.control()
         self.stratified()
         self.compare()
         self.importance()
         self.warning()
+        self.answer()
+        self.checkpoint([("Halving the Monte Carlo error costs?", "four times as many draws"),
+                         ("A simulation study reports, beside each estimate?", "its Monte Carlo standard error")],
+                        narration="Checkpoint. Monte Carlo.",
+                        answers_narration="Four times the draws. And every estimate gets its Monte Carlo error bar.")
 
     def card(self):
         self.chapter(7, r"Variance reduction", r"The same accuracy, \ for less computing", part=PART, said="Chapter seven. Variance reduction.")

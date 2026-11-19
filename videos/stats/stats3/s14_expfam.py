@@ -8,10 +8,21 @@ from videos.stats.stats3.common import *  # noqa: F403
 class ExpFam(StatsScene):
     def construct(self):
         self.card()
+        self.ask(r"Which is \emph{not} an exponential family?",
+                 ["the binomial, $n$ fixed", "the normal", r"the uniform on $(0, \theta)$"], 2,
+                 say="One formula sits behind most of the family. Which of these doesn't fit it: the binomial, the "
+                     "normal, or the uniform from zero to theta?",
+                 reveal="The uniform on zero to theta: its support moves with the parameter. Exponential families "
+                        "have a fixed support.")
         self.form()
         self.members()
         self.mean()
         self.ahead()
+        self.answer()
+        self.checkpoint([("Poisson counts with a gamma rate: which law?", "negative binomial"),
+                         (r"Why isn't Uniform$(0, \theta)$ an exponential family?", r"its support depends on $\theta$")],
+                        narration="Checkpoint. Mixtures and the exponential family.",
+                        answers_narration="The negative binomial. And the uniform's support moves with theta.")
 
     def card(self):
         self.chapter(13, r"Exponential families", r"One formula behind most of the family", lit=(), part=PART, said="Chapter thirteen. Exponential families, a first look.")

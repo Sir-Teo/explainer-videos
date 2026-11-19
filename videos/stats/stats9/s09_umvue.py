@@ -13,6 +13,12 @@ UMV = EST_COL["umvue"]  # the class below takes the colour's name
 class UMVUE(StatsScene):
     def construct(self):
         self.card()
+        self.ask("Unbiased estimators of $N$ that depend only on the largest serial: how many?",
+                 ["many", "exactly one", "none"], 1,
+                 say="In the tank problem, how many unbiased estimators of N depend on the data only through the "
+                     "largest serial?",
+                 reveal="Exactly one. The maximum is complete as well as sufficient, so Lehmann-Scheffé makes its "
+                        "unbiased function the best unbiased estimator there is.")
         self.question()
         self.completeness()
         self.lehmann_scheffe()
@@ -20,6 +26,7 @@ class UMVUE(StatsScene):
         self.gaps()
         self.families()
         self.absurd()
+        self.answer()
 
     def card(self):
         self.chapter(8, r"The best unbiased estimator", r"When is an improvement the last one?", part=PART, said="Chapter eight. The best unbiased estimator.")

@@ -10,12 +10,23 @@ CHI_COLS = {"1": S.RESID, "2": S.POST, "3": S.ACCENT, "5": S.LIK, "9": S.EST, "1
 class ChiSq(StatsScene):
     def construct(self):
         self.card()
+        self.ask("The mean of a chi-squared with $k$ degrees of freedom?",
+                 ["1", "$k$", "$2k$"], 1,
+                 say="A chi-squared with k degrees of freedom is the squared length of k standard normals. What's "
+                     "its mean?",
+                 reveal="K: each squared normal averages one. Its variance is two k.")
         self.family()
         self.history()
         self.sample()
         self.cochran()
         self.interval()
         self.varcover()
+        self.answer()
+        self.checkpoint([("The spread of the mean of $n$ draws?", r"$\sigma/\sqrt n$"),
+                         ("Why divide by $n - 1$?", "centring uses one dimension: $n - 1$ degrees of freedom remain")],
+                        narration="Checkpoint. Sampling distributions.",
+                        answers_narration="Sigma over root n. And n minus one degrees of freedom are left after "
+                                          "centring.")
 
     def card(self):
         self.chapter(4, r"Chi-squared and Cochran", r"Squared lengths of random vectors", lit=(1934,), part=PART, said="Chapter four. Chi-squared, and Cochran's theorem.")

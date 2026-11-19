@@ -8,6 +8,12 @@ from videos.stats.stats9.common import *  # noqa: F403
 class RaoBlackwell(StatsScene):
     def construct(self):
         self.card()
+        self.ask("Condition an unbiased estimator on a sufficient statistic. Its variance...",
+                 ["can go up", "never goes up", "always halves"], 1,
+                 say="Take an unbiased estimator and average it over everything except a sufficient statistic. Can "
+                     "its variance go up?",
+                 reveal="Never. Rao-Blackwell: the result is still unbiased, and its variance is no larger. "
+                        "Randomness that carries no information only adds noise.")
         self.history()
         self.theorem()
         self.proof()
@@ -16,6 +22,12 @@ class RaoBlackwell(StatsScene):
         self.tank_algebra()
         self.tank_collapse()
         self.legacy()
+        self.answer()
+        self.checkpoint([("Given the number of heads, the order of the tosses tells you?", "nothing more about $p$"),
+                         ("Where does the MLE's standard error come from?", "the curvature of the log-likelihood at its peak")],
+                        narration="Checkpoint. Two questions on what the data carry.",
+                        answers_narration="Nothing more: the count is sufficient. And the curvature of the "
+                                          "log-likelihood.")
 
     def card(self):
         self.chapter(7, r"Rao--Blackwell", r"Conditioning on a sufficient statistic never hurts", part=PART, said="Chapter seven. The Rao–Blackwell theorem.")

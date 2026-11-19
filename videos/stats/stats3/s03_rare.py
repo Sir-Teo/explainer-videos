@@ -8,12 +8,19 @@ from videos.stats.stats3.common import *  # noqa: F403
 class Rare(StatsScene, TreeMixin):
     def construct(self):
         self.card()
+        self.ask("Horse-kick deaths average 0.61 a corps-year. Share of corps-years with none?",
+                 [r"about 54\%", r"about 39\%", r"about 10\%"], 0,
+                 say="Prussian cavalry corps lost on average zero point six one men a year to horse kicks. In what "
+                     "share of corps-years would you expect no deaths at all?",
+                 reveal="About fifty-four percent: e to the minus zero point six one. Bortkiewicz's records had a "
+                        "hundred and nine such years out of two hundred. Many chances, each tiny: Poisson.")
         self.derive()
         self.converge()
         self.lecam()
         self.moments()
         self.tree_voiceover("The second arrow: <bookmark mark='t'/> a binomial with many trials and a small chance of "
                             "success, n times p held at lambda, becomes a Poisson.", 2)
+        self.answer()
 
     def card(self):
         self.chapter(2, r"The law of rare events", r"Many chances, each tiny: \ why horse kicks are Poisson", lit=(1898,), part=PART, said="Chapter two. The law of rare events.")

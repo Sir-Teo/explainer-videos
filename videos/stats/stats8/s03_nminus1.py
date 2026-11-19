@@ -8,11 +8,18 @@ from videos.stats.stats8.common import *  # noqa: F403
 class NMinus1(StatsScene):
     def construct(self):
         self.card()
+        self.ask("Dividing the sum of squared deviations by $n$, the sample variance on average...",
+                 ["is right", "comes out too small", "comes out too large"], 1,
+                 say="Divide the sum of squared deviations by n rather than n minus one. On average, is the "
+                     "variance right, too small, or too large?",
+                 reveal="Too small, by a factor of n minus one over n. The deviations are measured from the "
+                        "sample's own mean, which sits closer to them than the truth does.")
         self.bias()
         self.algebra()
         self.geometry()
         self.sbias()
         self.dof()
+        self.answer()
 
     def card(self):
         self.chapter(2, r"Why $n - 1$", r"The variance that divides by one less", part=PART, said="Chapter two. Why n minus one.")

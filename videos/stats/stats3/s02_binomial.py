@@ -8,12 +8,19 @@ from videos.stats.stats3.common import *  # noqa: F403
 class Binomial(StatsScene, TreeMixin):
     def construct(self):
         self.card()
+        self.ask("Ten fair coin tosses. Chance of exactly five heads?",
+                 [r"about 25\%", r"about 50\%", r"about 10\%"], 0,
+                 say="Ten fair coin tosses. What's the chance of exactly five heads: about a quarter, about a half, "
+                     "or about a tenth?",
+                 reveal="About a quarter: two hundred and fifty-two ways out of one thousand and twenty-four. The "
+                        "most likely count is still unlikely.")
         self.paths()
         self.formula()
         self.moments()
         self.poll()
         self.tree_voiceover("So the first arrow of the family tree: <bookmark mark='t'/> add up n independent "
                             "Bernoulli trials, and you get a binomial.", 1)
+        self.answer()
 
     def card(self):
         self.chapter(1, r"Bernoulli to binomial", r"Count the successes in $n$ independent trials", lit=(1713,), part=PART, said="Chapter one. Bernoulli to binomial.")

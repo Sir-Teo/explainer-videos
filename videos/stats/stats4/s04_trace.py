@@ -8,11 +8,18 @@ from videos.stats.stats4.common import *  # noqa: F403
 class Trace(StatsScene):
     def construct(self):
         self.card()
+        self.ask(r"$A$ is $2 \times 3$ and $B$ is $3 \times 2$. Compare $\mathrm{tr}(AB)$ and $\mathrm{tr}(BA)$.",
+                 ["equal", "different in general", "$BA$ has no trace"], 0,
+                 say="A is two by three, B three by two. So A B is two by two and B A is three by three. Are their "
+                     "traces equal?",
+                 reveal="Equal. The trace is cyclic, and that one identity turns expectations of quadratic forms "
+                        "into one-line computations.")
         self.cyclic()
         self.expectation()
         self.mse()
         self.rank()
         self.genvar()
+        self.answer()
 
     def card(self):
         self.chapter(3, r"Trace tricks", r"The sum of the diagonal, \ and why it is so useful", lit=(), part=PART, said="Chapter three. Trace tricks.")

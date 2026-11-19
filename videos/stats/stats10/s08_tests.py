@@ -9,11 +9,18 @@ from videos.stats.stats10.common import *  # noqa: F403
 class Tests(StatsScene):
     def construct(self):
         self.card()
+        self.ask("Two groups with very different variances and sizes. Which $t$-test?",
+                 ["the pooled test", "Welch's test", "the paired test"], 1,
+                 say="Two independent groups of different sizes with very different spreads. Which t-test should "
+                     "you use?",
+                 reveal="Welch's. The pooled test assumes equal variances, and when the smaller group has the "
+                        "bigger spread its size breaks badly.")
         self.catalogue()
         self.paired()
         self.behrens()
         self.sizes()
         self.advice()
+        self.answer()
 
     def card(self):
         self.chapter(7, r"The everyday tests", r"$z$, \ $t$, \ paired, \ pooled, \ Welch", part=PART, said="Chapter seven. The everyday tests.")

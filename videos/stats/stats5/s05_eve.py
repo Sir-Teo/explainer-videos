@@ -8,11 +8,23 @@ from videos.stats.stats5.common import *  # noqa: F403
 class Eve(StatsScene):
     def construct(self):
         self.card()
+        self.ask("Two equal groups, each with variance 49, their means 13 apart. The total variance?",
+                 ["49", "about 91", "98"], 1,
+                 say="Women and men, equal numbers, each group with height variance forty-nine. Their means are "
+                     "thirteen centimetres apart. What's the total variance?",
+                 reveal="About ninety-one: forty-nine within, plus forty-two point two five between, the variance "
+                        "of the two means. Total variance is within plus between.")
         self.derive()
         self.galton()
         self.world()
         self.eta()
         self.on_average()
+        self.answer()
+        self.checkpoint([("Uncorrelated implies independent?", "no: $x^2$ is uncorrelated with a symmetric $x$"),
+                         ("Total variance equals?", "mean within-group variance $+$ variance of the group means")],
+                        narration="Checkpoint. Dependence and variance.",
+                        answers_narration="No: uncorrelated is not independent. And total variance is within plus "
+                                          "between.")
 
     def card(self):
         self.chapter(4, r"Eve's law", r"Total variance $=$ within $+$ between", lit=(), part=PART, said="Chapter four. Eve's law.")

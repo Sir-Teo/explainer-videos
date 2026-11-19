@@ -8,12 +8,19 @@ from videos.stats.stats4.common import *  # noqa: F403
 class Quad(StatsScene):
     def construct(self):
         self.card()
+        self.ask(r"$\mathbf z$ standard normal in $\mathbb R^n$, $P$ a projection of rank $k$. Then $\mathbf z^\top P\mathbf z$ is...",
+                 [r"$\chi^2_n$", r"$\chi^2_k$", "normal"], 1,
+                 say="A standard normal vector z in n dimensions, and a projection of rank k. What's the law of z "
+                     "transpose P z?",
+                 reveal="Chi-squared with k degrees of freedom: rotate so P keeps k coordinates, and add up their "
+                        "squares.")
         self.theorem()
         self.simulate()
         self.cochran()
         self.noncentral()
         self.independence()
         self.student()
+        self.answer()
 
     def card(self):
         self.chapter(11, r"Quadratic forms in normal vectors", r"When is $\mathbf z^\top A \mathbf z$ chi-squared?", lit=(1876,), part=PART, said="Chapter eleven. Quadratic forms in normal vectors.")

@@ -8,10 +8,22 @@ from videos.stats.stats5.common import *  # noqa: F403
 class Jacobian(StatsScene):
     def construct(self):
         self.card()
+        self.ask("Two independent standard normals. Their distance from the origin is most often near...",
+                 ["0", "1", "2"], 1,
+                 say="Two independent standard normals. The density is highest at the origin. So where is their "
+                     "distance from the origin most likely to be: near zero, near one, or near two?",
+                 reveal="Near one. The density is highest at the centre, but there's very little room there: the "
+                        "Jacobian, r, makes the distance's density r e to the minus r squared over two.")
         self.rule()
         self.convolution()
         self.ratio()
         self.polar()
+        self.answer()
+        self.checkpoint([("The fathers of the tallest sons are, on average?", "less tall: regression runs both ways"),
+                         ("Each slice of a bivariate normal is?", "normal, of one width, centred on the regression line")],
+                        narration="Checkpoint. The bivariate normal.",
+                        answers_narration="Less tall, by the same arithmetic. And each slice is normal, centred on "
+                                          "the regression line.")
 
     def card(self):
         self.chapter(9, r"Change of variables", r"Densities in many dimensions", lit=(), part=PART, said="Chapter nine. Change of variables in many dimensions.")

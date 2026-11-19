@@ -8,12 +8,18 @@ from videos.stats.stats8.common import *  # noqa: F403
 class Fisher(StatsScene):
     def construct(self):
         self.card()
+        self.ask("For normal data, the sample mean and the sample variance are...",
+                 ["independent", "positively correlated", "dependent through $n$"], 0,
+                 say="For normal data, how are the sample mean and the sample variance related?",
+                 reveal="They're independent. In Fisher's picture, one is a coordinate along the diagonal and the "
+                        "other a length perpendicular to it, and a round cloud doesn't link them.")
         self.sphere()
         self.rotation()
         self.letters()
         self.independent()
         self.angle()
         self.consequences()
+        self.answer()
 
     def card(self):
         self.chapter(3, r"Fisher's geometry", r"A sample is a point; \ its statistics are lengths and angles", lit=(1915,), part=PART, said="Chapter three. Fisher's geometry.")

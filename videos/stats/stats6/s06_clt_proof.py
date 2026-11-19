@@ -8,11 +8,18 @@ from videos.stats.stats6.common import *  # noqa: F403
 class CLTProof(StatsScene):
     def construct(self):
         self.card()
+        self.ask("The proof of the central limit theorem expands which function to second order?",
+                 ["the density", "the characteristic function", "the CDF"], 1,
+                 say="Three lines of Taylor expansion prove the central limit theorem. Expansion of what: the "
+                     "density, the characteristic function, or the CDF?",
+                 reveal="The characteristic function. Its expansion to second order turns into e to the minus t "
+                        "squared over two, the normal's.")
         self.setup_()
         self.expand()
         self.seen()
         self.assumed()
         self.names()
+        self.answer()
 
     def card(self):
         self.chapter(5, r"The central limit theorem, proved", r"Three lines of Taylor expansion", part=PART, said="Chapter five. The central limit theorem, proved.")

@@ -8,9 +8,16 @@ from videos.stats.stats1.common import *  # noqa: F403
 class Random(StatsScene):
     def construct(self):
         self.card()
+        self.ask("Draw 100 adults again and again. Each sample's average height...",
+                 ["is the same every time", "varies, piling up near the truth", "varies with no pattern"], 1,
+                 say="Last prediction of the part. Draw a hundred adults from the World, again and again. Is each "
+                     "sample's average the same, does it vary but pile up near the truth, or vary with no pattern?",
+                 reveal="It varies, and the averages pile up around the truth. That pile is the sampling "
+                        "distribution, the central object of statistics.")
         self.machine()
         self.multiples()
         self.many()
+        self.answer()
 
     def card(self):
         self.chapter(14, r"The sample is random", r"Draw again, and every summary changes", lit=(), part=PART, said="Chapter fourteen. The sample is random.")

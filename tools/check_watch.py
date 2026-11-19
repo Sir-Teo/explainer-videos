@@ -94,12 +94,13 @@ def chapter_stats(path: Path, cls: str) -> dict:
             st["fade"] += 1
         if n in MOTION_CALLS or (isinstance(c.func, ast.Attribute) and n in MOTION_METHODS):
             st["motion"] += 1
-        if n in ("predict", "checkpoint", "wrong_idea", "title", "ask") and isinstance(c.func, ast.Attribute):
-            st["predict" if n == "ask" else n] += 1
+        if n in ("predict", "checkpoint", "wrong_idea", "title", "ask", "pose_voiceover") and \
+                isinstance(c.func, ast.Attribute):
+            st["predict" if n in ("ask", "pose_voiceover") else n] += 1  # an exam's posed problem has its clock
         if n == "objectives_card":
             st["objectives"] += 1
         spoken = None
-        if n == "voiceover" and c.args:
+        if (n == "voiceover" or n.endswith("_voiceover")) and c.args:  # and the helpers that speak their first argument
             spoken = c.args[0]
         elif n in NARRATED:
             spoken = next((k.value for k in c.keywords if k.arg in ("narration", "say", "said")), None)

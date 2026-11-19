@@ -8,11 +8,17 @@ from videos.stats.stats5.common import *  # noqa: F403
 class Condition(StatsScene):
     def construct(self):
         self.card()
+        self.ask("Slice a bivariate normal at $X = x$. As $x$ moves, the slice's centre moves along...",
+                 ["a straight line", "a curve", "nowhere: it stays put"], 0,
+                 say="Slice a bivariate normal at X equals x, and slide the slice along. Where does its centre go?",
+                 reveal="Along a straight line, the regression line, and every slice has the same width. That's "
+                        "where regression is born.")
         self.theorem()
         self.proof()
         self.bivariate()
         self.galton()
         self.precision()
+        self.answer()
 
     def card(self):
         self.chapter(6, r"Conditioning a Gaussian", r"Where regression is born", lit=(1886,), part=PART, said="Chapter six. Conditioning a Gaussian.")

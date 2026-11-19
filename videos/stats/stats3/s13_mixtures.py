@@ -8,12 +8,19 @@ from videos.stats.stats3.common import *  # noqa: F403
 class Mixtures(StatsScene, TreeMixin):
     def construct(self):
         self.card()
+        self.ask("Poisson counts whose rate varies from unit to unit. Their variance is...",
+                 ["equal to the mean", "larger than the mean", "smaller than the mean"], 1,
+                 say="Poisson counts, but each unit has its own rate. Is the variance equal to the mean, larger, or "
+                     "smaller?",
+                 reveal="Larger. Variation in the rate adds to the Poisson noise: overdispersion. A gamma rate "
+                        "makes the counts negative binomial.")
         self.betabin()
         self.total_variance()
         self.gamma_poisson()
         self.scale_mixture()
         self.tree_voiceover("The last two arrows are mixtures: <bookmark mark='t'/> a Poisson whose rate is gamma is "
                              "negative binomial, and a binomial whose success chance is beta is beta-binomial.", 12)
+        self.answer()
 
     def card(self):
         self.chapter(12, r"Mixtures and hierarchies", r"When the parameter is random too", lit=(), part=PART, said="Chapter twelve. Mixtures and hierarchies.")

@@ -10,6 +10,19 @@ from videos.stats.stats9.common import *  # noqa: F403
 class Likelihood(StatsScene):
     def construct(self):
         self.card()
+        self.wrong_idea(r"The likelihood is the probability that $\theta$ is the true value",
+                        r"It's the probability of the data, seen as a function of $\theta$",
+                        narration="A very common reading: the likelihood of theta is the probability that theta is "
+                                  "the true value.",
+                        right_narration="No. It's the probability of the data, for each value of theta. It doesn't "
+                                        "add up to one over theta. Turning it into a probability for theta takes a "
+                                        "prior, and that's Bayes.")
+        self.ask(r"The MLE of $\sigma^2$ is 4. The MLE of $\sigma$ is...",
+                 ["2", "undetermined", "4"], 0,
+                 say="The maximum likelihood estimate of a variance is four. What's the maximum likelihood estimate "
+                     "of the standard deviation?",
+                 reveal="Two. The likelihood ranks distributions, not their labels: relabel the parameter and the "
+                        "same distribution wins. That's invariance.")
         self.fisher()
         self.flip()
         self.sharpen()
@@ -17,6 +30,11 @@ class Likelihood(StatsScene):
         self.horsekicks()
         self.tanks()
         self.invariance()
+        self.answer()
+        self.checkpoint([("The tank estimate from the maximum $m$ of $k$ serials?", "$m(1 + 1/k) - 1$"),
+                         (r"Invariance: if $\hat\sigma^2 = 4$, then $\hat\sigma$?", "2")],
+                        narration="Checkpoint. Recipes.",
+                        answers_narration="M times one plus one over k, minus one. And two.")
 
     def card(self):
         self.chapter(3, r"Maximum likelihood", r"Which parameter makes the data least surprising?", lit=(1922,), part=PART, said="Chapter three. Maximum likelihood.")

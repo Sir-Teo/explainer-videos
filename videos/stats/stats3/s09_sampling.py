@@ -10,6 +10,12 @@ CHI_COLS = {"1": "#9FB4C7", "2": "#7BD88F", "3": "#F2C14E", "5": "#FF9F5A"}
 class Sampling(StatsScene, TreeMixin):
     def construct(self):
         self.card()
+        self.ask("Student's $t$ with one degree of freedom is...",
+                 ["the normal", "the Cauchy", "chi-squared"], 1,
+                 say="A normal divided by the root of a chi-squared over its degrees of freedom gives Student's t. "
+                     "With one degree of freedom, which famous distribution is it?",
+                 reveal="The Cauchy, whose mean doesn't exist. With infinitely many degrees of freedom, t becomes "
+                        "the normal.")
         self.chisq()
         self.student()
         self.fisher()
@@ -18,6 +24,7 @@ class Sampling(StatsScene, TreeMixin):
                             "a special gamma; a normal over the root of a chi-squared gives Student's t; a ratio of "
                             "chi-squareds gives F; t with one degree of freedom is Cauchy, and with infinitely many, "
                             "the normal.", 8)
+        self.answer()
 
     def card(self):
         self.chapter(8, r"The sampling family", r"The distributions that statistics itself creates", lit=(1908,), part=PART, said="Chapter eight. The sampling family.")

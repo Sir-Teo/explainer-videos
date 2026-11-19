@@ -332,6 +332,21 @@ def _part(timeline) -> int | None:
     return None
 
 
+ROMAN = {"I": 1, "V": 5, "X": 10}
+
+
+def chapter_number(title: str) -> int | None:
+    """A numbered chapter's number ("7. The bootstrap" -> 7; an exam section, "III. Testing" -> 3), else None."""
+    m = re.match(r"\s*(\d+)\.\s", title)
+    if m:
+        return int(m.group(1))
+    m = re.match(r"\s*([IVX]+)\.\s", title)
+    if not m:
+        return None
+    vals = [ROMAN[c] for c in m.group(1)]
+    return sum(-v if i + 1 < len(vals) and v < vals[i + 1] else v for i, v in enumerate(vals))
+
+
 COUNTDOWN = re.compile(r"countdown(?::(\d+(?:\.\d+)?))?$")
 
 
@@ -356,10 +371,9 @@ def cues(timeline, cache: Path, part: int | None = None) -> list[dict]:
     tag = f"p{part or 0}"
     for k, s in enumerate(timeline):
         busy = []
-        m = re.match(r"\s*(\d+)\.", s.get("chapter") or "")
+        n = chapter_number(s.get("chapter") or "")
         head = 0.0
-        if m:
-            n = int(m.group(1))
+        if n is not None:
             d = cue(f"sting{n % 16}_s{v}", sting(n, part), s["start"] + 0.05)
             head = d + 0.05
         for mk in s.get("marks", []):

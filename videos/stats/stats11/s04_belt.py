@@ -9,11 +9,18 @@ from videos.stats.stats11.common import *  # noqa: F403
 class Belt(StatsScene):
     def construct(self):
         self.card()
+        self.ask(r"A 95\% confidence set contains every $\theta_0$ that...",
+                 [r"a 5\% test would reject", r"a 5\% test would not reject", "maximizes the likelihood"], 1,
+                 say="There's a second way to build an interval. Run a five percent test of every candidate value. "
+                     "Which values go in the confidence set?",
+                 reveal="Every value the test would not reject. Invert a test and you get an interval exactly as "
+                        "good as the test.")
         self.duality()
         self.belt()
         self.wald_belt()
         self.curve()
         self.family()
+        self.answer()
 
     def card(self):
         self.chapter(3, r"Inverting tests", r"A confidence set contains every value a test would not reject", part=PART, said="Chapter three. Inverting tests.")

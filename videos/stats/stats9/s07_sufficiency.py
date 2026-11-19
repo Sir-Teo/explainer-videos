@@ -13,6 +13,12 @@ def coin_row(seq, r=0.16, buff=0.1):
 class Sufficiency(StatsScene):
     def construct(self):
         self.card()
+        self.ask("Five tosses, two heads. Given the count, the order tells you about $p$...",
+                 ["something", "nothing"], 1,
+                 say="Five tosses of a coin, two heads. Once you know there were two heads, does the order they "
+                     "came in tell you anything more about the chance of heads?",
+                 reveal="Nothing. All ten orders are equally likely whatever p is. The count is sufficient: it "
+                        "carries all the information.")
         self.coins()
         self.definition()
         self.regenerate()
@@ -20,6 +26,11 @@ class Sufficiency(StatsScene):
         self.catalogue()
         self.tanks()
         self.minimal()
+        self.answer()
+        self.checkpoint([(r"The MLE of $\theta$ for Uniform$(0, \theta)$?", "the sample maximum"),
+                         ("A sufficient statistic for $p$ in $n$ tosses?", "the number of heads")],
+                        narration="Checkpoint. Likelihood and sufficiency.",
+                        answers_narration="The largest observation. And the count of heads.")
 
     def card(self):
         self.chapter(6, r"Sufficiency", r"Which part of the data carries the information?", lit=(1922,), part=PART, said="Chapter six. Sufficiency.")

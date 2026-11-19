@@ -11,11 +11,17 @@ PAGE_POS = [(-1.6, 1.6), (-3.4, 0.0), (-1.2, -0.6), (-3.6, -2.2), (0.8, -2.0), (
 class Stationary(StatsScene):
     def construct(self):
         self.card()
+        self.ask("A chain that strictly alternates between two states. Its distribution...",
+                 ["converges", "oscillates forever"], 1,
+                 say="A chain that strictly alternates between two states. Does its distribution converge?",
+                 reveal="No, it oscillates: the chain is periodic. The cure is a little laziness, staying put with "
+                        "chance a half.")
         self.eigen()
         self.balance()
         self.walk()
         self.pagerank()
         self.periodic()
+        self.answer()
 
     def card(self):
         self.chapter(9, r"Stationary distributions", r"Where the probability comes to rest", part=PART, said="Chapter nine. Stationary distributions.")

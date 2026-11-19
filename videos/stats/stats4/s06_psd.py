@@ -8,11 +8,25 @@ from videos.stats.stats4.common import *  # noqa: F403
 class PSD(StatsScene):
     def construct(self):
         self.card()
+        self.wrong_idea("Any symmetric table of correlations between $-1$ and $1$ is a correlation matrix",
+                        "It must also be positive semidefinite: three variables can't all correlate at $-0.9$",
+                        narration="A tempting idea: write any symmetric table of numbers between minus one and one "
+                                  "with ones on the diagonal, and you have a correlation matrix.",
+                        right_narration="Not quite. It must be positive semidefinite. Three variables can't all "
+                                        "correlate at minus point nine: if x opposes y and z, then y and z move "
+                                        "together.")
+        self.ask("The eigenvalues of a covariance matrix are always...",
+                 ["positive or zero", "any real numbers", "at most one"], 0,
+                 say="What can the eigenvalues of a covariance matrix be: only positive or zero, any real numbers, "
+                     "or at most one?",
+                 reveal="Positive or zero. Each is the variance of the data along an axis, and no variance is "
+                        "negative.")
         self.definition()
         self.nearest()
         self.cholesky()
         self.loewner()
         self.linear()
+        self.answer()
 
     def card(self):
         self.chapter(5, r"Positive semidefinite matrices", r"The matrices that can be covariances", lit=(), part=PART, said="Chapter five. Positive semidefinite matrices.")

@@ -7,11 +7,22 @@ from videos.stats.stats11.common import *  # noqa: F403
 class Board(StatsScene):
     def construct(self):
         self.card()
+        self.ask(r"Coverage 94.6\% in 10,000 replications. The verdict?",
+                 ["kept", "broken", "conservative"], 0,
+                 say="The Coverage Board runs ten thousand replications, and an interval covers ninety-four point "
+                     "six percent of the time. Kept, broken, or conservative?",
+                 reveal="Kept. The Monte Carlo error is about point two points, and ninety-four point six is within "
+                        "two of them of ninety-five.")
         self.protocol()
         self.mcse()
         self.replications()
         self.rows()
         self.lessons()
+        self.answer()
+        self.checkpoint([("Where the next observation falls needs?", "a prediction interval, not a confidence interval"),
+                         (r"Coverage 94.6\% in 10,000 runs: kept or broken?", "kept: within two Monte Carlo SEs")],
+                        narration="Checkpoint. Promises and their checks.",
+                        answers_narration="A prediction interval. And kept.")
 
     def card(self):
         self.chapter(11, r"The Coverage Board, \ formally", r"How every promise in the series is checked", part=PART, said="Chapter eleven. The Coverage Board, formally.")

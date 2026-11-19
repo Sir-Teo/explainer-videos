@@ -8,12 +8,19 @@ from videos.stats.stats10.common import *  # noqa: F403
 class Misreadings(StatsScene):
     def construct(self):
         self.card()
+        self.ask("$p = 0.03$. The probability that the null hypothesis is true is...",
+                 [r"3\%", r"97\%", "not given by the p-value"], 2,
+                 say="A study reports p equals point zero three. What's the probability that the null hypothesis is "
+                     "true: three percent, ninety-seven percent, or something the p-value doesn't tell you?",
+                 reveal="The p-value doesn't tell you. It's a probability about the data assuming the null, not "
+                        "about the null given the data.")
         self.not_posterior()
         self.icons()
         self.dance()
         self.size_not_effect()
         self.difference()
         self.asa()
+        self.answer()
 
     def card(self):
         self.chapter(11, r"What $p$-values are not", r"Six misreadings, \ and a statement", lit=(2016,), part=PART, said="Chapter eleven. What p-values are not.")

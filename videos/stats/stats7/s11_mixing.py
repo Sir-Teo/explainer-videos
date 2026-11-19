@@ -15,11 +15,22 @@ def card(k, w=0.42, h=0.62):
 class Mixing(StatsScene):
     def construct(self):
         self.card_()
+        self.ask("How many riffle shuffles mix a 52-card deck?",
+                 ["3", "7", "52"], 1,
+                 say="How many riffle shuffles does it take to mix a deck of fifty-two cards: three, seven, or "
+                     "fifty-two?",
+                 reveal="About seven. Bayer and Diaconis showed the distance from random stays near one, then falls "
+                        "off a cliff around seven.")
         self.riffle()
         self.rising()
         self.seven()
         self.check()
         self.cutoff()
+        self.answer()
+        self.checkpoint([("A periodic chain's cure?", "laziness: stay put with chance one half"),
+                         ("Riffle shuffles to mix 52 cards?", "about seven")],
+                        narration="Checkpoint. Chains.",
+                        answers_narration="Laziness. And about seven shuffles.")
 
     def card_(self):
         self.chapter(10, r"Mixing: \ seven shuffles", r"How long until a chain forgets where it started?", lit=(1992,), part=PART, said="Chapter ten. Mixing, and seven shuffles.")

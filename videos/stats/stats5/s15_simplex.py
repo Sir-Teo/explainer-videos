@@ -18,11 +18,23 @@ def to_xy(p, corners):
 class Simplex(StatsScene):
     def construct(self):
         self.card()
+        self.ask("Three shares that always sum to one. Their correlations are...",
+                 ["unconstrained", "negative on average", "zero"], 1,
+                 say="Three shares of a vote, always summing to one. What does the constraint do to their "
+                     "correlations?",
+                 reveal="It forces them negative on average: if one share rises, the others must fall. Pearson "
+                        "called it spurious correlation in 1897.")
         self.multinomial()
         self.dirichlet()
         self.gammas()
         self.conjugate()
         self.spurious()
+        self.answer()
+        self.checkpoint([("Same correlation, same tail risk?", "no: the copula decides the tails"),
+                         (r"P\'olya's urn: the long-run red share?", "random: uniform on $(0, 1)$")],
+                        narration="Checkpoint. Dependence beyond correlation.",
+                        answers_narration="No: the copula decides. And the urn's share settles at a uniform random "
+                                          "value.")
 
     def card(self):
         self.chapter(14, r"The simplex", r"Distributions over proportions", lit=(), part=PART, said="Chapter fourteen. The simplex.")

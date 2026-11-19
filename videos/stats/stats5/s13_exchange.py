@@ -23,11 +23,19 @@ def urn_mob(r, b, center, w=1.6, h=2.0) -> VGroup:
 class Exchange(StatsScene):
     def construct(self):
         self.card()
+        self.ask(r"P\'olya's urn: draw, return with another of the same colour. The red share in the long run...",
+                 ["settles near $1/2$", "settles at a random value", "keeps swinging"], 1,
+                 say="Pólya's urn. One red ball, one blue. Draw one, put it back with another of the same colour, "
+                     "and repeat. In the long run, does the red share settle near a half, settle at a random value, "
+                     "or keep swinging?",
+                 reveal="It settles, but at a random value, uniform between zero and one. The draws are "
+                        "exchangeable, and de Finetti's theorem says that's exactly the picture.")
         self.machine()
         self.limits()
         self.exchangeable()
         self.definetti()
         self.finite()
+        self.answer()
 
     def card(self):
         self.chapter(12, r"Exchangeability", r"P\'olya's urn, \ and why de Finetti needed it", lit=(1931,), part=PART, said="Chapter twelve. Exchangeability.")

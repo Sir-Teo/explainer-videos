@@ -12,12 +12,23 @@ ITEMS = [("mean", r"mean height", S.EST, "{:.1f}"), ("sd", r"SD of height", S.LI
 class PlugIn(StatsScene):
     def construct(self):
         self.card()
+        self.ask("The bootstrap estimates a standard error by...",
+                 ["a formula", "resampling the sample with replacement", "collecting more data"], 1,
+                 say="Plug in the sample for the population, and you can estimate almost anything. How does the "
+                     "bootstrap estimate a standard error?",
+                 reveal="By resampling the sample with replacement and recomputing the estimate each time. The "
+                        "spread of those recomputations estimates the standard error.")
         self.functional()
         self.paths()
         self.fisherz()
         self.consistent()
         self.maximum()
         self.bootstrap()
+        self.answer()
+        self.checkpoint([(r"$T^2$, for $T \sim t_k$?", "$F_{1,k}$"),
+                         ("Mean squared error equals?", "variance $+$ bias$^2$")],
+                        narration="Checkpoint. The normal family and estimators.",
+                        answers_narration="F one, k. And mean squared error is variance plus squared bias.")
 
     def card(self):
         self.chapter(8, r"Consistency and plug-in", r"Estimate a population feature by the same feature of the sample", part=PART, said="Chapter eight. Consistency, and the plug-in principle.")
