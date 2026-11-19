@@ -5,7 +5,7 @@ import numpy as np
 from videos.stats.stats6.common import *  # noqa: F403
 
 
-class Inequalities(VoiceoverScene):
+class Inequalities(StatsScene):
     def construct(self):
         self.card()
         self.markov_picture()
@@ -15,10 +15,7 @@ class Inequalities(VoiceoverScene):
         self.jensen()
 
     def card(self):
-        card = chapter_card(1, r"Markov, Chebyshev, Jensen", r"What does a mean alone guarantee?", lit=(1867,), part=PART)
-        with self.voiceover("Chapter one. Three inequalities."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(1, r"Markov, Chebyshev, Jensen", r"What does a mean alone guarantee?", lit=(1867,), part=PART, said="Chapter one. Three inequalities.")
 
     def markov_picture(self):
         A = axes([0, 6], [0, 6], x_length=5.4, y_length=4.6, xlabel=r"$x$", xticks=[0, 2, 4, 6], yticks=[0, 2, 4, 6],

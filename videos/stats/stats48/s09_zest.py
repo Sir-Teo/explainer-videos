@@ -3,7 +3,7 @@ from __future__ import annotations
 from videos.stats.stats48.common import *  # noqa: F403
 
 
-class ZEstimators(VoiceoverScene):
+class ZEstimators(StatsScene):
     def construct(self):
         self.card()
         self.theorem()
@@ -13,10 +13,7 @@ class ZEstimators(VoiceoverScene):
         self.lesson()
 
     def card(self):
-        card = chapter_card(8, r"Z-estimators with nuisance parameters", r"When estimating something else first costs, \ and when it does not", part=PART)
-        with self.voiceover("Chapter eight. Z-estimators with nuisance parameters: when estimating something else first costs, and when it does not."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(8, r"Z-estimators with nuisance parameters", r"When estimating something else first costs, \ and when it does not", part=PART, said="Chapter eight. Z-estimators with nuisance parameters: when estimating something else first costs, and when it does not.")
 
     def theorem(self):
         rows = [

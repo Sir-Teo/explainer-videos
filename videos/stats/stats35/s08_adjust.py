@@ -3,7 +3,7 @@ from __future__ import annotations
 from videos.stats.stats35.common import *  # noqa: F403
 
 
-class Adjust(VoiceoverScene):
+class Adjust(StatsScene):
     def construct(self):
         self.card()
         self.ancova_()
@@ -15,10 +15,7 @@ class Adjust(VoiceoverScene):
         self.rules()
 
     def card(self):
-        card = chapter_card(7, r"Adjustment", r"Freedman's critique and Lin's answer", lit=(2008, 2013), part=PART)
-        with self.voiceover("Chapter seven. Regression adjustment."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(7, r"Adjustment", r"Freedman's critique and Lin's answer", lit=(2008, 2013), part=PART, said="Chapter seven. Regression adjustment.")
 
     def ancova_(self):
         rows = [

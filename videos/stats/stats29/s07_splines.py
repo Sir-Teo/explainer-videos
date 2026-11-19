@@ -5,7 +5,7 @@ import numpy as np
 from videos.stats.stats29.common import *  # noqa: F403
 
 
-class Splines(VoiceoverScene):
+class Splines(StatsScene):
     def construct(self):
         self.card()
         self.problem()
@@ -16,10 +16,7 @@ class Splines(VoiceoverScene):
         self.ridge()
 
     def card(self):
-        card = chapter_card(6, r"Smoothing splines", r"The smoothest curve that fits", lit=(1967,), part=PART)
-        with self.voiceover("Chapter six. Smoothing splines."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(6, r"Smoothing splines", r"The smoothest curve that fits", lit=(1967,), part=PART, said="Chapter six. Smoothing splines.")
 
     def problem(self):
         rows = [

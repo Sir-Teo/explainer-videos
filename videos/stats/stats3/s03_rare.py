@@ -5,7 +5,7 @@ import numpy as np
 from videos.stats.stats3.common import *  # noqa: F403
 
 
-class Rare(VoiceoverScene, TreeMixin):
+class Rare(StatsScene, TreeMixin):
     def construct(self):
         self.card()
         self.derive()
@@ -16,11 +16,7 @@ class Rare(VoiceoverScene, TreeMixin):
                             "success, n times p held at lambda, becomes a Poisson.", 2)
 
     def card(self):
-        card = chapter_card(2, r"The law of rare events", r"Many chances, each tiny: \ why horse kicks are Poisson",
-                            lit=(1898,), part=PART)
-        with self.voiceover("Chapter two. The law of rare events."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(2, r"The law of rare events", r"Many chances, each tiny: \ why horse kicks are Poisson", lit=(1898,), part=PART, said="Chapter two. The law of rare events.")
 
     def derive(self):
         rows = [

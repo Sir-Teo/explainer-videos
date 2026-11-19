@@ -5,7 +5,7 @@ import numpy as np
 from videos.stats.stats58.common import *  # noqa: F403
 
 
-class Bandits(LectureMixin, VoiceoverScene):
+class Bandits(LectureMixin, StatsScene):
     def construct(self):
         self.card_voiceover("Chapter eleven. Bandits and adaptive designs: choosing what to collect as the data arrive.",
                        11, r"Bandits and adaptive designs", r"Learn and earn at once", lit=(1933,))

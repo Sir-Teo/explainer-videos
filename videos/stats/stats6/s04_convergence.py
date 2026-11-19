@@ -12,7 +12,7 @@ def typewriter(n: int) -> tuple[float, float]:
     return j / 2 ** k, (j + 1) / 2 ** k
 
 
-class Convergence(VoiceoverScene):
+class Convergence(StatsScene):
     def construct(self):
         self.card()
         self.definitions()
@@ -22,10 +22,7 @@ class Convergence(VoiceoverScene):
         self.hierarchy()
 
     def card(self):
-        card = chapter_card(3, r"Kinds of convergence", r"What does it mean for a random quantity to settle?", part=PART)
-        with self.voiceover("Chapter three. What it means for random things to converge."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(3, r"Kinds of convergence", r"What does it mean for a random quantity to settle?", part=PART, said="Chapter three. What it means for random things to converge.")
 
     def definitions(self):
         dfs = VGroup(

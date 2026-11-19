@@ -5,7 +5,7 @@ import numpy as np
 from videos.stats.stats25.common import *  # noqa: F403
 
 
-class SmallArea(VoiceoverScene):
+class SmallArea(StatsScene):
     def construct(self):
         self.card()
         self.problem()
@@ -15,10 +15,7 @@ class SmallArea(VoiceoverScene):
         self.practice()
 
     def card(self):
-        card = chapter_card(11, r"Small areas", r"A survey too thin for every town", lit=(1979,), part=PART)
-        with self.voiceover("Chapter eleven. Small-area estimation."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(11, r"Small areas", r"A survey too thin for every town", lit=(1979,), part=PART, said="Chapter eleven. Small-area estimation.")
 
     def problem(self):
         d = load("smallarea")

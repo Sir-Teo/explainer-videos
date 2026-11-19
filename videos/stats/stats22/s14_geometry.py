@@ -23,7 +23,7 @@ def fisher_length(mu, sg):
     return float(np.sum(np.sqrt(dm ** 2 + 2 * ds ** 2) / s))
 
 
-class Geometry(VoiceoverScene):
+class Geometry(StatsScene):
     def construct(self):
         self.card()
         self.metric()
@@ -33,10 +33,7 @@ class Geometry(VoiceoverScene):
         self.jeffreys()
 
     def card(self):
-        card = chapter_card(13, r"Information geometry, \ a glimpse", r"Distance measured in standard errors", lit=(1945,), part=PART)
-        with self.voiceover("Chapter thirteen. Information geometry, a glimpse."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(13, r"Information geometry, \ a glimpse", r"Distance measured in standard errors", lit=(1945,), part=PART, said="Chapter thirteen. Information geometry, a glimpse.")
 
     def metric(self):
         rows = [

@@ -5,7 +5,7 @@ import numpy as np
 from videos.stats.stats62.common import *  # noqa: F403
 
 
-class Surrogates(LectureMixin, VoiceoverScene):
+class Surrogates(LectureMixin, StatsScene):
     def construct(self):
         self.card_voiceover("Chapter nine. Surrogates and long-term effects: answering a ten-year question in one year.", 9,
                             r"Surrogates", r"Short-term proxies for long-term effects", lit=(2019,))

@@ -5,7 +5,7 @@ import numpy as np
 from videos.stats.stats12.common import *  # noqa: F403
 
 
-class Fallacy(VoiceoverScene):
+class Fallacy(StatsScene):
     def construct(self):
         self.card()
         self.galton1886()
@@ -15,10 +15,7 @@ class Fallacy(VoiceoverScene):
         self.secrist()
 
     def card(self):
-        card = chapter_card(11, r"The regression fallacy", r"Part 5's regression to the mean, \ revisited", lit=(1886,), part=PART)
-        with self.voiceover("Chapter eleven. The regression fallacy."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(11, r"The regression fallacy", r"Part 5's regression to the mean, \ revisited", lit=(1886,), part=PART, said="Chapter eleven. The regression fallacy.")
 
     def both_ways(self):
         d = load("fallacy")

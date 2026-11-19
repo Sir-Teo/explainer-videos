@@ -5,7 +5,7 @@ import numpy as np
 from videos.stats.stats59.common import *  # noqa: F403
 
 
-class Ridge(LectureMixin, VoiceoverScene):
+class Ridge(LectureMixin, StatsScene):
     def construct(self):
         self.card_voiceover("Chapter three. Exact ridge and ridgeless risk, and double descent derived.", 3,
                             r"Exact ridge and ridgeless risk", r"Double descent, \ derived", lit=(2018, 2022))

@@ -5,7 +5,7 @@ import numpy as np
 from videos.stats.stats57.common import *  # noqa: F403
 
 
-class Beyond(VoiceoverScene):
+class Beyond(StatsScene):
     def construct(self):
         self.card()
         self.weighted()
@@ -17,10 +17,7 @@ class Beyond(VoiceoverScene):
         self.board()
 
     def card(self):
-        card = chapter_card(5, r"Beyond exchangeability", r"When the future does not look like the past", lit=(2019, 2023), part=PART)
-        with self.voiceover("Chapter five. Beyond exchangeability: when the future does not look like the past."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(5, r"Beyond exchangeability", r"When the future does not look like the past", lit=(2019, 2023), part=PART, said="Chapter five. Beyond exchangeability: when the future does not look like the past.")
 
     def weighted(self):
         rows = [

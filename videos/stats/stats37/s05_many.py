@@ -5,7 +5,7 @@ import numpy as np
 from videos.stats.stats37.common import *  # noqa: F403
 
 
-class Many(VoiceoverScene):
+class Many(StatsScene):
     def construct(self):
         self.card()
         self.thirty()
@@ -16,11 +16,7 @@ class Many(VoiceoverScene):
         self.mr_plot()
 
     def card(self):
-        card = chapter_card(4, r"Many instruments; \ Mendelian randomization", r"More instruments, \ more bias",
-                            lit=(1995, 2003, 2015), part=PART)
-        with self.voiceover("Chapter four. Many instruments, and Mendelian randomization."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(4, r"Many instruments; \ Mendelian randomization", r"More instruments, \ more bias", lit=(1995, 2003, 2015), part=PART, said="Chapter four. Many instruments, and Mendelian randomization.")
 
     def thirty(self):
         d = load("many")

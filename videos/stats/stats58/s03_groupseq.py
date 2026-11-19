@@ -5,7 +5,7 @@ import numpy as np
 from videos.stats.stats58.common import *  # noqa: F403
 
 
-class GroupSequential(LectureMixin, VoiceoverScene):
+class GroupSequential(LectureMixin, StatsScene):
     def construct(self):
         self.card_voiceover("Chapter two. Group-sequential theory: a few planned looks, in the Brownian picture, and what "
                        "stopping does to an estimate.", 2, r"Group-sequential theory", r"A few planned looks", lit=(1977, 1979, 1983))

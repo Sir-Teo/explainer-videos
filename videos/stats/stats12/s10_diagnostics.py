@@ -5,7 +5,7 @@ import numpy as np
 from videos.stats.stats12.common import *  # noqa: F403
 
 
-class Diagnostics(VoiceoverScene):
+class Diagnostics(StatsScene):
     def construct(self):
         self.card()
         self.quartet()
@@ -17,10 +17,7 @@ class Diagnostics(VoiceoverScene):
         self.qq()
 
     def card(self):
-        card = chapter_card(9, r"Diagnostics", r"Look at the data, \ not just the fit", lit=(1973,), part=PART)
-        with self.voiceover("Chapter nine. Diagnostics."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(9, r"Diagnostics", r"Look at the data, \ not just the fit", lit=(1973,), part=PART, said="Chapter nine. Diagnostics.")
 
     def quartet(self):
         d = load("anscombe")

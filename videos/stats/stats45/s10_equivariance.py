@@ -5,7 +5,7 @@ import numpy as np
 from videos.stats.stats45.common import *  # noqa: F403
 
 
-class Equivariance(VoiceoverScene):
+class Equivariance(StatsScene):
     def construct(self):
         self.card()
         self.location()
@@ -16,10 +16,7 @@ class Equivariance(VoiceoverScene):
         self.haar()
 
     def card(self):
-        card = chapter_card(9, r"Equivariance", r"Rules that respect the symmetry of the problem", lit=(1939,), part=PART)
-        with self.voiceover("Chapter nine. Equivariance: rules that respect the symmetry of the problem."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(9, r"Equivariance", r"Rules that respect the symmetry of the problem", lit=(1939,), part=PART, said="Chapter nine. Equivariance: rules that respect the symmetry of the problem.")
 
     def location(self):
         rows = [

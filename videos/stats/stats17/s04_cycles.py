@@ -6,7 +6,7 @@ from explainer.stats.kit import ts as T
 from videos.stats.stats17.common import *  # noqa: F403
 
 
-class Cycles(VoiceoverScene):
+class Cycles(StatsScene):
     def construct(self):
         self.card()
         self.complex_roots()
@@ -17,10 +17,7 @@ class Cycles(VoiceoverScene):
         self.lesson()
 
     def card(self):
-        card = chapter_card(3, r"Pseudo-cycles", r"Rhythm without a clock", part=PART)
-        with self.voiceover("Chapter three. Pseudo-cycles."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(3, r"Pseudo-cycles", r"Rhythm without a clock", part=PART, said="Chapter three. Pseudo-cycles.")
 
     def complex_roots(self):
         p = T.ar2_period(1.3, -0.6)

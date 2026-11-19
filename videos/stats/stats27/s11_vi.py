@@ -5,7 +5,7 @@ import numpy as np
 from videos.stats.stats27.common import *  # noqa: F403
 
 
-class VI(VoiceoverScene):
+class VI(StatsScene):
     def construct(self):
         self.card()
         self.elbo()
@@ -16,10 +16,7 @@ class VI(VoiceoverScene):
         self.check()
 
     def card(self):
-        card = chapter_card(10, r"Variational inference", r"Replace integration by optimization", lit=(1999,), part=PART)
-        with self.voiceover("Chapter ten. Variational inference."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(10, r"Variational inference", r"Replace integration by optimization", lit=(1999,), part=PART, said="Chapter ten. Variational inference.")
 
     def elbo(self):
         rows = [

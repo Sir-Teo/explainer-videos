@@ -6,7 +6,7 @@ from explainer.stats.board import coverage_board, load_all
 from videos.stats.stats26.common import *  # noqa: F403
 
 
-class Workflow(VoiceoverScene):
+class Workflow(StatsScene):
     def construct(self):
         self.card()
         self.steps()
@@ -17,10 +17,7 @@ class Workflow(VoiceoverScene):
         self.sensitivity()
 
     def card(self):
-        card = chapter_card(11, r"Workflow", r"Building a model you can defend", lit=(2020,), part=PART)
-        with self.voiceover("Chapter eleven. The Bayesian workflow."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(11, r"Workflow", r"Building a model you can defend", lit=(2020,), part=PART, said="Chapter eleven. The Bayesian workflow.")
 
     def steps(self):
         items = [

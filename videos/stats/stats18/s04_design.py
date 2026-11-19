@@ -6,7 +6,7 @@ from explainer.stats.world import World
 from videos.stats.stats18.common import *  # noqa: F403
 
 
-class DesignBased(VoiceoverScene):
+class DesignBased(StatsScene):
     def construct(self):
         self.card()
         self.history()
@@ -17,10 +17,7 @@ class DesignBased(VoiceoverScene):
         self.contrast()
 
     def card(self):
-        card = chapter_card(3, r"Design-based inference", r"The randomness is in the selection", lit=(1934,), part=PART)
-        with self.voiceover("Chapter three. Design-based inference."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(3, r"Design-based inference", r"The randomness is in the selection", lit=(1934,), part=PART, said="Chapter three. Design-based inference.")
 
     def history(self):
         rows = fit_rows(VGroup(

@@ -5,7 +5,7 @@ import numpy as np
 from videos.stats.stats56.common import *  # noqa: F403
 
 
-class Carving(VoiceoverScene):
+class Carving(StatsScene):
     def construct(self):
         self.card()
         self.idea()
@@ -16,10 +16,7 @@ class Carving(VoiceoverScene):
         self.carving()
 
     def card(self):
-        card = chapter_card(4, r"Randomization and carving", r"Trading a little noise for a lot of power", lit=(2018,), part=PART)
-        with self.voiceover("Chapter four. Randomization and carving: trading a little noise for a lot of power."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(4, r"Randomization and carving", r"Trading a little noise for a lot of power", lit=(2018,), part=PART, said="Chapter four. Randomization and carving: trading a little noise for a lot of power.")
 
     def idea(self):
         rows = [

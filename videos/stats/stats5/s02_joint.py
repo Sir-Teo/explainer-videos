@@ -5,7 +5,7 @@ import numpy as np
 from videos.stats.stats5.common import *  # noqa: F403
 
 
-class Joint(VoiceoverScene):
+class Joint(StatsScene):
     def construct(self):
         self.card()
         self.discrete()
@@ -15,10 +15,7 @@ class Joint(VoiceoverScene):
         self.dice()
 
     def card(self):
-        card = chapter_card(1, r"Joint, marginal, conditional", r"Three ways to read one table", lit=(1886,), part=PART)
-        with self.voiceover("Chapter one. Joint, marginal, conditional."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(1, r"Joint, marginal, conditional", r"Three ways to read one table", lit=(1886,), part=PART, said="Chapter one. Joint, marginal, conditional.")
 
     def discrete(self):
         d = load("galton")

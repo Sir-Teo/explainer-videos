@@ -5,7 +5,7 @@ import numpy as np
 from videos.stats.stats2.common import *  # noqa: F403
 
 
-class Bayes(VoiceoverScene):
+class Bayes(StatsScene):
     def construct(self):
         self.card()
         self.theorem()
@@ -16,11 +16,7 @@ class Bayes(VoiceoverScene):
         self.second_test()
 
     def card(self):
-        card = chapter_card(6, r"Bayes' theorem", r"From the chance of the evidence to the chance of the cause",
-                            lit=(1763,), part=PART)
-        with self.voiceover("Chapter six. Bayes' theorem."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(6, r"Bayes' theorem", r"From the chance of the evidence to the chance of the cause", lit=(1763,), part=PART, said="Chapter six. Bayes' theorem.")
 
     def theorem(self):
         hc = history_card(1763, r"Thomas Bayes, \ a Presbyterian minister (d.\ 1761)", r"``An essay towards solving "

@@ -5,7 +5,7 @@ import numpy as np
 from videos.stats.stats31.common import *  # noqa: F403
 
 
-class Wishart(VoiceoverScene):
+class Wishart(StatsScene):
     def construct(self):
         self.card()
         self.definition()
@@ -17,10 +17,7 @@ class Wishart(VoiceoverScene):
         self.mp()
 
     def card(self):
-        card = chapter_card(2, r"Wishart", r"The distribution of a covariance matrix", lit=(1928,), part=PART)
-        with self.voiceover("Chapter two. The Wishart distribution."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(2, r"Wishart", r"The distribution of a covariance matrix", lit=(1928,), part=PART, said="Chapter two. The Wishart distribution.")
 
     def definition(self):
         rows = [

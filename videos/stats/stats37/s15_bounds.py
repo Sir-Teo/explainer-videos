@@ -5,7 +5,7 @@ import numpy as np
 from videos.stats.stats37.common import *  # noqa: F403
 
 
-class Bounds(VoiceoverScene):
+class Bounds(StatsScene):
     def construct(self):
         self.card()
         self.manski_idea()
@@ -16,11 +16,7 @@ class Bounds(VoiceoverScene):
         self.law()
 
     def card(self):
-        card = chapter_card(14, r"Bounds", r"When no design identifies the answer, \ say what the data rule out",
-                            lit=(1990, 2009), part=PART)
-        with self.voiceover("Chapter fourteen. Bounds."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(14, r"Bounds", r"When no design identifies the answer, \ say what the data rule out", lit=(1990, 2009), part=PART, said="Chapter fourteen. Bounds.")
 
     def manski_idea(self):
         rows = [

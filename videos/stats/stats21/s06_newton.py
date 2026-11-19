@@ -5,7 +5,7 @@ import numpy as np
 from videos.stats.stats21.common import *  # noqa: F403
 
 
-class Newton(VoiceoverScene):
+class Newton(StatsScene):
     def construct(self):
         self.card()
         self.idea()
@@ -16,10 +16,7 @@ class Newton(VoiceoverScene):
         self.remedies()
 
     def card(self):
-        card = chapter_card(5, r"Newton and Fisher scoring", r"Climb by the curvature", part=PART)
-        with self.voiceover("Chapter five. Newton's method, and Fisher scoring."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(5, r"Newton and Fisher scoring", r"Climb by the curvature", part=PART, said="Chapter five. Newton's method, and Fisher scoring.")
 
     def idea(self):
         rows = [

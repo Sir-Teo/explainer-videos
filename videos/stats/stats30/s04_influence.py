@@ -6,7 +6,7 @@ from explainer.stats.kit import robust as R
 from videos.stats.stats30.common import *  # noqa: F403
 
 
-class Influence(VoiceoverScene):
+class Influence(StatsScene):
     def construct(self):
         self.card()
         self.gross()
@@ -20,10 +20,7 @@ class Influence(VoiceoverScene):
         self.hampel_opt()
 
     def card(self):
-        card = chapter_card(3, r"Gross errors and influence", r"What one bad point can do", lit=(1974,), part=PART)
-        with self.voiceover("Chapter three. Gross errors and influence functions."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(3, r"Gross errors and influence", r"What one bad point can do", lit=(1974,), part=PART, said="Chapter three. Gross errors and influence functions.")
 
     def gross(self):
         rows = [

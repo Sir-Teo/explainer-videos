@@ -5,7 +5,7 @@ import numpy as np
 from videos.stats.stats32.common import *  # noqa: F403
 
 
-class Choosing(VoiceoverScene):
+class Choosing(StatsScene):
     def construct(self):
         self.card()
         self.options()
@@ -18,10 +18,7 @@ class Choosing(VoiceoverScene):
         self.advice()
 
     def card(self):
-        card = chapter_card(7, r"Choosing $\lambda$", r"Prediction, \ selection, \ and stability", lit=(1974,), part=PART)
-        with self.voiceover("Chapter seven. Choosing lambda."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(7, r"Choosing $\lambda$", r"Prediction, \ selection, \ and stability", lit=(1974,), part=PART, said="Chapter seven. Choosing lambda.")
 
     def options(self):
         rows = [

@@ -5,7 +5,7 @@ import numpy as np
 from videos.stats.stats53.common import *  # noqa: F403
 
 
-class GaussianProcess(VoiceoverScene):
+class GaussianProcess(StatsScene):
     def construct(self):
         self.card()
         self.rkhs()
@@ -15,10 +15,7 @@ class GaussianProcess(VoiceoverScene):
         self.examples()
 
     def card(self):
-        card = chapter_card(7, r"Gaussian process priors", r"Rates from the RKHS and small-ball probabilities", lit=(2008,), part=PART)
-        with self.voiceover("Chapter seven. Gaussian process priors: rates from the reproducing-kernel Hilbert space and small-ball probabilities."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(7, r"Gaussian process priors", r"Rates from the RKHS and small-ball probabilities", lit=(2008,), part=PART, said="Chapter seven. Gaussian process priors: rates from the reproducing-kernel Hilbert space and small-ball probabilities.")
 
     def rkhs(self):
         rows = [

@@ -7,7 +7,7 @@ from videos.stats.stats8.common import *  # noqa: F403
 T_COLS = {"1": S.RESID, "3": S.POST, "10": S.LIK, "30": SIM}
 
 
-class StudentT(VoiceoverScene):
+class StudentT(StatsScene):
     def construct(self):
         self.card()
         self.density()
@@ -17,10 +17,7 @@ class StudentT(VoiceoverScene):
         self.unpaired()
 
     def card(self):
-        card = chapter_card(5, r"Student's $t$", r"A normal, divided by its own estimated scale", lit=(1908,), part=PART)
-        with self.voiceover("Chapter five. Student's t."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(5, r"Student's $t$", r"A normal, divided by its own estimated scale", lit=(1908,), part=PART, said="Chapter five. Student's t.")
 
     def density(self):
         rows = [

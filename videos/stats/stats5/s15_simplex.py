@@ -15,7 +15,7 @@ def to_xy(p, corners):
     return p[0] * corners[0] + p[1] * corners[1] + p[2] * corners[2]
 
 
-class Simplex(VoiceoverScene):
+class Simplex(StatsScene):
     def construct(self):
         self.card()
         self.multinomial()
@@ -25,10 +25,7 @@ class Simplex(VoiceoverScene):
         self.spurious()
 
     def card(self):
-        card = chapter_card(14, r"The simplex", r"Distributions over proportions", lit=(), part=PART)
-        with self.voiceover("Chapter fourteen. The simplex."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(14, r"The simplex", r"Distributions over proportions", lit=(), part=PART, said="Chapter fourteen. The simplex.")
 
     def multinomial(self):
         rows = [

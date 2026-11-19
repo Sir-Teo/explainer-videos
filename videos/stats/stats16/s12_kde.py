@@ -10,7 +10,7 @@ def height_axes(center, x_length=8.4, y_length=3.8, ymax=0.05, font_size=20, xla
                 xticks=[150, 165, 180, 195], yticks=[0, 0.02, 0.04], center=list(center), font_size=font_size)
 
 
-class Density(VoiceoverScene):
+class Density(StatsScene):
     def construct(self):
         self.card()
         self.histograms()
@@ -20,10 +20,7 @@ class Density(VoiceoverScene):
         self.choosing()
 
     def card(self):
-        card = chapter_card(11, r"Density estimates, \ a first look", r"A histogram without the bins", part=PART)
-        with self.voiceover("Chapter eleven. Density estimates, a first look."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(11, r"Density estimates, \ a first look", r"A histogram without the bins", part=PART, said="Chapter eleven. Density estimates, a first look.")
 
     def histograms(self):
         d = load("kde")

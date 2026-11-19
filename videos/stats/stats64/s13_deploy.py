@@ -5,7 +5,7 @@ import numpy as np
 from videos.stats.stats64.common import *  # noqa: F403
 
 
-class Deployment(LectureMixin, VoiceoverScene):
+class Deployment(LectureMixin, StatsScene):
     def construct(self):
         self.card_voiceover("Chapter twelve. Causal questions about deployed AI systems.", 12,
                             r"Causal questions about deployments", r"When users share a world")

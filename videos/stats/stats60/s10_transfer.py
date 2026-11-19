@@ -5,7 +5,7 @@ import numpy as np
 from videos.stats.stats60.common import *  # noqa: F403
 
 
-class Transfer(LectureMixin, VoiceoverScene):
+class Transfer(LectureMixin, StatsScene):
     def construct(self):
         self.card_voiceover("Chapter nine. Transfer learning: borrowing from a related problem, and knowing when not to.", 9,
                             r"Transfer learning", r"How much is the source worth?", lit=(2010,))

@@ -8,7 +8,7 @@ COH = {2004.0: Y1C, 2009.0: TAUC, 2014.0: IVC}
 KIND = {"vs never": BANDC, "early vs later": Y0C, "later vs earlier": MISSC}
 
 
-class Staggered(VoiceoverScene):
+class Staggered(StatsScene):
     def construct(self):
         self.card()
         self.staircase()
@@ -20,10 +20,7 @@ class Staggered(VoiceoverScene):
         self.board()
 
     def card(self):
-        card = chapter_card(9, r"Staggered adoption", r"When two-way fixed effects get the sign wrong", lit=(2021,), part=PART)
-        with self.voiceover("Chapter nine. Staggered adoption."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(9, r"Staggered adoption", r"When two-way fixed effects get the sign wrong", lit=(2021,), part=PART, said="Chapter nine. Staggered adoption.")
 
     def staircase(self):
         d = load("staggered")

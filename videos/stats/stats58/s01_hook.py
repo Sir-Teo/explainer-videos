@@ -5,7 +5,7 @@ import numpy as np
 from videos.stats.stats58.common import *  # noqa: F403
 
 
-class Hook(LectureMixin, VoiceoverScene):
+class Hook(LectureMixin, StatsScene):
     def construct(self):
         self.story()
         self.idea()
@@ -14,7 +14,7 @@ class Hook(LectureMixin, VoiceoverScene):
         self.board()
         self.turn()
         self.upgrade()
-        self.objectives()
+        self.title(PART)
 
     def story(self):
         tl = timeline(lit=(1943, 1945)).to_edge(UP, buff=0.35)
@@ -153,33 +153,5 @@ class Hook(LectureMixin, VoiceoverScene):
             self.play(FadeIn(cards[0], shift=UP * 0.2))
             vo.wait_until("b")
             self.play(FadeIn(cards[1], shift=UP * 0.2))
-        self.wait(1.0)
-        self.clear_scene()
-
-    def objectives(self):
-        head = VGroup(label(r"Part 58", font_size=34, color=GREY_B), label(r"Anytime-Valid Inference", font_size=56),
-                      label(r"and Adaptive Experiments", font_size=40, color=GREY_A)).arrange(DOWN, buff=0.2)
-        obj = objectives_card([
-            r"the SPRT, \ exactly; \ group-sequential theory; \ estimation after stopping",
-            r"test martingales and Ville; \ testing by betting; \ e-values; \ composite nulls",
-            r"confidence sequences; \ CAST as a betting test; \ e-BH; \ change detection on the Nile",
-            r"bandits, \ adaptive designs and the inference they need; \ off-policy evaluation; \ open problems",
-        ], color=S.ACCENT, font_size=26)
-        prereq = note(r"prerequisites: \ Parts 35, \ 44, \ 46").to_corner(DL, buff=0.3)
-        built = note(r"built: \ \texttt{statkit.sequential}, \ the confidence funnel").to_corner(DR, buff=0.3)
-        with self.voiceover(
-            (
-            "<bookmark mark='a'/> Part fifty-eight: anytime-valid inference and adaptive experiments. <bookmark "
-            "mark='b'/> The sequential probability ratio test, computed exactly; group-sequential theory and "
-            "estimation after stopping; test martingales and Ville's inequality; testing by betting and e-values, "
-            'for simple and composite nulls; confidence sequences; the CAST trial as a betting test; multiple '
-            'testing with e-values; change detection on the Nile; and bandits, adaptive designs, and the inference '
-            'they need, with off-policy evaluation and open problems.'
-        )
-        ) as vo:
-            vo.wait_until("a")
-            self.play(FadeIn(head, shift=UP * 0.2))
-            vo.wait_until("b")
-            self.play(FadeOut(head), FadeIn(obj, shift=UP * 0.2), FadeIn(prereq), FadeIn(built))
         self.wait(1.0)
         self.clear_scene()

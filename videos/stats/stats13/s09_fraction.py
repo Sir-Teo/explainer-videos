@@ -5,7 +5,7 @@ import numpy as np
 from videos.stats.stats13.common import *  # noqa: F403
 
 
-class Fraction(VoiceoverScene):
+class Fraction(StatsScene):
     def construct(self):
         self.card()
         self.explosion()
@@ -17,10 +17,7 @@ class Fraction(VoiceoverScene):
         self.plackett()
 
     def card(self):
-        card = chapter_card(8, r"Fractional factorials", r"Half the runs, \ and knowing exactly what you gave up", part=PART)
-        with self.voiceover("Chapter eight. Fractional factorials."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(8, r"Fractional factorials", r"Half the runs, \ and knowing exactly what you gave up", part=PART, said="Chapter eight. Fractional factorials.")
 
     def explosion(self):
         ks = list(range(2, 11))

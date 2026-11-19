@@ -8,7 +8,7 @@ HS = S.KEPT  # the horseshoe: green
 BL = S.POST  # the Bayesian lasso: orange
 
 
-class BayesSparse(VoiceoverScene):
+class BayesSparse(StatsScene):
     def construct(self):
         self.card()
         self.laplace()
@@ -21,10 +21,7 @@ class BayesSparse(VoiceoverScene):
         self.spike_slab()
 
     def card(self):
-        card = chapter_card(8, r"Bayesian sparsity", r"The lasso's prior is not sparse", lit=(2010,), part=PART)
-        with self.voiceover("Chapter eight. Bayesian sparsity."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(8, r"Bayesian sparsity", r"The lasso's prior is not sparse", lit=(2010,), part=PART, said="Chapter eight. Bayesian sparsity.")
 
     def laplace(self):
         rows = [

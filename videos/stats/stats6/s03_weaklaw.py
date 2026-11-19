@@ -5,7 +5,7 @@ import numpy as np
 from videos.stats.stats6.common import *  # noqa: F403
 
 
-class WeakLaw(VoiceoverScene):
+class WeakLaw(StatsScene):
     def construct(self):
         self.card()
         self.proof()
@@ -15,10 +15,7 @@ class WeakLaw(VoiceoverScene):
         self.compare()
 
     def card(self):
-        card = chapter_card(2, r"The weak law", r"Why the average settles down", lit=(1713,), part=PART)
-        with self.voiceover("Chapter two. The weak law of large numbers."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(2, r"The weak law", r"Why the average settles down", lit=(1713,), part=PART, said="Chapter two. The weak law of large numbers.")
 
     def proof(self):
         rows = [

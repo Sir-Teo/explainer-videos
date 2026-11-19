@@ -5,7 +5,7 @@ import numpy as np
 from videos.stats.stats27.common import *  # noqa: F403
 
 
-class NUTS(VoiceoverScene):
+class NUTS(StatsScene):
     def construct(self):
         self.card()
         self.uturn()
@@ -16,10 +16,7 @@ class NUTS(VoiceoverScene):
         self.discrete()
 
     def card(self):
-        card = chapter_card(6, r"NUTS", r"Stop when the path turns back", lit=(2014,), part=PART)
-        with self.voiceover("Chapter six. The No-U-Turn Sampler."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(6, r"NUTS", r"Stop when the path turns back", lit=(2014,), part=PART, said="Chapter six. The No-U-Turn Sampler.")
 
     def uturn(self):
         rows = [

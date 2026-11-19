@@ -5,7 +5,7 @@ import numpy as np
 from videos.stats.stats29.common import *  # noqa: F403
 
 
-class Curse(VoiceoverScene):
+class Curse(StatsScene):
     def construct(self):
         self.card()
         self.rate()
@@ -16,10 +16,7 @@ class Curse(VoiceoverScene):
         self.escape()
 
     def card(self):
-        card = chapter_card(4, r"The curse of dimensionality", r"Why smoothing fails in many dimensions", lit=(1961,), part=PART)
-        with self.voiceover("Chapter four. The curse of dimensionality."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(4, r"The curse of dimensionality", r"Why smoothing fails in many dimensions", lit=(1961,), part=PART, said="Chapter four. The curse of dimensionality.")
 
     def rate(self):
         rows = [

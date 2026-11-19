@@ -5,7 +5,7 @@ import numpy as np
 from videos.stats.stats42.common import *  # noqa: F403
 
 
-class TrialPlan(VoiceoverScene):
+class TrialPlan(StatsScene):
     def construct(self):
         self.card()
         self.protocol()
@@ -17,10 +17,7 @@ class TrialPlan(VoiceoverScene):
         self.reporting()
 
     def card(self):
-        card = chapter_card(3, r"Case 1: \ the analysis plan", r"Decide the analysis before the data", part=PART)
-        with self.voiceover("Chapter three. The analysis plan, written before any data exist."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(3, r"Case 1: \ the analysis plan", r"Decide the analysis before the data", part=PART, said="Chapter three. The analysis plan, written before any data exist.")
 
     def protocol(self):
         head = label(r"The protocol", font_size=36, color=CASE1).to_edge(UP, buff=0.5)

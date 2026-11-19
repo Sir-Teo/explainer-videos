@@ -5,7 +5,7 @@ import numpy as np
 from videos.stats.stats59.common import *  # noqa: F403
 
 
-class Replica(LectureMixin, VoiceoverScene):
+class Replica(LectureMixin, StatsScene):
     def construct(self):
         self.card_voiceover("Chapter seven. The replica method: the physicists' predictions, and their proofs.", 7,
                             r"The replica method", r"Predictions first, \ proofs later", lit=(2019,))

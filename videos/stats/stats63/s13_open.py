@@ -3,7 +3,7 @@ from __future__ import annotations
 from videos.stats.stats63.common import *  # noqa: F403
 
 
-class OpenProblems(LectureMixin, VoiceoverScene):
+class OpenProblems(LectureMixin, StatsScene):
     def construct(self):
         self.card_voiceover("Chapter twelve. Open problems in privacy and fairness.", 12, r"Open problems",
                             r"Where the guarantees stop")

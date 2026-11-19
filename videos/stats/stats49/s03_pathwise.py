@@ -5,7 +5,7 @@ import numpy as np
 from videos.stats.stats49.common import *  # noqa: F403
 
 
-class Pathwise(VoiceoverScene):
+class Pathwise(StatsScene):
     def construct(self):
         self.card()
         self.definition()
@@ -15,10 +15,7 @@ class Pathwise(VoiceoverScene):
         self.lesson()
 
     def card(self):
-        card = chapter_card(2, r"Pathwise differentiability", r"The efficient influence function as a projection", part=PART)
-        with self.voiceover("Chapter two. Pathwise differentiability: the efficient influence function as a projection."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(2, r"Pathwise differentiability", r"The efficient influence function as a projection", part=PART, said="Chapter two. Pathwise differentiability: the efficient influence function as a projection.")
 
     def definition(self):
         rows = [

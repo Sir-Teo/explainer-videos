@@ -8,7 +8,7 @@ KINDS = (("calibrated", r"calibrated: \ $N(\mu_t, 1)$", HIT), ("overconfident", 
          ("underconfident", r"underconfident: \ SD 2", AICC), ("biased", r"biased: \ mean $\mu_t + 0.7$", BICC))
 
 
-class Calibration(VoiceoverScene):
+class Calibration(StatsScene):
     def construct(self):
         self.card()
         self.prequential()
@@ -21,10 +21,7 @@ class Calibration(VoiceoverScene):
         self.sharp()
 
     def card(self):
-        card = chapter_card(11, r"Calibrated forecasts", r"Judge a model by what it predicts", lit=(1984,), part=PART)
-        with self.voiceover("Chapter eleven. Calibrated forecasts."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(11, r"Calibrated forecasts", r"Judge a model by what it predicts", lit=(1984,), part=PART, said="Chapter eleven. Calibrated forecasts.")
 
     def prequential(self):
         rows = fit_rows(VGroup(

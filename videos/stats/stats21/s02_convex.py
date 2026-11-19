@@ -5,7 +5,7 @@ import numpy as np
 from videos.stats.stats21.common import *  # noqa: F403
 
 
-class Convexity(VoiceoverScene):
+class Convexity(StatsScene):
     def construct(self):
         self.card()
         self.definitions()
@@ -17,10 +17,7 @@ class Convexity(VoiceoverScene):
         self.families()
 
     def card(self):
-        card = chapter_card(1, r"Convex sets and functions", r"When local is global", part=PART)
-        with self.voiceover("Chapter one. Convex sets and functions."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(1, r"Convex sets and functions", r"When local is global", part=PART, said="Chapter one. Convex sets and functions.")
 
     def definitions(self):
         rows = [

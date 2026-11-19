@@ -5,7 +5,7 @@ import numpy as np
 from videos.stats.stats58.common import *  # noqa: F403
 
 
-class Adaptive(LectureMixin, VoiceoverScene):
+class Adaptive(LectureMixin, StatsScene):
     def construct(self):
         self.card_voiceover("Chapter twelve. Inference after adaptivity: what the data can still tell us when the design "
                        "chased them.", 12, r"Inference after adaptivity", r"When the design chased the data", lit=(2018, 2021))

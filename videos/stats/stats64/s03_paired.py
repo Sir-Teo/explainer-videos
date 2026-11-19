@@ -5,7 +5,7 @@ import numpy as np
 from videos.stats.stats64.common import *  # noqa: F403
 
 
-class Paired(LectureMixin, VoiceoverScene):
+class Paired(LectureMixin, StatsScene):
     def construct(self):
         self.card_voiceover("Chapter two. Paired comparisons, power, and the leaderboard's winner's curse.", 2,
                             r"Paired comparisons", r"Same questions, \ correlated errors")

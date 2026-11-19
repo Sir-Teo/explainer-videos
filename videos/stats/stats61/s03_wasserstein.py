@@ -5,7 +5,7 @@ import numpy as np
 from videos.stats.stats61.common import *  # noqa: F403
 
 
-class Wasserstein(LectureMixin, VoiceoverScene):
+class Wasserstein(LectureMixin, StatsScene):
     def construct(self):
         self.card_voiceover("Chapter two. Wasserstein distances: a geometry on probability distributions.", 2,
                             r"Wasserstein distances", r"Distance, \ geodesics, \ curvature", lit=(1969,))

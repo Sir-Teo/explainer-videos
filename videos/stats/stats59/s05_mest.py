@@ -5,7 +5,7 @@ import numpy as np
 from videos.stats.stats59.common import *  # noqa: F403
 
 
-class MEstimation(LectureMixin, VoiceoverScene):
+class MEstimation(LectureMixin, StatsScene):
     def construct(self):
         self.card_voiceover("Chapter four. M-estimation in high dimensions: when the textbook's choice of loss is wrong.", 4,
                             r"M-estimation in high dimensions", r"When the best loss changes")

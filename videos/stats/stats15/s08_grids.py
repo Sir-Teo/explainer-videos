@@ -5,7 +5,7 @@ import numpy as np
 from videos.stats.stats15.common import *  # noqa: F403
 
 
-class Grids(VoiceoverScene):
+class Grids(StatsScene):
     def construct(self):
         self.card()
         self.recipe()
@@ -16,10 +16,7 @@ class Grids(VoiceoverScene):
         self.curse()
 
     def card(self):
-        card = chapter_card(7, r"Grids", r"Any posterior in one or two dimensions, \ by brute force", part=PART)
-        with self.voiceover("Chapter seven. Grids."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(7, r"Grids", r"Any posterior in one or two dimensions, \ by brute force", part=PART, said="Chapter seven. Grids.")
 
     def recipe(self):
         rows = [

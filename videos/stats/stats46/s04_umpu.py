@@ -5,7 +5,7 @@ import numpy as np
 from videos.stats.stats46.common import *  # noqa: F403
 
 
-class UMPU(VoiceoverScene):
+class UMPU(StatsScene):
     def construct(self):
         self.card()
         self.unbiased()
@@ -18,10 +18,7 @@ class UMPU(VoiceoverScene):
         self.ttest()
 
     def card(self):
-        card = chapter_card(3, r"Unbiased tests and Neyman structure", r"Optimality when nuisance parameters intrude", lit=(1933,), part=PART)
-        with self.voiceover("Chapter three. Unbiased tests and Neyman structure: optimality when nuisance parameters intrude."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(3, r"Unbiased tests and Neyman structure", r"Optimality when nuisance parameters intrude", lit=(1933,), part=PART, said="Chapter three. Unbiased tests and Neyman structure: optimality when nuisance parameters intrude.")
 
     def unbiased(self):
         rows = [

@@ -5,7 +5,7 @@ import numpy as np
 from videos.stats.stats47.common import *  # noqa: F403
 
 
-class TestEfficiency(VoiceoverScene):
+class TestEfficiency(StatsScene):
     def construct(self):
         self.card()
         self.pitman()
@@ -16,10 +16,7 @@ class TestEfficiency(VoiceoverScene):
         self.which()
 
     def card(self):
-        card = chapter_card(10, r"Efficiency of tests", r"How many more observations does the worse test need?", part=PART)
-        with self.voiceover("Chapter ten. The efficiency of tests: how many more observations does the worse test need?"):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(10, r"Efficiency of tests", r"How many more observations does the worse test need?", part=PART, said="Chapter ten. The efficiency of tests: how many more observations does the worse test need?")
 
     def pitman(self):
         rows = [

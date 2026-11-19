@@ -6,7 +6,7 @@ from explainer.stats.board import coverage_board, load_all
 from videos.stats.stats31.common import *  # noqa: F403
 
 
-class HighDim(VoiceoverScene):
+class HighDim(StatsScene):
     def construct(self):
         self.card()
         self.problem()
@@ -18,10 +18,7 @@ class HighDim(VoiceoverScene):
         self.lesson()
 
     def card(self):
-        card = chapter_card(10, r"A high-dimensional warning", r"When $p$ grows with $n$", lit=(1967, 1996), part=PART)
-        with self.voiceover("Chapter ten. A high-dimensional warning."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(10, r"A high-dimensional warning", r"When $p$ grows with $n$", lit=(1967, 1996), part=PART, said="Chapter ten. A high-dimensional warning.")
 
     def problem(self):
         rows = [

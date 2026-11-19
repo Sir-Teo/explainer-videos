@@ -6,7 +6,7 @@ from explainer.stats.board import coverage_board, load_all
 from videos.stats.stats12.common import *  # noqa: F403
 
 
-class Hetero(VoiceoverScene):
+class Hetero(StatsScene):
     def construct(self):
         self.card()
         self.funnel()
@@ -17,10 +17,7 @@ class Hetero(VoiceoverScene):
         self.advice()
 
     def card(self):
-        card = chapter_card(10, r"Uneven noise", r"When the classical standard errors lie", lit=(1980,), part=PART)
-        with self.voiceover("Chapter ten. Uneven noise."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(10, r"Uneven noise", r"When the classical standard errors lie", lit=(1980,), part=PART, said="Chapter ten. Uneven noise.")
 
     def funnel(self):
         d = load("hetero")

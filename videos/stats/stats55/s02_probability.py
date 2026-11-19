@@ -5,17 +5,14 @@ import numpy as np
 from videos.stats.stats55.common import *  # noqa: F403
 
 
-class ExamProbability(ExamMixin, VoiceoverScene):
+class ExamProbability(ExamMixin, StatsScene):
     def construct(self):
         self.card()
         self.p1()
         self.p2()
 
     def card(self):
-        card = chapter_card(1, r"Sitting I: \ probability", r"Problems 1 and 2", lit=(1909, 1939), part=PART)
-        with self.voiceover("Sitting one: probability. Two problems, on Borel–Cantelli and on optional stopping."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(1, r"Sitting I: \ probability", r"Problems 1 and 2", lit=(1909, 1939), part=PART, said="Sitting one: probability. Two problems, on Borel–Cantelli and on optional stopping.")
 
     # ------------------------------------------------------------------------------------------ Problem 1
     def p1(self):

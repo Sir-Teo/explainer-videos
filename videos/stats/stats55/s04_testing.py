@@ -5,17 +5,14 @@ import numpy as np
 from videos.stats.stats55.common import *  # noqa: F403
 
 
-class ExamTesting(ExamMixin, VoiceoverScene):
+class ExamTesting(ExamMixin, StatsScene):
     def construct(self):
         self.card()
         self.p5()
         self.p6()
 
     def card(self):
-        card = chapter_card(3, r"Sitting III: \ testing and asymptotics", r"Problems 5 and 6", lit=(1855, 1933, 1960), part=PART)
-        with self.voiceover("Sitting three: testing and asymptotics. Neyman structure on John Snow's data, and local power."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(3, r"Sitting III: \ testing and asymptotics", r"Problems 5 and 6", lit=(1855, 1933, 1960), part=PART, said="Sitting three: testing and asymptotics. Neyman structure on John Snow's data, and local power.")
 
     # ------------------------------------------------------------------------------------------ Problem 5
     def p5(self):

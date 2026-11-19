@@ -5,7 +5,7 @@ import numpy as np
 from videos.stats.stats43.common import *  # noqa: F403
 
 
-class Stein(VoiceoverScene):
+class Stein(StatsScene):
     def construct(self):
         self.card()
         self.identity()
@@ -16,10 +16,7 @@ class Stein(VoiceoverScene):
         self.board()
 
     def card(self):
-        card = chapter_card(10, r"Stein's method and the rates", r"How fast, \ with explicit constants?", lit=(1972,), part=PART)
-        with self.voiceover("Chapter ten. Stein's method, and how fast the central limit theorem works, with constants."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(10, r"Stein's method and the rates", r"How fast, \ with explicit constants?", lit=(1972,), part=PART, said="Chapter ten. Stein's method, and how fast the central limit theorem works, with constants.")
 
     def identity(self):
         rows = [

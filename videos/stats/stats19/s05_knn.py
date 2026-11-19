@@ -6,7 +6,7 @@ from explainer.stats.kit import learn as L
 from videos.stats.stats19.common import *  # noqa: F403
 
 
-class Neighbours(VoiceoverScene):
+class Neighbours(StatsScene):
     def construct(self):
         self.card()
         self.regions()
@@ -17,10 +17,7 @@ class Neighbours(VoiceoverScene):
         self.lessons()
 
     def card(self):
-        card = chapter_card(4, r"$k$-nearest neighbours", r"Predict like your neighbours, \ if you have any", part=PART)
-        with self.voiceover("Chapter four. Nearest neighbours."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(4, r"$k$-nearest neighbours", r"Predict like your neighbours, \ if you have any", part=PART, said="Chapter four. Nearest neighbours.")
 
     def region_map(self, ax, X, v, k, nx=36, ny=26):
         xs = np.linspace(0.6, 2.6, nx)

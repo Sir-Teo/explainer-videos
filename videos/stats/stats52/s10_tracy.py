@@ -5,7 +5,7 @@ import numpy as np
 from videos.stats.stats52.common import *  # noqa: F403
 
 
-class TracyWidom(VoiceoverScene):
+class TracyWidom(StatsScene):
     def construct(self):
         self.card()
         self.law()
@@ -16,10 +16,7 @@ class TracyWidom(VoiceoverScene):
         self.beyond()
 
     def card(self):
-        card = chapter_card(9, r"Tracy--Widom fluctuations", r"The largest eigenvalue, \ to the next order", lit=(2001,), part=PART)
-        with self.voiceover("Chapter nine. Tracy–Widom fluctuations: the largest eigenvalue, to the next order."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(9, r"Tracy--Widom fluctuations", r"The largest eigenvalue, \ to the next order", lit=(2001,), part=PART, said="Chapter nine. Tracy–Widom fluctuations: the largest eigenvalue, to the next order.")
 
     def law(self):
         rows = [

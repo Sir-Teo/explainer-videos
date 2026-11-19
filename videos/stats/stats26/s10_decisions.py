@@ -5,7 +5,7 @@ import numpy as np
 from videos.stats.stats26.common import *  # noqa: F403
 
 
-class Decisions(VoiceoverScene):
+class Decisions(StatsScene):
     def construct(self):
         self.card()
         self.utility()
@@ -16,10 +16,7 @@ class Decisions(VoiceoverScene):
         self.evsi()
 
     def card(self):
-        card = chapter_card(9, r"Decisions", r"Expected utility, \ and what information is worth", lit=(1954,), part=PART)
-        with self.voiceover("Chapter nine. Decisions."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(9, r"Decisions", r"Expected utility, \ and what information is worth", lit=(1954,), part=PART, said="Chapter nine. Decisions.")
 
     def utility(self):
         rows = [

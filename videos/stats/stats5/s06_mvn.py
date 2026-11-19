@@ -5,7 +5,7 @@ import numpy as np
 from videos.stats.stats5.common import *  # noqa: F403
 
 
-class MVN(VoiceoverScene):
+class MVN(StatsScene):
     def construct(self):
         self.card()
         self.affine()
@@ -14,10 +14,7 @@ class MVN(VoiceoverScene):
         self.check()
 
     def card(self):
-        card = chapter_card(5, r"The multivariate normal", r"Independent normals, \ stretched and turned", lit=(1886,), part=PART)
-        with self.voiceover("Chapter five. The multivariate normal."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(5, r"The multivariate normal", r"Independent normals, \ stretched and turned", lit=(1886,), part=PART, said="Chapter five. The multivariate normal.")
 
     def affine(self):
         d = load("mvn")

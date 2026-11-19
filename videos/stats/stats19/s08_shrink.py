@@ -5,7 +5,7 @@ import numpy as np
 from videos.stats.stats19.common import *  # noqa: F403
 
 
-class Shrinkage(VoiceoverScene):
+class Shrinkage(StatsScene):
     def construct(self):
         self.card()
         self.ridge()
@@ -16,10 +16,7 @@ class Shrinkage(VoiceoverScene):
         self.cv()
 
     def card(self):
-        card = chapter_card(7, r"Ridge and the lasso, \ a first look", r"Shrink to predict better", lit=(1996,), part=PART)
-        with self.voiceover("Chapter seven. Ridge and the lasso, a first look."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(7, r"Ridge and the lasso, \ a first look", r"Shrink to predict better", lit=(1996,), part=PART, said="Chapter seven. Ridge and the lasso, a first look.")
 
     def ridge(self):
         rows = [

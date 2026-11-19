@@ -5,7 +5,7 @@ import numpy as np
 from videos.stats.stats8.common import *  # noqa: F403
 
 
-class Machine(VoiceoverScene):
+class Machine(StatsScene):
     def construct(self):
         self.card()
         self.machine()
@@ -16,10 +16,7 @@ class Machine(VoiceoverScene):
         self.median_se()
 
     def card(self):
-        card = chapter_card(1, r"Sampling distributions", r"What would happen if we sampled again?", part=PART)
-        with self.voiceover("Chapter one. Sampling distributions."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(1, r"Sampling distributions", r"What would happen if we sampled again?", part=PART, said="Chapter one. Sampling distributions.")
 
     def machine(self):
         d = load("machine")

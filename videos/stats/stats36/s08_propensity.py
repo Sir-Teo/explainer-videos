@@ -3,7 +3,7 @@ from __future__ import annotations
 from videos.stats.stats36.common import *  # noqa: F403
 
 
-class Propensity(VoiceoverScene):
+class Propensity(StatsScene):
     def construct(self):
         self.card()
         self.balancing()
@@ -13,10 +13,7 @@ class Propensity(VoiceoverScene):
         self.design()
 
     def card(self):
-        card = chapter_card(7, r"Propensity scores", r"One number that balances many", lit=(1983, 1968), part=PART)
-        with self.voiceover("Chapter seven. Propensity scores."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(7, r"Propensity scores", r"One number that balances many", lit=(1983, 1968), part=PART, said="Chapter seven. Propensity scores.")
 
     def balancing(self):
         rows = [

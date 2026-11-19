@@ -9,7 +9,7 @@ DEB = S.KEPT  # debiased: green
 NAIVE = S.RESID  # naive: red
 
 
-class Inference(VoiceoverScene):
+class Inference(StatsScene):
     def construct(self):
         self.card()
         self.why_fails()
@@ -24,10 +24,7 @@ class Inference(VoiceoverScene):
         self.posi()
 
     def card(self):
-        card = chapter_card(10, r"Inference after the lasso", r"Confidence intervals for selected coefficients", lit=(2014,), part=PART)
-        with self.voiceover("Chapter ten. Inference after the lasso."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(10, r"Inference after the lasso", r"Confidence intervals for selected coefficients", lit=(2014,), part=PART, said="Chapter ten. Inference after the lasso.")
 
     def why_fails(self):
         rows = [

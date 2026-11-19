@@ -5,7 +5,7 @@ import numpy as np
 from videos.stats.stats48.common import *  # noqa: F403
 
 
-class Donsker(VoiceoverScene):
+class Donsker(StatsScene):
     def construct(self):
         self.card()
         self.definition()
@@ -15,10 +15,7 @@ class Donsker(VoiceoverScene):
         self.failures()
 
     def card(self):
-        card = chapter_card(5, r"Donsker classes", r"A central limit theorem, uniformly over a class", lit=(1952,), part=PART)
-        with self.voiceover("Chapter five. Donsker classes: a central limit theorem, uniformly over a class."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(5, r"Donsker classes", r"A central limit theorem, uniformly over a class", lit=(1952,), part=PART, said="Chapter five. Donsker classes: a central limit theorem, uniformly over a class.")
 
     def definition(self):
         rows = [

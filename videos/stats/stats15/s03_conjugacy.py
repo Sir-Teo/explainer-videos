@@ -6,7 +6,7 @@ from scipy import stats
 from videos.stats.stats15.common import *  # noqa: F403
 
 
-class Conjugacy(VoiceoverScene):
+class Conjugacy(StatsScene):
     def construct(self):
         self.card()
         self.beta_binomial()
@@ -17,10 +17,7 @@ class Conjugacy(VoiceoverScene):
         self.table()
 
     def card(self):
-        card = chapter_card(2, r"Conjugacy", r"When the posterior is the prior, \ updated", part=PART)
-        with self.voiceover("Chapter two. Conjugacy."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(2, r"Conjugacy", r"When the posterior is the prior, \ updated", part=PART, said="Chapter two. Conjugacy.")
 
     def beta_binomial(self):
         rows = [

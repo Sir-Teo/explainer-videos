@@ -5,7 +5,7 @@ import numpy as np
 from videos.stats.stats61.common import *  # noqa: F403
 
 
-class Duality(LectureMixin, VoiceoverScene):
+class Duality(LectureMixin, StatsScene):
     def construct(self):
         self.card_voiceover("Chapter one. Kantorovich duality: the transport problem, its prices, and its solution on a line.", 1,
                             r"Kantorovich duality", r"Plans and prices", lit=(1942,))

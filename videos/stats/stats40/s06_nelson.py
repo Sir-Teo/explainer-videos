@@ -5,7 +5,7 @@ import numpy as np
 from videos.stats.stats40.common import *  # noqa: F403
 
 
-class NelsonAalen(VoiceoverScene):
+class NelsonAalen(StatsScene):
     def construct(self):
         self.card()
         self.estimator()
@@ -15,10 +15,7 @@ class NelsonAalen(VoiceoverScene):
         self.diagnostic()
 
     def card(self):
-        card = chapter_card(5, r"Nelson--Aalen", r"Estimate the hazard, \ not the survival", lit=(1969, 1978), part=PART)
-        with self.voiceover("Chapter five. Nelson and Aalen."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(5, r"Nelson--Aalen", r"Estimate the hazard, \ not the survival", lit=(1969, 1978), part=PART, said="Chapter five. Nelson and Aalen.")
 
     def estimator(self):
         rows = [

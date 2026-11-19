@@ -15,7 +15,7 @@ def step_box(title, sub, color, width=3.0):
     return VGroup(r, body.move_to(r))
 
 
-class Reproducibility(VoiceoverScene):
+class Reproducibility(StatsScene):
     def construct(self):
         self.card()
         self.chain()
@@ -25,10 +25,7 @@ class Reproducibility(VoiceoverScene):
         self.checklist()
 
     def card(self):
-        card = chapter_card(12, r"Reproducibility and ethics", r"Could someone else get the same answer?", part=PART)
-        with self.voiceover("Chapter twelve. Reproducibility, and ethics."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(12, r"Reproducibility and ethics", r"Could someone else get the same answer?", part=PART, said="Chapter twelve. Reproducibility, and ethics.")
 
     def chain(self):
         d = load("repro")

@@ -5,7 +5,7 @@ import numpy as np
 from videos.stats.stats4.common import *  # noqa: F403
 
 
-class Spectral(VoiceoverScene):
+class Spectral(StatsScene):
     def construct(self):
         self.card()
         self.theorem()
@@ -15,11 +15,7 @@ class Spectral(VoiceoverScene):
         self.power()
 
     def card(self):
-        card = chapter_card(4, r"The spectral theorem", r"Every symmetric matrix is a stretch along perpendicular axes",
-                            lit=(), part=PART)
-        with self.voiceover("Chapter four. The spectral theorem."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(4, r"The spectral theorem", r"Every symmetric matrix is a stretch along perpendicular axes", lit=(), part=PART, said="Chapter four. The spectral theorem.")
 
     def theorem(self):
         th = theorem_card(r"The spectral theorem", r"a real symmetric matrix $A$ can be written $A = Q\Lambda Q^\top$, \ "

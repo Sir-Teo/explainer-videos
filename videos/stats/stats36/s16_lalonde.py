@@ -5,7 +5,7 @@ import numpy as np
 from videos.stats.stats36.common import *  # noqa: F403
 
 
-class LaLonde(VoiceoverScene):
+class LaLonde(StatsScene):
     def construct(self):
         self.card()
         self.overlap()
@@ -15,10 +15,7 @@ class LaLonde(VoiceoverScene):
         self.lessons()
 
     def card(self):
-        card = chapter_card(15, r"LaLonde revisited", r"What forty years of re-analysis taught", lit=(1986, 1999), part=PART)
-        with self.voiceover("Chapter fifteen. LaLonde, revisited."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(15, r"LaLonde revisited", r"What forty years of re-analysis taught", lit=(1986, 1999), part=PART, said="Chapter fifteen. LaLonde, revisited.")
 
     def overlap(self):
         d = load("lalonde2")

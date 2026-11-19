@@ -5,7 +5,7 @@ import numpy as np
 from videos.stats.stats54.common import *  # noqa: F403
 
 
-class Interpolation(VoiceoverScene):
+class Interpolation(StatsScene):
     def construct(self):
         self.card()
         self.puzzle()
@@ -17,10 +17,7 @@ class Interpolation(VoiceoverScene):
         self.lesson()
 
     def card(self):
-        card = chapter_card(10, r"Interpolation", r"Double descent and benign overfitting", lit=(2020,), part=PART)
-        with self.voiceover("Chapter ten. Interpolation: double descent and benign overfitting."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(10, r"Interpolation", r"Double descent and benign overfitting", lit=(2020,), part=PART, said="Chapter ten. Interpolation: double descent and benign overfitting.")
 
     def puzzle(self):
         rows = [

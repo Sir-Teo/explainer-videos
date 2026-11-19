@@ -6,7 +6,7 @@ from scipy import special, stats
 from videos.stats.stats14.common import *  # noqa: F403
 
 
-class Fitting(VoiceoverScene):
+class Fitting(StatsScene):
     def construct(self):
         self.card()
         self.likelihood()
@@ -16,10 +16,7 @@ class Fitting(VoiceoverScene):
         self.deviance()
 
     def card(self):
-        card = chapter_card(3, r"Fitting by maximum likelihood", r"Newton's method, \ dressed as weighted least squares", lit=(1922,), part=PART)
-        with self.voiceover("Chapter three. Fitting by maximum likelihood."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(3, r"Fitting by maximum likelihood", r"Newton's method, \ dressed as weighted least squares", lit=(1922,), part=PART, said="Chapter three. Fitting by maximum likelihood.")
 
     def likelihood(self):
         rows = [

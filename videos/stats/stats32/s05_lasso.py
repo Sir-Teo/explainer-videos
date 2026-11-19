@@ -5,7 +5,7 @@ import numpy as np
 from videos.stats.stats32.common import *  # noqa: F403
 
 
-class Lasso(VoiceoverScene):
+class Lasso(StatsScene):
     def construct(self):
         self.card()
         self.history()
@@ -18,10 +18,7 @@ class Lasso(VoiceoverScene):
         self.bias()
 
     def card(self):
-        card = chapter_card(4, r"The lasso", r"Shrinkage and selection in one convex problem", lit=(1996,), part=PART)
-        with self.voiceover("Chapter four. The lasso."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(4, r"The lasso", r"Shrinkage and selection in one convex problem", lit=(1996,), part=PART, said="Chapter four. The lasso.")
 
     def history(self):
         rows = fit_rows(VGroup(

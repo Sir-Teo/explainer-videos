@@ -5,13 +5,13 @@ import numpy as np
 from videos.stats.stats8.common import *  # noqa: F403
 
 
-class Hook(VoiceoverScene):
+class Hook(StatsScene):
     def construct(self):
         self.brewer()
         self.brewery()
         self.cards()
         self.result()
-        self.objectives()
+        self.title(PART)
 
     def brewer(self):
         tl = timeline(lit=(1908,)).to_edge(UP, buff=0.35)
@@ -131,36 +131,6 @@ class Hook(VoiceoverScene):
             self.play(FadeIn(rows[2:]))
         self.clear_scene()
 
-    def objectives(self):
-        head = VGroup(label(r"Part 8", font_size=34, color=GREY_B), label(r"From Sample to Population", font_size=60))
-        head.arrange(DOWN, buff=0.25)
-        obj = objectives_card([
-            r"sampling distributions and standard errors: \ the sampling machine",
-            r"why $n - 1$; \ Fisher's geometry of the sample; \ $\chi^2$, \ $t$ and $F$ derived",
-            r"bias, variance and mean squared error; \ consistency; \ plug-in estimators",
-            r"standard errors for ratios: \ Laplace's census of France (1802); \ finite populations",
-            r"the Coverage Board opens: \ which textbook intervals keep their promise?",
-        ], color=S.ACCENT, font_size=26)
-        prereq = note(r"prerequisites: \ Parts 4, 6 and 7").to_corner(DL, buff=0.3)
-        built = label(r"Built in this part: \ the first rows of the Coverage Board", font_size=28, color=S.ACCENT)
-        built.to_edge(DOWN, buff=0.8)
-        with self.voiceover(
-            "This part asks how much an estimate wobbles, and how a single sample can tell you. "
-            "<bookmark mark='a'/> Part eight: from sample to population. <bookmark mark='b'/> We'll watch sampling "
-            "distributions form; see why the variance divides by n minus one; follow Fisher into n dimensions, "
-            "where chi-squared, t and F all fall out of one picture; weigh bias against variance; build standard "
-            "errors for ratios, as Laplace did to count France; correct for small populations; and finally open the "
-            "Coverage Board, where textbook intervals are tested against the truth. <bookmark mark='c'/> Some of them "
-            "fail."
-        ) as vo:
-            self.play(FadeIn(head, shift=UP * 0.2))
-            vo.wait_until("a")
-            vo.wait_until("b")
-            self.play(FadeOut(head), FadeIn(obj, shift=UP * 0.2), FadeIn(prereq))
-            vo.wait_until("c")
-            self.play(obj.animate.shift(UP * 0.4), FadeIn(built))
-        self.wait(1.0)
-        self.clear_scene()
 
     def brewery(self):
         rows = fit_rows(VGroup(

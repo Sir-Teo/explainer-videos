@@ -3,7 +3,7 @@ from __future__ import annotations
 from videos.stats.stats57.common import *  # noqa: F403
 
 
-class Methods(VoiceoverScene):
+class Methods(StatsScene):
     def construct(self):
         self.card()
         self.full()
@@ -16,10 +16,7 @@ class Methods(VoiceoverScene):
         self.cost()
 
     def card(self):
-        card = chapter_card(2, r"Full, \ split and jackknife$+$", r"Using every observation twice, \ honestly", lit=(2021,), part=PART)
-        with self.voiceover("Chapter two. Full, split and jackknife plus conformal: using every observation twice, honestly."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(2, r"Full, \ split and jackknife$+$", r"Using every observation twice, \ honestly", lit=(2021,), part=PART, said="Chapter two. Full, split and jackknife plus conformal: using every observation twice, honestly.")
 
     def full(self):
         rows = [

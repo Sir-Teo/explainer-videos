@@ -7,7 +7,7 @@ from videos.stats.stats13.common import *  # noqa: F403
 FERT = [r"none", r"N", r"P", r"NPK"]
 
 
-class Anova(VoiceoverScene):
+class Anova(StatsScene):
     def construct(self):
         self.card()
         self.trial()
@@ -19,10 +19,7 @@ class Anova(VoiceoverScene):
         self.expectations()
 
     def card(self):
-        card = chapter_card(3, r"One-way ANOVA", r"Splitting the variation, \ and Pythagoras again", lit=(1919,), part=PART)
-        with self.voiceover("Chapter three. The analysis of variance."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(3, r"One-way ANOVA", r"Splitting the variation, \ and Pythagoras again", lit=(1919,), part=PART, said="Chapter three. The analysis of variance.")
 
     def dotplot(self, d, center, x_length=6.2, y_length=4.4):
         y = np.asarray(d["y"])

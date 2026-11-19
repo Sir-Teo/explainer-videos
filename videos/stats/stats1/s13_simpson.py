@@ -5,7 +5,7 @@ import numpy as np
 from videos.stats.stats1.common import *  # noqa: F403
 
 
-class Simpson(VoiceoverScene):
+class Simpson(StatsScene):
     def construct(self):
         self.card()
         self.overall()
@@ -15,11 +15,7 @@ class Simpson(VoiceoverScene):
         self.ecological()
 
     def card(self):
-        card = chapter_card(12, r"The trap of aggregation", r"Better in every group, worse overall?", lit=(),
-                            part=PART)
-        with self.voiceover("Chapter twelve. The trap of aggregation."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(12, r"The trap of aggregation", r"Better in every group, worse overall?", lit=(), part=PART, said="Chapter twelve. The trap of aggregation.")
 
     def bar(self, ax, x, v, col, w=0.7):
         lo, hi = ax.c2p(x - w / 2, 0), ax.c2p(x + w / 2, v)

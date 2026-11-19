@@ -5,7 +5,7 @@ import numpy as np
 from videos.stats.stats63.common import *  # noqa: F403
 
 
-class CausalFairness(LectureMixin, VoiceoverScene):
+class CausalFairness(LectureMixin, StatsScene):
     def construct(self):
         self.card_voiceover("Chapter eleven. Causal fairness: which paths from the group to the decision are allowed?", 11,
                             r"Causal fairness", r"Fair along which paths?", lit=(2017,))

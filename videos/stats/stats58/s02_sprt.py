@@ -5,7 +5,7 @@ import numpy as np
 from videos.stats.stats58.common import *  # noqa: F403
 
 
-class SPRT(LectureMixin, VoiceoverScene):
+class SPRT(LectureMixin, StatsScene):
     def construct(self):
         self.card_voiceover("Chapter one. The sequential probability ratio test: how it works, what it costs, and why "
                        "nothing does better.", 1, r"The SPRT", r"Stop when the evidence suffices", lit=(1945, 1948))

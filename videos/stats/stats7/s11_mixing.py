@@ -12,7 +12,7 @@ def card(k, w=0.42, h=0.62):
                                    fill_color=CARD_COLS[k], fill_opacity=1), MathTex(str(k + 1), font_size=20, color=BLACK))
 
 
-class Mixing(VoiceoverScene):
+class Mixing(StatsScene):
     def construct(self):
         self.card_()
         self.riffle()
@@ -22,10 +22,7 @@ class Mixing(VoiceoverScene):
         self.cutoff()
 
     def card_(self):
-        c = chapter_card(10, r"Mixing: \ seven shuffles", r"How long until a chain forgets where it started?", lit=(1992,), part=PART)
-        with self.voiceover("Chapter ten. Mixing, and seven shuffles."):
-            self.play(FadeIn(c[0], shift=UP * 0.2), FadeIn(c[1]))
-        self.play(FadeOut(c))
+        self.chapter(10, r"Mixing: \ seven shuffles", r"How long until a chain forgets where it started?", lit=(1992,), part=PART, said="Chapter ten. Mixing, and seven shuffles.")
 
     def riffle(self):
         rng = np.random.Generator(np.random.PCG64(52))

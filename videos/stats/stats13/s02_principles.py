@@ -5,7 +5,7 @@ import numpy as np
 from videos.stats.stats13.common import *  # noqa: F403
 
 
-class Principles(VoiceoverScene):
+class Principles(StatsScene):
     def construct(self):
         self.card()
         self.systematic()
@@ -16,10 +16,7 @@ class Principles(VoiceoverScene):
         self.three()
 
     def card(self):
-        card = chapter_card(1, r"Three principles", r"Replication, \ randomization, \ local control", lit=(1884, 1935), part=PART)
-        with self.voiceover("Chapter one. Three principles."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(1, r"Three principles", r"Replication, \ randomization, \ local control", lit=(1884, 1935), part=PART, said="Chapter one. Three principles.")
 
     def systematic(self):
         d = load("field")

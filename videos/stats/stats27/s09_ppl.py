@@ -16,7 +16,7 @@ m = P.Model({"mu": (1, "real"), "tau": (1, "positive"),
 fit = P.sample(m, chains=4, iters=1000, warmup=1000)"""
 
 
-class PPL(VoiceoverScene):
+class PPL(StatsScene):
     def construct(self):
         self.card()
         self.parts()
@@ -28,10 +28,7 @@ class PPL(VoiceoverScene):
         self.real()
 
     def card(self):
-        card = chapter_card(8, r"Built: \ a probabilistic programming language", r"Write the model; \ get the posterior", lit=(2017,), part=PART)
-        with self.voiceover("Chapter eight. Built: a probabilistic programming language."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(8, r"Built: \ a probabilistic programming language", r"Write the model; \ get the posterior", lit=(2017,), part=PART, said="Chapter eight. Built: a probabilistic programming language.")
 
     def parts(self):
         rows = fit_rows(VGroup(

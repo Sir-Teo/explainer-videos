@@ -5,7 +5,7 @@ import numpy as np
 from videos.stats.stats31.common import *  # noqa: F403
 
 
-class CCA(VoiceoverScene):
+class CCA(StatsScene):
     def construct(self):
         self.card()
         self.question()
@@ -18,10 +18,7 @@ class CCA(VoiceoverScene):
         self.family()
 
     def card(self):
-        card = chapter_card(6, r"Canonical correlation", r"Two sets of variables, \ one relationship", lit=(1936,), part=PART)
-        with self.voiceover("Chapter six. Canonical correlation."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(6, r"Canonical correlation", r"Two sets of variables, \ one relationship", lit=(1936,), part=PART, said="Chapter six. Canonical correlation.")
 
     def question(self):
         rows = [

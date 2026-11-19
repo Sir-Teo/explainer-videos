@@ -5,7 +5,7 @@ import numpy as np
 from videos.stats.stats35.common import *  # noqa: F403
 
 
-class Fisher(VoiceoverScene):
+class Fisher(StatsScene):
     def construct(self):
         self.card()
         self.sharp()
@@ -16,10 +16,7 @@ class Fisher(VoiceoverScene):
         self.weak()
 
     def card(self):
-        card = chapter_card(4, r"Fisher's sharp null", r"Testing without a model", lit=(1935,), part=PART)
-        with self.voiceover("Chapter four. Fisher's sharp null hypothesis."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(4, r"Fisher's sharp null", r"Testing without a model", lit=(1935,), part=PART, said="Chapter four. Fisher's sharp null hypothesis.")
 
     def sharp(self):
         rows = [

@@ -14,7 +14,7 @@ def spline_est(d):
     raise KeyError
 
 
-class Checking(VoiceoverScene):
+class Checking(StatsScene):
     def construct(self):
         self.card()
         self.residuals()
@@ -25,10 +25,7 @@ class Checking(VoiceoverScene):
         self.summary()
 
     def card(self):
-        card = chapter_card(6, r"Checking it", r"Is the model hiding something?", part=PART)
-        with self.voiceover("Chapter six. Checking the model."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(6, r"Checking it", r"Is the model hiding something?", part=PART, said="Chapter six. Checking the model.")
 
     def residuals(self):
         d = load("checks")

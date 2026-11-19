@@ -7,7 +7,7 @@ from videos.stats.stats7.common import *  # noqa: F403
 SDS = [("0.1", BAD), ("1.5", GOOD), ("20.0", S.POST)]
 
 
-class Metropolis(VoiceoverScene):
+class Metropolis(StatsScene):
     def construct(self):
         self.card()
         self.history()
@@ -19,10 +19,7 @@ class Metropolis(VoiceoverScene):
         self.lessons()
 
     def card(self):
-        c = chapter_card(11, r"The Metropolis algorithm", r"A walk whose long-run law is the one you want", lit=(1953,), part=PART)
-        with self.voiceover("Chapter eleven. The Metropolis algorithm, first look."):
-            self.play(FadeIn(c[0], shift=UP * 0.2), FadeIn(c[1]))
-        self.play(FadeOut(c))
+        self.chapter(11, r"The Metropolis algorithm", r"A walk whose long-run law is the one you want", lit=(1953,), part=PART, said="Chapter eleven. The Metropolis algorithm, first look.")
 
     def history(self):
         hc = history_card(1953, r"N. Metropolis, A. Rosenbluth, M. Rosenbluth, A. Teller \& E. Teller",

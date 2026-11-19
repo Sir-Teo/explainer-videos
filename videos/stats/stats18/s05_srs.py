@@ -6,7 +6,7 @@ from scipy import stats
 from videos.stats.stats18.common import *  # noqa: F403
 
 
-class SimpleRandom(VoiceoverScene):
+class SimpleRandom(StatsScene):
     def construct(self):
         self.card()
         self.fpc_derive()
@@ -17,10 +17,7 @@ class SimpleRandom(VoiceoverScene):
         self.soup()
 
     def card(self):
-        card = chapter_card(4, r"Simple random sampling", r"Every set of $n$ equally likely", part=PART)
-        with self.voiceover("Chapter four. Simple random sampling."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(4, r"Simple random sampling", r"Every set of $n$ equally likely", part=PART, said="Chapter four. Simple random sampling.")
 
     def fpc_derive(self):
         rows = [

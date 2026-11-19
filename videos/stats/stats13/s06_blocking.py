@@ -5,7 +5,7 @@ import numpy as np
 from videos.stats.stats13.common import *  # noqa: F403
 
 
-class Blocking(VoiceoverScene):
+class Blocking(StatsScene):
     def construct(self):
         self.card()
         self.field()
@@ -17,10 +17,7 @@ class Blocking(VoiceoverScene):
         self.when()
 
     def card(self):
-        card = chapter_card(5, r"Blocking", r"Compare like with like, \ and take the soil out of the error", lit=(1935,), part=PART)
-        with self.voiceover("Chapter five. Blocking."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(5, r"Blocking", r"Compare like with like, \ and take the soil out of the error", lit=(1935,), part=PART, said="Chapter five. Blocking.")
 
     def field(self):
         d = load("blocking")

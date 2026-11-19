@@ -3,7 +3,7 @@ from __future__ import annotations
 from videos.stats.stats36.common import *  # noqa: F403
 
 
-class Simpson(VoiceoverScene):
+class Simpson(StatsScene):
     def construct(self):
         self.card()
         self.recall()
@@ -13,10 +13,7 @@ class Simpson(VoiceoverScene):
         self.lesson()
 
     def card(self):
-        card = chapter_card(5, r"Simpson resolved", r"The paradox is in the causal story, \ not the numbers", lit=(1995,), part=PART)
-        with self.voiceover("Chapter five. Simpson's paradox, resolved."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(5, r"Simpson resolved", r"The paradox is in the causal story, \ not the numbers", lit=(1995,), part=PART, said="Chapter five. Simpson's paradox, resolved.")
 
     def recall(self):
         d = load("simpson")

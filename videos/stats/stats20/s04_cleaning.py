@@ -3,7 +3,7 @@ from __future__ import annotations
 from videos.stats.stats20.common import *  # noqa: F403
 
 
-class Cleaning(VoiceoverScene):
+class Cleaning(StatsScene):
     def construct(self):
         self.card()
         self.codebook()
@@ -14,10 +14,7 @@ class Cleaning(VoiceoverScene):
         self.rules()
 
     def card(self):
-        card = chapter_card(3, r"Cleaning", r"Every decision, \ in a log", part=PART)
-        with self.voiceover("Chapter three. Cleaning."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(3, r"Cleaning", r"Every decision, \ in a log", part=PART, said="Chapter three. Cleaning.")
 
     def codebook(self):
         d = load("clean")

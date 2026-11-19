@@ -7,7 +7,7 @@ from explainer.stats.board import coverage_board, load_all
 from videos.stats.stats29.common import *  # noqa: F403
 
 
-class Inference(VoiceoverScene):
+class Inference(StatsScene):
     def construct(self):
         self.card()
         self.problem()
@@ -18,10 +18,7 @@ class Inference(VoiceoverScene):
         self.bands()
 
     def card(self):
-        card = chapter_card(11, r"Inference for curves", r"Intervals that admit their bias", lit=(2018,), part=PART)
-        with self.voiceover("Chapter eleven. Inference for curves."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(11, r"Inference for curves", r"Intervals that admit their bias", lit=(2018,), part=PART, said="Chapter eleven. Inference for curves.")
 
     def problem(self):
         rows = [

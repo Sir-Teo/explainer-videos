@@ -5,7 +5,7 @@ import numpy as np
 from videos.stats.stats63.common import *  # noqa: F403
 
 
-class Cost(LectureMixin, VoiceoverScene):
+class Cost(LectureMixin, StatsScene):
     def construct(self):
         self.card_voiceover("Chapter four. The cost of privacy, measured as a minimax rate.", 4,
                             r"The cost of privacy", r"Minimax rates with a budget", lit=(2013,))

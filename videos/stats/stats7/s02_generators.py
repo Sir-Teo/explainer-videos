@@ -5,7 +5,7 @@ import numpy as np
 from videos.stats.stats7.common import *  # noqa: F403
 
 
-class Generators(VoiceoverScene):
+class Generators(StatsScene):
     def construct(self):
         self.card()
         self.lehmer()
@@ -16,10 +16,7 @@ class Generators(VoiceoverScene):
         self.tests()
 
     def card(self):
-        card = chapter_card(1, r"Pseudo-random generators", r"Arithmetic that looks like chance", lit=(1949,), part=PART)
-        with self.voiceover("Chapter one. Pseudo-random generators."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(1, r"Pseudo-random generators", r"Arithmetic that looks like chance", lit=(1949,), part=PART, said="Chapter one. Pseudo-random generators.")
 
     def lehmer(self):
         rows = [

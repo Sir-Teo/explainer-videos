@@ -3,7 +3,7 @@ from __future__ import annotations
 from videos.stats.stats36.common import *  # noqa: F403
 
 
-class Smoking(VoiceoverScene):
+class Smoking(StatsScene):
     def construct(self):
         self.card()
         self.doll()
@@ -14,10 +14,7 @@ class Smoking(VoiceoverScene):
         self.lesson()
 
     def card(self):
-        card = chapter_card(13, r"Smoking and lung cancer", r"The argument that settled it", lit=(1950, 1958, 1959, 1965), part=PART)
-        with self.voiceover("Chapter thirteen. Smoking and lung cancer."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(13, r"Smoking and lung cancer", r"The argument that settled it", lit=(1950, 1958, 1959, 1965), part=PART, said="Chapter thirteen. Smoking and lung cancer.")
 
     def doll(self):
         d = load("smoking")

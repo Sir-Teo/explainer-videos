@@ -7,7 +7,7 @@ import numpy as np
 from videos.stats.stats52.common import *  # noqa: F403
 
 
-class Perturbation(VoiceoverScene):
+class Perturbation(StatsScene):
     def construct(self):
         self.card()
         self.weyl()
@@ -17,10 +17,7 @@ class Perturbation(VoiceoverScene):
         self.wedin()
 
     def card(self):
-        card = chapter_card(6, r"Perturbation theory", r"How far does an eigenvector move?", lit=(1970,), part=PART)
-        with self.voiceover("Chapter six. Perturbation theory: how far does an eigenvector move?"):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(6, r"Perturbation theory", r"How far does an eigenvector move?", lit=(1970,), part=PART, said="Chapter six. Perturbation theory: how far does an eigenvector move?")
 
     def weyl(self):
         rows = [

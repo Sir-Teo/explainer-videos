@@ -5,7 +5,7 @@ import numpy as np
 from videos.stats.stats52.common import *  # noqa: F403
 
 
-class Inference(VoiceoverScene):
+class Inference(StatsScene):
     def construct(self):
         self.card()
         self.problem()
@@ -17,10 +17,7 @@ class Inference(VoiceoverScene):
         self.caveats()
 
     def card(self):
-        card = chapter_card(11, r"Inference: \ the debiased lasso", r"Confidence intervals when $p$ is large", lit=(2014,), part=PART)
-        with self.voiceover("Chapter eleven. Inference: the debiased lasso, or confidence intervals when p is large."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(11, r"Inference: \ the debiased lasso", r"Confidence intervals when $p$ is large", lit=(2014,), part=PART, said="Chapter eleven. Inference: the debiased lasso, or confidence intervals when p is large.")
 
     def problem(self):
         rows = [

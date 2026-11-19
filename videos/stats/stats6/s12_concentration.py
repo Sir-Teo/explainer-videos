@@ -5,7 +5,7 @@ import numpy as np
 from videos.stats.stats6.common import *  # noqa: F403
 
 
-class Concentration(VoiceoverScene):
+class Concentration(StatsScene):
     def construct(self):
         self.card()
         self.statement()
@@ -15,10 +15,7 @@ class Concentration(VoiceoverScene):
         self.large_dev()
 
     def card(self):
-        card = chapter_card(11, r"Concentration", r"Guarantees for every $n$, \ not just in the limit", part=PART)
-        with self.voiceover("Chapter eleven. Concentration."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(11, r"Concentration", r"Guarantees for every $n$, \ not just in the limit", part=PART, said="Chapter eleven. Concentration.")
 
     def statement(self):
         thm = theorem_card(r"Hoeffding's inequality", r"if $X_1, \dots, X_n$ are independent with common mean $\mu$ and $a \le X_i \le b$, $a<b$: \ "

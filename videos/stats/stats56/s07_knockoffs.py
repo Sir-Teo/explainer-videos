@@ -5,7 +5,7 @@ import numpy as np
 from videos.stats.stats56.common import *  # noqa: F403
 
 
-class Knockoffs(VoiceoverScene):
+class Knockoffs(StatsScene):
     def construct(self):
         self.card()
         self.fixed_x()
@@ -17,10 +17,7 @@ class Knockoffs(VoiceoverScene):
         self.robust()
 
     def card(self):
-        card = chapter_card(6, r"Knockoff theory", r"Fake variables that keep the selection honest", lit=(2015,), part=PART)
-        with self.voiceover("Chapter six. Knockoff theory: fake variables that keep the selection honest."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(6, r"Knockoff theory", r"Fake variables that keep the selection honest", lit=(2015,), part=PART, said="Chapter six. Knockoff theory: fake variables that keep the selection honest.")
 
     def fixed_x(self):
         rows = [

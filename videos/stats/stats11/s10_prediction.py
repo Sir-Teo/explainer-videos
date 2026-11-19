@@ -5,7 +5,7 @@ import numpy as np
 from videos.stats.stats11.common import *  # noqa: F403
 
 
-class Prediction(VoiceoverScene):
+class Prediction(StatsScene):
     def construct(self):
         self.card()
         self.confusion()
@@ -16,10 +16,7 @@ class Prediction(VoiceoverScene):
         self.tolerance()
 
     def card(self):
-        card = chapter_card(9, r"Prediction and tolerance", r"Where will the next observation fall?", part=PART)
-        with self.voiceover("Chapter nine. Prediction and tolerance intervals."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(9, r"Prediction and tolerance", r"Where will the next observation fall?", part=PART, said="Chapter nine. Prediction and tolerance intervals.")
 
     def confusion(self):
         d = load("prediction")

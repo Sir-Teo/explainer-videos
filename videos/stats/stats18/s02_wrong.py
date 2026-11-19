@@ -8,7 +8,7 @@ from videos.stats.stats18.compute import adults, digest_returns
 BANDS = [r"under 20", r"20--30", r"30--50", r"50--100", r"over 100"]
 
 
-class WhatWentWrong(VoiceoverScene):
+class WhatWentWrong(StatsScene):
     def construct(self):
         self.card()
         self.frame()
@@ -19,10 +19,7 @@ class WhatWentWrong(VoiceoverScene):
         self.total_error()
 
     def card(self):
-        card = chapter_card(1, r"What went wrong", r"Two biases, \ and neither shrinks", lit=(1936,), part=PART)
-        with self.voiceover("Chapter one. What went wrong."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(1, r"What went wrong", r"Two biases, \ and neither shrinks", lit=(1936,), part=PART, said="Chapter one. What went wrong.")
 
     def by_income(self):
         P = adults()

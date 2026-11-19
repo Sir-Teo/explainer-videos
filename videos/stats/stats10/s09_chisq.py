@@ -5,7 +5,7 @@ import numpy as np
 from videos.stats.stats10.common import *  # noqa: F403
 
 
-class ChiSq(VoiceoverScene):
+class ChiSq(StatsScene):
     def construct(self):
         self.card()
         self.pearson()
@@ -17,10 +17,7 @@ class ChiSq(VoiceoverScene):
         self.confounded()
 
     def card(self):
-        card = chapter_card(8, r"Pearson's $\chi^2$", r"Do the counts fit the model?", lit=(1900,), part=PART)
-        with self.voiceover("Chapter eight. Pearson's chi-squared."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(8, r"Pearson's $\chi^2$", r"Do the counts fit the model?", lit=(1900,), part=PART, said="Chapter eight. Pearson's chi-squared.")
 
     def pearson(self):
         hc = history_card(1900, r"Karl Pearson, \ \emph{Philosophical Magazine}", r"``On the criterion that a given system of deviations "

@@ -5,7 +5,7 @@ import numpy as np
 from videos.stats.stats30.common import *  # noqa: F403
 
 
-class Breakdown(VoiceoverScene):
+class Breakdown(StatsScene):
     def construct(self):
         self.card()
         self.definition()
@@ -17,10 +17,7 @@ class Breakdown(VoiceoverScene):
         self.limits()
 
     def card(self):
-        card = chapter_card(4, r"Breakdown", r"How many bad points to ruin it?", lit=(1971,), part=PART)
-        with self.voiceover("Chapter four. Breakdown."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(4, r"Breakdown", r"How many bad points to ruin it?", lit=(1971,), part=PART, said="Chapter four. Breakdown.")
 
     def definition(self):
         rows = [

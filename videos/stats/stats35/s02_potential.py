@@ -5,7 +5,7 @@ import numpy as np
 from videos.stats.stats35.common import *  # noqa: F403
 
 
-class Potential(VoiceoverScene):
+class Potential(StatsScene):
     def construct(self):
         self.card()
         self.history()
@@ -17,10 +17,7 @@ class Potential(VoiceoverScene):
         self.holland()
 
     def card(self):
-        card = chapter_card(1, r"Potential outcomes", r"Two futures for every unit", lit=(1923, 1974), part=PART)
-        with self.voiceover("Chapter one. Potential outcomes."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(1, r"Potential outcomes", r"Two futures for every unit", lit=(1923, 1974), part=PART, said="Chapter one. Potential outcomes.")
 
     def history(self):
         rows = fit_rows(VGroup(

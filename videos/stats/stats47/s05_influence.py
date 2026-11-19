@@ -5,7 +5,7 @@ import numpy as np
 from videos.stats.stats47.common import *  # noqa: F403
 
 
-class Influence(VoiceoverScene):
+class Influence(StatsScene):
     def construct(self):
         self.card()
         self.functional()
@@ -15,10 +15,7 @@ class Influence(VoiceoverScene):
         self.uses()
 
     def card(self):
-        card = chapter_card(4, r"Influence functions and the functional delta method", r"Differentiating a statistic with respect to the data", lit=(1974,), part=PART)
-        with self.voiceover("Chapter four. Influence functions and the functional delta method: differentiating a statistic with respect to the data."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(4, r"Influence functions and the functional delta method", r"Differentiating a statistic with respect to the data", lit=(1974,), part=PART, said="Chapter four. Influence functions and the functional delta method: differentiating a statistic with respect to the data.")
 
     def functional(self):
         rows = [

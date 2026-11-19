@@ -5,7 +5,7 @@ import numpy as np
 from videos.stats.stats54.common import *  # noqa: F403
 
 
-class Stability(VoiceoverScene):
+class Stability(StatsScene):
     def construct(self):
         self.card()
         self.definition()
@@ -16,10 +16,7 @@ class Stability(VoiceoverScene):
         self.sgd_chart()
 
     def card(self):
-        card = chapter_card(7, r"Stability", r"Generalization from the algorithm, \ not the class", lit=(2002,), part=PART)
-        with self.voiceover("Chapter seven. Stability: generalization from the algorithm, not the class."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(7, r"Stability", r"Generalization from the algorithm, \ not the class", lit=(2002,), part=PART, said="Chapter seven. Stability: generalization from the algorithm, not the class.")
 
     def definition(self):
         rows = [

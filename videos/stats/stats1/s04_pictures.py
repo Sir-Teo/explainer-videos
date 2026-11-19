@@ -5,7 +5,7 @@ import numpy as np
 from videos.stats.stats1.common import *  # noqa: F403
 
 
-class Pictures(VoiceoverScene):
+class Pictures(StatsScene):
     def construct(self):
         self.card()
         self.dots()
@@ -15,11 +15,7 @@ class Pictures(VoiceoverScene):
         self.rules()
 
     def card(self):
-        card = chapter_card(3, r"Pictures first", r"Before any formula: what does the data look like?",
-                            lit=(1786,), part=PART)
-        with self.voiceover("Chapter three. Pictures first."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(3, r"Pictures first", r"Before any formula: what does the data look like?", lit=(1786,), part=PART, said="Chapter three. Pictures first.")
 
     def dots(self):
         d = load("heights")

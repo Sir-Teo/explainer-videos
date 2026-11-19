@@ -5,7 +5,7 @@ import numpy as np
 from videos.stats.stats51.common import *  # noqa: F403
 
 
-class Comparison(VoiceoverScene):
+class Comparison(StatsScene):
     def construct(self):
         self.card()
         self.slepian()
@@ -38,10 +38,7 @@ class Comparison(VoiceoverScene):
         self.clear_scene()
 
     def card(self):
-        card = chapter_card(7, r"Gaussian comparison", r"Less correlated means a larger maximum", lit=(1962, 1985), part=PART)
-        with self.voiceover("Chapter seven. Gaussian comparison: less correlated means a larger maximum."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(7, r"Gaussian comparison", r"Less correlated means a larger maximum", lit=(1962, 1985), part=PART, said="Chapter seven. Gaussian comparison: less correlated means a larger maximum.")
 
     def slepian(self):
         rows = [

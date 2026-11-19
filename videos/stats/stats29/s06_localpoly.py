@@ -5,7 +5,7 @@ import numpy as np
 from videos.stats.stats29.common import *  # noqa: F403
 
 
-class LocalPoly(VoiceoverScene):
+class LocalPoly(StatsScene):
     def construct(self):
         self.card()
         self.nw()
@@ -17,10 +17,7 @@ class LocalPoly(VoiceoverScene):
         self.loess_robust()
 
     def card(self):
-        card = chapter_card(5, r"Local polynomials", r"Regression, \ one neighbourhood at a time", lit=(1964,), part=PART)
-        with self.voiceover("Chapter five. Local polynomial regression."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(5, r"Local polynomials", r"Regression, \ one neighbourhood at a time", lit=(1964,), part=PART, said="Chapter five. Local polynomial regression.")
 
     def nw(self):
         rows = [

@@ -5,7 +5,7 @@ import numpy as np
 from videos.stats.stats54.common import *  # noqa: F403
 
 
-class Localization(VoiceoverScene):
+class Localization(StatsScene):
     def construct(self):
         self.card()
         self.idea()
@@ -16,10 +16,7 @@ class Localization(VoiceoverScene):
         self.regression()
 
     def card(self):
-        card = chapter_card(4, r"Localization and fast rates", r"When the gap shrinks like $1/n$", lit=(2005,), part=PART)
-        with self.voiceover("Chapter four. Localization and fast rates: when the gap shrinks like one over n."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(4, r"Localization and fast rates", r"When the gap shrinks like $1/n$", lit=(2005,), part=PART, said="Chapter four. Localization and fast rates: when the gap shrinks like one over n.")
 
     def idea(self):
         rows = [

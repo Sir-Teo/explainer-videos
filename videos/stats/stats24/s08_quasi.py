@@ -6,7 +6,7 @@ from explainer.stats.board import coverage_board, load_all
 from videos.stats.stats24.common import *  # noqa: F403
 
 
-class Quasi(VoiceoverScene):
+class Quasi(StatsScene):
     def construct(self):
         self.card()
         self.overdispersion()
@@ -17,10 +17,7 @@ class Quasi(VoiceoverScene):
         self.board()
 
     def card(self):
-        card = chapter_card(7, r"Quasi-likelihood", r"Only a mean and a variance", lit=(1974,), part=PART)
-        with self.voiceover("Chapter seven. Quasi-likelihood and overdispersion."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(7, r"Quasi-likelihood", r"Only a mean and a variance", lit=(1974,), part=PART, said="Chapter seven. Quasi-likelihood and overdispersion.")
 
     def overdispersion(self):
         d = load("visits")

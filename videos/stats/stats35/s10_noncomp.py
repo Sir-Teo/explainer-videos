@@ -3,7 +3,7 @@ from __future__ import annotations
 from videos.stats.stats35.common import *  # noqa: F403
 
 
-class Noncompliance(VoiceoverScene):
+class Noncompliance(StatsScene):
     def construct(self):
         self.card()
         self.problem()
@@ -15,10 +15,7 @@ class Noncompliance(VoiceoverScene):
         self.meaning()
 
     def card(self):
-        card = chapter_card(9, r"Noncompliance", r"Assigned is not treated", lit=(1994,), part=PART)
-        with self.voiceover("Chapter nine. Noncompliance."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(9, r"Noncompliance", r"Assigned is not treated", lit=(1994,), part=PART, said="Chapter nine. Noncompliance.")
 
     def problem(self):
         rows = fit_rows(VGroup(

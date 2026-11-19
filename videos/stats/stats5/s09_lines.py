@@ -5,7 +5,7 @@ import numpy as np
 from videos.stats.stats5.common import *  # noqa: F403
 
 
-class Lines(VoiceoverScene):
+class Lines(StatsScene):
     def construct(self):
         self.card()
         self.three()
@@ -13,11 +13,7 @@ class Lines(VoiceoverScene):
         self.attenuation()
 
     def card(self):
-        card = chapter_card(8, r"Three lines through one ellipse", r"$Y$ on $X$, \ $X$ on $Y$, \ and the major axis", lit=(1886,),
-                            part=PART)
-        with self.voiceover("Chapter eight. Three lines through one ellipse."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(8, r"Three lines through one ellipse", r"$Y$ on $X$, \ $X$ on $Y$, \ and the major axis", lit=(1886,), part=PART, said="Chapter eight. Three lines through one ellipse.")
 
     def three(self):
         d = load("galton")

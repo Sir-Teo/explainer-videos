@@ -5,7 +5,7 @@ import numpy as np
 from videos.stats.stats4.common import *  # noqa: F403
 
 
-class Trace(VoiceoverScene):
+class Trace(StatsScene):
     def construct(self):
         self.card()
         self.cyclic()
@@ -15,10 +15,7 @@ class Trace(VoiceoverScene):
         self.genvar()
 
     def card(self):
-        card = chapter_card(3, r"Trace tricks", r"The sum of the diagonal, \ and why it is so useful", lit=(), part=PART)
-        with self.voiceover("Chapter three. Trace tricks."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(3, r"Trace tricks", r"The sum of the diagonal, \ and why it is so useful", lit=(), part=PART, said="Chapter three. Trace tricks.")
 
     def cyclic(self):
         d = load("trace")

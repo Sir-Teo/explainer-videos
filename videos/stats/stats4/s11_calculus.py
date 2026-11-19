@@ -5,7 +5,7 @@ import numpy as np
 from videos.stats.stats4.common import *  # noqa: F403
 
 
-class Calculus(VoiceoverScene):
+class Calculus(StatsScene):
     def construct(self):
         self.card()
         self.rules()
@@ -15,10 +15,7 @@ class Calculus(VoiceoverScene):
         self.information()
 
     def card(self):
-        card = chapter_card(10, r"Matrix calculus", r"Derivatives with respect to vectors and matrices", lit=(), part=PART)
-        with self.voiceover("Chapter ten. Matrix calculus."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(10, r"Matrix calculus", r"Derivatives with respect to vectors and matrices", lit=(), part=PART, said="Chapter ten. Matrix calculus.")
 
     def rules(self):
         rows = [

@@ -5,7 +5,7 @@ import numpy as np
 from videos.stats.stats11.common import *  # noqa: F403
 
 
-class Credible(VoiceoverScene):
+class Credible(StatsScene):
     def construct(self):
         self.card()
         self.credible()
@@ -16,10 +16,7 @@ class Credible(VoiceoverScene):
         self.moral()
 
     def card(self):
-        card = chapter_card(10, r"Credible vs confidence", r"Where they agree, \ and where they part", part=PART)
-        with self.voiceover("Chapter ten. Credible intervals versus confidence intervals."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(10, r"Credible vs confidence", r"Where they agree, \ and where they part", part=PART, said="Chapter ten. Credible intervals versus confidence intervals.")
 
     def credible(self):
         rows = [

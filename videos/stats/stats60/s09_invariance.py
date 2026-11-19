@@ -12,7 +12,7 @@ def sci_tex(v: float) -> str:
     return rf"{v / 10 ** e:.1f}\times 10^{{{e}}}"
 
 
-class Invariance(LectureMixin, VoiceoverScene):
+class Invariance(LectureMixin, StatsScene):
     def construct(self):
         self.card_voiceover("Chapter eight. Invariance: what stays the same across environments is what will stay the same "
                             "next time.", 8, r"Invariance", r"Causal structure as a guarantee", lit=(2016,))

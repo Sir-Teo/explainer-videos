@@ -5,7 +5,7 @@ import numpy as np
 from videos.stats.stats33.common import *  # noqa: F403
 
 
-class Adaptive(VoiceoverScene):
+class Adaptive(StatsScene):
     def construct(self):
         self.card()
         self.waste()
@@ -16,10 +16,7 @@ class Adaptive(VoiceoverScene):
         self.when()
 
     def card(self):
-        card = chapter_card(4, r"Adaptive FDR", r"Estimating the share of nulls", lit=(1995,), part=PART)
-        with self.voiceover("Chapter four. Adaptive false discovery rates."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(4, r"Adaptive FDR", r"Estimating the share of nulls", lit=(1995,), part=PART, said="Chapter four. Adaptive false discovery rates.")
 
     def waste(self):
         rows = [

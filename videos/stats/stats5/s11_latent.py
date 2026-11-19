@@ -7,7 +7,7 @@ from videos.stats.stats5.common import *  # noqa: F403
 MEN, WOMEN = "#6FA8DC", "#E59AB8"
 
 
-class Latent(VoiceoverScene):
+class Latent(StatsScene):
     def construct(self):
         self.card()
         self.heights()
@@ -16,10 +16,7 @@ class Latent(VoiceoverScene):
         self.simpson()
 
     def card(self):
-        card = chapter_card(10, r"Latent variables", r"A variable you never see, \ shaping the ones you do", lit=(1894,), part=PART)
-        with self.voiceover("Chapter ten. Latent variables."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(10, r"Latent variables", r"A variable you never see, \ shaping the ones you do", lit=(1894,), part=PART, said="Chapter ten. Latent variables.")
 
     def heights(self):
         d = load("latent")

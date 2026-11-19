@@ -5,7 +5,7 @@ import numpy as np
 from videos.stats.stats11.common import *  # noqa: F403
 
 
-class Fieller(VoiceoverScene):
+class Fieller(StatsScene):
     def construct(self):
         self.card()
         self.problem()
@@ -15,10 +15,7 @@ class Fieller(VoiceoverScene):
         self.impossible()
 
     def card(self):
-        card = chapter_card(7, r"Ratios: \ Fieller", r"When the denominator might be near zero", part=PART)
-        with self.voiceover("Chapter seven. Ratios, and Fieller's interval."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(7, r"Ratios: \ Fieller", r"When the denominator might be near zero", part=PART, said="Chapter seven. Ratios, and Fieller's interval.")
 
     def problem(self):
         rows = fit_rows(VGroup(

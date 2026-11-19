@@ -5,7 +5,7 @@ import numpy as np
 from videos.stats.stats38.common import *  # noqa: F403
 
 
-class BlockBootstrap(VoiceoverScene):
+class BlockBootstrap(StatsScene):
     def construct(self):
         self.card()
         self.problem()
@@ -16,10 +16,7 @@ class BlockBootstrap(VoiceoverScene):
         self.board()
 
     def card(self):
-        card = chapter_card(11, r"The block bootstrap", r"Resampling without breaking the memory", lit=(1989, 1994), part=PART)
-        with self.voiceover("Chapter eleven. The block bootstrap."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(11, r"The block bootstrap", r"Resampling without breaking the memory", lit=(1989, 1994), part=PART, said="Chapter eleven. The block bootstrap.")
 
     def problem(self):
         rows = fit_rows(VGroup(

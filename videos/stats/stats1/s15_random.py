@@ -5,7 +5,7 @@ import numpy as np
 from videos.stats.stats1.common import *  # noqa: F403
 
 
-class Random(VoiceoverScene):
+class Random(StatsScene):
     def construct(self):
         self.card()
         self.machine()
@@ -13,11 +13,7 @@ class Random(VoiceoverScene):
         self.many()
 
     def card(self):
-        card = chapter_card(14, r"The sample is random", r"Draw again, and every summary changes", lit=(),
-                            part=PART)
-        with self.voiceover("Chapter fourteen. The sample is random."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(14, r"The sample is random", r"Draw again, and every summary changes", lit=(), part=PART, said="Chapter fourteen. The sample is random.")
 
     def machine(self):
         d = load("sampling")

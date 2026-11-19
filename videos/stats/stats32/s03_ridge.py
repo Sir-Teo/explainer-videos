@@ -5,7 +5,7 @@ import numpy as np
 from videos.stats.stats32.common import *  # noqa: F403
 
 
-class Ridge(VoiceoverScene):
+class Ridge(StatsScene):
     def construct(self):
         self.card()
         self.history()
@@ -19,10 +19,7 @@ class Ridge(VoiceoverScene):
         self.never()
 
     def card(self):
-        card = chapter_card(2, r"Ridge", r"Stability by shrinking", lit=(1970,), part=PART)
-        with self.voiceover("Chapter two. Ridge regression."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(2, r"Ridge", r"Stability by shrinking", lit=(1970,), part=PART, said="Chapter two. Ridge regression.")
 
     def history(self):
         rows = fit_rows(VGroup(

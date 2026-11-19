@@ -5,7 +5,7 @@ import numpy as np
 from videos.stats.stats42.common import *  # noqa: F403
 
 
-class SurveyEstimate(VoiceoverScene):
+class SurveyEstimate(StatsScene):
     def construct(self):
         self.card()
         self.holes()
@@ -17,10 +17,7 @@ class SurveyEstimate(VoiceoverScene):
         self.board()
 
     def card(self):
-        card = chapter_card(5, r"Case 2: \ imputation and AIPW", r"Income is missing for more than a third", part=PART)
-        with self.voiceover("Chapter five. The estimate: imputation for the holes, then a doubly robust estimator."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(5, r"Case 2: \ imputation and AIPW", r"Income is missing for more than a third", part=PART, said="Chapter five. The estimate: imputation for the holes, then a doubly robust estimator.")
 
     def holes(self):
         o = load("obs")

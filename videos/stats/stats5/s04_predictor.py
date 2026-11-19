@@ -5,7 +5,7 @@ import numpy as np
 from videos.stats.stats5.common import *  # noqa: F403
 
 
-class Predictor(VoiceoverScene):
+class Predictor(StatsScene):
     def construct(self):
         self.card()
         self.incomes()
@@ -15,10 +15,7 @@ class Predictor(VoiceoverScene):
         self.median()
 
     def card(self):
-        card = chapter_card(3, r"Conditional expectation", r"The best possible prediction of $Y$ from $X$", lit=(), part=PART)
-        with self.voiceover("Chapter three. Conditional expectation."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(3, r"Conditional expectation", r"The best possible prediction of $Y$ from $X$", lit=(), part=PART, said="Chapter three. Conditional expectation.")
 
     def incomes(self):
         d = load("predictor")

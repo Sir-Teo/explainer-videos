@@ -5,7 +5,7 @@ import numpy as np
 from videos.stats.stats46.common import *  # noqa: F403
 
 
-class Hook(VoiceoverScene):
+class Hook(StatsScene):
     def construct(self):
         self.quarrel()
         self.sizes()
@@ -13,7 +13,7 @@ class Hook(VoiceoverScene):
         self.faithful()
         self.linnik()
         self.upgrades()
-        self.objectives()
+        self.title(PART)
 
     def quarrel(self):
         tl = timeline(lit=(1935, 1968)).to_edge(UP, buff=0.35)
@@ -179,29 +179,5 @@ class Hook(VoiceoverScene):
             for k, m_ in enumerate("ab"):
                 vo.wait_until(m_)
                 self.play(FadeIn(cards[k], shift=UP * 0.15))
-        self.wait(1.0)
-        self.clear_scene()
-
-    def objectives(self):
-        head = VGroup(label(r"Part 46", font_size=34, color=GREY_B), label(r"The Theory of Testing and Confidence", font_size=48)).arrange(DOWN, buff=0.25)
-        obj = objectives_card([
-            r"the Neyman--Pearson lemma in general; \ monotone likelihood ratio; \ Karlin--Rubin",
-            r"unbiased tests and Neyman structure; \ invariance; \ the likelihood ratio test on a boundary",
-            r"confidence sets by inversion; \ Fieller and Gleser--Hwang; \ Feldman--Cousins",
-            r"closed testing; \ recognizable subsets; \ p-values as evidence; \ goodness of fit",
-        ], color=S.ACCENT, font_size=26)
-        prereq = note(r"prerequisites: \ Parts 10, \ 11, \ 45").to_corner(DL, buff=0.3)
-        built = note(r"built: \ \texttt{statkit.testing}, \ the Neyman-structure visualizer").to_corner(DR, buff=0.3)
-        with self.voiceover(
-            "<bookmark mark='a'/> Part forty-six: the theory of testing and confidence. <bookmark mark='b'/> We'll prove the "
-            "Neyman–Pearson lemma in general, with Karlin and Rubin's one-sided theory; build unbiased tests by Neyman "
-            "structure, with a visualizer that shows it slice by slice, and invariant tests; take the likelihood ratio test "
-            "to the boundary of its parameter space; invert tests into confidence sets and meet their impossibility "
-            "theorems; and finish with closed testing, conditional coverage, p-values as evidence, and goodness of fit."
-        ) as vo:
-            vo.wait_until("a")
-            self.play(FadeIn(head, shift=UP * 0.2))
-            vo.wait_until("b")
-            self.play(FadeOut(head), FadeIn(obj, shift=UP * 0.2), FadeIn(prereq), FadeIn(built))
         self.wait(1.0)
         self.clear_scene()

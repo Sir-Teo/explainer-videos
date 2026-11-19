@@ -5,7 +5,7 @@ import numpy as np
 from videos.stats.stats48.common import *  # noqa: F403
 
 
-class Concentration(VoiceoverScene):
+class Concentration(StatsScene):
     def construct(self):
         self.card()
         self.bernstein()
@@ -15,10 +15,7 @@ class Concentration(VoiceoverScene):
         self.uses()
 
     def card(self):
-        card = chapter_card(6, r"Maximal inequalities", r"How tightly the supremum sits around its mean", lit=(1996,), part=PART)
-        with self.voiceover("Chapter six. Maximal inequalities: how tightly the supremum sits around its mean."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(6, r"Maximal inequalities", r"How tightly the supremum sits around its mean", lit=(1996,), part=PART, said="Chapter six. Maximal inequalities: how tightly the supremum sits around its mean.")
 
     def bernstein(self):
         rows = [

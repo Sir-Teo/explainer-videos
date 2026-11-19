@@ -5,7 +5,7 @@ import numpy as np
 from videos.stats.stats58.common import *  # noqa: F403
 
 
-class Ville(LectureMixin, VoiceoverScene):
+class Ville(LectureMixin, StatsScene):
     def construct(self):
         self.card_voiceover("Chapter three. Test martingales and Ville's inequality: one line of 1939 that makes peeking "
                        "safe.", 3, r"Test martingales and Ville", r"Peeking, made safe", lit=(1939,))

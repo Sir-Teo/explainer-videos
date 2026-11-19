@@ -3,7 +3,7 @@ from __future__ import annotations
 from videos.stats.stats48.common import *  # noqa: F403
 
 
-class BootstrapProcess(VoiceoverScene):
+class BootstrapProcess(StatsScene):
     def construct(self):
         self.card()
         self.theorem()
@@ -13,10 +13,7 @@ class BootstrapProcess(VoiceoverScene):
         self.board()
 
     def card(self):
-        card = chapter_card(11, r"The bootstrap empirical process", r"Resampling a whole random function", lit=(1990,), part=PART)
-        with self.voiceover("Chapter eleven. The bootstrap empirical process: resampling a whole random function."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(11, r"The bootstrap empirical process", r"Resampling a whole random function", lit=(1990,), part=PART, said="Chapter eleven. The bootstrap empirical process: resampling a whole random function.")
 
     def theorem(self):
         rows = [

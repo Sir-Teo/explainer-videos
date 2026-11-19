@@ -15,12 +15,12 @@ def middle_square(seed: int, n: int) -> list[int]:
     return out
 
 
-class Hook(VoiceoverScene):
+class Hook(StatsScene):
     def construct(self):
         self.sin()
         self.middle()
         self.randu()
-        self.objectives()
+        self.title(PART)
 
     def sin(self):
         tl = timeline(lit=(1951,)).to_edge(UP, buff=0.35)
@@ -128,34 +128,4 @@ class Hook(VoiceoverScene):
             self.play(ns.angle.animate.set_value(EDGE_ON + 0.9), run_time=3.0)
             cl.clear_updaters()
             cl2.clear_updaters()
-        self.clear_scene()
-
-    def objectives(self):
-        head = VGroup(label(r"Part 7", font_size=34, color=GREY_B), label(r"Randomness on Demand", font_size=60))
-        head.arrange(DOWN, buff=0.25)
-        obj = objectives_card([
-            r"pseudo-random generators: \ congruences, \ PCG, \ and how to test them",
-            r"samplers: \ the inverse CDF, \ rejection, \ Box--Muller, \ Marsaglia--Tsang, \ the alias method",
-            r"Monte Carlo integration: \ $\sigma/\sqrt n$ in any dimension; \ Buffon's needle",
-            r"simulation studies done right; \ variance reduction",
-            r"Markov chains: \ stationary laws, \ PageRank, \ seven shuffles, \ Metropolis",
-        ], color=S.ACCENT, font_size=26)
-        prereq = note(r"prerequisites: \ Parts 3 and 6").to_corner(DL, buff=0.3)
-        built = label(r"Built in this part: \ statkit.random, \ and the simulation-study harness", font_size=28, color=S.ACCENT)
-        built.to_edge(DOWN, buff=0.8)
-        with self.voiceover(
-            "<bookmark mark='a'/> Part seven: randomness on demand. <bookmark mark='b'/> We'll build a generator and "
-            "learn to test one; turn uniform numbers into any distribution we like; integrate by throwing darts; "
-            "learn to run a simulation study honestly, a framework for evaluating statistical methods; make "
-            "simulations cheaper; and meet Markov chains, which mix decks of cards and power the algorithms of "
-            "modern Bayesian statistics. <bookmark mark='c'/> And we'll build statkit dot random, a library that "
-            "later simulations can use."
-        ) as vo:
-            vo.wait_until("a")
-            self.play(FadeIn(head, shift=UP * 0.2))
-            vo.wait_until("b")
-            self.play(FadeOut(head), FadeIn(obj, shift=UP * 0.2), FadeIn(prereq))
-            vo.wait_until("c")
-            self.play(obj.animate.shift(UP * 0.4), FadeIn(built))
-        self.wait(1.0)
         self.clear_scene()

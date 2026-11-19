@@ -5,17 +5,14 @@ import numpy as np
 from videos.stats.stats55.common import *  # noqa: F403
 
 
-class ExamEmpirical(ExamMixin, VoiceoverScene):
+class ExamEmpirical(ExamMixin, StatsScene):
     def construct(self):
         self.card()
         self.p7()
         self.p8()
 
     def card(self):
-        card = chapter_card(4, r"Sitting IV: \ empirical processes and efficiency", r"Problems 7 and 8", lit=(1952, 1974, 1882), part=PART)
-        with self.voiceover("Sitting four: empirical processes and efficiency. A bracketing bound, and an influence function on Newcomb's data."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(4, r"Sitting IV: \ empirical processes and efficiency", r"Problems 7 and 8", lit=(1952, 1974, 1882), part=PART, said="Sitting four: empirical processes and efficiency. A bracketing bound, and an influence function on Newcomb's data.")
 
     # ------------------------------------------------------------------------------------------ Problem 7
     def p7(self):

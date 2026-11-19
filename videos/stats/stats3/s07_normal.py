@@ -5,7 +5,7 @@ import numpy as np
 from videos.stats.stats3.common import *  # noqa: F403
 
 
-class Normal(VoiceoverScene, TreeMixin):
+class Normal(StatsScene, TreeMixin):
     def construct(self):
         self.card()
         self.demoivre()
@@ -17,11 +17,7 @@ class Normal(VoiceoverScene, TreeMixin):
                             "trials, and the Poisson with a large mean, which is a sum of many small Poissons.", 6)
 
     def card(self):
-        card = chapter_card(6, r"The normal, three ways", r"One curve, reached from three directions", lit=(1733,),
-                            part=PART)
-        with self.voiceover("Chapter six. The normal, three ways."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(6, r"The normal, three ways", r"One curve, reached from three directions", lit=(1733,), part=PART, said="Chapter six. The normal, three ways.")
 
     def demoivre(self):
         d = load("normal")

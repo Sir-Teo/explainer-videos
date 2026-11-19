@@ -6,7 +6,7 @@ from scipy import stats
 from videos.stats.stats9.common import *  # noqa: F403
 
 
-class Properties(VoiceoverScene):
+class Properties(StatsScene):
     def construct(self):
         self.card()
         self.consistency()
@@ -18,10 +18,7 @@ class Properties(VoiceoverScene):
         self.failures()
 
     def card(self):
-        card = chapter_card(5, r"How good is the MLE?", r"Consistency, \ normality, \ and a standard error from curvature", part=PART)
-        with self.voiceover("Chapter five. How good is the maximum likelihood estimator?"):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(5, r"How good is the MLE?", r"Consistency, \ normality, \ and a standard error from curvature", part=PART, said="Chapter five. How good is the maximum likelihood estimator?")
 
     def consistency(self):
         g = np.random.Generator(np.random.PCG64(1949))

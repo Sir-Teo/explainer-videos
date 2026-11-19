@@ -5,7 +5,7 @@ import numpy as np
 from videos.stats.stats44.common import *  # noqa: F403
 
 
-class Convergence(VoiceoverScene):
+class Convergence(StatsScene):
     def construct(self):
         self.card()
         self.upcrossings()
@@ -15,10 +15,7 @@ class Convergence(VoiceoverScene):
         self.reverse()
 
     def card(self):
-        card = chapter_card(5, r"Martingale convergence", r"Why a fair game must settle down", lit=(1953,), part=PART)
-        with self.voiceover("Chapter five. Martingale convergence: why a bounded fair game must settle down."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(5, r"Martingale convergence", r"Why a fair game must settle down", lit=(1953,), part=PART, said="Chapter five. Martingale convergence: why a bounded fair game must settle down.")
 
     def upcrossings(self):
         g = np.random.default_rng(9)

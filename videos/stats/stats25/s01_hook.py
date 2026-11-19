@@ -12,14 +12,14 @@ def baseball_plot(d, with_truth=True, center=(0.6, 0.3, 0)):
                          colors={"raw": RAW, "shrunk": SHRUNK, "truth": TRUE})
 
 
-class Hook(VoiceoverScene):
+class Hook(StatsScene):
     def construct(self):
         self.story()
         self.raw()
         self.shrink()
         self.score()
         self.paradox()
-        self.objectives()
+        self.title(PART)
 
     def story(self):
         tl = timeline(lit=(1975,)).to_edge(UP, buff=0.35)
@@ -152,30 +152,4 @@ class Hook(VoiceoverScene):
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
                 step(k, transform=False)
-        self.clear_scene()
-
-    def objectives(self):
-        head = VGroup(label(r"Part 25", font_size=34, color=GREY_B), label(r"Borrowing Strength", font_size=60)).arrange(DOWN, buff=0.25)
-        obj = objectives_card([
-            r"James--Stein, \ its risk, \ and SURE; \ empirical Bayes and Tweedie's formula",
-            r"random effects, \ the linear mixed model, \ BLUPs; \ ML vs REML",
-            r"inference for mixed models; \ longitudinal, \ nested and crossed designs",
-            r"fixed vs random effects; \ GLMMs and league tables",
-            r"small areas, \ meta-analysis, \ and item response theory",
-        ], color=SHRUNK, font_size=26)
-        prereq = note(r"prerequisites: \ Parts 15, \ 22 and 23").to_corner(DL, buff=0.3)
-        built = note(r"built: \ \texttt{statkit.shrink}, \ \texttt{statkit.mixed}; \ the shrinkage plot").to_corner(DR, buff=0.3)
-        with self.voiceover(
-            "<bookmark mark='a'/> Part twenty-five: borrowing strength. <bookmark mark='b'/> We'll prove "
-            "James–Stein's advantage and estimate its risk; see it as empirical Bayes; meet random effects and the "
-            "linear mixed model with its best linear unbiased predictors; compare maximum likelihood with REML; do "
-            "inference, including tests on the boundary; model growth curves and nested and crossed designs; decide "
-            "between fixed and random effects; fit mixed models for binary outcomes and study noisy hospital "
-            "rankings; and apply all of it to small areas, meta-analysis and educational testing."
-        ) as vo:
-            vo.wait_until("a")
-            self.play(FadeIn(head, shift=UP * 0.2))
-            vo.wait_until("b")
-            self.play(FadeOut(head), FadeIn(obj, shift=UP * 0.2), FadeIn(prereq), FadeIn(built))
-        self.wait(1.0)
         self.clear_scene()

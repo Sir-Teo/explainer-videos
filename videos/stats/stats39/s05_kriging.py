@@ -5,7 +5,7 @@ import numpy as np
 from videos.stats.stats39.common import *  # noqa: F403
 
 
-class Kriging(VoiceoverScene):
+class Kriging(StatsScene):
     def construct(self):
         self.card()
         self.blup()
@@ -16,10 +16,7 @@ class Kriging(VoiceoverScene):
         self.gp()
 
     def card(self):
-        card = chapter_card(4, r"Kriging", r"The best linear unbiased predictor", lit=(1963,), part=PART)
-        with self.voiceover("Chapter four. Kriging."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(4, r"Kriging", r"The best linear unbiased predictor", lit=(1963,), part=PART, said="Chapter four. Kriging.")
 
     def blup(self):
         rows = [

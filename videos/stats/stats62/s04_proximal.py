@@ -5,7 +5,7 @@ import numpy as np
 from videos.stats.stats62.common import *  # noqa: F403
 
 
-class Proximal(LectureMixin, VoiceoverScene):
+class Proximal(LectureMixin, StatsScene):
     def construct(self):
         self.card_voiceover("Chapter three. Proximal causal inference: two imperfect proxies for one hidden confounder.", 3,
                             r"Proximal causal inference", r"Proxies, \ not measurements", lit=(2018,))

@@ -12,7 +12,7 @@ def node_positions():
     return [np.array([-3.0, 1.0, 0]), np.array([0.0, -1.6, 0]), np.array([3.0, 1.0, 0])]
 
 
-class Chains(VoiceoverScene):
+class Chains(StatsScene):
     def construct(self):
         self.card()
         self.markov()
@@ -23,10 +23,7 @@ class Chains(VoiceoverScene):
         self.ergodic()
 
     def card(self):
-        card = chapter_card(8, r"Markov chains", r"Randomness with a memory of one step", part=PART)
-        with self.voiceover("Chapter eight. Markov chains."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(8, r"Markov chains", r"Randomness with a memory of one step", part=PART, said="Chapter eight. Markov chains.")
 
     def markov(self):
         hc = history_card(1913, r"Andrey Markov, \ on Pushkin's \emph{Eugene Onegin}", r"20,000 letters, \ classified as vowel or "

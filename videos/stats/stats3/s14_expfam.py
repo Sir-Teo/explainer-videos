@@ -5,7 +5,7 @@ import numpy as np
 from videos.stats.stats3.common import *  # noqa: F403
 
 
-class ExpFam(VoiceoverScene):
+class ExpFam(StatsScene):
     def construct(self):
         self.card()
         self.form()
@@ -14,11 +14,7 @@ class ExpFam(VoiceoverScene):
         self.ahead()
 
     def card(self):
-        card = chapter_card(13, r"Exponential families", r"One formula behind most of the family", lit=(),
-                            part=PART)
-        with self.voiceover("Chapter thirteen. Exponential families, a first look."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(13, r"Exponential families", r"One formula behind most of the family", lit=(), part=PART, said="Chapter thirteen. Exponential families, a first look.")
 
     def form(self):
         f = cmath(r"f(x \mid \eta)", r"=", r"h(x)", r"\,\exp\!\big(", r"\eta", r"\, T(x)", r"-", r"A(\eta)", r"\big)",

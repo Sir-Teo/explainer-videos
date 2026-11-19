@@ -3,7 +3,7 @@ from __future__ import annotations
 from videos.stats.stats57.common import *  # noqa: F403
 
 
-class FunctionClasses(VoiceoverScene):
+class FunctionClasses(StatsScene):
     def construct(self):
         self.card()
         self.shift_view()
@@ -14,10 +14,7 @@ class FunctionClasses(VoiceoverScene):
         self.infinite()
 
     def card(self):
-        card = chapter_card(4, r"Conditional guarantees over function classes", r"Exact coverage for every group in a family", lit=(2023,), part=PART)
-        with self.voiceover("Chapter four. Conditional guarantees over function classes: exact coverage for every group in a family."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(4, r"Conditional guarantees over function classes", r"Exact coverage for every group in a family", lit=(2023,), part=PART, said="Chapter four. Conditional guarantees over function classes: exact coverage for every group in a family.")
 
     def shift_view(self):
         rows = [

@@ -5,7 +5,7 @@ import numpy as np
 from videos.stats.stats50.common import *  # noqa: F403
 
 
-class LeCam(VoiceoverScene):
+class LeCam(StatsScene):
     def construct(self):
         self.card()
         self.reduction()
@@ -17,10 +17,7 @@ class LeCam(VoiceoverScene):
         self.chart()
 
     def card(self):
-        card = chapter_card(3, r"Le Cam's two-point method", r"If two answers look alike, \ no one can tell them apart", part=PART)
-        with self.voiceover("Chapter three. Le Cam's two-point method: if two answers look alike, no one can tell them apart."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(3, r"Le Cam's two-point method", r"If two answers look alike, \ no one can tell them apart", part=PART, said="Chapter three. Le Cam's two-point method: if two answers look alike, no one can tell them apart.")
 
     def reduction(self):
         rows = [

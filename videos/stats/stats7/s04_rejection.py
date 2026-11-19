@@ -8,7 +8,7 @@ from scipy import stats as st
 from videos.stats.stats7.common import *  # noqa: F403
 
 
-class Rejection(VoiceoverScene):
+class Rejection(StatsScene):
     def construct(self):
         self.card()
         self.darts()
@@ -18,10 +18,7 @@ class Rejection(VoiceoverScene):
         self.dimension()
 
     def card(self):
-        card = chapter_card(3, r"Rejection sampling", r"Throw darts, \ keep the ones under the curve", lit=(1951,), part=PART)
-        with self.voiceover("Chapter three. Rejection sampling."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(3, r"Rejection sampling", r"Throw darts, \ keep the ones under the curve", lit=(1951,), part=PART, said="Chapter three. Rejection sampling.")
 
     def darts(self):
         d = load("rejection")

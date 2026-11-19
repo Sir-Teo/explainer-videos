@@ -8,7 +8,7 @@ from scipy import stats
 from videos.stats.stats10.common import *  # noqa: F403
 
 
-class Logic(VoiceoverScene):
+class Logic(StatsScene):
     def construct(self):
         self.card()
         self.ingredients()
@@ -19,10 +19,7 @@ class Logic(VoiceoverScene):
         self.five_percent()
 
     def card(self):
-        card = chapter_card(1, r"Fisher's logic", r"A null, \ a statistic, \ a tail probability", lit=(1710,), part=PART)
-        with self.voiceover("Chapter one. Fisher's logic."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(1, r"Fisher's logic", r"A null, \ a statistic, \ a tail probability", lit=(1710,), part=PART, said="Chapter one. Fisher's logic.")
 
     def ingredients(self):
         items = [

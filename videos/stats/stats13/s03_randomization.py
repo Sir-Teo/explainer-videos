@@ -5,7 +5,7 @@ import numpy as np
 from videos.stats.stats13.common import *  # noqa: F403
 
 
-class Randomization(VoiceoverScene):
+class Randomization(StatsScene):
     def construct(self):
         self.card()
         self.sharp_null()
@@ -16,11 +16,7 @@ class Randomization(VoiceoverScene):
         self.why_t()
 
     def card(self):
-        card = chapter_card(2, r"Randomization as inference", r"The coin that made the layout is the probability model",
-                            lit=(1935,), part=PART)
-        with self.voiceover("Chapter two. Randomization as inference."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(2, r"Randomization as inference", r"The coin that made the layout is the probability model", lit=(1935,), part=PART, said="Chapter two. Randomization as inference.")
 
     def sharp_null(self):
         rows = [

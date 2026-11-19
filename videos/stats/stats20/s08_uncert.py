@@ -5,7 +5,7 @@ import numpy as np
 from videos.stats.stats20.common import *  # noqa: F403
 
 
-class Uncertainty(VoiceoverScene):
+class Uncertainty(StatsScene):
     def construct(self):
         self.card()
         self.four()
@@ -15,10 +15,7 @@ class Uncertainty(VoiceoverScene):
         self.silent()
 
     def card(self):
-        card = chapter_card(7, r"Uncertainty", r"Which standard error?", part=PART)
-        with self.voiceover("Chapter seven. Uncertainty."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(7, r"Uncertainty", r"Which standard error?", part=PART, said="Chapter seven. Uncertainty.")
 
     def four(self):
         d = load("uncert")

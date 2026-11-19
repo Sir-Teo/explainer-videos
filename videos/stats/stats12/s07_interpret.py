@@ -5,7 +5,7 @@ import numpy as np
 from videos.stats.stats12.common import *  # noqa: F403
 
 
-class Interpret(VoiceoverScene):
+class Interpret(StatsScene):
     def construct(self):
         self.card()
         self.dummies()
@@ -17,10 +17,7 @@ class Interpret(VoiceoverScene):
         self.extrapolation()
 
     def card(self):
-        card = chapter_card(6, r"Interpreting coefficients", r"Units, \ dummies, \ interactions, \ curves", part=PART)
-        with self.voiceover("Chapter six. Interpreting coefficients."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(6, r"Interpreting coefficients", r"Units, \ dummies, \ interactions, \ curves", part=PART, said="Chapter six. Interpreting coefficients.")
 
     def dummies(self):
         d = load("dummies")

@@ -17,7 +17,7 @@ def box(text, color, width=3.6, height=0.9, font_size=22):
     return VGroup(r, t.move_to(r))
 
 
-class Leakage(VoiceoverScene):
+class Leakage(StatsScene):
     def construct(self):
         self.card()
         self.experiment()
@@ -31,10 +31,7 @@ class Leakage(VoiceoverScene):
         self.closing()
 
     def card(self):
-        card = chapter_card(10, r"Leakage and honest evaluation", r"When the test has seen the answers", lit=(2002,), part=PART)
-        with self.voiceover("Chapter ten. Leakage, and honest evaluation."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(10, r"Leakage and honest evaluation", r"When the test has seen the answers", lit=(2002,), part=PART, said="Chapter ten. Leakage, and honest evaluation.")
 
     def matrix(self):
         g = np.random.default_rng(60)  # decoration only: the shading of the drawn cells

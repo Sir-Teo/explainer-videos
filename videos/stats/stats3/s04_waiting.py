@@ -5,7 +5,7 @@ import numpy as np
 from videos.stats.stats3.common import *  # noqa: F403
 
 
-class Waiting(VoiceoverScene, TreeMixin):
+class Waiting(StatsScene, TreeMixin):
     def construct(self):
         self.card()
         self.geometric()
@@ -17,10 +17,7 @@ class Waiting(VoiceoverScene, TreeMixin):
                             "binomial.", 3)
 
     def card(self):
-        card = chapter_card(3, r"Waiting", r"How long until the first six?", lit=(1654,), part=PART)
-        with self.voiceover("Chapter three. Waiting."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(3, r"Waiting", r"How long until the first six?", lit=(1654,), part=PART, said="Chapter three. Waiting.")
 
     def geometric(self):
         d = load("waiting")

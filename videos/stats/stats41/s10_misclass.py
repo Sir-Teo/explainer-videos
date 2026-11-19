@@ -5,7 +5,7 @@ import numpy as np
 from videos.stats.stats41.common import *  # noqa: F403
 
 
-class Misclassification(VoiceoverScene):
+class Misclassification(StatsScene):
     def construct(self):
         self.card()
         self.setup_study()
@@ -18,10 +18,7 @@ class Misclassification(VoiceoverScene):
         self.lessons()
 
     def card(self):
-        card = chapter_card(9, r"Misclassification", r"When the category itself is wrong", lit=(1904,), part=PART)
-        with self.voiceover("Chapter nine. Misclassification."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(9, r"Misclassification", r"When the category itself is wrong", lit=(1904,), part=PART, said="Chapter nine. Misclassification.")
 
     def setup_study(self):
         rows = fit_rows(VGroup(

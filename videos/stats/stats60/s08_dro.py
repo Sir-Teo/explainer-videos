@@ -5,7 +5,7 @@ import numpy as np
 from videos.stats.stats60.common import *  # noqa: F403
 
 
-class DRO(LectureMixin, VoiceoverScene):
+class DRO(LectureMixin, StatsScene):
     def construct(self):
         self.card_voiceover("Chapter seven. Distributionally robust optimization: guarding against every shift in a ball.", 7,
                             r"Distributionally robust optimization", r"The worst case, within reason", lit=(2013,))

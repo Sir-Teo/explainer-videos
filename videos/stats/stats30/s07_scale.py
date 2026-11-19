@@ -5,7 +5,7 @@ import numpy as np
 from videos.stats.stats30.common import *  # noqa: F403
 
 
-class Scale(VoiceoverScene):
+class Scale(StatsScene):
     def construct(self):
         self.card()
         self.copper()
@@ -17,10 +17,7 @@ class Scale(VoiceoverScene):
         self.why_scale()
 
     def card(self):
-        card = chapter_card(6, r"Robust scale", r"MAD, \ $Q_n$, \ $S_n$", lit=(1993,), part=PART)
-        with self.voiceover("Chapter six. Robust measures of scale."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(6, r"Robust scale", r"MAD, \ $Q_n$, \ $S_n$", lit=(1993,), part=PART, said="Chapter six. Robust measures of scale.")
 
     def copper(self):
         d = load("scale")

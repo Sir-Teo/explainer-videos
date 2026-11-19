@@ -6,7 +6,7 @@ from scipy import stats as st
 from videos.stats.stats6.common import *  # noqa: F403
 
 
-class Using(VoiceoverScene):
+class Using(StatsScene):
     def construct(self):
         self.card()
         self.demoivre()
@@ -15,10 +15,7 @@ class Using(VoiceoverScene):
         self.rare()
 
     def card(self):
-        card = chapter_card(6, r"Using it", r"The normal approximation, \ and how to apply it well", lit=(1733,), part=PART)
-        with self.voiceover("Chapter six. Using the normal approximation."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(6, r"Using it", r"The normal approximation, \ and how to apply it well", lit=(1733,), part=PART, said="Chapter six. Using the normal approximation.")
 
     def demoivre(self):
         tl = timeline(lit=(1733,)).to_edge(UP, buff=0.35)

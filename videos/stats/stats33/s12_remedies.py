@@ -3,7 +3,7 @@ from __future__ import annotations
 from videos.stats.stats33.common import *  # noqa: F403
 
 
-class Remedies(VoiceoverScene):
+class Remedies(StatsScene):
     def construct(self):
         self.card()
         self.prereg()
@@ -15,10 +15,7 @@ class Remedies(VoiceoverScene):
         self.position()
 
     def card(self):
-        card = chapter_card(11, r"Remedies argued", r"What should change, \ and who disagrees", lit=(2016,), part=PART)
-        with self.voiceover("Chapter eleven. Remedies, argued."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(11, r"Remedies argued", r"What should change, \ and who disagrees", lit=(2016,), part=PART, said="Chapter eleven. Remedies, argued.")
 
     def prereg(self):
         rows = fit_rows(VGroup(

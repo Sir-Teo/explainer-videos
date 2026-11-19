@@ -5,7 +5,7 @@ import numpy as np
 from videos.stats.stats48.common import *  # noqa: F403
 
 
-class Entropy(VoiceoverScene):
+class Entropy(StatsScene):
     def construct(self):
         self.card()
         self.definitions()
@@ -14,10 +14,7 @@ class Entropy(VoiceoverScene):
         self.examples()
 
     def card(self):
-        card = chapter_card(3, r"Entropy and bracketing", r"Measuring a class by how many balls it takes to cover it", part=PART)
-        with self.voiceover("Chapter three. Entropy and bracketing: measuring a class by how many balls it takes to cover it."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(3, r"Entropy and bracketing", r"Measuring a class by how many balls it takes to cover it", part=PART, said="Chapter three. Entropy and bracketing: measuring a class by how many balls it takes to cover it.")
 
     def definitions(self):
         rows = [

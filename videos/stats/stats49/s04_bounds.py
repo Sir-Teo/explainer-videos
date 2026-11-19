@@ -5,7 +5,7 @@ import numpy as np
 from videos.stats.stats49.common import *  # noqa: F403
 
 
-class Bounds(VoiceoverScene):
+class Bounds(StatsScene):
     def construct(self):
         self.card()
         self.convolution()
@@ -16,10 +16,7 @@ class Bounds(VoiceoverScene):
         self.ate()
 
     def card(self):
-        card = chapter_card(3, r"Efficiency bounds", r"The hardest one-dimensional submodel", part=PART)
-        with self.voiceover("Chapter three. Efficiency bounds: the hardest one-dimensional submodel."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(3, r"Efficiency bounds", r"The hardest one-dimensional submodel", part=PART, said="Chapter three. Efficiency bounds: the hardest one-dimensional submodel.")
 
     def convolution(self):
         rows = [

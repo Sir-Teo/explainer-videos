@@ -5,7 +5,7 @@ import numpy as np
 from videos.stats.stats44.common import *  # noqa: F403
 
 
-class ConditionalExpectation(VoiceoverScene):
+class ConditionalExpectation(StatsScene):
     def construct(self):
         self.card()
         self.definition()
@@ -16,10 +16,7 @@ class ConditionalExpectation(VoiceoverScene):
         self.disintegration()
 
     def card(self):
-        card = chapter_card(1, r"Conditional expectation", r"Averaging over what you don't know", lit=(1933,), part=PART)
-        with self.voiceover("Chapter one. Conditional expectation, defined properly at last."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(1, r"Conditional expectation", r"Averaging over what you don't know", lit=(1933,), part=PART, said="Chapter one. Conditional expectation, defined properly at last.")
 
     def definition(self):
         rows = [

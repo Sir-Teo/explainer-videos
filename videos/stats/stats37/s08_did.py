@@ -5,7 +5,7 @@ import numpy as np
 from videos.stats.stats37.common import *  # noqa: F403
 
 
-class DiD(VoiceoverScene):
+class DiD(StatsScene):
     def construct(self):
         self.card()
         self.story()
@@ -16,10 +16,7 @@ class DiD(VoiceoverScene):
         self.event()
 
     def card(self):
-        card = chapter_card(7, r"Difference-in-differences", r"Two changes, \ subtracted", lit=(1855, 1994), part=PART)
-        with self.voiceover("Chapter seven. Difference-in-differences."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(7, r"Difference-in-differences", r"Two changes, \ subtracted", lit=(1855, 1994), part=PART, said="Chapter seven. Difference-in-differences.")
 
     def story(self):
         rows = fit_rows(VGroup(

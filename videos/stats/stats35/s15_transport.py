@@ -5,7 +5,7 @@ import numpy as np
 from videos.stats.stats35.common import *  # noqa: F403
 
 
-class Transport(VoiceoverScene):
+class Transport(StatsScene):
     def construct(self):
         self.card()
         self.who()
@@ -16,10 +16,7 @@ class Transport(VoiceoverScene):
         self.lesson()
 
     def card(self):
-        card = chapter_card(14, r"External validity", r"Transporting a trial", lit=(2011, 2019), part=PART)
-        with self.voiceover("Chapter fourteen. External validity."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(14, r"External validity", r"Transporting a trial", lit=(2011, 2019), part=PART, said="Chapter fourteen. External validity.")
 
     def who(self):
         rows = fit_rows(VGroup(

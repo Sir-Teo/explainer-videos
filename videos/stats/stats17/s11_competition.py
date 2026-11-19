@@ -8,7 +8,7 @@ NAMES = {"naive": r"naive: \ the last value", "drift": r"drift: \ the average st
          "ar": r"AR, \ order by AIC", "combo": r"the average of drift, \ smoothing and AR"}
 
 
-class Competition(VoiceoverScene):
+class Competition(StatsScene):
     def construct(self):
         self.card()
         self.history()
@@ -20,10 +20,7 @@ class Competition(VoiceoverScene):
         self.lessons()
 
     def card(self):
-        card = chapter_card(10, r"The M-competitions", r"What actually forecasts well?", lit=(1982,), part=PART)
-        with self.voiceover("Chapter ten. The M-competitions."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(10, r"The M-competitions", r"What actually forecasts well?", lit=(1982,), part=PART, said="Chapter ten. The M-competitions.")
 
     def history(self):
         hc = history_card(1979, r"S. Makridakis \& M. Hibon, \ \emph{JRSS A}",

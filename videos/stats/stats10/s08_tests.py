@@ -6,7 +6,7 @@ from explainer.stats.kit import tests as T
 from videos.stats.stats10.common import *  # noqa: F403
 
 
-class Tests(VoiceoverScene):
+class Tests(StatsScene):
     def construct(self):
         self.card()
         self.catalogue()
@@ -16,10 +16,7 @@ class Tests(VoiceoverScene):
         self.advice()
 
     def card(self):
-        card = chapter_card(7, r"The everyday tests", r"$z$, \ $t$, \ paired, \ pooled, \ Welch", part=PART)
-        with self.voiceover("Chapter seven. The everyday tests."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(7, r"The everyday tests", r"$z$, \ $t$, \ paired, \ pooled, \ Welch", part=PART, said="Chapter seven. The everyday tests.")
 
     def catalogue(self):
         items = [

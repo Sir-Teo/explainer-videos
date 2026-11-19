@@ -5,7 +5,7 @@ import numpy as np
 from videos.stats.stats41.common import *  # noqa: F403
 
 
-class Likelihood(VoiceoverScene):
+class Likelihood(StatsScene):
     def construct(self):
         self.card()
         self.air()
@@ -18,10 +18,7 @@ class Likelihood(VoiceoverScene):
         self.fiml()
 
     def card(self):
-        card = chapter_card(3, r"Likelihood under MAR", r"Use everything you saw", lit=(1977,), part=PART)
-        with self.voiceover("Chapter three. Likelihood under missing at random."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(3, r"Likelihood under MAR", r"Use everything you saw", lit=(1977,), part=PART, said="Chapter three. Likelihood under missing at random.")
 
     def air(self):
         d = load("em")

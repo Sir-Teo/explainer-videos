@@ -5,7 +5,7 @@ import numpy as np
 from videos.stats.stats44.common import *  # noqa: F403
 
 
-class Brownian(VoiceoverScene):
+class Brownian(StatsScene):
     def construct(self):
         self.card()
         self.definition()
@@ -15,10 +15,7 @@ class Brownian(VoiceoverScene):
         self.variation()
 
     def card(self):
-        card = chapter_card(10, r"Brownian motion", r"A continuous path made of independent pieces", lit=(1923,), part=PART)
-        with self.voiceover("Chapter ten. Brownian motion: a continuous path made of independent pieces."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(10, r"Brownian motion", r"A continuous path made of independent pieces", lit=(1923,), part=PART, said="Chapter ten. Brownian motion: a continuous path made of independent pieces.")
 
     def definition(self):
         rows = [

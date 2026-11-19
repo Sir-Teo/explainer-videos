@@ -7,7 +7,7 @@ from videos.stats.stats14.common import *  # noqa: F403
 DEPTS = "ABCDEF"
 
 
-class Simpson(VoiceoverScene):
+class Simpson(StatsScene):
     def construct(self):
         self.card()
         self.by_department()
@@ -17,10 +17,7 @@ class Simpson(VoiceoverScene):
         self.meaning()
 
     def card(self):
-        card = chapter_card(8, r"Simpson's paradox", r"Every part one way, \ the whole the other", lit=(1975,), part=PART)
-        with self.voiceover("Chapter eight. Simpson's paradox."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(8, r"Simpson's paradox", r"Every part one way, \ the whole the other", lit=(1975,), part=PART, said="Chapter eight. Simpson's paradox.")
 
     def by_department(self):
         d = load("tables")["depts"]

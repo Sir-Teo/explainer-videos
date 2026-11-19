@@ -5,14 +5,14 @@ import numpy as np
 from videos.stats.stats21.common import *  # noqa: F403
 
 
-class Hook(VoiceoverScene):
+class Hook(StatsScene):
     def construct(self):
         self.dantzig()
         self.bakery()
         self.walk()
         self.stigler()
         self.argmin()
-        self.objectives()
+        self.title(PART)
 
     def dantzig(self):
         tl = timeline(lit=(1939, 1947)).to_edge(UP, buff=0.35)
@@ -200,29 +200,4 @@ class Hook(VoiceoverScene):
             for k, m_ in enumerate("abcde"):
                 vo.wait_until(m_)
                 step(k, transform=False)
-        self.clear_scene()
-
-    def objectives(self):
-        head = VGroup(label(r"Part 21", font_size=34, color=GREY_B), label(r"Optimization for Statistics", font_size=56),
-                      label(r"Stage III: \ the master's", font_size=28, color=PATH)).arrange(DOWN, buff=0.25)
-        obj = objectives_card([
-            r"convexity; \ Lagrange multipliers and the KKT conditions",
-            r"duality, \ and the Neyman--Pearson lemma as a linear program",
-            r"linear programs: \ least absolute deviations and quantile regression",
-            r"Newton and Fisher scoring; \ MM; \ coordinate descent; \ proximal methods; \ ADMM",
-            r"stochastic gradient and Polyak--Ruppert averaging; \ optimization and inference",
-        ], color=PATH, font_size=26)
-        prereq = note(r"prerequisites: \ Parts 4, \ 9 and 19").to_corner(DL, buff=0.3)
-        built = note(r"built: \ \texttt{statkit.optim}; \ the landscape").to_corner(DR, buff=0.3)
-        with self.voiceover(
-            "<bookmark mark='a'/> Part twenty-one: optimization for statistics. <bookmark mark='b'/> We'll meet convexity and "
-            "Lagrange multipliers; duality, with the Neyman–Pearson lemma as a linear program; least absolute deviations and "
-            "quantile regression; Newton's method, MM algorithms, coordinate descent, proximal methods and ADMM; stochastic "
-            "gradient with averaging; and finally what an optimizer's output tells us about uncertainty."
-        ) as vo:
-            vo.wait_until("a")
-            self.play(FadeIn(head, shift=UP * 0.2))
-            vo.wait_until("b")
-            self.play(FadeOut(head), FadeIn(obj, shift=UP * 0.2), FadeIn(prereq), FadeIn(built))
-        self.wait(1.0)
         self.clear_scene()

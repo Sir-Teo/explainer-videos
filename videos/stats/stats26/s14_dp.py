@@ -5,7 +5,7 @@ import numpy as np
 from videos.stats.stats26.common import *  # noqa: F403
 
 
-class DP(VoiceoverScene):
+class DP(StatsScene):
     def construct(self):
         self.card()
         self.definition()
@@ -15,10 +15,7 @@ class DP(VoiceoverScene):
         self.uses()
 
     def card(self):
-        card = chapter_card(13, r"Bayesian nonparametrics", r"A prior on distributions", lit=(1973,), part=PART)
-        with self.voiceover("Chapter thirteen. Bayesian nonparametrics, a first look."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(13, r"Bayesian nonparametrics", r"A prior on distributions", lit=(1973,), part=PART, said="Chapter thirteen. Bayesian nonparametrics, a first look.")
 
     def definition(self):
         rows = [

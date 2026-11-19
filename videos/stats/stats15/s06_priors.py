@@ -8,7 +8,7 @@ from videos.stats.stats15.common import *  # noqa: F403
 PCOL = {"uniform": PRIOR, "Jeffreys": S.ALT, "sceptic": S.CTRL, "pessimist": RES}
 
 
-class Priors(VoiceoverScene):
+class Priors(StatsScene):
     def construct(self):
         self.card()
         self.four()
@@ -20,10 +20,7 @@ class Priors(VoiceoverScene):
         self.kinds()
 
     def card(self):
-        card = chapter_card(5, r"Priors", r"Where they come from, \ and how much they matter", lit=(1939,), part=PART)
-        with self.voiceover("Chapter five. Priors."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(5, r"Priors", r"Where they come from, \ and how much they matter", lit=(1939,), part=PART, said="Chapter five. Priors.")
 
     def four(self):
         d = load("priors")

@@ -5,7 +5,7 @@ import numpy as np
 from videos.stats.stats47.common import *  # noqa: F403
 
 
-class Bootstrap(VoiceoverScene):
+class Bootstrap(StatsScene):
     def construct(self):
         self.card()
         self.consistency()
@@ -16,10 +16,7 @@ class Bootstrap(VoiceoverScene):
         self.board()
 
     def card(self):
-        card = chapter_card(11, r"The bootstrap, \ rigorously", r"Why resampling beats the normal approximation", lit=(1992,), part=PART)
-        with self.voiceover("Chapter eleven. The bootstrap, rigorously: why resampling can beat the normal approximation."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(11, r"The bootstrap, \ rigorously", r"Why resampling beats the normal approximation", lit=(1992,), part=PART, said="Chapter eleven. The bootstrap, rigorously: why resampling can beat the normal approximation.")
 
     def consistency(self):
         rows = [

@@ -7,7 +7,7 @@ from explainer.stats.world import World
 from videos.stats.stats18.common import *  # noqa: F403
 
 
-class Clusters(VoiceoverScene):
+class Clusters(StatsScene):
     def construct(self):
         self.card()
         self.why_clusters()
@@ -19,10 +19,7 @@ class Clusters(VoiceoverScene):
         self.multistage()
 
     def card(self):
-        card = chapter_card(6, r"Clusters and stages", r"Cheaper interviews, \ correlated answers", part=PART)
-        with self.voiceover("Chapter six. Clusters and stages."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(6, r"Clusters and stages", r"Cheaper interviews, \ correlated answers", part=PART, said="Chapter six. Clusters and stages.")
 
     def multistage(self):
         rows = fit_rows(VGroup(

@@ -6,14 +6,14 @@ from explainer.stats.kit import ts as T
 from videos.stats.stats17.common import *  # noqa: F403
 
 
-class Hook(VoiceoverScene):
+class Hook(StatsScene):
     def construct(self):
         self.yule()
         self.series()
         self.differences()
         self.random_walks()
         self.pendulum()
-        self.objectives()
+        self.title(PART)
 
     def yule(self):
         tl = timeline(lit=(1926,)).to_edge(UP, buff=0.35)
@@ -202,29 +202,4 @@ class Hook(VoiceoverScene):
             vo.wait_until("c")
             self.play(FadeIn(rows[2]), tracker.animate.set_value(n - 1), run_time=8.0, rate_func=linear)
         pend.clear_updaters()
-        self.clear_scene()
-
-    def objectives(self):
-        head = VGroup(label(r"Part 17", font_size=34, color=GREY_B), label(r"Time Series", font_size=60)).arrange(DOWN, buff=0.25)
-        obj = objectives_card([
-            r"stationarity, \ the autocorrelation function, \ and the effective sample size",
-            r"AR, \ MA and ARMA models; \ roots and the unit circle; \ pseudo-cycles",
-            r"identification, \ estimation and checking: \ Box and Jenkins",
-            r"forecasts with honest intervals; \ trend, \ seasonality and exponential smoothing",
-            r"spurious regression, \ and what forecasting competitions teach",
-        ], color=SERIES, font_size=26)
-        prereq = note(r"prerequisites: \ Parts 7 and 12").to_corner(DL, buff=0.3)
-        built = note(r"built: \ \texttt{statkit.ts}; \ the correlogram, \ the root plane, \ Yule's pendulum").to_corner(DR, buff=0.3)
-        with self.voiceover(
-            "<bookmark mark='a'/> Part seventeen: time series. <bookmark mark='b'/> We'll define stationarity and the "
-            "autocorrelation function, and see how much information a dependent sample really holds; build autoregressive and "
-            "moving-average models and read their behaviour from the roots of a polynomial; identify, fit and check them, "
-            "the way George Box and Gwilym Jenkins taught; forecast with intervals that widen honestly; take apart trend and "
-            "season; and end with spurious regression and the surprising lessons of forecasting competitions."
-        ) as vo:
-            vo.wait_until("a")
-            self.play(FadeIn(head, shift=UP * 0.2))
-            vo.wait_until("b")
-            self.play(FadeOut(head), FadeIn(obj, shift=UP * 0.2), FadeIn(prereq), FadeIn(built))
-        self.wait(1.0)
         self.clear_scene()

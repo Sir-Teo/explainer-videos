@@ -3,7 +3,7 @@ from __future__ import annotations
 from videos.stats.stats49.common import *  # noqa: F403
 
 
-class DoubleRobust(VoiceoverScene):
+class DoubleRobust(StatsScene):
     def construct(self):
         self.card()
         self.remainder()
@@ -12,10 +12,7 @@ class DoubleRobust(VoiceoverScene):
         self.structure()
 
     def card(self):
-        card = chapter_card(7, r"Double robustness", r"A property of the influence function, \ not a trick", lit=(1994,), part=PART)
-        with self.voiceover("Chapter seven. Double robustness: a property of the influence function, not a trick."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(7, r"Double robustness", r"A property of the influence function, \ not a trick", lit=(1994,), part=PART, said="Chapter seven. Double robustness: a property of the influence function, not a trick.")
 
     def remainder(self):
         rows = [

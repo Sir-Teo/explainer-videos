@@ -5,7 +5,7 @@ import numpy as np
 from videos.stats.stats52.common import *  # noqa: F403
 
 
-class SparsePCA(VoiceoverScene):
+class SparsePCA(StatsScene):
     def construct(self):
         self.card()
         self.idea()
@@ -15,10 +15,7 @@ class SparsePCA(VoiceoverScene):
         self.graph_chart()
 
     def card(self):
-        card = chapter_card(10, r"Sparse PCA and graphical models", r"Structure beats the BBP threshold, \ at a price", lit=(2009,), part=PART)
-        with self.voiceover("Chapter ten. Sparse PCA and graphical models: structure beats the BBP threshold, at a price."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(10, r"Sparse PCA and graphical models", r"Structure beats the BBP threshold, \ at a price", lit=(2009,), part=PART, said="Chapter ten. Sparse PCA and graphical models: structure beats the BBP threshold, at a price.")
 
     def idea(self):
         rows = [

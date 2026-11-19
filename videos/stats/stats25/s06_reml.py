@@ -5,7 +5,7 @@ import numpy as np
 from videos.stats.stats25.common import *  # noqa: F403
 
 
-class REML(VoiceoverScene):
+class REML(StatsScene):
     def construct(self):
         self.card()
         self.bias()
@@ -14,10 +14,7 @@ class REML(VoiceoverScene):
         self.compare()
 
     def card(self):
-        card = chapter_card(5, r"ML vs REML", r"Neyman--Scott, \ cured", lit=(1971,), part=PART)
-        with self.voiceover("Chapter five. Maximum likelihood versus REML."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(5, r"ML vs REML", r"Neyman--Scott, \ cured", lit=(1971,), part=PART, said="Chapter five. Maximum likelihood versus REML.")
 
     def bias(self):
         rows = [

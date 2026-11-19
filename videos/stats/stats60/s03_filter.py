@@ -5,7 +5,7 @@ import numpy as np
 from videos.stats.stats60.common import *  # noqa: F403
 
 
-class Filter(LectureMixin, VoiceoverScene):
+class Filter(LectureMixin, StatsScene):
     def construct(self):
         self.card_voiceover("Chapter two. Efficient robust estimation in high dimensions: the filter.", 2,
                             r"Efficient high-dimensional robustness", r"Robust and computable", lit=(2016,))

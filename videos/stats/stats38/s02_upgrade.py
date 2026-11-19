@@ -16,7 +16,7 @@ def mini(center, ys, color, title, y_range=None):
     return VGroup(A, line, t)
 
 
-class Upgrade(VoiceoverScene):
+class Upgrade(StatsScene):
     def construct(self):
         self.card()
         self.recap()
@@ -26,11 +26,7 @@ class Upgrade(VoiceoverScene):
         self.plan()
 
     def card(self):
-        card = chapter_card(1, r"What Part 17 assumed", r"Stationary, \ short memory, \ constant variance, \ observed",
-                            lit=(1927, 1938), part=PART)
-        with self.voiceover("Chapter one. What Part seventeen assumed."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(1, r"What Part 17 assumed", r"Stationary, \ short memory, \ constant variance, \ observed", lit=(1927, 1938), part=PART, said="Chapter one. What Part seventeen assumed.")
 
     def recap(self):
         card = upgrade_card(17, r"ARMA models: \ stationary, \ fitted by Yule--Walker and least squares, \ forecast with intervals",

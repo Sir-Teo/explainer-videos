@@ -3,7 +3,7 @@ from __future__ import annotations
 from videos.stats.stats36.common import *  # noqa: F403
 
 
-class AIPW(VoiceoverScene):
+class AIPW(StatsScene):
     def construct(self):
         self.card()
         self.formula()
@@ -15,10 +15,7 @@ class AIPW(VoiceoverScene):
         self.lesson()
 
     def card(self):
-        card = chapter_card(9, r"Double robustness", r"Two chances to be right", lit=(1994, 2007), part=PART)
-        with self.voiceover("Chapter nine. Double robustness."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(9, r"Double robustness", r"Two chances to be right", lit=(1994, 2007), part=PART, said="Chapter nine. Double robustness.")
 
     def formula(self):
         rows = [

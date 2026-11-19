@@ -5,7 +5,7 @@ import numpy as np
 from videos.stats.stats52.common import *  # noqa: F403
 
 
-class Oracle(VoiceoverScene):
+class Oracle(StatsScene):
     def construct(self):
         self.card()
         self.setting()
@@ -16,10 +16,7 @@ class Oracle(VoiceoverScene):
         self.random_design()
 
     def card(self):
-        card = chapter_card(1, r"The lasso's oracle inequality", r"As good as knowing the support, \ up to $\log p$", lit=(2009,), part=PART)
-        with self.voiceover("Chapter one. The lasso's oracle inequality: as good as knowing the support, up to a log p."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(1, r"The lasso's oracle inequality", r"As good as knowing the support, \ up to $\log p$", lit=(2009,), part=PART, said="Chapter one. The lasso's oracle inequality: as good as knowing the support, up to a log p.")
 
     def setting(self):
         rows = [

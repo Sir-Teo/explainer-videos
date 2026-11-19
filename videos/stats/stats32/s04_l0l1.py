@@ -15,7 +15,7 @@ def lq_curve(q, center, r=1.25, color=None, n=400):
     return m
 
 
-class FromL0(VoiceoverScene):
+class FromL0(StatsScene):
     def construct(self):
         self.card()
         self.subset()
@@ -26,10 +26,7 @@ class FromL0(VoiceoverScene):
         self.hull()
 
     def card(self):
-        card = chapter_card(3, r"From $\ell_0$ to $\ell_1$", r"The closest convex penalty to counting", lit=(1996,), part=PART)
-        with self.voiceover("Chapter three. From counting to absolute values."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(3, r"From $\ell_0$ to $\ell_1$", r"The closest convex penalty to counting", lit=(1996,), part=PART, said="Chapter three. From counting to absolute values.")
 
     def subset(self):
         rows = [

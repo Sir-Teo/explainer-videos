@@ -5,7 +5,7 @@ import numpy as np
 from videos.stats.stats35.common import *  # noqa: F403
 
 
-class Blocks(VoiceoverScene):
+class Blocks(StatsScene):
     def construct(self):
         self.card()
         self.idea()
@@ -16,10 +16,7 @@ class Blocks(VoiceoverScene):
         self.lesson()
 
     def card(self):
-        card = chapter_card(6, r"Blocking and pairing", r"Randomize within similar units", lit=(1935,), part=PART)
-        with self.voiceover("Chapter six. Blocking and pairing."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(6, r"Blocking and pairing", r"Randomize within similar units", lit=(1935,), part=PART, said="Chapter six. Blocking and pairing.")
 
     def idea(self):
         d = load("blocks")

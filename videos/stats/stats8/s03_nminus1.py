@@ -5,7 +5,7 @@ import numpy as np
 from videos.stats.stats8.common import *  # noqa: F403
 
 
-class NMinus1(VoiceoverScene):
+class NMinus1(StatsScene):
     def construct(self):
         self.card()
         self.bias()
@@ -15,10 +15,7 @@ class NMinus1(VoiceoverScene):
         self.dof()
 
     def card(self):
-        card = chapter_card(2, r"Why $n - 1$", r"The variance that divides by one less", part=PART)
-        with self.voiceover("Chapter two. Why n minus one."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(2, r"Why $n - 1$", r"The variance that divides by one less", part=PART, said="Chapter two. Why n minus one.")
 
     def bias(self):
         d = load("nminus1")

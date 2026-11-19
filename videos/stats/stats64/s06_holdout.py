@@ -5,7 +5,7 @@ import numpy as np
 from videos.stats.stats64.common import *  # noqa: F403
 
 
-class Holdout(LectureMixin, VoiceoverScene):
+class Holdout(LectureMixin, StatsScene):
     def construct(self):
         self.card_voiceover("Chapter five. Adaptive reuse of test sets, and how to keep a holdout honest.", 5,
                             r"Reusing the test set", r"Every look is a query")

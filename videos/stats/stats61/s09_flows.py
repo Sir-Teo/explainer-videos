@@ -5,7 +5,7 @@ import numpy as np
 from videos.stats.stats61.common import *  # noqa: F403
 
 
-class GradientFlows(LectureMixin, VoiceoverScene):
+class GradientFlows(LectureMixin, StatsScene):
     def construct(self):
         self.card_voiceover("Chapter eight. Gradient flows: sampling as optimization over distributions.", 8,
                             r"Gradient flows", r"Langevin, \ seen from Wasserstein space", lit=(1998,))

@@ -5,17 +5,14 @@ import numpy as np
 from videos.stats.stats55.common import *  # noqa: F403
 
 
-class ExamHighDim(ExamMixin, VoiceoverScene):
+class ExamHighDim(ExamMixin, StatsScene):
     def construct(self):
         self.card()
         self.p11()
         self.p12()
 
     def card(self):
-        card = chapter_card(6, r"Sitting VI: \ the lasso and the posterior", r"Problems 11 and 12", lit=(1996, 2000, 2009), part=PART)
-        with self.voiceover("Sitting six, the last: high-dimensional statistics and Bayesian asymptotics. The lasso's oracle inequality, and a posterior contraction rate."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(6, r"Sitting VI: \ the lasso and the posterior", r"Problems 11 and 12", lit=(1996, 2000, 2009), part=PART, said="Sitting six, the last: high-dimensional statistics and Bayesian asymptotics. The lasso's oracle inequality, and a posterior contraction rate.")
 
     # ------------------------------------------------------------------------------------------ Problem 11
     def p11(self):

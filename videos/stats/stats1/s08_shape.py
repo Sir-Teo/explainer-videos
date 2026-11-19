@@ -5,7 +5,7 @@ import numpy as np
 from videos.stats.stats1.common import *  # noqa: F403
 
 
-class Shape(VoiceoverScene):
+class Shape(StatsScene):
     def construct(self):
         self.card()
         self.skew()
@@ -14,11 +14,7 @@ class Shape(VoiceoverScene):
         self.pareto()
 
     def card(self):
-        card = chapter_card(7, r"Shape: skew, tails and power laws", r"How lopsided, and how heavy at the edges?",
-                            lit=(), part=PART)
-        with self.voiceover("Chapter seven. Shape: skew, tails and power laws."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(7, r"Shape: skew, tails and power laws", r"How lopsided, and how heavy at the edges?", lit=(), part=PART, said="Chapter seven. Shape: skew, tails and power laws.")
 
     def skew(self):
         sh, w = load("shape"), load("world")

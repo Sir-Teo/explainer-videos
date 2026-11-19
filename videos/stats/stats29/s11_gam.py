@@ -5,7 +5,7 @@ import numpy as np
 from videos.stats.stats29.common import *  # noqa: F403
 
 
-class GAM(VoiceoverScene):
+class GAM(StatsScene):
     def construct(self):
         self.card()
         self.model()
@@ -16,10 +16,7 @@ class GAM(VoiceoverScene):
         self.extensions()
 
     def card(self):
-        card = chapter_card(10, r"Additive models", r"Many variables, \ one dimension at a time", lit=(1990,), part=PART)
-        with self.voiceover("Chapter ten. Additive models."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(10, r"Additive models", r"Many variables, \ one dimension at a time", lit=(1990,), part=PART, said="Chapter ten. Additive models.")
 
     def model(self):
         rows = [

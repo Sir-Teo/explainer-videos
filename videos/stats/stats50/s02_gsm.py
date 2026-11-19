@@ -5,7 +5,7 @@ import numpy as np
 from videos.stats.stats50.common import *  # noqa: F403
 
 
-class SequenceModel(VoiceoverScene):
+class SequenceModel(StatsScene):
     def construct(self):
         self.card()
         self.model()
@@ -15,10 +15,7 @@ class SequenceModel(VoiceoverScene):
         self.ellipsoid()
 
     def card(self):
-        card = chapter_card(1, r"The Gaussian sequence model", r"A model for regular Gaussian approximation problems", lit=(1996,), part=PART)
-        with self.voiceover("Chapter one. The Gaussian sequence model: one model that stands for almost every problem."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(1, r"The Gaussian sequence model", r"A model for regular Gaussian approximation problems", lit=(1996,), part=PART, said="Chapter one. The Gaussian sequence model: one model that stands for almost every problem.")
 
     def model(self):
         rows = [

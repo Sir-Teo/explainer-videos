@@ -6,7 +6,7 @@ from scipy import stats
 from videos.stats.stats26.common import *  # noqa: F403
 
 
-class Occam(VoiceoverScene):
+class Occam(StatsScene):
     def construct(self):
         self.card()
         self.idea()
@@ -16,10 +16,7 @@ class Occam(VoiceoverScene):
         self.lessons()
 
     def card(self):
-        card = chapter_card(8, r"Occam's razor, \ built in", r"The evidence penalizes flexibility", lit=(1992,), part=PART)
-        with self.voiceover("Chapter eight. Occam's razor, built in."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(8, r"Occam's razor, \ built in", r"The evidence penalizes flexibility", lit=(1992,), part=PART, said="Chapter eight. Occam's razor, built in.")
 
     def idea(self):
         A = axes([0, 10], [0, 0.5], x_length=7.4, y_length=4.0, xlabel=r"one-dimensional illustration; \ tails outside viewport",

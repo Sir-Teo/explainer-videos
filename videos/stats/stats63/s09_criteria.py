@@ -5,7 +5,7 @@ import numpy as np
 from videos.stats.stats63.common import *  # noqa: F403
 
 
-class Criteria(LectureMixin, VoiceoverScene):
+class Criteria(LectureMixin, StatsScene):
     def construct(self):
         self.card_voiceover("Chapter eight. Fairness criteria: three conditional independences.", 8,
                             r"Fairness criteria", r"Independence, \ separation, \ sufficiency", lit=(2016,))

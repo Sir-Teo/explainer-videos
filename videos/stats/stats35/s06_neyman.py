@@ -5,7 +5,7 @@ import numpy as np
 from videos.stats.stats35.common import *  # noqa: F403
 
 
-class Neyman(VoiceoverScene):
+class Neyman(StatsScene):
     def construct(self):
         self.card()
         self.variance()
@@ -16,10 +16,7 @@ class Neyman(VoiceoverScene):
         self.bounds()
 
     def card(self):
-        card = chapter_card(5, r"Neyman's variance", r"Repeated randomization of a fixed science", lit=(1923,), part=PART)
-        with self.voiceover("Chapter five. Neyman's variance."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(5, r"Neyman's variance", r"Repeated randomization of a fixed science", lit=(1923,), part=PART, said="Chapter five. Neyman's variance.")
 
     def variance(self):
         rows = [

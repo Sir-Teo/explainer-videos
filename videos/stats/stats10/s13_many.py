@@ -5,7 +5,7 @@ import numpy as np
 from videos.stats.stats10.common import *  # noqa: F403
 
 
-class Many(VoiceoverScene):
+class Many(StatsScene):
     def construct(self):
         self.card()
         self.any_curve()
@@ -15,10 +15,7 @@ class Many(VoiceoverScene):
         self.forking()
 
     def card(self):
-        card = chapter_card(12, r"Many tests", r"Test enough things, \ and something will be significant", lit=(1995,), part=PART)
-        with self.voiceover("Chapter twelve. Many tests."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(12, r"Many tests", r"Test enough things, \ and something will be significant", lit=(1995,), part=PART, said="Chapter twelve. Many tests.")
 
     def any_curve(self):
         d = load("many")

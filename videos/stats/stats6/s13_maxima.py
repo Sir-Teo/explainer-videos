@@ -5,7 +5,7 @@ import numpy as np
 from videos.stats.stats6.common import *  # noqa: F403
 
 
-class Maxima(VoiceoverScene):
+class Maxima(StatsScene):
     def construct(self):
         self.card()
         self.power()
@@ -15,10 +15,7 @@ class Maxima(VoiceoverScene):
         self.gev()
 
     def card(self):
-        card = chapter_card(12, r"The law of maxima", r"Not the typical value, \ but the largest", lit=(1928,), part=PART)
-        with self.voiceover("Chapter twelve. The law of maxima."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(12, r"The law of maxima", r"Not the typical value, \ but the largest", lit=(1928,), part=PART, said="Chapter twelve. The law of maxima.")
 
     def power(self):
         A = axes([0, 9], [0, 1.05], x_length=7.4, y_length=4.4, xlabel=r"$x$", ylabel=r"$P(\max \le x) = F(x)^n$", xticks=[0, 2, 4, 6, 8],

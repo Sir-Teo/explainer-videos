@@ -5,7 +5,7 @@ import numpy as np
 from videos.stats.stats20.common import *  # noqa: F403
 
 
-class Design(VoiceoverScene):
+class Design(StatsScene):
     def construct(self):
         self.card()
         self.stages()
@@ -16,10 +16,7 @@ class Design(VoiceoverScene):
         self.deff()
 
     def card(self):
-        card = chapter_card(2, r"The design and its weights", r"Who was asked, \ and whom they stand for", part=PART)
-        with self.voiceover("Chapter two. The design, and its weights."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(2, r"The design and its weights", r"Who was asked, \ and whom they stand for", part=PART, said="Chapter two. The design, and its weights.")
 
     def stages(self):
         rows = [

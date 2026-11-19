@@ -5,7 +5,7 @@ import numpy as np
 from videos.stats.stats46.common import *  # noqa: F403
 
 
-class Belt(VoiceoverScene):
+class Belt(StatsScene):
     def construct(self):
         self.card()
         self.duality()
@@ -15,11 +15,8 @@ class Belt(VoiceoverScene):
         self.pratt()
 
     def card(self):
-        card = chapter_card(6, r"Confidence sets by inversion", r"Invert a family of tests into a confidence set", lit=(1937,), part=PART)
-        with self.voiceover("Chapter six. Confidence sets by inversion: inverting a family of tests gives a confidence set, which "
-            "need not be an interval."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(6, r"Confidence sets by inversion", r"Invert a family of tests into a confidence set", lit=(1937,), part=PART, said="Chapter six. Confidence sets by inversion: inverting a family of tests gives a confidence set, which "
+            "need not be an interval.")
 
     def duality(self):
         rows = [

@@ -5,7 +5,7 @@ import numpy as np
 from videos.stats.stats13.common import *  # noqa: F403
 
 
-class Latin(VoiceoverScene):
+class Latin(StatsScene):
     def construct(self):
         self.card()
         self.square()
@@ -16,10 +16,7 @@ class Latin(VoiceoverScene):
         self.carryover()
 
     def card(self):
-        card = chapter_card(6, r"Latin squares", r"Blocking in two directions at once", lit=(1935,), part=PART)
-        with self.voiceover("Chapter six. Latin squares, and crossover trials."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(6, r"Latin squares", r"Blocking in two directions at once", lit=(1935,), part=PART, said="Chapter six. Latin squares, and crossover trials.")
 
     def square(self):
         d = load("latin")

@@ -10,7 +10,7 @@ BETA, SE = 0.05, 0.1  # x_1's coefficient and its standard error with n = 100 in
 KEEP = np.sqrt(2.0) * SE  # AIC keeps a predictor, roughly, when t^2 > 2
 
 
-class Selective(VoiceoverScene):
+class Selective(StatsScene):
     def construct(self):
         self.card()
         self.freedman_again()
@@ -21,10 +21,7 @@ class Selective(VoiceoverScene):
         self.fixes()
 
     def card(self):
-        card = chapter_card(9, r"Inference after selection", r"Freedman's ghost", lit=(1983, 2013), part=PART)
-        with self.voiceover("Chapter nine. Inference after selection, a first look."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(9, r"Inference after selection", r"Freedman's ghost", lit=(1983, 2013), part=PART, said="Chapter nine. Inference after selection, a first look.")
 
     def freedman_again(self):
         d = load("freedman")

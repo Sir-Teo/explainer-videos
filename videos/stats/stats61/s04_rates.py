@@ -5,7 +5,7 @@ import numpy as np
 from videos.stats.stats61.common import *  # noqa: F403
 
 
-class Rates(LectureMixin, VoiceoverScene):
+class Rates(LectureMixin, StatsScene):
     def construct(self):
         self.card_voiceover("Chapter three. Empirical rates: how fast does a sample approach its law, in Wasserstein distance?", 3,
                             r"Empirical rates", r"The curse of dimensionality", lit=(1969,))

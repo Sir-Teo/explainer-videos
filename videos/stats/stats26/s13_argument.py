@@ -3,7 +3,7 @@ from __future__ import annotations
 from videos.stats.stats26.common import *  # noqa: F403
 
 
-class Argument(VoiceoverScene):
+class Argument(StatsScene):
     def construct(self):
         self.card()
         self.history()
@@ -14,10 +14,7 @@ class Argument(VoiceoverScene):
         self.schools_differ()
 
     def card(self):
-        card = chapter_card(12, r"The argument, \ honestly", r"Two hundred years of disagreement", lit=(1763, 1990), part=PART)
-        with self.voiceover("Chapter twelve. The argument, honestly."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(12, r"The argument, \ honestly", r"Two hundred years of disagreement", lit=(1763, 1990), part=PART, said="Chapter twelve. The argument, honestly.")
 
     def history(self):
         items = [

@@ -5,7 +5,7 @@ import numpy as np
 from videos.stats.stats28.common import *  # noqa: F403
 
 
-class AIC(VoiceoverScene):
+class AIC(StatsScene):
     def construct(self):
         self.card()
         self.cp()
@@ -17,10 +17,7 @@ class AIC(VoiceoverScene):
         self.deltas()
 
     def card(self):
-        card = chapter_card(2, r"Cp and AIC", r"Estimate the optimism, \ add it back", lit=(1973,), part=PART)
-        with self.voiceover("Chapter two. Mallows's Cp and Akaike's information criterion."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(2, r"Cp and AIC", r"Estimate the optimism, \ add it back", lit=(1973,), part=PART, said="Chapter two. Mallows's Cp and Akaike's information criterion.")
 
     def cp(self):
         rows = [

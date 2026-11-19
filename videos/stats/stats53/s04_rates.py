@@ -7,7 +7,7 @@ import numpy as np
 from videos.stats.stats53.common import *  # noqa: F403
 
 
-class Rates(VoiceoverScene):
+class Rates(StatsScene):
     def construct(self):
         self.card()
         self.theorem()
@@ -19,10 +19,7 @@ class Rates(VoiceoverScene):
         self.lower()
 
     def card(self):
-        card = chapter_card(3, r"Contraction rates", r"Prior mass, \ entropy and tests, \ quantified", lit=(2000,), part=PART)
-        with self.voiceover("Chapter three. Contraction rates: prior mass, entropy and tests, quantified."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(3, r"Contraction rates", r"Prior mass, \ entropy and tests, \ quantified", lit=(2000,), part=PART, said="Chapter three. Contraction rates: prior mass, entropy and tests, quantified.")
 
     def theorem(self):
         rows = [

@@ -5,7 +5,7 @@ import numpy as np
 from videos.stats.stats5.common import *  # noqa: F403
 
 
-class Condition(VoiceoverScene):
+class Condition(StatsScene):
     def construct(self):
         self.card()
         self.theorem()
@@ -15,10 +15,7 @@ class Condition(VoiceoverScene):
         self.precision()
 
     def card(self):
-        card = chapter_card(6, r"Conditioning a Gaussian", r"Where regression is born", lit=(1886,), part=PART)
-        with self.voiceover("Chapter six. Conditioning a Gaussian."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(6, r"Conditioning a Gaussian", r"Where regression is born", lit=(1886,), part=PART, said="Chapter six. Conditioning a Gaussian.")
 
     def theorem(self):
         part = MathTex(r"\begin{pmatrix} \mathbf X_1 \\ \mathbf X_2 \end{pmatrix} \sim N\!\left(\begin{pmatrix} \boldsymbol\mu_1 \\ "

@@ -5,7 +5,7 @@ import numpy as np
 from videos.stats.stats47.common import *  # noqa: F403
 
 
-class NonRegular(VoiceoverScene):
+class NonRegular(StatsScene):
     def construct(self):
         self.card()
         self.uniform()
@@ -16,10 +16,7 @@ class NonRegular(VoiceoverScene):
         self.board()
 
     def card(self):
-        card = chapter_card(13, r"Non-regular models", r"When the support moves, \ the rate changes", part=PART)
-        with self.voiceover("Chapter thirteen. Non-regular models: when the support moves, the rate changes."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(13, r"Non-regular models", r"When the support moves, \ the rate changes", part=PART, said="Chapter thirteen. Non-regular models: when the support moves, the rate changes.")
 
     def uniform(self):
         rows = [

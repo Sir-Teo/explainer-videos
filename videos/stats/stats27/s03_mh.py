@@ -5,7 +5,7 @@ import numpy as np
 from videos.stats.stats27.common import *  # noqa: F403
 
 
-class MH(VoiceoverScene):
+class MH(StatsScene):
     def construct(self):
         self.card()
         self.algorithm()
@@ -16,10 +16,7 @@ class MH(VoiceoverScene):
         self.mala()
 
     def card(self):
-        card = chapter_card(2, r"Metropolis--Hastings", r"A Markov chain with the posterior as its limit", lit=(1953, 1970), part=PART)
-        with self.voiceover("Chapter two. Metropolis–Hastings."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(2, r"Metropolis--Hastings", r"A Markov chain with the posterior as its limit", lit=(1953, 1970), part=PART, said="Chapter two. Metropolis–Hastings.")
 
     def algorithm(self):
         rows = [

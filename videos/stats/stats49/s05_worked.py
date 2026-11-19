@@ -3,7 +3,7 @@ from __future__ import annotations
 from videos.stats.stats49.common import *  # noqa: F403
 
 
-class Worked(VoiceoverScene):
+class Worked(StatsScene):
     def construct(self):
         self.card()
         self.mean()
@@ -14,10 +14,7 @@ class Worked(VoiceoverScene):
         self.cox()
 
     def card(self):
-        card = chapter_card(4, r"Worked influence functions", r"The mean, \ the ATE, \ the partially linear model, \ Cox", lit=(1998, 1988), part=PART)
-        with self.voiceover("Chapter four. Worked influence functions: the mean, the average treatment effect, the partially linear model, and Cox."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(4, r"Worked influence functions", r"The mean, \ the ATE, \ the partially linear model, \ Cox", lit=(1998, 1988), part=PART, said="Chapter four. Worked influence functions: the mean, the average treatment effect, the partially linear model, and Cox.")
 
     def mean(self):
         rows = [

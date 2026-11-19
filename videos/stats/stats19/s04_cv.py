@@ -6,7 +6,7 @@ from explainer.stats.board import coverage_board, load_all
 from videos.stats.stats19.common import *  # noqa: F403
 
 
-class CrossValidation(VoiceoverScene):
+class CrossValidation(StatsScene):
     def construct(self):
         self.card()
         self.recap()
@@ -17,10 +17,7 @@ class CrossValidation(VoiceoverScene):
         self.loo()
 
     def card(self):
-        card = chapter_card(3, r"Cross-validation", r"Estimating the U from one training set", part=PART)
-        with self.voiceover("Chapter three. Cross-validation."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(3, r"Cross-validation", r"Estimating the U from one training set", part=PART, said="Chapter three. Cross-validation.")
 
     def recap(self):
         rows = [

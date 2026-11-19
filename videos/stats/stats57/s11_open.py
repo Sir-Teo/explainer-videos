@@ -3,7 +3,7 @@ from __future__ import annotations
 from videos.stats.stats57.common import *  # noqa: F403
 
 
-class OpenProblems(VoiceoverScene):
+class OpenProblems(StatsScene):
     def construct(self):
         self.card()
         self.map_()
@@ -17,10 +17,7 @@ class OpenProblems(VoiceoverScene):
         self.op_func()
 
     def card(self):
-        card = chapter_card(10, r"Open problems", r"Between the possible and the impossible", part=PART)
-        with self.voiceover("Chapter ten. Open problems, between the possible and the impossible."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(10, r"Open problems", r"Between the possible and the impossible", part=PART, said="Chapter ten. Open problems, between the possible and the impossible.")
 
     def map_(self):
         hdr = [r"target", r"guarantee", r"assumes"]

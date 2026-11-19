@@ -7,7 +7,7 @@ from videos.stats.stats8.common import *  # noqa: F403
 DISTS = [("normal", r"normal", S.EST), ("uniform", r"uniform", S.LIK), ("t5", r"$t_5$", S.POST), ("exponential", r"exponential", S.RESID)]
 
 
-class Robust(VoiceoverScene):
+class Robust(StatsScene):
     def construct(self):
         self.card()
         self.sizes()
@@ -16,10 +16,7 @@ class Robust(VoiceoverScene):
         self.box()
 
     def card(self):
-        card = chapter_card(12, r"How robust is normal theory?", r"When the data are not normal", lit=(1953,), part=PART)
-        with self.voiceover("Chapter twelve. How robust is normal theory?"):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(12, r"How robust is normal theory?", r"When the data are not normal", lit=(1953,), part=PART, said="Chapter twelve. How robust is normal theory?")
 
     def sizes(self):
         d = load("robust")

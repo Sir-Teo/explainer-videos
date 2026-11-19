@@ -5,7 +5,7 @@ import numpy as np
 from videos.stats.stats34.common import *  # noqa: F403
 
 
-class Split(VoiceoverScene):
+class Split(StatsScene):
     def construct(self):
         self.card()
         self.history()
@@ -21,10 +21,7 @@ class Split(VoiceoverScene):
         self.impossible()
 
     def card(self):
-        card = chapter_card(6, r"Split conformal", r"A guarantee from ranks alone", lit=(2005,), part=PART)
-        with self.voiceover("Chapter six. Split conformal prediction."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(6, r"Split conformal", r"A guarantee from ranks alone", lit=(2005,), part=PART, said="Chapter six. Split conformal prediction.")
 
     def history(self):
         rows = fit_rows(VGroup(

@@ -5,7 +5,7 @@ import numpy as np
 from videos.stats.stats6.common import *  # noqa: F403
 
 
-class Slutsky(VoiceoverScene):
+class Slutsky(StatsScene):
     def construct(self):
         self.card()
         self.theorems()
@@ -14,10 +14,7 @@ class Slutsky(VoiceoverScene):
         self.trap()
 
     def card(self):
-        card = chapter_card(9, r"Slutsky and continuous mapping", r"Rules for combining limits", part=PART)
-        with self.voiceover("Chapter nine. Slutsky's theorem and the continuous mapping theorem."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(9, r"Slutsky and continuous mapping", r"Rules for combining limits", part=PART, said="Chapter nine. Slutsky's theorem and the continuous mapping theorem.")
 
     def theorems(self):
         cmt = theorem_card(r"Continuous mapping", r"if $X_n \xrightarrow{d} X$ \ (or $\xrightarrow{P}$) \ and $g$ is continuous, \ then "

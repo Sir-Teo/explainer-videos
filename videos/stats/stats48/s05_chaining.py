@@ -5,7 +5,7 @@ import numpy as np
 from videos.stats.stats48.common import *  # noqa: F403
 
 
-class Chaining(VoiceoverScene):
+class Chaining(StatsScene):
     def construct(self):
         self.card()
         self.problem()
@@ -15,10 +15,7 @@ class Chaining(VoiceoverScene):
         self.dudley()
 
     def card(self):
-        card = chapter_card(4, r"Chaining", r"Dudley's refining nets", lit=(1967,), part=PART)
-        with self.voiceover("Chapter four. Chaining: Dudley's refining nets."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(4, r"Chaining", r"Dudley's refining nets", lit=(1967,), part=PART, said="Chapter four. Chaining: Dudley's refining nets.")
 
     def problem(self):
         rows = [

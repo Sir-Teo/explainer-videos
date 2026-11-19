@@ -10,7 +10,7 @@ from videos.stats.stats9.common import *  # noqa: F403
 UMV = EST_COL["umvue"]  # the class below takes the colour's name
 
 
-class UMVUE(VoiceoverScene):
+class UMVUE(StatsScene):
     def construct(self):
         self.card()
         self.question()
@@ -22,10 +22,7 @@ class UMVUE(VoiceoverScene):
         self.absurd()
 
     def card(self):
-        card = chapter_card(8, r"The best unbiased estimator", r"When is an improvement the last one?", part=PART)
-        with self.voiceover("Chapter eight. The best unbiased estimator."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(8, r"The best unbiased estimator", r"When is an improvement the last one?", part=PART, said="Chapter eight. The best unbiased estimator.")
 
     def question(self):
         boxes = VGroup()

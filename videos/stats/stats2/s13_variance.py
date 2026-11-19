@@ -5,7 +5,7 @@ import numpy as np
 from videos.stats.stats2.common import *  # noqa: F403
 
 
-class Variance(VoiceoverScene):
+class Variance(StatsScene):
     def construct(self):
         self.card()
         self.definition()
@@ -15,11 +15,8 @@ class Variance(VoiceoverScene):
         self.utility()
 
     def card(self):
-        card = chapter_card(12, r"Variance, and a game worth infinity", r"How far from its expectation does a "
-                            r"variable stray?", lit=(1738,), part=PART)
-        with self.voiceover("Chapter twelve. Variance, and a game worth infinity."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(12, r"Variance, and a game worth infinity", r"How far from its expectation does a "
+                            r"variable stray?", lit=(1738,), part=PART, said="Chapter twelve. Variance, and a game worth infinity.")
 
     def definition(self):
         d = load("variance")

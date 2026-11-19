@@ -5,7 +5,7 @@ import numpy as np
 from videos.stats.stats43.common import *  # noqa: F403
 
 
-class BorelCantelli(VoiceoverScene):
+class BorelCantelli(StatsScene):
     def construct(self):
         self.card()
         self.lemmas()
@@ -15,10 +15,7 @@ class BorelCantelli(VoiceoverScene):
         self.hewitt()
 
     def card(self):
-        card = chapter_card(5, r"Borel--Cantelli and the 0--1 laws", r"What happens infinitely often?", lit=(1909,), part=PART)
-        with self.voiceover("Chapter five. Borel–Cantelli and the zero–one laws: what happens infinitely often?"):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(5, r"Borel--Cantelli and the 0--1 laws", r"What happens infinitely often?", lit=(1909,), part=PART, said="Chapter five. Borel–Cantelli and the zero–one laws: what happens infinitely often?")
 
     def lemmas(self):
         rows = [

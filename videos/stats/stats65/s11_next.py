@@ -3,7 +3,7 @@ from __future__ import annotations
 from videos.stats.stats65.common import *  # noqa: F403
 
 
-class WhereNext(LectureMixin, VoiceoverScene):
+class WhereNext(LectureMixin, StatsScene):
     def construct(self):
         self.card_voiceover("Chapter ten. Where to go next.", 10, r"Where to go next", r"Beyond the series")
         self.books()

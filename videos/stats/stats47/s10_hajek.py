@@ -5,7 +5,7 @@ import numpy as np
 from videos.stats.stats47.common import *  # noqa: F403
 
 
-class Hajek(VoiceoverScene):
+class Hajek(StatsScene):
     def construct(self):
         self.card()
         self.regular()
@@ -16,10 +16,7 @@ class Hajek(VoiceoverScene):
         self.meaning()
 
     def card(self):
-        card = chapter_card(9, r"The convolution and LAM theorems", r"In what sense the MLE is best", lit=(1970, 1972), part=PART)
-        with self.voiceover("Chapter nine. Hájek's convolution and local asymptotic minimax theorems: in what sense the MLE is best."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(9, r"The convolution and LAM theorems", r"In what sense the MLE is best", lit=(1970, 1972), part=PART, said="Chapter nine. Hájek's convolution and local asymptotic minimax theorems: in what sense the MLE is best.")
 
     def regular(self):
         rows = [

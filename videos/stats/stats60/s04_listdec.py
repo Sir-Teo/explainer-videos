@@ -5,7 +5,7 @@ import numpy as np
 from videos.stats.stats60.common import *  # noqa: F403
 
 
-class ListDecoding(LectureMixin, VoiceoverScene):
+class ListDecoding(LectureMixin, StatsScene):
     def construct(self):
         self.card_voiceover("Chapter three. List-decodable learning: when most of the data are not what you want.", 3,
                             r"List-decodable learning", r"When the inliers are a minority", lit=(2017,))

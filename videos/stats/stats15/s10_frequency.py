@@ -7,7 +7,7 @@ from explainer.stats.board import coverage_board, load_all
 from videos.stats.stats15.common import *  # noqa: F403
 
 
-class Frequency(VoiceoverScene):
+class Frequency(StatsScene):
     def construct(self):
         self.card()
         self.question()
@@ -18,10 +18,7 @@ class Frequency(VoiceoverScene):
         self.lessons()
 
     def card(self):
-        card = chapter_card(9, r"Bayes and frequency", r"How often does a credible interval catch the truth?", part=PART)
-        with self.voiceover("Chapter nine. Bayes and frequency."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(9, r"Bayes and frequency", r"How often does a credible interval catch the truth?", part=PART, said="Chapter nine. Bayes and frequency.")
 
     def question(self):
         rows = [

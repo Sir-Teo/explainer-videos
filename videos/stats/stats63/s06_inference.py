@@ -5,7 +5,7 @@ import numpy as np
 from videos.stats.stats63.common import *  # noqa: F403
 
 
-class Inference(LectureMixin, VoiceoverScene):
+class Inference(LectureMixin, StatsScene):
     def construct(self):
         self.card_voiceover("Chapter five. Private inference: confidence intervals and tests that survive the noise.", 5,
                             r"Private inference", r"Intervals that know about the noise")

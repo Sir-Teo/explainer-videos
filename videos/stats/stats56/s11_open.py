@@ -3,7 +3,7 @@ from __future__ import annotations
 from videos.stats.stats56.common import *  # noqa: F403
 
 
-class OpenProblems(VoiceoverScene):
+class OpenProblems(StatsScene):
     def construct(self):
         self.card()
         self.prices()
@@ -11,10 +11,7 @@ class OpenProblems(VoiceoverScene):
         self.problems()
 
     def card(self):
-        card = chapter_card(10, r"Open problems", r"Where the frontier is", part=PART)
-        with self.voiceover("Chapter ten. Open problems: where the frontier of selective inference is."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(10, r"Open problems", r"Where the frontier is", part=PART, said="Chapter ten. Open problems: where the frontier of selective inference is.")
 
     def prices(self):
         hdr = [r"approach", r"what it needs", r"what it costs"]

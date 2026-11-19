@@ -7,7 +7,7 @@ from videos.stats.stats8.common import *  # noqa: F403
 CHI_COLS = {"1": S.RESID, "2": S.POST, "3": S.ACCENT, "5": S.LIK, "9": S.EST, "15": S.PRIOR}
 
 
-class ChiSq(VoiceoverScene):
+class ChiSq(StatsScene):
     def construct(self):
         self.card()
         self.family()
@@ -18,10 +18,7 @@ class ChiSq(VoiceoverScene):
         self.varcover()
 
     def card(self):
-        card = chapter_card(4, r"Chi-squared and Cochran", r"Squared lengths of random vectors", lit=(1934,), part=PART)
-        with self.voiceover("Chapter four. Chi-squared, and Cochran's theorem."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(4, r"Chi-squared and Cochran", r"Squared lengths of random vectors", lit=(1934,), part=PART, said="Chapter four. Chi-squared, and Cochran's theorem.")
 
     def family(self):
         d = load("chisq")

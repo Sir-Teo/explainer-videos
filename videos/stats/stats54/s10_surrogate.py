@@ -5,7 +5,7 @@ import numpy as np
 from videos.stats.stats54.common import *  # noqa: F403
 
 
-class Surrogates(VoiceoverScene):
+class Surrogates(StatsScene):
     def construct(self):
         self.card()
         self.losses()
@@ -16,10 +16,7 @@ class Surrogates(VoiceoverScene):
         self.multiclass()
 
     def card(self):
-        card = chapter_card(9, r"Classification-calibrated surrogates", r"Why minimizing the wrong loss is safe", lit=(2006,), part=PART)
-        with self.voiceover("Chapter nine. Classification-calibrated surrogates: why minimizing the wrong loss is safe."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(9, r"Classification-calibrated surrogates", r"Why minimizing the wrong loss is safe", lit=(2006,), part=PART, said="Chapter nine. Classification-calibrated surrogates: why minimizing the wrong loss is safe.")
 
     def losses(self):
         u = np.linspace(-2, 2.5, 200)

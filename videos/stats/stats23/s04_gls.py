@@ -5,7 +5,7 @@ import numpy as np
 from videos.stats.stats23.common import *  # noqa: F403
 
 
-class GLS(VoiceoverScene):
+class GLS(StatsScene):
     def construct(self):
         self.card()
         self.aitken()
@@ -17,10 +17,7 @@ class GLS(VoiceoverScene):
         self.feasible()
 
     def card(self):
-        card = chapter_card(3, r"GLS and Aitken", r"When the errors have a shape", lit=(1935,), part=PART)
-        with self.voiceover("Chapter three. Generalized least squares."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(3, r"GLS and Aitken", r"When the errors have a shape", lit=(1935,), part=PART, said="Chapter three. Generalized least squares.")
 
     def aitken(self):
         rows = [

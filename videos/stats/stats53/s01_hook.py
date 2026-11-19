@@ -3,14 +3,14 @@ from __future__ import annotations
 from videos.stats.stats53.common import *  # noqa: F403
 
 
-class Hook(VoiceoverScene):
+class Hook(StatsScene):
     def construct(self):
         self.story()
         self.model()
         self.result()
         self.lesson()
         self.upgrades()
-        self.objectives()
+        self.title(PART)
 
     def story(self):
         tl = timeline(lit=(1986,)).to_edge(UP, buff=0.35)
@@ -117,29 +117,4 @@ class Hook(VoiceoverScene):
             for k, m_ in enumerate("abc"):
                 vo.wait_until(m_)
                 self.play(FadeIn(stack[k], shift=UP * 0.2))
-        self.clear_scene()
-
-    def objectives(self):
-        head = VGroup(label(r"Part 53", font_size=34, color=GREY_B), label(r"Bayesian Asymptotics and Nonparametric Bayes", font_size=44)).arrange(DOWN, buff=0.25)
-        obj = objectives_card([
-            r"Doob's and Schwartz's theorems; \ contraction rates from prior mass, \ entropy and tests",
-            r"Bernstein--von Mises, \ parametric and semiparametric, \ and its failures",
-            r"Dirichlet processes, \ Pólya trees, \ Gaussian processes; \ adaptation by empirical and hierarchical Bayes",
-            r"when credible sets cover; \ spike-and-slab and the horseshoe; \ misspecification and generalized posteriors",
-        ], color=BALLC, font_size=26)
-        prereq = note(r"prerequisites: \ Parts 26, \ 47, \ 50").to_corner(DL, buff=0.3)
-        built = note(r"built: \ \texttt{statkit.bnp}, \ the contraction ball").to_corner(DR, buff=0.3)
-        with self.voiceover(
-            "<bookmark mark='a'/> Part fifty-three: Bayesian asymptotics and nonparametric Bayes. <bookmark mark='b'/> We'll "
-            "prove Doob's theorem and Schwartz's, and find contraction rates from prior mass, entropy and tests; prove "
-            "Bernstein–von Mises in parametric and semiparametric models, and see where it fails; meet Dirichlet processes, "
-            "Pólya trees and Gaussian processes, with adaptation by empirical and hierarchical Bayes; and find when credible "
-            "sets cover, how the spike-and-slab and horseshoe priors behave, and what happens to a posterior when the model "
-            "is wrong."
-        ) as vo:
-            vo.wait_until("a")
-            self.play(FadeIn(head, shift=UP * 0.2))
-            vo.wait_until("b")
-            self.play(FadeOut(head), FadeIn(obj, shift=UP * 0.2), FadeIn(prereq), FadeIn(built))
-        self.wait(1.0)
         self.clear_scene()

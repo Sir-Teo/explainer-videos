@@ -7,14 +7,14 @@ from videos.stats.stats49.common import *  # noqa: F403
 NAMES = {"normal": r"normal", "logistic": r"logistic", "laplace": r"Laplace", "t3": r"$t_3$", "mixture": r"bimodal mixture"}
 
 
-class Hook(VoiceoverScene):
+class Hook(StatsScene):
     def construct(self):
         self.story()
         self.table()
         self.chart()
         self.question()
         self.upgrades()
-        self.objectives()
+        self.title(PART)
 
     def story(self):
         tl = timeline(lit=(1956, 1982)).to_edge(UP, buff=0.35)
@@ -133,29 +133,4 @@ class Hook(VoiceoverScene):
             for k, m_ in enumerate("abc"):
                 vo.wait_until(m_)
                 self.play(FadeIn(cards[k], shift=UP * 0.2))
-        self.clear_scene()
-
-    def objectives(self):
-        head = VGroup(label(r"Part 49", font_size=34, color=GREY_B), label(r"Semiparametric Efficiency", font_size=48)).arrange(DOWN, buff=0.25)
-        obj = objectives_card([
-            r"models and tangent spaces; \ pathwise derivatives; \ the efficient influence function as a projection",
-            r"semiparametric efficiency bounds; \ worked influence functions: \ the mean, \ the ATE, \ the partially linear model",
-            r"the nuisance tangent space and the efficient score; \ one-step estimators and TMLE",
-            r"double robustness; \ DML theory and the product rate; \ missing data; \ higher-order influence functions",
-        ], color=EFFC, font_size=26)
-        prereq = note(r"prerequisites: \ Parts 36, \ 47, \ 48").to_corner(DL, buff=0.3)
-        built = note(r"built: \ \texttt{statkit.semipar}, \ the tangent-space picture").to_corner(DR, buff=0.3)
-        with self.voiceover(
-            "<bookmark mark='a'/> Part forty-nine: semiparametric efficiency. <bookmark mark='b'/> We'll define tangent "
-            "spaces and pathwise derivatives, and find the efficient influence function as a projection, drawn in a picture "
-            "of the space of scores; derive the bound and work out the influence functions of the mean, the average "
-            "treatment effect and the partially linear model; project out nuisances to get the efficient score; build "
-            "one-step and targeted estimators; and then explain double robustness, the product-rate condition behind "
-            "double machine learning, missing data, and what lies beyond the first order."
-        ) as vo:
-            vo.wait_until("a")
-            self.play(FadeIn(head, shift=UP * 0.2))
-            vo.wait_until("b")
-            self.play(FadeOut(head), FadeIn(obj, shift=UP * 0.2), FadeIn(prereq), FadeIn(built))
-        self.wait(1.0)
         self.clear_scene()

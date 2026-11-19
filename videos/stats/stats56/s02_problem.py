@@ -5,7 +5,7 @@ import numpy as np
 from videos.stats.stats56.common import *  # noqa: F403
 
 
-class Problem(VoiceoverScene):
+class Problem(StatsScene):
     def construct(self):
         self.card()
         self.setup_rows()
@@ -18,10 +18,7 @@ class Problem(VoiceoverScene):
         self.board()
 
     def card(self):
-        card = chapter_card(1, r"The selective-inference problem", r"Why a fixed-question interval fails a chosen question", lit=(2005,), part=PART)
-        with self.voiceover("Chapter one. The selective-inference problem: why an interval built for a fixed question fails a chosen one."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(1, r"The selective-inference problem", r"Why a fixed-question interval fails a chosen question", lit=(2005,), part=PART, said="Chapter one. The selective-inference problem: why an interval built for a fixed question fails a chosen one.")
 
     def setup_rows(self):
         rows = [

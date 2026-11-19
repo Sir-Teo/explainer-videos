@@ -6,7 +6,7 @@ from scipy import stats
 from videos.stats.stats16.common import *  # noqa: F403
 
 
-class MannWhitney(VoiceoverScene):
+class MannWhitney(StatsScene):
     def construct(self):
         self.card()
         self.flights()
@@ -17,10 +17,7 @@ class MannWhitney(VoiceoverScene):
         self.question()
 
     def card(self):
-        card = chapter_card(3, r"Two samples, \ ranked", r"Wilcoxon, \ Mann and Whitney", lit=(1947,), part=PART)
-        with self.voiceover("Chapter three. Two samples, ranked."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(3, r"Two samples, \ ranked", r"Wilcoxon, \ Mann and Whitney", lit=(1947,), part=PART, said="Chapter three. Two samples, ranked.")
 
     def strips(self, d, center=(0, 1.0, 0)):
         w, c = np.asarray(d["warm"]), np.asarray(d["cold"])

@@ -3,7 +3,7 @@ from __future__ import annotations
 from videos.stats.stats52.common import *  # noqa: F403
 
 
-class Decomposable(VoiceoverScene):
+class Decomposable(StatsScene):
     def construct(self):
         self.card()
         self.idea()
@@ -13,10 +13,7 @@ class Decomposable(VoiceoverScene):
         self.rates()
 
     def card(self):
-        card = chapter_card(3, r"Decomposable regularizers", r"One theorem for sparse, \ group and low-rank problems", lit=(2012,), part=PART)
-        with self.voiceover("Chapter three. Decomposable regularizers: one theorem for sparse, group and low-rank problems."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(3, r"Decomposable regularizers", r"One theorem for sparse, \ group and low-rank problems", lit=(2012,), part=PART, said="Chapter three. Decomposable regularizers: one theorem for sparse, group and low-rank problems.")
 
     def idea(self):
         rows = [

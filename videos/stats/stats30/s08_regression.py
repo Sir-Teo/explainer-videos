@@ -5,7 +5,7 @@ import numpy as np
 from videos.stats.stats30.common import *  # noqa: F403
 
 
-class Regression(VoiceoverScene):
+class Regression(StatsScene):
     def construct(self):
         self.card()
         self.stars()
@@ -20,10 +20,7 @@ class Regression(VoiceoverScene):
         self.advice()
 
     def card(self):
-        card = chapter_card(7, r"Robust regression", r"LMS, \ LTS, \ S and MM", lit=(1984,), part=PART)
-        with self.voiceover("Chapter seven. Robust regression."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(7, r"Robust regression", r"LMS, \ LTS, \ S and MM", lit=(1984,), part=PART, said="Chapter seven. Robust regression.")
 
     def _axes(self):
         return axes([3.3, 4.8], [3.8, 6.4], x_length=7.4, y_length=4.4, xlabel=r"log surface temperature",

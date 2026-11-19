@@ -5,7 +5,7 @@ import numpy as np
 from videos.stats.stats35.common import *  # noqa: F403
 
 
-class Interference(VoiceoverScene):
+class Interference(StatsScene):
     def construct(self):
         self.card()
         self.herd()
@@ -17,10 +17,7 @@ class Interference(VoiceoverScene):
         self.exposure()
 
     def card(self):
-        card = chapter_card(10, r"Interference", r"When your treatment affects me", lit=(2008,), part=PART)
-        with self.voiceover("Chapter ten. Interference."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(10, r"Interference", r"When your treatment affects me", lit=(2008,), part=PART, said="Chapter ten. Interference.")
 
     def herd(self):
         rows = fit_rows(VGroup(

@@ -5,7 +5,7 @@ import numpy as np
 from videos.stats.stats38.common import *  # noqa: F403
 
 
-class Coint(VoiceoverScene):
+class Coint(StatsScene):
     def construct(self):
         self.card()
         self.pair()
@@ -17,11 +17,7 @@ class Coint(VoiceoverScene):
         self.board()
 
     def card(self):
-        card = chapter_card(4, r"Spurious regression and cointegration", r"When two wanderers are tied together",
-                            lit=(1974, 1987, 1988), part=PART)
-        with self.voiceover("Chapter four. Spurious regression, and cointegration."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(4, r"Spurious regression and cointegration", r"When two wanderers are tied together", lit=(1974, 1987, 1988), part=PART, said="Chapter four. Spurious regression, and cointegration.")
 
     def pair(self):
         d = load("coint")

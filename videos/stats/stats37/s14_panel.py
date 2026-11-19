@@ -5,7 +5,7 @@ import numpy as np
 from videos.stats.stats37.common import *  # noqa: F403
 
 
-class Panel(VoiceoverScene):
+class Panel(StatsScene):
     def construct(self):
         self.card()
         self.within()
@@ -16,10 +16,7 @@ class Panel(VoiceoverScene):
         self.fix()
 
     def card(self):
-        card = chapter_card(13, r"Panel data", r"What fixed effects remove, \ and what they add", lit=(1978, 1981), part=PART)
-        with self.voiceover("Chapter thirteen. Panel data."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(13, r"Panel data", r"What fixed effects remove, \ and what they add", lit=(1978, 1981), part=PART, said="Chapter thirteen. Panel data.")
 
     def within(self):
         rows = [

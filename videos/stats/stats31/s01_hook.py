@@ -5,7 +5,7 @@ import numpy as np
 from videos.stats.stats31.common import *  # noqa: F403
 
 
-class Hook(VoiceoverScene):
+class Hook(StatsScene):
     def construct(self):
         self.story()
         self.roads()
@@ -15,7 +15,7 @@ class Hook(VoiceoverScene):
         self.error()
         self.stress()
         self.lesson()
-        self.objectives()
+        self.title(PART)
 
     def story(self):
         tl = timeline(lit=(1952,)).to_edge(UP, buff=0.35)
@@ -220,31 +220,6 @@ class Hook(VoiceoverScene):
                 self.play(FadeIn(rows[k], shift=RIGHT * 0.2))
         self.clear_scene()
 
-    def objectives(self):
-        head = VGroup(label(r"Part 31", font_size=34, color=GREY_B), label(r"Multivariate Analysis", font_size=60)).arrange(DOWN, buff=0.25)
-        obj = objectives_card([
-            r"the data matrix; \ Mahalanobis distance; \ the Wishart distribution",
-            r"Hotelling's $T^2$; \ MANOVA's four statistics",
-            r"principal components; \ factor analysis; \ canonical correlation",
-            r"discriminant analysis; \ clustering by $k$-means and mixtures",
-            r"graphical models; \ what happens as $p$ approaches $n$",
-        ], color=PCC, font_size=26)
-        prereq = note(r"prerequisites: \ Parts 4, \ 5 and 22").to_corner(DL, buff=0.3)
-        built = note(r"built: \ \texttt{statkit.multi}; \ the map from distances").to_corner(DR, buff=0.3)
-        with self.voiceover(
-            "<bookmark mark='a'/> Part thirty-one: multivariate analysis. <bookmark mark='b'/> We'll meet the data matrix and "
-            "Mahalanobis distance; derive the Wishart distribution of the sample covariance; test mean vectors with "
-            "Hotelling's T squared and MANOVA; find low-dimensional structure by principal components, factor analysis and "
-            "canonical correlation; separate groups by discriminant analysis and find them by clustering; read conditional "
-            "independence from the inverse covariance; and see what goes wrong as the number of variables approaches the "
-            "number of observations."
-        ) as vo:
-            vo.wait_until("a")
-            self.play(FadeIn(head, shift=UP * 0.2))
-            vo.wait_until("b")
-            self.play(FadeOut(head), FadeIn(obj, shift=UP * 0.2), FadeIn(prereq), FadeIn(built))
-        self.wait(1.0)
-        self.clear_scene()
 
     def stress(self):
         rows = [

@@ -5,7 +5,7 @@ import numpy as np
 from videos.stats.stats6.common import *  # noqa: F403
 
 
-class Thirty(VoiceoverScene):
+class Thirty(StatsScene):
     def construct(self):
         self.card()
         self.folklore()
@@ -15,10 +15,7 @@ class Thirty(VoiceoverScene):
         self.lesson()
 
     def card(self):
-        card = chapter_card(7, r"Is thirty enough?", r"How fast the bell arrives", part=PART)
-        with self.voiceover("Chapter seven. Is thirty enough?"):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(7, r"Is thirty enough?", r"How fast the bell arrives", part=PART, said="Chapter seven. Is thirty enough?")
 
     def panel(self, d, key, n, cx, color, title):
         ed = np.asarray(d["edges"])

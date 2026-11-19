@@ -5,7 +5,7 @@ import numpy as np
 from videos.stats.stats57.common import *  # noqa: F403
 
 
-class Lemma(VoiceoverScene):
+class Lemma(StatsScene):
     def construct(self):
         self.card()
         self.exchange()
@@ -20,10 +20,7 @@ class Lemma(VoiceoverScene):
         self.split_rows()
 
     def card(self):
-        card = chapter_card(1, r"Exchangeability and the quantile lemma", r"One fact, \ proved", lit=(2005,), part=PART)
-        with self.voiceover("Chapter one. Exchangeability, and the quantile lemma that everything else rests on."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(1, r"Exchangeability and the quantile lemma", r"One fact, \ proved", lit=(2005,), part=PART, said="Chapter one. Exchangeability, and the quantile lemma that everything else rests on.")
 
     def exchange(self):
         rows = [

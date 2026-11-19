@@ -5,7 +5,7 @@ import numpy as np
 from videos.stats.stats63.common import *  # noqa: F403
 
 
-class Accounting(LectureMixin, VoiceoverScene):
+class Accounting(LectureMixin, StatsScene):
     def construct(self):
         self.card_voiceover("Chapter three. Accountants: how privacy losses add up over many releases.", 3,
                             r"Accountants", r"Adding up the privacy loss", lit=(2016, 2017))

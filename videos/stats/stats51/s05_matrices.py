@@ -5,7 +5,7 @@ import numpy as np
 from videos.stats.stats51.common import *  # noqa: F403
 
 
-class RandomMatrices(VoiceoverScene):
+class RandomMatrices(StatsScene):
     def construct(self):
         self.card()
         self.nets()
@@ -16,10 +16,7 @@ class RandomMatrices(VoiceoverScene):
         self.shuffle()
 
     def card(self):
-        card = chapter_card(4, r"Random matrices, \ non-asymptotically", r"$\sqrt n \pm \sqrt p$, \ and what it says about covariances", lit=(1985,), part=PART)
-        with self.voiceover("Chapter four. Random matrices, non-asymptotically: root n plus or minus root p, and what it says about covariances."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(4, r"Random matrices, \ non-asymptotically", r"$\sqrt n \pm \sqrt p$, \ and what it says about covariances", lit=(1985,), part=PART, said="Chapter four. Random matrices, non-asymptotically: root n plus or minus root p, and what it says about covariances.")
 
     def nets(self):
         rows = [

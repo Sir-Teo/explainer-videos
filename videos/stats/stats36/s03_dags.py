@@ -3,7 +3,7 @@ from __future__ import annotations
 from videos.stats.stats36.common import *  # noqa: F403
 
 
-class DAGs(VoiceoverScene):
+class DAGs(StatsScene):
     def construct(self):
         self.card()
         self.wright()
@@ -14,10 +14,7 @@ class DAGs(VoiceoverScene):
         self.lesson()
 
     def card(self):
-        card = chapter_card(2, r"Causal diagrams", r"Arrows for causes, \ paths for associations", lit=(1921, 1995), part=PART)
-        with self.voiceover("Chapter two. Causal diagrams."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(2, r"Causal diagrams", r"Arrows for causes, \ paths for associations", lit=(1921, 1995), part=PART, said="Chapter two. Causal diagrams.")
 
     def wright(self):
         rows = fit_rows(VGroup(

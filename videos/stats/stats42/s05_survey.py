@@ -17,7 +17,7 @@ def graph(center=(-2.4, 0.1, 0), scale=0.78):
     return CausalGraph(POS, EDGES, center=center, scale=scale, font_size=26, radius=0.34, colors=cols)
 
 
-class SurveyGraph(VoiceoverScene):
+class SurveyGraph(StatsScene):
     def construct(self):
         self.card()
         self.naive()
@@ -28,10 +28,7 @@ class SurveyGraph(VoiceoverScene):
         self.numbers()
 
     def card(self):
-        card = chapter_card(4, r"Case 2: \ the survey and its graph", r"Users have higher pressure: \ so what?", part=PART)
-        with self.voiceover("Chapter four. The second case: an observational survey, and the graph that has to come before any estimate."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(4, r"Case 2: \ the survey and its graph", r"Users have higher pressure: \ so what?", part=PART, said="Chapter four. The second case: an observational survey, and the graph that has to come before any estimate.")
 
     def naive(self):
         o = load("obs")

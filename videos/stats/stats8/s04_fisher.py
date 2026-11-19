@@ -5,7 +5,7 @@ import numpy as np
 from videos.stats.stats8.common import *  # noqa: F403
 
 
-class Fisher(VoiceoverScene):
+class Fisher(StatsScene):
     def construct(self):
         self.card()
         self.sphere()
@@ -16,11 +16,7 @@ class Fisher(VoiceoverScene):
         self.consequences()
 
     def card(self):
-        card = chapter_card(3, r"Fisher's geometry", r"A sample is a point; \ its statistics are lengths and angles", lit=(1915,),
-                            part=PART)
-        with self.voiceover("Chapter three. Fisher's geometry."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(3, r"Fisher's geometry", r"A sample is a point; \ its statistics are lengths and angles", lit=(1915,), part=PART, said="Chapter three. Fisher's geometry.")
 
     def sphere(self):
         hc = history_card(1915, r"R. A. Fisher, \ ``Frequency distribution of the values of the correlation coefficient''",

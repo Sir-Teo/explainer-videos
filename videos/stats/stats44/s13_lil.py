@@ -5,7 +5,7 @@ import numpy as np
 from videos.stats.stats44.common import *  # noqa: F403
 
 
-class IteratedLogarithm(VoiceoverScene):
+class IteratedLogarithm(StatsScene):
     def construct(self):
         self.card()
         self.statement()
@@ -14,10 +14,7 @@ class IteratedLogarithm(VoiceoverScene):
         self.meaning()
 
     def card(self):
-        card = chapter_card(12, r"The law of the iterated logarithm", r"How far does a random walk stray?", lit=(1924,), part=PART)
-        with self.voiceover("Chapter twelve. The law of the iterated logarithm: exactly how far a random walk strays."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(12, r"The law of the iterated logarithm", r"How far does a random walk stray?", lit=(1924,), part=PART, said="Chapter twelve. The law of the iterated logarithm: exactly how far a random walk strays.")
 
     def statement(self):
         rows = [

@@ -5,7 +5,7 @@ import numpy as np
 from videos.stats.stats29.common import *  # noqa: F403
 
 
-class Lambda(VoiceoverScene):
+class Lambda(StatsScene):
     def construct(self):
         self.card()
         self.gcv()
@@ -17,10 +17,7 @@ class Lambda(VoiceoverScene):
         self.which()
 
     def card(self):
-        card = chapter_card(7, r"Choosing $\lambda$", r"GCV, \ REML, \ and splines as mixed models", lit=(1979,), part=PART)
-        with self.voiceover("Chapter seven. Choosing lambda."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(7, r"Choosing $\lambda$", r"GCV, \ REML, \ and splines as mixed models", lit=(1979,), part=PART, said="Chapter seven. Choosing lambda.")
 
     def gcv(self):
         rows = [

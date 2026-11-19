@@ -5,7 +5,7 @@ import numpy as np
 from videos.stats.stats8.common import *  # noqa: F403
 
 
-class FPC(VoiceoverScene):
+class FPC(StatsScene):
     def construct(self):
         self.card()
         self.derive()
@@ -14,10 +14,7 @@ class FPC(VoiceoverScene):
         self.surprise()
 
     def card(self):
-        card = chapter_card(10, r"Finite populations", r"When the sample is a sizeable share of everyone", part=PART)
-        with self.voiceover("Chapter ten. Finite populations."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(10, r"Finite populations", r"When the sample is a sizeable share of everyone", part=PART, said="Chapter ten. Finite populations.")
 
     def derive(self):
         rows = [

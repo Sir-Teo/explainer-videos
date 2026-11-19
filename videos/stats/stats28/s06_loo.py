@@ -5,7 +5,7 @@ import numpy as np
 from videos.stats.stats28.common import *  # noqa: F403
 
 
-class LOO(VoiceoverScene):
+class LOO(StatsScene):
     def construct(self):
         self.card()
         self.elpd()
@@ -17,10 +17,7 @@ class LOO(VoiceoverScene):
         self.compare()
 
     def card(self):
-        card = chapter_card(5, r"Bayesian LOO and WAIC", r"Predictive accuracy from posterior draws", lit=(2010,), part=PART)
-        with self.voiceover("Chapter five. Bayesian leave-one-out and WAIC."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(5, r"Bayesian LOO and WAIC", r"Predictive accuracy from posterior draws", lit=(2010,), part=PART, said="Chapter five. Bayesian leave-one-out and WAIC.")
 
     def elpd(self):
         rows = [

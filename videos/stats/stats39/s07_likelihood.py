@@ -5,7 +5,7 @@ import numpy as np
 from videos.stats.stats39.common import *  # noqa: F403
 
 
-class Likelihood(VoiceoverScene):
+class Likelihood(StatsScene):
     def construct(self):
         self.card()
         self.loglik()
@@ -15,10 +15,7 @@ class Likelihood(VoiceoverScene):
         self.cost()
 
     def card(self):
-        card = chapter_card(6, r"Likelihood", r"Fitting the covariance and the trend together", lit=(1985,), part=PART)
-        with self.voiceover("Chapter six. Likelihood."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(6, r"Likelihood", r"Fitting the covariance and the trend together", lit=(1985,), part=PART, said="Chapter six. Likelihood.")
 
     def loglik(self):
         rows = [

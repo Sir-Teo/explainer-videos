@@ -5,7 +5,7 @@ import numpy as np
 from videos.stats.stats63.common import *  # noqa: F403
 
 
-class Census(LectureMixin, VoiceoverScene):
+class Census(LectureMixin, StatsScene):
     def construct(self):
         self.card_voiceover("Chapter six. The 2020 United States census, the largest use of differential privacy.", 6,
                             r"The 2020 Census", r"Privacy at the scale of a nation", lit=(2022,))

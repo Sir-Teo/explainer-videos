@@ -11,7 +11,7 @@ from videos.stats.stats54.common import *  # noqa: F403
 from videos.stats.stats54.checked import separator
 
 
-class Hook(VoiceoverScene):
+class Hook(StatsScene):
     def construct(self):
         self.story()
         self.three()
@@ -19,7 +19,7 @@ class Hook(VoiceoverScene):
         self.table()
         self.question()
         self.upgrades()
-        self.objectives()
+        self.title(PART)
 
     def story(self):
         tl = timeline(lit=(1971,)).to_edge(UP, buff=0.35)
@@ -183,28 +183,4 @@ class Hook(VoiceoverScene):
             for k, m_ in enumerate("abc"):
                 vo.wait_until(m_)
                 self.play(FadeIn(stack[k], shift=UP * 0.2))
-        self.clear_scene()
-
-    def objectives(self):
-        head = VGroup(label(r"Part 54", font_size=34, color=GREY_B), label(r"Statistical Learning Theory", font_size=48)).arrange(DOWN, buff=0.25)
-        obj = objectives_card([
-            r"ERM and uniform convergence; \ VC bounds; \ Rademacher complexity and contraction",
-            r"localization and fast rates; \ margins for boosting and SVMs",
-            r"PAC-Bayes; \ stability; \ online learning and regret; \ calibrated surrogate losses",
-            r"interpolation: \ double descent and benign overfitting",
-        ], color=CLASSC, font_size=26)
-        prereq = note(r"prerequisites: \ Parts 34, \ 48, \ 51").to_corner(DL, buff=0.3)
-        built = note(r"built: \ \texttt{statkit.slt}, \ the shatterer").to_corner(DR, buff=0.3)
-        with self.voiceover(
-            "<bookmark mark='a'/> Part fifty-four: statistical learning theory. <bookmark mark='b'/> We'll study empirical "
-            "risk minimization and uniform convergence, VC bounds, and Rademacher complexity with its contraction lemma; "
-            "localization and fast rates; margins for boosting and support vector machines; PAC-Bayes bounds; algorithmic "
-            "stability; online learning and regret; why convex surrogate losses are safe; and finally interpolation, double "
-            "descent and benign overfitting, where the classical story needs revision."
-        ) as vo:
-            vo.wait_until("a")
-            self.play(FadeIn(head, shift=UP * 0.2))
-            vo.wait_until("b")
-            self.play(FadeOut(head), FadeIn(obj, shift=UP * 0.2), FadeIn(prereq), FadeIn(built))
-        self.wait(1.0)
         self.clear_scene()

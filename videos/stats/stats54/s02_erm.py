@@ -5,7 +5,7 @@ import numpy as np
 from videos.stats.stats54.common import *  # noqa: F403
 
 
-class ERM(VoiceoverScene):
+class ERM(StatsScene):
     def construct(self):
         self.card()
         self.setup_ladder()
@@ -17,10 +17,7 @@ class ERM(VoiceoverScene):
         self.srm()
 
     def card(self):
-        card = chapter_card(1, r"ERM and uniform convergence", r"Why the chosen rule's sample error lies", lit=(1971,), part=PART)
-        with self.voiceover("Chapter one. Empirical risk minimization and uniform convergence: why the chosen rule's sample error lies."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(1, r"ERM and uniform convergence", r"Why the chosen rule's sample error lies", lit=(1971,), part=PART, said="Chapter one. Empirical risk minimization and uniform convergence: why the chosen rule's sample error lies.")
 
     def setup_ladder(self):
         rows = [

@@ -29,7 +29,7 @@ def graph(pc, pos, color=GREY_B, tol=1e-6):
     return g
 
 
-class Graphs(VoiceoverScene):
+class Graphs(StatsScene):
     def construct(self):
         self.card()
         self.partial()
@@ -41,10 +41,7 @@ class Graphs(VoiceoverScene):
         self.reading()
 
     def card(self):
-        card = chapter_card(9, r"Graphical models", r"Who is directly connected to whom", lit=(2008,), part=PART)
-        with self.voiceover("Chapter nine. Graphical models."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(9, r"Graphical models", r"Who is directly connected to whom", lit=(2008,), part=PART, said="Chapter nine. Graphical models.")
 
     def partial(self):
         rows = [

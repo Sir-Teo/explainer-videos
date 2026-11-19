@@ -5,7 +5,7 @@ import numpy as np
 from videos.stats.stats39.common import *  # noqa: F403
 
 
-class SpatialData(VoiceoverScene):
+class SpatialData(StatsScene):
     def construct(self):
         self.card()
         self.tobler()
@@ -16,10 +16,7 @@ class SpatialData(VoiceoverScene):
         self.neff()
 
     def card(self):
-        card = chapter_card(1, r"Spatial data", r"Near things are more related", lit=(1970,), part=PART)
-        with self.voiceover("Chapter one. Spatial data."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(1, r"Spatial data", r"Near things are more related", lit=(1970,), part=PART, said="Chapter one. Spatial data.")
 
     def tobler(self):
         q = label(r"\emph{``Everything is related to everything else, \ but near things are more related than distant things.''}",

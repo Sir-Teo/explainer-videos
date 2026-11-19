@@ -5,7 +5,7 @@ import numpy as np
 from videos.stats.stats6.common import *  # noqa: F403
 
 
-class CLTProof(VoiceoverScene):
+class CLTProof(StatsScene):
     def construct(self):
         self.card()
         self.setup_()
@@ -15,10 +15,7 @@ class CLTProof(VoiceoverScene):
         self.names()
 
     def card(self):
-        card = chapter_card(5, r"The central limit theorem, proved", r"Three lines of Taylor expansion", part=PART)
-        with self.voiceover("Chapter five. The central limit theorem, proved."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(5, r"The central limit theorem, proved", r"Three lines of Taylor expansion", part=PART, said="Chapter five. The central limit theorem, proved.")
 
     def setup_(self):
         rows = [

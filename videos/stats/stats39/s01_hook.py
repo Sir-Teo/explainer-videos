@@ -5,13 +5,13 @@ import numpy as np
 from videos.stats.stats39.common import *  # noqa: F403
 
 
-class Hook(VoiceoverScene):
+class Hook(StatsScene):
     def construct(self):
         self.story()
         self.boreholes()
         self.matheron()
         self.question()
-        self.objectives()
+        self.title(PART)
 
     def story(self):
         tl = timeline(lit=(1951,)).to_edge(UP, buff=0.35)
@@ -112,29 +112,4 @@ class Hook(VoiceoverScene):
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
                 self.play(FadeIn(rows[k], shift=RIGHT * 0.2))
-        self.clear_scene()
-
-    def objectives(self):
-        head = VGroup(label(r"Part 39", font_size=34, color=GREY_B), label(r"Space", font_size=56)).arrange(DOWN, buff=0.25)
-        obj = objectives_card([
-            r"random fields, \ Bochner, \ variograms; \ kriging as the best linear predictor",
-            r"Mat\'ern smoothness, \ what cannot be learned, \ ML and REML",
-            r"scaling: \ Vecchia, \ nearest-neighbour GPs, \ GMRFs and the SPDE",
-            r"areal data and disease maps; \ point processes and Snow's map",
-            r"spatial confounding; \ space--time; \ GPs in machine learning; \ honest prediction",
-        ], color=TAUC, font_size=26)
-        prereq = note(r"prerequisites: \ Parts 25 and 29").to_corner(DL, buff=0.3)
-        built = note(r"built: \ \texttt{statkit.spatial}; \ the field surface; \ data: \ Meuse, \ Snow's map").to_corner(DR, buff=0.3)
-        with self.voiceover(
-            "<bookmark mark='a'/> Part thirty-nine: space. <bookmark mark='b'/> We'll describe random fields and their "
-            "variograms; derive kriging; meet the Matérn family and a parameter fixed-domain sampling cannot consistently separate from the variance; estimate by "
-            "likelihood, and scale it to a hundred thousand locations; map disease rates in areas, and test point patterns, "
-            "including Snow's map; see how spatial random effects can confound a regression; move to space and time; and "
-            "end with Gaussian processes in machine learning, and honest prediction."
-        ) as vo:
-            vo.wait_until("a")
-            self.play(FadeIn(head, shift=UP * 0.2))
-            vo.wait_until("b")
-            self.play(FadeOut(head), FadeIn(obj, shift=UP * 0.2), FadeIn(prereq), FadeIn(built))
-        self.wait(1.0)
         self.clear_scene()

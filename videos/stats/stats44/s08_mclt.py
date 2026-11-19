@@ -6,7 +6,7 @@ from scipy import stats
 from videos.stats.stats44.common import *  # noqa: F403
 
 
-class MartingaleCLT(VoiceoverScene):
+class MartingaleCLT(StatsScene):
     def construct(self):
         self.card()
         self.statement()
@@ -16,10 +16,7 @@ class MartingaleCLT(VoiceoverScene):
         self.board()
 
     def card(self):
-        card = chapter_card(7, r"The martingale CLT", r"Normal limits for dependent sums", lit=(1974,), part=PART)
-        with self.voiceover("Chapter seven. The martingale central limit theorem."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(7, r"The martingale CLT", r"Normal limits for dependent sums", lit=(1974,), part=PART, said="Chapter seven. The martingale central limit theorem.")
 
     def statement(self):
         rows = [

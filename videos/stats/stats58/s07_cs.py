@@ -5,7 +5,7 @@ import numpy as np
 from videos.stats.stats58.common import *  # noqa: F403
 
 
-class ConfidenceSequences(LectureMixin, VoiceoverScene):
+class ConfidenceSequences(LectureMixin, StatsScene):
     def construct(self):
         self.card_voiceover("Chapter six. Confidence sequences: intervals that hold at every time at once, so you may "
                        "watch them shrink and stop when you like.", 6, r"Confidence sequences", r"Intervals valid at every time",

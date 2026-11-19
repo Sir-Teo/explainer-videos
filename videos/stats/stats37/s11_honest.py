@@ -5,7 +5,7 @@ import numpy as np
 from videos.stats.stats37.common import *  # noqa: F403
 
 
-class Honest(VoiceoverScene):
+class Honest(StatsScene):
     def construct(self):
         self.card()
         self.pretests()
@@ -16,10 +16,7 @@ class Honest(VoiceoverScene):
         self.lesson()
 
     def card(self):
-        card = chapter_card(10, r"Honest parallel trends", r"What if the trends were not quite parallel?", lit=(2022, 2023), part=PART)
-        with self.voiceover("Chapter ten. Honest parallel trends."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(10, r"Honest parallel trends", r"What if the trends were not quite parallel?", lit=(2022, 2023), part=PART, said="Chapter ten. Honest parallel trends.")
 
     def pretests(self):
         rows = fit_rows(VGroup(

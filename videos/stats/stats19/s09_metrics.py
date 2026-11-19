@@ -5,7 +5,7 @@ import numpy as np
 from videos.stats.stats19.common import *  # noqa: F403
 
 
-class Metrics(VoiceoverScene):
+class Metrics(StatsScene):
     def construct(self):
         self.card()
         self.confusion()
@@ -17,10 +17,7 @@ class Metrics(VoiceoverScene):
         self.lessons()
 
     def card(self):
-        card = chapter_card(8, r"Classification metrics", r"Right for the right reasons", part=PART)
-        with self.voiceover("Chapter eight. Classification metrics."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(8, r"Classification metrics", r"Right for the right reasons", part=PART, said="Chapter eight. Classification metrics.")
 
     def matrix(self, c, center):
         cells = VGroup()

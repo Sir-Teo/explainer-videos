@@ -8,7 +8,7 @@ CATS = [r"under", r"normal", r"over", r"obese"]
 CCOL = [TEAL, BLUE, PATH, RED]
 
 
-class Ordinal(VoiceoverScene):
+class Ordinal(StatsScene):
     def construct(self):
         self.card()
         self.multinomial()
@@ -19,10 +19,7 @@ class Ordinal(VoiceoverScene):
         self.others()
 
     def card(self):
-        card = chapter_card(10, r"Multinomial and ordinal", r"More than two outcomes", lit=(1980,), part=PART)
-        with self.voiceover("Chapter ten. Multinomial and ordinal models."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(10, r"Multinomial and ordinal", r"More than two outcomes", lit=(1980,), part=PART, said="Chapter ten. Multinomial and ordinal models.")
 
     def multinomial(self):
         rows = [

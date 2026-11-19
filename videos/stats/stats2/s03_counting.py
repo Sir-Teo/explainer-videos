@@ -19,7 +19,7 @@ def stars_bars(counts, star_color=EVENT, size=0.34) -> VGroup:
     return g.arrange(RIGHT, buff=0.16)
 
 
-class Counting(VoiceoverScene):
+class Counting(StatsScene):
     def construct(self):
         self.card()
         self.multiply()
@@ -29,10 +29,7 @@ class Counting(VoiceoverScene):
         self.stars()
 
     def card(self):
-        card = chapter_card(2, r"Counting", r"How many equally likely cases are there?", lit=(1654,), part=PART)
-        with self.voiceover("Chapter two. Counting."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(2, r"Counting", r"How many equally likely cases are there?", lit=(1654,), part=PART, said="Chapter two. Counting.")
 
     def multiply(self):
         one = dice_row(range(1, 7), size=0.46, buff=0.1).move_to([-4.6, 1.8, 0])

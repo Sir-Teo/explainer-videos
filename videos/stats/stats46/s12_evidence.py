@@ -5,7 +5,7 @@ import numpy as np
 from videos.stats.stats46.common import *  # noqa: F403
 
 
-class Evidence(VoiceoverScene):
+class Evidence(StatsScene):
     def construct(self):
         self.card()
         self.framing()
@@ -15,10 +15,7 @@ class Evidence(VoiceoverScene):
         self.lessons()
 
     def card(self):
-        card = chapter_card(11, r"p-values and evidence", r"How strong is $p = 0.05$?", lit=(1987,), part=PART)
-        with self.voiceover("Chapter eleven. p-values and evidence: how strong is a p-value of point zero five?"):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(11, r"p-values and evidence", r"How strong is $p = 0.05$?", lit=(1987,), part=PART, said="Chapter eleven. p-values and evidence: how strong is a p-value of point zero five?")
 
     def framing(self):
         rows = [

@@ -7,7 +7,7 @@ from videos.stats.stats24.common import *  # noqa: F403
 from videos.stats.stats24.s01_hook import beetle_panel
 
 
-class IRLS(VoiceoverScene):
+class IRLS(StatsScene):
     def construct(self):
         self.card()
         self.derive()
@@ -18,10 +18,7 @@ class IRLS(VoiceoverScene):
         self.cost()
 
     def card(self):
-        card = chapter_card(3, r"IRLS derived", r"Fisher scoring is weighted least squares", part=PART)
-        with self.voiceover("Chapter three. Iteratively reweighted least squares, derived."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(3, r"IRLS derived", r"Fisher scoring is weighted least squares", part=PART, said="Chapter three. Iteratively reweighted least squares, derived.")
 
     def derive(self):
         rows = [

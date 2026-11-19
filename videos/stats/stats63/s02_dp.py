@@ -5,7 +5,7 @@ import numpy as np
 from videos.stats.stats63.common import *  # noqa: F403
 
 
-class Definition(LectureMixin, VoiceoverScene):
+class Definition(LectureMixin, StatsScene):
     def construct(self):
         self.card_voiceover("Chapter one. Differential privacy: a promise about any one person, against any attacker.", 1,
                             r"Differential privacy", r"A promise about the process", lit=(2006,))

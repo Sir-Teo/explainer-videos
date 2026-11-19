@@ -5,7 +5,7 @@ import numpy as np
 from videos.stats.stats5.common import *  # noqa: F403
 
 
-class Eve(VoiceoverScene):
+class Eve(StatsScene):
     def construct(self):
         self.card()
         self.derive()
@@ -15,10 +15,7 @@ class Eve(VoiceoverScene):
         self.on_average()
 
     def card(self):
-        card = chapter_card(4, r"Eve's law", r"Total variance $=$ within $+$ between", lit=(), part=PART)
-        with self.voiceover("Chapter four. Eve's law."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(4, r"Eve's law", r"Total variance $=$ within $+$ between", lit=(), part=PART, said="Chapter four. Eve's law.")
 
     def derive(self):
         rows = [

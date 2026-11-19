@@ -5,7 +5,7 @@ import numpy as np
 from videos.stats.stats26.common import *  # noqa: F403
 
 
-class Checking(VoiceoverScene):
+class Checking(StatsScene):
     def construct(self):
         self.card()
         self.idea()
@@ -15,10 +15,7 @@ class Checking(VoiceoverScene):
         self.prior_predictive()
 
     def card(self):
-        card = chapter_card(10, r"Checking", r"Could the model have produced these data?", lit=(1984,), part=PART)
-        with self.voiceover("Chapter ten. Model checking."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(10, r"Checking", r"Could the model have produced these data?", lit=(1984,), part=PART, said="Chapter ten. Model checking.")
 
     def idea(self):
         rows = [

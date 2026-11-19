@@ -5,7 +5,7 @@ import numpy as np
 from videos.stats.stats35.common import *  # noqa: F403
 
 
-class Sequential(VoiceoverScene):
+class Sequential(StatsScene):
     def construct(self):
         self.card()
         self.why_()
@@ -18,10 +18,7 @@ class Sequential(VoiceoverScene):
         self.dsmb()
 
     def card(self):
-        card = chapter_card(12, r"Sequential trials", r"Looking early without cheating", lit=(1977, 1979, 1983), part=PART)
-        with self.voiceover("Chapter twelve. Sequential trials."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(12, r"Sequential trials", r"Looking early without cheating", lit=(1977, 1979, 1983), part=PART, said="Chapter twelve. Sequential trials.")
 
     def why_(self):
         rows = fit_rows(VGroup(

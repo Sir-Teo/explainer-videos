@@ -5,7 +5,7 @@ import numpy as np
 from videos.stats.stats40.common import *  # noqa: F403
 
 
-class Prediction(VoiceoverScene):
+class Prediction(StatsScene):
     def construct(self):
         self.card()
         self.concordance()
@@ -17,10 +17,7 @@ class Prediction(VoiceoverScene):
         self.board()
 
     def card(self):
-        card = chapter_card(15, r"Prediction", r"Who will have the event, \ and when?", lit=(1999, 2008, 2023), part=PART)
-        with self.voiceover("Chapter fifteen. Prediction."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(15, r"Prediction", r"Who will have the event, \ and when?", lit=(1999, 2008, 2023), part=PART, said="Chapter fifteen. Prediction.")
 
     def concordance(self):
         rows = [

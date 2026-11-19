@@ -5,7 +5,7 @@ import numpy as np
 from videos.stats.stats61.common import *  # noqa: F403
 
 
-class Generative(LectureMixin, VoiceoverScene):
+class Generative(LectureMixin, StatsScene):
     def construct(self):
         self.card_voiceover("Chapter nine. Generative models and transport: learning a map from noise to data.", 9,
                             r"Generative models", r"From noise to data", lit=(2017,))

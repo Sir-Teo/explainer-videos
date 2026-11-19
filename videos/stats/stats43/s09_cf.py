@@ -5,7 +5,7 @@ import numpy as np
 from videos.stats.stats43.common import *  # noqa: F403
 
 
-class CharacteristicFunctions(VoiceoverScene):
+class CharacteristicFunctions(StatsScene):
     def construct(self):
         self.card()
         self.definition()
@@ -16,10 +16,7 @@ class CharacteristicFunctions(VoiceoverScene):
         self.wold()
 
     def card(self):
-        card = chapter_card(8, r"Characteristic functions", r"A transform that always exists", lit=(1925,), part=PART)
-        with self.voiceover("Chapter eight. Characteristic functions: a transform that always exists."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(8, r"Characteristic functions", r"A transform that always exists", lit=(1925,), part=PART, said="Chapter eight. Characteristic functions: a transform that always exists.")
 
     def definition(self):
         rows = [

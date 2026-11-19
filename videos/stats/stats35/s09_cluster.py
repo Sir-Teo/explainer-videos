@@ -3,7 +3,7 @@ from __future__ import annotations
 from videos.stats.stats35.common import *  # noqa: F403
 
 
-class Cluster(VoiceoverScene):
+class Cluster(StatsScene):
     def construct(self):
         self.card()
         self.why_()
@@ -14,10 +14,7 @@ class Cluster(VoiceoverScene):
         self.analysis()
 
     def card(self):
-        card = chapter_card(8, r"Cluster randomization", r"When whole groups are assigned", lit=(1978,), part=PART)
-        with self.voiceover("Chapter eight. Cluster randomization."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(8, r"Cluster randomization", r"When whole groups are assigned", lit=(1978,), part=PART, said="Chapter eight. Cluster randomization.")
 
     def why_(self):
         rows = fit_rows(VGroup(

@@ -4,7 +4,7 @@ from explainer.stats import museum
 from videos.stats.stats35.common import *  # noqa: F403
 
 
-class Hook(VoiceoverScene):
+class Hook(StatsScene):
     def construct(self):
         self.story()
         self.designs()
@@ -12,7 +12,7 @@ class Hook(VoiceoverScene):
         self.why()
         self.blind()
         self.question()
-        self.objectives()
+        self.title(PART)
 
     def story(self):
         tl = timeline(lit=(1954,)).to_edge(UP, buff=0.35)
@@ -168,32 +168,4 @@ class Hook(VoiceoverScene):
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
                 self.play(FadeIn(rows[k], shift=RIGHT * 0.2))
-        self.clear_scene()
-
-    def objectives(self):
-        head = VGroup(label(r"Part 35", font_size=34, color=GREY_B), label(r"What If?", font_size=60),
-                      label(r"Experiments and Potential Outcomes", font_size=36, color=GREY_A)).arrange(DOWN, buff=0.25)
-        obj = objectives_card([
-            r"potential outcomes, \ the science table, \ estimands and SUTVA",
-            r"why randomization works; \ Fisher's sharp null; \ Neyman's variance",
-            r"blocking, \ adjustment (Freedman, \ Lin), \ cluster randomization",
-            r"noncompliance and the LATE; \ interference; \ subgroups",
-            r"sequential trials, \ surrogates, \ and transporting a trial",
-        ], color=TAUC, font_size=26)
-        prereq = note(r"prerequisites: \ Parts 13 and 23").to_corner(DL, buff=0.3)
-        built = note(r"built: \ the World's clinic trial; \ \texttt{statkit.causal} (I); \ the science table").to_corner(DR, buff=0.3)
-        with self.voiceover(
-            "<bookmark mark='a'/> Part thirty-five: what if? Experiments and potential outcomes. <bookmark mark='b'/> We'll "
-            "define causal effects through potential outcomes, using a World in which, for once, both outcomes of every "
-            "patient are known; see exactly why randomization removes selection bias; test Fisher's sharp null and derive "
-            "Neyman's variance; block, pair and adjust, and see what Freedman objected to and how Lin answered; randomize "
-            "whole schools; handle patients who do not take their pills, and vaccines that protect the neighbours; distrust "
-            "subgroups; stop trials early without cheating; doubt surrogate endpoints; and carry a trial's result to the "
-            "population that will use it."
-        ) as vo:
-            vo.wait_until("a")
-            self.play(FadeIn(head, shift=UP * 0.2))
-            vo.wait_until("b")
-            self.play(FadeOut(head), FadeIn(obj, shift=UP * 0.2), FadeIn(prereq), FadeIn(built))
-        self.wait(1.0)
         self.clear_scene()

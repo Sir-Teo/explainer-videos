@@ -5,7 +5,7 @@ import numpy as np
 from videos.stats.stats16.common import *  # noqa: F403
 
 
-class CrossValidation(VoiceoverScene):
+class CrossValidation(StatsScene):
     def construct(self):
         self.card()
         self.fits()
@@ -16,10 +16,7 @@ class CrossValidation(VoiceoverScene):
         self.cautions()
 
     def card(self):
-        card = chapter_card(10, r"Cross-validation", r"How well will it predict data it hasn't seen?", part=PART)
-        with self.voiceover("Chapter ten. Cross-validation."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(10, r"Cross-validation", r"How well will it predict data it hasn't seen?", part=PART, said="Chapter ten. Cross-validation.")
 
     def fits(self):
         d = load("cv")

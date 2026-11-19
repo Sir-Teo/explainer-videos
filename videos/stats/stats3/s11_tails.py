@@ -7,7 +7,7 @@ from videos.stats.stats3.common import *  # noqa: F403
 LS, MLE = S.RESID, S.LIK
 
 
-class Tails(VoiceoverScene, TreeMixin):
+class Tails(StatsScene, TreeMixin):
     def construct(self):
         self.card()
         self.pareto()
@@ -16,10 +16,7 @@ class Tails(VoiceoverScene, TreeMixin):
         self.fitting()
 
     def card(self):
-        card = chapter_card(10, r"Heavy tails", r"Power laws, and how not to fit them", lit=(), part=PART)
-        with self.voiceover("Chapter ten. Heavy tails."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(10, r"Heavy tails", r"Power laws, and how not to fit them", lit=(), part=PART, said="Chapter ten. Heavy tails.")
 
     def pareto(self):
         dfn = definition_card(r"Pareto (power-law) tail", r"$P(X > x) = (x_{\min} / x)^{\alpha}$ \ for $x \ge x_{\min}$: "

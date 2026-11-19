@@ -5,7 +5,7 @@ import numpy as np
 from videos.stats.stats32.common import *  # noqa: F403
 
 
-class Computing(VoiceoverScene):
+class Computing(StatsScene):
     def construct(self):
         self.card()
         self.cd()
@@ -17,10 +17,7 @@ class Computing(VoiceoverScene):
         self.ols_end()
 
     def card(self):
-        card = chapter_card(5, r"Computing the path", r"Coordinate descent and least angle regression", lit=(2004,), part=PART)
-        with self.voiceover("Chapter five. Computing the lasso."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(5, r"Computing the path", r"Coordinate descent and least angle regression", lit=(2004,), part=PART, said="Chapter five. Computing the lasso.")
 
     def cd(self):
         rows = [

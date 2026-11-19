@@ -5,7 +5,7 @@ import numpy as np
 from videos.stats.stats11.common import *  # noqa: F403
 
 
-class Pivots(VoiceoverScene):
+class Pivots(StatsScene):
     def construct(self):
         self.card()
         self.idea()
@@ -15,10 +15,7 @@ class Pivots(VoiceoverScene):
         self.approximate()
 
     def card(self):
-        card = chapter_card(2, r"Pivots", r"A quantity whose distribution does not depend on $\theta$", part=PART)
-        with self.voiceover("Chapter two. Pivots."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(2, r"Pivots", r"A quantity whose distribution does not depend on $\theta$", part=PART, said="Chapter two. Pivots.")
 
     def idea(self):
         rows = [

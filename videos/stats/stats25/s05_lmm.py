@@ -5,7 +5,7 @@ import numpy as np
 from videos.stats.stats25.common import *  # noqa: F403
 
 
-class LMM(VoiceoverScene):
+class LMM(StatsScene):
     def construct(self):
         self.card()
         self.model()
@@ -16,10 +16,7 @@ class LMM(VoiceoverScene):
         self.predict()
 
     def card(self):
-        card = chapter_card(4, r"The linear mixed model", r"GLS, \ and predictions for each group", lit=(1982,), part=PART)
-        with self.voiceover("Chapter four. The linear mixed model."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(4, r"The linear mixed model", r"GLS, \ and predictions for each group", lit=(1982,), part=PART, said="Chapter four. The linear mixed model.")
 
     def model(self):
         rows = [

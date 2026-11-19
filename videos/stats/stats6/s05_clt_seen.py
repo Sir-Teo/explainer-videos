@@ -6,7 +6,7 @@ from scipy import stats as st
 from videos.stats.stats6.common import *  # noqa: F403
 
 
-class CLTSeen(VoiceoverScene):
+class CLTSeen(StatsScene):
     def construct(self):
         self.card()
         self.convolution()
@@ -15,11 +15,7 @@ class CLTSeen(VoiceoverScene):
         self.universal()
 
     def card(self):
-        card = chapter_card(4, r"The central limit theorem, seen", r"Why the bell curve, \ from almost anything", lit=(1733, 1810),
-                            part=PART)
-        with self.voiceover("Chapter four. The central limit theorem, seen."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(4, r"The central limit theorem, seen", r"Why the bell curve, \ from almost anything", lit=(1733, 1810), part=PART, said="Chapter four. The central limit theorem, seen.")
 
     def convolution(self):
         d = load("lopsided")

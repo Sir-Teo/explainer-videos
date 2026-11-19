@@ -5,7 +5,7 @@ import numpy as np
 from videos.stats.stats20.common import *  # noqa: F403
 
 
-class Exploration(VoiceoverScene):
+class Exploration(StatsScene):
     def construct(self):
         self.card()
         self.pressure()
@@ -16,10 +16,7 @@ class Exploration(VoiceoverScene):
         self.lessons()
 
     def card(self):
-        card = chapter_card(4, r"Exploration", r"Look before you model", part=PART)
-        with self.voiceover("Chapter four. Exploration."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(4, r"Exploration", r"Look before you model", part=PART, said="Chapter four. Exploration.")
 
     def pressure(self):
         d = load("explore")

@@ -7,7 +7,7 @@ from videos.stats.stats14.common import *  # noqa: F403
 DEPTS = "ABCDEF"
 
 
-class ThreeWay(VoiceoverScene):
+class ThreeWay(StatsScene):
     def construct(self):
         self.card()
         self.strata()
@@ -18,10 +18,7 @@ class ThreeWay(VoiceoverScene):
         self.history()
 
     def card(self):
-        card = chapter_card(9, r"Three-way tables", r"Comparing within strata, \ then pooling", lit=(1959,), part=PART)
-        with self.voiceover("Chapter nine. Three-way tables."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(9, r"Three-way tables", r"Comparing within strata, \ then pooling", lit=(1959,), part=PART, said="Chapter nine. Three-way tables.")
 
     def strata(self):
         d = load("tables")

@@ -5,7 +5,7 @@ import numpy as np
 from videos.stats.stats56.common import *  # noqa: F403
 
 
-class Clustering(VoiceoverScene):
+class Clustering(StatsScene):
     def construct(self):
         self.card()
         self.double_dip()
@@ -16,10 +16,7 @@ class Clustering(VoiceoverScene):
         self.extensions()
 
     def card(self):
-        card = chapter_card(9, r"Selection in unsupervised problems", r"Testing the clusters you found", lit=(2022,), part=PART)
-        with self.voiceover("Chapter nine. Selection in unsupervised problems: testing the clusters you found."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(9, r"Selection in unsupervised problems", r"Testing the clusters you found", lit=(2022,), part=PART, said="Chapter nine. Selection in unsupervised problems: testing the clusters you found.")
 
     def double_dip(self):
         rows = [

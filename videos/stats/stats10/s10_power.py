@@ -5,7 +5,7 @@ import numpy as np
 from videos.stats.stats10.common import *  # noqa: F403
 
 
-class Power(VoiceoverScene):
+class Power(StatsScene):
     def construct(self):
         self.card()
         self.curves()
@@ -16,10 +16,7 @@ class Power(VoiceoverScene):
         self.lesson()
 
     def card(self):
-        card = chapter_card(9, r"Power and sample size", r"Could the study have found it?", part=PART)
-        with self.voiceover("Chapter nine. Power and sample size."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(9, r"Power and sample size", r"Could the study have found it?", part=PART, said="Chapter nine. Power and sample size.")
 
     def curves(self):
         d = load("power")

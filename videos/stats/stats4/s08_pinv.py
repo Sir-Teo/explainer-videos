@@ -5,7 +5,7 @@ import numpy as np
 from videos.stats.stats4.common import *  # noqa: F403
 
 
-class Pinv(VoiceoverScene):
+class Pinv(StatsScene):
     def construct(self):
         self.card()
         self.minimum_norm()
@@ -14,10 +14,7 @@ class Pinv(VoiceoverScene):
         self.ridge()
 
     def card(self):
-        card = chapter_card(7, r"Generalized inverses", r"When $A^\top A$ has no inverse", lit=(1955,), part=PART)
-        with self.voiceover("Chapter seven. Generalized inverses."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(7, r"Generalized inverses", r"When $A^\top A$ has no inverse", lit=(1955,), part=PART, said="Chapter seven. Generalized inverses.")
 
     def minimum_norm(self):
         d = load("pinv")

@@ -5,7 +5,7 @@ import numpy as np
 from videos.stats.stats28.common import *  # noqa: F403
 
 
-class BIC(VoiceoverScene):
+class BIC(StatsScene):
     def construct(self):
         self.card()
         self.derivation()
@@ -17,10 +17,7 @@ class BIC(VoiceoverScene):
         self.choose()
 
     def card(self):
-        card = chapter_card(3, r"BIC", r"Consistency against efficiency", lit=(1978,), part=PART)
-        with self.voiceover("Chapter three. The Bayesian information criterion."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(3, r"BIC", r"Consistency against efficiency", lit=(1978,), part=PART, said="Chapter three. The Bayesian information criterion.")
 
     def derivation(self):
         rows = [

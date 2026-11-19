@@ -9,7 +9,7 @@ def fpr_of(p, ppv, fnr):
     return p / (1 - p) * (1 - ppv) / ppv * (1 - fnr)
 
 
-class Impossibility(LectureMixin, VoiceoverScene):
+class Impossibility(LectureMixin, StatsScene):
     def construct(self):
         self.card_voiceover("Chapter nine. Impossibility results: which fairness requirements conflict, under which conditions.", 9,
                             r"Impossibility", r"One line of algebra", lit=(2016, 2017))

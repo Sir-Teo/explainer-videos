@@ -5,7 +5,7 @@ import numpy as np
 from videos.stats.stats26.common import *  # noqa: F403
 
 
-class Hierarchy(VoiceoverScene):
+class Hierarchy(StatsScene):
     def construct(self):
         self.card()
         self.model()
@@ -17,10 +17,7 @@ class Hierarchy(VoiceoverScene):
         self.vs_eb()
 
     def card(self):
-        card = chapter_card(2, r"Hierarchical models", r"The eight schools on a grid", lit=(1981,), part=PART)
-        with self.voiceover("Chapter two. Hierarchical models."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(2, r"Hierarchical models", r"The eight schools on a grid", lit=(1981,), part=PART, said="Chapter two. Hierarchical models.")
 
     def model(self):
         rows = [

@@ -5,7 +5,7 @@ import numpy as np
 from videos.stats.stats52.common import *  # noqa: F403
 
 
-class Support(VoiceoverScene):
+class Support(StatsScene):
     def construct(self):
         self.card()
         self.condition()
@@ -15,10 +15,7 @@ class Support(VoiceoverScene):
         self.betamin()
 
     def card(self):
-        card = chapter_card(2, r"Support recovery", r"Finding the right variables, \ not just a good fit", lit=(2009,), part=PART)
-        with self.voiceover("Chapter two. Support recovery: finding the right variables, not just a good fit."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(2, r"Support recovery", r"Finding the right variables, \ not just a good fit", lit=(2009,), part=PART, said="Chapter two. Support recovery: finding the right variables, not just a good fit.")
 
     def condition(self):
         rows = [

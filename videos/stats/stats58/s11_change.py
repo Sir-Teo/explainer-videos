@@ -5,7 +5,7 @@ import numpy as np
 from videos.stats.stats58.common import *  # noqa: F403
 
 
-class Change(LectureMixin, VoiceoverScene):
+class Change(LectureMixin, StatsScene):
     def construct(self):
         self.card_voiceover("Chapter ten. Change detection: when the question is not whether, but when, something changed.",
                        10, r"Change detection", r"Raise the alarm, \ not too often", lit=(1954,))

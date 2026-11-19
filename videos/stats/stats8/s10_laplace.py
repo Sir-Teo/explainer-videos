@@ -6,7 +6,7 @@ from videos.stats.stats8.common import *  # noqa: F403
 from videos.stats.stats8.compute import histogram_density
 
 
-class Laplace(VoiceoverScene):
+class Laplace(StatsScene):
     def construct(self):
         self.card()
         self.history()
@@ -16,10 +16,7 @@ class Laplace(VoiceoverScene):
         self.world()
 
     def card(self):
-        card = chapter_card(9, r"Standard errors for ratios", r"Laplace counts France", lit=(1802,), part=PART)
-        with self.voiceover("Chapter nine. Standard errors for ratios, and Laplace's census of France."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(9, r"Standard errors for ratios", r"Laplace counts France", lit=(1802,), part=PART, said="Chapter nine. Standard errors for ratios, and Laplace's census of France.")
 
     def history(self):
         d = load("laplace")["laplace"]

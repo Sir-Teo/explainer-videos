@@ -5,7 +5,7 @@ import numpy as np
 from videos.stats.stats21.common import *  # noqa: F403
 
 
-class Duality(VoiceoverScene):
+class Duality(StatsScene):
     def construct(self):
         self.card()
         self.dual_function()
@@ -16,10 +16,7 @@ class Duality(VoiceoverScene):
         self.ridge_dual()
 
     def card(self):
-        card = chapter_card(3, r"Duality", r"Dual bounds, \ and when they match", lit=(1939,), part=PART)
-        with self.voiceover("Chapter three. Duality."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(3, r"Duality", r"Dual bounds, \ and when they match", lit=(1939,), part=PART, said="Chapter three. Duality.")
 
     def dual_function(self):
         rows = [

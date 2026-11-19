@@ -5,7 +5,7 @@ import numpy as np
 from videos.stats.stats40.common import *  # noqa: F403
 
 
-class Censoring(VoiceoverScene):
+class Censoring(StatsScene):
     def construct(self):
         self.card()
         self.kinds()
@@ -16,10 +16,7 @@ class Censoring(VoiceoverScene):
         self.entry_plot()
 
     def card(self):
-        card = chapter_card(2, r"Censoring and truncation", r"What a study cannot see", lit=(1958,), part=PART)
-        with self.voiceover("Chapter two. Censoring and truncation."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(2, r"Censoring and truncation", r"What a study cannot see", lit=(1958,), part=PART, said="Chapter two. Censoring and truncation.")
 
     def kinds(self):
         rows = [[r"kind", r"what we know", r"example"],

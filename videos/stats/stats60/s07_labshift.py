@@ -5,7 +5,7 @@ import numpy as np
 from videos.stats.stats60.common import *  # noqa: F403
 
 
-class LabelShift(LectureMixin, VoiceoverScene):
+class LabelShift(LectureMixin, StatsScene):
     def construct(self):
         self.card_voiceover("Chapter six. Label shift: when the mix of outcomes changes, but each outcome looks the same.", 6,
                             r"Label shift", r"Counting through a confused classifier", lit=(2018,))

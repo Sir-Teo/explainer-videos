@@ -6,7 +6,7 @@ from scipy import stats
 from videos.stats.stats11.common import *  # noqa: F403
 
 
-class Simultaneous(VoiceoverScene):
+class Simultaneous(StatsScene):
     def construct(self):
         self.card()
         self.joint()
@@ -17,10 +17,7 @@ class Simultaneous(VoiceoverScene):
         self.band_vs_points()
 
     def card(self):
-        card = chapter_card(8, r"Simultaneous intervals", r"When several promises must hold at once", part=PART)
-        with self.voiceover("Chapter eight. Simultaneous intervals."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(8, r"Simultaneous intervals", r"When several promises must hold at once", part=PART, said="Chapter eight. Simultaneous intervals.")
 
     def joint(self):
         rows = [

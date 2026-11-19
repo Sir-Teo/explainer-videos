@@ -5,7 +5,7 @@ import numpy as np
 from videos.stats.stats59.common import *  # noqa: F403
 
 
-class RandomMatrices(LectureMixin, VoiceoverScene):
+class RandomMatrices(LectureMixin, StatsScene):
     def construct(self):
         self.card_voiceover("Chapter two. Random matrix tools: the Stieltjes transform, and free convolution.", 2,
                             r"Random matrix tools", r"Spectra in closed form")

@@ -5,7 +5,7 @@ import numpy as np
 from videos.stats.stats41.common import *  # noqa: F403
 
 
-class Sins(VoiceoverScene):
+class Sins(StatsScene):
     def construct(self):
         self.card()
         self.complete_cases()
@@ -21,10 +21,7 @@ class Sins(VoiceoverScene):
         self.board()
 
     def card(self):
-        card = chapter_card(2, r"The easy methods' sins", r"Complete cases, \ the mean, \ the last value", lit=(1976,), part=PART)
-        with self.voiceover("Chapter two. The easy methods' sins."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(2, r"The easy methods' sins", r"Complete cases, \ the mean, \ the last value", lit=(1976,), part=PART, said="Chapter two. The easy methods' sins.")
 
     def complete_cases(self):
         rows = [

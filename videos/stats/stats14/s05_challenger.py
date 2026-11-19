@@ -13,7 +13,7 @@ def challenger_fit():
     return T, Y, glm.logistic(np.column_stack([np.ones(23), T]), Y)
 
 
-class ChallengerFit(VoiceoverScene):
+class ChallengerFit(StatsScene):
     def construct(self):
         self.card()
         self.dashboard()
@@ -24,10 +24,7 @@ class ChallengerFit(VoiceoverScene):
         self.verdict()
 
     def card(self):
-        card = chapter_card(4, r"The Challenger fit", r"What 23 flights say about 31$^\circ$F", lit=(1986,), part=PART)
-        with self.voiceover("Chapter four. The Challenger fit."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(4, r"The Challenger fit", r"What 23 flights say about 31$^\circ$F", lit=(1986,), part=PART, said="Chapter four. The Challenger fit.")
 
     def dashboard(self):
         T, Y, f = challenger_fit()

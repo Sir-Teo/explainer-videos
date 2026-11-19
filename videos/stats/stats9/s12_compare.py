@@ -12,7 +12,7 @@ MODELS = [("uniform", (r"the textbook:", r"uniform capture")), ("newer", (r"newe
           ("offset", (r"serials start", r"at 1{,}001"))]
 
 
-class Compare(VoiceoverScene):
+class Compare(StatsScene):
     def construct(self):
         self.card()
         self.board()
@@ -21,10 +21,7 @@ class Compare(VoiceoverScene):
         self.lessons()
 
     def card(self):
-        card = chapter_card(11, r"Comparing estimators", r"Which recipe would you send to war?", part=PART)
-        with self.voiceover("Chapter eleven. Comparing estimators."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(11, r"Comparing estimators", r"Which recipe would you send to war?", part=PART, said="Chapter eleven. Comparing estimators.")
 
     def board(self):
         d = load("board")

@@ -5,7 +5,7 @@ import numpy as np
 from videos.stats.stats52.common import *  # noqa: F403
 
 
-class Spikes(VoiceoverScene):
+class Spikes(StatsScene):
     def construct(self):
         self.card()
         self.model()
@@ -16,10 +16,7 @@ class Spikes(VoiceoverScene):
         self.board()
 
     def card(self):
-        card = chapter_card(8, r"Spiked models and the BBP transition", r"Ordinary PCA overlap vanishes below the asymptotic threshold", lit=(2005,), part=PART)
-        with self.voiceover('Chapter eight. Spiked models and the BBP transition: below a threshold, ordinary PCA loses directional overlap below a model-dependent asymptotic threshold.'):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(8, r"Spiked models and the BBP transition", r"Ordinary PCA overlap vanishes below the asymptotic threshold", lit=(2005,), part=PART, said='Chapter eight. Spiked models and the BBP transition: below a threshold, ordinary PCA loses directional overlap below a model-dependent asymptotic threshold.')
 
     def model(self):
         rows = [

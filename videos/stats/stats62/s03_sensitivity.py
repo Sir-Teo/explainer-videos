@@ -5,7 +5,7 @@ import numpy as np
 from videos.stats.stats62.common import *  # noqa: F403
 
 
-class Sensitivity(LectureMixin, VoiceoverScene):
+class Sensitivity(LectureMixin, StatsScene):
     def construct(self):
         self.card_voiceover("Chapter two. Partial identification and sensitivity: how wrong could the answer be?", 2,
                             r"Sensitivity and bounds", r"How much hidden confounding?", lit=(2006,))

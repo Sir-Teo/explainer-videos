@@ -4,7 +4,7 @@ from explainer.stats.board import coverage_board, load_all
 from videos.stats.stats11.common import *  # noqa: F403
 
 
-class Board(VoiceoverScene):
+class Board(StatsScene):
     def construct(self):
         self.card()
         self.protocol()
@@ -14,10 +14,7 @@ class Board(VoiceoverScene):
         self.lessons()
 
     def card(self):
-        card = chapter_card(11, r"The Coverage Board, \ formally", r"How every promise in the series is checked", part=PART)
-        with self.voiceover("Chapter eleven. The Coverage Board, formally."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(11, r"The Coverage Board, \ formally", r"How every promise in the series is checked", part=PART, said="Chapter eleven. The Coverage Board, formally.")
 
     def protocol(self):
         items = [

@@ -5,7 +5,7 @@ import numpy as np
 from videos.stats.stats41.common import *  # noqa: F403
 
 
-class Measurement(VoiceoverScene):
+class Measurement(StatsScene):
     def construct(self):
         self.card()
         self.spearman()
@@ -22,10 +22,7 @@ class Measurement(VoiceoverScene):
         self.board()
 
     def card(self):
-        card = chapter_card(8, r"Measurement error", r"Values we see, \ but wrongly", lit=(1904, 1994), part=PART)
-        with self.voiceover("Chapter eight. Measurement error."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(8, r"Measurement error", r"Values we see, \ but wrongly", lit=(1904, 1994), part=PART, said="Chapter eight. Measurement error.")
 
     def spearman(self):
         rows = [

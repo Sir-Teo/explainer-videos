@@ -5,7 +5,7 @@ import numpy as np
 from videos.stats.stats59.common import *  # noqa: F403
 
 
-class Corrected(LectureMixin, VoiceoverScene):
+class Corrected(LectureMixin, StatsScene):
     def construct(self):
         self.card_voiceover("Chapter nine. Corrected inference: rescaled tests, debiased estimates, and a real design.", 9,
                             r"Corrected inference", r"Repairing the textbook", lit=(2019,))

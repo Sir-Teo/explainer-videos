@@ -8,7 +8,7 @@ from videos.stats.stats13.common import *  # noqa: F403
 WET, DRY = S.CTRL, S.POST
 
 
-class SplitPlot(VoiceoverScene):
+class SplitPlot(StatsScene):
     def construct(self):
         self.card()
         self.layout()
@@ -19,10 +19,7 @@ class SplitPlot(VoiceoverScene):
         self.industry()
 
     def card(self):
-        card = chapter_card(10, r"Split plots", r"Two sizes of plot, \ two sizes of error", lit=(1935,), part=PART)
-        with self.voiceover("Chapter ten. Split plots."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(10, r"Split plots", r"Two sizes of plot, \ two sizes of error", lit=(1935,), part=PART, said="Chapter ten. Split plots.")
 
     def layout(self):
         g = np.random.Generator(np.random.PCG64(1937))

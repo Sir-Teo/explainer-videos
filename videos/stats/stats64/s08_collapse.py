@@ -7,7 +7,7 @@ import numpy as np
 from videos.stats.stats64.common import *  # noqa: F403
 
 
-class Collapse(LectureMixin, VoiceoverScene):
+class Collapse(LectureMixin, StatsScene):
     def construct(self):
         self.card_voiceover("Chapter seven. Synthetic data, and the collapse of a model trained on itself.", 7,
                             r"Model collapse", r"A Gaussian fitted to its own samples")

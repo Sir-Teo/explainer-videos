@@ -6,7 +6,7 @@ from videos.stats.stats14.common import *  # noqa: F403
 from videos.stats.stats14.s02_lpm import flights
 
 
-class Logistic(VoiceoverScene):
+class Logistic(StatsScene):
     def construct(self):
         self.card()
         self.odds()
@@ -18,10 +18,7 @@ class Logistic(VoiceoverScene):
         self.canonical()
 
     def card(self):
-        card = chapter_card(2, r"Logistic regression", r"Linear in the log-odds", part=PART)
-        with self.voiceover("Chapter two. Logistic regression."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(2, r"Logistic regression", r"Linear in the log-odds", part=PART, said="Chapter two. Logistic regression.")
 
     def odds(self):
         rows = [

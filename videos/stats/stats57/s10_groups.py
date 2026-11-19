@@ -5,7 +5,7 @@ import numpy as np
 from videos.stats.stats57.common import *  # noqa: F403
 
 
-class Groups(VoiceoverScene):
+class Groups(StatsScene):
     def construct(self):
         self.card()
         self.mondrian()
@@ -17,10 +17,7 @@ class Groups(VoiceoverScene):
         self.fairness()
 
     def card(self):
-        card = chapter_card(9, r"Mondrian and group-conditional coverage", r"Coverage for every group, \ on NHANES", lit=(2005, 2023), part=PART)
-        with self.voiceover("Chapter nine. Mondrian and group-conditional coverage, on NHANES blood pressures."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(9, r"Mondrian and group-conditional coverage", r"Coverage for every group, \ on NHANES", lit=(2005, 2023), part=PART, said="Chapter nine. Mondrian and group-conditional coverage, on NHANES blood pressures.")
 
     def mondrian(self):
         rows = [

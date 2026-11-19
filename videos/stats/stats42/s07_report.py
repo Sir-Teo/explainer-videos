@@ -7,7 +7,7 @@ import numpy as np
 from videos.stats.stats42.common import *  # noqa: F403
 
 
-class SurveyReport(VoiceoverScene):
+class SurveyReport(StatsScene):
     def construct(self):
         self.card()
         self.rv()
@@ -17,10 +17,7 @@ class SurveyReport(VoiceoverScene):
         self.truth()
 
     def card(self):
-        card = chapter_card(6, r"Case 2: \ sensitivity and the report", r"How wrong could we be, \ and what do we say?", lit=(2021,), part=PART)
-        with self.voiceover("Chapter six. How wrong could we be, and what do we tell the minister?"):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(6, r"Case 2: \ sensitivity and the report", r"How wrong could we be, \ and what do we say?", lit=(2021,), part=PART, said="Chapter six. How wrong could we be, and what do we tell the minister?")
 
     def rv(self):
         o = load("obs")

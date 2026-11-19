@@ -10,7 +10,7 @@ def block(label_tex, color, w=1.4, h=1.4) -> VGroup:
     return VGroup(r, MathTex(label_tex, font_size=38, color=color).move_to(r))
 
 
-class Blocks(VoiceoverScene):
+class Blocks(StatsScene):
     def construct(self):
         self.card()
         self.schur()
@@ -20,11 +20,7 @@ class Blocks(VoiceoverScene):
         self.loo()
 
     def card(self):
-        card = chapter_card(8, r"Block matrices", r"Eliminate a block, \ and the Schur complement is what is left",
-                            lit=(), part=PART)
-        with self.voiceover("Chapter eight. Block matrices."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(8, r"Block matrices", r"Eliminate a block, \ and the Schur complement is what is left", lit=(), part=PART, said="Chapter eight. Block matrices.")
 
     def schur(self):
         M = VGroup(block("A", SPACE), block("B", GREY_A), block("C", GREY_A), block("D", RES))

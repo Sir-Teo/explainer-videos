@@ -5,7 +5,7 @@ import numpy as np
 from videos.stats.stats65.common import *  # noqa: F403
 
 
-class Conjecture(LectureMixin, VoiceoverScene):
+class Conjecture(LectureMixin, StatsScene):
     def construct(self):
         self.card_voiceover("Chapter three. A conjecture, stated precisely enough to be wrong.", 3, r"A conjecture",
                             r"Precise enough to be wrong")

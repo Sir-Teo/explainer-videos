@@ -7,7 +7,7 @@ from videos.stats.stats3.common import *  # noqa: F403
 CHI_COLS = {"1": "#9FB4C7", "2": "#7BD88F", "3": "#F2C14E", "5": "#FF9F5A"}
 
 
-class Sampling(VoiceoverScene, TreeMixin):
+class Sampling(StatsScene, TreeMixin):
     def construct(self):
         self.card()
         self.chisq()
@@ -20,11 +20,7 @@ class Sampling(VoiceoverScene, TreeMixin):
                             "the normal.", 8)
 
     def card(self):
-        card = chapter_card(8, r"The sampling family", r"The distributions that statistics itself creates",
-                            lit=(1908,), part=PART)
-        with self.voiceover("Chapter eight. The sampling family."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(8, r"The sampling family", r"The distributions that statistics itself creates", lit=(1908,), part=PART, said="Chapter eight. The sampling family.")
 
     def chisq(self):
         d = load("sampling")

@@ -5,7 +5,7 @@ import numpy as np
 from videos.stats.stats28.common import *  # noqa: F403
 
 
-class MDL(VoiceoverScene):
+class MDL(StatsScene):
     def construct(self):
         self.card()
         self.codes()
@@ -15,10 +15,7 @@ class MDL(VoiceoverScene):
         self.prequential()
 
     def card(self):
-        card = chapter_card(7, r"Minimum description length", r"The best model compresses the data most", lit=(1978,), part=PART)
-        with self.voiceover("Chapter seven. Minimum description length."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(7, r"Minimum description length", r"The best model compresses the data most", lit=(1978,), part=PART, said="Chapter seven. Minimum description length.")
 
     def codes(self):
         rows = [

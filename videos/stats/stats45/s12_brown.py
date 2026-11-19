@@ -5,7 +5,7 @@ import numpy as np
 from videos.stats.stats45.common import *  # noqa: F403
 
 
-class Brown(VoiceoverScene):
+class Brown(StatsScene):
     def construct(self):
         self.card()
         self.tweedie()
@@ -16,10 +16,7 @@ class Brown(VoiceoverScene):
         self.priors()
 
     def card(self):
-        card = chapter_card(11, r"Why three dimensions", r"Admissibility and the recurrence of Brownian motion", lit=(1971,), part=PART)
-        with self.voiceover("Chapter eleven. Why three dimensions: admissibility and the recurrence of Brownian motion."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(11, r"Why three dimensions", r"Admissibility and the recurrence of Brownian motion", lit=(1971,), part=PART, said="Chapter eleven. Why three dimensions: admissibility and the recurrence of Brownian motion.")
 
     def tweedie(self):
         rows = [

@@ -5,7 +5,7 @@ import numpy as np
 from videos.stats.stats45.common import *  # noqa: F403
 
 
-class Decision(VoiceoverScene):
+class Decision(StatsScene):
     def construct(self):
         self.card()
         self.wald()
@@ -16,10 +16,7 @@ class Decision(VoiceoverScene):
         self.uniform()
 
     def card(self):
-        card = chapter_card(1, r"Decision theory", r"Estimation as a game against nature", lit=(1950,), part=PART)
-        with self.voiceover("Chapter one. Decision theory: estimation as a game against nature."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(1, r"Decision theory", r"Estimation as a game against nature", lit=(1950,), part=PART, said="Chapter one. Decision theory: estimation as a game against nature.")
 
     def wald(self):
         rows = fit_rows(VGroup(

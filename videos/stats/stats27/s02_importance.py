@@ -9,7 +9,7 @@ PC = {"narrow": RES, "wide": SAMPLER, "t3": HIT}
 PN = {"narrow": r"$N(0, 0.5^2)$", "wide": r"$N(0, 3^2)$", "t3": r"Student $t_3$"}
 
 
-class Importance(VoiceoverScene):
+class Importance(StatsScene):
     def construct(self):
         self.card()
         self.idea()
@@ -20,10 +20,7 @@ class Importance(VoiceoverScene):
         self.psis_idea()
 
     def card(self):
-        card = chapter_card(1, r"Importance sampling", r"Sample from the wrong distribution, \ reweight", lit=(), part=PART)
-        with self.voiceover("Chapter one. Importance sampling."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(1, r"Importance sampling", r"Sample from the wrong distribution, \ reweight", lit=(), part=PART, said="Chapter one. Importance sampling.")
 
     def idea(self):
         rows = [

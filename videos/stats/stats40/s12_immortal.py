@@ -5,7 +5,7 @@ import numpy as np
 from videos.stats.stats40.common import *  # noqa: F403
 
 
-class Immortal(VoiceoverScene):
+class Immortal(StatsScene):
     def construct(self):
         self.card()
         self.oscars()
@@ -17,10 +17,7 @@ class Immortal(VoiceoverScene):
         self.target()
 
     def card(self):
-        card = chapter_card(11, r"Immortal time", r"Time in which the outcome could not happen", lit=(1977, 2001, 2008), part=PART)
-        with self.voiceover("Chapter eleven. Immortal time."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(11, r"Immortal time", r"Time in which the outcome could not happen", lit=(1977, 2001, 2008), part=PART, said="Chapter eleven. Immortal time.")
 
     def oscars(self):
         rows = fit_rows(VGroup(

@@ -5,7 +5,7 @@ import numpy as np
 from videos.stats.stats47.common import *  # noqa: F403
 
 
-class LAN(VoiceoverScene):
+class LAN(StatsScene):
     def construct(self):
         self.card()
         self.definition()
@@ -15,10 +15,7 @@ class LAN(VoiceoverScene):
         self.qmd()
 
     def card(self):
-        card = chapter_card(7, r"Local asymptotic normality", r"Every regular model, \ seen up close, \ is one Gaussian observation", lit=(1960,), part=PART)
-        with self.voiceover("Chapter seven. Local asymptotic normality: every regular model, seen up close, is one Gaussian observation."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(7, r"Local asymptotic normality", r"Every regular model, \ seen up close, \ is one Gaussian observation", lit=(1960,), part=PART, said="Chapter seven. Local asymptotic normality: every regular model, seen up close, is one Gaussian observation.")
 
     def definition(self):
         rows = [

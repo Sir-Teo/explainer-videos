@@ -5,7 +5,7 @@ import numpy as np
 from videos.stats.stats25.common import *  # noqa: F403
 
 
-class Stein(VoiceoverScene):
+class Stein(StatsScene):
     def construct(self):
         self.card()
         self.estimator()
@@ -16,10 +16,7 @@ class Stein(VoiceoverScene):
         self.remarks()
 
     def card(self):
-        card = chapter_card(1, r"James--Stein", r"Inadmissibility, \ proved", lit=(1956, 1961), part=PART)
-        with self.voiceover("Chapter one. The James–Stein estimator."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(1, r"James--Stein", r"Inadmissibility, \ proved", lit=(1956, 1961), part=PART, said="Chapter one. The James–Stein estimator.")
 
     def estimator(self):
         rows = [

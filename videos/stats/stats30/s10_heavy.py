@@ -5,7 +5,7 @@ import numpy as np
 from videos.stats.stats30.common import *  # noqa: F403
 
 
-class Heavy(VoiceoverScene):
+class Heavy(StatsScene):
     def construct(self):
         self.card()
         self.problem()
@@ -18,10 +18,7 @@ class Heavy(VoiceoverScene):
         self.lesson()
 
     def card(self):
-        card = chapter_card(9, r"Heavy-tailed means", r"Median of means", lit=(1983,), part=PART)
-        with self.voiceover("Chapter nine. Estimating the mean of heavy-tailed data."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(9, r"Heavy-tailed means", r"Median of means", lit=(1983,), part=PART, said="Chapter nine. Estimating the mean of heavy-tailed data.")
 
     def problem(self):
         rows = [

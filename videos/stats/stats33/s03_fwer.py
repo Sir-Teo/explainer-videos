@@ -5,7 +5,7 @@ import numpy as np
 from videos.stats.stats33.common import *  # noqa: F403
 
 
-class FWER(VoiceoverScene):
+class FWER(StatsScene):
     def construct(self):
         self.card()
         self.bonferroni()
@@ -18,10 +18,7 @@ class FWER(VoiceoverScene):
         self.verdict()
 
     def card(self):
-        card = chapter_card(2, r"Family-wise error", r"No false positives, \ with high probability", lit=(1979,), part=PART)
-        with self.voiceover("Chapter two. The family-wise error rate."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(2, r"Family-wise error", r"No false positives, \ with high probability", lit=(1979,), part=PART, said="Chapter two. The family-wise error rate.")
 
     def bonferroni(self):
         rows = [

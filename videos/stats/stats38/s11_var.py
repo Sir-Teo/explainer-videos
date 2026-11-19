@@ -7,7 +7,7 @@ from videos.stats.stats38.common import *  # noqa: F403
 COLS = [MISSC, Y0C, TAUC]
 
 
-class VAR(VoiceoverScene):
+class VAR(StatsScene):
     def construct(self):
         self.card()
         self.data()
@@ -18,10 +18,7 @@ class VAR(VoiceoverScene):
         self.lesson()
 
     def card(self):
-        card = chapter_card(10, r"VARs and Granger causality", r"Several series, \ each forecasting the others", lit=(1969, 1980), part=PART)
-        with self.voiceover("Chapter ten. Vector autoregressions, and Granger causality."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(10, r"VARs and Granger causality", r"Several series, \ each forecasting the others", lit=(1969, 1980), part=PART, said="Chapter ten. Vector autoregressions, and Granger causality.")
 
     def data(self):
         d = load("var")

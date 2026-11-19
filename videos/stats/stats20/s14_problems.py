@@ -60,7 +60,7 @@ PROBLEMS = [
 ]
 
 
-class BScProblems(VoiceoverScene):
+class BScProblems(StatsScene):
     def construct(self):
         self.card()
         for p in PROBLEMS:
@@ -68,11 +68,8 @@ class BScProblems(VoiceoverScene):
         self.close()
 
     def card(self):
-        card = chapter_card(13, r"The BSc problem set", r"Stages I and II, \ in six problems", part=PART)
-        with self.voiceover("Chapter thirteen. The bachelor's problem set: six problems that draw on the whole of the first two "
-                            "stages, each solved on screen."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(13, r"The BSc problem set", r"Stages I and II, \ in six problems", part=PART, said="Chapter thirteen. The bachelor's problem set: six problems that draw on the whole of the first two "
+                            "stages, each solved on screen.")
 
     def problem(self, p):
         tag = label(p["part"], font_size=22, color=p["color"]).to_edge(UP, buff=0.4)

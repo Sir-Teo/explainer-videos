@@ -7,7 +7,7 @@ from videos.stats.stats18.common import *  # noqa: F403
 BANDS = [r"under 30k", r"30--100k", r"over 100k"]
 
 
-class Strata(VoiceoverScene):
+class Strata(StatsScene):
     def construct(self):
         self.card()
         self.idea()
@@ -19,10 +19,7 @@ class Strata(VoiceoverScene):
         self.post()
 
     def card(self):
-        card = chapter_card(5, r"Stratification", r"Divide, \ then sample each part", part=PART)
-        with self.voiceover("Chapter five. Stratification."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(5, r"Stratification", r"Divide, \ then sample each part", part=PART, said="Chapter five. Stratification.")
 
     def idea(self):
         rows = [

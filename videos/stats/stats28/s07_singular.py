@@ -5,7 +5,7 @@ import numpy as np
 from videos.stats.stats28.common import *  # noqa: F403
 
 
-class Singular(VoiceoverScene):
+class Singular(StatsScene):
     def construct(self):
         self.card()
         self.mixture()
@@ -17,10 +17,7 @@ class Singular(VoiceoverScene):
         self.where()
 
     def card(self):
-        card = chapter_card(6, r"Singular models", r"When the truth is a set, \ not a point", lit=(2009,), part=PART)
-        with self.voiceover("Chapter six. Singular models."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(6, r"Singular models", r"When the truth is a set, \ not a point", lit=(2009,), part=PART, said="Chapter six. Singular models.")
 
     def mixture(self):
         rows = [

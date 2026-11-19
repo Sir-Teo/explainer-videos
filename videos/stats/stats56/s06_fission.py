@@ -5,7 +5,7 @@ import numpy as np
 from videos.stats.stats56.common import *  # noqa: F403
 
 
-class Fission(VoiceoverScene):
+class Fission(StatsScene):
     def construct(self):
         self.card()
         self.splitting()
@@ -18,10 +18,7 @@ class Fission(VoiceoverScene):
         self.board()
 
     def card(self):
-        card = chapter_card(5, r"Data fission and thinning", r"Splitting a single observation", lit=(2023,), part=PART)
-        with self.voiceover("Chapter five. Data fission and data thinning: splitting a single observation in two."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(5, r"Data fission and thinning", r"Splitting a single observation", lit=(2023,), part=PART, said="Chapter five. Data fission and data thinning: splitting a single observation in two.")
 
     def splitting(self):
         rows = [

@@ -3,7 +3,7 @@ from __future__ import annotations
 from videos.stats.stats57.common import *  # noqa: F403
 
 
-class Online(VoiceoverScene):
+class Online(StatsScene):
     def construct(self):
         self.card()
         self.aci()
@@ -14,10 +14,7 @@ class Online(VoiceoverScene):
         self.beyond()
 
     def card(self):
-        card = chapter_card(6, r"Online and adversarial", r"Coverage with no probability model at all", lit=(2021,), part=PART)
-        with self.voiceover("Chapter six. Online and adversarial coverage: guarantees with no probability model at all."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(6, r"Online and adversarial", r"Coverage with no probability model at all", lit=(2021,), part=PART, said="Chapter six. Online and adversarial coverage: guarantees with no probability model at all.")
 
     def aci(self):
         rows = [

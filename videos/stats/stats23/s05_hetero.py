@@ -6,7 +6,7 @@ from explainer.stats.board import coverage_board, load_all
 from videos.stats.stats23.common import *  # noqa: F403
 
 
-class Hetero(VoiceoverScene):
+class Hetero(StatsScene):
     def construct(self):
         self.card()
         self.ehw()
@@ -18,10 +18,7 @@ class Hetero(VoiceoverScene):
         self.board()
 
     def card(self):
-        card = chapter_card(4, r"Heteroskedasticity theory", r"Eicker, \ Huber, \ White, \ and small samples", lit=(1980,), part=PART)
-        with self.voiceover("Chapter four. Heteroskedasticity theory."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(4, r"Heteroskedasticity theory", r"Eicker, \ Huber, \ White, \ and small samples", lit=(1980,), part=PART, said="Chapter four. Heteroskedasticity theory.")
 
     def ehw(self):
         rows = [

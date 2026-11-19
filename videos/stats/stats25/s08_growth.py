@@ -5,7 +5,7 @@ import numpy as np
 from videos.stats.stats25.common import *  # noqa: F403
 
 
-class Growth(VoiceoverScene):
+class Growth(StatsScene):
     def construct(self):
         self.card()
         self.spaghetti()
@@ -15,10 +15,7 @@ class Growth(VoiceoverScene):
         self.covariance()
 
     def card(self):
-        card = chapter_card(7, r"Longitudinal data", r"Each child its own line", lit=(1982,), part=PART)
-        with self.voiceover("Chapter seven. Longitudinal data."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(7, r"Longitudinal data", r"Each child its own line", lit=(1982,), part=PART, said="Chapter seven. Longitudinal data.")
 
     def axes_(self):
         return axes([3, 13], [70, 160], x_length=7.4, y_length=4.6, xlabel=r"age", ylabel=r"height, \ cm",

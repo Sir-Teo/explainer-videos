@@ -5,7 +5,7 @@ import numpy as np
 from videos.stats.stats38.common import *  # noqa: F403
 
 
-class Smoothing(VoiceoverScene):
+class Smoothing(StatsScene):
     def construct(self):
         self.card()
         self.rts_()
@@ -16,10 +16,7 @@ class Smoothing(VoiceoverScene):
         self.apollo()
 
     def card(self):
-        card = chapter_card(8, r"Smoothing and learning", r"Using the future, \ and estimating the noise", lit=(1965, 1982), part=PART)
-        with self.voiceover("Chapter eight. Smoothing, and learning the model."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(8, r"Smoothing and learning", r"Using the future, \ and estimating the noise", lit=(1965, 1982), part=PART, said="Chapter eight. Smoothing, and learning the model.")
 
     def rts_(self):
         rows = [

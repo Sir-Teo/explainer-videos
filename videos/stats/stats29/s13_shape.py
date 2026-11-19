@@ -5,7 +5,7 @@ import numpy as np
 from videos.stats.stats29.common import *  # noqa: F403
 
 
-class Shape(VoiceoverScene):
+class Shape(StatsScene):
     def construct(self):
         self.card()
         self.isotonic()
@@ -16,10 +16,7 @@ class Shape(VoiceoverScene):
         self.more()
 
     def card(self):
-        card = chapter_card(12, r"Shape constraints", r"Only monotone: \ no bandwidth at all", lit=(1956,), part=PART)
-        with self.voiceover("Chapter twelve. Shape constraints."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(12, r"Shape constraints", r"Only monotone: \ no bandwidth at all", lit=(1956,), part=PART, said="Chapter twelve. Shape constraints.")
 
     def isotonic(self):
         rows = [

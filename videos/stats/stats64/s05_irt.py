@@ -5,7 +5,7 @@ import numpy as np
 from videos.stats.stats64.common import *  # noqa: F403
 
 
-class IRT(LectureMixin, VoiceoverScene):
+class IRT(LectureMixin, StatsScene):
     def construct(self):
         self.card_voiceover("Chapter four. Item response theory: benchmarks as tests, models as test-takers.", 4,
                             r"IRT for benchmarks", r"Not every question is worth the same")

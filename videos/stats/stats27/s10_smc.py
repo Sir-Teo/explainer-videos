@@ -5,7 +5,7 @@ import numpy as np
 from videos.stats.stats27.common import *  # noqa: F403
 
 
-class SMC(VoiceoverScene):
+class SMC(StatsScene):
     def construct(self):
         self.card()
         self.filter_idea()
@@ -16,10 +16,7 @@ class SMC(VoiceoverScene):
         self.evidence()
 
     def card(self):
-        card = chapter_card(9, r"Sequential Monte Carlo", r"A population of particles, \ reweighted and resampled", lit=(1993,), part=PART)
-        with self.voiceover("Chapter nine. Sequential Monte Carlo."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(9, r"Sequential Monte Carlo", r"A population of particles, \ reweighted and resampled", lit=(1993,), part=PART, said="Chapter nine. Sequential Monte Carlo.")
 
     def filter_idea(self):
         rows = [

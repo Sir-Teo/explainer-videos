@@ -5,7 +5,7 @@ import numpy as np
 from videos.stats.stats4.common import *  # noqa: F403
 
 
-class Numerics(VoiceoverScene):
+class Numerics(StatsScene):
     def construct(self):
         self.card()
         self.float_()
@@ -16,10 +16,7 @@ class Numerics(VoiceoverScene):
         self.practice()
 
     def card(self):
-        card = chapter_card(12, r"Conditioning and numerics", r"Why you should never invert $X^\top X$", lit=(1947,), part=PART)
-        with self.voiceover("Chapter twelve. Conditioning and numerics."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(12, r"Conditioning and numerics", r"Why you should never invert $X^\top X$", lit=(1947,), part=PART, said="Chapter twelve. Conditioning and numerics.")
 
     def float_(self):
         d = load("numerics")

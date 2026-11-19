@@ -5,7 +5,7 @@ import numpy as np
 from videos.stats.stats4.common import *  # noqa: F403
 
 
-class PSD(VoiceoverScene):
+class PSD(StatsScene):
     def construct(self):
         self.card()
         self.definition()
@@ -15,10 +15,7 @@ class PSD(VoiceoverScene):
         self.linear()
 
     def card(self):
-        card = chapter_card(5, r"Positive semidefinite matrices", r"The matrices that can be covariances", lit=(), part=PART)
-        with self.voiceover("Chapter five. Positive semidefinite matrices."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(5, r"Positive semidefinite matrices", r"The matrices that can be covariances", lit=(), part=PART, said="Chapter five. Positive semidefinite matrices.")
 
     def definition(self):
         dfn = definition_card(r"Positive semidefinite", r"symmetric $A$ with $\mathbf u^\top A \mathbf u \ge 0$ for every "

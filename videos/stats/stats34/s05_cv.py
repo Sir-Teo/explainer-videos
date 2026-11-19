@@ -5,7 +5,7 @@ import numpy as np
 from videos.stats.stats34.common import *  # noqa: F403
 
 
-class CV(VoiceoverScene):
+class CV(StatsScene):
     def construct(self):
         self.card()
         self.targets()
@@ -19,10 +19,7 @@ class CV(VoiceoverScene):
         self.lesson()
 
     def card(self):
-        card = chapter_card(4, r"What cross-validation estimates", r"This model, or models like it?", lit=(1974,), part=PART)
-        with self.voiceover("Chapter four. What cross-validation estimates."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(4, r"What cross-validation estimates", r"This model, or models like it?", lit=(1974,), part=PART, said="Chapter four. What cross-validation estimates.")
 
     def targets(self):
         rows = [

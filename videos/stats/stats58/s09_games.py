@@ -3,7 +3,7 @@ from __future__ import annotations
 from videos.stats.stats58.common import *  # noqa: F403
 
 
-class Games(LectureMixin, VoiceoverScene):
+class Games(LectureMixin, StatsScene):
     def construct(self):
         self.card_voiceover("Chapter eight. Game-theoretic probability: Shafer and Vovk's foundation, in which probability "
                        "itself is defined by betting.", 8, r"Game-theoretic probability", r"Probability as a game", lit=(1939,))

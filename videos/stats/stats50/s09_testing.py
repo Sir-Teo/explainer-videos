@@ -5,7 +5,7 @@ import numpy as np
 from videos.stats.stats50.common import *  # noqa: F403
 
 
-class MinimaxTesting(VoiceoverScene):
+class MinimaxTesting(StatsScene):
     def construct(self):
         self.card()
         self.separation()
@@ -16,10 +16,7 @@ class MinimaxTesting(VoiceoverScene):
         self.hc()
 
     def card(self):
-        card = chapter_card(8, r"Minimax testing", r"How faint a signal can anyone detect?", lit=(1997, 2004), part=PART)
-        with self.voiceover("Chapter eight. Minimax testing: how faint a signal can anyone detect?"):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(8, r"Minimax testing", r"How faint a signal can anyone detect?", lit=(1997, 2004), part=PART, said="Chapter eight. Minimax testing: how faint a signal can anyone detect?")
 
     def separation(self):
         rows = [

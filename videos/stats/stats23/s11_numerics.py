@@ -6,7 +6,7 @@ from explainer.stats.kit import ols as O
 from videos.stats.stats23.common import *  # noqa: F403
 
 
-class Numerics(VoiceoverScene):
+class Numerics(StatsScene):
     def construct(self):
         self.card()
         self.mirror()
@@ -18,10 +18,7 @@ class Numerics(VoiceoverScene):
         self.advice()
 
     def card(self):
-        card = chapter_card(10, r"Numerics", r"How the computer solves least squares", part=PART)
-        with self.voiceover("Chapter ten. The numerics of least squares."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(10, r"Numerics", r"How the computer solves least squares", part=PART, said="Chapter ten. The numerics of least squares.")
 
     def mirror(self):
         u = 0.55

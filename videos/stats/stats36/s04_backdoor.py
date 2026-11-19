@@ -3,7 +3,7 @@ from __future__ import annotations
 from videos.stats.stats36.common import *  # noqa: F403
 
 
-class Backdoor(VoiceoverScene):
+class Backdoor(StatsScene):
     def construct(self):
         self.card()
         self.criterion()
@@ -13,10 +13,7 @@ class Backdoor(VoiceoverScene):
         self.rules()
 
     def card(self):
-        card = chapter_card(3, r"The back door", r"What to adjust for, \ and what not to", lit=(1946, 1995), part=PART)
-        with self.voiceover("Chapter three. The back door."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(3, r"The back door", r"What to adjust for, \ and what not to", lit=(1946, 1995), part=PART, said="Chapter three. The back door.")
 
     def criterion(self):
         rows = [

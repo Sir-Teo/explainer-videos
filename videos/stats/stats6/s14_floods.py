@@ -5,7 +5,7 @@ import numpy as np
 from videos.stats.stats6.common import *  # noqa: F403
 
 
-class Floods(VoiceoverScene):
+class Floods(StatsScene):
     def construct(self):
         self.card()
         self.flood()
@@ -16,10 +16,7 @@ class Floods(VoiceoverScene):
         self.dantzig()
 
     def card(self):
-        card = chapter_card(13, r"Floods and return levels", r"Predicting the worst from what we have seen", part=PART)
-        with self.voiceover("Chapter thirteen. Floods and return levels."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(13, r"Floods and return levels", r"Predicting the worst from what we have seen", part=PART, said="Chapter thirteen. Floods and return levels.")
 
     def flood(self):
         hc = history_card(1953, r"the North Sea flood, \ night of 31 January -- 1 February",

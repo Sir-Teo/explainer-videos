@@ -3,7 +3,7 @@ from __future__ import annotations
 from videos.stats.stats58.common import *  # noqa: F403
 
 
-class EBH(LectureMixin, VoiceoverScene):
+class EBH(LectureMixin, StatsScene):
     def construct(self):
         self.card_voiceover("Chapter nine. Multiple testing with e-values: false discovery rate control under any "
                        "dependence, and for experiments that each stop when they like.", 9, r"Multiple testing with e-values",

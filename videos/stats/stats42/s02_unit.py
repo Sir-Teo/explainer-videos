@@ -19,7 +19,7 @@ def houses(center, n=5, s=0.42, treated=None, color=PROGC):
     return g
 
 
-class TrialUnit(VoiceoverScene):
+class TrialUnit(StatsScene):
     def construct(self):
         self.card()
         self.estimand()
@@ -30,10 +30,7 @@ class TrialUnit(VoiceoverScene):
         self.planning()
 
     def card(self):
-        card = chapter_card(1, r"Case 1: \ what to randomize", r"Who gets the programme, \ and who decides?", lit=(1978,), part=PART)
-        with self.voiceover("Chapter one. The first case: a trial to design. What should be randomized?"):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(1, r"Case 1: \ what to randomize", r"Who gets the programme, \ and who decides?", lit=(1978,), part=PART, said="Chapter one. The first case: a trial to design. What should be randomized?")
 
     def estimand(self):
         rows = [

@@ -6,7 +6,7 @@ from videos.stats.stats1.common import *  # noqa: F403
 from videos.stats.stats1.compute import inverse_quantiles
 
 
-class Quantiles(VoiceoverScene):
+class Quantiles(StatsScene):
     def construct(self):
         self.card()
         self.ecdf()
@@ -15,11 +15,7 @@ class Quantiles(VoiceoverScene):
         self.regions()
 
     def card(self):
-        card = chapter_card(6, r"Quantiles and the box plot", r"Where does each person stand?",
-                            lit={1977: r"Tukey's \emph{Exploratory Data Analysis}"}, part=PART)
-        with self.voiceover("Chapter six. Quantiles and the box plot."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(6, r"Quantiles and the box plot", r"Where does each person stand?", lit={1977: r"Tukey's \emph{Exploratory Data Analysis}"}, part=PART, said="Chapter six. Quantiles and the box plot.")
 
     def ecdf(self):
         d = load("quantiles")

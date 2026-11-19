@@ -5,7 +5,7 @@ import numpy as np
 from videos.stats.stats39.common import *  # noqa: F403
 
 
-class Honest(VoiceoverScene):
+class Honest(StatsScene):
     def construct(self):
         self.card()
         self.plugin()
@@ -15,10 +15,7 @@ class Honest(VoiceoverScene):
         self.checklist()
 
     def card(self):
-        card = chapter_card(14, r"Honest prediction", r"Do the intervals cover?", lit=(2023,), part=PART)
-        with self.voiceover("Chapter fourteen. Honest prediction."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(14, r"Honest prediction", r"Do the intervals cover?", lit=(2023,), part=PART, said="Chapter fourteen. Honest prediction.")
 
     def plugin(self):
         rows = [

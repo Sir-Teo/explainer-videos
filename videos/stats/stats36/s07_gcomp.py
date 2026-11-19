@@ -6,7 +6,7 @@ from videos.stats.stats36.common import *  # noqa: F403
 from videos.stats.stats36.compute import obs_sample, rng, ols_fit, ols_pred
 
 
-class GComp(VoiceoverScene):
+class GComp(StatsScene):
     def construct(self):
         self.card()
         self.idea()
@@ -15,10 +15,7 @@ class GComp(VoiceoverScene):
         self.extrapolate()
 
     def card(self):
-        card = chapter_card(6, r"g-computation", r"Model the outcome, \ then intervene in the model", lit=(1986,), part=PART)
-        with self.voiceover("Chapter six. g-computation."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(6, r"g-computation", r"Model the outcome, \ then intervene in the model", lit=(1986,), part=PART, said="Chapter six. g-computation.")
 
     def idea(self):
         rows = [

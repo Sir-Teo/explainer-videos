@@ -7,7 +7,7 @@ from videos.stats.stats31.common import *  # noqa: F403
 KC = [S.ACCENT, S.RESID, S.ALT]  # k-means clusters: gold, red, teal (not species colours)
 
 
-class Cluster(VoiceoverScene):
+class Cluster(StatsScene):
     def construct(self):
         self.card()
         self.objective()
@@ -20,10 +20,7 @@ class Cluster(VoiceoverScene):
         self.cautions()
 
     def card(self):
-        card = chapter_card(8, r"Clustering", r"Finding groups nobody told you about", lit=(1957, 1977), part=PART)
-        with self.voiceover("Chapter eight. Clustering."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(8, r"Clustering", r"Finding groups nobody told you about", lit=(1957, 1977), part=PART, said="Chapter eight. Clustering.")
 
     def objective(self):
         rows = [

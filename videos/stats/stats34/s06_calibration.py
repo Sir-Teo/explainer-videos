@@ -16,7 +16,7 @@ def rel_plot(ax, rel, color, rmin=0.05, rmax=0.22, total=None):
     return VGroup(line, dots)
 
 
-class Calibration(VoiceoverScene):
+class Calibration(StatsScene):
     def construct(self):
         self.card()
         self.define()
@@ -28,10 +28,7 @@ class Calibration(VoiceoverScene):
         self.limits()
 
     def card(self):
-        card = chapter_card(5, r"Calibration", r"When 70\% should mean 70\%", lit=(1999,), part=PART)
-        with self.voiceover("Chapter five. Calibration."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(5, r"Calibration", r"When 70\% should mean 70\%", lit=(1999,), part=PART, said="Chapter five. Calibration.")
 
     def define(self):
         rows = [

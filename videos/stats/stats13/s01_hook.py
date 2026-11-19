@@ -5,13 +5,13 @@ import numpy as np
 from videos.stats.stats13.common import *  # noqa: F403
 
 
-class Hook(VoiceoverScene):
+class Hook(StatsScene):
     def construct(self):
         self.broadbalk()
         self.muck_heap()
         self.uniformity()
         self.questionnaire()
-        self.objectives()
+        self.title(PART)
 
     def broadbalk(self):
         tl = timeline(lit=(1919,)).to_edge(UP, buff=0.35)
@@ -143,30 +143,4 @@ class Hook(VoiceoverScene):
             self.play(FadeIn(q1, lag_ratio=0.1), FadeIn(s1), run_time=3.0)
             vo.wait_until("b")
             self.play(FadeIn(q2), FadeIn(s2))
-        self.clear_scene()
-
-    def objectives(self):
-        head = VGroup(label(r"Part 13", font_size=34, color=GREY_B), label(r"Experiments by Design", font_size=60)).arrange(DOWN, buff=0.25)
-        obj = objectives_card([
-            r"replication, \ randomization, \ local control; \ randomization as the basis of inference",
-            r"the analysis of variance as Pythagoras; \ contrasts and many comparisons",
-            r"blocks, \ Latin squares, \ crossovers; \ factorials, \ fractions, \ response surfaces",
-            r"split plots and their two errors; \ optimal design; \ power",
-            r"today's experiments: \ A/B tests, \ CUPED, \ sample-ratio mismatch",
-        ], color=OBS, font_size=26)
-        prereq = note(r"prerequisites: \ Parts 10 and 12").to_corner(DL, buff=0.3)
-        built = note(r"built: \ the field-trial simulator; \ \texttt{statkit.design}").to_corner(DR, buff=0.3)
-        with self.voiceover(
-            "<bookmark mark='a'/> Part thirteen: experiments by design. <bookmark mark='b'/> We'll meet Fisher's three "
-            "principles, and see randomization become the basis of inference itself; build the analysis of variance as "
-            "Pythagoras, and handle many comparisons honestly; control the field with blocks and Latin squares; ask many "
-            "questions at once with factorials, their fractions and response surfaces; meet the split plot, with its two "
-            "kinds of error; choose design points optimally and plan for power; and end with the experiments that run on "
-            "websites today, millions of times a year."
-        ) as vo:
-            vo.wait_until("a")
-            self.play(FadeIn(head, shift=UP * 0.2))
-            vo.wait_until("b")
-            self.play(FadeOut(head), FadeIn(obj, shift=UP * 0.2), FadeIn(prereq), FadeIn(built))
-        self.wait(1.0)
         self.clear_scene()

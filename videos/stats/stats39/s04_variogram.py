@@ -6,7 +6,7 @@ from explainer.stats.kit import spatial as SPK
 from videos.stats.stats39.common import *  # noqa: F403
 
 
-class Variogram(VoiceoverScene):
+class Variogram(StatsScene):
     def construct(self):
         self.card()
         self.definition()
@@ -17,10 +17,7 @@ class Variogram(VoiceoverScene):
         self.world()
 
     def card(self):
-        card = chapter_card(3, r"Variograms", r"How different are values a distance $h$ apart?", lit=(1962, 1985), part=PART)
-        with self.voiceover("Chapter three. Variograms."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(3, r"Variograms", r"How different are values a distance $h$ apart?", lit=(1962, 1985), part=PART, said="Chapter three. Variograms.")
 
     def definition(self):
         rows = [

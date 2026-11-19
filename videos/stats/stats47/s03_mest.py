@@ -5,7 +5,7 @@ import numpy as np
 from videos.stats.stats47.common import *  # noqa: F403
 
 
-class MEstimators(VoiceoverScene):
+class MEstimators(StatsScene):
     def construct(self):
         self.card()
         self.definition()
@@ -16,10 +16,7 @@ class MEstimators(VoiceoverScene):
         self.misspec()
 
     def card(self):
-        card = chapter_card(2, r"M- and Z-estimators", r"Maximize an average, \ or solve one", lit=(1964,), part=PART)
-        with self.voiceover("Chapter two. M- and Z-estimators: maximize an average, or solve one."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(2, r"M- and Z-estimators", r"Maximize an average, \ or solve one", lit=(1964,), part=PART, said="Chapter two. M- and Z-estimators: maximize an average, or solve one.")
 
     def definition(self):
         rows = [

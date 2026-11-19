@@ -7,7 +7,7 @@ from videos.stats.stats3.common import *  # noqa: F403
 K_COLS = {"1": "#7EC8F5", "3": "#7BD88F", "8": "#F2C14E", "10": "#FF9F5A"}
 
 
-class Order(VoiceoverScene, TreeMixin):
+class Order(StatsScene, TreeMixin):
     def construct(self):
         self.card()
         self.density()
@@ -18,11 +18,7 @@ class Order(VoiceoverScene, TreeMixin):
                             "share X over X plus Y of two independent gammas with the same scale.", 9)
 
     def card(self):
-        card = chapter_card(9, r"Order statistics", r"The smallest, the largest, and everything in between",
-                            lit=(), part=PART)
-        with self.voiceover("Chapter nine. Order statistics."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(9, r"Order statistics", r"The smallest, the largest, and everything in between", lit=(), part=PART, said="Chapter nine. Order statistics.")
 
     def density(self):
         line = NumberLine(x_range=[0, 1, 0.25], length=10, include_numbers=False, color=GREY_C).move_to([0, 2.0, 0])

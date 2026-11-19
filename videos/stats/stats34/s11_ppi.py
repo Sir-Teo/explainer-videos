@@ -11,7 +11,7 @@ def ci_row(ax, y, est, lo, hi, color, xmin, xmax):
                   Dot(ax.c2p(est, y), radius=0.08, color=WHITE))
 
 
-class PPI(VoiceoverScene):
+class PPI(StatsScene):
     def construct(self):
         self.card()
         self.problem()
@@ -26,10 +26,7 @@ class PPI(VoiceoverScene):
         self.uses()
 
     def card(self):
-        card = chapter_card(10, r"Prediction-powered inference", r"Many guesses, \ a few labels", lit=(2023,), part=PART)
-        with self.voiceover("Chapter ten. Prediction-powered inference."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(10, r"Prediction-powered inference", r"Many guesses, \ a few labels", lit=(2023,), part=PART, said="Chapter ten. Prediction-powered inference.")
 
     def problem(self):
         rows = fit_rows(VGroup(

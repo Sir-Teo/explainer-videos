@@ -7,7 +7,7 @@ import numpy as np
 from videos.stats.stats46.common import *  # noqa: F403
 
 
-class Simultaneous(VoiceoverScene):
+class Simultaneous(StatsScene):
     def construct(self):
         self.card()
         self.scheffe()
@@ -17,10 +17,7 @@ class Simultaneous(VoiceoverScene):
         self.beyond()
 
     def card(self):
-        card = chapter_card(9, r"Simultaneous inference", r"Many intervals, \ one promise", lit=(1953, 1976), part=PART)
-        with self.voiceover("Chapter nine. Simultaneous inference: many intervals, one promise."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(9, r"Simultaneous inference", r"Many intervals, \ one promise", lit=(1953, 1976), part=PART, said="Chapter nine. Simultaneous inference: many intervals, one promise.")
 
     def scheffe(self):
         rows = [

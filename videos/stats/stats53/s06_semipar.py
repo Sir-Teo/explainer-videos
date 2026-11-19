@@ -5,7 +5,7 @@ import numpy as np
 from videos.stats.stats53.common import *  # noqa: F403
 
 
-class Semiparametric(VoiceoverScene):
+class Semiparametric(StatsScene):
     def construct(self):
         self.card()
         self.failures()
@@ -16,10 +16,7 @@ class Semiparametric(VoiceoverScene):
         self.castillo()
 
     def card(self):
-        card = chapter_card(5, r"Semiparametric BvM, \ and its failures", r"In infinite dimensions, \ credible is not confident", lit=(1999,), part=PART)
-        with self.voiceover("Chapter five. Semiparametric Bernstein–von Mises, and its failures: in infinite dimensions, credible is not confident."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(5, r"Semiparametric BvM, \ and its failures", r"In infinite dimensions, \ credible is not confident", lit=(1999,), part=PART, said="Chapter five. Semiparametric Bernstein–von Mises, and its failures: in infinite dimensions, credible is not confident.")
 
     def failures(self):
         rows = [

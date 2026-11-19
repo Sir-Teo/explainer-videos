@@ -6,7 +6,7 @@ from explainer.stats.board import coverage_board, load_all
 from videos.stats.stats22.common import *  # noqa: F403
 
 
-class Misspecification(VoiceoverScene):
+class Misspecification(StatsScene):
     def construct(self):
         self.card()
         self.target()
@@ -17,10 +17,7 @@ class Misspecification(VoiceoverScene):
         self.board()
 
     def card(self):
-        card = chapter_card(10, r"Misspecification", r"What the MLE estimates when the model is wrong", lit=(1967,), part=PART)
-        with self.voiceover("Chapter ten. Misspecification: what happens when the model is wrong, as every model is."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(10, r"Misspecification", r"What the MLE estimates when the model is wrong", lit=(1967,), part=PART, said="Chapter ten. Misspecification: what happens when the model is wrong, as every model is.")
 
     def target(self):
         rows = [

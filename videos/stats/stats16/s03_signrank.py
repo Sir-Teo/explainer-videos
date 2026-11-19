@@ -20,7 +20,7 @@ def diff_bars(ax, z, colors=None, width=0.6):
     return g
 
 
-class SignedRank(VoiceoverScene):
+class SignedRank(StatsScene):
     def construct(self):
         self.card()
         self.darwin()
@@ -32,10 +32,7 @@ class SignedRank(VoiceoverScene):
         self.hodges()
 
     def card(self):
-        card = chapter_card(2, r"Signs and signed ranks", r"Darwin's maize, \ three ways", lit=(1945,), part=PART)
-        with self.voiceover("Chapter two. Signs and signed ranks."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(2, r"Signs and signed ranks", r"Darwin's maize, \ three ways", lit=(1945,), part=PART, said="Chapter two. Signs and signed ranks.")
 
     def darwin(self):
         d = load("signrank")

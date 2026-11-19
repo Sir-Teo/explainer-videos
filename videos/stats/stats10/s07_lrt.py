@@ -6,7 +6,7 @@ from scipy import stats
 from videos.stats.stats10.common import *  # noqa: F403
 
 
-class LRT(VoiceoverScene):
+class LRT(StatsScene):
     def construct(self):
         self.card()
         self.definition()
@@ -17,10 +17,7 @@ class LRT(VoiceoverScene):
         self.sides()
 
     def card(self):
-        card = chapter_card(6, r"The likelihood ratio test", r"One recipe for almost every test", part=PART)
-        with self.voiceover("Chapter six. The likelihood ratio test."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(6, r"The likelihood ratio test", r"One recipe for almost every test", part=PART, said="Chapter six. The likelihood ratio test.")
 
     def definition(self):
         rows = [

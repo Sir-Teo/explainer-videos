@@ -6,7 +6,7 @@ from videos.stats.stats62.common import *  # noqa: F403
 from videos.stats.stats62.compute import _true_value
 
 
-class Policy(LectureMixin, VoiceoverScene):
+class Policy(LectureMixin, StatsScene):
     def construct(self):
         self.card_voiceover("Chapter five. Policy learning: whom should we treat, and how good is the rule we learned?", 5,
                             r"Policy learning", r"From effects to decisions", lit=(2018,))

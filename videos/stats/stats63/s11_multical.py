@@ -5,7 +5,7 @@ import numpy as np
 from videos.stats.stats63.common import *  # noqa: F403
 
 
-class Multicalibration(LectureMixin, VoiceoverScene):
+class Multicalibration(LectureMixin, StatsScene):
     def construct(self):
         self.card_voiceover("Chapter ten. Multicalibration: calibrated for every group one can name.", 10,
                             r"Multicalibration", r"Sufficiency for many groups at once", lit=(2018,))

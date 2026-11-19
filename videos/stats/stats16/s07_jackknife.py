@@ -6,7 +6,7 @@ from explainer.stats.kit import bootstrap as Bt
 from videos.stats.stats16.common import *  # noqa: F403
 
 
-class Jackknife(VoiceoverScene):
+class Jackknife(StatsScene):
     def construct(self):
         self.card()
         self.leave_out()
@@ -16,10 +16,7 @@ class Jackknife(VoiceoverScene):
         self.median_fail()
 
     def card(self):
-        card = chapter_card(6, r"The jackknife", r"Leave one out, \ and watch what moves", part=PART)
-        with self.voiceover("Chapter six. The jackknife."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(6, r"The jackknife", r"Leave one out, \ and watch what moves", part=PART, said="Chapter six. The jackknife.")
 
     def leave_out(self):
         d = load("law")

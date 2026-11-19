@@ -6,7 +6,7 @@ from scipy import special
 from videos.stats.stats24.common import *  # noqa: F403
 
 
-class Separation(VoiceoverScene):
+class Separation(StatsScene):
     def construct(self):
         self.card()
         self.picture()
@@ -17,10 +17,7 @@ class Separation(VoiceoverScene):
         self.practice()
 
     def card(self):
-        card = chapter_card(6, r"Separation", r"When the likelihood has no top", lit=(1984, 1993), part=PART)
-        with self.voiceover("Chapter six. Separation."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(6, r"Separation", r"When the likelihood has no top", lit=(1984, 1993), part=PART, said="Chapter six. Separation.")
 
     def picture(self):
         d = load("separation")

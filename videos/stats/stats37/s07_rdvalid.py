@@ -5,7 +5,7 @@ import numpy as np
 from videos.stats.stats37.common import *  # noqa: F403
 
 
-class RDValid(VoiceoverScene):
+class RDValid(StatsScene):
     def construct(self):
         self.card()
         self.remark()
@@ -17,10 +17,7 @@ class RDValid(VoiceoverScene):
         self.checklist()
 
     def card(self):
-        card = chapter_card(6, r"RD validity", r"What a cutoff can hide", lit=(2008,), part=PART)
-        with self.voiceover("Chapter six. Is the discontinuity valid?"):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(6, r"RD validity", r"What a cutoff can hide", lit=(2008,), part=PART, said="Chapter six. Is the discontinuity valid?")
 
     def remark(self):
         rows = fit_rows(VGroup(

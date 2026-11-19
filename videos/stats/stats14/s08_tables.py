@@ -5,7 +5,7 @@ import numpy as np
 from videos.stats.stats14.common import *  # noqa: F403
 
 
-class Tables(VoiceoverScene):
+class Tables(StatsScene):
     def construct(self):
         self.card()
         self.berkeley_table()
@@ -16,10 +16,7 @@ class Tables(VoiceoverScene):
         self.rxc()
 
     def card(self):
-        card = chapter_card(7, r"Two-way tables", r"Counting by category, \ and comparing proportions", lit=(1900,), part=PART)
-        with self.voiceover("Chapter seven. Two-way tables."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(7, r"Two-way tables", r"Counting by category, \ and comparing proportions", lit=(1900,), part=PART, said="Chapter seven. Two-way tables.")
 
     def berkeley_table(self):
         d = load("tables")

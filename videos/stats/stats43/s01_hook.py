@@ -3,12 +3,12 @@ from __future__ import annotations
 from videos.stats.stats43.common import *  # noqa: F403
 
 
-class Hook(VoiceoverScene):
+class Hook(StatsScene):
     def construct(self):
         self.hilbert()
         self.kolmogorov()
         self.upgrades()
-        self.objectives()
+        self.title(PART)
 
     def hilbert(self):
         tl = timeline(lit=(1900, 1933)).to_edge(UP, buff=0.35)
@@ -99,30 +99,5 @@ class Hook(VoiceoverScene):
             for k, m_ in enumerate("abc"):
                 vo.wait_until(m_)
                 self.play(FadeIn(cards[k], shift=UP * 0.15))
-        self.wait(1.0)
-        self.clear_scene()
-
-    def objectives(self):
-        head = VGroup(label(r"Part 43", font_size=34, color=GREY_B), label(r"Measure-Theoretic Probability", font_size=56)).arrange(DOWN, buff=0.25)
-        obj = objectives_card([
-            r"$\sigma$-algebras, \ measures, \ random variables as measurable maps, \ integration",
-            r"independence and products; \ Borel--Cantelli, \ the 0--1 laws, \ the strong law",
-            r"weak convergence, \ characteristic functions, \ Lindeberg--Feller, \ Stein's method",
-            r"stable laws, \ large deviations, \ extremes: \ what the limit theorems say beyond the CLT",
-        ], color=S.ACCENT, font_size=26)
-        prereq = note(r"prerequisites: \ Part 6; \ \emph{Analysis, Built} Parts 1--5").to_corner(DL, buff=0.3)
-        built = note(r"built: \ \texttt{statkit.limits}, \ the weak-convergence lab").to_corner(DR, buff=0.3)
-        with self.voiceover(
-            "<bookmark mark='a'/> Part forty-three: measure-theoretic probability, the first part of the PhD core. "
-            "<bookmark mark='b'/> We'll build sigma-algebras and measures, random variables and their integrals; "
-            "independence, the Borel–Cantelli lemmas and the zero–one laws, and a full proof of the strong law; weak "
-            "convergence, characteristic functions, Lindeberg's theorem and Stein's method, with exact probability "
-            "formulas and numerical distance calculations in a weak-convergence lab; and then what lies beyond the "
-            "normal: stable laws, large deviations and extremes. Each condition that matters gets its counterexample."
-        ) as vo:
-            vo.wait_until("a")
-            self.play(FadeIn(head, shift=UP * 0.2))
-            vo.wait_until("b")
-            self.play(FadeOut(head), FadeIn(obj, shift=UP * 0.2), FadeIn(prereq), FadeIn(built))
         self.wait(1.0)
         self.clear_scene()

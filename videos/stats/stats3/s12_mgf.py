@@ -5,7 +5,7 @@ import numpy as np
 from videos.stats.stats3.common import *  # noqa: F403
 
 
-class MGF(VoiceoverScene):
+class MGF(StatsScene):
     def construct(self):
         self.card()
         self.definition()
@@ -15,10 +15,7 @@ class MGF(VoiceoverScene):
         self.cf()
 
     def card(self):
-        card = chapter_card(11, r"Generating functions", r"Part 2's polynomials, \ grown up", lit=(1810,), part=PART)
-        with self.voiceover("Chapter eleven. Generating functions."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(11, r"Generating functions", r"Part 2's polynomials, \ grown up", lit=(1810,), part=PART, said="Chapter eleven. Generating functions.")
 
     def definition(self):
         rows = [

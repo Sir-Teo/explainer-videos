@@ -5,7 +5,7 @@ import numpy as np
 from videos.stats.stats30.common import *  # noqa: F403
 
 
-class Pitman(VoiceoverScene):
+class Pitman(StatsScene):
     def construct(self):
         self.card()
         self.upgrade()
@@ -18,10 +18,7 @@ class Pitman(VoiceoverScene):
         self.estimators()
 
     def card(self):
-        card = chapter_card(1, r"Pitman efficiency", r"How much do ranks cost?", lit=(1956,), part=PART)
-        with self.voiceover("Chapter one. Pitman efficiency."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(1, r"Pitman efficiency", r"How much do ranks cost?", lit=(1956,), part=PART, said="Chapter one. Pitman efficiency.")
 
     def upgrade(self):
         card = upgrade_card(16, r"the Wilcoxon test is 95.5\% as efficient as $t$ for normal data, \ and never below 86.4\%",

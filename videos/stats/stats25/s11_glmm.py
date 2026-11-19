@@ -6,7 +6,7 @@ from scipy import optimize, special
 from videos.stats.stats25.common import *  # noqa: F403
 
 
-class GLMM(VoiceoverScene):
+class GLMM(StatsScene):
     def construct(self):
         self.card()
         self.model()
@@ -17,10 +17,7 @@ class GLMM(VoiceoverScene):
         self.league_table()
 
     def card(self):
-        card = chapter_card(10, r"GLMMs", r"Random effects inside a link", lit=(1993,), part=PART)
-        with self.voiceover("Chapter ten. Generalized linear mixed models."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(10, r"GLMMs", r"Random effects inside a link", lit=(1993,), part=PART, said="Chapter ten. Generalized linear mixed models.")
 
     def model(self):
         rows = [

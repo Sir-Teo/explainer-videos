@@ -5,7 +5,7 @@ import numpy as np
 from videos.stats.stats54.common import *  # noqa: F403
 
 
-class Rademacher(VoiceoverScene):
+class Rademacher(StatsScene):
     def construct(self):
         self.card()
         self.definition()
@@ -17,10 +17,7 @@ class Rademacher(VoiceoverScene):
         self.data_dependent()
 
     def card(self):
-        card = chapter_card(3, r"Rademacher complexity", r"How well can a class fit pure noise?", lit=(2002,), part=PART)
-        with self.voiceover("Chapter three. Rademacher complexity: how well can a class fit pure noise?"):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(3, r"Rademacher complexity", r"How well can a class fit pure noise?", lit=(2002,), part=PART, said="Chapter three. Rademacher complexity: how well can a class fit pure noise?")
 
     def definition(self):
         rows = [

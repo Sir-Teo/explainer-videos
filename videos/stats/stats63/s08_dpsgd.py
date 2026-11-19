@@ -5,7 +5,7 @@ import numpy as np
 from videos.stats.stats63.common import *  # noqa: F403
 
 
-class DPSGD(LectureMixin, VoiceoverScene):
+class DPSGD(LectureMixin, StatsScene):
     def construct(self):
         self.card_voiceover("Chapter seven. Private learning, and the attacks that audit it.", 7,
                             r"DP-SGD and membership inference", r"Learning without memorizing", lit=(2016,))

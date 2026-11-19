@@ -5,7 +5,7 @@ import numpy as np
 from videos.stats.stats61.common import *  # noqa: F403
 
 
-class Ranks(LectureMixin, VoiceoverScene):
+class Ranks(LectureMixin, StatsScene):
     def construct(self):
         self.card_voiceover("Chapter seven. Multivariate ranks and quantiles: transport to a reference law.", 7,
                             r"Multivariate ranks", r"Center-outward, \ by transport", lit=(2017,))

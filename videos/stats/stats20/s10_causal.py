@@ -37,7 +37,7 @@ def arrow(a, b, color=GREY_B, dashed=False):
     return ln
 
 
-class CausalOrNot(VoiceoverScene):
+class CausalOrNot(StatsScene):
     def construct(self):
         self.card()
         self.dag()
@@ -47,10 +47,7 @@ class CausalOrNot(VoiceoverScene):
         self.can_say()
 
     def card(self):
-        card = chapter_card(9, r"Causal or not?", r"What a survey can, \ and cannot, \ say", lit=(1988,), part=PART)
-        with self.voiceover("Chapter nine. Causal, or not?"):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(9, r"Causal or not?", r"What a survey can, \ and cannot, \ say", lit=(1988,), part=PART, said="Chapter nine. Causal, or not?")
 
     def dag(self):
         n = {k: node(k) for k in NODES}

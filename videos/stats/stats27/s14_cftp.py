@@ -16,7 +16,7 @@ def spin_grid(state, cell=0.22, center=ORIGIN):
     return g.move_to(center)
 
 
-class CFTP(VoiceoverScene):
+class CFTP(StatsScene):
     def construct(self):
         self.card()
         self.problem()
@@ -27,10 +27,7 @@ class CFTP(VoiceoverScene):
         self.limits()
 
     def card(self):
-        card = chapter_card(13, r"Exact sampling", r"Coupling from the past", lit=(1996,), part=PART)
-        with self.voiceover("Chapter thirteen. Exact sampling."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(13, r"Exact sampling", r"Coupling from the past", lit=(1996,), part=PART, said="Chapter thirteen. Exact sampling.")
 
     def problem(self):
         rows = fit_rows(VGroup(

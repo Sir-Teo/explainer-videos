@@ -21,7 +21,7 @@ def law_hist(d, center=(-1.6, 0.6, 0), x_length=8.0, y_length=3.6):
     return A, ax, bars, one, obs
 
 
-class BootIntervals(VoiceoverScene):
+class BootIntervals(StatsScene):
     def construct(self):
         self.card()
         self.percentile()
@@ -33,10 +33,7 @@ class BootIntervals(VoiceoverScene):
         self.lessons()
 
     def card(self):
-        card = chapter_card(8, r"Bootstrap intervals", r"From a histogram of replicates to a 95\% interval", part=PART)
-        with self.voiceover("Chapter eight. Bootstrap intervals."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(8, r"Bootstrap intervals", r"From a histogram of replicates to a 95\% interval", part=PART, said="Chapter eight. Bootstrap intervals.")
 
     def percentile(self):
         d = load("law")

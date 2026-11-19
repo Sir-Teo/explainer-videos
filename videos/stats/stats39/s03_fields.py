@@ -14,7 +14,7 @@ def panel(vals, center, title, color):
     return VGroup(F, t)
 
 
-class Fields(VoiceoverScene):
+class Fields(StatsScene):
     def construct(self):
         self.card()
         self.definitions()
@@ -23,10 +23,7 @@ class Fields(VoiceoverScene):
         self.families()
 
     def card(self):
-        card = chapter_card(2, r"Random fields", r"Which functions can be covariances?", lit=(1960,), part=PART)
-        with self.voiceover("Chapter two. Random fields."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(2, r"Random fields", r"Which functions can be covariances?", lit=(1960,), part=PART, said="Chapter two. Random fields.")
 
     def definitions(self):
         rows = [

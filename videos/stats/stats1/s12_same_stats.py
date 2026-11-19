@@ -5,7 +5,7 @@ import numpy as np
 from videos.stats.stats1.common import *  # noqa: F403
 
 
-class SameStats(VoiceoverScene):
+class SameStats(StatsScene):
     def construct(self):
         self.card()
         self.anscombe()
@@ -13,12 +13,7 @@ class SameStats(VoiceoverScene):
         self.algorithm()
 
     def card(self):
-        card = chapter_card(11, r"Same statistics, different pictures", r"What do the numbers leave out?",
-                            lit={1973: r"Anscombe's quartet", 2017: r"Matejka--Fitzmaurice: same stats, different graphs"},
-                            part=PART)
-        with self.voiceover("Chapter eleven. Same statistics, different pictures."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(11, r"Same statistics, different pictures", r"What do the numbers leave out?", lit={1973: r"Anscombe's quartet", 2017: r"Matejka--Fitzmaurice: same stats, different graphs"}, part=PART, said="Chapter eleven. Same statistics, different pictures.")
 
     def anscombe(self):
         d = load("anscombe")["sets"]

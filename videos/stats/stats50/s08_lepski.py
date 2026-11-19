@@ -5,7 +5,7 @@ import numpy as np
 from videos.stats.stats50.common import *  # noqa: F403
 
 
-class Lepski(VoiceoverScene):
+class Lepski(StatsScene):
     def construct(self):
         self.card()
         self.method()
@@ -16,10 +16,7 @@ class Lepski(VoiceoverScene):
         self.price()
 
     def card(self):
-        card = chapter_card(7, r"Adaptation", r"Lepski's method: \ let the data choose the smoothing", lit=(1990,), part=PART)
-        with self.voiceover("Chapter seven. Adaptation: Lepski's method lets the data choose the smoothing."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(7, r"Adaptation", r"Lepski's method: \ let the data choose the smoothing", lit=(1990,), part=PART, said="Chapter seven. Adaptation: Lepski's method lets the data choose the smoothing.")
 
     def method(self):
         rows = [

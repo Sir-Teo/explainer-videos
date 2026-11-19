@@ -3,7 +3,7 @@ from __future__ import annotations
 from videos.stats.stats36.common import *  # noqa: F403
 
 
-class Frontdoor(VoiceoverScene):
+class Frontdoor(StatsScene):
     def construct(self):
         self.card()
         self.setup_()
@@ -13,10 +13,7 @@ class Frontdoor(VoiceoverScene):
         self.swig()
 
     def card(self):
-        card = chapter_card(4, r"The front door and do-calculus", r"Identification beyond adjustment", lit=(1995,), part=PART)
-        with self.voiceover("Chapter four. The front door, and the do-calculus."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(4, r"The front door and do-calculus", r"Identification beyond adjustment", lit=(1995,), part=PART, said="Chapter four. The front door, and the do-calculus.")
 
     def setup_(self):
         G = CausalGraph({"U": (0, 1.6), "T": (-2.4, -0.6), "M": (0, -0.6), "Y": (2.4, -0.6)},

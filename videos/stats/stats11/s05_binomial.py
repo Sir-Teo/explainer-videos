@@ -5,7 +5,7 @@ import numpy as np
 from videos.stats.stats11.common import *  # noqa: F403
 
 
-class Binomial(VoiceoverScene):
+class Binomial(StatsScene):
     def construct(self):
         self.card()
         self.history()
@@ -17,10 +17,7 @@ class Binomial(VoiceoverScene):
         self.advice()
 
     def card(self):
-        card = chapter_card(4, r"The binomial family", r"Six intervals for a proportion", lit=(1927,), part=PART)
-        with self.voiceover("Chapter four. The binomial family."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(4, r"The binomial family", r"Six intervals for a proportion", lit=(1927,), part=PART, said="Chapter four. The binomial family.")
 
     def history(self):
         cards = VGroup(

@@ -5,7 +5,7 @@ import numpy as np
 from videos.stats.stats21.common import *  # noqa: F403
 
 
-class OptimAndInference(VoiceoverScene):
+class OptimAndInference(StatsScene):
     def construct(self):
         self.card()
         self.curvature()
@@ -16,10 +16,7 @@ class OptimAndInference(VoiceoverScene):
         self.summary()
 
     def card(self):
-        card = chapter_card(11, r"Optimization and inference", r"The shape of the peak is the uncertainty", part=PART)
-        with self.voiceover("Chapter eleven. Optimization, and inference."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(11, r"Optimization and inference", r"The shape of the peak is the uncertainty", part=PART, said="Chapter eleven. Optimization, and inference.")
 
     def curvature(self):
         d = load("inference")

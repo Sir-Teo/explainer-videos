@@ -5,7 +5,7 @@ import numpy as np
 from videos.stats.stats56.common import *  # noqa: F403
 
 
-class Winners(VoiceoverScene):
+class Winners(StatsScene):
     def construct(self):
         self.card()
         self.conditional()
@@ -17,10 +17,7 @@ class Winners(VoiceoverScene):
         self.board()
 
     def card(self):
-        card = chapter_card(8, r"Inference on winners", r"The best-looking option, \ honestly", lit=(2024,), part=PART)
-        with self.voiceover("Chapter eight. Inference on winners: the best-looking option, honestly."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(8, r"Inference on winners", r"The best-looking option, \ honestly", lit=(2024,), part=PART, said="Chapter eight. Inference on winners: the best-looking option, honestly.")
 
     def conditional(self):
         rows = [

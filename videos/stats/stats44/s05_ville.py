@@ -7,7 +7,7 @@ import numpy as np
 from videos.stats.stats44.common import *  # noqa: F403
 
 
-class Maximal(VoiceoverScene):
+class Maximal(StatsScene):
     def construct(self):
         self.card()
         self.doob()
@@ -18,10 +18,7 @@ class Maximal(VoiceoverScene):
         self.board()
 
     def card(self):
-        card = chapter_card(4, r"Maximal inequalities and Ville", r"How high can a fair game climb?", lit=(1939,), part=PART)
-        with self.voiceover("Chapter four. Maximal inequalities: how high can a fair game climb?"):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(4, r"Maximal inequalities and Ville", r"How high can a fair game climb?", lit=(1939,), part=PART, said="Chapter four. Maximal inequalities: how high can a fair game climb?")
 
     def doob(self):
         rows = [

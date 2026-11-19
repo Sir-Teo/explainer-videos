@@ -3,7 +3,7 @@ from __future__ import annotations
 from videos.stats.stats58.common import *  # noqa: F403
 
 
-class OffPolicy(LectureMixin, VoiceoverScene):
+class OffPolicy(LectureMixin, StatsScene):
     def construct(self):
         self.card_voiceover("Chapter thirteen. Off-policy evaluation: what would have happened under a policy we did not "
                        "run?", 13, r"Off-policy evaluation", r"Evaluating the policy you did not run")

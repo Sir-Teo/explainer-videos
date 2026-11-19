@@ -5,14 +5,14 @@ import numpy as np
 from videos.stats.stats28.common import *  # noqa: F403
 
 
-class Hook(VoiceoverScene):
+class Hook(StatsScene):
     def construct(self):
         self.story()
         self.first()
         self.second()
         self.repeat()
         self.lesson()
-        self.objectives()
+        self.title(PART)
 
     def story(self):
         tl = timeline(lit=(1983,)).to_edge(UP, buff=0.35)
@@ -155,29 +155,4 @@ class Hook(VoiceoverScene):
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
                 self.play(FadeIn(rows[k], shift=RIGHT * 0.2))
-        self.clear_scene()
-
-    def objectives(self):
-        head = VGroup(label(r"Part 28", font_size=34, color=GREY_B), label(r"Which Model?", font_size=60)).arrange(DOWN, buff=0.25)
-        obj = objectives_card([
-            r"optimism, \ degrees of freedom, \ Cp, \ AIC and TIC",
-            r"BIC, \ consistency vs efficiency; \ cross-validation's theory",
-            r"Bayesian LOO and WAIC; \ singular models; \ MDL",
-            r"averaging vs choosing: \ BMA and stacking",
-            r"inference after selection; \ subset selection; \ calibrated forecasts",
-        ], color=AICC, font_size=26)
-        prereq = note(r"prerequisites: \ Parts 19, \ 22 and 26").to_corner(DL, buff=0.3)
-        built = note(r"built: \ \texttt{statkit.select}; \ the model-selection bench").to_corner(DR, buff=0.3)
-        with self.voiceover(
-            "<bookmark mark='a'/> Part twenty-eight: which model? <bookmark mark='b'/> We'll measure optimism and degrees of "
-            "freedom and derive Mallows's Cp, Akaike's criterion and Takeuchi's; derive BIC and see why consistency and "
-            "efficiency conflict; learn what cross-validation really estimates; compute Bayesian leave-one-out and WAIC; see "
-            "singular models break BIC; meet minimum description length; compare averaging with choosing; correct inference "
-            "after selection; pit best subset against the lasso; and grade probability forecasts for calibration."
-        ) as vo:
-            vo.wait_until("a")
-            self.play(FadeIn(head, shift=UP * 0.2))
-            vo.wait_until("b")
-            self.play(FadeOut(head), FadeIn(obj, shift=UP * 0.2), FadeIn(prereq), FadeIn(built))
-        self.wait(1.0)
         self.clear_scene()

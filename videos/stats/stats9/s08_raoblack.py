@@ -5,7 +5,7 @@ import numpy as np
 from videos.stats.stats9.common import *  # noqa: F403
 
 
-class RaoBlackwell(VoiceoverScene):
+class RaoBlackwell(StatsScene):
     def construct(self):
         self.card()
         self.history()
@@ -18,10 +18,7 @@ class RaoBlackwell(VoiceoverScene):
         self.legacy()
 
     def card(self):
-        card = chapter_card(7, r"Rao--Blackwell", r"Conditioning on a sufficient statistic never hurts", part=PART)
-        with self.voiceover("Chapter seven. The Rao–Blackwell theorem."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(7, r"Rao--Blackwell", r"Conditioning on a sufficient statistic never hurts", part=PART, said="Chapter seven. The Rao–Blackwell theorem.")
 
     def history(self):
         h1 = history_card(1945, r"C. R. Rao, \ aged 24, \ Calcutta", r"``Information and the accuracy attainable in the estimation of "

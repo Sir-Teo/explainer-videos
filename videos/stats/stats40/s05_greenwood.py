@@ -6,7 +6,7 @@ from videos.stats.stats40.common import *  # noqa: F403
 from videos.stats.stats40.s04_km import km_axes
 
 
-class Greenwood(VoiceoverScene):
+class Greenwood(StatsScene):
     def construct(self):
         self.card()
         self.formula()
@@ -16,10 +16,7 @@ class Greenwood(VoiceoverScene):
         self.board()
 
     def card(self):
-        card = chapter_card(4, r"Greenwood's variance", r"How sure is the staircase?", lit=(1926,), part=PART)
-        with self.voiceover("Chapter four. Greenwood's variance."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(4, r"Greenwood's variance", r"How sure is the staircase?", lit=(1926,), part=PART, said="Chapter four. Greenwood's variance.")
 
     def formula(self):
         rows = [

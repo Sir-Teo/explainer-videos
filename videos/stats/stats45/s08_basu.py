@@ -5,7 +5,7 @@ import numpy as np
 from videos.stats.stats45.common import *  # noqa: F403
 
 
-class Ancillarity(VoiceoverScene):
+class Ancillarity(StatsScene):
     def construct(self):
         self.card()
         self.basu()
@@ -16,10 +16,7 @@ class Ancillarity(VoiceoverScene):
         self.board()
 
     def card(self):
-        card = chapter_card(7, r"Ancillarity and Basu", r"Statistics that say nothing about $\theta$, \ yet matter", lit=(1955, 1958), part=PART)
-        with self.voiceover("Chapter seven. Ancillarity and Basu's theorem: statistics that say nothing about theta, yet matter."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(7, r"Ancillarity and Basu", r"Statistics that say nothing about $\theta$, \ yet matter", lit=(1955, 1958), part=PART, said="Chapter seven. Ancillarity and Basu's theorem: statistics that say nothing about theta, yet matter.")
 
     def basu(self):
         rows = [

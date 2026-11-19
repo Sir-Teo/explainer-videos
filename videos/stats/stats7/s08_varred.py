@@ -6,7 +6,7 @@ from scipy import stats as st
 from videos.stats.stats7.common import *  # noqa: F403
 
 
-class VarRed(VoiceoverScene):
+class VarRed(StatsScene):
     def construct(self):
         self.card()
         self.antithetic()
@@ -17,10 +17,7 @@ class VarRed(VoiceoverScene):
         self.warning()
 
     def card(self):
-        card = chapter_card(7, r"Variance reduction", r"The same accuracy, \ for less computing", part=PART)
-        with self.voiceover("Chapter seven. Variance reduction."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(7, r"Variance reduction", r"The same accuracy, \ for less computing", part=PART, said="Chapter seven. Variance reduction.")
 
     def antithetic(self):
         A = axes([0, 1], [0.8, 2.9], x_length=5.0, y_length=4.0, xlabel=r"$u$", ylabel=r"$e^u$", xticks=[0, 0.5, 1],

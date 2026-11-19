@@ -10,7 +10,7 @@ def trace(ax, ys, color, n=None):
     return polyline(ax, np.arange(len(ys)), ys, color, stroke_width=1.6)
 
 
-class Metropolis(VoiceoverScene):
+class Metropolis(StatsScene):
     def construct(self):
         self.card()
         self.algorithm()
@@ -22,10 +22,7 @@ class Metropolis(VoiceoverScene):
         self.functions()
 
     def card(self):
-        card = chapter_card(8, r"When grids fail", r"A Metropolis walk through the posterior", lit=(1953,), part=PART)
-        with self.voiceover("Chapter eight. When grids fail."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(8, r"When grids fail", r"A Metropolis walk through the posterior", lit=(1953,), part=PART, said="Chapter eight. When grids fail.")
 
     def algorithm(self):
         rows = [

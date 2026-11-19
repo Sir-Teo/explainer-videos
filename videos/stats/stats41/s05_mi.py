@@ -5,7 +5,7 @@ import numpy as np
 from videos.stats.stats41.common import *  # noqa: F403
 
 
-class MultipleImputation(VoiceoverScene):
+class MultipleImputation(StatsScene):
     def construct(self):
         self.card()
         self.idea()
@@ -22,10 +22,7 @@ class MultipleImputation(VoiceoverScene):
         self.board()
 
     def card(self):
-        card = chapter_card(4, r"Multiple imputation", r"Fill the holes several times, \ and say how much they differ", lit=(1987,), part=PART)
-        with self.voiceover("Chapter four. Multiple imputation."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(4, r"Multiple imputation", r"Fill the holes several times, \ and say how much they differ", lit=(1987,), part=PART, said="Chapter four. Multiple imputation.")
 
     def idea(self):
         rows = fit_rows(VGroup(

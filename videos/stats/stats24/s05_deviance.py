@@ -6,7 +6,7 @@ from scipy import stats
 from videos.stats.stats24.common import *  # noqa: F403
 
 
-class Deviance(VoiceoverScene):
+class Deviance(StatsScene):
     def construct(self):
         self.card()
         self.define()
@@ -18,10 +18,7 @@ class Deviance(VoiceoverScene):
         self.qq()
 
     def card(self):
-        card = chapter_card(4, r"Deviance", r"How far from the saturated model?", part=PART)
-        with self.voiceover("Chapter four. Deviance."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(4, r"Deviance", r"How far from the saturated model?", part=PART, said="Chapter four. Deviance.")
 
     def define(self):
         rows = [

@@ -12,7 +12,7 @@ def cells():
     return {(x["mu"], x["gamma"], x["method"]): x for x in load("study")["rows"]}
 
 
-class Study(LectureMixin, VoiceoverScene):
+class Study(LectureMixin, StatsScene):
     def construct(self):
         self.card_voiceover("Chapter five. The simulation study, with its original protocol and explicit post hoc QA correction.", 5, r"A protocol-guided study",
                             r"Original protocol; transparent post hoc QA rerun")

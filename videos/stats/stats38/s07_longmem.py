@@ -5,7 +5,7 @@ import numpy as np
 from videos.stats.stats38.common import *  # noqa: F403
 
 
-class LongMemory(VoiceoverScene):
+class LongMemory(StatsScene):
     def construct(self):
         self.card()
         self.model()
@@ -16,10 +16,7 @@ class LongMemory(VoiceoverScene):
         self.caveat()
 
     def card(self):
-        card = chapter_card(6, r"Long memory", r"Correlations that fade like a power, \ not an exponential", lit=(1980, 1981), part=PART)
-        with self.voiceover("Chapter six. Long memory."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(6, r"Long memory", r"Correlations that fade like a power, \ not an exponential", lit=(1980, 1981), part=PART, said="Chapter six. Long memory.")
 
     def model(self):
         rows = [

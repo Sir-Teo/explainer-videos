@@ -5,7 +5,7 @@ import numpy as np
 from videos.stats.stats33.common import *  # noqa: F403
 
 
-class Forking(VoiceoverScene):
+class Forking(StatsScene):
     def construct(self):
         self.card()
         self.sixty_four()
@@ -16,10 +16,7 @@ class Forking(VoiceoverScene):
         self.multiverse()
 
     def card(self):
-        card = chapter_card(8, r"The garden of forking paths", r"Many analyses of one data set", lit=(2011,), part=PART)
-        with self.voiceover("Chapter eight. The garden of forking paths."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(8, r"The garden of forking paths", r"Many analyses of one data set", lit=(2011,), part=PART, said="Chapter eight. The garden of forking paths.")
 
     def sixty_four(self):
         rows = fit_rows(VGroup(

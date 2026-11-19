@@ -5,7 +5,7 @@ import numpy as np
 from videos.stats.stats25.common import *  # noqa: F403
 
 
-class Fixed(VoiceoverScene):
+class Fixed(StatsScene):
     def construct(self):
         self.card()
         self.two_views()
@@ -16,10 +16,7 @@ class Fixed(VoiceoverScene):
         self.advice()
 
     def card(self):
-        card = chapter_card(9, r"Fixed or random?", r"When the groups are correlated with $x$", lit=(1978,), part=PART)
-        with self.voiceover("Chapter nine. Fixed effects or random effects?"):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(9, r"Fixed or random?", r"When the groups are correlated with $x$", lit=(1978,), part=PART, said="Chapter nine. Fixed effects or random effects?")
 
     def two_views(self):
         rows = [

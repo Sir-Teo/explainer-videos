@@ -5,7 +5,7 @@ import numpy as np
 from videos.stats.stats19.common import *  # noqa: F403
 
 
-class Decided(VoiceoverScene):
+class Decided(StatsScene):
     def construct(self):
         self.card()
         self.setup_check()
@@ -17,10 +17,7 @@ class Decided(VoiceoverScene):
         self.conclusion()
 
     def card(self):
-        card = chapter_card(9, r"The \emph{Federalist} decided", r"Twelve papers, \ one author", lit=(1964,), part=PART)
-        with self.voiceover("Chapter nine. The Federalist decided."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(9, r"The \emph{Federalist} decided", r"Twelve papers, \ one author", lit=(1964,), part=PART, said="Chapter nine. The Federalist decided.")
 
     def setup_check(self):
         d = load("nbvslr")

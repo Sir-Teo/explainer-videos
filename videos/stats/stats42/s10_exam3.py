@@ -7,7 +7,7 @@ from videos.stats.stats42.common import *  # noqa: F403
 LTOP = 1.45
 
 
-class ExamNonparametric(ExamMixin, VoiceoverScene):
+class ExamNonparametric(ExamMixin, StatsScene):
     def construct(self):
         self.card()
         self.p7()
@@ -15,10 +15,7 @@ class ExamNonparametric(ExamMixin, VoiceoverScene):
         self.p9()
 
     def card(self):
-        card = chapter_card(9, r"Exam III: \ smoothing, \ robustness, \ sparsity", r"Problems 7--9", part=PART)
-        with self.voiceover("Chapter nine. Three problems from the middle of the master's: smoothing, robustness and sparsity."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(9, r"Exam III: \ smoothing, \ robustness, \ sparsity", r"Problems 7--9", part=PART, said="Chapter nine. Three problems from the middle of the master's: smoothing, robustness and sparsity.")
 
     # ------------------------------------------------------------------------------------------ Problem 7
     def p7(self):

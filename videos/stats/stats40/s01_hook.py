@@ -31,13 +31,13 @@ def swimmers(d, grp, center, width=5.4, height=5.0, color=None):
     return out, axis
 
 
-class Hook(VoiceoverScene):
+class Hook(StatsScene):
     def construct(self):
         self.story()
         self.lanes()
         self.problem()
         self.question()
-        self.objectives()
+        self.title(PART)
 
     def story(self):
         tl = timeline(lit=(1963,)).to_edge(UP, buff=0.35)
@@ -131,28 +131,4 @@ class Hook(VoiceoverScene):
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
                 self.play(FadeIn(rows[k], shift=RIGHT * 0.2))
-        self.clear_scene()
-
-    def objectives(self):
-        head = VGroup(label(r"Part 40", font_size=34, color=GREY_B), label(r"Time to Event", font_size=56)).arrange(DOWN, buff=0.25)
-        obj = objectives_card([
-            r"lifetimes: \ survival, \ hazard, \ cumulative hazard; \ censoring and truncation",
-            r"Kaplan--Meier, \ Greenwood, \ Nelson--Aalen; \ counting processes and martingales",
-            r"the log-rank test; \ Cox's partial likelihood, \ and checking it",
-            r"what hazard ratios mean; \ immortal time; \ parametric and AFT models",
-            r"competing risks; \ frailty; \ prediction, \ and conformal bounds",
-        ], color=TAUC, font_size=26)
-        prereq = note(r"prerequisites: \ Parts 22 and 24").to_corner(DL, buff=0.3)
-        built = note(r"built: \ \texttt{statkit.survival}; \ the KM staircase; \ data: \ Gehan, \ PBC, \ Stanford, \ MGUS").to_corner(DR, buff=0.3)
-        with self.voiceover(
-            "<bookmark mark='a'/> Part forty: time to event. <bookmark mark='b'/> We'll define survival and the hazard; "
-            "build the Kaplan-Meier curve and its intervals, and the counting process theory beneath them; derive the "
-            "log-rank test and Cox's partial likelihood, and check them; ask what hazard ratios mean and meet the trap of "
-            "immortal time; fit parametric models; handle competing risks and frailty; and end with prediction."
-        ) as vo:
-            vo.wait_until("a")
-            self.play(FadeIn(head, shift=UP * 0.2))
-            vo.wait_until("b")
-            self.play(FadeOut(head), FadeIn(obj, shift=UP * 0.2), FadeIn(prereq), FadeIn(built))
-        self.wait(1.0)
         self.clear_scene()

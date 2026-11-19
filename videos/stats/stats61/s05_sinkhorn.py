@@ -5,7 +5,7 @@ import numpy as np
 from videos.stats.stats61.common import *  # noqa: F403
 
 
-class Sinkhorn(LectureMixin, VoiceoverScene):
+class Sinkhorn(LectureMixin, StatsScene):
     def construct(self):
         self.card_voiceover("Chapter four. Entropic transport and Sinkhorn's algorithm: blur the plan, and everything gets easier.", 4,
                             r"Entropic transport", r"Sinkhorn's algorithm", lit=(2013,))

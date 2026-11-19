@@ -5,7 +5,7 @@ import numpy as np
 from videos.stats.stats45.common import *  # noqa: F403
 
 
-class ExpFamilies(VoiceoverScene):
+class ExpFamilies(StatsScene):
     def construct(self):
         self.card()
         self.definition()
@@ -16,10 +16,7 @@ class ExpFamilies(VoiceoverScene):
         self.pkd()
 
     def card(self):
-        card = chapter_card(4, r"Exponential families as convex duality", r"One convex function holds the whole model", part=PART)
-        with self.voiceover("Chapter four. Exponential families as convex duality: one convex function holds the whole model."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(4, r"Exponential families as convex duality", r"One convex function holds the whole model", part=PART, said="Chapter four. Exponential families as convex duality: one convex function holds the whole model.")
 
     def definition(self):
         rows = [

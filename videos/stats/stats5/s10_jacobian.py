@@ -5,7 +5,7 @@ import numpy as np
 from videos.stats.stats5.common import *  # noqa: F403
 
 
-class Jacobian(VoiceoverScene):
+class Jacobian(StatsScene):
     def construct(self):
         self.card()
         self.rule()
@@ -14,10 +14,7 @@ class Jacobian(VoiceoverScene):
         self.polar()
 
     def card(self):
-        card = chapter_card(9, r"Change of variables", r"Densities in many dimensions", lit=(), part=PART)
-        with self.voiceover("Chapter nine. Change of variables in many dimensions."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(9, r"Change of variables", r"Densities in many dimensions", lit=(), part=PART, said="Chapter nine. Change of variables in many dimensions.")
 
     def rule(self):
         sq = Square(side_length=1.6, stroke_color=SIM, stroke_width=2.5, fill_color=SIM, fill_opacity=0.2).move_to([-4.2, -0.2, 0])

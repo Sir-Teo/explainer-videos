@@ -5,7 +5,7 @@ import numpy as np
 from videos.stats.stats52.common import *  # noqa: F403
 
 
-class LowRank(VoiceoverScene):
+class LowRank(StatsScene):
     def construct(self):
         self.card()
         self.problem()
@@ -15,10 +15,7 @@ class LowRank(VoiceoverScene):
         self.noisy()
 
     def card(self):
-        card = chapter_card(4, r"Low-rank recovery and matrix completion", r"Filling in a table from a few of its entries", lit=(2009,), part=PART)
-        with self.voiceover("Chapter four. Low-rank recovery and matrix completion: filling in a table from a few of its entries."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(4, r"Low-rank recovery and matrix completion", r"Filling in a table from a few of its entries", lit=(2009,), part=PART, said="Chapter four. Low-rank recovery and matrix completion: filling in a table from a few of its entries.")
 
     def problem(self):
         rows = [

@@ -3,7 +3,7 @@ from __future__ import annotations
 from videos.stats.stats36.common import *  # noqa: F403
 
 
-class IPW(VoiceoverScene):
+class IPW(StatsScene):
     def construct(self):
         self.card()
         self.idea()
@@ -14,10 +14,7 @@ class IPW(VoiceoverScene):
         self.board()
 
     def card(self):
-        card = chapter_card(8, r"Weighting", r"Rebuild the population the coin would have made", lit=(1952, 1983), part=PART)
-        with self.voiceover("Chapter eight. Inverse probability weighting."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(8, r"Weighting", r"Rebuild the population the coin would have made", lit=(1952, 1983), part=PART, said="Chapter eight. Inverse probability weighting.")
 
     def idea(self):
         rows = fit_rows(VGroup(

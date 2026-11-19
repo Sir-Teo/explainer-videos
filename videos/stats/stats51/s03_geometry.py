@@ -5,7 +5,7 @@ import numpy as np
 from videos.stats.stats51.common import *  # noqa: F403
 
 
-class Geometry(VoiceoverScene):
+class Geometry(StatsScene):
     def construct(self):
         self.card()
         self.shell()
@@ -15,10 +15,7 @@ class Geometry(VoiceoverScene):
         self.chart()
 
     def card(self):
-        card = chapter_card(2, r"High-dimensional geometry", r"Thin shells, \ right angles, \ and random projections", lit=(1984,), part=PART)
-        with self.voiceover("Chapter two. High-dimensional geometry: thin shells, right angles, and random projections."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(2, r"High-dimensional geometry", r"Thin shells, \ right angles, \ and random projections", lit=(1984,), part=PART, said="Chapter two. High-dimensional geometry: thin shells, right angles, and random projections.")
 
     def shell(self):
         rows = [

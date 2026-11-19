@@ -5,7 +5,7 @@ import numpy as np
 from videos.stats.stats34.common import *  # noqa: F403
 
 
-class Boosting(VoiceoverScene):
+class Boosting(StatsScene):
     def construct(self):
         self.card()
         self.adaboost()
@@ -19,10 +19,7 @@ class Boosting(VoiceoverScene):
         self.modern()
 
     def card(self):
-        card = chapter_card(3, r"Boosting", r"Stagewise additive modelling", lit=(2000,), part=PART)
-        with self.voiceover("Chapter three. Boosting."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(3, r"Boosting", r"Stagewise additive modelling", lit=(2000,), part=PART, said="Chapter three. Boosting.")
 
     def adaboost(self):
         rows = fit_rows(VGroup(

@@ -5,7 +5,7 @@ import numpy as np
 from videos.stats.stats39.common import *  # noqa: F403
 
 
-class SpaceTime(VoiceoverScene):
+class SpaceTime(StatsScene):
     def construct(self):
         self.card()
         self.separable()
@@ -16,10 +16,7 @@ class SpaceTime(VoiceoverScene):
         self.practice()
 
     def card(self):
-        card = chapter_card(12, r"Space and time", r"Fields that change", lit=(2002,), part=PART)
-        with self.voiceover("Chapter twelve. Space and time."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(12, r"Space and time", r"Fields that change", lit=(2002,), part=PART, said="Chapter twelve. Space and time.")
 
     def separable(self):
         rows = [

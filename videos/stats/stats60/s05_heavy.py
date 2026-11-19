@@ -5,7 +5,7 @@ import numpy as np
 from videos.stats.stats60.common import *  # noqa: F403
 
 
-class HeavyTails(LectureMixin, VoiceoverScene):
+class HeavyTails(LectureMixin, StatsScene):
     def construct(self):
         self.card_voiceover("Chapter four. Heavy tails in high dimensions: median-of-means tournaments.", 4,
                             r"Heavy tails in high dimensions", r"Sub-Gaussian with two moments", lit=(2019,))

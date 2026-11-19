@@ -9,7 +9,7 @@ PNAME = {"uniform": r"uniform on $\tau$", "halfcauchy": r"half-Cauchy(25)", "ig1
          "ig001": r"inv-gamma(.001, .001)"}
 
 
-class Priors(VoiceoverScene):
+class Priors(StatsScene):
     def construct(self):
         self.card()
         self.invariance()
@@ -21,10 +21,7 @@ class Priors(VoiceoverScene):
         self.improper()
 
     def card(self):
-        card = chapter_card(3, r"Priors", r"Invariance, \ reference, \ and weak information", lit=(1946, 2006), part=PART)
-        with self.voiceover("Chapter three. Priors."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(3, r"Priors", r"Invariance, \ reference, \ and weak information", lit=(1946, 2006), part=PART, said="Chapter three. Priors.")
 
     def invariance(self):
         rows = [

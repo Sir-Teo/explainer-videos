@@ -5,7 +5,7 @@ import numpy as np
 from videos.stats.stats45.common import *  # noqa: F403
 
 
-class NormalMeans(VoiceoverScene):
+class NormalMeans(StatsScene):
     def construct(self):
         self.card()
         self.baranchik()
@@ -16,10 +16,7 @@ class NormalMeans(VoiceoverScene):
         self.lesson()
 
     def card(self):
-        card = chapter_card(12, r"Minimaxity and admissibility for normal means", r"Better than $X$, \ and beyond improvement", lit=(1971,), part=PART)
-        with self.voiceover("Chapter twelve. Minimaxity and admissibility in the normal-means problem: better than X, and beyond improvement."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(12, r"Minimaxity and admissibility for normal means", r"Better than $X$, \ and beyond improvement", lit=(1971,), part=PART, said="Chapter twelve. Minimaxity and admissibility in the normal-means problem: better than X, and beyond improvement.")
 
     def baranchik(self):
         rows = [

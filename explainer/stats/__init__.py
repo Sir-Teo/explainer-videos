@@ -436,3 +436,4 @@ def historical_tag(source: str, corner=DL) -> Tex:
 
 from explainer.stats.viz import *  # noqa: E402,F401,F403
 from explainer.stats.board import Row, coverage_board, load_all, save_rows, verdict  # noqa: E402,F401
+from explainer.stats.watch import StatsScene, degree_strip, lively, predict_card  # noqa: E402,F401

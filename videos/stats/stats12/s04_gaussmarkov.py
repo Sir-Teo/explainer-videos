@@ -5,7 +5,7 @@ import numpy as np
 from videos.stats.stats12.common import *  # noqa: F403
 
 
-class GaussMarkov(VoiceoverScene):
+class GaussMarkov(StatsScene):
     def construct(self):
         self.card()
         self.statement()
@@ -15,10 +15,7 @@ class GaussMarkov(VoiceoverScene):
         self.limits()
 
     def card(self):
-        card = chapter_card(3, r"Gauss--Markov", r"Why least squares is the best linear unbiased estimator", lit=(1821,), part=PART)
-        with self.voiceover("Chapter three. The Gauss–Markov theorem."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(3, r"Gauss--Markov", r"Why least squares is the best linear unbiased estimator", lit=(1821,), part=PART, said="Chapter three. The Gauss–Markov theorem.")
 
     def statement(self):
         tc = theorem_card(r"Gauss--Markov", r"For fixed full-column-rank $X$, if $y = X\beta + \varepsilon$ with $E\varepsilon = 0$ and $\mathrm{Var}\,\varepsilon = \sigma^2 I$ \ "

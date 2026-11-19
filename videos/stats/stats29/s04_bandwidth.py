@@ -5,7 +5,7 @@ import numpy as np
 from videos.stats.stats29.common import *  # noqa: F403
 
 
-class Bandwidth(VoiceoverScene):
+class Bandwidth(StatsScene):
     def construct(self):
         self.card()
         self.reference()
@@ -17,10 +17,7 @@ class Bandwidth(VoiceoverScene):
         self.advice()
 
     def card(self):
-        card = chapter_card(3, r"Choosing the bandwidth", r"From the data, \ without knowing $f''$", lit=(1991,), part=PART)
-        with self.voiceover("Chapter three. Choosing the bandwidth."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(3, r"Choosing the bandwidth", r"From the data, \ without knowing $f''$", lit=(1991,), part=PART, said="Chapter three. Choosing the bandwidth.")
 
     def reference(self):
         rows = [

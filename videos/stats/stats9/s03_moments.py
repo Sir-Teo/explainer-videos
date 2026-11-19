@@ -5,7 +5,7 @@ import numpy as np
 from videos.stats.stats9.common import *  # noqa: F403
 
 
-class Moments(VoiceoverScene):
+class Moments(StatsScene):
     def construct(self):
         self.card()
         self.pearson()
@@ -16,10 +16,7 @@ class Moments(VoiceoverScene):
         self.delta()
 
     def card(self):
-        card = chapter_card(2, r"The method of moments", r"Match the model's averages to the sample's", lit=(1894,), part=PART)
-        with self.voiceover("Chapter two. The method of moments."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(2, r"The method of moments", r"Match the model's averages to the sample's", lit=(1894,), part=PART, said="Chapter two. The method of moments.")
 
     def pearson(self):
         hc = history_card(1894, r"Karl Pearson, \ ``Contributions to the mathematical theory of evolution''",

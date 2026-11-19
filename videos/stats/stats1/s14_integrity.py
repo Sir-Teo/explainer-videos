@@ -8,7 +8,7 @@ DISEASE, WOUNDS, OTHER = "#7EB6E8", "#F26D6D", "#8A8F98"
 ADV, RET = "#E3B98A", "#9AA3AE"
 
 
-class Integrity(VoiceoverScene):
+class Integrity(StatsScene):
     def construct(self):
         self.card()
         self.playfair()
@@ -18,11 +18,7 @@ class Integrity(VoiceoverScene):
         self.lie_factor()
 
     def card(self):
-        card = chapter_card(13, r"Honest pictures", r"A graph is an argument. Make it a fair one.",
-                            lit=(1786, 1858, 1869), part=PART)
-        with self.voiceover("Chapter thirteen. Honest pictures."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(13, r"Honest pictures", r"A graph is an argument. Make it a fair one.", lit=(1786, 1858, 1869), part=PART, said="Chapter thirteen. Honest pictures.")
 
     def playfair(self):
         yr = np.array(museum.PLAYFAIR_YEAR)

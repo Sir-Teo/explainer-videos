@@ -5,7 +5,7 @@ import numpy as np
 from videos.stats.stats46.common import *  # noqa: F403
 
 
-class NPLemma(VoiceoverScene):
+class NPLemma(StatsScene):
     def construct(self):
         self.card()
         self.lemma()
@@ -16,10 +16,7 @@ class NPLemma(VoiceoverScene):
         self.randomization()
 
     def card(self):
-        card = chapter_card(1, r"The Neyman--Pearson lemma in general", r"The most powerful test, \ and why it exists", lit=(1933,), part=PART)
-        with self.voiceover("Chapter one. The Neyman–Pearson lemma in general: the most powerful test, and why it exists."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(1, r"The Neyman--Pearson lemma in general", r"The most powerful test, \ and why it exists", lit=(1933,), part=PART, said="Chapter one. The Neyman–Pearson lemma in general: the most powerful test, and why it exists.")
 
     def lemma(self):
         rows = [

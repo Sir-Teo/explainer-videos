@@ -5,7 +5,7 @@ import numpy as np
 from videos.stats.stats26.common import *  # noqa: F403
 
 
-class Lindley(VoiceoverScene):
+class Lindley(StatsScene):
     def construct(self):
         self.card()
         self.pear()
@@ -16,10 +16,7 @@ class Lindley(VoiceoverScene):
         self.lessons()
 
     def card(self):
-        card = chapter_card(7, r"Lindley's paradox", r"Significant, \ and evidence for the null", lit=(1957,), part=PART)
-        with self.voiceover("Chapter seven. Lindley's paradox."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(7, r"Lindley's paradox", r"Significant, \ and evidence for the null", lit=(1957,), part=PART, said="Chapter seven. Lindley's paradox.")
 
     def pear(self):
         d = load("lindley")

@@ -6,7 +6,7 @@ from scipy import stats
 from videos.stats.stats27.common import *  # noqa: F403
 
 
-class Funnel(VoiceoverScene):
+class Funnel(StatsScene):
     def construct(self):
         self.card()
         self.shape()
@@ -18,10 +18,7 @@ class Funnel(VoiceoverScene):
         self.lessons()
 
     def card(self):
-        card = chapter_card(7, r"Neal's funnel", r"The eight schools' hidden geometry", lit=(2003,), part=PART)
-        with self.voiceover("Chapter seven. Neal's funnel and the eight schools."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(7, r"Neal's funnel", r"The eight schools' hidden geometry", lit=(2003,), part=PART, said="Chapter seven. Neal's funnel and the eight schools.")
 
     def shape(self):
         rows = [

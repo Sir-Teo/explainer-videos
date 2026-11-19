@@ -9,7 +9,7 @@ def normal_pdf(x, m, s):
     return np.exp(-0.5 * ((x - m) / s) ** 2) / (s * np.sqrt(2 * np.pi))
 
 
-class CovariateShift(LectureMixin, VoiceoverScene):
+class CovariateShift(LectureMixin, StatsScene):
     def construct(self):
         self.card_voiceover("Chapter five. Covariate shift: when the people change, but the relationship does not.", 5,
                             r"Covariate shift", r"Reweight the sample to the target", lit=(2000,))

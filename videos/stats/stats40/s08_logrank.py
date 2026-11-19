@@ -5,7 +5,7 @@ import numpy as np
 from videos.stats.stats40.common import *  # noqa: F403
 
 
-class LogRank(VoiceoverScene):
+class LogRank(StatsScene):
     def construct(self):
         self.card()
         self.derive()
@@ -15,10 +15,7 @@ class LogRank(VoiceoverScene):
         self.limits()
 
     def card(self):
-        card = chapter_card(7, r"The log-rank test", r"Observed minus expected, \ at every event", lit=(1965, 1966), part=PART)
-        with self.voiceover("Chapter seven. The log-rank test."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(7, r"The log-rank test", r"Observed minus expected, \ at every event", lit=(1965, 1966), part=PART, said="Chapter seven. The log-rank test.")
 
     def derive(self):
         rows = [

@@ -6,7 +6,7 @@ from explainer.stats.board import coverage_board, load_all
 from videos.stats.stats23.common import *  # noqa: F403
 
 
-class EIV(VoiceoverScene):
+class EIV(StatsScene):
     def construct(self):
         self.card()
         self.attenuation()
@@ -19,10 +19,7 @@ class EIV(VoiceoverScene):
         self.fixes()
 
     def card(self):
-        card = chapter_card(7, r"Errors in variables", r"A noisy $x$ flattens the slope", lit=(1929,), part=PART)
-        with self.voiceover("Chapter seven. Errors in variables."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(7, r"Errors in variables", r"A noisy $x$ flattens the slope", lit=(1929,), part=PART, said="Chapter seven. Errors in variables.")
 
     def attenuation(self):
         rows = [

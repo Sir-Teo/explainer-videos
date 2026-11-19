@@ -5,7 +5,7 @@ import numpy as np
 from videos.stats.stats44.common import *  # noqa: F403
 
 
-class OptionalStopping(VoiceoverScene):
+class OptionalStopping(StatsScene):
     def construct(self):
         self.card()
         self.theorem()
@@ -15,10 +15,7 @@ class OptionalStopping(VoiceoverScene):
         self.wald()
 
     def card(self):
-        card = chapter_card(3, r"Optional stopping", r"Can you beat a fair game by quitting at the right time?", part=PART)
-        with self.voiceover("Chapter three. Optional stopping: can you beat a fair game by choosing when to quit?"):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(3, r"Optional stopping", r"Can you beat a fair game by quitting at the right time?", part=PART, said="Chapter three. Optional stopping: can you beat a fair game by choosing when to quit?")
 
     def theorem(self):
         rows = [

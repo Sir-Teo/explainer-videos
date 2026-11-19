@@ -5,7 +5,7 @@ import numpy as np
 from videos.stats.stats4.common import *  # noqa: F403
 
 
-class Quad(VoiceoverScene):
+class Quad(StatsScene):
     def construct(self):
         self.card()
         self.theorem()
@@ -16,11 +16,7 @@ class Quad(VoiceoverScene):
         self.student()
 
     def card(self):
-        card = chapter_card(11, r"Quadratic forms in normal vectors", r"When is $\mathbf z^\top A \mathbf z$ chi-squared?",
-                            lit=(1876,), part=PART)
-        with self.voiceover("Chapter eleven. Quadratic forms in normal vectors."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(11, r"Quadratic forms in normal vectors", r"When is $\mathbf z^\top A \mathbf z$ chi-squared?", lit=(1876,), part=PART, said="Chapter eleven. Quadratic forms in normal vectors.")
 
     def theorem(self):
         rows = [

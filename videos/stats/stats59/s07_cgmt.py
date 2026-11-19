@@ -3,7 +3,7 @@ from __future__ import annotations
 from videos.stats.stats59.common import *  # noqa: F403
 
 
-class CGMT(LectureMixin, VoiceoverScene):
+class CGMT(LectureMixin, StatsScene):
     def construct(self):
         self.card_voiceover("Chapter six. Gordon's comparison inequality: replacing a matrix by two vectors.", 6,
                             r"Gordon's comparison", r"A matrix, \ replaced by two vectors", lit=(2015,))

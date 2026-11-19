@@ -5,7 +5,7 @@ import numpy as np
 from videos.stats.stats29.common import *  # noqa: F403
 
 
-class Histogram(VoiceoverScene):
+class Histogram(StatsScene):
     def construct(self):
         self.card()
         self.upgrade()
@@ -16,10 +16,7 @@ class Histogram(VoiceoverScene):
         self.rate()
 
     def card(self):
-        card = chapter_card(1, r"Histograms as estimators", r"Bias, \ variance, \ and the cube-root bin", lit=(1926,), part=PART)
-        with self.voiceover("Chapter one. The histogram, as an estimator."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(1, r"Histograms as estimators", r"Bias, \ variance, \ and the cube-root bin", lit=(1926,), part=PART, said="Chapter one. The histogram, as an estimator.")
 
     def upgrade(self):
         card = upgrade_card(1, r"bin width trades variance against bias; \ Scott's rule is $3.49\, s\, n^{-1/3}$",

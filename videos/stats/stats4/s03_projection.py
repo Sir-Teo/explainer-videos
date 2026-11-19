@@ -5,7 +5,7 @@ import numpy as np
 from videos.stats.stats4.common import *  # noqa: F403
 
 
-class Projection(VoiceoverScene):
+class Projection(StatsScene):
     def construct(self):
         self.card()
         self.derive()
@@ -16,10 +16,7 @@ class Projection(VoiceoverScene):
         self.leverage()
 
     def card(self):
-        card = chapter_card(2, r"Projections", r"The closest point in a subspace", lit=(1805,), part=PART)
-        with self.voiceover("Chapter two. Projections."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(2, r"Projections", r"The closest point in a subspace", lit=(1805,), part=PART, said="Chapter two. Projections.")
 
     def derive(self):
         rows = [

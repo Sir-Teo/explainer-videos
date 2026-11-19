@@ -3,7 +3,7 @@ from __future__ import annotations
 from videos.stats.stats36.common import *  # noqa: F403
 
 
-class DML(VoiceoverScene):
+class DML(StatsScene):
     def construct(self):
         self.card()
         self.problem()
@@ -15,10 +15,7 @@ class DML(VoiceoverScene):
         self.plr()
 
     def card(self):
-        card = chapter_card(10, r"Double machine learning", r"Flexible nuisances, \ honest intervals", lit=(2018,), part=PART)
-        with self.voiceover("Chapter ten. Double machine learning."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(10, r"Double machine learning", r"Flexible nuisances, \ honest intervals", lit=(2018,), part=PART, said="Chapter ten. Double machine learning.")
 
     def problem(self):
         rows = fit_rows(VGroup(

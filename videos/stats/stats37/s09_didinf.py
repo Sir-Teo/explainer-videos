@@ -5,7 +5,7 @@ import numpy as np
 from videos.stats.stats37.common import *  # noqa: F403
 
 
-class DiDInference(VoiceoverScene):
+class DiDInference(StatsScene):
     def construct(self):
         self.card()
         self.persistence()
@@ -15,10 +15,7 @@ class DiDInference(VoiceoverScene):
         self.board()
 
     def card(self):
-        card = chapter_card(8, r"DiD inference", r"How much should we trust differences-in-differences estimates?", lit=(2004,), part=PART)
-        with self.voiceover("Chapter eight. Inference for differences-in-differences."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(8, r"DiD inference", r"How much should we trust differences-in-differences estimates?", lit=(2004,), part=PART, said="Chapter eight. Inference for differences-in-differences.")
 
     def persistence(self):
         d = load("didinf")

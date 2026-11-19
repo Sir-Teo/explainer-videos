@@ -5,7 +5,7 @@ import numpy as np
 from videos.stats.stats60.common import *  # noqa: F403
 
 
-class Detect(LectureMixin, VoiceoverScene):
+class Detect(LectureMixin, StatsScene):
     def construct(self):
         self.card_voiceover("Chapter ten. Detecting shift: has the world changed, and does it matter?", 10,
                             r"Detecting shift", r"Two-sample tests in many dimensions", lit=(2012,))

@@ -36,7 +36,7 @@ def face_mob(pts, paint):
     return Polygon(*pts, stroke_color=WHITE, stroke_width=2, fill_color=col, fill_opacity=0.9)
 
 
-class Independence(VoiceoverScene):
+class Independence(StatsScene):
     def construct(self):
         self.card()
         self.definition()
@@ -45,11 +45,7 @@ class Independence(VoiceoverScene):
         self.lesson()
 
     def card(self):
-        card = chapter_card(9, r"Independence", r"When does knowing one thing tell you nothing about another?",
-                            lit=(1933,), part=PART)
-        with self.voiceover("Chapter nine. Independence."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(9, r"Independence", r"When does knowing one thing tell you nothing about another?", lit=(1933,), part=PART, said="Chapter nine. Independence.")
 
     def definition(self):
         dfn = definition_card(r"Independent events", r"$P(A \cap B) = P(A)\,P(B)$; \ equivalently, \ when "

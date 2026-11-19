@@ -3,7 +3,7 @@ from __future__ import annotations
 from videos.stats.stats65.common import *  # noqa: F403
 
 
-class Writing(LectureMixin, VoiceoverScene):
+class Writing(LectureMixin, StatsScene):
     def construct(self):
         self.card_voiceover("Chapter seven. Writing it up, and what referees will check.", 7, r"Writing and review",
                             r"A result others can check")

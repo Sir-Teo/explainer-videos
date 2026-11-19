@@ -351,6 +351,7 @@ class ExamMixin:
     def pose_voiceover(self, text, card, pause: float = 6.0):
         with self.voiceover(text):
             self.play(FadeIn(card, shift=UP * 0.2))
+        self.mark(f"countdown:{int(round(pause))}")  # the score clicks the exam clock down
         self.play(card.sweep(pause))
         self.play(card.shrink())
 
@@ -461,10 +462,8 @@ def list_voiceover(self, text, lines, width=12.4, buff=0.5, pos=(0, 0, 0), font_
 
 
 def card_voiceover(self, text, k, title, subtitle, lit=()):
-    card = chapter_card(k, title, subtitle, lit=lit, part=PART)
-    with self.voiceover(text):
-        self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-    self.play(FadeOut(card))
+    """The chapter card, animated (``StatsScene.chapter``), speaking ``text``."""
+    self.chapter(k, title, subtitle, lit=lit, part=PART, said=text)
 
 
 def sci(v: float, nd: int = 1) -> str:

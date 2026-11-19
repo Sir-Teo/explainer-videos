@@ -5,7 +5,7 @@ import numpy as np
 from videos.stats.stats45.common import *  # noqa: F403
 
 
-class RiskSets(VoiceoverScene):
+class RiskSets(StatsScene):
     def construct(self):
         self.card()
         self.problem()
@@ -15,10 +15,7 @@ class RiskSets(VoiceoverScene):
         self.theorem()
 
     def card(self):
-        card = chapter_card(2, r"Risk sets", r"A whole decision problem in one picture", part=PART)
-        with self.voiceover("Chapter two. Risk sets: a whole decision problem in one picture."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(2, r"Risk sets", r"A whole decision problem in one picture", part=PART, said="Chapter two. Risk sets: a whole decision problem in one picture.")
 
     def problem(self):
         d = load("decision")

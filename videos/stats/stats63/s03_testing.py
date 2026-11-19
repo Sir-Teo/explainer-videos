@@ -6,7 +6,7 @@ from scipy import stats as st
 from videos.stats.stats63.common import *  # noqa: F403
 
 
-class Testing(LectureMixin, VoiceoverScene):
+class Testing(LectureMixin, StatsScene):
     def construct(self):
         self.card_voiceover("Chapter two. Differential privacy is a statement about hypothesis tests.", 2,
                             r"DP as hypothesis testing", r"The attacker's power", lit=(2022,))

@@ -7,7 +7,7 @@ from videos.stats.stats42.common import *  # noqa: F403
 LTOP = 1.45
 
 
-class ExamBayes(ExamMixin, VoiceoverScene):
+class ExamBayes(ExamMixin, StatsScene):
     def construct(self):
         self.card()
         self.p4()
@@ -15,10 +15,7 @@ class ExamBayes(ExamMixin, VoiceoverScene):
         self.p6()
 
     def card(self):
-        card = chapter_card(8, r"Exam II: \ Bayes and model choice", r"Problems 4--6", part=PART)
-        with self.voiceover("Chapter eight. Three problems on Bayesian models, their computation, and choosing between models."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(8, r"Exam II: \ Bayes and model choice", r"Problems 4--6", part=PART, said="Chapter eight. Three problems on Bayesian models, their computation, and choosing between models.")
 
     # ------------------------------------------------------------------------------------------ Problem 4
     def p4(self):

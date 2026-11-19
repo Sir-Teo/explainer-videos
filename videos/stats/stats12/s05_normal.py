@@ -6,7 +6,7 @@ from scipy import stats
 from videos.stats.stats12.common import *  # noqa: F403
 
 
-class NormalTheory(VoiceoverScene):
+class NormalTheory(StatsScene):
     def construct(self):
         self.card()
         self.distribution()
@@ -18,10 +18,7 @@ class NormalTheory(VoiceoverScene):
         self.r2_caveats()
 
     def card(self):
-        card = chapter_card(4, r"Normal theory", r"Standard errors, \ $t$, \ $F$ as Pythagoras", part=PART)
-        with self.voiceover("Chapter four. Normal theory."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(4, r"Normal theory", r"Standard errors, \ $t$, \ $F$ as Pythagoras", part=PART, said="Chapter four. Normal theory.")
 
     def distribution(self):
         rows = [

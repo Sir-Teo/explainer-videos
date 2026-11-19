@@ -3,7 +3,7 @@ from __future__ import annotations
 from videos.stats.stats23.common import *  # noqa: F403
 
 
-class Upgrade(VoiceoverScene):
+class Upgrade(StatsScene):
     def construct(self):
         self.card()
         self.upgrade()
@@ -12,10 +12,7 @@ class Upgrade(VoiceoverScene):
         self.map_()
 
     def card(self):
-        card = chapter_card(1, r"Upgrade: \ what Part 12 assumed", r"Least squares without the fine print", part=PART)
-        with self.voiceover("Chapter one. An upgrade of Part 12."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(1, r"Upgrade: \ what Part 12 assumed", r"Least squares without the fine print", part=PART, said="Chapter one. An upgrade of Part 12.")
 
     def upgrade(self):
         u = upgrade_card(12, r"$\hat\beta = (X^\top X)^{-1}X^\top y$ is BLUE, \ with $\mathrm{Var}\,\hat\beta = \sigma^2 (X^\top X)^{-1}$",

@@ -6,7 +6,7 @@ from scipy import stats
 from videos.stats.stats10.common import *  # noqa: F403
 
 
-class Neyman(VoiceoverScene):
+class Neyman(StatsScene):
     def construct(self):
         self.card()
         self.history()
@@ -16,10 +16,7 @@ class Neyman(VoiceoverScene):
         self.philosophies()
 
     def card(self):
-        card = chapter_card(4, r"Two kinds of error", r"Neyman and Pearson's theory of tests", lit=(1933,), part=PART)
-        with self.voiceover("Chapter four. Two kinds of error."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(4, r"Two kinds of error", r"Neyman and Pearson's theory of tests", lit=(1933,), part=PART, said="Chapter four. Two kinds of error.")
 
     def history(self):
         h1 = history_card(1928, r"Jerzy Neyman \& Egon Pearson", r"``On the use and interpretation of certain test criteria'': \ a test "

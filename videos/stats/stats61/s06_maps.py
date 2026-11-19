@@ -5,7 +5,7 @@ import numpy as np
 from videos.stats.stats61.common import *  # noqa: F403
 
 
-class Maps(LectureMixin, VoiceoverScene):
+class Maps(LectureMixin, StatsScene):
     def construct(self):
         self.card_voiceover("Chapter five. Estimating transport maps: not just how far, but where each point should go.", 5,
                             r"Estimating transport maps", r"From samples to a function", lit=(2021,))

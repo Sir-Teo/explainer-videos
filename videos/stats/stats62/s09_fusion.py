@@ -5,7 +5,7 @@ import numpy as np
 from videos.stats.stats62.common import *  # noqa: F403
 
 
-class Fusion(LectureMixin, VoiceoverScene):
+class Fusion(LectureMixin, StatsScene):
     def construct(self):
         self.card_voiceover("Chapter eight. Data fusion and transportability: carrying an effect to a new population.", 8,
                             r"Transportability", r"From the trial to the target", lit=(2016,))

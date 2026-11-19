@@ -5,7 +5,7 @@ import numpy as np
 from videos.stats.stats27.common import *  # noqa: F403
 
 
-class Hook(VoiceoverScene):
+class Hook(StatsScene):
     def construct(self):
         self.story()
         self.disks()
@@ -13,7 +13,7 @@ class Hook(VoiceoverScene):
         self.ergodic()
         self.banana()
         self.problem()
-        self.objectives()
+        self.title(PART)
 
     def story(self):
         tl = timeline(lit=(1953,)).to_edge(UP, buff=0.35)
@@ -172,31 +172,6 @@ class Hook(VoiceoverScene):
                 self.play(FadeIn(rows[k], shift=RIGHT * 0.2))
         self.clear_scene()
 
-    def objectives(self):
-        head = VGroup(label(r"Part 27", font_size=34, color=GREY_B), label(r"Bayesian Computation", font_size=60)).arrange(DOWN, buff=0.25)
-        obj = objectives_card([
-            r"importance sampling and PSIS; \ Metropolis--Hastings; \ Gibbs",
-            r"diagnostics: \ $\hat R$ and effective sample size",
-            r"Hamiltonian Monte Carlo, \ NUTS, \ and Neal's funnel",
-            r"a probabilistic programming language, \ built and checked",
-            r"SMC, \ variational inference, \ Laplace, \ ABC, \ exact sampling",
-        ], color=SAMPLER, font_size=26)
-        prereq = note(r"prerequisites: \ Parts 7 and 26").to_corner(DL, buff=0.3)
-        built = note(r"built: \ \texttt{statkit.ppl}; \ the puck on the surface").to_corner(DR, buff=0.3)
-        with self.voiceover(
-            "<bookmark mark='a'/> Part twenty-seven: Bayesian computation. <bookmark mark='b'/> We'll weight samples by "
-            "importance and learn when the weights lie; build Metropolis–Hastings and Gibbs samplers; diagnose chains; slide "
-            "a puck over the posterior with Hamiltonian Monte Carlo and its self-tuning descendant NUTS, and watch it fail "
-            "in Neal's funnel and be fixed; build a small probabilistic programming language and check it against exact "
-            "answers; and meet the alternatives: particle methods, variational inference, Laplace approximations, "
-            "likelihood-free inference, and sampling that is exactly right."
-        ) as vo:
-            vo.wait_until("a")
-            self.play(FadeIn(head, shift=UP * 0.2))
-            vo.wait_until("b")
-            self.play(FadeOut(head), FadeIn(obj, shift=UP * 0.2), FadeIn(prereq), FadeIn(built))
-        self.wait(1.0)
-        self.clear_scene()
 
     def ergodic(self):
         rows = [

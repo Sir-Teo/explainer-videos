@@ -5,7 +5,7 @@ import numpy as np
 from videos.stats.stats14.common import *  # noqa: F403
 
 
-class Scoring(VoiceoverScene):
+class Scoring(StatsScene):
     def construct(self):
         self.card()
         self.task()
@@ -17,10 +17,7 @@ class Scoring(VoiceoverScene):
         self.threshold()
 
     def card(self):
-        card = chapter_card(11, r"Scoring predictions", r"Ranking, \ calibration, \ and the Brier score", lit=(1950,), part=PART)
-        with self.voiceover("Chapter eleven. Scoring predictions."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(11, r"Scoring predictions", r"Ranking, \ calibration, \ and the Brier score", lit=(1950,), part=PART, said="Chapter eleven. Scoring predictions.")
 
     def task(self):
         d = load("scoring")

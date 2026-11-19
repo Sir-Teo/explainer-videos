@@ -5,7 +5,7 @@ import numpy as np
 from videos.stats.stats40.common import *  # noqa: F403
 
 
-class Counting(VoiceoverScene):
+class Counting(StatsScene):
     def construct(self):
         self.card()
         self.definitions()
@@ -15,10 +15,7 @@ class Counting(VoiceoverScene):
         self.payoff()
 
     def card(self):
-        card = chapter_card(6, r"Counting processes", r"Events minus their compensator", lit=(1978,), part=PART)
-        with self.voiceover("Chapter six. Counting processes."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(6, r"Counting processes", r"Events minus their compensator", lit=(1978,), part=PART, said="Chapter six. Counting processes.")
 
     def definitions(self):
         rows = [

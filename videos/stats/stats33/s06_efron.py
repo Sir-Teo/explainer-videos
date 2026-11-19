@@ -5,7 +5,7 @@ import numpy as np
 from videos.stats.stats33.common import *  # noqa: F403
 
 
-class Efron(VoiceoverScene):
+class Efron(StatsScene):
     def construct(self):
         self.card()
         self.two_groups()
@@ -19,10 +19,7 @@ class Efron(VoiceoverScene):
         self.lesson()
 
     def card(self):
-        card = chapter_card(5, r"Empirical Bayes", r"Efron's local false discovery rate", lit=(1995, 2001), part=PART)
-        with self.voiceover("Chapter five. Empirical Bayes."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(5, r"Empirical Bayes", r"Efron's local false discovery rate", lit=(1995, 2001), part=PART, said="Chapter five. Empirical Bayes.")
 
     def two_groups(self):
         rows = [

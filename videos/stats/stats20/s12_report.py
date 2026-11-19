@@ -5,7 +5,7 @@ import numpy as np
 from videos.stats.stats20.common import *  # noqa: F403
 
 
-class Report(VoiceoverScene):
+class Report(StatsScene):
     def construct(self):
         self.card()
         self.sentences()
@@ -14,10 +14,7 @@ class Report(VoiceoverScene):
         self.appendix()
 
     def card(self):
-        card = chapter_card(11, r"Communicating", r"One page, \ one honest sentence", part=PART)
-        with self.voiceover("Chapter eleven. Communicating the result."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(11, r"Communicating", r"One page, \ one honest sentence", part=PART, said="Chapter eleven. Communicating the result.")
 
     def sentences(self):
         d = load("report")

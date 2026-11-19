@@ -5,7 +5,7 @@ import numpy as np
 from videos.stats.stats33.common import *  # noqa: F403
 
 
-class PubBias(VoiceoverScene):
+class PubBias(StatsScene):
     def construct(self):
         self.card()
         self.drawer()
@@ -16,10 +16,7 @@ class PubBias(VoiceoverScene):
         self.selection()
 
     def card(self):
-        card = chapter_card(10, r"Publication bias", r"The literature is a filtered sample", lit=(1997,), part=PART)
-        with self.voiceover("Chapter ten. Publication bias."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(10, r"Publication bias", r"The literature is a filtered sample", lit=(1997,), part=PART, said="Chapter ten. Publication bias.")
 
     def drawer(self):
         rows = fit_rows(VGroup(

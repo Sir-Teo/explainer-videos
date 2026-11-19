@@ -15,7 +15,7 @@ def island_outline(scale, center):
     return Polygon(*pts, stroke_color=S.WORLD, stroke_width=2, fill_color="#14261C", fill_opacity=0.9)
 
 
-class TheWorld(VoiceoverScene):
+class TheWorld(StatsScene):
     def construct(self):
         self.card()
         self.island()
@@ -24,10 +24,7 @@ class TheWorld(VoiceoverScene):
         self.seeds()
 
     def card(self):
-        card = chapter_card(2, r"Building the World", r"A population whose truth we know", lit=(), part=PART)
-        with self.voiceover("Chapter two. Building the World."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(2, r"Building the World", r"A population whose truth we know", lit=(), part=PART, said="Chapter two. Building the World.")
 
     def island(self):
         d = load("world")

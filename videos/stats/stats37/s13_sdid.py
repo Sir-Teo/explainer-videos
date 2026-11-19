@@ -5,7 +5,7 @@ import numpy as np
 from videos.stats.stats37.common import *  # noqa: F403
 
 
-class SDID(VoiceoverScene):
+class SDID(StatsScene):
     def construct(self):
         self.card()
         self.two()
@@ -15,10 +15,7 @@ class SDID(VoiceoverScene):
         self.lesson()
 
     def card(self):
-        card = chapter_card(12, r"Synthetic difference-in-differences", r"Weights for units, \ and for years", lit=(2021,), part=PART)
-        with self.voiceover("Chapter twelve. Synthetic difference-in-differences."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(12, r"Synthetic difference-in-differences", r"Weights for units, \ and for years", lit=(2021,), part=PART, said="Chapter twelve. Synthetic difference-in-differences.")
 
     def two(self):
         rows = [[r"", r"units", r"periods", r"matches"],

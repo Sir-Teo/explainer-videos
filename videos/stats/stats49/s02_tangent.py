@@ -5,7 +5,7 @@ import numpy as np
 from videos.stats.stats49.common import *  # noqa: F403
 
 
-class Tangent(VoiceoverScene):
+class Tangent(StatsScene):
     def construct(self):
         self.card()
         self.submodels()
@@ -15,10 +15,7 @@ class Tangent(VoiceoverScene):
         self.independence()
 
     def card(self):
-        card = chapter_card(1, r"Models and tangent spaces", r"The directions in which a model can move", part=PART)
-        with self.voiceover("Chapter one. Models and tangent spaces: the directions in which a model can move."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(1, r"Models and tangent spaces", r"The directions in which a model can move", part=PART, said="Chapter one. Models and tangent spaces: the directions in which a model can move.")
 
     def submodels(self):
         rows = [

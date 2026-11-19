@@ -8,7 +8,7 @@ from videos.stats.stats7.common import *  # noqa: F403
 COLS = [S.EST, S.LIK, S.POST, S.PRIOR, S.ACCENT, S.ALT]
 
 
-class Special(VoiceoverScene):
+class Special(StatsScene):
     def construct(self):
         self.card()
         self.box_muller()
@@ -18,10 +18,7 @@ class Special(VoiceoverScene):
         self.cholesky()
 
     def card(self):
-        card = chapter_card(4, r"Special methods", r"Clever transformations, \ one distribution at a time", part=PART)
-        with self.voiceover("Chapter four. Special methods."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(4, r"Special methods", r"Clever transformations, \ one distribution at a time", part=PART, said="Chapter four. Special methods.")
 
     def box_muller(self):
         d = load("special")

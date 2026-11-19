@@ -6,7 +6,7 @@ from explainer.stats.board import coverage_board, load_all
 from videos.stats.stats27.common import *  # noqa: F403
 
 
-class ABC(VoiceoverScene):
+class ABC(StatsScene):
     def construct(self):
         self.card()
         self.idea()
@@ -17,10 +17,7 @@ class ABC(VoiceoverScene):
         self.sbc_board()
 
     def card(self):
-        card = chapter_card(12, r"Likelihood-free inference", r"When you can simulate but not evaluate", lit=(2002,), part=PART)
-        with self.voiceover("Chapter twelve. Likelihood-free inference."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(12, r"Likelihood-free inference", r"When you can simulate but not evaluate", lit=(2002,), part=PART, said="Chapter twelve. Likelihood-free inference.")
 
     def idea(self):
         rows = [

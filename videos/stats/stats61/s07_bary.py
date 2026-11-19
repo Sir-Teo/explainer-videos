@@ -5,7 +5,7 @@ import numpy as np
 from videos.stats.stats61.common import *  # noqa: F403
 
 
-class Barycenters(LectureMixin, VoiceoverScene):
+class Barycenters(LectureMixin, StatsScene):
     def construct(self):
         self.card_voiceover("Chapter six. Barycenters: averaging distributions by moving them, not by mixing them.", 6,
                             r"Barycenters", r"The Fr\'echet mean of laws", lit=(2011,))

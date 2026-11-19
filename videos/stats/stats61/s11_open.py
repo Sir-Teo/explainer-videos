@@ -3,7 +3,7 @@ from __future__ import annotations
 from videos.stats.stats61.common import *  # noqa: F403
 
 
-class OpenProblems(LectureMixin, VoiceoverScene):
+class OpenProblems(LectureMixin, StatsScene):
     def construct(self):
         self.card_voiceover("Chapter ten. Open problems in optimal transport for statistics.", 10, r"Open problems",
                             r"Where the transport theory stops")

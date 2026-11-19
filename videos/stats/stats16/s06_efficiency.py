@@ -7,7 +7,7 @@ from explainer.stats.board import coverage_board, load_all
 from videos.stats.stats16.common import *  # noqa: F403
 
 
-class Efficiency(VoiceoverScene):
+class Efficiency(StatsScene):
     def construct(self):
         self.card()
         self.cost()
@@ -18,10 +18,7 @@ class Efficiency(VoiceoverScene):
         self.lessons()
 
     def card(self):
-        card = chapter_card(5, r"Efficiency, \ a first look", r"What do ranks cost?", part=PART)
-        with self.voiceover("Chapter five. Efficiency, a first look."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(5, r"Efficiency, \ a first look", r"What do ranks cost?", part=PART, said="Chapter five. Efficiency, a first look.")
 
     def cost(self):
         rows = [

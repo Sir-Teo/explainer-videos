@@ -5,7 +5,7 @@ import numpy as np
 from videos.stats.stats50.common import *  # noqa: F403
 
 
-class Fano(VoiceoverScene):
+class Fano(StatsScene):
     def construct(self):
         self.card()
         self.inequality()
@@ -17,10 +17,7 @@ class Fano(VoiceoverScene):
         self.chart()
 
     def card(self):
-        card = chapter_card(4, r"Fano's method", r"Many hypotheses, \ and how many bits the data carry", part=PART)
-        with self.voiceover("Chapter four. Fano's method: many hypotheses, and how many bits the data carry."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(4, r"Fano's method", r"Many hypotheses, \ and how many bits the data carry", part=PART, said="Chapter four. Fano's method: many hypotheses, and how many bits the data carry.")
 
     def inequality(self):
         rows = [

@@ -6,7 +6,7 @@ from scipy import stats
 from videos.stats.stats28.common import *  # noqa: F403
 
 
-class Averaging(VoiceoverScene):
+class Averaging(StatsScene):
     def construct(self):
         self.card()
         self.bma()
@@ -19,10 +19,7 @@ class Averaging(VoiceoverScene):
         self.prostate_avg()
 
     def card(self):
-        card = chapter_card(8, r"Averaging", r"Weight the models instead of choosing one", lit=(1999,), part=PART)
-        with self.voiceover("Chapter eight. Averaging models."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(8, r"Averaging", r"Weight the models instead of choosing one", lit=(1999,), part=PART, said="Chapter eight. Averaging models.")
 
     def bma(self):
         rows = [

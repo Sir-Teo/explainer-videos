@@ -5,7 +5,7 @@ import numpy as np
 from videos.stats.stats21.common import *  # noqa: F403
 
 
-class ADMM(VoiceoverScene):
+class ADMM(StatsScene):
     def construct(self):
         self.card()
         self.idea()
@@ -16,10 +16,7 @@ class ADMM(VoiceoverScene):
         self.verdict()
 
     def card(self):
-        card = chapter_card(9, r"ADMM", r"Split a hard problem into easy ones", part=PART)
-        with self.voiceover("Chapter nine. The alternating direction method of multipliers."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(9, r"ADMM", r"Split a hard problem into easy ones", part=PART, said="Chapter nine. The alternating direction method of multipliers.")
 
     def idea(self):
         rows = [

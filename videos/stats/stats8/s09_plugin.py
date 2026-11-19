@@ -9,7 +9,7 @@ ITEMS = [("mean", r"mean height", S.EST, "{:.1f}"), ("sd", r"SD of height", S.LI
          ("corr", r"father--son $r$", S.ACCENT, "{:.3f}")]
 
 
-class PlugIn(VoiceoverScene):
+class PlugIn(StatsScene):
     def construct(self):
         self.card()
         self.functional()
@@ -20,10 +20,7 @@ class PlugIn(VoiceoverScene):
         self.bootstrap()
 
     def card(self):
-        card = chapter_card(8, r"Consistency and plug-in", r"Estimate a population feature by the same feature of the sample", part=PART)
-        with self.voiceover("Chapter eight. Consistency, and the plug-in principle."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(8, r"Consistency and plug-in", r"Estimate a population feature by the same feature of the sample", part=PART, said="Chapter eight. Consistency, and the plug-in principle.")
 
     def functional(self):
         rows = [

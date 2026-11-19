@@ -5,7 +5,7 @@ import numpy as np
 from videos.stats.stats24.common import *  # noqa: F403
 
 
-class Counts(VoiceoverScene):
+class Counts(StatsScene):
     def construct(self):
         self.card()
         self.negbin()
@@ -17,10 +17,7 @@ class Counts(VoiceoverScene):
         self.truth()
 
     def card(self):
-        card = chapter_card(8, r"Counts", r"Overdispersion and too many zeros", lit=(1992,), part=PART)
-        with self.voiceover("Chapter eight. Counts: overdispersion and too many zeros."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(8, r"Counts", r"Overdispersion and too many zeros", lit=(1992,), part=PART, said="Chapter eight. Counts: overdispersion and too many zeros.")
 
     def negbin(self):
         rows = [

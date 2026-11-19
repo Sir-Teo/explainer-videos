@@ -13,7 +13,7 @@ def town_map(d, values, center, width, lo, hi):
     return F, dots
 
 
-class Areal(VoiceoverScene):
+class Areal(StatsScene):
     def construct(self):
         self.card()
         self.moran()
@@ -25,10 +25,7 @@ class Areal(VoiceoverScene):
         self.scatter_plot()
 
     def card(self):
-        card = chapter_card(9, r"Areal data", r"Disease maps without the noise", lit=(1974, 1991), part=PART)
-        with self.voiceover("Chapter nine. Areal data."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(9, r"Areal data", r"Disease maps without the noise", lit=(1974, 1991), part=PART, said="Chapter nine. Areal data.")
 
     def moran(self):
         rows = [

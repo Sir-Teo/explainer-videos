@@ -8,7 +8,7 @@ GRAPH_POS = [(-6.0, 1.2), (-6.0, -1.4), (-4.3, -0.1), (-2.2, -0.1), (-0.5, 1.2),
 PAGE_POS = [(-1.6, 1.6), (-3.4, 0.0), (-1.2, -0.6), (-3.6, -2.2), (0.8, -2.0), (2.8, -0.4), (2.4, 1.8)]
 
 
-class Stationary(VoiceoverScene):
+class Stationary(StatsScene):
     def construct(self):
         self.card()
         self.eigen()
@@ -18,10 +18,7 @@ class Stationary(VoiceoverScene):
         self.periodic()
 
     def card(self):
-        card = chapter_card(9, r"Stationary distributions", r"Where the probability comes to rest", part=PART)
-        with self.voiceover("Chapter nine. Stationary distributions."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(9, r"Stationary distributions", r"Where the probability comes to rest", part=PART, said="Chapter nine. Stationary distributions.")
 
     def eigen(self):
         d = load("chain")

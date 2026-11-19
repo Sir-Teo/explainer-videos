@@ -6,7 +6,7 @@ from explainer.stats.board import coverage_board, load_all
 from videos.stats.stats25.common import *  # noqa: F403
 
 
-class Meta(VoiceoverScene):
+class Meta(StatsScene):
     def construct(self):
         self.card()
         self.model()
@@ -18,10 +18,7 @@ class Meta(VoiceoverScene):
         self.cautions()
 
     def card(self):
-        card = chapter_card(12, r"Meta-analysis", r"Studies as a sample of studies", lit=(1986,), part=PART)
-        with self.voiceover("Chapter twelve. Meta-analysis."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(12, r"Meta-analysis", r"Studies as a sample of studies", lit=(1986,), part=PART, said="Chapter twelve. Meta-analysis.")
 
     def model(self):
         rows = [

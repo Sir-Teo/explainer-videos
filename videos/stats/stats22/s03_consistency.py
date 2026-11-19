@@ -5,7 +5,7 @@ import numpy as np
 from videos.stats.stats22.common import *  # noqa: F403
 
 
-class Consistency(VoiceoverScene):
+class Consistency(StatsScene):
     def construct(self):
         self.card()
         self.kl()
@@ -14,10 +14,7 @@ class Consistency(VoiceoverScene):
         self.limits()
 
     def card(self):
-        card = chapter_card(2, r"Consistency", r"The argmax of a random curve", lit=(1949,), part=PART)
-        with self.voiceover("Chapter two. Consistency."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(2, r"Consistency", r"The argmax of a random curve", lit=(1949,), part=PART, said="Chapter two. Consistency.")
 
     def kl(self):
         rows = [

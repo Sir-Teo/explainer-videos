@@ -8,7 +8,7 @@ INNOCENT = S.KEPT
 GUILTY = S.RESID
 
 
-class Prosecutor(VoiceoverScene):
+class Prosecutor(StatsScene):
     def construct(self):
         self.card()
         self.case()
@@ -18,11 +18,7 @@ class Prosecutor(VoiceoverScene):
         self.aftermath()
 
     def card(self):
-        card = chapter_card(7, r"The prosecutor's fallacy", r"The chance of the evidence is not the chance of guilt",
-                            lit=(1763,), part=PART)
-        with self.voiceover("Chapter seven. The prosecutor's fallacy."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(7, r"The prosecutor's fallacy", r"The chance of the evidence is not the chance of guilt", lit=(1763,), part=PART, said="Chapter seven. The prosecutor's fallacy.")
 
     def case(self):
         d = load("clark")

@@ -5,14 +5,14 @@ import numpy as np
 from videos.stats.stats45.common import *  # noqa: F403
 
 
-class Hook(VoiceoverScene):
+class Hook(StatsScene):
     def construct(self):
         self.berkeley()
         self.risk()
         self.unrelated()
         self.question()
         self.upgrades()
-        self.objectives()
+        self.title(PART)
 
     def berkeley(self):
         tl = timeline(lit=(1956, 1961)).to_edge(UP, buff=0.35)
@@ -137,29 +137,5 @@ class Hook(VoiceoverScene):
             for k, m_ in enumerate("ab"):
                 vo.wait_until(m_)
                 self.play(FadeIn(cards[k], shift=UP * 0.15))
-        self.wait(1.0)
-        self.clear_scene()
-
-    def objectives(self):
-        head = VGroup(label(r"Part 45", font_size=34, color=GREY_B), label(r"The Theory of Estimation", font_size=48)).arrange(DOWN, buff=0.25)
-        obj = objectives_card([
-            r"risk, \ admissibility, \ minimax and Bayes rules; \ risk sets and complete classes",
-            r"exponential families as convex duality; \ sufficiency, \ completeness, \ ancillarity",
-            r"Rao--Blackwell, \ Lehmann--Scheff\'e, \ information bounds, \ equivariance",
-            r"Stein's lemma, \ James--Stein, \ Brown's theorem, \ empirical Bayes",
-        ], color=S.ACCENT, font_size=26)
-        prereq = note(r"prerequisites: \ Parts 9, \ 25, \ 43").to_corner(DL, buff=0.3)
-        built = note(r"built: \ \texttt{statkit.decision}, \ the risk-set explorer").to_corner(DR, buff=0.3)
-        with self.voiceover(
-            "<bookmark mark='a'/> Part forty-five: the theory of estimation. <bookmark mark='b'/> We'll set up risk, "
-            "admissibility, minimax and Bayes rules, and draw the risk set of a whole problem; read exponential families as "
-            "convex duality; prove the sufficiency theorems, Rao–Blackwell and Lehmann–Scheffé, with Basu's theorem and the "
-            "information bounds; find best equivariant estimators; and then follow Stein, Brown and Robbins to the frontier "
-            "of shrinkage and empirical Bayes."
-        ) as vo:
-            vo.wait_until("a")
-            self.play(FadeIn(head, shift=UP * 0.2))
-            vo.wait_until("b")
-            self.play(FadeOut(head), FadeIn(obj, shift=UP * 0.2), FadeIn(prereq), FadeIn(built))
         self.wait(1.0)
         self.clear_scene()

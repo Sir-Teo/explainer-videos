@@ -5,7 +5,7 @@ import numpy as np
 from videos.stats.stats48.common import *  # noqa: F403
 
 
-class Rates(VoiceoverScene):
+class Rates(StatsScene):
     def construct(self):
         self.card()
         self.theorem()
@@ -15,10 +15,7 @@ class Rates(VoiceoverScene):
         self.others()
 
     def card(self):
-        card = chapter_card(9, r"Rates of convergence", r"When the answer is not $\sqrt n$", lit=(1990,), part=PART)
-        with self.voiceover("Chapter nine. Rates of convergence: when the answer is not root n."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(9, r"Rates of convergence", r"When the answer is not $\sqrt n$", lit=(1990,), part=PART, said="Chapter nine. Rates of convergence: when the answer is not root n.")
 
     def theorem(self):
         rows = [

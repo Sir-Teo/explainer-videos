@@ -5,7 +5,7 @@ import numpy as np
 from videos.stats.stats50.common import *  # noqa: F403
 
 
-class Gaps(VoiceoverScene):
+class Gaps(StatsScene):
     def construct(self):
         self.card()
         self.clique()
@@ -16,10 +16,7 @@ class Gaps(VoiceoverScene):
         self.lowdegree()
 
     def card(self):
-        card = chapter_card(9, r"Statistical--computational gaps", r"Possible in principle, \ out of reach in practice?", lit=(2013,), part=PART)
-        with self.voiceover("Chapter nine. Statistical–computational gaps: possible in principle, out of reach in practice?"):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(9, r"Statistical--computational gaps", r"Possible in principle, \ out of reach in practice?", lit=(2013,), part=PART, said="Chapter nine. Statistical–computational gaps: possible in principle, out of reach in practice?")
 
     def clique(self):
         d = load("clique")

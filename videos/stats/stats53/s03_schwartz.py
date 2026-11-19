@@ -5,7 +5,7 @@ import numpy as np
 from videos.stats.stats53.common import *  # noqa: F403
 
 
-class Schwartz(VoiceoverScene):
+class Schwartz(StatsScene):
     def construct(self):
         self.card()
         self.theorem()
@@ -15,10 +15,7 @@ class Schwartz(VoiceoverScene):
         self.tests()
 
     def card(self):
-        card = chapter_card(2, r"Schwartz's theorem", r"Which truths can a prior learn?", lit=(1965,), part=PART)
-        with self.voiceover("Chapter two. Schwartz's theorem: which truths can a prior learn?"):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(2, r"Schwartz's theorem", r"Which truths can a prior learn?", lit=(1965,), part=PART, said="Chapter two. Schwartz's theorem: which truths can a prior learn?")
 
     def theorem(self):
         rows = [

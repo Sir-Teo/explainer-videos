@@ -6,7 +6,7 @@ from videos.stats.stats13.common import *  # noqa: F403
 from videos.stats.stats13.s08_factorial import bakery_map
 
 
-class Surface(VoiceoverScene):
+class Surface(StatsScene):
     def construct(self):
         self.card()
         self.box_wilson()
@@ -17,10 +17,7 @@ class Surface(VoiceoverScene):
         self.result()
 
     def card(self):
-        card = chapter_card(9, r"Response surfaces", r"Climbing a hill you cannot see", part=PART)
-        with self.voiceover("Chapter nine. Response surfaces."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(9, r"Response surfaces", r"Climbing a hill you cannot see", part=PART, said="Chapter nine. Response surfaces.")
 
     def box_wilson(self):
         hc = history_card(1951, r"George Box \ and \ K. B. Wilson, \ Imperial Chemical Industries",

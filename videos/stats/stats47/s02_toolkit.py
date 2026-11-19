@@ -5,7 +5,7 @@ import numpy as np
 from videos.stats.stats47.common import *  # noqa: F403
 
 
-class Toolkit(VoiceoverScene):
+class Toolkit(StatsScene):
     def construct(self):
         self.card()
         self.orders()
@@ -16,10 +16,7 @@ class Toolkit(VoiceoverScene):
         self.second()
 
     def card(self):
-        card = chapter_card(1, r"Stochastic orders and the toolkit", r"Bookkeeping for things that go to zero at random", part=PART)
-        with self.voiceover("Chapter one. Stochastic orders and the toolkit: bookkeeping for things that go to zero at random."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(1, r"Stochastic orders and the toolkit", r"Bookkeeping for things that go to zero at random", part=PART, said="Chapter one. Stochastic orders and the toolkit: bookkeeping for things that go to zero at random.")
 
     def orders(self):
         rows = [

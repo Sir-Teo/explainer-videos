@@ -6,7 +6,7 @@ from scipy import stats
 from videos.stats.stats12.common import *  # noqa: F403
 
 
-class Collinear(VoiceoverScene):
+class Collinear(StatsScene):
     def construct(self):
         self.card()
         self.vif()
@@ -15,10 +15,7 @@ class Collinear(VoiceoverScene):
         self.remedies()
 
     def card(self):
-        card = chapter_card(8, r"Collinearity", r"When the predictors move together", part=PART)
-        with self.voiceover("Chapter eight. Collinearity."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(8, r"Collinearity", r"When the predictors move together", part=PART, said="Chapter eight. Collinearity.")
 
     def vif(self):
         rows = [

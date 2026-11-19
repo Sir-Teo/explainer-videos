@@ -18,7 +18,7 @@ def lattice_grid(L, size=3.6, center=ORIGIN, up=None, down=None):
     return VGroup(g, frame).move_to(center)
 
 
-class Quasi(VoiceoverScene):
+class Quasi(StatsScene):
     def construct(self):
         self.card()
         self.quasi()
@@ -29,10 +29,7 @@ class Quasi(VoiceoverScene):
         self.composite()
 
     def card(self):
-        card = chapter_card(11, r"Quasi-, \ composite and pseudo-likelihood", r"When the full likelihood is too much", lit=(1975,), part=PART)
-        with self.voiceover("Chapter eleven. Quasi-likelihood, composite likelihood and pseudo-likelihood."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(11, r"Quasi-, \ composite and pseudo-likelihood", r"When the full likelihood is too much", lit=(1975,), part=PART, said="Chapter eleven. Quasi-likelihood, composite likelihood and pseudo-likelihood.")
 
     def quasi(self):
         d = load("sandwich")

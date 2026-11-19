@@ -5,7 +5,7 @@ import numpy as np
 from videos.stats.stats47.common import *  # noqa: F403
 
 
-class Ranks(VoiceoverScene):
+class Ranks(StatsScene):
     def construct(self):
         self.card()
         self.signed()
@@ -15,10 +15,7 @@ class Ranks(VoiceoverScene):
         self.scores()
 
     def card(self):
-        card = chapter_card(6, r"Rank statistics", r"How much is lost by keeping only the order?", lit=(1945,), part=PART)
-        with self.voiceover("Chapter six. Rank statistics: how much is lost by keeping only the order?"):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(6, r"Rank statistics", r"How much is lost by keeping only the order?", lit=(1945,), part=PART, said="Chapter six. Rank statistics: how much is lost by keeping only the order?")
 
     def signed(self):
         rows = [

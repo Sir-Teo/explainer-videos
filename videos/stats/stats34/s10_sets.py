@@ -8,7 +8,7 @@ from videos.stats.stats34.common import *  # noqa: F403
 SPC = [S.CTRL, S.TREAT, S.ALT]  # setosa, versicolor, virginica
 
 
-class Sets(VoiceoverScene):
+class Sets(StatsScene):
     def construct(self):
         self.card()
         self.lac()
@@ -21,10 +21,7 @@ class Sets(VoiceoverScene):
         self.pvalues()
 
     def card(self):
-        card = chapter_card(9, r"Classification sets", r"Answers that admit doubt", lit=(2020,), part=PART)
-        with self.voiceover("Chapter nine. Prediction sets for classification."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(9, r"Classification sets", r"Answers that admit doubt", lit=(2020,), part=PART, said="Chapter nine. Prediction sets for classification.")
 
     def lac(self):
         rows = [

@@ -3,7 +3,7 @@ from __future__ import annotations
 from videos.stats.stats65.common import *  # noqa: F403
 
 
-class Literature(LectureMixin, VoiceoverScene):
+class Literature(LectureMixin, StatsScene):
     def construct(self):
         self.card_voiceover("Chapter two. Reading the literature: what is known, and where the gap is.", 2,
                             r"Reading the literature", r"Theorem, \ conditions, \ evidence, \ gap")

@@ -5,7 +5,7 @@ import numpy as np
 from videos.stats.stats54.common import *  # noqa: F403
 
 
-class PACBayes(VoiceoverScene):
+class PACBayes(StatsScene):
     def construct(self):
         self.card()
         self.theorem()
@@ -16,10 +16,7 @@ class PACBayes(VoiceoverScene):
         self.deep()
 
     def card(self):
-        card = chapter_card(6, r"PAC-Bayes", r"Bounds for averaged rules, \ with a prior", lit=(1999,), part=PART)
-        with self.voiceover("Chapter six. PAC-Bayes: bounds for averaged rules, with a prior."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(6, r"PAC-Bayes", r"Bounds for averaged rules, \ with a prior", lit=(1999,), part=PART, said="Chapter six. PAC-Bayes: bounds for averaged rules, with a prior.")
 
     def theorem(self):
         rows = [

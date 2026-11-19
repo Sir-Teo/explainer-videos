@@ -5,7 +5,7 @@ import numpy as np
 from videos.stats.stats1.common import *  # noqa: F403
 
 
-class Center(VoiceoverScene):
+class Center(StatsScene):
     def construct(self):
         self.card()
         self.squares()
@@ -15,11 +15,7 @@ class Center(VoiceoverScene):
         self.clock()
 
     def card(self):
-        card = chapter_card(4, r"The centre as an optimization", r"Which single number best stands for all of them?",
-                            lit=(1805,), part=PART)
-        with self.voiceover("Chapter four. The centre as an optimization."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(4, r"The centre as an optimization", r"Which single number best stands for all of them?", lit=(1805,), part=PART, said="Chapter four. The centre as an optimization.")
 
     # ------------------------------------------------------------------
     def lanes(self, x, x_range=(0, 200)):

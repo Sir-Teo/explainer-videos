@@ -5,7 +5,7 @@ import numpy as np
 from videos.stats.stats15.common import *  # noqa: F403
 
 
-class Hypotheses(VoiceoverScene):
+class Hypotheses(StatsScene):
     def construct(self):
         self.card()
         self.odds()
@@ -16,10 +16,7 @@ class Hypotheses(VoiceoverScene):
         self.scale()
 
     def card(self):
-        card = chapter_card(10, r"Hypotheses, \ the Bayesian way", r"Posterior odds and Bayes factors, \ a first look", lit=(1939,), part=PART)
-        with self.voiceover("Chapter ten. Hypotheses, the Bayesian way."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(10, r"Hypotheses, \ the Bayesian way", r"Posterior odds and Bayes factors, \ a first look", lit=(1939,), part=PART, said="Chapter ten. Hypotheses, the Bayesian way.")
 
     def odds(self):
         rows = [

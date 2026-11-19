@@ -8,7 +8,7 @@ METH = {"naive": (r"in-sample residuals", MISSC), "jack": (r"jackknife", CALC), 
         "split": (r"split", PREDC)}
 
 
-class Jackknife(VoiceoverScene):
+class Jackknife(StatsScene):
     def construct(self):
         self.card()
         self.waste()
@@ -24,10 +24,7 @@ class Jackknife(VoiceoverScene):
         self.board()
 
     def card(self):
-        card = chapter_card(7, r"Jackknife+ and CQR", r"Using all the data; \ bands that breathe", lit=(2021,), part=PART)
-        with self.voiceover("Chapter seven. The jackknife plus, and conformalized quantile regression."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(7, r"Jackknife+ and CQR", r"Using all the data; \ bands that breathe", lit=(2021,), part=PART, said="Chapter seven. The jackknife plus, and conformalized quantile regression.")
 
     def waste(self):
         rows = fit_rows(VGroup(

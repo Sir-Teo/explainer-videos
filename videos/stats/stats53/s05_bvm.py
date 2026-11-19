@@ -5,7 +5,7 @@ import numpy as np
 from videos.stats.stats53.common import *  # noqa: F403
 
 
-class BvM(VoiceoverScene):
+class BvM(StatsScene):
     def construct(self):
         self.card()
         self.theorem()
@@ -16,10 +16,7 @@ class BvM(VoiceoverScene):
         self.meaning()
 
     def card(self):
-        card = chapter_card(4, r"Bernstein--von Mises", r"When a posterior is a confidence distribution", part=PART)
-        with self.voiceover("Chapter four. Bernstein–von Mises: when a posterior is a confidence distribution."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(4, r"Bernstein--von Mises", r"When a posterior is a confidence distribution", part=PART, said="Chapter four. Bernstein–von Mises: when a posterior is a confidence distribution.")
 
     def theorem(self):
         rows = [

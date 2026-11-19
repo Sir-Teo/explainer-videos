@@ -10,7 +10,7 @@ def coin_row(seq, r=0.16, buff=0.1):
                     for s_ in seq]).arrange(RIGHT, buff=buff)
 
 
-class Sufficiency(VoiceoverScene):
+class Sufficiency(StatsScene):
     def construct(self):
         self.card()
         self.coins()
@@ -22,10 +22,7 @@ class Sufficiency(VoiceoverScene):
         self.minimal()
 
     def card(self):
-        card = chapter_card(6, r"Sufficiency", r"Which part of the data carries the information?", lit=(1922,), part=PART)
-        with self.voiceover("Chapter six. Sufficiency."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(6, r"Sufficiency", r"Which part of the data carries the information?", lit=(1922,), part=PART, said="Chapter six. Sufficiency.")
 
     def coins(self):
         d = load("sufficiency")

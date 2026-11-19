@@ -16,7 +16,7 @@ def flights(ax, t, y, stack=0.05, radius=0.08):
     return g
 
 
-class LinearProbability(VoiceoverScene):
+class LinearProbability(StatsScene):
     def construct(self):
         self.card()
         self.binary()
@@ -26,10 +26,7 @@ class LinearProbability(VoiceoverScene):
         self.wanted()
 
     def card(self):
-        card = chapter_card(1, r"Why not least squares?", r"A straight line through zeros and ones", part=PART)
-        with self.voiceover("Chapter one. Why not least squares?"):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(1, r"Why not least squares?", r"A straight line through zeros and ones", part=PART, said="Chapter one. Why not least squares?")
 
     def binary(self):
         d = load("challenger")

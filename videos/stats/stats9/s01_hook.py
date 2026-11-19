@@ -5,12 +5,12 @@ import numpy as np
 from videos.stats.stats9.common import *  # noqa: F403
 
 
-class Hook(VoiceoverScene):
+class Hook(StatsScene):
     def construct(self):
         self.war()
         self.table()
         self.factory()
-        self.objectives()
+        self.title(PART)
 
     def war(self):
         tl = timeline(lit=(1943,)).to_edge(UP, buff=0.35)
@@ -116,29 +116,4 @@ class Hook(VoiceoverScene):
             self.play(FadeIn(rows[2]))
             vo.wait_until("e")
             self.play(f.reveal(0.8), Transform(q, ans), FadeIn(game))
-        self.clear_scene()
-
-    def objectives(self):
-        head = VGroup(label(r"Part 9", font_size=34, color=GREY_B), label(r"Estimation", font_size=60))
-        head.arrange(DOWN, buff=0.25)
-        obj = objectives_card([
-            r"estimators as recipes, \ judged by their sampling distributions",
-            r"the method of moments; \ maximum likelihood, \ its curvature and its standard error",
-            r"sufficiency: \ what in the data matters; \ Rao--Blackwell: \ conditioning never hurts",
-            r"the best unbiased estimator; \ Fisher information; \ the Cram\'er--Rao bound, \ and how the tanks beat it",
-            r"comparing estimators, \ and what happens when the model is wrong",
-        ], color=S.ACCENT, font_size=26)
-        prereq = note(r"prerequisites: \ Part 8").to_corner(DL, buff=0.3)
-        with self.voiceover(
-            "<bookmark mark='a'/> Part nine: estimation. <bookmark mark='b'/> We'll treat estimators as recipes and judge "
-            "them by their sampling distributions; build them by the method of moments and by maximum likelihood, the "
-            "most important idea in statistical inference; find out which parts of the data matter, with sufficiency; "
-            "improve any estimator by conditioning, with the Rao–Blackwell theorem; find the best unbiased estimator; "
-            "and meet the Cramér–Rao bound, the speed limit for unbiased estimation, which the tanks manage to break."
-        ) as vo:
-            vo.wait_until("a")
-            self.play(FadeIn(head, shift=UP * 0.2))
-            vo.wait_until("b")
-            self.play(FadeOut(head), FadeIn(obj, shift=UP * 0.2), FadeIn(prereq))
-        self.wait(1.0)
         self.clear_scene()

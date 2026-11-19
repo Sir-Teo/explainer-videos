@@ -6,7 +6,7 @@ from videos.stats.stats19.common import *  # noqa: F403
 from videos.stats.stats19.compute import truth_curve
 
 
-class PredictionError(VoiceoverScene):
+class PredictionError(StatsScene):
     def construct(self):
         self.card()
         self.goal()
@@ -18,10 +18,7 @@ class PredictionError(VoiceoverScene):
         self.lessons()
 
     def card(self):
-        card = chapter_card(1, r"Prediction error", r"Fitting the past is not predicting the future", part=PART)
-        with self.voiceover("Chapter one. Prediction error."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(1, r"Prediction error", r"Fitting the past is not predicting the future", part=PART, said="Chapter one. Prediction error.")
 
     def goal(self):
         rows = [

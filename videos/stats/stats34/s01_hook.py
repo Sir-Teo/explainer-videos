@@ -18,7 +18,7 @@ def nature_box(center, inner, color, width=3.2):
     return VGroup(box, t, x, y, a1, a2)
 
 
-class Hook(VoiceoverScene):
+class Hook(StatsScene):
     def construct(self):
         self.story()
         self.boxes()
@@ -26,7 +26,7 @@ class Hook(VoiceoverScene):
         self.replies()
         self.since()
         self.question()
-        self.objectives()
+        self.title(PART)
 
     def story(self):
         tl = timeline(lit=(2001,)).to_edge(UP, buff=0.35)
@@ -207,31 +207,4 @@ class Hook(VoiceoverScene):
             self.play(FadeIn(rows[2]))
             vo.wait_until("d")
             self.play(FadeIn(rows[3]))
-        self.clear_scene()
-
-    def objectives(self):
-        head = VGroup(label(r"Part 34", font_size=34, color=GREY_B), label(r"Prediction with Guarantees", font_size=60)).arrange(DOWN, buff=0.25)
-        obj = objectives_card([
-            r"explain or predict: \ the Rashomon effect",
-            r"forests and boosting as estimators: \ variance, \ importance, \ intervals",
-            r"what cross-validation estimates; \ calibration",
-            r"conformal prediction: \ split, \ jackknife+, \ CQR, \ under shift, \ sets",
-            r"prediction-powered inference; \ interpretation as estimation",
-        ], color=PREDC, font_size=26)
-        prereq = note(r"prerequisites: \ Parts 16, 19 and 33").to_corner(DL, buff=0.3)
-        built = note(r"built: \ \texttt{statkit.conformal}, \ \texttt{statkit.ppi}; \ the score ladder").to_corner(DR, buff=0.3)
-        with self.voiceover(
-            "<bookmark mark='a'/> Part thirty-four: prediction with guarantees. <bookmark mark='b'/> We'll see why "
-            "good predictors do not explain; treat forests and boosting as estimators, with a variance, an importance"
-            " measure and confidence intervals; ask what cross-validation actually estimates, and when a probability "
-            "can be trusted; then build conformal prediction, which wraps any model, forest or neural network, in "
-            "intervals and sets with a marginal finite-sample guarantee under exchangeability and proper separation "
-            "of training and calibration; use machine-learning guesses to sharpen a valid estimate, with "
-            "prediction-powered inference; and finish with what interpretation methods estimate."
-        ) as vo:
-            vo.wait_until("a")
-            self.play(FadeIn(head, shift=UP * 0.2))
-            vo.wait_until("b")
-            self.play(FadeOut(head), FadeIn(obj, shift=UP * 0.2), FadeIn(prereq), FadeIn(built))
-        self.wait(1.0)
         self.clear_scene()

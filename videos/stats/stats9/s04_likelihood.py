@@ -7,7 +7,7 @@ import numpy as np
 from videos.stats.stats9.common import *  # noqa: F403
 
 
-class Likelihood(VoiceoverScene):
+class Likelihood(StatsScene):
     def construct(self):
         self.card()
         self.fisher()
@@ -19,10 +19,7 @@ class Likelihood(VoiceoverScene):
         self.invariance()
 
     def card(self):
-        card = chapter_card(3, r"Maximum likelihood", r"Which parameter makes the data least surprising?", lit=(1922,), part=PART)
-        with self.voiceover("Chapter three. Maximum likelihood."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(3, r"Maximum likelihood", r"Which parameter makes the data least surprising?", lit=(1922,), part=PART, said="Chapter three. Maximum likelihood.")
 
     def fisher(self):
         h1 = history_card(1912, r"R. A. Fisher, \ a Cambridge undergraduate", r"``On an absolute criterion for fitting frequency "

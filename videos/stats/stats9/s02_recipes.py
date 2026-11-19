@@ -5,7 +5,7 @@ import numpy as np
 from videos.stats.stats9.common import *  # noqa: F403
 
 
-class Recipes(VoiceoverScene):
+class Recipes(StatsScene):
     def construct(self):
         self.card()
         self.vocabulary()
@@ -15,10 +15,7 @@ class Recipes(VoiceoverScene):
         self.sources()
 
     def card(self):
-        card = chapter_card(1, r"Estimators as recipes", r"What is an estimator, \ and how do we grade one?", part=PART)
-        with self.voiceover("Chapter one. Estimators as recipes."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(1, r"Estimators as recipes", r"What is an estimator, \ and how do we grade one?", part=PART, said="Chapter one. Estimators as recipes.")
 
     def vocabulary(self):
         dc = definition_card(r"Estimator", r"a model $\{P_\theta : \theta \in \Theta\}$; \ data $X = (X_1, \dots, X_n) \sim P_\theta$; \ "

@@ -7,7 +7,7 @@ import numpy as np
 from videos.stats.stats42.common import *  # noqa: F403
 
 
-class TrialSize(VoiceoverScene):
+class TrialSize(StatsScene):
     def construct(self):
         self.card()
         self.individual()
@@ -18,10 +18,7 @@ class TrialSize(VoiceoverScene):
         self.power()
 
     def card(self):
-        card = chapter_card(2, r"Case 1: \ how many towns", r"What does the correlation cost?", part=PART)
-        with self.voiceover("Chapter two. How many towns?"):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(2, r"Case 1: \ how many towns", r"What does the correlation cost?", part=PART, said="Chapter two. How many towns?")
 
     def individual(self):
         s = load("size")

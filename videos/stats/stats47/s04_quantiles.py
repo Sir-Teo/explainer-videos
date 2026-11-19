@@ -5,7 +5,7 @@ import numpy as np
 from videos.stats.stats47.common import *  # noqa: F403
 
 
-class Quantiles(VoiceoverScene):
+class Quantiles(StatsScene):
     def construct(self):
         self.card()
         self.limit()
@@ -15,10 +15,7 @@ class Quantiles(VoiceoverScene):
         self.uses()
 
     def card(self):
-        card = chapter_card(3, r"Quantiles and the Bahadur representation", r"A sample quantile is an average in disguise", lit=(1966,), part=PART)
-        with self.voiceover("Chapter three. Quantiles and the Bahadur representation: a sample quantile is an average in disguise."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(3, r"Quantiles and the Bahadur representation", r"A sample quantile is an average in disguise", lit=(1966,), part=PART, said="Chapter three. Quantiles and the Bahadur representation: a sample quantile is an average in disguise.")
 
     def limit(self):
         rows = [

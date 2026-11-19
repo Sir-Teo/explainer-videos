@@ -6,7 +6,7 @@ from explainer.stats.board import coverage_board, load_all
 from videos.stats.stats24.common import *  # noqa: F403
 
 
-class GEE(VoiceoverScene):
+class GEE(StatsScene):
     def construct(self):
         self.card()
         self.problem()
@@ -17,10 +17,7 @@ class GEE(VoiceoverScene):
         self.board()
 
     def card(self):
-        card = chapter_card(11, r"GEE", r"Clustered outcomes, \ honest standard errors", lit=(1986,), part=PART)
-        with self.voiceover("Chapter eleven. Generalized estimating equations."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(11, r"GEE", r"Clustered outcomes, \ honest standard errors", lit=(1986,), part=PART, said="Chapter eleven. Generalized estimating equations.")
 
     def problem(self):
         d = load("gee")

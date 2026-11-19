@@ -5,7 +5,7 @@ import numpy as np
 from videos.stats.stats24.common import *  # noqa: F403
 
 
-class Scoring(VoiceoverScene):
+class Scoring(StatsScene):
     def construct(self):
         self.card()
         self.question()
@@ -17,10 +17,7 @@ class Scoring(VoiceoverScene):
         self.advice()
 
     def card(self):
-        card = chapter_card(12, r"Proper scoring rules", r"How to grade a probability", lit=(2007,), part=PART)
-        with self.voiceover("Chapter twelve. Proper scoring rules."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(12, r"Proper scoring rules", r"How to grade a probability", lit=(2007,), part=PART, said="Chapter twelve. Proper scoring rules.")
 
     def question(self):
         rows = [

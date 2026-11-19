@@ -3,7 +3,7 @@ from __future__ import annotations
 from videos.stats.stats35.common import *  # noqa: F403
 
 
-class Estimands(VoiceoverScene):
+class Estimands(StatsScene):
     def construct(self):
         self.card()
         self.ladder_()
@@ -13,10 +13,7 @@ class Estimands(VoiceoverScene):
         self.risk()
 
     def card(self):
-        card = chapter_card(2, r"Estimands and SUTVA", r"What exactly are we estimating?", lit=(1974,), part=PART)
-        with self.voiceover("Chapter two. Estimands, and the stable unit treatment value assumption."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(2, r"Estimands and SUTVA", r"What exactly are we estimating?", lit=(1974,), part=PART, said="Chapter two. Estimands, and the stable unit treatment value assumption.")
 
     def ladder_(self):
         rows = [

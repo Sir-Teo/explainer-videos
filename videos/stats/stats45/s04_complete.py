@@ -5,7 +5,7 @@ import numpy as np
 from videos.stats.stats45.common import *  # noqa: F403
 
 
-class CompleteClass(VoiceoverScene):
+class CompleteClass(StatsScene):
     def construct(self):
         self.card()
         self.bayes_admissible()
@@ -16,10 +16,7 @@ class CompleteClass(VoiceoverScene):
         self.variance()
 
     def card(self):
-        card = chapter_card(3, r"Complete class theorems", r"Which rules are worth considering?", lit=(1950,), part=PART)
-        with self.voiceover("Chapter three. Complete class theorems: which rules are worth considering at all?"):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(3, r"Complete class theorems", r"Which rules are worth considering?", lit=(1950,), part=PART, said="Chapter three. Complete class theorems: which rules are worth considering at all?")
 
     def bayes_admissible(self):
         rows = [

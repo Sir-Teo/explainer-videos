@@ -5,7 +5,7 @@ import numpy as np
 from videos.stats.stats8.common import *  # noqa: F403
 
 
-class MSE(VoiceoverScene):
+class MSE(StatsScene):
     def construct(self):
         self.card()
         self.darts()
@@ -16,10 +16,7 @@ class MSE(VoiceoverScene):
         self.bound()
 
     def card(self):
-        card = chapter_card(7, r"Bias, variance, MSE", r"What makes an estimator good?", part=PART)
-        with self.voiceover("Chapter seven. Bias, variance, and mean squared error."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(7, r"Bias, variance, MSE", r"What makes an estimator good?", part=PART, said="Chapter seven. Bias, variance, and mean squared error.")
 
     def darts(self):
         g = np.random.Generator(np.random.PCG64(87))

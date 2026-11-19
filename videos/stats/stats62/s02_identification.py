@@ -3,7 +3,7 @@ from __future__ import annotations
 from videos.stats.stats62.common import *  # noqa: F403
 
 
-class Identification(LectureMixin, VoiceoverScene):
+class Identification(LectureMixin, StatsScene):
     def construct(self):
         self.card_voiceover("Chapter one. Identification theory: which causal effects can a graph and data determine?", 1,
                             r"Identification theory", r"Beyond the back door", lit=(1995,))

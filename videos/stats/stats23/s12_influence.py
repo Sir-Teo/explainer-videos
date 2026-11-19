@@ -5,7 +5,7 @@ import numpy as np
 from videos.stats.stats23.common import *  # noqa: F403
 
 
-class Influence(VoiceoverScene):
+class Influence(StatsScene):
     def construct(self):
         self.card()
         self.deletion()
@@ -16,10 +16,7 @@ class Influence(VoiceoverScene):
         self.advice()
 
     def card(self):
-        card = chapter_card(11, r"Influence", r"Which points move the answer?", part=PART)
-        with self.voiceover("Chapter eleven. Influence."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(11, r"Influence", r"Which points move the answer?", part=PART, said="Chapter eleven. Influence.")
 
     def deletion(self):
         rows = [

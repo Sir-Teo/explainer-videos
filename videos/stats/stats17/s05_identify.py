@@ -13,7 +13,7 @@ def corr_panel(r, band, center, color, title, lags=20, theory=None, width=5.4, h
     return VGroup(A, cg, t)
 
 
-class Identify(VoiceoverScene):
+class Identify(StatsScene):
     def construct(self):
         self.card()
         self.pacf_def()
@@ -24,10 +24,7 @@ class Identify(VoiceoverScene):
         self.differencing()
 
     def card(self):
-        card = chapter_card(4, r"Identification", r"Reading a model's fingerprints", lit=(1970,), part=PART)
-        with self.voiceover("Chapter four. Identification."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(4, r"Identification", r"Reading a model's fingerprints", lit=(1970,), part=PART, said="Chapter four. Identification.")
 
     def pacf_def(self):
         rows = [

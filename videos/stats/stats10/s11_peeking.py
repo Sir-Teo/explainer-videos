@@ -6,7 +6,7 @@ from explainer.stats.board import Row, coverage_board, load_all
 from videos.stats.stats10.common import *  # noqa: F403
 
 
-class Peeking(VoiceoverScene):
+class Peeking(StatsScene):
     def construct(self):
         self.card()
         self.paths()
@@ -15,10 +15,7 @@ class Peeking(VoiceoverScene):
         self.board()
 
     def card(self):
-        card = chapter_card(10, r"The peeking problem", r"Look after every observation, \ stop when $p < 0.05$", lit=(1945,), part=PART)
-        with self.voiceover("Chapter ten. The peeking problem."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(10, r"The peeking problem", r"Look after every observation, \ stop when $p < 0.05$", lit=(1945,), part=PART, said="Chapter ten. The peeking problem.")
 
     def paths(self):
         d = load("peeking")

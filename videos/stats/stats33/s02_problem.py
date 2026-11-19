@@ -5,7 +5,7 @@ import numpy as np
 from videos.stats.stats33.common import *  # noqa: F403
 
 
-class Problem(VoiceoverScene):
+class Problem(StatsScene):
     def construct(self):
         self.card()
         self.study()
@@ -17,10 +17,7 @@ class Problem(VoiceoverScene):
         self.rates()
 
     def card(self):
-        card = chapter_card(1, r"The problem", r"Five thousand genes, \ one study", lit=(1995,), part=PART)
-        with self.voiceover("Chapter one. The problem."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(1, r"The problem", r"Five thousand genes, \ one study", lit=(1995,), part=PART, said="Chapter one. The problem.")
 
     def study(self):
         d = load("genes")

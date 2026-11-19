@@ -12,7 +12,7 @@ PROBLEMS = [
 ]
 
 
-class Outro(VoiceoverScene):
+class Outro(StatsScene):
     def construct(self):
         self.recap()
         self.upgrade()

@@ -6,7 +6,7 @@ from scipy import stats
 from videos.stats.stats22.common import *  # noqa: F403
 
 
-class Principle(VoiceoverScene):
+class Principle(StatsScene):
     def construct(self):
         self.card()
         self.two_experiments()
@@ -17,10 +17,7 @@ class Principle(VoiceoverScene):
         self.debate()
 
     def card(self):
-        card = chapter_card(12, r"The likelihood principle", r"Should the stopping rule matter?", lit=(1962,), part=PART)
-        with self.voiceover("Chapter twelve. The likelihood principle."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(12, r"The likelihood principle", r"Should the stopping rule matter?", lit=(1962,), part=PART, said="Chapter twelve. The likelihood principle.")
 
     def two_experiments(self):
         rows = [

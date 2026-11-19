@@ -5,7 +5,7 @@ import numpy as np
 from videos.stats.stats51.common import *  # noqa: F403
 
 
-class Lipschitz(VoiceoverScene):
+class Lipschitz(StatsScene):
     def construct(self):
         self.card()
         self.theorem()
@@ -16,10 +16,7 @@ class Lipschitz(VoiceoverScene):
         self.talagrand()
 
     def card(self):
-        card = chapter_card(3, r"Concentration of Lipschitz functions", r"Lipschitz functions of Gaussian inputs concentrate", lit=(1976,), part=PART)
-        with self.voiceover('Chapter three. Concentration of Lipschitz functions: Lipschitz functions of Gaussian inputs concentrate.'):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(3, r"Concentration of Lipschitz functions", r"Lipschitz functions of Gaussian inputs concentrate", lit=(1976,), part=PART, said='Chapter three. Concentration of Lipschitz functions: Lipschitz functions of Gaussian inputs concentrate.')
 
     def theorem(self):
         rows = [

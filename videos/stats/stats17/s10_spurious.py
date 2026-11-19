@@ -16,7 +16,7 @@ def sci_p(p: float) -> str:
 # The illustrative example uses the first fixed seed pair, without selection.
 
 
-class Spurious(VoiceoverScene):
+class Spurious(StatsScene):
     def construct(self):
         self.card()
         self.example()
@@ -28,10 +28,7 @@ class Spurious(VoiceoverScene):
         self.lessons()
 
     def card(self):
-        card = chapter_card(9, r"Spurious regression", r"Yule's nonsense, \ made precise", part=PART)
-        with self.voiceover("Chapter nine. Spurious regression, a first look."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(9, r"Spurious regression", r"Yule's nonsense, \ made precise", part=PART, said="Chapter nine. Spurious regression, a first look.")
 
     def example(self):
         d = load("spurious")

@@ -5,7 +5,7 @@ import numpy as np
 from videos.stats.stats2.common import *  # noqa: F403
 
 
-class Expectation(VoiceoverScene):
+class Expectation(StatsScene):
     def construct(self):
         self.card()
         self.balance()
@@ -16,11 +16,7 @@ class Expectation(VoiceoverScene):
         self.coupons()
 
     def card(self):
-        card = chapter_card(11, r"Expectation", r"Pascal's averages, and the most useful trick in probability",
-                            lit=(1654,), part=PART)
-        with self.voiceover("Chapter eleven. Expectation."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(11, r"Expectation", r"Pascal's averages, and the most useful trick in probability", lit=(1654,), part=PART, said="Chapter eleven. Expectation.")
 
     def balance(self):
         d = load("variables")

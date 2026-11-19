@@ -13,7 +13,7 @@ Y0 = 0.35
 LONG, SHORT = S.ACCENT, "#55657A"
 
 
-class Bertrand(VoiceoverScene):
+class Bertrand(StatsScene):
     def construct(self):
         self.card()
         self.setup_q()
@@ -22,11 +22,8 @@ class Bertrand(VoiceoverScene):
         self.resolution()
 
     def card(self):
-        card = chapter_card(3, r"Bertrand's paradox", r"Draw a chord of a circle at random. How likely is it to be "
-                            r"long?", lit=(1889,), part=PART)
-        with self.voiceover("Chapter three. Bertrand's paradox."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(3, r"Bertrand's paradox", r"Draw a chord of a circle at random. How likely is it to be "
+                            r"long?", lit=(1889,), part=PART, said="Chapter three. Bertrand's paradox.")
 
     def setup_q(self):
         c = Circle(radius=2.4, stroke_color=GREY_A, stroke_width=3).move_to([-2.6, -0.2, 0])

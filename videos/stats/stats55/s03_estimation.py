@@ -7,17 +7,14 @@ import numpy as np
 from videos.stats.stats55.common import *  # noqa: F403
 
 
-class ExamEstimation(ExamMixin, VoiceoverScene):
+class ExamEstimation(ExamMixin, StatsScene):
     def construct(self):
         self.card()
         self.p3()
         self.p4()
 
     def card(self):
-        card = chapter_card(2, r"Sitting II: \ estimation", r"Problems 3 and 4", lit=(1947, 1950, 1951), part=PART)
-        with self.voiceover("Sitting two: estimation. A best unbiased estimator, one that cannot exist, and an admissibility proof."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(2, r"Sitting II: \ estimation", r"Problems 3 and 4", lit=(1947, 1950, 1951), part=PART, said="Sitting two: estimation. A best unbiased estimator, one that cannot exist, and an admissibility proof.")
 
     # ------------------------------------------------------------------------------------------ Problem 3
     def p3(self):

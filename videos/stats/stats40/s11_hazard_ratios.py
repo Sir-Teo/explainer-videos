@@ -6,7 +6,7 @@ from videos.stats.stats40.common import *  # noqa: F403
 from videos.stats.stats40.s04_km import km_axes
 
 
-class HazardRatios(VoiceoverScene):
+class HazardRatios(StatsScene):
     def construct(self):
         self.card()
         self.selection()
@@ -17,10 +17,7 @@ class HazardRatios(VoiceoverScene):
         self.rmst_gehan()
 
     def card(self):
-        card = chapter_card(10, r"What hazard ratios mean", r"A ratio among survivors who are no longer comparable", lit=(2010, 2013), part=PART)
-        with self.voiceover("Chapter ten. What hazard ratios mean."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(10, r"What hazard ratios mean", r"A ratio among survivors who are no longer comparable", lit=(2010, 2013), part=PART, said="Chapter ten. What hazard ratios mean.")
 
     def selection(self):
         rows = [

@@ -5,7 +5,7 @@ import numpy as np
 from videos.stats.stats57.common import *  # noqa: F403
 
 
-class Risk(VoiceoverScene):
+class Risk(StatsScene):
     def construct(self):
         self.card()
         self.idea()
@@ -16,10 +16,7 @@ class Risk(VoiceoverScene):
         self.llm()
 
     def card(self):
-        card = chapter_card(8, r"Risk control", r"Beyond coverage: \ any monotone loss", lit=(2024,), part=PART)
-        with self.voiceover("Chapter eight. Risk control: beyond coverage, to any monotone loss."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(8, r"Risk control", r"Beyond coverage: \ any monotone loss", lit=(2024,), part=PART, said="Chapter eight. Risk control: beyond coverage, to any monotone loss.")
 
     def idea(self):
         rows = [

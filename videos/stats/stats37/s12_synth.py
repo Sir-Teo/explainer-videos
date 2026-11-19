@@ -10,7 +10,7 @@ def cig_axes(center=(-1.8, 0.2, 0), y=(30, 150)):
                 xticks=[1970, 1980, 1990, 2000], yticks=[40, 80, 120, 140], xfmt=lambda v: f"{v:.0f}", center=list(center))
 
 
-class Synth(VoiceoverScene):
+class Synth(StatsScene):
     def construct(self):
         self.card()
         self.story()
@@ -22,11 +22,7 @@ class Synth(VoiceoverScene):
         self.caveats()
 
     def card(self):
-        card = chapter_card(11, r"Synthetic control", r"One treated state, \ and a weighted mix of the others",
-                            lit=(2003, 2010), part=PART)
-        with self.voiceover("Chapter eleven. The synthetic control."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(11, r"Synthetic control", r"One treated state, \ and a weighted mix of the others", lit=(2003, 2010), part=PART, said="Chapter eleven. The synthetic control.")
 
     def story(self):
         rows = fit_rows(VGroup(

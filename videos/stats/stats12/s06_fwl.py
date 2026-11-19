@@ -5,7 +5,7 @@ import numpy as np
 from videos.stats.stats12.common import *  # noqa: F403
 
 
-class FWL(VoiceoverScene):
+class FWL(StatsScene):
     def construct(self):
         self.card()
         self.theorem()
@@ -16,10 +16,7 @@ class FWL(VoiceoverScene):
         self.lesson()
 
     def card(self):
-        card = chapter_card(5, r"Controlling for", r"What a coefficient in a multiple regression means", part=PART)
-        with self.voiceover("Chapter five. Controlling for."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(5, r"Controlling for", r"What a coefficient in a multiple regression means", part=PART, said="Chapter five. Controlling for.")
 
     def theorem(self):
         tc = theorem_card(r"Frisch--Waugh--Lovell", r"In $y = X_1\beta_1 + X_2\beta_2 + \varepsilon$, \ the least squares $\hat\beta_1$ equals the "

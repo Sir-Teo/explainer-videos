@@ -5,7 +5,7 @@ import numpy as np
 from videos.stats.stats56.common import *  # noqa: F403
 
 
-class PoSI(VoiceoverScene):
+class PoSI(StatsScene):
     def construct(self):
         self.card()
         self.target()
@@ -16,10 +16,7 @@ class PoSI(VoiceoverScene):
         self.verdict()
 
     def card(self):
-        card = chapter_card(2, r"PoSI", r"Cover every model you might have chosen", lit=(2013,), part=PART)
-        with self.voiceover("Chapter two. Post-selection inference, PoSI: cover every model you might have chosen."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(2, r"PoSI", r"Cover every model you might have chosen", lit=(2013,), part=PART, said="Chapter two. Post-selection inference, PoSI: cover every model you might have chosen.")
 
     def target(self):
         rows = [

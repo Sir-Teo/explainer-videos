@@ -5,7 +5,7 @@ import numpy as np
 from videos.stats.stats62.common import *  # noqa: F403
 
 
-class Discovery(LectureMixin, VoiceoverScene):
+class Discovery(LectureMixin, StatsScene):
     def construct(self):
         self.card_voiceover("Chapter seven. Causal discovery: can the graph itself be learned from data?", 7,
                             r"Causal discovery", r"What data can say about arrows", lit=(2018,))

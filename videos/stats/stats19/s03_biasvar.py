@@ -5,7 +5,7 @@ import numpy as np
 from videos.stats.stats19.common import *  # noqa: F403
 
 
-class BiasVariance(VoiceoverScene):
+class BiasVariance(StatsScene):
     def construct(self):
         self.card()
         self.derive()
@@ -16,10 +16,7 @@ class BiasVariance(VoiceoverScene):
         self.lessons()
 
     def card(self):
-        card = chapter_card(2, r"Bias and variance", r"Where the U comes from", part=PART)
-        with self.voiceover("Chapter two. Bias and variance."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(2, r"Bias and variance", r"Where the U comes from", part=PART, said="Chapter two. Bias and variance.")
 
     def derive(self):
         rows = [

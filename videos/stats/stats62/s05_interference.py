@@ -5,7 +5,7 @@ import numpy as np
 from videos.stats.stats62.common import *  # noqa: F403
 
 
-class Interference(LectureMixin, VoiceoverScene):
+class Interference(LectureMixin, StatsScene):
     def construct(self):
         self.card_voiceover("Chapter four. Interference: when one person's treatment affects another's outcome.", 4,
                             r"Interference and networks", r"Spillovers", lit=(2017,))

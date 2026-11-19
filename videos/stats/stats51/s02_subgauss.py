@@ -19,7 +19,7 @@ def say_sci(v: float) -> str:
     return f"{_NUM[int(a)]} point {_NUM[int(b)]} times ten to the minus {_NUM[-int(e)] if -int(e) < 10 else -int(e)}"
 
 
-class SubGaussian(VoiceoverScene):
+class SubGaussian(StatsScene):
     def construct(self):
         self.card()
         self.definitions()
@@ -29,10 +29,7 @@ class SubGaussian(VoiceoverScene):
         self.rare()
 
     def card(self):
-        card = chapter_card(1, r"Sub-Gaussian and sub-exponential variables", r"Tails you can count on, \ at every $n$", part=PART)
-        with self.voiceover("Chapter one. Sub-Gaussian and sub-exponential variables: tails you can count on, at every n."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(1, r"Sub-Gaussian and sub-exponential variables", r"Tails you can count on, \ at every $n$", part=PART, said="Chapter one. Sub-Gaussian and sub-exponential variables: tails you can count on, at every n.")
 
     def definitions(self):
         rows = [

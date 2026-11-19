@@ -5,7 +5,7 @@ import numpy as np
 from videos.stats.stats10.common import *  # noqa: F403
 
 
-class PValues(VoiceoverScene):
+class PValues(StatsScene):
     def construct(self):
         self.card()
         self.definition()
@@ -15,10 +15,7 @@ class PValues(VoiceoverScene):
         self.surprise()
 
     def card(self):
-        card = chapter_card(3, r"The $p$-value", r"What is its distribution?", part=PART)
-        with self.voiceover("Chapter three. The p-value."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(3, r"The $p$-value", r"What is its distribution?", part=PART, said="Chapter three. The p-value.")
 
     def definition(self):
         dc = definition_card(r"$p$-value", r"For a statistic $T$ with null distribution function $F_0$, \ the $p$-value of data $x$ is \ "

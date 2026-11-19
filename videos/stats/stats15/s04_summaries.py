@@ -6,7 +6,7 @@ from scipy import stats
 from videos.stats.stats15.common import *  # noqa: F403
 
 
-class Summaries(VoiceoverScene):
+class Summaries(StatsScene):
     def construct(self):
         self.card()
         self.centres()
@@ -17,10 +17,7 @@ class Summaries(VoiceoverScene):
         self.reading()
 
     def card(self):
-        card = chapter_card(3, r"Summaries", r"Point estimates and credible intervals from a posterior", part=PART)
-        with self.voiceover("Chapter three. Summaries."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(3, r"Summaries", r"Point estimates and credible intervals from a posterior", part=PART, said="Chapter three. Summaries.")
 
     def axes_beta(self, center=(-2.2, 0.2, 0)):
         A = axes([0, 0.7], [0, 5], x_length=7.4, y_length=4.2, xlabel=r"$p$", ylabel=r"posterior density", xticks=[0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6],

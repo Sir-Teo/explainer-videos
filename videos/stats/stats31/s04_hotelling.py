@@ -5,7 +5,7 @@ import numpy as np
 from videos.stats.stats31.common import *  # noqa: F403
 
 
-class Hotelling(VoiceoverScene):
+class Hotelling(StatsScene):
     def construct(self):
         self.card()
         self.problem()
@@ -18,10 +18,7 @@ class Hotelling(VoiceoverScene):
         self.which()
 
     def card(self):
-        card = chapter_card(3, r"Hotelling's $T^2$ and MANOVA", r"Testing mean vectors", lit=(1931,), part=PART)
-        with self.voiceover("Chapter three. Hotelling's T squared and MANOVA."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(3, r"Hotelling's $T^2$ and MANOVA", r"Testing mean vectors", lit=(1931,), part=PART, said="Chapter three. Hotelling's T squared and MANOVA.")
 
     def problem(self):
         rows = [

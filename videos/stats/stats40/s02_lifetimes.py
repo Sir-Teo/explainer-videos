@@ -5,7 +5,7 @@ import numpy as np
 from videos.stats.stats40.common import *  # noqa: F403
 
 
-class Lifetimes(VoiceoverScene):
+class Lifetimes(StatsScene):
     def construct(self):
         self.card()
         self.definitions()
@@ -16,10 +16,7 @@ class Lifetimes(VoiceoverScene):
         self.shapes()
 
     def card(self):
-        card = chapter_card(1, r"Lifetimes", r"Survival, \ hazard, \ and the link between them", lit=(1662, 1693, 1825), part=PART)
-        with self.voiceover("Chapter one. Lifetimes."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(1, r"Lifetimes", r"Survival, \ hazard, \ and the link between them", lit=(1662, 1693, 1825), part=PART, said="Chapter one. Lifetimes.")
 
     def definitions(self):
         rows = [

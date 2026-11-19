@@ -5,7 +5,7 @@ import numpy as np
 from videos.stats.stats40.common import *  # noqa: F403
 
 
-class Competing(VoiceoverScene):
+class Competing(StatsScene):
     def construct(self):
         self.card()
         self.problem()
@@ -16,10 +16,7 @@ class Competing(VoiceoverScene):
         self.mgus_models()
 
     def card(self):
-        card = chapter_card(13, r"Competing risks", r"When another event gets there first", lit=(1999,), part=PART)
-        with self.voiceover("Chapter thirteen. Competing risks."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(13, r"Competing risks", r"When another event gets there first", lit=(1999,), part=PART, said="Chapter thirteen. Competing risks.")
 
     def problem(self):
         rows = fit_rows(VGroup(

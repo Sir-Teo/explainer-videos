@@ -5,7 +5,7 @@ import numpy as np
 from videos.stats.stats9.common import *  # noqa: F403
 
 
-class CramerRao(VoiceoverScene):
+class CramerRao(StatsScene):
     def construct(self):
         self.card()
         self.history()
@@ -18,10 +18,7 @@ class CramerRao(VoiceoverScene):
         self.biased()
 
     def card(self):
-        card = chapter_card(10, r"The Cram\'er--Rao bound", r"How good can an unbiased estimator possibly be?", lit=(1946,), part=PART)
-        with self.voiceover("Chapter ten. The Cramér–Rao bound."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(10, r"The Cram\'er--Rao bound", r"How good can an unbiased estimator possibly be?", lit=(1946,), part=PART, said="Chapter ten. The Cramér–Rao bound.")
 
     def history(self):
         h1 = history_card(1945, r"C. R. Rao, \ Calcutta", r"the bound, \ with information as its measure of accuracy", color=LIK,

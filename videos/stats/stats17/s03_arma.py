@@ -6,7 +6,7 @@ from explainer.stats.kit import ts as T
 from videos.stats.stats17.common import *  # noqa: F403
 
 
-class Arma(VoiceoverScene):
+class Arma(StatsScene):
     def construct(self):
         self.card()
         self.ar1()
@@ -18,10 +18,7 @@ class Arma(VoiceoverScene):
         self.wold()
 
     def card(self):
-        card = chapter_card(2, r"AR, \ MA, \ ARMA", r"Building memory out of shocks", part=PART)
-        with self.voiceover("Chapter two. Autoregressive and moving-average models."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(2, r"AR, \ MA, \ ARMA", r"Building memory out of shocks", part=PART, said="Chapter two. Autoregressive and moving-average models.")
 
     def ar1(self):
         rows = [

@@ -5,7 +5,7 @@ import numpy as np
 from videos.stats.stats44.common import *  # noqa: F403
 
 
-class Counting(VoiceoverScene):
+class Counting(StatsScene):
     def construct(self):
         self.card()
         self.compensator()
@@ -15,10 +15,7 @@ class Counting(VoiceoverScene):
         self.rebolledo()
 
     def card(self):
-        card = chapter_card(13, r"Counting processes", r"The martingales inside survival analysis", lit=(1978,), part=PART)
-        with self.voiceover("Chapter thirteen. Counting processes: the martingales inside survival analysis."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(13, r"Counting processes", r"The martingales inside survival analysis", lit=(1978,), part=PART, said="Chapter thirteen. Counting processes: the martingales inside survival analysis.")
 
     def compensator(self):
         rows = [

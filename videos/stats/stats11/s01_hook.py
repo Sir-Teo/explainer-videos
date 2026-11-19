@@ -5,13 +5,13 @@ import numpy as np
 from videos.stats.stats11.common import *  # noqa: F403
 
 
-class Hook(VoiceoverScene):
+class Hook(StatsScene):
     def construct(self):
         self.textbook()
         self.sawtooth()
         self.lucky()
         self.across_p()
-        self.objectives()
+        self.title(PART)
 
     def textbook(self):
         f = MathTex(r"\hat p \pm 1.96\sqrt{\frac{\hat p(1 - \hat p)}{n}}", font_size=60, color=OBS).move_to([0, 1.2, 0])
@@ -125,29 +125,4 @@ class Hook(VoiceoverScene):
             self.play(FadeIn(foot[0]))
             vo.wait_until("c")
             self.play(FadeIn(foot[1]))
-        self.clear_scene()
-
-    def objectives(self):
-        head = VGroup(label(r"Part 11", font_size=34, color=GREY_B), label(r"Honest Intervals", font_size=60)).arrange(DOWN, buff=0.25)
-        obj = objectives_card([
-            r"Neyman's definition of confidence, \ and what ``95\%'' does and does not promise",
-            r"pivots, \ and intervals made by inverting tests: \ Neyman's belt",
-            r"the binomial family: \ Wilson, \ Agresti--Coull, \ Clopper--Pearson, \ Jeffreys, \ likelihood",
-            r"discreteness, \ ratios (Fieller), \ simultaneous bands, \ prediction and tolerance",
-            r"credible vs confidence; \ the Coverage Board's protocol, \ formally",
-        ], color=OBS, font_size=26)
-        prereq = note(r"prerequisites: \ Part 10").to_corner(DL, buff=0.3)
-        built = note(r"built: \ \texttt{statkit.intervals}; \ the interval rain").to_corner(DR, buff=0.3)
-        with self.voiceover(
-            "<bookmark mark='a'/> Part eleven: honest intervals. <bookmark mark='b'/> We'll start with Jerzy Neyman's "
-            "definition of confidence and what it really promises; build intervals from pivots and by inverting tests; "
-            "replace the Wald interval with the binomial intervals that work; and deal with discreteness, ratios, many "
-            "intervals at once, and predicting the next observation. Then we'll compare confidence with Bayesian "
-            "credibility, and set down the Coverage Board's protocol formally."
-        ) as vo:
-            vo.wait_until("a")
-            self.play(FadeIn(head, shift=UP * 0.2))
-            vo.wait_until("b")
-            self.play(FadeOut(head), FadeIn(obj, shift=UP * 0.2), FadeIn(prereq), FadeIn(built))
-        self.wait(1.0)
         self.clear_scene()

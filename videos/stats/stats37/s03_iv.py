@@ -5,7 +5,7 @@ import numpy as np
 from videos.stats.stats37.common import *  # noqa: F403
 
 
-class Instruments(VoiceoverScene):
+class Instruments(StatsScene):
     def construct(self):
         self.card()
         self.wright()
@@ -16,11 +16,7 @@ class Instruments(VoiceoverScene):
         self.lottery()
 
     def card(self):
-        card = chapter_card(2, r"Instrumental variables", r"A nudge that reaches the outcome only through the treatment",
-                            lit=(1928, 1990, 1991), part=PART)
-        with self.voiceover("Chapter two. Instrumental variables."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(2, r"Instrumental variables", r"A nudge that reaches the outcome only through the treatment", lit=(1928, 1990, 1991), part=PART, said="Chapter two. Instrumental variables.")
 
     def wright(self):
         rows = fit_rows(VGroup(

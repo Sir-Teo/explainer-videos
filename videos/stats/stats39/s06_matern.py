@@ -6,7 +6,7 @@ from explainer.stats.kit import spatial as SPK
 from videos.stats.stats39.common import *  # noqa: F403
 
 
-class Matern(VoiceoverScene):
+class Matern(StatsScene):
     def construct(self):
         self.card()
         self.family()
@@ -18,10 +18,7 @@ class Matern(VoiceoverScene):
         self.ridge_pred()
 
     def card(self):
-        card = chapter_card(5, r"Mat\'ern and identifiability", r"What can one field tell us?", lit=(1960, 1999, 2004), part=PART)
-        with self.voiceover("Chapter five. Matérn, and what cannot be learned."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(5, r"Mat\'ern and identifiability", r"What can one field tell us?", lit=(1960, 1999, 2004), part=PART, said="Chapter five. Matérn, and what cannot be learned.")
 
     def family(self):
         rows = [

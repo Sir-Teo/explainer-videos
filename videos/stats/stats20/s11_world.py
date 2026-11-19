@@ -9,7 +9,7 @@ METHODS = [("naive", r"one-day recall (the plan)", SALT), ("calib", r"regression
            ("oracle", r"true intake, \ as if measured perfectly", TEAL)]
 
 
-class OnTheWorld(VoiceoverScene):
+class OnTheWorld(StatsScene):
     def construct(self):
         self.card()
         self.laws()
@@ -20,10 +20,7 @@ class OnTheWorld(VoiceoverScene):
         self.board()
 
     def card(self):
-        card = chapter_card(10, r"The same pipeline on the World", r"Where the answer is known", part=PART)
-        with self.voiceover("Chapter ten. The same pipeline, on the World."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(10, r"The same pipeline on the World", r"Where the answer is known", part=PART, said="Chapter ten. The same pipeline, on the World.")
 
     def laws(self):
         rows = [

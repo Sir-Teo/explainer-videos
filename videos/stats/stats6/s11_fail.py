@@ -5,7 +5,7 @@ import numpy as np
 from videos.stats.stats6.common import *  # noqa: F403
 
 
-class Fail(VoiceoverScene):
+class Fail(StatsScene):
     def construct(self):
         self.card()
         self.cauchy()
@@ -14,10 +14,7 @@ class Fail(VoiceoverScene):
         self.stable()
 
     def card(self):
-        card = chapter_card(10, r"When averages fail", r"Heavy tails, \ and the limits of the limit theorems", part=PART)
-        with self.voiceover("Chapter ten. When averages fail."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(10, r"When averages fail", r"Heavy tails, \ and the limits of the limit theorems", part=PART, said="Chapter ten. When averages fail.")
 
     def running(self, d, key, cx, color, yr, title):
         steps = np.asarray(d["steps"], float)

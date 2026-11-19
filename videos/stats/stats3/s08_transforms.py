@@ -5,7 +5,7 @@ import numpy as np
 from videos.stats.stats3.common import *  # noqa: F403
 
 
-class Transforms(VoiceoverScene, TreeMixin):
+class Transforms(StatsScene, TreeMixin):
     def construct(self):
         self.card()
         self.cdf_method()
@@ -17,11 +17,7 @@ class Transforms(VoiceoverScene, TreeMixin):
                             "and e to an exponential is a Pareto.", 7)
 
     def card(self):
-        card = chapter_card(7, r"Transformations", r"If $X$ has a distribution, what does $g(X)$ have?", lit=(),
-                            part=PART)
-        with self.voiceover("Chapter seven. Transformations."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(7, r"Transformations", r"If $X$ has a distribution, what does $g(X)$ have?", lit=(), part=PART, said="Chapter seven. Transformations.")
 
     def cdf_method(self):
         d = load("transforms")

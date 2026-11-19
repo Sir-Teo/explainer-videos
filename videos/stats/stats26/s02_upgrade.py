@@ -3,7 +3,7 @@ from __future__ import annotations
 from videos.stats.stats26.common import *  # noqa: F403
 
 
-class Upgrade(VoiceoverScene):
+class Upgrade(StatsScene):
     def construct(self):
         self.card()
         self.upgrade()
@@ -13,10 +13,7 @@ class Upgrade(VoiceoverScene):
         self.everywhere()
 
     def card(self):
-        card = chapter_card(1, r"Upgrade", r"What Part 15 assumed", lit=(1931,), part=PART)
-        with self.voiceover("Chapter one. The upgrade."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(1, r"Upgrade", r"What Part 15 assumed", lit=(1931,), part=PART, said="Chapter one. The upgrade.")
 
     def upgrade(self):
         card = upgrade_card(15, r"choose a prior, \ multiply by the likelihood, \ normalize: \ the posterior is the answer",

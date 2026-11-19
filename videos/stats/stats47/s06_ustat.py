@@ -5,7 +5,7 @@ import numpy as np
 from videos.stats.stats47.common import *  # noqa: F403
 
 
-class UStatistics(VoiceoverScene):
+class UStatistics(StatsScene):
     def construct(self):
         self.card()
         self.definition()
@@ -16,10 +16,7 @@ class UStatistics(VoiceoverScene):
         self.projection()
 
     def card(self):
-        card = chapter_card(5, r"U-statistics", r"Averages over pairs", lit=(1948,), part=PART)
-        with self.voiceover("Chapter five. U-statistics: averages over pairs."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(5, r"U-statistics", r"Averages over pairs", lit=(1948,), part=PART, said="Chapter five. U-statistics: averages over pairs.")
 
     def definition(self):
         rows = [

@@ -6,7 +6,7 @@ from scipy import stats
 from videos.stats.stats43.common import *  # noqa: F403
 
 
-class Stable(VoiceoverScene):
+class Stable(StatsScene):
     def construct(self):
         self.card()
         self.divisible()
@@ -17,10 +17,7 @@ class Stable(VoiceoverScene):
         self.board()
 
     def card(self):
-        card = chapter_card(11, r"Infinitely divisible and stable laws", r"What can a sum converge to?", lit=(1925,), part=PART)
-        with self.voiceover("Chapter eleven. Infinitely divisible and stable laws: what else a sum can converge to."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(11, r"Infinitely divisible and stable laws", r"What can a sum converge to?", lit=(1925,), part=PART, said="Chapter eleven. Infinitely divisible and stable laws: what else a sum can converge to.")
 
     def divisible(self):
         rows = [

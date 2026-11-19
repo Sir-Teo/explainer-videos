@@ -6,7 +6,7 @@ from explainer.stats.board import coverage_board, load_all
 from videos.stats.stats22.common import *  # noqa: F403
 
 
-class Trinity(VoiceoverScene):
+class Trinity(StatsScene):
     def construct(self):
         self.card()
         self.picture()
@@ -16,10 +16,7 @@ class Trinity(VoiceoverScene):
         self.board()
 
     def card(self):
-        card = chapter_card(6, r"The trinity", r"Wald, \ score and likelihood ratio", part=PART)
-        with self.voiceover("Chapter six. The trinity of tests."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(6, r"The trinity", r"Wald, \ score and likelihood ratio", part=PART, said="Chapter six. The trinity of tests.")
 
     def picture(self):
         d = load("trinity")

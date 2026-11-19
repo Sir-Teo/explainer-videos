@@ -6,7 +6,7 @@ from scipy import stats as st
 from videos.stats.stats40.common import *  # noqa: F403
 
 
-class Frailty(VoiceoverScene):
+class Frailty(StatsScene):
     def construct(self):
         self.card()
         self.vaupel()
@@ -16,10 +16,7 @@ class Frailty(VoiceoverScene):
         self.recurrent()
 
     def card(self):
-        card = chapter_card(14, r"Frailty", r"Unmeasured differences in risk", lit=(1979,), part=PART)
-        with self.voiceover("Chapter fourteen. Frailty."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(14, r"Frailty", r"Unmeasured differences in risk", lit=(1979,), part=PART, said="Chapter fourteen. Frailty.")
 
     def vaupel(self):
         rows = [

@@ -7,7 +7,7 @@ import numpy as np
 from videos.stats.stats43.common import *  # noqa: F403
 
 
-class LargeDeviations(VoiceoverScene):
+class LargeDeviations(StatsScene):
     def construct(self):
         self.card()
         self.cramer()
@@ -16,10 +16,7 @@ class LargeDeviations(VoiceoverScene):
         self.sanov()
 
     def card(self):
-        card = chapter_card(12, r"Large deviations", r"How rare is a rare event?", lit=(1938,), part=PART)
-        with self.voiceover("Chapter twelve. Large deviations: how rare is a rare event?"):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(12, r"Large deviations", r"How rare is a rare event?", lit=(1938,), part=PART, said="Chapter twelve. Large deviations: how rare is a rare event?")
 
     def cramer(self):
         rows = [

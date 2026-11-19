@@ -5,7 +5,7 @@ import numpy as np
 from videos.stats.stats7.common import *  # noqa: F403
 
 
-class Inverse(VoiceoverScene):
+class Inverse(StatsScene):
     def construct(self):
         self.card()
         self.proof()
@@ -16,10 +16,7 @@ class Inverse(VoiceoverScene):
         self.limits()
 
     def card(self):
-        card = chapter_card(2, r"The inverse CDF", r"Any distribution from one uniform", part=PART)
-        with self.voiceover("Chapter two. The inverse CDF."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(2, r"The inverse CDF", r"Any distribution from one uniform", part=PART, said="Chapter two. The inverse CDF.")
 
     def proof(self):
         rows = [

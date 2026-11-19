@@ -3,7 +3,7 @@ from __future__ import annotations
 from videos.stats.stats53.common import *  # noqa: F403
 
 
-class Misspecification(VoiceoverScene):
+class Misspecification(StatsScene):
     def construct(self):
         self.card()
         self.theorem()
@@ -15,10 +15,7 @@ class Misspecification(VoiceoverScene):
         self.safebayes()
 
     def card(self):
-        card = chapter_card(11, r"Misspecification and generalized posteriors", r"When the model is wrong", lit=(2017,), part=PART)
-        with self.voiceover("Chapter eleven. Misspecification and generalized posteriors: when the model is wrong."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(11, r"Misspecification and generalized posteriors", r"When the model is wrong", lit=(2017,), part=PART, said="Chapter eleven. Misspecification and generalized posteriors: when the model is wrong.")
 
     def theorem(self):
         rows = [

@@ -7,7 +7,7 @@ from videos.stats.stats64.common import *  # noqa: F403
 NAMES = [r"A", r"B", r"C", r"D", r"E", r"F", r"G", r"H"]
 
 
-class Arena(LectureMixin, VoiceoverScene):
+class Arena(LectureMixin, StatsScene):
     def construct(self):
         self.card_voiceover("Chapter three. Arenas: pairwise votes, and the Bradley-Terry model behind the ranking.", 3,
                             r"Arenas", r"Ranking by pairwise votes")

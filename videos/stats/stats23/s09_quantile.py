@@ -7,7 +7,7 @@ from videos.stats.stats23.common import *  # noqa: F403
 QCOL = [BLUE, TEAL, PATH, GLS_C, RED]
 
 
-class Quantile(VoiceoverScene):
+class Quantile(StatsScene):
     def construct(self):
         self.card()
         self.idea()
@@ -19,10 +19,7 @@ class Quantile(VoiceoverScene):
         self.properties()
 
     def card(self):
-        card = chapter_card(8, r"Quantile regression", r"Not just the mean", lit=(1978,), part=PART)
-        with self.voiceover("Chapter eight. Quantile regression."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(8, r"Quantile regression", r"Not just the mean", lit=(1978,), part=PART, said="Chapter eight. Quantile regression.")
 
     def idea(self):
         rows = [

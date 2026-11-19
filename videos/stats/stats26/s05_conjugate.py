@@ -3,7 +3,7 @@ from __future__ import annotations
 from videos.stats.stats26.common import *  # noqa: F403
 
 
-class Conjugate(VoiceoverScene):
+class Conjugate(StatsScene):
     def construct(self):
         self.card()
         self.family()
@@ -14,10 +14,7 @@ class Conjugate(VoiceoverScene):
         self.beyond()
 
     def card(self):
-        card = chapter_card(4, r"Conjugate families", r"Priors as pseudo-data", lit=(1979,), part=PART)
-        with self.voiceover("Chapter four. Conjugate and exponential families."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(4, r"Conjugate families", r"Priors as pseudo-data", lit=(1979,), part=PART, said="Chapter four. Conjugate and exponential families.")
 
     def family(self):
         rows = [

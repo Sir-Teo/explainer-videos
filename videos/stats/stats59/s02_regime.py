@@ -5,7 +5,7 @@ import numpy as np
 from videos.stats.stats59.common import *  # noqa: F403
 
 
-class Regime(LectureMixin, VoiceoverScene):
+class Regime(LectureMixin, StatsScene):
     def construct(self):
         self.card_voiceover("Chapter one. The proportional regime: what changes when p grows with n, and what takes the "
                             "place of the old answers.", 1, r"The proportional regime", r"$p/n \to \kappa$", lit=(2019,))

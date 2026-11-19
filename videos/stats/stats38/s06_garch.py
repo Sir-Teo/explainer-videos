@@ -5,7 +5,7 @@ import numpy as np
 from videos.stats.stats38.common import *  # noqa: F403
 
 
-class Volatility(VoiceoverScene):
+class Volatility(StatsScene):
     def construct(self):
         self.card()
         self.returns()
@@ -17,10 +17,7 @@ class Volatility(VoiceoverScene):
         self.lesson()
 
     def card(self):
-        card = chapter_card(5, r"Volatility", r"When the variance has a memory", lit=(1963, 1982, 1986), part=PART)
-        with self.voiceover("Chapter five. Volatility."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(5, r"Volatility", r"When the variance has a memory", lit=(1963, 1982, 1986), part=PART, said="Chapter five. Volatility.")
 
     def returns(self):
         d = load("garch")

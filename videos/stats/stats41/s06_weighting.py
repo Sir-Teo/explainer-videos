@@ -5,7 +5,7 @@ import numpy as np
 from videos.stats.stats41.common import *  # noqa: F403
 
 
-class Weighting(VoiceoverScene):
+class Weighting(StatsScene):
     def construct(self):
         self.card()
         self.ipw()
@@ -19,10 +19,7 @@ class Weighting(VoiceoverScene):
         self.board()
 
     def card(self):
-        card = chapter_card(5, r"Weighting is causal inference", r"Respondents stand in for the missing", lit=(1994,), part=PART)
-        with self.voiceover("Chapter five. Weighting is causal inference."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(5, r"Weighting is causal inference", r"Respondents stand in for the missing", lit=(1994,), part=PART, said="Chapter five. Weighting is causal inference.")
 
     def ipw(self):
         rows = [

@@ -5,7 +5,7 @@ import numpy as np
 from videos.stats.stats33.common import *  # noqa: F403
 
 
-class Knockoffs(VoiceoverScene):
+class Knockoffs(StatsScene):
     def construct(self):
         self.card()
         self.problem()
@@ -19,10 +19,7 @@ class Knockoffs(VoiceoverScene):
         self.reach()
 
     def card(self):
-        card = chapter_card(7, r"Knockoffs", r"Fake variables that catch false ones", lit=(2015,), part=PART)
-        with self.voiceover("Chapter seven. Knockoffs."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(7, r"Knockoffs", r"Fake variables that catch false ones", lit=(2015,), part=PART, said="Chapter seven. Knockoffs.")
 
     def problem(self):
         rows = [

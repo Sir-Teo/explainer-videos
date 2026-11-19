@@ -13,17 +13,14 @@ GROUPS = [
 ]
 
 
-class Tree(VoiceoverScene):
+class Tree(StatsScene):
     def construct(self):
         self.card()
         self.tour()
         self.reference()
 
     def card(self):
-        card = chapter_card(14, r"The family tree", r"Sums, limits, transformations and mixtures", lit=(), part=PART)
-        with self.voiceover("Chapter fourteen. The family tree."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(14, r"The family tree", r"Sums, limits, transformations and mixtures", lit=(), part=PART, said="Chapter fourteen. The family tree.")
 
     def tour(self):
         ft = FamilyTree().scale(0.92)

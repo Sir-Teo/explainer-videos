@@ -3,7 +3,7 @@ from __future__ import annotations
 from videos.stats.stats65.common import *  # noqa: F403
 
 
-class TranscriptComplete(LectureMixin, VoiceoverScene):
+class TranscriptComplete(LectureMixin, StatsScene):
     def construct(self):
         self.card_voiceover("Chapter nine. The transcript, complete.", 9, r"The transcript", r"The degree in one picture")
         self.transcript()

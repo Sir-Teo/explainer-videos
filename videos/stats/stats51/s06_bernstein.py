@@ -5,7 +5,7 @@ import numpy as np
 from videos.stats.stats51.common import *  # noqa: F403
 
 
-class MatrixBernstein(VoiceoverScene):
+class MatrixBernstein(StatsScene):
     def construct(self):
         self.card()
         self.why_matrices()
@@ -15,10 +15,7 @@ class MatrixBernstein(VoiceoverScene):
         self.uses()
 
     def card(self):
-        card = chapter_card(5, r"Matrix concentration", r"Bernstein's inequality, \ for sums of random matrices", lit=(2012,), part=PART)
-        with self.voiceover("Chapter five. Matrix concentration: Bernstein's inequality, for sums of random matrices."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(5, r"Matrix concentration", r"Bernstein's inequality, \ for sums of random matrices", lit=(2012,), part=PART, said="Chapter five. Matrix concentration: Bernstein's inequality, for sums of random matrices.")
 
     def why_matrices(self):
         rows = fit_rows(VGroup(

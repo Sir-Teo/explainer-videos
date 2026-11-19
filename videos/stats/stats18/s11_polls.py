@@ -5,7 +5,7 @@ import numpy as np
 from videos.stats.stats18.common import *  # noqa: F403
 
 
-class Polls(VoiceoverScene):
+class Polls(StatsScene):
     def construct(self):
         self.card()
         self.quota()
@@ -18,10 +18,7 @@ class Polls(VoiceoverScene):
         self.lessons()
 
     def card(self):
-        card = chapter_card(10, r"Polls", r"1948, \ 2016, \ 2020", part=PART)
-        with self.voiceover("Chapter ten. Polls."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(10, r"Polls", r"1948, \ 2016, \ 2020", part=PART, said="Chapter ten. Polls.")
 
     def quota(self):
         rows = [

@@ -5,7 +5,7 @@ import numpy as np
 from videos.stats.stats45.common import *  # noqa: F403
 
 
-class Information(VoiceoverScene):
+class Information(StatsScene):
     def construct(self):
         self.card()
         self.multi()
@@ -17,10 +17,7 @@ class Information(VoiceoverScene):
         self.hodges()
 
     def card(self):
-        card = chapter_card(8, r"Information inequalities", r"How small can a variance be?", lit=(1945, 1946), part=PART)
-        with self.voiceover("Chapter eight. Information inequalities: how small can the variance of an unbiased estimator be?"):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(8, r"Information inequalities", r"How small can a variance be?", lit=(1945, 1946), part=PART, said="Chapter eight. Information inequalities: how small can the variance of an unbiased estimator be?")
 
     def multi(self):
         rows = [

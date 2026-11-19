@@ -5,7 +5,7 @@ import numpy as np
 from videos.stats.stats65.common import *  # noqa: F403
 
 
-class Question(LectureMixin, VoiceoverScene):
+class Question(LectureMixin, StatsScene):
     def construct(self):
         self.card_voiceover("Chapter one. Choosing a question.", 1, r"Choosing a question", r"Important, \ open, \ and small enough")
         self.criteria()

@@ -5,7 +5,7 @@ import numpy as np
 from videos.stats.stats29.common import *  # noqa: F403
 
 
-class Hook(VoiceoverScene):
+class Hook(StatsScene):
     def construct(self):
         self.story()
         self.histograms()
@@ -13,7 +13,7 @@ class Hook(VoiceoverScene):
         self.critical()
         self.test()
         self.lesson()
-        self.objectives()
+        self.title(PART)
 
     def story(self):
         tl = timeline(lit=(1981,)).to_edge(UP, buff=0.35)
@@ -201,29 +201,4 @@ class Hook(VoiceoverScene):
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
                 self.play(FadeIn(rows[k], shift=RIGHT * 0.2))
-        self.clear_scene()
-
-    def objectives(self):
-        head = VGroup(label(r"Part 29", font_size=34, color=GREY_B), label(r"Smoothing", font_size=60)).arrange(DOWN, buff=0.25)
-        obj = objectives_card([
-            r"histograms and kernel estimates: \ bias, \ variance, \ rates",
-            r"choosing the bandwidth; \ the curse of dimensionality",
-            r"local polynomials; \ smoothing splines; \ GCV and REML",
-            r"kernels and the representer theorem; \ wavelets",
-            r"additive models; \ honest intervals for curves; \ shape constraints",
-        ], color=KDEC, font_size=26)
-        prereq = note(r"prerequisites: \ Parts 16, \ 23 and 25").to_corner(DL, buff=0.3)
-        built = note(r"built: \ \texttt{statkit.smooth}; \ the spline spectrum").to_corner(DR, buff=0.3)
-        with self.voiceover(
-            "<bookmark mark='a'/> Part twenty-nine: smoothing. <bookmark mark='b'/> We'll derive the error of histograms and "
-            "kernel estimates and their optimal rates; choose bandwidths from the data; meet the curse of dimensionality; fit "
-            "regression curves by local polynomials and smoothing splines, and choose their smoothness by GCV and REML; see "
-            "why kernels and splines are the same idea; denoise with wavelets; fit additive models; build intervals for "
-            "curves that are honest about bias; and estimate curves known only to be monotone."
-        ) as vo:
-            vo.wait_until("a")
-            self.play(FadeIn(head, shift=UP * 0.2))
-            vo.wait_until("b")
-            self.play(FadeOut(head), FadeIn(obj, shift=UP * 0.2), FadeIn(prereq), FadeIn(built))
-        self.wait(1.0)
         self.clear_scene()

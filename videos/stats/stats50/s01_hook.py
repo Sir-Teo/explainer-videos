@@ -5,7 +5,7 @@ import numpy as np
 from videos.stats.stats50.common import *  # noqa: F403
 
 
-class Hook(VoiceoverScene):
+class Hook(StatsScene):
     def construct(self):
         self.story()
         self.rates()
@@ -13,7 +13,7 @@ class Hook(VoiceoverScene):
         self.question()
         self.game()
         self.upgrades()
-        self.objectives()
+        self.title(PART)
 
     def story(self):
         tl = timeline(lit=(1972, 1980)).to_edge(UP, buff=0.35)
@@ -171,24 +171,4 @@ class Hook(VoiceoverScene):
             for k, m_ in enumerate("abc"):
                 vo.wait_until(m_)
                 self.play(FadeIn(cards[k], shift=UP * 0.2))
-        self.clear_scene()
-
-    def objectives(self):
-        head = VGroup(label(r"Part 50", font_size=34, color=GREY_B), label(r"Minimax Theory", font_size=48)).arrange(DOWN, buff=0.25)
-        obj = objectives_card([
-            r"the Gaussian sequence model, \ and its connections to regular regression and density models",
-            r"Pinsker's exact minimax risk; \ Le Cam's, \ Fano's and Assouad's lower bounds",
-            r"upper bounds that match: \ blockwise James--Stein, \ thresholding; \ Lepski's adaptation",
-            r"minimax testing and higher criticism; \ statistical--computational gaps",
-        ], color=HYPC, font_size=26)
-        prereq = note(r"prerequisites: \ Parts 29, \ 45, \ 47").to_corner(DL, buff=0.3)
-        built = note(r"built: \ \texttt{statkit.gsm}, \ the lower-bound workbench").to_corner(DR, buff=0.3)
-        with self.voiceover(
-            "<bookmark mark='a'/> Part fifty: minimax theory, the limits of estimation. <bookmark mark='b'/> We'll meet the Gaussian sequence model and see why it stands for regression and density estimation; find Pinsker's exact linear minimax risk and asymptotic unrestricted constant; build lower bounds by Le Cam's, Fano's and Assouad's methods on a workbench of packed hypotheses; match them with blockwise James–Stein and thresholding; adapt to unknown smoothness with Lepski's method; test for sparse signals with higher criticism; and end at the frontier where statistics meets computational complexity."
-        ) as vo:
-            vo.wait_until("a")
-            self.play(FadeIn(head, shift=UP * 0.2))
-            vo.wait_until("b")
-            self.play(FadeOut(head), FadeIn(obj, shift=UP * 0.2), FadeIn(prereq), FadeIn(built))
-        self.wait(1.0)
         self.clear_scene()

@@ -6,7 +6,7 @@ from scipy import special
 from videos.stats.stats25.common import *  # noqa: F403
 
 
-class Rasch(VoiceoverScene):
+class Rasch(StatsScene):
     def construct(self):
         self.card()
         self.model()
@@ -17,10 +17,7 @@ class Rasch(VoiceoverScene):
         self.beyond()
 
     def card(self):
-        card = chapter_card(13, r"Item response theory", r"Exams as mixed models", lit=(1960,), part=PART)
-        with self.voiceover("Chapter thirteen. Item response theory."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(13, r"Item response theory", r"Exams as mixed models", lit=(1960,), part=PART, said="Chapter thirteen. Item response theory.")
 
     def model(self):
         rows = [

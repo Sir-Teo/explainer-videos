@@ -5,7 +5,7 @@ import numpy as np
 from videos.stats.stats65.common import *  # noqa: F403
 
 
-class Application(LectureMixin, VoiceoverScene):
+class Application(LectureMixin, StatsScene):
     def construct(self):
         self.card_voiceover("Chapter six. Real data: blood pressure for a population a study under-sampled.", 6,
                             r"An application", r"NHANES, \ with a designed selection")

@@ -5,7 +5,7 @@ import numpy as np
 from videos.stats.stats14.common import *  # noqa: F403
 
 
-class CaseControl(VoiceoverScene):
+class CaseControl(StatsScene):
     def construct(self):
         self.card()
         self.doll_hill()
@@ -16,10 +16,7 @@ class CaseControl(VoiceoverScene):
         self.rare()
 
     def card(self):
-        card = chapter_card(10, r"Case--control studies", r"Sampling on the outcome, \ and what survives it", lit=(1950,), part=PART)
-        with self.voiceover("Chapter ten. Case–control studies."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(10, r"Case--control studies", r"Sampling on the outcome, \ and what survives it", lit=(1950,), part=PART, said="Chapter ten. Case–control studies.")
 
     def doll_hill(self):
         dh = museum.DOLL_HILL

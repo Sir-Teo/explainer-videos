@@ -5,7 +5,7 @@ import numpy as np
 from videos.stats.stats22.common import *  # noqa: F403
 
 
-class Information(VoiceoverScene):
+class Information(StatsScene):
     def construct(self):
         self.card()
         self.two()
@@ -14,10 +14,7 @@ class Information(VoiceoverScene):
         self.advice()
 
     def card(self):
-        card = chapter_card(4, r"Observed vs expected information", r"Which curvature?", part=PART)
-        with self.voiceover("Chapter four. Observed versus expected information."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(4, r"Observed vs expected information", r"Which curvature?", part=PART, said="Chapter four. Observed versus expected information.")
 
     def two(self):
         rows = [

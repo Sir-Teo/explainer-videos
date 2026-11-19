@@ -6,7 +6,7 @@ from scipy import stats
 from videos.stats.stats16.common import *  # noqa: F403
 
 
-class MoreRanks(VoiceoverScene):
+class MoreRanks(StatsScene):
     def construct(self):
         self.card()
         self.kruskal()
@@ -17,10 +17,7 @@ class MoreRanks(VoiceoverScene):
         self.outlier()
 
     def card(self):
-        card = chapter_card(4, r"More rank methods", r"Many groups, \ blocks, \ and correlation", part=PART)
-        with self.voiceover("Chapter four. More rank methods."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(4, r"More rank methods", r"Many groups, \ blocks, \ and correlation", part=PART, said="Chapter four. More rank methods.")
 
     def kruskal(self):
         d = load("more")

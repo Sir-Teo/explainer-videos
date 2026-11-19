@@ -17,7 +17,7 @@ def urn(name, reds, n=8, color=GREY_B) -> VGroup:
     return VGroup(body, balls, nm)
 
 
-class Conditioning(VoiceoverScene):
+class Conditioning(StatsScene):
     def construct(self):
         self.card()
         self.slice()
@@ -27,10 +27,7 @@ class Conditioning(VoiceoverScene):
         self.children()
 
     def card(self):
-        card = chapter_card(5, r"Conditioning", r"What changes when we learn something?", lit=(1654,), part=PART)
-        with self.voiceover("Chapter five. Conditioning."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(5, r"Conditioning", r"What changes when we learn something?", lit=(1654,), part=PART, said="Chapter five. Conditioning.")
 
     def slice(self):
         d = load("conditioning")

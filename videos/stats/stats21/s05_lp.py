@@ -5,7 +5,7 @@ import numpy as np
 from videos.stats.stats21.common import *  # noqa: F403
 
 
-class LinearProgramming(VoiceoverScene):
+class LinearProgramming(StatsScene):
     def construct(self):
         self.card()
         self.boscovich()
@@ -17,10 +17,7 @@ class LinearProgramming(VoiceoverScene):
         self.summary()
 
     def card(self):
-        card = chapter_card(4, r"Linear programming", r"Absolute deviations and quantiles", part=PART)
-        with self.voiceover("Chapter four. Linear programming in statistics."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(4, r"Linear programming", r"Absolute deviations and quantiles", part=PART, said="Chapter four. Linear programming in statistics.")
 
     def boscovich(self):
         hc = history_card(1757, r"Roger Boscovich, \ Rome",

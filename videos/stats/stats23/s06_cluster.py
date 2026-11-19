@@ -6,7 +6,7 @@ from explainer.stats.board import coverage_board, load_all
 from videos.stats.stats23.common import *  # noqa: F403
 
 
-class Cluster(VoiceoverScene):
+class Cluster(StatsScene):
     def construct(self):
         self.card()
         self.schools()
@@ -19,10 +19,7 @@ class Cluster(VoiceoverScene):
         self.board()
 
     def card(self):
-        card = chapter_card(5, r"Clustering", r"Sixty pupils are not sixty schools", lit=(1986, 2008), part=PART)
-        with self.voiceover("Chapter five. Clustering."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(5, r"Clustering", r"Sixty pupils are not sixty schools", lit=(1986, 2008), part=PART, said="Chapter five. Clustering.")
 
     def schools(self):
         d = load("schools")

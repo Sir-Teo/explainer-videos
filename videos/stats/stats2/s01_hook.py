@@ -21,7 +21,7 @@ def tally(name: str, color, won: int, of=3, r=0.2) -> VGroup:
     return g
 
 
-class Hook(VoiceoverScene):
+class Hook(StatsScene):
     def construct(self):
         self.letters()
         self.game()
@@ -29,7 +29,7 @@ class Hook(VoiceoverScene):
         self.fermat()
         self.pascal()
         self.check()
-        self.objectives()
+        self.title(PART)
 
     # ------------------------------------------------------------------
     def letters(self):
@@ -313,44 +313,4 @@ class Hook(VoiceoverScene):
             self.play(Create(path), run_time=4.0)
             vo.wait_until("b")
             self.play(FadeIn(box, shift=LEFT * 0.2))
-        self.clear_scene()
-
-    def objectives(self):
-        head = VGroup(label(r"Part 2", font_size=34, color=GREY_B), label(r"Chance, Counted", font_size=64))
-        head.arrange(DOWN, buff=0.25)
-        obj = objectives_card([
-            r"classical probability: \ Cardano, Galileo, de M\'er\'e; \ counting with permutations, combinations, "
-            r"stars and bars",
-            r"Bertrand's paradox, \ and Kolmogorov's axioms with their consequences: \ inclusion--exclusion, the union "
-            r"bound, $1/e$",
-            r"conditioning, \ Bayes' theorem in odds form, \ the prosecutor's fallacy, \ Monty Hall's protocols",
-            r"independence, \ pairwise and mutual; \ conditional independence",
-            r"random variables and distribution functions; \ expectation, indicators, variance; \ St.\ Petersburg; "
-            r"\ generating functions",
-            r"what probability means: \ frequency, logic, belief, \ and the Dutch book",
-        ], color=S.ACCENT, font_size=25)
-        prereq = note(r"prerequisites: \ Part 1; \ high-school algebra").to_corner(DL, buff=0.3)
-        code = code_block([
-            "die = Dist.uniform(range(1, 7))",
-            "(die ** 3).map(sum).P(10)        # 27/216, exactly",
-            "(die ** 4).P(lambda r: 6 in r)   # 671/1296",
-        ], font_size=24)
-        built = label(r"Built in this part: \ an exact probability engine, \ checked against simulation",
-                      font_size=30, color=S.ACCENT)
-        bb = VGroup(built, code).arrange(DOWN, buff=0.45)
-        with self.voiceover(
-            "So this part asks: how do we reason exactly about what might happen? Part two: chance, counted. "
-            "<bookmark mark='a'/> In this part: classical probability, from Cardano and "
-            "Galileo to the Chevalier de Méré, and the counting it needs. Bertrand's paradox, and Kolmogorov's "
-            "axioms with what follows from them. Conditioning; Bayes' theorem; a miscarriage of justice; and the "
-            "Monty Hall problem, done properly. Independence. Random variables, expectation and variance, and "
-            "generating functions. And the old argument about what probability means. <bookmark mark='b'/> Along "
-            "the way we'll build an engine that computes probabilities on finite spaces exactly, as fractions, with "
-            "no rounding at all, and we'll check every answer it gives against simulation."
-        ) as vo:
-            self.play(FadeIn(head, shift=UP * 0.2))
-            self.play(FadeOut(head), FadeIn(obj, shift=UP * 0.2), FadeIn(prereq))
-            vo.wait_until("b")
-            self.play(FadeOut(obj), FadeOut(prereq), FadeIn(bb, shift=UP * 0.2))
-        self.wait(1.0)
         self.clear_scene()

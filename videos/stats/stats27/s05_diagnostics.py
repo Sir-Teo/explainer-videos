@@ -5,7 +5,7 @@ import numpy as np
 from videos.stats.stats27.common import *  # noqa: F403
 
 
-class Diagnostics(VoiceoverScene):
+class Diagnostics(StatsScene):
     def construct(self):
         self.card()
         self.ess()
@@ -17,10 +17,7 @@ class Diagnostics(VoiceoverScene):
         self.warmup()
 
     def card(self):
-        card = chapter_card(4, r"Diagnostics", r"Did the chains find the posterior?", lit=(), part=PART)
-        with self.voiceover("Chapter four. Diagnostics."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(4, r"Diagnostics", r"Did the chains find the posterior?", lit=(), part=PART, said="Chapter four. Diagnostics.")
 
     def ess(self):
         rows = [

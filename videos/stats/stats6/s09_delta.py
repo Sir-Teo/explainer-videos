@@ -5,7 +5,7 @@ import numpy as np
 from videos.stats.stats6.common import *  # noqa: F403
 
 
-class Delta(VoiceoverScene):
+class Delta(StatsScene):
     def construct(self):
         self.card()
         self.picture()
@@ -16,10 +16,7 @@ class Delta(VoiceoverScene):
         self.second_order()
 
     def card(self):
-        card = chapter_card(8, r"The delta method", r"The CLT, pushed through a smooth function", part=PART)
-        with self.voiceover("Chapter eight. The delta method."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(8, r"The delta method", r"The CLT, pushed through a smooth function", part=PART, said="Chapter eight. The delta method.")
 
     def picture(self):
         A = axes([0, 9], [0, 3.4], x_length=7.0, y_length=5.2, xlabel=r"$\bar X$", ylabel=r"$g(\bar X) = \sqrt{\bar X}$",

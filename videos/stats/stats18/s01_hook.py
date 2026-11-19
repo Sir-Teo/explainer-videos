@@ -6,14 +6,14 @@ from explainer.stats.world import World
 from videos.stats.stats18.common import *  # noqa: F403
 
 
-class Hook(VoiceoverScene):
+class Hook(StatsScene):
     def construct(self):
         self.digest()
         self.result()
         self.island()
         self.recreate()
         self.question()
-        self.objectives()
+        self.title(PART)
 
     def digest(self):
         tl = timeline(lit=(1936,)).to_edge(UP, buff=0.35)
@@ -162,29 +162,4 @@ class Hook(VoiceoverScene):
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
                 self.play(FadeIn(rows[k], shift=RIGHT * 0.2))
-        self.clear_scene()
-
-    def objectives(self):
-        head = VGroup(label(r"Part 18", font_size=34, color=GREY_B), label(r"Who Did You Ask?", font_size=60)).arrange(DOWN, buff=0.25)
-        obj = objectives_card([
-            r"frame and nonresponse bias; \ Meng's identity: \ why size can't buy back bias",
-            r"design-based inference: \ the randomness is in the selection",
-            r"simple random sampling, \ stratification, \ clusters and stages",
-            r"unequal probabilities: \ Hansen--Hurwitz, \ Horvitz--Thompson, \ Basu's elephants",
-            r"ratio and regression estimators; \ weighting and raking; \ polls from 1948 to 2020",
-        ], color=BLUE, font_size=26)
-        prereq = note(r"prerequisites: \ Parts 8 and 11").to_corner(DL, buff=0.3)
-        built = note(r"built: \ \texttt{statkit.survey}; \ the World's polling firm; \ the island map").to_corner(DR, buff=0.3)
-        with self.voiceover(
-            "<bookmark mark='a'/> Part eighteen: who did you ask? <bookmark mark='b'/> We'll separate the Digest's "
-            "two mistakes and measure them with Xiao-Li Meng's identity; see why a probability sample needs no model "
-            "of the population; build simple random, stratified and cluster samples; meet unequal-probability "
-            "estimators and Basu's elephants; use auxiliary information, weighting and raking; and look at what went "
-            "wrong with the polls of 1948, 2016 and 2020."
-        ) as vo:
-            vo.wait_until("a")
-            self.play(FadeIn(head, shift=UP * 0.2))
-            vo.wait_until("b")
-            self.play(FadeOut(head), FadeIn(obj, shift=UP * 0.2), FadeIn(prereq), FadeIn(built))
-        self.wait(1.0)
         self.clear_scene()

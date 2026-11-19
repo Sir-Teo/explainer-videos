@@ -22,7 +22,7 @@ def bernstein(p):
     return np.sqrt(2 * p * (1 - p) * N / (N - 1) * LA / N) + 7 * LA / (3 * (N - 1))
 
 
-class ConcentrationIntervals(VoiceoverScene):
+class ConcentrationIntervals(StatsScene):
     def construct(self):
         self.card()
         self.intervals()
@@ -65,10 +65,7 @@ class ConcentrationIntervals(VoiceoverScene):
         self.clear_scene()
 
     def card(self):
-        card = chapter_card(10, r"The Board: \ intervals from concentration", r"Valid at every $n$, \ and what that costs", part=PART)
-        with self.voiceover("Chapter ten. The Board: intervals from concentration, valid at every n, and what that costs."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(10, r"The Board: \ intervals from concentration", r"Valid at every $n$, \ and what that costs", part=PART, said="Chapter ten. The Board: intervals from concentration, valid at every n, and what that costs.")
 
     def intervals(self):
         rows = [

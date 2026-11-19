@@ -5,7 +5,7 @@ import numpy as np
 from videos.stats.stats32.common import *  # noqa: F403
 
 
-class Zoo(VoiceoverScene):
+class Zoo(StatsScene):
     def construct(self):
         self.card()
         self.enet()
@@ -19,10 +19,7 @@ class Zoo(VoiceoverScene):
         self.recovery()
 
     def card(self):
-        card = chapter_card(6, r"The penalty zoo", r"Changing the corner to fit the problem", lit=(2001, 2005), part=PART)
-        with self.voiceover("Chapter six. The penalty zoo."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(6, r"The penalty zoo", r"Changing the corner to fit the problem", lit=(2001, 2005), part=PART, said="Chapter six. The penalty zoo.")
 
     def enet(self):
         rows = [

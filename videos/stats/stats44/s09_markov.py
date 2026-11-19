@@ -5,7 +5,7 @@ import numpy as np
 from videos.stats.stats44.common import *  # noqa: F403
 
 
-class MarkovChains(VoiceoverScene):
+class MarkovChains(StatsScene):
     def construct(self):
         self.card()
         self.harris()
@@ -15,10 +15,7 @@ class MarkovChains(VoiceoverScene):
         self.board()
 
     def card(self):
-        card = chapter_card(8, r"Markov chains on general spaces", r"When can you trust an MCMC average?", lit=(1953,), part=PART)
-        with self.voiceover("Chapter eight. Markov chains on general spaces, and when an MCMC average can be trusted."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(8, r"Markov chains on general spaces", r"When can you trust an MCMC average?", lit=(1953,), part=PART, said="Chapter eight. Markov chains on general spaces, and when an MCMC average can be trusted.")
 
     def harris(self):
         rows = [

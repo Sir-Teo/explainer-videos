@@ -5,7 +5,7 @@ import numpy as np
 from videos.stats.stats39.common import *  # noqa: F403
 
 
-class Scaling(VoiceoverScene):
+class Scaling(StatsScene):
     def construct(self):
         self.card()
         self.vecchia()
@@ -16,10 +16,7 @@ class Scaling(VoiceoverScene):
         self.others()
 
     def card(self):
-        card = chapter_card(7, r"Scaling up", r"A hundred thousand locations", lit=(1988, 2016), part=PART)
-        with self.voiceover("Chapter seven. Scaling up."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(7, r"Scaling up", r"A hundred thousand locations", lit=(1988, 2016), part=PART, said="Chapter seven. Scaling up.")
 
     def vecchia(self):
         rows = [

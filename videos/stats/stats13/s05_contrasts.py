@@ -8,7 +8,7 @@ from videos.stats.stats13.common import *  # noqa: F403
 NAMES = [r"control", r"A", r"B", r"C", r"D"]
 
 
-class Contrasts(VoiceoverScene):
+class Contrasts(StatsScene):
     def construct(self):
         self.card()
         self.contrasts()
@@ -21,10 +21,7 @@ class Contrasts(VoiceoverScene):
         self.advice()
 
     def card(self):
-        card = chapter_card(4, r"Contrasts", r"Asking sharper questions, \ and asking many honestly", part=PART)
-        with self.voiceover("Chapter four. Contrasts, and many comparisons."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(4, r"Contrasts", r"Asking sharper questions, \ and asking many honestly", part=PART, said="Chapter four. Contrasts, and many comparisons.")
 
     def contrasts(self):
         d = load("anova")

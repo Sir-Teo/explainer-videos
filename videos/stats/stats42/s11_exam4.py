@@ -7,7 +7,7 @@ from videos.stats.stats42.common import *  # noqa: F403
 LTOP = 1.45
 
 
-class ExamModern(ExamMixin, VoiceoverScene):
+class ExamModern(ExamMixin, StatsScene):
     def construct(self):
         self.card()
         self.p10()
@@ -15,10 +15,7 @@ class ExamModern(ExamMixin, VoiceoverScene):
         self.p12()
 
     def card(self):
-        card = chapter_card(10, r"Exam IV: \ discoveries, \ guarantees, \ survival", r"Problems 10--12", part=PART)
-        with self.voiceover("Chapter ten. The last three problems: many tests at once, a prediction interval with a guarantee, and a survival curve."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(10, r"Exam IV: \ discoveries, \ guarantees, \ survival", r"Problems 10--12", part=PART, said="Chapter ten. The last three problems: many tests at once, a prediction interval with a guarantee, and a survival curve.")
 
     # ------------------------------------------------------------------------------------------ Problem 10
     def p10(self):

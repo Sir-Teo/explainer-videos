@@ -5,7 +5,7 @@ import numpy as np
 from videos.stats.stats47.common import *  # noqa: F403
 
 
-class Contiguity(VoiceoverScene):
+class Contiguity(StatsScene):
     def construct(self):
         self.card()
         self.first()
@@ -15,10 +15,7 @@ class Contiguity(VoiceoverScene):
         self.trinity()
 
     def card(self):
-        card = chapter_card(8, r"Contiguity and local power", r"Moving a limit from the null to the alternative", part=PART)
-        with self.voiceover("Chapter eight. Contiguity and local power: moving a limit from the null to the alternative."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(8, r"Contiguity and local power", r"Moving a limit from the null to the alternative", part=PART, said="Chapter eight. Contiguity and local power: moving a limit from the null to the alternative.")
 
     def first(self):
         rows = [

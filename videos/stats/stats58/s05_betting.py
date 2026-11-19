@@ -5,7 +5,7 @@ import numpy as np
 from videos.stats.stats58.common import *  # noqa: F403
 
 
-class Betting(LectureMixin, VoiceoverScene):
+class Betting(LectureMixin, StatsScene):
     def construct(self):
         self.card_voiceover("Chapter four. Testing by betting: e-values, how to calibrate them, how to merge them, and how "
                        "to bet well.", 4, r"Testing by betting", r"Evidence as wealth", lit=(2021,))

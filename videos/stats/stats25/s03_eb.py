@@ -5,7 +5,7 @@ import numpy as np
 from videos.stats.stats25.common import *  # noqa: F403
 
 
-class EB(VoiceoverScene):
+class EB(StatsScene):
     def construct(self):
         self.card()
         self.upgrade()
@@ -16,10 +16,7 @@ class EB(VoiceoverScene):
         self.winners()
 
     def card(self):
-        card = chapter_card(2, r"Empirical Bayes", r"Estimate the prior from the data", lit=(1956,), part=PART)
-        with self.voiceover("Chapter two. Empirical Bayes."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(2, r"Empirical Bayes", r"Estimate the prior from the data", lit=(1956,), part=PART, said="Chapter two. Empirical Bayes.")
 
     def upgrade(self):
         u = upgrade_card(15, r"with a normal prior, \ the posterior mean pulls the data towards the prior mean",

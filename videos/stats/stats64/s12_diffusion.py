@@ -5,7 +5,7 @@ import numpy as np
 from videos.stats.stats64.common import *  # noqa: F403
 
 
-class Diffusion(LectureMixin, VoiceoverScene):
+class Diffusion(LectureMixin, StatsScene):
     def construct(self):
         self.card_voiceover("Chapter eleven. Generative models are density estimators: Tweedie's formula inside diffusion.", 11,
                             r"Generative models as estimators", r"Denoising is Bayes")

@@ -8,13 +8,13 @@ STAGES = [r"question", r"estimand", r"design", r"cleaning", r"exploration", r"mo
           r"sensitivity", r"causal?", r"the World", r"report", r"reproducible"]
 
 
-class Hook(VoiceoverScene):
+class Hook(StatsScene):
     def construct(self):
         self.question()
         self.nhanes()
         self.cloud()
         self.plan()
-        self.objectives()
+        self.title(PART)
 
     def question(self):
         tl = timeline(lit=(1971, 1988)).to_edge(UP, buff=0.35)
@@ -148,30 +148,4 @@ class Hook(VoiceoverScene):
             for k, m_ in enumerate("bcd"):
                 vo.wait_until(m_)
                 self.play(FadeIn(rows[k], shift=RIGHT * 0.2))
-        self.clear_scene()
-
-    def objectives(self):
-        head = VGroup(label(r"Part 20", font_size=34, color=GREY_B), label(r"The Analysis", font_size=60),
-                      label(r"the bachelor's capstone", font_size=28, color=SALT)).arrange(DOWN, buff=0.25)
-        obj = objectives_card([
-            r"from a question to an estimand, \ for a stated population",
-            r"a complex survey: \ strata, \ PSUs and weights; \ cleaning with a decision log",
-            r"exploration, \ a pre-specified model, \ and its checks",
-            r"design-based uncertainty, \ sensitivity, \ and measurement error",
-            r"what a survey cannot say; \ the World and a trial; \ the report and its reproducibility",
-        ], color=SALT, font_size=26)
-        prereq = note(r"prerequisites: \ Parts 1--19").to_corner(DL, buff=0.3)
-        built = note(r"built: \ the capstone pipeline, \ \texttt{statkit.capstone}, \ the World's health block").to_corner(DR, buff=0.3)
-        with self.voiceover(
-            "<bookmark mark='a'/> Part twenty: the analysis. <bookmark mark='b'/> We'll turn a question into an estimand; "
-            "handle a complex survey's strata, clusters and weights; clean the data with a log of every decision; explore; fit "
-            "a model we wrote down in advance, and check it; get its uncertainty right; test how sensitive the answer is; face "
-            "measurement error; ask what a survey can and cannot say about cause; check everything on the World and against a "
-            "trial; and write the report, so that anyone can reproduce it."
-        ) as vo:
-            vo.wait_until("a")
-            self.play(FadeIn(head, shift=UP * 0.2))
-            vo.wait_until("b")
-            self.play(FadeOut(head), FadeIn(obj, shift=UP * 0.2), FadeIn(prereq), FadeIn(built))
-        self.wait(1.0)
         self.clear_scene()

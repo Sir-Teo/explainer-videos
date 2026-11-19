@@ -5,7 +5,7 @@ import numpy as np
 from videos.stats.stats43.common import *  # noqa: F403
 
 
-class StrongLaw(VoiceoverScene):
+class StrongLaw(StatsScene):
     def construct(self):
         self.card()
         self.statement()
@@ -15,10 +15,7 @@ class StrongLaw(VoiceoverScene):
         self.paths()
 
     def card(self):
-        card = chapter_card(6, r"The strong law", r"Why does almost every average settle?", lit=(1981,), part=PART)
-        with self.voiceover("Chapter six. The strong law of large numbers, proved."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(6, r"The strong law", r"Why does almost every average settle?", lit=(1981,), part=PART, said="Chapter six. The strong law of large numbers, proved.")
 
     def statement(self):
         rows = [

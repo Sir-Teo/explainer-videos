@@ -5,7 +5,7 @@ import numpy as np
 from videos.stats.stats13.common import *  # noqa: F403
 
 
-class Optimal(VoiceoverScene):
+class Optimal(StatsScene):
     def construct(self):
         self.card()
         self.line()
@@ -17,10 +17,7 @@ class Optimal(VoiceoverScene):
         self.caveat()
 
     def card(self):
-        card = chapter_card(11, r"Optimal design, \ a first look", r"Where should the observations go?", part=PART)
-        with self.voiceover("Chapter eleven. Optimal design, a first look."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(11, r"Optimal design, \ a first look", r"Where should the observations go?", part=PART, said="Chapter eleven. Optimal design, a first look.")
 
     def line(self):
         A = axes([-1.2, 1.2], [-0.5, 3.5], x_length=6.0, y_length=4.2, xlabel=r"$x$, \ the dose we may choose", ylabel=r"", xticks=[-1, 0, 1],

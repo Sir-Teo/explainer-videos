@@ -5,7 +5,7 @@ import numpy as np
 from videos.stats.stats30.common import *  # noqa: F403
 
 
-class Multivariate(VoiceoverScene):
+class Multivariate(StatsScene):
     def construct(self):
         self.card()
         self.masking()
@@ -16,10 +16,7 @@ class Multivariate(VoiceoverScene):
         self.swamping()
 
     def card(self):
-        card = chapter_card(8, r"Robust multivariate", r"Masking, \ swamping, \ and the MCD", lit=(1999,), part=PART)
-        with self.voiceover("Chapter eight. Robust multivariate estimation."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(8, r"Robust multivariate", r"Masking, \ swamping, \ and the MCD", lit=(1999,), part=PART, said="Chapter eight. Robust multivariate estimation.")
 
     def masking(self):
         rows = [

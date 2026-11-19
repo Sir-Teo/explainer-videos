@@ -5,7 +5,7 @@ import numpy as np
 from videos.stats.stats48.common import *  # noqa: F403
 
 
-class Learning(VoiceoverScene):
+class Learning(StatsScene):
     def construct(self):
         self.card()
         self.erm()
@@ -13,10 +13,7 @@ class Learning(VoiceoverScene):
         self.bounds()
 
     def card(self):
-        card = chapter_card(10, r"Uniform laws at work: \ learning", r"Why minimizing training error works", lit=(1971,), part=PART)
-        with self.voiceover("Chapter ten. Uniform laws at work, in learning: why minimizing training error works."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(10, r"Uniform laws at work: \ learning", r"Why minimizing training error works", lit=(1971,), part=PART, said="Chapter ten. Uniform laws at work, in learning: why minimizing training error works.")
 
     def erm(self):
         rows = [

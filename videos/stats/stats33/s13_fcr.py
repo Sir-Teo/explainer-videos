@@ -4,7 +4,7 @@ from explainer.stats.board import coverage_board, load_all
 from videos.stats.stats33.common import *  # noqa: F403
 
 
-class FCR(VoiceoverScene):
+class FCR(StatsScene):
     def construct(self):
         self.card()
         self.problem()
@@ -15,10 +15,7 @@ class FCR(VoiceoverScene):
         self.beyond()
 
     def card(self):
-        card = chapter_card(12, r"The false coverage rate", r"Intervals for the effects you selected", lit=(2005,), part=PART)
-        with self.voiceover("Chapter twelve. The false coverage rate."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(12, r"The false coverage rate", r"Intervals for the effects you selected", lit=(2005,), part=PART, said="Chapter twelve. The false coverage rate.")
 
     def problem(self):
         rows = [

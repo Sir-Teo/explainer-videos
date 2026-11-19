@@ -5,7 +5,7 @@ import numpy as np
 from videos.stats.stats64.common import *  # noqa: F403
 
 
-class Judges(LectureMixin, VoiceoverScene):
+class Judges(LectureMixin, StatsScene):
     def construct(self):
         self.card_voiceover("Chapter six. Labels from models: judges with errors, and how to correct for them.", 6,
                             r"Labels from models", r"A judge is a measurement")

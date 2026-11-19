@@ -5,7 +5,7 @@ import numpy as np
 from videos.stats.stats64.common import *  # noqa: F403
 
 
-class Uncertainty(LectureMixin, VoiceoverScene):
+class Uncertainty(LectureMixin, StatsScene):
     def construct(self):
         self.card_voiceover("Chapter eight. Uncertainty for language models: calibration, and conformal guarantees.", 8,
                             r"Uncertainty for language models", r"Knowing what it knows")

@@ -15,7 +15,7 @@ def box(text, sub, col, pos, w=2.6):
     return VGroup(r, inner)
 
 
-class Trees(VoiceoverScene):
+class Trees(StatsScene):
     def construct(self):
         self.card()
         self.idea()
@@ -26,10 +26,7 @@ class Trees(VoiceoverScene):
         self.pros_cons()
 
     def card(self):
-        card = chapter_card(6, r"Trees", r"Twenty questions, \ asked by the data", part=PART)
-        with self.voiceover("Chapter six. Trees."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(6, r"Trees", r"Twenty questions, \ asked by the data", part=PART, said="Chapter six. Trees.")
 
     def idea(self):
         rows = [

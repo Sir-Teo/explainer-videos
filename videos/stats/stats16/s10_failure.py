@@ -6,7 +6,7 @@ from explainer.stats.board import coverage_board, load_all
 from videos.stats.stats16.common import *  # noqa: F403
 
 
-class Failure(VoiceoverScene):
+class Failure(StatsScene):
     def construct(self):
         self.card()
         self.tanks()
@@ -17,10 +17,7 @@ class Failure(VoiceoverScene):
         self.other()
 
     def card(self):
-        card = chapter_card(9, r"When the bootstrap fails", r"The German tanks, \ one more time", lit=(1943,), part=PART)
-        with self.voiceover("Chapter nine. When the bootstrap fails."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(9, r"When the bootstrap fails", r"The German tanks, \ one more time", lit=(1943,), part=PART, said="Chapter nine. When the bootstrap fails.")
 
     def tanks(self):
         d = load("maxfail")

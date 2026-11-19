@@ -5,7 +5,7 @@ import numpy as np
 from videos.stats.stats40.common import *  # noqa: F403
 
 
-class Parametric(VoiceoverScene):
+class Parametric(StatsScene):
     def construct(self):
         self.card()
         self.aft()
@@ -16,10 +16,7 @@ class Parametric(VoiceoverScene):
         self.cure()
 
     def card(self):
-        card = chapter_card(12, r"Parametric and AFT models", r"When the shape is worth assuming", lit=(1972,), part=PART)
-        with self.voiceover("Chapter twelve. Parametric and accelerated failure time models."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(12, r"Parametric and AFT models", r"When the shape is worth assuming", lit=(1972,), part=PART, said="Chapter twelve. Parametric and accelerated failure time models.")
 
     def aft(self):
         rows = [

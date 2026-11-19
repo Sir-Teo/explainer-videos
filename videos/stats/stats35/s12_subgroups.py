@@ -8,7 +8,7 @@ from videos.stats.stats35.common import *  # noqa: F403
 SIGNS = ["Ari", "Tau", "Gem", "Can", "Leo", "Vir", "Lib", "Sco", "Sag", "Cap", "Aqu", "Pis"]
 
 
-class Subgroups(VoiceoverScene):
+class Subgroups(StatsScene):
     def construct(self):
         self.card()
         self.isis()
@@ -19,10 +19,7 @@ class Subgroups(VoiceoverScene):
         self.rules()
 
     def card(self):
-        card = chapter_card(11, r"Subgroups", r"Gemini, \ Libra, \ and the garden of forking paths", lit=(1988,), part=PART)
-        with self.voiceover("Chapter eleven. Subgroups."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(11, r"Subgroups", r"Gemini, \ Libra, \ and the garden of forking paths", lit=(1988,), part=PART, said="Chapter eleven. Subgroups.")
 
     def isis(self):
         a, p = museum.ISIS2["aspirin"], museum.ISIS2["placebo"]

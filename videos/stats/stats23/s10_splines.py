@@ -7,7 +7,7 @@ from videos.stats.stats23.common import *  # noqa: F403
 KCOL = {"1": BLUE, "3": TEAL, "6": PATH, "20": RED}
 
 
-class Splines(VoiceoverScene):
+class Splines(StatsScene):
     def construct(self):
         self.card()
         self.bases()
@@ -18,10 +18,7 @@ class Splines(VoiceoverScene):
         self.natural()
 
     def card(self):
-        card = chapter_card(9, r"Splines and bases", r"Curves are linear models too", part=PART)
-        with self.voiceover("Chapter nine. Splines and bases."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(9, r"Splines and bases", r"Curves are linear models too", part=PART, said="Chapter nine. Splines and bases.")
 
     def bases(self):
         d = load("splines")

@@ -15,7 +15,7 @@ def point_panel(pts, labels, width=2.2, color_in=None, color_out=None):
     return VGroup(box, dots)
 
 
-class VC(VoiceoverScene):
+class VC(StatsScene):
     def construct(self):
         self.card()
         self.shatter()
@@ -25,10 +25,7 @@ class VC(VoiceoverScene):
         self.covering()
 
     def card(self):
-        card = chapter_card(2, r"VC classes", r"Counting the patterns a class can draw", lit=(1971,), part=PART)
-        with self.voiceover("Chapter two. VC classes: counting the patterns a class can draw."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(2, r"VC classes", r"Counting the patterns a class can draw", lit=(1971,), part=PART, said="Chapter two. VC classes: counting the patterns a class can draw.")
 
     def shatter(self):
         rows = [

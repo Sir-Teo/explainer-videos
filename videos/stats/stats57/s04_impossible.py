@@ -5,7 +5,7 @@ import numpy as np
 from videos.stats.stats57.common import *  # noqa: F403
 
 
-class Impossible(VoiceoverScene):
+class Impossible(StatsScene):
     def construct(self):
         self.card()
         self.conditional()
@@ -17,10 +17,7 @@ class Impossible(VoiceoverScene):
         self.functionals()
 
     def card(self):
-        card = chapter_card(3, r"Impossibility", r"What no distribution-free method can do", lit=(2014,), part=PART)
-        with self.voiceover("Chapter three. Impossibility: what no distribution-free method can do."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(3, r"Impossibility", r"What no distribution-free method can do", lit=(2014,), part=PART, said="Chapter three. Impossibility: what no distribution-free method can do.")
 
     def conditional(self):
         rows = [

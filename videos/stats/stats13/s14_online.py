@@ -6,7 +6,7 @@ from explainer.stats.board import coverage_board, load_all
 from videos.stats.stats13.common import *  # noqa: F403
 
 
-class Online(VoiceoverScene):
+class Online(StatsScene):
     def construct(self):
         self.card()
         self.bing()
@@ -19,10 +19,7 @@ class Online(VoiceoverScene):
         self.board()
 
     def card(self):
-        card = chapter_card(13, r"Online experiments", r"Fisher's field, \ a billion plots at a time", lit=(2013,), part=PART)
-        with self.voiceover("Chapter thirteen. Online experiments."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(13, r"Online experiments", r"Fisher's field, \ a billion plots at a time", lit=(2013,), part=PART, said="Chapter thirteen. Online experiments.")
 
     def bing(self):
         hc = history_card(2012, r"Bing, \ Microsoft's search engine", r"an engineer's idea, \ shelved for months as low priority: \ "

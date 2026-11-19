@@ -23,7 +23,7 @@ def heat(L, cell=0.2, x0=0.0, y0=0.0, color=None):
     return g
 
 
-class Factor(VoiceoverScene):
+class Factor(StatsScene):
     def construct(self):
         self.card()
         self.spearman()
@@ -37,10 +37,7 @@ class Factor(VoiceoverScene):
         self.versus()
 
     def card(self):
-        card = chapter_card(5, r"Factor analysis", r"Latent shared variation", lit=(1904,), part=PART)
-        with self.voiceover("Chapter five. Factor analysis."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(5, r"Factor analysis", r"Latent shared variation", lit=(1904,), part=PART, said="Chapter five. Factor analysis.")
 
     def spearman(self):
         rows = fit_rows(VGroup(

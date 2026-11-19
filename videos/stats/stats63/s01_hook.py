@@ -5,7 +5,7 @@ import numpy as np
 from videos.stats.stats63.common import *  # noqa: F403
 
 
-class Hook(LectureMixin, VoiceoverScene):
+class Hook(LectureMixin, StatsScene):
     def construct(self):
         self.story()
         self.linkage()
@@ -15,7 +15,7 @@ class Hook(LectureMixin, VoiceoverScene):
         self.decisions()
         self.taxonomy()
         self.upgrade()
-        self.objectives()
+        self.title(PART)
 
     def story(self):
         tl = timeline(lit=(1997,)).to_edge(UP, buff=0.35)
@@ -169,28 +169,5 @@ class Hook(LectureMixin, VoiceoverScene):
             self.play(FadeIn(cards[0], shift=UP * 0.2))
             vo.wait_until("b")
             self.play(FadeIn(cards[1], shift=UP * 0.2))
-        self.wait(1.0)
-        self.clear_scene()
-
-    def objectives(self):
-        head = VGroup(label(r"Part 63", font_size=34, color=GREY_B), label(r"Privacy and Fairness", font_size=56)).arrange(DOWN, buff=0.25)
-        obj = objectives_card([
-            r"differential privacy as a hypothesis test; \ accountants; \ the minimax cost of privacy",
-            r"confidence intervals on noisy data; \ the 2020 Census; \ private learning and its audits",
-            r"fairness criteria on ProPublica's COMPAS data; \ the impossibility theorem; \ multicalibration",
-            r"counterfactual fairness; \ two Board rows; \ open problems",
-        ], color=S.ACCENT, font_size=26)
-        prereq = note(r"prerequisites: \ Parts 41, \ 46, \ 50").to_corner(DL, buff=0.3)
-        built = note(r"built: \ \texttt{statkit.privacy}, \ the trade-off plot").to_corner(DR, buff=0.3)
-        with self.voiceover(
-            "<bookmark mark='a'/> Part sixty-three: privacy and fairness. <bookmark mark='b'/> Differential privacy, read "
-            "as a hypothesis test; privacy accountants; the minimax cost of privacy; confidence intervals that survive the "
-            "noise; the 2020 census; private learning and the attacks that audit it; then fairness criteria on ProPublica's "
-            "COMPAS data, the theorem that they conflict, multicalibration, counterfactual fairness, and open problems."
-        ) as vo:
-            vo.wait_until("a")
-            self.play(FadeIn(head, shift=UP * 0.2))
-            vo.wait_until("b")
-            self.play(FadeOut(head), FadeIn(obj, shift=UP * 0.2), FadeIn(prereq), FadeIn(built))
         self.wait(1.0)
         self.clear_scene()

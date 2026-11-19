@@ -5,7 +5,7 @@ import numpy as np
 from videos.stats.stats39.common import *  # noqa: F403
 
 
-class Points(VoiceoverScene):
+class Points(StatsScene):
     def construct(self):
         self.card()
         self.snow_map()
@@ -16,10 +16,7 @@ class Points(VoiceoverScene):
         self.cox()
 
     def card(self):
-        card = chapter_card(10, r"Point patterns", r"Where the events are", lit=(1855, 1976), part=PART)
-        with self.voiceover("Chapter ten. Point patterns."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(10, r"Point patterns", r"Where the events are", lit=(1855, 1976), part=PART, said="Chapter ten. Point patterns.")
 
     def _map(self, d, s=0.36, c=(-2.0, 0.0)):
         pts = np.vstack([np.asarray(d["deaths"], float), np.asarray(d["pumps"], float)])

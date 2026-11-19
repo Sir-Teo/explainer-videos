@@ -5,7 +5,7 @@ import numpy as np
 from videos.stats.stats59.common import *  # noqa: F403
 
 
-class AMP(LectureMixin, VoiceoverScene):
+class AMP(LectureMixin, StatsScene):
     def construct(self):
         self.card_voiceover("Chapter five. Approximate message passing and its state evolution: an algorithm whose every "
                             "step can be predicted exactly.", 5, r"AMP and state evolution", r"An algorithm you can predict",

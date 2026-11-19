@@ -8,7 +8,7 @@ from videos.stats.stats1.compute import correlation_cloud
 POS, NEG = S.EST, S.RESID
 
 
-class Correlation(VoiceoverScene):
+class Correlation(StatsScene):
     def construct(self):
         self.card()
         self.scatter()
@@ -17,11 +17,7 @@ class Correlation(VoiceoverScene):
         self.range_()
 
     def card(self):
-        card = chapter_card(10, r"Two variables: correlation as a cosine", r"When one is big, is the other?",
-                            lit=(1886,), part=PART)
-        with self.voiceover("Chapter ten. Two variables: correlation as a cosine."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(10, r"Two variables: correlation as a cosine", r"When one is big, is the other?", lit=(1886,), part=PART, said="Chapter ten. Two variables: correlation as a cosine.")
 
     def axes_(self, center=(-2.4, -0.3, 0), w=7.4, h=5.6):
         return axes([150, 192], [154, 200], x_length=w, y_length=h, xlabel=r"mid-parent height (cm)",

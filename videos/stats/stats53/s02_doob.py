@@ -5,7 +5,7 @@ import numpy as np
 from videos.stats.stats53.common import *  # noqa: F403
 
 
-class Doob(VoiceoverScene):
+class Doob(StatsScene):
     def construct(self):
         self.card()
         self.theorem()
@@ -15,10 +15,7 @@ class Doob(VoiceoverScene):
         self.catch()
 
     def card(self):
-        card = chapter_card(1, r"Doob's theorem", r"Consistency, \ almost surely \ under the prior", lit=(1949,), part=PART)
-        with self.voiceover("Chapter one. Doob's theorem: consistency, almost surely under the prior."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(1, r"Doob's theorem", r"Consistency, \ almost surely \ under the prior", lit=(1949,), part=PART, said="Chapter one. Doob's theorem: consistency, almost surely under the prior.")
 
     def theorem(self):
         rows = [

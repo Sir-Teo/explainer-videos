@@ -6,7 +6,7 @@ from explainer.stats.board import coverage_board, load_all
 from videos.stats.stats33.common import *  # noqa: F403
 
 
-class Spread(VoiceoverScene):
+class Spread(StatsScene):
     def construct(self):
         self.card()
         self.setup_()
@@ -18,10 +18,7 @@ class Spread(VoiceoverScene):
         self.fdx()
 
     def card(self):
-        card = chapter_card(6, r"FDR is an average", r"The false discovery proportion of one study", lit=(2001,), part=PART)
-        with self.voiceover("Chapter six. The false discovery rate is an average."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(6, r"FDR is an average", r"The false discovery proportion of one study", lit=(2001,), part=PART, said="Chapter six. The false discovery rate is an average.")
 
     def setup_(self):
         rows = [

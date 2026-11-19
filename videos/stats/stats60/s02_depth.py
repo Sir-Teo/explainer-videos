@@ -5,7 +5,7 @@ import numpy as np
 from videos.stats.stats60.common import *  # noqa: F403
 
 
-class Depth(LectureMixin, VoiceoverScene):
+class Depth(LectureMixin, StatsScene):
     def construct(self):
         self.card_voiceover("Chapter one. Depth: Tukey's way to find the centre of a cloud of points, whatever a minority "
                             "of them do.", 1, r"Depth", r"The centre of a cloud", lit=(1975,))

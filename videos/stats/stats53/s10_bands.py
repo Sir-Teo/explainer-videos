@@ -5,7 +5,7 @@ import numpy as np
 from videos.stats.stats53.common import *  # noqa: F403
 
 
-class Bands(VoiceoverScene):
+class Bands(StatsScene):
     def construct(self):
         self.card()
         self.polished()
@@ -15,10 +15,7 @@ class Bands(VoiceoverScene):
         self.lesson()
 
     def card(self):
-        card = chapter_card(9, r"Credible sets that cover", r"Polished tails and inconvenient truths", lit=(2015,), part=PART)
-        with self.voiceover("Chapter nine. Credible sets that cover: polished tails and inconvenient truths."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(9, r"Credible sets that cover", r"Polished tails and inconvenient truths", lit=(2015,), part=PART, said="Chapter nine. Credible sets that cover: polished tails and inconvenient truths.")
 
     def polished(self):
         rows = [

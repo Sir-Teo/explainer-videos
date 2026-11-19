@@ -5,7 +5,7 @@ import numpy as np
 from videos.stats.stats3.common import *  # noqa: F403
 
 
-class Mixtures(VoiceoverScene, TreeMixin):
+class Mixtures(StatsScene, TreeMixin):
     def construct(self):
         self.card()
         self.betabin()
@@ -16,10 +16,7 @@ class Mixtures(VoiceoverScene, TreeMixin):
                              "negative binomial, and a binomial whose success chance is beta is beta-binomial.", 12)
 
     def card(self):
-        card = chapter_card(12, r"Mixtures and hierarchies", r"When the parameter is random too", lit=(), part=PART)
-        with self.voiceover("Chapter twelve. Mixtures and hierarchies."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(12, r"Mixtures and hierarchies", r"When the parameter is random too", lit=(), part=PART, said="Chapter twelve. Mixtures and hierarchies.")
 
     def betabin(self):
         d = load("mixtures")

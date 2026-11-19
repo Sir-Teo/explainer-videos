@@ -5,7 +5,7 @@ import numpy as np
 from videos.stats.stats45.common import *  # noqa: F403
 
 
-class SteinLemma(VoiceoverScene):
+class SteinLemma(StatsScene):
     def construct(self):
         self.card()
         self.lemma()
@@ -16,10 +16,7 @@ class SteinLemma(VoiceoverScene):
         self.hitters()
 
     def card(self):
-        card = chapter_card(10, r"Stein's lemma, \ SURE, \ James--Stein", r"An unbiased estimate of your own risk", lit=(1961,), part=PART)
-        with self.voiceover("Chapter ten. Stein's lemma, SURE and James–Stein: an unbiased estimate of your own risk."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(10, r"Stein's lemma, \ SURE, \ James--Stein", r"An unbiased estimate of your own risk", lit=(1961,), part=PART, said="Chapter ten. Stein's lemma, SURE and James–Stein: an unbiased estimate of your own risk.")
 
     def lemma(self):
         d = load("stein")["lemma"]

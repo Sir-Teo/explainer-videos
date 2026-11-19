@@ -5,7 +5,7 @@ import numpy as np
 from videos.stats.stats46.common import *  # noqa: F403
 
 
-class Impossibility(VoiceoverScene):
+class Impossibility(StatsScene):
     def construct(self):
         self.card()
         self.fieller()
@@ -17,10 +17,7 @@ class Impossibility(VoiceoverScene):
         self.board()
 
     def card(self):
-        card = chapter_card(7, r"Impossibility: \ Fieller and Gleser--Hwang", r"When every honest interval must sometimes be infinite", lit=(1987,), part=PART)
-        with self.voiceover("Chapter seven. Impossibility, from Fieller to Gleser and Hwang: when every honest interval must sometimes be infinite."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(7, r"Impossibility: \ Fieller and Gleser--Hwang", r"When every honest interval must sometimes be infinite", lit=(1987,), part=PART, said="Chapter seven. Impossibility, from Fieller to Gleser and Hwang: when every honest interval must sometimes be infinite.")
 
     def fieller(self):
         rows = [

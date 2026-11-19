@@ -5,7 +5,7 @@ import numpy as np
 from videos.stats.stats32.common import *  # noqa: F403
 
 
-class Completion(VoiceoverScene):
+class Completion(StatsScene):
     def construct(self):
         self.card()
         self.netflix()
@@ -18,10 +18,7 @@ class Completion(VoiceoverScene):
         self.theory()
 
     def card(self):
-        card = chapter_card(11, r"Matrix completion", r"Sparsity in the singular values", lit=(2010,), part=PART)
-        with self.voiceover("Chapter eleven. Matrix completion."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(11, r"Matrix completion", r"Sparsity in the singular values", lit=(2010,), part=PART, said="Chapter eleven. Matrix completion.")
 
     def netflix(self):
         rows = fit_rows(VGroup(

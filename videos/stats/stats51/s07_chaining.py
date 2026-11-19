@@ -5,7 +5,7 @@ import numpy as np
 from videos.stats.stats51.common import *  # noqa: F403
 
 
-class Chaining(VoiceoverScene):
+class Chaining(StatsScene):
     def construct(self):
         self.card()
         self.problem()
@@ -16,10 +16,7 @@ class Chaining(VoiceoverScene):
         self.generic()
 
     def card(self):
-        card = chapter_card(6, r"Chaining revisited", r"The supremum of a Gaussian process, \ scale by scale", part=PART)
-        with self.voiceover("Chapter six. Chaining revisited: the supremum of a Gaussian process, scale by scale."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(6, r"Chaining revisited", r"The supremum of a Gaussian process, \ scale by scale", part=PART, said="Chapter six. Chaining revisited: the supremum of a Gaussian process, scale by scale.")
 
     def problem(self):
         rows = [

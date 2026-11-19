@@ -5,13 +5,13 @@ import numpy as np
 from videos.stats.stats5.common import *  # noqa: F403
 
 
-class Hook(VoiceoverScene):
+class Hook(StatsScene):
     def construct(self):
         self.galton()
         self.table()
         self.ellipses()
         self.mediocrity()
-        self.objectives()
+        self.title(PART)
 
     def galton(self):
         tl = timeline(lit=(1886,)).to_edge(UP, buff=0.35)
@@ -165,38 +165,4 @@ class Hook(VoiceoverScene):
             self.play(Create(line), FadeIn(info[:2]))
             vo.wait_until("d")
             self.play(FadeIn(info[2:]))
-        self.clear_scene()
-
-    def objectives(self):
-        head = VGroup(label(r"Part 5", font_size=34, color=GREY_B), label(r"Many Variables at Once", font_size=60))
-        head.arrange(DOWN, buff=0.25)
-        obj = objectives_card([
-            r"joint, marginal and conditional distributions; \ uncorrelated is not independent",
-            r"conditional expectation as the best predictor; \ Eve's law, \ $R^2$",
-            r"the multivariate normal; \ conditioning it with a Schur complement; \ regression to the mean; \ three lines",
-            r"change of variables; \ latent variables and mixtures; \ copulas and their tails",
-            r"exchangeability and P\'olya's urn; \ measuring dependence; \ the Dirichlet on the simplex",
-        ], color=S.ACCENT, font_size=26)
-        prereq = note(r"prerequisites: \ Parts 3 and 4").to_corner(DL, buff=0.3)
-        built = label(r"Built in this part: \ a Gaussian slicer, \ and a P\'olya urn machine", font_size=28, color=S.ACCENT)
-        built.to_edge(DOWN, buff=0.8)
-        intro = label('What does one variable tell us about another?', font_size=36)
-        with self.voiceover(
-            "This part asks: what does knowing one thing tell you about another? <bookmark mark='a'/> Part five: many "
-            "variables at once. <bookmark mark='b'/> Joint, marginal and conditional distributions; dependence; "
-            "conditional expectation as the best possible prediction, and the law of total variance; the "
-            "multivariate normal and its conditionals, which give birth to regression; regression to the mean; "
-            "change of variables; latent variables; copulas; exchangeability; how to measure dependence; and the "
-            "simplex. <bookmark mark='c'/> We'll build a Gaussian slicer, to cut a density and renormalize the slice, "
-            "and a Pólya urn machine."
-        ) as vo:
-            self.play(FadeIn(intro))
-            vo.wait_until("a")
-            self.play(FadeOut(intro), run_time=0.25)
-            self.play(FadeIn(head, shift=UP * 0.2))
-            vo.wait_until("b")
-            self.play(FadeOut(head), FadeIn(obj, shift=UP * 0.2), FadeIn(prereq))
-            vo.wait_until("c")
-            self.play(obj.animate.shift(UP * 0.4), FadeIn(built))
-        self.wait(1.0)
         self.clear_scene()

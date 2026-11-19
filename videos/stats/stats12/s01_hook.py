@@ -5,12 +5,12 @@ import numpy as np
 from videos.stats.stats12.common import *  # noqa: F403
 
 
-class Hook(VoiceoverScene):
+class Hook(StatsScene):
     def construct(self):
         self.ceres()
         self.orbit()
         self.priority()
-        self.objectives()
+        self.title(PART)
 
     def ceres(self):
         tl = timeline(lit=(1801,)).to_edge(UP, buff=0.35)
@@ -107,28 +107,4 @@ class Hook(VoiceoverScene):
             self.play(FadeIn(h2, shift=UP * 0.2))
             vo.wait_until("c")
             self.play(FadeIn(foot))
-        self.clear_scene()
-
-    def objectives(self):
-        head = VGroup(label(r"Part 12", font_size=34, color=GREY_B), label(r"Least Squares", font_size=60)).arrange(DOWN, buff=0.25)
-        obj = objectives_card([
-            r"the principle, \ the normal equations, \ and why squares", r"least squares as a projection; \ Gauss--Markov, \ proved",
-            r"normal theory: \ $t$, \ $F$ as Pythagoras, \ $R^2$; \ ``controlling for'' (Frisch--Waugh--Lovell); \ omitted variables",
-            r"interpreting coefficients; \ confidence and prediction bands; \ collinearity",
-            r"diagnostics and influence; \ uneven noise and robust SEs; \ the regression fallacy",
-        ], color=OBS, font_size=26)
-        prereq = note(r"prerequisites: \ Parts 4 and 11").to_corner(DL, buff=0.3)
-        built = note(r"built: \ \texttt{statkit.ols}; \ the influence probe").to_corner(DR, buff=0.3)
-        with self.voiceover(
-            "<bookmark mark='a'/> Part twelve: least squares. <bookmark mark='b'/> We'll derive the method and ask why "
-            "squares; see it as a projection, and prove the Gauss–Markov theorem that makes it optimal; build its normal "
-            "theory, tests and R squared; make precise what controlling for a variable means, and what leaving one out "
-            "does; interpret coefficients, draw bands, and see what collinearity does; then diagnose influence, fix standard "
-            "errors when the noise is uneven, and end with the regression fallacy."
-        ) as vo:
-            vo.wait_until("a")
-            self.play(FadeIn(head, shift=UP * 0.2))
-            vo.wait_until("b")
-            self.play(FadeOut(head), FadeIn(obj, shift=UP * 0.2), FadeIn(prereq), FadeIn(built))
-        self.wait(1.0)
         self.clear_scene()

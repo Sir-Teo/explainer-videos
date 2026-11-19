@@ -5,7 +5,7 @@ import numpy as np
 from videos.stats.stats38.common import *  # noqa: F403
 
 
-class Spectra(VoiceoverScene):
+class Spectra(StatsScene):
     def construct(self):
         self.card()
         self.herglotz()
@@ -16,10 +16,7 @@ class Spectra(VoiceoverScene):
         self.lesson()
 
     def card(self):
-        card = chapter_card(2, r"Spectra", r"A series, \ one frequency at a time", lit=(1967, 1982), part=PART)
-        with self.voiceover("Chapter two. Spectra."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(2, r"Spectra", r"A series, \ one frequency at a time", lit=(1967, 1982), part=PART, said="Chapter two. Spectra.")
 
     def herglotz(self):
         rows = [

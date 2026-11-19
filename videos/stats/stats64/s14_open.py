@@ -3,7 +3,7 @@ from __future__ import annotations
 from videos.stats.stats64.common import *  # noqa: F403
 
 
-class OpenProblems(LectureMixin, VoiceoverScene):
+class OpenProblems(LectureMixin, StatsScene):
     def construct(self):
         self.card_voiceover("Chapter thirteen. Open problems for statistics in the age of AI.", 13, r"Open problems",
                             r"What the degree cannot yet answer")

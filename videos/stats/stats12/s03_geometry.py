@@ -5,7 +5,7 @@ import numpy as np
 from videos.stats.stats12.common import *  # noqa: F403
 
 
-class Geometry(VoiceoverScene):
+class Geometry(StatsScene):
     def construct(self):
         self.card()
         self.space()
@@ -16,10 +16,7 @@ class Geometry(VoiceoverScene):
         self.many_x()
 
     def card(self):
-        card = chapter_card(2, r"Geometry", r"Least squares is a projection", part=PART)
-        with self.voiceover("Chapter two. Geometry."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(2, r"Geometry", r"Least squares is a projection", part=PART, said="Chapter two. Geometry.")
 
     def space(self):
         x = np.array([1.0, 2.0, 4.0])

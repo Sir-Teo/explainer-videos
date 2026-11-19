@@ -8,7 +8,7 @@ from explainer.stats.kit import survey as Sv
 from videos.stats.stats18.common import *  # noqa: F403
 
 
-class HorvitzThompson(VoiceoverScene):
+class HorvitzThompson(StatsScene):
     def construct(self):
         self.card()
         self.estimator()
@@ -19,10 +19,7 @@ class HorvitzThompson(VoiceoverScene):
         self.hajek()
 
     def card(self):
-        card = chapter_card(7, r"Horvitz--Thompson", r"Weight each unit by one over its chance", part=PART)
-        with self.voiceover("Chapter seven. Horvitz–Thompson."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(7, r"Horvitz--Thompson", r"Weight each unit by one over its chance", part=PART, said="Chapter seven. Horvitz–Thompson.")
 
     def estimator(self):
         rows = [

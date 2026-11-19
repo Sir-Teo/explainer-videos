@@ -5,7 +5,7 @@ import numpy as np
 from videos.stats.stats44.common import *  # noqa: F403
 
 
-class Martingales(VoiceoverScene):
+class Martingales(StatsScene):
     def construct(self):
         self.card()
         self.definition()
@@ -14,10 +14,7 @@ class Martingales(VoiceoverScene):
         self.urn()
 
     def card(self):
-        card = chapter_card(2, r"Martingales", r"A fair game, \ in symbols", part=PART)
-        with self.voiceover("Chapter two. Martingales: a fair game, in symbols."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(2, r"Martingales", r"A fair game, \ in symbols", part=PART, said="Chapter two. Martingales: a fair game, in symbols.")
 
     def definition(self):
         rows = [

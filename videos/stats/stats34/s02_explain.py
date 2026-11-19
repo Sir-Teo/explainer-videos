@@ -9,7 +9,7 @@ def short(name: str) -> str:
     return name.replace("_", " ")
 
 
-class Explain(VoiceoverScene):
+class Explain(StatsScene):
     def construct(self):
         self.card()
         self.shmueli()
@@ -22,10 +22,7 @@ class Explain(VoiceoverScene):
         self.lesson()
 
     def card(self):
-        card = chapter_card(1, r"Explain or predict?", r"The Rashomon effect", lit=(2010,), part=PART)
-        with self.voiceover("Chapter one. Explain, or predict?"):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(1, r"Explain or predict?", r"The Rashomon effect", lit=(2010,), part=PART, said="Chapter one. Explain, or predict?")
 
     def shmueli(self):
         left = VGroup(label(r"\textbf{explanatory}", font_size=28, color=TRUEC),

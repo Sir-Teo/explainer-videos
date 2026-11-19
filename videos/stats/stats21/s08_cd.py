@@ -5,7 +5,7 @@ import numpy as np
 from videos.stats.stats21.common import *  # noqa: F403
 
 
-class CoordinateDescent(VoiceoverScene):
+class CoordinateDescent(StatsScene):
     def construct(self):
         self.card()
         self.idea()
@@ -15,10 +15,7 @@ class CoordinateDescent(VoiceoverScene):
         self.stuck()
 
     def card(self):
-        card = chapter_card(7, r"Coordinate descent", r"One variable at a time", part=PART)
-        with self.voiceover("Chapter seven. Coordinate descent."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(7, r"Coordinate descent", r"One variable at a time", part=PART, said="Chapter seven. Coordinate descent.")
 
     def idea(self):
         rows = [

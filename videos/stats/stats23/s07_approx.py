@@ -5,7 +5,7 @@ import numpy as np
 from videos.stats.stats23.common import *  # noqa: F403
 
 
-class Approx(VoiceoverScene):
+class Approx(StatsScene):
     def construct(self):
         self.card()
         self.target()
@@ -16,10 +16,7 @@ class Approx(VoiceoverScene):
         self.lesson()
 
     def card(self):
-        card = chapter_card(6, r"Models as approximations", r"What a wrong line estimates", lit=(2019,), part=PART)
-        with self.voiceover("Chapter six. Models as approximations."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(6, r"Models as approximations", r"What a wrong line estimates", lit=(2019,), part=PART, said="Chapter six. Models as approximations.")
 
     def target(self):
         rows = [

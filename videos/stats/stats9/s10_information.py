@@ -5,7 +5,7 @@ import numpy as np
 from videos.stats.stats9.common import *  # noqa: F403
 
 
-class Information(VoiceoverScene):
+class Information(StatsScene):
     def construct(self):
         self.card()
         self.mean_zero()
@@ -18,10 +18,7 @@ class Information(VoiceoverScene):
         self.kl_curvature()
 
     def card(self):
-        card = chapter_card(9, r"Fisher information", r"How much does one observation say about $\theta$?", part=PART)
-        with self.voiceover("Chapter nine. Fisher information."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(9, r"Fisher information", r"How much does one observation say about $\theta$?", part=PART, said="Chapter nine. Fisher information.")
 
     def mean_zero(self):
         rows = [

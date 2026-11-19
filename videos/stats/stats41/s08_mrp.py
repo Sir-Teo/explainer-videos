@@ -5,7 +5,7 @@ import numpy as np
 from videos.stats.stats41.common import *  # noqa: F403
 
 
-class MRP(VoiceoverScene):
+class MRP(StatsScene):
     def construct(self):
         self.card()
         self.xbox()
@@ -20,10 +20,7 @@ class MRP(VoiceoverScene):
         self.board()
 
     def card(self):
-        card = chapter_card(7, r"MRP", r"Multilevel regression and poststratification", lit=(1997, 2015), part=PART)
-        with self.voiceover("Chapter seven. Multilevel regression and poststratification."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(7, r"MRP", r"Multilevel regression and poststratification", lit=(1997, 2015), part=PART, said="Chapter seven. Multilevel regression and poststratification.")
 
     def xbox(self):
         rows = fit_rows(VGroup(

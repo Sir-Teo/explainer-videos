@@ -6,7 +6,7 @@ from scipy import stats
 from videos.stats.stats43.common import *  # noqa: F403
 
 
-class WeakConvergence(VoiceoverScene):
+class WeakConvergence(StatsScene):
     def construct(self):
         self.card()
         self.definition()
@@ -17,10 +17,7 @@ class WeakConvergence(VoiceoverScene):
         self.horse()
 
     def card(self):
-        card = chapter_card(7, r"Weak convergence", r"What does it mean for laws to converge?", lit=(1956,), part=PART)
-        with self.voiceover("Chapter seven. Weak convergence: what it means for laws to converge, and how far apart two laws are."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(7, r"Weak convergence", r"What does it mean for laws to converge?", lit=(1956,), part=PART, said="Chapter seven. Weak convergence: what it means for laws to converge, and how far apart two laws are.")
 
     def definition(self):
         rows = [

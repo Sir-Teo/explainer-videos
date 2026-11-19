@@ -5,14 +5,14 @@ import numpy as np
 from videos.stats.stats19.common import *  # noqa: F403
 
 
-class Hook(VoiceoverScene):
+class Hook(StatsScene):
     def construct(self):
         self.federalist()
         self.dispute()
         self.upon()
         self.paper_by_paper()
         self.prediction()
-        self.objectives()
+        self.title(PART)
 
     def federalist(self):
         tl = timeline(lit=(1964,)).to_edge(UP, buff=0.35)
@@ -164,29 +164,4 @@ class Hook(VoiceoverScene):
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
                 self.play(FadeIn(rows[k], shift=RIGHT * 0.2))
-        self.clear_scene()
-
-    def objectives(self):
-        head = VGroup(label(r"Part 19", font_size=34, color=GREY_B), label(r"Learning from Data", font_size=60)).arrange(DOWN, buff=0.25)
-        obj = objectives_card([
-            r"training and test error; \ overfitting; \ the bias--variance trade-off",
-            r"cross-validation and the one-standard-error rule",
-            r"nearest neighbours and the curse of dimensionality",
-            r"naive Bayes, \ logistic regression and trees; \ ridge and the lasso, \ a first look",
-            r"classification metrics, \ the \emph{Federalist} decided, \ and leakage",
-        ], color=DISP, font_size=26)
-        prereq = note(r"prerequisites: \ Parts 12, \ 14 and 16").to_corner(DL, buff=0.3)
-        built = note(r"built: \ \texttt{statkit.learn}; \ the $\ell_1$ geometry").to_corner(DR, buff=0.3)
-        with self.voiceover(
-            "<bookmark mark='a'/> Part nineteen: learning from data. <bookmark mark='b'/> We'll separate training error from "
-            "test error and see overfitting happen; derive the trade-off between bias and variance; estimate test error by "
-            "cross-validation; meet nearest neighbours and the curse of dimensionality; compare naive Bayes with logistic "
-            "regression, and grow and prune trees; take a first look at ridge and the lasso; learn the metrics for "
-            "classifiers; decide the Federalist; and finish with the many ways an evaluation can leak."
-        ) as vo:
-            vo.wait_until("a")
-            self.play(FadeIn(head, shift=UP * 0.2))
-            vo.wait_until("b")
-            self.play(FadeOut(head), FadeIn(obj, shift=UP * 0.2), FadeIn(prereq), FadeIn(built))
-        self.wait(1.0)
         self.clear_scene()

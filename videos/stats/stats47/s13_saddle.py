@@ -5,7 +5,7 @@ import numpy as np
 from videos.stats.stats47.common import *  # noqa: F403
 
 
-class Saddlepoint(VoiceoverScene):
+class Saddlepoint(StatsScene):
     def construct(self):
         self.card()
         self.idea()
@@ -15,10 +15,7 @@ class Saddlepoint(VoiceoverScene):
         self.uses()
 
     def card(self):
-        card = chapter_card(12, r"Saddlepoint approximations", r"Accuracy far into the tails", lit=(1954,), part=PART)
-        with self.voiceover("Chapter twelve. Saddlepoint approximations: accuracy far into the tails."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(12, r"Saddlepoint approximations", r"Accuracy far into the tails", lit=(1954,), part=PART, said="Chapter twelve. Saddlepoint approximations: accuracy far into the tails.")
 
     def idea(self):
         rows = [

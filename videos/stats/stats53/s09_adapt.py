@@ -5,7 +5,7 @@ import numpy as np
 from videos.stats.stats53.common import *  # noqa: F403
 
 
-class Adaptation(VoiceoverScene):
+class Adaptation(StatsScene):
     def construct(self):
         self.card()
         self.methods()
@@ -16,10 +16,7 @@ class Adaptation(VoiceoverScene):
         self.hierarchical()
 
     def card(self):
-        card = chapter_card(8, r"Adaptation", r"Letting the data choose the prior's smoothness", lit=(2008,), part=PART)
-        with self.voiceover("Chapter eight. Adaptation: letting the data choose the prior's smoothness."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(8, r"Adaptation", r"Letting the data choose the prior's smoothness", lit=(2008,), part=PART, said="Chapter eight. Adaptation: letting the data choose the prior's smoothness.")
 
     def methods(self):
         rows = [

@@ -5,7 +5,7 @@ import numpy as np
 from videos.stats.stats27.common import *  # noqa: F403
 
 
-class HMC(VoiceoverScene):
+class HMC(StatsScene):
     def construct(self):
         self.card()
         self.physics()
@@ -17,10 +17,7 @@ class HMC(VoiceoverScene):
         self.tuning()
 
     def card(self):
-        card = chapter_card(5, r"Hamiltonian Monte Carlo", r"Slide, \ don't stumble", lit=(1987,), part=PART)
-        with self.voiceover("Chapter five. Hamiltonian Monte Carlo."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(5, r"Hamiltonian Monte Carlo", r"Slide, \ don't stumble", lit=(1987,), part=PART, said="Chapter five. Hamiltonian Monte Carlo.")
 
     def physics(self):
         rows = [

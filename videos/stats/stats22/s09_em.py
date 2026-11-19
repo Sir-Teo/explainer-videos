@@ -6,7 +6,7 @@ from videos.stats.stats22.common import *  # noqa: F403
 from videos.stats.stats22.s01_hook import crab_axes
 
 
-class EM(VoiceoverScene):
+class EM(StatsScene):
     def construct(self):
         self.card()
         self.missing()
@@ -18,10 +18,7 @@ class EM(VoiceoverScene):
         self.louis()
 
     def card(self):
-        card = chapter_card(8, r"EM", r"Fill in what you did not see", lit=(1977,), part=PART)
-        with self.voiceover("Chapter eight. The EM algorithm."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(8, r"EM", r"Fill in what you did not see", lit=(1977,), part=PART, said="Chapter eight. The EM algorithm.")
 
     def missing(self):
         rows = [

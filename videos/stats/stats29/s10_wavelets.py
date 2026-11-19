@@ -5,7 +5,7 @@ import numpy as np
 from videos.stats.stats29.common import *  # noqa: F403
 
 
-class Wavelets(VoiceoverScene):
+class Wavelets(StatsScene):
     def construct(self):
         self.card()
         self.haar()
@@ -17,10 +17,7 @@ class Wavelets(VoiceoverScene):
         self.scores()
 
     def card(self):
-        card = chapter_card(9, r"Wavelets", r"Sparse in the right basis", lit=(1994,), part=PART)
-        with self.voiceover("Chapter nine. Wavelets."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(9, r"Wavelets", r"Sparse in the right basis", lit=(1994,), part=PART, said="Chapter nine. Wavelets.")
 
     def haar(self):
         rows = [

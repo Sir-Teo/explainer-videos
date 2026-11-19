@@ -5,7 +5,7 @@ import numpy as np
 from videos.stats.stats64.common import *  # noqa: F403
 
 
-class Benchmarks(LectureMixin, VoiceoverScene):
+class Benchmarks(LectureMixin, StatsScene):
     def construct(self):
         self.card_voiceover("Chapter one. Benchmarks are samples, and their questions come in clusters.", 1,
                             r"Benchmarks are samples", r"Error bars for evaluations")

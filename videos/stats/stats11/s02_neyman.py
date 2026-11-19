@@ -6,7 +6,7 @@ from scipy import stats
 from videos.stats.stats11.common import *  # noqa: F403
 
 
-class Neyman(VoiceoverScene):
+class Neyman(StatsScene):
     def construct(self):
         self.card()
         self.history()
@@ -18,10 +18,7 @@ class Neyman(VoiceoverScene):
         self.planning()
 
     def card(self):
-        card = chapter_card(1, r"Neyman's promise", r"What does ``95\% confident'' mean?", lit=(1937,), part=PART)
-        with self.voiceover("Chapter one. Neyman's promise."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(1, r"Neyman's promise", r"What does ``95\% confident'' mean?", lit=(1937,), part=PART, said="Chapter one. Neyman's promise.")
 
     def history(self):
         hc = history_card(1937, r"Jerzy Neyman, \ \emph{Phil.\ Trans.\ A} 236", r"``Outline of a theory of statistical estimation based on the "

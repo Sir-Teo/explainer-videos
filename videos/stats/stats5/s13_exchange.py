@@ -20,7 +20,7 @@ def urn_mob(r, b, center, w=1.6, h=2.0) -> VGroup:
     return VGroup(body, balls)
 
 
-class Exchange(VoiceoverScene):
+class Exchange(StatsScene):
     def construct(self):
         self.card()
         self.machine()
@@ -30,10 +30,7 @@ class Exchange(VoiceoverScene):
         self.finite()
 
     def card(self):
-        card = chapter_card(12, r"Exchangeability", r"P\'olya's urn, \ and why de Finetti needed it", lit=(1931,), part=PART)
-        with self.voiceover("Chapter twelve. Exchangeability."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(12, r"Exchangeability", r"P\'olya's urn, \ and why de Finetti needed it", lit=(1931,), part=PART, said="Chapter twelve. Exchangeability.")
 
     def machine(self):
         g = np.random.Generator(np.random.PCG64(11))

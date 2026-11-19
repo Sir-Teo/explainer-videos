@@ -26,7 +26,7 @@ def bakery_map(center, width=6.0, height=4.4, n=40, t_range=(160, 240), m_range=
     return A, ax, cells
 
 
-class Factorial(VoiceoverScene):
+class Factorial(StatsScene):
     def construct(self):
         self.card()
         self.ofat()
@@ -39,10 +39,7 @@ class Factorial(VoiceoverScene):
         self.hidden_replication()
 
     def card(self):
-        card = chapter_card(7, r"Factorials", r"Ask Nature several questions at once", lit=(1935,), part=PART)
-        with self.voiceover("Chapter seven. Factorial experiments."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(7, r"Factorials", r"Ask Nature several questions at once", lit=(1935,), part=PART, said="Chapter seven. Factorial experiments.")
 
     def ofat(self):
         d = load("factorial")["ofat"]

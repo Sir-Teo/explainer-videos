@@ -5,7 +5,7 @@ import numpy as np
 from videos.stats.stats25.common import *  # noqa: F403
 
 
-class Nested(VoiceoverScene):
+class Nested(StatsScene):
     def construct(self):
         self.card()
         self.nested_model()
@@ -17,10 +17,7 @@ class Nested(VoiceoverScene):
         self.syntax()
 
     def card(self):
-        card = chapter_card(8, r"Nested and crossed", r"Schools in towns; \ essays and raters", lit=(2007,), part=PART)
-        with self.voiceover("Chapter eight. Nested and crossed random effects."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(8, r"Nested and crossed", r"Schools in towns; \ essays and raters", lit=(2007,), part=PART, said="Chapter eight. Nested and crossed random effects.")
 
     def nested_model(self):
         rows = [

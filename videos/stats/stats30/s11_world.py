@@ -6,7 +6,7 @@ from explainer.stats.board import coverage_board, load_all
 from videos.stats.stats30.common import *  # noqa: F403
 
 
-class World(VoiceoverScene):
+class World(StatsScene):
     def construct(self):
         self.card()
         self.setup_world()
@@ -18,10 +18,7 @@ class World(VoiceoverScene):
         self.lesson()
 
     def card(self):
-        card = chapter_card(10, r"Contamination on the World", r"Mean vs Hodges--Lehmann intervals", lit=(1960,), part=PART)
-        with self.voiceover("Chapter ten. Contamination on the World."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(10, r"Contamination on the World", r"Mean vs Hodges--Lehmann intervals", lit=(1960,), part=PART, said="Chapter ten. Contamination on the World.")
 
     def setup_world(self):
         d = load("board")

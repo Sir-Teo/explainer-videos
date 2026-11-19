@@ -5,7 +5,7 @@ import numpy as np
 from videos.stats.stats48.common import *  # noqa: F403
 
 
-class EstimatedParameters(VoiceoverScene):
+class EstimatedParameters(StatsScene):
     def construct(self):
         self.card()
         self.process()
@@ -15,10 +15,7 @@ class EstimatedParameters(VoiceoverScene):
         self.board()
 
     def card(self):
-        card = chapter_card(12, r"KS with estimated parameters, \ done right", r"Testing a family, \ not a single law", lit=(1973,), part=PART)
-        with self.voiceover("Chapter twelve. The Kolmogorov–Smirnov test with estimated parameters, done right: testing a family, not a single law."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(12, r"KS with estimated parameters, \ done right", r"Testing a family, \ not a single law", lit=(1973,), part=PART, said="Chapter twelve. The Kolmogorov–Smirnov test with estimated parameters, done right: testing a family, not a single law.")
 
     def process(self):
         rows = [

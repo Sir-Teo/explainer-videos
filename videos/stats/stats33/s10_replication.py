@@ -4,7 +4,7 @@ from explainer.stats.kit.multiple import ppv
 from videos.stats.stats33.common import *  # noqa: F403
 
 
-class Replication(VoiceoverScene):
+class Replication(StatsScene):
     def construct(self):
         self.card()
         self.ioannidis()
@@ -16,10 +16,7 @@ class Replication(VoiceoverScene):
         self.reading()
 
     def card(self):
-        card = chapter_card(9, r"Replication", r"How many published findings are true?", lit=(2005, 2015), part=PART)
-        with self.voiceover("Chapter nine. Replication."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(9, r"Replication", r"How many published findings are true?", lit=(2005, 2015), part=PART, said="Chapter nine. Replication.")
 
     def ioannidis(self):
         rows = fit_rows(VGroup(

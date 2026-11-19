@@ -6,7 +6,7 @@ from explainer.stats.board import coverage_board, load_all
 from videos.stats.stats18.common import *  # noqa: F403
 
 
-class Meng(VoiceoverScene):
+class Meng(StatsScene):
     def construct(self):
         self.card()
         self.derive()
@@ -17,11 +17,7 @@ class Meng(VoiceoverScene):
         self.board()
 
     def card(self):
-        card = chapter_card(2, r"Meng's identity", r"Data quality $\times$ data quantity $\times$ problem difficulty", lit=(2018,),
-                            part=PART)
-        with self.voiceover("Chapter two. Meng's identity."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(2, r"Meng's identity", r"Data quality $\times$ data quantity $\times$ problem difficulty", lit=(2018,), part=PART, said="Chapter two. Meng's identity.")
 
     def derive(self):
         rows = [

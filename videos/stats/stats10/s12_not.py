@@ -5,7 +5,7 @@ import numpy as np
 from videos.stats.stats10.common import *  # noqa: F403
 
 
-class Misreadings(VoiceoverScene):
+class Misreadings(StatsScene):
     def construct(self):
         self.card()
         self.not_posterior()
@@ -16,10 +16,7 @@ class Misreadings(VoiceoverScene):
         self.asa()
 
     def card(self):
-        card = chapter_card(11, r"What $p$-values are not", r"Six misreadings, \ and a statement", lit=(2016,), part=PART)
-        with self.voiceover("Chapter eleven. What p-values are not."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(11, r"What $p$-values are not", r"Six misreadings, \ and a statement", lit=(2016,), part=PART, said="Chapter eleven. What p-values are not.")
 
     def not_posterior(self):
         rows = [

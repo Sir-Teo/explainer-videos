@@ -25,7 +25,7 @@ def staircase(ax, xs, F, color, stroke_width=3, x_lo=None, x_hi=None):
     return segs
 
 
-class Variables(VoiceoverScene):
+class Variables(StatsScene):
     def construct(self):
         self.card()
         self.function()
@@ -34,11 +34,7 @@ class Variables(VoiceoverScene):
         self.cantor()
 
     def card(self):
-        card = chapter_card(10, r"Random variables", r"Numbers that depend on chance, and their distributions",
-                            lit={1933: "Kolmogorov: probability foundations"}, part=PART)
-        with self.voiceover("Chapter ten. Random variables."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(10, r"Random variables", r"Numbers that depend on chance, and their distributions", lit={1933: "Kolmogorov: probability foundations"}, part=PART, said="Chapter ten. Random variables.")
 
     def function(self):
         d = load("variables")

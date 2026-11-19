@@ -5,7 +5,7 @@ import numpy as np
 from videos.stats.stats40.common import *  # noqa: F403
 
 
-class Cox(VoiceoverScene):
+class Cox(StatsScene):
     def construct(self):
         self.card()
         self.model()
@@ -17,10 +17,7 @@ class Cox(VoiceoverScene):
         self.trial()
 
     def card(self):
-        card = chapter_card(8, r"Cox's partial likelihood", r"Regression without the baseline hazard", lit=(1972,), part=PART)
-        with self.voiceover("Chapter eight. Cox's partial likelihood."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(8, r"Cox's partial likelihood", r"Regression without the baseline hazard", lit=(1972,), part=PART, said="Chapter eight. Cox's partial likelihood.")
 
     def model(self):
         rows = [

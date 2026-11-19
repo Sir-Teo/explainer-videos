@@ -5,7 +5,7 @@ import numpy as np
 from videos.stats.stats52.common import *  # noqa: F403
 
 
-class Laws(VoiceoverScene):
+class Laws(StatsScene):
     def construct(self):
         self.card()
         self.stieltjes()
@@ -15,10 +15,7 @@ class Laws(VoiceoverScene):
         self.universality()
 
     def card(self):
-        card = chapter_card(7, r"Random-matrix laws", r"The Stieltjes transform, \ Marchenko--Pastur and the semicircle", lit=(1967,), part=PART)
-        with self.voiceover("Chapter seven. Random-matrix laws: the Stieltjes transform, Marchenko–Pastur and the semicircle."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(7, r"Random-matrix laws", r"The Stieltjes transform, \ Marchenko--Pastur and the semicircle", lit=(1967,), part=PART, said="Chapter seven. Random-matrix laws: the Stieltjes transform, Marchenko–Pastur and the semicircle.")
 
     def stieltjes(self):
         rows = [

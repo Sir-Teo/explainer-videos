@@ -5,7 +5,7 @@ import numpy as np
 from videos.stats.stats41.common import *  # noqa: F403
 
 
-class MNAR(VoiceoverScene):
+class MNAR(StatsScene):
     def construct(self):
         self.card()
         self.problem()
@@ -20,10 +20,7 @@ class MNAR(VoiceoverScene):
         self.practice()
 
     def card(self):
-        card = chapter_card(6, r"Missing not at random", r"Model the reason, \ or measure how much it matters", lit=(1979,), part=PART)
-        with self.voiceover("Chapter six. Missing not at random."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(6, r"Missing not at random", r"Model the reason, \ or measure how much it matters", lit=(1979,), part=PART, said="Chapter six. Missing not at random.")
 
     def problem(self):
         rows = fit_rows(VGroup(

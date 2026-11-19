@@ -5,7 +5,7 @@ import numpy as np
 from videos.stats.stats36.common import *  # noqa: F403
 
 
-class Unconfounded(VoiceoverScene):
+class Unconfounded(StatsScene):
     def construct(self):
         self.card()
         self.assumption()
@@ -15,10 +15,7 @@ class Unconfounded(VoiceoverScene):
         self.untestable()
 
     def card(self):
-        card = chapter_card(1, r"Unconfoundedness and overlap", r"The assumptions that replace a coin", lit=(1983,), part=PART)
-        with self.voiceover("Chapter one. Unconfoundedness and overlap."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(1, r"Unconfoundedness and overlap", r"The assumptions that replace a coin", lit=(1983,), part=PART, said="Chapter one. Unconfoundedness and overlap.")
 
     def assumption(self):
         rows = [

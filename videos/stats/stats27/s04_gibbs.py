@@ -5,7 +5,7 @@ import numpy as np
 from videos.stats.stats27.common import *  # noqa: F403
 
 
-class Gibbs(VoiceoverScene):
+class Gibbs(StatsScene):
     def construct(self):
         self.card()
         self.idea()
@@ -16,10 +16,7 @@ class Gibbs(VoiceoverScene):
         self.limits()
 
     def card(self):
-        card = chapter_card(3, r"Gibbs sampling", r"One coordinate at a time", lit=(1990,), part=PART)
-        with self.voiceover("Chapter three. Gibbs sampling."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(3, r"Gibbs sampling", r"One coordinate at a time", lit=(1990,), part=PART, said="Chapter three. Gibbs sampling.")
 
     def idea(self):
         rows = [

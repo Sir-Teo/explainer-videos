@@ -7,7 +7,7 @@ from videos.stats.stats36.common import *  # noqa: F403
 LC = {"T-learner": GREY_B, "X-learner": Y0C, "DR-learner": PSC, "causal forest": BANDC, "linear, interacted": TAUC}
 
 
-class CATE(VoiceoverScene):
+class CATE(StatsScene):
     def construct(self):
         self.card()
         self.goal()
@@ -18,10 +18,7 @@ class CATE(VoiceoverScene):
         self.cautions()
 
     def card(self):
-        card = chapter_card(11, r"Heterogeneous effects", r"For whom does it work?", lit=(2018,), part=PART)
-        with self.voiceover("Chapter eleven. Heterogeneous effects."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(11, r"Heterogeneous effects", r"For whom does it work?", lit=(2018,), part=PART, said="Chapter eleven. Heterogeneous effects.")
 
     def goal(self):
         rows = [

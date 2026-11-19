@@ -6,7 +6,7 @@ from explainer.stats.kit import ts as T
 from videos.stats.stats17.common import *  # noqa: F403
 
 
-class Smoothing(VoiceoverScene):
+class Smoothing(StatsScene):
     def construct(self):
         self.card()
         self.ses_rule()
@@ -18,10 +18,7 @@ class Smoothing(VoiceoverScene):
         self.theory()
 
     def card(self):
-        card = chapter_card(8, r"Exponential smoothing", r"Forecasting by forgetting gracefully", part=PART)
-        with self.voiceover("Chapter eight. Exponential smoothing."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(8, r"Exponential smoothing", r"Forecasting by forgetting gracefully", part=PART, said="Chapter eight. Exponential smoothing.")
 
     def ses_rule(self):
         a = 0.3

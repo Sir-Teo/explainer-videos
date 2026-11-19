@@ -14,7 +14,7 @@ def sci(v: float) -> str:
     return rf"${v / 10 ** e:.1f} \times 10^{{{e}}}$"
 
 
-class Extremes(VoiceoverScene):
+class Extremes(StatsScene):
     def construct(self):
         self.card()
         self.maxstable()
@@ -24,10 +24,7 @@ class Extremes(VoiceoverScene):
         self.portpirie()
 
     def card(self):
-        card = chapter_card(13, r"Extremes", r"What can a maximum converge to?", lit=(1928, 1943), part=PART)
-        with self.voiceover("Chapter thirteen. Extremes: what a maximum can converge to."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(13, r"Extremes", r"What can a maximum converge to?", lit=(1928, 1943), part=PART, said="Chapter thirteen. Extremes: what a maximum can converge to.")
 
     def maxstable(self):
         rows = [

@@ -5,7 +5,7 @@ import numpy as np
 from videos.stats.stats50.common import *  # noqa: F403
 
 
-class UpperBounds(VoiceoverScene):
+class UpperBounds(StatsScene):
     def construct(self):
         self.card()
         self.estimators()
@@ -16,10 +16,7 @@ class UpperBounds(VoiceoverScene):
         self.besov()
 
     def card(self):
-        card = chapter_card(6, r"Upper bounds that match", r"Blockwise James--Stein and thresholding", part=PART)
-        with self.voiceover("Chapter six. Upper bounds that match: blockwise James–Stein and thresholding."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(6, r"Upper bounds that match", r"Blockwise James--Stein and thresholding", part=PART, said="Chapter six. Upper bounds that match: blockwise James–Stein and thresholding.")
 
     def estimators(self):
         rows = [

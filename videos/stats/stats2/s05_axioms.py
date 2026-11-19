@@ -9,7 +9,7 @@ from videos.stats.stats2.common import *  # noqa: F403
 A_COL, B_COL = PA, PB
 
 
-class Axioms(VoiceoverScene):
+class Axioms(StatsScene):
     def construct(self):
         self.card()
         self.kolmogorov()
@@ -20,11 +20,7 @@ class Axioms(VoiceoverScene):
         self.continuity()
 
     def card(self):
-        card = chapter_card(4, r"Kolmogorov's axioms", r"Three rules from which everything else follows",
-                            lit={1933: "Kolmogorov's axioms"}, part=PART)
-        with self.voiceover("Chapter four. Kolmogorov's axioms."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(4, r"Kolmogorov's axioms", r"Three rules from which everything else follows", lit={1933: "Kolmogorov's axioms"}, part=PART, said="Chapter four. Kolmogorov's axioms.")
 
     def kolmogorov(self):
         hc = history_card(1933, r"Andrey Kolmogorov, aged 30: \ \emph{Grundbegriffe der "

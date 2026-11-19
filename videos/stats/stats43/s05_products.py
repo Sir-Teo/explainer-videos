@@ -5,7 +5,7 @@ import numpy as np
 from videos.stats.stats43.common import *  # noqa: F403
 
 
-class Products(VoiceoverScene):
+class Products(StatsScene):
     def construct(self):
         self.card()
         self.independence()
@@ -15,10 +15,7 @@ class Products(VoiceoverScene):
         self.likelihood()
 
     def card(self):
-        card = chapter_card(4, r"Independence and products", r"How do infinitely many coins exist?", part=PART)
-        with self.voiceover("Chapter four. Independence, products, and how infinitely many coins can exist at once."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(4, r"Independence and products", r"How do infinitely many coins exist?", part=PART, said="Chapter four. Independence, products, and how infinitely many coins can exist at once.")
 
     def independence(self):
         rows = [

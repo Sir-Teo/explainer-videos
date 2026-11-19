@@ -5,7 +5,7 @@ import numpy as np
 from videos.stats.stats56.common import *  # noqa: F403
 
 
-class Polyhedral(VoiceoverScene):
+class Polyhedral(StatsScene):
     def construct(self):
         self.card()
         self.lemma()
@@ -20,10 +20,7 @@ class Polyhedral(VoiceoverScene):
         self.asymptotic()
 
     def card(self):
-        card = chapter_card(3, r"Conditional selective inference", r"The polyhedral lemma, \ proved", lit=(2016,), part=PART)
-        with self.voiceover("Chapter three. Conditional selective inference, and the polyhedral lemma, proved."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(3, r"Conditional selective inference", r"The polyhedral lemma, \ proved", lit=(2016,), part=PART, said="Chapter three. Conditional selective inference, and the polyhedral lemma, proved.")
 
     def lemma(self):
         rows = [

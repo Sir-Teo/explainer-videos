@@ -5,7 +5,7 @@ import numpy as np
 from videos.stats.stats28.common import *  # noqa: F403
 
 
-class Optimism(VoiceoverScene):
+class Optimism(StatsScene):
     def construct(self):
         self.card()
         self.fits()
@@ -16,10 +16,7 @@ class Optimism(VoiceoverScene):
         self.lasso()
 
     def card(self):
-        card = chapter_card(1, r"Optimism", r"Training error flatters", lit=(1986,), part=PART)
-        with self.voiceover("Chapter one. Optimism."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(1, r"Optimism", r"Training error flatters", lit=(1986,), part=PART, said="Chapter one. Optimism.")
 
     def fits(self):
         d = load("optimism")

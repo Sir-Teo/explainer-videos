@@ -5,7 +5,7 @@ import numpy as np
 from videos.stats.stats46.common import *  # noqa: F403
 
 
-class GoodnessOfFit(VoiceoverScene):
+class GoodnessOfFit(StatsScene):
     def construct(self):
         self.card()
         self.pearson()
@@ -17,10 +17,7 @@ class GoodnessOfFit(VoiceoverScene):
         self.board()
 
     def card(self):
-        card = chapter_card(12, r"Goodness of fit, \ rigorously", r"Testing a whole distribution", lit=(1900, 1967), part=PART)
-        with self.voiceover("Chapter twelve. Goodness of fit, rigorously: testing a whole distribution."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(12, r"Goodness of fit, \ rigorously", r"Testing a whole distribution", lit=(1900, 1967), part=PART, said="Chapter twelve. Goodness of fit, rigorously: testing a whole distribution.")
 
     def pearson(self):
         rows = [

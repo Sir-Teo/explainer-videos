@@ -3,7 +3,7 @@ from __future__ import annotations
 from videos.stats.stats54.common import *  # noqa: F403
 
 
-class VC(VoiceoverScene):
+class VC(StatsScene):
     def construct(self):
         self.card()
         self.symmetrization()
@@ -16,10 +16,7 @@ class VC(VoiceoverScene):
         self.lesson()
 
     def card(self):
-        card = chapter_card(2, r"VC bounds", r"From counting labellings to a guarantee", lit=(1971,), part=PART)
-        with self.voiceover("Chapter two. VC bounds: from counting labellings to a guarantee."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(2, r"VC bounds", r"From counting labellings to a guarantee", lit=(1971,), part=PART, said="Chapter two. VC bounds: from counting labellings to a guarantee.")
 
     def symmetrization(self):
         rows = [

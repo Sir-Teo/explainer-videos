@@ -5,7 +5,7 @@ import numpy as np
 from videos.stats.stats17.common import *  # noqa: F403
 
 
-class Estimate(VoiceoverScene):
+class Estimate(StatsScene):
     def construct(self):
         self.card()
         self.yule_walker()
@@ -16,10 +16,7 @@ class Estimate(VoiceoverScene):
         self.choice()
 
     def card(self):
-        card = chapter_card(5, r"Estimation", r"Fitting, \ choosing, \ and checking", part=PART)
-        with self.voiceover("Chapter five. Estimation."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(5, r"Estimation", r"Fitting, \ choosing, \ and checking", part=PART, said="Chapter five. Estimation.")
 
     def yule_walker(self):
         d = load("sunspot")

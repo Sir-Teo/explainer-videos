@@ -7,7 +7,7 @@ import numpy as np
 from videos.stats.stats64.common import *  # noqa: F403
 
 
-class Watermark(LectureMixin, VoiceoverScene):
+class Watermark(LectureMixin, StatsScene):
     def construct(self):
         self.card_voiceover("Chapter nine. Watermarks: hiding a hypothesis test in the text.", 9,
                             r"Watermarks as tests", r"A signal in the word choices")

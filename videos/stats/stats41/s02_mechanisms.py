@@ -5,7 +5,7 @@ import numpy as np
 from videos.stats.stats41.common import *  # noqa: F403
 
 
-class Mechanisms(VoiceoverScene):
+class Mechanisms(StatsScene):
     def construct(self):
         self.card()
         self.notation()
@@ -19,10 +19,7 @@ class Mechanisms(VoiceoverScene):
         self.untestable()
 
     def card(self):
-        card = chapter_card(1, r"Mechanisms", r"Why is it missing?", lit=(1976,), part=PART)
-        with self.voiceover("Chapter one. Mechanisms."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(1, r"Mechanisms", r"Why is it missing?", lit=(1976,), part=PART, said="Chapter one. Mechanisms.")
 
     def notation(self):
         rows = [

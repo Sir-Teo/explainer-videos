@@ -5,7 +5,7 @@ import numpy as np
 from videos.stats.stats1.common import *  # noqa: F403
 
 
-class Spread(VoiceoverScene):
+class Spread(StatsScene):
     def construct(self):
         self.card()
         self.squares()
@@ -14,10 +14,7 @@ class Spread(VoiceoverScene):
         self.chebyshev()
 
     def card(self):
-        card = chapter_card(5, r"Spread, and why squares", r"How far from the centre is typical?", lit=(), part=PART)
-        with self.voiceover("Chapter five. Spread, and why squares."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(5, r"Spread, and why squares", r"How far from the centre is typical?", lit=(), part=PART, said="Chapter five. Spread, and why squares.")
 
     def squares(self):
         d = load("heights")

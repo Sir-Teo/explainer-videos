@@ -5,7 +5,7 @@ import numpy as np
 from videos.stats.stats43.common import *  # noqa: F403
 
 
-class RandomVariables(VoiceoverScene):
+class RandomVariables(StatsScene):
     def construct(self):
         self.card()
         self.definition()
@@ -15,10 +15,7 @@ class RandomVariables(VoiceoverScene):
         self.information()
 
     def card(self):
-        card = chapter_card(2, r"Random variables as measurable maps", r"What is $X$, \ really?", lit=(1909,), part=PART)
-        with self.voiceover("Chapter two. What is a random variable, really?"):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(2, r"Random variables as measurable maps", r"What is $X$, \ really?", lit=(1909,), part=PART, said="Chapter two. What is a random variable, really?")
 
     def definition(self):
         rows = [

@@ -5,7 +5,7 @@ import numpy as np
 from videos.stats.stats39.common import *  # noqa: F403
 
 
-class GPML(VoiceoverScene):
+class GPML(StatsScene):
     def construct(self):
         self.card()
         self.same()
@@ -17,10 +17,7 @@ class GPML(VoiceoverScene):
         self.wider()
 
     def card(self):
-        card = chapter_card(13, r"Gaussian processes in machine learning", r"Kriging, \ renamed", lit=(1989, 1998), part=PART)
-        with self.voiceover("Chapter thirteen. Gaussian processes in machine learning."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(13, r"Gaussian processes in machine learning", r"Kriging, \ renamed", lit=(1989, 1998), part=PART, said="Chapter thirteen. Gaussian processes in machine learning.")
 
     def same(self):
         rows = [[r"geostatistics", r"machine learning"],

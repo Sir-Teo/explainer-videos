@@ -5,7 +5,7 @@ import numpy as np
 from videos.stats.stats50.common import *  # noqa: F403
 
 
-class Assouad(VoiceoverScene):
+class Assouad(StatsScene):
     def construct(self):
         self.card()
         self.lemma()
@@ -16,10 +16,7 @@ class Assouad(VoiceoverScene):
         self.compare()
 
     def card(self):
-        card = chapter_card(5, r"Assouad's lemma", r"A hypercube of bumps, \ one coin per coordinate", part=PART)
-        with self.voiceover("Chapter five. Assouad's lemma: a hypercube of bumps, one coin per coordinate."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(5, r"Assouad's lemma", r"A hypercube of bumps, \ one coin per coordinate", part=PART, said="Chapter five. Assouad's lemma: a hypercube of bumps, one coin per coordinate.")
 
     def lemma(self):
         rows = [

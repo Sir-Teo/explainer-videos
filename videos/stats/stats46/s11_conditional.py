@@ -5,7 +5,7 @@ import numpy as np
 from videos.stats.stats46.common import *  # noqa: F403
 
 
-class Conditional(VoiceoverScene):
+class Conditional(StatsScene):
     def construct(self):
         self.card()
         self.welch()
@@ -15,10 +15,7 @@ class Conditional(VoiceoverScene):
         self.resolution()
 
     def card(self):
-        card = chapter_card(10, r"Conditional inference", r"Does 95\% hold for \emph{this} data set?", lit=(1959,), part=PART)
-        with self.voiceover("Chapter ten. Conditional inference: does ninety-five percent hold for this data set?"):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(10, r"Conditional inference", r"Does 95\% hold for \emph{this} data set?", lit=(1959,), part=PART, said="Chapter ten. Conditional inference: does ninety-five percent hold for this data set?")
 
     def welch(self):
         rows = [

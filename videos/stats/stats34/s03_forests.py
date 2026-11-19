@@ -9,7 +9,7 @@ from videos.stats.stats34.common import *  # noqa: F403
 MTRY_C = {"10": GREY_B, "5": TREEC, "3": PREDC, "1": BOOSTC}
 
 
-class Forests(VoiceoverScene):
+class Forests(StatsScene):
     def construct(self):
         self.card()
         self.bagging()
@@ -26,10 +26,7 @@ class Forests(VoiceoverScene):
         self.board()
 
     def card(self):
-        card = chapter_card(2, r"Forests", r"An average of many noisy trees", lit=(2001,), part=PART)
-        with self.voiceover("Chapter two. Forests."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(2, r"Forests", r"An average of many noisy trees", lit=(2001,), part=PART, said="Chapter two. Forests.")
 
     def bagging(self):
         rows = [

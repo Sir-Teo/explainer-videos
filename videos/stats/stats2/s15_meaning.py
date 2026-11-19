@@ -7,7 +7,7 @@ from videos.stats.stats2.common import *  # noqa: F403
 FREQ, LOGIC, BELIEF = S.EST, S.LIK, S.PRIOR
 
 
-class Meaning(VoiceoverScene):
+class Meaning(StatsScene):
     def construct(self):
         self.card()
         self.frequency()
@@ -17,11 +17,7 @@ class Meaning(VoiceoverScene):
         self.synthesis()
 
     def card(self):
-        card = chapter_card(14, r"What probability means", r"A frequency, a logic, or a degree of belief?",
-                            lit=(1933,), part=PART)
-        with self.voiceover("Chapter fourteen. What probability means."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(14, r"What probability means", r"A frequency, a logic, or a degree of belief?", lit=(1933,), part=PART, said="Chapter fourteen. What probability means.")
 
     def frequency(self):
         g = np.random.Generator(np.random.PCG64(1866))

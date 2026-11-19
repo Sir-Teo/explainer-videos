@@ -5,7 +5,7 @@ import numpy as np
 from videos.stats.stats38.common import *  # noqa: F403
 
 
-class Forecast(VoiceoverScene):
+class Forecast(StatsScene):
     def construct(self):
         self.card()
         self.competitions()
@@ -16,10 +16,7 @@ class Forecast(VoiceoverScene):
         self.lesson()
 
     def card(self):
-        card = chapter_card(12, r"The forecasting frontier", r"Big models, \ and honest evaluation", lit=(2018, 2020, 2024), part=PART)
-        with self.voiceover("Chapter twelve. The forecasting frontier."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(12, r"The forecasting frontier", r"Big models, \ and honest evaluation", lit=(2018, 2020, 2024), part=PART, said="Chapter twelve. The forecasting frontier.")
 
     def competitions(self):
         rows = fit_rows(VGroup(

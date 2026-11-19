@@ -5,7 +5,7 @@ import numpy as np
 from videos.stats.stats49.common import *  # noqa: F403
 
 
-class Estimators(VoiceoverScene):
+class Estimators(StatsScene):
     def construct(self):
         self.card()
         self.expansion()
@@ -17,10 +17,7 @@ class Estimators(VoiceoverScene):
         self.nsw()
 
     def card(self):
-        card = chapter_card(6, r"Constructing efficient estimators", r"One-step, \ estimating equations, \ TMLE", lit=(2006,), part=PART)
-        with self.voiceover("Chapter six. Constructing efficient estimators: one-step, estimating equations, and targeted maximum likelihood."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(6, r"Constructing efficient estimators", r"One-step, \ estimating equations, \ TMLE", lit=(2006,), part=PART, said="Chapter six. Constructing efficient estimators: one-step, estimating equations, and targeted maximum likelihood.")
 
     def expansion(self):
         rows = [

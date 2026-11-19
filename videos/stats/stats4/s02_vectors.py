@@ -5,7 +5,7 @@ import numpy as np
 from videos.stats.stats4.common import *  # noqa: F403
 
 
-class Vectors(VoiceoverScene):
+class Vectors(StatsScene):
     def construct(self):
         self.card()
         self.point()
@@ -15,10 +15,7 @@ class Vectors(VoiceoverScene):
         self.data_matrix()
 
     def card(self):
-        card = chapter_card(1, r"Vectors as data", r"A sample of $n$ is one point in $\mathbb R^n$", lit=(1805,), part=PART)
-        with self.voiceover("Chapter one. Vectors as data."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(1, r"Vectors as data", r"A sample of $n$ is one point in $\mathbb R^n$", lit=(1805,), part=PART, said="Chapter one. Vectors as data.")
 
     def point(self):
         d = load("vectors")

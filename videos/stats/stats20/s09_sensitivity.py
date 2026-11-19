@@ -9,7 +9,7 @@ AXIS_NAMES = {"meds": r"BP medicine users in", "energy": r"energy adjusted", "we
 ON = {"meds": "keep", "energy": True, "weights": True, "age_spline": True, "readings": "all", "exposure": "mean2"}
 
 
-class Sensitivity(VoiceoverScene):
+class Sensitivity(StatsScene):
     def construct(self):
         self.card()
         self.curve()
@@ -20,10 +20,7 @@ class Sensitivity(VoiceoverScene):
         self.verdict()
 
     def card(self):
-        card = chapter_card(8, r"Sensitivity", r"What changes the answer?", part=PART)
-        with self.voiceover("Chapter eight. Sensitivity."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(8, r"Sensitivity", r"What changes the answer?", part=PART, said="Chapter eight. Sensitivity.")
 
     def curve(self):
         d = load("spec")

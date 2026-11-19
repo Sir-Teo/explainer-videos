@@ -8,7 +8,7 @@ SHAPES = [("line", r"line"), ("parabola", r"parabola"), ("circle", r"circle"), (
           ("noise", r"noise")]
 
 
-class Measures(VoiceoverScene):
+class Measures(StatsScene):
     def construct(self):
         self.card()
         self.gallery()
@@ -17,10 +17,7 @@ class Measures(VoiceoverScene):
         self.dcor_mi()
 
     def card(self):
-        card = chapter_card(13, r"Measuring dependence", r"One number for a relationship: \ which one?", lit=(), part=PART)
-        with self.voiceover("Chapter thirteen. Measuring dependence."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(13, r"Measuring dependence", r"One number for a relationship: \ which one?", lit=(), part=PART, said="Chapter thirteen. Measuring dependence.")
 
     def gallery(self):
         d = load("measures")

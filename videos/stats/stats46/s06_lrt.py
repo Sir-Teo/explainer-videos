@@ -5,7 +5,7 @@ import numpy as np
 from videos.stats.stats46.common import *  # noqa: F403
 
 
-class LRT(VoiceoverScene):
+class LRT(StatsScene):
     def construct(self):
         self.card()
         self.wilks()
@@ -15,10 +15,7 @@ class LRT(VoiceoverScene):
         self.failures()
 
     def card(self):
-        card = chapter_card(5, r"The likelihood ratio test", r"Wilks's theorem, \ and where it breaks", lit=(1938, 1954), part=PART)
-        with self.voiceover("Chapter five. The likelihood ratio test: Wilks's theorem, and where it breaks."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(5, r"The likelihood ratio test", r"Wilks's theorem, \ and where it breaks", lit=(1938, 1954), part=PART, said="Chapter five. The likelihood ratio test: Wilks's theorem, and where it breaks.")
 
     def wilks(self):
         rows = [

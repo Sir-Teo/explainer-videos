@@ -6,7 +6,7 @@ from explainer.stats.board import coverage_board, load_all
 from videos.stats.stats22.common import *  # noqa: F403
 
 
-class NeymanScott(VoiceoverScene):
+class NeymanScott(StatsScene):
     def construct(self):
         self.card()
         self.setup_problem()
@@ -17,10 +17,7 @@ class NeymanScott(VoiceoverScene):
         self.board()
 
     def card(self):
-        card = chapter_card(7, r"Neyman--Scott", r"When the parameters grow with the data", lit=(1948,), part=PART)
-        with self.voiceover("Chapter seven. The Neyman–Scott problem."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(7, r"Neyman--Scott", r"When the parameters grow with the data", lit=(1948,), part=PART, said="Chapter seven. The Neyman–Scott problem.")
 
     def setup_problem(self):
         rows = [

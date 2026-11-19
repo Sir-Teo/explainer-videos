@@ -5,7 +5,7 @@ import numpy as np
 from videos.stats.stats7.common import *  # noqa: F403
 
 
-class MonteCarlo(VoiceoverScene):
+class MonteCarlo(StatsScene):
     def construct(self):
         self.card()
         self.darts()
@@ -16,10 +16,7 @@ class MonteCarlo(VoiceoverScene):
         self.lazzarini()
 
     def card(self):
-        card = chapter_card(5, r"Monte Carlo integration", r"Integrals as averages", lit=(1777,), part=PART)
-        with self.voiceover("Chapter five. Monte Carlo integration."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(5, r"Monte Carlo integration", r"Integrals as averages", lit=(1777,), part=PART, said="Chapter five. Monte Carlo integration.")
 
     def darts(self):
         d = load("montecarlo")

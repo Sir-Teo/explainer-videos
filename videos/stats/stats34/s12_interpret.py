@@ -5,7 +5,7 @@ import numpy as np
 from videos.stats.stats34.common import *  # noqa: F403
 
 
-class Interpret(VoiceoverScene):
+class Interpret(StatsScene):
     def construct(self):
         self.card()
         self.estimands()
@@ -19,10 +19,7 @@ class Interpret(VoiceoverScene):
         self.lesson()
 
     def card(self):
-        card = chapter_card(11, r"Interpretation as estimation", r"What does an explanation estimate?", lit=(2017,), part=PART)
-        with self.voiceover("Chapter eleven. Interpretation as estimation."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(11, r"Interpretation as estimation", r"What does an explanation estimate?", lit=(2017,), part=PART, said="Chapter eleven. Interpretation as estimation.")
 
     def estimands(self):
         rows = [

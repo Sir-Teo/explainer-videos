@@ -5,7 +5,7 @@ import numpy as np
 from videos.stats.stats23.common import *  # noqa: F403
 
 
-class GLH(VoiceoverScene):
+class GLH(StatsScene):
     def construct(self):
         self.card()
         self.hypothesis()
@@ -18,10 +18,7 @@ class GLH(VoiceoverScene):
         self.scheffe()
 
     def card(self):
-        card = chapter_card(2, r"The general linear hypothesis", r"One test for every linear question", part=PART)
-        with self.voiceover("Chapter two. The general linear hypothesis."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(2, r"The general linear hypothesis", r"One test for every linear question", part=PART, said="Chapter two. The general linear hypothesis.")
 
     def hypothesis(self):
         rows = [

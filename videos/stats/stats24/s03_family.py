@@ -6,7 +6,7 @@ from scipy import special, stats
 from videos.stats.stats24.common import *  # noqa: F403
 
 
-class Family(VoiceoverScene):
+class Family(StatsScene):
     def construct(self):
         self.card()
         self.edf()
@@ -18,10 +18,7 @@ class Family(VoiceoverScene):
         self.canonical()
 
     def card(self):
-        card = chapter_card(2, r"The exponential dispersion family", r"One form for many distributions", lit=(1972,), part=PART)
-        with self.voiceover("Chapter two. The exponential dispersion family."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(2, r"The exponential dispersion family", r"One form for many distributions", lit=(1972,), part=PART, said="Chapter two. The exponential dispersion family.")
 
     def edf(self):
         rows = [

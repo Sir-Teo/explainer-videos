@@ -5,7 +5,7 @@ import numpy as np
 from videos.stats.stats64.common import *  # noqa: F403
 
 
-class SBI(LectureMixin, VoiceoverScene):
+class SBI(LectureMixin, StatsScene):
     def construct(self):
         self.card_voiceover("Chapter ten. Simulation-based inference, and posteriors that are too sure of themselves.", 10,
                             r"Simulation-based inference", r"When the likelihood is a simulator")

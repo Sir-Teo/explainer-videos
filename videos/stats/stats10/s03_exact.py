@@ -5,7 +5,7 @@ import numpy as np
 from videos.stats.stats10.common import *  # noqa: F403
 
 
-class Exact(VoiceoverScene):
+class Exact(StatsScene):
     def construct(self):
         self.card()
         self.tea_null()
@@ -17,10 +17,7 @@ class Exact(VoiceoverScene):
         self.why_random()
 
     def card(self):
-        card = chapter_card(2, r"Exact tests by design", r"Randomization makes the null distribution", lit=(1935,), part=PART)
-        with self.voiceover("Chapter two. Exact tests by design."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(2, r"Exact tests by design", r"Randomization makes the null distribution", lit=(1935,), part=PART, said="Chapter two. Exact tests by design.")
 
     def tea_null(self):
         d = load("tea")["8"]

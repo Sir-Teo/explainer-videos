@@ -5,7 +5,7 @@ import numpy as np
 from videos.stats.stats33.common import *  # noqa: F403
 
 
-class FDR(VoiceoverScene):
+class FDR(StatsScene):
     def construct(self):
         self.card()
         self.history()
@@ -19,10 +19,7 @@ class FDR(VoiceoverScene):
         self.by_results()
 
     def card(self):
-        card = chapter_card(3, r"The false discovery rate", r"Control the share of errors, \ not their existence", lit=(1995,), part=PART)
-        with self.voiceover("Chapter three. The false discovery rate."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(3, r"The false discovery rate", r"Control the share of errors, \ not their existence", lit=(1995,), part=PART, said="Chapter three. The false discovery rate.")
 
     def history(self):
         rows = fit_rows(VGroup(

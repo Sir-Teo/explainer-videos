@@ -6,7 +6,7 @@ from scipy import stats
 from videos.stats.stats38.common import *  # noqa: F403
 
 
-class UnitRoot(VoiceoverScene):
+class UnitRoot(StatsScene):
     def construct(self):
         self.card()
         self.two()
@@ -18,10 +18,7 @@ class UnitRoot(VoiceoverScene):
         self.board()
 
     def card(self):
-        card = chapter_card(3, r"Unit roots", r"Does the series come back?", lit=(1979, 1992), part=PART)
-        with self.voiceover("Chapter three. Unit roots."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(3, r"Unit roots", r"Does the series come back?", lit=(1979, 1992), part=PART, said="Chapter three. Unit roots.")
 
     def two(self):
         d = load("unitroot")

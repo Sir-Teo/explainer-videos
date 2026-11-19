@@ -8,7 +8,7 @@ from videos.stats.stats17.common import *  # noqa: F403
 MONTHS = ["J", "F", "M", "A", "M", "J", "J", "A", "S", "O", "N", "D"]
 
 
-class Seasonal(VoiceoverScene):
+class Seasonal(StatsScene):
     def construct(self):
         self.card()
         self.keeling()
@@ -20,10 +20,7 @@ class Seasonal(VoiceoverScene):
         self.variants()
 
     def card(self):
-        card = chapter_card(7, r"Trend and seasonality", r"Taking a series apart", part=PART)
-        with self.voiceover("Chapter seven. Trend and seasonality."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(7, r"Trend and seasonality", r"Taking a series apart", part=PART, said="Chapter seven. Trend and seasonality.")
 
     def keeling(self):
         d = load("co2")

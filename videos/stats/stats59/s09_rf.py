@@ -5,7 +5,7 @@ import numpy as np
 from videos.stats.stats59.common import *  # noqa: F403
 
 
-class RandomFeatures(LectureMixin, VoiceoverScene):
+class RandomFeatures(LectureMixin, StatsScene):
     def construct(self):
         self.card_voiceover("Chapter eight. Random features and kernels: a bridge from regression to neural networks.", 8,
                             r"Random features and kernels", r"A two-layer network, \ first layer frozen", lit=(2022,))

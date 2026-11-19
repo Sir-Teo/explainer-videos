@@ -5,14 +5,14 @@ import numpy as np
 from videos.stats.stats48.common import *  # noqa: F403
 
 
-class Hook(VoiceoverScene):
+class Hook(StatsScene):
     def construct(self):
         self.story()
         self.paths()
         self.kolmogorov()
         self.question()
         self.upgrades()
-        self.objectives()
+        self.title(PART)
 
     def story(self):
         tl = timeline(lit=(1933, 1949, 1952)).to_edge(UP, buff=0.35)
@@ -135,29 +135,4 @@ class Hook(VoiceoverScene):
             for k, m_ in enumerate("abc"):
                 vo.wait_until(m_)
                 self.play(FadeIn(cards[k], shift=UP * 0.2))
-        self.clear_scene()
-
-    def objectives(self):
-        head = VGroup(label(r"Part 48", font_size=34, color=GREY_B), label(r"Empirical Processes", font_size=48)).arrange(DOWN, buff=0.25)
-        obj = objectives_card([
-            r"Glivenko--Cantelli classes; \ symmetrization; \ Rademacher averages; \ VC dimension",
-            r"covering and bracketing numbers; \ Dudley's chaining; \ Donsker classes",
-            r"Talagrand's concentration; \ the functional delta method; \ Z-estimators with nuisance parameters",
-            r"rates and cube-root asymptotics; \ the bootstrap empirical process; \ KS with estimated parameters",
-        ], color=CLASSC, font_size=26)
-        prereq = note(r"prerequisites: \ Parts 43, \ 44, \ 47").to_corner(DL, buff=0.3)
-        built = note(r"built: \ \texttt{statkit.empirical}, \ the chaining net").to_corner(DR, buff=0.3)
-        with self.voiceover(
-            "<bookmark mark='a'/> Part forty-eight: empirical processes. <bookmark mark='b'/> We'll prove uniform laws of "
-            "large numbers by symmetrization and Rademacher averages, and measure the size of a class by its VC dimension; "
-            "measure it more finely by covering and bracketing numbers, and use Dudley's chaining, drawn as refining nets, "
-            "to prove uniform central limit theorems; meet Talagrand's concentration inequality; differentiate along the "
-            "empirical process, with quantiles, Kaplan–Meier and estimators with nuisance parameters; find the cube-root "
-            "rate of the Grenander estimator; and finish with the bootstrap and the Kolmogorov–Smirnov test done right."
-        ) as vo:
-            vo.wait_until("a")
-            self.play(FadeIn(head, shift=UP * 0.2))
-            vo.wait_until("b")
-            self.play(FadeOut(head), FadeIn(obj, shift=UP * 0.2), FadeIn(prereq), FadeIn(built))
-        self.wait(1.0)
         self.clear_scene()

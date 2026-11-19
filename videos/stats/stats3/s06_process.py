@@ -7,7 +7,7 @@ from videos.stats.stats3.common import *  # noqa: F403
 BUS = S.ACCENT
 
 
-class Process(VoiceoverScene, TreeMixin):
+class Process(StatsScene, TreeMixin):
     def construct(self):
         self.card()
         self.buses()
@@ -19,11 +19,7 @@ class Process(VoiceoverScene, TreeMixin):
                             "becomes the exponential.", 5)
 
     def card(self):
-        card = chapter_card(5, r"Continuous time", r"Buses at random, \ and why you always seem to wait longer",
-                            lit=(1898,), part=PART)
-        with self.voiceover("Chapter five. Continuous time."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(5, r"Continuous time", r"Buses at random, \ and why you always seem to wait longer", lit=(1898,), part=PART, said="Chapter five. Continuous time.")
 
     def buses(self):
         d = load("process")

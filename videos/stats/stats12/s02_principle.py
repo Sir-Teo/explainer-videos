@@ -5,7 +5,7 @@ import numpy as np
 from videos.stats.stats12.common import *  # noqa: F403
 
 
-class Principle(VoiceoverScene):
+class Principle(StatsScene):
     def construct(self):
         self.card()
         self.squares()
@@ -17,10 +17,7 @@ class Principle(VoiceoverScene):
         self.losses()
 
     def card(self):
-        card = chapter_card(1, r"The principle", r"Minimize the sum of squared misses", lit=(1805,), part=PART)
-        with self.voiceover("Chapter one. The principle."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(1, r"The principle", r"Minimize the sum of squared misses", lit=(1805,), part=PART, said="Chapter one. The principle.")
 
     def squares(self):
         d = load("line")

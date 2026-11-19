@@ -5,7 +5,7 @@ import numpy as np
 from videos.stats.stats29.common import *  # noqa: F403
 
 
-class KDE(VoiceoverScene):
+class KDE(StatsScene):
     def construct(self):
         self.card()
         self.bumps()
@@ -18,10 +18,7 @@ class KDE(VoiceoverScene):
         self.efficiency()
 
     def card(self):
-        card = chapter_card(2, r"Kernel density estimates", r"Smooth bumps, \ and the rate $n^{-4/5}$", lit=(1956,), part=PART)
-        with self.voiceover("Chapter two. Kernel density estimates."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(2, r"Kernel density estimates", r"Smooth bumps, \ and the rate $n^{-4/5}$", lit=(1956,), part=PART, said="Chapter two. Kernel density estimates.")
 
     def bumps(self):
         d = load("faithful")

@@ -7,7 +7,7 @@ import numpy as np
 from videos.stats.stats51.common import *  # noqa: F403
 
 
-class Widths(VoiceoverScene):
+class Widths(StatsScene):
     def construct(self):
         self.card()
         self.width()
@@ -17,10 +17,7 @@ class Widths(VoiceoverScene):
         self.mesh()
 
     def card(self):
-        card = chapter_card(8, r"Gaussian widths and the escape through the mesh", r"When does a random subspace miss a set?", lit=(1985,), part=PART)
-        with self.voiceover("Chapter eight. Gaussian widths and the escape through the mesh: when does a random subspace miss a set?"):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(8, r"Gaussian widths and the escape through the mesh", r"When does a random subspace miss a set?", lit=(1985,), part=PART, said="Chapter eight. Gaussian widths and the escape through the mesh: when does a random subspace miss a set?")
 
     def width(self):
         rows = [

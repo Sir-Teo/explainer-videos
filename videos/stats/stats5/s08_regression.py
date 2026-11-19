@@ -5,7 +5,7 @@ import numpy as np
 from videos.stats.stats5.common import *  # noqa: F403
 
 
-class RegressionToMean(VoiceoverScene):
+class RegressionToMean(StatsScene):
     def construct(self):
         self.card()
         self.world()
@@ -15,10 +15,7 @@ class RegressionToMean(VoiceoverScene):
         self.flight()
 
     def card(self):
-        card = chapter_card(7, r"Regression to the mean", r"Not a force: \ a fact about imperfect correlation", lit=(1886,), part=PART)
-        with self.voiceover("Chapter seven. Regression to the mean."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(7, r"Regression to the mean", r"Not a force: \ a fact about imperfect correlation", lit=(1886,), part=PART, said="Chapter seven. Regression to the mean.")
 
     def world(self):
         d = load("regression")

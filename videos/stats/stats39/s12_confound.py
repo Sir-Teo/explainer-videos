@@ -5,7 +5,7 @@ import numpy as np
 from videos.stats.stats39.common import *  # noqa: F403
 
 
-class Confounding(VoiceoverScene):
+class Confounding(StatsScene):
     def construct(self):
         self.card()
         self.setting()
@@ -15,10 +15,7 @@ class Confounding(VoiceoverScene):
         self.lessons()
 
     def card(self):
-        card = chapter_card(11, r"Spatial confounding", r"Does a spatial random effect adjust for what we did not measure?", lit=(2010,), part=PART)
-        with self.voiceover("Chapter eleven. Spatial confounding."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(11, r"Spatial confounding", r"Does a spatial random effect adjust for what we did not measure?", lit=(2010,), part=PART, said="Chapter eleven. Spatial confounding.")
 
     def setting(self):
         rows = [

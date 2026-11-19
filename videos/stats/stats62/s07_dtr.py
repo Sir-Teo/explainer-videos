@@ -5,7 +5,7 @@ import numpy as np
 from videos.stats.stats62.common import *  # noqa: F403
 
 
-class Regimes(LectureMixin, VoiceoverScene):
+class Regimes(LectureMixin, StatsScene):
     def construct(self):
         self.card_voiceover("Chapter six. Dynamic treatment regimes: rules that adapt as the patient changes.", 6,
                             r"Dynamic treatment regimes", r"Decisions in sequence", lit=(2003,))

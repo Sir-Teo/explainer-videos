@@ -13,7 +13,7 @@ def grid_surface(vals, center, width, lo=-2.5, hi=2.5):
     return FieldSurface(X.ravel(), Y.ravel(), v.ravel(), 1.0, width=width, center=center, lo=lo, hi=hi)
 
 
-class GMRF(VoiceoverScene):
+class GMRF(StatsScene):
     def construct(self):
         self.card()
         self.markov()
@@ -23,10 +23,7 @@ class GMRF(VoiceoverScene):
         self.inla()
 
     def card(self):
-        card = chapter_card(8, r"Markov random fields", r"Sparse precision, \ not sparse covariance", lit=(1974, 2011), part=PART)
-        with self.voiceover("Chapter eight. Markov random fields."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(8, r"Markov random fields", r"Sparse precision, \ not sparse covariance", lit=(1974, 2011), part=PART, said="Chapter eight. Markov random fields.")
 
     def markov(self):
         rows = [

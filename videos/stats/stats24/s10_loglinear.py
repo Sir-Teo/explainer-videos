@@ -5,7 +5,7 @@ import numpy as np
 from videos.stats.stats24.common import *  # noqa: F403
 
 
-class LogLinear(VoiceoverScene):
+class LogLinear(StatsScene):
     def construct(self):
         self.card()
         self.table()
@@ -16,10 +16,7 @@ class LogLinear(VoiceoverScene):
         self.logistic_link()
 
     def card(self):
-        card = chapter_card(9, r"Log-linear models", r"Tables as Poisson regressions", part=PART)
-        with self.voiceover("Chapter nine. Log-linear models."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(9, r"Log-linear models", r"Tables as Poisson regressions", part=PART, said="Chapter nine. Log-linear models.")
 
     def table(self):
         d = load("loglinear")

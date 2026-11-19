@@ -5,7 +5,7 @@ import numpy as np
 from videos.stats.stats45.common import *  # noqa: F403
 
 
-class EmpiricalBayes(VoiceoverScene):
+class EmpiricalBayes(StatsScene):
     def construct(self):
         self.card()
         self.robbins()
@@ -16,10 +16,7 @@ class EmpiricalBayes(VoiceoverScene):
         self.modeling()
 
     def card(self):
-        card = chapter_card(13, r"Empirical Bayes theory", r"Learning the prior from many problems at once", lit=(1956,), part=PART)
-        with self.voiceover("Chapter thirteen. Empirical Bayes theory: learning the prior from many problems at once."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(13, r"Empirical Bayes theory", r"Learning the prior from many problems at once", lit=(1956,), part=PART, said="Chapter thirteen. Empirical Bayes theory: learning the prior from many problems at once.")
 
     def robbins(self):
         rows = [

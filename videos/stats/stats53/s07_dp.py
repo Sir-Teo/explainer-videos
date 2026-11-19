@@ -5,7 +5,7 @@ import numpy as np
 from videos.stats.stats53.common import *  # noqa: F403
 
 
-class Dirichlet(VoiceoverScene):
+class Dirichlet(StatsScene):
     def construct(self):
         self.card()
         self.definition()
@@ -18,10 +18,7 @@ class Dirichlet(VoiceoverScene):
         self.pitman()
 
     def card(self):
-        card = chapter_card(6, r"Dirichlet processes and Pólya trees", r"Priors on distributions", lit=(1973,), part=PART)
-        with self.voiceover("Chapter six. Dirichlet processes and Pólya trees: priors on distributions."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(6, r"Dirichlet processes and Pólya trees", r"Priors on distributions", lit=(1973,), part=PART, said="Chapter six. Dirichlet processes and Pólya trees: priors on distributions.")
 
     def definition(self):
         rows = [

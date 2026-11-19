@@ -37,7 +37,7 @@ def boundaries(ax, gx, gy, Z, color, radius=0.022):
     return g
 
 
-class LDA(VoiceoverScene):
+class LDA(StatsScene):
     def construct(self):
         self.card()
         self.fisher()
@@ -49,10 +49,7 @@ class LDA(VoiceoverScene):
         self.history()
 
     def card(self):
-        card = chapter_card(7, r"Discriminant analysis", r"Separating groups you already know", lit=(1936,), part=PART)
-        with self.voiceover("Chapter seven. Discriminant analysis."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(7, r"Discriminant analysis", r"Separating groups you already know", lit=(1936,), part=PART, said="Chapter seven. Discriminant analysis.")
 
     def fisher(self):
         rows = [

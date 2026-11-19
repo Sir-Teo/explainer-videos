@@ -3,7 +3,7 @@ from __future__ import annotations
 from videos.stats.stats65.common import *  # noqa: F403
 
 
-class Theorem(LectureMixin, VoiceoverScene):
+class Theorem(LectureMixin, StatsScene):
     def construct(self):
         self.card_voiceover("Chapter four. The conjecture becomes a theorem, and here is its proof.", 4, r"A theorem",
                             r"Proved on screen")

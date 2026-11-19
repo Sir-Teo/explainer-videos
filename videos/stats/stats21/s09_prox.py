@@ -5,7 +5,7 @@ import numpy as np
 from videos.stats.stats21.common import *  # noqa: F403
 
 
-class Proximal(VoiceoverScene):
+class Proximal(StatsScene):
     def construct(self):
         self.card()
         self.operator()
@@ -16,10 +16,7 @@ class Proximal(VoiceoverScene):
         self.zoo()
 
     def card(self):
-        card = chapter_card(8, r"Proximal methods", r"A gradient step, \ then a cleanup", lit=(2009,), part=PART)
-        with self.voiceover("Chapter eight. Proximal methods."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(8, r"Proximal methods", r"A gradient step, \ then a cleanup", lit=(2009,), part=PART, said="Chapter eight. Proximal methods.")
 
     def operator(self):
         rows = [

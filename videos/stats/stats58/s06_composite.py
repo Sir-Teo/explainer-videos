@@ -5,7 +5,7 @@ import numpy as np
 from videos.stats.stats58.common import *  # noqa: F403
 
 
-class Composite(LectureMixin, VoiceoverScene):
+class Composite(LectureMixin, StatsScene):
     def construct(self):
         self.card_voiceover("Chapter five. Composite nulls: when the null hypothesis is a family, how can a bet be fair "
                        "against all of it?", 5, r"Composite nulls", r"Fair against a whole family", lit=(2020, 2024))

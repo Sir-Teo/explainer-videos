@@ -6,7 +6,7 @@ from explainer.stats.board import coverage_board, load_all
 from videos.stats.stats14.common import *  # noqa: F403
 
 
-class Overdispersion(VoiceoverScene):
+class Overdispersion(StatsScene):
     def construct(self):
         self.card()
         self.towns()
@@ -16,10 +16,7 @@ class Overdispersion(VoiceoverScene):
         self.board()
 
     def card(self):
-        card = chapter_card(6, r"Overdispersion", r"When the counts vary more than Poisson allows", part=PART)
-        with self.voiceover("Chapter six. Overdispersion."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(6, r"Overdispersion", r"When the counts vary more than Poisson allows", part=PART, said="Chapter six. Overdispersion.")
 
     def towns(self):
         d = load("clinic")

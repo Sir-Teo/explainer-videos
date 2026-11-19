@@ -6,7 +6,7 @@ from videos.stats.stats18.common import *  # noqa: F403
 from videos.stats.stats18.compute import adults
 
 
-class Ratio(VoiceoverScene):
+class Ratio(StatsScene):
     def construct(self):
         self.card()
         self.laplace()
@@ -18,10 +18,7 @@ class Ratio(VoiceoverScene):
         self.regression()
 
     def card(self):
-        card = chapter_card(8, r"Ratio and regression estimators", r"Borrowing strength from what we already know", part=PART)
-        with self.voiceover("Chapter eight. Ratio and regression estimators."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(8, r"Ratio and regression estimators", r"Borrowing strength from what we already know", part=PART, said="Chapter eight. Ratio and regression estimators.")
 
     def laplace(self):
         d = load("ratio")["laplace"]

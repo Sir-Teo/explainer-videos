@@ -5,7 +5,7 @@ import numpy as np
 from videos.stats.stats17.common import *  # noqa: F403
 
 
-class Forecast(VoiceoverScene):
+class Forecast(StatsScene):
     def construct(self):
         self.card()
         self.best_linear()
@@ -17,10 +17,7 @@ class Forecast(VoiceoverScene):
         self.cautions()
 
     def card(self):
-        card = chapter_card(6, r"Forecasting", r"How far ahead can memory see?", part=PART)
-        with self.voiceover("Chapter six. Forecasting."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(6, r"Forecasting", r"How far ahead can memory see?", part=PART, said="Chapter six. Forecasting.")
 
     def best_linear(self):
         rows = [

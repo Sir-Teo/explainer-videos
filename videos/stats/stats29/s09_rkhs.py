@@ -5,7 +5,7 @@ import numpy as np
 from videos.stats.stats29.common import *  # noqa: F403
 
 
-class RKHS(VoiceoverScene):
+class RKHS(StatsScene):
     def construct(self):
         self.card()
         self.space()
@@ -16,10 +16,7 @@ class RKHS(VoiceoverScene):
         self.bridge()
 
     def card(self):
-        card = chapter_card(8, r"Kernels and the representer theorem", r"Infinite dimensions, \ finite answers", lit=(1970,), part=PART)
-        with self.voiceover("Chapter eight. Reproducing kernels and the representer theorem."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(8, r"Kernels and the representer theorem", r"Infinite dimensions, \ finite answers", lit=(1970,), part=PART, said="Chapter eight. Reproducing kernels and the representer theorem.")
 
     def space(self):
         rows = [

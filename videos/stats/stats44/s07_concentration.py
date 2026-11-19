@@ -5,7 +5,7 @@ import numpy as np
 from videos.stats.stats44.common import *  # noqa: F403
 
 
-class Concentration(VoiceoverScene):
+class Concentration(StatsScene):
     def construct(self):
         self.card()
         self.azuma()
@@ -15,10 +15,7 @@ class Concentration(VoiceoverScene):
         self.freedman()
 
     def card(self):
-        card = chapter_card(6, r"Martingale concentration", r"Hoeffding, \ without independence", part=PART)
-        with self.voiceover("Chapter six. Concentration for martingales: Hoeffding's inequality without independence."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(6, r"Martingale concentration", r"Hoeffding, \ without independence", part=PART, said="Chapter six. Concentration for martingales: Hoeffding's inequality without independence.")
 
     def azuma(self):
         rows = [

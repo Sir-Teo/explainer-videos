@@ -5,7 +5,7 @@ import numpy as np
 from videos.stats.stats14.common import *  # noqa: F403
 
 
-class Poisson(VoiceoverScene):
+class Poisson(StatsScene):
     def construct(self):
         self.card()
         self.counts()
@@ -17,10 +17,7 @@ class Poisson(VoiceoverScene):
         self.rare_link()
 
     def card(self):
-        card = chapter_card(5, r"Poisson regression", r"Counts, \ rates, \ and offsets", lit=(1898,), part=PART)
-        with self.voiceover("Chapter five. Poisson regression."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(5, r"Poisson regression", r"Counts, \ rates, \ and offsets", lit=(1898,), part=PART, said="Chapter five. Poisson regression.")
 
     def _women(self, d):
         m = np.asarray(d["male"]) == 0

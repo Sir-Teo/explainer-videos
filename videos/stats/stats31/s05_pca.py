@@ -5,7 +5,7 @@ import numpy as np
 from videos.stats.stats31.common import *  # noqa: F403
 
 
-class PCA(VoiceoverScene):
+class PCA(StatsScene):
     def construct(self):
         self.card()
         self.idea()
@@ -18,10 +18,7 @@ class PCA(VoiceoverScene):
         self.cautions()
 
     def card(self):
-        card = chapter_card(4, r"Principal components", r"The directions of greatest variance", lit=(1901, 1933), part=PART)
-        with self.voiceover("Chapter four. Principal components."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(4, r"Principal components", r"The directions of greatest variance", lit=(1901, 1933), part=PART, said="Chapter four. Principal components.")
 
     def idea(self):
         rows = [

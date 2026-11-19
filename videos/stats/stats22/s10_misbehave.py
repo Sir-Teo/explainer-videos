@@ -6,7 +6,7 @@ from scipy import stats
 from videos.stats.stats22.common import *  # noqa: F403
 
 
-class Misbehave(VoiceoverScene):
+class Misbehave(StatsScene):
     def construct(self):
         self.card()
         self.spike()
@@ -16,10 +16,7 @@ class Misbehave(VoiceoverScene):
         self.bootstrap()
 
     def card(self):
-        card = chapter_card(9, r"When likelihood misbehaves", r"Spikes, \ twins and edges", part=PART)
-        with self.voiceover("Chapter nine. When likelihood misbehaves."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(9, r"When likelihood misbehaves", r"Spikes, \ twins and edges", part=PART, said="Chapter nine. When likelihood misbehaves.")
 
     def spike(self):
         d = load("misbehave")

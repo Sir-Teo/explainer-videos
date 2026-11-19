@@ -5,7 +5,7 @@ import numpy as np
 from videos.stats.stats16.common import *  # noqa: F403
 
 
-class Permutation(VoiceoverScene):
+class Permutation(StatsScene):
     def construct(self):
         self.card()
         self.exchangeable()
@@ -16,10 +16,7 @@ class Permutation(VoiceoverScene):
         self.limits()
 
     def card(self):
-        card = chapter_card(1, r"Permutation tests", r"Exact $p$-values from exchangeability", lit=(1935,), part=PART)
-        with self.voiceover("Chapter one. Permutation tests."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(1, r"Permutation tests", r"Exact $p$-values from exchangeability", lit=(1935,), part=PART, said="Chapter one. Permutation tests.")
 
     def exchangeable(self):
         rows = [

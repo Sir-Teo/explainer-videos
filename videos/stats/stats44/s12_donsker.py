@@ -6,7 +6,7 @@ from scipy import stats
 from videos.stats.stats44.common import *  # noqa: F403
 
 
-class Donsker(VoiceoverScene):
+class Donsker(StatsScene):
     def construct(self):
         self.card()
         self.walks()
@@ -16,11 +16,8 @@ class Donsker(VoiceoverScene):
         self.df()
 
     def card(self):
-        card = chapter_card(11, r"Donsker's invariance principle", r"Centered iid finite-variance walks, seen from far away", lit=(1951,), part=PART)
-        with self.voiceover("Chapter eleven. Donsker's invariance principle: centered finite-variance random walks, seen from far "
-            "away."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(11, r"Donsker's invariance principle", r"Centered iid finite-variance walks, seen from far away", lit=(1951,), part=PART, said="Chapter eleven. Donsker's invariance principle: centered finite-variance random walks, seen from far "
+            "away.")
 
     def walks(self):
         d = load("donsker")

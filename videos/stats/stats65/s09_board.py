@@ -3,7 +3,7 @@ from __future__ import annotations
 from videos.stats.stats65.common import *  # noqa: F403
 
 
-class FullBoard(LectureMixin, VoiceoverScene):
+class FullBoard(LectureMixin, StatsScene):
     def construct(self):
         self.card_voiceover("Chapter eight. The full Coverage Board: every promise of the degree, tested.", 8,
                             r"The full Coverage Board", r"Every promise, \ kept or broken")

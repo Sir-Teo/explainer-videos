@@ -20,13 +20,13 @@ def heatmap(M, size=0.11, pos_color=None, neg_color=None) -> VGroup:
     return g
 
 
-class Hook(VoiceoverScene):
+class Hook(StatsScene):
     def construct(self):
         self.fit()
         self.matrix()
         self.eigen()
         self.dof()
-        self.objectives()
+        self.title(PART)
 
     def fit(self):
         d = load("hat")
@@ -187,38 +187,4 @@ class Hook(VoiceoverScene):
             self.play(FadeIn(rows[2]))
             vo.wait_until("d")
             self.play(FadeIn(take))
-        self.clear_scene()
-
-    def objectives(self):
-        head = VGroup(label(r"Part 4", font_size=34, color=GREY_B), label(r"Matrices for Statistics", font_size=60))
-        head.arrange(DOWN, buff=0.25)
-        obj = objectives_card([
-            r"data as vectors; \ projections, Gram--Schmidt and QR; \ the trace and its tricks",
-            r"the spectral theorem, quadratic forms and ellipses; \ positive semidefinite matrices and Cholesky",
-            r"the singular value decomposition and low-rank approximation; \ the pseudoinverse",
-            r"block matrices, Schur complements and Woodbury; \ Kronecker products and vec",
-            r"matrix calculus and the Gaussian MLE; \ quadratic forms that are $\chi^2$; \ conditioning and floating point",
-        ], color=S.ACCENT, font_size=26)
-        prereq = note(r"prerequisites: \ a first course in linear algebra, \ or \emph{AI, Built} Part 3").to_corner(DL, buff=0.3)
-        built = label(r"Built in this part: \ a projection lab, \ $\mathbb R^3$ you can turn", font_size=28, color=S.ACCENT)
-        built.to_edge(DOWN, buff=0.8)
-        with self.voiceover(
-            "This part is the toolkit. <bookmark mark='a'/> Part four: matrices for statistics. <bookmark mark='b'/> "
-            "Data as vectors, and projections; the trace; the spectral theorem and the ellipses of quadratic "
-            "forms; positive semidefinite matrices; the singular value decomposition; generalized inverses; block "
-            "matrices and the Woodbury identity; Kronecker products; matrix calculus; the quadratic forms that are "
-            "chi-squared; and, at the end, what floating-point arithmetic does to all of it. "
-            "<bookmark mark='c'/> Along the way we'll use a projection lab: three-dimensional space you can turn, "
-            "where every projection can be seen. Most of the formulas of the next sixty parts are written in this "
-            "language, from the standard errors of regression to the eigenvalues of random matrices, so it's worth "
-            "learning to read it fluently. We'll prove what we use, check every identity numerically, and keep the "
-            "statistics in view: every chapter ends with what the tool is for."
-        ) as vo:
-            self.play(FadeIn(head, shift=UP * 0.2))
-            vo.wait_until("a")
-            vo.wait_until("b")
-            self.play(FadeOut(head), FadeIn(obj, shift=UP * 0.2), FadeIn(prereq))
-            vo.wait_until("c")
-            self.play(obj.animate.shift(UP * 0.4), FadeIn(built))
-        self.wait(1.0)
         self.clear_scene()

@@ -5,7 +5,7 @@ import numpy as np
 from videos.stats.stats21.common import *  # noqa: F403
 
 
-class Lagrange(VoiceoverScene):
+class Lagrange(StatsScene):
     def construct(self):
         self.card()
         self.multinomial()
@@ -16,10 +16,7 @@ class Lagrange(VoiceoverScene):
         self.uses()
 
     def card(self):
-        card = chapter_card(2, r"Lagrange and KKT", r"Optimizing under constraints", part=PART)
-        with self.voiceover("Chapter two. Lagrange multipliers, and the Karush–Kuhn–Tucker conditions."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(2, r"Lagrange and KKT", r"Optimizing under constraints", part=PART, said="Chapter two. Lagrange multipliers, and the Karush–Kuhn–Tucker conditions.")
 
     def multinomial(self):
         rows = [
