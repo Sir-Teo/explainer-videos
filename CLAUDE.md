@@ -67,20 +67,21 @@ Manim videos with local neural narration. See README.md for layout and build com
   `tools/lecture_length.py musicN` (30–60 minutes, listening included). `videos/music/soundcheck/` is the pipeline's
   two-minute test film.
 - *Economics, Built* (`videos/economics/`): sixty-eight parts planned in twelve acts (`econ1` … `econ68`; the series
-  key is `economics`, the prefix `econ`, as `psych` is to `psychology`), Part 1 built (English). The plan and the open
+  key is `economics`, the prefix `econ`, as `psych` is to `psychology`), Parts 1–2 built (English). The plan and the open
   decisions are `videos/economics/README.md`; the standard (cold opens, the Island as a serial, Play it in the first
   third, the intermission with a data film, Called it?, the is/ought card, the computed score), the devices and every
   part chapter by chapter are `videos/economics/SYLLABUS.md`. Shared code in `explainer/economics/` (tested in
-  `tests/economics/`): Agora, the economy the series builds (`agora/`, numpy and scipy only: `market`, `crusoe`,
-  `signals` so far), the Island's cast and planted truths (`island.py`), the Facts, the Dials (`dials.py`, gated by
+  `tests/economics/`): Agora, the economy the series builds (`agora/`, numpy and scipy only: `market` with taxes, caps and floors,
+  `crusoe`, `signals`, `curves` so far), the Island's cast and planted truths (`island.py`), the Facts, the Dials (`dials.py`, gated by
   `tools/check_dials.py econN`), Called it? (`calls.py`), the Data Room (`data/`: frozen, cited extracts of the
-  Maddison Project, FRED and the Philadelphia Fed's forecasters, registered in `data/SOURCES.md`, refreshed with
+  Maddison Project, FRED, the Philadelphia Fed's forecasters, the World Bank's Pink Sheet and USDA's coffee data, registered in `data/SOURCES.md`, refreshed with
   `python -m explainer.economics.data --refresh NAME`; transcribed passages and tables in `data/tables.py`, each with
   the date it was checked), the instruments (`viz.py`: the Tableau, the Play-it stage, traders' cards, the dial, fact,
   call, study and is/ought cards) and the score (`score.py`: the scissors theme, chapter stings that close in chapter by
   chapter, beds under pauses, the close, and each part's data melody, mixed by `tools/build.py` through the music-stem
   path; `--no-score` leaves it out). A part's intermission is a `SoundScene` that plays its data melody from the
-  part's `ClipStore`. Dates and numbers in the syllabus are from memory until each part's frontier sweep; a built part's
+  part's `ClipStore`. Scenes from Part 2 on take the chapter card and the number helpers from `explainer/economics/kit.py`
+  (narration speaks signed numbers through `say_num`). Dates and numbers in the syllabus are from memory until each part's frontier sweep; a built part's
   are checked against primary sources. The interactive of each part is a game on the kit `course/site/widgets/00_games.js`
   (`QB.econ`), which stores and sends nothing. `videos/economics/READING.md` maps textbooks and papers to the parts
   that plan them (the syllabus) and cite them (the built parts); it is written by `python -m videos.economics.reading`,

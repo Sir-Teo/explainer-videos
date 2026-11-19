@@ -163,3 +163,63 @@ def test_the_pit_with_a_tax_and_with_controls():
     assert cap["n"] == 5 and cap["efficiency"] < 0.9  # random rationing predicts 5.57 / 6.70 = 0.83
     floor = last(minimum=2.6)
     assert floor["n"] == 4 and floor["efficiency"] < 0.75  # 4.5 / 6.7 = 0.67
+
+
+# ---------------------------------------------------------------------------
+# Part 3: national accounts and index numbers
+# ---------------------------------------------------------------------------
+def test_island_accounts_agree_three_ways():
+    from explainer.economics.agora.accounts import IOTable
+
+    t = IOTable(**truths(3)["accounts"])
+    t.check()
+    g = t.gdp()
+    assert g["output"] == g["income"] == g["expenditure"] == 740
+    e = t.expenditure()
+    saving = t.income()["wages"] + t.income()["profits"] + 10 - e["C"]   # households keep the council's transfer of 10
+    assert saving == e["I"] + (e["X"] - e["M"])                          # S = I + NX: the boats were partly borrowed
+    L = t.leontief()
+    assert np.all(L >= -1e-12) and np.all(np.diag(L) >= 1)
+    # Leontief: producing final demand needs exactly the gross output
+    f = sum(t.final.values())
+    assert np.allclose(L @ f, t.gross_output())
+    va = t.value_added_in("X")
+    assert 0 < va["share"] < 1
+
+
+def test_inconsistent_accounts_are_refused():
+    from explainer.economics.agora.accounts import IOTable
+
+    a = dict(truths(3)["accounts"])
+    a["wages"] = (161, 180, 70, 40)
+    with pytest.raises(ValueError):
+        IOTable(**a).check()
+
+
+def test_index_numbers_bracket_the_true_cost_of_living():
+    from explainer.economics.agora import indices as ix
+
+    rng = np.random.default_rng(3)
+    for _ in range(50):
+        n = 4
+        sh = rng.dirichlet(np.ones(n))
+        p0, p1 = rng.uniform(0.5, 2, n), rng.uniform(0.5, 2, n)
+        q0 = ix.cobb_douglas_demand(p0, 100, sh)
+        q1 = ix.cobb_douglas_demand(p1, 130, sh)
+        true = ix.cost_of_living(p0, p1, sh)
+        assert ix.paasche(p0, p1, q1) <= true + 1e-12 <= ix.laspeyres(p0, p1, q0) + 2e-12
+        assert abs(ix.tornqvist(p0, p1, q0, q1) - true) < 1e-12        # exact for Cobb-Douglas tastes
+        assert ix.paasche(p0, p1, q1) <= ix.fisher(p0, p1, q0, q1) <= ix.laspeyres(p0, p1, q0)
+
+
+def test_chained_fisher_does_not_drift():
+    from explainer.economics.agora import indices as ix
+
+    P = np.array([[1, 1, 1], [2, 1, 0.8], [1.3, 1.6, 1], [1, 1, 1]], float)
+    sh = np.array([0.5, 0.3, 0.2])
+    Q = np.array([ix.cobb_douglas_demand(p, 100, sh) for p in P])
+    d = ix.chain_drift(P, Q)
+    assert d["laspeyres"] > 1.01 and d["paasche"] < 0.99
+    # Fisher is not exactly path-independent, but its drift is tiny next to Laspeyres's; Tornqvist is exact for
+    # Cobb-Douglas tastes
+    assert abs(d["fisher"] - 1) < 0.005 < d["laspeyres"] - 1 and abs(d["tornqvist"] - 1) < 1e-9

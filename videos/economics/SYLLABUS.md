@@ -2758,11 +2758,21 @@ Young Economist*.
 
 | Part | Status | Notes |
 |---|---|---|
-| Phase 0 | the first slice built | `explainer/economics/`: Agora (`market`, `crusoe`, `signals`), the Island, the Facts, the Dials and their gate, Called it?, the Data Room (Maddison 2023, FRED, the Philadelphia Fed's forecasters, frozen 2026-11-18), the instruments, the score; the course entry, the lab kit and the game kit (`00_games.js`); `tests/economics/`. `READING.md`, written from the syllabus and the parts (`videos/economics/reading.py`); the Chinese term guide (`ECONOMICS_ZH_GUIDE.md`). Still to come: the soundcheck film, the Chinese text table |
-| 1 | built, English | *Who Feeds Paris?* Every date, quotation and number checked against its source (see the part's README); the Chinese edition is next |
+| Phase 0 | the first slice built | `explainer/economics/`: Agora (`market`, `crusoe`, `signals`, and from Part 2 `curves`), the Island, the Facts, the Dials and their gate, Called it?, the Data Room (Maddison 2023, FRED, the Philadelphia Fed's forecasters, and from Part 2 the Pink Sheet and USDA's coffee data, frozen 2026-11-18), the instruments, the score; the course entry, the lab kit and the game kit (`00_games.js`); `tests/economics/`. `READING.md`, written from the syllabus and the parts (`videos/economics/reading.py`); the Chinese term guide (`ECONOMICS_ZH_GUIDE.md`). Still to come: the soundcheck film, the Chinese text table |
+| 1 | built, English | *Who Feeds Paris?* Every date, quotation and number checked against its source (see the part's README); the Chinese edition is to come |
+| 2 | built, English | *The Scissors.* Agora gains `curves` (straight lines through elasticity, incidence and controls) and taxes, caps and floors in the double auction; the Data Room gains the World Bank's Pink Sheet and USDA's coffee balance sheets; the first Dial row (staples) and the first Fact's columns are filled |
 
 **Corrections found while building Part 1** (the plan's draft, written from memory, against the sources): Bastiat's
 Paris passage is in *Economic Sophisms*, First Series, ch. 18 (1845), not the *Harmonies*; Hume's is/ought passage is
 in Book III of the *Treatise* (1740); after the Black Death England's GDP per head rose, and the long fall came in the
 seventeenth century; the Survey of Professional Forecasters' August 2008 median for 2009 was +1.5% against an outcome of
 −2.6%; Chamberlin's 1948 market is described from secondary summaries (Roth 1995), not re-read.
+
+**Corrections found while building Part 2.** Smith's first double auction was in January 1956 (his Nobel
+autobiography), not 1955; his worry that convergence was "an accident of symmetry", and the lopsided design he ran to
+answer it, are his own words there, and they became the part's Play-it market. Marshall's 1890 text compares each
+principle to "one blade of a pair of scissors"; the sentence about the upper and the under blade is from the later
+editions (third, 1895; quoted from the fifth, 1907). The Dial rows are petrol, cigarettes and alcohol, from three
+meta-analyses; housing services, in the draft, wait for Part 37. Gallet and List's mean (−0.48) is read from *Tobacco
+in Australia*, not the paper. The Bureau of Labor Statistics published no consumer price index for October 2025;
+deflated series fill that month from its neighbours and say so.

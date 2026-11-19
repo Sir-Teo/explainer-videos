@@ -67,6 +67,27 @@ TRUTHS = {
         # the wedges and controls applied to Part 1's pit
         "tax": 0.40, "cap": 2.00, "minimum": 2.60,
     },
+    # Part 3: a year of the Island's national accounts (thousands of island dollars), as an input-output table
+    # (agora.accounts.IOTable).  Four industries; the council taxes production and buys ferry trips and coconuts;
+    # passing ships buy fish and coconuts and sell nets, nails, fuel and cloth.  Constructed so that output, income
+    # and expenditure each give a GDP of 740, and households save 100 while the boats bought cost 120 (the rest is
+    # borrowed from abroad: exports 120 against imports 140).
+    3: {
+        "accounts": {
+            "industries": ("fishing", "coconut grove", "boatyard", "ferry"),
+            # Z[i][j]: what industry j bought from industry i and used up
+            "Z": ((0, 0, 0, 0),
+                  (20, 0, 30, 0),     # coconut fibre for nets, coconut wood for hulls
+                  (40, 0, 0, 25),     # boat repairs for the fishing company and the ferry
+                  (15, 10, 5, 0)),    # carrying fish, coconuts and timber
+            "final": {"C": (300, 200, 0, 60), "I": (0, 0, 120, 0), "G": (0, 10, 0, 20), "X": (80, 40, 0, 0)},
+            "imports_used": (30, 0, 40, 20),       # nets, nails, fuel
+            "imports_final": {"C": 50},            # cloth bought by households
+            "wages": (160, 180, 70, 40), "profits": (95, 100, 35, 20), "taxes": (20, 10, 5, 5),
+        },
+        # what the accounts leave out (chapter 3): a year of the islanders' unpaid work, valued at the fishing wage
+        "unpaid": {"cooking and cleaning": 120, "childcare": 70, "Crusoe's garden": 25, "mending nets at home": 15},
+    },
 }
 
 

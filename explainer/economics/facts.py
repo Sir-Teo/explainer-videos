@@ -101,8 +101,10 @@ BY_KEY = {f.key: f for f in FACTS}
 
 # Agora's column: {fact key: (part, what the built economy produces)}.  Filled as parts land.
 AGORA = {
-    "auctions_converge": (1, "traders who adjust their margins converge in a few periods; random traders capture "
-                             "most of the surplus without converging"),
+    # Part 1 entered the row; Part 2 tested it on lopsided markets (Cliff and Bruten's question) and kept it
+    "auctions_converge": (2, "traders who adjust their margins converge by the third period in balanced and lopsided "
+                             "markets alike; random traders capture most of the surplus, but find the price only when "
+                             "the market is balanced"),
 }
 
 
