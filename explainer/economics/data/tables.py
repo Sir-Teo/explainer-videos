@@ -1850,6 +1850,48 @@ SCHOOL_EFFECTS = Table(
 PART17 = (ROTH_2012, SCHOOL_EFFECTS)
 
 
+# ---------------------------------------------------------------------------------------------------------------
+# Part 18: social choice and welfare
+
+VSL = Table(
+    key="vsl",
+    cite="U.S. Department of Transportation, \"Departmental Guidance on Valuation of a Statistical Life in Economic "
+         "Analysis\" (table of values by base year); U.S. Environmental Protection Agency, \"Mortality Risk "
+         "Valuation\" and its Guidelines for Preparing Economic Analyses (the $7.4 million central estimate, 2006 "
+         "dollars); Orley Ashenfelter and Michael Greenstone, \"Using Mandated Speed Limits to Measure the Value of a "
+         "Statistical Life\", Journal of Political Economy 112(S1) (2004): S226-S267; Thomas J. Kniesner, W. Kip "
+         "Viscusi, Christopher Woock and James P. Ziliak, \"The Value of a Statistical Life: Evidence from Panel "
+         "Data\", Review of Economics and Statistics 94(1) (2012): 74-87",
+    tag="DOT guidance; EPA; Ashenfelter and Greenstone, JPE 112(S1) (2004); Kniesner et al., REStat 94(1) (2012)",
+    where="DOT: the table of VSL by base year; EPA: the mortality risk valuation page (a Weibull fit to 26 studies, "
+          "mean $7.4m, s.d. $4.7m, 2006 dollars); Ashenfelter and Greenstone: the abstract; Kniesner et al.: the "
+          "abstract",
+    read="the agencies' pages and the articles' abstracts, as reported",
+    checked="2026-11-19",
+    data={"dot": {2022: 12.5, 2023: 13.2, 2024: 13.7, 2025: 14.2}, "dot_sensitivity_2023": (7.9, 18.5),
+          "epa_2006": 7.4, "epa_sd_2006": 4.7, "epa_studies": 26,
+          "ag_1997": 1.54, "ag_se_share": 1 / 3, "ag_speed": "65 mph limits from 1987: speeds up about 2.5 mph (4%), "
+                                                             "fatality rates up about 35%",
+          "ag_hours_per_life": 125000,
+          "kniesner_range": (4.0, 10.0)},
+)
+
+DUVERGER = Table(
+    key="duverger",
+    cite="Maurice Duverger, *Les partis politiques* (1951; English edition 1954); William H. Riker, \"The Two-Party "
+         "System and Duverger's Law: An Essay on the History of Political Science\", American Political Science "
+         "Review 76(4) (1982): 753-766",
+    tag="Duverger (1951); Riker, APSR 76(4) (1982)",
+    where="the law as stated, and Riker's history of it",
+    read="Riker's essay",
+    checked="2026-11-19",
+    data={"law": "plurality rule in single-member districts tends to produce a two-party system",
+          "us_presidents_since": 1853, "exceptions": ("Canada", "India", "the United Kingdom")},
+)
+
+PART18 = (VSL, DUVERGER)
+
+
 PART7 = (BERNOULLI_1738, SAMUELSON_1937, ALLAIS_1953, ELLSBERG_1961, RABIN_2000, THALER_1981, HOLT_LAURY_2005,
          HAYDEN_PLATT_2009, MADRIAN_SHEA_2001, THALER_BENARTZI_2004, BARSKY_1997, POST_2008, MEHRA_PRESCOTT_1985)
-ALL = {t.key: t for t in (*PART1, *PART3, *PART4, *PART5, *PART6, *PART7, *PART8, *PART9, *PART10, *PART11, *PART12, *PART13, *PART14, *PART15, *PART16, *PART17)}
+ALL = {t.key: t for t in (*PART1, *PART3, *PART4, *PART5, *PART6, *PART7, *PART8, *PART9, *PART10, *PART11, *PART12, *PART13, *PART14, *PART15, *PART16, *PART17, *PART18)}

@@ -291,6 +291,22 @@ DATASETS = {
                      "France", "Netherlands", "Denmark"),
         "files": ("marriage_rate.csv",),
     },
+    "democracy": {
+        "title": "Electoral democracy index (V-Dem), by country and for the world, 1789-2025",
+        "publisher": "Varieties of Democracy (V-Dem) Institute; Our World in Data (compilation)",
+        "citation": "V-Dem (2026), Democracy Report v16, electoral democracy index (central estimate), processed by Our "
+                    "World in Data, grapher electoral-democracy-index, retrieved 2026-11-19",
+        "short": "V-Dem v16 (2026), via Our World in Data",
+        "url": "https://ourworldindata.org/grapher/electoral-democracy-index.csv?v=1&csvType=full&"
+               "useColumnShortNames=true",
+        "licence": "CC BY 4.0 (Our World in Data); V-Dem's terms (free with citation)",
+        "units": "index from 0 to 1",
+        "vintage": "2026-11-19",
+        "sha256": "a0843a64486708e1638e5051be67dde8ddb0c82ae7be264c512173f503445afc",
+        "entities": ("World", "United States", "United Kingdom", "France", "India", "Germany", "Japan", "Brazil",
+                     "South Africa", "China"),
+        "files": ("democracy_vdem.csv",),
+    },
     "draft1970": {
         "title": "The draft lottery of 1 December 1969 (for men born 1944-50): the rank drawn for each birthday",
         "publisher": "U.S. Selective Service System; as tabulated by the Journal of Statistics Education data archive",
@@ -888,10 +904,36 @@ def refresh_marriage() -> None:
             w.writerow([r["entity"], r["code"], r["year"], r["value__gender_both__indicator_marriage_rate"]])
 
 
+def democracy(entity: str) -> dict:
+    """V-Dem's electoral democracy index (0 to 1, central estimate), 1789-2025 (South Africa from 1900), for one of
+    the entities kept in the extract; "World" is Our World in Data's aggregate of the countries:
+    ``{"year": [...], "value": [...]}``."""
+    rows = [r for r in _read(HERE / "democracy_vdem.csv") if r["entity"] == entity]
+    if not rows:
+        raise KeyError(entity)
+    return {"year": [int(r["year"]) for r in rows], "value": [float(r["index"]) for r in rows]}
+
+
+def refresh_democracy() -> None:
+    d = DATASETS["democracy"]
+    raw = RAW / "electoral-democracy-index.csv"
+    sha = _download(d["url"], raw)
+    if d.get("sha256") and sha != d["sha256"]:
+        print(f"democracy: the download differs from the recorded vintage ({sha[:12]} vs {d['sha256'][:12]})")
+    print(f"democracy: sha256 {sha}")
+    with open(raw, newline="", encoding="utf-8") as f:
+        rows = [r for r in csv.DictReader(f) if r["entity"] in d["entities"]]
+    with open(HERE / "democracy_vdem.csv", "w", newline="", encoding="utf-8") as f:
+        w = csv.writer(f)
+        w.writerow(["entity", "code", "year", "index"])
+        for r in rows:
+            w.writerow([r["entity"], r["code"], r["year"], r["electdem_vdem__estimate_best"]])
+
+
 REFRESH = {"draft1970": refresh_draft1970, "maddison2023": refresh_maddison, "fred": refresh_fred, "spf": refresh_spf,
            "pinksheet": refresh_pinksheet, "psd_coffee": refresh_psd_coffee, "wdi": refresh_wdi, "hdr": refresh_hdr,
            "rtdsm": refresh_rtdsm, "warheads": refresh_warheads, "so2": refresh_so2,
-           "marriage": refresh_marriage}
+           "marriage": refresh_marriage, "democracy": refresh_democracy}
 
 
 def main() -> None:

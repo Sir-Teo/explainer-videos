@@ -521,6 +521,23 @@ TRUTHS = {
         "lottery": {"students": 20000, "effect": 0.4, "seats": 3000, "sibling_share": 0.25, "always_takers": 0.3,
                     "seed": 2017, "reps": 200},
     },
+    18: {
+        # Play it (chapter 1): 38 islanders rank five plans for the harvest feast (found by search: five rules, five
+        # winners, no ties)
+        "playit": {"profile": ((12, ("A", "E", "D", "B", "C")), (11, ("B", "D", "E", "C", "A")),
+                               (8, ("C", "E", "D", "B", "A")), (7, ("D", "C", "B", "E", "A")))},
+        # the median voter (chapter 4): five islanders' ideal sizes for the new granary, on a line
+        "peaks": {"peaks": (1.0, 2.0, 3.0, 7.0, 9.0), "options": tuple(float(x) for x in range(1, 10))},
+        # Arrow's pivot (chapter 3): five voters, a dictator at the third
+        "arrow": {"n_voters": 5, "dictator": 2},
+        # welfare (chapters 7-8): five islanders' incomes, and two societies behind the veil
+        "incomes": (5.0, 10.0, 20.0, 40.0, 80.0),
+        "veil": {"A": (20.0, 20.0, 20.0, 20.0, 20.0), "B": (8.0, 30.0, 30.0, 30.0, 30.0)},
+        # the value of a statistical life (chapter 11): a job with more risk, and the pay that goes with it
+        "vsl": {"extra_risk": 1e-4, "extra_pay": 1000.0},
+        # discounting (chapter 12): a benefit 100 years away, at three rates
+        "discount": {"years": 100, "amount": 1e6, "rates": (0.014, 0.03, 0.045)},
+    },
 }
 
 

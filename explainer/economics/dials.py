@@ -429,7 +429,25 @@ DIALS = {d.key: d for d in [
     Dial("agglomeration", "agglomeration elasticity", "percent productivity per doubling of density", (37,)),
     Dial("housing_supply", "elasticity of housing supply", "", (37,)),
     Dial("return_capital_poor", "return to capital for small firms in poor countries", "percent a month", (46,)),
-    Dial("vsl", "value of a statistical life", "millions of dollars", (18, 58)),
+    Dial("vsl", "value of a statistical life", "millions of 2024 dollars (older figures converted with the CPI-U)",
+         (18, 58), status="contested", checked="2026-11-19",
+         meaning="what people accept, in pay or in time, for a small change in the risk of death, scaled up to one "
+                 "death; American agencies use about $12-14 million, wage-risk studies give a few million to ten, and "
+                 "the speed-limit natural experiment an upper bound near $3 million: the number moves with the method "
+                 "and the people asked, and it is a rate of exchange for small risks, not the worth of a person",
+         estimates=(
+             Estimate("Ashenfelter and Greenstone", 2004, "DiD", "US states raising rural interstate limits to 65 mph "
+                      "from 1987: hours saved per extra death, valued at the wage (an upper bound)", 3.01, 1.00, 5.02,
+                      where="JPE 112(S1), abstract: $1.54m in 1997 dollars, sampling error about a third of it; "
+                            "converted x 1.954 (CPI-U, 1997 to 2024)", checked="2026-11-19"),
+             Estimate("EPA", 2006, "meta-analysis", "a Weibull distribution fitted to 26 studies (mostly wage-risk); "
+                      "the agency's central value", 11.52,
+                      where="EPA, Mortality Risk Valuation: $7.4m in 2006 dollars (s.d. $4.7m); converted x 1.556 "
+                            "(CPI-U, 2006 to 2024)", checked="2026-11-19"),
+             Estimate("U.S. Department of Transportation", 2024, "review", "the department's value for analyses with a "
+                      "2024 base year, from wage-risk and stated-preference studies", 13.7,
+                      where="DOT VSL guidance, table by base year", checked="2026-11-19"),
+         )),
     Dial("discount", "social discount rate and the social cost of carbon", "percent a year; dollars per tonne",
          (48, 58)),
     Dial("energy_elasticity", "price elasticity of gasoline and of electricity", "", (48,)),
@@ -799,6 +817,16 @@ SHOWN = {
         ("Roth (2007)", "repugnance, stated"),
         ("Bansak et al. (2018)", "refugee placement by algorithm: its predicted employment gains, stated with the "
          "range the authors report"),
+    ],    18: [
+        ("Condorcet (1785); Borda (1781); Arrow (1950, 1951); Black (1948); Downs (1957); May (1952); Gibbard (1973); "
+         "Satterthwaite (1975); Sen (1970); Harsanyi (1955); Rawls (1971); Atkinson (1970); Kaldor (1939); Hicks "
+         "(1939); Scitovsky (1941); Geanakoplos (2005)", "theory, stated; every rule, axiom check and welfare function "
+         "is run in Agora (agora.choice)"),
+        ("Duverger (1951); Riker (1982)", "Duverger's law, stated, and the Called it? outcome told as history"),
+        ("Kniesner, Viscusi, Woock and Ziliak (2012)", "a range of wage-risk estimates ($4-10 million), stated, not "
+         "dialled, since its dollar year is not recorded here"),
+        ("the Stern Review (2007); Nordhaus", "discount rates, stated for direction; the dial is Part 48's"),
+        ("V-Dem via Our World in Data", "data, shown with its source; no parameter is estimated"),
     ],
 }
 

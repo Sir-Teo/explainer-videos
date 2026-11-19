@@ -144,6 +144,16 @@ CALLS = {c.key: c for c in [
          ("P. R. Portney, \"Economics and the Clean Air Act\", Journal of Economic Perspectives 4(4) (1990): 173-181, "
           "as cited by Schmalensee and Stavins",
           "R. Schmalensee and R. N. Stavins, Journal of Economic Perspectives 27(1) (2013): 103-122, Table 1")),
+    Call("duverger", 18, "Maurice Duverger, Les partis politiques",
+         "1951", "plurality rule in single-member districts tends to produce two-party systems: voters desert third "
+                 "parties that cannot win, and politicians stop joining them",
+         "the mechanics of the rule (a third party's votes are wasted) and the psychology of voters who know it",
+         "in the United States every president since 1853 has been a Democrat or a Republican; but Britain, Canada and "
+         "India, which also elect by plurality, keep third and regional parties in parliament, strong where their "
+         "votes are concentrated, as Riker's history of the law records",
+         "partly right",
+         ("M. Duverger, Les partis politiques (1951)",
+          "W. H. Riker, American Political Science Review 76(4) (1982): 753-766")),
     Call("roth_stability", 17, "Alvin Roth, on the American medical match",
          "1984", "a clearinghouse survives if the matches it produces are stable; one whose matches can be blocked, by a "
                  "doctor and a hospital who both prefer each other to what they were given, will be abandoned as people "
