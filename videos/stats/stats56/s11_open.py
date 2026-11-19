@@ -6,9 +6,20 @@ from videos.stats.stats56.common import *  # noqa: F403
 class OpenProblems(StatsScene):
     def construct(self):
         self.card()
+        self.ask("Which approach needs no model of how the selection was made?",
+                 ["PoSI", "conditional selective inference"], 0,
+                 say="Where the frontier is. Of the approaches in this part, which needs nothing at all about the "
+                     "rule that made the selection?",
+                 reveal="PoSI: it covers every model at once. Conditioning needs the rule; randomization and "
+                        "splitting need to be planned. Each pays a different price.")
         self.prices()
         self.referee()
         self.problems()
+        self.answer()
+        self.checkpoint([("The winner's naive estimate?", "biased upward"),
+                         ("A $t$-test between clusters you found?", "tiny $p$-values even with one group")],
+                        narration="Checkpoint. Winners and clusters.",
+                        answers_narration="Biased upward. And tiny p-values.")
 
     def card(self):
         self.chapter(10, r"Open problems", r"Where the frontier is", part=PART, said="Chapter ten. Open problems: where the frontier of selective inference is.")

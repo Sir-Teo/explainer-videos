@@ -8,6 +8,12 @@ from videos.stats.stats57.common import *  # noqa: F403
 class Groups(StatsScene):
     def construct(self):
         self.card()
+        self.ask("Calibrating conformal separately within each group gives coverage...",
+                 ["within each group", "only overall"], 0,
+                 say="Vovk's Mondrian conformal prediction calibrates separately within each group. What does it "
+                     "guarantee?",
+                 reveal="Coverage within each group, for groups named in advance. It can't cover every group at "
+                        "once: that impossibility still stands.")
         self.mondrian()
         self.mondrian_worked()
         self.table()
@@ -15,6 +21,7 @@ class Groups(StatsScene):
         self.board()
         self.slack()
         self.fairness()
+        self.answer()
 
     def card(self):
         self.chapter(9, r"Mondrian and group-conditional coverage", r"Coverage for every group, \ on NHANES", lit=(2005, 2023), part=PART, said="Chapter nine. Mondrian and group-conditional coverage, on NHANES blood pressures.")

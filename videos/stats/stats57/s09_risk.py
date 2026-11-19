@@ -8,12 +8,19 @@ from videos.stats.stats57.common import *  # noqa: F403
 class Risk(StatsScene):
     def construct(self):
         self.card()
+        self.ask("Conformal risk control bounds the expected value of...",
+                 ["any bounded, monotone loss", "only miscoverage"], 0,
+                 say="Angelopoulos and colleagues generalized the lemma beyond coverage. Conformal risk control "
+                     "bounds the expected value of what?",
+                 reveal="Any bounded loss that is monotone in the tuning parameter: false negative rates in "
+                        "segmentation, precision in retrieval, the error of a set of claims.")
         self.idea()
         self.proof()
         self.crc_worked()
         self.ltt()
         self.chart()
         self.llm()
+        self.answer()
 
     def card(self):
         self.chapter(8, r"Risk control", r"Beyond coverage: \ any monotone loss", lit=(2024,), part=PART, said="Chapter eight. Risk control: beyond coverage, to any monotone loss.")

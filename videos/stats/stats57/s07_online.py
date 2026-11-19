@@ -6,12 +6,24 @@ from videos.stats.stats57.common import *  # noqa: F403
 class Online(StatsScene):
     def construct(self):
         self.card()
+        self.ask(r"Adaptive conformal inference's long-run miscoverage approaches $\alpha$ for...",
+                 ["every sequence, even adversarial", "i.i.d. data only"], 0,
+                 say="Online conformal with no probability model: Gibbs and Candès's adaptive conformal inference "
+                     "adjusts its level after every error. For which data sequences does its long-run miscoverage "
+                     "approach alpha?",
+                 reveal="Every sequence, even one chosen by an adversary: a deterministic guarantee about the "
+                        "frequency of errors, not a probability.")
         self.aci()
         self.aci_chart()
         self.proof()
         self.aci_worked()
         self.dtaci()
         self.beyond()
+        self.answer()
+        self.checkpoint([("Distribution-free conditional coverage at every $x$?", "impossible with finite intervals"),
+                         ("ACI's long-run miscoverage?", r"near $\alpha$, for any sequence")],
+                        narration="Checkpoint. Limits and drift.",
+                        answers_narration="Impossible. And alpha, for any sequence.")
 
     def card(self):
         self.chapter(6, r"Online and adversarial", r"Coverage with no probability model at all", lit=(2021,), part=PART, said="Chapter six. Online and adversarial coverage: guarantees with no probability model at all.")

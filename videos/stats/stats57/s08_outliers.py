@@ -6,12 +6,19 @@ from videos.stats.stats57.common import *  # noqa: F403
 class Outliers(StatsScene):
     def construct(self):
         self.card()
+        self.ask("Conformal p-values for many test points, against one calibration set, are...",
+                 ["independent", "positively dependent, so BH still controls the FDR"], 1,
+                 say="Conformal p-values for outlier testing: many test points, one shared calibration set. How are "
+                     "their p-values related?",
+                 reveal="Positively dependent, PRDS, through the shared calibration set: the kind of dependence "
+                        "under which Benjamini-Hochberg still controls the false discovery rate.")
         self.pvalues()
         self.hist()
         self.prds()
         self.bh_worked()
         self.scores()
         self.example()
+        self.answer()
 
     def card(self):
         self.chapter(7, r"Conformal $p$-values and outlier testing", r"Is this point from the same distribution?", lit=(2023,), part=PART, said="Chapter seven. Conformal p-values and outlier testing: is this point from the same distribution?")

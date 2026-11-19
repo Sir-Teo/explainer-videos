@@ -6,6 +6,12 @@ from videos.stats.stats57.common import *  # noqa: F403
 class OpenProblems(StatsScene):
     def construct(self):
         self.card()
+        self.ask("Under exchangeability alone, what can be guaranteed for a new outcome?",
+                 ["marginal coverage, exactly", "conditional coverage at every $x$"], 0,
+                 say="Between the possible and the impossible. Assuming only exchangeability, what can be "
+                     "guaranteed for a new outcome?",
+                 reveal="Marginal coverage, exactly. Conditional coverage needs assumptions, or a restricted class "
+                        "of conditioning events, and mapping that price is open.")
         self.map_()
         self.checklist()
         self.problems()
@@ -15,6 +21,11 @@ class OpenProblems(StatsScene):
         self.op_train()
         self.op_struct()
         self.op_func()
+        self.answer()
+        self.checkpoint([("Conformal $p$-values for many test points are?", "PRDS: BH controls the FDR"),
+                         ("Mondrian conformal covers?", "within each prespecified group")],
+                        narration="Checkpoint. Tests, risks and groups.",
+                        answers_narration="Positively dependent. And within each group.")
 
     def card(self):
         self.chapter(10, r"Open problems", r"Between the possible and the impossible", part=PART, said="Chapter ten. Open problems, between the possible and the impossible.")

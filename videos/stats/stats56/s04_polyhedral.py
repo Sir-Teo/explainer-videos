@@ -8,6 +8,12 @@ from videos.stats.stats56.common import *  # noqa: F403
 class Polyhedral(StatsScene):
     def construct(self):
         self.card()
+        self.ask("After lasso selection, a linear contrast's conditional distribution is...",
+                 ["normal", "a truncated normal"], 1,
+                 say="Condition on the lasso having selected the model it did. What's the distribution of a linear "
+                     "contrast of the response?",
+                 reveal="A truncated normal: the selection event is a polyhedron, and it cuts the normal to an "
+                        "interval. Lee, Sun, Sun and Taylor's polyhedral lemma.")
         self.lemma()
         self.proof()
         self.pivot()
@@ -18,6 +24,11 @@ class Polyhedral(StatsScene):
         self.board()
         self.costs()
         self.asymptotic()
+        self.answer()
+        self.checkpoint([(r"A 95\% interval for the largest of 100 estimates covers?", r"far less than 95\%"),
+                         ("After lasso selection, a contrast's law?", "a truncated normal")],
+                        narration="Checkpoint. The selection problem.",
+                        answers_narration="Far less than ninety-five percent. And a truncated normal.")
 
     def card(self):
         self.chapter(3, r"Conditional selective inference", r"The polyhedral lemma, \ proved", lit=(2016,), part=PART, said="Chapter three. Conditional selective inference, and the polyhedral lemma, proved.")

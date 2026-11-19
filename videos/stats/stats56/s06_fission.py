@@ -8,6 +8,12 @@ from videos.stats.stats56.common import *  # noqa: F403
 class Fission(StatsScene):
     def construct(self):
         self.card()
+        self.ask("Data fission splits one Gaussian observation into two pieces that are...",
+                 ["independent", "identical"], 0,
+                 say="Data fission: split a single Gaussian observation, using added noise, into two pieces. How "
+                     "are the pieces related?",
+                 reveal="Independent: X plus noise and X minus scaled noise. Select with one, infer with the other, "
+                        "with no double dipping, even with one observation.")
         self.splitting()
         self.fission()
         self.thinning()
@@ -16,6 +22,7 @@ class Fission(StatsScene):
         self.compare()
         self.counts()
         self.board()
+        self.answer()
 
     def card(self):
         self.chapter(5, r"Data fission and thinning", r"Splitting a single observation", lit=(2023,), part=PART, said="Chapter five. Data fission and data thinning: splitting a single observation in two.")

@@ -8,6 +8,12 @@ from videos.stats.stats57.common import *  # noqa: F403
 class Lemma(StatsScene):
     def construct(self):
         self.card()
+        self.ask(r"Split conformal, $n$ calibration points, continuous scores. Coverage is at most $1 - \alpha$ plus...",
+                 ["$1/(n + 1)$", r"$\alpha$", "0"], 0,
+                 say="One fact, proved: the quantile lemma. Split conformal guarantees at least one minus alpha. "
+                     "With continuous scores and n calibration points, how much more than that can it cover?",
+                 reveal="At most one over n plus one more. The new score's rank among n plus one exchangeable "
+                        "scores is uniform, which pins coverage between the two.")
         self.exchange()
         self.strip()
         self.proof()
@@ -18,6 +24,7 @@ class Lemma(StatsScene):
         self.beta_proof()
         self.pac()
         self.split_rows()
+        self.answer()
 
     def card(self):
         self.chapter(1, r"Exchangeability and the quantile lemma", r"One fact, \ proved", lit=(2005,), part=PART, said="Chapter one. Exchangeability, and the quantile lemma that everything else rests on.")
