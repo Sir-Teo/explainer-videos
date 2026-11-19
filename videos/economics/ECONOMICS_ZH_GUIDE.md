@@ -251,6 +251,41 @@ brackets on screen.
 | Ramsey rule (inverse elasticity rule) | 拉姆齐法则（逆弹性法则） |
 | inflation inequality | 通胀不平等 |
 
+## Part 7
+
+| English | 中文 |
+|---|---|
+| the St Petersburg paradox (game) | 圣彼得堡悖论（游戏） |
+| expected value; expected utility | 期望值；期望效用 |
+| utility function; diminishing marginal utility | 效用函数；边际效用递减 |
+| lottery (a gamble) | 彩票（赌局，概率组合） |
+| the independence axiom; the von Neumann–Morgenstern theorem | 独立性公理；冯·诺伊曼—摩根斯坦定理 |
+| the probability (Marschak–Machina) triangle | 概率三角形（马尔沙克—马奇纳三角形） |
+| risk aversion; risk neutral; risk loving | 风险厌恶；风险中性；风险偏好 |
+| certainty equivalent; risk premium | 确定性等价；风险溢价 |
+| absolute and relative risk aversion (Arrow–Pratt) | 绝对风险厌恶与相对风险厌恶（阿罗—普拉特） |
+| CARA; CRRA | 常绝对风险厌恶；常相对风险厌恶 |
+| loading (of a premium); deductible | （保费）附加费；免赔额 |
+| the risky asset; Merton's share | 风险资产；默顿份额 |
+| first- and second-order stochastic dominance; mean-preserving spread | 一阶与二阶随机占优；保均值展型 |
+| the Allais paradox; the common-consequence effect | 阿莱悖论；共同结果效应 |
+| fanning out; weighted utility | 扇形展开；加权效用 |
+| the Ellsberg paradox; ambiguity; ambiguity aversion | 埃尔斯伯格悖论；模糊性；模糊厌恶 |
+| maxmin expected utility | 最大最小期望效用 |
+| prospect theory; loss aversion; probability weighting; reference point | 前景理论；损失厌恶；概率加权；参照点 |
+| Rabin's calibration theorem; narrow framing | 拉宾校准定理；窄框架 |
+| Fisher's two periods; the Euler equation | 费雪两期模型；欧拉方程 |
+| discount factor; rate of time preference; present value | 贴现因子；时间偏好率；现值 |
+| exponential, hyperbolic and quasi-hyperbolic (beta–delta) discounting | 指数贴现、双曲贴现与准双曲（β—δ）贴现 |
+| time consistency; preference reversal | 时间一致性；偏好逆转 |
+| present bias; commitment | 现时偏差；承诺（承诺机制） |
+| the elasticity of intertemporal substitution (EIS) | 跨期替代弹性 |
+| Epstein–Zin (recursive) preferences; early resolution of uncertainty | 爱泼斯坦—辛（递归）偏好；不确定性的提前揭示 |
+| the equity premium puzzle; the risk-free rate puzzle | 股权溢价之谜；无风险利率之谜 |
+| robustness; multiplier preferences | 稳健性；乘子偏好 |
+| automatic enrolment (default); Save More Tomorrow | 自动加入（默认选项）；"明天存更多"计划 |
+| the social discount rate; the Ramsey formula | 社会贴现率；拉姆齐公式 |
+
 ## Names
 
 | English | 中文 |
@@ -338,3 +373,24 @@ brackets on screen.
 | Bruce Hamilton; Dora Costa; Ingvild Almås | 布鲁斯·汉密尔顿；多拉·科斯塔；英维尔德·阿尔马斯 |
 | Frank Ramsey | 弗兰克·拉姆齐 |
 | Robert Feenstra; Xavier Jaravel | 罗伯特·芬斯特拉；泽维尔·雅拉韦尔 |
+| Daniel Bernoulli; Nicolaus Bernoulli | 丹尼尔·伯努利；尼古拉·伯努利 |
+| Gabriel Cramer | 加布里埃尔·克莱姆 |
+| Irving Fisher | 欧文·费雪 |
+| Tjalling Koopmans | 佳林·库普曼斯 |
+| John von Neumann, Oskar Morgenstern | 约翰·冯·诺伊曼、奥斯卡·摩根斯坦 |
+| Maurice Allais | 莫里斯·阿莱 |
+| Leonard Savage | 伦纳德·萨维奇 |
+| Daniel Ellsberg | 丹尼尔·埃尔斯伯格 |
+| Kenneth Arrow; John Pratt | 肯尼斯·阿罗；约翰·普拉特 |
+| Daniel Kahneman, Amos Tversky | 丹尼尔·卡尼曼、阿莫斯·特沃斯基 |
+| Mark Machina | 马克·马奇纳 |
+| Matthew Rabin | 马修·拉宾 |
+| Richard Thaler | 理查德·塞勒 |
+| Robert Strotz; David Laibson | 罗伯特·斯特罗茨；大卫·莱布森 |
+| Larry Epstein, Stanley Zin | 拉里·爱泼斯坦、斯坦利·辛 |
+| Rajnish Mehra, Edward Prescott | 拉吉尼什·梅赫拉、爱德华·普雷斯科特 |
+| Robert Hall | 罗伯特·霍尔 |
+| Charles Holt, Susan Laury | 查尔斯·霍尔特、苏珊·劳里 |
+| Lars Peter Hansen, Thomas Sargent | 拉尔斯·彼得·汉森、托马斯·萨金特 |
+| Charles Manski | 查尔斯·曼斯基 |
+| Frank Ramsey | 弗兰克·拉姆齐 |

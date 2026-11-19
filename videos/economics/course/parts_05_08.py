@@ -125,4 +125,63 @@ PARTS = [
               ("The Island's planted truths", "explainer/economics/island.py"),
               ("The Data Room's sources", "explainer/economics/data/SOURCES.md")),
     ),
+    Part(
+        n=7, level="U", widget="risk", prereq=(5, 6),
+        question="How do people choose when the pay-off comes later, or may not come at all?",
+        story="The part opens with the St Petersburg game: a coin tossed until heads, a prize of $1 doubling with every "
+              "tail, an infinite expected prize, and a million simulated games whose average creeps up for ever. "
+              "Nicolaus Bernoulli posed it in 1713, Cramer answered with the square root in 1728, and Daniel Bernoulli "
+              "published the logarithm in 1738; the viewer names a price, scored at the end. Fisher's two periods "
+              "(1930) make the interest rate a price and give the Euler equation and the elasticity of intertemporal "
+              "substitution; discounting comes with Samuelson's own caveats and Koopmans's axioms, and only the "
+              "exponential is time consistent. Lotteries and the von Neumann-Morgenstern axioms lead to the "
+              "probability triangle, where the viewer then plays Allais's two pairs and sees why the common answers "
+              "break independence (Savage, Paris, 1952). Risk aversion gets numbers (certainty equivalents, "
+              "Arrow-Pratt, CARA and CRRA), insurance its logic (Mossin's full cover, loadings, deductibles that imply "
+              "absurd aversion) and the risky asset Merton's share. After an intermission on Hall's century of the "
+              "Euler equation (an instrumented slope near zero), stochastic dominance, Machina's fanning out, "
+              "Ellsberg's urn and maxmin, prospect theory in one card, Rabin's calibration, Epstein-Zin preferences "
+              "and the equity premium, present bias (Thaler's survey, Strotz, beta-delta, a store eaten faster than "
+              "planned, commitment), and measurement (Holt and Laury's menu run on 400 simulated islanders, the HRS "
+              "gambles, Deal or No Deal, and Bernoulli's price against what people pay). Two dials open, and the part "
+              "ends with insurance pricing, pension defaults, the discount rate as a value judgment, and ambiguity, "
+              "robustness and stated beliefs.",
+        handoff="Part 8 turns to the firm; the Euler equation returns in Parts 20, 22 and 30, risk aversion and the "
+                "equity premium in Part 23, insurance markets in Parts 13, 14 and 42, prospect theory and present bias "
+                "in Part 45, and the social discount rate in Part 48.",
+        outside="The calculus of Parts 5 and 6; logarithms and powers; expected values (a weighted average). Chapters 9 "
+                "and 10 use a second-order Taylor expansion, explained on screen.",
+        objectives={
+            "U": ["Solve Fisher's two-period problem, state the Euler equation, and say how saving responds to the "
+                  "interest rate through substitution and income effects.",
+                  "Compute present values, and explain why only exponential discounting is time consistent.",
+                  "Compute expected values, expected utilities, certainty equivalents and risk premia for simple "
+                  "lotteries, and the demand for insurance and for a risky asset."],
+            "M": ["State the von Neumann-Morgenstern axioms, draw expected utility in the probability triangle, and "
+                  "show why Allais's and Ellsberg's patterns violate it.",
+                  "Use the Arrow-Pratt measures and the small-risk approximation, and test first- and second-order "
+                  "stochastic dominance.",
+                  "Explain Rabin's calibration theorem, the separation of risk aversion from the EIS in Epstein-Zin "
+                  "preferences, and the beta-delta model's preference reversals and demand for commitment."],
+            "D": ["Describe maxmin and multiplier preferences under ambiguity, and how stated beliefs and global "
+                  "preference surveys are used to measure what choices alone cannot."],
+            "I": ["Price an insurance policy from expected losses and a loading, explain pooling and its limits, and "
+                  "explain how default enrolment and Save More Tomorrow use inertia and present bias.",
+                  "Separate the facts from the value judgments in choosing a social discount rate."],
+        },
+        results=[
+            ("The Euler equation", r"u'(c_1) = \beta\,(1+r)\,u'(c_2),\qquad \frac{c_2}{c_1} = "
+                                   r"\bigl(\beta(1+r)\bigr)^{1/\gamma}"),
+            ("Expected utility", r"U(L) = \sum_i p_i\,u(x_i)"),
+            ("Arrow-Pratt", r"A(x) = -\frac{u''(x)}{u'(x)},\qquad \pi \approx \tfrac12\,A(x)\,\sigma^2"),
+            ("Merton's share", r"\alpha^* = \frac{\mu - r}{\gamma\,\sigma^2}"),
+            ("Epstein-Zin", r"V_t = \Bigl[(1-\beta)c_t^{1-1/\psi} + \beta\,\mathrm{CE}_\gamma[V_{t+1}]^{1-1/\psi}"
+                            r"\Bigr]^{\frac{1}{1-1/\psi}}"),
+            ("Beta-delta", r"U_t = u(c_t) + \beta\sum_{k\ge1}\delta^k u(c_{t+k})"),
+        ],
+        U=(0, 1, 2, 3, 4, 5, 6, 7, 12, 13, "s08_intermission"), D=(15,), I=(14,),
+        also=(("Agora's time and risk", "explainer/economics/agora/risk.py"),
+              ("The Island's planted truths", "explainer/economics/island.py"),
+              ("The Data Room's sources", "explainer/economics/data/SOURCES.md")),
+    ),
 ]

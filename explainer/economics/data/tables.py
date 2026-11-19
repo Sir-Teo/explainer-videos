@@ -878,7 +878,13 @@ RABIN_2000 = Table(
           "table1_g101": {400: 400, 600: 600, 800: 800, 1000: 1010, 2000: 2320, 4000: 5750, 6000: 11810,
                           8000: 34940, 10000: float("inf"), 20000: float("inf")},
           # table II: turning down lose $100 / gain $110 only at wealth below $300,000, starting from $290,000
-          "table2_g110": {1000: 718_190, 2000: 12_210_880, 10000: 1_300_000_000}},
+          "table2_g110": {1000: 718_190, 2000: 12_210_880, 10000: 1_300_000_000},
+          "rabin_thaler_2001": "M. Rabin and R. H. Thaler, \"Anomalies: Risk Aversion\", Journal of Economic "
+                               "Perspectives 15(1): 219-232 (2001): they felt \"much like the customer in the pet "
+                               "shop, beating at a dead parrot\", and closed that expected utility is \"an "
+                               "ex-hypothesis\""},
+    note="Rabin and Thaler's two phrases as quoted by A. Rubinstein, Econometrica 74(4) (2006), and by J. C. Cox and "
+         "V. Sadiraj (working paper, Georgia State); checked 2026-11-19.",
 )
 
 THALER_1981 = Table(

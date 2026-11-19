@@ -10,7 +10,7 @@ the series leaves out.
 Both *Parts* columns are found, not typed. *Planned* lists the parts whose entry in
 [`SYLLABUS.md`](SYLLABUS.md) names the book or paper; *Built* lists the parts whose scenes, compute step or
 README cite it (a dot: none yet). Fuller notes (editions, chapters, what each source was used for) are in each
-part's README, under *Sources*. Built so far: Parts 1–6.
+part's README, under *Sources*. Built so far: Parts 1–7.
 
 ## 1. The textbook spine
 
@@ -28,7 +28,7 @@ part's README, under *Sources*. Built so far: Parts 1–6.
 
 | Short name | Book | Planned | Built |
 |---|---|---|---|
-| Varian | H. Varian, *Intermediate Microeconomics* (9th ed., 2014) | 2, 5–6, 8, 10 | 2, 5–6 |
+| Varian | H. Varian, *Intermediate Microeconomics* (9th ed., 2014) | 2, 5–8, 10 | 2, 5–7 |
 | Nicholson–Snyder | W. Nicholson and C. Snyder, *Microeconomic Theory* (13th ed., 2021) | 5–6 | 5–6 |
 | Jones | C. I. Jones, *Macroeconomics* (6th ed., 2023) | 20 | · |
 | Blanchard | O. Blanchard, *Macroeconomics* (8th ed., 2021) | 27, 32 | · |
@@ -39,16 +39,16 @@ part's README, under *Sources*. Built so far: Parts 1–6.
 | Mishkin | F. Mishkin, *The Economics of Money, Banking, and Financial Markets* (13th ed., 2022) | 26 | · |
 | Cabral | L. Cabral, *Introduction to Industrial Organization* (2nd ed., 2017) | 12 | · |
 | Borjas | G. Borjas, *Labor Economics* (8th ed., 2020) | 38 | · |
-| Gruber | J. Gruber, *Public Finance and Public Policy* (7th ed., 2022) | 15, 41–42, 50 | · |
+| Gruber | J. Gruber, *Public Finance and Public Policy* (7th ed., 2022) | 15, 41–42, 50 | 7 |
 | Ray | D. Ray, *Development Economics* (1998) | 46 | · |
-| Weil | D. Weil, *Economic Growth* (3rd ed., 2013) | 19 | 3 |
+| Weil | D. Weil, *Economic Growth* (3rd ed., 2013) | 7, 19 | 3, 7 |
 
 ### Graduate micro
 
 | Short name | Book | Planned | Built |
 |---|---|---|---|
-| MWG | A. Mas-Colell, M. Whinston and J. Green, *Microeconomic Theory* (1995) | 5–9, 13, 15, 18, 56 | 5–6 |
-| Kreps | D. Kreps, *Microeconomic Foundations I* (2013) | 5, 7, 9, 56 | 5 |
+| MWG | A. Mas-Colell, M. Whinston and J. Green, *Microeconomic Theory* (1995) | 5–9, 13, 15, 18, 56 | 5–7 |
+| Kreps | D. Kreps, *Microeconomic Foundations I* (2013) | 5, 7, 9, 56 | 5, 7 |
 | Jehle–Reny | G. Jehle and P. Reny, *Advanced Microeconomic Theory* (3rd ed., 2011) | 5, 9 | 5–6 |
 | Fudenberg–Tirole | D. Fudenberg and J. Tirole, *Game Theory* (1991) | 11, 53 | · |
 | Osborne–Rubinstein | M. Osborne and A. Rubinstein, *A Course in Game Theory* (1994) | 11 | · |
@@ -134,9 +134,9 @@ part's README, under *Sources*. Built so far: Parts 1–6.
 | Model or result | Paper | Planned | Built |
 |---|---|---|---|
 | revealed preference | Samuelson (1938); Afriat (1967); Varian (1982) | 5 | 5–6 |
-| expected utility | von Neumann and Morgenstern (1944) | 7 | · |
-| prospect theory | Kahneman and Tversky (1979) | 45 | · |
-| present bias | Laibson (1997) | 45 | · |
+| expected utility | von Neumann and Morgenstern (1944) | 7 | 7 |
+| prospect theory | Kahneman and Tversky (1979) | 7, 45 | 7 |
+| present bias | Laibson (1997) | 7, 45 | 7 |
 
 ### Firms
 
@@ -161,7 +161,7 @@ part's README, under *Sources*. Built so far: Parts 1–6.
 |---|---|---|---|
 | lemons | Akerlof (1970) | 13 | · |
 | signalling | Spence (1973) | 13 | · |
-| screening in insurance | Rothschild and Stiglitz (1976) | 13 | · |
+| screening in insurance | Rothschild and Stiglitz (1976) | 7, 13 | 7 |
 | second-price auctions | Vickrey (1961) | 16 | · |
 | optimal auctions | Myerson (1981) | 16 | · |
 | stable matching | Gale and Shapley (1962) | 17 | · |
@@ -205,7 +205,7 @@ part's README, under *Sources*. Built so far: Parts 1–6.
 | the Taylor rule | Taylor (1993) | 30 | · |
 | search and unemployment | Diamond (1982); Mortensen and Pissarides (1994) | 24 | · |
 | heterogeneous agents | Bewley (1977); Huggett (1993); Aiyagari (1994) | 52, 56 | · |
-| the equity premium puzzle | Mehra and Prescott (1985) | 23 | · |
+| the equity premium puzzle | Mehra and Prescott (1985) | 7, 23 | 7 |
 
 ### Money and finance
 
@@ -267,6 +267,8 @@ part's README, under *Sources*. Built so far: Parts 1–6.
 **Part 5, *What People Want*.** Books: Hal Varian, *Intermediate Microeconomics*, chs. 2–7; Andreu Mas-Colell, Michael Whinston and Jerry Green, *Microeconomic Theory*, chs. 1–3; David Kreps, *Microeconomic Foundations I*, chs. 1–4; Jehle and Reny, *Advanced Microeconomic Theory*, ch. 1; Christopher Chambers and Federico Echenique, *Revealed Preference Theory* (2016). Papers: Samuelson (1938), *Economica* 5; Houthakker (1950), *Economica* 17; Debreu (1954); Afriat (1967), *IER* 8; Varian (1982), *Econometrica* 50; Bronars (1987); Becker (1962), *JPE* 70; Harbaugh, Krause and Berry (2001); Andreoni and Miller (2002); Choi et al. (2007, 2014), *AER*; Saez (2010); Blundell, Browning and Crawford (2008); McFadden (1974); Kitamura and Stoye (2018); Chen, Liu, Shan and Zhong (2023), *PNAS*.
 
 **Part 6, *Demand*.** Books: Hal Varian, *Intermediate Microeconomics*, chs. 6–10, 14; Andreu Mas-Colell, Michael Whinston and Jerry Green, *Microeconomic Theory*, chs. 2–3; Angus Deaton and John Muellbauer, *Economics and Consumer Behavior* (1980); Walter Nicholson and Christopher Snyder, *Microeconomic Theory*, chs. 5–6. Papers: Slutsky (1915); Hicks and Allen (1934), *Economica*; Hicks, *Value and Capital* (1939); Jensen and Miller (2008), *AER* 98(4); Stigler (1947); Rosen (1999), *JPE*; Roy (1947); Shephard (1953); Hurwicz and Uzawa (1971); Konüs (1924); Hicks (1940); Willig (1976), *AER*; Hausman (1981), *AER*; Hausman (1997), new goods; Stone (1954); Deaton and Muellbauer (1980), *AER*; Gorman (1953); Houthakker (1957); Hamilton (2001), *AER*; Costa (2001), *JPE*; Almås (2012), *AER*; Deaton (1989); Feenstra (1994); Jaravel (2019), *QJE*; Redding and Weinstein (2020); Jaravel and Lashkari (2024); Atkin et al. (2024).
+
+**Part 7, *Time and Risk*.** Books: Hal Varian, *Intermediate Microeconomics*, chs. 10–13; Andreu Mas-Colell, Michael Whinston and Jerry Green, *Microeconomic Theory*, ch. 6; David Kreps, *Microeconomic Foundations I*, chs. 5–6; Christian Gollier, *The Economics of Risk and Time* (2001). Papers: Bernoulli (1738); Fisher, *The Theory of Interest* (1930); Samuelson (1937); Koopmans (1960); von Neumann and Morgenstern (1944); Savage (1954); Allais (1953); Ellsberg (1961); Pratt (1964); Arrow (1965); Mossin (1968); Merton (1969); Rothschild and Stiglitz (1970); Kahneman and Tversky (1979); Machina (1982); Gilboa and Schmeidler (1989); Rabin (2000); Kreps and Porteus (1978); Epstein and Zin (1989); Mehra and Prescott (1985); Weil (1989); Hall (1988); Strotz (1955–56); Laibson (1997); Holt and Laury (2002); Barsky et al. (1997); Hayden and Platt (2009); Hansen and Sargent, *Robustness* (2008); Manski (2004); Madrian and Shea (2001); Thaler and Benartzi (2004).
 
 ## 4. What the series leaves out
 

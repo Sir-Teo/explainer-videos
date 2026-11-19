@@ -165,6 +165,9 @@ def deductible_gamma(w: float, p: float, d_low: float, d_high: float, extra: flo
     the deductible from d_high to d_low, when a claim comes with chance p.  Expected saving p (d_high - d_low); anything
     paid above it is a risk premium, and over stakes this small it implies enormous risk aversion (Sydnor 2010)."""
 
+    if extra <= p * (d_high - d_low):
+        return 0.0                                               # no more than the expected saving: risk neutral
+
     def gap(gm):
         a = (1 - p) * crra(1 - extra / w, gm) + p * crra(1 - (extra + d_low) / w, gm)
         b = (1 - p) * crra(1.0, gm) + p * crra(1 - d_high / w, gm)
@@ -210,7 +213,8 @@ def crra_rejects(l: float, g: float, w: float, gamma: float) -> bool:
 
 def crra_gamma_to_reject(l: float, g: float, w: float) -> float:
     """The relative risk aversion at which a CRRA chooser with wealth w is just indifferent to (lose l, gain g)."""
-    return float(brentq(lambda gm: _crra_gain(l, g, w, gm), 1e-3, 1e5))
+    hi = 5 * 2 * w * (g - l) / (g * g + l * l) + 10           # five times the small-bet approximation
+    return float(brentq(lambda gm: _crra_gain(l, g, w, gm), 1e-3, hi))
 
 
 def crra_largest_gain(L: float, w: float, gamma: float, cap: float = 1e15) -> float:

@@ -624,36 +624,56 @@ Deaton & Muellbauer 1980 and *Economics and Consumer Behavior*; Gorman 1953; Hou
 2001; Almås 2012; Deaton 1989; Ramsey 1927; Feenstra 1994; Jaravel 2019; Redding & Weinstein 2020; Jaravel &
 Lashkari 2024; Atkin et al. 2024; MWG chs 2–3; Varian chs 6–10, 14; Nicholson & Snyder chs 5–6.
 
-### Part 7 · Time and Risk (~56)
+### Part 7 · Time and Risk (~50)
 *Question:* how do people choose when the pay-off comes later, or may not come at all?
-*Story:* in 1738 Daniel Bernoulli asks what a game with infinite expected value is worth, and answers with the
-first utility function. Two centuries later von Neumann and Morgenstern give it axioms, Allais breaks one of
-them over lunch, and Fisher's diagram of today against tomorrow becomes the atom of macroeconomics.
-0. Hook: the St Petersburg game, played; the question; objectives. A card: not financial advice.
-1. Fisher's two periods (1930): the interest rate as a price; borrowing, lending, the Euler equation.
-2. Discounting: exponential and why (Samuelson 1937, with his own warning); the discount factor.
-3. Lotteries; expected utility; the independence axiom; the von Neumann–Morgenstern theorem sketched in the
-   probability triangle.
-4. Play it: Allais's two pairs.
-5. Risk aversion: concavity, the certainty equivalent, Arrow–Pratt's measures; CARA and CRRA.
-6. Insurance: full cover at fair odds; deductibles; the demand for a risky asset.
-7. Stochastic dominance, first and second order; mean-preserving spreads.
-8. Allais (1953) and Ellsberg (1961) in the triangle; prospect theory in one card (a pointer to
-   *Psychology, Built* 26 and Part 45).
-9. Rabin's calibration (2000): turning down small bets implies absurd aversion to large ones, computed.
-10. Time meets risk: the elasticity of intertemporal substitution against risk aversion; Epstein–Zin.
-11. Present bias: Strotz (1955), the beta–delta model; preference reversals; a pointer to Part 45.
-12. Measuring it: Holt and Laury's menus (2002); Barsky et al.'s survey gambles (1997); the game show
-    evidence.
-13. Dials. 14. In practice: insurance pricing, pension design. 15. Frontier: ambiguity, robustness
-    (Hansen and Sargent) and what people's stated beliefs reveal.
+*Story:* in 1713 Nicolaus Bernoulli posed a coin game whose expected prize is infinite; in 1738 his cousin Daniel
+answered with the logarithm of wealth, the first utility function. Two centuries later von Neumann and Morgenstern
+gave it axioms, Allais broke one of them over lunch with Savage, and Fisher's diagram of today against tomorrow
+became the atom of macroeconomics.
+0. Hook: the St Petersburg game played ($1, doubling); each ending worth 50 cents; a pause to name a price; a
+   million simulated games (half pay $1, the average about $11 and still rising); Nicolaus Bernoulli, Cramer, Daniel
+   Bernoulli ($4.36, $5.97, $10.94 at $100, $1,000, $1 million); the question; objectives; not financial advice.
+1. Fisher's two periods (1930): Chidi's harvest, Dara's 10%; the Euler equation and the EIS; the rate rises to 30%
+   (substitution −3.1, income +3.3, magnified); saving against the rate for EIS 2, ½ and ⅛.
+2. Discounting: present values; Samuelson (1937) and his two caveats; Koopmans (1960); exponential, hyperbolic and
+   beta–delta functions and the price of a year's wait.
+3. Lotteries and expected utility: Ana's reef and open sea; the von Neumann–Morgenstern axioms; the triangle on $0,
+   $1M, $5M with straight, parallel lines.
+4. Play it: Allais's two pairs, chosen by the viewer; Kahneman and Tversky's 82%; the common-consequence algebra; the
+   parallel moves in the triangle; Paris, May 1952.
+5. Risk aversion: the certainty equivalent ($90 against $120) and premium; γ = 0, 1, 2, 4 and the switch at 1.26;
+   Arrow–Pratt and ½Aσ²; CARA against CRRA.
+6. Insurance and the risky asset: Mossin's full cover at fair odds, partial cover under loadings, the most Ana pays
+   ($27.27); deductibles' implied γ (26, 98, 203; Sydnor 2010); Merton's share.
+7. Intermission: Hall's century, the real bill rate against consumption growth per head, 1935–2025 (OLS 0.07, IV
+   −0.02), as a data film and melody.
+8. Stochastic dominance: first and second order; mean-preserving spreads (Rothschild and Stiglitz 1970).
+9. Allais and Ellsberg in the triangle: Machina's fanning out (Chew's weighted utility); Ellsberg's urn (1961) and
+   maxmin expected utility; Knight; prospect theory in one card (pointers to *Psychology, Built* 26 and Part 45).
+10. Rabin's calibration (2000): the power function computed (γ = 91 at $100,000) and his tables I and II; Rabin and
+    Thaler's parrot.
+11. Time meets risk: one γ for two attitudes; the plane of estimates; Epstein–Zin and early resolution; Mehra and
+    Prescott, Weil, Bansal and Yaron.
+12. Present bias: Thaler (1981); reversals; Strotz; beta–delta; Chidi's store; Pollak; commitment; Imai et al.
+13. Measuring it: Holt and Laury (2002, 2005) and their stakes; the menu on 400 simulated islanders; the HRS gambles
+    (Barsky et al. 1997); Deal or No Deal (Post et al. 2008); *Called it?*: Bernoulli against Hayden and Platt.
+14. Dials (relative risk aversion and the EIS, both new, both contested). 15. In practice: pooling, pension defaults
+    (Madrian and Shea 2001; Save More Tomorrow), the social discount rate as an is/ought card. 16. Frontier:
+    ambiguity and robustness (Gilboa–Schmeidler; Hansen–Sargent), stated beliefs (Manski; Hurd and McGarry), the
+    Global Preference Survey.
 
-*Agora:* an intertemporal chooser (two and many periods) and an expected-utility maximizer with CARA, CRRA and
-Epstein–Zin preferences; Rabin's bound.
-*Dials:* relative risk aversion; the elasticity of intertemporal substitution. *Called it?* Bernoulli's
-price for the game against what people pay.
-*Reading:* Bernoulli 1738; Fisher 1930; von Neumann & Morgenstern 1944; Allais 1953; Ellsberg 1961; Arrow
-1965; Pratt 1964; Rabin 2000; Holt & Laury 2002; MWG ch 6; Kreps chs 5–6.
+*Agora:* `risk`: CRRA, CARA and log utility, certainty equivalents, Arrow–Pratt, dominance, the triangle and
+weighted utility, Allais and Ellsberg (maxmin), insurance and deductibles, Merton's share, Rabin's calibration for the
+power function, the St Petersburg game (Bernoulli's and Cramer's prices, truncations, the median heuristic), Fisher,
+discount functions and reversals, Epstein–Zin early resolution, beta–delta plans, Hall's regression, Holt and Laury's
+menu with noisy respondents, the HRS thresholds, Tversky and Kahneman's curves.
+*Dials:* relative risk aversion (new); the elasticity of intertemporal substitution (new). *Called it?* Bernoulli
+1738, partly right.
+*Reading:* Bernoulli 1738; Fisher 1930; Samuelson 1937; Koopmans 1960; von Neumann & Morgenstern 1944; Savage 1954;
+Allais 1953; Ellsberg 1961; Pratt 1964; Arrow 1965; Mossin 1968; Merton 1969; Rothschild & Stiglitz 1970; Kahneman &
+Tversky 1979; Machina 1982; Kreps & Porteus 1978; Epstein & Zin 1989; Mehra & Prescott 1985; Weil 1989; Hall 1988;
+Strotz 1955–56; Laibson 1997; Rabin 2000; Holt & Laury 2002; Barsky et al. 1997; Hayden & Platt 2009; Hansen &
+Sargent 2008; Manski 2004; MWG ch 6; Kreps chs 5–6; Gollier 2001; Varian chs 10–13.
 
 ### Part 8 · The Firm (~54)
 *Question:* how does a firm decide what to make and how, and why is there a firm at all?
@@ -2797,6 +2817,7 @@ Young Economist*.
 | 4 | built, English | *The Evidence.* Agora gains `econometrician` (the fish market and its planted curves, OLS, Wald and 2SLS over statkit's `quasi`, the omitted-variable formula, the apprenticeship by choice and by lottery, Lucas's islands, the two-level village trial, difference in differences); the Data Room gains the 1969 draft lottery and Lucas (1976) among the transcribed passages; the Museum's NSW data and Card and Krueger's table are used; a new dial (the return to a year of school, from Card 2001); Act I is complete |
 | 5 | built, English | *What People Want.* Agora gains `consumer` (preferences and demand with corners and kinks, WARP, SARP and GARP, Afriat's index and his inequalities as an LP, Varian's bounds, Bronars's power, Becker's random consumers, the EITC's kink, a binary logit); the Data Room gains BEA's fifteen PCE categories and the population, 1929–2025, and the transcribed results of Harbaugh et al., Choi et al., Andreoni and Miller, Chen et al., Saez and McFadden; a new dial (consistency with utility maximization) and the BART *Called it?*; Act II begins |
 | 6 | built, English | *Demand.* Agora gains `demand` (Cobb–Douglas, CES, linear expenditure and AIDS systems with their dual functions checked numerically, the Slutsky matrix and decompositions, the subsistence diet and Jensen and Miller's voucher design, welfare with Willig and Hausman, price indices and Feenstra, Hamilton's Engel drift, AIDS estimation with tests, the integrability loop); the transcribed results of Jensen and Miller, Hausman's cereal, Costa and Hamilton, Engel and Houthakker, the USDA's quintiles, Jaravel and the BLS's methods; rows added to the staples and CPI-bias dials, a new dial (food's income elasticity) and Engel's law as *Called it?* |
+| 7 | built, English | *Time and Risk.* Agora's `risk` grows to the whole part (expected utility and its measures, dominance, insurance and portfolios, Rabin's calibration, the St Petersburg game, Fisher, discounting and beta–delta, Epstein–Zin, Hall's regression, Holt and Laury with noisy respondents, Ellsberg's maxmin and Chew's weighted utility); the Data Room gains real PCE, the PCE price index and the 3-month bill rate, and the transcribed results of Bernoulli, Samuelson, Allais, Ellsberg, Rabin, Thaler, Holt and Laury, Hayden and Platt, Madrian and Shea, Thaler and Benartzi, Barsky et al., Post et al. and Mehra and Prescott; two new dials (relative risk aversion; the EIS) and Bernoulli's *Called it?* |
 
 **Corrections found while building Part 1** (the plan's draft, written from memory, against the sources): Bastiat's
 Paris passage is in *Economic Sophisms*, First Series, ch. 18 (1845), not the *Harmonies*; Hume's is/ought passage is
@@ -2854,3 +2875,17 @@ reference for Giffen, and Stigler (1947) could not find the claim in Giffen's wr
 $78.1 million a year in the US with a virtual price of $7.14 against $3.48 (his NBER chapter, published 1997). Hamilton's
 CPI-bias estimates (2.7 points a year in 1974–82, 0.6 in 1982–91) are read as Costa (2001) reports them. Housing and
 energy elasticities, in the draft's dials, wait for Parts 37 and 48.
+
+**Corrections found while building Part 7.** Bernoulli's own game pays one ducat for heads on the first toss and
+doubles after (prizes 1, 2, 4, …), so on his logarithm it is worth $5.97 to someone with $1,000, not the $10.95 often
+quoted for a game that starts at $2; Cramer's "about 2.9" is for the same 1, 2, 4 game. Savage's answers at the
+lunch in May 1952 broke the independence axiom, but the sources do not agree on which options he chose, so the part
+does not say. Kahneman and Tversky's first Allais problem drew 82% for the sure 2,400. The game-show evidence is Post,
+van den Assem, Baltussen and Thaler (2008): risk aversion falls after both losses and gains, a break-even effect.
+Hayden and Platt (2009) give the bids for Bernoulli's game: a median of $1.75 with real money (20 students) and $1.50
+hypothetically (220), flat across truncations. Samuelson's 1937 note runs to seven pages and was written while he was
+a graduate student. Sydnor's (2010) implied risk aversions were not read, so the deductible example uses illustrative
+numbers computed on screen. Madrian and Shea's figures (86% against 37%; 76% at the default) are the NBER working
+paper's. The plan's "In practice" chapter also carries the social discount rate (Ramsey's formula as an is/ought
+card); the Stern–Nordhaus numbers wait for Part 48. The prospect-theory pointer is to *Psychology, Built* Part 26,
+*Judgment and Choice*.

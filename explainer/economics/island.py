@@ -220,9 +220,10 @@ TRUTHS = {
         # sold at the expected payout times 1 + loading; her gamma is 2
         "boat": {"wealth": 300.0, "boat": 150.0, "storm": 0.10, "loadings": (0.0, 0.2, 0.5), "gamma": 2.0},
         # deductibles at an American household's scale (illustrative): wealth $100,000, a claim in 5% of years,
-        # deductibles of $500 or $1,000, the lower one costing $25, $50 or $100 a year more
+        # deductibles of $500 or $1,000, the lower one costing $30, $50 or $100 a year more (its expected saving is
+        # $25)
         "deductible": {"wealth": 100_000.0, "claim": 0.05, "deductibles": (500.0, 1000.0),
-                       "extra": (25.0, 50.0, 100.0)},
+                       "extra": (30.0, 50.0, 100.0)},
         # the risky asset (chapter 6): Dara's venture returns 8% on average, 28% or -12% with equal chance (sd 20%),
         # against a safe 2%
         "venture": {"safe": 0.02, "outcomes": (1.28, 0.88), "gammas": (1.0, 2.0, 4.0, 10.0)},
@@ -240,8 +241,8 @@ TRUTHS = {
         # present bias (chapter 11): Chidi's dry-season store of 300 coconuts, to last six weeks; beta 0.7, delta 1
         "present": {"store": 300.0, "weeks": 6, "beta": 0.7, "delta": 1.0},
         # Holt and Laury's menu run on 400 islanders (chapter 12): CRRA gammas drawn normal (mean 0.35, sd 0.35),
-        # choices noisy, logit in certainty-equivalent dollars with scale $0.30
-        "hl": {"people": 400, "gamma_mean": 0.35, "gamma_sd": 0.35, "noise": 0.30, "seed": 2002},
+        # choices noisy, logit in certainty-equivalent dollars with scale $0.20
+        "hl": {"people": 400, "gamma_mean": 0.35, "gamma_sd": 0.35, "noise": 0.20, "seed": 2002},
     },
 }
 
