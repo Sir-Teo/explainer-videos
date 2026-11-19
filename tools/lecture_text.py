@@ -123,6 +123,8 @@ def _spoken(call: ast.Call, consts: dict) -> Paragraph | None:
         arg = call.args[0] if call.args else next((k.value for k in call.keywords if k.arg == "text"), None)
     elif name in NARRATING and len(call.args) > NARRATING[name]:
         arg = call.args[NARRATING[name]]
+    elif name == "chapter" and any(k.arg == "said" for k in call.keywords):  # a watch kit's card speaks its line
+        arg = next(k.value for k in call.keywords if k.arg == "said")
     elif name in CHAPTER_CARDS:
         q = call.args[CHAPTER_CARDS[name]] if len(call.args) > CHAPTER_CARDS[name] else None
         text = _text(q, consts) if q is not None else None
