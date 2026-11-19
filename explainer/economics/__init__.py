@@ -164,19 +164,25 @@ T0, T1 = 1750, 2030
 
 
 def timeline(lit=(), width=12.0, show_labels=True, font_size=18) -> VGroup:
-    """The strip from 1750 to 2030; years in ``lit`` glow and get their names (kept apart and inside the frame, a
-    faint leader tying each displaced label to its year).  ``lit`` may be a dict ``{year: name}`` to name the event
-    this chapter means."""
+    """The strip from 1750 to 2030, or from an earlier century when a lit year is earlier (the long-run parts); years
+    in ``lit`` glow and get their names (kept apart and inside the frame, a faint leader tying each displaced label to
+    its year).  ``lit`` may be a dict ``{year: name}`` to name the event this chapter means."""
     x0 = -width / 2
+    early = [y for y in lit if y < T0]
+    t0 = T0 if not early else int(np.floor(min(early) / 100.0) * 100)
 
     def X(y):
-        return x0 + width * (y - T0) / (T1 - T0)
+        return x0 + width * (y - t0) / (T1 - t0)
 
-    g = VGroup(Line([X(T0), 0, 0], [X(T1), 0, 0], color=GREY_D, stroke_width=2))
-    for yr in (1750, 1800, 1850, 1900, 1950, 2000):
+    g = VGroup(Line([X(t0), 0, 0], [X(T1), 0, 0], color=GREY_D, stroke_width=2))
+    span = T1 - t0
+    step = 50 if span <= 300 else 100 if span <= 700 else 200 if span <= 1400 else 500
+    ticks = [y for y in range(int(np.ceil(t0 / step) * step), 2001, step)] if early else \
+        [1750, 1800, 1850, 1900, 1950, 2000]
+    for yr in ticks:
         g.add(Line([X(yr), -0.06, 0], [X(yr), 0.06, 0], color=GREY_D, stroke_width=1.5))
         g.add(Text(str(yr), font_size=14, color=GREY_D).next_to([X(yr), 0, 0], DOWN, buff=0.12))
-    names = dict(TIMELINE)
+    names = {y: n for y, n in TIMELINE if not early or y in lit}
     if isinstance(lit, dict):
         names.update(lit)
     labels, anchors, side = VGroup(), [], 1

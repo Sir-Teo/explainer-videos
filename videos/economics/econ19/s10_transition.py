@@ -112,9 +112,9 @@ class Transition(VoiceoverScene):
         gs = [q["g"] for q in qq]
         cn = path(ax, gs, [q["n"] for q in qq], color=POP, width=4)
         ce = path(ax, gs, [5 * q["e"] for q in qq], color=EDU, width=4)
-        ln = label(r"children per adult", font_size=18, color=POP).next_to(ax.ax.c2p(0.8, qq[-1]["n"]), UP, buff=0.1)
-        le = label(r"schooling per child \ ($\times 5$)", font_size=18, color=EDU).next_to(
-            ax.ax.c2p(0.8, 5 * qq[-1]["e"]), UP, buff=0.1)
+        ln = label(r"children per adult", font_size=18, color=POP).move_to(ax.ax.c2p(0.45, 1.12), aligned_edge=LEFT)
+        le = label(r"schooling per child \ ($\times 5$)", font_size=18, color=EDU).move_to(ax.ax.c2p(0.42, 0.3),
+                                                                                        aligned_edge=LEFT)
         rows = VGroup(
             label(r"Gary Becker and H.\ Gregg Lewis, \ 1973: \ quantity against quality", font_size=21),
             label(r"each child costs time; \ an educated child costs more", font_size=21, color=GREY_A),

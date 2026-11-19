@@ -62,7 +62,10 @@ class China(VoiceoverScene):
             label(rf"1850: \ China {a['CHN']['1850']['gdppc']:,.0f}, \ Britain {a['GBR']['1850']['gdppc']:,.0f}"
                   .replace(",", "{,}"), font_size=19, color=E.ACCENT),
             label(r"the little divergence: \\ Holland and Britain pass Italy", font_size=19, color=NL),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.25).to_edge(RIGHT, buff=0.3).shift(UP * 0.6)
+        ).arrange(DOWN, aligned_edge=LEFT, buff=0.2)
+        rows.move_to(ax.ax.c2p(1010, np.log10(4500)), aligned_edge=UL)
+        for r in rows:
+            r.add_background_rectangle(color=BACKGROUND, opacity=0.85, buff=0.04)
         src = data_tag(r"Maddison Project Database 2023 \ (Bolt and van Zanden)", corner=DR, font_size=12)
         g, c = a["GBR"], a["CHN"]
         with self.voiceover(

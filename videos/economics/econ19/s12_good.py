@@ -16,7 +16,7 @@ class Good(VoiceoverScene):
 
     def heights(self):
         h = load("heights")
-        ax = plane([1700, 1985], [160, 185], center=LEFT * 1.8 + DOWN * 0.4, x_length=8.8, y_length=5.0,
+        ax = plane([1700, 1985], [160, 185], center=LEFT * 2.7 + DOWN * 0.4, x_length=7.4, y_length=5.0,
                    xticks=[1700, 1750, 1800, 1850, 1900, 1950], yticks=[160, 165, 170, 175, 180, 185],
                    xlabel=r"decade of birth", ylabel=r"men's average height, \ cm", xfmt=lambda v: f"{v:.0f}",
                    font_size=17)
@@ -32,9 +32,13 @@ class Good(VoiceoverScene):
             label(rf"British men born in the 1760s: \ {uk['1760']:.1f} cm", font_size=20, color=UK),
             label(rf"born in the 1850s: \ {uk['1850']:.1f} cm", font_size=20, color=DEATH),
             label(rf"born in the 1960s: \ {uk['1960']:.1f} cm", font_size=20, color=GDP),
-            label(r"height records childhood nutrition and disease: \\ a measure income misses", font_size=19,
+            label(r"height records childhood \\ nutrition and disease: \\ a measure income misses", font_size=19,
                   color=GREY_A),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.25).to_edge(RIGHT, buff=0.3).shift(UP * 1.0)
+        ).arrange(DOWN, aligned_edge=LEFT, buff=0.3)
+        for r in rows:
+            if r.width > 3.9:
+                r.width = 3.9
+        rows.to_edge(RIGHT, buff=0.3).shift(DOWN * 0.6)
         src = data_tag(data.cite("longrun"), corner=DR, font_size=12)
         with self.voiceover(
             "Incomes rose; did lives get better? One answer is written in bones. <bookmark mark='a'/> A grown "

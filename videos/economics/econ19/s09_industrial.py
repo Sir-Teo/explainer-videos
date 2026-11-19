@@ -67,7 +67,7 @@ class Industrial(VoiceoverScene):
     def pause(self):
         ind = load("industrial")
         yrs = np.array(ind["years"], float)
-        ax = plane([1770, 1850], [80, 160], center=LEFT * 1.8 + DOWN * 0.45, x_length=8.0, y_length=4.8,
+        ax = plane([1770, 1850], [80, 160], center=LEFT * 2.9 + DOWN * 0.45, x_length=6.8, y_length=4.8,
                    xticks=[1780, 1800, 1820, 1840], yticks=[80, 100, 120, 140, 160], ylabel=r"index, \ 1780 = 100",
                    xfmt=lambda v: f"{v:.0f}", font_size=17)
         cg = path(ax, yrs, ind["gdppc_index"], color=GDP, width=4, smooth=False)
@@ -77,17 +77,18 @@ class Industrial(VoiceoverScene):
         lw = label(r"real wages", font_size=19, color=WAGE).next_to(ax.ax.c2p(1850, ind["wage_index"][-1]), RIGHT,
                                                                     buff=0.1)
         rows = VGroup(
-            label(rf"1780--1840: \ output per head $+{ind['gdppc_1840'] - 100:.0f}\%$, \ real wages "
+            label(rf"1780--1840: \\ output per head $+{ind['gdppc_1840'] - 100:.0f}\%$, \\ real wages "
                   rf"$+{ind['wage_1840'] - 100:.0f}\%$", font_size=21, color=WHITE),
-            label(r"Friedrich Engels, \ 1845: \ \emph{The Condition of the Working Class in England}", font_size=20,
+            label(r"Friedrich Engels, \ 1845: \\ \emph{The Condition of the Working Class in England}", font_size=20,
                   color=GREY_A),
-            label(r"the gain went to profits, \ reinvested in machines \ (Allen: \ Engels's pause)", font_size=21,
+            label(r"the gain went to profits, \\ reinvested in machines \\ (Allen: \ Engels's pause)", font_size=21,
                   color=TECH),
             label(r"after 1840, \ wages begin to catch up", font_size=21, color=WAGE),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.3).to_edge(RIGHT, buff=0.3).shift(UP * 1.2)
+        ).arrange(DOWN, aligned_edge=LEFT, buff=0.35)
         for r in rows:
-            if r.width > 4.8:
-                r.width = 4.8
+            if r.width > 4.2:
+                r.width = 4.2
+        rows.to_edge(RIGHT, buff=0.3).shift(UP * 0.6)
         tag = published_tag(r"Allen, EEH 46(4) (2009); \ Engels (1845)", corner=DR, font_size=13)
         with self.voiceover(
             "And the workers? <bookmark mark='a'/> Set output per head and real wages to a hundred in 1780 and "

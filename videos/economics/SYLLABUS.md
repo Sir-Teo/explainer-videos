@@ -2956,6 +2956,7 @@ Young Economist*.
 | 16 | built, English | *Auctions.* Agora gains `auctions` (first-price bids with reserves and risk aversion, five formats on the same draws, Myerson's reserve, the winner's curse, Vickrey's prices for slots and the generalized second price, the exposure problem, demand reduction against Vickrey's rule); the Data Room gains the transcribed Binmore and Klemperer (2002), Klemperer (2002), Bazerman and Samuelson (1983), Cramton and Schwartz (2000), Ostrovsky and Schwarz (2009), Garbade and Ingber (2005) and the FCC's incentive auction; the intermission plays FRED's 3-month bill rate; a new dial (what a reserve adds), the Dutch 3G *Called it?*, and the winner's curse in the Facts |
 | 17 | built, English | *Markets by Design.* Agora gains `matching` (deferred acceptance either side asking, the Boston rule, blocking pairs and every stable matching, manipulation checks, top trading cycles, kidney cycles and chains, Clarke's pivot rule, the bilateral-trade bound, the assignment game's core, a lottery-based school study); the Data Room gains the crude marriage rate via Our World in Data and the transcribed Roth (2012) and exam-school and Denver charter estimates; a new dial (what a sought-after school adds) and Roth's stability *Called it?* |
 | 18 | built, English | *Social Choice and Welfare.* Agora gains `choice` (plurality, runoff, instant runoff, Borda, Condorcet and Copeland; agendas; Borda's failure of independence; Geanakoplos's pivotal voter; single peaks; bloc manipulation; Atkinson's family; the two veils; Scitovsky's reversal; Sen's liberal paradox); the Data Room gains V-Dem's electoral democracy index via Our World in Data and the transcribed values of a statistical life (DOT, EPA, Ashenfelter and Greenstone) and Duverger's law; a new dial (the value of a statistical life) and Duverger's *Called it?* |
+| 19 | built, English | *The Great Escape.* Agora gains `malthus` (a Malthusian economy with a plague and an invention, England's labour demand curve, Galor and Weil's household and a toy unified growth economy, spatial noise); the Data Room gains the Bank of England's millennium series for England and Our World in Data's long-run population, life expectancy, fertility and heights, and Malthus's 1798 passage from the first edition; a new dial (English living standards before 1700, three reconstructions, with a new 'reconstruction' design) and Ehrlich's *Called it?* |
 
 **Corrections found while building Part 1** (the plan's draft, written from memory, against the sources): Bastiat's
 Paris passage is in *Economic Sophisms*, First Series, ch. 18 (1845), not the *Harmonies*; Hume's is/ought passage is
@@ -3150,3 +3151,15 @@ version by executive order in 2025) and the voting reforms and bans since 2018, 
 2024 and again in November 2026. Arrow's paper is 1950 (*JPE*) and the book 1951. The Borda manipulation shown is the
 lie that wins outright (A E C B D), not one that only ties; the rules break ties by letter, and the search now checks
 each result with the letters' order reversed.
+
+**Corrections found while building Part 19.** The Black Death's effect is stated from the Bank of England's series:
+England's population fell from about 4.8 to 2.6 million between 1348 and 1351 (46%), and real wages rose to 2.2 times
+their 1348 level by 1400 and 2.7 times by 1450 ("double" in the plan was too low). English real wages did not pass
+their 1450 level for good until 1874. Ashraf and Galor (2011) is stated in words, not dialled. Broadberry, Guan and Li
+(2018) date the start of the divergence to around 1700, when the Yangzi delta fell behind Europe's richest region; the
+chart uses Maddison's 2023 series, whose China path rises to about 1700 and falls after. The Great Divergence data film
+is the intermission (chapter 10 of the plan), so the chapters after it are renumbered: the Industrial Revolution is 7,
+the transition 8, unified growth 9, *Was it good?* 10, the Dials 11, practice 12 and the frontier 13. Malthus's *Called
+it?* is folded into the hook; the formal call is Ehrlich's (1968), with the Simon-Ehrlich wager. Kelly's (2019) point
+about persistence studies is demonstrated in Agora with two independent smooth random fields (55% of slopes
+"significant" at 5%). The chapter cards' timeline now starts at the century of the earliest year a chapter lights.

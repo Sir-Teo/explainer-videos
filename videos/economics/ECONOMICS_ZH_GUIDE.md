@@ -607,6 +607,21 @@ brackets on screen.
 | regulatory impact analysis; Circular A-4; the Green Book | 监管影响分析；A-4号通告；《绿皮书》 |
 | behavioural welfare economics; preference aggregation; reinforcement learning from human feedback | 行为福利经济学；偏好加总；基于人类反馈的强化学习 |
 
+## Part 19
+
+| English | 中文 |
+|---|---|
+| the Malthusian trap; subsistence; the preventive and positive checks | 马尔萨斯陷阱；生存水平；预防性抑制与积极抑制 |
+| diminishing returns to labour on fixed land | 固定土地上的劳动报酬递减 |
+| the Black Death; the Statute of Labourers; the Peasants' Revolt | 黑死病；《劳工法令》；农民起义 |
+| the Industrial Revolution; the high-wage economy; the industrial Enlightenment | 工业革命；高工资经济；工业启蒙 |
+| the Great Divergence; the little divergence; the Needham question | 大分流；小分流；李约瑟难题 |
+| Engels's pause; the standard-of-living debate; the industrious revolution | 恩格斯停顿；生活水平之争；勤勉革命 |
+| the demographic transition; total fertility rate; replacement level | 人口转变；总和生育率；更替水平 |
+| the quantity-quality trade-off; unified growth theory; the scale effect | 数量与质量的权衡；统一增长理论；规模效应 |
+| historical national accounts; real wages; reconstruction | 历史国民账户；实际工资；（历史数据）重建 |
+| deep roots; persistence; spatial noise; spatial HAC standard errors | 深层根源；持续性；空间噪声；空间异方差自相关稳健标准误 |
+
 ## Names
 
 | English | 中文 |
@@ -837,3 +852,9 @@ brackets on screen.
 | Mahbub ul Haq; Martin Ravallion; Martha Nussbaum | 马赫布卜·乌尔·哈克；马丁·拉瓦雷；玛莎·努斯鲍姆 |
 | Douglas Bernheim; Antonio Rangel; Steven Lalley; Glen Weyl; Eric Posner | 道格拉斯·伯恩海姆；安东尼奥·兰格尔；史蒂文·拉利；格伦·韦尔；埃里克·波斯纳 |
 | Anand Siththaranjan; Cassidy Laidlaw; Vincent Conitzer | Anand Siththaranjan（中文名待核）；Cassidy Laidlaw（中文名待核）；文森特·科尼策 |
+| Thomas Malthus; David Ricardo; Gregory Clark; Robert Allen; Joel Mokyr | 托马斯·马尔萨斯；大卫·李嘉图；格雷戈里·克拉克；罗伯特·艾伦；乔尔·莫基尔 |
+| Douglass North; Barry Weingast; Jane Humphries; Jacob Weisdorf; Morgan Kelly; Cormac Ó Gráda | 道格拉斯·诺思；巴里·温加斯特；简·汉弗莱斯；雅各布·魏斯多夫；摩根·凯利；科马克·奥格拉达 |
+| Stephen Broadberry; Hanhui Guan; David Daokui Li; Kenneth Pomeranz; Joseph Needham | 斯蒂芬·布罗德伯里；管汉晖；李稻葵；彭慕兰；李约瑟 |
+| Nico Voigtländer; Hans-Joachim Voth; Nicholas Crafts; Knick Harley; Friedrich Engels; Jan de Vries | 尼科·福格特兰德；汉斯-约阿希姆·沃斯；尼古拉斯·克拉夫茨；尼克·哈利；弗里德里希·恩格斯；扬·德弗里斯 |
+| Gary Becker; H. Gregg Lewis; Michael Kremer; Oded Galor; David Weil; Quamrul Ashraf | 加里·贝克尔；H.格雷格·刘易斯；迈克尔·克雷默；奥戴德·盖勒；戴维·韦尔；夸姆鲁尔·阿什拉夫 |
+| Paul Ehrlich; Julian Simon; Diego Comin; William Easterly; Erick Gong; Enrico Spolaore; Romain Wacziarg | 保罗·埃利希；朱利安·西蒙；迭戈·科明；威廉·伊斯特利；Erick Gong（中文名待核）；恩里科·斯波劳雷；罗曼·瓦齐亚格 |

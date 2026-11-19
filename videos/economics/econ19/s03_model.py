@@ -74,16 +74,16 @@ class Model(VoiceoverScene):
         c2 = path(ax, Ls, ml.income(Ls, A2, beta=beta), color=TECH, width=4, yr=(0, 2.4))
         star2 = Dot(ax.ax.c2p(m["L_star_after"], 1.0), radius=0.1, color=TECH)
         rows = VGroup(
-            label(r"above subsistence: \ births exceed deaths, \ $L$ grows, \ $y$ falls", font_size=20, color=BIRTH),
-            label(r"below: \ deaths exceed births, \ $L$ shrinks, \ $y$ rises", font_size=20, color=DEATH),
-            label(r"a stable point: \ the Malthusian trap", font_size=22, color=E.ACCENT),
-            label(rf"better technology: \ the curve shifts up, \ but the economy settles at the same $y$ with "
-                  rf"{m['L_star_after']:.2f} \ times the people", font_size=20, color=TECH),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.22).to_edge(RIGHT, buff=0.3).shift(UP * 1.2)
+            label(r"above subsistence: \\ births exceed deaths, \\ $L$ grows, \ $y$ falls", font_size=21, color=BIRTH),
+            label(r"below: \\ deaths exceed births, \\ $L$ shrinks, \ $y$ rises", font_size=21, color=DEATH),
+            label(r"a stable point: \\ the Malthusian trap", font_size=23, color=E.ACCENT),
+            label(rf"better technology: \\ the curve shifts up, \\ the economy settles at the same $y$ \\ with "
+                  rf"{m['L_star_after']:.2f} \ times the people", font_size=21, color=TECH),
+        ).arrange(DOWN, aligned_edge=LEFT, buff=0.3)
         for r in rows:
-            if r.width > 4.6:
-                r.width = 4.6
-        rows.arrange(DOWN, aligned_edge=LEFT, buff=0.22).to_edge(RIGHT, buff=0.3).shift(UP * 1.3)
+            if r.width > 4.8:
+                r.width = 4.8
+        rows.to_edge(RIGHT, buff=0.3).shift(UP * 0.5)
         with self.voiceover(
             "Put the two parts together. <bookmark mark='a'/> If income is above subsistence, births exceed "
             "deaths, the population grows, and with less land each, income falls. <bookmark mark='b'/> If income is "
