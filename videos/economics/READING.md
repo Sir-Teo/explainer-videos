@@ -10,7 +10,7 @@ the series leaves out.
 Both *Parts* columns are found, not typed. *Planned* lists the parts whose entry in
 [`SYLLABUS.md`](SYLLABUS.md) names the book or paper; *Built* lists the parts whose scenes, compute step or
 README cite it (a dot: none yet). Fuller notes (editions, chapters, what each source was used for) are in each
-part's README, under *Sources*. Built so far: Parts 1–17.
+part's README, under *Sources*. Built so far: Parts 1–18.
 
 ## 1. The textbook spine
 
@@ -47,7 +47,7 @@ part's README, under *Sources*. Built so far: Parts 1–17.
 
 | Short name | Book | Planned | Built |
 |---|---|---|---|
-| MWG | A. Mas-Colell, M. Whinston and J. Green, *Microeconomic Theory* (1995) | 5–9, 11, 13, 15, 18, 56 | 5–11, 13, 15–16 |
+| MWG | A. Mas-Colell, M. Whinston and J. Green, *Microeconomic Theory* (1995) | 5–9, 11, 13, 15, 18, 56 | 5–11, 13, 15–16, 18 |
 | Kreps | D. Kreps, *Microeconomic Foundations I* (2013) | 5, 7, 9, 11, 56 | 5, 7, 9, 11–13 |
 | Jehle–Reny | G. Jehle and P. Reny, *Advanced Microeconomic Theory* (3rd ed., 2011) | 5, 9 | 5–6, 9 |
 | Fudenberg–Tirole | D. Fudenberg and J. Tirole, *Game Theory* (1991) | 11–12, 53 | 11–12 |
@@ -127,7 +127,7 @@ part's README, under *Sources*. Built so far: Parts 1–17.
 | the double auction in the classroom | Chamberlin (1948); Smith (1962) | 1–2 | 1 |
 | zero-intelligence traders | Gode and Sunder (1993) | 2 | 1–2 |
 | general equilibrium and its welfare theorems | Arrow and Debreu (1954); Debreu (1959) | 9 | 8–9 |
-| consumer surplus | Dupuit (1844) | 2, 10 | 2, 9–10 |
+| consumer surplus | Dupuit (1844) | 2, 10 | 2, 9–10, 18 |
 
 ### Choice
 
@@ -184,7 +184,7 @@ part's README, under *Sources*. Built so far: Parts 1–17.
 
 | Model or result | Paper | Planned | Built |
 |---|---|---|---|
-| the Malthusian economy | Malthus (1798) | 19 | · |
+| the Malthusian economy | Malthus (1798) | 19 | 18 |
 | the long run in numbers | the Maddison Project (Bolt and van Zanden 2024) | 1 | 1, 3, 14 |
 | the neoclassical growth model | Solow (1956); Ramsey (1928); Cass (1965) | 20 | · |
 | endogenous growth | Romer (1990); Aghion and Howitt (1992) | 21 | · |
@@ -289,6 +289,8 @@ part's README, under *Sources*. Built so far: Parts 1–17.
 **Part 16, *Auctions*.** Books: Vijay Krishna, *Auction Theory* (2nd ed., 2010); Paul Klemperer, *Auctions: Theory and Practice* (2004); Paul Milgrom, *Putting Auction Theory to Work* (2004); John Kagel and Dan Levin, *Common Value Auctions and the Winner's Curse* (2002). Papers: Vickrey (1961); Myerson (1981); Riley and Samuelson (1981); Milgrom and Weber (1982); Capen, Clapp and Campbell (1971); Bazerman and Samuelson (1983); Kagel, Harstad and Levin (1987); Cox, Smith and Walker (1988); Bulow and Klemperer (1996); Maskin and Riley (2000); Guerre, Perrigne and Vuong (2000); Cramton and Schwartz (2000); Binmore and Klemperer (2002); Klemperer (2002a, 2002b); Edelman, Ostrovsky and Schwarz (2007); Varian (2007); Ostrovsky and Schwarz (2009); Garbade and Ingber (2005); Akbarpour and Li (2020); Milgrom and Segal (2020).
 
 **Part 17, *Markets by Design*.** Books: Alvin E. Roth, *Who Gets What and Why* (2015); Alvin E. Roth and Marilda Sotomayor, *Two-Sided Matching* (1990); Tilman Börgers, *An Introduction to the Theory of Mechanism Design* (2015); Nisan, Roughgarden, Tardos and Vazirani, *Algorithmic Game Theory* (2007), chs. 9–10. Papers: Gale and Shapley (1962); Shapley and Shubik (1971); Shapley and Scarf (1974); Vickrey (1961); Clarke (1971); Groves (1973); Green and Laffont (1977); Myerson (1979); Myerson and Satterthwaite (1983); Chatterjee and Samuelson (1983); Dubins and Freedman (1981); Roth (1982, 1984, 1991, 2002, 2007, 2008); Roth and Peranson (1999); Kagel and Roth (2000); Abdulkadiroğlu and Sönmez (2003); Abdulkadiroğlu, Pathak and Roth (2005); Chen and Kesten (2017); Roth, Sönmez and Ünver (2004); Rees et al. (2009); Kojima and Pathak (2009); Azevedo and Leshno (2016); Abdulkadiroğlu, Angrist and Pathak (2014); Abdulkadiroğlu, Angrist, Narita and Pathak (2017); Bansak et al. (2018).
+
+**Part 18, *Social Choice and Welfare*.** Books: Kenneth J. Arrow, *Social Choice and Individual Values* (1951; 3rd ed. 2012); Amartya Sen, *Collective Choice and Social Welfare* (1970; expanded ed. 2017); Mas-Colell, Whinston and Green, *Microeconomic Theory* (1995), chs. 21–22; Matthew Adler, *Measuring Social Welfare* (2019). Papers: Condorcet (1785); Black (1948); May (1952); Downs (1957); McKelvey (1976); Gibbard (1973); Satterthwaite (1975); Duverger (1951); Riker (1982); Robbins (1932); Hammond (1976); d'Aspremont and Gevers (1977); Geanakoplos (2005); Harsanyi (1953, 1955, 1975); Rawls (1971); Atkinson (1970); Okun (1975); Kaldor (1939); Hicks (1939); Scitovsky (1941); Sen (1970); Kaplow and Shavell (1994); Schelling (1968); Thaler and Rosen (1976); Ashenfelter and Greenstone (2004); Ravallion (2012); Bernheim and Rangel (2009); Lalley and Weyl (2018); Conitzer et al. (2024).
 
 ## 4. What the series leaves out
 
