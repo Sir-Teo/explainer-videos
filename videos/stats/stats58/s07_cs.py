@@ -10,6 +10,12 @@ class ConfidenceSequences(LectureMixin, StatsScene):
         self.card_voiceover("Chapter six. Confidence sequences: intervals that hold at every time at once, so you may "
                        "watch them shrink and stop when you like.", 6, r"Confidence sequences", r"Intervals valid at every time",
                        lit=(1970,))
+        self.ask(r"A 95\% confidence sequence, against a fixed-$n$ 95\% interval at the same $n$, is...",
+                 ["wider", "the same", "narrower"], 0,
+                 say="Confidence sequences: intervals valid at every time at once. At a given n, how does one "
+                     "compare with the ordinary ninety-five percent interval?",
+                 reveal="Wider, by a factor that grows like root log log n at best. That's the price of being "
+                        "allowed to watch and stop whenever you like.")
         self.definition()
         self.mixture()
         self.lil()
@@ -19,6 +25,7 @@ class ConfidenceSequences(LectureMixin, StatsScene):
         self.board()
         self.widths()
         self.duality()
+        self.answer()
 
     def definition(self):
         heading = label('The guarantee and its assumptions', font_size=30, color=WEALTHC).move_to([0, 3.35, 0])

@@ -9,6 +9,12 @@ class Adaptive(LectureMixin, StatsScene):
     def construct(self):
         self.card_voiceover("Chapter twelve. Inference after adaptivity: what the data can still tell us when the design "
                        "chased them.", 12, r"Inference after adaptivity", r"When the design chased the data", lit=(2018, 2021))
+        self.ask("Data collected by a bandit. An arm's sample mean is...",
+                 ["unbiased", "biased"], 1,
+                 say="The design chased the data: a bandit sampled arms that looked good. Is each arm's sample mean "
+                     "unbiased?",
+                 reveal="Biased, usually downward: an arm that was unlucky early gets sampled less, so its bad luck "
+                        "is never averaged away. Adaptive weighting restores valid inference.")
         self.bias()
         self.why_bias()
         self.hist()
@@ -17,6 +23,7 @@ class Adaptive(LectureMixin, StatsScene):
         self.weights()
         self.board()
         self.anytime()
+        self.answer()
 
     def bias(self):
         heading = label('Selection bias in adaptive sampling', font_size=30, color=WEALTHC).move_to([0, 3.35, 0])

@@ -9,6 +9,12 @@ class RandomFeatures(LectureMixin, StatsScene):
     def construct(self):
         self.card_voiceover("Chapter eight. Random features and kernels: a bridge from regression to neural networks.", 8,
                             r"Random features and kernels", r"A two-layer network, \ first layer frozen", lit=(2022,))
+        self.ask("Random-features regression, $N$ features, $n$ samples, no ridge. The test error peaks when...",
+                 [r"$N \approx n$", "$N = 0$", "never"], 0,
+                 say="A two-layer network with its first layer frozen: random-features regression. With N features, "
+                     "n samples and no penalty, where does the test error peak?",
+                 reveal="Near N equal to n, the interpolation threshold. Mei and Montanari computed the whole "
+                        "curve, and a little ridge removes the peak.")
         self.model()
         self.chart()
         self.theory()
@@ -16,6 +22,7 @@ class RandomFeatures(LectureMixin, StatsScene):
         self.kernel()
         self.kernel_worked()
         self.lessons()
+        self.answer()
 
     def model(self):
         heading = label('A frozen random first layer', font_size=30, color=PROPC).move_to([0, 3.35, 0])

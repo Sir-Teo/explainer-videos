@@ -9,6 +9,12 @@ class Betting(LectureMixin, StatsScene):
     def construct(self):
         self.card_voiceover("Chapter four. Testing by betting: e-values, how to calibrate them, how to merge them, and how "
                        "to bet well.", 4, r"Testing by betting", r"Evidence as wealth", lit=(2021,))
+        self.ask("An e-value of 20 means...",
+                 ["a fair bet against the null multiplied your stake 20-fold", "$p = 0.05$, exactly", r"the null is 95\% likely false"], 0,
+                 say="Testing by betting. An e-value of twenty: what does it mean?",
+                 reveal="That a bet which was fair under the null multiplied your stake twenty-fold. One over it, "
+                        "point zero five, is a valid but conservative p-value; it's not a probability that the null "
+                        "is false.")
         self.shafer()
         self.evalue()
         self.table()
@@ -17,6 +23,11 @@ class Betting(LectureMixin, StatsScene):
         self.growth_chart()
         self.kelly()
         self.compare()
+        self.answer()
+        self.checkpoint([("The SPRT against fixed-sample tests, same errors?", "fewer observations on average"),
+                         (r"Reject when a test martingale exceeds $1/\alpha$: type I error?", r"at most $\alpha$, however often you look")],
+                        narration="Checkpoint. Sequential tests.",
+                        answers_narration="Fewer observations. And at most alpha.")
 
     def shafer(self):
         heading = label('Testing through conditionally fair bets', font_size=30, color=WEALTHC).move_to([0, 3.35, 0])

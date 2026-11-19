@@ -9,6 +9,12 @@ class Bandits(LectureMixin, StatsScene):
     def construct(self):
         self.card_voiceover("Chapter eleven. Bandits and adaptive designs: choosing what to collect as the data arrive.",
                        11, r"Bandits and adaptive designs", r"Learn and earn at once", lit=(1933,))
+        self.ask("Thompson sampling plays each arm with probability...",
+                 ["its posterior probability of being best", "uniformly", "one for the current best"], 0,
+                 say="Thompson's 1933 question: which treatment to give next, while learning which is better. How "
+                     "does Thompson sampling choose?",
+                 reveal="Each arm with its posterior probability of being the best. It explores what's uncertain "
+                        "and exploits what's known, with regret near the Lai-Robbins bound.")
         self.thompson()
         self.how()
         self.chart()
@@ -16,6 +22,11 @@ class Bandits(LectureMixin, StatsScene):
         self.finite()
         self.policy_choice()
         self.tension()
+        self.answer()
+        self.checkpoint([("e-BH controls the FDR under?", "any dependence"),
+                         ("CUSUM resets when?", "its sum drops below zero")],
+                        narration="Checkpoint. Many tests and changes.",
+                        answers_narration="Any dependence. And below zero.")
 
     def thompson(self):
         heading = label('Posterior probability matching', font_size=30, color=WEALTHC).move_to([0, 3.35, 0])

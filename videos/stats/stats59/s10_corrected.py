@@ -9,6 +9,12 @@ class Corrected(LectureMixin, StatsScene):
     def construct(self):
         self.card_voiceover("Chapter nine. Corrected inference: rescaled tests, debiased estimates, and a real design.", 9,
                             r"Corrected inference", r"Repairing the textbook", lit=(2019,))
+        self.ask(r"Logistic likelihood-ratio test, proportional regime. $-2 \log \Lambda$ is approximately...",
+                 [r"$\chi^2_1$, as usual", r"a rescaled $\chi^2_1$"], 1,
+                 say="Repairing the textbook. In the proportional regime, what's the null distribution of the "
+                     "logistic likelihood-ratio statistic?",
+                 reveal="A rescaled chi-squared, with a factor greater than one from the Sur-Candès system. Using "
+                        "the plain chi-squared gives far too many false rejections.")
         self.rescale()
         self.debias()
         self.worked_interval()
@@ -17,6 +23,7 @@ class Corrected(LectureMixin, StatsScene):
         self.real_chart()
         self.board()
         self.other()
+        self.answer()
 
     def rescale(self):
         d = load("lrt")

@@ -9,6 +9,12 @@ class GroupSequential(LectureMixin, StatsScene):
     def construct(self):
         self.card_voiceover("Chapter two. Group-sequential theory: a few planned looks, in the Brownian picture, and what "
                        "stopping does to an estimate.", 2, r"Group-sequential theory", r"A few planned looks", lit=(1977, 1979, 1983))
+        self.ask("Stopping early because the effect looks large makes the naive estimate...",
+                 ["unbiased", "biased upward"], 1,
+                 say="A group-sequential trial stops at an interim look because the effect looks large. Is the "
+                     "naive estimate at stopping unbiased?",
+                 reveal="Biased upward: trials stop on a lucky high. Conditional or median-unbiased estimates "
+                        "correct for the stopping rule.")
         self.brownian()
         self.bounds()
         self.spending()
@@ -16,6 +22,7 @@ class GroupSequential(LectureMixin, StatsScene):
         self.bias_why()
         self.remedies()
         self.compare()
+        self.answer()
 
     def brownian(self):
         heading = label('The known-variance Gaussian joint law', font_size=30, color=WEALTHC).move_to([0, 3.35, 0])

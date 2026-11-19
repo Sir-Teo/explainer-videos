@@ -9,6 +9,12 @@ class Change(LectureMixin, StatsScene):
     def construct(self):
         self.card_voiceover("Chapter ten. Change detection: when the question is not whether, but when, something changed.",
                        10, r"Change detection", r"Raise the alarm, \ not too often", lit=(1954,))
+        self.ask("Page's CUSUM statistic resets to zero when...",
+                 ["it drops below zero", "an alarm is raised", "never"], 0,
+                 say="Change detection: Page's cumulative sum, 1954. It adds log likelihood ratios as data arrive. "
+                     "When does it reset to zero?",
+                 reveal="Whenever it drops below zero: evidence against a change is forgotten, so a change is "
+                        "caught quickly once it happens. It's optimal in Lorden's worst-case sense.")
         self.cusum()
         self.why()
         self.arl()
@@ -17,6 +23,7 @@ class Change(LectureMixin, StatsScene):
         self.bocpd()
         self.bocpd_chart()
         self.compare()
+        self.answer()
 
     def cusum(self):
         heading = label('A likelihood-ratio scan with resets', font_size=30, color=WEALTHC).move_to([0, 3.35, 0])

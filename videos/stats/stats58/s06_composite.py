@@ -9,6 +9,12 @@ class Composite(LectureMixin, StatsScene):
     def construct(self):
         self.card_voiceover("Chapter five. Composite nulls: when the null hypothesis is a family, how can a bet be fair "
                        "against all of it?", 5, r"Composite nulls", r"Fair against a whole family", lit=(2020, 2024))
+        self.ask("Universal inference's split likelihood ratio is an e-value for...",
+                 ["any composite null, with no regularity", "simple nulls only"], 0,
+                 say="Composite nulls: fair against a whole family. Wasserman, Ramdas and Balakrishnan's split "
+                     "likelihood ratio is an e-value for which nulls?",
+                 reveal="Any composite null at all, with no regularity conditions: fit the alternative on one half, "
+                        "maximize the null likelihood on the other. The price is power.")
         self.problem()
         self.universal()
         self.why_valid()
@@ -17,6 +23,7 @@ class Composite(LectureMixin, StatsScene):
         self.grow()
         self.ripr()
         self.tests_compare()
+        self.answer()
 
     def problem(self):
         heading = label('Fairness against every null member', font_size=30, color=WEALTHC).move_to([0, 3.35, 0])

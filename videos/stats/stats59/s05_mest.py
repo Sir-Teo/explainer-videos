@@ -9,6 +9,12 @@ class MEstimation(LectureMixin, StatsScene):
     def construct(self):
         self.card_voiceover("Chapter four. M-estimation in high dimensions: when the textbook's choice of loss is wrong.", 4,
                             r"M-estimation in high dimensions", r"When the best loss changes")
+        self.ask("Laplace noise, $p/n = 0.5$. Which loss does better?",
+                 ["least absolute deviations, as in low dimensions", "least squares can win"], 1,
+                 say="Laplace noise: in low dimensions, least absolute deviations is the maximum likelihood fit and "
+                     "the best. With p over n equal to a half, which loss does better?",
+                 reveal="Least squares can win. In the proportional regime the best loss changes with p over n, El "
+                        "Karoui, Bean, Bickel, Lim and Yu showed: the textbook choice can be wrong.")
         self.scaling()
         self.chart()
         self.system()
@@ -16,6 +22,7 @@ class MEstimation(LectureMixin, StatsScene):
         self.why()
         self.optimal_loss()
         self.lessons()
+        self.answer()
 
     def scaling(self):
         heading = label('The proportional regime and model assumptions', font_size=30, color=PROPC).move_to([0, 3.35, 0])

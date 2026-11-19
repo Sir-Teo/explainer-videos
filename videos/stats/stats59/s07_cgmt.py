@@ -7,6 +7,12 @@ class CGMT(LectureMixin, StatsScene):
     def construct(self):
         self.card_voiceover("Chapter six. Gordon's comparison inequality: replacing a matrix by two vectors.", 6,
                             r"Gordon's comparison", r"A matrix, \ replaced by two vectors", lit=(2015,))
+        self.ask("Gordon's comparison replaces a Gaussian matrix by...",
+                 ["two Gaussian vectors", "its mean", "a diagonal matrix"], 0,
+                 say="Gordon's comparison inequality, 1985, made tight by Thrampoulidis and colleagues. What does "
+                     "it replace a Gaussian matrix with?",
+                 reveal="Two Gaussian vectors: a min-max over a matrix becomes a min-max over a scalar problem, and "
+                        "the limiting error comes out of a few equations.")
         self.gordon()
         self.convex()
         self.recipe()
@@ -14,6 +20,11 @@ class CGMT(LectureMixin, StatsScene):
         self.ridge_cgmt()
         self.lasso()
         self.compare_tools()
+        self.answer()
+        self.checkpoint([("Laplace noise, $p/n = 0.5$: LAD or least squares?", "least squares can win"),
+                         ("AMP's state evolution predicts?", "each iteration's error, exactly in the limit")],
+                        narration="Checkpoint. Losses and algorithms.",
+                        answers_narration="Least squares. And each iteration's error.")
 
     def gordon(self):
         heading = label('Gordon compares Gaussian min-max values', font_size=30, color=PROPC).move_to([0, 3.35, 0])

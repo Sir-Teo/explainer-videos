@@ -9,6 +9,18 @@ class Ville(LectureMixin, StatsScene):
     def construct(self):
         self.card_voiceover("Chapter three. Test martingales and Ville's inequality: one line of 1939 that makes peeking "
                        "safe.", 3, r"Test martingales and Ville", r"Peeking, made safe", lit=(1939,))
+        self.wrong_idea("You can look at a standard $p$-value as often as you like",
+                        "Each look is another chance to cross: peeking inflates error unless the test is anytime-valid",
+                        narration="A common habit in online experiments: check the dashboard's p-value every day, "
+                                  "and stop when it's significant.",
+                        right_narration="Every look is another chance to cross a fixed line. Peeking inflates the "
+                                        "error far beyond five percent, unless the test is built to be valid at "
+                                        "every time, like a test martingale.")
+        self.ask(r"Reject when a test martingale first exceeds $1/\alpha$. However often you peek, the type I error is...",
+                 [r"at most $\alpha$", "inflated by the peeking"], 0,
+                 say="A test martingale for the null: a fair game's wealth. Reject the first time it exceeds one "
+                     "over alpha, checking after every observation. What's the type one error?",
+                 reveal="At most alpha, however often you look: Ville's inequality of 1939. Peeking, made safe.")
         self.definition()
         self.inequality()
         self.proof()
@@ -17,6 +29,7 @@ class Ville(LectureMixin, StatsScene):
         self.sprt_again()
         self.stopping()
         self.anytime_p()
+        self.answer()
 
     def definition(self):
         heading = label('The guarantee and its assumptions', font_size=30, color=WEALTHC).move_to([0, 3.35, 0])

@@ -10,11 +10,18 @@ class CAST(LectureMixin, StatsScene):
         self.card_voiceover("Chapter seven. A real trial as a betting test: CAST, which was stopped early because its "
                        "drugs were killing patients.", 7, r"CAST as a betting test", r"Evidence that accumulates, death by death",
                        lit=(1989,))
+        self.ask("E-values from successive independent batches, multiplied together, give...",
+                 ["a valid e-value", "an invalid one"], 0,
+                 say="Evidence that accumulates, batch by batch. Multiply e-values from successive batches, each "
+                     "valid given the past. Is the product a valid e-value?",
+                 reveal="Yes: the running product is a test martingale. Evidence compounds like wealth, and the "
+                        "trial can stop whenever it's enough.")
         self.story()
         self.bet()
         self.chart()
         self.compare()
         self.lessons()
+        self.answer()
 
     def story(self):
         c = museum.CAST
