@@ -1,0 +1,114 @@
+"""The Island's econometrician (Agora, Part 4): data whose truth is planted, and the estimators that try to find it.
+
+Every dataset here is simulated from parameters in ``explainer.economics.island`` (Part 4's truths), so an
+estimator can be graded against the truth rather than against another estimator:
+
+* :func:`fish_season`: a season of the fish market in which feast days shift demand and storms shift supply.  The
+  day's price and quantity are where the day's lines cross, so the cloud of (price, quantity) points is neither curve
+  (Working 1927).  :func:`simultaneity_slope` gives the probability limit of the least-squares slope.
+* :func:`wald` (a binary instrument) and :func:`iv` (two-stage least squares, from statkit's ``quasi.tsls``): weather
+  moves supply only, so it identifies demand (Wright 1928).
+* :func:`schooling_records`: ability raises both schooling and wages; a school built on one side of the Island moves
+  schooling only.  :func:`ols` is biased upward by the omitted-variable formula (:func:`ovb`); the instrument is not.
+* :func:`lucas_islands`: output answers only to surprise inflation, with adaptive expectations; the regression of
+  output on inflation estimated in calm years breaks when a council tries to exploit it (Lucas 1976).
+* :func:`did`: the two-by-two difference in differences (Card and Krueger 1994).
+
+numpy only, with statkit for two-stage least squares; no manim.
+"""
+
+from __future__ import annotations
+
+import numpy as np
+
+from explainer.stats.kit import quasi
+
+
+def fish_season(days: int, a: float, b: float, c: float, d: float, feast=(0.25, 70.0), storm=(0.15, 80.0),
+                noise=(12.0, 12.0), seed: int = 0) -> dict:
+    """Demand q = a - b p + F f + u, supply q = c + d p - S s + v, with f (feast) and s (storm) Bernoulli and u, v
+    normal.  Returns each day's price, quantity, feast and storm flags, and the planted slopes."""
+    rng = np.random.default_rng(seed)
+    f = (rng.random(days) < feast[0]).astype(float)
+    s = (rng.random(days) < storm[0]).astype(float)
+    u = rng.normal(0, noise[0], days)
+    v = rng.normal(0, noise[1], days)
+    dem = a + feast[1] * f + u          # demand intercept of the day
+    sup = c - storm[1] * s + v          # supply intercept of the day
+    p = (dem - sup) / (b + d)
+    q = dem - b * p
+    return {"p": p, "q": q, "feast": f, "storm": s, "demand_slope": -b, "supply_slope": d,
+            "dem_intercept": dem, "sup_intercept": sup}
+
+
+def simultaneity_slope(b: float, d: float, var_u: float, var_v: float) -> float:
+    """The probability limit of the least-squares slope of q on p when demand shocks have variance var_u and supply
+    shocks var_v: (d var_u - b var_v) / (var_u + var_v).  Demand shocks trace supply; supply shocks trace demand."""
+    return (d * var_u - b * var_v) / (var_u + var_v)
+
+
+def ols(y, x) -> dict:
+    """Least squares of y on a constant and x (one regressor or several columns): coefficients and classical SEs."""
+    y = np.asarray(y, float)
+    X = np.column_stack([np.ones(len(y)), np.asarray(x, float)])
+    beta, *_ = np.linalg.lstsq(X, y, rcond=None)
+    r = y - X @ beta
+    s2 = r @ r / (len(y) - X.shape[1])
+    se = np.sqrt(np.diag(s2 * np.linalg.inv(X.T @ X)))
+    return {"beta": beta, "se": se, "slope": float(beta[1]), "slope_se": float(se[1])}
+
+
+def wald(y, x, z) -> dict:
+    """The Wald estimator for a binary instrument z: (mean y | z=1 - mean y | z=0) / (mean x | z=1 - mean x | z=0)."""
+    y, x, z = (np.asarray(v, float) for v in (y, x, z))
+    dy = y[z == 1].mean() - y[z == 0].mean()
+    dx = x[z == 1].mean() - x[z == 0].mean()
+    return {"estimate": float(dy / dx), "dy": float(dy), "dx": float(dx),
+            "means": {"y1": float(y[z == 1].mean()), "y0": float(y[z == 0].mean()),
+                      "x1": float(x[z == 1].mean()), "x0": float(x[z == 0].mean())}}
+
+
+def iv(y, x, z, controls=None) -> dict:
+    """Two-stage least squares of y on x with instruments z (statkit's quasi.tsls), and the first-stage F."""
+    res = quasi.tsls(np.asarray(y, float), np.asarray(x, float), np.asarray(z, float).reshape(len(y), -1),
+                     X=None if controls is None else np.asarray(controls, float))
+    F = quasi.first_stage_F(np.asarray(x, float), np.asarray(z, float).reshape(len(y), -1),
+                            None if controls is None else np.asarray(controls, float))
+    return {"estimate": float(res["beta"]), "se": float(res["se"]), "F": float(F)}
+
+
+def schooling_records(n: int, base: float, ability_on_school: float, near_school: float, school_noise: float,
+                      return_: float, ability_on_wage: float, wage_noise: float, seed: int = 0) -> dict:
+    """Islanders' ability (unobserved), whether they grew up near the new school, years of schooling and log wages."""
+    rng = np.random.default_rng(seed)
+    ability = rng.normal(0, 1, n)
+    near = (rng.random(n) < 0.5).astype(float)
+    school = base + ability_on_school * ability + near_school * near + rng.normal(0, school_noise, n)
+    logw = 1.0 + return_ * school + ability_on_wage * ability + rng.normal(0, wage_noise, n)
+    return {"ability": ability, "near": near, "school": school, "logw": logw, "return": return_}
+
+
+def ovb(gamma: float, cov_sa: float, var_s: float) -> float:
+    """The omitted-variable bias of the schooling coefficient: gamma * cov(S, A) / var(S), where gamma is ability's
+    effect on log wages."""
+    return gamma * cov_sa / var_s
+
+
+def lucas_islands(ystar: float, b: float, noise: float, lam: float, pi_calm=(2.0, 2.0), pi_push: float = 8.0,
+                  years=(30, 20), seed: int = 0) -> dict:
+    """Years of calm (inflation pi ~ N(pi_calm)) then years in which the council pushes inflation to pi_push to keep
+    output up.  Expected inflation adapts: E_t = E_{t-1} + lam (pi_{t-1} - E_{t-1}).  Output y = y* + b (pi - E) + e."""
+    rng = np.random.default_rng(seed)
+    T1, T2 = years
+    pi = np.concatenate([rng.normal(pi_calm[0], pi_calm[1], T1), pi_push + rng.normal(0, 0.5, T2)])
+    E = np.empty_like(pi)
+    E[0] = pi_calm[0]
+    for t in range(1, len(pi)):
+        E[t] = E[t - 1] + lam * (pi[t - 1] - E[t - 1])
+    y = ystar + b * (pi - E) + rng.normal(0, noise, len(pi))
+    return {"pi": pi, "expected": E, "y": y, "calm": np.arange(len(pi)) < T1, "b": b, "ystar": ystar}
+
+
+def did(before_t: float, after_t: float, before_c: float, after_c: float) -> float:
+    """The difference in differences: (treated after - before) - (control after - before)."""
+    return (after_t - before_t) - (after_c - before_c)

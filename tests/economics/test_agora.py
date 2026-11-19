@@ -223,3 +223,37 @@ def test_chained_fisher_does_not_drift():
     # Fisher is not exactly path-independent, but its drift is tiny next to Laspeyres's; Tornqvist is exact for
     # Cobb-Douglas tastes
     assert abs(d["fisher"] - 1) < 0.005 < d["laspeyres"] - 1 and abs(d["tornqvist"] - 1) < 1e-9
+
+
+# --- Part 4: the Island's econometrician ---------------------------------------------------------------------------
+def test_simultaneity_and_the_instrument():
+    from explainer.economics import island
+    from explainer.economics.agora import econometrician as em
+
+    t = island.truths(4)["season"]
+    big = dict(t, days=40000)
+    s = em.fish_season(**big)
+    var_u = t["feast"][1] ** 2 * t["feast"][0] * (1 - t["feast"][0]) + t["noise"][0] ** 2
+    var_v = t["storm"][1] ** 2 * t["storm"][0] * (1 - t["storm"][0]) + t["noise"][1] ** 2
+    plim = em.simultaneity_slope(t["b"], t["d"], var_u, var_v)
+    assert abs(em.ols(s["q"], s["p"])["slope"] - plim) < 1.5          # least squares finds neither curve
+    assert abs(em.wald(s["q"], s["p"], s["storm"])["estimate"] + t["b"]) < 2.0    # storms trace demand
+    assert abs(em.wald(s["q"], s["p"], s["feast"])["estimate"] - t["d"]) < 2.0    # feasts trace supply
+    w = em.wald(s["q"], s["p"], s["storm"])["estimate"]
+    assert abs(em.iv(s["q"], s["p"], s["storm"])["estimate"] - w) < 1e-6         # one binary instrument: 2SLS = Wald
+
+
+def test_omitted_ability_and_lucas():
+    from explainer.economics import island
+    from explainer.economics.agora import econometrician as em
+
+    sc = dict(island.truths(4)["schooling"], n=60000)
+    sc["return_"] = sc.pop("return")
+    r = em.schooling_records(**sc)
+    bias = em.ovb(sc["ability_on_wage"], np.cov(r["school"], r["ability"])[0, 1], r["school"].var())
+    assert abs(em.ols(r["logw"], r["school"])["slope"] - (sc["return_"] + bias)) < 0.005
+    assert abs(em.iv(r["logw"], r["school"], r["near"])["estimate"] - sc["return_"]) < 0.01
+    L = em.lucas_islands(**island.truths(4)["lucas"])
+    assert em.ols(L["y"][L["calm"]], L["pi"][L["calm"]])["slope"] > 0.5        # a tradeoff in calm years
+    assert abs(L["y"][-10:].mean() - L["ystar"]) < 0.5                          # gone once it is exploited
+    assert em.did(20.44, 21.03, 23.33, 21.17) == pytest.approx(2.75, abs=0.01)

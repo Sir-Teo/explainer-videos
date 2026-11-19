@@ -26,6 +26,7 @@ film that moves to a new vintage says so on screen.
 | `fred_LABSHPUSA156NRUG.csv` | the share of labour compensation in GDP, United States, annual, 1950-2023 | Penn World Table (Groningen Growth and Development Centre), via FRED | CC BY 4.0 | 2026-11-19 |
 | `wdi_2015_2025.csv` | World Development Indicators for the 217 economies (not aggregates), 2015-2025: GDP and GDP per head at market exchange rates (current US dollars) and at purchasing power parity (current international dollars), population, Gini index; with each economy's region and income group | World Bank (API, last updated 11 November 2026) | CC BY 4.0 | 2026-11-19 |
 | `hdr2025_1990_2023.csv` | Human Development Report 2025, composite indices time series: the HDI, life expectancy, expected and mean years of schooling, GNI per head (2021 PPP dollars), 1990-2023, for the 195 countries (aggregates dropped) | UNDP Human Development Report Office | CC BY 3.0 IGO | 2026-11-19 |
+| `draft1970.csv` | the draft lottery of 1 December 1969: the rank drawn for each of the 366 birthdays (day, month, rank) | U.S. Selective Service System, via the Journal of Statistics Education's data archive (Starr 1997, `draft70yr.dat`) | public record; JSE tabulation free for education | 2026-11-19 |
 | `rtdsm_2006_2010.csv` | real GDP for 2006Q1-2010Q4 as reported by every quarterly vintage from 2007Q1 to 2026Q4 | Federal Reserve Bank of Philadelphia, Real-Time Data Set for Macroeconomists (ROUTPUT) | free with attribution | 2026-11-19 |
 | `rtdsm_first_latest.csv` | for every quarter from 1965Q4: annualized real GDP growth in the first vintage that reported it and in the latest (2026Q4), computed from the same workbook | as above | free with attribution | 2026-11-19 |
 
@@ -37,7 +38,8 @@ The raw Maddison workbook (`mpd2023_web.xlsx`, dataverse file 421302) had SHA-25
 prices are nominal; a film that compares them across decades deflates them with `fred_CPIAUCNS.csv` and says so.
 The UNDP's composite-indices file (`HDR25_Composite_indices_complete_time_series.csv`, Latin-1 encoded) had SHA-256
 `61ed82e5b66c88dfca8ff9fac775c63981ecab6a254862af97acacc41c143117`, and the Philadelphia Fed's `routputqvqd.xlsx`
-`6a7971b31b7336551705465de8a0855826f3652abe112406f52b2c2ed0994c0c`. The World Bank's API returns JSON pages that
+`6a7971b31b7336551705465de8a0855826f3652abe112406f52b2c2ed0994c0c`; the JSE's `draft70yr.dat.txt`
+`973f258e63c94812b705c2007652fba34a02d579719dc74c569286106053f8d0`. The World Bank's API returns JSON pages that
 are not kept; the extract records the API's "last updated" date instead.
 
 The Maddison Project asks that the original country sources be cited when its data are shown in a graph. The
@@ -68,3 +70,7 @@ publication, the copy that was read and the date the transcription was checked:
 | `jones_klenow_2016` | consumption-equivalent welfare and income for 13 countries | 2026-11-19 |
 | `nordhaus_tobin_1972` | the growth of the measure of economic welfare against NNP, 1929-65 | 2026-11-19 |
 | `psz_2018` | distributional national accounts: the bottom half's and the top 1%'s shares (and Auten and Splinter's estimate of the top 1%'s rise) | 2026-11-19 |
+| `moore_1914` | Moore's upward-sloping "law of demand" for pig iron, and Wright's 1915 reply | 2026-11-19 |
+| `leamer_1983` | "Let's Take the Con out of Econometrics", p. 37 | 2026-11-19 |
+| `lalonde_1986` | table 5: the NSW experiment against non-experimental estimates for men | 2026-11-19 |
+| `card_2001` | table 2: OLS and IV estimates of the return to schooling | 2026-11-19 |

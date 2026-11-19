@@ -44,4 +44,12 @@ CALLS = {c.key: c for c in [
          "own cards; a lopsided design later converged too", "wrong",
          ("V. L. Smith, autobiography, Nobel Prize in Economic Sciences 2002 (nobelprize.org)",
           "V. L. Smith (1962), Journal of Political Economy 70(2): 111-137")),
+    Call("lalonde_1986", 4, "the standard non-experimental evaluation of a training programme", "the 1970s and 1980s",
+         "the effect of the National Supported Work programme on men's 1978 earnings, from a comparison group drawn "
+         "from a survey (the PSID) and a regression adjusting for age, schooling and race: -$8,067",
+         "the methods of the day: survey comparison groups, regression adjustment, difference in differences",
+         "the same programme had been run as an experiment: random assignment gave +$886; most non-experimental "
+         "estimates missed it, many by thousands of dollars, and the specification tests could not say which",
+         "wrong",
+         ("R. J. LaLonde (1986), American Economic Review 76(4): 604-620, table 5",)),
 ]}

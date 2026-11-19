@@ -104,6 +104,22 @@ TRUTHS = {
         "households": {"n": 40, "wage_sigma": 0.45, "friday": 100.0, "crusoe": 85.0, "small_owners": (8, 65.0),
                        "seed": 1934},
     },
+    4: {
+        # a season of the fish market (chapters 0-3): straight lines as in Part 2, but now both move.  Feast days
+        # shift demand out by 70 fish at every price; storms shift supply in by 80; each day also has small shocks
+        # to both.  The day's price and quantity are where the day's two lines cross.
+        "season": {"days": 240, "a": 400.0, "b": 400.0 / 6, "c": -400.0 * 0.5 / 4.5, "d": 400.0 / 4.5,
+                   "feast": (0.25, 70.0), "storm": (0.15, 80.0), "noise": (12.0, 12.0), "seed": 1927},
+        # the Island's school records (chapter 5): 1,200 islanders; ability raises both schooling and wages; the
+        # school built on the east side in year 20 adds schooling for those born near it, and nothing else
+        "schooling": {"n": 1200, "base": 9.0, "ability_on_school": 1.5, "near_school": 2.0, "school_noise": 1.5,
+                      "return": 0.08, "ability_on_wage": 0.10, "wage_noise": 0.35, "seed": 1991},
+        # Lucas's islands (chapter 9): output rises only with surprise inflation, y = y* + b (pi - E pi) + e;
+        # expectations adapt (E pi moves a share lam of the way to last year's inflation).  For 30 years the
+        # council's inflation is noise around 2%; then it tries to keep output high with 8% a year
+        "lucas": {"ystar": 100.0, "b": 0.8, "noise": 0.4, "lam": 0.5, "pi_calm": (2.0, 2.0), "pi_push": 8.0,
+                  "years": (30, 20), "seed": 1976},
+    },
 }
 
 

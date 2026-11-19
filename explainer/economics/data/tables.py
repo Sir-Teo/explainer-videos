@@ -395,4 +395,84 @@ PSZ_2018 = Table(
 )
 
 PART3 = (KUZNETS_1934, PETTY_1665, CPI_BIAS, DEATON_HESTON_2010, JONES_KLENOW_2016, NORDHAUS_TOBIN_1972, PSZ_2018)
-ALL = {t.key: t for t in (*PART1, *PART3)}
+
+
+# ---------------------------------------------------------------------------
+# Part 4
+# ---------------------------------------------------------------------------
+MOORE_1914 = Table(
+    key="moore_1914",
+    cite="Henry L. Moore, Economic Cycles: Their Law and Cause (Macmillan, 1914), p. 126; Philip G. Wright, "
+         "\"Moore's Economic Cycles\", Quarterly Journal of Economics 29(2): 631-641 (1915)",
+    tag="Moore, Economic Cycles (1914), p. 126; Wright (1915)",
+    where="Moore p. 126; Wright's review",
+    read="both as quoted and summarized in the editorial of The Econometrics Journal 28(1) (2025), \"Philip G. Wright, "
+         "directed acyclic graphs, and instrumental variables\" (arXiv 2501.16395v2)",
+    checked="2026-11-19",
+    data={
+        "moore": "Unlike the law of demand for the crops, the law of demand for a representative producers' good is "
+                 "such that as the supply increases the price rises, and as the supply decreases the price falls.",
+        "wright_1915": "rainfall shifts the supply of crops but, through business conditions, the demand for a "
+                       "producers' good like pig iron; Moore's upward-sloping curve for pig iron may be closer to a "
+                       "supply curve",
+    },
+    note="The 1915 sentence is the editorial's summary of Wright's argument, not a quotation.",
+)
+
+LEAMER_1983 = Table(
+    key="leamer_1983",
+    cite="Edward E. Leamer, \"Let's Take the Con out of Econometrics\", American Economic Review 73(1): 31-43 (1983)",
+    tag="Leamer, AER (1983), p. 37",
+    where="p. 37",
+    read="a scan of the article (gwern.net)",
+    checked="2026-11-19",
+    data={"quote": "Hardly anyone takes data analyses seriously. Or perhaps more accurately, hardly anyone takes "
+                   "anyone else's data analyses seriously.",
+          "birds": "Like elaborately plumed birds who have long since lost the ability to procreate but not the "
+                   "desire, we preen and strut and display our t-values."},
+)
+
+LALONDE_1986 = Table(
+    key="lalonde_1986",
+    cite="Robert J. LaLonde, \"Evaluating the Econometric Evaluations of Training Programs with Experimental Data\", "
+         "American Economic Review 76(4): 604-620 (1986)",
+    tag="LaLonde, AER (1986), table 5",
+    where="table 5 (male participants), and the text on table 4 (women)",
+    read="a scan of the article (gwern.net)",
+    checked="2026-11-19",
+    data={
+        "units": "1982 dollars; standard errors in parentheses in the paper",
+        "experiment": (886, 476), "women_experiment": (851, 317),
+        # comparison group: (1978 difference, unadjusted; adjusted; difference in differences without age; with age)
+        "PSID-1": (-15578, -8067, 425, -749), "CPS-SSA-1": (-8870, -4416, 1714, 195),
+        "PSID-3": (697, -509, 242, -1325), "CPS-SSA-3": (-1300, 224, -1637, -1388),
+    },
+)
+
+CARD_2001 = Table(
+    key="card_2001",
+    cite="David Card, \"Estimating the Return to Schooling: Progress on Some Persistent Econometric Problems\", "
+         "Econometrica 69(5): 1127-1160 (2001); NBER Working Paper 7769 (2000)",
+    tag="Card, Econometrica (2001), table 2",
+    where="table 2 (OLS and IV estimates with instruments based on features of the school system)",
+    read="NBER Working Paper 7769 (nber.org)",
+    checked="2026-11-19",
+    data={"rows": (
+        # (study, sample, OLS, IV, IV standard error), returns per year of schooling
+        ("Angrist and Krueger (1991)", "US men born 1920-29, quarter of birth", 0.070, 0.101, 0.033),
+        ("Angrist and Krueger (1991)", "US men born 1930-39", 0.063, 0.060, 0.030),
+        ("Angrist and Krueger (1991)", "US men born 1940-49", 0.052, 0.078, 0.030),
+        ("Staiger and Stock (1997)", "US men born 1930-39, LIML", 0.063, 0.098, 0.015),
+        ("Kane and Rouse (1993)", "US women, tuition and distance", 0.080, 0.091, 0.033),
+        ("Card (1995)", "US men, a college nearby", 0.073, 0.132, 0.049),
+        ("Conneely and Uusitalo (1997)", "Finnish men, a university town", 0.085, 0.110, 0.024),
+        ("Harmon and Walker (1995)", "British men, school-leaving age", 0.061, 0.153, 0.015),
+        ("Lemieux and Card (1998)", "Ontario veterans, 1971 census", 0.070, 0.164, 0.053),
+        ("Maluccio (1997)", "rural Philippines, distance to school", 0.073, 0.145, 0.041),
+        ("Duflo (1999)", "Indonesia, school building", 0.078, 0.064, 0.025),
+    )},
+    note="Rows measured per year of schooling only (Card's rows 7 and 9, with schooling as a dummy, are left out).",
+)
+
+PART4 = (MOORE_1914, LEAMER_1983, LALONDE_1986, CARD_2001)
+ALL = {t.key: t for t in (*PART1, *PART3, *PART4)}

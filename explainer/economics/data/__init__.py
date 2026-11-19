@@ -194,6 +194,20 @@ DATASETS = {
         "sha256": "61ed82e5b66c88dfca8ff9fac775c63981ecab6a254862af97acacc41c143117",
         "files": ("hdr2025_1990_2023.csv",),
     },
+    "draft1970": {
+        "title": "The draft lottery of 1 December 1969 (for men born 1944-50): the rank drawn for each birthday",
+        "publisher": "U.S. Selective Service System; as tabulated by the Journal of Statistics Education data archive",
+        "citation": "Selective Service System, Semiannual Report of the Director (July-December 1971), p. 60; N. Starr, "
+                    "\"Nonrandom Risk: The 1970 Draft Lottery\", Journal of Statistics Education 5(2) (1997), data "
+                    "file draft70yr.dat; retrieved 2026-11-19",
+        "short": "Selective Service System, draft lottery of 1 Dec 1969 (JSE data archive)",
+        "url": "https://jse.amstat.org/datasets/draft70yr.dat.txt",
+        "licence": "a U.S. government record (public domain); the JSE archive's tabulation, free for education",
+        "units": "rank (1 = drafted first) for each day of the year, 1 January (day 1) to 31 December (day 366)",
+        "vintage": "2026-11-19",
+        "sha256": "973f258e63c94812b705c2007652fba34a02d579719dc74c569286106053f8d0",
+        "files": ("draft1970.csv",),
+    },
     "rtdsm": {
         "title": "Real-Time Data Set for Macroeconomists: real GDP (ROUTPUT), quarterly vintages",
         "publisher": "Federal Reserve Bank of Philadelphia",
@@ -408,6 +422,15 @@ def rtdsm() -> dict:
     out["first_latest"] = [{"quarter": r["quarter"], "first": _num(r["first"]), "latest": _num(r["latest"])}
                            for r in _read(HERE / "rtdsm_first_latest.csv")]
     return out
+
+
+@functools.lru_cache(maxsize=None)
+def draft1970() -> dict:
+    """The draft lottery drawn on 1 December 1969: ``{"day": [1..366], "month": [...], "rank": [...]}``, the rank
+    (order of call) drawn for each birthday of the year (366 days, with 29 February)."""
+    rows = _read(HERE / "draft1970.csv")
+    return {"day": [int(r["day"]) for r in rows], "month": [int(r["month"]) for r in rows],
+            "rank": [int(r["rank"]) for r in rows]}
 
 
 # ---------------------------------------------------------------------------
@@ -653,7 +676,21 @@ def refresh_rtdsm() -> None:
                 w.writerow([q, f"{first:.3f}", f"{latest:.3f}"])
 
 
-REFRESH = {"maddison2023": refresh_maddison, "fred": refresh_fred, "spf": refresh_spf,
+def refresh_draft1970() -> None:
+    d = DATASETS["draft1970"]
+    raw = RAW / "draft70yr.dat.txt"
+    sha = _download(d["url"], raw)
+    if d.get("sha256") and sha != d["sha256"]:
+        print(f"draft1970: the download differs from the recorded vintage ({sha[:12]} vs {d['sha256'][:12]})")
+    rows = [line.split() for line in raw.read_text().splitlines() if line.strip()]
+    with open(HERE / "draft1970.csv", "w", newline="", encoding="utf-8") as f:
+        w = csv.writer(f)
+        w.writerow(["day", "month", "rank"])
+        for r in rows:
+            w.writerow([int(r[0]), int(r[2]), int(r[1])])
+
+
+REFRESH = {"draft1970": refresh_draft1970, "maddison2023": refresh_maddison, "fred": refresh_fred, "spf": refresh_spf,
            "pinksheet": refresh_pinksheet, "psd_coffee": refresh_psd_coffee, "wdi": refresh_wdi, "hdr": refresh_hdr,
            "rtdsm": refresh_rtdsm}
 
