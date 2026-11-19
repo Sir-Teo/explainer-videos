@@ -63,4 +63,59 @@ PARTS = [
         also=(("Agora's market", "explainer/economics/agora/market.py"),
               ("The Data Room's sources", "explainer/economics/data/SOURCES.md")),
     ),
+    Part(
+        n=2, level="U", widget="scissors",
+        question="What sets a price, and what happens to it when a frost, a tax or the law gets in the way?",
+        story="The part opens at Purdue in January 1956, where Vernon Smith ran a double auction expecting the "
+              "competitive model to fail, and watched it converge. Smith's paradox of water and diamonds is "
+              "dissolved by value at the margin (Jevons, Menger, Walras), and Whately's pearl divers dispose of the "
+              "labour theory. Demand is built from Ana's cups and three drinkers added sideways, until crowds of "
+              "10,000 buyers turn the staircase into a line; supply from a farm's rising costs; and Marshall's "
+              "scissors join them. In Part 1's pit, four cards fix the band. The viewer plays a lopsided market, "
+              "where Agora's learning traders find $2.25 to $2.30 but zero-intelligence traders stop at $2.10: zero "
+              "is not enough (Cliff and Bruten), and Smith's prediction is scored wrong. Elasticity is measured "
+              "along the Island's fish market and with the midpoint formula on its stormy days; Brazil's black "
+              "frost of July 1975 cut the world's coffee crop by 16% and raised Arabica 5.7 times, still the real "
+              "record. After an intermission of sixty-six years of commodity prices, Dupuit's bridges give surplus, "
+              "a 40-cent tax in the pit falls the same way whoever remits it, a price cap loses 16% of the gains "
+              "rather than the triangle's 1.5%, and San Francisco's rent control shrank the rental stock. The "
+              "frontier is pricing by algorithm.",
+        handoff="Part 3 adds up prices across goods and years. The picture's failures return as monopoly and "
+                "oligopoly (Parts 10 to 12), hidden quality (13), spillovers (15), asset prices and crises (23, 33) "
+                "and designed markets (16, 17); demand is rebuilt from choice in Parts 5 and 6, the welfare theorem "
+                "in Part 9, the identification of a demand curve in Part 4, incidence in public finance in Part 41, "
+                "the minimum wage in Part 38 and market definition in Part 61.",
+        outside="School algebra. Chapter 6 uses the elasticity of a straight line; the problems use one integral.",
+        objectives={
+            "U": ["Build a market demand curve from buyers' reservation values and a supply curve from sellers' "
+                  "costs, and find the competitive quantity and the band of prices that clears it.",
+                  "Compute an elasticity by the midpoint formula, and say whether spending rises or falls when a "
+                  "price changes.",
+                  "Work out who bears a tax and the deadweight loss it causes, and what a binding price cap or floor "
+                  "costs."],
+            "M": ["Derive the elasticity along a straight demand line and the price that maximizes spending.",
+                  "Derive the incidence of a tax on straight lines, and show that it does not depend on who remits "
+                  "it.",
+                  "Compute the loss from a binding price control under efficient rationing and under a lottery."],
+            "D": ["Explain why zero-intelligence traders find the competitive price only in balanced markets, and "
+                  "design a test of how much intelligence convergence needs.",
+                  "State what is open about pricing algorithms and collusion, and propose a simulation that would "
+                  "settle part of it."],
+            "I": ["Say who pays a proposed excise tax and how its revenue depends on the elasticities.",
+                  "Read a commodity shock from price and quantity data: which curve moved, and a rough short-run "
+                  "elasticity with its caveats."],
+        },
+        results=[
+            ("Value at the margin", r"p^{*}=MV(q^{*})=MC(q^{*})"),
+            ("Elasticity", r"\varepsilon=\frac{dQ/Q}{dP/P}\approx\frac{\Delta Q/\bar Q}{\Delta P/\bar P}"),
+            ("A straight demand line", r"Q=a-bp:\quad \varepsilon(p)=\frac{-bp}{a-bp},\quad "
+                                       r"\arg\max_p\,pQ=\frac{a}{2b}\ (\varepsilon=-1)"),
+            ("Incidence", r"\text{buyers' share}=\frac{\varepsilon_S}{\varepsilon_S+|\varepsilon_D|}"),
+            ("Deadweight loss of a tax", r"\text{DWL}=\tfrac12\,t\,\Delta Q"),
+            ("Rationing by lottery", r"\text{extra loss}=\tfrac12\,q_S\,\big(P_D(q_S)-\bar p\big)"),
+        ],
+        U=(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, "s09_intermission"), D=(14,), I=(13,),
+        also=(("Agora's curves", "explainer/economics/agora/curves.py"),
+              ("The Data Room's sources", "explainer/economics/data/SOURCES.md")),
+    ),
 ]

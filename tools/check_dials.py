@@ -10,7 +10,8 @@ For one part (``videos/economics/econN``) it checks, from the part's own sources
   ``explainer.economics.data.tables`` with a citation, where it is in the publication, and the date it was checked;
 * every Data Room dataset it loads (``data.maddison_*``, ``data.fred``, ``data.spf``) is registered in
   ``explainer.economics.data.DATASETS`` with a licence and a vintage, and its extracts are listed in ``SOURCES.md``;
-* every Called-it card it draws (``call_card(``) has a ``explainer.economics.calls`` entry for the part;
+* every Called-it card it draws (``call_card(``) comes from a ``explainer.economics.calls`` entry for the part
+  (``calls.CALLS["key"]``), and every entry it names exists and belongs to the part;
 * every study it draws (``study_card(``, ``published_tag(``) is accounted for: the part either enters a row in
   ``explainer.economics.dials.DIALS`` (a dial whose ``parts`` include it, with estimates) or declares in
   ``dials.SHOWN`` what it shows without one, and why.
@@ -66,12 +67,18 @@ def check(video: str) -> list[str]:
         for f in d["files"]:
             if f"`{f}`" not in sources:
                 problems.append(f"{video}: {f} is not listed in SOURCES.md")
-    # Called it?
-    n_calls = len(re.findall(r"\bcall_card\(", src))
-    mine = [c for c in calls.CALLS.values() if c.part == part]
-    if n_calls and len(mine) < n_calls:
-        problems.append(f"{video}: draws {n_calls} Called-it card(s) but explainer/economics/calls.py has "
-                        f"{len(mine)} for Part {part}")
+    # Called it? (a call may be drawn more than once, e.g. unscored in the hook and scored later)
+    n_cards = len(re.findall(r"\bcall_card\(", src))
+    keys = set(re.findall(r"calls\.CALLS\[\s*[\"']([A-Za-z0-9_]+)[\"']\s*\]", src))
+    mine = {k for k, c in calls.CALLS.items() if c.part == part}
+    for k in sorted(keys):
+        if k not in calls.CALLS:
+            problems.append(f"{video}: calls.CALLS[{k!r}] is not in explainer/economics/calls.py")
+        elif k not in mine:
+            problems.append(f"{video}: calls.CALLS[{k!r}] belongs to Part {calls.CALLS[k].part}, not Part {part}")
+    if n_cards and not (keys & mine):
+        problems.append(f"{video}: draws {n_cards} Called-it card(s) but uses no call entered for Part {part} in "
+                        f"explainer/economics/calls.py")
     # studies shown
     n_studies = len(re.findall(r"\b(study_card|published_tag)\(", src))
     rows = [d for d in dials.DIALS.values() if part in d.parts and d.estimates]

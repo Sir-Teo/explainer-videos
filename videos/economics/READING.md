@@ -10,7 +10,7 @@ the series leaves out.
 Both *Parts* columns are found, not typed. *Planned* lists the parts whose entry in
 [`SYLLABUS.md`](SYLLABUS.md) names the book or paper; *Built* lists the parts whose scenes, compute step or
 README cite it (a dot: none yet). Fuller notes (editions, chapters, what each source was used for) are in each
-part's README, under *Sources*. Built so far: Part 1.
+part's README, under *Sources*. Built so far: Parts 1–2.
 
 ## 1. The textbook spine
 
@@ -18,8 +18,8 @@ part's README, under *Sources*. Built so far: Part 1.
 
 | Short name | Book | Planned | Built |
 |---|---|---|---|
-| Mankiw | N. G. Mankiw, *Principles of Economics* (10th ed., 2024) | 1–2 | 1 |
-| Krugman–Wells | P. Krugman and R. Wells, *Economics* (6th ed., 2021) | 2 | · |
+| Mankiw | N. G. Mankiw, *Principles of Economics* (10th ed., 2024) | 1–2 | 1–2 |
+| Krugman–Wells | P. Krugman and R. Wells, *Economics* (6th ed., 2021) | 2 | 2 |
 | Acemoglu–Laibson–List | D. Acemoglu, D. Laibson and J. List, *Economics* (3rd ed., 2022) | 4 | · |
 | CORE | The CORE Team, *The Economy* (2017; 2.0, 2023) | 1 | 1 |
 | Heilbroner | R. Heilbroner, *The Worldly Philosophers* (7th ed., 1999) | 1 | 1 |
@@ -28,7 +28,7 @@ part's README, under *Sources*. Built so far: Part 1.
 
 | Short name | Book | Planned | Built |
 |---|---|---|---|
-| Varian | H. Varian, *Intermediate Microeconomics* (9th ed., 2014) | 2, 6, 8, 10 | · |
+| Varian | H. Varian, *Intermediate Microeconomics* (9th ed., 2014) | 2, 6, 8, 10 | 2 |
 | Nicholson–Snyder | W. Nicholson and C. Snyder, *Microeconomic Theory* (13th ed., 2021) | 5–6 | · |
 | Jones | C. I. Jones, *Macroeconomics* (6th ed., 2023) | 20 | · |
 | Blanchard | O. Blanchard, *Macroeconomics* (8th ed., 2021) | 27, 32 | · |
@@ -120,14 +120,14 @@ part's README, under *Sources*. Built so far: Part 1.
 
 | Model or result | Paper | Planned | Built |
 |---|---|---|---|
-| the division of labour | Smith (1776), *The Wealth of Nations* | 1 | 1 |
-| comparative advantage | Ricardo (1817), *Principles*, ch. 7 | 2, 35–36 | 1 |
-| supply and demand, the scissors | Marshall (1890), *Principles of Economics* | 2, 37 | · |
+| the division of labour | Smith (1776), *The Wealth of Nations* | 1 | 1–2 |
+| comparative advantage | Ricardo (1817), *Principles*, ch. 7 | 2, 35–36 | 1–2 |
+| supply and demand, the scissors | Marshall (1890), *Principles of Economics* | 2, 37 | 2 |
 | the price system as information | Hayek (1945), "The Use of Knowledge in Society" | 1, 9 | 1 |
 | the double auction in the classroom | Chamberlin (1948); Smith (1962) | 1–2 | 1 |
-| zero-intelligence traders | Gode and Sunder (1993) | 2 | 1 |
+| zero-intelligence traders | Gode and Sunder (1993) | 2 | 1–2 |
 | general equilibrium and its welfare theorems | Arrow and Debreu (1954); Debreu (1959) | 9 | · |
-| consumer surplus | Dupuit (1844) | 2, 10 | · |
+| consumer surplus | Dupuit (1844) | 2, 10 | 2 |
 
 ### Choice
 
@@ -194,7 +194,7 @@ part's README, under *Sources*. Built so far: Part 1.
 
 | Model or result | Paper | Planned | Built |
 |---|---|---|---|
-| national accounts | Kuznets (1934) | 3 | · |
+| national accounts | Kuznets (1934) | 3 | 2 |
 | the General Theory and IS-LM | Keynes (1936); Hicks (1937) | 27 | · |
 | the permanent income hypothesis | Friedman (1957); Hall (1978) | 22 | · |
 | the Phillips curve and the natural rate | Phillips (1958); Friedman (1968); Phelps (1967) | 28 | · |
@@ -257,6 +257,8 @@ part's README, under *Sources*. Built so far: Part 1.
 ## 3. Every built part's reference card
 
 **Part 1, *Who Feeds Paris?*.** Books: Adam Smith, *The Wealth of Nations* (1776), Book I, chs 1–3; David Ricardo, *Principles of Political Economy and Taxation* (1817), ch. 7; Frédéric Bastiat, *Economic Sophisms* (1845); The CORE Team, *The Economy*, units 1–2; N. Gregory Mankiw, *Principles of Economics*, chs 1–3; Robert Heilbroner, *The Worldly Philosophers*; Dani Rodrik, *Economics Rules* (2015). Papers: Hayek (1945), "The Use of Knowledge in Society", *AER* 35; Coase (1937), "The Nature of the Firm", *Economica* 4; Simon (1991), *JEP* 5(2); Chamberlin (1948), *JPE* 56; Smith (1962), *JPE* 70; Gode and Sunder (1993), *JPE* 101; Cliff (1997); Gneezy and Rustichini (2000), "A Fine Is a Price", *Journal of Legal Studies* 29; Friedman (1953), "The Methodology of Positive Economics"; Read (1958), "I, Pencil"; Bolt and van Zanden (2024), the Maddison Project Database 2023; Besley and Hennessy (2009).
+
+**Part 2, *The Scissors*.** Books: Alfred Marshall, *Principles of Economics* (1890), Book V; Adam Smith, *The Wealth of Nations* (1776), Book I, ch. 4; Hal Varian, *Intermediate Microeconomics*, chs 1, 15–16; N. Gregory Mankiw, *Principles of Economics*, chs 4–8; Krugman and Wells, chs 3–5. Papers: Smith (1962), *JPE* 70; Gode and Sunder (1993), *JPE* 101; Cliff and Bruten (1997); Dupuit (1844); Whately (1832), Lecture IX; Havranek, Irsova and Janda (2012); Chetty, Looney and Kroft (2009), *AER* 99; Kopczuk, Marion, Muehlegger and Slemrod (2016); Diamond, McQuade and Qian (2019), *AER* 109; Calvano, Calzolari, Denicoló and Pastorello (2020), *AER* 110; Assad, Clark, Ershov and Xu (2024), *JPE* 132.
 
 ## 4. What the series leaves out
 

@@ -4,7 +4,9 @@
 //
 //   QB.econ.market(values, costs)          -> {v, c, q, lo, hi, p, surplus}: the competitive prediction
 //   QB.econ.auction(mkt, opts)             -> periods of a continuous double auction (zip or zi traders),
-//                                             with an optional human buyer who bids a fixed price
+//                                             with an optional human buyer who bids a fixed price, a tax per unit
+//                                             (opts.tax, remitted by opts.taxOn "sell" or "buy") and a legal
+//                                             maximum price (opts.cap)
 //   QB.econ.alpha(prices, p0)              -> Smith's (1962) coefficient of convergence, in percent
 // The traders are a port of explainer/economics/agora/market.py (Cliff 1997; Gode and Sunder 1993).
 (function () {
@@ -62,17 +64,20 @@
   };
 
   // opts: {kind: "zip" | "zi", periods, seed, human: index of the buyer the reader plays (or -1), bid: the reader's
-  // price (they bid it, and take any offer at or below it), floor, ceiling}
+  // price (they bid it, and take any offer at or below it), floor, ceiling, tax, taxOn, cap}
   function auction(mkt, opts) {
     var rnd = QB.rng(opts.seed || 1), floor = opts.floor || 0, ceiling = opts.ceiling || 5;
     var human = opts.human === undefined ? -1 : opts.human;
+    var tax = opts.tax || 0, tb = opts.taxOn === "buy" ? tax : 0, ts = opts.taxOn === "buy" ? 0 : tax;
+    var cap = opts.cap === undefined || opts.cap === null ? Infinity : opts.cap;
     var buyers = mkt.values.map(function (v, i) {
-      return new Trader(i === human ? "human" : opts.kind, "buy", i === human ? Math.min(opts.bid, v) : v, rnd);
+      return new Trader(i === human ? "human" : opts.kind, "buy", i === human ? Math.min(opts.bid, v) : v - tb, rnd);
     });
-    var sellers = mkt.costs.map(function (c) { return new Trader(opts.kind, "sell", c, rnd); });
+    var sellers = mkt.costs.map(function (c) { return new Trader(opts.kind, "sell", c + ts, rnd); });
     var out = [];
     for (var per = 0; per < (opts.periods || 6); per++) {
-      var i, t; for (i = 0; i < buyers.length; i++) buyers[i].active = true; for (i = 0; i < sellers.length; i++) sellers[i].active = true;
+      var i, t; for (i = 0; i < buyers.length; i++) buyers[i].active = buyers[i].limit > floor;
+      for (i = 0; i < sellers.length; i++) sellers[i].active = sellers[i].limit <= cap;
       var bb = null, ba = null, trades = [], idle = 0;
       for (var step = 0; step < 600 && idle <= 120; step++) {
         var live = [];
@@ -81,17 +86,19 @@
         if (!live.length) break;
         var pick = live[Math.floor(rnd() * live.length)], side = pick[0], k = pick[1];
         t = side === "buy" ? buyers[k] : sellers[k];
-        var q = t.quote(floor, ceiling), dealt = false, price = q;
+        var q = Math.min(t.quote(floor, ceiling), cap), dealt = false, price = q;
         if (side === "buy") {
           if (ba && q >= ba[0]) {
             price = ba[0];
-            trades.push({ price: price, value: mkt.values[k], cost: mkt.costs[ba[1]], human: k === human });
+            trades.push({ price: price, value: mkt.values[k], cost: mkt.costs[ba[1]], human: k === human,
+                          paid: price + tb, received: price - ts });
             buyers[k].active = false; sellers[ba[1]].active = false; bb = ba = null; dealt = true;
           } else if (!bb || q > bb[0]) bb = [q, k];
         } else {
           if (bb && q <= bb[0]) {
             price = bb[0];
-            trades.push({ price: price, value: mkt.values[bb[1]], cost: mkt.costs[k], human: bb[1] === human });
+            trades.push({ price: price, value: mkt.values[bb[1]], cost: mkt.costs[k], human: bb[1] === human,
+                          paid: price + tb, received: price - ts });
             buyers[bb[1]].active = false; sellers[k].active = false; bb = ba = null; dealt = true;
           } else if (!ba || q < ba[0]) ba = [q, k];
         }

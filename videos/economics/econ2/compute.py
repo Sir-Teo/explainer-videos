@@ -92,7 +92,7 @@ def _median_run(runs: list[dict]) -> int:
 def compute_diamonds() -> dict:
     """Illustrative only: a marginal value that falls with each litre a day, and the same shape for carats."""
     q = np.linspace(0, 200, 401)
-    mv = 30.0 / (1 + q / 2.0) ** 2 + 0.002        # dollars for one more litre, when you already have q litres a day
+    mv = 30.0 * np.exp(-q / 28.0) + 0.004          # dollars for one more litre, when you already have q litres a day
     total = np.concatenate([[0.0], np.cumsum((mv[1:] + mv[:-1]) / 2 * np.diff(q))])
     used = 150.0                                     # litres a day a household might use
     k = int(np.searchsorted(q, used))

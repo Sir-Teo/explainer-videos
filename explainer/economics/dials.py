@@ -122,6 +122,19 @@ SHOWN = {
          "(explainer.economics.calls), not an estimate of a parameter"),
         ("the Maddison Project Database and FRED", "data, shown with their sources; no parameter is estimated"),
     ],
+    2: [
+        ("Smith's double auction (1956-62) and Cliff and Bruten (1997)", "laboratory and simulation designs shown for "
+         "what they found about convergence: the Fact of the double auction, not an estimate of a parameter"),
+        ("Chetty, Looney and Kroft (2009); Kopczuk, Marion, Muehlegger and Slemrod (2016)", "two studies shown as "
+         "exceptions to tax-collection invariance; their estimates enter the public-finance dials in Part 41"),
+        ("Glaeser and Luttmer (2003); Deacon and Sonstelie (1985); Diamond, McQuade and Qian (2019)", "evidence on "
+         "price controls, shown for its direction; rent control's supply response enters the housing-supply dial in "
+         "Part 37"),
+        ("Calvano and others (2020); Assad, Clark, Ershov and Xu (2024)", "the frontier chapter's evidence on "
+         "algorithmic pricing; markups enter their dial in Part 10"),
+        ("the Pink Sheet and PSD coffee data, and the frost's rough elasticity", "data, and a back-of-the-envelope "
+         "calculation with its caveats stated; not an entry in the staples dial"),
+    ],
 }
 
 

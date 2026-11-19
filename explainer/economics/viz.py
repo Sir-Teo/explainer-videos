@@ -31,7 +31,7 @@ __all__ = ["person", "islander", "palm", "fish_glyph", "coconut", "island_shape"
            "scissors_logo", "game_stage", "trader_card", "step_curve", "market_steps", "SECTORS", "PIPES", "tableau_map", "flowing",
            "SECTOR_SIZE", "study_card", "dial_face", "dial_board", "fact_card", "call_card", "is_ought_card", "quote_card",
            "source_card", "point_cards", "flow_chain", "quadrant", "heading", "panel", "hist", "CARD_FILL",
-           "PANEL_FILL", "accent_card"]
+           "PANEL_FILL", "accent_card", "dial_card"]
 
 
 def accent_card(w: float, h: float, color, fill_opacity: float = 0.96, center=ORIGIN) -> VGroup:
@@ -344,8 +344,10 @@ def tableau_map(open_pipes=(), lit=(), width: float = 13.4, font_size=22, sealed
         g.pipe[key] = pp
         g.paths[key] = path
         pipes.add(pp)
-    g.add(pipes, tanks)
-    g.tanks, g.pipes = tanks, pipes
+    # the bare curves ride along, invisible, so that scaling or moving the map moves what flowing() follows
+    rails = VGroup(*g.paths.values()).set_stroke(opacity=0).set_fill(opacity=0)
+    g.add(pipes, tanks, rails)
+    g.tanks, g.pipes, g.rails = tanks, pipes, rails
     if g.width > width:
         g.width = width
     return g
@@ -439,6 +441,54 @@ def dial_board(rows, cols: int = 4, radius: float = 0.62, width: float = 13.0, f
         faces.width = width
     faces.faces = list(faces)
     return faces
+
+
+def dial_card(dial, lo: float, hi: float, width: float = 12.4, font_size=22, ticks=None, short=None) -> VGroup:
+    """One dial opened up: its name and status, its estimates as dots on one axis from ``lo`` to ``hi`` (each in its
+    design's colour, labelled with who and what), and what the range means for policy.  ``short``: optional labels,
+    one per estimate, to use instead of the author and year."""
+    from explainer.economics.dials import DESIGNS  # noqa: F401  (the colours below cover every design)
+
+    color = DIAL_STATUS.get(dial.status, GREY_C)
+    name = wrapped_label(dial.name, width - 3.4, font_size + 6, WHITE)
+    chip_t = label(dial.status, font_size=font_size - 4, color=BACKGROUND)
+    chip = RoundedRectangle(width=chip_t.width + 0.3, height=chip_t.height + 0.16, corner_radius=0.08, stroke_width=0,
+                            fill_color=color, fill_opacity=1)
+    chip_t.move_to(chip)
+    head = VGroup(name, VGroup(chip, chip_t)).arrange(RIGHT, buff=0.4, aligned_edge=UP)
+    span = width - 1.6
+    axis = Line(LEFT * span / 2, RIGHT * span / 2, color=GREY_C, stroke_width=2)
+
+    def X(v):
+        return axis.get_left() + RIGHT * span * (v - lo) / (hi - lo)
+
+    marks = VGroup()
+    for v in (ticks if ticks is not None else np.linspace(lo, hi, 5)):
+        marks.add(Line(X(v) + UP * 0.08, X(v) + DOWN * 0.08, color=GREY_C, stroke_width=2))
+        marks.add(MathTex(f"{v:g}".replace("-", "-"), font_size=font_size - 4, color=GREY_B).next_to(X(v), DOWN,
+                                                                                                    buff=0.15))
+    dots = VGroup()
+    for k, e in enumerate(dial.estimates):
+        c = DESIGN_COLOR.get(e.design, GREY_B)
+        d = Dot(X(e.value), radius=0.1, color=c)
+        txt = short[k] if short else rf"{e.who} ({e.year})"
+        t = label(txt, font_size=font_size - 5, color=c)
+        up = k % 2 == 0
+        t.next_to(d, UP if up else DOWN, buff=0.32 if up else 0.62)
+        stem = Line(d.get_center(), t.get_bottom() if up else t.get_top(), color=c, stroke_width=1.2,
+                    stroke_opacity=0.6)
+        dots.add(VGroup(stem, d, t))
+    meaning = wrapped_label(dial.meaning, width - 1.0, font_size - 2, GREY_A) if dial.meaning else VGroup()
+    body = VGroup(axis, marks, dots)
+    inner = VGroup(head, body, meaning).arrange(DOWN, buff=0.75, aligned_edge=LEFT)
+    card = accent_card(width, inner.height + 1.0, color)
+    inner.move_to(card)
+    head.align_to(card.box, LEFT).shift(RIGHT * 0.45)
+    if dial.meaning:
+        meaning.align_to(card.box, LEFT).shift(RIGHT * 0.45)
+    g = VGroup(card, inner)
+    g.card, g.head, g.axis, g.marks, g.dots, g.meaning = card, head, axis, marks, dots, meaning
+    return g
 
 
 def fact_card(statement: str, columns=((r"your guess", None), (r"the data", None), (r"Agora", None)),

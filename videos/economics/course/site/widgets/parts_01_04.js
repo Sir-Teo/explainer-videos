@@ -71,4 +71,95 @@
             "the twenty cards. Nothing you do here is stored or sent.",
     });
   };
+
+  // ---- Part 2: who pays the tax? ----------------------------------------------------------------------------------
+  W.scissors = function (el) {
+    var V0 = [3.40, 3.10, 2.90, 2.70, 2.50, 2.30, 2.10, 1.90, 1.70, 1.50];
+    var C0 = [1.20, 1.40, 1.60, 1.80, 2.00, 2.20, 2.40, 2.60, 2.80, 3.00];
+    var PINK = "#E9A3C9", RED = "#F26D6D";
+    function cards(kd, ks) {
+      return { v: V0.map(function (x) { return 2.25 + kd * (x - 2.25); }),
+               c: C0.map(function (x) { return 2.25 + ks * (x - 2.25); }) };
+    }
+    QB.widget(el, {
+      title: "Who pays the tax? Predict, then let the pit trade",
+      sub: "Part 1's twenty cards, with a tax on every unit sold. Make the buyers' cards or the sellers' cards more " +
+           "alike (a flatter staircase: they respond more to price) or more spread out (steeper). Choose who hands " +
+           "the tax to the government, make your prediction with a button, and watch where the learning traders " +
+           "settle. A legal maximum price, if you set one below the market, shows what a cap costs.",
+      panels: 2, height: 320,
+      controls: [
+        { k: "tax", label: "Tax per unit", min: 0, max: 0.8, step: 0.05, value: 0.4, fmt: function (x) { return "$" + x.toFixed(2); } },
+        { k: "kd", label: "Buyers' cards: alike (left) or spread (right)", min: 0.3, max: 2.0, step: 0.1, value: 1.0,
+          fmt: function (x) { return "x" + x.toFixed(1); } },
+        { k: "ks", label: "Sellers' cards: alike (left) or spread (right)", min: 0.3, max: 2.0, step: 0.1, value: 1.0,
+          fmt: function (x) { return "x" + x.toFixed(1); } },
+        { k: "cap", label: "Legal maximum price (off at $3.50)", min: 1.5, max: 3.5, step: 0.05, value: 3.5,
+          fmt: function (x) { return x >= 3.5 ? "none" : "$" + x.toFixed(2); } },
+      ],
+      buttons: [
+        { label: "Sellers remit the tax", act: function (s) { s.on = "sell"; } },
+        { label: "Buyers remit the tax", act: function (s) { s.on = "buy"; } },
+        { label: "I predict: buyers bear more", act: function (s) { s.guess = "buyers"; } },
+        { label: "I predict: sellers bear more", act: function (s) { s.guess = "sellers"; } },
+      ],
+      draw: function (g, v, s) {
+        var on = s.on || "sell", cd = cards(v.kd, v.ks), mkt = QB.econ.market(cd.v, cd.c);
+        var cap = v.cap >= 3.5 ? null : v.cap, i, k, r;
+        var paid = [], rec = [], eff = [], n = [], dots = [];
+        for (r = 0; r < 6; r++) {
+          var res = QB.econ.auction(mkt, { kind: "zip", periods: 6, seed: 17 + 31 * r + (s.seed || 1), tax: v.tax,
+                                           taxOn: on, cap: cap });
+          var last = res[res.length - 1];
+          if (last.trades.length) {
+            paid.push(QB.mean(last.trades.map(function (t) { return t.paid; })));
+            rec.push(QB.mean(last.trades.map(function (t) { return t.received; })));
+          }
+          eff.push(last.efficiency); n.push(last.trades.length);
+          if (r === 0) for (k = 0; k < res.length; k++) for (i = 0; i < res[k].trades.length; i++)
+            dots.push([k + (i + 0.5) / Math.max(res[k].trades.length, 1), res[k].trades[i].paid, res[k].trades[i].received]);
+        }
+        var a = g[0].axes({ x: [0, 10], y: [0, 5], title: "The cards, and the tax as a wedge", xlabel: "units" });
+        var dx = [], dy = [], sx = [], sy = [], tx = [], ty = [];
+        for (i = 0; i < 10; i++) {
+          dx.push(i, i + 1); dy.push(mkt.v[i], mkt.v[i]); sx.push(i, i + 1); sy.push(mkt.c[i], mkt.c[i]);
+          if (on === "sell") { tx.push(i, i + 1); ty.push(mkt.c[i] + v.tax, mkt.c[i] + v.tax); }
+          else { tx.push(i, i + 1); ty.push(mkt.v[i] - v.tax, mkt.v[i] - v.tax); }
+        }
+        a.area([0, 10], [mkt.hi, mkt.hi], mkt.lo, { color: GOLD, alpha: 0.18 });
+        a.line(dx, dy, { color: BLUE, width: 2.4 }).line(sx, sy, { color: AMBER, width: 2.4 });
+        if (v.tax > 0) a.line(tx, ty, { color: PINK, width: 2, dash: [5, 4] });
+        if (cap) a.hline(cap, { color: RED, width: 2, dash: [] });
+        var mp = paid.length ? QB.mean(paid) : NaN, mr = rec.length ? QB.mean(rec) : NaN;
+        if (isFinite(mp)) a.hline(mp, { color: BLUE, dash: [2, 3] });
+        if (isFinite(mr)) a.hline(mr, { color: AMBER, dash: [2, 3] });
+        a.legend([["demand", BLUE], ["supply", AMBER], [on === "sell" ? "supply plus the tax" : "demand less the tax", PINK]],
+                 { pos: "tr" });
+        var b = g[1].axes({ x: [0, 6], y: [0, 5], title: "Every deal: what buyers paid (blue), sellers kept (amber)",
+                            xlabel: "period" });
+        b.area([0, 6], [mkt.hi, mkt.hi], mkt.lo, { color: GOLD, alpha: 0.18 });
+        b.dots(dots.map(function (d) { return d[0]; }), dots.map(function (d) { return d[1]; }), { color: BLUE, r: 3 });
+        b.dots(dots.map(function (d) { return d[0]; }), dots.map(function (d) { return d[2]; }), { color: AMBER, r: 3 });
+        var p0 = mkt.p, share = v.tax > 0 && isFinite(mp) ? (mp - p0) / v.tax : NaN;
+        s.out = { on: on, paid: mp, rec: mr, p0: p0, share: share, eff: QB.mean(eff), n: QB.mean(n), q0: mkt.q,
+                  guess: s.guess, cap: cap, lo: mkt.lo, hi: mkt.hi };
+      },
+      readout: function (v, s) {
+        var o = s.out, rows = [["tax remitted by", o.on === "sell" ? "sellers" : "buyers"],
+                               ["before the tax", o.q0 + " units at $" + fmt(o.lo, 2) + " to $" + fmt(o.hi, 2)]];
+        if (isFinite(o.paid)) rows.push(["buyers pay", "$" + fmt(o.paid, 2)], ["sellers keep", "$" + fmt(o.rec, 2)]);
+        rows.push(["units traded", fmt(o.n, 1)], ["share of the gains made", QB.pct(o.eff, 0)]);
+        if (isFinite(o.share)) {
+          var even = Math.abs(o.share - 0.5) < 0.07, who = o.share > 0.5 ? "buyers" : "sellers";
+          rows.push(["buyers' share of the tax", QB.pct(Math.max(0, Math.min(1, o.share)), 0)]);
+          if (o.guess) rows.push(["your prediction", o.guess + (even ? ": about even, so neither side bears much more" :
+                                                                o.guess === who ? ": right" : ": not this time")]);
+        }
+        return rows;
+      },
+      note: "Simulated traders: Agora's learning traders (Cliff 1997), six markets of six periods each, the last period " +
+            "averaged. Switch who remits the tax and the two dashed price lines barely move: the burden does not " +
+            "follow the cheque. Nothing you do here is stored or sent.",
+    });
+  };
 })();

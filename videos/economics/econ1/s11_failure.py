@@ -75,8 +75,8 @@ class Failure(VoiceoverScene):
         got = VGroup(label(rf"2009: \ {pct(s['actual_2009'], 1, sign=True)}", font_size=34, color=WHITE),
                      label(r"the largest fall in a year since 1946", font_size=18, color=GREY_B)).arrange(
             DOWN, aligned_edge=LEFT, buff=0.06)
-        cc = call_card(r"the Survey of Professional Forecasters", r"August 2008",
-                       r"real GDP in 2009 a little higher than in 2008", r"it fell", "wrong", width=11.6,
+        c = calls.CALLS["spf_2008"]
+        cc = call_card(r"the Survey of Professional Forecasters", c.when, c.said, r"it fell", c.verdict, width=11.6,
                        said_value=said, outcome_value=got).to_edge(UP, buff=0.45)
         more = VGroup(
             label(rf"after Lehman, in November 2008, they said {pct(s['nov_2009'], 1, sign=True)} for 2009", font_size=24,

@@ -147,7 +147,8 @@ class Outro(VoiceoverScene):
         with self.voiceover(
             "And here's the problem the next part opens with. <bookmark mark='a'/> A boat comes ashore, and four "
             "more people step off it: Ana, Bo, Chidi and Dara. <bookmark mark='b'/> Ana fishes. Bo would like to buy. "
-            "Soon there is a fish market on the Island, with ten traders, and a question: what will a fish cost? "
+            "Soon there is a fish market on the Island, with buyers and sellers on both sides, and a question: what "
+            "will a fish cost? "
             "<bookmark mark='c'/> Part two: the scissors. Why water is cheap and diamonds are dear, how demand and "
             "supply are built from the cards in the pit, and who really pays a tax."
         ) as vo:
