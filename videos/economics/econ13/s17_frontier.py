@@ -90,15 +90,15 @@ class Frontier(VoiceoverScene):
                   color=GOOD),
         ).arrange(DOWN, buff=0.42).next_to(head, DOWN, buff=0.6)
         with self.voiceover(
-            "Open questions follow. <bookmark mark='a'/> When should a society forbid pricing on what can be seen, "
+            "Open questions follow. When should a society forbid pricing on what can be seen, "
             "and who should pay for the pool that results? <bookmark mark='b'/> Do the remedies, with their taxes, "
             "mandates and lost choice, cost more than the triangles they close? <bookmark mark='c'/> Could "
             "information design, choosing what a platform reveals and to whom, work better than bans? That is Part "
             "fifty-three. <bookmark mark='d'/> And how should a contract be written when one side cannot see what the "
             "other does? That is the next part."
         ) as vo:
-            self.play(FadeIn(head, shift=DOWN * 0.2))
-            for mk, r in zip("abcd", rows):
+            self.play(FadeIn(head, shift=DOWN * 0.2), FadeIn(rows[0], shift=UP * 0.1))
+            for mk, r in zip("bcd", rows[1:]):
                 vo.wait_until(mk)
                 self.play(FadeIn(r, shift=UP * 0.1))
         self.clear_scene()

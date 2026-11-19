@@ -399,6 +399,8 @@ def cues(timeline, cache: Path, part: int | None = None) -> list[dict]:
             if secs < 1.5:
                 continue
             cue(f"bed{secs:.1f}", lambda secs=secs: bed(secs, act), s["start"] + a + BED_EDGE)
+    # the close is the film's last ten seconds, at full level: an outro holds its end card that long after its last
+    # line, so the close sounds in a pause (under a line it can meet a syllable and push the mix over the ceiling)
     last = timeline[-1]
     cue("close", lambda: close(act), max(last["start"], last["start"] + last["duration"] - 10.0))
     return out

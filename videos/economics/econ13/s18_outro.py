@@ -163,5 +163,5 @@ class Outro(VoiceoverScene):
             self.play(FadeIn(hc, shift=UP * 0.2))
             vo.wait_until("b")
             self.play(FadeIn(nxt, shift=UP * 0.2))
-        self.wait(2.0)
+        self.wait(9.5)          # the score's close plays here, after the last line, not under it
         self.clear_scene()
