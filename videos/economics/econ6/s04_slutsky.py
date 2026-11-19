@@ -149,12 +149,13 @@ class Slutsky(VoiceoverScene):
             "holding satisfaction fixed, a dearer good is always bought less, or no more. We'll see why in chapter "
             "five."
         ) as vo:
+            self.play(Write(eq), run_time=1.6)
             vo.wait_until("a")
-            self.play(Write(eq[0]), FadeIn(names[0]))
+            self.play(FadeIn(names[0]), Indicate(eq[0], color=E.ACCENT))
             vo.wait_until("b")
-            self.play(Write(eq[1]), Write(eq[2]), FadeIn(names[1]))
+            self.play(FadeIn(names[1]), Indicate(eq[2], color=SUB))
             vo.wait_until("c")
-            self.play(Write(eq[3]), Write(eq[4]), FadeIn(names[2]))
+            self.play(FadeIn(names[2]), Indicate(eq[4], color=INC))
             vo.wait_until("d")
             self.play(FadeIn(nums), FadeIn(unit))
             vo.wait_until("e")
@@ -199,9 +200,9 @@ class Slutsky(VoiceoverScene):
             "must be little room to substitute away from it. Which kind of household fits that recipe is the next "
             "chapter."
         ) as vo:
-            self.play(Write(eq[0]), Write(eq[1]), run_time=1.0)
+            self.play(Write(eq), FadeIn(legend), run_time=1.6)
             vo.wait_until("a")
-            self.play(Write(eq[2:]), FadeIn(legend))
+            self.play(Indicate(eq, color=E.ACCENT))
             vo.wait_until("b")
             self.play(FadeIn(rows[0], shift=RIGHT * 0.2))
             vo.wait_until("c")
