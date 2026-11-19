@@ -264,7 +264,8 @@ def compute_melody() -> dict:
                 notes=[{"t": float(t), "dur": 0.3, "hz": score.hz(nn), "name": str(y)}
                        for t, nn, y in zip(times, mel["notes"], f["years"])],
                 meta={"label": "the American and Soviet (later Russian) nuclear stockpiles together, year by year, "
-                               "1945-2026, as a tune (computed)", "kind": "synthesized"})
+                               "1945-2026, as a tune (computed)", "kind": "synthesized",
+                      "needs": "headphones, for the sweep from left to right across the years"})
     ClipStore("econ11").save("intermission.melody", clip)
     return {"times": times, "notes": mel["notes"], "total": total, "years": f["years"], "seconds": MELODY_SECONDS}
 

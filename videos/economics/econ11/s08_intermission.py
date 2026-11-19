@@ -80,10 +80,16 @@ class Intermission(SoundScene):
             for m in marks:
                 m.set_opacity(0)
                 snd.drive(m, show_mark)
-            snd.show(ax, *grown.values(), year, legend, intro, *marks)
+            t_end = float(t_of[-1]) + 0.3
+            fills = []
+            for ys_, col_ in ((us, US), (su, USSR)):
+                m_, up_ = area_sweep(ax, years, ys_, col_, t_end, seconds=5.2)
+                snd.drive(m_, up_)
+                fills.append(m_)
+            snd.show(*fills, ax, *grown.values(), year, legend, intro, *marks)
             self.play(FadeIn(ax), FadeIn(legend), run_time=1.2)
             snd.wait_until("film_end")
-            self.play(*[FadeOut(m) for m in (ax, *grown.values(), year, legend, intro, src, stag, *marks)],
+            self.play(*[FadeOut(m) for m in (*fills, ax, *grown.values(), year, legend, intro, src, stag, *marks)],
                       run_time=1.0)
             story = point_cards([
                 (r"the guessing game", r"two-thirds of the average: \\ 0 in theory, \ 13 to 25 in practice", ANA),

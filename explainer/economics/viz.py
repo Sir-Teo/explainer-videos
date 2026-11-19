@@ -27,7 +27,7 @@ from explainer.analysis import label, wrapped_label
 from explainer.economics.style import DESIGN_COLOR, DIAL_STATUS, E
 from explainer.psychology.viz import CARD_FILL, PANEL_FILL, flow_chain, heading, hist, panel, point_cards, quadrant  # noqa: F401
 
-__all__ = ["person", "islander", "palm", "fish_glyph", "coconut", "island_shape", "cart", "loaf", "pin_glyph", "coin",
+__all__ = ["area_sweep", "person", "islander", "palm", "fish_glyph", "coconut", "island_shape", "cart", "loaf", "pin_glyph", "coin",
            "scissors_logo", "game_stage", "countdown", "trader_card", "step_curve", "market_steps", "SECTORS", "PIPES", "tableau_map", "flowing",
            "SECTOR_SIZE", "study_card", "dial_face", "dial_board", "fact_card", "call_card", "is_ought_card", "quote_card",
            "source_card", "point_cards", "flow_chain", "quadrant", "heading", "panel", "hist", "CARD_FILL",
@@ -619,3 +619,25 @@ def source_card(lines, title: str = r"Sources", width: float = 12.6, font_size=2
     if g.height > 7.2:
         g.height = 7.2
     return g.move_to(ORIGIN)
+
+
+def area_sweep(ax, xs, ys, color, t0: float, seconds: float = 5.0, opacity: float = 0.2):
+    """For a data film's closing hold: the area under a finished curve fills in from left to right between ``t0``
+    and ``t0 + seconds`` (a sound window must not sit over a still picture).  Returns ``(mobject, updater)``; pass
+    both to ``snd.drive`` and show the mobject."""
+    xs, ys = np.asarray(xs, float), np.asarray(ys, float)
+    a = ax.ax
+    m = VMobject(stroke_width=0, fill_color=color, fill_opacity=0)
+
+    def update(mob, t):
+        f = float(np.clip((t - t0) / seconds, 0, 1))
+        if f <= 0:
+            mob.set_fill(opacity=0)
+            return
+        k = max(1, int(round(f * (len(xs) - 1))))
+        pts = [a.c2p(xs[0], 0)] + [a.c2p(x, y) for x, y in zip(xs[:k + 1], ys[:k + 1])] + [a.c2p(xs[k], 0),
+                                                                                         a.c2p(xs[0], 0)]
+        mob.set_points_as_corners(pts)
+        mob.set_fill(color, opacity=opacity)
+
+    return m, update

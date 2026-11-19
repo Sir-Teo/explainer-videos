@@ -81,8 +81,8 @@ class Centipede(VoiceoverScene):
         bl = label(rf"fifteen small-scale societies: \ {100 * lo:.0f}\% to {100 * hi:.0f}\%", font_size=18,
                    color=OFFER).next_to(band, UP, buff=0.12)
         ind = Dot(a.c2p(100 * h["industrial_mean"], 0.5), radius=0.1, color=WHITE)
-        il = label(rf"industrial societies: \ about {100 * h['industrial_mean']:.0f}\%", font_size=18).next_to(
-            ind, DOWN, buff=0.35)
+        il = label(rf"white: \ industrial societies, \\ about {100 * h['industrial_mean']:.0f}\%", font_size=17).next_to(
+            band, RIGHT, buff=0.15)
         spe = Dot(a.c2p(0.5, 0.5), radius=0.1, color=EQ)
         sl = label(r"subgame perfect: \ the smallest coin", font_size=18, color=EQ).next_to(spe, UP, buff=0.5).shift(
             RIGHT * 0.9)

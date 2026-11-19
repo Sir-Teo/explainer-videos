@@ -50,9 +50,9 @@ class Repeated(VoiceoverScene):
             "patient enough players, cooperation is an equilibrium: no one wants to break it, because of what "
             "follows."
         ) as vo:
-            self.play(FadeIn(ax), FadeIn(tag), FadeIn(side[0]))
+            self.play(FadeIn(ax), FadeIn(tag), FadeIn(side[0]), Create(coop), FadeIn(cl))
             vo.wait_until("b")
-            self.play(Create(coop), FadeIn(cl), FadeIn(side[1]))
+            self.play(FadeIn(side[1]), Indicate(cl))
             vo.wait_until("c")
             self.play(Create(dev), FadeIn(dl), FadeIn(side[2]))
             vo.wait_until("d")
@@ -74,7 +74,7 @@ class Repeated(VoiceoverScene):
         pts = VGroup(*[VGroup(Dot(a.c2p(x, y), radius=0.08, color=WHITE),
                               label(t, font_size=15, color=GREY_A).next_to(a.c2p(x, y), d, buff=0.1))
                        for (x, y), t, d in (((3, 3), r"both cooperate", UR), ((1, 1), r"both defect", DL),
-                                            ((5, 0), r"Ana defects alone", DOWN), ((0, 5), r"Bo defects alone", LEFT))])
+                                            ((5, 0), r"Ana defects alone", DOWN), ((0, 5), r"Bo defects alone", RIGHT))])
         mm = VGroup(DashedLine(a.c2p(1, 1), a.c2p(1, 5.3), color=GREY_B, stroke_width=1.5),
                     DashedLine(a.c2p(1, 1), a.c2p(5.3, 1), color=GREY_B, stroke_width=1.5))
         side = VGroup(

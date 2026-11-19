@@ -65,10 +65,17 @@ class Intermission(SoundScene):
                 snd.drive(m, grow)
             snd.drive(year, set_year)
             snd.drive(intro, show_intro)
-            snd.show(ax, *grown.values(), year, legend, intro)
+            t_end = float(t_of[-1]) + 0.3
+            fills = []
+            for ys_, col_ in ((shelf, SHELF), (bean, BEAN)):
+                m_, up_ = area_sweep(ax, xs, ys_, col_, t_end, seconds=5.2, opacity=0.16)
+                snd.drive(m_, up_)
+                fills.append(m_)
+            snd.show(*fills, ax, *grown.values(), year, legend, intro)
             self.play(FadeIn(ax), FadeIn(legend), run_time=1.2)
             snd.wait_until("film_end")
-            self.play(*[FadeOut(m) for m in (ax, *grown.values(), year, legend, intro, src, stag)], run_time=1.0)
+            self.play(*[FadeOut(m) for m in (*fills, ax, *grown.values(), year, legend, intro, src, stag)],
+                      run_time=1.0)
             story = point_cards([
                 (r"the ferry", r"a toll on a free crossing: \\ revenue against waste", BO),
                 (r"marginal revenue", r"$MR = MC$; \ the Lerner index \\ $(p - c)/p = -1/\varepsilon$", MR),
