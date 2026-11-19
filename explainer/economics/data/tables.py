@@ -1000,6 +1000,47 @@ MEHRA_PRESCOTT_1985 = Table(
          "risk aversion of ten or less as plausible, and the model with such values cannot produce it.",
 )
 
+# ---------------------------------------------------------------------------
+# Part 8
+# ---------------------------------------------------------------------------
+COBB_DOUGLAS_1928 = Table(
+    key="cobb_douglas_1928",
+    cite="C. W. Cobb and P. H. Douglas, \"A Theory of Production\", American Economic Review 18(1), supplement "
+         "(March 1928) 139-165; the data as reproduced by J. Felipe and F. G. Adams, \"'A Theory of Production': The "
+         "Estimation of the Cobb-Douglas Function: A Retrospective View\", Eastern Economic Journal 31(3) (2005) "
+         "427-445, table 1 (from Pesaran and Pesaran 1997, data file CD.FIT)",
+    tag="Cobb and Douglas (1928), via Felipe and Adams (2005), table 1",
+    where="Felipe and Adams (2005), table 1 (indices, 1899 = 100) and table 2 (regressions); checked against the "
+          "logarithms tabulated by Smirnov and Wang (arXiv 1910.06739)",
+    read="Felipe and Adams (2005), the published article; Smirnov and Wang (2019)",
+    checked="2026-11-19",
+    data={"years": tuple(range(1899, 1923)),
+          # output (Day's index of physical production), labour (wage earners employed), capital (fixed capital in
+          # constant dollars), American manufacturing, 1899 = 100
+          "output": (100, 101, 112, 122, 124, 122, 143, 152, 151, 126, 155, 159, 153, 177, 184, 169, 189, 225, 227,
+                     223, 218, 231, 179, 240),
+          "labour": (100, 105, 110, 118, 123, 116, 125, 133, 138, 121, 140, 144, 145, 152, 154, 149, 154, 182, 196,
+                     200, 193, 193, 147, 161),
+          "capital": (100, 107, 114, 122, 131, 138, 149, 163, 176, 185, 198, 208, 216, 226, 236, 244, 266, 298, 335,
+                      366, 387, 407, 417, 431),
+          "felipe_adams": {"unrestricted": {"labour": 0.807, "capital": 0.233},
+                           "trend": {"trend": 0.0468, "labour": 0.906, "capital": -0.526},
+                           "growth": {"labour": 1.39, "capital": -1.51},
+                           "to_1920": {"labour": 1.09, "capital": 0.08}},
+          "verdict": "if computer technology had allowed Cobb and Douglas to perform the analysis carried out here, "
+                     "their results would have been dismissed",
+          "cobb": "Douglas went to his friend Charles W. Cobb, of the mathematics faculty at Amherst, and asked for a "
+                  "function to measure the effect of each factor; the paper was presented at the American Economic "
+                  "Association's meetings of 1927",
+          "solow": "we would not now be concerned with the question had Paul Douglas found labor's share of American "
+                   "output to be twenty-five per cent and capital's share seventy-five instead of the other way around",
+          "solow_cite": "Solow, as quoted by F. M. Fisher (1969), p. 572, and by Felipe and Adams (2005)"},
+    note="Douglas plotted the three indices on a logarithmic scale and noticed that output lay about a quarter of the "
+         "way from labour's curve to capital's (Felipe and Adams 2005, p. 428).",
+)
+
+PART8 = (COBB_DOUGLAS_1928,)
+
 PART7 = (BERNOULLI_1738, SAMUELSON_1937, ALLAIS_1953, ELLSBERG_1961, RABIN_2000, THALER_1981, HOLT_LAURY_2005,
          HAYDEN_PLATT_2009, MADRIAN_SHEA_2001, THALER_BENARTZI_2004, BARSKY_1997, POST_2008, MEHRA_PRESCOTT_1985)
-ALL = {t.key: t for t in (*PART1, *PART3, *PART4, *PART5, *PART6, *PART7)}
+ALL = {t.key: t for t in (*PART1, *PART3, *PART4, *PART5, *PART6, *PART7, *PART8)}

@@ -244,6 +244,29 @@ TRUTHS = {
         # choices noisy, logit in certainty-equivalent dollars with scale $0.20
         "hl": {"people": 400, "gamma_mean": 0.35, "gamma_sd": 0.35, "noise": 0.20, "seed": 2002},
     },
+    8: {
+        # Crusoe's boatyard: boats a month from slipways K and shipwrights L, q = 2 K^0.25 L^0.5 (decreasing returns,
+        # 0.75); a shipwright costs $1,000 a month, a slipway $400; a boat sells for $1,200
+        "yard": {"A": 2.0, "a": 0.25, "b": 0.5, "wage": 1000.0, "rent": 400.0, "price": 1200.0, "slipways": 4.0},
+        # the technologies compared in chapter 2: CES with capital's weight 0.3 and sigma 0 (Leontief) to infinity
+        "techs": {"share": 0.3, "sigmas": (0.0, 0.5, 1.0, 2.0)},
+        # an industry of boatyards (chapter 8): each with total cost F + c q + d q^2 a month; boats demanded
+        # Q = 400 - 0.2 p; with free entry and identical yards, and with fixed costs spread over $2,000-$8,000
+        "industry": {"F": 4000.0, "c": 200.0, "d": 50.0, "demand": (400.0, 0.2), "fixed_range": (2000.0, 8000.0),
+                     "entrants": 200},
+        # rules of thumb under selection (chapter 9): 200 yards price at cost times (1 + markup), markups drawn
+        # uniform 0-100%; each faces demand with elasticity -3, so the profit-maximizing markup is 50%; a yard whose
+        # profit falls below zero three months running closes and is replaced by a copy of a survivor, slightly
+        # varied
+        "selection": {"yards": 200, "months": 120, "elasticity": -3.0, "noise": 0.15, "mutation": 0.03,
+                      "seed": 1950},
+        # hold-up (chapter 11): a body maker's specific investment i is worth 2 V sqrt(i) to the car maker, V = 10;
+        # at arm's length it gets half the surplus after investing
+        "holdup": {"V": 10.0, "theta": 0.5},
+        # Grossman-Hart-Moore (chapter 12): A's investment matters four times as much as B's; the asset's owner keeps
+        # 80% of its own investment's value outside the relationship
+        "ghm": {"va": 4.0, "vb": 1.0, "outside": 0.8},
+    },
 }
 
 

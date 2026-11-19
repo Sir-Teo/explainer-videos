@@ -106,3 +106,4 @@ publication, the copy that was read and the date the transcription was checked:
 | `barsky_1997` | the HRS income gambles; mean risk tolerance and EIS | 2026-11-19 |
 | `post_2008` | Deal or No Deal: the break-even effect | 2026-11-19 |
 | `mehra_prescott_1985` | the equity premium, about 6 points a year, 1889-1978 | 2026-11-19 |
+| `cobb_douglas_1928` | Cobb and Douglas's data, American manufacturing 1899-1922 (output, labour, capital, 1899 = 100), and Felipe and Adams's re-estimates | 2026-11-19 |
