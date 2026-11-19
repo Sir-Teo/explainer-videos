@@ -29,6 +29,7 @@ film that moves to a new vintage says so on screen.
 | `fred_MCOILBRENTEU.csv`, `fred_MCOILWTICO.csv` | crude oil prices, Brent (Europe) and West Texas Intermediate (Cushing, Oklahoma), dollars a barrel, monthly, May 1987 and January 1986 to October 2026 | U.S. Energy Information Administration, via FRED | public domain | 2026-11-19 |
 | `fred_APU0000717311.csv` | the average retail price of ground coffee (100%, ground roast, all sizes), U.S. city average, dollars a pound, monthly, January 1980 to October 2026 | U.S. Bureau of Labor Statistics, via FRED | public domain | 2026-11-19 |
 | `fred_APU000074714.csv` | the average retail price of regular unleaded gasoline, U.S. city average, dollars a gallon, monthly, January 1976 to October 2026 | U.S. Bureau of Labor Statistics, via FRED | public domain | 2026-11-19 |
+| `fred_CUSR0000SETA02.csv`, `fred_CUSR0000SETA01.csv` | the consumer price indexes for used cars and trucks and for new vehicles, U.S. city average (1982-84 = 100, seasonally adjusted), monthly, January 1953 to October 2026 | U.S. Bureau of Labor Statistics, via FRED | public domain | 2026-11-19 |
 | `wdi_2015_2025.csv` | World Development Indicators for the 217 economies (not aggregates), 2015-2025: GDP and GDP per head at market exchange rates (current US dollars) and at purchasing power parity (current international dollars), population, Gini index; with each economy's region and income group | World Bank (API, last updated 11 November 2026) | CC BY 4.0 | 2026-11-19 |
 | `hdr2025_1990_2023.csv` | Human Development Report 2025, composite indices time series: the HDI, life expectancy, expected and mean years of schooling, GNI per head (2021 PPP dollars), 1990-2023, for the 195 countries (aggregates dropped) | UNDP Human Development Report Office | CC BY 3.0 IGO | 2026-11-19 |
 | `warheads_1945_2026.csv` | estimated nuclear warhead stockpiles by country (military stockpiles; retired warheads queued for dismantlement excluded), 1945-2026 | Federation of American Scientists, "Estimated Global Nuclear Warhead Inventories", via Our World in Data (nuclear-warhead-stockpiles, updated 2026-05-13) | CC BY 4.0 (Our World in Data); FAS estimates cited | 2026-11-19 |
@@ -130,3 +131,9 @@ publication, the copy that was read and the date the transcription was checked:
 | `connor_2014` | Connor's long-run median and mean cartel overcharges (2014) | 2026-11-19 |
 | `boyer_kotchoni_2015` | Boyer and Kotchoni's bias-corrected mean and median overcharges | 2026-11-19 |
 | `merger_guidelines` | the HHI thresholds of the 2023 Merger Guidelines and the 2010 Horizontal Merger Guidelines | 2026-11-19 |
+| `akerlof_1970` | Akerlof's lemons paper: its pages, the three rejections and the Nobel | 2026-11-19 |
+| `efc_2010` | Einav, Finkelstein and Cullen's demand and cost estimates for Alcoa, and the welfare cost of selection | 2026-11-19 |
+| `cutler_zeckhauser_1998` | Harvard's PPO, 1992-97: the employee's charge, enrollment, the reform and the spiral; Cutler and Reber's welfare loss | 2026-11-19 |
+| `tyler_2000` | the GED's signalling value for young dropouts | 2026-11-19 |
+| `info_tests` | tests for private information: Chiappori and Salanié, Finkelstein and McGarry, Cabral and Hortaçsu | 2026-11-19 |
+| `hkk_2015` | Hackmann, Kolstad and Kowalski's mandate gain; Handel's inertia | 2026-11-19 |

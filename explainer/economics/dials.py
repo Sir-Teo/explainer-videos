@@ -278,6 +278,21 @@ DIALS = {d.key: d for d in [
                       "buyers ($65-140 million) and sales ($495-550 million)", 20.0, 12.0, 28.0,
                       where="Choices 13(3), p. 17", checked="2026-11-19"),
          )),
+    Dial("selection_cost", "welfare cost of adverse selection", "percent of the money at stake (each study's own "
+         "measure)", (13, 42), status="depends on the setting", checked="2026-11-19",
+         meaning="in employer health plans, adverse selection costs a few percent of what is at stake, small enough "
+                 "that subsidies to fix it can cost more than they save; where selection is stronger, as in individual "
+                 "markets, mandates gain more; and making people choose better can make selection worse",
+         estimates=(
+             Estimate("Einav, Finkelstein and Cullen", 2010, "structural", "Alcoa's employees: $9.55 a year each, as "
+                      "a share of the surplus at stake from efficient pricing", 3.0, where="NBER WP 14414, section "
+                      "4.3", checked="2026-11-19"),
+             Estimate("Cutler and Reber", 1998, "structural", "Harvard's employees after the 1995 reform, as a share "
+                      "of baseline spending", 3.0, 2.0, 4.0, where="QJE 113(2), abstract", checked="2026-11-19"),
+             Estimate("Hackmann, Kolstad and Kowalski", 2015, "structural", "Massachusetts's individual market: the "
+                      "gain per person from the mandate's reduction in selection", 4.1, where="AER 105(3), abstract",
+                      checked="2026-11-19"),
+         )),
     Dial("return_schooling", "return to a year of school", "proportional rise in earnings per year of schooling",
          (4, 38), status="settled within a range", checked="2026-11-19",
          meaning="a year of school raises earnings by roughly 6 to 15 percent, a return few investments match; "
@@ -634,6 +649,17 @@ SHOWN = {
          "contestability, limit pricing and predation, stated"),
         ("Azar, Schmalz and Tecu (2018); O'Brien and Salop (2000); Calvano et al. (2020); Assad et al. (2024)",
          "the frontier, stated with its dispute; the modified HHI is computed, no estimate is entered as a dial row"),
+    ],    13: [
+        ("Akerlof (1970); Spence (1973); Rothschild and Stiglitz (1976); Stiglitz and Weiss (1981); Cho and Kreps "
+         "(1987)", "theory, stated; every model is solved in Agora on the Island"),
+        ("Cutler and Zeckhauser (1998)", "Harvard's death spiral, shown from their figures (a transcribed table); "
+         "Cutler and Reber's welfare loss is a dial row"),
+        ("Tyler, Murnane and Willett (2000)", "the GED's signalling value, shown for its finding; not a dial"),
+        ("Chiappori and Salanié (2000); Finkelstein and McGarry (2006)", "tests for private information, shown for "
+         "their findings; the test is run on simulated drivers in Agora"),
+        ("Cabral and Hortaçsu (2010)", "eBay's feedback, shown for its direction; the reputation model is Agora's"),
+        ("Handel (2013)", "inertia and selection, stated as the frontier's counterpoint; not entered as a row"),
+        ("the CPI for used and new vehicles (BLS via FRED)", "data for the intermission, shown as history"),
     ],
 }
 

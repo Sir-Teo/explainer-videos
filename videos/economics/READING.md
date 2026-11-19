@@ -10,7 +10,7 @@ the series leaves out.
 Both *Parts* columns are found, not typed. *Planned* lists the parts whose entry in
 [`SYLLABUS.md`](SYLLABUS.md) names the book or paper; *Built* lists the parts whose scenes, compute step or
 README cite it (a dot: none yet). Fuller notes (editions, chapters, what each source was used for) are in each
-part's README, under *Sources*. Built so far: Parts 1–12.
+part's README, under *Sources*. Built so far: Parts 1–13.
 
 ## 1. The textbook spine
 
@@ -37,7 +37,7 @@ part's README, under *Sources*. Built so far: Parts 1–12.
 | Osborne | M. Osborne, *An Introduction to Game Theory* (2004) | 11 | 11 |
 | Krugman–Obstfeld–Melitz | P. Krugman, M. Obstfeld and M. Melitz, *International Economics* (12th ed., 2022) | 34–35 | · |
 | Mishkin | F. Mishkin, *The Economics of Money, Banking, and Financial Markets* (13th ed., 2022) | 26 | · |
-| Cabral | L. Cabral, *Introduction to Industrial Organization* (2nd ed., 2017) | 12 | 12 |
+| Cabral | L. Cabral, *Introduction to Industrial Organization* (2nd ed., 2017) | 12 | 12–13 |
 | Borjas | G. Borjas, *Labor Economics* (8th ed., 2020) | 38 | · |
 | Gruber | J. Gruber, *Public Finance and Public Policy* (7th ed., 2022) | 15, 41–42, 50 | 7 |
 | Ray | D. Ray, *Development Economics* (1998) | 46 | · |
@@ -47,12 +47,12 @@ part's README, under *Sources*. Built so far: Parts 1–12.
 
 | Short name | Book | Planned | Built |
 |---|---|---|---|
-| MWG | A. Mas-Colell, M. Whinston and J. Green, *Microeconomic Theory* (1995) | 5–9, 11, 13, 15, 18, 56 | 5–11 |
-| Kreps | D. Kreps, *Microeconomic Foundations I* (2013) | 5, 7, 9, 11, 56 | 5, 7, 9, 11–12 |
+| MWG | A. Mas-Colell, M. Whinston and J. Green, *Microeconomic Theory* (1995) | 5–9, 11, 13, 15, 18, 56 | 5–11, 13 |
+| Kreps | D. Kreps, *Microeconomic Foundations I* (2013) | 5, 7, 9, 11, 56 | 5, 7, 9, 11–13 |
 | Jehle–Reny | G. Jehle and P. Reny, *Advanced Microeconomic Theory* (3rd ed., 2011) | 5, 9 | 5–6, 9 |
 | Fudenberg–Tirole | D. Fudenberg and J. Tirole, *Game Theory* (1991) | 11–12, 53 | 11–12 |
 | Osborne–Rubinstein | M. Osborne and A. Rubinstein, *A Course in Game Theory* (1994) | 11 | 11 |
-| Bolton–Dewatripont | P. Bolton and M. Dewatripont, *Contract Theory* (2005) | 13–14 | · |
+| Bolton–Dewatripont | P. Bolton and M. Dewatripont, *Contract Theory* (2005) | 13–14 | 13 |
 | Krishna | V. Krishna, *Auction Theory* (2nd ed., 2010) | 16 | · |
 | Milgrom | P. Milgrom, *Putting Auction Theory to Work* (2004) | 16 | · |
 | Roth–Sotomayor | A. Roth and M. Sotomayor, *Two-Sided Matching* (1990) | 17 | · |
@@ -95,7 +95,7 @@ part's README, under *Sources*. Built so far: Parts 1–12.
 | Feenstra | R. Feenstra, *Advanced International Trade* (2nd ed., 2016) | 6, 35–36 | 6, 8 |
 | Cahuc–Carcillo–Zylberberg | P. Cahuc, S. Carcillo and A. Zylberberg, *Labor Economics* (2nd ed., 2014) | 24, 38 | · |
 | Atkinson–Stiglitz | A. Atkinson and J. Stiglitz, *Lectures on Public Economics* (1980; 2015) | 41 | 6 |
-| Salanié | B. Salanie, *The Economics of Taxation* (2nd ed., 2011) | 41 | · |
+| Salanié | B. Salanie, *The Economics of Taxation* (2nd ed., 2011) | 41 | 13 |
 | Banerjee–Duflo | A. Banerjee and E. Duflo, *Poor Economics* (2011) | 46 | · |
 | Persson–Tabellini | T. Persson and G. Tabellini, *Political Economics* (2000) | 47 | · |
 | Dhami | S. Dhami, *The Foundations of Behavioral Economic Analysis* (2016) | 45 | · |
@@ -159,9 +159,9 @@ part's README, under *Sources*. Built so far: Parts 1–12.
 
 | Model or result | Paper | Planned | Built |
 |---|---|---|---|
-| lemons | Akerlof (1970) | 13 | · |
+| lemons | Akerlof (1970) | 13 | 13 |
 | signalling | Spence (1973) | 13 | · |
-| screening in insurance | Rothschild and Stiglitz (1976) | 7, 13 | 7 |
+| screening in insurance | Rothschild and Stiglitz (1976) | 7, 13 | 7, 13 |
 | second-price auctions | Vickrey (1961) | 16 | · |
 | optimal auctions | Myerson (1981) | 16 | · |
 | stable matching | Gale and Shapley (1962) | 17 | · |
@@ -233,7 +233,7 @@ part's README, under *Sources*. Built so far: Parts 1–12.
 
 | Model or result | Paper | Planned | Built |
 |---|---|---|---|
-| human capital | Becker (1964); Mincer (1974) | 38 | · |
+| human capital | Becker (1964); Mincer (1974) | 38 | 13 |
 | the minimum wage | Card and Krueger (1994) | 4, 38 | 4 |
 | skills, tasks and technology | Autor, Levy and Murnane (2003); Acemoglu and Autor (2011) | 39 | · |
 | mobility and place | Chetty and others (2014) | 40, 42 | · |
@@ -279,6 +279,8 @@ part's README, under *Sources*. Built so far: Parts 1–12.
 **Part 11, *Games*.** Books: Martin Osborne, *An Introduction to Game Theory* (2004); Osborne and Rubinstein, *A Course in Game Theory* (1994); Drew Fudenberg and Jean Tirole, *Game Theory* (1991), chs. 1–5; Robert Gibbons, *A Primer in Game Theory* (1992); Thomas Schelling, *The Strategy of Conflict* (1960); Robert Axelrod, *The Evolution of Cooperation* (1984); Colin Camerer, *Behavioral Game Theory* (2003); Martin Nowak, *Evolutionary Dynamics* (2006). Papers: von Neumann (1928); Nash (1950, 1951); Flood (1952); Selten (1965, 1978); Harsanyi (1967–68); Aumann (1974); Maynard Smith and Price (1973); Brown (1951); Robinson (1951); Shapley (1964); Friedman (1971); Rubinstein (1982); Kreps, Milgrom, Roberts and Wilson (1982); Fudenberg and Maskin (1986); Axelrod (1980); Nowak and Sigmund (1993); Rosenthal (1981); McKelvey and Palfrey (1992); Güth, Schmittberger and Schwarze (1982); Henrich et al. (2001); Nagel (1995); Stahl and Wilson (1994); Camerer, Ho and Chong (2004); Chiappori, Levitt and Groseclose (2002); Palacios-Huerta (2003); Walker and Wooders (2001); Hart and Mas-Colell (2000); Erev and Roth (1998); Bowling et al. (2015); Brown and Sandholm (2018, 2019).
 
 **Part 12, *Competition among the Few*.** Books: Jean Tirole, *The Theory of Industrial Organization* (1988), chs. 5–9; Luís Cabral, *Introduction to Industrial Organization* (2nd ed., 2017); Dennis Carlton and Jeffrey Perloff, *Modern Industrial Organization*; Belleflamme and Peitz, *Industrial Organization: Markets and Strategies*; Massimo Motta, *Competition Policy: Theory and Practice* (2004); Whinston, *Lectures on Antitrust Economics* (2006); John Connor, *Global Price Fixing* (2nd ed., 2008); Kurt Eichenwald, *The Informant* (2000). Papers: Cournot (1838); Bertrand (1883); Edgeworth (1897); Hotelling (1929); Chamberlin (1933); Robinson (1933); von Stackelberg (1934); Stigler (1964); Williamson (1968); Friedman (1971); Dixit and Stiglitz (1977); Salop (1979); d'Aspremont, Gabszewicz and Thisse (1979); Dixit (1980); Kreps and Scheinkman (1983); Porter (1983); Salant, Switzer and Reynolds (1983); Green and Porter (1984); Fudenberg and Tirole (1984); Farrell and Shapiro (1990); Cowling and Waterson (1976); McGee (1958); Baumol, Panzar and Willig (1982); Milgrom and Roberts (1982); Kreps and Wilson (1982); Borenstein, Cameron and Gilbert (1997); Connor (1998, 2014); Levenstein and Suslow (2006); Boyer and Kotchoni (2015); O'Brien and Salop (2000); Azar, Schmalz and Tecu (2018); Dennis, Gerardi and Schenone (2022); Calvano et al. (2020); Assad et al. (2024).
+
+**Part 13, *Lemons and Signals*.** Books: Patrick Bolton and Mathias Dewatripont, *Contract Theory* (2005), chs. 2–3; Mas-Colell, Whinston and Green, ch. 13; Jean-Jacques Laffont and David Martimort, *The Theory of Incentives* (2002); Salanié, *The Economics of Contracts*; Liran Einav, Amy Finkelstein and Ray Fisman, *Risky Business* (2023); Einav and Finkelstein, JEP 25(1) (2011); Bryan Caplan, *The Case against Education* (2018). Papers: Akerlof (1970); Spence (1973); Rothschild and Stiglitz (1976); Riley (1979); Stiglitz and Weiss (1981); Cho and Kreps (1987); Hungerford and Solon (1987); Tyler, Murnane and Willett (2000); Cutler and Reber (1998); Cutler and Zeckhauser (1998); Chiappori and Salanié (2000); Finkelstein and Poterba (2004); Finkelstein and McGarry (2006); Cabral and Hortaçsu (2010); Einav, Finkelstein and Cullen (2010); Handel (2013); Einav, Finkelstein, Ryan, Schrimpf and Cullen (2013); Hackmann, Kolstad and Kowalski (2015); Angrist and Krueger (1991).
 
 ## 4. What the series leaves out
 

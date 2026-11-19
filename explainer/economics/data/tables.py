@@ -1396,6 +1396,116 @@ MERGER_GUIDELINES = Table(
 PART12 = (LYSINE_CONNOR_1998, CONNOR_2014, BOYER_KOTCHONI_2015, MERGER_GUIDELINES)
 
 
+
+# ---------------------------------------------------------------------------------------------------------------
+# Part 13: lemons and signals
+
+AKERLOF_1970 = Table(
+    key="akerlof_1970",
+    cite="George A. Akerlof, \"The Market for 'Lemons': Quality Uncertainty and the Market Mechanism\", Quarterly "
+         "Journal of Economics 84(3) (1970): 488-500; \"Writing 'The Market for Lemons': A Personal and Interpretive "
+         "Essay\" (Nobel Foundation, 2003)",
+    tag="Akerlof, QJE 84(3) (1970); Akerlof (2003)",
+    where="the article; the essay's account of its rejections, as excerpted in secondary sources",
+    read="the article; excerpts of the essay",
+    checked="2026-11-19",
+    data={"pages": (488, 500), "rejected_by": ("American Economic Review", "Review of Economic Studies",
+                                               "Journal of Political Economy"),
+          "aer_res": "turned down as trivial: the journals did not publish papers on such subjects",
+          "jpe": "the referees held it was wrong: if it were correct, no goods could be traded",
+          "nobel": 2001},
+    note="The essay recalls the Journal of Political Economy's editor's comment as \"If this is correct, economics "
+         "would be different\"; the exact wording is from the essay's secondary accounts.",
+)
+
+EFC_2010 = Table(
+    key="efc_2010",
+    cite="Liran Einav, Amy Finkelstein and Mark R. Cullen, \"Estimating Welfare in Insurance Markets Using Variation "
+         "in Prices\", Quarterly Journal of Economics 125(3) (2010): 877-921; NBER Working Paper 14414 (2008)",
+    tag="Einav, Finkelstein and Cullen, QJE 125(3) (2010)",
+    where="the working paper's Table 4 and section 4",
+    read="NBER Working Paper 14414 (October 2008)",
+    checked="2026-11-19",
+    data={"demand": (0.940, -0.00070), "demand_se": 0.00032, "cost": (391.690, 0.15524), "cost_se": 0.06388,
+          "n_demand": 3779, "n_cost": 2465, "p_eq": 463, "p_eff": 264, "share_drop_pp": 14, "gap_at_eq": 138,
+          "loss": 9.55, "loss_share_surplus": 0.03, "loss_share_max": 0.023, "max_at_stake": 414,
+          "price_range": (384, 659), "subsidy_cost": 45},
+    note="Alcoa's salaried workers with family coverage; the relative price of the more generous plan varied across "
+         "the company's divisions. Working-paper numbers; the published version's may differ slightly.",
+)
+
+CUTLER_ZECKHAUSER_1998 = Table(
+    key="cutler_zeckhauser_1998",
+    cite="David M. Cutler and Richard J. Zeckhauser, \"Adverse Selection in Health Insurance\", Frontiers in Health "
+         "Policy Research 1 (1998): 1-31; David M. Cutler and Sarah J. Reber, \"Paying for Health Insurance: The "
+         "Trade-Off between Competition and Adverse Selection\", Quarterly Journal of Economics 113(2) (1998): "
+         "433-466",
+    tag="Cutler and Zeckhauser (1998); Cutler and Reber, QJE 113(2) (1998)",
+    where="the Harvard section and figures 1.3-1.4 of the chapter; Cutler and Reber's abstract",
+    read="the chapter (NBER reprint); the article's abstract",
+    checked="2026-11-19",
+    data={"employees": 10000, "plans_from": 1992,
+          # the employee's extra charge for the PPO, 1996 dollars, family policy, and the PPO's share of employees
+          "path": ((1994, 450, 0.20), (1995, 1000, 0.15), (1996, 2000, 0.09)),
+          "charge_1992_94": (400, 500), "reform": "an equal contribution to every plan: half the employees in 1995, "
+                                                  "the rest in 1996",
+          "hmo_cut_1995": 1000, "ages_1995": (46, 51), "leavers_1996_healthier": 0.20, "disbanded": 1997,
+          "welfare_loss_share": (0.02, 0.04), "premium_cut": (0.05, 0.08)},
+    note="The 1994 charge is given as \"about $500\" and the 1996 one as \"more than $2,000\"; 1994's enrollment as "
+         "about 20% and 1996's as about 9%.",
+)
+
+TYLER_2000 = Table(
+    key="tyler_2000",
+    cite="John H. Tyler, Richard J. Murnane and John B. Willett, \"Estimating the Labor Market Signaling Value of the "
+         "GED\", Quarterly Journal of Economics 115(2) (2000): 431-468",
+    tag="Tyler, Murnane and Willett, QJE 115(2) (2000)",
+    where="the abstract",
+    read="the abstract and its citations",
+    checked="2026-11-19",
+    data={"white": (0.10, 0.19), "nonwhite": "no statistically discernible effect",
+          "design": "differences between states' passing standards", "sample": "16-21-year-old dropouts who "
+                                                                                "attempted the GED in 1990"},
+    note="The effect is for young white dropouts on the margin of passing.",
+)
+
+INFO_TESTS = Table(
+    key="info_tests",
+    cite="P.-A. Chiappori and B. Salanié, Journal of Political Economy 108(1) (2000): 56-78; A. Finkelstein and K. "
+         "McGarry, American Economic Review 96(4) (2006): 938-958; L. Cabral and A. Hortaçsu, Journal of Industrial "
+         "Economics 58(1) (2010): 54-78",
+    tag="Chiappori and Salanié (2000); Finkelstein and McGarry (2006); Cabral and Hortaçsu (2010)",
+    where="the abstracts",
+    read="the abstracts and their citations",
+    checked="2026-11-19",
+    data={"chiappori_salanie": "young French drivers (licensed less than three years): no correlation between "
+                               "comprehensive cover and accidents",
+          "finkelstein_mcgarry": "long-term care insurance: people's own beliefs predict both buying and using care, "
+                                 "but the cautious buy more and use less, so the insured are no likelier to use care",
+          "cabral_hortacsu": "eBay: after a seller's first negative feedback, weekly sales growth turns sharply "
+                             "negative, and later negatives arrive faster"},
+)
+
+HKK_2015 = Table(
+    key="hkk_2015",
+    cite="Martin B. Hackmann, Jonathan T. Kolstad and Amanda E. Kowalski, \"Adverse Selection and an Individual "
+         "Mandate: When Theory Meets Practice\", American Economic Review 105(3) (2015): 1030-1066; Benjamin R. "
+         "Handel, \"Adverse Selection and Inertia in Health Insurance Markets: When Nudging Hurts\", American Economic "
+         "Review 103(7) (2013): 2643-2682",
+    tag="Hackmann, Kolstad and Kowalski, AER 105(3) (2015); Handel, AER 103(7) (2013)",
+    where="the abstracts",
+    read="the abstracts",
+    checked="2026-11-19",
+    data={"hkk_gain": 0.041, "hkk_total_musd": 51.1, "hkk_penalty": 2190,
+          "handel_loss": 0.082, "handel": "reducing inertia by three quarters doubles the welfare loss from adverse "
+                                         "selection, to 8.2% of premiums"},
+    note="Hackmann et al.: the welfare gain per person from the Massachusetts mandate's reduction in adverse "
+         "selection, as a share of what the study measures (abstract).",
+)
+
+PART13 = (AKERLOF_1970, EFC_2010, CUTLER_ZECKHAUSER_1998, TYLER_2000, INFO_TESTS, HKK_2015)
+
+
 PART7 = (BERNOULLI_1738, SAMUELSON_1937, ALLAIS_1953, ELLSBERG_1961, RABIN_2000, THALER_1981, HOLT_LAURY_2005,
          HAYDEN_PLATT_2009, MADRIAN_SHEA_2001, THALER_BENARTZI_2004, BARSKY_1997, POST_2008, MEHRA_PRESCOTT_1985)
-ALL = {t.key: t for t in (*PART1, *PART3, *PART4, *PART5, *PART6, *PART7, *PART8, *PART9, *PART10, *PART11, *PART12)}
+ALL = {t.key: t for t in (*PART1, *PART3, *PART4, *PART5, *PART6, *PART7, *PART8, *PART9, *PART10, *PART11, *PART12, *PART13)}

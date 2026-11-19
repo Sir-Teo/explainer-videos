@@ -396,6 +396,33 @@ TRUTHS = {
         # rest of each airline is held either by one owner or by a thousand small ones
         "common": {"shares": (0.5, 0.5), "funds": 4, "stake": 0.07, "small": 1000},
     },
+    13: {
+        # used boats (chapters 1-2): a boat's quality, what it is worth to its owner, is uniform from $0 to $100; any
+        # buyer values it at that plus $30; Play it's offers
+        "boats": {"lo": 0.0, "hi": 100.0, "premium": 30.0, "offers": (80.0, 60.0, 40.0, 30.0, 20.0)},
+        # a guarantee (chapter 3): good boats worth $90, bad $30, half good; a repair costs $100; a good boat breaks
+        # with chance 0.1, a bad one with 0.7
+        "warranty": {"good": 90.0, "bad": 30.0, "share_good": 0.5, "fix": 100.0, "break_good": 0.1,
+                     "break_bad": 0.7},
+        # signalling (chapter 4): fishers of two kinds, landing 1 or 2 baskets a day; a season of schooling costs a
+        # weak fisher 1 basket a day and a strong one 0.5; half are strong
+        "spence": {"theta_low": 1.0, "theta_high": 2.0, "cost_low": 1.0, "cost_high": 0.5, "share_high": 0.5},
+        # screening (chapter 6): wealth 100, a storm that costs 60; careful boat owners lose with chance 0.1,
+        # careless ones with 0.4; 30% are careless
+        "screen": {"W": 100.0, "d": 60.0, "p_low": 0.1, "p_high": 0.4, "share_high": 0.3},
+        # the death spiral (chapter 7)
+        "spiral": {"n": 20000, "years": 5, "mean_extra": 300.0, "sd": 1.4, "value_mult": 1.5, "taste_mean": -600.0,
+                   "taste_sd": 800.0, "base_charge": 450.0, "seed": 1995},
+        # testing for private information (chapter 9): simulated drivers
+        "drivers": {"n": 20000, "seed": 2000},
+        # credit (chapter 10): two kinds of borrower and the bank's cost of chasing a failed loan
+        "credit": {"s_safe": 0.9, "y_safe": 160.0, "s_risky": 0.5, "y_risky": 130.0, "share_safe": 0.5,
+                   "collection_cost": 60.0},
+        # reputation (chapter 12): a new seller, honest with prior 0.6; honest sales go well 95% of the time, a
+        # cheat's 60%; three good reviews, one bad, then twelve good
+        "reputation": {"prior": 0.6, "honest_good": 0.95, "cheat_good": 0.6, "value_honest": 100.0,
+                       "value_cheat": 40.0, "feedback": (1,) * 3 + (0,) + (1,) * 12},
+    },
 }
 
 

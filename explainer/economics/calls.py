@@ -122,4 +122,16 @@ CALLS = {c.key: c for c in [
          ("G. J. Stigler, Journal of Political Economy 72(1) (1964): 44-61",
           "M. C. Levenstein and V. Y. Suslow, Journal of Economic Literature 44(1) (2006): 43-95, abstract and "
           "conclusion")),
+    Call("lemons_referees", 13, "the referees and editors who turned down Akerlof's paper", "before 1970",
+         "the paper was trivial (the American Economic Review and the Review of Economic Studies), or wrong: if it "
+         "were right, no goods could be traded (the Journal of Political Economy)",
+         "used cars are traded every day, so a theory in which quality uncertainty stops trade must be mistaken",
+         "the Quarterly Journal of Economics printed it in 1970; it became one of the most cited papers in economics, "
+         "and Akerlof shared the 2001 Nobel prize with Spence and Stiglitz for the analysis of markets with "
+         "asymmetric information; used goods do trade, through the guarantees, brand names and dealers that the "
+         "paper itself said grow up to counter the problem",
+         "wrong",
+         ("G. A. Akerlof, Quarterly Journal of Economics 84(3) (1970), the section \"Counteracting Institutions\"",
+          "G. A. Akerlof, \"Writing 'The Market for Lemons'\" (2003), as excerpted",
+          "The Nobel Foundation, the 2001 prize in economic sciences")),
 ]}

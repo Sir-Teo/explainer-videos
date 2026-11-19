@@ -127,11 +127,18 @@ FRED_SERIES["APU0000717311"] = ("Average price: coffee, 100%, ground roast, all 
 FRED_SERIES["APU000074714"] = ("Average price: gasoline, unleaded regular (cost per gallon/3.785 liters) in U.S. city "
                                "average", "dollars per gallon, not seasonally adjusted", "monthly",
                                "U.S. Bureau of Labor Statistics")
+# Part 13: lemons: the CPI for used cars and trucks, and for new vehicles (BLS)
+FRED_SERIES["CUSR0000SETA02"] = ("Consumer Price Index for All Urban Consumers: used cars and trucks in U.S. city "
+                                 "average", "index 1982-1984 = 100, seasonally adjusted", "monthly",
+                                 "U.S. Bureau of Labor Statistics")
+FRED_SERIES["CUSR0000SETA01"] = ("Consumer Price Index for All Urban Consumers: new vehicles in U.S. city average",
+                                 "index 1982-1984 = 100, seasonally adjusted", "monthly",
+                                 "U.S. Bureau of Labor Statistics")
 # The date each series was retrieved (its vintage); a series not listed was retrieved on DATASETS["fred"]["vintage"]
 FRED_RETRIEVED = {s: "2026-11-19" for s in (
     "GDPA", "GDIA", "PCECA", "GPDIA", "GCEA", "EXPGSA", "IMPGSA", "A033RC1A027NBEA", "A191RD3A086NBEA", "U1RATE",
     "U2RATE", "U4RATE", "U5RATE", "U6RATE", "CIVPART", "EMRATIO", "CPIAUCSL", "SUUR0000SA0", "PCEPI",
-    "LABSHPUSA156NRUG", "B230RC0A052NBEA", "PCECCA", "DPCERG3A086NBEA", "TB3MS", "MCOILBRENTEU", "MCOILWTICO", "APU0000717311", "APU000074714", *(f"{c}{t}" for c in PCE_CATEGORIES for t in ("RG3A086NBEA",
+    "LABSHPUSA156NRUG", "B230RC0A052NBEA", "PCECCA", "DPCERG3A086NBEA", "TB3MS", "MCOILBRENTEU", "MCOILWTICO", "APU0000717311", "APU000074714", "CUSR0000SETA02", "CUSR0000SETA01", *(f"{c}{t}" for c in PCE_CATEGORIES for t in ("RG3A086NBEA",
                                                                                          "RC1A027NBEA")))}
 
 SPF_FILES = ("median_rgdp_level", "median_rgdp_growth", "median_recess_level")
