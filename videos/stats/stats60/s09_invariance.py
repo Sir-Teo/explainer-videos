@@ -16,12 +16,19 @@ class Invariance(LectureMixin, StatsScene):
     def construct(self):
         self.card_voiceover("Chapter eight. Invariance: what stays the same across environments is what will stay the same "
                             "next time.", 8, r"Invariance", r"Causal structure as a guarantee", lit=(2016,))
+        self.ask("Invariant causal prediction selects predictors whose...",
+                 ["conditional law of $y$ is the same across environments", "correlation with $y$ is largest"], 0,
+                 say="Invariance across environments. Peters, Bühlmann and Meinshausen's invariant causal "
+                     "prediction selects which predictors?",
+                 reveal="Those given which the outcome's conditional distribution is the same in every environment. "
+                        "What stays the same across environments is what will stay the same next time.")
         self.idea()
         self.icp_method()
         self.icp_table()
         self.anchor()
         self.anchor_chart()
         self.irm()
+        self.answer()
 
     def idea(self):
         self.lad_voiceover(

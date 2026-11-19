@@ -9,6 +9,13 @@ class Interference(LectureMixin, StatsScene):
     def construct(self):
         self.card_voiceover("Chapter four. Interference: when one person's treatment affects another's outcome.", 4,
                             r"Interference and networks", r"Spillovers", lit=(2017,))
+        self.ask("An exposure mapping defines...",
+                 ["the treatment a unit effectively receives, given others' assignments", "a random effect"], 0,
+                 say="Interference: one person's treatment affects another's outcome. Aronow and Samii's exposure "
+                     "mappings define what?",
+                 reveal="The treatment each unit effectively receives, given its own and its neighbours' "
+                        "assignments, such as treated with a treated friend. Effects are then contrasts of "
+                        "exposures.")
         self.sutva()
         self.versions()
         self.exposure()
@@ -17,6 +24,7 @@ class Interference(LectureMixin, StatsScene):
         self.estimates()
         self.designs()
         self.dependence()
+        self.answer()
 
     def sutva(self):
         self.lad_voiceover(

@@ -7,6 +7,12 @@ class Identification(LectureMixin, StatsScene):
     def construct(self):
         self.card_voiceover("Chapter one. Identification theory: which causal effects can a graph and data determine?", 1,
                             r"Identification theory", r"Beyond the back door", lit=(1995,))
+        self.ask("If Pearl's do-calculus can't identify an effect from a graph, then...",
+                 ["no method can, from that graph alone", "a cleverer method might"], 0,
+                 say="Beyond the back door. Suppose Pearl's do-calculus can't identify a causal effect from a graph "
+                     "and the observed data. Could a cleverer method?",
+                 reveal="No: the do-calculus is complete, Shpitser and Pearl, and Huang and Valtorta, proved in "
+                        "2006. If it fails, the effect is not identified without more assumptions.")
         self.question()
         self.frontdoor()
         self.frontdoor_chart()
@@ -16,6 +22,7 @@ class Identification(LectureMixin, StatsScene):
         self.id_algorithm()
         self.balke()
         self.limits()
+        self.answer()
 
     def question(self):
         self.lad_voiceover(

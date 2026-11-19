@@ -9,12 +9,23 @@ class HeavyTails(LectureMixin, StatsScene):
     def construct(self):
         self.card_voiceover("Chapter four. Heavy tails in high dimensions: median-of-means tournaments.", 4,
                             r"Heavy tails in high dimensions", r"Sub-Gaussian with two moments", lit=(2019,))
+        self.ask("Two moments only, many dimensions. Sub-Gaussian error is achieved by...",
+                 ["the sample mean", "median-of-means tournaments"], 1,
+                 say="No adversary, but heavy tails: the data have only a finite variance, in many dimensions. "
+                     "Which estimator gets sub-Gaussian error?",
+                 reveal="Median-of-means tournaments, Lugosi and Mendelson's: as if the data were Gaussian, with "
+                        "two moments. The sample mean's error depends badly on the confidence level.")
         self.problem()
         self.mom()
         self.delta()
         self.chart()
         self.tournaments()
         self.catoni()
+        self.answer()
+        self.checkpoint([("Tukey's median: optimal error, but?", "exponential time to compute"),
+                         ("More than half adversarial: what can be output?", "a short list of candidates")],
+                        narration="Checkpoint. Robustness in high dimensions.",
+                        answers_narration="Exponential time. And a short list.")
 
     def problem(self):
         self.lad_voiceover(

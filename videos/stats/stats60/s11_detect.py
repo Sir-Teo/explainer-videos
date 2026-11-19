@@ -9,6 +9,12 @@ class Detect(LectureMixin, StatsScene):
     def construct(self):
         self.card_voiceover("Chapter ten. Detecting shift: has the world changed, and does it matter?", 10,
                             r"Detecting shift", r"Two-sample tests in many dimensions", lit=(2012,))
+        self.ask("The MMD two-sample test compares...",
+                 ["the means of kernel features", "only the raw means"], 0,
+                 say="Has the world changed? Gretton's maximum mean discrepancy test compares two samples in many "
+                     "dimensions. What does it compare?",
+                 reveal="The means of kernel features: with a characteristic kernel, every difference in "
+                        "distribution shows up. Calibrate it by permutation.")
         self.question()
         self.mmd()
         self.chart()
@@ -16,6 +22,7 @@ class Detect(LectureMixin, StatsScene):
         self.power()
         self.harmful()
         self.monitor()
+        self.answer()
 
     def question(self):
         self.lad_voiceover(

@@ -9,12 +9,19 @@ class Depth(LectureMixin, StatsScene):
     def construct(self):
         self.card_voiceover("Chapter one. Depth: Tukey's way to find the centre of a cloud of points, whatever a minority "
                             "of them do.", 1, r"Depth", r"The centre of a cloud", lit=(1975,))
+        self.ask("Tukey's median attains the optimal error under contamination in high dimensions. Computing it takes...",
+                 ["polynomial time", "time exponential in $d$"], 1,
+                 say="Tukey's depth finds the centre of a cloud whatever a minority of points do, with optimal "
+                     "error in high dimensions. How long does it take to compute?",
+                 reveal="Time exponential in the dimension. Robust or computable, not both, until 2016: the next "
+                        "chapter's breakthrough.")
         self.definition()
         self.map_chart()
         self.contaminated()
         self.breakdown()
         self.minimax()
         self.cost()
+        self.answer()
 
     def definition(self):
         self.lad_voiceover(

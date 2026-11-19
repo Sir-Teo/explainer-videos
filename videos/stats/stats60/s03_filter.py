@@ -9,6 +9,12 @@ class Filter(LectureMixin, StatsScene):
     def construct(self):
         self.card_voiceover("Chapter two. Efficient robust estimation in high dimensions: the filter.", 2,
                             r"Efficient high-dimensional robustness", r"Robust and computable", lit=(2016,))
+        self.ask("The filter removes points that lie...",
+                 ["along directions of unexpectedly large variance", "at random"], 0,
+                 say="Robust and computable: Diakonikolas and colleagues', and Lai, Rao and Vempala's, filter. "
+                     "Which points does it remove?",
+                 reveal="Points far out along directions of unexpectedly large variance: outliers that move the "
+                        "mean must also inflate the covariance somewhere, and the top eigenvector finds it.")
         self.problem()
         self.attack()
         self.idea()
@@ -16,6 +22,7 @@ class Filter(LectureMixin, StatsScene):
         self.chart()
         self.eps_chart()
         self.sos()
+        self.answer()
 
     def problem(self):
         self.lad_voiceover(

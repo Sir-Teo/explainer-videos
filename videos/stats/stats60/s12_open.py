@@ -7,6 +7,12 @@ class OpenProblems(LectureMixin, StatsScene):
     def construct(self):
         self.card_voiceover("Chapter eleven. Open problems in robustness and distribution shift.", 11, r"Open problems",
                             r"Where the guarantees stop")
+        self.ask("Guarantees under an arbitrary, unconstrained shift are...",
+                 ["impossible", "free"], 0,
+                 say="Where the guarantees stop. Without any assumption about how the distribution shifts, what can "
+                     "be guaranteed?",
+                 reveal="Nothing: an arbitrary shift can make any rule fail. Every method in this part trades an "
+                        "assumption for a guarantee.")
         self.map_()
         self.op_gaps()
         self.op_which()
@@ -14,6 +20,11 @@ class OpenProblems(LectureMixin, StatsScene):
         self.op_deep()
         self.op_inference()
         self.problems()
+        self.answer()
+        self.checkpoint([("DRO minimizes?", "worst-case risk over a ball of distributions"),
+                         ("ICP selects predictors whose?", "conditional law of $y$ is invariant across environments")],
+                        narration="Checkpoint. Worst cases and invariance.",
+                        answers_narration="Worst-case risk. And invariance.")
 
     def map_(self):
         hdr = [r"threat", r"assumption", r"method", r"guarantee"]

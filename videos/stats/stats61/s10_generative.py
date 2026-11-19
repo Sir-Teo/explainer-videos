@@ -9,6 +9,11 @@ class Generative(LectureMixin, StatsScene):
     def construct(self):
         self.card_voiceover("Chapter nine. Generative models and transport: learning a map from noise to data.", 9,
                             r"Generative models", r"From noise to data", lit=(2017,))
+        self.ask("Diffusion and flow-matching models learn...",
+                 ["a transport from noise to data", "a classifier"], 0,
+                 say="Generative models: from noise to data. What do diffusion and flow-matching models learn?",
+                 reveal="A transport: a velocity field that carries noise to data. Flow matching regresses it "
+                        "directly; whether such models generalize, or memorize, is open.")
         self.gans()
         self.penalty()
         self.flow_matching()
@@ -16,6 +21,7 @@ class Generative(LectureMixin, StatsScene):
         self.samples()
         self.steps_chart()
         self.theory()
+        self.answer()
 
     def gans(self):
         self.lad_voiceover(

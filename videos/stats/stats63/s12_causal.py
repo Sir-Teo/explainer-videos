@@ -9,6 +9,13 @@ class CausalFairness(LectureMixin, StatsScene):
     def construct(self):
         self.card_voiceover("Chapter eleven. Causal fairness: which paths from the group to the decision are allowed?", 11,
                             r"Causal fairness", r"Fair along which paths?", lit=(2017,))
+        self.ask("Counterfactual fairness asks whether the decision...",
+                 ["would be the same had the person's group been different", "gives equal rates across groups"], 0,
+                 say="Causal fairness: fair along which paths? What does Kusner and colleagues' counterfactual "
+                     "fairness ask?",
+                 reveal="Whether the decision would be the same in the counterfactual world where the person's "
+                        "group was different, with everything downstream changing accordingly. It needs a causal "
+                        "model.")
         self.limits()
         self.definition()
         self.graph()
@@ -16,6 +23,7 @@ class CausalFairness(LectureMixin, StatsScene):
         self.paths()
         self.critique()
         self.rules()
+        self.answer()
 
     def limits(self):
         self.lad_voiceover(

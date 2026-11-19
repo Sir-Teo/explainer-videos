@@ -9,6 +9,12 @@ class Regimes(LectureMixin, StatsScene):
     def construct(self):
         self.card_voiceover("Chapter six. Dynamic treatment regimes: rules that adapt as the patient changes.", 6,
                             r"Dynamic treatment regimes", r"Decisions in sequence", lit=(2003,))
+        self.ask("Q-learning for a two-stage treatment regime works...",
+                 ["backwards, last decision first", "forwards, first decision first"], 0,
+                 say="Decisions in sequence: a dynamic treatment regime with two stages. In which order does "
+                     "Q-learning solve it?",
+                 reveal="Backwards: find the best second-stage decision first, then the first stage, assuming the "
+                        "second is played well. Dynamic programming, estimated.")
         self.problem()
         self.gformula()
         self.qlearning()
@@ -16,6 +22,11 @@ class Regimes(LectureMixin, StatsScene):
         self.chart()
         self.smart()
         self.emulation()
+        self.answer()
+        self.checkpoint([("An exposure mapping defines?", "the effective treatment, given others' assignments"),
+                         ("Q-learning solves a two-stage regime?", "backwards, last decision first")],
+                        narration="Checkpoint. Spillovers and policies.",
+                        answers_narration="The effective treatment. And backwards.")
 
     def problem(self):
         self.lad_voiceover(

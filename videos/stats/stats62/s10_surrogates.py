@@ -9,12 +9,20 @@ class Surrogates(LectureMixin, StatsScene):
     def construct(self):
         self.card_voiceover("Chapter nine. Surrogates and long-term effects: answering a ten-year question in one year.", 9,
                             r"Surrogates", r"Short-term proxies for long-term effects", lit=(2019,))
+        self.ask("The surrogate index assumes the treatment affects the long-term outcome...",
+                 ["only through the surrogates", "not at all"], 0,
+                 say="Athey, Chetty, Imbens and Kang's surrogate index predicts a long-term outcome from short-term "
+                     "ones. What does it assume about the treatment?",
+                 reveal="That it affects the long-term outcome only through the surrogates, and that the "
+                        "observational data relating them is comparable. A check against real long-term outcomes "
+                        "earns the assumption.")
         self.problem()
         self.paradox()
         self.principal()
         self.index()
         self.chart()
         self.uses()
+        self.answer()
 
     def problem(self):
         self.lad_voiceover(

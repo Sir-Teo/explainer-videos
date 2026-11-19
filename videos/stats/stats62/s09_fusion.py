@@ -9,6 +9,12 @@ class Fusion(LectureMixin, StatsScene):
     def construct(self):
         self.card_voiceover("Chapter eight. Data fusion and transportability: carrying an effect to a new population.", 8,
                             r"Transportability", r"From the trial to the target", lit=(2016,))
+        self.ask("Transport a trial's effect to a target population by reweighting on...",
+                 ["effect modifiers whose distribution differs", "every measured variable"], 0,
+                 say="From the trial to the target. To carry a trial's average effect to a different population, "
+                     "reweight on what?",
+                 reveal="The effect modifiers whose distribution differs between trial and target. And assume none "
+                        "are missing, which no data can check.")
         self.problem()
         self.selection()
         self.formula()
@@ -17,6 +23,7 @@ class Fusion(LectureMixin, StatsScene):
         self.meta()
         self.sites()
         self.limits()
+        self.answer()
 
     def problem(self):
         self.lad_voiceover(

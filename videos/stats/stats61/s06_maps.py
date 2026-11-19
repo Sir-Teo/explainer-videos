@@ -9,6 +9,12 @@ class Maps(LectureMixin, StatsScene):
     def construct(self):
         self.card_voiceover("Chapter five. Estimating transport maps: not just how far, but where each point should go.", 5,
                             r"Estimating transport maps", r"From samples to a function", lit=(2021,))
+        self.ask("Brenier: for quadratic cost, the optimal transport map is...",
+                 ["the gradient of a convex function", "any measurable map"], 0,
+                 say="Brenier's theorem, 1991. For quadratic cost, between nice distributions, what is the optimal "
+                     "transport map?",
+                 reveal="The gradient of a convex function: the multivariate analogue of a monotone map. It's "
+                        "unique, and it's the starting point for multivariate ranks.")
         self.problem()
         self.minimax()
         self.regularity()
@@ -16,6 +22,7 @@ class Maps(LectureMixin, StatsScene):
         self.semidiscrete()
         self.chart()
         self.uses()
+        self.answer()
 
     def problem(self):
         self.lad_voiceover(

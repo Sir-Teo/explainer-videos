@@ -9,6 +9,18 @@ class Barycenters(LectureMixin, StatsScene):
     def construct(self):
         self.card_voiceover("Chapter six. Barycenters: averaging distributions by moving them, not by mixing them.", 6,
                             r"Barycenters", r"The Fr\'echet mean of laws", lit=(2011,))
+        self.wrong_idea("Averaging two distributions means mixing them",
+                        "A Wasserstein barycenter moves mass: two bumps average to one bump between them",
+                        narration="The usual way to average two distributions: mix them, half and half.",
+                        right_narration="A mixture keeps both bumps. The Wasserstein barycenter moves mass instead: "
+                                        "the average of a bump at minus five and a bump at five is one bump at "
+                                        "zero. Which average you want depends on the question.")
+        self.ask("The Wasserstein barycenter of $N(0, 1)$ and $N(0, 9)$ is...",
+                 ["$N(0, 5)$", "$N(0, 4)$", "their mixture"], 1,
+                 say="Averaging distributions by moving them. What's the Wasserstein barycenter of a normal with "
+                     "variance one and a normal with variance nine?",
+                 reveal="A normal with variance four: the standard deviations average, one and three to two. The "
+                        "mixture would keep both shapes; the barycenter is a typical member.")
         self.definition()
         self.chart()
         self.numbers()
@@ -16,6 +28,11 @@ class Barycenters(LectureMixin, StatsScene):
         self.computing()
         self.theory()
         self.uses()
+        self.answer()
+        self.checkpoint([(r"Empirical $W_1$ error in $d \ge 3$?", "$n^{-1/d}$: the curse"),
+                         ("Brenier's optimal map?", "the gradient of a convex function")],
+                        narration="Checkpoint. Rates and maps.",
+                        answers_narration="N to the minus one over d. And a convex gradient.")
 
     def definition(self):
         self.lad_voiceover(

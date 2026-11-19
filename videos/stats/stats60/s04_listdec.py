@@ -9,11 +9,18 @@ class ListDecoding(LectureMixin, StatsScene):
     def construct(self):
         self.card_voiceover("Chapter three. List-decodable learning: when most of the data are not what you want.", 3,
                             r"List-decodable learning", r"When the inliers are a minority", lit=(2017,))
+        self.ask("More than half the data are adversarial. A single robust estimate is...",
+                 ["still possible", "impossible: output a short list"], 1,
+                 say="When the inliers are a minority: more than half the data come from an adversary. Can any "
+                     "method give one good estimate?",
+                 reveal="No: the adversary can plant a fake cluster as convincing as the real one. List-decodable "
+                        "learning outputs a short list, one of which is close.")
         self.problem()
         self.chart()
         self.theory()
         self.lower()
         self.uses()
+        self.answer()
 
     def problem(self):
         self.lad_voiceover(

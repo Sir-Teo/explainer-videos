@@ -9,6 +9,12 @@ class Accounting(LectureMixin, StatsScene):
     def construct(self):
         self.card_voiceover("Chapter three. Accountants: how privacy losses add up over many releases.", 3,
                             r"Accountants", r"Adding up the privacy loss", lit=(2016, 2017))
+        self.ask("Advanced composition: the privacy loss of $k$ releases grows roughly like...",
+                 ["$k$", r"$\sqrt k$", r"$\log k$"], 1,
+                 say="Adding up the privacy loss. Release k statistics, each epsilon-private. Basic composition "
+                     "charges k epsilon. How does advanced composition say the loss really grows?",
+                 reveal="Roughly like root k, times epsilon, with a small delta: privacy losses are random and "
+                        "partly cancel. Rényi and zero-concentrated accountants track it more tightly still.")
         self.loss()
         self.advanced()
         self.renyi()
@@ -16,6 +22,11 @@ class Accounting(LectureMixin, StatsScene):
         self.chart()
         self.census()
         self.subsampling()
+        self.answer()
+        self.checkpoint([(r"$\varepsilon$-DP bounds an attacker's power by?", r"$e^\varepsilon$ times its size"),
+                         ("Advanced composition: the loss over $k$ releases grows like?", r"$\sqrt k$")],
+                        narration="Checkpoint. Privacy's promise.",
+                        answers_narration="E to the epsilon times its size. And root k.")
 
     def loss(self):
         self.lad_voiceover(

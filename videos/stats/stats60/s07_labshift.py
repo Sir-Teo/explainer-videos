@@ -9,6 +9,12 @@ class LabelShift(LectureMixin, StatsScene):
     def construct(self):
         self.card_voiceover("Chapter six. Label shift: when the mix of outcomes changes, but each outcome looks the same.", 6,
                             r"Label shift", r"Counting through a confused classifier", lit=(2018,))
+        self.ask("Label shift. Black-box shift estimation uses...",
+                 ["the classifier's confusion matrix", "the density ratio of $x$"], 0,
+                 say="Label shift: the mix of outcomes changes, but each outcome looks the same. How does black-box "
+                     "shift estimation recover the new mix?",
+                 reveal="Through the classifier's confusion matrix: invert it against the distribution of "
+                        "predictions on the unlabelled target. Counting through a confused classifier.")
         self.definition()
         self.cc_bias()
         self.bbse()
@@ -16,6 +22,7 @@ class LabelShift(LectureMixin, StatsScene):
         self.chart()
         self.board()
         self.recalibrate()
+        self.answer()
 
     def definition(self):
         d = load("labshift")

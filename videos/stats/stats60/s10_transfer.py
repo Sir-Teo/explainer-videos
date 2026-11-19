@@ -9,12 +9,18 @@ class Transfer(LectureMixin, StatsScene):
     def construct(self):
         self.card_voiceover("Chapter nine. Transfer learning: borrowing from a related problem, and knowing when not to.", 9,
                             r"Transfer learning", r"How much is the source worth?", lit=(2010,))
+        self.ask("Transfer from a source study helps when the parameters are...",
+                 ["close", "arbitrary"], 0,
+                 say="Transfer learning: borrow from a related problem. When does the source data help the target?",
+                 reveal="When the source and target parameters are close, as the Trans-Lasso's two-step estimator "
+                        "exploits. Otherwise the transfer hurts: negative transfer.")
         self.bound()
         self.exponent()
         self.translasso()
         self.chart()
         self.negative()
         self.domain()
+        self.answer()
 
     def bound(self):
         self.lad_voiceover(

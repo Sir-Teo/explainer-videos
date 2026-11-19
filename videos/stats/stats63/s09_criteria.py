@@ -9,12 +9,19 @@ class Criteria(LectureMixin, StatsScene):
     def construct(self):
         self.card_voiceover("Chapter eight. Fairness criteria: three conditional independences.", 8,
                             r"Fairness criteria", r"Independence, \ separation, \ sufficiency", lit=(2016,))
+        self.ask("A score calibrated within each group satisfies...",
+                 ["independence", "separation", "sufficiency"], 2,
+                 say="Three fairness criteria: independence, separation and sufficiency. A score that is calibrated "
+                     "within each group satisfies which?",
+                 reveal="Sufficiency: given the score, the outcome doesn't depend on the group. Separation "
+                        "equalizes error rates; independence equalizes the score's distribution.")
         self.setup_()
         self.three()
         self.data()
         self.table()
         self.calibration()
         self.pairs()
+        self.answer()
 
     def setup_(self):
         self.lad_voiceover(

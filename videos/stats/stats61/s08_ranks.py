@@ -9,6 +9,12 @@ class Ranks(LectureMixin, StatsScene):
     def construct(self):
         self.card_voiceover("Chapter seven. Multivariate ranks and quantiles: transport to a reference law.", 7,
                             r"Multivariate ranks", r"Center-outward, \ by transport", lit=(2017,))
+        self.ask("Centre-outward multivariate ranks are distribution-free under the null because...",
+                 ["they are transported to a fixed reference law", "they rank each coordinate"], 0,
+                 say="Multivariate ranks by transport: Hallin, del Barrio, Cuesta-Albertos and Matrán. Why are they "
+                     "distribution-free under the null?",
+                 reveal="Because the data are transported to a fixed reference law, the spherical uniform, so their "
+                        "ranks have a known distribution whatever the data's.")
         self.problem()
         self.definition()
         self.properties()
@@ -17,6 +23,7 @@ class Ranks(LectureMixin, StatsScene):
         self.test()
         self.board()
         self.power()
+        self.answer()
 
     def problem(self):
         self.lad_voiceover(

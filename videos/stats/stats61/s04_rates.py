@@ -9,6 +9,12 @@ class Rates(LectureMixin, StatsScene):
     def construct(self):
         self.card_voiceover("Chapter three. Empirical rates: how fast does a sample approach its law, in Wasserstein distance?", 3,
                             r"Empirical rates", r"The curse of dimensionality", lit=(1969,))
+        self.ask(r"In $d \ge 3$ dimensions, the empirical measure's $W_1$ error shrinks like...",
+                 ["$n^{-1/2}$", "$n^{-1/d}$"], 1,
+                 say="How fast does a sample approach its own law, in Wasserstein distance, in d dimensions, d at "
+                     "least three?",
+                 reveal="Like n to the minus one over d: the curse of dimensionality, Dudley's rate of 1969. "
+                        "Smoothing or slicing changes the question to escape it.")
         self.question()
         self.chart()
         self.why()
@@ -16,6 +22,11 @@ class Rates(LectureMixin, StatsScene):
         self.sliced()
         self.one_d()
         self.consequences()
+        self.answer()
+        self.checkpoint([("One-dimensional transport, convex cost?", "match sorted points in order"),
+                         ("$W_2$ between equal-variance normals?", "the distance between their means")],
+                        narration="Checkpoint. Transport on a line.",
+                        answers_narration="Sorted order. And the distance between the means.")
 
     def question(self):
         self.lad_voiceover(

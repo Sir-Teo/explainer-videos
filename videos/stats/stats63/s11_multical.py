@@ -9,6 +9,12 @@ class Multicalibration(LectureMixin, StatsScene):
     def construct(self):
         self.card_voiceover("Chapter ten. Multicalibration: calibrated for every group one can name.", 10,
                             r"Multicalibration", r"Sufficiency for many groups at once", lit=(2018,))
+        self.ask("Multicalibration asks for calibration...",
+                 ["overall only", "for every group in a rich class, at once"], 1,
+                 say="Calibrated for every group one can name. What does Hébert-Johnson and colleagues' "
+                     "multicalibration ask for?",
+                 reveal="Calibration within every group in a rich class, simultaneously, including intersections. "
+                        "Patching algorithms achieve it from data.")
         self.idea()
         self.algorithm()
         self.history()
@@ -16,6 +22,7 @@ class Multicalibration(LectureMixin, StatsScene):
         self.honest()
         self.conformal()
         self.family()
+        self.answer()
 
     def idea(self):
         self.lad_voiceover(

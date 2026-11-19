@@ -9,6 +9,12 @@ class Wasserstein(LectureMixin, StatsScene):
     def construct(self):
         self.card_voiceover("Chapter two. Wasserstein distances: a geometry on probability distributions.", 2,
                             r"Wasserstein distances", r"Distance, \ geodesics, \ curvature", lit=(1969,))
+        self.ask(r"$W_2$ between $N(\mu_1, \sigma^2)$ and $N(\mu_2, \sigma^2)$ is...",
+                 [r"$|\mu_1 - \mu_2|$", r"$(\mu_1 - \mu_2)^2$", "0"], 0,
+                 say="A geometry on distributions. What's the two-Wasserstein distance between two normals with the "
+                     "same variance and different means?",
+                 reveal="The distance between their means: just slide one onto the other. Unlike KL or total "
+                        "variation, the Wasserstein distance sees how far apart the mass is.")
         self.metric()
         self.kr()
         self.compare()
@@ -17,6 +23,7 @@ class Wasserstein(LectureMixin, StatsScene):
         self.gaussians()
         self.geodesic_chart()
         self.mccann()
+        self.answer()
 
     def metric(self):
         self.lad_voiceover(

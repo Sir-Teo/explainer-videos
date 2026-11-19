@@ -7,6 +7,12 @@ class OpenProblems(LectureMixin, StatsScene):
     def construct(self):
         self.card_voiceover("Chapter twelve. Open problems in privacy and fairness.", 12, r"Open problems",
                             r"Where the guarantees stop")
+        self.ask("Adding differential-privacy noise tends to hurt accuracy most for...",
+                 ["small groups", "all groups equally"], 0,
+                 say="Privacy and fairness together. Adding differential-privacy noise to counts or training: whose "
+                     "accuracy suffers most?",
+                 reveal="Small groups': the same noise is a larger fraction of a smaller count, and clipping cuts "
+                        "their gradients hardest. The two goals interact.")
         self.map_()
         self.op_inference()
         self.op_epsilon()
@@ -14,6 +20,11 @@ class OpenProblems(LectureMixin, StatsScene):
         self.op_dynamics()
         self.op_together()
         self.problems()
+        self.answer()
+        self.checkpoint([("Multicalibration asks for?", "calibration in every group of a rich class"),
+                         ("DP noise hurts which groups most?", "small ones")],
+                        narration="Checkpoint. The frontier.",
+                        answers_narration="Every group in the class. And small ones.")
 
     def map_(self):
         hdr = [r"the worry", r"the tool", r"what it costs"]

@@ -9,6 +9,12 @@ class Sensitivity(LectureMixin, StatsScene):
     def construct(self):
         self.card_voiceover("Chapter two. Partial identification and sensitivity: how wrong could the answer be?", 2,
                             r"Sensitivity and bounds", r"How much hidden confounding?", lit=(2006,))
+        self.ask("Without no unmeasured confounding, the ATE from observational data is...",
+                 ["point identified", "only partially identified: bounds"], 1,
+                 say="Drop the assumption of no unmeasured confounding. What can observational data say about the "
+                     "average treatment effect?",
+                 reveal="Only bounds: partial identification. A sensitivity model, such as Tan's marginal model, "
+                        "narrows them by saying how much hidden confounding is plausible.")
         self.manski()
         self.msm()
         self.nsw()
@@ -16,6 +22,7 @@ class Sensitivity(LectureMixin, StatsScene):
         self.inference()
         self.reading()
         self.others()
+        self.answer()
 
     def manski(self):
         self.lad_voiceover(
