@@ -132,6 +132,36 @@ TRUTHS = {
                      "spill": -0.08, "ability_on_wage": 0.25, "base": 2.0, "wage_noise": 0.30, "village_noise": 0.04,
                      "seed": 2013},
     },
+    # Part 5: what the islanders want (agora.consumer)
+    5: {
+        # the eleven budget lines of Play it, as (most fish, most coconuts) each one affords, in the order shown;
+        # chosen so that the lines cross often: a chooser who picks at random violates GARP on 97% of tries
+        "budgets": {"lines": ((6, 6), (12, 3), (4, 9), (9, 4), (3, 12), (7, 5), (5, 7), (11, 4), (4, 8), (10, 6),
+                              (6, 7))},
+        # four islanders choose on the same lines: Bo (Cobb-Douglas, 60% on fish, with a small tremble), Ana (fish
+        # and coconuts one for one, perfect complements), Chidi (perfect substitutes, a coconut worth 1.2 fish), and
+        # Dara on a distracted day (a point at random on each line)
+        "choosers": {"bo": {"kind": "cobb-douglas", "a": 0.6, "tremble": 0.12},
+                     "ana": {"kind": "complements", "a": 1.0, "b": 1.0, "tremble": 0.0},
+                     "chidi": {"kind": "substitutes", "a": 1.0, "b": 1.2, "tremble": 0.0},
+                     "dara": {"kind": "random"}, "seed": 1938},
+        # the money pump: a trader whose tastes go round in a circle (fish over coconut, coconut over cloth, cloth
+        # over fish) pays a coconut-shell coin for each swap up the circle
+        "pump": {"goods": ("fish", "coconut", "cloth"), "fee": 1, "rounds": 12},
+        # the coconut seller's bulk price: $2 each for the first 6, $1 each after; fish cost $2; Bo's income varies
+        "bulk": {"fish": 2.0, "first": 6, "price_first": 2.0, "price_after": 1.0},
+        # a village of 4,000 earners facing the EITC's 2008 schedule for one child (Saez 2010, table 1):
+        # potential earnings lognormal (median $12,000, sigma 0.6), quasilinear isoelastic effort cost; two
+        # elasticities of reported earnings, 0 (wage earners) and 1 (the self-employed)
+        "credit": {"people": 4000, "median": 12000.0, "sigma": 0.6, "elasticities": (0.0, 0.25, 1.0), "seed": 2010},
+        # Becker's 2,000 islanders who split $12 between fish and coconuts at random, whatever the price
+        "becker": {"people": 2000, "income": 12.0, "prices": (1.0, 1.5, 2.0, 3.0, 4.0, 6.0), "seed": 1962},
+        # the ferry survey (chapter 12): 2,000 trips, each a choice between the slow ferry and a faster one that saves
+        # 10, 20 or 30 minutes for an extra fare drawn between $0 and $15; travellers value time at $15 an hour, with
+        # logistic taste shocks (scale: 0.5 per dollar)
+        "ferry": {"trips": 2000, "saves": (10, 20, 30), "max_extra": 15.0, "value_of_time": 15.0, "scale": 0.5,
+                  "seed": 1974},
+    },
 }
 
 

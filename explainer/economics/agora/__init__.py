@@ -14,6 +14,16 @@ Modules so far:
   comparative advantage, and the competitive equilibrium of their trade.
 * :mod:`.signals` (Part 1): Hayek's tin market: many users who see only a price, a supply shock, the price that
   clears, and the cost of rationing the same cut without a price.
+* :mod:`.curves` (Part 2): straight-line supply and demand through elasticities; incidence; caps, floors and taxes.
+* :mod:`.accounts` (Part 3): the Island's input-output table; GDP by output, spending and income; Leontief's
+  inverse; value added in exports.
+* :mod:`.indices` (Part 3): Laspeyres, Paasche, Fisher and Tornqvist indexes, the exact Cobb-Douglas index,
+  chaining and drift.
+* :mod:`.econometrician` (Part 4): the fish market's simultaneous equations, least squares, the Wald estimator and
+  two-stage least squares, omitted ability, the apprenticeship by choice and by lottery, Lucas's islands, the
+  two-level village trial.
+* :mod:`.consumer` (Part 5): preferences and demand (corners and kinks included), WARP, SARP and GARP, Afriat's
+  index and inequalities, Varian's bounds, Bronars's power, Becker's random consumers, the EITC's kink.
 
 Conventions: a model is plain data plus functions; randomness comes from a ``numpy.random.Generator`` passed in or
 from a ``seed``; results are dicts of floats and lists, so a part's ``compute.py`` can cache them as they are.

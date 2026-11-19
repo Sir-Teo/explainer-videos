@@ -52,4 +52,13 @@ CALLS = {c.key: c for c in [
          "estimates missed it, many by thousands of dollars, and the specification tests could not say which",
          "wrong",
          ("R. J. LaLonde (1986), American Economic Review 76(4): 604-620, table 5",)),
+    Call("mcfadden_bart", 5, "Daniel McFadden's model of travellers' choices", "1973",
+         "BART, the San Francisco Bay Area's new rapid transit, would carry 6.3% of work trips (the official "
+         "projection, from a zone-level model, was about 15%)",
+         "a random-utility (logit) model of individual commuters' choices among car, bus and BART, estimated on a "
+         "survey of travellers before BART opened",
+         "BART carried 6.2% of work trips in 1975; McFadden re-interviewed the same travellers to check",
+         "right",
+         ("D. McFadden, \"The Path to Discrete-Choice Models\", Access 20 (2002)",
+          "D. McFadden, \"Economic Choices\", Nobel lecture, American Economic Review 91(3) (2001)")),
 ]}

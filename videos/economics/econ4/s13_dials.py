@@ -13,7 +13,7 @@ class Dials(VoiceoverScene):
     def construct(self):
         card(self, 11, r"The Dials: \ what is a year of school worth?", r"What do eleven natural experiments say, "
              r"and why do they disagree with the regressions?", "Chapter eleven. The Dials: what is a year of school "
-             "worth?", lit=("households",), scale=("person",), horizon=("a lifetime",))
+             "worth?", lit=("households",), scale=("person",), horizon=("a decade",))
         self.forest()
         self.weak()
         self.why()

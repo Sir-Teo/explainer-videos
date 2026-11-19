@@ -14,7 +14,7 @@ class Selection(VoiceoverScene):
     def construct(self):
         card(self, 5, r"Omitted variables and selection", r"Does school raise pay, or do able people do both?",
              "Chapter five. Omitted variables and selection.", lit=("households",), scale=("person",),
-             horizon=("a lifetime",))
+             horizon=("a decade",))
         self.records()
         self.formula()
         self.school()

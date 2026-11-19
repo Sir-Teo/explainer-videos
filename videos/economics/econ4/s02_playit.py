@@ -5,16 +5,6 @@ from videos.economics.econ4.common import *  # noqa: F403
 CAND_COLOR = {"A": OLSC, "B": "#F2B84B", "C": "#5DADEC", "D": "#F28C6F"}
 
 
-def countdown(radius: float = 0.42) -> VGroup:
-    t = ValueTracker(1.0)
-    back = Circle(radius=radius, stroke_color=GREY_D, stroke_width=5)
-    arc = always_redraw(lambda: Arc(radius=radius, start_angle=PI / 2, angle=-TAU * max(t.get_value(), 1e-3),
-                                    stroke_color=E.ACCENT, stroke_width=5).move_arc_center_to(back.get_center()))
-    g = VGroup(back, arc)
-    g.t = t
-    return g
-
-
 class PlayIt(VoiceoverScene):
     def construct(self):
         card(self, 1, r"Play it: \ find the demand curve", r"Which line through the cloud is the islanders' demand?",

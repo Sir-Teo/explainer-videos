@@ -490,4 +490,126 @@ LUCAS_1976 = Table(
 )
 
 PART4 = (MOORE_1914, LEAMER_1983, LALONDE_1986, CARD_2001, LUCAS_1976)
-ALL = {t.key: t for t in (*PART1, *PART3, *PART4)}
+# ---------------------------------------------------------------------------
+# Part 5
+# ---------------------------------------------------------------------------
+SAMUELSON_1938 = Table(
+    key="samuelson_1938",
+    cite="Paul A. Samuelson, \"A Note on the Pure Theory of Consumer's Behaviour\", Economica, New Series, 5(17): "
+         "61-71 (February 1938)",
+    tag="Samuelson, Economica (1938)",
+    where="the programme stated in the paper's opening pages",
+    read="the phrase as found by a full-text search of the article; its context from I. Moscati, \"Not a "
+         "behaviorist: Samuelson's contributions to utility theory in the Harvard years, 1936-1940\" (LSE eprint "
+         "90415, 2019), which warns against reading Samuelson as a strict behaviourist",
+    checked="2026-11-19",
+    data={"vestiges": "dropping off the last vestiges of the utility analysis"},
+)
+
+HARBAUGH_2001 = Table(
+    key="harbaugh_2001",
+    cite="William T. Harbaugh, Kate Krause and Timothy R. Berry, \"GARP for Kids: On the Development of Rational "
+         "Choice Behavior\", American Economic Review 91(5): 1539-1545 (2001)",
+    tag="Harbaugh, Krause and Berry, AER (2001), tables 1-2",
+    where="section III (protocol) and tables 1 and 2",
+    read="the authors' copy (harbaugh.uoregon.edu)",
+    checked="2026-11-19",
+    data={"sets": 11, "goods": ("bags of potato chips", "boxes of fruit juice"),
+          "groups": {"second graders": {"n": 31, "age": 7, "violations": 4.3, "afriat": 0.93, "zero": 0.26},
+                     "sixth graders": {"n": 42, "age": 11, "violations": 2.1, "afriat": 0.96, "zero": 0.62},
+                     "undergraduates": {"n": 55, "age": 21, "violations": 2.0, "afriat": 0.94, "zero": 0.65},
+                     "random (uniform)": {"violations": 8.91, "afriat": 0.648},
+                     "random (bootstrap)": {"violations": 8.29, "afriat": 0.749, "zero": 0.02}},
+          "animals": {"rats": 0.87, "pigeons": 0.81}},
+    note="'zero' is the share of each group with no GARP violations (table 2). The animals line is Harbaugh et al.'s "
+         "summary of Kagel, Battalio and Green (1995): the share that reduced consumption of a good after an "
+         "income-compensated rise in its price.",
+)
+
+CHOI_2007 = Table(
+    key="choi_2007",
+    cite="Syngjoo Choi, Raymond Fisman, Douglas Gale and Shachar Kariv, \"Consistency and Heterogeneity of "
+         "Individual Behavior under Uncertainty\", American Economic Review 97(5): 1921-1938 (2007)",
+    tag="Choi, Fisman, Gale and Kariv, AER (2007)",
+    where="the published results as reported by Choi, Kariv, Mueller and Silverman (2014), footnote 5; the random "
+          "benchmarks from the working paper's section 3",
+    read="Choi et al. (2014), AER version (eml.berkeley.edu/~kariv); the working paper CFGK_I.pdf",
+    checked="2026-11-19",
+    data={"subjects": 93, "budgets": 50, "above_95": 60, "mean_ccei": 0.954,
+          "random": {"budgets_50": {"mean_ccei": 0.60, "above_90_of_25000": 12},
+                     "budgets_25": {"consistent": 0.043, "above_95": 0.143, "above_90": 0.289},
+                     "budgets_10": {"consistent": 0.202, "above_95": 0.373, "above_90": 0.506}}},
+)
+
+CKMS_2014 = Table(
+    key="ckms_2014",
+    cite="Syngjoo Choi, Shachar Kariv, Wieland Mueller and Dan Silverman, \"Who Is (More) Rational?\", American "
+         "Economic Review 104(6): 1518-1550 (2014)",
+    tag="Choi, Kariv, Mueller and Silverman, AER (2014)",
+    where="sections I-III; the introduction for the wealth result",
+    read="the AER version (eml.berkeley.edu/~kariv/CKMS_I_AER.pdf)",
+    checked="2026-11-19",
+    data={"subjects": 1182, "budgets": 25, "mean_ccei": 0.881, "panel": "CentERpanel, the Netherlands",
+          "gaps": {"low income": 3.3, "low education": 2.6, "women": 2.4, "old": 5.1},
+          "wealth_per_sd": (0.15, 0.19)},
+    note="'gaps': how many more percentage points of their budgets each group leaves on the table than its "
+         "comparison group (high income, high education, men, young).",
+)
+
+ANDREONI_MILLER_2002 = Table(
+    key="andreoni_miller_2002",
+    cite="James Andreoni and John Miller, \"Giving According to GARP: An Experimental Test of the Consistency of "
+         "Preferences for Altruism\", Econometrica 70(2): 737-753 (2002)",
+    tag="Andreoni and Miller, Econometrica (2002)",
+    where="the introduction and section 2",
+    read="the published article (econweb.ucsd.edu)",
+    checked="2026-11-19",
+    data={"subjects": 176, "consistent": 0.98, "selfish": 0.25},
+    note="'consistent': over 98% made choices consistent with utility maximization; 'selfish': about a quarter were "
+         "selfish money-maximizers.",
+)
+
+CHEN_2023 = Table(
+    key="chen_2023",
+    cite="Yiting Chen, Tracy Xiao Liu, You Shan and Songfa Zhong, \"The Emergence of Economic Rationality of GPT\", "
+         "Proceedings of the National Academy of Sciences 120(51) (2023); arXiv 2305.12763",
+    tag="Chen, Liu, Shan and Zhong, PNAS (2023)",
+    where="section 3 (rationality score) and figure D1",
+    read="arXiv 2305.12763v3 (6 November 2023)",
+    checked="2026-11-19",
+    data={"gpt": {"risk": 0.998, "time": 0.997, "social": 0.997, "food": 0.999},
+          "humans": {"risk": 0.980, "time": 0.985, "social": 0.967, "food": 0.963},
+          "literature": {"low": 0.81, "high": 0.99, "mean": 0.918}},
+)
+
+SAEZ_2010 = Table(
+    key="saez_2010",
+    cite="Emmanuel Saez, \"Do Taxpayers Bunch at Kink Points?\", American Economic Journal: Economic Policy 2(3): "
+         "180-212 (2010)",
+    tag="Saez, AEJ: Policy (2010)",
+    where="the introduction and table 1, panel B",
+    read="the author's copy (eml.berkeley.edu/~saez)",
+    checked="2026-11-19",
+    data={"one_child_2008": {"phase_in": (0, 8580, 0.34), "plateau": (8580, 15740), "phase_out": (15740, 33995,
+                                                                                                  0.16)},
+          "two_children_2008": {"phase_in": (0, 12060, 0.40), "plateau": (12060, 15740), "phase_out": (15740,
+                                                                                                    38646, 0.21)},
+          "elasticity": {"all": 0.25, "self_employed": 1.0, "wage_earners": 0.0}},
+    note="Dollars of 2008. The elasticities are of reported earnings, implied by the bunching at the first kink.",
+)
+
+MCFADDEN_BART = Table(
+    key="mcfadden_bart",
+    cite="Daniel McFadden, \"The Path to Discrete-Choice Models\", Access 20 (Spring 2002), from his Nobel lecture "
+         "\"Economic Choices\", American Economic Review 91(3) (2001)",
+    tag="McFadden, Access 20 (2002)",
+    where="the BART forecast",
+    read="Access magazine's article (accessmagazine.org); the Library of Economics and Liberty's biography",
+    checked="2026-11-19",
+    data={"official": 0.15, "mcfadden": 0.063, "actual": 0.062, "year_forecast": 1973, "year_actual": 1975},
+    note="Shares of work trips taken on BART in the San Francisco Bay Area.",
+)
+
+PART5 = (SAMUELSON_1938, HARBAUGH_2001, CHOI_2007, CKMS_2014, ANDREONI_MILLER_2002, CHEN_2023, SAEZ_2010,
+         MCFADDEN_BART)
+ALL = {t.key: t for t in (*PART1, *PART3, *PART4, *PART5)}

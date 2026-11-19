@@ -10,7 +10,7 @@ the series leaves out.
 Both *Parts* columns are found, not typed. *Planned* lists the parts whose entry in
 [`SYLLABUS.md`](SYLLABUS.md) names the book or paper; *Built* lists the parts whose scenes, compute step or
 README cite it (a dot: none yet). Fuller notes (editions, chapters, what each source was used for) are in each
-part's README, under *Sources*. Built so far: Parts 1–4.
+part's README, under *Sources*. Built so far: Parts 1–5.
 
 ## 1. The textbook spine
 
@@ -28,7 +28,7 @@ part's README, under *Sources*. Built so far: Parts 1–4.
 
 | Short name | Book | Planned | Built |
 |---|---|---|---|
-| Varian | H. Varian, *Intermediate Microeconomics* (9th ed., 2014) | 2, 6, 8, 10 | 2 |
+| Varian | H. Varian, *Intermediate Microeconomics* (9th ed., 2014) | 2, 6, 8, 10 | 2, 5 |
 | Nicholson–Snyder | W. Nicholson and C. Snyder, *Microeconomic Theory* (13th ed., 2021) | 5–6 | · |
 | Jones | C. I. Jones, *Macroeconomics* (6th ed., 2023) | 20 | · |
 | Blanchard | O. Blanchard, *Macroeconomics* (8th ed., 2021) | 27, 32 | · |
@@ -47,9 +47,9 @@ part's README, under *Sources*. Built so far: Parts 1–4.
 
 | Short name | Book | Planned | Built |
 |---|---|---|---|
-| MWG | A. Mas-Colell, M. Whinston and J. Green, *Microeconomic Theory* (1995) | 5–9, 13, 15, 18, 56 | · |
-| Kreps | D. Kreps, *Microeconomic Foundations I* (2013) | 5, 7, 9, 56 | · |
-| Jehle–Reny | G. Jehle and P. Reny, *Advanced Microeconomic Theory* (3rd ed., 2011) | 5, 9 | · |
+| MWG | A. Mas-Colell, M. Whinston and J. Green, *Microeconomic Theory* (1995) | 5–9, 13, 15, 18, 56 | 5 |
+| Kreps | D. Kreps, *Microeconomic Foundations I* (2013) | 5, 7, 9, 56 | 5 |
+| Jehle–Reny | G. Jehle and P. Reny, *Advanced Microeconomic Theory* (3rd ed., 2011) | 5, 9 | 5 |
 | Fudenberg–Tirole | D. Fudenberg and J. Tirole, *Game Theory* (1991) | 11, 53 | · |
 | Osborne–Rubinstein | M. Osborne and A. Rubinstein, *A Course in Game Theory* (1994) | 11 | · |
 | Bolton–Dewatripont | P. Bolton and M. Dewatripont, *Contract Theory* (2005) | 13–14 | · |
@@ -133,7 +133,7 @@ part's README, under *Sources*. Built so far: Parts 1–4.
 
 | Model or result | Paper | Planned | Built |
 |---|---|---|---|
-| revealed preference | Samuelson (1938); Afriat (1967); Varian (1982) | 5 | · |
+| revealed preference | Samuelson (1938); Afriat (1967); Varian (1982) | 5 | 5 |
 | expected utility | von Neumann and Morgenstern (1944) | 7 | · |
 | prospect theory | Kahneman and Tversky (1979) | 45 | · |
 | present bias | Laibson (1997) | 45 | · |
@@ -263,6 +263,8 @@ part's README, under *Sources*. Built so far: Parts 1–4.
 **Part 3, *The Measure*.** Books: Diane Coyle, *GDP: A Brief but Affectionate History* (2014); François Lequiller and Derek Blades, *Understanding National Accounts* (OECD, 2nd ed., 2014); N. Gregory Mankiw, *Macroeconomics*, ch. 2, "The Data of Macroeconomics"; Wassily Leontief, *Input-Output Economics* (2nd ed., 1986). Papers: Kuznets et al., *National Income, 1929–32* (1934); Petty, *Verbum Sapienti* (1665); Boskin et al. (1996); Lebow and Rudd (2003), *JEL* 41; Moulton (2018), Brookings; Deaton and Heston (2010), *AEJ: Macro* 2; Jones and Klenow (2016), *AER* 106; Nordhaus and Tobin (1972); Piketty, Saez and Zucman (2018), *QJE* 133; Corrado, Hulten and Sichel (2009); Henderson, Storeygard and Weil (2012), *AER* 102; Martinez (2022), *JPE* 130.
 
 **Part 4, *The Evidence*.** Books: Joshua Angrist and Jörn-Steffen Pischke, *Mostly Harmless Econometrics* (2009) and *Mastering 'Metrics* (2014); James Stock and Mark Watson, *Introduction to Econometrics*, chs. 1–3, 12–13; Scott Cunningham, *Causal Inference: The Mixtape* (2021); Daron Acemoglu, David Laibson and John List, *Economics*, ch. 2. Papers: Working (1927), *QJE* 41; Wright (1928), Appendix B; Stock and Trebbi (2003), *JEP* 17; Haavelmo (1944); Leamer (1983), *AER* 73; LaLonde (1986), *AER* 76; Lucas (1976); Angrist (1990); Angrist and Krueger (1991); Card and Krueger (1994); Imbens and Angrist (1994); Bound, Jaeger and Baker (1995); Staiger and Stock (1997); Card (2001), *Econometrica* 69; Deaton, Imbens and Heckman (2010), *JEL* 48; Angrist and Pischke (2010), *JEP* 24; Crépon et al. (2013), *QJE* 128; Egger et al. (2022) and Muralidharan et al. (2023), *Econometrica*.
+
+**Part 5, *What People Want*.** Books: Hal Varian, *Intermediate Microeconomics*, chs. 2–7; Andreu Mas-Colell, Michael Whinston and Jerry Green, *Microeconomic Theory*, chs. 1–3; David Kreps, *Microeconomic Foundations I*, chs. 1–4; Jehle and Reny, *Advanced Microeconomic Theory*, ch. 1; Christopher Chambers and Federico Echenique, *Revealed Preference Theory* (2016). Papers: Samuelson (1938), *Economica* 5; Houthakker (1950), *Economica* 17; Debreu (1954); Afriat (1967), *IER* 8; Varian (1982), *Econometrica* 50; Bronars (1987); Becker (1962), *JPE* 70; Harbaugh, Krause and Berry (2001); Andreoni and Miller (2002); Choi et al. (2007, 2014), *AER*; Saez (2010); Blundell, Browning and Crawford (2008); McFadden (1974); Kitamura and Stoye (2018); Chen, Liu, Shan and Zhong (2023), *PNAS*.
 
 ## 4. What the series leaves out
 

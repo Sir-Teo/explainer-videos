@@ -87,12 +87,31 @@ FRED_SERIES = {
     # Part 3: the labour share (Penn World Table, via FRED)
     "LABSHPUSA156NRUG": ("Share of labour compensation in GDP at current national prices for the United States",
                          "ratio", "annual", "Penn World Table, Groningen Growth and Development Centre"),
+    # Part 5: the population, for spending per head
+    "B230RC0A052NBEA": ("Population (midperiod)", "thousands of persons", "annual", "U.S. Bureau of Economic Analysis"),
 }
+# Part 5: personal consumption expenditures by type of product (NIPA tables 2.4.4 and 2.4.5), annual, 1929 on: the
+# fifteen categories that make up all of PCE, each as a price index (2017 = 100) and as spending (billions of dollars)
+PCE_CATEGORIES = {
+    "DMOT": "motor vehicles and parts", "DFDH": "furnishings and durable household equipment",
+    "DREQ": "recreational goods and vehicles", "DODG": "other durable goods",
+    "DFXA": "food and beverages purchased for off-premises consumption", "DCLO": "clothing and footwear",
+    "DGOE": "gasoline and other energy goods", "DONG": "other nondurable goods", "DHUT": "housing and utilities",
+    "DHLC": "health care", "DTRS": "transportation services", "DRCA": "recreation services",
+    "DFSA": "food services and accommodations", "DIFS": "financial services and insurance",
+    "DOTS": "other services (including nonprofit institutions' final consumption)",
+}
+for _c, _name in PCE_CATEGORIES.items():
+    FRED_SERIES[f"{_c}RG3A086NBEA"] = (f"Personal consumption expenditures: {_name} (chain-type price index)",
+                                       "index 2017 = 100", "annual", "U.S. Bureau of Economic Analysis")
+    FRED_SERIES[f"{_c}RC1A027NBEA"] = (f"Personal consumption expenditures: {_name}", "billions of dollars", "annual",
+                                       "U.S. Bureau of Economic Analysis")
 # The date each series was retrieved (its vintage); a series not listed was retrieved on DATASETS["fred"]["vintage"]
 FRED_RETRIEVED = {s: "2026-11-19" for s in (
     "GDPA", "GDIA", "PCECA", "GPDIA", "GCEA", "EXPGSA", "IMPGSA", "A033RC1A027NBEA", "A191RD3A086NBEA", "U1RATE",
     "U2RATE", "U4RATE", "U5RATE", "U6RATE", "CIVPART", "EMRATIO", "CPIAUCSL", "SUUR0000SA0", "PCEPI",
-    "LABSHPUSA156NRUG")}
+    "LABSHPUSA156NRUG", "B230RC0A052NBEA", *(f"{c}{t}" for c in PCE_CATEGORIES for t in ("RG3A086NBEA",
+                                                                                         "RC1A027NBEA")))}
 
 SPF_FILES = ("median_rgdp_level", "median_rgdp_growth", "median_recess_level")
 SPF_URL = ("https://www.philadelphiafed.org/-/media/frbp/assets/surveys-and-data/survey-of-professional-forecasters/"
@@ -327,6 +346,30 @@ def fred(series: str) -> dict:
 
 
 @functools.lru_cache(maxsize=None)
+def pce_by_type(first: int = 1929, last: int = 2025) -> dict:
+    """America's spending as one consumer's choices: for each year, the fifteen PCE categories' price indexes
+    (2017 = 100) and quantities per head (spending in dollars per person divided by the price index, so in 2017
+    dollars per person).  Returns ``{"years", "codes", "names", "prices" (n x 15), "quantities" (n x 15),
+    "spending" (n x 15, dollars per head), "population" (thousands)}``."""
+    import numpy as _np  # noqa: PLC0415
+
+    def annual(series):
+        d = fred(series)
+        return {int(t[:4]): v for t, v in zip(d["date"], d["value"])}
+
+    pop = annual("B230RC0A052NBEA")
+    years = list(range(first, last + 1))
+    codes = list(PCE_CATEGORIES)
+    price = {c: annual(f"{c}RG3A086NBEA") for c in codes}
+    spend = {c: annual(f"{c}RC1A027NBEA") for c in codes}
+    P = _np.array([[price[c][y] for c in codes] for y in years], float)
+    E = _np.array([[spend[c][y] for c in codes] for y in years], float) * 1e9 / (
+        _np.array([pop[y] for y in years], float)[:, None] * 1e3)
+    return {"years": years, "codes": codes, "names": [PCE_CATEGORIES[c] for c in codes], "prices": P,
+            "quantities": E / P * 100.0, "spending": E, "population": [pop[y] for y in years]}
+
+
+@functools.lru_cache(maxsize=None)
 def spf() -> list[dict]:
     """Median forecasts from each survey of 2006-2011: ``[{"year", "quarter", "rgdp_a", "rgdp_b", "growth_q": [...],
     "recess": [...]}]``.  ``rgdp_a``, ``rgdp_b``: the median forecast of the annual-average level of real GDP in the
@@ -481,8 +524,9 @@ def _fmt(x) -> str:
     return f"{float(x):.4f}".rstrip("0").rstrip(".")
 
 
-def refresh_fred() -> None:
-    for s in FRED_SERIES:
+def refresh_fred(series=None) -> None:
+    """Download FRED's series again (all of them, or just ``series``) and rewrite the extracts."""
+    for s in (series or FRED_SERIES):
         raw = RAW / f"fred_{s}.csv"
         _download(DATASETS["fred"]["url"].format(s), raw)
         with open(raw, newline="") as f:

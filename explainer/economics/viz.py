@@ -28,7 +28,7 @@ from explainer.economics.style import DESIGN_COLOR, DIAL_STATUS, E
 from explainer.psychology.viz import CARD_FILL, PANEL_FILL, flow_chain, heading, hist, panel, point_cards, quadrant  # noqa: F401
 
 __all__ = ["person", "islander", "palm", "fish_glyph", "coconut", "island_shape", "cart", "loaf", "pin_glyph", "coin",
-           "scissors_logo", "game_stage", "trader_card", "step_curve", "market_steps", "SECTORS", "PIPES", "tableau_map", "flowing",
+           "scissors_logo", "game_stage", "countdown", "trader_card", "step_curve", "market_steps", "SECTORS", "PIPES", "tableau_map", "flowing",
            "SECTOR_SIZE", "study_card", "dial_face", "dial_board", "fact_card", "call_card", "is_ought_card", "quote_card",
            "source_card", "point_cards", "flow_chain", "quadrant", "heading", "panel", "hist", "CARD_FILL",
            "PANEL_FILL", "accent_card", "dial_card"]
@@ -202,6 +202,18 @@ def game_stage(width: float = 9.0, height: float = 5.0, tag: str = r"Play it", c
     tg.move_to(plate)
     g = VGroup(box, plate, tg).move_to(center)
     g.box, g.tag = box, VGroup(plate, tg)
+    return g
+
+
+def countdown(radius: float = 0.42) -> VGroup:
+    """A ring that empties while the viewer thinks (Play it): add ``ring[1]`` (the arc, which redraws itself), then
+    animate ``ring.t`` from 1 to 0."""
+    t = ValueTracker(1.0)
+    back = Circle(radius=radius, stroke_color=GREY_D, stroke_width=5)
+    arc = always_redraw(lambda: Arc(radius=radius, start_angle=PI / 2, angle=-TAU * max(t.get_value(), 1e-3),
+                                    stroke_color=E.ACCENT, stroke_width=5).move_arc_center_to(back.get_center()))
+    g = VGroup(back, arc)
+    g.t = t
     return g
 
 

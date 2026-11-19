@@ -9,7 +9,7 @@ PA = "#5DADEC"
 class Credibility(VoiceoverScene):
     def construct(self):
         card(self, 7, r"The credibility revolution", r"Where can you find an experiment nobody designed?",
-             "Chapter seven. The credibility revolution.", scale=("person", "nation"), horizon=("a lifetime",))
+             "Chapter seven. The credibility revolution.", scale=("person", "nation"), horizon=("a decade",))
         self.lottery()
         self.birthdays()
         self.border()

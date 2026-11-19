@@ -179,6 +179,26 @@ DIALS = {d.key: d for d in [
     Dial("energy_elasticity", "price elasticity of gasoline and of electricity", "", (48,)),
     Dial("loss_present", "loss aversion and present bias", "", (45,)),
     Dial("genai_productivity", "productivity effect of generative AI on a task", "percent", (65,)),
+    Dial("consistency", "consistency of choices with utility maximization", "Afriat's critical cost efficiency "
+         "index: the share of each budget a person's choices keep once all revealed-preference contradictions are "
+         "removed (1 = perfectly consistent)", (5, 45), status="settled within a range", checked="2026-11-19",
+         meaning="most people, children included, choose far more consistently than chance; how consistently varies, "
+                 "with income, education and age, and the variation goes with wealth; with too few or too similar "
+                 "budgets the test has no power, so a score is read against random choosers on the same budgets",
+         estimates=(
+             Estimate("Harbaugh, Krause and Berry", 2001, "lab", "7-year-olds (31), 11 sets of chips and juice", 0.93,
+                      where="AER 91(5), table 1 (Afriat's index)", checked="2026-11-19"),
+             Estimate("Harbaugh, Krause and Berry", 2001, "lab", "11-year-olds (42), the same 11 sets", 0.96,
+                      where="AER 91(5), table 1", checked="2026-11-19"),
+             Estimate("Harbaugh, Krause and Berry", 2001, "lab", "undergraduates (55), the same 11 sets", 0.94,
+                      where="AER 91(5), table 1", checked="2026-11-19"),
+             Estimate("Choi, Fisman, Gale and Kariv", 2007, "lab", "93 Berkeley students and staff, 50 budgets", 0.954,
+                      where="AER 97(5), as reported by Choi et al. (2014), footnote 5", checked="2026-11-19"),
+             Estimate("Choi, Kariv, Mueller and Silverman", 2014, "survey", "1,182 Dutch adults (CentERpanel), 25 "
+                      "budgets, online", 0.881, where="AER 104(6), section II", checked="2026-11-19"),
+             Estimate("Chen, Liu, Shan and Zhong", 2023, "lab", "their human subjects, food budgets", 0.963,
+                      where="arXiv 2305.12763v3, section 3", checked="2026-11-19"),
+         )),
 ]}
 
 # What each part shows without entering a row, and why: {part: [(what is shown, the reason)]}
@@ -251,6 +271,25 @@ SHOWN = {
          "development dials in Part 46"),
         ("the 1969 draft lottery (Selective Service, JSE archive); FRED's unemployment rate and CPI", "data, shown "
          "with their sources; no parameter is estimated"),
+    ],
+    5: [
+        ("Jevons (1871), Edgeworth (1881), Pareto (1906), Hicks and Allen (1934), Samuelson (1938), Houthakker (1950), "
+         "Debreu (1954), Afriat (1967), Varian (1982)", "the theory's history, shown as history; no parameter is "
+         "estimated"),
+        ("Andreoni and Miller (2002); Chen, Lakshminarayanan and Santos (2006); Kagel, Battalio and Green (1995)",
+         "experiments shown for what they show about consistency (and altruism); the share consistent, not a dial's "
+         "row, since their designs and indices differ"),
+        ("Saez (2010)", "bunching at the EITC's first kink, shown with simulated earners; the elasticity of reported "
+         "earnings enters the taxable-income dial in Part 41"),
+        ("Becker (1962)", "a thought experiment, simulated on the Island"),
+        ("Blundell, Browning and Crawford (2008); Bronars (1987)", "methods, shown for what they do"),
+        ("McFadden's BART forecast", "a Called-it card (explainer.economics.calls), not an estimate of a parameter"),
+        ("Chen, Liu, Shan and Zhong (2023), GPT", "a language model's choices, shown at the frontier; the dial is "
+         "about people"),
+        ("Dean and Martin (2016); Echenique, Lee and Shum (2011); Kitamura and Stoye (2018); McFadden (1974); Block "
+         "and Marschak (1960)", "the frontier chapter's methods and evidence, shown for what they do"),
+        ("BEA's personal consumption expenditures by type of product, 1929-2025 (FRED)", "data, with GARP and its "
+         "power computed; no parameter is estimated"),
     ],
 }
 
