@@ -54,8 +54,8 @@ class Lottery(VoiceoverScene):
         a = ax.ax
         truth = VGroup(DashedLine(a.c2p(-0.6, lt["effect"]), a.c2p(2.6, lt["effect"]), color=WHITE,
                                   stroke_width=2),
-                       label(rf"the truth Agora planted: \ {lt['effect']:.1f}", font_size=17).next_to(
-                           a.c2p(2.6, lt["effect"]), UP, buff=0.08).shift(LEFT * 1.2))
+                       label(rf"dashed: \ the truth Agora planted, \ {lt['effect']:.1f}", font_size=17).move_to(
+                           a.c2p(1.6, 0.93)))
         bars, labs, nums = VGroup(), VGroup(), VGroup()
         for i, (v, c, nm) in enumerate(zip(vals, cols, names)):
             lo, hi = a.c2p(i - 0.3, min(0, v)), a.c2p(i + 0.3, max(0, v))

@@ -77,7 +77,7 @@ class Money(VoiceoverScene):
                   font_size=21, color=PROPOSE),
             label(r"with wages for prices, \ the same model matches workers to firms: \ parts thirty-nine and forty-nine",
                   font_size=21, color=GREY_A),
-        ).arrange(DOWN, buff=0.18).to_edge(DOWN, buff=0.4)
+        ).arrange(DOWN, buff=0.18).to_edge(DOWN, buff=0.8)
         tag = agora_tag(corner=DR, font_size=15)
         with self.voiceover(
             "Agora finds every split that no pair could beat by dealing on its own: the core. "

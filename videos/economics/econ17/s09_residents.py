@@ -31,7 +31,7 @@ class Residents(VoiceoverScene):
                             label("yes" if used else "no", font_size=22,
                                   color=STABLE if used else REJECT).move_to([3.2, y, 0])))
         foot = label(r"the two unstable survivors each matched one medical school to one hospital", font_size=21,
-                     color=GREY_A).to_edge(DOWN, buff=0.45)
+                     color=GREY_A).to_edge(DOWN, buff=0.8)
         tag = published_tag(r"Roth, AER 81(3) (1991); \ Roth, Nobel lecture (2012)", corner=DR, font_size=13)
         with self.voiceover(
             "In 1984 Roth showed that the doctors' clearinghouse produced stable matches, and argued that this was "

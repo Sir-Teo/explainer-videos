@@ -23,7 +23,7 @@ class Kidneys(VoiceoverScene):
         chips = {k: who_chip(k, 0.6, 18).move_to(pos[k]) for k in HUTS}
         prefs = VGroup(*[label(rf"{island.CAST[k].name}: \ " + r" $>$ ".join(island.CAST[x].name + "'s"
                                                                           for x in h["prefs"][k]),
-                               font_size=17, color=color_of(k)) for k in HUTS]).arrange(
+                               font_size=20, color=color_of(k)) for k in HUTS]).arrange(
             DOWN, aligned_edge=LEFT, buff=0.08).to_corner(UL, buff=0.35).shift(DOWN * 0.5)
         head = label(r"top trading cycles: \ everyone owns a hut, \ and points at the one they like best",
                      font_size=24, color=E.ACCENT).to_edge(UP, buff=0.25)
@@ -36,7 +36,7 @@ class Kidneys(VoiceoverScene):
         round1 = VGroup(*[arrow(a, b, color_of(a)) for a, b in first.items()])
         round2 = VGroup(*[arrow(a, b, color_of(a)) for a, b in h["cycles"][1]])
         result = label(r"each cycle swaps, \ and leaves; \ the rest point again", font_size=22,
-                       color=STABLE).to_edge(DOWN, buff=0.4)
+                       color=STABLE).to_edge(DOWN, buff=0.8)
         tag = published_tag(r"Shapley and Scarf, J.\ Math.\ Econ.\ 1(1) (1974), \ crediting David Gale", corner=DR,
                             font_size=13)
         with self.voiceover(

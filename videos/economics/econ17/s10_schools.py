@@ -27,6 +27,8 @@ class Schools(VoiceoverScene):
                   r"student envies a place they had the better claim to", font_size=22, color=STABLE),
             label(r"Boston adopted it, \ and other cities followed", font_size=24, color=E.ACCENT),
         ).arrange(DOWN, buff=0.38).move_to(UP * 0.1)
+        if rows.width > 13.0:
+            rows.scale_to_fit_width(13.0)
         tag = published_tag(r"Abdulkadiroğlu and Sönmez, AER 93(3) (2003)", corner=DR, font_size=13)
         with self.voiceover(
             "School places are the largest matching market most people ever meet. <bookmark mark='a'/> In 2003 "

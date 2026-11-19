@@ -25,8 +25,8 @@ class Lattice(VoiceoverScene):
                                  for a, w in s["match"].items())
             ar = r" \ ".join(str(s["a_ranks"][a]) for a in APPS)
             wr = r" \ ".join(str(s["w_ranks"][w]) for w in ("boatyard", "kiln", "loft", "grove"))
-            rows.add(VGroup(label(nm, font_size=22, color=c), label(pairs, font_size=19),
-                            label(rf"apprentices' ranks: \ {ar} \quad workshops' ranks: \ {wr}", font_size=18,
+            rows.add(VGroup(label(nm, font_size=25, color=c), label(pairs, font_size=22),
+                            label(rf"apprentices' ranks: \ {ar} \quad workshops' ranks: \ {wr}", font_size=20,
                                   color=GREY_A)).arrange(DOWN, aligned_edge=LEFT, buff=0.08))
         rows.arrange(DOWN, aligned_edge=LEFT, buff=0.45).move_to(LEFT * 0.9 + DOWN * 0.1)
         arrow = DoubleArrow(rows[0].get_right() + RIGHT * 0.5, rows[2].get_right() + RIGHT * 0.5, color=GREY_B,
@@ -57,7 +57,7 @@ class Lattice(VoiceoverScene):
             vo.wait_until("c")
             self.play(FadeIn(rows[1]))
             vo.wait_until("d")
-            self.play(GrowFromCenter(arrow), FadeIn(al), FadeIn(foot))
+            self.play(FadeIn(arrow), FadeIn(al), FadeIn(foot))
         self.clear_scene()
 
     def truth(self):

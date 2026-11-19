@@ -13,15 +13,15 @@ def board_layout(b):
     g = VGroup()
     for i, k in enumerate(APPS):
         y = 2.0 - 1.25 * i
-        chip = who_chip(k, 0.5, 16).move_to([-3.6, y, 0])
-        lst = label(r" $>$ ".join(SHORT[s] for s in b["apprentices"][k]), font_size=15,
+        chip = who_chip(k, 0.55, 18).move_to([-3.3, y, 0])
+        lst = label(r" $>$ ".join(SHORT[s] for s in b["apprentices"][k]), font_size=19,
                     color=color_of(k)).next_to(chip, LEFT, buff=0.3)
         left[k] = chip
         g.add(chip, lst)
     for i, s in enumerate(SHOPS):
         y = 2.0 - 1.25 * i
-        chip = place_chip(s, w=2.0, h=0.55, font_size=19).move_to([2.6, y, 0])
-        rk = label(r" $>$ ".join(island.CAST[a].name for a in b["workshops"][s]), font_size=15,
+        chip = place_chip(s, w=2.2, h=0.6, font_size=21).move_to([2.2, y, 0])
+        rk = label(r" $>$ ".join(island.CAST[a].name for a in b["workshops"][s]), font_size=19,
                    color=PLACES[s]).next_to(chip, RIGHT, buff=0.3)
         right[s] = chip
         g.add(chip, rk)

@@ -104,7 +104,7 @@ class Mechanisms(VoiceoverScene):
             (r"deferred acceptance", ["~", "~", "y", "y", "y"], STABLE),
             (r"top trading cycles", ["y", "y", "y", "y", "n"], KIDNEY),
         ]
-        xs = [-3.0, -0.6, 1.4, 3.3, 5.3]
+        xs = [-2.3, -0.2, 1.7, 3.5, 5.4]
         hdr = VGroup(*[label(c, font_size=20, color=GREY_B).move_to([x, 2.3, 0]) for c, x in zip(cols, xs)])
         sym = {"y": (r"\checkmark", STABLE), "n": (r"\times", REJECT), "~": (r"\sim", HELD), "-": (r"\cdot", GREY_C)}
         rows = VGroup()

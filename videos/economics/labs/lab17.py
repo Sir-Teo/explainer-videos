@@ -33,6 +33,7 @@ def run(seed=0):
     cap = dict(p["capacity"])
     b = mt.boston(students, schools, cap)["match"]
     d = mt.deferred_acceptance(students, schools, cap)["match"]
+    assert not mt.blocking_pairs(d, students, schools, cap)          # deferred acceptance is stable
     lab.row("workshops: your place under Boston (truth / kiln first) and under DA (truth)",
             f"{b['you']} / " + next(r["gets"] for r in mt.outcomes_by_report("you", students, schools, cap)
                                     if r["report"][0] == "kiln") + f"; {d['you']}")
@@ -43,6 +44,7 @@ def run(seed=0):
     pa = {k: list(v) for k, v in bd["apprentices"].items()}
     pw = {k: list(v) for k, v in bd["workshops"].items()}
     st = mt.all_stable(pa, pw)
+    assert mt.deferred_acceptance(pa, pw)["match"] == st[0]["match"]  # the asking side gets its best
     lab.row("the board: stable matchings; DA rounds with apprentices / workshops asking",
             f"{len(st)}; {mt.deferred_acceptance(pa, pw)['rounds']} / {mt.deferred_acceptance(pw, pa)['rounds']}")
 

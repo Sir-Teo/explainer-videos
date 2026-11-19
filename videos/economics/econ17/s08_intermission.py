@@ -69,6 +69,8 @@ class Intermission(SoundScene):
                 ax.ax.c2p(1925, 4.6)), t_of[idx[1932]] - 0.5, t_of[idx[1932]] + 6.0),
             (label(rf"{film['peak_year']}: \ {film['peak']:.1f}, \ the soldiers come home", font_size=17,
                    color=US_C).move_to(ax.ax.c2p(1968, 17.2)), t_of[idx[1946]] - 0.5, t_of[idx[1946]] + 7.0),
+            (label(r"1989: \ Swedes marry before a widow's pension ends", font_size=17,
+                   color="#F2C14E").move_to(ax.ax.c2p(1960, 14.2)), t_of[idx[1989]] - 0.5, t_of[idx[1989]] + 6.0),
             (label(rf"{film['low_year']}: \ {film['low']:.1f}, \ the pandemic", font_size=17, color=US_C).move_to(
                 ax.ax.c2p(1996, 2.0)), t_of[idx[2020]] - 0.5, t_of[idx[2020]] + 6.0),
         ]

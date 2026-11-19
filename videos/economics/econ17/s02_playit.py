@@ -49,17 +49,19 @@ class PlayIt(VoiceoverScene):
         stage = game_stage(12.4, 6.1, center=DOWN * 0.15)
         lines = VGroup(
             label(r"four children, \ three workshops taking apprentices: \ one place at the boatyard, \ one at the "
-                  r"kiln, \ two at the net loft", font_size=21),
-            label(r"each child lists the workshops in order; \ one lottery decides every tie", font_size=21),
+                  r"kiln, \ two at the net loft", font_size=24),
+            label(r"each child lists the workshops in order; \ one lottery decides every tie", font_size=24),
             label(r"the Boston rule: \ round 1, \ everyone applies to the first workshop on their list; \ places go "
-                  r"by lottery, \ and are final", font_size=21, color=SCHOOL),
+                  r"by lottery, \ and are final", font_size=24, color=SCHOOL),
             label(r"round 2: \ those still without a place apply to their second, \ if it has room; \ and so on",
-                  font_size=21, color=SCHOOL),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.2).move_to(stage.box.get_center() + UP * 1.55)
-        lc = lists_card(p).move_to(stage.box.get_center() + DOWN * 0.95 + LEFT * 2.6)
-        ask = VGroup(label(r"you love the boatyard, \ then the kiln", font_size=22, color=YOU),
-                     label(r"do you list the boatyard first, \\ or the kiln?", font_size=24, color=E.ACCENT)
-                     ).arrange(DOWN, buff=0.15).move_to(stage.box.get_center() + DOWN * 0.8 + RIGHT * 3.3)
+                  font_size=24, color=SCHOOL),
+        ).arrange(DOWN, aligned_edge=LEFT, buff=0.24).move_to(stage.box.get_center() + UP * 1.45)
+        if lines.width > 11.6:
+            lines.scale_to_fit_width(11.6).move_to(stage.box.get_center() + UP * 1.45)
+        lc = lists_card(p, font_size=23).move_to(stage.box.get_center() + DOWN * 1.15 + LEFT * 2.7)
+        ask = VGroup(label(r"you love the boatyard, \ then the kiln", font_size=25, color=YOU),
+                     label(r"do you list the boatyard first, \\ or the kiln?", font_size=27, color=E.ACCENT)
+                     ).arrange(DOWN, buff=0.15).move_to(stage.box.get_center() + DOWN * 0.9 + RIGHT * 3.3)
         ring = countdown().next_to(ask, DOWN, buff=0.3)
         with self.voiceover(
             "You are one of four island children, and three workshops are taking apprentices: one place at the "
@@ -89,7 +91,7 @@ class PlayIt(VoiceoverScene):
         p = load("playit")
         board, cols = places(p)
         chips = {k: who_chip(k, 0.5, 17) for k in ("you", "ana", "bo", "dara")}
-        pool = VGroup(*chips.values()).arrange(RIGHT, buff=0.9).move_to(DOWN * 2.3)
+        pool = VGroup(*chips.values()).arrange(RIGHT, buff=0.9).move_to(DOWN * 2.3 + LEFT * 3.2)
         head = label(title, font_size=28, color=color).to_edge(UP, buff=0.35)
         used = {k: 0 for k in ORDER}
         res = label(result_line, font_size=25, color=E.ACCENT).to_edge(DOWN, buff=0.35)
@@ -98,8 +100,9 @@ class PlayIt(VoiceoverScene):
             txt = r"round " + str(i + 1) + r": \ " + r"; \ ".join(
                 ("you" if s == "you" else island.CAST[s].name) + r" $\to$ " + PLACE_NAMES[w].replace("the ", "")
                 for s, w in rd["admitted"])
-            rounds.add(label(txt if rd["admitted"] else rf"round {i + 1}: \ no room", font_size=18, color=GREY_A))
-        rounds.arrange(DOWN, aligned_edge=LEFT, buff=0.08).to_corner(UR, buff=0.4).shift(DOWN * 0.5)
+            rounds.add(label(txt if rd["admitted"] else rf"round {i + 1}: \ no room for you", font_size=22,
+                             color=GREY_A))
+        rounds.arrange(DOWN, aligned_edge=LEFT, buff=0.12).move_to(DOWN * 0.9 + RIGHT * 2.6)
         with self.voiceover(say) as vo:
             self.play(FadeIn(head), FadeIn(board), FadeIn(pool))
             for i, rd in enumerate(log):
