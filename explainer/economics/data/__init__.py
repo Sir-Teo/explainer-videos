@@ -55,6 +55,8 @@ FRED_SERIES = {
 SPF_FILES = ("median_rgdp_level", "median_rgdp_growth", "median_recess_level")
 SPF_URL = ("https://www.philadelphiafed.org/-/media/frbp/assets/surveys-and-data/survey-of-professional-forecasters/"
            "data-files/files/{}.xlsx")
+PINK_URL = ("https://thedocs.worldbank.org/en/doc/74e8be41ceb20fa0da750cda2f6b9e4e-0050012026/related/"
+            "CMO-Historical-Data-Monthly.xlsx")
 
 DATASETS = {
     "maddison2023": {
@@ -95,7 +97,49 @@ DATASETS = {
         "vintage": "2026-11-18",
         "files": ("spf_2006_2011.csv",),
     },
+    "pinksheet": {
+        "title": "World Bank Commodity Price Data (The Pink Sheet), monthly prices",
+        "publisher": "World Bank, Prospects Group",
+        "citation": "World Bank, Commodity Price Data (The Pink Sheet), CMO-Historical-Data-Monthly.xlsx, updated "
+                    "3 November 2026, retrieved 2026-11-18",
+        "short": "World Bank Pink Sheet, Nov 2026",
+        "url": PINK_URL,
+        "page": "https://www.worldbank.org/en/research/commodity-markets",
+        "licence": "CC BY 4.0 (World Bank open data)",
+        "units": "nominal US dollars, monthly averages (units per column in PINK_COLUMNS)",
+        "vintage": "2026-11-18",
+        "sha256": "3c8d9d8dbb48342fdbf24777c39a8ce8964cc2fd0958f72f6779e6e4ad99cde2",
+        "files": ("pinksheet_monthly.csv",),
+    },
+    "psd_coffee": {
+        "title": "Production, Supply and Distribution: coffee, green",
+        "publisher": "U.S. Department of Agriculture, Foreign Agricultural Service",
+        "citation": "USDA Foreign Agricultural Service, Production, Supply and Distribution Online, coffee "
+                    "(psd_coffee_csv.zip), retrieved 2026-11-18",
+        "short": "USDA FAS, PSD Online (coffee)",
+        "url": "https://apps.fas.usda.gov/psdonline/downloads/psd_coffee_csv.zip",
+        "licence": "U.S. government work, public domain",
+        "units": "thousands of 60 kg bags, by marketing year",
+        "vintage": "2026-11-18",
+        "sha256": "967633a200af10d2a196816dd0169e732c61ed8dff4a83574bfa0b435c50ee66",
+        "files": ("psd_coffee.csv",),
+    },
 }
+
+# The Pink Sheet columns kept in the extract: (key, the column's heading in the sheet, units)
+PINK_COLUMNS = (
+    ("oil", "Crude oil, average", "$/bbl"), ("coal", "Coal, Australian", "$/mt"),
+    ("gas_us", "Natural gas, US", "$/mmbtu"), ("cocoa", "Cocoa", "$/kg"), ("arabica", "Coffee, Arabica", "$/kg"),
+    ("robusta", "Coffee, Robusta", "$/kg"), ("tea", "Tea, avg 3 auctions", "$/kg"), ("maize", "Maize", "$/mt"),
+    ("rice", "Rice, Thai 5%", "$/mt"), ("wheat", "Wheat, US HRW", "$/mt"), ("soybeans", "Soybeans", "$/mt"),
+    ("sugar", "Sugar, world", "$/kg"), ("beef", "Beef **", "$/kg"), ("banana", "Banana, US", "$/kg"),
+    ("cotton", "Cotton, A Index", "$/kg"), ("rubber", "Rubber, RSS3", "$/kg"), ("aluminum", "Aluminum", "$/mt"),
+    ("copper", "Copper", "$/mt"), ("tin", "Tin", "$/mt"), ("nickel", "Nickel", "$/mt"), ("zinc", "Zinc", "$/mt"),
+    ("gold", "Gold", "$/troy oz"), ("silver", "Silver", "$/troy oz"),
+)
+# The coffee producers kept by name in the PSD extract (the rest are in the world total)
+PSD_COUNTRIES = ("Brazil", "Vietnam", "Colombia", "Indonesia", "Ethiopia", "Honduras", "India", "Uganda", "Mexico",
+                 "Peru", "Cote d'Ivoire")
 
 # Countries kept at full (annual) resolution in the Maddison extract; every other country is kept at the
 # benchmark years in MADDISON_YEARS (enough for the data films).
@@ -190,6 +234,34 @@ def spf() -> list[dict]:
     return out
 
 
+@functools.lru_cache(maxsize=None)
+def pinksheet(key: str) -> dict:
+    """A Pink Sheet monthly price series: ``{"month": ["1960-01", ...], "value": [...], "name", "units"}`` (nominal
+    US dollars; NaN where the sheet has no price).  ``key`` is one of :data:`PINK_COLUMNS`' keys ("arabica", "oil",
+    "tin", ...)."""
+    cols = {k: (name, units) for k, name, units in PINK_COLUMNS}
+    if key not in cols:
+        raise KeyError(f"no Pink Sheet column {key!r}; choose from {sorted(cols)}")
+    rows = _read(HERE / "pinksheet_monthly.csv")
+    return {"month": [r["month"] for r in rows], "value": [_num(r[key]) for r in rows], "name": cols[key][0],
+            "units": cols[key][1], "key": key}
+
+
+@functools.lru_cache(maxsize=None)
+def psd_coffee() -> dict:
+    """World coffee balance by marketing year from USDA's PSD: ``{"year": [...], "world": {attribute: [...]},
+    country: {attribute: [...]}}`` for attributes ``production``, ``consumption``, ``exports``, ``ending_stocks``
+    (thousands of 60 kg bags).  ``world`` sums every country in the PSD file."""
+    rows = _read(HERE / "psd_coffee.csv")
+    years = sorted({int(r["year"]) for r in rows})
+    out = {"year": years}
+    for r in rows:
+        place = out.setdefault(r["country"], {})
+        series = place.setdefault(r["attribute"], [float("nan")] * len(years))
+        series[years.index(int(r["year"]))] = _num(r["value"])
+    return out
+
+
 # ---------------------------------------------------------------------------
 # Refreshing from the sources
 # ---------------------------------------------------------------------------
@@ -275,7 +347,65 @@ def refresh_spf() -> None:
             w.writerow([y, q, *[_fmt(v) if isinstance(v, (int, float)) else "" for v in vals]])
 
 
-REFRESH = {"maddison2023": refresh_maddison, "fred": refresh_fred, "spf": refresh_spf}
+def refresh_pinksheet() -> None:
+    import openpyxl  # noqa: PLC0415
+
+    d = DATASETS["pinksheet"]
+    raw = RAW / "pinksheet_monthly.xlsx"
+    sha = _download(d["url"], raw)
+    if sha != d["sha256"]:
+        print(f"pinksheet: the download differs from the recorded vintage ({sha[:12]} vs {d['sha256'][:12]})")
+    ws = openpyxl.load_workbook(raw, read_only=True, data_only=True)["Monthly Prices"]
+    rows = list(ws.iter_rows(values_only=True))
+    head = [str(h).strip() if h else "" for h in rows[4]]
+    idx = {k: head.index(name) for k, name, _ in PINK_COLUMNS}
+    with open(HERE / "pinksheet_monthly.csv", "w", newline="", encoding="utf-8") as f:
+        w = csv.writer(f)
+        w.writerow(["month", *idx])
+        for r in rows[6:]:
+            if not r[0] or "M" not in str(r[0]):
+                continue
+            y, m = str(r[0]).split("M")
+            vals = [r[i] if isinstance(r[i], (int, float)) else None for i in idx.values()]
+            if all(v is None for v in vals):
+                continue
+            w.writerow([f"{y}-{m}", *[_fmt(v) for v in vals]])
+
+
+def refresh_psd_coffee() -> None:
+    import io  # noqa: PLC0415
+    import zipfile  # noqa: PLC0415
+
+    d = DATASETS["psd_coffee"]
+    raw = RAW / "psd_coffee_csv.zip"
+    sha = _download(d["url"], raw)
+    if sha != d["sha256"]:
+        print(f"psd_coffee: the download differs from the recorded vintage ({sha[:12]} vs {d['sha256'][:12]})")
+    with zipfile.ZipFile(raw) as z:
+        text = z.read("psd_coffee.csv").decode("utf-8")
+    keep = {"Production": "production", "Domestic Consumption": "consumption", "Exports": "exports",
+            "Ending Stocks": "ending_stocks"}
+    world: dict = {}
+    named = []
+    for r in csv.DictReader(io.StringIO(text)):
+        a = keep.get(r["Attribute_Description"])
+        if a is None:
+            continue
+        y, v = int(r["Market_Year"]), float(r["Value"])
+        world[(y, a)] = world.get((y, a), 0.0) + v
+        if r["Country_Name"] in PSD_COUNTRIES:
+            named.append((r["Country_Name"], y, a, v))
+    with open(HERE / "psd_coffee.csv", "w", newline="", encoding="utf-8") as f:
+        w = csv.writer(f)
+        w.writerow(["country", "year", "attribute", "value"])
+        for (y, a), v in sorted(world.items()):
+            w.writerow(["world", y, a, _fmt(v)])
+        for c, y, a, v in sorted(named):
+            w.writerow([c, y, a, _fmt(v)])
+
+
+REFRESH = {"maddison2023": refresh_maddison, "fred": refresh_fred, "spf": refresh_spf,
+           "pinksheet": refresh_pinksheet, "psd_coffee": refresh_psd_coffee}
 
 
 def main() -> None:

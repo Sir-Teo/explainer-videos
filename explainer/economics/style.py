@@ -72,4 +72,5 @@ DESIGN_COLOR = {
     "survey": GREY_A,
     "narrative": "#E9A3C9",
     "lab": "#F7D154",
+    "meta-analysis": "#E3B98A",  # a summary of many studies, whatever their designs (the SOURCE colour)
 }

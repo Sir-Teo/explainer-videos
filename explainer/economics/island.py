@@ -46,6 +46,27 @@ TRUTHS = {
                 "costs": (1.20, 1.40, 1.60, 1.80, 2.00, 2.20, 2.40, 2.60, 2.80, 3.00),
                 "viewer": 3},  # the card the film hands to you: the buyer with the 2.70 card
     },
+    # Part 2: the village's fish market opens (the Tableau's goods pipe), and the pit is run again with a tax and
+    # with price controls
+    2: {
+        # Each market day the village's 400 buyers draw their values for a fish afresh, uniform between 0 and the
+        # choke price (so demand is the straight line Q = 400 (1 - p / 6)); the 400 boats' costs are fixed, uniform
+        # between 0.50 and 5.00 (supply Q = 400 (p - 0.5) / 4.5).  A storm keeps a share of the boats ashore, at
+        # random.  The day's catch is sold at the price that clears that day's cards (Agora's competitive outcome).
+        "fish": {"buyers": 400, "boats": 400, "choke": 6.0, "lowest_cost": 0.5, "highest_cost": 5.0,
+                 "days": 120, "storm_prob": 0.15, "storm_ashore": 0.35, "seed": 1890},
+        # the Play-it market: Smith's worry that convergence was "an accident of symmetry"; a design in which the
+        # sellers' surplus is far larger than the buyers' (nearly flat demand, steep supply)
+        "lopsided": {"values": (2.60, 2.55, 2.50, 2.45, 2.40, 2.35, 2.30, 2.25, 2.20, 2.15),
+                     "costs": (0.60, 0.85, 1.10, 1.35, 1.60, 1.85, 2.10, 2.35, 2.60, 2.85)},
+        # two more asymmetric designs for the zero-intelligence test (Cliff and Bruten 1997)
+        "flat_supply": {"values": (3.40, 3.10, 2.90, 2.70, 2.50, 2.30, 2.10, 1.90, 1.70, 1.50),
+                        "costs": (2.00,) * 10},
+        "flat_demand": {"values": (2.60,) * 10,
+                        "costs": (1.20, 1.40, 1.60, 1.80, 2.00, 2.20, 2.40, 2.60, 2.80, 3.00)},
+        # the wedges and controls applied to Part 1's pit
+        "tax": 0.40, "cap": 2.00, "minimum": 2.60,
+    },
 }
 
 

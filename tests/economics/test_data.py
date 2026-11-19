@@ -30,6 +30,18 @@ def test_fred_and_spf():
     assert aug["recess"][1] == 45
 
 
+def test_pinksheet_and_psd():
+    a = data.pinksheet("arabica")
+    assert a["month"][0] == "1960-01" and a["month"][-1] == "2026-10"
+    i = a["month"].index("1975-06")
+    assert a["value"][i] == 1.23 and a["value"][a["month"].index("1977-04")] > 5 * a["value"][i]
+    assert data.pinksheet("tin")["units"] == "$/mt"
+    c = data.psd_coffee()
+    y = c["year"].index(1976)
+    assert c["Brazil"]["production"][y - 1:y + 1] == [23000.0, 9300.0]
+    assert abs(c["world"]["production"][y] - 61162) < 1
+
+
 def test_every_file_is_registered():
     listed = {f for d in data.DATASETS.values() for f in d["files"]}
     on_disk = {p.name for p in HERE.glob("*.csv")}

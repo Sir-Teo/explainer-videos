@@ -19,7 +19,8 @@ from __future__ import annotations
 from dataclasses import dataclass, field
 
 STATUSES = ("settled within a range", "depends on the setting", "contested", "not identified")
-DESIGNS = ("RCT", "IV", "RD", "DiD", "event study", "structural", "calibration", "survey", "narrative", "lab")
+DESIGNS = ("RCT", "IV", "RD", "DiD", "event study", "structural", "calibration", "survey", "narrative", "lab",
+           "meta-analysis")
 
 
 @dataclass(frozen=True)
@@ -56,7 +57,25 @@ class Dial:
 # sets the status and the date); until then a dial has no estimates and is drawn empty, with the part that fills it.
 DIALS = {d.key: d for d in [
     Dial("elasticity_staples", "price elasticity of demand for staples", "percent change in quantity per percent "
-         "change in price", (2, 6)),
+         "change in price", (2, 6), status="settled within a range", checked="2026-11-18",
+         meaning="below one in size for every staple measured: a tax on any of them raises revenue and cuts "
+                 "consumption a little; how little decides whether it is a revenue tax or a health policy",
+         estimates=(
+             Estimate("Havranek, Irsova and Janda", 2012, "meta-analysis", "gasoline, short run: published "
+                      "estimates, corrected for publication bias", -0.09, where="Energy Economics 34(1): 201-207, "
+                      "abstract", checked="2026-11-18"),
+             Estimate("Havranek, Irsova and Janda", 2012, "meta-analysis", "gasoline, long run: the same meta-analysis",
+                      -0.31, where="Energy Economics 34(1): 201-207, abstract", checked="2026-11-18"),
+             Estimate("Gallet and List", 2003, "meta-analysis", "cigarettes: mean of 523 estimates from 86 studies",
+                      -0.48, where="Health Economics 12(10): 821-835; the mean as reported by Tobacco in Australia, "
+                      "section 13.1 (Cancer Council Victoria)", checked="2026-11-18"),
+             Estimate("Wagenaar, Salois and Komro", 2009, "meta-analysis", "beer: simple mean of 105 estimates",
+                      -0.46, where="Addiction 104: 179-190 (accepted manuscript, Results)", checked="2026-11-18"),
+             Estimate("Wagenaar, Salois and Komro", 2009, "meta-analysis", "wine: simple mean of 93 estimates",
+                      -0.69, where="as above", checked="2026-11-18"),
+             Estimate("Wagenaar, Salois and Komro", 2009, "meta-analysis", "spirits: simple mean of 103 estimates",
+                      -0.80, where="as above", checked="2026-11-18"),
+         )),
     Dial("eis", "elasticity of intertemporal substitution", "", (7, 23)),
     Dial("risk_aversion", "relative risk aversion", "", (7, 23)),
     Dial("capital_share", "output elasticity of capital", "", (8, 20)),

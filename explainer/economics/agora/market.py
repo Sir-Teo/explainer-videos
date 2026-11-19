@@ -150,20 +150,39 @@ class _Trader:
 
 
 def double_auction(market: Market, kind: str = "zip", periods: int = 6, seed: int = 0, max_steps: int = 600,
-                   patience: int = 120, viewer: int | None = None) -> dict:
+                   patience: int = 120, viewer: int | None = None, tax: float = 0.0, tax_on: str = "sell",
+                   cap: float | None = None, minimum: float | None = None) -> dict:
     """Run ``periods`` trading periods with the same cards.  Returns ``{"periods": [{"trades": [...], "shouts":
     [...], "alpha", "efficiency", "mean"}], "equilibrium"}``.  A trade records ``price``, ``value``, ``cost``,
     ``buyer``, ``seller`` (indices into the market's ``values`` and ``costs``) and ``step``.  A shout records
     ``price``, ``side`` and whether it was the best quote when it was made.  ``viewer``: the index of a buyer whose
-    trades are marked (the card the film hands to you)."""
+    trades are marked (the card the film hands to you).
+
+    Part 2's wedges and controls:
+
+    * ``tax``: a tax per unit traded, remitted by the sellers (``tax_on="sell"``: a seller keeps the price less the
+      tax, so the least he can call is his cost plus the tax) or by the buyers (``"buy"``: a buyer pays the price plus
+      the tax).  Each trade then records ``paid`` (what the buyer gives up) and ``received`` (what the seller keeps);
+      ``price`` is the price called in the pit.  Alpha is measured against the untaxed competitive price, and
+      efficiency counts the tax as surplus (it goes to someone), so what is lost is the trades that did not happen.
+    * ``cap`` / ``minimum``: a legal maximum or minimum price.  No bid or offer may break it (quotes are clipped to
+      it), and a seller whose cost is above the cap, or a buyer whose value is below the minimum, cannot trade at
+      all.  Under a binding cap more buyers want to buy than sellers will sell, and who gets the units is decided by
+      who calls first, not by who values them most."""
+    if tax_on not in ("sell", "buy"):
+        raise ValueError("tax_on is 'sell' or 'buy'")
     rng = np.random.default_rng(seed)
-    buyers = [_Trader(kind, "buy", v, market, rng) for v in market.values]
-    sellers = [_Trader(kind, "sell", c, market, rng) for c in market.costs]
+    t_b, t_s = (tax, 0.0) if tax_on == "buy" else (0.0, tax)
+    buyers = [_Trader(kind, "buy", v - t_b, market, rng) for v in market.values]
+    sellers = [_Trader(kind, "sell", c + t_s, market, rng) for c in market.costs]
+    true_v, true_c = list(market.values), list(market.costs)
     eq = market.equilibrium()
     out = []
     for period in range(periods):
-        for t in buyers + sellers:
-            t.active = True
+        for k, t in enumerate(buyers):
+            t.active = (minimum is None or true_v[k] - t_b >= minimum) and true_v[k] - t_b > market.floor
+        for k, t in enumerate(sellers):
+            t.active = cap is None or true_c[k] + t_s <= cap
         best_bid, best_ask = None, None  # (price, index)
         trades, shouts = [], []
         idle = 0
@@ -175,12 +194,17 @@ def double_auction(market: Market, kind: str = "zip", periods: int = 6, seed: in
             side, i = live[rng.integers(len(live))]
             trader = buyers[i] if side == "buy" else sellers[i]
             q = trader.quote()
+            if cap is not None:
+                q = min(q, cap)
+            if minimum is not None:
+                q = max(q, minimum)
             dealt, price = False, q
             if side == "buy":
                 if best_ask is not None and q >= best_ask[0]:
                     price, j = best_ask
-                    trades.append({"price": price, "buyer": i, "seller": j, "value": buyers[i].limit,
-                                   "cost": sellers[j].limit, "step": step, "viewer": i == viewer})
+                    trades.append({"price": price, "buyer": i, "seller": j, "value": true_v[i], "cost": true_c[j],
+                                   "paid": price + t_b, "received": price - t_s, "step": step,
+                                   "viewer": i == viewer})
                     buyers[i].active = sellers[j].active = False
                     best_bid = best_ask = None
                     dealt = True
@@ -190,8 +214,9 @@ def double_auction(market: Market, kind: str = "zip", periods: int = 6, seed: in
             else:
                 if best_bid is not None and q <= best_bid[0]:
                     price, j = best_bid
-                    trades.append({"price": price, "buyer": j, "seller": i, "value": buyers[j].limit,
-                                   "cost": sellers[i].limit, "step": step, "viewer": j == viewer})
+                    trades.append({"price": price, "buyer": j, "seller": i, "value": true_v[j], "cost": true_c[i],
+                                   "paid": price + t_b, "received": price - t_s, "step": step,
+                                   "viewer": j == viewer})
                     buyers[j].active = sellers[i].active = False
                     best_bid = best_ask = None
                     dealt = True
@@ -205,5 +230,8 @@ def double_auction(market: Market, kind: str = "zip", periods: int = 6, seed: in
         out.append({"trades": trades, "shouts": shouts, "n": len(trades),
                     "alpha": convergence_alpha(prices, eq["p"]),
                     "efficiency": efficiency(market, trades) if trades else 0.0,
-                    "mean": float(np.mean(prices)) if prices else float("nan")})
-    return {"periods": out, "equilibrium": eq, "kind": kind, "seed": seed}
+                    "mean": float(np.mean(prices)) if prices else float("nan"),
+                    "paid": float(np.mean([t["paid"] for t in trades])) if trades else float("nan"),
+                    "received": float(np.mean([t["received"] for t in trades])) if trades else float("nan")})
+    return {"periods": out, "equilibrium": eq, "kind": kind, "seed": seed, "tax": tax, "tax_on": tax_on, "cap": cap,
+            "minimum": minimum}

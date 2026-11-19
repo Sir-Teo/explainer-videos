@@ -35,4 +35,13 @@ CALLS = {c.key: c for c in [
          "of Philadelphia surveys each quarter",
          "real GDP fell in 2009, by more than in any year since 1946", "wrong",
          ("Federal Reserve Bank of Philadelphia, SPF median forecasts, 2008 Q3 survey", "BEA via FRED (GDPCA)")),
+    Call("smith_1956", 2, "Vernon Smith, about to run his first market experiment", "January 1956",
+         "the competitive model would fail to predict the outcome, so a more competitive trading procedure would "
+         "make a stronger case against it than Chamberlin's",
+         "Chamberlin's classroom markets of 1948, which traded more than the competitive quantity at scattered "
+         "prices, and the textbook's own doubts",
+         "the market converged quickly to near the predicted price and volume with 22 traders who knew only their "
+         "own cards; a lopsided design later converged too", "wrong",
+         ("V. L. Smith, autobiography, Nobel Prize in Economic Sciences 2002 (nobelprize.org)",
+          "V. L. Smith (1962), Journal of Political Economy 70(2): 111-137")),
 ]}
