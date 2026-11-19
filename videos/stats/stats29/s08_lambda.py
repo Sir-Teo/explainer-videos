@@ -8,6 +8,11 @@ from videos.stats.stats29.common import *  # noqa: F403
 class Lambda(StatsScene):
     def construct(self):
         self.card()
+        self.ask(r"A smoothing spline's $\lambda$ can be chosen by...",
+                 ["treating it as a mixed model, with REML", "nothing principled"], 0,
+                 say="How can a smoothing spline's penalty be chosen from the data?",
+                 reveal="By generalized cross-validation, or by writing the spline as a mixed model whose "
+                        "random-effect variance sets lambda, and estimating it by REML.")
         self.gcv()
         self.mixed()
         self.bayes_band()
@@ -15,6 +20,7 @@ class Lambda(StatsScene):
         self.fits()
         self.race()
         self.which()
+        self.answer()
 
     def card(self):
         self.chapter(7, r"Choosing $\lambda$", r"GCV, \ REML, \ and splines as mixed models", lit=(1979,), part=PART, said="Chapter seven. Choosing lambda.")

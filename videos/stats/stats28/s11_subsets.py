@@ -8,12 +8,19 @@ from videos.stats.stats28.common import *  # noqa: F403
 class Subsets(StatsScene):
     def construct(self):
         self.card()
+        self.ask("Stepwise regression's reported $p$-values...",
+                 ["are valid", "ignore the search, so they are too small"], 1,
+                 say="Stepwise regression adds and drops variables by their p-values. Are the p-values it finally "
+                     "reports valid?",
+                 reveal="No: they ignore the search that produced the model, so they're too small and the intervals "
+                        "too narrow. Tune by cross-validation, and don't believe the chosen model's p-values.")
         self.sins()
         self.search()
         self.race()
         self.prostate_test()
         self.stability()
         self.lesson()
+        self.answer()
 
     def card(self):
         self.chapter(10, r"Subset selection", r"Best subsets, \ stepwise, \ and the lasso", lit=(2020,), part=PART, said="Chapter ten. Subset selection.")

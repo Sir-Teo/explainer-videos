@@ -8,6 +8,11 @@ from videos.stats.stats32.common import *  # noqa: F403
 class Computing(StatsScene):
     def construct(self):
         self.card()
+        self.ask("Least angle regression computes the whole lasso path at the cost of about...",
+                 ["one least-squares fit", "$n$ fits", "$p^2$ fits"], 0,
+                 say="The lasso's coefficients trace a path as lambda falls. Efron, Hastie, Johnstone and "
+                     "Tibshirani's least angle regression computes the whole path. At what cost?",
+                 reveal="About one least-squares fit: the path is piecewise linear, so it only needs its kinks.")
         self.cd()
         self.tricks()
         self.lars_idea()
@@ -15,6 +20,7 @@ class Computing(StatsScene):
         self.path()
         self.order()
         self.ols_end()
+        self.answer()
 
     def card(self):
         self.chapter(5, r"Computing the path", r"Coordinate descent and least angle regression", lit=(2004,), part=PART, said="Chapter five. Computing the lasso.")

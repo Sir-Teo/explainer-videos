@@ -8,12 +8,19 @@ from videos.stats.stats33.common import *  # noqa: F403
 class PubBias(StatsScene):
     def construct(self):
         self.card()
+        self.ask("On a funnel plot, publication bias shows as...",
+                 ["symmetry", "a missing corner of small, non-significant studies"], 1,
+                 say="A funnel plot: each study's effect against its precision. If only significant studies were "
+                     "published, what does the plot show?",
+                 reveal="A missing corner: small studies with small or negative effects never reached print. The "
+                        "record is a filtered sample.")
         self.drawer()
         self.funnel()
         self.egger()
         self.pcurve_def()
         self.pcurve_plot()
         self.selection()
+        self.answer()
 
     def card(self):
         self.chapter(10, r"Publication bias", r"The literature is a filtered sample", lit=(1997,), part=PART, said="Chapter ten. Publication bias.")

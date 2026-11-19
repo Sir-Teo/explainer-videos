@@ -26,6 +26,12 @@ def heat(L, cell=0.2, x0=0.0, y0=0.0, color=None):
 class Factor(StatsScene):
     def construct(self):
         self.card()
+        self.ask("Rotate a factor analysis's loadings by varimax. The model's fit...",
+                 ["improves", "is unchanged: only the interpretation changes"], 1,
+                 say="A factor model fitted, then its loadings rotated by varimax so each variable loads on few "
+                     "factors. What happens to the model's fit?",
+                 reveal="Nothing: any rotation fits equally well. Rotation changes only how the factors read, which "
+                        "is why factors need interpretation with care.")
         self.spearman()
         self.model()
         self.indeterminacy()
@@ -35,6 +41,7 @@ class Factor(StatsScene):
         self.scores()
         self.heywood()
         self.versus()
+        self.answer()
 
     def card(self):
         self.chapter(5, r"Factor analysis", r"Latent shared variation", lit=(1904,), part=PART, said="Chapter five. Factor analysis.")

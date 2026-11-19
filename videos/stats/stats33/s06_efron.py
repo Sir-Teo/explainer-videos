@@ -8,6 +8,12 @@ from videos.stats.stats33.common import *  # noqa: F403
 class Efron(StatsScene):
     def construct(self):
         self.card()
+        self.ask("Efron's local false discovery rate at $z = 3$ is...",
+                 ["the chance this case is null, given its $z$", "the $p$-value at 3", "the FDR of the list"], 0,
+                 say="Efron recast testing as empirical Bayes: each z-value comes from a null or a non-null "
+                     "density. What is the local false discovery rate at a given z?",
+                 reveal="The probability that this case is null, given its z-value. It speaks to each case, where "
+                        "the FDR speaks to a list.")
         self.two_groups()
         self.fdr_defs()
         self.data()
@@ -17,6 +23,7 @@ class Efron(StatsScene):
         self.empirical_null()
         self.counts()
         self.lesson()
+        self.answer()
 
     def card(self):
         self.chapter(5, r"Empirical Bayes", r"Efron's local false discovery rate", lit=(1995, 2001), part=PART, said="Chapter five. Empirical Bayes.")

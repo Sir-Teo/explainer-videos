@@ -8,12 +8,18 @@ from videos.stats.stats30.common import *  # noqa: F403
 class HodgesLehmann(StatsScene):
     def construct(self):
         self.card()
+        self.ask("The Hodges--Lehmann estimate is the median of...",
+                 ["the data", "the Walsh averages, all pairwise means", "the pairwise differences"], 1,
+                 say="Hodges and Lehmann turned the signed-rank test into an estimate. It's the median of what?",
+                 reveal="Of the Walsh averages: the means of all pairs of observations, each with itself included. "
+                        "An estimate as good as the test it inverts.")
         self.walsh()
         self.picture()
         self.interval()
         self.newcomb()
         self.darwin()
         self.properties()
+        self.answer()
 
     def card(self):
         self.chapter(2, r"Hodges--Lehmann", r"An estimate from a test", lit=(1963,), part=PART, said="Chapter two. The Hodges–Lehmann estimator.")

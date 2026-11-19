@@ -13,12 +13,19 @@ KEEP = np.sqrt(2.0) * SE  # AIC keeps a predictor, roughly, when t^2 > 2
 class Selective(StatsScene):
     def construct(self):
         self.card()
+        self.ask("100 rows, 50 noise columns. Keep the columns with $p < 0.25$ and refit. The refit's $F$-test...",
+                 ["rightly finds nothing", "often looks highly significant"], 1,
+                 say="Freedman's experiment. A hundred rows, fifty columns of pure noise. Keep the columns with p "
+                     "below point two five, and refit. What does the refit's F-test say?",
+                 reveal="It often looks highly significant. The screening used the same data, so the survivors are "
+                        "the ones that fit the noise best.")
         self.freedman_again()
         self.curse()
         self.conditional()
         self.board()
         self.split()
         self.fixes()
+        self.answer()
 
     def card(self):
         self.chapter(9, r"Inference after selection", r"Freedman's ghost", lit=(1983, 2013), part=PART, said="Chapter nine. Inference after selection, a first look.")

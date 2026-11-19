@@ -8,6 +8,12 @@ from videos.stats.stats28.common import *  # noqa: F403
 class Singular(StatsScene):
     def construct(self):
         self.card()
+        self.ask("A two-component mixture whose truth has one component. BIC's penalty is...",
+                 ["about right", "too big"], 1,
+                 say="Fit a two-component mixture when the truth has one. The true parameters form a set, not a "
+                     "point. Is BIC's penalty right?",
+                 reveal="Too big. In singular models the effective dimension, Watanabe's learning coefficient, is "
+                        "smaller than half the parameter count, and WAIC and singular BIC use it.")
         self.mixture()
         self.plane()
         self.breaks()
@@ -15,6 +21,7 @@ class Singular(StatsScene):
         self.free_energy()
         self.table()
         self.where()
+        self.answer()
 
     def card(self):
         self.chapter(6, r"Singular models", r"When the truth is a set, \ not a point", lit=(2009,), part=PART, said="Chapter six. Singular models.")

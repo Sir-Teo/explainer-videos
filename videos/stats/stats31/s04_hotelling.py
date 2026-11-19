@@ -8,6 +8,12 @@ from videos.stats.stats31.common import *  # noqa: F403
 class Hotelling(StatsScene):
     def construct(self):
         self.card()
+        self.ask("Hotelling's $T^2$ is the largest squared $t$-statistic over...",
+                 ["all linear combinations of the variables", "the $p$ variables", "pairs of variables"], 0,
+                 say="Testing a whole mean vector at once. Hotelling's T squared is the largest squared t-statistic "
+                     "over what?",
+                 reveal="Over all linear combinations of the variables. Its null distribution accounts for that "
+                        "search, so the test keeps its level where p separate t-tests wouldn't.")
         self.problem()
         self.ui()
         self.iris_test()
@@ -16,6 +22,11 @@ class Hotelling(StatsScene):
         self.manova_def()
         self.four()
         self.which()
+        self.answer()
+        self.checkpoint([("Mahalanobis distance accounts for?", "the variances and correlations"),
+                         ("20 variables, $n = 50$, identity covariance: the largest eigenvalue?", "about 2.7: spread, not structure")],
+                        narration="Checkpoint. Means, covariances and tests.",
+                        answers_narration="The variances and correlations. And about two point seven.")
 
     def card(self):
         self.chapter(3, r"Hotelling's $T^2$ and MANOVA", r"Testing mean vectors", lit=(1931,), part=PART, said="Chapter three. Hotelling's T squared and MANOVA.")

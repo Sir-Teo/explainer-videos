@@ -8,6 +8,12 @@ from videos.stats.stats29.common import *  # noqa: F403
 class Bandwidth(StatsScene):
     def construct(self):
         self.card()
+        self.ask("Silverman's rule-of-thumb bandwidth assumes the density is...",
+                 ["normal", "uniform", "bimodal"], 0,
+                 say="The best bandwidth depends on the unknown curvature of the density. Silverman's rule of thumb "
+                     "escapes by assuming what?",
+                 reveal="That the density is normal. For a bimodal density that oversmooths, and the bumps blur "
+                        "together; Sheather and Jones estimate the curvature instead.")
         self.reference()
         self.lscv_idea()
         self.lscv_curve()
@@ -15,6 +21,7 @@ class Bandwidth(StatsScene):
         self.faithful_four()
         self.race()
         self.advice()
+        self.answer()
 
     def card(self):
         self.chapter(3, r"Choosing the bandwidth", r"From the data, \ without knowing $f''$", lit=(1991,), part=PART, said="Chapter three. Choosing the bandwidth.")

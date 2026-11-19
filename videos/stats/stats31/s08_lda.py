@@ -40,6 +40,12 @@ def boundaries(ax, gx, gy, Z, color, radius=0.022):
 class LDA(StatsScene):
     def construct(self):
         self.card()
+        self.ask("Fisher's discriminant maximizes...",
+                 ["the total variance", "between-group variance relative to within-group", "a correlation"], 1,
+                 say="Fisher's irises: which combination of measurements best separates the known species? What "
+                     "does Fisher's discriminant maximize?",
+                 reveal="The between-group variance relative to the within-group variance: groups far apart, each "
+                        "tight. With normal groups of equal covariance it's the Bayes rule.")
         self.fisher()
         self.bayes()
         self.logistic()
@@ -47,6 +53,11 @@ class LDA(StatsScene):
         self.plane()
         self.errors()
         self.history()
+        self.answer()
+        self.checkpoint([("PCA after changing one variable's units?", "can change completely: standardize"),
+                         ("Varimax rotation changes the fit?", "no, only the interpretation")],
+                        narration="Checkpoint. Directions and factors.",
+                        answers_narration="It can change completely. And no.")
 
     def card(self):
         self.chapter(7, r"Discriminant analysis", r"Separating groups you already know", lit=(1936,), part=PART, said="Chapter seven. Discriminant analysis.")

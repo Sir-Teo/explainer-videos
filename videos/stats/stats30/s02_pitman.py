@@ -8,6 +8,12 @@ from videos.stats.stats30.common import *  # noqa: F403
 class Pitman(StatsScene):
     def construct(self):
         self.card()
+        self.ask("Laplace data. The median's efficiency relative to the mean?",
+                 ["half", "the same", "twice"], 2,
+                 say="Data from the Laplace distribution, a peak with exponential tails. How efficient is the "
+                     "median relative to the mean?",
+                 reveal="Twice as efficient. For normal data the mean wins; at the Laplace the median does, and "
+                        "Hodges-Lehmann sits in between at one and a half.")
         self.upgrade()
         self.efficacy()
         self.sign()
@@ -16,6 +22,7 @@ class Pitman(StatsScene):
         self.bound()
         self.scores()
         self.estimators()
+        self.answer()
 
     def card(self):
         self.chapter(1, r"Pitman efficiency", r"How much do ranks cost?", lit=(1956,), part=PART, said="Chapter one. Pitman efficiency.")

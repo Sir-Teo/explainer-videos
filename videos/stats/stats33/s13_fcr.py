@@ -7,12 +7,23 @@ from videos.stats.stats33.common import *  # noqa: F403
 class FCR(StatsScene):
     def construct(self):
         self.card()
+        self.ask(r"Select BH's discoveries; report usual 90\% intervals for each. Their coverage is...",
+                 [r"90\%", r"below 90\%"], 1,
+                 say="Select the genes Benjamini-Hochberg calls discoveries, and report the usual ninety percent "
+                     "interval for each. How do those intervals cover?",
+                 reveal="Below ninety percent: the selected effects are the ones that came out large, partly by "
+                        "luck. Benjamini and Yekutieli's false coverage rate intervals widen to pay for selection.")
         self.problem()
         self.definition()
         self.whyRm()
         self.sim()
         self.board()
         self.beyond()
+        self.answer()
+        self.checkpoint([(r"Power 20\%, odds 1:10: share of significant findings true?", r"about 30\%"),
+                         ("Usual intervals for selected effects?", "under-cover: use FCR intervals")],
+                        narration="Checkpoint. The literature.",
+                        answers_narration="About thirty percent. And they under-cover.")
 
     def card(self):
         self.chapter(12, r"The false coverage rate", r"Intervals for the effects you selected", lit=(2005,), part=PART, said="Chapter twelve. The false coverage rate.")

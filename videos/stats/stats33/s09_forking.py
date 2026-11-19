@@ -8,12 +8,20 @@ from videos.stats.stats33.common import *  # noqa: F403
 class Forking(StatsScene):
     def construct(self):
         self.card()
+        self.ask("Four researcher choices, no true effect. The false-positive rate reached about...",
+                 [r"5\%", r"20\%", r"60\%"], 2,
+                 say="Simmons, Nelson and Simonsohn, 2011: no true effect, but the analyst may choose among "
+                     "dependent variables, add observations, add a covariate, or drop a condition. Combining all "
+                     "four, what was the false-positive rate?",
+                 reveal="About sixty percent. Each choice looked innocent; together they made almost any result "
+                        "significant. The garden of forking paths.")
         self.sixty_four()
         self.garden()
         self.stopping()
         self.simulator()
         self.bars()
         self.multiverse()
+        self.answer()
 
     def card(self):
         self.chapter(8, r"The garden of forking paths", r"Many analyses of one data set", lit=(2011,), part=PART, said="Chapter eight. The garden of forking paths.")

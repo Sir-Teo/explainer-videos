@@ -8,6 +8,13 @@ from videos.stats.stats31.common import *  # noqa: F403
 class PCA(StatsScene):
     def construct(self):
         self.card()
+        self.ask("Change one variable's units from metres to millimetres. The first principal component...",
+                 ["is unchanged", "swings toward that variable"], 1,
+                 say="Principal components find the directions of greatest variance. Change one variable from "
+                     "metres to millimetres. What happens to the first component?",
+                 reveal="It swings toward that variable, whose variance just grew a millionfold. Principal "
+                        "components depend on units: standardize, and work with correlations, unless the units are "
+                        "shared.")
         self.idea()
         self.svd()
         self.mds_link()
@@ -16,6 +23,7 @@ class PCA(StatsScene):
         self.units()
         self.how_many()
         self.cautions()
+        self.answer()
 
     def card(self):
         self.chapter(4, r"Principal components", r"The directions of greatest variance", lit=(1901, 1933), part=PART, said="Chapter four. Principal components.")

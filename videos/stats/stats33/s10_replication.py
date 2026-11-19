@@ -7,6 +7,12 @@ from videos.stats.stats33.common import *  # noqa: F403
 class Replication(StatsScene):
     def construct(self):
         self.card()
+        self.ask(r"Power 20\%, prior odds 1 to 10, $\alpha = 5\%$. Share of significant findings that are true?",
+                 [r"about 95\%", r"about 70\%", r"about 30\%"], 2,
+                 say="A field where tests have twenty percent power and one hypothesis in eleven is true, tested at "
+                     "five percent. What share of its significant findings are true?",
+                 reveal="About thirty percent: point two times one tenth, over that plus point zero five. "
+                        "Ioannidis's argument: low power and long odds make most findings false.")
         self.ioannidis()
         self.derive()
         self.table()
@@ -14,6 +20,11 @@ class Replication(StatsScene):
         self.osc()
         self.others()
         self.reading()
+        self.answer()
+        self.checkpoint([("Does FDR control one study's FDP?", "no: only its average"),
+                         ("Four forking choices, no effect: false positives reached?", r"about 60\%")],
+                        narration="Checkpoint. Lists and gardens.",
+                        answers_narration="No, only its average. And about sixty percent.")
 
     def card(self):
         self.chapter(9, r"Replication", r"How many published findings are true?", lit=(2005, 2015), part=PART, said="Chapter nine. Replication.")

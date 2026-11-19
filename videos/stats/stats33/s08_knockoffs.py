@@ -8,6 +8,12 @@ from videos.stats.stats33.common import *  # noqa: F403
 class Knockoffs(StatsScene):
     def construct(self):
         self.card()
+        self.ask("A knockoff variable is built to...",
+                 ["mimic the real one's correlations, with no signal", "be pure independent noise"], 0,
+                 say="Barber and Candès's knockoffs catch false variables in a regression. How is a knockoff built?",
+                 reveal="To mimic the real variable's correlations with every other variable, while carrying no "
+                        "signal about the outcome. Real and knockoff compete; a variable that can't beat its "
+                        "knockoff isn't selected.")
         self.problem()
         self.construct_()
         self.gaussian()
@@ -17,6 +23,7 @@ class Knockoffs(StatsScene):
         self.bars()
         self.results()
         self.reach()
+        self.answer()
 
     def card(self):
         self.chapter(7, r"Knockoffs", r"Fake variables that catch false ones", lit=(2015,), part=PART, said="Chapter seven. Knockoffs.")

@@ -11,6 +11,12 @@ KINDS = (("calibrated", r"calibrated: \ $N(\mu_t, 1)$", HIT), ("overconfident", 
 class Calibration(StatsScene):
     def construct(self):
         self.card()
+        self.ask("Dawid's prequential principle judges a model by...",
+                 ["its fit to all the data", "its one-step-ahead forecasts"], 1,
+                 say="Dawid's view: a model is a machine for issuing forecasts. His prequential principle judges it "
+                     "by what?",
+                 reveal="Its one-step-ahead forecasts, each made before the next observation is seen, and scored by "
+                        "a proper scoring rule. Weather forecasting has worked this way since Brier.")
         self.prequential()
         self.pit()
         self.histograms()
@@ -19,6 +25,11 @@ class Calibration(StatsScene):
         self.proper()
         self.crps()
         self.sharp()
+        self.answer()
+        self.checkpoint([("$p$-values after stepwise selection?", "too small: they ignore the search"),
+                         ("The prequential principle judges?", "one-step-ahead forecasts")],
+                        narration="Checkpoint. After selection.",
+                        answers_narration="Too small. And one-step-ahead forecasts.")
 
     def card(self):
         self.chapter(11, r"Calibrated forecasts", r"Judge a model by what it predicts", lit=(1984,), part=PART, said="Chapter eleven. Calibrated forecasts.")

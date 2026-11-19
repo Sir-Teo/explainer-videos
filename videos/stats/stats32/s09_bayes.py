@@ -11,6 +11,12 @@ BL = S.POST  # the Bayesian lasso: orange
 class BayesSparse(StatsScene):
     def construct(self):
         self.card()
+        self.ask("Posterior draws under the Laplace prior, the Bayesian lasso, are...",
+                 ["exactly sparse", "never exactly zero"], 1,
+                 say="The lasso is the posterior mode under independent Laplace priors. Are posterior draws under "
+                     "that prior sparse?",
+                 reveal="Never exactly zero: the Laplace prior puts no mass at zero. The lasso's prior is not "
+                        "sparse. Spike-and-slab and the horseshoe are built for that.")
         self.laplace()
         self.not_sparse()
         self.profile()
@@ -19,6 +25,7 @@ class BayesSparse(StatsScene):
         self.means()
         self.sse()
         self.spike_slab()
+        self.answer()
 
     def card(self):
         self.chapter(8, r"Bayesian sparsity", r"The lasso's prior is not sparse", lit=(2010,), part=PART, said="Chapter eight. Bayesian sparsity.")

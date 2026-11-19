@@ -8,12 +8,19 @@ from videos.stats.stats33.common import *  # noqa: F403
 class Adaptive(StatsScene):
     def construct(self):
         self.card()
+        self.ask("Half the hypotheses are false. BH at level $q$ actually controls FDR at...",
+                 ["$q$", "$q/2$", "$2q$"], 1,
+                 say="With independent tests, Benjamini-Hochberg's false discovery rate is the share of true nulls "
+                     "times q. If half the hypotheses are false, what does it actually control?",
+                 reveal="Q over two: it spends only half its budget. Estimate the share of nulls, as Storey did, "
+                        "and you can spend the rest on discoveries.")
         self.waste()
         self.storey()
         self.picture()
         self.qvalue()
         self.twostage()
         self.when()
+        self.answer()
 
     def card(self):
         self.chapter(4, r"Adaptive FDR", r"Estimating the share of nulls", lit=(1995,), part=PART, said="Chapter four. Adaptive false discovery rates.")

@@ -8,6 +8,12 @@ from videos.stats.stats28.common import *  # noqa: F403
 class BIC(StatsScene):
     def construct(self):
         self.card()
+        self.ask("The true model is among the candidates. As $n$ grows, AIC...",
+                 [r"picks it with probability $\to 1$", "keeps a chance of choosing a larger model"], 1,
+                 say="The true model is among the candidates. As the sample grows, BIC picks it with probability "
+                     "tending to one. What about AIC?",
+                 reveal="AIC keeps a fixed chance of choosing a larger model. It's efficient for prediction, not "
+                        "consistent for selection. Consistency against efficiency.")
         self.derivation()
         self.unit_info()
         self.bench()
@@ -15,6 +21,7 @@ class BIC(StatsScene):
         self.efficient()
         self.plateau()
         self.choose()
+        self.answer()
 
     def card(self):
         self.chapter(3, r"BIC", r"Consistency against efficiency", lit=(1978,), part=PART, said="Chapter three. The Bayesian information criterion.")

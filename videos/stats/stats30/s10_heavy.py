@@ -8,6 +8,12 @@ from videos.stats.stats30.common import *  # noqa: F403
 class Heavy(StatsScene):
     def construct(self):
         self.card()
+        self.ask("Heavy tails, finite variance. Which mean estimator has sub-Gaussian deviations?",
+                 ["the sample mean", "the median of means"], 1,
+                 say="Heavy-tailed data whose variance is finite, and you want the mean itself. Which estimator has "
+                     "deviation bounds as good as if the data were Gaussian?",
+                 reveal="The median of means: split the data into groups, average each, and take the median of the "
+                        "averages. The sample mean's confidence bounds degrade badly.")
         self.problem()
         self.skew()
         self.mom()
@@ -16,6 +22,7 @@ class Heavy(StatsScene):
         self.vectors()
         self.race()
         self.lesson()
+        self.answer()
 
     def card(self):
         self.chapter(9, r"Heavy-tailed means", r"Median of means", lit=(1983,), part=PART, said="Chapter nine. Estimating the mean of heavy-tailed data.")

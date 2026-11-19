@@ -8,12 +8,19 @@ from videos.stats.stats29.common import *  # noqa: F403
 class Splines(StatsScene):
     def construct(self):
         self.card()
+        self.ask(r"A smoothing spline with $\lambda \to \infty$ becomes...",
+                 ["the interpolating curve", "the least-squares straight line", "zero"], 1,
+                 say="A smoothing spline trades fit against integrated squared curvature with a penalty lambda. As "
+                     "lambda goes to infinity, what does it become?",
+                 reveal="The least-squares straight line: the only curves with no curvature. As lambda goes to "
+                        "zero, the interpolating spline.")
         self.problem()
         self.theorem()
         self.reinsch()
         self.fits()
         self.spectrum()
         self.ridge()
+        self.answer()
 
     def card(self):
         self.chapter(6, r"Smoothing splines", r"The smoothest curve that fits", lit=(1967,), part=PART, said="Chapter six. Smoothing splines.")

@@ -8,6 +8,12 @@ from videos.stats.stats29.common import *  # noqa: F403
 class LocalPoly(StatsScene):
     def construct(self):
         self.card()
+        self.ask("Near a boundary of the data, which has smaller bias?",
+                 ["Nadaraya--Watson", "local linear regression"], 1,
+                 say="Regression one neighbourhood at a time. Near the edge of the data, which has the smaller "
+                     "bias: the local average, Nadaraya-Watson, or a local straight line?",
+                 reveal="The local line. A local average is dragged by the one-sided neighbourhood; a local line "
+                        "follows the slope to the edge.")
         self.nw()
         self.local_linear()
         self.kernels()
@@ -15,6 +21,7 @@ class LocalPoly(StatsScene):
         self.design()
         self.motorcycle()
         self.loess_robust()
+        self.answer()
 
     def card(self):
         self.chapter(5, r"Local polynomials", r"Regression, \ one neighbourhood at a time", lit=(1964,), part=PART, said="Chapter five. Local polynomial regression.")

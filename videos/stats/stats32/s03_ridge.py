@@ -8,6 +8,12 @@ from videos.stats.stats32.common import *  # noqa: F403
 class Ridge(StatsScene):
     def construct(self):
         self.card()
+        self.ask("Ridge regression on nearly collinear predictors...",
+                 ["increases the variance", "trades a little bias for much less variance"], 1,
+                 say="Hoerl at DuPont had nearly collinear predictors and wildly unstable least-squares "
+                     "coefficients. What does adding a ridge do?",
+                 reveal="It trades a little bias for much less variance. Some ridge always beats least squares in "
+                        "mean squared error, a theorem Hoerl and Kennard proved in 1970.")
         self.history()
         self.derive()
         self.collinear()
@@ -17,6 +23,7 @@ class Ridge(StatsScene):
         self.prior()
         self.mse()
         self.never()
+        self.answer()
 
     def card(self):
         self.chapter(2, r"Ridge", r"Stability by shrinking", lit=(1970,), part=PART, said="Chapter two. Ridge regression.")

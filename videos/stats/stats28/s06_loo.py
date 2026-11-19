@@ -8,6 +8,12 @@ from videos.stats.stats28.common import *  # noqa: F403
 class LOO(StatsScene):
     def construct(self):
         self.card()
+        self.ask("WAIC and PSIS-LOO estimate...",
+                 ["which model is true", "out-of-sample predictive accuracy"], 1,
+                 say="For Bayesian models, WAIC and Pareto-smoothed leave-one-out work from posterior draws. What "
+                     "do they estimate?",
+                 reveal="Out-of-sample predictive accuracy, the expected log predictive density. Not which model is "
+                        "true.")
         self.elpd()
         self.psis()
         self.waic_idea()
@@ -15,6 +21,7 @@ class LOO(StatsScene):
         self.khats()
         self.waic_vs_loo()
         self.compare()
+        self.answer()
 
     def card(self):
         self.chapter(5, r"Bayesian LOO and WAIC", r"Predictive accuracy from posterior draws", lit=(2010,), part=PART, said="Chapter five. Bayesian leave-one-out and WAIC.")

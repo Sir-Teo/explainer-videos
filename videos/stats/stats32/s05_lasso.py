@@ -8,6 +8,12 @@ from videos.stats.stats32.common import *  # noqa: F403
 class Lasso(StatsScene):
     def construct(self):
         self.card()
+        self.ask("Orthonormal design. The lasso's estimate of each coefficient is...",
+                 ["soft-thresholded least squares", "hard-thresholded least squares", "least squares, scaled down"], 0,
+                 say="With an orthonormal design, the lasso separates into one problem per coefficient. What's each "
+                     "estimate?",
+                 reveal="The least-squares coefficient, soft-thresholded: moved toward zero by lambda, and set to "
+                        "zero if it would cross. Shrinkage and selection in one convex problem.")
         self.history()
         self.kkt()
         self.lam_max()
@@ -16,6 +22,7 @@ class Lasso(StatsScene):
         self.geometry()
         self.facts()
         self.bias()
+        self.answer()
 
     def card(self):
         self.chapter(4, r"The lasso", r"Shrinkage and selection in one convex problem", lit=(1996,), part=PART, said="Chapter four. The lasso.")

@@ -8,6 +8,12 @@ from videos.stats.stats33.common import *  # noqa: F403
 class FWER(StatsScene):
     def construct(self):
         self.card()
+        self.ask(r"Bonferroni for 5,000 tests at family-wise 5\%. Each test's threshold?",
+                 ["0.05", "0.001", "0.00001"], 2,
+                 say="Bonferroni's correction: control the chance of any false positive at five percent across five "
+                     "thousand tests. What threshold does each test get?",
+                 reveal="Point zero zero zero zero one: five percent divided by five thousand. Safe, and at that "
+                        "strictness most real effects are missed.")
         self.bonferroni()
         self.holm()
         self.closed()
@@ -16,6 +22,7 @@ class FWER(StatsScene):
         self.wy()
         self.results()
         self.verdict()
+        self.answer()
 
     def card(self):
         self.chapter(2, r"Family-wise error", r"No false positives, \ with high probability", lit=(1979,), part=PART, said="Chapter two. The family-wise error rate.")

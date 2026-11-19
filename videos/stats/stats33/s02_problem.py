@@ -8,6 +8,12 @@ from videos.stats.stats33.common import *  # noqa: F403
 class Problem(StatsScene):
     def construct(self):
         self.card()
+        self.ask(r"5,000 genes, none truly different, each tested at 5\%. Expected false positives?",
+                 ["0", "5", "250"], 2,
+                 say="Five thousand genes, and none of them truly differs between patients and controls. Test each "
+                     "at five percent. How many false positives do you expect?",
+                 reveal="Two hundred and fifty: five percent of five thousand. A list that long would look like "
+                        "discovery.")
         self.study()
         self.sea()
         self.uncorrected()
@@ -15,6 +21,7 @@ class Problem(StatsScene):
         self.uniform()
         self.table()
         self.rates()
+        self.answer()
 
     def card(self):
         self.chapter(1, r"The problem", r"Five thousand genes, \ one study", lit=(1995,), part=PART, said="Chapter one. The problem.")

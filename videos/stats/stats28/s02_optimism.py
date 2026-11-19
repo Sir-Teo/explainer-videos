@@ -8,12 +8,19 @@ from videos.stats.stats28.common import *  # noqa: F403
 class Optimism(StatsScene):
     def construct(self):
         self.card()
+        self.ask("Fit $d$ parameters by least squares. The training error flatters the test error by about...",
+                 ["nothing", r"$2d\sigma^2/n$", "$d$"], 1,
+                 say="Fit d parameters to n noisy points by least squares. By about how much does the training "
+                     "error flatter the error on new data?",
+                 reveal="About two d sigma squared over n: each parameter spent fitting the noise makes the "
+                        "training error look better. That's the optimism Mallows' Cp adds back.")
         self.fits()
         self.curves()
         self.decomp()
         self.theory()
         self.df()
         self.lasso()
+        self.answer()
 
     def card(self):
         self.chapter(1, r"Optimism", r"Training error flatters", lit=(1986,), part=PART, said="Chapter one. Optimism.")

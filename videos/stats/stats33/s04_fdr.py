@@ -8,6 +8,19 @@ from videos.stats.stats33.common import *  # noqa: F403
 class FDR(StatsScene):
     def construct(self):
         self.card()
+        self.wrong_idea(r"FDR control at 5\% means each discovery is 95\% likely real",
+                        "FDR is an average share over the list; one case's chance is its local fdr",
+                        narration="A natural reading: with the false discovery rate at five percent, each discovery "
+                                  "is ninety-five percent likely to be real.",
+                        right_narration="No. The FDR is an average share over the whole list. Discoveries at the "
+                                        "bottom of the list are far more likely to be false than those at the top; "
+                                        "one case's chance is its local false discovery rate.")
+        self.ask(r"Benjamini--Hochberg at $q = 10\%$ promises...",
+                 ["no false discoveries", r"at most 10\% of discoveries false, on average", r"10\% of tests false"], 1,
+                 say="Benjamini and Hochberg changed the promise. At q equal to ten percent, what does their "
+                     "procedure promise?",
+                 reveal="That on average at most ten percent of the discoveries are false. A list with a few false "
+                        "entries is useful; a list too short to contain anything isn't.")
         self.history()
         self.procedure()
         self.sea()
@@ -17,6 +30,11 @@ class FDR(StatsScene):
         self.proof()
         self.dependence()
         self.by_results()
+        self.answer()
+        self.checkpoint([(r"5,000 true nulls at 5\%: false positives expected?", "250"),
+                         (r"Bonferroni's threshold, 5,000 tests at 5\%?", "0.00001")],
+                        narration="Checkpoint. Error rates.",
+                        answers_narration="Two hundred and fifty. And point zero zero zero zero one.")
 
     def card(self):
         self.chapter(3, r"The false discovery rate", r"Control the share of errors, \ not their existence", lit=(1995,), part=PART, said="Chapter three. The false discovery rate.")

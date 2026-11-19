@@ -8,12 +8,19 @@ from videos.stats.stats30.common import *  # noqa: F403
 class Multivariate(StatsScene):
     def construct(self):
         self.card()
+        self.ask("Three outliers clustered together. Classical Mahalanobis distances flag them...",
+                 ["always", "often not: they mask each other"], 1,
+                 say="Three outliers sitting close together. Do classical Mahalanobis distances, from the sample "
+                     "mean and covariance, reliably flag them?",
+                 reveal="Often not. Together they drag the mean and inflate the covariance, so each looks ordinary. "
+                        "The minimum covariance determinant ignores them while fitting.")
         self.masking()
         self.mcd_def()
         self.dd()
         self.ellipses()
         self.stahel()
         self.swamping()
+        self.answer()
 
     def card(self):
         self.chapter(8, r"Robust multivariate", r"Masking, \ swamping, \ and the MCD", lit=(1999,), part=PART, said="Chapter eight. Robust multivariate estimation.")

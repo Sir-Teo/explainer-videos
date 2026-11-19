@@ -8,6 +8,12 @@ from videos.stats.stats28.common import *  # noqa: F403
 class CV(StatsScene):
     def construct(self):
         self.card()
+        self.ask("Cross-validation estimates best the error of...",
+                 ["the procedure, averaged over training sets", "this one fitted model"], 0,
+                 say="What does cross-validation actually estimate: the error of the procedure, averaged over "
+                     "training sets, or the error of the one model you fitted?",
+                 reveal="The procedure's average error. To know one fitted model's error, there is no substitute "
+                        "for fresh data.")
         self.shortcuts()
         self.prostate_cv()
         self.press_prostate()
@@ -15,6 +21,11 @@ class CV(StatsScene):
         self.kfold()
         self.picture()
         self.advice()
+        self.answer()
+        self.checkpoint([("The optimism of a $d$-parameter least-squares fit?", r"about $2d\sigma^2/n$"),
+                         ("Which is consistent for a true model in the set, AIC or BIC?", "BIC")],
+                        narration="Checkpoint. Criteria.",
+                        answers_narration="Two d sigma squared over n. And BIC.")
 
     def card(self):
         self.chapter(4, r"Cross-validation theory", r"What it estimates, \ and what it does not", lit=(1974,), part=PART, said="Chapter four. The theory of cross-validation.")
