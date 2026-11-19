@@ -273,6 +273,24 @@ DATASETS = {
                      "Asia", "North America", "Africa", "South America"),
         "files": ("so2_1900_2022.csv",),
     },
+    "marriage": {
+        "title": "Crude marriage rate (marriages a year per 1,000 people), by country",
+        "publisher": "OECD Family Database; US Census Bureau (1949); Centers for Disease Control and Prevention; Our "
+                     "World in Data (compilation)",
+        "citation": "OECD (2025), OECD Family Database, Marriage and Divorce Rates; US Census Bureau (1949), Vital "
+                    "Statistics; CDC (2020), Marriage Rates in the United States, with minor processing by Our World in "
+                    "Data, grapher marriage-rate-per-1000-inhabitants, retrieved 2026-11-19",
+        "short": "OECD, US Census Bureau and CDC, via Our World in Data",
+        "url": "https://ourworldindata.org/grapher/marriage-rate-per-1000-inhabitants.csv?v=1&csvType=full&"
+               "useColumnShortNames=true",
+        "licence": "CC BY 4.0 (Our World in Data); sources' terms",
+        "units": "marriages a year per 1,000 people",
+        "vintage": "2026-11-19",
+        "sha256": "bddc3f12a677f36a7c0af65118b8e3c37869582eac1e5f638bd850c7d214c979",
+        "entities": ("United States", "United Kingdom", "Japan", "Italy", "Sweden", "South Korea", "Germany",
+                     "France", "Netherlands", "Denmark"),
+        "files": ("marriage_rate.csv",),
+    },
     "draft1970": {
         "title": "The draft lottery of 1 December 1969 (for men born 1944-50): the rank drawn for each birthday",
         "publisher": "U.S. Selective Service System; as tabulated by the Journal of Statistics Education data archive",
@@ -845,9 +863,35 @@ def refresh_so2() -> None:
             w.writerow([r["entity"], r["code"], r["year"], r["emissions__pollutant_so2__sector_all_sectors"]])
 
 
+def marriage(entity: str) -> dict:
+    """Marriages a year per 1,000 people, for one of the countries kept in the extract (the United States from 1886,
+    with gaps; the others from 1960): ``{"year": [...], "value": [...]}``."""
+    rows = [r for r in _read(HERE / "marriage_rate.csv") if r["entity"] == entity]
+    if not rows:
+        raise KeyError(entity)
+    return {"year": [int(r["year"]) for r in rows], "value": [float(r["rate"]) for r in rows]}
+
+
+def refresh_marriage() -> None:
+    d = DATASETS["marriage"]
+    raw = RAW / "marriage-rate-per-1000-inhabitants.csv"
+    sha = _download(d["url"], raw)
+    if d.get("sha256") and sha != d["sha256"]:
+        print(f"marriage: the download differs from the recorded vintage ({sha[:12]} vs {d['sha256'][:12]})")
+    print(f"marriage: sha256 {sha}")
+    with open(raw, newline="", encoding="utf-8") as f:
+        rows = [r for r in csv.DictReader(f) if r["entity"] in d["entities"]]
+    with open(HERE / "marriage_rate.csv", "w", newline="", encoding="utf-8") as f:
+        w = csv.writer(f)
+        w.writerow(["entity", "code", "year", "rate"])
+        for r in rows:
+            w.writerow([r["entity"], r["code"], r["year"], r["value__gender_both__indicator_marriage_rate"]])
+
+
 REFRESH = {"draft1970": refresh_draft1970, "maddison2023": refresh_maddison, "fred": refresh_fred, "spf": refresh_spf,
            "pinksheet": refresh_pinksheet, "psd_coffee": refresh_psd_coffee, "wdi": refresh_wdi, "hdr": refresh_hdr,
-           "rtdsm": refresh_rtdsm, "warheads": refresh_warheads, "so2": refresh_so2}
+           "rtdsm": refresh_rtdsm, "warheads": refresh_warheads, "so2": refresh_so2,
+           "marriage": refresh_marriage}
 
 
 def main() -> None:

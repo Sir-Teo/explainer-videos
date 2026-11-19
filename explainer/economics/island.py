@@ -494,6 +494,33 @@ TRUTHS = {
         # the harbour's bonds (chapter 12): two bonds; a big buyer wants both, a small one wants one
         "bonds": {"supply": 2, "big": (10.0, 10.0), "small": 6.0},
     },
+    17: {
+        # Play it (chapter 1): four children, three workshops' places; one lottery breaks every tie
+        "playit": {"students": {"you": ("boatyard", "kiln", "loft"), "ana": ("boatyard", "kiln", "loft"),
+                                "bo": ("loft", "kiln", "boatyard"), "dara": ("kiln", "boatyard", "loft")},
+                   "lottery": ("ana", "bo", "you", "dara"), "capacity": {"boatyard": 1, "kiln": 1, "loft": 2}},
+        # the apprentices' board (chapters 5-6): four apprentices, four workshops (found by search: six rounds, three
+        # stable matchings)
+        "board": {"apprentices": {"ana": ("boatyard", "kiln", "loft", "grove"), "bo": ("kiln", "grove", "boatyard", "loft"),
+                                  "chidi": ("loft", "boatyard", "kiln", "grove"),
+                                  "dara": ("boatyard", "kiln", "grove", "loft")},
+                  "workshops": {"boatyard": ("bo", "dara", "ana", "chidi"), "grove": ("ana", "dara", "chidi", "bo"),
+                                "kiln": ("chidi", "dara", "bo", "ana"), "loft": ("bo", "dara", "ana", "chidi")}},
+        # a footbridge (chapter 3): four islanders' values, a cost shared equally
+        "bridge": {"values": (60.0, 10.0, 10.0, 40.0), "cost": 100.0},
+        # two boats and two buyers (chapter 11): what each pair creates together
+        "assignment": {"values": ((5.0, 8.0), (7.0, 9.0))},
+        # huts (chapter 9): each islander's ranking of the four huts, named by owner
+        "huts": {"ana": ("bo", "chidi", "ana", "dara"), "bo": ("ana", "dara", "bo", "chidi"),
+                 "chidi": ("dara", "ana", "chidi", "bo"), "dara": ("ana", "chidi", "dara", "bo")},
+        # the kidney pool (chapter 9): which pair's donor can give to which pair's patient (found by search)
+        "kidneys": {"compat": {"P1": ("P6", "P7"), "P2": (), "P3": ("P2", "P6"), "P4": ("P5",), "P5": ("P3", "P6"),
+                               "P6": ("P1", "P4"), "P7": ("P8",), "P8": ("P1", "P2")},
+                    "altruists": {"altruist": ("P1", "P3")}, "max_cycle": 3, "max_chain": 5},
+        # what a lottery reveals (chapter 12): one oversubscribed school
+        "lottery": {"students": 20000, "effect": 0.4, "seats": 3000, "sibling_share": 0.25, "always_takers": 0.3,
+                    "seed": 2017, "reps": 200},
+    },
 }
 
 

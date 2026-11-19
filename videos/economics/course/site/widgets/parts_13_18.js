@@ -319,4 +319,108 @@
             "browser; nothing you do here is stored or sent.",
     });
   };
+  // ---- Part 17: markets by design ------------------------------------------------------------------------------
+  W.match = function (el) {
+    // the workshops of Part 17 (explainer.economics.agora.matching: boston, deferred_acceptance): nine children,
+    // three workshops (2, 3 and 4 places); the reader truly ranks the boatyard, then the kiln, then the net loft;
+    // the eight others rank at random, with the boatyard as popular as the slider says; one lottery breaks ties.
+    // For each of the six lists the reader could submit, the page plays 400 such markets under the chosen rule and
+    // reports how the reader fares, measured by the TRUE ranking (3 points for the boatyard, 2 the kiln, 1 the loft)
+    var SCH = ["boatyard", "kiln", "net loft"], CAP = [2, 3, 4], N = 9, M = 400;
+    var LISTS = [[0, 1, 2], [0, 2, 1], [1, 0, 2], [1, 2, 0], [2, 0, 1], [2, 1, 0]];
+    var NAMES = LISTS.map(function (l) { return l.map(function (k) { return SCH[k].split(" ").pop(); }).join(" > "); });
+    function others(r, pop) {
+      // a random ranking with the boatyard first with probability pop, otherwise uniformly random
+      var a = [0, 1, 2], i, j, t;
+      for (i = 2; i > 0; i--) { j = Math.floor(r() * (i + 1)); t = a[i]; a[i] = a[j]; a[j] = t; }
+      if (r() < pop) { a = [0].concat(a.filter(function (x) { return x !== 0; })); }
+      return a;
+    }
+    function boston(pref, rank) {
+      var left = CAP.slice(), got = new Array(N).fill(-1), k, s, i;
+      for (k = 0; k < 3; k++) {
+        for (s = 0; s < 3; s++) {
+          var apps = [];
+          for (i = 0; i < N; i++) if (got[i] < 0 && pref[i][k] === s) apps.push(i);
+          apps.sort(function (x, y) { return rank[x] - rank[y]; });
+          for (i = 0; i < apps.length && left[s] > 0; i++) { got[apps[i]] = s; left[s]--; }
+        }
+      }
+      return got;
+    }
+    function da(pref, rank) {
+      var next = new Array(N).fill(0), held = [[], [], []], free = [], i, changed = true;
+      for (i = 0; i < N; i++) free.push(i);
+      while (free.length) {
+        var nf = [];
+        free.forEach(function (i) {
+          if (next[i] >= 3) return;
+          var s = pref[i][next[i]++];
+          held[s].push(i);
+        });
+        for (var s = 0; s < 3; s++) {
+          held[s].sort(function (x, y) { return rank[x] - rank[y]; });
+          while (held[s].length > CAP[s]) nf.push(held[s].pop());
+        }
+        free = nf.filter(function (i) { return next[i] < 3; });
+      }
+      var got = new Array(N).fill(-1);
+      for (var t = 0; t < 3; t++) held[t].forEach(function (i) { got[i] = t; });
+      return got;
+    }
+    function play(v, s) {
+      var res = LISTS.map(function () { return { pts: 0, dist: [0, 0, 0, 0] }; }), m, li;
+      for (m = 0; m < M; m++) {
+        var r = rng((s.seed || 1) * 7919 + m * 31 + 7), pref = [null], rank = [], i;
+        for (i = 1; i < N; i++) pref.push(others(r, v.pop));
+        for (i = 0; i < N; i++) rank.push(r());
+        for (li = 0; li < LISTS.length; li++) {
+          pref[0] = LISTS[li];
+          var got = (s.da ? da : boston)(pref, rank)[0];
+          var pts = got < 0 ? 0 : 3 - got;              // the reader's TRUE ranking: boatyard 3, kiln 2, loft 1
+          res[li].pts += pts / M;
+          res[li].dist[got < 0 ? 3 : got] += 1 / M;
+        }
+      }
+      return res;
+    }
+    QB.widget(el, {
+      title: "Which list should you submit?",
+      sub: "You truly prefer the boatyard, then the kiln, then the net loft. Eight other children rank the three " +
+           "workshops too, and one lottery breaks ties. For each of the six lists you could submit, the page plays " +
+           "400 markets and scores what you get by your true ranking. Change how popular the boatyard is, and " +
+           "switch between the Boston rule and deferred acceptance.",
+      panels: 2, height: 320, weights: [1.25, 1],
+      controls: [
+        { k: "pop", label: "Share of the others who put the boatyard first (beyond chance)", min: 0, max: 0.9,
+          step: 0.05, value: 0.5, fmt: function (x) { return (100 * x).toFixed(0) + "%"; } },
+      ],
+      buttons: [
+        { label: "Switch the rule", act: function (s) { s.da = !s.da; } },
+        { label: "New markets", act: function (s) { s.seed = (s.seed || 1) + 1; } },
+      ],
+      draw: function (g, v, s) {
+        var res = play(v, s);
+        s.res = res;
+        var a = g[0].axes({ x: [-0.6, 5.6], y: [0, 3], title: "Average result by your true ranking (" +
+                            (s.da ? "deferred acceptance" : "the Boston rule") + ")", xlabel: NAMES.join("  |  ") });
+        a.bars([0, 1, 2, 3, 4, 5], res.map(function (r) { return r.pts; }), 0.6,
+               { color: function (i) { return i === 0 ? GREEN : (s.da ? BLUE : GOLD); } });
+        var b = g[1].axes({ x: [-0.5, 3.5], y: [0, 1], title: "If you tell the truth: where you end up",
+                            xlabel: "boatyard / kiln / net loft / nowhere" });
+        b.bars([0, 1, 2, 3], res[0].dist, 0.6, { color: function (i) { return [GOLD, RED, GREEN, GREY_HINT][i]; } });
+      },
+      readout: function (v, s) {
+        var res = s.res || [], best = 0, i;
+        for (i = 1; i < res.length; i++) if (res[i].pts > res[best].pts + 1e-9) best = i;
+        return [["rule", s.da ? "deferred acceptance (students asking)" : "the Boston rule"],
+                ["the truth (green) scores", res.length ? res[0].pts.toFixed(2) : "-"],
+                ["the best list scores", res.length ? res[best].pts.toFixed(2) + " (" + NAMES[best] + ")" : "-"],
+                ["does a lie ever pay?", res.length ? (best === 0 ? "no: the truth is best" : "yes, here") : "-"]];
+      },
+      note: "Under deferred acceptance the truthful list always scores best, whatever the others do (Part 17, " +
+            "chapter 6); under the Boston rule a safer list beats the truth when the boatyard is popular. Computed in " +
+            "your browser; nothing you do here is stored or sent.",
+    });
+  };
 })();

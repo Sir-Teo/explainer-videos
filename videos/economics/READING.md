@@ -10,7 +10,7 @@ the series leaves out.
 Both *Parts* columns are found, not typed. *Planned* lists the parts whose entry in
 [`SYLLABUS.md`](SYLLABUS.md) names the book or paper; *Built* lists the parts whose scenes, compute step or
 README cite it (a dot: none yet). Fuller notes (editions, chapters, what each source was used for) are in each
-part's README, under *Sources*. Built so far: Parts 1–16.
+part's README, under *Sources*. Built so far: Parts 1–17.
 
 ## 1. The textbook spine
 
@@ -56,7 +56,7 @@ part's README, under *Sources*. Built so far: Parts 1–16.
 | Krishna | V. Krishna, *Auction Theory* (2nd ed., 2010) | 16 | 16 |
 | Milgrom | P. Milgrom, *Putting Auction Theory to Work* (2004) | 16 | 16 |
 | Roth–Sotomayor | A. Roth and M. Sotomayor, *Two-Sided Matching* (1990) | 17 | · |
-| Börgers | T. Börgers, *An Introduction to the Theory of Mechanism Design* (2015) | 17 | · |
+| Börgers | T. Börgers, *An Introduction to the Theory of Mechanism Design* (2015) | 17 | 17 |
 | Tirole IO | J. Tirole, *The Theory of Industrial Organization* (1988) | 10–12, 53 | 10, 12 |
 
 ### Graduate macro
@@ -162,9 +162,9 @@ part's README, under *Sources*. Built so far: Parts 1–16.
 | lemons | Akerlof (1970) | 13 | 13 |
 | signalling | Spence (1973) | 13 | · |
 | screening in insurance | Rothschild and Stiglitz (1976) | 7, 13 | 7, 13 |
-| second-price auctions | Vickrey (1961) | 16 | 16 |
+| second-price auctions | Vickrey (1961) | 16 | 16–17 |
 | optimal auctions | Myerson (1981) | 16 | 16 |
-| stable matching | Gale and Shapley (1962) | 17 | · |
+| stable matching | Gale and Shapley (1962) | 17 | 17 |
 | Bayesian persuasion | Kamenica and Gentzkow (2011) | 53 | · |
 | incentives that crowd out | Gneezy and Rustichini (2000), "A Fine Is a Price" | 1, 14 | 1, 14 |
 
@@ -287,6 +287,8 @@ part's README, under *Sources*. Built so far: Parts 1–16.
 **Part 15, *Spillovers*.** Books: Jonathan Gruber, *Public Finance and Public Policy*, chs. 5–9; Mas-Colell, Whinston and Green, *Microeconomic Theory* (1995), ch. 11; Elinor Ostrom, *Governing the Commons* (1990); Tom Tietenberg and Lynne Lewis, *Environmental and Natural Resource Economics*. Papers: Pigou (1920); Meade (1952); Coase (1959, 1960, 1974); Samuelson (1954); Gordon (1954); Hardin (1968); Dales (1968); Montgomery (1972); Cheung (1973); Weitzman (1974); Vickrey (1969); Arnott, de Palma and Lindsey (1990); Duranton and Turner (2011); Fehr and Gächter (2000); Fischbacher, Gächter and Fehr (2001); Herrmann, Thöni and Gächter (2008); Rohlfs (1974); Katz and Shapiro (1985); David (1985); Arthur (1989); Jaffe, Trajtenberg and Henderson (1993); Schmalensee and Stavins (2013); Chay and Greenstone (2003); Currie and Walker (2011); Deryugina et al. (2019).
 
 **Part 16, *Auctions*.** Books: Vijay Krishna, *Auction Theory* (2nd ed., 2010); Paul Klemperer, *Auctions: Theory and Practice* (2004); Paul Milgrom, *Putting Auction Theory to Work* (2004); John Kagel and Dan Levin, *Common Value Auctions and the Winner's Curse* (2002). Papers: Vickrey (1961); Myerson (1981); Riley and Samuelson (1981); Milgrom and Weber (1982); Capen, Clapp and Campbell (1971); Bazerman and Samuelson (1983); Kagel, Harstad and Levin (1987); Cox, Smith and Walker (1988); Bulow and Klemperer (1996); Maskin and Riley (2000); Guerre, Perrigne and Vuong (2000); Cramton and Schwartz (2000); Binmore and Klemperer (2002); Klemperer (2002a, 2002b); Edelman, Ostrovsky and Schwarz (2007); Varian (2007); Ostrovsky and Schwarz (2009); Garbade and Ingber (2005); Akbarpour and Li (2020); Milgrom and Segal (2020).
+
+**Part 17, *Markets by Design*.** Books: Alvin E. Roth, *Who Gets What and Why* (2015); Alvin E. Roth and Marilda Sotomayor, *Two-Sided Matching* (1990); Tilman Börgers, *An Introduction to the Theory of Mechanism Design* (2015); Nisan, Roughgarden, Tardos and Vazirani, *Algorithmic Game Theory* (2007), chs. 9–10. Papers: Gale and Shapley (1962); Shapley and Shubik (1971); Shapley and Scarf (1974); Vickrey (1961); Clarke (1971); Groves (1973); Green and Laffont (1977); Myerson (1979); Myerson and Satterthwaite (1983); Chatterjee and Samuelson (1983); Dubins and Freedman (1981); Roth (1982, 1984, 1991, 2002, 2007, 2008); Roth and Peranson (1999); Kagel and Roth (2000); Abdulkadiroğlu and Sönmez (2003); Abdulkadiroğlu, Pathak and Roth (2005); Chen and Kesten (2017); Roth, Sönmez and Ünver (2004); Rees et al. (2009); Kojima and Pathak (2009); Azevedo and Leshno (2016); Abdulkadiroğlu, Angrist and Pathak (2014); Abdulkadiroğlu, Angrist, Narita and Pathak (2017); Bansak et al. (2018).
 
 ## 4. What the series leaves out
 

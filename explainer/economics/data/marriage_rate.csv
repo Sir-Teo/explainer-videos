@@ -1,0 +1,643 @@
+entity,code,year,rate
+Denmark,DNK,1960,7.8
+Denmark,DNK,1961,7.9
+Denmark,DNK,1962,8.1
+Denmark,DNK,1963,8.2
+Denmark,DNK,1964,8.4
+Denmark,DNK,1965,8.8
+Denmark,DNK,1966,8.6
+Denmark,DNK,1967,8.5
+Denmark,DNK,1968,8.1
+Denmark,DNK,1969,8
+Denmark,DNK,1970,7.4
+Denmark,DNK,1971,6.6
+Denmark,DNK,1972,6.2
+Denmark,DNK,1973,6.1
+Denmark,DNK,1974,6.6
+Denmark,DNK,1975,6.3
+Denmark,DNK,1976,6.1
+Denmark,DNK,1977,6.3
+Denmark,DNK,1978,5.6
+Denmark,DNK,1979,5.4
+Denmark,DNK,1980,5.2
+Denmark,DNK,1981,5
+Denmark,DNK,1982,4.8
+Denmark,DNK,1983,5.3
+Denmark,DNK,1984,5.6
+Denmark,DNK,1985,5.7
+Denmark,DNK,1986,6
+Denmark,DNK,1987,6.1
+Denmark,DNK,1988,6.3
+Denmark,DNK,1989,6
+Denmark,DNK,1990,6.1
+Denmark,DNK,1991,6
+Denmark,DNK,1992,6.2
+Denmark,DNK,1993,6.1
+Denmark,DNK,1994,6.8
+Denmark,DNK,1995,6.6
+Denmark,DNK,1996,6.8
+Denmark,DNK,1997,6.5
+Denmark,DNK,1998,6.5
+Denmark,DNK,1999,6.7
+Denmark,DNK,2000,7.2
+Denmark,DNK,2001,6.8
+Denmark,DNK,2002,6.9
+Denmark,DNK,2003,6.5
+Denmark,DNK,2004,7
+Denmark,DNK,2005,6.7
+Denmark,DNK,2006,6.7
+Denmark,DNK,2007,6.7
+Denmark,DNK,2008,6.8
+Denmark,DNK,2009,6
+Denmark,DNK,2010,5.6
+Denmark,DNK,2011,4.9
+Denmark,DNK,2012,5.1
+Denmark,DNK,2013,4.9
+Denmark,DNK,2014,5
+Denmark,DNK,2015,5.1
+Denmark,DNK,2016,5.4
+Denmark,DNK,2017,5.5
+Denmark,DNK,2018,5.6
+Denmark,DNK,2019,5.3
+Denmark,DNK,2020,4.9
+Denmark,DNK,2021,4.7
+Denmark,DNK,2022,5.34
+France,FRA,1994,4.4
+France,FRA,1995,4.4
+France,FRA,1996,4.8
+France,FRA,1997,4.9
+France,FRA,1998,4.6
+France,FRA,1999,4.9
+France,FRA,2000,5
+France,FRA,2001,4.8
+France,FRA,2002,4.6
+France,FRA,2003,4.6
+France,FRA,2004,4.5
+France,FRA,2005,4.5
+France,FRA,2006,4.3
+France,FRA,2007,4.3
+France,FRA,2008,4.1
+France,FRA,2009,3.9
+France,FRA,2010,3.9
+France,FRA,2011,3.6
+France,FRA,2012,3.7
+France,FRA,2013,3.6
+France,FRA,2014,3.6
+France,FRA,2015,3.6
+France,FRA,2016,3.5
+France,FRA,2017,3.5
+France,FRA,2018,3.5
+France,FRA,2019,3.3
+France,FRA,2020,2.3
+France,FRA,2021,3.3908896
+France,FRA,2022,3.6
+Germany,DEU,1960,9.5
+Germany,DEU,1961,9.5
+Germany,DEU,1962,9.4
+Germany,DEU,1963,8.8
+Germany,DEU,1964,8.5
+Germany,DEU,1965,8.2
+Germany,DEU,1966,7.9
+Germany,DEU,1967,7.8
+Germany,DEU,1968,7.3
+Germany,DEU,1969,7.3
+Germany,DEU,1970,7.4
+Germany,DEU,1971,7.2
+Germany,DEU,1972,7
+Germany,DEU,1973,6.7
+Germany,DEU,1974,6.5
+Germany,DEU,1975,6.7
+Germany,DEU,1976,6.5
+Germany,DEU,1977,6.5
+Germany,DEU,1978,6
+Germany,DEU,1979,6.2
+Germany,DEU,1980,6.3
+Germany,DEU,1981,6.2
+Germany,DEU,1982,6.2
+Germany,DEU,1983,6.3
+Germany,DEU,1984,6.4
+Germany,DEU,1985,6.4
+Germany,DEU,1986,6.6
+Germany,DEU,1987,6.7
+Germany,DEU,1988,6.8
+Germany,DEU,1989,6.7
+Germany,DEU,1990,6.5
+Germany,DEU,1991,5.7
+Germany,DEU,1992,5.6
+Germany,DEU,1993,5.5
+Germany,DEU,1994,5.4
+Germany,DEU,1995,5.3
+Germany,DEU,1996,5.2
+Germany,DEU,1997,5.2
+Germany,DEU,1998,5.1
+Germany,DEU,1999,5.2
+Germany,DEU,2000,5.1
+Germany,DEU,2001,4.7
+Germany,DEU,2002,4.6
+Germany,DEU,2003,4.6
+Germany,DEU,2004,4.8
+Germany,DEU,2005,4.7
+Germany,DEU,2006,4.5
+Germany,DEU,2007,4.5
+Germany,DEU,2008,4.6
+Germany,DEU,2009,4.6
+Germany,DEU,2010,4.7
+Germany,DEU,2011,4.6
+Germany,DEU,2012,4.8
+Germany,DEU,2013,4.6
+Germany,DEU,2014,4.8
+Germany,DEU,2015,4.9
+Germany,DEU,2016,5
+Germany,DEU,2017,4.9
+Germany,DEU,2018,5.4
+Germany,DEU,2019,5
+Germany,DEU,2020,4.5
+Germany,DEU,2021,4.3
+Germany,DEU,2022,4.7
+Italy,ITA,1960,7.7
+Italy,ITA,1961,7.9
+Italy,ITA,1962,8
+Italy,ITA,1963,8.2
+Italy,ITA,1964,8.1
+Italy,ITA,1965,7.7
+Italy,ITA,1966,7.3
+Italy,ITA,1967,7.2
+Italy,ITA,1968,7
+Italy,ITA,1969,7.2
+Italy,ITA,1970,7.3
+Italy,ITA,1971,7.5
+Italy,ITA,1972,7.7
+Italy,ITA,1973,7.6
+Italy,ITA,1974,7.3
+Italy,ITA,1975,6.7
+Italy,ITA,1976,6.4
+Italy,ITA,1977,6.2
+Italy,ITA,1978,5.9
+Italy,ITA,1979,5.8
+Italy,ITA,1980,5.7
+Italy,ITA,1981,5.6
+Italy,ITA,1982,5.5
+Italy,ITA,1983,5.4
+Italy,ITA,1984,5.3
+Italy,ITA,1985,5.3
+Italy,ITA,1986,5.3
+Italy,ITA,1987,5.4
+Italy,ITA,1988,5.6
+Italy,ITA,1989,5.7
+Italy,ITA,1990,5.6
+Italy,ITA,1991,5.5
+Italy,ITA,1992,5.5
+Italy,ITA,1993,5.3
+Italy,ITA,1994,5.1
+Italy,ITA,1995,5.1
+Italy,ITA,1996,4.9
+Italy,ITA,1997,4.9
+Italy,ITA,1998,4.9
+Italy,ITA,1999,4.9
+Italy,ITA,2000,5
+Italy,ITA,2001,4.6
+Italy,ITA,2002,4.7
+Italy,ITA,2003,4.6
+Italy,ITA,2004,4.3
+Italy,ITA,2005,4.3
+Italy,ITA,2006,4.2
+Italy,ITA,2007,4.3
+Italy,ITA,2008,4.2
+Italy,ITA,2009,3.9
+Italy,ITA,2010,3.7
+Italy,ITA,2011,3.4
+Italy,ITA,2012,3.5
+Italy,ITA,2013,3.2
+Italy,ITA,2014,3.1
+Italy,ITA,2015,3.2
+Italy,ITA,2016,3.4
+Italy,ITA,2017,3.2
+Italy,ITA,2018,3.2
+Italy,ITA,2019,3.1
+Italy,ITA,2020,1.6
+Italy,ITA,2021,3.1
+Italy,ITA,2022,3.2
+Japan,JPN,1960,9.3
+Japan,JPN,1963,9.7
+Japan,JPN,1964,9.9
+Japan,JPN,1965,9.7
+Japan,JPN,1966,9.5
+Japan,JPN,1967,9.6
+Japan,JPN,1968,9.5
+Japan,JPN,1969,9.6
+Japan,JPN,1970,10
+Japan,JPN,1971,10.5
+Japan,JPN,1972,10.4
+Japan,JPN,1973,9.9
+Japan,JPN,1974,9.1
+Japan,JPN,1975,8.5
+Japan,JPN,1976,7.8
+Japan,JPN,1977,7.2
+Japan,JPN,1978,6.9
+Japan,JPN,1979,6.8
+Japan,JPN,1980,6.7
+Japan,JPN,1981,6.6
+Japan,JPN,1982,6.6
+Japan,JPN,1983,6.4
+Japan,JPN,1984,6.2
+Japan,JPN,1985,6.1
+Japan,JPN,1986,5.9
+Japan,JPN,1987,5.7
+Japan,JPN,1988,5.8
+Japan,JPN,1989,5.8
+Japan,JPN,1990,5.9
+Japan,JPN,1991,6
+Japan,JPN,1992,6.1
+Japan,JPN,1993,6.4
+Japan,JPN,1994,6.3
+Japan,JPN,1995,6.4
+Japan,JPN,1996,6.4
+Japan,JPN,1997,6.2
+Japan,JPN,1998,6.3
+Japan,JPN,1999,6.1
+Japan,JPN,2000,6.4
+Japan,JPN,2001,6.4
+Japan,JPN,2002,6
+Japan,JPN,2003,5.9
+Japan,JPN,2004,5.7
+Japan,JPN,2005,5.7
+Japan,JPN,2006,5.8
+Japan,JPN,2007,5.7
+Japan,JPN,2008,5.8
+Japan,JPN,2009,5.6
+Japan,JPN,2010,5.5
+Japan,JPN,2011,5.2
+Japan,JPN,2012,5.3
+Japan,JPN,2013,5.3
+Japan,JPN,2014,5.1
+Japan,JPN,2015,5.1
+Japan,JPN,2016,5
+Japan,JPN,2017,4.9
+Japan,JPN,2018,4.7
+Japan,JPN,2019,4.8
+Japan,JPN,2020,4.3
+Japan,JPN,2021,4.1
+Japan,JPN,2022,4.1
+Netherlands,NLD,1960,7.7
+Netherlands,NLD,1961,7.9
+Netherlands,NLD,1962,7.9
+Netherlands,NLD,1963,7.9
+Netherlands,NLD,1964,8.5
+Netherlands,NLD,1965,8.8
+Netherlands,NLD,1966,9
+Netherlands,NLD,1967,9.1
+Netherlands,NLD,1968,9.2
+Netherlands,NLD,1969,9.1
+Netherlands,NLD,1970,9.5
+Netherlands,NLD,1971,9.3
+Netherlands,NLD,1972,8.8
+Netherlands,NLD,1973,8
+Netherlands,NLD,1974,8.1
+Netherlands,NLD,1975,7.3
+Netherlands,NLD,1976,7
+Netherlands,NLD,1977,6.7
+Netherlands,NLD,1978,6.4
+Netherlands,NLD,1979,6.1
+Netherlands,NLD,1980,6.4
+Netherlands,NLD,1981,6
+Netherlands,NLD,1982,5.8
+Netherlands,NLD,1983,5.4
+Netherlands,NLD,1984,5.6
+Netherlands,NLD,1985,5.7
+Netherlands,NLD,1986,6
+Netherlands,NLD,1987,6
+Netherlands,NLD,1988,6
+Netherlands,NLD,1989,6.2
+Netherlands,NLD,1990,6.5
+Netherlands,NLD,1991,6.4
+Netherlands,NLD,1992,6.2
+Netherlands,NLD,1993,5.8
+Netherlands,NLD,1994,5.4
+Netherlands,NLD,1995,5.3
+Netherlands,NLD,1996,5.5
+Netherlands,NLD,1997,5.4
+Netherlands,NLD,1998,5.5
+Netherlands,NLD,1999,5.7
+Netherlands,NLD,2000,5.5
+Netherlands,NLD,2001,5
+Netherlands,NLD,2002,5.2
+Netherlands,NLD,2003,4.9
+Netherlands,NLD,2004,4.4
+Netherlands,NLD,2005,4.4
+Netherlands,NLD,2006,4.4
+Netherlands,NLD,2007,4.3
+Netherlands,NLD,2008,4.5
+Netherlands,NLD,2009,4.4
+Netherlands,NLD,2010,4.5
+Netherlands,NLD,2011,4.3
+Netherlands,NLD,2012,4.2
+Netherlands,NLD,2013,3.8
+Netherlands,NLD,2014,3.9
+Netherlands,NLD,2015,3.8
+Netherlands,NLD,2016,3.8
+Netherlands,NLD,2017,3.8
+Netherlands,NLD,2018,3.7
+Netherlands,NLD,2019,3.7
+Netherlands,NLD,2020,2.9
+Netherlands,NLD,2021,3.2
+Netherlands,NLD,2022,4
+South Korea,KOR,1970,9.2
+South Korea,KOR,1971,7.3
+South Korea,KOR,1972,7.3
+South Korea,KOR,1973,7.6
+South Korea,KOR,1974,7.5
+South Korea,KOR,1975,8
+South Korea,KOR,1976,8
+South Korea,KOR,1977,8.3
+South Korea,KOR,1978,9.3
+South Korea,KOR,1979,9.4
+South Korea,KOR,1980,10.6
+South Korea,KOR,1981,10.5
+South Korea,KOR,1982,9.9
+South Korea,KOR,1983,10.3
+South Korea,KOR,1984,9.5
+South Korea,KOR,1985,9.4
+South Korea,KOR,1986,9.5
+South Korea,KOR,1987,9.4
+South Korea,KOR,1988,9.8
+South Korea,KOR,1989,9.7
+South Korea,KOR,1990,9.3
+South Korea,KOR,1991,9.6
+South Korea,KOR,1992,9.6
+South Korea,KOR,1993,9
+South Korea,KOR,1994,8.7
+South Korea,KOR,1995,8.7
+South Korea,KOR,1996,9.4
+South Korea,KOR,1997,8.4
+South Korea,KOR,1998,8
+South Korea,KOR,1999,7.6
+South Korea,KOR,2000,7
+South Korea,KOR,2001,6.7
+South Korea,KOR,2002,6.3
+South Korea,KOR,2003,6.3
+South Korea,KOR,2004,6.4
+South Korea,KOR,2005,6.5
+South Korea,KOR,2006,6.8
+South Korea,KOR,2007,7
+South Korea,KOR,2008,6.6
+South Korea,KOR,2009,6.2
+South Korea,KOR,2010,6.5
+South Korea,KOR,2011,6.6
+South Korea,KOR,2012,6.5
+South Korea,KOR,2013,6.4
+South Korea,KOR,2014,6
+South Korea,KOR,2015,5.9
+South Korea,KOR,2016,5.5
+South Korea,KOR,2017,5.2
+South Korea,KOR,2018,5
+South Korea,KOR,2019,4.7
+South Korea,KOR,2020,4.2
+South Korea,KOR,2021,3.8
+South Korea,KOR,2022,3.7
+Sweden,SWE,1960,6.7
+Sweden,SWE,1961,7
+Sweden,SWE,1962,7.1
+Sweden,SWE,1963,7
+Sweden,SWE,1964,7.6
+Sweden,SWE,1965,7.8
+Sweden,SWE,1966,7.8
+Sweden,SWE,1967,7.2
+Sweden,SWE,1968,6.6
+Sweden,SWE,1969,6.1
+Sweden,SWE,1970,5.4
+Sweden,SWE,1971,4.9
+Sweden,SWE,1972,4.8
+Sweden,SWE,1973,4.7
+Sweden,SWE,1974,5.5
+Sweden,SWE,1975,5.4
+Sweden,SWE,1976,5.4
+Sweden,SWE,1977,4.9
+Sweden,SWE,1978,4.6
+Sweden,SWE,1979,4.5
+Sweden,SWE,1980,4.5
+Sweden,SWE,1981,4.5
+Sweden,SWE,1982,4.5
+Sweden,SWE,1983,4.3
+Sweden,SWE,1984,4.4
+Sweden,SWE,1985,4.6
+Sweden,SWE,1986,4.6
+Sweden,SWE,1987,4.9
+Sweden,SWE,1988,5.2
+Sweden,SWE,1989,12.8
+Sweden,SWE,1990,4.7
+Sweden,SWE,1991,4.3
+Sweden,SWE,1992,4.3
+Sweden,SWE,1993,3.9
+Sweden,SWE,1994,3.9
+Sweden,SWE,1996,3.8
+Sweden,SWE,1997,3.7
+Sweden,SWE,1998,3.6
+Sweden,SWE,1999,4
+Sweden,SWE,2000,4.5
+Sweden,SWE,2001,4
+Sweden,SWE,2002,4.3
+Sweden,SWE,2003,4.4
+Sweden,SWE,2004,4.8
+Sweden,SWE,2005,4.9
+Sweden,SWE,2006,5
+Sweden,SWE,2008,5.5
+Sweden,SWE,2009,5.1
+Sweden,SWE,2010,5.3
+Sweden,SWE,2011,5
+Sweden,SWE,2012,5.3
+Sweden,SWE,2013,5.4
+Sweden,SWE,2014,5.5
+Sweden,SWE,2015,5.3
+Sweden,SWE,2016,5.4
+Sweden,SWE,2017,5.2
+Sweden,SWE,2018,5
+Sweden,SWE,2019,4.7
+Sweden,SWE,2020,3.6
+Sweden,SWE,2021,3.7
+Sweden,SWE,2022,4.6
+United Kingdom,GBR,1960,7.5
+United Kingdom,GBR,1961,7.5
+United Kingdom,GBR,1962,7.5
+United Kingdom,GBR,1963,7.5
+United Kingdom,GBR,1964,7.6
+United Kingdom,GBR,1965,7.8
+United Kingdom,GBR,1966,8
+United Kingdom,GBR,1967,8
+United Kingdom,GBR,1968,8.4
+United Kingdom,GBR,1969,8.1
+United Kingdom,GBR,1970,8.5
+United Kingdom,GBR,1971,8.2
+United Kingdom,GBR,1972,8.6
+United Kingdom,GBR,1973,8.1
+United Kingdom,GBR,1974,7.8
+United Kingdom,GBR,1975,7.7
+United Kingdom,GBR,1976,7.2
+United Kingdom,GBR,1977,7.2
+United Kingdom,GBR,1978,7.4
+United Kingdom,GBR,1979,7.4
+United Kingdom,GBR,1980,7.4
+United Kingdom,GBR,1981,7.1
+United Kingdom,GBR,1982,6.9
+United Kingdom,GBR,1983,6.9
+United Kingdom,GBR,1984,7
+United Kingdom,GBR,1985,7
+United Kingdom,GBR,1986,7
+United Kingdom,GBR,1987,7
+United Kingdom,GBR,1988,6.9
+United Kingdom,GBR,1989,6.9
+United Kingdom,GBR,1990,6.6
+United Kingdom,GBR,1991,6.1
+United Kingdom,GBR,1992,6.2
+United Kingdom,GBR,1993,5.9
+United Kingdom,GBR,1994,5.7
+United Kingdom,GBR,1995,5.6
+United Kingdom,GBR,1996,5.5
+United Kingdom,GBR,1997,5.3
+United Kingdom,GBR,1998,5.2
+United Kingdom,GBR,1999,5.1
+United Kingdom,GBR,2000,5.2
+United Kingdom,GBR,2001,4.8
+United Kingdom,GBR,2002,4.9
+United Kingdom,GBR,2003,5.2
+United Kingdom,GBR,2007,4.5
+United Kingdom,GBR,2008,4.4
+United Kingdom,GBR,2009,4.3
+United Kingdom,GBR,2010,4.4
+United Kingdom,GBR,2011,4.4
+United Kingdom,GBR,2012,4.7
+United Kingdom,GBR,2013,4.2
+United Kingdom,GBR,2014,4.4
+United Kingdom,GBR,2015,4.2
+United Kingdom,GBR,2016,4.3
+United Kingdom,GBR,2017,4.1
+United Kingdom,GBR,2018,4
+United Kingdom,GBR,2019,3.7
+United Kingdom,GBR,2020,1.4
+United States,USA,1886,9.2
+United States,USA,1887,8.7
+United States,USA,1889,9.1
+United States,USA,1890,9
+United States,USA,1892,9.2
+United States,USA,1893,9
+United States,USA,1894,8.6
+United States,USA,1895,8.9
+United States,USA,1896,9
+United States,USA,1897,8.9
+United States,USA,1898,8.8
+United States,USA,1899,9
+United States,USA,1902,9.8
+United States,USA,1903,10.1
+United States,USA,1904,9.9
+United States,USA,1905,10
+United States,USA,1906,10.5
+United States,USA,1907,10.8
+United States,USA,1908,9.7
+United States,USA,1909,9.9
+United States,USA,1910,10.3
+United States,USA,1912,10.5
+United States,USA,1913,10.5
+United States,USA,1914,10.3
+United States,USA,1915,10
+United States,USA,1916,10.6
+United States,USA,1917,11.1
+United States,USA,1918,9.7
+United States,USA,1919,11
+United States,USA,1920,12
+United States,USA,1922,10.3
+United States,USA,1923,11
+United States,USA,1924,10.4
+United States,USA,1925,10.3
+United States,USA,1926,10.2
+United States,USA,1927,10.1
+United States,USA,1928,9.8
+United States,USA,1929,10.1
+United States,USA,1930,9.2
+United States,USA,1932,7.9
+United States,USA,1933,8.7
+United States,USA,1934,10.3
+United States,USA,1935,10.4
+United States,USA,1936,10.7
+United States,USA,1937,11.3
+United States,USA,1938,10.3
+United States,USA,1939,10.7
+United States,USA,1940,12.1
+United States,USA,1942,13.2
+United States,USA,1943,11.8
+United States,USA,1944,11
+United States,USA,1945,12.1
+United States,USA,1946,16.4
+United States,USA,1947,13.9
+United States,USA,1948,12.4
+United States,USA,1949,10.6
+United States,USA,1950,11.1
+United States,USA,1951,10.4
+United States,USA,1952,9.9
+United States,USA,1953,9.8
+United States,USA,1954,9.2
+United States,USA,1955,9.3
+United States,USA,1956,9.5
+United States,USA,1957,8.9
+United States,USA,1958,8.4
+United States,USA,1959,8.5
+United States,USA,1960,8.5
+United States,USA,1961,8.5
+United States,USA,1962,8.5
+United States,USA,1963,8.8
+United States,USA,1964,9
+United States,USA,1965,9.3
+United States,USA,1966,9.5
+United States,USA,1967,9.7
+United States,USA,1968,10.4
+United States,USA,1969,10.6
+United States,USA,1970,10.6
+United States,USA,1971,10.6
+United States,USA,1972,10.9
+United States,USA,1973,10.8
+United States,USA,1974,10.5
+United States,USA,1975,10
+United States,USA,1976,9.9
+United States,USA,1977,9.9
+United States,USA,1978,10.3
+United States,USA,1979,10.4
+United States,USA,1980,10.6
+United States,USA,1981,10.6
+United States,USA,1982,10.6
+United States,USA,1983,10.5
+United States,USA,1984,10.5
+United States,USA,1985,10.1
+United States,USA,1986,10
+United States,USA,1987,9.9
+United States,USA,1988,9.8
+United States,USA,1989,9.7
+United States,USA,1991,9.2
+United States,USA,1992,9
+United States,USA,1993,9.1
+United States,USA,1994,8.9
+United States,USA,1995,8.9
+United States,USA,1996,8.8
+United States,USA,1997,8.9
+United States,USA,1998,8.3
+United States,USA,1999,8.6
+United States,USA,2000,8.2
+United States,USA,2001,8.2
+United States,USA,2002,8
+United States,USA,2003,7.7
+United States,USA,2004,7.8
+United States,USA,2005,7.6
+United States,USA,2006,7.5
+United States,USA,2007,7.3
+United States,USA,2008,7.1
+United States,USA,2009,6.8
+United States,USA,2010,6.8
+United States,USA,2011,6.8
+United States,USA,2012,6.8
+United States,USA,2013,6.8
+United States,USA,2014,6.9
+United States,USA,2015,6.9
+United States,USA,2016,7
+United States,USA,2017,6.9
+United States,USA,2018,6.5
+United States,USA,2019,6.1
+United States,USA,2020,5.1
+United States,USA,2021,6
+United States,USA,2022,6.2

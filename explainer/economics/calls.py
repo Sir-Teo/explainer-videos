@@ -144,6 +144,19 @@ CALLS = {c.key: c for c in [
          ("P. R. Portney, \"Economics and the Clean Air Act\", Journal of Economic Perspectives 4(4) (1990): 173-181, "
           "as cited by Schmalensee and Stavins",
           "R. Schmalensee and R. N. Stavins, Journal of Economic Perspectives 27(1) (2013): 103-122, Table 1")),
+    Call("roth_stability", 17, "Alvin Roth, on the American medical match",
+         "1984", "a clearinghouse survives if the matches it produces are stable; one whose matches can be blocked, by a "
+                 "doctor and a hospital who both prefer each other to what they were given, will be abandoned as people "
+                 "act on that",
+         "the history of the American market for interns, and Gale and Shapley's theorem",
+         "in Britain, where each region of the health service built its own clearinghouse in the 1960s and 1970s, both "
+         "stable ones (Edinburgh from 1969, Cardiff) were still in use, and four of the six unstable ones (Birmingham, "
+         "Edinburgh's of 1967, Newcastle, Sheffield) were abandoned; the two unstable survivors, Cambridge and the "
+         "London Hospital, each matched one medical school to one hospital, where instabilities were hard to act on",
+         "right",
+         ("A. E. Roth, Journal of Political Economy 92(6) (1984): 991-1016",
+          "A. E. Roth, American Economic Review 81(3) (1991): 415-440",
+          "A. E. Roth, Nobel Prize lecture (2012), table of clearinghouses")),
     Call("dutch_3g", 16, "the Dutch government, before its 3G auction",
          "2000", "its five licences for third-generation mobile spectrum would raise almost 10 billion euros",
          "Britain's auction three months earlier, scaled to the Netherlands' population",

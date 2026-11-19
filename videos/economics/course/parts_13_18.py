@@ -201,5 +201,54 @@ PARTS = [
         also=(("Agora's auction house", "explainer/economics/agora/auctions.py"),
               ("The Island's planted truths", "explainer/economics/island.py"),
               ("The Data Room's sources", "explainer/economics/data/SOURCES.md")),
+    ),    Part(
+        n=17, level="U", widget="match", prereq=(2, 9, 11, 16),
+        question="Can a market be engineered, when prices cannot do the work?",
+        story="The part opens with the American market for medical interns, which unravelled until hospitals hired "
+              "students two years before graduation, then congested into exploding offers, until in 1952 the "
+              "hospitals and students built a clearinghouse that Alvin Roth later showed was Gale and Shapley's "
+              "algorithm. The viewer ranks three workshops under the Boston rule and finds the truth punished, then "
+              "meets mechanisms and the revelation principle, Clarke's pivot rule for a footbridge, Myerson and "
+              "Satterthwaite's impossible bargain, stable matching run on a board, and who should propose. After an "
+              "intermission of a century and a half of American marriages, Britain's clearinghouses with Called it? on "
+              "Roth's stability claim, couples and the 1998 redesign, school choice in Boston, New York and China, "
+              "huts and kidney exchange with chains, why markets fail to form and repugnance, the assignment game, "
+              "what a school lottery reveals, a new dial on what a sought-after school adds, clearinghouses and "
+              "platforms, and a frontier on refugee placement and very large markets.",
+        handoff="Part 18 adds up preferences by voting; Parts 24 and 39 match workers to jobs; Part 49 returns to "
+                "schools; Part 53 to information design; Parts 44 and 61 to platforms; Part 64 to algorithms and "
+                "fairness.",
+        outside="Part 9: efficiency; Part 11: dominant strategies and Nash equilibrium; Part 16: Vickrey and the "
+                "envelope argument. Chapter 4 uses double integrals over the unit square; chapter 11 a small linear "
+                "programme; chapter 12 two-stage least squares (Part 4).",
+        objectives={
+            "U": ["Explain unravelling, congestion and safety as reasons markets fail to form, with the interns' "
+                  "market and school choice as examples.",
+                  "Run deferred acceptance and the Boston rule by hand, find blocking pairs, and explain why the "
+                  "Boston rule rewards strategic lists.",
+                  "Explain kidney exchange, cycles and chains, and the role of repugnance."],
+            "M": ["Prove that deferred acceptance yields a stable matching that is optimal for the asking side, and "
+                  "that truth is dominant for that side.",
+                  "State the revelation principle; derive Clarke's pivot rule and explain why its budget cannot "
+                  "balance; compute gains from trade under Myerson and Satterthwaite.",
+                  "Run top trading cycles and find the core of an assignment game."],
+            "D": ["Use the lotteries inside a centralized match to estimate school effects, controlling for each "
+                  "applicant's chance of an offer, and read the evidence on sought-after schools."],
+            "I": ["Design a clearinghouse for a real market, from its rules and details to its simulation and its "
+                  "evaluation."],
+        },
+        results=[
+            ("Blocking pair", r"a \succ_b \mu(b)\ \text{and}\ b \succ_a \mu(a)"),
+            ("Clarke's pivot tax", r"t_i = \big|\textstyle\sum_{j \ne i} u_j\big|\ \text{if } i \text{ is pivotal}"),
+            ("Gains from trade, uniform values", r"\tfrac16\ \text{(efficient)},\ \tfrac{9}{64}\ \text{(the "
+                                                 r"best feasible)}"),
+            ("Assignment-game core", r"u_i + w_j \ge a_{ij},\ \textstyle\sum u + \sum w = \max \sum a"),
+            ("2SLS within types", r"\tau = \frac{E[y \mid z = 1, t] - E[y \mid z = 0, t]}{E[d \mid z = 1, t] - "
+                                  r"E[d \mid z = 0, t]}"),
+        ],
+        U=(0, 1, 2, 3, 4, 5, 6, "s08_intermission", 7, 8, 9, 10, 11, 12), D=(13, 15), I=(14,),
+        also=(("Agora's matching module", "explainer/economics/agora/matching.py"),
+              ("The Island's planted truths", "explainer/economics/island.py"),
+              ("The Data Room's sources", "explainer/economics/data/SOURCES.md")),
     ),
 ]

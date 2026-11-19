@@ -2954,6 +2954,7 @@ Young Economist*.
 | 14 | built, English | *Incentives.* Agora gains `contracts` (teams, the linear and two-outcome agency problems, relative performance, multitask, tournaments, the ratchet, career concerns, Shapiro–Stiglitz, sharecropping, relational contracts); the Data Room gains the Maddison series for China and India and the transcribed Lazear (2000), Shearer (2004), Bandiera, Barankay and Rasul (2005), Raff and Summers (1987), Lin (1992), Jacob and Levitt (2003), Banerjee, Gertler and Ghatak (2002) and Frey and Oberholzer-Gee (1997); a new dial (output's response to piece rates) and the multitasking *Called it?* |
 | 15 | built, English | *Spillovers.* Agora gains `public` (the externality market and Pigou's tax, Coase's bargain with transaction costs, public goods, typed players in the shared pot with punishment, Gordon's fishery, Weitzman's comparison, Vickrey's bottleneck, Arthur's lock-in); the Data Room gains CEDS sulphur dioxide via Our World in Data and the transcribed Coase (1960), Cheung (1973), Schmalensee and Stavins (2013), Duranton and Turner (2011) and Currie and Walker (2011); a new dial (traffic's response to roads) and the acid-rain *Called it?* |
 | 16 | built, English | *Auctions.* Agora gains `auctions` (first-price bids with reserves and risk aversion, five formats on the same draws, Myerson's reserve, the winner's curse, Vickrey's prices for slots and the generalized second price, the exposure problem, demand reduction against Vickrey's rule); the Data Room gains the transcribed Binmore and Klemperer (2002), Klemperer (2002), Bazerman and Samuelson (1983), Cramton and Schwartz (2000), Ostrovsky and Schwarz (2009), Garbade and Ingber (2005) and the FCC's incentive auction; the intermission plays FRED's 3-month bill rate; a new dial (what a reserve adds), the Dutch 3G *Called it?*, and the winner's curse in the Facts |
+| 17 | built, English | *Markets by Design.* Agora gains `matching` (deferred acceptance either side asking, the Boston rule, blocking pairs and every stable matching, manipulation checks, top trading cycles, kidney cycles and chains, Clarke's pivot rule, the bilateral-trade bound, the assignment game's core, a lottery-based school study); the Data Room gains the crude marriage rate via Our World in Data and the transcribed Roth (2012) and exam-school and Denver charter estimates; a new dial (what a sought-after school adds) and Roth's stability *Called it?* |
 
 **Corrections found while building Part 1** (the plan's draft, written from memory, against the sources): Bastiat's
 Paris passage is in *Economic Sophisms*, First Series, ch. 18 (1845), not the *Harmonies*; Hume's is/ought passage is
@@ -3128,3 +3129,12 @@ Jehiel and Moldovanu. The film says only that the publisher offered exactly Goet
 asks, without answering, whether the go-between had told him. Ostrovsky and Schwarz's headline estimate of about 13% was not robust (p = 0.09);
 the dial uses their estimates at fixed search volumes (2.7%, -2.2% and 3.3%). The dial's return is Part 61, not Part 39.
 The *Called it?* is the Dutch government's forecast, with Klemperer's warning in the outcome.
+
+**Corrections found while building Part 17.** The story's dates are from Roth's Nobel lecture: hiring two years
+before graduation by 1940 (not 1945), the medical schools' embargo of 1945, offers open ten days (1945), eight (1946)
+and less than twelve hours by 1950. The planned chapter "what a lottery reveals" uses Agora's district and Denver's
+charter estimates (Abdulkadiroğlu, Angrist, Narita and Pathak, Table 6); the dial uses the exam-school offer effects
+from the 2011 working paper's Table 4, not the published tables, which were not read. The intermission is the US
+marriage rate (the oldest matching market), since no NRMP series is in the Data Room. Refugee placement is given as
+the authors' predicted range (roughly 40 to 70 percent higher employment), not as an experimental result. Chen and
+Kesten's parallel mechanism is said to be used in many provinces, not most.

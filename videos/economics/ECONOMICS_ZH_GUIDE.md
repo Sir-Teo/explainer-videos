@@ -560,6 +560,28 @@ brackets on screen.
 | obviously strategy-proof; credible auction | 显然防策略操纵；可信拍卖 |
 | auto-bidding; return-on-spend target | 自动出价；投入产出目标 |
 
+## Part 17
+
+| English | 中文 |
+|---|---|
+| market design; mechanism design; mechanism | 市场设计；机制设计；机制 |
+| the revelation principle; direct mechanism; strategy-proof | 显示原理；直接机制；防策略操纵 |
+| Vickrey-Clarke-Groves mechanism; pivotal; Clarke tax | VCG机制；关键人；克拉克税 |
+| budget balance; individual rationality (voluntary participation) | 预算平衡；个体理性（自愿参与） |
+| bilateral trade; double auction; the Myerson-Satterthwaite theorem | 双边交易；双向拍卖；迈尔森-萨特思韦特定理 |
+| stable matching; blocking pair; deferred acceptance | 稳定匹配；阻碍对；延迟接受算法 |
+| proposing side; the lattice of stable matchings | 提议方；稳定匹配格 |
+| the Boston (immediate acceptance) mechanism; school choice | 波士顿（即时接受）机制；择校 |
+| clearinghouse; the National Resident Matching Program | 集中匹配机构；美国住院医师匹配项目 |
+| unravelling; congestion; exploding offer; thickness | 市场提前化（拆解）；拥堵；限时要约；市场厚度 |
+| top trading cycles; housing market | 首位交易环算法；住房市场 |
+| kidney exchange; paired donation; altruistic donor chain | 肾脏交换；配对捐献；利他捐献者链 |
+| repugnance | 嫌恶（对交易的道德排斥） |
+| assignment game; core | 分配博弈；核 |
+| parallel mechanism (Chinese college admissions) | 平行志愿机制 |
+| propensity score; offer; always-taker | 倾向得分；录取通知；始终接受者 |
+| exam school; charter school | 考试选拔学校；特许学校 |
+
 ## Names
 
 | English | 中文 |
@@ -775,3 +797,8 @@ brackets on screen.
 | Benjamin Edelman; Michael Ostrovsky; Michael Schwarz; Hal Varian | 本杰明·埃德尔曼；迈克尔·奥斯特洛夫斯基；迈克尔·施瓦茨；哈尔·瓦里安 |
 | Mohammad Akbarpour; Shengwu Li; Lawrence Ausubel; Eric Maskin | 穆罕默德·阿克巴尔普尔；Shengwu Li（中文名待核）；劳伦斯·奥苏贝尔；埃里克·马斯金 |
 | Johann Wolfgang von Goethe; Milton Friedman | 约翰·沃尔夫冈·冯·歌德；米尔顿·弗里德曼 |
+| Alvin Roth; Lloyd Shapley; David Gale; Elliott Peranson | 阿尔文·罗斯；劳埃德·沙普利；戴维·盖尔；埃利奥特·佩兰森 |
+| Leonid Hurwicz; Edward Clarke; Theodore Groves; Mark Satterthwaite | 莱昂尼德·赫维茨；爱德华·克拉克；西奥多·格罗夫斯；马克·萨特思韦特 |
+| Herbert Scarf; Martin Shubik; Marilda Sotomayor | 赫伯特·斯卡夫；马丁·舒比克；玛丽尔达·索托马约尔 |
+| Atila Abdulkadiroğlu; Tayfun Sönmez; Utku Ünver; Parag Pathak; Joshua Angrist | 阿蒂拉·阿卜杜勒卡迪尔奥卢；泰丰·瑟恩梅兹；乌特库·于恩韦尔；帕拉格·帕塔克；约书亚·安格里斯特 |
+| Fuhito Kojima; Yusuke Narita; Yan Chen; Onur Kesten; Gary Becker | 小岛武仁；成田悠辅；Yan Chen（中文名待核）；奥努尔·凯斯滕；加里·贝克尔 |

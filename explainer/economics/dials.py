@@ -336,6 +336,27 @@ DIALS = {d.key: d for d in [
                       "(74 percent of searches)", 0.0330, 0.0051, 0.0609, where="Table 6 (t = 2.32)",
                       checked="2026-11-19"),
          )),
+    Dial("school_effects", "what a sought-after school adds", "effect on test scores, in standard deviations of "
+         "students' scores, of an offer at (exam schools) or attendance at (charters) an oversubscribed school",
+         (17, 49), status="depends on the setting", checked="2026-11-19",
+         meaning="a school's popularity is not its value added: an offer at Boston's exam schools, whose pupils score far "
+                 "higher, changes scores by about nothing, while attending Denver's oversubscribed charter schools "
+                 "raises math scores by about four tenths of a standard deviation; cutoffs and lotteries make both "
+                 "estimates credible",
+         estimates=(
+             Estimate("Abdulkadiroğlu, Angrist and Pathak", 2014, "RD", "Boston exam schools: an offer, math, grades "
+                      "7, 8 and 10 pooled, at the admission cutoffs", -0.035, -0.088, 0.018,
+                      where="NBER WP 17264, Table 4, column 8 (s.e. 0.027)", checked="2026-11-19"),
+             Estimate("Abdulkadiroğlu, Angrist and Pathak", 2014, "RD", "Boston exam schools: an offer, English, "
+                      "pooled", 0.022, -0.033, 0.077, where="NBER WP 17264, Table 4, column 8 (s.e. 0.028)",
+                      checked="2026-11-19"),
+             Estimate("Abdulkadiroğlu, Angrist, Narita and Pathak", 2017, "IV", "Denver charter schools: attending, "
+                      "math, lottery offers from deferred acceptance, propensity-score controls", 0.415, 0.313, 0.517,
+                      where="IZA DP 10429, Table 6, column 3 (s.e. 0.052)", checked="2026-11-19"),
+             Estimate("Abdulkadiroğlu, Angrist, Narita and Pathak", 2017, "IV", "Denver charter schools: attending, "
+                      "reading", 0.166, 0.062, 0.270, where="IZA DP 10429, Table 6, column 3 (s.e. 0.053)",
+                      checked="2026-11-19"),
+         )),
     Dial("return_schooling", "return to a year of school", "proportional rise in earnings per year of schooling",
          (4, 38), status="settled within a range", checked="2026-11-19",
          meaning="a year of school raises earnings by roughly 6 to 15 percent, a return few investments match; "
@@ -764,6 +785,20 @@ SHOWN = {
          "(data.tables.TREASURY_FORMAT); its evidence was inconclusive, so it is told, not dialled"),
         ("the FCC's incentive auction (2017)", "totals, transcribed (data.tables.INCENTIVE_AUCTION)"),
         ("FRED: the 3-month Treasury bill rate", "data, shown with its source; no parameter is estimated"),
+    ],
+    17: [
+        ("Gale and Shapley (1962); Shapley and Scarf (1974); Vickrey (1961), Clarke (1971) and Groves (1973); Myerson "
+         "and Satterthwaite (1983); Shapley and Shubik (1971)", "theory, stated; every algorithm and mechanism is run "
+         "in Agora (agora.matching)"),
+        ("Roth (1984, 1991); Roth's Nobel lecture (2012)", "the market for doctors and the clearinghouses, transcribed "
+         "(data.tables.ROTH_2012) and the Called it? outcome"),
+        ("Roth and Peranson (1999); Abdulkadiroğlu and Sönmez (2003); Abdulkadiroğlu, Pathak and Roth (2005); "
+         "Chen and Kesten (2017)", "redesigns of the residents' match and of school choice, told as history"),
+        ("Roth, Sönmez and Ünver (2004); Rees et al. (2009)", "kidney exchange and chains, told as history with the "
+         "lecture's numbers"),
+        ("Roth (2007)", "repugnance, stated"),
+        ("Bansak et al. (2018)", "refugee placement by algorithm: its predicted employment gains, stated with the "
+         "range the authors report"),
     ],
 }
 

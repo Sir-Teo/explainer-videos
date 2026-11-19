@@ -1797,6 +1797,59 @@ PART16 = (UK_3G_2000, EURO_3G_2000, BAZERMAN_SAMUELSON_1983, COLLUSION_SIGNALS, 
           INCENTIVE_AUCTION)
 
 
+# ---------------------------------------------------------------------------------------------------------------
+# Part 17: markets by design
+
+ROTH_2012 = Table(
+    key="roth_2012",
+    cite="Alvin E. Roth, \"The Theory and Practice of Market Design\", Nobel Prize lecture, 8 December 2012, in *Les "
+         "Prix Nobel 2012* (Nobel Foundation, 2013); Roth, \"The Evolution of the Labor Market for Medical Interns and "
+         "Residents\", Journal of Political Economy 92(6) (1984): 991-1016; Roth, \"A Natural Experiment in the "
+         "Organization of Entry-Level Labor Markets\", American Economic Review 81(3) (1991): 415-440",
+    tag="Roth, Nobel lecture (2012)",
+    where="the lecture's account of the medical market, its table of clearinghouses, and its accounts of New York's "
+          "high schools and kidney exchange",
+    read="the published lecture (nobelprize.org)",
+    checked="2026-11-19",
+    data={"interns": {"two_years_before_by": 1940, "schools_withhold_info": 1945, "offer_days_1945": 10,
+                      "offer_days_1946": 8, "twelve_hours_too_long_by": 1950},
+          "clearinghouses": [("NRMP (US doctors)", True, True), ("Edinburgh, 1969", True, True),
+                             ("Cardiff", True, True), ("Birmingham", False, False), ("Edinburgh, 1967", False, False),
+                             ("Newcastle", False, False), ("Sheffield", False, False), ("Cambridge", False, True),
+                             ("London Hospital", False, True), ("osteopaths before 1994", False, False),
+                             ("osteopaths from 1994", True, True), ("pharmacists", True, True)],
+          "single_school_exceptions": "Cambridge and the London Hospital each matched one medical school's students "
+                                      "to one hospital",
+          "nrmp_positions": 25000, "british_positions": "a couple of hundred",
+          "women_students": {"1950s": "almost none", "1970s": 0.10, "2012": 0.50},
+          "nyc": {"entering": 90000, "unassigned_before": 30000, "unassigned_after": 3000},
+          "kidney": {"two_way_rooms": 4, "three_way_rooms": 6, "first_chain_people": 20, "first_chain_transplants": 10,
+                     "large_chain_people": 60, "large_chain_transplants": 30}},
+)
+
+SCHOOL_EFFECTS = Table(
+    key="school_effects",
+    cite="Atila Abdulkadiroğlu, Joshua Angrist and Parag Pathak, \"The Elite Illusion: Achievement Effects at Boston "
+         "and New York Exam Schools\", NBER Working Paper 17264 (2011), published in Econometrica 82(1) (2014): "
+         "137-196; Atila Abdulkadiroğlu, Joshua Angrist, Yusuke Narita and Parag Pathak, \"Research Design Meets "
+         "Market Design: Using Centralized Assignment for Impact Evaluation\", IZA Discussion Paper 10429 (2016), "
+         "published in Econometrica 85(5) (2017): 1373-1432",
+    tag="Abdulkadiroğlu, Angrist and Pathak (2014); Abdulkadiroğlu, Angrist, Narita and Pathak (2017)",
+    where="the exam schools: the working paper's Table 4 (Boston reduced forms, all schools, nonparametric) and the "
+          "introduction; Denver: Table 6 of the discussion paper",
+    read="the working papers",
+    checked="2026-11-19",
+    data={"exam_offer": {"math": (-0.035, 0.027), "english": (0.022, 0.028)},
+          "newton_waltham": {"newton": 412000, "waltham": 316000, "proficient_newton": 0.92,
+                             "proficient_waltham": 0.78},
+          "denver": {"first_stage": (0.420, 0.024), "math": (0.415, 0.052), "reading": (0.166, 0.053),
+                     "writing": (0.274, 0.058), "math_no_score_controls": (0.231, 0.030),
+                     "math_ols_no_controls": (0.230, 0.010), "always_takers": 0.44, "never_takers_below": 0.20}},
+)
+
+PART17 = (ROTH_2012, SCHOOL_EFFECTS)
+
+
 PART7 = (BERNOULLI_1738, SAMUELSON_1937, ALLAIS_1953, ELLSBERG_1961, RABIN_2000, THALER_1981, HOLT_LAURY_2005,
          HAYDEN_PLATT_2009, MADRIAN_SHEA_2001, THALER_BENARTZI_2004, BARSKY_1997, POST_2008, MEHRA_PRESCOTT_1985)
-ALL = {t.key: t for t in (*PART1, *PART3, *PART4, *PART5, *PART6, *PART7, *PART8, *PART9, *PART10, *PART11, *PART12, *PART13, *PART14, *PART15, *PART16)}
+ALL = {t.key: t for t in (*PART1, *PART3, *PART4, *PART5, *PART6, *PART7, *PART8, *PART9, *PART10, *PART11, *PART12, *PART13, *PART14, *PART15, *PART16, *PART17)}
