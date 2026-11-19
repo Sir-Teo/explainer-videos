@@ -65,6 +65,7 @@ class Intermission(SoundScene):
             i, w = at(t)
             j = m.j_
             m.move_to(a.c2p((1 - w) * rel[i, j] + w * rel[i + 1, j], (1 - w) * qty[i, j] + w * qty[i + 1, j]))
+            pulse(m, t)
 
         def grow(m, t):
             k = float(np.interp(t, times, np.arange(n)))
@@ -96,12 +97,25 @@ class Intermission(SoundScene):
         legend.next_to(year, DOWN, buff=0.35).align_to(year, RIGHT)
         slope, icept = film["slope"], film["intercept"]
         xs = np.array([-1.95, 0.65])
-        fit = DashedLine(a.c2p(xs[0], (icept + slope * xs[0] * np.log(10)) / np.log(10)),
-                         a.c2p(xs[1], (icept + slope * xs[1] * np.log(10)) / np.log(10)), color=WHITE,
-                         stroke_width=2.5).set_opacity(0)
+        fit_full = Line(a.c2p(xs[0], (icept + slope * xs[0] * np.log(10)) / np.log(10)),
+                        a.c2p(xs[1], (icept + slope * xs[1] * np.log(10)) / np.log(10)), color=WHITE,
+                        stroke_width=2.5, stroke_opacity=0.85)
+        fit = fit_full.copy().set_opacity(0)
+        t_end = times[-1] + 0.3
 
         def show_fit(m, t):
-            m.set_opacity(1.0 if t >= times[-1] + 0.3 else 0.0)
+            # after the last year, the line through the fifteen endpoints draws itself across the final hold
+            if t < t_end:
+                m.set_opacity(0.0)
+                return
+            m.pointwise_become_partial(fit_full, 0, float(np.clip((t - t_end) / 4.5, 1e-3, 1)))
+            m.set_stroke(opacity=0.85)
+
+        def pulse(m, t):
+            # the endpoints breathe while the line draws, so the closing seconds are not a still frame
+            if t >= t_end:
+                k = 1 + 0.25 * np.sin(2 * np.pi * (t - t_end) / 1.6) ** 2
+                m.set(width=2 * 0.085 * k)
 
         verdict = label(rf"fifteen goods, \ 1929--2025: \\ slope {slope:.2f}, \ correlation {film['corr']:.2f} \\ "
                         rf"real spending per head $\times${film['real_ratio']:.1f}: \\ not a demand curve", font_size=19,
