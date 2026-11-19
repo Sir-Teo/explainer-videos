@@ -171,6 +171,16 @@ ladder. New statistics instruments go in `explainer/stats/viz.py` (list in the s
   are value trackers, so the viewer sees each estimate respond.
 * **Real numbers.** Everything plotted comes from the part's `compute.py`. Tags say which kind it is: `computed`,
   `simulated`, `historical data` (with source), `illustrative` or `schematic`.
+* **You take part** (the watch standard, syllabus §1.2). Every chapter opens by asking you to predict what it
+  will show, with a three-second countdown, and closes by lighting the right answer. About every fifteen minutes a
+  checkpoint asks two questions back; each part states one tempting wrong idea, strikes it through and replaces it.
+  After the cold open, the title places the part among the sixty-five; chapter cards draw themselves, and plain
+  fades arrive as growing arrows, drawn curves and written formulas.
+* **A score you can hear the degree in.** `explainer/stats/score.py` computes the music, a Galton board you can
+  hear: a ball falling through pegs, each peg a note of the pentatonic scale, landing in the bell curve's chord. A
+  theme under the title, a sting under each chapter card, soft clicks under each countdown, a chime when an answer
+  lights, a quiet bed in long pauses, and a close. Each stage of the degree has its own instrument, from marimba to
+  celesta. It never plays under an explanation; `python tools/build.py statsN --no-score` leaves it out.
 
 ## The parts
 
