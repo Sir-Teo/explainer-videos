@@ -94,6 +94,97 @@ brackets on screen.
 | circular flow | 循环流 |
 | households, firms, banks, government, the rest of the world | 家庭、企业、银行、政府、世界其他地区 |
 
+## Part 2
+
+| English | 中文 |
+|---|---|
+| demand curve; supply curve | 需求曲线；供给曲线 |
+| equilibrium price | 均衡价格 |
+| willingness to pay | 支付意愿 |
+| consumer surplus; producer surplus | 消费者剩余；生产者剩余 |
+| deadweight loss | 无谓损失 |
+| price elasticity of demand; of supply | 需求价格弹性；供给价格弹性 |
+| tax incidence | 税收归宿 |
+| price ceiling; price floor | 价格上限；价格下限 |
+| shortage; excess supply | 短缺；过剩 |
+| double auction | 双向拍卖 |
+| rent control | 租金管制 |
+| black market | 黑市 |
+| algorithmic pricing | 算法定价 |
+
+## Part 3
+
+| English | 中文 |
+|---|---|
+| gross domestic product (GDP) | 国内生产总值（GDP） |
+| national accounts; the System of National Accounts | 国民账户；国民账户体系 |
+| value added | 增加值 |
+| gross domestic income; statistical discrepancy | 国内总收入；统计误差 |
+| consumption, investment, government purchases, net exports | 消费、投资、政府购买、净出口 |
+| production boundary | 生产边界 |
+| imputed rent | 估算租金 |
+| household production | 家庭生产 |
+| informal economy | 非正规经济 |
+| nominal; real; deflator | 名义；实际；平减指数 |
+| Laspeyres index; Paasche index | 拉氏指数；帕氏指数 |
+| Fisher's ideal index; Törnqvist index | 费雪理想指数；唐克维斯特指数 |
+| chain index; chain drift | 链式指数；链式漂移 |
+| hedonic regression; quality adjustment | 特征价格回归；质量调整 |
+| substitution bias | 替代偏差 |
+| the Penn effect | 佩恩效应 |
+| labour force participation rate | 劳动参与率 |
+| Lorenz curve; Gini coefficient | 洛伦兹曲线；基尼系数 |
+| input-output table; Leontief inverse | 投入产出表；里昂惕夫逆矩阵 |
+| output multiplier | 产出乘数 |
+| revision; vintage | 修订；数据版本 |
+| Human Development Index | 人类发展指数 |
+| measure of economic welfare | 经济福利尺度 |
+| intangible capital | 无形资本 |
+| night lights | 夜间灯光 |
+
+## Part 4
+
+| English | 中文 |
+|---|---|
+| identification | 识别 |
+| simultaneity; simultaneous equations | 联立性；联立方程 |
+| endogeneity | 内生性 |
+| instrumental variable; instrument | 工具变量 |
+| two-stage least squares | 两阶段最小二乘法 |
+| Wald estimator | 沃尔德估计量 |
+| relevance; exclusion restriction | 相关性；排除性约束 |
+| first stage; first-stage F statistic | 第一阶段；第一阶段F统计量 |
+| weak instruments | 弱工具变量 |
+| omitted-variable bias; ability bias | 遗漏变量偏误；能力偏误 |
+| selection bias | 选择偏误 |
+| Ashenfelter's dip | 阿申费尔特凹陷 |
+| natural experiment | 自然实验 |
+| regression discontinuity | 断点回归 |
+| the credibility revolution | 可信性革命 |
+| local average treatment effect (LATE) | 局部平均处理效应（LATE） |
+| complier; always-taker; never-taker; defier | 依从者；始终接受者；从不接受者；违抗者 |
+| the Lucas critique | 卢卡斯批判 |
+| Phillips curve | 菲利普斯曲线 |
+| adaptive expectations; rational expectations | 适应性预期；理性预期 |
+| structural model; reduced form | 结构模型；简约式 |
+| deep parameters; autonomy | 深层参数；自主性 |
+| external validity | 外部有效性 |
+| sufficient statistics | 充分统计量 |
+| negative income tax | 负所得税 |
+| conditional cash transfer | 有条件现金转移支付 |
+| pre-analysis plan | 预分析计划 |
+| statistical power | 统计功效 |
+| minimum detectable effect | 最小可检测效应 |
+| attrition | 样本流失 |
+| take-up | 参与率（接受率） |
+| spillover; interference | 溢出效应；干扰 |
+| general equilibrium effects | 一般均衡效应 |
+| randomized saturation design | 随机饱和度设计 |
+| return to schooling | 教育回报率 |
+| draft lottery | 征兵抽签 |
+| minimum wage | 最低工资 |
+| A/B test | A/B测试 |
+
 ## Names
 
 | English | 中文 |
@@ -121,3 +212,34 @@ brackets on screen.
 | "The Use of Knowledge in Society" | 《知识在社会中的运用》 |
 | "The Nature of the Firm" | 《企业的性质》 |
 | the Maddison Project | 麦迪森项目 |
+| Alfred Marshall | 阿尔弗雷德·马歇尔 |
+| Simon Kuznets | 西蒙·库兹涅茨 |
+| William Petty | 威廉·配第 |
+| Richard Stone | 理查德·斯通 |
+| Wassily Leontief | 瓦西里·里昂惕夫 |
+| Étienne Laspeyres, Hermann Paasche | 艾蒂安·拉斯拜尔、赫尔曼·帕舍 |
+| Irving Fisher | 欧文·费雪 |
+| Michael Boskin | 迈克尔·博斯金 |
+| Nicholas Kaldor | 尼古拉斯·卡尔多 |
+| William Nordhaus, James Tobin | 威廉·诺德豪斯、詹姆斯·托宾 |
+| Angus Deaton | 安格斯·迪顿 |
+| Henry Moore | 亨利·摩尔 |
+| Philip Wright, Sewall Wright | 菲利普·赖特、休厄尔·赖特 |
+| Elmer Working | 埃尔默·沃金 |
+| Trygve Haavelmo | 特里夫·哈维尔莫 |
+| the Cowles Commission | 考尔斯委员会 |
+| Edward Leamer | 爱德华·利默 |
+| Robert LaLonde | 罗伯特·拉隆德 |
+| Orley Ashenfelter | 奥利·阿申费尔特 |
+| Joshua Angrist | 乔舒亚·安格里斯特 |
+| Alan Krueger | 艾伦·克鲁格 |
+| David Card | 戴维·卡德 |
+| Guido Imbens | 吉多·因本斯 |
+| Robert Lucas | 罗伯特·卢卡斯 |
+| James Heckman | 詹姆斯·赫克曼 |
+| Paul Samuelson, Robert Solow | 保罗·萨缪尔森、罗伯特·索洛 |
+| Edmund Phelps | 埃德蒙·费尔普斯 |
+| Abhijit Banerjee, Esther Duflo, Michael Kremer | 阿比吉特·班纳吉、埃丝特·迪弗洛、迈克尔·克雷默 |
+| Raj Chetty | 拉吉·切蒂 |
+| Santiago Levy | 圣地亚哥·利维 |
+| PROGRESA; Oportunidades | “进步”计划；“机会”计划 |

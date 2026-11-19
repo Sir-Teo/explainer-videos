@@ -177,4 +177,67 @@ PARTS = [
               ("Agora's index numbers", "explainer/economics/agora/indices.py"),
               ("The Data Room's sources", "explainer/economics/data/SOURCES.md")),
     ),
+    Part(
+        n=4, level="U", widget="evidence",
+        question="When can data answer an economic question?",
+        story="The part opens in 1914, when Henry Moore fitted a line through the prices and quantities of pig iron, "
+              "found it sloping up, and called it a new law of demand; Philip Wright's review explained that "
+              "business booms had moved demand along supply. The viewer then tries to find the demand curve in the "
+              "Island's fish market, 240 days of prices and catches: the best-fitting line slopes up (+8.3 fish per "
+              "dollar), and the planted demand (-66.7) is a line nothing in the cloud singles out. Simultaneity "
+              "explains why (least squares converges to a weighted mixture of the two slopes), and storms, which "
+              "move supply alone, trace demand (-65.2), as feasts trace supply; Wright's Appendix B (1928) had the "
+              "idea, and Haavelmo (1944) made identification a question to ask first. Ability inflates the "
+              "return to schooling on the Island (10.1% against a planted 8%) until a new school serves as an "
+              "instrument. Leamer's con (1983) and LaLonde's test (1986) show the methods of the day missing an "
+              "experiment's answer, sometimes in sign. After an intermission on the draft lottery of 1969, which "
+              "was not even fair, the part follows the credibility revolution (the draft lottery, quarter of "
+              "birth, New Jersey against Pennsylvania), experiments run on purpose (the Island's apprenticeship by "
+              "choice and by lottery, the negative income tax, PROGRESA), the Lucas critique on the Island, "
+              "structure against design and the local average treatment effect, a new dial for the return to a "
+              "year of school (eleven natural experiments), weak instruments, how to plan and power a trial, and a "
+              "frontier on spillovers: within-village effects against what a whole policy delivers.",
+        handoff="Part 5 begins Act II with what people want, the choices behind every demand curve. The designs "
+                "return in the minimum-wage debate (Part 38), demand estimation with instruments (Part 43), field "
+                "experiments (Part 45), trials in development (Part 46), identification in macroeconomics (Part 55), "
+                "the courtroom (Part 59) and the platforms' experiments (Part 61); the Lucas critique in inflation "
+                "and expectations (Part 28).",
+        outside="School algebra; means, variances and covariances; a least-squares line. Two-stage least squares and "
+                "the omitted-variable formula are derived on screen; the problems use a square root and one ratio of "
+                "covariances.",
+        objectives={
+            "U": ["Explain why a line through equilibrium prices and quantities need not be demand or supply, and "
+                  "compute the probability limit of least squares when both curves shift.",
+                  "Compute a Wald (instrumental-variable) estimate from group means, and state the relevance and "
+                  "exclusion conditions it needs.",
+                  "Compute the omitted-variable bias of a regression, and say why randomization removes it."],
+            "M": ["Derive the local average treatment effect: what an instrument estimates when effects differ, and "
+                  "who the compliers are.",
+                  "Show how a difference in differences depends on parallel trends, using LaLonde's data.",
+                  "Compute the minimum detectable effect of a trial and how take-up changes the sample it needs."],
+            "D": ["Explain the Lucas critique with a model in which only surprises move output, and say which "
+                  "parameters could survive a change of policy.",
+                  "Design a randomized-saturation trial that separates a direct effect from a spillover, and say "
+                  "what sets its power."],
+            "I": ["Plan an evaluation: the estimand, the power calculation, the pre-analysis plan, balance and "
+                  "attrition, and an honest report.",
+                  "Read a natural-experiment study and say what moved, for whom, and whether the answer travels."],
+        },
+        results=[
+            ("Least squares through a cloud", r"\operatorname{plim}\hat\beta=\frac{d\,\sigma_u^2-b\,\sigma_v^2}"
+                                              r"{\sigma_u^2+\sigma_v^2}"),
+            ("The Wald estimator", r"\hat\beta_{IV}=\frac{\bar y_1-\bar y_0}{\bar x_1-\bar x_0}"),
+            ("Omitted-variable bias", r"\operatorname{plim}\hat\rho=\rho+\gamma\,\frac{\operatorname{cov}(S,A)}"
+                                      r"{\operatorname{var}(S)}"),
+            ("The local average treatment effect", r"\frac{E[Y|Z=1]-E[Y|Z=0]}{E[D|Z=1]-E[D|Z=0]}"
+                                                   r"=E[Y_1-Y_0\mid\text{complier}]"),
+            ("Difference in differences", r"(\bar y^{T}_{1}-\bar y^{T}_{0})-(\bar y^{C}_{1}-\bar y^{C}_{0})"),
+            ("The minimum detectable effect", r"\mathrm{MDE}=(z_{1-\alpha/2}+z_{1-\beta})\,\frac{\sigma}"
+                                              r"{\sqrt{p(1-p)N}}"),
+        ],
+        U=(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, "s08_intermission"), D=(13,), I=(12,),
+        also=(("Agora's econometrician", "explainer/economics/agora/econometrician.py"),
+              ("The Island's planted truths", "explainer/economics/island.py"),
+              ("The Data Room's sources", "explainer/economics/data/SOURCES.md")),
+    ),
 ]

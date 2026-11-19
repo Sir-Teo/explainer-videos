@@ -254,4 +254,107 @@
             "your browser; nothing you do here is stored or sent.",
     });
   };
+
+  // ---- Part 4: the evidence ----------------------------------------------------------------------------------------
+  W.evidence = function (el) {
+    var GREEN = "#7BD88F", LILAC = "#C9A0FF", TEAL = "#4FD1C5", RED = "#F25F5C", SKY = "#7EC8F5";
+    // the Island's fish market (Part 4's truths): demand q = a - b p + feast + u, supply q = c + d p - storm + v;
+    // two more things happen on some days: a full moon (it moves nothing) and rain on market day, which keeps
+    // buyers at home and boats in harbour at once
+    var A = 400, B = 400 / 6, Cc = -400 * 0.5 / 4.5, D = 400 / 4.5;
+    var NAMES = ["storms", "feasts", "the full moon", "rainy market days"];
+    var COLS = [SKY, AMBER, GREY_HINT, RED];
+    function season(n, seed, storm, rainDem) {
+      var r = QB.rng(seed * 31 + 4), d = { p: [], q: [], z: [[], [], [], []] }, i;
+      for (i = 0; i < n; i++) {
+        var f = r() < 0.25 ? 1 : 0, s = r() < 0.15 ? 1 : 0, m = r() < 0.25 ? 1 : 0, w = r() < 0.2 ? 1 : 0;
+        var dem = A + 70 * f - rainDem * w + 12 * r.normal(), sup = Cc - storm * s - 60 * w + 12 * r.normal();
+        var p = (dem - sup) / (B + D);
+        d.p.push(p); d.q.push(dem - B * p);
+        d.z[0].push(s); d.z[1].push(f); d.z[2].push(m); d.z[3].push(w);
+      }
+      return d;
+    }
+    function wald(d, z) {
+      var n1 = 0, n0 = 0, q1 = 0, q0 = 0, p1 = 0, p0 = 0, i;
+      for (i = 0; i < d.p.length; i++) {
+        if (z[i]) { n1++; q1 += d.q[i]; p1 += d.p[i]; } else { n0++; q0 += d.q[i]; p0 += d.p[i]; }
+      }
+      if (!n1 || !n0) return { est: NaN, dp: 0, n1: n1 };
+      q1 /= n1; q0 /= n0; p1 /= n1; p0 /= n0;
+      return { est: (q1 - q0) / (p1 - p0), dp: p1 - p0, n1: n1, pm: [p0, p1], qm: [q0, q1] };
+    }
+    function ols(d) {
+      var n = d.p.length, mp = 0, mq = 0, sxy = 0, sxx = 0, i;
+      for (i = 0; i < n; i++) { mp += d.p[i] / n; mq += d.q[i] / n; }
+      for (i = 0; i < n; i++) { sxy += (d.p[i] - mp) * (d.q[i] - mq); sxx += (d.p[i] - mp) * (d.p[i] - mp); }
+      return { slope: sxy / sxx, mp: mp, mq: mq };
+    }
+    QB.widget(el, {
+      title: "Find the demand curve: choose an instrument",
+      sub: "A season of the Island's fish market: each dot is one day's price and catch. Four things happen on some " +
+           "days: storms (they keep the boats in), feasts (everyone wants fish), a full moon, and rain on market day " +
+           "(it keeps the boats in and the buyers at home). Which one, used as an instrument, traces the islanders' " +
+           "demand? Pick one, then see every instrument's Wald estimate against the planted slope of -66.7 fish per dollar.",
+      panels: 2, height: 330,
+      controls: [
+        { k: "n", label: "Days in the season", min: 60, max: 720, step: 30, value: 240 },
+        { k: "storm", label: "How many fish a storm keeps off the market", min: 10, max: 120, step: 5, value: 80 },
+        { k: "rain", label: "How many fish' worth of buyers rain keeps at home", min: 0, max: 60, step: 5, value: 30 },
+      ],
+      buttons: [
+        { label: "I pick storms", act: function (s) { s.pick = 0; } },
+        { label: "I pick feasts", act: function (s) { s.pick = 1; } },
+        { label: "I pick the full moon", act: function (s) { s.pick = 2; } },
+        { label: "I pick rainy market days", act: function (s) { s.pick = 3; } },
+        { label: "A new season", act: function (s) { s.seed++; } },
+      ],
+      draw: function (g, v, s) {
+        var d = season(v.n, s.seed, v.storm, v.rain), ests = [], k, o = ols(d);
+        for (k = 0; k < 4; k++) ests.push(wald(d, d.z[k]));
+        var pick = s.pick === undefined ? 0 : s.pick;
+        var a = g[0].axes({ x: [100, 330], y: [1.6, 4.6], title: "The season: catch (across) and price (up)", xlabel: "fish sold" });
+        a.dots(d.q, d.p, { r: 2.6, alpha: 0.85, color: function (i) { return d.z[pick][i] ? COLS[pick] : "#5C6670"; } });
+        var ps = [1.7, 4.5];
+        a.line(ps.map(function (p) { return o.mq + (-B) * (p - o.mp); }), ps, { color: GREEN, dash: [6, 4], width: 2.2 });
+        a.line(ps.map(function (p) { return o.mq + o.slope * (p - o.mp); }), ps, { color: LILAC, width: 2 });
+        var e = ests[pick];
+        if (isFinite(e.est) && e.qm) {
+          a.line(ps.map(function (p) { return e.qm[0] + e.est * (p - e.pm[0]); }), ps, { color: COLS[pick], width: 2.6 });
+          a.dots(e.qm, e.pm, { r: 6, color: function (i) { return i ? COLS[pick] : C.ink; } });
+        }
+        a.legend([["planted demand", GREEN], ["least squares", LILAC], [NAMES[pick] + " as instrument", COLS[pick]]], { pos: "tr" });
+        var vals = ests.map(function (x) { return isFinite(x.est) ? Math.max(-250, Math.min(250, x.est)) : 0; });
+        var b = g[1].axes({ x: [0, 4], y: [-250, 250], title: "Each instrument's estimate, fish per dollar", xlabel: "" });
+        b.bars([0.5, 1.5, 2.5, 3.5], vals, 0.6, { color: function (i) { return COLS[i]; } });
+        b.hline(-B, { color: GREEN, dash: [6, 4], width: 2 });
+        b.hline(D, { color: AMBER, dash: [2, 4], width: 1.5 });
+        b.hline(0, { color: GREY_HINT, dash: [], width: 1 });
+        for (k = 0; k < 4; k++) b.text(k + 0.5, vals[k], NAMES[k] + " " + (isFinite(ests[k].est) ? fmt(ests[k].est, 1) : "n/a"),
+                                       { color: COLS[k], align: "center", dy: vals[k] < 0 ? 12 : -10, size: 10.5, bg: true });
+        b.legend([["planted demand -66.7", GREEN], ["planted supply +88.9", AMBER]], { pos: "tl" });
+        s.out = { ests: ests.map(function (x) { return x.est; }), dps: ests.map(function (x) { return x.dp; }), ols: o.slope,
+                  pick: s.pick, rain: v.rain };
+      },
+      readout: function (v, s) {
+        var o = s.out, rows = [["least squares through the cloud", fmt(o.ols, 1) + " fish per dollar"]], k;
+        for (k = 0; k < 4; k++) rows.push([NAMES[k] + " (moves the price by " + fmt(100 * o.dps[k], 0) + " cents)",
+                                            isFinite(o.ests[k]) ? fmt(o.ests[k], 1) : "no such days"]);
+        if (o.pick !== undefined) {
+          var verdict = ["right: storms move supply alone, so they trace demand",
+                         "not demand: feasts move demand, so they trace supply",
+                         "no: the moon moves nothing, so the ratio is noise over noise",
+                         o.rain > 0 ? "no: rain moves both curves, so the ratio mixes them" :
+                                      "right this time: with no buyers kept home, rain moves supply alone"][o.pick];
+          rows.push(["your pick: " + NAMES[o.pick], verdict]);
+        }
+        return rows;
+      },
+      note: "The Wald ratio is the change in mean catch over the change in mean price between days with and without " +
+            "the event. It finds demand only if the event moves supply and nothing else (relevance and exclusion). " +
+            "Set rain's effect on buyers to 0 and rain becomes a second good instrument; shrink the storms and watch " +
+            "the storm estimate wander as its first stage weakens. Computed in your browser; nothing you do here is " +
+            "stored or sent.",
+    });
+  };
 })();

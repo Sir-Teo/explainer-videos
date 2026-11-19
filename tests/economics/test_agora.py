@@ -257,3 +257,29 @@ def test_omitted_ability_and_lucas():
     assert em.ols(L["y"][L["calm"]], L["pi"][L["calm"]])["slope"] > 0.5        # a tradeoff in calm years
     assert abs(L["y"][-10:].mean() - L["ystar"]) < 0.5                          # gone once it is exploited
     assert em.did(20.44, 21.03, 23.33, 21.17) == pytest.approx(2.75, abs=0.01)
+
+
+def test_the_lottery_balances_what_nobody_sees():
+    from explainer.economics import island
+    from explainer.economics.agora import econometrician as em
+
+    a = dict(island.truths(4)["apprentice"], n=200000)
+    r = em.apprenticeship(**a)
+    ch, lo = r["by_choice"], r["by_lottery"]
+    assert ch["ability1"] < ch["ability0"] - 0.8                     # the choosers differ in what nobody sees
+    assert ch["diff"] < 0 < a["effect"]                              # so the comparison gets even the sign wrong
+    assert ch["diff"] == pytest.approx(a["effect"] + r["bias"], abs=0.005)    # the bias is ability's gap
+    assert abs(lo["ability1"] - lo["ability0"]) < 0.02               # the lottery's groups are alike
+    assert abs(lo["diff"] - a["effect"]) < 3 * lo["se"]
+
+
+def test_spillovers_hide_from_a_trial_within_villages():
+    from explainer.economics import island
+    from explainer.economics.agora import econometrician as em
+
+    t = dict(island.truths(4)["villages"], villages=2000)
+    r = em.village_trial(**t)
+    assert abs(r["within"] - t["direct"]) < 0.01                      # a trial inside villages finds the direct effect
+    assert abs(r["spill_hat"] - t["spill"]) < 0.02                    # the shares reveal the spillover
+    assert abs(r["total"] - (t["direct"] + t["spill"])) < 0.02        # and scaling up delivers much less
+

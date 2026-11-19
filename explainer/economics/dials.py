@@ -225,6 +225,33 @@ SHOWN = {
          "data; the Penn World Table's labour share", "data, shown with their sources; Kaldor's facts and the "
          "labour share are entered in explainer.economics.facts"),
     ],
+    4: [
+        ("Moore (1914); Wright (1915, 1928); Working (1927); Haavelmo (1944)", "history of the identification problem, "
+         "transcribed or paraphrased with sources; their estimates are shown as what went wrong or what was "
+         "invented, not as entries in a dial"),
+        ("Leamer (1983); LaLonde (1986); Dehejia and Wahba (1999)", "a test of methods against an experiment: the "
+         "Called-it card lalonde_1986 records it; training programmes' effects enter the labour-market dials in "
+         "Part 38"),
+        ("Angrist (1990), the veterans' earnings", "a natural experiment shown as an instrument; the effect of "
+         "military service is not a dial"),
+        ("Card and Krueger (1994)", "the border design, shown as a design; its estimate enters the minimum-wage "
+         "employment dial in Part 38, with the replies"),
+        ("Angrist and Krueger (1991) and the other studies of Card (2001), table 2", "entered in the "
+         "return_schooling dial (this part)"),
+        ("Imbens and Angrist (1994); Bound, Jaeger and Baker (1995); Staiger and Stock (1997); Deaton, Imbens and "
+         "Heckman (2010); Chetty (2009); Nakamura and Steinsson (2018); Lucas (1976)", "methods and arguments, "
+         "shown for what they say; no parameter is estimated"),
+        ("the negative income tax experiments (Munnell, ed., 1986); PROGRESA (Schultz 2004; Skoufias 2005)",
+         "experiments shown for their design and the direction of their findings; labour-supply elasticities "
+         "enter their dial in Part 38 and conditional transfers in Part 46"),
+        ("Samuelson and Solow (1960); Friedman (1968); Phelps (1967)", "the Phillips curve's history, shown with "
+         "FRED's data; its slope enters the Phillips-curve dial in Part 28"),
+        ("Crepon et al. (2013); Egger et al. (2022); Muralidharan, Niehaus and Sukhtankar (2023)", "the frontier "
+         "chapter's evidence on spillovers, shown for direction and size; the transfer multiplier enters the "
+         "development dials in Part 46"),
+        ("the 1969 draft lottery (Selective Service, JSE archive); FRED's unemployment rate and CPI", "data, shown "
+         "with their sources; no parameter is estimated"),
+    ],
 }
 
 

@@ -119,6 +119,18 @@ TRUTHS = {
         # council's inflation is noise around 2%; then it tries to keep output high with 8% a year
         "lucas": {"ystar": 100.0, "b": 0.8, "noise": 0.4, "lam": 0.5, "pi_calm": (2.0, 2.0), "pi_push": 8.0,
                   "years": (30, 20), "seed": 1976},
+        # the apprenticeship (Part 4, chapter 8): a year with the boatwrights raises log earnings by 0.10.  Left to
+        # choose, the islanders with the poorest prospects sign up (P = logistic(-select * ability)); a lottery
+        # instead takes half at random.  Ability moves earnings by 0.25 per standard deviation and is never seen
+        "apprentice": {"n": 1600, "effect": 0.10, "select": 1.4, "ability_on_wage": 0.25, "base": 2.0,
+                       "wage_noise": 0.30, "seed": 2019},
+        # the apprenticeship scaled up (Part 4, the frontier): 100 villages of 40 young islanders; each village's
+        # share offered a place is drawn from 0, 25, 50, 75 or 100% (as Crepon et al. 2013 drew theirs).  A place
+        # raises its holder's log earnings by 0.10; every apprentice in a village takes a little of the boatwrights'
+        # work from the others, lowering everyone's log earnings by 0.08 times the village's share
+        "villages": {"villages": 100, "per_village": 40, "saturations": (0.0, 0.25, 0.5, 0.75, 1.0), "direct": 0.10,
+                     "spill": -0.08, "ability_on_wage": 0.25, "base": 2.0, "wage_noise": 0.30, "village_noise": 0.04,
+                     "seed": 2013},
     },
 }
 

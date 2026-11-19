@@ -474,5 +474,20 @@ CARD_2001 = Table(
     note="Rows measured per year of schooling only (Card's rows 7 and 9, with schooling as a dummy, are left out).",
 )
 
-PART4 = (MOORE_1914, LEAMER_1983, LALONDE_1986, CARD_2001)
+LUCAS_1976 = Table(
+    key="lucas_1976",
+    cite="Robert E. Lucas, Jr., \"Econometric Policy Evaluation: A Critique\", Carnegie-Rochester Conference Series "
+         "on Public Policy 1: 19-46 (1976)",
+    tag="Lucas (1976), p. 41",
+    where="p. 41, the 'single syllogism'",
+    read="the sentence as quoted with its page in the secondary literature (the Wikipedia article's footnote and "
+         "the papers it cites); the article itself was not read",
+    checked="2026-11-19",
+    data={"quote": "Given that the structure of an econometric model consists of optimal decision rules of economic "
+                   "agents, and that optimal decision rules vary systematically with changes in the structure of "
+                   "series relevant to the decision maker, it follows that any change in policy will "
+                   "systematically alter the structure of econometric models."},
+)
+
+PART4 = (MOORE_1914, LEAMER_1983, LALONDE_1986, CARD_2001, LUCAS_1976)
 ALL = {t.key: t for t in (*PART1, *PART3, *PART4)}

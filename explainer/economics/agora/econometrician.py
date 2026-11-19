@@ -109,6 +109,69 @@ def lucas_islands(ystar: float, b: float, noise: float, lam: float, pi_calm=(2.0
     return {"pi": pi, "expected": E, "y": y, "calm": np.arange(len(pi)) < T1, "b": b, "ystar": ystar}
 
 
+def apprenticeship(n: int, effect: float, select: float, ability_on_wage: float, base: float, wage_noise: float,
+                   seed: int) -> dict:
+    """One population, two ways of deciding who is treated.  ``chose``: each islander signs up with probability
+    logistic(-select * ability), so those with poorer prospects choose the programme; ``lottery``: a fair coin.
+    Earnings are log w = base + effect * treated + ability_on_wage * ability + noise, computed for each way.  Returns
+    ability, both assignments, both earnings, and each comparison of means with its standard error."""
+    rng = np.random.default_rng(seed)
+    ability = rng.standard_normal(n)
+    noise = rng.normal(0.0, wage_noise, n)
+    chose = rng.random(n) < 1.0 / (1.0 + np.exp(select * ability))
+    lottery = rng.permutation(np.arange(n) < n // 2)
+
+    def outcome(d):
+        return base + effect * d + ability_on_wage * ability + noise
+
+    def compare(y, d):
+        a, b = y[d], y[~d]
+        return {"diff": float(a.mean() - b.mean()), "se": float(np.sqrt(a.var(ddof=1) / len(a) + b.var(ddof=1) / len(b))),
+                "n1": int(d.sum()), "n0": int((~d).sum()), "ability1": float(ability[d].mean()),
+                "ability0": float(ability[~d].mean())}
+
+    y_chose, y_lottery = outcome(chose), outcome(lottery)
+    return {"ability": ability, "chose": chose, "lottery": lottery, "y_chose": y_chose, "y_lottery": y_lottery,
+            "by_choice": compare(y_chose, chose), "by_lottery": compare(y_lottery, lottery), "effect": effect,
+            "bias": ability_on_wage * float(ability[chose].mean() - ability[~chose].mean())}
+
+
+def village_trial(villages: int, per_village: int, saturations, direct: float, spill: float, ability_on_wage: float,
+                  base: float, wage_noise: float, village_noise: float, seed: int) -> dict:
+    """A two-level randomized trial: each village draws a share from ``saturations`` (equal numbers of villages per
+    share), then that share of its people, chosen at random, is treated.  Log earnings are base + direct * treated
+    + spill * share + ability_on_wage * ability + village shock + noise.  Returns the people's records and the
+    estimates: within-village (treated minus untreated, villages with both), the slope of earnings on the share for
+    the untreated, and the total effect of treating everyone against no one."""
+    rng = np.random.default_rng(seed)
+    sats = np.array(saturations, float)
+    share = rng.permutation(np.resize(sats, villages))
+    v = np.repeat(np.arange(villages), per_village)
+    s = share[v]
+    treated = np.zeros(len(v), bool)
+    for j in range(villages):
+        idx = np.flatnonzero(v == j)
+        k = int(round(share[j] * per_village))
+        treated[rng.choice(idx, k, replace=False)] = True
+    ability = rng.standard_normal(len(v))
+    y = (base + direct * treated + spill * s + ability_on_wage * ability + rng.normal(0, village_noise, villages)[v]
+         + rng.normal(0, wage_noise, len(v)))
+    # within each village that has both, treated minus untreated; then the average over those villages
+    diffs = [y[(v == j) & treated].mean() - y[(v == j) & ~treated].mean() for j in range(villages)
+             if 0 < share[j] < 1]
+    within = float(np.mean(diffs))
+    within_se = float(np.std(diffs, ddof=1) / np.sqrt(len(diffs)))
+    means = {f"{q:g}": {"treated": float(y[(s == q) & treated].mean()) if ((s == q) & treated).any() else None,
+                        "untreated": float(y[(s == q) & ~treated].mean()) if ((s == q) & ~treated).any() else None}
+             for q in sats}
+    un = ~treated
+    spill_hat = ols(y[un], s[un])["slope"]
+    total = float(y[s == 1].mean() - y[s == 0].mean())
+    return {"village": v, "share": s, "treated": treated, "y": y, "within": within, "within_se": within_se,
+            "spill_hat": spill_hat,
+            "total": total, "means": means, "truth_total": direct + spill}
+
+
 def did(before_t: float, after_t: float, before_c: float, after_c: float) -> float:
     """The difference in differences: (treated after - before) - (control after - before)."""
     return (after_t - before_t) - (after_c - before_c)

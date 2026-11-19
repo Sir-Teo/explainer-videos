@@ -10,7 +10,7 @@ the series leaves out.
 Both *Parts* columns are found, not typed. *Planned* lists the parts whose entry in
 [`SYLLABUS.md`](SYLLABUS.md) names the book or paper; *Built* lists the parts whose scenes, compute step or
 README cite it (a dot: none yet). Fuller notes (editions, chapters, what each source was used for) are in each
-part's README, under *Sources*. Built so far: Parts 1–3.
+part's README, under *Sources*. Built so far: Parts 1–4.
 
 ## 1. The textbook spine
 
@@ -20,7 +20,7 @@ part's README, under *Sources*. Built so far: Parts 1–3.
 |---|---|---|---|
 | Mankiw | N. G. Mankiw, *Principles of Economics* (10th ed., 2024) | 1–2 | 1–3 |
 | Krugman–Wells | P. Krugman and R. Wells, *Economics* (6th ed., 2021) | 2 | 2 |
-| Acemoglu–Laibson–List | D. Acemoglu, D. Laibson and J. List, *Economics* (3rd ed., 2022) | 4 | · |
+| Acemoglu–Laibson–List | D. Acemoglu, D. Laibson and J. List, *Economics* (3rd ed., 2022) | 4 | 4 |
 | CORE | The CORE Team, *The Economy* (2017; 2.0, 2023) | 1 | 1 |
 | Heilbroner | R. Heilbroner, *The Worldly Philosophers* (7th ed., 1999) | 1 | 1 |
 
@@ -32,8 +32,8 @@ part's README, under *Sources*. Built so far: Parts 1–3.
 | Nicholson–Snyder | W. Nicholson and C. Snyder, *Microeconomic Theory* (13th ed., 2021) | 5–6 | · |
 | Jones | C. I. Jones, *Macroeconomics* (6th ed., 2023) | 20 | · |
 | Blanchard | O. Blanchard, *Macroeconomics* (8th ed., 2021) | 27, 32 | · |
-| Stock–Watson | J. Stock and M. Watson, *Introduction to Econometrics* (4th ed., 2019) | 4 | · |
-| Angrist–Pischke | J. Angrist and J.-S. Pischke, *Mostly Harmless Econometrics* (2009) | 4, 50, 67 | · |
+| Stock–Watson | J. Stock and M. Watson, *Introduction to Econometrics* (4th ed., 2019) | 4 | 4 |
+| Angrist–Pischke | J. Angrist and J.-S. Pischke, *Mostly Harmless Econometrics* (2009) | 4, 50, 67 | 4 |
 | Osborne | M. Osborne, *An Introduction to Game Theory* (2004) | 11 | · |
 | Krugman–Obstfeld–Melitz | P. Krugman, M. Obstfeld and M. Melitz, *International Economics* (12th ed., 2022) | 34–35 | · |
 | Mishkin | F. Mishkin, *The Economics of Money, Banking, and Financial Markets* (13th ed., 2022) | 26 | · |
@@ -198,7 +198,7 @@ part's README, under *Sources*. Built so far: Parts 1–3.
 | the General Theory and IS-LM | Keynes (1936); Hicks (1937) | 27 | · |
 | the permanent income hypothesis | Friedman (1957); Hall (1978) | 22 | · |
 | the Phillips curve and the natural rate | Phillips (1958); Friedman (1968); Phelps (1967) | 28 | · |
-| the Lucas critique | Lucas (1976) | 4, 28, 54 | · |
+| the Lucas critique | Lucas (1976) | 4, 28, 54 | 4 |
 | time inconsistency and rules | Kydland and Prescott (1977) | 28 | · |
 | real business cycles | Kydland and Prescott (1982) | 29 | · |
 | staggered prices | Calvo (1983) | 30 | · |
@@ -234,7 +234,7 @@ part's README, under *Sources*. Built so far: Parts 1–3.
 | Model or result | Paper | Planned | Built |
 |---|---|---|---|
 | human capital | Becker (1964); Mincer (1974) | 38 | · |
-| the minimum wage | Card and Krueger (1994) | 38 | · |
+| the minimum wage | Card and Krueger (1994) | 4, 38 | 4 |
 | skills, tasks and technology | Autor, Levy and Murnane (2003); Acemoglu and Autor (2011) | 39 | · |
 | mobility and place | Chetty and others (2014) | 40, 42 | · |
 | top incomes | Piketty and Saez (2003) | 40 | · |
@@ -246,8 +246,8 @@ part's README, under *Sources*. Built so far: Parts 1–3.
 |---|---|---|---|
 | positive economics | Friedman (1953) | 8 | 1 |
 | models as maps | Rodrik (2015), *Economics Rules* | 1, 67 | 1 |
-| identification by instruments | Wright (1928); Haavelmo (1944) | 4 | · |
-| the credibility of econometrics | Leamer (1983); LaLonde (1986) | 4 | · |
+| identification by instruments | Wright (1928); Haavelmo (1944) | 4 | 4 |
+| the credibility of econometrics | Leamer (1983); LaLonde (1986) | 4 | 4 |
 | vector autoregressions | Sims (1980) | 55 | · |
 | dynamic discrete choice | Rust (1987) | 44, 54 | · |
 | generalized method of moments | Hansen (1982) | 54 | · |
@@ -261,6 +261,8 @@ part's README, under *Sources*. Built so far: Parts 1–3.
 **Part 2, *The Scissors*.** Books: Alfred Marshall, *Principles of Economics* (1890), Book V; Adam Smith, *The Wealth of Nations* (1776), Book I, ch. 4; Hal Varian, *Intermediate Microeconomics*, chs 1, 15–16; N. Gregory Mankiw, *Principles of Economics*, chs 4–8; Krugman and Wells, chs 3–5. Papers: Smith (1962), *JPE* 70; Gode and Sunder (1993), *JPE* 101; Cliff and Bruten (1997); Dupuit (1844); Whately (1832), Lecture IX; Havranek, Irsova and Janda (2012); Chetty, Looney and Kroft (2009), *AER* 99; Kopczuk, Marion, Muehlegger and Slemrod (2016); Diamond, McQuade and Qian (2019), *AER* 109; Calvano, Calzolari, Denicoló and Pastorello (2020), *AER* 110; Assad, Clark, Ershov and Xu (2024), *JPE* 132.
 
 **Part 3, *The Measure*.** Books: Diane Coyle, *GDP: A Brief but Affectionate History* (2014); François Lequiller and Derek Blades, *Understanding National Accounts* (OECD, 2nd ed., 2014); N. Gregory Mankiw, *Macroeconomics*, ch. 2, "The Data of Macroeconomics"; Wassily Leontief, *Input-Output Economics* (2nd ed., 1986). Papers: Kuznets et al., *National Income, 1929–32* (1934); Petty, *Verbum Sapienti* (1665); Boskin et al. (1996); Lebow and Rudd (2003), *JEL* 41; Moulton (2018), Brookings; Deaton and Heston (2010), *AEJ: Macro* 2; Jones and Klenow (2016), *AER* 106; Nordhaus and Tobin (1972); Piketty, Saez and Zucman (2018), *QJE* 133; Corrado, Hulten and Sichel (2009); Henderson, Storeygard and Weil (2012), *AER* 102; Martinez (2022), *JPE* 130.
+
+**Part 4, *The Evidence*.** Books: Joshua Angrist and Jörn-Steffen Pischke, *Mostly Harmless Econometrics* (2009) and *Mastering 'Metrics* (2014); James Stock and Mark Watson, *Introduction to Econometrics*, chs. 1–3, 12–13; Scott Cunningham, *Causal Inference: The Mixtape* (2021); Daron Acemoglu, David Laibson and John List, *Economics*, ch. 2. Papers: Working (1927), *QJE* 41; Wright (1928), Appendix B; Stock and Trebbi (2003), *JEP* 17; Haavelmo (1944); Leamer (1983), *AER* 73; LaLonde (1986), *AER* 76; Lucas (1976); Angrist (1990); Angrist and Krueger (1991); Card and Krueger (1994); Imbens and Angrist (1994); Bound, Jaeger and Baker (1995); Staiger and Stock (1997); Card (2001), *Econometrica* 69; Deaton, Imbens and Heckman (2010), *JEL* 48; Angrist and Pischke (2010), *JEP* 24; Crépon et al. (2013), *QJE* 128; Egger et al. (2022) and Muralidharan et al. (2023), *Econometrica*.
 
 ## 4. What the series leaves out
 

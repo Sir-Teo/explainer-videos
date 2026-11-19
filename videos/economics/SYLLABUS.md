@@ -505,35 +505,44 @@ Sichel 2009; Henderson, Storeygard & Weil 2012; Martinez 2022.
 
 ### Part 4 · The Evidence (~56)
 *Question:* when can data answer an economic question?
-*Story:* in 1927 Elmer Working plots prices against quantities and asks what the cloud shows. It is neither
-demand nor supply. A year later, in an appendix to a book on vegetable oils, Philip Wright (or his son Sewall)
-invents the instrument. Fifty years on the profession barely believes its own regressions, and then learns to
-find experiments.
-0. Hook: Working's cloud; the question; objectives.
-1. Play it: draw the demand curve through the Island's fish-market data. The truth appears in dashed green.
-2. Simultaneity: both curves shift; the algebra of the bias.
-3. The instrument: weather moves supply only; Wright (1928); the Wald ratio drawn. Recovered on the Island.
-4. Haavelmo (1944) and the Cowles Commission: systems of equations; identification as counting.
-5. Omitted variables and selection: schooling and ability; who signs up for training.
-6. Leamer's "Let's take the con out of econometrics" (1983); LaLonde's test (1986): the methods of the day
-   against an experimental benchmark.
-7. The credibility revolution: draft lotteries (Angrist 1990), quarters of birth, two states and a border;
-   difference-in-differences, discontinuities (pointers to *Statistics, Built* 35–37).
-8. Randomized experiments in economics: the negative income tax trials, PROGRESA, the lab and the field.
-9. The Lucas critique (1976): estimated relations move when policy does. Shown on the Island.
-10. Structure against design: what each can and cannot answer; external validity; sufficient statistics.
-11. Forecasts as tests; the *Called it?* list; why prediction is harder in a system that reads the forecast.
-12. The Dials introduced: design, range, status, date.
-13. In practice: every empirical job in the series. 14. Frontier: design-based inference under interference
-    and general equilibrium.
+*Story:* in 1914 Henry Moore fits a line through the prices and quantities of pig iron, finds it sloping up, and
+calls it a new law of demand; a year later Philip Wright explains that business booms moved demand along supply, and
+in 1927 Elmer Working asks what such clouds show. In 1928, in an appendix to a book on vegetable oils, Wright invents
+the instrument (Stock and Trebbi's stylometry says the father, not his son Sewall). Fifty years on the profession
+barely believes its own regressions, and then learns to find experiments.
+0. Hook: Moore's pig iron and Wright's reply; the Island's cloud; Working's question; objectives.
+1. Play it: four lines through the Island's fish-market data; the truth appears in dashed green.
+2. Simultaneity: both curves shift; four kinds of day; the probability limit of least squares.
+3. The instrument: storms move supply only and trace demand, feasts trace supply; the Wald ratio and 2SLS;
+   Wright (1928) and his arrows.
+4. Haavelmo (1944) and the Cowles Commission: systems of equations; identification; the order condition.
+5. Omitted variables and selection: schooling and ability, the formula, a new school as instrument; who signs up for
+   training (Ashenfelter's dip).
+6. Leamer's "Let's take the con out of econometrics" (1983); LaLonde's test (1986) and Dehejia and Wahba's sequel;
+   *Called it?*
+7. Intermission: the draft lottery of 1969, capsule by capsule, as a data melody.
+8. The credibility revolution: the draft lottery (Angrist 1990), quarters of birth, two states and a border; the
+   designs (pointers to *Statistics, Built* 35–37); Nobel 2021.
+9. Experiments: the Island's apprenticeship by choice and by lottery; the negative income tax trials; PROGRESA; the
+   lab, the field, policy trials, A/B tests.
+10. The Lucas critique (1976): the American Phillips curve of the 1960s and 1970s; the Island's council and its menu.
+11. Structure and design: the local average treatment effect; Deaton, Imbens and Heckman (2010); sufficient
+    statistics; identified moments.
+12. The Dials: the return to a year of school from eleven natural experiments; weak instruments on the Island.
+13. In practice: who evaluates for a living; planning a trial; power. 14. Frontier: spillovers and general
+    equilibrium in randomized-saturation trials.
 
-*Agora:* the Island's econometrician: every Island dataset comes with its planted truth; OLS, IV, DiD and RD
-wrappers over statkit's `ols`, `quasi` and `causal`. `dials.py` and its first rows.
+*Agora:* the Island's econometrician (`agora.econometrician`): every Island dataset comes with its planted truth; OLS,
+Wald and 2SLS over statkit's `quasi`; omitted ability; the apprenticeship; Lucas's islands; the village trial.
+`dials.py`'s second dial.
 *Play it:* the cloud; on the site, choose an instrument from four candidates and see which recovers the truth.
 *Called it?* LaLonde's non-experimental estimates against the experiment.
-*Reading:* Working 1927; Wright 1928 (and Stock & Trebbi 2003); Haavelmo 1944; Leamer 1983; LaLonde 1986;
-Lucas 1976; Angrist & Pischke 2009, 2010; Deaton 2010; Heckman 2010; Nakamura & Steinsson 2018; Stock & Watson,
-*Introduction to Econometrics*, chs 1–3, 13; Acemoglu, Laibson & List ch 2.
+*Reading:* Moore 1914; Wright 1915, 1928 (and Stock & Trebbi 2003); Working 1927; Haavelmo 1944; Leamer 1983;
+LaLonde 1986; Dehejia & Wahba 1999; Angrist 1990; Angrist & Krueger 1991; Card & Krueger 1994; Imbens & Angrist 1994;
+Bound, Jaeger & Baker 1995; Staiger & Stock 1997; Card 2001; Lucas 1976; Angrist & Pischke 2009, 2010; Deaton 2010;
+Imbens 2010; Heckman 2010; Chetty 2009; Nakamura & Steinsson 2018; Crépon et al. 2013; Egger et al. 2022;
+Muralidharan, Niehaus & Sukhtankar 2023; Stock & Watson, *Introduction to Econometrics*, chs 1–3, 12–13; Cunningham,
+*The Mixtape*; Acemoglu, Laibson & List ch 2.
 
 ## Act II · Choosing
 
@@ -2764,6 +2773,7 @@ Young Economist*.
 | 1 | built, English | *Who Feeds Paris?* Every date, quotation and number checked against its source (see the part's README); the Chinese edition is to come |
 | 2 | built, English | *The Scissors.* Agora gains `curves` (straight lines through elasticity, incidence and controls) and taxes, caps and floors in the double auction; the Data Room gains the World Bank's Pink Sheet and USDA's coffee balance sheets; the first Dial row (staples) and the first Fact's columns are filled |
 | 3 | built, English | *The Measure.* Agora gains `accounts` (the Island's input-output table, GDP three ways, Leontief's inverse, value added in exports) and `indices` (Laspeyres, Paasche, Fisher, Törnqvist, the exact Cobb–Douglas index, chaining and drift); the Data Room gains FRED's national accounts, labour-market and price series, the World Bank's WDI, the UNDP's HDI and the Philadelphia Fed's real-time GDP; a new dial (the CPI's bias, from expert reviews); Kaldor's facts and the labour share are shown; the Dials gate checks every Data Room loader |
+| 4 | built, English | *The Evidence.* Agora gains `econometrician` (the fish market and its planted curves, OLS, Wald and 2SLS over statkit's `quasi`, the omitted-variable formula, the apprenticeship by choice and by lottery, Lucas's islands, the two-level village trial, difference in differences); the Data Room gains the 1969 draft lottery and Lucas (1976) among the transcribed passages; the Museum's NSW data and Card and Krueger's table are used; a new dial (the return to a year of school, from Card 2001); Act I is complete |
 
 **Corrections found while building Part 1** (the plan's draft, written from memory, against the sources): Bastiat's
 Paris passage is in *Economic Sophisms*, First Series, ch. 18 (1845), not the *Harmonies*; Hume's is/ought passage is
@@ -2791,3 +2801,15 @@ smaller, India 36%); the 2011 round in the draft is left out. Leontief's 1936 ta
 was not taken in October 2025, so the unemployment rate for that month does not exist; the intermission turns that
 gap into a rest in its melody. The draft's social accounting matrix became an input-output table with four
 industries; unemployment's flows wait for Part 24; the Big Mac index is mentioned, not used.
+
+**Corrections found while building Part 4.** The story now opens with Moore's pig iron (1914, p. 126, quoted from the
+*Econometrics Journal*'s 2025 editorial) and Wright's 1915 review; Working (1927) frames the question rather than
+opening it. Stock and Trebbi (2003) attribute Appendix B to Philip Wright, not Sewall. The draft lottery of 1
+December 1969 was not a fair draw: the correlation between birthday and draw order is −0.23, and only 1 of 20,000
+fair shuffles comes as far (Fienberg 1971 told the story of the unmixed capsules). LaLonde's table 5 is for men; on
+Dehejia and Wahba's subsample the experiment says +$1,794 and the adjusted PSID comparison +$1,548. The New Jersey
+income-maintenance experiment ran 1968–72 with about 1,350 families and eight plans (guarantees of 50–125% of the
+poverty line, tax rates of 30, 50 or 70%); PROGRESA's evaluation used 506 villages, 320 first and 186 about two
+years later. Lucas's syllogism is quoted with its page (p. 41) from the secondary literature; the article was not
+re-read. Card's (2001) table 2 is entered as eleven rows (the two with schooling as a dummy are left out). The plan's
+chapter on forecasts as tests became the *Called it?* card in chapter 6; forecasting as a test waits for Part 57.

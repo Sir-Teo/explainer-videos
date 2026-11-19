@@ -74,3 +74,4 @@ publication, the copy that was read and the date the transcription was checked:
 | `leamer_1983` | "Let's Take the Con out of Econometrics", p. 37 | 2026-11-19 |
 | `lalonde_1986` | table 5: the NSW experiment against non-experimental estimates for men | 2026-11-19 |
 | `card_2001` | table 2: OLS and IV estimates of the return to schooling | 2026-11-19 |
+| `lucas_1976` | "Econometric Policy Evaluation: A Critique", p. 41, the syllogism (as quoted in the secondary literature) | 2026-11-19 |

@@ -67,16 +67,17 @@ Manim videos with local neural narration. See README.md for layout and build com
   `tools/lecture_length.py musicN` (30–60 minutes, listening included). `videos/music/soundcheck/` is the pipeline's
   two-minute test film.
 - *Economics, Built* (`videos/economics/`): sixty-eight parts planned in twelve acts (`econ1` … `econ68`; the series
-  key is `economics`, the prefix `econ`, as `psych` is to `psychology`), Parts 1–3 built (English). The plan and the open
+  key is `economics`, the prefix `econ`, as `psych` is to `psychology`), Parts 1–4 built (English; Act I complete). The plan and the open
   decisions are `videos/economics/README.md`; the standard (cold opens, the Island as a serial, Play it in the first
   third, the intermission with a data film, Called it?, the is/ought card, the computed score), the devices and every
   part chapter by chapter are `videos/economics/SYLLABUS.md`. Shared code in `explainer/economics/` (tested in
   `tests/economics/`): Agora, the economy the series builds (`agora/`, numpy and scipy only: `market` with taxes, caps and floors,
-  `crusoe`, `signals`, `curves`, `accounts` (input-output tables, GDP three ways, Leontief) and `indices` (Laspeyres to
-  Törnqvist, chaining) so far), the Island's cast and planted truths (`island.py`), the Facts, the Dials (`dials.py`, gated by
+  `crusoe`, `signals`, `curves`, `accounts` (input-output tables, GDP three ways, Leontief), `indices` (Laspeyres to
+  Törnqvist, chaining) and `econometrician` (the fish market, OLS, Wald and 2SLS over statkit's `quasi`, omitted
+  ability, the apprenticeship by choice and by lottery, Lucas's islands, the two-level village trial) so far), the Island's cast and planted truths (`island.py`), the Facts, the Dials (`dials.py`, gated by
   `tools/check_dials.py econN`), Called it? (`calls.py`), the Data Room (`data/`: frozen, cited extracts of the
   Maddison Project, FRED (each series with its retrieval date in `FRED_RETRIEVED`), the Philadelphia Fed's forecasters and
-  real-time GDP, the World Bank's Pink Sheet and WDI, USDA's coffee data and the UNDP's HDI, registered in `data/SOURCES.md`, refreshed with
+  real-time GDP, the World Bank's Pink Sheet and WDI, USDA's coffee data, the UNDP's HDI and the 1969 draft lottery, registered in `data/SOURCES.md`, refreshed with
   `python -m explainer.economics.data --refresh NAME`; transcribed passages and tables in `data/tables.py`, each with
   the date it was checked), the instruments (`viz.py`: the Tableau, the Play-it stage, traders' cards, the dial, fact,
   call, study and is/ought cards) and the score (`score.py`: the scissors theme, chapter stings that close in chapter by
