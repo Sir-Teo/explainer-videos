@@ -56,7 +56,7 @@ class Hook(VoiceoverScene):
         n1 = label(r"five centuries of Malthus: \ wages rise and fall, \ but go nowhere", font_size=21,
                    color=WAGE).move_to(ax.ax.c2p(1500, 200))
         n2 = label(rf"then a climb that has not stopped: \ $\times${p['key']['2016']['wage'] / p['key']['1800']['wage']:.0f}"
-                   rf" \ by 2016", font_size=21, color=GDP).move_to(ax.ax.c2p(1840, 470))
+                   rf" \ by 2016", font_size=21, color=GDP).move_to(ax.ax.c2p(1600, 470))
         src = data_tag(data.cite("millennium"), corner=DR,
                        font_size=12)
         with self.voiceover(

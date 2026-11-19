@@ -65,6 +65,8 @@ class PlayIt(VoiceoverScene):
                   font_size=21, color=GDP),
             label(rf"since 1800, \ $\times${p['ratio_1800_2016']:.1f}", font_size=24, color=E.ACCENT),
         ).arrange(DOWN, buff=0.15).move_to(ax.ax.c2p(1530, 20000))
+        for r in rows:
+            r.add_background_rectangle(color=BACKGROUND, opacity=0.9, buff=0.06)
         src = data_tag(data.cite("millennium"), corner=DR, font_size=12)
         with self.voiceover(
             "Here is the answer, from the Bank of England's millennium dataset, which uses Stephen Broadberry and "

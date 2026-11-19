@@ -351,6 +351,22 @@ DATASETS = {
                      "South Korea", "Nigeria", "United States"),
         "files": ("longrun_owid.csv",),
     },
+    "pwt": {
+        "title": "Penn World Table version 11.0: output, population, employment, hours, human capital, capital "
+                 "stocks, labour shares, investment shares and TFP, 185 countries, 1950-2023",
+        "publisher": "Groningen Growth and Development Centre (Feenstra, Inklaar and Timmer)",
+        "citation": "Feenstra, R. C., R. Inklaar and M. P. Timmer (2015), \"The Next Generation of the Penn World "
+                    "Table\", American Economic Review 105(10): 3150-3182; Penn World Table 11.0 (2025), DataverseNL, "
+                    "doi:10.34894/FABVLR, file pwt110.xlsx, sheet Data, retrieved 2026-11-19",
+        "short": "Penn World Table 11.0 (Feenstra, Inklaar and Timmer)",
+        "url": "https://dataverse.nl/api/access/datafile/554105",
+        "licence": "CC BY 4.0",
+        "units": "rgdpo, rgdpna, cn, rnna in millions of 2021 US dollars (PPP); pop and emp in millions; avh hours a "
+                 "year; hc an index; labsh, csh_i, delta shares; ctfp relative to the US = 1",
+        "vintage": "2026-11-19",
+        "sha256": "7b337e94f39dfe304bc459e433f8ce0624496c812707ae0c924888f5142b3ab3",
+        "files": ("pwt110.csv",),
+    },
     "draft1970": {
         "title": "The draft lottery of 1 December 1969 (for men born 1944-50): the rank drawn for each birthday",
         "publisher": "U.S. Selective Service System; as tabulated by the Journal of Statistics Education data archive",
@@ -1057,11 +1073,55 @@ def refresh_longrun() -> None:
         w.writerows(out)
 
 
+PWT_COLUMNS = ("countrycode", "country", "year", "rgdpo", "rgdpna", "rgdpe", "pop", "emp", "avh", "hc", "cn", "rnna",
+               "labsh", "csh_i", "delta", "ctfp", "cgdpo", "ck")
+
+
+def pwt(code: str | None = None, year: int | None = None) -> list[dict]:
+    """Rows of the Penn World Table 11.0 extract (numbers as floats, nan where missing), for one country, one year,
+    or all."""
+    out = []
+    for r in _read(HERE / "pwt110.csv"):
+        if code and r["countrycode"] != code:
+            continue
+        if year and int(r["year"]) != year:
+            continue
+        row = {"countrycode": r["countrycode"], "country": r["country"], "year": int(r["year"])}
+        for k in PWT_COLUMNS[3:]:
+            row[k] = _num(r[k])
+        out.append(row)
+    return out
+
+
+def refresh_pwt() -> None:
+    import openpyxl
+
+    d = DATASETS["pwt"]
+    raw = RAW / "pwt110.xlsx"
+    sha = _download(d["url"], raw)
+    if d.get("sha256") and sha != d["sha256"]:
+        print(f"pwt: the download differs from the recorded vintage ({sha[:12]} vs {d['sha256'][:12]})")
+    print(f"pwt: sha256 {sha}")
+    wb = openpyxl.load_workbook(raw, read_only=True, data_only=True)
+    rows = wb["Data"].iter_rows(values_only=True)
+    head = list(next(rows))
+    idx = [head.index(c) for c in PWT_COLUMNS]
+    with open(HERE / "pwt110.csv", "w", newline="", encoding="utf-8") as f:
+        w = csv.writer(f)
+        w.writerow(PWT_COLUMNS)
+        for r in rows:
+            vals = [r[i] for i in idx]
+            if all(v is None for v in vals[3:]):
+                continue
+            w.writerow([vals[0], vals[1], int(vals[2])] + [_fmt(v) if isinstance(v, (int, float)) else ""
+                                                           for v in vals[3:]])
+
+
 REFRESH = {"draft1970": refresh_draft1970, "maddison2023": refresh_maddison, "fred": refresh_fred, "spf": refresh_spf,
            "pinksheet": refresh_pinksheet, "psd_coffee": refresh_psd_coffee, "wdi": refresh_wdi, "hdr": refresh_hdr,
            "rtdsm": refresh_rtdsm, "warheads": refresh_warheads, "so2": refresh_so2,
            "marriage": refresh_marriage, "democracy": refresh_democracy, "millennium": refresh_millennium,
-           "longrun": refresh_longrun}
+           "longrun": refresh_longrun, "pwt": refresh_pwt}
 
 
 def main() -> None:

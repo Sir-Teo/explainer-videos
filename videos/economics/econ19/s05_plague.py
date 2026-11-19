@@ -31,7 +31,7 @@ class Plague(VoiceoverScene):
         n1 = label(rf"1348--51: \ {k['1348']['pop'] / 1000:.1f} \ million \ $\to$ \ {k['1351']['pop'] / 1000:.1f}: \ "
                    rf"{100 * b['drop']:.0f}\% die", font_size=19, color=POP).move_to(top.ax.c2p(1490, 5300))
         n2 = label(rf"real wages: \ $\times${b['wage_x_1400']:.1f} by 1400, \ $\times${b['wage_x_1450']:.1f} by 1450",
-                   font_size=19, color=WAGE).move_to(bot.ax.c2p(1530, 72))
+                   font_size=19, color=WAGE).move_to(bot.ax.c2p(1610, 70))
         n3 = label(rf"by 1650: \ {k['1650']['pop'] / 1000:.1f} \ million, \ and wages back to {k['1650']['wage']:.0f}",
                    font_size=19, color=GREY_A).move_to(bot.ax.c2p(1560, 14))
         src = data_tag(data.cite("millennium"), corner=DR, font_size=12)
