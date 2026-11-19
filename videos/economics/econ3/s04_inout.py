@@ -188,9 +188,9 @@ class InOut(VoiceoverScene):
             "<bookmark mark='c'/> None of this makes GDP wrong. It measures market production, carefully and "
             "consistently, and it stops at the edge of the market, as Kuznets said it would."
         ) as vo:
-            self.play(FadeIn(top))
+            self.play(FadeIn(top), FadeIn(cards[0], shift=UP * 0.2))
             vo.wait_until("a")
-            self.play(FadeIn(cards[0], shift=UP * 0.2))
+            self.play(Indicate(cards[0].card, color=E.ACCENT, scale_factor=1.02))
             vo.wait_until("b")
             self.play(FadeIn(cards[1], shift=UP * 0.2))
             vo.wait_until("c")

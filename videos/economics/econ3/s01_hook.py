@@ -197,9 +197,9 @@ class Hook(VoiceoverScene):
             "unpleasant the job was. The number became the most watched statistic in the world, and the warning "
             "is still worth reading."
         ) as vo:
-            self.wait(0.3)
-            vo.wait_until("a")
             self.play(FadeIn(q, shift=UP * 0.2))
+            vo.wait_until("a")
+            self.play(Indicate(q.quote, color=KUZ, scale_factor=1.02))
             for m, r in zip("bcd", why):
                 vo.wait_until(m)
                 self.play(FadeIn(r, shift=RIGHT * 0.2))

@@ -60,7 +60,7 @@ class Dials(VoiceoverScene):
             dot = Dot([X(e.value), y, 0], radius=0.1, color=c)
             val = label(f"{e.value:.2f}", font_size=20, color=c).next_to(dot, UP, buff=0.08)
             rows.add(VGroup(t, bar, dot, val))
-        meaning = wrapped_label(dial.meaning, 12.0, 21, GREY_A).to_edge(DOWN, buff=0.45)
+        meaning = wrapped_label(dial.meaning, 12.0, 21, GREY_A).to_edge(DOWN, buff=0.8)
         src = published_tag(r"Boskin et al.\ (1996); \ Lebow and Rudd (2003); \ Gordon (2006); \ Moulton (2018): "
                             r"expert reviews", corner=DR, font_size=14).shift(UP * 0.0)
         e = dial.estimates
