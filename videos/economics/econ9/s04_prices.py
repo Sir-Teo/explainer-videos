@@ -186,7 +186,7 @@ class Prices(VoiceoverScene):
                        font_size=13)
         with self.voiceover(
             "In the equilibrium of the box, Ana and Bo face the same price. That's a prediction about every market: "
-            "one price for each good, for everyone. It's the second of this series' Facts. <bookmark mark='a'/> "
+            "one price for each good, for everyone. It's the third of this series' Facts. <bookmark mark='a'/> "
             "Make a guess before the data: where would you expect it to hold, and where to fail? "
             "<bookmark mark='b'/> Crude oil is about as uniform a good as there is. From 1987 to 2010 the North Sea "
             "crude called Brent and the American crude called West Texas Intermediate differed by about a dollar "
