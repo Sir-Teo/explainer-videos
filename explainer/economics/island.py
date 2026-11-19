@@ -280,7 +280,7 @@ TRUTHS = {
                               ("Friday", (0.3, 0.2, 0.5), (0.0, 0.0, 1.5))),
                   "grids": (6, 12, 48), "starts": ((0.8, 0.15, 0.4), (0.2, 0.9, 0.2), (0.3, 0.3, 0.85))},
         # Scarf's economy (chapter 9): the auctioneer starts from these prices
-        "scarf_start": (0.45, 0.75, 0.52),
+        "scarf_start": (0.22, 0.85, 0.5),
         # the whole Island cleared at once (chapter 10): 5 goods, 12 islanders, CES tastes (elasticities 0.5-2),
         # endowments and weights drawn with this seed
         "island": {"goods": ("fish", "coconuts", "timber", "cloth", "salt"), "people": 12, "seed": 1954,

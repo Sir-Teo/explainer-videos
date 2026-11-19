@@ -325,6 +325,47 @@ brackets on screen.
 | intangible capital (scalable, sunk, spillovers, synergies) | 无形资本（可扩展、沉没、溢出、协同） |
 | the Coasean singularity | 科斯奇点 |
 
+## Part 9
+
+| English | 中文 |
+|---|---|
+| general equilibrium; partial equilibrium | 一般均衡；局部均衡 |
+| the invisible hand | 看不见的手 |
+| exchange economy; endowment | 交换经济；禀赋 |
+| the Edgeworth box | 埃奇沃思盒 |
+| the lens (of mutual gains) | （互利）透镜区域 |
+| Pareto efficient; Pareto improvement | 帕累托有效；帕累托改进 |
+| the contract curve | 契约曲线 |
+| offer curve | 提供曲线 |
+| competitive (Walrasian) equilibrium | 竞争（瓦尔拉斯）均衡 |
+| excess demand; Walras's law | 超额需求；瓦尔拉斯定律 |
+| the law of one price | 一价定律 |
+| the core; blocking coalition; replica economy | 核；阻挠联盟；复制经济 |
+| Edgeworth's conjecture; the core convergence theorem | 埃奇沃思猜想；核收敛定理 |
+| the first and second fundamental theorems of welfare economics | 福利经济学第一、第二基本定理 |
+| local nonsatiation | 局部非饱和 |
+| lump-sum transfer | 一次性转移支付 |
+| separating hyperplane | 分离超平面 |
+| the price simplex | 价格单纯形 |
+| Brouwer's fixed-point theorem | 布劳威尔不动点定理 |
+| Sperner's lemma; Scarf's algorithm | 斯佩纳引理；斯卡夫算法 |
+| tatonnement; the Walrasian auctioneer | 试探过程（摸索过程）；瓦尔拉斯拍卖人 |
+| stability; gross substitutes | 稳定性；总替代品 |
+| Scarf's example (cycle) | 斯卡夫的例子（循环） |
+| Newton's method | 牛顿法 |
+| the Robinson Crusoe economy | 鲁滨逊·克鲁索经济 |
+| multiple equilibria; the Sonnenschein–Mantel–Debreu theorem | 多重均衡；索南夏因—曼特尔—德布鲁定理 |
+| representative agent | 代表性个体 |
+| contingent commodity; Arrow security; complete and incomplete markets | 或有商品；阿罗证券；完全市场与不完全市场 |
+| the socialist calculation debate; central planning | 社会主义计算论战；中央计划 |
+| linear programming; dual; shadow price (resolving multipliers) | 线性规划；对偶；影子价格（解乘数） |
+| misallocation; revenue productivity (TFPR) | 资源错配；收入生产率（TFPR） |
+| computable general equilibrium (CGE) model; calibration | 可计算一般均衡（CGE）模型；校准 |
+| the Armington elasticity; the extensive (new-goods) margin | 阿明顿弹性；扩展（新产品）边际 |
+| PPAD; computational complexity | PPAD；计算复杂性 |
+| indivisible goods; the housing market; top trading cycles | 不可分物品；住房市场；顶端交易循环 |
+| approximate competitive equilibrium from equal incomes (A-CEEI) | 等收入近似竞争均衡 |
+
 ## Names
 
 | English | 中文 |
@@ -444,3 +485,20 @@ brackets on screen.
 | Jonathan Haskel, Stian Westlake | 乔纳森·哈斯克尔、斯蒂安·韦斯特莱克 |
 | Erik Brynjolfsson | 埃里克·布林约尔松 |
 | Loukas Karabarbounis, Brent Neiman | 卢卡斯·卡拉巴布尼斯、布伦特·奈曼 |
+| R. A. Radford | R. A. 拉德福德 |
+| Léon Walras | 莱昂·瓦尔拉斯 |
+| Francis Ysidro Edgeworth | 弗朗西斯·伊西德罗·埃奇沃思 |
+| Vilfredo Pareto; Arthur Bowley | 维尔弗雷多·帕累托；阿瑟·鲍利 |
+| Gérard Debreu; Lionel McKenzie | 杰拉德·德布鲁；莱昂内尔·麦肯齐 |
+| Herbert Scarf | 赫伯特·斯卡夫 |
+| Robert Aumann | 罗伯特·奥曼 |
+| Leonid Hurwicz | 莱昂尼德·赫维茨 |
+| Hugo Sonnenschein; Rolf Mantel | 雨果·索南夏因；罗尔夫·曼特尔 |
+| Alan Kirman | 艾伦·柯曼 |
+| Ludwig von Mises; Oskar Lange | 路德维希·冯·米塞斯；奥斯卡·兰格 |
+| Leonid Kantorovich; Tjalling Koopmans | 列昂尼德·康托罗维奇；佳林·库普曼斯 |
+| Chang-Tai Hsieh; Peter Klenow | 谢长泰；彼得·克莱诺 |
+| Timothy Kehoe | 蒂莫西·基欧 |
+| Christos Papadimitriou | 克里斯托斯·帕帕季米特里乌 |
+| Lloyd Shapley; David Gale; Alvin Roth | 劳埃德·沙普利；戴维·盖尔；埃尔文·罗斯 |
+| Eric Budish | 埃里克·布迪什 |

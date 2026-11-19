@@ -511,6 +511,28 @@ SHOWN = {
         ("Shahidi, Rusak, Manning, Fradkin and Horton (2025)", "a working paper's argument about AI agents and "
          "transaction costs, stated as an open question"),
     ],
+    9: [
+        ("Radford (1945)", "the camp economy, told from the article itself (a transcribed table); its salmon is one "
+         "column of the law-of-one-price Fact"),
+        ("Edgeworth (1881); Walras (1874); Arrow and Debreu (1954); McKenzie (1954); Debreu (1959); Debreu and Scarf "
+         "(1963); Aumann (1964); Arrow (1953)", "the theory's history and theorems, shown as such; every number about "
+         "them is computed in Agora"),
+        ("Arrow, Block and Hurwicz (1959); Scarf (1960, 1967); Anderson, Plott, Shimomura and Granat (2004)",
+         "stability and computation: Scarf's economy is simulated; the laboratory study is shown for its direction"),
+        ("Sonnenschein (1973); Mantel (1974); Debreu (1974); Kirman (1992); Brown and Matzkin (1996)",
+         "theorems and arguments, stated; the three-equilibrium economy is computed"),
+        ("Mises (1920); Lange (1936-37); Hayek (1945); Kantorovich (1939); Koopmans", "the calculation debate, shown "
+         "as history; Kantorovich's method is run on the Island's machines"),
+        ("Bils, Klenow and Ruane (2021)", "a correction to the misallocation dial's rows, stated in its meaning and on "
+         "screen, not entered as a row (it is a share of the gains, not a gain)"),
+        ("Kehoe (2005, 2014); USITC (1992)", "the 1992 NAFTA forecasts: a Called-it card (explainer.economics.calls), "
+         "and Kehoe's table transcribed"),
+        ("Papadimitriou (1994); Daskalakis, Goldberg and Papadimitriou (2009); Chen and Deng; Chen, Dai, Du and Teng "
+         "(2009); Shapley and Scarf (1974); Roth (1982); Budish (2011); Budish, Cachon, Kessler and Othman (2017)",
+         "the frontier, stated; the housing market is solved in Agora on the Island's huts"),
+        ("Brent and WTI via FRED; the World Bank's WDI (2023)", "data for the law-of-one-price Fact and the "
+         "intermission, computed on screen, not entered as dial rows"),
+    ],
 }
 
 

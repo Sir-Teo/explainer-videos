@@ -10,7 +10,7 @@ the series leaves out.
 Both *Parts* columns are found, not typed. *Planned* lists the parts whose entry in
 [`SYLLABUS.md`](SYLLABUS.md) names the book or paper; *Built* lists the parts whose scenes, compute step or
 README cite it (a dot: none yet). Fuller notes (editions, chapters, what each source was used for) are in each
-part's README, under *Sources*. Built so far: Parts 1–8.
+part's README, under *Sources*. Built so far: Parts 1–9.
 
 ## 1. The textbook spine
 
@@ -21,7 +21,7 @@ part's README, under *Sources*. Built so far: Parts 1–8.
 | Mankiw | N. G. Mankiw, *Principles of Economics* (10th ed., 2024) | 1–2 | 1–3 |
 | Krugman–Wells | P. Krugman and R. Wells, *Economics* (6th ed., 2021) | 2 | 2 |
 | Acemoglu–Laibson–List | D. Acemoglu, D. Laibson and J. List, *Economics* (3rd ed., 2022) | 4 | 4 |
-| CORE | The CORE Team, *The Economy* (2017; 2.0, 2023) | 1 | 1 |
+| CORE | The CORE Team, *The Economy* (2017; 2.0, 2023) | 1 | 1, 9 |
 | Heilbroner | R. Heilbroner, *The Worldly Philosophers* (7th ed., 1999) | 1 | 1 |
 
 ### The major
@@ -47,9 +47,9 @@ part's README, under *Sources*. Built so far: Parts 1–8.
 
 | Short name | Book | Planned | Built |
 |---|---|---|---|
-| MWG | A. Mas-Colell, M. Whinston and J. Green, *Microeconomic Theory* (1995) | 5–9, 13, 15, 18, 56 | 5–8 |
-| Kreps | D. Kreps, *Microeconomic Foundations I* (2013) | 5, 7, 9, 56 | 5, 7 |
-| Jehle–Reny | G. Jehle and P. Reny, *Advanced Microeconomic Theory* (3rd ed., 2011) | 5, 9 | 5–6 |
+| MWG | A. Mas-Colell, M. Whinston and J. Green, *Microeconomic Theory* (1995) | 5–9, 13, 15, 18, 56 | 5–9 |
+| Kreps | D. Kreps, *Microeconomic Foundations I* (2013) | 5, 7, 9, 56 | 5, 7, 9 |
+| Jehle–Reny | G. Jehle and P. Reny, *Advanced Microeconomic Theory* (3rd ed., 2011) | 5, 9 | 5–6, 9 |
 | Fudenberg–Tirole | D. Fudenberg and J. Tirole, *Game Theory* (1991) | 11, 53 | · |
 | Osborne–Rubinstein | M. Osborne and A. Rubinstein, *A Course in Game Theory* (1994) | 11 | · |
 | Bolton–Dewatripont | P. Bolton and M. Dewatripont, *Contract Theory* (2005) | 13–14 | · |
@@ -123,11 +123,11 @@ part's README, under *Sources*. Built so far: Parts 1–8.
 | the division of labour | Smith (1776), *The Wealth of Nations* | 1 | 1–2 |
 | comparative advantage | Ricardo (1817), *Principles*, ch. 7 | 2, 8, 35–36 | 1–2, 8 |
 | supply and demand, the scissors | Marshall (1890), *Principles of Economics* | 2, 37 | 2 |
-| the price system as information | Hayek (1945), "The Use of Knowledge in Society" | 1, 9 | 1 |
+| the price system as information | Hayek (1945), "The Use of Knowledge in Society" | 1, 9 | 1, 9 |
 | the double auction in the classroom | Chamberlin (1948); Smith (1962) | 1–2 | 1 |
 | zero-intelligence traders | Gode and Sunder (1993) | 2 | 1–2 |
-| general equilibrium and its welfare theorems | Arrow and Debreu (1954); Debreu (1959) | 9 | 8 |
-| consumer surplus | Dupuit (1844) | 2, 10 | 2 |
+| general equilibrium and its welfare theorems | Arrow and Debreu (1954); Debreu (1959) | 9 | 8–9 |
+| consumer surplus | Dupuit (1844) | 2, 10 | 2, 9 |
 
 ### Choice
 
@@ -188,7 +188,7 @@ part's README, under *Sources*. Built so far: Parts 1–8.
 | the long run in numbers | the Maddison Project (Bolt and van Zanden 2024) | 1 | 1, 3 |
 | the neoclassical growth model | Solow (1956); Ramsey (1928); Cass (1965) | 20 | · |
 | endogenous growth | Romer (1990); Aghion and Howitt (1992) | 21 | · |
-| misallocation | Hsieh and Klenow (2009) | 21 | · |
+| misallocation | Hsieh and Klenow (2009) | 9, 21 | 9 |
 
 ### Macroeconomics
 
@@ -271,6 +271,8 @@ part's README, under *Sources*. Built so far: Parts 1–8.
 **Part 7, *Time and Risk*.** Books: Hal Varian, *Intermediate Microeconomics*, chs. 10–13; Andreu Mas-Colell, Michael Whinston and Jerry Green, *Microeconomic Theory*, ch. 6; David Kreps, *Microeconomic Foundations I*, chs. 5–6; Christian Gollier, *The Economics of Risk and Time* (2001). Papers: Bernoulli (1738); Fisher, *The Theory of Interest* (1930); Samuelson (1937); Koopmans (1960); von Neumann and Morgenstern (1944); Savage (1954); Allais (1953); Ellsberg (1961); Pratt (1964); Arrow (1965); Mossin (1968); Merton (1969); Rothschild and Stiglitz (1970); Kahneman and Tversky (1979); Machina (1982); Gilboa and Schmeidler (1989); Rabin (2000); Kreps and Porteus (1978); Epstein and Zin (1989); Mehra and Prescott (1985); Weil (1989); Hall (1988); Strotz (1955–56); Laibson (1997); Holt and Laury (2002); Barsky et al. (1997); Hayden and Platt (2009); Hansen and Sargent, *Robustness* (2008); Manski (2004); Madrian and Shea (2001); Thaler and Benartzi (2004).
 
 **Part 8, *The Firm*.** Books: Hal Varian, *Intermediate Microeconomics*, chs. 19–24; Andreu Mas-Colell, Michael Whinston and Jerry Green, *Microeconomic Theory*, ch. 5; Oliver Williamson, *The Economic Institutions of Capitalism* (1985); Oliver Hart, *Firms, Contracts, and Financial Structure* (1995). Papers: Cobb and Douglas (1928), *AER*; Douglas (1976), *JPE*; Felipe and Adams (2005); Arrow, Chenery, Minhas and Solow (1961); Chenery (1949); Samuelson's Le Chatelier principle; Hall and Hitch (1939); Alchian (1950); Friedman (1953); Coase (1937), *Economica*; Williamson (1975, 1985); Klein, Crawford and Alchian (1978); Coase (2000), Klein (2000), Freeland (2000), Casadesus-Masanell and Spulber (2000), *JLE*; Grossman and Hart (1986); Hart and Moore (1990), *JPE*; Gollin (2002); Karabarbounis and Neiman (2014); Haskel and Westlake (2018); Brynjolfsson, Li and Raymond (2025); Shahidi et al. (2025).
+
+**Part 9, *The Invisible Hand, Proved*.** Books: Andreu Mas-Colell, Michael Whinston and Jerry Green, *Microeconomic Theory*, chs. 15–19; Gerard Debreu, *Theory of Value* (1959); David Kreps, *Microeconomic Foundations I* (2013); Jehle and Reny, *Advanced Microeconomic Theory*, ch. 5; Herbert Scarf, *The Computation of Economic Equilibria* (1973). Papers: Radford (1945), *Economica*; Edgeworth, *Mathematical Psychics* (1881); Walras (1874); Arrow and Debreu (1954); McKenzie (1954); Debreu and Scarf (1963); Aumann (1964); Arrow, Block and Hurwicz (1959); Scarf (1960, 1967); Anderson, Plott, Shimomura and Granat (2004); Sonnenschein (1973); Mantel (1974); Debreu (1974); Kirman (1992); Brown and Matzkin (1996); Arrow (1953); Mises (1920); Lange (1936–37); Hayek (1945); Kantorovich (1939); Hsieh and Klenow (2009); Bils, Klenow and Ruane (2021); Kehoe (2005, 2014); Papadimitriou (1994); Daskalakis, Goldberg and Papadimitriou (2009); Shapley and Scarf (1974); Budish (2011).
 
 ## 4. What the series leaves out
 

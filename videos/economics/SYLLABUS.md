@@ -726,33 +726,52 @@ Brynjolfsson, Li & Raymond 2025; Varian chs 19–24; MWG ch 5.
 ## Act III · Markets
 
 ### Part 9 · The Invisible Hand, Proved (~58)
-*Question:* can a whole economy of selfish traders reach a state that nobody could improve on, and will it?
-*Story:* R. A. Radford, an economist captured in 1942, watches a market grow from Red Cross parcels: prices,
-arbitrage, a currency in cigarettes, deflation when the parcels stop. In 1954 Arrow and Debreu prove that the
-order Radford saw can exist in any economy. What they could not prove is that an economy gets there.
-0. Hook: Radford's camp (1945); the question; objectives.
-1. Play it: two traders, two goods: trade in the box until nobody can gain.
-2. The Edgeworth box: endowments, the lens of gains, Pareto efficiency, the contract curve.
-3. The core; Edgeworth's conjecture: replicate the traders and the core shrinks to the price equilibria.
-4. Prices: offer curves, Walrasian equilibrium, Walras's law.
-5. The first welfare theorem, proved in six lines; what it assumes (the payoff cards to Act IV).
-6. The second welfare theorem, by a separating hyperplane, drawn; lump-sum transfers and why they are rare.
-7. Existence: excess demand on the simplex; Brouwer by Sperner's lemma, shown as a colouring; Arrow–Debreu.
-8. Does it get there? Walras's tâtonnement; Scarf's example (1960) where prices circle for ever.
-9. Computing an equilibrium: Scarf's algorithm; Newton on excess demand; the Island solved.
-10. Production: the Robinson Crusoe economy decentralized; firms and profits in equilibrium.
-11. Anything goes: Sonnenschein, Mantel and Debreu (1973–74), and what it cost the programme.
-12. Time and uncertainty: Arrow's securities (1953); complete markets.
-13. The calculation debate: Mises, Lange, Hayek; Kantorovich's linear programmes; what the Soviet plan had
-    to compute.
-14. Dials. 15. In practice: computable general equilibrium models. 16. Frontier: equilibrium computation's
-    complexity (PPAD); markets with indivisibilities.
+*Question:* can a whole economy of selfish traders reach a state nobody could improve on, and will it?
+*Story:* R. A. Radford, back from officers' prisoner-of-war camps in Italy and Germany, describes in *Economica*
+(1945) a market grown from equal Red Cross parcels: a padre's arbitrage, cigarettes as money, one price where the
+Exchange and Mart boards were read, slump when the parcels stopped, and liberation on 12 April 1945. In 1954 Arrow
+and Debreu prove that such an order can exist in any economy of their kind. What they could not prove is that an
+economy gets there.
+0. Hook: Radford's camps (the parcel, the padre, "cheese for seven", the board, the salmon, August 1944, the Bully
+   Mark, February 1945, liberation); Arrow and Debreu (1954); the question; objectives.
+1. Play it: four proposed trades between Ana and Bo, accepted or refused.
+2. The Edgeworth box: indifference maps, the lens, Pareto efficiency, the contract curve (Edgeworth's name).
+3. Prices: budget lines, offer curves, the equilibrium at 1.018 baskets a fish, Walras's law; the law of one price
+   as a Fact (Brent against WTI; price levels across countries; Agora's two villages; Radford's salmon).
+4. The core and Edgeworth's conjecture: a blocking coalition; the core of the replicated box, computed for 1 to 20
+   copies; Debreu and Scarf (1963), Aumann (1964).
+5. The first welfare theorem in five lines; its assumptions as the map of Act IV.
+6. The second welfare theorem: a target, its supporting price, the lump-sum transfer, the separating hyperplane;
+   why lump-sum transfers are rare.
+   Intermission: Brent and WTI month by month, 1987-2026, the gap as a tune.
+7. Existence: the price simplex, Brouwer's fixed point, Sperner's colouring and Scarf's door-to-door walk (grids of
+   6, 12 and 48).
+8. Stability: tatonnement, gross substitutes (Arrow, Block and Hurwicz 1959), Scarf's cycle with its two conserved
+   quantities, and its laboratory test (Anderson, Plott, Shimomura and Granat 2004).
+9. Computing an equilibrium: the Island's five goods and twelve islanders, by Newton (6 steps) and the auctioneer
+   (238).
+10. Production: Crusoe decentralized into a firm and a household; convexity, and increasing returns.
+11. Anything goes: three equilibria in a two-trader economy; Sonnenschein, Mantel and Debreu; Kirman; Brown and
+    Matzkin.
+12. Time and uncertainty: Arrow securities share Ana's and Chidi's weather risk; a bond alone shares nothing.
+13. The calculation debate: Mises, Lange, Hayek; Kantorovich's programme for the yard's machines and its resolving
+    multipliers.
+14. Dials (misallocation, new). 15. In practice: computable general equilibrium models; *Called it?*: the 1992 NAFTA
+    forecasts against 1989-2009 (Kehoe). 16. Frontier: PPAD; Shapley and Scarf's housing market and top trading
+    cycles; Budish's course market.
 
-*Agora:* `ge`: exchange and production economies, the contract curve and core, equilibrium by tâtonnement,
-Newton and a simplicial method; Scarf's cycling economy. The whole Island cleared at once.
-*Facts:* the law of one price. *Called it?* the convergence theorem against Scarf's cycle.
-*Reading:* Radford 1945; Edgeworth 1881; Arrow & Debreu 1954; Debreu, *Theory of Value*; Scarf 1960, 1973;
-Hayek 1945; MWG chs 15–17, 19; Kreps chs 14–16; Jehle & Reny ch 5.
+*Agora:* `ge`: traders (Cobb-Douglas, CES, Leontief), the Edgeworth box, offer curves, the core of the replicated
+economy by coalition checks, Sperner's labelling and Scarf's walk, tatonnement and Scarf's cycle, Newton, Crusoe,
+three equilibria, Arrow securities and a bond economy, Kantorovich's programme with duals, misallocation with Hsieh
+and Klenow's formula, top trading cycles. The whole Island cleared at once.
+*Dials:* the TFP gain from equalizing marginal products (new; contested). *Facts:* the law of one price. *Called
+it?* Sobarzo's 1992 forecasts of NAFTA, wrong.
+*Reading:* Radford 1945; Edgeworth 1881; Walras 1874; Arrow & Debreu 1954; McKenzie 1954; Debreu, *Theory of Value*;
+Debreu & Scarf 1963; Aumann 1964; Arrow, Block & Hurwicz 1959; Scarf 1960, 1967, 1973; Anderson et al. 2004;
+Sonnenschein 1973; Mantel 1974; Debreu 1974; Kirman 1992; Brown & Matzkin 1996; Arrow 1953; Mises 1920; Lange
+1936-37; Hayek 1945; Kantorovich 1939; Hsieh & Klenow 2009; Bils, Klenow & Ruane 2021; Kehoe 2005, 2014;
+Papadimitriou 1994; Daskalakis, Goldberg & Papadimitriou 2009; Shapley & Scarf 1974; Roth 1982; Budish 2011; MWG chs
+15-19; Kreps; Jehle & Reny ch 5.
 
 ### Part 10 · The Price Maker (~54)
 *Question:* what does a seller do when the price is hers to set?
@@ -2837,6 +2856,7 @@ Young Economist*.
 | 6 | built, English | *Demand.* Agora gains `demand` (Cobb–Douglas, CES, linear expenditure and AIDS systems with their dual functions checked numerically, the Slutsky matrix and decompositions, the subsistence diet and Jensen and Miller's voucher design, welfare with Willig and Hausman, price indices and Feenstra, Hamilton's Engel drift, AIDS estimation with tests, the integrability loop); the transcribed results of Jensen and Miller, Hausman's cereal, Costa and Hamilton, Engel and Houthakker, the USDA's quintiles, Jaravel and the BLS's methods; rows added to the staples and CPI-bias dials, a new dial (food's income elasticity) and Engel's law as *Called it?* |
 | 7 | built, English | *Time and Risk.* Agora's `risk` grows to the whole part (expected utility and its measures, dominance, insurance and portfolios, Rabin's calibration, the St Petersburg game, Fisher, discounting and beta–delta, Epstein–Zin, Hall's regression, Holt and Laury with noisy respondents, Ellsberg's maxmin and Chew's weighted utility); the Data Room gains real PCE, the PCE price index and the 3-month bill rate, and the transcribed results of Bernoulli, Samuelson, Allais, Ellsberg, Rabin, Thaler, Holt and Laury, Hayden and Platt, Madrian and Shea, Thaler and Benartzi, Barsky et al., Post et al. and Mehra and Prescott; two new dials (relative risk aversion; the EIS) and Bernoulli's *Called it?* |
 | 8 | built, English | *The Firm.* Agora gains `firm` (technologies, costs and their duality identities, supply and Le Chatelier, free entry with identical and different firms, Cobb and Douglas's regressions, hold-up, Grossman–Hart–Moore, make-or-buy, Alchian's selection); the Data Room gains the transcribed Cobb–Douglas indices of 1899–1922 (via Felipe and Adams 2005) and the Penn World Table's labour share; two new dials (capital's output elasticity; the capital–labour elasticity of substitution); Act II is complete |
+| 9 | built, English | *The Invisible Hand, Proved.* Agora gains `ge` (the box and the replicated core, Sperner and Scarf, tatonnement and Scarf's cycle, Newton, Crusoe, three equilibria, Arrow securities, Kantorovich's duals, misallocation, top trading cycles); the Data Room gains Brent and WTI crude via FRED and the transcribed Radford (1945), Edgeworth (1881), Hsieh and Klenow (2009), Bils, Klenow and Ruane (2021) and Kehoe (2014); a new dial (misallocation), the law of one price as a Fact, and the NAFTA *Called it?*; Act III begins |
 
 **Corrections found while building Part 1** (the plan's draft, written from memory, against the sources): Bastiat's
 Paris passage is in *Economic Sophisms*, First Series, ch. 18 (1845), not the *Harmonies*; Hume's is/ought passage is
@@ -2919,3 +2939,14 @@ Economics* dispute, and does not settle it. Douglas's own account of the 1927 co
 summarized without the details of where they met; the six-tenths rule is credited to Williams (1947) without its
 title, which was not re-read; Hall and Hitch's sample is "a few dozen" firms. The learning curve is drawn at a fifth
 per doubling as an illustration, not as Wright's estimate.
+
+**Corrections found while building Part 9.** Radford's camps were Oflags, officers' camps, of 1,200 to 2,500 men;
+the padre's walk happened in a transit camp in Italy, and the salmon's two cigarettes in twenty in a transit camp in
+general; the liberation was on 12 April 1945 by elements of the 30th U.S. Infantry Division (all from the article).
+The draft's Edgeworth box is Edgeworth's idea but not his drawing: he named the contract curve (1881, p. 21) and the
+box in its familiar form came later, from Pareto and Bowley. Hsieh and Klenow's headline gains (30-50% for China,
+40-60% for India) are relative to US efficiency in 1997; full equalization gives 87-115% and 100-128%. Scarf's 1960
+economy is told as textbooks give it (each trader wants its own good and the next in fixed proportions); the
+original paper was not reached. The draft's *Called it?* (the convergence theorem against Scarf's cycle) became the
+NAFTA forecasts, a dated prediction with an outcome, and Scarf's cycle a chapter of its own. Oil prices from 2026 show
+a spike the film does not explain. Kantorovich worked for the plywood trust in the late 1930s and published in 1939.
