@@ -69,9 +69,9 @@ class Leontief(VoiceoverScene):
             "Each dollar of fish needs about five cents of fibre, ten cents of repairs and four cents of "
             "freight. Leontief's bet was that these recipes stay roughly fixed, at least for a while."
         ) as vo:
-            self.play(FadeIn(tag))
+            self.play(FadeIn(tag), FadeIn(who, shift=UP * 0.2))
             vo.wait_until("a")
-            self.play(FadeIn(who, shift=UP * 0.2))
+            self.play(Indicate(who, color=E.FIRMS, scale_factor=1.02))
             vo.wait_until("b")
             self.play(FadeIn(zl), FadeIn(zm.heads_c), FadeIn(zm.heads_r), LaggedStart(
                 *[FadeIn(c) for c in zm.cells], lag_ratio=0.05), run_time=2.0)
@@ -219,9 +219,9 @@ class Leontief(VoiceoverScene):
             "Organization have published trade measured by value added, using Leontief's method on tables of the "
             "whole world. We'll use them in Part 36."
         ) as vo:
-            self.play(FadeIn(tag))
+            self.play(FadeIn(tag), Create(gross), FadeIn(gl))
             vo.wait_until("a")
-            self.play(Create(gross), FadeIn(gl))
+            self.play(Indicate(gl, color=E.WORLD))
             vo.wait_until("b")
             self.play(GrowFromEdge(va, LEFT), FadeIn(vl), run_time=1.5)
             self.play(FadeIn(imp))

@@ -44,9 +44,9 @@ class Frontier(VoiceoverScene):
             "away, appear nowhere. How to price a product that didn't exist last year is the oldest problem in "
             "this part, in its newest form."
         ) as vo:
-            self.wait(0.3)
-            vo.wait_until("a")
             self.play(FadeIn(cards[0], shift=UP * 0.2))
+            vo.wait_until("a")
+            self.play(Indicate(cards[0].card, color=E.ACCENT, scale_factor=1.02))
             vo.wait_until("b")
             self.play(FadeIn(rd))
             vo.wait_until("c")

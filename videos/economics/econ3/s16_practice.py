@@ -12,7 +12,9 @@ class Practice(VoiceoverScene):
         self.friday()
 
     def jobs(self):
-        head = heading(r"In practice")
+        head = VGroup(heading(r"In practice"),
+                      label(r"who measures an economy for a living", font_size=26, color=GREY_B))
+        head[1].next_to(head[0], DOWN, buff=0.2)
         items = [
             (r"national accountants", r"at statistical agencies: \ they assemble GDP from surveys, tax records and "
              r"the census of businesses, \ and revise it", E.ACCENT),
@@ -27,7 +29,7 @@ class Practice(VoiceoverScene):
             (r"data scientists", r"at card networks, payroll firms and satellite companies: \ they sell faster, \ "
              r"rougher readings of the same economy", E.AGORA),
         ]
-        pc = point_cards(items, width=12.8, cols=2, font_size=24).move_to(DOWN * 0.3)
+        pc = point_cards(items, width=12.8, cols=2, font_size=24).move_to(DOWN * 0.55)
         with self.voiceover(
             "Who does this for a living? <bookmark mark='a'/> National accountants at statistical agencies, who "
             "assemble GDP every quarter from surveys, tax records and a census of businesses, and spend years "

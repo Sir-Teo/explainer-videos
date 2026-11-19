@@ -21,37 +21,74 @@ class Dials(VoiceoverScene):
     # ------------------------------------------------------------------
     def dial(self):
         dial = dials.DIALS["cpi_bias"]
-        short = [r"Boskin et al.\ (1996): \ 1995--96", r"Lebow and Rudd (2003)", r"Gordon (2006): \ 1995--96, revisited",
-                 r"Gordon (2006): \ 2006", r"Moulton (2018): \ 2017"]
-        dc = dial_card(dial, 0.0, 1.8, width=12.8, font_size=22, ticks=[0, 0.3, 0.6, 0.9, 1.2, 1.5, 1.8],
-                       short=short).move_to(UP * 0.2)
+        rows_def = [(r"Boskin et al.\ (1996)", r"the CPI in 1995--96"),
+                    (r"Lebow and Rudd (2003)", r"after the reforms"),
+                    (r"Gordon (2006)", r"1995--96, revisited"),
+                    (r"Gordon (2006)", r"the CPI in 2006"),
+                    (r"Moulton (2018)", r"the CPI in 2017")]
+        color = DIAL_STATUS.get(dial.status, GREY_C)
+        head = VGroup(label(dial.name, font_size=30),
+                      VGroup(RoundedRectangle(width=3.6, height=0.42, corner_radius=0.08, stroke_width=0,
+                                              fill_color=color, fill_opacity=1),
+                             label(dial.status, font_size=20, color=BACKGROUND))).arrange(RIGHT, buff=0.4)
+        head[1][1].move_to(head[1][0])
+        units = label(r"percentage points a year by which the CPI overstates the rise in the cost of living",
+                      font_size=20, color=GREY_B)
+        VGroup(head, units).arrange(DOWN, aligned_edge=LEFT, buff=0.15).to_edge(UP, buff=0.4).to_edge(LEFT, buff=0.6)
+        x0, x1 = -0.4, 6.2
+        lo, hi = 0.0, 1.8
+
+        def X(v):
+            return x0 + (x1 - x0) * (v - lo) / (hi - lo)
+
+        top_y = 1.55
+        axis_y = top_y - 5 * 0.62 - 0.1
+        axis = Line([x0, axis_y, 0], [x1, axis_y, 0], color=GREY_C, stroke_width=2)
+        ticks = VGroup(*[VGroup(Line([X(v), axis_y - 0.07, 0], [X(v), axis_y + 0.07, 0], color=GREY_C),
+                                MathTex(f"{v:g}", font_size=22, color=GREY_B).move_to([X(v), axis_y - 0.32, 0]))
+                         for v in (0, 0.3, 0.6, 0.9, 1.2, 1.5, 1.8)])
+        grid = VGroup(*[DashedLine([X(v), axis_y, 0], [X(v), top_y + 0.35, 0], color=GREY_D, stroke_width=1)
+                        for v in (0.3, 0.6, 0.9, 1.2, 1.5)])
+        rows = VGroup()
+        for k, (e, (who, what)) in enumerate(zip(dial.estimates, rows_def)):
+            y = top_y - 0.62 * k
+            c = DESIGN_COLOR.get(e.design, GREY_B)
+            t = VGroup(label(who, font_size=22, color=WHITE), label(what, font_size=18, color=GREY_B)).arrange(
+                DOWN, aligned_edge=RIGHT, buff=0.04).move_to([x0 - 0.4, y, 0], aligned_edge=RIGHT)
+            bar = Line([X(e.lo if e.lo is not None else e.value), y, 0], [X(e.hi if e.hi is not None else e.value),
+                                                                          y, 0], color=c, stroke_width=5)
+            dot = Dot([X(e.value), y, 0], radius=0.1, color=c)
+            val = label(f"{e.value:.2f}", font_size=20, color=c).next_to(dot, UP, buff=0.08)
+            rows.add(VGroup(t, bar, dot, val))
+        meaning = wrapped_label(dial.meaning, 12.0, 21, GREY_A).to_edge(DOWN, buff=0.45)
         src = published_tag(r"Boskin et al.\ (1996); \ Lebow and Rudd (2003); \ Gordon (2006); \ Moulton (2018): "
-                            r"expert reviews", corner=DR, font_size=15)
+                            r"expert reviews", corner=DR, font_size=14).shift(UP * 0.0)
         e = dial.estimates
         with self.voiceover(
             "This part enters a new dial: how far the consumer price index overstates the rise in the cost of "
             "living, in percentage points a year. Its estimates come from expert reviews, which add up the bias "
             "source by source from many smaller studies. <bookmark mark='a'/> The Boskin Commission put it at "
-            f"{e[0].value:.1f} points for the mid-1990s. <bookmark mark='b'/> After the bureau's reforms, David Lebow "
-            f"and Jeremy Rudd put it at {e[1].value:.2f}, with a plausible range from 0.3 to 1.4. "
-            "<bookmark mark='c'/> Robert Gordon, one of the original commissioners, looked back in 2006: with what "
-            "was known by then, the 1990s bias had been more like 1.2 or 1.3, and the bias of 2006 about 0.8. "
-            f"<bookmark mark='d'/> And Brent Moulton's audit for 2017 found {e[4].value:.2f}. "
+            f"{e[0].value:.1f} points for the mid-1990s, plausibly from 0.8 to 1.6. <bookmark mark='b'/> After the "
+            f"bureau's reforms, David Lebow and Jeremy Rudd put it at {e[1].value:.2f}, with a plausible range from "
+            "0.3 to 1.4. <bookmark mark='c'/> Robert Gordon, one of the original commissioners, looked back in 2006: "
+            "with what was known by then, the 1990s bias had been more like 1.2 or 1.3, and the bias of 2006 about "
+            f"0.8. <bookmark mark='d'/> And Brent Moulton's audit for 2017 found {e[4].value:.2f}. "
             "<bookmark mark='e'/> The status is settled within a range: the index overstates inflation, by "
             "somewhere between a few tenths of a point and a point and a half a year, and the best single guess "
             "has stayed close to one. Over a decade that compounds, and every indexed payment drifts with it."
         ) as vo:
-            self.play(FadeIn(dc.card), FadeIn(dc.head), FadeIn(dc.axis), FadeIn(dc.marks), FadeIn(src))
+            self.play(FadeIn(head), FadeIn(units), Create(axis), FadeIn(ticks), FadeIn(grid), FadeIn(src))
             vo.wait_until("a")
-            self.play(FadeIn(dc.dots[0], scale=0.6))
+            self.play(FadeIn(rows[0][0]), Create(rows[0][1]), FadeIn(rows[0][2], scale=0.6), FadeIn(rows[0][3]))
             vo.wait_until("b")
-            self.play(FadeIn(dc.dots[1], scale=0.6))
+            self.play(FadeIn(rows[1][0]), Create(rows[1][1]), FadeIn(rows[1][2], scale=0.6), FadeIn(rows[1][3]))
             vo.wait_until("c")
-            self.play(FadeIn(dc.dots[2], scale=0.6), FadeIn(dc.dots[3], scale=0.6))
+            for r in rows[2:4]:
+                self.play(FadeIn(r[0]), Create(r[1]), FadeIn(r[2], scale=0.6), FadeIn(r[3]), run_time=0.8)
             vo.wait_until("d")
-            self.play(FadeIn(dc.dots[4], scale=0.6))
+            self.play(FadeIn(rows[4][0]), Create(rows[4][1]), FadeIn(rows[4][2], scale=0.6), FadeIn(rows[4][3]))
             vo.wait_until("e")
-            self.play(FadeIn(dc.meaning))
+            self.play(FadeIn(meaning))
         self.clear_scene()
 
     def audits(self):

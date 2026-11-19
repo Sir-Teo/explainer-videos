@@ -219,7 +219,7 @@ class Unemployment(VoiceoverScene):
         l6 = label(r"U-6", font_size=22, color="#C9A0FF").next_to(a.c2p(2026.8, h["u6"][-1]), RIGHT, buff=0.1)
         part = label(rf"participation: \\ {d['CIVPART']['last']:.1f}\% \\ (peak {d['CIVPART']['peak']:.1f}\%, "
                      rf"{d['CIVPART']['peak_month'][:4]})", font_size=22, color=GREY_A)
-        part.next_to(rates, DOWN, buff=0.6).align_to(rates, LEFT)
+        part.next_to(rates, DOWN, buff=0.6).to_edge(RIGHT, buff=0.35)
         tag = data_tag(rf"BLS, Current Population Survey (U1RATE ... U6RATE, UNRATE, CIVPART), "
                        rf"{data.fred_cite('U6RATE')}", corner=DL, font_size=14)
         with self.voiceover(

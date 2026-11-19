@@ -90,7 +90,8 @@ class PlayIt(VoiceoverScene):
             label(r"Irving Fisher, 1922: \ the geometric mean of the two, \ ``ideal''", font_size=25, color=FISHER),
             MathTex(r"\sqrt{1.50 \times 1.33} = \sqrt{2}", r"= 1.414", font_size=40, color=FISHER),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.18)
-        g = VGroup(las, pas, fis).arrange(DOWN, aligned_edge=LEFT, buff=0.5).move_to(LEFT * 0.6)
+        g = VGroup(las, pas, fis).arrange(DOWN, aligned_edge=LEFT, buff=0.5).move_to(LEFT * 0.6 + DOWN * 0.3)
+        top = label(r"Three answers with names", font_size=34).to_edge(UP, buff=0.4)
         verdicts = VGroup(label(r"B \ \ $+50\%$", font_size=30, color=LASP).next_to(las[1], RIGHT, buff=0.8),
                           label(r"D \ \ $+33\%$", font_size=30, color=PAAS).next_to(pas[1], RIGHT, buff=0.8),
                           label(r"C \ \ $+41\%$", font_size=30, color=FISHER).next_to(fis[1], RIGHT, buff=0.8))
@@ -105,7 +106,7 @@ class PlayIt(VoiceoverScene):
             f"{100 * (d['fisher'] - 1):.1f} percent. Answer C. Three formulas, three answers, from the same "
             "prices. Which is right?"
         ) as vo:
-            self.wait(0.3)
+            self.play(FadeIn(top))
             vo.wait_until("a")
             self.play(FadeIn(las[0]), Write(las[1]))
             self.play(FadeIn(verdicts[0]))

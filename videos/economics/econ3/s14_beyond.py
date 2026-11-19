@@ -47,9 +47,9 @@ class Beyond(VoiceoverScene):
             f"{nt['nnp_growth']} for net national product. Slower, but growing. Their title asked whether growth "
             "was obsolete, and their answer was no."
         ) as vo:
-            self.play(FadeIn(tag))
+            self.play(FadeIn(tag), FadeIn(who, shift=UP * 0.2))
             vo.wait_until("a")
-            self.play(FadeIn(who, shift=UP * 0.2))
+            self.play(Indicate(who, color=WELFARE, scale_factor=1.02))
             vo.wait_until("b")
             self.play(FadeIn(plus, lag_ratio=0.2))
             vo.wait_until("c")

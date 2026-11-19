@@ -172,6 +172,7 @@ class InOut(VoiceoverScene):
                         (r"in GDP", r"almost nothing: \ the price is zero")],
                        design="survey", width=6.5, font_size=24),
         ).arrange(RIGHT, buff=0.3).move_to(UP * 0.3)
+        top = label(r"Two more gaps", font_size=34).to_edge(UP, buff=0.45)
         bottom = label(r"GDP measures market production well, \ and stops at the edge of the market", font_size=26,
                        color=E.ACCENT).to_edge(DOWN, buff=0.6)
         with self.voiceover(
@@ -187,7 +188,7 @@ class InOut(VoiceoverScene):
             "<bookmark mark='c'/> None of this makes GDP wrong. It measures market production, carefully and "
             "consistently, and it stops at the edge of the market, as Kuznets said it would."
         ) as vo:
-            self.wait(0.3)
+            self.play(FadeIn(top))
             vo.wait_until("a")
             self.play(FadeIn(cards[0], shift=UP * 0.2))
             vo.wait_until("b")
