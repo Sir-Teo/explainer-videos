@@ -23,6 +23,10 @@ class GroupSequential(LectureMixin, StatsScene):
         self.remedies()
         self.compare()
         self.answer()
+        self.checkpoint([("Wald's SPRT stops when?", "the likelihood ratio leaves a band"),
+                         ("A trial stopped early for a large effect: its naive estimate?", "biased upward")],
+                        narration="Checkpoint. Stopping when the evidence suffices.",
+                        answers_narration="When the likelihood ratio leaves its band. And biased upward.")
 
     def brownian(self):
         heading = label('The known-variance Gaussian joint law', font_size=30, color=WEALTHC).move_to([0, 3.35, 0])
