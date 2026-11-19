@@ -98,4 +98,15 @@ CALLS = {c.key: c for c in [
          ("T. J. Kehoe, NAFTA at 20 (Federal Reserve Bank of Dallas, 2014), ch. 1, table 1",
           "T. J. Kehoe, in Frontiers in Applied General Equilibrium Modeling (Cambridge, 2005)",
           "USITC publication 2516 (May 1992)")),
+    Call("nash_guessing", 11, "game theory's equilibrium for the guessing game (Nash's concept, 1950, with every "
+         "player rational and knowing the others are)", "1950",
+         "everyone chooses 0 in two-thirds of the average, the only Nash equilibrium",
+         "iterated elimination of dominated choices: no one should name more than 66.7, so no one more than 44.4, and "
+         "so on down to 0",
+         "in Nagel's first rounds (1995) the 67 students' choices averaged 36.73, so the winning number was about 25; "
+         "in the Financial Times contest of 1997 the readers' average was 18.9 and the winning number 13; only with "
+         "repetition do choices fall toward 0, as Nagel's later rounds showed",
+         "wrong",
+         ("R. Nagel, American Economic Review 85(5) (1995), section IV and Figure 1",
+          "R. Thaler's Financial Times contest (1997), as reported in Chicago Booth Review (2015)")),
 ]}

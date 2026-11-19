@@ -400,6 +400,36 @@ brackets on screen.
 | personalized pricing | 个性化定价 |
 | algorithmic pricing; algorithmic collusion | 算法定价；算法合谋 |
 
+## Part 11
+
+| English | 中文 |
+|---|---|
+| game theory; player; strategy; payoff | 博弈论；参与人；策略；收益 |
+| strategic (normal) form; payoff matrix | 策略式（标准式）；收益矩阵 |
+| the prisoner's dilemma | 囚徒困境 |
+| dominant strategy; dominated strategy | 占优策略；劣势策略 |
+| iterated elimination of dominated strategies | 重复剔除劣势策略 |
+| common knowledge of rationality | 理性的共同知识 |
+| Nash equilibrium; best response | 纳什均衡；最优反应 |
+| mixed strategy; the indifference principle | 混合策略；无差异原则 |
+| coordination game; the battle of the sexes; chicken; the stag hunt | 协调博弈；性别之战；胆小鬼博弈；猎鹿博弈 |
+| extensive form; game tree; backward induction | 扩展式；博弈树；逆向归纳 |
+| subgame-perfect equilibrium; credible and empty threats | 子博弈完美均衡；可信威胁与空洞威胁 |
+| the chain-store paradox | 连锁店悖论 |
+| the centipede game; the ultimatum game | 蜈蚣博弈；最后通牒博弈 |
+| repeated game; discount factor; grim trigger | 重复博弈；贴现因子；冷酷触发策略 |
+| the folk theorem; minmax payoff | 无名氏定理；最小最大收益 |
+| tit for tat; win-stay, lose-shift | 以牙还牙；赢则保持、输则改变 |
+| focal point | 聚点（谢林点） |
+| correlated equilibrium | 相关均衡 |
+| evolutionarily stable strategy; the replicator dynamic | 演化稳定策略；复制者动态 |
+| fictitious play; regret matching | 虚拟博弈；后悔匹配 |
+| level-k thinking; the cognitive hierarchy | k 级思维；认知层级模型 |
+| the beauty contest (Keynes) | 选美竞赛（凯恩斯） |
+| Bayesian game; type; Bayesian Nash equilibrium | 贝叶斯博弈；类型；贝叶斯纳什均衡 |
+| alternating-offers bargaining (Rubinstein) | 轮流出价讨价还价（鲁宾斯坦） |
+| counterfactual regret minimization | 反事实后悔最小化 |
+
 ## Names
 
 | English | 中文 |
@@ -556,3 +586,18 @@ brackets on screen.
 | Jean-Pierre Dubé; Sanjog Misra | 让-皮埃尔·杜贝；桑乔格·米斯拉 |
 | Emilio Calvano; Giacomo Calzolari; Vincenzo Denicolò; Sergio Pastorello | 埃米利奥·卡尔瓦诺；贾科莫·卡尔佐拉里；温琴佐·德尼科洛；塞尔吉奥·帕斯托雷洛 |
 | Stephanie Assad; Robert Clark; Daniel Ershov; Lei Xu | 斯蒂芬妮·阿萨德；罗伯特·克拉克；丹尼尔·叶尔绍夫；Lei Xu（中文名未核实） |
+| Merrill Flood; Melvin Dresher | 梅里尔·弗勒德；梅尔文·德雷希尔 |
+| Armen Alchian; John D. Williams | 阿门·阿尔钦；约翰·D. 威廉姆斯 |
+| John Nash; Albert Tucker; John von Neumann | 约翰·纳什；阿尔伯特·塔克；约翰·冯·诺依曼 |
+| Rosemarie Nagel; Richard Thaler | 罗斯玛丽·纳格尔；理查德·塞勒 |
+| Reinhard Selten; John Harsanyi; Robert Aumann | 莱因哈德·泽尔腾；约翰·海萨尼；罗伯特·奥曼 |
+| Thomas Schelling; Morton Halperin | 托马斯·谢林；莫顿·霍尔珀林 |
+| Robert Axelrod; Anatol Rapoport | 罗伯特·阿克塞尔罗德；阿纳托尔·拉波波特 |
+| Martin Nowak; Karl Sigmund | 马丁·诺瓦克；卡尔·西格蒙德 |
+| John Maynard Smith; George Price | 约翰·梅纳德·史密斯；乔治·普赖斯 |
+| Ariel Rubinstein; Drew Fudenberg; Eric Maskin | 阿里尔·鲁宾斯坦；朱·弗登博格；埃里克·马斯金 |
+| Ignacio Palacios-Huerta; Pierre-André Chiappori; Steven Levitt | 伊格纳西奥·帕拉西奥斯-韦尔塔；皮埃尔-安德烈·基亚波里；史蒂文·莱维特 |
+| Joseph Henrich; Werner Güth | 约瑟夫·亨里奇；维尔纳·居特 |
+| Colin Camerer; Teck-Hua Ho | 科林·凯默勒；何德华 |
+| Sergiu Hart; Andreu Mas-Colell | 塞尔吉乌·哈特；安德鲁·马斯-科莱尔 |
+| Noam Brown; Tuomas Sandholm | 诺姆·布朗；托马斯·桑德霍尔姆 |

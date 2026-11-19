@@ -30,6 +30,7 @@ film that moves to a new vintage says so on screen.
 | `fred_APU0000717311.csv` | the average retail price of ground coffee (100%, ground roast, all sizes), U.S. city average, dollars a pound, monthly, January 1980 to October 2026 | U.S. Bureau of Labor Statistics, via FRED | public domain | 2026-11-19 |
 | `wdi_2015_2025.csv` | World Development Indicators for the 217 economies (not aggregates), 2015-2025: GDP and GDP per head at market exchange rates (current US dollars) and at purchasing power parity (current international dollars), population, Gini index; with each economy's region and income group | World Bank (API, last updated 11 November 2026) | CC BY 4.0 | 2026-11-19 |
 | `hdr2025_1990_2023.csv` | Human Development Report 2025, composite indices time series: the HDI, life expectancy, expected and mean years of schooling, GNI per head (2021 PPP dollars), 1990-2023, for the 195 countries (aggregates dropped) | UNDP Human Development Report Office | CC BY 3.0 IGO | 2026-11-19 |
+| `warheads_1945_2026.csv` | estimated nuclear warhead stockpiles by country (military stockpiles; retired warheads queued for dismantlement excluded), 1945-2026 | Federation of American Scientists, "Estimated Global Nuclear Warhead Inventories", via Our World in Data (nuclear-warhead-stockpiles, updated 2026-05-13) | CC BY 4.0 (Our World in Data); FAS estimates cited | 2026-11-19 |
 | `draft1970.csv` | the draft lottery of 1 December 1969: the rank drawn for each of the 366 birthdays (day, month, rank) | U.S. Selective Service System, via the Journal of Statistics Education's data archive (Starr 1997, `draft70yr.dat`) | public record; JSE tabulation free for education | 2026-11-19 |
 | `rtdsm_2006_2010.csv` | real GDP for 2006Q1-2010Q4 as reported by every quarterly vintage from 2007Q1 to 2026Q4 | Federal Reserve Bank of Philadelphia, Real-Time Data Set for Macroeconomists (ROUTPUT) | free with attribution | 2026-11-19 |
 | `rtdsm_first_latest.csv` | for every quarter from 1965Q4: annualized real GDP growth in the first vintage that reported it and in the latest (2026Q4), computed from the same workbook | as above | free with attribution | 2026-11-19 |
@@ -118,3 +119,9 @@ publication, the copy that was read and the date the transcription was checked:
 | `traina_2018` | Traina's finding that public-firm markups rose only modestly, and the aggregate flat or falling | 2026-11-19 |
 | `nakamura_zerom_2010` | Nakamura and Zerom's decomposition of incomplete pass-through in coffee (local costs, markups, menu costs) | 2026-11-19 |
 | `dube_misra_2023` | Dube and Misra's personalized-pricing experiment: profits against uniform pricing, and who gains | 2026-11-19 |
+| `nagel_1995` | Nagel's guessing-game sessions: design, and the first-period means and medians for p = 1/2, 2/3 and 4/3 | 2026-11-19 |
+| `thaler_ft_1997` | the Financial Times guessing contest of 1997: its mean and winning number (secondary accounts) | 2026-11-19 |
+| `flood_1952` | the Flood-Dresher experiment of January 1950: a hundred rounds, the joint outcomes, and Nash's comment (via Poundstone) | 2026-11-19 |
+| `henrich_2001` | ultimatum offers in fifteen small-scale societies: the range of mean offers | 2026-11-19 |
+| `chc_2004` | Camerer, Ho and Chong's cognitive hierarchy: the typical number of thinking steps | 2026-11-19 |
+| `axelrod_1980` | Axelrod's two computer tournaments: entries, rounds and the winner | 2026-11-19 |

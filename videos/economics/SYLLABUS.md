@@ -819,34 +819,51 @@ chs 1–4; Belleflamme & Peitz; Varian chs 25–27; Talluri & van Ryzin.
 
 ### Part 11 · Games (~58)
 *Question:* what happens when my best choice depends on yours, and yours on mine?
-*Story:* in January 1950, at RAND, Merrill Flood and Melvin Dresher run a game a hundred times on two
-colleagues to test a new idea by a Princeton student. The players cooperate far more than the theory says.
-John Nash's reply: it was one long game, not a hundred short ones.
-0. Hook: the hundred rounds, with the players' own notes; the question; objectives.
-1. Play it: guess two-thirds of the average (Nagel 1995).
-2. Strategic form; dominance; iterated elimination; what your guess revealed about your depth.
-3. Nash equilibrium (1950); best responses crossing; existence by a fixed point (the simplex of Part 9).
+*Story:* at the start of 1950, at RAND, Merrill Flood and Melvin Dresher have two colleagues, Armen Alchian and John
+Williams, play a new game a hundred times, to test a new idea by a Princeton student. Both cooperate in 60 rounds
+and both defect, as the theory says, in only 14. John Nash's reply: it was one long game, not a hundred short ones.
+0. Hook: the hundred rounds (the joint outcomes, as Poundstone counted them from Flood's report); Nash's comment;
+   Tucker's prisoners; games everywhere; the question; objectives.
+1. Play it: guess two-thirds of the average (an Island crowd; Nagel 1995; the Financial Times, 1997).
+2. Strategic form; dominance in the prisoner's dilemma; iterated elimination (Gibbons's example); the guessing game's
+   descent to 0, and how few take three steps.
+3. Nash equilibrium (1950); best responses crossing three times in the battle of the sexes; existence by a fixed
+   point (the simplex of Part 9); von Neumann (1928).
 4. Coordination, battle of the sexes, chicken, stag hunt: one grammar of social life.
 5. Mixed strategies: indifference; the test on penalty kicks (Chiappori, Levitt and Groseclose 2002;
-   Palacios-Huerta 2003).
-6. Extensive form; backward induction; subgame perfection (Selten 1965); credible and empty threats.
-7. The centipede and the limits of induction; the ultimatum game in fifteen societies (Henrich et al. 2001).
-8. Repeated games: the discount factor that sustains cooperation; the folk theorem drawn as a region.
-9. Axelrod's tournaments (1980): tit for tat; what noise does to it (Nowak and Sigmund's win-stay,
-   lose-shift, 1993).
-10. Focal points (Schelling 1960); correlated equilibrium (Aumann 1974) as a traffic light.
-11. Evolution and learning: evolutionarily stable strategies, replicator dynamics, fictitious play.
-12. Level-k and cognitive hierarchy fitted to the guessing game (Camerer, Ho and Chong 2004).
-13. Bayesian games in one example (a pointer to Parts 16 and 53).
-14. Dials. 15. In practice: bargaining, standards, arms control. 16. Frontier: learning in games at scale;
-    equilibrium computation by regret minimization (*AI, Built*).
+   Palacios-Huerta 2003) and Wimbledon serves (Walker and Wooders 2001).
+6. Extensive form; backward induction; subgame perfection (Selten 1965); an empty threat; credibility (the chain
+   store, 1978).
+   Intermission: the American and Soviet (later Russian) nuclear stockpiles, 1945-2026, with the treaties; their
+   total as a tune.
+7. The centipede and the limits of induction (Rosenthal 1981; McKelvey and Palfrey 1992); the ultimatum game (Güth,
+   Schmittberger and Schwarze 1982) in fifteen societies (Henrich et al. 2001).
+8. Repeated games: the discount factor that sustains grim trigger; the folk theorem drawn as a region (Friedman
+   1971; Fudenberg and Maskin 1986); the finite horizon (Kreps, Milgrom, Roberts and Wilson 1982; Selten and Stoecker
+   1986).
+9. Axelrod's tournaments (1980): tit for tat; Agora's round robin and ecology; one mistake, and win-stay, lose-shift
+   (Nowak and Sigmund 1993).
+10. Focal points (Schelling 1960); correlated equilibrium (Aumann 1974) as a traffic light, by linear programming.
+11. Evolution and learning: hawk and dove, evolutionarily stable strategies (Maynard Smith and Price 1973),
+    rock-paper-scissors cycles (Sinervo and Lively 1996), fictitious play (Brown, Robinson 1951; Shapley 1964).
+12. Level-k and cognitive hierarchy fitted to the guessing game (Stahl and Wilson 1994; Camerer, Ho and Chong 2004);
+    *Called it?*
+13. Bayesian games in one example (Harsanyi 1967-68; pointers to Parts 13, 16 and 53).
+14. Dials (depth of reasoning, new), with Keynes's beauty contest. 15. In practice: bargaining (Rubinstein 1982),
+    standards (Sweden, 1967), arms control (Schelling and Halperin 1961). 16. Frontier: regret matching (Hart and
+    Mas-Colell 2000), solved poker (Bowling et al. 2015), Libratus and Pluribus (*AI, Built*).
 
-*Agora:* `games`: normal- and extensive-form solvers (support enumeration, backward induction), a repeated-game
-tournament, replicator dynamics, a level-k fitter.
+*Agora:* `games`: pure and mixed equilibria (support enumeration), iterated elimination, the cognitive hierarchy and
+its fit, game trees and backward induction (the entry game, the centipede), Rubinstein's split, grim trigger and the
+folk region, a strategy library with matches, a noisy round robin and the ecology, correlated equilibrium by LP, the
+replicator, ESS checks, fictitious play, regret matching, Bayesian equilibria.
 *Play it:* the guessing game; on the site, an Axelrod tournament the reader enters with a strategy.
-*Called it?* the Nash prediction for the guessing game (0) against the winning guess.
-*Reading:* Nash 1950, 1951; Schelling, *The Strategy of Conflict*; Selten 1965; Axelrod 1984; Nagel 1995;
-Osborne; Osborne & Rubinstein; Fudenberg & Tirole chs 1–5; Camerer, *Behavioral Game Theory*.
+*Dials:* the depth of strategic reasoning (new; depends on the setting). *Called it?* the Nash prediction for the
+guessing game (0) against the winning guess: wrong the first time.
+*Reading:* Nash 1950, 1951; von Neumann 1928; Flood 1952; Schelling, *The Strategy of Conflict*; Selten 1965, 1978;
+Harsanyi 1967-68; Aumann 1974; Axelrod 1980, 1984; Nowak & Sigmund 1993; Nagel 1995; Stahl & Wilson 1994; Camerer,
+Ho & Chong 2004; Henrich et al. 2001; Palacios-Huerta 2003; Rubinstein 1982; Hart & Mas-Colell 2000; Osborne;
+Osborne & Rubinstein; Fudenberg & Tirole chs 1–5; Gibbons; Camerer, *Behavioral Game Theory*.
 
 ### Part 12 · Competition among the Few (~55)
 *Question:* how do a handful of firms compete, and when do they stop?
@@ -2874,6 +2891,7 @@ Young Economist*.
 | 8 | built, English | *The Firm.* Agora gains `firm` (technologies, costs and their duality identities, supply and Le Chatelier, free entry with identical and different firms, Cobb and Douglas's regressions, hold-up, Grossman–Hart–Moore, make-or-buy, Alchian's selection); the Data Room gains the transcribed Cobb–Douglas indices of 1899–1922 (via Felipe and Adams 2005) and the Penn World Table's labour share; two new dials (capital's output elasticity; the capital–labour elasticity of substitution); Act II is complete |
 | 9 | built, English | *The Invisible Hand, Proved.* Agora gains `ge` (the box and the replicated core, Sperner and Scarf, tatonnement and Scarf's cycle, Newton, Crusoe, three equilibria, Arrow securities, Kantorovich's duals, misallocation, top trading cycles); the Data Room gains Brent and WTI crude via FRED and the transcribed Radford (1945), Edgeworth (1881), Hsieh and Klenow (2009), Bils, Klenow and Ruane (2021) and Kehoe (2014); a new dial (misallocation), the law of one price as a Fact, and the NAFTA *Called it?*; Act III begins |
 | 10 | built, English | *The Price Maker.* Agora gains `pricing` (the monopoly price and pass-through, the ferry, three degrees of discrimination, two-part tariffs, bundling, the Coase equilibrium, Ramsey prices, the Averch–Johnson firm, monopsony, Littlewood's rule, personalized prices from a price experiment); the Data Room gains the BLS price of ground coffee via FRED and the transcribed De Loecker, Eeckhout and Unger (2020), Traina (2018), Nakamura and Zerom (2010) and Dubé and Misra (2023); a new dial (markups), incomplete pass-through as a Fact; no *Called it?* |
+| 11 | built, English | *Games.* Agora gains `games` (equilibria by support enumeration, iterated elimination, the cognitive hierarchy and its fit, game trees, Rubinstein, the folk region, a strategy library with a noisy round robin and the ecology, correlated equilibrium by LP, the replicator, fictitious play, regret matching, Bayesian equilibria); the Data Room gains the FAS nuclear stockpiles via Our World in Data and the transcribed Nagel (1995), Thaler's FT contest (1997), Flood (1952, via Poundstone), Henrich et al. (2001), Camerer, Ho and Chong (2004) and Axelrod (1980); a new dial (depth of reasoning) and the guessing game's *Called it?* |
 
 **Corrections found while building Part 1** (the plan's draft, written from memory, against the sources): Bastiat's
 Paris passage is in *Economic Sophisms*, First Series, ch. 18 (1845), not the *Harmonies*; Hume's is/ought passage is
@@ -2979,3 +2997,14 @@ quarters) but about complete in dollars, once a pound of roast coffee is counted
 chapter says so. Nakamura and Zerom are read in the NBER working paper (2009); Dubé and Misra, Calvano et al. and Assad
 et al. from their published abstracts. The draft's chapter 14, "In practice: Part 60", became Littlewood's rule, with
 the airline war left to Part 60.
+
+**Corrections found while building Part 11.** The Flood-Dresher experiment is dated to the start of 1950 (the
+Stanford Encyclopedia says early 1950); the joint outcomes (60 mutual cooperation, 14 mutual defection) are
+Poundstone's count from Flood's report, which was not re-read, and Nash's comment is quoted from the same accounts.
+Nagel's 2/3 sessions had 67 subjects in four sessions of 15 to 18, a first-round mean of 36.73 and median of 33 (read
+in the article). The Financial Times contest's mean (18.9) and winning number (13) are from secondary accounts.
+Axelrod's second tournament is given as "more than sixty entries", the figure not having been checked. The penalty
+kick's scoring table is illustrative; the published tests are cited for their findings, not their numbers. In
+Agora's own round robin tit for tat comes fifth, behind tit for two tats, which the chapter says, with Axelrod's own
+remark that tit for two tats would have won his first tournament. The draft's dials line had no dial for this part;
+the depth of reasoning was added, with two of its three rows Agora's fits to published means, labelled as such.

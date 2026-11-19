@@ -230,6 +230,21 @@ DATASETS = {
         "sha256": "61ed82e5b66c88dfca8ff9fac775c63981ecab6a254862af97acacc41c143117",
         "files": ("hdr2025_1990_2023.csv",),
     },
+    "warheads": {
+        "title": "Estimated nuclear warhead stockpiles, by country, 1945-2026",
+        "publisher": "Federation of American Scientists (estimates); Our World in Data (compilation)",
+        "citation": "Federation of American Scientists (2026), \"Estimated Global Nuclear Warhead Inventories\", with "
+                    "minor processing by Our World in Data, grapher nuclear-warhead-stockpiles (last updated "
+                    "2026-05-13), retrieved 2026-11-19",
+        "short": "Federation of American Scientists, via Our World in Data",
+        "url": "https://ourworldindata.org/grapher/nuclear-warhead-stockpiles.csv?v=1&csvType=full&"
+               "useColumnShortNames=true",
+        "licence": "CC BY 4.0 (Our World in Data); the estimates are the Federation of American Scientists', cited",
+        "units": "warheads in military stockpiles (retired warheads awaiting dismantlement excluded), end of year",
+        "vintage": "2026-11-19",
+        "sha256": "2f38e76406e3de5e726cf7d5026af345776afeb6f46cf5ceef22fbc01ddc36ea",
+        "files": ("warheads_1945_2026.csv",),
+    },
     "draft1970": {
         "title": "The draft lottery of 1 December 1969 (for men born 1944-50): the rank drawn for each birthday",
         "publisher": "U.S. Selective Service System; as tabulated by the Journal of Statistics Education data archive",
@@ -751,9 +766,34 @@ def refresh_draft1970() -> None:
             w.writerow([int(r[0]), int(r[2]), int(r[1])])
 
 
+@functools.lru_cache(maxsize=None)
+def warheads(entity: str) -> dict:
+    """A country's estimated nuclear warhead stockpile, 1945-2026 (``entity`` as Our World in Data names it, e.g.
+    "United States", "Russia" (the Soviet Union before 1992)): ``{"year": [...], "value": [...]}``."""
+    rows = [r for r in _read(HERE / "warheads_1945_2026.csv") if r["entity"] == entity]
+    if not rows:
+        raise KeyError(entity)
+    return {"year": [int(r["year"]) for r in rows], "value": [int(r["number_of_warheads"]) for r in rows]}
+
+
+def refresh_warheads() -> None:
+    d = DATASETS["warheads"]
+    raw = RAW / "nuclear-warhead-stockpiles.csv"
+    sha = _download(d["url"], raw)
+    if d.get("sha256") and sha != d["sha256"]:
+        print(f"warheads: the download differs from the recorded vintage ({sha[:12]} vs {d['sha256'][:12]})")
+    with open(raw, newline="", encoding="utf-8") as f:
+        rows = list(csv.DictReader(f))
+    with open(HERE / "warheads_1945_2026.csv", "w", newline="", encoding="utf-8") as f:
+        w = csv.writer(f)
+        w.writerow(["entity", "code", "year", "number_of_warheads"])
+        for r in rows:
+            w.writerow([r["entity"], r["code"], r["year"], r["number_of_warheads"]])
+
+
 REFRESH = {"draft1970": refresh_draft1970, "maddison2023": refresh_maddison, "fred": refresh_fred, "spf": refresh_spf,
            "pinksheet": refresh_pinksheet, "psd_coffee": refresh_psd_coffee, "wdi": refresh_wdi, "hdr": refresh_hdr,
-           "rtdsm": refresh_rtdsm}
+           "rtdsm": refresh_rtdsm, "warheads": refresh_warheads}
 
 
 def main() -> None:

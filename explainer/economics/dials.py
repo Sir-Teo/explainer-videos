@@ -246,6 +246,22 @@ DIALS = {d.key: d for d in [
              Estimate("De Loecker, Eeckhout and Unger", 2020, "structural", "the same, 2016", 1.61,
                       where="as above", checked="2026-11-19"),
          )),
+    Dial("reasoning_depth", "depth of strategic reasoning", "average steps of thinking (the cognitive hierarchy's "
+         "tau)", (11, 45), status="depends on the setting", checked="2026-11-19",
+         meaning="people typically think one or two steps ahead of a naive player, not the infinitely many steps that "
+                 "equilibrium assumes; newspaper readers with time to think, and players with experience, go deeper, "
+                 "so how far reasoning goes depends on the setting, and first-time play is better predicted by levels "
+                 "of thinking than by equilibrium",
+         estimates=(
+             Estimate("Camerer, Ho and Chong", 2004, "structural", "nearly 100 games: values from 1 to 2, typically "
+                      "1.5", 1.5, 1.0, 2.0, where="QJE 119(3): 861-898, abstract and conclusion", checked="2026-11-19"),
+             Estimate("Nagel", 1995, "lab", "first round of two-thirds of the average, 67 students: the tau whose mean "
+                      "is 36.73 (Agora's fit)", 1.12, where="AER 85(5), Figure 1B; tau fitted in Agora",
+                      checked="2026-11-19"),
+             Estimate("Thaler (Financial Times)", 1997, "structural", "newspaper readers, two-thirds of the average: "
+                      "the tau whose mean is 18.9 (Agora's fit)", 4.07, where="the reported mean; tau fitted in Agora",
+                      checked="2026-11-19"),
+         )),
     Dial("return_schooling", "return to a year of school", "proportional rise in earnings per year of schooling",
          (4, 38), status="settled within a range", checked="2026-11-19",
          meaning="a year of school raises earnings by roughly 6 to 15 percent, a return few investments match; "
@@ -566,6 +582,28 @@ SHOWN = {
          "Agora"),
         ("ground coffee (BLS via FRED) and arabica (the Pink Sheet)", "data for the pass-through Fact and the "
          "intermission, computed on screen, not entered as dial rows"),
+    ],
+    11: [
+        ("Flood (1952); Nash (1950, 1951); von Neumann (1928); Tucker", "the history of the prisoner's dilemma and of "
+         "equilibrium, told from the sources (the joint outcomes via Poundstone's account, a transcribed table)"),
+        ("Gibbons (1992); Schelling (1960); Selten (1965, 1978); Harsanyi (1967-68); Aumann (1974); Rubinstein (1982)",
+         "theory and examples, stated; every game shown is solved in Agora"),
+        ("Chiappori, Levitt and Groseclose (2002); Palacios-Huerta (2003); Walker and Wooders (2001)", "tests of mixed "
+         "strategies, shown for their findings; no parameter is estimated, so no dial"),
+        ("Rosenthal (1981); McKelvey and Palfrey (1992); Guth, Schmittberger and Schwarze (1982); Henrich et al. "
+         "(2001)", "experiments on backward induction and fairness, shown for their direction and range (Henrich's a "
+         "transcribed table); fairness enters a dial in Part 45"),
+        ("Friedman (1971); Fudenberg and Maskin (1986); Kreps, Milgrom, Roberts and Wilson (1982); Selten and "
+         "Stoecker (1986); Axelrod (1980); Nowak and Sigmund (1993)", "repetition and cooperation: theorems and "
+         "tournaments, stated; Axelrod's tournament is rerun in Agora"),
+        ("Maynard Smith and Price (1973); Sinervo and Lively (1996); Brown (1951); Robinson (1951); Shapley (1964); "
+         "Stahl and Wilson (1994)", "evolution and learning, stated; the dynamics are computed"),
+        ("Keynes (1936)", "the beauty contest, quoted as the idea behind the depth-of-reasoning dial"),
+        ("Schelling and Halperin (1961); Hart and Mas-Colell (2000); Bowling et al. (2015); Brown and Sandholm (2018, "
+         "2019); Erev and Roth (1998); Camerer and Ho (1999)", "practice and the frontier, stated from the sources; "
+         "regret matching is run in Agora"),
+        ("nuclear warhead stockpiles (FAS via Our World in Data)", "data for the intermission and the arms-control "
+         "section, shown as history, not entered as dial rows"),
     ],
 }
 

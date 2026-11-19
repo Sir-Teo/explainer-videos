@@ -117,4 +117,55 @@ PARTS = [
               ("The Island's planted truths", "explainer/economics/island.py"),
               ("The Data Room's sources", "explainer/economics/data/SOURCES.md")),
     ),
+    Part(
+        n=11, level="U", widget="tournament", prereq=(5, 7, 9, 10),
+        question="What happens when my best choice depends on yours, and yours on mine?",
+        story="The part opens at RAND at the start of 1950: Merrill Flood and Melvin Dresher have Armen Alchian and "
+              "John Williams play a new game a hundred times. Defecting pays whatever the other does, so John Nash's "
+              "new equilibrium says defect every time; both cooperate in 60 rounds and both defect in 14, and Nash "
+              "replies that the experiment is one large multimove game. The viewer guesses two-thirds of the average "
+              "(an Island crowd, Nagel's 1995 students, the Financial Times' readers of 1997), then meets dominance and "
+              "its iteration, Nash equilibrium with best responses crossing and existence by a fixed point, four "
+              "games of social life, mixed strategies tested on penalty kicks (Chiappori, Levitt and Groseclose; "
+              "Palacios-Huerta), and an entry game with an empty threat (Selten). After an intermission of the "
+              "American and Soviet nuclear stockpiles, the centipede and the ultimatum game in fifteen societies, "
+              "repeated games and the folk theorem, Axelrod's tournaments rerun with and without mistakes, focal "
+              "points and Aumann's traffic light, hawks and doves and rock-paper-scissors cycles, fictitious play, "
+              "levels of thinking fitted to the guessing game (with Called it?: the Nash prediction of 0), a "
+              "Bayesian game, a new dial on the depth of reasoning with Keynes's beauty contest, bargaining, Sweden's "
+              "switch to driving on the right and arms control, and a frontier on regret minimization and poker.",
+        handoff="Part 12 applies the tools to oligopoly and cartels; Parts 13-14 to signals, screening and incentives; "
+                "Parts 16-17 to auctions and market design; Part 44 to networks and platforms; Part 45 to fairness and "
+                "limited reasoning; Part 53 to information design.",
+        outside="Parts 5 and 7: preferences and expected utility; Part 9: fixed points and the simplex. Chapter 3 "
+                "states Kakutani's and Brouwer's theorems without proof; chapter 10 uses one linear programme.",
+        objectives={
+            "U": ["Write a game in strategic form, find dominated strategies, and solve a game by iterated "
+                  "elimination; explain why the guessing game's equilibrium is 0.",
+                  "Find pure and mixed Nash equilibria of two-by-two games, and use backward induction on game trees.",
+                  "Explain when repetition sustains cooperation, and what Axelrod's tournaments showed."],
+            "M": ["Compute all equilibria of a bimatrix game by support enumeration; distinguish Nash from "
+                  "subgame-perfect equilibrium.",
+                  "Derive the discount factor that sustains grim trigger and tit for tat; state the folk theorem; "
+                  "compute a correlated equilibrium by linear programming.",
+                  "Define a Bayesian Nash equilibrium; derive Rubinstein's bargaining split; analyze the replicator "
+                  "dynamic and evolutionary stability."],
+            "D": ["Fit level-k and cognitive-hierarchy models to data, and explain regret minimization and its "
+                  "convergence to correlated equilibrium and, in zero-sum games, to Nash."],
+            "I": ["Apply bargaining, coordination and repeated-game reasoning to negotiations, standards and arms "
+                  "control."],
+        },
+        results=[
+            ("Nash equilibrium", r"u_i(s_i^*, s_{-i}^*) \ge u_i(s_i, s_{-i}^*)\ \ \forall i, s_i"),
+            ("Mixing by indifference", r"q = \frac{d - b}{a - b - c + d}"),
+            ("Grim trigger", r"\delta \ge \frac{T - R}{T - P}"),
+            ("Rubinstein's split", r"x^* = \frac{1}{1 + \delta}"),
+            ("Replicator dynamic", r"\dot x_i = x_i\left[(Ax)_i - x^\top A x\right]"),
+            ("Cognitive hierarchy", r"f(k) = \frac{e^{-\tau}\tau^k}{k!}"),
+        ],
+        U=(0, 1, 2, 3, 4, 5, 6, "s08_intermission", 7, 8, 9, 10, 11), D=(12, 16), I=(15,),
+        also=(("Agora's games", "explainer/economics/agora/games.py"),
+              ("The Island's planted truths", "explainer/economics/island.py"),
+              ("The Data Room's sources", "explainer/economics/data/SOURCES.md")),
+    ),
 ]

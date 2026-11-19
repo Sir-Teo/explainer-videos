@@ -1228,6 +1228,97 @@ DUBE_MISRA_2023 = Table(
 PART10 = (DLEU_2020, TRAINA_2018, NAKAMURA_ZEROM_2010, DUBE_MISRA_2023)
 
 
+# ---------------------------------------------------------------------------
+# Part 11
+# ---------------------------------------------------------------------------
+NAGEL_1995 = Table(
+    key="nagel_1995",
+    cite="Rosemarie Nagel, \"Unraveling in Guessing Games: An Experimental Study\", American Economic Review 85(5): "
+         "1313-1326 (1995)",
+    tag="Nagel, American Economic Review 85(5) (1995)",
+    where="section III (design) and section IV.A and Figure 1 (first-period choices)",
+    read="the published article (JSTOR copy)",
+    checked="2026-11-19",
+    data={"p_2_3": {"sessions": 4, "subjects": 67, "mean": 36.73, "median": 33, "above_67": 0.10},
+          "p_1_2": {"sessions": 3, "subjects": 48, "mean": 27.05, "median": 17},
+          "p_4_3": {"sessions": 3, "mean": 60.12, "median": 66},
+          "group_size": (15, 18), "prize_dm": 20, "rounds": 4, "step3_or_higher": (0.06, 0.10)},
+    note="Fifteen to eighteen subjects a session chose numbers from 0 to 100; the one closest to p times the mean won "
+         "20 DM. Over all sessions only 6-10 percent of first-period choices were at iteration step 3 or higher.",
+)
+
+THALER_FT_1997 = Table(
+    key="thaler_ft_1997",
+    cite="Richard Thaler's guessing contest in the Financial Times (1997), as reported in R. Thaler, \"Keynes's "
+         "'Beauty Contest'\", Chicago Booth Review (2015) and later accounts",
+    tag="Thaler's contest, Financial Times (1997)",
+    where="the reported mean and winning number",
+    read="secondary accounts (Chicago Booth Review; The National)",
+    checked="2026-11-19",
+    data={"p": 2 / 3, "range": (0, 100), "mean": 18.9, "winner": 13},
+    note="Readers chose a whole number from 0 to 100; the winner was closest to two-thirds of the average. The "
+         "original newspaper report was not re-read.",
+)
+
+FLOOD_1952 = Table(
+    key="flood_1952",
+    cite="Merrill M. Flood, \"Some Experimental Games\", RAND Research Memorandum RM-789-1 (1952), and Management "
+         "Science 5(1): 5-26 (1958); as reported in W. Poundstone, Prisoner's Dilemma (1992), ch. 6",
+    tag="Flood, RAND RM-789-1 (1952), via Poundstone (1992)",
+    where="the Flood-Dresher experiment of January 1950",
+    read="Poundstone's account and the Stanford Encyclopedia of Philosophy's entry \"Prisoner's Dilemma\"",
+    checked="2026-11-19",
+    data={"rounds": 100, "mutual_cooperation": 60, "mutual_defection": 14, "players": ("Armen Alchian",
+          "John D. Williams"), "year": 1950,
+          "nash": "the flaw in this experiment as a test of equilibrium point theory is that the experiment really "
+                  "amounts to having the players play one large multimove game"},
+    note="The payoff table was asymmetric; the counts of joint outcomes are Poundstone's from the report.",
+)
+
+HENRICH_2001 = Table(
+    key="henrich_2001",
+    cite="Joseph Henrich, Robert Boyd, Samuel Bowles, Colin Camerer, Ernst Fehr, Herbert Gintis and Richard "
+         "McElreath, \"In Search of Homo Economicus: Behavioral Experiments in 15 Small-Scale Societies\", American "
+         "Economic Review 91(2): 73-78 (2001)",
+    tag="Henrich et al., AER 91(2) (2001)",
+    where="the text and Table 1",
+    read="the published paper (Papers and Proceedings)",
+    checked="2026-11-19",
+    data={"societies": 15, "mean_offer_range": (0.26, 0.58), "industrial_mean": 0.44, "lowest": "Machiguenga"},
+    note="Mean ultimatum offers ranged from 26 to 58 percent of the pie, against about 44 percent in industrial "
+         "societies; the canonical selfish model was not supported in any society studied.",
+)
+
+CHC_2004 = Table(
+    key="chc_2004",
+    cite="Colin F. Camerer, Teck-Hua Ho and Juin-Kuan Chong, \"A Cognitive Hierarchy Model of Games\", Quarterly "
+         "Journal of Economics 119(3): 861-898 (2004)",
+    tag="Camerer, Ho and Chong, QJE 119(3) (2004)",
+    where="the abstract and the conclusion",
+    read="the published abstract and the authors' working paper",
+    checked="2026-11-19",
+    data={"tau": 1.5, "range": (1.0, 2.0), "games": "nearly 100"},
+    note="An average of about 1.5 steps of thinking fits data from many games; values between 1 and 2 explain results "
+         "for nearly 100 games.",
+)
+
+AXELROD_1980 = Table(
+    key="axelrod_1980",
+    cite="Robert Axelrod, \"Effective Choice in the Prisoner's Dilemma\" and \"More Effective Choice in the "
+         "Prisoner's Dilemma\", Journal of Conflict Resolution 24(1) and 24(3) (1980); The Evolution of Cooperation "
+         "(1984)",
+    tag="Axelrod, Journal of Conflict Resolution 24 (1980)",
+    where="the two tournaments",
+    read="the published abstracts and the 1984 book's account",
+    checked="2026-11-19",
+    data={"first_entries": 14, "first_rounds": 200, "winner": "TIT FOR TAT", "entrant": "Anatol Rapoport",
+          "second_entries": "more than sixty", "second_winner": "TIT FOR TAT"},
+    note="Axelrod also reported that TIT FOR TWO TATS would have won the first tournament had it been entered.",
+)
+
+PART11 = (NAGEL_1995, THALER_FT_1997, FLOOD_1952, HENRICH_2001, CHC_2004, AXELROD_1980)
+
+
 PART7 = (BERNOULLI_1738, SAMUELSON_1937, ALLAIS_1953, ELLSBERG_1961, RABIN_2000, THALER_1981, HOLT_LAURY_2005,
          HAYDEN_PLATT_2009, MADRIAN_SHEA_2001, THALER_BENARTZI_2004, BARSKY_1997, POST_2008, MEHRA_PRESCOTT_1985)
-ALL = {t.key: t for t in (*PART1, *PART3, *PART4, *PART5, *PART6, *PART7, *PART8, *PART9, *PART10)}
+ALL = {t.key: t for t in (*PART1, *PART3, *PART4, *PART5, *PART6, *PART7, *PART8, *PART9, *PART10, *PART11)}

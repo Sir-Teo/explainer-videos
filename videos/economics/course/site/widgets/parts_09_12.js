@@ -216,4 +216,116 @@
             "nothing you do here is stored or sent.",
     });
   };
+  // ---- Part 11: games ---------------------------------------------------------------------------------------
+  W.tournament = function (el) {
+    // Axelrod's tournament of Part 11 (explainer.economics.agora.games): the prisoner's dilemma with payoffs T 5,
+    // R 3, P 1, S 0, 200 rounds a match; the reader's entry is a reactive strategy: a first move, and the chance of
+    // cooperating after the other cooperated and after the other defected
+    var T = 5, R = 3, P = 1, S = 0, ROUNDS = 200;
+    function rng(seed) {
+      var a = seed >>> 0;
+      return function () {
+        a += 0x6D2B79F5;
+        var t = a;
+        t = Math.imul(t ^ (t >>> 15), t | 1);
+        t ^= t + Math.imul(t ^ (t >>> 7), t | 61);
+        return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+      };
+    }
+    var LIB = {
+      "always cooperate": function () { return 1; },
+      "always defect": function () { return 0; },
+      "tit for tat": function (m, t) { return t.length ? t[t.length - 1] : 1; },
+      "grim trigger": function (m, t) { return t.indexOf(0) >= 0 ? 0 : 1; },
+      "tit for two tats": function (m, t) { var n = t.length; return n >= 2 && !t[n - 1] && !t[n - 2] ? 0 : 1; },
+      "win-stay, lose-shift": function (m, t) { var n = m.length; return n ? (m[n - 1] === t[n - 1] ? 1 : 0) : 1; },
+      "generous tit for tat": function (m, t, r) { var n = t.length; return !n || t[n - 1] || r() < 1 / 3 ? 1 : 0; },
+      "random": function (m, t, r) { return r() < 0.5 ? 1 : 0; },
+      "Joss (sneaky)": function (m, t, r) { var n = t.length, c = n ? t[n - 1] : 1; return c && r() < 0.1 ? 0 : c; },
+    };
+    function you(v) {
+      return function (m, t, r) {
+        var n = t.length;
+        if (!n) return v.first >= 0.5 ? 1 : 0;
+        return r() < (t[n - 1] ? v.coop : v.forgive) ? 1 : 0;
+      };
+    }
+    function match(fa, fb, noise, r) {
+      var ha = [], hb = [], sa = 0, sb = 0;
+      for (var k = 0; k < ROUNDS; k++) {
+        var x = fa(ha, hb, r), y = fb(hb, ha, r);
+        if (noise && r() < noise) x = 1 - x;
+        if (noise && r() < noise) y = 1 - y;
+        sa += x && y ? R : x ? S : y ? T : P;
+        sb += x && y ? R : y ? S : x ? T : P;
+        ha.push(x);
+        hb.push(y);
+      }
+      return [sa / ROUNDS, sb / ROUNDS];
+    }
+
+    QB.widget(el, {
+      title: "Enter Axelrod's tournament",
+      sub: "Your program plays the prisoner's dilemma for 200 rounds against each of nine classic strategies (and a " +
+           "copy of itself), and they all play each other. Choose your first move, how often you cooperate after the " +
+           "other cooperated, and how often after the other defected. Can you beat tit for tat? Then add mistakes.",
+      panels: 2, height: 340, weights: [1.15, 1],
+      controls: [
+        { k: "first", label: "First move: defect (0) or cooperate (1)", min: 0, max: 1, step: 1, value: 1,
+          fmt: function (x) { return x >= 0.5 ? "cooperate" : "defect"; } },
+        { k: "coop", label: "Chance you cooperate after the other cooperated", min: 0, max: 1, step: 0.05, value: 1,
+          fmt: function (x) { return (100 * x).toFixed(0) + "%"; } },
+        { k: "forgive", label: "Chance you cooperate after the other defected", min: 0, max: 1, step: 0.05,
+          value: 0.3, fmt: function (x) { return (100 * x).toFixed(0) + "%"; } },
+        { k: "noise", label: "Share of moves that come out wrong", min: 0, max: 0.1, step: 0.01, value: 0,
+          fmt: function (x) { return (100 * x).toFixed(0) + "%"; } },
+      ],
+      buttons: [
+        { label: "New luck", act: function (s) { s.seed = (s.seed || 1980) + 1; } },
+        { label: "Show tit for tat's rank", act: function (s) { s.showTft = !s.showTft; } },
+      ],
+      draw: function (g, v, s) {
+        var r = rng(s.seed || 1980);
+        var names = Object.keys(LIB).concat(["YOU"]);
+        var fs = names.map(function (n) { return n === "YOU" ? you(v) : LIB[n]; });
+        var k = names.length, tot = names.map(function () { return 0; }), mine = [];
+        for (var i = 0; i < k; i++) {
+          for (var j = i; j < k; j++) {
+            var res = match(fs[i], fs[j], v.noise, r);
+            tot[i] += res[0];
+            if (i !== j) tot[j] += res[1];
+            if (names[i] === "YOU" && i !== j) mine.push([names[j], res[0]]);
+            if (names[j] === "YOU" && i !== j) mine.push([names[i], res[1]]);
+            if (i === j && names[i] === "YOU") mine.push(["a copy of you", res[0]]);
+          }
+        }
+        var avg = tot.map(function (x) { return x / k; });
+        var order = avg.map(function (x, i) { return i; }).sort(function (a, b) { return avg[b] - avg[a]; });
+        var tftIdx = names.indexOf("tit for tat");
+        var a = g[0].axes({ x: [0, k + 1], y: [0, 3.5], title: "Average points a round, best first",
+                            xlabel: "rank (gold: you" + (s.showTft ? "; green: tit for tat)" : ")") });
+        a.bars(order.map(function (_, q) { return q + 1; }), order.map(function (i) { return avg[i]; }), 0.7,
+               { color: function (q) { return names[order[q]] === "YOU" ? GOLD :
+                                              (s.showTft && order[q] === tftIdx ? GREEN : GREY_HINT); },
+                 alpha: 0.9 });
+        var b = g[1].axes({ x: [0, mine.length + 1], y: [0, 5], title: "Your points a round against each opponent",
+                            xlabel: "opponents (dashed: mutual cooperation, 3)" });
+        b.bars(mine.map(function (_, q) { return q + 1; }), mine.map(function (m) { return m[1]; }), 0.7,
+               { color: function () { return GOLD; }, alpha: 0.85 });
+        b.hline(R, { color: GREEN, dash: [3, 3] });
+        var worst = mine.slice().sort(function (x, y) { return x[1] - y[1]; })[0];
+        s.out = { rank: order.indexOf(k - 1) + 1, k: k, score: avg[k - 1], winner: names[order[0]],
+                  tft: avg[tftIdx], tftRank: order.indexOf(tftIdx) + 1, worst: worst };
+      },
+      readout: function (v, s) {
+        var o = s.out;
+        return [["your rank", o.rank + " of " + o.k], ["your points a round", o.score.toFixed(3)],
+                ["the winner", o.winner === "YOU" ? "you" : o.winner],
+                ["tit for tat", o.tft.toFixed(3) + " (rank " + o.tftRank + ")"],
+                ["your worst match", o.worst[0] + ": " + o.worst[1].toFixed(2) + " a round"]];
+      },
+      note: "Points: 3 each for mutual cooperation, 1 each for mutual defection, 5 and 0 when one defects alone. " +
+            "Computed in your browser; nothing you do here is stored or sent.",
+    });
+  };
 })();

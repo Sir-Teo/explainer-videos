@@ -92,8 +92,8 @@ class Regulation(VoiceoverScene):
             "incentive. <bookmark mark='e'/> Every regulator trades the firm's incentive to be efficient against "
             "the profit it is allowed to keep. Part fourteen has the theory."
         ) as vo:
-            self.play(FadeIn(head, shift=DOWN * 0.2))
-            for mk, r in zip("abcde", rows):
+            self.play(FadeIn(head, shift=DOWN * 0.2), FadeIn(rows[0], shift=UP * 0.1))
+            for mk, r in zip("bcde", rows[1:]):
                 vo.wait_until(mk)
                 self.play(FadeIn(r, shift=UP * 0.1))
         self.clear_scene()

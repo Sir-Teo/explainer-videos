@@ -10,7 +10,7 @@ the series leaves out.
 Both *Parts* columns are found, not typed. *Planned* lists the parts whose entry in
 [`SYLLABUS.md`](SYLLABUS.md) names the book or paper; *Built* lists the parts whose scenes, compute step or
 README cite it (a dot: none yet). Fuller notes (editions, chapters, what each source was used for) are in each
-part's README, under *Sources*. Built so far: Parts 1–10.
+part's README, under *Sources*. Built so far: Parts 1–11.
 
 ## 1. The textbook spine
 
@@ -34,7 +34,7 @@ part's README, under *Sources*. Built so far: Parts 1–10.
 | Blanchard | O. Blanchard, *Macroeconomics* (8th ed., 2021) | 27, 32 | · |
 | Stock–Watson | J. Stock and M. Watson, *Introduction to Econometrics* (4th ed., 2019) | 4 | 4 |
 | Angrist–Pischke | J. Angrist and J.-S. Pischke, *Mostly Harmless Econometrics* (2009) | 4, 50, 67 | 4 |
-| Osborne | M. Osborne, *An Introduction to Game Theory* (2004) | 11 | · |
+| Osborne | M. Osborne, *An Introduction to Game Theory* (2004) | 11 | 11 |
 | Krugman–Obstfeld–Melitz | P. Krugman, M. Obstfeld and M. Melitz, *International Economics* (12th ed., 2022) | 34–35 | · |
 | Mishkin | F. Mishkin, *The Economics of Money, Banking, and Financial Markets* (13th ed., 2022) | 26 | · |
 | Cabral | L. Cabral, *Introduction to Industrial Organization* (2nd ed., 2017) | 12 | · |
@@ -47,11 +47,11 @@ part's README, under *Sources*. Built so far: Parts 1–10.
 
 | Short name | Book | Planned | Built |
 |---|---|---|---|
-| MWG | A. Mas-Colell, M. Whinston and J. Green, *Microeconomic Theory* (1995) | 5–9, 13, 15, 18, 56 | 5–10 |
-| Kreps | D. Kreps, *Microeconomic Foundations I* (2013) | 5, 7, 9, 56 | 5, 7, 9 |
+| MWG | A. Mas-Colell, M. Whinston and J. Green, *Microeconomic Theory* (1995) | 5–9, 11, 13, 15, 18, 56 | 5–11 |
+| Kreps | D. Kreps, *Microeconomic Foundations I* (2013) | 5, 7, 9, 11, 56 | 5, 7, 9, 11 |
 | Jehle–Reny | G. Jehle and P. Reny, *Advanced Microeconomic Theory* (3rd ed., 2011) | 5, 9 | 5–6, 9 |
-| Fudenberg–Tirole | D. Fudenberg and J. Tirole, *Game Theory* (1991) | 11, 53 | · |
-| Osborne–Rubinstein | M. Osborne and A. Rubinstein, *A Course in Game Theory* (1994) | 11 | · |
+| Fudenberg–Tirole | D. Fudenberg and J. Tirole, *Game Theory* (1991) | 11, 53 | 11 |
+| Osborne–Rubinstein | M. Osborne and A. Rubinstein, *A Course in Game Theory* (1994) | 11 | 11 |
 | Bolton–Dewatripont | P. Bolton and M. Dewatripont, *Contract Theory* (2005) | 13–14 | · |
 | Krishna | V. Krishna, *Auction Theory* (2nd ed., 2010) | 16 | · |
 | Milgrom | P. Milgrom, *Putting Auction Theory to Work* (2004) | 16 | · |
@@ -134,7 +134,7 @@ part's README, under *Sources*. Built so far: Parts 1–10.
 | Model or result | Paper | Planned | Built |
 |---|---|---|---|
 | revealed preference | Samuelson (1938); Afriat (1967); Varian (1982) | 5 | 5–6 |
-| expected utility | von Neumann and Morgenstern (1944) | 7 | 7 |
+| expected utility | von Neumann and Morgenstern (1944) | 7 | 7, 11 |
 | prospect theory | Kahneman and Tversky (1979) | 7, 45 | 7 |
 | present bias | Laibson (1997) | 7, 45 | 7 |
 
@@ -151,7 +151,7 @@ part's README, under *Sources*. Built so far: Parts 1–10.
 
 | Model or result | Paper | Planned | Built |
 |---|---|---|---|
-| equilibrium in games | Nash (1950, 1951) | 11 | · |
+| equilibrium in games | Nash (1950, 1951) | 11 | 11 |
 | oligopoly in quantities and prices | Cournot (1838); Bertrand (1883) | 12 | 6 |
 | demand estimation with differentiated products | Berry, Levinsohn and Pakes (1995) | 43 | · |
 
@@ -275,6 +275,8 @@ part's README, under *Sources*. Built so far: Parts 1–10.
 **Part 9, *The Invisible Hand, Proved*.** Books: Andreu Mas-Colell, Michael Whinston and Jerry Green, *Microeconomic Theory*, chs. 15–19; Gerard Debreu, *Theory of Value* (1959); David Kreps, *Microeconomic Foundations I* (2013); Jehle and Reny, *Advanced Microeconomic Theory*, ch. 5; Herbert Scarf, *The Computation of Economic Equilibria* (1973). Papers: Radford (1945), *Economica*; Edgeworth, *Mathematical Psychics* (1881); Walras (1874); Arrow and Debreu (1954); McKenzie (1954); Debreu and Scarf (1963); Aumann (1964); Arrow, Block and Hurwicz (1959); Scarf (1960, 1967); Anderson, Plott, Shimomura and Granat (2004); Sonnenschein (1973); Mantel (1974); Debreu (1974); Kirman (1992); Brown and Matzkin (1996); Arrow (1953); Mises (1920); Lange (1936–37); Hayek (1945); Kantorovich (1939); Hsieh and Klenow (2009); Bils, Klenow and Ruane (2021); Kehoe (2005, 2014); Papadimitriou (1994); Daskalakis, Goldberg and Papadimitriou (2009); Shapley and Scarf (1974); Budish (2011).
 
 **Part 10, *The Price Maker*.** Books: Jean Tirole, *The Theory of Industrial Organization* (1988), chs. 1–4; Paul Belleflamme and Martin Peitz, *Industrial Organization: Markets and Strategies* (2015); Hal Varian, *Intermediate Microeconomics*: monopoly, monopoly behaviour, factor markets; Kalyan Talluri and Garrett van Ryzin, *The Theory and Practice of Revenue Management* (2004). Papers: Dupuit (1844, 1849); Pigou (1920); Robinson (1933); Lerner (1934); Harberger (1954); Posner (1975); Schmalensee (1981); Varian (1985); Mussa and Rosen (1978); Maskin and Riley (1984); Deneckere and McAfee (1996); Oi (1971); Stigler (1963); Adams and Yellen (1976); McAfee, McMillan and Whinston (1989); Coase (1972); Stokey (1981); Bulow (1982, 1986); Gul, Sonnenschein and Wilson (1986); Ramsey (1927); Boiteux (1956); Averch and Johnson (1962); Littlechild (1983); Littlewood (1972); Nakamura and Zerom (2010); Weyl and Fabinger (2013); Hall (1988); De Loecker and Warzynski (2012); De Loecker, Eeckhout and Unger (2020); Traina (2018); Dubé and Misra (2023); Calvano et al. (2020); Assad et al. (2024).
+
+**Part 11, *Games*.** Books: Martin Osborne, *An Introduction to Game Theory* (2004); Osborne and Rubinstein, *A Course in Game Theory* (1994); Drew Fudenberg and Jean Tirole, *Game Theory* (1991), chs. 1–5; Robert Gibbons, *A Primer in Game Theory* (1992); Thomas Schelling, *The Strategy of Conflict* (1960); Robert Axelrod, *The Evolution of Cooperation* (1984); Colin Camerer, *Behavioral Game Theory* (2003); Martin Nowak, *Evolutionary Dynamics* (2006). Papers: von Neumann (1928); Nash (1950, 1951); Flood (1952); Selten (1965, 1978); Harsanyi (1967–68); Aumann (1974); Maynard Smith and Price (1973); Brown (1951); Robinson (1951); Shapley (1964); Friedman (1971); Rubinstein (1982); Kreps, Milgrom, Roberts and Wilson (1982); Fudenberg and Maskin (1986); Axelrod (1980); Nowak and Sigmund (1993); Rosenthal (1981); McKelvey and Palfrey (1992); Güth, Schmittberger and Schwarze (1982); Henrich et al. (2001); Nagel (1995); Stahl and Wilson (1994); Camerer, Ho and Chong (2004); Chiappori, Levitt and Groseclose (2002); Palacios-Huerta (2003); Walker and Wooders (2001); Hart and Mas-Colell (2000); Erev and Roth (1998); Bowling et al. (2015); Brown and Sandholm (2018, 2019).
 
 ## 4. What the series leaves out
 

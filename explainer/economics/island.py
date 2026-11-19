@@ -334,6 +334,41 @@ TRUTHS = {
         # adds $25 a day, and a minimum wage of $18
         "monopsony": {"w0": 5.0, "slope": 0.1, "mrp": 25.0, "min_wage": 18.0},
     },
+    11: {
+        # the guessing game (chapters 1, 2, 12): two-thirds of the average, 0-100; an Island crowd of 67 (the size of
+        # Nagel's four 2/3 sessions) drawn from the cognitive hierarchy, with each level's choice blurred by noise
+        "guess": {"p": 2 / 3, "crowd": 67, "noise": 6.0, "seed": 1995},
+        # the prisoner's dilemma with Axelrod's payoffs (chapters 0, 8, 9): temptation, reward, punishment, sucker
+        "pd": {"T": 5.0, "R": 3.0, "P": 1.0, "S": 0.0},
+        # the grammar of 2x2 games (chapter 4): row payoff, column payoff for each cell (row strategy first)
+        "grammar": {
+            "coordination": ((2, 2), (0, 0), (0, 0), (1, 1)),     # both use the harbour's east or west quay
+            "battle": ((2, 1), (0, 0), (0, 0), (1, 2)),           # Ana prefers the regatta, Bo the market
+            "chicken": ((0, 0), (7, 2), (2, 7), (6, 6)),          # dare, chicken; Aumann's (1974) numbers
+            "stag": ((4, 4), (0, 3), (3, 0), (3, 3)),             # hunt the stag together, or a hare alone
+        },
+        # mixed strategies (chapter 5): a penalty kick; the kicker's chance of scoring by (kick, dive), left first
+        "penalty": {"score": ((0.58, 0.95), (0.93, 0.70))},
+        # extensive form (chapter 6): Dara's boatyard considers entering Crusoe's trade; payoffs (entrant, incumbent)
+        "entry": {"fight": (-1, -1), "accommodate": (1, 1), "stay_out": (0, 4)},
+        # the centipede (chapter 7): McKelvey and Palfrey's four-move game, 0.40 and 0.10 doubling each move
+        "centipede": {"moves": 4, "start": (0.4, 0.1), "grow": 2.0},
+        # repeated games (chapter 8): discount factors to show
+        "repeated": {"deltas": (0.3, 0.5, 0.7, 0.9)},
+        # Axelrod's tournament (chapter 9): the field, 200 rounds a match, five repeats, and a noisy rerun
+        "tournament": {"field": ("ALLC", "ALLD", "TFT", "GRIM", "TF2T", "WSLS", "GTFT", "RANDOM", "JOSS"),
+                       "rounds": 200, "repeats": 5, "noise": 0.05, "seed": 1980},
+        # evolution (chapter 11): hawk and dove with a prize of 2 and a cost of fighting of 4
+        "hawkdove": {"V": 2.0, "C": 4.0},
+        # incomplete information (chapter 13): Ana is tough with probability 0.3; if Bo enters her fishing ground,
+        # a tough Ana fights and a weak one shares, and fighting an empty sea wastes effort; payoffs ((Ana fights,
+        # shares) x (Bo enters, stays out))
+        "bayes": {"prior_tough": 0.3,
+                  "tough": ((3, 1.5), (1, 2)), "weak": ((0, 1), (1, 2)),
+                  "bo_vs_tough": ((-2, 0), (2, 0)), "bo_vs_weak": ((-2, 0), (2, 0))},
+        # bargaining (chapter 15): Rubinstein's alternating offers, patience 0.9 a round
+        "bargain": {"delta": 0.9},
+    },
 }
 
 
