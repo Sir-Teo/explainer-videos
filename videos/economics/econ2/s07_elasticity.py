@@ -135,9 +135,9 @@ class Elasticity(VoiceoverScene):
             label(rf"stormy days: \ {q1:.0f} fish at {dollars(p1)}", font_size=28, color=STORM),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.2).to_edge(UP, buff=0.6)
         up = MathTex(rf"\text{{calm}}\to\text{{storm}}:\quad \frac{{{100 * (q1 - q0) / q0:.1f}\%}}"
-                     rf"{{+{100 * (p1 - p0) / p0:.1f}\%}} = {say_num(e['naive_up'])}", font_size=36)
+                     rf"{{+{100 * (p1 - p0) / p0:.1f}\%}} = {e['naive_up']:.2f}", font_size=36)
         down = MathTex(rf"\text{{storm}}\to\text{{calm}}:\quad \frac{{+{100 * (q0 - q1) / q1:.1f}\%}}"
-                       rf"{{{100 * (p0 - p1) / p1:.1f}\%}} = {say_num(e['naive_down'])}", font_size=36)
+                       rf"{{{100 * (p0 - p1) / p1:.1f}\%}} = {e['naive_down']:.2f}", font_size=36)
         mid = MathTex(r"\text{midpoint}:\quad \frac{\Delta Q\,/\,\bar Q}{\Delta P\,/\,\bar P} = "
                       + f"{e['arc']:.2f}", font_size=40, color=E.ACCENT)
         VGroup(up, down, mid).arrange(DOWN, buff=0.45, aligned_edge=LEFT).next_to(rows, DOWN, buff=0.6)
