@@ -62,4 +62,67 @@ PARTS = [
               ("The Island's planted truths", "explainer/economics/island.py"),
               ("The Data Room's sources", "explainer/economics/data/SOURCES.md")),
     ),
+    Part(
+        n=6, level="U", widget="demand", prereq=(5,),
+        question="When a price changes, what happens to what people buy, and to how well off they are?",
+        story="The part opens in Hunan in 2006, where Robert Jensen and Nolan Miller gave randomly chosen poor "
+              "households vouchers that cut the price of rice by up to a quarter, and the households that were poor "
+              "but not the poorest ate less rice: the Giffen behaviour Marshall described in 1895 and Stigler said would "
+              "make its discoverer immortal. The viewer runs one of the Island's poorest households for a week on $21 "
+              "and buys more coconuts when they get dearer. Demand is traced from the tangency (price- and "
+              "income-consumption curves, homogeneity, elasticities and the adding-up rules); Slutsky's equation of "
+              "1915, unread for twenty years, splits a price change into substitution and income effects, drawn as two "
+              "moves with Hicks's and Slutsky's compensations; its elasticity form gives the recipe for Giffen "
+              "behaviour, and the subsistence model's three zones, Jensen and Miller's table 3 and the same design run "
+              "on 1,300 simulated households with the truth planted show where to look and how an average hides it. "
+              "Duality gives four functions for one consumer (Roy, Shephard, a concave expenditure function), and "
+              "integrability a loop of prices that pumps money from demand that comes from no preference. After an "
+              "intermission on a century of relative prices, Engel curves (America's century, 2024's quintiles, "
+              "Hamilton's use of their drift to measure CPI bias, Engel's law as a call that came true), welfare in "
+              "dollars (CV, EV, consumer's surplus, Willig, Hausman's exact deadweight loss), the cost of living "
+              "(Konus, the substitution bias, Hicks's virtual prices and Apple-Cinnamon Cheerios), demand systems (the "
+              "linear expenditure system, the AIDS estimated and tested on an island survey, Gorman's aggregation), the "
+              "dials, the CPI's methods, food prices and poor households, Ramsey taxes, and a frontier on inflation "
+              "inequality and welfare that depends on income.",
+        handoff="Part 7 adds time and risk; CV and EV return in cost-benefit analysis (Part 18), the CPI and inflation "
+                "by income group in Part 28, Ramsey and optimal taxation in Part 41, demand estimation with product "
+                "characteristics in Part 43, and food prices and poverty in Part 46.",
+        outside="School algebra and the calculus of Part 5 (derivatives, a Lagrange multiplier); logarithms for the "
+                "elasticities. Chapters 5 and 6 use partial derivatives and, once, Green's theorem, explained on screen.",
+        objectives={
+            "U": ["Derive a demand curve and an Engel curve from a utility function, and compute own-price, cross-price "
+                  "and income elasticities.",
+                  "Split a price change into substitution and income effects with Hicks's and with Slutsky's "
+                  "compensation, and use the Slutsky equation to say when demand can slope up.",
+                  "Compute compensating and equivalent variation and consumer's surplus for a price change, and say "
+                  "which is larger and why."],
+            "M": ["State and use the duality identities (Roy's identity, Shephard's lemma, e(p, v(p, m)) = m), and "
+                  "show that compensated demand slopes down because the expenditure function is concave.",
+                  "Check a demand system for integrability (symmetry and negative semidefiniteness of the Slutsky "
+                  "matrix), and estimate and test an almost ideal demand system.",
+                  "Relate Laspeyres, Paasche and the true cost-of-living index, and value a new good by its virtual "
+                  "price."],
+            "D": ["Explain how scanner data, variety corrections and income-dependent preferences change the "
+                  "measurement of inflation and welfare (Jaravel; Feenstra; Redding and Weinstein; Jaravel and "
+                  "Lashkari; Atkin et al.)."],
+            "I": ["Use budget shares to estimate the first-order welfare effect of a price change on different "
+                  "households, and explain how the official CPI allows for substitution.",
+                  "Apply Ramsey's inverse-elasticity rule and state the equity objection."],
+        },
+        results=[
+            ("The Slutsky equation", r"\frac{\partial x_i}{\partial p_j} = \frac{\partial h_i}{\partial p_j} - "
+                                     r"x_j\,\frac{\partial x_i}{\partial m}"),
+            ("In elasticities", r"\varepsilon_{ii} = \varepsilon^{h}_{ii} - w_i\,\eta_i"),
+            ("Duality", r"e(p, v(p,m)) = m,\qquad h_i = \frac{\partial e}{\partial p_i},\qquad "
+                        r"x_i = -\frac{\partial v/\partial p_i}{\partial v/\partial m}"),
+            ("Welfare", r"CV = e(p_1, u_0) - m,\qquad EV = m - e(p_0, u_1)"),
+            ("Cost of living", r"\frac{e(p_1,u_0)}{e(p_0,u_0)} \le \frac{p_1\cdot x_0}{p_0\cdot x_0},\qquad "
+                               r"\frac{e(p_1,u_1)}{e(p_0,u_1)} \ge \frac{p_1\cdot x_1}{p_0\cdot x_1}"),
+            ("AIDS", r"w_i = \alpha_i + \sum_j \gamma_{ij}\log p_j + \beta_i \log\frac{m}{P(p)}"),
+        ],
+        U=(0, 1, 2, 3, 4, 7, 8, 11, "s08_intermission"), D=(13,), I=(12,),
+        also=(("Agora's demand systems", "explainer/economics/agora/demand.py"),
+              ("The Island's planted truths", "explainer/economics/island.py"),
+              ("The Data Room's sources", "explainer/economics/data/SOURCES.md")),
+    ),
 ]

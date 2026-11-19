@@ -67,7 +67,7 @@ Manim videos with local neural narration. See README.md for layout and build com
   `tools/lecture_length.py musicN` (30–60 minutes, listening included). `videos/music/soundcheck/` is the pipeline's
   two-minute test film.
 - *Economics, Built* (`videos/economics/`): sixty-eight parts planned in twelve acts (`econ1` … `econ68`; the series
-  key is `economics`, the prefix `econ`, as `psych` is to `psychology`), Parts 1–5 built (English; Act I complete, Act II begun). The plan and the open
+  key is `economics`, the prefix `econ`, as `psych` is to `psychology`), Parts 1–6 built (English; Act I complete, Act II under way). The plan and the open
   decisions are `videos/economics/README.md`; the standard (cold opens, the Island as a serial, Play it in the first
   third, the intermission with a data film, Called it?, the is/ought card, the computed score), the devices and every
   part chapter by chapter are `videos/economics/SYLLABUS.md`. Shared code in `explainer/economics/` (tested in
@@ -76,7 +76,11 @@ Manim videos with local neural narration. See README.md for layout and build com
   Törnqvist, chaining) and `econometrician` (the fish market, OLS, Wald and 2SLS over statkit's `quasi`, omitted
   ability, the apprenticeship by choice and by lottery, Lucas's islands, the two-level village trial) and `consumer`
   (preferences and demand with corners and kinks, WARP/SARP/GARP, Afriat's index and LP, Varian's bounds, Bronars's
-  power, Becker's random consumers, the EITC's kink, a binary logit) so far), the Island's cast and planted truths (`island.py`), the Facts, the Dials (`dials.py`, gated by
+  power, Becker's random consumers, the EITC's kink, a binary logit) and `demand` (Cobb-Douglas, CES, linear
+  expenditure and AIDS systems with all four dual functions and numerical checks of Roy and Shephard, the Slutsky matrix
+  and both decompositions, the subsistence diet and Jensen and Miller's voucher design, CV/EV/surplus with Willig and
+  Hausman's exact linear case, Konüs/Laspeyres/Paasche and Feenstra, Working-Leser and Hamilton's Engel drift, AIDS by
+  iterated GLS with Wald tests, the integrability loop) so far), the Island's cast and planted truths (`island.py`), the Facts, the Dials (`dials.py`, gated by
   `tools/check_dials.py econN`), Called it? (`calls.py`), the Data Room (`data/`: frozen, cited extracts of the
   Maddison Project, FRED (each series with its retrieval date in `FRED_RETRIEVED`), the Philadelphia Fed's forecasters and
   real-time GDP, the World Bank's Pink Sheet and WDI, USDA's coffee data, the UNDP's HDI, the 1969 draft lottery and BEA's PCE by type of product (`data.pce_by_type()`), registered in `data/SOURCES.md`, refreshed with

@@ -162,6 +162,46 @@ TRUTHS = {
         "ferry": {"trips": 2000, "saves": (10, 20, 30), "max_extra": 15.0, "value_of_time": 15.0, "scale": 0.5,
                   "seed": 1974},
     },
+    # Part 6: when prices move (agora.demand)
+    6: {
+        # Bo again (Part 5's Cobb-Douglas, 60% of his $60 on fish): fish falls from $10 to $6, coconuts stay at $6
+        "bo": {"a": 0.6, "income": 60.0, "fish": (10.0, 6.0), "coconut": 6.0},
+        # the Island's poorest households must eat 14,000 calories a week (2,000 a day).  A coconut brings 1,400
+        # calories, a fish 700 but far more taste; 12% of the budget goes on oil and greens (600 calories a dollar).
+        # Taste is Stone-Geary with 3 coconuts committed and a sixth of the rest on coconuts.  Coconuts are 4 times
+        # as many calories a dollar as fish at the prices below, so in the subsistence zone the planted price
+        # elasticity of coconuts is r / (1 - r) = +0.43 (r = 0.30)
+        "diet": {"coconut_kcal": 1400.0, "fish_kcal": 700.0, "need": 14000.0, "beta": 1 / 6, "s0": 3.0,
+                 "other_share": 0.12, "other_kcal": 600.0},
+        # Play it: a week's food money of $21, the two foods only; coconuts go from $1.20 to $1.50, fish stay at $2
+        "playit": {"budget": 21.0, "coconut": (1.20, 1.50), "fish": 2.00},
+        # the voucher experiment, on Jensen and Miller's design (2008): 1,300 households in 11 villages, a control
+        # group and vouchers worth 10, 20 or 30 cents off a $1.20 coconut, three survey rounds; weekly food money
+        # lognormal (median $17, sigma 0.3), calorie needs vary by 10%, consumption reported with 12% error
+        "vouchers": {"households": 1300, "villages": 11, "cuts": (0.10, 0.20, 0.30), "coconut": 1.20, "fish": 2.00,
+                     "median": 17.0, "sigma": 0.3, "need_sd": 0.10, "report_sd": 0.12, "income_sd": 0.05,
+                     "seed": 2006},
+        # the household survey (chapter 10): 20 villages x 12 months of prices, 25 households a cell, spending on
+        # fish, coconuts and cloth from a planted AIDS (alpha0 = log 300, the median monthly spending)
+        "survey": {"goods": ("fish", "coconuts", "cloth"), "alpha": (0.35, 0.40, 0.25), "beta": (-0.04, -0.08, 0.12),
+                   "gamma": ((-0.0525, -0.0075, 0.06), (-0.0075, 0.08, -0.0725), (0.06, -0.0725, 0.0125)),
+                   "median": 300.0, "villages": 20, "months": 12, "per_cell": 25, "price_sd": 0.15, "m_sigma": 0.5,
+                   "share_sd": 0.03, "seed": 1980},
+        # a tax on coconuts (chapter 8): weekly demand x = -4 p + 0.1 m + 6 at $1.20 and $60 a week
+        "tax": {"alpha": -4.0, "delta": 0.1, "c": 6.0, "price": 1.20, "income": 60.0, "taxes": (0.30, 0.60, 0.90)},
+        # integrability (chapter 6): budget shares w = alpha + gamma log p over fish, coconuts and cloth, one gamma
+        # symmetric and one that goes round in a circle; a loop of radius 0.4 in log prices
+        "loop": {"alpha": (0.40, 0.35, 0.25),
+                 "symmetric": ((-0.10, 0.05, 0.05), (0.05, -0.10, 0.05), (0.05, 0.05, -0.10)),
+                 "circular": ((-0.10, 0.08, 0.02), (0.02, -0.10, 0.08), (0.08, 0.02, -0.10)), "radius": 0.4},
+        # Hamilton's method on the Island (chapter 7): six surveys four years apart, 1,500 households each; food's
+        # share w = 0.60 - 0.10 log(real income / 300) + 0.05 log(food's relative price) + noise; real income grows
+        # 1.5% a year; food's relative price differs across 10 regions and years; the official price index
+        # overstates the rise in the cost of living by 1% a year
+        "hamilton": {"years": (0, 4, 8, 12, 16, 20), "households": 1500, "regions": 10, "median": 300.0,
+                     "sigma": 0.5, "growth": 0.015, "bias": 0.010, "a": 0.60, "b": -0.10, "g": 0.05, "noise": 0.04,
+                     "food_price_sd": 0.08, "seed": 2001},
+    },
 }
 
 

@@ -579,36 +579,50 @@ Harbaugh, Krause & Berry 2001; Andreoni & Miller 2002; Choi et al. 2007, 2014; S
 Crawford 2008; McFadden 1974; Kitamura & Stoye 2018; Chen et al. 2023; MWG chs 1–3; Kreps chs 1–4; Nicholson &
 Snyder chs 2–4; Jehle & Reny ch 1; Chambers & Echenique, *Revealed Preference Theory*.
 
-### Part 6 · Demand (~55)
+### Part 6 · Demand (~45)
 *Question:* when a price changes, what happens to what people buy and to how well off they are?
 *Story:* for a century the Giffen good, a good people buy more of when its price rises, was a textbook rumour.
-In 2006 Robert Jensen and Nolan Miller subsidized rice for poor households in Hunan, and consumption fell. The
-equation that explains it was written by Slutsky in 1915 and went unread for twenty years.
-0. Hook: the rice vouchers; the question; objectives.
-1. The demand function: comparative statics of the tangency; homogeneity.
-2. Play it: a price falls: sort the change into "cheaper relative to" and "richer".
-3. The Slutsky equation derived twice (Slutsky's and Hicks's compensation), drawn as two moves.
-4. Giffen behaviour: when the income effect wins; the Hunan and Gansu experiments (elasticity about +0.2
-   in Hunan (verify)).
-5. Duality: the expenditure function, Hicksian demand, Shephard's lemma; the indirect utility function and
-   Roy's identity; the map of four functions.
-6. Integrability: when a demand system comes from a preference; the Slutsky matrix.
-7. Engel curves: Engel's budgets (1857) and today's; necessities and luxuries; using food shares to measure
-   welfare (Hamilton 2001; Almås 2012).
-8. Welfare: compensating and equivalent variation; consumer surplus as an approximation (Willig 1976);
-   exact welfare from an estimated curve (Hausman 1981).
-9. The cost of living as a welfare problem: the substitution bias as a triangle; new goods (Hausman's
-   Apple-Cinnamon Cheerios, 1996).
-10. Demand systems that can be estimated: linear expenditure, AIDS (Deaton and Muellbauer 1980); aggregation
-    and the Gorman form.
-11. Dials. 12. In practice: demand forecasting, the CPI, tax design. 13. Frontier: scanner data and
-    non-homothetic price indices; inflation inequality (Jaravel 2019).
+In 2006 Robert Jensen and Nolan Miller subsidized rice for poor households in Hunan, and the poor-but-not-poorest
+ate less of it. The equation that explains it was written by Slutsky in 1915 and went unread for twenty years.
+0. Hook: the rice vouchers (1,300 households, 11 county towns, cuts of 0.10–0.30 yuan on 1.20); +0.45 for
+   households under 80% of calories from rice; Marshall (1895) and Stigler's "immortality" (1987); Slutsky and
+   Hicks and Allen; the question; objectives.
+1. Play it: a week of food on $21 (14,000 calories; coconuts $1.20 for 1,400, fish $2 for 700); coconuts rise to
+   $1.50 and the viewer buys more of them.
+2. The demand function: price- and income-consumption curves (Bo), the demand and Engel curves; homogeneity;
+   elasticities and the adding-up rules.
+3. The Slutsky equation drawn as two moves (Hicks's and Slutsky's compensation); the equation and its elasticity
+   form; the recipe for Giffen behaviour.
+4. Giffen behaviour: the rumour (Stigler 1947, Rosen 1999); the subsistence model's three zones and its elasticity
+   r/(1 − r); Jensen and Miller's design and table 3 (+0.22, +0.45, −0.61, +0.64; the inverted U, peak 0.85 at a
+   0.70 rice share); Gansu; the same design on 1,300 simulated households with the truth planted.
+5. Duality: the four functions, Roy's identity, Shephard's lemma, the concave expenditure function; the identities
+   checked numerically on four systems.
+6. Integrability: the Slutsky matrix's symmetry; a loop of prices that pumps money (Green's theorem).
+7. Intermission: a century of relative prices, fifteen kinds of spending, as a data film and melody.
+8. Engel curves: Engel 1857; America's century and 2024's quintiles; Hamilton 2001 and Costa 2001 (CPI bias from
+   Engel drift), Almås 2012; *Called it?*: Engel's law.
+9. Welfare: CV, EV and consumer's surplus; Willig 1976; Hausman 1981's exact surplus and deadweight loss.
+10. The cost of living: Konüs; the substitution bias; Hicks's virtual prices and Hausman's Apple-Cinnamon Cheerios;
+    the Boskin Commission's pieces.
+11. Demand systems: the LES (Stone 1954), the AIDS (Deaton and Muellbauer 1980) estimated and tested on an island
+    survey; Gorman's aggregation.
+12. Dials (staples' price elasticities with Hunan's rows; food's income elasticity, new). 13. In practice: the CPI's
+    geometric means and chained index; food prices and poor households (Deaton 1989); Ramsey taxes. 14. Frontier:
+    inflation inequality (Jaravel 2019), new goods (Feenstra 1994; Redding and Weinstein 2020), income-dependent
+    preferences (Jaravel and Lashkari 2024; Atkin et al. 2024).
 
-*Agora:* a demand system with duality (all four functions and their identities checked numerically), a welfare
-calculator, AIDS estimation on the Island's household survey.
-*Dials:* own-price and income elasticities of food, housing, energy. *Facts:* Engel's law; demand slopes down.
-*Reading:* Slutsky 1915; Hicks, *Value and Capital*; Jensen & Miller 2008; Deaton & Muellbauer, *Economics
-and Consumer Behavior*; Hausman 1981; MWG ch 3; Varian chs 5–9, 14; Nicholson & Snyder chs 5–6.
+*Agora:* `demand`: four demand systems with all four dual functions and their identities checked numerically, the
+Slutsky matrix and decompositions, the subsistence diet and the voucher experiment, CV/EV/surplus with Willig and
+Hausman, price indices and Feenstra, Working–Leser and Hamilton's drift, AIDS estimation with tests, the
+integrability loop.
+*Dials:* staples' price elasticities (Hunan's rows added); food's income elasticity (new); CPI bias (Hamilton's and
+Costa's rows added). *Facts:* Engel's law. *Called it?* Engel 1857.
+*Reading:* Slutsky 1915; Hicks and Allen 1934; Hicks, *Value and Capital*; Jensen & Miller 2008; Stigler 1947;
+Rosen 1999; Roy 1947; Shephard 1953; Hurwicz & Uzawa 1971; Konüs 1924; Willig 1976; Hausman 1981, 1997; Stone 1954;
+Deaton & Muellbauer 1980 and *Economics and Consumer Behavior*; Gorman 1953; Houthakker 1957; Hamilton 2001; Costa
+2001; Almås 2012; Deaton 1989; Ramsey 1927; Feenstra 1994; Jaravel 2019; Redding & Weinstein 2020; Jaravel &
+Lashkari 2024; Atkin et al. 2024; MWG chs 2–3; Varian chs 6–10, 14; Nicholson & Snyder chs 5–6.
 
 ### Part 7 · Time and Risk (~56)
 *Question:* how do people choose when the pay-off comes later, or may not come at all?
@@ -2782,6 +2796,7 @@ Young Economist*.
 | 3 | built, English | *The Measure.* Agora gains `accounts` (the Island's input-output table, GDP three ways, Leontief's inverse, value added in exports) and `indices` (Laspeyres, Paasche, Fisher, Törnqvist, the exact Cobb–Douglas index, chaining and drift); the Data Room gains FRED's national accounts, labour-market and price series, the World Bank's WDI, the UNDP's HDI and the Philadelphia Fed's real-time GDP; a new dial (the CPI's bias, from expert reviews); Kaldor's facts and the labour share are shown; the Dials gate checks every Data Room loader |
 | 4 | built, English | *The Evidence.* Agora gains `econometrician` (the fish market and its planted curves, OLS, Wald and 2SLS over statkit's `quasi`, the omitted-variable formula, the apprenticeship by choice and by lottery, Lucas's islands, the two-level village trial, difference in differences); the Data Room gains the 1969 draft lottery and Lucas (1976) among the transcribed passages; the Museum's NSW data and Card and Krueger's table are used; a new dial (the return to a year of school, from Card 2001); Act I is complete |
 | 5 | built, English | *What People Want.* Agora gains `consumer` (preferences and demand with corners and kinks, WARP, SARP and GARP, Afriat's index and his inequalities as an LP, Varian's bounds, Bronars's power, Becker's random consumers, the EITC's kink, a binary logit); the Data Room gains BEA's fifteen PCE categories and the population, 1929–2025, and the transcribed results of Harbaugh et al., Choi et al., Andreoni and Miller, Chen et al., Saez and McFadden; a new dial (consistency with utility maximization) and the BART *Called it?*; Act II begins |
+| 6 | built, English | *Demand.* Agora gains `demand` (Cobb–Douglas, CES, linear expenditure and AIDS systems with their dual functions checked numerically, the Slutsky matrix and decompositions, the subsistence diet and Jensen and Miller's voucher design, welfare with Willig and Hausman, price indices and Feenstra, Hamilton's Engel drift, AIDS estimation with tests, the integrability loop); the transcribed results of Jensen and Miller, Hausman's cereal, Costa and Hamilton, Engel and Houthakker, the USDA's quintiles, Jaravel and the BLS's methods; rows added to the staples and CPI-bias dials, a new dial (food's income elasticity) and Engel's law as *Called it?* |
 
 **Corrections found while building Part 1** (the plan's draft, written from memory, against the sources): Bastiat's
 Paris passage is in *Economic Sophisms*, First Series, ch. 18 (1845), not the *Harmonies*; Hume's is/ought passage is
@@ -2831,3 +2846,11 @@ et al.'s animal results are taken from Harbaugh et al.'s summary of Kagel, Batta
 81% of pigeons. Jensen and Miller's Giffen behaviour was among poor households, not the very poorest. Varian's 1982
 test of US aggregate data was not read, so the part runs its own test on BEA's fifteen categories and reports its
 power. The money pump is credited to Davidson, McKinsey and Suppes (1955), who credit Norman Dalkey.
+
+**Corrections found while building Part 6.** Jensen and Miller's Hunan elasticity is +0.45 for households under 80%
+of their calories from rice (+0.64 between 60% and 80%; +0.22, not significant, for everyone), not "about +0.2"; their
+subsidy cut a 1.20-yuan jin of rice by 0.10–0.30 yuan, up to a quarter, for five months of 2006. Marshall gave no
+reference for Giffen, and Stigler (1947) could not find the claim in Giffen's writings. Hausman's cereal is valued at
+$78.1 million a year in the US with a virtual price of $7.14 against $3.48 (his NBER chapter, published 1997). Hamilton's
+CPI-bias estimates (2.7 points a year in 1974–82, 0.6 in 1982–91) are read as Costa (2001) reports them. Housing and
+energy elasticities, in the draft's dials, wait for Parts 37 and 48.

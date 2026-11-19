@@ -84,3 +84,11 @@ publication, the copy that was read and the date the transcription was checked:
 | `chen_2023` | GPT's and humans' CCEIs in four domains, and the literature's range | 2026-11-19 |
 | `saez_2010` | the EITC's schedule (2008 dollars) and the elasticities implied by bunching at its first kink | 2026-11-19 |
 | `mcfadden_bart` | the BART forecast: official 15%, McFadden's 6.3%, actual 6.2% | 2026-11-19 |
+| `jensen_miller_2008` | the Hunan and Gansu voucher experiment: design, diets, calories per yuan, table 3's elasticities, figure 2's range; Marshall (1895) and Stigler (1987) as they quote them | 2026-11-19 |
+| `hausman_1997` | Apple-Cinnamon Cheerios: the virtual price, consumer's surplus and the cereal CPI's bias | 2026-11-19 |
+| `costa_2001` | CPI bias by period from Engel curves, 1888-1994, and Hamilton's (2001) estimates as she reports them | 2026-11-19 |
+| `engel_1857` | Engel's law in Zimmerman's translation; Houthakker's confirmation and food elasticity; Seale and Regmi's elasticities by income group | 2026-11-19 |
+| `ers_food_2024` | food spending and its share of income by income quintile, 2024 | 2026-11-19 |
+| `jaravel_2019` | inflation inequality, 2004-2015; Jaravel and Lashkari's correction for income-dependent preferences | 2026-11-19 |
+| `bls_cpi_methods` | the CPI's geometric means (1999) and the chained CPI (2002) | 2026-11-19 |
+| `slutsky_1915` | Slutsky's article and its rediscovery | 2026-11-19 |

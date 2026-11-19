@@ -57,9 +57,11 @@ class Dial:
 # sets the status and the date); until then a dial has no estimates and is drawn empty, with the part that fills it.
 DIALS = {d.key: d for d in [
     Dial("elasticity_staples", "price elasticity of demand for staples", "percent change in quantity per percent "
-         "change in price", (2, 6), status="settled within a range", checked="2026-11-18",
-         meaning="below one in size for every staple measured: a tax on any of them raises revenue and cuts "
-                 "consumption a little; how little decides whether it is a revenue tax or a health policy",
+         "change in price", (2, 6), status="depends on the setting", checked="2026-11-19",
+         meaning="below one in size for every staple measured in a market: a tax on any of them raises revenue and "
+                 "cuts consumption a little, and how little decides whether it is a revenue tax or a health policy; "
+                 "but for households poor enough to live on one staple, a dearer staple can mean more of it (Hunan's "
+                 "rice), so a price subsidy meant to feed them can leave them eating less",
          estimates=(
              Estimate("Havranek, Irsova and Janda", 2012, "meta-analysis", "gasoline, short run: published "
                       "estimates, corrected for publication bias", -0.09, where="Energy Economics 34(1): 201-207, "
@@ -75,9 +77,19 @@ DIALS = {d.key: d for d in [
                       -0.69, where="as above", checked="2026-11-18"),
              Estimate("Wagenaar, Salois and Komro", 2009, "meta-analysis", "spirits: simple mean of 103 estimates",
                       -0.80, where="as above", checked="2026-11-18"),
+             Estimate("Jensen and Miller", 2008, "RCT", "rice, Hunan's urban poor: all 1,258 household changes",
+                      0.224, 0.224 - 1.96 * 0.149, 0.224 + 1.96 * 0.149, where="AER 98(4), table 3, column 1",
+                      checked="2026-11-19"),
+             Estimate("Jensen and Miller", 2008, "RCT", "rice, Hunan: households with rice under 80% of calories",
+                      0.451, 0.451 - 1.96 * 0.170, 0.451 + 1.96 * 0.170, where="AER 98(4), table 3, column 3",
+                      checked="2026-11-19"),
+             Estimate("Jensen and Miller", 2008, "RCT", "rice, Hunan: households with rice over 80% of calories",
+                      -0.61, -0.61 - 1.96 * 0.296, -0.61 + 1.96 * 0.296, where="AER 98(4), table 3, column 5",
+                      checked="2026-11-19"),
          )),
     Dial("cpi_bias", "measurement bias of the consumer price index", "percentage points a year by which the CPI "
-         "overstates the rise in the cost of living", (3, 28), status="settled within a range", checked="2026-11-19",
+         "overstates the rise in the cost of living", (3, 6, 28), status="settled within a range",
+         checked="2026-11-19",
          meaning="pensions, tax brackets and many wages are indexed to the CPI: at 1 point a year an indexed payment "
                  "gains about a tenth in real terms over a decade, and the Boskin Commission put the cost to the "
                  "federal debt of 1997-2008 at about a trillion dollars; at 0.3 the drift is small",
@@ -96,6 +108,14 @@ DIALS = {d.key: d for d in [
                       where="NBER Working Paper 12311, abstract", checked="2026-11-19"),
              Estimate("Moulton", 2018, "review", "the CPI-U in 2017", 0.85, 0.30, 1.40,
                       where="Brookings (July 2018), table 5", checked="2026-11-19"),
+             Estimate("Hamilton", 2001, "regression", "food Engel curves in the PSID, 1974-91", 1.6,
+                      where="AER 91(3): 619-630, as reported by Costa (2001), pp. 1305-1306", checked="2026-11-19"),
+             Estimate("Costa", 2001, "regression", "food Engel curves in the Consumer Expenditure Surveys, 1972-94",
+                      1.6, where="JPE 109(6), section VI", checked="2026-11-19"),
+             Estimate("Costa", 2001, "regression", "food Engel curves, 1888-1919", -0.1, where="JPE 109(6), abstract",
+                      checked="2026-11-19"),
+             Estimate("Costa", 2001, "regression", "food Engel curves, 1919-35", 0.7, where="JPE 109(6), abstract",
+                      checked="2026-11-19"),
          )),
     Dial("eis", "elasticity of intertemporal substitution", "", (7, 23)),
     Dial("risk_aversion", "relative risk aversion", "", (7, 23)),
@@ -199,6 +219,25 @@ DIALS = {d.key: d for d in [
              Estimate("Chen, Liu, Shan and Zhong", 2023, "lab", "their human subjects, food budgets", 0.963,
                       where="arXiv 2305.12763v3, section 3", checked="2026-11-19"),
          )),
+    Dial("engel_food", "income elasticity of spending on food", "percent change in food spending per percent "
+         "change in income (or total spending)", (6, 46), status="depends on the setting", checked="2026-11-19",
+         meaning="below one wherever it has been measured (Engel's law), and falling as countries grow richer: "
+                 "food's share is a measure of living standards, and an Engel curve that shifts over time can be "
+                 "read as a check on the price index (Hamilton 2001; Costa 2001)",
+         estimates=(
+             Estimate("Houthakker", 1957, "regression", "about 40 household surveys in 30 countries: \"one would not "
+                      "be very far astray\"", 0.6, where="Econometrica 25(4), as quoted by Anker (2011), PERI WP 247, "
+                      "p. 3", checked="2026-11-19"),
+             Estimate("Seale and Regmi", 2006, "structural", "low-income countries", 0.7,
+                      where="Review of Income and Wealth 52(4), as summarized by Anker (2011), p. 3",
+                      checked="2026-11-19"),
+             Estimate("Seale and Regmi", 2006, "structural", "lower-middle-income countries", 0.6, where="as above",
+                      checked="2026-11-19"),
+             Estimate("Seale and Regmi", 2006, "structural", "upper-middle-income countries", 0.5, where="as above",
+                      checked="2026-11-19"),
+             Estimate("Seale and Regmi", 2006, "structural", "high-income countries", 0.2, 0.1, 0.3,
+                      where="as above", checked="2026-11-19"),
+         )),
 ]}
 
 # What each part shows without entering a row, and why: {part: [(what is shown, the reason)]}
@@ -290,6 +329,26 @@ SHOWN = {
          "and Marschak (1960)", "the frontier chapter's methods and evidence, shown for what they do"),
         ("BEA's personal consumption expenditures by type of product, 1929-2025 (FRED)", "data, with GARP and its "
          "power computed; no parameter is estimated"),
+    ],
+    6: [
+        ("Marshall (1895); Stigler (1947, 1987); Rosen (1999); Slutsky (1915) and its rediscovery; Hicks and Allen "
+         "(1934); Antonelli (1886); Konus (1924); Hicks (1940); Engel (1857) in Zimmerman's translation",
+         "the theory's history, shown as history; no parameter is estimated"),
+        ("Jensen and Miller (2008): the inverted U across staple calorie shares, the meat response and Gansu",
+         "shown with the study; its rice elasticities are entered in the elasticity_staples dial (this part)"),
+        ("Hausman (1997), Apple-Cinnamon Cheerios", "one new good's value, shown as an example of a virtual price; "
+         "new goods' share of CPI bias is in the cpi_bias dial's Boskin row"),
+        ("Willig (1976); Hausman (1981); Deaton and Muellbauer (1980); Stone (1954); Gorman (1953); Working (1943) "
+         "and Leser (1963); Blundell and Robin (1999); Ramsey (1927); Deaton (1989)", "methods, shown for what they "
+         "do (Deaton and Muellbauer's rejection of homogeneity is reported as a finding about a method)"),
+        ("the BLS's geometric means (1999) and chained CPI (2002)", "how the official index allows for "
+         "substitution; no parameter is estimated"),
+        ("Jaravel (2019); Jaravel and Lashkari (2024); Feenstra (1994); Redding and Weinstein (2020); Atkin, Faber, "
+         "Fally and Gonzalez-Navarro (2024)", "the frontier chapter's evidence and methods, shown for direction and "
+         "size; inflation by income group enters the inflation dials in Part 28"),
+        ("USDA ERS's food spending by income quintile, 2024; BEA's personal consumption expenditures by type of "
+         "product, 1929-2025 (FRED)", "data, shown with their sources; the elasticities drawn from them are "
+         "computed on screen and labelled as such"),
     ],
 }
 

@@ -61,4 +61,15 @@ CALLS = {c.key: c for c in [
          "right",
          ("D. McFadden, \"The Path to Discrete-Choice Models\", Access 20 (2002)",
           "D. McFadden, \"Economic Choices\", Nobel lecture, American Economic Review 91(3) (2001)")),
+    Call("engel_1857", 6, "Ernst Engel, director of the Saxon statistical bureau", "1857",
+         "the poorer a family, the larger the share of its spending that must go on food; so that share, other things "
+         "equal, measures a population's standard of living, and it falls as people grow richer",
+         "about 150 Belgian working families' budgets from Ducpetiaux's survey, and Saxon data",
+         "America's share of spending on food at home fell from about a fifth in 1929 to under a tenth in 2025 as real "
+         "spending per head rose about sixfold; in 2024 the poorest fifth of households spent a third of their income "
+         "on food, the richest a sixteenth",
+         "right",
+         ("C. C. Zimmerman, Quarterly Journal of Economics 47(1) (1932), as quoted by R. Anker, PERI WP 247 (2011)",
+          "BEA via FRED (personal consumption expenditures by type of product)",
+          "USDA ERS, Food Prices and Spending (2026), from the BLS Consumer Expenditure Survey")),
 ]}

@@ -222,6 +222,35 @@ brackets on screen.
 | stochastic choice | 随机选择 |
 | homogeneous of degree zero | 零次齐次 |
 
+## Part 6
+
+| English | 中文 |
+|---|---|
+| demand function; Marshallian (ordinary) demand | 需求函数；马歇尔（普通）需求 |
+| Hicksian (compensated) demand | 希克斯（补偿）需求 |
+| price-consumption curve; income-consumption curve | 价格—消费曲线；收入—消费曲线 |
+| Engel curve; Engel's law | 恩格尔曲线；恩格尔定律 |
+| own-price, cross-price and income elasticity | 自价格弹性、交叉价格弹性、收入弹性 |
+| homogeneous of degree zero; money illusion | 零次齐次；货币幻觉 |
+| Engel aggregation; Cournot aggregation | 恩格尔加总；古诺加总 |
+| substitution effect; income effect | 替代效应；收入效应 |
+| the Slutsky equation; Hicks's and Slutsky's compensation | 斯卢茨基方程；希克斯补偿与斯卢茨基补偿 |
+| normal good; inferior good; Giffen good (Giffen behaviour) | 正常品；劣等品；吉芬商品（吉芬行为） |
+| staple; subsistence | 主食；温饱（维持生存） |
+| voucher; subsidy | 代金券（购粮券）；补贴 |
+| indirect utility function; expenditure function | 间接效用函数；支出函数 |
+| Roy's identity; Shephard's lemma | 罗伊恒等式；谢泼德引理 |
+| duality | 对偶 |
+| integrability; the Slutsky matrix | 可积性；斯卢茨基矩阵 |
+| compensating variation; equivalent variation | 补偿变化（补偿变差）；等价变化（等价变差） |
+| consumer's surplus; deadweight loss | 消费者剩余；无谓损失 |
+| true cost-of-living index; substitution bias | 真实生活成本指数；替代偏差 |
+| virtual price; new goods | 虚拟价格；新产品 |
+| linear expenditure system; almost ideal demand system (AIDS) | 线性支出系统；近乎理想需求系统 |
+| representative consumer; the Gorman form | 代表性消费者；戈尔曼形式 |
+| Ramsey rule (inverse elasticity rule) | 拉姆齐法则（逆弹性法则） |
+| inflation inequality | 通胀不平等 |
+
 ## Names
 
 | English | 中文 |
@@ -298,3 +327,14 @@ brackets on screen.
 | Richard Blundell | 理查德·布伦德尔 |
 | Robert Jensen, Nolan Miller | 罗伯特·詹森、诺兰·米勒 |
 | Eugen Slutsky | 尤金·斯卢茨基 |
+| Alfred Marshall; Robert Giffen | 阿尔弗雷德·马歇尔；罗伯特·吉芬 |
+| George Stigler; Sherwin Rosen | 乔治·施蒂格勒；舍温·罗森 |
+| René Roy; Ronald Shephard | 勒内·罗伊；罗纳德·谢泼德 |
+| Alexander Konüs | 亚历山大·科纽斯 |
+| Ernst Engel | 恩斯特·恩格尔 |
+| Robert Willig; Jerry Hausman | 罗伯特·威利格；杰里·豪斯曼 |
+| Richard Stone; Angus Deaton; John Muellbauer | 理查德·斯通；安格斯·迪顿；约翰·米尔鲍尔 |
+| W. M. Gorman | W. M. 戈尔曼 |
+| Bruce Hamilton; Dora Costa; Ingvild Almås | 布鲁斯·汉密尔顿；多拉·科斯塔；英维尔德·阿尔马斯 |
+| Frank Ramsey | 弗兰克·拉姆齐 |
+| Robert Feenstra; Xavier Jaravel | 罗伯特·芬斯特拉；泽维尔·雅拉韦尔 |

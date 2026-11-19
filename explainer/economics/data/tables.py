@@ -612,4 +612,177 @@ MCFADDEN_BART = Table(
 
 PART5 = (SAMUELSON_1938, HARBAUGH_2001, CHOI_2007, CKMS_2014, ANDREONI_MILLER_2002, CHEN_2023, SAEZ_2010,
          MCFADDEN_BART)
-ALL = {t.key: t for t in (*PART1, *PART3, *PART4, *PART5)}
+
+# ---------------------------------------------------------------------------
+# Part 6
+# ---------------------------------------------------------------------------
+JENSEN_MILLER_2008 = Table(
+    key="jensen_miller_2008",
+    cite="Robert T. Jensen and Nolan H. Miller, \"Giffen Behavior and Subsistence Consumption\", American Economic "
+         "Review 98(4): 1553-1577 (2008)",
+    tag="Jensen and Miller, AER (2008)",
+    where="sections II-IV, tables 1-3 and figure 2",
+    read="the authors' manuscript of January 2008, \"forthcoming, American Economic Review\" "
+         "(nmiller.web.illinois.edu)",
+    checked="2026-11-19",
+    data={
+        "design": {"households": 1300, "per_province": 650, "individuals": 3661, "counties": 11,
+                   "cuts_yuan_per_jin": (0.10, 0.20, 0.30), "rice_price_hunan": 1.20, "flour_price_gansu": 1.04,
+                   "subsidy_months": "June-October 2006", "rounds": ("April 2006", "September 2006",
+                                                                    "December 2006"),
+                   "voucher_cap_g_per_person_day": 750, "attrition_households": 11},
+        "diet": {"rice_g_per_day_hunan": 330, "rice_calorie_share_hunan": 0.64, "wheat_g_per_day_gansu": 344,
+                 "wheat_calorie_share_gansu": 0.69, "meat_g_per_day_hunan": 42, "meat_calorie_share_hunan": 0.07,
+                 "meat_calorie_share_gansu": 0.01},
+        "calories_per_yuan": {"rice (Hunan)": 1399, "wheat flour (Gansu)": 1655, "wheat": 1221, "millet": 537,
+                              "pork": 331, "bean curd": 239, "cabbage": 141},
+        # Table 3, Hunan: the arc percent change in rice on the arc percent change in its price, county x round
+        # fixed effects, standard errors clustered by household
+        "hunan": {"full": (0.224, 0.149, 1258), "full_controls": (0.235, 0.140, 1258),
+                  "share_le_080": (0.451, 0.170, 997), "share_gt_080": (-0.61, 0.296, 261),
+                  "share_060_080": (0.640, 0.192, 513), "meat_full": (-0.325, 0.472, 997),
+                  "meat_over_50g": (-1.125, 0.625, 452), "p_full": 0.14},
+        "hunan_local": {"positive_from": 0.53, "positive_to": 0.84, "significant_from": 0.63,
+                        "significant_to": 0.75, "peak": 0.85, "peak_at": 0.70, "turns_negative": 0.80},
+        "gansu": {"positive_from": 0.40, "positive_to": 0.60, "range_040_060": 1.07, "meat_over_50g": 1.3},
+        "marshall_1895": "As Mr. Giffen has pointed out, a rise in the price of bread makes so large a drain on the "
+                         "resources of the poorer labouring families and raises so much the marginal utility of "
+                         "money to them, that they are forced to curtail their consumption of meat and the more "
+                         "expensive farinaceous foods: and, bread being still the cheapest food which they can get "
+                         "and will take, they consume more, and not less of it.",
+        "stigler_1987": "if an economist were to demonstrate its failure in a particular market at a particular "
+                        "time, he would be assured of immortality, professionally speaking, and rapid promotion "
+                        "while still alive.",
+    },
+    note="1 jin = 500 g; 1 yuan was about $0.13.  Marshall's passage is from the third edition of his Principles "
+         "(1895), p. 208, and Stigler's from The Theory of Price, 4th edition (1987), p. 23, both as quoted by "
+         "Jensen and Miller.  The published article's tables carry the same estimates.",
+)
+
+HAUSMAN_1997 = Table(
+    key="hausman_1997",
+    cite="Jerry A. Hausman, \"Valuation of New Goods under Perfect and Imperfect Competition\", in T. F. "
+         "Bresnahan and R. J. Gordon (eds.), The Economics of New Goods, NBER Studies in Income and Wealth 58, "
+         "University of Chicago Press (1997), chapter 5",
+    tag="Hausman, in The Economics of New Goods (1997)",
+    where="sections 5.2-5.6",
+    read="the NBER chapter (nber.org/chapters/c6068)",
+    checked="2026-11-19",
+    data={"introduced": 1989, "virtual_price": 7.14, "virtual_price_ase": 1.33, "average_price": 3.48,
+          "cs_per_city_week": 32268, "cs_us_year_million": 78.1, "cs_per_person_year": 0.3136,
+          "cs_imperfect_us_year_million": 66.8, "imperfect_share": 0.856, "cereal_cpi_overstated": 0.25,
+          "cereal_cpi_overstated_imperfect": 0.20, "new_brands_1980_92": 190, "existing_brands": 160,
+          "segment_own_price_elasticity": -2.0},
+    note="Prices are per unit of the brand as sold in his scanner data (dollars of the early 1990s).",
+)
+
+COSTA_2001 = Table(
+    key="costa_2001",
+    cite="Dora L. Costa, \"Estimating Real Income in the United States from 1888 to 1994: Correcting CPI Bias "
+         "Using Engel Curves\", Journal of Political Economy 109(6): 1288-1310 (2001)",
+    tag="Costa, JPE (2001)",
+    where="the abstract and section VI, pp. 1305-1306",
+    read="a copy of the published article (gwern.net/doc/economics/2001-costa.pdf)",
+    checked="2026-11-19",
+    data={"bias_per_year": {"1888-1919": -0.1, "1919-1935": 0.7, "1960-1972": 0.4, "1972-1982": 2.7,
+                            "1982-1994": 0.6, "1972-1994": 1.6},
+          "hamilton_2001": {"1974-1982": 2.7, "1982-1991": 0.6, "overall": 1.6},
+          "nordhaus_1997": 1.5},
+    note="Percentage points a year by which the CPI overstated the rise in the cost of living.  Hamilton's figures "
+         "(American Economic Review 91(3): 619-630, 2001, from the Panel Study of Income Dynamics) are as Costa "
+         "reports them.",
+)
+
+ENGEL_1857 = Table(
+    key="engel_1857",
+    cite="Ernst Engel, \"Die Productions- und Consumtionsverhältnisse des Königreichs Sachsen\" (1857), as "
+         "translated in C. C. Zimmerman, \"Ernst Engel\'s Law of Expenditures for Food\", Quarterly Journal of "
+         "Economics 47(1): 78-101 (1932); H. S. Houthakker, \"An International Comparison of Household Expenditure "
+         "Patterns, Commemorating the Centenary of Engel\'s Law\", Econometrica 25(4): 532-551 (1957); J. L. "
+         "Seale and A. Regmi, \"Modeling International Consumption Patterns\", Review of Income and Wealth 52(4): "
+         "603-624 (2006)",
+    tag="Engel (1857), via Zimmerman (1932); Houthakker (1957)",
+    where="as quoted and summarized by R. Anker, \"Engel\'s Law Around the World 150 Years Later\", PERI "
+          "Working Paper 247 (2011), pp. 1-3",
+    read="Anker's working paper (peri.umass.edu)",
+    checked="2026-11-19",
+    data={"engel": "The poorer is a family, the greater is the proportion of the total outgo [family "
+                   "expenditures] which must be used for food. ... The proportion of the outgo used for food, other "
+                   "things being equal, is the best measure of the material standard of living of a population.",
+          "houthakker": "Engel's law, formulated in 1857, is confirmed by all surveys.",
+          "houthakker_food_elasticity": 0.6, "houthakker_surveys": 40, "houthakker_countries": 30,
+          "seale_regmi": {"low income": 0.7, "lower middle income": 0.6, "upper middle income": 0.5,
+                          "high income": (0.1, 0.3)}},
+    note="Engel's budgets were the Belgian working families of Ducpétiaux's survey (1853-55) and his own Saxon "
+         "data.  Seale and Regmi's are income elasticities of food expenditure across countries by income group.",
+)
+
+ERS_FOOD_2024 = Table(
+    key="ers_food_2024",
+    cite="USDA Economic Research Service, \"Food spending as a share of income declines as income rises\" (W. "
+         "Sinclair and H. Stewart, Ag and Food Statistics: Charting the Essentials, 30 April 2026), from the BLS "
+         "Consumer Expenditure Survey, 2024",
+    tag="USDA ERS (2026), from the BLS Consumer Expenditure Survey, 2024",
+    where="Food Prices and Spending, the chart and its text",
+    read="ers.usda.gov, Ag and Food Statistics: Charting the Essentials, Food Prices and Spending",
+    checked="2026-11-19",
+    data={"lowest": {"food": 5498, "share": 0.330}, "middle": {"food": 9097, "share": 0.122},
+          "highest": {"food": 16989, "share": 0.064},
+          "us_calories_2025": 3902, "nigeria_calories_2025": 2470},
+    note="Dollars a household a year; shares are of before-tax income, by income quintile.",
+)
+
+JARAVEL_2019 = Table(
+    key="jaravel_2019",
+    cite="Xavier Jaravel, \"The Unequal Gains from Product Innovations: Evidence from the U.S. Retail Sector\", "
+         "Quarterly Journal of Economics 134(2): 715-783 (2019); X. Jaravel and D. Lashkari, \"Measuring Growth "
+         "in Consumer Welfare with Income-Dependent Preferences: Nonparametric Methods and Estimates for the "
+         "United States\", Quarterly Journal of Economics 139(1): 477-532 (2024)",
+    tag="Jaravel, QJE (2019); Jaravel and Lashkari, QJE (2024)",
+    where="the abstracts",
+    read="the abstracts as listed on EconPapers and by the LSE's Centre for Economic Performance",
+    checked="2026-11-19",
+    data={"retail_gap": (0.661, 0.0535), "retail_gap_variety": (0.8846, 0.0739), "full_basket_gap": (0.368, 0.0502),
+          "years": "2004-2015", "share_explained": 0.5,
+          "lashkari_1955_understated": 0.115, "lashkari_growth_bp": 18},
+    note="Percentage points a year by which annual inflation was higher for the bottom income quintile than the "
+         "top (standard errors in the second place).  Jaravel and Lashkari: real consumption per household in "
+         "1955 understated by 11.5% by the uncorrected measure; growth 1955-2019 lower by 18 basis points a year.",
+)
+
+BLS_CPI_METHODS = Table(
+    key="bls_cpi_methods",
+    cite="U.S. Bureau of Labor Statistics, Handbook of Methods, \"Consumer Price Index: Calculation\"; "
+         "\"Chained CPI: questions and answers\"",
+    tag="BLS, Handbook of Methods: the CPI",
+    where="Calculation; the chained CPI",
+    read="bls.gov, as quoted in search results of the Handbook and the chained CPI pages",
+    checked="2026-11-19",
+    data={"geometric_mean_since": "January 1999", "chained_published": 2002, "chained_from": "January 2000",
+          "chained_formula": "Tornqvist", "item_area_indexes": 7776},
+    note="The geometric mean is used within most item strata (it allows substitution between, say, varieties of "
+         "apples); the chained index (C-CPI-U) also allows substitution across strata.",
+)
+
+SLUTSKY_1915 = Table(
+    key="slutsky_1915",
+    cite="Eugen Slutsky, \"Sulla teoria del bilancio del consumatore\", Giornale degli Economisti e Rivista di "
+         "Statistica 51 (July 1915); J. R. Hicks and R. G. D. Allen, \"A Reconsideration of the Theory of "
+         "Value\", Economica (1934); H. Schultz, \"Interrelations of Demand, Price, and Income\", Journal of "
+         "Political Economy (1935); R. G. D. Allen, \"Professor Slutsky\'s Theory of Consumers\' Choice\", "
+         "Review of Economic Studies (1936); J. R. Hicks, Value and Capital (1939)",
+    tag="Slutsky (1915); Chipman and Lenfant, HOPE (2002)",
+    where="J. S. Chipman and J.-S. Lenfant, \"Slutsky\'s 1915 Article: How It Came to Be Found and "
+          "Interpreted\", History of Political Economy 34(3): 553-597 (2002), the opening pages",
+    read="the article's first page (Project MUSE) and its abstract (RePEc)",
+    checked="2026-11-19",
+    data={"published": "July 1915", "sent_from": "Kiev", "rediscovered_by": ("Henry Schultz", "Hicks and Allen",
+                                                                            "R. G. D. Allen"),
+          "hicks_and_allen": 1934, "allen": 1936, "hicks_name": "the Fundamental Equation of Value Theory"},
+    note="Hicks and Allen reached the decomposition in 1934 without knowing of Slutsky's paper; Hicks later wrote "
+         "that it had to be rediscovered.",
+)
+
+PART6 = (JENSEN_MILLER_2008, HAUSMAN_1997, COSTA_2001, ENGEL_1857, ERS_FOOD_2024, JARAVEL_2019, BLS_CPI_METHODS,
+         SLUTSKY_1915)
+ALL = {t.key: t for t in (*PART1, *PART3, *PART4, *PART5, *PART6)}
