@@ -8,10 +8,17 @@ from videos.stats.stats44.common import *  # noqa: F403
 class Martingales(StatsScene):
     def construct(self):
         self.card()
+        self.ask(r"P\'olya's urn. Given today's share of red, tomorrow's expected share is...",
+                 ["today's share", "one half", "larger"], 0,
+                 say="Pólya's urn again. Given today's share of red balls, what's the expected share after the next "
+                     "draw?",
+                 reveal="Exactly today's share: the proportion is a martingale. That's why it converges, to a "
+                        "random limit.")
         self.definition()
         self.lr()
         self.doob()
         self.urn()
+        self.answer()
 
     def card(self):
         self.chapter(2, r"Martingales", r"A fair game, \ in symbols", part=PART, said="Chapter two. Martingales: a fair game, in symbols.")

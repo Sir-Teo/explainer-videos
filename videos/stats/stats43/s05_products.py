@@ -8,11 +8,21 @@ from videos.stats.stats43.common import *  # noqa: F403
 class Products(StatsScene):
     def construct(self):
         self.card()
+        self.ask("Infinitely many independent coin tosses exist on one probability space because of...",
+                 ["Kolmogorov's extension theorem", "nothing: they can't exist"], 0,
+                 say="How do infinitely many independent coin tosses exist on a single probability space?",
+                 reveal="By Kolmogorov's extension theorem: consistent finite-dimensional laws extend to one law on "
+                        "all sequences. Products of probability spaces always exist.")
         self.independence()
         self.fubini()
         self.counter()
         self.extension()
         self.likelihood()
+        self.answer()
+        self.checkpoint([("Can every subset of $[0, 1]$ be measured?", "no: Vitali's set"),
+                         ("Limits pass inside expectations given?", "domination or uniform integrability")],
+                        narration="Checkpoint. Measure and integration.",
+                        answers_narration="No. And domination or uniform integrability.")
 
     def card(self):
         self.chapter(4, r"Independence and products", r"How do infinitely many coins exist?", part=PART, said="Chapter four. Independence, products, and how infinitely many coins can exist at once.")

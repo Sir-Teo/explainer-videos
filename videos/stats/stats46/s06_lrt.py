@@ -8,11 +8,17 @@ from videos.stats.stats46.common import *  # noqa: F403
 class LRT(StatsScene):
     def construct(self):
         self.card()
+        self.ask(r"Wilks's $\chi^2$ approximation breaks when the null value is...",
+                 ["on the boundary of the parameter space", "in the interior"], 0,
+                 say="The likelihood ratio test's chi-squared limit is Wilks's theorem. When does it break?",
+                 reveal="When the null sits on the boundary of the parameter space, or a parameter vanishes under "
+                        "the null, as in a mixture's number of components. Then the limit changes shape.")
         self.wilks()
         self.check()
         self.chernoff()
         self.boundary()
         self.failures()
+        self.answer()
 
     def card(self):
         self.chapter(5, r"The likelihood ratio test", r"Wilks's theorem, \ and where it breaks", lit=(1938, 1954), part=PART, said="Chapter five. The likelihood ratio test: Wilks's theorem, and where it breaks.")

@@ -8,12 +8,19 @@ from videos.stats.stats44.common import *  # noqa: F403
 class ConditionalExpectation(StatsScene):
     def construct(self):
         self.card()
+        self.ask(r"$E\big[E[X \mid \mathcal G]\big]$ equals...",
+                 ["$E[X]$", "$X$", "0"], 0,
+                 say="Conditional expectation averages over what you don't know. Average it again, over everything. "
+                     "What do you get?",
+                 reveal="E of X: the tower property. Averaging in two stages gives the same answer as averaging at "
+                        "once.")
         self.definition()
         self.projection()
         self.rules()
         self.variance()
         self.borel()
         self.disintegration()
+        self.answer()
 
     def card(self):
         self.chapter(1, r"Conditional expectation", r"Averaging over what you don't know", lit=(1933,), part=PART, said="Chapter one. Conditional expectation, defined properly at last.")

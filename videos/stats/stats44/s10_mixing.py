@@ -8,11 +8,18 @@ from videos.stats.stats44.common import *  # noqa: F403
 class Mixing(StatsScene):
     def construct(self):
         self.card()
+        self.ask("A lazy random walk on the $n$-dimensional hypercube mixes in about...",
+                 ["$n$ steps", r"$\tfrac12 n \log n$ steps", "$2^n$ steps"], 1,
+                 say="A lazy random walk on the corners of an n-dimensional cube: each step picks a coordinate and "
+                     "re-randomizes it. How long until it forgets where it started?",
+                 reveal="About a half n log n steps, a coupon collector's count of coordinates. And the drop to "
+                        "mixed is sudden: a cutoff.")
         self.coupling()
         self.cycle()
         self.hypercube()
         self.shuffles()
         self.polya()
+        self.answer()
 
     def card(self):
         self.chapter(9, r"Coupling and mixing", r"How long until a chain forgets where it started?", lit=(1992,), part=PART, said="Chapter nine. Coupling and mixing: how long until a chain forgets where it started?")

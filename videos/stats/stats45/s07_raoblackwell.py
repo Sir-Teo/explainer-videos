@@ -8,12 +8,23 @@ from videos.stats.stats45.common import *  # noqa: F403
 class RaoBlackwell(StatsScene):
     def construct(self):
         self.card()
+        self.ask(r"One Poisson count $X$. The unbiased estimator of $e^{-2\lambda}$ is $(-1)^X$. It is...",
+                 ["sensible", r"absurd: always $\pm 1$"], 1,
+                 say="One Poisson count X, and we want e to the minus two lambda. The only unbiased estimator is "
+                     "minus one to the X. Is it sensible?",
+                 reveal="It's absurd: always plus or minus one, for a target between zero and one. Unbiased, the "
+                        "best unbiased, and inadmissible. Unbiasedness is a constraint we chose.")
         self.theorem()
         self.tanks()
         self.lehmann()
         self.table()
         self.absurd()
         self.lesson()
+        self.answer()
+        self.checkpoint([(r"$A''(\eta)$ in an exponential family?", r"$\mathrm{Var}(T)$"),
+                         (r"$(-1)^X$ for $e^{-2\lambda}$?", "unbiased, and absurd")],
+                        narration="Checkpoint. Families and unbiasedness.",
+                        answers_narration="The variance of T. And absurd.")
 
     def card(self):
         self.chapter(6, r"Rao--Blackwell and Lehmann--Scheff\'e", r"Averaging over what does not matter", lit=(1947, 1950), part=PART, said="Chapter six. Rao–Blackwell and Lehmann–Scheffé: averaging over what does not matter.")

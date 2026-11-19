@@ -10,10 +10,17 @@ from videos.stats.stats43.common import *  # noqa: F403
 class LargeDeviations(StatsScene):
     def construct(self):
         self.card()
+        self.ask(r"The chance that $n$ fair coins give at least 70\% heads decays...",
+                 [r"like $1/\sqrt n$", "exponentially in $n$"], 1,
+                 say="The central limit theorem describes typical deviations. What about rare ones: at least "
+                     "seventy percent heads from n fair coins. How fast does that chance decay?",
+                 reveal="Exponentially in n, at a rate given by a Kullback-Leibler divergence. Cramér's theorem: "
+                        "large deviations have their own theory.")
         self.cramer()
         self.rate()
         self.urn()
         self.sanov()
+        self.answer()
 
     def card(self):
         self.chapter(12, r"Large deviations", r"How rare is a rare event?", lit=(1938,), part=PART, said="Chapter twelve. Large deviations: how rare is a rare event?")

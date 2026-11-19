@@ -8,11 +8,18 @@ from videos.stats.stats43.common import *  # noqa: F403
 class BorelCantelli(StatsScene):
     def construct(self):
         self.card()
+        self.ask("A simple random walk in three dimensions returns to its start...",
+                 ["infinitely often", "only finitely often"], 1,
+                 say="Pólya's question. A simple random walk on the three-dimensional lattice. How often does it "
+                     "return to its start?",
+                 reveal="Only finitely often: in three dimensions it eventually wanders off. On the line and the "
+                        "plane it returns forever. Borel-Cantelli decides it from the return probabilities' sum.")
         self.lemmas()
         self.runs()
         self.monkey()
         self.zero_one()
         self.hewitt()
+        self.answer()
 
     def card(self):
         self.chapter(5, r"Borel--Cantelli and the 0--1 laws", r"What happens infinitely often?", lit=(1909,), part=PART, said="Chapter five. Borel–Cantelli and the zero–one laws: what happens infinitely often?")

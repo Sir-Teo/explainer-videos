@@ -9,11 +9,18 @@ from videos.stats.stats44.common import *  # noqa: F403
 class Donsker(StatsScene):
     def construct(self):
         self.card()
+        self.ask(r"A $\pm 1$ walk of $n$ steps, time scaled by $n$ and space by $\sqrt n$, converges to...",
+                 ["a straight line", "Brownian motion"], 1,
+                 say="A random walk of n steps of plus or minus one. Squeeze time by n and space by root n. What "
+                     "does the whole path converge to?",
+                 reveal="Brownian motion, as a whole path: Donsker's invariance principle. Any finite-variance step "
+                        "distribution gives the same limit.")
         self.walks()
         self.theorem()
         self.reflection()
         self.bridge()
         self.df()
+        self.answer()
 
     def card(self):
         self.chapter(11, r"Donsker's invariance principle", r"Centered iid finite-variance walks, seen from far away", lit=(1951,), part=PART, said="Chapter eleven. Donsker's invariance principle: centered finite-variance random walks, seen from far "

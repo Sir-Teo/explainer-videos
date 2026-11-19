@@ -8,12 +8,23 @@ from videos.stats.stats45.common import *  # noqa: F403
 class Brown(StatsScene):
     def construct(self):
         self.card()
+        self.ask("For a normal mean in $p$ dimensions, $X$ is admissible when $p$ is...",
+                 ["1 only", "1 or 2", "any"], 1,
+                 say="Why three dimensions? For estimating a normal mean in p dimensions, the observation X itself "
+                     "is admissible for which p?",
+                 reveal="One and two. Brown's answer: admissibility tracks whether Brownian motion in that "
+                        "dimension is recurrent, and in three it isn't.")
         self.tweedie()
         self.theorem()
         self.integrals()
         self.hitting()
         self.intuition()
         self.priors()
+        self.answer()
+        self.checkpoint([(r"Stein's identity: $E[(X - \theta)\,g(X)]$?", "$E[g'(X)]$"),
+                         ("$X$ is admissible in dimensions?", "1 and 2")],
+                        narration="Checkpoint. Stein.",
+                        answers_narration="E of g prime. And one and two.")
 
     def card(self):
         self.chapter(11, r"Why three dimensions", r"Admissibility and the recurrence of Brownian motion", lit=(1971,), part=PART, said="Chapter eleven. Why three dimensions: admissibility and the recurrence of Brownian motion.")

@@ -8,11 +8,22 @@ from videos.stats.stats44.common import *  # noqa: F403
 class Brownian(StatsScene):
     def construct(self):
         self.card()
+        self.ask("A Brownian motion path is...",
+                 ["smooth", "continuous but nowhere differentiable"], 1,
+                 say="Brownian motion: independent Gaussian increments, variance equal to elapsed time. What do its "
+                     "paths look like?",
+                 reveal="Continuous, but nowhere differentiable: rough at every scale, its quadratic variation "
+                        "equal to elapsed time.")
         self.definition()
         self.construction()
         self.properties()
         self.exits()
         self.variation()
+        self.answer()
+        self.checkpoint([("A lazy walk on the $n$-cube mixes in about?", r"$\tfrac12 n \log n$ steps"),
+                         ("Brownian paths are?", "continuous, nowhere differentiable")],
+                        narration="Checkpoint. Chains and paths.",
+                        answers_narration="A half n log n. And continuous but nowhere differentiable.")
 
     def card(self):
         self.chapter(10, r"Brownian motion", r"A continuous path made of independent pieces", lit=(1923,), part=PART, said="Chapter ten. Brownian motion: a continuous path made of independent pieces.")

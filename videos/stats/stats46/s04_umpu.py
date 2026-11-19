@@ -8,6 +8,11 @@ from videos.stats.stats46.common import *  # noqa: F403
 class UMPU(StatsScene):
     def construct(self):
         self.card()
+        self.ask("Two-sided test of a normal mean. A uniformly most powerful test...",
+                 ["exists", "doesn't exist, but a UMP unbiased one does"], 1,
+                 say="A two-sided test of a normal mean. Is there a uniformly most powerful test?",
+                 reveal="No: the best test against positive alternatives is the worst against negative ones. Among "
+                        "unbiased tests, the usual two-sided test is uniformly most powerful.")
         self.unbiased()
         self.power()
         self.lp()
@@ -16,6 +21,11 @@ class UMPU(StatsScene):
         self.sizes()
         self.isis()
         self.ttest()
+        self.answer()
+        self.checkpoint([("Exact size with discrete data needs?", "randomization at the boundary"),
+                         ("A one-sided test in an MLR family?", "uniformly most powerful")],
+                        narration="Checkpoint. Optimal tests.",
+                        answers_narration="Randomization. And uniformly most powerful.")
 
     def card(self):
         self.chapter(3, r"Unbiased tests and Neyman structure", r"Optimality when nuisance parameters intrude", lit=(1933,), part=PART, said="Chapter three. Unbiased tests and Neyman structure: optimality when nuisance parameters intrude.")

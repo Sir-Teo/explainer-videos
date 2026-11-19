@@ -8,6 +8,12 @@ from videos.stats.stats46.common import *  # noqa: F403
 class Impossibility(StatsScene):
     def construct(self):
         self.card()
+        self.ask("A ratio of means. Every honest confidence procedure must sometimes give...",
+                 ["an infinite set", "an empty set"], 0,
+                 say="A ratio of two means, the dose that kills half the beetles. Gleser and Hwang proved something "
+                     "about every confidence procedure with positive coverage. It must sometimes give what?",
+                 reveal="An infinite set, with positive probability. Any interval that's always finite has coverage "
+                        "zero somewhere. Fieller's sets are honest about it.")
         self.fieller()
         self.shapes()
         self.table()
@@ -15,6 +21,7 @@ class Impossibility(StatsScene):
         self.bliss()
         self.elsewhere()
         self.board()
+        self.answer()
 
     def card(self):
         self.chapter(7, r"Impossibility: \ Fieller and Gleser--Hwang", r"When every honest interval must sometimes be infinite", lit=(1987,), part=PART, said="Chapter seven. Impossibility, from Fieller to Gleser and Hwang: when every honest interval must sometimes be infinite.")

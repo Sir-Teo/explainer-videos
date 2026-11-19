@@ -8,12 +8,19 @@ from videos.stats.stats45.common import *  # noqa: F403
 class Decision(StatsScene):
     def construct(self):
         self.card()
+        self.ask("Two estimators' risk curves cross. Which is better?",
+                 ["the one with lower average risk", "neither dominates the other"], 1,
+                 say="Estimation as a game against nature: each rule has a risk curve over theta. Two rules' risk "
+                     "curves cross. Which is better?",
+                 reveal="Neither dominates: each wins somewhere. To choose, restrict the class, or summarize each "
+                        "curve by its maximum, minimax, or its average under a prior, Bayes.")
         self.wald()
         self.language()
         self.binomial()
         self.criteria()
         self.region()
         self.uniform()
+        self.answer()
 
     def card(self):
         self.chapter(1, r"Decision theory", r"Estimation as a game against nature", lit=(1950,), part=PART, said="Chapter one. Decision theory: estimation as a game against nature.")

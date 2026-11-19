@@ -8,11 +8,25 @@ from videos.stats.stats43.common import *  # noqa: F403
 class StrongLaw(StatsScene):
     def construct(self):
         self.card()
+        self.wrong_idea("The law of large numbers makes frequencies balance out: after many tails, heads is due",
+                        "Averages settle because early excesses are diluted, not corrected",
+                        narration="The gambler's reading of the law of large numbers: after a run of tails, heads "
+                                  "is due, so the frequencies balance out.",
+                        right_narration="The coin has no memory. The average settles because an early excess is "
+                                        "diluted by ever more tosses, not corrected. The count of heads minus tails "
+                                        "actually wanders further and further.")
+        self.ask("For i.i.d. variables, the strong law needs...",
+                 ["a finite variance", "a finite mean"], 1,
+                 say="The strong law: the running average converges almost surely to the mean. For independent, "
+                     "identically distributed variables, what does it need?",
+                 reveal="Only a finite mean: Etemadi's proof needs pairwise independence and nothing more. Without "
+                        "a mean, as for the Cauchy, the averages never settle.")
         self.statement()
         self.maximal()
         self.series()
         self.etemadi()
         self.paths()
+        self.answer()
 
     def card(self):
         self.chapter(6, r"The strong law", r"Why does almost every average settle?", lit=(1981,), part=PART, said="Chapter six. The strong law of large numbers, proved.")

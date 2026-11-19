@@ -9,11 +9,22 @@ from videos.stats.stats44.common import *  # noqa: F403
 class MartingaleCLT(StatsScene):
     def construct(self):
         self.card()
+        self.ask("The martingale CLT gives a normal limit when the conditional variances...",
+                 ["sum to a constant in the limit", "are all equal"], 0,
+                 say="Lindeberg's theorem has a martingale version. Its normal limit needs what of the conditional "
+                     "variances?",
+                 reveal="That they add up to a constant in the limit, together with a Lindeberg condition. Random "
+                        "sums of variances give mixtures of normals instead.")
         self.statement()
         self.ar1()
         self.score()
         self.hist()
         self.board()
+        self.answer()
+        self.checkpoint([("A nonnegative martingale?", "converges almost surely"),
+                         ("Azuma--Hoeffding requires?", "bounded differences, not independence")],
+                        narration="Checkpoint. Martingale limits.",
+                        answers_narration="It converges. And bounded differences.")
 
     def card(self):
         self.chapter(7, r"The martingale CLT", r"Normal limits for dependent sums", lit=(1974,), part=PART, said="Chapter seven. The martingale central limit theorem.")

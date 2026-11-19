@@ -8,12 +8,19 @@ from videos.stats.stats45.common import *  # noqa: F403
 class ExpFamilies(StatsScene):
     def construct(self):
         self.card()
+        self.ask(r"In an exponential family, $A''(\eta)$, the log-partition's second derivative, is...",
+                 ["the variance of $T$", "the mean of $T$", "zero"], 0,
+                 say="An exponential family: one convex function, the log-partition A of eta, holds the whole "
+                     "model. What is its second derivative?",
+                 reveal="The variance of the sufficient statistic, and so the Fisher information in eta. Its first "
+                        "derivative is the mean. Convex duality maps one to the other.")
         self.definition()
         self.duality()
         self.legendre()
         self.bregman()
         self.efficiency()
         self.pkd()
+        self.answer()
 
     def card(self):
         self.chapter(4, r"Exponential families as convex duality", r"One convex function holds the whole model", part=PART, said="Chapter four. Exponential families as convex duality: one convex function holds the whole model.")

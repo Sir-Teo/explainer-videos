@@ -8,12 +8,25 @@ from videos.stats.stats45.common import *  # noqa: F403
 class SteinLemma(StatsScene):
     def construct(self):
         self.card()
+        self.wrong_idea("James--Stein improves the estimate of every coordinate",
+                        "It lowers the total risk; any single coordinate can get worse",
+                        narration="A natural reading of Stein's paradox: shrinking improves the estimate of every "
+                                  "mean.",
+                        right_narration="It improves the total. A coordinate far from the others can be made worse, "
+                                        "which is why limited-translation rules cap how far any one is moved.")
+        self.ask(r"SURE estimates an estimator's risk without knowing $\theta$, using...",
+                 ["Stein's identity", "the bootstrap"], 0,
+                 say="Stein's unbiased risk estimate: an estimate of your own risk without knowing theta. What "
+                     "makes it possible?",
+                 reveal="Stein's identity: for normal X, the expectation of X minus theta times g of X equals the "
+                        "expectation of g prime. The unknown theta drops out.")
         self.lemma()
         self.sure()
         self.js()
         self.risk()
         self.scatter()
         self.hitters()
+        self.answer()
 
     def card(self):
         self.chapter(10, r"Stein's lemma, \ SURE, \ James--Stein", r"An unbiased estimate of your own risk", lit=(1961,), part=PART, said="Chapter ten. Stein's lemma, SURE and James–Stein: an unbiased estimate of your own risk.")

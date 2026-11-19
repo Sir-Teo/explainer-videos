@@ -9,12 +9,23 @@ from videos.stats.stats43.common import *  # noqa: F403
 class WeakConvergence(StatsScene):
     def construct(self):
         self.card()
+        self.ask("Point masses at $1/n$ converge weakly to the point mass at 0. In total variation?",
+                 ["yes", "no"], 1,
+                 say="Point masses at one over n converge weakly to a point mass at zero. Do they converge in total "
+                     "variation?",
+                 reveal="No: their total variation distance stays one, since the event zero itself has probability "
+                        "zero then one. Weak convergence asks less: expectations of bounded continuous functions.")
         self.definition()
         self.lab()
         self.table()
         self.skorokhod()
         self.tightness()
         self.horse()
+        self.answer()
+        self.checkpoint([("A three-dimensional random walk returns?", "only finitely often"),
+                         ("The strong law needs?", "a finite mean")],
+                        narration="Checkpoint. Infinitely often.",
+                        answers_narration="Finitely often. And a finite mean.")
 
     def card(self):
         self.chapter(7, r"Weak convergence", r"What does it mean for laws to converge?", lit=(1956,), part=PART, said="Chapter seven. Weak convergence: what it means for laws to converge, and how far apart two laws are.")

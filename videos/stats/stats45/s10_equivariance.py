@@ -8,12 +8,23 @@ from videos.stats.stats45.common import *  # noqa: F403
 class Equivariance(StatsScene):
     def construct(self):
         self.card()
+        self.ask("Pitman's estimator is best among...",
+                 ["all estimators", "location-equivariant estimators"], 1,
+                 say="Restrict the competition by symmetry. Pitman's estimator of a location parameter is best "
+                     "among which estimators?",
+                 reveal="Among location-equivariant ones: shift the data, and the estimate shifts too. It's the "
+                        "generalized Bayes rule under a flat prior.")
         self.location()
         self.pitman()
         self.table()
         self.uniform()
         self.scale()
         self.haar()
+        self.answer()
+        self.checkpoint([("A complete sufficient and an ancillary statistic are?", "independent: Basu"),
+                         ("Pitman's estimator is best among?", "location-equivariant estimators")],
+                        narration="Checkpoint. Ancillarity and symmetry.",
+                        answers_narration="Independent. And equivariant estimators.")
 
     def card(self):
         self.chapter(9, r"Equivariance", r"Rules that respect the symmetry of the problem", lit=(1939,), part=PART, said="Chapter nine. Equivariance: rules that respect the symmetry of the problem.")

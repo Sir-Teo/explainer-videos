@@ -8,12 +8,19 @@ from videos.stats.stats45.common import *  # noqa: F403
 class NormalMeans(StatsScene):
     def construct(self):
         self.card()
+        self.ask("The James--Stein estimator itself is...",
+                 ["admissible", "inadmissible"], 1,
+                 say="James and Stein beat X in three dimensions and more. Is the James-Stein estimator itself "
+                     "admissible?",
+                 reveal="No: its positive-part version, which never shrinks past the target, beats it. And the "
+                        "positive part is itself inadmissible, though admissible improvements exist.")
         self.baranchik()
         self.factors()
         self.strawderman()
         self.risks()
         self.table()
         self.lesson()
+        self.answer()
 
     def card(self):
         self.chapter(12, r"Minimaxity and admissibility for normal means", r"Better than $X$, \ and beyond improvement", lit=(1971,), part=PART, said="Chapter twelve. Minimaxity and admissibility in the normal-means problem: better than X, and beyond improvement.")

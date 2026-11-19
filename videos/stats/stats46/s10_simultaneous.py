@@ -10,11 +10,22 @@ from videos.stats.stats46.common import *  # noqa: F403
 class Simultaneous(StatsScene):
     def construct(self):
         self.card()
+        self.ask(r"Scheff\'e's intervals for every linear combination, against Tukey's for pairwise differences, are...",
+                 ["wider", "narrower"], 0,
+                 say="Scheffé's intervals hold for every linear combination of k means at once. Compared with "
+                     "Tukey's, for pairwise differences only, are they wider or narrower?",
+                 reveal="Wider: they keep infinitely many promises at once. Ask only for what you need, and pay "
+                        "only for that.")
         self.scheffe()
         self.multipliers()
         self.closed()
         self.lattice()
         self.beyond()
+        self.answer()
+        self.checkpoint([("A ratio of means: honest sets must sometimes be?", "infinite"),
+                         ("Flip-flopping between a limit and an interval?", "undercovers")],
+                        narration="Checkpoint. Confidence, honestly.",
+                        answers_narration="Infinite. And it undercovers.")
 
     def card(self):
         self.chapter(9, r"Simultaneous inference", r"Many intervals, \ one promise", lit=(1953, 1976), part=PART, said="Chapter nine. Simultaneous inference: many intervals, one promise.")

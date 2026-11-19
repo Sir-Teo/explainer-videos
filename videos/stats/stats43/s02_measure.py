@@ -8,12 +8,19 @@ from videos.stats.stats43.common import *  # noqa: F403
 class Measures(StatsScene):
     def construct(self):
         self.card()
+        self.ask("Can every subset of $[0, 1]$ get a length that is shift-invariant and countably additive?",
+                 ["yes", "no"], 1,
+                 say="Part 2 assumed every set of outcomes has a probability. Can every subset of the unit interval "
+                     "be given a length, unchanged by shifting and countably additive?",
+                 reveal="No. Vitali's set, built with the axiom of choice, can't have any such length. So "
+                        "probability lives on a sigma-algebra of events, not on every set.")
         self.vitali()
         self.circle()
         self.sigma()
         self.pilambda()
         self.caratheodory()
         self.cantor()
+        self.answer()
 
     def card(self):
         self.chapter(1, r"$\sigma$-algebras and measures", r"Can every set have a size?", lit=(1905,), part=PART, said="Chapter one. Can every set of outcomes be given a probability?")

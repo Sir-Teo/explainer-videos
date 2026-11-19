@@ -8,12 +8,20 @@ from videos.stats.stats43.common import *  # noqa: F403
 class Integration(StatsScene):
     def construct(self):
         self.card()
+        self.ask(r"$X_n \to 0$ almost surely. Must $E[X_n] \to 0$?",
+                 ["yes", "not without more"], 1,
+                 say="A sequence of random variables converges to zero almost surely. Must their expectations "
+                     "converge to zero?",
+                 reveal="Not without more. N times the indicator that a uniform is below one over n goes to zero, "
+                        "yet its expectation stays one. Domination or uniform integrability lets the limit pass "
+                        "inside.")
         self.layer_cake()
         self.theorems()
         self.bumps()
         self.typewriter()
         self.ui()
         self.estimator()
+        self.answer()
 
     def card(self):
         self.chapter(3, r"Integration", r"When can a limit pass inside an expectation?", part=PART, said="Chapter three. Integration, and when a limit can pass inside an expectation.")
