@@ -118,11 +118,12 @@ SMITH_1962 = Table(
     cite="Vernon L. Smith, \"An Experimental Study of Competitive Market Behavior\", Journal of Political Economy "
          "70(2), 1962, 111-137",
     tag="Vernon Smith (1962), JPE 70: 111-137",
-    where="pp. 111-114 (the design); the experiments ran over six years from 1955",
+    where="pp. 111-114 (the design); the first session was in January 1956 and variations followed until 1960, "
+          "by Smith's own account (Nobel autobiography, 2002)",
     read="the JSTOR copy",
     checked="2026-11-18",
     data={
-        "began": 1955,
+        "began": 1956,
         "period_minutes": (5, 10),
         "rules": ["each buyer and each seller holds a card with a private limit price",
                   "a buyer may call out a bid at or below his card, a seller an offer at or above hers",

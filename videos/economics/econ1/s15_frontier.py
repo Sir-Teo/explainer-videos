@@ -67,7 +67,6 @@ class Frontier(VoiceoverScene):
             "outside. It took decades for economists to take this seriously, and it won Coase a Nobel prize in "
             "1991."
         ) as vo:
-            vo.wait_until("a")
             self.play(FadeIn(hc, shift=UP * 0.2))
             vo.wait_until("b")
             self.play(FadeIn(ans[0]), FadeIn(ans[1]))

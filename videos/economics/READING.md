@@ -1,0 +1,267 @@
+# Economics, Built: textbooks, papers and models
+
+The series' reading in one place, written by `python -m videos.economics.reading` from
+[`reading.py`](reading.py), the syllabus and the parts themselves; `tests/economics/test_reading.py` fails when
+it is out of date. Section 1 is the textbook spine, tier by tier: the books an economics degree, a graduate
+core and the practice are taught from. Section 2 maps the field's classic papers and models to the parts that
+teach them. Section 3 is every built part's reference card, as it appears on screen, and section 4 says what
+the series leaves out.
+
+Both *Parts* columns are found, not typed. *Planned* lists the parts whose entry in
+[`SYLLABUS.md`](SYLLABUS.md) names the book or paper; *Built* lists the parts whose scenes, compute step or
+README cite it (a dot: none yet). Fuller notes (editions, chapters, what each source was used for) are in each
+part's README, under *Sources*. Built so far: Part 1.
+
+## 1. The textbook spine
+
+### Principles
+
+| Short name | Book | Planned | Built |
+|---|---|---|---|
+| Mankiw | N. G. Mankiw, *Principles of Economics* (10th ed., 2024) | 1–2 | 1 |
+| Krugman–Wells | P. Krugman and R. Wells, *Economics* (6th ed., 2021) | 2 | · |
+| Acemoglu–Laibson–List | D. Acemoglu, D. Laibson and J. List, *Economics* (3rd ed., 2022) | 4 | · |
+| CORE | The CORE Team, *The Economy* (2017; 2.0, 2023) | 1 | 1 |
+| Heilbroner | R. Heilbroner, *The Worldly Philosophers* (7th ed., 1999) | 1 | 1 |
+
+### The major
+
+| Short name | Book | Planned | Built |
+|---|---|---|---|
+| Varian | H. Varian, *Intermediate Microeconomics* (9th ed., 2014) | 2, 6, 8, 10 | · |
+| Nicholson–Snyder | W. Nicholson and C. Snyder, *Microeconomic Theory* (13th ed., 2021) | 5–6 | · |
+| Jones | C. I. Jones, *Macroeconomics* (6th ed., 2023) | 20 | · |
+| Blanchard | O. Blanchard, *Macroeconomics* (8th ed., 2021) | 27, 32 | · |
+| Stock–Watson | J. Stock and M. Watson, *Introduction to Econometrics* (4th ed., 2019) | 4 | · |
+| Angrist–Pischke | J. Angrist and J.-S. Pischke, *Mostly Harmless Econometrics* (2009) | 4, 50, 67 | · |
+| Osborne | M. Osborne, *An Introduction to Game Theory* (2004) | 11 | · |
+| Krugman–Obstfeld–Melitz | P. Krugman, M. Obstfeld and M. Melitz, *International Economics* (12th ed., 2022) | 34–35 | · |
+| Mishkin | F. Mishkin, *The Economics of Money, Banking, and Financial Markets* (13th ed., 2022) | 26 | · |
+| Cabral | L. Cabral, *Introduction to Industrial Organization* (2nd ed., 2017) | 12 | · |
+| Borjas | G. Borjas, *Labor Economics* (8th ed., 2020) | 38 | · |
+| Gruber | J. Gruber, *Public Finance and Public Policy* (7th ed., 2022) | 15, 41–42, 50 | · |
+| Ray | D. Ray, *Development Economics* (1998) | 46 | · |
+| Weil | D. Weil, *Economic Growth* (3rd ed., 2013) | 19 | · |
+
+### Graduate micro
+
+| Short name | Book | Planned | Built |
+|---|---|---|---|
+| MWG | A. Mas-Colell, M. Whinston and J. Green, *Microeconomic Theory* (1995) | 5–9, 13, 15, 18, 56 | · |
+| Kreps | D. Kreps, *Microeconomic Foundations I* (2013) | 5, 7, 9, 56 | · |
+| Jehle–Reny | G. Jehle and P. Reny, *Advanced Microeconomic Theory* (3rd ed., 2011) | 5, 9 | · |
+| Fudenberg–Tirole | D. Fudenberg and J. Tirole, *Game Theory* (1991) | 11, 53 | · |
+| Osborne–Rubinstein | M. Osborne and A. Rubinstein, *A Course in Game Theory* (1994) | 11 | · |
+| Bolton–Dewatripont | P. Bolton and M. Dewatripont, *Contract Theory* (2005) | 13–14 | · |
+| Krishna | V. Krishna, *Auction Theory* (2nd ed., 2010) | 16 | · |
+| Milgrom | P. Milgrom, *Putting Auction Theory to Work* (2004) | 16 | · |
+| Roth–Sotomayor | A. Roth and M. Sotomayor, *Two-Sided Matching* (1990) | 17 | · |
+| Börgers | T. Börgers, *An Introduction to the Theory of Mechanism Design* (2015) | 17 | · |
+| Tirole IO | J. Tirole, *The Theory of Industrial Organization* (1988) | 10–12, 53 | · |
+
+### Graduate macro
+
+| Short name | Book | Planned | Built |
+|---|---|---|---|
+| Romer | D. Romer, *Advanced Macroeconomics* (5th ed., 2019) | 20, 22–23, 28–29, 56 | · |
+| Ljungqvist–Sargent | L. Ljungqvist and T. Sargent, *Recursive Macroeconomic Theory* (4th ed., 2018) | 29, 52, 56 | · |
+| SLP | N. Stokey, R. Lucas and E. Prescott, *Recursive Methods in Economic Dynamics* (1989) | 29, 51 | · |
+| Acemoglu | D. Acemoglu, *Introduction to Modern Economic Growth* (2009) | 20–21 | · |
+| Galí | J. Galí, *Monetary Policy, Inflation, and the Business Cycle* (2nd ed., 2015) | 30, 56 | · |
+| Woodford | M. Woodford, *Interest and Prices* (2003) | 30 | · |
+| Walsh | C. Walsh, *Monetary Theory and Policy* (4th ed., 2017) | 25 | · |
+| Obstfeld–Rogoff | M. Obstfeld and K. Rogoff, *Foundations of International Macroeconomics* (1996) | 34 | · |
+| Pissarides | C. Pissarides, *Equilibrium Unemployment Theory* (2nd ed., 2000) | 24 | · |
+| Cochrane | J. Cochrane, *Asset Pricing* (rev. ed., 2005) | 23 | · |
+| Freixas–Rochet | X. Freixas and J.-C. Rochet, *Microeconomics of Banking* (2nd ed., 2008) | 26 | · |
+
+### Econometrics and computation
+
+| Short name | Book | Planned | Built |
+|---|---|---|---|
+| Hayashi | F. Hayashi, *Econometrics* (2000) | 54, 56 | · |
+| Wooldridge | J. Wooldridge, *Econometric Analysis of Cross Section and Panel Data* (2nd ed., 2010) | 54 | · |
+| Hansen | B. Hansen, *Econometrics* (2022) | 54 | · |
+| Hamilton | J. Hamilton, *Time Series Analysis* (1994) | 55 | · |
+| Kilian–Lütkepohl | L. Kilian and H. Lütkepohl, *Structural Vector Autoregressive Analysis* (2017) | 55 | · |
+| Train | K. Train, *Discrete Choice Methods with Simulation* (2nd ed., 2009) | 43, 54 | · |
+| Judd | K. Judd, *Numerical Methods in Economics* (1998) | 51 | · |
+| QuantEcon | T. Sargent and J. Stachurski, *Quantitative Economics* (QuantEcon lectures) | 51 | · |
+
+### The fields
+
+| Short name | Book | Planned | Built |
+|---|---|---|---|
+| Feenstra | R. Feenstra, *Advanced International Trade* (2nd ed., 2016) | 35–36 | · |
+| Cahuc–Carcillo–Zylberberg | P. Cahuc, S. Carcillo and A. Zylberberg, *Labor Economics* (2nd ed., 2014) | 24, 38 | · |
+| Atkinson–Stiglitz | A. Atkinson and J. Stiglitz, *Lectures on Public Economics* (1980; 2015) | 41 | · |
+| Salanié | B. Salanie, *The Economics of Taxation* (2nd ed., 2011) | 41 | · |
+| Banerjee–Duflo | A. Banerjee and E. Duflo, *Poor Economics* (2011) | 46 | · |
+| Persson–Tabellini | T. Persson and G. Tabellini, *Political Economics* (2000) | 47 | · |
+| Dhami | S. Dhami, *The Foundations of Behavioral Economic Analysis* (2016) | 45 | · |
+| Fujita–Krugman–Venables | M. Fujita, P. Krugman and A. Venables, *The Spatial Economy* (1999) | 37 | · |
+| Nordhaus | W. Nordhaus, *A Question of Balance* (2008) | 48 | · |
+| Jackson | M. Jackson, *Social and Economic Networks* (2008) | 63 | · |
+
+### Practice
+
+| Short name | Book | Planned | Built |
+|---|---|---|---|
+| Blinder | A. Blinder, *Central Banking in Theory and Practice* (1998) | 31 | · |
+| Boardman | A. Boardman and others, *Cost-Benefit Analysis* (5th ed., 2018) | 50, 58 | · |
+| Davis–Garcés | P. Davis and E. Garces, *Quantitative Techniques for Competition and Antitrust Analysis* (2010) | 59 | · |
+| Talluri–van Ryzin | K. Talluri and G. van Ryzin, *The Theory and Practice of Revenue Management* (2004) | 60 | · |
+| Kohavi–Tang–Xu | R. Kohavi, D. Tang and Y. Xu, *Trustworthy Online Controlled Experiments* (2020) | 61 | · |
+| Lazear–Gibbs | E. Lazear and M. Gibbs, *Personnel Economics in Practice* (3rd ed., 2014) | 62 | · |
+
+## 2. Papers and models, and where they are taught
+
+### Markets and prices
+
+| Model or result | Paper | Planned | Built |
+|---|---|---|---|
+| the division of labour | Smith (1776), *The Wealth of Nations* | 1 | 1 |
+| comparative advantage | Ricardo (1817), *Principles*, ch. 7 | 2, 35–36 | 1 |
+| supply and demand, the scissors | Marshall (1890), *Principles of Economics* | 2, 37 | · |
+| the price system as information | Hayek (1945), "The Use of Knowledge in Society" | 1, 9 | 1 |
+| the double auction in the classroom | Chamberlin (1948); Smith (1962) | 1–2 | 1 |
+| zero-intelligence traders | Gode and Sunder (1993) | 2 | 1 |
+| general equilibrium and its welfare theorems | Arrow and Debreu (1954); Debreu (1959) | 9 | · |
+| consumer surplus | Dupuit (1844) | 2, 10 | · |
+
+### Choice
+
+| Model or result | Paper | Planned | Built |
+|---|---|---|---|
+| revealed preference | Samuelson (1938); Afriat (1967); Varian (1982) | 5 | · |
+| expected utility | von Neumann and Morgenstern (1944) | 7 | · |
+| prospect theory | Kahneman and Tversky (1979) | 45 | · |
+| present bias | Laibson (1997) | 45 | · |
+
+### Firms
+
+| Model or result | Paper | Planned | Built |
+|---|---|---|---|
+| why firms exist | Coase (1937), "The Nature of the Firm" | 1, 8 | 1 |
+| organizations and markets | Simon (1991) | 1 | 1 |
+| incomplete contracts and ownership | Grossman and Hart (1986) | 14 | · |
+| moral hazard and the principal | Holmström (1979) | 14 | · |
+
+### Strategy
+
+| Model or result | Paper | Planned | Built |
+|---|---|---|---|
+| equilibrium in games | Nash (1950, 1951) | 11 | · |
+| oligopoly in quantities and prices | Cournot (1838); Bertrand (1883) | 12 | · |
+| demand estimation with differentiated products | Berry, Levinsohn and Pakes (1995) | 43 | · |
+
+### Information and design
+
+| Model or result | Paper | Planned | Built |
+|---|---|---|---|
+| lemons | Akerlof (1970) | 13 | · |
+| signalling | Spence (1973) | 13 | · |
+| screening in insurance | Rothschild and Stiglitz (1976) | 13 | · |
+| second-price auctions | Vickrey (1961) | 16 | · |
+| optimal auctions | Myerson (1981) | 16 | · |
+| stable matching | Gale and Shapley (1962) | 17 | · |
+| Bayesian persuasion | Kamenica and Gentzkow (2011) | 53 | · |
+| incentives that crowd out | Gneezy and Rustichini (2000), "A Fine Is a Price" | 1, 14 | 1 |
+
+### Welfare and the state
+
+| Model or result | Paper | Planned | Built |
+|---|---|---|---|
+| externalities and their tax | Pigou (1920) | 15, 56 | · |
+| bargaining over externalities | Coase (1960) | 15 | · |
+| public goods | Samuelson (1954) | 15 | · |
+| governing the commons | Ostrom (1990) | 15 | · |
+| the impossibility of social choice | Arrow (1951) | 18 | · |
+| optimal income taxation | Mirrlees (1971); Saez (2001) | 41 | · |
+| optimal commodity taxation | Ramsey (1927); Diamond and Mirrlees (1971) | 41 | · |
+
+### Growth
+
+| Model or result | Paper | Planned | Built |
+|---|---|---|---|
+| the Malthusian economy | Malthus (1798) | 19 | · |
+| the long run in numbers | the Maddison Project (Bolt and van Zanden 2024) | 1 | 1 |
+| the neoclassical growth model | Solow (1956); Ramsey (1928); Cass (1965) | 20 | · |
+| endogenous growth | Romer (1990); Aghion and Howitt (1992) | 21 | · |
+| misallocation | Hsieh and Klenow (2009) | 21 | · |
+
+### Macroeconomics
+
+| Model or result | Paper | Planned | Built |
+|---|---|---|---|
+| national accounts | Kuznets (1934) | 3 | · |
+| the General Theory and IS-LM | Keynes (1936); Hicks (1937) | 27 | · |
+| the permanent income hypothesis | Friedman (1957); Hall (1978) | 22 | · |
+| the Phillips curve and the natural rate | Phillips (1958); Friedman (1968); Phelps (1967) | 28 | · |
+| the Lucas critique | Lucas (1976) | 4, 28, 54 | · |
+| time inconsistency and rules | Kydland and Prescott (1977) | 28 | · |
+| real business cycles | Kydland and Prescott (1982) | 29 | · |
+| staggered prices | Calvo (1983) | 30 | · |
+| the Taylor rule | Taylor (1993) | 30 | · |
+| search and unemployment | Diamond (1982); Mortensen and Pissarides (1994) | 24 | · |
+| heterogeneous agents | Bewley (1977); Huggett (1993); Aiyagari (1994) | 52, 56 | · |
+| the equity premium puzzle | Mehra and Prescott (1985) | 23 | · |
+
+### Money and finance
+
+| Model or result | Paper | Planned | Built |
+|---|---|---|---|
+| money as a medium of exchange | Kiyotaki and Wright (1989) | 25 | · |
+| bank runs | Diamond and Dybvig (1983) | 26 | · |
+| debt deflation and financial instability | Fisher (1933); Minsky (1986) | 33 | · |
+| the financial accelerator | Bernanke, Gertler and Gilchrist (1999) | 33 | · |
+| forecasting by professionals | the Survey of Professional Forecasters (Philadelphia Fed) | 1, 57 | 1 |
+
+### The world economy
+
+| Model or result | Paper | Planned | Built |
+|---|---|---|---|
+| optimum currency areas and the trilemma | Mundell (1961, 1963) | 34 | · |
+| exchange-rate overshooting | Dornbusch (1976) | 34 | · |
+| factor prices and trade | Stolper and Samuelson (1941) | 35 | · |
+| trade with increasing returns | Krugman (1979, 1980) | 36 | · |
+| heterogeneous firms in trade | Melitz (2003) | 36 | · |
+| gravity | Anderson and van Wincoop (2003) | 36 | · |
+| economic geography | Krugman (1991) | 37 | · |
+
+### People
+
+| Model or result | Paper | Planned | Built |
+|---|---|---|---|
+| human capital | Becker (1964); Mincer (1974) | 38 | · |
+| the minimum wage | Card and Krueger (1994) | 38 | · |
+| skills, tasks and technology | Autor, Levy and Murnane (2003); Acemoglu and Autor (2011) | 39 | · |
+| mobility and place | Chetty and others (2014) | 40, 42 | · |
+| top incomes | Piketty and Saez (2003) | 40 | · |
+| the economics of crime | Becker (1968) | 49 | · |
+
+### Method
+
+| Model or result | Paper | Planned | Built |
+|---|---|---|---|
+| positive economics | Friedman (1953) | 8 | 1 |
+| models as maps | Rodrik (2015), *Economics Rules* | 1, 67 | 1 |
+| identification by instruments | Wright (1928); Haavelmo (1944) | 4 | · |
+| the credibility of econometrics | Leamer (1983); LaLonde (1986) | 4 | · |
+| vector autoregressions | Sims (1980) | 55 | · |
+| dynamic discrete choice | Rust (1987) | 44, 54 | · |
+| generalized method of moments | Hansen (1982) | 54 | · |
+| machine learning for causal questions | Chernozhukov and others (2018); Athey and Imbens (2019) | 64 | · |
+| publication bias in economics | Brodeur and others (2016) | 67 | · |
+
+## 3. Every built part's reference card
+
+**Part 1, *Who Feeds Paris?*.** Books: Adam Smith, *The Wealth of Nations* (1776), Book I, chs 1–3; David Ricardo, *Principles of Political Economy and Taxation* (1817), ch. 7; Frédéric Bastiat, *Economic Sophisms* (1845); The CORE Team, *The Economy*, units 1–2; N. Gregory Mankiw, *Principles of Economics*, chs 1–3; Robert Heilbroner, *The Worldly Philosophers*; Dani Rodrik, *Economics Rules* (2015). Papers: Hayek (1945), "The Use of Knowledge in Society", *AER* 35; Coase (1937), "The Nature of the Firm", *Economica* 4; Simon (1991), *JEP* 5(2); Chamberlin (1948), *JPE* 56; Smith (1962), *JPE* 70; Gode and Sunder (1993), *JPE* 101; Cliff (1997); Gneezy and Rustichini (2000), "A Fine Is a Price", *Journal of Legal Studies* 29; Friedman (1953), "The Methodology of Positive Economics"; Read (1958), "I, Pencil"; Bolt and van Zanden (2024), the Maddison Project Database 2023; Besley and Hennessy (2009).
+
+## 4. What the series leaves out
+
+- **Accounting and corporate finance.** The firm's books and its capital structure appear only where an economic argument needs them (the T-accounts of money and banks in Parts 25 and 26); there is no course in valuation or financial reporting.
+- **Derivatives and financial engineering.** Asset pricing is taught as economics (Part 23: the stochastic discount factor and its puzzles); option pricing and the mathematics of hedging belong to *Quant, Built*.
+- **The history of economic thought as a field.** Each idea arrives with its people, its year and its dead ends, but the series does not survey schools for their own sake. Marxian, Austrian, post-Keynesian, institutionalist and complexity arguments appear where they bear on a part's question, with their best case (SYLLABUS, section 1).
+- **Sector fields.** Agricultural, health, transport and energy economics are drawn on for examples (health insurance in Part 42, carbon in Part 48) but have no parts of their own.
+- **Country studies.** The Data Room's countries are evidence, not subjects: no part is a course on one economy.

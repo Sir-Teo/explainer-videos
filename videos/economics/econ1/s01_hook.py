@@ -194,7 +194,6 @@ class Hook(VoiceoverScene):
             "study both. It is built from scratch, and it is technical on purpose: every idea is written down as a "
             "model, solved in code that runs, and set against data."
         ) as vo:
-            vo.wait_until("a")
             self.play(FadeIn(left), FadeIn(lt), FadeIn(ring), FadeIn(city))
             flows = VGroup(*[flowing(r, GOODS[k % len(GOODS)], n=1, period=2.6 + 0.3 * (k % 4), radius=0.03)
                              for k, r in enumerate(ring.roads) if k % 3 == 0])

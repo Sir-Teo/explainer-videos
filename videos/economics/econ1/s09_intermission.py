@@ -46,7 +46,7 @@ class Intermission(SoundScene):
         jitter = rng.uniform(-0.2, 0.2, len(regions))
         dots = VGroup(*[Circle(radius=0.05, stroke_width=0.6, stroke_color=BACKGROUND,
                                fill_color=REGION_COLOR.get(r, GREY_B), fill_opacity=0.85) for r in regions])
-        year_t = Integer(1820, font_size=96, color=GREY_D, group_with_commas=False).move_to([4.6, 3.25, 0]).set_z_index(-2)
+        year_t = Integer(1820, font_size=96, color=GREY_C, group_with_commas=False).move_to([4.6, 3.25, 0]).set_z_index(-2)
         world_line = Line([0, y_top + 0.4, 0], [0, lane_y[lanes[-1]] - 0.4, 0], color=WHITE, stroke_width=2.5)
         world_lab = label(r"the world", font_size=18, color=WHITE)
         tag = data_tag(r"Maddison Project Database 2023 (Bolt and van Zanden 2024); log-linear between benchmark "
@@ -89,12 +89,16 @@ class Intermission(SoundScene):
 
         with self.listen(clip) as snd:
             snd.caption(r"the world's GDP per head, 1820 to 2022, as a tune")
-            snd.show(frame, axis_name, tag, stag)
+            snd.show(tag, stag)
             snd.drive(dots, place)
             snd.drive(year_t, counter)
             snd.drive(world_line, world)
             snd.drive(world_lab, world_label)
-            snd.show(dots, year_t, world_line, world_lab)
+            snd.show(dots, year_t, world_line, world_lab, frame, axis_name)
+            # the lanes draw in while the film holds on 1820 (film_time(1820) = 1.5 s), so the picture moves from
+            # the first note
+            self.play(LaggedStart(*[Create(m) if isinstance(m, Line) else FadeIn(m) for m in frame], lag_ratio=0.02),
+                      FadeIn(axis_name), run_time=1.4)
             snd.wait_until("film_end")
             self.play(*[FadeOut(m) for m in (frame, axis_name, tag, dots, world_line, world_lab, stag)],
                       year_t.animate.set_opacity(0.0), run_time=1.0)
@@ -109,7 +113,8 @@ class Intermission(SoundScene):
             head = label(r"The story so far", font_size=40).to_edge(UP, buff=0.5)
             nxt = label(r"next: \ what a model is, \ when the order fails, \ and the economy as plumbing",
                         font_size=22, color=GREY_B).to_edge(DOWN, buff=0.4)
-            self.play(FadeIn(head), LaggedStart(*[FadeIn(c, shift=UP * 0.1) for c in story.cards], lag_ratio=0.25),
-                      run_time=3.0)
+            # the cards arrive one by one over what is left of the tune, so the picture moves until the last note
+            self.play(FadeIn(head), LaggedStart(*[FadeIn(c, shift=UP * 0.1) for c in story.cards], lag_ratio=0.6),
+                      run_time=max(3.0, snd.remaining() - 1.6))
             self.play(FadeIn(nxt))
         self.play(*[FadeOut(m) for m in self.mobjects], run_time=0.8)

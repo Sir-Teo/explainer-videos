@@ -26,6 +26,7 @@ class Models(VoiceoverScene):
                       VGroup(small.copy(), labels[2].copy()).arrange(DOWN, buff=0.25)).arrange(RIGHT, buff=1.4)
         quote = label(r"Borges, 1946: \ a map of the Empire ``whose size was that of the Empire''", font_size=28,
                       color=E.ACCENT).to_edge(DOWN, buff=0.6)
+        quote.add_background_rectangle(color=BACKGROUND, opacity=0.88, buff=0.18)  # readable over the map's sand
         with self.voiceover(
             "We've used a lot of models already: a pit market, an island, a tin market. Every one of them was "
             "wrong. That's on purpose. <bookmark mark='a'/> In a story of 1946, Jorge Luis Borges described an "
@@ -36,7 +37,6 @@ class Models(VoiceoverScene):
             "right scale depends on the question. A model in economics is a map in exactly this sense: it is "
             "wrong on purpose, and the skill is choosing what to leave out."
         ) as vo:
-            vo.wait_until("a")
             self.play(FadeIn(big), FadeIn(quote))
             vo.wait_until("b")
             self.play(FadeOut(big), FadeIn(trio, lag_ratio=0.3), run_time=2)
@@ -95,7 +95,6 @@ class Models(VoiceoverScene):
             "predicts well in one world can mislead when the world changes, and sometimes the model's own use "
             "is what changes it. That's a story for Part four."
         ) as vo:
-            vo.wait_until("a")
             self.play(FadeIn(fr, shift=UP * 0.2))
             vo.wait_until("b")
             self.play(FadeIn(ro, shift=UP * 0.2))
@@ -127,7 +126,6 @@ class Models(VoiceoverScene):
             "the people still looking for a home, and against the landlords. <bookmark mark='e'/> Whenever this "
             "series makes that step, it will show this card, and name the judgment."
         ) as vo:
-            vo.wait_until("a")
             self.play(FadeIn(hume, shift=UP * 0.2))
             vo.wait_until("b")
             self.play(FadeIn(io.card), FadeIn(io.is_row))

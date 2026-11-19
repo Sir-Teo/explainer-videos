@@ -304,9 +304,10 @@ The series draws in the manner of 3Blue1Brown with the instruments of `explainer
 
 ## What it follows
 
-The series reads like the reading lists of a strong department. `READING.md` (written in Phase 0, as for *Quant,
-Built* and *Psychology, Built*) will map the textbooks, the field's major models and its classic papers to the part
-and chapter that teach them, and say what the series leaves out. The spines (each part's reference card names its
+The series reads like the reading lists of a strong department. [`READING.md`](READING.md) maps the textbooks, the
+field's major models and its classic papers to the parts that plan and teach them, and says what the series leaves
+out; it is written by `python -m videos.economics.reading` from the syllabus and the built parts, and
+`tests/economics/test_reading.py` keeps it true. The spines (each part's reference card names its
 own, and the syllabus lists them with the papers):
 
 | Tier | Main texts |

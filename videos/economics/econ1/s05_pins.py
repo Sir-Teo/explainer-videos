@@ -36,7 +36,6 @@ class Pins(VoiceoverScene):
             "three more operations, putting it on is another, whitening the pins another, and putting them into "
             "the paper is a trade by itself. <bookmark mark='c'/> In all, about eighteen distinct operations."
         ) as vo:
-            vo.wait_until("a")
             self.play(FadeIn(hc, shift=UP * 0.2), FadeIn(src))
             vo.wait_until("b")
             for b, a in zip(chain.boxes, list(chain.arrows) + [None]):

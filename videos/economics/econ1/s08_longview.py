@@ -121,7 +121,6 @@ class LongView(VoiceoverScene):
             "1820. Before 1800, a person lived in much the same economy as their great-great-grandparents. Now "
             "each generation lives in a different one."
         ) as vo:
-            vo.wait_until("a")
             self.play(Write(rows[0]))
             self.play(Write(rows[1]))
             vo.wait_until("b")

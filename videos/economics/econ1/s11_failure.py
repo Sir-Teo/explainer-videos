@@ -99,7 +99,6 @@ class Failure(VoiceoverScene):
             f"survey, they put the chance of a fall in output that quarter at {s['aug_recess_q4']:.0f} percent. "
             "They saw the risk. What they didn't see was its size."
         ) as vo:
-            vo.wait_until("a")
             self.play(FadeIn(cc.card), FadeIn(cc[1][0]), FadeIn(cc.left), FadeIn(src))
             vo.wait_until("b")
             self.play(FadeIn(cc.right))

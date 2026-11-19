@@ -435,7 +435,8 @@ part ends with the map of the series, sealed.
 optimum). The Tableau, sealed. The Island: Crusoe and Friday.
 *Play it:* the pit market; on the site, twelve rounds against zero-intelligence traders, with the price path.
 *Facts:* income per head was flat for millennia; double auctions converge.
-*Called it?* Smith on the pin factory's arithmetic against a modern count (Pratten 1980) (verify).
+*Called it?* the Survey of Professional Forecasters' call for 2009, made in November 2008 (built; the draft's
+call, Smith's pin arithmetic against a modern count, Pratten 1980, suits Part 8 better).
 *In practice:* the series' map of jobs (§2.8). *Frontier:* the boundary between markets and planning inside the
 economy (Coase 1937; Simon 1991, "Organizations and Markets").
 *Reading:* Smith 1776, Book I chs 1–3; Bastiat 1845; Hayek 1945; Chamberlin 1948; Smith 1962; Rodrik,
@@ -469,7 +470,8 @@ controls; the double auction with human-like, zero-intelligence and equilibrium 
 *Dials:* price elasticities of a few staples (gasoline, cigarettes, housing services). *Facts:* double auctions
 converge within a few rounds.
 *Called it?* Smith's own expectation that the competitive model would fail in his classroom.
-*Reading:* Marshall 1890, Book V; Smith 1962; Gode & Sunder 1993; Varian chs 1, 15–16; Mankiw chs 4–8.
+*Reading:* Marshall 1890, Book V; Smith 1962; Gode & Sunder 1993; Varian chs 1, 15–16; Mankiw chs 4–8;
+Krugman & Wells chs 3–5.
 
 ### Part 3 · The Measure (~55)
 *Question:* how do you put a number on an economy?
@@ -528,7 +530,8 @@ wrappers over statkit's `ols`, `quasi` and `causal`. `dials.py` and its first ro
 *Play it:* the cloud; on the site, choose an instrument from four candidates and see which recovers the truth.
 *Called it?* LaLonde's non-experimental estimates against the experiment.
 *Reading:* Working 1927; Wright 1928 (and Stock & Trebbi 2003); Haavelmo 1944; Leamer 1983; LaLonde 1986;
-Lucas 1976; Angrist & Pischke 2009, 2010; Deaton 2010; Heckman 2010; Nakamura & Steinsson 2018.
+Lucas 1976; Angrist & Pischke 2009, 2010; Deaton 2010; Heckman 2010; Nakamura & Steinsson 2018; Stock & Watson,
+*Introduction to Econometrics*, chs 1–3, 13; Acemoglu, Laibson & List ch 2.
 
 ## Act II · Choosing
 
@@ -555,7 +558,8 @@ runs on a grocery receipt.
 
 *Agora:* `consumer`: preferences, the constrained optimum, a GARP tester and Afriat's index.
 *Play it:* the eleven budgets; on the site, the same with a live consistency score (no rating of the player).
-*Reading:* Samuelson 1938; Afriat 1967; Varian 1982; Choi et al. 2007; Becker 1962; MWG chs 1–3; Kreps chs 1–4.
+*Reading:* Samuelson 1938; Afriat 1967; Varian 1982; Choi et al. 2007; Becker 1962; MWG chs 1–3; Kreps chs 1–4;
+Nicholson & Snyder chs 2–4; Jehle & Reny ch 1.
 
 ### Part 6 · Demand (~55)
 *Question:* when a price changes, what happens to what people buy and to how well off they are?
@@ -586,7 +590,7 @@ equation that explains it was written by Slutsky in 1915 and went unread for twe
 calculator, AIDS estimation on the Island's household survey.
 *Dials:* own-price and income elasticities of food, housing, energy. *Facts:* Engel's law; demand slopes down.
 *Reading:* Slutsky 1915; Hicks, *Value and Capital*; Jensen & Miller 2008; Deaton & Muellbauer, *Economics
-and Consumer Behavior*; Hausman 1981; MWG ch 3; Varian chs 5–9, 14.
+and Consumer Behavior*; Hausman 1981; MWG ch 3; Varian chs 5–9, 14; Nicholson & Snyder chs 5–6.
 
 ### Part 7 · Time and Risk (~56)
 *Question:* how do people choose when the pay-off comes later, or may not come at all?
@@ -678,7 +682,7 @@ order Radford saw can exist in any economy. What they could not prove is that an
 Newton and a simplicial method; Scarf's cycling economy. The whole Island cleared at once.
 *Facts:* the law of one price. *Called it?* the convergence theorem against Scarf's cycle.
 *Reading:* Radford 1945; Edgeworth 1881; Arrow & Debreu 1954; Debreu, *Theory of Value*; Scarf 1960, 1973;
-Hayek 1945; MWG chs 15–17, 19; Kreps chs 14–16.
+Hayek 1945; MWG chs 15–17, 19; Kreps chs 14–16; Jehle & Reny ch 5.
 
 ### Part 10 · The Price Maker (~54)
 *Question:* what does a seller do when the price is hers to set?
@@ -737,7 +741,7 @@ tournament, replicator dynamics, a level-k fitter.
 *Play it:* the guessing game; on the site, an Axelrod tournament the reader enters with a strategy.
 *Called it?* the Nash prediction for the guessing game (0) against the winning guess.
 *Reading:* Nash 1950, 1951; Schelling, *The Strategy of Conflict*; Selten 1965; Axelrod 1984; Nagel 1995;
-Osborne; Fudenberg & Tirole chs 1–5; Camerer, *Behavioral Game Theory*.
+Osborne; Osborne & Rubinstein; Fudenberg & Tirole chs 1–5; Camerer, *Behavioral Game Theory*.
 
 ### Part 12 · Competition among the Few (~55)
 *Question:* how do a handful of firms compete, and when do they stop?
@@ -1010,7 +1014,8 @@ Ramsey model solved by shooting and by time elimination. The Island gets capital
 *Dials:* capital's share; the speed of convergence. *Facts:* Kaldor's facts; conditional convergence.
 *Called it?* Solow-model forecasts for Asia; Samuelson's textbook on Soviet overtaking.
 *Reading:* Solow 1956, 1957; Ramsey 1928; Cass 1965; Mankiw, Romer & Weil 1992; Young 1995; Hall & Jones 1999;
-Jones & Vollrath, *Introduction to Economic Growth*; Acemoglu chs 2–3, 8; Romer chs 1–2.
+Jones & Vollrath, *Introduction to Economic Growth*; Jones, *Macroeconomics*, chs 4–6; Acemoglu chs 2–3, 8; Romer
+chs 1–2.
 
 ### Part 21 · Growth II: Ideas and Institutions (~58)
 *Question:* where does the growth that capital cannot explain come from?
@@ -1199,7 +1204,7 @@ with a balance sheet and a capital rule. The Island gets a bank.
 *Dials:* deposit betas; the output cost of a bank failure. *Called it?* the stress-test scenarios of 2022
 against 2023's rate shock.
 *Reading:* Diamond & Dybvig 1983; Bagehot, *Lombard Street*; Diamond 1984; Gorton & Metrick 2012; Morris &
-Shin 1998; Admati & Hellwig; Freixas & Rochet; Gorton, *Misunderstanding Financial Crises*.
+Shin 1998; Admati & Hellwig; Freixas & Rochet; Mishkin; Gorton, *Misunderstanding Financial Crises*.
 
 ### Part 27 · The Keynesian Revolution (~56)
 *Question:* how can a whole economy be short of buyers?
@@ -1950,7 +1955,8 @@ adjustable discounting and damages; a merit-order electricity market.
 of electricity demand; the output effect of a degree of warming.
 *Called it?* Simon against Ehrlich; solar-cost forecasts against outcomes.
 *Reading:* Hotelling 1931; Nordhaus 1992, 2008, 2015; Stern 2007; Weitzman 2009; Acemoglu et al. 2012; Burke,
-Hsiang & Miguel 2015; Borenstein, Bushnell & Wolak 2002; Hsiang & Kopp 2018; Sabin, *The Bet*.
+Hsiang & Miguel 2015; Borenstein, Bushnell & Wolak 2002; Hsiang & Kopp 2018; Sabin, *The Bet*; Nordhaus, *A Question
+of Balance*.
 
 ### Part 49 · The Economic Approach (~55)
 *Question:* how far can the model of choice under constraint be pushed into the rest of life?
@@ -2147,7 +2153,8 @@ Andrews–Gentzkow–Shapiro sensitivity matrix; every Island model can be hande
 *Called it?* McFadden's BART forecast; Todd and Wolpin's.
 *Reading:* McFadden 1974, 1989; Hansen 1982; Hansen & Singleton 1982; Rust 1987; Keane & Wolpin 1997;
 Gourinchas & Parker 2002; Chetty 2009; Andrews, Gentzkow & Shapiro 2017; Todd & Wolpin 2006; Train; Hayashi
-chs 3–4, 7; Low & Meghir 2017.
+chs 3–4, 7; Low & Meghir 2017; Wooldridge, *Econometric Analysis of Cross Section and Panel Data*; B. Hansen,
+*Econometrics*.
 
 ### Part 55 · Identifying Macro (~60)
 *Question:* with one history and no control group, how can anyone say what a policy did?
@@ -2247,7 +2254,7 @@ scorer; a recession-probability model. Reuses statkit `ts`.
 *Called it?* the whole part is the Called-it card.
 *Reading:* Giannone, Reichlin & Small 2008; Stock & Watson 2002, 2016; Diebold & Mariano 1995; Romer & Romer
 2000; Estrella & Mishkin 1998; Cavallo & Rigobon 2016; Baker, Bloom & Davis 2016; Gentzkow, Kelly & Taddy
-2019; Bernanke 2024.
+2019; Bernanke 2024; the Philadelphia Fed's Survey of Professional Forecasters.
 
 ### Part 58 · Scoring the Bill (~55)
 *Question:* how does a government decide whether a project or a law is worth it?
@@ -2751,7 +2758,7 @@ Young Economist*.
 
 | Part | Status | Notes |
 |---|---|---|
-| Phase 0 | the first slice built | `explainer/economics/`: Agora (`market`, `crusoe`, `signals`), the Island, the Facts, the Dials and their gate, Called it?, the Data Room (Maddison 2023, FRED, the Philadelphia Fed's forecasters, frozen 2026-11-18), the instruments, the score; the course entry, the lab kit and the game kit (`00_games.js`); `tests/economics/`. Still to come: `READING.md`, the soundcheck film, the Chinese text table and term guide |
+| Phase 0 | the first slice built | `explainer/economics/`: Agora (`market`, `crusoe`, `signals`), the Island, the Facts, the Dials and their gate, Called it?, the Data Room (Maddison 2023, FRED, the Philadelphia Fed's forecasters, frozen 2026-11-18), the instruments, the score; the course entry, the lab kit and the game kit (`00_games.js`); `tests/economics/`. `READING.md`, written from the syllabus and the parts (`videos/economics/reading.py`); the Chinese term guide (`ECONOMICS_ZH_GUIDE.md`). Still to come: the soundcheck film, the Chinese text table |
 | 1 | built, English | *Who Feeds Paris?* Every date, quotation and number checked against its source (see the part's README); the Chinese edition is next |
 
 **Corrections found while building Part 1** (the plan's draft, written from memory, against the sources): Bastiat's

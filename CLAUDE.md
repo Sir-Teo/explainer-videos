@@ -82,7 +82,10 @@ Manim videos with local neural narration. See README.md for layout and build com
   path; `--no-score` leaves it out). A part's intermission is a `SoundScene` that plays its data melody from the
   part's `ClipStore`. Dates and numbers in the syllabus are from memory until each part's frontier sweep; a built part's
   are checked against primary sources. The interactive of each part is a game on the kit `course/site/widgets/00_games.js`
-  (`QB.econ`), which stores and sends nothing.
+  (`QB.econ`), which stores and sends nothing. `videos/economics/READING.md` maps textbooks and papers to the parts
+  that plan them (the syllabus) and cite them (the built parts); it is written by `python -m videos.economics.reading`,
+  and `tests/economics/test_reading.py` fails when it is stale, so rerun it after adding a part. Chinese terms:
+  `videos/economics/ECONOMICS_ZH_GUIDE.md`.
 - *Psychology, Built* (`videos/psychology/`): sixty-two parts in thirteen acts (`psych1` … `psych62`: a degree,
   the graduate methods sequence, industry practice and a research tier); all sixty-two are built (Acts I to XIII and the capstone). The folders are `psychN` while
   the series key is `psychology` (`videos/coursekit.PREFIX`, and `prefix="psych"` in `tools/series_site.py`). The series

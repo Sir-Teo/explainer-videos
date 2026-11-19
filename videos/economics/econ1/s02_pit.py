@@ -70,8 +70,8 @@ class Pit(VoiceoverScene):
             "more than your card, and a seller may never sell for less than theirs. Each person trades at most one "
             "unit, and when trading dies down the market closes and opens again, six times, with the same cards. "
             "<bookmark mark='e'/> If you buy, you keep the difference between your card and the price. "
-            "<bookmark mark='f'/> This is the design of an experiment that Vernon Smith began running with his "
-            "students at Purdue in 1955, after Edward Chamberlin had run a looser version at Harvard."
+            "<bookmark mark='f'/> This is the design of an experiment that Vernon Smith first ran with his "
+            "students at Purdue in January 1956, after Edward Chamberlin had run a looser version at Harvard."
         ) as vo:
             self.play(FadeIn(stage))
             vo.wait_until("a")
@@ -250,7 +250,6 @@ class Pit(VoiceoverScene):
             f"people could make. In the last period you paid {money_words(mine)}, and kept "
             f"{money_words(d['viewer_value'] - mine)}."
         ) as vo:
-            vo.wait_until("a")
             self.play(FadeIn(b_cards, lag_ratio=0.08), FadeIn(s_cards, lag_ratio=0.08), run_time=2)
             vo.wait_until("b")
             self.play(FadeIn(ax))
@@ -269,7 +268,7 @@ class Pit(VoiceoverScene):
                         [(r"rules", r"bargain in pairs, wandering the room; one round"),
                          (r"found", r"more units traded than the competitive six, at scattered prices")],
                         design="lab", width=6.2, font_size=22).to_corner(UL, buff=0.4)
-        sm = study_card(r"Smith's market (1962)", r"Purdue students, from 1955",
+        sm = study_card(r"Smith's market (1962)", r"Purdue students, from 1956",
                         [(r"rules", r"every bid and offer called out to everyone; the market reopens"),
                          (r"found", r"prices converge on the crossing within a few periods")],
                         design="lab", width=6.2, font_size=22).to_corner(UR, buff=0.4)
@@ -317,7 +316,6 @@ class Pit(VoiceoverScene):
             f"capture {100 * d['zip_eff_last']:.1f} percent. The institution gives you most of the efficiency; the "
             "learning gives you the price."
         ) as vo:
-            vo.wait_until("a")
             self.play(FadeIn(ch, shift=RIGHT * 0.2))
             vo.wait_until("b")
             self.play(FadeIn(sm, shift=LEFT * 0.2))

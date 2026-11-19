@@ -18,13 +18,15 @@
       panels: 2, height: 310,
       controls: [
         { k: "bid", label: "Your price", min: 1.0, max: 2.7, step: 0.05, value: 2.3, fmt: function (x) { return "$" + x.toFixed(2); } },
-        { k: "kind", label: "The other traders (0 learn, 1 random)", min: 0, max: 1, step: 1, value: 0,
-          fmt: function (x) { return x ? "zero intelligence" : "learning"; } },
         { k: "periods", label: "Periods", min: 1, max: 10, step: 1, value: 6 },
       ],
-      buttons: [{ label: "New market (reshuffle who calls when)", act: function (s) { s.seed = (s.seed * 7919 + 13) % 100003 || 1; } }],
+      buttons: [
+        { label: "The others learn (Cliff's traders)", act: function (s) { s.zi = false; } },
+        { label: "The others bid at random (zero intelligence)", act: function (s) { s.zi = true; } },
+        { label: "New market (reshuffle who calls when)", act: function (s) { s.seed = (s.seed * 7919 + 13) % 100003 || 1; } },
+      ],
       draw: function (g, v, s) {
-        var res = QB.econ.auction(mkt, { kind: v.kind ? "zi" : "zip", periods: v.periods, seed: s.seed, human: YOU, bid: v.bid });
+        var res = QB.econ.auction(mkt, { kind: s.zi ? "zi" : "zip", periods: v.periods, seed: s.seed, human: YOU, bid: v.bid });
         var xs = [], ys = [], mineX = [], mineY = [], seps = [], x = 0.5, i, k;
         for (k = 0; k < res.length; k++) {
           if (k) seps.push(x - 0.75);
@@ -42,7 +44,9 @@
         a.dots(xs, ys, { color: C.ink, r: 3 });
         a.dots(mineX, mineY, { color: GOLD, r: 5 });
         a.hline(v.bid, { color: GOLD, dash: [2, 3] });
-        a.legend([["a deal", C.ink], ["your deal", GOLD], ["the band $2.20 to $2.30", GOLD]], { pos: "tr" });
+        a.text(xmax - 0.3, mkt.lo - 0.1, "the competitive band, $" + mkt.lo.toFixed(2) + " to $" + mkt.hi.toFixed(2),
+               { color: GOLD, align: "right", size: 11, bg: true });
+        a.legend([["a deal", C.ink], ["your deal", GOLD]], { pos: "tr" });
         // the cards as staircases
         var b = g[1].axes({ x: [0, 10], y: [1, 3.5], title: "The cards: demand (blue) and supply (amber)", xlabel: "how many units" });
         var dx = [], dy = [], sx = [], sy = [];
@@ -53,12 +57,12 @@
         b.text(9.8, v.bid + 0.08, "your price", { color: GOLD, align: "right", size: 11 });
         var last = res[res.length - 1], earned = 0, n = 0;
         for (k = 0; k < res.length; k++) if (res[k].mine !== null) { earned += VALUES[YOU] - res[k].mine; n++; }
-        s.out = { alpha: last.alpha, eff: last.efficiency, n: n, periods: res.length, earned: earned,
+        s.out = { zi: !!s.zi, alpha: last.alpha, eff: last.efficiency, n: n, periods: res.length, earned: earned,
                   mean: last.prices.length ? QB.mean(last.prices) : 0 };
       },
       readout: function (v, s) {
         var o = s.out;
-        return [["you traded in", o.n + " of " + o.periods + " periods"], ["you kept", "$" + fmt(o.earned, 2)],
+        return [["the others", o.zi ? "bid at random" : "learn"], ["you traded in", o.n + " of " + o.periods + " periods"], ["you kept, all periods", "$" + fmt(o.earned, 2)],
                 ["last period: mean price", o.mean ? "$" + fmt(o.mean, 2) : "no deals"], ["Smith's alpha", fmt(o.alpha, 1) + "%"],
                 ["share of the possible gain", QB.pct(o.eff, 0)]];
       },

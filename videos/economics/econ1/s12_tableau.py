@@ -77,7 +77,6 @@ class Tableau(VoiceoverScene):
             "back as investment and government spending. About a dozen of these machines were built, and they "
             "were used to teach economics for years."
         ) as vo:
-            vo.wait_until("a")
             self.play(FadeIn(qc, shift=UP * 0.2), FadeIn(tag))
             self.play(FadeIn(z.submobjects[0]), LaggedStart(*[Create(x) for x in z.lines], lag_ratio=0.5),
                       run_time=3)

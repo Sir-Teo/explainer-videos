@@ -38,7 +38,6 @@ class Prices(VoiceoverScene):
             "tin they used to consume is now more valuable somewhere else, and that, in consequence, they must "
             "economize tin."
         ) as vo:
-            vo.wait_until("a")
             self.play(FadeIn(hc, shift=UP * 0.2), FadeIn(src))
             vo.wait_until("b")
             self.play(FadeIn(q, shift=UP * 0.2))
