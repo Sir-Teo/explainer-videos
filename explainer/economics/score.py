@@ -355,6 +355,9 @@ def is_intermission(scene: dict) -> bool:
     return (scene.get("cls") == "Intermission") or (scene.get("chapter") or "").lower().startswith("intermission")
 
 
+UNDER_VOICE = -1.5   # dB, for the cues that sound under narration
+
+
 def cues(timeline, cache: Path, part: int | None = None) -> list[dict]:
     """The score for one film.  ``timeline``: the scenes in order, each ``{"cls", "chapter", "start", "duration",
     "lines"}`` (``start`` in film time; the lines' times within the scene).  Returns the music-stem cues."""
@@ -363,27 +366,30 @@ def cues(timeline, cache: Path, part: int | None = None) -> list[dict]:
     root = Path(cache) / VERSION / f"act{act}"
     out = []
 
-    def cue(name, make, start):
+    def cue(name, make, start, gain_db=0.0):
         p = root / f"{name}.wav"
         y = make() if not p.exists() else None
         _write(y, p) if y is not None else None
         from explainer.music.monochord.audio import Clip
 
         dur = Clip.read(p).duration
-        out.append({"path": str(p), "start": float(start), "gain_db": 0.0, "duration": dur, "underscore": True,
+        out.append({"path": str(p), "start": float(start), "gain_db": gain_db, "duration": dur, "underscore": True,
                     "label": f"score: {name}"})
 
     if not timeline:
         return out
     numbered = [k for k, s in enumerate(timeline) if re.match(r"\s*\d+\.", s.get("chapter") or "")]
-    cue("theme", lambda: theme(act), timeline[0]["start"])
+    # the theme and the chapter stings sound under narration (the cold open's first line, each chapter card's), so
+    # they sit UNDER_VOICE dB lower than the beds, which play only in pauses: the mix then stays under the build's
+    # true-peak ceiling whatever syllable they meet
+    cue("theme", lambda: theme(act), timeline[0]["start"], UNDER_VOICE)
     for k, s in enumerate(timeline):
         head = 8.5 if k == 0 else 0.0
         if k in numbered:
             j = numbered.index(k) + 1
             prog = j / (len(numbered) + 1)
             d, sp = blades(prog)
-            cue(f"sting_{d}_{sp}", lambda prog=prog: sting(prog, act), s["start"] + 0.05)
+            cue(f"sting_{d}_{sp}", lambda prog=prog: sting(prog, act), s["start"] + 0.05, UNDER_VOICE)
             head = 3.4
         if is_intermission(s):
             continue  # the intermission plays its own data melody, from its cue sheet
