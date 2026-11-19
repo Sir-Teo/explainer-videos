@@ -99,7 +99,7 @@ class Tradeoff(VoiceoverScene):
                   color=RISK),
             label(r"franchised outlets in riskier places, \ executives of volatile firms: \ often more pay "
                   r"for results, \ not less", font_size=22, color=GREY_A),
-            label(r"his explanation: \ where things are uncertain, \ the principal can't tell the agent what to do",
+            label(r"Prendergast's explanation: \ where things are uncertain, \ the principal can't tell the agent what to do",
                   font_size=23, color=SIGNAL),
             label(r"so it delegates, \ and pays on results \ because watching inputs tells little there", font_size=23,
                   color=SIGNAL),

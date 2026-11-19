@@ -514,6 +514,28 @@ brackets on screen.
 | specification gaming; reward model overoptimization; Goodhart's law | 规格博弈（钻规则空子）；奖励模型过度优化；古德哈特定律 |
 | Xiaogang village, Fengyang county, Anhui | 安徽省凤阳县小岗村 |
 
+## Part 15
+
+| English | 中文 |
+|---|---|
+| externality; spillover; negative / positive externality | 外部性；溢出效应；负 / 正外部性 |
+| private cost; social cost; marginal damage | 私人成本；社会成本；边际损害 |
+| Pigouvian tax; Pigouvian subsidy | 庇古税；庇古补贴 |
+| the Coase theorem; transaction costs; liability rule; property rights | 科斯定理；交易成本；责任规则；产权 |
+| pollination fee; apiary rent | 授粉费；蜂场租金 |
+| public good; club good; common resource; rival; excludable | 公共品；俱乐部品；共有资源；竞争性；排他性 |
+| Samuelson condition; Lindahl prices; free rider | 萨缪尔森条件；林达尔价格；搭便车者 |
+| voluntary contribution game; conditional cooperator; antisocial punishment | 自愿捐献博弈；条件合作者；反社会惩罚 |
+| tragedy of the commons; open access; rent dissipation; maximum sustainable yield | 公地悲剧；开放获取；租金耗散；最大可持续产量 |
+| design principles (Ostrom) | 设计原则（奥斯特罗姆） |
+| cap and trade; emission allowance; banking | 总量管制与交易；排放配额；配额储存 |
+| prices versus quantities | 价格还是数量 |
+| congestion pricing; bottleneck model; schedule delay | 拥堵收费；瓶颈模型；时刻延误 |
+| network externality; lock-in; path dependence | 网络外部性；锁定；路径依赖 |
+| knowledge spillover | 知识溢出 |
+| the fundamental law of road congestion; induced demand | 道路拥堵基本定律；诱发需求 |
+| acid rain; sulphur dioxide | 酸雨；二氧化硫 |
+
 ## Names
 
 | English | 中文 |
@@ -713,3 +735,12 @@ brackets on screen.
 | George Baker; Jonathan Levin; Rebecca Henderson | 乔治·贝克；乔纳森·莱文；丽贝卡·亨德森 |
 | Dylan Hadfield-Menell; Gillian Hadfield; Leo Gao; John Schulman; Jacob Hilton | 迪伦·哈德菲尔德-梅内尔；吉莉恩·哈德菲尔德；Leo Gao（中文名未核实）；约翰·舒尔曼；雅各布·希尔顿 |
 | Charles Goodhart; Marilyn Strathern | 查尔斯·古德哈特；玛丽琳·斯特拉森 |
+| James Meade; Arthur Pigou; Ronald Coase; Steven Cheung | 詹姆斯·米德；阿瑟·庇古；罗纳德·科斯；张五常 |
+| Paul Samuelson; Erik Lindahl; Scott Gordon; Garrett Hardin; Elinor Ostrom | 保罗·萨缪尔森；埃里克·林达尔；斯科特·戈登；加勒特·哈丁；埃莉诺·奥斯特罗姆 |
+| Simon Gächter; Urs Fischbacher; Benedikt Herrmann; Christian Thöni | 西蒙·加希特；乌尔斯·菲施巴赫尔；贝内迪克特·赫尔曼；克里斯蒂安·特尼 |
+| John Dales; David Montgomery; Richard Schmalensee; Robert Stavins; Paul Portney | 约翰·戴尔斯；戴维·蒙哥马利；理查德·施马伦西；罗伯特·斯塔文斯；保罗·波特尼 |
+| Martin Weitzman; William Pizer; Marc Roberts | 马丁·韦茨曼；威廉·派泽；马克·罗伯茨 |
+| William Vickrey; Richard Arnott; André de Palma; Robin Lindsey; Jonas Eliasson | 威廉·维克里；理查德·阿诺特；安德烈·德帕尔马；罗宾·林赛；约纳斯·埃利亚松 |
+| Gilles Duranton; Matthew Turner; Jeffrey Rohlfs; Brian Arthur; Paul David | 吉勒·迪朗通；马修·特纳；杰弗里·罗尔夫斯；布莱恩·阿瑟；保罗·戴维 |
+| Stan Liebowitz; Stephen Margolis; Adam Jaffe; Manuel Trajtenberg | 斯坦·利博维茨；斯蒂芬·马戈利斯；亚当·贾菲；曼努埃尔·特拉滕伯格 |
+| Kenneth Chay; Michael Greenstone; Janet Currie; Reed Walker; Tatyana Deryugina | 肯尼斯·蔡；迈克尔·格林斯通；珍妮特·柯里；里德·沃克；塔季扬娜·杰留吉娜 |

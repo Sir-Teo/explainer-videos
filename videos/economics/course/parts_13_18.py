@@ -103,4 +103,53 @@ PARTS = [
               ("The Island's planted truths", "explainer/economics/island.py"),
               ("The Data Room's sources", "explainer/economics/data/SOURCES.md")),
     ),
+    Part(
+        n=15, level="U", widget="pot", prereq=(2, 9, 11, 14),
+        question="What happens when my choice lands on you, and nobody pays?",
+        story="The part opens with James Meade's orchard and beekeeper of 1952, the textbook's example of a benefit no "
+              "market could price, and Steven Cheung's 1972 survey of Washington's beekeepers, who had been paid "
+              "pollination fees, or paid apiary rents, for decades. The viewer plays the shared pot, then meets the "
+              "wedge between private and social cost (Bo's kiln and Ana's fish), Pigou's tax and the efficient amount "
+              "of smoke, Coase's cattle and corn from his own table, with bargaining and transaction costs, Cheung's "
+              "rents per hive, and public goods with Samuelson's condition, Lindahl's prices and the lighthouse. After "
+              "an intermission of a century of sulphur dioxide, free riding measured (conditional cooperators, "
+              "punishment and antisocial punishment), the commons from Gordon and Hardin to the cod collapse and "
+              "Ostrom's design principles, permits and the acid-rain market with Called it? on its forecast benefits, "
+              "prices against quantities, Vickrey's bottleneck and Stockholm's charge, networks, lock-in and ideas, a "
+              "new dial on whether new roads fill, the toolkit in use, and a frontier on measuring the damage.",
+        handoff="Parts 16-17 turn to markets designed on purpose; Part 21 to ideas and growth; Part 37 to cities; Parts "
+                "41-42 to taxes and public goods; Part 44 to platforms; Part 47 to collective action; Part 48 to climate; "
+                "Part 58 to cost-benefit analysis.",
+        outside="Part 2: supply, demand and surplus; Part 9: the first welfare theorem; Part 11: the prisoner's dilemma "
+                "and repeated games; Part 14: contracts. Chapter 8 uses logistic growth; chapter 10 expected values of "
+                "squared normal shocks; chapter 11 piecewise-linear costs over the rush hour.",
+        objectives={
+            "U": ["Explain externalities as a wedge between private and social cost, and find the market and efficient "
+                  "outputs and the deadweight loss.",
+                  "Explain Pigou's tax, the Coase theorem and its dependence on transaction costs, and why the efficient "
+                  "amount of pollution is not zero.",
+                  "Classify goods by rivalry and excludability, and explain free riding, the commons and Ostrom's "
+                  "design principles."],
+            "M": ["Derive Samuelson's condition, voluntary provision and Lindahl prices for a public good.",
+                  "Solve Gordon's fishery for open-access, maximum-economic and maximum-sustainable effort.",
+                  "Derive Weitzman's comparison of prices and quantities, and Vickrey's bottleneck equilibrium and "
+                  "toll."],
+            "D": ["Read the evidence on permit markets, congestion charges and induced traffic, and design studies that "
+                  "measure damages (natural experiments, instruments)."],
+            "I": ["Design a tax, a cap-and-trade market or a road charge, and judge its distributional and political "
+                  "costs."],
+        },
+        results=[
+            ("Market and efficient output", r"P(Q) = MC_{\text{private}}(Q) \quad\text{vs}\quad P(Q) = MC(Q) + MD(Q)"),
+            ("Pigou's tax", r"t^* = MD(Q^*)"),
+            ("Samuelson's condition", r"\textstyle\sum_i MB_i(G) = MC(G)"),
+            ("Open-access fishing effort", r"E_{oa} = \tfrac{r}{q}\left(1 - \tfrac{c}{pqK}\right)"),
+            ("Prices against quantities", r"\Delta = \tfrac{\sigma^2 (C'' - B'')}{2 C''^2}"),
+            ("Bottleneck cost per commuter", r"\delta N / s,\ \ \delta = \tfrac{\beta\gamma}{\beta + \gamma}"),
+        ],
+        U=(0, 1, 2, 3, 4, 5, 6, "s08_intermission", 7, 8, 9, 11, 12), D=(13, 15), I=(14,),
+        also=(("Agora's spillovers module", "explainer/economics/agora/public.py"),
+              ("The Island's planted truths", "explainer/economics/island.py"),
+              ("The Data Room's sources", "explainer/economics/data/SOURCES.md")),
+    ),
 ]

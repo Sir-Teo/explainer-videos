@@ -256,6 +256,23 @@ DATASETS = {
         "sha256": "2f38e76406e3de5e726cf7d5026af345776afeb6f46cf5ceef22fbc01ddc36ea",
         "files": ("warheads_1945_2026.csv",),
     },
+    "so2": {
+        "title": "Sulphur dioxide emissions from all sectors, by country and region, 1900-2022",
+        "publisher": "Community Emissions Data System (Hoesly et al. 2024); Our World in Data (compilation)",
+        "citation": "R. M. Hoesly et al. (2024), Community Emissions Data System (CEDS) v_2024_07_08, with minor "
+                    "processing by Our World in Data, grapher so-emissions-by-world-region-in-million-tonnes, "
+                    "retrieved 2026-11-19",
+        "short": "CEDS (Hoesly et al. 2024), via Our World in Data",
+        "url": "https://ourworldindata.org/grapher/so-emissions-by-world-region-in-million-tonnes.csv?v=1&"
+               "csvType=full&useColumnShortNames=true",
+        "licence": "CC BY 4.0 (Our World in Data and CEDS)",
+        "units": "tonnes of SO2 a year",
+        "vintage": "2026-11-19",
+        "sha256": "8465848ae578ec07c5636ca207d470bf99551fa72b7e0fcb9ea77d691a3a519c",
+        "entities": ("World", "United States", "United Kingdom", "China", "India", "Germany", "Japan", "Europe",
+                     "Asia", "North America", "Africa", "South America"),
+        "files": ("so2_1900_2022.csv",),
+    },
     "draft1970": {
         "title": "The draft lottery of 1 December 1969 (for men born 1944-50): the rank drawn for each birthday",
         "publisher": "U.S. Selective Service System; as tabulated by the Journal of Statistics Education data archive",
@@ -802,9 +819,35 @@ def refresh_warheads() -> None:
             w.writerow([r["entity"], r["code"], r["year"], r["number_of_warheads"]])
 
 
+@functools.lru_cache(maxsize=None)
+def so2(entity: str) -> dict:
+    """Sulphur dioxide emissions, tonnes a year, 1900-2022, for one of the entities kept in the extract (as Our World
+    in Data names them: "World", "United States", "China", ...): ``{"year": [...], "value": [...]}``."""
+    rows = [r for r in _read(HERE / "so2_1900_2022.csv") if r["entity"] == entity]
+    if not rows:
+        raise KeyError(entity)
+    return {"year": [int(r["year"]) for r in rows], "value": [float(r["so2_tonnes"]) for r in rows]}
+
+
+def refresh_so2() -> None:
+    d = DATASETS["so2"]
+    raw = RAW / "so-emissions-by-world-region.csv"
+    sha = _download(d["url"], raw)
+    if d.get("sha256") and sha != d["sha256"]:
+        print(f"so2: the download differs from the recorded vintage ({sha[:12]} vs {d['sha256'][:12]})")
+    print(f"so2: sha256 {sha}")
+    with open(raw, newline="", encoding="utf-8") as f:
+        rows = [r for r in csv.DictReader(f) if r["entity"] in d["entities"] and int(r["year"]) >= 1900]
+    with open(HERE / "so2_1900_2022.csv", "w", newline="", encoding="utf-8") as f:
+        w = csv.writer(f)
+        w.writerow(["entity", "code", "year", "so2_tonnes"])
+        for r in rows:
+            w.writerow([r["entity"], r["code"], r["year"], r["emissions__pollutant_so2__sector_all_sectors"]])
+
+
 REFRESH = {"draft1970": refresh_draft1970, "maddison2023": refresh_maddison, "fred": refresh_fred, "spf": refresh_spf,
            "pinksheet": refresh_pinksheet, "psd_coffee": refresh_psd_coffee, "wdi": refresh_wdi, "hdr": refresh_hdr,
-           "rtdsm": refresh_rtdsm, "warheads": refresh_warheads}
+           "rtdsm": refresh_rtdsm, "warheads": refresh_warheads, "so2": refresh_so2}
 
 
 def main() -> None:

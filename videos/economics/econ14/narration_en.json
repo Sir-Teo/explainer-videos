@@ -1,0 +1,12 @@
+{
+ "video": "econ14",
+ "note": "Rendered English narration of the chapters whose numbers are computed at render time, written by tools/lecture_text.py --record; the course site fills those numbers in from here.",
+ "lines": {
+  "Backfire": [
+   "Chapter twelve. When incentives backfire.",
+   "Part one began with a fine. Ten day-care centres in Haifa, and parents who came late to collect their children. In six of them, chosen at random, a small fine for lateness was introduced; before it, they had about 8 late pick-ups a week. With the fine, late pick-ups doubled. And when the fine was taken away, they stayed high, and if anything rose. Before, a late parent felt they owed the teacher something. The fine turned that debt into a price, and a cheap one, and once the parents had learnt that lateness was something one could simply pay for, removing the price did not bring the guilt back.",
+   "Haifa is not alone. In 1993 two Swiss communities were named as possible sites for a store of radioactive waste. Bruno Frey and Felix Oberholzer-Gee asked residents whether they would accept it. Just over half said yes. Then they asked whether they would accept it if every resident were paid, thousands of dollars a year each. Acceptance fell to a quarter. The money made it look like a bribe for a danger, where before it had been a civic duty. In 2000 Gneezy and Rustichini paid people a token sum for each right answer in a quiz, and they got fewer right than people paid nothing. Students collecting for charity raised less with a one percent commission than with none. A larger payment did better than the token one; their title gave the advice: pay enough or don't pay at all. A small payment can do worse than none, because it changes what the act means.",
+   "Why does this happen? In 2003 Roland Bénabou and Jean Tirole argued that an incentive is also a message. A principal who pays for a task reveals something: that the task is unpleasant, or that the agent can't otherwise be trusted to do it. And people do good partly to be seen as good, so paying them muddies the signal: the volunteer who is paid can no longer show that they volunteered. Underneath both is the fact that no contract can list everything, and what it leaves out is governed by norms. A price can push a norm out, and the norm may not come back. So the incentive contracts of this part work best where the task is narrow, the measure is good, and the norm they would replace is weak."
+  ]
+ }
+}

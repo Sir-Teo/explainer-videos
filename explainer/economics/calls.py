@@ -134,6 +134,16 @@ CALLS = {c.key: c for c in [
          ("G. A. Akerlof, Quarterly Journal of Economics 84(3) (1970), the section \"Counteracting Institutions\"",
           "G. A. Akerlof, \"Writing 'The Market for Lemons'\" (2003), as excerpted",
           "The Nobel Foundation, the 2001 prize in economic sciences")),
+    Call("acid_rain_benefits", 15, "Paul Portney and other analysts of the 1990 Clean Air Act Amendments",
+         "1990", "the acid-rain programme's benefits would be roughly equal to its costs",
+         "the damage of acid rain to lakes, forests and buildings, valued against the cost of cutting sulphur emissions",
+         "by Schmalensee and Stavins's tally, the programme's annual benefits came to $59 to $116 billion against costs "
+         "of $0.5 to $2 billion, more than 95 percent of the benefits from fewer fine particles in the air people "
+         "breathe, which nobody had counted; the ecological benefits alone were probably smaller than the costs",
+         "wrong",
+         ("P. R. Portney, \"Economics and the Clean Air Act\", Journal of Economic Perspectives 4(4) (1990): 173-181, "
+          "as cited by Schmalensee and Stavins",
+          "R. Schmalensee and R. N. Stavins, Journal of Economic Perspectives 27(1) (2013): 103-122, Table 1")),
     Call("multitask_tests", 14, "Bengt Holmström and Paul Milgrom, \"Multitask Principal-Agent Analyses\" (1991)",
          "1991", "when only some of a job's tasks can be measured, strong pay for the measured ones pulls effort away "
          "from the rest; so where measures are narrow, incentives should be weak",

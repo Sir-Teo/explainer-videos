@@ -1600,6 +1600,87 @@ CROWDING = Table(
 PART14 = (LAZEAR_2000, PIECE_RATES, INCENTIVE_CASES, TENANCY, CROWDING)
 
 
+COASE_1960 = Table(
+    key="coase_1960",
+    cite="R. H. Coase, \"The Problem of Social Cost\", Journal of Law and Economics 3 (1960): 1-44",
+    tag="Coase, JLE 3 (1960)",
+    where="pp. 3 and 6-7: the arithmetical example and the bargain over the third steer",
+    read="the article (University of Chicago Law School's copy)",
+    checked="2026-11-19",
+    data={"steers": (1, 2, 3, 4), "crop_loss_tons": (1, 3, 6, 10), "marginal_loss": (1, 2, 3, 4),
+          "crop_price": 1.0, "fence": 9.0,
+          "bargain": "with a herd of 3, the farmer would pay up to $3 to cut it to 2, up to $5 for 1, up to $6 to end "
+                     "cattle-raising"},
+)
+
+CHEUNG_1973 = Table(
+    key="cheung_1973",
+    cite="Steven N. S. Cheung, \"The Fable of the Bees: An Economic Investigation\", Journal of Law and Economics "
+         "16(1) (1973): 11-33",
+    tag="Cheung, JLE 16(1) (1973)",
+    where="the survey (p. 16) and the decomposition of the rent per hive (pp. 25-27)",
+    read="the article",
+    checked="2026-11-19",
+    data={"survey": "spring 1972: nine beekeepers, about 10,000 spring colonies, in Washington State",
+          "state": "about 60 beekeepers with 100 colonies or more; about 90,000 colonies at the peak",
+          "crops": {"cherry": "pollination, no surplus honey", "mint": "honey, no pollination needed",
+                    "alfalfa": "both"},
+          "pollination_season": {"total": 9.65, "money": 9.02, "nectar": 0.64, "n": 13},
+          "honey_season": {"total": 8.07, "money": 1.30, "nectar": 6.77, "n": 23},
+          "corr_money_nectar": -0.973, "apple": "apple blossoms yield little or no surplus honey"},
+    note="Rents per hive per crop season, dollars of 1971; the money fee is negative (an apiary rent paid by the "
+         "beekeeper) for some honey crops.",
+)
+
+ACID_RAIN = Table(
+    key="acid_rain",
+    cite="Richard Schmalensee and Robert N. Stavins, \"The SO2 Allowance Trading System: The Ironic History of a "
+         "Grand Policy Experiment\", Journal of Economic Perspectives 27(1) (2013): 103-122 (NBER Working Paper 18306)",
+    tag="Schmalensee and Stavins, JEP 27(1) (2013)",
+    where="the working paper's text and Table 1",
+    read="NBER Working Paper 18306",
+    checked="2026-11-19",
+    data={"utility_so2_mt": {1990: 15.9, 2004: 10.2, 2010: 5.1}, "goal_mt": 8.95, "goal_year": 2007,
+          "coal_generation_rise_1990_2004": 0.25, "fine_per_ton": 2000, "savings_vs_command": (0.15, 0.90),
+          "benefits_bn": (59, 116), "costs_bn": (0.5, 2.0), "health_share": 0.95,
+          "prices": {"2004 auction": 273, "2005 auction": 703, "2005 peak": 1200, "11 July 2008, before": 315,
+                     "11 July 2008, after": 115, "2008 auction": 390, "2009 auction": 70, "2012 spot auction": 0.56,
+                     "2012 seven-year advance": 0.12},
+          "portney": "some studies at enactment predicted benefits about equal to costs (Portney 1990)"},
+)
+
+ROADS = Table(
+    key="roads",
+    cite="Gilles Duranton and Matthew A. Turner, \"The Fundamental Law of Road Congestion: Evidence from US Cities\", "
+         "American Economic Review 101(6) (2011): 2616-2652; Jonas Eliasson and others on the Stockholm trial "
+         "(Transportation Research Part A 43(3) (2009): 240-250), as summarized",
+    tag="Duranton and Turner, AER 101(6) (2011)",
+    where="Duranton and Turner: the abstract, Table 3 (pooled OLS, 0.86) and Table 5 (TSLS, panel A); Stockholm: "
+          "secondary summaries of Eliasson et al.",
+    read="the authors' copy of Duranton and Turner; summaries of the Stockholm evaluation",
+    checked="2026-11-19",
+    data={"ols": 0.86, "iv": 1.03, "iv_se": 0.11, "iv_range": (0.92, 1.04),
+          "instruments": "1835 exploration routes, 1898 railroads, the 1947 interstate plan",
+          "stockholm_trial": "January to July 2006", "stockholm_traffic": -0.22, "stockholm_yes_city": 0.53,
+          "stockholm_permanent": 2007},
+    note="Stockholm: the cordon traffic fall (about a fifth) and the city's 53% vote are from summaries of the "
+         "official evaluation, not re-read; the county as a whole voted no.",
+)
+
+CURRIE_WALKER_2011 = Table(
+    key="currie_walker_2011",
+    cite="Janet Currie and Reed Walker, \"Traffic Congestion and Infant Health: Evidence from E-ZPass\", American "
+         "Economic Journal: Applied Economics 3(1) (2011): 65-90",
+    tag="Currie and Walker, AEJ: Applied 3(1) (2011)",
+    where="the abstract",
+    read="the abstract and the NBER working paper (15413)",
+    checked="2026-11-19",
+    data={"prematurity": -0.108, "low_birth_weight": -0.118, "near_km": 2, "control_km": (2, 10)},
+)
+
+PART15 = (COASE_1960, CHEUNG_1973, ACID_RAIN, ROADS, CURRIE_WALKER_2011)
+
+
 PART7 = (BERNOULLI_1738, SAMUELSON_1937, ALLAIS_1953, ELLSBERG_1961, RABIN_2000, THALER_1981, HOLT_LAURY_2005,
          HAYDEN_PLATT_2009, MADRIAN_SHEA_2001, THALER_BENARTZI_2004, BARSKY_1997, POST_2008, MEHRA_PRESCOTT_1985)
-ALL = {t.key: t for t in (*PART1, *PART3, *PART4, *PART5, *PART6, *PART7, *PART8, *PART9, *PART10, *PART11, *PART12, *PART13, *PART14)}
+ALL = {t.key: t for t in (*PART1, *PART3, *PART4, *PART5, *PART6, *PART7, *PART8, *PART9, *PART10, *PART11, *PART12, *PART13, *PART14, *PART15)}

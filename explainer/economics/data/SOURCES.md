@@ -33,6 +33,7 @@ film that moves to a new vintage says so on screen.
 | `wdi_2015_2025.csv` | World Development Indicators for the 217 economies (not aggregates), 2015-2025: GDP and GDP per head at market exchange rates (current US dollars) and at purchasing power parity (current international dollars), population, Gini index; with each economy's region and income group | World Bank (API, last updated 11 November 2026) | CC BY 4.0 | 2026-11-19 |
 | `hdr2025_1990_2023.csv` | Human Development Report 2025, composite indices time series: the HDI, life expectancy, expected and mean years of schooling, GNI per head (2021 PPP dollars), 1990-2023, for the 195 countries (aggregates dropped) | UNDP Human Development Report Office | CC BY 3.0 IGO | 2026-11-19 |
 | `warheads_1945_2026.csv` | estimated nuclear warhead stockpiles by country (military stockpiles; retired warheads queued for dismantlement excluded), 1945-2026 | Federation of American Scientists, "Estimated Global Nuclear Warhead Inventories", via Our World in Data (nuclear-warhead-stockpiles, updated 2026-05-13) | CC BY 4.0 (Our World in Data); FAS estimates cited | 2026-11-19 |
+| `so2_1900_2022.csv` | sulphur dioxide emissions from all sectors, tonnes a year, 1900-2022, for the world, five regions and six countries (United States, United Kingdom, China, India, Germany, Japan) | Community Emissions Data System v_2024_07_08 (Hoesly et al. 2024), via Our World in Data (grapher so-emissions-by-world-region-in-million-tonnes) | CC BY 4.0 | 2026-11-19 |
 | `draft1970.csv` | the draft lottery of 1 December 1969: the rank drawn for each of the 366 birthdays (day, month, rank) | U.S. Selective Service System, via the Journal of Statistics Education's data archive (Starr 1997, `draft70yr.dat`) | public record; JSE tabulation free for education | 2026-11-19 |
 | `rtdsm_2006_2010.csv` | real GDP for 2006Q1-2010Q4 as reported by every quarterly vintage from 2007Q1 to 2026Q4 | Federal Reserve Bank of Philadelphia, Real-Time Data Set for Macroeconomists (ROUTPUT) | free with attribution | 2026-11-19 |
 | `rtdsm_first_latest.csv` | for every quarter from 1965Q4: annualized real GDP growth in the first vintage that reported it and in the latest (2026Q4), computed from the same workbook | as above | free with attribution | 2026-11-19 |
@@ -142,3 +143,8 @@ publication, the copy that was read and the date the transcription was checked:
 | `incentive_cases` | Ford's five-dollar day, China's rural reform and teacher cheating in Chicago | 2026-11-19 |
 | `tenancy` | Tenancy reform in West Bengal (Operation Barga) and sharecropped against owned plots in India | 2026-11-19 |
 | `crowding` | Frey and Oberholzer-Gee's Swiss survey: accepting a nuclear-waste repository with and without compensation | 2026-11-19 |
+| `coase_1960` | Coase's steers and crops: the arithmetical example and the bargain | 2026-11-19 |
+| `cheung_1973` | Cheung's beekeepers: the rent per hive in money and in nectar, by season | 2026-11-19 |
+| `acid_rain` | the SO2 allowance market: emissions, costs and benefits, and allowance prices (Schmalensee and Stavins) | 2026-11-19 |
+| `roads` | the fundamental law of road congestion (Duranton and Turner) and the Stockholm trial | 2026-11-19 |
+| `currie_walker_2011` | E-ZPass and infant health | 2026-11-19 |

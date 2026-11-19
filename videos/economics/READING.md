@@ -10,7 +10,7 @@ the series leaves out.
 Both *Parts* columns are found, not typed. *Planned* lists the parts whose entry in
 [`SYLLABUS.md`](SYLLABUS.md) names the book or paper; *Built* lists the parts whose scenes, compute step or
 README cite it (a dot: none yet). Fuller notes (editions, chapters, what each source was used for) are in each
-part's README, under *Sources*. Built so far: Parts 1–14.
+part's README, under *Sources*. Built so far: Parts 1–15.
 
 ## 1. The textbook spine
 
@@ -39,7 +39,7 @@ part's README, under *Sources*. Built so far: Parts 1–14.
 | Mishkin | F. Mishkin, *The Economics of Money, Banking, and Financial Markets* (13th ed., 2022) | 26 | · |
 | Cabral | L. Cabral, *Introduction to Industrial Organization* (2nd ed., 2017) | 12–13 | 12–13 |
 | Borjas | G. Borjas, *Labor Economics* (8th ed., 2020) | 38 | · |
-| Gruber | J. Gruber, *Public Finance and Public Policy* (7th ed., 2022) | 15, 41–42, 50 | 7 |
+| Gruber | J. Gruber, *Public Finance and Public Policy* (7th ed., 2022) | 15, 41–42, 50 | 7, 15 |
 | Ray | D. Ray, *Development Economics* (1998) | 46 | · |
 | Weil | D. Weil, *Economic Growth* (3rd ed., 2013) | 7, 19 | 3, 7 |
 
@@ -47,7 +47,7 @@ part's README, under *Sources*. Built so far: Parts 1–14.
 
 | Short name | Book | Planned | Built |
 |---|---|---|---|
-| MWG | A. Mas-Colell, M. Whinston and J. Green, *Microeconomic Theory* (1995) | 5–9, 11, 13, 15, 18, 56 | 5–11, 13 |
+| MWG | A. Mas-Colell, M. Whinston and J. Green, *Microeconomic Theory* (1995) | 5–9, 11, 13, 15, 18, 56 | 5–11, 13, 15 |
 | Kreps | D. Kreps, *Microeconomic Foundations I* (2013) | 5, 7, 9, 11, 56 | 5, 7, 9, 11–13 |
 | Jehle–Reny | G. Jehle and P. Reny, *Advanced Microeconomic Theory* (3rd ed., 2011) | 5, 9 | 5–6, 9 |
 | Fudenberg–Tirole | D. Fudenberg and J. Tirole, *Game Theory* (1991) | 11–12, 53 | 11–12 |
@@ -172,10 +172,10 @@ part's README, under *Sources*. Built so far: Parts 1–14.
 
 | Model or result | Paper | Planned | Built |
 |---|---|---|---|
-| externalities and their tax | Pigou (1920) | 10, 15, 56 | 10 |
-| bargaining over externalities | Coase (1960) | 15 | · |
+| externalities and their tax | Pigou (1920) | 10, 15, 56 | 10, 15 |
+| bargaining over externalities | Coase (1960) | 15 | 15 |
 | public goods | Samuelson (1954) | 15 | · |
-| governing the commons | Ostrom (1990) | 15 | · |
+| governing the commons | Ostrom (1990) | 15 | 15 |
 | the impossibility of social choice | Arrow (1951) | 18 | · |
 | optimal income taxation | Mirrlees (1971); Saez (2001) | 14, 41 | 6, 14 |
 | optimal commodity taxation | Ramsey (1927); Diamond and Mirrlees (1971) | 6, 10, 41 | · |
@@ -283,6 +283,8 @@ part's README, under *Sources*. Built so far: Parts 1–14.
 **Part 13, *Lemons and Signals*.** Books: Patrick Bolton and Mathias Dewatripont, *Contract Theory* (2005), chs. 2–3; Mas-Colell, Whinston and Green, ch. 13; Jean-Jacques Laffont and David Martimort, *The Theory of Incentives* (2002); Salanié, *The Economics of Contracts*; Liran Einav, Amy Finkelstein and Ray Fisman, *Risky Business* (2023); Einav and Finkelstein, JEP 25(1) (2011); Bryan Caplan, *The Case against Education* (2018). Papers: Akerlof (1970); Spence (1973); Rothschild and Stiglitz (1976); Riley (1979); Stiglitz and Weiss (1981); Cho and Kreps (1987); Hungerford and Solon (1987); Tyler, Murnane and Willett (2000); Cutler and Reber (1998); Cutler and Zeckhauser (1998); Chiappori and Salanié (2000); Finkelstein and Poterba (2004); Finkelstein and McGarry (2006); Cabral and Hortaçsu (2010); Einav, Finkelstein and Cullen (2010); Handel (2013); Einav, Finkelstein, Ryan, Schrimpf and Cullen (2013); Hackmann, Kolstad and Kowalski (2015); Angrist and Krueger (1991).
 
 **Part 14, *Incentives*.** Books: Patrick Bolton and Mathias Dewatripont, *Contract Theory* (2005), chs. 4, 6, 8, 11; Jean-Jacques Laffont and David Martimort, *The Theory of Incentives* (2002); Salanié, *The Economics of Contracts*; Paul Milgrom and John Roberts, *Economics, Organization and Management* (1992); Robert Gibbons and John Roberts, eds., *The Handbook of Organizational Economics* (2013). Papers: Ross (1973); Holmström (1979, 1982); Mirrlees (1975); Grossman and Hart (1983); Holmström and Milgrom (1987, 1991); Lazear and Rosen (1981); Rosen (1986); Weitzman (1980); Shapiro and Stiglitz (1984); Akerlof (1982); Raff and Summers (1987); Stiglitz (1974); Lazear (2000); Shearer (2004); Bandiera, Barankay and Rasul (2005); Jacob and Levitt (2003); Lin (1992); Banerjee, Gertler and Ghatak (2002); Gneezy and Rustichini (2000); Frey and Oberholzer-Gee (1997); Baker, Gibbons and Murphy (2002); Levin (2003); Hadfield-Menell and Hadfield (2019); Gao, Schulman and Hilton (2023).
+
+**Part 15, *Spillovers*.** Books: Jonathan Gruber, *Public Finance and Public Policy*, chs. 5–9; Mas-Colell, Whinston and Green, *Microeconomic Theory* (1995), ch. 11; Elinor Ostrom, *Governing the Commons* (1990); Tom Tietenberg and Lynne Lewis, *Environmental and Natural Resource Economics*. Papers: Pigou (1920); Meade (1952); Coase (1959, 1960, 1974); Samuelson (1954); Gordon (1954); Hardin (1968); Dales (1968); Montgomery (1972); Cheung (1973); Weitzman (1974); Vickrey (1969); Arnott, de Palma and Lindsey (1990); Duranton and Turner (2011); Fehr and Gächter (2000); Fischbacher, Gächter and Fehr (2001); Herrmann, Thöni and Gächter (2008); Rohlfs (1974); Katz and Shapiro (1985); David (1985); Arthur (1989); Jaffe, Trajtenberg and Henderson (1993); Schmalensee and Stavins (2013); Chay and Greenstone (2003); Currie and Walker (2011); Deryugina et al. (2019).
 
 ## 4. What the series leaves out
 

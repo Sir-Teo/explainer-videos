@@ -1011,33 +1011,37 @@ multitasking against Chicago's test scores: right.
 ### Part 15 · Spillovers (~54)
 *Question:* what happens when my choice lands on you, and nobody pays?
 *Story:* James Meade (1952) used the orchard and the beekeeper as the textbook example of a benefit no market
-could price. In 1973 Steven Cheung went to Washington State and found the contracts: growers had been renting
-hives for decades, at prices that varied with the nectar. The part is about when Coase is right and when
+could price. In 1972 Steven Cheung went to Washington State and found the contracts: orchards paid pollination fees,
+and for honey crops the beekeepers paid apiary rents (Cheung 1973). The part is about when Coase is right and when
 Pigou is.
-0. Hook: the fable and the contracts; the question; objectives.
-1. The wedge between private and social cost; the first welfare theorem's missing market.
-2. Pigou's tax (1920); the efficient amount of pollution is not zero.
-3. Coase (1960): the rancher and the farmer; bargaining; what transaction costs do to the theorem.
-4. Play it: a public-goods game, ten rounds, with and without punishment (Fehr and Gächter 2000).
-5. Public goods: non-rival and non-excludable; Samuelson's condition (1954); Lindahl prices.
-6. The lighthouse: Coase's history (1974) and its critics.
-7. Free riding measured: the decay of contributions; what restores them.
-8. The commons: Gordon's fishery (1954), Hardin (1968), and Ostrom's irrigation systems (1990): eight
-   design principles.
-9. Permits: Dales (1968); the US sulphur dioxide market, costs against forecasts (verify).
-10. Prices against quantities (Weitzman 1974): the slopes that decide.
-11. Congestion: Vickrey's bottleneck (1969); Stockholm's trial and the vote after it; fundamental law of road
-    congestion (Duranton and Turner 2011).
-12. Network externalities and standards (a pointer to Part 44); knowledge spillovers (a pointer to Part 21).
-13. Dials. 14. In practice: environmental regulation, spectrum, transport. 15. Frontier: a pointer to
-    Part 48; valuing ecosystems.
+0. Hook: the fable and the contracts; spillovers everywhere; the question; objectives.
+1. Play it: the shared pot (four islanders, twenty shells, the pot multiplied by 1.6).
+2. The wedge between private and social cost: Bo's kiln and Ana's fish; the first welfare theorem's missing market.
+3. Pigou's tax (1920); the efficient amount of pollution is not zero; Pigouvian subsidies.
+4. Coase (1960): his own table of the cattle and the corn; bargaining under either rule; transaction costs.
+5. The fable of the bees investigated: Cheung's rents per hive in money and in nectar.
+6. Public goods: rivalry and exclusion; Samuelson's condition (1954); Lindahl prices; the lighthouse (Coase 1974).
+   Intermission: sulphur dioxide in four countries, 1900-2022; the US line as a tune.
+7. Free riding measured: conditional cooperators, punishment (Fehr and Gächter 2000), antisocial punishment.
+8. The commons: Gordon's fishery (1954), Hardin (1968), the northern cod (1992), Ostrom's design principles (1990).
+9. Permits: Dales (1968), Montgomery (1972); the US sulphur dioxide market, its record and its prices (Schmalensee
+   and Stavins 2013).
+10. Prices against quantities (Weitzman 1974): the slopes that decide; carbon (Pizer 2002).
+11. Congestion: Vickrey's bottleneck (1969) and the toll; Stockholm's trial and the vote after it.
+12. Network externalities and lock-in (Rohlfs 1974; Katz and Shapiro 1985; Arthur 1989; David 1985); knowledge
+    spillovers (Jaffe, Trajtenberg and Henderson 1993), with pointers to Parts 21 and 44.
+13. Dials (the fundamental law of road congestion, Duranton and Turner 2011). 14. In practice: carbon taxes, permit
+    markets, quotas, spectrum, road charges, standards. 15. Frontier: measuring the damage (Chay and Greenstone 2003;
+    Currie and Walker 2011; Deryugina et al. 2019).
 
-*Agora:* `public`: an externality economy with taxes and tradable permits; a public-goods game with types; a
-commons with and without governance.
-*Dials:* the marginal damage of a tonne of a local pollutant; the price elasticity of congestion.
-*Called it?* the forecast cost of the acid-rain programme against the realized permit price.
-*Reading:* Pigou 1920; Coase 1960, 1974; Samuelson 1954; Cheung 1973; Weitzman 1974; Ostrom 1990; Fehr &
-Gächter 2000; Gruber chs 5–9; MWG ch 11.
+*Agora:* `public`: an externality market with Pigou's tax; Coase's table with bargaining and transaction costs; a
+public good with Samuelson, Nash and Lindahl; a voluntary-contribution game with typed players and punishment; Gordon's
+fishery; Weitzman's comparison; Vickrey's bottleneck; Arthur's lock-in.
+*Play it:* the shared pot; on the site, ten rounds against three typed islanders, with and without punishment.
+*Dials:* traffic's response to roads (new; settled within a range). *Called it?* the forecast that the acid-rain
+programme's benefits would about equal its costs: wrong.
+*Reading:* Pigou 1920; Coase 1960, 1974; Samuelson 1954; Cheung 1973; Weitzman 1974; Ostrom 1990; Fehr & Gächter
+2000; Schmalensee & Stavins 2013; Gruber chs 5–9; MWG ch 11.
 
 ### Part 16 · Auctions (~56)
 *Question:* how should something be sold when nobody knows what it is worth to the buyers?
@@ -2947,6 +2951,7 @@ Young Economist*.
 | 12 | built, English | *Competition among the Few.* Agora gains `oligopoly` (Cournot, Bertrand homogeneous and differentiated, Kreps–Scheinkman, Hotelling and Salop, Dixit–Stiglitz, Stackelberg, Dixit's credible capacity, collusion thresholds, Green–Porter, leniency, the HHI and mergers, the MHHI); the Data Room gains the BLS gasoline price via FRED and the transcribed Connor (1998, 2014), Boyer and Kotchoni (2015) and the merger guidelines; a new dial (cartel overcharges) and Stigler's *Called it?*; Act III is complete |
 | 13 | built, English | *Lemons and Signals.* Agora gains `info` (lemons and blind offers, guarantees, Spence, Rothschild–Stiglitz and its existence, the Einav–Finkelstein diagram, a death spiral, the positive-correlation test, credit rationing, reputation); the Data Room gains the BLS CPIs for used cars and new vehicles via FRED and the transcribed Akerlof (1970), Einav, Finkelstein and Cullen (2010, Table 4), Cutler and Zeckhauser (1998), Tyler, Murnane and Willett (2000) and the selection papers; a new dial (the welfare cost of adverse selection) and the referees' *Called it?*; Act IV begins |
 | 14 | built, English | *Incentives.* Agora gains `contracts` (teams, the linear and two-outcome agency problems, relative performance, multitask, tournaments, the ratchet, career concerns, Shapiro–Stiglitz, sharecropping, relational contracts); the Data Room gains the Maddison series for China and India and the transcribed Lazear (2000), Shearer (2004), Bandiera, Barankay and Rasul (2005), Raff and Summers (1987), Lin (1992), Jacob and Levitt (2003), Banerjee, Gertler and Ghatak (2002) and Frey and Oberholzer-Gee (1997); a new dial (output's response to piece rates) and the multitasking *Called it?* |
+| 15 | built, English | *Spillovers.* Agora gains `public` (the externality market and Pigou's tax, Coase's bargain with transaction costs, public goods, typed players in the shared pot with punishment, Gordon's fishery, Weitzman's comparison, Vickrey's bottleneck, Arthur's lock-in); the Data Room gains CEDS sulphur dioxide via Our World in Data and the transcribed Coase (1960), Cheung (1973), Schmalensee and Stavins (2013), Duranton and Turner (2011) and Currie and Walker (2011); a new dial (traffic's response to roads) and the acid-rain *Called it?* |
 
 **Corrections found while building Part 1** (the plan's draft, written from memory, against the sources): Bastiat's
 Paris passage is in *Economic Sophisms*, First Series, ch. 18 (1845), not the *Harmonies*; Hume's is/ought passage is
@@ -3100,3 +3105,13 @@ planned on Lin's decomposition; it is multitasking against Chicago's test scores
 11. Incomplete contracts, planned as a chapter, are folded into chapter 14, since Part 8 told Grossman, Hart and Moore.
 The top of the promotion ladder is credited to Rosen (1986), not to Lazear and Rosen (1981). The Swiss survey's
 50.8% and 24.6% were read in Frey and Oberholzer-Gee's article.
+
+**Corrections found while building Part 15.** The *Called it?* was planned on the acid-rain programme's forecast
+costs against its permit prices; no forecast price was verified, so it is the forecast that benefits would about equal
+costs (Portney 1990, as Schmalensee and Stavins cite it) against their tally. Cheung's survey was in the spring of
+1972, of nine beekeepers; the rents are his means, and the money-nectar correlation is for the late-spring farms. The
+Stockholm figures (about a fifth less traffic, 53% of the city's voters) are from summaries of the official evaluation.
+Fehr and Gächter's contribution levels are stated qualitatively; the curves drawn are Agora's typed players. The
+cod moratorium's job losses are given as about 30,000 in Newfoundland and Labrador (estimates range from about 19,000
+direct to 40,000 nationally). Duranton and Turner's dial rows are their preferred OLS (0.86) and the TSLS estimate with
+geography (1.03).

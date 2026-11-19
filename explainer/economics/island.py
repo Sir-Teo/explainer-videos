@@ -454,6 +454,26 @@ TRUTHS = {
         # sharecropping (chapter 11): output 10 per unit of effort, noise sd 8, risk aversion 1
         "sharecrop": {"a": 10.0, "c": 1.0, "r": 1.0, "sigma": 8.0},
     },
+    15: {
+        # Play it (chapter 1): four islanders, twenty shells each; the pot is multiplied by 1.6 and shared (MPCR 0.4)
+        "playit": {"n": 4, "endowment": 20.0, "mpcr": 0.4, "gives": (0, 5, 10, 20)},
+        # the smoke of Dara's kiln (chapters 2-3): demand for pots, private cost, and the damage to the village
+        "kiln": {"a": 100.0, "b": 1.0, "c": 10.0, "e": 1.0, "d": 0.5},
+        # Coase's cattle (chapter 4): what each steer is worth to the cattle-raiser (Agora's numbers; Coase gives none)
+        "coase": {"values": (5.0, 4.0, 1.5, -1.0), "transaction_costs": (0.0, 1.0, 2.0)},
+        # a lighthouse for the island (chapter 6): four ship-owners' values theta ln(1 + G), a unit cost of 1
+        "lighthouse": {"thetas": (4.0, 3.0, 2.0, 1.0), "mc": 1.0},
+        # typed players (chapter 7): groups of four, ten rounds
+        "vcm": {"groups": 400, "rounds": 10, "n": 4, "endowment": 20.0, "mpcr": 0.4, "seed": 2000},
+        # the lagoon's fish (chapter 8)
+        "fishery": {"K": 1.0, "r": 0.5, "q": 0.01, "p": 100.0, "c": 0.3},
+        # prices or quantities (chapter 10): flat benefits and steep costs, then the reverse
+        "weitzman": {"cases": ((0.5, 2.0), (2.0, 0.5)), "sigma": 1.0},
+        # standards and lock-in (chapter 12): Arthur's adopters
+        "lockin": {"runs": 12, "adopters": 800, "taste": 1.0, "network": 0.1, "seed": 1989},
+        # the causeway into town (chapter 11)
+        "bottleneck": {"N": 6000.0, "s": 4000.0, "alpha": 20.0, "beta": 10.0, "gamma": 40.0, "t_star": 9.0},
+    },
 }
 
 

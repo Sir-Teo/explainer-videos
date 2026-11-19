@@ -164,4 +164,78 @@
             "chapter 1). Computed in your browser; nothing you do here is stored or sent.",
     });
   };
+  // ---- Part 15: spillovers -------------------------------------------------------------------------------------
+  W.pot = function (el) {
+    // the shared pot of Part 15 (explainer.economics.agora.public.vcm): four islanders hold 20 shells each round; the
+    // pot is multiplied by 4 m and shared equally.  The reader plays one seat; the other three are Agora's typed
+    // players: a conditional cooperator, a free rider and a waverer who starts generous and copies the average
+    var W0 = 20, NAMES = ["you", "cooperator", "free rider", "waverer"], COLS = [GOLD, GREEN, RED, BLUE];
+    function others(s) {
+      var h = s.hist, k = h.length;
+      var lastAvg = k ? (h[k - 1][0] + h[k - 1][1] + h[k - 1][2] + h[k - 1][3]) / 4 : 14;
+      var youLast = k ? h[k - 1][0] : 14;
+      var cc = Math.min(W0, Math.max(0, (s.punish ? 1.05 : 0.8) * lastAvg));
+      var fr = s.punished ? Math.min(W0, lastAvg) : 0;
+      var wv = k ? Math.min(W0, Math.max(0, 0.5 * h[k - 1][3] + 0.5 * youLast * (s.punish ? 1.1 : 0.8))) : 16;
+      return [cc, fr, wv];
+    }
+    QB.widget(el, {
+      title: "Play the shared pot",
+      sub: "Each round you and three islanders each hold 20 shells and choose, in secret, how many to put in a pot. " +
+           "The pot is multiplied and shared equally among all four; you keep what you didn't put in. Play ten rounds " +
+           "against Agora's typed players: a conditional cooperator, a free rider and a waverer. Then allow punishment " +
+           "and play again.",
+      panels: 2, height: 320, weights: [1.1, 1],
+      controls: [
+        { k: "give", label: "Shells you put in this round", min: 0, max: 20, step: 1, value: 10,
+          fmt: function (x) { return x.toFixed(0); } },
+        { k: "m", label: "Each shell in the pot returns to each player", min: 0.25, max: 0.75, step: 0.05,
+          value: 0.4, fmt: function (x) { return x.toFixed(2) + " (the pot grows x" + (4 * x).toFixed(1) + ")"; } },
+      ],
+      buttons: [
+        { label: "Play the round", act: function (s, v) {
+            s.hist = s.hist || []; s.pay = s.pay || [0, 0, 0, 0];
+            if (s.hist.length >= 10) return;
+            var o = others(s), g = [v.give, o[0], o[1], o[2]];
+            var pot = g[0] + g[1] + g[2] + g[3], k;
+            for (k = 0; k < 4; k++) s.pay[k] += W0 - g[k] + v.m * pot;
+            s.punished = false;
+            if (s.punish) {
+              var avg = pot / 4;
+              if (g[2] < 0.6 * avg) { s.pay[2] -= 6; s.pay[1] -= 2; s.punished = true; }
+              if (g[0] < 0.6 * avg) { s.pay[0] -= 6; s.pay[1] -= 2; }
+            }
+            s.hist.push(g);
+          } },
+        { label: "Start again", act: function (s) { s.hist = []; s.pay = [0, 0, 0, 0]; s.punished = false; } },
+        { label: "Allow punishment (and start again)", act: function (s) {
+            s.punish = !s.punish; s.hist = []; s.pay = [0, 0, 0, 0]; s.punished = false; } },
+      ],
+      draw: function (g, v, s) {
+        s.hist = s.hist || []; s.pay = s.pay || [0, 0, 0, 0];
+        var a = g[0].axes({ x: [0.5, 10.5], y: [0, 21], title: "Shells put in, round by round" +
+                            (s.punish ? " (punishment allowed)" : ""), xlabel: "round" });
+        var k, j;
+        for (j = 0; j < 4; j++) {
+          var xs = [], ys = [];
+          for (k = 0; k < s.hist.length; k++) { xs.push(k + 1); ys.push(s.hist[k][j]); }
+          if (xs.length > 1) a.line(xs, ys, { color: COLS[j], width: j === 0 ? 2.4 : 1.6 });
+          if (xs.length) a.dots(xs, ys, { r: j === 0 ? 5 : 3.5, color: function () { return COLS[j]; } });
+        }
+        var b = g[1].axes({ x: [-0.5, 3.5], y: [0, 340], title: "Shells earned so far", xlabel: NAMES.join(" / ") });
+        b.bars([0, 1, 2, 3], s.pay, 0.6, { color: function (i) { return COLS[i]; } });
+        b.hline(10 * v.m * 4 * W0, { color: GREY_HINT, dash: [4, 4] });
+      },
+      readout: function (v, s) {
+        var n = (s.hist || []).length, tot = (s.pay || [0, 0, 0, 0]).reduce(function (x, y) { return x + y; }, 0);
+        return [["round", n + " of 10"], ["your shells so far", (s.pay ? s.pay[0] : 0).toFixed(1)],
+                ["the four together", tot.toFixed(1)],
+                ["if all four gave everything, every round", (4 * 10 * v.m * 4 * W0).toFixed(0) + " (dashed line: each)"],
+                ["if nobody gave anything", (4 * 10 * W0).toFixed(0)]];
+      },
+      note: "With each shell returning 0.4 to each player, giving nothing is always best for you, and giving " +
+            "everything best for the four (Part 15, chapter 1). Computed in your browser; nothing you do here is " +
+            "stored or sent.",
+    });
+  };
 })();

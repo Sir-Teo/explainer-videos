@@ -307,6 +307,19 @@ DIALS = {d.key: d for d in [
              Estimate("Bandiera, Barankay and Rasul", 2005, "DiD", "fruit pickers, piece rates against relative "
                       "incentives (at least)", 50.0, where="QJE 120(3), abstract", checked="2026-11-19"),
          )),
+    Dial("road_traffic", "traffic's response to roads", "percent rise in vehicle-kilometres travelled for a 1% rise "
+         "in lane-kilometres (an elasticity)", (15, 37), status="settled within a range", checked="2026-11-19",
+         meaning="in US cities, driving on interstate highways rises about in proportion to their lane kilometres: "
+                 "new roads fill, and building them does not relieve congestion; a price on the road does",
+         estimates=(
+             Estimate("Duranton and Turner", 2011, "regression", "US metropolitan areas, 1983-2003, pooled OLS with "
+                      "population and geography (their preferred OLS)", 0.86, where="AER 101(6), Table 3",
+                      checked="2026-11-19"),
+             Estimate("Duranton and Turner", 2011, "IV", "the same areas, lane kilometres instrumented by 1835 "
+                      "exploration routes, 1898 railroads and the 1947 interstate plan", 1.03, 0.81, 1.25,
+                      where="AER 101(6), Table 5, panel A, column 3 (standard error about 0.11)",
+                      checked="2026-11-19"),
+         )),
     Dial("return_schooling", "return to a year of school", "proportional rise in earnings per year of schooling",
          (4, 38), status="settled within a range", checked="2026-11-19",
          meaning="a year of school raises earnings by roughly 6 to 15 percent, a return few investments match; "
@@ -683,6 +696,42 @@ SHOWN = {
         ("Jacob and Levitt (2003)", "multitasking's evidence, the Called it? outcome"),
         ("Gneezy and Rustichini (2000); Bénabou and Tirole (2003)", "crowding out: the day-care data of Part 1 "
          "replotted; theory stated"),
+        ("Prendergast (1999, 2002)", "a survey and its explanation of the risk-incentive puzzle, stated for direction"),
+        ("Bertrand and Mullainathan (2001); Jensen and Murphy (1990); Hall and Liebman (1998)", "executive pay: "
+         "findings stated (pay for luck; $3.25 per $1,000; stock and options); the pay-performance link enters a "
+         "dial in Part 62"),
+        ("Ehrenberg and Bognanno (1990); Brown, Harlow and Starks (1996); Lazear (1989)", "tournament evidence, "
+         "stated for direction"),
+        ("Gibbons and Murphy (1992); Laffont and Tirole (1993)", "career concerns' evidence and the theory of "
+         "regulation, stated"),
+        ("Akerlof (1982); Fehr, Kirchsteiger and Riedl (1993); Gneezy and List (2006)", "gift exchange in the "
+         "laboratory and the field, stated for direction"),
+        ("Shaban (1987); Banerjee, Gertler and Ghatak (2002)", "sharecropping's evidence (a transcribed table, "
+         "data.tables.TENANCY)"),
+        ("Frey and Oberholzer-Gee (1997)", "a survey's acceptance rates, transcribed (data.tables.CROWDING)"),
+        ("Kerr (1975); Brickley and Dark (1987)", "an essay and a franchising study, stated for direction"),
+        ("Baker, Gibbons and Murphy (2002); Levin (2003); Gibbons and Henderson (2013)", "relational contracts: "
+         "theory, solved in Agora"),
+        ("Amodei and Clark (2016); Krakovna et al. (2020); Hadfield-Menell and Hadfield (2019); Gao, Schulman and "
+         "Hilton (2023)", "incentives for machines: an example, a catalogue, an argument and the shape of a fitted "
+         "curve, drawn with illustrative constants"),
+    ],
+    15: [
+        ("Meade (1952); Pigou (1920); Coase (1960, 1974); Samuelson (1954); Lindahl (1919); Gordon (1954); Hardin "
+         "(1968); Dales (1968); Weitzman (1974); Vickrey (1969)", "theory, stated; every model is solved in Agora "
+         "(Coase's own table is transcribed, data.tables.COASE_1960)"),
+        ("Cheung (1973)", "the beekeepers' rents, transcribed (data.tables.CHEUNG_1973): a market for a spillover, "
+         "shown for what it prices"),
+        ("Fehr and Gächter (2000); Ledyard (1995); Fischbacher, Gächter and Fehr (2001)", "laboratory public-goods "
+         "games, stated for direction; the dynamics drawn are Agora's typed players"),
+        ("Ostrom (1990); the northern cod moratorium (1992)", "governed and ungoverned commons, told as history"),
+        ("Schmalensee and Stavins (2013); Portney (1990)", "the SO2 market's record, transcribed "
+         "(data.tables.ACID_RAIN), and the Called it? outcome"),
+        ("the Stockholm trial (2006); Currie and Walker (2011)", "a congestion charge and the damage of congestion, "
+         "transcribed (data.tables.ROADS, CURRIE_WALKER_2011); the elasticity of congestion enters a dial in Part 37"),
+        ("Katz and Shapiro (1985); David (1985); Jaffe, Trajtenberg and Henderson (1993)", "network externalities and "
+         "knowledge spillovers, stated for direction; their dials are in Parts 21 and 44"),
+        ("CEDS sulphur dioxide via Our World in Data", "data, shown with its source; no parameter is estimated"),
     ],
 }
 

@@ -72,7 +72,7 @@ class Piece(VoiceoverScene):
             label(r"two effects: \ the same people work harder, \\ and different people take the job", font_size=22,
                   color=E.ACCENT),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.3).to_edge(RIGHT, buff=0.35)
-        tag = illustrative_tag(r"illustrative: \ Lazear's model, \ not his data", corner=DR, font_size=13)
+        tag = illustrative_tag(r"illustrative: \ Lazear's model, \ not Lazear's data", corner=DR, font_size=13)
         with self.voiceover(
             "Lazear's explanation has two parts. <bookmark mark='a'/> Paid by the hour, an installer who meets the "
             "standard earns the same whether they fit one windscreen more or ten, so each does about the standard. "
@@ -120,7 +120,7 @@ class Piece(VoiceoverScene):
         ).arrange(DOWN, buff=0.3).next_to(ax, DOWN, buff=0.6)
         tag = published_tag(r"Lazear, AER 90(5) (2000); \ NBER WP 5672 (1996)", corner=DR, font_size=13)
         with self.voiceover(
-            "Lazear could tell the two effects apart, because he had each installer's output before and after the "
+            "Lazear could tell the two effects apart, because the firm's records gave each installer's output before and after the "
             "switch, and could also compare the people who left with the people who joined. <bookmark mark='a'/> "
             "About half of the forty-four percent came from incentives, the same workers fitting more, and about "
             "half from sorting. <bookmark mark='b'/> The workers shared in it: average pay rose by about ten percent. "
