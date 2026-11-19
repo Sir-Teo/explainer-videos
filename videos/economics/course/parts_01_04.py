@@ -118,4 +118,63 @@ PARTS = [
         also=(("Agora's curves", "explainer/economics/agora/curves.py"),
               ("The Data Room's sources", "explainer/economics/data/SOURCES.md")),
     ),
+    Part(
+        n=3, level="U", widget="measure",
+        question="How do you put a number on an economy, and what does the number leave out?",
+        story="The part opens in 1932, when nobody could say how far America's income had fallen, and follows Simon "
+              "Kuznets's report to the Senate of January 1934: income produced down 53%, interest still paid almost "
+              "in full, wages in the mines and factories down by six tenths, and a warning that the welfare of a "
+              "nation can scarcely be inferred from its income. Petty had already added England up twice, by "
+              "spending and by income, in 1665. On the Island, Dara keeps the books: $975 of sales, $740 of value "
+              "added, the same $740 as consumption, investment, government and net exports, and again as wages, "
+              "profits and taxes; saving equals investment plus the trade balance. America's GDP of $30.9 trillion "
+              "in 2025 is built the same way, with a statistical discrepancy. Unpaid work is 31% of the Island's "
+              "output. The viewer prices Bo's two baskets after a storm doubles the price of fish: Laspeyres says "
+              "50%, Paasche 33%, the truth on his indifference curve 41.4%, which Fisher's index finds; chained "
+              "Laspeyres drifts to 2.03 over twelve seasons. The CPI's bias (Boskin's 1.1 points), hedonic quality "
+              "adjustment on the boatyard's boats, and the chained CPI's measured gap follow. After an intermission "
+              "of seventy-eight years of unemployment, with one month missing, the part compares countries at "
+              "purchasing power (China's economy $38 trillion, not $19), measures unemployment with a survey (U-1 to "
+              "U-6), distributes income (Lorenz, Gini, and the dispute over the top 1%), traces $10 of exports "
+              "through Leontief's inverse, revises 2008 vintage by vintage, and tries measures beyond GDP. The "
+              "frontier is intangibles, night lights and the 2025 SNA.",
+        handoff="Part 4 asks when data can answer an economic question. The accounts return as aggregate demand "
+                "(Part 27), the price index as inflation (Part 28), real-time data as policy (Part 31), saving and "
+                "the current account in the open economy (Part 34), trade in value added (Part 36), Kaldor's facts "
+                "in growth (Part 20), unemployment's flows (Part 24), the labour share (Part 39), inequality (Part 40) "
+                "and the measurement of AI (Part 65).",
+        outside="School algebra and percentages. Chapter 10 uses a matrix inverse (explained on screen); the problems "
+                "use a 2x2 inverse and one logarithm.",
+        objectives={
+            "U": ["Compute GDP by output, spending and income from a small economy's accounts, and explain why the "
+                  "three agree and what the statistical discrepancy is.",
+                  "Deflate a nominal series by a price index, and compute Laspeyres, Paasche and Fisher indexes for "
+                  "two baskets.",
+                  "Compute U-3 and the broader rates from a labour survey, and a Gini coefficient from a list of "
+                  "incomes."],
+            "M": ["Show that Laspeyres overstates and Paasche understates a homothetic consumer's cost of living, and "
+                  "that chained Laspeyres drifts when prices bounce.",
+                  "Derive S = I + (X - M) from the spending identity, and compute a Leontief inverse and its output "
+                  "multipliers.",
+                  "Estimate a pure price change with a hedonic regression, and compare PPP and market-rate GDP."],
+            "D": ["Explain the disagreements over the top 1%'s share in distributional national accounts and what "
+                  "data would settle them.",
+                  "Design a test of reported growth with night lights, and state what would confound it."],
+            "I": ["Read a jobs report and a GDP release, including what a revision can do to them.",
+                  "Say how biased the CPI is, source by source, and what that bias costs an indexed budget."],
+        },
+        results=[
+            ("GDP three ways", r"\sum_j (x_j - \textstyle\sum_i z_{ij} - m_j)=C+I+G+X-M=W+\Pi+T"),
+            ("Saving and the trade balance", r"S \equiv Y-C-G = I+(X-M)"),
+            ("Laspeyres and Paasche", r"P_L=\frac{\sum p_1q_0}{\sum p_0q_0},\quad P_P=\frac{\sum p_1q_1}{\sum p_0q_1},\quad "
+                                      r"P_P\le P^{*}\le P_L"),
+            ("Fisher's ideal index", r"P_F=\sqrt{P_L\,P_P}"),
+            ("Leontief's inverse", r"x=(I-A)^{-1}f=f+Af+A^2f+\cdots"),
+            ("The Gini coefficient", r"G=\frac{\sum_i\sum_j|y_i-y_j|}{2n^2\bar y}"),
+        ],
+        U=(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, "s08_intermission"), D=(15,), I=(14,),
+        also=(("Agora's national accounts", "explainer/economics/agora/accounts.py"),
+              ("Agora's index numbers", "explainer/economics/agora/indices.py"),
+              ("The Data Room's sources", "explainer/economics/data/SOURCES.md")),
+    ),
 ]

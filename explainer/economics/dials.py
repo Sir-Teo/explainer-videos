@@ -80,7 +80,7 @@ DIALS = {d.key: d for d in [
          "overstates the rise in the cost of living", (3, 28), status="settled within a range", checked="2026-11-19",
          meaning="pensions, tax brackets and many wages are indexed to the CPI: at 1 point a year an indexed payment "
                  "gains about a tenth in real terms over a decade, and the Boskin Commission put the cost to the "
-                 "federal debt of 1997-2008 at about $1 trillion; at 0.3 the drift is small",
+                 "federal debt of 1997-2008 at about a trillion dollars; at 0.3 the drift is small",
          estimates=(
              Estimate("Boskin, Dulberger, Gordon, Griliches and Jorgenson", 1996, "review", "the CPI-U in 1995-96: "
                       "substitution 0.40, outlets 0.10, new products and quality 0.60", 1.10, 0.80, 1.60,
@@ -155,6 +155,25 @@ SHOWN = {
          "algorithmic pricing; markups enter their dial in Part 10"),
         ("the Pink Sheet and PSD coffee data, and the frost's rough elasticity", "data, and a back-of-the-envelope "
          "calculation with its caveats stated; not an entry in the staples dial"),
+    ],
+    3: [
+        ("National Income, 1929-32 (Kuznets, 1934) and Petty's Verbum Sapienti (1665)", "historical accounts, "
+         "transcribed in data.tables and shown as history, not as estimates of a parameter"),
+        ("Bridgman, Dugan, Lal, Osborne and Villones (2012); the ILO (2018); Brynjolfsson, Collis and Eggers (2019)",
+         "measurements of what GDP leaves out (home production, informal work, free goods), shown for their size; "
+         "no dial measures them"),
+        ("Deaton and Heston (2010); Balassa (1964) and Samuelson (1964)", "a revision of purchasing power parities "
+         "and the theory of the Penn effect; the WDI data are shown, no parameter is estimated"),
+        ("Piketty, Saez and Zucman (2018); Auten and Splinter (2024)", "distributional national accounts, shown as "
+         "a measurement dispute; the inequality dials enter in Part 40"),
+        ("Leontief (1936)", "the input-output method, applied to the Island's simulated table"),
+        ("Nordhaus and Tobin (1972); the HDI (UNDP); Jones and Klenow (2016)", "measures beyond GDP, shown for what "
+         "they find; no dial is a welfare measure"),
+        ("Corrado, Hulten and Sichel (2009); Henderson, Storeygard and Weil (2012); Martinez (2022)", "the frontier "
+         "chapter's evidence on intangibles and on night lights, shown for direction and size"),
+        ("FRED's national accounts, unemployment and price series; WDI; the HDR; the Philadelphia Fed's real-time "
+         "data; the Penn World Table's labour share", "data, shown with their sources; Kaldor's facts and the "
+         "labour share are entered in explainer.economics.facts"),
     ],
 }
 

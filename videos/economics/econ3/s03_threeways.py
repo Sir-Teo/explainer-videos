@@ -133,15 +133,15 @@ class ThreeWays(VoiceoverScene):
     def spending(self):
         a = load("accounts")
         e = a["expenditure"]
-        k = 0.0085
+        k = 0.0125
         items = [("C", e["C"]), ("I", e["I"]), ("G", e["G"]), ("X", e["X"])]
-        y0 = 1.3
+        y0 = 1.0
         x = -5.8
         blocks = VGroup()
         for key, v in items:
-            r = Rectangle(width=v * k, height=0.75, stroke_width=0, fill_color=USE_COLOR[key], fill_opacity=0.85)
+            r = Rectangle(width=v * k, height=0.95, stroke_width=0, fill_color=USE_COLOR[key], fill_opacity=0.85)
             r.move_to([x + v * k / 2, y0, 0])
-            t = label(rf"{USE_NAME[key]} \\ {dollars(v, 0)}", font_size=20, color=BACKGROUND if v > 100 else WHITE)
+            t = label(rf"{USE_NAME[key]} \\ {dollars(v, 0)}", font_size=23, color=BACKGROUND if v > 100 else WHITE)
             t.move_to(r)
             if v < 100:
                 t.next_to(r, UP, buff=0.12).set_color(USE_COLOR[key])
@@ -149,12 +149,12 @@ class ThreeWays(VoiceoverScene):
             x += v * k + 0.04
         total_right = x
         m = e["M"]
-        mbar = Rectangle(width=m * k, height=0.75, stroke_width=0, fill_color=E.WORLD, fill_opacity=0.35)
+        mbar = Rectangle(width=m * k, height=0.95, stroke_width=0, fill_color=E.WORLD, fill_opacity=0.35)
         mbar.move_to([total_right - m * k / 2, y0 - 1.0, 0])
         mt = label(rf"minus imports \ {dollars(m, 0)}: \ nets, nails, fuel, \ and cloth", font_size=20,
                    color=E.WORLD).next_to(mbar, DOWN, buff=0.15)
         gdp_w = 740 * k
-        gbar = Rectangle(width=gdp_w, height=0.75, stroke_width=0, fill_color=E.ACCENT, fill_opacity=0.85)
+        gbar = Rectangle(width=gdp_w, height=0.95, stroke_width=0, fill_color=E.ACCENT, fill_opacity=0.85)
         gbar.move_to([-5.8 + gdp_w / 2, y0 - 2.6, 0])
         gt = label(r"GDP by spending: \ \$740", font_size=24, color=BACKGROUND).move_to(gbar)
         eq = MathTex(r"Y = C + I + G + X - M", font_size=44).to_edge(UP, buff=0.45)
@@ -186,15 +186,15 @@ class ThreeWays(VoiceoverScene):
     def income(self):
         a = load("accounts")
         inc = a["income"]
-        k = 0.0085
+        k = 0.0125
         parts = [("wages", inc["wages"], WAGES, r"wages"), ("profits", inc["profits"], PROFITS, r"profits"),
                  ("taxes", inc["taxes"], TAXES, r"taxes on production")]
         x = -5.8
         blocks = VGroup()
         for key, v, col, nm in parts:
-            r = Rectangle(width=v * k, height=0.75, stroke_width=0, fill_color=col, fill_opacity=0.85)
-            r.move_to([x + v * k / 2, 0.8, 0])
-            t = label(rf"{nm} \\ {dollars(v, 0)}", font_size=22, color=BACKGROUND if v > 100 else col)
+            r = Rectangle(width=v * k, height=0.95, stroke_width=0, fill_color=col, fill_opacity=0.85)
+            r.move_to([x + v * k / 2, 0.9, 0])
+            t = label(rf"{nm} \\ {dollars(v, 0)}", font_size=25, color=BACKGROUND if v > 100 else col)
             t.move_to(r)
             if v < 100:
                 t.next_to(r, UP, buff=0.12)

@@ -1,8 +1,8 @@
 # Economics, Built (经济学，从零搭建)
 
-**Status (2026-11-19): Parts 1 and 2, [*Who Feeds Paris?*](econ1/README.md) and [*The Scissors*](econ2/README.md),
-are built in English, each with its computed score, lab and game; the shared code (Agora, the Island, the Facts, the
-Dials, the Data Room, the instruments and the score) is in `explainer/economics/`.** This file is the plan; the standard every part meets, the devices and all
+**Status (2026-11-19): Parts 1 to 3, [*Who Feeds Paris?*](econ1/README.md), [*The Scissors*](econ2/README.md) and
+[*The Measure*](econ3/README.md), are built in English, each with its computed score, lab and game; the shared code
+(Agora, the Island, the Facts, the Dials, the Data Room, the instruments and the score) is in `explainer/economics/`.** This file is the plan; the standard every part meets, the devices and all
 sixty-eight parts chapter by chapter are in [`SYLLABUS.md`](SYLLABUS.md), with progress in its §9. The decisions the
 building started from are at the end of this file.
 

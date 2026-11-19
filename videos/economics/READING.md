@@ -10,7 +10,7 @@ the series leaves out.
 Both *Parts* columns are found, not typed. *Planned* lists the parts whose entry in
 [`SYLLABUS.md`](SYLLABUS.md) names the book or paper; *Built* lists the parts whose scenes, compute step or
 README cite it (a dot: none yet). Fuller notes (editions, chapters, what each source was used for) are in each
-part's README, under *Sources*. Built so far: Parts 1–2.
+part's README, under *Sources*. Built so far: Parts 1–3.
 
 ## 1. The textbook spine
 
@@ -18,7 +18,7 @@ part's README, under *Sources*. Built so far: Parts 1–2.
 
 | Short name | Book | Planned | Built |
 |---|---|---|---|
-| Mankiw | N. G. Mankiw, *Principles of Economics* (10th ed., 2024) | 1–2 | 1–2 |
+| Mankiw | N. G. Mankiw, *Principles of Economics* (10th ed., 2024) | 1–2 | 1–3 |
 | Krugman–Wells | P. Krugman and R. Wells, *Economics* (6th ed., 2021) | 2 | 2 |
 | Acemoglu–Laibson–List | D. Acemoglu, D. Laibson and J. List, *Economics* (3rd ed., 2022) | 4 | · |
 | CORE | The CORE Team, *The Economy* (2017; 2.0, 2023) | 1 | 1 |
@@ -41,7 +41,7 @@ part's README, under *Sources*. Built so far: Parts 1–2.
 | Borjas | G. Borjas, *Labor Economics* (8th ed., 2020) | 38 | · |
 | Gruber | J. Gruber, *Public Finance and Public Policy* (7th ed., 2022) | 15, 41–42, 50 | · |
 | Ray | D. Ray, *Development Economics* (1998) | 46 | · |
-| Weil | D. Weil, *Economic Growth* (3rd ed., 2013) | 19 | · |
+| Weil | D. Weil, *Economic Growth* (3rd ed., 2013) | 19 | 3 |
 
 ### Graduate micro
 
@@ -185,7 +185,7 @@ part's README, under *Sources*. Built so far: Parts 1–2.
 | Model or result | Paper | Planned | Built |
 |---|---|---|---|
 | the Malthusian economy | Malthus (1798) | 19 | · |
-| the long run in numbers | the Maddison Project (Bolt and van Zanden 2024) | 1 | 1 |
+| the long run in numbers | the Maddison Project (Bolt and van Zanden 2024) | 1 | 1, 3 |
 | the neoclassical growth model | Solow (1956); Ramsey (1928); Cass (1965) | 20 | · |
 | endogenous growth | Romer (1990); Aghion and Howitt (1992) | 21 | · |
 | misallocation | Hsieh and Klenow (2009) | 21 | · |
@@ -259,6 +259,8 @@ part's README, under *Sources*. Built so far: Parts 1–2.
 **Part 1, *Who Feeds Paris?*.** Books: Adam Smith, *The Wealth of Nations* (1776), Book I, chs 1–3; David Ricardo, *Principles of Political Economy and Taxation* (1817), ch. 7; Frédéric Bastiat, *Economic Sophisms* (1845); The CORE Team, *The Economy*, units 1–2; N. Gregory Mankiw, *Principles of Economics*, chs 1–3; Robert Heilbroner, *The Worldly Philosophers*; Dani Rodrik, *Economics Rules* (2015). Papers: Hayek (1945), "The Use of Knowledge in Society", *AER* 35; Coase (1937), "The Nature of the Firm", *Economica* 4; Simon (1991), *JEP* 5(2); Chamberlin (1948), *JPE* 56; Smith (1962), *JPE* 70; Gode and Sunder (1993), *JPE* 101; Cliff (1997); Gneezy and Rustichini (2000), "A Fine Is a Price", *Journal of Legal Studies* 29; Friedman (1953), "The Methodology of Positive Economics"; Read (1958), "I, Pencil"; Bolt and van Zanden (2024), the Maddison Project Database 2023; Besley and Hennessy (2009).
 
 **Part 2, *The Scissors*.** Books: Alfred Marshall, *Principles of Economics* (1890), Book V; Adam Smith, *The Wealth of Nations* (1776), Book I, ch. 4; Hal Varian, *Intermediate Microeconomics*, chs 1, 15–16; N. Gregory Mankiw, *Principles of Economics*, chs 4–8; Krugman and Wells, chs 3–5. Papers: Smith (1962), *JPE* 70; Gode and Sunder (1993), *JPE* 101; Cliff and Bruten (1997); Dupuit (1844); Whately (1832), Lecture IX; Havranek, Irsova and Janda (2012); Chetty, Looney and Kroft (2009), *AER* 99; Kopczuk, Marion, Muehlegger and Slemrod (2016); Diamond, McQuade and Qian (2019), *AER* 109; Calvano, Calzolari, Denicoló and Pastorello (2020), *AER* 110; Assad, Clark, Ershov and Xu (2024), *JPE* 132.
+
+**Part 3, *The Measure*.** Books: Diane Coyle, *GDP: A Brief but Affectionate History* (2014); François Lequiller and Derek Blades, *Understanding National Accounts* (OECD, 2nd ed., 2014); N. Gregory Mankiw, *Macroeconomics*, ch. 2, "The Data of Macroeconomics"; Wassily Leontief, *Input-Output Economics* (2nd ed., 1986). Papers: Kuznets et al., *National Income, 1929–32* (1934); Petty, *Verbum Sapienti* (1665); Boskin et al. (1996); Lebow and Rudd (2003), *JEL* 41; Moulton (2018), Brookings; Deaton and Heston (2010), *AEJ: Macro* 2; Jones and Klenow (2016), *AER* 106; Nordhaus and Tobin (1972); Piketty, Saez and Zucman (2018), *QJE* 133; Corrado, Hulten and Sichel (2009); Henderson, Storeygard and Weil (2012), *AER* 102; Martinez (2022), *JPE* 130.
 
 ## 4. What the series leaves out
 

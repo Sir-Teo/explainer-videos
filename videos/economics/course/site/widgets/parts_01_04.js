@@ -2,7 +2,7 @@
 (function () {
   "use strict";
   var C = QB.C, W = QB.W, fmt = QB.fmt;
-  var BLUE = "#5DADEC", AMBER = "#F2B84B", ORANGE = "#FF9F5A", GOLD = "#F6C453";
+  var BLUE = "#5DADEC", AMBER = "#F2B84B", ORANGE = "#FF9F5A", GOLD = "#F6C453", GREY_HINT = "#8B93A1";
 
   // ---- Part 1: the pit -------------------------------------------------------------------------------------------
   W.pit = function (el) {
@@ -160,6 +160,98 @@
       note: "Simulated traders: Agora's learning traders (Cliff 1997), six markets of six periods each, the last period " +
             "averaged. Switch who remits the tax and the two dashed price lines barely move: the burden does not " +
             "follow the cheque. Nothing you do here is stored or sent.",
+    });
+  };
+
+  // ---- Part 3: two baskets, and a chain --------------------------------------------------------------------------
+  W.measure = function (el) {
+    var GREEN = "#7BD88F", PAAS = "#6FC3F2", LASP = "#F28C6F", FISH = "#6FB7E8";
+    // a homothetic (CES) consumer: base expenditure shares s0, price relatives r, elasticity of substitution sig
+    function indexes(r, s0, sig) {
+      var L = 0, i, s1 = [], w = [], tw = 0, P = 0, tr;
+      for (i = 0; i < r.length; i++) L += s0[i] * r[i];
+      if (Math.abs(sig - 1) < 1e-6) {
+        tr = 0;
+        for (i = 0; i < r.length; i++) { s1.push(s0[i]); tr += s0[i] * Math.log(r[i]); }
+        tr = Math.exp(tr);
+      } else {
+        for (i = 0; i < r.length; i++) { w.push(s0[i] * Math.pow(r[i], 1 - sig)); tw += w[i]; }
+        for (i = 0; i < r.length; i++) s1.push(w[i] / tw);
+        tr = Math.pow(tw, 1 / (1 - sig));
+      }
+      for (i = 0; i < r.length; i++) P += s1[i] / r[i];
+      P = 1 / P;
+      return { L: L, P: P, F: Math.sqrt(L * P), T: tr, s1: s1 };
+    }
+    QB.widget(el, {
+      title: "Bo's two baskets: how much dearer is living?",
+      sub: "Bo spends $100 a week on fish and coconuts. A stormy year multiplies the price of fish; coconuts stay at $1. " +
+           "Set how much fish costs, how much of his budget goes on fish, and how easily he switches between the two " +
+           "(0: never; 1: he always spends the same share; 2: he switches readily). Guess where the true rise in his " +
+           "cost of living lies, then see the named indexes against the truth, and chain them over seasons of storms.",
+      panels: 2, height: 320,
+      controls: [
+        { k: "r", label: "Fish price in the stormy year (calm = $2)", min: 1.0, max: 4.0, step: 0.1, value: 2.0,
+          fmt: function (x) { return "x" + x.toFixed(1) + " ($" + (2 * x).toFixed(2) + ")"; } },
+        { k: "share", label: "Share of Bo's budget on fish (calm year)", min: 0.1, max: 0.9, step: 0.05, value: 0.5,
+          fmt: function (x) { return QB.pct(x, 0); } },
+        { k: "sig", label: "How easily Bo switches (elasticity of substitution)", min: 0.0, max: 2.0, step: 0.1, value: 1.0,
+          fmt: function (x) { return x.toFixed(1); } },
+        { k: "seasons", label: "Seasons in the chain (calm, storm, calm, ...)", min: 2, max: 20, step: 2, value: 12 },
+      ],
+      buttons: [
+        { label: "I guess: as much as the fish price rose", act: function (s) { s.guess = "fish"; } },
+        { label: "I guess: Laspeyres is right", act: function (s) { s.guess = "L"; } },
+        { label: "I guess: between Paasche and Laspeyres", act: function (s) { s.guess = "between"; } },
+        { label: "I guess: Paasche is right", act: function (s) { s.guess = "P"; } },
+      ],
+      draw: function (g, v, s) {
+        var r = [v.r, 1], s0 = [v.share, 1 - v.share], x = indexes(r, s0, v.sig), i;
+        var vals = [x.L, x.P, x.F, x.T].map(function (z) { return 100 * (z - 1); });
+        var top = Math.max(5, 100 * (v.r - 1) * 1.05);
+        var a = g[0].axes({ x: [0, 4], y: [0, top], title: "The rise in Bo's cost of living, %", xlabel: "" });
+        a.bars([0.5, 1.5, 2.5, 3.5], vals, 0.6, { color: function (i) { return [LASP, PAAS, GOLD, GREEN][i]; } });
+        a.hline(100 * (v.r - 1), { color: FISH, dash: [5, 4] });
+        a.text(0.5, vals[0], "Laspeyres " + fmt(vals[0], 1) + "%", { color: LASP, align: "center", dy: -8 });
+        a.text(1.5, vals[1], "Paasche " + fmt(vals[1], 1) + "%", { color: PAAS, align: "center", dy: -8 });
+        a.text(2.5, vals[2], "Fisher " + fmt(vals[2], 1) + "%", { color: GOLD, align: "center", dy: -8 });
+        a.text(3.5, vals[3], "true " + fmt(vals[3], 1) + "%", { color: GREEN, align: "center", dy: -8 });
+        a.legend([["the fish price's own rise", FISH]], { pos: "tl" });
+        // chain over seasons: storms come and go, prices end where they began
+        var n = v.seasons, cl = [1], cp = [1], cf = [1], ct = [1], xs = [0], k;
+        for (k = 1; k <= n; k++) {
+          var up = k % 2 === 1, rr = up ? [v.r, 1] : [1 / v.r, 1];
+          var base = up ? s0 : indexes([v.r, 1], s0, v.sig).s1;
+          var y = indexes(rr, base, v.sig);
+          cl.push(cl[k - 1] * y.L); cp.push(cp[k - 1] * y.P); cf.push(cf[k - 1] * y.F); ct.push(ct[k - 1] * y.T);
+          xs.push(k);
+        }
+        var ymax = Math.max(1.2, Math.max.apply(null, cl) * 1.08), ymin = Math.min(0.8, Math.min.apply(null, cp) * 0.92);
+        var b = g[1].axes({ x: [0, n], y: [Math.max(0.05, ymin), ymax], title: "Chained over " + n + " seasons", xlabel: "season" });
+        b.hline(1, { color: GREY_HINT, dash: [3, 3] });
+        b.line(xs, cl, { color: LASP, width: 2.2 }).line(xs, cp, { color: PAAS, width: 2.2 })
+         .line(xs, cf, { color: GOLD, width: 2.2, dash: [6, 4] }).line(xs, ct, { color: GREEN, width: 2.6 });
+        b.legend([["Laspeyres", LASP], ["Paasche", PAAS], ["Fisher", GOLD], ["true", GREEN]], { pos: "tl" });
+        s.out = { L: x.L, P: x.P, F: x.F, T: x.T, r: v.r, guess: s.guess, cl: cl[n], cp: cp[n], cf: cf[n], ct: ct[n], n: n };
+      },
+      readout: function (v, s) {
+        var o = s.out, rows = [
+          ["Laspeyres (the calm basket)", "+" + fmt(100 * (o.L - 1), 1) + "%"],
+          ["Paasche (the stormy basket)", "+" + fmt(100 * (o.P - 1), 1) + "%"],
+          ["Fisher (their geometric mean)", "+" + fmt(100 * (o.F - 1), 1) + "%"],
+          ["the truth, for Bo's tastes", "+" + fmt(100 * (o.T - 1), 1) + "%"],
+          ["after " + o.n + " seasons: Laspeyres / Paasche / Fisher", fmt(o.cl, 3) + " / " + fmt(o.cp, 3) + " / " + fmt(o.cf, 3)],
+        ];
+        if (o.guess) {
+          var ok = { fish: Math.abs(o.T - o.r) < 1e-6, L: Math.abs(o.T - o.L) < 1e-6, P: Math.abs(o.T - o.P) < 1e-6,
+                     between: o.T >= o.P - 1e-9 && o.T <= o.L + 1e-9 }[o.guess];
+          rows.push(["your guess", ok ? "right" : "not this time: the truth is +" + fmt(100 * (o.T - 1), 1) + "%"]);
+        }
+        return rows;
+      },
+      note: "A homothetic consumer: the true index always lies between Paasche and Laspeyres (Konus 1924), and Fisher " +
+            "is close to it; with no switching at all the three coincide, and chain drift needs switching. Computed in " +
+            "your browser; nothing you do here is stored or sent.",
     });
   };
 })();

@@ -50,6 +50,7 @@ class Counting(VoiceoverScene):
             vo.wait_until("d")
             self.play(FadeIn(row[3]), FadeIn(row[4], scale=0.8))
             self.play(FadeIn(q, shift=UP * 0.2))
+        self.wait(3.0)
         self.clear_scene()
 
     def identity(self):
@@ -100,13 +101,13 @@ class Counting(VoiceoverScene):
 
     def timeline(self):
         events = [
-            (1665, r"Petty: \ the nation's \\ expense and income", POUND, UP, 0.45),
-            (1696, r"Gregory King: \ England's \\ families by rank", POUND, DOWN, 0.45),
-            (1934, r"Kuznets: \ the first \\ US national income", KUZ, UP, 0.45),
-            (1941, r"Meade and Stone: \\ Britain's war accounts", E.ACCENT, DOWN, 0.45),
-            (1953, r"the UN's System \\ of National Accounts", E.WORLD, UP, 1.45),
-            (1991, r"the US moves \\ from GNP to GDP", E.FIRMS, DOWN, 0.45),
-            (2025, r"the SNA's \\ newest edition", E.WORLD, UP, 0.45),
+            (1665, r"Petty: \ the nation's \\ expense and income", POUND, UP, 0.6),
+            (1696, r"Gregory King: \ England's \\ families by rank", POUND, DOWN, 0.6),
+            (1934, r"Kuznets: \ the first \\ US national income", KUZ, UP, 0.6),
+            (1941, r"Meade and Stone: \\ Britain's war accounts", E.ACCENT, DOWN, 0.6),
+            (1953, r"the UN's System \\ of National Accounts", E.WORLD, UP, 1.75),
+            (1991, r"the US moves \\ from GNP to GDP", E.FIRMS, DOWN, 0.6),
+            (2025, r"the SNA's \\ newest edition", E.WORLD, UP, 0.6),
         ]
         x0, x1 = -5.4, 5.9
 
@@ -122,14 +123,14 @@ class Counting(VoiceoverScene):
                      Line([bx, -0.15, 0], [bx + 0.12, 0.15, 0], color=GREY_C))
         marks = VGroup()
         for y, text, col, side, lift in events:
-            d = Dot([X(y), 0, 0], radius=0.08, color=col)
-            yr = label(str(y), font_size=22, color=col).next_to(d, -side, buff=0.15)
-            stem = Line(d.get_center(), d.get_center() + side * lift, color=col, stroke_width=2)
-            t = label(text, font_size=21, color=WHITE).next_to(stem.get_end(), side, buff=0.1)
+            d = Dot([X(y), 0, 0], radius=0.1, color=col)
+            yr = label(str(y), font_size=26, color=col).next_to(d, -side, buff=0.15)
+            stem = Line(d.get_center(), d.get_center() + side * lift, color=col, stroke_width=2.5)
+            t = label(text, font_size=25, color=WHITE).next_to(stem.get_end(), side, buff=0.1)
             marks.add(VGroup(d, yr, stem, t))
         nobel = VGroup(
-            label(r"Nobel prizes: \ Kuznets 1971, \ Leontief 1973, \ Stone 1984", font_size=22, color=E.ACCENT),
-        ).to_edge(DOWN, buff=0.6)
+            label(r"Nobel prizes: \ Kuznets 1971, \ Leontief 1973, \ Stone 1984", font_size=28, color=E.ACCENT),
+        ).to_edge(DOWN, buff=0.7)
         head = label(r"Counting a country", font_size=34).to_edge(UP, buff=0.4)
         with self.voiceover(
             "Petty's rough arithmetic had followers. <bookmark mark='a'/> Thirty years later Gregory King drew up a "

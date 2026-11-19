@@ -498,8 +498,10 @@ three ways that must agree, then asks how to compare it across years and across 
 *Agora:* the Island's national accounts (a social accounting matrix) and an index-number lab.
 *Play it:* the two baskets; on the site, build a price index and watch chaining fix it.
 *Facts:* Kaldor's facts stated (answered in Part 20); the labour share.
-*Reading:* Kuznets 1934; Coyle, *GDP: A Brief but Affectionate History*; Lequiller & Blades, *Understanding
-National Accounts*; Diewert on index numbers; Deaton & Heston 2010; Boskin et al. 1998; Jones & Klenow 2016.
+*Reading:* Kuznets 1934; Petty 1665; Coyle, *GDP: A Brief but Affectionate History*; Lequiller & Blades,
+*Understanding National Accounts*; Leontief, *Input-Output Economics*; Boskin et al. 1996; Lebow & Rudd 2003; Moulton
+2018; Deaton & Heston 2010; Nordhaus & Tobin 1972; Piketty, Saez & Zucman 2018; Jones & Klenow 2016; Corrado, Hulten &
+Sichel 2009; Henderson, Storeygard & Weil 2012; Martinez 2022.
 
 ### Part 4 · The Evidence (~56)
 *Question:* when can data answer an economic question?
@@ -2761,6 +2763,7 @@ Young Economist*.
 | Phase 0 | the first slice built | `explainer/economics/`: Agora (`market`, `crusoe`, `signals`, and from Part 2 `curves`), the Island, the Facts, the Dials and their gate, Called it?, the Data Room (Maddison 2023, FRED, the Philadelphia Fed's forecasters, and from Part 2 the Pink Sheet and USDA's coffee data, frozen 2026-11-18), the instruments, the score; the course entry, the lab kit and the game kit (`00_games.js`); `tests/economics/`. `READING.md`, written from the syllabus and the parts (`videos/economics/reading.py`); the Chinese term guide (`ECONOMICS_ZH_GUIDE.md`). Still to come: the soundcheck film, the Chinese text table |
 | 1 | built, English | *Who Feeds Paris?* Every date, quotation and number checked against its source (see the part's README); the Chinese edition is to come |
 | 2 | built, English | *The Scissors.* Agora gains `curves` (straight lines through elasticity, incidence and controls) and taxes, caps and floors in the double auction; the Data Room gains the World Bank's Pink Sheet and USDA's coffee balance sheets; the first Dial row (staples) and the first Fact's columns are filled |
+| 3 | built, English | *The Measure.* Agora gains `accounts` (the Island's input-output table, GDP three ways, Leontief's inverse, value added in exports) and `indices` (Laspeyres, Paasche, Fisher, Törnqvist, the exact Cobb–Douglas index, chaining and drift); the Data Room gains FRED's national accounts, labour-market and price series, the World Bank's WDI, the UNDP's HDI and the Philadelphia Fed's real-time GDP; a new dial (the CPI's bias, from expert reviews); Kaldor's facts and the labour share are shown; the Dials gate checks every Data Room loader |
 
 **Corrections found while building Part 1** (the plan's draft, written from memory, against the sources): Bastiat's
 Paris passage is in *Economic Sophisms*, First Series, ch. 18 (1845), not the *Harmonies*; Hume's is/ought passage is
@@ -2776,3 +2779,15 @@ editions (third, 1895; quoted from the fifth, 1907). The Dial rows are petrol, c
 meta-analyses; housing services, in the draft, wait for Part 37. Gallet and List's mean (−0.48) is read from *Tobacco
 in Australia*, not the paper. The Bureau of Labor Statistics published no consumer price index for October 2025;
 deflated series fill that month from its neighbours and say so.
+
+**Corrections found while building Part 3.** The 1934 report was transmitted on 4 January 1934 (the letter is dated 3
+January); the warning "the welfare of a nation can, therefore, scarcely be inferred from a measurement of national
+income" is on p. 7 of Senate Document 124, read in BEA's 2020 reprint, beside the passage on "housewives' services".
+Petty's estimate is in *Verbum Sapienti* (written 1665, printed 1691): six million people at £6 13s 4d a head, £40
+million, of which the stock yields £15 million and labour £25 million; he used the split to apportion a war tax. The
+Boskin Commission's 1.1 points break down as 0.15, 0.25, 0.10 and 0.60 (Gordon 2006; Moulton 2018), and Lebow and
+Rudd's estimate is 0.87 (0.9 in their abstract). Deaton and Heston's revision is the 2005 round only (China 40%
+smaller, India 36%); the 2011 round in the draft is left out. Leontief's 1936 table is of 1919. The household survey
+was not taken in October 2025, so the unemployment rate for that month does not exist; the intermission turns that
+gap into a rest in its melody. The draft's social accounting matrix became an input-output table with four
+industries; unemployment's flows wait for Part 24; the Big Mac index is mentioned, not used.

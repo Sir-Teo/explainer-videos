@@ -8,7 +8,8 @@ For one part (``videos/economics/econN``) it checks, from the part's own sources
 
 * every transcribed table the part uses (``tables.NAME`` in its scenes or ``compute.py``) is registered in
   ``explainer.economics.data.tables`` with a citation, where it is in the publication, and the date it was checked;
-* every Data Room dataset it loads (``data.maddison_*``, ``data.fred``, ``data.spf``) is registered in
+* every Data Room dataset it loads (``data.maddison_*``, ``data.fred``, ``data.spf``, ``data.pinksheet``,
+  ``data.psd_coffee``, ``data.wdi``, ``data.hdr``, ``data.rtdsm``) is registered in
   ``explainer.economics.data.DATASETS`` with a licence and a vintage, and its extracts are listed in ``SOURCES.md``;
 * every Called-it card it draws (``call_card(``) comes from a ``explainer.economics.calls`` entry for the part
   (``calls.CALLS["key"]``), and every entry it names exists and belongs to the part;
@@ -34,7 +35,8 @@ from explainer.economics import calls, data, dials  # noqa: E402
 from explainer.economics.data import tables  # noqa: E402
 
 LOADERS = {"maddison_world": "maddison2023", "maddison_country": "maddison2023", "maddison_year": "maddison2023",
-           "fred": "fred", "spf": "spf"}
+           "fred": "fred", "spf": "spf", "pinksheet": "pinksheet", "psd_coffee": "psd_coffee", "wdi": "wdi",
+           "hdr": "hdr", "rtdsm": "rtdsm"}
 
 
 def check(video: str) -> list[str]:
@@ -60,7 +62,7 @@ def check(video: str) -> list[str]:
             problems.append(f"{video}: tables.{name} has no date checked")
     # the Data Room
     sources = (ROOT / "explainer" / "economics" / "data" / "SOURCES.md").read_text()
-    for loader in sorted(set(re.findall(r"\bdata\.(maddison_world|maddison_country|maddison_year|fred|spf)\(", src))):
+    for loader in sorted(set(re.findall(r"\bdata\.(" + "|".join(LOADERS) + r")\(", src))):
         d = data.DATASETS[LOADERS[loader]]
         if not d.get("licence") or not d.get("vintage"):
             problems.append(f"{video}: dataset {LOADERS[loader]} has no licence or vintage")

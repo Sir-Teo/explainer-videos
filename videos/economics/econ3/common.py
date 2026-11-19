@@ -26,6 +26,7 @@ PAAS = "#6FC3F2"      # Paasche: the new basket
 FISHER = E.ACCENT     # Fisher's ideal index
 TRUE = E.TRUTH        # the true cost of living (the Island's, known)
 UNPAID = "#C9A0FF"    # work the accounts leave out
+STORM_C = "#8FA3B8"   # a stormy season on the Island
 DARA = island.CAST["dara"].color
 BO = island.CAST["bo"].color
 KUZ = "#E8D5A8"       # the 1934 report's paper

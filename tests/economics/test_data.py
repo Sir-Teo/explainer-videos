@@ -62,3 +62,35 @@ def test_the_fine_transcription():
         mine = (sum(x[0:4]) / 4, sum(x[4:8]) / 4, sum(x[4:16]) / 12, sum(x[16:20]) / 4)
         for a, b in zip(mine, means):  # the paper truncates its twelve-week means to one decimal
             assert abs(a - b) < 1e-9 or abs(math.floor(a * 10 + 1e-9) / 10 - b) < 1e-9
+
+
+def test_part3_accounts_and_surveys():
+    gdp = dict(zip(data.fred("GDPA")["date"], data.fred("GDPA")["value"]))["2025-01-01"]
+    parts = [dict(zip(data.fred(s)["date"], data.fred(s)["value"]))["2025-01-01"]
+             for s in ("PCECA", "GPDIA", "GCEA", "EXPGSA", "IMPGSA")]
+    assert abs(parts[0] + parts[1] + parts[2] + parts[3] - parts[4] - gdp) < 0.01   # C + I + G + X - M = GDP
+    assert data.fred("GDIA")["retrieved"] == "2026-11-19" and data.fred("GDPCA")["retrieved"] == "2026-11-18"
+    u = data.fred("UNRATE")
+    missing = [d for d, v in zip(u["date"], u["value"]) if not v == v]
+    assert missing == ["2025-10-01"]                                        # the one month never collected
+    chn = next(r for r in data.wdi(2024) if r["code"] == "CHN")
+    assert 18e12 < chn["gdp_usd"] < 19e12 and 38e12 < chn["gdp_ppp"] < 39e12
+    assert len(data.hdr()) == 195
+    fl = {r["quarter"]: r for r in data.rtdsm()["first_latest"]}
+    assert abs(fl["2008:Q4"]["first"] + 3.804) < 1e-3 and abs(fl["2008:Q4"]["latest"] + 8.472) < 1e-3
+
+
+def test_kuznets_tables_add_up():
+    k = tables.KUZNETS_1934.data
+    for i in range(4):
+        # income produced = income paid out + business savings (table 1)
+        assert k["paid_out"][i] + k["business_savings"][i] == k["produced"][i]
+        # labour + property + entrepreneurial income = income paid out (table 2), to the report's rounding
+        total = k["labour"][i] + k["property"][i] + k["entrepreneurial"][i]
+        assert abs(total - k["paid_out"][i]) <= 2
+    p = tables.PETTY_1665.data
+    assert p["stock_yields"] + p["labour_yields"] == p["expense"]
+    b = tables.CPI_BIAS.data
+    assert abs(sum(b["boskin_1996"]) - b["boskin_total"]) < 1e-9
+    assert abs(sum(b["lebow_rudd_2003"]) - b["lebow_rudd_total"]) < 1e-9
+    assert abs(sum(b["moulton_2018"]) - b["moulton_total"]) < 1e-9
