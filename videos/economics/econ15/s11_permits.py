@@ -108,7 +108,7 @@ class Permits(VoiceoverScene):
         a = ax.ax
         dots = VGroup(*[Dot(a.c2p(x, y), radius=0.07, color=DEMAND) for x, y, _ in pts])
         line = VMobject(stroke_color=DEMAND, stroke_width=2.5).set_points_as_corners([a.c2p(x, y) for x, y, _ in pts])
-        sides = [RIGHT, LEFT, RIGHT, LEFT, None, LEFT, RIGHT, UL]
+        sides = [RIGHT, LEFT, RIGHT, LEFT, None, LEFT, RIGHT, UP]
         labs = VGroup()
         for (x, y, t_), d, sd in zip(pts, dots, sides):
             if t_:

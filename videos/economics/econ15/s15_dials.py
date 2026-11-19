@@ -21,7 +21,7 @@ class Dials(VoiceoverScene):
         def X(v):
             return x0 + (x1 - x0) * (v - lo) / (hi - lo)
 
-        one = VGroup(DashedLine([X(1.0), 2.1, 0], [X(1.0), -0.5, 0], color=GOOD, stroke_width=2),
+        one = VGroup(DashedLine([X(1.0), 2.1, 0], [X(1.0), 0.32, 0], color=GOOD, stroke_width=2),
                      label(r"one: \ every new lane fills", font_size=15, color=GOOD).move_to([X(1.0), 2.3, 0]))
         meaning = wrapped_label(tex_safe(dial.meaning), 12.6, 18, GREY_A).to_edge(DOWN, buff=0.25)
         extra = label(r"the instruments: \ explorers' routes of the 1830s, \ railroads of 1898, \ the 1947 highway "

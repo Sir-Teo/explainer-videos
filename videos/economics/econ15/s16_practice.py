@@ -32,9 +32,9 @@ class Practice(VoiceoverScene):
             "their users. <bookmark mark='b'/> And plain rules, standards for engines, fuels and chimneys, which are "
             "still the commonest tool of all, and often the costliest way to get a given cut."
         ) as vo:
-            self.play(FadeIn(head, shift=DOWN * 0.2))
+            self.play(FadeIn(head, shift=DOWN * 0.2), FadeIn(rows.cards[0], shift=UP * 0.1))
             vo.wait_until("a")
-            self.play(LaggedStart(*[FadeIn(c, shift=UP * 0.1) for c in rows.cards[:5]], lag_ratio=0.8), run_time=10)
+            self.play(LaggedStart(*[FadeIn(c, shift=UP * 0.1) for c in rows.cards[1:5]], lag_ratio=0.8), run_time=9)
             vo.wait_until("b")
             self.play(FadeIn(rows.cards[5], shift=UP * 0.1))
         self.clear_scene()
