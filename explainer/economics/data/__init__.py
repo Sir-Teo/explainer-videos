@@ -113,11 +113,17 @@ for _c, _name in PCE_CATEGORIES.items():
                                        "index 2017 = 100", "annual", "U.S. Bureau of Economic Analysis")
     FRED_SERIES[f"{_c}RC1A027NBEA"] = (f"Personal consumption expenditures: {_name}", "billions of dollars", "annual",
                                        "U.S. Bureau of Economic Analysis")
+# Part 9: the law of one price in crude oil, Brent (North Sea) against West Texas Intermediate (Cushing, Oklahoma)
+FRED_SERIES["MCOILBRENTEU"] = ("Crude oil prices: Brent - Europe", "dollars per barrel, not seasonally adjusted",
+                               "monthly", "U.S. Energy Information Administration")
+FRED_SERIES["MCOILWTICO"] = ("Crude oil prices: West Texas Intermediate (WTI) - Cushing, Oklahoma",
+                             "dollars per barrel, not seasonally adjusted", "monthly",
+                             "U.S. Energy Information Administration")
 # The date each series was retrieved (its vintage); a series not listed was retrieved on DATASETS["fred"]["vintage"]
 FRED_RETRIEVED = {s: "2026-11-19" for s in (
     "GDPA", "GDIA", "PCECA", "GPDIA", "GCEA", "EXPGSA", "IMPGSA", "A033RC1A027NBEA", "A191RD3A086NBEA", "U1RATE",
     "U2RATE", "U4RATE", "U5RATE", "U6RATE", "CIVPART", "EMRATIO", "CPIAUCSL", "SUUR0000SA0", "PCEPI",
-    "LABSHPUSA156NRUG", "B230RC0A052NBEA", "PCECCA", "DPCERG3A086NBEA", "TB3MS", *(f"{c}{t}" for c in PCE_CATEGORIES for t in ("RG3A086NBEA",
+    "LABSHPUSA156NRUG", "B230RC0A052NBEA", "PCECCA", "DPCERG3A086NBEA", "TB3MS", "MCOILBRENTEU", "MCOILWTICO", *(f"{c}{t}" for c in PCE_CATEGORIES for t in ("RG3A086NBEA",
                                                                                          "RC1A027NBEA")))}
 
 SPF_FILES = ("median_rgdp_level", "median_rgdp_growth", "median_recess_level")
