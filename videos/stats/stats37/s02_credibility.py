@@ -6,11 +6,18 @@ from videos.stats.stats37.common import *  # noqa: F403
 class Credibility(StatsScene):
     def construct(self):
         self.card()
+        self.ask("Change which controls enter a regression. The estimated effect...",
+                 ["stays stable", "can swing widely"], 1,
+                 say="Leamer, 1983: Let's Take the Con out of Econometrics. Change which control variables enter a "
+                     "regression. What happens to the estimated effect?",
+                 reveal="It can swing widely, even change sign. The answer was design before regression: find "
+                        "variation in the treatment that is as good as random.")
         self.con()
         self.design()
         self.designs()
         self.local()
         self.nobel()
+        self.answer()
 
     def card(self):
         self.chapter(1, r"The credibility revolution", r"Design before regression", lit=(1983, 2010), part=PART, said="Chapter one. The credibility revolution.")

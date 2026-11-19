@@ -8,6 +8,12 @@ from videos.stats.stats35.common import *  # noqa: F403
 class Randomization(StatsScene):
     def construct(self):
         self.card()
+        self.ask("Treated minus untreated averages equals the effect plus...",
+                 ["selection bias, zero on average under randomization", "only noise"], 0,
+                 say="The difference in average outcomes between treated and untreated. In general, it equals the "
+                     "effect plus what?",
+                 reveal="Selection bias: how the treated would have differed anyway. Randomization makes it zero on "
+                        "average; that's the whole argument.")
         self.decompose()
         self.doctor()
         self.numbers()
@@ -15,6 +21,7 @@ class Randomization(StatsScene):
         self.why_()
         self.board()
         self.balance()
+        self.answer()
 
     def card(self):
         self.chapter(3, r"Why randomization works", r"Selection bias, measured", lit=(1935,), part=PART, said="Chapter three. Why randomization works.")

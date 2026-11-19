@@ -6,12 +6,20 @@ from videos.stats.stats36.common import *  # noqa: F403
 class Smoking(StatsScene):
     def construct(self):
         self.card()
+        self.ask("Fisher suggested a gene behind both smoking and cancer. What answered him?",
+                 ["a randomized trial of smoking", "consistency, dose--response, cessation, Cornfield's bound"], 1,
+                 say="Fisher suggested that a gene might cause both smoking and lung cancer. What evidence answered "
+                     "him?",
+                 reveal="Not a trial: nobody randomized cigarettes. Consistency across studies, dose-response, "
+                        "falling risk after quitting, and Cornfield's bound. In 1964 the Surgeon General's report "
+                        "concluded that smoking causes lung cancer.")
         self.doll()
         self.cohort()
         self.fisher()
         self.cornfield()
         self.hill()
         self.lesson()
+        self.answer()
 
     def card(self):
         self.chapter(13, r"Smoking and lung cancer", r"The argument that settled it", lit=(1950, 1958, 1959, 1965), part=PART, said="Chapter thirteen. Smoking and lung cancer.")

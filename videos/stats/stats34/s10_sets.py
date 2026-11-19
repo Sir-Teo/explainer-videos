@@ -11,6 +11,12 @@ SPC = [S.CTRL, S.TREAT, S.ALT]  # setosa, versicolor, virginica
 class Sets(StatsScene):
     def construct(self):
         self.card()
+        self.ask("A conformal prediction set for an ambiguous image contains...",
+                 ["always one label", "several labels, admitting doubt"], 1,
+                 say="A conformal classifier gives a set of labels with ninety percent coverage. For an ambiguous "
+                     "image, what does the set contain?",
+                 reveal="Several labels: the set grows when the model is unsure. An answer that admits doubt, with "
+                        "a guarantee.")
         self.lac()
         self.aps()
         self.irises()
@@ -19,6 +25,7 @@ class Sets(StatsScene):
         self.mondrian()
         self.cancer()
         self.pvalues()
+        self.answer()
 
     def card(self):
         self.chapter(9, r"Classification sets", r"Answers that admit doubt", lit=(2020,), part=PART, said="Chapter nine. Prediction sets for classification.")

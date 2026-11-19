@@ -8,6 +8,12 @@ from videos.stats.stats36.common import *  # noqa: F403
 class Sensitivity(StatsScene):
     def construct(self):
         self.card()
+        self.ask("Smokers had about 9 times the lung-cancer risk. A hidden confounder explaining it must be...",
+                 ["at least 9 times as common in smokers", "slightly more common in smokers"], 0,
+                 say="Smokers had about nine times the lung-cancer risk of non-smokers. For a hidden confounder to "
+                     "explain it all away, how much more common must it be among smokers?",
+                 reveal="At least nine times as common. Cornfield's inequality, 1959: the first formal sensitivity "
+                        "analysis, and a bar no proposed gene could clear.")
         self.setup_()
         self.rosenbaum()
         self.gamma_chart()
@@ -16,6 +22,11 @@ class Sensitivity(StatsScene):
         self.ch_numbers()
         self.board()
         self.lesson()
+        self.answer()
+        self.checkpoint([("AIPW is consistent when?", "either model is right"),
+                         ("Cross-fitting avoids?", "bias from reusing the data")],
+                        narration="Checkpoint. Robustness.",
+                        answers_narration="Either model. And bias from reusing the data.")
 
     def card(self):
         self.chapter(12, r"Sensitivity analysis", r"How wrong could we be?", lit={1959: r"Cornfield's inequality", 2017: r"E-values", 2020: r"robustness values"}, part=PART, said="Chapter twelve. Sensitivity analysis.")

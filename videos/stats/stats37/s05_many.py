@@ -8,12 +8,23 @@ from videos.stats.stats37.common import *  # noqa: F403
 class Many(StatsScene):
     def construct(self):
         self.card()
+        self.ask("Quarter of birth interacted into 180 instruments. 2SLS drifts toward...",
+                 ["the truth", "OLS"], 1,
+                 say="Angrist and Krueger interacted quarter of birth with year and state, up to a hundred and "
+                     "eighty instruments. With so many weak ones, where does two-stage least squares drift?",
+                 reveal="Toward ordinary least squares. Bound, Jaeger and Baker showed in 1995 that random quarters "
+                        "of birth gave similar answers. More instruments, more bias.")
         self.thirty()
         self.hist()
         self.fake()
         self.board()
         self.mr_graph()
         self.mr_plot()
+        self.answer()
+        self.checkpoint([("The draft-lottery IV estimate is for?", "the compliers"),
+                         ("Weak instruments push 2SLS toward?", "OLS")],
+                        narration="Checkpoint. Instruments.",
+                        answers_narration="The compliers. And toward OLS.")
 
     def card(self):
         self.chapter(4, r"Many instruments; \ Mendelian randomization", r"More instruments, \ more bias", lit=(1995, 2003, 2015), part=PART, said="Chapter four. Many instruments, and Mendelian randomization.")

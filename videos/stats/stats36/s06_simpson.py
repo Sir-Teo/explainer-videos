@@ -6,11 +6,18 @@ from videos.stats.stats36.common import *  # noqa: F403
 class Simpson(StatsScene):
     def construct(self):
         self.card()
+        self.ask("Simpson's paradox: which comparison is right, pooled or stratified?",
+                 ["always the stratified one", "it depends on the causal story"], 1,
+                 say="The World's clinic: the treatment wins in every severity group and loses overall. Which "
+                     "comparison is right, the pooled one or the stratified one?",
+                 reveal="It depends on the causal story. If severity drove the choice of treatment, stratify; if "
+                        "the treatment changed severity, don't. The paradox is in the story, not the numbers.")
         self.recall()
         self.graph()
         self.adjust()
         self.other()
         self.lesson()
+        self.answer()
 
     def card(self):
         self.chapter(5, r"Simpson resolved", r"The paradox is in the causal story, \ not the numbers", lit=(1995,), part=PART, said="Chapter five. Simpson's paradox, resolved.")

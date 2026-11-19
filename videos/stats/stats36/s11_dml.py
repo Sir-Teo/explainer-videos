@@ -6,6 +6,12 @@ from videos.stats.stats36.common import *  # noqa: F403
 class DML(StatsScene):
     def construct(self):
         self.card()
+        self.ask("Why cross-fit in double machine learning?",
+                 ["to avoid bias from reusing the data", "to speed it up"], 0,
+                 say="Double machine learning fits the nuisance models with flexible learners, then cross-fits: "
+                     "nuisances on one fold, the effect on another. Why?",
+                 reveal="To avoid the overfitting bias of using the same data twice. With cross-fitting, root-n "
+                        "intervals survive flexible nuisance fits.")
         self.problem()
         self.orthogonal()
         self.crossfit()
@@ -13,6 +19,7 @@ class DML(StatsScene):
         self.results()
         self.board()
         self.plr()
+        self.answer()
 
     def card(self):
         self.chapter(10, r"Double machine learning", r"Flexible nuisances, \ honest intervals", lit=(2018,), part=PART, said="Chapter ten. Double machine learning.")

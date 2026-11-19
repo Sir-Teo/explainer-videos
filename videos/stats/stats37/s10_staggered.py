@@ -11,6 +11,12 @@ KIND = {"vs never": BANDC, "early vs later": Y0C, "later vs earlier": MISSC}
 class Staggered(StatsScene):
     def construct(self):
         self.card()
+        self.ask("Two-way fixed effects, staggered adoption, effects growing over time. The estimate can...",
+                 ["get the sign wrong", "only be too small"], 0,
+                 say="Towns adopt a programme in different years, and its effect grows over time. Fit the usual "
+                     "two-way fixed effects regression. How wrong can it be?",
+                 reveal="It can get the sign wrong: already-treated towns serve as controls, and their growing "
+                        "effects are subtracted. Goodman-Bacon's decomposition shows the forbidden comparisons.")
         self.staircase()
         self.verdict()
         self.bacon()
@@ -18,6 +24,7 @@ class Staggered(StatsScene):
         self.fixes()
         self.event()
         self.board()
+        self.answer()
 
     def card(self):
         self.chapter(9, r"Staggered adoption", r"When two-way fixed effects get the sign wrong", lit=(2021,), part=PART, said="Chapter nine. Staggered adoption.")

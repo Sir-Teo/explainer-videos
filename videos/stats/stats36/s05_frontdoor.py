@@ -6,11 +6,23 @@ from videos.stats.stats36.common import *  # noqa: F403
 class Frontdoor(StatsScene):
     def construct(self):
         self.card()
+        self.ask(r"Smoking $\to$ tar $\to$ cancer, with an unmeasured gene affecting smoking and cancer. The effect is...",
+                 ["unidentifiable", "identified through tar: the front door"], 1,
+                 say="Fisher's objection, drawn: an unmeasured gene drives both smoking and cancer. But smoking "
+                     "acts only through tar in the lungs, and the gene doesn't affect tar. Is the effect "
+                     "identified?",
+                 reveal="Yes, through the front door: estimate smoking's effect on tar, and tar's effect on cancer "
+                        "adjusting for smoking, then chain them. Identification beyond adjustment.")
         self.setup_()
         self.formula()
         self.numbers()
         self.docalc()
         self.swig()
+        self.answer()
+        self.checkpoint([("A path through a common cause carries?", "association, not causation"),
+                         ("Adjusting for a collider?", "opens a path: it creates bias")],
+                        narration="Checkpoint. Diagrams.",
+                        answers_narration="Association. And it creates bias.")
 
     def card(self):
         self.chapter(4, r"The front door and do-calculus", r"Identification beyond adjustment", lit=(1995,), part=PART, said="Chapter four. The front door, and the do-calculus.")

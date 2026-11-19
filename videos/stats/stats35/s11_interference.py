@@ -8,6 +8,13 @@ from videos.stats.stats35.common import *  # noqa: F403
 class Interference(StatsScene):
     def construct(self):
         self.card()
+        self.ask("Treatment spills over to the controls. The simple difference in means...",
+                 ["overstates the total effect", "understates the total effect"], 1,
+                 say="A vaccine protects the vaccinated and the people they'd have infected. If the controls "
+                     "benefit too, does the simple difference in means overstate or understate the effect of "
+                     "vaccinating everyone?",
+                 reveal="It understates it: the controls got some of the benefit. Define the estimand for the "
+                        "interference you believe in, and randomize at the level it implies.")
         self.herd()
         self.epidemic()
         self.design()
@@ -15,6 +22,7 @@ class Interference(StatsScene):
         self.numbers()
         self.naive()
         self.exposure()
+        self.answer()
 
     def card(self):
         self.chapter(10, r"Interference", r"When your treatment affects me", lit=(2008,), part=PART, said="Chapter ten. Interference.")

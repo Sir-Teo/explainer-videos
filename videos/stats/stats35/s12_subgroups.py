@@ -11,12 +11,23 @@ SIGNS = ["Ari", "Tau", "Gem", "Can", "Leo", "Vir", "Lib", "Sco", "Sag", "Cap", "
 class Subgroups(StatsScene):
     def construct(self):
         self.card()
+        self.ask("In ISIS-2, aspirin appeared not to help patients born under which signs?",
+                 ["Gemini or Libra", "Leo", "none"], 0,
+                 say="ISIS-2, seventeen thousand patients with a suspected heart attack. Aspirin clearly worked. "
+                     "But for patients born under some star signs it appeared not to help. Which?",
+                 reveal="Gemini or Libra. The investigators reported it on purpose: cut the data enough ways and "
+                        "some subgroup will disagree by chance.")
         self.isis()
         self.zodiac()
         self.simulate()
         self.chart()
         self.why_()
         self.rules()
+        self.answer()
+        self.checkpoint([("ITT over the uptake difference estimates?", "the complier average effect"),
+                         ("Spillover to controls makes the difference in means?", "understate the total effect")],
+                        narration="Checkpoint. When the design is broken.",
+                        answers_narration="The compliers' effect. And it understates.")
 
     def card(self):
         self.chapter(11, r"Subgroups", r"Gemini, \ Libra, \ and the garden of forking paths", lit=(1988,), part=PART, said="Chapter eleven. Subgroups.")

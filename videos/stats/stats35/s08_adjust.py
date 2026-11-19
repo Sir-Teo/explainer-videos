@@ -6,6 +6,12 @@ from videos.stats.stats35.common import *  # noqa: F403
 class Adjust(StatsScene):
     def construct(self):
         self.card()
+        self.ask("Lin's adjustment, treatment by covariate interacted, with robust SEs. Asymptotically, against no adjustment...",
+                 ["never less precise", "can be less precise"], 0,
+                 say="Freedman warned that regression adjustment of a randomized trial can hurt precision. Lin's "
+                     "answer: interact the treatment with the centred covariate and use robust standard errors. "
+                     "Asymptotically, can that be less precise than no adjustment?",
+                 reveal="Never less precise, asymptotically. Freedman's critique, answered.")
         self.ancova_()
         self.trial()
         self.freedman()
@@ -13,6 +19,11 @@ class Adjust(StatsScene):
         self.design()
         self.board()
         self.rules()
+        self.answer()
+        self.checkpoint([("Neyman's variance estimate is?", "conservative"),
+                         ("Lin's interacted adjustment, asymptotically?", "never less precise than unadjusted")],
+                        narration="Checkpoint. Designs and adjustment.",
+                        answers_narration="Conservative. And never less precise.")
 
     def card(self):
         self.chapter(7, r"Adjustment", r"Freedman's critique and Lin's answer", lit=(2008, 2013), part=PART, said="Chapter seven. Regression adjustment.")

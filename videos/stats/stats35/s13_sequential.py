@@ -8,6 +8,12 @@ from videos.stats.stats35.common import *  # noqa: F403
 class Sequential(StatsScene):
     def construct(self):
         self.card()
+        self.ask(r"Look 5 times, each at 5\%, stop at the first significance. The overall false-positive rate?",
+                 [r"5\%", r"about 14\%", r"about 25\%"], 1,
+                 say="A trial looks at its data five times, each at the five percent level, and stops at the first "
+                     "significant result. With no true effect, what's the overall false-positive rate?",
+                 reveal="About fourteen percent. Group-sequential boundaries, Pocock's or O'Brien and Fleming's, "
+                        "spend the five percent across the looks.")
         self.why_()
         self.peek()
         self.boundaries()
@@ -16,6 +22,7 @@ class Sequential(StatsScene):
         self.spending_()
         self.board()
         self.dsmb()
+        self.answer()
 
     def card(self):
         self.chapter(12, r"Sequential trials", r"Looking early without cheating", lit=(1977, 1979, 1983), part=PART, said="Chapter twelve. Sequential trials.")

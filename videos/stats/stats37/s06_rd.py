@@ -13,6 +13,12 @@ def lens_axes(center=(-1.6, 0.2, 0), x_length=8.2, y_length=4.4):
 class RD(StatsScene):
     def construct(self):
         self.card()
+        self.ask("A regression discontinuity estimates the effect for...",
+                 ["everyone", "units at the cutoff"], 1,
+                 say="A scholarship goes to everyone scoring above a cutoff. Compare those just above with those "
+                     "just below. Whose effect does that estimate?",
+                 reveal="The effect at the cutoff, for students right at the threshold. Nature's experiment, local "
+                        "by construction.")
         self.history()
         self.picture()
         self.identify()
@@ -21,6 +27,7 @@ class RD(StatsScene):
         self.robust()
         self.study()
         self.board()
+        self.answer()
 
     def card(self):
         self.chapter(5, r"Regression discontinuity", r"Nature's experiment at a cutoff", lit=(1960, 2012, 2014), part=PART, said="Chapter five. Regression discontinuity.")

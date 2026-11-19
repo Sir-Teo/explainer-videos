@@ -12,6 +12,12 @@ def short(name: str) -> str:
 class Explain(StatsScene):
     def construct(self):
         self.card()
+        self.ask("Many different models fit the data almost equally well. Their explanations...",
+                 ["agree", "can disagree completely"], 1,
+                 say="Breiman's Rashomon effect: many different models fit the same data almost equally well. Do "
+                     "their explanations of the data agree?",
+                 reveal="They can disagree completely: different variables, different shapes, the same accuracy. "
+                        "Good prediction doesn't single out one explanation.")
         self.shmueli()
         self.epe()
         self.wrong_wins()
@@ -20,6 +26,7 @@ class Explain(StatsScene):
         self.pairs()
         self.rashomon_set()
         self.lesson()
+        self.answer()
 
     def card(self):
         self.chapter(1, r"Explain or predict?", r"The Rashomon effect", lit=(2010,), part=PART, said="Chapter one. Explain, or predict?")

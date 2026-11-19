@@ -8,12 +8,19 @@ from videos.stats.stats37.common import *  # noqa: F403
 class Instruments(StatsScene):
     def construct(self):
         self.card()
+        self.ask("The draft-lottery IV estimate of military service applies to...",
+                 ["all veterans", "men who served because their number came up"], 1,
+                 say="Angrist used the Vietnam draft lottery as an instrument for military service. Whose effect "
+                     "does the estimate describe?",
+                 reveal="The compliers': men who served because their number came up, and otherwise wouldn't have. "
+                        "Not volunteers, and not those who avoided service anyway.")
         self.wright()
         self.graph()
         self.quarters()
         self.wald()
         self.tsls()
         self.lottery()
+        self.answer()
 
     def card(self):
         self.chapter(2, r"Instrumental variables", r"A nudge that reaches the outcome only through the treatment", lit=(1928, 1990, 1991), part=PART, said="Chapter two. Instrumental variables.")

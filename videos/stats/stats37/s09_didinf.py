@@ -8,11 +8,19 @@ from videos.stats.stats37.common import *  # noqa: F403
 class DiDInference(StatsScene):
     def construct(self):
         self.card()
+        self.ask(r"Placebo laws in state panels, naive standard errors, at 5\%. ``Significant'' how often?",
+                 [r"about 5\%", r"about 45\%"], 1,
+                 say="Bertrand, Duflo and Mullainathan assigned fake laws at random to states in a wage panel, and "
+                     "ran difference-in-differences with the usual standard errors. How often was a fake law "
+                     "significant at five percent?",
+                 reveal="About forty-five percent of the time. Serially correlated outcomes make naive standard "
+                        "errors far too small. Cluster by state.")
         self.persistence()
         self.bdm()
         self.placebo()
         self.fixes()
         self.board()
+        self.answer()
 
     def card(self):
         self.chapter(8, r"DiD inference", r"How much should we trust differences-in-differences estimates?", lit=(2004,), part=PART, said="Chapter eight. Inference for differences-in-differences.")

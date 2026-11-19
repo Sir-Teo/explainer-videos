@@ -8,6 +8,12 @@ from videos.stats.stats35.common import *  # noqa: F403
 class Potential(StatsScene):
     def construct(self):
         self.card()
+        self.ask("For each patient, how many of the two potential outcomes can we observe?",
+                 ["both", "at most one"], 1,
+                 say="Neyman's idea: every unit has two potential outcomes, one if treated and one if not. For each "
+                     "patient, how many of them can we observe?",
+                 reveal="At most one. The other is missing for ever: the fundamental problem of causal inference. "
+                        "Individual effects are out of reach, so we aim at averages.")
         self.history()
         self.define()
         self.trial()
@@ -15,6 +21,7 @@ class Potential(StatsScene):
         self.hide()
         self.histogram()
         self.holland()
+        self.answer()
 
     def card(self):
         self.chapter(1, r"Potential outcomes", r"Two futures for every unit", lit=(1923, 1974), part=PART, said="Chapter one. Potential outcomes.")

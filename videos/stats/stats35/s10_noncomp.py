@@ -6,6 +6,20 @@ from videos.stats.stats35.common import *  # noqa: F403
 class Noncompliance(StatsScene):
     def construct(self):
         self.card()
+        self.wrong_idea("Compare patients by the treatment they actually took",
+                        "As-treated comparisons break the randomization: report ITT and the complier effect",
+                        narration="When patients don't comply, a natural fix: compare those who took the drug with "
+                                  "those who didn't.",
+                        right_narration="That breaks the randomization: the patients who chose to take it differ "
+                                        "from those who didn't. Report the intention-to-treat effect, and the "
+                                        "complier effect by instrumental variables, never the as-treated comparison "
+                                        "alone.")
+        self.ask("The ITT effect divided by the difference in uptake estimates the effect for...",
+                 ["everyone", "the compliers"], 1,
+                 say="Some patients assigned the drug never take it. Divide the intention-to-treat effect by the "
+                     "difference in uptake between arms. Whose effect does that estimate?",
+                 reveal="The compliers': those who take the drug only when it's offered. Imbens and Angrist's local "
+                        "average treatment effect, under monotonicity and exclusion.")
         self.problem()
         self.types()
         self.estimates()
@@ -13,6 +27,7 @@ class Noncompliance(StatsScene):
         self.assumptions()
         self.board()
         self.meaning()
+        self.answer()
 
     def card(self):
         self.chapter(9, r"Noncompliance", r"Assigned is not treated", lit=(1994,), part=PART, said="Chapter nine. Noncompliance.")

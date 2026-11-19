@@ -8,12 +8,20 @@ from videos.stats.stats35.common import *  # noqa: F403
 class Neyman(StatsScene):
     def construct(self):
         self.card()
+        self.ask("Neyman's variance estimate for a difference in means is...",
+                 ["exact", "conservative: too large on average"], 1,
+                 say="Neyman asked how precisely the difference in means estimates the average effect. How does his "
+                     "standard variance estimate behave?",
+                 reveal="It's conservative, too large on average, because the variance of the unit effects can't be "
+                        "estimated from one realized half of the science. It's exact only if the effect is "
+                        "constant.")
         self.variance()
         self.why_cons()
         self.numbers()
         self.dist()
         self.board()
         self.bounds()
+        self.answer()
 
     def card(self):
         self.chapter(5, r"Neyman's variance", r"Repeated randomization of a fixed science", lit=(1923,), part=PART, said="Chapter five. Neyman's variance.")

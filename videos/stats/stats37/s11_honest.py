@@ -8,12 +8,30 @@ from videos.stats.stats37.common import *  # noqa: F403
 class Honest(StatsScene):
     def construct(self):
         self.card()
+        self.wrong_idea("Insignificant pre-trends prove parallel trends",
+                        "Pre-trend tests have little power; report how conclusions change if trends differ",
+                        narration="Common practice: the event study's leads aren't significantly different from "
+                                  "zero, so parallel trends holds.",
+                        right_narration="Pre-trend tests often have little power, and passing one says little. "
+                                        "Worse, conditioning on passing can bias the estimate. Report how the "
+                                        "conclusion changes if trends differ.")
+        self.ask("Rambachan and Roth's honest DiD reports...",
+                 ["a single estimate", "intervals that widen as allowed trend violations grow"], 1,
+                 say="What if the trends weren't quite parallel? What does Rambachan and Roth's honest "
+                     "difference-in-differences report?",
+                 reveal="Intervals that widen as the allowed violation of parallel trends grows, so the reader sees "
+                        "how much departure the conclusion can survive.")
         self.pretests()
         self.example()
         self.idea()
         self.sets()
         self.rm()
         self.lesson()
+        self.answer()
+        self.checkpoint([("Placebo laws, naive SEs: rejected how often?", r"about 45\% at 5\%"),
+                         ("TWFE with staggered, growing effects can?", "get the sign wrong")],
+                        narration="Checkpoint. Differences in differences.",
+                        answers_narration="About forty-five percent. And get the sign wrong.")
 
     def card(self):
         self.chapter(10, r"Honest parallel trends", r"What if the trends were not quite parallel?", lit=(2022, 2023), part=PART, said="Chapter ten. Honest parallel trends.")

@@ -8,6 +8,19 @@ from videos.stats.stats34.common import *  # noqa: F403
 class Split(StatsScene):
     def construct(self):
         self.card()
+        self.wrong_idea(r"A 90\% conformal interval covers each individual 90\% of the time",
+                        "The guarantee is marginal, averaged over cases; per-case coverage is impossible in general",
+                        narration="A tempting reading: a ninety percent conformal interval covers ninety percent of "
+                                  "the time for each person.",
+                        right_narration="The guarantee is marginal: averaged over new cases. For some kinds of "
+                                        "person it can cover far less, and Part 57 proves that exact coverage for "
+                                        "every individual is impossible without assumptions.")
+        self.ask(r"Split conformal's 90\% guarantee requires...",
+                 ["a correct model", "only exchangeability", "normal errors"], 1,
+                 say="Split conformal prediction wraps any model in an interval with ninety percent coverage. What "
+                     "does the guarantee require?",
+                 reveal="Only exchangeability of the calibration cases and the new one. The model can be wrong; the "
+                        "guarantee comes from ranks alone.")
         self.history()
         self.exchange()
         self.ladder_demo()
@@ -19,6 +32,11 @@ class Split(StatsScene):
         self.by_age()
         self.board()
         self.impossible()
+        self.answer()
+        self.checkpoint([(r"70\% forecasts that happen 85\% of the time are?", "underconfident"),
+                         ("Split conformal requires?", "exchangeability, nothing more")],
+                        narration="Checkpoint. Calibration and conformal.",
+                        answers_narration="Underconfident. And exchangeability.")
 
     def card(self):
         self.chapter(6, r"Split conformal", r"A guarantee from ranks alone", lit=(2005,), part=PART, said="Chapter six. Split conformal prediction.")

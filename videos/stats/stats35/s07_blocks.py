@@ -8,12 +8,19 @@ from videos.stats.stats35.common import *  # noqa: F403
 class Blocks(StatsScene):
     def construct(self):
         self.card()
+        self.ask("Pair patients by baseline pressure; randomize within pairs. The variance, against complete randomization...",
+                 ["is usually much smaller", "is always larger"], 0,
+                 say="A patient's baseline pressure strongly predicts their outcome. Pair patients by baseline, and "
+                     "randomize within each pair. What happens to the variance?",
+                 reveal="It's usually much smaller: the baseline differences are compared within pairs and cancel. "
+                        "Block what you can, randomize what you cannot.")
         self.idea()
         self.estimator()
         self.compare()
         self.pairs()
         self.rerand()
         self.lesson()
+        self.answer()
 
     def card(self):
         self.chapter(6, r"Blocking and pairing", r"Randomize within similar units", lit=(1935,), part=PART, said="Chapter six. Blocking and pairing.")

@@ -13,6 +13,12 @@ def cig_axes(center=(-1.8, 0.2, 0), y=(30, 150)):
 class Synth(StatsScene):
     def construct(self):
         self.card()
+        self.ask("California's synthetic control is built from...",
+                 ["the single most similar state", "a weighted mix of other states"], 1,
+                 say="Proposition 99 raised California's cigarette tax in 1989. Its synthetic control is built from "
+                     "what?",
+                 reveal="A weighted mix of other states, chosen so the mix tracked California's smoking before the "
+                        "law. After, the gap is the estimated effect.")
         self.story()
         self.average()
         self.recipe()
@@ -20,6 +26,7 @@ class Synth(StatsScene):
         self.gap()
         self.placebo()
         self.caveats()
+        self.answer()
 
     def card(self):
         self.chapter(11, r"Synthetic control", r"One treated state, \ and a weighted mix of the others", lit=(2003, 2010), part=PART, said="Chapter eleven. The synthetic control.")

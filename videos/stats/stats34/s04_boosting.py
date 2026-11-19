@@ -8,6 +8,11 @@ from videos.stats.stats34.common import *  # noqa: F403
 class Boosting(StatsScene):
     def construct(self):
         self.card()
+        self.ask("Gradient boosting fits each new tree to...",
+                 ["the original outcome", "the current residuals", "a fresh random sample only"], 1,
+                 say="Boosting adds trees one at a time, each a small step. What does each new tree fit?",
+                 reveal="The current residuals, or more generally the negative gradient of the loss: stagewise "
+                        "additive modelling, as Friedman put it.")
         self.adaboost()
         self.stagewise()
         self.gradient()
@@ -17,6 +22,7 @@ class Boosting(StatsScene):
         self.exponential()
         self.lasso_link()
         self.modern()
+        self.answer()
 
     def card(self):
         self.chapter(3, r"Boosting", r"Stagewise additive modelling", lit=(2000,), part=PART, said="Chapter three. Boosting.")

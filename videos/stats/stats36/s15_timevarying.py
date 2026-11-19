@@ -6,11 +6,18 @@ from videos.stats.stats36.common import *  # noqa: F403
 class TimeVarying(StatsScene):
     def construct(self):
         self.card()
+        self.ask("A time-varying confounder is also affected by earlier treatment. Regression adjustment for it is...",
+                 ["correct", "biased: g-methods are needed"], 1,
+                 say="HIV drugs adjusted to the latest viral load, which the earlier drugs changed. Adjust for "
+                     "viral load by regression?",
+                 reveal="Biased: it blocks part of the effect and can open other paths. Robins' g-methods, such as "
+                        "marginal structural models, handle confounders that are also results.")
         self.graph()
         self.dilemma()
         self.msm()
         self.numbers()
         self.target()
+        self.answer()
 
     def card(self):
         self.chapter(14, r"Time-varying treatments", r"When the confounder is also a result", lit={1986: r"the g-formula", 2000: r"marginal structural models", 2016: r"target trials"}, part=PART, said="Chapter fourteen. Treatments that vary over time.")

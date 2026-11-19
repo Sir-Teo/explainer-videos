@@ -6,11 +6,18 @@ from videos.stats.stats36.common import *  # noqa: F403
 class Propensity(StatsScene):
     def construct(self):
         self.card()
+        self.ask("Treated and untreated patients with the same propensity score are...",
+                 ["balanced on the score's covariates", "identical"], 0,
+                 say="The propensity score is each patient's chance of being treated, given their covariates. "
+                     "Treated and untreated patients with the same score: how do they compare?",
+                 reveal="Balanced: their covariates have the same distribution. One number balances many, Rosenbaum "
+                        "and Rubin's 1983 result.")
         self.balancing()
         self.matching()
         self.subclass()
         self.numbers()
         self.design()
+        self.answer()
 
     def card(self):
         self.chapter(7, r"Propensity scores", r"One number that balances many", lit=(1983, 1968), part=PART, said="Chapter seven. Propensity scores.")

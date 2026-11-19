@@ -11,6 +11,12 @@ METH = {"naive": (r"in-sample residuals", MISSC), "jack": (r"jackknife", CALC), 
 class Jackknife(StatsScene):
     def construct(self):
         self.card()
+        self.ask("Conformalized quantile regression's bands are...",
+                 ["the same width everywhere", "wider where the data are noisier"], 1,
+                 say="Conformalized quantile regression starts from estimated quantiles, then calibrates them. What "
+                     "do its bands look like?",
+                 reveal="Wider where the data are noisier: the band breathes with the spread. The marginal ninety "
+                        "percent stays guaranteed.")
         self.waste()
         self.naive()
         self.jplus()
@@ -22,6 +28,7 @@ class Jackknife(StatsScene):
         self.cqr_band()
         self.cqr_age()
         self.board()
+        self.answer()
 
     def card(self):
         self.chapter(7, r"Jackknife+ and CQR", r"Using all the data; \ bands that breathe", lit=(2021,), part=PART, said="Chapter seven. The jackknife plus, and conformalized quantile regression.")

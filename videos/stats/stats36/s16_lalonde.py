@@ -8,11 +8,22 @@ from videos.stats.stats36.common import *  # noqa: F403
 class LaLonde(StatsScene):
     def construct(self):
         self.card()
+        self.ask("LaLonde, 1986: non-experimental estimates of a job-training effect, against the experiment...",
+                 ["matched it closely", "varied widely, often far off"], 1,
+                 say="LaLonde compared non-experimental estimates of a job-training programme's effect with the "
+                     "answer from its randomized experiment. How did they do?",
+                 reveal="They varied widely and were often far off. Forty years of re-analysis taught that overlap, "
+                        "design and sensitivity matter more than any single estimator.")
         self.overlap()
         self.estimates()
         self.chart()
         self.placebo()
         self.lessons()
+        self.answer()
+        self.checkpoint([("Cornfield: to explain a 9-fold risk, a confounder must be?", "at least 9 times as common in smokers"),
+                         ("Confounders affected by earlier treatment need?", "g-methods, not regression adjustment")],
+                        narration="Checkpoint. Sensitivity and time.",
+                        answers_narration="Nine times as common. And g-methods.")
 
     def card(self):
         self.chapter(15, r"LaLonde revisited", r"What forty years of re-analysis taught", lit=(1986, 1999), part=PART, said="Chapter fifteen. LaLonde, revisited.")

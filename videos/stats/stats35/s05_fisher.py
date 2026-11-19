@@ -8,12 +8,22 @@ from videos.stats.stats35.common import *  # noqa: F403
 class Fisher(StatsScene):
     def construct(self):
         self.card()
+        self.ask("Fisher's sharp null hypothesis says...",
+                 ["the average effect is zero", "every unit's effect is zero"], 1,
+                 say="Fisher tested without a model, using a sharp null hypothesis. What does it say?",
+                 reveal="That every unit's effect is zero, so both potential outcomes are known for everyone, and "
+                        "every other randomization can be replayed.")
         self.sharp()
         self.twelve()
         self.dist()
         self.invert()
         self.all2000()
         self.weak()
+        self.answer()
+        self.checkpoint([("The fundamental problem of causal inference?", "each unit shows only one potential outcome"),
+                         ("Fisher's sharp null says?", "no effect for any unit")],
+                        narration="Checkpoint. Potential outcomes.",
+                        answers_narration="Only one outcome per unit. And no effect for anyone.")
 
     def card(self):
         self.chapter(4, r"Fisher's sharp null", r"Testing without a model", lit=(1935,), part=PART, said="Chapter four. Fisher's sharp null hypothesis.")

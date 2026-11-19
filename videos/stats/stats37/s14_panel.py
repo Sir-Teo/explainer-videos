@@ -8,12 +8,18 @@ from videos.stats.stats37.common import *  # noqa: F403
 class Panel(StatsScene):
     def construct(self):
         self.card()
+        self.ask("Unit fixed effects in a panel remove...",
+                 ["all confounding", "time-invariant confounders only"], 1,
+                 say="Give every unit its own intercept. What do these fixed effects remove?",
+                 reveal="Confounders that don't change over time, and only those. Anything that varies within a "
+                        "unit over time is still a threat.")
         self.within()
         self.numbers()
         self.limits()
         self.nickell()
         self.hist()
         self.fix()
+        self.answer()
 
     def card(self):
         self.chapter(13, r"Panel data", r"What fixed effects remove, \ and what they add", lit=(1978, 1981), part=PART, said="Chapter thirteen. Panel data.")

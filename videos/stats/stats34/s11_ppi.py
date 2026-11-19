@@ -14,6 +14,12 @@ def ci_row(ax, y, est, lo, hi, color, xmin, xmax):
 class PPI(StatsScene):
     def construct(self):
         self.card()
+        self.ask("Many unlabelled cases with predictions, a few labelled. Treating predictions as truth gives an estimate that is...",
+                 ["unbiased", "biased by the predictor's errors"], 1,
+                 say="Measuring the truth is expensive, predicting it cheap. Treat a model's predictions on many "
+                     "unlabelled cases as if they were the truth. Is the estimate unbiased?",
+                 reveal="No: it inherits the predictor's errors. Prediction-powered inference measures that bias on "
+                        "the few labelled cases and removes it, keeping most of the precision.")
         self.problem()
         self.watch()
         self.bias()
@@ -24,6 +30,7 @@ class PPI(StatsScene):
         self.board()
         self.lineage()
         self.uses()
+        self.answer()
 
     def card(self):
         self.chapter(10, r"Prediction-powered inference", r"Many guesses, \ a few labels", lit=(2023,), part=PART, said="Chapter ten. Prediction-powered inference.")

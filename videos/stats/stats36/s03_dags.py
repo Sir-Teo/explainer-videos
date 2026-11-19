@@ -6,12 +6,19 @@ from videos.stats.stats36.common import *  # noqa: F403
 class DAGs(StatsScene):
     def construct(self):
         self.card()
+        self.ask(r"The path $X \leftarrow Z \rightarrow Y$ carries...",
+                 ["the causal effect of $X$ on $Y$", "association, through the common cause", "nothing"], 1,
+                 say="In a causal diagram, a path from X back to a common cause Z and forward to Y. What does it "
+                     "carry?",
+                 reveal="Association: X and Y move together because Z drives both. Block that path, and only the "
+                        "causal ones remain.")
         self.wright()
         self.graph()
         self.three()
         self.dsep()
         self.world()
         self.lesson()
+        self.answer()
 
     def card(self):
         self.chapter(2, r"Causal diagrams", r"Arrows for causes, \ paths for associations", lit=(1921, 1995), part=PART, said="Chapter two. Causal diagrams.")
