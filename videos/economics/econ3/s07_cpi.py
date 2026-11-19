@@ -31,7 +31,8 @@ class CPI(VoiceoverScene):
         steps.move_to(UP * 1.1)
         title = label(r"The consumer price index \ (CPI-U)", font_size=36).to_edge(UP, buff=0.45)
         uses = VGroup(
-            label(r"Social Security's cost-of-living adjustment", font_size=24, color=E.ACCENT),
+            label(r"Social Security's cost-of-living adjustment \ (the CPI for wage earners)", font_size=24,
+                  color=E.ACCENT),
             label(r"federal tax brackets \ (the chained CPI, since 2018)", font_size=24, color=E.ACCENT),
             label(r"many wage contracts, \ rents, \ inflation-protected bonds", font_size=24, color=E.ACCENT),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.25).to_edge(DOWN, buff=0.7)
@@ -43,9 +44,9 @@ class CPI(VoiceoverScene):
             "a survey of their spending. <bookmark mark='b'/> Every month, the bureau's staff record prices in 75 "
             "urban areas, in about 23,000 shops and 6,000 homes for rents. <bookmark mark='c'/> And it combines "
             "them, each price weighted by its share of the basket. Since 2023 the weights have been updated every "
-            "year. <bookmark mark='d'/> A great deal is tied to this number. Social Security payments rise with it "
-            "each year. Federal tax brackets move with a version of it. So do many wage contracts, rents and the "
-            "government's inflation-protected bonds. If it's wrong by a point a year, a great deal of money moves "
+            "year. <bookmark mark='d'/> A great deal is tied to this number. Social Security payments rise each year "
+            "with one version of it, the index for wage earners. Federal tax brackets move with another, the chained "
+            "index. So do many wage contracts, rents and the government's inflation-protected bonds. If it's wrong by a point a year, a great deal of money moves "
             "for no reason."
         ) as vo:
             self.play(FadeIn(tag), FadeIn(title))
