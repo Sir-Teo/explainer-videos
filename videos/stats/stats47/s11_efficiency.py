@@ -8,12 +8,19 @@ from videos.stats.stats47.common import *  # noqa: F403
 class TestEfficiency(StatsScene):
     def construct(self):
         self.card()
+        self.ask("Pitman's asymptotic relative efficiency of two tests compares...",
+                 ["the sample sizes they need for the same local power", "their $p$-values"], 0,
+                 say="How many more observations does the worse test need? What does Pitman's efficiency compare?",
+                 reveal="The ratio of sample sizes the two tests need for the same power against alternatives "
+                        "closing in on the null. Bahadur's efficiency asks a different question, at fixed "
+                        "alternatives.")
         self.pitman()
         self.table()
         self.design()
         self.bahadur()
         self.chart()
         self.which()
+        self.answer()
 
     def card(self):
         self.chapter(10, r"Efficiency of tests", r"How many more observations does the worse test need?", part=PART, said="Chapter ten. The efficiency of tests: how many more observations does the worse test need?")

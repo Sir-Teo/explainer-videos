@@ -8,9 +8,23 @@ from videos.stats.stats48.common import *  # noqa: F403
 class Learning(StatsScene):
     def construct(self):
         self.card()
+        self.wrong_idea("Low training error guarantees low test error",
+                        "Only uniformly over a class of limited complexity",
+                        narration="The engineer's hope: the classifier got the training data right, so it will get "
+                                  "new data right.",
+                        right_narration="Only if training error is close to true error uniformly over the class "
+                                        "searched, and that needs the class's complexity to be small relative to n. "
+                                        "A rich enough class fits anything.")
+        self.ask("A class of VC dimension $d$: training error approaches true error, uniformly, at about...",
+                 ["$1/n$", r"$\sqrt{d/n}$", "no rate"], 1,
+                 say="Why does minimizing training error work? For a class of classifiers of VC dimension d, how "
+                     "fast does training error approach true error, uniformly over the class?",
+                 reveal="About root d over n, up to logs. The uniform law is what licenses picking the classifier "
+                        "with the smallest training error.")
         self.erm()
         self.chart()
         self.bounds()
+        self.answer()
 
     def card(self):
         self.chapter(10, r"Uniform laws at work: \ learning", r"Why minimizing training error works", lit=(1971,), part=PART, said="Chapter ten. Uniform laws at work, in learning: why minimizing training error works.")

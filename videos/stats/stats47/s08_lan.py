@@ -8,11 +8,18 @@ from videos.stats.stats47.common import *  # noqa: F403
 class LAN(StatsScene):
     def construct(self):
         self.card()
+        self.ask(r"Seen at scale $1/\sqrt n$, a regular model's log-likelihood ratio is...",
+                 ["like that of one Gaussian observation", "linear", "degenerate"], 0,
+                 say="Le Cam's idea: fix theta and look at alternatives h over root n away. What does the "
+                     "log-likelihood ratio look like?",
+                 reveal="Like that of one Gaussian observation with mean h: local asymptotic normality. Every "
+                        "regular model, seen up close, is the same simple experiment.")
         self.definition()
         self.limit()
         self.chart()
         self.scoretest()
         self.qmd()
+        self.answer()
 
     def card(self):
         self.chapter(7, r"Local asymptotic normality", r"Every regular model, \ seen up close, \ is one Gaussian observation", lit=(1960,), part=PART, said="Chapter seven. Local asymptotic normality: every regular model, seen up close, is one Gaussian observation.")

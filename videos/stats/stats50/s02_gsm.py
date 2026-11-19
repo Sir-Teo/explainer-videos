@@ -8,11 +8,18 @@ from videos.stats.stats50.common import *  # noqa: F403
 class SequenceModel(StatsScene):
     def construct(self):
         self.card()
+        self.ask("Estimating a smooth function from $n$ noisy points is asymptotically equivalent to...",
+                 [r"a Gaussian sequence model with noise $1/\sqrt n$", "one linear regression"], 0,
+                 say="Nonparametric regression: noisy observations of an unknown function at n points. Take "
+                     "coefficients in a basis. What is the problem equivalent to, asymptotically?",
+                 reveal="A Gaussian sequence model: infinitely many coefficients, each observed with noise one over "
+                        "root n. Brown and Low, and Nussbaum, proved the equivalence.")
         self.model()
         self.chart()
         self.equivalence()
         self.examples()
         self.ellipsoid()
+        self.answer()
 
     def card(self):
         self.chapter(1, r"The Gaussian sequence model", r"A model for regular Gaussian approximation problems", lit=(1996,), part=PART, said="Chapter one. The Gaussian sequence model: one model that stands for almost every problem.")

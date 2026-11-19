@@ -8,12 +8,20 @@ from videos.stats.stats50.common import *  # noqa: F403
 class Lepski(StatsScene):
     def construct(self):
         self.card()
+        self.ask("Lepski's method chooses a bandwidth by...",
+                 ["comparing estimates across bandwidths", "cross-validation", "a fixed rule"], 0,
+                 say="Adaptation: let the data choose the smoothing, without knowing the smoothness. How does "
+                     "Lepski's method choose a bandwidth?",
+                 reveal="By comparing estimates across bandwidths: take the largest bandwidth whose estimate agrees "
+                        "with every smaller one within its noise. Adaptive, at the price of a log factor at a "
+                        "point.")
         self.method()
         self.tests()
         self.chart()
         self.table()
         self.mcycle()
         self.price()
+        self.answer()
 
     def card(self):
         self.chapter(7, r"Adaptation", r"Lepski's method: \ let the data choose the smoothing", lit=(1990,), part=PART, said="Chapter seven. Adaptation: Lepski's method lets the data choose the smoothing.")

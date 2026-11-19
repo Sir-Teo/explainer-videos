@@ -8,6 +8,12 @@ from videos.stats.stats50.common import *  # noqa: F403
 class Fano(StatsScene):
     def construct(self):
         self.card()
+        self.ask("Fano: to tell $M$ hypotheses apart, the data must carry information of about...",
+                 [r"$\log M$", "$M$", "one bit"], 0,
+                 say="Many hypotheses, and how many bits the data carry. By Fano's inequality, to tell M hypotheses "
+                     "apart, how much information must the data carry?",
+                 reveal="About log M: the mutual information must be comparable to the log of the number of "
+                        "hypotheses. Pack many well-separated hypotheses close in KL, and the lower bound follows.")
         self.inequality()
         self.proof()
         self.packing()
@@ -15,6 +21,7 @@ class Fano(StatsScene):
         self.sparse()
         self.entropy()
         self.chart()
+        self.answer()
 
     def card(self):
         self.chapter(4, r"Fano's method", r"Many hypotheses, \ and how many bits the data carry", part=PART, said="Chapter four. Fano's method: many hypotheses, and how many bits the data carry.")

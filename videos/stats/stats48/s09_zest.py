@@ -6,11 +6,23 @@ from videos.stats.stats48.common import *  # noqa: F403
 class ZEstimators(StatsScene):
     def construct(self):
         self.card()
+        self.ask("Estimating a nuisance first costs nothing asymptotically when...",
+                 ["the estimating equation is orthogonal to the nuisance", "never"], 0,
+                 say="An estimating equation contains a nuisance estimated first. When does that first step cost "
+                     "nothing in the limit?",
+                 reveal="When the estimating function is orthogonal to the nuisance: its derivative in the "
+                        "nuisance's direction is zero. Then the nuisance's footprint vanishes, even if it's "
+                        "infinite-dimensional.")
         self.theorem()
         self.example()
         self.table()
         self.newcomb()
         self.lesson()
+        self.answer()
+        self.checkpoint([(r"$\sqrt n\,(F_n - F)$ converges to?", "a Brownian bridge on the scale of $F$"),
+                         ("Kaplan--Meier's CLT follows from?", "Donsker plus the functional delta method")],
+                        narration="Checkpoint. Uniform limits.",
+                        answers_narration="A Brownian bridge. And the functional delta method.")
 
     def card(self):
         self.chapter(8, r"Z-estimators with nuisance parameters", r"When estimating something else first costs, \ and when it does not", part=PART, said="Chapter eight. Z-estimators with nuisance parameters: when estimating something else first costs, and when it does not.")

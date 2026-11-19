@@ -8,12 +8,26 @@ from videos.stats.stats50.common import *  # noqa: F403
 class Gaps(StatsScene):
     def construct(self):
         self.card()
+        self.wrong_idea("If it's possible in principle, a fast algorithm can do it",
+                        r"Planted clique: about $2\log_2 n$ suffices in principle; known fast algorithms need about $\sqrt n$",
+                        narration="A natural assumption: if the data contain enough information to solve a problem, "
+                                  "some efficient algorithm can solve it.",
+                        right_narration="Not as far as anyone knows. A planted clique of size about two log n is "
+                                        "detectable in principle, but every known polynomial-time method needs "
+                                        "about root n. Statistical-computational gaps.")
+        self.ask("Planted clique: information-theoretically, the smallest detectable clique has size about...",
+                 [r"$2 \log_2 n$", r"$\sqrt n$", "$n/2$"], 0,
+                 say="A random graph on n nodes, with a clique planted in it. With unlimited computation, how small "
+                     "a clique can be detected?",
+                 reveal="About two log n: random graphs have cliques no bigger than that. With limited computation "
+                        "the story changes, which is this chapter's point.")
         self.clique()
         self.chart()
         self.spca()
         self.lasso()
         self.practice()
         self.lowdegree()
+        self.answer()
 
     def card(self):
         self.chapter(9, r"Statistical--computational gaps", r"Possible in principle, \ out of reach in practice?", lit=(2013,), part=PART, said="Chapter nine. Statistical–computational gaps: possible in principle, out of reach in practice?")

@@ -8,11 +8,19 @@ from videos.stats.stats48.common import *  # noqa: F403
 class Rates(StatsScene):
     def construct(self):
         self.card()
+        self.ask("Isotonic regression at a point, and Chernoff's mode estimator, converge at rate...",
+                 ["$n^{1/2}$", "$n^{1/3}$", "$n$"], 1,
+                 say="When the answer is not root n. Isotonic regression at a point, or Chernoff's mode estimator: "
+                     "what rate?",
+                 reveal="N to the one third: in a window of width delta the noise scales like root delta, not "
+                        "delta, which Kim and Pollard turned into cube-root asymptotics. The limit is Chernoff's "
+                        "distribution.")
         self.theorem()
         self.cuberoot()
         self.chernoff()
         self.grenander()
         self.others()
+        self.answer()
 
     def card(self):
         self.chapter(9, r"Rates of convergence", r"When the answer is not $\sqrt n$", lit=(1990,), part=PART, said="Chapter nine. Rates of convergence: when the answer is not root n.")

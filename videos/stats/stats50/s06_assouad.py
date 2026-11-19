@@ -8,12 +8,19 @@ from videos.stats.stats50.common import *  # noqa: F403
 class Assouad(StatsScene):
     def construct(self):
         self.card()
+        self.ask("Assouad's lemma indexes its hypotheses by...",
+                 ["a hypercube's vertices", "two points"], 0,
+                 say="Assouad's lemma, 1983, for a whole function's worth of features. How are its hypotheses "
+                     "indexed?",
+                 reveal="By the vertices of a hypercube: one bump per coordinate, each on or off. The risk splits "
+                        "into one coin flip per coordinate.")
         self.lemma()
         self.cube()
         self.bumps()
         self.chart()
         self.density()
         self.compare()
+        self.answer()
 
     def card(self):
         self.chapter(5, r"Assouad's lemma", r"A hypercube of bumps, \ one coin per coordinate", part=PART, said="Chapter five. Assouad's lemma: a hypercube of bumps, one coin per coordinate.")

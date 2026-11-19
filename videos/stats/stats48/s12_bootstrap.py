@@ -6,11 +6,18 @@ from videos.stats.stats48.common import *  # noqa: F403
 class BootstrapProcess(StatsScene):
     def construct(self):
         self.card()
+        self.ask("The bootstrap empirical process converges to the same Brownian bridge when...",
+                 ["the class is Donsker", "never"], 0,
+                 say="Resample the data, and form the empirical process of the resample around the original. When "
+                     "does it converge to the same Brownian bridge?",
+                 reveal="Exactly when the class is Donsker, Giné and Zinn proved. Then bootstrap bands and tests "
+                        "are valid uniformly over the class.")
         self.theorem()
         self.multiplier()
         self.table()
         self.faithful()
         self.board()
+        self.answer()
 
     def card(self):
         self.chapter(11, r"The bootstrap empirical process", r"Resampling a whole random function", lit=(1990,), part=PART, said="Chapter eleven. The bootstrap empirical process: resampling a whole random function.")

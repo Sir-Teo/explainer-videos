@@ -8,10 +8,17 @@ from videos.stats.stats48.common import *  # noqa: F403
 class Entropy(StatsScene):
     def construct(self):
         self.card()
+        self.ask("Monotone functions into $[0, 1]$: their bracketing entropy grows like...",
+                 [r"$\log(1/\varepsilon)$", r"$1/\varepsilon$", r"$e^{1/\varepsilon}$"], 1,
+                 say="Measure a class by how many brackets of size epsilon it takes to cover it. For monotone "
+                     "functions into the unit interval, how does that log-count grow?",
+                 reveal="Like one over epsilon: bigger than any VC class's log one over epsilon, small enough for a "
+                        "uniform central limit theorem.")
         self.definitions()
         self.brackets()
         self.chart()
         self.examples()
+        self.answer()
 
     def card(self):
         self.chapter(3, r"Entropy and bracketing", r"Measuring a class by how many balls it takes to cover it", part=PART, said="Chapter three. Entropy and bracketing: measuring a class by how many balls it takes to cover it.")

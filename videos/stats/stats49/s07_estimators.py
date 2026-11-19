@@ -8,6 +8,11 @@ from videos.stats.stats49.common import *  # noqa: F403
 class Estimators(StatsScene):
     def construct(self):
         self.card()
+        self.ask("A one-step estimator adds to a plug-in...",
+                 ["the average of the estimated influence function", "nothing"], 0,
+                 say="Constructing efficient estimators: the one-step. What does it add to a plug-in estimate?",
+                 reveal="The average of the estimated efficient influence function: one Newton step in the "
+                        "direction of the functional. TMLE does the same by updating the fit instead.")
         self.expansion()
         self.middle()
         self.recipes()
@@ -15,6 +20,7 @@ class Estimators(StatsScene):
         self.table()
         self.compare()
         self.nsw()
+        self.answer()
 
     def card(self):
         self.chapter(6, r"Constructing efficient estimators", r"One-step, \ estimating equations, \ TMLE", lit=(2006,), part=PART, said="Chapter six. Constructing efficient estimators: one-step, estimating equations, and targeted maximum likelihood.")

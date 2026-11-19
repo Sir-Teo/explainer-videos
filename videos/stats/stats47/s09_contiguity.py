@@ -8,11 +8,18 @@ from videos.stats.stats47.common import *  # noqa: F403
 class Contiguity(StatsScene):
     def construct(self):
         self.card()
+        self.ask(r"Under local alternatives $h/\sqrt n$, a statistic's normal limit shifts by...",
+                 ["its covariance with the log-likelihood ratio", "zero"], 0,
+                 say="A test statistic is normal under the null. Under local alternatives, h over root n away, its "
+                     "limit shifts. By how much?",
+                 reveal="By its covariance with the log-likelihood ratio, times h: Le Cam's third lemma. Local "
+                        "power, computed without ever simulating the alternative.")
         self.first()
         self.noncontig()
         self.third()
         self.chart()
         self.trinity()
+        self.answer()
 
     def card(self):
         self.chapter(8, r"Contiguity and local power", r"Moving a limit from the null to the alternative", part=PART, said="Chapter eight. Contiguity and local power: moving a limit from the null to the alternative.")

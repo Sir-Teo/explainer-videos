@@ -8,11 +8,18 @@ from videos.stats.stats49.common import *  # noqa: F403
 class Tangent(StatsScene):
     def construct(self):
         self.card()
+        self.ask("Two binary variables known to be independent. The efficient estimate of one cell's probability is...",
+                 ["no better than the cell's raw frequency", "more precise: it uses the margins"], 1,
+                 say="A two by two table, and we know the two variables are independent. Estimate the top-left "
+                     "cell's probability. Can we beat the raw cell frequency?",
+                 reveal="Yes: the product of the two margins is more precise. Knowing the model's shape shrinks the "
+                        "directions it can move in, its tangent space, and that buys efficiency.")
         self.submodels()
         self.paths()
         self.picture()
         self.examples()
         self.independence()
+        self.answer()
 
     def card(self):
         self.chapter(1, r"Models and tangent spaces", r"The directions in which a model can move", part=PART, said="Chapter one. Models and tangent spaces: the directions in which a model can move.")

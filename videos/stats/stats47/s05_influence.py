@@ -8,11 +8,18 @@ from videos.stats.stats47.common import *  # noqa: F403
 class Influence(StatsScene):
     def construct(self):
         self.card()
+        self.ask("The functional delta method gives a smooth statistic's asymptotic variance as...",
+                 ["the variance of its influence function, over $n$", "zero"], 0,
+                 say="Von Mises's view: a statistic is a functional of the empirical distribution. Differentiate "
+                     "it. What's its asymptotic variance?",
+                 reveal="The variance of its influence function, over n. The influence function is the derivative, "
+                        "and the statistic is approximately its average.")
         self.functional()
         self.curves()
         self.hadamard()
         self.variance()
         self.uses()
+        self.answer()
 
     def card(self):
         self.chapter(4, r"Influence functions and the functional delta method", r"Differentiating a statistic with respect to the data", lit=(1974,), part=PART, said="Chapter four. Influence functions and the functional delta method: differentiating a statistic with respect to the data.")

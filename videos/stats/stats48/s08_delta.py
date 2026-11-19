@@ -8,11 +8,17 @@ from videos.stats.stats48.common import *  # noqa: F403
 class FunctionalDelta(StatsScene):
     def construct(self):
         self.card()
+        self.ask("Kaplan--Meier's asymptotic normality follows from Donsker plus...",
+                 ["the functional delta method", "Slutsky's theorem alone"], 0,
+                 say="Quantile processes and Kaplan-Meier from one theorem. Donsker's theorem, plus what?",
+                 reveal="The functional delta method: Kaplan-Meier is a Hadamard-differentiable map of empirical "
+                        "processes, so its normal limit follows.")
         self.theorem()
         self.quantile()
         self.qtable()
         self.km()
         self.kmtable()
+        self.answer()
 
     def card(self):
         self.chapter(7, r"The functional delta method", r"Quantile processes and Kaplan--Meier, from one theorem", part=PART, said="Chapter seven. The functional delta method: quantile processes and Kaplan–Meier, from one theorem.")

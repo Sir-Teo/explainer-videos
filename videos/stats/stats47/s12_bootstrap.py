@@ -8,12 +8,19 @@ from videos.stats.stats47.common import *  # noqa: F403
 class Bootstrap(StatsScene):
     def construct(self):
         self.card()
+        self.ask("For a studentized statistic, the bootstrap's error is...",
+                 ["$O(n^{-1/2})$, like the normal approximation", "$O(n^{-1})$, smaller"], 1,
+                 say="Why does the bootstrap beat the normal approximation? For a studentized statistic, how big is "
+                     "the bootstrap's error?",
+                 reveal="Order one over n, against the normal's one over root n. The bootstrap gets the skewness "
+                        "term right automatically: Hall's second-order accuracy.")
         self.consistency()
         self.edgeworth()
         self.pivot()
         self.table()
         self.chart()
         self.board()
+        self.answer()
 
     def card(self):
         self.chapter(11, r"The bootstrap, \ rigorously", r"Why resampling beats the normal approximation", lit=(1992,), part=PART, said="Chapter eleven. The bootstrap, rigorously: why resampling can beat the normal approximation.")

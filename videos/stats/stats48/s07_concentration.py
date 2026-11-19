@@ -8,11 +8,18 @@ from videos.stats.stats48.common import *  # noqa: F403
 class Concentration(StatsScene):
     def construct(self):
         self.card()
+        self.ask("Talagrand's inequality: the supremum of an empirical process concentrates around...",
+                 ["its mean", "zero"], 0,
+                 say="Maximal inequalities. Talagrand's: where does the supremum of the empirical process "
+                     "concentrate?",
+                 reveal="Around its mean, with Gaussian-like tails in the largest variance. The whole theory comes "
+                        "down to bounding that one expected supremum.")
         self.bernstein()
         self.talagrand()
         self.chart()
         self.lowvar()
         self.uses()
+        self.answer()
 
     def card(self):
         self.chapter(6, r"Maximal inequalities", r"How tightly the supremum sits around its mean", lit=(1996,), part=PART, said="Chapter six. Maximal inequalities: how tightly the supremum sits around its mean.")
