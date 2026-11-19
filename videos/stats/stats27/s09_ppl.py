@@ -19,6 +19,12 @@ fit = P.sample(m, chains=4, iters=1000, warmup=1000)"""
 class PPL(StatsScene):
     def construct(self):
         self.card()
+        self.ask("A probabilistic programming language needs you to write...",
+                 ["the model, as code", "the posterior's formula", "the sampler's tuning"], 0,
+                 say="Statkit now has a small probabilistic programming language, like Stan or PyMC. What do you "
+                     "have to write?",
+                 reveal="Only the model, as code: priors and likelihood. Transforms, gradients, NUTS and its warmup "
+                        "do the rest.")
         self.parts()
         self.code()
         self.transforms()
@@ -26,6 +32,7 @@ class PPL(StatsScene):
         self.checks()
         self.debugging()
         self.real()
+        self.answer()
 
     def card(self):
         self.chapter(8, r"Built: \ a probabilistic programming language", r"Write the model; \ get the posterior", lit=(2017,), part=PART, said="Chapter eight. Built: a probabilistic programming language.")

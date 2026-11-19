@@ -9,10 +9,16 @@ from videos.stats.stats22.common import *  # noqa: F403
 class Normality(StatsScene):
     def construct(self):
         self.card()
+        self.ask("The MLE's asymptotic variance is...",
+                 [r"$1/(nI(\theta))$", r"$I(\theta)/n$", r"$\sigma^2/n$, always"], 0,
+                 say="Expand the score around the truth. What's the maximum likelihood estimator's asymptotic "
+                     "variance?",
+                 reveal="One over n times the Fisher information: the Cramér-Rao bound, attained in the limit.")
         self.expand()
         self.limit()
         self.cauchy()
         self.efficiency()
+        self.answer()
 
     def card(self):
         self.chapter(3, r"Asymptotic normality", r"Expand the score", part=PART, said="Chapter three. Asymptotic normality.")

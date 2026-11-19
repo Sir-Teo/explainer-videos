@@ -9,6 +9,12 @@ from videos.stats.stats24.common import *  # noqa: F403
 class Deviance(StatsScene):
     def construct(self):
         self.card()
+        self.ask("The deviance measures the distance from the model to...",
+                 ["the null model", "the saturated model", "the true model"], 1,
+                 say="Deviance is to generalized linear models what the residual sum of squares is to least "
+                     "squares. Distance from the model to what?",
+                 reveal="To the saturated model, which gives every observation its own mean. Twice the "
+                        "log-likelihood gap.")
         self.define()
         self.beetles()
         self.analysis()
@@ -16,6 +22,11 @@ class Deviance(StatsScene):
         self.residuals()
         self.binned()
         self.qq()
+        self.answer()
+        self.checkpoint([("Which algorithm fits every GLM?", "IRLS: Fisher scoring as weighted least squares"),
+                         ("The deviance compares the fit with?", "the saturated model")],
+                        narration="Checkpoint. The family and its algorithm.",
+                        answers_narration="Iteratively reweighted least squares. And the saturated model.")
 
     def card(self):
         self.chapter(4, r"Deviance", r"How far from the saturated model?", part=PART, said="Chapter four. Deviance.")

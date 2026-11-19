@@ -8,6 +8,12 @@ from videos.stats.stats24.common import *  # noqa: F403
 class Scoring(StatsScene):
     def construct(self):
         self.card()
+        self.ask("Under a proper scoring rule, your best expected score comes from reporting...",
+                 ["your true belief", "something nearer 0 or 1", r"always 50\%"], 0,
+                 say="A scoring rule grades a probability once we see what happened. Under a proper one, what "
+                     "should a forecaster report to get the best expected score?",
+                 reveal="Their true belief. That's what proper means: honesty is optimal. The log score and the "
+                        "Brier score are proper; accuracy at a threshold is not.")
         self.question()
         self.curves()
         self.forecasters()
@@ -15,6 +21,11 @@ class Scoring(StatsScene):
         self.crps()
         self.murphy()
         self.advice()
+        self.answer()
+        self.checkpoint([("Proportional odds: a predictor's effect at each cut?", "the same"),
+                         ("A proper score is optimized by?", "reporting your true belief")],
+                        narration="Checkpoint. More outcomes, and grading them.",
+                        answers_narration="The same at every cut. And honesty.")
 
     def card(self):
         self.chapter(12, r"Proper scoring rules", r"How to grade a probability", lit=(2007,), part=PART, said="Chapter twelve. Proper scoring rules.")

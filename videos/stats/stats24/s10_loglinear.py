@@ -8,12 +8,19 @@ from videos.stats.stats24.common import *  # noqa: F403
 class LogLinear(StatsScene):
     def construct(self):
         self.card()
+        self.ask("A Poisson model for a table's counts, with the right margins fitted, gives associations equal to...",
+                 ["the multinomial (logistic) model's", "nothing comparable"], 0,
+                 say="Model a three-way table's counts as Poisson, with the right margins fitted. How do its "
+                     "association estimates compare with a multinomial or logistic model's?",
+                 reveal="They're the same. That's the Poisson trick: multinomial models can be fitted with ordinary "
+                        "Poisson software.")
         self.table()
         self.idea()
         self.models()
         self.reading()
         self.graphical()
         self.logistic_link()
+        self.answer()
 
     def card(self):
         self.chapter(9, r"Log-linear models", r"Tables as Poisson regressions", part=PART, said="Chapter nine. Log-linear models.")

@@ -8,12 +8,26 @@ from videos.stats.stats25.common import *  # noqa: F403
 class Stein(StatsScene):
     def construct(self):
         self.card()
+        self.wrong_idea("Estimates of unrelated quantities can't help each other",
+                        "James--Stein: shrinking them together lowers the total risk, related or not",
+                        narration="Common sense says: if ten quantities have nothing to do with each other, "
+                                  "estimating them together can't help.",
+                        right_narration="Stein proved otherwise. Shrinking all ten toward a common point lowers the "
+                                        "total squared error whatever the true means are, from three upward. It "
+                                        "helps the total, not necessarily each one.")
+        self.ask(r"Ten normal means, each seen once. Can any estimator beat the raw observations for every $\theta$?",
+                 ["no", "yes"], 1,
+                 say="Ten unrelated normal means, each observed once with unit variance. Judged by total squared "
+                     "error, can any estimator beat the raw observations for every possible set of means?",
+                 reveal="Yes. James and Stein shrink them all toward a common point and lower the total risk "
+                        "everywhere, once there are three or more. The raw observations are inadmissible.")
         self.estimator()
         self.geometry()
         self.lemma()
         self.risk()
         self.curves()
         self.remarks()
+        self.answer()
 
     def card(self):
         self.chapter(1, r"James--Stein", r"Inadmissibility, \ proved", lit=(1956, 1961), part=PART, said="Chapter one. The James–Stein estimator.")

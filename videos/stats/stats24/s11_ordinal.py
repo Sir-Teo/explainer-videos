@@ -11,12 +11,19 @@ CCOL = [TEAL, BLUE, PATH, RED]
 class Ordinal(StatsScene):
     def construct(self):
         self.card()
+        self.ask("The proportional-odds model gives a predictor's effect at each cut point that is...",
+                 ["the same", "different"], 0,
+                 say="An ordered outcome, like a pain score from one to five. In the proportional-odds model, is a "
+                     "predictor's effect on the log odds the same at every cut point?",
+                 reveal="The same: one coefficient shifts every cumulative log odds equally, as if a latent "
+                        "continuous variable were cut into categories.")
         self.multinomial()
         self.po()
         self.fit()
         self.stack()
         self.check()
         self.others()
+        self.answer()
 
     def card(self):
         self.chapter(10, r"Multinomial and ordinal", r"More than two outcomes", lit=(1980,), part=PART, said="Chapter ten. Multinomial and ordinal models.")

@@ -26,11 +26,22 @@ def fisher_length(mu, sg):
 class Geometry(StatsScene):
     def construct(self):
         self.card()
+        self.ask(r"Jeffreys's prior for a normal's $(\mu, \sigma)$ together is proportional to...",
+                 ["1", r"$1/\sigma$", r"$1/\sigma^2$"], 2,
+                 say="Measure distance in standard errors, and Jeffreys's prior is the uniform measure on the "
+                     "model. For a normal's mean and standard deviation together, what is it proportional to?",
+                 reveal="One over sigma squared, the root of the information matrix's determinant. It's improper, "
+                        "so the posterior's propriety must be checked.")
         self.metric()
         self.ellipses()
         self.path()
         self.natural()
         self.jeffreys()
+        self.answer()
+        self.checkpoint([("Quasi-likelihood needs?", "the mean and the variance function"),
+                         ("Fixed $n$ or stop at the third tail, same data: same $p$-value?", "no, though the likelihoods agree")],
+                        narration="Checkpoint. Beyond the full likelihood.",
+                        answers_narration="Only the mean and variance. And no.")
 
     def card(self):
         self.chapter(13, r"Information geometry, \ a glimpse", r"Distance measured in standard errors", lit=(1945,), part=PART, said="Chapter thirteen. Information geometry, a glimpse.")

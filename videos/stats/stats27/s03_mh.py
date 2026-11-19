@@ -8,12 +8,19 @@ from videos.stats.stats27.common import *  # noqa: F403
 class MH(StatsScene):
     def construct(self):
         self.card()
+        self.ask("Random-walk Metropolis in high dimension. The ideal acceptance rate is about...",
+                 [r"23\%", r"50\%", r"90\%"], 0,
+                 say="Random-walk Metropolis in many dimensions. Tune the step size for efficiency. What acceptance "
+                     "rate should you aim for?",
+                 reveal="About twenty-three percent, Roberts, Gelman and Gilks found: big steps rejected often beat "
+                        "small steps accepted always. In one dimension, about forty-four.")
         self.algorithm()
         self.balance()
         self.traces()
         self.tuning()
         self.dimension()
         self.mala()
+        self.answer()
 
     def card(self):
         self.chapter(2, r"Metropolis--Hastings", r"A Markov chain with the posterior as its limit", lit=(1953, 1970), part=PART, said="Chapter two. Metropolis–Hastings.")

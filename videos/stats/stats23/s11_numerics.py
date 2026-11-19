@@ -9,6 +9,12 @@ from videos.stats.stats23.common import *  # noqa: F403
 class Numerics(StatsScene):
     def construct(self):
         self.card()
+        self.ask("Longley's data, normal equations in single precision. The coefficients come out...",
+                 ["right to six digits", "mostly wrong", "exactly right"], 1,
+                 say="Longley's 1967 economic data, nearly collinear. Solve least squares through the normal "
+                     "equations in single precision. How do the coefficients come out?",
+                 reveal="Mostly wrong: forming X transpose X squares the condition number, and single precision has "
+                        "no digits to spare. Householder's QR gets them right.")
         self.mirror()
         self.columns()
         self.routes()
@@ -16,6 +22,7 @@ class Numerics(StatsScene):
         self.accuracy()
         self.kappa_plot()
         self.advice()
+        self.answer()
 
     def card(self):
         self.chapter(10, r"Numerics", r"How the computer solves least squares", part=PART, said="Chapter ten. The numerics of least squares.")

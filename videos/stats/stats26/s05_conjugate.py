@@ -6,12 +6,23 @@ from videos.stats.stats26.common import *  # noqa: F403
 class Conjugate(StatsScene):
     def construct(self):
         self.card()
+        self.ask("A Beta$(a, b)$ prior on a probability is worth how many observations?",
+                 ["$a + b$", "none", "infinitely many"], 0,
+                 say="Conjugate priors act like pseudo-data. A Beta a, b prior on a probability is worth how many "
+                     "observations?",
+                 reveal="A plus b: a successes and b failures, seen before the data. That's a handy way to judge "
+                        "whether a prior is strong.")
         self.family()
         self.dy()
         self.table()
         self.visits()
         self.predictive()
         self.beyond()
+        self.answer()
+        self.checkpoint([("Eight schools: no pooling, complete pooling, or?", "partial pooling, learned by the hierarchy"),
+                         ("A Beta$(a, b)$ prior is worth?", "$a + b$ pseudo-observations")],
+                        narration="Checkpoint. Hierarchies and priors.",
+                        answers_narration="Partial pooling. And a plus b observations.")
 
     def card(self):
         self.chapter(4, r"Conjugate families", r"Priors as pseudo-data", lit=(1979,), part=PART, said="Chapter four. Conjugate and exponential families.")

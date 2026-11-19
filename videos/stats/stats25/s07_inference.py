@@ -10,12 +10,19 @@ from videos.stats.stats25.common import *  # noqa: F403
 class Inference(StatsScene):
     def construct(self):
         self.card()
+        self.ask("Test that a random-effect variance is zero. The LRT's null distribution is...",
+                 [r"$\chi^2_1$", r"a 50:50 mixture of 0 and $\chi^2_1$", "normal"], 1,
+                 say="Test whether a random effect's variance is zero. Zero sits on the edge of the parameter "
+                     "space. What's the likelihood ratio statistic's null distribution?",
+                 reveal="A fifty-fifty mixture of a point mass at zero and a chi-squared with one degree of "
+                        "freedom. Using the plain chi-squared doubles the p-value, conservatively.")
         self.df()
         self.board()
         self.boundary_theory()
         self.boundary_sim()
         self.profile()
         self.advice()
+        self.answer()
 
     def card(self):
         self.chapter(6, r"Inference", r"Degrees of freedom, \ and tests on the edge", lit=(1987,), part=PART, said="Chapter six. Inference for mixed models.")

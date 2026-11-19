@@ -8,12 +8,20 @@ from videos.stats.stats25.common import *  # noqa: F403
 class EB(StatsScene):
     def construct(self):
         self.card()
+        self.ask("Early-season batting averages, shrunk toward their mean, predict the rest of the season...",
+                 ["better", "worse", "about the same"], 0,
+                 say="Efron and Morris took eighteen players' batting averages after their first forty-five "
+                     "at-bats. Shrink them toward the overall average. Do they predict the rest of the season "
+                     "better or worse?",
+                 reveal="Better, with a fraction of the total squared error. The data estimate the prior, and the "
+                        "prior pulls the lucky and the unlucky back.")
         self.upgrade()
         self.normal()
         self.js_is_eb()
         self.robbins()
         self.prior()
         self.winners()
+        self.answer()
 
     def card(self):
         self.chapter(2, r"Empirical Bayes", r"Estimate the prior from the data", lit=(1956,), part=PART, said="Chapter two. Empirical Bayes.")

@@ -8,10 +8,21 @@ from videos.stats.stats22.common import *  # noqa: F403
 class Information(StatsScene):
     def construct(self):
         self.card()
+        self.ask("Poisson regression with the log link: observed and expected information...",
+                 ["coincide", "differ"], 0,
+                 say="Two curvatures: the observed one at the estimate, and the expected one. For Poisson "
+                     "regression with its canonical log link, do they coincide?",
+                 reveal="They coincide. With a canonical link the second derivative doesn't depend on the data. "
+                        "Elsewhere they differ, and the observed one is often the better guide.")
         self.two()
         self.bins()
         self.why()
         self.advice()
+        self.answer()
+        self.checkpoint([("The MLE's asymptotic variance?", r"$1/(nI(\theta))$"),
+                         (r"Uniform$(0, \theta)$: the MLE's error shrinks like?", "$1/n$: a nonregular model")],
+                        narration="Checkpoint. The promises, proved.",
+                        answers_narration="One over n I. And one over n.")
 
     def card(self):
         self.chapter(4, r"Observed vs expected information", r"Which curvature?", part=PART, said="Chapter four. Observed versus expected information.")

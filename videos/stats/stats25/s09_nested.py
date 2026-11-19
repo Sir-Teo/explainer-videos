@@ -8,6 +8,12 @@ from videos.stats.stats25.common import *  # noqa: F403
 class Nested(StatsScene):
     def construct(self):
         self.card()
+        self.ask("Essays scored by several raters; each rater scores many essays. Essays and raters are...",
+                 ["nested", "crossed"], 1,
+                 say="Each essay is scored by several raters, and each rater scores many essays. Are essays and "
+                     "raters nested or crossed?",
+                 reveal="Crossed: neither sits inside the other. Schools within towns are nested. The model needs "
+                        "both kinds of term.")
         self.nested_model()
         self.nested_fit()
         self.radon()
@@ -15,6 +21,7 @@ class Nested(StatsScene):
         self.raters()
         self.crossed_fit()
         self.syntax()
+        self.answer()
 
     def card(self):
         self.chapter(8, r"Nested and crossed", r"Schools in towns; \ essays and raters", lit=(2007,), part=PART, said="Chapter eight. Nested and crossed random effects.")

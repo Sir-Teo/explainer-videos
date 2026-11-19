@@ -8,11 +8,22 @@ from videos.stats.stats26.common import *  # noqa: F403
 class DP(StatsScene):
     def construct(self):
         self.card()
+        self.ask("A draw from a Dirichlet process is a distribution that is...",
+                 ["continuous", "discrete, with probability one"], 1,
+                 say="Ferguson's Dirichlet process is a prior on distributions. What kind of distribution is a draw "
+                     "from it?",
+                 reveal="Discrete, with probability one: countably many atoms, with stick-breaking weights. That's "
+                        "why it clusters, which makes it a natural prior for mixtures.")
         self.definition()
         self.sticks()
         self.restaurant()
         self.tables()
         self.uses()
+        self.answer()
+        self.checkpoint([("Prior predictive simulation asks?", "do the priors imply plausible data?"),
+                         ("A Dirichlet process draw is?", "discrete, with probability one")],
+                        narration="Checkpoint. Workflow and beyond.",
+                        answers_narration="Whether the priors imply plausible data. And discrete.")
 
     def card(self):
         self.chapter(13, r"Bayesian nonparametrics", r"A prior on distributions", lit=(1973,), part=PART, said="Chapter thirteen. Bayesian nonparametrics, a first look.")

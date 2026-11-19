@@ -9,12 +9,19 @@ from videos.stats.stats24.common import *  # noqa: F403
 class Quasi(StatsScene):
     def construct(self):
         self.card()
+        self.ask("Doctor visits: mean 2.13, variance 10.3. Quasi-Poisson inflates the Poisson SEs by about...",
+                 ["1", "about 2", "about 5"], 1,
+                 say="The World's doctor visits: mean two point one three, variance ten point three. Quasi-Poisson "
+                     "rescales the Poisson standard errors. By about how much?",
+                 reveal="About two: the square root of a dispersion near five. Poisson's standard errors were "
+                        "claiming twice the precision the data have.")
         self.overdispersion()
         self.quasi()
         self.estimates()
         self.shape()
         self.binomial_od()
         self.board()
+        self.answer()
 
     def card(self):
         self.chapter(7, r"Quasi-likelihood", r"Only a mean and a variance", lit=(1974,), part=PART, said="Chapter seven. Quasi-likelihood and overdispersion.")

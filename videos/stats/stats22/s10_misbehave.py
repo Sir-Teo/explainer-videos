@@ -9,11 +9,18 @@ from videos.stats.stats22.common import *  # noqa: F403
 class Misbehave(StatsScene):
     def construct(self):
         self.card()
+        self.ask("A normal mixture. One mean on a data point, its variance shrinking to zero. The likelihood...",
+                 ["goes to infinity", "goes to zero", "stays bounded"], 0,
+                 say="A mixture of two normals. Put one component's mean exactly on a data point and shrink its "
+                     "variance toward zero. What does the likelihood do?",
+                 reveal="It goes to infinity. The global maximum is a useless spike; the sensible estimate is a "
+                        "local maximum. Likelihood misbehaves at the edges.")
         self.spike()
         self.cures()
         self.switching()
         self.boundary()
         self.bootstrap()
+        self.answer()
 
     def card(self):
         self.chapter(9, r"When likelihood misbehaves", r"Spikes, \ twins and edges", part=PART, said="Chapter nine. When likelihood misbehaves.")

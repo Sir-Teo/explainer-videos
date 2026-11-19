@@ -9,6 +9,13 @@ from videos.stats.stats23.common import *  # noqa: F403
 class Cluster(StatsScene):
     def construct(self):
         self.card()
+        self.ask("Tutoring in 20 of 40 schools, 2,500 pupils. The effective sample size is nearer...",
+                 ["2,500", "40"], 1,
+                 say="Forty schools, half of them running a tutoring programme, about two and a half thousand "
+                     "pupils. For the programme's effect, is the effective sample size nearer two and a half "
+                     "thousand, or forty?",
+                 reveal="Nearer forty. The programme was assigned to schools, so schools are the units. Sixty "
+                        "pupils are not sixty schools.")
         self.schools()
         self.moulton()
         self.robust()
@@ -17,6 +24,7 @@ class Cluster(StatsScene):
         self.level()
         self.model_it()
         self.board()
+        self.answer()
 
     def card(self):
         self.chapter(5, r"Clustering", r"Sixty pupils are not sixty schools", lit=(1986, 2008), part=PART, said="Chapter five. Clustering.")

@@ -8,11 +8,18 @@ from videos.stats.stats25.common import *  # noqa: F403
 class SmallArea(StatsScene):
     def construct(self):
         self.card()
+        self.ask("Fay--Herriot shrinks a town's direct estimate toward a regression prediction more when...",
+                 ["the town's sample is small", "the town's sample is large"], 0,
+                 say="A survey too thin for every town. Fay and Herriot shrink each town's direct estimate toward a "
+                     "regression prediction. When do they shrink more?",
+                 reveal="When the town's sample is small and its direct estimate noisy. Large towns keep their own "
+                        "numbers.")
         self.problem()
         self.model()
         self.errors()
         self.table()
         self.practice()
+        self.answer()
 
     def card(self):
         self.chapter(11, r"Small areas", r"A survey too thin for every town", lit=(1979,), part=PART, said="Chapter eleven. Small-area estimation.")

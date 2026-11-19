@@ -9,11 +9,18 @@ from videos.stats.stats26.common import *  # noqa: F403
 class Occam(StatsScene):
     def construct(self):
         self.card()
+        self.ask("A more flexible model spreads its predictions over more data sets. Its evidence for the data observed is...",
+                 ["higher", "lower, unless the data need the flexibility"], 1,
+                 say="A flexible model can predict many more data sets than a simple one. For the data actually "
+                     "observed, is its evidence higher or lower?",
+                 reveal="Lower, unless the data need the flexibility. Probability spread thin over everything "
+                        "possible is low on anything in particular: Occam's razor, built in.")
         self.idea()
         self.fits()
         self.evidence()
         self.factor()
         self.lessons()
+        self.answer()
 
     def card(self):
         self.chapter(8, r"Occam's razor, \ built in", r"The evidence penalizes flexibility", lit=(1992,), part=PART, said="Chapter eight. Occam's razor, built in.")

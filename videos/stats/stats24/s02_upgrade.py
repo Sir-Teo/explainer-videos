@@ -6,10 +6,16 @@ from videos.stats.stats24.common import *  # noqa: F403
 class Upgrade(StatsScene):
     def construct(self):
         self.card()
+        self.ask("Logistic and Poisson regression are fitted by one algorithm. Which?",
+                 ["IRLS: Fisher scoring as weighted least squares", "gradient descent", "one least-squares solve"], 0,
+                 say="Part 14 fitted logistic and Poisson regression with the same algorithm. Which one?",
+                 reveal="Iteratively reweighted least squares: Fisher scoring, written as a weighted least squares "
+                        "refitted until it settles. It fits every model in this part.")
         self.upgrade()
         self.three()
         self.lpm()
         self.recipe()
+        self.answer()
 
     def card(self):
         self.chapter(1, r"Upgrade: \ what Part 14 fitted", r"Two models become one family", lit=(1972,), part=PART, said="Chapter one. An upgrade of Part 14.")

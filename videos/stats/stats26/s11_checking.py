@@ -8,11 +8,28 @@ from videos.stats.stats26.common import *  # noqa: F403
 class Checking(StatsScene):
     def construct(self):
         self.card()
+        self.wrong_idea("If the posterior looks sensible, the model is fine",
+                        "Ask whether the model could have produced the data: check it",
+                        narration="A tempting conclusion: the sampler ran, the posterior looks sensible, so the "
+                                  "model is fine.",
+                        right_narration="Bayesian inference never says so on its own. Simulate replicated data from "
+                                        "the fitted model, and ask whether it could have produced what you saw.")
+        self.ask("When the model fits, posterior predictive $p$-values tend to be...",
+                 ["uniform on $(0, 1)$", "concentrated near 0.5"], 1,
+                 say="Simulate replicated data from the fitted model and compare. If the model really is right, how "
+                     "are these posterior predictive p-values distributed?",
+                 reveal="Concentrated near a half: the data were used twice, to fit and to check. So they're "
+                        "conservative, and an extreme one is a strong signal.")
         self.idea()
         self.schools()
         self.visits()
         self.conservative()
         self.prior_predictive()
+        self.answer()
+        self.checkpoint([("A more flexible model's evidence?", "lower, unless the data need it"),
+                         ("The value of perfect information?", "never negative")],
+                        narration="Checkpoint. Razors and decisions.",
+                        answers_narration="Lower. And never negative.")
 
     def card(self):
         self.chapter(10, r"Checking", r"Could the model have produced these data?", lit=(1984,), part=PART, said="Chapter ten. Model checking.")

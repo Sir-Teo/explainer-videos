@@ -9,6 +9,12 @@ from videos.stats.stats23.common import *  # noqa: F403
 class Hetero(StatsScene):
     def construct(self):
         self.card()
+        self.ask("Small sample, high-leverage points. Which sandwich does best?",
+                 ["HC0", "HC3", "they're equivalent"], 1,
+                 say="Heteroskedasticity-robust standard errors come in variants. With a small sample and some "
+                     "high-leverage points, which does best?",
+                 reveal="HC3, which inflates each residual by its leverage, close to a jackknife. HC0 is too small "
+                        "exactly where the leverage is.")
         self.ehw()
         self.testing()
         self.sources()
@@ -16,6 +22,11 @@ class Hetero(StatsScene):
         self.family()
         self.coverage()
         self.board()
+        self.answer()
+        self.checkpoint([("$q$ linear restrictions: the $F$'s numerator df?", "$q$"),
+                         (r"Known error covariance $\Omega$: the BLUE?", "GLS")],
+                        narration="Checkpoint. Tests and shapes.",
+                        answers_narration="Q. And generalized least squares.")
 
     def card(self):
         self.chapter(4, r"Heteroskedasticity theory", r"Eicker, \ Huber, \ White, \ and small samples", lit=(1980,), part=PART, said="Chapter four. Heteroskedasticity theory.")

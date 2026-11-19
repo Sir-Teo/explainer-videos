@@ -9,12 +9,19 @@ from videos.stats.stats24.common import *  # noqa: F403
 class GEE(StatsScene):
     def construct(self):
         self.card()
+        self.ask("GEE with an independence working correlation, truly exchangeable data. The estimates are...",
+                 ["still consistent", "biased"], 0,
+                 say="Generalized estimating equations with a working correlation of independence, when pupils in a "
+                     "school are truly correlated. Are the coefficient estimates still consistent?",
+                 reveal="Still consistent, and the robust standard errors are honest. The working correlation only "
+                        "affects efficiency.")
         self.problem()
         self.equations()
         self.results()
         self.marginal()
         self.working()
         self.board()
+        self.answer()
 
     def card(self):
         self.chapter(11, r"GEE", r"Clustered outcomes, \ honest standard errors", lit=(1986,), part=PART, said="Chapter eleven. Generalized estimating equations.")

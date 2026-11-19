@@ -10,12 +10,25 @@ KCOL = {"1": BLUE, "3": TEAL, "6": PATH, "20": RED}
 class Splines(StatsScene):
     def construct(self):
         self.card()
+        self.wrong_idea("A linear model can only fit straight lines",
+                        "Linear means linear in the coefficients: splines fit curves with least squares",
+                        narration="A common misunderstanding: a linear model can only fit straight lines.",
+                        right_narration="Linear means linear in the coefficients. Replace x by a set of basis "
+                                        "functions, splines for instance, and least squares fits curves, with every "
+                                        "tool of this part intact.")
+        self.ask("A restricted cubic spline is forced to be... beyond its outer knots.",
+                 ["linear", "cubic", "constant"], 0,
+                 say="A restricted cubic spline, the curve Part 20 used for age. What is it forced to be beyond its "
+                     "outer knots?",
+                 reveal="Linear. Cubic tails flail where there's little data; restricting them buys stability at "
+                        "the edges.")
         self.bases()
         self.basis_picture()
         self.fits()
         self.cv()
         self.varying()
         self.natural()
+        self.answer()
 
     def card(self):
         self.chapter(9, r"Splines and bases", r"Curves are linear models too", part=PART, said="Chapter nine. Splines and bases.")

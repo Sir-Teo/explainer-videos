@@ -9,12 +9,26 @@ from videos.stats.stats24.common import *  # noqa: F403
 class Separation(StatsScene):
     def construct(self):
         self.card()
+        self.wrong_idea("A huge standard error means the variable doesn't matter",
+                        "Under separation it's the strongest predictor in the data",
+                        narration="A tempting reading of the output: this coefficient has a huge standard error, so "
+                                  "the variable doesn't matter. Drop it.",
+                        right_narration="Under separation it's the opposite: the variable predicts the outcome "
+                                        "perfectly, and the Wald standard error is meaningless. Use Firth's "
+                                        "correction or a prior, not the delete key.")
+        self.ask("Perfectly separated data. The logistic MLE of the slope...",
+                 ["is zero", "doesn't exist: it runs to infinity", "is finite but large"], 1,
+                 say="Every observation below zero is a zero, every one above is a one. What's the maximum "
+                     "likelihood estimate of the logistic slope?",
+                 reveal="It doesn't exist: the likelihood keeps rising as the curve steepens into a step. Firth's "
+                        "penalty or a weakly informative prior gives a finite answer.")
         self.picture()
         self.runaway()
         self.why_()
         self.firth()
         self.rare()
         self.practice()
+        self.answer()
 
     def card(self):
         self.chapter(6, r"Separation", r"When the likelihood has no top", lit=(1984, 1993), part=PART, said="Chapter six. Separation.")

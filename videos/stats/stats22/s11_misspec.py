@@ -9,12 +9,23 @@ from videos.stats.stats22.common import *  # noqa: F403
 class Misspecification(StatsScene):
     def construct(self):
         self.card()
+        self.ask("When the model is wrong, the MLE converges to...",
+                 ["nothing", "the model member closest to the truth, in KL", "the truth anyway"], 1,
+                 say="Suppose the data come from a distribution outside the model. What does the maximum likelihood "
+                     "estimate converge to?",
+                 reveal="The member of the model closest to the truth in Kullback-Leibler divergence. And sandwich "
+                        "standard errors keep its uncertainty honest.")
         self.target()
         self.incomes()
         self.sandwich()
         self.practice()
         self.counts()
         self.board()
+        self.answer()
+        self.checkpoint([("Each EM step, the likelihood?", "never decreases"),
+                         ("A wrong model's MLE tends to?", "the KL-closest member of the model")],
+                        narration="Checkpoint. Algorithms and misspecification.",
+                        answers_narration="It never decreases. And the closest member in Kullback-Leibler.")
 
     def card(self):
         self.chapter(10, r"Misspecification", r"What the MLE estimates when the model is wrong", lit=(1967,), part=PART, said="Chapter ten. Misspecification: what happens when the model is wrong, as every model is.")

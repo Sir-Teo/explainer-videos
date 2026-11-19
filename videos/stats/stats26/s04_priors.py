@@ -12,6 +12,12 @@ PNAME = {"uniform": r"uniform on $\tau$", "halfcauchy": r"half-Cauchy(25)", "ig1
 class Priors(StatsScene):
     def construct(self):
         self.card()
+        self.ask(r"Eight schools with a prior flat on $\log\tau$. The posterior is...",
+                 ["proper", "improper"], 1,
+                 say="Put a prior flat on the log of tau, the classic choice for a scale, in the eight schools. Is "
+                     "the posterior proper?",
+                 reveal="Improper: it piles up infinite mass near tau equals zero. A sampler can still produce "
+                        "plausible-looking output. Check propriety, or use a proper prior.")
         self.invariance()
         self.jeffreys_picture()
         self.reference()
@@ -19,6 +25,7 @@ class Priors(StatsScene):
         self.sensitivity("eight")
         self.sensitivity("three")
         self.improper()
+        self.answer()
 
     def card(self):
         self.chapter(3, r"Priors", r"Invariance, \ reference, \ and weak information", lit=(1946, 2006), part=PART, said="Chapter three. Priors.")

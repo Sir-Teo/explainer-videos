@@ -21,12 +21,19 @@ def lattice_grid(L, size=3.6, center=ORIGIN, up=None, down=None):
 class Quasi(StatsScene):
     def construct(self):
         self.card()
+        self.ask("Quasi-likelihood needs...",
+                 ["the full distribution", "only the mean and the variance function"], 1,
+                 say="Wedderburn's quasi-likelihood builds doubt in from the start. What does it need to know about "
+                     "the data?",
+                 reveal="Only how the mean depends on the predictors, and how the variance depends on the mean. "
+                        "That's enough for consistent estimates and honest standard errors.")
         self.quasi()
         self.lattices()
         self.constant()
         self.pseudo()
         self.estimates()
         self.composite()
+        self.answer()
 
     def card(self):
         self.chapter(11, r"Quasi-, \ composite and pseudo-likelihood", r"When the full likelihood is too much", lit=(1975,), part=PART, said="Chapter eleven. Quasi-likelihood, composite likelihood and pseudo-likelihood.")

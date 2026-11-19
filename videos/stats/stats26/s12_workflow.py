@@ -9,12 +9,19 @@ from videos.stats.stats26.common import *  # noqa: F403
 class Workflow(StatsScene):
     def construct(self):
         self.card()
+        self.ask("Simulating data from the priors alone checks...",
+                 ["whether the priors imply plausible data", "the sampler's convergence", "nothing useful"], 0,
+                 say="Gelman's workflow starts by simulating fake data from the priors alone, before seeing the "
+                     "real data. What does that check?",
+                 reveal="Whether the priors imply plausible data. Flat-looking priors can imply absurd outcomes, "
+                        "and this catches it before the data can hide it.")
         self.steps()
         self.sbc_idea()
         self.sbc_pictures()
         self.computation()
         self.board()
         self.sensitivity()
+        self.answer()
 
     def card(self):
         self.chapter(11, r"Workflow", r"Building a model you can defend", lit=(2020,), part=PART, said="Chapter eleven. The Bayesian workflow.")

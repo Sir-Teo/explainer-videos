@@ -8,12 +8,23 @@ from videos.stats.stats27.common import *  # noqa: F403
 class VI(StatsScene):
     def construct(self):
         self.card()
+        self.ask(r"Mean-field variational inference, minimizing KL$(q \,\|\, p)$. The posterior's variances are usually...",
+                 ["underestimated", "overestimated", "exact"], 0,
+                 say="Variational inference finds the closest simple distribution to the posterior, minimizing KL "
+                     "of q from p. Are the posterior's variances usually under- or overestimated?",
+                 reveal="Underestimated. This direction of the divergence punishes q for putting mass where p has "
+                        "little, so q hugs the mode and ignores correlations.")
         self.elbo()
         self.mean_field()
         self.cavi()
         self.schools()
         self.richer()
         self.check()
+        self.answer()
+        self.checkpoint([("Particles without resampling?", "degenerate onto one"),
+                         ("Mean-field VI's variances?", "usually too small")],
+                        narration="Checkpoint. Particles and optimization.",
+                        answers_narration="They degenerate. And too small.")
 
     def card(self):
         self.chapter(10, r"Variational inference", r"Replace integration by optimization", lit=(1999,), part=PART, said="Chapter ten. Variational inference.")

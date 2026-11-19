@@ -9,12 +9,19 @@ from videos.stats.stats22.common import *  # noqa: F403
 class Principle(StatsScene):
     def construct(self):
         self.card()
+        self.ask("9 heads and 3 tails: fixed 12 tosses, or toss until the third tail. Same $p$-value?",
+                 ["yes: the likelihood is the same", "no"], 1,
+                 say="Nine heads and three tails. Alice planned twelve tosses; Bob tossed until the third tail. "
+                     "Their likelihoods are proportional. Do they get the same p-value for a fair coin?",
+                 reveal="No: about point zero seven three for Alice, point zero three three for Bob. The p-value "
+                        "depends on the stopping rule; the likelihood principle says evidence shouldn't.")
         self.two_experiments()
         self.same_curve()
         self.sample_spaces()
         self.bayes()
         self.birnbaum()
         self.debate()
+        self.answer()
 
     def card(self):
         self.chapter(12, r"The likelihood principle", r"Should the stopping rule matter?", lit=(1962,), part=PART, said="Chapter twelve. The likelihood principle.")

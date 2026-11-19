@@ -6,10 +6,17 @@ from videos.stats.stats23.common import *  # noqa: F403
 class Upgrade(StatsScene):
     def construct(self):
         self.card()
+        self.ask("Errors with unequal variances. Ordinary least squares is still...",
+                 ["unbiased, but not best, and its SEs are wrong", "biased", "best"], 0,
+                 say="Part 12's fine print: equal, uncorrelated errors. Drop the equal variances. What is ordinary "
+                     "least squares still?",
+                 reveal="Still unbiased, but no longer best, and its classical standard errors are wrong. The fine "
+                        "print matters most for the uncertainty.")
         self.upgrade()
         self.assumptions()
         self.gauss_markov()
         self.map_()
+        self.answer()
 
     def card(self):
         self.chapter(1, r"Upgrade: \ what Part 12 assumed", r"Least squares without the fine print", part=PART, said="Chapter one. An upgrade of Part 12.")

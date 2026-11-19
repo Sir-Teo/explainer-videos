@@ -8,12 +8,18 @@ from videos.stats.stats27.common import *  # noqa: F403
 class Gibbs(StatsScene):
     def construct(self):
         self.card()
+        self.ask("Gibbs sampling two highly correlated parameters moves...",
+                 ["quickly", "slowly, in small zig-zags"], 1,
+                 say="Gibbs sampling updates one coordinate at a time. On two strongly correlated parameters, how "
+                     "does it move?",
+                 reveal="Slowly, in small zig-zags along the ridge. Each conditional traps the other.")
         self.idea()
         self.zigzag()
         self.augmentation()
         self.probit()
         self.blocking()
         self.limits()
+        self.answer()
 
     def card(self):
         self.chapter(3, r"Gibbs sampling", r"One coordinate at a time", lit=(1990,), part=PART, said="Chapter three. Gibbs sampling.")

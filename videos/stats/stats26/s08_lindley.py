@@ -8,12 +8,24 @@ from videos.stats.stats26.common import *  # noqa: F403
 class Lindley(StatsScene):
     def construct(self):
         self.card()
+        self.ask(r"$10^8$ trials, $p = 0.0003$, a tiny deviation from 50\%. With a broad prior under $H_1$, the Bayes factor can favour...",
+                 ["$H_1$ strongly", "$H_0$"], 1,
+                 say="Princeton's anomalies lab: over a hundred million trials, a deviation from fifty percent of "
+                     "about two in ten thousand, p about point zero zero zero three. With a broad prior under the "
+                     "alternative, which way can the Bayes factor point?",
+                 reveal="Toward the null. A tiny effect is better predicted by no effect than by a broad "
+                        "alternative. Significant, and evidence for the null: Lindley's paradox.")
         self.pear()
         self.two_answers()
         self.why()
         self.growth()
         self.bound()
         self.lessons()
+        self.answer()
+        self.checkpoint([("A Bayes factor compares?", "how well each hypothesis predicted the data"),
+                         ("Huge $n$, tiny $p$, broad $H_1$ prior: the Bayes factor can favour?", "$H_0$: Lindley's paradox")],
+                        narration="Checkpoint. Evidence.",
+                        answers_narration="How well each predicted the data. And the null.")
 
     def card(self):
         self.chapter(7, r"Lindley's paradox", r"Significant, \ and evidence for the null", lit=(1957,), part=PART, said="Chapter seven. Lindley's paradox.")

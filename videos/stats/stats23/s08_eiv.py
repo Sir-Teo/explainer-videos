@@ -9,6 +9,11 @@ from videos.stats.stats23.common import *  # noqa: F403
 class EIV(StatsScene):
     def construct(self):
         self.card()
+        self.ask("$x$ measured with reliability 0.8. The OLS slope tends to...",
+                 [r"$\beta$", r"$0.8\,\beta$", r"$\beta / 0.8$"], 1,
+                 say="We see x plus independent measurement error, with reliability point eight. What does the "
+                     "least squares slope converge to?",
+                 reveal="Point eight times beta: a noisy x flattens the slope by the reliability ratio.")
         self.attenuation()
         self.fathers()
         self.board()
@@ -17,6 +22,7 @@ class EIV(StatsScene):
         self.simex()
         self.in_y()
         self.fixes()
+        self.answer()
 
     def card(self):
         self.chapter(7, r"Errors in variables", r"A noisy $x$ flattens the slope", lit=(1929,), part=PART, said="Chapter seven. Errors in variables.")

@@ -8,6 +8,17 @@ from videos.stats.stats27.common import *  # noqa: F403
 class Diagnostics(StatsScene):
     def construct(self):
         self.card()
+        self.wrong_idea(r"$\hat R$ below 1.01 proves the chain has converged",
+                        "Diagnostics can reveal failure, never prove convergence",
+                        narration="A comforting rule: R hat below one point zero one, so the chains have converged.",
+                        right_narration="Diagnostics can only reveal failure. Chains can agree with each other and "
+                                        "all miss a mode. A good R hat is necessary, never sufficient.")
+        self.ask("1,000 draws with lag-one autocorrelation 0.9. The effective sample size is about...",
+                 ["1,000", "500", "50"], 2,
+                 say="A thousand draws from a chain whose neighbouring draws correlate at point nine. About how "
+                     "many independent draws are they worth?",
+                 reveal="About fifty: a thousand times one minus point nine over one plus point nine. Report the "
+                        "effective sample size and the Monte Carlo error, not the number of draws.")
         self.ess()
         self.rhat_idea()
         self.ranks()
@@ -15,6 +26,11 @@ class Diagnostics(StatsScene):
         self.chains("good")
         self.advice()
         self.warmup()
+        self.answer()
+        self.checkpoint([("Random-walk Metropolis's ideal acceptance, high dimension?", r"about 23\%"),
+                         ("1,000 draws, lag-one autocorrelation 0.9: the ESS?", "about 50")],
+                        narration="Checkpoint. Chains.",
+                        answers_narration="About twenty-three percent. And about fifty.")
 
     def card(self):
         self.chapter(4, r"Diagnostics", r"Did the chains find the posterior?", lit=(), part=PART, said="Chapter four. Diagnostics.")

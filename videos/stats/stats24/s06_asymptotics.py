@@ -9,6 +9,12 @@ from videos.stats.stats24.common import *  # noqa: F403
 class Asymptotics(StatsScene):
     def construct(self):
         self.card()
+        self.ask("Small samples: which is usually more reliable?",
+                 ["the Wald test", "the likelihood-ratio test"], 1,
+                 say="Testing a coefficient in a small sample. Which is usually more reliable, the Wald test or the "
+                     "likelihood-ratio test?",
+                 reveal="The likelihood-ratio test. Wald leans on a quadratic approximation at the estimate, and it "
+                        "fails first, spectacularly so under separation.")
         self.trinity()
         self.dispersion()
         self.ld50_ci()
@@ -16,6 +22,7 @@ class Asymptotics(StatsScene):
         self.binary()
         self.od_test()
         self.advice()
+        self.answer()
 
     def card(self):
         self.chapter(5, r"Asymptotics for GLMs", r"Which approximations hold, \ and when", part=PART, said="Chapter five. Asymptotics for generalized linear models.")

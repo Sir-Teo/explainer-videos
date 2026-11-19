@@ -8,12 +8,19 @@ from videos.stats.stats23.common import *  # noqa: F403
 class Approx(StatsScene):
     def construct(self):
         self.card()
+        self.ask("The true mean is curved. Fit a line. OLS estimates...",
+                 ["nothing meaningful", "the best linear approximation, for this $x$ distribution", "the true slope"], 1,
+                 say="The true mean of y given x is curved, and you fit a straight line. What does least squares "
+                     "estimate?",
+                 reveal="The best linear approximation to the curve, which depends on where the x's lie. It's a "
+                        "description, not an effect, and not the slope at any one point.")
         self.target()
         self.picture()
         self.depends()
         self.toy()
         self.bootstraps()
         self.lesson()
+        self.answer()
 
     def card(self):
         self.chapter(6, r"Models as approximations", r"What a wrong line estimates", lit=(2019,), part=PART, said="Chapter six. Models as approximations.")

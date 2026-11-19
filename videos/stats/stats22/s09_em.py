@@ -9,6 +9,11 @@ from videos.stats.stats22.s01_hook import crab_axes
 class EM(StatsScene):
     def construct(self):
         self.card()
+        self.ask("Each EM iteration, the likelihood...",
+                 ["never decreases", "can decrease"], 0,
+                 say="EM fills in what you didn't see, then refits. Each iteration, can the likelihood go down?",
+                 reveal="Never. Each step maximizes a lower bound that touches the likelihood at the current point. "
+                        "EM is an MM algorithm.")
         self.missing()
         self.steps()
         self.split()
@@ -16,6 +21,7 @@ class EM(StatsScene):
         self.minorize()
         self.climb()
         self.louis()
+        self.answer()
 
     def card(self):
         self.chapter(8, r"EM", r"Fill in what you did not see", lit=(1977,), part=PART, said="Chapter eight. The EM algorithm.")

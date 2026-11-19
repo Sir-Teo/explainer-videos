@@ -8,12 +8,23 @@ from videos.stats.stats23.common import *  # noqa: F403
 class Influence(StatsScene):
     def construct(self):
         self.card()
+        self.ask(r"The change in $\hat\beta$ from deleting one point needs...",
+                 ["a full refit", "only its leverage and residual"], 1,
+                 say="How much does one observation move the coefficients? To find out, must you delete it and "
+                     "refit?",
+                 reveal="No. A formula with its leverage and residual gives the change exactly, for every point at "
+                        "once. Scaled by n, it's a first look at the influence function.")
         self.deletion()
         self.leverage()
         self.bars()
         self.jackknife()
         self.masking()
         self.advice()
+        self.answer()
+        self.checkpoint([(r"Quantile regression at $\tau = 0.9$ weights positive residuals?", "9 times the negative ones"),
+                         ("Deleting one point: refit needed?", "no: leverage and residual suffice")],
+                        narration="Checkpoint. Beyond the mean.",
+                        answers_narration="Nine times. And no refit.")
 
     def card(self):
         self.chapter(11, r"Influence", r"Which points move the answer?", part=PART, said="Chapter eleven. Influence.")

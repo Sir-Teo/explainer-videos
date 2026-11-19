@@ -8,10 +8,17 @@ from videos.stats.stats25.common import *  # noqa: F403
 class REML(StatsScene):
     def construct(self):
         self.card()
+        self.ask("REML improves on ML for variance components by accounting for...",
+                 ["the fixed effects estimated", "outliers", "missing data"], 0,
+                 say="Maximum likelihood underestimates variance components, just as dividing by n does. What does "
+                     "restricted maximum likelihood account for?",
+                 reveal="The fixed effects estimated from the same data: it works with contrasts free of them. "
+                        "Neyman and Scott's problem, cured.")
         self.bias()
         self.reml()
         self.simulation()
         self.compare()
+        self.answer()
 
     def card(self):
         self.chapter(5, r"ML vs REML", r"Neyman--Scott, \ cured", lit=(1971,), part=PART, said="Chapter five. Maximum likelihood versus REML.")

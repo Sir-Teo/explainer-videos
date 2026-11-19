@@ -8,12 +8,19 @@ from videos.stats.stats27.common import *  # noqa: F403
 class SMC(StatsScene):
     def construct(self):
         self.card()
+        self.ask("Particle weights, never resampled, over many time steps...",
+                 ["stay balanced", "degenerate onto one particle"], 1,
+                 say="A population of particles tracks a hidden level, reweighted as each observation arrives. "
+                     "Without resampling, what happens to the weights?",
+                 reveal="They degenerate: one particle ends up with nearly all the weight. Resampling clones the "
+                        "good particles and drops the bad.")
         self.filter_idea()
         self.filter_picture()
         self.noise()
         self.degeneracy()
         self.tempering()
         self.evidence()
+        self.answer()
 
     def card(self):
         self.chapter(9, r"Sequential Monte Carlo", r"A population of particles, \ reweighted and resampled", lit=(1993,), part=PART, said="Chapter nine. Sequential Monte Carlo.")

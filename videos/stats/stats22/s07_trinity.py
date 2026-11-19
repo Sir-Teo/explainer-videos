@@ -9,11 +9,18 @@ from videos.stats.stats22.common import *  # noqa: F403
 class Trinity(StatsScene):
     def construct(self):
         self.card()
+        self.ask("Which test needs only the model fitted under the null?",
+                 ["Wald", "score", "likelihood ratio"], 1,
+                 say="Three ways to test a value of a parameter: Wald, score and likelihood ratio. Which needs only "
+                     "the model fitted under the null hypothesis?",
+                 reveal="The score test: the slope of the log-likelihood at the null value. Wald needs only the "
+                        "full fit, and the likelihood ratio needs both.")
         self.picture()
         self.formulas()
         self.invert()
         self.hauck()
         self.board()
+        self.answer()
 
     def card(self):
         self.chapter(6, r"The trinity", r"Wald, \ score and likelihood ratio", part=PART, said="Chapter six. The trinity of tests.")
