@@ -75,4 +75,5 @@ DESIGN_COLOR = {
     "meta-analysis": "#E3B98A",  # a summary of many studies, whatever their designs (the SOURCE colour)
     "review": "#D9C7A7",         # an expert review that adds up component estimates (a measurement audit)
     "regression": "#9AA5B8",     # a regression on observational data that controls for what it can observe
+    "reconstruction": "#D4A373",  # a historical series rebuilt from archives (wages, prices, output, population)
 }

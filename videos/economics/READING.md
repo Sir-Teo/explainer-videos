@@ -10,7 +10,7 @@ the series leaves out.
 Both *Parts* columns are found, not typed. *Planned* lists the parts whose entry in
 [`SYLLABUS.md`](SYLLABUS.md) names the book or paper; *Built* lists the parts whose scenes, compute step or
 README cite it (a dot: none yet). Fuller notes (editions, chapters, what each source was used for) are in each
-part's README, under *Sources*. Built so far: Parts 1–18.
+part's README, under *Sources*. Built so far: Parts 1–19.
 
 ## 1. The textbook spine
 
@@ -41,7 +41,7 @@ part's README, under *Sources*. Built so far: Parts 1–18.
 | Borjas | G. Borjas, *Labor Economics* (8th ed., 2020) | 38 | · |
 | Gruber | J. Gruber, *Public Finance and Public Policy* (7th ed., 2022) | 15, 41–42, 50 | 7, 15 |
 | Ray | D. Ray, *Development Economics* (1998) | 46 | · |
-| Weil | D. Weil, *Economic Growth* (3rd ed., 2013) | 7, 19 | 3, 7 |
+| Weil | D. Weil, *Economic Growth* (3rd ed., 2013) | 7, 19 | 3, 7, 19 |
 
 ### Graduate micro
 
@@ -120,8 +120,8 @@ part's README, under *Sources*. Built so far: Parts 1–18.
 
 | Model or result | Paper | Planned | Built |
 |---|---|---|---|
-| the division of labour | Smith (1776), *The Wealth of Nations* | 1 | 1–2 |
-| comparative advantage | Ricardo (1817), *Principles*, ch. 7 | 2, 8, 35–36 | 1–2, 8 |
+| the division of labour | Smith (1776), *The Wealth of Nations* | 1 | 1–2, 19 |
+| comparative advantage | Ricardo (1817), *Principles*, ch. 7 | 2, 8, 35–36 | 1–2, 8, 19 |
 | supply and demand, the scissors | Marshall (1890), *Principles of Economics* | 2, 37 | 2, 14 |
 | the price system as information | Hayek (1945), "The Use of Knowledge in Society" | 1, 9 | 1, 9 |
 | the double auction in the classroom | Chamberlin (1948); Smith (1962) | 1–2 | 1 |
@@ -184,8 +184,8 @@ part's README, under *Sources*. Built so far: Parts 1–18.
 
 | Model or result | Paper | Planned | Built |
 |---|---|---|---|
-| the Malthusian economy | Malthus (1798) | 19 | 18 |
-| the long run in numbers | the Maddison Project (Bolt and van Zanden 2024) | 1 | 1, 3, 14 |
+| the Malthusian economy | Malthus (1798) | 19 | 18–19 |
+| the long run in numbers | the Maddison Project (Bolt and van Zanden 2024) | 1 | 1, 3, 14, 19 |
 | the neoclassical growth model | Solow (1956); Ramsey (1928); Cass (1965) | 20 | · |
 | endogenous growth | Romer (1990); Aghion and Howitt (1992) | 21 | · |
 | misallocation | Hsieh and Klenow (2009) | 9, 21 | 9 |
@@ -291,6 +291,8 @@ part's README, under *Sources*. Built so far: Parts 1–18.
 **Part 17, *Markets by Design*.** Books: Alvin E. Roth, *Who Gets What and Why* (2015); Alvin E. Roth and Marilda Sotomayor, *Two-Sided Matching* (1990); Tilman Börgers, *An Introduction to the Theory of Mechanism Design* (2015); Nisan, Roughgarden, Tardos and Vazirani, *Algorithmic Game Theory* (2007), chs. 9–10. Papers: Gale and Shapley (1962); Shapley and Shubik (1971); Shapley and Scarf (1974); Vickrey (1961); Clarke (1971); Groves (1973); Green and Laffont (1977); Myerson (1979); Myerson and Satterthwaite (1983); Chatterjee and Samuelson (1983); Dubins and Freedman (1981); Roth (1982, 1984, 1991, 2002, 2007, 2008); Roth and Peranson (1999); Kagel and Roth (2000); Abdulkadiroğlu and Sönmez (2003); Abdulkadiroğlu, Pathak and Roth (2005); Chen and Kesten (2017); Roth, Sönmez and Ünver (2004); Rees et al. (2009); Kojima and Pathak (2009); Azevedo and Leshno (2016); Abdulkadiroğlu, Angrist and Pathak (2014); Abdulkadiroğlu, Angrist, Narita and Pathak (2017); Bansak et al. (2018).
 
 **Part 18, *Social Choice and Welfare*.** Books: Kenneth J. Arrow, *Social Choice and Individual Values* (1951; 3rd ed. 2012); Amartya Sen, *Collective Choice and Social Welfare* (1970; expanded ed. 2017); Mas-Colell, Whinston and Green, *Microeconomic Theory* (1995), chs. 21–22; Matthew Adler, *Measuring Social Welfare* (2019). Papers: Condorcet (1785); Black (1948); May (1952); Downs (1957); McKelvey (1976); Gibbard (1973); Satterthwaite (1975); Duverger (1951); Riker (1982); Robbins (1932); Hammond (1976); d'Aspremont and Gevers (1977); Geanakoplos (2005); Harsanyi (1953, 1955, 1975); Rawls (1971); Atkinson (1970); Okun (1975); Kaldor (1939); Hicks (1939); Scitovsky (1941); Sen (1970); Kaplow and Shavell (1994); Schelling (1968); Thaler and Rosen (1976); Ashenfelter and Greenstone (2004); Ravallion (2012); Bernheim and Rangel (2009); Lalley and Weyl (2018); Conitzer et al. (2024).
+
+**Part 19, *The Great Escape*.** Books: Gregory Clark, *A Farewell to Alms* (2007); Robert C. Allen, *The British Industrial Revolution in Global Perspective* (2009); Joel Mokyr, *A Culture of Growth* (2016); Oded Galor, *Unified Growth Theory* (2011); Kenneth Pomeranz, *The Great Divergence* (2000). Papers: Malthus (1798); Ricardo (1817); Ashraf and Galor (2011, 2013); Broadberry, Campbell, Klein, Overton and van Leeuwen (2015); Humphries and Weisdorf (2019); Voigtländer and Voth (2013); North and Weingast (1989); Clark (1996); Humphries (2013); Kelly, Mokyr and Ó Gráda (2014); Broadberry, Guan and Li (2018); Crafts and Harley (1992); Crafts (2004); Allen (2009); Voth (2000); de Vries (1994); Becker and Lewis (1973); Kremer (1993); Galor and Weil (2000); Comin, Easterly and Gong (2010); Spolaore and Wacziarg (2009); Kelly (2019); Ehrlich (1968).
 
 ## 4. What the series leaves out
 

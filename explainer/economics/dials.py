@@ -20,7 +20,7 @@ from dataclasses import dataclass, field
 
 STATUSES = ("settled within a range", "depends on the setting", "contested", "not identified")
 DESIGNS = ("RCT", "IV", "RD", "DiD", "event study", "structural", "calibration", "survey", "narrative", "lab",
-           "meta-analysis", "review", "regression")
+           "meta-analysis", "review", "regression", "reconstruction")
 
 
 @dataclass(frozen=True)
@@ -448,6 +448,28 @@ DIALS = {d.key: d for d in [
                       "2024 base year, from wage-risk and stated-preference studies", 13.7,
                       where="DOT VSL guidance, table by base year", checked="2026-11-19"),
          )),
+    Dial("preindustrial_growth", "growth of English living standards before industrialization",
+         "percent a year, 1300 to 1700", (19, 46), status="contested", checked="2026-11-19",
+         meaning="how fast living standards rose in the four centuries before the Industrial Revolution: day wages say "
+                 "barely at all, about 0.07% a year; the same wages counting the extra days people worked, about 0.1%; "
+                 "output per head, about 0.2%. At 0.07% a year income doubles in a thousand years, at 0.2% in 350: the "
+                 "gap is the debate over whether England was already escaping slowly or stuck until about 1800",
+         estimates=(
+             Estimate("Broadberry, Campbell, Klein, Overton and van Leeuwen", 2015, "reconstruction",
+                      "England's real GDP per head, built up from agriculture, industry and services, 1300 to 1700 "
+                      "(784 to 1,668 pounds at 2013 prices)", 0.189,
+                      where="British Economic Growth, 1270-1870 (2015), as compiled in the Bank of England's Millennium "
+                            "dataset v3.1, sheet A21; compound growth computed here", checked="2026-11-19"),
+             Estimate("Bank of England (day wages)", 2017, "reconstruction",
+                      "real consumption wages from daily wage rates, England, 1300 to 1700 (26.5 to 35.4, 1900 = 100)",
+                      0.072, where="Millennium dataset v3.1, sheet A48, the traditional measure from daily wage rates "
+                                   "before 1750; compound growth computed here", checked="2026-11-19"),
+             Estimate("Humphries and Weisdorf", 2019, "reconstruction",
+                      "the same real wages adjusted for the days worked a year, England, 1300 to 1700 (18.2 to 27.6)",
+                      0.104, where="Millennium dataset v3.1, sheet A48, the index adjusted for days worked before 1750 "
+                                   "(after Humphries and Weisdorf's 2016 working paper, published in the Economic "
+                                   "Journal 129(623), 2019); compound growth computed here", checked="2026-11-19"),
+         )),
     Dial("discount", "social discount rate and the social cost of carbon", "percent a year; dollars per tonne",
          (48, 58)),
     Dial("energy_elasticity", "price elasticity of gasoline and of electricity", "", (48,)),
@@ -817,7 +839,8 @@ SHOWN = {
         ("Roth (2007)", "repugnance, stated"),
         ("Bansak et al. (2018)", "refugee placement by algorithm: its predicted employment gains, stated with the "
          "range the authors report"),
-    ],    18: [
+    ],
+    18: [
         ("Condorcet (1785); Borda (1781); Arrow (1950, 1951); Black (1948); Downs (1957); May (1952); Gibbard (1973); "
          "Satterthwaite (1975); Sen (1970); Harsanyi (1955); Rawls (1971); Atkinson (1970); Kaldor (1939); Hicks "
          "(1939); Scitovsky (1941); Geanakoplos (2005)", "theory, stated; every rule, axiom check and welfare function "
@@ -827,6 +850,27 @@ SHOWN = {
          "dialled, since its dollar year is not recorded here"),
         ("the Stern Review (2007); Nordhaus", "discount rates, stated for direction; the dial is Part 48's"),
         ("V-Dem via Our World in Data", "data, shown with its source; no parameter is estimated"),
+        ("Robbins (1932); Hammond (1976); d'Aspremont and Gevers (1977); Okun (1975); Frohlich and Oppenheimer "
+         "(1992); Kaplow and Shavell (1994); Ramsey (1928); Schelling (1968); Thaler and Rosen (1976)",
+         "theory and classic findings, stated; the leaky bucket, the veils and the jetty are computed in Agora"),
+        ("Ravallion (2012); the UNDP's HDI", "a critique and an index, stated; the scatter is the HDR's data"),
+        ("Bernheim and Rangel (2009); Lalley and Weyl (2018); Siththaranjan, Laidlaw and Hadfield-Menell (2024); "
+         "Conitzer et al. (2024); Huang et al. (2024)", "frontier work, described, not dialled"),
+        ("E.O. 12291, 12866, 14192; OMB Circular A-4 (2003, 2023); HM Treasury's Green Book; Whitman v. American "
+         "Trucking (2001); Michigan v. EPA (2015)", "rules and rulings, stated as practice"),
+    ],
+    19: [
+        ("Malthus (1798); Ehrlich (1968)", "the hook's theory and the Called it?, stated with their outcomes"),
+        ("Ashraf and Galor (2011)", "a cross-country test of Malthus's prediction, stated in words, not dialled"),
+        ("Allen (2009); Mokyr (2009, 2016); North and Weingast (1989); Clark (1996); Kelly, Mokyr and Ó Gráda (2014); "
+         "Humphries (2013)", "explanations of why Britain, each stated with its critics; no parameter is estimated"),
+        ("Needham; Pomeranz (2000); Broadberry, Guan and Li (2018)", "the debate over China, stated; the series shown "
+         "are Maddison's"),
+        ("Crafts and Harley (1992); Allen (2009) on Engels's pause", "slow early growth and the pause, shown in the Bank "
+         "of England's series"),
+        ("Becker and Lewis (1973); Galor and Weil (2000); Kremer (1993)", "theory, run in Agora (agora.malthus)"),
+        ("Spolaore and Wacziarg (2009); Ashraf and Galor (2013); Kelly (2019)", "frontier work, described, not "
+         "dialled"),
     ],
 }
 

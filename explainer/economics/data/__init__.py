@@ -307,6 +307,50 @@ DATASETS = {
                      "South Africa", "China"),
         "files": ("democracy_vdem.csv",),
     },
+    "millennium": {
+        "title": "A millennium of macroeconomic data for the UK (version 3.1): England's population, real consumption "
+                 "wages and real GDP per head, 1209-2016",
+        "publisher": "Bank of England",
+        "citation": "Thomas, R. and Dimsdale, N. (2017), A Millennium of UK Data, Bank of England OBRA dataset, version "
+                    "3.1, sheet A1 (headline series): population of England (A21), real consumption wages (A48), real "
+                    "consumption earnings adjusted for days worked (A48, after Humphries and Weisdorf) and "
+                    "England's real GDP per head in 2013 prices (A21, from Broadberry, Campbell, Klein, Overton "
+                    "and van Leeuwen 2015 before 1700), retrieved 2026-11-19",
+        "short": "Bank of England, A Millennium of Macroeconomic Data (v3.1)",
+        "url": "https://www.bankofengland.co.uk/-/media/boe/files/statistics/research-datasets/"
+               "a-millennium-of-macroeconomic-data-for-the-uk.xlsx",
+        "licence": "Bank of England; free to reuse with attribution under the Bank's terms",
+        "units": "population in thousands; real wages, 1900 = 100; GDP per head, 2013 pounds",
+        "vintage": "2026-11-19",
+        "sha256": "4c23dd392a498691eac92659aec283fb43f28118bd80511dc87fc595974195eb",
+        "files": ("boe_millennium_england.csv",),
+    },
+    "longrun": {
+        "title": "Long-run population (from 10,000 BCE), life expectancy (from 1543), children per woman (from 1891 or "
+                 "1950) and men's height (by decade of birth, from 1710), for the world and nine countries",
+        "publisher": "Our World in Data (compilation of HYDE, Gapminder, the UN World Population Prospects, Riley, "
+                     "Zijdeman and Ribeira da Silva, the Human Mortality and Fertility Databases, Baten and Blum, "
+                     "NCD-RisC)",
+        "citation": "Our World in Data, grapher population, life-expectancy, children-born-per-woman and "
+                    "average-height-of-men-for-selected-countries (each with the sources it names), retrieved "
+                    "2026-11-19",
+        "short": "HYDE, Gapminder, UN WPP, Riley and others, via Our World in Data",
+        "urls": {k: f"https://ourworldindata.org/grapher/{k}.csv?v=1&csvType=full&useColumnShortNames=true"
+                 for k in ("population", "life-expectancy", "children-born-per-woman",
+                           "average-height-of-men-for-selected-countries")},
+        "columns": {"population": "population_historical", "life-expectancy": "life_expectancy_0",
+                    "children-born-per-woman": "fertility_rate_hist",
+                    "average-height-of-men-for-selected-countries": "height"},
+        "licence": "CC BY 4.0 (Our World in Data); sources' terms",
+        "units": "people; years; children per woman; centimetres",
+        "vintage": "2026-11-19",
+        "sha256": {"population": "31c97de9a52df079", "life-expectancy": "6336e80067d72cd9",
+                   "children-born-per-woman": "c4398f67298b5e78",
+                   "average-height-of-men-for-selected-countries": "30402c6b431193c2"},
+        "entities": ("World", "United Kingdom", "Sweden", "France", "Netherlands", "China", "India", "Japan",
+                     "South Korea", "Nigeria", "United States"),
+        "files": ("longrun_owid.csv",),
+    },
     "draft1970": {
         "title": "The draft lottery of 1 December 1969 (for men born 1944-50): the rank drawn for each birthday",
         "publisher": "U.S. Selective Service System; as tabulated by the Journal of Statistics Education data archive",
@@ -930,10 +974,94 @@ def refresh_democracy() -> None:
             w.writerow([r["entity"], r["code"], r["year"], r["electdem_vdem__estimate_best"]])
 
 
+MILLENNIUM_COLUMNS = {25: "population_000s", 42: "real_wage_1900_100"}     # sheet A1
+MILLENNIUM_GDPPC = 8                                                        # sheet A21: England, real, 2013 pounds
+MILLENNIUM_DAYS = 6          # sheet A48: real consumption earnings adjusted for days worked before 1750, 1900 = 100
+
+
+def millennium() -> dict:
+    """England from the Bank of England's millennium dataset: ``{"year": [...], "population": [...] (thousands),
+    "real_wage": [...] (real consumption wages from daily wage rates, 1900 = 100), "earnings_days": [...] (the same
+    adjusted for days worked a year before 1750, from Humphries and Weisdorf), "gdppc": [...] (real GDP per head, 2013
+    pounds)}``, nan where a series has no value (wages from 1209, GDP per head from 1270, population from 1086)."""
+    rows = _read(HERE / "boe_millennium_england.csv")
+    return {"year": [int(r["year"]) for r in rows], "population": [_num(r["population_000s"]) for r in rows],
+            "real_wage": [_num(r["real_wage_1900_100"]) for r in rows],
+            "gdppc": [_num(r["gdppc_2013_pounds"]) for r in rows],
+            "earnings_days": [_num(r["real_earnings_days_1900_100"]) for r in rows]}
+
+
+def refresh_millennium() -> None:
+    import openpyxl
+
+    d = DATASETS["millennium"]
+    raw = RAW / "a-millennium-of-macroeconomic-data-for-the-uk.xlsx"
+    sha = _download(d["url"], raw)
+    if d.get("sha256") and sha != d["sha256"]:
+        print(f"millennium: the download differs from the recorded vintage ({sha[:12]} vs {d['sha256'][:12]})")
+    print(f"millennium: sha256 {sha}")
+    wb = openpyxl.load_workbook(raw, read_only=True, data_only=True)
+    ws = wb["A1. Headline series"]
+    out = []
+    for row in ws.iter_rows(min_row=8, values_only=True):
+        y = row[0]
+        if not isinstance(y, (int, float)) or not 1086 <= y <= 2016:
+            continue
+        vals = {k: (row[j] if isinstance(row[j], (int, float)) else None) for j, k in MILLENNIUM_COLUMNS.items()}
+        out.append((int(y), vals))
+    gdppc, days = {}, {}
+    for row in wb["A21. GDP per capita 1086+"].iter_rows(min_row=6, values_only=True):
+        if isinstance(row[0], (int, float)) and isinstance(row[MILLENNIUM_GDPPC], (int, float)):
+            gdppc[int(row[0])] = row[MILLENNIUM_GDPPC]
+    for row in wb["A48. Real Earnings "].iter_rows(min_row=6, values_only=True):
+        if isinstance(row[0], (int, float)) and isinstance(row[MILLENNIUM_DAYS], (int, float)):
+            days[int(row[0])] = row[MILLENNIUM_DAYS]
+    cols = [*MILLENNIUM_COLUMNS.values(), "gdppc_2013_pounds", "real_earnings_days_1900_100"]
+    with open(HERE / "boe_millennium_england.csv", "w", newline="", encoding="utf-8") as f:
+        w = csv.writer(f)
+        w.writerow(["year", *cols])
+        for y, v in out:
+            v["gdppc_2013_pounds"] = gdppc.get(y)
+            v["real_earnings_days_1900_100"] = days.get(y)
+            w.writerow([y, *[_fmt(v[k]) if v[k] is not None else "" for k in cols]])
+
+
+def longrun(series: str, entity: str) -> dict:
+    """One long-run series for one entity: ``series`` is "population", "life-expectancy", "children-born-per-woman"
+    or "height" (men, by decade of birth): ``{"year": [...], "value": [...]}``."""
+    key = {"height": "average-height-of-men-for-selected-countries"}.get(series, series)
+    rows = [r for r in _read(HERE / "longrun_owid.csv") if r["series"] == key and r["entity"] == entity]
+    if not rows:
+        raise KeyError((series, entity))
+    return {"year": [int(r["year"]) for r in rows], "value": [float(r["value"]) for r in rows]}
+
+
+def refresh_longrun() -> None:
+    d = DATASETS["longrun"]
+    out = []
+    for key, url in d["urls"].items():
+        raw = RAW / f"{key}.csv"
+        sha = _download(url, raw)
+        rec = d["sha256"].get(key)
+        if rec and not sha.startswith(rec):
+            print(f"longrun {key}: the download differs from the recorded vintage ({sha[:16]} vs {rec})")
+        print(f"longrun {key}: sha256 {sha}")
+        col = d["columns"][key]
+        with open(raw, newline="", encoding="utf-8") as f:
+            for r in csv.DictReader(f):
+                if r["entity"] in d["entities"] and r.get(col, "") != "":
+                    out.append((key, r["entity"], r["code"], r["year"], r[col]))
+    with open(HERE / "longrun_owid.csv", "w", newline="", encoding="utf-8") as f:
+        w = csv.writer(f)
+        w.writerow(["series", "entity", "code", "year", "value"])
+        w.writerows(out)
+
+
 REFRESH = {"draft1970": refresh_draft1970, "maddison2023": refresh_maddison, "fred": refresh_fred, "spf": refresh_spf,
            "pinksheet": refresh_pinksheet, "psd_coffee": refresh_psd_coffee, "wdi": refresh_wdi, "hdr": refresh_hdr,
            "rtdsm": refresh_rtdsm, "warheads": refresh_warheads, "so2": refresh_so2,
-           "marriage": refresh_marriage, "democracy": refresh_democracy}
+           "marriage": refresh_marriage, "democracy": refresh_democracy, "millennium": refresh_millennium,
+           "longrun": refresh_longrun}
 
 
 def main() -> None:

@@ -538,6 +538,21 @@ TRUTHS = {
         # discounting (chapter 12): a benefit 100 years away, at three rates
         "discount": {"years": 100, "amount": 1e6, "rates": (0.014, 0.03, 0.045)},
     },
+    19: {
+        # Play it (chapter 1): five candidate years for the start of England's climb in income per head
+        "playit": {"options": (1350, 1500, 1650, 1800, 1900)},
+        # the Malthusian island (chapters 2-4): income per head A (X / L)^beta, population growing at
+        # lam ln(y / ybar); a plague in year 100 kills 45% (England lost about that share, 1348-51); a better
+        # plough in year 250 raises A by half
+        "malthus": {"beta": 0.6, "lam": 0.02, "ybar": 1.0, "years": 400, "plague": (100, 0.45),
+                    "invention": (250, 0.5)},
+        # England's labour demand curve (chapter 3): the spans fitted
+        "elasticity": {"before": (1270, 1640), "after": (1600, 1800)},
+        # unified growth (chapter 9): one generation per step from the year 1000
+        "unified": {"phi": 0.065, "generations": 42},
+        # persistence and spatial noise (chapter 13): 300 places, two independent smooth fields
+        "noise": {"n_sites": 300, "length": 0.25, "reps": 400},
+    },
 }
 
 

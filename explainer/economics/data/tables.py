@@ -1892,6 +1892,25 @@ DUVERGER = Table(
 PART18 = (VSL, DUVERGER)
 
 
+MALTHUS_1798 = Table(
+    key="malthus_1798",
+    cite="[T. R. Malthus], *An Essay on the Principle of Population, as it affects the future improvement of society. "
+         "With remarks on the speculations of Mr. Godwin, M. Condorcet, and other writers* (London: J. Johnson, 1798), "
+         "first edition, published anonymously; preface dated 7 June 1798",
+    tag="Malthus, An Essay on the Principle of Population (1798), ch. 1",
+    where="chapter 1, pp. 13-14 of the first edition",
+    read="a scan of the first edition (Internet Archive, essayonprincipl00malt), the passage read on the page",
+    checked="2026-11-19",
+    data={"powers": "the power of population is indefinitely greater than the power in the earth to produce "
+                    "subsistence for man",
+          "ratios": "Population, when unchecked, increases in a geometrical ratio. Subsistence increases only in an "
+                    "arithmetical ratio.",
+          "preface_dated": "7 June 1798"},
+)
+
+PART19 = (MALTHUS_1798,)
+
+
 PART7 = (BERNOULLI_1738, SAMUELSON_1937, ALLAIS_1953, ELLSBERG_1961, RABIN_2000, THALER_1981, HOLT_LAURY_2005,
          HAYDEN_PLATT_2009, MADRIAN_SHEA_2001, THALER_BENARTZI_2004, BARSKY_1997, POST_2008, MEHRA_PRESCOTT_1985)
-ALL = {t.key: t for t in (*PART1, *PART3, *PART4, *PART5, *PART6, *PART7, *PART8, *PART9, *PART10, *PART11, *PART12, *PART13, *PART14, *PART15, *PART16, *PART17, *PART18)}
+ALL = {t.key: t for t in (*PART1, *PART3, *PART4, *PART5, *PART6, *PART7, *PART8, *PART9, *PART10, *PART11, *PART12, *PART13, *PART14, *PART15, *PART16, *PART17, *PART18, *PART19)}

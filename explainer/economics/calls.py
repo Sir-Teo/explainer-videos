@@ -144,6 +144,18 @@ CALLS = {c.key: c for c in [
          ("P. R. Portney, \"Economics and the Clean Air Act\", Journal of Economic Perspectives 4(4) (1990): 173-181, "
           "as cited by Schmalensee and Stavins",
           "R. Schmalensee and R. N. Stavins, Journal of Economic Perspectives 27(1) (2013): 103-122, Table 1")),
+    Call("ehrlich", 19, "Paul Ehrlich, The Population Bomb",
+         "1968", "the battle to feed all of humanity is over: in the 1970s hundreds of millions of people will starve to "
+                 "death in spite of any crash programmes embarked upon then",
+         "Malthus's arithmetic, population against food, applied to a world of 3.5 billion growing at about 2% a year",
+         "the world's population passed 8 billion in 2022, and food supply per person rose; the famines of the 1970s and "
+         "after, terrible as they were, killed far fewer than hundreds of millions, and most were made by war and "
+         "policy; in 1980 Ehrlich bet Julian Simon that five metals would be dearer in 1990, and in 1990 he paid "
+         "Simon $576.07",
+         "wrong",
+         ("P. R. Ehrlich, The Population Bomb (1968), prologue",
+          "United Nations, World Population Prospects; Our World in Data, population",
+          "J. Tierney, \"Betting on the Planet\", New York Times Magazine, 2 December 1990")),
     Call("duverger", 18, "Maurice Duverger, Les partis politiques",
          "1951", "plurality rule in single-member districts tends to produce two-party systems: voters desert third "
                  "parties that cannot win, and politicians stop joining them",
