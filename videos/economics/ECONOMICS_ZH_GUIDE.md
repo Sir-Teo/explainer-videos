@@ -536,6 +536,30 @@ brackets on screen.
 | the fundamental law of road congestion; induced demand | 道路拥堵基本定律；诱发需求 |
 | acid rain; sulphur dioxide | 酸雨；二氧化硫 |
 
+## Part 16
+
+| English | 中文 |
+|---|---|
+| auction; bidder; bid; reserve price | 拍卖；竞买人；出价；保留价 |
+| English (ascending) auction; Dutch (descending) auction | 英式（升价）拍卖；荷式（降价）拍卖 |
+| first-price sealed-bid auction; second-price sealed-bid (Vickrey) auction | 第一价格密封拍卖；第二价格密封（维克里）拍卖 |
+| all-pay auction | 全支付拍卖 |
+| private values; common value; affiliated values | 私人价值；共同价值；关联价值 |
+| bid shading; dominant strategy | 压价出价（出价折让）；占优策略 |
+| revenue equivalence theorem; envelope theorem | 收入等价定理；包络定理 |
+| virtual value; optimal auction | 虚拟价值；最优拍卖 |
+| winner's curse; linkage principle | 赢者诅咒；关联原理 |
+| simultaneous ascending auction; activity rule | 同时升价拍卖；活跃度规则 |
+| exposure problem; package (combinatorial) bidding | 暴露问题；组合竞价 |
+| collusion; tacit collusion; signalling by trailing digits | 合谋；默契合谋；尾数信号 |
+| Anglo-Dutch auction | 英荷混合拍卖 |
+| generalized second-price auction; position auction; quality score | 广义第二价格拍卖；位置拍卖；质量得分 |
+| uniform-price auction; discriminatory (pay-as-bid) auction | 统一价格拍卖；歧视性价格（按报价支付）拍卖 |
+| demand reduction | 需求削减 |
+| incentive auction; reverse auction; clock auction | 激励拍卖；反向拍卖；时钟拍卖 |
+| obviously strategy-proof; credible auction | 显然防策略操纵；可信拍卖 |
+| auto-bidding; return-on-spend target | 自动出价；投入产出目标 |
+
 ## Names
 
 | English | 中文 |
@@ -744,3 +768,10 @@ brackets on screen.
 | Gilles Duranton; Matthew Turner; Jeffrey Rohlfs; Brian Arthur; Paul David | 吉勒·迪朗通；马修·特纳；杰弗里·罗尔夫斯；布莱恩·阿瑟；保罗·戴维 |
 | Stan Liebowitz; Stephen Margolis; Adam Jaffe; Manuel Trajtenberg | 斯坦·利博维茨；斯蒂芬·马戈利斯；亚当·贾菲；曼努埃尔·特拉滕伯格 |
 | Kenneth Chay; Michael Greenstone; Janet Currie; Reed Walker; Tatyana Deryugina | 肯尼斯·蔡；迈克尔·格林斯通；珍妮特·柯里；里德·沃克；塔季扬娜·杰留吉娜 |
+| William Vickrey; Roger Myerson; John Riley; William Samuelson | 威廉·维克里；罗杰·迈尔森；约翰·赖利；威廉·萨缪尔森 |
+| Paul Milgrom; Robert Wilson; Robert Weber; Preston McAfee; Ilya Segal | 保罗·米尔格罗姆；罗伯特·威尔逊；罗伯特·韦伯；普雷斯顿·麦卡菲；伊利亚·西格尔 |
+| Ken Binmore; Paul Klemperer; Jeremy Bulow; Peter Cramton; Jesse Schwartz | 肯·宾莫尔；保罗·克伦佩勒；杰里米·布洛；彼得·克兰普顿；杰西·施瓦茨 |
+| Max Bazerman; John Kagel; Dan Levin; Vernon Smith; James Cox | 马克斯·巴泽曼；约翰·卡格尔；丹·莱文；弗农·史密斯；詹姆斯·考克斯 |
+| Benjamin Edelman; Michael Ostrovsky; Michael Schwarz; Hal Varian | 本杰明·埃德尔曼；迈克尔·奥斯特洛夫斯基；迈克尔·施瓦茨；哈尔·瓦里安 |
+| Mohammad Akbarpour; Shengwu Li; Lawrence Ausubel; Eric Maskin | 穆罕默德·阿克巴尔普尔；Shengwu Li（中文名待核）；劳伦斯·奥苏贝尔；埃里克·马斯金 |
+| Johann Wolfgang von Goethe; Milton Friedman | 约翰·沃尔夫冈·冯·歌德；米尔顿·弗里德曼 |

@@ -105,6 +105,11 @@ AGORA = {
     "auctions_converge": (2, "traders who adjust their margins converge by the third period in balanced and lopsided "
                              "markets alike; random traders capture most of the surplus, but find the price only when "
                              "the market is balanced"),
+    # Part 16 showed the jar of coins and explained it
+    "winners_curse": (16, "bidders who bid their own unbiased estimates of a common value lose, on average, the "
+                          "expected overestimate of the highest of n estimates, which grows with n (a third of the "
+                          "noise's half-width with 2 bidders, 94 percent of it with 32); shading by that much removes "
+                          "the loss"),
 }
 
 

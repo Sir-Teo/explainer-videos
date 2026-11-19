@@ -320,6 +320,22 @@ DIALS = {d.key: d for d in [
                       where="AER 101(6), Table 5, panel A, column 3 (standard error about 0.11)",
                       checked="2026-11-19"),
          )),
+    Dial("reserve_revenue", "what a reserve price adds", "proportional change in an auction's revenue from setting "
+         "reserve prices by Myerson's rule (from a low uniform floor)", (16, 61), status="depends on the setting",
+         checked="2026-11-19",
+         meaning="in Yahoo!'s sponsored-search auctions, reserves set by the theory raised revenue where many "
+                 "advertisers bid on frequently searched words, and lowered it on rarely searched ones, where they "
+                 "drove bidders away; a few percent overall, worth hundreds of millions of dollars a year",
+         estimates=(
+             Estimate("Ostrovsky and Schwarz", 2009, "RCT", "Yahoo! keywords, 438,632 treated and 23,016 "
+                      "controls, difference in differences at fixed search volumes", 0.0271, 0.0159, 0.0383,
+                      where="working paper, Table 4 (t = 4.73)", checked="2026-11-19"),
+             Estimate("Ostrovsky and Schwarz", 2009, "RCT", "the same, keywords searched fewer than 10 times a "
+                      "day", -0.0219, -0.0401, -0.0037, where="Table 5 (t = -2.36)", checked="2026-11-19"),
+             Estimate("Ostrovsky and Schwarz", 2009, "RCT", "the same, keywords searched 10 or more times a day "
+                      "(74 percent of searches)", 0.0330, 0.0051, 0.0609, where="Table 6 (t = 2.32)",
+                      checked="2026-11-19"),
+         )),
     Dial("return_schooling", "return to a year of school", "proportional rise in earnings per year of schooling",
          (4, 38), status="settled within a range", checked="2026-11-19",
          meaning="a year of school raises earnings by roughly 6 to 15 percent, a return few investments match; "
@@ -732,6 +748,22 @@ SHOWN = {
         ("Katz and Shapiro (1985); David (1985); Jaffe, Trajtenberg and Henderson (1993)", "network externalities and "
          "knowledge spillovers, stated for direction; their dials are in Parts 21 and 44"),
         ("CEDS sulphur dioxide via Our World in Data", "data, shown with its source; no parameter is estimated"),
+    ],
+    16: [
+        ("Vickrey (1961); Myerson (1981); Riley and Samuelson (1981); Milgrom and Weber (1982); Bulow and Klemperer "
+         "(1996); Edelman, Ostrovsky and Schwarz (2007); Varian (2007)", "theory, stated; every format, reserve and "
+         "equilibrium is computed in Agora (agora.auctions)"),
+        ("Cox, Smith and Walker (1988); Kagel, Harstad and Levin (1987); Kagel and Levin (1993)", "laboratory "
+         "bidding, stated for direction (bids above the risk-neutral equilibrium in first-price auctions, above value "
+         "in second-price ones)"),
+        ("Capen, Clapp and Campbell (1971); Bazerman and Samuelson (1983)", "the winner's curse: the oil engineers' "
+         "argument told as history, the jar of coins transcribed (data.tables.BAZERMAN_SAMUELSON_1983)"),
+        ("Binmore and Klemperer (2002); Klemperer (2002); Cramton and Schwartz (2000)", "the spectrum auctions, "
+         "transcribed (data.tables.UK_3G_2000, EURO_3G_2000, COLLUSION_SIGNALS) and the Called it? outcome"),
+        ("Garbade and Ingber (2005); Malvey and Archibald (1998)", "the Treasury's change of format, transcribed "
+         "(data.tables.TREASURY_FORMAT); its evidence was inconclusive, so it is told, not dialled"),
+        ("the FCC's incentive auction (2017)", "totals, transcribed (data.tables.INCENTIVE_AUCTION)"),
+        ("FRED: the 3-month Treasury bill rate", "data, shown with its source; no parameter is estimated"),
     ],
 }
 

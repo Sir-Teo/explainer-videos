@@ -1681,6 +1681,122 @@ CURRIE_WALKER_2011 = Table(
 PART15 = (COASE_1960, CHEUNG_1973, ACID_RAIN, ROADS, CURRIE_WALKER_2011)
 
 
+# ---------------------------------------------------------------------------------------------------------------
+# Part 16: auctions
+
+UK_3G_2000 = Table(
+    key="uk_3g_2000",
+    cite="Ken Binmore and Paul Klemperer, \"The Biggest Auction Ever: the Sale of the British 3G Telecom Licences\", "
+         "Economic Journal 112(478) (2002): C74-C96",
+    tag="Binmore and Klemperer, EJ 112(478) (2002)",
+    where="the introduction and the account of the auction",
+    read="the authors' copy",
+    checked="2026-11-19",
+    data={"start": "6 March 2000", "end": "27 April 2000", "licences": 5, "bidders": 13, "rounds": 150,
+          "revenue_bn_gbp": 22.5, "revenue_bn_usd": 34, "share_of_gnp": 0.025, "vs_media_estimates": (5, 10),
+          "incumbents": 4, "winners": "the four incumbents and one entrant (the largest licence was reserved for a "
+                                      "newcomer)",
+          "vodafone_bn_gbp": 6, "other_incumbents_bn_gbp": 4, "cheapest_over_bn_gbp": 4},
+)
+
+EURO_3G_2000 = Table(
+    key="euro_3g_2000",
+    cite="Paul Klemperer, \"How (Not) to Run Auctions: the European 3G Telecom Auctions\", European Economic Review "
+         "46(4-5) (2002): 829-845",
+    tag="Klemperer, EER 46 (2002)",
+    where="Table 1 (revenue per head) and the accounts of the Dutch and Swiss auctions",
+    read="the author's copy",
+    checked="2026-11-19",
+    data={"per_capita_eur": {"Austria": 100, "Germany": 615, "Italy": 240, "Netherlands": 170, "Switzerland": 20,
+                             "United Kingdom": 650},
+          "year": 2000,
+          "netherlands": {"month": "July 2000", "licences": 5, "incumbents": 5, "revenue_bn_eur_below": 3,
+                          "forecast_bn_eur": 10, "entrant": "Versatel, which stopped bidding after a letter from "
+                                                            "the incumbent Telfort threatening legal action"},
+          "switzerland": {"month": "November-December 2000"}},
+)
+
+BAZERMAN_SAMUELSON_1983 = Table(
+    key="bazerman_samuelson_1983",
+    cite="Max H. Bazerman and William F. Samuelson, \"I Won the Auction But Don't Want the Prize\", Journal of "
+         "Conflict Resolution 27(4) (1983): 618-634",
+    tag="Bazerman and Samuelson, JCR 27(4) (1983)",
+    where="the design and results sections",
+    read="the article",
+    checked="2026-11-19",
+    data={"classes": 12, "auctions": 48, "per_class": 4, "value": 8.00,
+          "jars": ("800 pennies", "160 nickels", "200 large paper clips worth 4 cents each",
+                   "400 small paper clips worth 2 cents each"),
+          "mean_estimate": 5.13, "mean_winning_bid": 10.01, "sd_winning_bid": 5.48, "mean_loss": 2.01,
+          "group_sizes": (4, 26), "format": "sealed bids; the highest bidder pays its bid and receives the jar's value"},
+)
+
+COLLUSION_SIGNALS = Table(
+    key="collusion_signals",
+    cite="Peter Cramton and Jesse A. Schwartz, \"Collusive Bidding: Lessons from the FCC Spectrum Auctions\", Journal "
+         "of Regulatory Economics 17(3) (2000): 229-252; Paul Klemperer, \"What Really Matters in Auction Design\", "
+         "Journal of Economic Perspectives 16(1) (2002): 169-189 (CEPR Discussion Paper 2581)",
+    tag="Cramton and Schwartz, JRE 17(3) (2000); Klemperer, JEP 16(1) (2002)",
+    where="Cramton and Schwartz's account of the DEF-block auction; Klemperer's footnotes on the German auction",
+    read="Klemperer's discussion paper; Cramton and Schwartz as quoted there and in the authors' copy",
+    checked="2026-11-19",
+    data={"def_auction": "the FCC's DEF-block PCS auction, August 1996 to January 1997",
+          "trailing": {"rochester_market": 378, "uswest_bid_round": 59, "uswest_bid": 313378, "mcleod_round": 60,
+                       "mcleod_bid": 345000, "uswest_wins_rochester_round": 64},
+          "germany_1999": {"licences": 10, "min_raise": 0.10, "mannesmann_1_5": 18.18, "mannesmann_6_10": 20.0,
+                           "tmobil_round2_1_5": 20.0, "rounds": 2, "units": "million DM per MHz",
+                           "quote": "There were no agreements with Mannesmann. But Mannesmann's first bid was a clear "
+                                    "offer.", "quote_source": "Frankfurter Allgemeine Zeitung, 29 October 1999"},
+          "us_1997": {"expected_m": 1800, "raised_below_m": 14}},
+)
+
+RESERVE_PRICES = Table(
+    key="reserve_prices",
+    cite="Michael Ostrovsky and Michael Schwarz, \"Reserve Prices in Internet Advertising Auctions: A Field "
+         "Experiment\", working paper (24 December 2009)",
+    tag="Ostrovsky and Schwarz (2009)",
+    where="section 5 and Tables 4-6",
+    read="the working paper",
+    checked="2026-11-19",
+    data={"treatment": 438632, "control": 23016, "depth_change": -0.9125,
+          "revenue_naive": 0.1285, "revenue_naive_p": 0.0915,
+          "effect": {"all": (0.0271, 4.73), "under 10 searches a day": (-0.0219, -2.36),
+                     "10 or more a day": (0.0330, 2.32)},
+          "high_volume": {"share_keywords": 0.127, "share_searches": 0.74, "share_revenue": 0.81},
+          "old_reserve_cents": 10},
+)
+
+TREASURY_FORMAT = Table(
+    key="treasury_format",
+    cite="Kenneth D. Garbade and Jeffrey F. Ingber, \"The Treasury Auction Process: Objectives, Structure, and Recent "
+         "Adaptations\", Federal Reserve Bank of New York, Current Issues in Economics and Finance 11(2) (2005)",
+    tag="Garbade and Ingber, NY Fed Current Issues 11(2) (2005)",
+    where="\"Auction format\" and Box 2",
+    read="the published note",
+    checked="2026-11-19",
+    data={"bills_first": 1929, "coupons_first": "early 1970s", "experiment": "September 1992: two- and five-year "
+          "notes in the single-price format", "all_single_price": "October 1998", "advocates": "Carson (1959), "
+          "Friedman (1960, 1963), Smith (1966)", "max_award": 0.35,
+          "evidence": "multiple-price auctions cleared at yields significantly above the when-issued market; "
+                      "single-price ones could not be told apart from zero, nor from multiple-price ones"},
+)
+
+INCENTIVE_AUCTION = Table(
+    key="incentive_auction",
+    cite="Federal Communications Commission, the broadcast incentive auction (Auction 1000), closing results announced "
+         "13 April 2017",
+    tag="FCC, Auction 1000 (2017)",
+    where="the closing announcement's totals",
+    read="the FCC's announcement, as reported",
+    checked="2026-11-19",
+    data={"forward_bn": 19.8, "reverse_bn": 10.05, "stations": 175, "mhz": 84, "mhz_licensed": 70,
+          "mhz_unlicensed": 14, "winning_bidders": 50, "closed": "13 April 2017"},
+)
+
+PART16 = (UK_3G_2000, EURO_3G_2000, BAZERMAN_SAMUELSON_1983, COLLUSION_SIGNALS, RESERVE_PRICES, TREASURY_FORMAT,
+          INCENTIVE_AUCTION)
+
+
 PART7 = (BERNOULLI_1738, SAMUELSON_1937, ALLAIS_1953, ELLSBERG_1961, RABIN_2000, THALER_1981, HOLT_LAURY_2005,
          HAYDEN_PLATT_2009, MADRIAN_SHEA_2001, THALER_BENARTZI_2004, BARSKY_1997, POST_2008, MEHRA_PRESCOTT_1985)
-ALL = {t.key: t for t in (*PART1, *PART3, *PART4, *PART5, *PART6, *PART7, *PART8, *PART9, *PART10, *PART11, *PART12, *PART13, *PART14, *PART15)}
+ALL = {t.key: t for t in (*PART1, *PART3, *PART4, *PART5, *PART6, *PART7, *PART8, *PART9, *PART10, *PART11, *PART12, *PART13, *PART14, *PART15, *PART16)}

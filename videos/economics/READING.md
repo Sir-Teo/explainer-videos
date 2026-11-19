@@ -10,7 +10,7 @@ the series leaves out.
 Both *Parts* columns are found, not typed. *Planned* lists the parts whose entry in
 [`SYLLABUS.md`](SYLLABUS.md) names the book or paper; *Built* lists the parts whose scenes, compute step or
 README cite it (a dot: none yet). Fuller notes (editions, chapters, what each source was used for) are in each
-part's README, under *Sources*. Built so far: Parts 1–15.
+part's README, under *Sources*. Built so far: Parts 1–16.
 
 ## 1. The textbook spine
 
@@ -28,7 +28,7 @@ part's README, under *Sources*. Built so far: Parts 1–15.
 
 | Short name | Book | Planned | Built |
 |---|---|---|---|
-| Varian | H. Varian, *Intermediate Microeconomics* (9th ed., 2014) | 2, 5–8, 10 | 2, 5–8, 10 |
+| Varian | H. Varian, *Intermediate Microeconomics* (9th ed., 2014) | 2, 5–8, 10 | 2, 5–8, 10, 16 |
 | Nicholson–Snyder | W. Nicholson and C. Snyder, *Microeconomic Theory* (13th ed., 2021) | 5–6 | 5–6, 8 |
 | Jones | C. I. Jones, *Macroeconomics* (6th ed., 2023) | 20 | · |
 | Blanchard | O. Blanchard, *Macroeconomics* (8th ed., 2021) | 27, 32 | · |
@@ -47,14 +47,14 @@ part's README, under *Sources*. Built so far: Parts 1–15.
 
 | Short name | Book | Planned | Built |
 |---|---|---|---|
-| MWG | A. Mas-Colell, M. Whinston and J. Green, *Microeconomic Theory* (1995) | 5–9, 11, 13, 15, 18, 56 | 5–11, 13, 15 |
+| MWG | A. Mas-Colell, M. Whinston and J. Green, *Microeconomic Theory* (1995) | 5–9, 11, 13, 15, 18, 56 | 5–11, 13, 15–16 |
 | Kreps | D. Kreps, *Microeconomic Foundations I* (2013) | 5, 7, 9, 11, 56 | 5, 7, 9, 11–13 |
 | Jehle–Reny | G. Jehle and P. Reny, *Advanced Microeconomic Theory* (3rd ed., 2011) | 5, 9 | 5–6, 9 |
 | Fudenberg–Tirole | D. Fudenberg and J. Tirole, *Game Theory* (1991) | 11–12, 53 | 11–12 |
 | Osborne–Rubinstein | M. Osborne and A. Rubinstein, *A Course in Game Theory* (1994) | 11 | 11 |
 | Bolton–Dewatripont | P. Bolton and M. Dewatripont, *Contract Theory* (2005) | 13–14 | 13–14 |
-| Krishna | V. Krishna, *Auction Theory* (2nd ed., 2010) | 16 | · |
-| Milgrom | P. Milgrom, *Putting Auction Theory to Work* (2004) | 16 | · |
+| Krishna | V. Krishna, *Auction Theory* (2nd ed., 2010) | 16 | 16 |
+| Milgrom | P. Milgrom, *Putting Auction Theory to Work* (2004) | 16 | 16 |
 | Roth–Sotomayor | A. Roth and M. Sotomayor, *Two-Sided Matching* (1990) | 17 | · |
 | Börgers | T. Börgers, *An Introduction to the Theory of Mechanism Design* (2015) | 17 | · |
 | Tirole IO | J. Tirole, *The Theory of Industrial Organization* (1988) | 10–12, 53 | 10, 12 |
@@ -162,8 +162,8 @@ part's README, under *Sources*. Built so far: Parts 1–15.
 | lemons | Akerlof (1970) | 13 | 13 |
 | signalling | Spence (1973) | 13 | · |
 | screening in insurance | Rothschild and Stiglitz (1976) | 7, 13 | 7, 13 |
-| second-price auctions | Vickrey (1961) | 16 | · |
-| optimal auctions | Myerson (1981) | 16 | · |
+| second-price auctions | Vickrey (1961) | 16 | 16 |
+| optimal auctions | Myerson (1981) | 16 | 16 |
 | stable matching | Gale and Shapley (1962) | 17 | · |
 | Bayesian persuasion | Kamenica and Gentzkow (2011) | 53 | · |
 | incentives that crowd out | Gneezy and Rustichini (2000), "A Fine Is a Price" | 1, 14 | 1, 14 |
@@ -177,7 +177,7 @@ part's README, under *Sources*. Built so far: Parts 1–15.
 | public goods | Samuelson (1954) | 15 | · |
 | governing the commons | Ostrom (1990) | 15 | 15 |
 | the impossibility of social choice | Arrow (1951) | 18 | · |
-| optimal income taxation | Mirrlees (1971); Saez (2001) | 14, 41 | 6, 14 |
+| optimal income taxation | Mirrlees (1971); Saez (2001) | 14, 41 | 6, 14, 16 |
 | optimal commodity taxation | Ramsey (1927); Diamond and Mirrlees (1971) | 6, 10, 41 | · |
 
 ### Growth
@@ -285,6 +285,8 @@ part's README, under *Sources*. Built so far: Parts 1–15.
 **Part 14, *Incentives*.** Books: Patrick Bolton and Mathias Dewatripont, *Contract Theory* (2005), chs. 4, 6, 8, 11; Jean-Jacques Laffont and David Martimort, *The Theory of Incentives* (2002); Salanié, *The Economics of Contracts*; Paul Milgrom and John Roberts, *Economics, Organization and Management* (1992); Robert Gibbons and John Roberts, eds., *The Handbook of Organizational Economics* (2013). Papers: Ross (1973); Holmström (1979, 1982); Mirrlees (1975); Grossman and Hart (1983); Holmström and Milgrom (1987, 1991); Lazear and Rosen (1981); Rosen (1986); Weitzman (1980); Shapiro and Stiglitz (1984); Akerlof (1982); Raff and Summers (1987); Stiglitz (1974); Lazear (2000); Shearer (2004); Bandiera, Barankay and Rasul (2005); Jacob and Levitt (2003); Lin (1992); Banerjee, Gertler and Ghatak (2002); Gneezy and Rustichini (2000); Frey and Oberholzer-Gee (1997); Baker, Gibbons and Murphy (2002); Levin (2003); Hadfield-Menell and Hadfield (2019); Gao, Schulman and Hilton (2023).
 
 **Part 15, *Spillovers*.** Books: Jonathan Gruber, *Public Finance and Public Policy*, chs. 5–9; Mas-Colell, Whinston and Green, *Microeconomic Theory* (1995), ch. 11; Elinor Ostrom, *Governing the Commons* (1990); Tom Tietenberg and Lynne Lewis, *Environmental and Natural Resource Economics*. Papers: Pigou (1920); Meade (1952); Coase (1959, 1960, 1974); Samuelson (1954); Gordon (1954); Hardin (1968); Dales (1968); Montgomery (1972); Cheung (1973); Weitzman (1974); Vickrey (1969); Arnott, de Palma and Lindsey (1990); Duranton and Turner (2011); Fehr and Gächter (2000); Fischbacher, Gächter and Fehr (2001); Herrmann, Thöni and Gächter (2008); Rohlfs (1974); Katz and Shapiro (1985); David (1985); Arthur (1989); Jaffe, Trajtenberg and Henderson (1993); Schmalensee and Stavins (2013); Chay and Greenstone (2003); Currie and Walker (2011); Deryugina et al. (2019).
+
+**Part 16, *Auctions*.** Books: Vijay Krishna, *Auction Theory* (2nd ed., 2010); Paul Klemperer, *Auctions: Theory and Practice* (2004); Paul Milgrom, *Putting Auction Theory to Work* (2004); John Kagel and Dan Levin, *Common Value Auctions and the Winner's Curse* (2002). Papers: Vickrey (1961); Myerson (1981); Riley and Samuelson (1981); Milgrom and Weber (1982); Capen, Clapp and Campbell (1971); Bazerman and Samuelson (1983); Kagel, Harstad and Levin (1987); Cox, Smith and Walker (1988); Bulow and Klemperer (1996); Maskin and Riley (2000); Guerre, Perrigne and Vuong (2000); Cramton and Schwartz (2000); Binmore and Klemperer (2002); Klemperer (2002a, 2002b); Edelman, Ostrovsky and Schwarz (2007); Varian (2007); Ostrovsky and Schwarz (2009); Garbade and Ingber (2005); Akbarpour and Li (2020); Milgrom and Segal (2020).
 
 ## 4. What the series leaves out
 

@@ -148,3 +148,10 @@ publication, the copy that was read and the date the transcription was checked:
 | `acid_rain` | the SO2 allowance market: emissions, costs and benefits, and allowance prices (Schmalensee and Stavins) | 2026-11-19 |
 | `roads` | the fundamental law of road congestion (Duranton and Turner) and the Stockholm trial | 2026-11-19 |
 | `currie_walker_2011` | E-ZPass and infant health | 2026-11-19 |
+| `uk_3g_2000` | Britain's 3G auction: licences, bidders, rounds and revenue (Binmore and Klemperer) | 2026-11-19 |
+| `euro_3g_2000` | the European 3G auctions of 2000: revenue per head, and the Dutch and Swiss sales (Klemperer) | 2026-11-19 |
+| `bazerman_samuelson_1983` | the jar of coins: estimates, winning bids and the winner's loss | 2026-11-19 |
+| `collusion_signals` | signalling in spectrum auctions: trailing digits in the FCC's DEF-block auction, Mannesmann's bids in Germany | 2026-11-19 |
+| `reserve_prices` | Ostrovsky and Schwarz's field experiment on reserve prices in sponsored search | 2026-11-19 |
+| `treasury_format` | the Treasury's move from multiple-price to single-price auctions, and its evidence | 2026-11-19 |
+| `incentive_auction` | the FCC's broadcast incentive auction: forward and reverse totals, spectrum cleared | 2026-11-19 |

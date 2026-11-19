@@ -152,4 +152,54 @@ PARTS = [
               ("The Island's planted truths", "explainer/economics/island.py"),
               ("The Data Room's sources", "explainer/economics/data/SOURCES.md")),
     ),
+    Part(
+        n=16, level="U", widget="auction", prereq=(2, 7, 10, 11, 13),
+        question="How should something be sold when nobody knows what it is worth to the buyers?",
+        story="The part opens with Britain's 3G auction of 2000, designed by game theorists: thirteen bidders, 150 "
+              "rounds, 22.5 billion pounds; that summer the Netherlands copied the design with as many licences as "
+              "incumbents and raised less than a third of its forecast. The viewer bids twice for Crusoe's canoe, "
+              "once paying the bid and once the next bid, then meets the four formats on the English and Dutch "
+              "clocks, Vickrey's proof (and Goethe's sealed offer), shading derived, revenue equivalence on 60,000 "
+              "simulated auctions and by the envelope argument, and the ways it fails: risk, the laboratory, linked "
+              "values, asymmetry, collusion and entry. After an intermission of ninety years of the Treasury bill, "
+              "Myerson's reserve and Bulow and Klemperer's extra bidder, the winner's curse from the Gulf of Mexico's "
+              "oil leases to a jar of coins, the simultaneous ascending auction and the exposure problem, signals in "
+              "the digits and the Dutch sale with Called it?, the auction behind every search, demand reduction in "
+              "bond auctions and electricity, a new dial on what a reserve adds, auction desks, and a frontier on the "
+              "incentive auction, credible auctions and machines that bid.",
+        handoff="Part 17 designs markets without prices; Part 32 returns to the Treasury's debt; Part 48 to electricity "
+                "and permits; Part 53 to information design; Part 54 to estimating values from bids; Parts 44 and 61 to "
+                "the platforms.",
+        outside="Part 7: risk aversion and expected utility; Part 10: the monopoly price; Part 11: Nash equilibrium and "
+                "dominant strategies; Part 13: private information. Chapters 4-5 use order statistics of uniform "
+                "variables and the envelope theorem; chapter 7 a hazard rate.",
+        objectives={
+            "U": ["Describe the English, Dutch, first-price and second-price auctions, and explain which are "
+                  "strategically equivalent.",
+                  "Prove that bidding one's value is dominant in a second-price auction, and derive equilibrium bid "
+                  "shading in a first-price auction.",
+                  "Explain the winner's curse, and why it grows with the number of bidders."],
+            "M": ["State and prove revenue equivalence with the envelope formula, and use it to solve the all-pay "
+                  "auction.",
+                  "Derive Myerson's optimal reserve from virtual values, and compare it with one more bidder.",
+                  "Compute Vickrey's prices for position auctions and the equilibrium of the generalized second price, "
+                  "and explain demand reduction under a uniform price."],
+            "D": ["Read the evidence on reserves, overbidding and collusion, and recover values from first-price bids "
+                  "(Guerre, Perrigne and Vuong)."],
+            "I": ["Design an auction for a given set of bidders, weighing entry, collusion, exposure and the seller's "
+                  "risk."],
+        },
+        results=[
+            ("First-price equilibrium bid", r"\beta(v) = \mathbb{E}[Y_1 \mid Y_1 < v] = \tfrac{n-1}{n}v"),
+            ("Revenue equivalence", r"T(v) = vP(v) - \int_0^v P(s)\,ds - U(0)"),
+            ("Virtual value", r"\varphi(v) = v - \tfrac{1 - F(v)}{f(v)}"),
+            ("The winner's expected overestimate", r"s\,\tfrac{n-1}{n+1}"),
+            ("Vickrey's price for slot i", r"\textstyle\sum_{j \ge i} (c_j - c_{j+1})\, v_{j+1}"),
+            ("Values from first-price bids", r"v = b + \tfrac{G(b)}{(n-1)\,g(b)}"),
+        ],
+        U=(0, 1, 2, 3, 4, 5, 6, "s08_intermission", 7, 8, 9, 10, 11, 12), D=(13, 15), I=(14,),
+        also=(("Agora's auction house", "explainer/economics/agora/auctions.py"),
+              ("The Island's planted truths", "explainer/economics/island.py"),
+              ("The Data Room's sources", "explainer/economics/data/SOURCES.md")),
+    ),
 ]

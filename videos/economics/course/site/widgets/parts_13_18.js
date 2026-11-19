@@ -238,4 +238,85 @@
             "stored or sent.",
     });
   };
+  // ---- Part 16: auctions ---------------------------------------------------------------------------------------
+  W.auction = function (el) {
+    // the auction house of Part 16 (explainer.economics.agora.auctions): each round the reader draws a value for a
+    // canoe, uniform on 0-100, and three rivals draw theirs; the rivals bid as the risk-neutral equilibrium says
+    // (three quarters of their values when the winner pays its bid, their values when it pays the second bid); the
+    // reader bids, and the page keeps score against the equilibrium bid played on the same draws
+    var N = 20, RIV = 3, NAMES = ["you", "rival 1", "rival 2", "rival 3"], COLS = [GOLD, BLUE, GREEN, RED];
+    function draw(s, k) {
+      var r = rng((s.seed || 1) * 1009 + 7 * k + 3), out = [], i;
+      for (i = 0; i <= RIV; i++) out.push(100 * r());
+      return out;
+    }
+    function outcome(vals, bid, second) {
+      var rb = [], i, top = -1, who = 0;
+      for (i = 1; i <= RIV; i++) rb.push(second ? vals[i] : 0.75 * vals[i]);
+      for (i = 0; i < RIV; i++) if (rb[i] > top) top = rb[i];
+      var won = bid > top, price = won ? (second ? top : bid) : 0;
+      return { won: won, price: price, profit: won ? vals[0] - price : 0, rivals: rb, top: top };
+    }
+    QB.widget(el, {
+      title: "Bid for the canoe, twenty times",
+      sub: "Each round you learn what the canoe is worth to you, between 0 and 100 shells; three rivals have values " +
+           "of their own and bid as the theory says. Choose your bid and press Bid. The page keeps your score, and " +
+           "the score of the theory's bid on the same draws. Switch the rule between paying your own bid and paying " +
+           "the second-highest bid.",
+      panels: 2, height: 320, weights: [1, 1.1],
+      controls: [
+        { k: "bid", label: "Your bid this round", min: 0, max: 100, step: 1, value: 50,
+          fmt: function (x) { return x.toFixed(0) + " shells"; } },
+      ],
+      buttons: [
+        { label: "Bid", act: function (s, v) {
+            s.hist = s.hist || []; s.seed = s.seed || 1;
+            if (s.hist.length >= N) return;
+            var k = s.hist.length, vals = draw(s, k), second = !!s.second;
+            var me = outcome(vals, v.bid, second);
+            var eq = outcome(vals, second ? vals[0] : 0.75 * vals[0], second);
+            s.hist.push({ vals: vals, bid: v.bid, me: me, eq: eq });
+          } },
+        { label: "Switch the rule (and start again)", act: function (s) {
+            s.second = !s.second; s.hist = []; s.seed = (s.seed || 1) + 1; } },
+        { label: "New draws (start again)", act: function (s) { s.hist = []; s.seed = (s.seed || 1) + 1; } },
+      ],
+      draw: function (g, v, s) {
+        s.hist = s.hist || []; s.seed = s.seed || 1;
+        var n = s.hist.length, last = n ? s.hist[n - 1] : null;
+        var a = g[0].axes({ x: [-0.5, 3.5], y: [0, 100], title: last ? "Last round: values (pale) and bids" :
+                            "Your value this round, and the rivals' (hidden until you bid)", xlabel: NAMES.join(" / ") });
+        if (last) {
+          a.bars([0, 1, 2, 3], last.vals, 0.7, { color: function () { return "rgba(200,200,200,0.25)"; } });
+          a.bars([0, 1, 2, 3], [last.bid].concat(last.me.rivals), 0.4, { color: function (i) { return COLS[i]; } });
+          if (last.me.won) a.hline(last.me.price, { color: GOLD, dash: [4, 4] });
+        } else {
+          a.bars([0], [draw(s, 0)[0]], 0.7, { color: function () { return GOLD; } });
+        }
+        var b = g[1].axes({ x: [0, N], y: [0, 160], title: "Shells earned so far" + (s.second ?
+                            " (pay the second bid)" : " (pay your own bid)"), xlabel: "round" });
+        var xs = [0], mine = [0], eqs = [0], k, cm = 0, ce = 0;
+        for (k = 0; k < n; k++) { cm += s.hist[k].me.profit; ce += s.hist[k].eq.profit; xs.push(k + 1);
+                                  mine.push(cm); eqs.push(ce); }
+        if (n) { b.line(xs, eqs, { color: GREY_HINT, width: 1.6, dash: [5, 4] }); b.line(xs, mine, { color: GOLD, width: 2.4 }); }
+        b.line([0, N], [0, 5 * N], { color: "rgba(139,147,161,0.35)", width: 1 });
+      },
+      readout: function (v, s) {
+        var h = s.hist || [], n = h.length, nxt = n < N ? draw(s, n)[0] : null, cm = 0, ce = 0, k;
+        for (k = 0; k < n; k++) { cm += h[k].me.profit; ce += h[k].eq.profit; }
+        var eqBid = nxt === null ? null : (s.second ? nxt : 0.75 * nxt);
+        var rows = [["rule", s.second ? "the winner pays the second-highest bid" : "the winner pays its own bid"],
+                    ["round", Math.min(n + 1, N) + " of " + N],
+                    ["your value this round", nxt === null ? "done" : nxt.toFixed(0) + " shells"],
+                    ["the theory's bid for it", eqBid === null ? "-" : eqBid.toFixed(1)],
+                    ["your shells so far", cm.toFixed(1)], ["the theory's bid, same draws", ce.toFixed(1)]];
+        if (n) rows.push(["last round", h[n - 1].me.won ? "you won, paying " + h[n - 1].me.price.toFixed(1) :
+                          "you lost (the top rival bid " + h[n - 1].me.top.toFixed(1) + ")"]);
+        return rows;
+      },
+      note: "With four bidders and values uniform on 0-100, the theory's bid earns 5 shells a round on average under " +
+            "either rule (the faint line): revenue equivalence for the bidder (Part 16, chapter 5). Computed in your " +
+            "browser; nothing you do here is stored or sent.",
+    });
+  };
 })();

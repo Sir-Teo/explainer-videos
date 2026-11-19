@@ -144,6 +144,16 @@ CALLS = {c.key: c for c in [
          ("P. R. Portney, \"Economics and the Clean Air Act\", Journal of Economic Perspectives 4(4) (1990): 173-181, "
           "as cited by Schmalensee and Stavins",
           "R. Schmalensee and R. N. Stavins, Journal of Economic Perspectives 27(1) (2013): 103-122, Table 1")),
+    Call("dutch_3g", 16, "the Dutch government, before its 3G auction",
+         "2000", "its five licences for third-generation mobile spectrum would raise almost 10 billion euros",
+         "Britain's auction three months earlier, scaled to the Netherlands' population",
+         "the auction in July 2000 raised less than 3 billion euros, about 170 euros a head against Britain's 650: "
+         "five licences for five incumbents, the strongest would-be entrants partnered with incumbents, and the one "
+         "weak entrant stopped bidding after a letter from an incumbent threatening legal action; Klemperer had warned "
+         "in the Dutch press that the design would deter entry",
+         "wrong",
+         ("P. Klemperer, \"How (Not) to Run Auctions: the European 3G Telecom Auctions\", European Economic Review "
+          "46(4-5) (2002): 829-845",)),
     Call("multitask_tests", 14, "Bengt Holmström and Paul Milgrom, \"Multitask Principal-Agent Analyses\" (1991)",
          "1991", "when only some of a job's tasks can be measured, strong pay for the measured ones pulls effort away "
          "from the rest; so where measures are narrow, incentives should be weak",

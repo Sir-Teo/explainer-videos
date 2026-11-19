@@ -1047,7 +1047,8 @@ programme's benefits would about equal its costs: wrong.
 *Question:* how should something be sold when nobody knows what it is worth to the buyers?
 *Story:* in spring 2000 the British government sells five licences for third-generation mobile spectrum in an
 auction designed by game theorists. It runs for 150 rounds and raises £22.5 billion, about 2.5% of GDP. The
-same year the Netherlands, with a different design, raises a third of what was forecast (verify).
+same year the Netherlands, with the same design and as many licences as incumbents, raises less than a third of what was
+forecast.
 0. Hook: London and The Hague, 2000; the question; objectives.
 1. Play it: one object, sealed bids: first-price, then second-price. Your bids are kept.
 2. Four formats: English, Dutch, first-price sealed, second-price sealed; which are the same game.
@@ -2952,6 +2953,7 @@ Young Economist*.
 | 13 | built, English | *Lemons and Signals.* Agora gains `info` (lemons and blind offers, guarantees, Spence, Rothschild–Stiglitz and its existence, the Einav–Finkelstein diagram, a death spiral, the positive-correlation test, credit rationing, reputation); the Data Room gains the BLS CPIs for used cars and new vehicles via FRED and the transcribed Akerlof (1970), Einav, Finkelstein and Cullen (2010, Table 4), Cutler and Zeckhauser (1998), Tyler, Murnane and Willett (2000) and the selection papers; a new dial (the welfare cost of adverse selection) and the referees' *Called it?*; Act IV begins |
 | 14 | built, English | *Incentives.* Agora gains `contracts` (teams, the linear and two-outcome agency problems, relative performance, multitask, tournaments, the ratchet, career concerns, Shapiro–Stiglitz, sharecropping, relational contracts); the Data Room gains the Maddison series for China and India and the transcribed Lazear (2000), Shearer (2004), Bandiera, Barankay and Rasul (2005), Raff and Summers (1987), Lin (1992), Jacob and Levitt (2003), Banerjee, Gertler and Ghatak (2002) and Frey and Oberholzer-Gee (1997); a new dial (output's response to piece rates) and the multitasking *Called it?* |
 | 15 | built, English | *Spillovers.* Agora gains `public` (the externality market and Pigou's tax, Coase's bargain with transaction costs, public goods, typed players in the shared pot with punishment, Gordon's fishery, Weitzman's comparison, Vickrey's bottleneck, Arthur's lock-in); the Data Room gains CEDS sulphur dioxide via Our World in Data and the transcribed Coase (1960), Cheung (1973), Schmalensee and Stavins (2013), Duranton and Turner (2011) and Currie and Walker (2011); a new dial (traffic's response to roads) and the acid-rain *Called it?* |
+| 16 | built, English | *Auctions.* Agora gains `auctions` (first-price bids with reserves and risk aversion, five formats on the same draws, Myerson's reserve, the winner's curse, Vickrey's prices for slots and the generalized second price, the exposure problem, demand reduction against Vickrey's rule); the Data Room gains the transcribed Binmore and Klemperer (2002), Klemperer (2002), Bazerman and Samuelson (1983), Cramton and Schwartz (2000), Ostrovsky and Schwarz (2009), Garbade and Ingber (2005) and the FCC's incentive auction; the intermission plays FRED's 3-month bill rate; a new dial (what a reserve adds), the Dutch 3G *Called it?*, and the winner's curse in the Facts |
 
 **Corrections found while building Part 1** (the plan's draft, written from memory, against the sources): Bastiat's
 Paris passage is in *Economic Sophisms*, First Series, ch. 18 (1845), not the *Harmonies*; Hume's is/ought passage is
@@ -3115,3 +3117,14 @@ Fehr and Gächter's contribution levels are stated qualitatively; the curves dra
 cod moratorium's job losses are given as about 30,000 in Newfoundland and Labrador (estimates range from about 19,000
 direct to 40,000 nationally). Duranton and Turner's dial rows are their preferred OLS (0.86) and the TSLS estimate with
 geography (1.03).
+
+**Corrections found while building Part 16.** The story's Dutch shortfall is confirmed (less than €3 billion against
+almost €10 billion forecast; Klemperer 2002). The chapters were regrouped: the laboratory evidence joins the failures of
+equivalence (chapter 6), and Treasury and electricity auctions get their own chapter (12), so the plan's chapters 6 and
+13 are folded in. The Treasury moved every auction to a single price in October 1998 after a 1992 experiment whose
+evidence its own studies called not unambiguous (Garbade and Ingber 2005). The German auction of 1999 (Mannesmann's
+18.18 and 20 million DM per MHz, two rounds) is from Klemperer's footnote, citing the *Frankfurter Allgemeine* and
+Jehiel and Moldovanu. The film says only that the publisher offered exactly Goethe's price (Moldovanu and Tietzel), and
+asks, without answering, whether the go-between had told him. Ostrovsky and Schwarz's headline estimate of about 13% was not robust (p = 0.09);
+the dial uses their estimates at fixed search volumes (2.7%, -2.2% and 3.3%). The dial's return is Part 61, not Part 39.
+The *Called it?* is the Dutch government's forecast, with Klemperer's warning in the outcome.

@@ -474,6 +474,26 @@ TRUTHS = {
         # the causeway into town (chapter 11)
         "bottleneck": {"N": 6000.0, "s": 4000.0, "alpha": 20.0, "beta": 10.0, "gamma": 40.0, "t_star": 9.0},
     },
+    16: {
+        # Play it (chapter 1): Crusoe's old canoe; you value it at 70 shells; three rivals' values uniform on 0-100
+        "playit": {"value": 70.0, "rivals": 3, "top": 100.0},
+        # the auction house (chapters 2-5): four bidders, values uniform on [0, 1] (in hundreds of shells)
+        "formats": {"n": 4, "draws": 60000, "seed": 1961},
+        # one sale run on the clocks (chapter 2): four islanders' values for the canoe, in shells
+        "clock": {"values": (31.0, 84.0, 57.0, 72.0), "names": ("ana", "bo", "dara", "friday")},
+        # Myerson (chapter 7): two bidders, and Bulow and Klemperer's extra one
+        "myerson": {"n": 2},
+        # risk aversion (chapter 6): utility x^alpha
+        "risk": {"alpha": 0.5},
+        # the jar (chapter 8): a common value of 10 shells, each bidder's estimate within 3 of it
+        "curse": {"ns": (2, 4, 8, 16, 32), "value": 10.0, "noise": 3.0, "seed": 1971},
+        # the fishing rights (chapter 9): a national bidder and two locals
+        "exposure": {"both": 10.0, "alone": 1.0, "rivals": ((4.0, 4.0), (2.0, 9.0))},
+        # the island's notice board (chapter 11): four advertisers, three slots
+        "gsp": {"values": (10.0, 8.0, 6.0, 4.0), "ctrs": (200.0, 120.0, 60.0)},
+        # the harbour's bonds (chapter 12): two bonds; a big buyer wants both, a small one wants one
+        "bonds": {"supply": 2, "big": (10.0, 10.0), "small": 6.0},
+    },
 }
 
 
