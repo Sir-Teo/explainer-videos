@@ -1171,7 +1171,63 @@ EDGEWORTH_1881 = Table(
 
 PART9 = (RADFORD_1945, EDGEWORTH_1881, HSIEH_KLENOW_2009, BILS_KLENOW_RUANE_2021, KEHOE_2014)
 
+# ---------------------------------------------------------------------------
+# Part 10
+# ---------------------------------------------------------------------------
+DLEU_2020 = Table(
+    key="dleu_2020",
+    cite="Jan De Loecker, Jan Eeckhout and Gabriel Unger, \"The Rise of Market Power and the Macroeconomic "
+         "Implications\", Quarterly Journal of Economics 135(2): 561-644 (2020)",
+    tag="De Loecker, Eeckhout and Unger, QJE 135(2) (2020)",
+    where="the abstract",
+    read="the published abstract (EconPapers listing)",
+    checked="2026-11-19",
+    data={"markup_1980": 1.21, "markup_now": 1.61, "now": 2016, "profit_rate": (0.01, 0.08),
+          "median": "the median is unchanged", "since": 1955},
+    note="Earlier working-paper versions report 18% and 67%; the published abstract's 21% and 61% are used.",
+)
+
+TRAINA_2018 = Table(
+    key="traina_2018",
+    cite="James Traina, \"Is Aggregate Market Power Increasing? Production Trends Using Financial Statements\", "
+         "Stigler Center Working Paper 272 (2018)",
+    tag="Traina, Stigler Center WP 272 (2018)",
+    where="the abstract",
+    read="the abstract (RePEc listing)",
+    checked="2026-11-19",
+    data={"finding": "public firm markups increased only modestly over this time period, and are within historical "
+                     "variation", "aggregate": "a flat or even decreasing aggregate markup"},
+)
+
+NAKAMURA_ZEROM_2010 = Table(
+    key="nakamura_zerom_2010",
+    cite="Emi Nakamura and Dawit Zerom, \"Accounting for Incomplete Pass-Through\", Review of Economic Studies "
+         "77(3): 1192-1230 (2010); NBER Working Paper 15255 (2009)",
+    tag="Nakamura and Zerom, REStud 77(3) (2010)",
+    where="the abstract",
+    read="NBER Working Paper 15255 (August 2009)",
+    checked="2026-11-19",
+    data={"local_costs": 0.59, "markups": 0.33, "menu_cost_share_of_revenue": 0.0023, "horizon_quarters": 6,
+          "abstract": "Local costs reduce long-run pass-through (after 6 quarters) by a factor of 59% relative to a CES "
+                      "benchmark. Markup adjustment reduces pass-through by an additional factor of 33%"},
+)
+
+DUBE_MISRA_2023 = Table(
+    key="dube_misra_2023",
+    cite="Jean-Pierre Dube and Sanjog Misra, \"Personalized Pricing and Consumer Welfare\", Journal of Political "
+         "Economy 131(1): 131-189 (2023)",
+    tag="Dube and Misra, JPE 131(1) (2023)",
+    where="the abstract",
+    read="the published abstract (EconPapers listing)",
+    checked="2026-11-19",
+    data={"profit_vs_uniform": 0.19, "profit_vs_status_quo": 0.86, "share_who_gain": 0.60,
+          "setting": "a large-scale field experiment at ZipRecruiter, an online recruiting platform"},
+    note="Total consumer surplus falls under personalized pricing, but over 60% of consumers benefit.",
+)
+
+PART10 = (DLEU_2020, TRAINA_2018, NAKAMURA_ZEROM_2010, DUBE_MISRA_2023)
+
 
 PART7 = (BERNOULLI_1738, SAMUELSON_1937, ALLAIS_1953, ELLSBERG_1961, RABIN_2000, THALER_1981, HOLT_LAURY_2005,
          HAYDEN_PLATT_2009, MADRIAN_SHEA_2001, THALER_BENARTZI_2004, BARSKY_1997, POST_2008, MEHRA_PRESCOTT_1985)
-ALL = {t.key: t for t in (*PART1, *PART3, *PART4, *PART5, *PART6, *PART7, *PART8, *PART9)}
+ALL = {t.key: t for t in (*PART1, *PART3, *PART4, *PART5, *PART6, *PART7, *PART8, *PART9, *PART10)}

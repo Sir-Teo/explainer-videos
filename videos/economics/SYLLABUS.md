@@ -775,31 +775,47 @@ Papadimitriou 1994; Daskalakis, Goldberg & Papadimitriou 2009; Shapley & Scarf 1
 
 ### Part 10 · The Price Maker (~54)
 *Question:* what does a seller do when the price is hers to set?
-*Story:* Jules Dupuit, a French bridge engineer, writes in 1849 that the railway does not leave third-class
-carriages without roofs to save the cost of a roof. It does it to frighten those who could pay for second
-class. Price discrimination, screening and the modern airline fare are all in that paragraph.
-0. Hook: the roofless carriage; the question; objectives.
-1. Play it: set the toll for a bridge that costs nothing to cross.
-2. Marginal revenue; the monopoly optimum; the Lerner index and the inverse-elasticity rule.
-3. Deadweight loss; Harberger's small triangles (1954) and Posner's larger rectangle (1975).
-4. First-degree discrimination: all the surplus, no waste; personalized prices.
-5. Third-degree: students and pensioners; when it raises welfare (Schmalensee 1981; Varian 1985).
-6. Second-degree: menus that sort; the screening problem solved for two types; quality degraded on purpose
-   (Deneckere and McAfee 1996).
-7. Two-part tariffs (Oi's Disneyland, 1971); razors and blades.
-8. Bundling (Stigler 1963; Adams and Yellen 1976): why negative correlation of tastes pays.
-9. Durable goods: the Coase conjecture (1972); renting, commitment, planned obsolescence.
-10. Natural monopoly: average-cost pricing, Ramsey–Boiteux prices, marginal-cost pricing and who pays the
-    fixed cost.
-11. Regulation: rate of return and gold plating (Averch and Johnson 1962); price caps.
-12. Monopsony in one diagram (a pointer to Part 38).
-13. Dials. 14. In practice: Part 60. 15. Frontier: personalized pricing with machine learning (Dubé and
-    Misra 2023).
+*Story:* Jules Dupuit, a French engineer of bridges and roads, argues in 1844 that a bridge is worth what crossing
+it is worth to everyone who crosses, so a toll on a crossing that costs nothing turns value away for no saving. In
+1849 he explains that the railway does not leave third-class carriages without roofs to save the cost of a roof: it
+does it to keep anyone who could pay for second class from travelling third. Price discrimination, screening and
+the modern airline fare are all in that paragraph.
+0. Hook: the bridge and the toll (1844); the roofless carriage (1849, paraphrased); the menu everywhere; the
+   question; objectives.
+1. Play it: set one fare for Bo's ferry against a hundred islanders' values.
+2. Marginal revenue; the monopoly optimum; no supply curve; the Lerner index and the inverse-elasticity rule.
+3. Deadweight loss; Harberger's small triangles (1954) and Posner's larger rectangle (1975), with Tullock (1967).
+4. First-degree discrimination: all the surplus, no waste; Pigou's three degrees (1920).
+5. Third-degree: students and townsfolk; a market opened; Schmalensee (1981) and Varian's output test (1985).
+6. Second-degree: the two-type screening menu (Mussa and Rosen 1978), the bottom of the menu cut, the information
+   rent; damaged goods (Deneckere and McAfee 1996).
+   Intermission: green arabica and the shelf price of ground coffee month by month, 1980-2026, the shelf price as a
+   tune.
+7. Two-part tariffs (Oi's Disneyland, 1971): identical visitors, then two ordinary visitors to one keen one.
+8. Bundling (Stigler 1963; Adams and Yellen 1976): two visitors, then four hundred with correlated values.
+9. Durable goods: the Coase conjecture (1972) solved for one to 365 price changes a year; renting, commitment,
+   planned obsolescence, reputation.
+10. Natural monopoly: average-cost pricing, Ramsey–Boiteux prices against one uniform markup.
+11. Regulation: rate of return and gold plating (Averch and Johnson 1962); price caps (Littlechild 1983).
+12. Monopsony in one diagram, with a minimum wage (a pointer to Part 38).
+13. Pass-through: a half and one and a half; incomplete pass-through as a Fact, measured on coffee; Nakamura and
+    Zerom's accounting (2010).
+14. Dials (markups, new). 15. In practice: fare fences and Littlewood's rule (1972); a pointer to Part 60.
+16. Frontier: personalized pricing learned from an experiment (Dubé and Misra 2023), rerun in Agora; pricing
+    algorithms (Calvano et al. 2020; Assad et al. 2024).
 
-*Agora:* `pricing`: a monopolist with linear, discriminatory, two-part and menu pricing; Ramsey prices.
-*Dials:* markups by industry. *Facts:* incomplete pass-through.
-*Reading:* Dupuit 1844, 1849; Robinson 1933; Mussa & Rosen 1978; Coase 1972; Tirole, *Industrial
-Organization*, chs 1–4; Varian chs 25–27.
+*Agora:* `pricing`: linear and constant-elasticity demand, the monopoly price and pass-through, the ferry, first-,
+second- and third-degree discrimination, two-part tariffs, bundling, the Coase equilibrium, Ramsey prices, the
+Averch–Johnson firm, monopsony, Littlewood's rule, personalized prices learned from a price experiment.
+*Dials:* markups over marginal cost (new; contested). *Facts:* incomplete pass-through. *Called it?* none: the
+theory of one seller makes no dated public forecast that can be checked against what followed.
+*Reading:* Dupuit 1844, 1849; Pigou 1920; Robinson 1933; Lerner 1934; Harberger 1954; Tullock 1967; Posner 1975;
+Schmalensee 1981; Varian 1985; Mussa & Rosen 1978; Maskin & Riley 1984; Deneckere & McAfee 1996; Oi 1971; Stigler
+1963; Adams & Yellen 1976; McAfee, McMillan & Whinston 1989; Coase 1972; Stokey 1981; Bulow 1982, 1986; Gul,
+Sonnenschein & Wilson 1986; Ramsey 1927; Boiteux 1956; Averch & Johnson 1962; Littlechild 1983; Littlewood 1972;
+Nakamura & Zerom 2010; Weyl & Fabinger 2013; Hall 1988; De Loecker & Warzynski 2012; De Loecker, Eeckhout & Unger
+2020; Traina 2018; Dubé & Misra 2023; Calvano et al. 2020; Assad et al. 2024; Tirole, *Industrial Organization*,
+chs 1–4; Belleflamme & Peitz; Varian chs 25–27; Talluri & van Ryzin.
 
 ### Part 11 · Games (~58)
 *Question:* what happens when my best choice depends on yours, and yours on mine?
@@ -2857,6 +2873,7 @@ Young Economist*.
 | 7 | built, English | *Time and Risk.* Agora's `risk` grows to the whole part (expected utility and its measures, dominance, insurance and portfolios, Rabin's calibration, the St Petersburg game, Fisher, discounting and beta–delta, Epstein–Zin, Hall's regression, Holt and Laury with noisy respondents, Ellsberg's maxmin and Chew's weighted utility); the Data Room gains real PCE, the PCE price index and the 3-month bill rate, and the transcribed results of Bernoulli, Samuelson, Allais, Ellsberg, Rabin, Thaler, Holt and Laury, Hayden and Platt, Madrian and Shea, Thaler and Benartzi, Barsky et al., Post et al. and Mehra and Prescott; two new dials (relative risk aversion; the EIS) and Bernoulli's *Called it?* |
 | 8 | built, English | *The Firm.* Agora gains `firm` (technologies, costs and their duality identities, supply and Le Chatelier, free entry with identical and different firms, Cobb and Douglas's regressions, hold-up, Grossman–Hart–Moore, make-or-buy, Alchian's selection); the Data Room gains the transcribed Cobb–Douglas indices of 1899–1922 (via Felipe and Adams 2005) and the Penn World Table's labour share; two new dials (capital's output elasticity; the capital–labour elasticity of substitution); Act II is complete |
 | 9 | built, English | *The Invisible Hand, Proved.* Agora gains `ge` (the box and the replicated core, Sperner and Scarf, tatonnement and Scarf's cycle, Newton, Crusoe, three equilibria, Arrow securities, Kantorovich's duals, misallocation, top trading cycles); the Data Room gains Brent and WTI crude via FRED and the transcribed Radford (1945), Edgeworth (1881), Hsieh and Klenow (2009), Bils, Klenow and Ruane (2021) and Kehoe (2014); a new dial (misallocation), the law of one price as a Fact, and the NAFTA *Called it?*; Act III begins |
+| 10 | built, English | *The Price Maker.* Agora gains `pricing` (the monopoly price and pass-through, the ferry, three degrees of discrimination, two-part tariffs, bundling, the Coase equilibrium, Ramsey prices, the Averch–Johnson firm, monopsony, Littlewood's rule, personalized prices from a price experiment); the Data Room gains the BLS price of ground coffee via FRED and the transcribed De Loecker, Eeckhout and Unger (2020), Traina (2018), Nakamura and Zerom (2010) and Dubé and Misra (2023); a new dial (markups), incomplete pass-through as a Fact; no *Called it?* |
 
 **Corrections found while building Part 1** (the plan's draft, written from memory, against the sources): Bastiat's
 Paris passage is in *Economic Sophisms*, First Series, ch. 18 (1845), not the *Harmonies*; Hume's is/ought passage is
@@ -2950,3 +2967,15 @@ economy is told as textbooks give it (each trader wants its own good and the nex
 original paper was not reached. The draft's *Called it?* (the convergence theorem against Scarf's cycle) became the
 NAFTA forecasts, a dated prediction with an outcome, and Scarf's cycle a chapter of its own. Oil prices from 2026 show
 a spike the film does not explain. Kantorovich worked for the plywood trust in the late 1930s and published in 1939.
+
+**Corrections found while building Part 10.** Dupuit's 1849 passage on the third-class carriages is paraphrased, not
+quoted: the French text was not re-read. The draft's Play it (a bridge toll) became Bo's ferry, the same problem on
+the Island. The draft's dial, markups by industry, became the aggregate markup, because that is where the measurement
+is contested: De Loecker, Eeckhout and Unger's sales-weighted mean of 1.21 in 1980 and 1.61 in 2016 (the published
+abstract; earlier working papers give 1.18 and 1.67) against Traina's flat or falling aggregate. Oi's two-part tariff
+needs more ordinary visitors than keen ones: with one of each, shutting the ordinary visitor out pays (98 against
+73), so the film uses two to one. Coffee's pass-through is incomplete in percent (0.15 at once, 0.55 after six
+quarters) but about complete in dollars, once a pound of roast coffee is counted as 1.19 pounds of green beans; the
+chapter says so. Nakamura and Zerom are read in the NBER working paper (2009); Dubé and Misra, Calvano et al. and Assad
+et al. from their published abstracts. The draft's chapter 14, "In practice: Part 60", became Littlewood's rule, with
+the airline war left to Part 60.

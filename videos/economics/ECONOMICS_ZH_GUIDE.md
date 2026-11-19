@@ -366,6 +366,40 @@ brackets on screen.
 | indivisible goods; the housing market; top trading cycles | 不可分物品；住房市场；顶端交易循环 |
 | approximate competitive equilibrium from equal incomes (A-CEEI) | 等收入近似竞争均衡 |
 
+## Part 10
+
+| English | 中文 |
+|---|---|
+| the price maker; market power | 价格制定者；市场势力 |
+| monopoly; monopolist | 垄断；垄断者 |
+| marginal revenue | 边际收益 |
+| the Lerner index; the inverse-elasticity rule | 勒纳指数；逆弹性法则 |
+| deadweight loss; Harberger's triangle | 无谓损失；哈伯格三角形 |
+| rent-seeking; Posner's rectangle | 寻租；波斯纳矩形 |
+| price discrimination (first, second, third degree) | 价格歧视（一级、二级、三级） |
+| perfect (first-degree) discrimination | 完全（一级）价格歧视 |
+| screening; self-selection; information rent | 甄别；自选择；信息租金 |
+| no distortion at the top | 顶端无扭曲 |
+| damaged goods | 刻意降级产品（受损品） |
+| two-part tariff; entry fee | 两部制定价；入场费 |
+| bundling; mixed bundling | 捆绑销售；混合捆绑 |
+| durable-goods monopoly; the Coase conjecture | 耐用品垄断；科斯猜想 |
+| planned obsolescence | 计划性报废 |
+| natural monopoly; average-cost pricing | 自然垄断；平均成本定价 |
+| Ramsey–Boiteux prices | 拉姆齐—布瓦特定价 |
+| rate-of-return regulation; gold plating (the Averch–Johnson effect) | 收益率管制；镀金效应（阿弗奇—约翰逊效应） |
+| price cap (RPI − X); the ratchet effect | 价格上限（RPI − X）；棘轮效应 |
+| monopsony; markdown; minimum wage | 买方垄断；工资压低幅度；最低工资 |
+| pass-through; incomplete pass-through | 成本传导（转嫁）；不完全传导 |
+| distributed lags | 分布滞后 |
+| menu costs | 菜单成本 |
+| markup; the production approach to markups | 加成；估计加成的生产法 |
+| output elasticity; cost of goods sold; SG&A | 产出弹性；销货成本；销售、一般及管理费用 |
+| fences (fare conditions); fare classes | 隔离条件（票价限制条件）；票价舱位等级 |
+| revenue management; Littlewood's rule; protection level | 收益管理；利特尔伍德规则；保护水平 |
+| personalized pricing | 个性化定价 |
+| algorithmic pricing; algorithmic collusion | 算法定价；算法合谋 |
+
 ## Names
 
 | English | 中文 |
@@ -502,3 +536,23 @@ brackets on screen.
 | Christos Papadimitriou | 克里斯托斯·帕帕季米特里乌 |
 | Lloyd Shapley; David Gale; Alvin Roth | 劳埃德·沙普利；戴维·盖尔；埃尔文·罗斯 |
 | Eric Budish | 埃里克·布迪什 |
+| Jules Dupuit | 朱尔·杜普伊 |
+| Arthur Pigou; Joan Robinson; Abba Lerner | 阿瑟·庇古；琼·罗宾逊；阿巴·勒纳 |
+| Arnold Harberger; Richard Posner; Gordon Tullock | 阿诺德·哈伯格；理查德·波斯纳；戈登·塔洛克 |
+| Richard Schmalensee; Hal Varian | 理查德·施马伦西；哈尔·范里安 |
+| Michael Mussa; Sherwin Rosen | 迈克尔·穆萨；舍温·罗森 |
+| Raymond Deneckere; Preston McAfee | 雷蒙德·德内克雷；普雷斯顿·麦卡菲 |
+| Walter Oi | 沃尔特·奥伊 |
+| George Stigler; William Adams; Janet Yellen | 乔治·施蒂格勒；威廉·亚当斯；珍妮特·耶伦 |
+| Nancy Stokey; Jeremy Bulow | 南希·斯托基；杰里米·布洛 |
+| Faruk Gul; Robert Wilson | 法鲁克·居尔；罗伯特·威尔逊 |
+| Marcel Boiteux | 马塞尔·布瓦特 |
+| Harvey Averch; Leland Johnson | 哈维·阿弗奇；利兰·约翰逊 |
+| Stephen Littlechild | 斯蒂芬·利特尔柴尔德 |
+| Kenneth Littlewood | 肯尼斯·利特尔伍德 |
+| Emi Nakamura; Dawit Zerom | 中村惠美；达维特·泽罗姆 |
+| Jan De Loecker; Jan Eeckhout; Gabriel Unger | 扬·德洛克；扬·埃克豪特；加布里埃尔·昂格尔 |
+| Frederic Warzynski; James Traina | 弗雷德里克·瓦尔津斯基；詹姆斯·特雷纳 |
+| Jean-Pierre Dubé; Sanjog Misra | 让-皮埃尔·杜贝；桑乔格·米斯拉 |
+| Emilio Calvano; Giacomo Calzolari; Vincenzo Denicolò; Sergio Pastorello | 埃米利奥·卡尔瓦诺；贾科莫·卡尔佐拉里；温琴佐·德尼科洛；塞尔吉奥·帕斯托雷洛 |
+| Stephanie Assad; Robert Clark; Daniel Ershov; Lei Xu | 斯蒂芬妮·阿萨德；罗伯特·克拉克；丹尼尔·叶尔绍夫；Lei Xu（中文名未核实） |

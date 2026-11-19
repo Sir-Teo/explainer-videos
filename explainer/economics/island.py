@@ -304,6 +304,36 @@ TRUTHS = {
                  "prefs": ((2, 3, 0, 1, 4, 5), (0, 2, 1, 3, 5, 4), (1, 0, 2, 4, 3, 5), (0, 4, 3, 2, 1, 5),
                            (2, 3, 4, 0, 5, 1), (3, 0, 5, 1, 2, 4))},
     },
+    10: {
+        # Bo's ferry (chapters 1-3): a hundred islanders who would cross, each with a value of the crossing drawn
+        # uniform on $0-$10; an extra passenger costs Bo nothing; the fares of Play it
+        "ferry": {"people": 100, "top": 10.0, "seed": 1844, "fares": (2.0, 4.0, 5.0, 6.0, 8.0)},
+        # the same market as a demand curve: crossings a day Q = 100 - 10 p, marginal cost c (for pass-through)
+        "demand": {"a": 100.0, "b": 10.0, "c": 2.0, "eps": 3.0},
+        # third degree (chapter 5): students (Q = 60 - 10 p) and townsfolk (Q = 100 - 5 p); a crossing costs $1
+        "groups": {"students": (60.0, 10.0), "town": (100.0, 5.0), "c": 1.0},
+        # second degree (chapter 6): deck and cabin; a share 0.3 of passengers value comfort at 2 per unit, the
+        # rest at 1; comfort q costs q^2 / 2 to provide
+        "screen": {"lo": 1.0, "hi": 2.0, "share_hi": 0.3},
+        # two-part tariffs (chapter 7): Oi's park on the Island, rides demanded 10 - p by two visitors in three and
+        # 16 - p by the keen third; a ride costs $2
+        "rides": {"small": (10.0, 1.0), "big": (16.0, 1.0), "mix": (2, 1), "c": 2.0},
+        # bundling (chapter 8): 400 visitors' values for the crossing and the reef tour, negatively and positively
+        # correlated
+        "bundle": {"people": 400, "top": 10.0, "noise": 0.5, "seed": 1976},
+        # a durable good (chapter 9): Crusoe's boats; buyers' values uniform on [0, 1] (in thousands); the market
+        # discounts at 10% a year; a thirty-year horizon; price changes 1, 4, 12, 52 and 365 times a year
+        "durable": {"r": 0.10, "years": 30, "per_year": (1, 4, 12, 52, 365)},
+        # natural monopoly (chapter 10): the Island's waterworks sells to households (elasticity 1.5) and boatyards
+        # (4), marginal cost 1, and must cover a fixed cost of 40
+        "ramsey": {"A": (100.0, 100.0), "eps": (1.5, 4.0), "c": (1.0, 1.0), "F": 40.0},
+        # regulation (chapter 11): the waterworks, q = 2 K^0.3 L^0.4 at price 10, wage 1, cost of capital 1, an
+        # allowed return of 1.4
+        "aj": {"A": 2.0, "a": 0.3, "b": 0.4, "p": 10.0, "w": 1.0, "r": 1.0, "s": 1.4},
+        # monopsony (chapter 12): Crusoe's yard as the only employer: labour supply w = 5 + 0.1 L, each shipwright
+        # adds $25 a day, and a minimum wage of $18
+        "monopsony": {"w0": 5.0, "slope": 0.1, "mrp": 25.0, "min_wage": 18.0},
+    },
 }
 
 

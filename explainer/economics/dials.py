@@ -234,7 +234,18 @@ DIALS = {d.key: d for d in [
              Estimate("Hsieh and Klenow", 2009, "structural", "India, 1994: full equalization within industries",
                       127.5, where="as above, table 4", checked="2026-11-19"),
          )),
-    Dial("markups", "markups over marginal cost", "price over marginal cost", (10, 43)),
+    Dial("markups", "markups over marginal cost", "price over marginal cost", (10, 43), status="contested",
+         checked="2026-11-19",
+         meaning="the production approach finds the average American public firm's markup rising from about 1.2 in "
+                 "1980 to about 1.6 by 2016, with the median unchanged and the rise at the top; others find it much "
+                 "flatter once all costs and all firms are counted (Traina 2018: flat or falling once public firms "
+                 "are reweighted to represent the economy), so how much market power has grown is open",
+         estimates=(
+             Estimate("De Loecker, Eeckhout and Unger", 2020, "structural", "US public firms, sales-weighted mean, "
+                      "1980", 1.21, where="QJE 135(2): 561-644, abstract", checked="2026-11-19"),
+             Estimate("De Loecker, Eeckhout and Unger", 2020, "structural", "the same, 2016", 1.61,
+                      where="as above", checked="2026-11-19"),
+         )),
     Dial("return_schooling", "return to a year of school", "proportional rise in earnings per year of schooling",
          (4, 38), status="settled within a range", checked="2026-11-19",
          meaning="a year of school raises earnings by roughly 6 to 15 percent, a return few investments match; "
@@ -531,6 +542,29 @@ SHOWN = {
          "(2009); Shapley and Scarf (1974); Roth (1982); Budish (2011); Budish, Cachon, Kessler and Othman (2017)",
          "the frontier, stated; the housing market is solved in Agora on the Island's huts"),
         ("Brent and WTI via FRED; the World Bank's WDI (2023)", "data for the law-of-one-price Fact and the "
+         "intermission, computed on screen, not entered as dial rows"),
+    ],
+    10: [
+        ("Dupuit (1844, 1849); Pigou (1920); Robinson (1933); Lerner (1934)", "the theory's history, told from the "
+         "texts (the 1849 passage paraphrased); every number about it is computed in Agora"),
+        ("Harberger (1954); Posner (1975); Tullock (1967)", "the cost of monopoly: Harberger's total is stated as "
+         "history, Posner's argument as an argument; the ferry's triangle and rectangle are computed"),
+        ("Schmalensee (1981); Varian (1985); Mussa and Rosen (1978); Deneckere and McAfee (1996); Oi (1971); "
+         "Stigler (1963); Adams and Yellen (1976)", "theorems and cases, stated; each is computed on the Island"),
+        ("Coase (1972); Stokey (1981); Bulow (1982, 1986); Gul, Sonnenschein and Wilson (1986)", "the Coase "
+         "conjecture, stated; its equilibrium is solved in Agora"),
+        ("Ramsey (1927); Boiteux (1956); Averch and Johnson (1962); Littlechild (1983); Littlewood (1972)",
+         "rules and regulation, stated; Ramsey prices, the Averch-Johnson firm and Littlewood's rule are computed"),
+        ("Nakamura and Zerom (2010)", "a structural decomposition of coffee's pass-through, shown beside the "
+         "incomplete-pass-through Fact (a transcribed abstract); not a dial"),
+        ("Hall (1988); De Loecker and Warzynski (2012)", "the production approach to markups, checked in Agora; "
+         "its estimates enter the markups dial through De Loecker, Eeckhout and Unger"),
+        ("Traina (2018)", "a challenge to the markups dial's rows, stated in its meaning and on screen; it reports no "
+         "single markup to enter as a row"),
+        ("Dube and Misra (2023); Calvano, Calzolari, Denicolo and Pastorello (2020); Assad, Clark, Ershov and Xu "
+         "(2024)", "the frontier, stated from the papers' abstracts; the personalized-pricing experiment is rerun in "
+         "Agora"),
+        ("ground coffee (BLS via FRED) and arabica (the Pink Sheet)", "data for the pass-through Fact and the "
          "intermission, computed on screen, not entered as dial rows"),
     ],
 }

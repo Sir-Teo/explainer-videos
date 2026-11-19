@@ -10,7 +10,7 @@ the series leaves out.
 Both *Parts* columns are found, not typed. *Planned* lists the parts whose entry in
 [`SYLLABUS.md`](SYLLABUS.md) names the book or paper; *Built* lists the parts whose scenes, compute step or
 README cite it (a dot: none yet). Fuller notes (editions, chapters, what each source was used for) are in each
-part's README, under *Sources*. Built so far: Parts 1–9.
+part's README, under *Sources*. Built so far: Parts 1–10.
 
 ## 1. The textbook spine
 
@@ -28,7 +28,7 @@ part's README, under *Sources*. Built so far: Parts 1–9.
 
 | Short name | Book | Planned | Built |
 |---|---|---|---|
-| Varian | H. Varian, *Intermediate Microeconomics* (9th ed., 2014) | 2, 5–8, 10 | 2, 5–8 |
+| Varian | H. Varian, *Intermediate Microeconomics* (9th ed., 2014) | 2, 5–8, 10 | 2, 5–8, 10 |
 | Nicholson–Snyder | W. Nicholson and C. Snyder, *Microeconomic Theory* (13th ed., 2021) | 5–6 | 5–6, 8 |
 | Jones | C. I. Jones, *Macroeconomics* (6th ed., 2023) | 20 | · |
 | Blanchard | O. Blanchard, *Macroeconomics* (8th ed., 2021) | 27, 32 | · |
@@ -47,7 +47,7 @@ part's README, under *Sources*. Built so far: Parts 1–9.
 
 | Short name | Book | Planned | Built |
 |---|---|---|---|
-| MWG | A. Mas-Colell, M. Whinston and J. Green, *Microeconomic Theory* (1995) | 5–9, 13, 15, 18, 56 | 5–9 |
+| MWG | A. Mas-Colell, M. Whinston and J. Green, *Microeconomic Theory* (1995) | 5–9, 13, 15, 18, 56 | 5–10 |
 | Kreps | D. Kreps, *Microeconomic Foundations I* (2013) | 5, 7, 9, 56 | 5, 7, 9 |
 | Jehle–Reny | G. Jehle and P. Reny, *Advanced Microeconomic Theory* (3rd ed., 2011) | 5, 9 | 5–6, 9 |
 | Fudenberg–Tirole | D. Fudenberg and J. Tirole, *Game Theory* (1991) | 11, 53 | · |
@@ -57,7 +57,7 @@ part's README, under *Sources*. Built so far: Parts 1–9.
 | Milgrom | P. Milgrom, *Putting Auction Theory to Work* (2004) | 16 | · |
 | Roth–Sotomayor | A. Roth and M. Sotomayor, *Two-Sided Matching* (1990) | 17 | · |
 | Börgers | T. Börgers, *An Introduction to the Theory of Mechanism Design* (2015) | 17 | · |
-| Tirole IO | J. Tirole, *The Theory of Industrial Organization* (1988) | 10–12, 53 | · |
+| Tirole IO | J. Tirole, *The Theory of Industrial Organization* (1988) | 10–12, 53 | 10 |
 
 ### Graduate macro
 
@@ -110,7 +110,7 @@ part's README, under *Sources*. Built so far: Parts 1–9.
 | Blinder | A. Blinder, *Central Banking in Theory and Practice* (1998) | 31 | · |
 | Boardman | A. Boardman and others, *Cost-Benefit Analysis* (5th ed., 2018) | 50, 58 | · |
 | Davis–Garcés | P. Davis and E. Garces, *Quantitative Techniques for Competition and Antitrust Analysis* (2010) | 59 | · |
-| Talluri–van Ryzin | K. Talluri and G. van Ryzin, *The Theory and Practice of Revenue Management* (2004) | 60 | · |
+| Talluri–van Ryzin | K. Talluri and G. van Ryzin, *The Theory and Practice of Revenue Management* (2004) | 10, 60 | 10 |
 | Kohavi–Tang–Xu | R. Kohavi, D. Tang and Y. Xu, *Trustworthy Online Controlled Experiments* (2020) | 61 | · |
 | Lazear–Gibbs | E. Lazear and M. Gibbs, *Personnel Economics in Practice* (3rd ed., 2014) | 62 | · |
 
@@ -127,7 +127,7 @@ part's README, under *Sources*. Built so far: Parts 1–9.
 | the double auction in the classroom | Chamberlin (1948); Smith (1962) | 1–2 | 1 |
 | zero-intelligence traders | Gode and Sunder (1993) | 2 | 1–2 |
 | general equilibrium and its welfare theorems | Arrow and Debreu (1954); Debreu (1959) | 9 | 8–9 |
-| consumer surplus | Dupuit (1844) | 2, 10 | 2, 9 |
+| consumer surplus | Dupuit (1844) | 2, 10 | 2, 9–10 |
 
 ### Choice
 
@@ -172,13 +172,13 @@ part's README, under *Sources*. Built so far: Parts 1–9.
 
 | Model or result | Paper | Planned | Built |
 |---|---|---|---|
-| externalities and their tax | Pigou (1920) | 15, 56 | · |
+| externalities and their tax | Pigou (1920) | 10, 15, 56 | 10 |
 | bargaining over externalities | Coase (1960) | 15 | · |
 | public goods | Samuelson (1954) | 15 | · |
 | governing the commons | Ostrom (1990) | 15 | · |
 | the impossibility of social choice | Arrow (1951) | 18 | · |
 | optimal income taxation | Mirrlees (1971); Saez (2001) | 41 | 6 |
-| optimal commodity taxation | Ramsey (1927); Diamond and Mirrlees (1971) | 6, 41 | · |
+| optimal commodity taxation | Ramsey (1927); Diamond and Mirrlees (1971) | 6, 10, 41 | · |
 
 ### Growth
 
@@ -273,6 +273,8 @@ part's README, under *Sources*. Built so far: Parts 1–9.
 **Part 8, *The Firm*.** Books: Hal Varian, *Intermediate Microeconomics*, chs. 19–24; Andreu Mas-Colell, Michael Whinston and Jerry Green, *Microeconomic Theory*, ch. 5; Oliver Williamson, *The Economic Institutions of Capitalism* (1985); Oliver Hart, *Firms, Contracts, and Financial Structure* (1995). Papers: Cobb and Douglas (1928), *AER*; Douglas (1976), *JPE*; Felipe and Adams (2005); Arrow, Chenery, Minhas and Solow (1961); Chenery (1949); Samuelson's Le Chatelier principle; Hall and Hitch (1939); Alchian (1950); Friedman (1953); Coase (1937), *Economica*; Williamson (1975, 1985); Klein, Crawford and Alchian (1978); Coase (2000), Klein (2000), Freeland (2000), Casadesus-Masanell and Spulber (2000), *JLE*; Grossman and Hart (1986); Hart and Moore (1990), *JPE*; Gollin (2002); Karabarbounis and Neiman (2014); Haskel and Westlake (2018); Brynjolfsson, Li and Raymond (2025); Shahidi et al. (2025).
 
 **Part 9, *The Invisible Hand, Proved*.** Books: Andreu Mas-Colell, Michael Whinston and Jerry Green, *Microeconomic Theory*, chs. 15–19; Gerard Debreu, *Theory of Value* (1959); David Kreps, *Microeconomic Foundations I* (2013); Jehle and Reny, *Advanced Microeconomic Theory*, ch. 5; Herbert Scarf, *The Computation of Economic Equilibria* (1973). Papers: Radford (1945), *Economica*; Edgeworth, *Mathematical Psychics* (1881); Walras (1874); Arrow and Debreu (1954); McKenzie (1954); Debreu and Scarf (1963); Aumann (1964); Arrow, Block and Hurwicz (1959); Scarf (1960, 1967); Anderson, Plott, Shimomura and Granat (2004); Sonnenschein (1973); Mantel (1974); Debreu (1974); Kirman (1992); Brown and Matzkin (1996); Arrow (1953); Mises (1920); Lange (1936–37); Hayek (1945); Kantorovich (1939); Hsieh and Klenow (2009); Bils, Klenow and Ruane (2021); Kehoe (2005, 2014); Papadimitriou (1994); Daskalakis, Goldberg and Papadimitriou (2009); Shapley and Scarf (1974); Budish (2011).
+
+**Part 10, *The Price Maker*.** Books: Jean Tirole, *The Theory of Industrial Organization* (1988), chs. 1–4; Paul Belleflamme and Martin Peitz, *Industrial Organization: Markets and Strategies* (2015); Hal Varian, *Intermediate Microeconomics*: monopoly, monopoly behaviour, factor markets; Kalyan Talluri and Garrett van Ryzin, *The Theory and Practice of Revenue Management* (2004). Papers: Dupuit (1844, 1849); Pigou (1920); Robinson (1933); Lerner (1934); Harberger (1954); Posner (1975); Schmalensee (1981); Varian (1985); Mussa and Rosen (1978); Maskin and Riley (1984); Deneckere and McAfee (1996); Oi (1971); Stigler (1963); Adams and Yellen (1976); McAfee, McMillan and Whinston (1989); Coase (1972); Stokey (1981); Bulow (1982, 1986); Gul, Sonnenschein and Wilson (1986); Ramsey (1927); Boiteux (1956); Averch and Johnson (1962); Littlechild (1983); Littlewood (1972); Nakamura and Zerom (2010); Weyl and Fabinger (2013); Hall (1988); De Loecker and Warzynski (2012); De Loecker, Eeckhout and Unger (2020); Traina (2018); Dubé and Misra (2023); Calvano et al. (2020); Assad et al. (2024).
 
 ## 4. What the series leaves out
 
