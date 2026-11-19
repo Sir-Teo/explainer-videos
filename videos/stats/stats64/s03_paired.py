@@ -9,12 +9,20 @@ class Paired(LectureMixin, StatsScene):
     def construct(self):
         self.card_voiceover("Chapter two. Paired comparisons, power, and the leaderboard's winner's curse.", 2,
                             r"Paired comparisons", r"Same questions, \ correlated errors")
+        self.ask("Two models on the same 1,000 questions. The SE of their difference, paired, is...",
+                 ["smaller than unpaired", "larger", "the same"], 0,
+                 say="Two models answer the same thousand questions, and their errors are correlated: hard "
+                     "questions are hard for both. Analysed as pairs, is the standard error of their difference "
+                     "smaller or larger?",
+                 reveal="Smaller: the shared difficulty cancels in each pair's difference. McNemar's test uses only "
+                        "the questions on which they disagree.")
         self.pairing()
         self.mcnemar_()
         self.board()
         self.power()
         self.curse()
         self.multiplicity()
+        self.answer()
 
     def pairing(self):
         d = load("paired")

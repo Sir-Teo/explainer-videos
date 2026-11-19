@@ -9,12 +9,19 @@ class Holdout(LectureMixin, StatsScene):
     def construct(self):
         self.card_voiceover("Chapter five. Adaptive reuse of test sets, and how to keep a holdout honest.", 5,
                             r"Reusing the test set", r"Every look is a query")
+        self.ask("ImageNet, rebuilt in 2019. Models scored lower on the new test set. Their ranking...",
+                 ["barely changed", "was scrambled"], 0,
+                 say="Every look at a test set is a query. Recht and colleagues rebuilt ImageNet's test set in "
+                     "2019, following the original recipe. Models scored lower. Did their ranking change much?",
+                 reveal="Barely: accuracy fell by eleven to fourteen points across the board, but the order held. "
+                        "The drop looked more like a shift in the questions than overfitting to the old test set.")
         self.problem()
         self.experiment()
         self.chart()
         self.thresholdout_()
         self.ladder()
         self.contamination()
+        self.answer()
 
     def problem(self):
         self.lad_voiceover(

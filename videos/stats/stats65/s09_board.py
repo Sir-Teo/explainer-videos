@@ -7,6 +7,12 @@ class FullBoard(LectureMixin, StatsScene):
     def construct(self):
         self.card_voiceover("Chapter eight. The full Coverage Board: every promise of the degree, tested.", 8,
                             r"The full Coverage Board", r"Every promise, \ kept or broken")
+        self.ask("Across the degree, broken promises on the Board came mostly from...",
+                 ["violated assumptions and habits", "random bad luck"], 0,
+                 say="The full Coverage Board: every promise made in sixty-five parts, kept or broken. Where did "
+                     "most of the broken rows come from?",
+                 reveal="Violated assumptions and habits: skewed data, peeking, selection, too few clusters. Not "
+                        "bad luck, which the Monte Carlo error accounts for.")
         self.recall()
         self.mosaic()
         self.breaks()
@@ -15,6 +21,7 @@ class FullBoard(LectureMixin, StatsScene):
         self.memorable()
         self.cannot()
         self.lesson()
+        self.answer()
 
     def recall(self):
         f = load("fullboard")

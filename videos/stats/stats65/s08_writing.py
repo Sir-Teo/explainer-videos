@@ -7,6 +7,12 @@ class Writing(LectureMixin, StatsScene):
     def construct(self):
         self.card_voiceover("Chapter seven. Writing it up, and what referees will check.", 7, r"Writing and review",
                             r"A result others can check")
+        self.ask("A paper that says where its method fails is...",
+                 ["weaker", "more useful, and more likely true"], 1,
+                 say="Writing it up, and what referees check. A paper that says plainly where its method fails: is "
+                     "that a weaker paper?",
+                 reveal="It's more useful, and more likely to be true. A method with no stated failures deserves "
+                        "suspicion.")
         self.structure()
         self.abstract()
         self.figures()
@@ -14,6 +20,7 @@ class Writing(LectureMixin, StatsScene):
         self.report()
         self.repro()
         self.honesty()
+        self.answer()
 
     def structure(self):
         self.lad_voiceover(

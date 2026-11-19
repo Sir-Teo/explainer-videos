@@ -9,12 +9,23 @@ class Application(LectureMixin, StatsScene):
     def construct(self):
         self.card_voiceover("Chapter six. Real data: blood pressure for a population a study under-sampled.", 6,
                             r"An application", r"NHANES, \ with a designed selection")
+        self.ask("Selection depends on something the classifier can't see. Weighted conformal's coverage...",
+                 ["is still guaranteed", "can fail"], 1,
+                 say="Real data: NHANES, with a designed selection. If the selection depended on something the "
+                     "density-ratio classifier can't see, what happens to the guarantee?",
+                 reveal="It can fail: the weights are only as good as what they condition on. That's a limitation "
+                        "to state, not to hide.")
         self.design()
         self.method()
         self.chart()
         self.diagnostics()
         self.workflow()
         self.reading()
+        self.answer()
+        self.checkpoint([("When is a simulation protocol fixed?", "before the study runs"),
+                         ("Selection on something unseen?", "the guarantee can fail: a stated limitation")],
+                        narration="Checkpoint. Study and data.",
+                        answers_narration="Before it runs. And the guarantee can fail.")
 
     def design(self):
         d = load("nhanes")

@@ -9,12 +9,19 @@ class Uncertainty(LectureMixin, StatsScene):
     def construct(self):
         self.card_voiceover("Chapter eight. Uncertainty for language models: calibration, and conformal guarantees.", 8,
                             r"Uncertainty for language models", r"Knowing what it knows")
+        self.ask("Asked to rate their own answers, large language models were...",
+                 ["reasonably well calibrated on many tasks", "uninformative"], 0,
+                 say="Does a language model know what it knows? Kadavath and colleagues asked large models for the "
+                     "probability that their own answers were true. How good were those probabilities?",
+                 reveal="Reasonably well calibrated on many tasks, in the right format. Calibration weakens "
+                        "off-distribution, and it's not the conditional coverage we'd need for a guarantee.")
         self.calibration()
         self.posttraining()
         self.factuality()
         self.chart()
         self.sets()
         self.limits()
+        self.answer()
 
     def calibration(self):
         self.lad_voiceover(

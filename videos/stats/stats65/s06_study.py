@@ -16,6 +16,19 @@ class Study(LectureMixin, StatsScene):
     def construct(self):
         self.card_voiceover("Chapter five. The simulation study, with its original protocol and explicit post hoc QA correction.", 5, r"A protocol-guided study",
                             r"Original protocol; transparent post hoc QA rerun")
+        self.wrong_idea("A simulation protocol can be quietly adjusted after a first run",
+                        "Keep the original protocol; label any change a transparent post hoc amendment",
+                        narration="A temptation in every simulation study: after a first run, quietly adjust the "
+                                  "settings until the results look right.",
+                        right_narration="Keep the original protocol, and report what it showed. Any correction is "
+                                        "labelled as a post hoc amendment, with both runs on the record. That's "
+                                        "what makes a study evidence.")
+        self.ask("A simulation study reports each estimate with...",
+                 ["its Monte Carlo standard error", "nothing more"], 0,
+                 say="The simulation study, by Morris and colleagues' ADEMP protocol. What must it report beside "
+                     "each estimate?",
+                 reveal="Its Monte Carlo standard error, so a reader can tell a real difference from simulation "
+                        "noise. Part 7's rule, at dissertation scale.")
         self.why_pre()
         self.ademp()
         self.mc()
@@ -26,6 +39,7 @@ class Study(LectureMixin, StatsScene):
         self.scorecard()
         self.failure()
         self.limits()
+        self.answer()
 
     def why_pre(self):
         self.lad_voiceover(

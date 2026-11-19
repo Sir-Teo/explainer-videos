@@ -6,11 +6,18 @@ from videos.stats.stats65.common import *  # noqa: F403
 class TranscriptComplete(LectureMixin, StatsScene):
     def construct(self):
         self.card_voiceover("Chapter nine. The transcript, complete.", 9, r"The transcript", r"The degree in one picture")
+        self.ask("What made this degree's numbers worth believing?",
+                 ["checks against a known truth and sourced records", "confident narration"], 0,
+                 say="The transcript complete: sixty-five cells. What made the series' numbers worth believing "
+                     "rather than taking on trust?",
+                 reveal="Checks against a known truth in the World, and the Museum's real data, each with its "
+                        "source. Every number had a reason.")
         self.transcript()
         self.timeline_()
         self.instruments()
         self.stages()
         self.numbers()
+        self.answer()
 
     def transcript(self):
         tr = transcript_card(done=64, current=65)

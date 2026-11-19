@@ -9,12 +9,19 @@ class SBI(LectureMixin, StatsScene):
     def construct(self):
         self.card_voiceover("Chapter ten. Simulation-based inference, and posteriors that are too sure of themselves.", 10,
                             r"Simulation-based inference", r"When the likelihood is a simulator")
+        self.ask("Simulation-based calibration checks whether...",
+                 ["the true parameters' posterior ranks are uniform", "the model fits the real data"], 0,
+                 say="Simulation-based inference: neural posteriors trained on a simulator can be too sure of "
+                     "themselves. What does simulation-based calibration check?",
+                 reveal="Whether the true parameters' ranks among posterior draws are uniform, over many simulated "
+                        "data sets. It checks the computation, not the simulator's match to reality.")
         self.setting()
         self.amortized()
         self.crisis()
         self.toy()
         self.chart()
         self.sbc()
+        self.answer()
 
     def setting(self):
         self.lad_voiceover(
