@@ -83,4 +83,19 @@ CALLS = {c.key: c for c in [
          "partly right",
          ("D. Bernoulli, Commentarii Academiae Scientiarum Imperialis Petropolitanae 5 (1738); Econometrica 22(1) "
           "(1954)", "B. Y. Hayden and M. L. Platt, Judgment and Decision Making 4(4) (2009)")),
+    Call("nafta_1992", 9, "Horacio Sobarzo's applied general equilibrium model of Mexico, one of the models presented "
+         "at the US International Trade Commission's 1992 conference on NAFTA",
+         "1992",
+         "free trade would raise Mexico's imports from North America, relative to its GDP, most in nonelectrical "
+         "machinery (+20.7%), iron and steel (+17.7%) and mining (+13.2%), and lower them in tobacco, food and paper",
+         "a multisector general equilibrium model of the kind used to assess trade agreements: trade grows most where "
+         "it is already large and the barrier falls most, governed by Armington elasticities",
+         "from 1989 to 2009 Mexico's imports from North America rose relative to GDP in 20 of 21 industries, by a "
+         "median of about 95%, most in tobacco (+576%), chemicals (+219%) and beverages (+189%); across the 21 "
+         "industries the weighted correlation between predicted and actual growth was -0.12, and Timothy Kehoe, who "
+         "had worked on the model, said the forecasts' correlations with what happened \"average about zero\"",
+         "wrong",
+         ("T. J. Kehoe, NAFTA at 20 (Federal Reserve Bank of Dallas, 2014), ch. 1, table 1",
+          "T. J. Kehoe, in Frontiers in Applied General Equilibrium Modeling (Cambridge, 2005)",
+          "USITC publication 2516 (May 1992)")),
 ]}

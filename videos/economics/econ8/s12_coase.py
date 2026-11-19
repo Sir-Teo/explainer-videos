@@ -35,9 +35,7 @@ class Coase(VoiceoverScene):
             "<bookmark mark='e'/> Economists now call these the costs of transacting, and the idea took decades to "
             "catch on. Coase was given the Nobel prize for it in 1991."
         ) as vo:
-            self.play(FadeIn(tag))
-            vo.wait_until("a")
-            self.play(FadeIn(q, shift=UP * 0.2))
+            self.play(FadeIn(tag), FadeIn(q, shift=UP * 0.2))
             vo.wait_until("b")
             self.play(FadeIn(rows[0]), FadeIn(rows[1]))
             vo.wait_until("c")
@@ -71,7 +69,8 @@ class Coase(VoiceoverScene):
             "the telephone and the telegraph in his day, should make firms bigger; chapter fifteen asks what today's "
             "should do."
         ) as vo:
-            for mk, r_ in zip("abcde", rows):
+            self.play(FadeIn(rows[0], shift=UP * 0.1))
+            for mk, r_ in zip("bcde", rows[1:]):
                 vo.wait_until(mk)
                 self.play(FadeIn(r_, shift=UP * 0.1))
         self.clear_scene()

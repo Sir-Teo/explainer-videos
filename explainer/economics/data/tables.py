@@ -1041,6 +1041,137 @@ COBB_DOUGLAS_1928 = Table(
 
 PART8 = (COBB_DOUGLAS_1928,)
 
+# ---------------------------------------------------------------------------
+# Part 9
+# ---------------------------------------------------------------------------
+RADFORD_1945 = Table(
+    key="radford_1945",
+    cite="R. A. Radford, \"The Economic Organisation of a P.O.W. Camp\", Economica, New Series 12(48): 189-201 "
+         "(November 1945)",
+    tag="Radford, Economica 12(48) (1945)",
+    where="pp. 189-201: the introduction (p. 190), the development of the market (pp. 190-192), the cigarette "
+          "currency (pp. 194-195), paper currency (pp. 196-197), the conclusion (pp. 200-201)",
+    read="the article as printed (a scan of the journal pages)",
+    checked="2026-11-19",
+    data={
+        "camps": "Oflags (officers' camps) of between 1,200 and 2,500 prisoners, in bungalows of about 200",
+        "parcel": ("tinned milk", "jam", "butter", "biscuits", "bully", "chocolate", "sugar", "cigarettes"),
+        "first_parcel": "a quarter of a Red Cross food parcel each, a week after reaching a transit camp in Italy, "
+                        "about a fortnight after capture",
+        "equal": "Everyone receives a roughly equal share of essentials; it is by trade that individual preferences "
+                 "are given expression and comfort increased.",
+        "padre": "Stories circulated of a padre who started off round the camp with a tin of cheese and five "
+                 "cigarettes and returned to his bed with a complete parcel in addition to his original cheese and "
+                 "cigarettes; the market was not yet perfect.",
+        "standard": "The cigarette became the standard of value.",
+        "offer": "cheese for seven",
+        "salmon": "The price of a tin of salmon is known to have varied by two cigarettes in 20 between one end of a "
+                  "hut and the other.",
+        "salmon_spread": (2, 20),
+        "moosburg": "Stalag VIIA at Moosburg in Bavaria, autumn 1943: up to 50,000 prisoners of all nationalities",
+        "supply": "the Red Cross issue of 50 or 25 cigarettes per man per week",
+        "halved": "In August, 1944, the supplies of parcels and cigarettes were both halved.",
+        "bully_mark": "paper money backed 100 per cent. by food: one BMk. was worth one cigarette at first, and fell "
+                      "to four-fifths of a cigarette",
+        "blizzard": "in February the supplies of food parcels were exhausted and the depression became a blizzard",
+        "liberation": "On 12th April, with the arrival of elements of the 30th U.S. Infantry Division, the ushering "
+                      "in of an age of plenty demonstrated the hypothesis that with infinite means economic "
+                      "organisation and activity would be redundant",
+        "bread": "Bread was issued on Thursday and Monday ... by Wednesday and Sunday night it had risen at least one "
+                 "cigarette per ration, from seven to eight",
+    },
+    note="The quotations are verbatim from the printed text; only line breaks differ.",
+)
+
+HSIEH_KLENOW_2009 = Table(
+    key="hsieh_klenow_2009",
+    cite="Chang-Tai Hsieh and Peter J. Klenow, \"Misallocation and Manufacturing TFP in China and India\", "
+         "Quarterly Journal of Economics 124(4): 1403-1448 (2009)",
+    tag="Hsieh and Klenow, QJE 124(4) (2009)",
+    where="the abstract; table 2 (dispersion of TFPR), table 4 (gains from equalizing TFPR within industries), "
+          "table 6 (gains relative to 1997 US gains)",
+    read="the December 2008 accepted version (it thanks the referees and editors), whose abstract matches the "
+         "published one",
+    checked="2026-11-19",
+    data={
+        "sigma": 3.0,
+        "sd_log_tfpr": {"China": {1998: 0.74, 2001: 0.68, 2005: 0.63}, "India": {1987: 0.69, 1991: 0.67, 1994: 0.67},
+                        "US": {1977: 0.45, 1987: 0.41, 1997: 0.49}},
+        "full": {"China": {1998: 115.1, 2001: 95.8, 2005: 86.6}, "India": {1987: 100.4, 1991: 102.1, 1994: 127.5},
+                 "US": {1977: 36.1, 1987: 30.7, 1997: 42.9}},
+        "to_us_1997": {"China": {1998: 50.5, 2001: 37.0, 2005: 30.5}, "India": {1987: 40.2, 1991: 41.4, 1994: 59.2}},
+        "abstract": "When capital and labor are hypothetically reallocated to equalize marginal products to the extent "
+                    "observed in the U.S., we calculate manufacturing TFP gains of 30-50% in China and 40-60% in "
+                    "India.",
+    },
+    note="Gains are percent increases in manufacturing TFP; \"full\" equalizes revenue productivity across plants "
+         "within each industry, \"to US 1997\" only to the dispersion of the United States in 1997.",
+)
+
+BILS_KLENOW_RUANE_2021 = Table(
+    key="bils_klenow_ruane_2021",
+    cite="Mark Bils, Peter J. Klenow and Cian Ruane, \"Misallocation or Mismeasurement?\", Journal of Monetary "
+         "Economics 124(S): S39-S56 (2021); NBER Working Paper 26711 (2020)",
+    tag="Bils, Klenow and Ruane, JME (2021); NBER WP 26711",
+    where="the working paper's abstract",
+    read="NBER Working Paper 26711 (January 2020)",
+    checked="2026-11-19",
+    data={"india_cut": 0.20, "us_cut": 0.60, "india_years": "1985-2013", "us_years": "1978-2013",
+          "abstract": "For Indian manufacturing from 1985-2013, our correction lowers potential gains from "
+                      "reallocation by 20%. For the U.S. the effect is even more dramatic, reducing potential gains by "
+                      "60%"},
+)
+
+KEHOE_2014 = Table(
+    key="kehoe_2014",
+    cite="Timothy J. Kehoe, \"The Challenges of Predicting the Impact of Trade Reforms\", chapter 1 of NAFTA at 20 "
+         "(Federal Reserve Bank of Dallas, 2014), table 1, from Kehoe, Rossbach and Ruhl (2014) and Kehoe (2014); the "
+         "evaluation is T. J. Kehoe, \"An Evaluation of the Performance of Applied General Equilibrium Models of the "
+         "Impact of NAFTA\", in Frontiers in Applied General Equilibrium Modeling (Cambridge, 2005)",
+    tag="Kehoe, NAFTA at 20 (Dallas Fed, 2014), table 1",
+    where="table 1: changes in Mexican imports from North America relative to Mexican GDP, by industry (percent)",
+    read="the Dallas Fed's conference volume, chapter 1 (pp. 16-20)",
+    checked="2026-11-19",
+    data={
+        "industries": ("Agriculture", "Beverages", "Chemicals", "Electrical machinery", "Food", "Iron and steel",
+                       "Leather", "Metal products", "Mining", "Nonelectrical machinery", "Nonferrous metals",
+                       "Nonmetallic mineral products", "Other manufactures", "Paper", "Petroleum", "Rubber",
+                       "Textiles", "Tobacco", "Transportation equipment", "Wearing apparel", "Wood"),
+        "actual": (61.0, 189.0, 218.5, 66.3, 128.8, 92.0, 60.0, 94.8, 79.4, 115.8, 113.9, 64.3, 96.7, 49.7, -71.2,
+                   178.2, 131.3, 575.5, 97.7, 29.2, 2.9),
+        "sobarzo": (3.4, -1.8, -2.7, 9.6, -5.0, 17.7, -0.4, 9.5, 13.2, 20.7, 9.8, 10.9, 4.2, -4.7, -6.8, -0.1, -1.2,
+                    -11.6, 11.2, 4.5, 11.7),
+        "ltp": (77.2, 143.2, 115.9, 53.2, 94.7, 115.7, 245.5, 90.9, 97.3, 76.9, 84.2, 215.0, 95.3, 70.9, 68.1, 67.1,
+                175.7, 340.5, 56.7, 107.9, 65.6),
+        "weighted_corr": {"sobarzo": -0.12, "ltp": 0.47},
+        "years": "1989-2009",
+        "quote": "if we look at the correlations of what we predicted with what happened, they average about zero",
+        "usitc": "USITC, Economy-wide Modeling of the Economic Implications of a FTA with Mexico and a NAFTA with "
+                 "Mexico and Canada, USITC publication 2516 (May 1992)",
+    },
+    note="The weights of the weighted correlations are not given in the chapter; the film recomputes only the "
+         "unweighted correlation from the table and labels it so.",
+)
+
+EDGEWORTH_1881 = Table(
+    key="edgeworth_1881",
+    cite="F. Y. Edgeworth, Mathematical Psychics: An Essay on the Application of Mathematics to the Moral Sciences "
+         "(London: C. Kegan Paul, 1881)",
+    tag="Edgeworth, Mathematical Psychics (1881), pp. 20-21",
+    where="p. 20 (the three demonstrations) and p. 21 (the contract-curve named)",
+    read="a scan of the 1881 edition",
+    checked="2026-11-19",
+    data={"answer": "(a) Contract without competition is indeterminate, (b) Contract with perfect competition is "
+                    "perfectly determinate, (c) Contract with more or less perfect competition is less or more "
+                    "indeterminate.",
+          "name": "which locus it is here proposed to call the contract-curve"},
+    note="Edgeworth labels the three cases with Greek letters (alpha, beta, gamma); the box diagram itself was drawn "
+         "later.",
+)
+
+PART9 = (RADFORD_1945, EDGEWORTH_1881, HSIEH_KLENOW_2009, BILS_KLENOW_RUANE_2021, KEHOE_2014)
+
+
 PART7 = (BERNOULLI_1738, SAMUELSON_1937, ALLAIS_1953, ELLSBERG_1961, RABIN_2000, THALER_1981, HOLT_LAURY_2005,
          HAYDEN_PLATT_2009, MADRIAN_SHEA_2001, THALER_BENARTZI_2004, BARSKY_1997, POST_2008, MEHRA_PRESCOTT_1985)
-ALL = {t.key: t for t in (*PART1, *PART3, *PART4, *PART5, *PART6, *PART7, *PART8)}
+ALL = {t.key: t for t in (*PART1, *PART3, *PART4, *PART5, *PART6, *PART7, *PART8, *PART9)}

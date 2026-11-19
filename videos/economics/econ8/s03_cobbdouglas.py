@@ -173,6 +173,8 @@ class CobbDouglas(VoiceoverScene):
             label(r"the falling labour share since 2000 is one reason the value of $\sigma$ is contested: \ "
                   r"chapter 13", font_size=23, color=GREY_A),
         ).arrange(DOWN, buff=0.4)
+        head = label(r"why the exponents matter: \ income shares", font_size=32, color=E.ACCENT).to_edge(UP, buff=0.4)
+        rows.next_to(head, DOWN, buff=0.5)
         with self.voiceover(
             "Here's why it matters. <bookmark mark='a'/> If markets are competitive, each input is paid its marginal "
             "product. <bookmark mark='b'/> Then labour's share of income is the elasticity of output with respect to "
@@ -183,6 +185,7 @@ class CobbDouglas(VoiceoverScene):
             "<bookmark mark='e'/> So when labour's share began to fall, the value of sigma became a live question. "
             "Chapter thirteen has the estimates."
         ) as vo:
+            self.play(FadeIn(head, shift=DOWN * 0.2))
             for mk, r_ in zip("abcde", rows):
                 vo.wait_until(mk)
                 self.play(FadeIn(r_, shift=UP * 0.1))

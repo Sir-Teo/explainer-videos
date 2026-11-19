@@ -267,6 +267,43 @@ TRUTHS = {
         # 80% of its own investment's value outside the relationship
         "ghm": {"va": 4.0, "vb": 1.0, "outside": 0.8},
     },
+    9: {
+        # the box (chapters 1-5): Ana has 8 fish and 1.5 bundles of coconuts, Bo 2 fish and 8.5; Cobb-Douglas
+        # tastes, Ana spending 40% on fish, Bo 60%; replicated 1, 2, 3, 5, 10 and 20 times for the core
+        "box": {"ana": {"a": 0.4, "e": (8.0, 1.5)}, "bo": {"a": 0.6, "e": (2.0, 8.5)},
+                "replicas": (1, 2, 3, 5, 10, 20)},
+        # the second welfare theorem (chapter 6): the efficient allocation that gives Ana 5 fish
+        "target_fish": 5.0,
+        # three goods (chapters 8-9): Ana owns 2 fish, Bo 1 bundle of coconuts, Friday 1.5 cords of timber, each
+        # with Cobb-Douglas weights on (fish, coconuts, timber)
+        "three": {"traders": (("Ana", (0.5, 0.3, 0.2), (2.0, 0.0, 0.0)), ("Bo", (0.1, 0.6, 0.3), (0.0, 1.0, 0.0)),
+                              ("Friday", (0.3, 0.2, 0.5), (0.0, 0.0, 1.5))),
+                  "grids": (6, 12, 48), "starts": ((0.8, 0.15, 0.4), (0.2, 0.9, 0.2), (0.3, 0.3, 0.85))},
+        # Scarf's economy (chapter 9): the auctioneer starts from these prices
+        "scarf_start": (0.45, 0.75, 0.52),
+        # the whole Island cleared at once (chapter 10): 5 goods, 12 islanders, CES tastes (elasticities 0.5-2),
+        # endowments and weights drawn with this seed
+        "island": {"goods": ("fish", "coconuts", "timber", "cloth", "salt"), "people": 12, "seed": 1954,
+                   "sigma": (0.5, 2.0)},
+        # Crusoe as consumer, worker and firm (chapter 11): 12 hours a day, coconuts c = 2 L^0.5, utility
+        # 0.6 log c + 0.4 log leisure
+        "crusoe": {"A": 2.0, "alpha": 0.5, "hours": 12.0, "b": 0.6},
+        # time and uncertainty (chapter 13): Ana fishes (80 in calm weather, 20 in a storm), Chidi gathers coconuts
+        # (storms bring them down: 20 calm, 80 storm); 50 each today; even odds; patience 0.95; risk aversion 2
+        "risk": {"e0": (50.0, 50.0), "E": ((80.0, 20.0), (20.0, 80.0)), "probs": (0.5, 0.5), "beta": 0.95,
+                 "gamma": (2.0, 2.0)},
+        # the planner (chapter 14): four of the yard's machines make planks and masts at these rates a day; a
+        # boat's set is 2 planks and 1 mast
+        "plan": {"machines": ("saw", "adze", "lathe", "press"), "parts": ("planks", "masts"),
+                 "rates": ((6.0, 1.0), (4.0, 2.0), (2.0, 2.0), (1.0, 3.0)), "kit": (2.0, 1.0)},
+        # misallocation (chapter 15): 100,000 plants, productivity spread 0.2 in logs, revenue productivity spread
+        # as in Hsieh and Klenow's United States (1997) and China (2005)
+        "plants": {"n": 100_000, "sd_A": 0.2, "seed": 2009},
+        # the housing market (chapter 17): six islanders, each with a hut, rank the huts
+        "huts": {"names": ("Ana", "Bo", "Chidi", "Dara", "Crusoe", "Friday"),
+                 "prefs": ((2, 3, 0, 1, 4, 5), (0, 2, 1, 3, 5, 4), (1, 0, 2, 4, 3, 5), (0, 4, 3, 2, 1, 5),
+                           (2, 3, 4, 0, 5, 1), (3, 0, 5, 1, 2, 4))},
+    },
 }
 
 

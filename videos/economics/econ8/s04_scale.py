@@ -123,7 +123,8 @@ class Scale(VoiceoverScene):
             "firm running many plants has decreasing ones. <bookmark mark='e'/> Coase's answer, in chapter ten, is "
             "that organizing things inside a firm has costs too, and they rise as the firm grows."
         ) as vo:
-            for mk, r_ in zip("abcde", rows):
+            self.play(FadeIn(rows[0], shift=UP * 0.1))
+            for mk, r_ in zip("bcde", rows[1:]):
                 vo.wait_until(mk)
                 self.play(FadeIn(r_, shift=UP * 0.1))
         self.clear_scene()

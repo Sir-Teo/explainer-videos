@@ -35,9 +35,8 @@ class Technology(VoiceoverScene):
             "With four of each, five point six six boats. <bookmark mark='d'/> A production function is a "
             "description of what is possible: the most output the inputs can make, with nothing wasted."
         ) as vo:
-            self.play(FadeIn(tag))
-            vo.wait_until("a")
-            self.play(LaggedStart(*[FadeIn(w_, shift=UP * 0.1) for w_ in ways], lag_ratio=0.2), FadeIn(rows[0]))
+            self.play(FadeIn(tag), LaggedStart(*[FadeIn(w_, shift=UP * 0.1) for w_ in ways], lag_ratio=0.2),
+                      FadeIn(rows[0]))
             vo.wait_until("b")
             self.play(LaggedStart(*[FadeIn(m, shift=UP * 0.1) for m in men], lag_ratio=0.2), FadeIn(rows[1]))
             vo.wait_until("c")

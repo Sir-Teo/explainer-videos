@@ -215,6 +215,25 @@ DIALS = {d.key: d for d in [
                       "relative price of investment goods", 1.25, where="QJE 129(1); NBER WP 19136, abstract",
                       checked="2026-11-19"),
          )),
+    Dial("misallocation", "TFP gain from equalizing marginal products across plants", "percent rise in "
+         "manufacturing TFP if capital and labour were moved until marginal products were equal (or as equal as in "
+         "the United States)", (9, 21), status="contested", checked="2026-11-19",
+         meaning="the first welfare theorem says competitive markets equalize marginal products; measured gaps across "
+                 "plants imply large losses where they are unequal (tens of percent of manufacturing TFP in China "
+                 "and India), but measurement error inflates measured gaps: one correction cuts the potential gains "
+                 "by a fifth in India and three fifths in the United States (Bils, Klenow and Ruane)",
+         estimates=(
+             Estimate("Hsieh and Klenow", 2009, "structural", "China, 2005: moving to the United States' dispersion "
+                      "of 1997", 30.5, where="QJE 124(4), table 6 (accepted version)", checked="2026-11-19"),
+             Estimate("Hsieh and Klenow", 2009, "structural", "India, 1994: moving to the United States' dispersion "
+                      "of 1997", 59.2, where="as above, table 6", checked="2026-11-19"),
+             Estimate("Hsieh and Klenow", 2009, "structural", "the United States, 1997: full equalization within "
+                      "industries", 42.9, where="as above, table 4", checked="2026-11-19"),
+             Estimate("Hsieh and Klenow", 2009, "structural", "China, 2005: full equalization within industries",
+                      86.6, where="as above, table 4", checked="2026-11-19"),
+             Estimate("Hsieh and Klenow", 2009, "structural", "India, 1994: full equalization within industries",
+                      127.5, where="as above, table 4", checked="2026-11-19"),
+         )),
     Dial("markups", "markups over marginal cost", "price over marginal cost", (10, 43)),
     Dial("return_schooling", "return to a year of school", "proportional rise in earnings per year of schooling",
          (4, 38), status="settled within a range", checked="2026-11-19",
