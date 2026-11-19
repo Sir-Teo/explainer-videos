@@ -202,6 +202,47 @@ TRUTHS = {
                      "sigma": 0.5, "growth": 0.015, "bias": 0.010, "a": 0.60, "b": -0.10, "g": 0.05, "noise": 0.04,
                      "food_price_sd": 0.08, "seed": 2001},
     },
+    7: {
+        # the St Petersburg game as Bernoulli posed it (1738): $1 for heads on the first toss, doubling after; a million
+        # simulated games, and the prices Bernoulli's log utility puts on it at three levels of wealth
+        "stpete": {"first": 1.0, "games": 1_000_000, "seed": 1738, "wealths": (100.0, 1000.0, 1_000_000.0)},
+        # Fisher's two periods (chapter 1): Chidi's harvest is worth $120 this season and $40 the next (the dry
+        # season); Dara lends and borrows at 10% a season; Chidi's utility is CRRA with gamma 2 (an EIS of 1/2) and
+        # beta 0.9.  The comparison choosers have EIS 2, 1/2 and 1/8
+        "chidi": {"income": (120.0, 40.0), "rate": 0.10, "rates": (0.0, 0.10, 0.20, 0.30, 0.40), "beta": 0.90,
+                  "gamma": 2.0, "gammas": (0.5, 2.0, 8.0)},
+        # discounting (chapter 2): $100 thirty years away at 3% and at 10%
+        "discount": {"rates": (0.03, 0.10), "years": 30, "prize": 100.0},
+        # risk aversion (chapter 5): Ana has $40 and a day's fishing: the reef pays $60 for sure, the open sea $20 or
+        # $140, 50-50
+        "ana": {"wealth": 40.0, "reef": 60.0, "sea": (20.0, 140.0), "gammas": (0.0, 1.0, 2.0, 4.0)},
+        # insurance (chapter 6): Ana's wealth is $300, $150 of it her boat; a storm wrecks it with chance 10%; cover
+        # sold at the expected payout times 1 + loading; her gamma is 2
+        "boat": {"wealth": 300.0, "boat": 150.0, "storm": 0.10, "loadings": (0.0, 0.2, 0.5), "gamma": 2.0},
+        # deductibles at an American household's scale (illustrative): wealth $100,000, a claim in 5% of years,
+        # deductibles of $500 or $1,000, the lower one costing $25, $50 or $100 a year more
+        "deductible": {"wealth": 100_000.0, "claim": 0.05, "deductibles": (500.0, 1000.0),
+                       "extra": (25.0, 50.0, 100.0)},
+        # the risky asset (chapter 6): Dara's venture returns 8% on average, 28% or -12% with equal chance (sd 20%),
+        # against a safe 2%
+        "venture": {"safe": 0.02, "outcomes": (1.28, 0.88), "gammas": (1.0, 2.0, 4.0, 10.0)},
+        # stochastic dominance (chapter 7): three nets' daily catches (fish, with chances)
+        "nets": {"old": ((2, 6, 10), (0.25, 0.5, 0.25)), "better": ((4, 6, 10), (0.25, 0.5, 0.25)),
+                 "spread": ((0, 6, 12), (0.25, 0.5, 0.25))},
+        # fanning out (chapter 8): Chew's weighted utility on $0, $1M, $5M with u = (0, 0.85, 1) and weights
+        # (6, 1, 2), illustrative values that produce Allais's pattern
+        "fanning": {"u": (0.0, 0.85, 1.0), "w": (6.0, 1.0, 2.0)},
+        # Epstein-Zin (chapter 10): consumption 1 today and next season, then 0.8 or 1.2 with equal chance, learnt
+        # next season or only when it comes; beta 0.95; Bansal and Yaron's calibration (gamma 10, psi 1.5) against
+        # expected utility with gamma 2
+        "ez": {"c": (1.0, 1.0), "c2": (0.8, 1.2), "beta": 0.95, "calibrations": ((10.0, 1.5), (2.0, 0.5),
+                                                                              (5.0, 0.5), (0.5, 0.5))},
+        # present bias (chapter 11): Chidi's dry-season store of 300 coconuts, to last six weeks; beta 0.7, delta 1
+        "present": {"store": 300.0, "weeks": 6, "beta": 0.7, "delta": 1.0},
+        # Holt and Laury's menu run on 400 islanders (chapter 12): CRRA gammas drawn normal (mean 0.35, sd 0.35),
+        # choices noisy, logit in certainty-equivalent dollars with scale $0.30
+        "hl": {"people": 400, "gamma_mean": 0.35, "gamma_sd": 0.35, "noise": 0.30, "seed": 2002},
+    },
 }
 
 

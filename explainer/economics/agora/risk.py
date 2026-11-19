@@ -19,8 +19,21 @@ hyperbolic, quasi-hyperbolic beta-delta: :func:`discount`) and the preference re
 produce (:func:`reversal`); the elasticity of intertemporal substitution against relative risk aversion in an
 Epstein-Zin aggregator (:func:`epstein_zin_value`).
 
-**Measuring it.**  :func:`holt_laury_menu` (Holt and Laury's ten paired lotteries) and :func:`holt_laury_interval`
-(the CRRA interval implied by the number of safe choices).
+**Insurance and portfolios.**  :func:`deductible_gamma` (the risk aversion a deductible choice implies),
+:func:`merton_share` and :func:`portfolio_eu` (the demand for a risky asset).
+
+**Time meets risk.**  :func:`ez_resolution` (Kreps-Porteus and Epstein-Zin: a preference for early resolution),
+:func:`beta_delta_path` (a present-biased self's plan against what its later selves do, and a commitment), and
+:func:`euler_regression` (Hall's regression of consumption growth on the real interest rate, by OLS and 2SLS).
+
+**Paradoxes.**  :func:`ellsberg_maxmin` (Ellsberg's urn under maxmin expected utility), Chew's weighted utility in
+the triangle (:func:`weighted_utility_line`, :func:`weighted_utility_value`: indifference lines that fan out),
+Tversky and Kahneman's value and weighting functions (:func:`tk_value`, :func:`tk_weight`).
+
+**Measuring it.**  :func:`holt_laury_menu` (Holt and Laury's ten paired lotteries), :func:`holt_laury_interval`
+(the CRRA interval implied by the number of safe choices), :func:`holt_laury_respond` and :func:`switches_back`
+(noisy simulated respondents), :func:`hrs_threshold` (the risk aversion at each of the HRS's income gambles) and
+:func:`stpetersburg_median_prize` (Hayden and Platt's median heuristic).
 
 Plain numpy and scipy.
 """
@@ -29,6 +42,7 @@ from __future__ import annotations
 
 import numpy as np
 from scipy.optimize import brentq
+from scipy.special import expit
 
 # ---------------------------------------------------------------------------------------------------------------
 # utility of wealth
@@ -146,6 +160,36 @@ def optimal_cover(w: float, loss: float, p: float, loading: float, gamma: float,
     return {"cover": float(q[k]), "premium": float(prem[k]), "eu": eu, "q": q}
 
 
+def deductible_gamma(w: float, p: float, d_low: float, d_high: float, extra: float) -> float:
+    """The relative risk aversion at which a CRRA chooser with wealth w is just willing to pay ``extra`` a year to cut
+    the deductible from d_high to d_low, when a claim comes with chance p.  Expected saving p (d_high - d_low); anything
+    paid above it is a risk premium, and over stakes this small it implies enormous risk aversion (Sydnor 2010)."""
+
+    def gap(gm):
+        a = (1 - p) * crra(1 - extra / w, gm) + p * crra(1 - (extra + d_low) / w, gm)
+        b = (1 - p) * crra(1.0, gm) + p * crra(1 - d_high / w, gm)
+        return float(a - b)
+
+    with np.errstate(over="ignore", divide="ignore", invalid="ignore"):
+        return float(brentq(gap, 1e-6, 2000.0))
+
+
+def merton_share(mu: float, r: float, sigma: float, gamma: float) -> float:
+    """The share of wealth in a risky asset with mean return mu and volatility sigma, against a safe rate r, for CRRA
+    utility (Merton 1969, Samuelson 1969): (mu - r) / (gamma sigma^2), whatever the wealth."""
+    return float((mu - r) / (gamma * sigma ** 2))
+
+
+def portfolio_eu(share, w: float, r: float, outcomes, probs, gamma: float):
+    """Expected CRRA utility of putting ``share`` of w in a risky asset with gross returns ``outcomes`` (the rest at
+    1 + r), for a grid of shares: the curve whose top is the demand for the risky asset."""
+    share = np.atleast_1d(np.asarray(share, float))
+    R = np.asarray(outcomes, float)
+    p = np.asarray(probs, float)
+    wealth = w * ((1 - share)[:, None] * (1 + r) + share[:, None] * R[None, :])
+    return (crra(np.maximum(wealth, 1e-9), gamma) * p[None, :]).sum(axis=1)
+
+
 # ---------------------------------------------------------------------------------------------------------------
 # Rabin's calibration, for CRRA utility (his theorem needs only concavity; its tables are transcribed, not computed)
 
@@ -187,37 +231,57 @@ def crra_largest_gain(L: float, w: float, gamma: float, cap: float = 1e15) -> fl
 # the St Petersburg game
 
 
-def stpetersburg_value(n: int) -> float:
-    """The expected prize of a game cut off after n tosses (prize 2^k with chance 2^-k): n dollars."""
-    return float(sum(2.0 ** -k * 2.0 ** k for k in range(1, n + 1)))
+def stpetersburg_value(n: int, first: float = 2.0) -> float:
+    """The expected prize of a game cut off after n tosses (heads on toss k pays first * 2^(k-1), with chance 2^-k):
+    n * first / 2 dollars, which grows without bound."""
+    return float(sum(2.0 ** -k * first * 2.0 ** (k - 1) for k in range(1, n + 1)))
 
 
-def stpetersburg_price(w: float, utility: str = "log", kmax: int = 200) -> float:
-    """The most a player with wealth w would pay to play, under log utility (Bernoulli) or the square root (Cramer):
-    the price c solving sum_k 2^-k u(w - c + 2^k) = u(w)."""
+def stpetersburg_truncated_value(n: int, first: float = 1.0) -> float:
+    """Hayden and Platt's truncated game: the coin is tossed at most n times, and if it never shows heads the player
+    gets the maximum prize first * 2^n.  Expected prize first * (n / 2 + 1): $2.50 for three tosses (first = 1)."""
+    return float(stpetersburg_value(n, first) + 0.5 ** n * first * 2.0 ** n)
+
+
+def _prizes(first: float, kmax: int):
     ks = np.arange(1, kmax + 1)
-    pk = 0.5 ** ks
-    prize = 2.0 ** ks
+    return ks, 0.5 ** ks, first * 2.0 ** (ks - 1)
+
+
+def stpetersburg_price(w: float, utility: str = "log", kmax: int = 200, first: float = 2.0) -> float:
+    """The most a player with wealth w would pay to play, under log utility (Bernoulli) or the square root (Cramer):
+    the price c solving sum_k 2^-k u(w - c + prize_k) = u(w).  Bernoulli's own game (1738) has ``first`` = 1: one
+    ducat for heads on the first toss, two on the second, four on the third."""
+    _, pk, prize = _prizes(first, kmax)
     u = np.log if utility == "log" else np.sqrt
 
     def gap(c):
         return float(np.sum(pk * u(w - c + prize)) - u(w))
 
-    return float(brentq(gap, -1e9 if w <= 0 else 0.0, w + 1.999999))
+    return float(brentq(gap, -1e9 if w <= 0 else 0.0, w + first * 0.999999))
 
 
-def stpetersburg_ce_alone(utility: str = "sqrt", kmax: int = 200) -> float:
-    """The game's certainty equivalent ignoring wealth: u^-1(sum_k 2^-k u(2^k)).  Cramer's square root gives about 2.9."""
-    ks = np.arange(1, kmax + 1)
+def stpetersburg_ce_alone(utility: str = "sqrt", kmax: int = 200, first: float = 2.0) -> float:
+    """The game's certainty equivalent ignoring wealth: u^-1(sum_k 2^-k u(prize_k)).  Cramer's square root gives
+    about 2.9 for prizes 1, 2, 4, ...; the logarithm gives exactly 2 * ``first``."""
+    _, pk, prize = _prizes(first, kmax)
     if utility == "sqrt":
-        return float(np.sum(0.5 ** ks * 2.0 ** (ks / 2)) ** 2)
-    return float(np.exp(np.sum(0.5 ** ks * ks * np.log(2))))
+        return float(np.sum(pk * np.sqrt(prize)) ** 2)
+    return float(np.exp(np.sum(pk * np.log(prize))))
 
 
-def stpetersburg_play(games: int, rng) -> np.ndarray:
-    """Prizes of simulated games: toss until heads; heads on toss k pays 2^k."""
+def stpetersburg_play(games: int, rng, first: float = 2.0) -> np.ndarray:
+    """Prizes of simulated games: toss until heads; heads on toss k pays first * 2^(k-1)."""
     k = rng.geometric(0.5, size=games)
-    return 2.0 ** k
+    return first * 2.0 ** (k - 1)
+
+
+def stpetersburg_median_prize(games: int, first: float = 1.0, reps: int = 4000, seed: int = 0) -> float:
+    """The median, over many sessions, of the average prize per game in a session of ``games`` games: what Hayden and
+    Platt's median heuristic says a player bids per game.  It grows like log2(games) / 2 dollars (for first = 1)."""
+    rng = np.random.default_rng(seed)
+    means = [stpetersburg_play(games, rng, first).mean() for _ in range(reps)]
+    return float(np.median(means))
 
 
 # ---------------------------------------------------------------------------------------------------------------
@@ -268,6 +332,85 @@ def epstein_zin_value(c_path, probs_next, beta: float, gamma: float, psi: float)
     return float(((1 - beta) * c0 ** rho + beta * ce ** rho) ** (1 / rho))
 
 
+def ez_resolution(c0: float, c1: float, c2_states, probs, beta: float, gamma: float, psi: float) -> dict:
+    """Kreps and Porteus (1978), Epstein and Zin (1989): the same lottery over consumption at t = 2, its outcome learnt
+    at t = 1 (early) or at t = 2 (late).  Expected utility (gamma = 1/psi) does not care; Epstein-Zin prefers early
+    resolution when gamma > 1/psi.  ``premium`` is the share of c0 the chooser would give up to learn early."""
+    rho = 1 - 1 / psi
+    p = np.asarray(probs, float)
+    c2 = np.asarray(c2_states, float)
+
+    def agg(c, ce):
+        return ((1 - beta) * c ** rho + beta * ce ** rho) ** (1 / rho)
+
+    def ce(v):
+        if abs(gamma - 1) < 1e-12:
+            return float(np.exp(p @ np.log(v)))
+        return float((p @ v ** (1 - gamma)) ** (1 / (1 - gamma)))
+
+    early = agg(c0, ce(np.array([agg(c1, x) for x in c2])))
+    late = agg(c0, agg(c1, ce(c2)))
+
+    def v0(c):
+        return agg(c, ce(np.array([agg(c1, x) for x in c2])))
+
+    target = late
+    prem = 0.0 if early <= late else float(brentq(lambda k: v0(c0 * (1 - k)) - target, 0.0, 0.999))
+    return {"early": float(early), "late": float(late), "premium": prem, "prefers_early": bool(early > late + 1e-12)}
+
+
+def beta_delta_path(w: float, T: int, beta: float, delta: float = 1.0, plan_only: bool = False) -> dict:
+    """A cake of size w eaten over T periods with log utility and quasi-hyperbolic discounting (1, beta delta, beta
+    delta^2, ...) and no interest.  ``plan`` is what the self at t = 0 plans for every period; ``naive`` what each
+    self actually eats when it re-plans (with log utility the sophisticated self eats the same: Pollak 1968).
+    ``commit`` is the plan locked in at t = 0 (a savings box that only opens on schedule)."""
+    d = np.array([delta ** k for k in range(T)])
+
+    def first_share(n):  # share of what is left that the current self eats, with n periods to go
+        weights = np.r_[1.0, beta * d[1:n]]
+        return 1.0 / weights.sum()
+
+    wts = np.r_[1.0, beta * d[1:T]]
+    plan = w * wts / wts.sum()
+    eaten, left = [], w
+    for t in range(T):
+        c = left * first_share(T - t)
+        eaten.append(c)
+        left -= c
+    return {"plan": plan, "naive": np.array(eaten), "commit": plan.copy(),
+            "exponential": w * d / d.sum()}
+
+
+def euler_regression(growth, rate, instruments=None) -> dict:
+    """Hall (1988): consumption growth on the real interest rate.  The slope estimates the elasticity of
+    intertemporal substitution.  OLS, and two-stage least squares on ``instruments`` (lagged variables: the ex post
+    real rate is measured with error and time-averaged data make adjacent errors correlated, so Hall used lags of
+    two years or more), with the first stage's F statistic."""
+    g, r = np.asarray(growth, float), np.asarray(rate, float)
+    X = np.c_[np.ones_like(r), r]
+    b_ols = np.linalg.lstsq(X, g, rcond=None)[0]
+    out = {"ols": float(b_ols[1]), "ols_const": float(b_ols[0]), "corr": float(np.corrcoef(r, g)[0, 1]), "n": len(g)}
+    e = g - X @ b_ols
+    XtXi = np.linalg.inv(X.T @ X)
+    out["ols_se"] = float(np.sqrt(XtXi[1, 1] * (e @ e) / (len(g) - 2)))
+    if instruments is not None:
+        Z = np.c_[np.ones_like(r), np.asarray(instruments, float)]
+        pi = np.linalg.lstsq(Z, r, rcond=None)[0]
+        rh = Z @ pi
+        u = r - rh
+        k = Z.shape[1] - 1
+        rss_u, rss_r = u @ u, ((r - r.mean()) @ (r - r.mean()))
+        out["first_F"] = float(((rss_r - rss_u) / k) / (rss_u / (len(r) - k - 1)))
+        Xh = np.c_[np.ones_like(r), rh]
+        b = np.linalg.lstsq(Xh, g, rcond=None)[0]
+        e2 = g - X @ b
+        XhXi = np.linalg.inv(Xh.T @ Xh)
+        out["iv"] = float(b[1])
+        out["iv_const"] = float(b[0])
+        out["iv_se"] = float(np.sqrt(XhXi[1, 1] * (e2 @ e2) / (len(g) - 2)))
+    return out
+
+
 # ---------------------------------------------------------------------------------------------------------------
 # Holt and Laury's menu
 
@@ -299,3 +442,80 @@ def holt_laury_interval(n_safe: int, scale: float = 1.0) -> tuple:
     gs = np.linspace(-1.5, 3.0, 9001)
     hits = [g for g in gs if safe_choices(g, scale) == n_safe]
     return (float(min(hits)), float(max(hits))) if hits else (float("nan"), float("nan"))
+
+
+def holt_laury_respond(gammas, noise: float, rng, scale: float = 1.0) -> np.ndarray:
+    """Simulated respondents on the menu: each row, option A with probability Lambda((CE_A - CE_B) / noise) (a logit
+    in certainty-equivalent dollars).  Returns a (people, 10) array of booleans, True for the safe choice."""
+    menu = holt_laury_menu(scale)
+    out = np.zeros((len(gammas), 10), bool)
+    for i, gm in enumerate(gammas):
+        for j, row in enumerate(menu):
+            pa = (row["p"], 1 - row["p"])
+            ca = certainty_equivalent(row["A"], pa, gamma=float(gm)) if abs(gm) > 1e-9 else float(np.dot(row["A"], pa))
+            cb = certainty_equivalent(row["B"], pa, gamma=float(gm)) if abs(gm) > 1e-9 else float(np.dot(row["B"], pa))
+            out[i, j] = rng.random() < expit((ca - cb) / noise)
+    return out
+
+
+def switches_back(choices) -> np.ndarray:
+    """Which respondents switch from B back to A somewhere on the menu (inconsistent with any single gamma)."""
+    c = np.asarray(choices, bool)
+    return np.array([np.any(~row[:-1] & row[1:]) for row in c])
+
+
+def hrs_threshold(cut: float) -> float:
+    """Barsky, Juster, Kimball and Shapiro (1997): the CRRA chooser indifferent between a sure income and a 50-50
+    chance of doubling it or cutting it by ``cut``.  Cuts of a half, a third and a fifth give 1, 2 and about 3.76."""
+
+    def gap(gm):
+        if abs(gm - 1) < 1e-12:
+            return 0.5 * np.log(2) + 0.5 * np.log(1 - cut)
+        return (0.5 * 2.0 ** (1 - gm) + 0.5 * (1 - cut) ** (1 - gm) - 1) / (1 - gm)
+
+    if abs(gap(1.0)) < 1e-12:
+        return 1.0
+    return float(brentq(gap, 1e-6, 200.0))
+
+
+def ellsberg_maxmin(black_range=(0.0, 2.0 / 3.0)) -> dict:
+    """Ellsberg's urn (30 red; 60 black and yellow in unknown proportion), $100 bets, under maxmin expected utility
+    (Gilboa and Schmeidler 1989): each bet valued at its worst chance of winning over the priors with p(black) in
+    ``black_range``.  Bets: I red, II black, III red or yellow, IV black or yellow."""
+    lo, hi = black_range
+    grid = np.linspace(lo, hi, 201)
+    red = 1 / 3
+    bets = {"I": np.full_like(grid, red), "II": grid, "III": red + (2 / 3 - grid), "IV": np.full_like(grid, 2 / 3)}
+    return {k: float(v.min()) for k, v in bets.items()} | {"single_prior_consistent": False}
+
+
+def weighted_utility_line(k: float, u, w, n: int = 2):
+    """Chew's weighted utility, V = sum p_i w_i u_i / sum p_i w_i, on three outcomes (worst, middle, best): its
+    indifference curve V = k in the probability triangle is the straight line sum_i p_i w_i (u_i - k) = 0.  Returns
+    two points (p_worst, p_best) on it, at p_worst = 0 and 1 (outside the triangle where they fall)."""
+    (u1, u2, u3), (w1, w2, w3) = u, w
+    pts = []
+    for p1 in (0.0, 1.0):
+        # p1 w1 (u1-k) + (1 - p1 - p3) w2 (u2-k) + p3 w3 (u3-k) = 0
+        a = w3 * (u3 - k) - w2 * (u2 - k)
+        b = p1 * w1 * (u1 - k) + (1 - p1) * w2 * (u2 - k)
+        pts.append((p1, float(-b / a)))
+    return pts
+
+
+def weighted_utility_value(p_low: float, p_high: float, u, w) -> float:
+    p = np.array([p_low, 1 - p_low - p_high, p_high])
+    u, w = np.asarray(u, float), np.asarray(w, float)
+    return float((p * w * u).sum() / (p * w).sum())
+
+
+def tk_value(x, alpha: float = 0.88, lam: float = 2.25):
+    """Tversky and Kahneman's (1992) value function: x^alpha for gains, -lam (-x)^alpha for losses."""
+    x = np.asarray(x, float)
+    return np.where(x >= 0, np.abs(x) ** alpha, -lam * np.abs(x) ** alpha)
+
+
+def tk_weight(p, gamma: float = 0.61):
+    """Their probability weighting function for gains: p^g / (p^g + (1 - p)^g)^(1/g)."""
+    p = np.asarray(p, float)
+    return p ** gamma / (p ** gamma + (1 - p) ** gamma) ** (1 / gamma)

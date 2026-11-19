@@ -785,4 +785,215 @@ SLUTSKY_1915 = Table(
 
 PART6 = (JENSEN_MILLER_2008, HAUSMAN_1997, COSTA_2001, ENGEL_1857, ERS_FOOD_2024, JARAVEL_2019, BLS_CPI_METHODS,
          SLUTSKY_1915)
-ALL = {t.key: t for t in (*PART1, *PART3, *PART4, *PART5, *PART6)}
+
+# ---------------------------------------------------------------------------
+# Part 7
+# ---------------------------------------------------------------------------
+BERNOULLI_1738 = Table(
+    key="bernoulli_1738",
+    cite="Daniel Bernoulli, \"Specimen Theoriae Novae de Mensura Sortis\", Commentarii Academiae Scientiarum "
+         "Imperialis Petropolitanae 5: 175-192 (1738); translated by Louise Sommer as \"Exposition of a New Theory "
+         "on the Measurement of Risk\", Econometrica 22(1): 23-36 (1954)",
+    tag="Bernoulli (1738); the St Petersburg paradox",
+    where="the Stanford Encyclopedia of Philosophy, \"The St. Petersburg Paradox\", on Nicolaus Bernoulli's letter, "
+          "Cramer's and Daniel Bernoulli's answers; Bernoulli's twenty ducats as quoted by Hayden and Platt (2009), "
+          "p. 2, from Baron (1998)",
+    read="the encyclopedia entry; Hayden and Platt's article (journal.sjdm.org)",
+    checked="2026-11-19",
+    data={"posed": "Nicolaus Bernoulli, in a letter to Pierre Remond de Montmort, 9 September 1713",
+          "cramer": "Gabriel Cramer, in a letter to Nicolaus Bernoulli (1728): the square root of money; the game "
+                    "worth about 2.9", "daniel": 1738, "utility": "the logarithm of wealth",
+          "twenty_ducats": "any fairly reasonable man would sell his chance, with great pleasure, for twenty ducats",
+          "game": "one ducat if heads first appears on the first toss, two on the second, four on the third, and "
+                  "so on"},
+    note="Daniel Bernoulli acknowledged that Cramer had reached a similar answer ten years before him.",
+)
+
+SAMUELSON_1937 = Table(
+    key="samuelson_1937",
+    cite="Paul A. Samuelson, \"A Note on Measurement of Utility\", Review of Economic Studies 4(2): 155-161 (1937)",
+    tag="Samuelson, RES (1937)",
+    where="pp. 159 and 161, as quoted by Frederick, Loewenstein and O'Donoghue, \"Time Discounting and Time "
+          "Preference: A Critical Review\", Journal of Economic Literature 40(2): 351-401 (2002), pp. 355-356",
+    read="Frederick, Loewenstein and O'Donoghue (2002), the published article",
+    checked="2026-11-19",
+    data={"arbitrary": "It is completely arbitrary to assume that the individual behaves so as to maximize an "
+                       "integral of the form envisaged", "disavowed": "any connection between utility as discussed "
+                       "here and any welfare concept is disavowed",
+          "koopmans": "Tjalling Koopmans (1960) later derived discounted utility from axioms on preferences"},
+)
+
+ALLAIS_1953 = Table(
+    key="allais_1953",
+    cite="Maurice Allais, \"Le comportement de l'homme rationnel devant le risque: critique des postulats et "
+         "axiomes de l'ecole americaine\", Econometrica 21(4): 503-546 (1953); L. J. Savage, The Foundations of "
+         "Statistics (1954), ch. 5; D. Kahneman and A. Tversky, \"Prospect Theory: An Analysis of Decision under "
+         "Risk\", Econometrica 47(2): 263-291 (1979)",
+    tag="Allais, Econometrica (1953); Kahneman and Tversky (1979)",
+    where="the colloquium on risk of the CNRS, Paris, May 1952, as told by Savage (1954) and in the secondary "
+          "literature; Kahneman and Tversky's problems 1 and 2",
+    read="Savage's account (secondary sources); Kahneman and Tversky (1979), p. 265",
+    checked="2026-11-19",
+    data={"pairs": {"1A": "$1 million for sure", "1B": "10%: $5 million; 89%: $1 million; 1%: nothing",
+                    "2A": "11%: $1 million; 89%: nothing", "2B": "10%: $5 million; 90%: nothing"},
+          "colloquium": "Paris, May 1952", "savage": "Savage's own first answers broke the independence axiom; in "
+                        "his book he wrote that on reflection he changed them",
+          "kt_problem1_sure": 0.82},
+    note="Kahneman and Tversky's version uses 2,400 and 2,500 Israeli pounds: in their problem 1, 82% chose 2,400 "
+         "for sure over a 33% chance of 2,500, 66% of 2,400 and 1% of nothing.",
+)
+
+ELLSBERG_1961 = Table(
+    key="ellsberg_1961",
+    cite="Daniel Ellsberg, \"Risk, Ambiguity, and the Savage Axioms\", Quarterly Journal of Economics 75(4): "
+         "643-669 (1961)",
+    tag="Ellsberg, QJE (1961), pp. 653-655",
+    where="pp. 653-655",
+    read="the published article (a copy hosted at UC Irvine)",
+    checked="2026-11-19",
+    data={"urn": {"red": 30, "black_or_yellow": 60}, "prize": 100,
+          "bets": {"I": "red", "II": "black", "III": "red or yellow", "IV": "black or yellow"},
+          "pattern": "A very frequent pattern of response is: action I preferred to II, and IV preferred to III.",
+          "take_your_time": "Take your time!",
+          "abide": ("G. Debreu", "R. Schlaifer", "P. Samuelson")},
+    note="Ellsberg names Debreu, Schlaifer and Samuelson among those who do not violate the axioms, or say they "
+         "won't.",
+)
+
+RABIN_2000 = Table(
+    key="rabin_2000",
+    cite="Matthew Rabin, \"Risk Aversion and Expected-Utility Theory: A Calibration Theorem\", Econometrica 68(5): "
+         "1281-1292 (2000)",
+    tag="Rabin, Econometrica (2000), tables I and II",
+    where="p. 1282 (the two examples) and tables I and II",
+    read="the published article (dklevine.com copy)",
+    checked="2026-11-19",
+    data={"example": "Suppose that, from any initial wealth level, a person turns down gambles where she loses $100 "
+                     "or gains $110, each with 50% probability. Then she will turn down 50-50 bets of losing $1,000 "
+                     "or gaining any sum of money.",
+          "example2": "A person who would always turn down 50-50 lose $1,000/gain $1,050 bets would always turn "
+                      "down 50-50 bets of losing $20,000 or gaining any sum.",
+          # table I: turning down lose $100 / gain g at every wealth; for each loss L the largest G still turned down
+          "table1_g110": {400: 550, 600: 990, 800: 2090, 1000: float("inf"), 2000: float("inf")},
+          "table1_g101": {400: 400, 600: 600, 800: 800, 1000: 1010, 2000: 2320, 4000: 5750, 6000: 11810,
+                          8000: 34940, 10000: float("inf"), 20000: float("inf")},
+          # table II: turning down lose $100 / gain $110 only at wealth below $300,000, starting from $290,000
+          "table2_g110": {1000: 718_190, 2000: 12_210_880, 10000: 1_300_000_000}},
+)
+
+THALER_1981 = Table(
+    key="thaler_1981",
+    cite="Richard Thaler, \"Some Empirical Evidence on Dynamic Inconsistency\", Economics Letters 8(3): 201-207 "
+         "(1981)",
+    tag="Thaler (1981), via Frederick, Loewenstein and O'Donoghue (2002)",
+    where="as reported by Frederick, Loewenstein and O'Donoghue, JEL 40(2) (2002), p. 360",
+    read="Frederick, Loewenstein and O'Donoghue (2002)",
+    checked="2026-11-19",
+    data={"now": 15, "months": (1, 12, 120), "median_equivalent": (20, 50, 100), "annual_rate": (3.45, 1.20, 0.19),
+          "reversal": "$110 in 31 days over $100 in 30 days, but $100 today over $110 tomorrow"},
+    note="The rates are continuously compounded annual rates; the reversal is the textbook example of the same "
+         "survey's pattern.",
+)
+
+HOLT_LAURY_2005 = Table(
+    key="holt_laury_2005",
+    cite="Charles A. Holt and Susan K. Laury, \"Risk Aversion and Incentive Effects\", American Economic Review "
+         "92(5): 1644-1655 (2002); \"Risk Aversion and Incentive Effects: New Data without Order Effects\", "
+         "American Economic Review 95(3): 902-904 (2005)",
+    tag="Holt and Laury, AER (2002, 2005)",
+    where="Holt and Laury (2005), table 1",
+    read="the 2005 note (copy hosted at UCSD)",
+    checked="2026-11-19",
+    data={"menu": {"A": (2.00, 1.60), "B": (3.85, 0.10)},
+          "real_2002": {1: 5.2, 20: 6.0, 50: 6.8, 90: 7.2}, "hypothetical_2002": {20: 4.9, 50: 5.1, 90: 5.3},
+          "real_ordered_2004": {1: 6.1, 20: 7.1}, "real_unordered_2004": {1: 5.7, 20: 6.7},
+          "hypothetical_unordered_2004": {1: 5.6, 20: 5.7}, "subjects_2002": 208, "subjects_2004": 216,
+          "top_stakes": "the 90x treatment paid from $9.00 to $346.50"},
+    note="Average number of safe choices out of ten; a risk-neutral chooser makes four.",
+)
+
+HAYDEN_PLATT_2009 = Table(
+    key="hayden_platt_2009",
+    cite="Benjamin Y. Hayden and Michael L. Platt, \"The mean, the median, and the St. Petersburg paradox\", "
+         "Judgment and Decision Making 4(4): 256-272 (2009)",
+    tag="Hayden and Platt, JDM (2009)",
+    where="section 3 and figure 2",
+    read="the published article (journal.sjdm.org)",
+    checked="2026-11-19",
+    data={"real": {"n": 20, "median_bid": 1.75}, "hypothetical": {"n": 220, "median_bid": 1.50, "max_bid": 50_000,
+                                                                 "refused": 14, "below_1": 26, "at_1": 68,
+                                                                 "at_2": 43, "above_2": 56},
+          "truncated": {"tosses": (3, 5, 8, 10, 15), "ev": (2.50, 3.50, 5.0, 6.0, 8.50), "bids": "$1.50 or $2"},
+          "finding": "bids were typically lower than twice the smallest payoff"},
+)
+
+MADRIAN_SHEA_2001 = Table(
+    key="madrian_shea_2001",
+    cite="Brigitte C. Madrian and Dennis F. Shea, \"The Power of Suggestion: Inertia in 401(k) Participation and "
+         "Savings Behavior\", Quarterly Journal of Economics 116(4): 1149-1187 (2001)",
+    tag="Madrian and Shea, QJE (2001); NBER WP 7682",
+    where="NBER Working Paper 7682 (2000), pp. 10-11 and section on contribution rates",
+    read="the NBER working paper",
+    checked="2026-11-19",
+    data={"date": "1 April 1998", "default_rate": 0.03, "default_fund": "the money market fund",
+          "participation": {"auto-enrolled (3-15 months' tenure)": 0.86, "hired the year before, same tenure": 0.37},
+          "at_default": 0.76, "others_at_3pct": 0.10},
+    note="The published version's figures are close to the working paper's; these are the working paper's.",
+)
+
+THALER_BENARTZI_2004 = Table(
+    key="thaler_benartzi_2004",
+    cite="Richard H. Thaler and Shlomo Benartzi, \"Save More Tomorrow: Using Behavioral Economics to Increase "
+         "Employee Saving\", Journal of Political Economy 112(S1): S164-S187 (2004)",
+    tag="Thaler and Benartzi, JPE (2004)",
+    where="the abstract and the first implementation",
+    read="the article's abstract and summary",
+    checked="2026-11-19",
+    data={"before": 0.035, "after": 0.136, "months": 40},
+    note="The participants chose to join, so the rise is not a randomized effect.",
+)
+
+BARSKY_1997 = Table(
+    key="barsky_1997",
+    cite="Robert B. Barsky, F. Thomas Juster, Miles S. Kimball and Matthew D. Shapiro, \"Preference Parameters "
+         "and Behavioral Heterogeneity: An Experimental Approach in the Health and Retirement Study\", Quarterly "
+         "Journal of Economics 112(2): 537-579 (1997)",
+    tag="Barsky, Juster, Kimball and Shapiro, QJE (1997)",
+    where="the survey's income gambles; the abstract",
+    read="the NBER working paper's abstract and summary",
+    checked="2026-11-19",
+    data={"question": "a job with your current income for life, or one with a 50-50 chance of doubling it or cutting "
+                      "it by a third; then by a half, or by a fifth",
+          "cuts": (0.5, 1 / 3, 0.2), "mean_risk_tolerance": 0.25, "mean_eis": 0.2,
+          "correlated": "risk tolerance and the EIS are essentially uncorrelated across people"},
+)
+
+POST_2008 = Table(
+    key="post_2008",
+    cite="Thierry Post, Martijn J. van den Assem, Guido Baltussen and Richard H. Thaler, \"Deal or No Deal? "
+         "Decision Making under Risk in a Large-Payoff Game Show\", American Economic Review 98(1): 38-71 (2008)",
+    tag="Post, van den Assem, Baltussen and Thaler, AER (2008)",
+    where="the abstract",
+    read="the abstract",
+    checked="2026-11-19",
+    data={"finding": "risk aversion falls after contestants' expectations are shattered by opening high-value "
+                     "cases, or surpassed: the break-even effect; choices depend on the path, which points to "
+                     "reference dependence"},
+)
+
+MEHRA_PRESCOTT_1985 = Table(
+    key="mehra_prescott_1985",
+    cite="Rajnish Mehra and Edward C. Prescott, \"The Equity Premium: A Puzzle\", Journal of Monetary Economics "
+         "15(2): 145-161 (1985)",
+    tag="Mehra and Prescott, JME (1985)",
+    where="the abstract and introduction",
+    read="secondary summaries",
+    checked="2026-11-19",
+    data={"premium": 0.06, "period": (1889, 1978), "plausible_rra": 10},
+    note="About six points a year of excess return on stocks over short-term bonds; Mehra and Prescott took relative "
+         "risk aversion of ten or less as plausible, and the model with such values cannot produce it.",
+)
+
+PART7 = (BERNOULLI_1738, SAMUELSON_1937, ALLAIS_1953, ELLSBERG_1961, RABIN_2000, THALER_1981, HOLT_LAURY_2005,
+         HAYDEN_PLATT_2009, MADRIAN_SHEA_2001, THALER_BENARTZI_2004, BARSKY_1997, POST_2008, MEHRA_PRESCOTT_1985)
+ALL = {t.key: t for t in (*PART1, *PART3, *PART4, *PART5, *PART6, *PART7)}

@@ -89,6 +89,13 @@ FRED_SERIES = {
                          "ratio", "annual", "Penn World Table, Groningen Growth and Development Centre"),
     # Part 5: the population, for spending per head
     "B230RC0A052NBEA": ("Population (midperiod)", "thousands of persons", "annual", "U.S. Bureau of Economic Analysis"),
+    # Part 7: the Euler equation's data: real consumption, its price index and the Treasury bill rate
+    "PCECCA": ("Real personal consumption expenditures", "billions of chained 2017 dollars", "annual",
+               "U.S. Bureau of Economic Analysis"),
+    "DPCERG3A086NBEA": ("Personal consumption expenditures (implicit price deflator, chain-type price index)",
+                        "index 2017 = 100", "annual", "U.S. Bureau of Economic Analysis"),
+    "TB3MS": ("3-month Treasury bill secondary market rate, discount basis", "percent", "monthly",
+              "Board of Governors of the Federal Reserve System"),
 }
 # Part 5: personal consumption expenditures by type of product (NIPA tables 2.4.4 and 2.4.5), annual, 1929 on: the
 # fifteen categories that make up all of PCE, each as a price index (2017 = 100) and as spending (billions of dollars)
@@ -110,7 +117,7 @@ for _c, _name in PCE_CATEGORIES.items():
 FRED_RETRIEVED = {s: "2026-11-19" for s in (
     "GDPA", "GDIA", "PCECA", "GPDIA", "GCEA", "EXPGSA", "IMPGSA", "A033RC1A027NBEA", "A191RD3A086NBEA", "U1RATE",
     "U2RATE", "U4RATE", "U5RATE", "U6RATE", "CIVPART", "EMRATIO", "CPIAUCSL", "SUUR0000SA0", "PCEPI",
-    "LABSHPUSA156NRUG", "B230RC0A052NBEA", *(f"{c}{t}" for c in PCE_CATEGORIES for t in ("RG3A086NBEA",
+    "LABSHPUSA156NRUG", "B230RC0A052NBEA", "PCECCA", "DPCERG3A086NBEA", "TB3MS", *(f"{c}{t}" for c in PCE_CATEGORIES for t in ("RG3A086NBEA",
                                                                                          "RC1A027NBEA")))}
 
 SPF_FILES = ("median_rgdp_level", "median_rgdp_growth", "median_recess_level")

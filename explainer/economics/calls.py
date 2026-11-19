@@ -72,4 +72,15 @@ CALLS = {c.key: c for c in [
          ("C. C. Zimmerman, Quarterly Journal of Economics 47(1) (1932), as quoted by R. Anker, PERI WP 247 (2011)",
           "BEA via FRED (personal consumption expenditures by type of product)",
           "USDA ERS, Food Prices and Spending (2026), from the BLS Consumer Expenditure Survey")),
+    Call("bernoulli_1738", 7, "Daniel Bernoulli, in St Petersburg", "1738",
+         "a game with an infinite expected prize is worth a small, finite sum, more to the rich than to the poor: "
+         "people value money by the logarithm of their wealth; on his rule, his game (one coin first, doubling) is "
+         "worth about $6 to someone with $1,000 and about $11 to a millionaire",
+         "diminishing marginal utility: a gain means less the richer you are",
+         "in 2009, twenty students bidding real money paid a median $1.75 to play, and 220 people asked hypothetically "
+         "$1.50; their bids barely changed when the game was cut off after three tosses or after fifteen, which the "
+         "logarithm does not predict",
+         "partly right",
+         ("D. Bernoulli, Commentarii Academiae Scientiarum Imperialis Petropolitanae 5 (1738); Econometrica 22(1) "
+          "(1954)", "B. Y. Hayden and M. L. Platt, Judgment and Decision Making 4(4) (2009)")),
 ]}

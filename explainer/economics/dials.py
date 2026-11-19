@@ -117,8 +117,63 @@ DIALS = {d.key: d for d in [
              Estimate("Costa", 2001, "regression", "food Engel curves, 1919-35", 0.7, where="JPE 109(6), abstract",
                       checked="2026-11-19"),
          )),
-    Dial("eis", "elasticity of intertemporal substitution", "", (7, 23)),
-    Dial("risk_aversion", "relative risk aversion", "", (7, 23)),
+    Dial("eis", "elasticity of intertemporal substitution", "percent change in consumption growth per percentage "
+         "point of the real interest rate", (7, 22, 23), status="contested", checked="2026-11-19",
+         meaning="near zero in aggregate data, about a third for stockholders and near one for bondholders, about two "
+                 "from tax variation, and 1.5 or more in the calibrations of asset pricing; it decides how much "
+                 "saving responds to interest rates and to taxes on interest, and how strongly a change in the "
+                 "central bank's rate moves spending",
+         estimates=(
+             Estimate("Hall", 1988, "IV", "US aggregate consumption, twentieth century: \"no strong evidence\" that "
+                      "it is positive", 0.0, where="JPE 96(2): 339-357, abstract", checked="2026-11-19"),
+             Estimate("Barsky, Juster, Kimball and Shapiro", 1997, "survey", "HRS respondents: hypothetical choices "
+                      "between consumption paths, mean", 0.2, where="QJE 112(2), abstract (NBER WP 5213)",
+                      checked="2026-11-19"),
+             Estimate("Vissing-Jorgensen", 2002, "IV", "US stockholders, Consumer Expenditure Survey", 0.35, 0.3, 0.4,
+                      where="JPE 110(4): 825-853, abstract", checked="2026-11-19"),
+             Estimate("Vissing-Jorgensen", 2002, "IV", "US bondholders, Consumer Expenditure Survey", 0.9, 0.8, 1.0,
+                      where="JPE 110(4): 825-853, abstract", checked="2026-11-19"),
+             Estimate("Gruber", 2013, "IV", "variation in after-tax interest rates across households, CEX, two "
+                      "decades", 2.0, where="Quarterly Journal of Finance 3(1); NBER WP 11945, abstract",
+                      checked="2026-11-19"),
+             Estimate("Havranek", 2015, "meta-analysis", "2,735 estimates in 169 studies, corrected for selective "
+                      "reporting: macro data", 0.0, where="JEEA 13(6): 1180-1204, abstract", checked="2026-11-19"),
+             Estimate("Havranek", 2015, "meta-analysis", "the same, corrected: micro data on asset holders", 0.35,
+                      0.3, 0.4, where="JEEA 13(6): 1180-1204, abstract", checked="2026-11-19"),
+             Estimate("Bansal and Yaron", 2004, "calibration", "long-run risks: the value asset prices need", 1.5,
+                      where="Journal of Finance 59(4): 1481-1509, abstract", checked="2026-11-19"),
+         )),
+    Dial("risk_aversion", "relative risk aversion", "the percentage fall in marginal utility per percent rise in "
+         "consumption", (7, 22, 23), status="contested", checked="2026-11-19",
+         meaning="about one when read from consumption or labour supply, two to seven in finance's estimates, four "
+                 "from survey gambles over lifetime income, ten in the calibrations that fit asset prices; laboratory "
+                 "choices over a few dollars give a fraction of one, which expected utility cannot square with the "
+                 "rest (Rabin 2000).  How much insurance, how safe a pension, how large a precautionary buffer, and "
+                 "how big the welfare cost of business cycles all move with it",
+         estimates=(
+             Estimate("Holt and Laury", 2002, "lab", "real stakes of a few dollars: 5.2 safe choices, its CRRA "
+                      "interval", 0.28, 0.15, 0.41, where="AER 92(5), via Holt and Laury (2005), table 1; the "
+                      "interval computed for five safe choices", checked="2026-11-19"),
+             Estimate("Holt and Laury", 2002, "lab", "stakes times 90: 7.2 safe choices, its CRRA interval", 0.83,
+                      0.68, 0.97, where="as above; the interval for seven safe choices", checked="2026-11-19"),
+             Estimate("Chetty", 2006, "structural", "labour supply: wage and income elasticities from 33 studies, "
+                      "mean", 1.0, where="AER 96(5): 1821-1834, abstract; NBER WP 12067", checked="2026-11-19"),
+             Estimate("Elminejad, Havranek and Irsova", 2025, "meta-analysis", "1,021 Euler-equation estimates in 92 "
+                      "studies: economics, corrected for publication bias", 1.0,
+                      where="Journal of Economic Surveys 39(5): 2315-2333, abstract; IES WP 2022/14",
+                      checked="2026-11-19"),
+             Estimate("Elminejad, Havranek and Irsova", 2025, "meta-analysis", "the same: finance, corrected", 4.5,
+                      2.0, 7.0, where="as above", checked="2026-11-19"),
+             Estimate("Elminejad, Havranek and Irsova", 2025, "meta-analysis", "the same: the median reported "
+                      "estimate", 3.77, where="IES WP 2022/14, table 1", checked="2026-11-19"),
+             Estimate("Barsky, Juster, Kimball and Shapiro", 1997, "survey", "HRS respondents' gambles over lifetime "
+                      "income: one over the mean risk tolerance (0.25)", 4.0, where="QJE 112(2), abstract (NBER WP "
+                      "5213)", checked="2026-11-19"),
+             Estimate("Elminejad, Havranek and Irsova", 2025, "calibration", "446 calibrations in 200 studies: the "
+                      "median", 6.0, where="IES WP 2022/14, table 1", checked="2026-11-19"),
+             Estimate("Bansal and Yaron", 2004, "calibration", "long-run risks: the value asset prices need", 10.0,
+                      where="Journal of Finance 59(4): 1481-1509, abstract", checked="2026-11-19"),
+         )),
     Dial("capital_share", "output elasticity of capital", "", (8, 20)),
     Dial("markups", "markups over marginal cost", "price over marginal cost", (10, 43)),
     Dial("return_schooling", "return to a year of school", "proportional rise in earnings per year of schooling",
@@ -349,6 +404,32 @@ SHOWN = {
         ("USDA ERS's food spending by income quintile, 2024; BEA's personal consumption expenditures by type of "
          "product, 1929-2025 (FRED)", "data, shown with their sources; the elasticities drawn from them are "
          "computed on screen and labelled as such"),
+    ],
+    7: [
+        ("Nicolaus Bernoulli (1713), Cramer (1728), Daniel Bernoulli (1738); Fisher (1930); Samuelson (1937); "
+         "Koopmans (1960); von Neumann and Morgenstern (1944); Savage (1954); Allais (1953); Ellsberg (1961)",
+         "the theory's history, shown as history; no parameter is estimated"),
+        ("Arrow (1965); Pratt (1964); Mossin (1968); Merton (1969); Rothschild and Stiglitz (1970); Machina (1982); "
+         "Chew's weighted utility; Kreps and Porteus (1978); Epstein and Zin (1989); Strotz (1955-56); Pollak "
+         "(1968); Laibson (1997); Gilboa and Schmeidler (1989); Klibanoff, Marinacci and Mukerji (2005); Hansen and "
+         "Sargent (2001, 2008); Manski (2004)", "methods and models, shown for what they do"),
+        ("Kahneman and Tversky (1979); Tversky and Kahneman (1992)", "prospect theory in one card; loss aversion "
+         "and probability weighting enter the loss_present dial in Part 45"),
+        ("Rabin (2000); Rabin and Thaler (2001)", "a theorem: its tables are transcribed, and the CRRA calibration "
+         "is computed on screen"),
+        ("Thaler (1981); Imai, Rutter and Camerer (2021)", "evidence on present bias, shown for its direction; "
+         "present bias enters the loss_present dial in Part 45"),
+        ("Hayden and Platt (2009)", "bids for the St Petersburg game: a Called-it card "
+         "(explainer.economics.calls), not an estimate of a parameter"),
+        ("Post, van den Assem, Baltussen and Thaler (2008); Sydnor (2010)", "evidence on risk taking in a game show "
+         "and in deductibles, shown for its direction; the deductible's implied aversion is computed on "
+         "illustrative numbers"),
+        ("Mehra and Prescott (1985); Weil (1989)", "the equity premium and risk-free rate puzzles, stated; asset "
+         "pricing takes them up in Part 23"),
+        ("Madrian and Shea (2001); Thaler and Benartzi (2004)", "pension design, shown for what happened; default "
+         "effects enter the behavioural dials in Part 45"),
+        ("FRED's real consumption, PCE prices and Treasury bill rate, 1934-2025", "data: Hall's regression is "
+         "computed on screen and labelled as such, not entered as a row"),
     ],
 }
 
