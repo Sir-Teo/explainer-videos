@@ -8,11 +8,18 @@ from videos.stats.stats40.common import *  # noqa: F403
 class LogRank(StatsScene):
     def construct(self):
         self.card()
+        self.ask("At each event, the log-rank test compares group 1's deaths with...",
+                 ["the deaths expected from the risk sets", "zero"], 0,
+                 say="The log-rank test forms a two by two table at each event time. It compares group one's "
+                     "observed deaths with what?",
+                 reveal="With the deaths expected if the hazards were equal, given who was at risk. Observed minus "
+                        "expected, summed over events.")
         self.derive()
         self.table()
         self.result()
         self.weights()
         self.limits()
+        self.answer()
 
     def card(self):
         self.chapter(7, r"The log-rank test", r"Observed minus expected, \ at every event", lit=(1965, 1966), part=PART, said="Chapter seven. The log-rank test.")

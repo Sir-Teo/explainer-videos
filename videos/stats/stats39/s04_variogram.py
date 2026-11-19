@@ -9,12 +9,19 @@ from videos.stats.stats39.common import *  # noqa: F403
 class Variogram(StatsScene):
     def construct(self):
         self.card()
+        self.ask("A variogram's nugget represents...",
+                 ["measurement error and micro-scale variation", "the sill", "the range"], 0,
+                 say="A variogram plots how different values are at distance h. At distances near zero it may jump: "
+                     "the nugget. What does the nugget represent?",
+                 reveal="Measurement error and variation at scales smaller than the closest pair of sites: the name "
+                        "comes from gold nuggets in ore.")
         self.definition()
         self.cloud()
         self.parts()
         self.robust()
         self.aniso()
         self.world()
+        self.answer()
 
     def card(self):
         self.chapter(3, r"Variograms", r"How different are values a distance $h$ apart?", lit=(1962, 1985), part=PART, said="Chapter three. Variograms.")

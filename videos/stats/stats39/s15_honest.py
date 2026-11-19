@@ -8,11 +8,22 @@ from videos.stats.stats39.common import *  # noqa: F403
 class Honest(StatsScene):
     def construct(self):
         self.card()
+        self.ask("Kriging variances with estimated parameters plugged in as if known are...",
+                 ["too small", "too large", "exact"], 0,
+                 say="In practice we plug estimated covariance parameters into the kriging variance, as if they "
+                     "were known. Are the resulting intervals too narrow, too wide, or exact?",
+                 reveal="Too narrow: they ignore the uncertainty in the parameters. Check coverage with a "
+                        "cross-validation that matches the prediction task.")
         self.plugin()
         self.cv()
         self.meuse_check()
         self.board()
         self.checklist()
+        self.answer()
+        self.checkpoint([("Ripley's $K$ under complete spatial randomness?", r"$\pi r^2$"),
+                         ("Plug-in kriging variances?", "too small")],
+                        narration="Checkpoint. Points and honesty.",
+                        answers_narration="Pi r squared. And too small.")
 
     def card(self):
         self.chapter(14, r"Honest prediction", r"Do the intervals cover?", lit=(2023,), part=PART, said="Chapter fourteen. Honest prediction.")

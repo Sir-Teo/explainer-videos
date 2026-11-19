@@ -8,12 +8,23 @@ from videos.stats.stats38.common import *  # noqa: F403
 class Smoothing(StatsScene):
     def construct(self):
         self.card()
+        self.ask("Smoothed estimates, compared with filtered ones, are...",
+                 ["less uncertain", "more uncertain"], 0,
+                 say="The filter estimates the state from the past. The smoother, afterwards, uses the future as "
+                     "well. Are its estimates more or less uncertain?",
+                 reveal="Less uncertain: more data inform each state. The Rauch-Tung-Striebel smoother runs the "
+                        "filter backwards.")
         self.rts_()
         self.missing()
         self.likelihood()
         self.em()
         self.structural()
         self.apollo()
+        self.answer()
+        self.checkpoint([("Squared daily returns?", "autocorrelated: volatility clusters"),
+                         ("The Kalman gain grows when?", "measurement noise is small relative to state uncertainty")],
+                        narration="Checkpoint. Volatility and states.",
+                        answers_narration="Volatility clusters. And when the measurements are precise.")
 
     def card(self):
         self.chapter(8, r"Smoothing and learning", r"Using the future, \ and estimating the noise", lit=(1965, 1982), part=PART, said="Chapter eight. Smoothing, and learning the model.")

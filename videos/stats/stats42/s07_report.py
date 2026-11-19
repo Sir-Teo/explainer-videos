@@ -10,11 +10,23 @@ from videos.stats.stats42.common import *  # noqa: F403
 class SurveyReport(StatsScene):
     def construct(self):
         self.card()
+        self.ask("The graph may have missed a common cause. A sensitivity analysis reports...",
+                 ["how strong a hidden confounder must be to change the answer", "a smaller $p$-value"], 0,
+                 say="The estimate rests on the graph containing every common cause. What does a sensitivity "
+                     "analysis report?",
+                 reveal="How strong a hidden confounder would have to be to change the conclusion, in units a "
+                        "reader can judge. Then the report says what was assumed, in one honest sentence.")
         self.rv()
         self.contour()
         self.trial()
         self.memo_()
         self.truth()
+        self.answer()
+        self.checkpoint([("Complete cases with a third missing assume?", "missingness unrelated to the outcome, given covariates"),
+                         ("A sensitivity analysis reports?", "how strong a hidden confounder must be to change the answer")],
+                        narration="Checkpoint. Before the exams.",
+                        answers_narration="Missingness unrelated to the outcome. And the strength a hidden "
+                                          "confounder would need.")
 
     def card(self):
         self.chapter(6, r"Case 2: \ sensitivity and the report", r"How wrong could we be, \ and what do we say?", lit=(2021,), part=PART, said="Chapter six. How wrong could we be, and what do we tell the minister?")

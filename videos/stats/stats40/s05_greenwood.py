@@ -9,11 +9,22 @@ from videos.stats.stats40.s04_km import km_axes
 class Greenwood(StatsScene):
     def construct(self):
         self.card()
+        self.ask(r"A pointwise 95\% band read as covering the whole curve at once covers it...",
+                 [r"95\% of the time", "less often"], 1,
+                 say="Greenwood's formula gives a ninety-five percent band at each time. Read it as covering the "
+                     "whole survival curve at once. How often does it?",
+                 reveal="Less often: each time's ninety-five percent leaks a little. A simultaneous band, such as "
+                        "Hall and Wellner's, is wider.")
         self.formula()
         self.bands()
         self.transforms()
         self.simultaneous()
         self.board()
+        self.answer()
+        self.checkpoint([("Alive at study end after 3 years?", "right-censored: survived at least 3"),
+                         ("Kaplan--Meier's factor at an event?", "$1 - d/n$ among those at risk")],
+                        narration="Checkpoint. Censoring and survival.",
+                        answers_narration="Right-censored. And one minus d over n.")
 
     def card(self):
         self.chapter(4, r"Greenwood's variance", r"How sure is the staircase?", lit=(1926,), part=PART, said="Chapter four. Greenwood's variance.")

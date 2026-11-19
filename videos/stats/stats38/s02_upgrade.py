@@ -19,11 +19,18 @@ def mini(center, ys, color, title, y_range=None):
 class Upgrade(StatsScene):
     def construct(self):
         self.card()
+        self.ask(r"Which of these is \emph{not} stationary?",
+                 [r"an AR(1) with $\phi = 0.5$", "a random walk", "white noise"], 1,
+                 say="Part 17 assumed stationarity: a mean and covariances that don't change with time. Which of "
+                     "these is not stationary?",
+                 reveal="The random walk: its variance grows without limit as time goes on. It has no mean to "
+                        "return to.")
         self.recap()
         self.gallery()
         self.wold()
         self.ergodic()
         self.plan()
+        self.answer()
 
     def card(self):
         self.chapter(1, r"What Part 17 assumed", r"Stationary, \ short memory, \ constant variance, \ observed", lit=(1927, 1938), part=PART, said="Chapter one. What Part seventeen assumed.")

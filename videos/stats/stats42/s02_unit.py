@@ -22,12 +22,19 @@ def houses(center, n=5, s=0.42, treated=None, color=PROGC):
 class TrialUnit(StatsScene):
     def construct(self):
         self.card()
+        self.ask("A salt-substitute programme runs through each town's shops. Randomize...",
+                 ["adults", "towns"], 1,
+                 say="The first case: a salt substitute offered through each town's shops. To test it, do you "
+                     "randomize individual adults, or whole towns?",
+                 reveal="Towns. The programme works at the level of the shop, and neighbours talk: randomize at the "
+                        "level where the treatment acts and spills over.")
         self.estimand()
         self.unit()
         self.cornfield()
         self.pilot()
         self.icc()
         self.planning()
+        self.answer()
 
     def card(self):
         self.chapter(1, r"Case 1: \ what to randomize", r"Who gets the programme, \ and who decides?", lit=(1978,), part=PART, said="Chapter one. The first case: a trial to design. What should be randomized?")

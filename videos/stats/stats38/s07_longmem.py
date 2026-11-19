@@ -8,12 +8,19 @@ from videos.stats.stats38.common import *  # noqa: F403
 class LongMemory(StatsScene):
     def construct(self):
         self.card()
+        self.ask("With long memory, the standard error of the mean shrinks...",
+                 [r"like $1/\sqrt n$", r"more slowly than $1/\sqrt n$"], 1,
+                 say="Hurst's Nile: correlations that fade like a power, not an exponential. How fast does the "
+                     "standard error of the long-run mean shrink?",
+                 reveal="More slowly than one over root n. The long-run mean is far less certain than the textbook "
+                        "standard error claims.")
         self.model()
         self.acfs()
         self.estimate()
         self.mean()
         self.elsewhere()
         self.caveat()
+        self.answer()
 
     def card(self):
         self.chapter(6, r"Long memory", r"Correlations that fade like a power, \ not an exponential", lit=(1980, 1981), part=PART, said="Chapter six. Long memory.")

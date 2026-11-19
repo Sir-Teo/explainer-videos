@@ -8,12 +8,19 @@ from videos.stats.stats40.common import *  # noqa: F403
 class Lifetimes(StatsScene):
     def construct(self):
         self.card()
+        self.ask("Over a human life, the hazard of death is...",
+                 ["constant", "high in infancy, low in youth, then rising", "always rising"], 1,
+                 say="The hazard is the instantaneous rate of death among those still alive. Over a human life, "
+                     "what shape does it have?",
+                 reveal="A bathtub: high in infancy, low through youth, then rising steadily by Gompertz's law. The "
+                        "hazard shows shapes the density hides.")
         self.definitions()
         self.hazard_meaning()
         self.graunt()
         self.gompertz()
         self.sixty()
         self.shapes()
+        self.answer()
 
     def card(self):
         self.chapter(1, r"Lifetimes", r"Survival, \ hazard, \ and the link between them", lit=(1662, 1693, 1825), part=PART, said="Chapter one. Lifetimes.")

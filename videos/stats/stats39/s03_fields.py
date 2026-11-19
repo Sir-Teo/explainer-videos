@@ -17,10 +17,17 @@ def panel(vals, center, title, color):
 class Fields(StatsScene):
     def construct(self):
         self.card()
+        self.ask("Which cannot be a covariance function in two dimensions?",
+                 ["the exponential", "the Gaussian", r"the triangle, $\max(0, 1 - |h|)$"], 2,
+                 say="Not every function can be a covariance: it must make every variance non-negative. Which of "
+                     "these fails in two dimensions?",
+                 reveal="The triangle. It's a valid covariance on a line, but not in the plane, where some "
+                        "combinations of locations would get negative variance.")
         self.definitions()
         self.bochner()
         self.gallery()
         self.families()
+        self.answer()
 
     def card(self):
         self.chapter(2, r"Random fields", r"Which functions can be covariances?", lit=(1960,), part=PART, said="Chapter two. Random fields.")

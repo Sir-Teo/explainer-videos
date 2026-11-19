@@ -8,11 +8,29 @@ from videos.stats.stats39.common import *  # noqa: F403
 class Confounding(StatsScene):
     def construct(self):
         self.card()
+        self.wrong_idea("A spatial random effect adjusts for unmeasured spatial confounding",
+                        "It can even move the exposure's effect the wrong way: it's a warning, not a remedy",
+                        narration="Common practice in environmental epidemiology: add a spatial random effect, and "
+                                  "it adjusts for whatever spatial confounder you didn't measure.",
+                        right_narration="It doesn't, reliably. The random effect competes with the exposure for the "
+                                        "same spatial pattern, and can push its estimate either way. Spatial "
+                                        "structure in the residuals is a warning, not a remedy.")
+        self.ask("Exposure and a hidden confounder both vary smoothly. Which exposure variation is least confounded?",
+                 ["broad-scale", "fine-scale"], 1,
+                 say="Pollution and an unmeasured confounder, such as income, both vary smoothly across space. "
+                     "Which scale of variation in the exposure is least confounded?",
+                 reveal="Fine-scale variation, which a smooth confounder can't track. Designs that isolate it do "
+                        "better than adding a spatial random effect.")
         self.setting()
         self.chart()
         self.why_not()
         self.rsr()
         self.lessons()
+        self.answer()
+        self.checkpoint([(r"The SPDE gives Mat\'ern fields?", "sparse precision matrices"),
+                         ("Disease-map smoothing does what to the highest rates?", "pulls them down")],
+                        narration="Checkpoint. Scale and areas.",
+                        answers_narration="Sparse precision. And pulls them down.")
 
     def card(self):
         self.chapter(11, r"Spatial confounding", r"Does a spatial random effect adjust for what we did not measure?", lit=(2010,), part=PART, said="Chapter eleven. Spatial confounding.")

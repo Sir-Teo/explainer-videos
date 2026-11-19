@@ -8,6 +8,13 @@ from videos.stats.stats55.common import *  # noqa: F403
 class ExamTesting(ExamMixin, StatsScene):
     def construct(self):
         self.card()
+        self.wrong_idea("Hodges's estimator beats the MLE, so the MLE isn't optimal",
+                        "Superefficiency at a point costs risk nearby: the MLE is locally asymptotically minimax",
+                        narration="A classic exam trap. Hodges's estimator has smaller asymptotic variance than the "
+                                  "MLE at zero and the same elsewhere, so the MLE can't be optimal.",
+                        right_narration="Superefficiency at a point is paid for nearby: Hodges's estimator has huge "
+                                        "risk at parameters close to zero. Among regular estimators, and in the "
+                                        "local minimax sense, the MLE is optimal.")
         self.p5()
         self.p6()
 

@@ -8,12 +8,23 @@ from videos.stats.stats40.common import *  # noqa: F403
 class Parametric(StatsScene):
     def construct(self):
         self.card()
+        self.ask(r"An AFT coefficient of $\log 2$ means...",
+                 ["the hazard doubles", "lifetimes are stretched to twice as long"], 1,
+                 say="The accelerated failure time model is a regression for log lifetime. What does a coefficient "
+                     "of log two mean?",
+                 reveal="Lifetimes are stretched to twice as long: time runs at half speed. It's a statement about "
+                        "time, not about the hazard.")
         self.aft()
         self.likelihood()
         self.weibull()
         self.fits()
         self.curves()
         self.cure()
+        self.answer()
+        self.checkpoint([("Trending Schoenfeld residuals?", "non-proportional hazards"),
+                         ("Immortal time bias favours?", "the group defined by a later event")],
+                        narration="Checkpoint. Reading hazards.",
+                        answers_narration="Non-proportional hazards. And the group defined by a later event.")
 
     def card(self):
         self.chapter(12, r"Parametric and AFT models", r"When the shape is worth assuming", lit=(1972,), part=PART, said="Chapter twelve. Parametric and accelerated failure time models.")

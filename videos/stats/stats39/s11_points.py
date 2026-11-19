@@ -8,12 +8,19 @@ from videos.stats.stats39.common import *  # noqa: F403
 class Points(StatsScene):
     def construct(self):
         self.card()
+        self.ask("For a completely random point pattern, Ripley's $K(r)$ grows like...",
+                 [r"$\pi r^2$", "$r$", "a constant"], 0,
+                 say="Ripley's K counts the expected number of further points within distance r of a typical point, "
+                     "divided by the intensity. For a completely random pattern, how does it grow?",
+                 reveal="Like pi r squared, the area of the disc. Above it means clustering, like Snow's cholera "
+                        "deaths; below, repulsion.")
         self.snow_map()
         self.nearest()
         self.ripley()
         self.lplot()
         self.caveat()
         self.cox()
+        self.answer()
 
     def card(self):
         self.chapter(10, r"Point patterns", r"Where the events are", lit=(1855, 1976), part=PART, said="Chapter ten. Point patterns.")

@@ -10,12 +10,30 @@ from videos.stats.stats42.common import *  # noqa: F403
 class TrialSize(StatsScene):
     def construct(self):
         self.card()
+        self.wrong_idea("Plan the trial with the pilot's estimate of the intracluster correlation",
+                        "A small pilot's ICC is very noisy: plan for its plausible upper range",
+                        narration="A tempting shortcut: run a small pilot, estimate the intracluster correlation, "
+                                  "and plan the trial's size with it.",
+                        right_narration="A pilot's correlation estimate is very noisy. Plan with it, and the trial "
+                                        "is often too small. Plan for the upper end of what's plausible, from the "
+                                        "pilot and from published trials.")
+        self.ask("50 adults per town, intracluster correlation 0.05. Each town is worth about how many independent adults?",
+                 ["50", "about 15", "1"], 1,
+                 say="Fifty adults measured in each town, and pressures within a town correlate at point zero five. "
+                     "Each town is worth about how many independent adults?",
+                 reveal="About fifteen: fifty divided by a design effect of about three and a half. The correlation "
+                        "is small and its cost is large.")
         self.individual()
         self.deff()
         self.towns()
         self.tradeoff()
         self.sensitivity()
         self.power()
+        self.answer()
+        self.checkpoint([("A programme run through town shops: randomize?", "towns"),
+                         ("Design effect, 50 adults per town, ICC 0.05?", "about 3.5")],
+                        narration="Checkpoint. The trial.",
+                        answers_narration="Towns. And about three and a half.")
 
     def card(self):
         self.chapter(2, r"Case 1: \ how many towns", r"What does the correlation cost?", part=PART, said="Chapter two. How many towns?")

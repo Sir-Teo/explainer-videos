@@ -8,12 +8,19 @@ from videos.stats.stats38.common import *  # noqa: F403
 class Nonlinear(StatsScene):
     def construct(self):
         self.card()
+        self.ask("The state's distribution turns bimodal. Which filter can represent it?",
+                 ["the Kalman filter", "a particle filter"], 1,
+                 say="A nonlinear measurement makes the state's distribution bimodal. Which filter can represent "
+                     "that?",
+                 reveal="A particle filter: a cloud of weighted samples can take any shape. The Kalman filter's "
+                        "single Gaussian ellipse can't.")
         self.methods()
         self.benchmark()
         self.scores()
         self.pmcmc()
         self.hamilton_model()
         self.gdp()
+        self.answer()
 
     def card(self):
         self.chapter(9, r"Nonlinear filtering and regimes", r"When the Gaussian ellipse breaks", lit=(1989, 1993, 1997), part=PART, said="Chapter nine. Nonlinear filtering, and switching regimes.")

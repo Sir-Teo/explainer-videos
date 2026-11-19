@@ -8,6 +8,11 @@ from videos.stats.stats38.common import *  # noqa: F403
 class Volatility(StatsScene):
     def construct(self):
         self.card()
+        self.ask("Daily returns are nearly uncorrelated. Their squares are...",
+                 ["also uncorrelated", "strongly autocorrelated"], 1,
+                 say="The DAX's daily returns are nearly uncorrelated from day to day. What about their squares?",
+                 reveal="Strongly autocorrelated: calm days follow calm, wild days follow wild. Volatility "
+                        "clusters, and ARCH and GARCH model it.")
         self.returns()
         self.facts()
         self.model()
@@ -15,6 +20,7 @@ class Volatility(StatsScene):
         self.forecast_vol()
         self.var_()
         self.lesson()
+        self.answer()
 
     def card(self):
         self.chapter(5, r"Volatility", r"When the variance has a memory", lit=(1963, 1982, 1986), part=PART, said="Chapter five. Volatility.")

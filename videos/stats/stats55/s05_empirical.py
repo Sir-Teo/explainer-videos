@@ -10,6 +10,11 @@ class ExamEmpirical(ExamMixin, StatsScene):
         self.card()
         self.p7()
         self.p8()
+        self.checkpoint([("Indicators of half-lines: their VC dimension?", "1"),
+                         ("The median's influence function is bounded?", "yes: its sign times $1/(2f(m))$")],
+                        narration="Checkpoint. Empirical processes and efficiency.",
+                        answers_narration="One. And yes, bounded: the sign of x minus the median, over twice the "
+                                          "density there.")
 
     def card(self):
         self.chapter(4, r"Sitting IV: \ empirical processes and efficiency", r"Problems 7 and 8", lit=(1952, 1974, 1882), part=PART, said="Sitting four: empirical processes and efficiency. A bracketing bound, and an influence function on Newcomb's data.")

@@ -8,11 +8,18 @@ from videos.stats.stats40.common import *  # noqa: F403
 class NelsonAalen(StatsScene):
     def construct(self):
         self.card()
+        self.ask("Nelson--Aalen estimates the cumulative hazard by summing...",
+                 ["$d/n$ at each event time", "the survival estimates", "$n/d$"], 0,
+                 say="Nelson, studying failures of electrical equipment, estimated the cumulative hazard directly. "
+                     "By summing what?",
+                 reveal="D over n, deaths over those at risk, at each event time. Its log against log time is "
+                        "straight for a Weibull.")
         self.estimator()
         self.plot()
         self.compare()
         self.lifetable()
         self.diagnostic()
+        self.answer()
 
     def card(self):
         self.chapter(5, r"Nelson--Aalen", r"Estimate the hazard, \ not the survival", lit=(1969, 1978), part=PART, said="Chapter five. Nelson and Aalen.")

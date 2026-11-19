@@ -8,12 +8,19 @@ from videos.stats.stats38.common import *  # noqa: F403
 class Spectra(StatsScene):
     def construct(self):
         self.card()
+        self.ask("The spectrum of white noise is...",
+                 ["flat", "peaked at one frequency", "zero"], 0,
+                 say="Look at a series one frequency at a time: its spectrum. What does white noise's spectrum look "
+                     "like?",
+                 reveal="Flat: every frequency carries the same power, like white light. Memory shows up as a slope "
+                        "or a peak.")
         self.herglotz()
         self.sunspots()
         self.inconsistent()
         self.welch_mt()
         self.sun_spectrum()
         self.lesson()
+        self.answer()
 
     def card(self):
         self.chapter(2, r"Spectra", r"A series, \ one frequency at a time", lit=(1967, 1982), part=PART, said="Chapter two. Spectra.")

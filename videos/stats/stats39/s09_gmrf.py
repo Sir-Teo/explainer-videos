@@ -16,11 +16,18 @@ def grid_surface(vals, center, width, lo=-2.5, hi=2.5):
 class GMRF(StatsScene):
     def construct(self):
         self.card()
+        self.ask(r"The SPDE approach gives Mat\'ern fields a precision matrix that is...",
+                 ["dense", "sparse"], 1,
+                 say="Lindgren, Rue and Lindström wrote Matérn fields as solutions of a stochastic partial "
+                     "differential equation. What does their precision matrix look like?",
+                 reveal="Sparse: each location is linked only to its mesh neighbours. Sparse precision, not sparse "
+                        "covariance, and INLA computes with it fast.")
         self.markov()
         self.sparsity()
         self.spde()
         self.condition()
         self.inla()
+        self.answer()
 
     def card(self):
         self.chapter(8, r"Markov random fields", r"Sparse precision, \ not sparse covariance", lit=(1974, 2011), part=PART, said="Chapter eight. Markov random fields.")

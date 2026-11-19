@@ -8,6 +8,12 @@ from videos.stats.stats41.common import *  # noqa: F403
 class Weighting(StatsScene):
     def construct(self):
         self.card()
+        self.ask("Weighting respondents by one over their response probability is the mathematics of...",
+                 ["IPW for treatment effects", "least squares"], 0,
+                 say="Weight each respondent by one over their estimated chance of responding. What other method is "
+                     "that, mathematically?",
+                 reveal="Inverse probability weighting for causal effects: respondents stand in for the missing, as "
+                        "treated patients stand in for the untreated. Weighting is causal inference.")
         self.ipw()
         self.dictionary()
         self.aipw()
@@ -17,6 +23,7 @@ class Weighting(StatsScene):
         self.weights()
         self.balance()
         self.board()
+        self.answer()
 
     def card(self):
         self.chapter(5, r"Weighting is causal inference", r"Respondents stand in for the missing", lit=(1994,), part=PART, said="Chapter five. Weighting is causal inference.")

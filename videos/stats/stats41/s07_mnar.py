@@ -8,6 +8,12 @@ from videos.stats.stats41.common import *  # noqa: F403
 class MNAR(StatsScene):
     def construct(self):
         self.card()
+        self.ask("Wages are observed only for women who work. OLS on the workers is...",
+                 ["unbiased", "biased by selection"], 1,
+                 say="In the 1970s many married women didn't work for pay, so their wages were never seen. Is "
+                     "ordinary least squares on the workers unbiased for the wage equation?",
+                 reveal="No: biased by selection. Women who work aren't a random sample of women. Heckman modelled "
+                        "the reason for the selection, and got a Nobel prize for it.")
         self.problem()
         self.heckman()
         self.mills()
@@ -18,6 +24,11 @@ class MNAR(StatsScene):
         self.pattern()
         self.tipping()
         self.practice()
+        self.answer()
+        self.checkpoint([("Rubin's total variance?", r"$\bar W + (1 + 1/m)\,B$"),
+                         ("Wages seen only for workers: OLS on workers?", "selection-biased")],
+                        narration="Checkpoint. Imputation and selection.",
+                        answers_narration="W bar plus one plus one over m, times B. And selection-biased.")
 
     def card(self):
         self.chapter(6, r"Missing not at random", r"Model the reason, \ or measure how much it matters", lit=(1979,), part=PART, said="Chapter six. Missing not at random.")

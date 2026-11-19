@@ -12,6 +12,11 @@ class ExamEstimation(ExamMixin, StatsScene):
         self.card()
         self.p3()
         self.p4()
+        self.checkpoint([(r"The UMVUE of $e^{-\lambda}$ from Poisson counts: built from?", "the complete sufficient total, by Rao--Blackwell"),
+                         (r"One normal observation, squared error: is $X$ admissible for $\theta$?", "yes, in one dimension")],
+                        narration="Checkpoint, halfway to the end of the probability and estimation sections.",
+                        answers_narration="Rao-Blackwellize on the total. And yes: X is admissible in one "
+                                          "dimension, though not in three.")
 
     def card(self):
         self.chapter(2, r"Sitting II: \ estimation", r"Problems 3 and 4", lit=(1947, 1950, 1951), part=PART, said="Sitting two: estimation. A best unbiased estimator, one that cannot exist, and an admissibility proof.")

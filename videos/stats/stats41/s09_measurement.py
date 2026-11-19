@@ -8,6 +8,12 @@ from videos.stats.stats41.common import *  # noqa: F403
 class Measurement(StatsScene):
     def construct(self):
         self.card()
+        self.ask("Classical error in an exposure with reliability 0.5. The slope is attenuated to...",
+                 ["half", "a quarter", "nothing: it's unbiased"], 0,
+                 say="Classical measurement error: what we record is the truth plus independent noise, with "
+                     "reliability one half. What happens to the regression slope on the recorded exposure?",
+                 reveal="It's halved: attenuated by the reliability. Replicates or validation data let regression "
+                        "calibration or SIMEX undo it.")
         self.spearman()
         self.attenuation()
         self.picture()
@@ -20,6 +26,7 @@ class Measurement(StatsScene):
         self.seeded()
         self.other()
         self.board()
+        self.answer()
 
     def card(self):
         self.chapter(8, r"Measurement error", r"Values we see, \ but wrongly", lit=(1904, 1994), part=PART, said="Chapter eight. Measurement error.")

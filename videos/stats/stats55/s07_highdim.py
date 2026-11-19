@@ -10,6 +10,10 @@ class ExamHighDim(ExamMixin, StatsScene):
         self.card()
         self.p11()
         self.p12()
+        self.checkpoint([(r"The lasso's oracle rate for $s$-sparse $\beta$?", r"$s \log p / n$, under restricted eigenvalues"),
+                         ("Gaussian sequence model, sparse prior: posterior contraction rate?", "near the minimax rate")],
+                        narration="Last checkpoint before candidacy.",
+                        answers_narration="S log p over n. And near the minimax rate.")
 
     def card(self):
         self.chapter(6, r"Sitting VI: \ the lasso and the posterior", r"Problems 11 and 12", lit=(1996, 2000, 2009), part=PART, said="Sitting six, the last: high-dimensional statistics and Bayesian asymptotics. The lasso's oracle inequality, and a posterior contraction rate.")

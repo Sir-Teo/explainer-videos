@@ -9,11 +9,18 @@ from videos.stats.stats40.common import *  # noqa: F403
 class Frailty(StatsScene):
     def construct(self):
         self.card()
+        self.ask("With unmeasured frailty, the population's hazard declines over time because...",
+                 ["everyone's risk falls", "the frail die first"], 1,
+                 say="Each person's hazard is constant, but frailty varies between people. The population's hazard "
+                     "declines over time. Why?",
+                 reveal="The frail die first, and the survivors are the robust. Population hazards can fall while "
+                        "no individual's does.")
         self.vaupel()
         self.deceleration()
         self.shared()
         self.kidney()
         self.recurrent()
+        self.answer()
 
     def card(self):
         self.chapter(14, r"Frailty", r"Unmeasured differences in risk", lit=(1979,), part=PART, said="Chapter fourteen. Frailty.")

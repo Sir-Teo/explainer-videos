@@ -8,12 +8,23 @@ from videos.stats.stats39.common import *  # noqa: F403
 class Scaling(StatsScene):
     def construct(self):
         self.card()
+        self.ask("Vecchia's approximation conditions each value on...",
+                 ["all earlier values", "a few nearest earlier neighbours"], 1,
+                 say="The chain rule factors any joint density into conditionals. Vecchia's approximation makes "
+                     "each conditional cheap. How?",
+                 reveal="By conditioning each value on only a few nearest earlier neighbours. The cost becomes "
+                        "linear in n, and the approximation is often excellent.")
         self.vecchia()
         self.picture()
         self.accuracy()
         self.profile()
         self.big()
         self.others()
+        self.answer()
+        self.checkpoint([("Kriging at an observed site, no nugget?", "the observation itself"),
+                         ("Infill: variance and range separately?", "not identifiable: only a combination")],
+                        narration="Checkpoint. Kriging and Matérn.",
+                        answers_narration="The observation. And only a combination.")
 
     def card(self):
         self.chapter(7, r"Scaling up", r"A hundred thousand locations", lit=(1988, 2016), part=PART, said="Chapter seven. Scaling up.")

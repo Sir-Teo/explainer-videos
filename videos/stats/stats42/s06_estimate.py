@@ -8,6 +8,12 @@ from videos.stats.stats42.common import *  # noqa: F403
 class SurveyEstimate(StatsScene):
     def construct(self):
         self.card()
+        self.ask("Income, a confounder, is missing for over a third. Dropping those rows assumes...",
+                 ["the missingness is unrelated to the outcome, given the covariates", "nothing"], 0,
+                 say="Income, one of the confounders, is missing for more than a third of the survey. Analysing "
+                     "only the complete rows assumes what?",
+                 reveal="That whether income is missing is unrelated to the outcome once the covariates are "
+                        "accounted for. Imputation under missing at random assumes less.")
         self.holes()
         self.cc()
         self.impute()
@@ -15,6 +21,7 @@ class SurveyEstimate(StatsScene):
         self.balance()
         self.aipw()
         self.board()
+        self.answer()
 
     def card(self):
         self.chapter(5, r"Case 2: \ imputation and AIPW", r"Income is missing for more than a third", part=PART, said="Chapter five. The estimate: imputation for the holes, then a doubly robust estimator.")

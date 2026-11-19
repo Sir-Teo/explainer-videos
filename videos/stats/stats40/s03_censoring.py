@@ -8,12 +8,26 @@ from videos.stats.stats40.common import *  # noqa: F403
 class Censoring(StatsScene):
     def construct(self):
         self.card()
+        self.wrong_idea("Censored patients are missing data: drop them",
+                        "They survived at least that long: Kaplan--Meier uses that information",
+                        narration="A natural first instinct: patients whose outcome we never saw are missing data, "
+                                  "so drop them.",
+                        right_narration="That throws away the fact that they survived at least that long, and "
+                                        "biases survival downward. Censored patients stay in the risk set until "
+                                        "they leave it.")
+        self.ask("A patient still alive when the study ends, after 3 years. Their survival time is...",
+                 ["3 years", "at least 3 years"], 1,
+                 say="A patient is still alive when the study ends, three years after joining. What do we know "
+                     "about their survival time?",
+                 reveal="That it's at least three years: right-censored. Partial information, not missing "
+                        "information.")
         self.kinds()
         self.assumption()
         self.cohort()
         self.naive()
         self.truncation()
         self.entry_plot()
+        self.answer()
 
     def card(self):
         self.chapter(2, r"Censoring and truncation", r"What a study cannot see", lit=(1958,), part=PART, said="Chapter two. Censoring and truncation.")

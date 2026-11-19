@@ -8,12 +8,19 @@ from videos.stats.stats38.common import *  # noqa: F403
 class BlockBootstrap(StatsScene):
     def construct(self):
         self.card()
+        self.ask("The i.i.d. bootstrap on a positively autocorrelated series gives standard errors that are...",
+                 ["too small", "too large", "right"], 0,
+                 say="Apply the ordinary bootstrap, resampling observations independently, to a positively "
+                     "autocorrelated series. Are its standard errors too small, too large, or right?",
+                 reveal="Too small: shuffling breaks the memory, and the memory was inflating the variance. "
+                        "Resample blocks instead.")
         self.problem()
         self.blocks()
         self.numbers()
         self.nile()
         self.choose_b()
         self.board()
+        self.answer()
 
     def card(self):
         self.chapter(11, r"The block bootstrap", r"Resampling without breaking the memory", lit=(1989, 1994), part=PART, said="Chapter eleven. The block bootstrap.")

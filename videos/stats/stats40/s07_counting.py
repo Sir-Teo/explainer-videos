@@ -8,11 +8,18 @@ from videos.stats.stats40.common import *  # noqa: F403
 class Counting(StatsScene):
     def construct(self):
         self.card()
+        self.ask("The counting process $N(t)$ minus its compensator is...",
+                 ["a martingale", "a constant"], 0,
+                 say="Aalen recast survival analysis in counting. N of t counts events; its compensator integrates "
+                     "the hazard over those at risk. What's their difference?",
+                 reveal="A martingale: events minus their predictable rate. The martingale central limit theorem "
+                        "then gives every estimator in this part its large-sample theory.")
         self.definitions()
         self.path()
         self.martingale()
         self.many()
         self.payoff()
+        self.answer()
 
     def card(self):
         self.chapter(6, r"Counting processes", r"Events minus their compensator", lit=(1978,), part=PART, said="Chapter six. Counting processes.")

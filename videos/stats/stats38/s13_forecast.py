@@ -8,12 +8,22 @@ from videos.stats.stats38.common import *  # noqa: F403
 class Forecast(StatsScene):
     def construct(self):
         self.card()
+        self.ask("The M4 competition, 2018: which methods won?",
+                 ["pure machine learning", "hybrids and combinations", "the naive forecast"], 1,
+                 say="Makridakis's fourth competition, a hundred thousand series. Which methods did best?",
+                 reveal="Hybrids and combinations: the winner joined exponential smoothing with a neural network. "
+                        "Pure machine learning methods did poorly.")
         self.competitions()
         self.pretrained()
         self.rolling()
         self.table()
         self.leakage()
         self.lesson()
+        self.answer()
+        self.checkpoint([("$x$ Granger-causes $y$ means?", "past $x$ improves forecasts of $y$"),
+                         ("The i.i.d. bootstrap on autocorrelated data?", "SEs too small: resample blocks")],
+                        narration="Checkpoint. Many series.",
+                        answers_narration="Better forecasts. And resample blocks.")
 
     def card(self):
         self.chapter(12, r"The forecasting frontier", r"Big models, \ and honest evaluation", lit=(2018, 2020, 2024), part=PART, said="Chapter twelve. The forecasting frontier.")

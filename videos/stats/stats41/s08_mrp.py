@@ -8,6 +8,12 @@ from videos.stats.stats41.common import *  # noqa: F403
 class MRP(StatsScene):
     def construct(self):
         self.card()
+        self.ask("An Xbox poll, mostly young men. After MRP, its election forecast was...",
+                 ["wildly off", "close to the result"], 1,
+                 say="In 2012, Xbox players answered a daily election poll. The respondents were overwhelmingly "
+                     "young men. After multilevel regression and poststratification, how good was its forecast?",
+                 reveal="Close to the result, comparable with the leading poll averages. Model each cell, then "
+                        "reweight to the electorate: a terrible sample, rescued by a model.")
         self.xbox()
         self.idea()
         self.model()
@@ -18,6 +24,7 @@ class MRP(StatsScene):
         self.limits()
         self.cousins()
         self.board()
+        self.answer()
 
     def card(self):
         self.chapter(7, r"MRP", r"Multilevel regression and poststratification", lit=(1997, 2015), part=PART, said="Chapter seven. Multilevel regression and poststratification.")

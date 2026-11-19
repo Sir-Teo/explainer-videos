@@ -8,12 +8,23 @@ from videos.stats.stats39.common import *  # noqa: F403
 class Kriging(StatsScene):
     def construct(self):
         self.card()
+        self.ask("Kriging with no nugget, predicting at an observed site, returns...",
+                 ["the observation itself", "the field's mean"], 0,
+                 say="Kriging predicts by a weighted average of the observations. With no nugget, what does it "
+                     "predict at a site that was observed?",
+                 reveal="The observation itself: kriging interpolates exactly. With a nugget, it smooths, "
+                        "separating the field from the measurement error.")
         self.blup()
         self.kinds()
         self.meuse_map()
         self.cv()
         self.world()
         self.gp()
+        self.answer()
+        self.checkpoint([("Correlated sites treated as independent: SEs?", "too small"),
+                         ("A variogram's nugget?", "measurement error and micro-scale variation")],
+                        narration="Checkpoint. Fields and variograms.",
+                        answers_narration="Too small. And measurement error with micro-scale variation.")
 
     def card(self):
         self.chapter(4, r"Kriging", r"The best linear unbiased predictor", lit=(1963,), part=PART, said="Chapter four. Kriging.")

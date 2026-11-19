@@ -8,12 +8,19 @@ from videos.stats.stats39.common import *  # noqa: F403
 class SpaceTime(StatsScene):
     def construct(self):
         self.card()
+        self.ask("A separable space--time covariance assumes...",
+                 [r"$C(h, u) = C_s(h)\,C_t(u)$", "space and time interact"], 0,
+                 say="When a field changes in time, the covariance depends on a spatial lag and a time lag. What "
+                     "does the easy, separable choice assume?",
+                 reveal="That it's a product of a spatial and a temporal covariance. Convenient, and often wrong: "
+                        "weather moves, so space and time interact. Gneiting's covariances allow it.")
         self.separable()
         self.shapes()
         self.gneiting_row()
         self.world_acf()
         self.world_space()
         self.practice()
+        self.answer()
 
     def card(self):
         self.chapter(12, r"Space and time", r"Fields that change", lit=(2002,), part=PART, said="Chapter twelve. Space and time.")

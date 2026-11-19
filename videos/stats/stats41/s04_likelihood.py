@@ -8,6 +8,12 @@ from videos.stats.stats41.common import *  # noqa: F403
 class Likelihood(StatsScene):
     def construct(self):
         self.card()
+        self.ask("Under MAR, maximum likelihood on all the observed data...",
+                 ["can ignore the missingness mechanism", "must model the mechanism"], 0,
+                 say="New York's air quality: ozone missing on some days. If the missingness is at random given "
+                     "what was observed, must maximum likelihood model why values are missing?",
+                 reveal="No: under missing at random, with distinct parameters, the mechanism is ignorable. Use "
+                        "everything you saw, and the likelihood takes care of the rest.")
         self.air()
         self.em_steps()
         self.buck()
@@ -16,6 +22,11 @@ class Likelihood(StatsScene):
         self.why_em()
         self.louis()
         self.fiml()
+        self.answer()
+        self.checkpoint([("Missing more often for high earners: which mechanism?", "MNAR"),
+                         ("Mean imputation does what to the variance?", "shrinks it")],
+                        narration="Checkpoint. Mechanisms and sins.",
+                        answers_narration="Missing not at random. And it shrinks.")
 
     def card(self):
         self.chapter(3, r"Likelihood under MAR", r"Use everything you saw", lit=(1977,), part=PART, said="Chapter three. Likelihood under missing at random.")

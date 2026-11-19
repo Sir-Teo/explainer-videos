@@ -9,6 +9,12 @@ from videos.stats.stats39.common import *  # noqa: F403
 class Matern(StatsScene):
     def construct(self):
         self.card()
+        self.ask(r"One Mat\'ern field, observed ever more densely in a fixed region. Its variance and range...",
+                 ["can each be learned", "can't be separated: only a combination"], 1,
+                 say="Observe one Matérn field more and more densely in a fixed region. Can you learn its variance "
+                     "and its range separately?",
+                 reveal="No: only a combination of them, Zhang showed in 2004. Fortunately that combination is what "
+                        "governs prediction.")
         self.family()
         self.curves()
         self.spectrum()
@@ -16,6 +22,7 @@ class Matern(StatsScene):
         self.ridge()
         self.zhang()
         self.ridge_pred()
+        self.answer()
 
     def card(self):
         self.chapter(5, r"Mat\'ern and identifiability", r"What can one field tell us?", lit=(1960, 1999, 2004), part=PART, said="Chapter five. Matérn, and what cannot be learned.")
