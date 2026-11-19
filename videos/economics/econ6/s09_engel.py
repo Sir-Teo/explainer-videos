@@ -90,8 +90,8 @@ class Engel(VoiceoverScene):
             "from home kitchens to restaurants."
         ) as vo:
             self.play(FadeIn(ax), FadeIn(tag))
-            vo.wait_until("a")
             self.play(Create(path), run_time=3.0)
+            vo.wait_until("a")
             self.play(LaggedStart(*[FadeIn(m_) for m_ in marks], lag_ratio=0.3), FadeIn(side[0]))
             vo.wait_until("b")
             self.play(FadeIn(side[1]), FadeIn(side[2]))

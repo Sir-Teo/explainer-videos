@@ -110,6 +110,16 @@ class Intermission(SoundScene):
         def show_verdict(m, t):
             m.set_opacity(1.0 if t >= times[-1] + 0.3 else 0.0)
 
+        intro = label(r"one dot for each of fifteen kinds of spending: \\ its price relative to all spending, "
+                      r"across; \ how much is bought per head, up", font_size=24, color=WHITE)
+        intro.move_to(a.c2p(-1.0, 2.3))
+
+        def show_intro(m, t):
+            # in over the first second and a half, held, out by the ninth second: the opening years barely move
+            o = float(np.clip(t / 1.5, 0, 1) * np.clip((9.0 - t) / 1.5, 0, 1))
+            m.set_opacity(o)
+            m.move_to(a.c2p(-1.0, 2.3) + UP * 0.15 * (1 - o))
+
         tag = data_tag(r"BEA, personal consumption expenditures by type of product, 1929--2025 (FRED)", corner=DL,
                        font_size=13).to_edge(UP, buff=0.12).to_edge(LEFT, buff=0.3)
         stag = note(r"sound: the relative price of recreational goods, \ year by year (computed)", font_size=13,
@@ -125,11 +135,12 @@ class Intermission(SoundScene):
                 snd.drive(nm, follow)
             snd.drive(year, set_year)
             snd.drive(fit, show_fit)
+            snd.drive(intro, show_intro)
             snd.drive(verdict, show_verdict)
-            snd.show(ax, trails, dots, names, year, legend, fit, verdict)
+            snd.show(ax, trails, dots, names, year, legend, fit, verdict, intro)
             self.play(FadeIn(ax), FadeIn(legend), run_time=1.2)
             snd.wait_until("film_end")
-            self.play(*[FadeOut(m) for m in (ax, trails, dots, names, year, legend, fit, verdict, tag, stag)],
+            self.play(*[FadeOut(m) for m in (ax, trails, dots, names, year, legend, fit, verdict, intro, tag, stag)],
                       run_time=1.0)
             story = point_cards([
                 (r"a price falls", r"two effects: \ cheaper relative to, \\ and richer", SUB),
