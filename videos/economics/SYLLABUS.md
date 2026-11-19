@@ -2955,6 +2955,7 @@ Young Economist*.
 | 15 | built, English | *Spillovers.* Agora gains `public` (the externality market and Pigou's tax, Coase's bargain with transaction costs, public goods, typed players in the shared pot with punishment, Gordon's fishery, Weitzman's comparison, Vickrey's bottleneck, Arthur's lock-in); the Data Room gains CEDS sulphur dioxide via Our World in Data and the transcribed Coase (1960), Cheung (1973), Schmalensee and Stavins (2013), Duranton and Turner (2011) and Currie and Walker (2011); a new dial (traffic's response to roads) and the acid-rain *Called it?* |
 | 16 | built, English | *Auctions.* Agora gains `auctions` (first-price bids with reserves and risk aversion, five formats on the same draws, Myerson's reserve, the winner's curse, Vickrey's prices for slots and the generalized second price, the exposure problem, demand reduction against Vickrey's rule); the Data Room gains the transcribed Binmore and Klemperer (2002), Klemperer (2002), Bazerman and Samuelson (1983), Cramton and Schwartz (2000), Ostrovsky and Schwarz (2009), Garbade and Ingber (2005) and the FCC's incentive auction; the intermission plays FRED's 3-month bill rate; a new dial (what a reserve adds), the Dutch 3G *Called it?*, and the winner's curse in the Facts |
 | 17 | built, English | *Markets by Design.* Agora gains `matching` (deferred acceptance either side asking, the Boston rule, blocking pairs and every stable matching, manipulation checks, top trading cycles, kidney cycles and chains, Clarke's pivot rule, the bilateral-trade bound, the assignment game's core, a lottery-based school study); the Data Room gains the crude marriage rate via Our World in Data and the transcribed Roth (2012) and exam-school and Denver charter estimates; a new dial (what a sought-after school adds) and Roth's stability *Called it?* |
+| 18 | built, English | *Social Choice and Welfare.* Agora gains `choice` (plurality, runoff, instant runoff, Borda, Condorcet and Copeland; agendas; Borda's failure of independence; Geanakoplos's pivotal voter; single peaks; bloc manipulation; Atkinson's family; the two veils; Scitovsky's reversal; Sen's liberal paradox); the Data Room gains V-Dem's electoral democracy index via Our World in Data and the transcribed values of a statistical life (DOT, EPA, Ashenfelter and Greenstone) and Duverger's law; a new dial (the value of a statistical life) and Duverger's *Called it?* |
 
 **Corrections found while building Part 1** (the plan's draft, written from memory, against the sources): Bastiat's
 Paris passage is in *Economic Sophisms*, First Series, ch. 18 (1845), not the *Harmonies*; Hume's is/ought passage is
@@ -3138,3 +3139,14 @@ from the 2011 working paper's Table 4, not the published tables, which were not 
 marriage rate (the oldest matching market), since no NRMP series is in the Data Room. Refugee placement is given as
 the authors' predicted range (roughly 40 to 70 percent higher employment), not as an experimental result. Chen and
 Kesten's parallel mechanism is said to be used in many provinces, not most.
+
+**Corrections found while building Part 18.** Discounting is part of chapter 10 (cost-benefit analysis) rather than a
+chapter of its own, so capabilities is chapter 12, the Dials 13, the practice chapter 14 and the frontier 15. The
+planned second dial (inequality aversion implied by tax schedules) is left for Part 41, where optimal tax
+schedules are built; this part opens only the value-of-a-statistical-life dial, in 2024 dollars by the CPI-U. The intermission is
+V-Dem's electoral democracy index (version 16) for the world and four countries. The practice chapter covers the
+American and British guidance on discount rates and weights (Circular A-4 of 2003 and 2023, restored to the 2003
+version by executive order in 2025) and the voting reforms and bans since 2018, with Alaska's system kept by voters in
+2024 and again in November 2026. Arrow's paper is 1950 (*JPE*) and the book 1951. The Borda manipulation shown is the
+lie that wins outright (A E C B D), not one that only ties; the rules break ties by letter, and the search now checks
+each result with the letters' order reversed.

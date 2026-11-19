@@ -54,15 +54,15 @@ class Intermission(SoundScene):
 
         idx = {int(y): k for k, y in enumerate(film["years"])}
         notes_ = [
-            (label(r"1848: \ revolutions across Europe", font_size=17, color="#7BD88F").move_to(ax.ax.c2p(1848, 0.55)),
+            (label(r"1848: \ revolutions across Europe", font_size=17, color="#7BD88F").move_to(ax.ax.c2p(1840, 0.64)),
              t_of[idx[1848]] - 0.5, t_of[idx[1848]] + 5.0),
             (label(r"1918--28: \ women vote in Britain", font_size=17, color="#F2788F").move_to(ax.ax.c2p(1905, 0.86)),
              t_of[idx[1918]] - 0.5, t_of[idx[1928]] + 4.0),
-            (label(r"1940--44: \ France occupied", font_size=17, color="#7BD88F").move_to(ax.ax.c2p(1925, 0.12)),
+            (label(r"1940--44: \ France occupied", font_size=17, color="#7BD88F").move_to(ax.ax.c2p(1985, 0.2)),
              t_of[idx[1940]] - 0.5, t_of[idx[1944]] + 4.0),
             (label(r"1950: \ India's republic; \ 1975--77: \ the Emergency", font_size=17,
-                   color="#C9A0FF").move_to(ax.ax.c2p(1945, 0.95)), t_of[idx[1950]] - 0.5, t_of[idx[1977]] + 4.0),
-            (label(r"1965: \ the US Voting Rights Act", font_size=17, color="#9FB8F2").move_to(ax.ax.c2p(1990, 0.97)),
+                   color="#C9A0FF").move_to(ax.ax.c2p(1940, 1.0)), t_of[idx[1950]] - 0.5, t_of[idx[1977]] + 4.0),
+            (label(r"1965: \ the US Voting Rights Act", font_size=17, color="#9FB8F2").move_to(ax.ax.c2p(2000, 0.9)),
              t_of[idx[1965]] - 0.5, t_of[idx[1965]] + 5.0),
             (label(rf"{film['world_peak_year']}: \ the world's peak", font_size=17, color="#F2C14E").move_to(
                 ax.ax.c2p(1995, 0.3)), t_of[idx[film['world_peak_year']]] - 0.5,

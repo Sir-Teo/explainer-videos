@@ -251,4 +251,54 @@ PARTS = [
               ("The Island's planted truths", "explainer/economics/island.py"),
               ("The Data Room's sources", "explainer/economics/data/SOURCES.md")),
     ),
+    Part(
+        n=18, level="U", widget="vote", prereq=(5, 9, 11, 17),
+        question="Can the wants of many people be added up into what society wants?",
+        story="The part opens with Condorcet's discovery in 1785 that a majority can prefer A to B, B to C and C to "
+              "A, and Kenneth Arrow's proof in 1950 that the trouble is not majority rule: every rule fails. The "
+              "viewer sees thirty-eight islanders' ballots give five winners under five rules, then follows Borda "
+              "against Condorcet and the agenda setter, Arrow's theorem proved by the pivotal voter, the ways out "
+              "through single peaks and May's theorem, strategic voting with Called it? on Duverger's law, and Sen's "
+              "case for comparing people. After an intermission of two centuries of democracy in V-Dem's data, the "
+              "part builds welfare functions from Bentham to Rawls through Atkinson's epsilon and Okun's leaky "
+              "bucket, Harsanyi's veil against Rawls's, Scitovsky's reversal and the Paretian liberal, cost-benefit "
+              "analysis with distributional weights and the discount rate, the value of a statistical life and a new "
+              "dial on it, capabilities and the Human Development Index, the rules regulators and voters actually "
+              "use, and a frontier on behavioural welfare, quadratic voting and preference aggregation for AI.",
+        handoff="Part 19 opens Act V on growth; Part 45 returns to behavioural welfare; Part 47 to voting and "
+                "parties; Part 48 to discounting the climate; Part 58 to scoring a bill with a value of a statistical "
+                "life.",
+        outside="Part 5: preferences and utility; Part 7: risk aversion and discounting; Part 9: Pareto efficiency; "
+                "Part 17: mechanisms and Gibbard-Satterthwaite's cousin, safe truth. Chapter 7 uses power means; "
+                "chapter 10 the present value of a stream.",
+        objectives={
+            "U": ["Compute the winner of one profile under plurality, the runoff, instant runoff, Borda's count and "
+                  "Condorcet's rule, and show how the agenda decides a majority cycle.",
+                  "State Arrow's conditions and theorem, Black's median voter theorem and May's theorem, and explain "
+                  "what each way out gives up.",
+                  "Explain the value of a statistical life, where its estimates come from and what it is not."],
+            "M": ["Prove Arrow's theorem by the pivotal voter and the median voter theorem.",
+                  "Compute Atkinson's equally distributed equivalent and index for any epsilon, and the switch between "
+                  "Harsanyi's and Rawls's choices behind the veil.",
+                  "Check Kaldor and Hicks's compensation test both ways, and show Scitovsky's reversal and Sen's "
+                  "liberal paradox."],
+            "D": ["Read the evidence on the value of a statistical life by design, and the case for and against "
+                  "distributional weights and a low discount rate."],
+            "I": ["Explain the parameters a regulatory analysis sets (the discount rate, distributional weights, the "
+                  "value of a statistical life) and who sets them."],
+        },
+        results=[
+            ("Borda's count", r"s(c) = \textstyle\sum_i \big(m - \text{rank}_i(c)\big)"),
+            ("Atkinson's equivalent", r"y_\varepsilon = \Big(\tfrac1n \textstyle\sum_i "
+                                      r"y_i^{\,1-\varepsilon}\Big)^{1/(1-\varepsilon)},"
+                                      r"\ A_\varepsilon = 1 - y_\varepsilon / \bar y"),
+            ("Okun's leaky bucket", r"\text{leak} \le 1 - (y_{\text{poor}} / y_{\text{rich}})^{\varepsilon}"),
+            ("Ramsey's rule", r"r = \delta + \eta\, g"),
+            ("Value of a statistical life", r"\text{VSL} = \Delta w / \Delta p"),
+        ],
+        U=(0, 1, 2, 3, 4, 5, 6, "s08_intermission", 7, 8, 9, 10, 11, 12), D=(13, 15), I=(14,),
+        also=(("Agora's social choice module", "explainer/economics/agora/choice.py"),
+              ("The Island's planted truths", "explainer/economics/island.py"),
+              ("The Data Room's sources", "explainer/economics/data/SOURCES.md")),
+    ),
 ]

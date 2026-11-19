@@ -2,8 +2,9 @@ from __future__ import annotations
 
 from videos.economics.econ18.common import *  # noqa: F403
 
-SHOW = {"LKA": (r"Sri Lanka", WELF, UP), "GNQ": (r"Equatorial Guinea", CYCLE, DOWN), "CUB": (r"Cuba", HARS, UP),
-        "USA": (r"United States", MONEY, DOWN), "CRI": (r"Costa Rica", RAWLS, UP), "QAT": (r"Qatar", LIFE, UP)}
+SHOW = {"LKA": (r"Sri Lanka", WELF, UP, RIGHT * 0.75), "GNQ": (r"Equatorial Guinea", CYCLE, DOWN, ORIGIN),
+        "CUB": (r"Cuba", HARS, LEFT, DOWN * 0.3), "USA": (r"United States", MONEY, DOWN, ORIGIN),
+        "CRI": (r"Costa Rica", RAWLS, UP, ORIGIN), "QAT": (r"Qatar", LIFE, RIGHT, ORIGIN)}
 
 
 class Capabilities(VoiceoverScene):
@@ -59,18 +60,20 @@ class Capabilities(VoiceoverScene):
                         for r in h["rows"] if 600 <= r["gni"] <= 150000 and 50 <= r["le"] <= 86])
         named = h["named"]
         marks = {}
-        for code, (name, c, side) in SHOW.items():
+        for code, (name, c, side, nudge) in SHOW.items():
             r = named[code]
             p = ax.ax.c2p(np.log10(r["gni"]), r["le"])
             d = Dot(p, radius=0.09, color=c)
             t = label(rf"{name}: \ \${r['gni']:,.0f}, \ {r['le']:.1f} years".replace(",", "{,}"), font_size=16,
-                      color=c).next_to(p, side, buff=0.12)
+                      color=c).next_to(p, side, buff=0.12).shift(nudge)
+            t.add_background_rectangle(color=BACKGROUND, opacity=0.85, buff=0.04)
             marks[code] = VGroup(d, t)
         lk, gq = named["LKA"], named["GNQ"]
         gap = DoubleArrow(ax.ax.c2p(np.log10(gq["gni"]) + 0.03, gq["le"]), ax.ax.c2p(np.log10(lk["gni"]) + 0.03,
                                                                                      lk["le"]),
                           buff=0.1, color=E.ACCENT, stroke_width=3, tip_length=0.15)
         gl = label(rf"{lk['le'] - gq['le']:.0f} years", font_size=18, color=E.ACCENT).next_to(gap, RIGHT, buff=0.1)
+        gl.add_background_rectangle(color=BACKGROUND, opacity=0.85, buff=0.04)
         src = data_tag(r"UNDP, \ Human Development Report 2025 data", corner=DR, font_size=12)
         with self.voiceover(
             "The data show why it matters. <bookmark mark='a'/> Each dot is a country in 2023: income per head "

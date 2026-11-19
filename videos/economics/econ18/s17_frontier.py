@@ -3,7 +3,7 @@ from __future__ import annotations
 from videos.economics.econ18.common import *  # noqa: F403
 
 
-def votes_square(n, color, cell=0.28):
+def votes_square(n, color, cell=0.36):
     """n votes cost n^2 credits: an n-by-n square of cells."""
     g = VGroup(*[Square(cell, stroke_color=color, stroke_width=1.5, fill_color=color, fill_opacity=0.35)
                  for _ in range(n * n)])
@@ -57,7 +57,9 @@ class Frontier(VoiceoverScene):
                       for n in (1, 2, 3, 4)])
         for g in sq:
             g.arrange(DOWN, buff=0.15)
-        sq.arrange(RIGHT, buff=0.6, aligned_edge=DOWN).move_to(UP * 1.2)
+        sq.arrange(RIGHT, buff=0.7, aligned_edge=DOWN).move_to(UP * 1.25)
+        head = label(r"quadratic voting: \ a budget of credits, \ and each extra vote costs more", font_size=28,
+                     color=E.ACCENT).to_edge(UP, buff=0.35)
         rows = VGroup(
             label(r"the $n$th vote costs $n^2 - (n-1)^2 = 2n - 1$ credits more", font_size=23, color=RULE),
             label(r"so each voter buys votes until the next costs more than the issue is worth to them", font_size=22),
@@ -67,7 +69,7 @@ class Frontier(VoiceoverScene):
                   r"weak point", font_size=21, color=GREY_A),
             label(r"Colorado's House Democrats ranked spending bills this way in 2019; \ a court later required the "
                   r"votes be public", font_size=21, color=E.ACCENT),
-        ).arrange(DOWN, buff=0.25).next_to(sq, DOWN, buff=0.45)
+        ).arrange(DOWN, buff=0.25).next_to(sq, DOWN, buff=0.4)
         tag = published_tag(r"Lalley and Weyl, AEA P\&P 108 (2018); \ Posner and Weyl, \emph{Radical Markets} "
                             r"(2018)", corner=DR, font_size=12)
         with self.voiceover(
@@ -82,9 +84,9 @@ class Frontier(VoiceoverScene):
             "votes and pay less. <bookmark mark='f'/> In 2019 the Democrats in Colorado's House used it to rank "
             "competing spending bills; a court later required that the votes be made public."
         ) as vo:
-            self.play(FadeIn(tag))
+            self.play(FadeIn(head), FadeIn(tag), FadeIn(sq[0], shift=UP * 0.1))
             vo.wait_until("a")
-            self.play(LaggedStart(*[FadeIn(g, shift=UP * 0.1) for g in sq], lag_ratio=0.5), run_time=3)
+            self.play(LaggedStart(*[FadeIn(g, shift=UP * 0.1) for g in sq[1:]], lag_ratio=0.5), run_time=3)
             for mk, r in zip("bcdef", rows):
                 vo.wait_until(mk)
                 self.play(FadeIn(r, shift=UP * 0.1))

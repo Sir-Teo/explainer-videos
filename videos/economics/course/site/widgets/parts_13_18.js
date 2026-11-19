@@ -423,4 +423,96 @@
             "your browser; nothing you do here is stored or sent.",
     });
   };
+
+  // ---- Part 18: social choice -----------------------------------------------------------------------------------
+  W.vote = function (el) {
+    // the island's ballots of Part 18 (explainer.economics.agora.choice: plurality, runoff, instant_runoff, borda,
+    // condorcet_winner): four kinds of ballot over five plans; the reader sets how many islanders cast each, and the
+    // page counts them under five rules, with Borda's points and each plan's head-to-head wins
+    var C5 = ["A", "B", "C", "D", "E"], NAME = ["fish feast", "fruit feast", "dance", "boat race", "market fair"];
+    var COL = ["#F2C14E", "#7EC8F5", "#F2788F", "#7BD88F", "#C9A0FF"];
+    var TYPES = [[0, 4, 3, 1, 2], [1, 3, 4, 2, 0], [2, 4, 3, 1, 0], [3, 2, 1, 4, 0]];   // A E D B C, B D E C A, ...
+    function prof(v) { return [v.n0, v.n1, v.n2, v.n3].map(function (n, i) { return { n: n, r: TYPES[i] }; }); }
+    function argbest(t, keep) {
+      // the highest count among those kept; ties go to the later letter, as in Agora
+      var b = -1;
+      for (var c = 0; c < 5; c++) if (keep[c] && (b < 0 || t[c] >= t[b])) b = c;
+      return b;
+    }
+    function tally(p, keep) {
+      var t = [0, 0, 0, 0, 0];
+      p.forEach(function (b) { for (var k = 0; k < 5; k++) if (keep[b.r[k]]) { t[b.r[k]] += b.n; break; } });
+      return t;
+    }
+    function beats(p, a, b) {
+      var x = 0;
+      p.forEach(function (q) { if (q.r.indexOf(a) < q.r.indexOf(b)) x += q.n; });
+      return x;
+    }
+    function rules(p) {
+      var all = [1, 1, 1, 1, 1], tot = p.reduce(function (s, b) { return s + b.n; }, 0), out = {};
+      var t = tally(p, all);
+      out.plurality = argbest(t, all);
+      var order = [0, 1, 2, 3, 4].sort(function (a, b) { return t[b] - t[a] || b - a; });
+      var f1 = order[0], f2 = order[1];
+      out.runoff = beats(p, f1, f2) >= beats(p, f2, f1) ? f1 : f2;
+      var keep = all.slice();
+      for (;;) {
+        var tt = tally(p, keep), top = argbest(tt, keep), left = keep.reduce(function (s, x) { return s + x; }, 0);
+        if (2 * tt[top] > tot || left === 1) { out.irv = top; break; }
+        var lo = -1;
+        for (var c = 0; c < 5; c++) if (keep[c] && (lo < 0 || tt[c] < tt[lo] || (tt[c] === tt[lo] && c < lo))) lo = c;
+        keep[lo] = 0;
+      }
+      var pts = [0, 0, 0, 0, 0];
+      p.forEach(function (b) { b.r.forEach(function (c, k) { pts[c] += b.n * (4 - k); }); });
+      out.borda = argbest(pts, all);
+      out.points = pts;
+      var wins = [0, 0, 0, 0, 0];
+      for (var a = 0; a < 5; a++) for (var b = 0; b < 5; b++) if (a !== b && beats(p, a, b) > beats(p, b, a)) wins[a]++;
+      out.wins = wins;
+      out.condorcet = wins.indexOf(4);
+      out.first = t;
+      return out;
+    }
+    function nm(c) { return c < 0 ? "none (a cycle or a tie)" : C5[c] + ", the " + NAME[c]; }
+    QB.widget(el, {
+      title: "One island, five rules",
+      sub: "Four kinds of ballot rank the island's five plans: A E D B C, B D E C A, C E D B A and D C B E A (best " +
+           "first; A the fish feast, B the fruit feast, C the dance, D the boat race, E the market fair). Set how " +
+           "many islanders cast each, and see who wins under plurality, a runoff, instant runoff, Borda's count and " +
+           "Condorcet's head-to-head rule. Part 18 starts from 12, 11, 8 and 7.",
+      panels: 2, height: 300,
+      controls: [
+        { k: "n0", label: "Ballots A E D B C (fish first)", min: 0, max: 30, step: 1, value: 12 },
+        { k: "n1", label: "Ballots B D E C A (fruit first)", min: 0, max: 30, step: 1, value: 11 },
+        { k: "n2", label: "Ballots C E D B A (dance first)", min: 0, max: 30, step: 1, value: 8 },
+        { k: "n3", label: "Ballots D C B E A (boat race first)", min: 0, max: 30, step: 1, value: 7 },
+      ],
+      draw: function (g, v, s) {
+        var p = prof(v), r = rules(p);
+        s.r = r;
+        var mx = Math.max.apply(null, r.points.concat([1]));
+        var a = g[0].axes({ x: [-0.6, 4.6], y: [0, mx * 1.15], title: "Borda's points (4 for a first place ... 0 for " +
+                            "a last)", xlabel: "A / B / C / D / E" });
+        a.bars([0, 1, 2, 3, 4], r.points, 0.6, { color: function (i) { return COL[i]; } });
+        var b = g[1].axes({ x: [-0.6, 4.6], y: [0, 4.4], title: "Head-to-head wins (of 4): 4 is a Condorcet winner",
+                            xlabel: "A / B / C / D / E" });
+        b.bars([0, 1, 2, 3, 4], r.wins, 0.6, { color: function (i) { return COL[i]; } });
+        b.hline(4, { color: GREY_HINT });
+      },
+      readout: function (v, s) {
+        var r = s.r;
+        if (!r) return [];
+        var ws = [r.plurality, r.runoff, r.irv, r.borda, r.condorcet], d = {};
+        ws.forEach(function (x) { if (x >= 0) d[x] = 1; });
+        return [["plurality", nm(r.plurality)], ["runoff (top two)", nm(r.runoff)], ["instant runoff", nm(r.irv)],
+                ["Borda's count", nm(r.borda)], ["Condorcet (beats every other)", nm(r.condorcet)],
+                ["different winners", String(Object.keys(d).length)]];
+      },
+      note: "With 12, 11, 8 and 7 the five rules pick five different plans (Part 18, chapter 1). Arrow's theorem says " +
+            "no rule escapes such trouble everywhere; Condorcet's rule can even find no winner. Ties go to the later " +
+            "letter, as in Agora. Computed in your browser; nothing you do here is stored or sent.",
+    });
+  };
 })();

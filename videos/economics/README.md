@@ -1,12 +1,12 @@
 # Economics, Built (经济学，从零搭建)
 
-**Status (2026-11-19): Parts 1 to 17, [*Who Feeds Paris?*](econ1/README.md), [*The Scissors*](econ2/README.md),
+**Status (2026-11-19): Parts 1 to 18, [*Who Feeds Paris?*](econ1/README.md), [*The Scissors*](econ2/README.md),
 [*The Measure*](econ3/README.md), [*The Evidence*](econ4/README.md), [*What People Want*](econ5/README.md),
 [*Demand*](econ6/README.md), [*Time and Risk*](econ7/README.md), [*The Firm*](econ8/README.md),
 [*The Invisible Hand, Proved*](econ9/README.md), [*The Price Maker*](econ10/README.md), [*Games*](econ11/README.md),
 [*Competition among the Few*](econ12/README.md), [*Lemons and Signals*](econ13/README.md),
-[*Incentives*](econ14/README.md), [*Spillovers*](econ15/README.md), [*Auctions*](econ16/README.md) and [*Markets by Design*](econ17/README.md), are built in
-English (Acts I to III are complete, Act IV under way), each with its computed score,
+[*Incentives*](econ14/README.md), [*Spillovers*](econ15/README.md), [*Auctions*](econ16/README.md), [*Markets by Design*](econ17/README.md) and
+[*Social Choice and Welfare*](econ18/README.md), are built in English (Acts I to IV are complete), each with its computed score,
 lab and game; the shared code
 (Agora, the Island, the Facts, the Dials, the Data Room, the instruments and the score) is in `explainer/economics/`.** This file is the plan; the standard every part meets, the devices and all
 sixty-eight parts chapter by chapter are in [`SYLLABUS.md`](SYLLABUS.md), with progress in its §9. The decisions the

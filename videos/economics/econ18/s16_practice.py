@@ -71,9 +71,9 @@ class Practice(VoiceoverScene):
 
     def ballots(self):
         cards = point_cards([
-            (r"Australia", r"the House by instant \\ runoff since 1918", VOTE["C"]),
-            (r"Maine", r"ranked ballots from 2018, \\ after a referendum", VOTE["C"]),
-            (r"Alaska", r"top four and ranked ballots \\ from 2022; \ kept in 2024 and 2026", VOTE["C"]),
+            (r"Australia", r"the House by instant \\ runoff since 1918", VOTE["B"]),
+            (r"Maine", r"ranked ballots from 2018, \\ after a referendum", VOTE["B"]),
+            (r"Alaska", r"top four and ranked ballots \\ from 2022; \ kept in 2024 and 2026", VOTE["B"]),
             (r"Fargo", r"approval voting from 2020: \\ tick every candidate you accept", VOTE["E"]),
             (r"North Dakota", r"banned approval and \\ ranked voting in 2025", CYCLE),
             (r"Florida, \ Tennessee", r"the first state bans on \\ ranked voting, \ 2022", CYCLE),
@@ -85,8 +85,8 @@ class Practice(VoiceoverScene):
             "Voting rules are chosen too, and fought over. <bookmark mark='a'/> Australia has elected its House of "
             "Representatives by instant runoff since 1918. Maine adopted ranked ballots by referendum and first used "
             "them in 2018. Alaska combined a top-four primary with ranked ballots from 2022; voters kept the system "
-            "by fewer than eight hundred votes in 2024, and again in 2026. <bookmark mark='b'/> Fargo, in North Dakota, adopted approval "
-            "voting, in which you tick every candidate you find acceptable, and used it from 2020. "
+            "by fewer than eight hundred votes in 2024, and again in 2026. <bookmark mark='b'/> Fargo, in North "
+            "Dakota, adopted approval voting, in which you tick every candidate you find acceptable, and used it from 2020. "
             "<bookmark mark='c'/> In 2025 North Dakota banned approval and ranked voting. Florida and Tennessee had "
             "passed the first state bans on ranked voting in 2022. <bookmark mark='d'/> Since each rule can pick a "
             "different winner from the same ballots, the choice of rule is itself political."

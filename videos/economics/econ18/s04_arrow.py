@@ -94,12 +94,14 @@ class ArrowTheorem(VoiceoverScene):
             self.play(FadeIn(steps[2]))
             for k in range(n):
                 new = column(("b",) + tuple(x for x in base[k] if x != "b"), xs[k], head=rf"voter {k + 1}")
+                jump = pv["positions"][k + 1] != pv["positions"][k]
                 anims = [Transform(cols[k], new)]
-                if pv["positions"][k + 1] != pv["positions"][k]:
+                if jump:
                     anims.append(Transform(soc, column(soc_rank(pv["positions"][k + 1]), 4.6, head=r"society",
                                                        color=E.ACCENT)))
-                    anims.append(Indicate(cols[k], color=CYCLE))
                 self.play(*anims, run_time=1.0)
+                if jump:
+                    self.play(Indicate(soc, color=CYCLE, scale_factor=1.08), run_time=0.8)
                 if k == pv["pivot"]:
                     vo.wait_until("d")
                     self.play(FadeIn(steps[3]), cols[k][0].animate.set_stroke(CYCLE, width=5))

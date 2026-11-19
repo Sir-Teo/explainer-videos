@@ -76,7 +76,7 @@ class Veil(VoiceoverScene):
         verdict = VGroup(
             label(r"Rawls: \ A, \ whatever $\varepsilon$", font_size=21, color=RAWLS),
             label(rf"Harsanyi: \ B below {v['cross']:.1f}, \ A above", font_size=21, color=HARS),
-            label(r"the veils differ by one number: \ how much you fear the bottom", font_size=19,
+            label(r"the veils differ by one number: \\ how much you fear the bottom", font_size=20,
                   color=E.ACCENT),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.25).next_to(ax, RIGHT, buff=0.5).shift(UP * 0.3)
         with self.voiceover(

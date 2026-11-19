@@ -29,16 +29,15 @@ class Welfare(VoiceoverScene):
 
     def two_ends(self):
         w = load("welfare")
-        ax = plane([0, 6], [0, 90], center=LEFT * 2.6 + DOWN * 0.2, x_length=6.4, y_length=5.0, yticks=[0, 20, 40, 60,
-                                                                                                         80],
-                   ylabel=r"income, \ baskets a week")
+        ax = plane([0, 6], [0, 90], center=LEFT * 3.8 + DOWN * 0.2, x_length=5.4, y_length=5.0,
+                   yticks=[0, 20, 40, 60, 80], ylabel=r"income, \ baskets a week")
         bs = bars(ax, w["incomes"])
         mean = VGroup(seg(ax, 0.3, w["mean"], 5.7, w["mean"], color=HARS, width=3, dashed=True),
-                      label(rf"mean {w['mean']:.0f}", font_size=18, color=HARS).next_to(ax.ax.c2p(5.7, w["mean"]), UP,
-                                                                                       buff=0.08))
+                      label(rf"mean {w['mean']:.0f}", font_size=18, color=HARS).next_to(ax.ax.c2p(5.7, w["mean"]),
+                                                                                       RIGHT, buff=0.08))
         low = VGroup(seg(ax, 0.3, w["min"], 5.7, w["min"], color=RAWLS, width=3, dashed=True),
-                     label(rf"minimum {w['min']:.0f}", font_size=18, color=RAWLS).next_to(ax.ax.c2p(4.6, w["min"]),
-                                                                                         UP, buff=0.08))
+                     label(rf"minimum {w['min']:.0f}", font_size=18, color=RAWLS).next_to(ax.ax.c2p(5.7, w["min"]),
+                                                                                         RIGHT, buff=0.08))
         rows = VGroup(
             label(r"Bentham: \ add up everyone's utility", font_size=23, color=HARS),
             label(r"if utility were income, \ only the total would count: \ the mean", font_size=21, color=GREY_A),
@@ -47,10 +46,11 @@ class Welfare(VoiceoverScene):
             label(r"between them: \ utility that grows ever more slowly with income", font_size=23, color=WELF),
             MathTex(r"u(y) = \frac{y^{\,1-\varepsilon}}{1-\varepsilon}, \qquad \varepsilon = 1:\ u = \log y",
                     font_size=32, color=WELF),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.25).to_edge(RIGHT, buff=0.4).shift(UP * 0.2)
+        ).arrange(DOWN, aligned_edge=LEFT, buff=0.25)
         for r in rows:
-            if r.width > 6.0:
-                r.width = 6.0
+            if r.width > 5.9:
+                r.width = 5.9
+        rows.arrange(DOWN, aligned_edge=LEFT, buff=0.25).to_edge(RIGHT, buff=0.35).shift(UP * 0.2)
         head = label(r"five islanders' incomes", font_size=26, color=E.ACCENT).to_edge(UP, buff=0.3).to_edge(LEFT,
                                                                                                            buff=0.6)
         with self.voiceover(
@@ -108,7 +108,7 @@ class Welfare(VoiceoverScene):
         t, idx = w["table"], w["index"]
         rows = VGroup(*[label(rf"$\varepsilon = {k}$: \ {t[k]:.1f}, \ Atkinson index {idx[k]:.2f}", font_size=20,
                               color=c) for k, c in (("0.0", HARS), ("1.0", WELF), ("2.0", WELF), ("5.0", RAWLS))])
-        rows.arrange(DOWN, aligned_edge=LEFT, buff=0.1).move_to(ea).shift(UP * 1.0 + RIGHT * 0.8)
+        rows.arrange(DOWN, aligned_edge=LEFT, buff=0.1).move_to(ea).shift(UP * 1.45 + RIGHT * 1.3)
         box = SurroundingRectangle(rows, buff=0.12, color=GREY_D, fill_color=BACKGROUND, fill_opacity=0.9,
                                    stroke_width=1)
         head = label(r"the equally distributed equivalent: \ the equal income society values as highly", font_size=23,
@@ -151,15 +151,19 @@ class Welfare(VoiceoverScene):
         bucket = VGroup(Polygon([-0.35, 0.3, 0], [0.35, 0.3, 0], [0.26, -0.3, 0], [-0.26, -0.3, 0],
                                 stroke_color=MONEY, stroke_width=3, fill_color=MONEY, fill_opacity=0.25))
         bucket.move_to(rich.get_right() + RIGHT * 0.8)
-        drops = VGroup(*[Dot(radius=0.04, color=MONEY) for _ in range(5)])
-        rows = VGroup(*[label(rf"$\varepsilon = {e}$: \ up to {say} of it may leak, \ and the move still helps",
-                              font_size=22, color=c)
-                        for e, say, c in (("0", r"none", HARS), ("\\tfrac12", rf"{lk['0.5'] * 100:.0f}\%", WELF),
-                                          ("1", rf"{lk['1.0'] * 100:.0f}\%", WELF),
-                                          ("2", rf"{lk['2.0'] * 100:.1f}\%", RAWLS))])
+        x0_, x1_ = rich.get_right()[0] + 0.8, poor.get_left()[0] - 0.8
+        drops = VGroup(*[Dot([x, rich.get_center()[1] - 0.55, 0], radius=0.045, color=MONEY)
+                         for x in np.linspace(x0_ + 0.6, x1_ - 0.6, 9)])
+        rows = VGroup(
+            label(r"$\varepsilon = 0$: \ none of it may leak: \ a basket is a basket", font_size=22, color=HARS),
+            *[label(rf"$\varepsilon = {e}$: \ up to {say} of it may leak, \ and the move still helps", font_size=22,
+                    color=c)
+              for e, say, c in ((r"\tfrac12", rf"{lk['0.5'] * 100:.0f}\%", WELF),
+                                ("1", rf"{lk['1.0'] * 100:.0f}\%", WELF),
+                                ("2", rf"{lk['2.0'] * 100:.1f}\%", RAWLS))])
         rows.arrange(DOWN, aligned_edge=LEFT, buff=0.22).move_to(DOWN * 1.2)
         foot = label(r"every measure of inequality, \ the Gini coefficient too, \ holds a judgment like this one",
-                     font_size=22, color=GREY_A).to_edge(DOWN, buff=0.4)
+                     font_size=22, color=GREY_A).to_edge(DOWN, buff=0.75)
         tag = published_tag(r"Okun, \emph{Equality and Efficiency: The Big Tradeoff} (1975)", corner=DR,
                             font_size=13)
         with self.voiceover(
@@ -175,9 +179,8 @@ class Welfare(VoiceoverScene):
             self.play(FadeIn(head), FadeIn(rich), FadeIn(poor), FadeIn(lab), FadeIn(tag))
             vo.wait_until("a")
             self.play(FadeIn(bucket))
-            drops.arrange(DOWN, buff=0.15).next_to(bucket, DOWN, buff=0.1)
-            self.play(bucket.animate.move_to(poor.get_left() + LEFT * 0.8), FadeIn(drops, lag_ratio=0.3),
-                      run_time=2.5)
+            self.play(bucket.animate.move_to(poor.get_left() + LEFT * 0.8),
+                      LaggedStart(*[FadeIn(d, shift=DOWN * 0.15) for d in drops], lag_ratio=0.4), run_time=2.5)
             vo.wait_until("b")
             self.play(FadeIn(rows[0]))
             vo.wait_until("c")

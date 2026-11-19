@@ -582,6 +582,31 @@ brackets on screen.
 | propensity score; offer; always-taker | 倾向得分；录取通知；始终接受者 |
 | exam school; charter school | 考试选拔学校；特许学校 |
 
+## Part 18
+
+| English | 中文 |
+|---|---|
+| social choice; social welfare function | 社会选择；社会福利函数 |
+| plurality; two-round runoff; instant runoff (ranked-choice voting) | 相对多数制；两轮决选制；即时决选（排序复选制） |
+| Borda count; Condorcet winner; Condorcet's paradox (majority cycle) | 博尔达计数；孔多塞赢家；孔多塞悖论（多数循环） |
+| agenda setter; approval voting; quadratic voting | 议程设定者；赞成投票制；平方投票 |
+| Arrow's impossibility theorem; unrestricted domain; independence of irrelevant alternatives; non-dictatorship | 阿罗不可能定理；无限制定义域；无关选项独立性；非独裁 |
+| pivotal voter; single-peaked preferences; the median voter theorem | 关键投票人；单峰偏好；中位投票人定理 |
+| May's theorem; anonymity; neutrality; positive responsiveness | 梅定理；匿名性；中立性；正向响应 |
+| the Gibbard-Satterthwaite theorem; strategic voting; Duverger's law | 吉伯德-萨特思韦特定理；策略性投票；迪韦尔热定律 |
+| interpersonal comparisons of utility | 效用的人际比较 |
+| utilitarianism; maximin; the difference principle; the veil of ignorance; the original position | 功利主义；最大最小原则；差异原则；无知之幕；原初状态 |
+| inequality aversion; equally distributed equivalent income; the Atkinson index | 不平等厌恶；平均分配等价收入；阿特金森指数 |
+| Okun's leaky bucket | 奥肯漏桶 |
+| the Pareto principle; compensation test; Kaldor-Hicks efficiency; the Scitovsky reversal | 帕累托原则；补偿检验；卡尔多-希克斯效率；西托夫斯基逆转 |
+| the Paretian liberal (the liberal paradox) | 帕累托自由悖论（自由主义悖论） |
+| cost-benefit analysis; willingness to pay; distributional weights | 成本收益分析；支付意愿；分配权重 |
+| social discount rate; the Ramsey rule; pure time preference | 社会贴现率；拉姆齐规则；纯时间偏好 |
+| the value of a statistical life; identified and statistical lives | 统计生命价值；可识别生命与统计生命 |
+| capabilities; functionings; the Human Development Index | 可行能力；功能性活动；人类发展指数 |
+| regulatory impact analysis; Circular A-4; the Green Book | 监管影响分析；A-4号通告；《绿皮书》 |
+| behavioural welfare economics; preference aggregation; reinforcement learning from human feedback | 行为福利经济学；偏好加总；基于人类反馈的强化学习 |
+
 ## Names
 
 | English | 中文 |
@@ -802,3 +827,13 @@ brackets on screen.
 | Herbert Scarf; Martin Shubik; Marilda Sotomayor | 赫伯特·斯卡夫；马丁·舒比克；玛丽尔达·索托马约尔 |
 | Atila Abdulkadiroğlu; Tayfun Sönmez; Utku Ünver; Parag Pathak; Joshua Angrist | 阿蒂拉·阿卜杜勒卡迪尔奥卢；泰丰·瑟恩梅兹；乌特库·于恩韦尔；帕拉格·帕塔克；约书亚·安格里斯特 |
 | Fuhito Kojima; Yusuke Narita; Yan Chen; Onur Kesten; Gary Becker | 小岛武仁；成田悠辅；Yan Chen（中文名待核）；奥努尔·凯斯滕；加里·贝克尔 |
+| Marquis de Condorcet; Jean-Charles de Borda; Kenneth Arrow; Duncan Black; Anthony Downs | 孔多塞侯爵；让-夏尔·德·博尔达；肯尼斯·阿罗；邓肯·布莱克；安东尼·唐斯 |
+| Kenneth May; Richard McKelvey; John Geanakoplos; Allan Gibbard; Maurice Duverger; William Riker | 肯尼斯·梅；理查德·麦凯尔维；约翰·吉纳科普洛斯；艾伦·吉伯德；莫里斯·迪韦尔热；威廉·赖克 |
+| Lionel Robbins; Amartya Sen; Peter Hammond; Claude d'Aspremont; Louis Gevers | 莱昂内尔·罗宾斯；阿马蒂亚·森；彼得·哈蒙德；克洛德·达斯普勒蒙；路易·热弗斯 |
+| Jeremy Bentham; John Rawls; John Harsanyi; Anthony Atkinson; Arthur Okun | 杰里米·边沁；约翰·罗尔斯；约翰·海萨尼；安东尼·阿特金森；阿瑟·奥肯 |
+| Norman Frohlich; Joe Oppenheimer; Vilfredo Pareto; Nicholas Kaldor; John Hicks; Tibor Scitovsky | 诺曼·弗罗利克；乔·奥本海默；维尔弗雷多·帕累托；尼古拉斯·卡尔多；约翰·希克斯；蒂博尔·西托夫斯基 |
+| Louis Kaplow; Steven Shavell; Frank Ramsey; Nicholas Stern; William Nordhaus; Jules Dupuit | 路易斯·卡普洛；史蒂文·沙维尔；弗兰克·拉姆齐；尼古拉斯·斯特恩；威廉·诺德豪斯；朱尔·杜皮伊 |
+| Thomas Schelling; Richard Thaler; Sherwin Rosen; Orley Ashenfelter | 托马斯·谢林；理查德·塞勒；舍温·罗森；奥利·阿申费尔特 |
+| Mahbub ul Haq; Martin Ravallion; Martha Nussbaum | 马赫布卜·乌尔·哈克；马丁·拉瓦雷；玛莎·努斯鲍姆 |
+| Douglas Bernheim; Antonio Rangel; Steven Lalley; Glen Weyl; Eric Posner | 道格拉斯·伯恩海姆；安东尼奥·兰格尔；史蒂文·拉利；格伦·韦尔；埃里克·波斯纳 |
+| Anand Siththaranjan; Cassidy Laidlaw; Vincent Conitzer | Anand Siththaranjan（中文名待核）；Cassidy Laidlaw（中文名待核）；文森特·科尼策 |

@@ -20,9 +20,9 @@ class CBA(VoiceoverScene):
         c = load("cba")
         (wa, ya, ga), (wf, yf, gf) = c["who"]
         people = VGroup(
-            VGroup(islander(wa, 0.8), label(rf"income {ya:.0f}", font_size=19, color=GREY_A),
+            VGroup(islander(wa, 0.8, name=True), label(rf"income {ya:.0f}", font_size=19, color=GREY_A),
                    label(rf"gains {ga:.0f} baskets' worth", font_size=21, color=WELF)).arrange(DOWN, buff=0.1),
-            VGroup(islander(wf, 0.8), label(rf"income {yf:.0f}", font_size=19, color=GREY_A),
+            VGroup(islander(wf, 0.8, name=True), label(rf"income {yf:.0f}", font_size=19, color=GREY_A),
                    label(rf"loses {-gf:.0f}", font_size=21, color=CYCLE)).arrange(DOWN, buff=0.1),
         ).arrange(RIGHT, buff=2.4).move_to(UP * 1.7)
         head = label(r"a new jetty: \ what each would pay for it, \ or must be paid to accept it", font_size=25,

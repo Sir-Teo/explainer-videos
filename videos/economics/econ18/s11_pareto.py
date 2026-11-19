@@ -64,16 +64,16 @@ class Pareto(VoiceoverScene):
         (a1, f1), (b1, g1) = sc["split_12"]
         (a2, f2), (b2, g2) = sc["split_21"]
         go = VGroup(
-            label(r"from 1 to 2: \ Bo gains, \ Ana loses", font_size=21, color=WELF),
+            label(r"from 1 to 2: \ Bo gains, \ Ana loses", font_size=23, color=WELF),
             label(rf"share state 2's goods: \ Ana {a1:.2f} fish, \ {f1:.2f} fruit \ ($\ge 6$); \ "
-                  rf"Bo {b1:.2f}, \ {g1:.2f} \ ($> 6$)", font_size=18, color=GREY_A),
-            label(r"the test says: \ better", font_size=21, color=WELF),
+                  rf"Bo {b1:.2f}, \ {g1:.2f} \ ($> 6$)", font_size=20, color=GREY_A),
+            label(r"the test says: \ better", font_size=23, color=WELF),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.1)
         back = VGroup(
-            label(r"from 2 back to 1: \ Ana gains, \ Bo loses", font_size=21, color=CYCLE),
+            label(r"from 2 back to 1: \ Ana gains, \ Bo loses", font_size=23, color=CYCLE),
             label(rf"share state 1's goods: \ Ana {a2:.2f} fish, \ {f2:.2f} fruit \ ($\ge 4$); \ "
-                  rf"Bo {b2:.2f}, \ {g2:.2f} \ ($\ge 21$)", font_size=18, color=GREY_A),
-            label(r"the test says: \ better \ again", font_size=21, color=CYCLE),
+                  rf"Bo {b2:.2f}, \ {g2:.2f} \ ($\ge 21$)", font_size=20, color=GREY_A),
+            label(r"the test says: \ better \ again", font_size=23, color=CYCLE),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.1)
         VGroup(go, back).arrange(DOWN, aligned_edge=LEFT, buff=0.35).move_to(DOWN * 1.75)
         foot = label(r"Scitovsky, \ 1941: \ the test can approve a move and its reversal; \ and compensation unpaid "
@@ -105,19 +105,19 @@ class Pareto(VoiceoverScene):
         name = {"n": r"nobody reads it", "p": r"the prude reads it", "l": r"the lewd reads it"}
         pos = {"n": UP * 1.6, "p": LEFT * 3.2 + DOWN * 1.4, "l": RIGHT * 3.2 + DOWN * 1.4}
         nodes = {k: label(v, font_size=24, color=WHITE).move_to(pos[k] + DOWN * 0.2) for k, v in name.items()}
-        edges = [("n", "p", r"the prude's own choice", RULE), ("l", "n", r"the lewd's own choice", RULE),
-                 ("p", "l", r"Pareto: \ both agree", WELF)]
+        edges = [("n", "p", r"the prude's own reading: \\ the prude decides", RULE, LEFT),
+                 ("l", "n", r"the lewd's own reading: \\ the lewd decides", RULE, RIGHT),
+                 ("p", "l", r"Pareto: \ both prefer it", WELF, DOWN)]
         arrows = VGroup()
-        for a, b, t, c in edges:
-            ar = Arrow(nodes[a].get_center(), nodes[b].get_center(), buff=0.55, color=c, stroke_width=4)
-            tl = label(rf"{t}: \ beats", font_size=17, color=c).move_to(ar.get_center())
-            off = ar.get_center() - ORIGIN + DOWN * 0.2
-            tl.shift(off / max(np.linalg.norm(off), 1e-6) * 0.55)
+        for a, b, t, c, side in edges:
+            ar = Arrow(nodes[a], nodes[b], buff=0.15, color=c, stroke_width=4)
+            tl = label(t, font_size=19, color=c).next_to(ar.get_center(), side, buff=0.35)
             arrows.add(VGroup(ar, tl))
         prefs = VGroup(
-            label(r"the prude: \ nobody, \ then the prude, \ then the lewd", font_size=19, color=GREY_A),
-            label(r"the lewd: \ the prude, \ then the lewd, \ then nobody", font_size=19, color=GREY_A),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.08).to_corner(UL, buff=0.35)
+            label(r"the prude: \ nobody, \ then the prude, \ then the lewd", font_size=21, color=GREY_A),
+            label(r"the lewd: \ the prude, \ then the lewd, \ then nobody", font_size=21, color=GREY_A),
+            label(r"each arrow points from the winner to the loser", font_size=19, color=E.ACCENT),
+        ).arrange(DOWN, aligned_edge=LEFT, buff=0.1).to_corner(UL, buff=0.35)
         foot = label(r"Sen, \ 1970: \ a little liberty and Pareto together can leave no best choice", font_size=23,
                      color=CYCLE).to_edge(DOWN, buff=0.4)
         tag = published_tag(r"Sen, JPE 78(1) (1970)", corner=DR, font_size=13)

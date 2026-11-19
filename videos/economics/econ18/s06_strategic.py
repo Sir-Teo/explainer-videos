@@ -55,15 +55,15 @@ class Strategic(VoiceoverScene):
         rows = VGroup()
         for rule, m, name in pick:
             rows.add(VGroup(
-                label(rf"{rule}: \ {name}", font_size=25, color=RULE),
-                label(rf"the {m['count']} who truly rank \ {rk(m['truth'])} \ vote \ {rk(m['lie'])}", font_size=21,
+                label(rf"{rule}: \ {name}", font_size=28, color=RULE),
+                label(rf"the {m['count']} who truly rank \ {rk(m['truth'])} \ vote \ {rk(m['lie'])}", font_size=24,
                       color=GREY_A),
                 label(rf"the winner moves from {m['honest_winner']} \ ({PLAN[m['honest_winner']]}) \ to "
-                      rf"{m['new_winner']} \ ({PLAN[m['new_winner']]}), \ which they prefer", font_size=21,
+                      rf"{m['new_winner']} \ ({PLAN[m['new_winner']]}), \ which they prefer", font_size=24,
                       color=VOTE[m["new_winner"]]),
             ).arrange(DOWN, aligned_edge=LEFT, buff=0.1))
-        rows.arrange(DOWN, aligned_edge=LEFT, buff=0.45).next_to(head, DOWN, buff=0.5)
-        foot = label(r"only the market fair, \ the Condorcet winner, \ is safe: \ no group can beat it", font_size=23,
+        rows.arrange(DOWN, aligned_edge=LEFT, buff=0.55).next_to(head, DOWN, buff=0.55)
+        foot = label(r"only the market fair, \ the Condorcet winner, \ is safe: \ no group can beat it", font_size=25,
                      color=VOTE["E"]).to_edge(DOWN, buff=0.45)
         tag = agora_tag(corner=DR, font_size=15)
         p0, b0, i0 = pick[0][1], pick[1][1], pick[2][1]

@@ -44,9 +44,9 @@ class PlayIt(VoiceoverScene):
 
     def rules(self):
         p = load("playit")
-        bs = self.ballot_row(p).scale(0.72).to_edge(UP, buff=0.3).shift(LEFT * 3.2)
-        key = VGroup(*[label(rf"{c}: \ {PLAN[c]}", font_size=17, color=VOTE[c]) for c in "ABCDE"]).arrange(
-            DOWN, aligned_edge=LEFT, buff=0.06).to_corner(UR, buff=0.35)
+        bs = self.ballot_row(p).scale(0.8).to_edge(UP, buff=0.25).shift(LEFT * 3.0)
+        key = VGroup(*[label(rf"{c}: \ {PLAN[c]}", font_size=20, color=VOTE[c]) for c in "ABCDE"]).arrange(
+            DOWN, aligned_edge=LEFT, buff=0.07).to_corner(UR, buff=0.35)
         w = p["winners"]
         pl, ru, irv, bo = p["plurality"], p["runoff"], p["irv"], p["borda"]
         lines = [
@@ -58,15 +58,19 @@ class PlayIt(VoiceoverScene):
                                r"26 to 12", w["instant runoff"]),
             ("Borda count", rf"4 points for a first place, \ 3 for a second, \ ...: \ D {bo['D']}, \ E {bo['E']}, "
                             rf"\ B {bo['B']}", w["Borda"]),
-            ("Condorcet", r"beats every other plan head to head", w["Condorcet"]),
+            ("Condorcet", r"beats every other plan head to head: \ " + r", \ ".join(
+                rf"{x} {p['pairwise'][w['Condorcet']][x]} to {p['pairwise'][x][w['Condorcet']]}"
+                for x in "ABCDE" if x != w["Condorcet"]), w["Condorcet"]),
         ]
         rows = VGroup()
         for name, how, win in lines:
-            rows.add(VGroup(label(name, font_size=23, color=RULE), label(how, font_size=19, color=GREY_A),
-                            label(win, font_size=32, color=VOTE[win])))
-        y0 = 0.9
+            rows.add(VGroup(label(name, font_size=26, color=RULE), label(how, font_size=22, color=GREY_A),
+                            label(win, font_size=38, color=VOTE[win])))
+        y0 = 0.75
         for i, r in enumerate(rows):
-            y = y0 - 0.78 * i
+            y = y0 - 0.88 * i
+            if r[1].width > 9.0:
+                r[1].width = 9.0
             r[0].move_to([-6.6 + r[0].width / 2, y, 0])
             r[1].move_to([-3.2 + r[1].width / 2, y, 0])
             r[2].move_to([6.0, y, 0])
