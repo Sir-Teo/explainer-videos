@@ -111,8 +111,8 @@ class Frontier(VoiceoverScene):
             label(r"Chen, Liu, Shan and Zhong (2023): \\ budgets for risk, time, sharing and food", font_size=22),
             label(rf"GPT: \ {g['gpt']['risk']:.3f}, {g['gpt']['time']:.3f}, {g['gpt']['social']:.3f}, "
                   rf"{g['gpt']['food']:.3f}", font_size=22, color=E.ACCENT),
-            label(rf"their human subjects: \ {g['humans']['risk']:.3f} to {g['humans']['time']:.3f}", font_size=22,
-                  color=IC),
+            label(rf"their human subjects: \ {min(g['humans'].values()):.3f} to {max(g['humans'].values()):.3f}",
+                  font_size=22, color=IC),
             label(r"but its scores shift with the wording: \\ how you ask changes how consistent it is",
                   font_size=22, color=VIOL),
             label(r"consistency is cheap for a machine; \\ whose wants it reveals is the open question", font_size=22,

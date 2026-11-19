@@ -548,29 +548,36 @@ Muralidharan, Niehaus & Sukhtankar 2023; Stock & Watson, *Introduction to Econom
 
 ### Part 5 · What People Want (~52)
 *Question:* can you tell what someone wants from what they buy, and what does "rational" assume?
-*Story:* in 1938 Paul Samuelson, aged twenty-three, tries to purge utility from economics by keeping only what
+*Story:* in 1938 Paul Samuelson, aged twenty-two, tries to purge utility from economics by keeping only what
 can be observed: choices. Thirty years later Sidney Afriat shows the two are the same thing, with a test that
 runs on a grocery receipt.
-0. Hook: Samuelson's programme; the question; objectives.
-1. Play it: eleven budget lines, pick a bundle on each (Choi, Fisman, Gale and Kariv 2007). Kept for later.
+0. Hook: Bo's receipts; from Jevons to Hicks and Allen; Samuelson's programme; the question; objectives.
+1. Play it: eleven budget lines, pick a bundle on each (the design of Harbaugh et al. 2001, crossing lines as in
+   Choi, Fisman, Gale and Kariv 2007). Kept for later.
 2. Preferences as a ranking: completeness, transitivity, continuity; the money pump.
-3. Utility as a label: Debreu's representation; ordinal against cardinal; indifference maps.
+3. Utility as a label: Debreu's representation; ordinal against cardinal; the lexicographic order; the MRS.
 4. Convexity and the marginal rate of substitution; perfect substitutes, complements, Cobb–Douglas, CES.
 5. The budget set; the tangency; Lagrange's method with the multiplier's meaning.
-6. Corner solutions and kinks; non-linear budgets (quantity discounts, a tax schedule).
-7. Revealed preference: WARP, SARP, GARP; Afriat's theorem and its inequalities as a linear programme.
-8. The test on data: your eleven choices scored (Afriat's efficiency index); the published distribution;
-   children, capuchins and rats (Harbaugh et al. 2001; Kagel et al. 1975).
-9. Recovering preferences: bounds on indifference curves from finite data (Varian 1982).
-10. What rationality does not assume: selfishness, calculation, stable tastes; Becker's irrational consumers
+6. Corner solutions and kinks; non-linear budgets (a bulk price, the EITC's first kink and Saez's bunching).
+7. Intermission: a century of the American basket, as a data melody.
+8. Revealed preference: WARP, SARP, GARP; Afriat's theorem and its inequalities as a linear programme.
+9. The test on data: your eleven choices scored (Afriat's efficiency index); its power against random choice
+   (Bronars 1987); children (Harbaugh et al. 2001), students and Dutch households (Choi et al. 2007, 2014);
+   America as one consumer, 1929–2025.
+10. Recovering preferences: bounds on indifference curves from finite data (Varian 1982), and a forecast.
+11. What rationality does not assume: selfishness, calculation, a human chooser; Becker's irrational consumers
     (1962) and why demand still slopes down.
-11. Dials. 12. In practice: conjoint studies, recommender baselines. 13. Frontier: stochastic choice and
-    random utility; revealed preference in big data.
+12. Dials (consistency) and *Called it?* (McFadden's BART forecast). 13. In practice: conjoint studies,
+    recommenders, discrete choice and the value of time. 14. Frontier: stochastic choice and random utility;
+    revealed preference in scanner data; the consistency of a language model.
 
-*Agora:* `consumer`: preferences, the constrained optimum, a GARP tester and Afriat's index.
+*Agora:* `consumer`: preferences, the constrained optimum (corners and kinks), a GARP tester, Afriat's index and
+LP, Varian's bounds, Bronars's power, Becker's random consumers, the EITC, a logit.
 *Play it:* the eleven budgets; on the site, the same with a live consistency score (no rating of the player).
-*Reading:* Samuelson 1938; Afriat 1967; Varian 1982; Choi et al. 2007; Becker 1962; MWG chs 1–3; Kreps chs 1–4;
-Nicholson & Snyder chs 2–4; Jehle & Reny ch 1.
+*Reading:* Samuelson 1938; Houthakker 1950; Debreu 1954; Afriat 1967; Varian 1982; Becker 1962; Bronars 1987;
+Harbaugh, Krause & Berry 2001; Andreoni & Miller 2002; Choi et al. 2007, 2014; Saez 2010; Blundell, Browning &
+Crawford 2008; McFadden 1974; Kitamura & Stoye 2018; Chen et al. 2023; MWG chs 1–3; Kreps chs 1–4; Nicholson &
+Snyder chs 2–4; Jehle & Reny ch 1; Chambers & Echenique, *Revealed Preference Theory*.
 
 ### Part 6 · Demand (~55)
 *Question:* when a price changes, what happens to what people buy and to how well off they are?
@@ -2774,6 +2781,7 @@ Young Economist*.
 | 2 | built, English | *The Scissors.* Agora gains `curves` (straight lines through elasticity, incidence and controls) and taxes, caps and floors in the double auction; the Data Room gains the World Bank's Pink Sheet and USDA's coffee balance sheets; the first Dial row (staples) and the first Fact's columns are filled |
 | 3 | built, English | *The Measure.* Agora gains `accounts` (the Island's input-output table, GDP three ways, Leontief's inverse, value added in exports) and `indices` (Laspeyres, Paasche, Fisher, Törnqvist, the exact Cobb–Douglas index, chaining and drift); the Data Room gains FRED's national accounts, labour-market and price series, the World Bank's WDI, the UNDP's HDI and the Philadelphia Fed's real-time GDP; a new dial (the CPI's bias, from expert reviews); Kaldor's facts and the labour share are shown; the Dials gate checks every Data Room loader |
 | 4 | built, English | *The Evidence.* Agora gains `econometrician` (the fish market and its planted curves, OLS, Wald and 2SLS over statkit's `quasi`, the omitted-variable formula, the apprenticeship by choice and by lottery, Lucas's islands, the two-level village trial, difference in differences); the Data Room gains the 1969 draft lottery and Lucas (1976) among the transcribed passages; the Museum's NSW data and Card and Krueger's table are used; a new dial (the return to a year of school, from Card 2001); Act I is complete |
+| 5 | built, English | *What People Want.* Agora gains `consumer` (preferences and demand with corners and kinks, WARP, SARP and GARP, Afriat's index and his inequalities as an LP, Varian's bounds, Bronars's power, Becker's random consumers, the EITC's kink, a binary logit); the Data Room gains BEA's fifteen PCE categories and the population, 1929–2025, and the transcribed results of Harbaugh et al., Choi et al., Andreoni and Miller, Chen et al., Saez and McFadden; a new dial (consistency with utility maximization) and the BART *Called it?*; Act II begins |
 
 **Corrections found while building Part 1** (the plan's draft, written from memory, against the sources): Bastiat's
 Paris passage is in *Economic Sophisms*, First Series, ch. 18 (1845), not the *Harmonies*; Hume's is/ought passage is
@@ -2813,3 +2821,13 @@ poverty line, tax rates of 30, 50 or 70%); PROGRESA's evaluation used 506 villag
 years later. Lucas's syllogism is quoted with its page (p. 41) from the secondary literature; the article was not
 re-read. Card's (2001) table 2 is entered as eleven rows (the two with schooling as a dummy are left out). The plan's
 chapter on forecasts as tests became the *Called it?* card in chapter 6; forecasting as a test waits for Part 57.
+
+**Corrections found while building Part 5.** Samuelson was twenty-two, not twenty-three, when "A Note on the Pure
+Theory of Consumer's Behaviour" appeared (February 1938; born May 1915); his phrase is "dropping off the last vestiges
+of the utility analysis", and Moscati (2019) warns against reading him as a strict behaviourist. The eleven budgets of
+Play it are Harbaugh, Krause and Berry's number (eleven choice sets of chips and juice, 2001); Choi et al. (2007) used
+fifty, and their published mean index is 0.954 (60 of 93 subjects above 0.95, as reported in Choi et al. 2014). Kagel
+et al.'s animal results are taken from Harbaugh et al.'s summary of Kagel, Battalio and Green (1995): 87% of rats and
+81% of pigeons. Jensen and Miller's Giffen behaviour was among poor households, not the very poorest. Varian's 1982
+test of US aggregate data was not read, so the part runs its own test on BEA's fifteen categories and reports its
+power. The money pump is credited to Davidson, McKinsey and Suppes (1955), who credit Norman Dalkey.

@@ -185,6 +185,43 @@ brackets on screen.
 | minimum wage | 最低工资 |
 | A/B test | A/B测试 |
 
+## Part 5
+
+| English | 中文 |
+|---|---|
+| preference; preference relation | 偏好；偏好关系 |
+| completeness; transitivity; continuity | 完备性；传递性；连续性 |
+| the money pump | 金钱泵 |
+| utility function; ordinal utility; cardinal utility | 效用函数；序数效用；基数效用 |
+| the representation theorem | 表示定理 |
+| lexicographic preferences | 字典序偏好 |
+| indifference curve; indifference map | 无差异曲线；无差异曲线图 |
+| marginal rate of substitution (MRS) | 边际替代率 |
+| convex preferences | 凸偏好 |
+| perfect substitutes; perfect complements | 完全替代品；完全互补品 |
+| quasilinear preferences | 拟线性偏好 |
+| elasticity of substitution; CES | 替代弹性；常替代弹性 |
+| budget set; budget line | 预算集；预算线 |
+| tangency condition | 相切条件 |
+| Lagrange multiplier; shadow price | 拉格朗日乘数；影子价格 |
+| corner solution | 角点解 |
+| kink; non-convex budget set | 拐点；非凸预算集 |
+| bunching | 聚集（堆积） |
+| earned income tax credit (EITC) | 劳动所得税抵免 |
+| revealed preference | 显示偏好 |
+| weak / strong / generalized axiom of revealed preference (WARP, SARP, GARP) | 显示偏好弱公理／强公理／广义公理 |
+| Afriat's theorem; Afriat's inequalities | 阿弗里亚特定理；阿弗里亚特不等式 |
+| critical cost efficiency index (CCEI) | 临界成本效率指数 |
+| Houtman–Maks index | 霍特曼—马克斯指数 |
+| power of a test (Bronars) | 检验功效（布罗纳斯） |
+| rationalize (data) | 使（数据）可理性化 |
+| random utility | 随机效用 |
+| discrete choice; logit | 离散选择；逻辑特模型 |
+| value of time | 时间价值 |
+| conjoint analysis | 联合分析 |
+| stochastic choice | 随机选择 |
+| homogeneous of degree zero | 零次齐次 |
+
 ## Names
 
 | English | 中文 |
@@ -243,3 +280,21 @@ brackets on screen.
 | Raj Chetty | 拉吉·切蒂 |
 | Santiago Levy | 圣地亚哥·利维 |
 | PROGRESA; Oportunidades | “进步”计划；“机会”计划 |
+| Stanley Jevons | 斯坦利·杰文斯 |
+| Francis Edgeworth | 弗朗西斯·埃奇沃思 |
+| Vilfredo Pareto | 维尔弗雷多·帕累托 |
+| John Hicks, Roy Allen | 约翰·希克斯、罗伊·艾伦 |
+| Hendrik Houthakker | 亨德里克·霍撒克 |
+| Gérard Debreu | 热拉尔·德布鲁 |
+| Sidney Afriat | 西德尼·阿弗里亚特 |
+| Hal Varian | 哈尔·范里安 |
+| Gary Becker | 加里·贝克尔 |
+| Stephen Bronars | 斯蒂芬·布罗纳斯 |
+| William Harbaugh | 威廉·哈博 |
+| James Andreoni | 詹姆斯·安德烈奥尼 |
+| Syngjoo Choi, Shachar Kariv | 崔成柱、沙查尔·卡里夫 |
+| Emmanuel Saez | 伊曼纽尔·赛斯 |
+| Daniel McFadden | 丹尼尔·麦克法登 |
+| Richard Blundell | 理查德·布伦德尔 |
+| Robert Jensen, Nolan Miller | 罗伯特·詹森、诺兰·米勒 |
+| Eugen Slutsky | 尤金·斯卢茨基 |

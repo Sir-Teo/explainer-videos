@@ -101,9 +101,9 @@ class Practice(VoiceoverScene):
         ) as vo:
             self.play(FadeIn(ax), FadeIn(tag), FadeIn(key))
             vo.wait_until("a")
-            self.play(FadeIn(rows[0]))
+            self.play(FadeIn(rows[0]), LaggedStart(*[FadeIn(g) for g in groups], lag_ratio=0.3))
             vo.wait_until("b")
-            self.play(LaggedStart(*[FadeIn(g) for g in groups], lag_ratio=0.3))
+            self.play(*[Indicate(g, scale_factor=1.15) for g in groups])
             vo.wait_until("c")
             self.play(Write(rows[1]), LaggedStart(*[Create(c_) for c_ in curves], lag_ratio=0.3), run_time=2.0)
             vo.wait_until("d")
