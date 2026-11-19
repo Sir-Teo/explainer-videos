@@ -87,6 +87,10 @@ class Shapes(VoiceoverScene):
             "curve shifted up, so a richer person buys no more of the other good. It's the shape behind consumer "
             "surplus, in Part 2."
         ) as vo:
+            head = label(r"Four shapes of indifference map", font_size=36).to_edge(UP, buff=0.45)
+            frames = VGroup(*[RoundedRectangle(corner_radius=0.12, width=p_.width + 0.2, height=p_.height + 0.2,
+                                               stroke_color=GREY_D, stroke_width=1.5).move_to(p_) for p_ in panels])
+            self.play(FadeIn(head), LaggedStart(*[Create(f_) for f_ in frames], lag_ratio=0.2), run_time=1.6)
             for mk, p_ in zip("abcd", panels):
                 vo.wait_until(mk)
                 self.play(FadeIn(p_, shift=UP * 0.15))

@@ -103,8 +103,8 @@ class Outro(VoiceoverScene):
             "and a research problem, marked with a star, on designing the most powerful eleven budgets. Full "
             "solutions are in the part's notes."
         ):
-            self.play(FadeIn(ps.head))
-            self.play(LaggedStart(*[FadeIn(r, shift=UP * 0.1) for r in ps.rows], lag_ratio=0.4), run_time=6)
+            self.play(FadeIn(ps.head), FadeIn(ps.rows[0], shift=UP * 0.1), run_time=0.8)
+            self.play(LaggedStart(*[FadeIn(r, shift=UP * 0.1) for r in ps.rows[1:]], lag_ratio=0.4), run_time=6)
         self.wait(4)
         self.clear_scene()
 
