@@ -50,7 +50,49 @@ FRED_SERIES = {
                "Board of Governors of the Federal Reserve System"),
     "CPIAUCNS": ("Consumer price index for all urban consumers: all items", "index 1982-84 = 100, not seasonally "
                  "adjusted", "monthly", "U.S. Bureau of Labor Statistics"),
+    # Part 3: the national accounts, annual, billions of current dollars
+    "GDPA": ("Gross domestic product", "billions of dollars", "annual", "U.S. Bureau of Economic Analysis"),
+    "GDIA": ("Gross domestic income", "billions of dollars", "annual", "U.S. Bureau of Economic Analysis"),
+    "PCECA": ("Personal consumption expenditures", "billions of dollars", "annual", "U.S. Bureau of Economic Analysis"),
+    "GPDIA": ("Gross private domestic investment", "billions of dollars", "annual",
+              "U.S. Bureau of Economic Analysis"),
+    "GCEA": ("Government consumption expenditures and gross investment", "billions of dollars", "annual",
+             "U.S. Bureau of Economic Analysis"),
+    "EXPGSA": ("Exports of goods and services", "billions of dollars", "annual", "U.S. Bureau of Economic Analysis"),
+    "IMPGSA": ("Imports of goods and services", "billions of dollars", "annual", "U.S. Bureau of Economic Analysis"),
+    "A033RC1A027NBEA": ("National income: compensation of employees, paid", "billions of dollars", "annual",
+                        "U.S. Bureau of Economic Analysis"),
+    "A191RD3A086NBEA": ("Gross domestic product: implicit price deflator", "index 2017 = 100", "annual",
+                        "U.S. Bureau of Economic Analysis"),
+    # Part 3: the household survey's measures of labour underutilization, monthly, seasonally adjusted
+    "U1RATE": ("U-1: unemployed 15 weeks or longer, as a percent of the civilian labor force", "percent", "monthly",
+               "U.S. Bureau of Labor Statistics"),
+    "U2RATE": ("U-2: job losers and persons who completed temporary jobs, as a percent of the civilian labor force",
+               "percent", "monthly", "U.S. Bureau of Labor Statistics"),
+    "U4RATE": ("U-4: total unemployed plus discouraged workers, as a percent of the labor force plus discouraged "
+               "workers", "percent", "monthly", "U.S. Bureau of Labor Statistics"),
+    "U5RATE": ("U-5: U-4 plus all other persons marginally attached to the labor force", "percent", "monthly",
+               "U.S. Bureau of Labor Statistics"),
+    "U6RATE": ("U-6: U-5 plus persons employed part time for economic reasons", "percent", "monthly",
+               "U.S. Bureau of Labor Statistics"),
+    "CIVPART": ("Labor force participation rate", "percent", "monthly", "U.S. Bureau of Labor Statistics"),
+    "EMRATIO": ("Employment-population ratio", "percent", "monthly", "U.S. Bureau of Labor Statistics"),
+    # Part 3: price indexes, monthly
+    "CPIAUCSL": ("Consumer price index for all urban consumers: all items", "index 1982-84 = 100, seasonally "
+                 "adjusted", "monthly", "U.S. Bureau of Labor Statistics"),
+    "SUUR0000SA0": ("Chained consumer price index for all urban consumers (C-CPI-U): all items",
+                    "index December 1999 = 100, not seasonally adjusted", "monthly", "U.S. Bureau of Labor Statistics"),
+    "PCEPI": ("Personal consumption expenditures: chain-type price index", "index 2017 = 100, seasonally adjusted",
+              "monthly", "U.S. Bureau of Economic Analysis"),
+    # Part 3: the labour share (Penn World Table, via FRED)
+    "LABSHPUSA156NRUG": ("Share of labour compensation in GDP at current national prices for the United States",
+                         "ratio", "annual", "Penn World Table, Groningen Growth and Development Centre"),
 }
+# The date each series was retrieved (its vintage); a series not listed was retrieved on DATASETS["fred"]["vintage"]
+FRED_RETRIEVED = {s: "2026-11-19" for s in (
+    "GDPA", "GDIA", "PCECA", "GPDIA", "GCEA", "EXPGSA", "IMPGSA", "A033RC1A027NBEA", "A191RD3A086NBEA", "U1RATE",
+    "U2RATE", "U4RATE", "U5RATE", "U6RATE", "CIVPART", "EMRATIO", "CPIAUCSL", "SUUR0000SA0", "PCEPI",
+    "LABSHPUSA156NRUG")}
 
 SPF_FILES = ("median_rgdp_level", "median_rgdp_growth", "median_recess_level")
 SPF_URL = ("https://www.philadelphiafed.org/-/media/frbp/assets/surveys-and-data/survey-of-professional-forecasters/"
@@ -77,11 +119,12 @@ DATASETS = {
     "fred": {
         "title": "FRED, Federal Reserve Bank of St. Louis",
         "publisher": "Federal Reserve Bank of St. Louis (series from the agencies in FRED_SERIES)",
-        "citation": "Federal Reserve Bank of St. Louis, FRED; each series retrieved 2026-11-18",
+        "citation": "Federal Reserve Bank of St. Louis, FRED; each series retrieved on its date in FRED_RETRIEVED "
+                    "(2026-11-18 unless listed there)",
         "short": "FRED, retrieved 18 Nov 2026",
         "url": "https://fred.stlouisfed.org/graph/fredgraph.csv?id={}",
         "licence": "BEA, BLS and Federal Reserve series are in the public domain; the NBER Macrohistory series is "
-                   "used with its suggested citation",
+                   "used with its suggested citation; the Penn World Table's labour share is CC BY 4.0",
         "vintage": "2026-11-18",
         "files": tuple(f"fred_{s}.csv" for s in FRED_SERIES),
     },
@@ -124,6 +167,47 @@ DATASETS = {
         "sha256": "967633a200af10d2a196816dd0169e732c61ed8dff4a83574bfa0b435c50ee66",
         "files": ("psd_coffee.csv",),
     },
+    "wdi": {
+        "title": "World Development Indicators: GDP at market exchange rates and at purchasing power parity, "
+                 "population, Gini index",
+        "publisher": "World Bank",
+        "citation": "World Bank, World Development Indicators (API, last updated 11 November 2026), indicators "
+                    "NY.GDP.MKTP.CD, NY.GDP.MKTP.PP.CD, NY.GDP.PCAP.CD, NY.GDP.PCAP.PP.CD, SP.POP.TOTL, SI.POV.GINI, "
+                    "retrieved 2026-11-19",
+        "short": "World Bank WDI, Nov 2026",
+        "url": "https://api.worldbank.org/v2/country/all/indicator/{}?format=json&date=2015:2025&per_page=20000",
+        "licence": "CC BY 4.0 (World Bank open data)",
+        "units": "current US dollars; current international (PPP) dollars; persons; Gini index 0-100",
+        "vintage": "2026-11-19",
+        "files": ("wdi_2015_2025.csv",),
+    },
+    "hdr": {
+        "title": "Human Development Report 2025: composite indices, complete time series",
+        "publisher": "United Nations Development Programme, Human Development Report Office",
+        "citation": "UNDP, Human Development Report 2025, HDR25_Composite_indices_complete_time_series.csv, "
+                    "retrieved 2026-11-19",
+        "short": "UNDP, Human Development Report 2025",
+        "url": "https://hdr.undp.org/sites/default/files/2025_HDR/HDR25_Composite_indices_complete_time_series.csv",
+        "licence": "CC BY 3.0 IGO (UNDP open data), with attribution",
+        "units": "HDI 0-1; life expectancy in years; schooling in years; GNI per head in 2021 PPP dollars",
+        "vintage": "2026-11-19",
+        "sha256": "61ed82e5b66c88dfca8ff9fac775c63981ecab6a254862af97acacc41c143117",
+        "files": ("hdr2025_1990_2023.csv",),
+    },
+    "rtdsm": {
+        "title": "Real-Time Data Set for Macroeconomists: real GDP (ROUTPUT), quarterly vintages",
+        "publisher": "Federal Reserve Bank of Philadelphia",
+        "citation": "Federal Reserve Bank of Philadelphia, Real-Time Data Set for Macroeconomists, routputqvqd.xlsx "
+                    "(vintages 1965Q4-2026Q4), retrieved 2026-11-19",
+        "short": "Philadelphia Fed, Real-Time Data Set",
+        "url": "https://www.philadelphiafed.org/-/media/frbp/assets/surveys-and-data/real-time-data/data-files/xlsx/"
+               "routputqvqd.xlsx",
+        "licence": "free to use with attribution to the Federal Reserve Bank of Philadelphia",
+        "units": "real GDP, billions of chained (or constant) dollars of each vintage's base year, SAAR",
+        "vintage": "2026-11-19",
+        "sha256": "6a7971b31b7336551705465de8a0855826f3652abe112406f52b2c2ed0994c0c",
+        "files": ("rtdsm_2006_2010.csv", "rtdsm_first_latest.csv"),
+    },
 }
 
 # The Pink Sheet columns kept in the extract: (key, the column's heading in the sheet, units)
@@ -157,6 +241,15 @@ def cite(name: str) -> str:
 
 def vintage(name: str) -> str:
     return DATASETS[name]["vintage"]
+
+
+def fred_cite(*series: str) -> str:
+    """The data tag for FRED series: "FRED, retrieved 19 Nov 2026" (the latest retrieval date of those named)."""
+    import datetime as _dt  # noqa: PLC0415
+
+    day = max(FRED_RETRIEVED.get(s, DATASETS["fred"]["vintage"]) for s in series)
+    d = _dt.date.fromisoformat(day)
+    return f"FRED, retrieved {d.day} {d.strftime('%b')} {d.year}"
 
 
 # ---------------------------------------------------------------------------
@@ -215,7 +308,8 @@ def fred(series: str) -> dict:
     rows = _read(HERE / f"fred_{series}.csv")
     title, units, freq, source = FRED_SERIES[series]
     return {"date": [r["date"] for r in rows], "value": [_num(r["value"]) for r in rows], "title": title,
-            "units": units, "frequency": freq, "source": source, "series": series}
+            "units": units, "frequency": freq, "source": source, "series": series,
+            "retrieved": FRED_RETRIEVED.get(series, DATASETS["fred"]["vintage"])}
 
 
 @functools.lru_cache(maxsize=None)
@@ -259,6 +353,60 @@ def psd_coffee() -> dict:
         place = out.setdefault(r["country"], {})
         series = place.setdefault(r["attribute"], [float("nan")] * len(years))
         series[years.index(int(r["year"]))] = _num(r["value"])
+    return out
+
+
+@functools.lru_cache(maxsize=None)
+def wdi(year: int | None = None) -> list[dict]:
+    """Countries (not regional aggregates) from the WDI extract: ``[{"code", "country", "region", "income", "lon",
+    "lat", "year",
+    "gdp_usd", "gdp_ppp", "gdppc_usd", "gdppc_ppp", "pop", "gini"}]`` (NaN where missing), every year 2015-2025 or
+    only ``year``."""
+    out = []
+    for r in _read(HERE / "wdi_2015_2025.csv"):
+        if year is not None and int(r["year"]) != year:
+            continue
+        row = {k: r[k] for k in ("code", "country", "region", "income")}
+        row["lon"], row["lat"] = _num(r["lon"]), _num(r["lat"])   # the capital's coordinates
+        row["year"] = int(r["year"])
+        for k in ("gdp_usd", "gdp_ppp", "gdppc_usd", "gdppc_ppp", "pop", "gini"):
+            row[k] = _num(r[k])
+        out.append(row)
+    return out
+
+
+@functools.lru_cache(maxsize=None)
+def hdr() -> list[dict]:
+    """Countries in the Human Development Report 2025's time series: ``[{"code", "country", "region", "hdi": {year:
+    value}, "le", "eys", "mys", "gnipc"}]`` for 1990-2023 (missing years absent)."""
+    out = []
+    for r in _read(HERE / "hdr2025_1990_2023.csv"):
+        row = {"code": r["iso3"], "country": r["country"], "region": r["region"]}
+        for k in ("hdi", "le", "eys", "mys", "gnipc"):
+            row[k] = {}
+        out.append(row)
+    by = {o["code"]: o for o in out}
+    for r in _read(HERE / "hdr2025_1990_2023.csv"):
+        for k in ("hdi", "le", "eys", "mys", "gnipc"):
+            for y in range(1990, 2024):
+                v = r.get(f"{k}_{y}", "")
+                if v not in ("", None):
+                    by[r["iso3"]][k][y] = float(v)
+    return out
+
+
+@functools.lru_cache(maxsize=None)
+def rtdsm() -> dict:
+    """Real GDP as each vintage reported it: ``{"quarters": ["2006:Q1", ...], "vintages": ["2007Q1", ...],
+    "level": {vintage: [...]}}`` for observation quarters 2006-2010 and vintages 2007Q1 onward (NaN where a vintage had
+    no figure yet), and ``{"first_latest": [{"quarter", "first", "latest"}]}``: each quarter's annualized growth in
+    the first vintage that reported it and in the latest."""
+    rows = _read(HERE / "rtdsm_2006_2010.csv")
+    vintages = [c for c in rows[0] if c != "quarter"]
+    out = {"quarters": [r["quarter"] for r in rows], "vintages": vintages,
+           "level": {v: [_num(r[v]) for r in rows] for v in vintages}}
+    out["first_latest"] = [{"quarter": r["quarter"], "first": _num(r["first"]), "latest": _num(r["latest"])}
+                           for r in _read(HERE / "rtdsm_first_latest.csv")]
     return out
 
 
@@ -404,8 +552,110 @@ def refresh_psd_coffee() -> None:
             w.writerow([c, y, a, _fmt(v)])
 
 
+WDI_INDICATORS = {"gdp_usd": "NY.GDP.MKTP.CD", "gdp_ppp": "NY.GDP.MKTP.PP.CD", "gdppc_usd": "NY.GDP.PCAP.CD",
+                  "gdppc_ppp": "NY.GDP.PCAP.PP.CD", "pop": "SP.POP.TOTL", "gini": "SI.POV.GINI"}
+
+
+def refresh_wdi() -> None:
+    import json  # noqa: PLC0415
+
+    raw = RAW / "wdi_countries.json"
+    _download("https://api.worldbank.org/v2/country?format=json&per_page=400", raw)
+    meta = {c["id"]: c for c in json.loads(raw.read_text())[1] if c["region"]["id"] != "NA"}
+    vals: dict = {}
+    for col, ind in WDI_INDICATORS.items():
+        f = RAW / f"wdi_{ind}.json"
+        _download(DATASETS["wdi"]["url"].format(ind), f)
+        for r in json.loads(f.read_text())[1]:
+            code = r["countryiso3code"]
+            if code in meta and r["value"] is not None:
+                vals.setdefault((code, int(r["date"])), {})[col] = r["value"]
+    with open(HERE / "wdi_2015_2025.csv", "w", newline="", encoding="utf-8") as f:
+        w = csv.writer(f)
+        w.writerow(["code", "country", "region", "income", "lon", "lat", "year", *WDI_INDICATORS])
+        for (code, year) in sorted(vals):
+            c = meta[code]
+            v = vals[(code, year)]
+            w.writerow([code, c["name"], c["region"]["value"].strip(), c["incomeLevel"]["value"], c["longitude"],
+                        c["latitude"], year, *[_fmt(v.get(k)) for k in WDI_INDICATORS]])
+
+
+def refresh_hdr() -> None:
+    d = DATASETS["hdr"]
+    raw = RAW / "hdr25_composite.csv"
+    sha = _download(d["url"], raw)
+    if d.get("sha256") and sha != d["sha256"]:
+        print(f"hdr: the download differs from the recorded vintage ({sha[:12]} vs {d['sha256'][:12]})")
+    with open(raw, newline="", encoding="latin-1") as f:   # the HDRO's file is Latin-1 (Cote d'Ivoire's o)
+        rows = list(csv.DictReader(f))
+    keep = ["iso3", "country", "region"] + [f"{k}_{y}" for k in ("hdi", "le", "eys", "mys", "gnipc")
+                                             for y in range(1990, 2024)]
+    with open(HERE / "hdr2025_1990_2023.csv", "w", newline="", encoding="utf-8") as f:
+        w = csv.writer(f)
+        w.writerow(keep)
+        for r in rows:
+            if not r["iso3"] or r["iso3"].startswith("ZZ"):
+                continue  # regional and world aggregates
+            w.writerow([r.get(k, "") for k in keep])
+
+
+def _quarter_key(q: str) -> tuple:
+    y, n = q.split(":Q")
+    return int(y), int(n)
+
+
+def refresh_rtdsm() -> None:
+    import openpyxl  # noqa: PLC0415
+    from openpyxl.reader import excel  # noqa: PLC0415
+
+    d = DATASETS["rtdsm"]
+    raw = RAW / "routputqvqd.xlsx"
+    sha = _download(d["url"], raw)
+    if sha != d["sha256"]:
+        print(f"rtdsm: the download differs from the recorded vintage ({sha[:12]} vs {d['sha256'][:12]})")
+    # the workbook's document properties carry a date openpyxl cannot parse; they are not needed
+    excel.ExcelReader.read_properties = lambda self: None
+    rows = list(openpyxl.load_workbook(raw, read_only=True, data_only=True).worksheets[0].iter_rows(values_only=True))
+    head = [str(h) for h in rows[0]]
+    vint = [h.replace("ROUTPUT", "") for h in head[1:]]          # e.g. "65Q4"
+
+    def full(v: str) -> str:
+        yy = int(v[:2])
+        return f"{1900 + yy if yy >= 60 else 2000 + yy}Q{v[-1]}"
+
+    vint = [full(v) for v in vint]
+    num = lambda x: float(x) if isinstance(x, (int, float)) else float("nan")  # noqa: E731
+    data = {str(r[0]): [num(x) for x in r[1:]] for r in rows[1:] if r[0]}
+    quarters = sorted(data, key=_quarter_key)
+    keep_v = [i for i, v in enumerate(vint) if v >= "2007Q1"]
+    with open(HERE / "rtdsm_2006_2010.csv", "w", newline="", encoding="utf-8") as f:
+        w = csv.writer(f)
+        w.writerow(["quarter", *[vint[i] for i in keep_v]])
+        for q in quarters:
+            if 2006 <= _quarter_key(q)[0] <= 2010:
+                w.writerow([q, *[_fmt(data[q][i]) if data[q][i] == data[q][i] else "" for i in keep_v]])
+    # each quarter's annualized growth in the first vintage that reports it, and in the latest vintage
+    with open(HERE / "rtdsm_first_latest.csv", "w", newline="", encoding="utf-8") as f:
+        w = csv.writer(f)
+        w.writerow(["quarter", "first", "latest"])
+        for k in range(1, len(quarters)):
+            q, p = quarters[k], quarters[k - 1]
+            first = None
+            for i in range(len(vint)):
+                a, b = data[q][i], data[p][i]
+                if a == a and b == b:
+                    # a quarter already in the earliest vintage (1965Q4) has no first estimate in the data set
+                    first = 100 * ((a / b) ** 4 - 1) if i > 0 else None
+                    break
+            a, b = data[q][-1], data[p][-1]
+            latest = 100 * ((a / b) ** 4 - 1) if a == a and b == b else None
+            if first is not None and latest is not None:
+                w.writerow([q, f"{first:.3f}", f"{latest:.3f}"])
+
+
 REFRESH = {"maddison2023": refresh_maddison, "fred": refresh_fred, "spf": refresh_spf,
-           "pinksheet": refresh_pinksheet, "psd_coffee": refresh_psd_coffee}
+           "pinksheet": refresh_pinksheet, "psd_coffee": refresh_psd_coffee, "wdi": refresh_wdi, "hdr": refresh_hdr,
+           "rtdsm": refresh_rtdsm}
 
 
 def main() -> None:

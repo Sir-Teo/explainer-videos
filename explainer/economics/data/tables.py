@@ -231,4 +231,168 @@ READ_1958 = Table(
 
 PART1 = (BASTIAT_1845, BRITISH_ACADEMY_2009, SMITH_1776, READ_1958, HAYEK_1945, SMITH_1962, CHAMBERLIN_1948,
          GNEEZY_RUSTICHINI_2000, SIMON_1991, RICARDO_1817)
-ALL = {t.key: t for t in PART1}
+
+
+# ---------------------------------------------------------------------------
+# Part 3
+# ---------------------------------------------------------------------------
+KUZNETS_1934 = Table(
+    key="kuznets_1934",
+    cite="U.S. Department of Commerce, Bureau of Foreign and Domestic Commerce (Simon Kuznets, with Robert F. Martin, "
+         "Robert R. Nathan and others, in cooperation with the National Bureau of Economic Research), National "
+         "Income, 1929-32, Senate Document No. 124, 73d Congress, 2d session (Government Printing Office, 1934); "
+         "transmitted to the Senate on 4 January 1934",
+    tag="National Income, 1929-32 (Senate Document 124, 1934)",
+    where="chapter I, section 4, \"Uses and abuses of national income measurements\" (pp. 5-7); tables 1-3 "
+          "(pp. 10, 14); the exclusions on p. 11",
+    read="the Bureau of Economic Analysis's reprint of the whole report in the Survey of Current Business, "
+         "September 2020; tables 2-3 checked against NBER Bulletin 49 (7 June 1934), whose figures the report's "
+         "table 3 confirms where the reprint's scan is unclear",
+    checked="2026-11-19",
+    data={
+        "years": (1929, 1930, 1931, 1932),
+        # table 1, millions of dollars
+        "paid_out": (81136, 75410, 63247, 48894),
+        "business_savings": (1896, -5065, -8604, -9529),
+        "produced": (83032, 70345, 54643, 39365),
+        "cost_of_living": (100.0, 97.4, 88.9, 80.4),        # BLS, 1929 = 100
+        "wholesale": (100.0, 90.7, 76.6, 68.0),
+        # table 2, millions of dollars
+        "salaries_selected": (5702, 5661, 4738, 3383),
+        "wages_selected": (17179, 14210, 10542, 6840),
+        "salaries_wages_other": (29052, 27794, 24622, 20302),
+        "labour": (52793, 48582, 40896, 31533),
+        "dividends": (5964, 5795, 4313, 2588),
+        "interest": (5677, 5815, 5649, 5491),
+        "property": (12206, 12226, 10498, 8472),
+        "rents_royalties": (4116, 3475, 2752, 1865),
+        "withdrawals": (12020, 11127, 9102, 7024),
+        "entrepreneurial": (16136, 14602, 11853, 8890),
+        "imputed_rent_1930": 2.7e3,     # owner-occupied homes, excluded (p. 11)
+        "king_1920_21_drop": 14.4,      # percent, the earlier depression in King's series (p. 10)
+        "welfare": "The welfare of a nation can, therefore, scarcely be inferred from a measurement of national "
+                   "income as defined above.",
+        "housewives": "A student of social affairs who is interested in the total productivity of the nation, "
+                      "including those efforts which, like housewives' services, do not appear on the market, can "
+                      "therefore use our measures only with some qualifications.",
+        "abuse": "a decline of 30 percent in the national income (in terms of \"constant\" dollars) means a 30 "
+                 "percent decline in the total productivity of the nation, and a corresponding decline in its "
+                 "welfare",
+        "precision": "the definiteness of the result suggests, often misleadingly, a precision and simplicity in "
+                     "the outlines of the object measured.",
+    },
+    note="The report's table 2 gives entrepreneurial income in 1932 as 8,890 (8,390 in the bulletin's scan is a "
+         "misreading; 8,890 / 81,136 x 100 matches table 3's share).",
+)
+
+PETTY_1665 = Table(
+    key="petty_1665",
+    cite="William Petty, Verbum Sapienti (written 1665, published 1691), chapters 1-2, in The Economic Writings of "
+         "Sir William Petty, ed. Charles Henry Hull (Cambridge University Press, 1899), vol. 1",
+    tag="Petty, Verbum Sapienti (1665), chs. 1-2",
+    where="chapter 1, paragraph 1; chapter 2, paragraph 1; Hull's note on the date",
+    read="Hull's edition, vol. 1 (Internet Archive, economicwritings01pettuoft)",
+    checked="2026-11-19",
+    data={
+        "people": 6.0e6, "expense_per_head": "6l. 13s. 4d.", "expense": 40.0e6,
+        "stock_yields": 15.0e6, "labour_yields": 25.0e6, "land_rent": 8.0e6,
+        "expense_quote": "about six Millions, whose Expence at 6l. 13s. 4d. per Annum ... for Food, Housing, "
+                         "Cloaths, and all other necessaries, amount to 40 Millions per Annum.",
+        "labour_quote": "if the Annual proceed of the Stock, or Wealth of the Nation, yields but 15 millions, and the "
+                        "expence be 40. Then the labour of the People must furnish the other 25",
+    },
+    note="Hull dates the manuscript to the latter part of 1665 (Petty's own list puts it opposite that year); it was "
+         "first printed in 1691.",
+)
+
+CPI_BIAS = Table(
+    key="cpi_bias",
+    cite="Advisory Commission to Study the Consumer Price Index (Boskin, Dulberger, Gordon, Griliches and Jorgenson), "
+         "Toward a More Accurate Measure of the Cost of Living, final report to the Senate Finance Committee, "
+         "December 1996; David E. Lebow and Jeremy B. Rudd, \"Measurement Error in the Consumer Price Index: Where "
+         "Do We Stand?\", Journal of Economic Literature 41(1): 159-201 (2003); Brent R. Moulton, The Measurement "
+         "of Output, Prices, and Productivity: What's Changed Since the Boskin Commission? (Brookings Institution, "
+         "July 2018); Robert J. Gordon, \"The Boskin Commission Report: A Retrospective One Decade Later\", NBER "
+         "Working Paper 12311 (2006)",
+    tag="Boskin et al. (1996); Lebow and Rudd (2003); Moulton (2018)",
+    where="Moulton (2018), table 5 (from Boskin et al. 1996, p. 44, and Lebow and Rudd 2003, p. 161); Gordon "
+          "(2006), table 1 and abstract",
+    read="Moulton's report (brookings.edu) and Gordon's working paper (nber.org); the Lebow-Rudd abstract (RePEc)",
+    checked="2026-11-19",
+    data={
+        "components": ("upper-level substitution", "lower-level substitution", "new products and quality",
+                       "new outlets", "weighting"),
+        # percentage points a year, in the order of "components"
+        "boskin_1996": (0.15, 0.25, 0.60, 0.10, 0.0), "boskin_range": (0.80, 1.60), "boskin_total": 1.10,
+        "lebow_rudd_2003": (0.30, 0.05, 0.37, 0.05, 0.10), "lebow_rudd_range": (0.30, 1.40),
+        "lebow_rudd_total": 0.87,
+        "moulton_2018": (0.25, 0.05, 0.37, 0.08, 0.10), "moulton_range": (0.30, 1.40), "moulton_total": 0.85,
+        "moulton_pce_total": 0.47,
+        "gordon_1995_96": (1.2, 1.3), "gordon_2006": 0.8,
+        "debt_1997_2008": 1.07e12,   # the Commission's figure for the bias's addition to the debt (Gordon, note 1)
+        "appointed": "June 1995",
+    },
+)
+
+DEATON_HESTON_2010 = Table(
+    key="deaton_heston_2010",
+    cite="Angus Deaton and Alan Heston, \"Understanding PPPs and PPP-based National Accounts\", American Economic "
+         "Journal: Macroeconomics 2(4): 1-35 (2010); NBER Working Paper 14499 (2008)",
+    tag="Deaton and Heston (2010)",
+    where="abstract",
+    read="NBER Working Paper 14499 (nber.org)",
+    checked="2026-11-19",
+    data={"china_smaller": 40, "india_smaller": 36, "round": 2005},
+)
+
+JONES_KLENOW_2016 = Table(
+    key="jones_klenow_2016",
+    cite="Charles I. Jones and Peter J. Klenow, \"Beyond GDP? Welfare across Countries and Time\", American "
+         "Economic Review 106(9): 2426-2457 (2016); NBER Working Paper 16352 (2010, revised April 2015)",
+    tag="Jones and Klenow (2016)",
+    where="table 2 (welfare across countries), and the France example of section 1",
+    read="NBER Working Paper 16352, revised April 2015 (nber.org)",
+    checked="2026-11-19",
+    data={
+        # consumption-equivalent welfare and income per person, US = 100, micro data (about 2005)
+        "rows": (("U.S.", 100.0, 100.0), ("U.K.", 96.6, 75.2), ("France", 91.8, 67.2), ("Italy", 80.2, 66.1),
+                 ("Spain", 73.3, 61.1), ("Mexico", 21.9, 28.6), ("Russia", 20.7, 37.0), ("Brazil", 11.1, 17.2),
+                 ("South Africa", 7.4, 16.0), ("China", 6.3, 10.1), ("Indonesia", 5.0, 7.8), ("India", 3.2, 5.6),
+                 ("Malawi", 0.9, 1.3)),
+        "france": {"consumption": 60, "life_expectancy": (80.1, 77.4), "hours": (535, 877),
+                   "sd_log_c": (0.422, 0.538)},
+        "correlation": 0.98,
+    },
+)
+
+NORDHAUS_TOBIN_1972 = Table(
+    key="nordhaus_tobin_1972",
+    cite="William D. Nordhaus and James Tobin, \"Is Growth Obsolete?\", in Economic Research: Retrospect and "
+         "Prospect, Volume 5: Economic Growth (NBER, 1972), pp. 1-80",
+    tag="Nordhaus and Tobin (1972)",
+    where="the observations on table 2",
+    read="the NBER chapter (nber.org, c7620)",
+    checked="2026-11-19",
+    data={"mew_growth": 1.1, "nnp_growth": 1.7, "period": "1929-65"},
+)
+
+PSZ_2018 = Table(
+    key="psz_2018",
+    cite="Thomas Piketty, Emmanuel Saez and Gabriel Zucman, \"Distributional National Accounts: Methods and "
+         "Estimates for the United States\", Quarterly Journal of Economics 133(2): 553-609 (2018); Gerald Auten "
+         "and David Splinter, \"Income Inequality in the United States: Using Tax Data to Measure Long-Term "
+         "Trends\", Journal of Political Economy 132(7) (2024)",
+    tag="Piketty, Saez and Zucman (2018); Auten and Splinter (2024)",
+    where="PSZ, introduction (pre-tax national income per adult); Auten and Splinter, abstract",
+    read="PSZ's version of 25 September 2017 (eml.berkeley.edu); Auten and Splinter's abstract (search-level)",
+    checked="2026-11-19",
+    data={
+        "bottom50_share": (20.0, 12.0), "top1_share": (12.0, 20.0), "years": (1980, 2014),
+        "bottom50_income": 16000, "average_growth": 60, "average_2014": 64500,
+        "top1_income": (420000, 1.3e6), "ratio": (27, 81),
+        "as_top1_pretax_rise": 4.4, "as_top1_aftertax_rise": 1.4, "as_years": (1979, 2019),
+    },
+)
+
+PART3 = (KUZNETS_1934, PETTY_1665, CPI_BIAS, DEATON_HESTON_2010, JONES_KLENOW_2016, NORDHAUS_TOBIN_1972, PSZ_2018)
+ALL = {t.key: t for t in (*PART1, *PART3)}

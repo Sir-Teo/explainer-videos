@@ -73,4 +73,5 @@ DESIGN_COLOR = {
     "narrative": "#E9A3C9",
     "lab": "#F7D154",
     "meta-analysis": "#E3B98A",  # a summary of many studies, whatever their designs (the SOURCE colour)
+    "review": "#D9C7A7",         # an expert review that adds up component estimates (a measurement audit)
 }

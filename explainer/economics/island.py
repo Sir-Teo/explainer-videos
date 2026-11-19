@@ -87,6 +87,22 @@ TRUTHS = {
         },
         # what the accounts leave out (chapter 3): a year of the islanders' unpaid work, valued at the fishing wage
         "unpaid": {"cooking and cleaning": 120, "childcare": 70, "Crusoe's garden": 25, "mending nets at home": 15},
+        # Bo's household (chapters 4-5): $100 a week, half on fish and half on coconuts (Cobb-Douglas tastes), in a
+        # calm year and a stormy one; the storms come and go for twelve seasons in the chain-drift example
+        "basket": {"income": 100.0, "shares": (0.5, 0.5), "calm": (2.0, 1.0), "storm": (4.0, 1.0), "seasons": 12},
+        # the boatyard's boats (chapter 6): price = A * length^B * (1 + inflation)^year * noise; this year's boats
+        # are longer, so the average price rises much more than the price of a boat of given length
+        "boats": {"n": 30, "length": ((5.0, 0.6), (5.6, 0.6)), "A": 2.0, "B": 1.6, "inflation": 0.03,
+                  "noise": 0.06, "seed": 1996},
+        # Dara's labour survey (chapter 8): the Island's 100 adults, each in exactly one box
+        "survey": {"employed full time or by choice part time": 58, "employed part time, wanting full time": 4,
+                   "unemployed 15 weeks or more": 2, "unemployed, lost a job in the last 15 weeks": 3,
+                   "discouraged": 2, "marginally attached, other reasons": 2, "not in the labour force": 29},
+        # who gets the income (chapter 9): 40 households; wages (450) spread lognormally over 38 of them, profits
+        # (250): 100 to Friday (the grove), 85 to Crusoe (the boatyard and half the fishing company), 65 in shares to
+        # eight others; taxes (40) to the council
+        "households": {"n": 40, "wage_sigma": 0.45, "friday": 100.0, "crusoe": 85.0, "small_owners": (8, 65.0),
+                       "seed": 1934},
     },
 }
 

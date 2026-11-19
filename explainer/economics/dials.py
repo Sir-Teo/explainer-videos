@@ -20,7 +20,7 @@ from dataclasses import dataclass, field
 
 STATUSES = ("settled within a range", "depends on the setting", "contested", "not identified")
 DESIGNS = ("RCT", "IV", "RD", "DiD", "event study", "structural", "calibration", "survey", "narrative", "lab",
-           "meta-analysis")
+           "meta-analysis", "review")
 
 
 @dataclass(frozen=True)
@@ -75,6 +75,27 @@ DIALS = {d.key: d for d in [
                       -0.69, where="as above", checked="2026-11-18"),
              Estimate("Wagenaar, Salois and Komro", 2009, "meta-analysis", "spirits: simple mean of 103 estimates",
                       -0.80, where="as above", checked="2026-11-18"),
+         )),
+    Dial("cpi_bias", "measurement bias of the consumer price index", "percentage points a year by which the CPI "
+         "overstates the rise in the cost of living", (3, 28), status="settled within a range", checked="2026-11-19",
+         meaning="pensions, tax brackets and many wages are indexed to the CPI: at 1 point a year an indexed payment "
+                 "gains about a tenth in real terms over a decade, and the Boskin Commission put the cost to the "
+                 "federal debt of 1997-2008 at about $1 trillion; at 0.3 the drift is small",
+         estimates=(
+             Estimate("Boskin, Dulberger, Gordon, Griliches and Jorgenson", 1996, "review", "the CPI-U in 1995-96: "
+                      "substitution 0.40, outlets 0.10, new products and quality 0.60", 1.10, 0.80, 1.60,
+                      where="final report, p. 44, as tabulated by Moulton (2018), table 5, and Gordon (2006), table 1",
+                      checked="2026-11-19"),
+             Estimate("Lebow and Rudd", 2003, "review", "the CPI-U after the reforms of 1995-2002", 0.87, 0.30, 1.40,
+                      where="Journal of Economic Literature 41(1): 159-201, p. 161 (via Moulton 2018, table 5); the "
+                      "abstract rounds to 0.9", checked="2026-11-19"),
+             Estimate("Gordon", 2006, "review", "the CPI-U in 1995-96, revisited: more upper-level substitution, "
+                      "less quality bias", 1.25, 1.2, 1.3, where="NBER Working Paper 12311, abstract",
+                      checked="2026-11-19"),
+             Estimate("Gordon", 2006, "review", "the CPI-U in 2006, before new products and longevity", 0.8,
+                      where="NBER Working Paper 12311, abstract", checked="2026-11-19"),
+             Estimate("Moulton", 2018, "review", "the CPI-U in 2017", 0.85, 0.30, 1.40,
+                      where="Brookings (July 2018), table 5", checked="2026-11-19"),
          )),
     Dial("eis", "elasticity of intertemporal substitution", "", (7, 23)),
     Dial("risk_aversion", "relative risk aversion", "", (7, 23)),
