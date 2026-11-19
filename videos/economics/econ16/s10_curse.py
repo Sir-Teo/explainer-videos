@@ -156,7 +156,7 @@ class Curse(VoiceoverScene):
                   r"average, \ and the winners still lost", font_size=22),
             label(r"the curse needs no optimists: \ only many estimates, \ and the highest one winning",
                   font_size=22, color=E.ACCENT),
-        ).arrange(DOWN, buff=0.15).to_edge(DOWN, buff=0.45)
+        ).arrange(DOWN, buff=0.15).next_to(fc, DOWN, buff=0.55)
         tag = published_tag(r"Bazerman and Samuelson, JCR 27(4) (1983)", corner=DR, font_size=13)
         with self.voiceover(
             "This is one of the series' Facts: the winners of common-value auctions tend to overpay. "

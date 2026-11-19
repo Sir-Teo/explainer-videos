@@ -5,11 +5,11 @@ from videos.economics.econ16.common import *  # noqa: F403
 
 class Frontier(VoiceoverScene):
     def construct(self):
-        card(self, 15, r"Frontier: \ credible auctions, \ auto-bidders, \ and the incentive auction", r"What happens "
+        card(self, 15, r"Frontier: \ new auctions, \ new bidders", r"What happens "
              r"when the seller can cheat, \ the bidders are machines, \ and the goods must be bought back first?",
-             "Chapter fifteen. Frontier: credible auctions, auto-bidders, and the incentive auction.",
-             lit={2017: r"the incentive auction", 2019: r"display ads go first-price", 2020: r"Akbarpour and Li; \ "
-                  r"Milgrom and Segal"}, scale=("market", "nation"), horizon=("a decade",))
+             "Chapter fifteen. Frontier: new auctions, new bidders.",
+             lit={2017: r"the incentive auction", 2019: r"display ads go first-price", 2020: r"Akbarpour and Li"},
+             scale=("market", "nation"), horizon=("a decade",))
         self.incentive()
         self.credible()
         self.machines()
@@ -21,22 +21,22 @@ class Frontier(VoiceoverScene):
                           r"stations, \ and sell them to phone companies, \ at once", color=SECOND, width=11.6,
                           font_size=24).to_edge(UP, buff=0.4)
         left = VGroup(
-            label(r"the reverse auction", font_size=24, color=FIRST),
-            label(r"a falling clock: \ each station \\ stays, \ or sells its channel", font_size=20, color=GREY_A),
+            label(r"the reverse auction", font_size=28, color=FIRST),
+            label(r"a falling clock: \ each station \\ stays, \ or sells its channel", font_size=23, color=GREY_A),
             label(r"a computer checks, \ at every step, \\ that the stations left can be \\ repacked into fewer "
-                  r"channels", font_size=20, color=GREY_A),
-            label(rf"\${f['reverse_bn']:.2f} billion \\ to {f['stations']} stations", font_size=24, color=FIRST),
+                  r"channels", font_size=23, color=GREY_A),
+            label(rf"\${f['reverse_bn']:.2f} billion \\ to {f['stations']} stations", font_size=28, color=FIRST),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.18)
         right = VGroup(
-            label(r"the forward auction", font_size=24, color=SECOND),
-            label(r"a rising clock: \\ phone companies bid \\ for the freed spectrum", font_size=20, color=GREY_A),
+            label(r"the forward auction", font_size=28, color=SECOND),
+            label(r"a rising clock: \\ phone companies bid \\ for the freed spectrum", font_size=23, color=GREY_A),
             label(r"if the sale didn't cover the purchase, \\ try again, \ clearing less",
-                  font_size=20, color=GREY_A),
-            label(rf"\${f['forward_bn']:.1f} billion; \\ {f['mhz']} MHz cleared", font_size=24, color=SECOND),
+                  font_size=23, color=GREY_A),
+            label(rf"\${f['forward_bn']:.1f} billion; \\ {f['mhz']} MHz cleared", font_size=28, color=SECOND),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.18)
         VGroup(left, right).arrange(RIGHT, buff=1.4, aligned_edge=UP).next_to(hc, DOWN, buff=0.45)
         foot = label(r"Milgrom and Segal: \ a falling clock is ``obviously strategy-proof'': \ stay while the price "
-                     r"beats your value", font_size=21, color=E.ACCENT).to_edge(DOWN, buff=0.4)
+                     r"beats your value", font_size=22, color=E.ACCENT).to_edge(DOWN, buff=0.75)
         tag = published_tag(r"FCC, Auction 1000 (2017); \ Milgrom and Segal, JPE 128(1) (2020)", corner=DR,
                             font_size=12)
         with self.voiceover(

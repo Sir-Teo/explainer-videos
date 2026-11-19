@@ -2,8 +2,6 @@ from __future__ import annotations
 
 from videos.economics.econ16.common import *  # noqa: F403
 
-BIG = "#C9A0FF"
-SMALL = "#7FD1B9"
 
 
 class Units(VoiceoverScene):
@@ -56,34 +54,34 @@ class Units(VoiceoverScene):
         tr, best, vk = b["truthful"], b["best"], b["vickrey"]
         head = label(r"two bonds; \ Bo wants both, \ worth 10 each; \ Dara wants one, \ worth 6", font_size=27,
                      color=E.ACCENT).to_edge(UP, buff=0.4)
-        who = VGroup(VGroup(islander("bo", 0.7), label(r"10, \ 10", font_size=20, color=BIG)).arrange(DOWN,
+        who = VGroup(VGroup(islander("bo", 0.7), label(r"10, \ 10", font_size=20, color=BO)).arrange(DOWN,
                                                                                                     buff=0.08),
-                     VGroup(islander("dara", 0.7), label(r"6", font_size=20, color=SMALL)).arrange(DOWN, buff=0.08)
+                     VGroup(islander("dara", 0.7), label(r"6", font_size=20, color=DARA)).arrange(DOWN, buff=0.08)
                      ).arrange(RIGHT, buff=1.2).next_to(head, DOWN, buff=0.3)
         hdr = [r"rule", r"who wins", r"price", r"Bo's profit", r"seller gets", r"surplus"]
         xs = [-4.6, -1.5, 0.6, 2.3, 4.0, 5.6]
         top = 0.9
-        header = VGroup(*[label(h, font_size=18, color=GREY_B).move_to([xs[j], top, 0]) for j, h in enumerate(hdr)])
+        header = VGroup(*[label(h, font_size=21, color=GREY_B).move_to([xs[j], top, 0]) for j, h in enumerate(hdr)])
 
         def row(i, cells, colors):
-            return VGroup(*[label(c, font_size=21, color=col).move_to([xs[j], top - 0.62 * (i + 1), 0])
+            return VGroup(*[label(c, font_size=25, color=col).move_to([xs[j], top - 0.7 * (i + 1), 0])
                             for j, (c, col) in enumerate(zip(cells, colors))])
 
         r1 = row(0, [r"one price; \ Bo bids for 2", r"Bo, \ Bo", rf"{tr['price']:.0f} each", rf"{tr['big_profit']:.0f}",
                      rf"{tr['revenue']:.0f}", rf"{tr['surplus']:.0f}"],
-                 [SECOND, WHITE, WHITE, BIG, PRICE, WHITE])
+                 [SECOND, WHITE, WHITE, BO, PRICE, WHITE])
         r2 = row(1, [r"one price; \ Bo bids for 1", r"Bo, \ Dara", rf"{best['price']:.0f}",
                      rf"{best['big_profit']:.0f}", rf"{best['revenue']:.0f}", rf"{best['surplus']:.0f}"],
-                 [HOLD, WHITE, WHITE, BIG, HOLD, HOLD])
+                 [HOLD, WHITE, WHITE, BO, HOLD, HOLD])
         r3 = row(2, [r"Vickrey's rule", r"Bo, \ Bo", rf"{vk['big_pays']:.0f} in all", rf"{vk['big_profit']:.0f}",
                      rf"{vk['revenue']:.0f}", rf"{vk['surplus']:.0f}"],
-                 [PRICE, WHITE, WHITE, BIG, PRICE, WHITE])
+                 [PRICE, WHITE, WHITE, BO, PRICE, WHITE])
         foot = VGroup(
             label(r"with one price, \ a big buyer's own bid sets the price it pays: \ so it asks for less",
                   font_size=22, color=HOLD),
             label(r"demand reduction \ (Ausubel and Cramton): \ less revenue, \ and units in the wrong hands",
                   font_size=22, color=E.ACCENT),
-        ).arrange(DOWN, buff=0.15).to_edge(DOWN, buff=0.4)
+        ).arrange(DOWN, buff=0.15).move_to(DOWN * 2.45)
         tag = agora_tag(corner=DR, font_size=15)
         with self.voiceover(
             "Friedman's single price has its own trap, and two bonds on the island show it. "

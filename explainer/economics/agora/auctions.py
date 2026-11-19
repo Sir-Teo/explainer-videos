@@ -51,11 +51,12 @@ def simulate_formats(n: int = 4, draws: int = 50000, reserve: float = 0.0, alpha
     first = np.where(top >= reserve, b, 0.0)
     second_p = np.where(top >= reserve, np.maximum(second, reserve), 0.0)
     allpay = ((n - 1) / n) * v ** n
-    allpay_rev = allpay.sum(axis=1) if reserve == 0 and alpha == 1.0 else np.full(draws, np.nan)
+    runs = [("first-price", first), ("Dutch", first), ("second-price", second_p), ("English", second_p)]
+    if reserve == 0 and alpha == 1.0:           # the all-pay bid above is the risk-neutral one without a reserve
+        runs.append(("all-pay", allpay.sum(axis=1)))
     out = {}
-    for name, r in (("first-price", first), ("Dutch", first), ("second-price", second_p), ("English", second_p),
-                    ("all-pay", allpay_rev)):
-        out[name] = {"mean": float(np.nanmean(r)), "se": float(np.nanstd(r) / np.sqrt(draws))}
+    for name, r in runs:
+        out[name] = {"mean": float(np.mean(r)), "se": float(np.std(r) / np.sqrt(draws))}
     return {"formats": out, "theory": float((n - 1) / (n + 1)), "n": n, "draws": draws, "reserve": reserve,
             "alpha": alpha, "first_dist": first[:2000].tolist(), "second_dist": second_p[:2000].tolist()}
 

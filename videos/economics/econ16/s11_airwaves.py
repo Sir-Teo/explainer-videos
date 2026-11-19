@@ -84,36 +84,36 @@ class Airwaves(VoiceoverScene):
                      color=E.ACCENT).to_edge(UP, buff=0.35)
         who = VGroup(
             VGroup(islander("bo", 0.7), label(rf"Bo: \ both together, \ {x['both']:.0f}; \ either alone, "
-                                             rf"{x['alone']:.0f}", font_size=20, color=NAT)).arrange(RIGHT, buff=0.25),
-            VGroup(islander("ana", 0.7), label(r"Ana: \ North only", font_size=20, color=RIVALS[0])).arrange(RIGHT,
+                                             rf"{x['alone']:.0f}", font_size=22, color=BO)).arrange(RIGHT, buff=0.25),
+            VGroup(islander("ana", 0.7), label(r"Ana: \ North only", font_size=22, color=ANA)).arrange(RIGHT,
                                                                                                     buff=0.25),
-            VGroup(islander("dara", 0.7), label(r"Dara: \ South only", font_size=20, color=RIVALS[2])).arrange(
+            VGroup(islander("dara", 0.7), label(r"Dara: \ South only", font_size=22, color=DARA)).arrange(
                 RIGHT, buff=0.25),
         ).arrange(RIGHT, buff=0.6).next_to(head, DOWN, buff=0.35)
 
         def case_block(c, title, color):
             r_lo, r_hi = c["rivals"]
             lines = VGroup(
-                label(title, font_size=22, color=color),
+                label(title, font_size=25, color=color),
                 label(rf"Bo cautious: \ bids each only to {x['alone']:.0f}; \ Ana and Dara win; \ surplus "
-                      rf"{c['cautious']['welfare']:.0f}", font_size=19, color=GREY_A),
+                      rf"{c['cautious']['welfare']:.0f}", font_size=22, color=GREY_A),
             )
             b = c["bold"]
             if b["national_wins"] == 2:
                 lines.add(label(rf"Bo bold: \ wins both, \ paying {b['prices'][0]:.0f} + {b['prices'][1]:.0f}; \ "
-                                rf"profit {b['national_profit']:.0f}; \ surplus {b['welfare']:.0f}", font_size=19,
-                                color=NAT))
+                                rf"profit {b['national_profit']:.0f}; \ surplus {b['welfare']:.0f}", font_size=22,
+                                color=BO))
             else:
                 lines.add(label(rf"Bo bold: \ wins one at {b['prices'][0]:.0f}, \ worth {x['alone']:.0f} alone; "
-                                rf"\ profit {b['national_profit']:.0f}", font_size=19, color=HOLD))
+                                rf"\ profit {b['national_profit']:.0f}", font_size=22, color=HOLD))
             lines.add(label(rf"the best outcome: \ {'Bo' if c['efficient'] == 'national' else 'Ana and Dara'}; \ "
-                            rf"surplus {c['efficient_welfare']:.0f}", font_size=19, color=E.ACCENT))
-            return lines.arrange(DOWN, aligned_edge=LEFT, buff=0.12)
+                            rf"surplus {c['efficient_welfare']:.0f}", font_size=22, color=E.ACCENT))
+            return lines.arrange(DOWN, aligned_edge=LEFT, buff=0.16)
 
         b1 = case_block(c1, rf"if Ana and Dara value theirs at {c1['rivals'][0]:.0f} and {c1['rivals'][1]:.0f}",
                         PRICE)
         b2 = case_block(c2, rf"if they value theirs at {c2['rivals'][0]:.0f} and {c2['rivals'][1]:.0f}", HOLD)
-        VGroup(b1, b2).arrange(DOWN, aligned_edge=LEFT, buff=0.45).next_to(who, DOWN, buff=0.45)
+        VGroup(b1, b2).arrange(DOWN, aligned_edge=LEFT, buff=0.55).next_to(who, DOWN, buff=0.5)
         foot = label(r"the cure: \ let Bo bid for the pair as a package \ (combinatorial auctions)", font_size=23,
                      color=SECOND).to_edge(DOWN, buff=0.35)
         tag = agora_tag(corner=DR, font_size=15)

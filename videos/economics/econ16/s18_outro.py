@@ -55,7 +55,7 @@ class Outro(VoiceoverScene):
     def recap(self):
         p, m, c, uk = load("playit"), load("myerson"), load("curse"), load("spectrum")["uk"]
         items = [
-            (rf"Britain's airwaves: \ \pounds{uk['revenue_bn_gbp']} billion; \ the Dutch: \ a third of the forecast",
+            (rf"Britain's airwaves: \ \pounds{uk['revenue_bn_gbp']} billion; \ the Dutch: \ under a third of the forecast",
              PRICE),
             (rf"Play it: \ bid {p['best_first']:.1f} when you pay your bid, \ 70 when you pay the next one", YOU),
             (r"four formats, \ two games: \ Dutch is a sealed bid; \ English is nearly Vickrey's", SECOND),

@@ -19,6 +19,6 @@ SCENES = [
     ("s14_units", "Units", "12. Many units: bonds and electricity"),
     ("s15_dials", "Dials", "13. The Dials: what a reserve adds"),
     ("s16_practice", "Practice", "14. In practice: auction desks"),
-    ("s17_frontier", "Frontier", "15. Frontier: credible auctions, auto-bidders, and the incentive auction"),
+    ("s17_frontier", "Frontier", "15. Frontier: new auctions, new bidders"),
     ("s18_outro", "Outro", "Recap, problems, and the road ahead"),
 ]

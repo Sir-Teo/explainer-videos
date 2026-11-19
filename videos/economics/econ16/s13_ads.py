@@ -52,8 +52,8 @@ class Ads(VoiceoverScene):
         boxes = VGroup()
         for k, c in enumerate(ctrs):
             h = 0.55 + 0.6 * c / ctrs[0]
-            r = RoundedRectangle(width=3.0, height=h, corner_radius=0.08, stroke_color=GREY_B, stroke_width=2)
-            t = label(rf"slot {k + 1}: \ {c:.0f} clicks", font_size=19, color=GREY_A).move_to(r)
+            r = RoundedRectangle(width=3.6, height=h + 0.15, corner_radius=0.08, stroke_color=GREY_B, stroke_width=2)
+            t = label(rf"slot {k + 1}: \ {c:.0f} clicks", font_size=23, color=GREY_A).move_to(r)
             boxes.add(VGroup(r, t))
         boxes.arrange(DOWN, buff=0.18).move_to(center)
         return boxes
@@ -63,15 +63,16 @@ class Ads(VoiceoverScene):
         head = label(r"the island's notice board: \ three slots, \ four advertisers", font_size=28,
                      color=E.ACCENT).to_edge(UP, buff=0.4)
         boxes = self.slots(g, LEFT * 3.6 + DOWN * 0.2)
-        who = VGroup(*[VGroup(islander(k, 0.55), label(rf"{v:.0f} a click", font_size=18, color=RIVALS[i])).arrange(
-            DOWN, buff=0.06) for i, (k, v) in enumerate(zip(NAMES, g["values"]))]).arrange(RIGHT, buff=0.45)
+        who = VGroup(*[VGroup(islander(k, 0.6), label(rf"{v:.0f} a click", font_size=20,
+                                                      color=island.CAST[k].color)).arrange(DOWN, buff=0.06)
+                       for k, v in zip(NAMES, g["values"])]).arrange(RIGHT, buff=0.5)
         who.next_to(head, DOWN, buff=0.35).shift(RIGHT * 2.6)
         v = g["values"]
         c = g["ctrs"]
         side = VGroup(
             label(r"if all bid their values: \ Ana gets slot 1, \ and pays Bo's bid, \ 8 a click", font_size=21),
             label(rf"Ana's profit: \ {c[0]:.0f} $\times$ ({v[0]:.0f} $-$ {v[1]:.0f}) $=$ "
-                  rf"{g['deviation_profits_top'][0]:.0f}", font_size=22, color=RIVALS[0]),
+                  rf"{g['deviation_profits_top'][0]:.0f}", font_size=22, color=ANA),
             label(r"if Ana bids under 8 instead, \ she drops to slot 2, \ and pays Dara's 6", font_size=21),
             label(rf"profit: \ {c[1]:.0f} $\times$ ({v[0]:.0f} $-$ {v[2]:.0f}) $=$ "
                   rf"{g['deviation_profits_top'][1]:.0f}", font_size=22, color=HOLD),
@@ -107,15 +108,15 @@ class Ads(VoiceoverScene):
         rows_data = []
         for k in range(3):
             rows_data.append([rf"{k + 1}", rf"{g['ctrs'][k]:.0f}", rf"{g['truthful_pay'][k] / g['ctrs'][k]:.0f}",
-                              rf"{g['gsp_price_per_click'][k]:.1f}", rf"{g['vcg_total'][k]:.0f}"])
+                              rf"{g['gsp_price_per_click'][k]:.1f}", rf"{g['vcg_total'][k]:,.0f}"])
         xs = [-5.4, -3.6, -0.9, 2.4, 5.0]
         table = VGroup()
         for j, h in enumerate(hdr):
-            table.add(label(h, font_size=18, color=GREY_B).move_to([xs[j], 1.9, 0]))
+            table.add(label(h, font_size=20, color=GREY_B).move_to([xs[j], 2.0, 0]))
         cells = VGroup()
         for i, r in enumerate(rows_data):
-            row = VGroup(*[label(t, font_size=24, color=[WHITE, GREY_A, FIRST, SECOND, SECOND][j]).move_to(
-                [xs[j], 1.2 - 0.65 * i, 0]) for j, t in enumerate(r)])
+            row = VGroup(*[label(t, font_size=28, color=[WHITE, GREY_A, FIRST, SECOND, SECOND][j]).move_to(
+                [xs[j], 1.25 - 0.7 * i, 0]) for j, t in enumerate(r)])
             cells.add(row)
         expl = VGroup(
             label(r"slot 1's Vickrey price: \ Bo loses 80 clicks at 8, \ Dara 60 at 6, \ Friday 60 at 4: \ 1,240",
@@ -124,7 +125,7 @@ class Ads(VoiceoverScene):
                   r"equilibrium", font_size=21),
             label(r"in which bidders shade, \ and each pays exactly Vickrey's price", font_size=21, color=E.ACCENT),
             label(r"the same revenue, \ by a different road: \ chapter five, \ again", font_size=21, color=GREY_A),
-        ).arrange(DOWN, buff=0.18).to_edge(DOWN, buff=0.45)
+        ).arrange(DOWN, buff=0.22).move_to(DOWN * 1.75)
         tag = agora_tag(corner=DR, font_size=15)
         with self.voiceover(
             "What would Vickrey's rule be here? Each advertiser should pay the harm its presence does to the others. "

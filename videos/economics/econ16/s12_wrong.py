@@ -83,8 +83,8 @@ class Wrong(VoiceoverScene):
                    color=TMOB).next_to(math_, DOWN, buff=0.35)
         quote = quote_card(r"There were no agreements with Mannesmann. \ But Mannesmann's first bid was a clear offer.",
                            r"a T-Mobil manager, \ Frankfurter Allgemeine Zeitung, \ 29 October 1999", width=11.0,
-                           font_size=22, color=TMOB).to_edge(DOWN, buff=0.3)
-        tag = published_tag(r"Klemperer, JEP 16(1) (2002), from Jehiel and Moldovanu (2000)", corner=UR,
+                           font_size=24, color=TMOB).move_to(DOWN * 0.6)
+        tag = published_tag(r"Klemperer, JEP 16(1) (2002), from Jehiel and Moldovanu (2000)", corner=DR,
                             font_size=12)
         with self.voiceover(
             "Bids can carry whole proposals. <bookmark mark='a'/> In 1999 Germany auctioned ten blocks of spectrum, "
