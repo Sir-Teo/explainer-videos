@@ -106,7 +106,6 @@ class Demand(VoiceoverScene):
             "the cups. <bookmark mark='c'/> The result is another staircase, with more and smaller steps. "
             f"<bookmark mark='d'/> At a dollar fifty, the three of them buy {n} cups between them."
         ) as vo:
-            vo.wait_until("a")
             self.play(LaggedStart(*[FadeIn(p, shift=LEFT * 0.2) for p in people], lag_ratio=0.4), run_time=2)
             vo.wait_until("b")
             self.play(FadeIn(ax), FadeIn(side))

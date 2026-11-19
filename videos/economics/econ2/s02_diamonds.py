@@ -64,7 +64,6 @@ class Diamonds(VoiceoverScene):
             "fetch a high price because men have dived for them; on the contrary, men dive for them because they "
             "fetch a high price. Work spent making something nobody wants gives it no value at all."
         ) as vo:
-            vo.wait_until("a")
             self.play(FadeIn(ric, shift=UP * 0.2))
             vo.wait_until("b")
             self.play(FadeIn(marx, shift=UP * 0.2))
@@ -152,11 +151,11 @@ class Diamonds(VoiceoverScene):
             "first half of the answer to this part's question, the half that comes from buyers. The other half "
             "comes from what it costs to supply one more unit, and that's where Ricardo was right after all."
         ) as vo:
-            self.play(FadeIn(left), FadeIn(right))
+            self.play(FadeIn(left), FadeIn(right), FadeIn(drop), FadeIn(gem))
             vo.wait_until("a")
-            self.play(FadeIn(drop), FadeIn(lw, shift=UP * 0.1))
+            self.play(FadeIn(lw, shift=UP * 0.1))
             vo.wait_until("b")
-            self.play(FadeIn(gem), FadeIn(rw, shift=UP * 0.1))
+            self.play(FadeIn(rw, shift=UP * 0.1))
             vo.wait_until("c")
             self.play(FadeIn(bottom, shift=UP * 0.1))
         self.clear_scene()
