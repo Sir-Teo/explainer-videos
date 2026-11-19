@@ -8,12 +8,19 @@ from videos.stats.stats54.common import *  # noqa: F403
 class Localization(StatsScene):
     def construct(self):
         self.card()
+        self.ask(r"ERM's excess risk can fall like $1/n$ instead of $1/\sqrt n$ when...",
+                 ["the variance shrinks with the excess risk", "never"], 0,
+                 say="The uniform deviation falls like one over root n. When can the chosen rule's excess risk fall "
+                     "like one over n instead?",
+                 reveal="When rules close to the best have small variance relative to it: low noise, a Bernstein "
+                        "condition. Localization looks only at those nearby rules.")
         self.idea()
         self.chart()
         self.conditions()
         self.bernstein()
         self.fixed_point()
         self.regression()
+        self.answer()
 
     def card(self):
         self.chapter(4, r"Localization and fast rates", r"When the gap shrinks like $1/n$", lit=(2005,), part=PART, said="Chapter four. Localization and fast rates: when the gap shrinks like one over n.")

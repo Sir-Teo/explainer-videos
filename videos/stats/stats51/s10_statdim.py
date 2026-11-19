@@ -8,12 +8,20 @@ from videos.stats.stats51.common import *  # noqa: F403
 class StatisticalDimension(StatsScene):
     def construct(self):
         self.card()
+        self.ask(r"$\ell_1$ recovery of an $s$-sparse vector in $p$ dimensions switches on at about $m \approx$...",
+                 [r"$2 s \log(p/s)$", "$p/2$", "$s$"], 0,
+                 say="The Donoho-Tanner curve, explained. Random measurements of an s-sparse vector in p "
+                     "dimensions. Near what number of measurements does l one recovery switch from failing to "
+                     "succeeding?",
+                 reveal="About two s log of p over s: the statistical dimension of the l one ball's descent cone. "
+                        "Amelunxen, Lotz, McCoy and Tropp predicted the whole curve.")
         self.definition()
         self.formula()
         self.grid()
         self.table()
         self.beyond()
         self.universal()
+        self.answer()
 
     def universal(self):
         rows = fit_rows(VGroup(

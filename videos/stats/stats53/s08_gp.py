@@ -8,11 +8,18 @@ from videos.stats.stats53.common import *  # noqa: F403
 class GaussianProcess(StatsScene):
     def construct(self):
         self.card()
+        self.ask("A Gaussian-process prior much smoother than the truth gives a contraction rate that is...",
+                 ["still optimal", "slower than minimax"], 1,
+                 say="A Gaussian-process prior whose sample paths are much smoother than the true function. How "
+                     "fast does the posterior contract?",
+                 reveal="Slower than the minimax rate: the prior can't reach the truth's roughness quickly enough. "
+                        "The rate is governed by the RKHS and small-ball probabilities.")
         self.rkhs()
         self.theorem()
         self.chart()
         self.functions()
         self.examples()
+        self.answer()
 
     def card(self):
         self.chapter(7, r"Gaussian process priors", r"Rates from the RKHS and small-ball probabilities", lit=(2008,), part=PART, said="Chapter seven. Gaussian process priors: rates from the reproducing-kernel Hilbert space and small-ball probabilities.")

@@ -25,12 +25,23 @@ def bernstein(p):
 class ConcentrationIntervals(StatsScene):
     def construct(self):
         self.card()
+        self.ask("A Hoeffding interval for a proportion, against Wilson's, is...",
+                 ["narrower", "wider, but valid at every $n$"], 1,
+                 say="Three intervals for a probability: Wald, Wilson, and one from Hoeffding's inequality. How "
+                     "does the Hoeffding interval compare?",
+                 reveal="Wider, but valid at every sample size, with no asymptotics. That's the cost of a guarantee "
+                        "that never fails.")
         self.intervals()
         self.widths()
         self.board()
         self.exact()
         self.anytime()
         self.lesson()
+        self.answer()
+        self.checkpoint([("Less correlated Gaussians have?", "a larger expected maximum"),
+                         (r"$\ell_1$ recovery's transition at?", r"the statistical dimension, about $2s\log(p/s)$")],
+                        narration="Checkpoint. Comparison and widths.",
+                        answers_narration="A larger maximum. And the statistical dimension.")
 
     def exact(self):
         from scipy import stats as ST

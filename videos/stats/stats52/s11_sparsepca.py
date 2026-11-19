@@ -8,11 +8,18 @@ from videos.stats.stats52.common import *  # noqa: F403
 class SparsePCA(StatsScene):
     def construct(self):
         self.card()
+        self.ask("Sparse PCA: what fast algorithms need, against what's possible in principle...",
+                 ["is the same", "is more signal: a gap"], 1,
+                 say="Sparse PCA: the signal lives on k of p variables. Structure can beat the BBP threshold. Do "
+                     "polynomial-time methods need the same signal strength as is possible in principle?",
+                 reveal="No: they need more. Berthet and Rigollet tied the gap to planted clique. Structure beats "
+                        "the threshold, at a computational price.")
         self.idea()
         self.chart()
         self.barrier()
         self.graphs()
         self.graph_chart()
+        self.answer()
 
     def card(self):
         self.chapter(10, r"Sparse PCA and graphical models", r"Structure beats the BBP threshold, \ at a price", lit=(2009,), part=PART, said="Chapter ten. Sparse PCA and graphical models: structure beats the BBP threshold, at a price.")

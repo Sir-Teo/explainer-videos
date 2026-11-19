@@ -10,11 +10,18 @@ from videos.stats.stats51.common import *  # noqa: F403
 class Widths(StatsScene):
     def construct(self):
         self.card()
+        self.ask("A random subspace of codimension $m$ misses a set on the sphere when $m$ exceeds about...",
+                 ["its squared Gaussian width", "its ambient dimension", "never"], 0,
+                 say="When does a random subspace miss a set on the sphere? Gordon's escape through the mesh: when "
+                     "its codimension exceeds about what?",
+                 reveal="The set's squared Gaussian width, its effective dimension. Sets of small width are easy to "
+                        "miss, however large the ambient space.")
         self.width()
         self.table()
         self.recovery()
         self.picture()
         self.mesh()
+        self.answer()
 
     def card(self):
         self.chapter(8, r"Gaussian widths and the escape through the mesh", r"When does a random subspace miss a set?", lit=(1985,), part=PART, said="Chapter eight. Gaussian widths and the escape through the mesh: when does a random subspace miss a set?")

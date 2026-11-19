@@ -8,6 +8,12 @@ from videos.stats.stats54.common import *  # noqa: F403
 class Margins(StatsScene):
     def construct(self):
         self.card()
+        self.ask("AdaBoost's test error kept falling after its training error hit zero because...",
+                 ["its margins kept growing", "by luck"], 0,
+                 say="AdaBoost's test error kept improving long after it stopped making mistakes on the training "
+                     "data. Why?",
+                 reveal="Its margins kept growing: it became more confident on the training points, and margin "
+                        "bounds depend on confidence, not on the number of rules combined.")
         self.puzzle()
         self.chart()
         self.margin_chart()
@@ -15,6 +21,7 @@ class Margins(StatsScene):
         self.gradient()
         self.svm()
         self.compression()
+        self.answer()
 
     def card(self):
         self.chapter(5, r"Margins", r"Why boosting kept improving after it stopped making mistakes", lit=(1998,), part=PART, said="Chapter five. Margins: why boosting kept improving after it stopped making mistakes.")

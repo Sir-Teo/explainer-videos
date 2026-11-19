@@ -8,12 +8,19 @@ from videos.stats.stats54.common import *  # noqa: F403
 class PACBayes(StatsScene):
     def construct(self):
         self.card()
+        self.ask("A PAC-Bayes bound for a posterior $Q$ pays a complexity term...",
+                 [r"$\mathrm{KL}(Q \,\|\, P)$", "the VC dimension", "none"], 0,
+                 say="PAC-Bayes: bounds for averaged rules, with a prior P fixed before the data. What does a "
+                     "posterior Q pay for complexity?",
+                 reveal="Its Kullback-Leibler divergence from the prior. Move far from the prior, pay more; a "
+                        "posterior close to it generalizes.")
         self.theorem()
         self.proof()
         self.chart()
         self.table()
         self.bayes()
         self.deep()
+        self.answer()
 
     def card(self):
         self.chapter(6, r"PAC-Bayes", r"Bounds for averaged rules, \ with a prior", lit=(1999,), part=PART, said="Chapter six. PAC-Bayes: bounds for averaged rules, with a prior.")

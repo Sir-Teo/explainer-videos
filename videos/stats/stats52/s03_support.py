@@ -8,11 +8,25 @@ from videos.stats.stats52.common import *  # noqa: F403
 class Support(StatsScene):
     def construct(self):
         self.card()
+        self.wrong_idea("Small prediction error means the lasso found the right variables",
+                        "Prediction and support recovery need different conditions",
+                        narration="A natural inference: the lasso predicts well, so it must have found the right "
+                                  "variables.",
+                        right_narration="No. Correlated designs let wrong variables predict nearly as well as right "
+                                        "ones. Prediction needs restricted eigenvalues; finding the support needs "
+                                        "irrepresentability and big enough coefficients.")
+        self.ask("Exact support recovery by the lasso needs...",
+                 ["irrepresentability and large enough coefficients", "only sparsity"], 0,
+                 say="A small estimation error isn't the same as finding the right variables. What does exact "
+                     "support recovery need?",
+                 reveal="The irrepresentable condition, so irrelevant variables can't masquerade as relevant ones, "
+                        "and coefficients large enough to see: the beta-min condition.")
         self.condition()
         self.witness()
         self.chart()
         self.failure()
         self.betamin()
+        self.answer()
 
     def card(self):
         self.chapter(2, r"Support recovery", r"Finding the right variables, \ not just a good fit", lit=(2009,), part=PART, said="Chapter two. Support recovery: finding the right variables, not just a good fit.")

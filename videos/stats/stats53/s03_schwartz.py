@@ -8,11 +8,18 @@ from videos.stats.stats53.common import *  # noqa: F403
 class Schwartz(StatsScene):
     def construct(self):
         self.card()
+        self.ask("Schwartz's theorem needs the prior to put positive mass on...",
+                 ["every Kullback--Leibler neighbourhood of the truth", "the exact truth"], 0,
+                 say="Which truths can a prior learn? Lorraine Schwartz's theorem of 1965 needs the prior to put "
+                     "positive mass on what?",
+                 reveal="Every Kullback-Leibler neighbourhood of the truth, plus tests that separate the truth from "
+                        "far-away alternatives. Mass near the truth, and a way to rule out the rest.")
         self.theorem()
         self.kl()
         self.chart()
         self.sieves()
         self.tests()
+        self.answer()
 
     def card(self):
         self.chapter(2, r"Schwartz's theorem", r"Which truths can a prior learn?", lit=(1965,), part=PART, said="Chapter two. Schwartz's theorem: which truths can a prior learn?")

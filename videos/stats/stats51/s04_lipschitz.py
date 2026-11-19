@@ -8,12 +8,23 @@ from videos.stats.stats51.common import *  # noqa: F403
 class Lipschitz(StatsScene):
     def construct(self):
         self.card()
+        self.ask("An $L$-Lipschitz function of $n$ standard Gaussians fluctuates on the scale of...",
+                 ["$L$", r"$L\sqrt n$", "$Ln$"], 0,
+                 say="A function of n Gaussian inputs that moves at most L for each unit the input moves. How large "
+                     "are its fluctuations?",
+                 reveal="Of order L, whatever n is: Gaussian concentration, Tsirelson, Ibragimov and Sudakov. A "
+                        "million inputs, and still the same tight tail.")
         self.theorem()
         self.herbst()
         self.chart()
         self.maxtable()
         self.sphere()
         self.talagrand()
+        self.answer()
+        self.checkpoint([("A Gaussian vector in $n$ dimensions lies near?", r"a thin shell of radius $\sqrt n$"),
+                         ("An $L$-Lipschitz function of Gaussians fluctuates on scale?", "$L$, whatever $n$")],
+                        narration="Checkpoint. Geometry and concentration.",
+                        answers_narration="A thin shell. And L.")
 
     def card(self):
         self.chapter(3, r"Concentration of Lipschitz functions", r"Lipschitz functions of Gaussian inputs concentrate", lit=(1976,), part=PART, said='Chapter three. Concentration of Lipschitz functions: Lipschitz functions of Gaussian inputs concentrate.')

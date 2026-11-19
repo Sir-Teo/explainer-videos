@@ -8,6 +8,12 @@ from videos.stats.stats53.common import *  # noqa: F403
 class Dirichlet(StatsScene):
     def construct(self):
         self.card()
+        self.ask("Dirichlet process prior, $n$ observations. The posterior mean CDF is...",
+                 ["a mix of the prior guess and the empirical CDF", "the empirical CDF only"], 0,
+                 say="Ferguson's Dirichlet process prior on a distribution, then n observations. What's the "
+                     "posterior mean of the distribution function?",
+                 reveal="A weighted mix of the prior's guess and the empirical CDF, with weights alpha and n. The "
+                        "prior acts like alpha pseudo-observations.")
         self.definition()
         self.newcomb()
         self.urn()
@@ -16,6 +22,7 @@ class Dirichlet(StatsScene):
         self.faithful()
         self.polya()
         self.pitman()
+        self.answer()
 
     def card(self):
         self.chapter(6, r"Dirichlet processes and Pólya trees", r"Priors on distributions", lit=(1973,), part=PART, said="Chapter six. Dirichlet processes and Pólya trees: priors on distributions.")

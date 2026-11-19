@@ -8,12 +8,19 @@ from videos.stats.stats51.common import *  # noqa: F403
 class Comparison(StatsScene):
     def construct(self):
         self.card()
+        self.ask("Two Gaussian vectors with equal variances. The less correlated one has a...",
+                 ["larger expected maximum", "smaller expected maximum"], 0,
+                 say="Slepian, at Bell Labs in 1962: two Gaussian vectors with the same variances, one less "
+                     "correlated than the other. Which has the larger expected maximum?",
+                 reveal="The less correlated one. Correlated variables move together and their peaks coincide; "
+                        "independent ones spread their chances. Less correlated means a larger maximum.")
         self.slepian()
         self.chart()
         self.fernique()
         self.gordon()
         self.singular()
         self.cgmt()
+        self.answer()
 
     def cgmt(self):
         rows = [

@@ -8,6 +8,12 @@ from videos.stats.stats52.common import *  # noqa: F403
 class Inference(StatsScene):
     def construct(self):
         self.card()
+        self.ask("The debiased lasso adds to the lasso estimate...",
+                 ["a correction built from the residuals", "nothing: it refits"], 0,
+                 say="Confidence intervals when p is large. The lasso's coefficients are shrunk, so they can't be "
+                     "centred intervals. What does the debiased lasso add?",
+                 reveal="A one-step correction built from the residuals and an approximate inverse covariance. The "
+                        "result is asymptotically normal, coordinate by coordinate.")
         self.problem()
         self.debias()
         self.theory()
@@ -15,6 +21,11 @@ class Inference(StatsScene):
         self.forest()
         self.table()
         self.caveats()
+        self.answer()
+        self.checkpoint([("Below the BBP threshold, PCA's overlap with the spike?", "zero, asymptotically"),
+                         ("Tracy--Widom fluctuations scale like?", "$n^{-2/3}$")],
+                        narration="Checkpoint. Spikes and edges.",
+                        answers_narration="Zero. And n to the minus two thirds.")
 
     def card(self):
         self.chapter(11, r"Inference: \ the debiased lasso", r"Confidence intervals when $p$ is large", lit=(2014,), part=PART, said="Chapter eleven. Inference: the debiased lasso, or confidence intervals when p is large.")

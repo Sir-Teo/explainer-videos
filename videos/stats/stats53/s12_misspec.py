@@ -6,6 +6,12 @@ from videos.stats.stats53.common import *  # noqa: F403
 class Misspecification(StatsScene):
     def construct(self):
         self.card()
+        self.ask("The model is wrong. The posterior concentrates near the KL-closest parameter, and its spread...",
+                 ["is right", "can be too narrow or too wide"], 1,
+                 say="When the model is wrong, the posterior concentrates near the parameter closest to the truth "
+                     "in Kullback-Leibler. Is its spread right?",
+                 reveal="Not necessarily: it can be too narrow or too wide, because the curvature and the score's "
+                        "variance no longer agree. Tempered and sandwich-adjusted posteriors correct it.")
         self.theorem()
         self.example()
         self.generalized()
@@ -13,6 +19,11 @@ class Misspecification(StatsScene):
         self.gibbs()
         self.board()
         self.safebayes()
+        self.answer()
+        self.checkpoint([("Adaptive credible sets cover truths with?", "polished tails"),
+                         ("Horseshoe or Laplace, on large signals?", "the horseshoe shrinks them less")],
+                        narration="Checkpoint. Adaptive and sparse Bayes.",
+                        answers_narration="Polished tails. And the horseshoe.")
 
     def card(self):
         self.chapter(11, r"Misspecification and generalized posteriors", r"When the model is wrong", lit=(2017,), part=PART, said="Chapter eleven. Misspecification and generalized posteriors: when the model is wrong.")

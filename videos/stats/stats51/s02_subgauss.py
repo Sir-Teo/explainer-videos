@@ -22,11 +22,18 @@ def say_sci(v: float) -> str:
 class SubGaussian(StatsScene):
     def construct(self):
         self.card()
+        self.ask("A bounded random variable is...",
+                 ["sub-Gaussian", "possibly heavy-tailed"], 0,
+                 say="Tails you can count on at every n: the psi-two norm. Is a bounded random variable "
+                     "sub-Gaussian?",
+                 reveal="Yes: Hoeffding's lemma, with a norm of the order of its range. But when the variance is "
+                        "much smaller than the range, Bernstein-type bounds that see the variance do better.")
         self.definitions()
         self.norms()
         self.hoeffding()
         self.chart()
         self.rare()
+        self.answer()
 
     def card(self):
         self.chapter(1, r"Sub-Gaussian and sub-exponential variables", r"Tails you can count on, \ at every $n$", part=PART, said="Chapter one. Sub-Gaussian and sub-exponential variables: tails you can count on, at every n.")

@@ -8,11 +8,18 @@ from videos.stats.stats53.common import *  # noqa: F403
 class Bands(StatsScene):
     def construct(self):
         self.card()
+        self.ask("Adaptive credible sets have honest coverage for truths with...",
+                 ["polished tails", "any shape at all"], 0,
+                 say="Credible sets that cover. Szabó, van der Vaart and van Zanten, 2015: for which truths do "
+                     "adaptive credible sets cover?",
+                 reveal="Truths with polished tails: their coefficients decay regularly. For inconvenient truths, "
+                        "which look smoother than they are, no adaptive set can cover.")
         self.polished()
         self.picture()
         self.board()
         self.byn()
         self.lesson()
+        self.answer()
 
     def card(self):
         self.chapter(9, r"Credible sets that cover", r"Polished tails and inconvenient truths", lit=(2015,), part=PART, said="Chapter nine. Credible sets that cover: polished tails and inconvenient truths.")

@@ -8,12 +8,19 @@ from videos.stats.stats52.common import *  # noqa: F403
 class TracyWidom(StatsScene):
     def construct(self):
         self.card()
+        self.ask("Under no spike, the largest eigenvalue's fluctuations around the edge scale like...",
+                 ["$n^{-1/2}$", "$n^{-2/3}$", "$n^{-1}$"], 1,
+                 say="No spike at all. Where does the largest eigenvalue fall, beyond its limit at the edge? How do "
+                     "its fluctuations scale?",
+                 reveal="Like n to the minus two thirds, with the Tracy-Widom law: smaller than the central limit "
+                        "theorem's scale, and skewed.")
         self.law()
         self.chart()
         self.roy()
         self.factors()
         self.board()
         self.beyond()
+        self.answer()
 
     def card(self):
         self.chapter(9, r"Tracy--Widom fluctuations", r"The largest eigenvalue, \ to the next order", lit=(2001,), part=PART, said="Chapter nine. Tracy–Widom fluctuations: the largest eigenvalue, to the next order.")

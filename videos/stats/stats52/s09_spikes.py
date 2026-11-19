@@ -8,12 +8,23 @@ from videos.stats.stats52.common import *  # noqa: F403
 class Spikes(StatsScene):
     def construct(self):
         self.card()
+        self.ask("Below the BBP threshold, the top sample eigenvector's overlap with the spike is...",
+                 ["zero, asymptotically", "small but positive"], 0,
+                 say="Johnstone's spiked model: noise plus one signal direction of strength ell. Below the Baik-Ben "
+                     "Arous-Péché threshold, how much does the top sample eigenvector point toward the signal?",
+                 reveal="Not at all, asymptotically: zero overlap. Above it, the eigenvalue pops out of the bulk "
+                        "and the overlap jumps up. A phase transition.")
         self.model()
         self.eigen_chart()
         self.overlap_chart()
         self.harman()
         self.harman_table()
         self.board()
+        self.answer()
+        self.checkpoint([("$p = 1{,}000$, $n = 500$: the sample covariance?", "singular"),
+                         (r"Davis--Kahan divides $\|E\|$ by?", "the eigengap")],
+                        narration="Checkpoint. Matrices.",
+                        answers_narration="Singular. And the eigengap.")
 
     def card(self):
         self.chapter(8, r"Spiked models and the BBP transition", r"Ordinary PCA overlap vanishes below the asymptotic threshold", lit=(2005,), part=PART, said='Chapter eight. Spiked models and the BBP transition: below a threshold, ordinary PCA loses directional overlap below a model-dependent asymptotic threshold.')

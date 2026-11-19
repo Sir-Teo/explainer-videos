@@ -8,6 +8,12 @@ from videos.stats.stats54.common import *  # noqa: F403
 class ERM(StatsScene):
     def construct(self):
         self.card()
+        self.ask("The rule with the smallest training error. Its training error, against its true error, is usually...",
+                 ["too low", "unbiased", "too high"], 0,
+                 say="Pick, from a class, the rule with the smallest training error. Is its training error a fair "
+                     "estimate of its true error?",
+                 reveal="No, too low: it was chosen for looking good on these data. Only a bound uniform over the "
+                        "class can say how much it lies.")
         self.setup_ladder()
         self.decomposition()
         self.chart()
@@ -15,6 +21,7 @@ class ERM(StatsScene):
         self.pac()
         self.nfl()
         self.srm()
+        self.answer()
 
     def card(self):
         self.chapter(1, r"ERM and uniform convergence", r"Why the chosen rule's sample error lies", lit=(1971,), part=PART, said="Chapter one. Empirical risk minimization and uniform convergence: why the chosen rule's sample error lies.")
