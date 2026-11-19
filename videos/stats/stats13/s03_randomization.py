@@ -8,12 +8,18 @@ from videos.stats.stats13.common import *  # noqa: F403
 class Randomization(StatsScene):
     def construct(self):
         self.card()
+        self.ask("Fisher's randomization test needs a model of the soil?",
+                 ["yes: a normal model", "no: the randomization is the model"], 1,
+                 say="Fisher's randomization test. Does it need a probability model for the soil's fertility?",
+                 reveal="No. The coin that made the layout is the probability model: under the null, every other "
+                        "layout was equally likely, so the test needs nothing more.")
         self.sharp_null()
         self.trial()
         self.exact()
         self.balance()
         self.doctor()
         self.why_t()
+        self.answer()
 
     def card(self):
         self.chapter(2, r"Randomization as inference", r"The coin that made the layout is the probability model", lit=(1935,), part=PART, said="Chapter two. Randomization as inference.")

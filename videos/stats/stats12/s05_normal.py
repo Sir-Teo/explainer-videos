@@ -9,6 +9,12 @@ from videos.stats.stats12.common import *  # noqa: F403
 class NormalTheory(StatsScene):
     def construct(self):
         self.card()
+        self.ask("Same true line, same noise; the $x$'s twice as spread out. $R^2$...",
+                 ["rises", "falls", "stays the same"], 0,
+                 say="The same true line and the same noise, but this time the x's you sample are twice as spread "
+                     "out. What happens to R squared?",
+                 reveal="It rises. R squared depends on how spread out your x's happen to be, so it isn't a measure "
+                        "of the model's truth.")
         self.distribution()
         self.tests_for_coefs()
         self.t_check()
@@ -16,6 +22,11 @@ class NormalTheory(StatsScene):
         self.f_test()
         self.anova_table()
         self.r2_caveats()
+        self.answer()
+        self.checkpoint([("The least-squares line passes through?", r"the point of means $(\bar x, \bar y)$"),
+                         ("Does Gauss--Markov need normal errors?", "no: mean zero, equal variances, uncorrelated")],
+                        narration="Checkpoint. The method.",
+                        answers_narration="The point of means. And no normality needed.")
 
     def card(self):
         self.chapter(4, r"Normal theory", r"Standard errors, \ $t$, \ $F$ as Pythagoras", part=PART, said="Chapter four. Normal theory.")

@@ -9,12 +9,19 @@ from videos.stats.stats16.common import *  # noqa: F403
 class MoreRanks(StatsScene):
     def construct(self):
         self.card()
+        self.ask("One income is 100 times the others. The rank test's statistic moves...",
+                 ["without limit", "only as far as one rank can"], 1,
+                 say="Ten incomes from each of three regions, and one of them is a hundred times the others. How "
+                     "far can that one income move a rank test's statistic?",
+                 reveal="Only as far as one rank can: its rank is at most n, however large its value. That's "
+                        "bounded influence.")
         self.kruskal()
         self.kw_stat()
         self.friedman()
         self.spearman()
         self.kendall()
         self.outlier()
+        self.answer()
 
     def card(self):
         self.chapter(4, r"More rank methods", r"Many groups, \ blocks, \ and correlation", part=PART, said="Chapter four. More rank methods.")

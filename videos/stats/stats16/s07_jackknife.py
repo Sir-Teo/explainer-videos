@@ -9,11 +9,22 @@ from videos.stats.stats16.common import *  # noqa: F403
 class Jackknife(StatsScene):
     def construct(self):
         self.card()
+        self.ask("The jackknife standard error of a sample median is...",
+                 ["excellent", "inconsistent", "exact"], 1,
+                 say="Leave one out, recompute, and watch what moves: the jackknife. How good is its standard error "
+                     "for a median?",
+                 reveal="It's inconsistent. Leaving one out barely moves a median, and the estimate stays noisy "
+                        "however large n grows. Something bolder is needed: the bootstrap.")
         self.leave_out()
         self.formulas()
         self.variance_check()
         self.influence()
         self.median_fail()
+        self.answer()
+        self.checkpoint([("Wilcoxon against $t$, normal data: the efficiency?", r"$3/\pi \approx 0.95$"),
+                         ("The jackknife SE of a median?", "inconsistent")],
+                        narration="Checkpoint. Ranks and the jackknife.",
+                        answers_narration="Three over pi. And inconsistent.")
 
     def card(self):
         self.chapter(6, r"The jackknife", r"Leave one out, \ and watch what moves", part=PART, said="Chapter six. The jackknife.")

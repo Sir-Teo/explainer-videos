@@ -11,6 +11,12 @@ MONTHS = ["J", "F", "M", "A", "M", "J", "J", "A", "S", "O", "N", "D"]
 class Seasonal(StatsScene):
     def construct(self):
         self.card()
+        self.ask("Mauna Loa's CO$_2$ peaks each year in...",
+                 ["May", "September", "December"], 0,
+                 say="Keeling's carbon dioxide record from Mauna Loa rises every year, with a seasonal wiggle on "
+                     "top. In which month does it peak?",
+                 reveal="In May. The northern forests draw carbon down through the summer, and the low comes in the "
+                        "autumn.")
         self.keeling()
         self.model()
         self.panels()
@@ -18,6 +24,7 @@ class Seasonal(StatsScene):
         self.growth()
         self.leftover()
         self.variants()
+        self.answer()
 
     def card(self):
         self.chapter(7, r"Trend and seasonality", r"Taking a series apart", part=PART, said="Chapter seven. Trend and seasonality.")

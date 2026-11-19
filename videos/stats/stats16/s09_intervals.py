@@ -24,6 +24,12 @@ def law_hist(d, center=(-1.6, 0.6, 0), x_length=8.0, y_length=3.6):
 class BootIntervals(StatsScene):
     def construct(self):
         self.card()
+        self.ask("Which bootstrap interval corrects for both bias and skewness?",
+                 ["the percentile interval", "BCa", "the normal interval"], 1,
+                 say="Two thousand bootstrap correlations. Which interval built from them corrects for both bias "
+                     "and skewness?",
+                 reveal="Efron's BCa: bias-corrected and accelerated. But no interval can see what the sample "
+                        "didn't contain.")
         self.percentile()
         self.basic()
         self.boot_t()
@@ -31,6 +37,7 @@ class BootIntervals(StatsScene):
         self.compare()
         self.board()
         self.lessons()
+        self.answer()
 
     def card(self):
         self.chapter(8, r"Bootstrap intervals", r"From a histogram of replicates to a 95\% interval", part=PART, said="Chapter eight. Bootstrap intervals.")

@@ -8,11 +8,18 @@ from videos.stats.stats21.common import *  # noqa: F403
 class CoordinateDescent(StatsScene):
     def construct(self):
         self.card()
+        self.ask("The lasso, one coefficient at a time. Each update is...",
+                 ["soft-thresholding", "hard-thresholding", "plain least squares"], 0,
+                 say="Coordinate descent minimizes over one variable at a time. For the lasso, what does each "
+                     "one-variable update look like?",
+                 reveal="Soft-thresholding: the least-squares coefficient, shrunk toward zero by lambda and cut off "
+                        "at zero. Cycle through the coordinates, and you have the glmnet algorithm.")
         self.idea()
         self.staircase()
         self.rates()
         self.why_fast()
         self.stuck()
+        self.answer()
 
     def card(self):
         self.chapter(7, r"Coordinate descent", r"One variable at a time", part=PART, said="Chapter seven. Coordinate descent.")

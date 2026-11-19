@@ -8,6 +8,12 @@ from videos.stats.stats13.common import *  # noqa: F403
 class Fraction(StatsScene):
     def construct(self):
         self.card()
+        self.ask("Screen seven factors for main effects only. Fewest runs?",
+                 ["8", "14", "128"], 0,
+                 say="Seven factors at two levels each. The full factorial needs a hundred and twenty-eight runs. "
+                     "To estimate main effects only, what's the fewest you need?",
+                 reveal="Eight: a two to the seven minus four fraction. The price is aliasing, and you know exactly "
+                        "which effects you gave up.")
         self.explosion()
         self.half_cube()
         self.aliasing()
@@ -15,6 +21,11 @@ class Fraction(StatsScene):
         self.resolution()
         self.saturated()
         self.plackett()
+        self.answer()
+        self.checkpoint([("One factor at a time, with interacting factors?", "it can miss the optimum"),
+                         ("Seven factors, main effects only: fewest runs?", "8: a $2^{7-4}$ fraction")],
+                        narration="Checkpoint. Factorials.",
+                        answers_narration="It can miss the peak. And eight runs.")
 
     def card(self):
         self.chapter(8, r"Fractional factorials", r"Half the runs, \ and knowing exactly what you gave up", part=PART, said="Chapter eight. Fractional factorials.")

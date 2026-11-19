@@ -9,6 +9,11 @@ from videos.stats.stats14.s02_lpm import flights
 class Logistic(StatsScene):
     def construct(self):
         self.card()
+        self.ask("A probability of 0.8 is odds of...",
+                 ["0.8 to 1", "4 to 1", "1 to 4"], 1,
+                 say="Logistic regression works on the odds. A probability of point eight is odds of what?",
+                 reveal="Four to one: point eight over point two. Odds run from zero to infinity, and their "
+                        "logarithm runs over the whole line, where a linear model is at home.")
         self.odds()
         self.odds_table()
         self.fit_curve()
@@ -16,6 +21,7 @@ class Logistic(StatsScene):
         self.latent()
         self.probit()
         self.canonical()
+        self.answer()
 
     def card(self):
         self.chapter(2, r"Logistic regression", r"Linear in the log-odds", part=PART, said="Chapter two. Logistic regression.")

@@ -9,12 +9,19 @@ from videos.stats.stats15.common import *  # noqa: F403
 class Conjugacy(StatsScene):
     def construct(self):
         self.card()
+        self.ask("Uniform prior on $p$; 2 successes in 13 trials. The posterior is...",
+                 ["Beta$(2, 11)$", "Beta$(3, 12)$", "normal"], 1,
+                 say="A uniform prior on a success probability, then two successes in thirteen trials. What's the "
+                     "posterior?",
+                 reveal="Beta three, twelve: add the successes to the first parameter and the failures to the "
+                        "second. The prior and posterior are the same family: conjugacy.")
         self.beta_binomial()
         self.pseudo()
         self.gamma_poisson()
         self.normal_derivation()
         self.heights()
         self.table()
+        self.answer()
 
     def card(self):
         self.chapter(2, r"Conjugacy", r"When the posterior is the prior, \ updated", part=PART, said="Chapter two. Conjugacy.")

@@ -10,11 +10,22 @@ DEPTS = "ABCDEF"
 class Simpson(StatsScene):
     def construct(self):
         self.card()
+        self.ask("Department by department, who had the higher admission rate in most?",
+                 ["men", "women", "neither"], 1,
+                 say="Now break Berkeley's table down by department. In most departments, who had the higher "
+                     "admission rate?",
+                 reveal="Women, in four of the six largest. Women applied mostly to the hardest departments: every "
+                        "part one way, the whole the other.")
         self.by_department()
         self.where_applied()
         self.mosaics()
         self.weights()
         self.meaning()
+        self.answer()
+        self.checkpoint([("Counts from groups of different sizes: model the rate with?", r"an offset, $\log(\text{size})$"),
+                         ("Overdispersed counts: the Poisson SEs are?", "too small")],
+                        narration="Checkpoint. Counts.",
+                        answers_narration="An offset. And too small.")
 
     def card(self):
         self.chapter(8, r"Simpson's paradox", r"Every part one way, \ the whole the other", lit=(1975,), part=PART, said="Chapter eight. Simpson's paradox.")

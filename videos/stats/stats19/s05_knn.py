@@ -9,12 +9,19 @@ from videos.stats.stats19.common import *  # noqa: F403
 class Neighbours(StatsScene):
     def construct(self):
         self.card()
+        self.ask("In 100 dimensions, a point's nearest neighbour is...",
+                 ["very close", "nearly as far as its farthest"], 1,
+                 say="Predict like your neighbours. But in a hundred dimensions, how close is a point's nearest "
+                     "neighbour?",
+                 reveal="Nearly as far as its farthest. In high dimensions distances concentrate, and "
+                        "neighbourhoods stop being local: the curse of dimensionality.")
         self.regions()
         self.curse_cube()
         self.distances()
         self.irrelevant()
         self.cover_hart()
         self.lessons()
+        self.answer()
 
     def card(self):
         self.chapter(4, r"$k$-nearest neighbours", r"Predict like your neighbours, \ if you have any", part=PART, said="Chapter four. Nearest neighbours.")

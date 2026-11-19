@@ -9,6 +9,18 @@ from videos.stats.stats19.compute import truth_curve
 class PredictionError(StatsScene):
     def construct(self):
         self.card()
+        self.wrong_idea("The rule that fits the training data best predicts best",
+                        "Training error always falls with flexibility; the error on new data is U-shaped",
+                        narration="The most natural idea in prediction: the rule that fits the training data best "
+                                  "is the one that predicts best.",
+                        right_narration="No. Training error falls steadily as rules get more flexible, but error on "
+                                        "new data falls and then rises again. Never judge a rule by the data it "
+                                        "learned from.")
+        self.ask("Fit a polynomial of degree $n - 1$ through $n$ noisy points. Its training error is...",
+                 ["zero", "small", "large"], 0,
+                 say="Fit a polynomial of degree n minus one through n noisy points. What's its training error?",
+                 reveal="Zero: it passes through every point. And its error on new data is enormous. Fitting the "
+                        "past is not predicting the future.")
         self.goal()
         self.fits()
         self.curves()
@@ -16,6 +28,7 @@ class PredictionError(StatsScene):
         self.optimism()
         self.mallows()
         self.lessons()
+        self.answer()
 
     def card(self):
         self.chapter(1, r"Prediction error", r"Fitting the past is not predicting the future", part=PART, said="Chapter one. Prediction error.")

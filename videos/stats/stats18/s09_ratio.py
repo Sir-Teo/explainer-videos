@@ -9,6 +9,11 @@ from videos.stats.stats18.compute import adults
 class Ratio(StatsScene):
     def construct(self):
         self.card()
+        self.ask("The ratio estimator works best when $y$ is...",
+                 ["proportional to the known $x$", "unrelated to $x$", "negatively related to $x$"], 0,
+                 say="Laplace's ratio: estimate y from a known total of x. When does the ratio estimator work best?",
+                 reveal="When y is roughly proportional to x, through the origin. Then the known total of x carries "
+                        "most of the information.")
         self.laplace()
         self.laplace_math()
         self.recapture()
@@ -16,6 +21,7 @@ class Ratio(StatsScene):
         self.world()
         self.precision()
         self.regression()
+        self.answer()
 
     def card(self):
         self.chapter(8, r"Ratio and regression estimators", r"Borrowing strength from what we already know", part=PART, said="Chapter eight. Ratio and regression estimators.")

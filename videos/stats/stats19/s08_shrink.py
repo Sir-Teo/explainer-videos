@@ -8,12 +8,23 @@ from videos.stats.stats19.common import *  # noqa: F403
 class Shrinkage(StatsScene):
     def construct(self):
         self.card()
+        self.ask("Which penalty can set coefficients exactly to zero?",
+                 ["ridge", "the lasso", "both"], 1,
+                 say="Ridge penalizes squared coefficients; the lasso penalizes their absolute values. Which can "
+                     "set coefficients exactly to zero?",
+                 reveal="The lasso. Its penalty has a corner at zero, so small coefficients get cut off entirely. "
+                        "Ridge only shrinks them.")
         self.ridge()
         self.lasso()
         self.geometry()
         self.soft()
         self.paths()
         self.cv()
+        self.answer()
+        self.checkpoint([("In high dimensions, nearest neighbours are?", "nearly as far as the farthest"),
+                         ("Which penalty sets coefficients exactly to zero?", "the lasso")],
+                        narration="Checkpoint. Rules.",
+                        answers_narration="Nearly as far as the farthest. And the lasso.")
 
     def card(self):
         self.chapter(7, r"Ridge and the lasso, \ a first look", r"Shrink to predict better", lit=(1996,), part=PART, said="Chapter seven. Ridge and the lasso, a first look.")

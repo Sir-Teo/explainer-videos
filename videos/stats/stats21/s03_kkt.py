@@ -8,12 +8,19 @@ from videos.stats.stats21.common import *  # noqa: F403
 class Lagrange(StatsScene):
     def construct(self):
         self.card()
+        self.ask(r"Maximize $\sum_k n_k \log p_k$ subject to $\sum_k p_k = 1$. The answer?",
+                 ["$p_k = n_k/n$", "all $p_k$ equal", r"$p_k \propto \log n_k$"], 0,
+                 say="The probabilities of K categories from counts. Maximize the log-likelihood subject to the "
+                     "probabilities adding to one. What's the answer?",
+                 reveal="The observed proportions, n k over n. The Lagrange multiplier is n, and the constraint "
+                        "does the normalizing.")
         self.multinomial()
         self.boundary()
         self.conditions()
         self.lasso_kkt()
         self.isotonic()
         self.uses()
+        self.answer()
 
     def card(self):
         self.chapter(2, r"Lagrange and KKT", r"Optimizing under constraints", part=PART, said="Chapter two. Lagrange multipliers, and the Karush–Kuhn–Tucker conditions.")

@@ -18,11 +18,22 @@ def step_box(title, sub, color, width=3.0):
 class Reproducibility(StatsScene):
     def construct(self):
         self.card()
+        self.ask("What makes an analysis reproducible?",
+                 ["a careful write-up", "code and data, from the source files to every number", "a large sample"], 1,
+                 say="Could someone else get the same answer? What makes an analysis reproducible?",
+                 reveal="The code and data, from the public source files to every number in the report, in a chain "
+                        "anyone can rerun.")
         self.chain()
         self.provenance()
         self.privacy()
         self.ethics()
         self.checklist()
+        self.answer()
+        self.checkpoint([("``Salt has no effect,'' from a null slope?", "a causal claim from absence of evidence"),
+                         ("Reproducible means?", "code and data from source files to every number")],
+                        narration="Checkpoint. Saying it, and showing how.",
+                        answers_narration="A causal claim from absence of evidence. And the full chain from source "
+                                          "to number.")
 
     def card(self):
         self.chapter(12, r"Reproducibility and ethics", r"Could someone else get the same answer?", part=PART, said="Chapter twelve. Reproducibility, and ethics.")

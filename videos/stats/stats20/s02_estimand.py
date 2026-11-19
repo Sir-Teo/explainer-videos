@@ -21,11 +21,18 @@ def doc_card(title, lines, color, width=9.6, font_size=21):
 class Estimand(StatsScene):
     def construct(self):
         self.card()
+        self.ask("``Does salt raise blood pressure?'' Is that an estimand yet?",
+                 ["yes", "not yet"], 1,
+                 say="The capstone's question: does salt raise blood pressure? Is that, as it stands, something a "
+                     "computer can estimate?",
+                 reveal="Not yet. An estimand pins down the population, the variables, the contrast and the "
+                        "summary. Only then is there a number to estimate.")
         self.five_parts()
         self.two_questions()
         self.usual()
         self.plan()
         self.why_plan()
+        self.answer()
 
     def card(self):
         self.chapter(1, r"From question to estimand", r"What, exactly, for whom?", part=PART, said="Chapter one. From a question to an estimand.")

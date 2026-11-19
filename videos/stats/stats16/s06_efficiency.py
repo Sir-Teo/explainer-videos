@@ -10,12 +10,19 @@ from videos.stats.stats16.common import *  # noqa: F403
 class Efficiency(StatsScene):
     def construct(self):
         self.card()
+        self.ask("Normal data: the Wilcoxon test's efficiency relative to the $t$-test?",
+                 [r"about 50\%", r"about 64\%", r"about 95\%"], 2,
+                 say="Ranks throw away the sizes of the observations. If the data really are normal, how much "
+                     "efficiency does the Wilcoxon test lose against the t-test?",
+                 reveal="Very little: its efficiency is three over pi, about ninety-five percent. And Hodges and "
+                        "Lehmann proved it never falls below about eighty-six percent.")
         self.cost()
         self.laws()
         self.power()
         self.are_table()
         self.board()
         self.lessons()
+        self.answer()
 
     def card(self):
         self.chapter(5, r"Efficiency, \ a first look", r"What do ranks cost?", part=PART, said="Chapter five. Efficiency, a first look.")

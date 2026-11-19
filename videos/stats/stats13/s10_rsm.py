@@ -9,12 +9,19 @@ from videos.stats.stats13.s08_factorial import bakery_map
 class Surface(StatsScene):
     def construct(self):
         self.card()
+        self.ask("Far from the optimum, Box and Wilson fit...",
+                 ["a plane, and climb the steepest ascent", "a quadratic", "nothing: they search at random"], 0,
+                 say="Climbing a hill you can't see. Far from the top, what do Box and Wilson fit to the "
+                     "experiment's results?",
+                 reveal="A plane, and they climb along its steepest ascent. Near the top, a quadratic. All models "
+                        "are wrong, but some are useful.")
         self.box_wilson()
         self.first_order()
         self.ascent()
         self.ccd()
         self.quadratic()
         self.result()
+        self.answer()
 
     def card(self):
         self.chapter(9, r"Response surfaces", r"Climbing a hill you cannot see", part=PART, said="Chapter nine. Response surfaces.")

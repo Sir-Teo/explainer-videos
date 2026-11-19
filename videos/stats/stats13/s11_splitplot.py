@@ -11,12 +11,23 @@ WET, DRY = S.CTRL, S.POST
 class SplitPlot(StatsScene):
     def construct(self):
         self.card()
+        self.ask("Irrigation on whole strips, varieties on small plots inside. Which is less precise?",
+                 ["the irrigation effect", "the variety effect", "the same"], 0,
+                 say="Irrigation can only be applied to whole strips; varieties go on small plots within each "
+                     "strip. Which effect is estimated less precisely?",
+                 reveal="Irrigation. It's compared across a few big strips, with the big plots' error; varieties "
+                        "are compared within strips. Analyse it the way it was randomized.")
         self.layout()
         self.strata()
         self.two_analyses()
         self.size()
         self.why_split()
         self.industry()
+        self.answer()
+        self.checkpoint([("Far from the optimum, Box and Wilson fit?", "a plane, then climb the steepest ascent"),
+                         ("Split plots: which factor has the larger error?", "the whole-plot factor")],
+                        narration="Checkpoint. Surfaces and split plots.",
+                        answers_narration="A plane. And the whole-plot factor.")
 
     def card(self):
         self.chapter(10, r"Split plots", r"Two sizes of plot, \ two sizes of error", lit=(1935,), part=PART, said="Chapter ten. Split plots.")

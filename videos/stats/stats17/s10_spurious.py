@@ -19,6 +19,12 @@ def sci_p(p: float) -> str:
 class Spurious(StatsScene):
     def construct(self):
         self.card()
+        self.ask(r"Regress one random walk on another, independent one. Slope ``significant'' at 5\%...",
+                 [r"about 5\% of the time", r"about 25\% of the time", "most of the time"], 2,
+                 say="Two random walks, generated completely independently. Regress one on the other. How often is "
+                     "the slope significant at five percent?",
+                 reveal="Most of the time. Each walk wanders, and wandering looks like a trend. That's spurious "
+                        "regression, Yule's nonsense correlation made precise.")
         self.example()
         self.distribution()
         self.why()
@@ -26,6 +32,7 @@ class Spurious(StatsScene):
         self.cure()
         self.board()
         self.lessons()
+        self.answer()
 
     def card(self):
         self.chapter(9, r"Spurious regression", r"Yule's nonsense, \ made precise", part=PART, said="Chapter nine. Spurious regression, a first look.")

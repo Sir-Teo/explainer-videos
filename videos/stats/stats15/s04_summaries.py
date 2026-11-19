@@ -9,12 +9,23 @@ from videos.stats.stats15.common import *  # noqa: F403
 class Summaries(StatsScene):
     def construct(self):
         self.card()
+        self.ask("Posterior Beta$(3, 12)$, skewed right. Which is largest?",
+                 ["the mode", "the median", "the mean"], 2,
+                 say="The posterior Beta three, twelve is skewed to the right. Which summary is largest: its mode, "
+                     "its median, or its mean?",
+                 reveal="The mean, point two. The median is about point one nine, and the mode about point one "
+                        "five. The long right tail pulls the mean furthest.")
         self.centres()
         self.losses()
         self.intervals()
         self.invariance()
         self.laplace_approx()
         self.reading()
+        self.answer()
+        self.checkpoint([("Uniform prior, 2 successes in 13: the posterior?", "Beta$(3, 12)$"),
+                         ("Doubling the prior everywhere changes the posterior?", "not at all")],
+                        narration="Checkpoint. The machinery.",
+                        answers_narration="Beta three, twelve. And not at all.")
 
     def card(self):
         self.chapter(3, r"Summaries", r"Point estimates and credible intervals from a posterior", part=PART, said="Chapter three. Summaries.")

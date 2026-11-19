@@ -8,11 +8,18 @@ from videos.stats.stats12.common import *  # noqa: F403
 class GaussMarkov(StatsScene):
     def construct(self):
         self.card()
+        self.ask("Does the Gauss--Markov theorem need normal errors?",
+                 ["yes", "no: mean zero, equal variances, uncorrelated"], 1,
+                 say="Gauss-Markov says least squares is the best linear unbiased estimator. Does it need normal "
+                     "errors?",
+                 reveal="No. Mean zero, equal variances and no correlation are enough. Normality buys exact t and F "
+                        "tests, which is the next chapter.")
         self.statement()
         self.proof()
         self.rival()
         self.wls()
         self.limits()
+        self.answer()
 
     def card(self):
         self.chapter(3, r"Gauss--Markov", r"Why least squares is the best linear unbiased estimator", lit=(1821,), part=PART, said="Chapter three. The Gauss–Markov theorem.")

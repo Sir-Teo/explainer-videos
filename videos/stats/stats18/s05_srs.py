@@ -9,12 +9,20 @@ from videos.stats.stats18.common import *  # noqa: F403
 class SimpleRandom(StatsScene):
     def construct(self):
         self.card()
+        self.ask("A simple random sample of half the population. The variance is multiplied by...",
+                 ["1", "about 0.5", "0"], 1,
+                 say="A simple random sample without replacement that takes half the population. Compared with "
+                     "sampling with replacement, what does the finite population correction multiply the variance "
+                     "by?",
+                 reveal="About a half: one minus the sampling fraction. Sample everyone and the variance is zero. "
+                        "Sample a thousand from millions and the correction is negligible.")
         self.fpc_derive()
         self.polls()
         self.size()
         self.town()
         self.systematic()
         self.soup()
+        self.answer()
 
     def card(self):
         self.chapter(4, r"Simple random sampling", r"Every set of $n$ equally likely", part=PART, said="Chapter four. Simple random sampling.")

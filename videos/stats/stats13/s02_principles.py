@@ -8,12 +8,19 @@ from videos.stats.stats13.common import *  # noqa: F403
 class Principles(StatsScene):
     def construct(self):
         self.card()
+        self.ask("Plant variety B in the plots you judge best. B's measured advantage will be...",
+                 ["unbiased", "inflated by the soil", "too small"], 1,
+                 say="Two varieties of wheat. The farmer plants B in the plots he judges best. Will B's measured "
+                     "advantage be unbiased, inflated, or too small?",
+                 reveal="Inflated: the soil's advantage is added to the variety's. Hence Fisher's principles: "
+                        "replicate, randomize, and control what you can.")
         self.systematic()
         self.randomized()
         self.replication()
         self.local_control()
         self.peirce()
         self.three()
+        self.answer()
 
     def card(self):
         self.chapter(1, r"Three principles", r"Replication, \ randomization, \ local control", lit=(1884, 1935), part=PART, said="Chapter one. Three principles.")

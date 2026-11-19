@@ -8,12 +8,19 @@ from videos.stats.stats12.common import *  # noqa: F403
 class FWL(StatsScene):
     def construct(self):
         self.card()
+        self.ask("Regress $y$ on $x$ and $z$. The coefficient on $x$ equals the slope of...",
+                 ["$y$ on $x$ alone", "$y$'s residuals on $x$'s residuals, after $z$", "$x$ on $y$"], 1,
+                 say="Regress y on x and z together. The coefficient on x equals the slope of which simple "
+                     "regression?",
+                 reveal="Y's residuals on x's residuals, both after removing z. That's Frisch-Waugh-Lovell, and "
+                        "it's what controlling for z means.")
         self.theorem()
         self.demo()
         self.ovb()
         self.ovb_sim()
         self.simpson()
         self.lesson()
+        self.answer()
 
     def card(self):
         self.chapter(5, r"Controlling for", r"What a coefficient in a multiple regression means", part=PART, said="Chapter five. Controlling for.")

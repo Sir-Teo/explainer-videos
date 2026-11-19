@@ -29,6 +29,12 @@ def bakery_map(center, width=6.0, height=4.4, n=40, t_range=(160, 240), m_range=
 class Factorial(StatsScene):
     def construct(self):
         self.card()
+        self.ask("Two oven knobs that interact. One factor at a time finds the best bread?",
+                 ["always", "it can miss the peak"], 1,
+                 say="The bakery has two knobs, oven temperature and time, and they interact. Will adjusting one "
+                     "knob at a time, then the other, find the best bread?",
+                 reveal="It can miss the peak. With a diagonal ridge, one-at-a-time stops at the wrong place. A "
+                        "factorial varies both at once and sees the interaction.")
         self.ofat()
         self.factorial_square()
         self.cube()
@@ -37,6 +43,7 @@ class Factorial(StatsScene):
         self.interaction()
         self.halfnormal()
         self.hidden_replication()
+        self.answer()
 
     def card(self):
         self.chapter(7, r"Factorials", r"Ask Nature several questions at once", lit=(1935,), part=PART, said="Chapter seven. Factorial experiments.")

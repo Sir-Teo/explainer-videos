@@ -9,12 +9,19 @@ NAMES = {"intercept": r"intercept", "sodium": r"sodium, \ per g", "age": r"age, 
 class FirstModel(StatsScene):
     def construct(self):
         self.card()
+        self.ask("One day's dietary recall stands in for usual sodium. The slope is biased...",
+                 ["toward zero", "away from zero", "not at all"], 0,
+                 say="The model uses one day's dietary recall in place of a person's usual sodium intake. Which way "
+                     "is the slope on sodium biased?",
+                 reveal="Toward zero. Noise in a predictor dilutes its slope: attenuation, Spearman's correction "
+                        "from 1904.")
         self.equation()
         self.weighting()
         self.table()
         self.reading()
         self.forest()
         self.verdict()
+        self.answer()
 
     def card(self):
         self.chapter(5, r"A first model", r"The plan, \ fitted", part=PART, said="Chapter five. A first model.")

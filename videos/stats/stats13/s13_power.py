@@ -8,6 +8,19 @@ from videos.stats.stats13.common import *  # noqa: F403
 class Power(StatsScene):
     def construct(self):
         self.card()
+        self.wrong_idea("Compute power from the observed effect to interpret a null result",
+                        "Observed power is the p-value transformed: it says nothing new",
+                        narration="A common practice after a non-significant result: compute the power for the "
+                                  "effect you observed, and report that the study was underpowered.",
+                        right_narration="That number is just a transformation of the p-value, and a non-significant "
+                                        "result always has low observed power. Plan power before the experiment, "
+                                        "for an effect worth finding.")
+        self.ask("To halve the smallest detectable difference, the sample size must...",
+                 ["double", "quadruple", "halve"], 1,
+                 say="You want to detect an effect half as large as before, with the same power. What must happen "
+                     "to the sample size?",
+                 reveal="It quadruples: the standard error shrinks like one over root n. Design reduces sigma; only "
+                        "money increases n.")
         self.curves()
         self.formula()
         self.mde_curve()
@@ -15,6 +28,7 @@ class Power(StatsScene):
         self.curse_scatter()
         self.curse_table()
         self.planning()
+        self.answer()
 
     def card(self):
         self.chapter(12, r"Power and sample size", r"How big must the experiment be?", part=PART, said="Chapter twelve. Power and sample size.")

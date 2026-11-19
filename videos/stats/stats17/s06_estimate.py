@@ -8,12 +8,19 @@ from videos.stats.stats17.common import *  # noqa: F403
 class Estimate(StatsScene):
     def construct(self):
         self.card()
+        self.ask("An AR(8) fits the sunspots better than an AR(2). Will it forecast better?",
+                 ["yes, always", "not necessarily"], 1,
+                 say="An autoregression of order eight fits the sunspot numbers better than one of order two. Will "
+                     "it forecast better?",
+                 reveal="Not necessarily: extra parameters chase the noise of the past. The honest referee is data "
+                        "the model hasn't seen.")
         self.yule_walker()
         self.least_squares()
         self.aic()
         self.residuals()
         self.ljung_box()
         self.choice()
+        self.answer()
 
     def card(self):
         self.chapter(5, r"Estimation", r"Fitting, \ choosing, \ and checking", part=PART, said="Chapter five. Estimation.")

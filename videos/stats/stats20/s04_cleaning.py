@@ -6,12 +6,19 @@ from videos.stats.stats20.common import *  # noqa: F403
 class Cleaning(StatsScene):
     def construct(self):
         self.card()
+        self.ask("A few points pull the sodium slope the ``wrong'' way. Drop them?",
+                 ["yes", "only by a rule written before looking"], 1,
+                 say="Cleaning the data. A handful of points pull the sodium slope the wrong way. Should you drop "
+                     "them?",
+                 reveal="Only by a rule written down before looking, and recorded in the log. Never because of "
+                        "which way they pull.")
         self.codebook()
         self.readings()
         self.implausible()
         self.funnel()
         self.meds()
         self.rules()
+        self.answer()
 
     def card(self):
         self.chapter(3, r"Cleaning", r"Every decision, \ in a log", part=PART, said="Chapter three. Cleaning.")

@@ -8,6 +8,12 @@ from videos.stats.stats14.common import *  # noqa: F403
 class Poisson(StatsScene):
     def construct(self):
         self.card()
+        self.ask("Counts from groups of very different sizes. Model the rate by adding...",
+                 ["the group size as a predictor", r"$\log(\text{size})$ as an offset", "nothing"], 1,
+                 say="Counts of cases from age bands of very different sizes. To model the rate rather than the "
+                     "count, what do you add?",
+                 reveal="The log of the group size, as an offset: a term with its coefficient fixed at one. Then "
+                        "the coefficients describe rates.")
         self.counts()
         self.rates()
         self.model()
@@ -15,6 +21,7 @@ class Poisson(StatsScene):
         self.reading()
         self.check()
         self.rare_link()
+        self.answer()
 
     def card(self):
         self.chapter(5, r"Poisson regression", r"Counts, \ rates, \ and offsets", lit=(1898,), part=PART, said="Chapter five. Poisson regression.")

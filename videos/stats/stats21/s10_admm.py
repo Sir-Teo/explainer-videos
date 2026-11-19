@@ -8,12 +8,19 @@ from videos.stats.stats21.common import *  # noqa: F403
 class ADMM(StatsScene):
     def construct(self):
         self.card()
+        self.ask(r"Penalize $|\beta_j - \beta_{j-1}|$, the fused lasso. The fitted signal is...",
+                 ["piecewise constant", "a smooth curve", "sparse spikes"], 0,
+                 say="The fused lasso penalizes jumps between neighbouring coefficients. What does its fitted "
+                     "signal look like?",
+                 reveal="Piecewise constant: most jumps are set exactly to zero. ADMM splits the penalty from the "
+                        "fit so each piece is easy.")
         self.idea()
         self.fused()
         self.signal()
         self.residuals()
         self.consensus()
         self.verdict()
+        self.answer()
 
     def card(self):
         self.chapter(9, r"ADMM", r"Split a hard problem into easy ones", part=PART, said="Chapter nine. The alternating direction method of multipliers.")

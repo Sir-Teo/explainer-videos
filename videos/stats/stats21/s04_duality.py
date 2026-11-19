@@ -8,12 +8,19 @@ from videos.stats.stats21.common import *  # noqa: F403
 class Duality(StatsScene):
     def construct(self):
         self.card()
+        self.ask("A convex problem satisfying Slater's condition. The dual's best bound is...",
+                 ["equal to the optimum", "always strictly below it", "unrelated to it"], 0,
+                 say="Every constrained problem has a dual that bounds it. For a convex problem with a strictly "
+                     "feasible point, how good is the dual's best bound?",
+                 reveal="Exact: strong duality. The bound meets the optimum, and the dual's solution prices the "
+                        "constraints.")
         self.dual_function()
         self.bakery_dual()
         self.neyman_pearson()
         self.np_bars()
         self.gap()
         self.ridge_dual()
+        self.answer()
 
     def card(self):
         self.chapter(3, r"Duality", r"Dual bounds, \ and when they match", lit=(1939,), part=PART, said="Chapter three. Duality.")

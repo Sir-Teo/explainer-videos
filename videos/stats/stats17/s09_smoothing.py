@@ -9,6 +9,12 @@ from videos.stats.stats17.common import *  # noqa: F403
 class Smoothing(StatsScene):
     def construct(self):
         self.card()
+        self.ask(r"Simple exponential smoothing with $\alpha = 1$ forecasts...",
+                 ["the average of all the data", "the last value", "zero"], 1,
+                 say="Simple exponential smoothing forgets gracefully, with a weight alpha. With alpha equal to "
+                     "one, what's the forecast?",
+                 reveal="The last value: the naive forecast. With alpha near zero, nearly the overall average. "
+                        "Alpha sets how fast the past is forgotten.")
         self.ses_rule()
         self.ses_demo()
         self.holt_winters()
@@ -16,6 +22,7 @@ class Smoothing(StatsScene):
         self.scores()
         self.damped()
         self.theory()
+        self.answer()
 
     def card(self):
         self.chapter(8, r"Exponential smoothing", r"Forecasting by forgetting gracefully", part=PART, said="Chapter eight. Exponential smoothing.")

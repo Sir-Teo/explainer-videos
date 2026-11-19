@@ -8,6 +8,12 @@ from videos.stats.stats12.common import *  # noqa: F403
 class Interpret(StatsScene):
     def construct(self):
         self.card()
+        self.ask(r"$\log y = a + 0.05\,x$. One more unit of $x$ multiplies $y$ by about...",
+                 ["1.05", "0.05", "5"], 0,
+                 say="A model for log y with slope point zero five on x. One more unit of x multiplies y by about "
+                     "how much?",
+                 reveal="About one point zero five: five percent more. On a log scale, coefficients are "
+                        "proportional changes.")
         self.dummies()
         self.regions()
         self.interaction()
@@ -15,6 +21,7 @@ class Interpret(StatsScene):
         self.logs()
         self.curves()
         self.extrapolation()
+        self.answer()
 
     def card(self):
         self.chapter(6, r"Interpreting coefficients", r"Units, \ dummies, \ interactions, \ curves", part=PART, said="Chapter six. Interpreting coefficients.")

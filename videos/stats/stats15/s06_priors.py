@@ -11,6 +11,17 @@ PCOL = {"uniform": PRIOR, "Jeffreys": S.ALT, "sceptic": S.CTRL, "pessimist": RES
 class Priors(StatsScene):
     def construct(self):
         self.card()
+        self.wrong_idea("A uniform prior is uninformative",
+                        "Uniform on $p$ isn't uniform on the log-odds: every prior says something",
+                        narration="A natural idea: to let the data speak, use a uniform prior. It says nothing.",
+                        right_narration="Every prior says something. Uniform on p is far from uniform on the "
+                                        "log-odds, and the parameter you choose to be flat on is itself a choice.")
+        self.ask("With plenty of data, the choice among reasonable priors...",
+                 ["still dominates", "matters less and less", "makes the posterior improper"], 1,
+                 say="Four different priors, all reasonable. As data pile up, does the choice among them still "
+                     "dominate, or matter less and less?",
+                 reveal="Less and less: the likelihood swamps any prior that doesn't rule the truth out. With "
+                        "little data, it matters, so report a sensitivity analysis.")
         self.four()
         self.small_n()
         self.large_n()
@@ -18,6 +29,7 @@ class Priors(StatsScene):
         self.jeffreys()
         self.prior_predictive()
         self.kinds()
+        self.answer()
 
     def card(self):
         self.chapter(5, r"Priors", r"Where they come from, \ and how much they matter", lit=(1939,), part=PART, said="Chapter five. Priors.")

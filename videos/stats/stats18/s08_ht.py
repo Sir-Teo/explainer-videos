@@ -11,12 +11,23 @@ from videos.stats.stats18.common import *  # noqa: F403
 class HorvitzThompson(StatsScene):
     def construct(self):
         self.card()
+        self.ask("A unit selected with probability 1/50 stands for...",
+                 ["1 unit", "50 units", "1/50 of a unit"], 1,
+                 say="Horvitz and Thompson weight each sampled unit by one over its chance of selection. A unit "
+                     "selected with probability one in fifty stands for how many?",
+                 reveal="Fifty. Weight every unit by one over its inclusion probability, and the estimated total is "
+                        "unbiased under any probability design.")
         self.estimator()
         self.enumerate()
         self.variance()
         self.elephants()
         self.verdict()
         self.hajek()
+        self.answer()
+        self.checkpoint([("20 interviews per town, intra-town correlation 0.05: the design effect?", "about 2"),
+                         ("A unit sampled with chance 1/50 gets weight?", "50")],
+                        narration="Checkpoint. Designs and weights.",
+                        answers_narration="About two. And fifty.")
 
     def card(self):
         self.chapter(7, r"Horvitz--Thompson", r"Weight each unit by one over its chance", part=PART, said="Chapter seven. Horvitz–Thompson.")

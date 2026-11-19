@@ -9,12 +9,22 @@ from videos.stats.stats18.common import *  # noqa: F403
 class DesignBased(StatsScene):
     def construct(self):
         self.card()
+        self.ask("In design-based inference, what is random?",
+                 ["the population's values", "which units are selected"], 1,
+                 say="Sampling a population, rather than modelling it. In design-based inference, what is random?",
+                 reveal="Which units are selected. The population's values are fixed numbers; the dice are the ones "
+                        "we rolled to choose the sample.")
         self.history()
         self.purposive()
         self.principle()
         self.superpop()
         self.lottery()
         self.contrast()
+        self.answer()
+        self.checkpoint([("Meng's identity: the error is a product of?", "data quality, data quantity and problem difficulty"),
+                         ("In design-based inference, what is random?", "who is selected")],
+                        narration="Checkpoint. What went wrong.",
+                        answers_narration="Quality, quantity and difficulty. And who is selected.")
 
     def card(self):
         self.chapter(3, r"Design-based inference", r"The randomness is in the selection", lit=(1934,), part=PART, said="Chapter three. Design-based inference.")

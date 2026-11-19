@@ -8,6 +8,12 @@ from videos.stats.stats19.common import *  # noqa: F403
 class Metrics(StatsScene):
     def construct(self):
         self.card()
+        self.ask(r"Prevalence 1\%. Predict ``healthy'' for everyone. Accuracy?",
+                 [r"50\%", r"99\%", r"1\%"], 1,
+                 say="A condition with one percent prevalence. A classifier that predicts healthy for everyone. "
+                     "What's its accuracy?",
+                 reveal="Ninety-nine percent, and it never finds a single case. Accuracy hides the rare class; "
+                        "precision and recall don't.")
         self.confusion()
         self.threshold()
         self.roc()
@@ -15,6 +21,7 @@ class Metrics(StatsScene):
         self.calibration()
         self.costs()
         self.lessons()
+        self.answer()
 
     def card(self):
         self.chapter(8, r"Classification metrics", r"Right for the right reasons", part=PART, said="Chapter eight. Classification metrics.")

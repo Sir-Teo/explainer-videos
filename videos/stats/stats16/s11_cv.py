@@ -8,12 +8,19 @@ from videos.stats.stats16.common import *  # noqa: F403
 class CrossValidation(StatsScene):
     def construct(self):
         self.card()
+        self.ask("Data come in towns. Cross-validation should hold out...",
+                 ["single points", "whole towns"], 1,
+                 say="Data from people grouped in towns. When cross-validating a prediction for a new town, what do "
+                     "you hold out?",
+                 reveal="Whole towns. Hold out single points and their townmates leak the answer, so the error "
+                        "looks smaller than it will be.")
         self.fits()
         self.folds()
         self.curves()
         self.optimism()
         self.loo()
         self.cautions()
+        self.answer()
 
     def card(self):
         self.chapter(10, r"Cross-validation", r"How well will it predict data it hasn't seen?", part=PART, said="Chapter ten. Cross-validation.")

@@ -8,6 +8,17 @@ from videos.stats.stats12.common import *  # noqa: F403
 class Diagnostics(StatsScene):
     def construct(self):
         self.card()
+        self.wrong_idea("A high $R^2$ means the model is right",
+                        "$R^2$ measures spread explained: Anscombe's four datasets share one $R^2$",
+                        narration="A common shortcut: R squared is high, so the model must be right.",
+                        right_narration="No. R squared measures how much spread the line explains, not whether a "
+                                        "line is the right shape. Anscombe's four datasets share one R squared, and "
+                                        "only one of them is a straight line with noise.")
+        self.ask("Which point moves the fitted line most when deleted?",
+                 ["the largest residual", "high leverage and a large residual", "the point nearest the mean"], 1,
+                 say="Delete one point and refit. Which point moves the line the most: the one with the largest "
+                     "residual, one with high leverage and a large residual, or the one nearest the mean?",
+                 reveal="High leverage and a large residual together. Cook's distance multiplies the two.")
         self.quartet()
         self.leverage()
         self.probe()
@@ -15,6 +26,7 @@ class Diagnostics(StatsScene):
         self.honesty()
         self.residual_plots()
         self.qq()
+        self.answer()
 
     def card(self):
         self.chapter(9, r"Diagnostics", r"Look at the data, \ not just the fit", lit=(1973,), part=PART, said="Chapter nine. Diagnostics.")

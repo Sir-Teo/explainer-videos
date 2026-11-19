@@ -23,6 +23,12 @@ def diff_bars(ax, z, colors=None, width=0.6):
 class SignedRank(StatsScene):
     def construct(self):
         self.card()
+        self.ask("Darwin's maize: the crossed plant was taller in 13 of 15 pairs. The sign test's two-sided $p$?",
+                 ["about 0.007", "about 0.13", "about 0.5"], 0,
+                 say="Darwin's maize. In thirteen of fifteen pairs the cross-fertilized plant grew taller. Counting "
+                     "only who won each pair, what's the two-sided p-value?",
+                 reveal="About point zero zero seven: a hundred and twenty-one ways of thirteen or more wins out of "
+                        "thirty-two thousand, doubled. Signs alone already say a lot.")
         self.darwin()
         self.sign_test()
         self.fisher_flip()
@@ -30,6 +36,7 @@ class SignedRank(StatsScene):
         self.null()
         self.compare()
         self.hodges()
+        self.answer()
 
     def card(self):
         self.chapter(2, r"Signs and signed ranks", r"Darwin's maize, \ three ways", lit=(1945,), part=PART, said="Chapter two. Signs and signed ranks.")

@@ -8,6 +8,12 @@ from videos.stats.stats13.common import *  # noqa: F403
 class Blocking(StatsScene):
     def construct(self):
         self.card()
+        self.ask("Fertility rises west to east. Block by strips. The error variance...",
+                 ["rises", "falls", "stays the same"], 1,
+                 say="The field's fertility rises steadily from west to east. Put every treatment in each "
+                     "north-south strip, and compare within strips. What happens to the error variance?",
+                 reveal="It falls. The strips soak up the slope, so only the variation within strips is left to "
+                        "blur the comparison.")
         self.field()
         self.two_tables()
         self.power()
@@ -15,6 +21,11 @@ class Blocking(StatsScene):
         self.darwin()
         self.fisher_zea()
         self.when()
+        self.answer()
+        self.checkpoint([("Many pairwise comparisons: what controls the family-wise error?", "Tukey's HSD, or Bonferroni"),
+                         ("Blocking removes what from the error?", "the variation between blocks")],
+                        narration="Checkpoint. Comparisons and blocks.",
+                        answers_narration="Tukey's method. And the variation between blocks.")
 
     def card(self):
         self.chapter(5, r"Blocking", r"Compare like with like, \ and take the soil out of the error", lit=(1935,), part=PART, said="Chapter five. Blocking.")

@@ -10,12 +10,19 @@ DEPTS = "ABCDEF"
 class ThreeWay(StatsScene):
     def construct(self):
         self.card()
+        self.ask("Pooling Berkeley's departments by Mantel--Haenszel, the odds ratio is...",
+                 ["well above 1: men favoured", "near 1", "far below 1"], 1,
+                 say="Compare within each department, then pool by Mantel and Haenszel's method. What's the common "
+                     "odds ratio, men against women?",
+                 reveal="Near one, slightly favouring women. Compare within strata, then pool, and the overall gap "
+                        "disappears.")
         self.strata()
         self.mh()
         self.cmh_test()
         self.logistic()
         self.homogeneity()
         self.history()
+        self.answer()
 
     def card(self):
         self.chapter(9, r"Three-way tables", r"Comparing within strata, \ then pooling", lit=(1959,), part=PART, said="Chapter nine. Three-way tables.")

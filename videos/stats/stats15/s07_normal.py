@@ -9,12 +9,19 @@ from videos.stats.stats15.common import *  # noqa: F403
 class NormalModel(StatsScene):
     def construct(self):
         self.card()
+        self.ask(r"Normal data, flat prior on $\mu$ and $\log\sigma$. The posterior of $\mu$ is...",
+                 ["normal", "Student's $t$", "chi-squared"], 1,
+                 say="Eight heights, normal with unknown mean and standard deviation, and flat priors. What's the "
+                     "marginal posterior of the mean?",
+                 reveal="Student's t, centred at x bar with scale s over root n: the frequentist interval, reached "
+                        "by a different road.")
         self.model_setup()
         self.derivation()
         self.picture()
         self.sigma()
         self.widths()
         self.agreement()
+        self.answer()
 
     def card(self):
         self.chapter(6, r"The normal model", r"Unknown mean and variance: \ Student's $t$, \ again", lit=(1908,), part=PART, said="Chapter six. The normal model.")

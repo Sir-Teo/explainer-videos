@@ -8,6 +8,12 @@ from videos.stats.stats13.common import *  # noqa: F403
 class Optimal(StatsScene):
     def construct(self):
         self.card()
+        self.ask("Fit a line with 10 doses in $[-1, 1]$. Best for the slope: put the doses...",
+                 ["evenly spread", "half at $-1$, half at $+1$", "all at 0"], 1,
+                 say="We'll fit a straight line with ten doses anywhere from minus one to one. To estimate the "
+                     "slope as precisely as possible, where do the doses go?",
+                 reveal="Half at each end. That maximizes the spread of x, and the slope's variance is sigma "
+                        "squared over that spread. But it can't check for curvature.")
         self.line()
         self.smith()
         self.criterion()
@@ -15,6 +21,7 @@ class Optimal(StatsScene):
         self.variance_function()
         self.equivalence()
         self.caveat()
+        self.answer()
 
     def card(self):
         self.chapter(11, r"Optimal design, \ a first look", r"Where should the observations go?", part=PART, said="Chapter eleven. Optimal design, a first look.")

@@ -8,6 +8,12 @@ from videos.stats.stats19.common import *  # noqa: F403
 class Decided(StatsScene):
     def construct(self):
         self.card()
+        self.ask("Mosteller and Wallace's verdict on the twelve disputed Federalist papers?",
+                 ["Hamilton", "Madison", "split between them"], 1,
+                 say="Twelve Federalist papers claimed by both Hamilton and Madison. What did Mosteller and "
+                     "Wallace's word counts say?",
+                 reveal="Madison, for all twelve, with very large odds. Whilst against while, upon against on: "
+                        "function words gave the author away.")
         self.setup_check()
         self.verdicts()
         self.logistic()
@@ -15,6 +21,7 @@ class Decided(StatsScene):
         self.joint()
         self.robust()
         self.conclusion()
+        self.answer()
 
     def card(self):
         self.chapter(9, r"The \emph{Federalist} decided", r"Twelve papers, \ one author", lit=(1964,), part=PART, said="Chapter nine. The Federalist decided.")

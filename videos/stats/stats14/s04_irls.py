@@ -9,11 +9,17 @@ from videos.stats.stats14.common import *  # noqa: F403
 class Fitting(StatsScene):
     def construct(self):
         self.card()
+        self.ask("The logistic coefficients are found by...",
+                 ["a closed formula", "Newton's method, as reweighted least squares", "least squares on 0s and 1s"], 1,
+                 say="There's no formula for the logistic coefficients. How are they found?",
+                 reveal="By Newton's method on the likelihood, which turns out to be a weighted least squares "
+                        "refitted again and again: iteratively reweighted least squares.")
         self.likelihood()
         self.surface()
         self.newton()
         self.irls_path()
         self.deviance()
+        self.answer()
 
     def card(self):
         self.chapter(3, r"Fitting by maximum likelihood", r"Newton's method, \ dressed as weighted least squares", lit=(1922,), part=PART, said="Chapter three. Fitting by maximum likelihood.")

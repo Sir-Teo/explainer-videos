@@ -11,12 +11,19 @@ BANDS = [r"under 20", r"20--30", r"30--50", r"50--100", r"over 100"]
 class WhatWentWrong(StatsScene):
     def construct(self):
         self.card()
+        self.ask("The Digest mailed 10 million ballots. Mailing 20 million would have...",
+                 ["halved its error", "left its bias where it was"], 1,
+                 say="The Literary Digest mailed ten million ballots and got two point four million back. If it had "
+                     "mailed twenty million, would its error have halved?",
+                 reveal="No: the bias would have stayed where it was. A biased list and biased replies don't shrink "
+                        "with size; only the random part of the error does.")
         self.frame()
         self.nonresponse()
         self.decompose()
         self.squire()
         self.gallup()
         self.total_error()
+        self.answer()
 
     def card(self):
         self.chapter(1, r"What went wrong", r"Two biases, \ and neither shrinks", lit=(1936,), part=PART, said="Chapter one. What went wrong.")

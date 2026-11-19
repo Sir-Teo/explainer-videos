@@ -9,12 +9,19 @@ from videos.stats.stats12.common import *  # noqa: F403
 class Hetero(StatsScene):
     def construct(self):
         self.card()
+        self.ask("Noise grows where $x$ is extreme. The classical slope SE is...",
+                 ["still right", "too small", "too large"], 1,
+                 say="Now the noise is largest exactly where x is extreme. Is the classical standard error of the "
+                     "slope still right, too small, or too large?",
+                 reveal="Too small. The noisiest points are the high-leverage ones that steer the slope. A sandwich "
+                        "estimator such as HC3 gives honest standard errors.")
         self.funnel()
         self.why_wrong()
         self.sandwich()
         self.log_fix()
         self.board()
         self.advice()
+        self.answer()
 
     def card(self):
         self.chapter(10, r"Uneven noise", r"When the classical standard errors lie", lit=(1980,), part=PART, said="Chapter ten. Uneven noise.")

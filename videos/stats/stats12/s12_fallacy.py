@@ -8,11 +8,22 @@ from videos.stats.stats12.common import *  # noqa: F403
 class Fallacy(StatsScene):
     def construct(self):
         self.card()
+        self.ask("Pilots praised for a great landing do worse next time. This shows...",
+                 ["praise hurts", "regression to the mean", "nothing at all"], 1,
+                 say="Flight instructors noticed that pilots praised for a great landing did worse next time, and "
+                     "those scolded did better. What does that show?",
+                 reveal="Regression to the mean. An extreme performance is partly luck, and luck doesn't repeat. "
+                        "Ask for a comparison group before believing in a cause.")
         self.galton1886()
         self.both_ways()
         self.treatment()
         self.medicine()
         self.secrist()
+        self.answer()
+        self.checkpoint([("Noise largest where $x$ is extreme: classical SEs are?", "too small: use HC3"),
+                         ("An extreme group improves on retest with no treatment. Why?", "regression to the mean")],
+                        narration="Checkpoint. When the classical story fails.",
+                        answers_narration="Too small. And regression to the mean.")
 
     def card(self):
         self.chapter(11, r"The regression fallacy", r"Part 5's regression to the mean, \ revisited", lit=(1886,), part=PART, said="Chapter eleven. The regression fallacy.")

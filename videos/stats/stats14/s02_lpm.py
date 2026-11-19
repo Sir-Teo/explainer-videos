@@ -19,11 +19,18 @@ def flights(ax, t, y, stack=0.05, radius=0.08):
 class LinearProbability(StatsScene):
     def construct(self):
         self.card()
+        self.ask("Fit a straight line to yes-or-no outcomes. Its predictions can be...",
+                 ["always between 0 and 1", "below 0 or above 1", "only 0 or 1"], 1,
+                 say="Fit an ordinary straight line to outcomes that are zero or one. Can its predicted "
+                     "probabilities go wrong?",
+                 reveal="Yes: below zero or above one, outside the data's range. Probabilities need a curve that "
+                        "bends to stay between them.")
         self.binary()
         self.line()
         self.variance()
         self.economists()
         self.wanted()
+        self.answer()
 
     def card(self):
         self.chapter(1, r"Why not least squares?", r"A straight line through zeros and ones", part=PART, said="Chapter one. Why not least squares?")

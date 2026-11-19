@@ -8,12 +8,19 @@ from videos.stats.stats20.common import *  # noqa: F403
 class Design(StatsScene):
     def construct(self):
         self.card()
+        self.ask("Thousands of NHANES adults, examined in a few dozen locations. For a mean, they're worth...",
+                 ["about the same number at random", "far fewer at random", "more at random"], 1,
+                 say="NHANES examines thousands of adults, but in a few dozen locations. For estimating a mean, how "
+                     "many people chosen at random are they worth?",
+                 reveal="Far fewer. People in the same place resemble each other, so clustering inflates the "
+                        "variance and the effective sample shrinks.")
         self.stages()
         self.psus()
         self.oversample()
         self.weights()
         self.means()
         self.deff()
+        self.answer()
 
     def card(self):
         self.chapter(2, r"The design and its weights", r"Who was asked, \ and whom they stand for", part=PART, said="Chapter two. The design, and its weights.")

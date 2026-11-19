@@ -9,12 +9,23 @@ from videos.stats.stats16.common import *  # noqa: F403
 class Failure(StatsScene):
     def construct(self):
         self.card()
+        self.ask("Bootstrap the largest tank serial. The resample's maximum equals the sample's with chance...",
+                 ["about $1/n$", r"about 63\%", "zero"], 1,
+                 say="The German tanks, one more time. Bootstrap the largest serial. How often does a resample's "
+                     "maximum equal the sample's own maximum?",
+                 reveal="About sixty-three percent of the time: one minus one over e. The bootstrap distribution "
+                        "piles up on one value, and the method fails completely.")
         self.tanks()
         self.spike()
         self.why_spike()
         self.board()
         self.fixes()
         self.other()
+        self.answer()
+        self.checkpoint([("Share of distinct points in a bootstrap resample?", r"about 63\%"),
+                         ("Bootstrap the sample maximum?", "it fails")],
+                        narration="Checkpoint. The bootstrap.",
+                        answers_narration="About sixty-three percent. And it fails for the maximum.")
 
     def card(self):
         self.chapter(9, r"When the bootstrap fails", r"The German tanks, \ one more time", lit=(1943,), part=PART, said="Chapter nine. When the bootstrap fails.")

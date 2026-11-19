@@ -8,6 +8,12 @@ from videos.stats.stats18.common import *  # noqa: F403
 class Polls(StatsScene):
     def construct(self):
         self.card()
+        self.ask("In 2016 many state polls missed partly because they didn't weight by...",
+                 ["age", "education", "region"], 1,
+                 say="In 2016 many state polls missed in the same direction. Which variable had many of them failed "
+                     "to weight by?",
+                 reveal="Education. College graduates answered more and voted differently, and weighting fixes only "
+                        "what it can see.")
         self.quota()
         self.dewey()
         self.phones()
@@ -16,6 +22,11 @@ class Polls(StatsScene):
         self.y2020()
         self.xbox()
         self.lessons()
+        self.answer()
+        self.checkpoint([("Raking matches the sample to?", "the population's known margins"),
+                         ("2016's state polls missed partly by not weighting for?", "education")],
+                        narration="Checkpoint. Weighting and polls.",
+                        answers_narration="The known margins. And education.")
 
     def card(self):
         self.chapter(10, r"Polls", r"1948, \ 2016, \ 2020", part=PART, said="Chapter ten. Polls.")

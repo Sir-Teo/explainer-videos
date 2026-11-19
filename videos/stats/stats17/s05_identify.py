@@ -16,12 +16,19 @@ def corr_panel(r, band, center, color, title, lags=20, theory=None, width=5.4, h
 class Identify(StatsScene):
     def construct(self):
         self.card()
+        self.ask("Which cuts off sharply after lag $q$ for an MA($q$)?",
+                 ["its autocorrelation function", "its partial autocorrelation function", "neither"], 0,
+                 say="Reading a model's fingerprints. For a moving average of order q, which function cuts off "
+                     "sharply after lag q?",
+                 reveal="The autocorrelation function. For an autoregression it's the partial autocorrelation that "
+                        "cuts off. Each model has its fingerprint.")
         self.pacf_def()
         self.signatures()
         self.simulated()
         self.sunspots()
         self.cycle()
         self.differencing()
+        self.answer()
 
     def card(self):
         self.chapter(4, r"Identification", r"Reading a model's fingerprints", lit=(1970,), part=PART, said="Chapter four. Identification.")

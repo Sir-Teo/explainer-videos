@@ -8,12 +8,18 @@ from videos.stats.stats13.common import *  # noqa: F403
 class Latin(StatsScene):
     def construct(self):
         self.card()
+        self.ask("A crossover trial gives each patient both treatments. It's useless when...",
+                 ["the condition is chronic", "the treatment cures", "there's a washout period"], 1,
+                 say="A crossover trial gives each patient both treatments in turn. When is that design useless?",
+                 reveal="When the treatment cures. The second period has nothing left to treat. Crossovers suit "
+                        "chronic conditions and bioequivalence studies.")
         self.square()
         self.table()
         self.random_square()
         self.euler()
         self.crossover()
         self.carryover()
+        self.answer()
 
     def card(self):
         self.chapter(6, r"Latin squares", r"Blocking in two directions at once", lit=(1935,), part=PART, said="Chapter six. Latin squares, and crossover trials.")

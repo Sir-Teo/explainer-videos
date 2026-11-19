@@ -9,12 +9,19 @@ from videos.stats.stats17.common import *  # noqa: F403
 class Stationarity(StatsScene):
     def construct(self):
         self.card()
+        self.ask("100 observations, lag-one correlation 0.9. For the mean, worth about how many independent ones?",
+                 ["100", "about 50", "about 5"], 2,
+                 say="A hundred observations of a series whose neighbours correlate at point nine. For estimating "
+                     "the mean, they're worth about how many independent observations?",
+                 reveal="About five: a hundred times one minus point nine over one plus point nine. Dependence is "
+                        "expensive.")
         self.definitions()
         self.trio()
         self.sample_acf()
         self.mean_variance()
         self.intervals()
         self.board()
+        self.answer()
 
     def card(self):
         self.chapter(1, r"Stationarity and the ACF", r"What stays the same while the series moves?", part=PART, said="Chapter one. Stationarity and the autocorrelation function.")

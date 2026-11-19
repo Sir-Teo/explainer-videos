@@ -11,12 +11,19 @@ XS = np.linspace(0, 1, 301)
 class Machinery(StatsScene):
     def construct(self):
         self.card()
+        self.ask("Multiply the prior density by 2 everywhere. The posterior...",
+                 ["doubles", "doesn't change", "halves"], 1,
+                 say="Posterior is proportional to prior times likelihood. Multiply the prior's density by two "
+                     "everywhere. What happens to the posterior?",
+                 reveal="Nothing. The posterior is renormalized to integrate to one, so only the prior's shape "
+                        "matters, not its scale.")
         self.rule()
         self.three_panels()
         self.sequential()
         self.batch()
         self.history()
         self.meaning()
+        self.answer()
 
     def card(self):
         self.chapter(1, r"The machinery", r"Prior $\times$ likelihood $\propto$ posterior", lit=(1763, 1774), part=PART, said="Chapter one. The machinery.")

@@ -20,6 +20,13 @@ def box(text, color, width=3.6, height=0.9, font_size=22):
 class Leakage(StatsScene):
     def construct(self):
         self.card()
+        self.ask("Pick 100 of 2,000 genes using all the data, labels random, then cross-validate. The estimated error?",
+                 [r"about 50\%", r"near 0\%", r"100\%"], 1,
+                 say="Sixty people, two thousand measurements each, and labels assigned at random. Choose the "
+                     "hundred genes most correlated with the labels using all the data, then cross-validate. What "
+                     "error does it report?",
+                 reveal="Near zero, though the true error is fifty percent. The selection saw the test folds. Every "
+                        "choice made with the data has to be repeated inside each fold.")
         self.experiment()
         self.two_ways()
         self.reps()
@@ -29,6 +36,11 @@ class Leakage(StatsScene):
         self.nested()
         self.protocol()
         self.closing()
+        self.answer()
+        self.checkpoint([(r"1\% prevalence, ``healthy'' for everyone: accuracy?", r"99\%, and useless"),
+                         ("Features chosen on all the data, then cross-validated?", "leakage: far too optimistic")],
+                        narration="Checkpoint. Honest evaluation.",
+                        answers_narration="Ninety-nine percent, and useless. And leakage.")
 
     def card(self):
         self.chapter(10, r"Leakage and honest evaluation", r"When the test has seen the answers", lit=(2002,), part=PART, said="Chapter ten. Leakage, and honest evaluation.")

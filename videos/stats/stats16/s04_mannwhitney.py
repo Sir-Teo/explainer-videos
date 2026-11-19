@@ -9,12 +9,30 @@ from videos.stats.stats16.common import *  # noqa: F403
 class MannWhitney(StatsScene):
     def construct(self):
         self.card()
+        self.wrong_idea("The Mann--Whitney test compares medians",
+                        r"It compares whole distributions: $P(X > Y) = \tfrac12$, unless you assume a pure shift",
+                        narration="A widespread belief: the Mann-Whitney test is a test of whether two medians are "
+                                  "equal.",
+                        right_narration="Only if the distributions differ by a pure shift. In general it tests "
+                                        "whether one draw is as likely to beat the other as to lose, and two "
+                                        "samples with equal medians can fail it.")
+        self.ask("The Mann--Whitney statistic counts...",
+                 ["pairs in which one sample beats the other", "the difference in means", "sign changes"], 0,
+                 say="Launch temperatures for flights with and without O-ring distress. What does the Mann-Whitney "
+                     "statistic count?",
+                 reveal="Pairs, one from each sample, in which the first beats the second. It's the rank-sum in "
+                        "disguise, and it estimates the chance that one draw exceeds the other.")
         self.flights()
         self.rank_sum()
         self.pairs()
         self.null()
         self.auc()
         self.question()
+        self.answer()
+        self.checkpoint([("Splits of 10 values into two groups of 5?", "252"),
+                         ("Darwin's maize, 13 of 15: the sign test's two-sided $p$?", "about 0.007")],
+                        narration="Checkpoint. Permutations and signs.",
+                        answers_narration="Two hundred and fifty-two. And about point zero zero seven.")
 
     def card(self):
         self.chapter(3, r"Two samples, \ ranked", r"Wilcoxon, \ Mann and Whitney", lit=(1947,), part=PART, said="Chapter three. Two samples, ranked.")

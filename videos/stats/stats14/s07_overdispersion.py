@@ -9,11 +9,18 @@ from videos.stats.stats14.common import *  # noqa: F403
 class Overdispersion(StatsScene):
     def construct(self):
         self.card()
+        self.ask("Counts vary more than Poisson allows. The Poisson standard errors are...",
+                 ["too small", "too large", "still right"], 0,
+                 say="Clinic visits vary between towns far more than a Poisson allows. Are the Poisson model's "
+                     "standard errors too small, too large, or still right?",
+                 reveal="Too small. Its intervals cover far less than promised. A quasi-Poisson scale or a negative "
+                        "binomial fixes the variance.")
         self.towns()
         self.mean_variance()
         self.ses()
         self.remedies()
         self.board()
+        self.answer()
 
     def card(self):
         self.chapter(6, r"Overdispersion", r"When the counts vary more than Poisson allows", part=PART, said="Chapter six. Overdispersion.")

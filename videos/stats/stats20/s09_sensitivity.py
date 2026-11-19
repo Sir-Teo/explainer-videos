@@ -12,12 +12,19 @@ ON = {"meds": "keep", "energy": True, "weights": True, "age_spline": True, "read
 class Sensitivity(StatsScene):
     def construct(self):
         self.card()
+        self.ask("A plan promised 64 analyses. Report...",
+                 ["the best one", "all 64", "the median one"], 1,
+                 say="The plan promised sixty-four analyses, every reasonable combination of choices. What do you "
+                     "report?",
+                 reveal="All sixty-four, as a specification curve. The reader sees how much the answer depends on "
+                        "the choices.")
         self.curve()
         self.which()
         self.two_days()
         self.attenuation()
         self.calibration()
         self.verdict()
+        self.answer()
 
     def card(self):
         self.chapter(8, r"Sensitivity", r"What changes the answer?", part=PART, said="Chapter eight. Sensitivity.")

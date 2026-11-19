@@ -8,10 +8,17 @@ from videos.stats.stats20.common import *  # noqa: F403
 class Report(StatsScene):
     def construct(self):
         self.card()
+        self.ask("A non-significant slope, reported as ``Salt has no effect on blood pressure.'' That's...",
+                 ["a fair summary", "a causal claim from absence of evidence"], 1,
+                 say="Suppose the slope weren't significant, and the report said: salt has no effect on blood "
+                     "pressure. Is that a fair summary?",
+                 reveal="No: it's a causal claim drawn from an absence of evidence. Say what was estimated, for "
+                        "whom, with its interval, in one honest sentence.")
         self.sentences()
         self.page()
         self.integrity()
         self.appendix()
+        self.answer()
 
     def card(self):
         self.chapter(11, r"Communicating", r"One page, \ one honest sentence", part=PART, said="Chapter eleven. Communicating the result.")

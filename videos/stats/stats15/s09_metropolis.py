@@ -13,6 +13,11 @@ def trace(ax, ys, color, n=None):
 class Metropolis(StatsScene):
     def construct(self):
         self.card()
+        self.ask("Does a Metropolis walk need the posterior's normalizing constant?",
+                 ["yes", "no: only ratios"], 1,
+                 say="The Metropolis walk samples the posterior. Does it need the normalizing constant, the "
+                     "integral we couldn't compute?",
+                 reveal="No. It only ever uses ratios of the posterior at two points, and the constant cancels.")
         self.algorithm()
         self.why_works()
         self.steps()
@@ -20,6 +25,7 @@ class Metropolis(StatsScene):
         self.burnin()
         self.answer()
         self.functions()
+        self.answer()
 
     def card(self):
         self.chapter(8, r"When grids fail", r"A Metropolis walk through the posterior", lit=(1953,), part=PART, said="Chapter eight. When grids fail.")

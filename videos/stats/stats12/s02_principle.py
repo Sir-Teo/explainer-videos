@@ -8,6 +8,12 @@ from videos.stats.stats12.common import *  # noqa: F403
 class Principle(StatsScene):
     def construct(self):
         self.card()
+        self.ask("The least-squares line always passes through...",
+                 ["the origin", r"the point of means, $(\bar x, \bar y)$", "the median point"], 1,
+                 say="Before we fit anything: whatever the data, the least-squares line always passes through one "
+                     "point. The origin, the point of means, or the median point?",
+                 reveal="The point of means. The first normal equation says the residuals sum to zero, and that "
+                        "pins the line to x bar, y bar.")
         self.squares()
         self.normal_equations()
         self.closed_form()
@@ -15,6 +21,7 @@ class Principle(StatsScene):
         self.gauss_derivation()
         self.lad()
         self.losses()
+        self.answer()
 
     def card(self):
         self.chapter(1, r"The principle", r"Minimize the sum of squared misses", lit=(1805,), part=PART, said="Chapter one. The principle.")

@@ -8,12 +8,19 @@ from videos.stats.stats12.common import *  # noqa: F403
 class Geometry(StatsScene):
     def construct(self):
         self.card()
+        self.ask("The residuals of a least-squares fit are, to every column of $X$...",
+                 ["parallel", "orthogonal", "proportional"], 1,
+                 say="Least squares is a projection. How do the residuals sit relative to every column of the "
+                     "design: parallel, orthogonal, or proportional?",
+                 reveal="Orthogonal. The fit is the closest point in the column space, so what's left over is "
+                        "perpendicular to all of it.")
         self.space()
         self.check()
         self.hat()
         self.qr()
         self.pythagoras()
         self.many_x()
+        self.answer()
 
     def card(self):
         self.chapter(2, r"Geometry", r"Least squares is a projection", part=PART, said="Chapter two. Geometry.")
