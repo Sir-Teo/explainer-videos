@@ -53,6 +53,8 @@ class Frontier(VoiceoverScene):
             label(rf"everyone against no one: \ ${v['total']:+.3f}$; \\ planted ${v['truth_total']:+.2f}$",
                   font_size=23, color=E.MISS),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.3).to_edge(RIGHT, buff=0.4).shift(UP * 0.2)
+        head = label(r"the assumption behind every design: \ one person's treatment does not change another's "
+                     r"outcome", font_size=22, color=GREY_A).to_edge(UP, buff=0.25)
         tag = island_tag(rf"simulated: the Island, {v['villages']} villages of {v['per_village']}; a place takes "
                          r"some work from the neighbours", corner=DR, font_size=13)
         with self.voiceover(
@@ -68,7 +70,7 @@ class Frontier(VoiceoverScene):
             "of the policy, a place for everyone against a place for no one, is a small fraction of what the "
             "trial said. The gain was partly taken from the neighbours."
         ) as vo:
-            self.play(FadeIn(ax), FadeIn(tag), FadeIn(key))
+            self.play(FadeIn(ax), FadeIn(tag), FadeIn(key), FadeIn(head))
             vo.wait_until("a")
             self.play(FadeIn(rows[0]))
             vo.wait_until("b")

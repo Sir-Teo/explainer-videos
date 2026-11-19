@@ -122,8 +122,10 @@ class Dials(VoiceoverScene):
                   rf"{w['real']['F']:.0f}", font_size=24, color=IVC),
             label(r"Staiger and Stock (1997): \\ worry when $F$ is below about 10", font_size=23, color=E.ACCENT),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.3).to_edge(RIGHT, buff=0.4).shift(UP * 0.2)
-        head = label(r"Bound, Jaeger and Baker (1995): \ instruments that know nothing", font_size=27,
-                     color=E.MISS).to_edge(UP, buff=0.4)
+        head = VGroup(label(r"Bound, Jaeger and Baker (1995): \ instruments that know nothing", font_size=27,
+                            color=E.MISS),
+                      label(r"real quarters of birth replaced by random ones: \ estimates much like the published "
+                            r"ones", font_size=21, color=GREY_A)).arrange(DOWN, buff=0.12).to_edge(UP, buff=0.3)
         tag = island_tag(rf"simulated: the Island's school records ({w['n']:,} islanders)".replace(",", "{,}"),
                          corner=DR, font_size=14)
         with self.voiceover(

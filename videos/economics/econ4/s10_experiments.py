@@ -220,6 +220,7 @@ class Experiments(VoiceoverScene):
         warn = label(r"an experiment answers the question it asked, \ where and when it asked it", font_size=27,
                      color=E.MISS).to_edge(DOWN, buff=0.55)
         tag = published_tag(r"the Nobel prize in economic sciences, 2002 and 2019", corner=DR, font_size=13)
+        head = label(r"Four kinds of experiment", font_size=34).to_edge(UP, buff=0.45)
         with self.voiceover(
             "Experiments in economics now come in four kinds. <bookmark mark='a'/> In the laboratory, people trade "
             "and bargain for real money: Vernon Smith's double auctions, which you saw in Part 2, won him a Nobel "
@@ -232,7 +233,7 @@ class Experiments(VoiceoverScene):
             "built in. It answers the question it asked, in the place and time it asked it. Whether the answer "
             "travels is a different question, and the next two chapters are about it."
         ) as vo:
-            self.play(FadeIn(tag))
+            self.play(FadeIn(tag), FadeIn(head))
             for mk, c_ in zip("abcd", kinds.cards):
                 vo.wait_until(mk)
                 self.play(FadeIn(c_, shift=UP * 0.1))
