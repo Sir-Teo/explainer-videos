@@ -328,4 +328,90 @@
             "Computed in your browser; nothing you do here is stored or sent.",
     });
   };
+
+  // ---- Part 12: competition among the few -----------------------------------------------------------------------
+  W.cartel = function (el) {
+    // the cartel of Part 12 (explainer.economics.agora.oligopoly, collusion_threshold and green_porter): the Island's
+    // boat market, P = 100 - Q, cost 10, N yards sharing the monopoly profit under grim trigger; the reader is one
+    // yard and plans to cheat in some season; or, with "a bad season", nobody cheats but demand falls once and the
+    // others, who see only the price, start a six-season war
+    var A = 100, B = 1, Cst = 10, SEASONS = 24, WAR = 6, BAD = 0.6;
+    function profits(n, prices) {
+      var pim = (A - Cst) * (A - Cst) / (4 * B), pc = pim / n, pd, pn;
+      if (prices) { pd = pim; pn = 0; }
+      else {
+        var qc = (A - Cst) / (2 * B * n), qd = (A - Cst - B * (n - 1) * qc) / (2 * B);
+        pd = (A - B * (qd + (n - 1) * qc) - Cst) * qd;
+        pn = (A - Cst) * (A - Cst) / (B * (n + 1) * (n + 1));
+      }
+      return { c: pc, d: pd, n: pn, delta: (pd - pc) / (pd - pn) };
+    }
+    QB.widget(el, {
+      title: "Keep the cartel, or cheat?",
+      sub: "You run one of N boatyards that have agreed to share the monopoly's profit. If anyone ever breaks the " +
+           "deal, everyone returns to competition for good. Choose how many yards there are, how much next season " +
+           "is worth to you, and when you would cheat; switch between competing in quantities and in prices; then " +
+           "see what one bad season does when the yards can see only the price.",
+      panels: 2, height: 330, weights: [1.2, 1],
+      controls: [
+        { k: "n", label: "Yards in the cartel", min: 2, max: 10, step: 1, value: 2,
+          fmt: function (x) { return x.toFixed(0); } },
+        { k: "delta", label: "What next season's dollar is worth today, delta", min: 0.3, max: 0.98, step: 0.01,
+          value: 0.6, fmt: function (x) { return x.toFixed(2); } },
+        { k: "when", label: "The season you cheat (or the bad season)", min: 1, max: 16, step: 1, value: 6,
+          fmt: function (x) { return x.toFixed(0); } },
+      ],
+      buttons: [
+        { label: "Switch quantities / prices", act: function (s) { s.prices = !s.prices; } },
+        { label: "A bad season instead of a cheat", act: function (s) { s.shock = !s.shock; } },
+      ],
+      draw: function (g, v, s) {
+        var n = Math.round(v.n), pr = profits(n, !!s.prices), d = v.delta, k = Math.round(v.when);
+        var xs = [], keep = [], other = [];
+        for (var t = 1; t <= SEASONS; t++) {
+          xs.push(t);
+          keep.push(pr.c);
+          if (s.shock) other.push(t < k ? pr.c : (t === k ? BAD * pr.c : (t <= k + WAR ? pr.n : pr.c)));
+          else other.push(t < k ? pr.c : (t === k ? pr.d : pr.n));
+        }
+        var top = Math.max(pr.d, pr.c) * 1.15;
+        var a = g[0].axes({ x: [0.5, SEASONS + 0.5], y: [0, top],
+                            title: "Your profit each season, $ (" + (s.prices ? "prices" : "quantities") + ")",
+                            xlabel: s.shock ? "season (green: no shock; gold: a bad season, then a war)" :
+                                              "season (green: you keep the deal; gold: you cheat)" });
+        a.line(xs, keep, { color: GREEN, width: 2.2 });
+        a.line(xs, other, { color: GOLD, width: 2.2, dash: [4, 3] });
+        a.vline(k, { color: GREY_HINT, dash: [2, 3] });
+        var ns = [2, 3, 4, 5, 6, 7, 8, 9, 10];
+        var b = g[1].axes({ x: [1.5, 10.5], y: [0.4, 1], title: "Patience a cartel needs, delta",
+                            xlabel: "yards (blue: quantities; red: prices; dot: you)" });
+        b.line(ns, ns.map(function (m) { return profits(m, false).delta; }), { color: BO, width: 2 });
+        b.line(ns, ns.map(function (m) { return profits(m, true).delta; }), { color: RED, width: 2 });
+        b.dots([n], [Math.min(Math.max(d, 0.4), 1)], { r: 6, color: function () { return d >= pr.delta ? GREEN : GOLD; } });
+        var pvKeep = pr.c / (1 - d), pvCheat = pr.d + d * pr.n / (1 - d);
+        var lost = 0;
+        for (var q = 0; q < other.length; q++) lost += (keep[q] - other[q]) * Math.pow(d, q);
+        s.out = { pr: pr, pvKeep: pvKeep, pvCheat: pvCheat, holds: d >= pr.delta, lost: lost };
+      },
+      readout: function (v, s) {
+        var o = s.out, pr = o.pr;
+        var rows = [["your share of the cartel's profit", "$" + pr.c.toFixed(2) + " a season"],
+                    ["cheating, the season you do it", "$" + pr.d.toFixed(2)],
+                    ["competition, for good after", "$" + pr.n.toFixed(2) + " a season"],
+                    ["the threshold for this market", "delta of at least " + pr.delta.toFixed(3)]];
+        if (s.shock) {
+          rows.push(["nobody cheated, yet", "a " + WAR + "-season price war"]);
+          rows.push(["what the bad luck cost you, today's dollars", "$" + o.lost.toFixed(0)]);
+        } else {
+          rows.push(["worth today, from that season on", "keep $" + o.pvKeep.toFixed(0) + "; cheat $" + o.pvCheat.toFixed(0)]);
+          rows.push(["verdict", o.holds ? "cheating doesn't pay: the cartel holds" : "cheating pays: the cartel breaks"]);
+        }
+        return rows;
+      },
+      note: "Demand P = 100 - Q and a cost of $10 a boat, as on the Island. With prices, a cheater undercuts by a cent " +
+            "and takes the whole market. The bad season cuts the cartel's profit by 40%, and the others, who see only " +
+            "the price, fight for " + WAR + " seasons (Green and Porter, 1984). Computed in your browser; nothing you " +
+            "do here is stored or sent.",
+    });
+  };
 })();

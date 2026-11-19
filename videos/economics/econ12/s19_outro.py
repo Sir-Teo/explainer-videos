@@ -67,7 +67,7 @@ class Outro(VoiceoverScene):
             (rf"collusion: \ $\delta \ge$ {c['cournot'][0]:.3f} for two; \ more firms need more patience", CARTEL),
             (r"Green and Porter's wars, \ Stigler partly right, \ leniency's built-in dilemma", E.MISS),
             (r"tacit collusion: \ the law reaches what firms say, \ not what they expect", GREY_A),
-            (rf"$L = H/\varepsilon$; \ mergers: \ the paradox, \ \${m['saving_needed']:.1f} of savings, \ Williamson",
+            (rf"$L = H/\varepsilon$; \ mergers: \ the paradox, \ \${m['saving_needed']:.2f} of savings, \ Williamson",
              "#F2C14E"),
             (rf"overcharges: \ 16 to 23\% at the median; \ common owners (MHHI {cm['mhhi_one']:,.0f} or "
              rf"{cm['mhhi_many']:,.0f}); \ algorithms".replace(",", "{,}"), ENTRANT),

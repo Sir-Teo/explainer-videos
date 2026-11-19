@@ -168,4 +168,57 @@ PARTS = [
               ("The Island's planted truths", "explainer/economics/island.py"),
               ("The Data Room's sources", "explainer/economics/data/SOURCES.md")),
     ),
+    Part(
+        n=12, level="U", widget="cartel", prereq=(8, 10, 11),
+        question="How do a handful of firms compete, and when do they stop?",
+        story="The part opens in Decatur, Illinois, where Archer Daniels Midland's new lysine plant starts a price war "
+              "in 1991 that takes the American price from $1.30 a pound to 64 cents, below ADM's own cost; in June "
+              "1992 the lysine association meets in Mexico City, from November an informant records its meetings for "
+              "the FBI, and prices climb back above a dollar until the raid of June 1995 (Connor 1998). The viewer "
+              "fights a price war against Crusoe's $40, then meets Cournot's quantities and the price with N firms, "
+              "Bertrand's prices and the paradox, and its escapes: Edgeworth's capacity and cycles, Kreps and "
+              "Scheinkman, differentiated prices and repetition; Hotelling's line and Salop's circle; Chamberlin and "
+              "Dixit-Stiglitz. After an intermission of crude oil and the pump price of gasoline, commitment "
+              "(Stackelberg, Dixit's credible capacity and its regimes, Fudenberg and Tirole's animals), collusion as "
+              "a repeated game with Stigler's policing (and Called it?: secret price cuts as what breaks cartels), "
+              "the Joint Executive Committee and Green and Porter's price wars, leniency, tacit collusion and the law "
+              "(Twombly, Wood Pulp, the airline fare database, rockets and feathers on monthly data), the Herfindahl "
+              "index and the merger guidelines, the merger paradox and Williamson's trade-off, contestable markets, "
+              "limit pricing and predation, a new dial on cartel overcharges, antitrust in practice (critical loss, "
+              "Staples), and a frontier on common ownership and pricing algorithms.",
+        handoff="Part 13 turns to markets where one side knows more; Parts 16-17 to auctions and bidding rings; Parts "
+                "21, 30 and 36 use Dixit-Stiglitz in growth, sticky prices and trade; Part 43 measures markups and "
+                "conduct; Part 44 takes on platforms and dynamic competition; Part 59 puts the viewer in the witness "
+                "box.",
+        outside="Part 10: monopoly, marginal revenue and the Lerner index; Part 11: Nash equilibrium, subgame "
+                "perfection and repeated games. Chapter 6 uses a CES utility function; chapter 9 a normal "
+                "distribution of demand shocks.",
+        objectives={
+            "U": ["Solve Cournot and Bertrand duopolies with linear demand, and explain the Bertrand paradox and why "
+                  "capacity, differentiation and repetition resolve it.",
+                  "Compute the Herfindahl index, and explain how mergers, entry and collusion affect prices.",
+                  "Explain what a cartel needs to hold together, and how leniency programmes break cartels."],
+            "M": ["Derive the Cournot equilibrium with N firms and asymmetric costs, the Stackelberg outcome, and the "
+                  "discount factor that sustains collusion with N firms in quantities and in prices.",
+                  "Solve Hotelling's and Salop's models and the Dixit-Stiglitz equilibrium, and show excess entry.",
+                  "Derive Cowling and Waterson's L = H/epsilon, and the merger paradox and Farrell and Shapiro's "
+                  "needed savings."],
+            "D": ["Analyze entry deterrence with credible capacity (Dixit 1980), trigger-price collusion with "
+                  "imperfect monitoring (Green and Porter 1984), and the modified HHI of common ownership."],
+            "I": ["Apply the hypothetical monopolist test and critical-loss analysis, and estimate a cartel's "
+                  "overcharge for damages."],
+        },
+        results=[
+            ("Cournot with N firms", r"P = \frac{a + Nc}{N + 1}"),
+            ("Bertrand", r"p_1 = p_2 = c"),
+            ("Collusion with N price setters", r"\delta \ge 1 - \tfrac{1}{N}"),
+            ("Cowling and Waterson", r"\sum_i s_i \frac{P - c_i}{P} = \frac{H}{\varepsilon}"),
+            ("Dixit and Stiglitz", r"p = \frac{\sigma}{\sigma - 1}\, c"),
+            ("Critical loss", r"\frac{X}{X + M}"),
+        ],
+        U=(0, 1, 2, 3, 4, 5, 6, "s08_intermission", 7, 8, 9, 10, 11, 12, 13), D=(16,), I=(15,),
+        also=(("Agora's oligopoly", "explainer/economics/agora/oligopoly.py"),
+              ("The Island's planted truths", "explainer/economics/island.py"),
+              ("The Data Room's sources", "explainer/economics/data/SOURCES.md")),
+    ),
 ]

@@ -865,34 +865,59 @@ Harsanyi 1967-68; Aumann 1974; Axelrod 1980, 1984; Nowak & Sigmund 1993; Nagel 1
 Ho & Chong 2004; Henrich et al. 2001; Palacios-Huerta 2003; Rubinstein 1982; Hart & Mas-Colell 2000; Osborne;
 Osborne & Rubinstein; Fudenberg & Tirole chs 1–5; Gibbons; Camerer, *Behavioral Game Theory*.
 
-### Part 12 · Competition among the Few (~55)
+### Part 12 · Competition among the Few (~57)
 *Question:* how do a handful of firms compete, and when do they stop?
-*Story:* between 1992 and 1995 an FBI informant tapes executives of Archer Daniels Midland and their Asian
-rivals dividing the world market for lysine, a feed additive. On the tapes: "the competitor is our friend, the
-customer is our enemy." The economics of why cartels form, cheat and fall is on those tapes too.
-0. Hook: the Maui tapes; the question; objectives.
-1. Cournot (1838): quantities, reaction curves, the equilibrium; from one firm to many.
-2. Bertrand's reply (1883): prices, and two firms are enough for competition. The paradox.
-3. Play it: name your price against one rival, then against twenty.
-4. Resolving it: capacity (Kreps and Scheinkman 1983), differentiation, repeated play.
-5. Hotelling's line (1929): location, minimum and maximum differentiation; Salop's circle.
-6. Monopolistic competition (Chamberlin 1933; Dixit and Stiglitz 1977): the model macro and trade will use.
-7. Stackelberg and commitment; entry deterrence; Dixit's capacity (1980); the taxonomy of fat cats and top
-   dogs.
-8. Collusion as a repeated game: the incentive to cheat; what makes cartels stable.
-9. Cartels in the data: the Joint Executive Committee's price wars (Porter 1983; Green and Porter 1984);
-   lysine prices before and after; leniency programmes.
-10. Tacit collusion and parallel prices: what the law can and cannot reach.
-11. Concentration: the Herfindahl index from Cournot; mergers' two effects (Williamson 1968; Farrell and
-    Shapiro 1990).
-12. Contestable markets; limit pricing; predation and the record of the Standard Oil story (McGee 1958).
-13. Dials. 14. In practice: Part 59. 15. Frontier: common ownership (Azar, Schmalz and Tecu 2018);
-    algorithms (a pointer to Part 44).
+*Story:* in 1991 Archer Daniels Midland's new lysine plant in Decatur starts a price war that takes the American
+price from $1.30 a pound to 64 cents, below ADM's own cost; in June 1992 the "lysine association" meets in Mexico
+City, from November the head of ADM's lysine division records its meetings for the FBI, and prices climb back above
+a dollar until the raid of June 1995. On a tape played at the trial, ADM's president describes a company slogan: "Our
+competitors are our friends. Our customers are the enemy." The economics of why cartels form, cheat and fall is on
+those tapes too.
+0. Hook: the plant, the price war and the cartel's prices as Connor (1998) states them; the informant and the raid;
+   the slogan; the $100 million fine; Connor's 12-28%; markets of a few; the question; objectives.
+1. Play it: name your price against Crusoe's $40 repair; then against twenty yards.
+2. Cournot (1838): the mineral springs; best replies and their path; the prisoner's dilemma in quantities; the
+   price with N firms.
+3. Bertrand's reply (1883): the undercutting spiral; the paradox; unequal costs.
+4. Resolving it: Edgeworth (1897) and Edgeworth cycles (Maskin and Tirole 1988); Kreps and Scheinkman (1983);
+   differentiated prices as strategic complements; repetition.
+5. Hotelling's line (1929) and his two parties; d'Aspremont, Gabszewicz and Thisse (1979); Salop's circle (1979) and
+   excess entry.
+6. Monopolistic competition: Chamberlin and Robinson (1933); Dixit and Stiglitz (1977); the gains from variety
+   (Krugman 1979).
+   Intermission: crude oil and the pump price of gasoline, 1986-2026, in October 2026 dollars; the pump price as a
+   tune.
+7. Stackelberg (1934) and commitment; Dixit's credible capacity (1980) and its three regimes (Bain 1956); Fudenberg
+   and Tirole's animals (1984).
+8. Collusion as a repeated game: the threshold with N firms in quantities and in prices (Friedman 1971); Stigler
+   (1964) and what helps a cartel (Bernheim and Whinston 1990); *Called it?*
+9. Cartels in the data: the Joint Executive Committee (Porter 1983); Green and Porter's price wars (1984) simulated;
+   the lysine overcharge; leniency (the US policy of 1993).
+10. Tacit collusion and the law: the Sherman Act and Article 101, *Twombly* (2007), *Wood Pulp* (1993);
+    price-matching promises; the airline fare-database case (1992-94); rockets and feathers (Borenstein, Cameron and
+    Gilbert 1997) tested on the Data Room's monthly prices.
+11. Concentration: the Herfindahl index; Cowling and Waterson's $L = H/\varepsilon$ (1976); the 2010 and 2023
+    merger guidelines.
+12. Mergers: the merger paradox (Salant, Switzer and Reynolds 1983); Farrell and Shapiro's needed savings (1990);
+    Deneckere and Davidson (1985); Williamson's trade-off (1968).
+13. Contestable markets (Baumol, Panzar and Willig 1982); limit pricing (Milgrom and Roberts 1982); predation (McGee
+    1958; Kreps and Wilson 1982; *Brooke Group* 1993).
+14. Dials (cartel overcharges, new), with the sentencing guidelines' 10%. 15. In practice: the hypothetical
+    monopolist and critical loss (Katz and Shapiro 2003), *FTC v. Staples* (1997), the economist's kit (Parts 43,
+    44, 59). 16. Frontier: common ownership (Azar, Schmalz and Tecu 2018; Dennis, Gerardi and Schenone 2022; O'Brien
+    and Salop's MHHI); pricing algorithms (Calvano et al. 2020; Assad et al. 2024); the RealPage case.
 
-*Agora:* `oligopoly`: Cournot, Bertrand (homogeneous, capacity-constrained, differentiated), Hotelling and
-Salop, a repeated-game collusion checker, a merger calculator.
-*Dials:* cartel overcharges (Connor's surveys (verify)). *Called it?* Stigler (1964) on which cartels cheat.
-*Reading:* Cournot 1838; Bertrand 1883; Hotelling 1929; Stigler 1964; Porter 1983; Tirole chs 5–9; Cabral.
+*Agora:* `oligopoly`: Cournot with any costs, reaction curves and their path, homogeneous and differentiated
+Bertrand, Kreps and Scheinkman's check, Hotelling and Salop, Dixit-Stiglitz, Stackelberg, Dixit's credible capacity
+and its regimes, collusion thresholds, Green and Porter's price wars, the leniency game, the HHI, the merger paradox
+and the needed savings, Williamson's trade-off, the modified HHI.
+*Play it:* a price war against Crusoe; on the site, a cartel the reader can keep or cheat on, and a bad season that
+starts a war nobody chose.
+*Dials:* cartel overcharges (new; contested). *Called it?* Stigler (1964): secret price cuts as what breaks cartels;
+partly right (Levenstein and Suslow 2006).
+*Reading:* Cournot 1838; Bertrand 1883; Hotelling 1929; Chamberlin 1933; Stigler 1964; Dixit & Stiglitz 1977; Dixit
+1980; Kreps & Scheinkman 1983; Porter 1983; Green & Porter 1984; Salant, Switzer & Reynolds 1983; Farrell & Shapiro
+1990; Connor 1998, 2014; Levenstein & Suslow 2006; Tirole chs 5–9; Cabral; Motta; Whinston.
 
 ## Act IV · Failure and Design
 
@@ -2892,6 +2917,7 @@ Young Economist*.
 | 9 | built, English | *The Invisible Hand, Proved.* Agora gains `ge` (the box and the replicated core, Sperner and Scarf, tatonnement and Scarf's cycle, Newton, Crusoe, three equilibria, Arrow securities, Kantorovich's duals, misallocation, top trading cycles); the Data Room gains Brent and WTI crude via FRED and the transcribed Radford (1945), Edgeworth (1881), Hsieh and Klenow (2009), Bils, Klenow and Ruane (2021) and Kehoe (2014); a new dial (misallocation), the law of one price as a Fact, and the NAFTA *Called it?*; Act III begins |
 | 10 | built, English | *The Price Maker.* Agora gains `pricing` (the monopoly price and pass-through, the ferry, three degrees of discrimination, two-part tariffs, bundling, the Coase equilibrium, Ramsey prices, the Averch–Johnson firm, monopsony, Littlewood's rule, personalized prices from a price experiment); the Data Room gains the BLS price of ground coffee via FRED and the transcribed De Loecker, Eeckhout and Unger (2020), Traina (2018), Nakamura and Zerom (2010) and Dubé and Misra (2023); a new dial (markups), incomplete pass-through as a Fact; no *Called it?* |
 | 11 | built, English | *Games.* Agora gains `games` (equilibria by support enumeration, iterated elimination, the cognitive hierarchy and its fit, game trees, Rubinstein, the folk region, a strategy library with a noisy round robin and the ecology, correlated equilibrium by LP, the replicator, fictitious play, regret matching, Bayesian equilibria); the Data Room gains the FAS nuclear stockpiles via Our World in Data and the transcribed Nagel (1995), Thaler's FT contest (1997), Flood (1952, via Poundstone), Henrich et al. (2001), Camerer, Ho and Chong (2004) and Axelrod (1980); a new dial (depth of reasoning) and the guessing game's *Called it?* |
+| 12 | built, English | *Competition among the Few.* Agora gains `oligopoly` (Cournot, Bertrand homogeneous and differentiated, Kreps–Scheinkman, Hotelling and Salop, Dixit–Stiglitz, Stackelberg, Dixit's credible capacity, collusion thresholds, Green–Porter, leniency, the HHI and mergers, the MHHI); the Data Room gains the BLS gasoline price via FRED and the transcribed Connor (1998, 2014), Boyer and Kotchoni (2015) and the merger guidelines; a new dial (cartel overcharges) and Stigler's *Called it?*; Act III is complete |
 
 **Corrections found while building Part 1** (the plan's draft, written from memory, against the sources): Bastiat's
 Paris passage is in *Economic Sophisms*, First Series, ch. 18 (1845), not the *Harmonies*; Hume's is/ought passage is
@@ -3008,3 +3034,17 @@ kick's scoring table is illustrative; the published tests are cited for their fi
 Agora's own round robin tit for tat comes fifth, behind tit for two tats, which the chapter says, with Axelrod's own
 remark that tit for two tats would have won his first tournament. The draft's dials line had no dial for this part;
 the depth of reasoning was added, with two of its three rows Agora's fits to published means, labelled as such.
+
+**Corrections found while building Part 12.** The hook was "the Maui tapes"; the lysine story is now told from
+Connor's 1998 article (the prices stated in its text, the months between left blank), and the slogan is attributed
+as the Justice Department describes it, to ADM's president on a tape played at the trial, since accounts differ on
+who first said it. ADM's 1996 fine was $100 million in all, $70 million of it for lysine; three ADM executives,
+the informant among them, went to prison. Hotelling's 1929 examples are given as his own political one; the cider
+and churches often quoted were not checked. Agora's Dixit model was first written with the incumbent able to threaten
+any capacity, which made deterrence possible where it is not credible; it now caps the incumbent's reply at its
+capacity and floors it at its reply at full cost, so only capacities between the two Cournot points deter, and the
+Island's numbers (slips at $30, use at $10, a setup cost of $144) give strategic deterrence at 36. Rockets and
+feathers could not be seen in monthly data (a first-month difference of 1 cent, standard error 11), and the chapter
+says so. The 3-7% common-ownership effect sometimes quoted was not verified and is not used; the dispute is shown
+instead. Called it? was planned as Stigler on which cartels cheat; it is Stigler's claim that secret price cuts break
+cartels, judged partly right from Levenstein and Suslow's survey.

@@ -1,10 +1,10 @@
 # Economics, Built (经济学，从零搭建)
 
-**Status (2026-11-19): Parts 1 to 11, [*Who Feeds Paris?*](econ1/README.md), [*The Scissors*](econ2/README.md),
+**Status (2026-11-19): Parts 1 to 12, [*Who Feeds Paris?*](econ1/README.md), [*The Scissors*](econ2/README.md),
 [*The Measure*](econ3/README.md), [*The Evidence*](econ4/README.md), [*What People Want*](econ5/README.md),
 [*Demand*](econ6/README.md), [*Time and Risk*](econ7/README.md), [*The Firm*](econ8/README.md),
-[*The Invisible Hand, Proved*](econ9/README.md), [*The Price Maker*](econ10/README.md) and
-[*Games*](econ11/README.md), are built in English (Acts I and II are complete, Act III under way), each with its computed score,
+[*The Invisible Hand, Proved*](econ9/README.md), [*The Price Maker*](econ10/README.md), [*Games*](econ11/README.md)
+and [*Competition among the Few*](econ12/README.md), are built in English (Acts I to III are complete), each with its computed score,
 lab and game; the shared code
 (Agora, the Island, the Facts, the Dials, the Data Room, the instruments and the score) is in `explainer/economics/`.** This file is the plan; the standard every part meets, the devices and all
 sixty-eight parts chapter by chapter are in [`SYLLABUS.md`](SYLLABUS.md), with progress in its §9. The decisions the
@@ -239,7 +239,7 @@ The series draws in the manner of 3Blue1Brown with the instruments of `explainer
 | 9 | The Invisible Hand, Proved | cigarettes in a prisoner-of-war camp, 1943-45 | the Edgeworth box, the core, Walras's law, existence by a fixed point, both welfare theorems proved, tâtonnement and Scarf's counterexample, computing equilibria, anything goes (Sonnenschein–Mantel–Debreu), the calculation debate | an exchange and production economy solver | trade in the box until nobody can gain |
 | 10 | The Price Maker | Dupuit and the third-class carriage, 1849 | monopoly and the markup rule, deadweight loss, three degrees of price discrimination, two-part tariffs, bundling, the durable-goods problem, natural monopoly, Ramsey prices and regulation | a monopolist with a pricing menu | set the fare for a ferry that costs nothing to run |
 | 11 | Games | RAND, January 1950: the first prisoner's dilemma | dominance, Nash equilibrium and existence, mixed strategies tested on penalty kicks, extensive forms and backward induction, repeated games and the folk theorem, Axelrod's tournaments, focal points, evolutionary stability, level-k | a game solver; a tournament | two-thirds of the average |
-| 12 | Competition among the Few | "the customer is our enemy": the lysine tapes, 1992 | Cournot, Bertrand and Stackelberg, capacity, Hotelling's line and product differentiation, monopolistic competition, cartels and their detection, entry deterrence, concentration and mergers in one formula | an oligopoly lab | name your price against one rival, then twenty |
+| 12 | Competition among the Few | "our customers are the enemy": the lysine tapes, 1992-95 | Cournot, Bertrand and Stackelberg, capacity, Hotelling's line and product differentiation, monopolistic competition, cartels and their detection, entry deterrence, concentration and mergers in one formula | an oligopoly lab | name your price against one rival, then twenty |
 | **IV** | **Failure and Design** | | | | |
 | 13 | Lemons and Signals | Akerlof's paper, rejected three times, 1967–70 | adverse selection and unravelling, signalling, screening and separating contracts, the death spiral in a real health plan, testing for asymmetric information, cost curves for selection markets | a lemons market; an insurance market | buy a used car you cannot inspect |
 | 14 | Incentives | eighteen thumbprints in Xiaogang, 1978 | moral hazard, the principal–agent problem solved, risk against incentives, multitasking, tournaments, career concerns, efficiency wages, piece rates at Safelite, incomplete contracts and ownership | a contract designer | write the contract, then watch the agent |

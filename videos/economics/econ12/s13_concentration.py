@@ -38,7 +38,7 @@ class Concentration(VoiceoverScene):
         eq = MathTex(r"H = \sum_i s_i^2 \quad (\text{shares in percent: } 0 \text{ to } 10{,}000)", font_size=36,
                      color=HHI).to_edge(UP, buff=0.55)
         foot = label(r"Orris Herfindahl (1950) \ and Albert Hirschman (1945): \ it weighs big firms more", font_size=21,
-                     color=GREY_A).to_edge(DOWN, buff=0.45)
+                     color=GREY_A).to_edge(DOWN, buff=0.8)
         tag = published_tag(r"Herfindahl, Columbia dissertation (1950); \ Hirschman, \emph{National Power and the "
                             r"Structure of Foreign Trade} (1945)", corner=DR, font_size=12)
         with self.voiceover(
@@ -111,7 +111,7 @@ class Concentration(VoiceoverScene):
         line = NumberLine(x_range=[0, 10000, 1000], length=11.4, include_numbers=False, color=GREY_B).move_to(UP * 0.6)
         nums = VGroup(*[label(f"{v:,}".replace(",", "{,}"), font_size=16, color=GREY_B).next_to(line.n2p(v), DOWN,
                                                                                                buff=0.15)
-                        for v in (0, 2500, 5000, 10000)])
+                        for v in (0, 5000, 10000)])
         m23 = VGroup(Triangle(color=LEADER, fill_opacity=1).scale(0.12).rotate(PI).next_to(
             line.n2p(g23["highly_concentrated"]), UP, buff=0.05),
             label(rf"2023: \ above {g23['highly_concentrated']:,}, \ highly concentrated".replace(",", "{,}"),
@@ -134,6 +134,11 @@ class Concentration(VoiceoverScene):
         ).arrange(DOWN, buff=0.25).to_edge(DOWN, buff=0.45)
         tag = published_tag(r"DOJ and FTC, Merger Guidelines (2023); \ Horizontal Merger Guidelines (2010)",
                             corner=UR, font_size=12)
+        pre, post = Dot(line.n2p(2000), radius=0.09, color=HHI), Dot(line.n2p(2800), radius=0.09, color=CARTEL)
+        jump = CurvedArrow(line.n2p(2000) + UP * 0.15, line.n2p(2800) + UP * 0.15, angle=-PI / 2, color=CARTEL,
+                           stroke_width=2.5, tip_length=0.15)
+        jl = label(r"two of five merge: \ 2{,}000 to 2{,}800", font_size=17, color=CARTEL).next_to(
+            line.n2p(5600), UP, buff=0.35)
         with self.voiceover(
             "Competition authorities use the index as a first screen. <bookmark mark='a'/> Under the American "
             "merger guidelines of December 2023, a merger is presumed to lessen competition substantially if it "
@@ -145,7 +150,9 @@ class Concentration(VoiceoverScene):
             "thousand eight hundred, a rise of eight hundred: past both lines."
         ) as vo:
             self.play(Create(line), FadeIn(nums), FadeIn(tag), FadeIn(m23), FadeIn(m10))
-            for mk, r in zip("abcd", rows):
+            for mk, r in zip("abc", rows[:3]):
                 vo.wait_until(mk)
                 self.play(FadeIn(r, shift=UP * 0.1))
+            vo.wait_until("d")
+            self.play(FadeIn(rows[3], shift=UP * 0.1), FadeIn(pre), FadeIn(post), Create(jump), FadeIn(jl))
         self.clear_scene()

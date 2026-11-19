@@ -64,7 +64,7 @@ class Collusion(VoiceoverScene):
         cd = VGroup(*[Dot(a.c2p(n, d), radius=0.06, color=LEADER) for n, d in zip(ns, c["cournot"])])
         bd = VGroup(*[Dot(a.c2p(n, d), radius=0.06, color=BERT) for n, d in zip(ns, c["bertrand"])])
         cl = label(r"quantities (Cournot)", font_size=16, color=LEADER).next_to(a.c2p(10, c["cournot"][-1]), DOWN,
-                                                                            buff=0.15).shift(LEFT * 0.6)
+                                                                            buff=0.35).shift(LEFT * 0.9)
         bl = label(r"prices (Bertrand)", font_size=16, color=BERT).next_to(a.c2p(10, c["bertrand"][-1]), UP,
                                                                        buff=0.1).shift(LEFT * 0.6)
         side = VGroup(

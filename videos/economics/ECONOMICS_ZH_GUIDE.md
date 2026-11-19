@@ -430,6 +430,37 @@ brackets on screen.
 | alternating-offers bargaining (Rubinstein) | 轮流出价讨价还价（鲁宾斯坦） |
 | counterfactual regret minimization | 反事实后悔最小化 |
 
+
+## Part 12
+
+| English | 中文 |
+|---|---|
+| oligopoly; duopoly | 寡头垄断；双头垄断 |
+| Cournot competition; reaction (best-reply) curve | 古诺竞争；反应（最优反应）曲线 |
+| Bertrand competition; the Bertrand paradox | 伯特兰竞争；伯特兰悖论 |
+| capacity constraint; Edgeworth cycle | 产能约束；埃奇沃思周期 |
+| product differentiation; strategic complements and substitutes | 产品差异化；策略互补与策略替代 |
+| Hotelling's line; minimum and maximum differentiation | 霍特林线性城市模型；最小差异化与最大差异化 |
+| Salop's circle; excess entry | 萨洛普环形城市模型；过度进入 |
+| monopolistic competition; love of variety | 垄断竞争；多样性偏好 |
+| Stackelberg leader and follower; first-mover advantage | 斯塔克尔伯格领导者与追随者；先动优势 |
+| entry deterrence; blockaded entry; limit pricing | 进入阻止；封锁性进入；限制性定价 |
+| top dog, puppy dog, fat cat, lean and hungry look | 恶犬、小狗、肥猫、饿狼（弗登伯格–梯若尔分类） |
+| cartel; collusion; tacit collusion | 卡特尔；共谋；默契共谋 |
+| price war; trigger price | 价格战；触发价格 |
+| leniency programme; amnesty | 宽大政策；豁免 |
+| overcharge | 超额收费（价格加成损害） |
+| parallel conduct; concerted practice | 平行行为；协同行为 |
+| price-matching guarantee | 价格匹配承诺 |
+| rockets and feathers | “火箭与羽毛”（涨快跌慢） |
+| the Herfindahl–Hirschman index (HHI) | 赫芬达尔–赫希曼指数（HHI） |
+| merger guidelines; the hypothetical monopolist test; critical loss | 合并指南；假定垄断者测试；临界损失 |
+| the merger paradox; efficiencies | 合并悖论；效率抵消 |
+| contestable market; hit-and-run entry | 可竞争市场；打了就跑式进入 |
+| predatory pricing; recoupment | 掠夺性定价；损失补偿 |
+| common ownership; the modified HHI | 共同所有权；修正赫芬达尔指数 |
+| algorithmic pricing | 算法定价 |
+
 ## Names
 
 | English | 中文 |
@@ -601,3 +632,10 @@ brackets on screen.
 | Colin Camerer; Teck-Hua Ho | 科林·凯默勒；何德华 |
 | Sergiu Hart; Andreu Mas-Colell | 塞尔吉乌·哈特；安德鲁·马斯-科莱尔 |
 | Noam Brown; Tuomas Sandholm | 诺姆·布朗；托马斯·桑德霍尔姆 |
+| Antoine Augustin Cournot; Joseph Bertrand; Francis Edgeworth | 安托万·奥古斯丁·古诺；约瑟夫·伯特兰；弗朗西斯·埃奇沃思 |
+| Harold Hotelling; Steven Salop; Heinrich von Stackelberg | 哈罗德·霍特林；史蒂文·萨洛普；海因里希·冯·施塔克尔贝格 |
+| Avinash Dixit; Joseph Stiglitz; Paul Krugman | 阿维纳什·迪克西特；约瑟夫·斯蒂格利茨；保罗·克鲁格曼 |
+| David Kreps; Jose Scheinkman; Robert Porter; Edward Green | 戴维·克雷普斯；何塞·沙因克曼；罗伯特·波特；爱德华·格林 |
+| Drew Fudenberg; Jean Tirole; Oliver Williamson | 德鲁·弗登伯格；让·梯若尔；奥利弗·威廉姆森 |
+| William Baumol; John McGee; John Connor; Mark Whitacre | 威廉·鲍莫尔；约翰·麦基；约翰·康纳；马克·惠特克 |
+| Archer Daniels Midland (ADM); lysine | 阿彻丹尼尔斯米德兰公司（ADM）；赖氨酸 |

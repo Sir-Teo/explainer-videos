@@ -49,7 +49,7 @@ class Intermission(SoundScene):
                                            (r"West Texas crude, \ per gallon (EIA)", CRUDE))]
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.1).move_to(ax.ax.c2p(1993, 6.3))
         intro = label(r"a few sellers on every corner: \ the pump and the oil beneath it", font_size=22,
-                      color=WHITE).move_to(ax.ax.c2p(2010, 6.7))
+                      color=WHITE).move_to(ax.ax.c2p(2014, 6.85))
 
         def show_intro(m, t):
             m.set_opacity(float(np.clip(t / 1.5, 0, 1) * np.clip((10.0 - t) / 1.5, 0, 1)))

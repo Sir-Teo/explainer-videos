@@ -57,10 +57,10 @@ class Frontier(VoiceoverScene):
         a = ax.ax
         one = path(ax, xs, c["curve_one"], color=FUND, width=3.5)
         many = path(ax, xs, c["curve_many"], color=CARTEL, width=3.5)
-        ol_ = label(r"the rest held by one owner", font_size=15, color=FUND).next_to(a.c2p(0.3, 5600), DOWN,
-                                                                                    buff=0.1)
+        ol_ = label(r"the rest held by one owner", font_size=15, color=FUND).next_to(a.c2p(0.25, 5700), UP,
+                                                                                    buff=0.15)
         ml_ = label(r"the rest held by a thousand small ones", font_size=15, color=CARTEL).next_to(
-            a.c2p(0.12, 9700), DOWN, buff=0.1)
+            a.c2p(0.32, 9450), DOWN, buff=0.1)
         cs = c["common_share"]
         d1 = Dot(a.c2p(cs, c["mhhi_one"]), radius=0.08, color=FUND)
         d2 = Dot(a.c2p(cs, c["mhhi_many"]), radius=0.08, color=CARTEL)
