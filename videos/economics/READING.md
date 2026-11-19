@@ -10,7 +10,7 @@ the series leaves out.
 Both *Parts* columns are found, not typed. *Planned* lists the parts whose entry in
 [`SYLLABUS.md`](SYLLABUS.md) names the book or paper; *Built* lists the parts whose scenes, compute step or
 README cite it (a dot: none yet). Fuller notes (editions, chapters, what each source was used for) are in each
-part's README, under *Sources*. Built so far: Parts 1–7.
+part's README, under *Sources*. Built so far: Parts 1–8.
 
 ## 1. The textbook spine
 
@@ -28,8 +28,8 @@ part's README, under *Sources*. Built so far: Parts 1–7.
 
 | Short name | Book | Planned | Built |
 |---|---|---|---|
-| Varian | H. Varian, *Intermediate Microeconomics* (9th ed., 2014) | 2, 5–8, 10 | 2, 5–7 |
-| Nicholson–Snyder | W. Nicholson and C. Snyder, *Microeconomic Theory* (13th ed., 2021) | 5–6 | 5–6 |
+| Varian | H. Varian, *Intermediate Microeconomics* (9th ed., 2014) | 2, 5–8, 10 | 2, 5–8 |
+| Nicholson–Snyder | W. Nicholson and C. Snyder, *Microeconomic Theory* (13th ed., 2021) | 5–6 | 5–6, 8 |
 | Jones | C. I. Jones, *Macroeconomics* (6th ed., 2023) | 20 | · |
 | Blanchard | O. Blanchard, *Macroeconomics* (8th ed., 2021) | 27, 32 | · |
 | Stock–Watson | J. Stock and M. Watson, *Introduction to Econometrics* (4th ed., 2019) | 4 | 4 |
@@ -47,7 +47,7 @@ part's README, under *Sources*. Built so far: Parts 1–7.
 
 | Short name | Book | Planned | Built |
 |---|---|---|---|
-| MWG | A. Mas-Colell, M. Whinston and J. Green, *Microeconomic Theory* (1995) | 5–9, 13, 15, 18, 56 | 5–7 |
+| MWG | A. Mas-Colell, M. Whinston and J. Green, *Microeconomic Theory* (1995) | 5–9, 13, 15, 18, 56 | 5–8 |
 | Kreps | D. Kreps, *Microeconomic Foundations I* (2013) | 5, 7, 9, 56 | 5, 7 |
 | Jehle–Reny | G. Jehle and P. Reny, *Advanced Microeconomic Theory* (3rd ed., 2011) | 5, 9 | 5–6 |
 | Fudenberg–Tirole | D. Fudenberg and J. Tirole, *Game Theory* (1991) | 11, 53 | · |
@@ -92,7 +92,7 @@ part's README, under *Sources*. Built so far: Parts 1–7.
 
 | Short name | Book | Planned | Built |
 |---|---|---|---|
-| Feenstra | R. Feenstra, *Advanced International Trade* (2nd ed., 2016) | 6, 35–36 | 6 |
+| Feenstra | R. Feenstra, *Advanced International Trade* (2nd ed., 2016) | 6, 35–36 | 6, 8 |
 | Cahuc–Carcillo–Zylberberg | P. Cahuc, S. Carcillo and A. Zylberberg, *Labor Economics* (2nd ed., 2014) | 24, 38 | · |
 | Atkinson–Stiglitz | A. Atkinson and J. Stiglitz, *Lectures on Public Economics* (1980; 2015) | 41 | 6 |
 | Salanié | B. Salanie, *The Economics of Taxation* (2nd ed., 2011) | 41 | · |
@@ -121,12 +121,12 @@ part's README, under *Sources*. Built so far: Parts 1–7.
 | Model or result | Paper | Planned | Built |
 |---|---|---|---|
 | the division of labour | Smith (1776), *The Wealth of Nations* | 1 | 1–2 |
-| comparative advantage | Ricardo (1817), *Principles*, ch. 7 | 2, 35–36 | 1–2 |
+| comparative advantage | Ricardo (1817), *Principles*, ch. 7 | 2, 8, 35–36 | 1–2, 8 |
 | supply and demand, the scissors | Marshall (1890), *Principles of Economics* | 2, 37 | 2 |
 | the price system as information | Hayek (1945), "The Use of Knowledge in Society" | 1, 9 | 1 |
 | the double auction in the classroom | Chamberlin (1948); Smith (1962) | 1–2 | 1 |
 | zero-intelligence traders | Gode and Sunder (1993) | 2 | 1–2 |
-| general equilibrium and its welfare theorems | Arrow and Debreu (1954); Debreu (1959) | 9 | · |
+| general equilibrium and its welfare theorems | Arrow and Debreu (1954); Debreu (1959) | 9 | 8 |
 | consumer surplus | Dupuit (1844) | 2, 10 | 2 |
 
 ### Choice
@@ -142,9 +142,9 @@ part's README, under *Sources*. Built so far: Parts 1–7.
 
 | Model or result | Paper | Planned | Built |
 |---|---|---|---|
-| why firms exist | Coase (1937), "The Nature of the Firm" | 1, 8 | 1 |
+| why firms exist | Coase (1937), "The Nature of the Firm" | 1, 8 | 1, 8 |
 | organizations and markets | Simon (1991) | 1 | 1 |
-| incomplete contracts and ownership | Grossman and Hart (1986) | 14 | · |
+| incomplete contracts and ownership | Grossman and Hart (1986) | 8, 14 | 8 |
 | moral hazard and the principal | Holmström (1979) | 14 | · |
 
 ### Strategy
@@ -244,7 +244,7 @@ part's README, under *Sources*. Built so far: Parts 1–7.
 
 | Model or result | Paper | Planned | Built |
 |---|---|---|---|
-| positive economics | Friedman (1953) | 8 | 1 |
+| positive economics | Friedman (1953) | 8 | 1, 8 |
 | models as maps | Rodrik (2015), *Economics Rules* | 1, 67 | 1 |
 | identification by instruments | Wright (1928); Haavelmo (1944) | 4 | 4 |
 | the credibility of econometrics | Leamer (1983); LaLonde (1986) | 4 | 4 |
@@ -269,6 +269,8 @@ part's README, under *Sources*. Built so far: Parts 1–7.
 **Part 6, *Demand*.** Books: Hal Varian, *Intermediate Microeconomics*, chs. 6–10, 14; Andreu Mas-Colell, Michael Whinston and Jerry Green, *Microeconomic Theory*, chs. 2–3; Angus Deaton and John Muellbauer, *Economics and Consumer Behavior* (1980); Walter Nicholson and Christopher Snyder, *Microeconomic Theory*, chs. 5–6. Papers: Slutsky (1915); Hicks and Allen (1934), *Economica*; Hicks, *Value and Capital* (1939); Jensen and Miller (2008), *AER* 98(4); Stigler (1947); Rosen (1999), *JPE*; Roy (1947); Shephard (1953); Hurwicz and Uzawa (1971); Konüs (1924); Hicks (1940); Willig (1976), *AER*; Hausman (1981), *AER*; Hausman (1997), new goods; Stone (1954); Deaton and Muellbauer (1980), *AER*; Gorman (1953); Houthakker (1957); Hamilton (2001), *AER*; Costa (2001), *JPE*; Almås (2012), *AER*; Deaton (1989); Feenstra (1994); Jaravel (2019), *QJE*; Redding and Weinstein (2020); Jaravel and Lashkari (2024); Atkin et al. (2024).
 
 **Part 7, *Time and Risk*.** Books: Hal Varian, *Intermediate Microeconomics*, chs. 10–13; Andreu Mas-Colell, Michael Whinston and Jerry Green, *Microeconomic Theory*, ch. 6; David Kreps, *Microeconomic Foundations I*, chs. 5–6; Christian Gollier, *The Economics of Risk and Time* (2001). Papers: Bernoulli (1738); Fisher, *The Theory of Interest* (1930); Samuelson (1937); Koopmans (1960); von Neumann and Morgenstern (1944); Savage (1954); Allais (1953); Ellsberg (1961); Pratt (1964); Arrow (1965); Mossin (1968); Merton (1969); Rothschild and Stiglitz (1970); Kahneman and Tversky (1979); Machina (1982); Gilboa and Schmeidler (1989); Rabin (2000); Kreps and Porteus (1978); Epstein and Zin (1989); Mehra and Prescott (1985); Weil (1989); Hall (1988); Strotz (1955–56); Laibson (1997); Holt and Laury (2002); Barsky et al. (1997); Hayden and Platt (2009); Hansen and Sargent, *Robustness* (2008); Manski (2004); Madrian and Shea (2001); Thaler and Benartzi (2004).
+
+**Part 8, *The Firm*.** Books: Hal Varian, *Intermediate Microeconomics*, chs. 19–24; Andreu Mas-Colell, Michael Whinston and Jerry Green, *Microeconomic Theory*, ch. 5; Oliver Williamson, *The Economic Institutions of Capitalism* (1985); Oliver Hart, *Firms, Contracts, and Financial Structure* (1995). Papers: Cobb and Douglas (1928), *AER*; Douglas (1976), *JPE*; Felipe and Adams (2005); Arrow, Chenery, Minhas and Solow (1961); Chenery (1949); Samuelson's Le Chatelier principle; Hall and Hitch (1939); Alchian (1950); Friedman (1953); Coase (1937), *Economica*; Williamson (1975, 1985); Klein, Crawford and Alchian (1978); Coase (2000), Klein (2000), Freeland (2000), Casadesus-Masanell and Spulber (2000), *JLE*; Grossman and Hart (1986); Hart and Moore (1990), *JPE*; Gollin (2002); Karabarbounis and Neiman (2014); Haskel and Westlake (2018); Brynjolfsson, Li and Raymond (2025); Shahidi et al. (2025).
 
 ## 4. What the series leaves out
 

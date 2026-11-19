@@ -148,7 +148,10 @@ class Rabin(VoiceoverScene):
             "<bookmark mark='e'/> And there's a warning for measurement: a gamma read from choices over a few dollars "
             "says nothing about how someone will treat their pension."
         ) as vo:
-            for mk, r_ in zip("abcde", rows):
+            self.play(FadeIn(rows[0], shift=UP * 0.15))
+            vo.wait_until("a")
+            self.play(Indicate(rows[0], color=E.ACCENT, scale_factor=1.03))
+            for mk, r_ in zip("bcde", rows[1:]):
                 vo.wait_until(mk)
                 self.play(FadeIn(r_, shift=UP * 0.15))
         self.clear_scene()

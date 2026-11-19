@@ -160,7 +160,8 @@ class EIS(VoiceoverScene):
         c3 = history_card(r"since", r"Epstein--Zin preferences in asset pricing", r"high risk aversion for the "
                           r"premium, \ a high EIS for the low safe rate: \ long-run risks (Bansal and Yaron), \ "
                           r"habits, \ disasters; \ Part 23", color=E.ACCENT, width=11.6, font_size=23)
-        g = VGroup(c1, c2, c3).arrange(DOWN, buff=0.35, aligned_edge=LEFT).move_to(DOWN * 0.1)
+        head = label(r"why finance cares", font_size=34, color=E.ACCENT).to_edge(UP, buff=0.3)
+        g = VGroup(c1, c2, c3).arrange(DOWN, buff=0.3, aligned_edge=LEFT).next_to(head, DOWN, buff=0.35)
         tag = published_tag(r"Mehra and Prescott, JME (1985); Weil, JME (1989)", corner=DR, font_size=14)
         with self.voiceover(
             "Why does finance care so much? <bookmark mark='a'/> In 1985 Rajnish Mehra and Edward Prescott pointed "
@@ -174,7 +175,7 @@ class EIS(VoiceoverScene):
             "and a high elasticity for the low safe rate. That's why Epstein and Zin's preferences are everywhere in "
             "asset pricing, and Part twenty-three picks the story up."
         ) as vo:
-            self.play(FadeIn(tag))
+            self.play(FadeIn(tag), FadeIn(head, shift=DOWN * 0.2))
             vo.wait_until("a")
             self.play(FadeIn(c1, shift=UP * 0.2))
             vo.wait_until("b")

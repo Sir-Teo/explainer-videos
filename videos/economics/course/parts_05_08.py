@@ -184,4 +184,58 @@ PARTS = [
               ("The Island's planted truths", "explainer/economics/island.py"),
               ("The Data Room's sources", "explainer/economics/data/SOURCES.md")),
     ),
+    Part(
+        n=8, level="U", widget="firm", prereq=(5, 6),
+        question="How does a firm decide what to make and how, and why is there a firm at all?",
+        story="The part opens with Paul Douglas's chart of 1927: capital, labour and output in American manufacturing, "
+              "1899-1922, on a log scale, with output a quarter of the way from labour to capital; Charles Cobb gives "
+              "him P' = 1.01 L^(3/4) C^(1/4), refitted on screen from their own data, and the labour share stays near "
+              "62% for half a century before falling. Ten years later Coase asks why the islands of conscious power "
+              "exist at all. Technology comes first (Crusoe's boatyard, isoquants, marginal products, the technical "
+              "rate of substitution), then the 1928 regression and its fragility (a time trend turns capital's "
+              "exponent negative), CES and the elasticity of substitution, returns to scale from a pipeline's "
+              "geometry and the six-tenths rule, cost minimization and the cost function with Shephard's lemma, "
+              "short-run cost curves and the long-run envelope, and a game: the viewer hires shipwrights until the "
+              "last one stops paying. After profit and supply (shut-down and break-even, Le Chatelier, Hotelling) "
+              "and an intermission redrawing Douglas's chart year by year, the industry with free entry and rents, "
+              "the marginalist controversy (Hall and Hitch, Friedman's billiard player, Alchian's survival run on 200 "
+              "simulated yards), Coase's transaction costs, Williamson's make-or-buy, hold-up and the record of Fisher "
+              "Body and General Motors, Grossman-Hart-Moore ownership, two dials, cost models and capacity in "
+              "practice, and a frontier on intangible capital, generative AI at work and a Coasean singularity.",
+        handoff="Part 9 puts consumers and firms together in general equilibrium; the production function returns in "
+                "the growth models of Parts 20 and 21, market power and markups in Parts 10 and 43, incentives inside "
+                "the firm in Part 14, and the modern evidence on firms in Part 62.",
+        outside="The calculus of Parts 5 and 6 (partial derivatives, a Lagrange multiplier); logarithms for the "
+                "regressions. Chapter 12 uses a little game theory (bargaining), explained on screen.",
+        objectives={
+            "U": ["Compute marginal products, the technical rate of substitution and returns to scale for a "
+                  "Cobb-Douglas technology, and explain the difference between diminishing returns and returns to "
+                  "scale.",
+                  "Find the least-cost combination of inputs and the cost function, and derive the short-run cost "
+                  "curves, the shut-down and break-even prices and the supply curve.",
+                  "Find the long-run equilibrium of a competitive industry with free entry, and explain economic rents."],
+            "M": ["Use Shephard's and Hotelling's lemmas and the Le Chatelier principle, and relate the CES elasticity "
+                  "of substitution to factor shares.",
+                  "Fit and criticize a Cobb-Douglas regression, and explain why a time trend or growth rates can "
+                  "overturn it.",
+                  "Explain Coase's transaction costs, Williamson's specific assets, the hold-up problem and the "
+                  "Grossman-Hart-Moore theory of ownership."],
+            "D": ["Discuss what intangible capital and AI do to production functions and to the boundary of the firm "
+                  "(Haskel and Westlake; Brynjolfsson, Li and Raymond; Shahidi et al.)."],
+            "I": ["Use the six-tenths rule, learning curves and a newsvendor rule to estimate costs and choose "
+                  "capacity."],
+        },
+        results=[
+            ("Cobb-Douglas", r"q = A K^{a} L^{b},\qquad \frac{wL}{pq} = b"),
+            ("CES", r"q = A\bigl[sK^{\rho} + (1-s)L^{\rho}\bigr]^{\nu/\rho},\qquad \sigma = \frac{1}{1-\rho}"),
+            ("Least cost", r"\frac{MP_L}{MP_K} = \frac{w}{r},\qquad \frac{\partial c}{\partial w} = L(w,r,q)"),
+            ("Profit and supply", r"p = MC(q)\ \text{above}\ \min AVC,\qquad \frac{\partial\pi}{\partial p} = q"),
+            ("Free entry", r"p = \min_q ATC(q)"),
+            ("Hold-up", r"i^{*} = V^{2},\qquad i_{\text{held up}} = (\theta V)^{2}"),
+        ],
+        U=(0, 1, 2, 3, 4, 5, 6, 7, 8, 13, "s09_intermission"), D=(15,), I=(14,),
+        also=(("Agora's firm", "explainer/economics/agora/firm.py"),
+              ("The Island's planted truths", "explainer/economics/island.py"),
+              ("The Data Room's sources", "explainer/economics/data/SOURCES.md")),
+    ),
 ]

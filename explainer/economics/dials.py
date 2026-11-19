@@ -174,7 +174,47 @@ DIALS = {d.key: d for d in [
              Estimate("Bansal and Yaron", 2004, "calibration", "long-run risks: the value asset prices need", 10.0,
                       where="Journal of Finance 59(4): 1481-1509, abstract", checked="2026-11-19"),
          )),
-    Dial("capital_share", "output elasticity of capital", "", (8, 20)),
+    Dial("capital_share", "output elasticity of capital", "percent change in output per percent change in capital "
+         "(capital's share of income, under competition)", (8, 20), status="settled within a range",
+         checked="2026-11-19",
+         meaning="about a quarter to a third: under competition and constant returns it is capital's share of income, "
+                 "and most measurements put labour's share at two thirds to four fifths; it sets how fast growth "
+                 "from saving runs into diminishing returns (Part 20), but the labour share has fallen since the "
+                 "1980s, so the number is not a constant of nature",
+         estimates=(
+             Estimate("Cobb and Douglas", 1928, "regression", "US manufacturing, 1899-1922, constant returns imposed "
+                      "(their table, refitted)", 0.25, where="AER 18(1) suppl.; the data via Felipe and Adams (2005), "
+                      "table 1, fitted on screen", checked="2026-11-19"),
+             Estimate("Felipe and Adams", 2005, "regression", "the same data, unrestricted", 0.233,
+                      where="Eastern Economic Journal 31(3), table 2", checked="2026-11-19"),
+             Estimate("Gollin", 2002, "review", "labour shares adjusted for self-employment, most countries: one "
+                      "minus 0.65-0.80", 0.275, 0.20, 0.35, where="JPE 110(2): 458-474, abstract",
+                      checked="2026-11-19"),
+             Estimate("Feenstra, Inklaar and Timmer (Penn World Table)", 2015, "survey", "the United States, "
+                      "1950-1999: one minus the mean labour share", 0.375, where="PWT via FRED (LABSHPUSA156NRUG), "
+                      "computed on screen", checked="2026-11-19"),
+         )),
+    Dial("kl_substitution", "elasticity of substitution between capital and labour", "percent change in the "
+         "capital-labour ratio per percent change in the wage relative to the rental of capital", (8, 20),
+         status="contested", checked="2026-11-19",
+         meaning="below one in most evidence, about a half: then capital and labour are complements, cheaper capital "
+                 "raises labour's share, and Cobb-Douglas (exactly one) is the wrong benchmark; above one, as one "
+                 "influential estimate has it, cheaper machines explain part of labour's falling share",
+         estimates=(
+             Estimate("Chirinko", 2008, "review", "the weight of the evidence, after 75 years of estimates", 0.5, 0.4,
+                      0.6, where="Journal of Macroeconomics 30(2): 671-686, abstract", checked="2026-11-19"),
+             Estimate("Gechert, Havranek, Irsova and Kolcunova", 2022, "meta-analysis", "3,186 estimates in 121 "
+                      "studies: the mean as reported", 0.9, where="Review of Economic Dynamics 45: 55-82, abstract",
+                      checked="2026-11-19"),
+             Estimate("Gechert, Havranek, Irsova and Kolcunova", 2022, "meta-analysis", "the same, corrected for "
+                      "publication bias and method choices", 0.3, where="as above", checked="2026-11-19"),
+             Estimate("Oberfield and Raval", 2021, "structural", "US manufacturing plants aggregated, long run, "
+                      "1970-2007", 0.6, 0.5, 0.7, where="Econometrica 89(2): 703-732, abstract",
+                      checked="2026-11-19"),
+             Estimate("Karabarbounis and Neiman", 2014, "regression", "across countries: labour shares against the "
+                      "relative price of investment goods", 1.25, where="QJE 129(1); NBER WP 19136, abstract",
+                      checked="2026-11-19"),
+         )),
     Dial("markups", "markups over marginal cost", "price over marginal cost", (10, 43)),
     Dial("return_schooling", "return to a year of school", "proportional rise in earnings per year of schooling",
          (4, 38), status="settled within a range", checked="2026-11-19",
@@ -430,6 +470,27 @@ SHOWN = {
          "effects enter the behavioural dials in Part 45"),
         ("FRED's real consumption, PCE prices and Treasury bill rate, 1934-2025", "data: Hall's regression is "
          "computed on screen and labelled as such, not entered as a row"),
+    ],
+    8: [
+        ("Cobb and Douglas (1928), via Felipe and Adams (2005)", "data: the 1899-1922 table is transcribed and the "
+         "regressions are refitted on screen; the constant-returns fit enters the capital_share dial"),
+        ("Penn World Table's US labour share, via FRED", "data: plotted as a series; its mean enters the "
+         "capital_share dial as one minus the labour share"),
+        ("Hall and Hitch (1939); Alchian (1950); Friedman (1953)", "the marginalist controversy, shown as history; "
+         "Alchian's argument is simulated on the Island, not estimated"),
+        ("Coase (1937); Williamson (1975, 1985); Klein, Crawford and Alchian (1978); Grossman and Hart (1986); "
+         "Hart and Moore (1990)", "theories of the firm, shown for what they say; hold-up and ownership are computed "
+         "in Agora's models"),
+        ("Coase (2000); Klein (2000); Freeland (2000); Casadesus-Masanell and Spulber (2000)", "the dispute over "
+         "Fisher Body, shown as a dispute; no number is estimated"),
+        ("Chenery (1949); Williams (1947); Wright (1936)", "engineering rules (pipelines, the six-tenths rule, the "
+         "learning curve), shown with illustrative numbers"),
+        ("Haskel and Westlake (2018); Corrado, Hulten and Sichel (2009)", "intangible capital, shown for its "
+         "properties"),
+        ("Brynjolfsson, Li and Raymond (2025)", "one firm's AI rollout, shown as a study card for its direction; "
+         "Part 65 returns to it"),
+        ("Shahidi, Rusak, Manning, Fradkin and Horton (2025)", "a working paper's argument about AI agents and "
+         "transaction costs, stated as an open question"),
     ],
 }
 

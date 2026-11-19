@@ -96,6 +96,11 @@ class PlayIt(VoiceoverScene):
                   color=GREY_A),
             label(r"independence says a shared part shouldn't matter, \ whatever it is", font_size=26, color=EUL),
         ).arrange(DOWN, buff=0.22).next_to(same, DOWN, buff=0.5)
+        head = label(r"why the common answers break expected utility", font_size=32,
+                     color=E.ACCENT).to_edge(UP, buff=0.5)
+        rows.next_to(head, DOWN, buff=0.5)
+        same.next_to(rows, DOWN, buff=0.5)
+        why.next_to(same, DOWN, buff=0.45)
         with self.voiceover(
             "Here's why. Write out the difference in expected utility between 1A and 1B. <bookmark mark='a'/> It's "
             "eleven hundredths of the utility of a million, minus ten hundredths of the utility of five million, "
@@ -106,6 +111,7 @@ class PlayIt(VoiceoverScene):
             "chance of a million; in the second, that shared chance is of nothing instead. The independence axiom "
             "says a part both options share shouldn't affect which you prefer."
         ) as vo:
+            self.play(FadeIn(head, shift=DOWN * 0.2))
             vo.wait_until("a")
             self.play(Write(rows[0]), run_time=2)
             vo.wait_until("b")
@@ -186,9 +192,9 @@ class PlayIt(VoiceoverScene):
             "described neither how people choose nor how a rational person should. <bookmark mark='c'/> That is the "
             "question every paradox in this part raises. Is expected utility a description of behaviour, or advice?"
         ) as vo:
-            self.play(FadeIn(tag))
+            self.play(FadeIn(tag), FadeIn(hc, shift=UP * 0.2))
             vo.wait_until("a")
-            self.play(FadeIn(hc, shift=UP * 0.2))
+            self.play(Indicate(hc, color=FAN, scale_factor=1.02))
             vo.wait_until("b")
             self.play(FadeIn(later[0]), FadeIn(later[1]))
             vo.wait_until("c")

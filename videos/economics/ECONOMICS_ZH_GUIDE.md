@@ -286,6 +286,45 @@ brackets on screen.
 | automatic enrolment (default); Save More Tomorrow | 自动加入（默认选项）；"明天存更多"计划 |
 | the social discount rate; the Ramsey formula | 社会贴现率；拉姆齐公式 |
 
+## Part 8
+
+| English | 中文 |
+|---|---|
+| the firm; the theory of the firm | 企业；企业理论 |
+| production function; production set; technology | 生产函数；生产集；技术 |
+| marginal product; diminishing returns | 边际产量；边际收益递减 |
+| isoquant; the technical rate of substitution | 等产量线；技术替代率 |
+| the Cobb–Douglas production function | 柯布—道格拉斯生产函数 |
+| CES (constant elasticity of substitution); Leontief technology | 常替代弹性（CES）；里昂惕夫技术 |
+| the elasticity of substitution (σ) | 替代弹性（σ） |
+| factor share; the labour share; the capital share | 要素份额；劳动份额；资本份额 |
+| returns to scale (increasing, constant, decreasing) | 规模报酬（递增、不变、递减） |
+| the six-tenths rule; engineering production functions | 十分之六法则；工程生产函数 |
+| isocost line; cost minimization | 等成本线；成本最小化 |
+| conditional factor demand; the cost function | 条件要素需求；成本函数 |
+| fixed, variable, average and marginal cost | 固定成本、可变成本、平均成本与边际成本 |
+| average total cost; average variable cost | 平均总成本；平均可变成本 |
+| the envelope of short-run cost curves | 短期成本曲线的包络线 |
+| sunk cost | 沉没成本 |
+| profit maximization; the profit function; Hotelling's lemma | 利润最大化；利润函数；霍特林引理 |
+| the break-even price; the shut-down price | 盈亏平衡价格；停业价格 |
+| the short-run and long-run supply curve | 短期与长期供给曲线 |
+| Le Chatelier's principle | 勒夏特列原理 |
+| free entry and exit; zero (economic) profit | 自由进入与退出；零（经济）利润 |
+| rent (Ricardian rent) | 租金（李嘉图租金） |
+| full-cost pricing; the marginalist controversy | 完全成本定价；边际主义论战 |
+| markup; rule of thumb | 加成；经验法则 |
+| survival (selection); "as if" maximization | 生存（选择）；"仿佛"最大化 |
+| transaction costs; the cost of using the price mechanism | 交易成本；使用价格机制的成本 |
+| the boundary of the firm; make or buy; vertical integration | 企业边界；自制还是外购；纵向一体化 |
+| asset specificity; specific investment | 资产专用性；专用性投资 |
+| hold-up; appropriable quasi-rents | 敲竹杠（套牢）；可占用准租 |
+| incomplete contracts; residual control rights | 不完全合同；剩余控制权 |
+| the property-rights theory (Grossman–Hart–Moore) | 产权理论（格罗斯曼—哈特—莫尔） |
+| the learning curve; capacity planning; the newsvendor rule | 学习曲线；产能规划；报童法则 |
+| intangible capital (scalable, sunk, spillovers, synergies) | 无形资本（可扩展、沉没、溢出、协同） |
+| the Coasean singularity | 科斯奇点 |
+
 ## Names
 
 | English | 中文 |
@@ -394,3 +433,14 @@ brackets on screen.
 | Lars Peter Hansen, Thomas Sargent | 拉尔斯·彼得·汉森、托马斯·萨金特 |
 | Charles Manski | 查尔斯·曼斯基 |
 | Frank Ramsey | 弗兰克·拉姆齐 |
+| Paul Douglas; Charles Cobb | 保罗·道格拉斯；查尔斯·柯布 |
+| Hollis Chenery; Robert Solow | 霍利斯·钱纳里；罗伯特·索洛 |
+| Robert Hall, Charles Hitch (Oxford, 1939) | 罗伯特·霍尔、查尔斯·希奇（牛津，1939） |
+| Armen Alchian; Milton Friedman | 阿门·阿尔钦；米尔顿·弗里德曼 |
+| Oliver Williamson | 奥利弗·威廉姆森 |
+| Benjamin Klein, Robert Crawford | 本杰明·克莱因、罗伯特·克劳福德 |
+| Sanford Grossman, Oliver Hart, John Moore | 桑福德·格罗斯曼、奥利弗·哈特、约翰·莫尔 |
+| Theodore Wright | 西奥多·赖特 |
+| Jonathan Haskel, Stian Westlake | 乔纳森·哈斯克尔、斯蒂安·韦斯特莱克 |
+| Erik Brynjolfsson | 埃里克·布林约尔松 |
+| Loukas Karabarbounis, Brent Neiman | 卢卡斯·卡拉巴布尼斯、布伦特·奈曼 |

@@ -149,12 +149,11 @@ class Present(VoiceoverScene):
             "Robert Pollak showed in 1968, it makes no difference to what he eats. With other utilities, knowing can "
             "make it better or worse."
         ) as vo:
-            self.play(FadeIn(ax), FadeIn(tag), FadeIn(side[0]))
+            self.play(FadeIn(ax), FadeIn(tag), FadeIn(side[0]), FadeIn(side[1]))
             vo.wait_until("a")
-            self.play(FadeIn(side[1]))
+            self.play(LaggedStart(*[GrowFromEdge(b, DOWN) for b in plan], lag_ratio=0.2), FadeIn(leg[0]))
             vo.wait_until("b")
-            self.play(LaggedStart(*[GrowFromEdge(b, DOWN) for b in plan], lag_ratio=0.2), FadeIn(leg[0]),
-                      FadeIn(side[2]))
+            self.play(FadeIn(side[2]))
             vo.wait_until("c")
             self.play(LaggedStart(*[GrowFromEdge(b, DOWN) for b in did], lag_ratio=0.4), FadeIn(leg[1]),
                       FadeIn(side[3]), run_time=4)
@@ -194,9 +193,7 @@ class Present(VoiceoverScene):
             "but not negligible when it applies every single day. <bookmark mark='e'/> Part forty-five comes back to "
             "it, and chapter fourteen shows what pension design has done with it."
         ) as vo:
-            self.play(FadeIn(tag))
-            vo.wait_until("a")
-            self.play(FadeIn(hc, shift=UP * 0.2))
+            self.play(FadeIn(tag), FadeIn(hc, shift=UP * 0.2))
             vo.wait_until("b")
             self.play(FadeIn(rows[0], shift=UP * 0.1))
             self.play(FadeIn(rows[1], shift=UP * 0.1))

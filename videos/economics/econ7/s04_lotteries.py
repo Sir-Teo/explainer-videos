@@ -28,6 +28,9 @@ class Lotteries(VoiceoverScene):
                   r"u(180)$", font_size=30, color=GREY_A),
         ).arrange(DOWN, buff=0.5).next_to(VGroup(reef, sea), DOWN, buff=0.6)
         tag = island_tag(corner=DR, font_size=15)
+        head = label(r"a lottery: \ prizes, \ and their chances", font_size=36, color=E.ACCENT).to_edge(UP, buff=0.35)
+        VGroup(reef, sea).next_to(head, DOWN, buff=0.45)
+        ev.next_to(VGroup(reef, sea), DOWN, buff=0.55)
         with self.voiceover(
             "Now risk. A lottery is a list of prizes with their chances. <bookmark mark='a'/> Ana can fish the reef, "
             "which pays sixty dollars for sure, or the open sea, which pays twenty or a hundred and forty with equal "
@@ -38,7 +41,7 @@ class Lotteries(VoiceoverScene):
             "dollars at home, so she compares the utility of a hundred for sure with half the utility of sixty plus "
             "half the utility of a hundred and eighty."
         ) as vo:
-            self.play(FadeIn(tag))
+            self.play(FadeIn(tag), FadeIn(head, shift=DOWN * 0.2))
             vo.wait_until("a")
             self.play(FadeIn(reef, shift=UP * 0.2), FadeIn(sea, shift=UP * 0.2))
             vo.wait_until("b")

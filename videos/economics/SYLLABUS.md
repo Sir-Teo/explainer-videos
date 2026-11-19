@@ -677,33 +677,51 @@ Sargent 2008; Manski 2004; MWG ch 6; Kreps chs 5–6; Gollier 2001; Varian chs 1
 
 ### Part 8 · The Firm (~54)
 *Question:* how does a firm decide what to make and how, and why is there a firm at all?
-*Story:* in 1927 Paul Douglas notices that labour's share of income hardly moves, and asks the mathematician
-Charles Cobb for a function that would make it so. Ten years later a twenty-six-year-old, Ronald Coase, asks
-the question the function hides: if markets are so good, why is so much of the economy run by command?
-0. Hook: Douglas's flat line; the question; objectives.
-1. Technology: production sets, isoquants, marginal products, the technical rate of substitution.
-2. Cobb–Douglas fitted to the 1899–1922 factory data; shares as exponents; CES and the elasticity of
-   substitution; Leontief.
-3. Returns to scale; why a pipeline's cost goes with its surface and its capacity with its volume.
-4. Cost minimization; conditional factor demands; the cost function and Shephard's lemma.
-5. Cost curves from the technology: fixed, variable, average, marginal; the envelope of short-run curves.
-6. Play it: run the boatyard: hire until the last worker stops paying.
-7. Profit maximization; supply as marginal cost above average variable cost; Hotelling's lemma; the Le
-   Chatelier principle.
-8. The industry: entry, exit and zero profit; long-run supply; rents.
-9. Do firms maximize profit? Hall and Hitch (1939), Friedman's billiard player (1953), survival.
-10. Coase (1937): the cost of using the market; make or buy.
-11. Williamson's specific assets; hold-up; Fisher Body and General Motors, the story and the record.
-12. Property rights and ownership (Grossman, Hart and Moore); a pointer to Parts 14 and 62.
-13. Dials. 14. In practice: cost modelling, capacity planning. 15. Frontier: production functions with
-    intangibles; what generative AI does to the boundary of the firm.
+*Story:* Paul Douglas's chart of 1927 puts American manufacturing's output a quarter of the way from labour to
+capital, year after year; the mathematician Charles Cobb gives him P′ = 1.01 L^¾ C^¼, and labour's share of
+income turns out to be the exponent. Ten years later Ronald Coase asks the question the function hides: if markets
+coordinate so well, why is so much of the economy run by command inside firms?
+0. Hook: Douglas's chart, 1899–1922 on a log scale (capital ×4.31, labour ×1.61, output ×2.40); Cobb; the 1928
+   formula refitted (labour 0.746, capital 0.254); the PWT's US labour share, near 62% for fifty years and 56.8%
+   in 2023; Robertson's "islands of conscious power"; the question; objectives.
+1. Technology: Crusoe's boatyard, q = 2K^0.25 L^0.5; marginal products by discrete steps (2.83, 1.17, 0.90, 0.76);
+   isoquants; the technical rate of substitution.
+2. Cobb and Douglas refitted, and broken: unrestricted, with a time trend (capital −0.53), in growth rates (Felipe
+   and Adams 2005); CES and σ (Arrow, Chenery, Minhas and Solow 1961); shares as exponents.
+3. Returns to scale; a pipe's steel against its capacity, the six-tenths rule (Williams 1947), Chenery (1949); why
+   not one firm?
+4. Cost minimization (eight boats for $8,841.68); conditional factor demands; the cost function and Shephard's lemma
+   checked numerically.
+5. Cost curves from the technology: fixed, variable, average and marginal; the envelope of short-run curves.
+6. Play it: run the boatyard; hire three, where p·MP_L = w; sunk slipways change the profit, not the decision.
+7. Profit and supply: price = marginal cost; break-even $1,094 and shut-down $200; supply elasticities 1 and 3; Le
+   Chatelier (Samuelson) and Hotelling.
+   Intermission: Douglas's chart redrawn year by year, the output index as a tune.
+8. The industry: free entry, zero profit and a flat long-run supply (about 20 yards); with fixed costs from $2,000
+   to $8,000, 27 yards, rents of $14,620 a month and an upward-sloping supply (Ricardo).
+9. Do firms maximize profit? Hall and Hitch (1939); Alchian (1950); Friedman's billiard player (1953); Alchian's
+   survival run on 200 island yards (the middle half of markups from 22–75% to 46–57%, 479 closures).
+10. Coase (1937): the cost of using the price mechanism; the boundary at a margin; Williamson's make-or-buy.
+11. Hold-up: invest 100 together, 25 apart; GM and Fisher Body (1919, 1926); Klein, Crawford and Alchian (1978) and
+    the 2000 *Journal of Law and Economics* dispute (Coase, Klein, Freeland, Casadesus-Masanell and Spulber).
+12. Grossman, Hart and Moore: residual control rights; surplus 8.50, 8.29, 6.50, 6.38; a pointer to Parts 14 and 62.
+13. Dials (capital's output elasticity, settled within a range; σ between capital and labour, contested).
+    14. In practice: the six-tenths rule, Wright's learning curve (1936), capacity as a newsvendor (113 boats).
+    15. Frontier: intangibles (Haskel and Westlake 2018), generative AI at work (Brynjolfsson, Li and Raymond), the
+    Coasean singularity (Shahidi et al. 2025).
 
-*Agora:* `firm`: technologies, cost and profit functions with their duality identities; an industry with free
-entry. The Island's firms get their technologies.
-*Dials:* the output elasticity of capital; the elasticity of substitution between capital and labour.
-*Facts:* the labour share (stable, then falling since about 1980 (verify)).
-*Reading:* Cobb & Douglas 1928; Coase 1937; Friedman 1953; Williamson 1985; Klein, Crawford & Alchian 1978;
-Hart 1995; Varian chs 19–24; MWG ch 5.
+*Agora:* `firm`: Cobb–Douglas, CES and Leontief technologies with conditional demands and costs, Shephard's and
+Hotelling's lemmas checked by differences, short-run costs, supply and Le Chatelier, U-shaped costs, free entry with
+identical and heterogeneous firms, Cobb and Douglas's regressions, hold-up, Grossman–Hart–Moore ownership,
+make-or-buy, the boatyard game and Alchian's selection. The Island's yard, larger yard and industry get their truths.
+*Dials:* the output elasticity of capital (new); the elasticity of substitution between capital and labour (new).
+*Facts:* the labour share (near 62% in 1950–99 in the PWT, 56.8% in 2023). No *Called it?*: the part's claims are
+theorems and records, and Coase's remark about the telephone is a comparative static, not a dated forecast.
+*Reading:* Cobb & Douglas 1928; Douglas 1976; Felipe & Adams 2005; Arrow, Chenery, Minhas & Solow 1961; Chenery 1949;
+Hall & Hitch 1939; Alchian 1950; Friedman 1953; Coase 1937; Williamson 1975, 1985; Klein, Crawford & Alchian 1978;
+the *JLE* 2000 symposium on Fisher Body; Grossman & Hart 1986; Hart & Moore 1990; Hart 1995; Gollin 2002; Chirinko
+2008; Gechert et al. 2022; Oberfield & Raval 2021; Karabarbounis & Neiman 2014; Wright 1936; Haskel & Westlake 2018;
+Brynjolfsson, Li & Raymond 2025; Varian chs 19–24; MWG ch 5.
 
 ## Act III · Markets
 
@@ -2818,6 +2836,7 @@ Young Economist*.
 | 5 | built, English | *What People Want.* Agora gains `consumer` (preferences and demand with corners and kinks, WARP, SARP and GARP, Afriat's index and his inequalities as an LP, Varian's bounds, Bronars's power, Becker's random consumers, the EITC's kink, a binary logit); the Data Room gains BEA's fifteen PCE categories and the population, 1929–2025, and the transcribed results of Harbaugh et al., Choi et al., Andreoni and Miller, Chen et al., Saez and McFadden; a new dial (consistency with utility maximization) and the BART *Called it?*; Act II begins |
 | 6 | built, English | *Demand.* Agora gains `demand` (Cobb–Douglas, CES, linear expenditure and AIDS systems with their dual functions checked numerically, the Slutsky matrix and decompositions, the subsistence diet and Jensen and Miller's voucher design, welfare with Willig and Hausman, price indices and Feenstra, Hamilton's Engel drift, AIDS estimation with tests, the integrability loop); the transcribed results of Jensen and Miller, Hausman's cereal, Costa and Hamilton, Engel and Houthakker, the USDA's quintiles, Jaravel and the BLS's methods; rows added to the staples and CPI-bias dials, a new dial (food's income elasticity) and Engel's law as *Called it?* |
 | 7 | built, English | *Time and Risk.* Agora's `risk` grows to the whole part (expected utility and its measures, dominance, insurance and portfolios, Rabin's calibration, the St Petersburg game, Fisher, discounting and beta–delta, Epstein–Zin, Hall's regression, Holt and Laury with noisy respondents, Ellsberg's maxmin and Chew's weighted utility); the Data Room gains real PCE, the PCE price index and the 3-month bill rate, and the transcribed results of Bernoulli, Samuelson, Allais, Ellsberg, Rabin, Thaler, Holt and Laury, Hayden and Platt, Madrian and Shea, Thaler and Benartzi, Barsky et al., Post et al. and Mehra and Prescott; two new dials (relative risk aversion; the EIS) and Bernoulli's *Called it?* |
+| 8 | built, English | *The Firm.* Agora gains `firm` (technologies, costs and their duality identities, supply and Le Chatelier, free entry with identical and different firms, Cobb and Douglas's regressions, hold-up, Grossman–Hart–Moore, make-or-buy, Alchian's selection); the Data Room gains the transcribed Cobb–Douglas indices of 1899–1922 (via Felipe and Adams 2005) and the Penn World Table's labour share; two new dials (capital's output elasticity; the capital–labour elasticity of substitution); Act II is complete |
 
 **Corrections found while building Part 1** (the plan's draft, written from memory, against the sources): Bastiat's
 Paris passage is in *Economic Sophisms*, First Series, ch. 18 (1845), not the *Harmonies*; Hume's is/ought passage is
@@ -2889,3 +2908,14 @@ numbers computed on screen. Madrian and Shea's figures (86% against 37%; 76% at 
 paper's. The plan's "In practice" chapter also carries the social discount rate (Ramsey's formula as an is/ought
 card); the Stern–Nordhaus numbers wait for Part 48. The prospect-theory pointer is to *Psychology, Built* Part 26,
 *Judgment and Choice*.
+
+**Corrections found while building Part 8.** The 1928 formula refits from Cobb and Douglas's own indices (as
+reproduced by Felipe and Adams 2005) to P′ = 1.01 L^0.746 C^0.254; Felipe and Adams's table 2 gives the unrestricted
+and trend fits that the part shows breaking it. The Penn World Table puts the US labour share near 62% from 1950 to
+1999 and at 56.8% in 2023: the fall the draft dated "since about 1980" is mostly after 2000 in this series (other
+measures differ, so the Fact says which series it is). GM bought 60% of Fisher Body in 1919 and the rest in 1926;
+the part tells the hold-up story as Klein, Crawford and Alchian (1978) told it, then the 2000 *Journal of Law and
+Economics* dispute, and does not settle it. Douglas's own account of the 1927 collaboration (Douglas 1976) is
+summarized without the details of where they met; the six-tenths rule is credited to Williams (1947) without its
+title, which was not re-read; Hall and Hitch's sample is "a few dozen" firms. The learning curve is drawn at a fifth
+per doubling as an illustration, not as Wright's estimate.

@@ -271,7 +271,7 @@
                               xlabel: "toss of the first heads" });
           var kx = [], ky = [];
           for (i = 1; i <= Math.min(v.n, 14); i++) { kx.push(i); ky.push(Math.pow(0.5, i)); }
-          b.bars(kx, ky, { color: GOLD, alpha: 0.8 });
+          b.bars(kx, ky, 0.75, { color: GOLD, alpha: 0.8 });
           b.text(1, 0.52, "half the games pay $1: the median prize is $1 to $2", { size: 10.5, color: C.ink });
           s.out = { mode: mode, w: w, pr: pr, e: e, n: v.n, g: v.g };
         } else {
@@ -309,6 +309,82 @@
       note: "The game's prizes are paid in dollars added to your wealth, and the price is the most you could pay and be no " +
             "worse off, on expected utility with the power function (gamma) or the logarithm (gamma = 1). The grey dashed " +
             "curve is Bernoulli's logarithm, for comparison. Computed in your browser; nothing you do here is stored or sent.",
+    });
+  };
+  // ---- Part 8: the firm -------------------------------------------------------------------------------------------
+  W.firm = function (el) {
+    // Crusoe's boatyard (Part 8): boats a month q = 2 K^0.25 L^0.5 from K slipways and L shipwrights; a slipway rents
+    // for $400 a month.  (explainer.economics.agora.firm: CobbDouglas, hire, ShortRun, cd_supply)
+    var A = 2, a = 0.25, b = 0.5, R = 400, CORAL = "#F28C6F", TEAL = "#5BD1C4", ORANGE = "#F2A65A";
+    function q(K, L) { return A * Math.pow(K, a) * Math.pow(L, b); }
+    QB.widget(el, {
+      title: "Run the boatyard",
+      sub: "Set the price of a boat, the wage of a shipwright and the number of slipways you have rented. Each bar is " +
+           "what one more shipwright adds, in dollars; hire while a bar is above the wage. On the right, the yard's " +
+           "cost curves for those slipways: profit is greatest where the price meets marginal cost.",
+      panels: 2, height: 330,
+      controls: [
+        { k: "p", label: "Price of a boat ($)", min: 600, max: 2400, step: 50, value: 1200,
+          fmt: function (x) { return "$" + x.toFixed(0); } },
+        { k: "w", label: "Wage of a shipwright ($ a month)", min: 400, max: 2000, step: 50, value: 1000,
+          fmt: function (x) { return "$" + x.toFixed(0); } },
+        { k: "K", label: "Slipways rented", min: 1, max: 12, step: 1, value: 4,
+          fmt: function (x) { return x.toFixed(0); } },
+      ],
+      buttons: [
+        { label: "Short run: these slipways", act: function (s) { s.mode = "short"; } },
+        { label: "Long run: choose slipways too", act: function (s) { s.mode = "long"; } },
+      ],
+      draw: function (g, v, s) {
+        var mode = s.mode || "short", i, n = 15, K = v.K;
+        if (mode === "long") {
+          // the long-run optimum: q = (p s / k)^(s / (1 - s)), with K / L = (a / b)(w / r)
+          var sc = a + b, ratio = (a / b) * (v.w / R);
+          var L1 = Math.pow(1 / (A * Math.pow(ratio, a)), 1 / sc), k = R * ratio * L1 + v.w * L1;
+          var qq = Math.pow(v.p * sc / k, sc / (1 - sc)), Lopt = Math.pow(qq / (A * Math.pow(ratio, a)), 1 / sc);
+          K = Math.max(0.2, ratio * Lopt);
+          s.longK = K;
+        }
+        var xs = [], ys = [], cols = [];
+        for (i = 1; i <= n; i++) { xs.push(i); ys.push(v.p * (q(K, i) - q(K, i - 1))); }
+        var hired = 0, best = -1e12, bestL = 0;
+        for (i = 0; i <= 40; i++) {
+          var pr = v.p * q(K, i) - v.w * i - R * K;
+          if (pr > best) { best = pr; bestL = i; }
+        }
+        for (i = 0; i < ys.length; i++) { if (ys[i] >= v.w) hired = i + 1; cols.push(i < bestL ? GREEN : GREY_HINT); }
+        var c = g[0].axes({ x: [0.5, n + 0.5], y: [0, Math.max(3000, v.w * 1.4)],
+                            title: "What each shipwright adds, in dollars a month", xlabel: "shipwright number" });
+        c.bars(xs, ys, 0.75, { color: function (j) { return cols[j]; }, alpha: 0.85 });
+        c.hline(v.w, { color: GOLD, dash: [3, 3] });
+        c.text(n - 0.5, v.w, "the wage", { size: 10.5, color: GOLD, dy: -8, align: "right" });
+        var qs = [], atc = [], avc = [], mc = [];
+        for (i = 1; i <= 200; i++) {
+          var qv = 0.1 * i, L = Math.pow(qv / (A * Math.pow(K, a)), 1 / b), vc = v.w * L;
+          qs.push(qv); avc.push(vc / qv); atc.push((vc + R * K) / qv); mc.push(vc / (b * qv));
+        }
+        var d = g[1].axes({ x: [0, 20], y: [0, 3000], title: "Cost per boat, " + K.toFixed(1) + " slipways",
+                            xlabel: "boats a month" });
+        d.line(qs, atc, { color: ORANGE, width: 2.4 });
+        d.line(qs, avc, { color: TEAL, width: 2 });
+        d.line(qs, mc, { color: C.ink, width: 2 });
+        d.hline(v.p, { color: CORAL, dash: [3, 3] });
+        d.dots([q(K, bestL)], [v.p], { r: 5, color: function () { return CORAL; } });
+        d.text(0.5, 2850, "orange: average total; teal: average variable; white: marginal", { size: 10, color: GREY_HINT });
+        s.out = { mode: mode, K: K, hired: hired, bestL: bestL, boats: q(K, bestL), profit: best };
+      },
+      readout: function (v, s) {
+        var o = s.out;
+        return [
+          ["shipwrights worth hiring", o.bestL + (o.mode === "short" ? " (the last one hired adds more than his wage)" : "")],
+          ["boats a month", o.boats.toFixed(2)],
+          ["profit a month, after the slipways", "$" + o.profit.toFixed(0)],
+          [o.mode === "long" ? "slipways the yard would choose" : "slipways", o.K.toFixed(2) + (o.mode === "long" ? " (more of everything when the price rises: the long run responds more)" : "")],
+        ];
+      },
+      note: "The bars are the value of each shipwright's marginal product; hiring stops where it falls below the wage. " +
+            "The slipways' rent changes the profit but not how many to hire. Computed in your browser; nothing you do " +
+            "here is stored or sent.",
     });
   };
 })();

@@ -1,8 +1,8 @@
 # Economics, Built (经济学，从零搭建)
 
-**Status (2026-11-19): Parts 1 to 7, [*Who Feeds Paris?*](econ1/README.md), [*The Scissors*](econ2/README.md),
+**Status (2026-11-19): Parts 1 to 8, [*Who Feeds Paris?*](econ1/README.md), [*The Scissors*](econ2/README.md),
 [*The Measure*](econ3/README.md), [*The Evidence*](econ4/README.md), [*What People Want*](econ5/README.md),
-[*Demand*](econ6/README.md) and [*Time and Risk*](econ7/README.md), are built in English (Act I is complete, Act II under way), each with its computed score,
+[*Demand*](econ6/README.md), [*Time and Risk*](econ7/README.md) and [*The Firm*](econ8/README.md), are built in English (Acts I and II are complete), each with its computed score,
 lab and game; the shared code
 (Agora, the Island, the Facts, the Dials, the Data Room, the instruments and the score) is in `explainer/economics/`.** This file is the plan; the standard every part meets, the devices and all
 sixty-eight parts chapter by chapter are in [`SYLLABUS.md`](SYLLABUS.md), with progress in its §9. The decisions the
@@ -232,7 +232,7 @@ The series draws in the manner of 3Blue1Brown with the instruments of `explainer
 | 5 | What People Want | Samuelson, 1938: can wants be read from purchases? | preference axioms, utility representation, indifference maps, budget sets, Lagrange's method, revealed preference, Afriat's theorem tested on real choices, what rationality does and does not assume | a consumer; a revealed-preference tester | are your own choices consistent? |
 | 6 | Demand | the rice of Hunan: a Giffen good found, 2008 | Marshallian and Hicksian demand, the Slutsky equation derived, duality, Engel curves, compensating and equivalent variation, exact welfare from a demand curve, demand systems, the cost of living | a demand system; a welfare calculator | split a price change into its two effects |
 | 7 | Time and Risk | the St Petersburg game, 1738 | Fisher's two-period diagram and the Euler equation, expected utility and the von Neumann–Morgenstern theorem, risk aversion, insurance, stochastic dominance, Allais, Ellsberg, Rabin's calibration, discounting and present bias | an intertemporal chooser; an expected-utility maximizer | the Allais pair, with the published split |
-| 8 | The Firm | Cobb and Douglas find a constant, 1928 | technology and isoquants, returns to scale, cost minimization and duality, cost curves, profit maximization and supply, entry and the long run, why firms exist (Coase 1937), boundaries and hold-up | a firm; an industry with entry | run a factory: hire until it stops paying |
+| 8 | The Firm | Douglas's chart: a share that holds still, 1927 | technology and isoquants, returns to scale, cost minimization and duality, cost curves, profit maximization and supply, entry and the long run, why firms exist (Coase 1937), boundaries and hold-up | a firm; an industry with entry | run a factory: hire until it stops paying |
 | **III** | **Markets** | | | | |
 | 9 | The Invisible Hand, Proved | cigarettes in a prisoner-of-war camp, 1945 | the Edgeworth box, the core, Walras's law, existence by a fixed point, both welfare theorems proved, tâtonnement and Scarf's counterexample, computing equilibria, anything goes (Sonnenschein–Mantel–Debreu), the calculation debate | an exchange and production economy solver | trade in the box until nobody can gain |
 | 10 | The Price Maker | Dupuit and the third-class carriage, 1849 | monopoly and the markup rule, deadweight loss, three degrees of price discrimination, two-part tariffs, bundling, the durable-goods problem, natural monopoly, Ramsey prices and regulation | a monopolist with a pricing menu | set the price of a bridge |
