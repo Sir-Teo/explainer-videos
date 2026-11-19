@@ -71,12 +71,13 @@ class Systems(VoiceoverScene):
             "fish equation. <bookmark mark='e'/> Each is a linear restriction on the coefficients, so each can be "
             "tested."
         ) as vo:
+            self.play(Write(eq), run_time=1.8)
             vo.wait_until("a")
-            self.play(Write(eq[0:3]), FadeIn(notes[0]))
+            self.play(Indicate(eq[0:3], color=E.ACCENT), FadeIn(notes[0]))
             vo.wait_until("b")
-            self.play(Write(eq[3:5]), FadeIn(notes[1]))
+            self.play(Indicate(eq[4], color=SUB), FadeIn(notes[1]))
             vo.wait_until("c")
-            self.play(Write(eq[5:]), FadeIn(notes[2]))
+            self.play(Indicate(eq[6], color=HICKS), FadeIn(notes[2]))
             vo.wait_until("d")
             self.play(FadeIn(notes[3]))
             vo.wait_until("e")
@@ -172,10 +173,14 @@ class Systems(VoiceoverScene):
             "representative consumer can mislead. <bookmark mark='c'/> Real Engel curves are rarely parallel; "
             "that's one reason the frontier works with household data."
         ) as vo:
+            head = label(r"Gorman (1953): \ when is a society one consumer?", font_size=32,
+                         color=E.ACCENT).to_edge(UP, buff=0.3)
+            self.play(FadeIn(head), FadeIn(panels[0][0]), FadeIn(panels[1][0]), FadeIn(panels[0][7]),
+                      FadeIn(panels[1][7]))
             vo.wait_until("a")
-            self.play(FadeIn(panels[0]))
+            self.play(FadeIn(panels[0][1:7]))
             vo.wait_until("b")
-            self.play(FadeIn(panels[1]))
+            self.play(FadeIn(panels[1][1:7]))
             vo.wait_until("c")
             self.play(FadeIn(foot))
         self.clear_scene()

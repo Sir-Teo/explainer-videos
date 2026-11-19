@@ -152,9 +152,9 @@ class Hook(VoiceoverScene):
             "cheaper or dearer relative to everything else, and it makes the buyer richer or poorer. This part is "
             "about those two things, and about what they're worth in dollars."
         ) as vo:
-            self.play(FadeIn(tag))
+            self.play(FadeIn(tag), FadeIn(c1, shift=UP * 0.2))
             vo.wait_until("a")
-            self.play(FadeIn(c1, shift=UP * 0.2))
+            self.play(Indicate(c1, color=SUB, scale_factor=1.02))
             vo.wait_until("b")
             self.play(FadeIn(c2, shift=UP * 0.2))
             vo.wait_until("c")

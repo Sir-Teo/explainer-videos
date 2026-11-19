@@ -65,9 +65,9 @@ class Living(VoiceoverScene):
             "<bookmark mark='d'/> That's the concave expenditure function from chapter five. A fixed basket ignores "
             "substitution, so it always overstates what a household needs, and the gap is the substitution bias."
         ) as vo:
-            self.play(FadeIn(tag))
+            self.play(FadeIn(tag), FadeIn(head))
             vo.wait_until("a")
-            self.play(FadeIn(head), FadeIn(sub))
+            self.play(FadeIn(sub), Indicate(head[1], color=COLIC))
             vo.wait_until("b")
             self.play(FadeIn(b1), FadeIn(t1))
             vo.wait_until("c")
