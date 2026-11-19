@@ -17,10 +17,15 @@ only one measured; effort on each against the share paid on the measured one).
 
 **Tournaments and careers.**  :func:`tournament` (Lazear and Rosen 1981: two workers, a prize spread, normal noise;
 equilibrium effort against the spread), :func:`ratchet` (Weitzman 1980: next year's target set from this year's
-output; effort with and without the ratchet).
+output; effort with and without the ratchet), :func:`career_concerns` (Holmström 1982: the market learns ability from
+output, so effort is high early in a career and fades; Gibbons and Murphy 1992's explicit share that rises as it
+fades).
 
 **Efficiency wages.**  :func:`shapiro_stiglitz` (the no-shirking condition against labour demand: the equilibrium
 wage and unemployment).
+
+**Relational contracts.**  :func:`relational` (a bonus no court can enforce, kept because the relationship is worth
+more than reneging: the effort it can sustain against patience).
 
 **Sharecropping.**  :func:`sharecrop` (a tenant's effort under a wage, a fixed rent and a crop share; the landlord's
 best share when the tenant is risk averse and cannot bear a large loss).
@@ -143,6 +148,38 @@ def ratchet(theta: float = 1.0, c: float = 1.0, delta: float = 0.9, bonus: float
     e_free = bonus / c
     e_ratchet = (1 - delta) * bonus / c
     return {"effort_fixed_target": float(e_free), "effort_ratchet": float(e_ratchet), "delta": delta}
+
+
+def career_concerns(years: int = 30, var_ability: float = 0.25, var_noise: float = 1.0, c: float = 1.0,
+                    delta: float = 0.9, rc_sigma2: float = 0.5) -> dict:
+    """Holmström (1982, published 1999): output y_t = ability + e_t + noise; ability is unknown to everyone, and the
+    market pays each year the mean of ability given the record so far (plus the effort it expects).  An extra unit of
+    output in year t raises the wage of every later year s by the weight the record of s years puts on one year,
+    h/(h0 + s h), with h0 = 1/var_ability and h = 1/var_noise; so the implicit incentive in year t is
+    m_t = sum_{s=t}^{years-1} delta^{s-t+1} h/(h0 + s h), and effort is m_t / c.  It falls through a career as the
+    record grows and fewer years remain.  Gibbons and Murphy (1992): an explicit share beta_t on top of it; with the
+    linear model's cost of risk the best one is beta_t = (1 - m_t)/(1 + r c sigma^2) (``rc_sigma2``), floored at 0, so
+    explicit incentives rise as career concerns fade."""
+    h0, h = 1 / var_ability, 1 / var_noise
+    yrs = np.arange(1, years + 1)
+    m = np.array([sum(delta ** (s - t + 1) * h / (h0 + s * h) for s in range(t, years)) for t in yrs])
+    explicit = np.clip((1 - m) / (1 + rc_sigma2), 0, None)
+    return {"year": yrs, "implicit": m, "effort_implicit": m / c, "explicit": explicit,
+            "total": (m + explicit) / c, "first_weight": float(h / (h0 + h))}
+
+
+def relational(deltas, c: float = 0.1) -> dict:
+    """A relational contract (Bull 1987; Baker, Gibbons and Murphy 1994, 2002; Levin 2003): effort e is seen by both
+    but can't be shown to a court, worth e to the principal and costing the agent c e^2 / 2.  The principal promises a
+    bonus b = c e^2 / 2 for the agreed effort, and both expect the relationship to go on with probability ``delta``
+    each period; reneging ends it, and both fall back to a spot market worth 0.  Paying is credible only if the bonus
+    is no more than the discounted future surplus, b <= delta / (1 - delta) (e - c e^2 / 2), so the most effort the
+    relationship can sustain is e = min(1/c, 2 delta / c): first best once delta reaches one half."""
+    d = np.asarray(deltas, float)
+    e = np.minimum(1 / c, 2 * d / c)
+    surplus = e - c * e ** 2 / 2
+    return {"delta": d, "effort": e, "surplus": surplus, "first_best": float(1 / c), "threshold": 0.5,
+            "bonus": c * e ** 2 / 2}
 
 
 def shapiro_stiglitz(effort_cost: float = 1.0, detect: float = 0.5, quit_rate: float = 0.1, discount: float = 0.05,

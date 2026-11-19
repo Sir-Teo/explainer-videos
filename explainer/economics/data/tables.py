@@ -1561,7 +1561,43 @@ INCENTIVE_CASES = Table(
          "elementary classrooms each year.",
 )
 
-PART14 = (LAZEAR_2000, PIECE_RATES, INCENTIVE_CASES)
+TENANCY = Table(
+    key="tenancy",
+    cite="Abhijit V. Banerjee, Paul J. Gertler and Maitreesh Ghatak, \"Empowerment and Efficiency: Tenancy Reform in "
+         "West Bengal\", Journal of Political Economy 110(2) (2002): 239-280; Radwan Ali Shaban, \"Testing between "
+         "Competing Models of Sharecropping\", Journal of Political Economy 95(5) (1987): 893-920",
+    tag="Banerjee, Gertler and Ghatak, JPE 110(2) (2002); Shaban, JPE 95(5) (1987)",
+    where="the abstract of Banerjee, Gertler and Ghatak (as posted by Gertler); Shaban's design as later papers using "
+          "his data describe it",
+    read="the abstract; secondary descriptions of Shaban",
+    checked="2026-11-19",
+    data={"barga_share_of_growth": 0.28, "barga_year": 1978,
+          "barga": "Operation Barga registered sharecroppers, giving them security of tenure and a legal floor on "
+                   "their share of the crop",
+          "shaban": "the same households' own plots against the plots they sharecropped, in ICRISAT's Indian "
+                    "villages: lower output and fewer inputs on the sharecropped plots"},
+    note="Banerjee, Gertler and Ghatak cannot separate the reform's direct and indirect effects; Shaban's exact gap "
+         "is not quoted here, since only secondary figures for it were found.",
+)
+
+CROWDING = Table(
+    key="crowding",
+    cite="Bruno S. Frey and Felix Oberholzer-Gee, \"The Cost of Price Incentives: An Empirical Analysis of "
+         "Motivation Crowding-Out\", American Economic Review 87(4) (1997): 746-755",
+    tag="Frey and Oberholzer-Gee, AER 87(4) (1997)",
+    where="section III.B, p. 749-750",
+    read="the published article (a copy at gwern.net)",
+    checked="2026-11-19",
+    data={"accept_unpaid": 0.508, "oppose_unpaid": 0.449, "indifferent": 0.043, "accept_paid": 0.246,
+          "offers_usd_per_year": (2175, 4350, 6525), "offers_n": (117, 102, 86),
+          "what": "a repository for short-lived low- and mid-level radioactive waste, in the respondent's community",
+          "where_": "two adjacent communities in central Switzerland designated as potential sites; 305 interviews, "
+                    "spring 1993"},
+    note="Compensation was offered to every resident of the host community, per person and year; acceptance with "
+         "compensation is over all three amounts.",
+)
+
+PART14 = (LAZEAR_2000, PIECE_RATES, INCENTIVE_CASES, TENANCY, CROWDING)
 
 
 PART7 = (BERNOULLI_1738, SAMUELSON_1937, ALLAIS_1953, ELLSBERG_1961, RABIN_2000, THALER_1981, HOLT_LAURY_2005,

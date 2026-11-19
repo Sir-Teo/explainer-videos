@@ -18,6 +18,9 @@ Items:
     multitask   efforts on a measured and an unmeasured task against the share paid on the measured one
     tournament  effort against the prize spread, for two levels of noise
     ratchet     effort with a fixed target and with a ratchet
+    careers     Holmström's career concerns over thirty years, and Gibbons and Murphy's explicit share
+    relational  the effort a relational contract sustains against patience
+    goodhart    a proxy reward against the true one as optimization pushes further (Gao et al.'s shape)
     shirking    Shapiro and Stiglitz's no-shirking curve, labour demand and the equilibrium
     sharecrop   effort and surplus against the tenant's share
     daycare     Gneezy and Rustichini's late pickups, fined centres against the others
@@ -105,6 +108,25 @@ def compute_ratchet() -> dict:
     return {**ct.ratchet(1.0, t["c"], t["delta"], t["bonus"]), **t}
 
 
+def compute_careers() -> dict:
+    return {**ct.career_concerns(**TRUTH["careers"]), **TRUTH["careers"]}
+
+
+def compute_relational() -> dict:
+    return {**ct.relational(np.linspace(0, 0.95, 96), **TRUTH["relational"]), **TRUTH["relational"]}
+
+
+def compute_goodhart() -> dict:
+    """The shape Gao, Schulman and Hilton (2023) fitted for best-of-n sampling against a proxy reward model: the gold
+    (true) reward d (alpha - beta d), with d the square root of the KL distance from the starting policy; the proxy
+    keeps rising.  The constants here are illustrative, not theirs."""
+    d = np.linspace(0, 10, 101)
+    alpha, beta = 1.0, 0.1
+    gold = d * (alpha - beta * d)
+    proxy = d * alpha * (1 - 0.02 * d)
+    return {"d": d, "gold": gold, "proxy": proxy, "peak": float(alpha / (2 * beta))}
+
+
 def compute_shirking() -> dict:
     return ct.shapiro_stiglitz(**TRUTH["shirking"])
 
@@ -176,6 +198,9 @@ ITEMS = {
     "multitask": compute_multitask,
     "tournament": compute_tournament,
     "ratchet": compute_ratchet,
+    "careers": compute_careers,
+    "relational": compute_relational,
+    "goodhart": compute_goodhart,
     "shirking": compute_shirking,
     "sharecrop": compute_sharecrop,
     "daycare": compute_daycare,

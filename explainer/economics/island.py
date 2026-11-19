@@ -444,6 +444,10 @@ TRUTHS = {
         "tournament": {"spreads": (0.0, 4.0), "sigma": 1.0, "c": 1.0},
         # the ratchet (chapter 9)
         "ratchet": {"delta": 0.9, "bonus": 1.0, "c": 1.0},
+        # Holmström's career concerns: ability's variance a quarter of a year's noise; a thirty-year career
+        "careers": {"years": 30, "var_ability": 0.25, "var_noise": 1.0, "c": 1.0, "delta": 0.9, "rc_sigma2": 0.5},
+        # a relational bonus for Friday, at the Play it's cost of effort
+        "relational": {"c": 0.1},
         # efficiency wages (chapter 10)
         "shirking": {"effort_cost": 1.0, "detect": 0.5, "quit_rate": 0.1, "discount": 0.05, "labour": 100.0,
                      "demand_a": 6.0, "demand_b": 0.04},

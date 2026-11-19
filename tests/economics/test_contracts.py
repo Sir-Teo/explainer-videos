@@ -59,3 +59,23 @@ def test_sharecrop_interior_share():
     s = ct.sharecrop()
     assert 0 < s["s_star"] < 1 and abs(s["s_grid_best"] - s["s_star"]) < 0.01
     assert s["surplus_best"] > max(s["surplus_wage"], s["surplus_rent"])
+
+
+def test_career_concerns_fade_and_explicit_pay_rises():
+    r = ct.career_concerns(years=30, var_ability=0.25, var_noise=1.0, delta=0.9)
+    m = r["implicit"]
+    assert r["first_weight"] == pytest.approx(0.2)
+    assert m[-1] == 0.0 and np.all(np.diff(m) < 0)            # the last year has no future to impress
+    # the first year's incentive: the discounted weights of every later year's record
+    want = sum(0.9 ** s * 1 / (4 + s) for s in range(1, 30))
+    assert m[0] == pytest.approx(want)
+    assert np.all(np.diff(r["explicit"]) >= 0) and r["explicit"][-1] == pytest.approx(1 / 1.5)
+
+
+def test_relational_contract_is_self_enforcing_only_with_patience():
+    r = ct.relational([0.1, 0.25, 0.5, 0.9], c=0.1)
+    assert r["effort"] == pytest.approx([2.0, 5.0, 10.0, 10.0])
+    d, e = r["delta"], r["effort"]
+    # at the most effort sustained, the bonus just equals the future surplus a renege throws away (below one half)
+    lhs, rhs = r["bonus"], d / (1 - d) * (e - 0.1 * e ** 2 / 2)
+    assert lhs[:2] == pytest.approx(rhs[:2]) and np.all(lhs <= rhs + 1e-12)

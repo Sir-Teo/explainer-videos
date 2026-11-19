@@ -10,7 +10,7 @@ the series leaves out.
 Both *Parts* columns are found, not typed. *Planned* lists the parts whose entry in
 [`SYLLABUS.md`](SYLLABUS.md) names the book or paper; *Built* lists the parts whose scenes, compute step or
 README cite it (a dot: none yet). Fuller notes (editions, chapters, what each source was used for) are in each
-part's README, under *Sources*. Built so far: Parts 1–13.
+part's README, under *Sources*. Built so far: Parts 1–14.
 
 ## 1. The textbook spine
 
@@ -52,7 +52,7 @@ part's README, under *Sources*. Built so far: Parts 1–13.
 | Jehle–Reny | G. Jehle and P. Reny, *Advanced Microeconomic Theory* (3rd ed., 2011) | 5, 9 | 5–6, 9 |
 | Fudenberg–Tirole | D. Fudenberg and J. Tirole, *Game Theory* (1991) | 11–12, 53 | 11–12 |
 | Osborne–Rubinstein | M. Osborne and A. Rubinstein, *A Course in Game Theory* (1994) | 11 | 11 |
-| Bolton–Dewatripont | P. Bolton and M. Dewatripont, *Contract Theory* (2005) | 13–14 | 13 |
+| Bolton–Dewatripont | P. Bolton and M. Dewatripont, *Contract Theory* (2005) | 13–14 | 13–14 |
 | Krishna | V. Krishna, *Auction Theory* (2nd ed., 2010) | 16 | · |
 | Milgrom | P. Milgrom, *Putting Auction Theory to Work* (2004) | 16 | · |
 | Roth–Sotomayor | A. Roth and M. Sotomayor, *Two-Sided Matching* (1990) | 17 | · |
@@ -95,7 +95,7 @@ part's README, under *Sources*. Built so far: Parts 1–13.
 | Feenstra | R. Feenstra, *Advanced International Trade* (2nd ed., 2016) | 6, 35–36 | 6, 8 |
 | Cahuc–Carcillo–Zylberberg | P. Cahuc, S. Carcillo and A. Zylberberg, *Labor Economics* (2nd ed., 2014) | 24, 38 | · |
 | Atkinson–Stiglitz | A. Atkinson and J. Stiglitz, *Lectures on Public Economics* (1980; 2015) | 41 | 6 |
-| Salanié | B. Salanie, *The Economics of Taxation* (2nd ed., 2011) | 41 | 13 |
+| Salanié | B. Salanie, *The Economics of Taxation* (2nd ed., 2011) | 41 | 13–14 |
 | Banerjee–Duflo | A. Banerjee and E. Duflo, *Poor Economics* (2011) | 46 | · |
 | Persson–Tabellini | T. Persson and G. Tabellini, *Political Economics* (2000) | 47 | · |
 | Dhami | S. Dhami, *The Foundations of Behavioral Economic Analysis* (2016) | 45 | · |
@@ -122,7 +122,7 @@ part's README, under *Sources*. Built so far: Parts 1–13.
 |---|---|---|---|
 | the division of labour | Smith (1776), *The Wealth of Nations* | 1 | 1–2 |
 | comparative advantage | Ricardo (1817), *Principles*, ch. 7 | 2, 8, 35–36 | 1–2, 8 |
-| supply and demand, the scissors | Marshall (1890), *Principles of Economics* | 2, 37 | 2 |
+| supply and demand, the scissors | Marshall (1890), *Principles of Economics* | 2, 37 | 2, 14 |
 | the price system as information | Hayek (1945), "The Use of Knowledge in Society" | 1, 9 | 1, 9 |
 | the double auction in the classroom | Chamberlin (1948); Smith (1962) | 1–2 | 1 |
 | zero-intelligence traders | Gode and Sunder (1993) | 2 | 1–2 |
@@ -144,8 +144,8 @@ part's README, under *Sources*. Built so far: Parts 1–13.
 |---|---|---|---|
 | why firms exist | Coase (1937), "The Nature of the Firm" | 1, 8 | 1, 8 |
 | organizations and markets | Simon (1991) | 1 | 1 |
-| incomplete contracts and ownership | Grossman and Hart (1986) | 8, 14 | 8 |
-| moral hazard and the principal | Holmström (1979) | 14 | · |
+| incomplete contracts and ownership | Grossman and Hart (1986) | 8, 14 | 8, 14 |
+| moral hazard and the principal | Holmström (1979) | 14 | 14 |
 
 ### Strategy
 
@@ -166,7 +166,7 @@ part's README, under *Sources*. Built so far: Parts 1–13.
 | optimal auctions | Myerson (1981) | 16 | · |
 | stable matching | Gale and Shapley (1962) | 17 | · |
 | Bayesian persuasion | Kamenica and Gentzkow (2011) | 53 | · |
-| incentives that crowd out | Gneezy and Rustichini (2000), "A Fine Is a Price" | 1, 14 | 1 |
+| incentives that crowd out | Gneezy and Rustichini (2000), "A Fine Is a Price" | 1, 14 | 1, 14 |
 
 ### Welfare and the state
 
@@ -177,7 +177,7 @@ part's README, under *Sources*. Built so far: Parts 1–13.
 | public goods | Samuelson (1954) | 15 | · |
 | governing the commons | Ostrom (1990) | 15 | · |
 | the impossibility of social choice | Arrow (1951) | 18 | · |
-| optimal income taxation | Mirrlees (1971); Saez (2001) | 41 | 6 |
+| optimal income taxation | Mirrlees (1971); Saez (2001) | 14, 41 | 6, 14 |
 | optimal commodity taxation | Ramsey (1927); Diamond and Mirrlees (1971) | 6, 10, 41 | · |
 
 ### Growth
@@ -185,7 +185,7 @@ part's README, under *Sources*. Built so far: Parts 1–13.
 | Model or result | Paper | Planned | Built |
 |---|---|---|---|
 | the Malthusian economy | Malthus (1798) | 19 | · |
-| the long run in numbers | the Maddison Project (Bolt and van Zanden 2024) | 1 | 1, 3 |
+| the long run in numbers | the Maddison Project (Bolt and van Zanden 2024) | 1 | 1, 3, 14 |
 | the neoclassical growth model | Solow (1956); Ramsey (1928); Cass (1965) | 20 | · |
 | endogenous growth | Romer (1990); Aghion and Howitt (1992) | 21 | · |
 | misallocation | Hsieh and Klenow (2009) | 9, 21 | 9 |
@@ -281,6 +281,8 @@ part's README, under *Sources*. Built so far: Parts 1–13.
 **Part 12, *Competition among the Few*.** Books: Jean Tirole, *The Theory of Industrial Organization* (1988), chs. 5–9; Luís Cabral, *Introduction to Industrial Organization* (2nd ed., 2017); Dennis Carlton and Jeffrey Perloff, *Modern Industrial Organization*; Belleflamme and Peitz, *Industrial Organization: Markets and Strategies*; Massimo Motta, *Competition Policy: Theory and Practice* (2004); Whinston, *Lectures on Antitrust Economics* (2006); John Connor, *Global Price Fixing* (2nd ed., 2008); Kurt Eichenwald, *The Informant* (2000). Papers: Cournot (1838); Bertrand (1883); Edgeworth (1897); Hotelling (1929); Chamberlin (1933); Robinson (1933); von Stackelberg (1934); Stigler (1964); Williamson (1968); Friedman (1971); Dixit and Stiglitz (1977); Salop (1979); d'Aspremont, Gabszewicz and Thisse (1979); Dixit (1980); Kreps and Scheinkman (1983); Porter (1983); Salant, Switzer and Reynolds (1983); Green and Porter (1984); Fudenberg and Tirole (1984); Farrell and Shapiro (1990); Cowling and Waterson (1976); McGee (1958); Baumol, Panzar and Willig (1982); Milgrom and Roberts (1982); Kreps and Wilson (1982); Borenstein, Cameron and Gilbert (1997); Connor (1998, 2014); Levenstein and Suslow (2006); Boyer and Kotchoni (2015); O'Brien and Salop (2000); Azar, Schmalz and Tecu (2018); Dennis, Gerardi and Schenone (2022); Calvano et al. (2020); Assad et al. (2024).
 
 **Part 13, *Lemons and Signals*.** Books: Patrick Bolton and Mathias Dewatripont, *Contract Theory* (2005), chs. 2–3; Mas-Colell, Whinston and Green, ch. 13; Jean-Jacques Laffont and David Martimort, *The Theory of Incentives* (2002); Salanié, *The Economics of Contracts*; Liran Einav, Amy Finkelstein and Ray Fisman, *Risky Business* (2023); Einav and Finkelstein, JEP 25(1) (2011); Bryan Caplan, *The Case against Education* (2018). Papers: Akerlof (1970); Spence (1973); Rothschild and Stiglitz (1976); Riley (1979); Stiglitz and Weiss (1981); Cho and Kreps (1987); Hungerford and Solon (1987); Tyler, Murnane and Willett (2000); Cutler and Reber (1998); Cutler and Zeckhauser (1998); Chiappori and Salanié (2000); Finkelstein and Poterba (2004); Finkelstein and McGarry (2006); Cabral and Hortaçsu (2010); Einav, Finkelstein and Cullen (2010); Handel (2013); Einav, Finkelstein, Ryan, Schrimpf and Cullen (2013); Hackmann, Kolstad and Kowalski (2015); Angrist and Krueger (1991).
+
+**Part 14, *Incentives*.** Books: Patrick Bolton and Mathias Dewatripont, *Contract Theory* (2005), chs. 4, 6, 8, 11; Jean-Jacques Laffont and David Martimort, *The Theory of Incentives* (2002); Salanié, *The Economics of Contracts*; Paul Milgrom and John Roberts, *Economics, Organization and Management* (1992); Robert Gibbons and John Roberts, eds., *The Handbook of Organizational Economics* (2013). Papers: Ross (1973); Holmström (1979, 1982); Mirrlees (1975); Grossman and Hart (1983); Holmström and Milgrom (1987, 1991); Lazear and Rosen (1981); Rosen (1986); Weitzman (1980); Shapiro and Stiglitz (1984); Akerlof (1982); Raff and Summers (1987); Stiglitz (1974); Lazear (2000); Shearer (2004); Bandiera, Barankay and Rasul (2005); Jacob and Levitt (2003); Lin (1992); Banerjee, Gertler and Ghatak (2002); Gneezy and Rustichini (2000); Frey and Oberholzer-Gee (1997); Baker, Gibbons and Murphy (2002); Levin (2003); Hadfield-Menell and Hadfield (2019); Gao, Schulman and Hilton (2023).
 
 ## 4. What the series leaves out
 

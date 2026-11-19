@@ -965,33 +965,48 @@ McGarry 2006; Bolton & Dewatripont chs 2–3; MWG ch 13; Laffont & Martimort.
 
 ### Part 14 · Incentives (~55)
 *Question:* how do you get someone to work for you when you cannot see what they do?
-*Story:* on a winter night in 1978, eighteen farmers in Xiaogang, Anhui, put their thumbprints on a secret
-contract: divide the commune's land, keep what you grow above the quota, raise each other's children if anyone
-is shot for it. The next harvest was larger than the previous five together (verify). The contract is a solved
-principal–agent problem.
-0. Hook: the thumbprints; the question; objectives.
-1. Team production and the free rider (Alchian and Demsetz 1972; Holmström 1982): one-eighteenth of the fruit.
-2. Play it: write a contract (a wage and a share), then watch the agent choose effort.
-3. The principal–agent model: hidden action; the participation and incentive constraints.
-4. The trade-off: insurance against incentives; the linear contract solved (Holmström and Milgrom 1987);
-   the optimal share in one formula.
-5. The informativeness principle (Holmström 1979): pay on what tells you about effort, and nothing else.
-6. Piece rates at Safelite (Lazear 2000): output up 44%, half of it from who stayed (verify).
-7. Multitasking (Holmström and Milgrom 1991): what you pay for is what you get; teaching to the test.
-8. Tournaments and promotions (Lazear and Rosen 1981); prizes in golf.
-9. Career concerns (Holmström 1999) and the ratchet effect in planned economies (Weitzman 1980).
-10. Efficiency wages (Shapiro and Stiglitz 1984): unemployment as a discipline device; Ford's five dollars.
-11. Sharecropping from Marshall to Stiglitz; the household responsibility system across China (Lin 1992).
-12. Incomplete contracts: residual control rights and who should own the asset (Grossman and Hart 1986).
-13. When incentives backfire: crowding out (Gneezy and Rustichini 2000; Bénabou and Tirole 2003).
-14. Dials. 15. In practice: compensation design, franchising, procurement. 16. Frontier: relational
-    contracts; incentives for teams of people and models.
+*Story:* late in 1978, eighteen farmers in Xiaogang, Anhui, put their thumbprints on a secret contract: divide the
+commune's land, deliver each family's quota and keep the rest, and raise each other's children if the leaders are
+jailed for it. The next harvest was far larger (accounts differ on the numbers, not on that). The contract is a
+solved principal–agent problem.
+0. Hook: the commune's eighteenth; the thumbprints; the result, not the effort, everywhere; the question; objectives.
+1. Play it: write Friday's contract (a fixed pay and a share of the harvest), and see effort and profit.
+2. Team production and the free rider (Alchian and Demsetz 1972; Holmström 1982): one-eighteenth of the effort; the
+   residual claimant and the budget breaker.
+3. The principal–agent model (Ross 1973; Mirrlees 1975; Holmström 1979; Grossman and Hart 1983): two efforts, two
+   harvests; the participation and incentive constraints in utility space; pay as an inference.
+4. The trade-off: insurance against incentives; the linear contract solved (Holmström and Milgrom 1987); the optimal
+   share in one formula; Prendergast's tenuous trade-off (1999, 2002).
+5. The informativeness principle (Holmström 1979): the common shock removed; CEOs paid for luck (Bertrand and
+   Mullainathan 2001).
+6. Piece rates at Safelite (Lazear 2000): output up 44%, about half from sorting; tree planters (Shearer 2004) and
+   fruit pickers (Bandiera, Barankay and Rasul 2005).
+   Intermission: GDP per head in China and India, 1950-2022; China's line as a tune.
+7. Multitasking (Holmström and Milgrom 1991): what you pay for is what you get; teaching to the test; Kerr (1975);
+   *Called it?* on cheating in Chicago (Jacob and Levitt 2003).
+8. Tournaments and promotions (Lazear and Rosen 1981; Rosen 1986); golf (Ehrenberg and Bognanno 1990), mutual funds
+   (Brown, Harlow and Starks 1996), sabotage (Lazear 1989).
+9. Career concerns (Holmström 1999; Gibbons and Murphy 1992) and the ratchet in planned economies (Weitzman 1980);
+   commitment and price caps.
+10. Efficiency wages (Shapiro and Stiglitz 1984): unemployment as a discipline device; Ford's five dollars (Raff and
+    Summers 1987); gift exchange in the laboratory and the field.
+11. Sharecropping from Marshall to Cheung and Stiglitz; Shaban (1987); Operation Barga (Banerjee, Gertler and Ghatak
+    2002); the household responsibility system measured (Lin 1992).
+12. When incentives backfire: crowding out (Gneezy and Rustichini 2000; Frey and Oberholzer-Gee 1997; Bénabou and
+    Tirole 2003, 2006).
+13. Dials. 14. In practice: compensation design, franchising, procurement (Laffont and Tirole 1993); incomplete
+    contracts and ownership by reference to Part 8. 15. Frontier: relational contracts (Baker, Gibbons and Murphy
+    2002; Levin 2003); incentives for machines (specification gaming; Hadfield-Menell and Hadfield 2019; Gao,
+    Schulman and Hilton 2023).
 
-*Agora:* `contracts`: the principal–agent problem (linear and general), multitask, tournaments, an efficiency-wage
-labour market.
-*Dials:* the output response to piece rates. *Called it?* Lin's decomposition of China's 1978–84 farm growth.
-*Reading:* Holmström 1979, 1982; Holmström & Milgrom 1987, 1991; Lazear 2000; Lin 1992; Grossman & Hart 1986;
-Bolton & Dewatripont chs 4, 6, 8, 11; Laffont & Martimort.
+*Agora:* `contracts`: teams, the linear and the two-outcome principal–agent problems, relative performance, multitask,
+tournaments, the ratchet, career concerns, an efficiency-wage labour market, sharecropping, relational contracts.
+*Play it:* a share of Friday's harvest; on the site, a fixed pay and a share to set against luck and risk aversion,
+with forty days of harvests and pay.
+*Dials:* the output response to piece rates (new; settled within a range). *Called it?* Holmström and Milgrom's
+multitasking against Chicago's test scores: right.
+*Reading:* Holmström 1979, 1982; Holmström & Milgrom 1987, 1991; Lazear 2000; Lazear & Rosen 1981; Shapiro & Stiglitz
+1984; Lin 1992; Bolton & Dewatripont chs 4, 6, 8, 11; Laffont & Martimort; Milgrom & Roberts.
 
 ### Part 15 · Spillovers (~54)
 *Question:* what happens when my choice lands on you, and nobody pays?
@@ -2931,6 +2946,7 @@ Young Economist*.
 | 11 | built, English | *Games.* Agora gains `games` (equilibria by support enumeration, iterated elimination, the cognitive hierarchy and its fit, game trees, Rubinstein, the folk region, a strategy library with a noisy round robin and the ecology, correlated equilibrium by LP, the replicator, fictitious play, regret matching, Bayesian equilibria); the Data Room gains the FAS nuclear stockpiles via Our World in Data and the transcribed Nagel (1995), Thaler's FT contest (1997), Flood (1952, via Poundstone), Henrich et al. (2001), Camerer, Ho and Chong (2004) and Axelrod (1980); a new dial (depth of reasoning) and the guessing game's *Called it?* |
 | 12 | built, English | *Competition among the Few.* Agora gains `oligopoly` (Cournot, Bertrand homogeneous and differentiated, Kreps–Scheinkman, Hotelling and Salop, Dixit–Stiglitz, Stackelberg, Dixit's credible capacity, collusion thresholds, Green–Porter, leniency, the HHI and mergers, the MHHI); the Data Room gains the BLS gasoline price via FRED and the transcribed Connor (1998, 2014), Boyer and Kotchoni (2015) and the merger guidelines; a new dial (cartel overcharges) and Stigler's *Called it?*; Act III is complete |
 | 13 | built, English | *Lemons and Signals.* Agora gains `info` (lemons and blind offers, guarantees, Spence, Rothschild–Stiglitz and its existence, the Einav–Finkelstein diagram, a death spiral, the positive-correlation test, credit rationing, reputation); the Data Room gains the BLS CPIs for used cars and new vehicles via FRED and the transcribed Akerlof (1970), Einav, Finkelstein and Cullen (2010, Table 4), Cutler and Zeckhauser (1998), Tyler, Murnane and Willett (2000) and the selection papers; a new dial (the welfare cost of adverse selection) and the referees' *Called it?*; Act IV begins |
+| 14 | built, English | *Incentives.* Agora gains `contracts` (teams, the linear and two-outcome agency problems, relative performance, multitask, tournaments, the ratchet, career concerns, Shapiro–Stiglitz, sharecropping, relational contracts); the Data Room gains the Maddison series for China and India and the transcribed Lazear (2000), Shearer (2004), Bandiera, Barankay and Rasul (2005), Raff and Summers (1987), Lin (1992), Jacob and Levitt (2003), Banerjee, Gertler and Ghatak (2002) and Frey and Oberholzer-Gee (1997); a new dial (output's response to piece rates) and the multitasking *Called it?* |
 
 **Corrections found while building Part 1** (the plan's draft, written from memory, against the sources): Bastiat's
 Paris passage is in *Economic Sophisms*, First Series, ch. 18 (1845), not the *Harmonies*; Hume's is/ought passage is
@@ -3072,3 +3088,15 @@ gives $9.46 against their $9.55. Sheepskin effects are stated qualitatively, wit
 credit-rationing example lets the risky projects be slightly worse, as well as riskier, so that the bank's return has
 a clear peak; Stiglitz and Weiss's own projects have equal means. Agora's death spiral is a stylized simulation,
 shown beside Harvard's data, not fitted to it.
+
+**Corrections found while building Part 14.** The plan's "the next harvest was larger than the previous five
+together" is not used: accounts of Xiaogang's 1979 harvest give different numbers, so the film says only that it was
+far larger. Safelite's 44% and its even split between incentives and sorting are the published paper's, as later
+summaries give them; the 1996 working paper's 20-36% is shown beside it. Ford's turnover and absenteeism figures were
+not checked and are not used; Raff and Summers are cited for the queues, productivity and profits, and Ford's
+"cost-cutting" remark is given as quoted. Shaban's gap between owned and sharecropped plots is stated without a
+number (only secondary figures were found); Operation Barga's 28% is from the paper's abstract. The Called it? was
+planned on Lin's decomposition; it is multitasking against Chicago's test scores, and Lin's result is told in chapter
+11. Incomplete contracts, planned as a chapter, are folded into chapter 14, since Part 8 told Grossman, Hart and Moore.
+The top of the promotion ladder is credited to Rosen (1986), not to Lazear and Rosen (1981). The Swiss survey's
+50.8% and 24.6% were read in Frey and Oberholzer-Gee's article.

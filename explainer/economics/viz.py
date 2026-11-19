@@ -621,10 +621,10 @@ def source_card(lines, title: str = r"Sources", width: float = 12.6, font_size=2
     return g.move_to(ORIGIN)
 
 
-def area_sweep(ax, xs, ys, color, t0: float, seconds: float = 5.0, opacity: float = 0.2):
-    """For a data film's closing hold: the area under a finished curve fills in from left to right between ``t0``
-    and ``t0 + seconds`` (a sound window must not sit over a still picture).  Returns ``(mobject, updater)``; pass
-    both to ``snd.drive`` and show the mobject."""
+def area_sweep(ax, xs, ys, color, t0: float, seconds: float = 5.0, opacity: float = 0.2, base: float = 0.0):
+    """For a data film's closing hold: the area between a finished curve and the level ``base`` fills in from left to
+    right between ``t0`` and ``t0 + seconds`` (a sound window must not sit over a still picture).  Returns
+    ``(mobject, updater)``; pass both to ``snd.drive`` and show the mobject."""
     xs, ys = np.asarray(xs, float), np.asarray(ys, float)
     a = ax.ax
     m = VMobject(stroke_width=0, fill_color=color, fill_opacity=0)
@@ -635,8 +635,8 @@ def area_sweep(ax, xs, ys, color, t0: float, seconds: float = 5.0, opacity: floa
             mob.set_fill(opacity=0)
             return
         k = max(1, int(round(f * (len(xs) - 1))))
-        pts = [a.c2p(xs[0], 0)] + [a.c2p(x, y) for x, y in zip(xs[:k + 1], ys[:k + 1])] + [a.c2p(xs[k], 0),
-                                                                                         a.c2p(xs[0], 0)]
+        pts = [a.c2p(xs[0], base)] + [a.c2p(x, y) for x, y in zip(xs[:k + 1], ys[:k + 1])] + [
+            a.c2p(xs[k], base), a.c2p(xs[0], base)]
         mob.set_points_as_corners(pts)
         mob.set_fill(color, opacity=opacity)
 

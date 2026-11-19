@@ -140,3 +140,5 @@ publication, the copy that was read and the date the transcription was checked:
 | `lazear_2000` | Safelite's switch to piece rates: the productivity gain, its split, and the wage rise | 2026-11-19 |
 | `piece_rates` | piece rates in a field experiment (Shearer) and against relative incentives (Bandiera, Barankay and Rasul) | 2026-11-19 |
 | `incentive_cases` | Ford's five-dollar day, China's rural reform and teacher cheating in Chicago | 2026-11-19 |
+| `tenancy` | Tenancy reform in West Bengal (Operation Barga) and sharecropped against owned plots in India | 2026-11-19 |
+| `crowding` | Frey and Oberholzer-Gee's Swiss survey: accepting a nuclear-waste repository with and without compensation | 2026-11-19 |

@@ -487,6 +487,33 @@ brackets on screen.
 | underwriting; telematics | 核保；车载远程信息（驾驶行为保险） |
 | annuity | 年金 |
 
+## Part 14
+
+| English | 中文 |
+|---|---|
+| incentives; moral hazard; hidden action | 激励；道德风险；隐藏行动 |
+| the principal-agent problem; principal; agent | 委托–代理问题；委托人；代理人 |
+| participation constraint; incentive-compatibility constraint | 参与约束；激励相容约束 |
+| team production; free rider; residual claimant; budget breaker | 团队生产；搭便车者；剩余索取者；预算打破者 |
+| the linear contract; the optimal share; risk premium; agency cost | 线性合同；最优分成比例；风险溢价；代理成本 |
+| the informativeness principle; relative performance evaluation | 信息量原则；相对绩效评估 |
+| the likelihood ratio | 似然比 |
+| piece rate; incentive effect; sorting (selection) effect | 计件工资；激励效应；筛选（选择）效应 |
+| multitasking; teaching to the test | 多任务；应试教学 |
+| tournament; prize spread; sabotage | 锦标赛；奖金差距；蓄意破坏 |
+| career concerns; the ratchet effect; planning from the achieved level | 职业关注；棘轮效应；从已达到的水平出发的计划 |
+| efficiency wage; no-shirking condition; unemployment as a discipline device | 效率工资；不偷懒条件；作为工人纪律手段的失业 |
+| gift exchange | 礼物交换 |
+| sharecropping; fixed rent; wage labour | 分成租佃；定额地租；雇佣劳动 |
+| the household responsibility system; decollectivization | 家庭联产承包责任制；去集体化 |
+| Operation Barga | 巴尔加行动（西孟加拉佃农登记） |
+| crowding out of intrinsic motivation | 内在动机的挤出 |
+| cost-plus contract; fixed-price contract; incentive contract | 成本加成合同；固定价格合同；激励合同 |
+| franchising; royalty | 特许经营；特许权使用费 |
+| relational contract | 关系型合同 |
+| specification gaming; reward model overoptimization; Goodhart's law | 规格博弈（钻规则空子）；奖励模型过度优化；古德哈特定律 |
+| Xiaogang village, Fengyang county, Anhui | 安徽省凤阳县小岗村 |
+
 ## Names
 
 | English | 中文 |
@@ -669,3 +696,20 @@ brackets on screen.
 | Michael Rothschild; Andrew Weiss | 迈克尔·罗斯柴尔德；安德鲁·韦斯 |
 | Liran Einav; Amy Finkelstein; David Cutler | 利兰·艾纳夫；埃米·芬克尔斯坦；戴维·卡特勒 |
 | Pierre-André Chiappori; Bernard Salanié | 皮埃尔-安德烈·基亚波里；贝尔纳·萨拉尼耶 |
+| Armen Alchian; Harold Demsetz; Bengt Holmström; Paul Milgrom | 阿门·阿尔钦；哈罗德·德姆塞茨；本特·霍尔姆斯特伦；保罗·米尔格罗姆 |
+| Stephen Ross; James Mirrlees; Sanford Grossman; Oliver Hart | 斯蒂芬·罗斯；詹姆斯·莫里斯；桑福德·格罗斯曼；奥利弗·哈特 |
+| Canice Prendergast; Marianne Bertrand; Sendhil Mullainathan | 卡尼斯·普伦德加斯特；玛丽安娜·伯特兰；森德希尔·穆来纳森 |
+| Edward Lazear; Sherwin Rosen; Bruce Shearer | 爱德华·拉齐尔；舍温·罗森；布鲁斯·希勒 |
+| Oriana Bandiera; Iwan Barankay; Imran Rasul | 奥丽亚娜·班迪耶拉；伊万·巴兰凯；伊姆兰·拉苏尔 |
+| Steven Kerr; Brian Jacob; Steven Levitt | 史蒂文·克尔；布赖恩·雅各布；史蒂文·莱维特 |
+| Ronald Ehrenberg; Michael Bognanno; Keith Brown; W. V. Harlow; Laura Starks | 罗纳德·埃伦伯格；迈克尔·博尼亚诺；基思·布朗；W. V. 哈洛；劳拉·斯塔克斯 |
+| Robert Gibbons; Kevin Murphy; Martin Weitzman | 罗伯特·吉本斯；凯文·墨菲；马丁·韦茨曼 |
+| Henry Ford; Daniel Raff; Lawrence Summers; Carl Shapiro | 亨利·福特；丹尼尔·拉夫；劳伦斯·萨默斯；卡尔·夏皮罗 |
+| Ernst Fehr; Georg Kirchsteiger; Arno Riedl; Uri Gneezy; John List | 恩斯特·费尔；格奥尔格·基希施泰格；阿尔诺·里德尔；乌里·格尼茨；约翰·李斯特 |
+| Alfred Marshall; Steven Cheung; Radwan Shaban | 阿尔弗雷德·马歇尔；张五常；拉德万·沙班 |
+| Abhijit Banerjee; Paul Gertler; Maitreesh Ghatak; Justin Yifu Lin | 阿比吉特·班纳吉；保罗·格特勒；迈特里什·加塔克；林毅夫 |
+| Aldo Rustichini; Bruno Frey; Felix Oberholzer-Gee; Roland Bénabou; Jean Tirole | 阿尔多·鲁斯蒂奇尼；布鲁诺·弗雷；费利克斯·奥伯霍尔泽-吉；罗兰·贝纳布；让·梯若尔 |
+| James Brickley; Frederick Dark; Brian Hall; Jeffrey Liebman; Jean-Jacques Laffont | 詹姆斯·布里克利；弗雷德里克·达克；布赖恩·霍尔；杰弗里·利布曼；让-雅克·拉丰 |
+| George Baker; Jonathan Levin; Rebecca Henderson | 乔治·贝克；乔纳森·莱文；丽贝卡·亨德森 |
+| Dylan Hadfield-Menell; Gillian Hadfield; Leo Gao; John Schulman; Jacob Hilton | 迪伦·哈德菲尔德-梅内尔；吉莉恩·哈德菲尔德；Leo Gao（中文名未核实）；约翰·舒尔曼；雅各布·希尔顿 |
+| Charles Goodhart; Marilyn Strathern | 查尔斯·古德哈特；玛丽琳·斯特拉森 |

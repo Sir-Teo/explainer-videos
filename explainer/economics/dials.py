@@ -294,7 +294,7 @@ DIALS = {d.key: d for d in [
                       checked="2026-11-19"),
          )),
     Dial("piece_rate_response", "output response to piece rates", "percent rise in output per worker when pay "
-         "follows output", (14, 38), status="settled within a range", checked="2026-11-19",
+         "follows output", (14, 62), status="settled within a range", checked="2026-11-19",
          meaning="paying for output raises it by something like a fifth to a half where output is easy to measure "
                  "and one person's work is their own; part of the rise is who the job attracts, and where work is "
                  "shared or hard to measure the response can be smaller, or perverse",

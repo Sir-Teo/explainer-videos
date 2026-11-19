@@ -86,4 +86,82 @@
             "Akerlof's x1.5 no price works. Computed in your browser; nothing you do here is stored or sent.",
     });
   };
+  // ---- Part 14: incentives -------------------------------------------------------------------------------------
+  W.contract = function (el) {
+    // Friday's contract of Part 14 (explainer.economics.agora.contracts.linear_agency): a day's harvest is effort plus
+    // luck (sd sigma); effort e costs c e^2 / 2 baskets; Friday is risk averse (CARA, r) and takes the job only if the
+    // pay is worth at least nothing extra; pay is a fixed amount plus a share of the harvest
+    var C = 0.1, DAYS = 40;
+    function terms(v, s) {
+      var b = v.share, e = b / C, risk = v.r * b * b * v.sigma * v.sigma / 2;
+      var fixed = s.fit ? -b * e + C * e * e / 2 + risk : v.fixed;
+      var ce = fixed + b * e - C * e * e / 2 - risk;
+      var accepts = ce >= -1e-9;
+      var bstar = 1 / (1 + v.r * C * v.sigma * v.sigma);
+      var best = bstar / (2 * C);
+      return { b: b, e: accepts ? e : 0, risk: risk, fixed: fixed, ce: ce, accepts: accepts, bstar: bstar, best: best,
+               profit: accepts ? e - fixed - b * e : 0 };
+    }
+    QB.widget(el, {
+      title: "Write Friday's contract",
+      sub: "You are Crusoe. Friday works your grove, and a day's harvest is Friday's effort, in baskets, plus luck. " +
+           "You can't see the effort, only the harvest. Offer a fixed pay and a share of the harvest: Friday takes " +
+           "the job only if it is worth it to them, and then works as hard as the share makes worth while. Find the " +
+           "share that earns you the most, and see how it moves with the luck and with Friday's dislike of risk.",
+      panels: 2, height: 330, weights: [1.1, 1],
+      controls: [
+        { k: "share", label: "Friday's share of the harvest", min: 0, max: 1, step: 0.01, value: 0.5,
+          fmt: function (x) { return (100 * x).toFixed(0) + "%"; } },
+        { k: "fixed", label: "Fixed pay, baskets a day (negative: a rent Friday pays you)", min: -15, max: 10,
+          step: 0.1, value: 0, fmt: function (x) { return x.toFixed(1); } },
+        { k: "sigma", label: "Luck in the harvest, sd in baskets", min: 0, max: 10, step: 0.5, value: 5,
+          fmt: function (x) { return x.toFixed(1); } },
+        { k: "r", label: "Friday's dislike of risk, r", min: 0, max: 1, step: 0.05, value: 0.2,
+          fmt: function (x) { return x.toFixed(2); } },
+      ],
+      buttons: [
+        { label: "Set the fixed pay so Friday just accepts", act: function (s) { s.fit = !s.fit; } },
+        { label: "New seasons", act: function (s) { s.seed = (s.seed || 1978) + 1; } },
+      ],
+      draw: function (g, v, s) {
+        var t = terms(v, s), k;
+        // panel 1: your profit against the share, with the fixed pay that just keeps Friday on
+        var bs = [], pr = [];
+        for (k = 0; k <= 100; k++) {
+          var b = k / 100, e = b / C;
+          bs.push(b); pr.push(e - C * e * e / 2 - v.r * b * b * v.sigma * v.sigma / 2);
+        }
+        var a = g[0].axes({ x: [0, 1], y: [-1, 5.5], title: "Your profit, baskets a day, at each share " +
+                            "(the fixed pay set so Friday just accepts)", xlabel: "Friday's share" });
+        a.hline(5, { color: GREY_HINT, dash: [4, 4] });
+        a.line(bs, pr, { color: GREEN, width: 2.2 });
+        a.dots([t.bstar], [t.best], { r: 6, color: function () { return GOLD; } });
+        a.dots([t.b], [t.profit], { r: 5, color: function () { return t.accepts ? BLUE : RED; } });
+        // panel 2: forty days: the harvest and Friday's pay
+        var r = rng(s.seed || 1978), days = [], harv = [], pay = [];
+        for (k = 0; k < DAYS; k++) {
+          var z = Math.sqrt(-2 * Math.log(r() + 1e-12)) * Math.cos(2 * Math.PI * r());
+          var y = t.e + v.sigma * z;
+          days.push(k + 1); harv.push(y); pay.push(t.accepts ? t.fixed + t.b * y : 0);
+        }
+        var c2 = g[1].axes({ x: [0, DAYS + 1], y: [-15, 35], title: "Forty days: the harvest (green) and Friday's pay " +
+                             "(gold)", xlabel: "day" });
+        c2.hline(0, { color: GREY_HINT });
+        c2.dots(days, harv, { r: 3, color: function () { return GREEN; } });
+        c2.dots(days, pay, { r: 3, color: function () { return GOLD; } });
+        s.out = t;
+      },
+      readout: function (v, s) {
+        var t = s.out;
+        return [["Friday", t.accepts ? "takes the job" : "turns it down: raise the fixed pay"],
+                ["Friday's effort", t.e.toFixed(2) + " baskets a day"],
+                ["what the luck costs Friday", t.risk.toFixed(2) + " baskets a day"],
+                ["your expected profit", t.profit.toFixed(2) + " baskets a day"],
+                ["the best share, 1/(1 + r c sigma^2)", (100 * t.bstar).toFixed(0) + "%, earning " +
+                   t.best.toFixed(2) + " (5.00 if you could see effort)"]];
+      },
+      note: "At the part's numbers (sd 5, r = 0.2) the best share is two-thirds and earns 3.33 baskets a day (Part 14, " +
+            "chapter 1). Computed in your browser; nothing you do here is stored or sent.",
+    });
+  };
 })();
