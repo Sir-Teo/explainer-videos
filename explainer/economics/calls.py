@@ -134,4 +134,14 @@ CALLS = {c.key: c for c in [
          ("G. A. Akerlof, Quarterly Journal of Economics 84(3) (1970), the section \"Counteracting Institutions\"",
           "G. A. Akerlof, \"Writing 'The Market for Lemons'\" (2003), as excerpted",
           "The Nobel Foundation, the 2001 prize in economic sciences")),
+    Call("multitask_tests", 14, "Bengt Holmström and Paul Milgrom, \"Multitask Principal-Agent Analyses\" (1991)",
+         "1991", "when only some of a job's tasks can be measured, strong pay for the measured ones pulls effort away "
+         "from the rest; so where measures are narrow, incentives should be weak",
+         "effort on one task raises the cost of effort on another; the agent goes where the pay is",
+         "when Chicago tied schools' fortunes to test scores, Jacob and Levitt found serious cheating by teachers or "
+         "administrators in at least 4 to 5 percent of elementary classrooms each year: effort diverted from "
+         "teaching to the measure itself",
+         "right",
+         ("B. Holmström and P. Milgrom, Journal of Law, Economics and Organization 7 (1991): 24-52",
+          "B. A. Jacob and S. D. Levitt, Quarterly Journal of Economics 118(3) (2003): 843-877, abstract")),
 ]}

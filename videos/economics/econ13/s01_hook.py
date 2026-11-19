@@ -9,8 +9,10 @@ def journal_card(name: str, verdict: str, color, width=3.9, font_size=21) -> VGr
     t = label(name, font_size=font_size, color=color)
     v = label(verdict, font_size=font_size - 2, color=GREY_A)
     VGroup(t, v).arrange(DOWN, buff=0.18).move_to(box)
-    stamp = label(r"rejected", font_size=font_size + 2, color=E.MISS).rotate(0.18).move_to(box.get_corner(UR) +
-                                                                                         LEFT * 0.75 + DOWN * 0.3)
+    stamp = label(r"rejected", font_size=font_size + 2, color=E.MISS).rotate(0.18)
+    plate = RoundedRectangle(width=stamp.width + 0.2, height=stamp.height + 0.12, corner_radius=0.06, stroke_width=0,
+                             fill_color=BACKGROUND, fill_opacity=1).move_to(stamp)
+    stamp = VGroup(plate, stamp).move_to(box.get_corner(UR) + LEFT * 0.75 + UP * 0.05)
     g = VGroup(box, t, v, stamp)
     g.stamp = stamp
     return g

@@ -24,7 +24,7 @@ class Lemons(VoiceoverScene):
         dl = label(r"the price", font_size=15, color=GREY_B).next_to(a.c2p(88, 88), RIGHT, buff=0.08)
         val = path(ax, ps, L["add_value"], color=GOOD, width=3.5, smooth=False)
         vl = label(r"what the average boat for sale \\ is worth to a buyer", font_size=15, color=GOOD).next_to(
-            a.c2p(12, 40), UP, buff=0.12)
+            a.c2p(76, 62), DOWN, buff=0.2)
         eq = Dot(a.c2p(L["add_p"], L["add_p"]), radius=0.1, color=EQ)
         side = VGroup(
             label(r"many buyers, \ each valuing a boat \\ at its worth to Bo plus \$30", font_size=21),

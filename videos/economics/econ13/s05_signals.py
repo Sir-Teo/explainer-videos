@@ -12,11 +12,11 @@ class Signals(VoiceoverScene):
              r"can you prove it by paying for something useless?", "Chapter four. Signalling: education that teaches "
              "nothing.", lit={1973: r"Spence's job market signaling"}, scale=("person", "market"),
              horizon=("a year", "a decade"))
-        self.setup()
+        self.fishers()
         self.separate()
         self.pooling()
 
-    def setup(self):
+    def fishers(self):
         hc = history_card(1973, r"Michael Spence, \ ``Job Market Signaling''", r"a doctoral thesis at Harvard: \ the "
                           r"informed side moves first, \ and spends money to be believed", color=SIGNAL, width=11.4,
                           font_size=24).to_edge(UP, buff=0.45)
@@ -61,7 +61,7 @@ class Signals(VoiceoverScene):
         wage = VGroup(Line(a.c2p(0, s["theta_low"]), a.c2p(e1, s["theta_low"]), color=WHITE, stroke_width=4),
                       Line(a.c2p(e1, s["theta_high"]), a.c2p(3, s["theta_high"]), color=WHITE, stroke_width=4))
         wl = label(r"the boat owners' pay: \\ 2 with a season of school, \ else 1", font_size=15).next_to(
-            a.c2p(1.6, 2.0), UP, buff=0.1)
+            a.c2p(2.45, 2.0), DOWN, buff=0.15)
         low = path(ax, es, s["low_line"], color=WEAK, width=2.5, smooth=False, yr=(0, 3))
         high = path(ax, es, s["high_line"], color=STRONG, width=2.5, smooth=False, yr=(0, 3))
         pl = Dot(a.c2p(0, s["theta_low"]), radius=0.09, color=WEAK)

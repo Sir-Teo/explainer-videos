@@ -921,35 +921,47 @@ partly right (Levenstein and Suslow 2006).
 
 ## Act IV · Failure and Design
 
-### Part 13 · Lemons and Signals (~54)
+### Part 13 · Lemons and Signals (~50)
 *Question:* what happens to a market when one side knows more than the other?
-*Story:* George Akerlof's thirteen pages on used cars were rejected by three journals between 1967 and 1970: one
-for triviality, one because if it were right economics would be different. It was right. The part follows the
-idea from car lots to health plans that destroyed themselves.
-0. Hook: the rejection letters; the question; objectives.
-1. Play it: buy a used boat you cannot inspect.
-2. Akerlof's market (1970): the average-quality curve; unravelling; no trade at any price.
-3. Warranties, reputations, certifiers: private fixes and what they cost.
-4. Signalling (Spence 1973): education that teaches nothing; separating and pooling equilibria; the
-   intuitive criterion in one picture.
-5. Is school a signal? sheepskin effects, the GED (Tyler, Murnane and Willett 2000), compulsory schooling.
-6. Screening (Rothschild and Stiglitz 1976): contracts that sort; why an equilibrium may not exist.
-7. The death spiral: Harvard's health plans, 1995–98 (Cutler and Reber 1998).
-8. The Einav–Finkelstein diagram: selection as demand and cost curves; welfare loss as a triangle, measured.
-9. Testing for asymmetric information: the positive-correlation test (Chiappori and Salanié 2000) and why it
-   can fail (advantageous selection, Finkelstein and McGarry 2006).
-10. Credit rationing (Stiglitz and Weiss 1981); a pointer to Parts 26 and 46.
-11. Mandates, subsidies and risk adjustment: the policy tools and their trade-offs.
-12. Online markets: does eBay's feedback solve Akerlof's problem?
-13. Dials. 14. In practice: insurance pricing, underwriting, platform trust. 15. Frontier: selection on
-    moral hazard; big data and the end of pooling.
+*Story:* George Akerlof's thirteen pages on used cars were turned down by the *American Economic Review* and the
+*Review of Economic Studies* as trivial, and by the *Journal of Political Economy*, whose referees held that if the
+paper were right no goods could be traded. The *Quarterly Journal of Economics* printed it in 1970. The part follows
+the idea from boats to the health plans that destroyed themselves.
+0. Hook: the rejections; the paper and the Nobel; private information everywhere; the question; objectives.
+1. Play it: buy a boat from Bo you cannot inspect (the best blind offer, and the boats left unsold).
+2. Akerlof's market (1970): the value of the average boat offered against the price; partial unravelling; Akerlof's
+   own example, in which nothing trades; Gresham's law; *Called it?*
+3. Guarantees that are cheap only for honest sellers; reputations, brands, chains, inspectors, licences; their cost.
+4. Signalling (Spence 1973): schooling that teaches nothing; separating and pooling equilibria; the intuitive
+   criterion (Cho and Kreps 1987; Riley 1979).
+5. Is school a signal? human capital against signals; sheepskin effects; the GED (Tyler, Murnane and Willett 2000);
+   compulsory schooling (Part 4); Caplan (2018).
+6. Screening (Rothschild and Stiglitz 1976): the separating menu; why an equilibrium may not exist.
+   Intermission: the prices of used cars and of new vehicles against all consumer prices, 1953-2026; the used-car
+   line as a tune.
+7. The death spiral: Harvard's PPO, 1995-97 (Cutler and Zeckhauser 1998; Cutler and Reber 1998), and Agora's.
+8. The Einav-Finkelstein diagram, rebuilt from Einav, Finkelstein and Cullen's estimates for Alcoa (2010); what a
+   subsidy would cost.
+9. Testing for asymmetric information: the positive-correlation test (Chiappori and Salanié 2000) on simulated
+   drivers, and why it can fail (advantageous selection, Finkelstein and McGarry 2006).
+10. Credit rationing (after Stiglitz and Weiss 1981); a pointer to Parts 26 and 46.
+11. Mandates, subsidies and risk adjustment: the Affordable Care Act, Massachusetts (Hackmann, Kolstad and Kowalski
+    2015), inertia (Handel 2013).
+12. Online markets: Bayes's rule for a new seller's reviews; eBay (Cabral and Hortaçsu 2010).
+13. Dials (the welfare cost of adverse selection, new). 14. In practice: underwriting, telematics, annuities
+    (Finkelstein and Poterba 2004), *Test-Achats* (2011). 15. Frontier: selection on moral hazard (Einav,
+    Finkelstein, Ryan, Schrimpf and Cullen 2013); data, genes and the end of pooling (GINA 2008).
 
-*Agora:* `info`: a lemons market, a signalling game with its equilibria, a Rothschild–Stiglitz insurance market,
-the Einav–Finkelstein welfare calculation.
-*Dials:* the welfare cost of selection in an insurance market. *Called it?* the referee who said the paper
-was trivial.
-*Reading:* Akerlof 1970; Spence 1973; Rothschild & Stiglitz 1976; Einav & Finkelstein 2011; Cutler & Reber
-1998; Bolton & Dewatripont chs 2–3; MWG ch 13.
+*Agora:* `info`: lemons with additive and proportional premiums and a single buyer's offers, a guarantee's
+separation, Spence's equilibria, the Rothschild-Stiglitz market and its existence, the Einav-Finkelstein welfare
+calculation, a death spiral, the positive-correlation test, credit rationing, reputation by Bayes's rule.
+*Play it:* a blind offer for Bo's boat; on the site, forty boats to buy blind, a market to watch unravel, and an
+inspection to pay for.
+*Dials:* the welfare cost of adverse selection (new; depends on the setting). *Called it?* the referees who called
+the paper trivial or wrong: wrong.
+*Reading:* Akerlof 1970; Spence 1973; Rothschild & Stiglitz 1976; Stiglitz & Weiss 1981; Cho & Kreps 1987; Einav &
+Finkelstein 2011; Einav, Finkelstein & Cullen 2010; Cutler & Reber 1998; Chiappori & Salanié 2000; Finkelstein &
+McGarry 2006; Bolton & Dewatripont chs 2–3; MWG ch 13; Laffont & Martimort.
 
 ### Part 14 · Incentives (~55)
 *Question:* how do you get someone to work for you when you cannot see what they do?
@@ -2918,6 +2930,7 @@ Young Economist*.
 | 10 | built, English | *The Price Maker.* Agora gains `pricing` (the monopoly price and pass-through, the ferry, three degrees of discrimination, two-part tariffs, bundling, the Coase equilibrium, Ramsey prices, the Averch–Johnson firm, monopsony, Littlewood's rule, personalized prices from a price experiment); the Data Room gains the BLS price of ground coffee via FRED and the transcribed De Loecker, Eeckhout and Unger (2020), Traina (2018), Nakamura and Zerom (2010) and Dubé and Misra (2023); a new dial (markups), incomplete pass-through as a Fact; no *Called it?* |
 | 11 | built, English | *Games.* Agora gains `games` (equilibria by support enumeration, iterated elimination, the cognitive hierarchy and its fit, game trees, Rubinstein, the folk region, a strategy library with a noisy round robin and the ecology, correlated equilibrium by LP, the replicator, fictitious play, regret matching, Bayesian equilibria); the Data Room gains the FAS nuclear stockpiles via Our World in Data and the transcribed Nagel (1995), Thaler's FT contest (1997), Flood (1952, via Poundstone), Henrich et al. (2001), Camerer, Ho and Chong (2004) and Axelrod (1980); a new dial (depth of reasoning) and the guessing game's *Called it?* |
 | 12 | built, English | *Competition among the Few.* Agora gains `oligopoly` (Cournot, Bertrand homogeneous and differentiated, Kreps–Scheinkman, Hotelling and Salop, Dixit–Stiglitz, Stackelberg, Dixit's credible capacity, collusion thresholds, Green–Porter, leniency, the HHI and mergers, the MHHI); the Data Room gains the BLS gasoline price via FRED and the transcribed Connor (1998, 2014), Boyer and Kotchoni (2015) and the merger guidelines; a new dial (cartel overcharges) and Stigler's *Called it?*; Act III is complete |
+| 13 | built, English | *Lemons and Signals.* Agora gains `info` (lemons and blind offers, guarantees, Spence, Rothschild–Stiglitz and its existence, the Einav–Finkelstein diagram, a death spiral, the positive-correlation test, credit rationing, reputation); the Data Room gains the BLS CPIs for used cars and new vehicles via FRED and the transcribed Akerlof (1970), Einav, Finkelstein and Cullen (2010, Table 4), Cutler and Zeckhauser (1998), Tyler, Murnane and Willett (2000) and the selection papers; a new dial (the welfare cost of adverse selection) and the referees' *Called it?*; Act IV begins |
 
 **Corrections found while building Part 1** (the plan's draft, written from memory, against the sources): Bastiat's
 Paris passage is in *Economic Sophisms*, First Series, ch. 18 (1845), not the *Harmonies*; Hume's is/ought passage is
@@ -3048,3 +3061,14 @@ feathers could not be seen in monthly data (a first-month difference of 1 cent, 
 says so. The 3-7% common-ownership effect sometimes quoted was not verified and is not used; the dispute is shown
 instead. Called it? was planned as Stigler on which cartels cheat; it is Stigler's claim that secret price cuts break
 cartels, judged partly right from Levenstein and Suslow's survey.
+
+**Corrections found while building Part 13.** The rejections are given as Akerlof's essay recalls them (the
+AER's and the RES's "triviality"; the JPE's referees: if correct, no goods could be traded), from excerpts; the
+"fourth attempt" sometimes quoted was not checked. Harvard's PPO is told from Cutler and Zeckhauser's figures
+(charges of about $500, $1,000 and over $2,000, enrollment about 20%, 15% and 9%, in 1996 dollars), not from Cutler
+and Reber's paper, whose scanned text could not be read; their welfare and premium figures are from its abstract.
+Einav, Finkelstein and Cullen's numbers are from the 2008 working paper; Agora's rebuild from the two published lines
+gives $9.46 against their $9.55. Sheepskin effects are stated qualitatively, without numbers. The
+credit-rationing example lets the risky projects be slightly worse, as well as riskier, so that the bank's return has
+a clear peak; Stiglitz and Weiss's own projects have equal means. Agora's death spiral is a stylized simulation,
+shown beside Harvard's data, not fitted to it.

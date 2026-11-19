@@ -27,8 +27,8 @@ class Spiral(VoiceoverScene):
         for yr, charge, share in path_:
             r = Rectangle(width=0.5, height=a.c2p(0, share)[1] - a.c2p(0, 0)[1], stroke_width=0, fill_color=PPO,
                           fill_opacity=0.85).move_to(a.c2p(yr, 0), aligned_edge=DOWN)
-            t = label(rf"\${charge:,.0f}".replace(",", "{,}") + (r"$+$" if yr == 1996 else ""), font_size=16,
-                      color=LEMON).next_to(r, UP, buff=0.1)
+            txt = {1994: r"\$400--500", 1995: r"about \$1{,}000", 1996: r"over \$2{,}000"}.get(yr, rf"\${charge:.0f}")
+            t = label(txt, font_size=16, color=LEMON).next_to(r, UP, buff=0.1)
             bars.add(VGroup(r, t))
         gone = label(r"disbanded", font_size=18, color=LOSS).move_to(a.c2p(1997, 0.03)).rotate(PI / 2)
         key = label(r"gold: \ the employee's extra charge for the PPO, \ a family, \ 1996 dollars", font_size=14,

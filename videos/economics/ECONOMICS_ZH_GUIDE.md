@@ -461,6 +461,32 @@ brackets on screen.
 | common ownership; the modified HHI | 共同所有权；修正赫芬达尔指数 |
 | algorithmic pricing | 算法定价 |
 
+
+## Part 13
+
+| English | 中文 |
+|---|---|
+| asymmetric information; private information | 信息不对称；私人信息 |
+| adverse selection; the market for lemons | 逆向选择；柠檬市场 |
+| unravelling | 市场瓦解（逐级退出） |
+| Gresham's law | 格雷欣法则（劣币驱逐良币） |
+| guarantee; warranty | 保证；质保 |
+| reputation; brand name; certification | 声誉；品牌；认证 |
+| signalling; job market signalling | 信号传递；劳动力市场信号 |
+| separating equilibrium; pooling equilibrium | 分离均衡；混同均衡 |
+| the intuitive criterion | 直观标准 |
+| human capital; sheepskin effect | 人力资本；文凭效应 |
+| screening; self-selection; menu of contracts | 甄别；自选择；合同菜单 |
+| the death spiral (insurance) | （保险）死亡螺旋 |
+| the Einav–Finkelstein diagram; average cost and marginal cost curves | 艾纳夫–芬克尔斯坦图；平均成本曲线与边际成本曲线 |
+| the positive-correlation test | 正相关检验 |
+| advantageous selection | 有利选择 |
+| credit rationing | 信贷配给 |
+| individual mandate; community rating; guaranteed issue; risk adjustment | 个人强制参保；社区费率；保证承保；风险调整 |
+| moral hazard; selection on moral hazard | 道德风险；基于道德风险的选择 |
+| underwriting; telematics | 核保；车载远程信息（驾驶行为保险） |
+| annuity | 年金 |
+
 ## Names
 
 | English | 中文 |
@@ -639,3 +665,7 @@ brackets on screen.
 | Drew Fudenberg; Jean Tirole; Oliver Williamson | 德鲁·弗登伯格；让·梯若尔；奥利弗·威廉姆森 |
 | William Baumol; John McGee; John Connor; Mark Whitacre | 威廉·鲍莫尔；约翰·麦基；约翰·康纳；马克·惠特克 |
 | Archer Daniels Midland (ADM); lysine | 阿彻丹尼尔斯米德兰公司（ADM）；赖氨酸 |
+| George Akerlof; Michael Spence; Joseph Stiglitz | 乔治·阿克洛夫；迈克尔·斯宾塞；约瑟夫·斯蒂格利茨 |
+| Michael Rothschild; Andrew Weiss | 迈克尔·罗斯柴尔德；安德鲁·韦斯 |
+| Liran Einav; Amy Finkelstein; David Cutler | 利兰·艾纳夫；埃米·芬克尔斯坦；戴维·卡特勒 |
+| Pierre-André Chiappori; Bernard Salanié | 皮埃尔-安德烈·基亚波里；贝尔纳·萨拉尼耶 |

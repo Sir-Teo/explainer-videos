@@ -137,3 +137,6 @@ publication, the copy that was read and the date the transcription was checked:
 | `tyler_2000` | the GED's signalling value for young dropouts | 2026-11-19 |
 | `info_tests` | tests for private information: Chiappori and Salanié, Finkelstein and McGarry, Cabral and Hortaçsu | 2026-11-19 |
 | `hkk_2015` | Hackmann, Kolstad and Kowalski's mandate gain; Handel's inertia | 2026-11-19 |
+| `lazear_2000` | Safelite's switch to piece rates: the productivity gain, its split, and the wage rise | 2026-11-19 |
+| `piece_rates` | piece rates in a field experiment (Shearer) and against relative incentives (Bandiera, Barankay and Rasul) | 2026-11-19 |
+| `incentive_cases` | Ford's five-dollar day, China's rural reform and teacher cheating in Chicago | 2026-11-19 |

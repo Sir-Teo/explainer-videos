@@ -1506,6 +1506,64 @@ HKK_2015 = Table(
 PART13 = (AKERLOF_1970, EFC_2010, CUTLER_ZECKHAUSER_1998, TYLER_2000, INFO_TESTS, HKK_2015)
 
 
+
+# ---------------------------------------------------------------------------------------------------------------
+# Part 14: incentives
+
+LAZEAR_2000 = Table(
+    key="lazear_2000",
+    cite="Edward P. Lazear, \"Performance Pay and Productivity\", American Economic Review 90(5) (2000): 1346-1361; "
+         "NBER Working Paper 5672 (1996)",
+    tag="Lazear, AER 90(5) (2000)",
+    where="the published estimate as summarized by the Stanford GSB and later papers; the working paper's abstract and "
+          "conclusion",
+    read="NBER Working Paper 5672; secondary summaries of the published version",
+    checked="2026-11-19",
+    data={"firm": "Safelite Glass", "switch": "from hourly wages to piece rates, 1994-95", "gain_published": 0.44,
+          "split": "about half from incentives (the same workers producing more), about half from sorting",
+          "gain_wp": (0.20, 0.36), "wage_rise": 0.096,
+          "passed_on": "about half of the worker-specific gain in productivity, in higher wages"},
+    note="The 1996 working paper puts the gain at 20 to 36 percent, depending on what is held constant, with more "
+         "than half from incentives; the published paper's 44 percent is the figure usually cited.",
+)
+
+PIECE_RATES = Table(
+    key="piece_rates",
+    cite="Bruce Shearer, \"Piece Rates, Fixed Wages and Incentives: Evidence from a Field Experiment\", Review of "
+         "Economic Studies 71(2) (2004): 513-534; Oriana Bandiera, Iwan Barankay and Imran Rasul, \"Social "
+         "Preferences and the Response to Incentives: Evidence from Personnel Data\", Quarterly Journal of Economics "
+         "120(3) (2005): 917-962",
+    tag="Shearer, REStud 71(2) (2004); Bandiera, Barankay and Rasul, QJE 120(3) (2005)",
+    where="the abstracts",
+    read="the abstracts",
+    checked="2026-11-19",
+    data={"shearer": 0.20, "shearer_structural": 0.217, "shearer_setting": "tree planters in British Columbia, "
+                                                                            "randomly assigned to piece rates or "
+                                                                            "fixed wages",
+          "bbr": 0.50, "bbr_setting": "fruit pickers on a British farm: piece rates against relative incentives"},
+)
+
+INCENTIVE_CASES = Table(
+    key="incentive_cases",
+    cite="Daniel M. G. Raff and Lawrence H. Summers, \"Did Henry Ford Pay Efficiency Wages?\", Journal of Labor "
+         "Economics 5(4) (1987): S57-S86; Justin Yifu Lin, \"Rural Reforms and Agricultural Growth in China\", "
+         "American Economic Review 82(1) (1992): 34-51; Brian A. Jacob and Steven D. Levitt, \"Rotten Apples\", "
+         "Quarterly Journal of Economics 118(3) (2003): 843-877",
+    tag="Raff and Summers (1987); Lin (1992); Jacob and Levitt (2003)",
+    where="the abstracts",
+    read="the abstracts",
+    checked="2026-11-19",
+    data={"ford": "the five-dollar day of 1914: long queues for Ford jobs, and higher productivity and profits",
+          "lin": "decollectivization accounts for about half of farm output growth in 1978-84; higher procurement "
+                 "prices also helped",
+          "jacob_levitt": 0.04},
+    note="Jacob and Levitt: serious cheating by teachers or administrators in at least 4 to 5 percent of Chicago's "
+         "elementary classrooms each year.",
+)
+
+PART14 = (LAZEAR_2000, PIECE_RATES, INCENTIVE_CASES)
+
+
 PART7 = (BERNOULLI_1738, SAMUELSON_1937, ALLAIS_1953, ELLSBERG_1961, RABIN_2000, THALER_1981, HOLT_LAURY_2005,
          HAYDEN_PLATT_2009, MADRIAN_SHEA_2001, THALER_BENARTZI_2004, BARSKY_1997, POST_2008, MEHRA_PRESCOTT_1985)
-ALL = {t.key: t for t in (*PART1, *PART3, *PART4, *PART5, *PART6, *PART7, *PART8, *PART9, *PART10, *PART11, *PART12, *PART13)}
+ALL = {t.key: t for t in (*PART1, *PART3, *PART4, *PART5, *PART6, *PART7, *PART8, *PART9, *PART10, *PART11, *PART12, *PART13, *PART14)}

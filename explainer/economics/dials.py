@@ -293,6 +293,20 @@ DIALS = {d.key: d for d in [
                       "gain per person from the mandate's reduction in selection", 4.1, where="AER 105(3), abstract",
                       checked="2026-11-19"),
          )),
+    Dial("piece_rate_response", "output response to piece rates", "percent rise in output per worker when pay "
+         "follows output", (14, 38), status="settled within a range", checked="2026-11-19",
+         meaning="paying for output raises it by something like a fifth to a half where output is easy to measure "
+                 "and one person's work is their own; part of the rise is who the job attracts, and where work is "
+                 "shared or hard to measure the response can be smaller, or perverse",
+         estimates=(
+             Estimate("Lazear", 2000, "DiD", "Safelite's windshield installers, hourly wages to piece rates (about half "
+                      "from sorting; the working paper: 20 to 36)", 44.0, where="AER 90(5); NBER WP 5672",
+                      checked="2026-11-19"),
+             Estimate("Shearer", 2004, "RCT", "tree planters in British Columbia, piece rates against fixed wages",
+                      20.0, where="REStud 71(2), abstract", checked="2026-11-19"),
+             Estimate("Bandiera, Barankay and Rasul", 2005, "DiD", "fruit pickers, piece rates against relative "
+                      "incentives (at least)", 50.0, where="QJE 120(3), abstract", checked="2026-11-19"),
+         )),
     Dial("return_schooling", "return to a year of school", "proportional rise in earnings per year of schooling",
          (4, 38), status="settled within a range", checked="2026-11-19",
          meaning="a year of school raises earnings by roughly 6 to 15 percent, a return few investments match; "
@@ -660,6 +674,15 @@ SHOWN = {
         ("Cabral and Hortaçsu (2010)", "eBay's feedback, shown for its direction; the reputation model is Agora's"),
         ("Handel (2013)", "inertia and selection, stated as the frontier's counterpoint; not entered as a row"),
         ("the CPI for used and new vehicles (BLS via FRED)", "data for the intermission, shown as history"),
+    ],    14: [
+        ("Alchian and Demsetz (1972); Holmström (1979, 1982, 1999); Holmström and Milgrom (1987, 1991); Lazear and "
+         "Rosen (1981); Weitzman (1980); Shapiro and Stiglitz (1984); Stiglitz (1974); Grossman and Hart (1986)",
+         "theory, stated; every model is solved in Agora"),
+        ("Xiaogang (1978)", "history, told qualitatively: accounts of the 1979 harvest disagree, so no number is shown"),
+        ("Raff and Summers (1987); Lin (1992)", "cases shown for their findings (a transcribed table)"),
+        ("Jacob and Levitt (2003)", "multitasking's evidence, the Called it? outcome"),
+        ("Gneezy and Rustichini (2000); Bénabou and Tirole (2003)", "crowding out: the day-care data of Part 1 "
+         "replotted; theory stated"),
     ],
 }
 

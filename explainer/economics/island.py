@@ -423,6 +423,33 @@ TRUTHS = {
         "reputation": {"prior": 0.6, "honest_good": 0.95, "cheat_good": 0.6, "value_honest": 100.0,
                        "value_cheat": 40.0, "feedback": (1,) * 3 + (0,) + (1,) * 12},
     },
+    14: {
+        # the team (chapter 1): eighteen households sharing a commune's harvest equally; effort cost c e^2/2, output a
+        # per unit of effort
+        "team": {"ns": (1, 2, 3, 6, 10, 18), "a": 1.0, "c": 1.0},
+        # Play it (chapter 1): Crusoe hires Friday for the grove; a day's harvest is Friday's effort plus luck (sd 5
+        # baskets); Friday is risk averse (CARA, r = 0.2 a basket) and effort e costs 0.1 e^2 / 2 baskets; the shares
+        # Crusoe can offer, the fixed pay set so that Friday just accepts
+        "playit": {"r": 0.2, "c": 0.1, "sigma": 5.0, "shares": (0.0, 1 / 3, 2 / 3, 1.0)},
+        # the discrete model (chapter 3): hard work makes a good harvest (100) likelier, 0.8 against 0.4 (else 40);
+        # it costs 0.3 utils; Friday's other work is worth 2 utils; log utility
+        "discrete": {"p_high": 0.8, "p_low": 0.4, "y_high": 100.0, "y_low": 40.0, "cost": 0.3, "reservation": 2.0},
+        # the trade-off (chapter 4): noise and risk aversion
+        "tradeoff": {"sigmas": (0.0, 10.0), "rs": (0.05, 0.2, 0.8), "c": 0.1},
+        # informativeness (chapter 5): a common shock (the weather on the whole island) and Friday's own luck
+        "rpe": {"r": 0.2, "c": 0.1, "common": 4.0, "own": 3.0},
+        # multitask (chapter 7): two tasks, half-substitutes in effort, pride worth 1 a unit on each
+        "multitask": {"s": 0.5, "c": 1.0, "base": 1.0},
+        # tournaments (chapter 8): prize spreads, noise sd 1
+        "tournament": {"spreads": (0.0, 4.0), "sigma": 1.0, "c": 1.0},
+        # the ratchet (chapter 9)
+        "ratchet": {"delta": 0.9, "bonus": 1.0, "c": 1.0},
+        # efficiency wages (chapter 10)
+        "shirking": {"effort_cost": 1.0, "detect": 0.5, "quit_rate": 0.1, "discount": 0.05, "labour": 100.0,
+                     "demand_a": 6.0, "demand_b": 0.04},
+        # sharecropping (chapter 11): output 10 per unit of effort, noise sd 8, risk aversion 1
+        "sharecrop": {"a": 10.0, "c": 1.0, "r": 1.0, "sigma": 8.0},
+    },
 }
 
 
