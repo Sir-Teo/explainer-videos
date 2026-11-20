@@ -178,4 +178,63 @@
             "browser; nothing you do here is stored or sent.",
     });
   };
+  W.gym = function (el) {
+    // The Island's gym (explainer.economics.agora.behave: gym_member, gym_choice).  On a share of the 30 days the
+    // member cannot go; on the others today's cost of going is uniform on [0, 60] and the member goes when it is below
+    // beta times the later benefit b (less the price of a visit).  At sign-up the member forecasts with beta_hat and
+    // the busy share they expect, and picks the monthly contract ($70, free visits), the pass ($10 a visit) or
+    // nothing, by forecast; the visits that follow use the true beta and busy share.
+    var N = 30, C = 60, FEE = 70, PASS = 10, BUSY = 0.55;
+    function member(beta, bh, b, p, busyHat) {
+      var xt = Math.min(Math.max(beta * b - p, 0), C), xh = Math.min(Math.max(bh * b - p, 0), C);
+      function val(x, free) { return N * (1 - free) / C * ((b - p) * x - x * x / 2); }
+      return { visits: N * (1 - BUSY) * xt / C, forecast: N * (1 - busyHat) * xh / C,
+               perceived: val(xh, busyHat), realized: val(xt, BUSY) };
+    }
+    QB.widget(el, {
+      title: "Join the gym",
+      sub: "What you forecast at sign-up (blue) and what you then do (red), on the monthly contract and on the " +
+           "pass. Your choice is made by forecast; the bill comes by visits.",
+      panels: 1, height: 290,
+      controls: [
+        { k: "beta", label: "Your present bias, beta (1 = none)", min: 0.3, max: 1, step: 0.01, value: 0.7,
+          fmt: function (x) { return x.toFixed(2); } },
+        { k: "bh", label: "What you believe your beta is", min: 0.3, max: 1, step: 0.01, value: 1,
+          fmt: function (x) { return x.toFixed(2); } },
+        { k: "busyHat", label: "Days you expect to be too busy", min: 0, max: 0.8, step: 0.05, value: 0,
+          fmt: function (x) { return (100 * x).toFixed(0) + "% (really 55%)"; } },
+        { k: "b", label: "What a workout is worth to you later, dollars", min: 10, max: 40, step: 1, value: 24,
+          fmt: function (x) { return "$" + x.toFixed(0); } },
+      ],
+      draw: function (g, v, st) {
+        var m = member(v.beta, v.bh, v.b, 0, v.busyHat), q = member(v.beta, v.bh, v.b, PASS, v.busyHat);
+        var per = { monthly: m.perceived - FEE, pass: q.perceived, none: 0 };
+        var real = { monthly: m.realized - FEE, pass: q.realized, none: 0 };
+        var pick = "none";
+        if (per.monthly >= per.pass && per.monthly > 0) pick = "monthly";
+        else if (per.pass > 0) pick = "pass";
+        var best = "none";
+        if (real.monthly >= real.pass && real.monthly > 0) best = "monthly";
+        else if (real.pass > 0) best = "pass";
+        var top = Math.max(m.forecast, m.visits, q.forecast, q.visits, 4) * 1.15;
+        var A = g[0].axes({ x: [0, 4], y: [0, top], title: "visits a month",
+                            xlabel: "monthly: forecast, made          pass: forecast, made" });
+        A.bars([0.5, 1.5, 2.5, 3.5], [m.forecast, m.visits, q.forecast, q.visits], 0.6,
+               { color: function (i) { return ["#7EC8F5", "#F25F5C", "#7EC8F5", "#F25F5C"][i]; } });
+        st.pick = pick; st.best = best; st.m = m; st.q = q; st.real = real;
+      },
+      readout: function (v, st) {
+        var paid = st.pick === "monthly" ? FEE : (st.pick === "pass" ? PASS * st.q.visits : 0);
+        var vis = st.pick === "monthly" ? st.m.visits : (st.pick === "pass" ? st.q.visits : 0);
+        var what = st.pick === "none" ? "not to join" : (st.pick === "pass" ? "the pass" : "the monthly contract");
+        return [["you choose", what],
+                ["you pay per visit", vis > 0 ? "$" + (paid / vis).toFixed(2) : "-"],
+                ["in hindsight, best", st.best === "none" ? "not joining" : "the " + st.best],
+                ["your choice costs you", "$" + (st.real[st.best] - st.real[st.pick]).toFixed(2) + " a month"]];
+      },
+      note: "Part 45, chapter 5. Set what you believe equal to the truth, beta and busy days alike, and the regret " +
+            "disappears: the cost of present bias here is the cost of not knowing it. Computed in your browser; " +
+            "nothing you do here is stored or sent.",
+    });
+  };
 })();

@@ -94,4 +94,53 @@ PARTS = [
               ("Rust's data", "explainer/economics/data/rust_buses.csv"),
               ("The Island's planted truths", "explainer/economics/island.py")),
     ),
+    Part(
+        n=45, level="U", widget="gym", prereq=(5, 7, 22, 42),
+        question="What changes in economics when people are not the agents of Part 5?",
+        story="The part opens on DellaVigna and Malmendier's gym: members on monthly contracts of over $70 who go "
+              "4.3 times a month, paying over $17 a visit when a ten-visit pass cost $10. The Island's gym repeats "
+              "it: naive members forecast 13.9 visits, make 4.7, and pay $15 a visit. DellaVigna's three departures "
+              "frame the part; the viewer is given a mug and names a selling price, and the Island's mug market "
+              "trades a quarter of its mugs instead of half. Prospect theory's kink, experienced traders, marathon "
+              "runners bunched under round times (measured with Part 41's bunching estimator), putts for par against "
+              "birdie at equal length, and loss-averse condominium sellers bracketed by two regressions follow. "
+              "Present bias reverses plans; O'Donoghue and Rabin's naifs and sophisticates act at different times; "
+              "a gym designs its contract for them. A randomized commitment account is taken mostly by "
+              "sophisticates, and defaults stick for naifs who put off deciding; Save More Tomorrow turns the biases "
+              "around. After an intermission of the American saving rate, shrouded add-ons survive competition, "
+              "left-digit bias leaves steps in car prices, Fehr-Schmidt players reject low offers, markets cure some "
+              "biases and feed on others, welfare is read where choices across frames agree, published nudges look "
+              "six times larger than nudges in full, and models of limited minds explain inattention and "
+              "forecasters who over-react individually while their average under-reacts. Three dials, practice and "
+              "the frontier close it.",
+        handoff="Part 46 turns to development: why the poor stay poor, and what actually helps.",
+        outside="Part 5: preferences and revealed preference; Part 7: discounting and risk; Part 22: saving; Part 41: "
+                "bunching; Part 42: defaults in social insurance; Psychology, Built, Part 26: prospect theory. "
+                "Chapter 6 uses the Wald estimator; chapter 12 a selection model fitted by maximum likelihood; "
+                "chapter 13 the Blahut-Arimoto iteration.",
+        objectives={
+            "U": ["Explain present bias, loss aversion and limited attention, each with a field example.",
+                  "Say why demand for commitment reveals present bias and knowing it.",
+                  "Explain why defaults matter and how Save More Tomorrow works."],
+            "M": ["Derive the beta-delta reversal and O'Donoghue and Rabin's naif and sophisticate.",
+                  "Estimate loss aversion from bunching and inattention from steps in prices.",
+                  "Write the step-function selection model and correct a filtered literature."],
+            "D": ["Assess what behavioural parameters are identified in the field, and how welfare can be judged "
+                  "when choices conflict.",
+                  "State the open questions in structural behavioural economics and behavioural macroeconomics."],
+            "I": ["Design a product choice, a disclosure or a default, and say who gains and who loses."],
+        },
+        results=[
+            ("Quasi-hyperbolic discounting", r"U_0 = u_0 + \beta \sum_{t \ge 1} \delta^t u_t"),
+            ("Prospect theory's value", r"v(x) = x^{\alpha}\ (x \ge 0),\quad -\lambda(-x)^{\beta}\ (x < 0)"),
+            ("The gym's visit price", r"p^{*} = m - (1 - \beta)\, b"),
+            ("Left-digit inattention", r"\hat\theta = \frac{\text{jump}}{\text{jump} + \text{slope} \times "
+                                       r"10{,}000}"),
+            ("Fehr-Schmidt", r"U_i = x_i - \alpha \max(x_j - x_i, 0) - \beta \max(x_i - x_j, 0)"),
+        ],
+        U=(0, 1, 2, 3, 4, 5, 6, 7, "s09_intermission", 8, 9, 10, 11), D=(14, 16), I=(15,),
+        also=(("Agora's behavioural economics", "explainer/economics/agora/behave.py"),
+              ("Prospect theory's functions", "explainer/psychology/psyche/choice.py"),
+              ("The Island's planted truths", "explainer/economics/island.py")),
+    ),
 ]
