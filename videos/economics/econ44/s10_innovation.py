@@ -104,9 +104,11 @@ class Innovation(VoiceoverScene):
             "imitate, to catch up. <bookmark mark='e'/> Tougher competition makes level firms run harder, the "
             "escape-competition effect, but leaves a laggard less to gain from catching up, Schumpeter's effect."
         ) as vo:
-            self.play(FadeIn(tag), FadeIn(states[0]))
+            self.play(FadeIn(tag), FadeIn(states[0]), FadeIn(states[1]), run_time=1.2)
+            vo.wait_until("a")
+            self.play(Indicate(states[0], color=WHITE, scale_factor=1.04))
             vo.wait_until("b")
-            self.play(FadeIn(states[1]))
+            self.play(Indicate(states[1], color=WHITE, scale_factor=1.04))
             vo.wait_until("c")
             self.play(Create(a1), FadeIn(l1))
             vo.wait_until("d")
@@ -126,8 +128,8 @@ class Innovation(VoiceoverScene):
         nm = path(ax, I["delta"], np.array(I["nm"]) / 1.4, FIRM1, 2.0)
         pk = VGroup(vline(ax, I["peak"], 0, 1.1, GAIN), dot(ax, I["peak"], I["peak_value"], GAIN, 0.09))
         side = VGroup(
-            label(r"teal: \ level firms' \\ effort rises", font_size=18, color=PATIENT),
-            label(r"gold: \ laggards' \\ effort falls", font_size=18, color=FIRM1),
+            label(r"teal: \ level firms' \\ effort rises \\ (rescaled)", font_size=18, color=PATIENT),
+            label(r"gold: \ laggards' \\ effort falls \\ (rescaled)", font_size=18, color=FIRM1),
             label(rf"green: \ the total \\ peaks at $\Delta$ = {I['peak']:.1f}", font_size=18, color=GAIN),
             label(r"Aghion et al.: \ British \\ industries' patents \\ trace an inverted U", font_size=18,
                   color=E.ACCENT),

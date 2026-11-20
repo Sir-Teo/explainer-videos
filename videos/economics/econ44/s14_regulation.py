@@ -37,8 +37,10 @@ class Regulation(VoiceoverScene):
             "low-cost firm a rent: the cost gap times whatever it would be paid to produce if it claimed high "
             f"costs, {G['rent_full']:.0f} if the high-cost output were set efficiently."
         ) as vo:
-            self.play(FadeIn(head), FadeIn(tag))
-            for mk, r_ in zip("abcd", rows):
+            self.play(FadeIn(head), FadeIn(tag), FadeIn(rows[0], shift=RIGHT * 0.1))
+            vo.wait_until("a")
+            self.play(Indicate(rows[0], color=WHITE, scale_factor=1.03))
+            for mk, r_ in zip("bcd", rows[1:]):
                 vo.wait_until(mk)
                 self.play(FadeIn(r_, shift=RIGHT * 0.1))
         self.clear_scene()
@@ -112,9 +114,10 @@ class Regulation(VoiceoverScene):
             "regulation on this trade-off between efficiency and rents, which shapes how price caps and cost-sharing "
             "contracts are designed."
         ) as vo:
-            self.play(FadeIn(ax), FadeIn(tag), run_time=1.0)
+            self.play(FadeIn(ax), FadeIn(tag), Create(q), FadeIn(side[0]), run_time=1.5)
             vo.wait_until("a")
-            self.play(Create(q), FadeIn(side[0]))
+            self.play(Indicate(side[0], color=WHITE), ShowPassingFlash(q.copy().set_stroke(WHITE, 5), time_width=0.5),
+                      run_time=1.5)
             vo.wait_until("b")
             self.play(Create(r), FadeIn(side[1]))
             vo.wait_until("c")

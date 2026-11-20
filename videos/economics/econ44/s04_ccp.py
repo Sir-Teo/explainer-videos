@@ -85,19 +85,19 @@ class CCP(VoiceoverScene):
     def fleets(self):
         C = load("ccp")
         tr = C["truth"]
-        ax = plane([8.5, 11.0], [2.0, 3.0], center=LEFT * 1.8 + DOWN * 0.4, x_length=8.2, y_length=4.6,
-                   xticks=[8.5, 9.0, 9.5, 10.0, 10.5, 11.0], yticks=[2.0, 2.25, 2.5, 2.75, 3.0],
-                   xlabel=r"rebuild cost, \ $RC$", ylabel=r"upkeep, \ $\theta$", xfmt=lambda v: f"{v:.1f}",
-                   yfmt=lambda v: f"{v:.2f}", font_size=14)
+        ax = plane([9.0, 10.5], [2.2, 2.8], center=LEFT * 1.8 + DOWN * 0.4, x_length=8.2, y_length=4.6,
+                   xticks=[9.0, 9.25, 9.5, 9.75, 10.0, 10.25, 10.5], yticks=[2.2, 2.4, 2.6, 2.8],
+                   xlabel=r"rebuild cost, \ $RC$", ylabel=r"upkeep, \ $\theta$", xfmt=lambda v: f"{v:.2f}",
+                   yfmt=lambda v: f"{v:.1f}", font_size=14)
         t = VGroup(dot(ax, tr[0], tr[1], GAIN, 0.12),
-                   label(r"the truth", font_size=17, color=GAIN).next_to(ax.ax.c2p(tr[0], tr[1]), UR, buff=0.1))
+                   label(r"the truth", font_size=17, color=GAIN).next_to(ax.ax.c2p(tr[0], tr[1]), UP, buff=0.14))
         pts = VGroup()
         for nb, sz in (("104", 0.08), ("1000", 0.11)):
             s_ = C["sims"][nb]
             a = dot(ax, s_["nfxp"][0], s_["nfxp"][1], PATIENT, sz)
             b = dot(ax, s_["ccp"][0], s_["ccp"][1], CCP_C, sz)
-            la = label(rf"NFXP, \ {nb} buses", font_size=15, color=PATIENT).next_to(a, UP, buff=0.08)
-            lb = label(rf"CCP, \ {nb} buses", font_size=15, color=CCP_C).next_to(b, DOWN, buff=0.08)
+            la = label(rf"NFXP, \ {nb} buses", font_size=15, color=PATIENT).next_to(a, RIGHT, buff=0.12)
+            lb = label(rf"CCP, \ {nb} buses", font_size=15, color=CCP_C).next_to(b, LEFT, buff=0.12)
             pts.add(VGroup(a, la, b, lb))
         s1, s2 = C["sims"]["104"], C["sims"]["1000"]
         side = VGroup(

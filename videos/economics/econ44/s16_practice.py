@@ -74,21 +74,33 @@ class Practice(VoiceoverScene):
         A = tables.APPLE.data
         cc = call_card(tex_safe(c.who), c.when, tex_safe(c.said), tex_safe(c.outcome), c.verdict, width=12.6,
                        font_size=20)
+        cc.move_to(UP * 1.25)
+        loop = flow_chain([(r"buyers", FIRM2), (r"developers", PATIENT), (r"apps", PATIENT), (r"more buyers", FIRM2)],
+                          box_w=2.3, box_h=0.75, buff=0.5, font_size=19).move_to(DOWN * 1.9)
+        why = label(r"the reasoning: \ an expensive phone, \ against software that ran \\ on many makers' "
+                    r"handsets", font_size=20, color=E.PRED).move_to(DOWN * 1.9)
         tag = published_tag(tables.APPLE.tag, corner=DR, font_size=11)
         with self.voiceover(
             "Called it? <bookmark mark='a'/> In April 2007, months before the first iPhone went on sale, Microsoft's "
             "chief executive, Steve Ballmer, told USA Today: there's no chance that the iPhone is going to get any "
-            "significant market share. No chance. The phone was expensive, and Microsoft's own mobile software ran "
+            "significant market share. No chance. <bookmark mark='a2'/> The phone was expensive, and Microsoft's own "
+            "mobile software ran "
             "on handsets from many makers. <bookmark mark='b'/> What followed was a two-sided platform: buyers "
-            "attracted developers, whose apps attracted more buyers. In 2023 Apple shipped "
+            "attracted developers, whose apps attracted more buyers. <bookmark mark='b2'/> In 2023 Apple shipped "
             f"{A['units']} million smartphones, {A['share']} percent of the world market and the most of any maker, "
             "according to IDC, and Microsoft had left the phone business. <bookmark mark='c'/> The verdict: "
             "wrong. Network effects can lock a market in, but a new platform that wins one side can also tip it the "
             "other way."
         ) as vo:
-            self.play(FadeIn(cc.card), FadeIn(cc[1]), FadeIn(tag))
+            self.play(FadeIn(cc.card), FadeIn(cc[1][0]), FadeIn(cc.left), FadeIn(tag))
+            vo.wait_until("a2")
+            self.play(FadeIn(why, shift=UP * 0.1))
             vo.wait_until("b")
-            self.play(Indicate(cc.right, color=WHITE, scale_factor=1.01))
+            self.play(FadeOut(why), run_time=0.5)
+            self.play(LaggedStart(*[FadeIn(b) for b in loop.boxes], lag_ratio=0.4),
+                      LaggedStart(*[GrowArrow(a) for a in loop.arrows], lag_ratio=0.4), run_time=2.6)
+            vo.wait_until("b2")
+            self.play(FadeIn(cc.right, shift=LEFT * 0.1))
             vo.wait_until("c")
             self.play(FadeIn(cc.stamp, scale=1.3))
         self.clear_scene()

@@ -3782,7 +3782,8 @@ FRONTIER44 = Table(
     key="frontier44",
     cite="the frontier chapter's sources, stated in words only",
     tag="frontier",
-    where="data as a barrier to entry; interoperability and data portability; competition among foundation models",
+    where="data as a barrier to entry; interoperability and data portability (the EU's Digital Markets Act, "
+          "Regulation (EU) 2022/1925, Articles 6(9) and 7); competition among foundation models",
     read="the chapter states questions, not estimates",
     checked="2026-11-20",
 )

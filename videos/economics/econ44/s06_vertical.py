@@ -23,7 +23,7 @@ class Vertical(VoiceoverScene):
         w = seg(ax, 0, V["w"], a, V["w"], FIRM1, 2.0, dashed=True)
         p_int = VGroup(dot(ax, V["q_int"], V["p_int"], GAIN, 0.1),
                        label(rf"integrated: \ {V['p_int']:.0f}", font_size=17, color=GAIN).next_to(
-                           ax.ax.c2p(V["q_int"], V["p_int"]), RIGHT, buff=0.15))
+                           ax.ax.c2p(V["q_int"], V["p_int"]), UR, buff=0.12))
         p_sep = VGroup(dot(ax, V["q_sep"], V["p_sep"], LOSS, 0.1),
                        label(rf"two markups: \ {V['p_sep']:.0f}", font_size=17, color=LOSS).next_to(
                            ax.ax.c2p(V["q_sep"], V["p_sep"]), RIGHT, buff=0.15))

@@ -64,19 +64,24 @@ class Antitrust(VoiceoverScene):
         head = label(r"each side's best case", font_size=28, color=E.ACCENT).to_edge(UP, buff=0.6)
         tag = published_tag(tables.ANTITRUST.tag, corner=DR, font_size=11)
         with self.voiceover(
-            "Each side has a strong case. <bookmark mark='a'/> The consumer-welfare standard asks one question: "
-            "are consumers worse off, through higher prices, lower output or worse products? Its strength is that "
-            "the tools of this part can answer it, so cases are predictable. Its weakness is that some harms, to "
-            "innovation, to quality, to the choices of the future, may not show up in today's prices. "
-            "<bookmark mark='b'/> The neo-Brandeisian view treats concentrated power as a harm in itself, "
-            "especially when a platform both runs a market and competes in it. Its strength is that it looks at "
-            "structure and dependence. Its weakness is that vague standards can end up protecting rivals rather than "
+            "Each side has a strong case. <bookmark mark='a0'/> The consumer-welfare standard asks one question: "
+            "are consumers worse off, through higher prices, lower output or worse products? <bookmark mark='a1'/> "
+            "Its strength is that the tools of this part can answer it, so cases are predictable. "
+            "<bookmark mark='a2'/> Its weakness is that some harms, to innovation, to quality, to the choices of the "
+            "future, may not show up in today's prices. <bookmark mark='b0'/> The neo-Brandeisian view treats "
+            "concentrated power as a harm in itself, especially when a platform both runs a market and competes in "
+            "it. <bookmark mark='b1'/> Its strength is that it looks at structure and dependence. "
+            "<bookmark mark='b2'/> Its weakness is that vague standards can end up protecting rivals rather than "
             "rivalry."
         ) as vo:
-            self.play(FadeIn(head), FadeIn(tag))
-            for mk, c in zip("ab", cols):
-                vo.wait_until(mk)
-                self.play(FadeIn(c[0]), LaggedStart(*[FadeIn(r_) for r_ in c[1]], lag_ratio=0.5), run_time=2.0)
+            self.play(FadeIn(head), FadeIn(tag), FadeIn(cols[0][0]))
+            for k, c in zip("ab", cols):
+                if k == "b":
+                    vo.wait_until("b0")
+                    self.play(FadeIn(c[0]))
+                for j, r_ in enumerate(c[1]):
+                    vo.wait_until(f"{k}{j}")
+                    self.play(FadeIn(r_, shift=UP * 0.08))
         self.clear_scene()
 
     def cases(self):
