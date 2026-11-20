@@ -46,7 +46,7 @@ class Practice(VoiceoverScene):
                        font_size=18).move_to(UP * 0.3)
         tag = published_tag(r"Rajan, \ Jackson Hole symposium (2005), \ NBER WP 11728", corner=DR, font_size=12)
         foot = label(r"the call was about incentives and liquidity, \ not housing or a date: \ the right kind of "
-                     r"warning, \ and the hard kind to act on", font_size=20, color=GREY_A).to_edge(DOWN, buff=0.45)
+                     r"warning, \ and the hard kind to act on", font_size=20, color=GREY_A).to_edge(DOWN, buff=0.75)
         with self.voiceover(
             "Called it? <bookmark mark='a'/> In August 2005, at the Kansas City Fed's symposium in Jackson Hole, a "
             "gathering in honour of Alan Greenspan, Raghuram Rajan, then the IMF's chief economist, presented a "

@@ -56,15 +56,12 @@ class Intermission(SoundScene):
             snd.drive(grow, grower)
             snd.drive(year, set_year)
             snd.show(ax, grow, year)
-            self.play(FadeIn(ax), run_time=1.2)
-            k = 0
             for x, m in zip(tick_t, ticks):
-                snd.wait_until(film_time(x))
-                anims = [GrowFromEdge(m, DOWN)]
-                while k < len(EVENTS) and EVENTS[k][0] <= x:
-                    anims.append(FadeIn(marks[k]))
-                    k += 1
-                self.play(*anims, run_time=0.25)
+                snd.drive(m, lambda mm, tt, ft=film_time(x): mm.set_opacity(1.0 if tt >= ft else 0.0))
+            for (x, _), m in zip(EVENTS, marks):
+                snd.drive(m, lambda mm, tt, ft=film_time(x): mm.set_opacity(1.0 if tt >= ft else 0.0))
+            snd.show(ticks, marks)
+            self.play(FadeIn(ax), run_time=1.2)
             snd.wait_until("film_end")
             self.wait(1.0)
             self.play(*[FadeOut(m) for m in (ax, grow, year, ticks, marks, src, stag)], run_time=1.0)

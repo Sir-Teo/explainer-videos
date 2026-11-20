@@ -70,7 +70,7 @@ class Macropru(VoiceoverScene):
                   r"from 2000, \ cushioned the bust but did not stop the boom", font_size=19, color=CRISIS),
             label(r"America's credit came mostly from markets, \ not banks: \ measured by bank loans, \ the guide "
                   r"barely moves", font_size=19, color=CB),
-        ).arrange(DOWN, buff=0.12).to_edge(DOWN, buff=0.25)
+        ).arrange(DOWN, buff=0.12).to_edge(DOWN, buff=0.55)
         tag = data_tag(r"Jord\`a, \ Schularick and Taylor; \ the Basel guide computed here (bank loans for all "
                        r"credit; \ annual $\lambda = 1562.5$)", corner=DR, font_size=11)
         with self.voiceover(

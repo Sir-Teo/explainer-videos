@@ -23,7 +23,7 @@ class Fighting(VoiceoverScene):
         ], width=12.6, cols=2, font_size=22).move_to(DOWN * 0.2)
         head = label(r"the toolkit", font_size=30, color=E.ACCENT).to_edge(UP, buff=0.45)
         foot = label(r"every rescue teaches lenders to expect the next one: \ the case for preventing booms",
-                     font_size=21, color=HOLD).to_edge(DOWN, buff=0.3)
+                     font_size=21, color=HOLD).to_edge(DOWN, buff=0.6)
         tag = published_tag(r"Bagehot, \ \emph{Lombard Street} (1873); \ Board of Governors, \ SCAP results, \ 7 May "
                             r"2009", corner=DR, font_size=12)
         with self.voiceover(

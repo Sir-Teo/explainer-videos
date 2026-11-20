@@ -721,9 +721,9 @@ DIALS = {d.key: d for d in [
              Estimate("Romer and Romer", 2017, "regression", "24 OECD countries, 1967-2012, a new measure of "
                       "financial distress: peak decline of GDP after a crisis (4 percent by GLS)", 6.0,
                       where="AER 107(10): 3072-3118", checked="2026-11-20"),
-             Estimate("this film (US, 2007-09)", 2026, "event study", "US real GDP, 2007 Q4 to 2009 Q2, peak to trough",
+             Estimate("this film (US 2007-09)", 2026, "event study", "US real GDP, 2007 Q4 to 2009 Q2, peak to trough",
                       3.8, where="videos/economics/econ26/compute.py, item crisis", checked="2026-11-20"),
-             Estimate("this film (US, 2007-09)", 2026, "event study", "US real GDP in 2019 Q4 below its 1990-2007 "
+             Estimate("this film (US 2007-09)", 2026, "event study", "US real GDP in 2019 Q4 below its 1990-2007 "
                       "trend (3.2 percent a year)", 17.6, where="videos/economics/econ26/compute.py, item crisis",
                       checked="2026-11-20"),
              Estimate("this film (JST since 1948)", 2026, "event study", "18 advanced economies, 1948-2020: real "
@@ -745,11 +745,11 @@ DIALS = {d.key: d for d in [
              Estimate("Greenwood, Hanson, Shleifer and Sorensen", 2022, "regression", "42 countries, 1950-2016: "
                       "rapid credit and asset-price growth in the business or household sector (about 7% otherwise)",
                       40.0, where="Journal of Finance 77(2): 863-921, abstract", checked="2026-11-20"),
-             Estimate("this film (JST, credit and houses)", 2026, "regression", "18 countries, 1870-2017: the "
+             Estimate("this film (JST: credit and houses)", 2026, "regression", "18 countries, 1870-2017: the "
                       "three-year rise in loans to GDP and in real house prices both in their top fifth "
                       "(5% when neither)", 33.3,
                       where="videos/economics/econ33/compute.py, item panel", checked="2026-11-20"),
-             Estimate("this film (JST, credit alone)", 2026, "regression", "the same, the top fifth of the rise in "
+             Estimate("this film (JST: credit alone)", 2026, "regression", "the same, the top fifth of the rise in "
                       "loans to GDP alone (6% in the bottom fifth)",
                       18.4, where="videos/economics/econ33/compute.py, item panel",
                       checked="2026-11-20"),
@@ -772,7 +772,7 @@ DIALS = {d.key: d for d in [
              Estimate("Coibion", 2012, "review", "the two reconciled: the 1979-82 period and lag lengths accounted "
                       "for", -2.5, lo=-3.0, hi=-2.0, where="AEJ: Macroeconomics 4(2): 1-32, abstract",
                       checked="2026-11-20"),
-             Estimate("this film (US, 1965-2007)", 2026, "structural", "a recursive VAR with commodity prices: "
+             Estimate("this film (US 1965-2007)", 2026, "structural", "a recursive VAR with commodity prices: "
                       "industrial production's trough, 29 months after the shock", -1.33, lo=-1.67, hi=-0.72,
                       where="videos/economics/econ31/compute.py, item usvar", checked="2026-11-20"),
          )),

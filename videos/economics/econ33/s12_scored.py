@@ -74,7 +74,7 @@ class Scored(VoiceoverScene):
             label(rf"ranked by the model's chance: \ area under the curve {B['auc8']:.2f} \ (0.5 is a coin)",
                   font_size=21, color=HOUSE),
             label(r"the model was fitted only on the years before each boom ended", font_size=19, color=GREY_A),
-        ).arrange(DOWN, buff=0.15).to_edge(DOWN, buff=0.35)
+        ).arrange(DOWN, buff=0.15).to_edge(DOWN, buff=0.65)
         tag = data_tag(r"Jord\`a, \ Schularick and Taylor, \ Macrohistory Database R6; \ this film's model", corner=DR,
                        font_size=12)
         with self.voiceover(
