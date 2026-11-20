@@ -1070,6 +1070,39 @@ DATASETS = {
         "sha256": "2f35e92208d596c487397c87d8011a9ccb4c376f33ce8fc88338d205e0ae7e7e",
         "files": ("sportscards_1998.csv",),
     },
+    "wdi_dev": {
+        "title": "World Development Indicators for development: the share of people below $3.00 a day (2021 PPP) "
+                 "for the world, its regions, China and India, 1981 onward; employment and value added in "
+                 "agriculture and GDP per head at PPP by country, 2015 onward",
+        "publisher": "World Bank",
+        "citation": "World Bank, World Development Indicators (API, last updated 11 November 2026), indicators "
+                    "SI.POV.DDAY, SL.AGR.EMPL.ZS, NV.AGR.TOTL.ZS, NY.GDP.PCAP.PP.KD, retrieved 2026-11-21",
+        "short": "World Bank WDI, Nov 2026",
+        "url": "https://api.worldbank.org/v2/country/{}/indicator/{}?format=json&date={}&per_page=20000",
+        "licence": "CC BY 4.0 (World Bank open data)",
+        "units": "percent of population; percent of employment; percent of GDP; constant 2021 international dollars",
+        "vintage": "2026-11-21",
+        "files": ("wdi_poverty_1981_2025.csv", "wdi_agriculture_2015_2025.csv"),
+    },
+    "causaldata": {
+        "title": "Three development experiments as distributed in the R package causaldata: Thornton's HIV-results "
+                 "incentives in Malawi (2004), Cai, de Janvry and Sadoulet's weather-insurance sessions in rural "
+                 "China, and Manacorda, Miguel and Vigorito's PANES households around Uruguay's eligibility cutoff",
+        "publisher": "R package causaldata (N. Huntington-Klein and M. Barrett), CRAN",
+        "citation": "R. L. Thornton, \"The Demand for, and Impact of, Learning HIV Status\", American Economic Review "
+                    "98(5): 1829-63 (2008); J. Cai, A. de Janvry and E. Sadoulet, \"Social Networks and the Decision "
+                    "to Insure\", American Economic Journal: Applied Economics 7(2): 81-108 (2015); M. Manacorda, E. "
+                    "Miguel and A. Vigorito, \"Government Transfers and Political Support\", American Economic "
+                    "Journal: Applied Economics 3(3): 1-28 (2011); causaldata 0.1.4 (CRAN), data/thornton_hiv.rda, "
+                    "social_insure.rda, gov_transfers.rda, retrieved 2026-11-21",
+        "short": "Thornton (2008), Cai et al. (2015), Manacorda et al. (2011), via causaldata",
+        "url": "https://cran.r-project.org/src/contrib/causaldata_0.1.4.tar.gz",
+        "licence": "MIT (the package); the data are the cited studies'",
+        "units": "one row per person (Thornton), household (Cai et al.) or household near the cutoff (Manacorda et al.)",
+        "vintage": "2026-11-21",
+        "sha256": "a3cf626e92fc1d173ffac0287dfa1b2069958395cbab91e8b555540a89b06549",
+        "files": ("thornton_hiv_2004.csv", "insure_china.csv", "panes_uruguay.csv"),
+    },
     "saez": {
         "title": "Top income shares in the United States from tax returns, 1913-2022 (Piketty and Saez's series, "
                  "updated): shares of the top 10%, 5%, 1%, 0.5%, 0.1% and 0.01% of tax units, excluding and including "
@@ -1623,6 +1656,58 @@ def resume() -> dict:
     strings; ``race`` is 'white' or 'black', ``gender`` 'f' or 'm', ``received_callback`` 0 or 1)."""
     rows = _read(HERE / "resume_2001.csv")
     return {k: ([r[k] for r in rows] if k in RESUME_TEXT else [_num(r[k]) for r in rows]) for k in RESUME_COLS}
+
+
+WDI_DEV_AREAS = ("WLD", "SSF", "SAS", "EAS", "LCN", "MEA", "ECS", "CHN", "IND")
+
+
+@functools.lru_cache(maxsize=None)
+def wdi_poverty() -> dict:
+    """The share below $3.00 a day (2021 PPP), percent: ``{area code: {"name", "year": [...], "value": [...]}}`` for
+    :data:`WDI_DEV_AREAS` (the world, its regions, China and India), years with an estimate only."""
+    out: dict = {}
+    for r in _read(HERE / "wdi_poverty_1981_2025.csv"):
+        a = out.setdefault(r["code"], {"name": r["name"], "year": [], "value": []})
+        a["year"].append(int(r["year"]))
+        a["value"].append(_num(r["value"]))
+    return out
+
+
+@functools.lru_cache(maxsize=None)
+def wdi_agriculture() -> list[dict]:
+    """Countries' latest year (2015 onward) with agriculture's share of employment and of value added and GDP per
+    head at PPP: ``[{"code", "country", "region", "year", "agri_emp", "agri_va", "gdppc"}]``."""
+    return [{"code": r["code"], "country": r["country"], "region": r["region"], "year": int(r["year"]),
+             "agri_emp": _num(r["agri_emp"]), "agri_va": _num(r["agri_va"]), "gdppc": _num(r["gdppc"])}
+            for r in _read(HERE / "wdi_agriculture_2015_2025.csv")]
+
+
+@functools.lru_cache(maxsize=None)
+def thornton_hiv() -> dict:
+    """Thornton's Malawi sample: ``{"village", "got" (learned the result, 0/1), "distance" (km to the centre),
+    "incentive" (dollars), "any" (any incentive), "age", "hiv"}``, NaN where missing."""
+    rows = _read(HERE / "thornton_hiv_2004.csv")
+    return {k: [_num(r[k]) for r in rows] for k in ("village", "got", "distance", "incentive", "any", "age", "hiv")}
+
+
+@functools.lru_cache(maxsize=None)
+def insure_china() -> dict:
+    """Cai, de Janvry and Sadoulet's households: ``{"village", "takeup", "default", "intensive", "age", "area",
+    "disaster_prob", "risk_averse", "literacy", "pre_takeup"}`` (village as text)."""
+    rows = _read(HERE / "insure_china.csv")
+    out = {"village": [r["village"] for r in rows]}
+    for k in ("takeup", "default", "intensive", "age", "area", "disaster_prob", "risk_averse", "literacy",
+              "pre_takeup"):
+        out[k] = [_num(r[k]) for r in rows]
+    return out
+
+
+@functools.lru_cache(maxsize=None)
+def panes() -> dict:
+    """PANES households near Uruguay's eligibility cutoff: ``{"score" (income score centred on the cutoff; below
+    zero is eligible), "education", "age", "participation", "support"}``."""
+    rows = _read(HERE / "panes_uruguay.csv")
+    return {k: [_num(r[k]) for r in rows] for k in ("score", "education", "age", "participation", "support")}
 
 
 SPORTSCARDS_COLS = ("good", "dealer", "permonth", "years", "income", "gender", "education", "age", "trade")
@@ -2342,6 +2427,91 @@ def refresh_sportscards() -> None:
             w.writerow(row)
 
 
+def refresh_wdi_dev() -> None:
+    import json  # noqa: PLC0415
+
+    d = DATASETS["wdi_dev"]
+    raw = RAW / "wdi_countries.json"
+    _download("https://api.worldbank.org/v2/country?format=json&per_page=400", raw)
+    meta = {c["id"]: c for c in json.loads(raw.read_text())[1]}
+    f = RAW / "wdi_SI.POV.DDAY.json"
+    _download(d["url"].format(";".join(WDI_DEV_AREAS), "SI.POV.DDAY", "1981:2025"), f)
+    with open(HERE / "wdi_poverty_1981_2025.csv", "w", newline="", encoding="utf-8") as out:
+        w = csv.writer(out)
+        w.writerow(["code", "name", "year", "value"])
+        rows = [r for r in json.loads(f.read_text())[1] if r["value"] is not None]
+        for r in sorted(rows, key=lambda r: (r["countryiso3code"], int(r["date"]))):
+            w.writerow([r["countryiso3code"], r["country"]["value"], r["date"], _fmt(r["value"])])
+    vals: dict = {}
+    for col, ind in (("agri_emp", "SL.AGR.EMPL.ZS"), ("agri_va", "NV.AGR.TOTL.ZS"), ("gdppc", "NY.GDP.PCAP.PP.KD")):
+        f = RAW / f"wdi_{ind}.json"
+        _download(d["url"].format("all", ind, "2015:2025"), f)
+        for r in json.loads(f.read_text())[1]:
+            code = r["countryiso3code"]
+            c = meta.get(code)
+            if c is None or c["region"]["id"] == "NA" or r["value"] is None:
+                continue
+            vals.setdefault((code, int(r["date"])), {})[col] = r["value"]
+    latest: dict = {}
+    for (code, year), v in vals.items():
+        if all(k in v for k in ("agri_emp", "agri_va", "gdppc")) and year > latest.get(code, (0,))[0]:
+            latest[code] = (year, v)
+    with open(HERE / "wdi_agriculture_2015_2025.csv", "w", newline="", encoding="utf-8") as out:
+        w = csv.writer(out)
+        w.writerow(["code", "country", "region", "year", "agri_emp", "agri_va", "gdppc"])
+        for code in sorted(latest):
+            year, v = latest[code]
+            c = meta[code]
+            w.writerow([code, c["name"], c["region"]["value"].strip(), year, _fmt(v["agri_emp"]), _fmt(v["agri_va"]),
+                        _fmt(v["gdppc"])])
+
+
+def refresh_causaldata() -> None:
+    import tarfile  # noqa: PLC0415
+
+    from explainer.psychology import rdata  # noqa: PLC0415
+
+    d = DATASETS["causaldata"]
+    raw = RAW / "causaldata_0.1.4.tar.gz"
+    if raw.exists() and hashlib.sha256(raw.read_bytes()).hexdigest() == d["sha256"]:
+        sha = d["sha256"]
+    else:
+        sha = _download(d["url"], raw)
+    if sha != d["sha256"]:
+        print(f"causaldata: the download differs from the recorded vintage ({sha[:12]})")
+
+    def frame(name):
+        with tarfile.open(raw, "r:gz") as tf:
+            tmp = RAW / f"causaldata_{name}.rda"
+            tmp.write_bytes(tf.extractfile(f"causaldata/data/{name}.rda").read())
+        obj = rdata.load(tmp)[0][1]
+        return {n: list(c["value"]) for n, c in zip(obj["attrs"]["names"]["value"], obj["value"])}
+
+    def write(fname, cols, data):
+        with open(HERE / fname, "w", newline="", encoding="utf-8") as out:
+            w = csv.writer(out)
+            w.writerow([c for c, _ in cols])
+            n = len(data[cols[0][1]])
+            for i in range(n):
+                row = []
+                for _, src in cols:
+                    v = data[src][i]
+                    row.append(v if isinstance(v, str) else ("" if v is None or v != v else _fmt(float(v))))
+                w.writerow(row)
+
+    t = frame("thornton_hiv")
+    write("thornton_hiv_2004.csv", [("village", "villnum"), ("got", "got"), ("distance", "distvct"),
+                                    ("incentive", "tinc"), ("any", "any"), ("age", "age"), ("hiv", "hiv2004")], t)
+    c = frame("social_insure")
+    write("insure_china.csv", [("village", "address"), ("takeup", "takeup_survey"), ("default", "default"),
+                               ("intensive", "intensive"), ("age", "age"), ("area", "ricearea_2010"),
+                               ("disaster_prob", "disaster_prob"), ("risk_averse", "risk_averse"),
+                               ("literacy", "literacy"), ("pre_takeup", "pre_takeup_rate")], c)
+    g = frame("gov_transfers")
+    write("panes_uruguay.csv", [("score", "Income_Centered"), ("education", "Education"), ("age", "Age"),
+                                ("participation", "Participation"), ("support", "Support")], g)
+
+
 def refresh_saez() -> None:
     import openpyxl  # noqa: PLC0415
 
@@ -3000,7 +3170,8 @@ REFRESH = {"draft1970": refresh_draft1970, "ajr": refresh_ajr, "maddison2023": r
            "hlw": refresh_hlw, "ramey_zubairy": refresh_ramey_zubairy, "ramey_tax": refresh_ramey_tax,
            "blanchard_leigh": refresh_blanchard_leigh, "rr_hap": refresh_rr_hap, "jst": refresh_jst,
            "bigmac": refresh_bigmac, "wdi_ca": refresh_wdi_ca, "trefler_hov": refresh_trefler_hov,
-           "cepii_gravity": refresh_cepii_gravity, "autor_dorn": refresh_autor_dorn, "resume": refresh_resume, "sportscards": refresh_sportscards,
+           "cepii_gravity": refresh_cepii_gravity, "autor_dorn": refresh_autor_dorn, "resume": refresh_resume, "sportscards": refresh_sportscards, "wdi_dev": refresh_wdi_dev,
+           "causaldata": refresh_causaldata,
            "saez": refresh_saez, "opportunity": refresh_opportunity, "wid_top1": refresh_wid_top1,
            "blp_cars": refresh_blp_cars, "rust_buses": refresh_rust_buses}
 
