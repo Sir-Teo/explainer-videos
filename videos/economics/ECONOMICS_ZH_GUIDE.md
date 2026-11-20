@@ -1050,6 +1050,31 @@ brackets on screen.
 | universal basic income | 全民基本收入 |
 | the marginal value of public funds (MVPF) | 公共资金边际价值 |
 
+## Part 43
+
+| English | 中文 |
+|---|---|
+| market power; markup; price-cost margin | 市场势力；加成；价格—成本边际 |
+| structure, conduct, performance | 结构—行为—绩效 |
+| the Herfindahl(-Hirschman) index | 赫芬达尔（—赫希曼）指数 |
+| conduct parameter; demand rotation | 行为参数；需求旋转 |
+| differentiated products; characteristics space | 差异化产品；特征空间 |
+| discrete choice; the logit; nested logit | 离散选择；logit 模型；嵌套 logit |
+| independence of irrelevant alternatives | 无关选项独立性 |
+| random coefficients (BLP) | 随机系数（BLP 模型） |
+| Berry's inversion; the contraction mapping | 贝里反演；压缩映射 |
+| unobserved product quality | 不可观测的产品质量 |
+| diversion ratio | 转移比率 |
+| merger simulation; upward pricing pressure | 合并模拟；上行定价压力 |
+| compensating marginal-cost reduction | 补偿性边际成本下降 |
+| multi-product firm; ownership matrix | 多产品企业；所有权矩阵 |
+| production function; simultaneity; proxy variable | 生产函数；同时性；代理变量 |
+| total factor productivity (TFP) | 全要素生产率 |
+| markups from production data | 基于生产数据的加成估计 |
+| entry threshold | 进入门槛 |
+| ordered probit | 有序 probit 模型 |
+| the value of new goods | 新产品的价值 |
+
 ## Names
 
 | English | 中文 |

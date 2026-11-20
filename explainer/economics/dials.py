@@ -350,6 +350,33 @@ DIALS = {d.key: d for d in [
                       "1980", 1.21, where="QJE 135(2): 561-644, abstract", checked="2026-11-19"),
              Estimate("De Loecker, Eeckhout and Unger", 2020, "structural", "the same, 2016", 1.61,
                       where="as above", checked="2026-11-19"),
+             Estimate("this film (the Island's cereal aisle)", 2026, "calibration", "twelve brands from four firms, "
+                      "random-coefficient logit, Nash-Bertrand prices: the median brand", 1.73,
+                      where="videos/economics/econ43/compute.py, item cereal", checked="2026-11-20"),
+             Estimate("this film (the Island's plants)", 2026, "structural", "De Loecker and Warzynski's ratio with "
+                      "labour's elasticity estimated by Ackerberg, Caves and Frazer (planted median 1.3)", 1.30,
+                      where="videos/economics/econ43/compute.py, item dlw", checked="2026-11-20"),
+         )),
+    Dial("product_elasticity", "own-price elasticity of demand for one differentiated product", "percent change in "
+         "a product's sales for a 1% rise in its own price", (43,), status="depends on the setting",
+         checked="2026-11-20",
+         meaning="one brand's demand is far more elastic than its category's, because buyers switch brands before "
+                 "they stop buying; a firm that sets its price to maximize profit never prices where its own demand "
+                 "is inelastic, so an estimate below one in magnitude is a sign that the method is biased, usually "
+                 "because price is correlated with quality the econometrician cannot see",
+         estimates=(
+             Estimate("this film (BLP's cars, plain logit by OLS)", 2026, "regression", "2,217 model-years, "
+                      "1971-1990: the median model; 1,491 of them inelastic", -0.78,
+                      where="videos/economics/econ43/compute.py, item blpdata", checked="2026-11-20"),
+             Estimate("this film (BLP's cars, plain logit by IV)", 2026, "IV", "the same, price instrumented by "
+                      "the characteristics of the firm's other models and of rivals' models; 726 inelastic", -1.20,
+                      where="videos/economics/econ43/compute.py, item blpdata", checked="2026-11-20"),
+             Estimate("this film (the Island's cars, BLP's estimator)", 2026, "structural", "40 simulated "
+                      "markets of 40 years each; the planted median is -3.87", -3.80, lo=-4.27, hi=-3.33,
+                      where="videos/economics/econ43/compute.py, item cars (mean, plus or minus two standard "
+                            "deviations across Islands)", checked="2026-11-20"),
+             Estimate("this film (the Island's cereal aisle)", 2026, "calibration", "twelve brands, the median "
+                      "brand", -2.74, where="videos/economics/econ43/compute.py, item cereal", checked="2026-11-20"),
          )),
     Dial("reasoning_depth", "depth of strategic reasoning", "average steps of thinking (the cognitive hierarchy's "
          "tau)", (11, 45), status="depends on the setting", checked="2026-11-19",
@@ -1296,6 +1323,29 @@ DIALS = {d.key: d for d in [
 
 # What each part shows without entering a row, and why: {part: [(what is shown, the reason)]}
 SHOWN = {
+    43: [
+        ("the FTC's cereal case (1972-1982)", "stated: the complaint, the shares of 1980 and the dismissal"),
+        ("Nevo (2001)", "the method stated and computed on the Island's cereal aisle; the finding stated"),
+        ("Bain (1951); Demsetz (1973)", "Bain's comparison stated; Demsetz's objection computed on the Island"),
+        ("Bresnahan (1982); Lau (1982)", "the identification argument computed on the Island"),
+        ("Lancaster (1966); McFadden (1974); Berry (1994)", "stated, and the logit and its inversion computed"),
+        ("Berry, Levinsohn and Pakes (1995)", "the estimator derived and run on the Island; plain logit run on their "
+         "data and entered in a dial"),
+        ("Petrin (2002)", "the problem of new goods computed on the Island; the finding stated"),
+        ("Olley and Pakes (1996); Levinsohn and Petrin (2003); Ackerberg, Caves and Frazer (2015)", "the "
+         "simultaneity problem and ACF's estimator computed on the Island's plants"),
+        ("Syverson (2004, 2011); Axtell (2001)", "the Facts on dispersion and firm sizes, stated"),
+        ("De Loecker and Warzynski (2012); De Loecker, Eeckhout and Unger (2020)", "the ratio computed on the "
+         "Island's plants; the rise entered in the markups dial"),
+        ("Traina (2018); Basu (2019); Bond et al. (2021)", "the critiques stated"),
+        ("Bresnahan and Reiss (1991)", "the threshold estimator computed on the Island's towns; the finding stated"),
+        ("Merger Guidelines (2023, 2010); Farrell and Shapiro (2010); Werden (1996)", "the screens stated and "
+         "computed on the Island"),
+        ("DOJ (2008); Ashenfelter, Hosken and Weinberg (2015); Miller and Weinberg (2017)", "the Called it? card"),
+        ("Cowling and Waterson (1976); Marschak and Andrews (1944)", "stated, with the identity derived"),
+        ("Berry, Levinsohn and Pakes (2004); Berry and Haile (2021); Gandhi and Houde (2019); Conlon and Gortmaker "
+         "(2020)", "the frontier, stated in words"),
+    ],
     1: [
         ("Gneezy and Rustichini (2000), the day-care fine", "one field experiment, shown as an example of an "
          "incentive that backfires; its record (a survey-based study did not find the same effect) is entered with "

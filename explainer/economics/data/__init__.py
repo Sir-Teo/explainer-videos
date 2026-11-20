@@ -483,6 +483,17 @@ SOCIAL_FRED = {
 FRED_SERIES.update(SOCIAL_FRED)
 FRED_RETRIEVED.update({s: "2026-11-20" for s in SOCIAL_FRED})
 
+# Part 43: corporate profits (BEA's national accounts), for the intermission's ratio to GDP
+IO_FRED = {
+    "CPATAX": ("Corporate profits after tax with inventory valuation adjustment (IVA) and capital consumption "
+               "adjustment (CCAdj)", "billions of dollars, seasonally adjusted annual rate", "quarterly",
+               "U.S. Bureau of Economic Analysis"),
+    "CP": ("Corporate profits after tax (without IVA and CCAdj)", "billions of dollars, seasonally adjusted annual "
+           "rate", "quarterly", "U.S. Bureau of Economic Analysis"),
+}
+FRED_SERIES.update(IO_FRED)
+FRED_RETRIEVED.update({s: "2026-11-20" for s in IO_FRED})
+
 SPF_FILES = ("median_rgdp_level", "median_rgdp_growth", "median_recess_level")
 SPF_URL = ("https://www.philadelphiafed.org/-/media/frbp/assets/surveys-and-data/survey-of-professional-forecasters/"
            "data-files/files/{}.xlsx")

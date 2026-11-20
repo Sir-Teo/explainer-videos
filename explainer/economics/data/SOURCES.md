@@ -94,6 +94,7 @@ film that moves to a new vintage says so on screen.
 | `fred_CCSA.csv`, `fred_ICSA.csv`, `fred_IURSA.csv` | continued and initial claims for state unemployment insurance and the insured unemployment rate, weekly, seasonally adjusted, from 1967 (the rate from 1971) | U.S. Department of Labor, Employment and Training Administration, via FRED | public domain | 2026-11-20 |
 | `fred_W825RC1.csv` | unemployment insurance benefits paid to persons, billions of dollars at a seasonally adjusted annual rate, monthly from 1959 | U.S. Bureau of Economic Analysis, via FRED | public domain | 2026-11-20 |
 | `fred_UEMPMED.csv` | median duration of unemployment in weeks, monthly from 1967 | U.S. Bureau of Labor Statistics, via FRED | public domain | 2026-11-20 |
+| `fred_CPATAX.csv`, `fred_CP.csv` | corporate profits after tax, with and without the inventory valuation and capital consumption adjustments, billions of dollars at a seasonally adjusted annual rate, quarterly from 1947 | U.S. Bureau of Economic Analysis, via FRED | public domain | 2026-11-20 |
 | `blp_cars.csv` | Berry, Levinsohn and Pakes's automobile data: 2,217 model-years, 1971-1990 (price in thousands of 1983 dollars, horsepower over weight, air conditioning, miles per gallon, size, share, firm) | Berry, Levinsohn and Pakes (1995), via the R package BLPestimatoR 0.3.4 (CRAN) | GPL-3 (package); the data are BLP's | 2026-11-20 |
 
 The raw Maddison workbook (`mpd2023_web.xlsx`, dataverse file 421302) had SHA-256
@@ -323,3 +324,18 @@ publication, the copy that was read and the date the transcription was checked:
 | `pensions` | workers per Social Security beneficiary, 1960-2035; the depletion date | 2026-11-20 |
 | `ss_1983` | the 1983 amendments' 75-year solvency and today's depletion date | 2026-11-20 |
 | `frontier42` | Part 42's frontier, stated in words | 2026-11-20 |
+| `cereal_ftc` | the FTC's 1972 'shared monopoly' complaint against the cereal makers, its dismissal in 1981 and 1982, and the 1980 shares | 2026-11-20 |
+| `nevo_2001` | Nevo's measurement of market power in ready-to-eat cereal: what it estimated and found | 2026-11-20 |
+| `bain_1951` | Bain's 42 industries, 1936-40, and their profit rates; Demsetz's objection | 2026-11-20 |
+| `bresnahan_1982` | Bresnahan's and Lau's identification of conduct by a rotation of demand | 2026-11-20 |
+| `lancaster_1966` | Lancaster's characteristics, McFadden's conditional logit, Berry's inversion | 2026-11-20 |
+| `blp_1995` | Berry, Levinsohn and Pakes: 2,217 model-years, 1971-1990, the random-coefficient estimator | 2026-11-20 |
+| `petrin_2002` | Petrin's minivan and the value of new products | 2026-11-20 |
+| `production_1996` | Olley and Pakes, Levinsohn and Petrin, Ackerberg, Caves and Frazer; Syverson's 90/10 ratio of 1.92 | 2026-11-20 |
+| `dlw_2012` | De Loecker and Warzynski's markup formula; De Loecker, Eeckhout and Unger's 1.21 and 1.61 | 2026-11-20 |
+| `markup_critique` | Traina, Basu and Bond et al. on markups from production data | 2026-11-20 |
+| `br_1991` | Bresnahan and Reiss's isolated towns and entry thresholds | 2026-11-20 |
+| `merger_2023` | the 2023 Merger Guidelines' presumptions and the 2010 thresholds; Farrell and Shapiro; Werden | 2026-11-20 |
+| `millercoors` | the 2008 MillerCoors clearance and the two studies of its effects | 2026-11-20 |
+| `axtell_2001` | Axtell's Zipf law for 5.5 million American firms | 2026-11-20 |
+| `frontier43` | Part 43's frontier, stated in words | 2026-11-20 |

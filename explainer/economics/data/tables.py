@@ -3419,10 +3419,222 @@ FRONTIER42 = Table(
     read="the chapter states questions, not estimates",
     checked="2026-11-20",
 )
+# ---------------------------------------------------------------------------
+# Part 43
+# ---------------------------------------------------------------------------
+CEREAL_FTC = Table(
+    key="cereal_ftc",
+    cite="In the Matter of Kellogg Co. et al., Federal Trade Commission docket 8883, complaint of 1972; initial "
+         "decision of Administrative Law Judge Alvin Berman (1981); 99 F.T.C. 8 (1982); Christian Science Monitor, "
+         "\"Cereal producers counterattack\" (15 April 1980) and \"US drops monopoly case against big cerealmakers\" "
+         "(11 September 1981)",
+    tag="FTC, \\emph{In re Kellogg} (1972--1982)",
+    where="in 1972 the FTC charged Kellogg, General Mills, General Foods (Post) and Quaker Oats with keeping monopoly "
+          "power in ready-to-eat cereal; its theory treated the largest three as a 'shared monopoly'; in 1981 an "
+          "administrative law judge dismissed the case, finding collusion unproved, and the Commission ended it in "
+          "1982; in 1980 Kellogg had about 42% of the market, General Mills about 20% and General Foods about 16%",
+    read="the Commission's decision volume 99 (1982) and the newspaper reports",
+    checked="2026-11-20",
+    data={"filed": 1972, "dismissed": 1981, "ended": 1982, "kellogg": 42, "gm": 20, "gf": 16},
+)
+NEVO_2001 = Table(
+    key="nevo_2001",
+    cite="A. Nevo, \"Measuring Market Power in the Ready-to-Eat Cereal Industry\", Econometrica 69(2): 307-342 "
+         "(2001); NBER working paper 6387 (1998)",
+    tag="Nevo, \\emph{Econometrica} (2001)",
+    where="abstract and conclusion: the industry has high concentration, high price-cost margins, large "
+          "advertising-to-sales ratios and many new products; demand for the leading brands estimated with random "
+          "coefficients; margins split into product differentiation, the portfolio of brands each firm owns, and "
+          "possible collusion; the first two explain most of the observed margins, and prices are consistent with "
+          "noncollusive pricing",
+    read="the abstract, the NBER summary and the published introduction",
+    checked="2026-11-20",
+)
+BAIN_1951 = Table(
+    key="bain_1951",
+    cite="J. S. Bain, \"Relation of Profit Rate to Industry Concentration: American Manufacturing, 1936-1940\", "
+         "Quarterly Journal of Economics 65(3): 293-324 (1951); H. Demsetz, \"Industry Structure, Market Rivalry, and "
+         "Public Policy\", Journal of Law and Economics 16(1): 1-9 (1973)",
+    tag="Bain, \\emph{QJE} (1951); \\ Demsetz, \\emph{JLE} (1973)",
+    where="Bain: 42 industries, 1936-40, split by whether the largest eight firms made at least 70% of the industry's "
+          "output; profit rates of about 11.8% in the 21 concentrated industries against 7.5% in the others (as "
+          "reported in later summaries); Demsetz: if the largest firms are large because they are more efficient, "
+          "concentration and profits go together without collusion, and the large firms' own rates of return should "
+          "rise with concentration while small firms' do not",
+    read="the article's abstract and later summaries of its table; Demsetz's article",
+    checked="2026-11-20",
+    data={"industries": 42, "years": "1936-40", "cut": 70, "high": 11.8, "low": 7.5},
+)
+BRESNAHAN_1982 = Table(
+    key="bresnahan_1982",
+    cite="T. F. Bresnahan, \"The Oligopoly Solution Concept Is Identified\", Economics Letters 10(1-2): 87-92 "
+         "(1982); L. J. Lau, \"On Identifying the Degree of Competitiveness from Industry Price and Output Data\", "
+         "Economics Letters 10(1-2): 93-99 (1982)",
+    tag="Bresnahan (1982); \\ Lau (1982)",
+    where="with only parallel shifts of demand, a competitive industry and a monopoly can produce the same prices "
+          "and quantities; a variable that rotates demand (changes its slope) separates them",
+    read="the articles' statements, as taught in IO texts",
+    checked="2026-11-20",
+)
+LANCASTER_1966 = Table(
+    key="lancaster_1966",
+    cite="K. J. Lancaster, \"A New Approach to Consumer Theory\", Journal of Political Economy 74(2): 132-157 (1966); "
+         "D. McFadden, \"Conditional Logit Analysis of Qualitative Choice Behavior\", in P. Zarembka (ed.), Frontiers "
+         "in Econometrics (1974); S. Berry, \"Estimating Discrete-Choice Models of Product Differentiation\", RAND "
+         "Journal of Economics 25(2): 242-262 (1994)",
+    tag="Lancaster (1966); \\ McFadden (1974); \\ Berry (1994)",
+    where="Lancaster: goods are bundles of characteristics, and people value the characteristics; McFadden: the "
+          "conditional logit and its independence of irrelevant alternatives; Berry: inverting market shares to mean "
+          "utilities, so that prices can be instrumented in a linear equation",
+    read="the articles' abstracts and standard expositions (Train, Discrete Choice Methods with Simulation)",
+    checked="2026-11-20",
+)
+BLP_1995 = Table(
+    key="blp_1995",
+    cite="S. Berry, J. Levinsohn and A. Pakes, \"Automobile Prices in Market Equilibrium\", Econometrica 63(4): "
+         "841-890 (1995)",
+    tag="Berry, \\ Levinsohn and Pakes, \\emph{Econometrica} (1995)",
+    where="2,217 model-years of cars sold in the United States, 1971-1990; random coefficients on characteristics "
+          "and price; market shares inverted by a contraction; moments that make the unobserved quality "
+          "uncorrelated with instruments built from the characteristics of the firm's other products and rivals' "
+          "products; the paper notes that some simple specifications imply implausible own-price elasticities",
+    read="the published article's abstract and introduction, and BLPestimatoR's copy of the data",
+    checked="2026-11-20",
+    data={"models": 2217, "first": 1971, "last": 1990},
+)
+PETRIN_2002 = Table(
+    key="petrin_2002",
+    cite="A. Petrin, \"Quantifying the Benefits of New Products: The Case of the Minivan\", Journal of Political "
+         "Economy 110(4): 705-729 (2002)",
+    tag="Petrin, \\emph{JPE} (2002)",
+    where="the minivan, introduced by Chrysler in 1984: the benefits to buyers of a new product estimated from "
+          "demand; adding information on who buys which car (micro data on buyers' demographics) changes the "
+          "estimates, and plain logit's independent tastes overstate the gains from new products",
+    read="the article's abstract",
+    checked="2026-11-20",
+    data={"year": 1984},
+)
+PRODUCTION_1996 = Table(
+    key="production_1996",
+    cite="G. S. Olley and A. Pakes, \"The Dynamics of Productivity in the Telecommunications Equipment Industry\", "
+         "Econometrica 64(6): 1263-1297 (1996); J. Levinsohn and A. Petrin, \"Estimating Production Functions Using "
+         "Inputs to Control for Unobservables\", Review of Economic Studies 70(2): 317-341 (2003); D. A. Ackerberg, "
+         "K. Caves and G. Frazer, \"Identification Properties of Recent Production Function Estimators\", "
+         "Econometrica 83(6): 2411-2451 (2015); C. Syverson, \"What Determines Productivity?\", Journal of Economic "
+         "Literature 49(2): 326-365 (2011)",
+    tag="Olley and Pakes (1996); \\ Levinsohn and Petrin (2003); \\ Ackerberg, \\ Caves and Frazer (2015)",
+    where="Olley and Pakes: investment as a proxy for productivity the econometrician cannot see; Levinsohn and "
+          "Petrin: intermediate inputs as the proxy; Ackerberg, Caves and Frazer: labour's coefficient is not "
+          "identified in the first stage, so both coefficients come from the second; Syverson: within four-digit "
+          "American manufacturing industries the 90th-percentile plant's TFP is on average 1.92 times the "
+          "10th-percentile plant's (a log gap of 0.651)",
+    read="the abstracts; Syverson's survey, section 2",
+    checked="2026-11-20",
+    data={"ratio": 1.92, "log_gap": 0.651},
+)
+DLW_2012 = Table(
+    key="dlw_2012",
+    cite="J. De Loecker and F. Warzynski, \"Markups and Firm-Level Export Status\", American Economic Review 102(6): "
+         "2437-2471 (2012); J. De Loecker, J. Eeckhout and G. Unger, \"The Rise of Market Power and the Macroeconomic "
+         "Implications\", Quarterly Journal of Economics 135(2): 561-644 (2020)",
+    tag="De Loecker and Warzynski (2012); \\ De Loecker, \\ Eeckhout and Unger, \\emph{QJE} (2020)",
+    where="a cost-minimizing firm's markup equals a flexible input's output elasticity divided by the input's share of "
+          "revenue; applied to Slovenian manufacturers (exporters have higher markups) and to American public firms: "
+          "the sales-weighted average markup rose from 21% above marginal cost in 1980 to 61% in 2016, the rise in "
+          "the upper tail, the median unchanged",
+    read="the abstracts",
+    checked="2026-11-20",
+    data={"m1980": 1.21, "m2016": 1.61},
+)
+MARKUP_CRITIQUE = Table(
+    key="markup_critique",
+    cite="J. Traina, \"Is Aggregate Market Power Increasing? Production Trends Using Financial Statements\", Stigler "
+         "Center working paper 17 (2018); S. Basu, \"Are Price-Cost Markups Rising in the United States? A Discussion "
+         "of the Evidence\", Journal of Economic Perspectives 33(3): 3-22 (2019); S. Bond, A. Hashemi, G. Kaplan and "
+         "P. Zoch, \"Some Unpleasant Markup Arithmetic: Production Function Elasticities and Their Estimation from "
+         "Production Data\", Journal of Monetary Economics 121: 1-14 (2021)",
+    tag="Traina (2018); \\ Basu, \\emph{JEP} (2019); \\ Bond et al., \\emph{JME} (2021)",
+    where="counting selling, general and administrative costs as variable flattens the rise; markups computed from "
+          "accounts depend on which costs are variable and on the output elasticity; with revenue rather than "
+          "quantity data, the elasticity estimated from production data is not the one the formula needs",
+    read="the abstracts",
+    checked="2026-11-20",
+)
+BR_1991 = Table(
+    key="br_1991",
+    cite="T. F. Bresnahan and P. C. Reiss, \"Entry and Competition in Concentrated Markets\", Journal of Political "
+         "Economy 99(5): 977-1009 (1991)",
+    tag="Bresnahan and Reiss, \\emph{JPE} (1991)",
+    where="about 200 isolated towns in the western United States; the number of doctors, dentists, plumbers and "
+          "other retail and professional businesses against population; the population needed to support each "
+          "additional firm; competitive conduct changes quickly as the number of incumbents rises, and most of the "
+          "change comes with the second and third firm",
+    read="the abstract and lecture summaries of its tables",
+    checked="2026-11-20",
+    data={"towns": 200},
+)
+MERGER_2023 = Table(
+    key="merger_2023",
+    cite="U.S. Department of Justice and Federal Trade Commission, Merger Guidelines (18 December 2023), Guideline 1; "
+         "Horizontal Merger Guidelines (2010); J. Farrell and C. Shapiro, \"Antitrust Evaluation of Horizontal "
+         "Mergers: An Economic Alternative to Market Definition\", B.E. Journal of Theoretical Economics 10(1) "
+         "(2010); G. Werden, \"A Robust Test for Consumer Welfare Enhancing Mergers among Sellers of Differentiated "
+         "Products\", Journal of Industrial Economics 44(4): 409-413 (1996)",
+    tag="DOJ and FTC, \\ Merger Guidelines (2023); \\ Farrell and Shapiro (2010); \\ Werden (1996)",
+    where="a merger is presumed to lessen competition substantially if it yields a Herfindahl index above 1,800 with "
+          "an increase above 100, or a firm with more than 30% of the market with an increase above 100 (the 1,800 "
+          "and 100 thresholds were those of 1982-2010; the 2010 guidelines used 2,500 and 200); upward pricing "
+          "pressure and compensating marginal-cost reductions as screens",
+    read="Guideline 1 and law-firm summaries of the 2023 guidelines",
+    checked="2026-11-20",
+    data={"hhi": 1800, "delta": 100, "share": 30, "hhi2010": 2500, "delta2010": 200},
+)
+MILLERCOORS = Table(
+    key="millercoors",
+    cite="U.S. Department of Justice, statement on closing its investigation of the joint venture of SABMiller and "
+         "Molson Coors (5 June 2008); O. Ashenfelter, D. Hosken and M. Weinberg, \"Efficiencies Brewed: Pricing and "
+         "Consolidation in the US Beer Industry\", RAND Journal of Economics 46(2): 328-361 (2015); N. H. Miller and "
+         "M. C. Weinberg, \"Understanding the Price Effects of the MillerCoors Joint Venture\", Econometrica 85(6): "
+         "1763-1791 (2017)",
+    tag="DOJ (2008); \\ Ashenfelter, \\ Hosken and Weinberg (2015); \\ Miller and Weinberg (2017)",
+    where="the Division found the venture not likely to lessen competition substantially and its cost savings "
+          "substantial and credible; Ashenfelter, Hosken and Weinberg: the rise in concentration raised prices about "
+          "2%, offset at the mean by an almost equal efficiency effect (Coors brewed nearer its customers, 364 miles "
+          "closer on average); Miller and Weinberg: prices of MillerCoors and Anheuser-Busch rose abruptly after the "
+          "venture, 6-8% above what Nash-Bertrand competition would give, consistent with coordination",
+    read="the DOJ statement and the two abstracts, with the NBER digest of the 2013 working paper",
+    checked="2026-11-20",
+    data={"concentration": 2.0, "miles": 364, "lo": 6, "hi": 8},
+)
+AXTELL_2001 = Table(
+    key="axtell_2001",
+    cite="R. L. Axtell, \"Zipf Distribution of U.S. Firm Sizes\", Science 293: 1818-1820 (2001)",
+    tag="Axtell, \\emph{Science} (2001)",
+    where="about 5.5 million American firms in 1997, from Census data: the number of firms larger than a size "
+          "falls in proportion to the size, a Zipf distribution with exponent close to one",
+    read="the abstract and summaries",
+    checked="2026-11-20",
+    data={"firms": 5.5, "year": 1997},
+)
+FRONTIER43 = Table(
+    key="frontier43",
+    cite="the frontier chapter's sources, stated in words only: S. Berry and P. Haile, \"Foundations of Demand "
+         "Estimation\", Handbook of Industrial Organization 4 (2021); A. Gandhi and J.-F. Houde, \"Measuring "
+         "Substitution Patterns in Differentiated-Products Industries\", NBER working paper (2019); C. Conlon and "
+         "J. Gortmaker, \"Best Practices for Differentiated Products Demand Estimation with PyBLP\", RAND Journal of "
+         "Economics 51(4) (2020)",
+    tag="frontier",
+    where="identification of demand; instruments that measure how crowded a product's neighbourhood is; software "
+          "and best practice; demand with micro data and with learned embeddings of products",
+    read="the abstracts",
+    checked="2026-11-20",
+)
+PART43 = (CEREAL_FTC, NEVO_2001, BAIN_1951, BRESNAHAN_1982, LANCASTER_1966, BLP_1995, PETRIN_2002, PRODUCTION_1996,
+          DLW_2012, MARKUP_CRITIQUE, BR_1991, MERGER_2023, MILLERCOORS, AXTELL_2001, FRONTIER43)
 PART42 = (OREGON_2008, RAND_HIE, ARROW_1963, UI_THEORY, UI_EVIDENCE, CHETTY_DK_2014, DISABILITY_2013, EITC_2025,
           NIT_1968, UBI_TRIALS, MVPF_2020, PENSIONS, SS_1983, FRONTIER42)
 PART41 = (LAFFER_1974, HARBERGER_1962, RAMSEY_1927, MIRRLEES_1971, DIAMOND_SAEZ_2011, ETI_STUDIES, BUNCHING,
           CLK_2009, CAPITAL_TAX, HAVENS, EVASION, FRONTIER41, TCJA_2017)
 PART7 = (BERNOULLI_1738, SAMUELSON_1937, ALLAIS_1953, ELLSBERG_1961, RABIN_2000, THALER_1981, HOLT_LAURY_2005,
          HAYDEN_PLATT_2009, MADRIAN_SHEA_2001, THALER_BENARTZI_2004, BARSKY_1997, POST_2008, MEHRA_PRESCOTT_1985)
-ALL = {t.key: t for t in (*PART1, *PART3, *PART4, *PART5, *PART6, *PART7, *PART8, *PART9, *PART10, *PART11, *PART12, *PART13, *PART14, *PART15, *PART16, *PART17, *PART18, *PART19, *PART21, *PART22, *PART25, *PART26, *PART35, *PART36, *PART37, *PART38, *PART39, *PART40, *PART41, *PART42)}
+ALL = {t.key: t for t in (*PART1, *PART3, *PART4, *PART5, *PART6, *PART7, *PART8, *PART9, *PART10, *PART11, *PART12, *PART13, *PART14, *PART15, *PART16, *PART17, *PART18, *PART19, *PART21, *PART22, *PART25, *PART26, *PART35, *PART36, *PART37, *PART38, *PART39, *PART40, *PART41, *PART42, *PART43)}

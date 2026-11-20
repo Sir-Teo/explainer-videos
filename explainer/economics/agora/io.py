@@ -421,6 +421,62 @@ def logit_markups(alpha: float, price, share, t, firm) -> np.ndarray:
     return out
 
 
+def logit_surplus(delta, alpha: float) -> float:
+    """Expected consumer surplus per buyer under plain logit with an outside good: ln(1 + sum exp delta) / alpha."""
+    d = np.asarray(delta, float)
+    return float(np.log1p(np.sum(np.exp(d))) / alpha)
+
+
+def nested_surplus(delta, nests, sigma: float, alpha: float) -> float:
+    """The same for nested logit: ln(1 + sum over nests of D_g^(1 - sigma)) / alpha."""
+    d = np.asarray(delta, float)
+    g = np.asarray(nests)
+    tot = sum(np.sum(np.exp(d[g == k] / (1 - sigma))) ** (1 - sigma) for k in np.unique(g))
+    return float(np.log1p(tot) / alpha)
+
+
+def implied_margins(share_fn, prices, owners: dict) -> dict:
+    """Nevo's (2001) test.  For each assumed ownership (a name and an owner vector), the marginal costs that make the
+    observed prices an equilibrium, and the implied price-cost margins (p - mc) / p.  Comparing them with margins
+    measured some other way says which conduct fits."""
+    p = np.asarray(prices, float)
+    out = {}
+    for name, own in owners.items():
+        mc = costs_from_prices(share_fn, p, np.asarray(own))
+        out[name] = ((p - mc) / p).tolist()
+    return out
+
+
+def cmcr(share_fn, prices, owner, merging) -> np.ndarray:
+    """Werden's (1996) compensating marginal-cost reductions: the cut in each merging product's marginal cost (as a
+    share of its pre-merger cost) that keeps every price where it was after the merger."""
+    p = np.asarray(prices, float)
+    own = np.asarray(owner).copy()
+    mc0 = costs_from_prices(share_fn, p, own)
+    new = own.copy()
+    tgt = own[merging[0]]
+    for j in merging:
+        new[own == own[j]] = tgt
+    mc1 = costs_from_prices(share_fn, p, new)
+    return (mc0 - mc1) / mc0
+
+
+def contraction_trace(share, x_rc, nu, sigma: float, iters: int = 60) -> dict:
+    """Berry's contraction in one market, step by step: the largest change in delta at each iteration, starting from
+    ln s_j - ln s_0 (the plain-logit answer)."""
+    share = np.asarray(share, float)
+    s0 = 1 - share.sum()
+    d = np.log(share) - np.log(s0)
+    steps, path = [], [d.copy()]
+    for _ in range(iters):
+        new = d + np.log(share) - np.log(rc_shares(d, x_rc, nu, sigma))
+        steps.append(float(np.max(np.abs(new - d))))
+        d = new
+        path.append(d.copy())
+    return {"steps": steps, "delta": d.tolist(), "start": path[0].tolist(),
+            "path": [q.tolist() for q in path[:12]]}
+
+
 # ---------------------------------------------------------------------------------------------------------------
 # production
 
@@ -522,15 +578,51 @@ def entry_thresholds(n_max: int = 5, F: float = 1.0, margin: float = 1.0, mode: 
     return {"N": N.tolist(), "S": S.tolist(), "per_firm": s.tolist(), "ratio": (s[1:] / s[:-1]).tolist()}
 
 
-def island_towns(n: int = 400, F: float = 1.0, margin: float = 1.0, sd: float = 0.25, seed: int = 0) -> dict:
-    """Towns of different populations (thousands, log-uniform 0.5 to 40) and the number of firms that enter under
-    Cournot thresholds, each town with its own fixed-cost shock."""
+def island_towns(n: int = 400, F: float = 1.0, margin: float = 1.0, sd: float = 0.25, seed: int = 0,
+                 margins=None, n_max: int = 8) -> dict:
+    """Towns of different populations (thousands, log-uniform 0.5 to 40) and the number of firms that enter, each town
+    with its own fixed-cost shock.  By default the thresholds are Cournot's; with ``margins`` (the market's variable
+    profit per head when 1, 2, ... firms compete) the N-firm threshold is S_N = N F / margins[N - 1]."""
     rng = np.random.default_rng(seed)
     pop = np.exp(rng.uniform(np.log(0.5), np.log(40), n))
     shock = np.exp(sd * rng.standard_normal(n))
-    th = np.array(entry_thresholds(8, F, margin)["S"])
+    if margins is None:
+        th = np.array(entry_thresholds(n_max, F, margin)["S"])
+    else:
+        m = np.asarray(margins, float)
+        th = np.arange(1, len(m) + 1) * F / m
     nfirms = np.array([int(np.sum(p >= th * f)) for p, f in zip(pop, shock)])
-    return {"pop": pop.tolist(), "n": nfirms.tolist(), "thresholds": th.tolist()}
+    return {"pop": pop.tolist(), "n": nfirms.tolist(), "thresholds": th.tolist(), "sd": sd}
+
+
+def ordered_thresholds(pop, n, n_max: int | None = None) -> dict:
+    """Bresnahan and Reiss's estimator, in its simplest form: N firms enter where ln(pop) - ln(S_N) exceeds a normal
+    shock with standard deviation sd, so P(N >= k) = Phi((ln pop - ln S_k) / sd), an ordered probit in ln(pop).
+    Returns the estimated S_k, the per-firm thresholds S_k / k, their ratios and sd."""
+    from scipy.optimize import minimize
+    from scipy.stats import norm
+
+    lp = np.log(np.asarray(pop, float))
+    n = np.asarray(n, int)
+    K = int(n_max or n.max())
+    n = np.minimum(n, K)
+
+    def unpack(th):
+        cuts = np.cumsum(np.r_[th[0], np.exp(th[1:K])])
+        return cuts, np.exp(th[K])
+
+    def nll(th):
+        cuts, sd = unpack(th)
+        c = np.r_[-np.inf, cuts, np.inf]
+        hi = norm.cdf((lp - c[n]) / sd)           # P(N >= n)
+        lo = norm.cdf((lp - c[n + 1]) / sd)       # P(N >= n + 1)
+        return -np.sum(np.log(np.maximum(hi - lo, 1e-300)))
+    start = np.r_[np.log(np.quantile(np.exp(lp), 0.2)), np.full(K - 1, np.log(0.5)), np.log(0.3)]
+    r = minimize(nll, start, method="BFGS")
+    cuts, sd = unpack(r.x)
+    S = np.exp(cuts)
+    per = S / np.arange(1, K + 1)
+    return {"S": S.tolist(), "per_firm": per.tolist(), "ratio": (per[1:] / per[:-1]).tolist(), "sd": float(sd)}
 
 
 def root(f, lo, hi):

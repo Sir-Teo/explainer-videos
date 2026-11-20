@@ -10,7 +10,7 @@ the series leaves out.
 Both *Parts* columns are found, not typed. *Planned* lists the parts whose entry in
 [`SYLLABUS.md`](SYLLABUS.md) names the book or paper; *Built* lists the parts whose scenes, compute step or
 README cite it (a dot: none yet). Fuller notes (editions, chapters, what each source was used for) are in each
-part's README, under *Sources*. Built so far: Parts 1–42.
+part's README, under *Sources*. Built so far: Parts 1–43.
 
 ## 1. The textbook spine
 
@@ -84,7 +84,7 @@ part's README, under *Sources*. Built so far: Parts 1–42.
 | Hansen | B. Hansen, *Econometrics* (2022) | 54 | · |
 | Hamilton | J. Hamilton, *Time Series Analysis* (1994) | 55 | 6 |
 | Kilian–Lütkepohl | L. Kilian and H. Lütkepohl, *Structural Vector Autoregressive Analysis* (2017) | 55 | · |
-| Train | K. Train, *Discrete Choice Methods with Simulation* (2nd ed., 2009) | 43, 54 | · |
+| Train | K. Train, *Discrete Choice Methods with Simulation* (2nd ed., 2009) | 43, 54 | 43 |
 | Judd | K. Judd, *Numerical Methods in Economics* (1998) | 51 | 29, 41 |
 | QuantEcon | T. Sargent and J. Stachurski, *Quantitative Economics* (QuantEcon lectures) | 51 | · |
 
@@ -152,8 +152,8 @@ part's README, under *Sources*. Built so far: Parts 1–42.
 | Model or result | Paper | Planned | Built |
 |---|---|---|---|
 | equilibrium in games | Nash (1950, 1951) | 11 | 11 |
-| oligopoly in quantities and prices | Cournot (1838); Bertrand (1883) | 12 | 6, 12 |
-| demand estimation with differentiated products | Berry, Levinsohn and Pakes (1995) | 43 | 35, 42 |
+| oligopoly in quantities and prices | Cournot (1838); Bertrand (1883) | 12 | 6, 12, 43 |
+| demand estimation with differentiated products | Berry, Levinsohn and Pakes (1995) | 43 | 35, 42–43 |
 
 ### Information and design
 
@@ -339,6 +339,8 @@ part's README, under *Sources*. Built so far: Parts 1–42.
 **Part 41, *Taxes*.** Books: Bernard Salanié, *The Economics of Taxation* (2nd edition, 2011); Joel Slemrod and Jon Bakija, *Taxing Ourselves* (5th edition, 2017); Peter Diamond and Emmanuel Saez, 'The Case for a Progressive Tax', *JEP* (2011); Jonathan Gruber, *Public Finance and Public Policy*, chapters 18–25. Papers: Ramsey (1927); Harberger (1962); Mirrlees (1971); Diamond and Mirrlees (1971); Allingham and Sandmo (1972); Atkinson and Stiglitz (1976); Judd (1985); Chamley (1986); Feldstein (1995); Diamond (1998); Saez (2001, 2002, 2010); Gruber and Saez (2002); Chetty, Looney and Kroft (2009); Kleven et al. (2011); Saez, Slemrod and Giertz (2012); Kleven and Waseem (2013); Kleven, Landais and Saez (2013); Zucman (2013); Piketty, Saez and Stantcheva (2014); Fuest, Peichl and Siegloch (2018); Straub and Werning (2020).
 
 **Part 42, *Social Insurance*.** Books: Jonathan Gruber, *Public Finance and Public Policy*, chapters 12–17; Nicholas Barr, *The Economics of the Welfare State* (6th edition, 2020); Liran Einav and Amy Finkelstein, *Risky Business* (2023); Raj Chetty and Amy Finkelstein, 'Social Insurance: Connecting Theory to Data', *Handbook of Public Economics* 5 (2013). Papers: Arrow (1963); Pauly (1968); Zeckhauser (1970); Akerlof (1978); Baily (1978); Robins (1985); Manning et al. (1987); Meyer (1990); Eissa and Liebman (1996); Gruber (1997); Madrian and Shea (2001); Chetty (2006, 2008); Card, Chetty and Weber (2007); Finkelstein et al. (2012); Schmieder, von Wachter and Bender (2012); Baicker et al. (2013); Maestas, Mullen and Strand (2013); Chetty et al. (2014); Taubman et al. (2014); Ganong and Noel (2019); Finkelstein, Hendren and Luttmer (2019); Hendren and Sprung-Keyser (2020).
+
+**Part 43, *Measuring Market Power*.** Books: Jean Tirole, *The Theory of Industrial Organization* (1988); Kenneth Train, *Discrete Choice Methods with Simulation* (2nd edition, 2009); Aviv Nevo, 'A Practitioner's Guide to Estimation of Random-Coefficients Logit Models of Demand', *JEMS* (2000); Steven Berry and Philip Haile, 'Foundations of Demand Estimation', *Handbook of Industrial Organization* 4 (2021). Papers: Bain (1951); Lancaster (1966); Demsetz (1973); McFadden (1974); Bresnahan (1982); Lau (1982); Bresnahan and Reiss (1991); Berry (1994); Berry, Levinsohn and Pakes (1995, 2004); Olley and Pakes (1996); Werden (1996); Nevo (2001); Axtell (2001); Petrin (2002); Levinsohn and Petrin (2003); Farrell and Shapiro (2010); Syverson (2011); De Loecker and Warzynski (2012); Ackerberg, Caves and Frazer (2015); Ashenfelter, Hosken and Weinberg (2015); Miller and Weinberg (2017); Traina (2018); Basu (2019); De Loecker, Eeckhout and Unger (2020); Bond et al. (2021).
 
 ## 4. What the series leaves out
 

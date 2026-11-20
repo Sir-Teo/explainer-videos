@@ -1,0 +1,53 @@
+"""Act IX, The Fields (Parts 43-50), first block (Parts 43-47)."""
+
+from videos.coursekit import Part
+
+PARTS = [
+    Part(
+        n=43, level="U", widget="merger", prereq=(4, 6, 10, 12),
+        question="How do you tell whether a market is competitive when you cannot see anyone's costs?",
+        story="The part opens on the cereal aisle: around 1980 Kellogg, General Mills and General Foods sold most of "
+              "America's cereal, and the FTC's 'shared monopoly' case of 1972 was dismissed in 1981. It shows on 300 "
+              "Island industries that concentration and margins correlate (0.78) with no collusion at all, as "
+              "Demsetz argued against Bain, and why: a Cournot industry's margin is its Herfindahl index over the "
+              "elasticity. The viewer judges two proposed mergers among five cereals in three nests; the one that "
+              "barely moves the concentration index raises prices ten times as much, because diversion, not share, "
+              "does the work. Bresnahan's rotation identifies conduct. Demand for differentiated products moves "
+              "into characteristics space; the logit, Berry's inversion, the red bus and the nested logit lead to "
+              "Berry, Levinsohn and Pakes's random coefficients, derived with the contraction and the moments. Their "
+              "estimator finds the truth on 40 simulated Islands where OLS and IV logit do not, and plain logit on "
+              "their real data leaves 726 impossible inelastic demands even by IV. After an intermission of "
+              "corporate profits over GDP since 1947, it runs Nevo's conduct test on the Island's cereal aisle, "
+              "simulates a merger with the cost savings that would offset it, values new goods, estimates "
+              "production functions by Ackerberg, Caves and Frazer, reads markups from production data and the "
+              "debate over their rise, estimates Bresnahan and Reiss's entry thresholds from 400 towns, enters two "
+              "dials, reviews mergers in practice with MillerCoors as Called it?, and reaches the frontier.",
+        handoff="Part 44 adds time: dynamic decisions, dynamic oligopoly, platforms and antitrust; Part 59 takes the "
+                "demand systems into pricing and strategy at firms.",
+        outside="Part 4: instrumental variables; Part 6: demand and elasticities; Part 10: the Lerner rule; Part 12: "
+                "Cournot and Bertrand. Chapter 6 uses a contraction mapping and the generalized method of moments; "
+                "chapter 10 a two-step semiparametric estimator; chapter 12 an ordered probit.",
+        objectives={
+            "U": ["Explain why concentration alone cannot reveal market power.",
+                  "Say why a merger of close substitutes can raise prices more than a merger of large firms.",
+                  "State what Nevo's test compares and what it found for cereal."],
+            "M": ["Derive logit shares, Berry's inversion and the multi-product Bertrand markups.",
+                  "Set out the BLP estimator: simulated shares, the contraction, instruments and moments.",
+                  "Explain the simultaneity problem in production functions and the proxy estimators' fix."],
+            "D": ["Assess the evidence on rising markups and what the production approach needs.",
+                  "Say what instruments and micro data identify in demand estimation."],
+            "I": ["Screen a merger by concentration, diversion and upward pricing pressure, and simulate it."],
+        },
+        results=[
+            ("Cournot margins", r"\sum_i s_i\,\frac{p - c_i}{p} = \frac{\mathrm{HHI}}{10{,}000\,\varepsilon}"),
+            ("Berry's inversion", r"\ln s_j - \ln s_0 = x_j\beta - \alpha p_j + \xi_j"),
+            ("Multi-product markups", r"p - c = -\big(\Omega \circ \tfrac{\partial s}{\partial p}'\big)^{-1} s"),
+            ("De Loecker and Warzynski", r"\mu = \theta_V \cdot \frac{P\,Q}{P_V V}"),
+            ("Upward pricing pressure", r"\mathrm{UPP}_1 = D_{12}(p_2 - c_2) - E_1 c_1"),
+        ],
+        U=(0, 1, 2, 4, 5, "s09_intermission", 8, 9, 12), D=(13, 15), I=(14,),
+        also=(("Agora's industrial organization", "explainer/economics/agora/io.py"),
+              ("The Island's planted truths", "explainer/economics/island.py"),
+              ("The Data Room's sources", "explainer/economics/data/SOURCES.md")),
+    ),
+]

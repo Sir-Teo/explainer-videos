@@ -984,6 +984,33 @@ TRUTHS = {
         # a basic income (chapter 12): 20,000 incomes, lognormal around $50,000; elasticity of the base 0.25
         "ubi": {"n": 20000, "median": 50000.0, "sigma": 0.7, "e": 0.25, "seed": 42},
     },
+    43: {
+        # structure and performance (chapter 1): 300 industries alike in demand and all playing Cournot, five firms
+        # each, whose costs differ by a spread drawn for each industry
+        "scp": {"n_ind": 300, "n_firms": 5, "a": 10.0, "b": 1.0, "c0": 4.0, "max_spread": 0.6, "seed": 43},
+        # the merger game (chapter 2): five brands of cereal in three nests (sweet, nutty, bran), each owned by a
+        # different firm; nested logit with nesting parameter 0.6 and price coefficient 1
+        "playit": {"names": ("Sun Flakes", "Honey Puffs", "Nut Clusters", "Bran Buds", "Bran Twigs"),
+                   "nests": (0, 0, 1, 2, 2), "quality": (0.8, 0.0, 1.0, -0.5, -0.5), "mc": (1.5, 1.2, 1.6, 1.0, 1.0),
+                   "sigma": 0.6, "alpha": 1.0, "x": (3, 4), "y": (0, 2)},
+        # the car market (chapters 6 and 7): 40 years of 24 models from six firms; buyers' price sensitivity varies
+        # around 0.6 with spread 0.15; costs shifted by an observed input price; 40 Islands for the Monte Carlo
+        "cars": {"T": 40, "firms": 6, "per_firm": 4, "alpha": 0.6, "sigma": 0.15, "seed": 0, "runs": 40},
+        # the cereal aisle (chapters 0 and 8): twelve brands from four firms (four, four, two, two); price
+        # sensitivity 1.6 with spread 0.4 (random coefficient on price); 500 simulated shoppers
+        "cereal": {"owner": (0, 0, 0, 0, 1, 1, 1, 1, 2, 2, 3, 3), "base_mean": 1.0, "base_sd": 0.5,
+                   "mc_median": 1.2, "mc_sd": 0.15, "alpha": 1.6, "sigma": 0.4, "ns": 500, "seed": 43,
+                   "merge": (8, 10)},
+        # plants (chapter 10): value added y = 0.6 l + 0.3 k + omega + eps; productivity persistent (rho 0.8) with
+        # innovations 0.15, which makes the 90/10 productivity ratio about two
+        "plants": {"n": 1500, "T": 10, "bl": 0.6, "bk": 0.3, "rho": 0.8, "sd_eta": 0.15, "sd_lerr": 0.3,
+                   "seed": 43},
+        # markups from production data (chapter 11): plants' true markups lognormal around 1.3
+        "dlw": {"median": 1.3, "sd": 0.15, "n": 2000, "seed": 43},
+        # towns (chapter 12): 400 isolated towns (populations in thousands); the market's margin per head falls
+        # from 1 with one firm to 0.6 with two, 0.48 with three, then hardly at all; fixed cost 1
+        "towns": {"n": 400, "F": 1.0, "sd": 0.25, "margins": (1.0, 0.6, 0.48, 0.46, 0.45), "seed": 43},
+    },
 }
 
 

@@ -414,6 +414,20 @@ CALLS = {c.key: c for c in [
           "of Technology on Employment and Unemployment, National Academy of Engineering (1983), as quoted in "
           "secondary listings",
           "BLS via FRED: LNS12300060 (employment-population ratio, 25-54) and PRS85006173 (labor share)")),
+    Call("millercoors_2008", 43, "The U.S. Department of Justice, closing its investigation of the MillerCoors joint "
+         "venture", "June 2008",
+         "the joint venture of SABMiller and Molson Coors is not likely to lessen competition substantially, and its "
+         "cost savings are substantial and credible",
+         "an eight-month investigation that judged the savings in brewing and shipping verifiable and specific to "
+         "the venture, large enough to offset its incentive to raise prices",
+         "the savings were real: Coors moved into Miller's breweries, nearer its customers, and Ashenfelter, Hosken "
+         "and Weinberg find they offset, at the mean, the roughly 2% that concentration added to prices; but prices "
+         "of MillerCoors and Anheuser-Busch jumped together after the venture, and Miller and Weinberg estimate "
+         "them 6-8% above what competition with those savings would give, consistent with coordination",
+         "partly right",
+         ("U.S. Department of Justice, statement of 5 June 2008",
+          "Ashenfelter, Hosken and Weinberg, RAND Journal of Economics 46(2) (2015)",
+          "Miller and Weinberg, Econometrica 85(6) (2017)")),
     Call("ss_1983", 42, "The 1983 Social Security Amendments, as projected by the program's actuaries", "1983",
          "the reforms would keep Social Security solvent for 75 years, with surpluses in the early years offsetting "
          "deficits later",
