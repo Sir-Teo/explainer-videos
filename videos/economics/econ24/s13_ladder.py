@@ -87,8 +87,9 @@ class Ladder(VoiceoverScene):
             "occasional falls."
         ) as vo:
             self.play(FadeIn(ax), FadeIn(floor), FadeIn(floor_l), FadeIn(tag), run_time=0.8)
+            self.play(Create(career), run_time=6, rate_func=linear)
             vo.wait_until("a")
-            self.play(FadeIn(side[0]), Create(career), run_time=8, rate_func=linear)
+            self.play(FadeIn(side[0]))
             vo.wait_until("b")
             self.play(FadeIn(side[1]))
             vo.wait_until("c")
@@ -121,9 +122,9 @@ class Ladder(VoiceoverScene):
             f"{lad['mean_earned']:.2f} against {lad['mean_offer']:.2f}. <bookmark mark='d'/> And firms that pay more "
             "are bigger: the link between wages and employer size that the data show everywhere."
         ) as vo:
-            self.play(FadeIn(ax), FadeIn(tag), FadeIn(side[0]), run_time=0.8)
+            self.play(FadeIn(ax), FadeIn(tag), FadeIn(side[0]), Create(fo), run_time=2)
             vo.wait_until("b")
-            self.play(Create(fo), FadeIn(side[1]), run_time=2)
+            self.play(FadeIn(side[1]), Indicate(fo, color=WHITE))
             vo.wait_until("c")
             self.play(Create(ge), FadeIn(side[2]), run_time=2)
             vo.wait_until("d")

@@ -168,8 +168,21 @@ CALLS = {c.key: c for c in [
          ("P. M. Romer, Journal of Political Economy 98(5) (1990): S71-S102, abstract",
           "C. I. Jones, Quarterly Journal of Economics 110(2) (1995): 495-525",
           "N. Bloom, C. I. Jones, J. Van Reenen and M. Webb, American Economic Review 110(4) (2020)")),
-    Call("dmp_volatility", 24, "Dale Mortensen and Christopher Pissarides, \"Job Creation and Job Destruction in the "
-                               "Theory of Unemployment\"",
+    Call("cagan_ceiling", 25, "the revenue theory of hyperinflation, in Phillip Cagan's estimates",
+         "1956", "a government printing money to pay its bills raises the most real revenue at a steady inflation of "
+                 "one over the semi-elasticity of money demand, about 20 percent a month for Germany; a government "
+                 "after revenue should not inflate faster than that",
+         "Cagan's money demand, in which real balances fall exponentially as expected inflation rises, estimated on "
+         "seven hyperinflations",
+         "governments inflated far faster: German prices rose 322 percent a month on average from August 1922 to "
+         "November 1923, and in most of Cagan's seven cases inflation ran above the revenue-maximizing rate, a puzzle "
+         "known since as Cagan's paradox; explanations include expectations that lag, so that faster printing pays "
+         "for a while, and governments that could not commit to stop",
+         "wrong",
+         ("P. Cagan, \"The Monetary Dynamics of Hyperinflation\", in M. Friedman (ed.), Studies in the Quantity Theory "
+          "of Money (1956): 25-117",
+          "secondary summaries of Cagan's table (the German average and the revenue-maximizing rate)")),
+    Call("dmp_volatility", 24, "Dale Mortensen and Christopher Pissarides",
          "1994", "a matching model driven by aggregate productivity shocks alone reproduces reasonably well the "
                  "cyclical behaviour of job creation and job destruction in the United States",
          "simulations of the model with Nash-bargained wages and an aggregate shock process",

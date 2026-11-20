@@ -43,9 +43,9 @@ class Volatility(VoiceoverScene):
             "volatile as productivity. <bookmark mark='d'/> Robert Shimer made the same comparison in 2005, for "
             "1951 to 2003, with older data on help-wanted advertising: almost twenty times."
         ) as vo:
-            self.play(FadeIn(ax), FadeIn(zero), FadeIn(tag), run_time=0.8)
+            self.play(FadeIn(ax), FadeIn(zero), FadeIn(tag), Create(vu), run_time=2)
             vo.wait_until("a")
-            self.play(Create(vu), FadeIn(side[0]), run_time=2)
+            self.play(FadeIn(side[0]), Indicate(vu, color=WHITE))
             vo.wait_until("b")
             self.play(Create(pr), FadeIn(side[1]), run_time=2)
             vo.wait_until("c")

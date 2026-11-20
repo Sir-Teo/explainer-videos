@@ -39,8 +39,10 @@ class InsOuts(VoiceoverScene):
             "Shimer's."
         ) as vo:
             self.play(FadeIn(rows[0]), FadeIn(tag))
+            vo.wait_until("a")
+            self.play(FadeIn(rows[1]))
             vo.wait_until("b")
-            self.play(FadeIn(rows[1]), FadeIn(rows[2]))
+            self.play(FadeIn(rows[2]), Indicate(rows[1], color=WHITE, scale_factor=1.02))
             vo.wait_until("c")
             self.play(FadeIn(rows[3]))
             vo.wait_until("d")

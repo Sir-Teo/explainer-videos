@@ -10,7 +10,7 @@ class Natural(VoiceoverScene):
              lit={1968: r"Friedman", 2011: r"Davis and von Wachter", 2013: r"Kroft, Lange, Notowidigdo"},
              scale=("person", "nation"), horizon=("years", "decades"))
         self.natural()
-        self.duration()
+        self.spells()
         self.callbacks()
         self.scars()
 
@@ -55,7 +55,7 @@ class Natural(VoiceoverScene):
             self.play(FadeIn(side[3]))
         self.clear_scene()
 
-    def duration(self):
+    def spells(self):
         n = load("natural")
         ax = plane([1948, 2027], [0, 50], center=LEFT * 1.8 + DOWN * 0.3, x_length=8.6, y_length=5.0,
                    xticks=[1950, 1970, 1990, 2010], yticks=[0, 10, 20, 30, 40, 50],
