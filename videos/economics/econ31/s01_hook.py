@@ -22,6 +22,20 @@ class Hook(VoiceoverScene):
                        r"Bank", width=10.4, font_size=30, color=CB).next_to(head, DOWN, buff=0.6)
         foot = label(r"the programme he announced in September was never used", font_size=24, color=PRICE).next_to(
             q, DOWN, buff=0.55)
+        bars = VGroup()
+        for c, name in (("ES", r"Spain"), ("IT", r"Italy"), ("DE", r"Germany")):
+            v = S["jul12"][c]
+            b = Rectangle(width=0.9 * v, height=0.55, fill_color=COUNTRY[c], fill_opacity=0.85, stroke_width=0)
+            nm = label(name, font_size=22, color=COUNTRY[c])
+            val = label(rf"{v:.1f}\%", font_size=22, color=COUNTRY[c])
+            bars.add(VGroup(nm, b, val))
+        for g in bars:
+            g[0].move_to(LEFT * 4.2, aligned_edge=RIGHT)
+            g[1].next_to(g[0], RIGHT, buff=0.3)
+            g[2].next_to(g[1], RIGHT, buff=0.2)
+        bars.arrange(DOWN, aligned_edge=LEFT, buff=0.35).move_to(DOWN * 0.4)
+        bcap = label(r"10-year government bond yields, \ July 2012", font_size=20, color=GREY_B).next_to(
+            bars, UP, buff=0.4)
         tag = published_tag(r"Draghi, \ speech at the Global Investment Conference, \ London, \ 26 July 2012; \ OECD "
                             r"bond yields via FRED", corner=DR, font_size=12)
         with self.voiceover(
@@ -34,9 +48,11 @@ class Hook(VoiceoverScene):
             "announced the programme behind the sentence: it would buy a country's short-term bonds without limit, "
             "on conditions. It never bought a single one."
         ) as vo:
-            self.play(FadeIn(head), FadeIn(tag))
+            self.play(FadeIn(head), FadeIn(tag), FadeIn(bcap))
+            self.play(LaggedStart(*[GrowFromEdge(g, LEFT) for g in bars], lag_ratio=0.4), run_time=2.0)
             vo.wait_until("a")
-            self.play(FadeIn(q, shift=UP * 0.2), run_time=1.2)
+            self.play(FadeOut(bars), FadeOut(bcap), run_time=0.5)
+            self.play(FadeIn(q, shift=UP * 0.2), run_time=1.0)
             vo.wait_until("b")
             self.play(FadeIn(foot, shift=UP * 0.1))
         self.clear_scene()

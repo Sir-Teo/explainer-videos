@@ -446,4 +446,92 @@
             "Part 30, chapters 5-9. Computed in your browser; nothing you do here is stored or sent.",
     });
   };
+  // ---- Part 31: the chair ---------------------------------------------------------------------------------------
+  W.chair = function (el) {
+    // The chair of Part 31 (videos/economics/econ31/compute.py, item realtime): for each year, CPI inflation over the
+    // year before, the output gap at the end of that year as the data of the day showed it (a log-linear trend fitted
+    // to the Philadelphia Fed's first-quarter vintage) and as the CBO's potential shows it today, and the federal
+    // funds rate in the first quarter.  The reader sets the rate year by year; the page compares Taylor's rule with
+    // each gap, and what the Federal Reserve did.
+    var D = [
+      [1966, 1.78, 3.38, 4.60, 4.56],
+      [1967, 3.57, 4.20, 4.67, 4.82],
+      [1968, 2.99, 3.11, 2.87, 4.79],
+      [1969, 4.63, 4.13, 3.29, 6.57],
+      [1970, 5.83, 1.46, 1.30, 8.57],
+      [1971, 5.60, -3.23, -2.31, 3.86],
+      [1972, 3.54, -2.18, -1.21, 3.55],
+      [1973, 3.33, 1.77, 2.22, 6.54],
+      [1974, 8.42, 1.50, 2.74, 9.32],
+      [1975, 12.05, -6.67, -2.70, 6.30],
+      [1976, 7.38, -6.88, -3.35, 4.83],
+      [1977, 5.19, -4.69, -2.23, 4.66],
+      [1978, 6.59, -2.03, -0.63, 6.76],
+      [1979, 8.93, -1.47, 2.34, 10.07],
+      [1980, 12.64, -3.02, 0.28, 15.05],
+      [1981, 12.54, -4.61, -2.02, 16.57],
+      [1982, 9.58, -7.13, -3.23, 14.23],
+      [1983, 4.44, -10.92, -7.57, 8.65],
+      [1984, 3.23, -7.06, -2.97, 9.69],
+      [1985, 4.15, -4.30, -0.88, 8.48],
+      [1986, 3.51, -5.82, -0.19, 7.83],
+      [1987, 1.35, -5.78, -0.63, 6.22],
+      [1988, 4.41, -4.10, 0.61, 6.66],
+      [1989, 4.31, -3.16, 1.37, 9.44],
+      [1990, 4.63, -2.76, 1.23, 8.25]
+    ];
+    var chosen = {}, TEAL = "#7FD1B9", PINK = "#E8A0B4";
+    function rule(pi, gap) { return 2 + pi + 0.5 * (pi - 2) + 0.5 * gap; }
+    QB.widget(el, {
+      title: "Take the chair, 1966-1990",
+      sub: "Pick a year and set the federal funds rate for its first quarter. You see what was known then: last " +
+           "year's inflation and the output gap as that winter's data showed it. Left: the rate the Federal Reserve " +
+           "set (pink), Taylor's rule with the gap of the day (green) and with today's estimate of the gap (teal, " +
+           "dashed), and your choices (gold). Right: the two gaps. In which years did the data of the day mislead?",
+      panels: 2, height: 280,
+      controls: [
+        { k: "year", label: "Year", min: 1966, max: 1990, step: 1, value: 1979,
+          fmt: function (x) { return x.toFixed(0); } },
+        { k: "rate", label: "Your funds rate, %", min: 0, max: 20, step: 0.25, value: 10,
+          fmt: function (x) { return x.toFixed(2); } },
+      ],
+      draw: function (g, v, st) {
+        var y = Math.round(v.year), row = null, i;
+        for (i = 0; i < D.length; i++) if (D[i][0] === y) row = D[i];
+        if (row) chosen[y] = v.rate;
+        var yr = [], ff = [], rrt = [], rtd = [], grt = [], gtd = [];
+        for (i = 0; i < D.length; i++) {
+          yr.push(D[i][0]); ff.push(D[i][4]); rrt.push(rule(D[i][1], D[i][2])); rtd.push(rule(D[i][1], D[i][3]));
+          grt.push(D[i][2]); gtd.push(D[i][3]);
+        }
+        var a1 = g[0].axes({ x: [1966, 1990], y: [0, 22], title: "The funds rate and the rule, %", xlabel: "year" });
+        a1.line(yr, rtd, { color: TEAL, width: 1.8, dash: [5, 4] });
+        a1.line(yr, rrt, { color: GREEN, width: 2 });
+        a1.line(yr, ff, { color: PINK, width: 2.5 });
+        var cx = [], cy = [];
+        for (var k in chosen) { cx.push(+k); cy.push(chosen[k]); }
+        a1.dots(cx, cy, { color: GOLD, r: 4 });
+        var a2 = g[1].axes({ x: [1966, 1990], y: [-12, 6], title: "The output gap, %", xlabel: "year" });
+        a2.hline(0, { color: GREY_HINT });
+        a2.line(yr, gtd, { color: TEAL, width: 2, dash: [5, 4] });
+        a2.line(yr, grt, { color: GREEN, width: 2.5 });
+        if (row) a2.dots([y], [row[2]], { color: GOLD, r: 5 });
+        st.row = row;
+      },
+      readout: function (v, st) {
+        var r = st.row;
+        if (!r) return [["year", "no data"]];
+        var rt = rule(r[1], r[2]), td = rule(r[1], r[3]);
+        return [["known then", "inflation " + r[1].toFixed(1) + "%; output " + r[2].toFixed(1) + "% from trend"],
+                ["the rule with that gap", rt.toFixed(1) + "%; with today's gap (" + r[3].toFixed(1) + "%): " +
+                  td.toFixed(1) + "%"],
+                ["you set", v.rate.toFixed(2) + "%; the Federal Reserve set " + r[4].toFixed(1) + "%"],
+                ["verdict", Math.abs(r[2] - r[3]) > 2 ? "the data of the day misread the gap by " +
+                  Math.abs(r[2] - r[3]).toFixed(1) + " points" : "the gap of the day was close to today's estimate"]];
+      },
+      note: "Taylor's rule as in Part 30: i = 2 + pi + 0.5(pi - 2) + 0.5x. Real-time GDP from the Philadelphia Fed's " +
+            "Real-Time Data Set; the CBO's potential, the CPI and the funds rate from FRED. Part 31, chapters 2 and 7. " +
+            "Computed in your browser; nothing you do here is stored or sent.",
+    });
+  };
 })();

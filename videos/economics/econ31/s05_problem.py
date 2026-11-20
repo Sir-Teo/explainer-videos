@@ -15,8 +15,9 @@ class Problem(VoiceoverScene):
     def island(self):
         I = load("island")
         q = np.array(I["q"][:120])
-        ax = plane([0, 120], [-3, 5], center=LEFT * 1.6 + DOWN * 0.3, x_length=8.8, y_length=4.8,
-                   xticks=[0, 40, 80, 120], yticks=[-2, 0, 2, 4], xlabel=r"quarters", ylabel=r"percent",
+        ax = plane([0, 120], [-8, 8], center=LEFT * 1.6 + DOWN * 0.3, x_length=8.8, y_length=4.8,
+                   xticks=[0, 40, 80, 120], yticks=[-8, -4, 0, 4, 8], xlabel=r"quarters",
+                   ylabel=r"percent, \ from the Island's average",
                    xfmt=lambda v: f"{v:.0f}", yfmt=lambda v: f"{v:.0f}", font_size=15)
         zero = seg(ax, 0, 0, 120, 0, GREY_D, 1.2)
         rate = path(ax, q, I["i"][:120], RATE, 3, smooth=False)

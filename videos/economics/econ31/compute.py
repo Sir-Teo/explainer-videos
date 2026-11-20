@@ -147,13 +147,13 @@ def compute_realtime() -> dict:
                      "ff": float(f), "trend_growth": g["trend_growth"]})
     yr = np.array([r["year"] for r in rows])
     err = np.array([r["gap_rt"] - r["gap_today"] for r in rows])
-    seventies = (yr >= 1970) & (yr <= 1981)
+    seventies = (yr >= 1971) & (yr <= 1982)          # gaps at the ends of 1970-81, rates set in 1971-82
     return {"rows": rows, "mean_error_70s": float(err[seventies].mean()),
             "mean_error_after": float(err[yr >= 1985].mean()),
-            "rule_gap_70s": float(np.mean([r["rule_today"] - r["rule_rt"] for r in rows if 1970 <= r["year"] <= 1981])),
-            "ff_minus_rule_rt_70s": float(np.mean([r["ff"] - r["rule_rt"] for r in rows if 1970 <= r["year"] <= 1981])),
+            "rule_gap_70s": float(np.mean([r["rule_today"] - r["rule_rt"] for r in rows if 1971 <= r["year"] <= 1982])),
+            "ff_minus_rule_rt_70s": float(np.mean([r["ff"] - r["rule_rt"] for r in rows if 1971 <= r["year"] <= 1982])),
             "ff_minus_rule_today_70s": float(np.mean([r["ff"] - r["rule_today"] for r in rows
-                                                      if 1970 <= r["year"] <= 1981]))}
+                                                      if 1971 <= r["year"] <= 1982]))}
 
 
 def compute_playit() -> dict:

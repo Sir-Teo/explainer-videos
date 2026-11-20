@@ -791,6 +791,22 @@ brackets on screen.
 | the zero lower bound; forward guidance; the forward guidance puzzle | 零利率下限；前瞻性指引；前瞻性指引之谜 |
 | habit formation; indexation; interest-rate smoothing; the hump-shaped response | 习惯形成；指数化；利率平滑；驼峰形响应 |
 
+## Part 31
+
+| English | 中文 |
+|---|---|
+| reserves; the overnight rate; the federal funds rate | 准备金；隔夜利率；联邦基金利率 |
+| a corridor system; a floor system; interest on reserves | 利率走廊；地板体系；准备金利率 |
+| quantitative easing; large-scale asset purchases; the term premium | 量化宽松；大规模资产购买；期限溢价 |
+| the identification problem; the price puzzle | 识别问题；价格之谜 |
+| a recursive VAR; local projections; narrative shocks | 递归向量自回归；局部投影；叙事冲击 |
+| high-frequency surprises; the information effect | 高频意外；信息效应 |
+| real-time data; a data vintage | 实时数据；数据版本 |
+| negative interest rates; yield-curve control | 负利率；收益率曲线控制 |
+| the neutral rate of interest (r-star); the Kalman filter | 中性利率（r*）；卡尔曼滤波 |
+| the lender of last resort; a backstop; self-fulfilling expectations | 最后贷款人；兜底支持；自我实现的预期 |
+| the Greenbook (Tealbook); the dot plot; the taper tantrum | 绿皮书（蓝绿皮书）；点阵图；缩减恐慌 |
+
 ## Names
 
 | English | 中文 |

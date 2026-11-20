@@ -20,8 +20,8 @@ class Balance(VoiceoverScene):
         bank = tacct(r"a commercial bank", OUTPUT, [(r"reserves", RES), (r"loans", OUTPUT), (r"bonds", BOND)],
                      [(r"deposits", OUTPUT), (r"capital", GREY_B)], width=5.4)
         VGroup(cbk, bank).arrange(RIGHT, buff=1.0).move_to(UP * 0.9)
-        arrow = CurvedArrow(cbk.right[1].get_bottom() + DOWN * 0.1, bank.left[0].get_bottom() + DOWN * 0.1,
-                            color=RES, angle=PI / 3)
+        arrow = Arrow(cbk.right[1].get_right() + RIGHT * 0.1, bank.left[0].get_left() + LEFT * 0.1, color=RES,
+                      buff=0.05, stroke_width=4, max_tip_length_to_length_ratio=0.15)
         rows = VGroup(
             label(r"reserves are the money banks pay each other with", font_size=22, color=RES),
             label(r"the overnight rate: \ what one bank charges another for reserves until tomorrow", font_size=22,

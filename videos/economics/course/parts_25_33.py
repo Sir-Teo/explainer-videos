@@ -275,4 +275,49 @@ PARTS = [
               ("The Island's planted truths", "explainer/economics/island.py"),
               ("The Data Room's sources", "explainer/economics/data/SOURCES.md")),
     ),
+    Part(
+        n=31, level="U", widget="chair", prereq=(25, 26, 28, 30),
+        question="What does a central bank actually do, and how do we know what it achieves?",
+        story="The part opens on Mario Draghi's sentence of July 2012 and the Spanish and Italian yields it brought "
+              "down without a euro being spent. It draws a central bank's balance sheet and the market for reserves, "
+              "a corridor and a floor, puts the viewer in the chair in 1979 with the data of the day, and traces "
+              "how a rate reaches the economy. It shows why a policy's effects are hard to measure, runs four methods "
+              "of identification on 300 Island histories with the truth known, and reads the consensus from a US "
+              "VAR and the published estimates. After an intermission of the federal funds rate since 1954 it "
+              "covers Taylor's rule in real time, the zero bound in practice, quantitative easing and its event "
+              "study, guidance, negative rates and yield-curve control, the neutral rate, the euro crisis as "
+              "self-fulfilling yields, and communication, reads three dials, and scores Romer and Romer's claim about "
+              "the Greenbook.",
+        handoff="Part 32 turns to the treasury; Part 52 follows monetary policy through households that differ; Part "
+                "55 estimates the models whose shocks this part identifies.",
+        outside="Part 4: instruments and natural experiments; Part 25: money and banks' balance sheets; Part 26: runs "
+                "and the lender of last resort; Part 30: the New Keynesian model and Taylor's rule. Chapter 5 uses "
+                "vector autoregressions and local projections; chapter 11 a Kalman filter; chapter 12 the fixed "
+                "points of a map.",
+        objectives={
+            "U": ["Explain how a central bank sets an overnight rate in a corridor and in a floor system, with "
+                  "T-accounts.",
+                  "Explain why the effects of monetary policy are hard to measure, and the price puzzle.",
+                  "Describe the zero bound and the tools used at it: asset purchases, guidance, negative rates."],
+            "M": ["Identify a policy shock by a recursive VAR, narrative shocks and high-frequency surprises, and "
+                  "explain the information effect.",
+                  "Compute output gaps and Taylor-rule prescriptions with real-time data."],
+            "D": ["Weigh the evidence on the size of monetary policy's effects, the effects of asset purchases and the "
+                  "level of the neutral rate.",
+                  "Model self-fulfilling sovereign yields and the effect of a backstop."],
+            "I": ["Read a central bank's balance sheet and statements as a rates strategist or policy economist does."],
+        },
+        results=[
+            ("Mid-corridor reserves", r"\bar\Phi\big((R - n)/s\big) = \tfrac{1}{2} \;\Rightarrow\; R = n"),
+            ("The recursive shock", r"u_i = \tfrac{\mathrm{cov}(u_i, u_x)}{\mathrm{var}(u_x)}\,u_x + "
+                                    r"L_{22}\,\varepsilon_i"),
+            ("Self-fulfilling yields", r"(1 + r)\,\big(1 - p(r)\big) = 1 + r_f"),
+            ("The information effect's bias", r"\frac{\lambda\sigma_n^2(\gamma_h - \delta\beta_h)}"
+                                              r"{\sigma_v^2 + \lambda\delta\sigma_n^2}"),
+        ],
+        U=(0, 1, 2, 3, 4, 6, "s09_intermission", 8, 9, 13), D=(10, 11, 12, 14, 16), I=(15,),
+        also=(("Agora's central bank", "explainer/economics/agora/cb.py"),
+              ("The Island's planted truths", "explainer/economics/island.py"),
+              ("The Data Room's sources", "explainer/economics/data/SOURCES.md")),
+    ),
 ]

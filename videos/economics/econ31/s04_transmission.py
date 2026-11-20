@@ -41,6 +41,8 @@ class Transmission(VoiceoverScene):
         arr2 = VGroup(*[Arrow(m.get_right(), dst1.get_left(), buff=0.08, stroke_width=2.5, color=GREY_B,
                               max_tip_length_to_length_ratio=0.08) for m in mids])
         arr3 = Arrow(dst1.get_bottom(), dst2.get_top(), buff=0.08, stroke_width=3, color=GREY_A)
+        top = label(r"how one overnight rate reaches the whole economy", font_size=26, color=E.ACCENT).to_edge(UP,
+                                                                                                      buff=0.45)
         foot = label(r"Friedman: \ ``long and variable lags'' \ $\cdot$ \ a year or more for output, \ longer for "
                      r"prices", font_size=21, color=HOLD).to_edge(DOWN, buff=0.5)
         tag = published_tag(r"Friedman, \ \emph{JPE} 69(5) (1961); \ Mishkin, \ \emph{The Economics of Money, Banking "
@@ -58,7 +60,7 @@ class Transmission(VoiceoverScene):
             "responds fully, longer for prices. That is why a central bank must act on forecasts, which is the root "
             "of everything hard in this part."
         ) as vo:
-            self.play(FadeIn(src), FadeIn(tag))
+            self.play(FadeIn(src), FadeIn(tag), FadeIn(top))
             for mk, m, a in zip("abcde", mids, arr1):
                 vo.wait_until(mk)
                 self.play(GrowArrow(a), FadeIn(m, shift=RIGHT * 0.1), run_time=0.8)

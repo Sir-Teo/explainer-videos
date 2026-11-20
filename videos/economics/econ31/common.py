@@ -121,8 +121,10 @@ def tacct(title: str, color, assets: list, liabilities: list, width: float = 4.2
                                                                                        buff=0.15)
     right = VGroup(*[label(a, font_size=font_size, color=c) for a, c in liabilities]).arrange(
         DOWN, aligned_edge=LEFT, buff=0.15)
-    left.next_to(top, DOWN, buff=0.2).align_to(top, LEFT).shift(RIGHT * 0.15)
-    right.next_to(top, DOWN, buff=0.2).align_to(mid, LEFT).shift(RIGHT * 0.15)
-    g = VGroup(head, top, mid, left, right, sides)
+    if len(left):
+        left.next_to(top, DOWN, buff=0.2).align_to(top, LEFT).shift(RIGHT * 0.15)
+    if len(right):
+        right.next_to(top, DOWN, buff=0.2).align_to(mid, LEFT).shift(RIGHT * 0.15)
+    g = VGroup(head, top, mid, sides, *[x for x in (left, right) if len(x)])
     g.head, g.left, g.right = head, left, right
     return g

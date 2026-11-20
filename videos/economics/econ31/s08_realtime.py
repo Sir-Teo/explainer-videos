@@ -27,8 +27,8 @@ class Realtime(VoiceoverScene):
             label(r"green: \ the gap from the data of the day \\ (a trend fitted to each year's release)",
                   font_size=17, color=OUTPUT),
             label(r"teal: \ today's estimate \\ (the CBO's potential, \ today's data)", font_size=17, color=CB),
-            label(rf"1970--81: \ the green line {abs(R['mean_error_70s']):.1f} points \\ more pessimistic about "
-                  r"output, \ on average", font_size=17, color=E.ACCENT),
+            label(rf"the 1970s: \ the green line {abs(R['mean_error_70s']):.1f} points \\ lower, \ on average",
+                  font_size=17, color=E.ACCENT),
             label(r"the old trend kept promising \\ growth that had stopped", font_size=18, color=HOLD),
             label(r"and again in the 2000s", font_size=18, color=HOLD),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.32).to_edge(RIGHT, buff=0.3)
@@ -39,7 +39,7 @@ class Realtime(VoiceoverScene):
             "end of each year as it looked the following winter: a trend fitted to everything that winter's figures "
             "contained, and output's distance from it. <bookmark mark='b'/> In teal, today's estimate of the same "
             "gap, from the Congressional Budget Office's potential output and today's revised figures. "
-            "<bookmark mark='c'/> From 1970 to 1981, the data of the day put output on average "
+            "<bookmark mark='c'/> Through the 1970s, the data of the day put output on average "
             f"{abs(R['mean_error_70s']):.1f} points further below potential than we now think it was. "
             "<bookmark mark='d'/> The trend extended the fast growth of the fifties and sixties, after productivity "
             "growth had slowed. <bookmark mark='e'/> And a mechanical trend makes the same mistake after the "
@@ -75,7 +75,7 @@ class Realtime(VoiceoverScene):
             label(r"pink: \ the federal funds rate", font_size=18, color=RATE),
             label(r"green: \ Taylor's rule, \ data of the day", font_size=18, color=OUTPUT),
             label(r"teal, \ dashed: \ the rule, \ today's gap", font_size=18, color=CB),
-            label(rf"1970--81: \ the actual rate \\ {abs(R['ff_minus_rule_rt_70s']):.1f} points below the rule \\ "
+            label(rf"the 1970s: \ the actual rate \\ {abs(R['ff_minus_rule_rt_70s']):.1f} points below the rule \\ "
                   rf"of the day; \ {abs(R['ff_minus_rule_today_70s']):.1f} below today's", font_size=18,
                   color=E.ACCENT),
             label(r"respond to inflation; \\ be humble about the gap", font_size=19, color=WHITE),

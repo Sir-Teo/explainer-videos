@@ -101,8 +101,9 @@ class Methods(VoiceoverScene):
             "wrong at first, because nothing in the VAR proxies for the demand news."
         ) as vo:
             self.play(FadeIn(axy), FadeIn(axp), FadeIn(zeros), FadeIn(head), FadeIn(tag), run_time=0.6)
-            vo.wait_until("a")
             self.play(Create(truth), FadeIn(key[0]), run_time=1.5)
+            vo.wait_until("a")
+            self.play(Indicate(truth, color=WHITE, scale_factor=1.03))
             vo.wait_until("b")
             self.play(Create(nv), FadeIn(key[1]), run_time=1.5)
             vo.wait_until("c")
@@ -160,7 +161,7 @@ class Methods(VoiceoverScene):
         P = M["peaks"]["hf_info"]
         foot = label(rf"output's trough: \ {P['y']['value']:+.2f}\% \ against the truth's "
                      rf"{M['peaks']['truth']['y']['value']:+.2f}\%; \ in the first quarter, \ "
-                     rf"{P['y_1']:+.2f}\%", font_size=20, color=METHOD["hf_info"]).to_edge(DOWN, buff=0.35)
+                     rf"{P['y_1']:+.2f}\%", font_size=20, color=METHOD["hf_info"]).to_edge(DOWN, buff=0.75)
         tag = published_tag(r"Nakamura and Steinsson, \ \emph{QJE} 133(3) (2018); \ the Island", corner=DR,
                             font_size=12)
         with self.voiceover(

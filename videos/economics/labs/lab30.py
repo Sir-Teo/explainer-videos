@@ -30,6 +30,7 @@ def run(seed=0):
     kw = {k: p[k] for k in ("beta", "sigma", "phi", "alpha", "eps", "theta", "phi_pi", "phi_x")}
 
     m = nk.menu_cost(T["menu"]["eps"], T["menu"]["gaps"])
+    assert m["rows"][0]["ratio"] > 10, "a price error should cost the economy far more than the seller"
     for r in m["rows"]:
         lab.row(f"a fare {100 * r['gap']:.0f}% too high: profit lost, sales lost",
                 f"{100 * r['profit_loss']:.2f}%, {100 * r['output_loss']:.1f}% ({r['ratio']:.0f} to 1)")
@@ -61,6 +62,7 @@ def run(seed=0):
     k = nk.kappa(p["theta"], p["beta"], p["sigma"], p["phi"], p["alpha"], p["eps"])
     for fp in (0.8, 0.99, 1.01, 1.5):
         d = nk.determinacy(fp, p["phi_x"], p["beta"], p["sigma"], k)
+        assert d["unique"] == (fp > 1), "the Taylor principle"
         lab.row(f"phi_pi = {fp}: unique equilibrium?", f"{d['unique']} (roots {d['moduli'][0]:.3f}, "
                 f"{d['moduli'][1]:.3f})")
 
@@ -70,6 +72,7 @@ def run(seed=0):
                 f"{r['i'][0]:+.3f}")
 
     o = nk.optimal_policy(rho_u=p["rho_shock"], size=p["size"], **kw)
+    assert o["loss_c"] < o["loss_d"], "commitment should beat discretion"
     lab.row("a cost-push shock: loss under discretion and commitment; the price level at the end",
             f"{o['loss_d']:.4f}, {o['loss_c']:.4f}; {o['price_d'][-1]:.3f}% and {o['price_c'][-1]:.3f}%")
 
@@ -78,6 +81,7 @@ def run(seed=0):
                          months=S["months"], seed=S["seed"] + seed)
     mm = nk.price_setters("menu", n=S["n"] // 2, freq=S["freq"], shock=S["shock"], sigma_a=S["sigma_a"],
                           months=S["months"], seed=S["seed"] + seed)
+    assert mm["pass_through"][0] > c["pass_through"][0], "menu costs should pass money through faster"
     lab.row("money up 5%: share passed into prices after 1, 3 and 6 months, Calvo",
             ", ".join(f"{100 * c['pass_through'][i]:.0f}%" for i in (0, 2, 5)))
     lab.row("the same, menu costs", ", ".join(f"{100 * mm['pass_through'][i]:.0f}%" for i in (0, 2, 5)))

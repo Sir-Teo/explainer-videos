@@ -28,8 +28,8 @@ behind the sentence had never been used. From there it covers:
   get it wrong; narrative shocks and clean high-frequency surprises recover it; an information effect halves it;
 - the consensus: in this film's VAR, industrial production -1.3% after
   29 months, prices later; published estimates from −0.7% to −4.3%;
-- Taylor's rule with the data of the day (Orphanides): from 1970 to 1981 the trend of the day put output
-  2.0 points further below potential than today's estimates do;
+- Taylor's rule with the data of the day (Orphanides): through the 1970s the trend of the day put output
+  2.4 points further below potential than today's estimates do;
 - an intermission without narration: the federal funds rate since 1954, with the Fed's chairs, as a tune;
 - the zero bound in practice (Japan from 1999; the Fed for 107 months; the ECB below zero for
   98 months);

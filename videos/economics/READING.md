@@ -10,7 +10,7 @@ the series leaves out.
 Both *Parts* columns are found, not typed. *Planned* lists the parts whose entry in
 [`SYLLABUS.md`](SYLLABUS.md) names the book or paper; *Built* lists the parts whose scenes, compute step or
 README cite it (a dot: none yet). Fuller notes (editions, chapters, what each source was used for) are in each
-part's README, under *Sources*. Built so far: Parts 1–30.
+part's README, under *Sources*. Built so far: Parts 1–31.
 
 ## 1. The textbook spine
 
@@ -36,7 +36,7 @@ part's README, under *Sources*. Built so far: Parts 1–30.
 | Angrist–Pischke | J. Angrist and J.-S. Pischke, *Mostly Harmless Econometrics* (2009) | 4, 50, 67 | 4 |
 | Osborne | M. Osborne, *An Introduction to Game Theory* (2004) | 11 | 11 |
 | Krugman–Obstfeld–Melitz | P. Krugman, M. Obstfeld and M. Melitz, *International Economics* (12th ed., 2022) | 34–35 | · |
-| Mishkin | F. Mishkin, *The Economics of Money, Banking, and Financial Markets* (13th ed., 2022) | 26 | · |
+| Mishkin | F. Mishkin, *The Economics of Money, Banking, and Financial Markets* (13th ed., 2022) | 26 | 31 |
 | Cabral | L. Cabral, *Introduction to Industrial Organization* (2nd ed., 2017) | 12–13 | 12–13 |
 | Borjas | G. Borjas, *Labor Economics* (8th ed., 2020) | 38 | · |
 | Gruber | J. Gruber, *Public Finance and Public Policy* (7th ed., 2022) | 15, 41–42, 50 | 7, 15 |
@@ -69,7 +69,7 @@ part's README, under *Sources*. Built so far: Parts 1–30.
 | Acemoglu | D. Acemoglu, *Introduction to Modern Economic Growth* (2009) | 20–21 | · |
 | Galí | J. Galí, *Monetary Policy, Inflation, and the Business Cycle* (2nd ed., 2015) | 30, 56 | 29–30 |
 | Woodford | M. Woodford, *Interest and Prices* (2003) | 30 | 30 |
-| Walsh | C. Walsh, *Monetary Theory and Policy* (4th ed., 2017) | 25 | 25, 30 |
+| Walsh | C. Walsh, *Monetary Theory and Policy* (4th ed., 2017) | 25 | 25, 30–31 |
 | Obstfeld–Rogoff | M. Obstfeld and K. Rogoff, *Foundations of International Macroeconomics* (1996) | 34 | · |
 | Pissarides | C. Pissarides, *Equilibrium Unemployment Theory* (2nd ed., 2000) | 24 | 24 |
 | Cochrane | J. Cochrane, *Asset Pricing* (rev. ed., 2005) | 23 | · |
@@ -107,7 +107,7 @@ part's README, under *Sources*. Built so far: Parts 1–30.
 
 | Short name | Book | Planned | Built |
 |---|---|---|---|
-| Blinder | A. Blinder, *Central Banking in Theory and Practice* (1998) | 31 | 30 |
+| Blinder | A. Blinder, *Central Banking in Theory and Practice* (1998) | 31 | 30–31 |
 | Boardman | A. Boardman and others, *Cost-Benefit Analysis* (5th ed., 2018) | 50, 58 | · |
 | Davis–Garcés | P. Davis and E. Garces, *Quantitative Techniques for Competition and Antitrust Analysis* (2010) | 59 | · |
 | Talluri–van Ryzin | K. Talluri and G. van Ryzin, *The Theory and Practice of Revenue Management* (2004) | 10, 60 | 10 |
@@ -215,7 +215,7 @@ part's README, under *Sources*. Built so far: Parts 1–30.
 | bank runs | Diamond and Dybvig (1983) | 26 | 26 |
 | debt deflation and financial instability | Fisher (1933); Minsky (1986) | 33 | · |
 | the financial accelerator | Bernanke, Gertler and Gilchrist (1999) | 33 | · |
-| forecasting by professionals | the Survey of Professional Forecasters (Philadelphia Fed) | 1, 57 | 1 |
+| forecasting by professionals | the Survey of Professional Forecasters (Philadelphia Fed) | 1, 57 | 1, 31 |
 
 ### The world economy
 
@@ -315,6 +315,8 @@ part's README, under *Sources*. Built so far: Parts 1–30.
 **Part 29, *The Cycle as Equilibrium*.** Books: Nancy Stokey, Robert Lucas and Edward Prescott, *Recursive Methods in Economic Dynamics* (1989), chs. 1–4; Lars Ljungqvist and Thomas Sargent, *Recursive Macroeconomic Theory* (4th ed., 2018), chs. 3–4; David Romer, *Advanced Macroeconomics* (5th ed., 2019), ch. 5; Robert King and Sergio Rebelo, "Resuscitating Real Business Cycles", *Handbook of Macroeconomics* (1999). Papers: Kydland and Prescott (1982); Long and Plosser (1983); Hansen (1985); Rogerson (1988); Prescott (1986); Summers (1986); Brock and Mirman (1972); Blanchard and Kahn (1980); Hodrick and Prescott (1997); Hamilton (2018); Tauchen (1986); Kopecky and Suen (2010); Galí (1999); Christiano, Eichenbaum and Vigfusson (2003); Basu, Fernald and Kimball (2006); Chari, Kehoe and McGrattan (2007); Chetty, Guren, Manoli and Weber (2011).
 
 **Part 30, *Sticky Prices*.** Books: Jordi Galí, *Monetary Policy, Inflation, and the Business Cycle* (2nd ed., 2015), chs. 3–5; Michael Woodford, *Interest and Prices* (2003); David Romer, *Advanced Macroeconomics* (5th ed., 2019), chs. 7 and 12; Carl Walsh, *Monetary Theory and Policy* (4th ed., 2017). Papers: Calvo (1983); Mankiw (1985); Akerlof and Yellen (1985); Taylor (1993); Bils and Klenow (2004); Nakamura and Steinsson (2008); Golosov and Lucas (2007); Clarida, Galí and Gertler (1999, 2000); Blanchard and Galí (2007); Christiano, Eichenbaum and Evans (2005); Smets and Wouters (2007); Eggertsson and Woodford (2003); Del Negro, Giannoni and Patterson (2012); McKay, Nakamura and Steinsson (2016).
+
+**Part 31, *The Central Bank*.** Books: Frederic Mishkin, *The Economics of Money, Banking and Financial Markets*, chs. 14–16 and 23–25; Carl Walsh, *Monetary Theory and Policy* (4th ed., 2017), chs. 1, 11 and 12; Alan Blinder, *Central Banking in Theory and Practice* (1998); Valerie Ramey, "Macroeconomic Shocks and Their Propagation", *Handbook of Macroeconomics* 2A (2016). Papers: Sims (1992); Christiano, Eichenbaum and Evans (1999); Romer and Romer (1989, 2000, 2004); Kuttner (2001); Gertler and Karadi (2015); Nakamura and Steinsson (2018); Coibion (2012); Orphanides (2001, 2004); Laubach and Williams (2003); Holston, Laubach and Williams (2023); Wallace (1981); Gagnon, Raskin, Remache and Sack (2011); Swanson (2021); Bernanke (2020); Calvo (1988); De Grauwe (2011).
 
 ## 4. What the series leaves out
 
