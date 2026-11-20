@@ -128,8 +128,9 @@ def narrative(H: dict, h: int = 20) -> dict:
     b, *_ = np.linalg.lstsq(X, i[1:], rcond=None)
     shock = np.concatenate([[0.0], i[1:] - X @ b])
     corr = float(np.corrcoef(shock[1:], np.array(H["v"])[1:])[0, 1])
-    return {"h": list(range(h + 1)), "y": local_projection(y, shock, h), "pi": local_projection(pi, shock, h),
-            "corr_with_truth": corr}
+    ctrl = (y, pi, i)
+    return {"h": list(range(h + 1)), "y": local_projection(y, shock, h, controls=ctrl),
+            "pi": local_projection(pi, shock, h, controls=ctrl), "corr_with_truth": corr, "shock": shock.tolist()}
 
 
 def high_frequency(H: dict, h: int = 20, info: float = 0.6, noise: float = 0.05, seed: int = 1) -> dict:
@@ -139,9 +140,10 @@ def high_frequency(H: dict, h: int = 20, info: float = 0.6, noise: float = 0.05,
     rng = np.random.default_rng(seed)
     v, nd = np.array(H["v"]), np.array(H["nd"])
     s = v + info * (1 - _p()["rho"]) * _p()["phi_nd"] * nd + noise * rng.standard_normal(len(v))
-    i = np.array(H["i"])
-    first = float(np.polyfit(s, i, 1)[0])
-    resp = {k: [b / first for b in local_projection(np.array(H[k]), s, h)] for k in ("y", "pi")}
+    y, pi, i = (np.array(H[k]) for k in ("y", "pi", "i"))
+    ctrl = (y, pi, i)
+    first = local_projection(i, s, 0, controls=ctrl)[0]
+    resp = {k: [b / first for b in local_projection(np.array(H[k]), s, h, controls=ctrl)] for k in ("y", "pi")}
     return {"h": list(range(h + 1)), **resp, "first_stage": first, "surprise": s.tolist()}
 
 
@@ -219,3 +221,85 @@ def identification_mc(reps: int = 200, T: int = 240, h: int = 16, seed: int = 0,
                              "hi": np.percentile(a, 95, 0).tolist()}
     return {"h": list(range(h + 1)), "truth": {"y": tr["y"], "pi": tr["pi"], "i": tr["i"]}, "methods": summary,
             "reps": reps, "T": T, "narrative_corr": float(np.mean(corr))}
+
+
+# --- the natural rate, estimated ----------------------------------------------------------------------------------
+def rstar_island(T: int = 200, seed: int = 0, a: float = 0.8, b: float = 0.3, sd_y: float = 0.6,
+                 sd_r: float = 0.12, r0: float = 3.0, phi_y: float = 0.6) -> dict:
+    """An Island whose natural real rate ``r*`` drifts as a random walk, and an economist who estimates it from the
+    output gap and the real rate by the Kalman filter, as Laubach and Williams do.
+
+        y_t   = a y_{t-1} - b (r_{t-1} - r*_{t-1}) + e_t          (the IS curve)
+        r*_t  = r*_{t-1} + w_t                                     (the natural rate drifts)
+        r_t   = r_est_t + phi_y y_t                                (the bank sets the real rate on its estimate)
+
+    The filter's observation is z_t = y_t - a y_{t-1} + b r_{t-1} = b r*_{t-1} + e_t; it returns the filtered
+    estimate, its standard error, and the truth (both one-sided, as the bank sees them)."""
+    rng = np.random.default_rng(seed)
+    y, r, rs = np.zeros(T), np.zeros(T), np.zeros(T)
+    est, se = np.zeros(T), np.zeros(T)
+    rs[0], m, P = r0, r0, 1.0
+    est[0], se[0], r[0] = m, np.sqrt(P), m
+    for t in range(1, T):
+        rs[t] = rs[t - 1] + sd_r * rng.standard_normal()
+        y[t] = a * y[t - 1] - b * (r[t - 1] - rs[t - 1]) + sd_y * rng.standard_normal()
+        # update the estimate of r*_{t-1} with z_t, then predict r*_t
+        z = y[t] - a * y[t - 1] + b * r[t - 1]
+        K = P * b / (b * b * P + sd_y ** 2)
+        m, P = m + K * (z - b * m), (1 - K * b) * P
+        P = P + sd_r ** 2
+        est[t], se[t] = m, np.sqrt(P)
+        r[t] = m + phi_y * y[t]
+    cover = float(np.mean(np.abs(rs[20:] - est[20:]) <= 1.645 * se[20:]))
+    return {"t": list(range(T)), "truth": rs.tolist(), "estimate": est.tolist(), "se": se.tolist(),
+            "y": y.tolist(), "r": r.tolist(), "steady_se": float(se[-1]), "coverage90": cover}
+
+
+# --- the euro crisis: self-fulfilling yields ------------------------------------------------------------------------
+def debt_game(debt: float = 1.2, rf: float = 0.02, mu: float = 0.072, sd: float = 0.016, cap: float | None = None,
+              grid=None) -> dict:
+    """A government owing ``debt`` (a share of GDP) must pay interest r * debt out of a fiscal capacity that is
+    uncertain (normal, mean ``mu``, s.d. ``sd``, shares of GDP); it defaults if the bill exceeds the capacity.  Risk-
+    neutral investors, who lose everything in default, lend at r only if (1 + r)(1 - p(r)) = 1 + rf.  The yield they
+    demand when they expect r is R(r) = (1 + rf) / (1 - p(r)) - 1; equilibria are the fixed points r = R(r).  With a
+    backstop (``cap``) the central bank stands ready to buy at the capped yield, so the default probability cannot
+    exceed p(cap)."""
+    grid = np.linspace(0.0, 0.14, 701) if grid is None else np.asarray(grid, float)
+    eff = grid if cap is None else np.minimum(grid, cap)
+    p = norm.cdf((eff * debt - mu) / sd)
+    with np.errstate(divide="ignore"):
+        R = np.where(p < 0.999, (1 + rf) / (1 - p) - 1, np.inf)
+    g = R - grid
+    roots = []
+    for k in range(len(grid) - 1):
+        if np.isfinite(g[k]) and np.isfinite(g[k + 1]) and g[k] * g[k + 1] < 0:
+            x0, x1 = grid[k], grid[k + 1]
+            roots.append(float(x0 - g[k] * (x1 - x0) / (g[k + 1] - g[k])))
+    stable = [r_ for r_ in roots if (np.interp(r_ + 1e-4, grid, R) - (r_ + 1e-4)) < 0]
+    return {"r": grid.tolist(), "R": np.where(np.isfinite(R), R, np.nan).tolist(), "p": p.tolist(),
+            "equilibria": roots, "stable": stable, "debt": debt, "rf": rf, "mu": mu, "sd": sd, "cap": cap}
+
+
+def debt_path(r0: float, periods: int = 12, **kw) -> list:
+    """Expectations that adjust to the yield demanded: r_{k+1} = R(r_k), from a starting belief r0 (a spiral up past
+    the unstable equilibrium; a return to the good one below it)."""
+    G = debt_game(**kw)
+    grid, R = np.array(G["r"]), np.array(G["R"])
+    out = [r0]
+    for _ in range(periods):
+        x = out[-1]
+        nxt = float(np.interp(x, grid, R)) if x <= grid[-1] else np.nan
+        if not np.isfinite(nxt) or nxt > grid[-1]:
+            out.append(float("nan"))
+            break
+        out.append(nxt)
+    return out
+
+
+def debt_params(debt: float = 1.2, rf: float = 0.02, r_good: float = 0.025, r_bad: float = 0.06) -> dict:
+    """The fiscal capacity (mean and s.d.) that puts the good and the unstable equilibria of ``debt_game`` at
+    ``r_good`` and ``r_bad``."""
+    zg = norm.ppf(1 - (1 + rf) / (1 + r_good))
+    zb = norm.ppf(1 - (1 + rf) / (1 + r_bad))
+    sd = (r_bad - r_good) * debt / (zb - zg)
+    return {"mu": float(r_good * debt - zg * sd), "sd": float(sd)}

@@ -37,7 +37,9 @@ from explainer.economics.data import tables  # noqa: E402
 LOADERS = {"maddison_world": "maddison2023", "maddison_country": "maddison2023", "maddison_year": "maddison2023",
            "fred": "fred", "spf": "spf", "pinksheet": "pinksheet", "psd_coffee": "psd_coffee", "wdi": "wdi",
            "hdr": "hdr", "rtdsm": "rtdsm", "warheads": "warheads", "so2": "so2", "marriage": "marriage",
-           "democracy": "democracy", "millennium": "millennium", "longrun": "longrun", "pwt": "pwt", "ajr": "ajr", "shiller": "shiller"}
+           "democracy": "democracy", "millennium": "millennium", "longrun": "longrun", "pwt": "pwt", "ajr": "ajr",
+           "shiller": "shiller",
+           "rtdsm_q1": "rtdsm", "greenbook": "greenbook", "hlw": "hlw", "wdi_money": "wdi_money"}
 
 
 def check(video: str) -> list[str]:

@@ -757,6 +757,24 @@ TRUTHS = {
         # a population of price setters (chapter 11): 10% change each month; targets drift 4% a month
         "setters": {"n": 20000, "freq": 0.1, "shock": 0.05, "sigma_a": 0.04, "months": 24, "seed": 3},
     },
+    31: {
+        # the Island's monetary history (chapters 4-5): recursive timing, the bank's private news about next quarter's
+        # cost and demand shocks, and a true policy shock of 0.25 points a quarter (agora.cb.DEFAULT)
+        "history": {"a": 0.8, "b": 0.25, "c": 0.08, "rho": 0.7, "phi_pi": 1.5, "phi_y": 0.5, "phi_ns": 1.5,
+                    "phi_nd": 1.0, "sd_d": 0.5, "sd_s": 0.3, "sd_v": 0.25, "sd_ns": 0.3, "sd_nd": 0.4},
+        # four methods scored on 300 histories of 60 years each; the announcement reveals 60% of the bank's demand
+        # news (the information effect); the commodity proxy measures cost news with noise 0.15
+        "mc": {"reps": 300, "T": 240, "h": 16, "info": 0.6, "proxy_noise": 0.15, "seed": 31},
+        # the market for reserves (chapter 1): deposit rate 1%, lending rate 3%, banks need about 50 units
+        "reserves": {"floor": 1.0, "ceiling": 3.0, "need": 50.0, "spread": 15.0},
+        # Taylor's rule (chapters 2 and 7): r* 2%, target 2%, half on inflation's gap, half on output's
+        "taylor": {"rstar": 2.0, "target": 2.0, "a_pi": 0.5, "a_y": 0.5},
+        # the natural rate drifts (chapter 11): a random walk with s.d. 0.12 a quarter, estimated by the filter
+        "rstar": {"T": 200, "seed": 4, "a": 0.8, "b": 0.3, "sd_y": 0.6, "sd_r": 0.12, "r0": 3.0, "phi_y": 0.6},
+        # a eurozone country's debt (chapter 12): debt 120% of GDP, a safe rate of 2%; the fiscal capacity is
+        # chosen so that the good equilibrium is 2.5% and the unstable one 6%; the backstop caps yields at 3.5%
+        "debt": {"debt": 1.2, "rf": 0.02, "r_good": 0.025, "r_bad": 0.06, "cap": 0.035},
+    },
 }
 
 

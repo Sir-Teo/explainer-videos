@@ -727,10 +727,72 @@ DIALS = {d.key: d for d in [
                       "trend (3.2 percent a year)", 17.6, where="videos/economics/econ26/compute.py, item crisis",
                       checked="2026-11-20"),
          )),
-    Dial("monetary_shock", "effect of a 100-basis-point tightening on output and prices", "percent at the peak",
-         (31, 55)),
+    Dial("monetary_shock", "effect of a 100-basis-point tightening on output", "percent fall in industrial "
+         "production at its peak, one to three years after the shock", (31, 55), status="contested",
+         checked="2026-11-20",
+         meaning="how much a central bank's rate moves the economy: a recursive VAR says little, under one percent of "
+                 "industrial production; Romer and Romer's narrative shocks say several times more, with the price "
+                 "level about 6% lower after four years; Coibion traced most of the gap to the 1979-82 period and the "
+                 "lag lengths and put the effect at 2-3%; the methods disagree because each must separate what the "
+                 "bank did on its own from what it did in response to the economy",
+         estimates=(
+             Estimate("a standard recursive VAR (reported by Coibion)", 2012, "structural", "US monthly data, "
+                      "1969-96: the peak fall in industrial production", -0.7,
+                      where="Coibion, AEJ: Macroeconomics 4(2): 1-32, and his VoxEU column on it", checked="2026-11-20"),
+             Estimate("Romer and Romer", 2004, "narrative", "shocks purged of the Greenbook's forecasts, 1969-96: the "
+                      "peak fall in industrial production", -4.3, where="AER 94(4): 1055-1084, as reported by "
+                      "Coibion (2012)", checked="2026-11-20"),
+             Estimate("Coibion", 2012, "review", "the two reconciled: the 1979-82 period and lag lengths accounted "
+                      "for", -2.5, lo=-3.0, hi=-2.0, where="AEJ: Macroeconomics 4(2): 1-32, abstract",
+                      checked="2026-11-20"),
+             Estimate("this film (US, 1965-2007)", 2026, "structural", "a recursive VAR with commodity prices: "
+                      "industrial production's trough, 29 months after the shock", -1.33, lo=-1.67, hi=-0.72,
+                      where="videos/economics/econ31/compute.py, item usvar", checked="2026-11-20"),
+         )),
     Dial("multipliers", "government-spending and tax multipliers", "dollars of output per dollar", (32,)),
-    Dial("neutral_rate", "neutral real interest rate", "percent", (31,)),
+    Dial("neutral_rate", "neutral real interest rate", "percent a year: the real short rate that neither "
+         "stimulates nor restrains the economy, once temporary shocks have passed", (31,), status="contested",
+         checked="2026-11-20",
+         meaning="where policy is tight or loose depends on it; estimates for the United States fell from about 3.5% "
+                 "in 2000 to under 1% in the 2010s and have edged up since, while the euro area's fell to about zero; "
+                 "each estimate is uncertain by a point or more either way, and the Island's filter shows why: the "
+                 "natural rate is inferred from slow drifts in output, which other shocks swamp",
+         estimates=(
+             Estimate("Holston, Laubach and Williams (US)", 2026, "structural", "one-sided estimate for 2026Q2, "
+                      "the New York Fed's current estimates", 1.01, where="FRBNY, Holston_Laubach_Williams_current_"
+                      "estimates.xlsx (data.hlw)", checked="2026-11-20"),
+             Estimate("Holston, Laubach and Williams (euro area)", 2026, "structural", "one-sided estimate for 2026Q2",
+                      0.09, where="FRBNY, Holston_Laubach_Williams_current_estimates.xlsx (data.hlw)",
+                      checked="2026-11-20"),
+             Estimate("Holston, Laubach and Williams (Canada)", 2026, "structural", "one-sided estimate for 2026Q2",
+                      1.76, where="FRBNY, Holston_Laubach_Williams_current_estimates.xlsx (data.hlw)",
+                      checked="2026-11-20"),
+             Estimate("FOMC participants (US)", 2026, "survey", "the median longer-run funds rate in the September "
+                      "projections (3.2%), less the 2% target", 1.2, where="FRED FEDTARMDLR", checked="2026-11-20"),
+             Estimate("FOMC participants (US)", 2012, "survey", "the same, in the first projections, January 2012 "
+                      "(4.3%), less 2%", 2.3, where="FRED FEDTARMDLR", checked="2026-11-20"),
+         )),
+    Dial("qe_yield", "effect of asset purchases on long-term yields", "basis points on the 10-year Treasury yield "
+         "or its term premium, for the Fed's first purchases ($1.725 trillion announced, 2008-09)", (31,),
+         status="contested", checked="2026-11-20",
+         meaning="whether a central bank at zero can still lower long rates by buying bonds: event studies of the "
+                 "announcement days find large falls, and time-series models of the term premium find falls of "
+                 "similar size; sceptics note that yields rose on the days in between and that the event-study result "
+                 "is fragile to the choice of days",
+         estimates=(
+             Estimate("Gagnon, Raskin, Remache and Sack", 2011, "event study", "the 10-year Treasury yield over the "
+                      "eight baseline announcements, November 2008 to November 2009", -91,
+                      where="IJCB 7(1): 3-43; FRBNY Economic Policy Review 17(1), chart 5", checked="2026-11-20"),
+             Estimate("Gagnon, Raskin, Remache and Sack", 2011, "event study", "the 10-year term premium, depending "
+                      "on the event set and window", -75, lo=-100, hi=-50, where="FRBNY Economic Policy Review 17(1)",
+                      checked="2026-11-20"),
+             Estimate("Gagnon, Raskin, Remache and Sack", 2011, "regression", "the 10-year term premium, by a time-"
+                      "series model of the supply of long-term debt", -60, lo=-82, hi=-38,
+                      where="FRBNY Economic Policy Review 17(1), table 6", checked="2026-11-20"),
+             Estimate("this film", 2026, "event study", "the 10-year Treasury yield (FRED DGS10) on the same eight "
+                      "days, close to close", -94, where="videos/economics/econ31/compute.py, item qe",
+                      checked="2026-11-20"),
+         )),
     Dial("trade_elasticity", "trade elasticity", "", (36,)),
     Dial("passthrough", "pass-through of tariffs and exchange rates to prices", "share", (34, 36, 66)),
     Dial("agglomeration", "agglomeration elasticity", "percent productivity per doubling of density", (37,)),
@@ -1426,6 +1488,28 @@ SHOWN = {
         ("Christiano, Eichenbaum and Evans (2005); Smets and Wouters (2007)", "medium-scale frictions; the hump "
          "computed with habits, indexation and smoothing"),
         ("Bernanke (2002)", "the Called it? card on deflation"),
+    ],
+    31: [
+        ("Draghi (2012)", "the speech, quoted; the yields are the OECD's via FRED"),
+        ("Sims (1992); Eichenbaum (1992)", "the price puzzle, reproduced with this film's VAR on FRED's data"),
+        ("Christiano, Eichenbaum and Evans (1999); Romer and Romer (1989, 2004); Kuttner (2001); Gertler and Karadi "
+         "(2015); Nakamura and Steinsson (2018)", "the four methods, run on the Island against the planted truth "
+         "(agora.cb); their US estimates enter the monetary_shock dial"),
+        ("Coibion (2012); Ramey (2016)", "the reconciliation and the survey, entered in the monetary_shock dial"),
+        ("Orphanides (2001, 2003, 2004)", "real-time output gaps, computed from the Philadelphia Fed's vintages; the "
+         "papers' findings stated"),
+        ("Friedman (1961)", "long and variable lags, stated"),
+        ("Wallace (1981); Vayanos and Vila (2021)", "the theory of asset purchases, stated"),
+        ("Gagnon, Raskin, Remache and Sack (2011)", "the QE1 event study, recomputed on DGS10 and entered in the "
+         "qe_yield dial"),
+        ("Swanson (2021); Eggertsson, Juelsrud, Summers and Wold (2019)", "forward guidance against purchases, and "
+         "negative rates in Sweden, stated"),
+        ("Laubach and Williams (2003); Holston, Laubach and Williams (2023)", "the natural rate: the New York Fed's "
+         "estimates, entered in the neutral_rate dial; the method run on the Island"),
+        ("Calvo (1988); De Grauwe (2011)", "self-fulfilling sovereign yields, computed in Agora (agora.cb.debt_game); "
+         "Eurostat's 2011 debt ratios stated"),
+        ("Bernanke (2013, 2014)", "the taper tantrum's testimony and the QE quip, stated; the yields are FRED's"),
+        ("Romer and Romer (2000)", "the Called it? card on the Greenbook, checked on the Philadelphia Fed's data"),
     ],
 }
 

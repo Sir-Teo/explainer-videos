@@ -138,7 +138,7 @@ class Calvo(VoiceoverScene):
             k = nk.kappa(t, T["beta"], T["sigma"], T["phi"], T["alpha"], T["eps"])
             d = dot(ax, t, k, col, 0.09)
             lab = label(rf"{name}: \ $\theta = {t:.2f}$, \ $\kappa = {k:.2f}$", font_size=17, color=col).next_to(
-                d, UR, buff=0.08)
+                d, DR if name.startswith("Nakamura") else UR, buff=0.08)
             pts.append((d, lab))
         side = VGroup(
             label(r"stickier prices, \\ a flatter curve", font_size=21, color=INFL),

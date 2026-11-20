@@ -272,11 +272,13 @@ FRED_SERIES["ECBDFR"] = ("ECB deposit facility rate for the euro area", "percent
 FRED_SERIES["RESPPLLOPNWW"] = ("Federal Reserve: earnings remittances due to the U.S. Treasury (Wednesday level; "
                                "negative: the deferred asset)", "millions of dollars", "weekly",
                                "Board of Governors of the Federal Reserve System")
+FRED_SERIES["FEDTARMDLR"] = ("FOMC Summary of Economic Projections: the federal funds rate, median, longer run",
+                             "percent", "quarterly (from 2012)", "Board of Governors of the Federal Reserve System")
 FRED_SERIES["DFEDTAR"] = ("Federal funds target rate (discontinued December 2008)", "percent", "daily",
                           "Board of Governors of the Federal Reserve System")
 FRED_SERIES["DFEDTARU"] = ("Federal funds target range, upper limit (from December 2008)", "percent", "daily",
                            "Board of Governors of the Federal Reserve System")
-for _c, _n in (("IT", "Italy"), ("ES", "Spain"), ("DE", "Germany")):
+for _c, _n in (("IT", "Italy"), ("ES", "Spain"), ("DE", "Germany"), ("GB", "the United Kingdom")):
     FRED_SERIES[f"IRLTLT01{_c}M156N"] = (f"Long-term (10-year) government bond yield, {_n}", "percent", "monthly",
                                          "OECD Main Economic Indicators")
 
@@ -299,7 +301,8 @@ FRED_RETRIEVED.update({s: "2026-11-20" for s in ("PCECC96", "DSPIC96", "PSAVERT"
                                                   "CORESTICKM159SFRBATL", "COREFLEXCPIM159SFRBATL", "WALCL",
                                                   "WRESBAL", "IOER", "IORB", "DGS10", "DFII10", "GS1", "PPIACO",
                                                   "IRLTLT01ITM156N", "IRLTLT01ESM156N", "IRLTLT01DEM156N",
-                                                  "ECBDFR", "RESPPLLOPNWW", "DFEDTAR", "DFEDTARU")})
+                                                  "ECBDFR", "RESPPLLOPNWW", "DFEDTAR", "DFEDTARU",
+                                                  "FEDTARMDLR", "IRLTLT01GBM156N")})
 
 SPF_FILES = ("median_rgdp_level", "median_rgdp_growth", "median_recess_level")
 SPF_URL = ("https://www.philadelphiafed.org/-/media/frbp/assets/surveys-and-data/survey-of-professional-forecasters/"

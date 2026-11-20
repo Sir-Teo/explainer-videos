@@ -221,6 +221,19 @@ CALLS = {c.key: c for c in [
          ("B. S. Bernanke, \"Deflation: Making Sure 'It' Doesn't Happen Here\", remarks before the National Economists "
           "Club, Washington, D.C., 21 November 2002",
           "BLS: the CPI; BEA: the core PCE price index; Federal Reserve: the federal funds rate; via FRED")),
+    Call("romer_2000", 31, "Christina and David Romer, in the American Economic Review", "June 2000",
+         "the Federal Reserve has considerable information about inflation beyond what is known to commercial "
+         "forecasters: once its staff's forecast is known, the others add almost nothing",
+         "the Greenbook's inflation forecasts, released after five years, against those of commercial forecasters, "
+         "1965-1991",
+         "on the Philadelphia Fed's data, over the four quarters ahead, the Greenbook's error was 1.33 points against "
+         "the professional forecasters' 1.69 in 1969-91, and given both, the best combination put all the weight on "
+         "the Greenbook; over 1992-2020 the errors were 0.98 and 0.95, and the edge was gone",
+         "partly right",
+         ("C. D. Romer and D. H. Romer, \"Federal Reserve Information and the Behavior of Interest Rates\", American "
+          "Economic Review 90(3): 429-457 (2000)",
+          "Federal Reserve Bank of Philadelphia: the Tealbook (Greenbook) Data Set and the Survey of Professional "
+          "Forecasters; BEA: the GDP price index via FRED")),
     Call("prescott_75", 29, "Edward Prescott, in the Federal Reserve Bank of Minneapolis's Quarterly Review",
          "Fall 1986", "technology shocks account for more than half of America's postwar fluctuations, with a best "
                       "estimate near 75 percent; in the theory, an improvement in technology raises output, investment "

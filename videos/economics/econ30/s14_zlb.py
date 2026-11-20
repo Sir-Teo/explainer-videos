@@ -77,9 +77,9 @@ class ZLB(VoiceoverScene):
         edge = DashedLine(ax.ax.c2p(Z["T"], -7), ax.ax.c2p(Z["T"], 17), color=CB, stroke_width=2)
         arrow = Arrow(ax.ax.c2p(Z["T"], 12), ax.ax.c2p(Z["T"] + 3, 12), color=CB, buff=0, stroke_width=4,
                       max_tip_length_to_length_ratio=0.2)
-        promise = label(r"the promise: \ zero for longer", font_size=16, color=CB).next_to(arrow, UP, buff=0.1)
+        promise = label(r"the promise: \\ zero for longer", font_size=16, color=CB).next_to(arrow, UP, buff=0.1)
         side = VGroup(
-            label(r"forward guidance: \ promise to keep the rate at zero \ \emph{after} the shock", font_size=19,
+            label(r"forward guidance: \\ promise to keep the rate \\ at zero \emph{after} the shock", font_size=19,
                   color=CB),
             label(r"output gap on impact:", font_size=19, color=GREY_A),
             *[label(rf"{'no promise' if k == '0' else '+' + k + ' quarter' + ('s' if k != '1' else '')}: \ "
