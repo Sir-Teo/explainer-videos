@@ -10,7 +10,7 @@ the series leaves out.
 Both *Parts* columns are found, not typed. *Planned* lists the parts whose entry in
 [`SYLLABUS.md`](SYLLABUS.md) names the book or paper; *Built* lists the parts whose scenes, compute step or
 README cite it (a dot: none yet). Fuller notes (editions, chapters, what each source was used for) are in each
-part's README, under *Sources*. Built so far: Parts 1–44.
+part's README, under *Sources*. Built so far: Parts 1–45.
 
 ## 1. The textbook spine
 
@@ -98,7 +98,7 @@ part's README, under *Sources*. Built so far: Parts 1–44.
 | Salanié | B. Salanie, *The Economics of Taxation* (2nd ed., 2011) | 41 | 13–14, 41 |
 | Banerjee–Duflo | A. Banerjee and E. Duflo, *Poor Economics* (2011) | 46 | · |
 | Persson–Tabellini | T. Persson and G. Tabellini, *Political Economics* (2000) | 47 | · |
-| Dhami | S. Dhami, *The Foundations of Behavioral Economic Analysis* (2016) | 45 | · |
+| Dhami | S. Dhami, *The Foundations of Behavioral Economic Analysis* (2016) | 45 | 45 |
 | Fujita–Krugman–Venables | M. Fujita, P. Krugman and A. Venables, *The Spatial Economy* (1999) | 37 | 37 |
 | Nordhaus | W. Nordhaus, *A Question of Balance* (2008) | 48 | · |
 | Jackson | M. Jackson, *Social and Economic Networks* (2008) | 63 | · |
@@ -135,7 +135,7 @@ part's README, under *Sources*. Built so far: Parts 1–44.
 |---|---|---|---|
 | revealed preference | Samuelson (1938); Afriat (1967); Varian (1982) | 5 | 5–6 |
 | expected utility | von Neumann and Morgenstern (1944) | 7 | 7, 11 |
-| prospect theory | Kahneman and Tversky (1979) | 7, 45 | 7 |
+| prospect theory | Kahneman and Tversky (1979) | 7, 45 | 7, 45 |
 | present bias | Laibson (1997) | 7, 45 | 7 |
 
 ### Firms
@@ -166,7 +166,7 @@ part's README, under *Sources*. Built so far: Parts 1–44.
 | optimal auctions | Myerson (1981) | 16 | 16 |
 | stable matching | Gale and Shapley (1962) | 17 | 17 |
 | Bayesian persuasion | Kamenica and Gentzkow (2011) | 53 | · |
-| incentives that crowd out | Gneezy and Rustichini (2000), "A Fine Is a Price" | 1, 14 | 1, 14 |
+| incentives that crowd out | Gneezy and Rustichini (2000), "A Fine Is a Price" | 1, 14 | 1, 14, 45 |
 
 ### Welfare and the state
 
@@ -343,6 +343,8 @@ part's README, under *Sources*. Built so far: Parts 1–44.
 **Part 43, *Measuring Market Power*.** Books: Jean Tirole, *The Theory of Industrial Organization* (1988); Kenneth Train, *Discrete Choice Methods with Simulation* (2nd edition, 2009); Aviv Nevo, 'A Practitioner's Guide to Estimation of Random-Coefficients Logit Models of Demand', *JEMS* (2000); Steven Berry and Philip Haile, 'Foundations of Demand Estimation', *Handbook of Industrial Organization* 4 (2021). Papers: Bain (1951); Lancaster (1966); Demsetz (1973); McFadden (1974); Bresnahan (1982); Lau (1982); Bresnahan and Reiss (1991); Berry (1994); Berry, Levinsohn and Pakes (1995, 2004); Olley and Pakes (1996); Werden (1996); Nevo (2001); Axtell (2001); Petrin (2002); Levinsohn and Petrin (2003); Farrell and Shapiro (2010); Syverson (2011); De Loecker and Warzynski (2012); Ackerberg, Caves and Frazer (2015); Ashenfelter, Hosken and Weinberg (2015); Miller and Weinberg (2017); Traina (2018); Basu (2019); De Loecker, Eeckhout and Unger (2020); Bond et al. (2021).
 
 **Part 44, *Dynamics, Platforms and Antitrust*.** Books: Jean Tirole, *The Theory of Industrial Organization* (1988); Aguirregabiria, *Empirical Industrial Organization: Models, Methods, and Applications* (2021); Michael Whinston, *Lectures on Antitrust Economics* (2006); Jean Tirole, *Economics for the Common Good* (2017). Papers: Spengler (1950); Arrow (1962); Baron and Myerson (1982); David (1985); Rust (1987); Arthur (1989); Liebowitz and Margolis (1990); Hotz and Miller (1993); Pakes and McGuire (1994); Ericson and Pakes (1995); Rochet and Tirole (2003); Rysman (2004); Aghion et al. (2005); Armstrong (2006); Bajari, Benkard and Levin (2007); Ryan (2012); Kwoka (2013, 2015); Khan (2017); Calvano et al. (2020); Cunningham, Ederer and Ma (2021); Assad et al. (2024).
+
+**Part 45, *Behavioural Economics*.** Books: Richard Thaler, *Misbehaving: The Making of Behavioral Economics* (2015); Daniel Kahneman, *Thinking, Fast and Slow* (2011); Sanjit Dhami, *The Foundations of Behavioral Economic Analysis* (2016); Bernheim, DellaVigna and Laibson (eds.), *Handbook of Behavioral Economics* (2018–19). Papers: Kahneman and Tversky (1979); Thaler (1980); Kahneman, Knetsch and Thaler (1990); Laibson (1997); O'Donoghue and Rabin (1999); Fehr and Schmidt (1999); Madrian and Shea (2001); Genesove and Mayer (2001); List (2003); Thaler and Benartzi (2004); Sims (2003); DellaVigna and Malmendier (2004, 2006); Ashraf, Karlan and Yin (2006); Gabaix and Laibson (2006); DellaVigna (2009); Bernheim and Rangel (2009); Pope and Schweitzer (2011); DellaVigna and Linos (2022).
 
 ## 4. What the series leaves out
 

@@ -54,10 +54,11 @@ class Commitment(VoiceoverScene):
             "<bookmark mark='a'/> The bank's clients were surveyed first, including questions that revealed whether "
             "they were patient for the far future but impatient for the near one. <bookmark mark='b'/> Then some of "
             "them, chosen at random, were offered a new account: money deposited could not be withdrawn until a date "
-            "or an amount the client set, and it earned no extra interest. <bookmark mark='c'/> A minority took it, "
-            "and those whose survey answers showed the tell-tale reversal were more likely to, at least among women. "
-            "<bookmark mark='d'/> A year later, the clients offered the account had saved markedly more than those "
-            "who were not. Commitment was demanded, and it worked."
+            "or an amount the client set, and it earned no extra interest. <bookmark mark='c'/> Of the 710 clients "
+            "offered it, 202, twenty-eight percent, took it, and women whose survey answers showed the tell-tale "
+            "reversal were more likely to. <bookmark mark='d'/> A year later, the average savings balance of those "
+            "offered the account had risen by 81 percentage points more than that of those not offered. Commitment "
+            "was demanded, and it worked."
         ) as vo:
             self.play(FadeIn(tag), FadeIn(foot), FadeIn(steps.boxes[0]), FadeIn(steps.notes[0]))
             vo.wait_until("a")

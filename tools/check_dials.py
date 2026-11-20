@@ -43,7 +43,7 @@ LOADERS = {"maddison_world": "maddison2023", "maddison_country": "maddison2023",
            "cbsa": "census_cbsa", "urban_share": "urban_share", "njmin": "njmin", "wooldridge": "wooldridge",
            "autor_dorn": "autor_dorn", "resume": "resume", "saez": "saez", "opportunity": "opportunity",
            "wid_top1": "wid_top1", "blp_cars": "blp_cars",
-           "rust_buses": "rust_buses"}
+           "rust_buses": "rust_buses", "sportscards": "sportscards"}
 
 
 def check(video: str) -> list[str]:

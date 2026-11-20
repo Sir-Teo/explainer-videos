@@ -29,7 +29,8 @@ class Defaults(VoiceoverScene):
             "its retirement plan. <bookmark mark='a'/> Before, new employees had to sign up to join. "
             "<bookmark mark='b'/> After, new employees were enrolled automatically unless they chose to opt out. The "
             "plan, the employer's matching contribution and the investment choices were the same. "
-            "<bookmark mark='c'/> Participation among new hires jumped. <bookmark mark='d'/> And many of the new "
+            "<bookmark mark='c'/> Participation among new hires jumped, from 37 percent to 86 percent, as the "
+            "authors later summarized it. <bookmark mark='d'/> And many of the new "
             "participants stayed exactly at the default: its low contribution rate and its conservative fund, "
             "which few had chosen before. For the agent of Part five, which box is ticked when you arrive should "
             "not matter. It matters enormously."
@@ -138,8 +139,8 @@ class Defaults(VoiceoverScene):
             f"<bookmark mark='c'/> On the Island, only {100 * S['join_now']:.0f} percent would raise their saving "
             f"now, but {100 * S['join_later']:.0f} percent sign up to raise it later, and with four rises their "
             f"rate climbs from {100 * path_[0]:.1f} to {100 * path_[-1]:.0f} percent. <bookmark mark='d'/> In the "
-            "first company to use it, participants' average saving rate rose from three and a half percent to "
-            "thirteen point six percent over forty months."
+            "first company to use it, 78 percent of those offered the plan joined, and their average saving rate "
+            "rose from three and a half percent to thirteen point six percent over forty months."
         ) as vo:
             self.play(FadeIn(ax), FadeIn(tag), FadeIn(side[0]), FadeIn(pts[0]), run_time=1.0)
             vo.wait_until("a")

@@ -84,6 +84,7 @@ film that moves to a new vintage says so on screen.
 | `fred_LNU02027662.csv`, `fred_LNU02027660.csv`, `fred_LNS12300060.csv`, `fred_PRS85006173.csv` | employment of people 25 and over with a bachelor's degree or more and of high-school graduates with no college (monthly, from 1992; October 2025 not collected); the employment-population ratio at ages 25-54; the labour share of the nonfarm business sector (quarterly, from 1947) | U.S. Bureau of Labor Statistics, via FRED | public domain | 2026-11-20 |
 | `polarization_1980_2005.csv`, `occ1990dd_1950_2005.csv` | Autor and Dorn's replication data: for each percentile of the 1980 occupational wage distribution, its percent of employment in 1980, 1990, 2000 and 2005, the change in mean log hourly wages over each period and its 1980 routine share; for each of 330 occ1990dd occupations, its percent of all employment in 1950-2005, mean log hourly wages in 1980 and 2005 and its 1980 routine task intensity (read from the archive's Stata files by the Data Room's own reader, `stata.py`) | D. Autor and D. Dorn (2013), Autor-Dorn-LowSkillServices-FileArchive.zip from David Dorn's data page | posted for research use; cite Autor and Dorn (2013) | 2026-11-20 |
 | `resume_2001.csv` | Bertrand and Mullainathan's 4,870 fictitious resumes sent to 1,323 help-wanted advertisements in Boston and Chicago, 2001-02: the advertisement, city, job and industry, the first name and the race and sex it signals, the resume's contents and quality, and whether the employer called back | M. Bertrand and S. Mullainathan (2004), via the R package openintro 2.5.1 (CRAN) | GPL-3 (the package); the data are the cited experiment's | 2026-11-20 |
+| `sportscards_1998.csv` | List's sports-card experiment: 148 traders at a trading-card show in Orlando, Florida, 1998, each given one of two collectibles of about equal value and offered a swap; dealer status, trades a month, years trading, demographics, and whether they swapped | J. A. List (2003), via the R package AER 1.2-17 (CRAN), from the online complements to Stock and Watson (2007) | GPL-2 or GPL-3 (the package); the data are the cited experiment's | 2026-11-21 |
 | `saez_top_shares_1913_2022.csv` | Piketty and Saez's top income shares for the United States from tax returns, 1913-2022: the shares of the top 10%, 5%, 1%, 0.5%, 0.1% and 0.01% of tax units, excluding and including capital gains (the top 10% and 5% from 1917), the number of tax units and average income in 2022 dollars (Tables A0, A1 and A3 of TabFig2022.xlsx) | T. Piketty and E. Saez (2003), updated by E. Saez | posted by the author for public use with citation | 2026-11-20 |
 | `chetty_by_parent_pctile.csv`, `chetty_absmob_1940_1984.csv`, `chetty_cz_2014.csv` | children born in 1980-82 by their parents' income percentile: parents' mean income, the children's mean rank and income at 31-32, college attendance, and the share in each quintile of their own generation (summed from the 100 x 100 transition matrix, onlinedata1.dta); the share of children earning more than their parents at 30, by birth cohort 1940-1984 and parent percentile; absolute and relative mobility, the chance of rising from the bottom to the top fifth, and 18 characteristics of 741 commuting zones (Online Data Tables V and VIII) | Opportunity Insights: Chetty, Hendren, Kline and Saez (2014); Chetty, Grusky, Hell, Hendren, Manduca and Narang (2017) | posted by Opportunity Insights for public use with citation | 2026-11-20 |
 | `wid_top1_selected.csv` | the share of pre-tax national income received by the richest 1%, in years without extrapolation, for the United States, the United Kingdom, France, Germany, Sweden, the Netherlands, Japan, China, India, Russia, Brazil, South Africa and the world | World Inequality Database (WID.world, 2026), via Our World in Data | CC BY 4.0 | 2026-11-20 |
@@ -352,18 +353,18 @@ publication, the copy that was read and the date the transcription was checked:
 | `retrospectives` | Kwoka's merger retrospectives and their critics | 2026-11-20 |
 | `apple` | Ballmer's 2007 remark and IDC's 2023 shipments | 2026-11-20 |
 | `frontier44` | Part 44's frontier, stated in words | 2026-11-20 |
-| `gym_2006` | DellaVigna and Malmendier's gym contracts and attendance (Part 45; draft, to be checked) | 2026-11-20 |
-| `departures_2009` | DellaVigna's three classes of departures (Part 45; draft, to be checked) | 2026-11-20 |
+| `gym_2006` | DellaVigna and Malmendier's gym contracts and attendance (Part 45) | 2026-11-20 |
+| `departures_2009` | DellaVigna's three classes of departures (Part 45) | 2026-11-20 |
 | `kkt_1990` | Kahneman, Knetsch and Thaler's mug experiments; Tversky and Kahneman's 1992 parameters (Part 45) | 2026-11-20 |
-| `list_2003` | List's sports-card traders (Part 45; draft, to be checked) | 2026-11-20 |
-| `reference_field` | marathon finishing times, PGA putts and Boston condominium sellers (Part 45; draft, to be checked) | 2026-11-20 |
+| `list_2003` | List's sports-card traders (Part 45) | 2026-11-20 |
+| `reference_field` | marathon finishing times, PGA putts and Boston condominium sellers (Part 45) | 2026-11-20 |
 | `present_bias` | Phelps and Pollak, Laibson, O'Donoghue and Rabin, DellaVigna and Malmendier (2004) (Part 45) | 2026-11-20 |
-| `seed_2006` | Ashraf, Karlan and Yin's commitment savings trial (Part 45; draft, to be checked) | 2026-11-20 |
-| `defaults_45` | Madrian and Shea; Save More Tomorrow; Carroll et al. (Part 45; draft, to be checked) | 2026-11-20 |
-| `inattention_45` | Gabaix and Laibson's shrouded attributes; left-digit bias in car prices (Part 45; draft) | 2026-11-20 |
-| `social_45` | Fehr and Schmidt; Gneezy and List; List's dictator games (Part 45; draft, to be checked) | 2026-11-20 |
-| `welfare_45` | Bernheim and Rangel; libertarian paternalism; the limits of arbitrage (Part 45; draft) | 2026-11-20 |
+| `seed_2006` | Ashraf, Karlan and Yin's commitment savings trial (Part 45) | 2026-11-20 |
+| `defaults_45` | Madrian and Shea; Save More Tomorrow; Carroll et al. (Part 45) | 2026-11-20 |
+| `inattention_45` | Gabaix and Laibson's shrouded attributes; left-digit bias in car prices (Part 45) | 2026-11-20 |
+| `social_45` | Fehr and Schmidt; Gneezy and List; List's dictator games (Part 45) | 2026-11-20 |
+| `welfare_45` | Bernheim and Rangel; libertarian paternalism; the limits of arbitrage (Part 45) | 2026-11-20 |
 | `nudges_2022` | DellaVigna and Linos's two nudge units against the academic journals (Part 45) | 2026-11-20 |
-| `limits_45` | rational inattention, sparsity, diagnostic expectations (Part 45; draft, to be checked) | 2026-11-20 |
+| `limits_45` | rational inattention, sparsity, diagnostic expectations (Part 45) | 2026-11-20 |
 | `practice_45` | Part 45's practice chapter, stated in words | 2026-11-20 |
 | `frontier45` | Part 45's frontier, stated in words | 2026-11-20 |

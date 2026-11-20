@@ -11,6 +11,7 @@ class Reference(VoiceoverScene):
              scale=("person", "market"), horizon=("a day",))
         self.value()
         self.experience()
+        self.cards()
         self.where()
 
     def value(self):
@@ -79,8 +80,7 @@ class Reference(VoiceoverScene):
                   r"trades", font_size=18, color=SELL),
             label(r"newcomers: \ a quarter \\ of the goods trade", font_size=18, color=LOSS),
             label(r"veterans: \ about half, \\ as theory predicts", font_size=18, color=GAIN),
-            label(r"List, \ 2003: \ dealers at \\ a sports-card show \\ showed no endowment \\ effect; "
-                  r"newcomers did", font_size=18, color=E.ACCENT),
+            label(r"does it happen? \\ John List went \\ to a card show", font_size=18, color=E.ACCENT),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.32).to_edge(RIGHT, buff=0.35)
         tag = published_tag(tables.LIST_2003.tag + r"; \ the Island", corner=DR, font_size=11)
         with self.voiceover(
@@ -88,11 +88,8 @@ class Reference(VoiceoverScene):
             "assumes it fades: a trader's loss aversion over goods bought to be sold again halves every five trades. "
             f"<bookmark mark='b'/> Newcomers trade only {100 * sh[0]:.0f} percent of the goods that should change "
             f"hands. <bookmark mark='c'/> Veterans trade about half, as standard theory says. "
-            "<bookmark mark='d'/> John List tested this at sports-card shows, where some traders were dealers and "
-            "some were collectors attending for fun. Inexperienced traders showed the endowment effect; dealers and "
-            "experienced traders did not. Markets can teach people out of an anomaly, at least for goods they "
-            "handle often. Whether experience does the same for a pension, chosen once in a lifetime, is another "
-            "question."
+            "<bookmark mark='d'/> That is an assumption. Whether it holds is a question for data, and John List went "
+            "to find out."
         ) as vo:
             self.play(FadeIn(ax), FadeIn(tag), FadeIn(half), FadeIn(side[0]), run_time=1.0)
             vo.wait_until("a")
@@ -101,6 +98,58 @@ class Reference(VoiceoverScene):
             self.play(Indicate(pts[0], scale_factor=1.8), FadeIn(side[1]))
             vo.wait_until("c")
             self.play(Indicate(pts[-1], scale_factor=1.8), FadeIn(side[2]))
+            vo.wait_until("d")
+            self.play(FadeIn(side[3]))
+        self.clear_scene()
+
+    def cards(self):
+        L = load("sportscards")
+        ax = plane([0, 5], [0, 0.6], center=LEFT * 2.0 + DOWN * 0.4, x_length=7.6, y_length=4.6, xticks=[],
+                   yticks=[0, 0.2, 0.4, 0.6], ylabel=r"share who swapped", yfmt=lambda v: f"{100 * v:.0f}\\%",
+                   font_size=14)
+        half = VGroup(seg(ax, 0, 0.5, 5, 0.5, GREY_B, 1.8, dashed=True),
+                      label(r"no endowment effect: \ about half", font_size=15, color=GREY_B).next_to(
+                          ax.ax.c2p(2.5, 0.5), UP, buff=0.08))
+        bars = VGroup()
+        for i, (nm, n, v) in enumerate(zip(L["bands"], L["band_n"], L["band_share"])):
+            p0, p1 = ax.ax.c2p(0.5 + i - 0.32, 0), ax.ax.c2p(0.5 + i + 0.32, max(v, 0.004))
+            r = Rectangle(width=p1[0] - p0[0], height=p1[1] - p0[1], stroke_width=0, fill_color=SELL,
+                          fill_opacity=0.85).move_to((p0 + p1) / 2)
+            bars.add(VGroup(r, label(nm, font_size=16, color=WHITE).next_to(ax.ax.c2p(0.5 + i, 0), DOWN, buff=0.15),
+                            label(rf"{100 * v:.0f}\% \\ ({n})", font_size=15, color=WHITE).next_to(r, UP, buff=0.08)))
+        cap = label(r"trades a month \ (traders in each group)", font_size=15, color=GREY_A).next_to(
+            ax.ax.c2p(2.5, 0), DOWN, buff=0.55)
+        side = VGroup(
+            label(rf"{L['n']} traders, \ Orlando, \ 1998: \\ each given one of two \\ collectibles, \ then "
+                  r"offered \\ a swap", font_size=18, color=WHITE),
+            label(rf"only {100 * L['share']:.0f}\% swapped", font_size=19, color=LOSS),
+            label(r"and the more they \\ trade, \ the more they \\ swap", font_size=18, color=SELL),
+            label(rf"non-dealers: \ {100 * L['others_low']:.0f}\% \\ below six trades a month, \\ "
+                  rf"{100 * L['others_high']:.0f}\% at six or more", font_size=18, color=E.ACCENT),
+        ).arrange(DOWN, aligned_edge=LEFT, buff=0.33).to_edge(RIGHT, buff=0.35)
+        tag = data_tag(r"List (2003), \ via the R package AER; \ shares computed here", corner=DR, font_size=11)
+        with self.voiceover(
+            f"At a trading-card show in Orlando, Florida, in 1998, List gave each of {L['n']} traders one of two "
+            "collectibles of about the same market value: a ticket stub from the game in which Cal Ripken set the "
+            "record for consecutive games, or a souvenir of Nolan Ryan's three-hundredth win. Then he offered each "
+            "trader the other one in exchange. <bookmark mark='a'/> Which good a trader got was random, so without "
+            "an endowment effect about half should swap. <bookmark mark='b'/> Only "
+            f"{100 * L['share']:.0f} percent did. <bookmark mark='c'/> But sort the traders by how often they trade: "
+            f"those who never trade almost never swapped, {100 * L['band_share'][1]:.0f} percent of those making one "
+            f"to four trades a month did, and about half of those making ten or more. <bookmark mark='d'/> Among "
+            f"traders who are not dealers, {100 * L['others_low']:.0f} percent of the occasional ones swapped, against "
+            f"{100 * L['others_high']:.0f} percent of the regulars. Experience teaches people out of the anomaly, at "
+            "least for goods they handle often. Whether it does the same for a pension, chosen once in a lifetime, "
+            "is another question."
+        ) as vo:
+            self.play(FadeIn(ax), FadeIn(tag), FadeIn(side[0]), run_time=1.0)
+            vo.wait_until("a")
+            self.play(FadeIn(half))
+            vo.wait_until("b")
+            self.play(FadeIn(side[1]))
+            vo.wait_until("c")
+            self.play(LaggedStart(*[AnimationGroup(GrowFromEdge(b_[0], DOWN), FadeIn(b_[1:])) for b_ in bars],
+                                  lag_ratio=0.3), FadeIn(cap), FadeIn(side[2]), run_time=2.5)
             vo.wait_until("d")
             self.play(FadeIn(side[3]))
         self.clear_scene()

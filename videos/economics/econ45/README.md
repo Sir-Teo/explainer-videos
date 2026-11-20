@@ -19,7 +19,10 @@ paid less with the pass. From there it covers:
   around $4) owners who count losses twice ask a median $8.07 against buyers' $4.03, and 24% of the mugs trade instead
   of 50% (averages over 4,000 sessions); Kahneman, Knetsch and Thaler's experiments;
 - prospect theory in one card (alpha = beta = 0.88, lambda = 2.25); traders whose loss aversion fades with experience,
-  trading 25% of goods as newcomers and 50% as veterans; List's sports-card dealers; where the reference point sits;
+  trading 25% of goods as newcomers and 50% as veterans; List's own card-show data (148 traders, Orlando, 1998): 34%
+  swapped where about half should have, from none of those who never trade to about half of those trading ten or more
+  times a month, and among non-dealers 7% of occasional traders against 47% of regulars; where the reference point
+  sits;
 - reference points in the field: 400,000 Island marathon runners bunch just under every half hour, with about 1.9
   minutes' worth of excess runners under four hours and as many missing just over it (the planted kink moves 2.5),
   measured with Part 41's bunching estimator; putts for par and birdie, where the raw gap of 21 points is mostly
@@ -54,7 +57,10 @@ paid less with the pass. From there it covers:
   (1.19);
 - models of limits: rational inattention by the Blahut-Arimoto iteration, sparse attention by soft thresholding, and
   forecasters who are rational (individual slope -0.04, consensus +1.17) or diagnostic (-0.36 and +0.37);
-- three dials, practice, *Called it?*, and a frontier chapter on structural behavioural economics, behavioural macro,
+- three dials (loss aversion: 2.25, 1.955, 1.31 and 1.13; present bias: about 0.5 structurally, 0.70-0.79 over effort,
+  about 1 over money; the effect of a default: 49 points for Madrian and Shea's new hires); practice (click to cancel,
+  vacated in July 2025; SECURE 2.0's automatic enrollment); *Called it?* on experts who expected a token piece rate to
+  crowd out effort (it raised effort 24%: wrong); and a frontier chapter on structural behavioural economics, behavioural macro,
   theories learned from data (prospect theory refitted to choices13k gives lambda = 1.13) and robustness.
 
 ## Build it
@@ -78,7 +84,7 @@ choices13k (Peterson et al. 2021, fetched on first use and checked by SHA-256), 
 | 0 | Paying not to go to the gym | DellaVigna and Malmendier; the Island's gym; the question; objectives |
 | 1 | Three departures | The standard objective, term by term; three classes; the Island's new residents |
 | 2 | Play it: your mug | Name a price; one session's asks and bids; 4,000 sessions |
-| 3 | Reference dependence | Prospect theory's value function; experienced traders; where the reference point sits |
+| 3 | Reference dependence | Prospect theory's value function; experienced traders; List's card-show data; where the reference point sits |
 | 4 | In the field: runners, golfers, sellers | Bunching under round times; the kink; par against birdie; condominium sellers |
 | 5 | Present bias | Discount curves; a preference reversal; naifs and sophisticates; the gym's contract |
 | 6 | Commitment, demanded | Why pay for fewer options; SEED; the Island's trial |
@@ -91,7 +97,7 @@ choices13k (Peterson et al. 2021, fetched on first use and checked by SHA-256), 
 | 12 | Nudges at scale | Journals against nudge units; a filtered literature; the selection model |
 | 13 | Models of limits | Rational inattention; sparsity; forecasts that over- and under-react |
 | 14 | The Dials | Loss aversion; present bias; the effect of a default |
-| 15 | In practice: products, protection, pensions | Who uses this; *Called it?* |
+| 15 | In practice: products, protection, pensions | Who uses this; click to cancel; SECURE 2.0; *Called it?* (wrong) |
 | 16 | Frontier | Structural behavioural economics, behavioural macro, theories from data, robustness |
 | — | Outro | The answer; twelve lines; problems; reading; next, Part 46, *Development* |
 
@@ -203,10 +209,16 @@ exceeds mu.
 
 ## Sources
 
-The studies the film states are listed with what each shows in `dials.SHOWN[45]`; the three dials are in
-`explainer/economics/dials.py`; the *Called it?* entry is in `explainer/economics/calls.py`. DellaVigna and Linos's
-numbers are from their Econometrica abstract and NBER working paper; the other studies' statements are drafted from
-their abstracts and are checked against the sources before the part is built (the tables in
-`explainer/economics/data/tables.py` carry a note until then). Not verified, so stated in words or computed on the
-Island instead: the size of the endowment effect in the mug experiments beyond "about two to one", the bunching and
-putting gaps in the field data, the condominium coefficients, and SEED's take-up and savings effects.
+The studies the film states are listed with what each shows in `dials.SHOWN[45]`; the three dials (loss aversion,
+present bias, the effect of a default) are in `explainer/economics/dials.py`; the experts' forecast of crowding out is a
+*Called it?* entry (`explainer/economics/calls.py`). List's card-show data are AER 1.2-17's `SportsCards` (from Stock
+and Watson's online complements), retrieved 2026-11-21 and checked by SHA-256; the shares are computed here. The
+studies' statements were checked on 2026-11-21 against their abstracts and the authors' summaries: DellaVigna and
+Malmendier (7,752 members, over $70 a month, 4.3 visits, more than $17 a visit against $10); Ashraf, Karlan and Yin
+(202 of 710 offered took the account; savings up 81 percentage points); Madrian and Shea (37% to 86%, as the authors
+summarized it in 2024); Thaler and Benartzi (78% joined; 3.5% to 13.6% in 40 months); Lacetera, Pope and Sydnor (22
+million sales; steps of roughly $150-200); Pope and Schweitzer (about two points); Genesove and Mayer (25-35% of the
+gap); Allen et al. (9,789,093 finishing times); DellaVigna and Linos; Gneezy and List; List (2007); Metcalf et al.
+(2020); DellaVigna and Pope (2018); the FTC ruling of 8 July 2025 and SECURE 2.0. Not verified, so stated in words:
+Kahneman, Knetsch and Thaler's exact medians (stated as about two to one) and Augenblick, Niederle and Sprenger's beta
+values (stated as little present bias over money and more over effort).

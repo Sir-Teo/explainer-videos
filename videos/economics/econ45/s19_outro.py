@@ -143,10 +143,9 @@ class Outro(VoiceoverScene):
         self.clear_scene()
 
     def next_part(self):
-        hc = history_card(2007, r"Cohen and Dupas", r"randomize the price of insecticide-treated bed nets at Kenyan "
-                          r"clinics: \ small prices cut take-up sharply, \ and those who paid were no more likely to "
-                          r"use "
-                          r"a net", color=E.ACCENT, width=10.4, font_size=24)
+        hc = history_card(2010, r"Cohen and Dupas", r"report a randomized price of insecticide-treated bed nets at 20 "
+                          r"Kenyan prenatal clinics: \ small prices cut take-up sharply, \ and those who paid were no "
+                          r"more likely to use a net", color=E.ACCENT, width=10.4, font_size=24)
         nxt = VGroup(label(r"Next: \ Part 46 \ $\cdot$ \ Act IX, \ The Fields", font_size=30, color=GREY_B),
                      label(r"Development", font_size=46),
                      label(r"why do the poor stay poor, \ and what actually helps?", font_size=24,
@@ -157,7 +156,8 @@ class Outro(VoiceoverScene):
         with self.voiceover(
             "Next time, the economics of development. <bookmark mark='a'/> A bed net treated with insecticide costs "
             "a few dollars and prevents malaria. Should it be given away, or sold cheaply so that only people who "
-            "value it take one? Jessica Cohen and Pascaline Dupas randomized the price at clinics in Kenya. Even "
+            "value it take one? Jessica Cohen and Pascaline Dupas randomized the price at twenty prenatal clinics "
+            "in Kenya. Even "
             "small prices cut take-up sharply, and those who paid were no more likely to use their nets. "
             "<bookmark mark='b'/> Part forty-six asks why the poor stay poor, and what actually helps."
         ) as vo:

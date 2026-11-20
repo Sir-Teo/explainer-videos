@@ -51,8 +51,8 @@ class Field(VoiceoverScene):
             "the Island, minute by minute. <bookmark mark='b'/> Look just before each half hour: three hours, three "
             "and a half, four. Too many runners finish there. <bookmark mark='c'/> And just after, too few. "
             "<bookmark mark='d'/> Eric Allen, Patricia Dechow, Devin Pope and George Wu found exactly this shape "
-            "in millions of real marathon finishes: runners bunch just under round numbers, most visibly under four "
-            "hours. Nothing about running changes at four hours. Only the goal does."
+            "in nearly ten million real marathon finishing times: runners bunch just under round numbers, most "
+            "visibly under three and four hours. Nothing about running changes at four hours. Only the goal does."
         ) as vo:
             self.play(FadeIn(ax), FadeIn(tag), FadeIn(side[0]), run_time=1.0)
             vo.wait_until("a")
@@ -190,8 +190,8 @@ class Field(VoiceoverScene):
             f"<bookmark mark='b'/> Averaged, the gap is {100 * G['within']:.1f} points, close to the planted "
             f"{100 * G['effect']:.1f}. <bookmark mark='c'/> Devin Pope and Maurice Schweitzer did this with millions "
             "of laser-measured putts on the PGA Tour. Professionals, with large sums at stake and years of practice, "
-            "hole par putts more often than birdie putts of the same length: they try harder to avoid a loss than "
-            "to secure a gain."
+            "hole par putts about two percentage points more often than birdie putts of the same length: they try "
+            "harder to avoid a loss than to secure a gain."
         ) as vo:
             self.play(FadeIn(ax), FadeIn(tag), Create(zero), run_time=1.0)
             vo.wait_until("a")
@@ -235,8 +235,9 @@ class Field(VoiceoverScene):
             f"estimate falls to {C['lower']:.2f}: too low, because that residual also contains the owner's luck "
             "when buying. The two estimates bracket the truth. <bookmark mark='d'/> And the owners with losses, "
             f"asking more, wait {C['weeks_losers']:.0f} weeks to sell instead of {C['weeks_gainers']:.0f}. David "
-            "Genesove and Christopher Mayer found this in Boston's condominium market in the 1990s: owners facing "
-            "losses asked more, got more, and sold more slowly."
+            "Genesove and Christopher Mayer found this in downtown Boston's condominium market from 1990 to 1997: "
+            "owners facing a nominal loss asked more, by a quarter to a third of the gap between the expected price "
+            "and the price they had paid, got more, and sold more slowly."
         ) as vo:
             self.play(FadeIn(ax), FadeIn(tag), FadeIn(side[0]), LaggedStart(*[FadeIn(p) for p in pts],
                                                                              lag_ratio=0.2), run_time=1.5)

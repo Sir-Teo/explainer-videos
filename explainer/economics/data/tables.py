@@ -3790,49 +3790,53 @@ FRONTIER44 = Table(
 # ---------------------------------------------------------------------------
 # Part 45
 # ---------------------------------------------------------------------------
-_D45 = "draft from memory, to be checked against the source before the build"
 GYM_2006 = Table(
     key="gym_2006",
     cite="Stefano DellaVigna and Ulrike Malmendier, \"Paying Not to Go to the Gym\", American Economic Review 96(3), "
          "2006, 694-719",
     tag="DellaVigna and Malmendier, AER (2006)",
-    where="abstract and section II",
-    read="the abstract",
-    checked="2026-11-20",
-    data={"members": 7752, "clubs": 3, "fee": 70, "visits": 4.3, "per_visit": 17, "pass": 10},
-    note=_D45,
+    where="the abstract: 7,752 members of three US health clubs over three years; a flat monthly fee of over $70; 4.3 "
+          "visits a month; a price per expected visit of more than $17 against $10 with a 10-visit pass; about $600 "
+          "forgone over a membership; overconfidence about future self-control or efficiency as the leading "
+          "explanation",
+    read="the abstract (Berkeley-hosted AER copy and RePEc)",
+    checked="2026-11-21",
+    data={"members": 7752, "clubs": 3, "fee": 70, "visits": 4.3, "per_visit": 17, "pass": 10, "forgone": 600},
 )
 DEPARTURES_2009 = Table(
     key="departures_2009",
     cite="Stefano DellaVigna, \"Psychology and Economics: Evidence from the Field\", Journal of Economic Literature "
          "47(2), 2009, 315-372",
     tag="DellaVigna, JEL (2009)",
-    where="sections 2-4: non-standard preferences, beliefs and decision making",
-    read="the article's structure",
-    checked="2026-11-20",
-    note=_D45,
+    where="the survey's organization into non-standard preferences, non-standard beliefs and non-standard decision "
+          "making",
+    read="the survey's structure, stated in words",
+    checked="2026-11-21",
 )
 KKT_1990 = Table(
     key="kkt_1990",
     cite="Daniel Kahneman, Jack L. Knetsch and Richard H. Thaler, \"Experimental Tests of the Endowment Effect and "
          "the Coase Theorem\", Journal of Political Economy 98(6), 1990, 1325-1348; Amos Tversky and Daniel Kahneman, "
-         "\"Advances in Prospect Theory\", Journal of Risk and Uncertainty 5, 1992, 297-323",
-    tag="Kahneman, Knetsch and Thaler, JPE (1990); Tversky and Kahneman (1992)",
-    where="the mug experiments; the 1992 parameters (0.88, 2.25, 0.61, 0.69)",
-    read="the 1990 paper's summary; the 1992 parameters as used in Psychology, Built, Part 26",
-    checked="2026-11-20",
-    note="volume of trade significantly below the half predicted (checked); the median asks and bids are stated "
-         "only as roughly two to one, " + _D45,
+         "\"Advances in Prospect Theory\", Journal of Risk and Uncertainty 5, 1992, 297-323; Botond Koszegi and "
+         "Matthew Rabin, \"A Model of Reference-Dependent Preferences\", Quarterly Journal of Economics 121(4), 2006, "
+         "1133-1165",
+    tag="Kahneman, Knetsch and Thaler, JPE (1990); Tversky and Kahneman (1992); Koszegi and Rabin (2006)",
+    where="the mug experiments: owners asked roughly twice what buyers would pay, and the volume of trade was "
+          "always well below the half predicted; the 1992 parameters (0.88, 2.25, 0.61, 0.69); the reference point "
+          "as recent expectations",
+    read="the 1990 paper's summary and secondary accounts (the exact medians are not stated); the 1992 parameters as "
+         "used in Psychology, Built, Part 26; the 2006 abstract",
+    checked="2026-11-21",
 )
 LIST_2003 = Table(
     key="list_2003",
     cite="John A. List, \"Does Market Experience Eliminate Market Anomalies?\", Quarterly Journal of Economics "
          "118(1), 2003, 41-71",
     tag="List, QJE (2003)",
-    where="the sports-card and pin markets",
-    read="the abstract",
-    checked="2026-11-20",
-    note=_D45,
+    where="the abstract and the card-show experiment: 148 traders, Orlando, 1998; market experience plays a "
+          "significant role in eliminating the endowment effect; the data as distributed in the R package AER",
+    read="the abstract; the data (AER 1.2-17), analysed here",
+    checked="2026-11-21",
 )
 REFERENCE_FIELD = Table(
     key="reference_field",
@@ -3842,10 +3846,12 @@ REFERENCE_FIELD = Table(
          "and Christopher Mayer, \"Loss Aversion and Seller Behavior: Evidence from the Housing Market\", Quarterly "
          "Journal of Economics 116(4), 2001, 1233-1260",
     tag="Allen et al. (2017); Pope and Schweitzer (2011); Genesove and Mayer (2001)",
-    where="the abstracts",
-    read="the abstracts",
-    checked="2026-11-20",
-    note=_D45,
+    where="marathons: 9,789,093 finishing times, bunching just ahead of round numbers; golf: millions of laser-"
+          "measured PGA Tour putts, birdie putts about two percentage points less often holed than comparable par "
+          "putts; condominiums: downtown Boston, 1990-97, asking prices higher by 25-35% of the gap between expected "
+          "price and purchase price, selling prices by 3-18%, lower hazard of sale",
+    read="the abstracts and working-paper abstracts",
+    checked="2026-11-21",
 )
 PRESENT_BIAS = Table(
     key="present_bias",
@@ -3855,20 +3861,21 @@ PRESENT_BIAS = Table(
          "American Economic Review 89(1), 1999, 103-124; Stefano DellaVigna and Ulrike Malmendier, \"Contract Design "
          "and Self-Control: Theory and Evidence\", Quarterly Journal of Economics 119(2), 2004, 353-402",
     tag="Phelps and Pollak (1968); Laibson (1997); O'Donoghue and Rabin (1999); DellaVigna and Malmendier (2004)",
-    where="the models",
-    read="the models as stated in the papers' introductions",
-    checked="2026-11-20",
-    note=_D45,
+    where="the models, stated and computed here (the chapter's numerical examples are the Island's)",
+    read="the models",
+    checked="2026-11-21",
 )
 SEED_2006 = Table(
     key="seed_2006",
     cite="Nava Ashraf, Dean Karlan and Wesley Yin, \"Tying Odysseus to the Mast: Evidence from a Commitment Savings "
          "Product in the Philippines\", Quarterly Journal of Economics 121(2), 2006, 635-672",
     tag="Ashraf, Karlan and Yin, QJE (2006)",
-    where="the abstract",
-    read="the abstract",
-    checked="2026-11-20",
-    note=_D45,
+    where="the abstract and IPA's summary: 202 of 710 clients offered the account took it (28.4%); women with "
+          "hyperbolic preferences were more likely to; after twelve months average savings balances in the treatment "
+          "group rose 81 percentage points relative to the comparison group",
+    read="the working-paper abstract and Innovations for Poverty Action's summary",
+    checked="2026-11-21",
+    data={"offered": 710, "took": 202, "itt_pp": 81},
 )
 DEFAULTS_45 = Table(
     key="defaults_45",
@@ -3876,12 +3883,16 @@ DEFAULTS_45 = Table(
          "Savings Behavior\", Quarterly Journal of Economics 116(4), 2001, 1149-1187; Richard H. Thaler and Shlomo "
          "Benartzi, \"Save More Tomorrow\", Journal of Political Economy 112(S1), 2004, S164-S187; Gabriel D. Carroll, "
          "James J. Choi, David Laibson, Brigitte C. Madrian and Andrew Metrick, \"Optimal Defaults and Active "
-         "Decisions\", Quarterly Journal of Economics 124(4), 2009, 1639-1674",
-    tag="Madrian and Shea (2001); Thaler and Benartzi (2004); Carroll et al. (2009)",
-    where="the abstracts",
-    read="the abstracts",
-    checked="2026-11-20",
-    note=_D45,
+         "Decisions\", Quarterly Journal of Economics 124(4), 2009, 1639-1674; Jon M. Jachimowicz, Shannon Duncan, "
+         "Elke U. Weber and Eric J. Johnson, \"When and Why Defaults Influence Decisions\", Behavioural Public Policy "
+         "3(2), 2019, 159-186",
+    tag="Madrian and Shea (2001); Thaler and Benartzi (2004); Carroll et al. (2009); Jachimowicz et al. (2019)",
+    where="participation in months 3-15 of tenure rose from 37% to 86% (Beshears, Choi, Laibson and Madrian, NBER "
+          "Reporter 2024); Save More Tomorrow: 78% of those offered joined, saving rates 3.5% to 13.6% over 40 months; "
+          "the meta-analysis: d = 0.68 (0.53 to 0.83) across 58 studies and 73,675 participants",
+    read="the abstracts and the authors' 2024 summary",
+    checked="2026-11-21",
+    data={"before": 37, "after": 86, "smart_join": 78, "smart_from": 3.5, "smart_to": 13.6, "meta_d": 0.68},
 )
 INATTENTION_45 = Table(
     key="inattention_45",
@@ -3890,10 +3901,11 @@ INATTENTION_45 = Table(
          "and Justin R. Sydnor, \"Heuristic Thinking and Limited Attention in the Car Market\", American Economic "
          "Review 102(5), 2012, 2206-2236",
     tag="Gabaix and Laibson (2006); Lacetera, Pope and Sydnor (2012)",
-    where="the abstracts",
-    read="the abstracts",
-    checked="2026-11-20",
-    note=_D45,
+    where="the shrouding equilibrium and the curse of debiasing; more than 22 million wholesale used-car sales, drops "
+          "of roughly $150-200 at each 10,000-mile threshold, most consistent with partial inattention by final "
+          "retail customers",
+    read="the abstracts and the NBER digest of the working paper",
+    checked="2026-11-21",
 )
 SOCIAL_45 = Table(
     key="social_45",
@@ -3901,12 +3913,14 @@ SOCIAL_45 = Table(
          "Journal of Economics 114(3), 1999, 817-868; Uri Gneezy and John A. List, \"Putting Behavioral Economics to "
          "Work: Testing for Gift Exchange in Labor Markets Using Field Experiments\", Econometrica 74(5), 2006, "
          "1365-1384; John A. List, \"On the Interpretation of Giving in Dictator Games\", Journal of Political "
-         "Economy 115(3), 2007, 482-493",
-    tag="Fehr and Schmidt (1999); Gneezy and List (2006); List (2007)",
-    where="the abstracts",
+         "Economy 115(3), 2007, 482-493; Robert Metcalf, Michael Satterthwaite, Shahar Dillbary and Bryant "
+         "Stoddard, \"Is a Fine Still a Price? Replication as Robustness\", 2020",
+    tag="Fehr and Schmidt (1999); Gneezy and List (2006); List (2007); Metcalf et al. (2020)",
+    where="inequity aversion; gift exchange in library data entry and door-to-door fundraising, higher effort in the "
+          "first hours only; nearly 200 dictators, a take option sharply reducing giving; the day-care fine put to "
+          "online respondents as vignettes, fines reducing anticipated lateness",
     read="the abstracts",
-    checked="2026-11-20",
-    note=_D45,
+    checked="2026-11-21",
 )
 WELFARE_45 = Table(
     key="welfare_45",
@@ -3916,22 +3930,22 @@ WELFARE_45 = Table(
          "Sunstein, Nudge (2008); Andrei Shleifer and Robert W. Vishny, \"The Limits of Arbitrage\", Journal of "
          "Finance 52(1), 1997, 35-55",
     tag="Bernheim and Rangel (2009); Thaler and Sunstein (2003, 2008); Shleifer and Vishny (1997)",
-    where="the abstracts",
-    read="the abstracts",
-    checked="2026-11-20",
-    note=_D45,
+    where="the welfare-relevant domain; libertarian paternalism; arbitrage that needs capital and patience",
+    read="the ideas, stated in words",
+    checked="2026-11-21",
 )
 NUDGES_2022 = Table(
     key="nudges_2022",
     cite="Stefano DellaVigna and Elizabeth Linos, \"RCTs to Scale: Comprehensive Evidence from Two Nudge Units\", "
          "Econometrica 90(1), 2022, 81-116",
     tag="DellaVigna and Linos, Econometrica (2022)",
-    where="the abstract; NBER working paper 27594",
+    where="the abstract; NBER working paper 27594: forecasters overestimated the nudge units' effect, nudge "
+          "practitioners were nearly calibrated; median arm sizes 484 (journals) and 10,006 (units)",
     read="the abstract and the NBER working paper's summary",
-    checked="2026-11-20",
+    checked="2026-11-21",
     data={"unit_trials": 126, "unit_people": 23_000_000, "unit_effect": 1.4, "unit_se": 0.3, "control": 17.2,
           "academic_trials": 26, "academic_nudges": 74, "academic_people": 505_337, "academic_effect": 8.7,
-          "academic_pct": 33.4, "selection_share": 0.70},
+          "academic_pct": 33.4, "selection_share": 0.70, "arm_journal": 484, "arm_unit": 10006},
 )
 LIMITS_45 = Table(
     key="limits_45",
@@ -3943,28 +3957,32 @@ LIMITS_45 = Table(
          "2748-2782; Olivier Coibion and Yuriy Gorodnichenko, \"Information Rigidity and the Expectations Formation "
          "Process\", American Economic Review 105(8), 2015, 2644-2678",
     tag="Sims (2003); Matejka and McKay (2015); Gabaix (2014); Bordalo et al. (2020)",
-    where="the models",
-    read="the abstracts",
-    checked="2026-11-20",
-    note=_D45,
+    where="the models, stated and computed on the Island",
+    read="the models",
+    checked="2026-11-21",
 )
 PRACTICE_45 = Table(
     key="practice_45",
-    cite="the practice chapter's sources, stated in words only",
-    tag="practice",
-    where="product design, consumer protection and pensions",
-    read="the chapter states practices, not estimates",
-    checked="2026-11-20",
-    note=_D45,
+    cite="the FTC's negative option (click-to-cancel) rule, vacated by the Eighth Circuit on 8 July 2025; SECURE 2.0 "
+         "Act of 2022, section 101 (automatic enrollment in new 401(k) and 403(b) plans, default 3-10%, rising "
+         "annually); Stefano DellaVigna and Devin Pope, \"What Motivates Effort? Evidence and Expert Forecasts\", "
+         "Review of Economic Studies 85(2), 2018, 1029-1069",
+    tag="FTC (2024-25); SECURE 2.0 (2022); DellaVigna and Pope (2018)",
+    where="the ruling's grounds (a missing preliminary regulatory analysis); the act's requirement for new plans; 208 "
+          "of 314 experts forecast 18 treatments; a sizeable share expected a very low piece rate to crowd out "
+          "effort, which instead rose 24% over no piece rate",
+    read="law-firm summaries of the ruling; plan-provider and ABA summaries of the act; the paper's abstract",
+    checked="2026-11-21",
 )
 FRONTIER45 = Table(
     key="frontier45",
-    cite="the frontier chapter's sources, stated in words only",
-    tag="frontier",
-    where="structural behavioural economics; behavioural macroeconomics; theories learned from data",
-    read="the chapter states questions, not estimates",
-    checked="2026-11-20",
-    note=_D45,
+    cite="Xavier Gabaix, \"A Behavioral New Keynesian Model\", American Economic Review 110(8), 2020, 2271-2327; "
+         "J. C. Peterson, D. D. Bourgin, M. Agrawal, D. Reichman and T. L. Griffiths, Science 372 (2021) 1209-1214",
+    tag="Gabaix (2020); Peterson et al. (2021); frontier",
+    where="cognitive discounting and the forward-guidance puzzle; choices13k; structural behavioural economics and "
+          "robustness, stated in words",
+    read="the abstracts",
+    checked="2026-11-21",
 )
 PART45 = (GYM_2006, DEPARTURES_2009, KKT_1990, LIST_2003, REFERENCE_FIELD, PRESENT_BIAS, SEED_2006, DEFAULTS_45,
           INATTENTION_45, SOCIAL_45, WELFARE_45, NUDGES_2022, LIMITS_45, PRACTICE_45, FRONTIER45)

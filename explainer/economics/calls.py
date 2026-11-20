@@ -414,6 +414,19 @@ CALLS = {c.key: c for c in [
           "of Technology on Employment and Unemployment, National Academy of Engineering (1983), as quoted in "
           "secondary listings",
           "BLS via FRED: LNS12300060 (employment-population ratio, 25-54) and PRS85006173 (labor share)")),
+    Call("experts_2018", 45, "a sizeable share of 208 experts (economists, psychologists and others) asked to "
+         "forecast a real-effort experiment", "before its results appeared, 2016",
+         "paying a token piece rate, a tenth of a cent, would crowd out effort: people paid almost nothing would work "
+         "less than people paid nothing at all",
+         "the psychology of motivation crowding out (a small payment turning a favour into a poor deal), and earlier "
+         "experiments such as the day-care fine",
+         "in DellaVigna and Pope's eighteen treatments, the token piece rate raised effort by 24% over no piece rate; "
+         "experts as a group anticipated other patterns well, such as the power of psychological motivators, and "
+         "averaging their forecasts beat most individual experts",
+         "wrong",
+         ("S. DellaVigna and D. Pope, \"What Motivates Effort? Evidence and Expert Forecasts\", Review of Economic "
+          "Studies 85(2), 2018, 1029-1069, abstract",
+          "S. DellaVigna and D. Pope, \"Predicting Experimental Results: Who Knows What?\", working paper (2017)")),
     Call("ballmer_2007", 44, "Steve Ballmer, chief executive of Microsoft, in an interview with USA Today", "April 2007",
          "there's no chance that the iPhone is going to get any significant market share; no chance",
          "an expensive phone entering a market of established makers, against Microsoft's own mobile software with "

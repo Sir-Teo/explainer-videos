@@ -1367,3 +1367,33 @@ brackets on screen.
 | Emmanuel Saez; Joel Slemrod; Martin Feldstein; Henrik Kleven; Gabriel Zucman; Agnar Sandmo | 伊曼纽尔·赛斯；乔尔·斯莱姆罗德；马丁·费尔德斯坦；亨里克·克莱文；加布里埃尔·祖克曼；阿格纳·桑德莫 |
 | Martin Baily; Raj Chetty; Jonathan Gruber; Bruce Meyer; Amy Finkelstein; Katherine Baicker | 马丁·贝利；拉杰·切蒂；乔纳森·格鲁伯；布鲁斯·迈耶；埃米·芬克尔斯坦；凯瑟琳·贝克 |
 | Nathaniel Hendren; Brigitte Madrian; Nicole Maestas; Nada Eissa; Mark Pauly; Kenneth Arrow | 纳撒尼尔·亨德伦；布丽奇特·马德里安；妮科尔·梅斯塔斯；纳达·艾萨；马克·保利；肯尼斯·阿罗 |
+
+## Part 45
+
+| English | 中文 |
+|---|---|
+| behavioural economics | 行为经济学 |
+| present bias; beta-delta (quasi-hyperbolic) discounting | 现时偏差；β-δ（准双曲）贴现 |
+| naif; sophisticate | 天真者；老练者（自知者） |
+| preference reversal | 偏好逆转 |
+| commitment device | 承诺机制 |
+| endowment effect | 禀赋效应 |
+| loss aversion; reference point | 损失厌恶；参照点 |
+| prospect theory; value function | 前景理论；价值函数 |
+| bunching | 聚集（堆积） |
+| default; inertia; procrastination | 默认选项；惰性；拖延 |
+| Save More Tomorrow | “明天存更多”计划 |
+| shrouded attributes; add-on pricing | 隐藏属性；附加品定价 |
+| curse of debiasing | 去偏的诅咒 |
+| left-digit bias | 左位数偏差 |
+| inequity aversion | 不平等厌恶 |
+| ultimatum game; dictator game | 最后通牒博弈；独裁者博弈 |
+| gift exchange | 礼物交换 |
+| crowding out (of motivation) | （动机的）挤出 |
+| libertarian paternalism; nudge; sludge | 自由意志家长主义；助推；淤泥（阻碍性摩擦） |
+| behavioural welfare economics | 行为福利经济学 |
+| publication bias; selection model | 发表偏倚；选择模型 |
+| rational inattention | 理性疏忽 |
+| sparsity | 稀疏性 |
+| diagnostic expectations; overreaction | 诊断性预期；过度反应 |
+| structural behavioural economics | 结构行为经济学 |

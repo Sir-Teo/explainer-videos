@@ -131,8 +131,9 @@ class Social(VoiceoverScene):
             "changed what they chose. <bookmark mark='d'/> So the game measures preferences, but also what the "
             "menu suggests is appropriate, and the sense of being watched. <bookmark mark='e'/> Social motives also "
             "interact with incentives. In Part one, a fine for late pickup at six Israeli day-care centres was "
-            "followed by more late parents, not fewer: a fine is a price. A later study, based on surveys in "
-            "another setting, did not find the same effect, which is how one striking result should be held: as "
+            "followed by more late parents, not fewer: a fine is a price. A 2020 replication that put the same "
+            "situation to online respondents as a written scenario found the opposite, fines reducing intended "
+            "lateness. A survey is not a field experiment, but one striking result should be held as what it is: "
             "one result."
         ) as vo:
             self.play(FadeIn(tag), FadeIn(cards.cards[0], shift=UP * 0.1))

@@ -1311,7 +1311,70 @@ DIALS = {d.key: d for d in [
     Dial("discount", "social discount rate and the social cost of carbon", "percent a year; dollars per tonne",
          (48, 58)),
     Dial("energy_elasticity", "price elasticity of gasoline and of electricity", "", (48,)),
-    Dial("loss_present", "loss aversion and present bias", "", (45,)),
+    Dial("loss_aversion", "loss aversion", "lambda: how many times more a loss is felt than an equal gain", (7, 45),
+         status="contested", checked="2026-11-21",
+         meaning="losses weigh more than equal gains in most settings, but how much depends on the setting and on how "
+                 "lambda is measured: around two across a broad literature, close to one in risky choices between "
+                 "modest gambles, and little at all for experienced traders handling goods meant for exchange; the "
+                 "size matters for pricing, insurance, labour supply and the stickiness of defaults",
+         estimates=(
+             Estimate("Tversky and Kahneman", 1992, "lab", "choices between gambles; the median parameters", 2.25,
+                      where="Journal of Risk and Uncertainty 5: 297-323, as used in Psychology, Built, Part 26",
+                      checked="2026-11-21"),
+             Estimate("Brown, Imai, Vieider and Camerer", 2024, "meta-analysis", "empirical estimates reported "
+                      "1992-2017 across economics, psychology and neuroscience", 1.955, 1.820, 2.102,
+                      where="Journal of Economic Literature 62(2): 485-516, abstract (95% interval)",
+                      checked="2026-11-21"),
+             Estimate("Walasek, Mullett and Stewart", 2024, "meta-analysis", "estimates from individual choices "
+                      "between risky prospects, random effects", 1.31, 1.10, 1.53,
+                      where="Journal of Economic Psychology 103: 102740, abstract (95% interval)",
+                      checked="2026-11-21"),
+             Estimate("this film (choices13k, prospect theory fitted)", 2026, "structural", "1,928 gamble problems "
+                      "described without feedback, 31,700 choices (Peterson et al. 2021)", 1.13,
+                      where="videos/economics/econ45/compute.py, item c13k (as in Psychology, Built, Part 26)",
+                      checked="2026-11-21"),
+         )),
+    Dial("present_bias", "present bias", "beta: the weight on everything after today relative to today (1 = none)",
+         (7, 45), status="depends on the setting", checked="2026-11-21",
+         meaning="people are present-biased on average, most clearly over effort and consumption and much less over "
+                 "money, which can be saved or borrowed; a meta-analysis of 220 convex-time-budget estimates from 28 "
+                 "articles finds present bias on average, with wide variation and some selective reporting (Imai, "
+                 "Rutter and Camerer 2021); the size, and whether people know it, decides the value of commitment and "
+                 "of defaults",
+         estimates=(
+             Estimate("Laibson, Repetto and Tobacman", 2007, "structural", "US households' wealth and credit-card "
+                      "borrowing over the life cycle, by simulated moments", 0.50,
+                      where="NBER working paper 13314 (2007 version): beta 0.50, delta 0.99, relative risk aversion "
+                            "1.3; a later revision reports annualized discount rates instead", checked="2026-11-21"),
+             Estimate("Cerrone et al.", 2026, "lab", "real-effort tasks chosen for today against a future day", 0.745,
+                      0.70, 0.79, where="Experimental Economics, \"Estimating present bias and sophistication over "
+                                        "effort and money\", abstract (the range of estimates)",
+                      checked="2026-11-21"),
+             Estimate("Augenblick, Niederle and Sprenger", 2015, "lab", "choices over money paid at different dates: "
+                      "virtually no present bias (shown at 1); over effort, considerably more", 1.0,
+                      where="QJE 130(3): 1067-1115, abstract", checked="2026-11-21"),
+             Estimate("this film (the Island's gym members)", 2026, "calibration", "planted, uniform between 0.5 and "
+                      "0.95", 0.725, 0.5, 0.95, where="explainer/economics/island.py, TRUTHS[45]['gym']",
+                      checked="2026-11-21"),
+         )),
+    Dial("default_effect", "the effect of a default", "percentage points more people ending at the default outcome",
+         (42, 45), status="depends on the setting", checked="2026-11-21",
+         meaning="defaults move choices a great deal when people put decisions off or read the default as advice, and "
+                 "little when preferences are strong and varied; across 58 studies a meta-analysis finds d = 0.68 "
+                 "(0.53 to 0.83) with wide variation (Jachimowicz et al. 2019); a default is a policy whether it is "
+                 "chosen deliberately or not",
+         estimates=(
+             Estimate("Madrian and Shea", 2001, "event study", "401(k) participation of new hires at one large firm, "
+                      "months 3 to 15 of tenure, before and after automatic enrollment (37% to 86%)", 49,
+                      where="QJE 116(4): 1149-1187; the figures as the authors summarized them in the NBER Reporter "
+                            "(2024)", checked="2026-11-21"),
+             Estimate("this film (the Island's naive new hires)", 2026, "calibration", "participation after a year, "
+                      "sign-up against automatic enrollment at 3% (63% to 98%)", 35,
+                      where="videos/economics/econ45/compute.py, item enrol", checked="2026-11-21"),
+             Estimate("this film (the Island's time-consistent new hires)", 2026, "calibration", "the same, with no "
+                      "present bias (90% either way)", 0,
+                      where="videos/economics/econ45/compute.py, item enrol", checked="2026-11-21"),
+         )),
     Dial("genai_productivity", "productivity effect of generative AI on a task", "percent", (65,)),
     Dial("consistency", "consistency of choices with utility maximization", "Afriat's critical cost efficiency "
          "index: the share of each budget a person's choices keep once all revealed-preference contradictions are "
@@ -1356,6 +1419,35 @@ DIALS = {d.key: d for d in [
 
 # What each part shows without entering a row, and why: {part: [(what is shown, the reason)]}
 SHOWN = {
+    45: [
+        ("DellaVigna and Malmendier (2006)", "the gym's contracts and attendance, stated from the abstract"),
+        ("DellaVigna (2009)", "the survey's three classes of departures, stated"),
+        ("Kahneman, Knetsch and Thaler (1990); Koszegi and Rabin (2006)", "the mug experiments stated in words (about "
+         "two to one); the reference point as expectations, stated"),
+        ("List (2003)", "his card-show data analysed here: who swapped, by experience"),
+        ("Allen, Dechow, Pope and Wu (2017); Pope and Schweitzer (2011); Genesove and Mayer (2001)", "the field "
+         "findings stated from the abstracts; each mechanism computed on the Island"),
+        ("Phelps and Pollak (1968); Laibson (1997); O'Donoghue and Rabin (1999); DellaVigna and Malmendier (2004)",
+         "models, computed on the Island"),
+        ("Ashraf, Karlan and Yin (2006)", "take-up and the savings effect stated; the design computed on the Island"),
+        ("Madrian and Shea (2001); Thaler and Benartzi (2004); Carroll et al. (2009)", "entered in the default_effect "
+         "dial; Save More Tomorrow's figures stated"),
+        ("Gabaix and Laibson (2006); Lacetera, Pope and Sydnor (2012)", "the equilibrium computed; the car-market "
+         "steps stated and the estimator run on the Island"),
+        ("Fehr and Schmidt (1999); Gneezy and List (2006); List (2007); Metcalf et al. (2020)", "the model computed; "
+         "the field findings and the day-care replication stated"),
+        ("Bernheim and Rangel (2009); Thaler and Sunstein (2003, 2008); Shleifer and Vishny (1997)", "ideas, stated"),
+        ("DellaVigna and Linos (2022)", "the two samples' average effects and the share due to selective "
+         "publication, stated; the filter and its correction computed on the Island"),
+        ("Sims (2003); Matejka and McKay (2015); Gabaix (2014); Bordalo et al. (2020); Coibion and Gorodnichenko "
+         "(2015)", "models, computed on the Island"),
+        ("DellaVigna and Pope (2018)", "the Called it? card"),
+        ("Tversky and Kahneman (1992); Brown et al. (2024); Walasek et al. (2024); Laibson, Repetto and Tobacman "
+         "(2007); Augenblick, Niederle and Sprenger (2015); Cerrone et al. (2026); Jachimowicz et al. (2019)",
+         "entered in the loss_aversion, present_bias and default_effect dials"),
+        ("Gabaix (2020); Peterson et al. (2021); the FTC's click-to-cancel rule; SECURE 2.0", "the practice and "
+         "frontier chapters, stated"),
+    ],
     44: [
         ("Rust (1987); Hotz and Miller (1993)", "the model estimated on Rust's data; CCPs computed; myopia rejected"),
         ("Ericson and Pakes (1995); Pakes and McGuire (1994)", "a small Markov-perfect duopoly computed"),
@@ -1514,11 +1606,11 @@ SHOWN = {
          "(1968); Laibson (1997); Gilboa and Schmeidler (1989); Klibanoff, Marinacci and Mukerji (2005); Hansen and "
          "Sargent (2001, 2008); Manski (2004)", "methods and models, shown for what they do"),
         ("Kahneman and Tversky (1979); Tversky and Kahneman (1992)", "prospect theory in one card; loss aversion "
-         "and probability weighting enter the loss_present dial in Part 45"),
+         "enters the loss_aversion dial in Part 45"),
         ("Rabin (2000); Rabin and Thaler (2001)", "a theorem: its tables are transcribed, and the CRRA calibration "
          "is computed on screen"),
         ("Thaler (1981); Imai, Rutter and Camerer (2021)", "evidence on present bias, shown for its direction; "
-         "present bias enters the loss_present dial in Part 45"),
+         "present bias enters the present_bias dial in Part 45"),
         ("Hayden and Platt (2009)", "bids for the St Petersburg game: a Called-it card "
          "(explainer.economics.calls), not an estimate of a parameter"),
         ("Post, van den Assem, Baltussen and Thaler (2008); Sydnor (2010)", "evidence on risk taking in a game show "

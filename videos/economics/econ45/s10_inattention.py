@@ -117,7 +117,7 @@ class Inattention(VoiceoverScene):
             label(r"each dot: \ the average \\ price in a 500-mile bin", font_size=18, color=BUY),
             label(rf"a jump of \${C['jump']:.0f} \\ at every 10,000", font_size=18, color=LOSS),
             label(rf"$\hat\theta$ = {C['theta_hat']:.2f} \ (planted {C['theta']:.1f})", font_size=19, color=E.ACCENT),
-            label(r"Lacetera, \ Pope and \\ Sydnor: \ the same jumps \\ in millions of real \\ auction sales",
+            label(r"Lacetera, \ Pope and \\ Sydnor: \ steps of about \\ \$150--200 in 22 million \\ auction sales",
                   font_size=17, color=GREY_A),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.33).to_edge(RIGHT, buff=0.35)
         tag = published_tag(tables.INATTENTION_45.tag + r"; \ the Island", corner=DR, font_size=11)
@@ -131,9 +131,10 @@ class Inattention(VoiceoverScene):
             "only part of the rest. If theta is the share of the remaining digits they ignore, the step and the "
             "slope between steps pin it down: theta is the step divided by the step plus ten thousand miles' worth "
             f"of slope. The estimate is {C['theta_hat']:.2f}, against a planted {C['theta']:.1f}. "
-            "<bookmark mark='d'/> Nicola Lacetera, Devin Pope and Justin Sydnor found these steps in millions of "
-            "real wholesale car auctions, where the buyers are professional dealers. They are passing on their "
-            "customers' left-digit bias."
+            "<bookmark mark='d'/> Nicola Lacetera, Devin Pope and Justin Sydnor found these steps in more than 22 "
+            "million real wholesale car sales, drops of roughly 150 to 200 dollars at each ten-thousand-mile mark. "
+            "The buyers at those auctions are professional dealers; the evidence fits partial inattention by the "
+            "retail customers they sell to, whose bias the dealers pass back into wholesale prices."
         ) as vo:
             self.play(FadeIn(ax), FadeIn(tag), FadeIn(thr), FadeIn(side[0]), run_time=1.0)
             vo.wait_until("a")

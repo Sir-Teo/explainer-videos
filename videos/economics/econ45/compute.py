@@ -3,13 +3,14 @@
     python -m videos.economics.econ45.compute            # everything missing (about two minutes)
     python -m videos.economics.econ45.compute --force gym
 
-Results are cached in ``.cache/econ45/<name>.json`` (+ ``.npz``); scenes call ``load(name)``.  Data: the Data Room
-(``explainer.economics.data``: FRED's personal saving rate; the tables of DellaVigna and Malmendier, Kahneman,
-Knetsch and Thaler, List, the field studies of reference dependence, Laibson and O'Donoghue and Rabin, Ashraf,
-Karlan and Yin, Madrian and Shea and Thaler and Benartzi, Gabaix and Laibson and Lacetera, Pope and Sydnor, Fehr and
-Schmidt, Gneezy and List and List, Bernheim and Rangel, DellaVigna and Linos, Sims, Gabaix and Bordalo, Gennaioli,
-Ma and Shleifer) and *Psychology, Built*'s Archive (choices13k, Peterson et al. 2021, fetched on first use).  Models:
-Agora's behavioural economics (``agora.behave``) with the Island's Part 45 truths.
+Results are cached in ``.cache/econ45/<name>.json`` (+ ``.npz``); scenes call ``load(name)``. Data: the Data Room
+(``explainer.economics.data``: FRED's personal saving rate; List's card-show traders, via the R package AER; the
+tables of DellaVigna and Malmendier, Kahneman, Knetsch and Thaler, List, the field studies of reference dependence,
+Laibson and O'Donoghue and Rabin, Ashraf, Karlan and Yin, Madrian and Shea and Thaler and Benartzi, Gabaix and
+Laibson and Lacetera, Pope and Sydnor, Fehr and Schmidt, Gneezy and List and List, Bernheim and Rangel, DellaVigna
+and Linos, Sims, Gabaix and Bordalo, Gennaioli, Ma and Shleifer) and *Psychology, Built*'s Archive (choices13k,
+Peterson et al. 2021, fetched on first use). Models: Agora's behavioural economics (``agora.behave``) with the
+Island's Part 45 truths.
 
 Items:
     gym          the Island's gym: who picks which contract, forecast against actual visits, the price per visit
@@ -17,6 +18,7 @@ Items:
     disclose     a disclosure rule at the gym: choices and realized gains as more naifs heed it
     mugs         the mug market with and without loss aversion: asks, bids, the volume of trade
     experience   the share of goods traded as traders gain experience
+    sportscards  List's card-show traders: who swapped, by dealer status and by trades a month
     marathon     finishing times bunched under round numbers; excess and missing mass at each half hour
     golf         putts for par and for birdie: the raw gap and the gap at equal distance
     condos       loss-averse sellers after a fall in prices: the two bounds, markups and time on the market
@@ -132,6 +134,32 @@ def compute_mugs() -> dict:
     return {"plain": plain, "loss": loss, "ask": ask.tolist(), "ask0": ask0.tolist(), "bid": bid.tolist(),
             "trades": int(np.sum(bid > ask)), "trades0": int(np.sum(bid > ask0)), "k": k, "n": M["n"],
             "lam": M["lam_goods"]}
+
+
+def compute_sportscards() -> dict:
+    """List's 148 card-show traders: the share who swapped, overall, by dealer status and by trades a month, with
+    exact binomial tests against the half predicted without an endowment effect."""
+    from scipy import stats
+
+    d = data.sportscards()
+    t = np.array([x == "yes" for x in d["trade"]])
+    dl = np.array([x == "yes" for x in d["dealer"]])
+    pm = np.array(d["permonth"])
+    bands = ((0, 1, "0"), (1, 5, "1-4"), (5, 10, "5-9"), (10, 20, "10-19"), (20, 1000, "20+"))
+    out = {"n": int(len(t)), "share": float(t.mean()), "dealers": int(dl.sum()), "share_dealers": float(t[dl].mean()),
+           "share_others": float(t[~dl].mean()),
+           "p_others": float(stats.binomtest(int(t[~dl].sum()), int((~dl).sum()), 0.5).pvalue),
+           "p_dealers": float(stats.binomtest(int(t[dl].sum()), int(dl.sum()), 0.5).pvalue),
+           "bands": [], "band_n": [], "band_share": []}
+    for lo, hi, nm in bands:
+        s = (pm >= lo) & (pm < hi)
+        out["bands"].append(nm)
+        out["band_n"].append(int(s.sum()))
+        out["band_share"].append(float(t[s].mean()))
+    lo_, hi_ = (~dl) & (pm < 6), (~dl) & (pm >= 6)
+    out.update({"others_low": float(t[lo_].mean()), "others_low_n": int(lo_.sum()), "others_high": float(t[hi_].mean()),
+                "others_high_n": int(hi_.sum())})
+    return out
 
 
 def compute_experience() -> dict:
@@ -321,6 +349,7 @@ ITEMS = {
     "disclose": compute_disclose,
     "mugs": compute_mugs,
     "experience": compute_experience,
+    "sportscards": compute_sportscards,
     "marathon": compute_marathon,
     "golf": compute_golf,
     "condos": compute_condos,

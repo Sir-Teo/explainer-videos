@@ -1052,6 +1052,24 @@ DATASETS = {
         "sha256": "b1c53f2e1eef9bf20cf38bbd09b604933a4ed8d6776b91ff9978f55237ee76a8",
         "files": ("resume_2001.csv",),
     },
+    "sportscards": {
+        "title": "List's sports-card experiment: 148 traders at a trading-card show in Orlando, Florida, 1998, each "
+                 "given one of two collectibles of about equal market value and offered a swap, as distributed in the "
+                 "R package AER",
+        "publisher": "R package AER (C. Kleiber and A. Zeileis), CRAN; from the online complements to Stock and Watson "
+                     "(2007)",
+        "citation": "J. A. List, \"Does Market Experience Eliminate Market Anomalies?\", Quarterly Journal of "
+                    "Economics 118(1): 41-71 (2003); AER 1.2-17 (CRAN), data/SportsCards.rda, retrieved 2026-11-21",
+        "short": "List (2003), via AER",
+        "url": "https://cran.r-project.org/src/contrib/AER_1.2-17.tar.gz",
+        "licence": "GPL-2 | GPL-3 (the package); the data are the cited experiment's",
+        "units": "one row per trader: the good given (A, a ticket stub from Cal Ripken Jr.'s record game; B, a souvenir "
+                 "of Nolan Ryan's 300th win), dealer or not, trades a month, years trading, income, gender, education, "
+                 "age, and whether the trader swapped",
+        "vintage": "2026-11-21",
+        "sha256": "2f35e92208d596c487397c87d8011a9ccb4c376f33ce8fc88338d205e0ae7e7e",
+        "files": ("sportscards_1998.csv",),
+    },
     "saez": {
         "title": "Top income shares in the United States from tax returns, 1913-2022 (Piketty and Saez's series, "
                  "updated): shares of the top 10%, 5%, 1%, 0.5%, 0.1% and 0.01% of tax units, excluding and including "
@@ -1605,6 +1623,19 @@ def resume() -> dict:
     strings; ``race`` is 'white' or 'black', ``gender`` 'f' or 'm', ``received_callback`` 0 or 1)."""
     rows = _read(HERE / "resume_2001.csv")
     return {k: ([r[k] for r in rows] if k in RESUME_TEXT else [_num(r[k]) for r in rows]) for k in RESUME_COLS}
+
+
+SPORTSCARDS_COLS = ("good", "dealer", "permonth", "years", "income", "gender", "education", "age", "trade")
+SPORTSCARDS_TEXT = ("good", "dealer", "income", "gender", "education", "trade")
+
+
+@functools.lru_cache(maxsize=None)
+def sportscards() -> dict:
+    """List's 148 card-show traders: ``{column: [...]}`` for :data:`SPORTSCARDS_COLS` (``good`` 'A' or 'B',
+    ``dealer`` and ``trade`` 'yes' or 'no', ``permonth`` trades a month, ``years`` years trading, ``age``)."""
+    rows = _read(HERE / "sportscards_1998.csv")
+    return {k: ([r[k] for r in rows] if k in SPORTSCARDS_TEXT else [_num(r[k]) for r in rows])
+            for k in SPORTSCARDS_COLS}
 
 
 @functools.lru_cache(maxsize=None)
@@ -2276,6 +2307,41 @@ def refresh_resume() -> None:
                     row.append("" if v is None or (isinstance(v, float) and v != v) else _fmt(float(v)))
             w.writerow(row)
 
+def refresh_sportscards() -> None:
+    import tarfile  # noqa: PLC0415
+
+    from explainer.psychology import rdata  # noqa: PLC0415
+
+    d = DATASETS["sportscards"]
+    raw = RAW / "AER_1.2-17.tar.gz"
+    if raw.exists() and hashlib.sha256(raw.read_bytes()).hexdigest() == d["sha256"]:
+        sha = d["sha256"]
+    else:
+        sha = _download(d["url"], raw)
+    if sha != d["sha256"]:
+        print(f"sportscards: the download differs from the recorded vintage ({sha[:12]})")
+    with tarfile.open(raw, "r:gz") as tf:
+        tmp = RAW / "AER_SportsCards.rda"
+        tmp.write_bytes(tf.extractfile("AER/data/SportsCards.rda").read())
+    obj = rdata.load(tmp)[0][1]
+    names = obj["attrs"]["names"]["value"]
+    cols = {}
+    for n, c in zip(names, obj["value"]):
+        v = c["value"]
+        attrs = c.get("attrs") or {}
+        levels = attrs.get("levels", {}).get("value") if isinstance(attrs, dict) else None
+        cols[n] = [levels[int(x) - 1] for x in v] if levels else list(v)
+    with open(HERE / "sportscards_1998.csv", "w", newline="", encoding="utf-8") as f:
+        w = csv.writer(f)
+        w.writerow(SPORTSCARDS_COLS)
+        for i in range(len(cols["trade"])):
+            row = []
+            for c in SPORTSCARDS_COLS:
+                v = cols[c][i]
+                row.append(str(v) if c in SPORTSCARDS_TEXT else _fmt(float(v)))
+            w.writerow(row)
+
+
 def refresh_saez() -> None:
     import openpyxl  # noqa: PLC0415
 
@@ -2934,7 +3000,7 @@ REFRESH = {"draft1970": refresh_draft1970, "ajr": refresh_ajr, "maddison2023": r
            "hlw": refresh_hlw, "ramey_zubairy": refresh_ramey_zubairy, "ramey_tax": refresh_ramey_tax,
            "blanchard_leigh": refresh_blanchard_leigh, "rr_hap": refresh_rr_hap, "jst": refresh_jst,
            "bigmac": refresh_bigmac, "wdi_ca": refresh_wdi_ca, "trefler_hov": refresh_trefler_hov,
-           "cepii_gravity": refresh_cepii_gravity, "autor_dorn": refresh_autor_dorn, "resume": refresh_resume,
+           "cepii_gravity": refresh_cepii_gravity, "autor_dorn": refresh_autor_dorn, "resume": refresh_resume, "sportscards": refresh_sportscards,
            "saez": refresh_saez, "opportunity": refresh_opportunity, "wid_top1": refresh_wid_top1,
            "blp_cars": refresh_blp_cars, "rust_buses": refresh_rust_buses}
 
