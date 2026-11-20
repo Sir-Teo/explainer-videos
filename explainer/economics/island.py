@@ -566,6 +566,21 @@ TRUTHS = {
         "development": {"year": 2019, "alpha": 1 / 3},
         "lucas": {"poor": "IND", "rich": "USA", "year": 2019, "alpha": 0.4},
     },
+    21: {
+        # Play it (chapter 1): hours of work for 1,000 lumen-hours in 1992, given 5.37 in 1800 (Nordhaus)
+        "playit": {"options": (1.0, 0.1, 0.01, 0.001, 0.0001)},
+        # Romer's economy (chapter 4): idea productivity delta, the markup's alpha, patience and curvature
+        "romer": {"L": 1.0, "delta": 0.10, "alpha": 0.5, "rho": 0.02, "theta": 1.0, "sizes": (0.5, 1.0, 1.5, 2.0)},
+        # Aghion and Howitt's ladder (chapter 5)
+        "ah": {"lam": 0.1, "alpha": 0.6, "rho": 0.05, "L": 1.0, "gamma": 1.5, "n": 0.25, "years": 120, "sectors": 200,
+               "seed": 21},
+        # semi-endogenous growth (chapter 6): researchers grow 4.3% a year; beta = 1 - phi = 3
+        "semi": {"lam": 1.0, "phi": -2.0, "n": 0.043, "theta": 0.05, "years": 200},
+        # the Island's plants (chapter 8): physical productivity and wedges, two economies
+        "plants": {"n": 4000, "sd_logA": 0.6, "sd_wedge": (0.35, 0.65), "sigma": 3.0, "seed": 21},
+        # directed technical change (chapter 12)
+        "directed": {"sigmas": (1.4, 3.0)},
+    },
 }
 
 

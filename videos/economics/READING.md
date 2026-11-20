@@ -10,7 +10,7 @@ the series leaves out.
 Both *Parts* columns are found, not typed. *Planned* lists the parts whose entry in
 [`SYLLABUS.md`](SYLLABUS.md) names the book or paper; *Built* lists the parts whose scenes, compute step or
 README cite it (a dot: none yet). Fuller notes (editions, chapters, what each source was used for) are in each
-part's README, under *Sources*. Built so far: Parts 1–20.
+part's README, under *Sources*. Built so far: Parts 1–21.
 
 ## 1. The textbook spine
 
@@ -41,7 +41,7 @@ part's README, under *Sources*. Built so far: Parts 1–20.
 | Borjas | G. Borjas, *Labor Economics* (8th ed., 2020) | 38 | · |
 | Gruber | J. Gruber, *Public Finance and Public Policy* (7th ed., 2022) | 15, 41–42, 50 | 7, 15 |
 | Ray | D. Ray, *Development Economics* (1998) | 46 | · |
-| Weil | D. Weil, *Economic Growth* (3rd ed., 2013) | 7, 19 | 3, 7, 19–20 |
+| Weil | D. Weil, *Economic Growth* (3rd ed., 2013) | 7, 19 | 3, 7, 19–21 |
 
 ### Graduate micro
 
@@ -120,7 +120,7 @@ part's README, under *Sources*. Built so far: Parts 1–20.
 
 | Model or result | Paper | Planned | Built |
 |---|---|---|---|
-| the division of labour | Smith (1776), *The Wealth of Nations* | 1 | 1–2, 19 |
+| the division of labour | Smith (1776), *The Wealth of Nations* | 1 | 1–2, 19, 21 |
 | comparative advantage | Ricardo (1817), *Principles*, ch. 7 | 2, 8, 35–36 | 1–2, 8, 19 |
 | supply and demand, the scissors | Marshall (1890), *Principles of Economics* | 2, 37 | 2, 14 |
 | the price system as information | Hayek (1945), "The Use of Knowledge in Society" | 1, 9 | 1, 9 |
@@ -188,7 +188,7 @@ part's README, under *Sources*. Built so far: Parts 1–20.
 | the long run in numbers | the Maddison Project (Bolt and van Zanden 2024) | 1 | 1, 3, 14, 19–20 |
 | the neoclassical growth model | Solow (1956); Ramsey (1928); Cass (1965) | 20 | 20 |
 | endogenous growth | Romer (1990); Aghion and Howitt (1992) | 21 | · |
-| misallocation | Hsieh and Klenow (2009) | 9, 21 | 9 |
+| misallocation | Hsieh and Klenow (2009) | 9, 21 | 9, 21 |
 
 ### Macroeconomics
 
@@ -251,7 +251,7 @@ part's README, under *Sources*. Built so far: Parts 1–20.
 | vector autoregressions | Sims (1980) | 55 | · |
 | dynamic discrete choice | Rust (1987) | 44, 54 | · |
 | generalized method of moments | Hansen (1982) | 54 | · |
-| machine learning for causal questions | Chernozhukov and others (2018); Athey and Imbens (2019) | 64 | · |
+| machine learning for causal questions | Chernozhukov and others (2018); Athey and Imbens (2019) | 64 | 21 |
 | publication bias in economics | Brodeur and others (2016) | 67 | · |
 
 ## 3. Every built part's reference card
@@ -295,6 +295,8 @@ part's README, under *Sources*. Built so far: Parts 1–20.
 **Part 19, *The Great Escape*.** Books: Gregory Clark, *A Farewell to Alms* (2007); Robert C. Allen, *The British Industrial Revolution in Global Perspective* (2009); Joel Mokyr, *A Culture of Growth* (2016); Oded Galor, *Unified Growth Theory* (2011); Kenneth Pomeranz, *The Great Divergence* (2000). Papers: Malthus (1798); Ricardo (1817); Ashraf and Galor (2011, 2013); Broadberry, Campbell, Klein, Overton and van Leeuwen (2015); Humphries and Weisdorf (2019); Voigtländer and Voth (2013); North and Weingast (1989); Clark (1996); Humphries (2013); Kelly, Mokyr and Ó Gráda (2014); Broadberry, Guan and Li (2018); Crafts and Harley (1992); Crafts (2004); Allen (2009); Voth (2000); de Vries (1994); Becker and Lewis (1973); Kremer (1993); Galor and Weil (2000); Comin, Easterly and Gong (2010); Spolaore and Wacziarg (2009); Kelly (2019); Ehrlich (1968).
 
 **Part 20, *Growth I: Capital*.** Books: Charles I. Jones and Dietrich Vollrath, *Introduction to Economic Growth* (3rd ed., 2013); Daron Acemoglu, *Introduction to Modern Economic Growth* (2009), chs. 2–3 and 8; David Romer, *Advanced Macroeconomics* (5th ed., 2019), chs. 1–2; William Easterly, *The Elusive Quest for Growth* (2001). Papers: Harrod (1939); Domar (1946); Solow (1956, 1957); Swan (1956); Kaldor (1961); Phelps (1961); Ramsey (1928); Cass (1965); Koopmans (1965); Abel, Mankiw, Summers and Zeckhauser (1989); Barro (1991); Mankiw, Romer and Weil (1992); Islam (1995); Quah (1996); Pritchett (1997); Krugman (1994); Young (1995); Hsieh (2002); Hall and Jones (1999); Caselli (2005); Lucas (1990); Song, Storesletten and Zilibotti (2011); Easterly (1999); Blanchard (2019); Fernald (2015); Syverson (2017); Kremer, Willis and You (2022); Acemoglu and Molina (2022); Feenstra, Inklaar and Timmer, the Penn World Table (2015; version 11.0, 2025).
+
+**Part 21, *Growth II: Ideas and Institutions*.** Books: Charles I. Jones and Dietrich Vollrath, *Introduction to Economic Growth* (3rd ed., 2013), chs. 4–6; Daron Acemoglu, *Introduction to Modern Economic Growth* (2009), chs. 13–15; Philippe Aghion and Peter Howitt, *The Economics of Growth* (2009); David Warsh, *Knowledge and the Wealth of Nations* (2006); Acemoglu and Robinson, *Why Nations Fail* (2012). Papers: Nordhaus (1996); Arrow (1962); Romer (1986, 1990); Lucas (1988); Aghion and Howitt (1992); Jones (1995, 2022); Bloom, Jones, Van Reenen and Webb (2020); Comin and Hobijn (2010); Basu and Weil (1998); Hsieh and Klenow (2009); Bils, Klenow and Ruane (2021); Acemoglu, Johnson and Robinson (2001, 2002); Albouy (2012); Dell (2010); Rodrik et al. (2004); Alsan (2015); Nunn and Wantchekon (2011); Acemoglu (2002); Katz and Murphy (1992); Moser (2005); Williams (2013); Jones and Williams (1998); Bloom, Schankerman and Van Reenen (2013); Dechezleprêtre et al. (2023); Bloom, Van Reenen and Williams (2019); Aghion, Jones and Jones (2019).
 
 ## 4. What the series leaves out
 

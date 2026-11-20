@@ -119,6 +119,12 @@ AGORA = {
                                     "across 89 countries, 1960-2019, holding investment, population growth and "
                                     "schooling fixed, the gap closes at about 1.3% a year, and with no controls not at "
                                     "all"),
+    # Part 21 showed Nordhaus's table and built the idea economy
+    "price_of_light": (21, "an idea, once found, can be used by everyone at once, so its cost is paid once and its "
+                           "benefit grows with the number who use it; in Romer's economy ideas accumulate without "
+                           "diminishing returns and the cost of a unit of anything made with them falls for ever, "
+                           "as the labour cost of light fell about 45,000-fold from the tallow candle to the compact "
+                           "fluorescent bulb"),
     # Part 16 showed the jar of coins and explained it
     "winners_curse": (16, "bidders who bid their own unbiased estimates of a common value lose, on average, the "
                           "expected overestimate of the highest of n estimates, which grows with n (a third of the "

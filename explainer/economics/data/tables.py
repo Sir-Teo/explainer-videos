@@ -1911,6 +1911,69 @@ MALTHUS_1798 = Table(
 PART19 = (MALTHUS_1798,)
 
 
+# ---------------------------------------------------------------------------
+# Part 21
+# ---------------------------------------------------------------------------
+NORDHAUS_LIGHT = Table(
+    key="nordhaus_light",
+    cite="William D. Nordhaus, \"Do Real-Output and Real-Wage Measures Capture Reality? The History of Lighting "
+         "Suggests Not\", in T. F. Bresnahan and R. J. Gordon (eds), The Economics of New Goods (NBER Studies in "
+         "Income and Wealth 58, University of Chicago Press, 1996): 27-70",
+    tag="Nordhaus (1996), table 1.6",
+    where="table 1.6, Labor Price of Light (hours of work per 1,000 lumen-hours); the bias of traditional indexes in "
+          "section 1.5",
+    read="the NBER chapter PDF (c6064), the table read on the page image",
+    checked="2026-11-20",
+    data={"rows": (
+              # (device, technology, date for the chart, date as printed, hours of work per 1,000 lumen-hours)
+              ("open fire", "wood", None, "from earliest time", 58.0),
+              ("Neolithic lamp", "animal or vegetable fat", None, "38,000-9000 B.C.", 50.0),
+              ("Babylonian lamp", "sesame oil", -1750, "1750 B.C.", 41.50),
+              ("candle", "tallow", 1800, "1800", 5.37),
+              ("candle", "sperm", 1800, "1800", 12.21),
+              ("candle", "tallow", 1830, "1830", 3.00),
+              ("candle", "sperm", 1830, "1830", 6.91),
+              ("lamp", "whale oil", 1830, "1815-45", 4.90),
+              ("town gas", "early lamp", 1827, "1827", 7.398),
+              ("town gas", "Silliman's experiment", 1855, "1855", 2.978),
+              ("town gas", "early lamp", 1880, "1875-85", 0.326),
+              ("town gas", "Welsbach mantle", 1890, "1885-95", 0.083),
+              ("town gas", "Welsbach mantle", 1916, "1916", 0.012),
+              ("kerosene lamp", "Silliman's experiment", 1855, "1855", 0.2306),
+              ("kerosene lamp", "19th century", 1880, "1875-85", 0.2253),
+              ("kerosene lamp", "Coleman lantern", 1993, "1993", 0.0098),
+              ("electric lamp", "Edison carbon lamp", 1883, "1883", 0.750239),
+              ("electric lamp", "carbon filament", 1900, "1900", 0.220431),
+              ("electric lamp", "carbon filament", 1910, "1910", 0.092096),
+              ("electric lamp", "filament lamp", 1920, "1920", 0.013538),
+              ("electric lamp", "filament lamp", 1930, "1930", 0.010396),
+              ("electric lamp", "filament lamp", 1940, "1940", 0.005490),
+              ("electric lamp", "filament lamp", 1950, "1950", 0.001883),
+              ("electric lamp", "filament lamp", 1960, "1960", 0.001016),
+              ("electric lamp", "filament lamp", 1970, "1970", 0.000551),
+              ("electric lamp", "filament lamp", 1980, "1980", 0.000678),
+              ("electric lamp", "filament lamp", 1990, "1990", 0.000605),
+              ("electric lamp", "compact fluorescent", 1992, "1992", 0.000119)),
+          "traditional_overstatement": "a factor of between nine hundred and sixteen hundred relative to the true price "
+                                       "(1800-1992)",
+          "traditional_bias": 0.036},
+)
+
+BLOOM_2020 = Table(
+    key="bloom_2020",
+    cite="Nicholas Bloom, Charles I. Jones, John Van Reenen and Michael Webb, \"Are Ideas Getting Harder to Find?\", "
+         "American Economic Review 110(4) (2020): 1104-1144",
+    tag="Bloom, Jones, Van Reenen and Webb (2020)",
+    where="section on the aggregate economy (figure 2) and the conclusion (table 6); NBER working paper 23782",
+    read="NBER working paper 23782 (2017, revised), the text read",
+    checked="2026-11-20",
+    data={"effort_factor": 23, "effort_growth": 0.043, "productivity_factor": 41, "productivity_growth": -0.051,
+          "moore_factor": 18, "aggregate_decline": 0.053, "half_life": 13},
+)
+
+PART21 = (NORDHAUS_LIGHT, BLOOM_2020)
+
+
 PART7 = (BERNOULLI_1738, SAMUELSON_1937, ALLAIS_1953, ELLSBERG_1961, RABIN_2000, THALER_1981, HOLT_LAURY_2005,
          HAYDEN_PLATT_2009, MADRIAN_SHEA_2001, THALER_BENARTZI_2004, BARSKY_1997, POST_2008, MEHRA_PRESCOTT_1985)
-ALL = {t.key: t for t in (*PART1, *PART3, *PART4, *PART5, *PART6, *PART7, *PART8, *PART9, *PART10, *PART11, *PART12, *PART13, *PART14, *PART15, *PART16, *PART17, *PART18, *PART19)}
+ALL = {t.key: t for t in (*PART1, *PART3, *PART4, *PART5, *PART6, *PART7, *PART8, *PART9, *PART10, *PART11, *PART12, *PART13, *PART14, *PART15, *PART16, *PART17, *PART18, *PART19, *PART21)}

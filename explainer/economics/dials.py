@@ -198,6 +198,26 @@ DIALS = {d.key: d for d in [
                       "human-capital share of 0.28 beside it)", 0.31, 0.23, 0.39,
                       where="QJE 107(2): 407-437, table II (restricted regression, s.e. 0.04)", checked="2026-11-19"),
          )),
+    Dial("social_return_rd", "social rate of return to R&D", "percent a year: the return to society of a dollar of "
+         "R&D, counting what it does for other firms (and against it)", (21, 44, 66), status="settled within a range",
+         checked="2026-11-20",
+         meaning="large: estimates of the social return run from about 30% to nearly 60% a year, two to four times "
+                 "the private return, because the ideas one firm finds spill over to others more than its "
+                 "business-stealing takes from rivals; so the market does too little research, and the case for "
+                 "subsidies and public science rests on the gap, not on the level",
+         estimates=(
+             Estimate("Jones and Williams", 1998, "calibration", "the US economy: a growth model's lower bound on "
+                      "the social return, the conservative value used to find optimal R&D at two to four times "
+                      "actual", 30.0, where="QJE 113(4): 1119-1135; Federal Reserve FEDS 1997-12 (the 30% value), "
+                      "abstract (two to four times)", checked="2026-11-20"),
+             Estimate("Bloom, Schankerman and Van Reenen", 2013, "regression", "US firms 1981-2001, technology "
+                      "spillovers net of product-market rivalry, baseline (private return 21%)", 55.0,
+                      where="Econometrica 81(4): 1347-1393; the March 2012 version's introduction gives 55% and 21%",
+                      checked="2026-11-20"),
+             Estimate("Lucking, Bloom and Van Reenen", 2019, "regression", "US firms over three decades, marginal "
+                      "social return (private return 14%)", 58.0,
+                      where="Fiscal Studies 40(4): 561-590, section on returns", checked="2026-11-20"),
+         )),
     Dial("convergence_speed", "speed of convergence to the steady state", "percent of the gap to its own steady state "
          "that a country closes in a year", (20, 46), status="contested", checked="2026-11-19",
          meaning="the textbook Solow model with capital's share at a third predicts about 5% a year, a half-life of 13 "
@@ -902,6 +922,23 @@ SHOWN = {
         ("Becker and Lewis (1973); Galor and Weil (2000); Kremer (1993)", "theory, run in Agora (agora.malthus)"),
         ("Spolaore and Wacziarg (2009); Ashraf and Galor (2013); Kelly (2019)", "frontier work, described, not "
          "dialled"),
+    ],
+    21: [
+        ("Nordhaus (1996)", "the price of light, a transcribed table (tables.NORDHAUS_LIGHT)"),
+        ("Arrow (1962); Romer (1986, 1990); Aghion and Howitt (1992); Jones (1995)", "theory, run in Agora "
+         "(agora.ideas)"),
+        ("Bloom, Jones, Van Reenen and Webb (2020)", "the decline of research productivity, transcribed "
+         "(tables.BLOOM_2020)"),
+        ("Comin and Hobijn (2010)", "adoption lags, stated from the abstract, not dialled"),
+        ("Hsieh and Klenow (2009)", "the misallocation dial (Parts 9 and 21), recalled; the measure run on the "
+         "Island's plants"),
+        ("Acemoglu, Johnson and Robinson (2001, 2002); Albouy (2012)", "settler mortality refitted on their data "
+         "(data.ajr), the reversal of fortune and the critique stated"),
+        ("Dell (2010); Acemoglu and Robinson (2012)", "borders as experiments, stated from the abstract and the book"),
+        ("Alsan (2015); Nunn and Wantchekon (2011); Diamond (1997)", "geography, disease and culture, stated"),
+        ("Acemoglu (2002)", "directed technical change, run in Agora"),
+        ("Williams (2013); Moser (2005)", "patents and innovation, stated from the abstracts"),
+        ("Jones (2022)", "frontier: growth with a declining population, stated"),
     ],
     20: [
         ("Kaldor (1961)", "the six facts, stated in Part 3 and checked here on the Penn World Table"),

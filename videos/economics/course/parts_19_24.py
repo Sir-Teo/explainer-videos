@@ -93,4 +93,49 @@ PARTS = [
               ("The Island's planted truths", "explainer/economics/island.py"),
               ("The Data Room's sources", "explainer/economics/data/SOURCES.md")),
     ),
+    Part(
+        n=21, level="U", widget="misallocation", prereq=(4, 9, 15, 20),
+        question="Where does the growth that capital cannot explain come from?",
+        story="The part opens with William Nordhaus's history of the price of light and asks the viewer what an hour "
+              "of light cost in 1992. It explains why ideas, being non-rival, bring increasing returns and need "
+              "monopoly or public money; runs the AK model and learning by doing; derives Romer's economy and its "
+              "scale effect; builds Aghion and Howitt's quality ladder and finds when the market does too much "
+              "research or too little; scores Romer's scale effect against Bloom, Jones, Van Reenen and Webb's "
+              "evidence that ideas are getting harder to find; and measures slow diffusion. After an intermission "
+              "of two centuries of light, it measures misallocation on the Island's plants, refits Acemoglu, Johnson "
+              "and Robinson's settler-mortality instrument with its critics, reads borders as experiments, weighs "
+              "geography, disease and culture, models directed technical change, reviews the evidence on patents, "
+              "opens a dial on the social return to R&D, and ends with growth when populations shrink.",
+        handoff="Part 22 turns to consumption and saving; Parts 43 and 44 return to market power and the spread of "
+                "productivity; Part 46 to development; Part 47 to institutions; Part 65 to the economics of AI.",
+        outside="Part 4: instrumental variables and regression discontinuity; Part 9: the efficiency of competitive "
+                "allocations; Part 15: public goods; Part 20: the Solow model and the residual. Chapter 4 solves a "
+                "balanced growth path; chapter 5 uses Poisson arrivals; chapter 8 a lognormal moment.",
+        objectives={
+            "U": ["Explain why non-rival ideas bring increasing returns and why they need monopoly, public money or "
+                  "prizes; read the price of light.",
+                  "Describe Romer's and Aghion and Howitt's models and what they say about whether markets do enough "
+                  "research.",
+                  "State the evidence on ideas getting harder to find, diffusion, misallocation and institutions, "
+                  "with its critics."],
+            "M": ["Derive Romer's balanced growth rate and the semi-endogenous growth rate; solve the market's and a "
+                  "planner's research in a quality-ladder model.",
+                  "Derive Hsieh and Klenow's misallocation formula, and estimate an instrumental-variables regression "
+                  "of income on institutions."],
+            "D": ["Weigh the identification of institutional effects (settler mortality, borders, discontinuities) "
+                  "against their critiques."],
+            "I": ["Read evaluations of R&D tax credits, and the evidence on the social return to research."],
+        },
+        results=[
+            ("Romer's balanced growth", r"g = \frac{\alpha\delta L - \rho}{\alpha + \theta}"),
+            ("Semi-endogenous growth", r"g_A = \frac{\lambda n}{1-\phi}"),
+            ("The quality ladder", r"E\,\dot{\ln A} = \lambda n \ln\gamma"),
+            ("Misallocation", r"\ln\frac{Y_{\text{eff}}}{Y} = \frac{\sigma}{2}\operatorname{var}(\ln \text{TFPR})"),
+            ("Directed technical change", r"\frac{w_H}{w_L} \propto (H/L)^{\sigma - 2}"),
+        ],
+        U=(0, 1, 2, 3, 4, 5, 6, 7, "s09_intermission", 8, 9, 10, 11, 12, 13), D=(14, 16), I=(15,),
+        also=(("Agora's ideas module", "explainer/economics/agora/ideas.py"),
+              ("The Island's planted truths", "explainer/economics/island.py"),
+              ("The Data Room's sources", "explainer/economics/data/SOURCES.md")),
+    ),
 ]

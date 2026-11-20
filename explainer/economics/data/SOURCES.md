@@ -166,3 +166,5 @@ publication, the copy that was read and the date the transcription was checked:
 | `vsl` | the value of a statistical life: DOT's and EPA's values, Ashenfelter and Greenstone's speed limits, Kniesner et al.'s panel estimates | 2026-11-19 |
 | `duverger` | Duverger's law and Riker's history of it | 2026-11-19 |
 | `malthus_1798` | Malthus's two powers and two ratios, *Essay on the Principle of Population* (1798), ch. 1, pp. 13-14 of the first edition | 2026-11-19 |
+| `nordhaus_light` | the labour price of light, hours of work per 1,000 lumen-hours, from the open fire to the compact fluorescent bulb, and the traditional indexes' overstatement, Nordhaus (1996), table 1.6 and section 1.5 | 2026-11-20 |
+| `bloom_2020` | research effort (×23 since the 1930s) and research productivity (÷41, -5.1% a year) in the US aggregate; Moore's law (18 times the researchers); the aggregate decline of 5.3% a year, Bloom, Jones, Van Reenen and Webb (2020), NBER WP 23782 | 2026-11-20 |

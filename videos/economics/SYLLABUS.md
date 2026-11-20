@@ -2958,6 +2958,7 @@ Young Economist*.
 | 18 | built, English | *Social Choice and Welfare.* Agora gains `choice` (plurality, runoff, instant runoff, Borda, Condorcet and Copeland; agendas; Borda's failure of independence; Geanakoplos's pivotal voter; single peaks; bloc manipulation; Atkinson's family; the two veils; Scitovsky's reversal; Sen's liberal paradox); the Data Room gains V-Dem's electoral democracy index via Our World in Data and the transcribed values of a statistical life (DOT, EPA, Ashenfelter and Greenstone) and Duverger's law; a new dial (the value of a statistical life) and Duverger's *Called it?* |
 | 19 | built, English | *The Great Escape.* Agora gains `malthus` (a Malthusian economy with a plague and an invention, England's labour demand curve, Galor and Weil's household and a toy unified growth economy, spatial noise); the Data Room gains the Bank of England's millennium series for England and Our World in Data's long-run population, life expectancy, fertility and heights, and Malthus's 1798 passage from the first edition; a new dial (English living standards before 1700, three reconstructions, with a new 'reconstruction' design) and Ehrlich's *Called it?* |
 | 20 | built, English | *Growth I: Capital.* Agora gains `growth` (the Solow model, its golden rule and speed of convergence, Harrod-Domar, growth and development accounting, convergence regressions, Lucas's ratio, the Ramsey model by shooting); the Data Room gains the Penn World Table 11.0, with the internal rate of return; a new dial (the speed of convergence) and a row on capital's share; Samuelson's Soviet forecast as *Called it?*; Kaldor's facts and conditional convergence get their Agora columns |
+| 21 | built, English | *Growth II: Ideas and Institutions.* Agora gains `ideas` (replication, AK, Romer's balanced path, Aghion and Howitt's market and planner research, semi-endogenous growth, directed technical change); the Data Room gains Acemoglu, Johnson and Robinson's 64 colonies (via hdm) and transcribes Nordhaus's price of light and Bloom et al.'s research numbers; a new dial (the social return to R&D); Romer's scale effect as *Called it?*; the price of light gets its Agora column |
 
 **Corrections found while building Part 1** (the plan's draft, written from memory, against the sources): Bastiat's
 Paris passage is in *Economic Sophisms*, First Series, ch. 18 (1845), not the *Harmonies*; Hume's is/ought passage is
@@ -3179,3 +3180,16 @@ poorest countries in 1988; Caselli's success measures (0.40, and 0.26 in Hall an
 elimination is left to the lab's extensions). An intermission (investment and income, 1960-2023) follows chapter 6, so
 the chapters after it keep the plan's numbers but sit after the film. Kremer, Willis and You's magnitudes are from
 their working paper's introduction; Acemoglu and Molina's comment is stated with them.
+
+**Corrections found while building Part 21.** Nordhaus's labour price of light is read from his table 1.6 (1996):
+41.5 hours of work per 1,000 lumen-hours for the Babylonian lamp, 5.37 for the tallow candle in 1800 and 0.000119 for
+the compact fluorescent bulb in 1992, a fall of about 45,000 times since 1800 and about 350,000 since Babylon ("several
+hundred thousand" in the plan). Bloom et al.'s numbers are from the working paper: research effort ×23 since the
+1930s, research productivity ÷41, Moore's law ×18, a decline of about 5.3% a year. Comin and Hobijn's 45 years and
+"at least a quarter" are from their abstract. AJR's estimates are refitted from the copy of their data in hdm: first
+stage −0.61 (0.13), OLS 0.52, 2SLS 0.92 against their published 0.94; Albouy's 28 of 64 is from his working paper. Dell's
+25% and 6 points are from her abstract, and the chapter's regression-discontinuity picture is illustrative. Nogales's
+numbers are *Why Nations Fail*'s. The Aghion-Howitt chapter compares the paper's risk-neutral market research with a
+log-utility planner (Agora's), so the crossing step size (about 1.49) is the island's, not a general result. The social
+return to R&D is dialled from Jones and Williams (30%, a conservative value), Bloom, Schankerman and Van Reenen (55%,
+from their 2012 version) and Lucking, Bloom and Van Reenen (58%). An intermission follows chapter 7.

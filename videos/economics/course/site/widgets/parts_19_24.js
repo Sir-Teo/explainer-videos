@@ -151,4 +151,71 @@
             "are (Part 20, chapter 11). Computed in your browser; nothing you do here is stored or sent.",
     });
   };
+  // ---- Part 21: move the workers ----------------------------------------------------------------------------------
+  W.misallocation = function (el) {
+    // Hsieh and Klenow's economy of Part 21 (explainer.economics.agora.ge: misallocation): four plants making
+    // varieties of one good (elasticity of substitution 3) with labour only, physical productivities A = 1, 1.5, 2 and
+    // 3.  Output is (sum (A_i L_i)^e)^(1/e), e = 2/3.  The reader moves workers between plants; the marginal revenue
+    // products show where a worker adds most.  The efficient allocation makes them equal (L_i proportional to A_i^2).
+    var A = [1.0, 1.5, 2.0, 3.0], SIG = 3, E = (SIG - 1) / SIG;
+    var NAMES = ["plant 1", "plant 2", "plant 3", "plant 4"];
+    var COLS = [BLUE, GREEN, GOLD, RED];
+    function output(L) {
+      var s = 0;
+      for (var i = 0; i < 4; i++) s += Math.pow(A[i] * L[i], E);
+      return Math.pow(s, 1 / E);
+    }
+    function mrpl(L) {
+      // dY/dL_i = Y^(1/sigma) * e^(-1)... up to a common factor: Y^(1/sigma) A_i^e L_i^(e-1)
+      var Y = output(L), out = [];
+      for (var i = 0; i < 4; i++) out.push(Math.pow(Y, 1 / SIG) * Math.pow(A[i], E) * Math.pow(Math.max(L[i], 1e-6), E - 1));
+      return out;
+    }
+    function efficient() {
+      var w = A.map(function (a) { return Math.pow(a, SIG - 1); });
+      var t = w.reduce(function (x, y) { return x + y; }, 0);
+      return w.map(function (x) { return x / t; });
+    }
+    QB.widget(el, {
+      title: "Move the workers",
+      sub: "Four plants make varieties of one good. Plant 4 is three times as productive as plant 1. Choose how many " +
+           "of the island's 100 workers each plant gets (plant 4 takes whoever is left). The right chart shows what " +
+           "one more worker would add in each plant. Can you find the allocation that makes the most output?",
+      panels: 2, height: 280,
+      controls: [
+        { k: "l1", label: "Workers in plant 1", min: 0, max: 60, step: 1, value: 25 },
+        { k: "l2", label: "Workers in plant 2", min: 0, max: 60, step: 1, value: 25 },
+        { k: "l3", label: "Workers in plant 3", min: 0, max: 60, step: 1, value: 25 },
+      ],
+      draw: function (g, v, st) {
+        var l4 = Math.max(0, 100 - v.l1 - v.l2 - v.l3);
+        var L = [v.l1 / 100, v.l2 / 100, v.l3 / 100, l4 / 100];
+        st.L = L;
+        var a = g[0].axes({ x: [0, 4], y: [0, 100], title: "Workers in each plant", xlabel: "plant 1 to 4" });
+        a.bars([0.5, 1.5, 2.5, 3.5], L.map(function (x) { return 100 * x; }), 0.6,
+               { color: function (i) { return COLS[i]; } });
+        var m = mrpl(L), top = Math.max.apply(null, m) * 1.15;
+        var b = g[1].axes({ x: [0, 4], y: [0, Math.min(top, 20)], title: "What one more worker adds",
+                            xlabel: "plant 1 to 4" });
+        b.bars([0.5, 1.5, 2.5, 3.5], m.map(function (x) { return Math.min(x, 20); }), 0.6,
+               { color: function (i) { return COLS[i]; } });
+      },
+      readout: function (v, st) {
+        var L = st.L;
+        if (!L) return [];
+        var over = v.l1 + v.l2 + v.l3 > 100;
+        var Y = output(L), Ye = output(efficient()), share = Y / Ye;
+        var eff = efficient().map(function (x) { return Math.round(100 * x); });
+        return [["output, against the best possible", (100 * share).toFixed(1) + "%"],
+                ["workers in plant 4", over ? "none left (you assigned more than 100)" : String(100 - v.l1 - v.l2 - v.l3)],
+                ["verdict", share > 0.995 ? "efficient: one more worker adds the same everywhere" :
+                  "move workers toward the plants where one more adds most"],
+                ["the efficient split (workers proportional to A squared)", eff.join(", ")]];
+      },
+      note: "With an elasticity of substitution of 3, the efficient allocation gives each plant workers in proportion to " +
+            "its productivity squared, and equalizes what one more worker adds. Taxes, subsidies, cheap credit for some " +
+            "firms and red tape for others push plants away from it (Part 21, chapter 8). Computed in your browser; " +
+            "nothing you do here is stored or sent.",
+    });
+  };
 })();

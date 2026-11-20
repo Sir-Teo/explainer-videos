@@ -156,6 +156,18 @@ CALLS = {c.key: c for c in [
          ("P. R. Ehrlich, The Population Bomb (1968), prologue",
           "United Nations, World Population Prospects; Our World in Data, population",
           "J. Tierney, \"Betting on the Planet\", New York Times Magazine, 2 December 1990")),
+    Call("romer_scale", 21, "Paul Romer, Endogenous Technological Change",
+         "1990", "the stock of human capital determines the rate of growth: an economy that puts more people to work "
+                 "on research grows faster, for ever",
+         "a model in which each researcher adds ideas in proportion to the ideas already known, so growth is "
+         "proportional to the number of researchers",
+         "the effective number of American researchers rose about 23-fold from the 1930s to the 2010s while growth of "
+         "productivity did not rise at all (Bloom, Jones, Van Reenen and Webb 2020); Jones (1995) had already "
+         "rejected the scale effect on American time series; the theory survived by letting ideas get harder to find",
+         "wrong",
+         ("P. M. Romer, Journal of Political Economy 98(5) (1990): S71-S102, abstract",
+          "C. I. Jones, Quarterly Journal of Economics 110(2) (1995): 495-525",
+          "N. Bloom, C. I. Jones, J. Van Reenen and M. Webb, American Economic Review 110(4) (2020)")),
     Call("samuelson_soviet", 20, "Paul Samuelson, Economics (the textbook)",
          "1961", "Soviet national income would overtake America's between 1984 and 1997, on the growth rates the "
                  "edition assumed; the 1980 edition still drew the crossing, between 2002 and 2012",

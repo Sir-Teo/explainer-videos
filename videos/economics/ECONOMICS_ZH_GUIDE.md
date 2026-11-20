@@ -640,6 +640,23 @@ brackets on screen.
 | potential output; the output gap; debt dynamics, r and g | 潜在产出；产出缺口；债务动态，r 与 g |
 | the productivity slowdown | 生产率增长放缓 |
 
+## Part 21
+
+| English | 中文 |
+|---|---|
+| the price of light; lumen-hours; the labour price | 光的价格；流明小时；劳动价格 |
+| rival and non-rival goods; excludable | 竞争性与非竞争性物品；排他性 |
+| increasing returns; the replication argument | 规模报酬递增；复制论证 |
+| learning by doing; knowledge spillovers; the AK model | 干中学；知识溢出；AK 模型 |
+| endogenous growth; expanding varieties; the scale effect | 内生增长；品种扩张；规模效应 |
+| creative destruction; quality ladders; business stealing | 创造性破坏；质量阶梯；抢夺生意效应 |
+| semi-endogenous growth; research productivity | 半内生增长；研究生产率 |
+| technology diffusion; adoption lags; appropriate technology | 技术扩散；采用滞后；适宜技术 |
+| misallocation; revenue productivity (TFPR) | 资源错配；收入生产率 |
+| institutions; settler mortality; the reversal of fortune | 制度；殖民者死亡率；命运逆转 |
+| directed technical change; skill-biased technical change; the skill premium | 定向技术进步；技能偏向型技术进步；技能溢价 |
+| the social return to R&D; R&D tax credits | 研发的社会回报率；研发税收抵免 |
+
 ## Names
 
 | English | 中文 |
@@ -686,6 +703,14 @@ brackets on screen.
 | Robert E. Lucas Jr. | 小罗伯特·卢卡斯 |
 | William Easterly | 威廉·伊斯特利 |
 | Gregory Mankiw, David Romer, David Weil | 格雷戈里·曼昆、戴维·罗默、戴维·韦尔 |
+| Paul Romer | 保罗·罗默 |
+| William Nordhaus | 威廉·诺德豪斯 |
+| Philippe Aghion, Peter Howitt | 菲利普·阿吉翁、彼得·豪伊特 |
+| Joseph Schumpeter | 约瑟夫·熊彼特 |
+| Charles Jones | 查尔斯·琼斯 |
+| Daron Acemoglu, Simon Johnson, James Robinson | 达龙·阿西莫格鲁、西蒙·约翰逊、詹姆斯·罗宾逊 |
+| Melissa Dell | 梅丽莎·戴尔 |
+| Douglass North | 道格拉斯·诺斯 |
 | William Nordhaus, James Tobin | 威廉·诺德豪斯、詹姆斯·托宾 |
 | Angus Deaton | 安格斯·迪顿 |
 | Henry Moore | 亨利·摩尔 |
