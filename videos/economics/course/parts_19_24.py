@@ -186,4 +186,47 @@ PARTS = [
               ("The Island's planted truths", "explainer/economics/island.py"),
               ("The Data Room's sources", "explainer/economics/data/SOURCES.md")),
     ),
+    Part(
+        n=23, level="U", widget="tree", prereq=(7, 20, 22),
+        question="What is a claim on the future worth, and how does that decide what gets built?",
+        story="The part opens with Mehra and Prescott's two numbers: a model premium of a third of a point against "
+              "six in the record. It values a growing stream of dividends and shows how sensitive long-lived assets "
+              "are to the discount rate; builds investment from the user cost, Tobin's q and adjustment costs, run on "
+              "the Island's firm; prices the option to wait; and slices Modigliani and Miller's pie. The viewer then "
+              "prices a coconut tree, and the part derives the stochastic discount factor from the Lucas tree, "
+              "measures the consumption CAPM on Shiller's century of data, computes the equity premium puzzle three "
+              "ways and tries three repairs. After an intermission following a dollar in stocks and in bonds since "
+              "1871, it tests excess volatility and predictability, shows bubbles in theory and in the laboratory, "
+              "scores Irving Fisher's 1929 forecast, treats housing as an asset, reads two dials, and ends with the "
+              "return on everything.",
+        handoff="Part 24 turns to the labour market; Parts 26 and 33 to banks and crises; Part 31 to low interest "
+                "rates; Part 32 to public debt; Part 40 to the return on wealth and inequality; Part 45 to behavioural "
+                "finance; Quant, Built treats the evidence on asset pricing in depth.",
+        outside="Part 7: expected utility, risk aversion and the Euler equation; Part 20: the golden rule; Part 22: "
+                "dynamic inefficiency. Chapter 3 uses a geometric Brownian motion; chapter 8 a two-state Markov chain.",
+        objectives={
+            "U": ["Value a growing stream with the Gordon formula and explain why long-lived assets are sensitive to "
+                  "the discount rate.",
+                  "Explain the user cost of capital, Tobin's q, the option to wait and the Modigliani-Miller theorem.",
+                  "State the equity premium puzzle and the three leading repairs."],
+            "M": ["Derive asset prices from the stochastic discount factor: the risk-free rate, risk premia as "
+                  "covariance, and the Hansen-Jagannathan bound.",
+                  "Solve Mehra and Prescott's economy and a rare-disaster economy, and compute their premia."],
+            "D": ["Weigh the evidence on excess volatility, predictability and bubbles, and on the response of "
+                  "investment to its cost."],
+            "I": ["Apply the NPV rule, terminal values and pension discount rates, and say which discount rate each "
+                  "needs."],
+        },
+        results=[
+            ("The Gordon formula", r"P = \frac{D_1}{r - g}"),
+            ("Investment and q", r"\frac{I}{K} = \frac{q - 1}{\phi}"),
+            ("The pricing equation", r"p = \mathbb{E}[m x], \quad m = \beta \frac{u'(c_{t+1})}{u'(c_t)}"),
+            ("Risk premia", r"\mathbb{E}[R] - R_f = -R_f \operatorname{cov}(m, R)"),
+            ("Hansen-Jagannathan", r"\frac{\sigma(m)}{\mathbb{E}(m)} \ge \frac{|\mathbb{E}[R - R_f]|}{\sigma(R - R_f)}"),
+        ],
+        U=(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, "s11_intermission", 10, 11, 12), D=(13, 15), I=(14,),
+        also=(("Agora's asset prices and investment", "explainer/economics/agora/assets.py"),
+              ("The Island's planted truths", "explainer/economics/island.py"),
+              ("The Data Room's sources", "explainer/economics/data/SOURCES.md")),
+    ),
 ]

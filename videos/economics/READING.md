@@ -10,7 +10,7 @@ the series leaves out.
 Both *Parts* columns are found, not typed. *Planned* lists the parts whose entry in
 [`SYLLABUS.md`](SYLLABUS.md) names the book or paper; *Built* lists the parts whose scenes, compute step or
 README cite it (a dot: none yet). Fuller notes (editions, chapters, what each source was used for) are in each
-part's README, under *Sources*. Built so far: Parts 1–22.
+part's README, under *Sources*. Built so far: Parts 1–23.
 
 ## 1. The textbook spine
 
@@ -41,7 +41,7 @@ part's README, under *Sources*. Built so far: Parts 1–22.
 | Borjas | G. Borjas, *Labor Economics* (8th ed., 2020) | 38 | · |
 | Gruber | J. Gruber, *Public Finance and Public Policy* (7th ed., 2022) | 15, 41–42, 50 | 7, 15 |
 | Ray | D. Ray, *Development Economics* (1998) | 46 | · |
-| Weil | D. Weil, *Economic Growth* (3rd ed., 2013) | 7, 19 | 3, 7, 19–21 |
+| Weil | D. Weil, *Economic Growth* (3rd ed., 2013) | 7, 19 | 3, 7, 19–21, 23 |
 
 ### Graduate micro
 
@@ -79,7 +79,7 @@ part's README, under *Sources*. Built so far: Parts 1–22.
 
 | Short name | Book | Planned | Built |
 |---|---|---|---|
-| Hayashi | F. Hayashi, *Econometrics* (2000) | 54, 56 | · |
+| Hayashi | F. Hayashi, *Econometrics* (2000) | 54, 56 | 23 |
 | Wooldridge | J. Wooldridge, *Econometric Analysis of Cross Section and Panel Data* (2nd ed., 2010) | 54 | · |
 | Hansen | B. Hansen, *Econometrics* (2022) | 54 | · |
 | Hamilton | J. Hamilton, *Time Series Analysis* (1994) | 55 | 6 |
@@ -205,7 +205,7 @@ part's README, under *Sources*. Built so far: Parts 1–22.
 | the Taylor rule | Taylor (1993) | 30 | · |
 | search and unemployment | Diamond (1982); Mortensen and Pissarides (1994) | 24 | · |
 | heterogeneous agents | Bewley (1977); Huggett (1993); Aiyagari (1994) | 52, 56 | · |
-| the equity premium puzzle | Mehra and Prescott (1985) | 7, 23 | 7, 22 |
+| the equity premium puzzle | Mehra and Prescott (1985) | 7, 23 | 7, 22–23 |
 
 ### Money and finance
 
@@ -299,6 +299,8 @@ part's README, under *Sources*. Built so far: Parts 1–22.
 **Part 21, *Growth II: Ideas and Institutions*.** Books: Charles I. Jones and Dietrich Vollrath, *Introduction to Economic Growth* (3rd ed., 2013), chs. 4–6; Daron Acemoglu, *Introduction to Modern Economic Growth* (2009), chs. 13–15; Philippe Aghion and Peter Howitt, *The Economics of Growth* (2009); David Warsh, *Knowledge and the Wealth of Nations* (2006); Acemoglu and Robinson, *Why Nations Fail* (2012). Papers: Nordhaus (1996); Arrow (1962); Romer (1986, 1990); Lucas (1988); Aghion and Howitt (1992); Jones (1995, 2022); Bloom, Jones, Van Reenen and Webb (2020); Comin and Hobijn (2010); Basu and Weil (1998); Hsieh and Klenow (2009); Bils, Klenow and Ruane (2021); Acemoglu, Johnson and Robinson (2001, 2002); Albouy (2012); Dell (2010); Rodrik et al. (2004); Alsan (2015); Nunn and Wantchekon (2011); Acemoglu (2002); Katz and Murphy (1992); Moser (2005); Williams (2013); Jones and Williams (1998); Bloom, Schankerman and Van Reenen (2013); Dechezleprêtre et al. (2023); Bloom, Van Reenen and Williams (2019); Aghion, Jones and Jones (2019).
 
 **Part 22, *Consumption and Saving*.** Books: Angus Deaton, *Understanding Consumption* (1992); David Romer, *Advanced Macroeconomics* (5th ed., 2019), chs. 2 and 8; Lars Ljungqvist and Thomas Sargent, *Recursive Macroeconomic Theory* (4th ed., 2018), chs. 17–18; Milton Friedman, *A Theory of the Consumption Function* (1957). Papers: Modigliani and Brumberg (1954); Hall (1978); Flavin (1981); Campbell and Mankiw (1989); Working (1960); Zeldes (1989); Kimball (1990); Deaton (1991); Carroll (1997, 2006); Johnson, Parker and Souleles (2006); Parker et al. (2013, 2022); Hsieh (2003); Kueng (2018); Kaplan, Violante and Weidner (2014); Kaplan and Violante (2014); Fagereng, Holm and Natvik (2021); Jappelli and Pistaferri (2014); Fuster, Kaplan and Zafar (2021); Sahm, Shapiro and Slemrod (2012); Barro (1974); Samuelson (1958); Diamond (1965); Abel, Mankiw, Summers and Zeckhauser (1989); Dynan, Skinner and Zeldes (2004); Modigliani and Cao (2004); Chamon and Prasad (2010); Wei and Zhang (2011); Ganong and Noel (2019).
+
+**Part 23, *Capital and Asset Prices*.** Books: John Cochrane, *Asset Pricing* (revised ed., 2005), chs. 1–2 and 21; David Romer, *Advanced Macroeconomics* (5th ed., 2019), ch. 9; Avinash Dixit and Robert Pindyck, *Investment under Uncertainty* (1994); Robert Shiller, *Irrational Exuberance* (3rd ed., 2015). Papers: Williams (1938); Gordon and Shapiro (1956); Jorgenson (1963); Tobin (1969); Hayashi (1982); McDonald and Siegel (1986); Bloom (2009); Modigliani and Miller (1958); Myers and Majluf (1984); Lucas (1978); Breeden (1979); Mehra and Prescott (1985); Hansen and Jagannathan (1991); Weil (1989); Campbell and Cochrane (1999); Bansal and Yaron (2004); Rietz (1988); Barro (2006); Shiller (1981); Campbell and Shiller (1988); Tirole (1985); Smith, Suchanek and Williams (1988); Poterba (1984); Chirinko, Fazzari and Meyer (1999); Zwick and Mahon (2017); Novy-Marx and Rauh (2011); Jordà et al. (2019); He and Krishnamurthy (2013); Adrian, Etula and Muir (2014).
 
 ## 4. What the series leaves out
 

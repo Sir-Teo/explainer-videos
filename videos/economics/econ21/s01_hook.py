@@ -72,8 +72,8 @@ class Hook(VoiceoverScene):
             "wages and real output have grown much faster than the statistics say. And the source of that growth was "
             "not more capital. It was better ideas about how to make light."
         ) as vo:
-            self.play(FadeIn(tag))
-            for mk, r in zip("abcd", rows):
+            self.play(FadeIn(tag), FadeIn(rows[0], shift=UP * 0.1))
+            for mk, r in zip("bcd", rows[1:]):
                 vo.wait_until(mk)
                 self.play(FadeIn(r, shift=UP * 0.1))
         self.clear_scene()

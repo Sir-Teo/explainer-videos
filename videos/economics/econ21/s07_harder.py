@@ -72,9 +72,8 @@ class Harder(VoiceoverScene):
             "The economy has to double its research effort every thirteen years just to keep growing at the same "
             "rate."
         ) as vo:
-            self.play(FadeIn(tag))
+            self.play(FadeIn(tag), Write(rows[0]))
             vo.wait_until("a")
-            self.play(Write(rows[0]))
             for mk, br in zip("bcd", bars):
                 vo.wait_until(mk)
                 self.play(GrowFromEdge(br[0], LEFT), FadeIn(br[1]), FadeIn(br[2]))

@@ -173,6 +173,15 @@ DIALS = {d.key: d for d in [
                       "median", 6.0, where="IES WP 2022/14, table 1", checked="2026-11-19"),
              Estimate("Bansal and Yaron", 2004, "calibration", "long-run risks: the value asset prices need", 10.0,
                       where="Journal of Finance 59(4): 1481-1509, abstract", checked="2026-11-19"),
+             Estimate("this film (Hansen-Jagannathan bound)", 2026, "calibration", "power utility on Shiller's "
+                      "1889-2009 stocks and consumption: the least risk aversion that meets the bound", 8.2,
+                      where="videos/economics/econ23/compute.py, hj", checked="2026-11-20"),
+             Estimate("this film (consumption CAPM)", 2026, "calibration", "the premium over its covariance with "
+                      "consumption growth, Shiller's data 1889-1978", 12.3,
+                      where="videos/economics/econ23/compute.py, ccapm", checked="2026-11-20"),
+             Estimate("this film (rare disasters)", 2026, "calibration", "the Island's disasters (1.7% a year, "
+                      "average fall 30%): the risk aversion that gives a 5% premium", 3.5,
+                      where="videos/economics/econ23/compute.py, disasters", checked="2026-11-20"),
          )),
     Dial("capital_share", "output elasticity of capital", "percent change in output per percent change in capital "
          "(capital's share of income, under competition)", (8, 20), status="settled within a range",
@@ -217,6 +226,24 @@ DIALS = {d.key: d for d in [
              Estimate("Lucking, Bloom and Van Reenen", 2019, "regression", "US firms over three decades, marginal "
                       "social return (private return 14%)", 58.0,
                       where="Fiscal Studies 40(4): 561-590, section on returns", checked="2026-11-20"),
+         )),
+    Dial("investment_user_cost", "investment's response to the user cost of capital", "elasticity of investment "
+         "(or the capital stock) with respect to the user cost; negative", (23, 32, 41), status="contested",
+         checked="2026-11-20",
+         meaning="aggregate time series once found almost no response; firm-level studies that use variation in the "
+                 "user cost across firms find more, and reviews settled on about -0.5 to -1; studies of temporary tax "
+                 "incentives find larger responses, most of all among small firms short of cash; how much a tax "
+                 "break or a rate cut raises investment depends on which of these is right",
+         estimates=(
+             Estimate("Chirinko, Fazzari and Meyer", 1999, "regression", "US firms (Compustat), 1981-1991, user cost "
+                      "varying across firms and years", -0.25, where="Journal of Public Economics 74(1): 53-80, "
+                      "abstract", checked="2026-11-20"),
+             Estimate("Hassett and Hubbard", 2002, "review", "the range of then-recent studies (midpoint shown)", -0.75,
+                      -1.0, -0.5, where="Handbook of Public Economics vol. 3, ch. 20, as quoted by later papers "
+                      "(p. 1321)", checked="2026-11-20"),
+             Estimate("Zwick and Mahon", 2017, "DiD", "bonus depreciation, 120,000 US firms, 2001-2004 and "
+                      "2008-2010: the implied user-cost elasticity", -1.6, where="AER 107(1): 217-248, as reported in "
+                      "the paper's comparison with earlier estimates", checked="2026-11-20"),
          )),
     Dial("mpc_windfall", "marginal propensity to consume out of a transitory windfall", "percent of a one-off payment "
          "spent soon after it arrives (on nondurables within a quarter, unless the row says otherwise)",
@@ -948,6 +975,32 @@ SHOWN = {
         ("Becker and Lewis (1973); Galor and Weil (2000); Kremer (1993)", "theory, run in Agora (agora.malthus)"),
         ("Spolaore and Wacziarg (2009); Ashraf and Galor (2013); Kelly (2019)", "frontier work, described, not "
          "dialled"),
+    ],
+    23: [
+        ("Mehra and Prescott (1985)", "the two numbers, transcribed (tables.MEHRA_PRESCOTT_1985); their economy "
+         "solved in Agora (agora.assets)"),
+        ("Williams (1938); Gordon and Shapiro (1956); Jorgenson (1963); Hall and Jorgenson (1967); Tobin (1969); "
+         "Hayashi (1982)", "theory, run in Agora"),
+        ("McDonald and Siegel (1986); Dixit and Pindyck (1994); Bloom (2009)", "the option to wait, run in Agora; "
+         "uncertainty shocks stated"),
+        ("Modigliani and Miller (1958); Myers and Majluf (1984)", "theory, stated"),
+        ("Lucas (1978); Breeden (1979); Hansen and Singleton (1982); Hansen and Jagannathan (1991); Weil (1989)",
+         "theory, computed on Shiller's data (data.shiller); risk-aversion rows added to the risk_aversion dial"),
+        ("Campbell and Cochrane (1999); Bansal and Yaron (2004); Epstein and Zin (1989); Rietz (1988); Barro (2006)",
+         "repairs, simulated or stated; Barro's 1.7% and 29% stated from the paper's calibration"),
+        ("Shiller (1981); Campbell and Shiller (1988); Samuelson (1965); Fama (1970)", "excess volatility and "
+         "predictability rerun on Shiller's data; efficient markets stated"),
+        ("Tirole (1985); Smith, Suchanek and Williams (1988)", "rational bubbles stated; the laboratory's 14 of 22 "
+         "stated from the abstract, the Island's market simulated"),
+        ("Fisher (1929)", "Called it? (calls.fisher_plateau)"),
+        ("Poterba (1984); Himmelberg, Mayer and Sinai (2005)", "the user cost of housing, stated; the price-to-rent "
+         "ratio computed from FRED"),
+        ("Chirinko, Fazzari and Meyer (1999); Hassett and Hubbard (2002); Zwick and Mahon (2017)", "entered in the "
+         "investment_user_cost dial"),
+        ("Novy-Marx and Rauh (2011)", "public pension liabilities at Treasury rates, stated"),
+        ("Jordà, Knoll, Kuvshinov, Schularick and Taylor (2019); He and Krishnamurthy (2013); Adrian, Etula and "
+         "Muir (2014)", "frontier, stated from the abstracts and the NBER working paper"),
+        ("Diamond (1982)", "the next part's hook, stated"),
     ],
     22: [
         ("Johnson, Parker and Souleles (2006); Parker et al. (2013, 2022); Kueng (2018); Jappelli and Pistaferri "

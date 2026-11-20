@@ -311,8 +311,8 @@ def data_melody(values, seconds: float, low: int = 50, high: int = 81, log: bool
     for i, m in enumerate(notes):
         at = times_in[i]
         times.append(at)
-        _place(out, pluck(hz(m + shift), 2.4, bright=bright), at, pan=-0.6 + 1.2 * i / max(n - 1, 1), gain=0.6)
-        _place(out, bell(hz(m + 12 + shift), 1.8, 0.6 * bright), at + 0.02, pan=0.6 - 1.2 * i / max(n - 1, 1),
+        _place(out, pluck(hz(m + shift), 2.4, bright=bright), at, pan=-0.4 + 0.8 * i / max(n - 1, 1), gain=0.6)
+        _place(out, bell(hz(m + 12 + shift), 1.8, 0.6 * bright), at + 0.02, pan=0.4 - 0.8 * i / max(n - 1, 1),
                gain=0.14)
     y = _wet(out, mix=0.28)[: int(seconds * SR)]
     y = y * _fade(np.ones(len(y)), 0.05, 1.2)[:, None]

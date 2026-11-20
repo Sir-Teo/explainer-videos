@@ -673,6 +673,22 @@ brackets on screen.
 | overlapping generations; dynamic inefficiency; pay-as-you-go and funded pensions | 世代交叠；动态无效率；现收现付制与基金制养老金 |
 | automatic enrolment; default options | 自动加入；默认选项 |
 
+## Part 23
+
+| English | 中文 |
+|---|---|
+| present value; the Gordon formula; duration | 现值；戈登公式；久期 |
+| the user cost of capital; Tobin's q; adjustment costs | 资本使用成本；托宾 q；调整成本 |
+| irreversible investment; the option to wait | 不可逆投资；等待期权 |
+| the Modigliani-Miller theorem; leverage; the cost of capital | 莫迪利亚尼-米勒定理；杠杆；资本成本 |
+| the stochastic discount factor; the Lucas tree | 随机贴现因子；卢卡斯树 |
+| the consumption CAPM; the equity premium puzzle; the risk-free rate puzzle | 消费资本资产定价模型；股权溢价之谜；无风险利率之谜 |
+| the Hansen-Jagannathan bound; the Sharpe ratio | 汉森-贾甘纳坦界；夏普比率 |
+| habit formation; long-run risk; rare disasters | 习惯形成；长期风险；罕见灾难 |
+| excess volatility; return predictability; efficient markets | 过度波动；收益可预测性；有效市场 |
+| rational bubbles; experimental asset markets | 理性泡沫；实验资产市场 |
+| the price-to-rent ratio; the user cost of housing | 房价租金比；住房使用成本 |
+
 ## Names
 
 | English | 中文 |

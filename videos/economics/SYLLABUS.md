@@ -2960,6 +2960,7 @@ Young Economist*.
 | 20 | built, English | *Growth I: Capital.* Agora gains `growth` (the Solow model, its golden rule and speed of convergence, Harrod-Domar, growth and development accounting, convergence regressions, Lucas's ratio, the Ramsey model by shooting); the Data Room gains the Penn World Table 11.0, with the internal rate of return; a new dial (the speed of convergence) and a row on capital's share; Samuelson's Soviet forecast as *Called it?*; Kaldor's facts and conditional convergence get their Agora columns |
 | 21 | built, English | *Growth II: Ideas and Institutions.* Agora gains `ideas` (replication, AK, Romer's balanced path, Aghion and Howitt's market and planner research, semi-endogenous growth, directed technical change); the Data Room gains Acemoglu, Johnson and Robinson's 64 colonies (via hdm) and transcribes Nordhaus's price of light and Bloom et al.'s research numbers; a new dial (the social return to R&D); Romer's scale effect as *Called it?*; the price of light gets its Agora column |
 | 22 | built, English | *Consumption and Saving.* Agora gains `household` (Keynes's function, the permanent-income annuity, the life cycle, Carroll's buffer stock by the endogenous grid method, simulated populations and their MPC, the wealthy hand-to-mouth, Friedman's cross-section, Campbell and Mankiw's rule of thumb) and `olg` (Samuelson's money, Diamond's economy, a pension's welfare); the Data Room gains FRED's monthly consumption by type with its price indexes, real disposable income and the saving rate, the Penn World Table's consumption shares, and transcribes the windfall studies; a new dial (the propensity to spend a windfall); Hall's random walk as *Called it?*; consumption smoother than income gets its Agora column |
+| 23 | built, English | *Capital and Asset Prices.* Agora gains `assets` (Gordon, the user cost, Hayashi's firm, the option to wait, Mehra and Prescott's economy and region, the Hansen-Jagannathan bound, rare disasters, habits, a laboratory market); the Data Room gains Shiller's annual series and the Case-Shiller index against the CPI's rent; a new dial (investment's response to the user cost) and three rows on risk aversion; Fisher's 1929 plateau as *Called it?*; the equity premium and unpredictable returns get their Agora columns |
 
 **Corrections found while building Part 1** (the plan's draft, written from memory, against the sources): Bastiat's
 Paris passage is in *Economic Sophisms*, First Series, ch. 18 (1845), not the *Harmonies*; Hume's is/ought passage is
@@ -3209,3 +3210,15 @@ Campbell and Mankiw's lambda on US data since 1960 is weakly identified (first-s
 it with that warning and quotes their own estimate as about one half. The wealthy hand-to-mouth are shown with a
 one-asset shortcut (an illiquid return of 7% against cash's 3%), not Kaplan and Violante's two-asset model. An
 intermission follows chapter 7.
+
+**Corrections found while building Part 23.** Mehra and Prescott's figures (1889-1978) are 6.98% for stocks and 0.80%
+for bills a year after inflation, a premium of 6.18%, with consumption growth of 1.83% (s.d. 3.57%), and the model's
+largest premium with sensible preferences 0.35%: the plan's "six" stands. Shiller's own series give a premium of about
+5.7% over the same years (one-year bonds rather than bills). Barro's (2006) calibration is sixty disasters, a 1.7%
+chance a year, falls averaging 29%; the Island's five-size distribution averages 30% and is not his. Smith, Suchanek
+and Williams's dividend values are not quoted: the Island's market uses 0, 8, 28 and 60 cents as an illustration, and
+the film quotes only their 14 bubbles in 22 markets. Zwick and Mahon's published effects are 10.4% and 16.9% (the 2014
+draft's were larger); their implied user-cost elasticity of about -1.6 is as the paper reports it against earlier
+work. Hassett and Hubbard's range of -0.5 to -1 is quoted from the papers that cite it. Novy-Marx and Rauh's shortfall
+at Treasury rates is about $3 trillion for the fifty states' main plans; other versions give other totals. An
+intermission follows chapter 9.

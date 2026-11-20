@@ -168,6 +168,16 @@ CALLS = {c.key: c for c in [
          ("P. M. Romer, Journal of Political Economy 98(5) (1990): S71-S102, abstract",
           "C. I. Jones, Quarterly Journal of Economics 110(2) (1995): 495-525",
           "N. Bloom, C. I. Jones, J. Van Reenen and M. Webb, American Economic Review 110(4) (2020)")),
+    Call("fisher_plateau", 23, "Irving Fisher, speaking in New York",
+         "October 1929", "stock prices have reached what looks like a permanently high plateau",
+         "the decade's rise in earnings, new industries and better management, which he thought justified the prices",
+         "the market crashed within days; in Shiller's January figures the S&P composite was worth 24.86 in 1929 and "
+         "8.30 in 1932, two-thirds lower in nominal terms and three-fifths lower after inflation, and it did not "
+         "regain its 1929 real level until the 1950s",
+         "wrong",
+         ("I. Fisher, remarks to the Purchasing Agents Association, New York, 15 October 1929, as reported in the "
+          "New York Times, 16 October 1929",
+          "R. J. Shiller, Market Volatility (1989), ch. 26 data, updated (S&P composite, January values)")),
     Call("hall_random_walk", 22, "Robert Hall, Stochastic Implications of the Life Cycle-Permanent Income Hypothesis",
          "1978", "consumption follows a random walk: nothing known today, anticipated changes in income included, "
                  "should predict how consumption changes next quarter",

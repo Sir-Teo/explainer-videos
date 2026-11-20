@@ -992,10 +992,12 @@ MEHRA_PRESCOTT_1985 = Table(
     cite="Rajnish Mehra and Edward C. Prescott, \"The Equity Premium: A Puzzle\", Journal of Monetary Economics "
          "15(2): 145-161 (1985)",
     tag="Mehra and Prescott, JME (1985)",
-    where="the abstract and introduction",
-    read="secondary summaries",
-    checked="2026-11-19",
-    data={"premium": 0.06, "period": (1889, 1978), "plausible_rra": 10},
+    where="the abstract and introduction; table 1 (means and standard deviations, 1889-1978)",
+    read="secondary summaries; the table's figures as reproduced from the paper",
+    checked="2026-11-20",
+    data={"premium": 0.06, "period": (1889, 1978), "plausible_rra": 10, "stock": 0.0698, "sd_stock": 0.1654,
+          "bill": 0.0080, "sd_bill": 0.0567, "premium_mean": 0.0618, "sd_premium": 0.1667, "growth": 0.0183,
+          "sd_growth": 0.0357, "model_max_premium": 0.0035},
     note="About six points a year of excess return on stocks over short-term bonds; Mehra and Prescott took relative "
          "risk aversion of ten or less as plausible, and the model with such values cannot produce it.",
 )

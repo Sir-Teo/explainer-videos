@@ -119,6 +119,16 @@ AGORA = {
                                     "across 89 countries, 1960-2019, holding investment, population growth and "
                                     "schooling fixed, the gap closes at about 1.3% a year, and with no controls not at "
                                     "all"),
+    # Part 23 computed the premium from Shiller's data and built the trees
+    "equity_premium": (23, "the premium is risk aversion times an asset's covariance with bad times; with consumption "
+                           "as smooth as the data show, power utility gives at most a third of a point at sensible "
+                           "risk aversion (Mehra and Prescott's economy, solved), and the Hansen-Jagannathan bound needs "
+                           "a risk aversion above eight; rare disasters (a 1.7% chance a year of a fall averaging 30%) "
+                           "give a 5% premium and a 2% safe rate with a risk aversion of 3.5"),
+    "unpredictable": (23, "in an efficient market prices use what is known, so next year's return is hard to "
+                          "forecast (an R-squared of 0.03 on the dividend yield in Shiller's data); a risk premium "
+                          "that rises in bad times, as with habits, makes returns over a decade partly forecastable "
+                          "(0.24) without leaving money on the table"),
     # Part 22 showed the US series and built the households
     "smooth_consumption": (22, "a household that can save and borrow spreads a windfall over the rest of its life, "
                                "so its spending follows permanent income, not this year's; even Agora's buffer-stock "

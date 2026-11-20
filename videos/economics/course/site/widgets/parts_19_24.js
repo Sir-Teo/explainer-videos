@@ -328,4 +328,76 @@
             "do here is stored or sent.",
     });
   };
+  // ---- Part 23: capital and asset prices --------------------------------------------------------------------------
+  W.tree = function (el) {
+    // the Lucas tree of Part 23 (explainer.economics.agora.assets: disasters), in closed form: consumption growth
+    // exp(g + s z) (here g = 2.5%, s = 2%) times (1 - b) in a disaster year; equity is the claim to consumption.
+    // The reader sets risk aversion, patience and the chance of a disaster (sizes 15-65%, average about 30%), and sees
+    // the premium and the safe rate against the US record (about 5.5 and 2 percent).
+    var G = 0.025, S = 0.02;
+    var SIZES = [0.15, 0.25, 0.35, 0.50, 0.65], W8 = [0.35, 0.25, 0.20, 0.12, 0.08];
+    function E(power, p) {
+      var normal = Math.exp(power * G + power * power * S * S / 2), d = 0;
+      for (var i = 0; i < SIZES.length; i++) d += W8[i] * Math.pow(1 - SIZES[i], power);
+      return normal * (1 - p + p * d);
+    }
+    function solve(gamma, rho, p) {
+      var beta = Math.exp(-rho);
+      var rf = 1 / (beta * E(-gamma, p)) - 1;
+      var x = beta * E(1 - gamma, p);
+      if (x >= 1) return null;
+      var pd = x / (1 - x);
+      var re = E(1, p) * (1 + pd) / pd - 1;
+      return { rf: rf, re: re, premium: re - (rf), pd: pd };
+    }
+    QB.widget(el, {
+      title: "Price the risk",
+      sub: "A tree economy: everyone owns the trees and eats the fruit. Set how much people dislike risk, how patient " +
+           "they are, and the yearly chance of a disaster that cuts consumption by 15 to 65 percent. The left chart " +
+           "shows the equity premium against risk aversion, the right the safe interest rate. Can you match the US " +
+           "record of about 5.5 percent and 2 percent with a risk aversion below 5?",
+      panels: 2, height: 280,
+      controls: [
+        { k: "gamma", label: "Risk aversion, gamma", min: 0.5, max: 10, step: 0.1, value: 2,
+          fmt: function (x) { return x.toFixed(1); } },
+        { k: "rho", label: "Impatience, a year", min: 0.0, max: 0.06, step: 0.002, value: 0.03,
+          fmt: function (x) { return (100 * x).toFixed(1) + "%"; } },
+        { k: "p", label: "Chance of a disaster, a year", min: 0, max: 0.04, step: 0.001, value: 0.017,
+          fmt: function (x) { return (100 * x).toFixed(1) + "%"; } },
+      ],
+      draw: function (g, v, st) {
+        var gs = [], pr = [], rf = [], pr0 = [], rf0 = [];
+        for (var k = 0; k <= 60; k++) {
+          var gm = 0.5 + 9.5 * k / 60, a = solve(gm, v.rho, v.p), b = solve(gm, v.rho, 0);
+          gs.push(gm);
+          pr.push(a ? Math.min(100 * a.premium, 15) : NaN); rf.push(a ? Math.max(Math.min(100 * a.rf, 30), -10) : NaN);
+          pr0.push(b ? Math.min(100 * b.premium, 15) : NaN); rf0.push(b ? Math.max(Math.min(100 * b.rf, 30), -10) : NaN);
+        }
+        var a1 = g[0].axes({ x: [0.5, 10], y: [0, 15], title: "Equity premium, % a year", xlabel: "risk aversion" });
+        a1.hline(5.5, { color: GREY_HINT });
+        a1.line(gs, pr0, { color: BLUE, width: 2 });
+        a1.line(gs, pr, { color: RED, width: 2.5 });
+        a1.vline(v.gamma, { color: GOLD });
+        var a2 = g[1].axes({ x: [0.5, 10], y: [-10, 30], title: "Safe interest rate, % a year", xlabel: "risk aversion" });
+        a2.hline(2, { color: GREY_HINT });
+        a2.line(gs, rf0, { color: BLUE, width: 2 });
+        a2.line(gs, rf, { color: RED, width: 2.5 });
+        a2.vline(v.gamma, { color: GOLD });
+        st.now = solve(v.gamma, v.rho, v.p);
+      },
+      readout: function (v, st) {
+        var s = st.now;
+        if (!s) return [["at this risk aversion", "no finite price: the tree would be worth more than everything"]];
+        var hit = Math.abs(100 * s.premium - 5.5) < 1.0 && Math.abs(100 * s.rf - 2) < 1.5 && v.gamma < 5;
+        return [["equity premium (red; blue without disasters)", (100 * s.premium).toFixed(2) + "%"],
+                ["safe interest rate", (100 * s.rf).toFixed(2) + "%"],
+                ["price-dividend ratio", s.pd.toFixed(1)],
+                ["verdict", hit ? "you matched the record with ordinary risk aversion" :
+                  "the record: a premium near 5.5% and a safe rate near 2% (grey lines)"]];
+      },
+      note: "Without disasters (blue), no plausible risk aversion gives a premium above a fraction of a percent, and " +
+            "raising risk aversion sends the safe rate soaring: the equity premium and risk-free rate puzzles (Part " +
+            "23, chapters 8-9). Computed in your browser; nothing you do here is stored or sent.",
+    });
+  };
 })();
