@@ -124,9 +124,9 @@ class UIP(VoiceoverScene):
         ) as vo:
             self.play(FadeIn(ax), FadeIn(tag))
             vo.wait_until("a")
-            self.play(FadeIn(side[0]))
+            self.play(Create(ln), FadeIn(side[0]), run_time=2.2)
             vo.wait_until("b")
-            self.play(Create(ln), FadeIn(side[1]), run_time=2.2)
+            self.play(FadeIn(side[1]))
             vo.wait_until("c")
             self.play(Create(crash), FadeIn(side[2]))
             vo.wait_until("d")

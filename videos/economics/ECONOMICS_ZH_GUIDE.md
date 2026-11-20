@@ -868,6 +868,29 @@ brackets on screen.
 | the global financial cycle | 全球金融周期 |
 | the exchange-rate disconnect | 汇率脱节之谜 |
 
+## Part 35
+
+| English | 中文 |
+|---|---|
+| comparative advantage; absolute advantage; opportunity cost | 比较优势；绝对优势；机会成本 |
+| the gains from trade; autarky | 贸易利得；自给自足（封闭） |
+| the production possibility frontier; the terms of trade | 生产可能性边界；贸易条件 |
+| the chain of comparative advantage; a continuum of goods | 比较优势链；商品连续统 |
+| non-traded goods; iceberg trade costs | 非贸易品；冰山型贸易成本 |
+| factor proportions; factor abundance; factor intensity | 要素比例；要素丰裕度；要素密集度 |
+| the Heckscher-Ohlin theorem; factor price equalization | 赫克歇尔-俄林定理；要素价格均等化 |
+| the Stolper-Samuelson theorem; the magnification effect | 斯托尔珀-萨缪尔森定理；放大效应 |
+| the Rybczynski theorem; the Lerner diagram | 雷布津斯基定理；勒纳图 |
+| the Leontief paradox; the factor content of trade; the missing trade | 里昂惕夫悖论；贸易的要素含量；消失的贸易 |
+| the specific-factors model | 特定要素模型 |
+| a tariff; a quota; a quota rent; a voluntary export restraint | 关税；配额；配额租金；自愿出口限制 |
+| deadweight loss; the optimal tariff | 无谓损失；最优关税 |
+| protection for sale; a trade war | 保护待售；贸易战 |
+| reciprocity; most-favoured-nation treatment | 互惠；最惠国待遇 |
+| the GATT; the WTO | 关贸总协定；世界贸易组织 |
+| the compensation principle; trade adjustment assistance | 补偿原则；贸易调整援助 |
+| intra-industry trade; the Grubel-Lloyd index | 产业内贸易；格鲁贝尔-劳埃德指数 |
+
 ## Names
 
 | English | 中文 |
@@ -1121,6 +1144,10 @@ brackets on screen.
 | Stephen Broadberry; Hanhui Guan; David Daokui Li; Kenneth Pomeranz; Joseph Needham | 斯蒂芬·布罗德伯里；管汉晖；李稻葵；彭慕兰；李约瑟 |
 | Nico Voigtländer; Hans-Joachim Voth; Nicholas Crafts; Knick Harley; Friedrich Engels; Jan de Vries | 尼科·福格特兰德；汉斯-约阿希姆·沃斯；尼古拉斯·克拉夫茨；尼克·哈利；弗里德里希·恩格斯；扬·德弗里斯 |
 | Gary Becker; H. Gregg Lewis; Michael Kremer; Oded Galor; David Weil; Quamrul Ashraf | 加里·贝克尔；H.格雷格·刘易斯；迈克尔·克雷默；奥戴德·盖勒；戴维·韦尔；夸姆鲁尔·阿什拉夫 |
+| Stanislaw Ulam; Eli Heckscher; Bertil Ohlin; Abba Lerner; Wolfgang Stolper; Tadeusz Rybczynski | 斯坦尼斯瓦夫·乌拉姆；伊莱·赫克歇尔；贝蒂尔·俄林；阿巴·勒纳；沃尔夫冈·斯托尔珀；塔德乌什·雷布津斯基 |
+| Wassily Leontief; Edward Leamer; Daniel Trefler; Ronald Jones; Mancur Olson | 瓦西里·里昂惕夫；爱德华·利默；丹尼尔·特雷夫勒；罗纳德·琼斯；曼瑟·奥尔森 |
+| Gene Grossman; Elhanan Helpman; Kyle Bagwell; Robert Staiger; Pinelopi Goldberg; Giovanni Maggi | 吉恩·格罗斯曼；埃尔赫南·赫尔普曼；凯尔·巴格韦尔；罗伯特·斯泰格尔；佩内洛皮·戈德堡；乔瓦尼·马吉 |
+| Arnaud Costinot; Dave Donaldson; Jonathan Eaton; Samuel Kortum; Daniel Bernhofen; John Brown | 阿尔诺·科斯蒂诺；戴夫·唐纳森；乔纳森·伊顿；塞缪尔·科特姆；丹尼尔·伯恩霍芬；约翰·布朗 |
 | Robert Mundell; Marcus Fleming; Rudiger Dornbusch; Maurice Obstfeld; Kenneth Rogoff | 罗伯特·蒙代尔；马库斯·弗莱明；鲁迪格·多恩布什；莫里斯·奥布斯特费尔德；肯尼斯·罗戈夫 |
 | Bela Balassa; Richard Meese; Eugene Fama; Hélène Rey; Gita Gopinath | 贝拉·巴拉萨；理查德·米斯；尤金·法玛；埃莱娜·雷伊；吉塔·戈皮纳特 |
 | Xavier Gabaix; Matteo Maggiori; Oleg Itskhoki; Dmitry Mukhin; Pierre-Olivier Gourinchas | 泽维尔·加贝克斯；马泰奥·马焦里；奥列格·伊茨霍基；德米特里·穆欣；皮埃尔-奥利维耶·古兰沙 |

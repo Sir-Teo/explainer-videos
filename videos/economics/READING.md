@@ -10,7 +10,7 @@ the series leaves out.
 Both *Parts* columns are found, not typed. *Planned* lists the parts whose entry in
 [`SYLLABUS.md`](SYLLABUS.md) names the book or paper; *Built* lists the parts whose scenes, compute step or
 README cite it (a dot: none yet). Fuller notes (editions, chapters, what each source was used for) are in each
-part's README, under *Sources*. Built so far: Parts 1–34.
+part's README, under *Sources*. Built so far: Parts 1–35.
 
 ## 1. The textbook spine
 
@@ -35,7 +35,7 @@ part's README, under *Sources*. Built so far: Parts 1–34.
 | Stock–Watson | J. Stock and M. Watson, *Introduction to Econometrics* (4th ed., 2019) | 4 | 4 |
 | Angrist–Pischke | J. Angrist and J.-S. Pischke, *Mostly Harmless Econometrics* (2009) | 4, 50, 67 | 4 |
 | Osborne | M. Osborne, *An Introduction to Game Theory* (2004) | 11 | 11 |
-| Krugman–Obstfeld–Melitz | P. Krugman, M. Obstfeld and M. Melitz, *International Economics* (12th ed., 2022) | 34–35 | 34 |
+| Krugman–Obstfeld–Melitz | P. Krugman, M. Obstfeld and M. Melitz, *International Economics* (12th ed., 2022) | 34–35 | 34–35 |
 | Mishkin | F. Mishkin, *The Economics of Money, Banking, and Financial Markets* (13th ed., 2022) | 26 | 31 |
 | Cabral | L. Cabral, *Introduction to Industrial Organization* (2nd ed., 2017) | 12–13 | 12–13 |
 | Borjas | G. Borjas, *Labor Economics* (8th ed., 2020) | 38 | · |
@@ -92,7 +92,7 @@ part's README, under *Sources*. Built so far: Parts 1–34.
 
 | Short name | Book | Planned | Built |
 |---|---|---|---|
-| Feenstra | R. Feenstra, *Advanced International Trade* (2nd ed., 2016) | 6, 35–36 | 6, 8, 20 |
+| Feenstra | R. Feenstra, *Advanced International Trade* (2nd ed., 2016) | 6, 35–36 | 6, 8, 20, 35 |
 | Cahuc–Carcillo–Zylberberg | P. Cahuc, S. Carcillo and A. Zylberberg, *Labor Economics* (2nd ed., 2014) | 24, 38 | 24 |
 | Atkinson–Stiglitz | A. Atkinson and J. Stiglitz, *Lectures on Public Economics* (1980; 2015) | 41 | 6 |
 | Salanié | B. Salanie, *The Economics of Taxation* (2nd ed., 2011) | 41 | 13–14 |
@@ -121,7 +121,7 @@ part's README, under *Sources*. Built so far: Parts 1–34.
 | Model or result | Paper | Planned | Built |
 |---|---|---|---|
 | the division of labour | Smith (1776), *The Wealth of Nations* | 1 | 1–2, 19, 21 |
-| comparative advantage | Ricardo (1817), *Principles*, ch. 7 | 2, 8, 35–36 | 1–2, 8, 19, 22, 25, 33–34 |
+| comparative advantage | Ricardo (1817), *Principles*, ch. 7 | 2, 8, 35–36 | 1–2, 8, 19, 22, 25, 33–35 |
 | supply and demand, the scissors | Marshall (1890), *Principles of Economics* | 2, 37 | 2, 14 |
 | the price system as information | Hayek (1945), "The Use of Knowledge in Society" | 1, 9 | 1, 9 |
 | the double auction in the classroom | Chamberlin (1948); Smith (1962) | 1–2 | 1 |
@@ -153,7 +153,7 @@ part's README, under *Sources*. Built so far: Parts 1–34.
 |---|---|---|---|
 | equilibrium in games | Nash (1950, 1951) | 11 | 11 |
 | oligopoly in quantities and prices | Cournot (1838); Bertrand (1883) | 12 | 6, 12 |
-| demand estimation with differentiated products | Berry, Levinsohn and Pakes (1995) | 43 | · |
+| demand estimation with differentiated products | Berry, Levinsohn and Pakes (1995) | 43 | 35 |
 
 ### Information and design
 
@@ -223,7 +223,7 @@ part's README, under *Sources*. Built so far: Parts 1–34.
 |---|---|---|---|
 | optimum currency areas and the trilemma | Mundell (1961, 1963) | 34 | 34 |
 | exchange-rate overshooting | Dornbusch (1976) | 34 | · |
-| factor prices and trade | Stolper and Samuelson (1941) | 35 | · |
+| factor prices and trade | Stolper and Samuelson (1941) | 35 | 35 |
 | trade with increasing returns | Krugman (1979, 1980) | 36 | · |
 | heterogeneous firms in trade | Melitz (2003) | 36 | · |
 | gravity | Anderson and van Wincoop (2003) | 36 | · |
@@ -323,6 +323,8 @@ part's README, under *Sources*. Built so far: Parts 1–34.
 **Part 33, *Crises*.** Books: Charles Kindleberger and Robert Aliber, *Manias, Panics, and Crashes* (7th ed., 2015); Atif Mian and Amir Sufi, *House of Debt* (2014); Carmen Reinhart and Kenneth Rogoff, *This Time Is Different* (2009); Adam Tooze, *Crashed* (2018); Ben Bernanke, Timothy Geithner and Henry Paulson, *Firefighting* (2019). Papers: Fisher (1933); Minsky (1986); Bernanke (1983); Townsend (1979); Kiyotaki and Moore (1997); Bernanke, Gertler and Gilchrist (1999); Geanakoplos (2010); Schularick and Taylor (2012); Jordá, Schularick and Taylor (2013, 2017); Greenwood et al. (2022); Gorton and Metrick (2012); Brunnermeier and Pedersen (2009); Brunnermeier and Sannikov (2014); Mian, Rao and Sufi (2013); Calvo (1998); Rajan (2005).
 
 **Part 34, *The Open Economy*.** Books: Paul Krugman, Maurice Obstfeld and Marc Melitz, *International Economics* (12th ed., 2022), Part 3; Maurice Obstfeld and Kenneth Rogoff, *Foundations of International Macroeconomics* (1996); Barry Eichengreen, *Globalizing Capital* (3rd ed., 2019); Martin Uribe and Stephanie Schmitt-Grohé, *Open Economy Macroeconomics* (2017). Papers: Mundell (1961, 1963); Fleming (1962); Dornbusch (1976); Balassa (1964); Samuelson (1964); Krugman (1979); Obstfeld (1996); Calvo (1998); Meese and Rogoff (1983); Fama (1984); Rogoff (1996); Lustig and Verdelhan (2007); Gourinchas and Rey (2007); Rey (2013); Gopinath, Itskhoki and Rigobon (2010); Gopinath et al. (2020); Gabaix and Maggiori (2015); Itskhoki and Mukhin (2021); Caballero, Farhi and Gourinchas (2017); Rossi (2013).
+
+**Part 35, *Trade I: Comparative Advantage*.** Books: Paul Krugman, Maurice Obstfeld and Marc Melitz, *International Economics* (12th ed., 2022), chs 3–6, 9–10; Robert Feenstra, *Advanced International Trade* (2nd ed., 2015), chs 1–3; Douglas Irwin, *Clashing over Commerce: A History of US Trade Policy* (2017); Arnaud Costinot and Andrés Rodríguez-Clare, "Trade Theory with Numbers", *Handbook of International Economics* vol. 4 (2014). Papers: Ricardo (1817); Heckscher (1919); Ohlin (1933); Stolper and Samuelson (1941); Lerner (1952); Leontief (1953); Jones (1971); Dornbusch, Fischer and Samuelson (1977); Leamer (1980); Grossman and Helpman (1994); Trefler (1995); Bagwell and Staiger (1999); Goldberg and Maggi (1999); Eaton and Kortum (2002); Bernhofen and Brown (2004, 2005); Irwin (2005); Arkolakis, Costinot and Rodríguez-Clare (2012); Costinot and Donaldson (2012).
 
 ## 4. What the series leaves out
 

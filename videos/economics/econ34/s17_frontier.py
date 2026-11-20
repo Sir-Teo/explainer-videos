@@ -25,6 +25,11 @@ class Frontier(VoiceoverScene):
                      font_size=24, color=E.ACCENT).to_edge(UP, buff=0.5)
         tag = published_tag(r"Gabaix and Maggiori, \ \emph{QJE} 130(3) (2015); \ Itskhoki and Mukhin, \ \emph{JPE} "
                             r"129(8) (2021)", corner=DR, font_size=12)
+        puzzles = VGroup(
+            label(r"the random walk \ (chapter 5)", font_size=19, color=GREY_A),
+            label(r"Fama's negative slopes \ (chapter 4)", font_size=19, color=GREY_A),
+            label(r"parity's slow return \ (chapter 3)", font_size=19, color=GREY_A),
+        ).arrange(RIGHT, buff=1.2).to_edge(DOWN, buff=0.9)
         with self.voiceover(
             "This part's evidence adds up to a puzzle with a name: the exchange-rate disconnect. Exchange rates move "
             "a lot, and their moves have little to do with output, prices or money. The frontier looks for what "
@@ -37,6 +42,7 @@ class Frontier(VoiceoverScene):
             "assets, which investors accept lower returns to hold."
         ) as vo:
             self.play(FadeIn(head), FadeIn(tag))
+            self.play(LaggedStart(*[FadeIn(x, shift=UP * 0.1) for x in puzzles], lag_ratio=0.5), run_time=2.0)
             for mk, c in zip("abc", cards.cards):
                 vo.wait_until(mk)
                 self.play(FadeIn(c, shift=UP * 0.1))

@@ -818,6 +818,29 @@ TRUTHS = {
         # demand's semi-elasticity 5
         "krugman": {"peg": 100.0, "d0": 60.0, "mu": 2.0, "alpha": 5.0, "T": 25.0},
     },
+    35: {
+        # the Play-it trade (chapter 1): hours per unit of fish and of cloth on the Island and in the Archipelago,
+        # which is better at both; the Island has twice the hours; half of spending goes on each good
+        "playit": {"island": (3.0, 6.0), "arch": (1.0, 4.0), "L_island": 1200.0, "L_arch": 600.0, "beta": 0.5},
+        # Ricardo's numbers (chapter 2), with England a quarter larger than Portugal in workers
+        "ricardo": {"L_england": 1.25, "L_portugal": 1.0, "beta": 0.5},
+        # the chain and the continuum (chapter 3): the Island's edge A(z) = a*(z)/a(z) = level exp(k (1 - 2 z)) over
+        # 200 goods (below one in most: the Archipelago is the more productive), equal spending shares, the
+        # Archipelago's labour force twice the Island's; shipping keeps 85% of a cargo
+        "dfs": {"n": 200, "k": 1.5, "level": 0.4, "L": 1.0, "Lf": 2.0, "g": 0.85, "growth": 1.5},
+        # Heckscher-Ohlin (chapter 5): cloth uses labour (share 0.7), machines capital (labour share 0.3); the Island
+        # is labour-abundant, the Archipelago capital-abundant
+        "ho": {"alphas": (0.7, 0.3), "island": (120.0, 50.0), "arch": (80.0, 130.0), "beta": 0.5},
+        # specific factors (chapter 8): 100 workers, capital in manufacturing, land in agriculture, labour share 0.5
+        "specific": {"pM": 1.0, "pA": 1.0, "L": 100.0, "K": 100.0, "T": 100.0, "theta": 0.5, "dpA": 0.10},
+        # tariffs (chapter 9): the Island's cloth market, D = 100 - 10 p, S = 10 p - 20, world price 4; the
+        # Archipelago's export supply when the Island is large, X* = 40 p* - 120 (free trade still at 4)
+        "tariff": {"a": 100.0, "b": 10.0, "c": -20.0, "d": 10.0, "pw": 4.0, "t": 1.0, "e": -120.0, "f": 40.0},
+        # protection for sale (chapter 10): ten industries, four organized; welfare weighs 50 times contributions
+        "gh": {"n": 10, "organized": (1, 1, 0, 1, 0, 0, 1, 0, 0, 0), "a": 50.0, "alpha_L": 0.05, "seed": 35},
+        # the tariff war (chapter 11): two mirror-image economies
+        "war": {"A": 10.0, "b_lo": 0.5, "b_hi": 2.0},
+    },
 }
 
 

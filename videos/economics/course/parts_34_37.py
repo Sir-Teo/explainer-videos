@@ -53,4 +53,57 @@ PARTS = [
               ("The Island's planted truths", "explainer/economics/island.py"),
               ("The Data Room's sources", "explainer/economics/data/SOURCES.md")),
     ),
+    Part(
+        n=35, level="U", widget="fournumbers", prereq=(2, 8, 9, 11, 18),
+        question="Why do countries trade, and who wins and loses when they do?",
+        story="The part opens on Stanislaw Ulam's challenge to Paul Samuelson, to name one proposition in the social "
+              "sciences that is both true and not trivial, and Samuelson's answer: comparative advantage. The viewer "
+              "decides who should make what when one island is worse at everything; then Ricardo's four numbers with "
+              "the world price and the wage band, the chain of goods and the Dornbusch-Fischer-Samuelson continuum, "
+              "and a test: Japan's opening in 1859, with Bernhofen and Brown's tables. Heckscher and Ohlin's factor "
+              "proportions are drawn in the Lerner diagram with their four theorems, Stolper and Samuelson's losers "
+              "inside each country, and Leontief's paradox and Trefler's missing trade, recomputed from his data. "
+              "After an intermission of America's tariff since 1929 come specific factors, a tariff's triangles and "
+              "the optimal tariff, protection for sale, the tariff war and the trade agreements that escape it, and "
+              "compensation, with its is/ought step; a new dial, the Fact of two-way trade, Heckscher and Ohlin's "
+              "prediction for America as Called it?, and a frontier of Ricardo tested in the fields.",
+        handoff="Part 36 explains two-way trade with scale and firms, measures the trade elasticity with gravity, and "
+                "follows the China shock's losers; Part 37 asks where economic activity locates; Part 66 returns to "
+                "tariffs, trade wars and industrial policy.",
+        outside="Part 2: supply, demand and surplus; Part 8: production and cost functions, Shephard's lemma; Part 9: "
+                "general equilibrium; Part 11: the prisoner's dilemma and best responses; Part 18: compensation tests "
+                "and welfare. Chapter 5 uses Cobb-Douglas unit costs and a linear system in logs; chapter 7 a "
+                "factor-content regression; chapter 11 best responses found numerically.",
+        objectives={
+            "U": ["Find comparative advantage from four numbers, the range of trade prices, and the gains for both "
+                  "countries.",
+                  "State the Heckscher-Ohlin and Stolper-Samuelson theorems, and say who gains and loses from trade "
+                  "inside a country.",
+                  "Measure a tariff's effects on consumers, producers and revenue, and explain why protection is "
+                  "common."],
+            "M": ["Solve the Dornbusch-Fischer-Samuelson continuum and its comparative statics.",
+                  "Derive factor price equalization and the magnification effect from zero-profit conditions.",
+                  "Compute the optimal tariff and the Nash tariffs of a tariff war."],
+            "D": ["Run and interpret tests of comparative advantage: Bernhofen and Brown's inner product and "
+                  "Trefler's factor-content statistics.",
+                  "Explain the Arkolakis-Costinot-Rodriguez-Clare formula and how Costinot and Donaldson test "
+                  "Ricardo."],
+            "I": ["Read a tariff schedule, a trade-remedy case and an estimate of the gains from a trade agreement."],
+        },
+        results=[
+            ("Comparative advantage", r"\frac{a_{1}}{a_{2}} < \frac{a^*_{1}}{a^*_{2}} \;\Rightarrow\; \text{Home "
+                                      r"exports good 1}"),
+            ("The DFS equilibrium", r"A(\bar z) = \omega = \frac{\bar z}{1 - \bar z}\,\frac{L^*}{L}"),
+            ("Stolper-Samuelson", r"\hat w = \frac{\hat p_1 (1-\alpha_2) - \hat p_2 (1-\alpha_1)}{\alpha_1 - "
+                                  r"\alpha_2}"),
+            ("HOV", r"F_c = V_c - s_c V_w"),
+            ("The optimal tariff", r"t^{\text{opt}} = 1/\varepsilon^*"),
+            ("Protection for sale", r"\frac{t_i}{1 + t_i} = \frac{I_i - \alpha_L}{a + \alpha_L}\,\frac{z_i}{e_i}"),
+            ("The gains from trade", r"1 - \lambda^{1/\varepsilon}"),
+        ],
+        U=(0, 1, 2, 3, 4, 5, 6, "s09_intermission", 8, 9, 10, 11, 12, 13), D=(7, 15), I=(14,),
+        also=(("Agora's trade", "explainer/economics/agora/trade.py"),
+              ("The Island's planted truths", "explainer/economics/island.py"),
+              ("The Data Room's sources", "explainer/economics/data/SOURCES.md")),
+    ),
 ]

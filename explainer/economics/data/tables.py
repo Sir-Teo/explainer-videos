@@ -2079,6 +2079,167 @@ STRESS_2022 = Table(
 PART26 = (SVB_2023, STRESS_2022)
 
 
+# ---------------------------------------------------------------------------
+# Part 35
+# ---------------------------------------------------------------------------
+SAMUELSON_ULAM = Table(
+    key="samuelson_ulam",
+    cite="P. A. Samuelson, \"The Way of an Economist\", in P. A. Samuelson (ed.), International Economic Relations: "
+         "Proceedings of the Third Congress of the International Economic Association (Macmillan, 1969), pp. 1-11",
+    tag="Samuelson (1969), as widely quoted",
+    where="the anecdote of Stanislaw Ulam's challenge and Samuelson's answer, comparative advantage",
+    read="the passage as reproduced in several secondary sources (Reason, FEE, Econlib), which agree on the wording; "
+         "the 1969 volume itself was not read",
+    checked="2026-11-20",
+    data={"answer": "Ricardo's theory of comparative advantage",
+          "quote": "That it is logically true need not be argued before a mathematician; that it is not trivial is "
+                   "attested by the thousands of important and intelligent men who have never been able to grasp the "
+                   "doctrine for themselves or to believe it after it was explained to them."},
+    note="the wording of Ulam's question and the date it was asked differ between accounts; the film says 'as "
+         "Samuelson told it'",
+)
+RICARDO_1817 = Table(
+    key="ricardo_1817",
+    cite="D. Ricardo, On the Principles of Political Economy and Taxation (John Murray, 1817), chapter 7, \"On Foreign "
+         "Trade\"",
+    tag="Ricardo (1817), ch. 7",
+    where="the four numbers: the labour of men for a year to make a quantity of cloth and of wine",
+    read="the standard text of chapter 7",
+    checked="2026-11-20",
+    data={"England": {"cloth": 100, "wine": 120}, "Portugal": {"cloth": 90, "wine": 80}},
+)
+BERNHOFEN_BROWN_2004 = Table(
+    key="bernhofen_brown_2004",
+    cite="D. M. Bernhofen and J. C. Brown, \"A Direct Test of the Theory of Comparative Advantage: The Case of Japan\", "
+         "Journal of Political Economy 112(1): 48-67 (2004)",
+    tag="Bernhofen and Brown, JPE 112(1) (2004)",
+    where="table 1 (the composition of Japanese trade, 1868-75, percent of imports or exports) and table 2 (the "
+          "inner product of autarky prices of 1851-53 and each year's net exports, millions of ryo)",
+    read="the published article (the authors' posted copy)",
+    checked="2026-11-20",
+    data={
+        "exports": {"silk": 35.9, "silkworm eggs": 15.7, "tea": 28.2, "other foods": 8.2, "other manufactures": 4.3,
+                    "other raw materials": 2.9, "vegetable wax and cotton": 2.7, "fuel": 1.9, "textiles": 0.2},
+        "imports": {"woolens": 19.2, "cotton cloth": 18.4, "cotton yarn": 15.1, "miscellaneous manufactures": 11.2,
+                    "rice": 10.8, "sugar": 9.9, "other foods": 4.2, "other raw materials": 3.1,
+                    "weapons and ammunition": 2.7, "vegetable wax and cotton": 2.2, "other textiles": 1.8,
+                    "machinery and instruments": 1.4},
+        "years": (1868, 1869, 1870, 1871, 1872, 1873, 1874, 1875),
+        "imports_observed": (-2.24, -4.12, -8.44, -7.00, -5.75, -5.88, -7.15, -7.98),
+        "woolens": (-0.98, -0.82, -1.29, -1.56, -2.16, -2.50, -1.56, -2.33),
+        "imports_approx": (-1.10, -0.95, -0.70, -0.85, -1.51, -2.08, -1.60, -2.65),
+        "exports_observed": (4.07, 3.40, 4.04, 5.16, 4.99, 4.08, 5.08, 4.80),
+        "exports_approx": (0.09, 0.03, 0.07, 0.07, 0.15, 0.07, 0.11, 0.10),
+        "total": (-0.18, -2.47, -6.31, -4.17, -4.28, -6.31, -5.11, -8.06),
+        "autarky": "1851-53", "opened": 1859,
+    },
+    note="figure 4's price changes (exports' prices rising, in some cases almost doubling; imports' falling) are "
+         "described in words, since the figure's points were not transcribed",
+)
+BERNHOFEN_BROWN_2005 = Table(
+    key="bernhofen_brown_2005",
+    cite="D. M. Bernhofen and J. C. Brown, \"An Empirical Assessment of the Comparative Advantage Gains from Trade: "
+         "Evidence from Japan\", American Economic Review 95(1): 208-225 (2005)",
+    tag="Bernhofen and Brown, AER 95(1) (2005)",
+    where="the abstract: an upper bound on the gains of about 8 to 9 percent of GDP",
+    read="the abstract and the authors' working-paper summary",
+    checked="2026-11-20",
+    data={"upper_bound_lo": 8.0, "upper_bound_hi": 9.0},
+)
+IRWIN_2005 = Table(
+    key="irwin_2005",
+    cite="D. A. Irwin, \"The Welfare Cost of Autarky: Evidence from the Jeffersonian Trade Embargo, 1807-09\", Review "
+         "of International Economics 13(4): 631-645 (2005)",
+    tag="Irwin, Review of International Economics 13(4) (2005)",
+    where="the abstract: about 5 percent of 1807 GNP (the 2001 working paper had 8 percent); trade about 13 percent of "
+          "GNP",
+    read="the abstract and the NBER Reporter summary (2006)",
+    checked="2026-11-20",
+    data={"cost": 5.0, "cost_wp": 8.0, "trade_share": 13.0, "from": "December 1807", "to": "March 1809"},
+)
+LEONTIEF_1953 = Table(
+    key="leontief_1953",
+    cite="W. Leontief, \"Domestic Production and Foreign Trade: The American Capital Position Re-examined\", "
+         "Proceedings of the American Philosophical Society 97(4): 332-349 (1953)",
+    tag="Leontief (1953)",
+    where="the table of capital and labour needed per million dollars of US exports and of competitive import "
+          "replacements, 1947",
+    read="the table as reproduced in textbooks and in the secondary literature (several copies agree)",
+    checked="2026-11-20",
+    data={"exports": {"capital": 2550780, "labour": 182.313}, "imports": {"capital": 3091339, "labour": 170.004}},
+)
+TREFLER_1995 = Table(
+    key="trefler_1995",
+    cite="D. Trefler, \"The Case of the Missing Trade and Other Mysteries\", American Economic Review 85(5): "
+         "1029-1046 (1995)",
+    tag="Trefler, AER 85(5) (1995)",
+    where="the abstract and table 1 as reported in the literature: the sign test (about 0.50) and the variance of "
+          "measured relative to predicted factor content (0.032)",
+    read="the abstract; the statistics as reported by later papers; this film recomputes both from the data",
+    checked="2026-11-20",
+    data={"sign_test": 0.50, "variance_ratio": 0.032, "countries": 33, "factors": 9, "year": 1983},
+)
+IRWIN_SMOOT_HAWLEY = Table(
+    key="irwin_smoot_hawley",
+    cite="D. A. Irwin, \"The Smoot-Hawley Tariff: A Quantitative Assessment\", Review of Economics and Statistics "
+         "80(2): 326-334 (1998), and Peddling Protectionism: Smoot-Hawley and the Great Depression (Princeton, 2011)",
+    tag="Irwin (1998, 2011)",
+    where="the average tariff on dutiable imports: about 40 percent in 1929, 59 percent in 1932, 14 percent in 1948; "
+          "much of the rise came from deflation, since many duties were specific (cents per unit)",
+    read="Irwin's NBER chapter and working paper as summarized; the book's decomposition was not read",
+    checked="2026-11-20",
+    data={"dutiable": {1929: 40.0, 1932: 59.0, 1948: 14.0}},
+)
+ACR_2012 = Table(
+    key="acr_2012",
+    cite="C. Arkolakis, A. Costinot and A. Rodriguez-Clare, \"New Trade Models, Same Old Gains?\", American Economic "
+         "Review 102(1): 94-130 (2012)",
+    tag="Arkolakis, Costinot and Rodriguez-Clare, AER 102(1) (2012)",
+    where="section on the welfare formula's application to the United States: a domestic share of about 0.93 and a "
+          "trade elasticity between -5 and -10 give gains of 0.7 to 1.4 percent",
+    read="the published article as summarized",
+    checked="2026-11-20",
+    data={"lambda": 0.93, "eps": (-5.0, -10.0), "gains": (0.7, 1.4)},
+)
+GOLDBERG_MAGGI_1999 = Table(
+    key="goldberg_maggi_1999",
+    cite="P. K. Goldberg and G. Maggi, \"Protection for Sale: An Empirical Investigation\", American Economic Review "
+         "89(5): 1135-1155 (1999)",
+    tag="Goldberg and Maggi, AER 89(5) (1999)",
+    where="the abstract: US protection in 1983 fits the model, and the government weighs welfare many times more than "
+          "contributions (50 to 88 times in the NBER working paper's estimates)",
+    read="the abstracts of the article and of NBER working paper 5942",
+    checked="2026-11-20",
+    data={"year": 1983, "weight_lo": 50, "weight_hi": 88},
+)
+COSTINOT_DONALDSON_2012 = Table(
+    key="costinot_donaldson_2012",
+    cite="A. Costinot and D. Donaldson, \"Ricardo's Theory of Comparative Advantage: Old Idea, New Evidence\", "
+         "American Economic Review: Papers and Proceedings 102(3): 453-458 (2012)",
+    tag="Costinot and Donaldson, AER P&P 102(3) (2012)",
+    where="the abstract and the main regression: 17 crops, 1.6 million parcels, 55 countries; log output on log "
+          "predicted output, slope 0.21",
+    read="the NBER working paper (w17969) as summarized",
+    checked="2026-11-20",
+    data={"crops": 17, "parcels": 1.6e6, "countries": 55, "slope": 0.21},
+)
+TAA = Table(
+    key="taa",
+    cite="Trade Expansion Act of 1962, Public Law 87-794 (11 October 1962); Congressional Research Service, R41922; "
+         "B. Hyman, \"Can Displaced Labor Be Retrained? Evidence from Quasi-Random Assignment to Trade Adjustment "
+         "Assistance\" (working paper, 2018)",
+    tag="PL 87-794 (1962); CRS R41922; Hyman (2018)",
+    where="the Act's purposes; the CRS history of TAA; Hyman's abstract: about $50,000 more cumulative earnings ten "
+          "years out for approved workers, from about 300,000 workers in Census data",
+    read="the statute's title page, the CRS report and the working paper's abstract",
+    checked="2026-11-20",
+    data={"enacted": "11 October 1962", "law": "PL 87-794", "hyman_gain": 50000, "hyman_workers": 300000,
+          "hyman_years": 10},
+)
+PART35 = (SAMUELSON_ULAM, RICARDO_1817, BERNHOFEN_BROWN_2004, BERNHOFEN_BROWN_2005, IRWIN_2005, LEONTIEF_1953,
+          TREFLER_1995, IRWIN_SMOOT_HAWLEY, ACR_2012, GOLDBERG_MAGGI_1999, COSTINOT_DONALDSON_2012, TAA)
+
+
 PART7 = (BERNOULLI_1738, SAMUELSON_1937, ALLAIS_1953, ELLSBERG_1961, RABIN_2000, THALER_1981, HOLT_LAURY_2005,
          HAYDEN_PLATT_2009, MADRIAN_SHEA_2001, THALER_BENARTZI_2004, BARSKY_1997, POST_2008, MEHRA_PRESCOTT_1985)
-ALL = {t.key: t for t in (*PART1, *PART3, *PART4, *PART5, *PART6, *PART7, *PART8, *PART9, *PART10, *PART11, *PART12, *PART13, *PART14, *PART15, *PART16, *PART17, *PART18, *PART19, *PART21, *PART22, *PART25, *PART26)}
+ALL = {t.key: t for t in (*PART1, *PART3, *PART4, *PART5, *PART6, *PART7, *PART8, *PART9, *PART10, *PART11, *PART12, *PART13, *PART14, *PART15, *PART16, *PART17, *PART18, *PART19, *PART21, *PART22, *PART25, *PART26, *PART35)}

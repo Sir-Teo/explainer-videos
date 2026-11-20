@@ -28,7 +28,7 @@ class Euro(VoiceoverScene):
                             font_size=12)
         with self.voiceover(
             "The trilemma says a fixed exchange rate costs a country its monetary policy. When is that worth it? "
-            "Robert Mundell asked in 1961 what makes a region an optimum currency area. <bookmark mark='a'/> The "
+            "<bookmark mark='a'/> Robert Mundell asked in 1961 what makes a region an optimum currency area. The "
             "gain from sharing a currency is no exchange-rate risk and cheaper trade. <bookmark mark='b'/> The cost "
             "is losing the exchange rate as a shock absorber when trouble hits one region and not another. "
             "<bookmark mark='c'/> The cost is small if workers move to where the jobs are, if a shared budget sends "

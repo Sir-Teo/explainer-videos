@@ -32,7 +32,7 @@ class Dollar(VoiceoverScene):
         tag = data_tag(rf"BLS import prices ex fuel; \ the Fed's broad dollar index; \ {Dl['pt_first'][:4]}--"
                        rf"{Dl['pt_last'][:4]}; \ this film's distributed lags", corner=DR, font_size=12)
         with self.voiceover(
-            "Most of the world's trade is priced in dollars, even trade that never touches America. Gita Gopinath "
+            "Much of the world's trade is priced in dollars, even trade that never touches America. Gita Gopinath "
             "and coauthors call it the dominant currency paradigm, and it changes how exchange rates work. "
             "<bookmark mark='a'/> When the dollar rises ten percent, what happens to the dollar prices of what "
             "America imports? Estimated month by month, the answer here is: almost nothing at once, "
@@ -43,9 +43,9 @@ class Dollar(VoiceoverScene):
             "corollary is uncomfortable for the rest of the world: when a country's currency falls against the "
             "dollar, its imports become dearer at once, but its exports, priced in dollars, do not get cheaper."
         ) as vo:
-            self.play(FadeIn(ax), FadeIn(full), FadeIn(tag))
+            self.play(FadeIn(ax), FadeIn(full), FadeIn(tag), Create(ln), FadeIn(dots), run_time=2.0)
             vo.wait_until("a")
-            self.play(Create(ln), FadeIn(dots), FadeIn(side[0]), run_time=2.0)
+            self.play(FadeIn(side[0]), Indicate(dots[0], color=WHITE, scale_factor=2.0))
             vo.wait_until("b")
             self.play(FadeIn(side[1]))
             vo.wait_until("c")

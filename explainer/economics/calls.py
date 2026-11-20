@@ -389,6 +389,21 @@ CALLS = {c.key: c for c in [
          "right",
          ("B. Holmström and P. Milgrom, Journal of Law, Economics and Organization 7 (1991): 24-52",
           "B. A. Jacob and S. D. Levitt, Quarterly Journal of Economics 118(3) (2003): 843-877, abstract")),
+    Call("heckscher_ohlin_us", 35, "Heckscher and Ohlin's theory, read for the United States", "1933",
+         "the country best endowed with capital should export goods that use capital intensively and import goods "
+         "that use labour intensively",
+         "the most capital-abundant economy in the world after 1945, the United States",
+         "Leontief's 1947 table found the reverse: a million dollars of exports needed $13,991 of capital per "
+         "worker-year, import replacements $18,184; Leamer (1980) showed that with unbalanced trade this was the "
+         "wrong test, and by the right one America was capital-abundant; Trefler (1995) found factor content far "
+         "smaller than the theory predicts unless technology differs across countries",
+         "partly right",
+         ("B. Ohlin, Interregional and International Trade (Harvard University Press, 1933)",
+          "W. Leontief, \"Domestic Production and Foreign Trade: The American Capital Position Re-examined\", "
+          "Proceedings of the American Philosophical Society 97(4): 332-349 (1953)",
+          "E. E. Leamer, \"The Leontief Paradox, Reconsidered\", Journal of Political Economy 88(3): 495-503 (1980)",
+          "D. Trefler, \"The Case of the Missing Trade and Other Mysteries\", American Economic Review 85(5): "
+          "1029-1046 (1995)")),
     Call("meese_rogoff_1983", 34, "Richard Meese and Kenneth Rogoff, in the Journal of International Economics",
          "February 1983",
          "the structural models of exchange rates of the 1970s forecast no better than a random walk at one to twelve "

@@ -366,6 +366,20 @@ FRED_SERIES["VIXCLS"] = ("CBOE volatility index: VIX", "index", "daily", "Chicag
 JST_FRED = ("DRSFRMACBS", "TEDRATE", "SWPT", "BAA10Y", "HDTGPDUSQ163N", "EXTHUS", "EXKOUS", "EXMXUS")
 FRED_RETRIEVED.update({s: "2026-11-20" for s in JST_FRED})
 FRED_RETRIEVED.update({s: "2026-11-20" for s in OPEN_FRED})
+TRADE_FRED = ("B235RC1A027NBEA", "A255RC1A027NBEA", "A640RC1A027NBEA", "A650RC1A027NBEA", "B641RC1A027NBEA",
+              "B651RC1A027NBEA", "A642RC1A027NBEA", "A652RC1A027NBEA")
+FRED_SERIES["B235RC1A027NBEA"] = ("Federal government current tax receipts: taxes on production and imports: customs "
+                                  "duties", "billions of dollars", "annual", "U.S. Bureau of Economic Analysis")
+FRED_SERIES["A255RC1A027NBEA"] = ("Current payments to the rest of the world: imports of goods", "billions of dollars",
+                                  "annual", "U.S. Bureau of Economic Analysis")
+for _k, _d in (("A640RC1A027NBEA", "Exports of goods: capital goods, except automotive"),
+               ("A650RC1A027NBEA", "Imports of goods: capital goods, except automotive"),
+               ("B641RC1A027NBEA", "Exports of goods: automotive vehicles, engines, and parts"),
+               ("B651RC1A027NBEA", "Imports of goods: automotive vehicles, engines, and parts"),
+               ("A642RC1A027NBEA", "Exports of goods: consumer goods, except food and automotive"),
+               ("A652RC1A027NBEA", "Imports of goods: consumer goods, except automotive")):
+    FRED_SERIES[_k] = (_d, "billions of dollars", "annual", "U.S. Bureau of Economic Analysis (NIPA table 4.2.5)")
+FRED_RETRIEVED.update({s: "2026-11-20" for s in TRADE_FRED})
 
 SPF_FILES = ("median_rgdp_level", "median_rgdp_growth", "median_recess_level")
 SPF_URL = ("https://www.philadelphiafed.org/-/media/frbp/assets/surveys-and-data/survey-of-professional-forecasters/"
@@ -767,6 +781,22 @@ DATASETS = {
         "sha256": "c1bb91fe56ea50d4f27af5c0fc897d481e89ae38ce41eaecab62134c9354981d",
         "files": ("jst.csv",),
     },
+    "trefler_hov": {
+        "title": "Trefler's data for \"The Case of the Missing Trade and Other Mysteries\": the factor content of trade, "
+                 "endowments and GDP for 33 countries and 9 factors, 1983",
+        "publisher": "Daniel Trefler (NBER)",
+        "citation": "D. Trefler, \"The Case of the Missing Trade and Other Mysteries\", American Economic Review 85(5): "
+                    "1029-1046 (1995); data file hov_pub.dat (15 November 1994), retrieved 2026-11-20",
+        "short": "Trefler (1995), replication data",
+        "url": "https://www.nber.org/ftp/trefler/HOV/hov_pub.dat",
+        "licence": "no licence stated; the author's replication data, posted for public use and redistributed here as "
+                   "a cited extract",
+        "units": "factor content of trade and endowments in the factor's units (capital in 1983 dollars, labour in "
+                 "workers, land in hectares); GDP and the trade balance in dollars; GDP per head (PWT)",
+        "vintage": "2026-11-20",
+        "sha256": "b3272c32ecec5642cf18082eeaba976f5b64342ac210288e393ea51c19e4ca33",
+        "files": ("trefler_hov.csv",),
+    },
     "bigmac": {
         "title": "The Economist's Big Mac index: local prices, exchange rates, dollar prices, raw and GDP-adjusted "
                  "valuations, 2000-2026",
@@ -1100,7 +1130,7 @@ def blanchard_leigh() -> dict:
 
 JST_COLS = ("year", "country", "iso", "pop", "rgdpmad", "rgdpbarro", "gdp", "iy", "cpi", "ca", "money", "stir",
             "ltrate", "hpnom", "unemp", "debtgdp", "xrusd", "tloans", "tmort", "thh", "tbus", "lev", "ltd", "noncore",
-            "crisisJST", "eq_tr", "housing_tr", "bond_tr", "bill_rate")
+            "crisisJST", "eq_tr", "housing_tr", "bond_tr", "bill_rate", "imports", "exports")
 
 
 @functools.lru_cache(maxsize=None)
@@ -1110,7 +1140,8 @@ def jst() -> dict:
     per head, index 2005 = 100), "gdp" (nominal GDP), "iy", "cpi", "ca", "money", "stir", "ltrate", "hpnom" (nominal
     house prices), "unemp", "debtgdp" (public debt), "xrusd", "tloans", "tmort", "thh", "tbus" (bank loans: total,
     mortgages, households, business; nominal), "lev", "ltd", "noncore", "crisisJST" (1 in the first year of a
-    systemic financial crisis), "eq_tr", "housing_tr", "bond_tr", "bill_rate": [...]}`` (NaN where missing)."""
+    systemic financial crisis), "eq_tr", "housing_tr", "bond_tr", "bill_rate", "imports", "exports" (nominal, national currency): [...]}``
+    (NaN where missing)."""
     rows = _read(HERE / "jst.csv")
     return {k: [r[k] if k in ("country", "iso") else _num(r[k]) for r in rows] for k in JST_COLS}
 
@@ -1140,6 +1171,16 @@ def wdi_ca() -> dict:
         d["year"].append(int(r["year"]))
         d["value"].append(_num(r["value"]))
     return out
+
+
+@functools.lru_cache(maxsize=None)
+def trefler() -> dict:
+    """Trefler's (1995) data: one row per country and factor, 33 countries and 9 factors in 1983: ``{"country",
+    "factor", "at" (the factor content of net exports, A T), "v" (the endowment), "y" (GDP), "b" (the trade balance),
+    "ypc" (GDP per head), "pop": [...]}``."""
+    rows = _read(HERE / "trefler_hov.csv")
+    return {k: [r[k] if k in ("country", "factor") else _num(r[k]) for r in rows]
+            for k in ("country", "factor", "at", "v", "y", "b", "ypc", "pop")}
 
 
 @functools.lru_cache(maxsize=None)
@@ -1581,6 +1622,19 @@ def refresh_wdi_ca() -> None:
                 w.writerow([r["countryiso3code"], int(r["date"]), "" if r["value"] is None else _fmt(r["value"])])
 
 
+def refresh_trefler_hov() -> None:
+    raw = RAW / "hov_pub.dat"
+    sha = _download(DATASETS["trefler_hov"]["url"], raw)
+    if sha != DATASETS["trefler_hov"]["sha256"]:
+        print(f"trefler_hov: the download differs from the recorded vintage ({sha[:12]})")
+    with open(HERE / "trefler_hov.csv", "w", newline="", encoding="utf-8") as f:
+        w = csv.writer(f)
+        w.writerow(["country", "factor", "at", "v", "y", "b", "ypc", "pop"])
+        for line in raw.read_text().splitlines():
+            if line.strip():
+                w.writerow([line[0:12].strip(), line[13:25].strip(), *line[26:].split()])
+
+
 def refresh_jst() -> None:
     import openpyxl  # noqa: PLC0415
 
@@ -1972,7 +2026,7 @@ REFRESH = {"draft1970": refresh_draft1970, "ajr": refresh_ajr, "maddison2023": r
            "wdi_money": refresh_wdi_money, "greenbook": refresh_greenbook,
            "hlw": refresh_hlw, "ramey_zubairy": refresh_ramey_zubairy, "ramey_tax": refresh_ramey_tax,
            "blanchard_leigh": refresh_blanchard_leigh, "rr_hap": refresh_rr_hap, "jst": refresh_jst,
-           "bigmac": refresh_bigmac, "wdi_ca": refresh_wdi_ca}
+           "bigmac": refresh_bigmac, "wdi_ca": refresh_wdi_ca, "trefler_hov": refresh_trefler_hov}
 
 
 def main() -> None:

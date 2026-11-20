@@ -74,4 +74,84 @@
             "Computed in your browser; nothing you do here is stored or sent.",
     });
   };
+  // ---- Part 35: comparative advantage ---------------------------------------------------------------------------
+  W.fournumbers = function (el) {
+    // Ricardo's model of Part 35 (explainer.economics.agora.trade: ricardo_trade).  Two countries, two goods (fish and
+    // cloth), labour only; hours per unit a1, a2 at home and b1, b2 abroad; half of spending on each good.  The world
+    // price of cloth in fish is (1 - beta)/beta times world fish over world cloth with full specialization, clamped
+    // to the two autarky prices; a country whose autarky price it is makes both goods.
+    var TEAL = "#7FD1B9", GOLDC = "#F2C14E", PINK = "#E8A0B4";
+    function solve(v) {
+      var aH = [v.a1, v.a2], aF = [v.b1, v.b2], LH = 600 * v.size, LF = 600, beta = 0.5;
+      var pH = aH[1] / aH[0], pF = aF[1] / aF[0];
+      var flip = pH > pF;
+      if (flip) { var t = aH; aH = aF; aF = t; var u = LH; LH = LF; LF = u; var x = pH; pH = pF; pF = x; }
+      var Q2 = LH / aH[1], Q1 = LF / aF[0];
+      var p = Math.min(Math.max((1 - beta) / beta * Q1 / Q2, pH), pF);
+      var qH = [0, Q2], qF = [Q1, 0];
+      if (p === pH && pH < pF) {          // home also makes good 1: p Q2 = Q1 (equal shares)
+        var h = (Q1 + LH / aH[0]) / (p / aH[1] + 1 / aH[0]);
+        qH = [(LH - h) / aH[0], h / aH[1]];
+      } else if (p === pF && pH < pF) {
+        var g = (Q2 * p - LF / aF[0]) / (-(p / aF[1]) - 1 / aF[0]);
+        qF = [(LF - g) / aF[0], g / aF[1]];
+      }
+      function out(q, a, L) {
+        var inc = q[0] + p * q[1], c1 = beta * inc, c2 = (1 - beta) * inc / p;
+        var aut = Math.pow(beta * L / a[0], beta) * Math.pow((1 - beta) * L / a[1], 1 - beta);
+        return { q: q, c: [c1, c2], gain: Math.pow(c1, beta) * Math.pow(c2, 1 - beta) / aut - 1, wage: inc / L };
+      }
+      var H = out(qH, aH, LH), F = out(qF, aF, LF);
+      if (flip) { var tt = H; H = F; F = tt; }
+      return { p: p, pH: v.a2 / v.a1, pF: v.b2 / v.b1, H: H, F: F, clothIsland: flip ? false : true };
+    }
+    function f1(x) { return x.toFixed(1); }
+    QB.widget(el, {
+      title: "Four numbers",
+      sub: "Set the hours each island needs for a fish and for a bolt of cloth, and how big the Island is. Left: " +
+           "what a bolt costs each island in fish, and the world price that trade settles on. Right: each " +
+           "island's gain in " +
+           "consumption from trading.",
+      panels: 2, height: 270,
+      controls: [
+        { k: "a1", label: "The Island: hours per fish", min: 1, max: 6, step: 0.5, value: 3, fmt: f1 },
+        { k: "a2", label: "The Island: hours per bolt", min: 1, max: 12, step: 0.5, value: 6, fmt: f1 },
+        { k: "b1", label: "The Archipelago: hours per fish", min: 1, max: 6, step: 0.5, value: 1, fmt: f1 },
+        { k: "b2", label: "The Archipelago: hours per bolt", min: 1, max: 12, step: 0.5, value: 4, fmt: f1 },
+        { k: "size", label: "The Island's hours, relative", min: 0.25, max: 4, step: 0.25, value: 2,
+          fmt: function (x) { return x.toFixed(2) + "x"; } },
+      ],
+      draw: function (g, v, st) {
+        var r = solve(v);
+        var top = Math.max(r.pH, r.pF) * 1.4;
+        var a = g[0].axes({ x: [0, 3], y: [0, top], title: "A bolt of cloth, in fish", xlabel: "" });
+        a.bars([0.6, 1.5], [r.pH, r.pF], 0.5, { color: function (j) { return j ? GOLDC : TEAL; } });
+        a.hline(r.p, { color: PINK, width: 2 });
+        a.text(0.6, r.pH + top * 0.05, "the Island alone " + r.pH.toFixed(2), { align: "center", size: 11 });
+        a.text(1.5, r.pF + top * 0.05, "the Archipelago " + r.pF.toFixed(2), { align: "center", size: 11 });
+        a.text(2.1, r.p + top * 0.04, "with trade " + r.p.toFixed(2), { color: PINK, size: 11 });
+        var gH = 100 * r.H.gain, gF = 100 * r.F.gain, m = Math.max(5, gH, gF) * 1.3;
+        var b = g[1].axes({ x: [0, 3], y: [0, m], title: "Gain from trade, %", xlabel: "" });
+        b.bars([0.8, 2.0], [gH, gF], 0.6, { color: function (j) { return j ? GOLDC : TEAL; } });
+        b.text(0.8, gH + m * 0.05, "the Island +" + gH.toFixed(1) + "%", { align: "center", size: 11 });
+        b.text(2.0, gF + m * 0.05, "the Archipelago +" + gF.toFixed(1) + "%", { align: "center", size: 11 });
+        st.r = r;
+      },
+      readout: function (v, st) {
+        var r = st.r, same = Math.abs(r.pH - r.pF) < 1e-9;
+        var who = same ? "no one: the costs are the same, so there is nothing to trade" :
+          (r.pH < r.pF ? "the Island makes cloth, the Archipelago fish" :
+                         "the Island makes fish, the Archipelago cloth");
+        var better = (v.a1 < v.b1 && v.a2 < v.b2) ? "the Island" : ((v.b1 < v.a1 && v.b2 < v.a2) ? "the Archipelago" :
+          "neither");
+        return [["who makes what", who],
+                ["better at both goods", better + " (it does not decide the pattern)"],
+                ["wages, fish per hour", "the Island " + r.H.wage.toFixed(2) + ", the Archipelago " +
+                  r.F.wage.toFixed(2)]];
+      },
+      note: "Ricardo (1817), as computed in Part 35, chapter 1: with 3 and 6 hours on the Island, 1 and 4 in the " +
+            "Archipelago and the Island twice as large, the price is 3 fish a bolt and both gain (22% and 15%). " +
+            "Computed in your browser; nothing you do here is stored or sent.",
+    });
+  };
 })();

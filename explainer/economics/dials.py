@@ -888,6 +888,27 @@ DIALS = {d.key: d for d in [
                       2.6, where="videos/economics/econ34/compute.py, item ppp",
                       checked="2026-11-20"),
          )),
+    Dial("gains_from_trade", "the gains from trade", "percent of real income lost by moving to autarky (or gained by "
+         "opening)", (35, 36), status="depends on the setting", checked="2026-11-20",
+         meaning="the static gains from comparative advantage are a few percent of income: an upper bound of 8-9% for "
+                 "Japan's opening in 1859, about 5% lost in America's embargo of 1807-09, and 1-3% for the United "
+                 "States today by the one-sector formula; models with many sectors, intermediate goods and differing "
+                 "firms give larger numbers",
+         estimates=(
+             Estimate("Bernhofen and Brown (Japan 1859)", 2005, "reconstruction", "Japan's autarky prices of "
+                      "1851-53 and its trade of the 1870s: an upper bound on the gain from opening, percent of GDP",
+                      8.5, lo=8.0, hi=9.0, where="American Economic Review 95(1): 208-225, abstract",
+                      checked="2026-11-20"),
+             Estimate("Irwin (the embargo of 1807)", 2005, "reconstruction", "the Jeffersonian embargo, December "
+                      "1807 to March 1809: the welfare cost of near-autarky, percent of 1807 GNP", 5.0,
+                      where="Review of International Economics 13(4): 631-645, abstract", checked="2026-11-20"),
+             Estimate("Arkolakis Costinot and Rodriguez-Clare (US)", 2012, "calibration", "the United States with a "
+                      "domestic share of 0.93 and trade elasticities of 5 to 10", 1.05, lo=0.7, hi=1.4,
+                      where="American Economic Review 102(1): 94-130", checked="2026-11-20"),
+             Estimate("this film (US 2025)", 2026, "calibration", "the same formula with imports of goods and "
+                      "services over GDP in 2025 (13.8%) as the import share, elasticities 5 to 10", 2.2, lo=1.5,
+                      hi=2.9, where="videos/economics/econ35/compute.py, item dials", checked="2026-11-20"),
+         )),
     Dial("agglomeration", "agglomeration elasticity", "percent productivity per doubling of density", (37,)),
     Dial("housing_supply", "elasticity of housing supply", "", (37,)),
     Dial("return_capital_poor", "return to capital for small firms in poor countries", "percent a month", (46,)),
@@ -1581,6 +1602,32 @@ SHOWN = {
         ("Christiano, Eichenbaum and Evans (2005); Smets and Wouters (2007)", "medium-scale frictions; the hump "
          "computed with habits, indexation and smoothing"),
         ("Bernanke (2002)", "the Called it? card on deflation"),
+    ],
+    35: [
+        ("Samuelson (1969)", "Ulam's challenge and Samuelson's answer, as Samuelson told it"),
+        ("Ricardo (1817)", "the four numbers, computed with the world price and the wage band"),
+        ("Dornbusch, Fischer and Samuelson (1977)", "the continuum model, computed for the Island"),
+        ("Bernhofen and Brown (2004, 2005)", "Japan's trade composition and the inner-product test, from their tables; "
+         "the upper bound on the gains entered in the dial"),
+        ("Irwin (2005)", "the cost of the Jeffersonian embargo, entered in the dial"),
+        ("Heckscher (1919); Ohlin (1933); Lerner (1952)", "factor proportions and the Lerner diagram, computed for the "
+         "Island"),
+        ("Stolper and Samuelson (1941); Rybczynski (1955)", "the theorems, computed for the Island"),
+        ("Scheve and Slaughter (2001)", "skills and trade-policy preferences, stated"),
+        ("Leontief (1953); Leamer (1980)", "the paradox from Leontief's table, and Leamer's answer, stated"),
+        ("Trefler (1995); Davis and Weinstein (2001)", "the missing trade, recomputed from Trefler's data"),
+        ("Jones (1971); Samuelson (1971); Olson (1965)", "specific factors, computed; collective action, stated"),
+        ("Irwin (1998, 2011)", "Smoot-Hawley's tariff rates and the role of deflation, stated"),
+        ("Berry, Levinsohn and Pakes (1999)", "the voluntary export restraint on Japanese cars, stated"),
+        ("Bickerdike (1906)", "the optimal tariff, computed for the Island"),
+        ("Grossman and Helpman (1994); Goldberg and Maggi (1999)", "protection for sale, computed for the Island; the "
+         "estimated weight on welfare, stated"),
+        ("Bagwell and Staiger (1999)", "trade agreements and the terms-of-trade externality; the tariff war computed"),
+        ("Kaldor (1939); Hicks (1939)", "the compensation test, computed for the Island"),
+        ("Hyman (2018)", "trade adjustment assistance's effect on earnings, stated"),
+        ("Arkolakis, Costinot and Rodriguez-Clare (2012)", "the gains-from-trade formula, applied to 2025"),
+        ("Costinot and Donaldson (2012)", "Ricardo tested on agricultural productivity, stated"),
+        ("Eaton and Kortum (2002)", "the many-country Ricardian model, stated"),
     ],
     34: [
         ("HM Treasury (2005); Bank of England", "Black Wednesday's sequence and cost, stated"),
