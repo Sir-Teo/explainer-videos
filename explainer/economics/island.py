@@ -645,6 +645,22 @@ TRUTHS = {
         # the job ladder (chapter 11): offers arrive five times as often as jobs end
         "ladder": {"p": 1.0, "b": 0.4, "lam": 0.1, "delta": 0.02},
     },
+    25: {
+        # Play it and Kiyotaki-Wright (chapters 2-3): three goods, salt, coconuts and fish, costing 0.1, 0.2 and 0.6 a
+        # period to keep (fish spoils); Ana eats salt and makes coconuts, Bo eats coconuts and makes fish, Dara eats
+        # fish and makes salt; eating is worth 1; patience 0.9 a period; 300 of each kind, 400 periods of meetings.
+        # In chapter 3 fish is smoked, so it keeps better: 0.25 a period
+        "kw": {"goods": ("salt", "coconuts", "fish"), "names": ("Ana", "Bo", "Dara"), "c": (0.1, 0.2, 0.6),
+               "c3_smoked": 0.25, "u": 1.0, "beta": 0.9, "n": 300, "periods": 400, "seed": 0},
+        # Cagan's money demand (chapters 6-8): a semi-elasticity of 5 months, so seigniorage peaks at 20% a month;
+        # a deficit of 4% of the real balances held at zero inflation, financed by printing; expectations that adapt
+        # slowly (10% of the gap a month) or fast (50%)
+        "cagan": {"alpha": 5.0, "deficit": 0.04, "lam_slow": 0.1, "lam_fast": 0.5, "months": 60},
+        # Baumol-Tobin (chapter 9): a month's income of 3,000 coconuts, a trip to the bank costs 2
+        "baumol": {"Y": 3000.0, "b": 2.0},
+        # cash in advance (chapters 11-12): yearly patience 0.96, disutility of work 1
+        "cia": {"beta": 0.96, "a": 1.0},
+    },
 }
 
 

@@ -119,6 +119,11 @@ AGORA = {
                                     "across 89 countries, 1960-2019, holding investment, population growth and "
                                     "schooling fixed, the gap closes at about 1.3% a year, and with no controls not at "
                                     "all"),
+    # Part 25 drew the world's money and inflation and built Cagan's economy
+    "quantity": (25, "with velocity steady and output growing for its own reasons, inflation is money growth less output "
+                     "growth; across 146 countries' averages for 1990-2024 the slope is 0.96 (0.98 net of output "
+                     "growth), while year by year the correlation is only 0.28, because velocity and output move and "
+                     "prices adjust slowly"),
     # Part 24 drew the JOLTS curve and built the labour market with frictions
     "beveridge": (24, "workers and jobs meet through a matching function with constant returns, so unemployment and "
                       "vacancies coexist in a steady state; productivity moves the economy along a downward-sloping "

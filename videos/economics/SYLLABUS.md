@@ -2962,6 +2962,7 @@ Young Economist*.
 | 22 | built, English | *Consumption and Saving.* Agora gains `household` (Keynes's function, the permanent-income annuity, the life cycle, Carroll's buffer stock by the endogenous grid method, simulated populations and their MPC, the wealthy hand-to-mouth, Friedman's cross-section, Campbell and Mankiw's rule of thumb) and `olg` (Samuelson's money, Diamond's economy, a pension's welfare); the Data Room gains FRED's monthly consumption by type with its price indexes, real disposable income and the saving rate, the Penn World Table's consumption shares, and transcribes the windfall studies; a new dial (the propensity to spend a windfall); Hall's random walk as *Called it?*; consumption smoother than income gets its Agora column |
 | 23 | built, English | *Capital and Asset Prices.* Agora gains `assets` (Gordon, the user cost, Hayashi's firm, the option to wait, Mehra and Prescott's economy and region, the Hansen-Jagannathan bound, rare disasters, habits, a laboratory market); the Data Room gains Shiller's annual series and the Case-Shiller index against the CPI's rent; a new dial (investment's response to the user cost) and three rows on risk aversion; Fisher's 1929 plateau as *Called it?*; the equity premium and unpredictable returns get their Agora columns |
 | 24 | built, English | *Looking for Work.* Agora gains `search` (McCall's searcher, the DMP model with its curves, Beveridge curves and path, Hosios's condition, the elasticity of tightness, Shimer's flows and the ins-and-outs shares, Burdett and Mortensen's job ladder); the Data Room gains FRED's JOLTS (openings, hires, separations, quits), unemployment by duration, the labour force, output per hour and the CBO's natural rate; two new dials (the matching elasticity; the worker's bargaining share); Mortensen and Pissarides's 1994 claim as *Called it?* (partly right); the Beveridge curve gets its Agora column |
+| 25 | built, English | *Money.* Agora gains `money` (Kiyotaki and Wright's economy with its equilibrium check, barter's odds, Cagan's Laffer curve and a printed deficit, Baumol and Tobin, cash in advance, T-accounts); the Data Room gains the World Bank's money growth and inflation by country since 1960 and FRED's M1, M2, base money, currency, reserves, velocity and nominal GDP, and transcribes Hanke and Krus's hyperinflation peaks; a new dial (the interest semi-elasticity of money demand); Cagan's revenue ceiling as *Called it?* (wrong); the quantity theory gets its Agora column |
 
 **Corrections found while building Part 1** (the plan's draft, written from memory, against the sources): Bastiat's
 Paris passage is in *Economic Sophisms*, First Series, ch. 18 (1845), not the *Harmonies*; Hume's is/ought passage is
@@ -3241,3 +3242,17 @@ abstract and post-print summary, and shown at zero. The remote-work shares are f
 (more than threefold in the United States, fivefold or more elsewhere, 2019 to early 2023). The Island's Burdett and
 Mortensen ladder has unemployment of 17% (offers at 0.1 a month, separations at 0.02): an illustration of the ladder,
 not a calibration. An intermission follows chapter 8.
+
+**Corrections found while building Part 25.** Furness visited Yap in 1903; his book is of 1910, and Friedman's essay
+(Hoover WP E-91-3, 1991) retells it; the painted crosses are from Furness as Friedman tells it, and the film says the
+crosses were removed rather than how. The Bank of France's earmarked gold is given as "the early 1930s", Friedman's
+"1932-33" not being re-read. Jevons's singer was paid a third of the takings: the book's opening page. Kiyotaki and
+Wright's model A is run with the Island's goods (salt, coconuts, fish) and storage costs of the Island's own; in
+Agora's grid the fundamental and speculative patterns never overlap, with a thin band between where neither pure
+pattern holds, so the film does not claim multiple equilibria there. The quantity-theory scatter is the World Bank's
+broad money and CPI for 1990-2024 (146 economies with at least twenty years), not McCandless and Weber's sample, which is
+only cited. Cagan's German figures (322% a month on average, about 20% revenue-maximizing) are from secondary summaries
+of his table; the film's Laffer curve uses alpha = 5. The Hanke-Krus peaks are from their table; Hungary's fifteen-hour
+doubling time from Hanke's commentary, the others computed with a thirty-day month. The money multiplier is M2 over
+the base (FRED reports BOGMBASE in billions). Stablecoin totals are DeFi Llama's as reported in December 2025. An
+intermission follows chapter 8.

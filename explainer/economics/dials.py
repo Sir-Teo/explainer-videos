@@ -561,7 +561,25 @@ DIALS = {d.key: d for d in [
     Dial("price_frequency", "frequency of price changes", "share of prices changing per month", (30,)),
     Dial("phillips_slope", "slope of the Phillips curve", "points of inflation per point of slack", (28, 30)),
     Dial("sacrifice", "sacrifice ratio", "point-years of output per point of disinflation", (28,)),
-    Dial("money_demand", "interest semi-elasticity of money demand", "", (25,)),
+    Dial("money_demand", "interest semi-elasticity of money demand", "the change in the log of real money balances "
+         "(relative to income) per percentage point of the nominal interest rate; negative", (25, 28, 31),
+         status="contested", checked="2026-11-20",
+         meaning="how much people economize on money when interest rates rise; it sets the welfare cost of inflation "
+                 "(chapter 12) and how far a central bank must move rates to change money holdings; estimates for "
+                 "American M1 range from about -0.07 before 1981 to -0.02 or less afterwards, and depend on which "
+                 "deposits are counted as money",
+         estimates=(
+             Estimate("Ball", 2001, "regression", "US M1, postwar years through 1996, long-run money demand", -0.05,
+                      where="Journal of Monetary Economics 47(1): 31-44, abstract", checked="2026-11-20"),
+             Estimate("Ireland", 2009, "regression", "US, post-1980 data, Cagan's semi-log form: a semi-elasticity "
+                      "below 2 per unit of the rate (shown at the bound)", -0.02, where="AER 99(3): 1040-1052, abstract",
+                      checked="2026-11-20"),
+             Estimate("this film (Agora)", 2026, "regression", "US 1959-1980, quarterly: ln(M1/GDP) on the three-month "
+                      "bill rate", -0.067, where="videos/economics/econ25/compute.py, item baumol",
+                      checked="2026-11-20"),
+             Estimate("this film (Agora)", 2026, "regression", "US 1994-2019, quarterly: the same regression", -0.032,
+                      where="videos/economics/econ25/compute.py, item baumol", checked="2026-11-20"),
+         )),
     Dial("monetary_shock", "effect of a 100-basis-point tightening on output and prices", "percent at the peak",
          (31, 55)),
     Dial("multipliers", "government-spending and tax multipliers", "dollars of output per dollar", (32,)),
@@ -1072,6 +1090,31 @@ SHOWN = {
         ("Pissarides (2000); Cahuc, Carcillo and Zylberberg (2014); Ljungqvist and Sargent (2018); Rogerson, Shimer "
          "and Wright (2005)", "the reading list"),
         ("Furness (1910)", "the next part's hook, stated"),
+    ],
+    25: [
+        ("Furness (1910); Friedman (1991)", "the hook's stone money and the Bank of France's gold, stated"),
+        ("Jevons (1875); Kocherlakota (1998)", "barter's double coincidence and money as memory, stated; the odds are "
+         "computed"),
+        ("Kiyotaki and Wright (1989)", "the search economy, simulated and solved in Agora"),
+        ("Duffy and Ochs (1999)", "a laboratory study, shown as an example"),
+        ("von Glahn (1996); Eichengreen (2019)", "histories of money behind the timeline, stated"),
+        ("Fisher (1896, 1911, 1930); Sidrauski (1967); Friedman (1969)", "theory, stated; the Fisher equation and "
+         "the cost of inflation computed on the data and in Agora"),
+        ("McCandless and Weber (1995); Friedman and Schwartz (1963)", "the quantity theory's evidence, stated; the "
+         "scatter is the World Bank's data"),
+        ("Hanke and Krus (2012); Cagan (1956)", "the hyperinflation peaks, transcribed (tables.HANKE_KRUS_2012); "
+         "Cagan's ceiling as the Called it? card; his money demand computed in Agora"),
+        ("Sargent (1982); Wicker (1986)", "the four stabilizations and their critic, stated"),
+        ("the IMF's statements of July and October 2018", "Venezuela's projected inflation, stated"),
+        ("Baumol (1952); Tobin (1956); Lucas and Nicolini (2015)", "the square-root rule, derived and computed; the "
+         "stability of money demand, stated"),
+        ("McLeay, Radia and Thomas (2014)", "money creation by lending, stated; the multiplier is the Fed's data"),
+        ("Lucas (2000)", "the cost of inflation on US data, stated beside Agora's"),
+        ("Ball (2001); Ireland (2009)", "the money-demand dial's rows"),
+        ("DeFi Llama (as reported, December 2025); the GENIUS Act (2025)", "the stablecoin market and its law, stated"),
+        ("Gorton and Zhang (2023); Selgin", "frontier work and its critic, stated from the abstracts"),
+        ("Walsh (2017); Sargent (2013); Lagos, Rocheteau and Wright (2017)", "the reading list"),
+        ("Silicon Valley Bank (March 2023)", "the next part's hook, stated"),
     ],
     22: [
         ("Johnson, Parker and Souleles (2006); Parker et al. (2013, 2022); Kueng (2018); Jappelli and Pistaferri "

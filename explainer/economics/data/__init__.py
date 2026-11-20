@@ -180,6 +180,21 @@ FRED_SERIES["OPHNFB"] = ("Nonfarm business sector: labor productivity (output pe
                          "index 2017 = 100, seasonally adjusted", "quarterly", "U.S. Bureau of Labor Statistics")
 FRED_SERIES["NROU"] = ("Noncyclical rate of unemployment", "percent, not seasonally adjusted", "quarterly",
                        "U.S. Congressional Budget Office")
+# Part 25: money
+FRED_SERIES["M2SL"] = ("M2", "billions of dollars, seasonally adjusted", "monthly",
+                       "Board of Governors of the Federal Reserve System (US)")
+FRED_SERIES["M1SL"] = ("M1", "billions of dollars, seasonally adjusted (savings deposits included from May 2020)",
+                       "monthly", "Board of Governors of the Federal Reserve System (US)")
+FRED_SERIES["BOGMBASE"] = ("Monetary base; total", "billions of dollars, not seasonally adjusted", "monthly",
+                           "Board of Governors of the Federal Reserve System (US)")
+FRED_SERIES["CURRCIR"] = ("Currency in circulation", "billions of dollars, not seasonally adjusted", "monthly",
+                          "Board of Governors of the Federal Reserve System (US)")
+FRED_SERIES["TOTRESNS"] = ("Reserves of depository institutions: total", "billions of dollars, not seasonally "
+                           "adjusted", "monthly", "Board of Governors of the Federal Reserve System (US)")
+FRED_SERIES["M2V"] = ("Velocity of M2 money stock", "ratio, seasonally adjusted", "quarterly",
+                      "Federal Reserve Bank of St. Louis")
+FRED_SERIES["GDP"] = ("Gross domestic product", "billions of dollars, seasonally adjusted annual rate", "quarterly",
+                      "U.S. Bureau of Economic Analysis")
 
 FRED_RETRIEVED = {s: "2026-11-19" for s in (
     "GDPA", "GDIA", "PCECA", "GPDIA", "GCEA", "EXPGSA", "IMPGSA", "A033RC1A027NBEA", "A191RD3A086NBEA", "U1RATE",
@@ -189,7 +204,8 @@ FRED_RETRIEVED = {s: "2026-11-19" for s in (
 FRED_RETRIEVED.update({s: "2026-11-20" for s in ("PCECC96", "DSPIC96", "PSAVERT", "PCE", "PCEND", "PCES",
                                                   "DNDGRG3M086SBEA", "DSERRG3M086SBEA", "CSUSHPINSA",
                                                   "CUSR0000SEHA", "UNEMPLOY", "UEMPLT5", "UEMP27OV", "CLF16OV",
-                                                  "JTSJOL", "JTSHIL", "JTSTSL", "JTSQUL", "NROU", "OPHNFB")})
+                                                  "JTSJOL", "JTSHIL", "JTSTSL", "JTSQUL", "NROU", "OPHNFB",
+                                                  "M2SL", "M1SL", "BOGMBASE", "CURRCIR", "TOTRESNS", "M2V", "GDP")})
 
 SPF_FILES = ("median_rgdp_level", "median_rgdp_growth", "median_recess_level")
 SPF_URL = ("https://www.philadelphiafed.org/-/media/frbp/assets/surveys-and-data/survey-of-professional-forecasters/"
@@ -277,6 +293,20 @@ DATASETS = {
         "units": "current US dollars; current international (PPP) dollars; persons; Gini index 0-100",
         "vintage": "2026-11-19",
         "files": ("wdi_2015_2025.csv",),
+    },
+    "wdi_money": {
+        "title": "World Development Indicators, 1960 onward: broad money growth, consumer-price inflation, GDP-deflator "
+                 "inflation, real GDP growth, and broad money as a share of GDP, by country and year",
+        "publisher": "World Bank",
+        "citation": "World Bank, World Development Indicators (API, last updated 11 November 2026), indicators "
+                    "FM.LBL.BMNY.ZG, FP.CPI.TOTL.ZG, NY.GDP.DEFL.KD.ZG, NY.GDP.MKTP.KD.ZG, FM.LBL.BMNY.GD.ZS, "
+                    "retrieved 2026-11-20",
+        "short": "World Bank WDI (money and prices), Nov 2026",
+        "url": "https://api.worldbank.org/v2/country/all/indicator/{}?format=json&date={}:{}&per_page=5000",
+        "licence": "CC BY 4.0 (World Bank open data)",
+        "units": "annual percent changes (money, CPI, deflator, real GDP); percent of GDP (broad money)",
+        "vintage": "2026-11-20",
+        "files": ("wdi_money_1960_2024.csv",),
     },
     "hdr": {
         "title": "Human Development Report 2025: composite indices, complete time series",
@@ -1252,6 +1282,49 @@ def shiller() -> dict:
     return {c: [(_num(r[c]) if c != "year" else int(r[c])) for r in rows] for c in SHILLER_COLUMNS}
 
 
+WDI_MONEY = {"money": "FM.LBL.BMNY.ZG", "cpi": "FP.CPI.TOTL.ZG", "deflator": "NY.GDP.DEFL.KD.ZG",
+             "growth": "NY.GDP.MKTP.KD.ZG", "m_gdp": "FM.LBL.BMNY.GD.ZS"}
+
+
+def wdi_money() -> list[dict]:
+    """The money-and-prices extract of the WDI: one row per country and year (1960 on, countries only, no aggregates),
+    ``code``, ``country``, ``region``, ``income``, ``year`` and the :data:`WDI_MONEY` columns (NaN where missing)."""
+    out = []
+    for r in _read(HERE / "wdi_money_1960_2024.csv"):
+        row = {k: r[k] for k in ("code", "country", "region", "income")}
+        row["year"] = int(r["year"])
+        for k in WDI_MONEY:
+            row[k] = _num(r[k])
+        out.append(row)
+    return out
+
+
+def refresh_wdi_money() -> None:
+    import json  # noqa: PLC0415
+
+    raw = RAW / "wdi_countries.json"
+    _download("https://api.worldbank.org/v2/country?format=json&per_page=400", raw)
+    meta = {c["id"]: c for c in json.loads(raw.read_text())[1] if c["region"]["id"] != "NA"}
+    vals: dict = {}
+    for col, ind in WDI_MONEY.items():
+        for a in range(1960, 2025, 5):   # the API times out on the whole span at once
+            f = RAW / f"wdimoney_{ind}_{a}.json"
+            if not (f.exists() and f.stat().st_size > 1000):   # resume: keep chunks already fetched
+                _download(DATASETS["wdi_money"]["url"].format(ind, a, min(a + 4, 2024)), f)
+            for r in json.loads(f.read_text())[1] or []:
+                code = r["countryiso3code"]
+                if code in meta and r["value"] is not None:
+                    vals.setdefault((code, int(r["date"])), {})[col] = r["value"]
+    with open(HERE / "wdi_money_1960_2024.csv", "w", newline="", encoding="utf-8") as f:
+        w = csv.writer(f)
+        w.writerow(["code", "country", "region", "income", "year", *WDI_MONEY])
+        for (code, year) in sorted(vals):
+            c = meta[code]
+            v = vals[(code, year)]
+            w.writerow([code, c["name"], c["region"]["value"].strip(), c["incomeLevel"]["value"], year,
+                        *[_fmt(v.get(k)) for k in WDI_MONEY]])
+
+
 def refresh_shiller() -> None:
     import openpyxl
 
@@ -1278,7 +1351,8 @@ REFRESH = {"draft1970": refresh_draft1970, "ajr": refresh_ajr, "maddison2023": r
            "pinksheet": refresh_pinksheet, "psd_coffee": refresh_psd_coffee, "wdi": refresh_wdi, "hdr": refresh_hdr,
            "rtdsm": refresh_rtdsm, "warheads": refresh_warheads, "so2": refresh_so2,
            "marriage": refresh_marriage, "democracy": refresh_democracy, "millennium": refresh_millennium,
-           "longrun": refresh_longrun, "pwt": refresh_pwt, "shiller": refresh_shiller}
+           "longrun": refresh_longrun, "pwt": refresh_pwt, "shiller": refresh_shiller,
+           "wdi_money": refresh_wdi_money}
 
 
 def main() -> None:

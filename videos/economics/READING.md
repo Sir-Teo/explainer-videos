@@ -10,7 +10,7 @@ the series leaves out.
 Both *Parts* columns are found, not typed. *Planned* lists the parts whose entry in
 [`SYLLABUS.md`](SYLLABUS.md) names the book or paper; *Built* lists the parts whose scenes, compute step or
 README cite it (a dot: none yet). Fuller notes (editions, chapters, what each source was used for) are in each
-part's README, under *Sources*. Built so far: Parts 1–24.
+part's README, under *Sources*. Built so far: Parts 1–25.
 
 ## 1. The textbook spine
 
@@ -69,7 +69,7 @@ part's README, under *Sources*. Built so far: Parts 1–24.
 | Acemoglu | D. Acemoglu, *Introduction to Modern Economic Growth* (2009) | 20–21 | · |
 | Galí | J. Galí, *Monetary Policy, Inflation, and the Business Cycle* (2nd ed., 2015) | 30, 56 | · |
 | Woodford | M. Woodford, *Interest and Prices* (2003) | 30 | · |
-| Walsh | C. Walsh, *Monetary Theory and Policy* (4th ed., 2017) | 25 | · |
+| Walsh | C. Walsh, *Monetary Theory and Policy* (4th ed., 2017) | 25 | 25 |
 | Obstfeld–Rogoff | M. Obstfeld and K. Rogoff, *Foundations of International Macroeconomics* (1996) | 34 | · |
 | Pissarides | C. Pissarides, *Equilibrium Unemployment Theory* (2nd ed., 2000) | 24 | 24 |
 | Cochrane | J. Cochrane, *Asset Pricing* (rev. ed., 2005) | 23 | · |
@@ -121,7 +121,7 @@ part's README, under *Sources*. Built so far: Parts 1–24.
 | Model or result | Paper | Planned | Built |
 |---|---|---|---|
 | the division of labour | Smith (1776), *The Wealth of Nations* | 1 | 1–2, 19, 21 |
-| comparative advantage | Ricardo (1817), *Principles*, ch. 7 | 2, 8, 35–36 | 1–2, 8, 19, 22 |
+| comparative advantage | Ricardo (1817), *Principles*, ch. 7 | 2, 8, 35–36 | 1–2, 8, 19, 22, 25 |
 | supply and demand, the scissors | Marshall (1890), *Principles of Economics* | 2, 37 | 2, 14 |
 | the price system as information | Hayek (1945), "The Use of Knowledge in Society" | 1, 9 | 1, 9 |
 | the double auction in the classroom | Chamberlin (1948); Smith (1962) | 1–2 | 1 |
@@ -211,7 +211,7 @@ part's README, under *Sources*. Built so far: Parts 1–24.
 
 | Model or result | Paper | Planned | Built |
 |---|---|---|---|
-| money as a medium of exchange | Kiyotaki and Wright (1989) | 25 | · |
+| money as a medium of exchange | Kiyotaki and Wright (1989) | 25 | 25 |
 | bank runs | Diamond and Dybvig (1983) | 26 | · |
 | debt deflation and financial instability | Fisher (1933); Minsky (1986) | 33 | · |
 | the financial accelerator | Bernanke, Gertler and Gilchrist (1999) | 33 | · |
@@ -303,6 +303,8 @@ part's README, under *Sources*. Built so far: Parts 1–24.
 **Part 23, *Capital and Asset Prices*.** Books: John Cochrane, *Asset Pricing* (revised ed., 2005), chs. 1–2 and 21; David Romer, *Advanced Macroeconomics* (5th ed., 2019), ch. 9; Avinash Dixit and Robert Pindyck, *Investment under Uncertainty* (1994); Robert Shiller, *Irrational Exuberance* (3rd ed., 2015). Papers: Williams (1938); Gordon and Shapiro (1956); Jorgenson (1963); Tobin (1969); Hayashi (1982); McDonald and Siegel (1986); Bloom (2009); Modigliani and Miller (1958); Myers and Majluf (1984); Lucas (1978); Breeden (1979); Mehra and Prescott (1985); Hansen and Jagannathan (1991); Weil (1989); Campbell and Cochrane (1999); Bansal and Yaron (2004); Rietz (1988); Barro (2006); Shiller (1981); Campbell and Shiller (1988); Tirole (1985); Smith, Suchanek and Williams (1988); Poterba (1984); Chirinko, Fazzari and Meyer (1999); Zwick and Mahon (2017); Novy-Marx and Rauh (2011); Jordà et al. (2019); He and Krishnamurthy (2013); Adrian, Etula and Muir (2014).
 
 **Part 24, *Looking for Work*.** Books: Christopher Pissarides, *Equilibrium Unemployment Theory* (2nd ed., 2000), ch. 1 on; Pierre Cahuc, Stéphane Carcillo and André Zylberberg, *Labor Economics* (2nd ed., 2014), chs. 5, 9; Lars Ljungqvist and Thomas Sargent, *Recursive Macroeconomic Theory* (4th ed., 2018), search and matching; Richard Rogerson, Robert Shimer and Randall Wright, JEL 43(4) (2005): the survey. Papers: Stigler (1961); McCall (1970); Diamond (1982); Mortensen and Pissarides (1994); Hosios (1990); Butters (1977); Petrongolo and Pissarides (2001); Davis and Haltiwanger (1992); Katz and Meyer (1990); Shimer (2005, 2012); Hall (2005); Hagedorn and Manovskii (2008); Pissarides (2009); Ljungqvist and Sargent (2017); Elsby, Michaels and Solon (2009); Burdett and Mortensen (1998); Topel and Ward (1992); Manning (2003); Kroft, Lange and Notowidigdo (2013); Davis and von Wachter (2011); Card, Chetty and Weber (2007); Horton (2017); Belot, Kircher and Muller (2019); Hershbein and Kahn (2018); Marinescu and Rathelot (2018); Hansen et al. (2023).
+
+**Part 25, *Money*.** Books: Carl Walsh, *Monetary Theory and Policy* (4th ed., 2017), chs. 1–4; Milton Friedman and Anna Schwartz, *A Monetary History of the United States, 1867–1960* (1963); Thomas Sargent, *Rational Expectations and Inflation* (3rd ed., 2013); Ricardo Lagos, Guillaume Rocheteau and Randall Wright, JEL 55(2) (2017): liquidity, a survey. Papers: Jevons (1875); Furness (1910); Friedman (1991); Kocherlakota (1998); Kiyotaki and Wright (1989); Duffy and Ochs (1999); Fisher (1896, 1911); McCandless and Weber (1995); Cagan (1956); Sargent (1982); Hanke and Krus (2012); Baumol (1952); Tobin (1956); Lucas and Nicolini (2015); McLeay, Radia and Thomas (2014); Sidrauski (1967); Friedman (1969); Lucas (2000); Ball (2001); Ireland (2009); Gorton and Zhang (2023).
 
 ## 4. What the series leaves out
 

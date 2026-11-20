@@ -706,6 +706,20 @@ brackets on screen.
 | the natural rate of unemployment; duration dependence; scarring | 自然失业率；持续期依赖；失业疤痕效应 |
 | online vacancy postings; remote work | 在线职位广告；远程工作 |
 
+## Part 25
+
+| English | 中文 |
+|---|---|
+| barter; the double coincidence of wants; money as memory | 物物交换；需求的双重巧合；货币即记忆 |
+| medium of exchange; unit of account; store of value | 交换媒介；记账单位；价值储藏 |
+| commodity money; convertible paper; fiat money | 商品货币；可兑换纸币；法定货币 |
+| the quantity theory; velocity; neutrality; superneutrality | 货币数量论；货币流通速度；中性；超中性 |
+| hyperinflation; seigniorage; the inflation tax | 恶性通货膨胀；铸币税；通货膨胀税 |
+| the demand for money; the square-root rule | 货币需求；平方根法则 |
+| reserves; base money; broad money; the money multiplier | 准备金；基础货币；广义货币；货币乘数 |
+| the Fisher equation; the Friedman rule; cash in advance | 费雪方程；弗里德曼规则；预付现金约束 |
+| stablecoins; central bank digital currency | 稳定币；央行数字货币 |
+
 ## Names
 
 | English | 中文 |

@@ -2022,7 +2022,30 @@ MPC_STUDIES = Table(
 
 PART22 = (MPC_STUDIES,)
 
+HANKE_KRUS_2012 = Table(
+    key="hanke_krus_2012",
+    cite="Steve H. Hanke and Nicholas Krus, \"World Hyperinflations\", Cato Working Paper no. 8 (15 August 2012), "
+         "the Hanke-Krus Hyperinflation Table; published in R. Parker and R. Whaples (eds.), The Routledge Handbook of "
+         "Major Events in Economic History (2013)",
+    tag="Hanke and Krus (2012), the hyperinflation table",
+    where="the table (peak month and the highest monthly inflation rate); Hungary's doubling time from Hanke's "
+          "commentary",
+    read="the table as reproduced by Cato and summarized by the American Numismatic Society",
+    checked="2026-11-20",
+    data={
+        "hungary": {"country": "Hungary", "month": "July 1946", "monthly_pct": 4.19e16, "doubling_hours": 15.0},
+        "zimbabwe": {"country": "Zimbabwe", "month": "November 2008", "monthly_pct": 7.96e10},
+        "yugoslavia": {"country": "Yugoslavia", "month": "January 1994", "monthly_pct": 3.13e8},
+        "germany": {"country": "Germany", "month": "October 1923", "monthly_pct": 2.95e4},
+        "cagan_germany": {"note": "Cagan (1956): German prices rose 322% a month on average, August 1922 to November "
+                                  "1923 (a ratio of about 1.02e10); his estimates imply revenue-maximizing inflation "
+                                  "of about 20% a month",
+                          "average_pct": 322.0, "revenue_max_pct": 20.0},
+    },
+)
+PART25 = (HANKE_KRUS_2012,)
+
 
 PART7 = (BERNOULLI_1738, SAMUELSON_1937, ALLAIS_1953, ELLSBERG_1961, RABIN_2000, THALER_1981, HOLT_LAURY_2005,
          HAYDEN_PLATT_2009, MADRIAN_SHEA_2001, THALER_BENARTZI_2004, BARSKY_1997, POST_2008, MEHRA_PRESCOTT_1985)
-ALL = {t.key: t for t in (*PART1, *PART3, *PART4, *PART5, *PART6, *PART7, *PART8, *PART9, *PART10, *PART11, *PART12, *PART13, *PART14, *PART15, *PART16, *PART17, *PART18, *PART19, *PART21, *PART22)}
+ALL = {t.key: t for t in (*PART1, *PART3, *PART4, *PART5, *PART6, *PART7, *PART8, *PART9, *PART10, *PART11, *PART12, *PART13, *PART14, *PART15, *PART16, *PART17, *PART18, *PART19, *PART21, *PART22, *PART25)}
