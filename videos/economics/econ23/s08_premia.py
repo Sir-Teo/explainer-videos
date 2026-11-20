@@ -59,8 +59,9 @@ class Premia(VoiceoverScene):
         ]
         grid = VGroup()
         for k, (name, key, f) in enumerate(lines):
-            col = HOLD if key == "implied_gamma" else WHITE
-            row = VGroup(label(name, font_size=20, color=GREY_A if col == WHITE else col),
+            hot = key == "implied_gamma"
+            col = HOLD if hot else WHITE
+            row = VGroup(label(name, font_size=20, color=col if hot else GREY_A),
                          label(f(mo[key]), font_size=22, color=col), label(f(lg[key]), font_size=22, color=col))
             grid.add(row)
         for k, row in enumerate(grid):

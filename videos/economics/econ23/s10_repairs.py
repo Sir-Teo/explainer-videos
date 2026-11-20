@@ -48,11 +48,11 @@ class Repairs(VoiceoverScene):
             "rises in recessions and falls in booms, which is also why, as chapter ten shows, returns are "
             "predictable over long horizons."
         ) as vo:
-            self.play(FadeIn(a1), FadeIn(a2), FadeIn(tag), FadeIn(side[0]))
+            self.play(FadeIn(a1), FadeIn(a2), FadeIn(tag), FadeIn(side[0]), Create(s_line), run_time=2.5)
             vo.wait_until("a")
             self.play(FadeIn(side[1]))
             vo.wait_until("b")
-            self.play(Create(s_line), run_time=2.5)
+            self.play(Indicate(s_line, color=WHITE))
             vo.wait_until("c")
             self.play(Create(p_line), FadeIn(stocks), FadeIn(side[2]), FadeIn(side[3]), FadeIn(side[4]), run_time=2.5)
             vo.wait_until("d")
@@ -114,7 +114,7 @@ class Repairs(VoiceoverScene):
         note_ = label(rf"$\gamma = 3.5$: \ premium {100 * row35['with']['premium']:.1f}\%, \ safe rate "
                       rf"{100 * row35['with']['rf']:.1f}\% \ (without disasters: \ "
                       rf"{100 * row35['without']['premium']:.2f}\% and {100 * row35['without']['rf']:.0f}\%)",
-                      font_size=21, color=E.ACCENT).to_edge(DOWN, buff=0.3)
+                      font_size=21, color=E.ACCENT).next_to(leg, DOWN, buff=0.2)
         tag = published_tag(r"Rietz, JME 22(1) (1988); \ Barro, QJE 121(3) (2006)", corner=DR, font_size=12)
         with self.voiceover(
             "The third answer is disaster. In 1988 Thomas Rietz suggested that stock investors are paid for the "
@@ -130,13 +130,13 @@ class Repairs(VoiceoverScene):
             "puzzles at once, with ordinary risk aversion. The price is a claim that cannot easily be tested: "
             "disasters are rare by definition."
         ) as vo:
-            self.play(FadeIn(head), FadeIn(a1), FadeIn(a2), FadeIn(tag))
+            self.play(FadeIn(head), FadeIn(a1), FadeIn(a2), FadeIn(tag), Create(po), Create(ro), run_time=2)
             vo.wait_until("a")
             self.play(FadeIn(leg))
             vo.wait_until("b")
-            self.play(Create(po), Create(pw), run_time=2)
+            self.play(Create(pw), run_time=2)
             vo.wait_until("c")
-            self.play(Create(ro), Create(rw), run_time=2)
+            self.play(Create(rw), run_time=2)
             vo.wait_until("d")
             self.play(FadeIn(note_))
         self.clear_scene()

@@ -52,8 +52,10 @@ class Frontier(VoiceoverScene):
             "governments can borrow for free."
         ) as vo:
             self.play(FadeIn(ax), FadeIn(tag), FadeIn(side[0]))
+            vo.wait_until("a")
+            self.play(*[GrowFromEdge(b[0], DOWN) for b in bars], *[FadeIn(b[1:]) for b in bars])
             vo.wait_until("b")
-            self.play(*[GrowFromEdge(b[0], DOWN) for b in bars], *[FadeIn(b[1:]) for b in bars], FadeIn(side[1]))
+            self.play(FadeIn(side[1]))
             vo.wait_until("c")
             self.play(FadeIn(side[2]))
             vo.wait_until("d")

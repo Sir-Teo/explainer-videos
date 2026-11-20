@@ -158,6 +158,28 @@ FRED_SERIES["CSUSHPINSA"] = ("S&P CoreLogic Case-Shiller U.S. National Home Pric
 FRED_SERIES["CUSR0000SEHA"] = ("Consumer Price Index for All Urban Consumers: rent of primary residence in U.S. city "
                                "average", "index 1982-1984 = 100, seasonally adjusted", "monthly",
                                "U.S. Bureau of Labor Statistics")
+# Part 24: the labour market's stocks and flows: unemployment by duration, the labour force, job openings, hires and
+# separations (JOLTS), and the Congressional Budget Office's natural rate
+FRED_SERIES["UNEMPLOY"] = ("Unemployment level", "thousands of persons, seasonally adjusted", "monthly",
+                           "U.S. Bureau of Labor Statistics")
+FRED_SERIES["UEMPLT5"] = ("Number unemployed for less than 5 weeks", "thousands of persons, seasonally adjusted",
+                          "monthly", "U.S. Bureau of Labor Statistics")
+FRED_SERIES["UEMP27OV"] = ("Number unemployed for 27 weeks and over", "thousands of persons, seasonally adjusted",
+                           "monthly", "U.S. Bureau of Labor Statistics")
+FRED_SERIES["CLF16OV"] = ("Civilian labor force level", "thousands of persons, seasonally adjusted", "monthly",
+                          "U.S. Bureau of Labor Statistics")
+FRED_SERIES["JTSJOL"] = ("Job openings: total nonfarm", "level in thousands, seasonally adjusted", "monthly",
+                         "U.S. Bureau of Labor Statistics")
+FRED_SERIES["JTSHIL"] = ("Hires: total nonfarm", "level in thousands, seasonally adjusted", "monthly",
+                         "U.S. Bureau of Labor Statistics")
+FRED_SERIES["JTSTSL"] = ("Total separations: total nonfarm", "level in thousands, seasonally adjusted", "monthly",
+                         "U.S. Bureau of Labor Statistics")
+FRED_SERIES["JTSQUL"] = ("Quits: total nonfarm", "level in thousands, seasonally adjusted", "monthly",
+                         "U.S. Bureau of Labor Statistics")
+FRED_SERIES["OPHNFB"] = ("Nonfarm business sector: labor productivity (output per hour) for all workers",
+                         "index 2017 = 100, seasonally adjusted", "quarterly", "U.S. Bureau of Labor Statistics")
+FRED_SERIES["NROU"] = ("Noncyclical rate of unemployment", "percent, not seasonally adjusted", "quarterly",
+                       "U.S. Congressional Budget Office")
 
 FRED_RETRIEVED = {s: "2026-11-19" for s in (
     "GDPA", "GDIA", "PCECA", "GPDIA", "GCEA", "EXPGSA", "IMPGSA", "A033RC1A027NBEA", "A191RD3A086NBEA", "U1RATE",
@@ -166,7 +188,8 @@ FRED_RETRIEVED = {s: "2026-11-19" for s in (
                                                                                          "RC1A027NBEA")))}
 FRED_RETRIEVED.update({s: "2026-11-20" for s in ("PCECC96", "DSPIC96", "PSAVERT", "PCE", "PCEND", "PCES",
                                                   "DNDGRG3M086SBEA", "DSERRG3M086SBEA", "CSUSHPINSA",
-                                                  "CUSR0000SEHA")})
+                                                  "CUSR0000SEHA", "UNEMPLOY", "UEMPLT5", "UEMP27OV", "CLF16OV",
+                                                  "JTSJOL", "JTSHIL", "JTSTSL", "JTSQUL", "NROU", "OPHNFB")})
 
 SPF_FILES = ("median_rgdp_level", "median_rgdp_growth", "median_recess_level")
 SPF_URL = ("https://www.philadelphiafed.org/-/media/frbp/assets/surveys-and-data/survey-of-professional-forecasters/"

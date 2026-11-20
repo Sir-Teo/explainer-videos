@@ -42,12 +42,12 @@ class Option(VoiceoverScene):
 
     def threshold(self):
         o = load("option")
-        ax = plane([0, 0.5], [1, 4.5], center=LEFT * 2.2 + DOWN * 0.4, x_length=7.0, y_length=4.8,
+        ax = plane([0, 0.5], [0.7, 4.5], center=LEFT * 2.2 + DOWN * 0.4, x_length=7.0, y_length=4.8,
                    xticks=[0, 0.1, 0.2, 0.3, 0.4, 0.5], yticks=[1, 2, 3, 4],
                    xlabel=r"volatility of the project's value, \ a year", ylabel=r"build when value exceeds cost by",
                    xfmt=lambda v: f"{100 * v:.0f}\\%", yfmt=lambda v: rf"{v:g}\times", font_size=16)
         npv = seg(ax, 0, 1, 0.5, 1, color=GREY_B, width=2, dashed=True)
-        curve = path(ax, o["sigma"], o["multiple"], color=FIRM, width=4, yr=(1, 4.5))
+        curve = path(ax, o["sigma"], o["multiple"], color=FIRM, width=4, yr=(0.7, 4.5))
         dots = VGroup(*[dot(ax, r["sigma"], r["multiple"], color=STOCK) for r in o["rows"]])
         side = VGroup(
             MathTex(r"dV = \mu V\,dt + \sigma V\,dW", font_size=32, color=WHITE),

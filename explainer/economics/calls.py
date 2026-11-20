@@ -168,6 +168,20 @@ CALLS = {c.key: c for c in [
          ("P. M. Romer, Journal of Political Economy 98(5) (1990): S71-S102, abstract",
           "C. I. Jones, Quarterly Journal of Economics 110(2) (1995): 495-525",
           "N. Bloom, C. I. Jones, J. Van Reenen and M. Webb, American Economic Review 110(4) (2020)")),
+    Call("dmp_volatility", 24, "Dale Mortensen and Christopher Pissarides, \"Job Creation and Job Destruction in the "
+                               "Theory of Unemployment\"",
+         "1994", "a matching model driven by aggregate productivity shocks alone reproduces reasonably well the "
+                 "cyclical behaviour of job creation and job destruction in the United States",
+         "simulations of the model with Nash-bargained wages and an aggregate shock process",
+         "the pattern held: in recessions job destruction jumps and job creation falls; the size did not: Shimer "
+         "(2005) calibrated the model to American data, and shocks to productivity of the observed size move the "
+         "vacancy-unemployment ratio about as much as productivity itself, while in the data it is almost twenty "
+         "times as volatile; the model needs implausibly large shocks (Hall 2005), and twenty years of repairs "
+         "followed",
+         "partly right",
+         ("D. T. Mortensen and C. A. Pissarides, Review of Economic Studies 61(3) (1994): 397-415, abstract",
+          "R. Shimer, American Economic Review 95(1) (2005): 25-49, abstract",
+          "R. E. Hall, American Economic Review 95(1) (2005): 50-65, abstract")),
     Call("fisher_plateau", 23, "Irving Fisher, speaking in New York",
          "October 1929", "stock prices have reached what looks like a permanently high plateau",
          "the decade's rise in earnings, new industries and better management, which he thought justified the prices",

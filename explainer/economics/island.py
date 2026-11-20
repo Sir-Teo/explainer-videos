@@ -627,6 +627,24 @@ TRUTHS = {
         # the stylized laboratory market (chapter 11)
         "ssw": {"periods": 15, "dividends": (0.0, 0.08, 0.28, 0.60), "share_trend": 0.7, "n": 12, "seed": 0},
     },
+    # Part 24: the Island's labour market gets frictions (a month a period)
+    24: {
+        # Play it (chapter 2): wage offers drawn uniformly between 50 and 150 coconuts a week, one a week; a benefit
+        # of 40 while searching; weekly patience 0.95; ten offers in the game, the same for every viewer
+        "playit": {"low": 50.0, "high": 150.0, "b": 40.0, "beta": 0.95, "offers": (88, 71, 104, 63, 97, 121, 79, 135,
+                                                                                  92, 110)},
+        # Diamond's coconuts (chapter 0): the chance of meeting a trading partner rises with the number climbing
+        "diamond": {"cost_max": 1.0, "gain": 1.2, "contact": 0.9, "grid": 200},
+        # the DMP economy (chapters 6-9), monthly: productivity 1, benefit 0.4, matching elasticity and bargaining share
+        # 0.5, matching efficiency 0.6, separations 3%, interest 0.4%, vacancy cost 0.3
+        "dmp": {"p": 1.0, "b": 0.4, "beta": 0.5, "eta": 0.5, "A": 0.6, "s": 0.03, "r": 0.004, "c": 0.3},
+        # Shimer's quarterly calibration and Hagedorn and Manovskii's small surplus, each with the vacancy cost set so
+        # that tightness is one in the steady state
+        "shimer": {"b": 0.4, "beta": 0.72, "eta": 0.72, "s": 0.10, "r": 0.012, "f": 1.355},
+        "hm": {"b": 0.955, "beta": 0.052, "eta": 0.45, "s": 0.10, "r": 0.012, "f": 1.355},
+        # the job ladder (chapter 11): offers arrive five times as often as jobs end
+        "ladder": {"p": 1.0, "b": 0.4, "lam": 0.1, "delta": 0.02},
+    },
 }
 
 

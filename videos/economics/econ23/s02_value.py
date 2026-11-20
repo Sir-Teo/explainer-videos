@@ -81,27 +81,29 @@ class Value(VoiceoverScene):
 
     def history(self):
         g = load("gordon")
-        ax = plane([1870, 2015], [0, 50], center=LEFT * 1.6 + DOWN * 0.4, x_length=8.6, y_length=4.8,
-                   xticks=[1880, 1920, 1960, 2000], yticks=[0, 10, 20, 30, 40, 50],
+        ax = plane([1870, 2015], [0, 95], center=LEFT * 1.6 + DOWN * 0.4, x_length=8.6, y_length=4.8,
+                   xticks=[1880, 1920, 1960, 2000], yticks=[0, 20, 40, 60, 80],
                    ylabel=r"real price $\div$ real dividends, \ S\&P composite", xfmt=lambda v: f"{v:.0f}",
                    yfmt=lambda v: f"{v:g}", font_size=16)
         line_ = path(ax, g["pd_years"], g["pd"], color=STOCK, width=3, smooth=False)
         mean = seg(ax, 1870, g["pd_mean"], 2015, g["pd_mean"], color=GREY_B, width=2, dashed=True)
         side = VGroup(
-            label(rf"{g['pd_years'][0]}: \ {g['pd_first']:.0f} \ times dividends", font_size=20, color=STOCK),
+            label(rf"{int(g['pd_years'][0])}: \ {g['pd_first']:.0f} \ times dividends", font_size=20, color=STOCK),
             label(rf"average: \ {g['pd_mean']:.0f}", font_size=20, color=GREY_B),
-            label(rf"{g['pd_years'][-1]}: \ {g['pd_last']:.0f}", font_size=20, color=STOCK),
+            label(rf"{int(g['pd_years'][-1])}: \ {g['pd_last']:.0f}", font_size=20, color=STOCK),
             label(rf"real dividends grew \\ {pc(g['div_growth'])} a year", font_size=20, color=GREY_A),
-            label(r"a price that wanders \\ this far is a puzzle \\ for chapter 10", font_size=20, color=HOLD),
+            label(rf"{g['pd_max_year']}: \ {g['pd_max']:.0f}; \\ a price that wanders \\ this far is a puzzle "
+                  r"\\ for chapter 10", font_size=20, color=HOLD),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.32).to_edge(RIGHT, buff=0.35)
         tag = data_tag(r"Shiller, \emph{Market Volatility} (1989), \ ch.\ 26 data, \ updated", corner=DR, font_size=12)
         with self.voiceover(
             "Here is the ratio in the record. Robert Shiller's data for the S and P composite index of American "
             "stocks, from 1871, the price divided by a year of dividends. <bookmark mark='a'/> In "
-            f"{g['pd_years'][0]} the market sold for about {g['pd_first']:.0f} times its dividends. "
+            f"{int(g['pd_years'][0])} the market sold for about {g['pd_first']:.0f} times its dividends. "
             f"<bookmark mark='b'/> On average, about {g['pd_mean']:.0f}. <bookmark mark='c'/> By "
-            f"{g['pd_years'][-1]}, about {g['pd_last']:.0f}. <bookmark mark='d'/> Real dividends grew only about "
-            f"{100 * g['div_growth']:.1f} percent a year. <bookmark mark='e'/> If the Gordon formula holds, a "
+            f"{int(g['pd_years'][-1])}, about {g['pd_last']:.0f}. <bookmark mark='d'/> Real dividends grew only about "
+            f"{100 * g['div_growth']:.1f} percent a year. <bookmark mark='e'/> At the peak, in {g['pd_max_year']}, it "
+            f"touched {g['pd_max']:.0f}. If the Gordon formula holds, a "
             "ratio that wanders this far means that either expected growth or the discount rate moved a lot. "
             "Chapter ten asks which."
         ) as vo:

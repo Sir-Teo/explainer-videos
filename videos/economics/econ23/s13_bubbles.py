@@ -78,11 +78,11 @@ class Bubbles(VoiceoverScene):
             "low, climbs past value, rides above it for half the session, and collapses as the end comes into "
             "view. Experience reduced bubbles in the laboratory, but did not end them."
         ) as vo:
-            self.play(FadeIn(ax), FadeIn(tag), FadeIn(sc[0]))
+            self.play(FadeIn(ax), FadeIn(tag), FadeIn(sc[0]), Create(fv), run_time=2)
             vo.wait_until("a")
             self.play(FadeIn(sc[1]))
             vo.wait_until("b")
-            self.play(Create(fv), FadeIn(sc[2]), run_time=2)
+            self.play(FadeIn(sc[2]), Indicate(fv, color=WHITE))
             vo.wait_until("c")
             self.play(FadeIn(sc[3]))
             vo.wait_until("d")

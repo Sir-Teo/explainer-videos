@@ -87,7 +87,8 @@ def compute_gordon() -> dict:
     D = s["RealD"][m]
     growth = float((D[-1] / D[0]) ** (1 / (years[-1] - years[0])) - 1)
     return {**g, **out, "pd_years": years.tolist(), "pd": pd.tolist(), "div_growth": growth,
-            "pd_first": float(pd[0]), "pd_last": float(pd[-1]), "pd_mean": float(pd.mean())}
+            "pd_first": float(pd[0]), "pd_last": float(pd[-1]), "pd_mean": float(pd.mean()),
+            "pd_max": float(pd.max()), "pd_max_year": int(years[int(np.argmax(pd))])}
 
 
 def compute_firm() -> dict:

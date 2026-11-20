@@ -47,9 +47,11 @@ class Puzzle(VoiceoverScene):
             f"premium is {100 * r['max_premium_rf4']:.2f} percent: their famous bound. To raise the premium, "
             "the model must raise risk aversion, and that sends the safe rate far off to the right."
         ) as vo:
-            self.play(FadeIn(ax), FadeIn(tag), FadeIn(side[0]))
+            self.play(FadeIn(ax), FadeIn(tag), LaggedStart(*[FadeIn(p) for p in pts], lag_ratio=0.001), run_time=3)
+            vo.wait_until("a")
+            self.play(FadeIn(side[0]))
             vo.wait_until("b")
-            self.play(LaggedStart(*[FadeIn(p) for p in pts], lag_ratio=0.001), FadeIn(side[1]), run_time=3)
+            self.play(FadeIn(side[1]))
             vo.wait_until("c")
             self.play(FadeIn(data_pt), FadeIn(data_lab))
             vo.wait_until("d")
@@ -89,8 +91,10 @@ class Puzzle(VoiceoverScene):
             "demand six percent for holding stocks."
         ) as vo:
             self.play(FadeIn(ax), FadeIn(tag), FadeIn(side[0]), FadeIn(side[1]))
+            vo.wait_until("a")
+            self.play(Create(bound))
             vo.wait_until("b")
-            self.play(Create(bound), FadeIn(side[2]))
+            self.play(FadeIn(side[2]), Indicate(bound))
             vo.wait_until("c")
             self.play(Create(curve), FadeIn(side[3]), run_time=2)
             vo.wait_until("d")
@@ -122,8 +126,8 @@ class Puzzle(VoiceoverScene):
             "rate puzzle in 1989. Power utility ties two things together, aversion to risk and willingness to "
             "substitute over time, that the data want apart."
         ) as vo:
-            self.play(FadeIn(rows[0]), FadeIn(tag))
-            for mk, r_ in zip("abcde", rows[1:]):
+            self.play(FadeIn(rows[0]), FadeIn(rows[1]), FadeIn(tag))
+            for mk, r_ in zip("bcde", rows[2:]):
                 vo.wait_until(mk)
                 self.play(FadeIn(r_, shift=UP * 0.1))
         self.clear_scene()

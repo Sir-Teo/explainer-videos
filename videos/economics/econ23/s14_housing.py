@@ -37,7 +37,9 @@ class Housing(VoiceoverScene):
             "expect prices to keep rising: which is how expectations can feed a boom."
         ) as vo:
             self.play(FadeIn(rows[0]), FadeIn(rows[1]), FadeIn(tag))
-            for mk, r_ in zip("bcde", rows[2:]):
+            vo.wait_until("a")
+            self.play(FadeIn(rows[2], shift=UP * 0.1))
+            for mk, r_ in zip("cde", rows[3:]):
                 vo.wait_until(mk)
                 self.play(FadeIn(r_, shift=UP * 0.1))
         self.clear_scene()
