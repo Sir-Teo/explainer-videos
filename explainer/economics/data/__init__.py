@@ -272,6 +272,16 @@ FRED_SERIES["ECBDFR"] = ("ECB deposit facility rate for the euro area", "percent
 FRED_SERIES["RESPPLLOPNWW"] = ("Federal Reserve: earnings remittances due to the U.S. Treasury (Wednesday level; "
                                "negative: the deferred asset)", "millions of dollars", "weekly",
                                "Board of Governors of the Federal Reserve System")
+FRED_SERIES["FYFSGDA188S"] = ("Federal surplus or deficit as a percent of GDP (fiscal years)", "percent", "annual",
+                              "Office of Management and Budget")
+FRED_SERIES["GFDEGDQ188S"] = ("Federal debt: total public debt as a percent of GDP", "percent", "quarterly",
+                              "Office of Management and Budget; Federal Reserve Bank of St. Louis")
+FRED_SERIES["FYGFGDQ188S"] = ("Federal debt held by the public as a percent of GDP", "percent", "quarterly",
+                              "Office of Management and Budget; Federal Reserve Bank of St. Louis")
+FRED_SERIES["A091RC1Q027SBEA"] = ("Federal government current expenditures: interest payments", "billions of "
+                                  "dollars, SAAR", "quarterly", "BEA")
+FRED_SERIES["IRLTLT01GRM156N"] = ("Long-term (10-year) government bond yield, Greece", "percent", "monthly",
+                                  "OECD Main Economic Indicators")
 FRED_SERIES["FEDTARMDLR"] = ("FOMC Summary of Economic Projections: the federal funds rate, median, longer run",
                              "percent", "quarterly (from 2012)", "Board of Governors of the Federal Reserve System")
 FRED_SERIES["DFEDTAR"] = ("Federal funds target rate (discontinued December 2008)", "percent", "daily",
@@ -302,11 +312,13 @@ FRED_RETRIEVED.update({s: "2026-11-20" for s in ("PCECC96", "DSPIC96", "PSAVERT"
                                                   "WRESBAL", "IOER", "IORB", "DGS10", "DFII10", "GS1", "PPIACO",
                                                   "IRLTLT01ITM156N", "IRLTLT01ESM156N", "IRLTLT01DEM156N",
                                                   "ECBDFR", "RESPPLLOPNWW", "DFEDTAR", "DFEDTARU",
-                                                  "FEDTARMDLR", "IRLTLT01GBM156N")})
+                                                  "FEDTARMDLR", "IRLTLT01GBM156N", "FYFSGDA188S", "GFDEGDQ188S",
+                                                  "FYGFGDQ188S", "A091RC1Q027SBEA", "IRLTLT01GRM156N")})
 
 SPF_FILES = ("median_rgdp_level", "median_rgdp_growth", "median_recess_level")
 SPF_URL = ("https://www.philadelphiafed.org/-/media/frbp/assets/surveys-and-data/survey-of-professional-forecasters/"
            "data-files/files/{}.xlsx")
+RAMEY_URL = "https://econweb.ucsd.edu/~vramey/research/{}"
 HLW_URL = ("https://www.newyorkfed.org/medialibrary/media/research/economists/williams/data/"
            "Holston_Laubach_Williams_current_estimates.xlsx")
 GB_URL = ("https://www.philadelphiafed.org/-/media/FRBP/Assets/Surveys-And-Data/greenbook-data/documentation/"
@@ -628,6 +640,66 @@ DATASETS = {
         "sha256": "120f1587a5501d9623f00fb65e492df714b303559806e60f728bc3e575b5aa46",
         "files": ("hlw_rstar.csv",),
     },
+    "ramey_zubairy": {
+        "title": "Ramey and Zubairy's US quarterly data, 1889-2015: government purchases, GDP, prices, population, "
+                 "unemployment, military spending news, potential output, the T-bill rate and a zero-bound dummy",
+        "publisher": "Valerie A. Ramey and Sarah Zubairy (replication files)",
+        "citation": "V. A. Ramey and S. Zubairy, \"Government Spending Multipliers in Good Times and in Bad: Evidence "
+                    "from U.S. Historical Data\", Journal of Political Economy 126(2) (2018), replication files "
+                    "(rzdatnew.csv), retrieved 2026-11-20",
+        "short": "Ramey and Zubairy (2018), replication data",
+        "url": RAMEY_URL.format("Ramey_Zubairy_replication_codes.zip"),
+        "licence": "posted by the authors for replication; used with citation",
+        "units": "nominal values in billions of dollars at annual rates; news in billions (present value); percent",
+        "vintage": "2026-11-20",
+        "sha256": "e268f8d4abc997227401d5b5f218d0cfa3c527cb9091f6e715baa5a7a6391d07",
+        "files": ("ramey_zubairy.csv",),
+    },
+    "ramey_tax": {
+        "title": "Ramey's Handbook tax data, 1945-2015, quarterly: GDP, prices, population, tax receipts and Romer and "
+                 "Romer's exogenous and endogenous tax changes as ratios to GDP",
+        "publisher": "Valerie A. Ramey (replication files for the Handbook of Macroeconomics)",
+        "citation": "V. A. Ramey, \"Macroeconomic Shocks and Their Propagation\", Handbook of Macroeconomics 2A "
+                    "(2016), replication files (homtaxdat.xlsx), with C. D. Romer and D. H. Romer's narrative tax "
+                    "changes (AER 100(3), 2010); retrieved 2026-11-20",
+        "short": "Ramey (2016), Handbook tax data (Romer and Romer's tax changes)",
+        "url": RAMEY_URL.format("Ramey_HOM_tax.zip"),
+        "licence": "posted by the author for replication; used with citation",
+        "units": "nominal values in billions of dollars at annual rates; tax changes as a share of GDP",
+        "vintage": "2026-11-20",
+        "sha256": "41cfe9a71f7c8e352227a448c6680d682c59d10b627135b899b5c1da82eb84f9",
+        "files": ("ramey_tax.csv",),
+    },
+    "blanchard_leigh": {
+        "title": "Blanchard and Leigh's forecast-error data: IMF spring 2010 forecasts of growth and of the structural "
+                 "balance, and growth as reported in fall 2012, for 2009-2011",
+        "publisher": "Olivier Blanchard and Daniel Leigh (NBER data appendix to w18779)",
+        "citation": "O. Blanchard and D. Leigh, \"Growth Forecast Errors and Fiscal Multipliers\", NBER Working Paper "
+                    "18779 (2013) and American Economic Review 103(3): 117-120 (2013), replication files (dta.xlsx), "
+                    "retrieved 2026-11-20",
+        "short": "Blanchard and Leigh (2013), replication data",
+        "url": "https://www.nber.org/data-appendix/w18779/replication%20files.zip",
+        "licence": "posted by the authors for replication; used with citation",
+        "units": "percent growth of real GDP; percent of potential GDP (structural balance)",
+        "vintage": "2026-11-20",
+        "sha256": "55d5f985c7b43cffceb3b0c7e51cab75710f979bc421cf564b0e5c1a5e77e7a4",
+        "files": ("blanchard_leigh.csv",),
+    },
+    "rr_hap": {
+        "title": "Reinhart and Rogoff's working spreadsheet as processed by Herndon, Ash and Pollin: public debt to GDP "
+                 "and real GDP growth, 20 advanced economies, 1946-2009",
+        "publisher": "Thomas Herndon, Michael Ash and Robert Pollin (PERI, University of Massachusetts Amherst)",
+        "citation": "T. Herndon, M. Ash and R. Pollin, \"Does High Public Debt Consistently Stifle Economic Growth? A "
+                    "Critique of Reinhart and Rogoff\", Cambridge Journal of Economics 38(2): 257-279 (2014), "
+                    "replication files (RR-keycolumns.xlsx), retrieved 2026-11-20",
+        "short": "Herndon, Ash and Pollin (2014), RR key columns",
+        "url": "https://peri.umass.edu/images/RR-keycolumns.xlsx",
+        "licence": "open source under the BSD 2-clause licence (the authors' replication files)",
+        "units": "percent of GDP; percent a year",
+        "vintage": "2026-11-20",
+        "sha256": "80bdd2503328d6bac29c6b33dc3113e40c0ba319da38907804de275294cf4179",
+        "files": ("rr_hap.csv",),
+    },
     "rtdsm": {
         "title": "Real-Time Data Set for Macroeconomists: real GDP (ROUTPUT), quarterly vintages",
         "publisher": "Federal Reserve Bank of Philadelphia",
@@ -901,6 +973,42 @@ def hlw() -> dict:
     rows = _read(HERE / "hlw_rstar.csv")
     return {k: [r[k] if k == "date" else _num(r[k]) for r in rows]
             for k in ("date", "g_us", "z_us", "rstar_us", "rstar_ca", "rstar_ea")}
+
+
+def _cols(name: str) -> dict:
+    rows = _read(HERE / name)
+    return {k: [_num(r[k]) if k not in ("country", "wdicode") else r[k] for r in rows] for k in rows[0]}
+
+
+@functools.lru_cache(maxsize=None)
+def ramey_zubairy() -> dict:
+    """Ramey and Zubairy's quarterly US data, 1889Q1-2015Q4: ``{"quarter": [1889.0, 1889.25, ...], "ngov", "ngdp",
+    "pgdp", "pop", "unemp", "news", "rgdp", "rgdp_pott6", "rgdp_potcbo", "tbill", "zlb_dummy",
+    "nfedcurrreceipts_nipa", "pubfeddebt_treas": [...]}`` (NaN where missing)."""
+    return _cols("ramey_zubairy.csv")
+
+
+@functools.lru_cache(maxsize=None)
+def ramey_tax() -> dict:
+    """Ramey's Handbook tax data, 1945Q1-2015Q4: ``{"quarter", "ngdp", "rgdp", "pgdp", "pop", "ngov",
+    "ntaxrev", "nfedtaxrev", "exog_rr", "endog_rr": [...]}``; ``exog_rr`` and ``endog_rr`` are Romer and Romer's
+    exogenous and endogenous tax changes as ratios to GDP."""
+    return _cols("ramey_tax.csv")
+
+
+@functools.lru_cache(maxsize=None)
+def blanchard_leigh() -> dict:
+    """Blanchard and Leigh's data for 2009-2011: ``{"country", "wdicode", "year", "eu", "growth_fall2012",
+    "growth_spring2010", "sb_spring2010": [...]}``: real GDP growth as reported in the IMF's fall 2012 WEO and as
+    forecast in spring 2010, and the structural balance (percent of potential GDP) as forecast in spring 2010."""
+    return _cols("blanchard_leigh.csv")
+
+
+@functools.lru_cache(maxsize=None)
+def rr_hap() -> dict:
+    """Reinhart and Rogoff's data as processed by Herndon, Ash and Pollin, 1946-2009: ``{"country", "year",
+    "debtgdp", "growth": [...]}`` (public debt, percent of GDP; real GDP growth, percent)."""
+    return _cols("rr_hap.csv")
 
 
 @functools.lru_cache(maxsize=None)
@@ -1223,6 +1331,88 @@ def refresh_hlw() -> None:
         for r in rows:
             if hasattr(r[0], "year"):
                 w.writerow([r[0].strftime("%Y-%m-%d"), num(r[2]), num(r[6]), num(r[10]), num(r[11]), num(r[12])])
+
+
+def _zip_member(raw: Path, suffix: str) -> bytes:
+    import zipfile  # noqa: PLC0415
+
+    with zipfile.ZipFile(raw) as z:
+        name = [n for n in z.namelist() if n.endswith(suffix)][0]
+        return z.read(name)
+
+
+def refresh_ramey_zubairy() -> None:
+    raw = RAW / "Ramey_Zubairy_replication_codes.zip"
+    print("ramey_zubairy:", _download(DATASETS["ramey_zubairy"]["url"], raw)[:12])
+    text = _zip_member(raw, "rzdatnew.csv").decode("utf-8", "replace").splitlines()
+    rows = list(csv.DictReader(text))
+    keep = ("quarter", "ngov", "ngdp", "pgdp", "pop", "unemp", "news", "rgdp", "rgdp_pott6", "rgdp_potcbo", "tbill",
+            "zlb_dummy", "nfedcurrreceipts_nipa", "pubfeddebt_treas")
+    with open(HERE / "ramey_zubairy.csv", "w", newline="", encoding="utf-8") as f:
+        w = csv.writer(f)
+        w.writerow(keep)
+        for r in rows:
+            w.writerow([r.get(k, "").strip() for k in keep])
+
+
+def refresh_ramey_tax() -> None:
+    import io  # noqa: PLC0415
+
+    import openpyxl  # noqa: PLC0415
+
+    raw = RAW / "Ramey_HOM_tax.zip"
+    print("ramey_tax:", _download(DATASETS["ramey_tax"]["url"], raw)[:12])
+    wb = openpyxl.load_workbook(io.BytesIO(_zip_member(raw, "homtaxdat.xlsx")), read_only=True, data_only=True)
+    rows = list(wb["homtaxdat"].iter_rows(values_only=True))
+    head = [str(h) for h in rows[0]]
+    keep = {"quarter": "quarter", "ngdp": "ngdp", "rgdp": "rgdp", "pgdp": "pgdp", "pop": "pop", "ngov": "ngov",
+            "ntaxrev": "ntaxrev", "nfedtaxrev": "nfedtaxrev", "EXOGENRRATIO": "exog_rr", "ENDOGNRRATIO": "endog_rr"}
+    with open(HERE / "ramey_tax.csv", "w", newline="", encoding="utf-8") as f:
+        w = csv.writer(f)
+        w.writerow(list(keep.values()))
+        for r in rows[1:]:
+            rec = dict(zip(head, r))
+            w.writerow([_fmt(rec[k]) if isinstance(rec.get(k), (int, float)) else "" for k in keep])
+
+
+def refresh_blanchard_leigh() -> None:
+    import io  # noqa: PLC0415
+
+    import openpyxl  # noqa: PLC0415
+
+    raw = RAW / "blanchard_leigh_replication.zip"
+    print("blanchard_leigh:", _download(DATASETS["blanchard_leigh"]["url"], raw)[:12])
+    wb = openpyxl.load_workbook(io.BytesIO(_zip_member(raw, "dta.xlsx")), read_only=True, data_only=True)
+    rows = list(wb.worksheets[0].iter_rows(values_only=True))
+    head = [str(h) for h in rows[0]]
+    cols = {"country": "country", "wdicode": "wdicode", "year": "year", "eu": "eu",
+            "ngdp_rpch2012fall": "growth_fall2012", "ngdp_rpch2010spring": "growth_spring2010",
+            "ggsb_gdp2010spring": "sb_spring2010"}
+    with open(HERE / "blanchard_leigh.csv", "w", newline="", encoding="utf-8") as f:
+        w = csv.writer(f)
+        w.writerow(list(cols.values()))
+        for r in rows[1:]:
+            rec = dict(zip(head, r))
+            if rec.get("year") not in (2009, 2010, 2011):
+                continue
+            w.writerow([rec[k] if k in ("country", "wdicode") else
+                        (_fmt(rec[k]) if isinstance(rec.get(k), (int, float)) else "") for k in cols])
+
+
+def refresh_rr_hap() -> None:
+    import openpyxl  # noqa: PLC0415
+
+    raw = RAW / "RR-keycolumns.xlsx"
+    print("rr_hap:", _download(DATASETS["rr_hap"]["url"], raw)[:12])
+    rows = list(openpyxl.load_workbook(raw, read_only=True, data_only=True).worksheets[0].iter_rows(values_only=True))
+    head = [str(h) for h in rows[0]]
+    with open(HERE / "rr_hap.csv", "w", newline="", encoding="utf-8") as f:
+        w = csv.writer(f)
+        w.writerow(["country", "year", "debtgdp", "growth"])
+        for r in rows[1:]:
+            rec = dict(zip(head, r))
+            num = lambda x: _fmt(float(x)) if x not in (None, "", "NA") else ""  # noqa: E731
+            w.writerow([rec["Country"], int(float(rec["Year"])), num(rec["debtgdp"]), num(rec["dRGDP"])])
 
 
 def refresh_draft1970() -> None:
@@ -1588,7 +1778,8 @@ REFRESH = {"draft1970": refresh_draft1970, "ajr": refresh_ajr, "maddison2023": r
            "marriage": refresh_marriage, "democracy": refresh_democracy, "millennium": refresh_millennium,
            "longrun": refresh_longrun, "pwt": refresh_pwt, "shiller": refresh_shiller,
            "wdi_money": refresh_wdi_money, "greenbook": refresh_greenbook,
-           "hlw": refresh_hlw}
+           "hlw": refresh_hlw, "ramey_zubairy": refresh_ramey_zubairy, "ramey_tax": refresh_ramey_tax,
+           "blanchard_leigh": refresh_blanchard_leigh, "rr_hap": refresh_rr_hap}
 
 
 def main() -> None:

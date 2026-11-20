@@ -33,6 +33,8 @@ class Neutral(VoiceoverScene):
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.34).to_edge(RIGHT, buff=0.3)
         tag = published_tag(r"Laubach and Williams, \ \emph{REStat} 85(4) (2003); \ the Island", corner=DR,
                             font_size=12)
+        top = label(r"the Island: \ a natural rate that drifts, \ and a bank that must estimate it", font_size=22,
+                    color=E.ACCENT).to_edge(UP, buff=0.3)
         with self.voiceover(
             "Part 30 left a question: every rule needs the natural rate of interest, the real rate at which policy "
             "neither pushes the economy nor holds it back, and nobody can see it. How is it estimated? On the "
@@ -44,7 +46,7 @@ class Neutral(VoiceoverScene):
             "with the model exactly right. <bookmark mark='d'/> The estimate trails the truth by years, because "
             "the natural rate shows itself only through slow drifts in output that other shocks swamp."
         ) as vo:
-            self.play(FadeIn(ax), FadeIn(zero), FadeIn(tag), run_time=0.6)
+            self.play(FadeIn(ax), FadeIn(zero), FadeIn(tag), FadeIn(top), run_time=0.6)
             vo.wait_until("a")
             self.play(Create(truth), FadeIn(side[0]), run_time=2)
             vo.wait_until("b")

@@ -49,7 +49,7 @@ class Practice(VoiceoverScene):
         K = load("called")
         cc = call_card(tex_safe(c.who), c.when, tex_safe(c.said), tex_safe(c.outcome), c.verdict, width=12.4,
                        font_size=17).to_edge(UP, buff=0.3)
-        ax = plane([0, 5], [0, 2], center=DOWN * 1.8 + LEFT * 1.6, x_length=7.0, y_length=2.9,
+        ax = plane([0, 5], [0, 2], center=DOWN * 1.45 + LEFT * 1.6, x_length=7.0, y_length=2.6,
                    xticks=[], yticks=[0, 0.5, 1.0, 1.5, 2.0], ylabel=r"typical error, \ points of inflation",
                    yfmt=lambda v: f"{v:.1f}", font_size=14)
         bars, labs = VGroup(), VGroup()

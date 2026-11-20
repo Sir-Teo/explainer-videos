@@ -18,7 +18,7 @@ class Dials(VoiceoverScene):
     def _show(self, dial, title, lo, hi, ticks, unit, say, marks, fmt="{:.2f}", step=0.62):
         head = status_head(dial, title)
         frame, rows = dial_rows(dial, lo, hi, ticks, unit, top=2.1, step=step, fmt=fmt)
-        meaning = wrapped_label(tex_safe(dial.meaning), 12.0, 16, GREY_A).to_edge(DOWN, buff=0.35)
+        meaning = wrapped_label(tex_safe(dial.meaning), 11.2, 15, GREY_A).to_edge(DOWN, buff=0.6)
         tag = published_tag(r"explainer.economics.dials, \ checked 2026-11-20", corner=DR, font_size=12)
         with self.voiceover(say) as vo:
             self.play(FadeIn(head), FadeIn(frame), FadeIn(tag))

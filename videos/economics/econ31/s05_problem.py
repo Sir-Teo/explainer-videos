@@ -104,10 +104,10 @@ class Problem(VoiceoverScene):
         zero = seg(ax, 0, 0, 48, 0, GREY_C, 1.5)
         p = U["plain"]
         c = U["commod"]
-        b1 = band(ax, h, p["cpi_lo"], p["cpi_hi"], INFL, 0.15)
+        b1 = band(ax, h, np.clip(p["cpi_lo"], -1.5, 1.0), np.clip(p["cpi_hi"], -1.5, 1.0), INFL, 0.15)
         l1 = path(ax, h, p["cpi"], INFL, 3.5)
         l2 = path(ax, h, c["cpi"], PRICE, 3.5)
-        b2 = band(ax, h, c["cpi_lo"], c["cpi_hi"], PRICE, 0.12)
+        b2 = band(ax, h, np.clip(c["cpi_lo"], -1.5, 1.0), np.clip(c["cpi_hi"], -1.5, 1.0), PRICE, 0.12)
         side = VGroup(
             label(r"a recursive VAR: \ output, \ prices, \\ the funds rate ordered last", font_size=18, color=GREY_A),
             label(rf"red: \ prices \emph{{rise}} \\ {p['cpi_24']:+.2f}\% after two years", font_size=18, color=INFL),

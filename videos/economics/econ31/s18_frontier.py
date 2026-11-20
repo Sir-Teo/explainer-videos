@@ -52,11 +52,11 @@ class Frontier(VoiceoverScene):
 
     def losses(self):
         F = load("frontier")
-        ax = plane([2019, 2027], [-260, 120], center=LEFT * 3.3 + DOWN * 0.4, x_length=5.6, y_length=4.4,
+        ax = plane([2019, 2027], [-260, 120], center=LEFT * 3.3 + DOWN * 0.2, x_length=5.6, y_length=4.0,
                    xticks=[2019, 2021, 2023, 2025, 2027], yticks=[-250, -200, -150, -100, -50, 0, 50, 100],
                    ylabel=r"owed to the Treasury, \ \$ billions", xfmt=lambda v: f"{v:.0f}",
                    yfmt=lambda v: f"{v:+.0f}" if v else "0", font_size=13)
-        ax2 = plane([2019, 2027], [0, 10], center=RIGHT * 3.3 + DOWN * 0.4, x_length=5.6, y_length=4.4,
+        ax2 = plane([2019, 2027], [0, 10], center=RIGHT * 3.3 + DOWN * 0.2, x_length=5.6, y_length=4.0,
                     xticks=[2019, 2021, 2023, 2025, 2027], yticks=[0, 2, 4, 6, 8, 10],
                     ylabel=r"the Fed's assets, \ \$ trillions", xfmt=lambda v: f"{v:.0f}", yfmt=lambda v: f"{v:.0f}",
                     font_size=13)
@@ -68,7 +68,7 @@ class Frontier(VoiceoverScene):
         n2 = label(rf"runoff: \ \${F['peak']:.1f} trillion in {F['peak_date'][:4]}, \\ \${F['last']:.1f} trillion "
                    rf"now", font_size=16, color=CB).next_to(ax2, UP, buff=0.15)
         foot = label(r"a central bank paying more on reserves than it earns on its bonds \ loses money, \ but cannot "
-                     r"run out of it", font_size=20, color=E.ACCENT).to_edge(DOWN, buff=0.25)
+                     r"run out of it", font_size=20, color=E.ACCENT).to_edge(DOWN, buff=0.7)
         tag = data_tag(r"Federal Reserve Board: \ H.4.1 (remittances; \ total assets), \ via FRED", corner=DR,
                        font_size=12)
         with self.voiceover(

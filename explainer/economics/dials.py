@@ -758,13 +758,13 @@ DIALS = {d.key: d for d in [
                  "each estimate is uncertain by a point or more either way, and the Island's filter shows why: the "
                  "natural rate is inferred from slow drifts in output, which other shocks swamp",
          estimates=(
-             Estimate("Holston, Laubach and Williams (US)", 2026, "structural", "one-sided estimate for 2026Q2, "
+             Estimate("Holston-Laubach-Williams (US)", 2026, "structural", "one-sided estimate for 2026Q2, "
                       "the New York Fed's current estimates", 1.01, where="FRBNY, Holston_Laubach_Williams_current_"
                       "estimates.xlsx (data.hlw)", checked="2026-11-20"),
-             Estimate("Holston, Laubach and Williams (euro area)", 2026, "structural", "one-sided estimate for 2026Q2",
+             Estimate("Holston-Laubach-Williams (euro area)", 2026, "structural", "one-sided estimate for 2026Q2",
                       0.09, where="FRBNY, Holston_Laubach_Williams_current_estimates.xlsx (data.hlw)",
                       checked="2026-11-20"),
-             Estimate("Holston, Laubach and Williams (Canada)", 2026, "structural", "one-sided estimate for 2026Q2",
+             Estimate("Holston-Laubach-Williams (Canada)", 2026, "structural", "one-sided estimate for 2026Q2",
                       1.76, where="FRBNY, Holston_Laubach_Williams_current_estimates.xlsx (data.hlw)",
                       checked="2026-11-20"),
              Estimate("FOMC participants (US)", 2026, "survey", "the median longer-run funds rate in the September "

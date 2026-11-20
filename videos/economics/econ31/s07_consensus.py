@@ -16,18 +16,18 @@ class Consensus(VoiceoverScene):
         U = load("usvar")
         c = U["commod"]
         h = np.array(U["h"])
-        axi = plane([0, 48], [-2.0, 0.8], center=LEFT * 3.3 + DOWN * 0.4, x_length=5.6, y_length=4.4,
+        axi = plane([0, 48], [-2.0, 0.8], center=LEFT * 3.3 + DOWN * 0.1, x_length=5.6, y_length=4.0,
                     xticks=[0, 12, 24, 36, 48], yticks=[-2, -1, 0], xlabel=r"months after the shock",
                     ylabel=r"industrial production, \ \%", xfmt=lambda v: f"{v:.0f}",
                     yfmt=lambda v: f"{v:+.0f}" if v else "0", font_size=14)
-        axc = plane([0, 48], [-1.4, 0.8], center=RIGHT * 3.3 + DOWN * 0.4, x_length=5.6, y_length=4.4,
+        axc = plane([0, 48], [-1.4, 0.8], center=RIGHT * 3.3 + DOWN * 0.1, x_length=5.6, y_length=4.0,
                     xticks=[0, 12, 24, 36, 48], yticks=[-1, -0.5, 0, 0.5], xlabel=r"months after the shock",
                     ylabel=r"consumer prices, \ \%", xfmt=lambda v: f"{v:.0f}",
                     yfmt=lambda v: f"{v:+.1f}" if v else "0", font_size=14)
         zeros = VGroup(seg(axi, 0, 0, 48, 0, GREY_D, 1.2), seg(axc, 0, 0, 48, 0, GREY_D, 1.2))
-        bi = band(axi, h, c["ip_lo"], c["ip_hi"], OUTPUT, 0.16)
+        bi = band(axi, h, np.clip(c["ip_lo"], -2.0, 0.8), np.clip(c["ip_hi"], -2.0, 0.8), OUTPUT, 0.16)
         li = path(axi, h, c["ip"], OUTPUT, 3.5)
-        bc = band(axc, h, c["cpi_lo"], c["cpi_hi"], INFL, 0.16)
+        bc = band(axc, h, np.clip(c["cpi_lo"], -1.4, 0.8), np.clip(c["cpi_hi"], -1.4, 0.8), INFL, 0.16)
         lc = path(axc, h, c["cpi"], INFL, 3.5)
         head = label(r"a one-point rise in the federal funds rate, \ US, \ 1965--2007, \ with commodity prices",
                      font_size=21, color=E.ACCENT).to_edge(UP, buff=0.4)
@@ -36,7 +36,7 @@ class Consensus(VoiceoverScene):
         n2 = label(rf"four years on: \ {c['cpi_48']:+.2f}\%", font_size=18, color=INFL).next_to(
             axc.ax.c2p(30, -1.4), UP, buff=0.15)
         foot = label(r"output falls after a year or more; \ prices fall later still, \ and less surely", font_size=22,
-                     color=WHITE).to_edge(DOWN, buff=0.3)
+                     color=WHITE).to_edge(DOWN, buff=0.7)
         tag = data_tag(r"FRED: \ industrial production, \ CPI, \ PPI (all commodities), \ the funds rate; \ this film",
                        corner=DR, font_size=12)
         with self.voiceover(
