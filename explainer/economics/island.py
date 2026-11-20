@@ -791,6 +791,22 @@ TRUTHS = {
         # the fiscal theory (chapter 10): nominal debt 100, a real rate of 2%, a surplus of 2 that falls to 1.5
         "ftpl": {"B": 100.0, "r": 0.02, "surplus": 2.0, "surplus_low": 1.5},
     },
+    33: {
+        # Minsky's borrowers (chapter 2): debt grows 10% a year against cash flow's 2% while credit is cheap at 3%,
+        # then the rate doubles to 6% over the last three years
+        "minsky": {"n": 4000, "years": 12, "rate0": 0.03, "rate_end": 0.06, "growth": 0.10, "seed": 33},
+        # the Island's lenders (chapter 4): project returns lognormal with a log standard deviation of 0.35,
+        # monitoring costs 15% of a failed project; firms borrow until capital's return meets the premium
+        "bgg": {"sigma": 0.35, "mu": 0.15, "K_star": 2.0, "theta": 0.3, "N_fall": 0.10},
+        # the Island's farmers and gatherers (chapter 5): R = 1.1 a period, an elasticity of land supply of 2, and a
+        # fall of 1% in the farmers' output
+        "km": {"R": 1.1, "eta": 2.0, "a": 1.0, "c": 0.5, "shock": 0.01, "T": 30},
+        # the leverage cycle (chapter 6): the asset pays 1, or 0.2 after bad news twice
+        "leverage": {"d": 0.2},
+        # the Island's 400 counties (chapter 8): an MPC out of housing wealth of 2 cents plus 6 cents per unit of
+        # leverage, house prices falling about a quarter
+        "counties": {"n": 400, "seed": 33, "mpc_base": 0.02, "mpc_slope": 0.06, "price_drop": 0.25},
+    },
 }
 
 

@@ -824,6 +824,26 @@ brackets on screen.
 | sovereign default; a haircut; a sovereign spread | 主权违约；债务减记（折价）；主权利差 |
 | modern monetary theory; fiscal space | 现代货币理论；财政空间 |
 
+## Part 33
+
+| English | 中文 |
+|---|---|
+| a financial crisis; a systemic banking crisis; a credit boom | 金融危机；系统性银行危机；信贷繁荣 |
+| displacement, euphoria, distress, revulsion | 冲击（错位）、狂热、困境、厌恶 |
+| hedge, speculative and Ponzi finance | 对冲型、投机型与庞氏型融资 |
+| debt deflation | 债务通缩 |
+| costly state verification; the external finance premium | 有成本的状态验证；外部融资溢价 |
+| the financial accelerator; net worth | 金融加速器；净值 |
+| a collateral constraint; the collateral cycle | 抵押约束；抵押品周期 |
+| leverage; a margin (haircut); the leverage cycle | 杠杆；保证金（折扣率）；杠杆周期 |
+| a fire sale; a liquidity spiral | 抛售（甩卖）；流动性螺旋 |
+| securitization; a tranche; repo | 证券化；分级（档）；回购 |
+| the area under the ROC curve; out of sample | ROC 曲线下面积；样本外 |
+| macroprudential policy; the countercyclical capital buffer; the credit-to-GDP gap | 宏观审慎政策；逆周期资本缓冲；信贷/GDP 缺口 |
+| a stress test; a swap line | 压力测试；货币互换额度 |
+| a sudden stop; original sin | 资本流动骤停；原罪 |
+| the volatility paradox | 波动性悖论 |
+
 ## Names
 
 | English | 中文 |

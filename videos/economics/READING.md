@@ -10,7 +10,7 @@ the series leaves out.
 Both *Parts* columns are found, not typed. *Planned* lists the parts whose entry in
 [`SYLLABUS.md`](SYLLABUS.md) names the book or paper; *Built* lists the parts whose scenes, compute step or
 README cite it (a dot: none yet). Fuller notes (editions, chapters, what each source was used for) are in each
-part's README, under *Sources*. Built so far: Parts 1–32.
+part's README, under *Sources*. Built so far: Parts 1–33.
 
 ## 1. The textbook spine
 
@@ -121,7 +121,7 @@ part's README, under *Sources*. Built so far: Parts 1–32.
 | Model or result | Paper | Planned | Built |
 |---|---|---|---|
 | the division of labour | Smith (1776), *The Wealth of Nations* | 1 | 1–2, 19, 21 |
-| comparative advantage | Ricardo (1817), *Principles*, ch. 7 | 2, 8, 35–36 | 1–2, 8, 19, 22, 25 |
+| comparative advantage | Ricardo (1817), *Principles*, ch. 7 | 2, 8, 35–36 | 1–2, 8, 19, 22, 25, 33 |
 | supply and demand, the scissors | Marshall (1890), *Principles of Economics* | 2, 37 | 2, 14 |
 | the price system as information | Hayek (1945), "The Use of Knowledge in Society" | 1, 9 | 1, 9 |
 | the double auction in the classroom | Chamberlin (1948); Smith (1962) | 1–2 | 1 |
@@ -213,8 +213,8 @@ part's README, under *Sources*. Built so far: Parts 1–32.
 |---|---|---|---|
 | money as a medium of exchange | Kiyotaki and Wright (1989) | 25 | 25 |
 | bank runs | Diamond and Dybvig (1983) | 26 | 26 |
-| debt deflation and financial instability | Fisher (1933); Minsky (1986) | 33 | · |
-| the financial accelerator | Bernanke, Gertler and Gilchrist (1999) | 33 | · |
+| debt deflation and financial instability | Fisher (1933); Minsky (1986) | 33 | 33 |
+| the financial accelerator | Bernanke, Gertler and Gilchrist (1999) | 33 | 33 |
 | forecasting by professionals | the Survey of Professional Forecasters (Philadelphia Fed) | 1, 57 | 1, 31 |
 
 ### The world economy
@@ -319,6 +319,8 @@ part's README, under *Sources*. Built so far: Parts 1–32.
 **Part 31, *The Central Bank*.** Books: Frederic Mishkin, *The Economics of Money, Banking and Financial Markets*, chs. 14–16 and 23–25; Carl Walsh, *Monetary Theory and Policy* (4th ed., 2017), chs. 1, 11 and 12; Alan Blinder, *Central Banking in Theory and Practice* (1998); Valerie Ramey, "Macroeconomic Shocks and Their Propagation", *Handbook of Macroeconomics* 2A (2016). Papers: Sims (1992); Christiano, Eichenbaum and Evans (1999); Romer and Romer (1989, 2000, 2004); Kuttner (2001); Gertler and Karadi (2015); Nakamura and Steinsson (2018); Coibion (2012); Orphanides (2001, 2004); Laubach and Williams (2003); Holston, Laubach and Williams (2023); Wallace (1981); Gagnon, Raskin, Remache and Sack (2011); Swanson (2021); Bernanke (2020); Calvo (1988); De Grauwe (2011).
 
 **Part 32, *The Treasury*.** Books: Olivier Blanchard, *Fiscal Policy under Low Interest Rates* (2023); David Romer, *Advanced Macroeconomics* (5th ed., 2019), ch. 13; Valerie Ramey, "Ten Years After the Financial Crisis: What Have We Learned from the Renaissance in Fiscal Research?", *JEP* 33(2) (2019); John Cochrane, *The Fiscal Theory of the Price Level* (2023). Papers: Domar (1944); Barro (1974, 1979); Diamond (1965); Sargent and Wallace (1981); Sims (1994); Blanchard and Perotti (2002); Ramey (2011); Nakamura and Steinsson (2014); Ramey and Zubairy (2018); Romer and Romer (2010); Alesina and Ardagna (2010); Guajardo, Leigh and Pescatori (2014); Reinhart and Rogoff (2010); Herndon, Ash and Pollin (2014); Blanchard and Leigh (2013); Eaton and Gersovitz (1981); Arellano (2008); Blanchard (2019).
+
+**Part 33, *Crises*.** Books: Charles Kindleberger and Robert Aliber, *Manias, Panics, and Crashes* (7th ed., 2015); Atif Mian and Amir Sufi, *House of Debt* (2014); Carmen Reinhart and Kenneth Rogoff, *This Time Is Different* (2009); Adam Tooze, *Crashed* (2018); Ben Bernanke, Timothy Geithner and Henry Paulson, *Firefighting* (2019). Papers: Fisher (1933); Minsky (1986); Bernanke (1983); Townsend (1979); Kiyotaki and Moore (1997); Bernanke, Gertler and Gilchrist (1999); Geanakoplos (2010); Schularick and Taylor (2012); Jordá, Schularick and Taylor (2013, 2017); Greenwood et al. (2022); Gorton and Metrick (2012); Brunnermeier and Pedersen (2009); Brunnermeier and Sannikov (2014); Mian, Rao and Sufi (2013); Calvo (1998); Rajan (2005).
 
 ## 4. What the series leaves out
 

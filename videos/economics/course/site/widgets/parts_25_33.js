@@ -608,4 +608,93 @@
             "browser; nothing you do here is stored or sent.",
     });
   };
+  W.leverage = function (el) {
+    // Geanakoplos's leverage cycle of Part 33 (explainer.economics.agora.credit: leverage_static, leverage_cycle).
+    // Agents h in [0, 1] each hold one unit of cash and one of an asset paying 1, or d after bad news; agent h thinks
+    // good news has probability h.  One period: the marginal buyer h values the asset at p = h + (1 - h) d, and buyers
+    // spend their cash plus what lenders allow, lambda * d per unit: p h = 1 - h + lambda d.  Two periods (lambda = 1):
+    // the asset pays d only after bad news twice; four equations solved by nested bisection.
+    var PINK = "#E8A0B4", TEAL = "#7FD1B9", LILAC = "#C9A0FF";
+    function bisect(f, a, b) {
+      var fa = f(a), i, m, fm;
+      for (i = 0; i < 80; i++) { m = 0.5 * (a + b); fm = f(m); if ((fm > 0) === (fa > 0)) { a = m; fa = fm; } else b = m; }
+      return 0.5 * (a + b);
+    }
+    function oneShot(d, lam) {
+      var h = bisect(function (x) { return (x + (1 - x) * d) * x - (1 - x) - lam * d; }, 1e-6, 1 - 1e-6);
+      return { h: h, p: h + (1 - h) * d };
+    }
+    function cycle(d) {
+      // for a given h0, find hD from the market at D; then h0 from the marginal buyer today
+      function atD(h0) {
+        var hD = bisect(function (x) {
+          var pD = x + (1 - x) * d, p0 = (1 - h0 + pD) / h0;
+          return pD - (h0 - x) * (1 + p0) - d;
+        }, 1e-6, h0 - 1e-9);
+        var pD = hD + (1 - hD) * d, p0 = (1 - h0 + pD) / h0;
+        return { h0: h0, hD: hD, pD: pD, p0: p0 };
+      }
+      function gap(h0) {
+        var s = atD(h0);
+        var lev = h0 * (1 - s.pD) / Math.max(s.p0 - s.pD, 1e-9);
+        var cash = h0 + (1 - h0) * h0 * (1 - d) / Math.max(s.pD - d, 1e-9);
+        return lev - cash;
+      }
+      var grid = [], k, lo = 0.5, hi = 0.999, prev = gap(lo), cur;
+      for (k = 1; k <= 60; k++) {
+        var x = 0.5 + k * (0.499 / 60); cur = gap(x);
+        if ((cur > 0) !== (prev > 0)) { lo = x - 0.499 / 60; hi = x; break; }
+        prev = cur;
+      }
+      var s = atD(bisect(gap, lo, hi));
+      s.m0 = (s.p0 - s.pD) / s.p0; s.mD = (s.pD - d) / s.pD;
+      return s;
+    }
+    QB.widget(el, {
+      title: "The leverage cycle",
+      sub: "An asset pays 1, or d if the news is bad; people differ in how likely they think good news is. Left: the " +
+           "price against how much lenders will lend (as a share of the safe amount d), with no borrowing (grey " +
+           "dot) and your choice (pink). Right: the two-period cycle with full borrowing: the price today and after " +
+           "bad news, against the value to today's marginal buyer.",
+      panels: 2, height: 280,
+      controls: [
+        { k: "d", label: "Payoff after bad news, d", min: 0.05, max: 0.5, step: 0.01, value: 0.2,
+          fmt: function (x) { return x.toFixed(2); } },
+        { k: "lam", label: "Lenders lend, share of d", min: 0, max: 1, step: 0.05, value: 1,
+          fmt: function (x) { return x.toFixed(2); } },
+      ],
+      draw: function (g, v, st) {
+        var lams = [], ps = [], i;
+        for (i = 0; i <= 20; i++) { lams.push(i / 20); ps.push(oneShot(v.d, i / 20).p); }
+        var me = oneShot(v.d, v.lam), none = oneShot(v.d, 0);
+        var a1 = g[0].axes({ x: [0, 1], y: [0.4, 1], title: "Price, one period", xlabel: "lending, share of d" });
+        a1.line(lams, ps, { color: LILAC, width: 2.5 });
+        a1.hline(0.5 + 0.5 * v.d, { color: GREY_HINT });
+        a1.text(0.02, 0.5 + 0.5 * v.d + 0.03, "the average opinion", { color: GREY_HINT, size: 11 });
+        a1.dots([0], [none.p], { color: GREY_HINT, r: 5 });
+        a1.dots([v.lam], [me.p], { color: PINK, r: 6 });
+        var c = cycle(v.d);
+        var a2 = g[1].axes({ x: [0, 3], y: [0, 1.05], title: "Two periods, full borrowing", xlabel: "" });
+        a2.bars([0.6, 1.5], [c.p0, c.pD], 0.5, { color: function (j) { return j ? RED : TEAL; } });
+        var v0 = c.h0 + (1 - c.h0) * (c.h0 + (1 - c.h0) * v.d), vD = c.h0 + (1 - c.h0) * v.d;
+        a2.dots([0.6, 1.5], [v0, vD], { color: GOLD, r: 5 });
+        a2.text(0.6, c.p0 + 0.05, "today " + c.p0.toFixed(2), { align: "center", size: 11 });
+        a2.text(1.5, c.pD + 0.05, "after bad news " + c.pD.toFixed(2), { align: "center", size: 11 });
+        a2.text(2.1, 0.9, "gold: the old marginal buyer's value", { color: GOLD, size: 11 });
+        st.me = me; st.none = none; st.c = c; st.v0 = v0; st.vD = vD;
+      },
+      readout: function (v, st) {
+        return [["price with no borrowing / with yours", st.none.p.toFixed(3) + " / " + st.me.p.toFixed(3) +
+                  " (marginal buyer h = " + st.me.h.toFixed(2) + ")"],
+                ["two periods: price today, after bad news", st.c.p0.toFixed(3) + " -> " + st.c.pD.toFixed(3) + " (" +
+                  (100 * (1 - st.c.pD / st.c.p0)).toFixed(0) + "% fall)"],
+                ["the news itself, to today's marginal buyer", (100 * (1 - st.vD / st.v0)).toFixed(0) + "% fall"],
+                ["margins: today, after bad news", (100 * st.c.m0).toFixed(0) + "% -> " + (100 * st.c.mD).toFixed(0) +
+                  "%"]];
+      },
+      note: "Geanakoplos (2010), as computed in Part 33, chapter 6: with d = 0.2 the price is 0.95 today and 0.69 after " +
+            "bad news, while margins rise from 27% to 71%. Computed in your browser; nothing you do here is stored or " +
+            "sent.",
+    });
+  };
 })();

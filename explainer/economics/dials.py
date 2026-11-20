@@ -726,6 +726,33 @@ DIALS = {d.key: d for d in [
              Estimate("this film (US, 2007-09)", 2026, "event study", "US real GDP in 2019 Q4 below its 1990-2007 "
                       "trend (3.2 percent a year)", 17.6, where="videos/economics/econ26/compute.py, item crisis",
                       checked="2026-11-20"),
+             Estimate("this film (JST since 1948)", 2026, "event study", "18 advanced economies, 1948-2020: real "
+                      "GDP per head five years after the peak, recessions with a banking crisis against normal ones "
+                      "(25 and 86)", 7.7,
+                      where="videos/economics/econ33/compute.py, item recessions", checked="2026-11-20"),
+             Estimate("this film (JST since 1870)", 2026, "event study", "the same, 1870-2020, war years left out "
+                      "(97 and 230)", 2.4,
+                      where="videos/economics/econ33/compute.py, item recessions", checked="2026-11-20"),
+         )),
+    Dial("credit_warning", "warning value of a credit boom", "percent chance that a banking crisis starts within "
+         "three years, after a boom in credit (and, where stated, asset prices)", (33,),
+         status="settled within a range", checked="2026-11-20",
+         meaning="credit booms are the best single warning of a crisis: after the fastest growth in credit the chance "
+                 "of a crisis within three years is two to four times the usual one in ten, and higher when house or "
+                 "stock prices have boomed too; but most booms still end without one, and out of sample the timing is "
+                 "hard to call, so a warning justifies leaning against a boom, not predicting the date",
+         estimates=(
+             Estimate("Greenwood, Hanson, Shleifer and Sorensen", 2022, "regression", "42 countries, 1950-2016: "
+                      "rapid credit and asset-price growth in the business or household sector (about 7% otherwise)",
+                      40.0, where="Journal of Finance 77(2): 863-921, abstract", checked="2026-11-20"),
+             Estimate("this film (JST, credit and houses)", 2026, "regression", "18 countries, 1870-2017: the "
+                      "three-year rise in loans to GDP and in real house prices both in their top fifth "
+                      "(5% when neither)", 33.3,
+                      where="videos/economics/econ33/compute.py, item panel", checked="2026-11-20"),
+             Estimate("this film (JST, credit alone)", 2026, "regression", "the same, the top fifth of the rise in "
+                      "loans to GDP alone (6% in the bottom fifth)",
+                      18.4, where="videos/economics/econ33/compute.py, item panel",
+                      checked="2026-11-20"),
          )),
     Dial("monetary_shock", "effect of a 100-basis-point tightening on output", "percent fall in industrial "
          "production at its peak, one to three years after the shock", (31, 55), status="contested",
@@ -1520,6 +1547,30 @@ SHOWN = {
         ("Christiano, Eichenbaum and Evans (2005); Smets and Wouters (2007)", "medium-scale frictions; the hump "
          "computed with habits, indexation and smoothing"),
         ("Bernanke (2002)", "the Called it? card on deflation"),
+    ],
+    33: [
+        ("Besley and Hennessy (2009)", "the British Academy's letter to the Queen, quoted"),
+        ("Kindleberger (1978); Minsky (1986)", "the anatomy of manias and Minsky's three kinds of borrower, computed "
+         "for the Island"),
+        ("Fisher (1933)", "debt deflation, quoted and computed; US 1929-33 from the JST database"),
+        ("Bernanke (1983)", "bank failures as lost information, stated; the suspensions from FRED"),
+        ("Townsend (1979); Bernanke, Gertler and Gilchrist (1999)", "costly state verification and the financial "
+         "accelerator, computed in Agora"),
+        ("Kiyotaki and Moore (1997)", "the collateral cycle, solved exactly in Agora"),
+        ("Geanakoplos (2010); Shleifer and Vishny (1992); Brunnermeier and Pedersen (2009); Gorton and Metrick (2012)",
+         "the leverage cycle computed; fire sales, liquidity spirals and repo haircuts stated"),
+        ("Mian, Rao and Sufi (2013); Mian and Sufi (2014)", "the MPC out of housing wealth, stated; the design rerun "
+         "on the Island's counties"),
+        ("Schularick and Taylor (2012); Jorda, Schularick and Taylor (2013, 2017)", "the crisis predictor and the "
+         "shape of recessions, recomputed from the Macrohistory Database"),
+        ("Greenwood, Hanson, Shleifer and Sorensen (2022)", "predictable crises, entered in the credit-warning dial"),
+        ("Reinhart and Rogoff (2009); Romer and Romer (2017)", "the aftermath of crises, in the crisis-cost dial"),
+        ("Basel Committee (2010); Cerutti, Claessens and Laeven (2017); Jimenez, Ongena, Peydro and Saurina (2017)",
+         "the countercyclical buffer's guide computed; macroprudential evidence stated"),
+        ("Calvo (1998); Eichengreen and Hausmann (1999)", "sudden stops and original sin, stated with the exchange "
+         "rates from FRED"),
+        ("Brunnermeier and Sannikov (2014)", "the frontier: nonlinear macro-finance, stated"),
+        ("Rajan (2005)", "the Called it? card"),
     ],
     32: [
         ("Reinhart and Rogoff (2010); Herndon, Ash and Pollin (2014)", "the 90% result, recomputed step by step from "

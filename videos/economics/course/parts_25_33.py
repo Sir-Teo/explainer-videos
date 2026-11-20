@@ -362,4 +362,48 @@ PARTS = [
               ("The Island's planted truths", "explainer/economics/island.py"),
               ("The Data Room's sources", "explainer/economics/data/SOURCES.md")),
     ),
+    Part(
+        n=33, level="U", widget="leverage", prereq=(13, 23, 26, 29, 30, 31),
+        question="Why do financial systems blow up, and why is it so hard to see it coming?",
+        story="The part opens on the Queen's question at the LSE in November 2008 and the British Academy's answer, a "
+              "failure of the collective imagination of many bright people. The viewer judges the eight largest "
+              "postwar credit booms, unlabelled; then Kindleberger's anatomy and Minsky's borrowers on the Island, "
+              "Fisher's debt deflation with America in 1929-33 and Bernanke's bank failures, the costly-verification "
+              "contract and the financial accelerator, Kiyotaki and Moore's collateral cycle solved exactly, and "
+              "Geanakoplos's leverage cycle. It tells 2008 in order, reruns Mian and Sufi's county design on the "
+              "Island, and after an intermission of credit since 1870 fits the crisis predictor to the Macrohistory "
+              "Database in and out of sample, scores the viewer's guesses, and turns to fighting crises, "
+              "macroprudential policy with Basel's guide computed for Spain, and sudden stops; two dials, Rajan's "
+              "2005 warning as Called it?, and a frontier of nonlinear macro-finance and runs outside banks.",
+        handoff="Part 34 opens the economy to the world; Part 63 returns to contagion through financial networks.",
+        outside="Part 13: hidden information; Part 23: Modigliani and Miller; Part 26: runs and the lender of last "
+                "resort; Part 29: the growth model; Part 30: the New Keynesian model; Part 31: the central bank's "
+                "balance sheet. Chapter 4 uses the lognormal's partial expectations; chapter 5 a perfect-foresight "
+                "path found by root-finding; chapter 9 logits and ROC curves.",
+        objectives={
+            "U": ["Describe Kindleberger's anatomy of a mania and Minsky's hedge, speculative and Ponzi borrowers.",
+                  "Explain debt deflation, and why a credit boom raises the odds of a crisis without fixing its date.",
+                  "Tell the crisis of 2008 in order, and describe the tools used to fight it and to prevent the "
+                  "next."],
+            "M": ["Estimate a crisis predictor by logit, score it by the ROC curve in and out of sample, and explain "
+                  "why the two differ.",
+                  "Compare normal and financial recessions in a long panel, and compute a credit gap by a one-sided "
+                  "filter."],
+            "D": ["Derive the costly-state-verification contract's premium and the financial accelerator.",
+                  "Solve Kiyotaki and Moore's collateral cycle and separate its static and dynamic multipliers.",
+                  "Solve Geanakoplos's leverage cycle with natural buyers."],
+            "I": ["Read a financial-stability report: credit gaps, leverage, margins and funding."],
+        },
+        results=[
+            ("Minsky's borrowers", r"\text{hedge: } \pi \ge rD + D/T, \quad \text{Ponzi: } \pi < rD"),
+            ("Debt deflation", r"b_{t+1} = b_t\,(1 - \text{repay}) / \big((1 - \text{deflation})(1 + g)\big)"),
+            ("The collateral constraint", r"b_t \le q_{t+1} k_t / R, \qquad u_t = q_t - q_{t+1}/R"),
+            ("The leverage price", r"p\,h = 1 - h + d, \qquad p = h + (1 - h)\,d"),
+            ("Basel's guide", r"\text{buffer} = 2.5\% \times \min\big(1, \max(0, (\text{gap} - 2)/8)\big)"),
+        ],
+        U=(0, 1, 2, 3, 7, "s09_intermission", 8, 9, 10, 11, 12, 13, 14), D=(4, 5, 6, 16), I=(15,),
+        also=(("Agora's credit", "explainer/economics/agora/credit.py"),
+              ("The Island's planted truths", "explainer/economics/island.py"),
+              ("The Data Room's sources", "explainer/economics/data/SOURCES.md")),
+    ),
 ]

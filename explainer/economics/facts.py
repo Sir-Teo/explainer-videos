@@ -127,6 +127,12 @@ AGORA = {
     "hump": (30, "in the three-equation model a monetary tightening cuts output most at once; with habits (0.9), "
                  "price indexation (0.9) and a smoothed rule (0.8) the trough comes two quarters after the shock, still "
                  "sooner than in the data"),
+    # Part 33 built the amplification mechanisms and fitted the predictor
+    "credit_booms": (33, "in Agora, credit amplifies: a 1% loss for farmers who borrow against land cuts their land "
+                         "5.3% once the land price feeds back (0.67% if it did not), and leverage bought on the "
+                         "optimists' beliefs makes a price fall from 0.95 to 0.69 on news worth 9%; in the data, a "
+                         "crisis follows within three years in 18% of the fastest credit booms and 33% when house "
+                         "prices boom too, against 6% after the slowest"),
     # Part 29 measured the US cycle (1948-2019) and simulated the real business cycle model
     "volatility": (29, "in a growth model with random technology, consumption smoothing and capital's long life make "
                        "investment swing and consumption hold steady: in the Island's real business cycle investment is "

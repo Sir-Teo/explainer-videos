@@ -389,4 +389,19 @@ CALLS = {c.key: c for c in [
          "right",
          ("B. Holmström and P. Milgrom, Journal of Law, Economics and Organization 7 (1991): 24-52",
           "B. A. Jacob and S. D. Levitt, Quarterly Journal of Economics 118(3) (2003): 843-877, abstract")),
+    Call("rajan_2005", 33, "Raghuram Rajan, at the Federal Reserve Bank of Kansas City's Jackson Hole symposium",
+         "August 2005",
+         "financial development has made the world riskier in ways that are not appreciated: managers paid for "
+         "returns relative to their peers are drawn to hide tail risks and to herd, and these behaviours can "
+         "reinforce each other in a boom, creating a greater (albeit still small) probability of a catastrophic "
+         "meltdown",
+         "the incentives of intermediaries' managers, and the illiquidity of the markets they would all try to sell in "
+         "at once",
+         "three years later the system came close to the meltdown he described: tail risks written by AIG and held "
+         "in banks' off-balance-sheet vehicles came due together, and the markets everyone relied on for liquidity "
+         "froze; he did not name housing or a date, and the paper says more work was needed to size the risk",
+         "right",
+         ("R. G. Rajan, \"Has Financial Development Made the World Riskier?\", Proceedings of the Economic Policy "
+          "Symposium, Jackson Hole (2005): 313-369; NBER Working Paper 11728",
+          "Federal Reserve Bank of Minneapolis, The Region (December 2009), on the paper's reception")),
 ]}
