@@ -961,6 +961,29 @@ TRUTHS = {
         # evasion (chapter 13): a 30% tax, a fine equal to the evaded tax, relative risk aversion 2
         "evasion": {"t": 0.3, "theta": 1.0, "rho": 2.0},
     },
+    42: {
+        # pooling (chapter 1): a 3% chance of losing one's job in a normal year, 9% in a recession (one year in seven)
+        "pooling": {"p_low": 0.03, "p_high": 0.09, "q": 0.15},
+        # unemployment insurance, the static model (chapters 2 to 4): resources A besides the wage, risk aversion 2;
+        # search costs calibrated so that, at a benefit of half the wage, 80% find work and the elasticity of
+        # staying unemployed (holding the tax fixed) is one half
+        "baily": {"gamma": 2.0, "w": 1.0, "A": 3.0, "theta": 0.3856, "kappa": 11.81},
+        # week by week (chapter 4): half the wage for 26 weeks, then a fifth; no savings
+        "weekly": {"b": 0.5, "K": 26, "floor": 0.2, "gamma": 2.0, "beta": 0.999, "theta": 240.0, "kappa": 0.5},
+        # health insurance (chapter 6): illness lognormal (median 5% of income, sigma 1.3, capped at 70%), seven in
+        # ten fall ill in a year; free care costs 1/0.7 times as much as a 95% coinsurance plan (RAND's ratio)
+        "health": {"gamma": 3.0, "p_sick": 0.7, "median": 0.05, "sigma": 1.3, "cap": 0.7, "k": 0.316},
+        # the lottery (chapter 7): 75,000 on the list, 40% drawn; coverage effects planted
+        "lottery": {"n": 75000, "drawn": 0.4, "take_up": 0.3, "other": 0.14, "runs": 200, "seed": 42},
+        # defaults (chapter 9): employees act on their choice about once in twenty-two months
+        "defaults": {"attention": 0.045, "want": 0.75, "default": 0.03, "seed": 42},
+        # disability examiners (chapter 10)
+        "examiners": {"n": 60000, "j": 200, "spread": 0.12, "seed": 42},
+        # tagging (chapter 11): a fifth are needy; the tag catches 70% of them and 10% of the rest
+        "tagging": {"needy": 0.2, "catch": 0.7, "false_tag": 0.1},
+        # a basic income (chapter 12): 20,000 incomes, lognormal around $50,000; elasticity of the base 0.25
+        "ubi": {"n": 20000, "median": 50000.0, "sigma": 0.7, "e": 0.25, "seed": 42},
+    },
 }
 
 

@@ -48,8 +48,9 @@ class Hook(VoiceoverScene):
             "and when; the cloth napkin in the Smithsonian may have been drawn years later. The curve itself is not."
         ) as vo:
             self.play(FadeIn(cloth), FadeIn(fold), FadeIn(tag), FadeIn(side[0]), run_time=1.5)
+            self.play(Create(xax), Create(yax), FadeIn(lx), FadeIn(ly), run_time=1.5)
             vo.wait_until("a")
-            self.play(Create(xax), Create(yax), FadeIn(lx), FadeIn(ly), FadeIn(z0), FadeIn(z1))
+            self.play(FadeIn(z0), FadeIn(z1), Indicate(lx, color=INK), Indicate(ly, color=INK))
             vo.wait_until("b")
             self.play(Create(curve), FadeIn(side[1]), run_time=3.0)
             vo.wait_until("c")

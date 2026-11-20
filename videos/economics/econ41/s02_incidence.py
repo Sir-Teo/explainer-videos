@@ -20,6 +20,8 @@ class Incidence(VoiceoverScene):
                            notes=[r"the statutory \\ incidence", r"if capital \\ cannot move", r"if it can: \\ abroad, "
                                   r"\\ or not saved", r"the wage \\ falls"], box_w=2.7, font_size=19,
                            note_size=15).move_to(UP * 0.8)
+        head = label(r"the corporate tax: \ who pays it, \ and who bears it?", font_size=28,
+                     color=E.ACCENT).to_edge(UP, buff=0.6)
         foot = label(r"Part 2: \ a tax on a market falls on whichever side can least escape it", font_size=20,
                      color=GREY_A).to_edge(DOWN, buff=0.9)
         with self.voiceover(
@@ -32,9 +34,9 @@ class Incidence(VoiceoverScene):
             "this out for a closed economy, with a fixed stock of capital, and found that capital bears about all of "
             "it."
         ) as vo:
-            self.play(FadeIn(foot))
+            self.play(FadeIn(head), FadeIn(foot), FadeIn(steps.boxes[0]), FadeIn(steps.notes[0]))
             vo.wait_until("a")
-            self.play(FadeIn(steps.boxes[0]), FadeIn(steps.notes[0]))
+            self.play(Indicate(steps.boxes[0], color=CAPITAL))
             vo.wait_until("b")
             self.play(GrowArrow(steps.arrows[0]), FadeIn(steps.boxes[1]), FadeIn(steps.notes[1]))
             vo.wait_until("c")

@@ -688,7 +688,46 @@ DIALS = {d.key: d for d in [
              Estimate("this film (the Island open)", 2026, "calibration", "Cobb-Douglas, capital perfectly mobile",
                       100.0, where="videos/economics/econ41/compute.py, item harberger", checked="2026-11-20"),
          )),
-    Dial("ui_duration", "duration elasticity of unemployment benefits", "", (42,)),
+    Dial("ui_duration", "duration elasticity of unemployment benefits", "percent longer unemployment for a 1% higher "
+         "weekly benefit", (24, 42), status="settled within a range", checked="2026-11-20",
+         meaning="the cost side of the Baily-Chetty formula: at 0.4 to 0.8, benefits that replace half of wages "
+                 "cost more in longer unemployment than they gain in smoother consumption unless people are very "
+                 "averse to risk, or unless much of the response is liquidity rather than moral hazard",
+         estimates=(
+             Estimate("Meyer", 1990, "regression", "American spells of the 1970s and 1980s, a semiparametric hazard "
+                      "model; a 10% higher benefit lengthens spells by 4-8%", 0.6, lo=0.4, hi=0.8,
+                      where="Econometrica 58(4): 757-782, as summarized by Chetty", checked="2026-11-20"),
+             Estimate("this film (the Island week by week)", 2026, "calibration", "26 weeks of half the wage, then "
+                      "a fifth; no savings", 0.41, where="videos/economics/econ42/compute.py, item weekly",
+                      checked="2026-11-20"),
+         )),
+    Dial("med_price", "price elasticity of medical spending", "percent change in medical spending for a 1% higher "
+         "out-of-pocket price", (42,), status="contested", checked="2026-11-20",
+         meaning="how much of insurance's extra spending is moral hazard: at -0.2, cutting the price from full to "
+                 "free raises spending by about 40%; the optimal coinsurance rate rises with the elasticity, and the "
+                 "summary itself is fragile because plans have deductibles and caps, so no single price applies",
+         estimates=(
+             Estimate("RAND (Manning et al.)", 1987, "RCT", "2,750 families at six sites, 1974-1982, plans from free "
+                      "care to 95% coinsurance", -0.2, where="AER 77(3): 251-277", checked="2026-11-20"),
+             Estimate("this film (the Island)", 2026, "calibration", "arc elasticity between 25% and 95% "
+                      "coinsurance, with free care costing 1/0.7 times the 95% plan", -0.23,
+                      where="videos/economics/econ42/compute.py, item health", checked="2026-11-20"),
+         )),
+    Dial("mvpf", "marginal value of public funds", "dollars of benefit to recipients per dollar of net cost to the "
+         "government", (42,), status="depends on the setting", checked="2026-11-20",
+         meaning="one yardstick for every policy: above one, a dollar spent delivers more than a dollar of value, "
+                 "because the policy raises other revenue; policies for children often pay for themselves, while "
+                 "most for adults lie between a half and two",
+         estimates=(
+             Estimate("Hendren and Sprung-Keyser", 2020, "review", "133 American policies; those aimed at adults",
+                      1.0, lo=0.5, hi=2.0, where="QJE 135(3): 1209-1318", checked="2026-11-20"),
+             Estimate("this film (the Island's UI at its best)", 2026, "calibration", "Baily's model at the "
+                      "welfare-maximizing benefit, a third of the wage", 1.0,
+                      where="videos/economics/econ42/compute.py, item mvpf", checked="2026-11-20"),
+             Estimate("this film (the Island's EITC)", 2026, "calibration", "a 10% larger credit for single "
+                      "parents who choose whether to work", 1.06,
+                      where="videos/economics/econ42/compute.py, item mvpf", checked="2026-11-20"),
+         )),
     Dial("matching", "elasticity of matches to unemployment", "eta in M = A U^eta V^(1-eta); one minus the elasticity "
          "of the job-finding rate with respect to openings per searcher", (24, 29, 42), status="settled within a range",
          checked="2026-11-20",
@@ -1858,6 +1897,26 @@ SHOWN = {
         ("Christiano, Eichenbaum and Evans (2005); Smets and Wouters (2007)", "medium-scale frictions; the hump "
          "computed with habits, indexation and smoothing"),
         ("Bernanke (2002)", "the Called it? card on deflation"),
+    ],
+    42: [
+        ("Finkelstein et al. (2012); Baicker et al. (2013); Taubman et al. (2014)", "the Oregon lottery, its design "
+         "computed on the Island and its results stated"),
+        ("RAND (1974-1982); Manning et al. (1987); Aron-Dine, Einav and Finkelstein (2013)", "the experiment stated; "
+         "the elasticity entered in a dial; moral hazard computed on the Island"),
+        ("Arrow (1963)", "stated"),
+        ("Baily (1978); Chetty (2006)", "the formula derived and checked on the Island"),
+        ("Chetty (2008)", "the liquidity split computed on the Island; the 60% stated"),
+        ("Meyer (1990); Card, Chetty and Weber (2007); Schmieder, von Wachter and Bender (2012)",
+         "durations computed on the Island; findings stated; Meyer entered in a dial"),
+        ("Gruber (1997); Ganong and Noel (2019)", "the consumption drop stated and used in the formula"),
+        ("Madrian and Shea (2001); Chetty et al. (2014)", "defaults computed on the Island; findings stated"),
+        ("Maestas, Mullen and Strand (2013)", "the examiner design computed on the Island; the finding stated"),
+        ("Eissa and Liebman (1996); IRS (2025)", "the schedule computed; the finding stated"),
+        ("Robins (1985)", "the negative income tax experiments, stated"),
+        ("Kela (2020); Vivalt et al. (2024); Banerjee et al. (2023)", "basic income trials, stated"),
+        ("Hendren and Sprung-Keyser (2020); Finkelstein, Hendren and Luttmer (2019)", "the MVPF computed on the "
+         "Island and entered in a dial"),
+        ("SSA Trustees (2025); CRS (2022)", "pension arithmetic computed; the Called it? card"),
     ],
     41: [
         ("Laffer (1974); Wanniski (1978)", "the napkin, its story and its dispute; the curve computed"),

@@ -467,6 +467,22 @@ TAX_FRED = {
 FRED_SERIES.update(TAX_FRED)
 FRED_RETRIEVED.update({s: "2026-11-20" for s in TAX_FRED})
 
+# Part 42: unemployment insurance claims and benefits (Department of Labor's Employment and Training Administration;
+# BEA), and the duration of unemployment (BLS)
+SOCIAL_FRED = {
+    "CCSA": ("Continued claims (insured unemployment)", "number", "weekly, ending Saturday, seasonally adjusted",
+             "U.S. Employment and Training Administration"),
+    "ICSA": ("Initial claims", "number", "weekly, ending Saturday, seasonally adjusted",
+             "U.S. Employment and Training Administration"),
+    "IURSA": ("Insured unemployment rate", "percent", "weekly, ending Saturday, seasonally adjusted",
+              "U.S. Employment and Training Administration"),
+    "W825RC1": ("Personal current transfer receipts: government social benefits to persons: unemployment insurance",
+                "billions of dollars, seasonally adjusted annual rate", "monthly", "U.S. Bureau of Economic Analysis"),
+    "UEMPMED": ("Median weeks unemployed", "weeks", "monthly, seasonally adjusted", "U.S. Bureau of Labor Statistics"),
+}
+FRED_SERIES.update(SOCIAL_FRED)
+FRED_RETRIEVED.update({s: "2026-11-20" for s in SOCIAL_FRED})
+
 SPF_FILES = ("median_rgdp_level", "median_rgdp_growth", "median_recess_level")
 SPF_URL = ("https://www.philadelphiafed.org/-/media/frbp/assets/surveys-and-data/survey-of-professional-forecasters/"
            "data-files/files/{}.xlsx")

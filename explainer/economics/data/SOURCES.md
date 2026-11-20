@@ -91,6 +91,9 @@ film that moves to a new vintage says so on screen.
 | `fred_GINIALLRH.csv` | the Gini index of household money income, annual from 1967 | U.S. Census Bureau, Current Population Survey, via FRED | public domain | 2026-11-20 |
 | `fred_IITTRHB.csv`, `fred_IITTIHB.csv` | the top statutory rate of the US individual income tax and the taxable income above which it applies (married couples filing jointly), annual 1913-2018 | Internal Revenue Service, Statistics of Income, Historical Table 23, via FRED | public domain | 2026-11-20 |
 | `fred_FYFRGDA188S.csv`, `fred_FYFSGDA188S.csv` | federal receipts and the federal surplus or deficit as percentages of GDP, fiscal years from 1929 | U.S. Office of Management and Budget, via FRED | public domain | 2026-11-20 |
+| `fred_CCSA.csv`, `fred_ICSA.csv`, `fred_IURSA.csv` | continued and initial claims for state unemployment insurance and the insured unemployment rate, weekly, seasonally adjusted, from 1967 (the rate from 1971) | U.S. Department of Labor, Employment and Training Administration, via FRED | public domain | 2026-11-20 |
+| `fred_W825RC1.csv` | unemployment insurance benefits paid to persons, billions of dollars at a seasonally adjusted annual rate, monthly from 1959 | U.S. Bureau of Economic Analysis, via FRED | public domain | 2026-11-20 |
+| `fred_UEMPMED.csv` | median duration of unemployment in weeks, monthly from 1967 | U.S. Bureau of Labor Statistics, via FRED | public domain | 2026-11-20 |
 
 The raw Maddison workbook (`mpd2023_web.xlsx`, dataverse file 421302) had SHA-256
 `ecc5916ca12789b983fc4be437f8a354bbf4291323605324ac3e0aea4c57cbb6` when the extract was made. The raw Pink Sheet
@@ -305,3 +308,17 @@ publication, the copy that was read and the date the transcription was checked:
 | `evasion` | Allingham and Sandmo; Denmark's audit experiment (0.3% and 37%) | 2026-11-20 |
 | `frontier41` | footballers' migration: elasticities of about one (foreign) and 0.15 (domestic) | 2026-11-20 |
 | `tcja_2017` | the 2017 tax act: 'it will pay for itself'; CBO's $1.9 trillion | 2026-11-20 |
+| `oregon_2008` | Oregon's Medicaid lottery: about 90,000 on the list, about 30,000 drawn, 10,000 places; the first stage, care, depression, blood pressure, emergency visits | 2026-11-20 |
+| `rand_hie` | the RAND Health Insurance Experiment: design, spending by plan, the -0.2 summary | 2026-11-20 |
+| `arrow_1963` | Arrow on the welfare economics of medical care | 2026-11-20 |
+| `ui_theory` | Baily and Chetty's formula; Chetty's 60% liquidity share | 2026-11-20 |
+| `ui_evidence` | Meyer; Card, Chetty and Weber; Schmieder, von Wachter and Bender; Gruber; Ganong and Noel | 2026-11-20 |
+| `chetty_dk_2014` | Denmark's active and passive savers; one cent per dollar of subsidy | 2026-11-20 |
+| `disability_2013` | Maestas, Mullen and Strand's examiner design | 2026-11-20 |
+| `eitc_2025` | the 2025 EITC schedule for three or more children; Eissa and Liebman | 2026-11-20 |
+| `nit_1968` | the negative income tax experiments, as summarized by Robins | 2026-11-20 |
+| `ubi_trials` | Finland's basic income experiment, OpenResearch's cash study, GiveDirectly's Kenyan study | 2026-11-20 |
+| `mvpf_2020` | Hendren and Sprung-Keyser's 133 policies; the value of Medicaid | 2026-11-20 |
+| `pensions` | workers per Social Security beneficiary, 1960-2035; the depletion date | 2026-11-20 |
+| `ss_1983` | the 1983 amendments' 75-year solvency and today's depletion date | 2026-11-20 |
+| `frontier42` | Part 42's frontier, stated in words | 2026-11-20 |

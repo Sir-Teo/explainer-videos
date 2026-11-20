@@ -46,10 +46,12 @@ class PlayIt(VoiceoverScene):
             "rate that raises the most. <bookmark mark='d'/> Which rate is it: thirty-seven percent, the current "
             "federal top rate; fifty; seventy-two; or ninety? Pause, and choose."
         ) as vo:
-            self.play(FadeIn(head), FadeIn(tag))
+            for n_ in nums:
+                n_.set_opacity(0.3)
+            self.play(FadeIn(head), FadeIn(tag), FadeIn(nums, lag_ratio=0.2), run_time=1.5)
             for mk, n_ in zip("abc", nums):
                 vo.wait_until(mk)
-                self.play(FadeIn(n_, shift=UP * 0.1))
+                self.play(n_.animate.set_opacity(1.0), Indicate(n_[1], scale_factor=1.15))
             vo.wait_until("d")
             self.play(FadeIn(opts), FadeIn(ring))
         self.add(ring[1])
@@ -66,7 +68,7 @@ class PlayIt(VoiceoverScene):
         hl = SurroundingRectangle(opts[2], color=GAIN, buff=0.12)
         foot = label(rf"Diamond and Saez (2011), \ with $a$ = 1.5: \ {100 * P['ds_rate']:.0f}\%; \ all taxes on top "
                      r"income combined, \ not only the federal rate", font_size=18, color=GREY_A).to_edge(DOWN,
-                                                                                                 buff=0.35)
+                                                                                                 buff=0.8)
         with self.voiceover(
             "The answer is C. <bookmark mark='a'/> The formula, derived in chapter six, is one minus g over one minus "
             f"g plus a times e: with these numbers, {100 * P['rates']['0.25']:.0f} percent. <bookmark mark='b'/> "

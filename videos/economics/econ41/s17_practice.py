@@ -46,10 +46,10 @@ class Practice(VoiceoverScene):
             y = 1.1 - 2.2 * k
             vals = [(r"static", c["static"], GREY_B), (r"$e$ = 0.25", c["dynamic"]["0.25"], TOP),
                     (r"$e$ = 1", c["dynamic"]["1.0"], LOSS)]
-            g = VGroup(label(nm, font_size=20, color=WHITE).move_to(np.array([-4.8, y, 0])))
+            g = VGroup(label(nm, font_size=20, color=WHITE).move_to(np.array([-5.7, y, 0])))
             for j, (lab_, v, col) in enumerate(vals):
                 yy = y + 0.45 - 0.45 * j
-                w = abs(v) * 30
+                w = abs(v) * 19
                 r = Rectangle(width=max(w, 0.03), height=0.32, stroke_width=0, fill_color=col,
                               fill_opacity=0.85).move_to(np.array([-1.4 + (w / 2 if v > 0 else -w / 2), yy, 0]))
                 pctv = 100 * v / c["static"]

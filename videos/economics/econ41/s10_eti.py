@@ -14,13 +14,13 @@ class ETI(VoiceoverScene):
         self.choice()
 
     def century(self):
-        E = load("eti")
-        ys = np.array(E["years"])
+        Et = load("eti")
+        ys = np.array(Et["years"])
         ax = plane([1913, 2026], [0, 100], center=LEFT * 1.6 + DOWN * 0.4, x_length=8.8, y_length=4.8,
                    xticks=[1920, 1940, 1960, 1980, 2000, 2020], yticks=[0, 25, 50, 75, 100],
                    ylabel=r"percent", xfmt=lambda v: f"{v:.0f}", yfmt=lambda v: f"{v:.0f}", font_size=14)
-        rate = path(ax, ys, E["rate"], RATE, 3.0, smooth=False)
-        share = path(ax, ys, 4 * np.array(E["top1"]), TOP, 3.2, smooth=False)
+        rate = path(ax, ys, Et["rate"], RATE, 3.0, smooth=False)
+        share = path(ax, ys, 4 * np.array(Et["top1"]), TOP, 3.2, smooth=False)
         side = VGroup(
             label(r"pink: \ the top statutory rate", font_size=18, color=RATE),
             label(r"gold: \ the top 1\% share \\ of income, \ times 4", font_size=18, color=TOP),
@@ -50,14 +50,14 @@ class ETI(VoiceoverScene):
         self.clear_scene()
 
     def tra86(self):
-        E = load("eti")
-        rows = [(r"the top rate, \ 1986 $\to$ 1988", rf"{E['r1986']:.0f}\% $\to$ {E['r1988']:.0f}\%", RATE),
-                (r"the share kept, \ $1 - t$", rf"{100 - E['r1986']:.0f}\% $\to$ {100 - E['r1988']:.0f}\% \ "
-                                                rf"(+{100 * ((100 - E['r1988']) / (100 - E['r1986']) - 1):.0f}\%)",
+        Et = load("eti")
+        rows = [(r"the top rate, \ 1986 $\to$ 1988", rf"{Et['r1986']:.0f}\% $\to$ {Et['r1988']:.0f}\%", RATE),
+                (r"the share kept, \ $1 - t$", rf"{100 - Et['r1986']:.0f}\% $\to$ {100 - Et['r1988']:.0f}\% \ "
+                                                rf"(+{100 * ((100 - Et['r1988']) / (100 - Et['r1986']) - 1):.0f}\%)",
                  GAIN),
-                (r"the top 1\% share of income", rf"{E['s1986']:.1f}\% $\to$ {E['s1988']:.1f}\% \ "
-                                                  rf"(+{100 * (E['s1988'] / E['s1986'] - 1):.0f}\%)", TOP),
-                (r"implied elasticity", rf"{E['tra86']:.2f}", E.ACCENT)]
+                (r"the top 1\% share of income", rf"{Et['s1986']:.1f}\% $\to$ {Et['s1988']:.1f}\% \ "
+                                                  rf"(+{100 * (Et['s1988'] / Et['s1986'] - 1):.0f}\%)", TOP),
+                (r"implied elasticity", rf"{Et['tra86']:.2f}", E.ACCENT)]
         tbl = VGroup(*[VGroup(label(a, font_size=22, color=WHITE), label(b, font_size=22, color=c)).arrange(
             RIGHT, buff=0.6) for a, b, c in rows]).arrange(DOWN, aligned_edge=LEFT, buff=0.38).move_to(UP * 0.5)
         head = label(r"the Tax Reform Act of 1986", font_size=28, color=E.ACCENT).to_edge(UP, buff=0.5)
@@ -65,17 +65,17 @@ class ETI(VoiceoverScene):
             label(r"much of it was relabelling: \ business profits moved from corporate to personal returns",
                   font_size=19,
                   color=GREY_A),
-            label(rf"and timing: \ with capital gains, \ the top share jumped to {E['s1986_kg']:.1f}\% in 1986, \ "
-                  rf"before a higher capital-gains rate, \ then fell back to {E['s1987_kg']:.1f}\%", font_size=19,
+            label(rf"and timing: \ with capital gains, \ the top share jumped to {Et['s1986_kg']:.1f}\% in 1986, \ "
+                  rf"before a higher capital-gains rate, \ then fell back to {Et['s1987_kg']:.1f}\%", font_size=19,
                   color=GREY_A),
         ).arrange(DOWN, buff=0.15).to_edge(DOWN, buff=0.55)
         tag = data_tag(r"IRS via FRED; \ Piketty and Saez; \ " + tables.ETI_STUDIES.tag, corner=DR, font_size=10)
         with self.voiceover(
             "The sharpest American reform cut the top rate from fifty percent in 1986 to twenty-eight in 1988. "
             "<bookmark mark='a'/> The share of each extra dollar a top earner kept rose by "
-            f"{100 * ((100 - E['r1988']) / (100 - E['r1986']) - 1):.0f} percent. <bookmark mark='b'/> The top one "
-            f"percent's share of income rose by {100 * (E['s1988'] / E['s1986'] - 1):.0f} percent, "
-            f"<bookmark mark='c'/> an elasticity of about {E['tra86']:.1f}. In 1995 Martin Feldstein, following the "
+            f"{100 * ((100 - Et['r1988']) / (100 - Et['r1986']) - 1):.0f} percent. <bookmark mark='b'/> The top one "
+            f"percent's share of income rose by {100 * (Et['s1988'] / Et['s1986'] - 1):.0f} percent, "
+            f"<bookmark mark='c'/> an elasticity of about {Et['tra86']:.1f}. In 1995 Martin Feldstein, following the "
             "same taxpayers in a Treasury panel, found an elasticity of at least one. With more reforms and more "
             "years, Jonathan Gruber and Emmanuel Saez found about 0.4. <bookmark mark='d'/> Why so large in 1986? "
             "Much of the response was relabelling: the reform made it cheaper to run a business through a personal "

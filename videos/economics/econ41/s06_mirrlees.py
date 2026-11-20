@@ -31,9 +31,9 @@ class Mirrlees(VoiceoverScene):
             "pay less. Every income tax trades equality against incentives, and the question is how to make that "
             "trade as well as possible, rate by rate, along the whole schedule."
         ) as vo:
-            self.play(FadeIn(hc))
+            self.play(FadeIn(hc), FadeIn(steps.boxes[0]), FadeIn(steps.notes[0]))
             vo.wait_until("a")
-            self.play(FadeIn(steps.boxes[0]), FadeIn(steps.notes[0]))
+            self.play(Indicate(steps.boxes[0], color=WORKER))
             vo.wait_until("b")
             self.play(GrowArrow(steps.arrows[0]), FadeIn(steps.boxes[1]), FadeIn(steps.notes[1]))
             vo.wait_until("c")
@@ -46,13 +46,18 @@ class Mirrlees(VoiceoverScene):
         eq = MathTex(r"\frac{T'(z)}{1 - T'(z)}", r"=", r"\Big(1 + \frac{1}{e}\Big)", r"\cdot",
                      r"\frac{1 - F(w)}{w\, f(w)}", r"\cdot", r"\big(1 - \bar g(w)\big)", font_size=42).move_to(UP * 1.2)
         labs = VGroup(
-            label(r"A: \ how much people \\ respond to the rate \\ (less response, \ higher rate)", font_size=18,
-                  color=RATE).next_to(eq[2], DOWN, buff=0.7),
-            label(r"B: \ how many people \\ earn more, \ against how \\ many are at this level", font_size=18,
-                  color=TOP).next_to(eq[4], DOWN, buff=0.7),
+            label(r"A: \ how much people \\ respond to the rate \\ (less response, \\ higher rate)", font_size=18,
+                  color=RATE),
+            label(r"B: \ how many people \\ earn more, \ against \\ how many are \\ at this level", font_size=18,
+                  color=TOP),
             label(r"C: \ how little society \\ values a dollar for \\ everyone above", font_size=18,
-                  color=WORKER).next_to(eq[6], DOWN, buff=0.7),
-        )
+                  color=WORKER),
+        ).arrange(RIGHT, buff=0.8, aligned_edge=UP).next_to(eq, DOWN, buff=0.7)
+        for lab_, part in zip(labs, (eq[2], eq[4], eq[6])):
+            lab_.set_x(part.get_x())
+        gaps = [labs[k + 1].get_left()[0] - labs[k].get_right()[0] for k in range(2)]
+        if min(gaps) < 0.25:
+            labs.arrange(RIGHT, buff=0.6, aligned_edge=UP).next_to(eq, DOWN, buff=0.7)
         foot = label(r"Diamond (1998): \ quasi-linear preferences, \ skills $w$ distributed $F$, \ welfare weights "
                      r"$g$", font_size=18, color=GREY_A).to_edge(DOWN, buff=0.6)
         with self.voiceover(
@@ -64,13 +69,13 @@ class Mirrlees(VoiceoverScene):
             "distorts only those at it. <bookmark mark='c'/> C: one minus the average value society places on a "
             "dollar for all those above. The less society cares about extra income at the top, the higher the rate."
         ) as vo:
-            self.play(Write(eq[:2]), FadeIn(foot), run_time=1.5)
+            self.play(Write(eq), FadeIn(foot), run_time=2.0)
             vo.wait_until("a")
-            self.play(Write(eq[2]), FadeIn(labs[0]))
+            self.play(Indicate(eq[2], color=RATE), FadeIn(labs[0]))
             vo.wait_until("b")
-            self.play(Write(eq[3:5]), FadeIn(labs[1]))
+            self.play(Indicate(eq[4], color=TOP), FadeIn(labs[1]))
             vo.wait_until("c")
-            self.play(Write(eq[5:]), FadeIn(labs[2]))
+            self.play(Indicate(eq[6], color=WORKER), FadeIn(labs[2]))
         self.clear_scene()
 
     def factors(self):
@@ -104,8 +109,9 @@ class Mirrlees(VoiceoverScene):
             "and rising C is the shape of the optimal schedule, chapter seven's subject."
         ) as vo:
             self.play(FadeIn(head), FadeIn(axb), FadeIn(axc), FadeIn(tag), run_time=1.0)
+            self.play(Create(lb), run_time=2.5)
             vo.wait_until("a")
-            self.play(Create(lb), run_time=2.0)
+            self.play(Indicate(lb, color=WHITE, scale_factor=1.02))
             vo.wait_until("b")
             self.play(Create(tail), FadeIn(nb))
             vo.wait_until("c")

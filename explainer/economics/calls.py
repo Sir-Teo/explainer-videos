@@ -414,6 +414,17 @@ CALLS = {c.key: c for c in [
           "of Technology on Employment and Unemployment, National Academy of Engineering (1983), as quoted in "
           "secondary listings",
           "BLS via FRED: LNS12300060 (employment-population ratio, 25-54) and PRS85006173 (labor share)")),
+    Call("ss_1983", 42, "The 1983 Social Security Amendments, as projected by the program's actuaries", "1983",
+         "the reforms would keep Social Security solvent for 75 years, with surpluses in the early years offsetting "
+         "deficits later",
+         "a rise in the payroll tax, taxation of benefits and a later retirement age, scored over 75 years",
+         "the trustees and the Congressional Budget Office now expect the trust funds to run out in 2034, about a "
+         "quarter of a century early; the actuaries had expected annual deficits from about 2025, and the economy "
+         "and the population turned out differently from the 1983 assumptions",
+         "wrong",
+         ("Congressional Research Service, R47040 (2022)",
+          "Brookings, 'Social Security: Today's financing challenge is at least double what it was in 1983'",
+          "Social Security Administration, The 2025 OASDI Trustees Report")),
     Call("tcja_2017", 41, "Steven Mnuchin, Secretary of the Treasury", "September 2017",
          "not only will this tax plan pay for itself, but it will pay down debt",
          "the claim that lower rates on corporations and individuals would raise growth enough to replace the revenue",

@@ -3214,8 +3214,215 @@ TCJA_2017 = Table(
     checked="2026-11-20",
     data={"cbo_total": 1.9, "feedback": 0.6, "interest": 0.6},
 )
+# ---------------------------------------------------------------------------
+# Part 42
+
+OREGON_2008 = Table(
+    key="oregon_2008",
+    cite="A. Finkelstein et al., \"The Oregon Health Insurance Experiment: Evidence from the First Year\", Quarterly "
+         "Journal of Economics 127(3): 1057-1106 (2012); K. Baicker et al., \"The Oregon Experiment: Effects of "
+         "Medicaid on Clinical Outcomes\", New England Journal of Medicine 368: 1713-1722 (2013); S. Taubman et al., "
+         "\"Medicaid Increases Emergency-Department Use\", Science 343: 263-268 (2014); NBER, the Oregon Health "
+         "Insurance Experiment, background",
+    tag="Finkelstein et al., \\emph{QJE} (2012); \\ Baicker et al., \\emph{NEJM} (2013); \\ Taubman et al., "
+        "\\emph{Science} (2014)",
+    where="in early 2008 about 90,000 people signed up (91,675 names on the final list) for about 10,000 places in "
+          "OHP Standard; between March and September 2008 the state drew about 30,000 names by lottery; in the first "
+          "year winners were about 25 percentage points more likely to be insured; outpatient use rose about 35% and "
+          "prescription use about 15% (NBER summary); in about two years, no statistically significant effect on "
+          "measured blood pressure, cholesterol or glycated haemoglobin; depression -9.15 percentage points (95% CI "
+          "-16.70 to -1.60) against 30% among controls; catastrophic out-of-pocket spending (above 30% of income) "
+          "virtually eliminated; emergency visits +0.41 a person, about 40% over the controls' 1.02",
+    read="the abstracts, the NBER summaries and background page, and the Medicaid Advisory Committee's minutes of "
+         "March 2008",
+    checked="2026-11-20",
+    data={"signups": 90000, "list": 91675, "places": 10000, "drawn": 30000, "first_stage": 25, "outpatient": 35,
+          "drugs": 15, "depression": -9.15, "depression_lo": -16.70, "depression_hi": -1.60, "depression_base": 30,
+          "ed": 0.41, "ed_base": 1.02, "ed_pct": 40},
+)
+RAND_HIE = Table(
+    key="rand_hie",
+    cite="RAND, \"The Health Insurance Experiment: A Classic RAND Study Speaks to the Current Health Care Reform "
+         "Debate\", Research Brief RB-9174 (2006); W. Manning et al., American Economic Review 77(3): 251-277 (1987); "
+         "A. Aron-Dine, L. Einav and A. Finkelstein, \"The RAND Health Insurance Experiment, Three Decades Later\", "
+         "Journal of Economic Perspectives 27(1): 197-222 (2013)",
+    tag="RAND (1974--82); \\ Manning et al. (1987); \\ Aron-Dine, \\ Einav and Finkelstein (2013)",
+    where="2,750 families, more than 7,700 people under 65, at six sites, randomly assigned to free care, coinsurance "
+          "of 25%, 50% or 95% (with income-related caps), or an HMO, for three to five years; those with 95% "
+          "coinsurance spent about 30% less than those with free care, those with 25% about 20% less; on average, "
+          "health was not measurably worse; the response is often summarized as a price elasticity of about -0.2, "
+          "a summary Aron-Dine, Einav and Finkelstein show to be fragile",
+    read="RAND's research brief and project pages; the re-analysis's abstract",
+    checked="2026-11-20",
+    data={"families": 2750, "people": 7700, "sites": 6, "less_95": 30, "less_25": 20, "elasticity": -0.2},
+)
+ARROW_1963 = Table(
+    key="arrow_1963",
+    cite="K. J. Arrow, \"Uncertainty and the Welfare Economics of Medical Care\", American Economic Review 53(5): "
+         "941-973 (1963)",
+    tag="Arrow, \\emph{AER} (1963)",
+    where="the founding article of health economics: medical care differs from other goods in the uncertainty of "
+          "illness and treatment and the asymmetry of knowledge between doctor and patient",
+    read="the article",
+    checked="2026-11-20",
+)
+UI_THEORY = Table(
+    key="ui_theory",
+    cite="M. N. Baily, \"Some Aspects of Optimal Unemployment Insurance\", Journal of Public Economics 10(3): "
+         "379-402 (1978); R. Chetty, \"A General Formula for the Optimal Level of Social Insurance\", Journal of "
+         "Public Economics 90: 1879-1901 (2006); R. Chetty, \"Moral Hazard versus Liquidity and Optimal Unemployment "
+         "Insurance\", Journal of Political Economy 116(2): 173-234 (2008)",
+    tag="Baily (1978); \\ Chetty (2006, \\ 2008)",
+    where="the optimal benefit balances the gain from smoothing consumption against the cost of longer "
+          "unemployment; Chetty (2008): 60% of the rise in durations caused by benefits is a liquidity effect, and "
+          "his formula implies an optimal benefit above 50% of the wage",
+    read="the abstracts and the NBER digest of Chetty (2008)",
+    checked="2026-11-20",
+    data={"liquidity": 60, "optimal_above": 50},
+)
+UI_EVIDENCE = Table(
+    key="ui_evidence",
+    cite="B. D. Meyer, \"Unemployment Insurance and Unemployment Spells\", Econometrica 58(4): 757-782 (1990); D. "
+         "Card, R. Chetty and A. Weber, \"Cash-on-Hand and Competing Models of Intertemporal Behavior\", Quarterly "
+         "Journal of Economics 122(4): 1511-1560 (2007); J. F. Schmieder, T. von Wachter and S. Bender, Quarterly "
+         "Journal of Economics 127(2): 701-752 (2012); J. Gruber, \"The Consumption Smoothing Benefits of "
+         "Unemployment Insurance\", American Economic Review 87(1): 192-205 (1997); P. Ganong and P. Noel, "
+         "\"Consumer Spending during Unemployment\", American Economic Review 109(7): 2383-2424 (2019)",
+    tag="Meyer (1990); \\ Card, \\ Chetty and Weber (2007); \\ Gruber (1997); \\ Ganong and Noel (2019)",
+    where="Meyer: higher benefits lower the chance of leaving unemployment, and exits jump when benefits lapse; a 10% "
+          "higher benefit lengthens spells by 4-8% (as summarized by Chetty); Card, Chetty and Weber: a severance "
+          "payment of two months' earnings lowers job finding by 8-12%, and 30 weeks of benefits instead of 20 "
+          "lower it by 5-9% in the first 20 weeks; Schmieder, von Wachter and Bender: Germany's age thresholds, "
+          "effects at most somewhat smaller in recessions; Gruber: consumption falls about 7% on unemployment, "
+          "2.7% less for each 10 points of replacement, and would fall over three times as much without benefits; "
+          "Ganong and Noel: spending falls about 6% at the start of unemployment and about 12% when benefits run out",
+    read="the abstracts, Chetty's summary of Meyer, and the NBER working papers' abstracts",
+    checked="2026-11-20",
+    data={"meyer_lo": 0.4, "meyer_hi": 0.8, "ccw_severance_lo": 8, "ccw_severance_hi": 12, "ccw_ext_lo": 5,
+          "ccw_ext_hi": 9, "gruber_drop": 7, "gruber_slope": 2.7, "gn_onset": 6, "gn_exhaust": 12},
+)
+CHETTY_DK_2014 = Table(
+    key="chetty_dk_2014",
+    cite="R. Chetty, J. N. Friedman, S. Leth-Petersen, T. H. Nielsen and T. Olsen, \"Active vs. Passive Decisions "
+         "and Crowd-Out in Retirement Savings Accounts: Evidence from Denmark\", Quarterly Journal of Economics "
+         "129(3): 1141-1219 (2014)",
+    tag="Chetty et al., \\emph{QJE} (2014)",
+    where="41 million observations on the savings of Danes: about 15% are active savers who respond to subsidies "
+          "mostly by moving money between accounts, 85% passive savers who do not respond to subsidies but keep "
+          "what automatic contributions put aside; each dollar of subsidy raises total saving by about one cent",
+    read="the abstract",
+    checked="2026-11-20",
+    data={"active": 15, "passive": 85, "cents": 1, "obs_millions": 41},
+)
+DISABILITY_2013 = Table(
+    key="disability_2013",
+    cite="N. Maestas, K. J. Mullen and A. Strand, \"Does Disability Insurance Receipt Discourage Work? Using "
+         "Examiner Assignment to Estimate Causal Effects of SSDI Receipt\", American Economic Review 103(5): "
+         "1797-1829 (2013)",
+    tag="Maestas, \\ Mullen and Strand, \\emph{AER} (2013)",
+    where="applicants are assigned to disability examiners who differ in how often they allow claims; for those on "
+          "the margin, benefits reduce work by amounts ranging from nothing for those with more severe impairments "
+          "to 50 percentage points for those with less severe ones",
+    read="the abstract",
+    checked="2026-11-20",
+    data={"hi": 50, "lo": 0},
+)
+EITC_2025 = Table(
+    key="eitc_2025",
+    cite="Internal Revenue Service, Revenue Procedure 2024-40 (2025 inflation adjustments); Center on Budget and "
+         "Policy Priorities, Policy Basics: the Earned Income Tax Credit; N. Eissa and J. B. Liebman, \"Labor Supply "
+         "Response to the Earned Income Tax Credit\", Quarterly Journal of Economics 111(2): 605-637 (1996)",
+    tag="IRS, \\ Rev. Proc. 2024-40; \\ Eissa and Liebman (1996)",
+    where="2025, three or more children: 45% of earnings up to $17,880, a maximum of $8,046, withdrawn at 21.06% from "
+          "$23,350 (single filers), gone at $61,555; two children: 40%; Eissa and Liebman: after the 1986 expansion, "
+          "single women with children raised their participation relative to single women without (by 1.4 points "
+          "from 73.1% in the 1995 working paper), with no change in the hours of those already working",
+    read="the IRS release and the CBPP table citing Rev. Proc. 2024-40; the working paper's abstract",
+    checked="2026-11-20",
+    data={"rate_in": 0.45, "top": 17880, "max": 8046, "start_out": 23350, "rate_out": 0.2106, "end": 61555,
+          "rate_two": 0.40, "el_pp": 1.4, "el_base": 73.1},
+)
+NIT_1968 = Table(
+    key="nit_1968",
+    cite="P. K. Robins, \"A Comparison of the Labor Supply Findings from the Four Negative Income Tax "
+         "Experiments\", Journal of Human Resources 20(4): 567-582 (1985)",
+    tag="Robins (1985)",
+    where="four American negative income tax experiments, 1968-1982, the largest in Seattle and Denver with about "
+          "4,800 families; hours fell by about 5% for husbands and by more for wives and single mothers (about 21% "
+          "and 13% in a summary table of Robins's estimates)",
+    read="secondary reproductions of Robins's summary table",
+    checked="2026-11-20",
+    data={"husbands": 5, "wives": 21, "single": 13, "families_sd": 4800},
+)
+UBI_TRIALS = Table(
+    key="ubi_trials",
+    cite="Kela and the Finnish Ministry of Social Affairs and Health, the basic income experiment 2017-2018, final "
+         "results (6 May 2020); E. Vivalt et al., OpenResearch unconditional cash study (2024); A. Banerjee, M. "
+         "Faye, A. Krueger, P. Niehaus and T. Suri, \"Universal Basic Income: Short-Term Results from a Long-Term "
+         "Experiment in Kenya\" (2023)",
+    tag="Kela (2020); \\ Vivalt et al. (2024); \\ Banerjee et al. (2023)",
+    where="Finland: 2,000 unemployed people aged 25-58 received 560 euros a month, unconditionally, in 2017-2018: a "
+          "small employment effect and better self-reported wellbeing (with no baseline survey); OpenResearch: "
+          "1,000 people in Illinois and Texas received $1,000 a month for three years, 2,000 controls $50: about "
+          "1.3 fewer hours of work a week; Kenya: lump sums of about $500 beat the same money paid monthly over two "
+          "years on most measures, with no sign that monthly payments discouraged work",
+    read="the ministry's release, university and press summaries, and GiveDirectly's summary of the working paper",
+    checked="2026-11-20",
+    data={"fi_n": 2000, "fi_eur": 560, "or_n": 1000, "or_control": 2000, "or_usd": 1000, "or_hours": 1.3,
+          "ke_lump": 500},
+)
+MVPF_2020 = Table(
+    key="mvpf_2020",
+    cite="N. Hendren and B. Sprung-Keyser, \"A Unified Welfare Analysis of Government Policies\", Quarterly Journal "
+         "of Economics 135(3): 1209-1318 (2020); A. Finkelstein, N. Hendren and E. F. P. Luttmer, \"The Value of "
+         "Medicaid\", Journal of Political Economy 127(6) (2019)",
+    tag="Hendren and Sprung-Keyser, \\emph{QJE} (2020); \\ Finkelstein, \\ Hendren and Luttmer (2019)",
+    where="133 policy changes from the past half-century on one scale, willingness to pay over net cost to the "
+          "government: the largest values for health and education policies aimed at children, some of which pay "
+          "for themselves; policies for adults mostly between 0.5 and 2; Medicaid: recipients value it at $0.5 to "
+          "$1.2 per dollar of the resource cost, and about 60 cents of each government dollar is a transfer to those "
+          "who paid for care of the uninsured before",
+    read="the abstracts and MIT's summary",
+    checked="2026-11-20",
+    data={"policies": 133, "adult_lo": 0.5, "adult_hi": 2.0, "medicaid_lo": 0.5, "medicaid_hi": 1.2,
+          "external": 0.60},
+)
+PENSIONS = Table(
+    key="pensions",
+    cite="Social Security Administration, The 2025 OASDI Trustees Report, Table IV.B3 (covered workers and "
+         "beneficiaries)",
+    tag="SSA, \\ 2025 Trustees Report",
+    where="covered workers per beneficiary: 5.1 in 1960, 2.7 in 2024 and 2025, 2.3 projected for 2035; the "
+          "combined trust funds are projected to run out in 2034",
+    read="the table online",
+    checked="2026-11-20",
+    data={"r1960": 5.1, "r2024": 2.7, "r2035": 2.3, "payroll": 12.4, "depletion": 2034},
+)
+SS_1983 = Table(
+    key="ss_1983",
+    cite="Congressional Research Service, \"Social Security: Trust Fund Status in the Early 1980s and Today and the "
+         "1980s Greenspan Commission\" (R47040, 2022); Brookings, \"Social Security: Today's financing challenge "
+         "is at least double what it was in 1983\"",
+    tag="CRS (2022); \\ Brookings",
+    where="the 1983 amendments were expected to keep Social Security solvent for 75 years, with early surpluses "
+          "offsetting later deficits; the actuaries expected annual deficits to begin around 2025; the trustees and "
+          "the CBO now expect the trust funds to run out in 2034",
+    read="the reports' summaries",
+    checked="2026-11-20",
+    data={"horizon": 75, "deficits_from": 2025, "now": 2034},
+)
+FRONTIER42 = Table(
+    key="frontier42",
+    cite="the frontier chapter's sources, stated in words only",
+    tag="frontier",
+    where="social insurance for platform work; long-term care; insurance against technological change",
+    read="the chapter states questions, not estimates",
+    checked="2026-11-20",
+)
+PART42 = (OREGON_2008, RAND_HIE, ARROW_1963, UI_THEORY, UI_EVIDENCE, CHETTY_DK_2014, DISABILITY_2013, EITC_2025,
+          NIT_1968, UBI_TRIALS, MVPF_2020, PENSIONS, SS_1983, FRONTIER42)
 PART41 = (LAFFER_1974, HARBERGER_1962, RAMSEY_1927, MIRRLEES_1971, DIAMOND_SAEZ_2011, ETI_STUDIES, BUNCHING,
           CLK_2009, CAPITAL_TAX, HAVENS, EVASION, FRONTIER41, TCJA_2017)
 PART7 = (BERNOULLI_1738, SAMUELSON_1937, ALLAIS_1953, ELLSBERG_1961, RABIN_2000, THALER_1981, HOLT_LAURY_2005,
          HAYDEN_PLATT_2009, MADRIAN_SHEA_2001, THALER_BENARTZI_2004, BARSKY_1997, POST_2008, MEHRA_PRESCOTT_1985)
-ALL = {t.key: t for t in (*PART1, *PART3, *PART4, *PART5, *PART6, *PART7, *PART8, *PART9, *PART10, *PART11, *PART12, *PART13, *PART14, *PART15, *PART16, *PART17, *PART18, *PART19, *PART21, *PART22, *PART25, *PART26, *PART35, *PART36, *PART37, *PART38, *PART39, *PART40, *PART41)}
+ALL = {t.key: t for t in (*PART1, *PART3, *PART4, *PART5, *PART6, *PART7, *PART8, *PART9, *PART10, *PART11, *PART12, *PART13, *PART14, *PART15, *PART16, *PART17, *PART18, *PART19, *PART21, *PART22, *PART25, *PART26, *PART35, *PART36, *PART37, *PART38, *PART39, *PART40, *PART41, *PART42)}
