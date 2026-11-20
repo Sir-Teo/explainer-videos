@@ -31,7 +31,7 @@ class Ends(VoiceoverScene):
             label(r"each ended within weeks, \ when the government stopped financing itself by printing",
                   font_size=23, color=E.ACCENT),
         ).arrange(DOWN, buff=0.3).next_to(cards, DOWN, buff=0.5)
-        tag = published_tag(r"Sargent, \ \"The Ends of Four Big Inflations\", \ in Hall (ed.), \emph{Inflation: "
+        tag = published_tag(r"Sargent, \ ``The Ends of Four Big Inflations'', \ in Hall (ed.), \emph{Inflation: "
                             r"Causes and Effects} (NBER, 1982): \ 41--98", corner=DR, font_size=12)
         with self.voiceover(
             "In 1982 Thomas Sargent studied four of the hyperinflations that followed the First World War. "
@@ -95,7 +95,7 @@ class Ends(VoiceoverScene):
         slow = path(ax, list(range(T)), d["slow"]["path"], color=MONEY, width=4, yr=(0, 0.6))
         fast = path(ax, list(range(len(d["fast"]["path"]))), d["fast"]["path"], color=PRICE, width=4, yr=(0, 0.6),
                     smooth=False)
-        big = path(ax, list(range(len(d["big"]["path"]))), d["big"]["path"], color=HOLD, width=4, yr=(0, 0.6),
+        big = path(ax, list(range(len(d["big"]["path"]))), d["big"]["path"], color=BANK, width=4, yr=(0, 0.6),
                    smooth=False)
         side = VGroup(
             label(rf"a deficit of {100 * d['deficit']:.0f}\% of real balances, \\ paid by printing", font_size=20,
@@ -105,7 +105,7 @@ class Ends(VoiceoverScene):
             label(r"slow expectations: \\ settles at the low one", font_size=20, color=MONEY),
             label(r"fast expectations: \\ it runs away", font_size=20, color=PRICE),
             label(r"a deficit beyond the most \\ printing can ever raise: \\ no steady state", font_size=20,
-                  color=HOLD),
+                  color=BANK),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.32).to_edge(RIGHT, buff=0.3)
         tag = island_tag(corner=DR, font_size=14)
         with self.voiceover(
@@ -119,9 +119,9 @@ class Ends(VoiceoverScene):
             "inflation tax can ever raise has no steady state at all. Printing faster cannot close it; only "
             "closing the deficit can. That is what the four stabilizations did."
         ) as vo:
-            self.play(FadeIn(ax), FadeIn(tag), FadeIn(side[0]), run_time=0.8)
+            self.play(FadeIn(ax), FadeIn(tag), FadeIn(side[0]), Create(s_lo), Create(s_hi), run_time=1.2)
             vo.wait_until("a")
-            self.play(Create(s_lo), Create(s_hi), FadeIn(side[1]))
+            self.play(FadeIn(side[1]))
             vo.wait_until("b")
             self.play(Create(slow), FadeIn(side[2]), run_time=2)
             vo.wait_until("c")

@@ -14,7 +14,7 @@ class Optimum(VoiceoverScene):
 
     def rule(self):
         rows = VGroup(
-            label(r"Milton Friedman, \ \"The Optimum Quantity of Money\", \ 1969", font_size=26, color=E.ACCENT),
+            label(r"Milton Friedman, \ ``The Optimum Quantity of Money'', \ 1969", font_size=26, color=E.ACCENT),
             label(r"money costs nothing to print; \ holding it costs you the interest you give up", font_size=23,
                   color=GREY_A),
             label(r"so people economize on something society could provide free: \ a waste", font_size=23,

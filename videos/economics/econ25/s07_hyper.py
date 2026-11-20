@@ -18,7 +18,7 @@ class Hyper(VoiceoverScene):
         rows = L["table"]
         ax = plane([-0.6, 3.6], [0, 18], center=LEFT * 1.8 + DOWN * 0.3, x_length=8.0, y_length=4.8, xticks=[],
                    yticks=[0, 4, 8, 12, 16], ylabel=r"highest monthly inflation, \ \% \ (log scale)",
-                   yfmt=lambda v: rf"$10^{{{v:.0f}}}$", font_size=16)
+                   yfmt=lambda v: rf"10^{{{v:.0f}}}", font_size=16)
         bars, names, vals = VGroup(), VGroup(), VGroup()
         for k, r in enumerate(rows):
             lo, hi = ax.ax.c2p(k, 0), ax.ax.c2p(k, r["log10"])
@@ -34,7 +34,7 @@ class Hyper(VoiceoverScene):
             label(r"Germany, \ October 1923: \\ 29{,}500\% a month", font_size=20, color=PRICE),
             label(r"Hungary, \ July 1946: \\ $4.19 \times 10^{16}$\% a month", font_size=20, color=PRICE),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.45).to_edge(RIGHT, buff=0.3)
-        tag = published_tag(r"Hanke and Krus, \ \"World Hyperinflations\", \ Cato WP 8 (2012)", corner=DR, font_size=12)
+        tag = published_tag(r"Hanke and Krus, \ ``World Hyperinflations'', \ Cato WP 8 (2012)", corner=DR, font_size=12)
         with self.voiceover(
             "Phillip Cagan defined a hyperinflation in 1956 as prices rising more than fifty percent a month. "
             "Steve Hanke and Nicholas Krus later listed every one they could document. <bookmark mark='a'/> Here "

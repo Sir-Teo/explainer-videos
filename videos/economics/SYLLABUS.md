@@ -2963,6 +2963,7 @@ Young Economist*.
 | 23 | built, English | *Capital and Asset Prices.* Agora gains `assets` (Gordon, the user cost, Hayashi's firm, the option to wait, Mehra and Prescott's economy and region, the Hansen-Jagannathan bound, rare disasters, habits, a laboratory market); the Data Room gains Shiller's annual series and the Case-Shiller index against the CPI's rent; a new dial (investment's response to the user cost) and three rows on risk aversion; Fisher's 1929 plateau as *Called it?*; the equity premium and unpredictable returns get their Agora columns |
 | 24 | built, English | *Looking for Work.* Agora gains `search` (McCall's searcher, the DMP model with its curves, Beveridge curves and path, Hosios's condition, the elasticity of tightness, Shimer's flows and the ins-and-outs shares, Burdett and Mortensen's job ladder); the Data Room gains FRED's JOLTS (openings, hires, separations, quits), unemployment by duration, the labour force, output per hour and the CBO's natural rate; two new dials (the matching elasticity; the worker's bargaining share); Mortensen and Pissarides's 1994 claim as *Called it?* (partly right); the Beveridge curve gets its Agora column |
 | 25 | built, English | *Money.* Agora gains `money` (Kiyotaki and Wright's economy with its equilibrium check, barter's odds, Cagan's Laffer curve and a printed deficit, Baumol and Tobin, cash in advance, T-accounts); the Data Room gains the World Bank's money growth and inflation by country since 1960 and FRED's M1, M2, base money, currency, reserves, velocity and nominal GDP, and transcribes Hanke and Krus's hyperinflation peaks; a new dial (the interest semi-elasticity of money demand); Cagan's revenue ceiling as *Called it?* (wrong); the quantity theory gets its Agora column |
+| 26 | built, English | *Banks and Runs.* Agora gains `bank` (Diamond and Dybvig's contract and run threshold, sequential service, suspension, Bagehot's lender against a fire sale, Merton's deposit-insurance put, bond losses, capital ratios with risk weights, deposit betas, the repo squeeze, Morris and Shin's global game, Diamond's delegated monitor); the Island gets a bank; the Data Room gains FRED's bank suspensions (1921-41, and monthly to 1933), small and large banks' weekly deposits, the FDIC's national deposit rates, the federal funds rate, Treasury yields, banks' equity ratio, money funds' assets and real GDP, and transcribes Silicon Valley Bank's numbers and the 2022 stress scenario; two new dials (the deposit beta; the output cost of a banking crisis); the 2022 stress scenario as *Called it?* (wrong) |
 
 **Corrections found while building Part 1** (the plan's draft, written from memory, against the sources): Bastiat's
 Paris passage is in *Economic Sophisms*, First Series, ch. 18 (1845), not the *Harmonies*; Hume's is/ought passage is
@@ -3256,3 +3257,22 @@ of his table; the film's Laffer curve uses alpha = 5. The Hanke-Krus peaks are f
 doubling time from Hanke's commentary, the others computed with a thirty-day month. The money multiplier is M2 over
 the base (FRED reports BOGMBASE in billions). Stablecoin totals are DeFi Llama's as reported in December 2025. An
 intermission follows chapter 8.
+
+**Corrections found while building Part 26.** The syllabus's "a quarter of its deposits" for 9 March 2023 is not used:
+the film gives the 42 billion withdrawn and the 100 billion queued (Barr's testimony) and the 94% uninsured share (the
+Federal Reserve's review), not a share of deposits. Silicon Valley Bank's held-to-maturity bonds ($91 billion, about
+$15 billion below book) are from its year-end 2022 accounts as reported; its capital ratio of about 12% from the review.
+The savings-and-loan clean-up is given as "as much as $124 billion" to taxpayers (Curry and Shibut 2000). The Reserve
+Primary Fund held $785 million of Lehman paper, about 1.2% of the fund, and was marked to 97 cents; the share of the
+fund asked for on 16 September is given as "about a quarter" from secondary accounts. Money funds' total assets rose in
+the fourth quarter of 2008 (Z.1): the run was from prime to government funds, and the film says so. Gorton and Metrick's
+haircut index is described, not quoted; the critique that their sample is structured debt only is stated. Calomiris and
+Mason's verdicts follow their abstract (no unexplained failure risk in the first two crises, the third ambiguous
+and small, early 1933 a panic). Jiang, Matvos, Piskorski and Seru's figures ($2 trillion, about 10%, about 190 banks with about $300
+billion of assets if half the uninsured left) are from their summaries. The deposit-beta rows are the New York Fed's and
+S&P Global's as reported, with the 2004-06 peak shown at 0.6 ("approaching 60 percent"); the film's own are from the
+FDIC's national rates. Reinhart and Rogoff's output fall is "over 9 percent" (shown at 9); Cerra and Saxena's 10% is
+from their own later summary. Cookson and coauthors' estimates differ across versions, so the film gives the direction
+only. USDC's low is given as about 88 cents. The Bank Term Funding Program valued collateral at par; the film calls
+that beyond Bagehot rather than against him. Bernanke, Diamond and Dybvig shared the 2022 Nobel prize. An intermission
+follows chapter 8.

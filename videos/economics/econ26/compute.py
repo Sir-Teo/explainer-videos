@@ -22,6 +22,9 @@ Items:
     betas        deposit betas: savings and 12-month CD rates against the federal funds rate, 2022-2023
     capital      banks' equity to assets, 1988-2020
     mmf          money market funds' assets
+    repo         a dealer funded by repo when haircuts rise
+    monitor      Diamond's delegated monitor: the bank's chance of failing against the number of its loans
+    crisis       the American output loss of 2007-09: peak to trough, and against the 1990-2007 trend
     film         the intermission's data film: deposits at small and large banks, week by week, 2022-2024
     melody       its data melody: small banks' deposits
 """
@@ -163,6 +166,38 @@ def compute_mmf() -> dict:
             "q4_2008": v.get("2008-10-01"), "last": pts[-1][1], "last_date": pts[-1][0]}
 
 
+def compute_repo() -> dict:
+    R = TRUTH["repo"]
+    hs = np.linspace(0.01, 0.5, 50)
+    return {**R, **bk.repo_leverage(R["assets"], R["equity"], R["haircut_from"], R["haircut_to"]),
+            "h": hs.tolist(), "lev": (1 / hs).tolist()}
+
+
+def compute_monitor() -> dict:
+    M = TRUTH["monitor"]
+    ns = np.unique(np.round(np.logspace(0, 3, 61)).astype(int))
+    fail = [bk.diversified_failure(int(n), M["p"], M["R"], M["D"]) for n in ns]
+    pts = {str(n): bk.diversified_failure(n, M["p"], M["R"], M["D"]) for n in M["ns"]}
+    return {**M, "n": ns.tolist(), "fail": fail, "points": pts,
+            "direct_cost": M["depositors"] * M["cost"], "bank_cost": M["cost"]}
+
+
+def compute_crisis() -> dict:
+    d = data.fred("GDPC1")
+    dt, v = d["date"], np.array(d["value"], float)
+    i, j = dt.index("2007-10-01"), dt.index("2009-04-01")
+    k = [n for n, x in enumerate(dt) if "1990-01-01" <= x <= "2007-10-01"]
+    tt = np.arange(len(v))
+    b = np.polyfit(tt[k], np.log(v[k]), 1)
+    show = [n for n, x in enumerate(dt) if "1990-01-01" <= x <= "2019-10-01"]
+    trend = np.exp(np.polyval(b, tt[show]))
+    m = dt.index("2019-10-01")
+    return {"t": [_t(dt[n]) for n in show], "gdp": v[show].tolist(), "trend": trend.tolist(),
+            "peak": float(v[i]), "trough": float(v[j]), "fall": float(100 * (1 - v[j] / v[i])),
+            "trend_growth": float(400 * b[0]),
+            "gap_2019": float(100 * (1 - v[m] / np.exp(np.polyval(b, tt[m]))))}
+
+
 FILM_SECONDS = 40.0
 MELODY_SECONDS = FILM_SECONDS + 8.0
 
@@ -211,6 +246,9 @@ ITEMS = {
     "betas": compute_betas,
     "capital": compute_capital,
     "mmf": compute_mmf,
+    "repo": compute_repo,
+    "monitor": compute_monitor,
+    "crisis": compute_crisis,
     "film": compute_film,
     "melody": compute_melody,
 }

@@ -101,7 +101,7 @@ class Hook(VoiceoverScene):
             label(r"were marked as its own: \ the gold never moved", font_size=22, color=MONEY),
             label(r"money is what people agree to accept, \ and keep track of", font_size=26, color=WHITE),
         ).arrange(DOWN, buff=0.4).move_to(UP * 0.3)
-        tag = published_tag(r"Friedman, \ \"The Island of Stone Money\", \ Hoover Institution WP E-91-3 (1991)",
+        tag = published_tag(r"Friedman, \ ``The Island of Stone Money'', \ Hoover Institution WP E-91-3 (1991)",
                             corner=DR, font_size=12)
         with self.voiceover(
             "Milton Friedman retold the story in 1991 and asked whether it is so different from us. "

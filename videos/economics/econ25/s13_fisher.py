@@ -45,8 +45,8 @@ class Fisher(VoiceoverScene):
                    xticks=[1960, 1980, 2000, 2020], yticks=[-4, 0, 4, 8, 12, 16], ylabel=r"\% a year",
                    xfmt=lambda v: f"{v:.0f}", yfmt=lambda v: f"{v:.0f}", font_size=16)
         zero = seg(ax, 1960, 0, 2027, 0, color=GREY_D, width=2)
-        rate = path(ax, f["t"], f["rate"], color=RATE, width=3, smooth=False)
-        infl = path(ax, f["t"], f["inflation"], color=PRICE, width=3, smooth=False, yr=(-4, 16))
+        rate = path(ax, f["t"], f["rate"], color=RATE, width=3, smooth=False, xr=(1960, 2027))
+        infl = path(ax, f["t"], f["inflation"], color=PRICE, width=3, smooth=False, yr=(-4, 16), xr=(1960, 2027))
         rows = VGroup(VGroup(label(r"decade", font_size=18, color=GREY_B), label(r"bill rate", font_size=18,
                                                                                  color=RATE),
                              label(r"inflation", font_size=18, color=PRICE), label(r"real", font_size=18,

@@ -83,4 +83,76 @@
             "Part 25, chapters 6-8. Computed in your browser; nothing you do here is stored or sent.",
     });
   };
+
+  // ---- Part 26: banks and runs ---------------------------------------------------------------------------------
+  W.bankrun = function (el) {
+    // The global game of Part 26 (explainer.economics.agora.bank: global_game): a bank of strength theta fails if the
+    // share of depositors withdrawing reaches theta.  A withdrawer gets c; a stayer gets R = 2 if the bank survives and
+    // nothing if it fails.  Each depositor sees theta + sigma e and withdraws below a cutoff.  The reader sets the
+    // cutoff everyone else uses and finds their own best reply; the unique equilibrium is where the two agree, and
+    // the bank then fails exactly when theta < c / R.
+    var R = 2;
+    function failPoint(xo, sig) {
+      // the bank fails while theta <= share withdrawing = Phi((xo - theta)/sig); find the crossing by bisection
+      var lo = -1, hi = 2;
+      for (var k = 0; k < 80; k++) {
+        var m = (lo + hi) / 2;
+        if (m - QB.cdf((xo - m) / sig) < 0) lo = m; else hi = m;
+      }
+      return (lo + hi) / 2;
+    }
+    function bestReply(xo, c, sig) {
+      // staying pays R * P(theta > theta_f | x) = R * Phi((x - theta_f)/sig): indifferent where that equals c
+      return failPoint(xo, sig) + sig * QB.inv(Math.min(Math.max(c / R, 1e-6), 1 - 1e-6));
+    }
+    QB.widget(el, {
+      title: "Run on the bank",
+      sub: "You are one depositor among thousands. Each of you sees a slightly noisy reading of how strong the bank " +
+           "is, and withdraws if it looks weak enough. Set the cutoff everyone else uses. Left: the share who " +
+           "withdraw at each strength, and where the bank fails (above the dashed line). Right: your best cutoff " +
+           "against theirs. Can you find the cutoff at which you would do exactly what everyone else does?",
+      panels: 2, height: 280,
+      controls: [
+        { k: "xo", label: "Everyone else's cutoff", min: 0, max: 1, step: 0.005, value: 0.3,
+          fmt: function (x) { return x.toFixed(3); } },
+        { k: "c", label: "What a withdrawal pays (staying pays 2 if the bank survives)", min: 0.2, max: 1.8,
+          step: 0.05, value: 1, fmt: function (x) { return x.toFixed(2); } },
+        { k: "sig", label: "Noise in each depositor's reading", min: 0.01, max: 0.2, step: 0.005, value: 0.05,
+          fmt: function (x) { return x.toFixed(3); } },
+      ],
+      draw: function (g, v, st) {
+        var th = [], sh = [], k;
+        for (k = 0; k <= 200; k++) { var t = k / 200; th.push(t); sh.push(QB.cdf((v.xo - t) / v.sig)); }
+        var tf = failPoint(v.xo, v.sig);
+        var a1 = g[0].axes({ x: [0, 1], y: [0, 1], title: "Share withdrawing", xlabel: "the bank's strength" });
+        a1.line([0, 1], [0, 1], { color: GREY_HINT, width: 1, dash: [4, 4] });
+        a1.line(th, sh, { color: RED, width: 2.5 });
+        if (tf > 0 && tf < 1) a1.vline(tf, { color: GOLD, width: 2, dash: [] });
+        var xs = [], br = [];
+        for (k = 0; k <= 100; k++) { var x = k / 100; xs.push(x); br.push(bestReply(x, v.c, v.sig)); }
+        var a2 = g[1].axes({ x: [0, 1], y: [0, 1], title: "Your best cutoff", xlabel: "everyone else's cutoff" });
+        a2.line([0, 1], [0, 1], { color: GREY_HINT, width: 1, dash: [4, 4] });
+        a2.line(xs, br, { color: BLUE, width: 2.5 });
+        var mine = bestReply(v.xo, v.c, v.sig);
+        a2.dots([v.xo], [Math.min(Math.max(mine, 0), 1)], { color: GOLD, r: 5 });
+        var ts = v.c / R, xstar = ts + v.sig * QB.inv(Math.min(Math.max(ts, 1e-6), 1 - 1e-6));
+        a2.dots([xstar], [xstar], { color: GREEN, r: 5 });
+        st.tf = tf; st.mine = mine; st.ts = ts; st.xstar = xstar;
+      },
+      readout: function (v, st) {
+        var gap = Math.abs(st.mine - v.xo);
+        return [["the bank fails below", st.tf.toFixed(3)],
+                ["your best cutoff", st.mine.toFixed(3) + (st.mine > v.xo ? " (run sooner than the others)" :
+                                                                         " (run later than the others)")],
+                ["the equilibrium", "everyone at " + st.xstar.toFixed(3) + "; the bank fails below c/R = " +
+                  st.ts.toFixed(2)],
+                ["verdict", gap < 0.01 ? "you found it: nobody wants a different cutoff" :
+                  "not yet: if everyone used your best cutoff, your best cutoff would move"]];
+      },
+      note: "However small the noise, there is only one cutoff that is everyone's best reply to itself (Morris and " +
+            "Shin 1998). Raise what a withdrawal pays and the failure threshold c/R rises: better insurance for the " +
+            "impatient means more runs (Goldstein and Pauzner 2005). Part 26, chapter 10. Computed in your browser; " +
+            "nothing you do here is stored or sent.",
+    });
+  };
 })();

@@ -10,7 +10,7 @@ the series leaves out.
 Both *Parts* columns are found, not typed. *Planned* lists the parts whose entry in
 [`SYLLABUS.md`](SYLLABUS.md) names the book or paper; *Built* lists the parts whose scenes, compute step or
 README cite it (a dot: none yet). Fuller notes (editions, chapters, what each source was used for) are in each
-part's README, under *Sources*. Built so far: Parts 1–25.
+part's README, under *Sources*. Built so far: Parts 1–26.
 
 ## 1. The textbook spine
 
@@ -73,7 +73,7 @@ part's README, under *Sources*. Built so far: Parts 1–25.
 | Obstfeld–Rogoff | M. Obstfeld and K. Rogoff, *Foundations of International Macroeconomics* (1996) | 34 | · |
 | Pissarides | C. Pissarides, *Equilibrium Unemployment Theory* (2nd ed., 2000) | 24 | 24 |
 | Cochrane | J. Cochrane, *Asset Pricing* (rev. ed., 2005) | 23 | · |
-| Freixas–Rochet | X. Freixas and J.-C. Rochet, *Microeconomics of Banking* (2nd ed., 2008) | 26 | · |
+| Freixas–Rochet | X. Freixas and J.-C. Rochet, *Microeconomics of Banking* (2nd ed., 2008) | 26 | 26 |
 
 ### Econometrics and computation
 
@@ -212,7 +212,7 @@ part's README, under *Sources*. Built so far: Parts 1–25.
 | Model or result | Paper | Planned | Built |
 |---|---|---|---|
 | money as a medium of exchange | Kiyotaki and Wright (1989) | 25 | 25 |
-| bank runs | Diamond and Dybvig (1983) | 26 | · |
+| bank runs | Diamond and Dybvig (1983) | 26 | 26 |
 | debt deflation and financial instability | Fisher (1933); Minsky (1986) | 33 | · |
 | the financial accelerator | Bernanke, Gertler and Gilchrist (1999) | 33 | · |
 | forecasting by professionals | the Survey of Professional Forecasters (Philadelphia Fed) | 1, 57 | 1 |
@@ -305,6 +305,8 @@ part's README, under *Sources*. Built so far: Parts 1–25.
 **Part 24, *Looking for Work*.** Books: Christopher Pissarides, *Equilibrium Unemployment Theory* (2nd ed., 2000), ch. 1 on; Pierre Cahuc, Stéphane Carcillo and André Zylberberg, *Labor Economics* (2nd ed., 2014), chs. 5, 9; Lars Ljungqvist and Thomas Sargent, *Recursive Macroeconomic Theory* (4th ed., 2018), search and matching; Richard Rogerson, Robert Shimer and Randall Wright, JEL 43(4) (2005): the survey. Papers: Stigler (1961); McCall (1970); Diamond (1982); Mortensen and Pissarides (1994); Hosios (1990); Butters (1977); Petrongolo and Pissarides (2001); Davis and Haltiwanger (1992); Katz and Meyer (1990); Shimer (2005, 2012); Hall (2005); Hagedorn and Manovskii (2008); Pissarides (2009); Ljungqvist and Sargent (2017); Elsby, Michaels and Solon (2009); Burdett and Mortensen (1998); Topel and Ward (1992); Manning (2003); Kroft, Lange and Notowidigdo (2013); Davis and von Wachter (2011); Card, Chetty and Weber (2007); Horton (2017); Belot, Kircher and Muller (2019); Hershbein and Kahn (2018); Marinescu and Rathelot (2018); Hansen et al. (2023).
 
 **Part 25, *Money*.** Books: Carl Walsh, *Monetary Theory and Policy* (4th ed., 2017), chs. 1–4; Milton Friedman and Anna Schwartz, *A Monetary History of the United States, 1867–1960* (1963); Thomas Sargent, *Rational Expectations and Inflation* (3rd ed., 2013); Ricardo Lagos, Guillaume Rocheteau and Randall Wright, JEL 55(2) (2017): liquidity, a survey. Papers: Jevons (1875); Furness (1910); Friedman (1991); Kocherlakota (1998); Kiyotaki and Wright (1989); Duffy and Ochs (1999); Fisher (1896, 1911); McCandless and Weber (1995); Cagan (1956); Sargent (1982); Hanke and Krus (2012); Baumol (1952); Tobin (1956); Lucas and Nicolini (2015); McLeay, Radia and Thomas (2014); Sidrauski (1967); Friedman (1969); Lucas (2000); Ball (2001); Ireland (2009); Gorton and Zhang (2023).
+
+**Part 26, *Banks and Runs*.** Books: Xavier Freixas and Jean-Charles Rochet, *Microeconomics of Banking* (2nd ed., 2008), chs. 2, 7, 9; Gary Gorton, *Misunderstanding Financial Crises* (2012); Walter Bagehot, *Lombard Street* (1873); Anat Admati and Martin Hellwig, *The Bankers' New Clothes* (2013). Papers: Diamond and Dybvig (1983); Diamond (1984); Bernanke (1983); Merton (1977); Gorton and Metrick (2012); Morris and Shin (1998); Goldstein and Pauzner (2005); Friedman and Schwartz (1963); Calomiris and Mason (2003); Curry and Shibut (2000); Jiang, Matvos, Piskorski and Seru (2024); Drechsler, Savov and Schnabl (2017, 2021); Reinhart and Rogoff (2009); Cerra and Saxena (2008); Romer and Romer (2017); Cookson et al. (2023).
 
 ## 4. What the series leaves out
 

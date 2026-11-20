@@ -680,6 +680,12 @@ TRUTHS = {
         # the global game (chapter 10): a withdrawer gets 1, a stayer 2 if the bank survives; noise 0.05; 2,000
         # depositors; a more generous deposit pays withdrawers 1.2
         "gg": {"c": 1.0, "R": 2.0, "sigma": 0.05, "n": 2000, "c_generous": 1.2, "seed": 0},
+        # the repo run (chapter 9): a dealer with securities of 100 and equity of 4 funds the rest by repo; the
+        # haircut rises from 4% to 20%
+        "repo": {"assets": 100.0, "equity": 4.0, "haircut_from": 0.04, "haircut_to": 0.20},
+        # delegated monitoring (chapter 12): each borrower repays 1.3 with probability 0.9, nothing otherwise; the
+        # bank promises depositors 1 per loan; monitoring a borrower costs 0.02
+        "monitor": {"p": 0.9, "R": 1.3, "D": 1.0, "cost": 0.02, "ns": (1, 10, 100, 1000), "depositors": 1000},
     },
 }
 

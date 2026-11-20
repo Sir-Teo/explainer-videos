@@ -152,3 +152,25 @@ def capital_ratio(assets: dict, equity: float, weights: dict | None = None, loss
 def deposit_beta(policy_from: float, policy_to: float, deposit_from: float, deposit_to: float) -> float:
     """The share of the change in the policy rate passed on to a deposit rate."""
     return (deposit_to - deposit_from) / (policy_to - policy_from)
+
+
+def repo_leverage(assets: float, equity: float, haircut_from: float, haircut_to: float) -> dict:
+    """A dealer funded by repo: it can borrow ``(1 - h)`` of its securities' value, so its leverage is at most
+    ``1 / h``.  When the haircut rises from ``haircut_from`` to ``haircut_to`` with equity fixed, the securities it
+    can carry fall to ``equity / haircut_to``; the rest must be sold."""
+    can_before = equity / haircut_from
+    can_after = equity / haircut_to
+    held = min(assets, can_before)
+    return {"max_leverage_from": 1 / haircut_from, "max_leverage_to": 1 / haircut_to, "held": held,
+            "can_hold_after": can_after, "must_sell": max(held - can_after, 0.0),
+            "repo_from": held * (1 - haircut_from), "repo_after": can_after * (1 - haircut_to)}
+
+
+def diversified_failure(n: int, p: float, R: float, D: float = 1.0) -> float:
+    """Diamond's delegated monitor: a bank lends 1 to each of ``n`` independent borrowers, each repaying ``R`` with
+    probability ``p`` and nothing otherwise, and promises depositors ``D`` per loan.  The probability that it cannot
+    pay them in full: P(repayments < n D)."""
+    from scipy.stats import binom
+
+    need = int(np.ceil(n * D / R - 1e-12))  # loans that must repay
+    return float(binom.cdf(need - 1, n, p))

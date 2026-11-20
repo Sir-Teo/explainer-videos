@@ -720,6 +720,20 @@ brackets on screen.
 | the Fisher equation; the Friedman rule; cash in advance | 费雪方程；弗里德曼规则；预付现金约束 |
 | stablecoins; central bank digital currency | 稳定币；央行数字货币 |
 
+## Part 26
+
+| English | 中文 |
+|---|---|
+| maturity transformation; demand deposit; bank run | 期限转换；活期存款；银行挤兑 |
+| sequential service; sunspot; suspension of convertibility | 先到先付；太阳黑子（协调信号）；暂停兑付 |
+| deposit insurance; lender of last resort; Bagehot's rule | 存款保险；最后贷款人；白芝浩原则 |
+| fire sale; illiquid; insolvent | 甩卖；流动性不足；资不抵债 |
+| moral hazard; too big to fail; capital requirement; risk weight | 道德风险；大而不能倒；资本要求；风险权重 |
+| repo; haircut; shadow banking; money market fund; breaking the buck | 回购；折扣率（垫头）；影子银行；货币市场基金；跌破面值 |
+| global games; delegated monitoring | 全局博弈；委托监督 |
+| deposit beta; deposit franchise; duration; stress test | 存款贝塔；存款特许价值；久期；压力测试 |
+| narrow banking | 狭义银行 |
+
 ## Names
 
 | English | 中文 |

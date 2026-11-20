@@ -27,8 +27,9 @@ class Intermission(SoundScene):
                    yfmt=lambda v: f"{10 ** v:.0f}", font_size=15)
 
         def full(series, color):
+            # a missing month (BLS published no October 2025 CPI) is skipped, not drawn
             return VMobject(stroke_color=color, stroke_width=3).set_points_as_corners(
-                [ax.ax.c2p(x, np.log10(v)) for x, v in zip(t, series)])
+                [ax.ax.c2p(x, np.log10(v)) for x, v in zip(t, series) if np.isfinite(v) and v > 0])
         fb, fm, fp = full(film["base"], CB), full(film["m2"], BANK), full(film["cpi"], PRICE)
         gb, gm, gp = fb.copy(), fm.copy(), fp.copy()
         t0, t1 = film_time(t[0]), film_time(t[-1])

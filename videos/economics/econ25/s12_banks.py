@@ -61,7 +61,7 @@ class Banks(VoiceoverScene):
         t = mo.taccounts(loan=100.0)
         bank0 = tacct(r"the bank", BANK, [(r"reserves \ 10", CB), (r"loans \ 90", BANK)],
                       [(r"deposits \ 90", BANK), (r"capital \ 10", GREY_A)])
-        hh0 = tacct(r"Ana", COCO, [(r"\ ", WHITE)], [(r"\ ", WHITE)])
+        hh0 = tacct(r"Ana", COCO, [(r"(nothing yet)", GREY_D)], [(r"(nothing yet)", GREY_D)])
         VGroup(bank0, hh0).arrange(RIGHT, buff=1.2).move_to(UP * 0.9)
         bank1 = tacct(r"the bank", BANK, [(r"reserves \ 10", CB), (r"loans \ 90", BANK),
                                           (rf"$+$ loan to Ana \ {t['bank']['assets']['loan']:.0f}", MONEY)],
@@ -75,7 +75,7 @@ class Banks(VoiceoverScene):
             label(r"broad money rises by 100; \ reserves have not changed", font_size=23, color=MONEY),
             label(r"when the loan is repaid, \ the deposit is destroyed", font_size=22, color=GREY_A),
         ).arrange(DOWN, buff=0.25).to_edge(DOWN, buff=0.7)
-        tag = published_tag(r"McLeay, Radia and Thomas (2014): \ \"Money creation in the modern economy\"", corner=DR,
+        tag = published_tag(r"McLeay, Radia and Thomas (2014): \ ``Money creation in the modern economy''", corner=DR,
                             font_size=12)
         with self.voiceover(
             "Watch two balance sheets. A bank with reserves, loans, deposits and capital, and Ana, who owns a bakery "

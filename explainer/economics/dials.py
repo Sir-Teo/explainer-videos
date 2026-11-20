@@ -580,6 +580,57 @@ DIALS = {d.key: d for d in [
              Estimate("this film (Agora)", 2026, "regression", "US 1994-2019, quarterly: the same regression", -0.032,
                       where="videos/economics/econ25/compute.py, item baumol", checked="2026-11-20"),
          )),
+    Dial("deposit_beta", "deposit beta", "the share of a rise in the policy rate that banks pass on to a deposit rate, "
+         "over a tightening cycle", (26, 31), status="depends on the setting", checked="2026-11-20",
+         meaning="banks pay depositors much less than the policy rate, and pass on its rises slowly: savings accounts "
+                 "almost nothing, time deposits a third, the average interest-bearing deposit about two-fifths by the "
+                 "end of a cycle; the low beta is the deposit franchise that hedges a bank's long assets, and it "
+                 "lasts only while depositors stay",
+         estimates=(
+             Estimate("Federal Reserve Bank of New York", 2022, "regression", "US banks, interest-bearing deposits: "
+                      "the 2004-06 cycle's peak cumulative beta, approaching 0.6 (shown at 0.6)", 0.6,
+                      where="Liberty Street Economics, 'How do deposit rates respond to monetary policy?', November "
+                            "2022", checked="2026-11-20"),
+             Estimate("Federal Reserve Bank of New York", 2022, "regression", "US banks, interest-bearing deposits: "
+                      "the 2015-19 cycle, never above 0.4 (shown at the bound)", 0.4,
+                      where="Liberty Street Economics, November 2022", checked="2026-11-20"),
+             Estimate("Federal Reserve Bank of New York", 2023, "regression", "US banks, interest-bearing deposits, "
+                      "cumulative to 2022 Q4: almost 0.4 (shown at 0.39)", 0.39,
+                      where="Liberty Street Economics, 'Deposit betas: up, up, and away?', April 2023",
+                      checked="2026-11-20"),
+             Estimate("S&P Global Market Intelligence", 2023, "survey", "US banks, all deposits, aggregate cumulative "
+                      "beta to 2023 Q3", 0.385, where="S&P Global Market Intelligence, October 2023",
+                      checked="2026-11-20"),
+             Estimate("this film (FDIC national rates)", 2026, "regression", "savings accounts, February 2022 to "
+                      "December 2023, against the federal funds rate", 0.076,
+                      where="videos/economics/econ26/compute.py, item betas", checked="2026-11-20"),
+             Estimate("this film (FDIC national rates)", 2026, "regression", "12-month CDs, February 2022 to "
+                      "December 2023", 0.328, where="videos/economics/econ26/compute.py, item betas",
+                      checked="2026-11-20"),
+         )),
+    Dial("crisis_cost", "output cost of a banking crisis", "percent of GDP: the fall from peak to trough, or the "
+         "persistent gap below the pre-crisis path, as each study measures it", (26, 33, 55), status="contested",
+         checked="2026-11-20",
+         meaning="output falls by about a tenth after the typical systemic banking crisis and does not fully recover, "
+                 "but averages mix crises with what caused them; in rich countries the average decline is nearer six "
+                 "percent and varies with how severe the financial distress was; the gap that persists depends on "
+                 "which trend you draw",
+         estimates=(
+             Estimate("Reinhart and Rogoff", 2009, "event study", "systemic banking crises: real GDP per capita, "
+                      "peak to trough, average (over 9 percent; shown at 9)", 9.0,
+                      where="AER 99(2): 466-472, abstract", checked="2026-11-20"),
+             Estimate("Cerra and Saxena", 2008, "regression", "190 countries, banking crises: the persistent loss of "
+                      "output", 10.0, where="AER 98(1): 439-457; the authors' summary, IMF blog, 21 March 2018",
+                      checked="2026-11-20"),
+             Estimate("Romer and Romer", 2017, "regression", "24 OECD countries, 1967-2012, a new measure of "
+                      "financial distress: peak decline of GDP after a crisis (4 percent by GLS)", 6.0,
+                      where="AER 107(10): 3072-3118", checked="2026-11-20"),
+             Estimate("this film (US, 2007-09)", 2026, "event study", "US real GDP, 2007 Q4 to 2009 Q2, peak to trough",
+                      3.8, where="videos/economics/econ26/compute.py, item crisis", checked="2026-11-20"),
+             Estimate("this film (US, 2007-09)", 2026, "event study", "US real GDP in 2019 Q4 below its 1990-2007 "
+                      "trend (3.2 percent a year)", 17.6, where="videos/economics/econ26/compute.py, item crisis",
+                      checked="2026-11-20"),
+         )),
     Dial("monetary_shock", "effect of a 100-basis-point tightening on output and prices", "percent at the peak",
          (31, 55)),
     Dial("multipliers", "government-spending and tax multipliers", "dollars of output per dollar", (32,)),
@@ -1090,6 +1141,27 @@ SHOWN = {
         ("Pissarides (2000); Cahuc, Carcillo and Zylberberg (2014); Ljungqvist and Sargent (2018); Rogerson, Shimer "
          "and Wright (2005)", "the reading list"),
         ("Furness (1910)", "the next part's hook, stated"),
+    ],
+    26: [
+        ("Barr (2023); the Federal Reserve's review of Silicon Valley Bank (2023)", "the hook's thirty-six hours and "
+         "the bank's numbers, transcribed (tables.SVB_2023)"),
+        ("Diamond and Dybvig (1983)", "the model, derived and solved in Agora"),
+        ("Bagehot (1873)", "the lender of last resort, stated; the fire sale computed in Agora"),
+        ("Merton (1977)", "deposit insurance as a put, computed in Agora"),
+        ("Curry and Shibut (2000)", "the cost of the savings-and-loan crisis, stated"),
+        ("Admati and Hellwig (2013)", "the capital debate, stated; the equity ratio is the FFIEC's data"),
+        ("Gorton and Metrick (2012)", "the run on repo, stated; the haircut arithmetic computed in Agora"),
+        ("Morris and Shin (1998); Goldstein and Pauzner (2005)", "global games, solved and simulated in Agora"),
+        ("Friedman and Schwartz (1963); Calomiris and Mason (2003)", "the Depression's banking crises, stated; the "
+         "suspensions are the NBER's data"),
+        ("Jiang, Matvos, Piskorski and Seru (2024)", "banks' unrealized losses and uninsured deposits, stated"),
+        ("Diamond (1984); Bernanke (1983)", "delegated monitoring computed in Agora; the cost of failures stated"),
+        ("the New York Fed (2022, 2023); S&P Global (2023)", "the deposit-beta dial's rows"),
+        ("Reinhart and Rogoff (2009); Cerra and Saxena (2008); Romer and Romer (2017)", "the crisis-cost dial's rows"),
+        ("the Federal Reserve's 2022 stress test scenarios", "the Called it? card (tables.STRESS_2022)"),
+        ("Drechsler, Savov and Schnabl (2017, 2021)", "the deposit franchise, stated"),
+        ("Cookson et al. (2023); the USDC de-peg of March 2023", "frontier work on digital runs and stablecoins, "
+         "stated"),
     ],
     25: [
         ("Furness (1910); Friedman (1991)", "the hook's stone money and the Bank of France's gold, stated"),

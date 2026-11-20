@@ -122,8 +122,8 @@ class Quantity(VoiceoverScene):
 
     def us(self):
         u = load("us_money")
-        ax = plane([1959, 2027], [1.2, 2.3], center=LEFT * 1.8 + DOWN * 0.3, x_length=8.4, y_length=4.8,
-                   xticks=[1960, 1980, 2000, 2020], yticks=[1.2, 1.5, 1.8, 2.1], ylabel=r"velocity of M2: \ nominal "
+        ax = plane([1959, 2027], [1.0, 2.3], center=LEFT * 1.8 + DOWN * 0.3, x_length=8.4, y_length=4.8,
+                   xticks=[1960, 1980, 2000, 2020], yticks=[1.0, 1.5, 2.0], ylabel=r"velocity of M2: \ nominal "
                    r"GDP $\div$ M2", xfmt=lambda v: f"{v:.0f}", yfmt=lambda v: f"{v:.1f}", font_size=16)
         line_ = path(ax, u["v_t"], u["v"], color=MONEY, width=3, smooth=False)
         side = VGroup(
