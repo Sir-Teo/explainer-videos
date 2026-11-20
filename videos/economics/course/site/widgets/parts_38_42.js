@@ -192,4 +192,54 @@
             "here is stored or sent.",
     });
   };
+  W.toprate = function (el) {
+    // The optimal top rate (explainer.economics.agora.tax: top_rate, top_revenue): (1 - g) / (1 - g + a e), with
+    // incomes above the top threshold Pareto with parameter a, each scaling with (1 - tau)^e.
+    function rate(a, e, g) { return (1 - g) / (1 - g + a * e); }
+    // every top income scales with (1 - t)^e and the Pareto tail keeps its shape, so the income above the threshold
+    // scales with the power a e: revenue t/(a - 1) ((1 - t)/(1 - 0.37))^(a e), per taxpayer in the bracket at 37%
+    function rev(t, a, e) { return t / (a - 1) * Math.pow((1 - t) / (1 - 0.37), a * e); }
+    QB.widget(el, {
+      title: "Set the top rate",
+      sub: "Left: the revenue from the top bracket against its rate (gold), the rate that raises the most (red) and " +
+           "your optimum (green). Right: the optimal rate against the elasticity, for your a and g.",
+      panels: 2, height: 270,
+      controls: [
+        { k: "a", label: "Pareto parameter of top incomes, a", min: 1.2, max: 3, step: 0.01, value: 1.56,
+          fmt: function (x) { return x.toFixed(2); } },
+        { k: "e", label: "Elasticity of taxable income, e", min: 0.05, max: 1.5, step: 0.01, value: 0.25,
+          fmt: function (x) { return x.toFixed(2); } },
+        { k: "g", label: "Social value of a dollar to top earners, g", min: 0, max: 0.8, step: 0.01, value: 0,
+          fmt: function (x) { return x.toFixed(2); } },
+      ],
+      draw: function (g, v, st) {
+        var ts = [], rs = [], k, best = 0;
+        for (k = 0; k <= 99; k++) {
+          var t = k / 100, r = rev(t, v.a, v.e);
+          ts.push(t); rs.push(r);
+          if (r > best) best = r;
+        }
+        var top = best;
+        var A = g[0].axes({ x: [0, 1], y: [0, top * 1.15 + 1e-6], title: "top-bracket revenue", xlabel: "top rate" });
+        A.line(ts, rs, { color: "#F2C14E", width: 2.5 });
+        var t0 = rate(v.a, v.e, 0), t1 = rate(v.a, v.e, v.g);
+        A.vline(t0, { color: "#F25F5C", width: 2, dash: [] });
+        A.vline(t1, { color: "#7BD88F", width: 2, dash: [4, 4] });
+        A.vline(0.37, { color: "#9AA3B2", width: 1 });
+        var es = [], os = [];
+        for (k = 0; k <= 60; k++) { var e = 0.05 + 1.45 * k / 60; es.push(e); os.push(rate(v.a, e, v.g)); }
+        var B = g[1].axes({ x: [0, 1.5], y: [0, 1], title: "optimal top rate", xlabel: "elasticity e" });
+        B.line(es, os, { color: "#7BD88F", width: 2.5 });
+        B.dots([v.e], [t1], { color: "#F2C14E", r: 5 });
+        st.t0 = t0; st.t1 = t1; st.at37 = rev(0.37, v.a, v.e) / best;
+      },
+      readout: function (v, st) {
+        return [["revenue-maximizing top rate (g = 0)", (100 * st.t0).toFixed(0) + "%"],
+                ["your optimal top rate", (100 * st.t1).toFixed(0) + "%"],
+                ["revenue at 37%, as a share of the most possible", (100 * st.at37).toFixed(0) + "%"]];
+      },
+      note: "Part 41, chapters 3 and 6. America's tax data give a of about 1.56 (2022); the elasticity is the " +
+            "contested number. Computed in your browser; nothing you do here is stored or sent.",
+    });
+  };
 })();

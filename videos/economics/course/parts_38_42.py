@@ -141,4 +141,48 @@ PARTS = [
               ("The Island's planted truths", "explainer/economics/island.py"),
               ("The Data Room's sources", "explainer/economics/data/SOURCES.md")),
     ),
+    Part(
+        n=41, level="U", widget="toprate", prereq=(2, 10, 18, 40),
+        question="Who really pays a tax, and how high should the top rate be?",
+        story="The part opens on Arthur Laffer's napkin of 1974 and the dispute about it, and shows that the top of "
+              "his curve depends on one elasticity. It computes who bears a tax on capital as capital becomes "
+              "mobile (none to all of it), measures the Harberger triangle as it grows with the square of the rate, "
+              "and asks the viewer to set the top rate from three numbers, the Pareto parameter read from the 2022 "
+              "tax data. It derives Ramsey's rule on three goods, sets out Mirrlees's information problem and "
+              "Diamond's formula, derives the top rate from one small reform, and computes the U-shaped schedule. "
+              "After an intermission of the top statutory rate since 1913, it measures the elasticity from a century "
+              "of rates and top shares and the 1986 reform, runs Saez's bunching estimator on the Island's taxpayers, "
+              "reads Chetty, Looney and Kroft's shelf tags, the case against taxing capital and its unravelling, "
+              "profit shifting and the global minimum tax, Allingham and Sandmo's model against Denmark's audit "
+              "experiment; three dials, a static and a behavioural score, Mnuchin's 2017 promise as Called it?, and "
+              "the frontier.",
+        handoff="Part 42 turns to what the state pays out: social insurance, the EITC and cash transfers; Part 58 "
+                "returns to tax policy in practice.",
+        outside="Part 2: incidence in one market; Part 10: elasticities and pricing; Part 18: welfare weights; Part "
+                "40: Pareto tails and top shares. Chapter 1 uses a Cobb-Douglas production function; chapter 4 a "
+                "Lagrangian; chapter 6 a first-order condition on a small reform; chapter 9 a polynomial fit.",
+        objectives={
+            "U": ["Explain why a tax's burden does not depend on who pays it, and who bears the corporate tax.",
+                  "Show why deadweight loss grows with the square of the rate.",
+                  "State what the elasticity of taxable income measures and why it is partly a policy choice."],
+            "M": ["Derive the optimal top rate (1 - g)/(1 - g + a e) from a small reform.",
+                  "Derive Ramsey's inverse-elasticity rule for independent goods.",
+                  "Compute Diamond's optimal marginal rates and explain the U-shape."],
+            "D": ["Estimate an elasticity from bunching at a kink and explain the role of frictions.",
+                  "Assess the Chamley-Judd result and Straub and Werning's revision."],
+            "I": ["Score a change in the top rate with and without behavioural responses."],
+        },
+        results=[
+            ("The Laffer peak", r"R(t) = t(1-t)^{e} \;\Rightarrow\; t^{*} = \frac{1}{1+e}"),
+            ("Harberger's triangle", r"\mathrm{DWL} \approx \tfrac12 t^2 \frac{\varepsilon_d \varepsilon_s}"
+                                     r"{\varepsilon_d+\varepsilon_s} pq"),
+            ("Ramsey's rule", r"\frac{t_i}{1+t_i} = \frac{k}{\varepsilon_i}"),
+            ("The top rate", r"\tau^{*} = \frac{1-g}{1-g+a e}"),
+            ("Bunching", r"\hat e = \frac{b}{z^{*}\ln\frac{1-t_0}{1-t_1}}"),
+        ],
+        U=(0, 1, 2, 3, "s09_intermission", 8, 10, 12, 13), D=(9, 11, 14, 16), I=(15,),
+        also=(("Agora's tax", "explainer/economics/agora/tax.py"),
+              ("The Island's planted truths", "explainer/economics/island.py"),
+              ("The Data Room's sources", "explainer/economics/data/SOURCES.md")),
+    ),
 ]

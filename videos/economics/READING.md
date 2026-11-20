@@ -10,7 +10,7 @@ the series leaves out.
 Both *Parts* columns are found, not typed. *Planned* lists the parts whose entry in
 [`SYLLABUS.md`](SYLLABUS.md) names the book or paper; *Built* lists the parts whose scenes, compute step or
 README cite it (a dot: none yet). Fuller notes (editions, chapters, what each source was used for) are in each
-part's README, under *Sources*. Built so far: Parts 1–40.
+part's README, under *Sources*. Built so far: Parts 1–41.
 
 ## 1. The textbook spine
 
@@ -39,7 +39,7 @@ part's README, under *Sources*. Built so far: Parts 1–40.
 | Mishkin | F. Mishkin, *The Economics of Money, Banking, and Financial Markets* (13th ed., 2022) | 26 | 31 |
 | Cabral | L. Cabral, *Introduction to Industrial Organization* (2nd ed., 2017) | 12–13 | 12–13 |
 | Borjas | G. Borjas, *Labor Economics* (8th ed., 2020) | 38 | 38 |
-| Gruber | J. Gruber, *Public Finance and Public Policy* (7th ed., 2022) | 15, 41–42, 50 | 7, 15 |
+| Gruber | J. Gruber, *Public Finance and Public Policy* (7th ed., 2022) | 15, 41–42, 50 | 7, 15, 41 |
 | Ray | D. Ray, *Development Economics* (1998) | 46 | · |
 | Weil | D. Weil, *Economic Growth* (3rd ed., 2013) | 7, 19 | 3, 7, 19–21, 23 |
 
@@ -85,7 +85,7 @@ part's README, under *Sources*. Built so far: Parts 1–40.
 | Hamilton | J. Hamilton, *Time Series Analysis* (1994) | 55 | 6 |
 | Kilian–Lütkepohl | L. Kilian and H. Lütkepohl, *Structural Vector Autoregressive Analysis* (2017) | 55 | · |
 | Train | K. Train, *Discrete Choice Methods with Simulation* (2nd ed., 2009) | 43, 54 | · |
-| Judd | K. Judd, *Numerical Methods in Economics* (1998) | 51 | 29 |
+| Judd | K. Judd, *Numerical Methods in Economics* (1998) | 51 | 29, 41 |
 | QuantEcon | T. Sargent and J. Stachurski, *Quantitative Economics* (QuantEcon lectures) | 51 | · |
 
 ### The fields
@@ -94,8 +94,8 @@ part's README, under *Sources*. Built so far: Parts 1–40.
 |---|---|---|---|
 | Feenstra | R. Feenstra, *Advanced International Trade* (2nd ed., 2016) | 6, 35–36 | 6, 8, 20, 35–36 |
 | Cahuc–Carcillo–Zylberberg | P. Cahuc, S. Carcillo and A. Zylberberg, *Labor Economics* (2nd ed., 2014) | 24, 38 | 24, 38 |
-| Atkinson–Stiglitz | A. Atkinson and J. Stiglitz, *Lectures on Public Economics* (1980; 2015) | 41 | 6 |
-| Salanié | B. Salanie, *The Economics of Taxation* (2nd ed., 2011) | 41 | 13–14 |
+| Atkinson–Stiglitz | A. Atkinson and J. Stiglitz, *Lectures on Public Economics* (1980; 2015) | 41 | 6, 41 |
+| Salanié | B. Salanie, *The Economics of Taxation* (2nd ed., 2011) | 41 | 13–14, 41 |
 | Banerjee–Duflo | A. Banerjee and E. Duflo, *Poor Economics* (2011) | 46 | · |
 | Persson–Tabellini | T. Persson and G. Tabellini, *Political Economics* (2000) | 47 | · |
 | Dhami | S. Dhami, *The Foundations of Behavioral Economic Analysis* (2016) | 45 | · |
@@ -127,7 +127,7 @@ part's README, under *Sources*. Built so far: Parts 1–40.
 | the double auction in the classroom | Chamberlin (1948); Smith (1962) | 1–2 | 1 |
 | zero-intelligence traders | Gode and Sunder (1993) | 2 | 1–2 |
 | general equilibrium and its welfare theorems | Arrow and Debreu (1954); Debreu (1959) | 9 | 8–9 |
-| consumer surplus | Dupuit (1844) | 2, 10 | 2, 9–10, 18 |
+| consumer surplus | Dupuit (1844) | 2, 10 | 2, 9–10, 18, 41 |
 
 ### Choice
 
@@ -172,12 +172,12 @@ part's README, under *Sources*. Built so far: Parts 1–40.
 
 | Model or result | Paper | Planned | Built |
 |---|---|---|---|
-| externalities and their tax | Pigou (1920) | 10, 15, 56 | 10, 15 |
+| externalities and their tax | Pigou (1920) | 10, 15, 56 | 10, 15, 41 |
 | bargaining over externalities | Coase (1960) | 15 | 15 |
 | public goods | Samuelson (1954) | 15 | · |
 | governing the commons | Ostrom (1990) | 15 | 15 |
 | the impossibility of social choice | Arrow (1951) | 18 | · |
-| optimal income taxation | Mirrlees (1971); Saez (2001) | 14, 41 | 6, 14, 16 |
+| optimal income taxation | Mirrlees (1971); Saez (2001) | 14, 41 | 6, 14, 16, 41 |
 | optimal commodity taxation | Ramsey (1927); Diamond and Mirrlees (1971) | 6, 10, 41 | · |
 
 ### Growth
@@ -237,7 +237,7 @@ part's README, under *Sources*. Built so far: Parts 1–40.
 | the minimum wage | Card and Krueger (1994) | 4, 38 | 4, 38 |
 | skills, tasks and technology | Autor, Levy and Murnane (2003); Acemoglu and Autor (2011) | 39 | 39 |
 | mobility and place | Chetty and others (2014) | 40, 42 | · |
-| top incomes | Piketty and Saez (2003) | 40 | 40 |
+| top incomes | Piketty and Saez (2003) | 40 | 40–41 |
 | the economics of crime | Becker (1968) | 49 | · |
 
 ### Method
@@ -335,6 +335,8 @@ part's README, under *Sources*. Built so far: Parts 1–40.
 **Part 39, *The Wage Structure*.** Books: Claudia Goldin and Lawrence Katz, *The Race between Education and Technology* (2008); Gary Becker, *The Economics of Discrimination* (1957); Claudia Goldin, *Career and Family* (2021); David Card, 'Who Set Your Wage?', *AER* (2022). Papers: Rosen (1974, 1981); Phelps (1972); Arrow (1973); Oaxaca (1973); Blinder (1973); Katz and Murphy (1992); Abowd, Kramarz and Margolis (1999); Goldin and Rouse (2000); Autor, Levy and Murnane (2003); Bertrand and Mullainathan (2004); Acemoglu and Autor (2011); Autor and Dorn (2013); Card, Heining and Kline (2013); Goldin (2014); Mas and Pallais (2017); Quillian et al. (2017); Kleven, Landais and S\ogaard (2019); Acemoglu and Restrepo (2020); Autor et al. (2020); Cullen and Pakzad-Hurson (2023).
 
 **Part 40, *Inequality and Mobility*.** Books: Anthony Atkinson, *Inequality: What Can Be Done?* (2015); Thomas Piketty, *Capital in the Twenty-First Century* (2014); Branko Milanovic, *Global Inequality* (2016); Frank Cowell, *Measuring Inequality* (3rd edition, 2011). Papers: Pareto (1896); Champernowne (1953); Kuznets (1955); Atkinson (1970); Pen (1971); Solon (1992); Piketty and Saez (2003); Mazumder (2005); Gabaix (2009); Corak (2013); Chetty, Hendren, Kline and Saez (2014); Rognlie (2015); Krusell and Smith (2015); Gabaix, Lasry, Lions and Moll (2016); Lakner and Milanovic (2016); Chetty et al. (2016, 2017); Chetty and Hendren (2018); Piketty, Saez and Zucman (2018); Jakobsen et al. (2020); Black et al. (2020); Auten and Splinter (2024).
+
+**Part 41, *Taxes*.** Books: Bernard Salanié, *The Economics of Taxation* (2nd edition, 2011); Joel Slemrod and Jon Bakija, *Taxing Ourselves* (5th edition, 2017); Peter Diamond and Emmanuel Saez, 'The Case for a Progressive Tax', *JEP* (2011); Jonathan Gruber, *Public Finance and Public Policy*, chapters 18–25. Papers: Ramsey (1927); Harberger (1962); Mirrlees (1971); Diamond and Mirrlees (1971); Allingham and Sandmo (1972); Atkinson and Stiglitz (1976); Judd (1985); Chamley (1986); Feldstein (1995); Diamond (1998); Saez (2001, 2002, 2010); Gruber and Saez (2002); Chetty, Looney and Kroft (2009); Kleven et al. (2011); Saez, Slemrod and Giertz (2012); Kleven and Waseem (2013); Kleven, Landais and Saez (2013); Zucman (2013); Piketty, Saez and Stantcheva (2014); Fuest, Peichl and Siegloch (2018); Straub and Werning (2020).
 
 ## 4. What the series leaves out
 

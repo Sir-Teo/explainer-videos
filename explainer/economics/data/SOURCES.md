@@ -292,3 +292,16 @@ publication, the copy that was read and the date the transcription was checked:
 | `matters` | life expectancy at 40: the richest 1% against the poorest 1%, 14.6 years for men and 10.1 for women | 2026-11-20 |
 | `frontier40` | distributional national accounts; Denmark's wealth taxes; Swedish adoptees' wealth | 2026-11-20 |
 | `forbes_400` | the Forbes 400's wealth: a Pareto exponent of 1.49 on average, 1988-2003 | 2026-11-20 |
+| `laffer_1974` | the Laffer curve's origin: the 1974 dinner, Wanniski's account and the disputed napkin | 2026-11-20 |
+| `harberger_1962` | corporate tax incidence: Harberger's closed economy; workers bear about 51% in German municipalities (Fuest, Peichl and Siegloch) | 2026-11-20 |
+| `ramsey_1927` | Ramsey's rule; Diamond and Mirrlees's production efficiency; Atkinson and Stiglitz | 2026-11-20 |
+| `mirrlees_1971` | the optimal income tax: Mirrlees; Diamond's U-shape; Saez's top rate and the extensive margin | 2026-11-20 |
+| `diamond_saez_2011` | the revenue-maximizing top rate: 73% with a = 1.5 and e = 0.25; bargaining raises it (Piketty, Saez and Stantcheva) | 2026-11-20 |
+| `eti_studies` | the elasticity of taxable income: Feldstein (at least one), Gruber and Saez (about 0.4), the 2012 review | 2026-11-20 |
+| `bunching` | bunching at kinks (Saez 2010: the EITC's first kink, self-employed only) and notches (Kleven and Waseem 2013) | 2026-11-20 |
+| `clk_2009` | salience: tax-inclusive tags cut sales about 8% (7.375% sales tax, about 750 products) | 2026-11-20 |
+| `capital_tax` | Chamley-Judd's zero long-run capital tax and Straub and Werning's revision | 2026-11-20 |
+| `havens` | offshore wealth (8% of household financial wealth), shifted profits (36%), the 15% global minimum (136 of 140) | 2026-11-20 |
+| `evasion` | Allingham and Sandmo; Denmark's audit experiment (0.3% and 37%) | 2026-11-20 |
+| `frontier41` | footballers' migration: elasticities of about one (foreign) and 0.15 (domestic) | 2026-11-20 |
+| `tcja_2017` | the 2017 tax act: 'it will pay for itself'; CBO's $1.9 trillion | 2026-11-20 |

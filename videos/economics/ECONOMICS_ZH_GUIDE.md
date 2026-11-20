@@ -998,6 +998,32 @@ brackets on screen.
 | redistribution; pre-distribution | 再分配；预分配 |
 | a distributional table | 分配表 |
 
+## Part 41
+
+| English | 中文 |
+|---|---|
+| the Laffer curve | 拉弗曲线 |
+| tax incidence; who bears a tax | 税收归宿；谁承担税负 |
+| the corporate tax; a small open economy | 公司税；小型开放经济 |
+| deadweight loss; Harberger's triangle | 无谓损失；哈伯格三角 |
+| the marginal cost of public funds | 公共资金的边际成本 |
+| Ramsey's rule; the inverse elasticity rule | 拉姆齐法则；逆弹性法则 |
+| production efficiency (Diamond-Mirrlees) | 生产效率（戴蒙德—米尔利斯） |
+| optimal income taxation (Mirrlees) | 最优所得税（米尔利斯） |
+| marginal tax rate; the top rate | 边际税率；最高税率 |
+| the elasticity of taxable income | 应税收入弹性 |
+| welfare weights | 社会福利权重 |
+| the Earned Income Tax Credit (EITC) | 劳动所得税抵免（EITC） |
+| the extensive and intensive margins | 广延边际与集约边际 |
+| bunching at kinks; notches | 拐点处的聚集；断点（缺口） |
+| salience | 显著性 |
+| the Chamley-Judd result | 查姆利—贾德结论 |
+| profit shifting; tax havens | 利润转移；避税天堂 |
+| the global minimum tax | 全球最低税 |
+| tax evasion; tax avoidance | 逃税；避税 |
+| third-party reporting | 第三方报告 |
+| static and dynamic (behavioural) scoring | 静态与动态（行为）评分 |
+
 ## Names
 
 | English | 中文 |
@@ -1263,3 +1289,5 @@ brackets on screen.
 | Xavier Gabaix; Matteo Maggiori; Oleg Itskhoki; Dmitry Mukhin; Pierre-Olivier Gourinchas | 泽维尔·加贝克斯；马泰奥·马焦里；奥列格·伊茨霍基；德米特里·穆欣；皮埃尔-奥利维耶·古兰沙 |
 | Valéry Giscard d'Estaing; Norman Lamont; Ben Bernanke; Joseph Stiglitz; Barbara Rossi | 瓦莱里·吉斯卡尔·德斯坦；诺曼·拉蒙特；本·伯南克；约瑟夫·斯蒂格利茨；Barbara Rossi（中文名待核） |
 | Paul Ehrlich; Julian Simon; Diego Comin; William Easterly; Erick Gong; Enrico Spolaore; Romain Wacziarg | 保罗·埃利希；朱利安·西蒙；迭戈·科明；威廉·伊斯特利；Erick Gong（中文名待核）；恩里科·斯波劳雷；罗曼·瓦齐亚格 |
+| Arthur Laffer; Jude Wanniski; Arnold Harberger; Frank Ramsey; James Mirrlees; Peter Diamond | 阿瑟·拉弗；裘德·万尼斯基；阿诺德·哈伯格；弗兰克·拉姆齐；詹姆斯·米尔利斯（又译莫里斯）；彼得·戴蒙德 |
+| Emmanuel Saez; Joel Slemrod; Martin Feldstein; Henrik Kleven; Gabriel Zucman; Agnar Sandmo | 伊曼纽尔·赛斯；乔尔·斯莱姆罗德；马丁·费尔德斯坦；亨里克·克莱文；加布里埃尔·祖克曼；阿格纳·桑德莫 |

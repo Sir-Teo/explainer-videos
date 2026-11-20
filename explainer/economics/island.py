@@ -943,6 +943,24 @@ TRUTHS = {
         # a flat tax with an equal transfer (chapter 15)
         "policy": {"tax": 0.2},
     },
+    41: {
+        # the napkin (chapter 0): two elasticities of the tax base
+        "laffer": {"e": (0.25, 1.0)},
+        # the corporate tax (chapter 1): capital's share of output, the tax, and capital's mobility
+        "harberger": {"alpha": 0.3, "tau": 0.2, "eta": (0.0, 0.5, 1.0, 2.0, 5.0, 20.0)},
+        # the Harberger triangle (chapter 2): the Island's market for fuel
+        "triangle": {"eps_d": 0.5, "eps_s": 1.0},
+        # Ramsey (chapter 4): bread, clothes and travel, and the revenue to raise (per unit of spending at cost)
+        "ramsey": {"goods": ("bread", "clothes", "travel"), "eps": (0.2, 1.0, 2.0), "revenue": 0.3},
+        # Mirrlees (chapters 5 and 7): skills lognormal with a Pareto tail; welfare weights falling with skill
+        "mirrlees": {"e": 0.25, "nu": 1.0, "mu": 0.0, "sigma": 0.5, "alpha": 2.0, "tail": 0.97},
+        # the top rate (chapters 3 and 6): the Pareto parameter is read from the tax data; these elasticities
+        "top": {"e": (0.1, 0.25, 0.5, 1.0), "g": (0.0, 0.25)},
+        # bunching (chapter 9): 200,000 taxpayers; the rate rises from 20% to 40% at 50 (thousand)
+        "bunching": {"n": 200000, "e": 0.25, "z_star": 50.0, "t0": 0.2, "t1": 0.4, "friction": 0.01, "seed": 41},
+        # evasion (chapter 13): a 30% tax, a fine equal to the evaded tax, relative risk aversion 2
+        "evasion": {"t": 0.3, "theta": 1.0, "rho": 2.0},
+    },
 }
 
 

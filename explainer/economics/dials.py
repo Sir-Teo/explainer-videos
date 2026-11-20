@@ -648,7 +648,46 @@ DIALS = {d.key: d for d in [
              Estimate("Klass Biham Levy Malcai and Solomon", 2006, "regression", "the Forbes 400, 1988-2003, "
                       "average", 1.49, where="Economics Letters 90(2): 290-295", checked="2026-11-20"),
          )),
-    Dial("eti", "elasticity of taxable income", "", (41,)),
+    Dial("eti", "elasticity of taxable income", "the percentage change in reported taxable income for a one percent "
+         "change in the net-of-tax rate, 1 - t", (41,), status="depends on the setting", checked="2026-11-20",
+         meaning="how much revenue a higher rate loses to smaller reported incomes; at 0.25 the revenue-maximizing top "
+                 "rate is about 73%, at 1 about 40%; estimates are larger where income can be relabelled, deferred or "
+                 "hidden, which is why the elasticity is partly a policy choice",
+         estimates=(
+             Estimate("Feldstein", 1995, "DiD", "a Treasury panel of more than 4,000 returns around the 1986 reform; "
+                      "'at least one'", 1.0, where="JPE 103(3): 551-572", checked="2026-11-20"),
+             Estimate("Gruber and Saez", 2002, "regression", "panel of returns over several reforms", 0.4,
+                      where="Journal of Public Economics 84(1): 1-32", checked="2026-11-20"),
+             Estimate("Diamond and Saez", 2011, "review", "the mid-range value used for the top rate", 0.25,
+                      where="JEP 25(4): 165-190", checked="2026-11-20"),
+         )),
+    Dial("top_rate", "revenue-maximizing top income tax rate", "the combined marginal rate on top incomes that "
+         "raises the most revenue, 1 / (1 + a e)", (41,), status="contested", checked="2026-11-20",
+         meaning="above it, a higher top rate raises less revenue; below it, the rate trades revenue from the top "
+                 "against the welfare of top earners; it rests on the Pareto parameter, which is measured well, and "
+                 "the elasticity, which is not",
+         estimates=(
+             Estimate("Diamond and Saez", 2011, "calibration", "a = 1.5, e = 0.25; all taxes combined", 73.0,
+                      where="JEP 25(4): 165-190", checked="2026-11-20"),
+             Estimate("this film (Piketty and Saez's 2022 shares)", 2026, "calibration", "a from the top 1% and "
+                      "0.1% shares in 2022, e = 0.25", 72.0, where="videos/economics/econ41/compute.py, item top",
+                      checked="2026-11-20"),
+             Estimate("this film (with Feldstein's elasticity)", 2026, "calibration", "the same a, e = 1", 39.0,
+                      where="videos/economics/econ41/compute.py, item top", checked="2026-11-20"),
+         )),
+    Dial("corp_incidence", "corporate tax incidence on wages", "the share of the corporate tax's burden borne by "
+         "workers through lower wages, percent", (41,), status="depends on the setting", checked="2026-11-20",
+         meaning="near zero in a closed economy where capital cannot leave, as Harberger found; large where capital "
+                 "is mobile, so that a corporate tax is partly a tax on wages; the answer differs by country, by "
+                 "time horizon and by how mobile firms and profits are",
+         estimates=(
+             Estimate("Fuest Peichl and Siegloch", 2018, "event study", "about 6,800 changes in German municipal "
+                      "business taxes", 51.0, where="AER 108(2): 393-418", checked="2026-11-20"),
+             Estimate("this film (the Island closed)", 2026, "calibration", "Cobb-Douglas, capital fixed", 0.0,
+                      where="videos/economics/econ41/compute.py, item harberger", checked="2026-11-20"),
+             Estimate("this film (the Island open)", 2026, "calibration", "Cobb-Douglas, capital perfectly mobile",
+                      100.0, where="videos/economics/econ41/compute.py, item harberger", checked="2026-11-20"),
+         )),
     Dial("ui_duration", "duration elasticity of unemployment benefits", "", (42,)),
     Dial("matching", "elasticity of matches to unemployment", "eta in M = A U^eta V^(1-eta); one minus the elasticity "
          "of the job-finding rate with respect to openings per searcher", (24, 29, 42), status="settled within a range",
@@ -1819,6 +1858,24 @@ SHOWN = {
         ("Christiano, Eichenbaum and Evans (2005); Smets and Wouters (2007)", "medium-scale frictions; the hump "
          "computed with habits, indexation and smoothing"),
         ("Bernanke (2002)", "the Called it? card on deflation"),
+    ],
+    41: [
+        ("Laffer (1974); Wanniski (1978)", "the napkin, its story and its dispute; the curve computed"),
+        ("Harberger (1962); Fuest, Peichl and Siegloch (2018)",
+         "incidence computed on the Island; Germany entered in a dial"),
+        ("Ramsey (1927); Diamond and Mirrlees (1971); Atkinson and Stiglitz (1976)", "computed on the Island; stated"),
+        ("Mirrlees (1971); Diamond (1998); Saez (2001, 2002)", "the schedule and the top rate computed"),
+        ("Diamond and Saez (2011); Piketty, Saez and Stantcheva (2014)", "the top rate entered in a dial; bargaining "
+         "stated"),
+        ("Feldstein (1995); Gruber and Saez (2002); Saez, Slemrod and Giertz (2012)",
+         "the elasticity entered in a dial"),
+        ("Saez (2010); Kleven and Waseem (2013)", "bunching computed on the Island; findings stated"),
+        ("Chetty, Looney and Kroft (2009)", "salience, stated"),
+        ("Chamley (1986); Judd (1985); Straub and Werning (2020)", "capital taxation, stated"),
+        ("Zucman (2013); Torslov, Wier and Zucman (2023); OECD (2021)", "havens and the minimum tax, stated"),
+        ("Allingham and Sandmo (1972); Kleven et al. (2011)", "evasion computed; the Danish experiment stated"),
+        ("Kleven, Landais and Saez (2013)", "migration at the frontier, stated"),
+        ("Mnuchin (2017); CBO (2018)", "the Called it? card"),
     ],
     40: [
         ("Pen (1971)", "the parade, drawn with Opportunity Insights' and Piketty and Saez's data"),

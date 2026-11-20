@@ -3033,6 +3033,189 @@ FORBES_400 = Table(
 PART40 = (PEN_1971, ATKINSON_1970, PIKETTY_SAEZ_2003, AUTEN_SPLINTER_2024, PARETO_1896, GLLM_2016, CAPITAL_2014,
           KUZNETS_1955, IGE_STUDIES, CHETTY_2014, CHETTY_2017, PLACES, GLOBAL, MATTERS, FRONTIER40, FORBES_400)
 
+
+# Part 41: Taxes
+LAFFER_1974 = Table(
+    key="laffer_1974",
+    cite="J. Wanniski, \"Taxes, Revenues, and the 'Laffer Curve'\", The Public Interest 50 (Winter 1978); "
+         "Smithsonian Magazine, \"How a Restaurant Doodle Launched a Political Movement\" (2017); The New York Times, "
+         "\"This Is Not Arthur Laffer's Famous Napkin\" (13 October 2017)",
+    tag="Wanniski (1978); \\ Smithsonian (2017); \\ \\emph{New York Times} (2017)",
+    where="in 1974, at the Two Continents restaurant in Washington, Arthur Laffer sketched for Dick Cheney, then a "
+          "White House aide, a curve on which a tax rate of zero and one of a hundred percent both raise nothing; "
+          "Jude Wanniski arranged the meeting and named the curve; accounts differ on the date and the guests, and "
+          "the cloth napkin in the National Museum of American History, dated 13 September 1974, may be a later copy",
+    read="the three accounts cited",
+    checked="2026-11-20",
+    data={"year": 1974},
+)
+HARBERGER_1962 = Table(
+    key="harberger_1962",
+    cite="A. C. Harberger, \"The Incidence of the Corporation Income Tax\", Journal of Political Economy 70(3): "
+         "215-240 (1962); C. Fuest, A. Peichl and S. Siegloch, \"Do Higher Corporate Taxes Reduce Wages? Micro "
+         "Evidence from Germany\", American Economic Review 108(2): 393-418 (2018)",
+    tag="Harberger, \\ \\emph{JPE} 70(3) (1962); \\ Fuest, \\ Peichl and Siegloch, \\ \\emph{AER} 108(2) "
+        "(2018)",
+    where="Harberger: in a closed economy with a fixed stock of capital, capital bears about the whole burden of the "
+          "corporate tax; Fuest, Peichl and Siegloch, from about 6,800 changes in German municipalities' local "
+          "business tax over twenty years: about 51% of the burden falls on workers (about 40% in the 2015 working "
+          "paper)",
+    read="Harberger's summary in later surveys; the AER article's authors' summary (LSE Business Review)",
+    checked="2026-11-20",
+    data={"fps_workers": 51, "fps_wp": 40, "changes": 6800},
+)
+RAMSEY_1927 = Table(
+    key="ramsey_1927",
+    cite="F. P. Ramsey, \"A Contribution to the Theory of Taxation\", Economic Journal 37(145): 47-61 (1927); P. A. "
+         "Diamond and J. A. Mirrlees, \"Optimal Taxation and Public Production\", American Economic Review 61(1, 3) "
+         "(1971); A. B. Atkinson and J. E. Stiglitz, \"The Design of Tax Structure: Direct versus Indirect "
+         "Taxation\", Journal of Public Economics 6: 55-75 (1976)",
+    tag="Ramsey (1927); \\ Diamond and Mirrlees (1971); \\ Atkinson and Stiglitz (1976)",
+    where="Ramsey: taxes on goods should cut every good's demand by the same proportion, which for independent "
+          "demands means rates inversely proportional to the elasticities; Diamond and Mirrlees: an optimal system "
+          "keeps production efficient, so it does not tax intermediate goods; Atkinson and Stiglitz: with a good "
+          "income tax and separable preferences, differential commodity taxes are not needed",
+    read="the papers' results as stated in Salanie, The Economics of Taxation",
+    checked="2026-11-20",
+    data={},
+)
+MIRRLEES_1971 = Table(
+    key="mirrlees_1971",
+    cite="J. A. Mirrlees, \"An Exploration in the Theory of Optimum Income Taxation\", Review of Economic Studies "
+         "38(2): 175-208 (1971); P. A. Diamond, \"Optimal Income Taxation: An Example with a U-Shaped Pattern of "
+         "Optimal Marginal Tax Rates\", American Economic Review 88(1): 83-95 (1998); E. Saez, \"Using Elasticities "
+         "to Derive Optimal Income Tax Rates\", Review of Economic Studies 68(1): 205-229 (2001); E. Saez, "
+         "\"Optimal Income Transfer Programs: Intensive versus Extensive Labor Supply Responses\", Quarterly "
+         "Journal of Economics 117(3): 1039-1073 (2002)",
+    tag="Mirrlees (1971); \\ Diamond (1998); \\ Saez (2001, \\ 2002)",
+    where="the government sees income, not ability, so taxes must respect incentive constraints; Diamond's formula "
+          "for quasi-linear preferences and its U-shaped rates; Saez's top rate 1/(1 + a e) and the schedule in "
+          "terms of elasticities and the income distribution; when responses are at the extensive margin, "
+          "transfers that rise with earnings at the bottom (like the EITC) can be optimal",
+    read="the abstracts and Diamond and Saez's 2011 survey",
+    checked="2026-11-20",
+    data={},
+)
+DIAMOND_SAEZ_2011 = Table(
+    key="diamond_saez_2011",
+    cite="P. Diamond and E. Saez, \"The Case for a Progressive Tax: From Basic Research to Policy "
+         "Recommendations\", Journal of Economic Perspectives 25(4): 165-190 (2011); T. Piketty, E. Saez and S. "
+         "Stantcheva, \"Optimal Taxation of Top Labor Incomes: A Tale of Three Elasticities\", American Economic "
+         "Journal: Economic Policy 6(1): 230-271 (2014)",
+    tag="Diamond and Saez, \\ \\emph{JEP} 25(4) (2011); \\ Piketty, \\ Saez and Stantcheva (2014)",
+    where="with a Pareto parameter of 1.5 and an elasticity of 0.25, the revenue-maximizing top rate is 73% (all "
+          "taxes combined); if part of top earners' response is bargaining over pay, the optimal top rate is higher",
+    read="the formula and secondary summaries (Cato Journal, EPI); PSS's abstract",
+    checked="2026-11-20",
+    data={"a": 1.5, "e": 0.25, "rate": 73},
+)
+ETI_STUDIES = Table(
+    key="eti_studies",
+    cite="M. Feldstein, \"The Effect of Marginal Tax Rates on Taxable Income: A Panel Study of the 1986 Tax Reform "
+         "Act\", Journal of Political Economy 103(3): 551-572 (1995); J. Gruber and E. Saez, \"The Elasticity of "
+         "Taxable Income: Evidence and Implications\", Journal of Public Economics 84(1): 1-32 (2002); E. Saez, J. "
+         "Slemrod and S. H. Giertz, \"The Elasticity of Taxable Income with Respect to Marginal Tax Rates: A Critical "
+         "Review\", Journal of Economic Literature 50(1): 3-50 (2012)",
+    tag="Feldstein (1995); \\ Gruber and Saez (2002); \\ Saez, \\ Slemrod and Giertz (2012)",
+    where="Feldstein, from a Treasury panel of more than 4,000 returns around the 1986 reform: an elasticity of "
+          "taxable income of at least one; Gruber and Saez, with more years and reforms: about 0.4; the review: "
+          "the elasticity is not a fixed parameter but depends on the tax base and on enforcement, which policy "
+          "chooses",
+    read="the abstracts; Gruber and Saez's figure as summarized in later work",
+    checked="2026-11-20",
+    data={"feldstein": 1.0, "gruber_saez": 0.4, "panel": 4000},
+)
+BUNCHING = Table(
+    key="bunching",
+    cite="E. Saez, \"Do Taxpayers Bunch at Kink Points?\", American Economic Journal: Economic Policy 2(3): 180-212 "
+         "(2010); H. J. Kleven and M. Waseem, \"Using Notches to Uncover Optimization Frictions and Structural "
+         "Elasticities: Theory and Evidence from Pakistan\", Quarterly Journal of Economics 128(2): 669-723 (2013)",
+    tag="Saez, \\ \\emph{AEJ: Policy} 2(3) (2010); \\ Kleven and Waseem, \\ \\emph{QJE} 128(2) (2013)",
+    where="bunching at the first kink of the EITC, but only among the self-employed, whose income is self-reported; "
+          "notches, where the average rate jumps, leave a hole that reveals how many taxpayers fail to optimize",
+    read="the abstracts",
+    checked="2026-11-20",
+    data={},
+)
+CLK_2009 = Table(
+    key="clk_2009",
+    cite="R. Chetty, A. Looney and K. Kroft, \"Salience and Taxation: Theory and Evidence\", American Economic "
+         "Review 99(4): 1145-1177 (2009)",
+    tag="Chetty, \\ Looney and Kroft, \\ \\emph{AER} 99(4) (2009)",
+    where="in a supermarket in early 2006, tags showing tax-inclusive prices on about 750 products (cosmetics, hair "
+          "care, deodorants) for three weeks cut their sales by about 8% against control products and stores; the "
+          "sales tax was 7.375%",
+    read="the abstract and the working paper",
+    checked="2026-11-20",
+    data={"drop": 8, "tax": 7.375, "products": 750},
+)
+CAPITAL_TAX = Table(
+    key="capital_tax",
+    cite="C. Chamley, \"Optimal Taxation of Capital Income in General Equilibrium with Infinite Lives\", "
+         "Econometrica 54(3): 607-622 (1986); K. L. Judd, \"Redistributive Taxation in a Simple Perfect Foresight "
+         "Model\", Journal of Public Economics 28(1): 59-83 (1985); L. Straub and I. Werning, \"Positive Long-Run "
+         "Capital Taxation: Chamley-Judd Revisited\", American Economic Review 110(1): 86-119 (2020)",
+    tag="Chamley (1986); \\ Judd (1985); \\ Straub and Werning, \\ \\emph{AER} 110(1) (2020)",
+    where="Chamley and Judd: the optimal tax on capital income is zero in the long run; Straub and Werning: in "
+          "Judd's main model the long-run tax is positive and significant whenever the intertemporal elasticity "
+          "of substitution is below one",
+    read="the abstracts",
+    checked="2026-11-20",
+    data={},
+)
+HAVENS = Table(
+    key="havens",
+    cite="G. Zucman, \"The Missing Wealth of Nations: Are Europe and the U.S. Net Debtors or Net Creditors?\", "
+         "Quarterly Journal of Economics 128(3): 1321-1364 (2013); T. Torslov, L. Wier and G. Zucman, \"The Missing "
+         "Profits of Nations\", Review of Economic Studies 90(3): 1499-1534 (2023); OECD/G20 Inclusive Framework, "
+         "Statement on a Two-Pillar Solution (8 October 2021)",
+    tag="Zucman (2013); \\ T\\o{}rsl\\o{}v, \\ Wier and Zucman (2023); \\ OECD (2021)",
+    where="about 8% of households' financial wealth is held in tax havens, mostly unrecorded; 36% of multinational "
+          "profits were shifted to tax havens in 2015 (close to 40% in the working paper); 136 of 140 jurisdictions "
+          "agreed a 15% global minimum tax on multinationals with revenue of 750 million euros or more",
+    read="the abstracts; secondary reports of the OECD statement",
+    checked="2026-11-20",
+    data={"wealth": 8, "profits": 36, "minimum": 15, "countries": 136, "members": 140},
+)
+EVASION = Table(
+    key="evasion",
+    cite="M. G. Allingham and A. Sandmo, \"Income Tax Evasion: A Theoretical Analysis\", Journal of Public "
+         "Economics 1(3-4): 323-338 (1972); H. J. Kleven, M. B. Knudsen, C. T. Kreiner, S. Pedersen and E. Saez, "
+         "\"Unwilling or Unable to Cheat? Evidence from a Tax Audit Experiment in Denmark\", Econometrica 79(3): "
+         "651-692 (2011)",
+    tag="Allingham and Sandmo (1972); \\ Kleven et al., \\ \\emph{Econometrica} 79(3) (2011)",
+    where="Denmark, 2007-08: about 42,800 taxpayers, half chosen at random for thorough audits; evasion was 0.3% of "
+          "income that third parties report and 37% of self-reported income; prior audits and threat letters "
+          "raised self-reported income",
+    read="the NBER working paper's abstract (the published abstract states the pattern without the numbers)",
+    checked="2026-11-20",
+    data={"third_party": 0.3, "self": 37, "n": 42800},
+)
+FRONTIER41 = Table(
+    key="frontier41",
+    cite="H. J. Kleven, C. Landais and E. Saez, \"Taxation and International Migration of Superstars: Evidence from "
+         "the European Football Market\", American Economic Review 103(5): 1892-1924 (2013)",
+    tag="Kleven, \\ Landais and Saez, \\ \\emph{AER} 103(5) (2013)",
+    where="in 14 European first leagues since 1985, the number of foreign players responds to the net-of-tax rate "
+          "with an elasticity of about one, domestic players about 0.15",
+    read="the abstract",
+    checked="2026-11-20",
+    data={"foreign": 1.0, "domestic": 0.15},
+)
+TCJA_2017 = Table(
+    key="tcja_2017",
+    cite="S. Mnuchin, remarks as quoted by the Joint Economic Committee (2017); Congressional Budget Office, The "
+         "Budget and Economic Outlook: 2018 to 2028 (April 2018)",
+    tag="Mnuchin (2017); \\ CBO (April 2018)",
+    where="'not only will this tax plan pay for itself, but it will pay down debt'; CBO: the 2017 act adds about $1.9 "
+          "trillion to deficits over 2018-2028, after a macroeconomic feedback of about $0.6 trillion and about $0.6 "
+          "trillion of added interest",
+    read="secondary reports quoting CBO's table and the remark",
+    checked="2026-11-20",
+    data={"cbo_total": 1.9, "feedback": 0.6, "interest": 0.6},
+)
+PART41 = (LAFFER_1974, HARBERGER_1962, RAMSEY_1927, MIRRLEES_1971, DIAMOND_SAEZ_2011, ETI_STUDIES, BUNCHING,
+          CLK_2009, CAPITAL_TAX, HAVENS, EVASION, FRONTIER41, TCJA_2017)
 PART7 = (BERNOULLI_1738, SAMUELSON_1937, ALLAIS_1953, ELLSBERG_1961, RABIN_2000, THALER_1981, HOLT_LAURY_2005,
          HAYDEN_PLATT_2009, MADRIAN_SHEA_2001, THALER_BENARTZI_2004, BARSKY_1997, POST_2008, MEHRA_PRESCOTT_1985)
-ALL = {t.key: t for t in (*PART1, *PART3, *PART4, *PART5, *PART6, *PART7, *PART8, *PART9, *PART10, *PART11, *PART12, *PART13, *PART14, *PART15, *PART16, *PART17, *PART18, *PART19, *PART21, *PART22, *PART25, *PART26, *PART35, *PART36, *PART37, *PART38, *PART39, *PART40)}
+ALL = {t.key: t for t in (*PART1, *PART3, *PART4, *PART5, *PART6, *PART7, *PART8, *PART9, *PART10, *PART11, *PART12, *PART13, *PART14, *PART15, *PART16, *PART17, *PART18, *PART19, *PART21, *PART22, *PART25, *PART26, *PART35, *PART36, *PART37, *PART38, *PART39, *PART40, *PART41)}

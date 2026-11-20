@@ -50,6 +50,8 @@ class Hook(VoiceoverScene):
         n90 = note(rf"minute 54: \ {P['h_p90']:.1f} m", 89, TOP, 0.2)
         n99 = label(rf"the last 36 seconds: \ {P['h_p99']:.0f} m, \ then {P['h_p100']:.0f} m", font_size=18,
                     color=TOP).move_to(LEFT * 1.0 + UP * 1.6)
+        who = label(r"one marcher for each percentile \\ of American families raising \\ children, \ around 2000",
+                    font_size=20, color=GREY_A).move_to(LEFT * 2.6 + UP * 1.0)
         tag = data_tag(r"parents' family income by percentile, \ 1996--2000, \ 2012 dollars: \ Chetty et al. "
                        r"(2014), \ Opportunity Insights", corner=DR, font_size=11)
         with self.voiceover(
@@ -69,7 +71,7 @@ class Hook(VoiceoverScene):
             vo.wait_until("a")
             self.play(FadeIn(avg), FadeIn(avg_l))
             self.play(LaggedStart(*[GrowFromEdge(b, DOWN) for b in bars[:3]], lag_ratio=0.5),
-                      clock_t.animate.set_value(2), run_time=3.0, rate_func=linear)
+                      clock_t.animate.set_value(2), FadeIn(who), run_time=3.0, rate_func=linear)
             vo.wait_until("b")
             self.play(LaggedStart(*[GrowFromEdge(b, DOWN) for b in bars[3:10]], lag_ratio=0.5),
                       clock_t.animate.set_value(6), FadeIn(n10), run_time=3.0, rate_func=linear)
@@ -81,7 +83,7 @@ class Hook(VoiceoverScene):
                       clock_t.animate.set_value(P["minute_mean"]), FadeIn(n70), run_time=3.0, rate_func=linear)
             vo.wait_until("e")
             self.play(LaggedStart(*[GrowFromEdge(b, DOWN) for b in bars[P["pct_mean"]:90]], lag_ratio=0.5),
-                      clock_t.animate.set_value(54), FadeIn(n90), run_time=3.0, rate_func=linear)
+                      clock_t.animate.set_value(54), FadeIn(n90), FadeOut(who), run_time=3.0, rate_func=linear)
             vo.wait_until("f")
             self.play(LaggedStart(*[GrowFromEdge(b, DOWN) for b in bars[90:]], lag_ratio=0.5),
                       clock_t.animate.set_value(60), FadeIn(n99), run_time=3.0, rate_func=linear)

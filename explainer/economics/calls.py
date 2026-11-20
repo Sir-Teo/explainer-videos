@@ -414,6 +414,16 @@ CALLS = {c.key: c for c in [
           "of Technology on Employment and Unemployment, National Academy of Engineering (1983), as quoted in "
           "secondary listings",
           "BLS via FRED: LNS12300060 (employment-population ratio, 25-54) and PRS85006173 (labor share)")),
+    Call("tcja_2017", 41, "Steven Mnuchin, Secretary of the Treasury", "September 2017",
+         "not only will this tax plan pay for itself, but it will pay down debt",
+         "the claim that lower rates on corporations and individuals would raise growth enough to replace the revenue",
+         "federal receipts fell from about 17% of GDP in fiscal 2017 to about 16% in 2018 and 2019; the Congressional "
+         "Budget Office estimated in April 2018 that the act would add about $1.9 trillion to deficits over ten "
+         "years, after counting its effect on growth",
+         "wrong",
+         ("S. Mnuchin, as quoted by the Joint Economic Committee (2017)",
+          "Congressional Budget Office, The Budget and Economic Outlook: 2018 to 2028 (April 2018)",
+          "OMB via FRED: FYFRGDA188S (federal receipts as a percentage of GDP)")),
     Call("kuznets_1955", 40, "Simon Kuznets, in his presidential address to the American Economic Association",
          "December 1954",
          "income inequality widens in the early phases of economic growth, as people move from agriculture to "

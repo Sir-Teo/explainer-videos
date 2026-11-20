@@ -28,6 +28,8 @@ class Speed(VoiceoverScene):
             label(r"gold dots: \ America, \\ Piketty and Saez", font_size=18, color=DATA),
             label(rf"grey: \ pure random growth, \\ volatility up; \ half the \\ change takes "
                   rf"{S['hl_pure']:.0f} years", font_size=18, color=PURE),
+            label(r"Gabaix, \ Lasry, \ Lions and \\ Moll (2016): \ the standard \\ model is far too slow",
+                  font_size=17, color=GREY_A),
             label(rf"red: \ a few high-growth \\ types grow faster; \\ half the change in "
                   rf"{S['hl_types']:.0f} years", font_size=18, color=TYPES),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.4).to_edge(RIGHT, buff=0.3)
@@ -39,7 +41,8 @@ class Speed(VoiceoverScene):
             "top share from about seven percent to twenty, and watch the Kolmogorov equation carry the distribution "
             "to its new state. It crawls: half of the change in the log of the top share takes "
             f"{S['hl_pure']:.0f} years, because the tail fills only as careers that began long ago drift upward. "
-            "In 2016 Xavier Gabaix, Jean-Michel Lasry, Pierre-Louis Lions and Benjamin Moll showed that the standard "
+            "<bookmark mark='g'/> In 2016 Xavier Gabaix, Jean-Michel Lasry, Pierre-Louis Lions and Benjamin Moll "
+            "showed that the standard "
             "model is far too slow. <bookmark mark='c'/> Their repair: let a few people be high-growth types, a "
             "founder, a star, whose income grows fast for a while before they become ordinary. Make those types grow "
             "faster, and the top share moves in time with the data: half of the change in "
@@ -49,9 +52,12 @@ class Speed(VoiceoverScene):
             vo.wait_until("a")
             self.play(FadeIn(side[0]), Indicate(us, color=WHITE, scale_factor=1.05))
             vo.wait_until("b")
-            self.play(Create(lp), FadeIn(side[1]), run_time=3.0)
+            self.play(FadeIn(side[1]), run_time=0.8)
+            self.play(Create(lp), run_time=8.0, rate_func=linear)
+            vo.wait_until("g")
+            self.play(FadeIn(side[2]))
             vo.wait_until("c")
-            self.play(Create(lt), FadeIn(side[2]), run_time=3.0)
+            self.play(Create(lt), FadeIn(side[3]), run_time=3.0)
         self.clear_scene()
 
     def fixes(self):

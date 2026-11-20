@@ -24,6 +24,10 @@ class Tools(VoiceoverScene):
             label(rf"Gini: \ {P['gini_pre']:.3f} before, \ {P['gini_post']:.3f} after", font_size=22,
                   color=E.ACCENT),
         ).arrange(DOWN, buff=0.25).to_edge(DOWN, buff=0.8)
+        two = VGroup(
+            label(r"redistribution: \ changes incomes after the market has set them", font_size=21, color=WHITE),
+            label(r"pre-distribution: \ changes what the market pays \ (next)", font_size=21, color=GREY_A),
+        ).arrange(DOWN, buff=0.22).move_to(DOWN * 0.7)
         tag = island_tag(corner=DR, font_size=14)
         head = label(r"redistribution: \ from market income to what people can spend", font_size=28,
                      color=E.ACCENT).to_edge(UP, buff=0.6)
@@ -37,7 +41,7 @@ class Tools(VoiceoverScene):
             f"equally to everyone lowers the Gini from {P['gini_pre']:.2f} to {P['gini_post']:.2f}. What it costs "
             "in work and saving is Part forty-one's question."
         ) as vo:
-            self.play(FadeIn(tag), FadeIn(head))
+            self.play(FadeIn(tag), FadeIn(head), FadeIn(two[0]), FadeIn(two[1]))
             vo.wait_until("a")
             self.play(FadeIn(steps.boxes[0]), FadeIn(steps.notes[0]))
             vo.wait_until("b")
