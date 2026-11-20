@@ -125,13 +125,13 @@ class Calvo(VoiceoverScene):
     def slope(self):
         C = load("calvo")
         T = island.truths(30)["nk"]
-        th = np.linspace(0.35, 0.9, 120)
+        th = np.linspace(0.42, 0.9, 120)
         ks = [nk.kappa(t, T["beta"], T["sigma"], T["phi"], T["alpha"], T["eps"]) for t in th]
-        ax = plane([0.35, 0.9], [0, 0.8], center=LEFT * 2.0 + DOWN * 0.3, x_length=7.8, y_length=4.8,
+        ax = plane([0.4, 0.9], [0, 0.8], center=LEFT * 2.0 + DOWN * 0.3, x_length=7.8, y_length=4.8,
                    xticks=[0.4, 0.5, 0.6, 0.7, 0.8, 0.9], yticks=[0, 0.2, 0.4, 0.6, 0.8],
                    xlabel=r"$\theta$, \ the chance a price survives a quarter", ylabel=r"$\kappa$, \ the slope",
                    xfmt=lambda v: f"{v:.1f}", yfmt=lambda v: f"{v:.1f}", font_size=15)
-        line = path(ax, th, np.clip(ks, 0, 0.8), INFL, 3.5, yr=(0, 0.8))
+        line = path(ax, th, ks, INFL, 3.5, yr=(0, 0.8))
         pts = []
         for name, t, col in ((r"Bils--Klenow", C["theta_bk"], FLEX), (r"Gal\'i's baseline", T["theta"], PRICE),
                              (r"Nakamura--Steinsson", C["theta_ns"], STICKY)):

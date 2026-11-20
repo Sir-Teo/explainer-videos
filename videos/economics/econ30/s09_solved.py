@@ -78,8 +78,9 @@ class Solved(VoiceoverScene):
                    yticks=[lo, 0, hi], xfmt=lambda v: f"{v:.0f}", yfmt=lambda v: f"{v:+.1f}" if v else "0",
                    font_size=13)
         zero = seg(ax, 0, 0, 11, 0, GREY_D, 1.2)
-        lines = VGroup(path(ax, q, R["x"], OUTPUT, 3, smooth=False), path(ax, q, R["pi"], INFL, 3, smooth=False),
-                       path(ax, q, R["i"], RATE, 2.5, smooth=False))
+        lines = VGroup(path(ax, q, R["i"], RATE, 2.5, smooth=False),
+                       DashedVMobject(path(ax, q, R["pi"], INFL, 3, smooth=False), num_dashes=24),
+                       path(ax, q, R["x"], OUTPUT, 4, smooth=False))
         t = label(title, font_size=19, color=col).next_to(ax, UP, buff=0.15)
         return VGroup(ax, zero, t), lines
 
@@ -88,7 +89,7 @@ class Solved(VoiceoverScene):
         panels = [self._panel(R[k], c, t, col) for (k, t, col), c in
                   zip(SHOCKS, (LEFT * 4.6 + DOWN * 0.2, DOWN * 0.2, RIGHT * 4.6 + DOWN * 0.2))]
         key = VGroup(label(r"green: \ output gap, \ \%", font_size=18, color=OUTPUT),
-                     label(r"red: \ inflation, \ annual rate", font_size=18, color=INFL),
+                     label(r"red, \ dashed: \ inflation, \ annual rate", font_size=18, color=INFL),
                      label(r"pink: \ the policy rate, \ annual", font_size=18, color=RATE)).arrange(
             RIGHT, buff=0.6).to_edge(UP, buff=0.35)
         m, c = R["monetary"], R["cost"]

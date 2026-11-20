@@ -63,14 +63,18 @@ class Medium(VoiceoverScene):
             (r"variable utilization", r"output can rise before \\ capital does", COST),
             (r"many shocks", r"Smets and Wouters: \ seven, \\ estimated on US data", E.ACCENT),
         ], width=12.8, cols=3, font_size=20).move_to(DOWN * 0.2)
-        head = label(r"Christiano, \ Eichenbaum and Evans, \ 2005; \ Smets and Wouters, \ 2007", font_size=24,
-                     color=E.ACCENT).to_edge(UP, buff=0.4)
+        top = label(r"how central banks' models were built", font_size=26, color=WHITE).to_edge(UP, buff=0.4)
+        head = label(r"Christiano, \ Eichenbaum and Evans, \ 2005; \ Smets and Wouters, \ 2007", font_size=22,
+                     color=E.ACCENT).next_to(top, DOWN, buff=0.25)
+        sub = label(r"each friction is added to buy a feature of the data", font_size=21, color=GREY_A).next_to(
+            head, DOWN, buff=0.25)
         tag = published_tag(r"Christiano, \ Eichenbaum and Evans, \ \emph{JPE} 113(1) (2005); \ Smets and Wouters, \ "
                             r"\emph{AER} 97(3) (2007)", corner=DR, font_size=12)
         with self.voiceover(
-            "This is how the models central banks use were built. Lawrence Christiano, Martin Eichenbaum and "
-            "Charles Evans in 2005, and Frank Smets and Raf Wouters in 2007, each added frictions to buy features of "
-            "the data. <bookmark mark='a'/> Habits give the hump in spending. <bookmark mark='b'/> Sticky wages, "
+            "This is how the models central banks use were built. <bookmark mark='h'/> Lawrence Christiano, Martin "
+            "Eichenbaum and Charles Evans in 2005, and Frank Smets and Raf Wouters in 2007, <bookmark mark='s'/> "
+            "each added frictions to buy features of the data. <bookmark mark='a'/> Habits give the hump in "
+            "spending. <bookmark mark='b'/> Sticky wages, "
             "with Calvo's fairy visiting workers too, keep inflation persistent. <bookmark mark='c'/> Indexation "
             "makes prices carry past inflation forward. <bookmark mark='d'/> Costs of adjusting investment give the "
             "hump in investment. <bookmark mark='e'/> Variable utilization lets output rise before capital does. "
@@ -78,7 +82,11 @@ class Medium(VoiceoverScene):
             "model on American data. The critics ask whether each friction describes how people behave, or only "
             "repairs a fit."
         ) as vo:
-            self.play(FadeIn(head), FadeIn(tag))
+            self.play(FadeIn(top), FadeIn(tag))
+            vo.wait_until("h")
+            self.play(FadeIn(head))
+            vo.wait_until("s")
+            self.play(FadeIn(sub))
             for mk, c in zip("abcdef", cards.cards):
                 vo.wait_until(mk)
                 self.play(FadeIn(c, shift=UP * 0.1))

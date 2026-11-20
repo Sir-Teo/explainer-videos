@@ -253,6 +253,33 @@ FRED_SERIES["COREFLEXCPIM159SFRBATL"] = ("Flexible price consumer price index le
                                          "from a year ago, seasonally adjusted", "monthly",
                                          "Federal Reserve Bank of Atlanta")
 
+FRED_SERIES["WALCL"] = ("Federal Reserve: total assets (Wednesday level)", "millions of dollars", "weekly",
+                        "Board of Governors of the Federal Reserve System")
+FRED_SERIES["WRESBAL"] = ("Reserve balances with Federal Reserve Banks (week average)", "millions of dollars", "weekly",
+                          "Board of Governors of the Federal Reserve System")
+FRED_SERIES["IOER"] = ("Interest rate on excess reserves (discontinued July 2021)", "percent", "daily",
+                       "Board of Governors of the Federal Reserve System")
+FRED_SERIES["IORB"] = ("Interest rate on reserve balances", "percent", "daily",
+                       "Board of Governors of the Federal Reserve System")
+FRED_SERIES["DGS10"] = ("10-year Treasury constant maturity yield", "percent", "daily",
+                        "Board of Governors of the Federal Reserve System")
+FRED_SERIES["DFII10"] = ("10-year Treasury inflation-indexed constant maturity yield", "percent", "daily",
+                         "Board of Governors of the Federal Reserve System")
+FRED_SERIES["GS1"] = ("1-year Treasury constant maturity yield", "percent", "monthly",
+                      "Board of Governors of the Federal Reserve System")
+FRED_SERIES["PPIACO"] = ("Producer price index by commodity: all commodities", "index 1982 = 100", "monthly", "BLS")
+FRED_SERIES["ECBDFR"] = ("ECB deposit facility rate for the euro area", "percent", "daily", "European Central Bank")
+FRED_SERIES["RESPPLLOPNWW"] = ("Federal Reserve: earnings remittances due to the U.S. Treasury (Wednesday level; "
+                               "negative: the deferred asset)", "millions of dollars", "weekly",
+                               "Board of Governors of the Federal Reserve System")
+FRED_SERIES["DFEDTAR"] = ("Federal funds target rate (discontinued December 2008)", "percent", "daily",
+                          "Board of Governors of the Federal Reserve System")
+FRED_SERIES["DFEDTARU"] = ("Federal funds target range, upper limit (from December 2008)", "percent", "daily",
+                           "Board of Governors of the Federal Reserve System")
+for _c, _n in (("IT", "Italy"), ("ES", "Spain"), ("DE", "Germany")):
+    FRED_SERIES[f"IRLTLT01{_c}M156N"] = (f"Long-term (10-year) government bond yield, {_n}", "percent", "monthly",
+                                         "OECD Main Economic Indicators")
+
 FRED_RETRIEVED = {s: "2026-11-19" for s in (
     "GDPA", "GDIA", "PCECA", "GPDIA", "GCEA", "EXPGSA", "IMPGSA", "A033RC1A027NBEA", "A191RD3A086NBEA", "U1RATE",
     "U2RATE", "U4RATE", "U5RATE", "U6RATE", "CIVPART", "EMRATIO", "CPIAUCSL", "SUUR0000SA0", "PCEPI",
@@ -269,11 +296,18 @@ FRED_RETRIEVED.update({s: "2026-11-20" for s in ("PCECC96", "DSPIC96", "PSAVERT"
                                                   "GDPPOT", "IRSTCI01JPM156N", "MICH", "T5YIEM", "CPILFESL",
                                                   "GPDIC1", "HOANBS", "A011RA3Q086SBEA",
                                                   "A008RA3Q086SBEA", "GDPDEF", "PCEPILFE",
-                                                  "CORESTICKM159SFRBATL", "COREFLEXCPIM159SFRBATL")})
+                                                  "CORESTICKM159SFRBATL", "COREFLEXCPIM159SFRBATL", "WALCL",
+                                                  "WRESBAL", "IOER", "IORB", "DGS10", "DFII10", "GS1", "PPIACO",
+                                                  "IRLTLT01ITM156N", "IRLTLT01ESM156N", "IRLTLT01DEM156N",
+                                                  "ECBDFR", "RESPPLLOPNWW", "DFEDTAR", "DFEDTARU")})
 
 SPF_FILES = ("median_rgdp_level", "median_rgdp_growth", "median_recess_level")
 SPF_URL = ("https://www.philadelphiafed.org/-/media/frbp/assets/surveys-and-data/survey-of-professional-forecasters/"
            "data-files/files/{}.xlsx")
+HLW_URL = ("https://www.newyorkfed.org/medialibrary/media/research/economists/williams/data/"
+           "Holston_Laubach_Williams_current_estimates.xlsx")
+GB_URL = ("https://www.philadelphiafed.org/-/media/FRBP/Assets/Surveys-And-Data/greenbook-data/documentation/"
+          "GBweb_Row_Format.xlsx")
 PINK_URL = ("https://thedocs.worldbank.org/en/doc/74e8be41ceb20fa0da750cda2f6b9e4e-0050012026/related/"
             "CMO-Historical-Data-Monthly.xlsx")
 
@@ -561,6 +595,36 @@ DATASETS = {
         "sha256": "973f258e63c94812b705c2007652fba34a02d579719dc74c569286106053f8d0",
         "files": ("draft1970.csv",),
     },
+    "greenbook": {
+        "title": "Tealbook (formerly Greenbook) projections: the price index for GDP (gPGDP), with the Survey of "
+                 "Professional Forecasters' median forecasts of the same index",
+        "publisher": "Federal Reserve Bank of Philadelphia (from the Board of Governors' Greenbooks)",
+        "citation": "Federal Reserve Bank of Philadelphia, Philadelphia Fed's Tealbook (formerly Greenbook) Data Set, "
+                    "GBweb_Row_Format.xlsx, sheet gPGDP (Greenbooks of 1967-2020); Survey of Professional "
+                    "Forecasters, median_pgdp_growth.xlsx; retrieved 2026-11-20",
+        "short": "Philadelphia Fed, Tealbook (Greenbook) Data Set and SPF",
+        "url": GB_URL,
+        "licence": "free to use with attribution to the Federal Reserve Bank of Philadelphia",
+        "units": "annualized quarter-on-quarter growth of the GDP (before December 1991, GNP) price index, percent",
+        "vintage": "2026-11-20",
+        "sha256": "2a676d7e545021ef42ace3670325c0892dcf7d1e121c1e58f7ff79ef33b84d28",
+        "files": ("greenbook_pgdp.csv", "spf_pgdp_growth.csv"),
+    },
+    "hlw": {
+        "title": "Holston, Laubach and Williams: estimates of the natural rate of interest (r*), trend growth and "
+                 "other determinants, one-sided, quarterly from 1961",
+        "publisher": "Federal Reserve Bank of New York",
+        "citation": "Federal Reserve Bank of New York, Measuring the Natural Rate of Interest, "
+                    "Holston_Laubach_Williams_current_estimates.xlsx (final data point 2026Q2), retrieved 2026-11-20; "
+                    "the model of Holston, Laubach and Williams, FRBNY Staff Report 1063 (2023)",
+        "short": "New York Fed, Holston-Laubach-Williams estimates",
+        "url": HLW_URL,
+        "licence": "public research data of the Federal Reserve Bank of New York, used with attribution",
+        "units": "percent a year (r* and trend growth g); z in percentage points",
+        "vintage": "2026-11-20",
+        "sha256": "120f1587a5501d9623f00fb65e492df714b303559806e60f728bc3e575b5aa46",
+        "files": ("hlw_rstar.csv",),
+    },
     "rtdsm": {
         "title": "Real-Time Data Set for Macroeconomists: real GDP (ROUTPUT), quarterly vintages",
         "publisher": "Federal Reserve Bank of Philadelphia",
@@ -573,7 +637,7 @@ DATASETS = {
         "units": "real GDP, billions of chained (or constant) dollars of each vintage's base year, SAAR",
         "vintage": "2026-11-19",
         "sha256": "6a7971b31b7336551705465de8a0855826f3652abe112406f52b2c2ed0994c0c",
-        "files": ("rtdsm_2006_2010.csv", "rtdsm_first_latest.csv"),
+        "files": ("rtdsm_2006_2010.csv", "rtdsm_first_latest.csv", "rtdsm_q1_vintages.csv"),
     },
 }
 
@@ -799,6 +863,41 @@ def rtdsm() -> dict:
     out["first_latest"] = [{"quarter": r["quarter"], "first": _num(r["first"]), "latest": _num(r["latest"])}
                            for r in _read(HERE / "rtdsm_first_latest.csv")]
     return out
+
+
+@functools.lru_cache(maxsize=None)
+def rtdsm_q1() -> dict:
+    """Real GDP as each first-quarter vintage from 1966Q1 reported it: ``{"quarters": ["1947:Q1", ...], "vintages":
+    ["1966Q1", ...], "level": {vintage: [...]}}`` (NaN where a vintage had no figure; each vintage in its own base
+    year's dollars)."""
+    rows = _read(HERE / "rtdsm_q1_vintages.csv")
+    vintages = [c for c in rows[0] if c != "quarter"]
+    return {"quarters": [r["quarter"] for r in rows], "vintages": vintages,
+            "level": {v: [_num(r[v]) for r in rows] for v in vintages}}
+
+
+@functools.lru_cache(maxsize=None)
+def greenbook() -> dict:
+    """The Fed staff's projections of GDP-price inflation, one row per Greenbook (Tealbook), 1967-2020: ``{"gb":
+    [{"date": "1967-03-29", "quarter": "1967Q1", "b1": ..., "f": [F0, ..., F4]}]}`` (annualized quarter-on-quarter
+    percent; ``b1`` the staff's estimate for the quarter before, ``F0`` the current quarter), and the Survey of
+    Professional Forecasters' medians for the same index, ``{"spf": [{"quarter": "1968Q4", "f": [F0, ..., F4]}]}``
+    (DPGDP2-6)."""
+    gb = [{"date": r["date"], "quarter": r["quarter"], "b1": _num(r["b1"]),
+           "f": [_num(r[f"f{k}"]) for k in range(5)]} for r in _read(HERE / "greenbook_pgdp.csv")]
+    spf_ = [{"quarter": r["quarter"], "f": [_num(r[f"f{k}"]) for k in range(5)]}
+            for r in _read(HERE / "spf_pgdp_growth.csv")]
+    return {"gb": gb, "spf": spf_}
+
+
+@functools.lru_cache(maxsize=None)
+def hlw() -> dict:
+    """Holston, Laubach and Williams's one-sided estimates, quarterly from 1961Q1: ``{"date": [...], "g_us",
+    "z_us", "rstar_us", "rstar_ca", "rstar_ea": [...]}`` (NaN where there is no estimate; the euro area from
+    1972)."""
+    rows = _read(HERE / "hlw_rstar.csv")
+    return {k: [r[k] if k == "date" else _num(r[k]) for r in rows]
+            for k in ("date", "g_us", "z_us", "rstar_us", "rstar_ca", "rstar_ea")}
 
 
 @functools.lru_cache(maxsize=None)
@@ -1035,6 +1134,14 @@ def refresh_rtdsm() -> None:
         for q in quarters:
             if 2006 <= _quarter_key(q)[0] <= 2010:
                 w.writerow([q, *[_fmt(data[q][i]) if data[q][i] == data[q][i] else "" for i in keep_v]])
+    # every first-quarter vintage, 1966Q1 to the latest: real GDP for every quarter it reported (Part 31's real-time
+    # output gaps)
+    keep_q1 = [i for i, v in enumerate(vint) if v.endswith("Q1") and v >= "1966Q1"]
+    with open(HERE / "rtdsm_q1_vintages.csv", "w", newline="", encoding="utf-8") as f:
+        w = csv.writer(f)
+        w.writerow(["quarter", *[vint[i] for i in keep_q1]])
+        for q in quarters:
+            w.writerow([q, *[_fmt(data[q][i]) if data[q][i] == data[q][i] else "" for i in keep_q1]])
     # each quarter's annualized growth in the first vintage that reports it, and in the latest vintage
     with open(HERE / "rtdsm_first_latest.csv", "w", newline="", encoding="utf-8") as f:
         w = csv.writer(f)
@@ -1052,6 +1159,67 @@ def refresh_rtdsm() -> None:
             latest = 100 * ((a / b) ** 4 - 1) if a == a and b == b else None
             if first is not None and latest is not None:
                 w.writerow([q, f"{first:.3f}", f"{latest:.3f}"])
+
+
+def refresh_greenbook() -> None:
+    import openpyxl  # noqa: PLC0415
+    from openpyxl.reader import excel  # noqa: PLC0415
+
+    d = DATASETS["greenbook"]
+    raw = RAW / "GBweb_Row_Format.xlsx"
+    sha = _download(d["url"], raw)
+    if sha != d["sha256"]:
+        print(f"greenbook: the download differs from the recorded vintage ({sha[:12]} vs {d['sha256'][:12]})")
+    excel.ExcelReader.read_properties = lambda self: None
+    rows = list(openpyxl.load_workbook(raw, read_only=True, data_only=True)["gPGDP"].iter_rows(values_only=True))
+    head = [str(h) for h in rows[0]]
+    num = lambda x: x if isinstance(x, (int, float)) else None  # noqa: E731
+    with open(HERE / "greenbook_pgdp.csv", "w", newline="", encoding="utf-8") as f:
+        w = csv.writer(f)
+        w.writerow(["date", "quarter", "b1", *[f"f{k}" for k in range(5)]])
+        for r in rows[1:]:
+            if not isinstance(r[0], (int, float)):
+                continue
+            rec = dict(zip(head, r))
+            gd = str(int(rec["GBdate"]))
+            y, q = str(r[0]).split(".")
+            vals = [num(rec["gPGDPB1"]), *[num(rec[f"gPGDPF{k}"]) for k in range(5)]]
+            w.writerow([f"{gd[:4]}-{gd[4:6]}-{gd[6:]}", f"{y}Q{q}", *[_fmt(v) if v is not None else "" for v in vals]])
+    raw2 = RAW / "spf_median_pgdp_growth.xlsx"
+    _download(SPF_URL.format("median_pgdp_growth"), raw2)
+    ws = openpyxl.load_workbook(raw2, read_only=True, data_only=True).worksheets[0]
+    rows = list(ws.iter_rows(values_only=True))
+    head = [str(h).lower() for h in rows[0]]
+    with open(HERE / "spf_pgdp_growth.csv", "w", newline="", encoding="utf-8") as f:
+        w = csv.writer(f)
+        w.writerow(["quarter", *[f"f{k}" for k in range(5)]])
+        for r in rows[1:]:
+            if not isinstance(r[0], (int, float)):
+                continue
+            rec = dict(zip(head, r))
+            vals = [num(rec.get(f"dpgdp{k}")) for k in range(2, 7)]
+            w.writerow([f"{int(r[0])}Q{int(r[1])}", *[_fmt(v) if v is not None else "" for v in vals]])
+
+
+def refresh_hlw() -> None:
+    import openpyxl  # noqa: PLC0415
+    from openpyxl.reader import excel  # noqa: PLC0415
+
+    d = DATASETS["hlw"]
+    raw = RAW / "Holston_Laubach_Williams_current_estimates.xlsx"
+    sha = _download(d["url"], raw)
+    if sha != d["sha256"]:
+        print(f"hlw: the download differs from the recorded vintage ({sha[:12]} vs {d['sha256'][:12]})")
+    excel.ExcelReader.read_properties = lambda self: None
+    rows = list(openpyxl.load_workbook(raw, read_only=True, data_only=True)["HLW Estimates"].iter_rows(
+        values_only=True))
+    num = lambda x: _fmt(x) if isinstance(x, (int, float)) else ""  # noqa: E731
+    with open(HERE / "hlw_rstar.csv", "w", newline="", encoding="utf-8") as f:
+        w = csv.writer(f)
+        w.writerow(["date", "g_us", "z_us", "rstar_us", "rstar_ca", "rstar_ea"])
+        for r in rows:
+            if hasattr(r[0], "year"):
+                w.writerow([r[0].strftime("%Y-%m-%d"), num(r[2]), num(r[6]), num(r[10]), num(r[11]), num(r[12])])
 
 
 def refresh_draft1970() -> None:
@@ -1416,7 +1584,8 @@ REFRESH = {"draft1970": refresh_draft1970, "ajr": refresh_ajr, "maddison2023": r
            "rtdsm": refresh_rtdsm, "warheads": refresh_warheads, "so2": refresh_so2,
            "marriage": refresh_marriage, "democracy": refresh_democracy, "millennium": refresh_millennium,
            "longrun": refresh_longrun, "pwt": refresh_pwt, "shiller": refresh_shiller,
-           "wdi_money": refresh_wdi_money}
+           "wdi_money": refresh_wdi_money, "greenbook": refresh_greenbook,
+           "hlw": refresh_hlw}
 
 
 def main() -> None:

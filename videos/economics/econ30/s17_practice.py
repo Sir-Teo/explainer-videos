@@ -73,8 +73,23 @@ class Practice(VoiceoverScene):
 
     def called(self):
         c = calls.CALLS["bernanke_2002"]
+        K = load("called")
         cc = call_card(tex_safe(c.who), c.when, tex_safe(c.said), tex_safe(c.outcome), c.verdict, width=12.4,
-                       font_size=18).move_to(UP * 0.1)
+                       font_size=17).to_edge(UP, buff=0.3)
+        ax = plane([2006, 2020], [-3, 6], center=DOWN * 1.75 + LEFT * 1.3, x_length=9.0, y_length=3.0,
+                   xticks=[2008, 2012, 2016, 2020], yticks=[-2, 0, 2, 4], xlabel=r"",
+                   ylabel=r"change over twelve months, \ \%", xfmt=lambda v: f"{v:.0f}",
+                   yfmt=lambda v: f"{v:.0f}", font_size=14)
+        zlb = shade(ax, [(2008.96, 2015.96)], -3, 6, color=RATE, opacity=0.10)
+        zero = seg(ax, 2006, 0, 2020, 0, GREY_C, 1.2)
+        target = seg(ax, 2006, 2, 2020, 2, CB, 1.6, dashed=True)
+        cpi = path(ax, K["cpi"]["t"], K["cpi"]["yoy"], INFL, 2.6, smooth=False)
+        core = path(ax, K["core"]["t"], K["core"]["yoy"], PRICE, 3.2, smooth=False)
+        key = VGroup(label(r"red: \ consumer prices", font_size=16, color=INFL),
+                     label(r"gold: \ core PCE prices", font_size=16, color=PRICE),
+                     label(r"dashed: \ the 2\% target \ (from 2012)", font_size=16, color=CB),
+                     label(r"shaded: \ the rate at zero", font_size=16, color=RATE)).arrange(
+            DOWN, aligned_edge=LEFT, buff=0.22).next_to(ax, RIGHT, buff=0.4)
         tag = published_tag(r"Bernanke, \ remarks before the National Economists Club, \ 21 November 2002; \ BLS, "
                             r"\ BEA and the Federal Reserve via FRED", corner=DR, font_size=12)
         with self.voiceover(
@@ -82,13 +97,20 @@ class Practice(VoiceoverScene):
             "then a governor of the Federal Reserve, said that the central bank, with the rest of the government, "
             "had enough instruments to make sure that any deflation in America would be mild and brief. "
             "<bookmark mark='b'/> Six years later the federal funds rate hit zero and stayed there for seven years. "
-            "Consumer prices fell over twelve months in 2009 and briefly in 2015, by at most two percent, while "
-            "core inflation never went below zero. But core inflation also stayed below the two percent target "
+            "<bookmark mark='d'/> Consumer prices fell over twelve months in 2009 and briefly in 2015, by at most "
+            "two percent, <bookmark mark='e'/> while core inflation never went below zero. "
+            "<bookmark mark='f'/> But core inflation also stayed below the two percent target "
             "most of the following decade. <bookmark mark='c'/> Right, about deflation."
         ) as vo:
-            self.play(FadeIn(cc.card), FadeIn(cc[1]), FadeIn(tag))
+            self.play(FadeIn(cc.card), FadeIn(cc[1]), FadeIn(tag), FadeIn(ax), FadeIn(zero))
             vo.wait_until("b")
-            self.play(Indicate(cc.right, color=WHITE, scale_factor=1.01))
+            self.play(Indicate(cc.right, color=WHITE, scale_factor=1.01), FadeIn(zlb), FadeIn(key[3]))
+            vo.wait_until("d")
+            self.play(Create(cpi), FadeIn(key[0]), run_time=1.5)
+            vo.wait_until("e")
+            self.play(Create(core), FadeIn(key[1]), run_time=1.5)
+            vo.wait_until("f")
+            self.play(Create(target), FadeIn(key[2]))
             vo.wait_until("c")
             self.play(FadeIn(cc.stamp, scale=1.3))
         self.clear_scene()

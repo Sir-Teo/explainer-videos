@@ -46,8 +46,8 @@ class Coincidence(VoiceoverScene):
                    yticks=[lo, 0, hi], xfmt=lambda v: f"{v:.0f}", yfmt=lambda v: f"{v:+.1f}" if v else "0",
                    font_size=13)
         zero = seg(ax, 0, 0, 11, 0, GREY_D, 1.2)
-        lines = VGroup(path(ax, q, np.clip(R["x"], lo, hi), OUTPUT, 3, smooth=False),
-                       path(ax, q, np.clip(R["pi"], lo, hi), INFL, 3, smooth=False))
+        lines = VGroup(DashedVMobject(path(ax, q, np.clip(R["pi"], lo, hi), INFL, 3, smooth=False), num_dashes=24),
+                       path(ax, q, np.clip(R["x"], lo, hi), OUTPUT, 4, smooth=False))
         t = label(title, font_size=19, color=col).next_to(ax, UP, buff=0.15)
         return VGroup(ax, zero, t), lines
 
@@ -59,7 +59,7 @@ class Coincidence(VoiceoverScene):
         pc_ = self._panel(c, RIGHT * 3.4 + DOWN * 0.4, r"a cost-push shock, \ inflation held at target", COST,
                           -2.5, 0.5)
         key = VGroup(label(r"green: \ output gap", font_size=18, color=OUTPUT),
-                     label(r"red: \ inflation", font_size=18, color=INFL)).arrange(RIGHT, buff=0.6).to_edge(
+                     label(r"red, \ dashed: \ inflation", font_size=18, color=INFL)).arrange(RIGHT, buff=0.6).to_edge(
             UP, buff=0.35)
         notes = VGroup(
             label(rf"output gap \ {d['x'][0]:+.3f}\%: \ zero as well", font_size=18, color=OUTPUT).next_to(
@@ -68,7 +68,7 @@ class Coincidence(VoiceoverScene):
                 pc_[0], DOWN, buff=0.3),
         )
         foot = label(r"Blanchard and Gal\'i, \ 2007: \ the coincidence holds only when nothing pushes costs on "
-                     r"its own", font_size=19, color=E.ACCENT).to_edge(DOWN, buff=0.45)
+                     r"its own", font_size=19, color=E.ACCENT).to_edge(DOWN, buff=0.8)
         tag = published_tag(r"Blanchard and Gal\'i, \ \emph{JMCB} 39(s1) (2007); \ the Island", corner=DR,
                             font_size=12)
         with self.voiceover(

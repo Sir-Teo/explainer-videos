@@ -45,8 +45,8 @@ class Markup(VoiceoverScene):
                    xticks=[0, 5, 10], yticks=[0, 1, 2], xlabel=r"quantity", ylabel=r"price, \ cost",
                    xfmt=lambda v: f"{v:.0f}", yfmt=lambda v: f"{v:.0f}", font_size=15)
         q = np.linspace(0.3, 10, 120)
-        d0 = path(ax, q, np.clip(6 / q, 0, 2.0), GREY_B, 2.5, yr=(0, 2.0))
-        d1 = path(ax, q, np.clip(8 / q, 0, 2.0), OUTPUT, 3, yr=(0, 2.0))
+        d0 = path(ax, q, 6 / q, GREY_B, 2.5, yr=(0, 2.0))
+        d1 = path(ax, q, 8 / q, OUTPUT, 3, yr=(0, 2.0))
         mc = path(ax, q, 0.6 + 0.07 * q, COST, 3)
         p0 = 1.2 * (0.6 + 0.07 * 5.0)
         fixed = seg(ax, 0, p0, 10, p0, PRICE, 3, dashed=True)
@@ -54,12 +54,13 @@ class Markup(VoiceoverScene):
         a0 = dot(ax, q0, p0, WHITE, 0.08)
         a1 = dot(ax, q1, p0, OUTPUT, 0.09)
         mc1 = 0.6 + 0.07 * q1
+        gap0 = seg(ax, q0, 0.6 + 0.07 * q0, q0, p0, GREY_B, 4)
         gap = seg(ax, q1, mc1, q1, p0, E.ACCENT, 4)
         side = VGroup(
             label(r"grey: \ demand before; \ green: \ after it rises", font_size=19, color=OUTPUT),
             label(r"gold, \ dashed: \ the price, \ stuck", font_size=19, color=PRICE),
             label(r"purple: \ marginal cost, \ rising with output", font_size=19, color=COST),
-            label(r"the firm sells more at the old price; \\ its markup shrinks \ (orange)", font_size=19,
+            label(r"the firm sells more at the old price; \\ its markup shrinks \ (grey to orange)", font_size=19,
                   color=E.ACCENT),
             label(r"output is set by demand, \\ not by the price", font_size=20, color=WHITE),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.36).to_edge(RIGHT, buff=0.35)
@@ -81,6 +82,7 @@ class Markup(VoiceoverScene):
             vo.wait_until("c")
             self.play(FadeIn(side[2]), Indicate(mc, color=WHITE, scale_factor=1.0))
             vo.wait_until("d")
+            self.play(Create(gap0), run_time=0.6)
             self.play(GrowFromCenter(a1), Create(gap), FadeIn(side[3]))
             vo.wait_until("e")
             self.play(FadeIn(side[4]))

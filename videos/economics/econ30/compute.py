@@ -183,6 +183,19 @@ def compute_hybrid() -> dict:
 
 
 FILM_SECONDS = 40.0
+def compute_called() -> dict:
+    """Bernanke's 2002 promise checked: consumer prices and core PCE prices, change over twelve months, 2006-2019."""
+    out = {}
+    for key, name in (("CPIAUCSL", "cpi"), ("PCEPILFE", "core")):
+        m = _monthly(key)
+        ds = [d for d in sorted(m) if "2006-01-01" <= d <= "2019-12-01" and f"{int(d[:4]) - 1}{d[4:]}" in m]
+        out[name] = {"t": [_t(d) for d in ds],
+                     "yoy": [100 * (m[d] / m[f"{int(d[:4]) - 1}{d[4:]}"] - 1) for d in ds]}
+    neg = [t for t, v in zip(out["cpi"]["t"], out["cpi"]["yoy"]) if v < 0]
+    return {**out, "cpi_min": float(min(out["cpi"]["yoy"])), "core_min": float(min(out["core"]["yoy"])),
+            "cpi_negative_months": len(neg)}
+
+
 MELODY_SECONDS = FILM_SECONDS + 8.0
 
 
@@ -227,6 +240,7 @@ ITEMS = {
     "setters": compute_setters,
     "zlb": compute_zlb,
     "hybrid": compute_hybrid,
+    "called": compute_called,
     "film": compute_film,
     "melody": compute_melody,
 }

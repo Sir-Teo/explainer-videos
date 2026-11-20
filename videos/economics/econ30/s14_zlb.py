@@ -70,11 +70,16 @@ class ZLB(VoiceoverScene):
         zero = seg(ax, 0, 0, 11, 0, GREY_D, 1.5)
         cols = {"0": GREY_B, "1": CB, "2": OUTPUT, "3": E.ACCENT}
         lines = {k: path(ax, ps[k]["q"], np.clip(ps[k]["x"], -7, 17), cols[k], 3, smooth=False) for k in ps}
-        names = {k: label(rf"+{k} quarter{'s' if k != '1' else ''}" if k != "0" else r"no promise",
-                          font_size=17, color=cols[k]).next_to(ax.ax.c2p(0, float(np.clip(ps[k]["x"][0], -7, 17))),
-                                                              LEFT, buff=0.12) for k in ps}
+        x0, x1 = ax.ax.c2p(0, 0)[0], ax.ax.c2p(Z["T"], 0)[0]
+        shock = Rectangle(width=x1 - x0, height=4.8, fill_color=COST, fill_opacity=0.10, stroke_width=0).move_to(
+            ax.ax.c2p(Z["T"] / 2, 5))
+        low = label(r"the natural rate is low", font_size=16, color=COST).move_to(ax.ax.c2p(Z["T"] / 2, 15.5))
+        edge = DashedLine(ax.ax.c2p(Z["T"], -7), ax.ax.c2p(Z["T"], 17), color=CB, stroke_width=2)
+        arrow = Arrow(ax.ax.c2p(Z["T"], 12), ax.ax.c2p(Z["T"] + 3, 12), color=CB, buff=0, stroke_width=4,
+                      max_tip_length_to_length_ratio=0.2)
+        promise = label(r"the promise: \ zero for longer", font_size=16, color=CB).next_to(arrow, UP, buff=0.1)
         side = VGroup(
-            label(r"forward guidance: \ promise to keep \\ the rate at zero \emph{after} the shock", font_size=19,
+            label(r"forward guidance: \ promise to keep the rate at zero \ \emph{after} the shock", font_size=19,
                   color=CB),
             label(r"output gap on impact:", font_size=19, color=GREY_A),
             *[label(rf"{'no promise' if k == '0' else '+' + k + ' quarter' + ('s' if k != '1' else '')}: \ "
@@ -83,20 +88,27 @@ class ZLB(VoiceoverScene):
         tag = island_tag(corner=DR, font_size=14)
         with self.voiceover(
             "What can a central bank do at zero? It can talk. <bookmark mark='a'/> Promise to keep the rate at "
-            "zero for a while after the natural rate has recovered, when the economy would otherwise call for "
-            "higher rates. That future stimulus raises expected output and inflation, and pulls the economy up "
-            "today. <bookmark mark='b'/> In the model the effect is enormous. With no promise, output is "
-            f"{abs(ps['0']['x'][0]):.1f} percent below normal. <bookmark mark='c'/> Promise one extra quarter at "
+            "zero for a while after the natural rate has recovered, <bookmark mark='p'/> when the economy would "
+            "otherwise call for higher rates. That future stimulus raises expected output and inflation, and pulls "
+            "the economy up today. <bookmark mark='b'/> In the model the effect is enormous. With no promise, output "
+            f"is {abs(ps['0']['x'][0]):.1f} percent below normal. <bookmark mark='c'/> Promise one extra quarter at "
             f"zero, and the slump almost disappears: {say_num(ps['1']['x'][0], 1)} percent. "
             f"<bookmark mark='d'/> Two quarters, and it becomes a boom of {ps['2']['x'][0]:.1f} percent; "
-            f"<bookmark mark='e'/> three, {ps['3']['x'][0]:.0f} percent."
+            f"<bookmark mark='e'/> three, {ps['3']['x'][0]:.0f} percent. No central bank has ever seen a promise "
+            "work like that."
         ) as vo:
-            self.play(FadeIn(ax), FadeIn(zero), FadeIn(tag), FadeIn(side[0]), run_time=0.6)
+            self.play(FadeIn(ax), FadeIn(zero), FadeIn(tag), FadeIn(side[0]), FadeIn(shock), FadeIn(low),
+                      run_time=0.6)
+            vo.wait_until("a")
+            self.play(Create(edge))
+            vo.wait_until("p")
+            self.play(GrowArrow(arrow), FadeIn(promise))
             vo.wait_until("b")
-            self.play(Create(lines["0"]), FadeIn(names["0"]), FadeIn(side[1]), FadeIn(side[2]))
+            self.play(FadeOut(arrow), FadeOut(promise), FadeOut(low), Create(lines["0"]), FadeIn(side[1]),
+                      FadeIn(side[2]))
             for mk, k in zip("cde", ("1", "2", "3")):
                 vo.wait_until(mk)
-                self.play(Create(lines[k]), FadeIn(names[k]), FadeIn(side[2 + int(k)]))
+                self.play(Create(lines[k]), FadeIn(side[2 + int(k)]))
         self.clear_scene()
 
     def puzzle(self):
