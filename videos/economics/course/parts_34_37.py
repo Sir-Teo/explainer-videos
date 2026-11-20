@@ -105,4 +105,52 @@ PARTS = [
               ("The Island's planted truths", "explainer/economics/island.py"),
               ("The Data Room's sources", "explainer/economics/data/SOURCES.md")),
     ),
+    Part(
+        n=36, level="U", widget="gravity", prereq=(10, 12, 24, 35),
+        question="Why is most trade between similar countries, and what did a generation of imports from China do?",
+        story="The part opens on the Ideal X leaving Newark in April 1956 with fifty-eight trailers on deck, and on "
+              "the trade web of 2019. It measures two-way trade with the Grubel-Lloyd index, explains it with "
+              "Krugman's variety and scale and the home-market effect, and asks the viewer where Spain sells the "
+              "most. Gravity is estimated on every pair of countries by least squares and PPML, with McCallum's "
+              "border puzzle; then firms: Bernard and Jensen's rare exporters, Melitz's selection, and Eaton and "
+              "Kortum's Ricardo with a distribution. After an intermission of America's imports from China, one "
+              "formula gives the gains from trade and exact hat algebra a counterfactual on real 2019 data; then the "
+              "China shock with Autor, Dorn and Hanson's design reproduced on the Island, the tariffs of 2018 and "
+              "2025, value chains, three dials, Krugman's 1995 estimate as Called it?, and a frontier.",
+        handoff="Part 37 turns to why activity clusters in a few places; Part 63 to fragile networks; Part 66 to "
+                "tariffs, industrial policy and the 2025 tariffs on the quantitative model.",
+        outside="Part 10: monopolistic pricing and markups; Part 12: firms and market structure; Part 24: local "
+                "labour markets; Part 35: comparative advantage and the gains formula. Chapter 4 uses Poisson "
+                "pseudo-maximum likelihood with two sets of fixed effects; chapter 7 the Frechet distribution; "
+                "chapter 8 a fixed-point solution for wages; chapter 9 instrumental variables.",
+        objectives={
+            "U": ["Measure two-way trade with the Grubel-Lloyd index and explain it with variety and scale.",
+                  "State the gravity equation and interpret its distance and border effects.",
+                  "Describe the China shock's design and findings, and who paid the 2018-19 tariffs."],
+            "M": ["Solve Krugman's model and the home-market effect; solve Melitz's cutoffs and the gain from "
+                  "opening.",
+                  "Estimate gravity by least squares and by PPML with fixed effects, and explain why they differ.",
+                  "Compute the gains from trade by the ACR formula and a counterfactual by exact hat algebra."],
+            "D": ["Derive Eaton and Kortum's trade shares from Frechet draws, and connect theta to the trade "
+                  "elasticity.",
+                  "Explain what shift-share designs assume, and why the short- and long-run trade elasticities "
+                  "differ."],
+            "I": ["Run a trade-policy counterfactual from a matrix of trade flows, and read a tariff pass-through "
+                  "study."],
+        },
+        results=[
+            ("Grubel-Lloyd", r"GL = 1 - \frac{|X - M|}{X + M}"),
+            ("Gravity", r"X_{od} = \exp(a_o + b_d - \delta \ln D_{od} + \dots)"),
+            ("Melitz's export cutoff", r"\varphi_x^* = \tau \left(\frac{f_x}{f}\right)^{1/(\sigma-1)} \varphi^*"),
+            ("Eaton-Kortum", r"\pi_{ni} = \frac{T_i (w_i d_{ni})^{-\theta}}{\sum_k T_k (w_k d_{nk})^{-\theta}}"),
+            ("Hat algebra", r"\hat W_n = \hat E_n / \hat P_n, \quad \hat P_n = \Big(\sum_i \pi_{ni} (\hat w_i "
+                            r"\hat d_{ni})^{-\theta}\Big)^{-1/\theta}"),
+            ("The China shock", r"\Delta L^m_{z} = \beta \sum_k \frac{L_{zk}}{L_z} \frac{\Delta M_k}{L_k} + "
+                                r"\varepsilon_z"),
+        ],
+        U=(0, 1, 2, 3, 4, 5, "s09_intermission", 9, 10, 11, 12), D=(7, 14), I=(13,),
+        also=(("Agora's trade", "explainer/economics/agora/trade.py"),
+              ("The Island's planted truths", "explainer/economics/island.py"),
+              ("The Data Room's sources", "explainer/economics/data/SOURCES.md")),
+    ),
 ]

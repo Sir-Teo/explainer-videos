@@ -10,7 +10,7 @@ the series leaves out.
 Both *Parts* columns are found, not typed. *Planned* lists the parts whose entry in
 [`SYLLABUS.md`](SYLLABUS.md) names the book or paper; *Built* lists the parts whose scenes, compute step or
 README cite it (a dot: none yet). Fuller notes (editions, chapters, what each source was used for) are in each
-part's README, under *Sources*. Built so far: Parts 1–35.
+part's README, under *Sources*. Built so far: Parts 1–36.
 
 ## 1. The textbook spine
 
@@ -35,7 +35,7 @@ part's README, under *Sources*. Built so far: Parts 1–35.
 | Stock–Watson | J. Stock and M. Watson, *Introduction to Econometrics* (4th ed., 2019) | 4 | 4 |
 | Angrist–Pischke | J. Angrist and J.-S. Pischke, *Mostly Harmless Econometrics* (2009) | 4, 50, 67 | 4 |
 | Osborne | M. Osborne, *An Introduction to Game Theory* (2004) | 11 | 11 |
-| Krugman–Obstfeld–Melitz | P. Krugman, M. Obstfeld and M. Melitz, *International Economics* (12th ed., 2022) | 34–35 | 34–35 |
+| Krugman–Obstfeld–Melitz | P. Krugman, M. Obstfeld and M. Melitz, *International Economics* (12th ed., 2022) | 34–35 | 34–36 |
 | Mishkin | F. Mishkin, *The Economics of Money, Banking, and Financial Markets* (13th ed., 2022) | 26 | 31 |
 | Cabral | L. Cabral, *Introduction to Industrial Organization* (2nd ed., 2017) | 12–13 | 12–13 |
 | Borjas | G. Borjas, *Labor Economics* (8th ed., 2020) | 38 | · |
@@ -92,7 +92,7 @@ part's README, under *Sources*. Built so far: Parts 1–35.
 
 | Short name | Book | Planned | Built |
 |---|---|---|---|
-| Feenstra | R. Feenstra, *Advanced International Trade* (2nd ed., 2016) | 6, 35–36 | 6, 8, 20, 35 |
+| Feenstra | R. Feenstra, *Advanced International Trade* (2nd ed., 2016) | 6, 35–36 | 6, 8, 20, 35–36 |
 | Cahuc–Carcillo–Zylberberg | P. Cahuc, S. Carcillo and A. Zylberberg, *Labor Economics* (2nd ed., 2014) | 24, 38 | 24 |
 | Atkinson–Stiglitz | A. Atkinson and J. Stiglitz, *Lectures on Public Economics* (1980; 2015) | 41 | 6 |
 | Salanié | B. Salanie, *The Economics of Taxation* (2nd ed., 2011) | 41 | 13–14 |
@@ -121,7 +121,7 @@ part's README, under *Sources*. Built so far: Parts 1–35.
 | Model or result | Paper | Planned | Built |
 |---|---|---|---|
 | the division of labour | Smith (1776), *The Wealth of Nations* | 1 | 1–2, 19, 21 |
-| comparative advantage | Ricardo (1817), *Principles*, ch. 7 | 2, 8, 35–36 | 1–2, 8, 19, 22, 25, 33–35 |
+| comparative advantage | Ricardo (1817), *Principles*, ch. 7 | 2, 8, 35–36 | 1–2, 8, 19, 22, 25, 33–36 |
 | supply and demand, the scissors | Marshall (1890), *Principles of Economics* | 2, 37 | 2, 14 |
 | the price system as information | Hayek (1945), "The Use of Knowledge in Society" | 1, 9 | 1, 9 |
 | the double auction in the classroom | Chamberlin (1948); Smith (1962) | 1–2 | 1 |
@@ -226,7 +226,7 @@ part's README, under *Sources*. Built so far: Parts 1–35.
 | factor prices and trade | Stolper and Samuelson (1941) | 35 | 35 |
 | trade with increasing returns | Krugman (1979, 1980) | 36 | · |
 | heterogeneous firms in trade | Melitz (2003) | 36 | · |
-| gravity | Anderson and van Wincoop (2003) | 36 | · |
+| gravity | Anderson and van Wincoop (2003) | 36 | 36 |
 | economic geography | Krugman (1991) | 37 | · |
 
 ### People
@@ -325,6 +325,8 @@ part's README, under *Sources*. Built so far: Parts 1–35.
 **Part 34, *The Open Economy*.** Books: Paul Krugman, Maurice Obstfeld and Marc Melitz, *International Economics* (12th ed., 2022), Part 3; Maurice Obstfeld and Kenneth Rogoff, *Foundations of International Macroeconomics* (1996); Barry Eichengreen, *Globalizing Capital* (3rd ed., 2019); Martin Uribe and Stephanie Schmitt-Grohé, *Open Economy Macroeconomics* (2017). Papers: Mundell (1961, 1963); Fleming (1962); Dornbusch (1976); Balassa (1964); Samuelson (1964); Krugman (1979); Obstfeld (1996); Calvo (1998); Meese and Rogoff (1983); Fama (1984); Rogoff (1996); Lustig and Verdelhan (2007); Gourinchas and Rey (2007); Rey (2013); Gopinath, Itskhoki and Rigobon (2010); Gopinath et al. (2020); Gabaix and Maggiori (2015); Itskhoki and Mukhin (2021); Caballero, Farhi and Gourinchas (2017); Rossi (2013).
 
 **Part 35, *Trade I: Comparative Advantage*.** Books: Paul Krugman, Maurice Obstfeld and Marc Melitz, *International Economics* (12th ed., 2022), chs 3–6, 9–10; Robert Feenstra, *Advanced International Trade* (2nd ed., 2015), chs 1–3; Douglas Irwin, *Clashing over Commerce: A History of US Trade Policy* (2017); Arnaud Costinot and Andrés Rodríguez-Clare, "Trade Theory with Numbers", *Handbook of International Economics* vol. 4 (2014). Papers: Ricardo (1817); Heckscher (1919); Ohlin (1933); Stolper and Samuelson (1941); Lerner (1952); Leontief (1953); Jones (1971); Dornbusch, Fischer and Samuelson (1977); Leamer (1980); Grossman and Helpman (1994); Trefler (1995); Bagwell and Staiger (1999); Goldberg and Maggi (1999); Eaton and Kortum (2002); Bernhofen and Brown (2004, 2005); Irwin (2005); Arkolakis, Costinot and Rodríguez-Clare (2012); Costinot and Donaldson (2012).
+
+**Part 36, *Trade II: Scale, Firms and Gravity*.** Books: Paul Krugman, Maurice Obstfeld and Marc Melitz, *International Economics* (12th ed., 2022), chs 7–8; Robert Feenstra, *Advanced International Trade* (2nd ed., 2015), chs 5–6; Keith Head and Thierry Mayer, "Gravity Equations", *Handbook of International Economics* vol. 4 (2014); Marc Levinson, *The Box* (2006). Papers: Tinbergen (1962); Grubel and Lloyd (1975); Krugman (1979, 1980); McCallum (1995); Bernard and Jensen (1995); Eaton and Kortum (2002); Melitz (2003); Anderson and van Wincoop (2003); Santos Silva and Tenreyro (2006); Dekle, Eaton and Kortum (2008); Xing and Detert (2010); Arkolakis, Costinot and Rodríguez-Clare (2012); Autor, Dorn and Hanson (2013); Amiti, Redding and Weinstein (2019); Fajgelbaum et al. (2020); Boehm et al. (2023).
 
 ## 4. What the series leaves out
 

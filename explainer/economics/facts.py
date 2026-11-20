@@ -127,6 +127,15 @@ AGORA = {
     "hump": (30, "in the three-equation model a monetary tightening cuts output most at once; with habits (0.9), "
                  "price indexation (0.9) and a smoothed rule (0.8) the trough comes two quarters after the shock, still "
                  "sooner than in the data"),
+    # Part 36 built the models of scale, firms and gravity
+    "intra_industry": (36, "in Agora, two identical islands trade different varieties of the same good because of "
+                           "love of variety and fixed costs, raising real wages 26%; America's two-way trade in "
+                           "capital goods scores 0.77 on the Grubel-Lloyd index in 2025"),
+    "gravity": (36, "in Agora, Eaton and Kortum's islands trade by a gravity formula; on CEPII's 2019 data trade "
+                    "falls with distance with an elasticity of -1.18 by least squares and -0.71 by PPML with fixed "
+                    "effects"),
+    "few_exporters": (36, "in Agora, Melitz's firms: of 4,000 draws 260 survive, the most productive 19% export and "
+                          "sell 67% of output, nine times the size of firms that sell only at home"),
     # Part 34 reran Meese and Rogoff and fitted the PPP half-life
     "random_walk": (34, "in Agora, overshooting makes the exchange rate jump 15% on a "
                         "10% rise in money because prices are sticky and asset markets are not; in the data, no "

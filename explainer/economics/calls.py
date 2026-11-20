@@ -389,6 +389,20 @@ CALLS = {c.key: c for c in [
          "right",
          ("B. Holmström and P. Milgrom, Journal of Law, Economics and Organization 7 (1991): 24-52",
           "B. A. Jacob and S. D. Levitt, Quarterly Journal of Economics 118(3) (2003): 843-877, abstract")),
+    Call("krugman_1995", 36, "Paul Krugman, in the Brookings Papers on Economic Activity", "1995",
+         "trade with low-wage countries had only a modest effect on American wage inequality: about 3 percentage "
+         "points on the ratio of skilled to unskilled wages, in line with the decade's other estimates",
+         "the effect of trade with developing countries on US wages and jobs",
+         "for the years he studied the estimate has held up, as Krugman himself later argued; but after 2000 "
+         "imports from China grew far faster, and Autor, Dorn and Hanson (2013) found large, lasting losses of "
+         "manufacturing jobs concentrated in the places that made the same goods, which aggregate models had "
+         "averaged away",
+         "partly right",
+         ("P. R. Krugman, \"Growing World Trade: Causes and Consequences\", Brookings Papers on Economic Activity "
+          "1995(1): 327-377",
+          "P. R. Krugman, \"Trade and Wages, Reconsidered\", Brookings Papers on Economic Activity 2008(1): 103-154",
+          "D. H. Autor, D. Dorn and G. H. Hanson, \"The China Syndrome\", American Economic Review 103(6): "
+          "2121-2168 (2013)")),
     Call("heckscher_ohlin_us", 35, "Heckscher and Ohlin's theory, read for the United States", "1933",
          "the country best endowed with capital should export goods that use capital intensively and import goods "
          "that use labour intensively",

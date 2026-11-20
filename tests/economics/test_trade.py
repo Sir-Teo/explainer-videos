@@ -123,3 +123,54 @@ def test_factor_content_on_a_perfect_hov_world():
             D["b"].append(0.0)
     F = trade.factor_content(D)
     assert F["sign_test"] == 1.0 and F["variance_ratio"] == pytest.approx(1.0)
+
+
+# ---- part II (Part 36) -----------------------------------------------------------------------------------------------
+def test_krugman_and_home_market():
+    k = trade.krugman_variety(1000, 1, 4, 2)
+    assert k["n_available"] == 2 * k["n_home"] and k["welfare_gain"] == pytest.approx(2 ** (1 / 3) - 1)
+    hm = trade.home_market([0.5, 0.55, 0.9], 0.3)
+    assert hm[0] == pytest.approx(0.5) and hm[1] > 0.55 and hm[2] == 1.0
+
+
+def test_ppml_recovers_planted_gravity():
+    rng = np.random.default_rng(0)
+    n = 40
+    o, d = np.meshgrid(np.arange(n), np.arange(n), indexing="ij")
+    keep = o != d
+    o, d = o[keep], d[keep]
+    a, b = rng.normal(0, 1, n), rng.normal(0, 1, n)
+    dist = rng.uniform(1, 4, len(o))
+    mu = np.exp(a[o] + b[d] - 0.9 * dist)
+    y = rng.poisson(mu * 50) / 50
+    P = trade.ppml_fe(y, dist[:, None], o, d)
+    assert P["beta"][0] == pytest.approx(-0.9, abs=0.05)
+
+
+def test_melitz_cutoffs_and_exports():
+    M = trade.melitz()
+    assert M["phi_export"] > M["phi_trade"] > M["phi_autarky"] and M["welfare_gain"] > 0
+    assert M["export_share"] == pytest.approx(M["ratio"] ** (-4.25))
+    closed = trade.melitz(tau=1e6)
+    assert closed["phi_trade"] == pytest.approx(closed["phi_autarky"], rel=1e-6)
+
+
+def test_eaton_kortum_formula_matches_simulation():
+    T, d = np.array([1.0, 2.0, 0.5]), np.array([[1, 1.5, 2], [1.5, 1, 1.8], [2, 1.8, 1.0]])
+    a = trade.eaton_kortum_shares(T, np.ones(3), d)
+    s = trade.eaton_kortum_simulate(T, np.ones(3), d, goods=40000)
+    assert np.allclose(a.sum(axis=1), 1) and np.abs(a - s).max() < 0.015
+
+
+def test_hat_algebra_matches_acr_and_nothing_changes_at_unit_costs():
+    X = np.array([[80, 10, 10], [10, 85, 5], [10, 5, 80.]])
+    assert np.allclose(trade.hat_algebra(X, np.ones((3, 3)))["welfare"], 0, atol=1e-10)
+    aut = np.ones((3, 3)) * 1e3
+    np.fill_diagonal(aut, 1)
+    h = trade.hat_algebra(X, aut, 4.0)["welfare"]
+    assert h == pytest.approx([-trade.acr_gains(X[i, i] / X[i].sum(), 4.0) for i in range(3)], abs=1e-6)
+
+
+def test_shift_share_iv_beats_ols():
+    S = trade.shift_share(seed=3)
+    assert abs(S["iv"] - S["beta"]) < abs(S["ols"] - S["beta"]) and S["first_stage"] > 0

@@ -891,6 +891,23 @@ brackets on screen.
 | the compensation principle; trade adjustment assistance | 补偿原则；贸易调整援助 |
 | intra-industry trade; the Grubel-Lloyd index | 产业内贸易；格鲁贝尔-劳埃德指数 |
 
+## Part 36
+
+| English | 中文 |
+|---|---|
+| containerization; the shipping container | 集装箱化；集装箱 |
+| love of variety; economies of scale; monopolistic competition | 多样性偏好；规模经济；垄断竞争 |
+| the home-market effect | 本地市场效应 |
+| the gravity equation; distance elasticity; the border effect | 引力方程；距离弹性；边界效应 |
+| multilateral resistance | 多边阻力 |
+| Poisson pseudo-maximum likelihood (PPML); fixed effects | 泊松伪最大似然（PPML）；固定效应 |
+| heterogeneous firms; the productivity cutoff; selection | 异质性企业；生产率临界值；选择效应 |
+| the Fréchet distribution; the trade elasticity | 弗雷歇分布；贸易弹性 |
+| exact hat algebra; a counterfactual | 精确帽子代数；反事实 |
+| the China shock; commuting zones; a shift-share (Bartik) instrument | 中国冲击；通勤区；移动份额（巴蒂克）工具变量 |
+| tariff pass-through; trade diversion | 关税传导；贸易转移 |
+| global value chains; trade in value added | 全球价值链；增加值贸易 |
+
 ## Names
 
 | English | 中文 |
@@ -1144,6 +1161,9 @@ brackets on screen.
 | Stephen Broadberry; Hanhui Guan; David Daokui Li; Kenneth Pomeranz; Joseph Needham | 斯蒂芬·布罗德伯里；管汉晖；李稻葵；彭慕兰；李约瑟 |
 | Nico Voigtländer; Hans-Joachim Voth; Nicholas Crafts; Knick Harley; Friedrich Engels; Jan de Vries | 尼科·福格特兰德；汉斯-约阿希姆·沃斯；尼古拉斯·克拉夫茨；尼克·哈利；弗里德里希·恩格斯；扬·德弗里斯 |
 | Gary Becker; H. Gregg Lewis; Michael Kremer; Oded Galor; David Weil; Quamrul Ashraf | 加里·贝克尔；H.格雷格·刘易斯；迈克尔·克雷默；奥戴德·盖勒；戴维·韦尔；夸姆鲁尔·阿什拉夫 |
+| Malcom McLean; Jan Tinbergen; Herbert Grubel; Peter Lloyd; John McCallum | 马尔科姆·麦克莱恩；扬·丁伯根；赫伯特·格鲁贝尔；彼得·劳埃德；约翰·麦卡勒姆 |
+| Marc Melitz; Andrew Bernard; Bradford Jensen; James Anderson; Eric van Wincoop | 马克·梅里兹；安德鲁·伯纳德；布拉德福德·詹森；詹姆斯·安德森；埃里克·范温库普 |
+| David Autor; David Dorn; Gordon Hanson; Pablo Fajgelbaum; Nina Pavcnik | 戴维·奥托；戴维·多恩；戈登·汉森；巴勃罗·法伊格尔鲍姆；尼娜·帕夫尼克 |
 | Stanislaw Ulam; Eli Heckscher; Bertil Ohlin; Abba Lerner; Wolfgang Stolper; Tadeusz Rybczynski | 斯坦尼斯瓦夫·乌拉姆；伊莱·赫克歇尔；贝蒂尔·俄林；阿巴·勒纳；沃尔夫冈·斯托尔珀；塔德乌什·雷布津斯基 |
 | Wassily Leontief; Edward Leamer; Daniel Trefler; Ronald Jones; Mancur Olson | 瓦西里·里昂惕夫；爱德华·利默；丹尼尔·特雷夫勒；罗纳德·琼斯；曼瑟·奥尔森 |
 | Gene Grossman; Elhanan Helpman; Kyle Bagwell; Robert Staiger; Pinelopi Goldberg; Giovanni Maggi | 吉恩·格罗斯曼；埃尔赫南·赫尔普曼；凯尔·巴格韦尔；罗伯特·斯泰格尔；佩内洛皮·戈德堡；乔瓦尼·马吉 |

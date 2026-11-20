@@ -154,4 +154,58 @@
             "Computed in your browser; nothing you do here is stored or sent.",
     });
   };
+  // ---- Part 36: gravity ---------------------------------------------------------------------------------------
+  W.gravity = function (el) {
+    // The gravity equation of Part 36 (explainer.economics.agora.trade: gravity_ols, ppml_fe), with the least-squares
+    // GDP elasticities estimated on CEPII's 2019 data (1.32 for the exporter, 0.97 for the importer) and a distance
+    // elasticity the reader chooses.  The prediction is scaled to Spain's exports to Portugal in 2019 ($26.0bn),
+    // so the reader can compare it with Spain's real exports to Japan ($3.2bn) and Brazil ($3.0bn).
+    var PINK = "#E8A0B4", TEAL = "#7FD1B9", GOLDC = "#F2C14E";
+    var base = { gdp_o: 1.39, gdp_d: 0.24, dist: 596, trade: 26.0 };     // Spain to Portugal, 2019
+    var real = [["Portugal", 0.24, 596, 26.0], ["Japan", 5.12, 10632, 3.2], ["Brazil", 1.87, 7791, 3.0]];
+    function f1(x) { return x.toFixed(2); }
+    function predict(gd, dist, v) {
+      return base.trade * Math.pow(gd / base.gdp_d, 0.97) * Math.pow(dist / base.dist, -v.delta);
+    }
+    QB.widget(el, {
+      title: "Gravity",
+      sub: "Spain's exports to a partner, predicted from the partner's size and distance. Left: the prediction for " +
+           "your partner against distance. Right: what the same equation says for Portugal, Japan and Brazil, " +
+           "against what Spain actually sold them in 2019.",
+      panels: 2, height: 270,
+      controls: [
+        { k: "gdp", label: "The partner's GDP, $ trillion", min: 0.1, max: 25, step: 0.1, value: 2, fmt: f1 },
+        { k: "dist", label: "Distance from Spain, km", min: 300, max: 18000, step: 100, value: 3000,
+          fmt: function (x) { return x.toFixed(0); } },
+        { k: "delta", label: "Distance elasticity", min: 0.3, max: 2.0, step: 0.05, value: 1.0, fmt: f1 },
+      ],
+      draw: function (g, v, st) {
+        var ds = [], ps = [], k;
+        for (k = 0; k <= 60; k++) {
+          var d = 300 * Math.pow(60, k / 60);
+          ds.push(Math.log10(d)); ps.push(predict(v.gdp, d, v));
+        }
+        var me = predict(v.gdp, v.dist, v), top = Math.max(30, me * 1.2);
+        var a = g[0].axes({ x: [Math.log10(300), Math.log10(18000)], y: [0, top], title: "Predicted exports, $bn",
+                            xlabel: "distance (log10 km)" });
+        a.line(ds, ps.map(function (p) { return Math.min(p, top); }), { color: GOLDC, width: 2.5 });
+        a.dots([Math.log10(v.dist)], [Math.min(me, top)], { color: PINK, r: 6 });
+        var b = g[1].axes({ x: [0, 3.6], y: [0, 40], title: "Actual (bars) and predicted (dots), $bn", xlabel: "" });
+        b.bars([0.6, 1.8, 3.0], real.map(function (r) { return r[3]; }), 0.6, { color: TEAL });
+        b.dots([0.6, 1.8, 3.0], real.map(function (r) { return Math.min(predict(r[1], r[2], v), 40); }),
+               { color: PINK, r: 5 });
+        real.forEach(function (r, i) { b.text(0.6 + 1.2 * i, 37, r[0], { align: "center", size: 11 }); });
+        st.me = me;
+        st.err = real.map(function (r) { return predict(r[1], r[2], v) / r[3]; });
+      },
+      readout: function (v, st) {
+        return [["predicted exports to your partner", "$" + st.me.toFixed(1) + "bn"],
+                ["predicted over actual: Portugal, Japan, Brazil", st.err.map(function (x) { return x.toFixed(2); })
+                  .join(", ")],
+                ["doubling the distance multiplies trade by", Math.pow(2, -v.delta).toFixed(2)]];
+      },
+      note: "Gravity as estimated in Part 36, chapter 4, on CEPII's 2019 data (least squares: distance -1.18; PPML " +
+            "with fixed effects: -0.71). Computed in your browser; nothing you do here is stored or sent.",
+    });
+  };
 })();

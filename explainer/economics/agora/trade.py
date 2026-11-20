@@ -434,3 +434,184 @@ def grubel_lloyd(x, m) -> np.ndarray:
     trade."""
     x, m = np.asarray(x, float), np.asarray(m, float)
     return 1 - np.abs(x - m) / (x + m)
+
+
+# =====================================================================================================================
+# Part II (Part 36): scale, firms and gravity
+# =====================================================================================================================
+def krugman_variety(L: float, f: float = 1.0, sigma: float = 4.0, partners: int = 1) -> dict:
+    """Krugman (1979, 1980): CES love of variety, a fixed cost f and a constant marginal cost of one unit of labour.
+    With free entry each firm makes sigma - 1 units of output per unit of fixed cost and the number of varieties is
+    L / (sigma f).  Trade among ``partners`` identical countries multiplies the varieties available by ``partners``;
+    the real wage rises by partners^(1/(sigma - 1)) with no change in any firm's size or price."""
+    n = L / (sigma * f)
+    q = (sigma - 1) * f
+    return {"n_home": n, "n_available": n * partners, "q": q, "price_markup": sigma / (sigma - 1),
+            "welfare_gain": partners ** (1 / (sigma - 1)) - 1}
+
+
+def home_market(share_demand, phi: float) -> np.ndarray:
+    """The home-market effect (Krugman 1980) with an outside good that equalizes wages: the larger country's share
+    of the differentiated industry's firms, s_n = 1/2 + (1 + phi)/(1 - phi) (s_L - 1/2), clipped to [0, 1]; phi =
+    tau^(1 - sigma) is the freeness of trade."""
+    s = np.asarray(share_demand, float)
+    return np.clip(0.5 + (1 + phi) / (1 - phi) * (s - 0.5), 0.0, 1.0)
+
+
+def gravity_ols(y, X) -> dict:
+    """Least squares of log trade on the columns of X (a constant is added), positive flows only."""
+    y, X = np.asarray(y, float), np.asarray(X, float)
+    ok = np.isfinite(y) & np.all(np.isfinite(X), axis=1) & (y > 0)
+    Z = np.column_stack([np.ones(ok.sum()), X[ok]])
+    b, *_ = np.linalg.lstsq(Z, np.log(y[ok]), rcond=None)
+    e = np.log(y[ok]) - Z @ b
+    r2 = 1 - e.var() / np.log(y[ok]).var()
+    return {"beta": b[1:], "const": b[0], "r2": float(r2), "n": int(ok.sum())}
+
+
+def ppml_fe(y, X, o, d, iters: int = 400, tol: float = 1e-9) -> dict:
+    """Poisson pseudo-maximum likelihood (Santos Silva and Tenreyro 2006) with exporter and importer fixed effects:
+    E[y_od] = exp(a_o + b_d + X beta).  Zeros are kept.  The fixed effects are concentrated out by their closed-form
+    first-order conditions, alternating with Newton steps for beta.  ``o`` and ``d`` are integer codes."""
+    y, X = np.asarray(y, float), np.asarray(X, float)
+    o, d = np.asarray(o, int), np.asarray(d, int)
+    no, nd = o.max() + 1, d.max() + 1
+    beta = np.zeros(X.shape[1])
+    a, b = np.zeros(no), np.zeros(nd)
+    sy_o = np.bincount(o, y, no)
+    sy_d = np.bincount(d, y, nd)
+    for _ in range(iters):
+        xb = X @ beta
+        a = np.log(np.maximum(sy_o, 1e-300)) - np.log(np.maximum(np.bincount(o, np.exp(b[d] + xb), no), 1e-300))
+        b = np.log(np.maximum(sy_d, 1e-300)) - np.log(np.maximum(np.bincount(d, np.exp(a[o] + xb), nd), 1e-300))
+        b -= b[0]
+        mu = np.exp(a[o] + b[d] + xb)
+        # demean X within the fixed-effect structure (one pass of each) for a better Newton direction
+        w = mu
+        Xt = X.copy()
+        for _k in range(3):
+            Xt -= (np.stack([np.bincount(o, w * Xt[:, j], no) for j in range(X.shape[1])], 1) /
+                   np.maximum(np.bincount(o, w, no), 1e-300)[:, None])[o]
+            Xt -= (np.stack([np.bincount(d, w * Xt[:, j], nd) for j in range(X.shape[1])], 1) /
+                   np.maximum(np.bincount(d, w, nd), 1e-300)[:, None])[d]
+        g = Xt.T @ (y - mu)
+        H = Xt.T @ (Xt * w[:, None])
+        step = np.linalg.solve(H, g)
+        beta = beta + step
+        if np.max(np.abs(step)) < tol:
+            break
+    mu = np.exp(a[o] + b[d] + X @ beta)
+    return {"beta": beta, "mu": mu, "a": a, "b": b}
+
+
+def melitz(sigma: float = 4.0, k: float = 4.25, f: float = 1.0, fx: float = 1.5, fe: float = 2.0,
+           tau: float = 1.3, delta: float = 0.1, countries: int = 2) -> dict:
+    """Melitz (2003) with Pareto productivity (minimum 1, shape k > sigma - 1), symmetric countries.  Free entry pins
+    the domestic cutoff phi*: delta fe = (sigma - 1)/(k - sigma + 1) [f phi*^-k + (countries - 1) fx phix*^-k], with
+    the export cutoff phix* = tau (fx/f)^(1/(sigma-1)) phi*.  Welfare (the real wage) is proportional to phi*.
+    Returns autarky and trade cutoffs, the share of firms that export, and the welfare gain."""
+    c = (sigma - 1) / (k - sigma + 1)
+    phi_a = (c * f / (delta * fe)) ** (1 / k)
+    ratio = tau * (fx / f) ** (1 / (sigma - 1))
+    phi_t = (c * (f + (countries - 1) * fx * ratio ** (-k)) / (delta * fe)) ** (1 / k)
+    phi_x = ratio * phi_t
+    return {"phi_autarky": phi_a, "phi_trade": phi_t, "phi_export": phi_x, "export_share": float(ratio ** (-k)),
+            "exit_share": float(1 - (phi_a / phi_t) ** k), "welfare_gain": phi_t / phi_a - 1, "ratio": ratio}
+
+
+def melitz_firms(n: int = 4000, seed: int = 0, **kw) -> dict:
+    """A population of potential firms drawn from the Pareto distribution of ``melitz``: who survives in autarky and
+    with trade, who exports, and each survivor's sales (proportional to phi^(sigma - 1), plus export sales)."""
+    sigma, k = kw.get("sigma", 4.0), kw.get("k", 4.25)
+    M = melitz(**kw)
+    rng = np.random.default_rng(seed)
+    phi = (1 - rng.uniform(size=n)) ** (-1 / k)
+    alive_a, alive_t = phi >= M["phi_autarky"], phi >= M["phi_trade"]
+    exp_ = phi >= M["phi_export"]
+    tau = kw.get("tau", 1.3)
+    dom = (phi / M["phi_trade"]) ** (sigma - 1)
+    sales = np.where(alive_t, dom * (1 + exp_ * (kw.get("countries", 2) - 1) * tau ** (1 - sigma)), 0.0)
+    return {"phi": phi, "alive_autarky": alive_a, "alive_trade": alive_t, "exporter": exp_, "sales": sales, **M}
+
+
+def eaton_kortum_shares(T, w, d, theta: float = 4.0) -> np.ndarray:
+    """Eaton and Kortum (2002): the share of country n's spending on goods from i, pi_ni = T_i (w_i d_ni)^-theta /
+    sum_k T_k (w_k d_nk)^-theta.  d[n, i] >= 1 is the iceberg cost of shipping from i to n."""
+    T, w, d = np.asarray(T, float), np.asarray(w, float), np.asarray(d, float)
+    num = T[None, :] * (w[None, :] * d) ** (-theta)
+    return num / num.sum(axis=1, keepdims=True)
+
+
+def eaton_kortum_simulate(T, w, d, theta: float = 4.0, goods: int = 20000, seed: int = 0) -> np.ndarray:
+    """The same shares from the model's micro story: each country draws a Frechet productivity for each good, and
+    every buyer buys each good from its cheapest source.  Returns the simulated spending shares (equal spending per
+    good)."""
+    rng = np.random.default_rng(seed)
+    T, w, d = np.asarray(T, float), np.asarray(w, float), np.asarray(d, float)
+    N = len(T)
+    z = (T[None, :] / -np.log(rng.uniform(size=(goods, N)))) ** (1 / theta)   # Frechet: P(Z < z) = exp(-T z^-theta)
+    out = np.zeros((N, N))
+    for n in range(N):
+        cost = w[None, :] * d[n][None, :] / z
+        win = np.argmin(cost, axis=1)
+        out[n] = np.bincount(win, minlength=N) / goods
+    return out
+
+
+def hat_algebra(X, dhat, theta: float = 4.0, iters: int = 20000, tol: float = 1e-12, step: float = 0.2) -> dict:
+    """Dekle, Eaton and Kortum (2008): counterfactual wages and welfare from observed trade flows X[n, i] (spending
+    by n on goods from i, domestic flows on the diagonal) and changes in trade costs dhat[n, i], in the Armington or
+    Eaton-Kortum model with trade elasticity theta.  Each country's deficit D_n = E_n - Y_n is held fixed in units of
+    world income.  Returns wage changes, new shares, and the welfare change, real spending E-hat / P-hat - 1, with
+    P-hat_n = (sum_i pi_ni (w-hat_i d-hat_ni)^-theta)^(-1/theta)."""
+    X = np.asarray(X, float)
+    dhat = np.asarray(dhat, float)
+    E = X.sum(axis=1)                      # spending of n
+    Y = X.sum(axis=0)                      # sales (income) of i
+    D = E - Y
+    pi = X / E[:, None]
+    w = np.ones(len(E))
+    for _ in range(iters):
+        num = pi * (w[None, :] * dhat) ** (-theta)
+        pin = num / num.sum(axis=1, keepdims=True)
+        En = w * Y + D
+        Yn = (pin * En[:, None]).sum(axis=0)
+        exc = (Yn - w * Y) / Y
+        w_new = w * (1 + step * exc)
+        w_new /= (w_new * Y).sum() / Y.sum()      # world income as numeraire
+        if np.max(np.abs(w_new - w)) < tol:
+            w = w_new
+            break
+        w = w_new
+    num = pi * (w[None, :] * dhat) ** (-theta)
+    pin = num / num.sum(axis=1, keepdims=True)
+    Phat = num.sum(axis=1) ** (-1 / theta)
+    Ehat = (w * Y + D) / E
+    welfare = Ehat / Phat - 1
+    return {"w": w, "pi_new": pin, "pi": pi, "welfare": welfare}
+
+
+def shift_share(n_zones: int = 400, n_ind: int = 30, beta: float = -0.6, seed: int = 0) -> dict:
+    """A China shock on the Island's local labour markets: zones differ in their mix of industries; each industry's
+    imports from a low-wage exporter rise by a supply-driven amount (seen also in other rich countries) plus a part
+    that responds to local demand.  Exposure = sum of industry shares times the import rise per worker; the outcome is
+    the change in the manufacturing employment share.  OLS is biased by the demand part; instrumenting with exposure
+    built from other countries' imports recovers the planted beta."""
+    rng = np.random.default_rng(seed)
+    shares = rng.dirichlet(np.full(n_ind, 0.3), size=n_zones) * rng.uniform(0.05, 0.35, n_zones)[:, None]
+    supply = rng.gamma(1.5, 1.0, n_ind)                       # the exporter's productivity surge, by industry
+    demand = rng.normal(0, 0.6, n_ind)                         # US demand shocks, by industry
+    us = supply + demand
+    other = supply + rng.normal(0, 0.3, n_ind)                 # other rich countries see the supply part
+    x_us = shares @ us
+    x_iv = shares @ other
+    # demand shocks raise both imports and employment: they bias OLS toward zero
+    outcome = beta * (shares @ supply) + 0.8 * (shares @ demand) + rng.normal(0, 0.15, n_zones)
+    Z = np.column_stack([np.ones(n_zones), x_us])
+    b_ols = np.linalg.lstsq(Z, outcome, rcond=None)[0][1]
+    Zi = np.column_stack([np.ones(n_zones), x_iv])
+    fs = np.linalg.lstsq(Zi, x_us, rcond=None)[0]
+    xhat = Zi @ fs
+    b_iv = np.linalg.lstsq(np.column_stack([np.ones(n_zones), xhat]), outcome, rcond=None)[0][1]
+    return {"exposure": x_us, "exposure_iv": x_iv, "outcome": outcome, "ols": float(b_ols), "iv": float(b_iv),
+            "beta": beta, "first_stage": float(fs[1]), "corr_iv": float(np.corrcoef(x_us, x_iv)[0, 1])}

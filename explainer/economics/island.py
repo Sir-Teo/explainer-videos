@@ -841,6 +841,22 @@ TRUTHS = {
         # the tariff war (chapter 11): two mirror-image economies
         "war": {"A": 10.0, "b_lo": 0.5, "b_hi": 2.0},
     },
+    36: {
+        # Krugman (chapter 2): workers, fixed cost, elasticity of substitution; and the home-market effect's freeness
+        "krugman": {"L": 1000.0, "f": 1.0, "sigma": 4.0, "phi": 0.3},
+        # Melitz (chapter 6): Pareto shape 4.25, fixed costs of producing (1), exporting (1.5) and entering (2),
+        # shipping 1.3, exit rate 0.1; 4,000 potential firms
+        "melitz": {"sigma": 4.0, "k": 4.25, "f": 1.0, "fx": 1.5, "fe": 2.0, "tau": 1.3, "delta": 0.1, "n": 4000,
+                   "seed": 41},
+        # Eaton and Kortum (chapter 7): three islands' technology levels and shipping costs
+        "ek": {"T": (1.0, 2.0, 0.5), "d": ((1.0, 1.5, 2.0), (1.5, 1.0, 1.8), (2.0, 1.8, 1.0)), "theta": 4.0,
+               "goods": 20000, "seed": 7},
+        # the China shock on the Island's 400 local labour markets (chapter 10): the planted effect of a unit of
+        # import exposure on the manufacturing share
+        "shock": {"n_zones": 400, "n_ind": 30, "beta": -0.6, "seed": 36},
+        # the hat-algebra counterfactual (chapter 9): trade costs between America and China up 25%, theta 4
+        "hat": {"theta": 4.0, "rise": 1.25, "n_top": 15},
+    },
 }
 
 

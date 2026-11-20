@@ -852,7 +852,38 @@ DIALS = {d.key: d for d in [
                       "days, close to close", -94, where="videos/economics/econ31/compute.py, item qe",
                       checked="2026-11-20"),
          )),
-    Dial("trade_elasticity", "trade elasticity", "", (36,)),
+    Dial("trade_elasticity", "the trade elasticity", "the percent fall in imports from a 1% rise in their cost "
+         "(absolute value)", (36, 66), status="depends on the setting", checked="2026-11-20",
+         meaning="how strongly trade responds to its costs: gravity studies across countries put it at five to ten; "
+                 "tariff changes traced over time give under one within a year and about two after a decade; since the "
+                 "gains from trade are 1 - lambda^(1/epsilon), the smaller long-run values imply larger gains",
+         estimates=(
+             Estimate("Anderson and van Wincoop (review)", 2004, "review", "the gravity literature's range, used by "
+                      "Arkolakis, Costinot and Rodriguez-Clare (2012)", 7.5, lo=5.0, hi=10.0,
+                      where="Journal of Economic Literature 42(3): 691-751; ACR (2012)", checked="2026-11-20"),
+             Estimate("Boehm Levchenko and Pandalai-Nayar (short run)", 2023, "event study", "MFN tariff changes, "
+                      "local projections: the first year", 0.76, where="American Economic Review 113(4): 861-905, "
+                      "abstract", checked="2026-11-20"),
+             Estimate("Boehm Levchenko and Pandalai-Nayar (long run)", 2023, "event study", "the same, after seven to "
+                      "ten years", 2.0, where="American Economic Review 113(4): 861-905, abstract",
+                      checked="2026-11-20"),
+         )),
+    Dial("import_competition_jobs", "local effect of import competition on manufacturing jobs", "percentage points "
+         "of a local labour market's working-age population employed in manufacturing, per $1,000 of import exposure "
+         "per worker over a decade", (36,), status="settled within a range", checked="2026-11-20",
+         meaning="the China shock's local footprint: places whose industries faced more imports from China lost "
+                 "manufacturing jobs, and the jobs were not quickly replaced; least squares understates the effect "
+                 "because demand shocks raise imports and jobs together",
+         estimates=(
+             Estimate("Autor Dorn and Hanson (2SLS)", 2013, "IV", "722 US commuting zones, 1990-2007, exposure "
+                      "instrumented with China's exports to eight other rich countries", -0.596,
+                      where="American Economic Review 103(6), table 3, column 6", checked="2026-11-20"),
+             Estimate("Autor Dorn and Hanson (OLS)", 2013, "regression", "the same, least squares", -0.171,
+                      where="NBER Working Paper 18054, section on OLS against 2SLS", checked="2026-11-20"),
+             Estimate("this film (the Island)", 2026, "IV", "400 simulated zones with a planted effect of -0.6: the "
+                      "instrumented estimate", -0.578, where="videos/economics/econ36/compute.py, item china",
+                      checked="2026-11-20"),
+         )),
     Dial("passthrough", "pass-through of tariffs and exchange rates to prices", "share of a change in the exchange "
          "rate (or a tariff) that reaches import prices", (34, 36, 66), status="depends on the setting",
          checked="2026-11-20",
@@ -866,6 +897,12 @@ DIALS = {d.key: d for d in [
                       where="AER 100(1): 304-336, abstract", checked="2026-11-20"),
              Estimate("Gopinath Itskhoki and Rigobon (other currencies)", 2010, "regression", "the same, goods priced "
                       "in other currencies", 0.95, where="AER 100(1): 304-336, abstract", checked="2026-11-20"),
+             Estimate("Amiti Redding and Weinstein (2018 tariffs)", 2019, "event study", "US import prices of goods "
+                      "hit by the 2018 tariffs: tariff-inclusive prices rose by the tariff", 1.0,
+                      where="Journal of Economic Perspectives 33(4): 187-210", checked="2026-11-20"),
+             Estimate("Fajgelbaum et al. (2018-19 tariffs)", 2020, "regression", "variety-level US import prices: "
+                      "complete pass-through of the tariffs to buyers", 1.0,
+                      where="Quarterly Journal of Economics 135(1): 1-55, abstract", checked="2026-11-20"),
              Estimate("this film (US imports ex fuel)", 2026, "regression", "BLS import prices excluding fuel on the "
                       "Fed's broad dollar index, 2001-2019, twelve monthly lags: the "
                       "cumulative pass-through after a year", 0.44,
@@ -1602,6 +1639,26 @@ SHOWN = {
         ("Christiano, Eichenbaum and Evans (2005); Smets and Wouters (2007)", "medium-scale frictions; the hump "
          "computed with habits, indexation and smoothing"),
         ("Bernanke (2002)", "the Called it? card on deflation"),
+    ],
+    36: [
+        ("McLean's Ideal X (1956)", "the first container voyage and its costs, stated"),
+        ("Grubel and Lloyd (1975)", "two-way trade, computed for America's end-use categories"),
+        ("Krugman (1979, 1980)", "variety, scale and the home-market effect, computed for the Island"),
+        ("Tinbergen (1962); Santos Silva and Tenreyro (2006)", "gravity, estimated on CEPII's 2019 data by least "
+         "squares and PPML"),
+        ("McCallum (1995); Anderson and van Wincoop (2003)", "the border effect and multilateral resistance, stated"),
+        ("Bernard and Jensen (1995)", "exporters are few, large and better, stated; the Island's firms computed"),
+        ("Melitz (2003); Pavcnik (2002); Trefler (2004)", "selection, computed; the liberalization evidence, stated"),
+        ("Eaton and Kortum (2002)", "shares by formula and by simulation, computed"),
+        ("Arkolakis, Costinot and Rodriguez-Clare (2012); Dekle, Eaton and Kortum (2008)", "the gains formula and a "
+         "hat-algebra counterfactual, computed on 2019 trade"),
+        ("Autor, Dorn and Hanson (2013); Borusyak, Hull and Jaravel (2022); Goldsmith-Pinkham, Sorkin and Swift "
+         "(2020)", "the China shock, stated and entered in a dial; shift-share reproduced on the Island"),
+        ("Amiti, Redding and Weinstein (2019); Fajgelbaum et al. (2020)", "the 2018-19 tariffs, stated and entered in "
+         "the pass-through dial"),
+        ("Xing and Detert (2010)", "the iPhone's value added, stated"),
+        ("Boehm, Levchenko and Pandalai-Nayar (2023)", "short- and long-run trade elasticities, entered in the dial"),
+        ("Krugman (1995, 2008)", "trade and wages; the Called it? card"),
     ],
     35: [
         ("Samuelson (1969)", "Ulam's challenge and Samuelson's answer, as Samuelson told it"),
