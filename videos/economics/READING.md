@@ -10,7 +10,7 @@ the series leaves out.
 Both *Parts* columns are found, not typed. *Planned* lists the parts whose entry in
 [`SYLLABUS.md`](SYLLABUS.md) names the book or paper; *Built* lists the parts whose scenes, compute step or
 README cite it (a dot: none yet). Fuller notes (editions, chapters, what each source was used for) are in each
-part's README, under *Sources*. Built so far: Parts 1–33.
+part's README, under *Sources*. Built so far: Parts 1–34.
 
 ## 1. The textbook spine
 
@@ -35,7 +35,7 @@ part's README, under *Sources*. Built so far: Parts 1–33.
 | Stock–Watson | J. Stock and M. Watson, *Introduction to Econometrics* (4th ed., 2019) | 4 | 4 |
 | Angrist–Pischke | J. Angrist and J.-S. Pischke, *Mostly Harmless Econometrics* (2009) | 4, 50, 67 | 4 |
 | Osborne | M. Osborne, *An Introduction to Game Theory* (2004) | 11 | 11 |
-| Krugman–Obstfeld–Melitz | P. Krugman, M. Obstfeld and M. Melitz, *International Economics* (12th ed., 2022) | 34–35 | · |
+| Krugman–Obstfeld–Melitz | P. Krugman, M. Obstfeld and M. Melitz, *International Economics* (12th ed., 2022) | 34–35 | 34 |
 | Mishkin | F. Mishkin, *The Economics of Money, Banking, and Financial Markets* (13th ed., 2022) | 26 | 31 |
 | Cabral | L. Cabral, *Introduction to Industrial Organization* (2nd ed., 2017) | 12–13 | 12–13 |
 | Borjas | G. Borjas, *Labor Economics* (8th ed., 2020) | 38 | · |
@@ -70,7 +70,7 @@ part's README, under *Sources*. Built so far: Parts 1–33.
 | Galí | J. Galí, *Monetary Policy, Inflation, and the Business Cycle* (2nd ed., 2015) | 30, 56 | 29–30 |
 | Woodford | M. Woodford, *Interest and Prices* (2003) | 30 | 30, 32 |
 | Walsh | C. Walsh, *Monetary Theory and Policy* (4th ed., 2017) | 25 | 25, 30–31 |
-| Obstfeld–Rogoff | M. Obstfeld and K. Rogoff, *Foundations of International Macroeconomics* (1996) | 34 | · |
+| Obstfeld–Rogoff | M. Obstfeld and K. Rogoff, *Foundations of International Macroeconomics* (1996) | 34 | 34 |
 | Pissarides | C. Pissarides, *Equilibrium Unemployment Theory* (2nd ed., 2000) | 24 | 24 |
 | Cochrane | J. Cochrane, *Asset Pricing* (rev. ed., 2005) | 23 | · |
 | Freixas–Rochet | X. Freixas and J.-C. Rochet, *Microeconomics of Banking* (2nd ed., 2008) | 26 | 26 |
@@ -121,7 +121,7 @@ part's README, under *Sources*. Built so far: Parts 1–33.
 | Model or result | Paper | Planned | Built |
 |---|---|---|---|
 | the division of labour | Smith (1776), *The Wealth of Nations* | 1 | 1–2, 19, 21 |
-| comparative advantage | Ricardo (1817), *Principles*, ch. 7 | 2, 8, 35–36 | 1–2, 8, 19, 22, 25, 33 |
+| comparative advantage | Ricardo (1817), *Principles*, ch. 7 | 2, 8, 35–36 | 1–2, 8, 19, 22, 25, 33–34 |
 | supply and demand, the scissors | Marshall (1890), *Principles of Economics* | 2, 37 | 2, 14 |
 | the price system as information | Hayek (1945), "The Use of Knowledge in Society" | 1, 9 | 1, 9 |
 | the double auction in the classroom | Chamberlin (1948); Smith (1962) | 1–2 | 1 |
@@ -221,7 +221,7 @@ part's README, under *Sources*. Built so far: Parts 1–33.
 
 | Model or result | Paper | Planned | Built |
 |---|---|---|---|
-| optimum currency areas and the trilemma | Mundell (1961, 1963) | 34 | · |
+| optimum currency areas and the trilemma | Mundell (1961, 1963) | 34 | 34 |
 | exchange-rate overshooting | Dornbusch (1976) | 34 | · |
 | factor prices and trade | Stolper and Samuelson (1941) | 35 | · |
 | trade with increasing returns | Krugman (1979, 1980) | 36 | · |
@@ -321,6 +321,8 @@ part's README, under *Sources*. Built so far: Parts 1–33.
 **Part 32, *The Treasury*.** Books: Olivier Blanchard, *Fiscal Policy under Low Interest Rates* (2023); David Romer, *Advanced Macroeconomics* (5th ed., 2019), ch. 13; Valerie Ramey, "Ten Years After the Financial Crisis: What Have We Learned from the Renaissance in Fiscal Research?", *JEP* 33(2) (2019); John Cochrane, *The Fiscal Theory of the Price Level* (2023). Papers: Domar (1944); Barro (1974, 1979); Diamond (1965); Sargent and Wallace (1981); Sims (1994); Blanchard and Perotti (2002); Ramey (2011); Nakamura and Steinsson (2014); Ramey and Zubairy (2018); Romer and Romer (2010); Alesina and Ardagna (2010); Guajardo, Leigh and Pescatori (2014); Reinhart and Rogoff (2010); Herndon, Ash and Pollin (2014); Blanchard and Leigh (2013); Eaton and Gersovitz (1981); Arellano (2008); Blanchard (2019).
 
 **Part 33, *Crises*.** Books: Charles Kindleberger and Robert Aliber, *Manias, Panics, and Crashes* (7th ed., 2015); Atif Mian and Amir Sufi, *House of Debt* (2014); Carmen Reinhart and Kenneth Rogoff, *This Time Is Different* (2009); Adam Tooze, *Crashed* (2018); Ben Bernanke, Timothy Geithner and Henry Paulson, *Firefighting* (2019). Papers: Fisher (1933); Minsky (1986); Bernanke (1983); Townsend (1979); Kiyotaki and Moore (1997); Bernanke, Gertler and Gilchrist (1999); Geanakoplos (2010); Schularick and Taylor (2012); Jordá, Schularick and Taylor (2013, 2017); Greenwood et al. (2022); Gorton and Metrick (2012); Brunnermeier and Pedersen (2009); Brunnermeier and Sannikov (2014); Mian, Rao and Sufi (2013); Calvo (1998); Rajan (2005).
+
+**Part 34, *The Open Economy*.** Books: Paul Krugman, Maurice Obstfeld and Marc Melitz, *International Economics* (12th ed., 2022), Part 3; Maurice Obstfeld and Kenneth Rogoff, *Foundations of International Macroeconomics* (1996); Barry Eichengreen, *Globalizing Capital* (3rd ed., 2019); Martin Uribe and Stephanie Schmitt-Grohé, *Open Economy Macroeconomics* (2017). Papers: Mundell (1961, 1963); Fleming (1962); Dornbusch (1976); Balassa (1964); Samuelson (1964); Krugman (1979); Obstfeld (1996); Calvo (1998); Meese and Rogoff (1983); Fama (1984); Rogoff (1996); Lustig and Verdelhan (2007); Gourinchas and Rey (2007); Rey (2013); Gopinath, Itskhoki and Rigobon (2010); Gopinath et al. (2020); Gabaix and Maggiori (2015); Itskhoki and Mukhin (2021); Caballero, Farhi and Gourinchas (2017); Rossi (2013).
 
 ## 4. What the series leaves out
 

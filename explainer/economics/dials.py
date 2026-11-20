@@ -853,7 +853,41 @@ DIALS = {d.key: d for d in [
                       checked="2026-11-20"),
          )),
     Dial("trade_elasticity", "trade elasticity", "", (36,)),
-    Dial("passthrough", "pass-through of tariffs and exchange rates to prices", "share", (34, 36, 66)),
+    Dial("passthrough", "pass-through of tariffs and exchange rates to prices", "share of a change in the exchange "
+         "rate (or a tariff) that reaches import prices", (34, 36, 66), status="depends on the setting",
+         checked="2026-11-20",
+         meaning="how far a currency's fall raises the prices a country pays: for goods priced in the importer's "
+                 "currency, such as most American imports priced in dollars, little at first and under half after a "
+                 "year; for goods priced in the exporter's currency, nearly all; so the dollar's share of invoicing "
+                 "decides how exchange rates move trade",
+         estimates=(
+             Estimate("Gopinath Itskhoki and Rigobon (dollar-priced)", 2010, "regression", "US import prices at the "
+                      "dock, goods priced in dollars, conditional on a price change", 0.25,
+                      where="AER 100(1): 304-336, abstract", checked="2026-11-20"),
+             Estimate("Gopinath Itskhoki and Rigobon (other currencies)", 2010, "regression", "the same, goods priced "
+                      "in other currencies", 0.95, where="AER 100(1): 304-336, abstract", checked="2026-11-20"),
+             Estimate("this film (US imports ex fuel)", 2026, "regression", "BLS import prices excluding fuel on the "
+                      "Fed's broad dollar index, 2001-2019, twelve monthly lags: the "
+                      "cumulative pass-through after a year", 0.44,
+                      where="videos/economics/econ34/compute.py, item dollar", checked="2026-11-20"),
+         )),
+    Dial("ppp_halflife", "half-life of deviations from purchasing power parity", "years for half of a real "
+         "exchange rate's deviation from its mean to disappear", (34,), status="settled within a range",
+         checked="2026-11-20",
+         meaning="real exchange rates do return toward parity, but slowly: half of a deviation lasts three to five "
+                 "years in most estimates, longer in samples with pegs and shorter in the floating era; too slow to "
+                 "blame on sticky prices alone, which is Rogoff's puzzle",
+         estimates=(
+             Estimate("Rogoff (the consensus)", 1996, "review", "the consensus of the long-horizon and panel "
+                      "studies he surveyed: three to five years", 4.0, lo=3.0, hi=5.0,
+                      where="Journal of Economic Literature 34(2): 647-668", checked="2026-11-20"),
+             Estimate("this film (JST since 1870)", 2026, "regression", "18 countries against the dollar, "
+                      "1870-2020, pooled AR(1) with country means", 5.2,
+                      where="videos/economics/econ34/compute.py, item ppp", checked="2026-11-20"),
+             Estimate("this film (JST since 1973)", 2026, "regression", "the same, 1973-2020, the floating era",
+                      2.6, where="videos/economics/econ34/compute.py, item ppp",
+                      checked="2026-11-20"),
+         )),
     Dial("agglomeration", "agglomeration elasticity", "percent productivity per doubling of density", (37,)),
     Dial("housing_supply", "elasticity of housing supply", "", (37,)),
     Dial("return_capital_poor", "return to capital for small firms in poor countries", "percent a month", (46,)),
@@ -1547,6 +1581,28 @@ SHOWN = {
         ("Christiano, Eichenbaum and Evans (2005); Smets and Wouters (2007)", "medium-scale frictions; the hump "
          "computed with habits, indexation and smoothing"),
         ("Bernanke (2002)", "the Called it? card on deflation"),
+    ],
+    34: [
+        ("HM Treasury (2005); Bank of England", "Black Wednesday's sequence and cost, stated"),
+        ("Balassa (1964); Samuelson (1964); The Economist's Big Mac index", "the Big Mac and the Balassa-Samuelson "
+         "slope, computed from the index"),
+        ("Rogoff (1996)", "the PPP puzzle and its half-life, recomputed from the JST database and entered in the "
+         "dial"),
+        ("Fama (1984)", "the forward premium puzzle, recomputed for seven currencies"),
+        ("Brunnermeier, Nagel and Pedersen (2008)", "carry crashes, stated; the carry trade computed"),
+        ("Meese and Rogoff (1983)", "the horse race, rerun; the Called it? card"),
+        ("Mundell (1961, 1963); Fleming (1962)", "Mundell-Fleming and optimum currency areas, computed for the "
+         "Island and stated"),
+        ("Dornbusch (1976)", "overshooting, derived and computed"),
+        ("Krugman (1979); Flood and Garber (1984); Obstfeld (1996); Kaminsky and Reinhart (1999)", "currency crises "
+         "in three generations, the first and second computed"),
+        ("IMF Independent Evaluation Office (2003); Stiglitz (2002)", "the IMF in Asia, stated"),
+        ("Bernanke (2005); Gourinchas and Rey (2007); Caballero, Farhi and Gourinchas (2017)", "the saving glut, the "
+         "exorbitant privilege and safe assets, stated with the current accounts and the US position"),
+        ("Gopinath, Itskhoki and Rigobon (2010); Gopinath et al. (2020)", "dollar pricing, in the pass-through dial; "
+         "this film's US estimate"),
+        ("Rey (2013)", "the global financial cycle, stated with the VIX"),
+        ("Gabaix and Maggiori (2015); Itskhoki and Mukhin (2021)", "the frontier, stated"),
     ],
     33: [
         ("Besley and Hennessy (2009)", "the British Academy's letter to the Queen, quoted"),

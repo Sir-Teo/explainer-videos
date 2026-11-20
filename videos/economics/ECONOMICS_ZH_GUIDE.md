@@ -844,6 +844,30 @@ brackets on screen.
 | a sudden stop; original sin | 资本流动骤停；原罪 |
 | the volatility paradox | 波动性悖论 |
 
+## Part 34
+
+| English | 中文 |
+|---|---|
+| the open economy; the exchange rate; a peg; a float | 开放经济；汇率；钉住汇率；浮动汇率 |
+| the balance of payments; the current account; the financial account | 国际收支；经常账户；金融账户 |
+| the net international investment position | 国际投资净头寸 |
+| the Exchange Rate Mechanism (ERM); Black Wednesday | 欧洲汇率机制；黑色星期三 |
+| purchasing power parity; the law of one price; the real exchange rate | 购买力平价；一价定律；实际汇率 |
+| the Big Mac index; the Balassa-Samuelson effect | 巨无霸指数；巴拉萨-萨缪尔森效应 |
+| a half-life | 半衰期 |
+| covered and uncovered interest parity; the forward premium puzzle | 抛补与非抛补利率平价；远期溢价之谜 |
+| the carry trade | 套息交易 |
+| a random walk; out-of-sample forecasting | 随机游走；样本外预测 |
+| the Mundell-Fleming model; the trilemma (the impossible trinity) | 蒙代尔-弗莱明模型；三元悖论（不可能三角） |
+| overshooting | 汇率超调 |
+| a speculative attack; the shadow exchange rate; a self-fulfilling crisis | 投机性攻击；影子汇率；自我实现的危机 |
+| an optimum currency area | 最优货币区 |
+| global imbalances; the saving glut; the exorbitant privilege | 全球失衡；储蓄过剩；过度特权 |
+| a safe asset; a convenience yield | 安全资产；便利收益 |
+| exchange-rate pass-through; dominant-currency pricing | 汇率传导；主导货币定价 |
+| the global financial cycle | 全球金融周期 |
+| the exchange-rate disconnect | 汇率脱节之谜 |
+
 ## Names
 
 | English | 中文 |
@@ -1097,4 +1121,8 @@ brackets on screen.
 | Stephen Broadberry; Hanhui Guan; David Daokui Li; Kenneth Pomeranz; Joseph Needham | 斯蒂芬·布罗德伯里；管汉晖；李稻葵；彭慕兰；李约瑟 |
 | Nico Voigtländer; Hans-Joachim Voth; Nicholas Crafts; Knick Harley; Friedrich Engels; Jan de Vries | 尼科·福格特兰德；汉斯-约阿希姆·沃斯；尼古拉斯·克拉夫茨；尼克·哈利；弗里德里希·恩格斯；扬·德弗里斯 |
 | Gary Becker; H. Gregg Lewis; Michael Kremer; Oded Galor; David Weil; Quamrul Ashraf | 加里·贝克尔；H.格雷格·刘易斯；迈克尔·克雷默；奥戴德·盖勒；戴维·韦尔；夸姆鲁尔·阿什拉夫 |
+| Robert Mundell; Marcus Fleming; Rudiger Dornbusch; Maurice Obstfeld; Kenneth Rogoff | 罗伯特·蒙代尔；马库斯·弗莱明；鲁迪格·多恩布什；莫里斯·奥布斯特费尔德；肯尼斯·罗戈夫 |
+| Bela Balassa; Richard Meese; Eugene Fama; Hélène Rey; Gita Gopinath | 贝拉·巴拉萨；理查德·米斯；尤金·法玛；埃莱娜·雷伊；吉塔·戈皮纳特 |
+| Xavier Gabaix; Matteo Maggiori; Oleg Itskhoki; Dmitry Mukhin; Pierre-Olivier Gourinchas | 泽维尔·加贝克斯；马泰奥·马焦里；奥列格·伊茨霍基；德米特里·穆欣；皮埃尔-奥利维耶·古兰沙 |
+| Valéry Giscard d'Estaing; Norman Lamont; Ben Bernanke; Joseph Stiglitz; Barbara Rossi | 瓦莱里·吉斯卡尔·德斯坦；诺曼·拉蒙特；本·伯南克；约瑟夫·斯蒂格利茨；Barbara Rossi（中文名待核） |
 | Paul Ehrlich; Julian Simon; Diego Comin; William Easterly; Erick Gong; Enrico Spolaore; Romain Wacziarg | 保罗·埃利希；朱利安·西蒙；迭戈·科明；威廉·伊斯特利；Erick Gong（中文名待核）；恩里科·斯波劳雷；罗曼·瓦齐亚格 |

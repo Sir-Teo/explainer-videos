@@ -807,6 +807,17 @@ TRUTHS = {
         # leverage, house prices falling about a quarter
         "counties": {"n": 400, "seed": 33, "mpc_base": 0.02, "mpc_slope": 0.06, "price_drop": 0.25},
     },
+    34: {
+        # the governor's choice (chapter 2): abandoning the peg costs 1 (in squared units of slack); an expected
+        # devaluation of 0.5 adds gamma * 0.5 to the slack a defence must bear; the Island's slack is 0.75
+        "playit": {"cost": 1.0, "gamma": 1.0, "delta": 0.5, "u_island": 0.75},
+        # overshooting (chapter 7): money up 10%; money demand's interest semi-elasticity 4 (years); prices close
+        # half the gap in about 1.4 years (theta = 0.5)
+        "dornbusch": {"dm": 0.10, "lam": 4.0, "theta": 0.5, "T": 8.0},
+        # a first-generation attack (chapter 8): a peg of 100, domestic credit of 60 growing 2 a year, money
+        # demand's semi-elasticity 5
+        "krugman": {"peg": 100.0, "d0": 60.0, "mu": 2.0, "alpha": 5.0, "T": 25.0},
+    },
 }
 
 

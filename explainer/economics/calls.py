@@ -389,6 +389,19 @@ CALLS = {c.key: c for c in [
          "right",
          ("B. Holmström and P. Milgrom, Journal of Law, Economics and Organization 7 (1991): 24-52",
           "B. A. Jacob and S. D. Levitt, Quarterly Journal of Economics 118(3) (2003): 843-877, abstract")),
+    Call("meese_rogoff_1983", 34, "Richard Meese and Kenneth Rogoff, in the Journal of International Economics",
+         "February 1983",
+         "the structural models of exchange rates of the 1970s forecast no better than a random walk at one to twelve "
+         "months, even when given the actual future values of the variables they say drive the rate",
+         "out-of-sample forecasts for the dollar against the mark, the yen and the pound, 1976-1981",
+         "forty years on, this film's rerun for the pound, the yen, the Canadian dollar and the Swiss franc, "
+         "1990-2026, finds interest parity and a fitted time-series model within half a percent of the random walk's "
+         "error at one, three and twelve months; surveys since find that some models beat it at times, but not "
+         "reliably out of sample",
+         "right",
+         ("R. A. Meese and K. Rogoff, \"Empirical Exchange Rate Models of the Seventies: Do They Fit Out of "
+          "Sample?\", Journal of International Economics 14(1-2): 3-24 (1983)",
+          "B. Rossi, \"Exchange Rate Predictability\", Journal of Economic Literature 51(4): 1063-1119 (2013)")),
     Call("rajan_2005", 33, "Raghuram Rajan, at the Federal Reserve Bank of Kansas City's Jackson Hole symposium",
          "August 2005",
          "financial development has made the world riskier in ways that are not appreciated: managers paid for "

@@ -127,6 +127,12 @@ AGORA = {
     "hump": (30, "in the three-equation model a monetary tightening cuts output most at once; with habits (0.9), "
                  "price indexation (0.9) and a smoothed rule (0.8) the trough comes two quarters after the shock, still "
                  "sooner than in the data"),
+    # Part 34 reran Meese and Rogoff and fitted the PPP half-life
+    "random_walk": (34, "in Agora, overshooting makes the exchange rate jump 15% on a "
+                        "10% rise in money because prices are sticky and asset markets are not; in the data, no "
+                        "model beat the random walk at one to twelve months for four currencies since 1990, and real "
+                        "exchange rates since 1870 lose half of a deviation in 5.2 years "
+                        "(2.6 since 1973)"),
     # Part 33 built the amplification mechanisms and fitted the predictor
     "credit_booms": (33, "in Agora, credit amplifies: a 1% loss for farmers who borrow against land cuts their land "
                          "5.3% once the land price feeds back (0.67% if it did not), and leverage bought on the "
