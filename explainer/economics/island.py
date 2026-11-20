@@ -661,6 +661,26 @@ TRUTHS = {
         # cash in advance (chapters 11-12): yearly patience 0.96, disutility of work 1
         "cia": {"beta": 0.96, "a": 1.0},
     },
+    26: {
+        # the Island's bank (chapters 1-4): a quarter of depositors turn out to need their money early; the bank's
+        # investment pays 1.5 if held to the end and 1 if cut short; depositors' risk aversion 2; 1,000 depositors
+        "dd": {"R": 1.5, "gamma": 2.0, "t": 0.25, "n": 1000, "seed": 0},
+        # Play it (chapter 2): half of the other depositors say they will withdraw tomorrow
+        "playit": {"share_saying": 0.5, "options": ("stay", "withdraw")},
+        # the balance sheet (chapters 1, 8): reserves 10, loans 60, ten-year bonds 30 bought at 1.5%; deposits 90,
+        # equity 10; then yields rise 3 points
+        "sheet": {"reserves": 10.0, "loans": 60.0, "bonds": 30.0, "deposits": 90.0, "equity": 10.0, "coupon": 0.015,
+                  "years": 10, "y0": 0.015, "y1": 0.045, "weights": {"reserves": 0.0, "loans": 1.0, "bonds": 0.0}},
+        # Bagehot (chapter 6): withdrawals of 30; loans sell at 60% of face in a hurry; the lender's haircut 20%,
+        # penalty rate 5%
+        "llr": {"liquid": 10.0, "loans": 90.0, "deposits": 90.0, "equity": 10.0, "withdraw": 30.0, "fire_price": 0.6,
+                "haircut": 0.2, "penalty": 0.05},
+        # deposit insurance as a put (chapter 7): assets 100, deposits 90, a year, asset volatility from 5% to 25%
+        "merton": {"V": 100.0, "D": 90.0, "sigmas": (0.05, 0.10, 0.15, 0.20, 0.25)},
+        # the global game (chapter 10): a withdrawer gets 1, a stayer 2 if the bank survives; noise 0.05; 2,000
+        # depositors; a more generous deposit pays withdrawers 1.2
+        "gg": {"c": 1.0, "R": 2.0, "sigma": 0.05, "n": 2000, "c_generous": 1.2, "seed": 0},
+    },
 }
 
 

@@ -93,11 +93,14 @@ class PlayIt(VoiceoverScene):
         for i, name in enumerate(k["names"]):
             parts = [rf"{100 * f['dist'][i][g]:.0f}\% {k['goods'][g]}" for g in range(3) if f["dist"][i][g] > 0.005]
             hold.add(label(rf"{name} holds: \ " + r", \ ".join(parts), font_size=20, color=WHITE))
-        hold.arrange(DOWN, aligned_edge=LEFT, buff=0.3).to_edge(RIGHT, buff=0.5).shift(UP * 1.2)
+        hold.arrange(DOWN, aligned_edge=LEFT, buff=0.3)
         why = label(r"Bo takes salt for fish: \ salt keeps, \\ and Dara, \ who has salt, \ wants fish", font_size=20,
-                    color=SALT).next_to(hold, DOWN, buff=0.5, aligned_edge=LEFT)
-        ans = label(r"A: \ salt is the Island's money", font_size=28, color=E.ACCENT).next_to(why, DOWN, buff=0.5,
-                                                                                         aligned_edge=LEFT)
+                    color=SALT)
+        ans = label(r"A: \ salt is the Island's money", font_size=28, color=E.ACCENT)
+        block = VGroup(hold, why, ans).arrange(DOWN, aligned_edge=LEFT, buff=0.5)
+        if block.width > 6.2:
+            block.width = 6.2
+        block.next_to(ax, RIGHT, buff=0.9).shift(UP * 0.3)
         tag = island_tag(corner=DR, font_size=14)
         with self.voiceover(
             f"Agora runs the Island: {k['n']} islanders of each kind, {k['periods']} months of random meetings, "
@@ -109,9 +112,9 @@ class PlayIt(VoiceoverScene):
             "wants fish, has salt. <bookmark mark='d'/> If you chose A, you were right: salt became the Island's "
             "money. Nobody decreed it. It emerged from people choosing what to accept."
         ) as vo:
-            self.play(FadeIn(ax), FadeIn(tag), FadeIn(names), run_time=0.8)
+            self.play(FadeIn(ax), FadeIn(tag), FadeIn(names), *[GrowFromEdge(b_, DOWN) for b_ in bars], run_time=1.5)
             vo.wait_until("a")
-            self.play(*[GrowFromEdge(b_, DOWN) for b_ in bars], run_time=1.5)
+            self.play(Indicate(bars[0], color=WHITE))
             vo.wait_until("b")
             self.play(LaggedStart(*[FadeIn(h) for h in hold], lag_ratio=0.5), run_time=2)
             vo.wait_until("c")

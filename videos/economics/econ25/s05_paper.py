@@ -25,8 +25,8 @@ class Paper(VoiceoverScene):
         def x_of(year):
             # a compressed axis: before 1000 squeezed, after it linear
             if year < 1000:
-                return -6.2 + (year + 700) / 1700 * 1.2
-            return -5.0 + (year - 1000) / 1030 * 11.0
+                return -5.4 + (year + 700) / 1700 * 1.0
+            return -4.4 + (year - 1000) / 1030 * 10.2
         axis = Line([-6.4, -0.2, 0], [6.4, -0.2, 0], color=GREY_B, stroke_width=3)
         ticks = VGroup()
         for y in (-600, 1000, 1200, 1400, 1600, 1800, 2000):
@@ -37,7 +37,7 @@ class Paper(VoiceoverScene):
         for k, (y, txt, c) in enumerate(EVENTS):
             up = k % 2 == 0
             d = Dot([x_of(y), -0.2, 0], radius=0.08, color=c)
-            lab = label(txt, font_size=17, color=c)
+            lab = label(txt, font_size=19, color=c)
             lab.move_to([x_of(y), -0.2 + (1.5 if up else -1.6) + (0.55 * (k % 4 == 0) if up else -0.4 * (k % 4 == 3)),
                          0])
             stem = Line(d.get_center(), lab.get_bottom() if up else lab.get_top(), color=c, stroke_width=1.5)

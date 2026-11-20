@@ -2045,7 +2045,40 @@ HANKE_KRUS_2012 = Table(
 )
 PART25 = (HANKE_KRUS_2012,)
 
+SVB_2023 = Table(
+    key="svb_2023",
+    cite="M. S. Barr, testimony before the Senate Committee on Banking, Housing, and Urban Affairs, 28 March 2023; "
+         "Board of Governors of the Federal Reserve System, Review of the Federal Reserve's Supervision and Regulation "
+         "of Silicon Valley Bank (April 2023), \"Evolution of Silicon Valley Bank\"",
+    tag="Barr (2023); the Federal Reserve's review (April 2023)",
+    where="the testimony (the withdrawals of 9 March and the requests for 10 March); the review (uninsured share, "
+          "capital ratio); the held-to-maturity portfolio and its fair value from the bank's year-end 2022 accounts as "
+          "reported by the ICAEW",
+    read="testimony, review and reporting",
+    checked="2026-11-20",
+    data={
+        "withdrawn_mar9": 42e9, "requested_mar10": 100e9, "uninsured_share": 0.94, "cet1": 0.12,
+        "htm_book": 91e9, "htm_gap": 15e9,
+    },
+)
+STRESS_2022 = Table(
+    key="stress_2022",
+    cite="Board of Governors of the Federal Reserve System, 2022 Stress Test Scenarios (February 2022): the severely "
+         "adverse scenario",
+    tag="the Federal Reserve's 2022 stress test scenarios",
+    where="the scenario's description of interest rates and unemployment",
+    read="the scenario document as quoted",
+    checked="2026-11-20",
+    data={
+        "ten_year_trough": 0.75, "ten_year_trough_when": "2022Q1", "ten_year_end": 1.5, "short_rates": "near zero "
+        "throughout", "unemployment_peak": 10.0, "unemployment_peak_when": "2023Q3",
+        "path": ((2021.75, 1.5), (2022.0, 0.75), (2022.25, 0.75), (2022.5, 0.75), (2022.75, 0.85), (2023.0, 0.95),
+                 (2023.25, 1.05), (2023.5, 1.15), (2023.75, 1.25), (2024.0, 1.35), (2024.75, 1.5)),
+    },
+)
+PART26 = (SVB_2023, STRESS_2022)
+
 
 PART7 = (BERNOULLI_1738, SAMUELSON_1937, ALLAIS_1953, ELLSBERG_1961, RABIN_2000, THALER_1981, HOLT_LAURY_2005,
          HAYDEN_PLATT_2009, MADRIAN_SHEA_2001, THALER_BENARTZI_2004, BARSKY_1997, POST_2008, MEHRA_PRESCOTT_1985)
-ALL = {t.key: t for t in (*PART1, *PART3, *PART4, *PART5, *PART6, *PART7, *PART8, *PART9, *PART10, *PART11, *PART12, *PART13, *PART14, *PART15, *PART16, *PART17, *PART18, *PART19, *PART21, *PART22, *PART25)}
+ALL = {t.key: t for t in (*PART1, *PART3, *PART4, *PART5, *PART6, *PART7, *PART8, *PART9, *PART10, *PART11, *PART12, *PART13, *PART14, *PART15, *PART16, *PART17, *PART18, *PART19, *PART21, *PART22, *PART25, *PART26)}

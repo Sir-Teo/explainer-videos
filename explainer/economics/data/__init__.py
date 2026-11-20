@@ -195,6 +195,29 @@ FRED_SERIES["M2V"] = ("Velocity of M2 money stock", "ratio, seasonally adjusted"
                       "Federal Reserve Bank of St. Louis")
 FRED_SERIES["GDP"] = ("Gross domestic product", "billions of dollars, seasonally adjusted annual rate", "quarterly",
                       "U.S. Bureau of Economic Analysis")
+# Part 26: banks and runs
+FRED_SERIES["X14AICBS"] = ("Suspensions among all incorporated commercial banks", "number", "annual",
+                           "Board of Governors of the Federal Reserve System, Banking and Monetary Statistics (NBER)")
+FRED_SERIES["M09036USM155NNBR"] = ("Number of suspended banks, all banks, United States", "number", "monthly",
+                                   "NBER Macrohistory Database")
+FRED_SERIES["FEDFUNDS"] = ("Federal funds effective rate", "percent, not seasonally adjusted", "monthly",
+                           "Board of Governors of the Federal Reserve System (US)")
+FRED_SERIES["SNDR"] = ("National deposit rate: savings", "percent, not seasonally adjusted", "monthly",
+                       "Federal Deposit Insurance Corporation")
+FRED_SERIES["NDR12MCD"] = ("National deposit rate: 12-month CD", "percent, not seasonally adjusted", "monthly",
+                           "Federal Deposit Insurance Corporation")
+FRED_SERIES["GS10"] = ("Market yield on US Treasury securities at 10-year constant maturity", "percent, monthly "
+                       "average", "monthly", "Board of Governors of the Federal Reserve System (US)")
+FRED_SERIES["GS2"] = ("Market yield on US Treasury securities at 2-year constant maturity", "percent, monthly average",
+                      "monthly", "Board of Governors of the Federal Reserve System (US)")
+FRED_SERIES["DPSSCBW027SBOG"] = ("Deposits, small domestically chartered commercial banks", "billions of dollars, "
+                                 "seasonally adjusted", "weekly", "Board of Governors of the Federal Reserve System (US)")
+FRED_SERIES["DPSLCBW027SBOG"] = ("Deposits, large domestically chartered commercial banks", "billions of dollars, "
+                                 "seasonally adjusted", "weekly", "Board of Governors of the Federal Reserve System (US)")
+FRED_SERIES["EQTA"] = ("Equity capital to total assets for all US banks", "percent, not seasonally adjusted",
+                       "quarterly", "Federal Financial Institutions Examination Council (US)")
+FRED_SERIES["MMMFFAQ027S"] = ("Money market funds; total financial assets, level", "millions of dollars, not "
+                              "seasonally adjusted", "quarterly", "Board of Governors of the Federal Reserve System (US)")
 
 FRED_RETRIEVED = {s: "2026-11-19" for s in (
     "GDPA", "GDIA", "PCECA", "GPDIA", "GCEA", "EXPGSA", "IMPGSA", "A033RC1A027NBEA", "A191RD3A086NBEA", "U1RATE",
@@ -205,7 +228,10 @@ FRED_RETRIEVED.update({s: "2026-11-20" for s in ("PCECC96", "DSPIC96", "PSAVERT"
                                                   "DNDGRG3M086SBEA", "DSERRG3M086SBEA", "CSUSHPINSA",
                                                   "CUSR0000SEHA", "UNEMPLOY", "UEMPLT5", "UEMP27OV", "CLF16OV",
                                                   "JTSJOL", "JTSHIL", "JTSTSL", "JTSQUL", "NROU", "OPHNFB",
-                                                  "M2SL", "M1SL", "BOGMBASE", "CURRCIR", "TOTRESNS", "M2V", "GDP")})
+                                                  "M2SL", "M1SL", "BOGMBASE", "CURRCIR", "TOTRESNS", "M2V", "GDP",
+                                                  "X14AICBS", "M09036USM155NNBR", "FEDFUNDS", "SNDR", "NDR12MCD",
+                                                  "GS10", "GS2", "DPSSCBW027SBOG", "DPSLCBW027SBOG", "EQTA",
+                                                  "MMMFFAQ027S")})
 
 SPF_FILES = ("median_rgdp_level", "median_rgdp_growth", "median_recess_level")
 SPF_URL = ("https://www.philadelphiafed.org/-/media/frbp/assets/surveys-and-data/survey-of-professional-forecasters/"

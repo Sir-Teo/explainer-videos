@@ -48,13 +48,14 @@ class KW(VoiceoverScene):
             f"{100 * s['medium'][2]:.0f}. The Island has two moneys. Which goods become money depends on what they "
             "cost to hold, and on what everyone else accepts."
         ) as vo:
-            self.play(FadeIn(rows[0]), FadeIn(ax), FadeIn(names), FadeIn(tag))
+            self.play(FadeIn(rows[0]), FadeIn(ax), FadeIn(names), FadeIn(tag),
+                      *[GrowFromEdge(b_, DOWN) for b_ in bars], FadeIn(vals), run_time=1.5)
             vo.wait_until("a")
             self.play(FadeIn(rows[1]))
             vo.wait_until("b")
             self.play(FadeIn(rows[2]))
             vo.wait_until("c")
-            self.play(*[GrowFromEdge(b_, DOWN) for b_ in bars], FadeIn(vals), FadeIn(side), run_time=1.5)
+            self.play(FadeIn(side), Indicate(bars[2], color=WHITE))
         self.clear_scene()
 
     def values(self):
@@ -107,10 +108,14 @@ class KW(VoiceoverScene):
                 f_, s_ = r["fund"][i][j], r["spec"][i][j]
                 col = MONEY if (f_ and s_) else SALT if f_ else FISH if s_ else GREY_D
                 p0, p1 = ax.ax.c2p(c - dx / 2, b - dy / 2), ax.ax.c2p(c + dx / 2, b + dy / 2)
-                cells.add(Rectangle(width=p1[0] - p0[0], height=p1[1] - p0[1], fill_color=col, fill_opacity=0.55,
+                cells.add(Rectangle(width=p1[0] - p0[0], height=p1[1] - p0[1], fill_color=col, fill_opacity=0.4,
                                     stroke_width=0).move_to((p0 + p1) / 2))
-        fresh = dot(ax, k["c"][2], k["beta"], color=WHITE, r=0.09)
-        smoked = dot(ax, k["c3_smoked"], k["beta"], color=WHITE, r=0.09)
+        fresh = VGroup(dot(ax, k["c"][2], k["beta"], color=E.ACCENT, r=0.11),
+                       label(r"fresh", font_size=18, color=E.ACCENT).next_to(ax.ax.c2p(k["c"][2], k["beta"]), UP,
+                                                                             buff=0.12))
+        smoked = VGroup(dot(ax, k["c3_smoked"], k["beta"], color=E.ACCENT, r=0.11),
+                        label(r"smoked", font_size=18, color=E.ACCENT).next_to(ax.ax.c2p(k["c3_smoked"], k["beta"]),
+                                                                               UP, buff=0.12))
         side = VGroup(
             label(r"only salt is money", font_size=20, color=SALT),
             label(r"salt and fish are money", font_size=20, color=FISH),
@@ -136,7 +141,7 @@ class KW(VoiceoverScene):
             vo.wait_until("c")
             self.play(FadeIn(side[2]))
             vo.wait_until("d")
-            self.play(GrowFromCenter(fresh), GrowFromCenter(smoked), FadeIn(side[3]))
+            self.play(FadeIn(fresh), FadeIn(smoked), FadeIn(side[3]))
         self.clear_scene()
 
     def lab_fiat(self):

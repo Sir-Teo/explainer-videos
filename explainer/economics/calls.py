@@ -168,6 +168,20 @@ CALLS = {c.key: c for c in [
          ("P. M. Romer, Journal of Political Economy 98(5) (1990): S71-S102, abstract",
           "C. I. Jones, Quarterly Journal of Economics 110(2) (1995): 495-525",
           "N. Bloom, C. I. Jones, J. Van Reenen and M. Webb, American Economic Review 110(4) (2020)")),
+    Call("stress_2022", 26, "the Federal Reserve's 2022 stress test scenarios",
+         "February 2022", "the severe but plausible scenario that large banks must be able to survive: a deep recession "
+                          "with the 10-year Treasury yield falling to 3/4 percent, short rates near zero throughout, and "
+                          "unemployment rising to 10 percent",
+         "a recession of the kind that had hit banks before, in which rates fall; the Fed stresses that a scenario is "
+         "not a forecast",
+         "rates rose instead: the federal funds rate went from near zero to over 4 percent within the year and the "
+         "10-year yield to about 4 percent; the losses that sank Silicon Valley Bank in March 2023 came from long "
+         "bonds losing value as rates rose, a risk the scenario did not test",
+         "wrong",
+         ("Board of Governors of the Federal Reserve System, 2022 Stress Test Scenarios (February 2022)",
+          "FRED: the federal funds rate and the 10-year Treasury yield",
+          "Board of Governors, Review of the Federal Reserve's Supervision and Regulation of Silicon Valley Bank "
+          "(April 2023)")),
     Call("cagan_ceiling", 25, "the revenue theory of hyperinflation, in Phillip Cagan's estimates",
          "1956", "a government printing money to pay its bills raises the most real revenue at a steady inflation of "
                  "one over the semi-elasticity of money demand, about 20 percent a month for Germany; a government "

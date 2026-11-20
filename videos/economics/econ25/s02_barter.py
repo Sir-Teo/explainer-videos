@@ -53,8 +53,9 @@ class Barter(VoiceoverScene):
                    xticks=[2, 4, 6, 8, 10, 12], yticks=[0, 0.25, 0.5, 0.75, 1.0], xlabel=r"number of goods",
                    ylabel=r"chance a stranger will trade with you", xfmt=lambda v: f"{v:.0f}",
                    yfmt=lambda v: f"{v:g}", font_size=16)
-        bar = path(ax, b["n"], b["barter"], color=PRICE, width=4)
-        mon = path(ax, b["n"], b["money"], color=MONEY, width=4)
+        ns = np.linspace(2, 12, 200)
+        bar = path(ax, ns, 1 / (ns - 1) ** 2, color=PRICE, width=4)
+        mon = path(ax, ns, 1 / (ns - 1), color=MONEY, width=4)
         k = b["n"].index(10)
         side = VGroup(
             label(r"barter: \ they must have what \\ you want \emph{and} want what \\ you have: \ $1/(n-1)^2$",
