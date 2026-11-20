@@ -580,8 +580,45 @@ DIALS = {d.key: d for d in [
                       where="videos/economics/econ27/compute.py, item okun", checked="2026-11-20"),
          )),
     Dial("price_frequency", "frequency of price changes", "share of prices changing per month", (30,)),
-    Dial("phillips_slope", "slope of the Phillips curve", "points of inflation per point of slack", (28, 30)),
-    Dial("sacrifice", "sacrifice ratio", "point-years of output per point of disinflation", (28,)),
+    Dial("phillips_slope", "slope of the Phillips curve", "percentage points of inflation (or of its change) per "
+         "point of unemployment; negative", (28, 30), status="contested", checked="2026-11-20",
+         meaning="the trade-off looked steep in the 1960s and has looked flat since the 1990s: a point of unemployment "
+                 "moved inflation by more than half a point a year before 1984 and by less than a tenth after 2000; "
+                 "part of the flattening is anchored expectations, which hide the curve, and estimates across "
+                 "American states (Hazell, Herreno, Nakamura and Steinsson 2022) find it was small even in the early "
+                 "1980s, so that the disinflation then came from expectations more than from slack",
+         estimates=(
+             Estimate("Phillips", 1958, "regression", "Britain, 1861-1913: the fitted wage curve's slope at 3% "
+                      "unemployment", -0.97, where="Economica 25(100): 283-299, the fitted curve",
+                      checked="2026-11-20"),
+             Estimate("Samuelson and Solow", 1960, "calibration", "United States: their menu, from price stability at "
+                      "5-6% unemployment to 4-5% inflation at 3% (shown at the midpoints)", -1.8,
+                      where="AER 50(2): 177-194", checked="2026-11-20"),
+             Estimate("this film (Agora)", 2026, "regression", "US 1960-1983, annual: the change in core inflation "
+                      "on unemployment less the CBO's natural rate", -0.65,
+                      where="videos/economics/econ28/compute.py, item flat", checked="2026-11-20"),
+             Estimate("this film (Agora)", 2026, "regression", "US 1984-1999: the same regression", -0.18,
+                      where="videos/economics/econ28/compute.py, item flat", checked="2026-11-20"),
+             Estimate("this film (Agora)", 2026, "regression", "US 2000-2019: the same regression", -0.07,
+                      where="videos/economics/econ28/compute.py, item flat", checked="2026-11-20"),
+         )),
+    Dial("sacrifice", "sacrifice ratio", "point-years of output lost per point by which trend inflation falls", (28,),
+         status="contested", checked="2026-11-20",
+         meaning="bringing inflation down by a point has cost about two years' worth of a point of output in America, "
+                 "less when the disinflation is fast and wage-setting flexible (Ball 1994) and, on some accounts, "
+                 "less when the central bank is believed; structural estimates are so imprecise that their intervals "
+                 "include zero",
+         estimates=(
+             Estimate("Ball", 1994, "event study", "US, the disinflation of 1979-83, trend output and trend inflation "
+                      "(as cited by Federal Reserve staff; other citations give 2.4)", 1.8,
+                      where="in N. G. Mankiw (ed.), Monetary Policy (1994): 155-193", checked="2026-11-20"),
+             Estimate("Mankiw", 1991, "calibration", "US 1982-85: the unemployment above normal, turned into output "
+                      "by Okun's law, per point of disinflation", 2.8,
+                      where="Mankiw, Macroeconomics, the Volcker disinflation", checked="2026-11-20"),
+             Estimate("this film (Agora)", 2026, "event study", "US 1980-1985: output below the CBO's potential, "
+                      "summed, per point by which core inflation fell (12.4% to 4.4%)", 2.04,
+                      where="videos/economics/econ28/compute.py, item volcker", checked="2026-11-20"),
+         )),
     Dial("money_demand", "interest semi-elasticity of money demand", "the change in the log of real money balances "
          "(relative to income) per percentage point of the nominal interest rate; negative", (25, 28, 31),
          status="contested", checked="2026-11-20",
@@ -1162,6 +1199,25 @@ SHOWN = {
         ("Pissarides (2000); Cahuc, Carcillo and Zylberberg (2014); Ljungqvist and Sargent (2018); Rogerson, Shimer "
          "and Wright (2005)", "the reading list"),
         ("Furness (1910)", "the next part's hook, stated"),
+    ],
+    28: [
+        ("Friedman (1968); Phelps (1967)", "the natural rate and acceleration, stated and computed in Agora; "
+         "Friedman's forecast is a Called it? card"),
+        ("Phillips (1958); Samuelson and Solow (1960)", "the curve and the menu, stated; Phillips's fitted equation "
+         "drawn"),
+        ("Muth (1961); Lucas (1972, 1973, 1976); Sargent and Wallace (1975)", "rational expectations, the islands and "
+         "the critique, stated and simulated in Agora"),
+        ("Kydland and Prescott (1977); Barro and Gordon (1983); Rogoff (1985)", "time inconsistency and the "
+         "conservative banker, solved in Agora"),
+        ("Alesina and Summers (1993)", "central bank independence and inflation, stated"),
+        ("Ball (1994); Mankiw (1991)", "the sacrifice-ratio dial's rows"),
+        ("Hazell, Herreno, Nakamura and Steinsson (2022)", "the flat Phillips curve across states, stated; the "
+         "aggregate slopes are the film's regressions"),
+        ("Bernanke and Blanchard (2023); Benigno and Eggertsson (2023)", "accounts of 2021-23, stated; openings per "
+         "unemployed and inflation are FRED's data"),
+        ("the FOMC's Summary of Economic Projections, June 2021", "the Called it? card on 'team transitory'"),
+        ("Coibion, Gorodnichenko and Kumar (2018); Weber, D'Acunto, Gorodnichenko and Coibion (2022)", "how households "
+         "and firms form expectations, stated; Michigan's survey is FRED's data"),
     ],
     27: [
         ("Sweeney and Sweeney (1977); Krugman (1998)", "the babysitting co-op, stated; Agora's co-op is simulated"),

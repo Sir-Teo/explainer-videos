@@ -143,4 +143,47 @@ PARTS = [
               ("The Island's planted truths", "explainer/economics/island.py"),
               ("The Data Room's sources", "explainer/economics/data/SOURCES.md")),
     ),
+    Part(
+        n=28, level="U", widget="natural", prereq=(4, 11, 27),
+        question="Can a country buy lower unemployment with higher inflation?",
+        story="The part opens on Milton Friedman's presidential address of December 1967, which said the menu of "
+              "inflation against unemployment would vanish once people came to expect the inflation, and on the "
+              "decade that proved it. It draws Phillips's curve and Samuelson and Solow's menu, asks the viewer to "
+              "forecast 1973's inflation, derives the natural rate and shows acceleration on the Island, follows the "
+              "Great Inflation's loops, scores adaptive forecasts against the data, explains rational expectations, "
+              "solves Lucas's islands and shows the Lucas critique. After an intermission of inflation and "
+              "unemployment since 1948, it turns inflation into Barro and Gordon's game, measures the cost of "
+              "Volcker's disinflation, builds the fixes (a conservative banker, independence, targets), shows the "
+              "flat curve of 2000-19 and the surge of 2021-23 with its three accounts, scores two forecasts, reads "
+              "two dials, and ends with what surveys say about how households and firms form expectations.",
+        handoff="Part 29 builds the business cycle as an equilibrium; Part 30 gives prices that are set in advance "
+                "and the New Keynesian Phillips curve; Part 31 the central bank's rules and targets.",
+        outside="Part 4: the Lucas critique on the Island; Part 11: games; Part 27: aggregate demand and supply. "
+                "Chapter 7 is a normal signal-extraction problem; chapter 9 a two-stage game solved backwards; "
+                "chapter 11 a one-dimensional minimization.",
+        objectives={
+            "U": ["Explain the expectations-augmented Phillips curve, the natural rate and why holding unemployment "
+                  "below it makes inflation accelerate.",
+                  "Contrast adaptive and rational expectations and explain the Lucas critique.",
+                  "Explain the inflation bias of discretion and the case for independent central banks with targets."],
+            "M": ["Solve Lucas's signal-extraction problem and Barro and Gordon's game, and find Rogoff's best "
+                  "central banker.",
+                  "Estimate a Phillips curve's slope and a sacrifice ratio from data."],
+            "D": ["Weigh the accounts of the flat Phillips curve and of the 2021-23 surge, and the evidence on how "
+                  "expectations are formed."],
+            "I": ["Build an inflation forecast from trend, shocks, expectations and slack, and explain indexation in "
+                  "wage bargaining."],
+        },
+        results=[
+            ("The expectations-augmented curve", r"\pi = \pi^e - \beta\,(u - u^*)"),
+            ("Adaptive expectations", r"\pi^e_{t+1} = \pi^e_t + \lambda\,(\pi_t - \pi^e_t)"),
+            ("Lucas's signal extraction", r"\theta = \frac{\sigma_z^2}{\sigma_z^2 + \sigma_m^2}"),
+            ("The inflation bias", r"\pi^{\text{discretion}} = \lambda b k"),
+            ("The sacrifice ratio", r"\frac{\text{point-years of output lost}}{\text{points of disinflation}}"),
+        ],
+        U=(0, 1, 2, 3, 4, 5, 6, 7, 8, "s10_intermission", 9, 10, 11), D=(12, 13, 14, 16), I=(15,),
+        also=(("Agora's expectations", "explainer/economics/agora/expectations.py"),
+              ("The Island's planted truths", "explainer/economics/island.py"),
+              ("The Data Room's sources", "explainer/economics/data/SOURCES.md")),
+    ),
 ]

@@ -26,7 +26,8 @@ class Trap(VoiceoverScene):
         dm = dot(ax, sm["Y"], sm["i"], color=COUPON, r=0.09)
         df = dot(ax, sf["Y"], sf["i"], color=GOV, r=0.09)
         side = VGroup(
-            label(rf"investment collapses by {L['slump']:.0f}: \\ $Y = {s['Y']:.0f}$, \ $i = {s['i']:.2f}\%$",
+            label(rf"investment collapses by {L['slump_size']:.0f}: \\ $Y = {s['Y']:.0f}$, \ "
+                  rf"$i = {s['i']:.2f}\%$",
                   font_size=20, color=PRICE),
             label(r"the interest rate cannot fall below zero: \\ LM is flat along the floor", font_size=20,
                   color=RATE),
@@ -37,7 +38,8 @@ class Trap(VoiceoverScene):
         tag = island_tag(corner=DR, font_size=14)
         with self.voiceover(
             "Now a slump. <bookmark mark='a'/> Firms lose confidence and investment collapses by "
-            f"{L['slump']:.0f} at every interest rate. The I S curve moves far to the left, and the economy settles "
+            f"{L['slump_size']:.0f} at every interest rate. The I S curve moves far to the left, and the economy "
+            "settles "
             f"at an income of {s['Y']:,.0f}, with the interest rate barely above zero. <bookmark mark='b'/> And "
             "the interest rate cannot go much below zero, because nobody lends at a negative rate when they could "
             "hold cash instead. Along that floor, the L M curve is flat. <bookmark mark='c'/> So the central bank "

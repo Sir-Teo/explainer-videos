@@ -226,4 +226,64 @@
             "in your browser; nothing you do here is stored or sent.",
     });
   };
+
+  // ---- Part 28: the natural rate ---------------------------------------------------------------------------------
+  W.natural = function (el) {
+    // The expectations-augmented Phillips curve of Part 28 (explainer.economics.agora.expectations: accelerate):
+    // pi_t = pi^e_t - beta (u_t - u*), with expectations adapting at rate lambda.  The reader is the central bank:
+    // choose the unemployment rate to hold for twenty years, and how fast people learn; watch inflation, and the
+    // short-run curves shift.
+    var USTAR = 5, BETA = 0.5, YEARS = 20;
+    function run(u, lam, pi0) {
+      var pe = pi0, pis = [], pes = [];
+      for (var t = 0; t < YEARS; t++) {
+        var p = pe - BETA * (u - USTAR);
+        pis.push(p); pes.push(pe);
+        pe = pe + lam * (p - pe);
+      }
+      return { pi: pis, pe: pes };
+    }
+    QB.widget(el, {
+      title: "Hold unemployment down",
+      sub: "You run the central bank. The natural rate of unemployment is 5%. Choose the unemployment rate to hold for " +
+           "twenty years, and how quickly people learn from inflation they did not expect. Left: inflation year by " +
+           "year. Right: the short-run Phillips curve in year 1, 10 and 20. Can you find any unemployment rate below " +
+           "5% that does not make inflation run away?",
+      panels: 2, height: 280,
+      controls: [
+        { k: "u", label: "Unemployment you hold, %", min: 3, max: 7, step: 0.1, value: 4,
+          fmt: function (x) { return x.toFixed(1) + "%"; } },
+        { k: "lam", label: "How fast expectations learn (share of each surprise)", min: 0, max: 1, step: 0.05, value: 1,
+          fmt: function (x) { return (100 * x).toFixed(0) + "%"; } },
+      ],
+      draw: function (g, v, st) {
+        var r = run(v.u, v.lam, 2), ys = [], k;
+        for (k = 0; k < YEARS; k++) ys.push(k + 1);
+        var top = Math.max(12, Math.max.apply(null, r.pi) + 1), bot = Math.min(-4, Math.min.apply(null, r.pi) - 1);
+        var a1 = g[0].axes({ x: [1, YEARS], y: [bot, top], title: "Inflation, %", xlabel: "year" });
+        a1.line(ys, r.pi, { color: RED, width: 2.5 });
+        a1.line(ys, r.pe, { color: GOLD, width: 1.5 });
+        a1.hline(2, { color: GREY_HINT });
+        var a2 = g[1].axes({ x: [2, 8], y: [bot, top], title: "Short-run curves", xlabel: "unemployment, %" });
+        [0, 9, 19].forEach(function (t, i) {
+          var us = [2, 8], ps = us.map(function (uu) { return r.pe[t] - BETA * (uu - USTAR); });
+          a2.line(us, ps, { color: [BLUE, GOLD, RED][i], width: 2 });
+        });
+        a2.vline(USTAR, { color: GREEN });
+        a2.dots([v.u, v.u, v.u], [r.pi[0], r.pi[9], r.pi[19]], { color: "#ffffff", r: 4 });
+        st.r = r;
+      },
+      readout: function (v, st) {
+        var last = st.r.pi[YEARS - 1], first = st.r.pi[0];
+        var verdict = Math.abs(v.u - USTAR) < 0.05 ? "at the natural rate, inflation stays where people expect it" :
+          (v.lam === 0 ? "people never learn, so the trade-off lasts: the 1960s menu, which did not survive" :
+           (v.u < USTAR ? "inflation keeps rising: every year needs a bigger surprise" :
+                          "inflation keeps falling: the cost of holding unemployment above the natural rate"));
+        return [["inflation in year 1", first.toFixed(1) + "%"], ["inflation in year 20", last.toFixed(1) + "%"],
+                ["verdict", verdict]];
+      },
+      note: "Friedman (1968) and Phelps (1967): there is no permanent trade-off unless people never learn. Part 28, " +
+            "chapter 3. Computed in your browser; nothing you do here is stored or sent.",
+    });
+  };
 })();

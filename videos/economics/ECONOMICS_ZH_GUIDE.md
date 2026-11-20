@@ -747,6 +747,19 @@ brackets on screen.
 | the neoclassical synthesis; the gold standard | 新古典综合；金本位 |
 | Okun's law; the output gap; potential output | 奥肯定律；产出缺口；潜在产出 |
 
+## Part 28
+
+| English | 中文 |
+|---|---|
+| the Phillips curve; the natural rate; the NAIRU | 菲利普斯曲线；自然失业率；非加速通胀失业率 |
+| expectations-augmented; acceleration; anchored expectations | 预期增广；通胀加速；锚定的预期 |
+| adaptive expectations; rational expectations; signal extraction | 适应性预期；理性预期；信号提取 |
+| the Lucas critique; policy ineffectiveness | 卢卡斯批判；政策无效性 |
+| time inconsistency; the inflation bias; rules versus discretion | 时间不一致性；通胀偏差；规则与相机抉择 |
+| a conservative central banker; central bank independence; inflation targeting | 保守的央行行长；央行独立性；通胀目标制 |
+| disinflation; the sacrifice ratio; stagflation | 反通胀；牺牲率；滞胀 |
+| rational inattention; indexation | 理性疏忽；指数化 |
+
 ## Names
 
 | English | 中文 |

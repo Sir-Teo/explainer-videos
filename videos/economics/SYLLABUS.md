@@ -2965,6 +2965,7 @@ Young Economist*.
 | 25 | built, English | *Money.* Agora gains `money` (Kiyotaki and Wright's economy with its equilibrium check, barter's odds, Cagan's Laffer curve and a printed deficit, Baumol and Tobin, cash in advance, T-accounts); the Data Room gains the World Bank's money growth and inflation by country since 1960 and FRED's M1, M2, base money, currency, reserves, velocity and nominal GDP, and transcribes Hanke and Krus's hyperinflation peaks; a new dial (the interest semi-elasticity of money demand); Cagan's revenue ceiling as *Called it?* (wrong); the quantity theory gets its Agora column |
 | 26 | built, English | *Banks and Runs.* Agora gains `bank` (Diamond and Dybvig's contract and run threshold, sequential service, suspension, Bagehot's lender against a fire sale, Merton's deposit-insurance put, bond losses, capital ratios with risk weights, deposit betas, the repo squeeze, Morris and Shin's global game, Diamond's delegated monitor); the Island gets a bank; the Data Room gains FRED's bank suspensions (1921-41, and monthly to 1933), small and large banks' weekly deposits, the FDIC's national deposit rates, the federal funds rate, Treasury yields, banks' equity ratio, money funds' assets and real GDP, and transcribes Silicon Valley Bank's numbers and the 2022 stress scenario; two new dials (the deposit beta; the output cost of a banking crisis); the 2022 stress scenario as *Called it?* (wrong) |
 | 27 | built, English | *The Keynesian Revolution.* Agora gains `keynes` (the babysitting co-op and its curve, the cross and Kahn's multiplier, the paradox of thrift, IS-LM with a zero lower bound, AS-AD, Phillips's machine, frozen wage cuts, cycle spells); the Island has a recession; the Data Room gains FRED's real GNP from 1929, the NBER's recession months since 1854, America's gold stock 1914-1946, the CBO's potential GDP and Japan's call rate; a new dial (Okun's coefficient) and the propensity-to-spend dial shown again; Okun's law gets its Agora column; Keynes's *Economic Consequences of the Peace* as *Called it?* (partly right) |
+| 28 | built, English | *Inflation and Expectations.* Agora gains `expectations` (Phillips's curve, acceleration, adaptive forecasts, Lucas's islands, the critique, Barro-Gordon with Rogoff's banker, the sacrifice ratio); the Island has an inflation; the Data Room gains FRED's core CPI, Michigan's expected inflation and the 5-year breakeven rate; two new dials (the slope of the Phillips curve; the sacrifice ratio); the persistence Fact shown; Friedman's 1967 forecast (right) and the Fed's June 2021 projection (wrong) as *Called it?* |
 
 **Corrections found while building Part 1** (the plan's draft, written from memory, against the sources): Bastiat's
 Paris passage is in *Economic Sophisms*, First Series, ch. 18 (1845), not the *Harmonies*; Hume's is/ought passage is
@@ -3290,3 +3291,14 @@ Dickens project covered sixteen countries. Keynes's forecast is scored partly ri
 abandoned and never paid in full, but Mantoux (1946) argued Germany could have paid. Guerrieri, Lorenzoni, Straub and
 Werning's results are stated as in their working paper. Samuelson's "neoclassical synthesis" is dated to his 1955
 edition. An intermission follows chapter 8.
+
+**Corrections found while building Part 28.** Phillips's fitted curve is $\dot w + 0.900 = 9.638u^{-1.394}$ (wages
+stable at about 5.5% unemployment). Samuelson and Solow's menu is stated as 5-6% unemployment for stable prices and
+3% with 4-5% inflation. The Play it options are 3, 6 and 11 percent; 1973's annual-average inflation was 6.3%. Ball's
+sacrifice ratio for the US disinflation is given as 1.8 as cited by Federal Reserve staff (other citations give 2.4);
+Mankiw's 2.8 is his textbook calculation by Okun's law; the film's own is 2.0 against the CBO's potential. Hazell,
+Herreno, Nakamura and Steinsson are described without their coefficients; the slopes shown are the film's aggregate
+regressions (-0.65, -0.18, -0.07), close to the aggregate numbers quoted in their draft's introduction. The Fed's June
+2021 projection (3.4% for 2021, 2.1% for 2022) is from the chair's press conference; PCE inflation is fourth quarter
+on fourth quarter in the current vintage (5.7% and 6.1%). The Rogoff curve includes the variance that supply shocks
+add to inflation (a first draft omitted it); the best weight is 0.31. An intermission follows chapter 8.

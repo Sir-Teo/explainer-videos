@@ -182,6 +182,30 @@ CALLS = {c.key: c for c in [
           "FRED: the federal funds rate and the 10-year Treasury yield",
           "Board of Governors, Review of the Federal Reserve's Supervision and Regulation of Silicon Valley Bank "
           "(April 2023)")),
+    Call("friedman_1967", 28, "Milton Friedman, in his presidential address to the American Economic Association",
+         "December 1967", "there is always a temporary trade-off between inflation and unemployment; there is no "
+                          "permanent trade-off: holding unemployment below its natural rate would take ever faster "
+                          "inflation, because people come to expect any steady rate",
+         "expectations catch up with any inflation that lasts; only surprises lower unemployment, and surprises cannot "
+         "be repeated forever",
+         "in the decade after the address, America's inflation and unemployment both rose: from 5.4 percent and 3.5 "
+         "percent in 1969 to 9.1 percent and 8.5 percent in 1975, and 13.5 percent and 7.2 percent in 1980; the stable "
+         "curve of the 1960s disappeared, and the natural rate became the core of the textbooks",
+         "right",
+         ("M. Friedman, \"The Role of Monetary Policy\", American Economic Review 58(1) (1968): 1-17",
+          "BLS: the consumer price index and the unemployment rate, via FRED")),
+    Call("team_transitory", 28, "the Federal Reserve's projections, with many forecasters",
+         "June 2021", "the median projection had PCE inflation at 3.4 percent in 2021 falling to 2.1 percent in 2022, "
+                      "as the bottlenecks of the reopening cleared: a transitory rise",
+         "supply shocks from the pandemic's reopening, which would unwind, and long-run expectations anchored near 2 "
+         "percent",
+         "PCE inflation was 5.7 percent over 2021 and 6.1 percent over 2022 (fourth quarter to fourth quarter, as now "
+         "revised); the Federal Reserve began raising rates in March 2022, and inflation fell to about 3 percent "
+         "during 2023 as supply recovered, without a recession",
+         "wrong",
+         ("Board of Governors of the Federal Reserve System, press conference and Summary of Economic Projections, "
+          "16 June 2021",
+          "BEA: the PCE price index, via FRED")),
     Call("keynes_peace", 27, "John Maynard Keynes, in The Economic Consequences of the Peace",
          "1919", "the reparations the Allies meant to demand were more than Germany could pay, and pressing them would "
                  "impoverish Central Europe and end in disaster: if we aim deliberately at the impoverishment of "

@@ -711,6 +711,26 @@ TRUTHS = {
         # AS-AD (chapter 10): potential output 1450, expected price level 1, wages sticky (slope 300)
         "asad": {"Ystar": 1450.0, "Pe": 1.0, "kappa": 300.0, "dM": -100.0, "cost": 0.15},
     },
+    28: {
+        # the Island's council holds unemployment a point below its natural rate of 5% (chapter 3); inflation responds
+        # half a point per point of unemployment; expectations are last year's inflation, or adapt more slowly
+        "accelerate": {"years": 15, "ustar": 5.0, "u_target": 4.0, "beta": 0.5, "lam": 1.0, "lam_slow": 0.3,
+                       "pi0": 2.0},
+        # Play it (chapter 2): the viewer forecasts 1973's inflation from 1960-1972
+        "playit": {"history": (1960, 1972), "target": 1973, "options": (3.0, 6.0, 11.0)},
+        # adaptive expectations (chapter 5): weights on last year's surprise
+        "adaptive": {"lams": (0.2, 0.5, 1.0)},
+        # Lucas's islands (chapter 7): relative-price noise 1; calm and volatile money
+        "islands": {"sigma_z": 1.0, "sigma_m_calm": 0.5, "sigma_m_wild": 3.0, "b": 1.0, "n_islands": 200,
+                    "years": 60, "seed": 4},
+        # the Lucas critique (chapter 8): output responds 2 to an inflation surprise; the council moves its rule from
+        # 2% to 6% inflation
+        "critique": {"ystar": 100.0, "b": 2.0, "pibar_old": 2.0, "pibar_new": 6.0, "sd": 1.5, "years": 40,
+                     "seed": 5},
+        # Barro-Gordon and Rogoff (chapter 9): society weights output 1; it wants output 2 above the natural level;
+        # supply shocks of standard deviation 2
+        "bg": {"lam": 1.0, "k": 2.0, "b": 1.0, "sigma": 2.0},
+    },
 }
 
 

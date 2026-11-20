@@ -10,7 +10,7 @@ the series leaves out.
 Both *Parts* columns are found, not typed. *Planned* lists the parts whose entry in
 [`SYLLABUS.md`](SYLLABUS.md) names the book or paper; *Built* lists the parts whose scenes, compute step or
 README cite it (a dot: none yet). Fuller notes (editions, chapters, what each source was used for) are in each
-part's README, under *Sources*. Built so far: Parts 1–27.
+part's README, under *Sources*. Built so far: Parts 1–28.
 
 ## 1. The textbook spine
 
@@ -18,7 +18,7 @@ part's README, under *Sources*. Built so far: Parts 1–27.
 
 | Short name | Book | Planned | Built |
 |---|---|---|---|
-| Mankiw | N. G. Mankiw, *Principles of Economics* (10th ed., 2024) | 1–2 | 1–3, 20, 22 |
+| Mankiw | N. G. Mankiw, *Principles of Economics* (10th ed., 2024) | 1–2 | 1–3, 20, 22, 28 |
 | Krugman–Wells | P. Krugman and R. Wells, *Economics* (6th ed., 2021) | 2 | 2 |
 | Acemoglu–Laibson–List | D. Acemoglu, D. Laibson and J. List, *Economics* (3rd ed., 2022) | 4 | 4 |
 | CORE | The CORE Team, *The Economy* (2017; 2.0, 2023) | 1 | 1, 9 |
@@ -31,7 +31,7 @@ part's README, under *Sources*. Built so far: Parts 1–27.
 | Varian | H. Varian, *Intermediate Microeconomics* (9th ed., 2014) | 2, 5–8, 10 | 2, 5–8, 10, 16 |
 | Nicholson–Snyder | W. Nicholson and C. Snyder, *Microeconomic Theory* (13th ed., 2021) | 5–6 | 5–6, 8 |
 | Jones | C. I. Jones, *Macroeconomics* (6th ed., 2023) | 20 | · |
-| Blanchard | O. Blanchard, *Macroeconomics* (8th ed., 2021) | 27, 32 | 20, 24, 27 |
+| Blanchard | O. Blanchard, *Macroeconomics* (8th ed., 2021) | 27, 32 | 20, 24, 27–28 |
 | Stock–Watson | J. Stock and M. Watson, *Introduction to Econometrics* (4th ed., 2019) | 4 | 4 |
 | Angrist–Pischke | J. Angrist and J.-S. Pischke, *Mostly Harmless Econometrics* (2009) | 4, 50, 67 | 4 |
 | Osborne | M. Osborne, *An Introduction to Game Theory* (2004) | 11 | 11 |
@@ -198,8 +198,8 @@ part's README, under *Sources*. Built so far: Parts 1–27.
 | the General Theory and IS-LM | Keynes (1936); Hicks (1937) | 27 | · |
 | the permanent income hypothesis | Friedman (1957); Hall (1978) | 22 | 22 |
 | the Phillips curve and the natural rate | Phillips (1958); Friedman (1968); Phelps (1967) | 28 | · |
-| the Lucas critique | Lucas (1976) | 4, 28, 54 | 4 |
-| time inconsistency and rules | Kydland and Prescott (1977) | 28 | · |
+| the Lucas critique | Lucas (1976) | 4, 28, 54 | 4, 28 |
+| time inconsistency and rules | Kydland and Prescott (1977) | 28 | 28 |
 | real business cycles | Kydland and Prescott (1982) | 29 | · |
 | staggered prices | Calvo (1983) | 30 | · |
 | the Taylor rule | Taylor (1993) | 30 | · |
@@ -309,6 +309,8 @@ part's README, under *Sources*. Built so far: Parts 1–27.
 **Part 26, *Banks and Runs*.** Books: Xavier Freixas and Jean-Charles Rochet, *Microeconomics of Banking* (2nd ed., 2008), chs. 2, 7, 9; Gary Gorton, *Misunderstanding Financial Crises* (2012); Walter Bagehot, *Lombard Street* (1873); Anat Admati and Martin Hellwig, *The Bankers' New Clothes* (2013). Papers: Diamond and Dybvig (1983); Diamond (1984); Bernanke (1983); Merton (1977); Gorton and Metrick (2012); Morris and Shin (1998); Goldstein and Pauzner (2005); Friedman and Schwartz (1963); Calomiris and Mason (2003); Curry and Shibut (2000); Jiang, Matvos, Piskorski and Seru (2024); Drechsler, Savov and Schnabl (2017, 2021); Reinhart and Rogoff (2009); Cerra and Saxena (2008); Romer and Romer (2017); Cookson et al. (2023).
 
 **Part 27, *The Keynesian Revolution*.** Books: John Maynard Keynes, *The General Theory of Employment, Interest and Money* (1936); Olivier Blanchard, *Macroeconomics* (8th ed., 2021), chs. 3–9; Barry Eichengreen, *Golden Fetters* (1992); Robert Skidelsky, *John Maynard Keynes* (three volumes, 1983–2000). Papers: Say (1803); Keynes (1919, 1923, 1936); Kahn (1931); Hicks (1937); Fisher (1933); Hayek (1931); Sweeney and Sweeney (1977); Krugman (1998); Okun (1962); Samuelson (1955); Bewley (1999); Card and Hyslop (1997); Dickens et al. (2007); Friedman and Schwartz (1963); Eichengreen and Sachs (1985); Romer (1992); Lucas and Sargent (1979); Mantoux (1946); Ball, Leigh and Loungani (2017); Guerrieri, Lorenzoni, Straub and Werning (2022).
+
+**Part 28, *Inflation and Expectations*.** Books: David Romer, *Advanced Macroeconomics* (5th ed., 2019), chs. 6 and 12; Thomas Sargent, *The Conquest of American Inflation* (1999); Olivier Blanchard, *Macroeconomics* (8th ed., 2021), chs. 8–9; Robert Lucas, *Studies in Business-Cycle Theory* (1981). Papers: Phillips (1958); Samuelson and Solow (1960); Phelps (1967); Friedman (1968); Muth (1961); Lucas (1972, 1973, 1976); Sargent and Wallace (1975); Kydland and Prescott (1977); Barro and Gordon (1983); Rogoff (1985); Alesina and Summers (1993); Ball (1994); Hazell, Herre\ no, Nakamura and Steinsson (2022); Bernanke and Blanchard (2023); Benigno and Eggertsson (2023); Coibion, Gorodnichenko and Kumar (2018); Weber et al. (2022).
 
 ## 4. What the series leaves out
 

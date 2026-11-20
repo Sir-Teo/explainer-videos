@@ -100,7 +100,8 @@ class Machine(VoiceoverScene):
             f"{M['multiplier']:.2f}, smaller than the cross's two and a half, because taxes now leak too. And it "
             "takes time: the water has to go round."
         ) as vo:
-            self.play(FadeIn(main), FadeIn(name), FadeIn(water), FadeIn(num), FadeIn(ax), FadeIn(tag), run_time=1)
+            self.add(water, num)
+            self.play(FadeIn(main), FadeIn(name), FadeIn(ax), FadeIn(tag), run_time=1)
             vo.wait_until("a")
             self.play(FadeIn(out), GrowArrow(arrows[0]), GrowArrow(arrows[1]))
             vo.wait_until("b")

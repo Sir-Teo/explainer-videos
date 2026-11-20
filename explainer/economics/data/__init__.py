@@ -228,6 +228,12 @@ FRED_SERIES["GDPPOT"] = ("Real potential gross domestic product", "billions of c
                          "Congressional Budget Office")
 FRED_SERIES["IRSTCI01JPM156N"] = ("Interest rates: immediate rates (< 24 hours): call money/interbank rate: total for "
                                   "Japan", "percent a year", "monthly", "OECD Main Economic Indicators")
+FRED_SERIES["MICH"] = ("University of Michigan: inflation expectation (median expected price change over the next 12 "
+                       "months)", "percent", "monthly", "University of Michigan, Surveys of Consumers")
+FRED_SERIES["T5YIEM"] = ("5-year breakeven inflation rate", "percent, monthly average", "monthly",
+                         "Federal Reserve Bank of St. Louis, from Treasury yields")
+FRED_SERIES["CPILFESL"] = ("Consumer price index for all urban consumers: all items less food and energy",
+                           "index 1982-84 = 100, seasonally adjusted", "monthly", "BLS")
 
 FRED_RETRIEVED = {s: "2026-11-19" for s in (
     "GDPA", "GDIA", "PCECA", "GPDIA", "GCEA", "EXPGSA", "IMPGSA", "A033RC1A027NBEA", "A191RD3A086NBEA", "U1RATE",
@@ -242,7 +248,7 @@ FRED_RETRIEVED.update({s: "2026-11-20" for s in ("PCECC96", "DSPIC96", "PSAVERT"
                                                   "X14AICBS", "M09036USM155NNBR", "FEDFUNDS", "SNDR", "NDR12MCD",
                                                   "GS10", "GS2", "DPSSCBW027SBOG", "DPSLCBW027SBOG", "EQTA",
                                                   "MMMFFAQ027S", "GNPCA", "USREC", "M1476BUSM027NNBR",
-                                                  "GDPPOT", "IRSTCI01JPM156N")})
+                                                  "GDPPOT", "IRSTCI01JPM156N", "MICH", "T5YIEM", "CPILFESL")})
 
 SPF_FILES = ("median_rgdp_level", "median_rgdp_growth", "median_recess_level")
 SPF_URL = ("https://www.philadelphiafed.org/-/media/frbp/assets/surveys-and-data/survey-of-professional-forecasters/"

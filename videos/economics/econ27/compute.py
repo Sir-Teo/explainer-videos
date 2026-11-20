@@ -127,7 +127,8 @@ def compute_islm() -> dict:
     promise = ks.islm(P["G"], P["M"] + 2 * P["dM"], **{**slump_kw, "pe": 2.0})
     Y = np.linspace(1000, 1800, 161)
     i = np.linspace(0, 8, 161)
-    return {**P, "base": base, "fiscal": fiscal, "money": money, "slump": slump, "slump_money": slump_money,
+    return {**P, "slump_size": P["slump"], "base": base, "fiscal": fiscal, "money": money, "slump": slump,
+            "slump_money": slump_money,
             "slump_fiscal": slump_fiscal, "deflation": deflation, "promise": promise, "i": i.tolist(), "Y": Y.tolist(),
             "is0": ks.is_curve(P["G"], i, **{k: kw[k] for k in ("a", "b", "T", "I0", "d")}).tolist(),
             "is1": ks.is_curve(P["G"] + P["dG"], i, **{k: kw[k] for k in ("a", "b", "T", "I0", "d")}).tolist(),
