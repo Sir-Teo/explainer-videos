@@ -3787,6 +3787,187 @@ FRONTIER44 = Table(
     read="the chapter states questions, not estimates",
     checked="2026-11-20",
 )
+# ---------------------------------------------------------------------------
+# Part 45
+# ---------------------------------------------------------------------------
+_D45 = "draft from memory, to be checked against the source before the build"
+GYM_2006 = Table(
+    key="gym_2006",
+    cite="Stefano DellaVigna and Ulrike Malmendier, \"Paying Not to Go to the Gym\", American Economic Review 96(3), "
+         "2006, 694-719",
+    tag="DellaVigna and Malmendier, AER (2006)",
+    where="abstract and section II",
+    read="the abstract",
+    checked="2026-11-20",
+    data={"members": 7752, "clubs": 3, "fee": 70, "visits": 4.3, "per_visit": 17, "pass": 10},
+    note=_D45,
+)
+DEPARTURES_2009 = Table(
+    key="departures_2009",
+    cite="Stefano DellaVigna, \"Psychology and Economics: Evidence from the Field\", Journal of Economic Literature "
+         "47(2), 2009, 315-372",
+    tag="DellaVigna, JEL (2009)",
+    where="sections 2-4: non-standard preferences, beliefs and decision making",
+    read="the article's structure",
+    checked="2026-11-20",
+    note=_D45,
+)
+KKT_1990 = Table(
+    key="kkt_1990",
+    cite="Daniel Kahneman, Jack L. Knetsch and Richard H. Thaler, \"Experimental Tests of the Endowment Effect and "
+         "the Coase Theorem\", Journal of Political Economy 98(6), 1990, 1325-1348; Amos Tversky and Daniel Kahneman, "
+         "\"Advances in Prospect Theory\", Journal of Risk and Uncertainty 5, 1992, 297-323",
+    tag="Kahneman, Knetsch and Thaler, JPE (1990); Tversky and Kahneman (1992)",
+    where="the mug experiments; the 1992 parameters (0.88, 2.25, 0.61, 0.69)",
+    read="the 1990 paper's summary; the 1992 parameters as used in Psychology, Built, Part 26",
+    checked="2026-11-20",
+    note="volume of trade significantly below the half predicted (checked); the median asks and bids are stated "
+         "only as roughly two to one, " + _D45,
+)
+LIST_2003 = Table(
+    key="list_2003",
+    cite="John A. List, \"Does Market Experience Eliminate Market Anomalies?\", Quarterly Journal of Economics "
+         "118(1), 2003, 41-71",
+    tag="List, QJE (2003)",
+    where="the sports-card and pin markets",
+    read="the abstract",
+    checked="2026-11-20",
+    note=_D45,
+)
+REFERENCE_FIELD = Table(
+    key="reference_field",
+    cite="Eric J. Allen, Patricia M. Dechow, Devin G. Pope and George Wu, \"Reference-Dependent Preferences: "
+         "Evidence from Marathon Runners\", Management Science 63(6), 2017, 1657-1672; Devin G. Pope and Maurice E. "
+         "Schweitzer, \"Is Tiger Woods Loss Averse?\", American Economic Review 101(1), 2011, 129-157; David Genesove "
+         "and Christopher Mayer, \"Loss Aversion and Seller Behavior: Evidence from the Housing Market\", Quarterly "
+         "Journal of Economics 116(4), 2001, 1233-1260",
+    tag="Allen et al. (2017); Pope and Schweitzer (2011); Genesove and Mayer (2001)",
+    where="the abstracts",
+    read="the abstracts",
+    checked="2026-11-20",
+    note=_D45,
+)
+PRESENT_BIAS = Table(
+    key="present_bias",
+    cite="E. S. Phelps and R. A. Pollak, \"On Second-Best National Saving and Game-Equilibrium Growth\", Review of "
+         "Economic Studies 35(2), 1968, 185-199; David Laibson, \"Golden Eggs and Hyperbolic Discounting\", Quarterly "
+         "Journal of Economics 112(2), 1997, 443-477; Ted O'Donoghue and Matthew Rabin, \"Doing It Now or Later\", "
+         "American Economic Review 89(1), 1999, 103-124; Stefano DellaVigna and Ulrike Malmendier, \"Contract Design "
+         "and Self-Control: Theory and Evidence\", Quarterly Journal of Economics 119(2), 2004, 353-402",
+    tag="Phelps and Pollak (1968); Laibson (1997); O'Donoghue and Rabin (1999); DellaVigna and Malmendier (2004)",
+    where="the models",
+    read="the models as stated in the papers' introductions",
+    checked="2026-11-20",
+    note=_D45,
+)
+SEED_2006 = Table(
+    key="seed_2006",
+    cite="Nava Ashraf, Dean Karlan and Wesley Yin, \"Tying Odysseus to the Mast: Evidence from a Commitment Savings "
+         "Product in the Philippines\", Quarterly Journal of Economics 121(2), 2006, 635-672",
+    tag="Ashraf, Karlan and Yin, QJE (2006)",
+    where="the abstract",
+    read="the abstract",
+    checked="2026-11-20",
+    note=_D45,
+)
+DEFAULTS_45 = Table(
+    key="defaults_45",
+    cite="Brigitte C. Madrian and Dennis F. Shea, \"The Power of Suggestion: Inertia in 401(k) Participation and "
+         "Savings Behavior\", Quarterly Journal of Economics 116(4), 2001, 1149-1187; Richard H. Thaler and Shlomo "
+         "Benartzi, \"Save More Tomorrow\", Journal of Political Economy 112(S1), 2004, S164-S187; Gabriel D. Carroll, "
+         "James J. Choi, David Laibson, Brigitte C. Madrian and Andrew Metrick, \"Optimal Defaults and Active "
+         "Decisions\", Quarterly Journal of Economics 124(4), 2009, 1639-1674",
+    tag="Madrian and Shea (2001); Thaler and Benartzi (2004); Carroll et al. (2009)",
+    where="the abstracts",
+    read="the abstracts",
+    checked="2026-11-20",
+    note=_D45,
+)
+INATTENTION_45 = Table(
+    key="inattention_45",
+    cite="Xavier Gabaix and David Laibson, \"Shrouded Attributes, Consumer Myopia, and Information Suppression in "
+         "Competitive Markets\", Quarterly Journal of Economics 121(2), 2006, 505-540; Nicola Lacetera, Devin G. Pope "
+         "and Justin R. Sydnor, \"Heuristic Thinking and Limited Attention in the Car Market\", American Economic "
+         "Review 102(5), 2012, 2206-2236",
+    tag="Gabaix and Laibson (2006); Lacetera, Pope and Sydnor (2012)",
+    where="the abstracts",
+    read="the abstracts",
+    checked="2026-11-20",
+    note=_D45,
+)
+SOCIAL_45 = Table(
+    key="social_45",
+    cite="Ernst Fehr and Klaus M. Schmidt, \"A Theory of Fairness, Competition, and Cooperation\", Quarterly "
+         "Journal of Economics 114(3), 1999, 817-868; Uri Gneezy and John A. List, \"Putting Behavioral Economics to "
+         "Work: Testing for Gift Exchange in Labor Markets Using Field Experiments\", Econometrica 74(5), 2006, "
+         "1365-1384; John A. List, \"On the Interpretation of Giving in Dictator Games\", Journal of Political "
+         "Economy 115(3), 2007, 482-493",
+    tag="Fehr and Schmidt (1999); Gneezy and List (2006); List (2007)",
+    where="the abstracts",
+    read="the abstracts",
+    checked="2026-11-20",
+    note=_D45,
+)
+WELFARE_45 = Table(
+    key="welfare_45",
+    cite="B. Douglas Bernheim and Antonio Rangel, \"Beyond Revealed Preference: Choice-Theoretic Foundations for "
+         "Behavioral Welfare Economics\", Quarterly Journal of Economics 124(1), 2009, 51-104; Richard H. Thaler and "
+         "Cass R. Sunstein, \"Libertarian Paternalism\", American Economic Review 93(2), 2003, 175-179; Thaler and "
+         "Sunstein, Nudge (2008); Andrei Shleifer and Robert W. Vishny, \"The Limits of Arbitrage\", Journal of "
+         "Finance 52(1), 1997, 35-55",
+    tag="Bernheim and Rangel (2009); Thaler and Sunstein (2003, 2008); Shleifer and Vishny (1997)",
+    where="the abstracts",
+    read="the abstracts",
+    checked="2026-11-20",
+    note=_D45,
+)
+NUDGES_2022 = Table(
+    key="nudges_2022",
+    cite="Stefano DellaVigna and Elizabeth Linos, \"RCTs to Scale: Comprehensive Evidence from Two Nudge Units\", "
+         "Econometrica 90(1), 2022, 81-116",
+    tag="DellaVigna and Linos, Econometrica (2022)",
+    where="the abstract; NBER working paper 27594",
+    read="the abstract and the NBER working paper's summary",
+    checked="2026-11-20",
+    data={"unit_trials": 126, "unit_people": 23_000_000, "unit_effect": 1.4, "unit_se": 0.3, "control": 17.2,
+          "academic_trials": 26, "academic_nudges": 74, "academic_people": 505_337, "academic_effect": 8.7,
+          "academic_pct": 33.4, "selection_share": 0.70},
+)
+LIMITS_45 = Table(
+    key="limits_45",
+    cite="Christopher A. Sims, \"Implications of Rational Inattention\", Journal of Monetary Economics 50(3), 2003, "
+         "665-690; Filip Matejka and Alisdair McKay, \"Rational Inattention to Discrete Choices\", American Economic "
+         "Review 105(1), 2015, 272-298; Xavier Gabaix, \"A Sparsity-Based Model of Bounded Rationality\", Quarterly "
+         "Journal of Economics 129(4), 2014, 1661-1710; Pedro Bordalo, Nicola Gennaioli, Yueran Ma and Andrei "
+         "Shleifer, \"Overreaction in Macroeconomic Expectations\", American Economic Review 110(9), 2020, "
+         "2748-2782; Olivier Coibion and Yuriy Gorodnichenko, \"Information Rigidity and the Expectations Formation "
+         "Process\", American Economic Review 105(8), 2015, 2644-2678",
+    tag="Sims (2003); Matejka and McKay (2015); Gabaix (2014); Bordalo et al. (2020)",
+    where="the models",
+    read="the abstracts",
+    checked="2026-11-20",
+    note=_D45,
+)
+PRACTICE_45 = Table(
+    key="practice_45",
+    cite="the practice chapter's sources, stated in words only",
+    tag="practice",
+    where="product design, consumer protection and pensions",
+    read="the chapter states practices, not estimates",
+    checked="2026-11-20",
+    note=_D45,
+)
+FRONTIER45 = Table(
+    key="frontier45",
+    cite="the frontier chapter's sources, stated in words only",
+    tag="frontier",
+    where="structural behavioural economics; behavioural macroeconomics; theories learned from data",
+    read="the chapter states questions, not estimates",
+    checked="2026-11-20",
+    note=_D45,
+)
+PART45 = (GYM_2006, DEPARTURES_2009, KKT_1990, LIST_2003, REFERENCE_FIELD, PRESENT_BIAS, SEED_2006, DEFAULTS_45,
+          INATTENTION_45, SOCIAL_45, WELFARE_45, NUDGES_2022, LIMITS_45, PRACTICE_45, FRONTIER45)
 PART44 = (RUST_1987, DYNAMIC_IO, VERTICAL, PLATFORMS, QWERTY, INNOVATION, ALGORITHMS, ANTITRUST, REGULATION,
           RETROSPECTIVES, APPLE, FRONTIER44)
 PART42 = (OREGON_2008, RAND_HIE, ARROW_1963, UI_THEORY, UI_EVIDENCE, CHETTY_DK_2014, DISABILITY_2013, EITC_2025,
@@ -3795,4 +3976,4 @@ PART41 = (LAFFER_1974, HARBERGER_1962, RAMSEY_1927, MIRRLEES_1971, DIAMOND_SAEZ_
           CLK_2009, CAPITAL_TAX, HAVENS, EVASION, FRONTIER41, TCJA_2017)
 PART7 = (BERNOULLI_1738, SAMUELSON_1937, ALLAIS_1953, ELLSBERG_1961, RABIN_2000, THALER_1981, HOLT_LAURY_2005,
          HAYDEN_PLATT_2009, MADRIAN_SHEA_2001, THALER_BENARTZI_2004, BARSKY_1997, POST_2008, MEHRA_PRESCOTT_1985)
-ALL = {t.key: t for t in (*PART1, *PART3, *PART4, *PART5, *PART6, *PART7, *PART8, *PART9, *PART10, *PART11, *PART12, *PART13, *PART14, *PART15, *PART16, *PART17, *PART18, *PART19, *PART21, *PART22, *PART25, *PART26, *PART35, *PART36, *PART37, *PART38, *PART39, *PART40, *PART41, *PART42, *PART43, *PART44)}
+ALL = {t.key: t for t in (*PART1, *PART3, *PART4, *PART5, *PART6, *PART7, *PART8, *PART9, *PART10, *PART11, *PART12, *PART13, *PART14, *PART15, *PART16, *PART17, *PART18, *PART19, *PART21, *PART22, *PART25, *PART26, *PART35, *PART36, *PART37, *PART38, *PART39, *PART40, *PART41, *PART42, *PART43, *PART44, *PART45)}

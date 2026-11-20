@@ -1038,6 +1038,44 @@ TRUTHS = {
         # regulation (chapter 12): demand P = 10 - q, unit cost 2 or 4 with equal chances, profits weighted 0.6
         "regulation": {"a": 10.0, "c_lo": 2.0, "c_hi": 4.0, "nu": 0.5, "weight": 0.6},
     },
+    45: {
+        # the gym (hook, chapters 5 and 10): a monthly contract at 70 against a pass at 10 a visit; thirty days, a
+        # busy share of 55% that naive members forget; the benefit of a workout lognormal around 24, today's cost
+        # uniform on [0, 60]; present bias beta uniform on [0.5, 0.95]; 85% naive.  The firm's cost of a visit 3.
+        "gym": {"fee": 70.0, "per_visit": 10.0, "N": 30, "C": 60.0, "b_mean": 24.0, "b_sd": 0.35, "beta_lo": 0.5,
+                "beta_hi": 0.95, "naive_share": 0.85, "busy": 0.55, "n": 4000, "m": 3.0, "seed": 45},
+        # the mug market (chapters 2 and 3): 44 subjects, values lognormal around 4 dollars, loss aversion over the
+        # mug 2 (none over money spent on it)
+        "mugs": {"n": 44, "mu": 1.3863, "sigma": 0.5, "lam_goods": 2.0, "reps": 4000, "seed": 45},
+        # experience (chapter 3): loss aversion over goods meant for trade halves every five trades
+        "experience": {"lam0": 2.0, "half_life": 5.0, "trades": (0, 1, 3, 6, 12, 25, 50)},
+        # the marathon (chapter 4): natural times lognormal around 4 h 30, effort cost e^2/2, a minute worth 1 plus
+        # gain-loss utility 2 a minute with loss aversion 2.25
+        "marathon": {"n": 400000, "k": 1.0, "eta": 2.0, "lam": 2.25, "base": 1.0, "friction": 0.3, "seed": 45},
+        # golf (chapter 4): par putts get 2.5 points more care
+        "golf": {"n": 200000, "effect": 0.025, "seed": 45},
+        # condos (chapter 4): asking prices rise by 0.3 of a nominal loss
+        "condos": {"n": 6000, "m": 0.3, "seed": 45},
+        # present bias (chapter 5): a report with costs 3, 5, 8, 13 over four weeks, beta 1/2
+        "odr": {"values": (3.0, 5.0, 8.0, 13.0), "beta": 0.5},
+        # commitment (chapter 6): a randomized offer of a locked savings account to half of 1,800 clients
+        "seed": {"n": 1800, "soph_share": 0.35, "flex_mean": 16.0, "flex_sd": 12.0, "seed": 45},
+        # defaults (chapter 7): new hires, three years; effort of changing exponential with mean 300, beta 0.7
+        "enrol": {"n": 20000, "months": 36, "beta": 0.7, "cost_mean": 300.0, "auto": 0.03, "seed": 45},
+        "smart": {"start": 0.035, "step": 0.03, "cap": 0.15, "raises": 4, "beta": 0.7, "lam": 2.25},
+        # inattention (chapter 8): add-ons; left-digit bias 0.3 in wholesale car prices
+        "shrouded": {"alpha": 0.7, "cost": 20.0, "addon_price": 18.0, "addon_cost": 3.0, "effort": 6.0},
+        "cars": {"n": 400000, "theta": 0.3, "seed": 45},
+        # social preferences (chapter 9): envy alpha exponential with mean 0.5; guilt beta uniform on [0, 0.8]
+        "social": {"n": 2000, "alpha_mean": 0.5, "beta_hi": 0.8, "seed": 45},
+        # a literature of nudges (chapter 12): true effects 1.4 points on average (sd 1) on a 17.2% base; journal
+        # trials of 300 to 8,000 a arm, a unit's of 2,000 to 100,000; journals publish one in ten insignificant trials
+        "nudges": {"k": 600, "mu": 1.4, "tau": 1.0, "control": 17.2, "journal_n": (300, 8000),
+                   "unit_n": (2000, 100000), "gamma": 0.1, "seed": 45},
+        # expectations (chapter 13): forecasters of an AR(1) with persistence 0.8, private noise 1.5; diagnostic
+        # distortion 0.6
+        "forecast": {"T": 600, "n": 40, "rho": 0.8, "sd_signal": 1.5, "theta": 0.6, "seed": 45},
+    },
 }
 
 
