@@ -56,6 +56,8 @@ class Matters(VoiceoverScene):
             (r"what can be learned", r"natural experiments: \\ lotteries, \ reforms, \\ local shocks, \ moves", GAIN),
         ], width=12.8, cols=4, font_size=18).move_to(DOWN * 0.1)
         head = label(r"what can be identified", font_size=28, color=E.ACCENT).to_edge(UP, buff=0.6)
+        sub = label(r"the same difficulty everywhere: \ a correlation across places \ or countries is not an effect",
+                    font_size=20, color=GREY_A).to_edge(DOWN, buff=0.8)
         with self.voiceover(
             "The same difficulty runs through every claim about inequality's consequences. <bookmark mark='a'/> For "
             "growth: regressions of growth on inequality across countries have found positive, negative and no "
@@ -67,7 +69,7 @@ class Matters(VoiceoverScene):
             "Part four: lotteries, reforms, local shocks and moves, like the movers of chapter ten. Inequality "
             "matters most clearly where it shapes opportunity."
         ) as vo:
-            self.play(FadeIn(head))
+            self.play(FadeIn(head), FadeIn(sub, shift=UP * 0.1))
             for mk, c in zip("abcd", cards.cards):
                 vo.wait_until(mk)
                 self.play(FadeIn(c, shift=UP * 0.1))

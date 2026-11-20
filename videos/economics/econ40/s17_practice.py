@@ -81,6 +81,7 @@ class Practice(VoiceoverScene):
             "income before the policy or after it. <bookmark mark='d'/> And the measures: several, since they watch "
             "different parts of the distribution, each with its uncertainty."
         ) as vo:
+            self.play(FadeIn(warn, shift=UP * 0.1))
             vo.wait_until("a")
             self.play(FadeIn(steps.boxes[0]), FadeIn(steps.notes[0]))
             vo.wait_until("b")
@@ -88,7 +89,8 @@ class Practice(VoiceoverScene):
             vo.wait_until("c")
             self.play(GrowArrow(steps.arrows[1]), FadeIn(steps.boxes[2]), FadeIn(steps.notes[2]))
             vo.wait_until("d")
-            self.play(GrowArrow(steps.arrows[2]), FadeIn(steps.boxes[3]), FadeIn(steps.notes[3]), FadeIn(warn))
+            self.play(GrowArrow(steps.arrows[2]), FadeIn(steps.boxes[3]), FadeIn(steps.notes[3]),
+                      Indicate(warn, color=WHITE, scale_factor=1.03))
         self.clear_scene()
 
     def precision(self):

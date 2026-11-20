@@ -2764,7 +2764,8 @@ def refresh_blp_cars() -> None:
         w.writerow(BLP_COLUMNS)
         for i in range(n):
             w.writerow([int(1970 + cols["cdid"][i]), int(cols["firmid"][i]), int(cols["id"][i]),
-                        *[_fmt(float(cols[c][i])) for c in ("price", "hpwt", "air", "mpg", "space", "share")]])
+                        *[_fmt(float(cols[c][i])) for c in ("price", "hpwt", "air", "mpg", "space")],
+                        f"{float(cols['share'][i]):.6e}"])
 
 
 SHILLER_COLUMNS = ("year", "P", "D", "E", "R", "RLONG", "CPI", "RealR", "C", "RealP", "Pstar", "PstarR", "PstarC", "RealD",
