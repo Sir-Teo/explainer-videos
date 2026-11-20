@@ -60,8 +60,9 @@ class Austerity(VoiceoverScene):
             col = INFL if k == 0 else (OUTPUT if k == 4 else DEBT)
             bars.add(Rectangle(width=p1[0] - p0[0], height=abs(p1[1] - p0[1]) + 1e-3, fill_color=col,
                                fill_opacity=0.85, stroke_width=0).move_to((p0 + p1) / 2))
-            labs.add(VGroup(label(rf"{v:+.1f}\%", font_size=18, color=col).next_to(bars[-1], UP if v >= 0 else DOWN,
-                                                                                  buff=0.08),
+            vt = 0.0 if abs(v) < 0.05 else v
+            labs.add(VGroup(label(rf"{vt:+.1f}\%", font_size=18, color=col).next_to(bars[-1], UP if v >= 0 else DOWN,
+                                                                         buff=0.08),
                             label(n, font_size=14, color=GREY_A).next_to(ax.ax.c2p(0.6 + k * 1.03, -1), DOWN,
                                                                          buff=0.1)))
         foot = label(rf"below 90\%: \ {st[-1]['means'][2]:.1f}\% \ (60--90) \ and "

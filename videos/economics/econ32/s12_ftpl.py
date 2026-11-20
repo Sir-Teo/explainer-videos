@@ -71,6 +71,8 @@ class FTPL(VoiceoverScene):
                      rf"{100 * U['mu_loose']:.1f}\%", font_size=21, color=INFL).to_edge(DOWN, buff=0.45)
         tag = published_tag(r"Sargent and Wallace, \ FRB Minneapolis \emph{Quarterly Review} 5(3) (1981); \ the "
                             r"Island", corner=DR, font_size=12)
+        setup = label(r"the treasury's deficit will not move: \\ the central bank chooses \\ only when to print",
+                      font_size=18, color=GREY_A).move_to(ax.ax.c2p(15, 0.07))
         with self.voiceover(
             "An older warning makes the same point. <bookmark mark='a'/> In 1981 Thomas Sargent and Neil Wallace "
             "imagined a treasury that runs a deficit it will not change, and a central bank that must decide how "
@@ -82,8 +84,10 @@ class FTPL(VoiceoverScene):
             "today means more inflation tomorrow, unless the treasury changes course."
         ) as vo:
             self.play(FadeIn(head), FadeIn(tag), FadeIn(ax), FadeIn(ax2), run_time=0.6)
+            vo.wait_until("a")
+            self.play(FadeIn(setup, shift=UP * 0.1))
             vo.wait_until("b")
-            self.play(Create(ml), Create(dl), FadeIn(k[0]), run_time=1.6)
+            self.play(Create(ml), Create(dl), FadeIn(k[0]), FadeOut(setup), run_time=1.6)
             vo.wait_until("c")
             self.play(Create(dt), FadeIn(k[1]), run_time=1.6)
             vo.wait_until("d")

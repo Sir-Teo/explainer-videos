@@ -36,7 +36,8 @@ class Hook(VoiceoverScene):
         head = VGroup(label(r"2010: \ ``Growth in a Time of Debt''", font_size=28, color=E.ACCENT),
                       label(r"Carmen Reinhart and Kenneth Rogoff: \ 20 advanced economies, \ 1946--2009", font_size=21,
                             color=GREY_A)).arrange(DOWN, buff=0.2).to_edge(UP, buff=0.4)
-        foot = label(r"above 90\% of GDP, \ growth seemed to stop", font_size=24, color=INFL).to_edge(DOWN, buff=0.35)
+        foot = label(r"above 90\% of GDP, \\ growth seemed to stop", font_size=24, color=INFL).move_to(
+            RIGHT * 4.7 + DOWN * 0.2)
         tag = published_tag(r"Reinhart and Rogoff, \ \emph{AER: P\&P} 100(2) (2010); \ the data as replicated by "
                             r"Herndon, \ Ash and Pollin", corner=DR, font_size=12)
         with self.voiceover(
@@ -71,7 +72,7 @@ class Hook(VoiceoverScene):
         grid.move_to(LEFT * 3.6 + DOWN * 0.3)
         box = SurroundingRectangle(grid, color=GREY_D, buff=0.25, corner_radius=0.08)
         cap = label(r"the spreadsheet's countries", font_size=19, color=GREY_B).next_to(box, UP, buff=0.12)
-        strikes = VGroup(*[Line(r.get_left() + LEFT * 0.05, r.get_right() + RIGHT * 0.05, color=INFL, stroke_width=3)
+        strikes = VGroup(*[Line(r.get_left() + LEFT * 0.05, r.get_right() + RIGHT * 0.05, color=INFL, stroke_width=2)
                            for r, c in zip(rows, COUNTRIES) if c in LEFT_OUT])
         side = VGroup(
             label(r"2013: \ Thomas Herndon, \ a graduate student \\ at the University of Massachusetts Amherst, \\ "
@@ -105,7 +106,7 @@ class Hook(VoiceoverScene):
             self.play(FadeIn(side[1]))
             vo.wait_until("c")
             self.play(LaggedStart(*[Create(s_) for s_ in strikes], lag_ratio=0.2),
-                      *[r.animate.set_color(GREY_D) for r, c in zip(rows, COUNTRIES) if c in LEFT_OUT],
+                      *[r.animate.set_color(GREY_B) for r, c in zip(rows, COUNTRIES) if c in LEFT_OUT],
                       FadeIn(side[2]), run_time=1.5)
             vo.wait_until("d")
             self.play(FadeIn(side[3]))

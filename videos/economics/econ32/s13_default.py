@@ -58,7 +58,9 @@ class Default(VoiceoverScene):
                     xticks=[0.9, 1.0, 1.1], yticks=[0, 0.1, 0.2, 0.3], xlabel=r"output, \ relative to its average",
                     ylabel=r"largest debt still repaid", xfmt=lambda v: f"{v:.1f}", yfmt=lambda v: f"{v:.1f}",
                     font_size=14)
-        thr = path(ax2, y, D["threshold"], DEBT, 3.5, smooth=False)
+        th = np.array(D["threshold"])
+        keep = (y >= 0.85) & (y <= 1.15) & (th < 0.345)        # past 0.345 the grid's edge, not the model, binds
+        thr = path(ax2, y[keep], th[keep], DEBT, 3.5, smooth=False)
         k1 = VGroup(label(r"red: \ a bad quarter", font_size=16, color=INFL),
                     label(r"gold: \ an average one", font_size=16, color=TAX),
                     label(r"green: \ a good one", font_size=16, color=OUTPUT)).arrange(RIGHT, buff=0.3).next_to(

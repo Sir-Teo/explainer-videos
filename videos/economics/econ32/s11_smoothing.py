@@ -18,13 +18,15 @@ class Smoothing(VoiceoverScene):
                    xticks=[0, 10, 20, 30, 40, 50], yticks=[0, 0.2, 0.4, 0.6], xlabel=r"years",
                    ylabel=r"share of output", xfmt=lambda v: f"{v:.0f}", yfmt=lambda v: f"{100 * v:.0f}\\%",
                    font_size=14)
-        ax2 = plane([0, 50], [0, 1.0], center=RIGHT * 3.3 + DOWN * 0.3, x_length=5.6, y_length=4.4,
-                    xticks=[0, 10, 20, 30, 40, 50], yticks=[0, 0.25, 0.5, 0.75, 1.0], xlabel=r"years",
+        ax2 = plane([0, 50], [-0.5, 1.0], center=RIGHT * 3.3 + DOWN * 0.3, x_length=5.6, y_length=4.4,
+                    xticks=[0, 10, 20, 30, 40, 50], yticks=[-0.5, 0, 0.5, 1.0], xlabel=r"years",
                     ylabel=r"debt, \ share of output", xfmt=lambda v: f"{v:.0f}", yfmt=lambda v: f"{100 * v:.0f}\\%",
                     font_size=14)
         g = path(ax, t, W["g"], SPEND, 3.5, smooth=False)
         tau = seg(ax, 0, W["tau_smooth"], 50, W["tau_smooth"], TAX, 3.5)
         debt = path(ax2, list(range(len(W["debt"]))), W["debt"], DEBT, 3.5, smooth=False)
+        zero2 = seg(ax2, 0, 0, 50, 0, GREY_C, 1.2)
+        harm = MathTex(r"\text{harm} \propto \tau^{2}", font_size=34, color=TAX).move_to(ax.ax.c2p(33, 0.48))
         head = label(r"Barro, \ 1979: \ a tax's harm rises with the square of its rate", font_size=22,
                      color=E.ACCENT).to_edge(UP, buff=0.4)
         foot = label(rf"pay as you go: \ {100 * (W['ratio'] - 1):.0f}\% more deadweight loss than the smooth tax of "
@@ -43,9 +45,11 @@ class Smoothing(VoiceoverScene):
             "<bookmark mark='e'/> Paying as you go would cost the Island "
             f"{100 * (W['ratio'] - 1):.0f} percent more in lost output from taxes. Debt is a shock absorber."
         ) as vo:
-            self.play(FadeIn(head), FadeIn(tag), FadeIn(ax), FadeIn(ax2), run_time=0.6)
+            self.play(FadeIn(head), FadeIn(tag), FadeIn(ax), FadeIn(ax2), FadeIn(zero2), run_time=0.6)
+            vo.wait_until("a")
+            self.play(FadeIn(harm, scale=1.1))
             vo.wait_until("b")
-            self.play(Create(g), FadeIn(k1), run_time=1.5)
+            self.play(Create(g), FadeIn(k1), harm.animate.set_opacity(0.4), run_time=1.5)
             vo.wait_until("c")
             self.play(Create(tau), FadeIn(k2))
             vo.wait_until("d")

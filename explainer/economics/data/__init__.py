@@ -288,6 +288,20 @@ FRED_SERIES["DFEDTAR"] = ("Federal funds target rate (discontinued December 2008
                           "Board of Governors of the Federal Reserve System")
 FRED_SERIES["DFEDTARU"] = ("Federal funds target range, upper limit (from December 2008)", "percent", "daily",
                            "Board of Governors of the Federal Reserve System")
+FRED_SERIES["DRSFRMACBS"] = ("Delinquency rate on single-family residential mortgages, booked in domestic offices, "
+                             "all commercial banks", "percent, seasonally adjusted", "quarterly",
+                             "Board of Governors of the Federal Reserve System")
+FRED_SERIES["TEDRATE"] = ("TED spread (3-month LIBOR minus 3-month Treasury bill; discontinued January 2022)",
+                          "percent", "daily", "Federal Reserve Bank of St. Louis")
+FRED_SERIES["SWPT"] = ("Assets: other: central bank liquidity swaps (Wednesday level)", "millions of dollars", "weekly",
+                       "Board of Governors of the Federal Reserve System")
+FRED_SERIES["BAA10Y"] = ("Moody's seasoned Baa corporate bond yield relative to the 10-year Treasury", "percent",
+                         "daily", "Federal Reserve Bank of St. Louis (Moody's)")
+FRED_SERIES["HDTGPDUSQ163N"] = ("Household debt to GDP for the United States", "percent of GDP", "quarterly",
+                                "International Monetary Fund")
+for _c, _n in (("TH", "Thai baht"), ("KO", "South Korean won"), ("MX", "Mexican peso")):
+    FRED_SERIES[f"EX{_c}US"] = (f"{_n}s to one US dollar", "currency units per dollar, not seasonally adjusted",
+                                "monthly", "Board of Governors of the Federal Reserve System (H.10)")
 for _c, _n in (("IT", "Italy"), ("ES", "Spain"), ("DE", "Germany"), ("GB", "the United Kingdom")):
     FRED_SERIES[f"IRLTLT01{_c}M156N"] = (f"Long-term (10-year) government bond yield, {_n}", "percent", "monthly",
                                          "OECD Main Economic Indicators")
@@ -314,6 +328,8 @@ FRED_RETRIEVED.update({s: "2026-11-20" for s in ("PCECC96", "DSPIC96", "PSAVERT"
                                                   "ECBDFR", "RESPPLLOPNWW", "DFEDTAR", "DFEDTARU",
                                                   "FEDTARMDLR", "IRLTLT01GBM156N", "FYFSGDA188S", "GFDEGDQ188S",
                                                   "FYGFGDQ188S", "A091RC1Q027SBEA", "IRLTLT01GRM156N")})
+JST_FRED = ("DRSFRMACBS", "TEDRATE", "SWPT", "BAA10Y", "HDTGPDUSQ163N", "EXTHUS", "EXKOUS", "EXMXUS")
+FRED_RETRIEVED.update({s: "2026-11-20" for s in JST_FRED})
 
 SPF_FILES = ("median_rgdp_level", "median_rgdp_growth", "median_recess_level")
 SPF_URL = ("https://www.philadelphiafed.org/-/media/frbp/assets/surveys-and-data/survey-of-professional-forecasters/"
@@ -700,6 +716,21 @@ DATASETS = {
         "sha256": "80bdd2503328d6bac29c6b33dc3113e40c0ba319da38907804de275294cf4179",
         "files": ("rr_hap.csv",),
     },
+    "jst": {
+        "title": "The Jorda-Schularick-Taylor Macrohistory Database, release 6: 18 advanced economies, 1870-2020",
+        "publisher": "Oscar Jorda, Moritz Schularick and Alan M. Taylor (macrohistory.net)",
+        "citation": "O. Jorda, M. Schularick and A. M. Taylor, \"Macrofinancial History and the New Business Cycle "
+                    "Facts\", NBER Macroeconomics Annual 2016, vol. 31 (University of Chicago Press, 2017); "
+                    "JSTdatasetR6.xlsx, retrieved 2026-11-20",
+        "short": "Jorda, Schularick and Taylor, Macrohistory Database R6",
+        "url": "https://www.macrohistory.net/app/download/9834512569/JSTdatasetR6.xlsx",
+        "licence": "CC BY-NC-SA 4.0 (the extract here is shared under the same licence; commercial data providers "
+                   "may not integrate it)",
+        "units": "national currency, percent and indices as in the database's documentation",
+        "vintage": "2026-11-20",
+        "sha256": "c1bb91fe56ea50d4f27af5c0fc897d481e89ae38ce41eaecab62134c9354981d",
+        "files": ("jst.csv",),
+    },
     "rtdsm": {
         "title": "Real-Time Data Set for Macroeconomists: real GDP (ROUTPUT), quarterly vintages",
         "publisher": "Federal Reserve Bank of Philadelphia",
@@ -1002,6 +1033,23 @@ def blanchard_leigh() -> dict:
     "growth_spring2010", "sb_spring2010": [...]}``: real GDP growth as reported in the IMF's fall 2012 WEO and as
     forecast in spring 2010, and the structural balance (percent of potential GDP) as forecast in spring 2010."""
     return _cols("blanchard_leigh.csv")
+
+
+JST_COLS = ("year", "country", "iso", "pop", "rgdpmad", "rgdpbarro", "gdp", "iy", "cpi", "ca", "money", "stir",
+            "ltrate", "hpnom", "unemp", "debtgdp", "xrusd", "tloans", "tmort", "thh", "tbus", "lev", "ltd", "noncore",
+            "crisisJST", "eq_tr", "housing_tr", "bond_tr", "bill_rate")
+
+
+@functools.lru_cache(maxsize=None)
+def jst() -> dict:
+    """The Jorda-Schularick-Taylor Macrohistory Database (release 6), 18 countries, 1870-2020, one row per country
+    and year: ``{"year", "country", "iso", "pop", "rgdpmad" (real GDP per head, 1990 dollars), "rgdpbarro" (real GDP
+    per head, index 2005 = 100), "gdp" (nominal GDP), "iy", "cpi", "ca", "money", "stir", "ltrate", "hpnom" (nominal
+    house prices), "unemp", "debtgdp" (public debt), "xrusd", "tloans", "tmort", "thh", "tbus" (bank loans: total,
+    mortgages, households, business; nominal), "lev", "ltd", "noncore", "crisisJST" (1 in the first year of a
+    systemic financial crisis), "eq_tr", "housing_tr", "bond_tr", "bill_rate": [...]}`` (NaN where missing)."""
+    rows = _read(HERE / "jst.csv")
+    return {k: [r[k] if k in ("country", "iso") else _num(r[k]) for r in rows] for k in JST_COLS}
 
 
 @functools.lru_cache(maxsize=None)
@@ -1415,6 +1463,32 @@ def refresh_rr_hap() -> None:
             w.writerow([rec["Country"], int(float(rec["Year"])), num(rec["debtgdp"]), num(rec["dRGDP"])])
 
 
+def refresh_jst() -> None:
+    import openpyxl  # noqa: PLC0415
+
+    raw = RAW / "JSTdatasetR6.xlsx"
+    sha = _download(DATASETS["jst"]["url"], raw)
+    if sha != DATASETS["jst"]["sha256"]:
+        print(f"jst: the download differs from the recorded vintage ({sha[:12]})")
+    rows = list(openpyxl.load_workbook(raw, read_only=True, data_only=True).worksheets[0].iter_rows(values_only=True))
+    head = [str(h) for h in rows[0]]
+    with open(HERE / "jst.csv", "w", newline="", encoding="utf-8") as f:
+        w = csv.writer(f)
+        w.writerow(JST_COLS)
+        for r in rows[1:]:
+            rec = dict(zip(head, r))
+            out = []
+            for k in JST_COLS:
+                v = rec.get(k)
+                if k in ("country", "iso"):
+                    out.append(str(v))
+                elif k == "year":
+                    out.append(int(v))
+                else:
+                    out.append(_fmt(float(v)) if isinstance(v, (int, float)) else "")
+            w.writerow(out)
+
+
 def refresh_draft1970() -> None:
     d = DATASETS["draft1970"]
     raw = RAW / "draft70yr.dat.txt"
@@ -1779,7 +1853,7 @@ REFRESH = {"draft1970": refresh_draft1970, "ajr": refresh_ajr, "maddison2023": r
            "longrun": refresh_longrun, "pwt": refresh_pwt, "shiller": refresh_shiller,
            "wdi_money": refresh_wdi_money, "greenbook": refresh_greenbook,
            "hlw": refresh_hlw, "ramey_zubairy": refresh_ramey_zubairy, "ramey_tax": refresh_ramey_tax,
-           "blanchard_leigh": refresh_blanchard_leigh, "rr_hap": refresh_rr_hap}
+           "blanchard_leigh": refresh_blanchard_leigh, "rr_hap": refresh_rr_hap, "jst": refresh_jst}
 
 
 def main() -> None:

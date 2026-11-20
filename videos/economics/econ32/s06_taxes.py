@@ -13,22 +13,25 @@ class Taxes(VoiceoverScene):
 
     def record(self):
         T = load("taxes")
-        ev = T["events"]
-        ax = plane([1945, 2009], [-2, 1], center=LEFT * 1.6 + DOWN * 0.3, x_length=8.8, y_length=4.4,
-                   xticks=[1950, 1960, 1970, 1980, 1990, 2000], yticks=[-2, -1, 0, 1],
-                   ylabel=r"exogenous tax change, \ \% of GDP", xfmt=lambda v: f"{v:.0f}",
+        ax = plane([1945, 2009], [-3, 2], center=LEFT * 1.6 + DOWN * 0.3, x_length=8.8, y_length=4.6,
+                   xticks=[1950, 1960, 1970, 1980, 1990, 2000], yticks=[-3, -2, -1, 0, 1, 2],
+                   ylabel=r"tax change, \ \% of GDP", xfmt=lambda v: f"{v:.0f}",
                    yfmt=lambda v: f"{v:+.0f}" if v else "0", font_size=15)
         zero = seg(ax, 1945, 0, 2009, 0, GREY_C, 1.5)
-        sticks = VGroup(*[Line(ax.ax.c2p(t, 0), ax.ax.c2p(t, v), color=TAX if v > 0 else OUTPUT, stroke_width=4)
-                          for t, v in ev])
+
+        def stick(t, v, col):
+            return Line(ax.ax.c2p(t, 0), ax.ax.c2p(t, v), color=col, stroke_width=4)
+
+        exo = VGroup(*[stick(t, v, GREY_B) for t, v in T["events"]])
+        endo = VGroup(*[stick(t, v, GREY_B) for t, v in T["endog"]])
         side = VGroup(
-            label(r"Christina and David Romer read \\ every postwar tax law's record", font_size=18, color=E.ACCENT),
+            label(r"every postwar federal tax law, \\ by the quarter it took effect", font_size=18, color=GREY_A),
+            label(r"Christina and David Romer read \\ every tax law's record", font_size=18, color=E.ACCENT),
             label(r"kept: \ changes made for long-run \\ reasons, \ or to pay off a deficit \\ already there",
-                  font_size=18,
-                  color=TAX),
+                  font_size=18, color=TAX),
             label(r"dropped: \ changes made because \\ the economy was weak or strong", font_size=18, color=GREY_B),
-            label(rf"{T['n_changes']} quarters with an exogenous change", font_size=18, color=GREY_A),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.34).to_edge(RIGHT, buff=0.3)
+            label(rf"{T['n_changes']} quarters kept: \ gold up, \ green down", font_size=18, color=GREY_A),
+        ).arrange(DOWN, aligned_edge=LEFT, buff=0.3).to_edge(RIGHT, buff=0.3)
         tag = data_tag(r"Romer and Romer, \ \emph{AER} 100(3) (2010), \ via Ramey's Handbook data", corner=DR,
                        font_size=12)
         with self.voiceover(
@@ -37,15 +40,20 @@ class Taxes(VoiceoverScene):
             "reports, the president's messages, to learn why each was passed. <bookmark mark='b'/> They kept the "
             "changes made for long-run reasons, to promote growth or because of a view about the size of "
             "government, or to pay off a deficit already there. <bookmark mark='c'/> They dropped changes made "
-            "because the economy was weak or strong. <bookmark mark='d'/> Here they are, in percent of GDP: gold "
-            "for increases, green for cuts."
+            "because the economy was weak or strong, or to pay for a war. <bookmark mark='d'/> What is left, in "
+            "percent of GDP: gold for increases, green for cuts."
         ) as vo:
-            self.play(FadeIn(ax), FadeIn(zero), FadeIn(tag), FadeIn(side[0]), run_time=0.6)
-            for mk, s_ in zip("abc", side[1:]):
-                vo.wait_until(mk)
-                self.play(FadeIn(s_))
+            self.play(FadeIn(ax), FadeIn(zero), FadeIn(tag), FadeIn(side[0]),
+                      LaggedStart(*[Create(s_) for s_ in [*exo, *endo]], lag_ratio=0.02), run_time=1.6)
+            vo.wait_until("a")
+            self.play(FadeIn(side[1]))
+            vo.wait_until("b")
+            self.play(FadeIn(side[2]), *[s_.animate.set_color(TAX if v > 0 else OUTPUT)
+                                         for s_, (t, v) in zip(exo, T["events"])])
+            vo.wait_until("c")
+            self.play(FadeIn(side[3]), endo.animate.set_opacity(0.12))
             vo.wait_until("d")
-            self.play(LaggedStart(*[Create(s_) for s_ in sticks], lag_ratio=0.05), run_time=2.0)
+            self.play(FadeIn(side[4]), FadeOut(endo))
         self.clear_scene()
 
     def response(self):

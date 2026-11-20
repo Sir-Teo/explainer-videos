@@ -68,6 +68,12 @@ class Evidence(VoiceoverScene):
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.36).to_edge(RIGHT, buff=0.3)
         tag = data_tag(r"Ramey and Zubairy, \ \emph{JPE} 126(2) (2018), \ replication data; \ this film's local "
                        r"projections", corner=DR, font_size=12)
+        lp = VGroup(
+            MathTex(r"\text{multiplier}_h = \frac{\sum_{j \le h} \Delta Y_{t+j}}{\sum_{j \le h} \Delta G_{t+j}}",
+                    font_size=36, color=WHITE),
+            label(r"each $\Delta$: \ the response at horizon $j$, \ from a regression on the shock", font_size=17,
+                  color=GREY_B),
+        ).arrange(DOWN, buff=0.25).move_to(ax.ax.c2p(10, 0.55))
         with self.voiceover(
             "Here are the first two designs on the longest record there is: American data since 1889, assembled "
             "by Valerie Ramey and Sarah Zubairy, with the World Wars and Korea in it. <bookmark mark='a'/> For each "
@@ -79,8 +85,11 @@ class Evidence(VoiceoverScene):
             "this film's estimates from their data; they match the published ones to two decimal places."
         ) as vo:
             self.play(FadeIn(ax), FadeIn(one), FadeIn(tag), FadeIn(side[0]), run_time=0.6)
+            vo.wait_until("a")
+            self.play(FadeIn(lp, shift=UP * 0.1))
             vo.wait_until("b")
-            self.play(Create(ln), FadeIn(side[1]), run_time=1.8)
+            self.play(Create(ln), FadeIn(side[1]), lp.animate.scale(0.7).set_opacity(0.55).move_to(
+                ax.ax.c2p(13, 0.25)), run_time=1.8)
             vo.wait_until("c")
             self.play(Create(lb), FadeIn(side[2]), run_time=1.8)
             vo.wait_until("d")

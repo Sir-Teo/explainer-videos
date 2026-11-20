@@ -59,6 +59,7 @@ class Budget(VoiceoverScene):
                   font_size=18, color=OUTPUT),
             label(r"dashed: \ the same with a balanced \\ primary budget", font_size=18, color=GREY_B),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.32).to_edge(RIGHT, buff=0.3)
+        start = Dot(ax.ax.c2p(0, B['b0']), color=WHITE, radius=0.07)
         tag = island_tag(corner=DR, font_size=14)
         with self.voiceover(
             "Here it is on the Island. <bookmark mark='a'/> Debt equal to a year's output, a primary deficit of two "
@@ -70,7 +71,9 @@ class Budget(VoiceoverScene):
             "Dashed, the same three economies with a balanced primary budget: with r above g, even that is not "
             "enough. Everything about debt sustainability is in the sign of r minus g."
         ) as vo:
-            self.play(FadeIn(ax), FadeIn(tag), FadeIn(side[0]), run_time=0.6)
+            self.play(FadeIn(ax), FadeIn(tag), run_time=0.6)
+            vo.wait_until("a")
+            self.play(FadeIn(start, scale=2), FadeIn(side[0]))
             for mk, k, s_ in zip("bcd", ("plus", "zero", "minus"), side[1:4]):
                 vo.wait_until(mk)
                 self.play(Create(lines[k]), FadeIn(s_), run_time=1.6)

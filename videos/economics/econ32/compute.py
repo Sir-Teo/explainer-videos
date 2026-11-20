@@ -213,8 +213,9 @@ def compute_taxes() -> dict:
     q = np.array(T["quarter"], float)
     ly = np.log(np.array(T["rgdp"], float))
     x = np.array(T["exog_rr"], float)
+    en = np.array(T["endog_rr"], float)
     ok = np.isfinite(ly) & np.isfinite(x)
-    q, ly, x = q[ok], ly[ok], x[ok]
+    q, ly, x, en = q[ok], ly[ok], x[ok], en[ok]
     dy = np.concatenate([[np.nan], np.diff(ly)])
     H, p = 16, 4
     out = []
@@ -227,9 +228,11 @@ def compute_taxes() -> dict:
         b, *_ = np.linalg.lstsq(Xm[okr], Y[okr], rcond=None)
         out.append(float(100 * b[1]))       # percent of GDP per percentage point of GDP of tax change
     lo = int(np.argmin(out))
-    events = [(float(a), float(b)) for a, b in zip(q, x) if abs(b) > 0.25]
+    events = [(float(a), float(b)) for a, b in zip(q, x) if abs(b) > 0]
+    endog = [(float(a), float(b)) for a, b in zip(q, en) if np.isfinite(b) and abs(b) > 0]
     return {"h": list(range(H + 1)), "resp": out, "trough": out[lo], "trough_h": lo, "at12": out[12],
-            "events": events, "n_changes": int((np.abs(x) > 0).sum()), "first": float(q[0]), "last": float(q[-1])}
+            "events": events, "endog": endog, "n_endog": len(endog), "n_changes": int((np.abs(x) > 0).sum()),
+            "first": float(q[0]), "last": float(q[-1])}
 
 
 def compute_stabilizers() -> dict:
