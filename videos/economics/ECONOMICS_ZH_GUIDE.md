@@ -657,6 +657,22 @@ brackets on screen.
 | directed technical change; skill-biased technical change; the skill premium | 定向技术进步；技能偏向型技术进步；技能溢价 |
 | the social return to R&D; R&D tax credits | 研发的社会回报率；研发税收抵免 |
 
+## Part 22
+
+| English | 中文 |
+|---|---|
+| the consumption function; marginal and average propensity to consume | 消费函数；边际消费倾向与平均消费倾向 |
+| permanent income; transitory income; the life-cycle hypothesis | 持久收入；暂时收入；生命周期假说 |
+| the random walk of consumption; excess sensitivity; excess smoothness | 消费的随机游走；过度敏感性；过度平滑性 |
+| rule-of-thumb households; time aggregation | 经验法则型家庭；时间加总 |
+| prudence; precautionary saving; the buffer stock; cash on hand | 谨慎；预防性储蓄；缓冲存货；手头现金 |
+| the endogenous grid method | 内生网格法 |
+| tax rebates; stimulus payments; the marginal propensity to consume out of a windfall | 退税；刺激支票；意外之财的边际消费倾向 |
+| hand-to-mouth households; the wealthy hand-to-mouth; liquid and illiquid wealth | 月光型家庭；富裕的月光族；流动与非流动财富 |
+| Ricardian equivalence; bequests | 李嘉图等价；遗赠 |
+| overlapping generations; dynamic inefficiency; pay-as-you-go and funded pensions | 世代交叠；动态无效率；现收现付制与基金制养老金 |
+| automatic enrolment; default options | 自动加入；默认选项 |
+
 ## Names
 
 | English | 中文 |

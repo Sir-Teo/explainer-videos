@@ -138,4 +138,52 @@ PARTS = [
               ("The Island's planted truths", "explainer/economics/island.py"),
               ("The Data Room's sources", "explainer/economics/data/SOURCES.md")),
     ),
+    Part(
+        n=22, level="U", widget="bufferstock", prereq=(4, 7, 20),
+        question="How do households decide how much to spend today?",
+        story="The part opens with the 2001 US tax rebates, mailed in an order set by a digit of each taxpayer's "
+              "Social Security number, and asks the viewer how much of each dollar went on nondurables within the "
+              "quarter. It sets Keynes's consumption function against Kuznets's long series and runs Friedman's "
+              "answer on the Island's 10,000 households; derives permanent income and the life cycle from the Euler "
+              "equation; tests Hall's random walk on sixty years of US data; estimates the share of rule-of-thumb "
+              "households; solves the buffer-stock household by the endogenous grid method; and reads the rebate "
+              "experiments and Alaska's dividend, scoring Hall's prediction. After an intermission of income and "
+              "spending month by month, it shows the wealthy hand-to-mouth, sets the viewer's own answer against "
+              "surveys and lottery winners, tests Ricardian equivalence, builds overlapping generations and asks "
+              "when a pension is a free lunch, takes up the saving of the rich and of China, opens a dial on the "
+              "propensity to spend a windfall, and ends with spending through unemployment in bank-account data.",
+        handoff="Part 23 prices the claims that savings buy; Part 27 builds the multiplier; Part 32 designs fiscal "
+                "stimulus; Part 42 returns to pensions; Part 45 to present bias; Part 52 builds economies of "
+                "buffer-stock households.",
+        outside="Part 4: instrumental variables and errors in variables; Part 7: the Euler equation and prudence; "
+                "Part 20: the golden rule. Chapter 4 uses an F test; chapter 6 iterates on a grid; chapter 11 solves "
+                "a difference equation.",
+        objectives={
+            "U": ["State Keynes's consumption function, Kuznets's puzzle and Friedman's answer; explain why a "
+                  "forward-looking household spends only the annuity value of a windfall.",
+                  "Describe the rebate experiments and what they show about the propensity to spend, and who spends "
+                  "most.",
+                  "Explain Ricardian equivalence and why it fails; explain when a pay-as-you-go pension raises "
+                  "welfare."],
+            "M": ["Derive permanent income from the Euler equation and the budget; derive Hall's random walk and "
+                  "test it, allowing for time averaging.",
+                  "Solve a buffer-stock household by the endogenous grid method and compute its marginal propensity "
+                  "to consume; estimate Campbell and Mankiw's share by instrumental variables."],
+            "D": ["Weigh the evidence on the marginal propensity to consume from experiments, account data and "
+                  "surveys, and what two-asset models add."],
+            "I": ["Design a stimulus payment and a pension default from the evidence on who spends and who saves."],
+        },
+        results=[
+            ("Permanent income", r"c = \frac{r}{1+r}\Big(A_0 + \sum_{t\ge0}\frac{\mathbb{E}\,y_t}{(1+r)^t}\Big)"),
+            ("Hall's random walk", r"c_{t+1} = c_t + \varepsilon_{t+1}"),
+            ("Friedman's slope", r"\frac{\sigma_p^2}{\sigma_p^2 + \sigma_t^2}"),
+            ("The buffer stock", r"c(m)^{-\gamma} = \beta R\,\mathbb{E}\big[(G\psi' c(m'))^{-\gamma}\big]"),
+            ("Dynamic inefficiency", r"R < 1 + n"),
+        ],
+        U=(0, 1, 2, 3, 4, 5, 6, 7, "s09_intermission", 8, 9, 10, 11, 12), D=(13, 15), I=(14,),
+        also=(("Agora's household module", "explainer/economics/agora/household.py"),
+              ("Agora's overlapping generations", "explainer/economics/agora/olg.py"),
+              ("The Island's planted truths", "explainer/economics/island.py"),
+              ("The Data Room's sources", "explainer/economics/data/SOURCES.md")),
+    ),
 ]

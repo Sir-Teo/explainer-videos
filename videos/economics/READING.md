@@ -10,7 +10,7 @@ the series leaves out.
 Both *Parts* columns are found, not typed. *Planned* lists the parts whose entry in
 [`SYLLABUS.md`](SYLLABUS.md) names the book or paper; *Built* lists the parts whose scenes, compute step or
 README cite it (a dot: none yet). Fuller notes (editions, chapters, what each source was used for) are in each
-part's README, under *Sources*. Built so far: Parts 1–21.
+part's README, under *Sources*. Built so far: Parts 1–22.
 
 ## 1. The textbook spine
 
@@ -18,7 +18,7 @@ part's README, under *Sources*. Built so far: Parts 1–21.
 
 | Short name | Book | Planned | Built |
 |---|---|---|---|
-| Mankiw | N. G. Mankiw, *Principles of Economics* (10th ed., 2024) | 1–2 | 1–3, 20 |
+| Mankiw | N. G. Mankiw, *Principles of Economics* (10th ed., 2024) | 1–2 | 1–3, 20, 22 |
 | Krugman–Wells | P. Krugman and R. Wells, *Economics* (6th ed., 2021) | 2 | 2 |
 | Acemoglu–Laibson–List | D. Acemoglu, D. Laibson and J. List, *Economics* (3rd ed., 2022) | 4 | 4 |
 | CORE | The CORE Team, *The Economy* (2017; 2.0, 2023) | 1 | 1, 9 |
@@ -64,7 +64,7 @@ part's README, under *Sources*. Built so far: Parts 1–21.
 | Short name | Book | Planned | Built |
 |---|---|---|---|
 | Romer | D. Romer, *Advanced Macroeconomics* (5th ed., 2019) | 20, 22–23, 28–29, 56 | · |
-| Ljungqvist–Sargent | L. Ljungqvist and T. Sargent, *Recursive Macroeconomic Theory* (4th ed., 2018) | 29, 52, 56 | · |
+| Ljungqvist–Sargent | L. Ljungqvist and T. Sargent, *Recursive Macroeconomic Theory* (4th ed., 2018) | 29, 52, 56 | 22 |
 | SLP | N. Stokey, R. Lucas and E. Prescott, *Recursive Methods in Economic Dynamics* (1989) | 29, 51 | · |
 | Acemoglu | D. Acemoglu, *Introduction to Modern Economic Growth* (2009) | 20–21 | · |
 | Galí | J. Galí, *Monetary Policy, Inflation, and the Business Cycle* (2nd ed., 2015) | 30, 56 | · |
@@ -121,7 +121,7 @@ part's README, under *Sources*. Built so far: Parts 1–21.
 | Model or result | Paper | Planned | Built |
 |---|---|---|---|
 | the division of labour | Smith (1776), *The Wealth of Nations* | 1 | 1–2, 19, 21 |
-| comparative advantage | Ricardo (1817), *Principles*, ch. 7 | 2, 8, 35–36 | 1–2, 8, 19 |
+| comparative advantage | Ricardo (1817), *Principles*, ch. 7 | 2, 8, 35–36 | 1–2, 8, 19, 22 |
 | supply and demand, the scissors | Marshall (1890), *Principles of Economics* | 2, 37 | 2, 14 |
 | the price system as information | Hayek (1945), "The Use of Knowledge in Society" | 1, 9 | 1, 9 |
 | the double auction in the classroom | Chamberlin (1948); Smith (1962) | 1–2 | 1 |
@@ -196,7 +196,7 @@ part's README, under *Sources*. Built so far: Parts 1–21.
 |---|---|---|---|
 | national accounts | Kuznets (1934) | 3 | 2 |
 | the General Theory and IS-LM | Keynes (1936); Hicks (1937) | 27 | · |
-| the permanent income hypothesis | Friedman (1957); Hall (1978) | 22 | · |
+| the permanent income hypothesis | Friedman (1957); Hall (1978) | 22 | 22 |
 | the Phillips curve and the natural rate | Phillips (1958); Friedman (1968); Phelps (1967) | 28 | · |
 | the Lucas critique | Lucas (1976) | 4, 28, 54 | 4 |
 | time inconsistency and rules | Kydland and Prescott (1977) | 28 | · |
@@ -205,7 +205,7 @@ part's README, under *Sources*. Built so far: Parts 1–21.
 | the Taylor rule | Taylor (1993) | 30 | · |
 | search and unemployment | Diamond (1982); Mortensen and Pissarides (1994) | 24 | · |
 | heterogeneous agents | Bewley (1977); Huggett (1993); Aiyagari (1994) | 52, 56 | · |
-| the equity premium puzzle | Mehra and Prescott (1985) | 7, 23 | 7 |
+| the equity premium puzzle | Mehra and Prescott (1985) | 7, 23 | 7, 22 |
 
 ### Money and finance
 
@@ -297,6 +297,8 @@ part's README, under *Sources*. Built so far: Parts 1–21.
 **Part 20, *Growth I: Capital*.** Books: Charles I. Jones and Dietrich Vollrath, *Introduction to Economic Growth* (3rd ed., 2013); Daron Acemoglu, *Introduction to Modern Economic Growth* (2009), chs. 2–3 and 8; David Romer, *Advanced Macroeconomics* (5th ed., 2019), chs. 1–2; William Easterly, *The Elusive Quest for Growth* (2001). Papers: Harrod (1939); Domar (1946); Solow (1956, 1957); Swan (1956); Kaldor (1961); Phelps (1961); Ramsey (1928); Cass (1965); Koopmans (1965); Abel, Mankiw, Summers and Zeckhauser (1989); Barro (1991); Mankiw, Romer and Weil (1992); Islam (1995); Quah (1996); Pritchett (1997); Krugman (1994); Young (1995); Hsieh (2002); Hall and Jones (1999); Caselli (2005); Lucas (1990); Song, Storesletten and Zilibotti (2011); Easterly (1999); Blanchard (2019); Fernald (2015); Syverson (2017); Kremer, Willis and You (2022); Acemoglu and Molina (2022); Feenstra, Inklaar and Timmer, the Penn World Table (2015; version 11.0, 2025).
 
 **Part 21, *Growth II: Ideas and Institutions*.** Books: Charles I. Jones and Dietrich Vollrath, *Introduction to Economic Growth* (3rd ed., 2013), chs. 4–6; Daron Acemoglu, *Introduction to Modern Economic Growth* (2009), chs. 13–15; Philippe Aghion and Peter Howitt, *The Economics of Growth* (2009); David Warsh, *Knowledge and the Wealth of Nations* (2006); Acemoglu and Robinson, *Why Nations Fail* (2012). Papers: Nordhaus (1996); Arrow (1962); Romer (1986, 1990); Lucas (1988); Aghion and Howitt (1992); Jones (1995, 2022); Bloom, Jones, Van Reenen and Webb (2020); Comin and Hobijn (2010); Basu and Weil (1998); Hsieh and Klenow (2009); Bils, Klenow and Ruane (2021); Acemoglu, Johnson and Robinson (2001, 2002); Albouy (2012); Dell (2010); Rodrik et al. (2004); Alsan (2015); Nunn and Wantchekon (2011); Acemoglu (2002); Katz and Murphy (1992); Moser (2005); Williams (2013); Jones and Williams (1998); Bloom, Schankerman and Van Reenen (2013); Dechezleprêtre et al. (2023); Bloom, Van Reenen and Williams (2019); Aghion, Jones and Jones (2019).
+
+**Part 22, *Consumption and Saving*.** Books: Angus Deaton, *Understanding Consumption* (1992); David Romer, *Advanced Macroeconomics* (5th ed., 2019), chs. 2 and 8; Lars Ljungqvist and Thomas Sargent, *Recursive Macroeconomic Theory* (4th ed., 2018), chs. 17–18; Milton Friedman, *A Theory of the Consumption Function* (1957). Papers: Modigliani and Brumberg (1954); Hall (1978); Flavin (1981); Campbell and Mankiw (1989); Working (1960); Zeldes (1989); Kimball (1990); Deaton (1991); Carroll (1997, 2006); Johnson, Parker and Souleles (2006); Parker et al. (2013, 2022); Hsieh (2003); Kueng (2018); Kaplan, Violante and Weidner (2014); Kaplan and Violante (2014); Fagereng, Holm and Natvik (2021); Jappelli and Pistaferri (2014); Fuster, Kaplan and Zafar (2021); Sahm, Shapiro and Slemrod (2012); Barro (1974); Samuelson (1958); Diamond (1965); Abel, Mankiw, Summers and Zeckhauser (1989); Dynan, Skinner and Zeldes (2004); Modigliani and Cao (2004); Chamon and Prasad (2010); Wei and Zhang (2011); Ganong and Noel (2019).
 
 ## 4. What the series leaves out
 

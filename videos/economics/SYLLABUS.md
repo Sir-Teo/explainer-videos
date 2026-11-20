@@ -2959,6 +2959,7 @@ Young Economist*.
 | 19 | built, English | *The Great Escape.* Agora gains `malthus` (a Malthusian economy with a plague and an invention, England's labour demand curve, Galor and Weil's household and a toy unified growth economy, spatial noise); the Data Room gains the Bank of England's millennium series for England and Our World in Data's long-run population, life expectancy, fertility and heights, and Malthus's 1798 passage from the first edition; a new dial (English living standards before 1700, three reconstructions, with a new 'reconstruction' design) and Ehrlich's *Called it?* |
 | 20 | built, English | *Growth I: Capital.* Agora gains `growth` (the Solow model, its golden rule and speed of convergence, Harrod-Domar, growth and development accounting, convergence regressions, Lucas's ratio, the Ramsey model by shooting); the Data Room gains the Penn World Table 11.0, with the internal rate of return; a new dial (the speed of convergence) and a row on capital's share; Samuelson's Soviet forecast as *Called it?*; Kaldor's facts and conditional convergence get their Agora columns |
 | 21 | built, English | *Growth II: Ideas and Institutions.* Agora gains `ideas` (replication, AK, Romer's balanced path, Aghion and Howitt's market and planner research, semi-endogenous growth, directed technical change); the Data Room gains Acemoglu, Johnson and Robinson's 64 colonies (via hdm) and transcribes Nordhaus's price of light and Bloom et al.'s research numbers; a new dial (the social return to R&D); Romer's scale effect as *Called it?*; the price of light gets its Agora column |
+| 22 | built, English | *Consumption and Saving.* Agora gains `household` (Keynes's function, the permanent-income annuity, the life cycle, Carroll's buffer stock by the endogenous grid method, simulated populations and their MPC, the wealthy hand-to-mouth, Friedman's cross-section, Campbell and Mankiw's rule of thumb) and `olg` (Samuelson's money, Diamond's economy, a pension's welfare); the Data Room gains FRED's monthly consumption by type with its price indexes, real disposable income and the saving rate, the Penn World Table's consumption shares, and transcribes the windfall studies; a new dial (the propensity to spend a windfall); Hall's random walk as *Called it?*; consumption smoother than income gets its Agora column |
 
 **Corrections found while building Part 1** (the plan's draft, written from memory, against the sources): Bastiat's
 Paris passage is in *Economic Sophisms*, First Series, ch. 18 (1845), not the *Harmonies*; Hume's is/ought passage is
@@ -3193,3 +3194,18 @@ numbers are *Why Nations Fail*'s. The Aghion-Howitt chapter compares the paper's
 log-utility planner (Agora's), so the crossing step size (about 1.49) is the island's, not a general result. The social
 return to R&D is dialled from Jones and Williams (30%, a conservative value), Bloom, Schankerman and Van Reenen (55%,
 from their 2012 version) and Lucking, Bloom and Van Reenen (58%). An intermission follows chapter 7.
+
+**Corrections found while building Part 22.** The 2001 rebates were $300 or $600 (and $500 for heads of household),
+reached about two-thirds of households, and went out over ten weeks from late July to late September by the
+second-to-last digit of the Social Security number; Johnson, Parker and Souleles's 20-40% is on nondurables in the
+quarter of receipt, about two-thirds over that quarter and the next. The 2008 figures (12-30% on nondurables, 50-90%
+with durables) are Parker, Souleles, Johnson and McClelland's abstract; the 2020 figure (about 10%, s.e. 3.4) is from
+Parker, Schild, Erhard and Johnson's NBER working paper 29648. Hsieh (2003) found no response to Alaska's dividend in
+survey data, and Kueng (2018) a 25% response within a quarter in account data, rising with income. Ganong and Noel's
+6% and 12% are from their NBER working paper (an earlier draft gave 13% at exhaustion). Fagereng, Holm and Natvik give
+no single MPC: small prizes to the cash-poor are spent in full within the year, large prizes to the cash-rich slightly
+below half. Wei and Zhang's "about half" of the 1990-2007 rise in household saving is the authors' own estimate.
+Campbell and Mankiw's lambda on US data since 1960 is weakly identified (first-stage F about 4), so the film reports
+it with that warning and quotes their own estimate as about one half. The wealthy hand-to-mouth are shown with a
+one-asset shortcut (an illiquid return of 7% against cash's 3%), not Kaplan and Violante's two-asset model. An
+intermission follows chapter 7.

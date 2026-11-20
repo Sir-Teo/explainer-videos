@@ -950,6 +950,34 @@ SHOWN = {
         ("Spolaore and Wacziarg (2009); Ashraf and Galor (2013); Kelly (2019)", "frontier work, described, not "
          "dialled"),
     ],
+    22: [
+        ("Johnson, Parker and Souleles (2006); Parker et al. (2013, 2022); Kueng (2018); Jappelli and Pistaferri "
+         "(2014)", "the propensity to spend a windfall, entered in the mpc_windfall dial"),
+        ("Keynes (1936); Kuznets (1946); Friedman (1957); Modigliani and Brumberg (1954)", "theory, quoted and run "
+         "on the Island (agora.household)"),
+        ("Hall (1978)", "Called it? (calls.hall_random_walk); the test rerun on FRED's series"),
+        ("Flavin (1981); Campbell and Mankiw (1989); Working (1960); Deaton (1987, 1992); Campbell and Deaton "
+         "(1989)", "excess sensitivity and smoothness, rerun on FRED's series and on the Island; Campbell and "
+         "Mankiw's own estimate stated as about one half"),
+        ("Kimball (1990); Zeldes (1989); Deaton (1991); Carroll (1997, 2006)", "theory, solved in Agora by the "
+         "endogenous grid method"),
+        ("Hsieh (2003)", "Alaska's dividend in survey data, stated from the abstract"),
+        ("Kaplan, Violante and Weidner (2014); Kaplan and Violante (2014)", "the hand-to-mouth shares stated from "
+         "the paper's summary; the mechanism run on the Island"),
+        ("Fuster, Kaplan and Zafar (2021); Fagereng, Holm and Natvik (2021)", "survey and lottery evidence, stated "
+         "from the abstracts (tables.MPC_STUDIES)"),
+        ("Barro (1974); Samuelson (1958); Diamond (1965)", "theory, run in Agora (agora.olg)"),
+        ("Abel, Mankiw, Summers and Zeckhauser (1989)", "the test of dynamic efficiency, stated from the abstract"),
+        ("Dynan, Skinner and Zeldes (2004); Kotlikoff and Summers (1981); Modigliani (1988); Carroll (2000)",
+         "the saving of the rich and inherited wealth, stated"),
+        ("Modigliani and Cao (2004); Chamon and Prasad (2010); Wei and Zhang (2011)", "explanations of China's "
+         "saving, stated; household consumption shares from the Penn World Table (data.pwt)"),
+        ("Sahm, Shapiro and Slemrod (2012); Madrian and Shea (2001)", "stimulus delivery and pension defaults, "
+         "stated from the abstract and transcribed (tables.MADRIAN_SHEA_2001)"),
+        ("Ganong and Noel (2019); Kaplan, Moll and Violante (2018)", "frontier: spending through unemployment and "
+         "HANK, stated; the path drawn from the working paper's magnitudes"),
+        ("Mehra and Prescott (1985)", "the next part's hook, stated"),
+    ],
     21: [
         ("Nordhaus (1996)", "the price of light, a transcribed table (tables.NORDHAUS_LIGHT)"),
         ("Arrow (1962); Romer (1986, 1990); Aghion and Howitt (1992); Jones (1995)", "theory, run in Agora "

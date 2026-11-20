@@ -218,4 +218,114 @@
             "nothing you do here is stored or sent.",
     });
   };
+  // ---- Part 22: consumption and saving ---------------------------------------------------------------------------
+  W.bufferstock = function (el) {
+    // Carroll's buffer-stock household of Part 22 (explainer.economics.agora.household: buffer_stock), solved here
+    // by the same endogenous grid method: cash on hand m per unit of permanent income, CRRA utility (gamma 2),
+    // R = 1.03, income growth G = 1.02, seven-point lognormal permanent and transitory shocks (permanent spread 10%)
+    // and a small chance of no income.  The reader sets patience, transitory risk and the chance of a jobless year.
+    var R = 1.03, G = 1.02, GAM = 2, PSD = 0.1;
+    var Z = [-1.46523, -0.79164, -0.36611, 0.0, 0.36611, 0.79164, 1.46523];
+    function shocks(sd) {
+      if (sd <= 0) return [1];
+      var x = Z.map(function (z) { return Math.exp(sd * z - sd * sd / 2); });
+      var m = x.reduce(function (a, b) { return a + b; }, 0) / x.length;
+      return x.map(function (v) { return v / m; });
+    }
+    function interp(x, xs, ys) {
+      var n = xs.length;
+      if (x <= xs[0]) return ys[0];
+      if (x >= xs[n - 1]) {
+        var sl = (ys[n - 1] - ys[n - 2]) / (xs[n - 1] - xs[n - 2]);
+        return ys[n - 1] + sl * (x - xs[n - 1]);
+      }
+      var lo = 0, hi = n - 1;
+      while (hi - lo > 1) { var mid = (lo + hi) >> 1; if (xs[mid] <= x) lo = mid; else hi = mid; }
+      var t = (x - xs[lo]) / (xs[hi] - xs[lo]);
+      return ys[lo] + t * (ys[hi] - ys[lo]);
+    }
+    function solve(beta, tsd, p0) {
+      var psi = shocks(PSD), th = shocks(tsd), wt = [];
+      th = th.map(function (v) { return v / (1 - p0); });
+      for (var i = 0; i < th.length; i++) wt.push((1 - p0) / th.length);
+      if (p0 > 0) { th = [0].concat(th); wt = [p0].concat(wt); }
+      var A = [0];
+      for (var k = 0; k < 59; k++) A.push(Math.exp(Math.log(1e-4) + k * (Math.log(20) - Math.log(1e-4)) / 58));
+      var mg = A.map(function (a) { return a + 1e-6; }), cg = mg.slice();
+      for (var it = 0; it < 600; it++) {
+        var nm = [0], nc = [0], diff = 0;
+        for (var j = 0; j < A.length; j++) {
+          var rhs = 0;
+          for (var p = 0; p < psi.length; p++) for (var q = 0; q < th.length; q++) {
+            var m1 = R * A[j] / (G * psi[p]) + th[q];
+            var c1 = Math.max(interp(m1, mg, cg), 1e-10);
+            rhs += wt[q] / psi.length * Math.pow(G * psi[p] * c1, -GAM);
+          }
+          var c = Math.pow(beta * R * rhs, -1 / GAM);
+          nc.push(c); nm.push(A[j] + c);
+        }
+        for (var t = 1; t < nm.length; t += 7) diff = Math.max(diff, Math.abs(interp(nm[t], mg, cg) - nc[t]));
+        mg = nm; cg = nc;
+        if (it > 5 && diff < 1e-6) break;
+      }
+      return { m: mg, c: cg };
+    }
+    QB.widget(el, {
+      title: "How much would you spend?",
+      sub: "A household that cannot borrow, facing income risk, decides how much of its cash on hand to spend each " +
+           "year (cash is measured in years of its permanent income). Change its patience, how uncertain its income " +
+           "is, and the chance of a year with no income at all. The left chart is its consumption function, against " +
+           "the same household with no risk; the right, the share of an extra dollar it would spend.",
+      panels: 2, height: 290,
+      controls: [
+        { k: "beta", label: "Patience, beta", min: 0.88, max: 0.99, step: 0.005, value: 0.96,
+          fmt: function (x) { return x.toFixed(3); } },
+        { k: "tsd", label: "Transitory income risk (spread)", min: 0.0, max: 0.3, step: 0.01, value: 0.1,
+          fmt: function (x) { return (100 * x).toFixed(0) + "%"; } },
+        { k: "p0", label: "Chance of a year with no income", min: 0.0, max: 0.03, step: 0.001, value: 0.005,
+          fmt: function (x) { return (100 * x).toFixed(1) + "%"; } },
+      ],
+      draw: function (g, v, st) {
+        var risky = solve(v.beta, v.tsd, v.p0), sure = solve(v.beta, 0, 0);
+        var ms = [], cr = [], cs = [], mpc = [];
+        for (var k = 0; k <= 100; k++) {
+          var m = 5 * k / 100;
+          ms.push(m); cr.push(interp(m, risky.m, risky.c)); cs.push(interp(m, sure.m, sure.c));
+        }
+        for (k = 0; k < 100; k++) mpc.push((cr[k + 1] - cr[k]) / (ms[k + 1] - ms[k]));
+        var a = g[0].axes({ x: [0, 5], y: [0, 2], title: "Consumption against cash on hand",
+                            xlabel: "cash on hand (years of income)" });
+        a.line([0, 2], [0, 2], { color: GREY_HINT, width: 1 });
+        a.line(ms, cs, { color: BLUE, width: 2 });
+        a.line(ms, cr, { color: GREEN, width: 2.5 });
+        // the target: E m' = m, with E[1/psi] close to one
+        var target = null;
+        for (k = 1; k <= 100; k++) {
+          var nxt = R * (ms[k] - cr[k]) / G + 1;
+          if (nxt <= ms[k]) { target = ms[k]; break; }
+        }
+        if (target !== null) a.vline(target, { color: GOLD });
+        var b = g[1].axes({ x: [0, 5], y: [0, 1], title: "Share of an extra dollar spent",
+                            xlabel: "cash on hand (years of income)" });
+        b.line(ms.slice(0, 100), mpc.map(function (x) { return Math.min(Math.max(x, 0), 1); }),
+               { color: GREEN, width: 2.5 });
+        st.target = target; st.ms = ms; st.mpc = mpc;
+        st.imp = Math.pow(R * v.beta, 1 / GAM) / G;
+      },
+      readout: function (v, st) {
+        if (!st.ms) return [];
+        function at(x) { return st.mpc[Math.min(99, Math.round(x * 20))].toFixed(2); }
+        return [["target cash on hand (gold line)", st.target === null ? "none in view" : st.target.toFixed(2) +
+                 " years of income"],
+                ["share of an extra dollar spent at half a year's cash", at(0.5)],
+                ["at one year's cash; at three years'", at(1.0) + "; " + at(3.0)],
+                ["impatience, (beta R)^(1/gamma) / G", st.imp.toFixed(3) + (st.imp < 1 ? " (impatient: a target exists)" :
+                  " (patient: wealth grows without limit)")]];
+      },
+      note: "More risk, or a larger chance of a jobless year, makes the household hold back at every level of cash and " +
+            "bends the consumption function: prudence (Part 22, chapter 6). Near zero cash it spends most of an extra " +
+            "dollar; with a cushion, almost none. Computed in your browser by the endogenous grid method; nothing you " +
+            "do here is stored or sent.",
+    });
+  };
 })();
