@@ -101,9 +101,9 @@ class Frontier(VoiceoverScene):
         ) as vo:
             self.play(FadeIn(ax), FadeIn(tag), FadeIn(side[0]), run_time=1.0)
             vo.wait_until("a")
-            self.play(Indicate(side[0], color=WHITE))
-            vo.wait_until("b")
             self.play(Create(l92), FadeIn(side[1]), run_time=1.5)
+            vo.wait_until("b")
+            self.play(Indicate(side[1], color=WHITE), Indicate(l92, color=WHITE))
             vo.wait_until("c")
             self.play(Create(lfit), FadeIn(side[2]), run_time=1.5)
             vo.wait_until("d")

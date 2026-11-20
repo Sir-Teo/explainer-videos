@@ -121,7 +121,8 @@ class Practice(VoiceoverScene):
             "Called it? <bookmark mark='a'/> Stefano DellaVigna and Devin Pope ran a large online experiment "
             "of a simple real-effort task with eighteen ways of motivating people, and before the results came out "
             "asked 208 "
-            "experts to forecast each one. One arm paid a token piece rate, a tenth of a cent. A sizeable share of "
+            "experts to forecast each one. <bookmark mark='a2'/> One arm paid a token piece rate, a tenth of a cent. A "
+            "sizeable share of "
             "the experts expected it to crowd out effort: people paid almost nothing would work less than people "
             "paid nothing at all, as with the day-care fine. <bookmark mark='b'/> Instead, effort was 24 percent "
             "higher than with no piece rate, and a full cent added more. <bookmark mark='c'/> The verdict: wrong. "
@@ -129,10 +130,12 @@ class Practice(VoiceoverScene):
             "famous story is not a law of nature, which is the lesson of this whole part."
         ) as vo:
             self.play(FadeIn(cc.card), FadeIn(cc[1][0]), FadeIn(cc.left), FadeIn(tag))
+            vo.wait_until("a2")
+            self.play(FadeIn(ax), FadeIn(cap), GrowFromEdge(bars[0][0], DOWN), FadeIn(bars[0][1:]),
+                      *[FadeIn(b_[1]) for b_ in bars[1:]])
             vo.wait_until("b")
-            self.play(FadeIn(cc.right), FadeIn(ax), FadeIn(cap),
-                      LaggedStart(*[GrowFromEdge(b_[0], DOWN) for b_ in bars], lag_ratio=0.3),
-                      *[FadeIn(b_[1:]) for b_ in bars], run_time=2.0)
+            self.play(FadeIn(cc.right), LaggedStart(*[GrowFromEdge(b_[0], DOWN) for b_ in bars[1:]], lag_ratio=0.3),
+                      *[FadeIn(b_[2]) for b_ in bars[1:]], run_time=2.0)
             vo.wait_until("c")
             self.play(FadeIn(cc.stamp, scale=1.3))
         self.clear_scene()

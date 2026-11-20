@@ -414,8 +414,7 @@ CALLS = {c.key: c for c in [
           "of Technology on Employment and Unemployment, National Academy of Engineering (1983), as quoted in "
           "secondary listings",
           "BLS via FRED: LNS12300060 (employment-population ratio, 25-54) and PRS85006173 (labor share)")),
-    Call("experts_2018", 45, "a sizeable share of 208 experts (economists, psychologists and others) asked to "
-         "forecast a real-effort experiment", "before its results appeared, 2016",
+    Call("experts_2018", 45, "many of 208 experts forecasting an effort experiment", "2016",
          "paying a token piece rate, a tenth of a cent, would crowd out effort: people paid almost nothing would work "
          "less than people paid nothing at all",
          "the psychology of motivation crowding out (a small payment turning a favour into a poor deal), and earlier "

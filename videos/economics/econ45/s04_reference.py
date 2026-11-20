@@ -127,6 +127,12 @@ class Reference(VoiceoverScene):
             label(rf"non-dealers: \ {100 * L['others_low']:.0f}\% \\ below six trades a month, \\ "
                   rf"{100 * L['others_high']:.0f}\% at six or more", font_size=18, color=E.ACCENT),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.33).to_edge(RIGHT, buff=0.35)
+        design = flow_chain([(r"148 traders \\ at a card show", SELL), (r"each given A or B \\ at random", PLAN),
+                             (r"offered the \\ other one", BUY), (r"swap, \\ or keep?", GYM)],
+                            notes=[r"Orlando, \\ 1998", r"A: \ a ticket stub, \\ Ripken's record game; \\ B: \ a "
+                                   r"souvenir of \\ Ryan's 300th win", r"of about the same \\ market value",
+                                   r"no endowment effect: \\ about half swap"],
+                            box_w=2.8, font_size=19, note_size=15).move_to(UP * 0.3)
         tag = data_tag(r"List (2003), \ via the R package AER; \ shares computed here", corner=DR, font_size=11)
         with self.voiceover(
             f"At a trading-card show in Orlando, Florida, in 1998, List gave each of {L['n']} traders one of two "
@@ -142,9 +148,12 @@ class Reference(VoiceoverScene):
             "least for goods they handle often. Whether it does the same for a pension, chosen once in a lifetime, "
             "is another question."
         ) as vo:
-            self.play(FadeIn(ax), FadeIn(tag), FadeIn(side[0]), run_time=1.0)
+            self.play(FadeIn(tag), FadeIn(design.boxes[0]), FadeIn(design.notes[0]), run_time=1.0)
+            self.play(LaggedStart(*[AnimationGroup(GrowArrow(a_), FadeIn(b_), FadeIn(n_)) for a_, b_, n_ in
+                                    zip(design.arrows, design.boxes[1:], design.notes[1:])], lag_ratio=0.8),
+                      run_time=6.0)
             vo.wait_until("a")
-            self.play(FadeIn(half))
+            self.play(FadeOut(design), FadeIn(ax), FadeIn(side[0]), FadeIn(half))
             vo.wait_until("b")
             self.play(FadeIn(side[1]))
             vo.wait_until("c")

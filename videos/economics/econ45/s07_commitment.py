@@ -39,7 +39,7 @@ class Commitment(VoiceoverScene):
     def seed(self):
         steps = flow_chain([(r"a rural bank's \\ clients", GYM),
                             (r"some offered the \\ locked account, \\ at random", SOPH),
-                            (r"a minority take it", PLAN), (r"savings a year \\ later", GAIN)],
+                            (r"28\% take it", PLAN), (r"savings a year \\ later", GAIN)],
                            notes=[r"Mindanao, \\ the Philippines",
                                   r"no extra interest; \\ money locked until \\ a date or an amount",
                                   r"more often those whose \\ survey answers showed \\ a reversal",
