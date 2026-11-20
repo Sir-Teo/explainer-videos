@@ -2240,6 +2240,105 @@ PART35 = (SAMUELSON_ULAM, RICARDO_1817, BERNHOFEN_BROWN_2004, BERNHOFEN_BROWN_20
           TREFLER_1995, IRWIN_SMOOT_HAWLEY, ACR_2012, GOLDBERG_MAGGI_1999, COSTINOT_DONALDSON_2012, TAA)
 
 
+# ---------------------------------------------------------------------------
+# Part 36
+# ---------------------------------------------------------------------------
+IDEAL_X = Table(
+    key="ideal_x",
+    cite="Port Authority of New York and New Jersey; J.-P. Rodrigue, The Geography of Transport Systems, \"The First "
+         "Containership, Ideal-X, 1956\"; M. Levinson, The Box (Princeton, 2006)",
+    tag="Rodrigue, \\emph{The Geography of Transport Systems}; \\ Levinson, \\emph{The Box} (2006)",
+    where="the voyage of 26 April 1956 from Port Newark to Houston with 58 trailers; McLean's estimate of loading "
+          "costs, $5.83 a ton by hand against under 16 cents in containers",
+    read="the cited web accounts, which agree; The Box was not read",
+    checked="2026-11-20",
+    data={"date": "26 April 1956", "trailers": 58, "hand": 5.83, "box": 0.16},
+)
+BERNARD_JENSEN_1995 = Table(
+    key="bernard_jensen_1995",
+    cite="A. B. Bernard and J. B. Jensen, \"Exporters, Jobs, and Wages in U.S. Manufacturing: 1976-1987\", Brookings "
+         "Papers on Economic Activity: Microeconomics (1995), 67-119",
+    tag="Bernard and Jensen, \\emph{BPEA Micro} (1995)",
+    where="the abstract: exporting plants were 10.4% of manufacturing plants in 1976 and 14.6% in 1987, with over half "
+          "of shipments",
+    read="the paper as summarized in its abstract",
+    checked="2026-11-20",
+    data={"share_1976": 10.4, "share_1987": 14.6, "shipments": 50},
+)
+ADH_2013 = Table(
+    key="adh_2013",
+    cite="D. H. Autor, D. Dorn and G. H. Hanson, \"The China Syndrome: Local Labor Market Effects of Import Competition "
+         "in the United States\", American Economic Review 103(6): 2121-2168 (2013); NBER Working Paper 18054",
+    tag="Autor, \\ Dorn and Hanson, \\emph{AER} 103(6) (2013)",
+    where="the abstract (one-quarter of the decline in manufacturing employment), table 3, column 6 (-0.596 per $1,000 "
+          "per worker over a decade, 2SLS; OLS -0.171), and the text on exposure ($1,140 in 1990-2000, $1,839 in "
+          "2000-07; implied falls of 0.68 and 1.10 points against actual falls of 2.07 and 2.00)",
+    read="NBER Working Paper 18054 (2012)",
+    checked="2026-11-20",
+    data={"beta": -0.596, "ols": -0.171, "ols_lag": -0.273, "exposure_90s": 1140, "exposure_00s": 1839,
+          "implied_90s": 0.68, "implied_00s": 1.10, "actual_90s": 2.07, "actual_00s": 2.00, "share": 0.25},
+)
+FAJGELBAUM_2020 = Table(
+    key="fajgelbaum_2020",
+    cite="P. D. Fajgelbaum, P. K. Goldberg, P. J. Kennedy and A. K. Khandelwal, \"The Return to Protectionism\", "
+         "Quarterly Journal of Economics 135(1): 1-55 (2020); M. Amiti, S. J. Redding and D. E. Weinstein, \"The "
+         "Impact of the 2018 Tariffs on Prices and Welfare\", Journal of Economic Perspectives 33(4): 187-210 (2019)",
+    tag="Fajgelbaum et al., \\emph{QJE} 135(1) (2020); \\ Amiti, \\ Redding and Weinstein, \\emph{JEP} 33(4) (2019)",
+    where="the abstracts: import prices did not fall (complete pass-through); losses to buyers of imports $51 billion "
+          "(0.27% of GDP); the aggregate real income loss net of revenue and producer gains $7.2 billion (0.04%)",
+    read="the published abstracts",
+    checked="2026-11-20",
+    data={"buyers_loss": 51e9, "buyers_share": 0.27, "net_loss": 7.2e9, "net_share": 0.04, "passthrough": 1.0},
+)
+BOEHM_2023 = Table(
+    key="boehm_2023",
+    cite="C. E. Boehm, A. A. Levchenko and N. Pandalai-Nayar, \"The Long and Short (Run) of Trade Elasticities\", "
+         "American Economic Review 113(4): 861-905 (2023)",
+    tag="Boehm, \\ Levchenko and Pandalai-Nayar, \\emph{AER} 113(4) (2023)",
+    where="the abstract: -0.76 in the short run, about -2 in the long run, seven to ten years to converge",
+    read="the published abstract and the NBER working paper's",
+    checked="2026-11-20",
+    data={"short": 0.76, "long": 2.0, "years": (7, 10)},
+)
+KRUGMAN_1995 = Table(
+    key="krugman_1995",
+    cite="P. R. Krugman, \"Growing World Trade: Causes and Consequences\", Brookings Papers on Economic Activity 1995(1): "
+         "327-377; P. R. Krugman, \"Trade and Wages, Reconsidered\", Brookings Papers on Economic Activity 2008(1)",
+    tag="Krugman, \\emph{BPEA} (1995, 2008)",
+    where="the 1995 estimate that trade with developing countries raised the skilled-unskilled wage ratio by about 3 "
+          "percentage points, as tabulated in the 2008 paper beside Lawrence (3), Cline (7) and Borjas, Freeman and "
+          "Katz (1.4)",
+    read="the 2008 paper's table as reported; the 1995 paper's opening",
+    checked="2026-11-20",
+    data={"krugman": 3, "lawrence": 3, "cline": 7, "bfk": 1.4},
+)
+XING_DETERT_2010 = Table(
+    key="xing_detert_2010",
+    cite="Y. Xing and N. Detert, \"How the iPhone Widens the United States Trade Deficit with the People's Republic of "
+         "China\", ADBI Working Paper 257 (December 2010)",
+    tag="Xing and Detert, \\ ADBI WP 257 (2010)",
+    where="the abstract and summaries: the iPhone added $1.9 billion to the 2009 US deficit with China; China's value "
+          "added was $6.50 per iPhone 3G; in value added, the trade would show a US surplus of $48 million",
+    read="the abstract and the authors' later summaries",
+    checked="2026-11-20",
+    data={"deficit": 1.9e9, "china_va": 6.50, "va_surplus": 48e6, "year": 2009},
+)
+MCCALLUM_1995 = Table(
+    key="mccallum_1995",
+    cite="J. McCallum, \"National Borders Matter: Canada-U.S. Regional Trade Patterns\", American Economic Review "
+         "85(3): 615-623 (1995); J. E. Anderson and E. van Wincoop, \"Gravity with Gravitas\", American Economic "
+         "Review 93(1): 170-192 (2003)",
+    tag="McCallum, \\emph{AER} 85(3) (1995); \\ Anderson and van Wincoop, \\emph{AER} 93(1) (2003)",
+    where="McCallum: trade between Canadian provinces about 22 times trade with US states of the same size and distance "
+          "(1988); Anderson and van Wincoop: a much smaller border effect once multilateral resistance is included",
+    read="the papers as summarized",
+    checked="2026-11-20",
+    data={"factor": 22, "year": 1988},
+)
+PART36 = (IDEAL_X, BERNARD_JENSEN_1995, ADH_2013, FAJGELBAUM_2020, BOEHM_2023, KRUGMAN_1995, XING_DETERT_2010,
+          MCCALLUM_1995)
+
+
 PART7 = (BERNOULLI_1738, SAMUELSON_1937, ALLAIS_1953, ELLSBERG_1961, RABIN_2000, THALER_1981, HOLT_LAURY_2005,
          HAYDEN_PLATT_2009, MADRIAN_SHEA_2001, THALER_BENARTZI_2004, BARSKY_1997, POST_2008, MEHRA_PRESCOTT_1985)
-ALL = {t.key: t for t in (*PART1, *PART3, *PART4, *PART5, *PART6, *PART7, *PART8, *PART9, *PART10, *PART11, *PART12, *PART13, *PART14, *PART15, *PART16, *PART17, *PART18, *PART19, *PART21, *PART22, *PART25, *PART26, *PART35)}
+ALL = {t.key: t for t in (*PART1, *PART3, *PART4, *PART5, *PART6, *PART7, *PART8, *PART9, *PART10, *PART11, *PART12, *PART13, *PART14, *PART15, *PART16, *PART17, *PART18, *PART19, *PART21, *PART22, *PART25, *PART26, *PART35, *PART36)}

@@ -136,12 +136,12 @@ class PlayIt(VoiceoverScene):
             f"again; the Archipelago the same fish and a third more cloth: gains of {100 * Ic['gain']:.0f} and "
             f"{100 * Ac['gain']:.0f} percent, for both, from the same hours of work."
         ) as vo:
-            self.play(FadeIn(opp[0]), FadeIn(tag))
+            self.play(FadeIn(opp[0]), FadeIn(tag), FadeIn(axI), FadeIn(axA), FadeIn(tI), FadeIn(tA))
+            self.play(Create(fI), Create(fA), run_time=1.5)
             vo.wait_until("a")
             self.play(FadeIn(opp[1]))
             vo.wait_until("b")
-            self.play(FadeIn(axI), FadeIn(axA), FadeIn(tI), FadeIn(tA), Create(fI), Create(fA), FadeIn(autI),
-                      FadeIn(autA), run_time=1.5)
+            self.play(FadeIn(autI), FadeIn(autA))
             vo.wait_until("c")
             self.play(FadeIn(verdict), Create(tlI), Create(tlA))
             vo.wait_until("d")
