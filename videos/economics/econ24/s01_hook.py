@@ -98,9 +98,9 @@ class Hook(VoiceoverScene):
             "frictionless market of Part two's kind, one of those numbers would be zero: the price would clear the "
             "market. Here both are large at once, every month."
         ) as vo:
-            self.play(FadeIn(tag))
+            self.play(FadeIn(tag), FadeIn(left, shift=UP * 0.1))
             vo.wait_until("a")
-            self.play(FadeIn(left, shift=UP * 0.1))
+            self.play(Indicate(left[1], color=WHITE))
             vo.wait_until("b")
             self.play(FadeIn(right, shift=UP * 0.1))
             vo.wait_until("c")

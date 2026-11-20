@@ -41,9 +41,9 @@ class Flows(VoiceoverScene):
             "<bookmark mark='e'/> In April 2020, separations jumped to "
             f"{j['apr2020_seps'] / 1000:.1f} million in a single month."
         ) as vo:
-            self.play(FadeIn(ax), FadeIn(tag), run_time=1.0)
+            self.play(FadeIn(ax), FadeIn(tag), Create(hires), run_time=2.0)
             vo.wait_until("a")
-            self.play(Create(hires), FadeIn(side[0]), run_time=2)
+            self.play(FadeIn(side[0]), Indicate(hires, color=WHITE))
             vo.wait_until("b")
             self.play(Create(seps), FadeIn(side[1]), run_time=2)
             vo.wait_until("c")

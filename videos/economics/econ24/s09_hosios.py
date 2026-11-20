@@ -69,9 +69,9 @@ class Hosios(VoiceoverScene):
             "efficient exactly when workers' share of the surplus equals their share in producing matches. "
             "Nothing guarantees that bargaining delivers it."
         ) as vo:
-            self.play(FadeIn(ax), FadeIn(tag), FadeIn(side[0]), run_time=0.8)
+            self.play(FadeIn(ax), FadeIn(tag), FadeIn(side[0]), Create(line_), run_time=2)
             vo.wait_until("a")
-            self.play(Create(line_), run_time=2)
+            self.play(Indicate(line_, color=WHITE))
             vo.wait_until("b")
             self.play(GrowFromCenter(peak), FadeIn(side[1]))
             vo.wait_until("c")

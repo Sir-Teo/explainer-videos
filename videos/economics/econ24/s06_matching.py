@@ -128,9 +128,9 @@ class Matching(VoiceoverScene):
             "2001: constant returns hold up well, and the elasticity on unemployment is usually between a half "
             "and seven-tenths. That number is a dial in chapter thirteen."
         ) as vo:
-            self.play(FadeIn(ax), FadeIn(tag), run_time=0.8)
+            self.play(FadeIn(ax), FadeIn(tag), LaggedStart(*[FadeIn(p_) for p_ in pts], lag_ratio=0.02), run_time=2)
             vo.wait_until("a")
-            self.play(LaggedStart(*[FadeIn(p_) for p_ in pts], lag_ratio=0.02), FadeIn(side[0]), run_time=2)
+            self.play(FadeIn(side[0]))
             vo.wait_until("b")
             self.play(Create(fit), FadeIn(side[1]))
             vo.wait_until("c")

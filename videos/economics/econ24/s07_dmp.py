@@ -42,9 +42,9 @@ class DMP(VoiceoverScene):
             "c over q, the cost per month times the expected months to fill it, equals the value of the worker "
             "hired. That is the job-creation condition."
         ) as vo:
-            self.play(FadeIn(rows[0]), FadeIn(tag))
+            self.play(FadeIn(rows[0]), FadeIn(rows[1]), FadeIn(tag))
             vo.wait_until("a")
-            self.play(FadeIn(rows[1]))
+            self.play(Indicate(rows[1], color=WHITE, scale_factor=1.03))
             vo.wait_until("b")
             self.play(FadeIn(rows[2]), FadeIn(rows[3]))
             vo.wait_until("c")
@@ -85,9 +85,9 @@ class DMP(VoiceoverScene):
             "parameters: benefits worth four-tenths of output, a three percent chance each month that a job ends, "
             "and the cost of keeping a vacancy open."
         ) as vo:
-            self.play(FadeIn(ax), FadeIn(tag), run_time=0.8)
+            self.play(FadeIn(ax), FadeIn(tag), Create(jc), run_time=1.5)
             vo.wait_until("a")
-            self.play(Create(jc), FadeIn(side[0]))
+            self.play(FadeIn(side[0]), Indicate(jc, color=WHITE))
             vo.wait_until("b")
             self.play(Create(wc), FadeIn(side[1]))
             vo.wait_until("c")
@@ -128,9 +128,9 @@ class DMP(VoiceoverScene):
             f"{100 * st['q']:.0f} percent chance of being filled. That answers the part's question, in one model: "
             "both exist at once because finding each other takes time."
         ) as vo:
-            self.play(FadeIn(ax), FadeIn(tag), run_time=0.8)
+            self.play(FadeIn(ax), FadeIn(tag), Create(bc), run_time=1.5)
             vo.wait_until("a")
-            self.play(Create(bc), FadeIn(side[0]))
+            self.play(FadeIn(side[0]), Indicate(bc, color=WHITE))
             vo.wait_until("b")
             self.play(Create(ray), FadeIn(side[1]))
             vo.wait_until("c")
@@ -167,9 +167,9 @@ class DMP(VoiceoverScene):
             "In a real recession, American unemployment rises by several points. Hold on to that; it is chapter "
             "nine's puzzle."
         ) as vo:
-            self.play(FadeIn(ax), FadeIn(tag), Create(pre), run_time=1.0)
+            self.play(FadeIn(ax), FadeIn(tag), Create(pre), FadeIn(new), run_time=1.0)
             vo.wait_until("a")
-            self.play(FadeIn(side[0]), FadeIn(new))
+            self.play(FadeIn(side[0]))
             vo.wait_until("b")
             self.play(Create(line_), FadeIn(side[1]), run_time=2)
             vo.wait_until("c")

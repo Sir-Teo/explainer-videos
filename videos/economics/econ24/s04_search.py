@@ -143,11 +143,11 @@ class Search(VoiceoverScene):
             "distribution. <bookmark mark='c'/> So unemployment insurance has a cost, in longer spells, as well as "
             "a benefit, in better matches and in protecting people who lose their jobs. How big is the cost?"
         ) as vo:
-            self.play(FadeIn(ax1), FadeIn(ax2), FadeIn(tag), run_time=0.8)
+            self.play(FadeIn(ax1), FadeIn(tag), Create(c1), FadeIn(here1), run_time=1.5)
             vo.wait_until("a")
-            self.play(Create(c1), FadeIn(here1), FadeIn(l1), run_time=1.5)
+            self.play(FadeIn(l1))
             vo.wait_until("b")
-            self.play(Create(c2), FadeIn(here2), FadeIn(l2), run_time=1.5)
+            self.play(FadeIn(ax2), Create(c2), FadeIn(here2), FadeIn(l2), run_time=1.5)
             vo.wait_until("c")
             self.play(Indicate(l1), Indicate(l2))
         self.clear_scene()

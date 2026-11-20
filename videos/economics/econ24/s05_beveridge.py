@@ -34,6 +34,8 @@ class Beveridge(VoiceoverScene):
         last_l = label(rf"{b['last'][:7]}", font_size=17, color=WHITE).next_to(last, RIGHT, buff=0.12)
         tag = data_tag(r"BLS: \ JOLTS openings and the CPS, \ via FRED; \ openings rate $= $ openings $\div$ "
                        r"(employment $+$ openings)", corner=DR, font_size=12)
+        quote = label(r"Beveridge, \ 1944: \ full employment means \\ more vacant jobs than unemployed people",
+                      font_size=20, color=GREY_A).move_to(ax.ax.c2p(11.3, 6.6))
         with self.voiceover(
             "In 1944 William Beveridge, the architect of Britain's welfare state, defined full employment as having "
             "more vacant jobs than unemployed people. Plot the two against each other. Along the bottom, the "
@@ -47,7 +49,7 @@ class Beveridge(VoiceoverScene):
             f"below four percent. <bookmark mark='e'/> The latest point, {b['last'][:7]}: unemployment "
             f"{b['last_u']:.1f} percent, openings {b['last_v']:.1f}."
         ) as vo:
-            self.play(FadeIn(ax), FadeIn(tag), run_time=0.8)
+            self.play(FadeIn(ax), FadeIn(tag), FadeIn(quote), run_time=0.8)
             for mk, sg, sd in zip("abcd", segs, side):
                 vo.wait_until(mk)
                 self.play(Create(sg[0]), FadeIn(sg[1:]), FadeIn(sd), run_time=2.5)
