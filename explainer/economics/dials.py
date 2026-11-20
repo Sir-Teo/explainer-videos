@@ -579,7 +579,25 @@ DIALS = {d.key: d for d in [
                       "natural rate on real GDP against the CBO's potential (R-squared 0.78)", -0.62,
                       where="videos/economics/econ27/compute.py, item okun", checked="2026-11-20"),
          )),
-    Dial("price_frequency", "frequency of price changes", "share of prices changing per month", (30,)),
+    Dial("price_frequency", "frequency of price changes", "share of consumer prices changing in a month", (30, 31),
+         status="settled within a range", checked="2026-11-20",
+         meaning="how often prices change sets how slowly the price level follows money, and so how much a change in "
+                 "money or interest rates moves output; American consumer prices change at a rate of about one in "
+                 "five a month counting temporary sales and about one in ten without them, and whether sales matter "
+                 "for money is itself argued (they appear to matter less than their number)",
+         estimates=(
+             Estimate("Bils and Klenow", 2004, "reconstruction", "BLS micro data, 350 categories, 1995-97: implied by "
+                      "the median duration of 4.3 months", 0.208, where="JPE 112(5): 947-985", checked="2026-11-20"),
+             Estimate("Nakamura and Steinsson", 2008, "reconstruction", "BLS micro data: all price changes, sales "
+                      "included", 0.195, lo=0.19, hi=0.20, where="QJE 123(4): 1415-1464, abstract",
+                      checked="2026-11-20"),
+             Estimate("Nakamura and Steinsson", 2008, "reconstruction", "the same data, regular prices (sales "
+                      "excluded)", 0.105, lo=0.09, hi=0.12, where="QJE 123(4): 1415-1464, abstract",
+                      checked="2026-11-20"),
+             Estimate("this film (Agora)", 2026, "calibration", "the Island's Calvo pricing (prices last three "
+                      "quarters on average), per month", 0.126,
+                      where="videos/economics/econ30/compute.py, item calvo", checked="2026-11-20"),
+         )),
     Dial("phillips_slope", "slope of the Phillips curve", "percentage points of inflation (or of its change) per "
          "point of unemployment; negative", (28, 30), status="contested", checked="2026-11-20",
          meaning="the trade-off looked steep in the 1960s and has looked flat since the 1990s: a point of unemployment "
@@ -1388,6 +1406,26 @@ SHOWN = {
          "data"),
         ("Beaudry and Portier (2006); Bloom (2009)", "news and uncertainty shocks, stated"),
         ("Leamer (2007)", "housing leads the cycle: Play it's average paths are FRED's data"),
+    ],
+    30: [
+        ("Bils and Klenow (2004); Nakamura and Steinsson (2008)", "the frequency of price changes, stated and dialled"),
+        ("Cecchetti (1986); Blinder, Canetti, Lebow and Rudd (1998)", "magazine prices and the survey of firms, "
+         "stated"),
+        ("Bryan and Meyer (2010)", "the sticky- and flexible-price CPIs: the Atlanta Fed's series via FRED"),
+        ("Mankiw (1985); Akerlof and Yellen (1985)", "menu costs, computed for the Island's ferry"),
+        ("Calvo (1983); Gali (2015); Woodford (2003)", "the New Keynesian model, derived and solved in Agora "
+         "(agora.nk)"),
+        ("Taylor (1993)", "the rule, computed on FRED's data and fitted for 1987-2005"),
+        ("Clarida, Gali and Gertler (1999, 2000)", "determinacy, discretion and commitment, computed; the pre- and "
+         "post-1979 estimates stated"),
+        ("Blanchard and Gali (2007)", "the divine coincidence, computed"),
+        ("Golosov and Lucas (2007); Caplin and Spulber (1987)", "the selection effect, simulated with 20,000 price "
+         "setters"),
+        ("Eggertsson and Woodford (2003); Del Negro, Giannoni and Patterson (2012); McKay, Nakamura and Steinsson "
+         "(2016); Gabaix (2020)", "the zero bound and the forward-guidance puzzle, computed; the repairs stated"),
+        ("Christiano, Eichenbaum and Evans (2005); Smets and Wouters (2007)", "medium-scale frictions; the hump "
+         "computed with habits, indexation and smoothing"),
+        ("Bernanke (2002)", "the Called it? card on deflation"),
     ],
 }
 

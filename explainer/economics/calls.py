@@ -206,6 +206,21 @@ CALLS = {c.key: c for c in [
          ("Board of Governors of the Federal Reserve System, press conference and Summary of Economic Projections, "
           "16 June 2021",
           "BEA: the PCE price index, via FRED")),
+    Call("bernanke_2002", 30, "Ben Bernanke, a governor of the Federal Reserve, before the National Economists Club",
+         "November 2002", "the Federal Reserve, with other parts of the government, has sufficient policy instruments "
+                          "to ensure that any deflation that might occur in the United States would be both mild and "
+                          "brief",
+         "even with its interest rate at zero, a central bank can buy longer-term assets, lend widely and, with the "
+         "fiscal authorities, put more money into circulation: under paper money, a determined government can "
+         "always raise spending",
+         "after the federal funds rate reached zero in December 2008 it stayed there for seven years; consumer prices "
+         "fell over twelve months in 14 months between 2008 and 2015, by at most 2.0 percent (July 2009, with oil), "
+         "while core PCE inflation never went below 0.6 percent; but it averaged 1.5 percent over 2009-2019, below the "
+         "2 percent target the Fed adopted in 2012",
+         "right",
+         ("B. S. Bernanke, \"Deflation: Making Sure 'It' Doesn't Happen Here\", remarks before the National Economists "
+          "Club, Washington, D.C., 21 November 2002",
+          "BLS: the CPI; BEA: the core PCE price index; Federal Reserve: the federal funds rate; via FRED")),
     Call("prescott_75", 29, "Edward Prescott, in the Federal Reserve Bank of Minneapolis's Quarterly Review",
          "Fall 1986", "technology shocks account for more than half of America's postwar fluctuations, with a best "
                       "estimate near 75 percent; in the theory, an improvement in technology raises output, investment "

@@ -119,6 +119,14 @@ AGORA = {
                                     "across 89 countries, 1960-2019, holding investment, population growth and "
                                     "schooling fixed, the gap closes at about 1.3% a year, and with no controls not at "
                                     "all"),
+    # Part 30 built sticky prices
+    "sticky_prices": (30, "with Calvo pricing calibrated so that prices last three quarters on average (13% change "
+                          "each month), the Island's prices follow a rise in money slowly: half has passed through "
+                          "after 7 months; with menu costs and the same frequency, after 1, because the firms that "
+                          "reprice are those furthest from their best price"),
+    "hump": (30, "in the three-equation model a monetary tightening cuts output most at once; with habits (0.9), "
+                 "price indexation (0.9) and a smoothed rule (0.8) the trough comes two quarters after the shock, still "
+                 "sooner than in the data"),
     # Part 29 measured the US cycle (1948-2019) and simulated the real business cycle model
     "volatility": (29, "in a growth model with random technology, consumption smoothing and capital's long life make "
                        "investment swing and consumption hold steady: in the Island's real business cycle investment is "

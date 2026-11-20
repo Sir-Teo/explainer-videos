@@ -66,8 +66,8 @@ def _params(**kw) -> dict:
 
 
 def determinacy(phi_pi: float, phi_x: float, beta: float = 0.99, sigma: float = 1.0, kap: float = 0.1275) -> dict:
-    """With ``E z' = M z`` for ``z = (x, pi)`` under the rule ``i = phi_pi pi + phi_x x``, the equilibrium is unique when
-    both roots of ``M`` lie outside the unit circle (both variables jump).  Also the analytical condition
+    """With ``E z' = M z`` for ``z = (x, pi)`` under the rule ``i = phi_pi pi + phi_x x``, the equilibrium is unique
+    when both roots of ``M`` lie outside the unit circle (both variables jump).  Also the analytical condition
     ``kappa (phi_pi - 1) + (1 - beta) phi_x > 0``."""
     M = np.array([[1 + phi_x / sigma + kap / (sigma * beta), (phi_pi - 1 / beta) / sigma],
                   [-kap / beta, 1 / beta]])
@@ -158,8 +158,9 @@ def hybrid_irf(habit: float = 0.0, index: float = 0.0, smooth: float = 0.0, rho_
 # --- optimal policy (Clarida, Gali and Gertler 1999) --------------------------------------------------------------
 def optimal_policy(rho_u: float = 0.5, size: float = 1.0, periods: int = 12, **kw) -> dict:
     """A cost-push shock ``u`` of ``size`` annualized points with persistence ``rho_u``; the loss is
-    ``pi^2 + (kappa/eps) x^2``.  Discretion: ``x = -(eps) pi`` with ``pi`` proportional to ``u``.  Commitment (timeless):
-    ``x_t - x_{t-1} = -eps pi_t``, so the price level returns to where it started.  Returns paths and the two losses."""
+    ``pi^2 + (kappa/eps) x^2``.  Discretion: ``x = -(eps) pi`` with ``pi`` proportional to ``u``.  Commitment
+    (timeless): ``x_t - x_{t-1} = -eps pi_t``, so the price level returns to where it started.  Returns paths and the
+    two losses."""
     p = _params(**kw)
     b, k, eps = p["beta"], p["kappa"], p["eps"]
     w = k / eps                                     # weight on the output gap in the loss

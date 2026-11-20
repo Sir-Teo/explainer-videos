@@ -776,6 +776,21 @@ brackets on screen.
 | a long-run restriction; a structural VAR; business cycle accounting; the labour wedge | 长期约束；结构向量自回归；经济周期核算；劳动楔子 |
 | news shocks; uncertainty shocks | 新闻冲击；不确定性冲击 |
 
+## Part 30
+
+| English | 中文 |
+|---|---|
+| sticky prices; flexible prices; the frequency of price changes | 价格粘性；弹性价格；价格调整频率 |
+| menu costs; near rationality; the desired markup | 菜单成本；近似理性；意愿加成 |
+| Calvo pricing; the reset price; the New Keynesian Phillips curve | 卡尔沃定价；重设价格；新凯恩斯菲利普斯曲线 |
+| the dynamic IS curve; the natural rate of interest | 动态IS曲线；自然利率 |
+| the Taylor rule; the Taylor principle; determinacy | 泰勒规则；泰勒原则；均衡唯一性（确定性） |
+| the divine coincidence; a cost-push shock | 神圣巧合；成本推动冲击 |
+| discretion; commitment; price-level targeting | 相机抉择；承诺；价格水平目标制 |
+| state-dependent pricing; the selection effect | 状态依存定价；选择效应 |
+| the zero lower bound; forward guidance; the forward guidance puzzle | 零利率下限；前瞻性指引；前瞻性指引之谜 |
+| habit formation; indexation; interest-rate smoothing; the hump-shaped response | 习惯形成；指数化；利率平滑；驼峰形响应 |
+
 ## Names
 
 | English | 中文 |

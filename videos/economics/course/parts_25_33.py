@@ -232,4 +232,47 @@ PARTS = [
               ("The Island's planted truths", "explainer/economics/island.py"),
               ("The Data Room's sources", "explainer/economics/data/SOURCES.md")),
     ),
+    Part(
+        n=30, level="U", widget="nk", prereq=(10, 12, 22, 28, 29),
+        question="Why does money move the real economy, and what is the best a central bank can do?",
+        story="The part opens on the price collectors behind America's consumer price index and on Bils and "
+              "Klenow, who counted how often each price changes. It asks the viewer how long the median price "
+              "lasts, reviews the evidence (magazines, a survey of firms, the records, sticky and flexible inflation), "
+              "computes Mankiw's menu-cost argument on the Island's ferry, and derives the New Keynesian Phillips "
+              "curve from Calvo pricing and the dynamic IS curve from the Euler equation. It fits Taylor's rule to "
+              "the Greenspan years, draws the Taylor principle, and solves the three equations for three shocks. "
+              "After an intermission of sticky and flexible inflation since 1968, it shows the divine coincidence, "
+              "optimal policy under discretion and commitment, the selection effect with 20,000 simulated firms, the "
+              "zero lower bound and the forward-guidance puzzle, and the frictions of medium-scale models, reads the "
+              "frequency-of-price-changes dial, and scores Bernanke's 2002 promise on deflation.",
+        handoff="Part 31 turns to what central banks actually do and how their effects are measured; Part 52 gives "
+                "the model many households; Part 55 estimates it.",
+        outside="Part 10: monopoly pricing; Part 12: monopolistic competition; Part 22: the Euler equation; Part 28: "
+                "the Phillips curve; Part 29: the saddle path. Chapter 5 sums a geometric series of expectations; "
+                "chapter 8 checks the roots of a 2-by-2 matrix; chapter 10 is a constrained minimization.",
+        objectives={
+            "U": ["Explain why prices are sticky, with the evidence on how often they change and Mankiw's menu-cost "
+                  "argument.",
+                  "Explain the three equations of the New Keynesian model and what each says about firms, "
+                  "households and the central bank.",
+                  "Explain the Taylor principle, the divine coincidence and why the zero lower bound matters."],
+            "M": ["Derive the New Keynesian Phillips curve from Calvo pricing and solve the model for AR(1) shocks.",
+                  "Compare discretion and commitment after a cost-push shock, and compute policy at the zero bound."],
+            "D": ["Weigh the evidence on price stickiness (sales, selection) and the forward-guidance puzzle and its "
+                  "repairs."],
+            "I": ["Use a New Keynesian model for scenarios and alternative policy paths, alongside judgement."],
+        },
+        results=[
+            ("The New Keynesian Phillips curve", r"\pi_t = \beta\,\mathbb{E}_t\pi_{t+1} + \kappa x_t"),
+            ("The dynamic IS curve", r"x_t = \mathbb{E}_t x_{t+1} - \tfrac{1}{\sigma}(i_t - \mathbb{E}_t\pi_{t+1} - "
+                                     r"r^n_t)"),
+            ("Taylor's rule", r"i = 2 + \pi + 0.5(\pi - 2) + 0.5x"),
+            ("The Taylor principle", r"\kappa(\phi_\pi - 1) + (1 - \beta)\phi_x > 0"),
+            ("Mankiw's menu cost", r"\Delta\Pi/\Pi \approx \varepsilon(\varepsilon - 1)g^2/2"),
+        ],
+        U=(0, 1, 2, 3, 4, 6, 7, "s10_intermission", 9), D=(11, 12, 13, 14, 16), I=(15,),
+        also=(("Agora's sticky prices", "explainer/economics/agora/nk.py"),
+              ("The Island's planted truths", "explainer/economics/island.py"),
+              ("The Data Room's sources", "explainer/economics/data/SOURCES.md")),
+    ),
 ]

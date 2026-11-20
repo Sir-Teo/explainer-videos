@@ -369,4 +369,81 @@
             "nothing you do here is stored or sent.",
     });
   };
+
+  // ---- Part 30: the three equations ----------------------------------------------------------------------------
+  W.nk = function (el) {
+    // The three-equation New Keynesian model of Part 30 (explainer.economics.agora.nk: irf_ar1, determinacy), with
+    // Gali's calibration: pi = beta E pi' + kappa x + u; x = E x' - (i - E pi' - r^n)/sigma; i = phi_pi pi + phi_x x
+    // + v.  AR(1) shocks with persistence 0.5, solved by undetermined coefficients.  The reader sets the central
+    // bank's response to inflation, how sticky prices are, and which shock hits.
+    var BETA = 0.99, SIGMA = 1, PHI = 1, ALPHA = 1 / 3, EPS = 6, PHIX = 0.125, RHO = 0.5, Q = 12;
+    function kappa(theta) {
+      var lam = (1 - theta) * (1 - BETA * theta) / theta * (1 - ALPHA) / (1 - ALPHA + ALPHA * EPS);
+      return lam * (SIGMA + (PHI + ALPHA) / (1 - ALPHA));
+    }
+    function solve(fp, theta, shock) {
+      var k = kappa(theta);
+      var a11 = 1 - RHO + PHIX / SIGMA, a12 = (fp - RHO) / SIGMA, a21 = -k, a22 = 1 - BETA * RHO;
+      var b = shock === 1 ? [-1 / SIGMA, 0] : (shock === 2 ? [1 / SIGMA, 0] : [0, 1]);
+      var det = a11 * a22 - a12 * a21;
+      var px = (b[0] * a22 - a12 * b[1]) / det, pp = (a11 * b[1] - a21 * b[0]) / det;
+      var x = [], pi = [], i = [], q = [];
+      for (var t = 0; t < Q; t++) {
+        var s = 0.25 * Math.pow(RHO, t);
+        q.push(t); x.push(px * s); pi.push(4 * pp * s);
+        i.push(4 * (fp * pp * s + PHIX * px * s + (shock === 1 ? s : 0)));
+      }
+      var unique = k * (fp - 1) + (1 - BETA) * PHIX > 0;
+      return { q: q, x: x, pi: pi, i: i, kappa: k, unique: unique };
+    }
+    QB.widget(el, {
+      title: "Run the three equations",
+      sub: "You set the central bank's response to inflation and how long prices last, and choose a shock: 1, a " +
+           "monetary tightening; 2, a rise in demand; 3, a cost-push shock (each one point a year, fading by half " +
+           "each quarter). Left: the output gap. Right: inflation and the policy rate, at annual rates. What happens " +
+           "when the response to inflation falls below one?",
+      panels: 2, height: 280,
+      controls: [
+        { k: "fp", label: "Response to inflation, phi_pi", min: 0.5, max: 3, step: 0.05, value: 1.5,
+          fmt: function (x) { return x.toFixed(2); } },
+        { k: "theta", label: "Chance a price survives a quarter, theta", min: 0.3, max: 0.9, step: 0.01,
+          value: 0.67, fmt: function (x) { return x.toFixed(2) + " (" + (3 / (1 - x)).toFixed(1) + " months)"; } },
+        { k: "shock", label: "Shock: 1 monetary, 2 demand, 3 cost-push", min: 1, max: 3, step: 1, value: 1,
+          fmt: function (x) { return ["", "monetary", "demand", "cost-push"][Math.round(x)]; } },
+      ],
+      draw: function (g, v, st) {
+        var r = solve(v.fp, v.theta, Math.round(v.shock));
+        var lo = Math.min(-0.5, Math.min.apply(null, r.x)), hi = Math.max(0.5, Math.max.apply(null, r.x));
+        var a1 = g[0].axes({ x: [0, Q - 1], y: [lo, hi], title: "Output gap, %", xlabel: "quarters" });
+        a1.hline(0, { color: GREY_HINT });
+        if (r.unique) a1.line(r.q, r.x, { color: GREEN, width: 2.5 });
+        var all = r.pi.concat(r.i);
+        var lo2 = Math.min(-0.5, Math.min.apply(null, all)), hi2 = Math.max(0.5, Math.max.apply(null, all));
+        var a2 = g[1].axes({ x: [0, Q - 1], y: [lo2, hi2], title: "Inflation and the policy rate, % a year",
+                             xlabel: "quarters" });
+        a2.hline(0, { color: GREY_HINT });
+        if (r.unique) {
+          a2.line(r.q, r.pi, { color: RED, width: 2.5 });
+          a2.line(r.q, r.i, { color: GOLD, width: 2 });
+        }
+        st.r = r;
+      },
+      readout: function (v, st) {
+        var r = st.r;
+        if (!r.unique) {
+          return [["kappa, the Phillips curve's slope", r.kappa.toFixed(3)],
+                  ["verdict", "no unique equilibrium: with the rate rising less than inflation, any inflation people " +
+                    "expect can come true (the Taylor principle fails)"]];
+        }
+        return [["kappa, the Phillips curve's slope", r.kappa.toFixed(3)],
+                ["on impact", "gap " + r.x[0].toFixed(2) + "%, inflation " + r.pi[0].toFixed(2) + ", policy rate " +
+                  r.i[0].toFixed(2)],
+                ["verdict", Math.round(v.shock) === 3 ? "a cost-push shock moves output and inflation apart: the " +
+                  "central bank must choose" : "output and inflation move together: stickier prices mean more " +
+                  "output and less inflation"]];
+      },
+      note: "Gali's calibration (2015, ch. 3): beta 0.99, sigma 1, phi 1, alpha 1/3, epsilon 6, phi_x 0.125. " +
+            "Part 30, chapters 5-9. Computed in your browser; nothing you do here is stored or sent.",
+    });
+  };
 })();

@@ -10,7 +10,7 @@ the series leaves out.
 Both *Parts* columns are found, not typed. *Planned* lists the parts whose entry in
 [`SYLLABUS.md`](SYLLABUS.md) names the book or paper; *Built* lists the parts whose scenes, compute step or
 README cite it (a dot: none yet). Fuller notes (editions, chapters, what each source was used for) are in each
-part's README, under *Sources*. Built so far: Parts 1–29.
+part's README, under *Sources*. Built so far: Parts 1–30.
 
 ## 1. The textbook spine
 
@@ -18,10 +18,10 @@ part's README, under *Sources*. Built so far: Parts 1–29.
 
 | Short name | Book | Planned | Built |
 |---|---|---|---|
-| Mankiw | N. G. Mankiw, *Principles of Economics* (10th ed., 2024) | 1–2 | 1–3, 20, 22, 28 |
+| Mankiw | N. G. Mankiw, *Principles of Economics* (10th ed., 2024) | 1–2 | 1–3, 20, 22, 28, 30 |
 | Krugman–Wells | P. Krugman and R. Wells, *Economics* (6th ed., 2021) | 2 | 2 |
 | Acemoglu–Laibson–List | D. Acemoglu, D. Laibson and J. List, *Economics* (3rd ed., 2022) | 4 | 4 |
-| CORE | The CORE Team, *The Economy* (2017; 2.0, 2023) | 1 | 1, 9 |
+| CORE | The CORE Team, *The Economy* (2017; 2.0, 2023) | 1 | 1, 9, 30 |
 | Heilbroner | R. Heilbroner, *The Worldly Philosophers* (7th ed., 1999) | 1 | 1 |
 
 ### The major
@@ -67,9 +67,9 @@ part's README, under *Sources*. Built so far: Parts 1–29.
 | Ljungqvist–Sargent | L. Ljungqvist and T. Sargent, *Recursive Macroeconomic Theory* (4th ed., 2018) | 29, 52, 56 | 22, 24, 29 |
 | SLP | N. Stokey, R. Lucas and E. Prescott, *Recursive Methods in Economic Dynamics* (1989) | 29, 51 | 29 |
 | Acemoglu | D. Acemoglu, *Introduction to Modern Economic Growth* (2009) | 20–21 | · |
-| Galí | J. Galí, *Monetary Policy, Inflation, and the Business Cycle* (2nd ed., 2015) | 30, 56 | 29 |
-| Woodford | M. Woodford, *Interest and Prices* (2003) | 30 | · |
-| Walsh | C. Walsh, *Monetary Theory and Policy* (4th ed., 2017) | 25 | 25 |
+| Galí | J. Galí, *Monetary Policy, Inflation, and the Business Cycle* (2nd ed., 2015) | 30, 56 | 29–30 |
+| Woodford | M. Woodford, *Interest and Prices* (2003) | 30 | 30 |
+| Walsh | C. Walsh, *Monetary Theory and Policy* (4th ed., 2017) | 25 | 25, 30 |
 | Obstfeld–Rogoff | M. Obstfeld and K. Rogoff, *Foundations of International Macroeconomics* (1996) | 34 | · |
 | Pissarides | C. Pissarides, *Equilibrium Unemployment Theory* (2nd ed., 2000) | 24 | 24 |
 | Cochrane | J. Cochrane, *Asset Pricing* (rev. ed., 2005) | 23 | · |
@@ -107,7 +107,7 @@ part's README, under *Sources*. Built so far: Parts 1–29.
 
 | Short name | Book | Planned | Built |
 |---|---|---|---|
-| Blinder | A. Blinder, *Central Banking in Theory and Practice* (1998) | 31 | · |
+| Blinder | A. Blinder, *Central Banking in Theory and Practice* (1998) | 31 | 30 |
 | Boardman | A. Boardman and others, *Cost-Benefit Analysis* (5th ed., 2018) | 50, 58 | · |
 | Davis–Garcés | P. Davis and E. Garces, *Quantitative Techniques for Competition and Antitrust Analysis* (2010) | 59 | · |
 | Talluri–van Ryzin | K. Talluri and G. van Ryzin, *The Theory and Practice of Revenue Management* (2004) | 10, 60 | 10 |
@@ -201,7 +201,7 @@ part's README, under *Sources*. Built so far: Parts 1–29.
 | the Lucas critique | Lucas (1976) | 4, 28, 54 | 4, 28 |
 | time inconsistency and rules | Kydland and Prescott (1977) | 28 | 28 |
 | real business cycles | Kydland and Prescott (1982) | 29 | · |
-| staggered prices | Calvo (1983) | 30 | · |
+| staggered prices | Calvo (1983) | 30 | 30 |
 | the Taylor rule | Taylor (1993) | 30 | · |
 | search and unemployment | Diamond (1982); Mortensen and Pissarides (1994) | 24 | 24 |
 | heterogeneous agents | Bewley (1977); Huggett (1993); Aiyagari (1994) | 52, 56 | · |
@@ -313,6 +313,8 @@ part's README, under *Sources*. Built so far: Parts 1–29.
 **Part 28, *Inflation and Expectations*.** Books: David Romer, *Advanced Macroeconomics* (5th ed., 2019), chs. 6 and 12; Thomas Sargent, *The Conquest of American Inflation* (1999); Olivier Blanchard, *Macroeconomics* (8th ed., 2021), chs. 8–9; Robert Lucas, *Studies in Business-Cycle Theory* (1981). Papers: Phillips (1958); Samuelson and Solow (1960); Phelps (1967); Friedman (1968); Muth (1961); Lucas (1972, 1973, 1976); Sargent and Wallace (1975); Kydland and Prescott (1977); Barro and Gordon (1983); Rogoff (1985); Alesina and Summers (1993); Ball (1994); Hazell, Herre\ no, Nakamura and Steinsson (2022); Bernanke and Blanchard (2023); Benigno and Eggertsson (2023); Coibion, Gorodnichenko and Kumar (2018); Weber et al. (2022).
 
 **Part 29, *The Cycle as Equilibrium*.** Books: Nancy Stokey, Robert Lucas and Edward Prescott, *Recursive Methods in Economic Dynamics* (1989), chs. 1–4; Lars Ljungqvist and Thomas Sargent, *Recursive Macroeconomic Theory* (4th ed., 2018), chs. 3–4; David Romer, *Advanced Macroeconomics* (5th ed., 2019), ch. 5; Robert King and Sergio Rebelo, "Resuscitating Real Business Cycles", *Handbook of Macroeconomics* (1999). Papers: Kydland and Prescott (1982); Long and Plosser (1983); Hansen (1985); Rogerson (1988); Prescott (1986); Summers (1986); Brock and Mirman (1972); Blanchard and Kahn (1980); Hodrick and Prescott (1997); Hamilton (2018); Tauchen (1986); Kopecky and Suen (2010); Galí (1999); Christiano, Eichenbaum and Vigfusson (2003); Basu, Fernald and Kimball (2006); Chari, Kehoe and McGrattan (2007); Chetty, Guren, Manoli and Weber (2011).
+
+**Part 30, *Sticky Prices*.** Books: Jordi Galí, *Monetary Policy, Inflation, and the Business Cycle* (2nd ed., 2015), chs. 3–5; Michael Woodford, *Interest and Prices* (2003); David Romer, *Advanced Macroeconomics* (5th ed., 2019), chs. 7 and 12; Carl Walsh, *Monetary Theory and Policy* (4th ed., 2017). Papers: Calvo (1983); Mankiw (1985); Akerlof and Yellen (1985); Taylor (1993); Bils and Klenow (2004); Nakamura and Steinsson (2008); Golosov and Lucas (2007); Clarida, Galí and Gertler (1999, 2000); Blanchard and Galí (2007); Christiano, Eichenbaum and Evans (2005); Smets and Wouters (2007); Eggertsson and Woodford (2003); Del Negro, Giannoni and Patterson (2012); McKay, Nakamura and Steinsson (2016).
 
 ## 4. What the series leaves out
 
