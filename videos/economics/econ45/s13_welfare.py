@@ -21,7 +21,7 @@ class Welfare(VoiceoverScene):
         cap = label(r"what joining the plan is worth to this worker, \ dollars", font_size=18,
                     color=GREY_A).next_to(nums, DOWN, buff=0.2)
         lo, hi = R["lo"], R["hi"]
-        rng_ = Line(nl.n2p(lo), nl.n2p(hi), stroke_width=10, color=HOLD)
+        rng_ = Line(nl.n2p(lo), nl.n2p(hi), stroke_width=10, color=GYM)
         fa = VGroup(Dot(nl.n2p(lo), color=PLAN, radius=0.1),
                     label(rf"frame 1: \ must sign up \\ acts as if worth below \${lo:.0f}", font_size=17,
                           color=PLAN).next_to(nl.n2p(lo), UP, buff=0.35))
@@ -29,7 +29,7 @@ class Welfare(VoiceoverScene):
                     label(rf"frame 2: \ enrolled already \\ acts as if worth above \${hi:.0f}", font_size=17,
                           color=NUDGE).next_to(nl.n2p(hi), UP, buff=0.35))
         verdicts = VGroup()
-        for cost, col in ((20, GAIN), (55, HOLD), (90, LOSS)):
+        for cost, col in ((20, GAIN), (55, GYM), (90, LOSS)):
             v = behave.welfare_range({"a": lo, "b": hi}, cost)["verdict"]
             verdicts.add(VGroup(Triangle(color=col, fill_opacity=1).scale(0.1).rotate(PI).next_to(nl.n2p(cost), UP,
                                                                                                  buff=1.5),

@@ -22,7 +22,7 @@ class Scale(VoiceoverScene):
         bars = VGroup()
         for i, (nm, v, col, sub) in enumerate(rows):
             y = 0.8 - 1.7 * i
-            w = v * 0.9
+            w = v * 0.72
             r = Rectangle(width=w, height=0.75, stroke_width=0, fill_color=col, fill_opacity=0.85).move_to(
                 np.array([-2.0 + w / 2, y, 0]))
             nl = VGroup(label(nm, font_size=21, color=col), label(sub, font_size=15, color=GREY_A)).arrange(
@@ -66,8 +66,8 @@ class Scale(VoiceoverScene):
         siglab = label(r"significant to the right", font_size=15, color=LOSS).next_to(ax.ax.c2p(6.9, 3.5), RIGHT,
                                                                                          buff=0.05)
         true = VGroup(vline(ax, N["mu"], 0, 3.5, WHITE, 1.8), label(rf"truth {N['mu']}", font_size=15,
-                                                                    color=WHITE).next_to(ax.ax.c2p(N["mu"], 0),
-                                                                                         DOWN, buff=0.35))
+                                                                    color=WHITE).next_to(ax.ax.c2p(N["mu"], 3.5),
+                                                                                         UP, buff=0.08))
         side = VGroup(
             label(rf"gold: \ {J['n']} trials a journal \\ published, \ of {J['run']} run", font_size=18, color=GYM),
             label(rf"their mean: \ {J['mean']:.1f}", font_size=18, color=GYM),

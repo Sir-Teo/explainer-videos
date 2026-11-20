@@ -47,9 +47,9 @@ class Limits(VoiceoverScene):
         ) as vo:
             self.play(FadeIn(ax), FadeIn(tag), FadeIn(eq), run_time=1.2)
             vo.wait_until("a")
-            self.play(FadeIn(side[1]))
+            self.play(FadeIn(side[1]), Create(lines[0]), run_time=1.5)
             vo.wait_until("b")
-            self.play(Create(lines[0]), FadeIn(side[2]), run_time=1.5)
+            self.play(FadeIn(side[2]), Indicate(lines[0], color=WHITE))
             vo.wait_until("c")
             self.play(LaggedStart(*[Create(ln) for ln in lines[1:]], lag_ratio=0.4), run_time=2.0)
             vo.wait_until("d")
@@ -130,8 +130,9 @@ class Limits(VoiceoverScene):
         with self.voiceover(
             "Limits also shape expectations, the subject of Part twenty-eight. <bookmark mark='a'/> Olivier Coibion "
             "and Yuriy Gorodnichenko's test regresses the error in a forecast on the revision that produced it. "
-            "If forecasters use their information well, revisions should not predict errors. A positive slope "
-            "means forecasts move too little when news arrives; a negative slope, too much. "
+            "If forecasters use their information well, revisions should not predict errors. "
+            "<bookmark mark='a2'/> A positive slope means forecasts move too little when news arrives; "
+            "<bookmark mark='a3'/> a negative slope, too much. "
             "<bookmark mark='b'/> On the Island, forty forecasters each see the economy through private noise. "
             f"When they are rational, each one's slope is {say_num(r['individual'], 2)}, about zero, but the "
             f"average forecast's slope is {r['consensus']:.2f}: the consensus under-reacts, because each person's "
@@ -144,7 +145,11 @@ class Limits(VoiceoverScene):
         ) as vo:
             self.play(FadeIn(tag), Write(eq), FadeIn(sub), run_time=1.5)
             vo.wait_until("a")
-            self.play(FadeIn(tbl[0]), FadeIn(notes))
+            self.play(FadeIn(tbl[0]))
+            vo.wait_until("a2")
+            self.play(FadeIn(notes[0], shift=UP * 0.1))
+            vo.wait_until("a3")
+            self.play(FadeIn(notes[1], shift=UP * 0.1))
             vo.wait_until("b")
             self.play(FadeIn(tbl[1]))
             vo.wait_until("c")
