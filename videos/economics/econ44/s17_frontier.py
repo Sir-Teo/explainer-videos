@@ -60,5 +60,5 @@ class Frontier(VoiceoverScene):
                           LaggedStart(*[GrowArrow(a) for a in ch.arrows], lag_ratio=0.35), run_time=2.4)
                 if k < 3:
                     vo.wait_until(mk + "2")
-                self.play(FadeIn(asks[k], shift=UP * 0.1), Indicate(c, color=WHITE, scale_factor=1.03))
+                self.play(FadeIn(asks[k], shift=UP * 0.1), Circumscribe(c, color=WHITE, buff=0.05))
         self.clear_scene()
