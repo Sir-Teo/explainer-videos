@@ -2502,6 +2502,153 @@ SCHELLING_1971 = Table(
 PART37 = (SAIZ_2010, CDGR_2010, ARSW_2015, CICCONE_HALL_1996, DMQ_2019, CHK_2016, HSIEH_MORETTI_2019, DONALDSON_2018,
           BAUM_SNOW_2007, KLINE_MORETTI_2014, SHENZHEN, SCHELLING_1971)
 
+# ---------------------------------------------------------------------------
+# Part 38: Work and Wages
+CK_1994 = Table(
+    key="ck_1994",
+    cite="D. Card and A. B. Krueger, \"Minimum Wages and Employment: A Case Study of the Fast-Food Industry in New "
+         "Jersey and Pennsylvania\", American Economic Review 84(4): 772-793 (1994)",
+    tag="Card and Krueger, \\ \\emph{AER} 84(4) (1994)",
+    where="Table 3 (full-time-equivalent employment per store: Pennsylvania 23.33 before and 21.17 after, New Jersey "
+          "20.44 and 21.03), reproduced exactly from the public data; New Jersey's minimum rose from $4.25 to $5.05 "
+          "on 1 April 1992; 410 stores surveyed in February-March and again in November-December 1992",
+    read="the public data (njmin.zip) and its codebook",
+    checked="2026-11-20",
+    data={"m0": 4.25, "m1": 5.05, "stores": 410, "nj": 331, "pa": 79},
+)
+NW_2000 = Table(
+    key="nw_2000",
+    cite="D. Neumark and W. Wascher, \"Minimum Wages and Employment: A Case Study of the Fast-Food Industry in New "
+         "Jersey and Pennsylvania: Comment\", American Economic Review 90(5): 1362-1396 (2000); D. Card and A. B. "
+         "Krueger, \"... Reply\", American Economic Review 90(5): 1397-1420 (2000)",
+    tag="Neumark and Wascher; \\ Card and Krueger, \\ \\emph{AER} 90(5) (2000)",
+    where="the payroll records of 230 restaurants (NBER WP 5224): employment 4.6% lower in New Jersey relative to "
+          "Pennsylvania, an elasticity of -0.24 with respect to the minimum wage; the reply's BLS ES-202 records: "
+          "similar or slightly faster growth in New Jersey",
+    read="the NBER working papers' abstracts (5224, 6386) and summaries",
+    checked="2026-11-20",
+    data={"stores": 230, "effect": -4.6, "elasticity_mw": -0.24},
+)
+CDLZ_2019 = Table(
+    key="cdlz_2019",
+    cite="D. Cengiz, A. Dube, A. Lindner and B. Zipperer, \"The Effect of Minimum Wages on Low-Wage Jobs\", Quarterly "
+         "Journal of Economics 134(3): 1405-1454 (2019)",
+    tag="Cengiz, \\ Dube, \\ Lindner and Zipperer, \\ \\emph{QJE} 134(3) (2019)",
+    where="the abstract and conclusion: 138 state minimum-wage increases, 1979-2016; the number of low-wage jobs "
+          "essentially unchanged over five years, missing jobs below the new minimum offset by excess jobs at and "
+          "just above it; an own-wage employment elasticity of 0.41 (s.e. 0.43)",
+    read="the accepted manuscript (UCL Discovery) and NBER WP 25434",
+    checked="2026-11-20",
+    data={"events": 138, "owe": 0.41, "owe_se": 0.43, "first": 1979, "last": 2016},
+)
+JARDIM_2022 = Table(
+    key="jardim_2022",
+    cite="E. Jardim, M. C. Long, R. Plotnick, E. van Inwegen, J. Vigdor and H. Wething, \"Minimum-Wage Increases and "
+         "Low-Wage Employment: Evidence from Seattle\", American Economic Journal: Economic Policy 14(2): 263-314 "
+         "(2022)",
+    tag="Jardim et al., \\ \\emph{AEJ: Policy} 14(2) (2022)",
+    where="the abstract: Seattle's minimum to $11 (2015) and $13 (2016); hours at low wages fell relative to a "
+          "synthetic control; employment elasticities of -0.2 to -2.0, mostly on the intensive margin",
+    read="the AEA's abstract page",
+    checked="2026-11-20",
+    data={"m2015": 11, "m2016": 13, "lo": -2.0, "hi": -0.2},
+)
+CABS = Table(
+    key="cabs",
+    cite="C. Camerer, L. Babcock, G. Loewenstein and R. Thaler, \"Labor Supply of New York City Cabdrivers: One Day "
+         "at a Time\", Quarterly Journal of Economics 112(2): 407-441 (1997); H. S. Farber, \"Why You Can't Find a "
+         "Taxi in the Rain and Other Labor Supply Lessons from Cab Drivers\", Quarterly Journal of Economics "
+         "130(4): 1975-2026 (2015); J. D. Angrist, S. Caldwell and J. V. Hall, \"Uber versus Taxi: A Driver's Eye "
+         "View\", American Economic Journal: Applied Economics 13(3): 272-308 (2021)",
+    tag="Camerer et al.\\ (1997); \\ Farber (2015); \\ Angrist, \\ Caldwell and Hall (2021)",
+    where="Camerer et al.: a negative elasticity of daily hours to the day's hourly earnings (a pure daily target "
+          "gives -1); Farber: every New York taxi trip of 2009-2013, positive responses to anticipated and "
+          "unanticipated earnings; Angrist et al.: Boston Uber drivers offered random fee changes, an intertemporal "
+          "elasticity of about 1.2",
+    read="the abstracts and summaries (NBER WP 20604; the AEA's abstract page)",
+    checked="2026-11-20",
+    data={"target": -1.0, "uber_frisch": 1.2, "farber_years": (2009, 2013)},
+)
+CHETTY_2011 = Table(
+    key="chetty_2011",
+    cite="R. Chetty, A. Guren, D. Manoli and A. Weber, \"Are Micro and Macro Labor Supply Elasticities Consistent? A "
+         "Review of Evidence on the Intensive and Extensive Margins\", American Economic Review 101(3): 471-475 "
+         "(2011)",
+    tag="Chetty, \\ Guren, \\ Manoli and Weber, \\ \\emph{AER P\\&P} 101(3) (2011)",
+    where="the recommended values from the micro evidence: Hicksian 0.3 (intensive) and 0.25 (extensive); Frisch 0.5 "
+          "(intensive) and 0.25 (extensive); micro Frisch elasticities an order of magnitude below what business "
+          "cycles need",
+    read="the AEA's abstract and NBER WP 16729 as summarized",
+    checked="2026-11-20",
+    data={"hicks_int": 0.3, "hicks_ext": 0.25, "frisch_int": 0.5, "frisch_ext": 0.25},
+)
+SS_2021 = Table(
+    key="ss_2021",
+    cite="A. Sokolova and T. Sorensen, \"Monopsony in Labor Markets: A Meta-Analysis\", ILR Review 74(1): 27-55 (2021)",
+    tag="Sokolova and Sorensen, \\ \\emph{ILR Review} 74(1) (2021)",
+    where="IZA DP 11966's abstract: about 800 published estimates of the labour supply elasticity facing a firm; "
+          "systematic variation by method and country (more competitive in Europe, less in developing countries); "
+          "publication bias against negative estimates",
+    read="IZA Discussion Paper 11966 (pdf)",
+    checked="2026-11-20",
+    data={"estimates": 801},
+)
+AK_1991 = Table(
+    key="ak_1991",
+    cite="J. D. Angrist and A. B. Krueger, \"Does Compulsory School Attendance Affect Schooling and Earnings?\", "
+         "Quarterly Journal of Economics 106(4): 979-1014 (1991); J. Bound, D. A. Jaeger and R. M. Baker, \"Problems "
+         "with Instrumental Variables Estimation When the Correlation between the Instruments and the Endogenous "
+         "Explanatory Variable Is Weak\", Journal of the American Statistical Association 90(430): 443-450 (1995)",
+    tag="Angrist and Krueger (1991); \\ Bound, \\ Jaeger and Baker (1995)",
+    where="NBER WP 3572's abstract: up to 25% of potential dropouts stay in school because of compulsory schooling "
+          "laws; the IV estimate of the return is remarkably close to least squares; Bound et al.: random 'quarters "
+          "of birth' reproduce estimates close to least squares, a sign of weak instruments",
+    read="the working paper's abstract (scanned) and summaries of Bound et al.",
+    checked="2026-11-20",
+    data={"dropouts": 25},
+)
+OREOPOULOS_2006 = Table(
+    key="oreopoulos_2006",
+    cite="P. Oreopoulos, \"Estimating Average and Local Average Treatment Effects of Education when Compulsory "
+         "Schooling Laws Really Matter\", American Economic Review 96(1): 152-175 (2006)",
+    tag="Oreopoulos, \\ \\emph{AER} 96(1) (2006)",
+    where="the abstract: Britain's school-leaving age rose from 14 to 15 (1947), sending almost half of 14-year-olds "
+          "to stay a year longer; a regression-discontinuity design; returns very large whether laws bind for many or "
+          "few",
+    read="the AEA's abstract page",
+    checked="2026-11-20",
+    data={"from": 14, "to": 15},
+)
+MARIEL = Table(
+    key="mariel",
+    cite="D. Card, \"The Impact of the Mariel Boatlift on the Miami Labor Market\", ILR Review 43(2): 245-257 (1990); "
+         "G. J. Borjas, \"The Wage Impact of the Marielitos: A Reappraisal\", ILR Review 70(5): 1077-1110 (2017); G. "
+         "Peri and V. Yasenov, \"The Labor Market Effects of a Refugee Wave\", Journal of Human Resources 54(2): "
+         "267-309 (2019)",
+    tag="Card (1990); \\ Borjas (2017); \\ Peri and Yasenov (2019)",
+    where="Card: some 125,000 Cubans arrived from May to September 1980, raising Miami's labour force 7% (and its "
+          "Cuban labour force 20%); no measurable effect on less-skilled workers' wages or unemployment; Borjas: the "
+          "wage of "
+          "non-Hispanic male high-school dropouts fell 10 to 30 percent; Peri and Yasenov: synthetic controls on "
+          "non-Cuban dropouts, no significant difference, and small subsamples can produce large ones",
+    read="the papers' abstracts and summaries",
+    checked="2026-11-20",
+    data={"year": 1980, "arrivals": 125000, "labour_force": 7, "cuban_lf": 20, "borjas_lo": 10, "borjas_hi": 30},
+)
+KEARL_1979 = Table(
+    key="kearl_1979",
+    cite="J. R. Kearl, C. L. Pope, G. C. Whiting and L. T. Wimmer, \"A Confusion of Economists?\", American Economic "
+         "Review 69(2): 28-37 (1979)",
+    tag="Kearl, \\ Pope, \\ Whiting and Wimmer, \\ \\emph{AER P\\&P} 69(2) (1979)",
+    where="of 211 economists, 90% agreed, or agreed with provisos, that 'a minimum wage increases unemployment "
+          "among young and unskilled workers' (as reported in later surveys; the fieldwork year is given variously)",
+    read="secondary accounts (Fuller and Geide-Stevenson; Econlib)",
+    checked="2026-11-20",
+    data={"agree": 90, "n": 211},
+)
+PART38 = (CK_1994, NW_2000, CDLZ_2019, JARDIM_2022, CABS, CHETTY_2011, SS_2021, AK_1991, OREOPOULOS_2006, MARIEL,
+          KEARL_1979)
+
 PART7 = (BERNOULLI_1738, SAMUELSON_1937, ALLAIS_1953, ELLSBERG_1961, RABIN_2000, THALER_1981, HOLT_LAURY_2005,
          HAYDEN_PLATT_2009, MADRIAN_SHEA_2001, THALER_BENARTZI_2004, BARSKY_1997, POST_2008, MEHRA_PRESCOTT_1985)
-ALL = {t.key: t for t in (*PART1, *PART3, *PART4, *PART5, *PART6, *PART7, *PART8, *PART9, *PART10, *PART11, *PART12, *PART13, *PART14, *PART15, *PART16, *PART17, *PART18, *PART19, *PART21, *PART22, *PART25, *PART26, *PART35, *PART36, *PART37)}
+ALL = {t.key: t for t in (*PART1, *PART3, *PART4, *PART5, *PART6, *PART7, *PART8, *PART9, *PART10, *PART11, *PART12, *PART13, *PART14, *PART15, *PART16, *PART17, *PART18, *PART19, *PART21, *PART22, *PART25, *PART26, *PART35, *PART36, *PART37, *PART38)}

@@ -402,6 +402,11 @@ FRED_SERIES["WFHCOVIDMATQUESTION"] = ("Work from home rate (Survey of Working Ar
                                       "American Time Use Survey", "monthly",
                                       "J. M. Barrero, N. Bloom and S. J. Davis (CC BY 4.0)")
 FRED_RETRIEVED.update({s: "2026-11-20" for s in CITY_FRED})
+# Part 38: the federal minimum wage
+FRED_SERIES["FEDMINNFRWG"] = ("Federal minimum hourly wage for nonfarm workers for the United States",
+                              "dollars an hour, not seasonally adjusted", "monthly",
+                              "U.S. Department of Labor, Wage and Hour Division")
+FRED_RETRIEVED["FEDMINNFRWG"] = "2026-11-20"
 
 SPF_FILES = ("median_rgdp_level", "median_rgdp_growth", "median_recess_level")
 SPF_URL = ("https://www.philadelphiafed.org/-/media/frbp/assets/surveys-and-data/survey-of-professional-forecasters/"
@@ -848,6 +853,39 @@ DATASETS = {
         "sha256": "85f781e9247ecdc6c20b0ba47f3276325075635f02ac9a1e0b6bb3ee3e7ddebe",
         "files": ("urban_share_1500_2025.csv",),
     },
+    "njmin": {
+        "title": "Card and Krueger's survey of 410 fast-food restaurants in New Jersey and eastern Pennsylvania, "
+                 "February-March and November-December 1992 (public.dat)",
+        "publisher": "David Card, data posted for Card and Krueger, Myth and Measurement (1995), chapter 2",
+        "citation": "D. Card and A. B. Krueger, \"Minimum Wages and Employment: A Case Study of the Fast-Food "
+                    "Industry in New Jersey and Pennsylvania\", American Economic Review 84(4): 772-793 (1994); "
+                    "njmin.zip from davidcard.berkeley.edu/data_sets, retrieved 2026-11-20",
+        "short": "Card and Krueger (1994), public data",
+        "url": "https://davidcard.berkeley.edu/data_sets/njmin.zip",
+        "licence": "posted by the author for public use; cited as Card and Krueger (1994)",
+        "units": "employees (full-time, part-time, managers) per store; starting wage, dollars an hour; prices, "
+                 "dollars",
+        "vintage": "2026-11-20",
+        "sha256": "41a29aec6b489658b20030d044a2b20a5f5a04b871cde41df057afd6013ba587",
+        "files": ("njmin_1992.csv",),
+    },
+    "wooldridge": {
+        "title": "Three labour datasets from Wooldridge's Introductory Econometrics, as distributed in the R package "
+                 "wooldridge: card (Card's 1995 extract of the National Longitudinal Survey of Young Men, 1976), "
+                 "wage1 (the Current Population Survey, 1976) and wage2 (the National Longitudinal Survey, 1980)",
+        "publisher": "J. M. Wooldridge's textbook data, R package wooldridge (J. Shea), CRAN",
+        "citation": "J. M. Wooldridge, Introductory Econometrics: A Modern Approach; D. Card, \"Using Geographic "
+                    "Variation in College Proximity to Estimate the Return to Schooling\", in Aspects of Labour "
+                    "Market Behaviour (1995); wooldridge 1.4-7 (CRAN), data/card.RData, wage1.RData, wage2.RData, "
+                    "retrieved 2026-11-20",
+        "short": "Wooldridge's data, via the R package wooldridge",
+        "url": "https://cran.r-project.org/src/contrib/wooldridge_1.4-7.tar.gz",
+        "licence": "GPL-3 (the package); the data are the cited surveys and studies",
+        "units": "hourly wages in dollars (1976 or 1980) and their logs; years of schooling and experience; IQ",
+        "vintage": "2026-11-20",
+        "sha256": "2f790f58898225e53dd69d690df118d985ce1553dd554cc7a1f634e0f1bba746",
+        "files": ("card1995.csv", "wage1_1976.csv", "wage2_1980.csv"),
+    },
     "trefler_hov": {
         "title": "Trefler's data for \"The Case of the Missing Trade and Other Mysteries\": the factor content of trade, "
                  "endowments and GDP for 33 countries and 9 factors, 1983",
@@ -1252,6 +1290,35 @@ def gravity() -> dict:
     (NaN where missing)."""
     rows = _read(HERE / "cepii_gravity_2019.csv")
     return {k: [r[k] if k in ("iso3_o", "iso3_d") else _num(r[k]) for r in rows] for k in GRAVITY_COLS}
+
+
+NJMIN_COLS = ("sheet", "chain", "co_owned", "state", "empft", "emppt", "nmgrs", "wage_st", "hrsopen", "pentree",
+              "status2", "empft2", "emppt2", "nmgrs2", "wage_st2", "hrsopen2", "pentree2")
+WOOLDRIDGE_COLS = {
+    "card": ("lwage", "wage", "educ", "exper", "expersq", "black", "smsa", "south", "smsa66", "nearc2", "nearc4",
+             "reg661", "reg662", "reg663", "reg664", "reg665", "reg666", "reg667", "reg668", "reg669", "IQ", "KWW",
+             "fatheduc", "motheduc", "age"),
+    "wage1": ("wage", "lwage", "educ", "exper", "tenure", "female", "nonwhite", "married"),
+    "wage2": ("wage", "lwage", "educ", "exper", "tenure", "IQ", "KWW", "meduc", "feduc", "black", "urban", "south",
+              "married"),
+}
+WOOLDRIDGE_FILES = {"card": "card1995.csv", "wage1": "wage1_1976.csv", "wage2": "wage2_1980.csv"}
+
+
+@functools.lru_cache(maxsize=None)
+def njmin() -> dict:
+    """Card and Krueger's 410 restaurants, one row each: ``{column: [...]}`` for :data:`NJMIN_COLS` (NaN where
+    missing; ``state`` 1 for New Jersey; ``status2`` 3 for closed for good)."""
+    rows = _read(HERE / "njmin_1992.csv")
+    return {k: [_num(r[k]) for r in rows] for k in NJMIN_COLS}
+
+
+@functools.lru_cache(maxsize=None)
+def wooldridge(name: str) -> dict:
+    """One of Wooldridge's labour datasets (``card``, ``wage1`` or ``wage2``): ``{column: [...]}`` (NaN where
+    missing)."""
+    rows = _read(HERE / WOOLDRIDGE_FILES[name])
+    return {k: [_num(r[k]) for r in rows] for k in WOOLDRIDGE_COLS[name]}
 
 
 @functools.lru_cache(maxsize=None)
@@ -1744,6 +1811,58 @@ def refresh_cepii_gravity() -> None:
             w.writerow([rec[k] for k in GRAVITY_COLS])
 
 
+def refresh_njmin() -> None:
+    import zipfile  # noqa: PLC0415
+
+    d = DATASETS["njmin"]
+    raw = RAW / "njmin.zip"
+    sha = _download(d["url"], raw)
+    if sha != d["sha256"]:
+        print(f"njmin: the download differs from the recorded vintage ({sha[:12]})")
+    names = ("SHEET CHAIN CO_OWNED STATE SOUTHJ CENTRALJ NORTHJ PA1 PA2 SHORE NCALLS EMPFT EMPPT NMGRS WAGE_ST "
+             "INCTIME FIRSTINC BONUS PCTAFF MEALS OPEN HRSOPEN PSODA PFRY PENTREE NREGS NREGS11 TYPE2 STATUS2 DATE2 "
+             "NCALLS2 EMPFT2 EMPPT2 NMGRS2 WAGE_ST2 INCTIME2 FIRSTIN2 SPECIAL2 MEALS2 OPEN2R HRSOPEN2 PSODA2 PFRY2 "
+             "PENTREE2 NREGS2 NREGS112").lower().split()
+    with zipfile.ZipFile(raw) as z:
+        lines = [ln.split() for ln in z.read("public.dat").decode("latin-1").splitlines() if ln.strip()]
+    with open(HERE / "njmin_1992.csv", "w", newline="", encoding="utf-8") as f:
+        w = csv.writer(f)
+        w.writerow(NJMIN_COLS)
+        for ln in lines:
+            rec = dict(zip(names, ln))
+            w.writerow(["" if rec[k] == "." else _fmt(float(rec[k])) for k in NJMIN_COLS])
+
+
+def refresh_wooldridge() -> None:
+    import tarfile  # noqa: PLC0415
+
+    from explainer.psychology import rdata  # noqa: PLC0415
+
+    d = DATASETS["wooldridge"]
+    raw = RAW / "wooldridge_1.4-7.tar.gz"
+    sha = _download(d["url"], raw)
+    if sha != d["sha256"]:
+        print(f"wooldridge: the download differs from the recorded vintage ({sha[:12]})")
+    with tarfile.open(raw, "r:gz") as tf:
+        for name, cols in WOOLDRIDGE_COLS.items():
+            blob = tf.extractfile(f"wooldridge/data/{name}.RData").read()
+            tmp = RAW / f"wooldridge_{name}.RData"
+            tmp.write_bytes(blob)
+            obj = rdata.load(tmp)[0][1]
+            names = obj["attrs"]["names"]["value"]
+            data = {n: c["value"] for n, c in zip(names, obj["value"])}
+            n = len(data[cols[0]])
+            with open(HERE / WOOLDRIDGE_FILES[name], "w", newline="", encoding="utf-8") as f:
+                w = csv.writer(f)
+                w.writerow(cols)
+                for i in range(n):
+                    row = []
+                    for c in cols:
+                        v = data[c][i]
+                        row.append("" if v is None or (isinstance(v, float) and v != v) else _fmt(float(v)))
+                    w.writerow(row)
+
+
 def refresh_census_cbsa() -> None:
     d = DATASETS["census_cbsa"]
     raw = RAW / "cbsa-est2024-alldata.csv"
@@ -2180,6 +2299,7 @@ def refresh_shiller() -> None:
 REFRESH = {"draft1970": refresh_draft1970, "ajr": refresh_ajr, "maddison2023": refresh_maddison, "fred": refresh_fred, "spf": refresh_spf,
            "pinksheet": refresh_pinksheet, "psd_coffee": refresh_psd_coffee, "wdi": refresh_wdi, "hdr": refresh_hdr,
            "rtdsm": refresh_rtdsm, "warheads": refresh_warheads, "census_cbsa": refresh_census_cbsa,
+           "njmin": refresh_njmin, "wooldridge": refresh_wooldridge,
            "urban_share": refresh_urban_share, "so2": refresh_so2,
            "marriage": refresh_marriage, "democracy": refresh_democracy, "millennium": refresh_millennium,
            "longrun": refresh_longrun, "pwt": refresh_pwt, "shiller": refresh_shiller,

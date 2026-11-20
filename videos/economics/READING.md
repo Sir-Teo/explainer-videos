@@ -10,7 +10,7 @@ the series leaves out.
 Both *Parts* columns are found, not typed. *Planned* lists the parts whose entry in
 [`SYLLABUS.md`](SYLLABUS.md) names the book or paper; *Built* lists the parts whose scenes, compute step or
 README cite it (a dot: none yet). Fuller notes (editions, chapters, what each source was used for) are in each
-part's README, under *Sources*. Built so far: Parts 1–37.
+part's README, under *Sources*. Built so far: Parts 1–38.
 
 ## 1. The textbook spine
 
@@ -38,7 +38,7 @@ part's README, under *Sources*. Built so far: Parts 1–37.
 | Krugman–Obstfeld–Melitz | P. Krugman, M. Obstfeld and M. Melitz, *International Economics* (12th ed., 2022) | 34–35 | 34–36 |
 | Mishkin | F. Mishkin, *The Economics of Money, Banking, and Financial Markets* (13th ed., 2022) | 26 | 31 |
 | Cabral | L. Cabral, *Introduction to Industrial Organization* (2nd ed., 2017) | 12–13 | 12–13 |
-| Borjas | G. Borjas, *Labor Economics* (8th ed., 2020) | 38 | · |
+| Borjas | G. Borjas, *Labor Economics* (8th ed., 2020) | 38 | 38 |
 | Gruber | J. Gruber, *Public Finance and Public Policy* (7th ed., 2022) | 15, 41–42, 50 | 7, 15 |
 | Ray | D. Ray, *Development Economics* (1998) | 46 | · |
 | Weil | D. Weil, *Economic Growth* (3rd ed., 2013) | 7, 19 | 3, 7, 19–21, 23 |
@@ -80,7 +80,7 @@ part's README, under *Sources*. Built so far: Parts 1–37.
 | Short name | Book | Planned | Built |
 |---|---|---|---|
 | Hayashi | F. Hayashi, *Econometrics* (2000) | 54, 56 | 23 |
-| Wooldridge | J. Wooldridge, *Econometric Analysis of Cross Section and Panel Data* (2nd ed., 2010) | 54 | · |
+| Wooldridge | J. Wooldridge, *Econometric Analysis of Cross Section and Panel Data* (2nd ed., 2010) | 54 | 38 |
 | Hansen | B. Hansen, *Econometrics* (2022) | 54 | · |
 | Hamilton | J. Hamilton, *Time Series Analysis* (1994) | 55 | 6 |
 | Kilian–Lütkepohl | L. Kilian and H. Lütkepohl, *Structural Vector Autoregressive Analysis* (2017) | 55 | · |
@@ -93,7 +93,7 @@ part's README, under *Sources*. Built so far: Parts 1–37.
 | Short name | Book | Planned | Built |
 |---|---|---|---|
 | Feenstra | R. Feenstra, *Advanced International Trade* (2nd ed., 2016) | 6, 35–36 | 6, 8, 20, 35–36 |
-| Cahuc–Carcillo–Zylberberg | P. Cahuc, S. Carcillo and A. Zylberberg, *Labor Economics* (2nd ed., 2014) | 24, 38 | 24 |
+| Cahuc–Carcillo–Zylberberg | P. Cahuc, S. Carcillo and A. Zylberberg, *Labor Economics* (2nd ed., 2014) | 24, 38 | 24, 38 |
 | Atkinson–Stiglitz | A. Atkinson and J. Stiglitz, *Lectures on Public Economics* (1980; 2015) | 41 | 6 |
 | Salanié | B. Salanie, *The Economics of Taxation* (2nd ed., 2011) | 41 | 13–14 |
 | Banerjee–Duflo | A. Banerjee and E. Duflo, *Poor Economics* (2011) | 46 | · |
@@ -233,8 +233,8 @@ part's README, under *Sources*. Built so far: Parts 1–37.
 
 | Model or result | Paper | Planned | Built |
 |---|---|---|---|
-| human capital | Becker (1964); Mincer (1974) | 38 | 13 |
-| the minimum wage | Card and Krueger (1994) | 4, 38 | 4 |
+| human capital | Becker (1964); Mincer (1974) | 38 | 13, 38 |
+| the minimum wage | Card and Krueger (1994) | 4, 38 | 4, 38 |
 | skills, tasks and technology | Autor, Levy and Murnane (2003); Acemoglu and Autor (2011) | 39 | · |
 | mobility and place | Chetty and others (2014) | 40, 42 | · |
 | top incomes | Piketty and Saez (2003) | 40 | · |
@@ -329,6 +329,8 @@ part's README, under *Sources*. Built so far: Parts 1–37.
 **Part 36, *Trade II: Scale, Firms and Gravity*.** Books: Paul Krugman, Maurice Obstfeld and Marc Melitz, *International Economics* (12th ed., 2022), chs 7–8; Robert Feenstra, *Advanced International Trade* (2nd ed., 2015), chs 5–6; Keith Head and Thierry Mayer, "Gravity Equations", *Handbook of International Economics* vol. 4 (2014); Marc Levinson, *The Box* (2006). Papers: Tinbergen (1962); Grubel and Lloyd (1975); Krugman (1979, 1980); McCallum (1995); Bernard and Jensen (1995); Eaton and Kortum (2002); Melitz (2003); Anderson and van Wincoop (2003); Santos Silva and Tenreyro (2006); Dekle, Eaton and Kortum (2008); Xing and Detert (2010); Arkolakis, Costinot and Rodríguez-Clare (2012); Autor, Dorn and Hanson (2013); Amiti, Redding and Weinstein (2019); Fajgelbaum et al. (2020); Boehm et al. (2023).
 
 **Part 37, *Cities and Regions*.** Books: Jan Brueckner, *Lectures on Urban Economics* (2011); Edward Glaeser, *Triumph of the City* (2011); Masahisa Fujita, Paul Krugman and Anthony Venables, *The Spatial Economy* (1999); Stephen Redding and Esteban Rossi-Hansberg, "Quantitative Spatial Economics", *Annual Review of Economics* 9 (2017). Papers: von Thünen (1826); Alonso (1964); Schelling (1971); Rosen (1979); Roback (1982); Krugman (1991); Ciccone and Hall (1996); Gabaix (1999); Duranton and Puga (2004); Baum-Snow (2007); Saiz (2010); Combes et al. (2010); Kline and Moretti (2014); Ahlfeldt et al. (2015); Chetty, Hendren and Katz (2016); Donaldson (2018); Diamond, McQuade and Qian (2019); Hsieh and Moretti (2019); Greaney (2026).
+
+**Part 38, *Work and Wages*.** Books: David Card and Alan Krueger, *Myth and Measurement* (1995); Alan Manning, *Monopsony in Motion* (2003); George Borjas, *Labor Economics*; Pierre Cahuc, Stéphane Carcillo and André Zylberberg, *Labor Economics*; Jacob Mincer, *Schooling, Experience, and Earnings* (1974). Papers: Robinson (1933); Stigler (1946); Roy (1951); Becker (1964); Heckman (1979); Card (1990); Angrist and Krueger (1991); Card and Krueger (1994); Card (1995); Camerer et al. (1997); Neumark and Wascher (2000); Oreopoulos (2006); Chetty et al. (2011); Farber (2015); Borjas (2017); Cengiz et al. (2019); Peri and Yasenov (2019); Angrist, Caldwell and Hall (2021); Sokolova and Sorensen (2021); Jardim et al. (2022).
 
 ## 4. What the series leaves out
 

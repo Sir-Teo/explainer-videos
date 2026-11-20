@@ -883,6 +883,19 @@ TRUTHS = {
         # the line city divided by a wall (chapter 11)
         "berlin": {"J": 61, "half": 6.0, "cbd": 1.5, "sub": -3.5},
     },
+    38: {
+        # labour supply (chapter 2): non-labour income, curvature of consumption utility, Frisch elasticity
+        "supply": {"y": 5.0, "gamma": 2.0, "phi": 0.5, "psi": 1.0, "res_median": 12.0, "res_sd": 0.5},
+        # a competitive market (chapter 4): demand A w^-0.5, supply B w
+        "market": {"A": 100.0, "eps_d": 0.5, "B": 4.0, "eps_s": 1.0},
+        # one employer (chapter 7): marginal product 30 L^-0.3, labour supply elasticity 3 (a 25% markdown)
+        "monopsony": {"a": 30.0, "b": 0.3, "eta": 3.0, "B": 1.0},
+        # the border experiment on the Island (chapter 8): the same 331 and 79 stores, the same rise
+        "border": {"n_treat": 331, "n_ctrl": 79, "m0": 4.25, "m1": 5.05, "eps_d": 0.5, "eta": 3.0, "trend": -0.06,
+                   "noise": 0.25, "seeds": 200},
+        # Roy's two occupations (chapter 11): fishing and the boatyard
+        "roy": {"n": 20000, "mu": (2.6, 2.5), "sd": (0.4, 0.6), "rho": 0.3, "cost_sd": 0.3, "seed": 38},
+    },
 }
 
 

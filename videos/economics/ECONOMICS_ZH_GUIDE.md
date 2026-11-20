@@ -928,6 +928,27 @@ brackets on screen.
 | the household registration system (hukou) | 户籍制度（户口） |
 | working from home; the donut effect | 居家办公；甜甜圈效应 |
 
+## Part 38
+
+| English | 中文 |
+|---|---|
+| the minimum wage; a wage floor | 最低工资；工资下限 |
+| difference in differences; parallel trends | 双重差分；平行趋势 |
+| labour supply; the backward-bending supply curve | 劳动供给；向后弯曲的供给曲线 |
+| Marshallian, Hicksian and Frisch elasticities | 马歇尔弹性、希克斯弹性、弗里施弹性 |
+| the intensive and extensive margins; participation | 集约边际与广延边际；劳动参与 |
+| income targeting | 收入目标 |
+| the own-wage elasticity | 自身工资弹性 |
+| the bunching estimator; missing and excess jobs | 聚集估计量；消失的岗位与新增的岗位 |
+| monopsony; the markdown; the marginal cost of labour | 买方垄断；工资压低幅度；劳动的边际成本 |
+| human capital; Mincer's equation | 人力资本；明瑟方程 |
+| the return to schooling; ability bias | 教育回报率；能力偏误 |
+| quarter of birth; weak instruments | 出生季度；弱工具变量 |
+| Roy's model; self-selection | 罗伊模型；自选择 |
+| Heckman's correction; the inverse Mills ratio | 赫克曼校正；逆米尔斯比率 |
+| the Mariel boatlift; synthetic control | 马里埃尔偷渡潮；合成控制法 |
+| employer concentration; non-compete agreements | 雇主集中度；竞业禁止协议 |
+
 ## Names
 
 | English | 中文 |

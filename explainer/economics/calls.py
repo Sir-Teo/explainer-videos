@@ -389,6 +389,19 @@ CALLS = {c.key: c for c in [
          "right",
          ("B. Holmström and P. Milgrom, Journal of Law, Economics and Organization 7 (1991): 24-52",
           "B. A. Jacob and S. D. Levitt, Quarterly Journal of Economics 118(3) (2003): 843-877, abstract")),
+    Call("survey_1979", 38, "Economists surveyed by Kearl, Pope, Whiting and Wimmer", "1979",
+         "a minimum wage increases unemployment among young and unskilled workers: 90% of 211 economists agreed, "
+         "or agreed with provisos",
+         "the employment effect of the minimum wage",
+         "for the moderate increases studied since, the average effect on employment has been close to zero, from "
+         "Card and Krueger's restaurants to Cengiz et al.'s 138 state increases; losses appear where minimums are high "
+         "relative to local wages, as in Seattle's hours; later surveys found the agreement falling",
+         "partly right",
+         ("J. R. Kearl, C. L. Pope, G. C. Whiting and L. T. Wimmer, \"A Confusion of Economists?\", American "
+          "Economic Review 69(2): 28-37 (1979)",
+          "D. Card and A. B. Krueger, American Economic Review 84(4): 772-793 (1994)",
+          "D. Cengiz, A. Dube, A. Lindner and B. Zipperer, Quarterly Journal of Economics 134(3): 1405-1454 (2019)",
+          "E. Jardim et al., American Economic Journal: Economic Policy 14(2): 263-314 (2022)")),
     Call("cairncross_1997", 37, "Frances Cairncross, in The Death of Distance", "1997",
          "distance would no longer decide the cost of communicating; location would cease to matter for most "
          "business decisions, and more people would work from home",

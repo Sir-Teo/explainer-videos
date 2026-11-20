@@ -136,6 +136,10 @@ AGORA = {
                     "effects"),
     "few_exporters": (36, "in Agora, Melitz's firms: of 4,000 draws 260 survive, the most productive 19% export and "
                           "sell 67% of output, nine times the size of firms that sell only at home"),
+    # Part 38 fitted Mincer's equation with Agora's least squares
+    "mincer": (38, "in Agora's least squares, the 1976 Current Population Survey's 526 workers earn 9.0% more per year "
+                   "of schooling (s.e. 0.8), holding experience and its square; Card's 3,010 young men's mean log "
+                   "wages rise close to a straight line from 8 to 18 years"),
     # Part 37 grew towns by Gibrat's law with a floor (Gabaix 1999)
     "zipf_cities": (37, "in Agora, 20,000 towns growing at random rates independent of size, above a floor of 5% of "
                         "the mean, settle at an exponent of 0.95 (theory 1.05); America's 100 largest metropolitan "

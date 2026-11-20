@@ -512,9 +512,62 @@ DIALS = {d.key: d for d in [
                       where="Card (2001), Econometrica 69(5), table 2", checked="2026-11-19"),
              Estimate("Duflo", 1999, "regression", "Indonesia: OLS on the same data", 0.078,
                       where="Card (2001), table 2", checked="2026-11-19"),
+             Estimate("this film (Card's data)", 1995, "IV", "Card's 3,010 young men of 1976, a four-year college "
+                      "nearby as the instrument, with his controls (first-stage F 13)", 0.132, lo=0.025, hi=0.238,
+                      where="videos/economics/econ38/compute.py, item returns", checked="2026-11-20"),
+             Estimate("this film (wage2, with IQ)", 1980, "regression", "935 men of the 1980 National Longitudinal "
+                      "Survey: 0.075 without IQ, 0.056 with it", 0.056, lo=0.041, hi=0.071,
+                      where="videos/economics/econ38/compute.py, item returns", checked="2026-11-20"),
+             Estimate("this film (Mincer, 1976 CPS)", 1976, "regression", "526 workers: log wage on schooling, "
+                      "experience and its square", 0.090, lo=0.075, hi=0.106,
+                      where="videos/economics/econ38/compute.py, item mincer", checked="2026-11-20"),
          )),
-    Dial("labour_supply", "elasticity of labour supply (Hicksian, Frisch, extensive)", "", (38, 41)),
-    Dial("minimum_wage", "employment effect of the minimum wage", "own-wage elasticity of employment", (38,)),
+    Dial("labour_supply", "elasticity of labour supply (Hicksian, Frisch, extensive)", "elasticity of hours or "
+         "participation to the wage", (38, 41), status="depends on the setting", checked="2026-11-20",
+         meaning="how much people work more when pay rises: about 0.3 for hours and 0.25 for whether to work at "
+                 "all when the change is permanent; about 0.5 for a temporary rise; far more where hours are free to "
+                 "move, as for rideshare drivers; the permanent elasticities price a tax, the temporary ones a "
+                 "business cycle",
+         estimates=(
+             Estimate("Chetty Guren Manoli and Weber (Hicksian intensive)", 2011, "review", "quasi-experimental "
+                      "micro estimates, synthesized", 0.30, where="American Economic Review 101(3): 471-475",
+                      checked="2026-11-20"),
+             Estimate("Chetty Guren Manoli and Weber (Hicksian extensive)", 2011, "review", "the same, for "
+                      "participation", 0.25, where="American Economic Review 101(3): 471-475", checked="2026-11-20"),
+             Estimate("Chetty Guren Manoli and Weber (Frisch intensive)", 2011, "review", "the same, for a "
+                      "temporary change", 0.50, where="American Economic Review 101(3): 471-475", checked="2026-11-20"),
+             Estimate("Chetty Guren Manoli and Weber (Frisch extensive)", 2011, "review", "the same, temporary, for "
+                      "participation", 0.25, where="American Economic Review 101(3): 471-475", checked="2026-11-20"),
+             Estimate("Angrist Caldwell and Hall (Uber)", 2021, "RCT", "Boston Uber drivers offered random changes "
+                      "in the platform's fee: an intertemporal elasticity", 1.2,
+                      where="American Economic Journal: Applied Economics 13(3): 272-308, abstract",
+                      checked="2026-11-20"),
+         )),
+    Dial("minimum_wage", "employment effect of the minimum wage", "own-wage elasticity of employment", (38,),
+         status="contested", checked="2026-11-20",
+         meaning="the percent change in low-wage employment per percent rise in low-wage pay caused by a minimum: "
+                 "near zero for the moderate increases studied most, with intervals wide enough to include modest "
+                 "losses; larger losses in hours where the minimum is high relative to local wages; a small or "
+                 "positive number points to employers with wage-setting power",
+         estimates=(
+             Estimate("this film (Card and Krueger's data)", 1994, "DiD", "410 restaurants, New Jersey against "
+                      "Pennsylvania, 1992: employment +10.7% relative, the starting wage +11.0% relative; 90% "
+                      "bootstrap interval", 0.97, lo=-0.05, hi=2.09,
+                      where="videos/economics/econ38/compute.py, item ck", checked="2026-11-20"),
+             Estimate("Cengiz Dube Lindner and Zipperer", 2019, "event study", "138 state increases, 1979-2016, by "
+                      "bunching in the wage distribution (s.e. 0.43)", 0.41, lo=-0.45, hi=1.27,
+                      where="Quarterly Journal of Economics 134(3): 1405-1454", checked="2026-11-20"),
+             Estimate("Jardim et al. (Seattle)", 2022, "DiD", "Seattle's $11 and $13 minimums against a synthetic "
+                      "control: hours at low wages", -1.1, lo=-2.0, hi=-0.2,
+                      where="American Economic Journal: Economic Policy 14(2), abstract (the midpoint is this "
+                      "film's)", checked="2026-11-20"),
+             Estimate("this film (the Island, competitive)", 2026, "DiD", "the same design, 200 runs, stores on "
+                      "their demand curves (planted elasticity -0.5)", -0.50,
+                      where="videos/economics/econ38/compute.py, item border", checked="2026-11-20"),
+             Estimate("this film (the Island, monopsony)", 2026, "DiD", "the same design, 200 runs, stores that set "
+                      "wages (supply elasticity 3)", 1.16, where="videos/economics/econ38/compute.py, item border",
+                      checked="2026-11-20"),
+         )),
     Dial("skill_substitution", "elasticity of substitution between skilled and unskilled labour", "", (39,)),
     Dial("ige", "intergenerational elasticity of income", "", (40,)),
     Dial("eti", "elasticity of taxable income", "", (41,)),
@@ -1688,6 +1741,29 @@ SHOWN = {
         ("Christiano, Eichenbaum and Evans (2005); Smets and Wouters (2007)", "medium-scale frictions; the hump "
          "computed with habits, indexation and smoothing"),
         ("Bernanke (2002)", "the Called it? card on deflation"),
+    ],
+    38: [
+        ("Card and Krueger (1994)", "the New Jersey-Pennsylvania border, recomputed from the public data; the own-wage "
+         "elasticity entered in a dial"),
+        ("Robbins (1930); Chetty, Guren, Manoli and Weber (2011)", "the backward bend, computed; the elasticities, "
+         "entered in the labour supply dial"),
+        ("Camerer, Babcock, Loewenstein and Thaler (1997); Farber (2015); Angrist, Caldwell and Hall (2021)",
+         "cab drivers' hours, stated; the Uber Frisch elasticity entered in the labour supply dial"),
+        ("Stigler (1946)", "the competitive prediction for a wage floor, computed"),
+        ("Neumark and Wascher (2000); Card and Krueger (2000)", "payroll records and the reply, stated"),
+        ("Cengiz, Dube, Lindner and Zipperer (2019)", "the bunching estimator, illustrated; the elasticity entered in "
+         "the minimum wage dial"),
+        ("Jardim et al. (2022)", "Seattle's hours, stated and entered in the minimum wage dial"),
+        ("Robinson (1933); Manning (2003); Sokolova and Sorensen (2021)", "monopsony and the minimum wage, computed; "
+         "the meta-analysis, stated"),
+        ("Becker (1964); Mincer (1974)", "Mincer's equation, fitted to the 1976 CPS; the return entered in the "
+         "schooling dial"),
+        ("Card (1995)", "college distance as an instrument, recomputed and entered in the schooling dial"),
+        ("Angrist and Krueger (1991); Bound, Jaeger and Baker (1995); Oreopoulos (2006)", "quarter of birth, weak "
+         "instruments and Britain's leaving age, stated"),
+        ("Roy (1951); Heckman (1979)", "selection and the two-step correction, computed on the Island"),
+        ("Card (1990); Borjas (2017); Peri and Yasenov (2019)", "the Mariel boatlift, stated"),
+        ("Kearl, Pope, Whiting and Wimmer (1979)", "the survey of economists; the Called it? card"),
     ],
     37: [
         ("Schelling (1971); Sakoda (1949)", "the checkerboard, played by Agora"),

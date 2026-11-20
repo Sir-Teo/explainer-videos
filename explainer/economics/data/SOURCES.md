@@ -77,6 +77,9 @@ film that moves to a new vintage says so on screen.
 | `fred_WFHCOVIDMATQUESTION.csv` | working from home (Part 37): the percent of full paid working days worked from home, monthly from May 2020, with a 2019 value from the American Time Use Survey (Survey of Working Arrangements and Attitudes) | J. M. Barrero, N. Bloom and S. J. Davis, via FRED | CC BY 4.0 (cite Barrero, Bloom and Davis, NBER WP 28731) | 2026-11-20 |
 | `cbsa_2020_2024.csv` | the resident population of every metropolitan and micropolitan statistical area: the April 2020 estimates base and the July 2024 estimate (Vintage 2024) | U.S. Census Bureau, Population Estimates Program (cbsa-est2024-alldata.csv) | public domain | 2026-11-20 |
 | `urban_share_1500_2025.csv` | the share of the population living in urban areas, 1500-2025 (centuries to 1700, then decades, then years), for the world, five regions and 21 countries | HYDE 3.5 (PBL Netherlands Environmental Assessment Agency), via Our World in Data (urbanization-last-500-years, updated 2026-06-08) | CC BY 4.0 | 2026-11-20 |
+| `njmin_1992.csv` | Card and Krueger's 410 fast-food restaurants in New Jersey and eastern Pennsylvania (Burger King, KFC, Roy Rogers, Wendy's): employees full-time, part-time and managers, the starting wage, hours open and the price of an entrée, in February-March and November-December 1992, and each store's status at the second interview | D. Card and A. B. Krueger (1994), public.dat in njmin.zip posted by David Card | posted for public use; cite Card and Krueger (1994) | 2026-11-20 |
+| `card1995.csv`, `wage1_1976.csv`, `wage2_1980.csv` | Wooldridge's labour datasets: Card's (1995) National Longitudinal Survey of Young Men, 1976 (3,010 men: log wage, schooling, experience, college nearby, region, IQ), the Current Population Survey of 1976 (526 workers) and the National Longitudinal Survey of 1980 (935 men, with IQ) | J. M. Wooldridge, via the R package wooldridge 1.4-7 (CRAN) | GPL-3 (the package); the data are the cited surveys | 2026-11-20 |
+| `fred_FEDMINNFRWG.csv` | the federal minimum hourly wage for nonfarm workers, monthly from October 1938 | U.S. Department of Labor, via FRED | public domain | 2026-11-20 |
 
 The raw Maddison workbook (`mpd2023_web.xlsx`, dataverse file 421302) had SHA-256
 `ecc5916ca12789b983fc4be437f8a354bbf4291323605324ac3e0aea4c57cbb6` when the extract was made. The raw Pink Sheet
@@ -238,3 +241,14 @@ publication, the copy that was read and the date the transcription was checked:
 | `kline_moretti_2014` | the Tennessee Valley Authority: agricultural gains reversed, manufacturing gains persisted, local gains offset nationally | 2026-11-20 |
 | `shenzhen` | Shenzhen's population: 314,100 in 1979, 17.56 million in the 2020 census | 2026-11-20 |
 | `schelling_1971` | Schelling's segregation model: the 1969 memorandum, the 1971 paper, the 1978 book, and Sakoda's 1949 precursor | 2026-11-20 |
+| `ck_1994` | Card and Krueger's minimum-wage case study: $4.25 to $5.05 in New Jersey, 410 stores, Table 3's employment means | 2026-11-20 |
+| `nw_2000` | Neumark and Wascher's payroll records (-4.6%, an elasticity of -0.24 to the minimum) and Card and Krueger's BLS reply | 2026-11-20 |
+| `cdlz_2019` | the bunching estimator: 138 state increases, low-wage jobs unchanged over five years, an own-wage elasticity of 0.41 (0.43) | 2026-11-20 |
+| `jardim_2022` | Seattle's $11 and $13 minimums: hours down; elasticities -0.2 to -2.0 | 2026-11-20 |
+| `cabs` | cab drivers' daily labour supply (Camerer et al. 1997; Farber 2015) and Uber drivers' intertemporal elasticity of about 1.2 | 2026-11-20 |
+| `chetty_2011` | micro labour supply elasticities: Hicksian 0.3 and 0.25, Frisch 0.5 and 0.25 (intensive, extensive) | 2026-11-20 |
+| `ss_2021` | the meta-analysis of firm-level labour supply elasticities (about 800 estimates) | 2026-11-20 |
+| `ak_1991` | quarter of birth: compulsory schooling keeps up to 25% of potential dropouts in school; IV close to OLS; weak instruments | 2026-11-20 |
+| `oreopoulos_2006` | Britain's school-leaving age from 14 to 15: a discontinuity, and large returns | 2026-11-20 |
+| `mariel` | the Mariel boatlift: Card (no effect), Borjas (-10 to -30% for non-Hispanic male dropouts), Peri and Yasenov (no significant effect) | 2026-11-20 |
+| `kearl_1979` | the survey: 90% of 211 economists agreed, at least with provisos, that a minimum wage raises unemployment among the young and unskilled | 2026-11-20 |
