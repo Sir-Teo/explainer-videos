@@ -63,8 +63,8 @@ class Frontier(VoiceoverScene):
         keys = label(rf"percent of real income lost in autarky: \ grey, \ one sector; \ green, \ with a share "
                      rf"$\beta$ = {G['beta']:.1f} of costs in traded inputs", font_size=17, color=GREY_A).next_to(
             eq, DOWN, buff=0.25)
-        foot = label(rf"Costinot and Rodr\'iguez-Clare (2018): \ for America, \ {G['crc_lo']} to {G['crc_hi']}\% "
-                     r"of GDP", font_size=18, color=E.ACCENT).to_edge(RIGHT, buff=0.4).shift(UP * 0.6)
+        foot = label(rf"Costinot and Rodr\'iguez-Clare (2018): \\ for America, \ {G['crc_lo']} to {G['crc_hi']}\% "
+                     r"of GDP", font_size=18, color=E.ACCENT).move_to(LEFT * 3.6 + UP * 0.9)
         tag = published_tag(r"CEPII 2019 flows; \ Costinot and Rodr\'iguez-Clare (2014, \ 2018)", corner=DR,
                             font_size=11)
         with self.voiceover(

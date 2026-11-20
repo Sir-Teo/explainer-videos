@@ -22,6 +22,8 @@ class Firms(VoiceoverScene):
         ], width=12.6, cols=3, font_size=21).move_to(DOWN * 0.1)
         head = label(r"Bernard and Jensen (1995): \ inside the plants", font_size=28, color=E.ACCENT).to_edge(
             UP, buff=0.6)
+        sub = label(r"the census of manufacturing plants: \ every plant, \ its sales, \ workers and exports",
+                    font_size=20, color=GREY_A).next_to(head, DOWN, buff=0.3)
         tag = published_tag(tables.BERNARD_JENSEN_1995.tag, corner=DR, font_size=12)
         with self.voiceover(
             "Until the 1990s, trade theory talked about countries and industries. Then Andrew Bernard and Bradford "
@@ -31,7 +33,7 @@ class Firms(VoiceoverScene):
             "productive, more capital-intensive, paying higher wages, and they were so before they started to "
             "export. Good firms export; exporting is not what made them good."
         ) as vo:
-            self.play(FadeIn(head), FadeIn(tag))
+            self.play(FadeIn(head), FadeIn(tag), FadeIn(sub))
             for mk, c in zip("abc", cards.cards):
                 vo.wait_until(mk)
                 self.play(FadeIn(c, shift=UP * 0.1))
@@ -69,10 +71,10 @@ class Firms(VoiceoverScene):
             f"{100 * F['sales_share_exporters']:.0f} percent of all output. <bookmark mark='d'/> On average they "
             f"are {F['size_ratio']:.0f} times as large as the firms that sell only at home."
         ) as vo:
-            self.play(FadeIn(ax), FadeIn(tag))
+            self.play(FadeIn(ax), FadeIn(tag), LaggedStart(*[GrowFromEdge(b, DOWN) for b in bars],
+                                                           lag_ratio=0.005), run_time=2.5)
             vo.wait_until("a")
-            self.play(LaggedStart(*[GrowFromEdge(b, DOWN) for b in bars], lag_ratio=0.005), FadeIn(side[0]),
-                      run_time=2.5)
+            self.play(FadeIn(side[0]))
             for mk, r_ in zip("bcd", side[1:]):
                 vo.wait_until(mk)
                 self.play(FadeIn(r_))
@@ -107,9 +109,9 @@ class Firms(VoiceoverScene):
             "explain all of Bernard and Jensen's facts: exporters are rare, because few firms clear the higher bar; "
             "and they are large and productive, because only the large and productive can."
         ) as vo:
-            self.play(FadeIn(ax), FadeIn(zero), FadeIn(tag))
+            self.play(FadeIn(ax), FadeIn(zero), FadeIn(tag), Create(pd), FadeIn(side[0]), run_time=1.5)
             vo.wait_until("a")
-            self.play(Create(pd), Create(c1), FadeIn(side[0]), run_time=1.5)
+            self.play(Create(c1), Indicate(pd, color=WHITE))
             vo.wait_until("b")
             self.play(Create(px), FadeIn(side[1]), run_time=1.5)
             vo.wait_until("c")

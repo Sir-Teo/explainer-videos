@@ -120,6 +120,11 @@ class Melitz(VoiceoverScene):
             label(rf"gold: \ exporters grow, \\ {100 * R['grow']:+.0f}\% and more", font_size=18, color=ARCH),
             label(r"no firm changed; \\ the market moved \\ to the best", font_size=18, color=GAIN),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.35).to_edge(RIGHT, buff=0.35)
+        cuts = VGroup(vline(ax, R["phi_t"], -1.1, 0.6, GREY_D), vline(ax, R["phi_x"], -1.1, 0.6, GREY_D))
+        zones = VGroup(*[label(t_, font_size=15, color=GREY_A).move_to(ax.ax.c2p((a_ + b_) / 2, 0.5))
+                         for t_, a_, b_ in ((r"close", 1.6, R["phi_t"]),
+                                            (r"home only", R["phi_t"], R["phi_x"]),
+                                            (r"export", R["phi_x"], 4.0))])
         tag = island_tag(corner=DR, font_size=14)
         with self.voiceover(
             "Follow each firm through the opening. Here is how a firm's sales with trade compare with its sales "
@@ -133,7 +138,7 @@ class Melitz(VoiceoverScene):
             "gain comes from. Studies of real liberalizations, in Chile, Canada and elsewhere, find exactly this "
             "pattern."
         ) as vo:
-            self.play(FadeIn(ax), FadeIn(zero), FadeIn(tag))
+            self.play(FadeIn(ax), FadeIn(zero), FadeIn(tag), FadeIn(cuts), FadeIn(zones))
             vo.wait_until("a")
             self.play(Create(l_ex), FadeIn(side[0]))
             vo.wait_until("b")
