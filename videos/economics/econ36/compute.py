@@ -149,6 +149,39 @@ def compute_gravity() -> dict:
             "mccallum": M["factor"], "zeros": float(np.mean(y == 0))}
 
 
+def compute_fit() -> dict:
+    """How well gravity fits: PPML with exporter and importer fixed effects, predicted against actual flows, and the
+    partial effect of a trade agreement."""
+    G = _grav()
+    ok = (np.isfinite(G["tradeflow_baci"]) & np.isfinite(G["distw_harmonic"]) & (G["distw_harmonic"] > 0) &
+          np.isfinite(G["contig"]) & np.isfinite(G["comlang_off"]) & np.isfinite(G["fta_wto"]) &
+          np.isfinite(G["col_dep_ever"]) & np.isfinite(G["gdp_o"]) & np.isfinite(G["gdp_d"]))
+    X = np.column_stack([np.log(G["distw_harmonic"]), G["contig"], G["comlang_off"], G["col_dep_ever"],
+                         G["fta_wto"]])[ok]
+    y = G["tradeflow_baci"][ok]
+    io, idd = G["iso3_o"][ok], G["iso3_d"][ok]
+    oc = {c: i for i, c in enumerate(sorted(set(io)))}
+    dc = {c: i for i, c in enumerate(sorted(set(idd)))}
+    P = trade.ppml_fe(y, X, np.array([oc[c] for c in io]), np.array([dc[c] for c in idd]))
+    mu = P["mu"]
+    pos = y > 0
+    lr = float(np.corrcoef(np.log(y[pos]), np.log(mu[pos]))[0, 1] ** 2)
+    share = float(np.corrcoef(y, mu)[0, 1] ** 2)
+    rng = np.random.default_rng(36)
+    big = np.argsort(-y)[:2000]
+    pick = rng.choice(np.flatnonzero(pos), 1500, replace=False)
+    labels = {}
+    for a, b in (("USA", "CAN"), ("DEU", "FRA"), ("CHN", "USA"), ("JPN", "KOR"), ("AUS", "NZL"), ("BRA", "ARG")):
+        k = np.flatnonzero((io == a) & (idd == b))
+        if len(k):
+            labels[f"{a}-{b}"] = (float(y[k[0]]), float(mu[k[0]]))
+    b = P["beta"]
+    return {"y": y[pick].tolist(), "mu": mu[pick].tolist(), "r2_logs": lr, "r2_levels": share, "labels": labels,
+            "fta": float(b[4]), "fta_pct": float(np.expm1(b[4])), "dist": float(b[0]),
+            "dist_double": float(1 - 2 ** b[0]), "border": float(np.expm1(b[1])), "top_share": float(
+                y[big].sum() / y.sum()), "n": int(len(y))}
+
+
 def compute_firms() -> dict:
     Mt = TRUTH["melitz"]
     kw = {k: Mt[k] for k in ("sigma", "k", "f", "fx", "fe", "tau", "delta")}
@@ -336,6 +369,7 @@ ITEMS = {
     "krugman": compute_krugman,
     "playit": compute_playit,
     "gravity": compute_gravity,
+    "fit": compute_fit,
     "firms": compute_firms,
     "melitz": compute_melitz,
     "ek": compute_ek,

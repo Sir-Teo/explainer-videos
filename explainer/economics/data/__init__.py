@@ -452,6 +452,20 @@ DIST_FRED = {
 }
 FRED_SERIES.update(DIST_FRED)
 FRED_RETRIEVED.update({s: "2026-11-20" for s in DIST_FRED})
+# Part 41: the top statutory income tax rate and its threshold (IRS, Statistics of Income, Historical Table 23), and
+# federal receipts and the surplus or deficit as percentages of GDP (OMB)
+TAX_FRED = {
+    "IITTRHB": ("U.S. individual income tax: tax rates for regular tax: highest bracket", "percent", "annual",
+                "Internal Revenue Service"),
+    "IITTIHB": ("U.S. individual income tax: taxable income boundary over which the highest tax rate bracket applies",
+                "dollars", "annual", "Internal Revenue Service"),
+    "FYFRGDA188S": ("Federal receipts as percent of gross domestic product", "percent of GDP", "annual",
+                    "U.S. Office of Management and Budget; Federal Reserve Bank of St. Louis"),
+    "FYFSGDA188S": ("Federal surplus or deficit [-] as percent of gross domestic product", "percent of GDP", "annual",
+                    "U.S. Office of Management and Budget; Federal Reserve Bank of St. Louis"),
+}
+FRED_SERIES.update(TAX_FRED)
+FRED_RETRIEVED.update({s: "2026-11-20" for s in TAX_FRED})
 
 SPF_FILES = ("median_rgdp_level", "median_rgdp_growth", "median_recess_level")
 SPF_URL = ("https://www.philadelphiafed.org/-/media/frbp/assets/surveys-and-data/survey-of-professional-forecasters/"

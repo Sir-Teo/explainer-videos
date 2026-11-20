@@ -89,6 +89,8 @@ film that moves to a new vintage says so on screen.
 | `wid_top1_selected.csv` | the share of pre-tax national income received by the richest 1%, in years without extrapolation, for the United States, the United Kingdom, France, Germany, Sweden, the Netherlands, Japan, China, India, Russia, Brazil, South Africa and the world | World Inequality Database (WID.world, 2026), via Our World in Data | CC BY 4.0 | 2026-11-20 |
 | `fred_WFRBST01134.csv`, `fred_WFRBSN09161.csv`, `fred_WFRBSN40188.csv`, `fred_WFRBSB50215.csv` | shares of household net worth held by the top 1%, the 90th to 99th percentiles, the 50th to 90th and the bottom half of the wealth distribution, quarterly from 1989 (the Distributional Financial Accounts) | Board of Governors of the Federal Reserve System, via FRED | public domain | 2026-11-20 |
 | `fred_GINIALLRH.csv` | the Gini index of household money income, annual from 1967 | U.S. Census Bureau, Current Population Survey, via FRED | public domain | 2026-11-20 |
+| `fred_IITTRHB.csv`, `fred_IITTIHB.csv` | the top statutory rate of the US individual income tax and the taxable income above which it applies (married couples filing jointly), annual 1913-2018 | Internal Revenue Service, Statistics of Income, Historical Table 23, via FRED | public domain | 2026-11-20 |
+| `fred_FYFRGDA188S.csv`, `fred_FYFSGDA188S.csv` | federal receipts and the federal surplus or deficit as percentages of GDP, fiscal years from 1929 | U.S. Office of Management and Budget, via FRED | public domain | 2026-11-20 |
 
 The raw Maddison workbook (`mpd2023_web.xlsx`, dataverse file 421302) had SHA-256
 `ecc5916ca12789b983fc4be437f8a354bbf4291323605324ac3e0aea4c57cbb6` when the extract was made. The raw Pink Sheet

@@ -9,6 +9,7 @@ class Practice(VoiceoverScene):
              "Chapter thirteen. In practice: modelling trade policy.", lit={1995: r"Krugman"},
              scale=("firm", "nation"), horizon=("a year",))
         self.jobs()
+        self.agreement()
         self.called()
 
     def jobs(self):
@@ -60,6 +61,51 @@ class Practice(VoiceoverScene):
             self.play(Indicate(cc.right, color=WHITE, scale_factor=1.01))
             vo.wait_until("c")
             self.play(FadeIn(cc.stamp, scale=1.3))
+            vo.wait_until("d")
+            self.play(FadeIn(foot))
+        self.clear_scene()
+
+    def agreement(self):
+        F = load("fit")
+        rows = [(r"a trade agreement", F["fta_pct"], GAIN), (r"a shared border", F["border"], ARCH),
+                (r"twice the distance", -F["dist_double"], TARIFF)]
+        bars = VGroup()
+        for k, (nm, v, col) in enumerate(rows):
+            y = 1.0 - 1.2 * k
+            w = abs(v) * 7.0
+            r = Rectangle(width=w, height=0.6, stroke_width=0, fill_color=col, fill_opacity=0.85).move_to(
+                np.array([-0.4 + (w / 2 if v > 0 else -w / 2), y, 0]))
+            nm_ = label(nm, font_size=21, color=WHITE)
+            if v > 0:
+                nm_.next_to(np.array([-0.5, y, 0]), LEFT, buff=0.15)
+                val = label(f"{100 * v:+.0f}\\%", font_size=21, color=col).next_to(r, RIGHT, buff=0.15)
+            else:
+                nm_.next_to(np.array([-0.4 - w, y, 0]), LEFT, buff=0.15)
+                val = label(f"{100 * v:+.0f}\\%", font_size=21, color=col).next_to(np.array([-0.3, y, 0]), RIGHT,
+                                                                                  buff=0.1)
+            bars.add(VGroup(r, nm_, val))
+        axis = Line(np.array([-0.4, 1.6, 0]), np.array([-0.4, -2.0, 0]), color=GREY_B, stroke_width=2)
+        head = label(r"a worked example: \ what would an agreement do to trade between its members?", font_size=24,
+                     color=E.ACCENT).to_edge(UP, buff=0.5)
+        foot = label(r"partial effects, \ holding each country's other trade fixed; \ the general equilibrium "
+                     r"(chapter 8) adds diversion", font_size=18, color=GREY_A).to_edge(DOWN, buff=0.6)
+        tag = data_tag(r"CEPII Gravity database (BACI), \ 2019; \ PPML with fixed effects, \ computed", corner=DR,
+                       font_size=12)
+        with self.voiceover(
+            "A typical first assignment for a trade analyst: what would a new agreement do to trade between its "
+            "members? Read it off the gravity equation, estimated with each country's fixed effect. "
+            f"<bookmark mark='a'/> Pairs with an agreement trade about {100 * F['fta_pct']:.0f} percent more than "
+            "otherwise similar pairs. <bookmark mark='b'/> Sharing a border adds about "
+            f"{100 * F['border']:.0f} percent; <bookmark mark='c'/> doubling the distance removes about "
+            f"{100 * F['dist_double']:.0f} percent. <bookmark mark='d'/> These are partial effects: they hold "
+            "fixed everything else each country trades. A real agreement also diverts trade from outsiders and "
+            "shifts prices, which is why the analyst's second step is the general-equilibrium calculation of "
+            "chapter eight."
+        ) as vo:
+            self.play(FadeIn(head), FadeIn(axis), FadeIn(tag), *[FadeIn(b_[1]) for b_ in bars])
+            for mk, b_ in zip("abc", bars):
+                vo.wait_until(mk)
+                self.play(GrowFromEdge(b_[0], LEFT if rows[list(bars).index(b_)][1] > 0 else RIGHT), FadeIn(b_[2]))
             vo.wait_until("d")
             self.play(FadeIn(foot))
         self.clear_scene()

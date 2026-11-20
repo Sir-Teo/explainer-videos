@@ -10,6 +10,7 @@ class Gravity(VoiceoverScene):
              scale=("nation", "world"), horizon=("a year",))
         self.germany()
         self.table()
+        self.fit()
         self.borders()
 
     def germany(self):
@@ -87,6 +88,55 @@ class Gravity(VoiceoverScene):
             self.play(LaggedStart(*[FadeIn(g) for g in grid[1::3]], lag_ratio=0.15))
             vo.wait_until("b")
             self.play(LaggedStart(*[FadeIn(g) for g in grid[2::3]], lag_ratio=0.15), FadeIn(foot))
+        self.clear_scene()
+
+    def fit(self):
+        F = load("fit")
+        y, mu = np.log10(np.array(F["y"]) / 1e6), np.log10(np.array(F["mu"]) / 1e6)
+        ax = plane([-4, 3], [-4, 3], center=LEFT * 2.2 + DOWN * 0.4, x_length=5.4, y_length=5.4,
+                   xticks=[-4, -2, 0, 2], yticks=[-4, -2, 0, 2], xlabel=r"predicted, \ \$ billions (log)",
+                   ylabel=r"actual, \ \$ billions (log)", xfmt=lambda v: f"{10 ** v:g}", yfmt=lambda v: f"{10 ** v:g}",
+                   font_size=13)
+        pts = VGroup(*[Dot(ax.ax.c2p(a, b), radius=0.022, color=ARCH, fill_opacity=0.5)
+                       for a, b in zip(mu, y) if -4 <= a <= 3 and -4 <= b <= 3])
+        diag = seg(ax, -4, -4, 3, 3, WHITE, 2, dashed=True)
+        names = {"USA-CAN": r"America to Canada", "CHN-USA": r"China to America", "DEU-FRA": r"Germany to France",
+                 "AUS-NZL": r"Australia to New Zealand"}
+        marks = VGroup()
+        for k, nm in names.items():
+            if k in F["labels"]:
+                a, b = (np.log10(v / 1e6) for v in F["labels"][k][::-1])
+                marks.add(VGroup(dot(ax, a, b, WHITE, 0.07), label(nm, font_size=14, color=WHITE).next_to(
+                    ax.ax.c2p(a, b), LEFT, buff=0.12)))
+        side = VGroup(
+            label(r"each dot: \ one pair of countries, \\ 2019 (1,500 of 28,107)", font_size=17, color=GREY_A),
+            label(r"predicted from distance, \ borders, \\ language, \ colonial ties, \\ agreements, \ and each "
+                  r"\\ country's fixed effect", font_size=17, color=WHITE),
+            label(rf"variance of log trade \\ explained: \ {100 * F['r2_logs']:.0f}\%", font_size=19, color=ARCH),
+            label(rf"of trade in dollars: \ {100 * F['r2_levels']:.0f}\%", font_size=19, color=ARCH),
+        ).arrange(DOWN, aligned_edge=LEFT, buff=0.32).to_edge(RIGHT, buff=0.4)
+        tag = data_tag(r"CEPII Gravity database (BACI), \ 2019; \ PPML computed", corner=DR, font_size=12)
+        with self.voiceover(
+            "How well does gravity actually fit? Take the Poisson fit with each country's fixed effect, and "
+            "compare its prediction for every pair of countries with the trade that happened. "
+            "<bookmark mark='a'/> Each dot is a pair; on the diagonal, the prediction is exact. <bookmark mark='b'/> "
+            "The big flows sit close to it: America's exports to Canada, China's to America, Germany's to France. "
+            "<bookmark mark='c'/> Across all pairs, the equation explains about "
+            f"{100 * F['r2_logs']:.0f} percent of the variation in log trade, <bookmark mark='d'/> and "
+            f"{100 * F['r2_levels']:.0f} percent of the variation in dollars, because the largest flows, which carry "
+            "most of world trade, are predicted best. The scatter around the line is where the interesting economics "
+            "lives: pairs that trade much more, or much less, than their geography says."
+        ) as vo:
+            self.play(FadeIn(ax), FadeIn(tag), Create(diag), FadeIn(pts, lag_ratio=0.001), FadeIn(side[0]),
+                      run_time=2.0)
+            vo.wait_until("a")
+            self.play(FadeIn(side[1]))
+            vo.wait_until("b")
+            self.play(LaggedStart(*[FadeIn(m_) for m_ in marks], lag_ratio=0.3), run_time=1.5)
+            vo.wait_until("c")
+            self.play(FadeIn(side[2]))
+            vo.wait_until("d")
+            self.play(FadeIn(side[3]))
         self.clear_scene()
 
     def borders(self):

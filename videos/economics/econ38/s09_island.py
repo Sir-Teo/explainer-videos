@@ -59,9 +59,9 @@ class IslandBorder(VoiceoverScene):
             "study, however careful, did not settle the question, and why the evidence had to accumulate."
         ) as vo:
             self.play(FadeIn(ax), FadeIn(zero), FadeIn(tag))
-            self.play(FadeIn(head, shift=DOWN * 0.1))
+            self.play(FadeIn(head, shift=DOWN * 0.1), FadeIn(hc, lag_ratio=0.03), run_time=1.5)
             vo.wait_until("a")
-            self.play(FadeIn(hc, lag_ratio=0.03), FadeIn(side[0]), run_time=1.5)
+            self.play(FadeIn(side[0]), Indicate(hc, color=WHITE, scale_factor=1.0))
             vo.wait_until("b")
             self.play(FadeIn(hm, lag_ratio=0.03), FadeIn(side[1]), run_time=1.5)
             vo.wait_until("c")
@@ -88,8 +88,8 @@ class IslandBorder(VoiceoverScene):
         even = dot(ax, np.log10(P["n"]), P["even_sd"], GAIN, 0.1)
         side = VGroup(
             label(rf"{P['n']} stores: \ {sd1:.3f}", font_size=18, color=WHITE),
-            label(rf"the competitive effect: \ {P['effect']:+.3f}; \ to find it 4 times \ in 5 needs a "
-                  rf"standard \\ error of {mde:.3f} (red)", font_size=17, color=LOSS),
+            label(rf"the competitive effect: \ {P['effect']:+.3f}; \\ to find it 4 times in 5 \\ needs a "
+                  rf"standard error \\ of {mde:.3f} (red)", font_size=17, color=LOSS),
             label(rf"about {round(P['need'], -2):,.0f} stores", font_size=19, color=LOSS),
             label(rf"the same {P['n']}, \ split evenly: \\ {P['even_sd']:.3f}", font_size=18, color=GAIN),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.35).to_edge(RIGHT, buff=0.3)

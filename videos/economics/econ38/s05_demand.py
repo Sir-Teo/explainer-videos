@@ -96,9 +96,10 @@ class Demand(VoiceoverScene):
             "sensitive than the technology. <bookmark mark='d'/> On the Island, labour is thirty percent of a "
             "restaurant's costs, and both sigma and epsilon are a half: the elasticity of a half used above."
         ) as vo:
-            self.play(Write(eq), FadeIn(ax), FadeIn(tag), FadeIn(rules[0]), run_time=1.5)
+            self.play(Write(eq), FadeIn(ax), FadeIn(tag), FadeIn(rules[0]), Create(lines[0]), FadeIn(keys[0]),
+                      run_time=2.0)
             vo.wait_until("a")
-            self.play(Create(lines[0]), FadeIn(keys[0]), run_time=1.5)
+            self.play(Indicate(lines[0], color=WHITE, scale_factor=1.0), Indicate(rules[0], color=WHITE))
             vo.wait_until("b")
             self.play(Create(lines[1]), FadeIn(keys[1]), FadeIn(rules[1]), run_time=1.5)
             vo.wait_until("c")
