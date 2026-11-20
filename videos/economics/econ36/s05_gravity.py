@@ -43,9 +43,9 @@ class Gravity(VoiceoverScene):
             "container twice as far does not cost twice as much. <bookmark mark='c'/> Every country's exports look "
             "like this. Gravity is the most reliable regularity in empirical economics."
         ) as vo:
-            self.play(FadeIn(ax), FadeIn(tag))
+            self.play(FadeIn(ax), FadeIn(tag), LaggedStart(*[FadeIn(p) for p in pts], lag_ratio=0.01), run_time=2.0)
             vo.wait_until("a")
-            self.play(LaggedStart(*[FadeIn(p) for p in pts], lag_ratio=0.01), FadeIn(side[0]), run_time=2.0)
+            self.play(FadeIn(side[0]), Indicate(pts, color=WHITE, scale_factor=1.0))
             vo.wait_until("b")
             self.play(Create(fit), FadeIn(side[1]))
             vo.wait_until("c")
@@ -106,8 +106,10 @@ class Gravity(VoiceoverScene):
         for k, nm in names.items():
             if k in F["labels"]:
                 a, b = (np.log10(v / 1e6) for v in F["labels"][k][::-1])
+                where = {"CHN-USA": (UP + LEFT, UP * 0.05), "USA-CAN": (LEFT, DOWN * 0.12),
+                         "DEU-FRA": (LEFT, DOWN * 0.2), "AUS-NZL": (LEFT, ORIGIN)}[k]
                 marks.add(VGroup(dot(ax, a, b, WHITE, 0.07), label(nm, font_size=14, color=WHITE).next_to(
-                    ax.ax.c2p(a, b), LEFT, buff=0.12)))
+                    ax.ax.c2p(a, b), where[0], buff=0.12).shift(where[1])))
         side = VGroup(
             label(r"each dot: \ one pair of countries, \\ 2019 (1,500 of 28,107)", font_size=17, color=GREY_A),
             label(r"predicted from distance, \ borders, \\ language, \ colonial ties, \\ agreements, \ and each "
