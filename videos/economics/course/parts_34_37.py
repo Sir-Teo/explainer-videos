@@ -98,7 +98,6 @@ PARTS = [
                                   r"\alpha_2}"),
             ("HOV", r"F_c = V_c - s_c V_w"),
             ("The optimal tariff", r"t^{\text{opt}} = 1/\varepsilon^*"),
-            ("Protection for sale", r"\frac{t_i}{1 + t_i} = \frac{I_i - \alpha_L}{a + \alpha_L}\,\frac{z_i}{e_i}"),
             ("The gains from trade", r"1 - \lambda^{1/\varepsilon}"),
         ],
         U=(0, 1, 2, 3, 4, 5, 6, "s09_intermission", 8, 9, 10, 11, 12, 13), D=(7, 15), I=(14,),
