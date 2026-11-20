@@ -95,4 +95,50 @@ PARTS = [
               ("The Island's planted truths", "explainer/economics/island.py"),
               ("The Data Room's sources", "explainer/economics/data/SOURCES.md")),
     ),
+    Part(
+        n=40, level="U", widget="tail", prereq=(3, 4, 22, 39),
+        question="How unequal are incomes and wealth, why, and do children escape where they started?",
+        story="The part opens on Jan Pen's parade of 1971, drawn from Opportunity Insights' family incomes and "
+              "Piketty and Saez's tax records: average height arrives at minute 42, and the richest one in ten "
+              "thousand are over 600 metres tall. After a game of four numbers it weighs the measures and the ethics "
+              "inside Atkinson's index, reads a century of top shares and their U, sets out the dispute over how "
+              "much the top pulled away after taxes, derives Pareto tails from random growth with the Kolmogorov "
+              "forward equation, shows with Gabaix, Lasry, Lions and Moll why pure random growth is too slow, and "
+              "turns to wealth, r against g, and the replies. After an intermission of the top 1% share since 1913, "
+              "it builds Kuznets's dual economy and takes his inverted U as Called it?, measures the "
+              "intergenerational elasticity with and without averaging, computes the Gatsby curve's mechanism and "
+              "its American version across commuting zones, reads rank-rank slopes, the transition matrix and the "
+              "fading of absolute mobility, finds the places where poor children rise and the designs that show "
+              "places matter, and steps back to the world; two dials, a distributional table and the frontier.",
+        handoff="Part 41 asks what taxes do and cost; Part 42 the transfers and insurance of the welfare state; Part "
+                "65 returns to wealth taxes and inequality at the frontier.",
+        outside="Part 3: Lorenz curves and the Gini; Part 4: regression and natural experiments; Part 22: saving and "
+                "wealth; Part 39: the wage structure. Chapter 4 uses a stochastic differential equation and its "
+                "Kolmogorov forward equation; chapter 8 the errors-in-variables formula; chapter 11 a "
+                "population-weighted Gini.",
+        objectives={
+            "U": ["Draw a Lorenz curve, compute the Gini and top shares, and say what each measure hides.",
+                  "Describe a century of top income shares and why their measurement is disputed.",
+                  "Explain rank-rank mobility, absolute mobility and what the Gatsby curve shows."],
+            "M": ["Derive the Pareto exponent of random growth with turnover from the Kolmogorov forward equation.",
+                  "Show how transitory income attenuates the intergenerational elasticity, and correct it.",
+                  "Compute Atkinson's index and the Pareto exponent implied by two top shares."],
+            "D": ["Explain why pure random growth is too slow to explain the rise of top incomes, and the repairs.",
+                  "Assess what r - g can and cannot explain about the tail of wealth."],
+            "I": ["Build a distributional table for a policy and state the four choices behind it."],
+        },
+        results=[
+            ("Atkinson's index", r"A_\varepsilon = 1 - \frac{1}{\bar x}\Big(\frac{1}{n}\sum_i "
+                                 r"x_i^{1-\varepsilon}\Big)^{1/(1-\varepsilon)}"),
+            ("Pareto from two shares", r"\frac{S(q)}{S(p)} = \Big(\frac{q}{p}\Big)^{1-1/\alpha}"),
+            ("Random growth's tail", r"\zeta = \frac{-\nu + \sqrt{\nu^2 + 2\sigma^2\delta}}{\sigma^2}"),
+            ("Attenuation", r"\operatorname{plim}\hat\beta_T = \beta\,\frac{\sigma^2_{p}}{\sigma^2_{p} + "
+                            r"\sigma^2_{t}/T}"),
+            ("Rank-rank", r"E[R_{child} \mid R_{parent}] = \alpha + 0.341\, R_{parent}"),
+        ],
+        U=(0, 1, 2, 3, "s08_intermission", 7, 9, 10, 11, 12, 13), D=(5, 14, 16), I=(15,),
+        also=(("Agora's distribution", "explainer/economics/agora/distribution.py"),
+              ("The Island's planted truths", "explainer/economics/island.py"),
+              ("The Data Room's sources", "explainer/economics/data/SOURCES.md")),
+    ),
 ]

@@ -616,7 +616,38 @@ DIALS = {d.key: d for d in [
              Estimate("Quillian Pager Hexel and Midtboen", 2017, "meta-analysis", "24 US field experiments since "
                       "1989", 36.0, where="PNAS 114(41): 10870-10875", checked="2026-11-20"),
          )),
-    Dial("ige", "intergenerational elasticity of income", "", (40,)),
+    Dial("ige", "intergenerational elasticity of income", "the slope of children's log income on parents' log "
+         "income, measured over long spans", (40,), status="contested", checked="2026-11-20",
+         meaning="how much of a parent's income advantage the child keeps: at 0.3 a doubling of parents' income is "
+                 "worth about 23% to the child, at 0.6 about 52%; estimates rise as parents' long-run income is "
+                 "measured better, and move with the age at which children are observed and with how zero "
+                 "incomes are treated, which is why rank slopes are now preferred",
+         estimates=(
+             Estimate("Solon", 1992, "regression", "PSID fathers and sons, fathers' earnings averaged over "
+                      "several years; '0.4 or higher'", 0.4, where="AER 82(3): 393-408", checked="2026-11-20"),
+             Estimate("Mazumder", 2005, "regression", "fathers' Social Security earnings over long spans", 0.6,
+                      where="Review of Economics and Statistics 87(2): 235-255", checked="2026-11-20"),
+             Estimate("Chetty Hendren Kline and Saez", 2014, "regression", "tax records, children born 1980-82, "
+                      "family income, log-log", 0.344, where="QJE 129(4): 1553-1623", checked="2026-11-20"),
+             Estimate("this film (Opportunity Insights' percentile means)", 2014, "regression", "log mean child "
+                      "income on log mean parent income across parents' percentiles 10-90", 0.41,
+                      where="videos/economics/econ40/compute.py, item ige", checked="2026-11-20"),
+         )),
+    Dial("pareto_wealth", "Pareto exponent of top wealth", "alpha in P(W > w) proportional to w^-alpha, for the "
+         "top of the US wealth distribution", (40,), status="depends on the setting", checked="2026-11-20",
+         meaning="the lower it is, the fatter the tail: at 1.5 the richest 0.1% hold almost half of what the richest "
+                 "1% hold, at 2 about a third; through random growth it depends on the return the very wealthy "
+                 "earn relative to growth, its risk, and how often fortunes are split, spent or taxed",
+         estimates=(
+             Estimate("this film (the Fed's accounts in 1989)", 2026, "reconstruction", "from the "
+                      "top 1% and top 10% shares of household net worth, 1989 Q3", 1.74,
+                      where="videos/economics/econ40/compute.py, item wealth", checked="2026-11-20"),
+             Estimate("this film (the Fed's accounts in 2026)", 2026, "reconstruction", "the same, "
+                      "2026 Q2", 1.48, where="videos/economics/econ40/compute.py, item wealth",
+                      checked="2026-11-20"),
+             Estimate("Klass Biham Levy Malcai and Solomon", 2006, "regression", "the Forbes 400, 1988-2003, "
+                      "average", 1.49, where="Economics Letters 90(2): 290-295", checked="2026-11-20"),
+         )),
     Dial("eti", "elasticity of taxable income", "", (41,)),
     Dial("ui_duration", "duration elasticity of unemployment benefits", "", (42,)),
     Dial("matching", "elasticity of matches to unemployment", "eta in M = A U^eta V^(1-eta); one minus the elasticity "
@@ -1788,6 +1819,29 @@ SHOWN = {
         ("Christiano, Eichenbaum and Evans (2005); Smets and Wouters (2007)", "medium-scale frictions; the hump "
          "computed with habits, indexation and smoothing"),
         ("Bernanke (2002)", "the Called it? card on deflation"),
+    ],
+    40: [
+        ("Pen (1971)", "the parade, drawn with Opportunity Insights' and Piketty and Saez's data"),
+        ("Atkinson (1970)", "the index, computed on the Island"),
+        ("Piketty and Saez (2003); the World Inequality Database", "top shares, data shown with sources"),
+        ("Auten and Splinter (2024); Piketty, Saez and Zucman", "the measurement dispute, stated with both sides' "
+         "numbers"),
+        ("Pareto (1896); Champernowne (1953); Gabaix (2009)", "the tail, computed from the shares and derived on the "
+         "Island; the Pareto fact"),
+        ("Gabaix, Lasry, Lions and Moll (2016)", "the speed of transitions, computed on the Island"),
+        ("Piketty (2014); Rognlie (2015); Krusell and Smith (2015)", "r against g, the mechanism computed; the replies "
+         "stated"),
+        ("Klass et al. (2006)", "the Forbes 400's exponent, entered in a dial"),
+        ("Kuznets (1955)", "the Called it? card"),
+        ("Solon (1992); Mazumder (2005); Chetty et al. (2014)", "the intergenerational elasticity, entered in a dial"),
+        ("Corak (2013)", "the Gatsby curve, the range stated; its mechanism computed; the Gatsby fact"),
+        ("Chetty et al. (2014, 2017)", "rank slopes, the transition matrix, absolute mobility and places, from the "
+         "published data"),
+        ("Chetty and Hendren (2018); Chetty, Hendren and Katz (2016)", "movers and Moving to Opportunity, stated"),
+        ("Lakner and Milanovic (2016)", "the elephant curve, described; inequality between countries computed from "
+         "the Penn World Table"),
+        ("Chetty et al. (2016)", "life expectancy by income, stated"),
+        ("Piketty, Saez and Zucman (2018); Jakobsen et al. (2020); Black et al. (2020)", "the frontier, stated"),
     ],
     39: [
         ("Bertrand and Mullainathan (2004)", "the resumes, recomputed from the data and entered in a dial"),

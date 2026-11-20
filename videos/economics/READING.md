@@ -10,7 +10,7 @@ the series leaves out.
 Both *Parts* columns are found, not typed. *Planned* lists the parts whose entry in
 [`SYLLABUS.md`](SYLLABUS.md) names the book or paper; *Built* lists the parts whose scenes, compute step or
 README cite it (a dot: none yet). Fuller notes (editions, chapters, what each source was used for) are in each
-part's README, under *Sources*. Built so far: Parts 1–39.
+part's README, under *Sources*. Built so far: Parts 1–40.
 
 ## 1. The textbook spine
 
@@ -237,7 +237,7 @@ part's README, under *Sources*. Built so far: Parts 1–39.
 | the minimum wage | Card and Krueger (1994) | 4, 38 | 4, 38 |
 | skills, tasks and technology | Autor, Levy and Murnane (2003); Acemoglu and Autor (2011) | 39 | 39 |
 | mobility and place | Chetty and others (2014) | 40, 42 | · |
-| top incomes | Piketty and Saez (2003) | 40 | · |
+| top incomes | Piketty and Saez (2003) | 40 | 40 |
 | the economics of crime | Becker (1968) | 49 | · |
 
 ### Method
@@ -333,6 +333,8 @@ part's README, under *Sources*. Built so far: Parts 1–39.
 **Part 38, *Work and Wages*.** Books: David Card and Alan Krueger, *Myth and Measurement* (1995); Alan Manning, *Monopsony in Motion* (2003); George Borjas, *Labor Economics*; Pierre Cahuc, Stéphane Carcillo and André Zylberberg, *Labor Economics*; Jacob Mincer, *Schooling, Experience, and Earnings* (1974). Papers: Robinson (1933); Stigler (1946); Roy (1951); Becker (1964); Heckman (1979); Card (1990); Angrist and Krueger (1991); Card and Krueger (1994); Card (1995); Camerer et al. (1997); Neumark and Wascher (2000); Oreopoulos (2006); Chetty et al. (2011); Farber (2015); Borjas (2017); Cengiz et al. (2019); Peri and Yasenov (2019); Angrist, Caldwell and Hall (2021); Sokolova and Sorensen (2021); Jardim et al. (2022).
 
 **Part 39, *The Wage Structure*.** Books: Claudia Goldin and Lawrence Katz, *The Race between Education and Technology* (2008); Gary Becker, *The Economics of Discrimination* (1957); Claudia Goldin, *Career and Family* (2021); David Card, 'Who Set Your Wage?', *AER* (2022). Papers: Rosen (1974, 1981); Phelps (1972); Arrow (1973); Oaxaca (1973); Blinder (1973); Katz and Murphy (1992); Abowd, Kramarz and Margolis (1999); Goldin and Rouse (2000); Autor, Levy and Murnane (2003); Bertrand and Mullainathan (2004); Acemoglu and Autor (2011); Autor and Dorn (2013); Card, Heining and Kline (2013); Goldin (2014); Mas and Pallais (2017); Quillian et al. (2017); Kleven, Landais and S\ogaard (2019); Acemoglu and Restrepo (2020); Autor et al. (2020); Cullen and Pakzad-Hurson (2023).
+
+**Part 40, *Inequality and Mobility*.** Books: Anthony Atkinson, *Inequality: What Can Be Done?* (2015); Thomas Piketty, *Capital in the Twenty-First Century* (2014); Branko Milanovic, *Global Inequality* (2016); Frank Cowell, *Measuring Inequality* (3rd edition, 2011). Papers: Pareto (1896); Champernowne (1953); Kuznets (1955); Atkinson (1970); Pen (1971); Solon (1992); Piketty and Saez (2003); Mazumder (2005); Gabaix (2009); Corak (2013); Chetty, Hendren, Kline and Saez (2014); Rognlie (2015); Krusell and Smith (2015); Gabaix, Lasry, Lions and Moll (2016); Lakner and Milanovic (2016); Chetty et al. (2016, 2017); Chetty and Hendren (2018); Piketty, Saez and Zucman (2018); Jakobsen et al. (2020); Black et al. (2020); Auten and Splinter (2024).
 
 ## 4. What the series leaves out
 

@@ -2821,6 +2821,218 @@ LEONTIEF_1983 = Table(
 PART39 = (KM_1992, SIGMA_SKILL, ALM_2003, AR_2020, CHK_2013, ADKPV_2020, UNIONS, MAS_PALLAIS_2017, BM_2004,
           DISCRIMINATION, GENDER, FRONTIER39, LEONTIEF_1983)
 
+# Part 40: Inequality and Mobility
+PEN_1971 = Table(
+    key="pen_1971",
+    cite="J. Pen, Income Distribution: Facts, Theories, Policies, translated by T. S. Preston, Allen Lane (1971), "
+         "chapter 3",
+    tag="Pen, \\ \\emph{Income Distribution} (1971)",
+    where="the parade: the whole population marches past in an hour, each person as tall as their income, the "
+          "average income at average height; dwarfs for most of the hour, giants in the last minutes",
+    read="the book's account as retold in later texts (Atkinson; Milanovic)",
+    checked="2026-11-20",
+    data={"minutes": 60},
+)
+ATKINSON_1970 = Table(
+    key="atkinson_1970",
+    cite="A. B. Atkinson, \"On the Measurement of Inequality\", Journal of Economic Theory 2(3): 244-263 (1970)",
+    tag="Atkinson, \\ \\emph{JET} 2(3) (1970)",
+    where="the index 1 - (equally distributed equivalent income)/(mean), for a social welfare function with constant "
+          "inequality aversion epsilon; Lorenz curves that cross cannot be ranked without a value judgement",
+    read="the article's statement as summarized in Cowell, Measuring Inequality",
+    checked="2026-11-20",
+    data={},
+)
+PIKETTY_SAEZ_2003 = Table(
+    key="piketty_saez_2003",
+    cite="T. Piketty and E. Saez, \"Income Inequality in the United States, 1913-1998\", Quarterly Journal of "
+         "Economics 118(1): 1-39 (2003), with series updated to 2022",
+    tag="Piketty and Saez, \\ \\emph{QJE} 118(1) (2003), \\ updated to 2022",
+    where="top income shares from federal income tax returns, 1913 on; the series is in the Data Room (saez)",
+    read="the paper and the updated tables (TabFig2022.xlsx)",
+    checked="2026-11-20",
+    data={},
+)
+AUTEN_SPLINTER_2024 = Table(
+    key="auten_splinter_2024",
+    cite="G. Auten and D. Splinter, \"Income Inequality in the United States: Using Tax Data to Measure Long-Term "
+         "Trends\", Journal of Political Economy 132(7): 2179-2227 (2024); T. Piketty, E. Saez and G. Zucman, "
+         "\"Income Inequality in the United States: A Comment\" (2024)",
+    tag="Auten and Splinter, \\ \\emph{JPE} 132(7) (2024); \\ Piketty, \\ Saez and Zucman (2024)",
+    where="Auten and Splinter: the top 1% share of pre-tax national income rose 2.6 percentage points from the early "
+          "1960s to 2019 (4.4 points since 1979); of after-tax income, 1.4 points since 1979; the top 1% share of "
+          "fiscal income rose from 9% to 19% in 1962-2019, a third of it around the 1986 tax reform. Piketty, Saez "
+          "and Zucman's after-tax-and-transfer share rose from about 9% in 1960 to 15% in 2019; they attribute the "
+          "difference to the allocation of untaxed business income, untaxed capital income and non-cash income",
+    read="the published paper's abstract and introduction as quoted; the Brookings primer; PSZ's comment",
+    checked="2026-11-20",
+    data={"as_pretax_pp": 2.6, "as_pretax_pp_1979": 4.4, "as_aftertax_pp_1979": 1.4, "fiscal_1962": 9,
+          "fiscal_2019": 19, "psz_after_1960": 9, "psz_after_2019": 15},
+)
+PARETO_1896 = Table(
+    key="pareto_1896",
+    cite="V. Pareto, Cours d'\u00e9conomie politique, Lausanne (1896-97); D. G. Champernowne, \"A Model of Income "
+         "Distribution\", Economic Journal 63: 318-351 (1953); X. Gabaix, \"Power Laws in Economics and Finance\", "
+         "Annual Review of Economics 1: 255-293 (2009)",
+    tag="Pareto (1896); \\ Champernowne (1953); \\ Gabaix (2009)",
+    where="Pareto: the number of people with income above x falls like x to a power, the same in every country he "
+          "examined; Champernowne and Gabaix: random proportional growth with a floor or with births and deaths "
+          "gives a Pareto tail",
+    read="Gabaix's review",
+    checked="2026-11-20",
+    data={},
+)
+GLLM_2016 = Table(
+    key="gllm_2016",
+    cite="X. Gabaix, J.-M. Lasry, P.-L. Lions and B. Moll, \"The Dynamics of Inequality\", Econometrica 84(6): "
+         "2071-2111 (2016)",
+    tag="Gabaix, \\ Lasry, \\ Lions and Moll, \\ \\emph{Econometrica} 84(6) (2016)",
+    where="standard random growth models produce transitions far too slow to explain the rise of top incomes since "
+          "the 1970s (an order of magnitude too slow, in the working paper); scale dependence or type dependence "
+          "(high-growth types, as in theories of superstar entrepreneurs and managers) can produce fast transitions",
+    read="the published abstract and NBER Working Paper 21363",
+    checked="2026-11-20",
+    data={},
+)
+CAPITAL_2014 = Table(
+    key="capital_2014",
+    cite="T. Piketty, Capital in the Twenty-First Century, Harvard University Press (2014); M. Rognlie, \"Deciphering "
+         "the Fall and Rise in the Net Capital Share\", Brookings Papers on Economic Activity (Spring 2015); P. "
+         "Krusell and A. A. Smith, \"Is Piketty's 'Second Law of Capitalism' Fundamental?\", Journal of Political "
+         "Economy 123(4): 725-748 (2015)",
+    tag="Piketty (2014); \\ Rognlie (2015); \\ Krusell and Smith (2015)",
+    where="r > g as a force for concentrating wealth; replies: the rise in the net capital share is largely "
+          "housing (Rognlie); with depreciation, the capital-income ratio does not explode as growth slows "
+          "(Krusell and Smith); a rising capital share as capital accumulates needs an elasticity of substitution "
+          "above one, while most estimates are below it",
+    read="the book; the two papers' abstracts",
+    checked="2026-11-20",
+    data={},
+)
+KUZNETS_1955 = Table(
+    key="kuznets_1955",
+    cite="S. Kuznets, \"Economic Growth and Income Inequality\", American Economic Review 45(1): 1-28 (1955)",
+    tag="Kuznets, \\ \\emph{AER} 45(1) (1955)",
+    where="inequality widens in the early phases of growth, as people move from agriculture to industry, becomes "
+          "stable, then narrows; the paper is 'perhaps 5 per cent empirical information and 95 per cent "
+          "speculation, some of it possibly tainted by wishful thinking'",
+    read="the article (via the NBER chapter and Wikiquote's extract)",
+    checked="2026-11-20",
+    data={"year": 1955},
+)
+IGE_STUDIES = Table(
+    key="ige_studies",
+    cite="G. Solon, \"Intergenerational Income Mobility in the United States\", American Economic Review 82(3): "
+         "393-408 (1992); B. Mazumder, \"Fortunate Sons: New Estimates of Intergenerational Mobility in the United "
+         "States Using Social Security Earnings Data\", Review of Economics and Statistics 87(2): 235-255 (2005); M. "
+         "Corak, \"Income Inequality, Equality of Opportunity, and Intergenerational Mobility\", Journal of Economic "
+         "Perspectives 27(3): 79-102 (2013), and testimony to the US Senate (2012)",
+    tag="Solon (1992); \\ Mazumder (2005); \\ Corak (2013)",
+    where="Solon: the elasticity of sons' earnings with respect to fathers' is 0.4 or higher, once fathers' earnings "
+          "are averaged over several years; Mazumder: averaging over longer spells of Social Security earnings, "
+          "about 0.6; Corak: across 22 countries, from less than 0.2 in Denmark, Norway and Finland to almost 0.7 "
+          "in Peru, higher where inequality is higher (Krueger's 'Great Gatsby curve', 2012)",
+    read="the abstracts; Corak's testimony; Mazumder's working paper",
+    checked="2026-11-20",
+    data={"solon": 0.4, "mazumder": 0.6, "corak_lo": 0.2, "corak_hi": 0.7},
+)
+CHETTY_2014 = Table(
+    key="chetty_2014",
+    cite="R. Chetty, N. Hendren, P. Kline and E. Saez, \"Where is the Land of Opportunity? The Geography of "
+         "Intergenerational Mobility in the United States\", Quarterly Journal of Economics 129(4): 1553-1623 "
+         "(2014)",
+    tag="Chetty, \\ Hendren, \\ Kline and Saez, \\ \\emph{QJE} 129(4) (2014)",
+    where="the rank-rank slope is 0.341; the log-log elasticity of child on parent family income is 0.344 (and "
+          "unstable to specification); the chance of reaching the top fifth from the bottom fifth is 4.4% in "
+          "Charlotte and 12.9% in San Jose",
+    read="the published paper and NBER Working Paper 19843",
+    checked="2026-11-20",
+    data={"rank_slope": 0.341, "ige": 0.344, "charlotte": 4.4, "san_jose": 12.9},
+)
+CHETTY_2017 = Table(
+    key="chetty_2017",
+    cite="R. Chetty, D. Grusky, M. Hell, N. Hendren, R. Manduca and J. Narang, \"The Fading American Dream: Trends "
+         "in Absolute Income Mobility since 1940\", Science 356(6336): 398-406 (2017)",
+    tag="Chetty et al., \\ \\emph{Science} 356 (2017)",
+    where="the share of children earning more than their parents at 30 (in real terms) fell from about 90% for those "
+          "born in 1940 to 50% for those born in the 1980s; for the 1980 cohort, restoring the growth rates of "
+          "the 1940s and 1950s with today's distribution would raise it only to 62%, while today's growth shared as "
+          "in the 1940 cohort would raise it to 80%; the data are in the Data Room (opportunity, absmob)",
+    read="the paper, its NBER abstract and the authors' VoxEU column",
+    checked="2026-11-20",
+    data={"growth_only": 62, "sharing_only": 80},
+)
+PLACES = Table(
+    key="places",
+    cite="R. Chetty and N. Hendren, \"The Impacts of Neighborhoods on Intergenerational Mobility I: Childhood "
+         "Exposure Effects\", Quarterly Journal of Economics 133(3): 1107-1162 (2018); R. Chetty, N. Hendren and L. "
+         "Katz, \"The Effects of Exposure to Better Neighborhoods on Children: New Evidence from the Moving to "
+         "Opportunity Experiment\", American Economic Review 106(4): 855-902 (2016)",
+    tag="Chetty and Hendren, \\ \\emph{QJE} 133(3) (2018); \\ Chetty, \\ Hendren and Katz, \\ "
+        "\\emph{AER} 106(4) (2016)",
+    where="children who move converge to the outcomes of the destination's permanent residents at about 4% a year "
+          "of childhood spent there; in Moving to Opportunity (1994-98, five cities), children whose families used "
+          "a voucher to move to a lower-poverty area before 13 earned $3,477 (31%) more in their mid-twenties than "
+          "the control group's mean of $11,270; moves after 13 did not help",
+    read="the abstracts (NBER Working Papers 23001 and 21156)",
+    checked="2026-11-20",
+    data={"exposure": 4, "mto_dollars": 3477, "mto_pct": 31, "mto_control": 11270},
+)
+GLOBAL = Table(
+    key="global",
+    cite="C. Lakner and B. Milanovic, \"Global Income Distribution: From the Fall of the Berlin Wall to the Great "
+         "Recession\", World Bank Economic Review 30(2): 203-232 (2016); B. Milanovic, Global Inequality, Harvard "
+         "University Press (2016)",
+    tag="Lakner and Milanovic, \\ \\emph{WBER} 30(2) (2016)",
+    where="the growth of real income by percentile of the global distribution, 1988-2008 (the 'elephant curve'): "
+          "the largest gains around the global median, mostly in Asia; essentially none around the 80th to 85th "
+          "percentiles, largely the lower middle classes of rich countries; large gains at the top 1%",
+    read="the paper's summary and Milanovic's own account (World Economic Forum, 2016)",
+    checked="2026-11-20",
+    data={"stagnant_lo": 80, "stagnant_hi": 85, "first": 1988, "last": 2008},
+)
+MATTERS = Table(
+    key="matters",
+    cite="R. Chetty, M. Stepner, S. Abraham, S. Lin, B. Scuderi, N. Turner, A. Bergeron and D. Cutler, \"The "
+         "Association Between Income and Life Expectancy in the United States, 2001-2014\", JAMA 315(16): "
+         "1750-1766 (2016)",
+    tag="Chetty et al., \\ \\emph{JAMA} 315(16) (2016)",
+    where="at 40, the gap in life expectancy between the richest 1% and the poorest 1% was 14.6 years for men and "
+          "10.1 years for women; between 2001 and 2014 it widened",
+    read="the abstract (PubMed)",
+    checked="2026-11-20",
+    data={"men": 14.6, "women": 10.1},
+)
+FRONTIER40 = Table(
+    key="frontier40",
+    cite="T. Piketty, E. Saez and G. Zucman, \"Distributional National Accounts: Methods and Estimates for the "
+         "United States\", Quarterly Journal of Economics 133(2): 553-609 (2018); K. Jakobsen, K. Jakobsen, H. Kleven "
+         "and G. Zucman, \"Wealth Taxation and Wealth Accumulation: Theory and Evidence from Denmark\", Quarterly "
+         "Journal of Economics 135(1): 329-388 (2020); S. E. Black, P. J. Devereux, P. Lundborg and K. Majlesi, "
+         "\"Poor Little Rich Kids? The Role of Nature versus Nurture in Wealth and Other Economic Outcomes and "
+         "Behaviours\", Review of Economic Studies 87(4): 1683-1725 (2020)",
+    tag="Piketty, \\ Saez and Zucman (2018); \\ Jakobsen et al. (2020); \\ Black et al. (2020)",
+    where="distributional national accounts allocate all of national income to people; in Denmark wealth taxes had "
+          "clear short- and medium-run effects on wealth, larger at the top, and a sizeable long-run elasticity at "
+          "the top; among Swedish adoptees, adoptive parents' wealth predicts the child's far more than biological "
+          "parents' wealth, more so once bequests are counted",
+    read="the abstracts",
+    checked="2026-11-20",
+    data={},
+)
+FORBES_400 = Table(
+    key="forbes_400",
+    cite="O. S. Klass, O. Biham, M. Levy, O. Malcai and S. Solomon, \"The Forbes 400 and the Pareto Wealth "
+         "Distribution\", Economics Letters 90(2): 290-295 (2006)",
+    tag="Klass et al., \\ \\emph{Economics Letters} 90(2) (2006)",
+    where="the wealth of the Forbes 400, 1988-2003, follows a Pareto distribution with an average exponent of 1.49",
+    read="the abstract",
+    checked="2026-11-20",
+    data={"alpha": 1.49},
+)
+PART40 = (PEN_1971, ATKINSON_1970, PIKETTY_SAEZ_2003, AUTEN_SPLINTER_2024, PARETO_1896, GLLM_2016, CAPITAL_2014,
+          KUZNETS_1955, IGE_STUDIES, CHETTY_2014, CHETTY_2017, PLACES, GLOBAL, MATTERS, FRONTIER40, FORBES_400)
+
 PART7 = (BERNOULLI_1738, SAMUELSON_1937, ALLAIS_1953, ELLSBERG_1961, RABIN_2000, THALER_1981, HOLT_LAURY_2005,
          HAYDEN_PLATT_2009, MADRIAN_SHEA_2001, THALER_BENARTZI_2004, BARSKY_1997, POST_2008, MEHRA_PRESCOTT_1985)
-ALL = {t.key: t for t in (*PART1, *PART3, *PART4, *PART5, *PART6, *PART7, *PART8, *PART9, *PART10, *PART11, *PART12, *PART13, *PART14, *PART15, *PART16, *PART17, *PART18, *PART19, *PART21, *PART22, *PART25, *PART26, *PART35, *PART36, *PART37, *PART38, *PART39)}
+ALL = {t.key: t for t in (*PART1, *PART3, *PART4, *PART5, *PART6, *PART7, *PART8, *PART9, *PART10, *PART11, *PART12, *PART13, *PART14, *PART15, *PART16, *PART17, *PART18, *PART19, *PART21, *PART22, *PART25, *PART26, *PART35, *PART36, *PART37, *PART38, *PART39, *PART40)}

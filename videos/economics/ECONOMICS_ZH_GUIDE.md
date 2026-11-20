@@ -972,6 +972,32 @@ brackets on screen.
 | the gender pay gap; the child penalty | 性别工资差距；生育惩罚 |
 | pay transparency; algorithmic hiring | 薪酬透明；算法招聘 |
 
+## Part 40
+
+| English | 中文 |
+|---|---|
+| Pen's parade | 佩恩的游行 |
+| the Lorenz curve; the Gini index | 洛伦兹曲线；基尼系数 |
+| Atkinson's index; inequality aversion | 阿特金森指数；不平等厌恶 |
+| the equally distributed equivalent income | 平均分配等价收入 |
+| top income shares; the top 1% | 顶层收入份额；最富的1% |
+| distributional national accounts | 分配国民账户 |
+| a Pareto tail; the Pareto exponent | 帕累托尾部；帕累托指数 |
+| random growth; the Kolmogorov forward equation | 随机增长；柯尔莫哥洛夫前向方程 |
+| scale dependence; type dependence | 规模依赖；类型依赖 |
+| r greater than g | r大于g |
+| the Kuznets curve | 库兹涅茨曲线 |
+| the intergenerational elasticity of income | 收入的代际弹性 |
+| attenuation bias; transitory income | 衰减偏误；暂时性收入 |
+| the Great Gatsby curve | 了不起的盖茨比曲线 |
+| rank-rank slope; transition matrix | 秩—秩斜率；转移矩阵 |
+| absolute mobility; relative mobility | 绝对流动性；相对流动性 |
+| upward mobility; commuting zone | 向上流动性；通勤区 |
+| childhood exposure effects; Moving to Opportunity | 童年暴露效应；“迈向机会”实验 |
+| the elephant curve; global inequality | 大象曲线；全球不平等 |
+| redistribution; pre-distribution | 再分配；预分配 |
+| a distributional table | 分配表 |
+
 ## Names
 
 | English | 中文 |

@@ -9,6 +9,7 @@ class IslandBorder(VoiceoverScene):
              "Chapter eight. The same design on the Island.", lit={1994: r"Card and Krueger"},
              scale=("firm", "market"), horizon=("a year",))
         self.runs()
+        self.power()
 
     def runs(self):
         B = load("border")
@@ -67,4 +68,53 @@ class IslandBorder(VoiceoverScene):
             self.play(Create(ck), FadeIn(ckl), FadeIn(side[2]))
             vo.wait_until("d")
             self.play(FadeIn(side[3]))
+        self.clear_scene()
+
+    def power(self):
+        P = load("power")
+        rows = P["rows"]
+        ax = plane([np.log10(150), np.log10(9000)], [0, 0.07], center=LEFT * 1.8 + DOWN * 0.4, x_length=8.2,
+                   y_length=4.6, xticks=[np.log10(v) for v in (200, 500, 1000, 2000, 5000)],
+                   yticks=[0, 0.02, 0.04, 0.06], xlabel=r"restaurants in the study \ (log scale)",
+                   ylabel=r"standard error of the estimate", xfmt=lambda v: f"{10 ** v:,.0f}",
+                   yfmt=lambda v: f"{v:.2f}", font_size=14)
+        pts = VGroup(*[dot(ax, np.log10(r["n"]), r["sd"], NJ, 0.08) for r in rows])
+        xs = np.linspace(np.log10(150), np.log10(9000), 60)
+        sd1 = rows[1]["sd"]
+        th = path(ax, xs, sd1 * np.sqrt(P["n"] / 10 ** xs), GREY_B, 2.4)
+        mde = abs(P["effect"]) / 2.8
+        need = seg(ax, np.log10(150), mde, np.log10(9000), mde, LOSS, 2.0, dashed=True)
+        here = dot(ax, np.log10(P["n"]), sd1, WHITE, 0.1)
+        even = dot(ax, np.log10(P["n"]), P["even_sd"], GAIN, 0.1)
+        side = VGroup(
+            label(rf"{P['n']} stores: \ {sd1:.3f}", font_size=18, color=WHITE),
+            label(rf"the competitive effect: \ {P['effect']:+.3f}; \ to find it 4 times \ in 5 needs a "
+                  rf"standard \\ error of {mde:.3f} (red)", font_size=17, color=LOSS),
+            label(rf"about {round(P['need'], -2):,.0f} stores", font_size=19, color=LOSS),
+            label(rf"the same {P['n']}, \ split evenly: \\ {P['even_sd']:.3f}", font_size=18, color=GAIN),
+        ).arrange(DOWN, aligned_edge=LEFT, buff=0.35).to_edge(RIGHT, buff=0.3)
+        tag = island_tag(corner=DR, font_size=14)
+        with self.voiceover(
+            "How large would a border study need to be? Rerun the competitive world with more and fewer "
+            "restaurants. <bookmark mark='a'/> With Card and Krueger's "
+            f"{P['n']}, the estimate's standard error is about {sd1:.3f}. <bookmark mark='b'/> It shrinks with the "
+            "square root of the number of stores: four times the stores, half the error. <bookmark mark='c'/> The "
+            f"competitive prediction here is a fall of about {abs(100 * P['effect']):.1f} percent. To detect it four "
+            f"times in five, the standard error must be below {mde:.3f}, <bookmark mark='d'/> which takes about "
+            f"{round(P['need'], -2):,.0f} restaurants, seven times as many. <bookmark mark='e'/> And the design can be "
+            f"cheaper: with {P['n_treat']} stores in one state and only {P['n_ctrl']} in the other, the small group "
+            "limits precision; the same number split evenly gives a standard error of "
+            f"{P['even_sd']:.3f}. Planning the size of a study before running it, its power, is part of the design."
+        ) as vo:
+            self.play(FadeIn(ax), FadeIn(tag), FadeIn(pts[1]), FadeIn(here), run_time=1.5)
+            vo.wait_until("a")
+            self.play(FadeIn(side[0]))
+            vo.wait_until("b")
+            self.play(LaggedStart(*[FadeIn(p_, scale=1.3) for p_ in pts], lag_ratio=0.2), Create(th), run_time=2.0)
+            vo.wait_until("c")
+            self.play(Create(need), FadeIn(side[1]))
+            vo.wait_until("d")
+            self.play(FadeIn(side[2]))
+            vo.wait_until("e")
+            self.play(FadeIn(even, scale=1.5), FadeIn(side[3]))
         self.clear_scene()

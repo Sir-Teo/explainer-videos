@@ -126,4 +126,70 @@
             "stored or sent.",
     });
   };
+  W.tail = function (el) {
+    // Random growth (explainer.economics.agora.distribution: simulate_growth, zeta): log income takes a random
+    // step each year (drift nu, volatility sigma), never falls below a floor at a third of the starting income,
+    // and careers end at rate delta and restart at 1. The tail of the stationary distribution is Pareto with
+    // exponent zeta = (-nu + sqrt(nu^2 + 2 sigma^2 delta)) / sigma^2.
+    var N = 4000, YEARS = 300, FLOOR = Math.log(1 / 3);
+    function zeta(nu, s, d) { return (-nu + Math.sqrt(nu * nu + 2 * s * s * d)) / (s * s); }
+    QB.widget(el, {
+      title: "Where long tails come from",
+      sub: "Left: the share of careers above each income (log scales), simulated (dots) and the theory's slope " +
+           "(gold). Right: the Lorenz curve of the same incomes.",
+      panels: 2, height: 270,
+      controls: [
+        { k: "sigma", label: "Volatility of yearly income growth, %", min: 4, max: 25, step: 0.5, value: 14.4,
+          fmt: function (x) { return x.toFixed(1) + "%"; } },
+        { k: "life", label: "Average career length, years (1 / delta)", min: 10, max: 80, step: 1, value: 40,
+          fmt: function (x) { return x.toFixed(0); } },
+        { k: "nu", label: "Average growth of log income, % a year", min: -3, max: 3, step: 0.1, value: 0,
+          fmt: function (x) { return x.toFixed(1) + "%"; } },
+      ],
+      draw: function (g, v, st) {
+        var s = v.sigma / 100, d = 1 / v.life, nu = v.nu / 100, r = QB.rng(40), y = [], i, t;
+        for (i = 0; i < N; i++) y.push(0);
+        for (t = 0; t < YEARS; t++) {
+          for (i = 0; i < N; i++) {
+            if (r() < d) { y[i] = 0; continue; }
+            y[i] = Math.max(y[i] + nu + s * r.normal(), FLOOR);
+          }
+        }
+        var x = y.map(Math.exp).sort(function (a, b) { return a - b; });
+        var tot = 0; for (i = 0; i < N; i++) tot += x[i];
+        var gx = [], gs = [], k;
+        for (k = 0; k < 40; k++) {
+          var q = 1 - Math.pow(10, -3 * k / 39);   // from the median-ish to the top 0.1%
+          var j = Math.min(N - 2, Math.floor(q * N));
+          if (x[j] >= 1) { gx.push(x[j]); gs.push(1 - (j + 1) / N); }
+        }
+        var z = zeta(nu, s, d);
+        var a = g[0].axes({ x: [1, 1000], y: [0.0005, 1], logx: true, logy: true, title: "share above",
+                            xlabel: "income (start = 1)" });
+        a.dots(gx, gs, { color: "#7EC8F5", r: 2.5 });
+        if (gx.length > 1 && z > 0) {
+          var x0 = gx[0], s0 = gs[0], tx = [], ty = [];
+          for (k = 0; k <= 20; k++) { var xx = x0 * Math.pow(1000 / x0, k / 20); tx.push(xx); ty.push(s0 * Math.pow(xx / x0, -z)); }
+          a.line(tx, ty, { color: "#F2C14E", width: 2.5 });
+        }
+        var px = [0], py = [0], cum = 0;
+        for (i = 0; i < N; i++) { cum += x[i]; if (i % 40 === 39 || i === N - 1) { px.push((i + 1) / N); py.push(cum / tot); } }
+        var b = g[1].axes({ x: [0, 1], y: [0, 1], title: "share of income", xlabel: "share of people, poorest first" });
+        b.line([0, 1], [0, 1], { color: "#9AA3B2", width: 1, dash: [4, 4] });
+        b.line(px, py, { color: "#F2C14E", width: 2.5 });
+        var area = 0;
+        for (k = 1; k < px.length; k++) area += (px[k] - px[k - 1]) * (py[k] + py[k - 1]) / 2;
+        var top = 0; for (i = Math.floor(0.99 * N); i < N; i++) top += x[i];
+        st.z = z; st.gini = 1 - 2 * area; st.top1 = top / tot;
+      },
+      readout: function (v, st) {
+        return [["Pareto exponent of the tail (theory)", st.z.toFixed(2) + (st.z <= 1 ? ": no finite mean" : "")],
+                ["top 1% share, simulated", (100 * st.top1).toFixed(1) + "%"],
+                ["Gini, simulated", st.gini.toFixed(3)]];
+      },
+      note: "Part 40, chapter 4. More volatile incomes, faster growth or longer careers fatten the tail (a lower " +
+            "exponent, a larger top share). 4,000 careers, 300 years, computed in your browser; nothing you do " +
+            "here is stored or sent.",
+    });
+  };
 })();

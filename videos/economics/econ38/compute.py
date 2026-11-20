@@ -163,6 +163,40 @@ def compute_border() -> dict:
     return {**res, "ck_owe": ck["owe"], "ck_emp": float(np.log1p(ck["emp_rel"])), **B}
 
 
+def compute_hicks() -> dict:
+    """Hicks's formula for the elasticity of labour demand in a competitive industry with constant returns and other
+    inputs in elastic supply: -[(1 - s) sigma + s eps], with s labour's share of costs, sigma the elasticity of
+    substitution and eps the elasticity of demand for the product."""
+    sh = np.linspace(0, 1, 41)
+    cases = [(0.5, 0.5), (0.5, 2.0), (1.5, 0.5)]
+    lines = [[(1 - x) * sg + x * ep for x in sh] for sg, ep in cases]
+    M = TRUTH["market"]
+    return {"s": sh.tolist(), "cases": cases, "lines": lines, "island": {"s": 0.3, "sigma": 0.5, "eps": 0.5,
+                                                                        "eta": 0.7 * 0.5 + 0.3 * 0.5},
+            "eps_d": M["eps_d"]}
+
+
+def compute_power() -> dict:
+    """The border design's precision as the number of stores grows, and with the same stores split evenly."""
+    B = TRUTH["border"]
+    kw = {k: B[k] for k in ("m0", "m1", "eps_d", "eta", "trend", "noise")}
+    out = []
+    for f in (0.5, 1, 2, 4, 8, 16):
+        nt, nc = int(round(B["n_treat"] * f)), int(round(B["n_ctrl"] * f))
+        d = [labour.border_experiment("competitive", n_treat=nt, n_ctrl=nc, seed=1000 + s, **kw)["did_emp"]
+             for s in range(60)]
+        out.append({"f": f, "n": nt + nc, "sd": float(np.std(d, ddof=1)), "mean": float(np.mean(d))})
+    n = B["n_treat"] + B["n_ctrl"]
+    even = [labour.border_experiment("competitive", n_treat=n // 2, n_ctrl=n - n // 2, seed=2000 + s, **kw)["did_emp"]
+            for s in range(60)]
+    eff = float(np.mean([r["mean"] for r in out]))
+    # stores needed for 80% power at 5% (two-sided): the standard error must be |effect| / 2.8
+    sd1 = out[1]["sd"]
+    need = n * (sd1 / (abs(eff) / 2.8)) ** 2
+    return {"rows": out, "even_sd": float(np.std(even, ddof=1)), "n": n, "effect": eff, "need": float(need),
+            "n_treat": B["n_treat"], "n_ctrl": B["n_ctrl"]}
+
+
 def compute_mincer() -> dict:
     W = data.wooldridge("wage1")
     y, s, x = _arr(W, "lwage"), _arr(W, "educ"), _arr(W, "exper")
@@ -268,6 +302,8 @@ ITEMS = {
     "market": compute_market,
     "monopsony": compute_monopsony,
     "border": compute_border,
+    "hicks": compute_hicks,
+    "power": compute_power,
     "mincer": compute_mincer,
     "returns": compute_returns,
     "roy": compute_roy,

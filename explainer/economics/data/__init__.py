@@ -436,6 +436,22 @@ WAGE_FRED = {
 for _k, (_t, _u, _f) in WAGE_FRED.items():
     FRED_SERIES[_k] = (_t, _u, _f, "U.S. Bureau of Labor Statistics")
 FRED_RETRIEVED.update({s: "2026-11-20" for s in WAGE_FRED})
+# Part 40: the Federal Reserve's Distributional Financial Accounts (shares of household net worth by wealth group)
+# and the Census Bureau's Gini index of household income
+DIST_FRED = {
+    "WFRBST01134": ("Share of total net worth held by the top 1% (99th to 100th wealth percentiles)", "percent of "
+                    "aggregate", "quarterly", "Board of Governors of the Federal Reserve System (US)"),
+    "WFRBSN09161": ("Share of total net worth held by the 90th to 99th wealth percentiles", "percent of aggregate",
+                    "quarterly", "Board of Governors of the Federal Reserve System (US)"),
+    "WFRBSN40188": ("Share of total net worth held by the 50th to 90th wealth percentiles", "percent of aggregate",
+                    "quarterly", "Board of Governors of the Federal Reserve System (US)"),
+    "WFRBSB50215": ("Share of total net worth held by the bottom 50% (1st to 50th wealth percentiles)", "percent of "
+                    "aggregate", "quarterly", "Board of Governors of the Federal Reserve System (US)"),
+    "GINIALLRH": ("Income Gini ratio for households by race of householder, all races", "ratio", "annual",
+                  "U.S. Census Bureau"),
+}
+FRED_SERIES.update(DIST_FRED)
+FRED_RETRIEVED.update({s: "2026-11-20" for s in DIST_FRED})
 
 SPF_FILES = ("median_rgdp_level", "median_rgdp_growth", "median_recess_level")
 SPF_URL = ("https://www.philadelphiafed.org/-/media/frbp/assets/surveys-and-data/survey-of-professional-forecasters/"
@@ -953,6 +969,64 @@ DATASETS = {
         "sha256": "b1c53f2e1eef9bf20cf38bbd09b604933a4ed8d6776b91ff9978f55237ee76a8",
         "files": ("resume_2001.csv",),
     },
+    "saez": {
+        "title": "Top income shares in the United States from tax returns, 1913-2022 (Piketty and Saez's series, "
+                 "updated): shares of the top 10%, 5%, 1%, 0.5%, 0.1% and 0.01% of tax units, excluding and including "
+                 "capital gains, with the number of tax units and average income",
+        "publisher": "Emmanuel Saez's data page (eml.berkeley.edu/~saez), TabFig2022.xlsx",
+        "citation": "T. Piketty and E. Saez, \"Income Inequality in the United States, 1913-1998\", Quarterly Journal "
+                    "of Economics 118(1): 1-39 (2003), tables and figures updated to 2022 (TabFig2022.xlsx, Tables A0, "
+                    "A1 and A3), retrieved 2026-11-20",
+        "short": "Piketty and Saez (2003), updated to 2022",
+        "url": "https://eml.berkeley.edu/~saez/TabFig2022.xlsx",
+        "licence": "posted by the author for public use with citation",
+        "units": "percent of total market income (excluding government transfers); tax units in thousands; average "
+                 "income in 2022 dollars (CPI-U-RS)",
+        "vintage": "2026-11-20",
+        "sha256": "772869f6c68ac86c49b89eb3404985183a8c3e1c10c30d618ac2f307c052c1e4",
+        "files": ("saez_top_shares_1913_2022.csv",),
+    },
+    "opportunity": {
+        "title": "Opportunity Insights' intergenerational mobility data: children born in 1980-82 by their parents' "
+                 "income percentile (mean child rank, incomes, college, the child's quintile), absolute mobility by "
+                 "birth cohort 1940-1984 and parent percentile, and mobility and characteristics of 741 commuting "
+                 "zones",
+        "publisher": "Opportunity Insights (opportunityinsights.org/data)",
+        "citation": "R. Chetty, N. Hendren, P. Kline and E. Saez, \"Where is the Land of Opportunity? The Geography of "
+                    "Intergenerational Mobility in the United States\", Quarterly Journal of Economics 129(4): "
+                    "1553-1623 (2014), online data tables (Statistics_By_Parent_or_child_Income_Percentile.xlsx, "
+                    "onlinedata1.dta, online_data_tables-8.xls, Tables V and VIII); R. Chetty, D. Grusky, M. Hell, "
+                    "N. Hendren, R. Manduca and J. Narang, \"The Fading American Dream\", Science 356: 398-406 "
+                    "(2017), table1_national_absmob_by_cohort_parpctile.xlsx; retrieved 2026-11-20",
+        "short": "Chetty et al. (2014, 2017), Opportunity Insights",
+        "url": "https://opportunityinsights.org/wp-content/uploads/2018/04/{}",
+        "licence": "posted by Opportunity Insights for public use with citation",
+        "units": "ranks on a 0-1 scale; incomes in 2012 dollars; probabilities; shares; correlates in their own units",
+        "vintage": "2026-11-20",
+        "sha256": {"Statistics_By_Parent_or_child_Income_Percentile.xlsx":
+                   "2fb55831b8c5190eb93c403a0134715acbc9979e62b462863716fc8ce057d41e",
+                   "onlinedata1.dta": "500562d4784ceeee0e61d25f4ff72e2e4ef739d8af527613ea6b3d7f67b59b78",
+                   "online_data_tables-8.xls": "3c851b8fda1a4dab35e2c6f45f50cf031d95d179599976a2d304ff00202a7de8",
+                   "table1_national_absmob_by_cohort_parpctile.xlsx":
+                   "9ebf3511b1ea9b0a093dfd7ce15f358f64f666370a29f5907efa5b253433ce32"},
+        "files": ("chetty_by_parent_pctile.csv", "chetty_absmob_1940_1984.csv", "chetty_cz_2014.csv"),
+    },
+    "wid_top1": {
+        "title": "Share of pre-tax national income received by the richest 1%, selected countries and the world, "
+                 "from the World Inequality Database (years without extrapolation)",
+        "publisher": "World Inequality Database (WID.world), via Our World in Data",
+        "citation": "World Inequality Database (WID.world) (2026), with processing by Our World in Data, \"Income "
+                    "share of the richest 1% (before tax)\", grapher chart income-share-top-1-before-tax-wid, "
+                    "retrieved 2026-11-20",
+        "short": "WID.world, via Our World in Data",
+        "url": "https://ourworldindata.org/grapher/income-share-top-1-before-tax-wid.csv?v=1&csvType=full&"
+               "useColumnShortNames=true",
+        "licence": "CC BY 4.0",
+        "units": "percent of pre-tax national income",
+        "vintage": "2026-11-20",
+        "sha256": "22a2859bf14745434d07de914806c7bc0381b2d00d132a4c17634f5e584a24da",
+        "files": ("wid_top1_selected.csv",),
+    },
     "trefler_hov": {
         "title": "Trefler's data for \"The Case of the Missing Trade and Other Mysteries\": the factor content of trade, "
                  "endowments and GDP for 33 countries and 9 factors, 1983",
@@ -1374,6 +1448,19 @@ WOOLDRIDGE_COLS = {
 }
 WOOLDRIDGE_FILES = {"card": "card1995.csv", "wage1": "wage1_1976.csv", "wage2": "wage2_1980.csv",
                     "wagepan": "wagepan_1980_87.csv", "cps78_85": "cps78_85.csv"}
+SAEZ_COLS = ("top10", "top5", "top1", "top05", "top01", "top001")
+WID_ENTITIES = ("United States", "United Kingdom", "France", "Germany", "Sweden", "Netherlands", "Japan", "China",
+                "India", "Russia", "Brazil", "South Africa", "World")
+# Online Data Table VIII's columns kept, by their names in chetty_cz_2014.csv
+CZ_COLS = {"pop2000": "Census 2000 population", "frac_black": "Frac. Black",
+           "racial_seg": "Racial Segregation", "income_seg": "Income Segregation",
+           "commute15": "Frac. with Commute < 15 Mins", "gini": "Gini", "top1": "Top 1% Income Share",
+           "gini99": "Gini Bottom 99%", "middle": "Frac. Between p25 and p75",
+           "school_spend": "School Expenditure per Student", "test_scores": "Test Score Percentile (Income Adjusted",
+           "dropout": "High School Dropout Rate (Income Adjusted)", "manuf": "Manufacturing Employment Share",
+           "foreign": "Frac. Foreign Born", "social_capital": "Social Capital Index", "religious": "Fraction Religious",
+           "crime": "Violent Crime Rate", "single_mothers": "Fraction of Children with Single Mothers"}
+
 RESUME_COLS = ("job_ad_id", "job_city", "job_type", "job_industry", "received_callback", "firstname", "race", "gender",
                "years_college", "college_degree", "honors", "years_experience", "computer_skills", "special_skills",
                "volunteer", "military", "employment_holes", "has_email_address", "resume_quality")
@@ -1435,6 +1522,47 @@ def resume() -> dict:
     strings; ``race`` is 'white' or 'black', ``gender`` 'f' or 'm', ``received_callback`` 0 or 1)."""
     rows = _read(HERE / "resume_2001.csv")
     return {k: ([r[k] for r in rows] if k in RESUME_TEXT else [_num(r[k]) for r in rows]) for k in RESUME_COLS}
+
+
+@functools.lru_cache(maxsize=None)
+def saez() -> dict:
+    """Piketty and Saez's top income shares for the United States, 1913-2022: ``{"year", "top10", "top5", "top1",
+    "top05", "top01", "top001" (percent of income excluding capital gains; the top 10% and 5% from 1917), the same
+    with "_kg" (including capital gains), "units" (tax units, thousands), "avg" and "avg_kg" (average income per tax
+    unit, 2022 dollars): [...]}`` (NaN where missing)."""
+    rows = _read(HERE / "saez_top_shares_1913_2022.csv")
+    out = {"year": [int(r["year"]) for r in rows]}
+    for k in rows[0]:
+        if k != "year":
+            out[k] = [_num(r[k]) for r in rows]
+    return out
+
+
+@functools.lru_cache(maxsize=None)
+def opportunity(table: str = "national") -> dict:
+    """Opportunity Insights' mobility data (Chetty et al. 2014, 2017).  ``national``: one row per parent income
+    percentile (1-100) of children born in 1980-82: parents' mean family income (1996-2000, 2012 dollars), the
+    children's mean family income rank (0-1) and mean income (2011-12), the share who attended college, and the share
+    of children in each quintile of their own generation's distribution (``q1`` ... ``q5``).  ``absmob``: one row per
+    birth cohort 1940-1984: the share of children earning more than their parents at age 30 (``mean``, and ``p1`` ...
+    ``p100`` by parent percentile).  ``cz``: one row per commuting zone: ``cz``, ``name``, ``state``, absolute upward
+    mobility (``am``, the expected rank of a child whose parents are at the 25th percentile, 0-100), relative mobility
+    (``rm``, the rank-rank slope), the chance of reaching the top quintile from the bottom (``q5q1``) and the
+    characteristics in :data:`CZ_COLS`."""
+    f = {"national": "chetty_by_parent_pctile.csv", "absmob": "chetty_absmob_1940_1984.csv",
+         "cz": "chetty_cz_2014.csv"}[table]
+    rows = _read(HERE / f)
+    text = ("name", "state")
+    return {k: ([r[k] for r in rows] if k in text else [_num(r[k]) for r in rows]) for k in rows[0]}
+
+
+def wid_top1(entity: str) -> dict:
+    """The share of pre-tax national income received by the richest 1% (WID.world, via Our World in Data), percent:
+    ``{"year": [...], "value": [...]}`` for one of :data:`WID_ENTITIES`."""
+    rows = [r for r in _read(HERE / "wid_top1_selected.csv") if r["entity"] == entity]
+    if not rows:
+        raise KeyError(entity)
+    return {"year": [int(r["year"]) for r in rows], "value": [float(r["top1"]) for r in rows]}
 
 
 @functools.lru_cache(maxsize=None)
@@ -2065,6 +2193,130 @@ def refresh_resume() -> None:
                     row.append("" if v is None or (isinstance(v, float) and v != v) else _fmt(float(v)))
             w.writerow(row)
 
+def refresh_saez() -> None:
+    import openpyxl  # noqa: PLC0415
+
+    d = DATASETS["saez"]
+    raw = RAW / "TabFig2022.xlsx"
+    sha = _download(d["url"], raw)
+    if sha != d["sha256"]:
+        print(f"saez: the download differs from the recorded vintage ({sha[:12]})")
+    wb = openpyxl.load_workbook(raw, read_only=True, data_only=True)
+
+    def table(name):
+        return {int(r[0]): r for r in wb[name].iter_rows(values_only=True)
+                if isinstance(r[0], (int, float)) and r[0] and 1900 < r[0] < 2100}
+
+    a0, a1, a3 = table("Table A0"), table("Table A1"), table("Table A3")
+    with open(HERE / "saez_top_shares_1913_2022.csv", "w", newline="", encoding="utf-8") as f:
+        w = csv.writer(f)
+        w.writerow(["year", *SAEZ_COLS, *(c + "_kg" for c in SAEZ_COLS), "units", "avg", "avg_kg"])
+        for y in sorted(a1):
+            vals = [a1[y][k] for k in range(1, 7)] + [a3[y][k] for k in range(1, 7)] + [a0[y][1], a0[y][6], a0[y][9]]
+            w.writerow([y, *("" if v is None else _fmt(float(v)) for v in vals)])
+
+
+def refresh_opportunity() -> None:
+    import openpyxl  # noqa: PLC0415
+    import xlrd  # noqa: PLC0415
+
+    from explainer.economics.data.stata import read_dta  # noqa: PLC0415
+
+    d = DATASETS["opportunity"]
+    raw = {}
+    for name, want in d["sha256"].items():
+        raw[name] = RAW / f"oi_{name}"
+        sha = _download(d["url"].format(name), raw[name])
+        if sha != want:
+            print(f"opportunity: {name} differs from the recorded vintage ({sha[:12]})")
+    # by parent percentile: means from the workbook, the child's quintile from the 100 x 100 transition matrix,
+    # whose child bins are 1 (negative income), 4 (zero), 7 (part of a percentile) and 8-100 (percentiles), so that
+    # bins up to 20 are the bottom fifth, 21-40 the second, and so on
+    ws = openpyxl.load_workbook(raw["Statistics_By_Parent_or_child_Income_Percentile.xlsx"], read_only=True,
+                                data_only=True)["By Parent Income Percentile"]
+    rows = list(ws.iter_rows(values_only=True))
+    head = rows[0]
+    par = {int(r[0]): dict(zip(head, r)) for r in rows[1:] if r[0] is not None}
+    mat = read_dta(raw["onlinedata1.dta"])[0]
+    bins = [int(b) for b in mat["kid_fam_bin"]]
+    quint = {p: [0.0] * 5 for p in range(1, 101)}
+    for i, b in enumerate(bins):
+        q = min((max(b, 1) - 1) // 20, 4)
+        for p in range(1, 101):
+            quint[p][q] += float(mat[f"par_frac_bin_{p}"][i])
+    with open(HERE / "chetty_by_parent_pctile.csv", "w", newline="", encoding="utf-8") as f:
+        w = csv.writer(f)
+        w.writerow(["pctile", "par_inc", "kid_rank", "kid_inc", "college", "q1", "q2", "q3", "q4", "q5"])
+        for p in range(1, 101):
+            r = par[p]
+            w.writerow([p, _fmt(float(r["par_fam_inc"])), _fmt(float(r["kid_fam_rank"])), _fmt(float(r["kid_fam_inc"])),
+                        _fmt(float(r["college"])), *(_fmt(v) for v in quint[p])])
+    ws = openpyxl.load_workbook(raw["table1_national_absmob_by_cohort_parpctile.xlsx"], read_only=True,
+                                data_only=True).worksheets[0]
+    rows = list(ws.iter_rows(values_only=True))
+    head = rows[0]
+    with open(HERE / "chetty_absmob_1940_1984.csv", "w", newline="", encoding="utf-8") as f:
+        w = csv.writer(f)
+        w.writerow(["cohort", "mean", *(f"p{p}" for p in range(1, 101))])
+        for r in rows[1:]:
+            if r[0] is None:
+                continue
+            row = dict(zip(head, r))
+            w.writerow([int(row["cohort"]), _fmt(float(row["cohort_mean"])),
+                        *(_fmt(float(row[f"abs_mob_pos_par_p{p}"])) for p in range(1, 101))])
+    book = xlrd.open_workbook(str(raw["online_data_tables-8.xls"]))
+
+    def table(name, key):
+        sh = book.sheet_by_name(name)
+        k0 = next(i for i in range(sh.nrows) if sh.row_values(i)[0] == key)
+        head = sh.row_values(k0)
+        out = {}
+        for i in range(k0 + 1, sh.nrows):
+            r = sh.row_values(i)
+            if isinstance(r[0], float) and r[0] > 0:
+                out[int(r[0])] = dict(zip(head, r))
+        return out
+
+    t8 = table("Online Data Table 8", "CZ")
+    sh5 = book.sheet_by_name("Online Data Table 5")
+    # Table V's header row is not labelled "CZ"; its columns are, in order: CZ, name, state, population, then
+    # AM and RM (1980-82 cohorts) and P(child in Q5 | parent in Q1) (1980-85)
+    k5 = next(i for i in range(sh5.nrows) if isinstance(sh5.row_values(i)[0], float) and sh5.row_values(i)[0] > 0)
+    t5 = {}
+    for i in range(k5, sh5.nrows):
+        r = sh5.row_values(i)
+        if isinstance(r[0], float) and r[0] > 0:
+            t5[int(r[0])] = r
+    with open(HERE / "chetty_cz_2014.csv", "w", newline="", encoding="utf-8") as f:
+        w = csv.writer(f)
+        w.writerow(["cz", "name", "state", "am", "rm", "q5q1", *CZ_COLS])
+        for cz in sorted(t8):
+            r8, r5 = t8[cz], t5.get(cz)
+
+            def num(v):
+                return "" if v in ("", None) else _fmt(float(v))
+
+            am, rm, q = (num(r5[4]), num(r5[5]), num(r5[6])) if r5 else ("", "", "")
+            w.writerow([cz, r8["CZ Name"], r8["State"], am, rm, q, *(num(r8[c]) for c in CZ_COLS.values())])
+
+
+def refresh_wid_top1() -> None:
+    d = DATASETS["wid_top1"]
+    raw = RAW / "income-share-top-1-before-tax-wid.csv"
+    sha = _download(d["url"], raw)
+    if sha != d["sha256"]:
+        print(f"wid_top1: the download differs from the recorded vintage ({sha[:12]})")
+    with open(raw, newline="", encoding="utf-8") as f:
+        rows = list(csv.DictReader(f))
+    col = "share__welfare_type_before_tax__quantile_richest_1pct__extrapolated_no"
+    with open(HERE / "wid_top1_selected.csv", "w", newline="", encoding="utf-8") as f:
+        w = csv.writer(f)
+        w.writerow(["entity", "year", "top1"])
+        for r in rows:
+            if r["entity"] in WID_ENTITIES and r[col] != "":
+                w.writerow([r["entity"], r["year"], _fmt(float(r[col]))])
+
+
 def refresh_census_cbsa() -> None:
     d = DATASETS["census_cbsa"]
     raw = RAW / "cbsa-est2024-alldata.csv"
@@ -2509,7 +2761,8 @@ REFRESH = {"draft1970": refresh_draft1970, "ajr": refresh_ajr, "maddison2023": r
            "hlw": refresh_hlw, "ramey_zubairy": refresh_ramey_zubairy, "ramey_tax": refresh_ramey_tax,
            "blanchard_leigh": refresh_blanchard_leigh, "rr_hap": refresh_rr_hap, "jst": refresh_jst,
            "bigmac": refresh_bigmac, "wdi_ca": refresh_wdi_ca, "trefler_hov": refresh_trefler_hov,
-           "cepii_gravity": refresh_cepii_gravity, "autor_dorn": refresh_autor_dorn, "resume": refresh_resume}
+           "cepii_gravity": refresh_cepii_gravity, "autor_dorn": refresh_autor_dorn, "resume": refresh_resume,
+           "saez": refresh_saez, "opportunity": refresh_opportunity, "wid_top1": refresh_wid_top1}
 
 
 def main() -> None:

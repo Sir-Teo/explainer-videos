@@ -414,6 +414,18 @@ CALLS = {c.key: c for c in [
           "of Technology on Employment and Unemployment, National Academy of Engineering (1983), as quoted in "
           "secondary listings",
           "BLS via FRED: LNS12300060 (employment-population ratio, 25-54) and PRS85006173 (labor share)")),
+    Call("kuznets_1955", 40, "Simon Kuznets, in his presidential address to the American Economic Association",
+         "December 1954",
+         "income inequality widens in the early phases of economic growth, as people move from agriculture to "
+         "industry, becomes stable for a while, and then narrows",
+         "a few income series for the United States, Britain and Germany, and the arithmetic of migration from a "
+         "poorer, more equal sector to a richer, less equal one",
+         "inequality in rich countries did narrow from the 1920s to the 1970s, but mostly through depression, war "
+         "and policy rather than migration; from about 1980 it widened again in America and Britain, long after "
+         "industrialization",
+         "partly right",
+         ("S. Kuznets, \"Economic Growth and Income Inequality\", American Economic Review 45(1): 1-28 (1955)",
+          "T. Piketty and E. Saez, top income shares updated to 2022; WID.world via Our World in Data")),
     Call("cairncross_1997", 37, "Frances Cairncross, in The Death of Distance", "1997",
          "distance would no longer decide the cost of communicating; location would cease to matter for most "
          "business decisions, and more people would work from home",

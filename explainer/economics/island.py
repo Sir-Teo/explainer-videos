@@ -920,6 +920,29 @@ TRUTHS = {
         # the child penalty (chapter 12): mothers' earnings in years 0, 1, 2, 5 and 10 after the first child
         "child": {"n": 4000, "penalty": (0.0, -0.30, -0.25, -0.22, -0.20), "seed": 39},
     },
+    40: {
+        # the Island's incomes (chapters 2 and 15): careers under random growth, sampled for the measures
+        "sample": {"n": 2000, "years": 400, "nu": 0.0, "sigma": 0.12, "delta": 0.025, "seed": 40},
+        # random growth (chapter 4): log income drifts at nu with volatility sigma; careers end at rate delta and
+        # restart at 1; sigma rises from sigma0 to sigma1 (the top 1% share from about 7% to 20%)
+        "growth": {"nu": 0.0, "sigma0": 0.0894, "sigma1": 0.144, "delta": 0.025, "floor": -1.0, "n": 50000,
+                   "seed": 40},
+        # type dependence (chapter 5): a share q_h of newcomers grow fast (nu_h), until they turn ordinary at rate
+        # psi; the fast types' growth rises from nu_h0 to nu_h1
+        "types": {"nu_l": -0.03, "sigma": 0.10, "psi": 0.2, "q_h": 0.15, "nu_h0": 0.085, "nu_h1": 0.16},
+        # wealth (chapter 6): dynasties consume c of their wealth a year, returns are risky, dynasties end or split
+        "wealth": {"c": 0.03, "sigma": 0.15, "delta": 0.02, "r_minus_g": (0.0, 0.01, 0.02, 0.03, 0.04)},
+        # Kuznets's dual economy (chapter 7)
+        "kuznets": {"gap": 1.0, "sd_a": 0.4, "sd_m": 0.7, "n": 40000, "seed": 40},
+        # generations (chapter 8): the planted elasticity, permanent and transitory spreads, fifteen years of
+        # parents' incomes
+        "generations": {"n": 6000, "beta": 0.45, "sd_perm": 0.6, "sd_trans": 0.55, "years": 15, "seed": 40},
+        # the Gatsby curve's mechanism (chapter 8): economies differing only in the return to inherited skill
+        "gatsby": {"lam": 0.5, "sd_h": 1.0, "sd_u": 0.5, "returns": (0.2, 0.35, 0.5, 0.65, 0.8, 0.95, 1.1),
+                   "n": 20000, "seed": 40},
+        # a flat tax with an equal transfer (chapter 15)
+        "policy": {"tax": 0.2},
+    },
 }
 
 
