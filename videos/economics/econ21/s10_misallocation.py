@@ -40,8 +40,8 @@ class Misallocation(VoiceoverScene):
             "wedges: taxes, subsidies, credit and connections that favour some firms over others. "
             "<bookmark mark='e'/> If it is lognormal, the output lost is about sigma over two times its variance."
         ) as vo:
-            self.play(FadeIn(tag))
-            for mk, r in zip("abcde", rows[:5]):
+            self.play(FadeIn(tag), FadeIn(rows[0], shift=UP * 0.1))
+            for mk, r in zip("bcde", rows[1:5]):
                 vo.wait_until(mk)
                 self.play(FadeIn(r, shift=UP * 0.1))
             self.play(FadeIn(rows[5]))

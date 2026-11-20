@@ -135,11 +135,31 @@ FRED_SERIES["CUSR0000SETA01"] = ("Consumer Price Index for All Urban Consumers: 
                                  "index 1982-1984 = 100, seasonally adjusted", "monthly",
                                  "U.S. Bureau of Labor Statistics")
 # The date each series was retrieved (its vintage); a series not listed was retrieved on DATASETS["fred"]["vintage"]
+# Part 22: consumption against income: real PCE (quarterly), real disposable personal income (monthly), the saving rate
+FRED_SERIES["PCECC96"] = ("Real personal consumption expenditures", "billions of chained 2017 dollars, seasonally "
+                          "adjusted annual rate", "quarterly", "U.S. Bureau of Economic Analysis")
+FRED_SERIES["DSPIC96"] = ("Real disposable personal income", "billions of chained 2017 dollars, seasonally adjusted "
+                          "annual rate", "monthly", "U.S. Bureau of Economic Analysis")
+FRED_SERIES["PSAVERT"] = ("Personal saving rate", "percent, seasonally adjusted annual rate", "monthly",
+                          "U.S. Bureau of Economic Analysis")
+FRED_SERIES["PCE"] = ("Personal consumption expenditures", "billions of dollars, seasonally adjusted annual rate",
+                      "monthly", "U.S. Bureau of Economic Analysis")
+FRED_SERIES["PCEND"] = ("Personal consumption expenditures: nondurable goods", "billions of dollars, seasonally "
+                       "adjusted annual rate", "monthly", "U.S. Bureau of Economic Analysis")
+FRED_SERIES["PCES"] = ("Personal consumption expenditures: services", "billions of dollars, seasonally adjusted "
+                       "annual rate", "monthly", "U.S. Bureau of Economic Analysis")
+FRED_SERIES["DNDGRG3M086SBEA"] = ("Personal consumption expenditures: nondurable goods (chain-type price index)",
+                                  "index 2017 = 100, seasonally adjusted", "monthly", "U.S. Bureau of Economic Analysis")
+FRED_SERIES["DSERRG3M086SBEA"] = ("Personal consumption expenditures: services (chain-type price index)",
+                                  "index 2017 = 100, seasonally adjusted", "monthly", "U.S. Bureau of Economic Analysis")
+
 FRED_RETRIEVED = {s: "2026-11-19" for s in (
     "GDPA", "GDIA", "PCECA", "GPDIA", "GCEA", "EXPGSA", "IMPGSA", "A033RC1A027NBEA", "A191RD3A086NBEA", "U1RATE",
     "U2RATE", "U4RATE", "U5RATE", "U6RATE", "CIVPART", "EMRATIO", "CPIAUCSL", "SUUR0000SA0", "PCEPI",
     "LABSHPUSA156NRUG", "B230RC0A052NBEA", "PCECCA", "DPCERG3A086NBEA", "TB3MS", "MCOILBRENTEU", "MCOILWTICO", "APU0000717311", "APU000074714", "CUSR0000SETA02", "CUSR0000SETA01", *(f"{c}{t}" for c in PCE_CATEGORIES for t in ("RG3A086NBEA",
                                                                                          "RC1A027NBEA")))}
+FRED_RETRIEVED.update({s: "2026-11-20" for s in ("PCECC96", "DSPIC96", "PSAVERT", "PCE", "PCEND", "PCES",
+                                                  "DNDGRG3M086SBEA", "DSERRG3M086SBEA")})
 
 SPF_FILES = ("median_rgdp_level", "median_rgdp_growth", "median_recess_level")
 SPF_URL = ("https://www.philadelphiafed.org/-/media/frbp/assets/surveys-and-data/survey-of-professional-forecasters/"
@@ -1090,7 +1110,7 @@ def refresh_longrun() -> None:
 
 
 PWT_COLUMNS = ("countrycode", "country", "year", "rgdpo", "rgdpna", "rgdpe", "pop", "emp", "avh", "hc", "cn", "rnna",
-               "labsh", "csh_i", "delta", "ctfp", "cgdpo", "ck", "irr")
+               "labsh", "csh_c", "csh_i", "csh_g", "delta", "ctfp", "cgdpo", "ck", "irr")
 
 
 def pwt(code: str | None = None, year: int | None = None) -> list[dict]:

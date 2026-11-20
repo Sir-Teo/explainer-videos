@@ -218,6 +218,33 @@ DIALS = {d.key: d for d in [
                       "social return (private return 14%)", 58.0,
                       where="Fiscal Studies 40(4): 561-590, section on returns", checked="2026-11-20"),
          )),
+    Dial("mpc_windfall", "marginal propensity to consume out of a transitory windfall", "percent of a one-off payment "
+         "spent soon after it arrives (on nondurables within a quarter, unless the row says otherwise)",
+         (22, 27, 32, 52), status="depends on the setting", checked="2026-11-20",
+         meaning="far above the permanent-income hypothesis's one percent a quarter: households spend 10 to 40 percent "
+                 "of a windfall on nondurables within a quarter, and more counting cars; the share is highest for "
+                 "those with little liquid wealth, whatever their net worth, and smaller when many households have "
+                 "cash in hand (2020); so a stimulus works through liquidity, and who receives it matters most",
+         estimates=(
+             Estimate("Johnson, Parker and Souleles", 2006, "RCT", "2001 tax rebates, mailing week set by the "
+                      "Social Security number: nondurables, the quarter received", 30.0, 20.0, 40.0,
+                      where="AER 96(5): 1589-1610, abstract", checked="2026-11-20"),
+             Estimate("Parker, Souleles, Johnson and McClelland", 2013, "RCT", "2008 stimulus payments, timing set by "
+                      "the Social Security number: nondurables, the quarter received (50-90% with durables)", 21.0,
+                      12.0, 30.0, where="AER 103(6): 2530-2553, abstract", checked="2026-11-20"),
+             Estimate("Parker, Schild, Erhard and Johnson", 2022, "event study", "2020 economic impact payments: "
+                      "nondurable goods and services, the three months of arrival (s.e. 3.4)", 10.0, 3.2, 16.8,
+                      where="NBER WP 29648, abstract", checked="2026-11-20"),
+             Estimate("Kueng", 2018, "event study", "Alaska's Permanent Fund dividend, account data: nondurables and "
+                      "services, within a quarter", 25.0, where="QJE 133(4): 1693-1751, abstract",
+                      checked="2026-11-20"),
+             Estimate("Jappelli and Pistaferri", 2014, "survey", "Italy, 2010: the reported share of a transitory "
+                      "income gain that would be consumed", 48.0, where="AEJ: Macroeconomics 6(4): 107-136, abstract",
+                      checked="2026-11-20"),
+             Estimate("this film (the Island's buffer-stock households)", 2026, "calibration", "Carroll's model, a "
+                      "month's windfall, spent within a year", 23.3, where="videos/economics/econ22/compute.py, mpc",
+                      checked="2026-11-20"),
+         )),
     Dial("convergence_speed", "speed of convergence to the steady state", "percent of the gap to its own steady state "
          "that a country closes in a year", (20, 46), status="contested", checked="2026-11-19",
          meaning="the textbook Solow model with capital's share at a third predicts about 5% a year, a half-life of 13 "
@@ -938,6 +965,8 @@ SHOWN = {
         ("Alsan (2015); Nunn and Wantchekon (2011); Diamond (1997)", "geography, disease and culture, stated"),
         ("Acemoglu (2002)", "directed technical change, run in Agora"),
         ("Williams (2013); Moser (2005)", "patents and innovation, stated from the abstracts"),
+        ("Putterman and Weil (2010)", "ancestry-adjusted early development, stated from the abstract as the reply to "
+         "the reversal of fortune"),
         ("Jones (2022)", "frontier: growth with a declining population, stated"),
     ],
     20: [

@@ -20,13 +20,13 @@ class AK(VoiceoverScene):
                    ylabel=r"output \ (year 0 $= 1$, \ log)", yfmt=lambda v: f"{10 ** v:.0f}", font_size=16)
         akl = path(ax, t, np.log10(np.array(a["K"]) / a["K"][0]), color=IDEA, width=4, smooth=False)
         sy = np.array(a["solow_y"])
-        sol = path(ax, t, np.log10(sy / sy[0]), color=CAPITAL, width=4, smooth=False)
+        sol = path(ax, t, np.log10(sy / sy[0]), color=OUTPUT, width=4, smooth=False)
         side = VGroup(
             MathTex(r"Y = A K", font_size=46, color=IDEA),
             MathTex(r"\frac{\dot K}{K} = sA - \delta", font_size=42),
             label(rf"$s = 0.2$, \ $A = 0.4$, \ $\delta = 0.05$: \\ {pc(a['growth'], 0)} a year, \ for ever",
                   font_size=20, color=IDEA),
-            label(r"Solow with the same saving: \\ growth fades as returns diminish", font_size=20, color=CAPITAL),
+            label(r"Solow with the same saving: \\ growth fades as returns diminish", font_size=20, color=OUTPUT),
         ).arrange(DOWN, buff=0.35).to_edge(RIGHT, buff=0.4)
         with self.voiceover(
             "The simplest way to get growth without end is to remove diminishing returns. <bookmark mark='a'/> Let "

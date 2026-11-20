@@ -168,6 +168,20 @@ CALLS = {c.key: c for c in [
          ("P. M. Romer, Journal of Political Economy 98(5) (1990): S71-S102, abstract",
           "C. I. Jones, Quarterly Journal of Economics 110(2) (1995): 495-525",
           "N. Bloom, C. I. Jones, J. Van Reenen and M. Webb, American Economic Review 110(4) (2020)")),
+    Call("hall_random_walk", 22, "Robert Hall, Stochastic Implications of the Life Cycle-Permanent Income Hypothesis",
+         "1978", "consumption follows a random walk: nothing known today, anticipated changes in income included, "
+                 "should predict how consumption changes next quarter",
+         "the Euler equation of a household that borrows and lends freely and forms rational expectations: it has "
+         "already spent out of any income it can foresee",
+         "anticipated payments do move spending: the randomly timed rebates of 2001 and payments of 2008 raised "
+         "spending in the quarter they arrived, most for households with little liquid wealth; Alaska's large, "
+         "regular dividend showed no response in survey data, though account data later found one; the theory "
+         "holds for households with cash to spare",
+         "partly right",
+         ("R. E. Hall, Journal of Political Economy 86(6) (1978): 971-987",
+          "D. S. Johnson, J. A. Parker and N. S. Souleles, American Economic Review 96(5) (2006): 1589-1610",
+          "C.-T. Hsieh, American Economic Review 93(1) (2003): 397-405",
+          "L. Kueng, Quarterly Journal of Economics 133(4) (2018): 1693-1751")),
     Call("samuelson_soviet", 20, "Paul Samuelson, Economics (the textbook)",
          "1961", "Soviet national income would overtake America's between 1984 and 1997, on the growth rates the "
                  "edition assumed; the 1980 edition still drew the crossing, between 2002 and 2012",

@@ -18,9 +18,9 @@ class Dials(VoiceoverScene):
         head = status_head(dial, r"the social return to R\&D \ (new)")
         frame, rows = dial_rows(dial, 0, 70, [0, 10, 20, 30, 40, 50, 60, 70], r"percent a year", top=1.6, step=0.95,
                                 fmt="{:.0f}")
-        meaning = wrapped_label(tex_safe(dial.meaning), 12.6, 17, GREY_A).to_edge(DOWN, buff=0.2)
+        meaning = wrapped_label(tex_safe(dial.meaning), 12.6, 17, GREY_A).to_edge(DOWN, buff=0.5)
         tag = published_tag(r"Jones and Williams (1998); \ Bloom, Schankerman and Van Reenen (2013); \ Lucking, Bloom "
-                            r"and Van Reenen (2019)", corner=UR, font_size=12)
+                            r"and Van Reenen (2019)", corner=DR, font_size=12)
         jw, bsv, lbv = dial.estimates
         with self.voiceover(
             "This part opens a dial: the social rate of return to research and development, what a dollar of R and "

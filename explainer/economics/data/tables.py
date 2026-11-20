@@ -1973,7 +1973,54 @@ BLOOM_2020 = Table(
 
 PART21 = (NORDHAUS_LIGHT, BLOOM_2020)
 
+# Part 22: what households do with windfalls, transcribed from the abstracts and summaries named in each row
+MPC_STUDIES = Table(
+    key="mpc_studies",
+    cite="Johnson, Parker and Souleles, AER 96(5) (2006): 1589-1610; Parker, Souleles, Johnson and McClelland, AER "
+         "103(6) (2013): 2530-2553; Parker, Schild, Erhard and Johnson, NBER WP 29648 (2022); Hsieh, AER 93(1) (2003): "
+         "397-405; Kueng, QJE 133(4) (2018): 1693-1751; Fagereng, Holm and Natvik, AEJ: Macro 13(4) (2021): 1-54; "
+         "Jappelli and Pistaferri, AEJ: Macro 6(4) (2014): 107-136; Fuster, Kaplan and Zafar, REStud 88(4) (2021): "
+         "1760-1795; Kaplan, Violante and Weidner, BPEA Spring 2014: 77-138; Ganong and Noel, AER 109(7) (2019): "
+         "2383-2424 (NBER WP 25417)",
+    tag="the studies' abstracts",
+    where="each paper's abstract (or, where noted, its NBER summary or working paper)",
+    read="abstracts and NBER summaries",
+    checked="2026-11-20",
+    data={
+        "jps": {"episode": "2001 tax rebates, $300 or $600, to about two-thirds of households",
+                "design": "mailing week set by the second-to-last digit of the Social Security number, late July to "
+                          "late September",
+                "lo": 0.20, "hi": 0.40, "measure": "nondurables, the quarter received",
+                "cumulative": "about two-thirds over that quarter and the next (nondurables)",
+                "who": "largest for households with low liquid wealth or low income"},
+        "parker2013": {"episode": "2008 economic stimulus payments", "lo": 0.12, "hi": 0.30,
+                       "measure": "nondurables, the quarter received", "total_lo": 0.50, "total_hi": 0.90,
+                       "total": "including durables, mainly vehicles"},
+        "parker2022": {"episode": "2020 economic impact payments", "value": 0.10, "se": 0.034,
+                       "measure": "nondurable goods and services, the three months of arrival",
+                       "low_liquid": 0.217, "low_liquid_se": 0.064},
+        "hsieh": {"episode": "the Alaska Permanent Fund dividend", "finding": "no response to the large, predictable "
+                  "dividend in survey data; a response to income-tax refunds"},
+        "kueng": {"episode": "the Alaska Permanent Fund dividend, account data", "value": 0.25,
+                  "measure": "nondurables and services, within a quarter",
+                  "high_income": "above 0.5 for high-income households with substantial liquid assets"},
+        "fhn": {"episode": "Norwegian lottery prizes", "small_low_liquid": 1.0, "large_high_liquid": "slightly "
+                "below one-half", "measure": "spending within the year of winning; back to normal within five years",
+                "small_prize": "around US$1,500"},
+        "jp": {"episode": "Italy's 2010 Survey of Household Income and Wealth", "value": 0.48,
+               "measure": "reported share of a transitory income gain consumed", "who": "higher at low cash-on-hand"},
+        "fkz": {"episode": "a US survey of hypothetical gains, losses, news and loans", "findings": [
+            "many would spend nothing of a gain, others a large share", "cuts after losses are larger and more common",
+            "very few would spend on news of a future gain", "almost no one takes a one-year interest-free loan"]},
+        "kvw": {"htm_share": "about one-third of US households", "wealthy_of_htm": "over two-thirds"},
+        "ganong_noel": {"onset": 0.06, "exhaustion": 0.12, "measure": "monthly nondurable spending",
+                        "source": "NBER WP 25417"},
+    },
+)
+
+PART22 = (MPC_STUDIES,)
+
 
 PART7 = (BERNOULLI_1738, SAMUELSON_1937, ALLAIS_1953, ELLSBERG_1961, RABIN_2000, THALER_1981, HOLT_LAURY_2005,
          HAYDEN_PLATT_2009, MADRIAN_SHEA_2001, THALER_BENARTZI_2004, BARSKY_1997, POST_2008, MEHRA_PRESCOTT_1985)
-ALL = {t.key: t for t in (*PART1, *PART3, *PART4, *PART5, *PART6, *PART7, *PART8, *PART9, *PART10, *PART11, *PART12, *PART13, *PART14, *PART15, *PART16, *PART17, *PART18, *PART19, *PART21)}
+ALL = {t.key: t for t in (*PART1, *PART3, *PART4, *PART5, *PART6, *PART7, *PART8, *PART9, *PART10, *PART11, *PART12, *PART13, *PART14, *PART15, *PART16, *PART17, *PART18, *PART19, *PART21, *PART22)}

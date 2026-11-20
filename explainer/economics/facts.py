@@ -119,6 +119,12 @@ AGORA = {
                                     "across 89 countries, 1960-2019, holding investment, population growth and "
                                     "schooling fixed, the gap closes at about 1.3% a year, and with no controls not at "
                                     "all"),
+    # Part 22 showed the US series and built the households
+    "smooth_consumption": (22, "a household that can save and borrow spreads a windfall over the rest of its life, "
+                               "so its spending follows permanent income, not this year's; even Agora's buffer-stock "
+                               "households, who hold little cash, spend only about a quarter of a month's windfall "
+                               "within the year; in US data from 1960 to 2019, spending on nondurables and services "
+                               "grew with half the quarterly volatility of disposable income"),
     # Part 21 showed Nordhaus's table and built the idea economy
     "price_of_light": (21, "an idea, once found, can be used by everyone at once, so its cost is paid once and its "
                            "benefit grows with the number who use it; in Romer's economy ideas accumulate without "

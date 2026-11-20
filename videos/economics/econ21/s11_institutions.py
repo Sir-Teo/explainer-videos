@@ -93,7 +93,9 @@ class Institutions(VoiceoverScene):
         b2, c2 = np.polyfit(x, y, 1)
         l2 = Line(ax2.ax.c2p(3.5, c2 + b2 * 3.5), ax2.ax.c2p(10.2, c2 + b2 * 10.2), color=GREY_B, stroke_width=3)
         xm, ym = x.mean(), y.mean()
-        l3 = Line(ax2.ax.c2p(4.5, ym + a["iv"] * (4.5 - xm)), ax2.ax.c2p(9.4, ym + a["iv"] * (9.4 - xm)),
+        x_lo = max(3.2, xm + (6.1 - ym) / a["iv"])
+        x_hi = min(10.3, xm + (10.4 - ym) / a["iv"])
+        l3 = Line(ax2.ax.c2p(x_lo, ym + a["iv"] * (x_lo - xm)), ax2.ax.c2p(x_hi, ym + a["iv"] * (x_hi - xm)),
                   color=E.ACCENT, stroke_width=4)
         t1 = label(rf"first stage: \ ${a['first']:.2f}$ \ (s.e. {a['first_se']:.2f})", font_size=18,
                    color=WHITE).next_to(ax1, UP, buff=0.2)
@@ -138,11 +140,11 @@ class Institutions(VoiceoverScene):
                   color=WEDGE),
             label(r"the authors replied, \ disputing the corrections; \ the debate is not settled", font_size=22,
                   color=GREY_A),
-            label(r"and the reversal of fortune \ (2002): \ colonies rich in 1500 are poor today, \ a pattern later "
-                  r"found fragile", font_size=21, color=INST),
+            label(r"reversal of fortune \ (2002): \ colonies rich in 1500 are poor today; \ but traced by ancestry, \ "
+                  r"peoples with early states and early farming are mostly still rich", font_size=21, color=INST),
         ).arrange(DOWN, buff=0.32).move_to(UP * 0.1)
         tag = published_tag(r"Albouy, AER 102(6) (2012): \ 3059--3076; \ Acemoglu, Johnson and Robinson, QJE 117(4) "
-                            r"(2002)", corner=DR, font_size=12)
+                            r"(2002); \ Putterman and Weil, QJE 125(4) (2010)", corner=DR, font_size=12)
         with self.voiceover(
             "The paper was a landmark, and it was attacked. <bookmark mark='a'/> David Albouy found that only "
             "twenty-eight of the sixty-four countries have mortality rates measured on their own soil. "
@@ -153,8 +155,10 @@ class Institutions(VoiceoverScene):
             "killed settlers may still hold back income directly. <bookmark mark='e'/> Acemoglu, Johnson and "
             "Robinson replied, disputing his corrections, and the debate is not settled. <bookmark mark='f'/> A "
             "companion paper found a reversal of fortune: the colonies that were richest in 1500, measured by "
-            "urbanization and population density, are among the poorest today. Later work found that pattern "
-            "fragile outside a handful of countries. Institutions matter. How much they explain is still argued."
+            "urbanization and population density, are among the poorest today. But Louis Putterman and David Weil "
+            "traced today's populations back to where their ancestors lived in 1500, and found that the descendants "
+            "of the early states and early farmers are mostly still rich: the reversal is one of places, not of "
+            "peoples. Institutions matter. How much they explain is still argued."
         ) as vo:
             self.play(FadeIn(rows[0]), FadeIn(tag))
             for mk, r in zip("abcdef", rows[1:]):

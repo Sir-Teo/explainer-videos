@@ -581,6 +581,30 @@ TRUTHS = {
         # directed technical change (chapter 12)
         "directed": {"sigmas": (1.4, 3.0)},
     },
+    # Part 22: households get a horizon.  The named cast now sits inside a population of 10,000 households
+    22: {
+        # Play it (chapter 1): a windfall of a month's income; what share is spent within the quarter?
+        "playit": {"options": (0.02, 0.25, 0.50, 0.90)},
+        # the population (chapters 2, 8): log permanent income N(0, 0.5^2) and transitory income N(0, 0.3^2) a year;
+        # every household consumes 0.9 of its permanent income; permanent incomes grow 2% a year for 60 years
+        "population": {"n": 10_000, "sd_perm": 0.5, "sd_tran": 0.3, "share": 0.9, "growth": 0.02, "years": 60,
+                       "seed": 22},
+        # the permanent-income household (chapter 3): the interest rate, and a life of 40 working and 20 retired years
+        "pih": {"r": 0.03, "work": 40, "retire": 20, "R": 1.02, "gamma": 2.0},
+        # Campbell and Mankiw's economy (chapter 5): a share 0.4 of income goes to hand-to-mouth households
+        "rule_of_thumb": {"lam": 0.4, "T": 240, "seed": 22},
+        # the buffer-stock household (chapter 6), a year a period, normalized by permanent income (Carroll 1997)
+        "buffer": {"beta": 0.96, "R": 1.03, "gamma": 2.0, "G": 1.02, "perm_sd": 0.1, "tran_sd": 0.1, "p_zero": 0.005},
+        "mpc": {"n": 20_000, "windfall": 1 / 12, "seed": 22},
+        # the wealthy hand-to-mouth (chapter 8): 60% of households hold illiquid wealth (houses, pensions), lognormal
+        # around three years of income, earning 7% against cash's 3%; short of cash means under three months' income
+        "illiquid": {"own": 0.6, "median": 3.0, "sd": 0.6, "R_h": 1.07, "short": 0.25, "seed": 22},
+        # Ricardian equivalence (chapter 10): a tax cut of a month's income now, repaid with interest in 20 years
+        "ricardo": {"cut": 1 / 12, "years": 20, "r": 0.03},
+        # Diamond's economy (chapter 11): 30-year periods; population growth 40% a generation (1.1% a year)
+        "olg": {"alpha": 0.3, "n": 0.4, "A": 10.0, "betas": (0.9, 0.3), "pensions": (0.0, 0.1, 0.2, 0.3, 0.4, 0.5,
+                                                                                     0.6, 0.7, 0.8)},
+    },
 }
 
 

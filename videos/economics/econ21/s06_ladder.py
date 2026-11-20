@@ -102,8 +102,8 @@ class Ladder(VoiceoverScene):
                                                                           DOWN, buff=0.15),
                      label(r"the planner", font_size=19, color=CONS).next_to(ax.ax.c2p(np.log(3.0), a["n_star"][-1]),
                                                                            UP, buff=0.15))
-        zones = VGroup(label(r"too much", font_size=19, color=WEDGE).move_to(ax.ax.c2p(np.log(1.12), 0.7)),
-                       label(r"too little", font_size=19, color=CONS).move_to(ax.ax.c2p(np.log(2.2), 0.75)))
+        zones = VGroup(label(r"too much", font_size=19, color=WEDGE).move_to(ax.ax.c2p(np.log(1.13), 0.3)),
+                       label(r"too little", font_size=19, color=CONS).move_to(ax.ax.c2p(np.log(2.1), 0.53)))
         s, b = a["small"], a["big"]
         side = VGroup(
             label(rf"$\gamma = 1.2$: \ market {s['n_dec']:.2f}, \ planner {s['n_star']:.2f}", font_size=19,
