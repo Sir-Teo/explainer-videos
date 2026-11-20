@@ -24,8 +24,8 @@ class Curve(VoiceoverScene):
         side = VGroup(
             MathTex(r"\dot w + 0.900 = 9.638\,u^{-1.394}", font_size=32, color=WAGE),
             label(r"fitted to Britain, \ 1861--1913, \\ and it fitted 1948--57 too", font_size=19, color=GREY_A),
-            label(r"wages stable at about \\ 5\tfrac12\% unemployment", font_size=20, color=OUTPUT),
-            label(rf"at 2\tfrac12\%: \ wages rise {p['w25']:.1f}\%, \\ about as fast as productivity, \\ so prices "
+            label(r"wages stable at about \\ 5$\tfrac12$\% unemployment", font_size=20, color=OUTPUT),
+            label(rf"at 2$\tfrac12$\%: \ wages rise {p['w25']:.1f}\%, \\ about as fast as productivity, \\ so prices "
                   r"stay stable", font_size=19, color=INFL),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.4).to_edge(RIGHT, buff=0.35)
         tag = published_tag(r"Phillips, \ Economica 25(100) (1958): \ 283--299", corner=DR, font_size=12)

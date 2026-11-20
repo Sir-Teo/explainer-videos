@@ -760,6 +760,22 @@ brackets on screen.
 | disinflation; the sacrifice ratio; stagflation | 反通胀；牺牲率；滞胀 |
 | rational inattention; indexation | 理性疏忽；指数化 |
 
+## Part 29
+
+| English | 中文 |
+|---|---|
+| the real business cycle; dynamic stochastic general equilibrium (DSGE) | 真实经济周期；动态随机一般均衡（DSGE） |
+| the Hodrick-Prescott filter; the trend; the cycle; the end-point problem | 霍德里克－普雷斯科特滤波；趋势；周期；端点问题 |
+| dynamic programming; the Bellman equation; the principle of optimality | 动态规划；贝尔曼方程；最优性原理 |
+| value function iteration; the policy function; a contraction mapping | 值函数迭代；策略函数；压缩映射 |
+| the stochastic growth model; a Markov chain; the Tauchen and Rouwenhorst methods | 随机增长模型；马尔可夫链；陶亨法与鲁文霍斯特法 |
+| intertemporal substitution; the Frisch elasticity; indivisible labour | 跨期替代；弗里希弹性；不可分劳动 |
+| calibration; the steady state; log-linearization | 校准；稳态；对数线性化 |
+| the saddle path; the Blanchard-Kahn conditions; the QZ decomposition | 鞍点路径；布兰查德－卡恩条件；QZ分解 |
+| an impulse response; the Solow residual; labour hoarding; capacity utilization | 脉冲响应；索洛余值；劳动力囤积；产能利用率 |
+| a long-run restriction; a structural VAR; business cycle accounting; the labour wedge | 长期约束；结构向量自回归；经济周期核算；劳动楔子 |
+| news shocks; uncertainty shocks | 新闻冲击；不确定性冲击 |
+
 ## Names
 
 | English | 中文 |

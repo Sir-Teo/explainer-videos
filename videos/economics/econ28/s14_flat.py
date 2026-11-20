@@ -70,7 +70,7 @@ class Flat(VoiceoverScene):
             label(r"3. \ \ the curve itself is flatter: \ global competition, \ fewer price changes \ (Part 30)",
                   font_size=21, color=WAGE),
             label(r"Hazell, \ Herre\~no, \ Nakamura and Steinsson, \ 2022: \ across states, \ which share one "
-                  r"central bank, \ the slope is small, \ and was small even in the early 1980s", font_size=20,
+                  r"central bank, \\ the slope is small, \ and was small even in the early 1980s", font_size=20,
                   color=OUTPUT),
             label(r"so the disinflation of the 1980s came mostly from expectations, \ not from slack", font_size=22,
                   color=E.ACCENT),

@@ -286,4 +286,87 @@
             "chapter 3. Computed in your browser; nothing you do here is stored or sent.",
     });
   };
+
+  // ---- Part 29: the cake -----------------------------------------------------------------------------------------
+  W.cake = function (el) {
+    // The cake of Part 29 (explainer.economics.agora.dp: cake): V(w) = max_c log c + beta V(w - c) on a grid of cake
+    // sizes, by value function iteration from V = 0.  The reader sets patience, the grid and the number of
+    // iterations, and watches V_n approach the exact value and the gap between iterates shrink by beta each step.
+    function solve(beta, n, iters) {
+      var w = [], i, j, k;
+      for (i = 0; i < n; i++) w.push((i + 1) / n);
+      var V = new Float64Array(n), gaps = [], pol = new Int32Array(n);
+      for (k = 0; k < iters; k++) {
+        var Vn = new Float64Array(n), gap = 0;
+        for (i = 0; i < n; i++) {
+          var best = (i === 0) ? Math.log(w[0]) + beta * V[0] : -1e300, arg = 0;
+          for (j = 0; j < i; j++) {
+            var v = Math.log(w[i] - w[j]) + beta * V[j];
+            if (v > best) { best = v; arg = j; }
+          }
+          Vn[i] = best; pol[i] = arg;
+          gap = Math.max(gap, Math.abs(best - V[i]));
+        }
+        V = Vn; gaps.push(gap);
+      }
+      return { w: w, V: V, gaps: gaps, pol: pol };
+    }
+    function exact(beta, x) {
+      return Math.log(1 - beta) / (1 - beta) + beta * Math.log(beta) / Math.pow(1 - beta, 2) + Math.log(x) / (1 - beta);
+    }
+    QB.widget(el, {
+      title: "Eat the cake by iteration",
+      sub: "A cake of size 1 must last for ever; each day you eat some, valued by its logarithm, and tomorrow counts " +
+           "beta as much as today. The computer starts from V = 0 and applies the Bellman equation again and again. " +
+           "Left: the value after n iterations (the best you can do if the world ends after n days) against the " +
+           "exact answer, dashed. Right: the largest change between successive iterations, on a log scale. How many " +
+           "iterations does a patient eater need?",
+      panels: 2, height: 280,
+      controls: [
+        { k: "beta", label: "Patience beta", min: 0.5, max: 0.97, step: 0.01, value: 0.9,
+          fmt: function (x) { return x.toFixed(2); } },
+        { k: "n", label: "Cake sizes on the grid", min: 21, max: 201, step: 10, value: 101,
+          fmt: function (x) { return x.toFixed(0); } },
+        { k: "it", label: "Iterations", min: 1, max: 300, step: 1, value: 20,
+          fmt: function (x) { return x.toFixed(0); } },
+      ],
+      draw: function (g, v, st) {
+        var r = solve(v.beta, Math.round(v.n), Math.round(v.it)), i;
+        var lo = Math.max(1, Math.round(0.05 * r.w.length)), xs = [], ys = [], ex = [];
+        for (i = lo; i < r.w.length; i++) { xs.push(r.w[i]); ys.push(r.V[i]); ex.push(exact(v.beta, r.w[i])); }
+        var bot = Math.min(Math.min.apply(null, ex), Math.min.apply(null, ys)) - 1;
+        var a1 = g[0].axes({ x: [0, 1], y: [bot, 1], title: "Value after n iterations", xlabel: "cake" });
+        a1.line(xs, ex, { color: GREY_HINT, width: 1.5, dash: [5, 4] });
+        a1.line(xs, ys, { color: GREEN, width: 2.5 });
+        var its = [], lg = [], ref = [];
+        for (i = 0; i < r.gaps.length; i++) {
+          its.push(i + 1); lg.push(Math.log10(Math.max(r.gaps[i], 1e-16)));
+          ref.push(Math.log10(r.gaps[0]) + i * Math.log10(v.beta));
+        }
+        var a2 = g[1].axes({ x: [1, Math.max(2, r.gaps.length)], y: [-12, 2], title: "Largest change (log10)",
+                             xlabel: "iteration" });
+        a2.line(its, ref, { color: GREY_HINT, width: 1, dash: [4, 4] });
+        a2.line(its, lg, { color: GOLD, width: 2.5 });
+        var m = r.w.length, share = 0, cnt = 0;
+        for (i = Math.round(0.2 * m); i < m; i++) {
+          var c = r.w[i] - r.w[r.pol[i]];
+          share += c / r.w[i]; cnt += 1;
+        }
+        st.share = share / cnt; st.gap = r.gaps[r.gaps.length - 1];
+        st.need = Math.ceil(Math.log(1e-6 / r.gaps[0]) / Math.log(v.beta));
+      },
+      readout: function (v, st) {
+        return [["share of the cake eaten each day", (100 * st.share).toFixed(1) + "% (exact: " +
+                  (100 * (1 - v.beta)).toFixed(1) + "%)"],
+                ["last change", st.gap.toExponential(2)],
+                ["iterations to reach a change of one in a million", "about " + st.need],
+                ["verdict", st.gap < 1e-6 ? "converged: more iterations change nothing you could see" :
+                  "not yet: each iteration shrinks the change by a factor beta"]];
+      },
+      note: "The Bellman operator is a contraction with modulus beta (Blackwell 1965), so the dashed line on the " +
+            "right, falling by log10(beta) per step, bounds the gold one. A coarse grid eats a little too much, " +
+            "because it can only cut the cake in whole grid steps. Part 29, chapters 3-4. Computed in your browser; " +
+            "nothing you do here is stored or sent.",
+    });
+  };
 })();

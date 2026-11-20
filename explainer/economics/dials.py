@@ -619,6 +619,26 @@ DIALS = {d.key: d for d in [
                       "summed, per point by which core inflation fell (12.4% to 4.4%)", 2.04,
                       where="videos/economics/econ28/compute.py, item volcker", checked="2026-11-20"),
          )),
+    Dial("frisch", "Frisch elasticity of labour supply", "the percentage change in hours worked per percentage "
+         "change in the wage, holding the marginal utility of wealth fixed", (29, 30, 52),
+         status="contested", checked="2026-11-20",
+         meaning="how far people move their hours when a wage change is temporary; models of the business cycle need "
+                 "a large value (hours swing almost as much as output), while studies of individual workers find a "
+                 "small one; part of the gap closes by counting people who move in and out of work (the extensive "
+                 "margin), part remains, and it decides whether recessions can be read as people choosing leisure",
+         estimates=(
+             Estimate("Chetty, Guren, Manoli and Weber", 2011, "review", "micro studies, the intensive margin (hours "
+                      "of those who work)", 0.54, where="AER 101(3): 471-475", checked="2026-11-20"),
+             Estimate("Chetty, Guren, Manoli and Weber", 2011, "review", "micro studies, the extensive margin (who "
+                      "works)", 0.28, where="AER 101(3): 471-475", checked="2026-11-20"),
+             Estimate("Chetty, Guren, Manoli and Weber", 2011, "review", "the two margins together: aggregate hours",
+                      0.82, where="AER 101(3): 471-475", checked="2026-11-20"),
+             Estimate("Chetty, Guren, Manoli and Weber", 2011, "review", "the value typical in macroeconomic models, "
+                      "as reported in the same review", 2.84, where="AER 101(3): 471-475", checked="2026-11-20"),
+             Estimate("this film (Agora)", 2026, "calibration", "the elasticity at which the Island's hours are half "
+                      "as volatile as its output (US data: 0.90)", 2.14,
+                      where="videos/economics/econ29/compute.py, item frisch", checked="2026-11-20"),
+         )),
     Dial("money_demand", "interest semi-elasticity of money demand", "the change in the log of real money balances "
          "(relative to income) per percentage point of the nominal interest rate; negative", (25, 28, 31),
          status="contested", checked="2026-11-20",
@@ -1349,6 +1369,25 @@ SHOWN = {
                                                     "Penn World Table's"),
         ("Fernald (2015); Kremer, Willis and You (2022); Acemoglu and Molina (2022)", "frontier work: the slowdown "
          "shown in the Penn World Table, the convergence finding dialled with its critics"),
+    ],
+    29: [
+        ("Burns and Mitchell (1946); Hodrick and Prescott (1997); Hamilton (2018)", "the cycle's definition and "
+         "filters, computed on FRED's real GDP"),
+        ("Kydland and Prescott (1982); Prescott (1986); Hansen (1985); Rogerson (1988)", "the real business cycle "
+         "model, solved and simulated in Agora (agora.rbc); Prescott's estimate is a Called it? card"),
+        ("Brock and Mirman (1972); Bellman (1957)", "the stochastic growth model and dynamic programming, solved on "
+         "screen"),
+        ("Tauchen (1986); Rouwenhorst (1995); Kopecky and Suen (2010)", "Markov chains for shocks, built and compared"),
+        ("Blanchard and Kahn (1980); Klein (2000)", "the saddle-path condition and the QZ solution, computed"),
+        ("Summers (1986)", "the sceptic's case, stated"),
+        ("Gali (1999); Christiano, Eichenbaum and Vigfusson (2003); Basu, Fernald and Kimball (2006); Fernald (2007)",
+         "technology shocks and hours: the long-run VAR re-estimated on FRED's data in both specifications; the "
+         "purified-technology and trend-break findings stated"),
+        ("Chetty, Guren, Manoli and Weber (2011)", "the Frisch elasticity dial's rows"),
+        ("Chari, Kehoe and McGrattan (2007); Shimer (2009)", "wedges, stated; the labour wedge computed from FRED's "
+         "data"),
+        ("Beaudry and Portier (2006); Bloom (2009)", "news and uncertainty shocks, stated"),
+        ("Leamer (2007)", "housing leads the cycle: Play it's average paths are FRED's data"),
     ],
 }
 

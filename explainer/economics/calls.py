@@ -206,6 +206,28 @@ CALLS = {c.key: c for c in [
          ("Board of Governors of the Federal Reserve System, press conference and Summary of Economic Projections, "
           "16 June 2021",
           "BEA: the PCE price index, via FRED")),
+    Call("prescott_75", 29, "Edward Prescott, in the Federal Reserve Bank of Minneapolis's Quarterly Review",
+         "Fall 1986", "technology shocks account for more than half of America's postwar fluctuations, with a best "
+                      "estimate near 75 percent; in the theory, an improvement in technology raises output, investment "
+                      "and hours worked together",
+         "the growth model with random technology, its parameters chosen from growth facts, reproduced the size and "
+         "comovement of America's postwar cycles, with the shocks measured by the Solow residual",
+         "the residual was partly not technology: firms work people and machines harder in booms, and corrected for "
+         "that (Basu, Fernald and Kimball 2006) improvements cut hours and investment at first; long-run VARs split: "
+         "with hours in growth rates (Gali 1999) hours fall and technology explains little of the cycle, in levels "
+         "(Christiano, Eichenbaum and Vigfusson 2003) hours rise and it explains much; few now say three quarters, "
+         "but technology matters, and the method won",
+         "partly right",
+         ("E. C. Prescott, \"Theory Ahead of Business Cycle Measurement\" and \"Response to a Skeptic\", Federal "
+          "Reserve Bank of Minneapolis Quarterly Review 10(4) (1986)",
+          "J. Gali, \"Technology, Employment, and the Business Cycle\", American Economic Review 89(1) (1999): 249-271",
+          "S. Basu, J. Fernald and M. Kimball, \"Are Technology Improvements Contractionary?\", American Economic "
+          "Review 96(5) (2006): 1418-1448",
+          "L. Christiano, M. Eichenbaum and R. Vigfusson, \"What Happens After a Technology Shock?\", NBER Working "
+          "Paper 9819 (2003)",
+          "J. Fernald, \"Trend Breaks, Long-Run Restrictions, and Contractionary Technology Improvements\", Journal of "
+          "Monetary Economics 54 (2007): 2467-2485",
+          "BLS: output per hour and hours in the nonfarm business sector, via FRED")),
     Call("keynes_peace", 27, "John Maynard Keynes, in The Economic Consequences of the Peace",
          "1919", "the reparations the Allies meant to demand were more than Germany could pay, and pressing them would "
                  "impoverish Central Europe and end in disaster: if we aim deliberately at the impoverishment of "

@@ -238,6 +238,10 @@ FRED_SERIES["GPDIC1"] = ("Real gross private domestic investment", "billions of 
                          "adjusted annual rate", "quarterly", "BEA")
 FRED_SERIES["HOANBS"] = ("Nonfarm business sector: hours worked for all workers", "index 2017 = 100, seasonally "
                          "adjusted", "quarterly", "BLS")
+FRED_SERIES["A011RA3Q086SBEA"] = ("Real gross private domestic investment: fixed investment: residential (chain-type "
+                                  "quantity index)", "index 2017 = 100, seasonally adjusted", "quarterly", "BEA")
+FRED_SERIES["A008RA3Q086SBEA"] = ("Real gross private domestic investment: fixed investment: nonresidential (chain-type "
+                                  "quantity index)", "index 2017 = 100, seasonally adjusted", "quarterly", "BEA")
 
 FRED_RETRIEVED = {s: "2026-11-19" for s in (
     "GDPA", "GDIA", "PCECA", "GPDIA", "GCEA", "EXPGSA", "IMPGSA", "A033RC1A027NBEA", "A191RD3A086NBEA", "U1RATE",
@@ -253,7 +257,8 @@ FRED_RETRIEVED.update({s: "2026-11-20" for s in ("PCECC96", "DSPIC96", "PSAVERT"
                                                   "GS10", "GS2", "DPSSCBW027SBOG", "DPSLCBW027SBOG", "EQTA",
                                                   "MMMFFAQ027S", "GNPCA", "USREC", "M1476BUSM027NNBR",
                                                   "GDPPOT", "IRSTCI01JPM156N", "MICH", "T5YIEM", "CPILFESL",
-                                                  "GPDIC1", "HOANBS")})
+                                                  "GPDIC1", "HOANBS", "A011RA3Q086SBEA",
+                                                  "A008RA3Q086SBEA")})
 
 SPF_FILES = ("median_rgdp_level", "median_rgdp_growth", "median_recess_level")
 SPF_URL = ("https://www.philadelphiafed.org/-/media/frbp/assets/surveys-and-data/survey-of-professional-forecasters/"

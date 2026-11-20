@@ -10,7 +10,7 @@ the series leaves out.
 Both *Parts* columns are found, not typed. *Planned* lists the parts whose entry in
 [`SYLLABUS.md`](SYLLABUS.md) names the book or paper; *Built* lists the parts whose scenes, compute step or
 README cite it (a dot: none yet). Fuller notes (editions, chapters, what each source was used for) are in each
-part's README, under *Sources*. Built so far: Parts 1–28.
+part's README, under *Sources*. Built so far: Parts 1–29.
 
 ## 1. The textbook spine
 
@@ -64,10 +64,10 @@ part's README, under *Sources*. Built so far: Parts 1–28.
 | Short name | Book | Planned | Built |
 |---|---|---|---|
 | Romer | D. Romer, *Advanced Macroeconomics* (5th ed., 2019) | 20, 22–23, 28–29, 56 | · |
-| Ljungqvist–Sargent | L. Ljungqvist and T. Sargent, *Recursive Macroeconomic Theory* (4th ed., 2018) | 29, 52, 56 | 22, 24 |
-| SLP | N. Stokey, R. Lucas and E. Prescott, *Recursive Methods in Economic Dynamics* (1989) | 29, 51 | · |
+| Ljungqvist–Sargent | L. Ljungqvist and T. Sargent, *Recursive Macroeconomic Theory* (4th ed., 2018) | 29, 52, 56 | 22, 24, 29 |
+| SLP | N. Stokey, R. Lucas and E. Prescott, *Recursive Methods in Economic Dynamics* (1989) | 29, 51 | 29 |
 | Acemoglu | D. Acemoglu, *Introduction to Modern Economic Growth* (2009) | 20–21 | · |
-| Galí | J. Galí, *Monetary Policy, Inflation, and the Business Cycle* (2nd ed., 2015) | 30, 56 | · |
+| Galí | J. Galí, *Monetary Policy, Inflation, and the Business Cycle* (2nd ed., 2015) | 30, 56 | 29 |
 | Woodford | M. Woodford, *Interest and Prices* (2003) | 30 | · |
 | Walsh | C. Walsh, *Monetary Theory and Policy* (4th ed., 2017) | 25 | 25 |
 | Obstfeld–Rogoff | M. Obstfeld and K. Rogoff, *Foundations of International Macroeconomics* (1996) | 34 | · |
@@ -85,7 +85,7 @@ part's README, under *Sources*. Built so far: Parts 1–28.
 | Hamilton | J. Hamilton, *Time Series Analysis* (1994) | 55 | 6 |
 | Kilian–Lütkepohl | L. Kilian and H. Lütkepohl, *Structural Vector Autoregressive Analysis* (2017) | 55 | · |
 | Train | K. Train, *Discrete Choice Methods with Simulation* (2nd ed., 2009) | 43, 54 | · |
-| Judd | K. Judd, *Numerical Methods in Economics* (1998) | 51 | · |
+| Judd | K. Judd, *Numerical Methods in Economics* (1998) | 51 | 29 |
 | QuantEcon | T. Sargent and J. Stachurski, *Quantitative Economics* (QuantEcon lectures) | 51 | · |
 
 ### The fields
@@ -311,6 +311,8 @@ part's README, under *Sources*. Built so far: Parts 1–28.
 **Part 27, *The Keynesian Revolution*.** Books: John Maynard Keynes, *The General Theory of Employment, Interest and Money* (1936); Olivier Blanchard, *Macroeconomics* (8th ed., 2021), chs. 3–9; Barry Eichengreen, *Golden Fetters* (1992); Robert Skidelsky, *John Maynard Keynes* (three volumes, 1983–2000). Papers: Say (1803); Keynes (1919, 1923, 1936); Kahn (1931); Hicks (1937); Fisher (1933); Hayek (1931); Sweeney and Sweeney (1977); Krugman (1998); Okun (1962); Samuelson (1955); Bewley (1999); Card and Hyslop (1997); Dickens et al. (2007); Friedman and Schwartz (1963); Eichengreen and Sachs (1985); Romer (1992); Lucas and Sargent (1979); Mantoux (1946); Ball, Leigh and Loungani (2017); Guerrieri, Lorenzoni, Straub and Werning (2022).
 
 **Part 28, *Inflation and Expectations*.** Books: David Romer, *Advanced Macroeconomics* (5th ed., 2019), chs. 6 and 12; Thomas Sargent, *The Conquest of American Inflation* (1999); Olivier Blanchard, *Macroeconomics* (8th ed., 2021), chs. 8–9; Robert Lucas, *Studies in Business-Cycle Theory* (1981). Papers: Phillips (1958); Samuelson and Solow (1960); Phelps (1967); Friedman (1968); Muth (1961); Lucas (1972, 1973, 1976); Sargent and Wallace (1975); Kydland and Prescott (1977); Barro and Gordon (1983); Rogoff (1985); Alesina and Summers (1993); Ball (1994); Hazell, Herre\ no, Nakamura and Steinsson (2022); Bernanke and Blanchard (2023); Benigno and Eggertsson (2023); Coibion, Gorodnichenko and Kumar (2018); Weber et al. (2022).
+
+**Part 29, *The Cycle as Equilibrium*.** Books: Nancy Stokey, Robert Lucas and Edward Prescott, *Recursive Methods in Economic Dynamics* (1989), chs. 1–4; Lars Ljungqvist and Thomas Sargent, *Recursive Macroeconomic Theory* (4th ed., 2018), chs. 3–4; David Romer, *Advanced Macroeconomics* (5th ed., 2019), ch. 5; Robert King and Sergio Rebelo, "Resuscitating Real Business Cycles", *Handbook of Macroeconomics* (1999). Papers: Kydland and Prescott (1982); Long and Plosser (1983); Hansen (1985); Rogerson (1988); Prescott (1986); Summers (1986); Brock and Mirman (1972); Blanchard and Kahn (1980); Hodrick and Prescott (1997); Hamilton (2018); Tauchen (1986); Kopecky and Suen (2010); Galí (1999); Christiano, Eichenbaum and Vigfusson (2003); Basu, Fernald and Kimball (2006); Chari, Kehoe and McGrattan (2007); Chetty, Guren, Manoli and Weber (2011).
 
 ## 4. What the series leaves out
 

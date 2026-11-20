@@ -119,6 +119,15 @@ AGORA = {
                                     "across 89 countries, 1960-2019, holding investment, population growth and "
                                     "schooling fixed, the gap closes at about 1.3% a year, and with no controls not at "
                                     "all"),
+    # Part 29 measured the US cycle (1948-2019) and simulated the real business cycle model
+    "volatility": (29, "in a growth model with random technology, consumption smoothing and capital's long life make "
+                       "investment swing and consumption hold steady: in the Island's real business cycle investment is "
+                       "3.2 times as volatile as output and consumption 0.29 times; in US data, 1948-2019, investment "
+                       "is 4.6 times and consumption (durables included) 0.77 times"),
+    "hours": (29, "in the model, hours rise in booms because a temporary rise in productivity makes this the time to "
+                  "work; with Hansen's indivisible labour hours are 0.76 times as volatile as output, against 0.90 in "
+                  "the data, but they move almost one for one with productivity (correlation 0.76) where the data "
+                  "show none (-0.07)"),
     # Part 27 measured Okun's law against the CBO's potential and built the Keynesian economy
     "okun": (27, "when spending, not capacity, sets output, firms hire and lay off with demand, so unemployment rises "
                  "as output falls below potential; against the CBO's potential, 1949-2025, the unemployment gap moves "

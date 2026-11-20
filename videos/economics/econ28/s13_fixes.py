@@ -56,7 +56,7 @@ class Fixes(VoiceoverScene):
     def independence(self):
         rows = VGroup(
             label(r"independence: \ put the banker out of the government's reach", font_size=25, color=E.ACCENT),
-            label(r"Alesina and Summers, \ 1993: \ rich countries with more independent central banks had lower "
+            label(r"Alesina and Summers, \ 1993: \ rich countries with more independent central banks \\ had lower "
                   r"inflation, \ and no worse growth or unemployment", font_size=21, color=CB),
             label(r"a correlation: \ countries that wanted low inflation also chose independence", font_size=21,
                   color=HOLD),

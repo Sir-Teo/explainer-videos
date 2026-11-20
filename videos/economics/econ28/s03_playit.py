@@ -14,7 +14,7 @@ class PlayIt(VoiceoverScene):
         self.reveal()
 
     def _axes(self):
-        return plane([1959.5, 1981], [0, 14], center=LEFT * 1.6 + UP * 0.2, x_length=8.6, y_length=4.2,
+        return plane([1959.5, 1981], [0, 14], center=LEFT * 1.6 + UP * 0.45, x_length=8.6, y_length=4.2,
                      xticks=[1960, 1965, 1970, 1975, 1980], yticks=[0, 4, 8, 12], ylabel=r"inflation, \ \%",
                      xfmt=lambda v: f"{v:.0f}", yfmt=lambda v: f"{v:.0f}", font_size=15)
 
@@ -34,7 +34,7 @@ class PlayIt(VoiceoverScene):
                                                 rf"C: \ about {o[2]:.0f}\%"))]).arrange(RIGHT, buff=0.5)
         for ch in chips:
             ch[1].move_to(ch[0])
-        chips.to_edge(DOWN, buff=0.9)
+        chips.to_edge(DOWN, buff=0.45)
         ring = countdown().scale(0.7).next_to(chips, RIGHT, buff=0.3)
         tag = data_tag(r"BLS: \ the CPI, \ annual averages, \ via FRED", corner=DR, font_size=12)
         with self.voiceover(
@@ -70,7 +70,7 @@ class PlayIt(VoiceoverScene):
             label(rf"1973: \ {P['answer']:.1f}\%: \ B was closest", font_size=22, color=INFL),
             label(rf"1974: \ {P['next5'][1]:.1f}\%", font_size=22, color=INFL),
             label(r"forecasting from the past \\ always lagged behind", font_size=20, color=EXPECT),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.3).to_edge(DOWN, buff=0.5).shift(RIGHT * 3)
+        ).arrange(DOWN, aligned_edge=LEFT, buff=0.3).to_edge(RIGHT, buff=0.4).shift(UP * 0.6)
         tag = data_tag(r"BLS: \ the CPI, \ annual averages, \ via FRED", corner=DR, font_size=12)
         with self.voiceover(
             f"<bookmark mark='a'/> In 1973, inflation was {P['answer']:.1f} percent. If you chose B, you were "

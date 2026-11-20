@@ -73,7 +73,7 @@ openings and unemployment, the University of Michigan's expected inflation and t
 | 12 | The flat curve | Slopes $-0.65$, $-0.18$, $-0.07$; anchored expectations, hidden curves, flatter curves; Hazell, Herreño, Nakamura and Steinsson |
 | 13 | 2021–23 | Headline CPI 9.0% (June 2022), core 6.6%, the 5-year breakeven never above 3.4%; openings per unemployed to 2.0; Bernanke and Blanchard, Benigno and Eggertsson; *Called it?*: PCE inflation 5.7% (2021) and 6.1% (2022) against a projected 3.4% and 2.1% |
 | 14 | The Dials | The slope of the Phillips curve (contested) and the sacrifice ratio (contested): Ball 1.8, Mankiw 2.8, this film 2.0 |
-| 15 | In practice | Persistence: this year's inflation and last year's, correlation 0.74 (0.81 before 1984, 0.52 after); *Called it?* on Friedman (right); the forecaster's toolkit and indexation |
+| 15 | In practice | Persistence: this year's inflation and last year's, correlation 0.73 (0.81 before 1984, 0.52 after); *Called it?* on Friedman (right); the forecaster's toolkit and indexation |
 | 16 | Frontier | Michigan's households: 2.9% expected in the 2010s against 1.8% realized; Weber and coauthors; Coibion, Gorodnichenko and Kumar's New Zealand firms; rational inattention; four open questions |
 | — | Outro | The answer; twelve lines; problems; reading; next, Part 29, *The Cycle as Equilibrium* |
 

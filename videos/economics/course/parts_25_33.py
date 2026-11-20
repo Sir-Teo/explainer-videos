@@ -186,4 +186,50 @@ PARTS = [
               ("The Island's planted truths", "explainer/economics/island.py"),
               ("The Data Room's sources", "explainer/economics/data/SOURCES.md")),
     ),
+    Part(
+        n=29, level="U", widget="cake", prereq=(7, 20, 22, 28),
+        question="Could booms and slumps be an economy's best response to shocks it cannot avoid?",
+        story="The part opens on Kydland and Prescott's paper of 1982 and on two cycles side by side, America's and "
+              "a frictionless model's. It defines the cycle by filters (Hodrick and Prescott against Hamilton, and "
+              "the end-point problem), asks the viewer which of six series turns first before a recession (housing), "
+              "and builds dynamic programming from a cake: the Bellman equation solved by hand, then by value "
+              "function iteration, with the contraction drawn. It solves Brock and Mirman's stochastic growth model, "
+              "builds shocks as Markov chains (Tauchen against Rouwenhorst), adds labour supply and Hansen and "
+              "Rogerson's indivisible labour, calibrates the model, and solves it by counting the roots of the "
+              "linearized system. After an intermission of America's cycle since 1947, it puts the model's impulse "
+              "responses and moments beside the data's, shows what fails (hours against productivity, the Solow "
+              "residual's recessions), re-estimates Gali's VAR in both specifications, scores Prescott's estimate, "
+              "measures the labour wedge, and reads the Frisch elasticity dial.",
+        handoff="Part 30 puts money and sticky prices into this framework; Part 31 the central bank; Part 51 solves "
+                "economies without formulas; Part 52 gives them many households; Part 55 estimates them.",
+        outside="Part 7: discounting; Part 20: the Solow model and the residual; Part 22: consumption smoothing; "
+                "Part 28: rational expectations. Chapter 3 needs a derivative and a geometric series; chapter 4 the "
+                "idea of a fixed point; chapter 8 eigenvalues of a 3-by-3 matrix; chapter 11 a vector "
+                "autoregression.",
+        objectives={
+            "U": ["Explain how a business cycle is measured against a trend, and why the filter matters.",
+                  "Write a Bellman equation for the cake problem and solve it, and explain intertemporal "
+                  "substitution and indivisible labour.",
+                  "Explain what the real business cycle model gets right and wrong about the US cycle."],
+            "M": ["Solve a dynamic program by value function iteration and explain why it converges.",
+                  "Discretize an AR(1) by Tauchen's and Rouwenhorst's methods, and log-linearize and solve a model "
+                  "with the Blanchard-Kahn conditions."],
+            "D": ["Weigh the evidence on technology shocks and hours (long-run VARs, purified technology) and on "
+                  "the Frisch elasticity, micro against macro."],
+            "I": ["Lay out the workflow of a structural model in a policy institution, from steady state to "
+                  "scenario."],
+        },
+        results=[
+            ("The Bellman equation", r"V(w) = \max_{c} \{\log c + \beta V(w - c)\} \Rightarrow c = (1-\beta)\,w"),
+            ("The contraction", r"\| TV - TW \| \le \beta\, \| V - W \|"),
+            ("Brock and Mirman", r"k' = \alpha\beta\, z k^{\alpha}"),
+            ("The steady state", r"\frac{\bar k}{\bar y} = \frac{\alpha}{1/\beta - 1 + \delta}"),
+            ("Blanchard and Kahn", r"\#\{|\lambda| > 1\} = \#\{\text{jump variables}\}"),
+        ],
+        U=(0, 1, 2, 3, 6, 7, "s10_intermission", 9, 10, 12), D=(11, 13, 15), I=(14,),
+        also=(("Agora's dynamic programming", "explainer/economics/agora/dp.py"),
+              ("Agora's real business cycle", "explainer/economics/agora/rbc.py"),
+              ("The Island's planted truths", "explainer/economics/island.py"),
+              ("The Data Room's sources", "explainer/economics/data/SOURCES.md")),
+    ),
 ]
