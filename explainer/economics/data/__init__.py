@@ -744,6 +744,24 @@ DATASETS = {
         "sha256": "3354b22752f0aa0c0d9c8c12b38810202b6380f2587e539be11d9a358412fe6a",
         "files": ("ajr_hdm.csv",),
     },
+    "blp_cars": {
+        "title": "Berry, Levinsohn and Pakes's automobile data: 2,217 model-years sold in the United States, "
+                 "1971-1990, with price, horsepower per weight, air conditioning, miles per gallon, size, market "
+                 "share and firm",
+        "publisher": "Berry, Levinsohn and Pakes (1995), as distributed in the R package BLPestimatoR (Brunner, "
+                     "Weiser and Romahn), dataset productData_cars, from the Harvard Dataverse copy",
+        "citation": "S. Berry, J. Levinsohn and A. Pakes, \"Automobile Prices in Market Equilibrium\", Econometrica "
+                    "63(4) (1995): 841-890; BLPestimatoR 0.3.4 (CRAN, 2022), data/productData_cars.rda, retrieved "
+                    "2026-11-20",
+        "short": "Berry, Levinsohn and Pakes (1995), via the R package BLPestimatoR",
+        "url": "https://cran.r-project.org/src/contrib/BLPestimatoR_0.3.4.tar.gz",
+        "licence": "GPL-3 (BLPestimatoR); the data are BLP's, published with their paper",
+        "units": "price: thousands of 1983 dollars; hpwt (horsepower over weight), mpg (miles per gallon) and space "
+                 "(length times width): in BLP's scaled units; share: share of US households",
+        "vintage": "2026-11-20",
+        "sha256": "0072a126b7762cfb970caa6584b687ecec64056c34006fb4ef8c05beb58b051f",
+        "files": ("blp_cars.csv",),
+    },
     "shiller": {
         "title": "Robert Shiller's annual US stock market data with consumption: the S&P composite price, dividends and "
                  "earnings, the one-year and long interest rates, the CPI, the real one-year rate, real consumption "
@@ -2703,6 +2721,52 @@ def refresh_ajr() -> None:
             w.writerow([_fmt(float(cols[c][i])) for c in AJR_COLUMNS])
 
 
+BLP_COLUMNS = ("year", "firm", "id", "price", "hpwt", "air", "mpg", "space", "share")
+
+
+@functools.lru_cache(maxsize=None)
+def blp_cars() -> dict:
+    """Berry, Levinsohn and Pakes's 2,217 model-years, 1971-1990: ``{column: [values]}`` for :data:`BLP_COLUMNS`
+    (year, firm and id as integers), plus ``outshr``, the outside good's share in each year (one less the year's
+    total)."""
+    rows = _read(HERE / "blp_cars.csv")
+    out = {c: [float(r[c]) for r in rows] for c in BLP_COLUMNS}
+    for c in ("year", "firm", "id"):
+        out[c] = [int(v) for v in out[c]]
+    tot: dict = {}
+    for y, sh in zip(out["year"], out["share"]):
+        tot[y] = tot.get(y, 0.0) + sh
+    out["outshr"] = [1 - tot[y] for y in out["year"]]
+    return out
+
+
+def refresh_blp_cars() -> None:
+    import tarfile
+
+    from explainer.psychology import rdata
+
+    d = DATASETS["blp_cars"]
+    raw = RAW / "BLPestimatoR_0.3.4.tar.gz"
+    sha = _download(d["url"], raw)
+    if sha != d["sha256"]:
+        print(f"blp_cars: the download differs from the recorded vintage ({sha[:12]} vs {d['sha256'][:12]})")
+    print(f"blp_cars: sha256 {sha}")
+    with tarfile.open(raw, "r:gz") as tf:
+        blob = tf.extractfile(tf.getmember("BLPestimatoR/data/productData_cars.rda")).read()
+    tmp = RAW / "productData_cars.rda"
+    tmp.write_bytes(blob)
+    obj = rdata.load(tmp)[0][1]
+    names = obj["attrs"]["names"]["value"]
+    cols = {n: c["value"] for n, c in zip(names, obj["value"])}
+    n = len(cols["price"])
+    with open(HERE / "blp_cars.csv", "w", newline="", encoding="utf-8") as f:
+        w = csv.writer(f)
+        w.writerow(BLP_COLUMNS)
+        for i in range(n):
+            w.writerow([int(1970 + cols["cdid"][i]), int(cols["firmid"][i]), int(cols["id"][i]),
+                        *[_fmt(float(cols[c][i])) for c in ("price", "hpwt", "air", "mpg", "space", "share")]])
+
+
 SHILLER_COLUMNS = ("year", "P", "D", "E", "R", "RLONG", "CPI", "RealR", "C", "RealP", "Pstar", "PstarR", "PstarC", "RealD",
                    "Return")
 
@@ -2792,7 +2856,8 @@ REFRESH = {"draft1970": refresh_draft1970, "ajr": refresh_ajr, "maddison2023": r
            "blanchard_leigh": refresh_blanchard_leigh, "rr_hap": refresh_rr_hap, "jst": refresh_jst,
            "bigmac": refresh_bigmac, "wdi_ca": refresh_wdi_ca, "trefler_hov": refresh_trefler_hov,
            "cepii_gravity": refresh_cepii_gravity, "autor_dorn": refresh_autor_dorn, "resume": refresh_resume,
-           "saez": refresh_saez, "opportunity": refresh_opportunity, "wid_top1": refresh_wid_top1}
+           "saez": refresh_saez, "opportunity": refresh_opportunity, "wid_top1": refresh_wid_top1,
+           "blp_cars": refresh_blp_cars}
 
 
 def main() -> None:

@@ -99,8 +99,9 @@ class Health(VoiceoverScene):
             "most of the remaining risk while keeping a price on the first visits."
         ) as vo:
             self.play(FadeIn(ax), FadeIn(tag), run_time=1.0)
+            self.play(Create(l_rp), run_time=2.0)
             vo.wait_until("a")
-            self.play(Create(l_rp), FadeIn(side[0]), run_time=1.5)
+            self.play(FadeIn(side[0]), Indicate(l_rp, color=WHITE, scale_factor=1.0))
             vo.wait_until("b")
             self.play(Create(l_ov), FadeIn(side[1]), run_time=1.5)
             vo.wait_until("c")

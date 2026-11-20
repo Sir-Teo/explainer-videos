@@ -44,9 +44,10 @@ class EITC(VoiceoverScene):
             "as earnings rise is a tax on every extra hour."
         ) as vo:
             self.play(FadeIn(head), FadeIn(sub), FadeIn(tag), *[FadeIn(b_[0]) for b_ in bars])
+            self.play(*[GrowFromEdge(b_[1], LEFT) for b_ in bars], run_time=1.5)
             for mk, b_ in zip("abc", bars):
                 vo.wait_until(mk)
-                self.play(GrowFromEdge(b_[1], LEFT), FadeIn(b_[2]))
+                self.play(FadeIn(b_[2]), Indicate(b_[1], color=WHITE, scale_factor=1.03))
             vo.wait_until("d")
             self.play(FadeIn(foot))
         self.clear_scene()
@@ -81,8 +82,9 @@ class EITC(VoiceoverScene):
             "working; for someone deciding whether to work at all, the credit is pure reward."
         ) as vo:
             self.play(FadeIn(ax), FadeIn(tag), FadeIn(side[0]), run_time=1.0)
+            self.play(Create(ln), run_time=2.5)
             vo.wait_until("b")
-            self.play(Create(ln), FadeIn(side[1]), run_time=2.5)
+            self.play(FadeIn(side[1]), Indicate(ln, color=WHITE, scale_factor=1.0))
             vo.wait_until("c")
             self.play(FadeIn(side[2]))
             vo.wait_until("d")

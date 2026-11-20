@@ -51,10 +51,12 @@ class Pensions(VoiceoverScene):
             f"{P['depletion']}."
         ) as vo:
             self.play(Write(eq), FadeIn(tag), FadeIn(colh), run_time=1.5)
+            self.play(*[FadeIn(g[0]) for g in grp], *[FadeIn(g[1]) for g in grp],
+                      *[LaggedStart(*[FadeIn(d) for d in g[2]], lag_ratio=0.1) for g in grp], run_time=2.0)
             for mk, g in zip("bcd", grp):
                 vo.wait_until(mk)
-                self.play(FadeIn(g[0]), FadeIn(g[1]), LaggedStart(*[FadeIn(d) for d in g[2]], lag_ratio=0.1),
-                          GrowFromEdge(g[3], LEFT), FadeIn(g[4]), run_time=1.5)
+                self.play(Indicate(g[2], color=WHITE, scale_factor=1.05), GrowFromEdge(g[3], LEFT), FadeIn(g[4]),
+                          run_time=1.5)
         self.clear_scene()
 
     def returns(self):

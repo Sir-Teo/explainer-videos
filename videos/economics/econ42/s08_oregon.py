@@ -51,9 +51,10 @@ class Oregon(VoiceoverScene):
             "dividing by the first stage scales it back up. This is the Wald estimator of Part four, an instrument "
             "made by chance."
         ) as vo:
-            self.play(FadeIn(tag), FadeIn(head_b), *[FadeIn(b_[1]) for b_ in bars], run_time=1.0)
+            self.play(FadeIn(tag), FadeIn(head_b), *[FadeIn(b_[1]) for b_ in bars],
+                      *[GrowFromEdge(b_[0], DOWN) for b_ in bars], run_time=1.5)
             vo.wait_until("a")
-            self.play(*[GrowFromEdge(b_[0], DOWN) for b_ in bars], *[FadeIn(b_[2]) for b_ in bars])
+            self.play(*[FadeIn(b_[2]) for b_ in bars])
             vo.wait_until("b")
             self.play(FadeIn(eq[1]))
             vo.wait_until("c")
@@ -134,8 +135,9 @@ class Oregon(VoiceoverScene):
             self.play(FadeIn(ax), FadeIn(tag), Create(zero), FadeIn(side[0]), run_time=1.0)
             vo.wait_until("a")
             self.play(Create(truth), FadeIn(tl))
+            self.play(LaggedStart(*[FadeIn(x) for x in dots_], lag_ratio=0.01), run_time=4.0)
             vo.wait_until("b")
-            self.play(LaggedStart(*[FadeIn(x) for x in dots_], lag_ratio=0.01), FadeIn(side[1]), run_time=3.0)
+            self.play(FadeIn(side[1]))
             vo.wait_until("c")
             self.play(FadeIn(side[2]))
             vo.wait_until("d")

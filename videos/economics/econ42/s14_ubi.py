@@ -52,10 +52,11 @@ class UBI(VoiceoverScene):
         ) as vo:
             self.play(FadeIn(axis), FadeIn(xl), FadeIn(tag), FadeIn(side[0]), *[FadeIn(b_[1]) for b_ in bars],
                       run_time=1.2)
-            vo.wait_until("b")
+            vo.wait_until("a")
             self.play(LaggedStart(*[GrowFromEdge(b_[0], DOWN if net[k] > 0 else UP) for k, b_ in
-                                    enumerate(bars)], lag_ratio=0.1), *[FadeIn(b_[2]) for b_ in bars],
-                      FadeIn(side[1]), run_time=2.0)
+                                    enumerate(bars)], lag_ratio=0.1), run_time=2.0)
+            vo.wait_until("b")
+            self.play(*[FadeIn(b_[2]) for b_ in bars], FadeIn(side[1]))
             vo.wait_until("c")
             self.play(FadeIn(side[2]))
         self.clear_scene()

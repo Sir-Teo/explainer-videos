@@ -50,9 +50,9 @@ class Why(VoiceoverScene):
         ) as vo:
             self.play(FadeIn(ax), FadeIn(tag), FadeIn(side[0]), run_time=1.2)
             vo.wait_until("a")
-            self.play(Indicate(side[0], color=WHITE))
+            self.play(Create(ind), run_time=2.0)
             vo.wait_until("b")
-            self.play(Create(ind), FadeIn(side[1]), run_time=2.0)
+            self.play(FadeIn(side[1]), Indicate(ind, color=WHITE, scale_factor=1.0))
             vo.wait_until("c")
             self.play(Create(cor), Create(floor), FadeIn(side[2]), run_time=2.0)
             vo.wait_until("d")

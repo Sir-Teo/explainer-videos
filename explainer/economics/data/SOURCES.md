@@ -94,6 +94,7 @@ film that moves to a new vintage says so on screen.
 | `fred_CCSA.csv`, `fred_ICSA.csv`, `fred_IURSA.csv` | continued and initial claims for state unemployment insurance and the insured unemployment rate, weekly, seasonally adjusted, from 1967 (the rate from 1971) | U.S. Department of Labor, Employment and Training Administration, via FRED | public domain | 2026-11-20 |
 | `fred_W825RC1.csv` | unemployment insurance benefits paid to persons, billions of dollars at a seasonally adjusted annual rate, monthly from 1959 | U.S. Bureau of Economic Analysis, via FRED | public domain | 2026-11-20 |
 | `fred_UEMPMED.csv` | median duration of unemployment in weeks, monthly from 1967 | U.S. Bureau of Labor Statistics, via FRED | public domain | 2026-11-20 |
+| `blp_cars.csv` | Berry, Levinsohn and Pakes's automobile data: 2,217 model-years, 1971-1990 (price in thousands of 1983 dollars, horsepower over weight, air conditioning, miles per gallon, size, share, firm) | Berry, Levinsohn and Pakes (1995), via the R package BLPestimatoR 0.3.4 (CRAN) | GPL-3 (package); the data are BLP's | 2026-11-20 |
 
 The raw Maddison workbook (`mpd2023_web.xlsx`, dataverse file 421302) had SHA-256
 `ecc5916ca12789b983fc4be437f8a354bbf4291323605324ac3e0aea4c57cbb6` when the extract was made. The raw Pink Sheet

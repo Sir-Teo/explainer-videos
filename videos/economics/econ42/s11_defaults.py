@@ -51,8 +51,10 @@ class Defaults(VoiceoverScene):
             "for everyone who does not decide."
         ) as vo:
             self.play(FadeIn(head), FadeIn(tag), FadeIn(side[0]), *[FadeIn(b_[1]) for b_ in bars], run_time=1.2)
+            vo.wait_until("a")
+            self.play(*[GrowFromEdge(b_[0], DOWN) for b_ in bars])
             vo.wait_until("b")
-            self.play(*[GrowFromEdge(b_[0], DOWN) for b_ in bars], *[FadeIn(b_[2]) for b_ in bars])
+            self.play(*[FadeIn(b_[2]) for b_ in bars])
             vo.wait_until("c")
             self.play(FadeIn(side[1]))
             vo.wait_until("d")
@@ -68,13 +70,13 @@ class Defaults(VoiceoverScene):
                    font_size=14)
         lo = path(ax, t, D["opt_in"], GREY_B, 3.2)
         la = path(ax, t, D["auto"], GAIN, 3.2)
-        ld = path(ax, t, D["at_default"], HOLD, 2.6)
+        ld = path(ax, t, D["at_default"], PENSION, 2.6)
         side = VGroup(
             label(rf"each month, \ a {100 * D['attention']:.1f}\% chance \\ of acting on the choice; \\ "
                   rf"{100 * D['want']:.0f}\% would choose to save", font_size=17, color=GREY_A),
             label(rf"grey: \ opt in: \\ {100 * D['m15_opt']:.0f}\% at 15 months", font_size=18, color=GREY_B),
             label(rf"green: \ automatic: \\ {100 * D['m15_auto']:.0f}\% at 15 months", font_size=18, color=GAIN),
-            label(rf"gold: \ still at the default: \\ {100 * D['m15_default']:.0f}\%", font_size=18, color=HOLD),
+            label(rf"gold: \ still at the default: \\ {100 * D['m15_default']:.0f}\%", font_size=18, color=PENSION),
             label(r"the gap closes \\ only slowly", font_size=19, color=E.ACCENT),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.3).to_edge(RIGHT, buff=0.35)
         tag = island_tag(corner=DR, font_size=14)
@@ -89,8 +91,9 @@ class Defaults(VoiceoverScene):
             "deciding; meanwhile, the default decides."
         ) as vo:
             self.play(FadeIn(ax), FadeIn(tag), FadeIn(side[0]), run_time=1.0)
+            self.play(Create(lo), run_time=2.0)
             vo.wait_until("b")
-            self.play(Create(lo), FadeIn(side[1]), run_time=1.5)
+            self.play(FadeIn(side[1]), Indicate(lo, color=WHITE, scale_factor=1.0))
             vo.wait_until("c")
             self.play(Create(la), FadeIn(side[2]), run_time=1.5)
             vo.wait_until("d")

@@ -34,6 +34,10 @@ class Liquidity(VoiceoverScene):
         res = label(rf"how much each lowers the chance of finding work; \ at {100 * B['bstar']:.0f}\%: \ liquidity is "
                     rf"{100 * S['share']:.0f}\% of the response", font_size=21, color=E.ACCENT).to_edge(DOWN,
                                                                                                   buff=0.45)
+        two = point_cards([
+            (r"liquidity", r"cash in hand: \\ no need to take \\ the first job; \\ insurance doing \\ its job", LIQ),
+            (r"moral hazard", r"a reward for \\ staying unemployed: \\ a distortion", HAZARD),
+        ], width=7.6, cols=2, font_size=19).move_to(DOWN * 1.3)
         tag = island_tag(corner=DR, font_size=14)
         with self.voiceover(
             "Why do benefits lengthen unemployment? In 2008 Raj Chetty separated two reasons. "
@@ -49,11 +53,14 @@ class Liquidity(VoiceoverScene):
             f"liquidity is {say_pct(S['share'], 0)} of the response."
         ) as vo:
             self.play(Write(lines[0]), FadeIn(tag), run_time=2.0)
+            vo.wait_until("a")
+            self.play(FadeIn(two.cards[0], shift=UP * 0.1), FadeIn(two.cards[1], shift=UP * 0.1))
             vo.wait_until("b")
-            self.play(Indicate(lines[0], color=LIQ))
+            self.play(Indicate(two.cards[0], color=LIQ, scale_factor=1.03))
             vo.wait_until("c")
             self.play(Write(lines[1]))
             vo.wait_until("d")
+            self.play(FadeOut(two.cards[0]), FadeOut(two.cards[1]))
             self.play(*[FadeIn(b_) for b_ in bars], FadeIn(res))
         self.clear_scene()
 

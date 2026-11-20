@@ -52,8 +52,9 @@ class Measure(VoiceoverScene):
             f"{say_pct(-W['ccw'], 0)} fewer find work in the first twenty weeks."
         ) as vo:
             self.play(FadeIn(ax), FadeIn(tag), FadeIn(side[0]), Create(ex), FadeIn(exl), run_time=1.5)
+            self.play(Create(ln), run_time=3.0)
             vo.wait_until("b")
-            self.play(Create(ln), FadeIn(side[1]), run_time=2.5)
+            self.play(FadeIn(side[1]), Indicate(ln, color=WHITE, scale_factor=1.0))
             for mk, k in zip("cde", range(2, 5)):
                 vo.wait_until(mk)
                 self.play(FadeIn(side[k]))
