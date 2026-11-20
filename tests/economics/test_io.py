@@ -133,3 +133,73 @@ def test_surplus_of_a_clone_vanishes_as_nests_tighten():
             for s in (0.0, 0.5, 0.99)]
     assert gain[0] == pytest.approx(io.logit_surplus(np.r_[d, d[1]], 1.0) - io.logit_surplus(d, 1.0))
     assert gain[0] > gain[1] > gain[2] > 0 and gain[2] < 0.01 * gain[0]
+
+
+# ---------------------------------------------------------------------------------------------------------------
+# Part 44
+
+
+def test_rust_fixed_point_and_estimates_on_simulated_buses():
+    p = [0.36, 0.63, 0.01]
+    m = io.Rust(9.8, 2.6, p)
+    ev = m.ev()
+    assert np.max(np.abs(ev - m.bellman(ev))) < 1e-9
+    p1 = m.prob_replace(ev)
+    assert np.all(np.diff(p1) > 0)                       # rebuilds likelier with mileage
+    rng = np.random.default_rng(0)
+    xs, ds = [], []
+    for _ in range(600):
+        x = 0
+        for _t in range(120):
+            d = rng.random() < p1[x]
+            xs.append(x)
+            ds.append(int(d))
+            x = min((0 if d else x) + int(rng.choice(3, p=p)), 89)
+    nf = io.rust_nfxp(np.array(xs), np.array(ds), p)
+    assert nf["RC"] == pytest.approx(9.8, rel=0.15) and nf["theta1"] == pytest.approx(2.6, rel=0.25)
+    cc = io.rust_ccp(np.array(xs), np.array(ds), p)
+    assert cc["RC"] == pytest.approx(9.8, rel=0.2)
+
+
+def test_average_cost_rule_has_an_interior_minimum():
+    m = io.Rust(4000.0, 6000.0, [0.36, 0.63, 0.01])
+    c = [m.average_cost(t) for t in (10, 30, 70)]
+    assert c[1] < c[0] and c[1] < c[2]
+
+
+def test_platform_subsidizes_the_valuable_side():
+    sym = io.platform(1, 1, 0.3, 0.3)
+    assert sym["p"][0] == pytest.approx(sym["p"][1])
+    a = io.platform(1, 1, 0.2, 1.2)
+    assert a["p"][0] < 0 < a["p"][1]
+
+
+def test_double_marginalization_and_arrow():
+    v = io.double_marginalization(10, 2)
+    assert v["p_sep"] > v["p_int"] and v["profit_m"] + v["profit_r"] < v["profit_int"]
+    a = io.arrow_replacement(10, 4, 2)
+    assert a["monopoly"] < a["competitive"] < a["planner"]
+
+
+def test_inverted_u_and_lockin():
+    inn = [io.step_by_step(d)["innovation"] for d in (0.02, 0.4, 1.0)]
+    assert inn[1] > inn[0] and inn[1] > inn[2]
+    lo = io.inferior_lockin(network=0.0, runs=50)["share_a_wins"]
+    hi = io.inferior_lockin(network=0.05, runs=50)["share_a_wins"]
+    assert lo < 0.1 and hi > 0.9
+
+
+def test_duopoly_policy_and_regulation():
+    eq = io.pm_duopoly()
+    X = eq["X"]
+    assert np.all(X >= 0) and X[3, 3] > X[6, 1]
+    b = io.baron_myerson()
+    assert b["q_hi"] < b["q_hi_full"] and b["rent"] < b["rent_full"]
+    assert io.baron_myerson(weight=1.0)["q_hi"] == pytest.approx(b["q_hi_full"])
+
+
+def test_q_learners_price_above_nash():
+    pN, pM = io.logit_nash_monopoly()
+    assert pN[0] == pytest.approx(1.4729, abs=1e-3) and pM[0] == pytest.approx(1.9250, abs=1e-3)
+    r = io.q_learning(max_iter=1_200_000, stable=50_000, seed=3)
+    assert np.mean(r["prices"]) > pN[0] + 0.05

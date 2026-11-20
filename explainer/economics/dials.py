@@ -357,6 +357,39 @@ DIALS = {d.key: d for d in [
                       "labour's elasticity estimated by Ackerberg, Caves and Frazer (planted median 1.3)", 1.30,
                       where="videos/economics/econ43/compute.py, item dlw", checked="2026-11-20"),
          )),
+    Dial("merger_retro", "price effects of mergers, measured after the fact", "percent change in the merging "
+         "firms' prices after a merger, against a control", (43, 44), status="contested", checked="2026-11-20",
+         meaning="if mergers the agencies cleared or settled are followed by price rises of several percent, review "
+                 "has been too lenient; critics reply that the studied mergers are a selected sample and that "
+                 "simple averages of different studies mislead, so how much enforcement errs remains disputed",
+         estimates=(
+             Estimate("Kwoka", 2013, "meta-analysis", "46 American mergers with retrospective studies: 38 (83%) "
+                      "followed by price rises averaging almost 10%", 10.0, where="Antitrust Law Journal 78(3), as "
+                      "summarized by Northeastern University", checked="2026-11-20"),
+             Estimate("Kwoka", 2015, "meta-analysis", "mergers the agencies challenged (as reported in reviews of "
+                      "the book)", 7.71, where="Mergers, Merger Control, and Remedies (MIT Press)",
+                      checked="2026-11-20"),
+             Estimate("Ashenfelter, Hosken and Weinberg", 2015, "DiD", "MillerCoors: the effect of the rise in "
+                      "concentration, before the efficiency offset", 2.0, where="RAND Journal of Economics 46(2), "
+                      "abstract", checked="2026-11-20"),
+             Estimate("Miller and Weinberg", 2017, "structural", "MillerCoors: prices against Nash-Bertrand "
+                      "competition with the venture's savings", 7.0, lo=6.0, hi=8.0,
+                      where="Econometrica 85(6), abstract", checked="2026-11-20"),
+             Estimate("this film (the Island's aisle)", 2026, "calibration", "the two smaller of four cereal makers, "
+                      "simulated with random-coefficient logit", 5.8,
+                      where="videos/economics/econ43/compute.py, item merger", checked="2026-11-20"),
+         )),
+    Dial("dynamic_beta", "the discount factor of a dynamic decision maker", "monthly discount factor implied by "
+         "choices", (44,), status="not identified", checked="2026-11-20",
+         meaning="the data can reject myopia, but the likelihood is nearly flat among patient discount factors, so "
+                 "the value is usually fixed by assumption; with it fixed, the estimated costs follow",
+         estimates=(
+             Estimate("this film (Rust's buses, NFXP)", 2026, "structural", "groups 1-4, 104 buses, 60 rebuilds: the "
+                      "best of seven values from 0 to 0.9999 (log likelihood -299.2, against "
+                      "-305.7 at 0)", 0.9999, lo=0.99, hi=0.9999,
+                      where="videos/economics/econ44/compute.py, item rust (the range: within 0.6 log points of the "
+                            "best)", checked="2026-11-20"),
+         )),
     Dial("product_elasticity", "own-price elasticity of demand for one differentiated product", "percent change in "
          "a product's sales for a 1% rise in its own price", (43,), status="depends on the setting",
          checked="2026-11-20",
@@ -1323,6 +1356,24 @@ DIALS = {d.key: d for d in [
 
 # What each part shows without entering a row, and why: {part: [(what is shown, the reason)]}
 SHOWN = {
+    44: [
+        ("Rust (1987); Hotz and Miller (1993)", "the model estimated on Rust's data; CCPs computed; myopia rejected"),
+        ("Ericson and Pakes (1995); Pakes and McGuire (1994)", "a small Markov-perfect duopoly computed"),
+        ("Bajari, Benkard and Levin (2007); Ryan (2012)", "stated"),
+        ("Spengler (1950); Bork (1978); Leegin (2007)", "double marginalization computed; the cases stated"),
+        ("Rochet and Tirole (2003); Armstrong (2006); Rysman (2004); Ohio v. American Express (2018)",
+         "a two-sided platform computed; the findings and the case stated"),
+        ("David (1985); Liebowitz and Margolis (1990); Arthur (1989)", "lock-in simulated on the Island; the debate "
+         "stated"),
+        ("Arrow (1962); Aghion et al. (2005)", "the replacement effect and the inverted U computed; the finding "
+         "stated"),
+        ("Cunningham, Ederer and Ma (2021)", "the logic in numbers; the finding stated"),
+        ("Calvano et al. (2020); Assad et al. (2024)", "Q-learning run on Calvano's game; the findings stated"),
+        ("Standard Oil (1911); Microsoft (2001); Google (2024-25); Khan (2017)", "stated"),
+        ("Baron and Myerson (1982); Laffont and Tirole (1993)", "computed with two types"),
+        ("Kwoka (2013, 2015); Vita and Osinski (2018)", "entered in the merger dial"),
+        ("USA Today (2007); IDC (2024)", "the Called it? card"),
+    ],
     43: [
         ("the FTC's cereal case (1972-1982)", "stated: the complaint, the shares of 1980 and the dismissal"),
         ("Nevo (2001)", "the method stated and computed on the Island's cereal aisle; the finding stated"),

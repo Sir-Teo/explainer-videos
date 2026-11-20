@@ -10,7 +10,7 @@ the series leaves out.
 Both *Parts* columns are found, not typed. *Planned* lists the parts whose entry in
 [`SYLLABUS.md`](SYLLABUS.md) names the book or paper; *Built* lists the parts whose scenes, compute step or
 README cite it (a dot: none yet). Fuller notes (editions, chapters, what each source was used for) are in each
-part's README, under *Sources*. Built so far: Parts 1–43.
+part's README, under *Sources*. Built so far: Parts 1–44.
 
 ## 1. The textbook spine
 
@@ -341,6 +341,8 @@ part's README, under *Sources*. Built so far: Parts 1–43.
 **Part 42, *Social Insurance*.** Books: Jonathan Gruber, *Public Finance and Public Policy*, chapters 12–17; Nicholas Barr, *The Economics of the Welfare State* (6th edition, 2020); Liran Einav and Amy Finkelstein, *Risky Business* (2023); Raj Chetty and Amy Finkelstein, 'Social Insurance: Connecting Theory to Data', *Handbook of Public Economics* 5 (2013). Papers: Arrow (1963); Pauly (1968); Zeckhauser (1970); Akerlof (1978); Baily (1978); Robins (1985); Manning et al. (1987); Meyer (1990); Eissa and Liebman (1996); Gruber (1997); Madrian and Shea (2001); Chetty (2006, 2008); Card, Chetty and Weber (2007); Finkelstein et al. (2012); Schmieder, von Wachter and Bender (2012); Baicker et al. (2013); Maestas, Mullen and Strand (2013); Chetty et al. (2014); Taubman et al. (2014); Ganong and Noel (2019); Finkelstein, Hendren and Luttmer (2019); Hendren and Sprung-Keyser (2020).
 
 **Part 43, *Measuring Market Power*.** Books: Jean Tirole, *The Theory of Industrial Organization* (1988); Kenneth Train, *Discrete Choice Methods with Simulation* (2nd edition, 2009); Aviv Nevo, 'A Practitioner's Guide to Estimation of Random-Coefficients Logit Models of Demand', *JEMS* (2000); Steven Berry and Philip Haile, 'Foundations of Demand Estimation', *Handbook of Industrial Organization* 4 (2021). Papers: Bain (1951); Lancaster (1966); Demsetz (1973); McFadden (1974); Bresnahan (1982); Lau (1982); Bresnahan and Reiss (1991); Berry (1994); Berry, Levinsohn and Pakes (1995, 2004); Olley and Pakes (1996); Werden (1996); Nevo (2001); Axtell (2001); Petrin (2002); Levinsohn and Petrin (2003); Farrell and Shapiro (2010); Syverson (2011); De Loecker and Warzynski (2012); Ackerberg, Caves and Frazer (2015); Ashenfelter, Hosken and Weinberg (2015); Miller and Weinberg (2017); Traina (2018); Basu (2019); De Loecker, Eeckhout and Unger (2020); Bond et al. (2021).
+
+**Part 44, *Dynamics, Platforms and Antitrust*.** Books: Jean Tirole, *The Theory of Industrial Organization* (1988); Aguirregabiria, *Empirical Industrial Organization: Models, Methods, and Applications* (2021); Michael Whinston, *Lectures on Antitrust Economics* (2006); Jean Tirole, *Economics for the Common Good* (2017). Papers: Spengler (1950); Arrow (1962); Baron and Myerson (1982); David (1985); Rust (1987); Arthur (1989); Liebowitz and Margolis (1990); Hotz and Miller (1993); Pakes and McGuire (1994); Ericson and Pakes (1995); Rochet and Tirole (2003); Rysman (2004); Aghion et al. (2005); Armstrong (2006); Bajari, Benkard and Levin (2007); Ryan (2012); Kwoka (2013, 2015); Khan (2017); Calvano et al. (2020); Cunningham, Ederer and Ma (2021); Assad et al. (2024).
 
 ## 4. What the series leaves out
 

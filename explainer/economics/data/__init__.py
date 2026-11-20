@@ -755,6 +755,30 @@ DATASETS = {
         "sha256": "3354b22752f0aa0c0d9c8c12b38810202b6380f2587e539be11d9a358412fe6a",
         "files": ("ajr_hdm.csv",),
     },
+    "rust_buses": {
+        "title": "Rust's Madison bus data: monthly odometer readings and engine replacements for 162 buses in eight "
+                 "groups, December 1974 to May 1985",
+        "publisher": "John Rust's original data files for \"Optimal Replacement of GMC Bus Engines\" (1987), as "
+                     "mirrored by OpenSourceEconomics (zurcher-data, data/original_data)",
+        "citation": "J. Rust, \"Optimal Replacement of GMC Bus Engines: An Empirical Model of Harold Zurcher\", "
+                    "Econometrica 55(5) (1987): 999-1033; files g870, rt50, t8h203, a530875, a530874, a452374, a530872 "
+                    "and a452372 from github.com/OpenSourceEconomics/zurcher-data, retrieved 2026-11-20",
+        "short": "Rust (1987), the Madison Metropolitan bus data",
+        "url": "https://raw.githubusercontent.com/OpenSourceEconomics/zurcher-data/master/data/original_data/{}.asc",
+        "licence": "MIT (the mirror's repository); the data are Rust's, distributed with his estimation software",
+        "units": "odometer in miles; group 1 to 8 as in Rust's Table 1; replace = 1 when the engine was replaced "
+                 "between this month's reading and the next",
+        "vintage": "2026-11-20",
+        "sha256": {"g870": "28c565af50b316670ebf3bc21e45b779c743fc93ff5adab375a2296a5a9ca042",
+                   "rt50": "18281cf711d9ea17cbcae0b17371f3749c46d40f46f2b44bde8bee6360b0f43a",
+                   "t8h203": "edf9548b8e343991a9d5da514fde260d70b9002d84accfbbbd9c4abc78675684",
+                   "a530875": "d67a6b7ea23b1b1fa772a22e86930ce79ed2afb9b1f01f546c119349ee7badab",
+                   "a530874": "31f6236e6473129d1fad7182147c1af4f97addba357c3ad4e841d462ddec66a0",
+                   "a452374": "3d847a8584abd55c5b87924022b8c4546beb0003f8a5427d620224e00aa7f363",
+                   "a530872": "495f9bb33affe2b946de52732e1397b40c9bd4e76afa1d9c8bda44379d12f697",
+                   "a452372": "e851cf2f31f35f13566dfd84f2b6f1f6e848c5b14f5a3a0d35edd3242ab46e05"},
+        "files": ("rust_buses.csv",),
+    },
     "blp_cars": {
         "title": "Berry, Levinsohn and Pakes's automobile data: 2,217 model-years sold in the United States, "
                  "1971-1990, with price, horsepower per weight, air conditioning, miles per gallon, size, market "
@@ -2779,6 +2803,49 @@ def refresh_blp_cars() -> None:
                         f"{float(cols['share'][i]):.6e}"])
 
 
+RUST_GROUPS = (("g870", 15), ("rt50", 4), ("t8h203", 48), ("a530875", 37), ("a530874", 12), ("a452374", 10),
+               ("a530872", 18), ("a452372", 18))
+RUST_COLUMNS = ("group", "bus", "year", "month", "odometer", "replace")
+
+
+def rust_buses() -> dict:
+    """Rust's bus panel: ``{column: [values]}`` for :data:`RUST_COLUMNS`, one row per bus and month (integers
+    throughout); ``replace`` marks the month after whose reading the engine was replaced."""
+    rows = _read(HERE / "rust_buses.csv")
+    return {c: [int(r[c]) for r in rows] for c in RUST_COLUMNS}
+
+
+def refresh_rust_buses() -> None:
+    """Download Rust's eight group files and write one long panel.  Each file holds, bus after bus, the bus number,
+    its purchase month and year, the month, year and odometer of its first and second engine replacements (zeros if
+    none), the month and year its readings begin, then one odometer reading a month."""
+    d = DATASETS["rust_buses"]
+    out = []
+    for g, (name, nb) in enumerate(RUST_GROUPS, start=1):
+        raw = RAW / f"rust_{name}.asc"
+        sha = _download(d["url"].format(name), raw)
+        if sha != d["sha256"][name]:
+            print(f"rust_buses: {name} differs from the recorded vintage ({sha[:12]} vs {d['sha256'][name][:12]})")
+        vals = [float(x) for x in raw.read_text().split()]
+        rows = len(vals) // nb
+        for b in range(nb):
+            col = vals[b * rows:(b + 1) * rows]
+            bus = int(col[0])
+            repl = [col[5], col[8]]
+            m0, y0 = int(col[9]), int(col[10])
+            odo = col[11:]
+            for t, x in enumerate(odo):
+                nxt = odo[t + 1] if t + 1 < len(odo) else None
+                rep = int(nxt is not None and any(0 < r and x < r <= nxt for r in repl))
+                mm = (m0 - 1 + t) % 12 + 1
+                yy = 1900 + y0 + (m0 - 1 + t) // 12
+                out.append((g, bus, yy, mm, int(x), rep))
+    with open(HERE / "rust_buses.csv", "w", newline="", encoding="utf-8") as f:
+        w = csv.writer(f)
+        w.writerow(RUST_COLUMNS)
+        w.writerows(out)
+
+
 SHILLER_COLUMNS = ("year", "P", "D", "E", "R", "RLONG", "CPI", "RealR", "C", "RealP", "Pstar", "PstarR", "PstarC", "RealD",
                    "Return")
 
@@ -2869,7 +2936,7 @@ REFRESH = {"draft1970": refresh_draft1970, "ajr": refresh_ajr, "maddison2023": r
            "bigmac": refresh_bigmac, "wdi_ca": refresh_wdi_ca, "trefler_hov": refresh_trefler_hov,
            "cepii_gravity": refresh_cepii_gravity, "autor_dorn": refresh_autor_dorn, "resume": refresh_resume,
            "saez": refresh_saez, "opportunity": refresh_opportunity, "wid_top1": refresh_wid_top1,
-           "blp_cars": refresh_blp_cars}
+           "blp_cars": refresh_blp_cars, "rust_buses": refresh_rust_buses}
 
 
 def main() -> None:

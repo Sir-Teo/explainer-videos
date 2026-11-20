@@ -627,3 +627,490 @@ def ordered_thresholds(pop, n, n_max: int | None = None) -> dict:
 
 def root(f, lo, hi):
     return float(brentq(f, lo, hi))
+
+
+# ===============================================================================================================
+# Part 44 (io II): dynamics, platforms and antitrust
+# ===============================================================================================================
+
+
+# ---------------------------------------------------------------------------------------------------------------
+# Rust (1987): when to rebuild a bus engine
+
+
+def rust_panel(d: dict, groups=(1, 2, 3, 4), bin_miles: float = 5000.0, n_states: int = 90) -> dict:
+    """Rust's states from his panel: for each bus-month, the mileage since the last replacement in bins of
+    ``bin_miles`` (capped at n_states - 1), the decision (1 = rebuild the engine before next month), and the number
+    of bins travelled to next month (from the old state, or from zero after a rebuild).  Also the mileage since the
+    last replacement at each replacement."""
+    g, bus, odo, rep = (np.asarray(d[c]) for c in ("group", "bus", "odometer", "replace"))
+    xs, ds, dxs, at = [], [], [], []
+    for gb in sorted({(a, b) for a, b in zip(g, bus) if a in groups}):
+        idx = np.where((g == gb[0]) & (bus == gb[1]))[0]
+        o, r = odo[idx].astype(float), rep[idx]
+        base = 0.0
+        for t in range(len(idx) - 1):
+            m = o[t] - base
+            x = min(int(m // bin_miles), n_states - 1)
+            if r[t]:
+                at.append(m + (o[t + 1] - o[t]) / 2)
+                base = o[t] + (o[t + 1] - o[t]) / 2          # rebuilt during the month: about halfway
+                x1 = min(int((o[t + 1] - base) // bin_miles), n_states - 1)
+                dx = x1
+            else:
+                x1 = min(int((o[t + 1] - base) // bin_miles), n_states - 1)
+                dx = x1 - x
+            xs.append(x)
+            ds.append(int(r[t]))
+            dxs.append(int(max(dx, 0)))
+    return {"x": np.array(xs), "d": np.array(ds), "dx": np.array(dxs), "at": np.array(at), "n_states": n_states,
+            "bin": bin_miles}
+
+
+def rust_transitions(dx, k: int = 3) -> np.ndarray:
+    """The monthly probabilities of moving 0, 1, ..., k - 1 bins (the last pooling everything above)."""
+    dx = np.minimum(np.asarray(dx), k - 1)
+    return np.bincount(dx, minlength=k) / len(dx)
+
+
+class Rust:
+    """Harold Zurcher's problem.  Each month a bus in mileage state x either keeps its engine, paying the operating
+    cost 0.001 theta1 x, or has it rebuilt for RC, which returns it to state 0; mileage then rises by j bins with
+    probability p[j].  Choices carry independent extreme-value shocks, so the choice probabilities are logit in the
+    two values.  ``ev`` solves the expected value function by contraction steps followed by Newton-Kantorovich
+    steps, which keeps beta = 0.9999 fast."""
+
+    def __init__(self, RC: float, theta1: float, p, beta: float = 0.9999, n: int = 90):
+        self.RC, self.theta1, self.beta, self.n = float(RC), float(theta1), float(beta), int(n)
+        self.p = np.asarray(p, float)
+        P = np.zeros((n, n))
+        for x in range(n):
+            for j, pj in enumerate(self.p):
+                P[x, min(x + j, n - 1)] += pj
+        self.P = P
+        self.x = np.arange(n)
+
+    def cost(self):
+        return 0.001 * self.theta1 * self.x
+
+    def values(self, ev):
+        v0 = -self.cost() + self.beta * ev
+        v1 = -self.RC + self.beta * ev[0]
+        return v0, v1
+
+    def bellman(self, ev):
+        v0, v1 = self.values(ev)
+        m = np.maximum(v0, v1)
+        logsum = m + np.log(np.exp(v0 - m) + np.exp(v1 - m))
+        return self.P @ logsum
+
+    def prob_replace(self, ev=None):
+        ev = self.ev() if ev is None else ev
+        v0, v1 = self.values(ev)
+        return 1.0 / (1.0 + np.exp(v0 - v1))
+
+    def ev(self, tol: float = 1e-12):
+        ev = np.zeros(self.n)
+        for _ in range(50):
+            ev = self.bellman(ev)
+        for _ in range(60):
+            p1 = self.prob_replace(ev)
+            J = self.beta * (self.P * (1 - p1)[None, :])      # d logsum(y) / d ev(y) = P0(y)
+            J[:, 0] += self.beta * (self.P @ p1)               # and via ev(0), weight P1(y)
+            F = ev - self.bellman(ev)
+            step = np.linalg.solve(np.eye(self.n) - J, F)
+            ev = ev - step
+            if np.max(np.abs(step)) < tol:
+                break
+        return ev
+
+    def loglik(self, x, d):
+        p1 = self.prob_replace()
+        p = np.where(np.asarray(d) == 1, p1[np.asarray(x)], 1 - p1[np.asarray(x)])
+        return float(np.sum(np.log(np.maximum(p, 1e-300))))
+
+    def average_cost(self, threshold: int) -> float:
+        """Average monthly cost of the deterministic rule 'rebuild once mileage reaches ``threshold`` bins', in the
+        same units as RC, from the stationary distribution of the chain it induces."""
+        n = self.n
+        Q = np.zeros((n, n))
+        for x in range(n):
+            src = 0 if x >= threshold else x
+            for j, pj in enumerate(self.p):
+                Q[x, min(src + j, n - 1)] += pj
+        w, v = np.linalg.eig(Q.T)
+        pi = np.real(v[:, np.argmin(np.abs(w - 1))])
+        pi = pi / pi.sum()
+        c = np.where(self.x >= threshold, self.RC, self.cost())
+        return float(pi @ c)
+
+
+def rust_nfxp(x, d, p, beta: float = 0.9999, start=(10.0, 2.0), n: int = 90) -> dict:
+    """Rust's nested fixed point: maximize the likelihood of the decisions over (RC, theta1), solving the dynamic
+    programme for every trial value."""
+    from scipy.optimize import minimize
+
+    def nll(th):
+        if th[0] <= 0 or th[1] <= 0:
+            return 1e10
+        return -Rust(th[0], th[1], p, beta, n).loglik(x, d)
+    r = minimize(nll, np.asarray(start, float), method="Nelder-Mead",
+                 options={"xatol": 1e-6, "fatol": 1e-8, "maxiter": 2000})
+    H = _num_hessian(nll, r.x)
+    se = np.sqrt(np.diag(np.linalg.inv(H))) if np.all(np.linalg.eigvalsh(H) > 0) else np.full(2, np.nan)
+    return {"RC": float(r.x[0]), "theta1": float(r.x[1]), "loglik": float(-r.fun), "se": se.tolist(),
+            "evals": int(r.nfev)}
+
+
+def _num_hessian(f, x, h: float = 1e-3):
+    x = np.asarray(x, float)
+    k = len(x)
+    H = np.zeros((k, k))
+    for i in range(k):
+        for j in range(k):
+            e_i, e_j = np.eye(k)[i] * h, np.eye(k)[j] * h
+            H[i, j] = (f(x + e_i + e_j) - f(x + e_i - e_j) - f(x - e_i + e_j) + f(x - e_i - e_j)) / (4 * h * h)
+    return (H + H.T) / 2
+
+
+def rust_ccp(x, d, p, beta: float = 0.9999, n: int = 90, degree: int = 3) -> dict:
+    """Hotz and Miller's conditional choice probabilities with Rust's renewal: estimate the probability of a
+    rebuild at each mileage directly (a logit in a polynomial of mileage), then, because a rebuild resets every bus
+    to the same state, v0(x) - v1 = -c(x) + RC + beta sum_j p_j [ln P1(j) - ln P1(x + j)], so (RC, theta1) come from
+    one logit with a known offset; no dynamic programme is solved."""
+    from scipy.optimize import minimize
+
+    x = np.asarray(x)
+    d = np.asarray(d)
+    z = x / n
+    B = np.column_stack([z ** k for k in range(degree + 1)])
+
+    def nll1(b):
+        e = B @ b
+        return -np.sum(d * e - np.logaddexp(0, e))
+    b = minimize(nll1, np.r_[-5.0, np.zeros(degree)], method="BFGS").x
+    grid = np.arange(n) / n
+    Bg = np.column_stack([grid ** k for k in range(degree + 1)])
+    lp1 = -np.logaddexp(0, -(Bg @ b))                     # ln P1 on the grid
+    pr = np.asarray(p, float)
+    corr = np.array([sum(pj * (lp1[min(xx + j, n - 1)] - lp1[min(j, n - 1)]) for j, pj in enumerate(pr))
+                     for xx in range(n)])
+
+    def nll2(th):
+        e = -th[0] + 0.001 * th[1] * x + beta * corr[x]       # v1 - v0
+        return -np.sum(d * e - np.logaddexp(0, e))
+    r = minimize(nll2, np.array([10.0, 2.0]), method="BFGS")
+    return {"RC": float(r.x[0]), "theta1": float(r.x[1]), "p1_hat": np.exp(lp1).tolist()}
+
+
+# ---------------------------------------------------------------------------------------------------------------
+# dynamic oligopoly (Pakes and McGuire's version of Ericson and Pakes)
+
+
+def pm_duopoly(K: int = 8, M: float = 5.0, a: float = 1.5, delta: float = 0.3, beta: float = 0.925,
+               tol: float = 1e-9, max_iter: int = 5000) -> dict:
+    """A symmetric Markov-perfect duopoly in qualities 0..K-1.  Each period a firm earns M times its logit share
+    exp(w_i) / (1 + exp(w_i) + exp(w_j)), invests x at cost x so that its quality rises one step with probability
+    a x / (1 + a x), and independently falls one step with probability delta.  Value and policy functions are found
+    by iterating on the Bellman equation with the rival playing the current policy (Gauss-Jacobi)."""
+    w = np.arange(K)
+    pi = np.array([[M * np.exp(i) / (1 + np.exp(i) + np.exp(j)) for j in w] for i in w])
+    V = pi / (1 - beta)
+    X = np.zeros((K, K))
+
+    def moves(xv):
+        up = a * xv / (1 + a * xv)
+        return up
+
+    for it in range(max_iter):
+        up_r = moves(X.T)                              # rival's chance of moving up, at (i, j) from j's view
+        EV_up, EV_no = np.zeros((K, K)), np.zeros((K, K))
+        for i in range(K):
+            for j in range(K):
+                def ev(ii):
+                    tot = 0.0
+                    for uj, pu in ((1, up_r[i, j]), (0, 1 - up_r[i, j])):
+                        for dj, pd in ((1, delta), (0, 1 - delta)):
+                            for di, pdi in ((1, delta), (0, 1 - delta)):
+                                ni = min(max(ii - di, 0), K - 1)
+                                nj = min(max(j + uj - dj, 0), K - 1)
+                                tot += pu * pd * pdi * V[ni, nj]
+                    return tot
+                EV_up[i, j] = ev(min(i + 1, K - 1))
+                EV_no[i, j] = ev(i)
+        gain = beta * np.maximum(EV_up - EV_no, 0.0)
+        Xn = np.maximum((np.sqrt(a * gain) - 1) / a, 0.0)
+        up = moves(Xn)
+        Vn = pi - Xn + beta * (up * EV_up + (1 - up) * EV_no)
+        err = max(np.max(np.abs(Vn - V)), np.max(np.abs(Xn - X)))
+        V, X = Vn, 0.5 * X + 0.5 * Xn
+        if err < tol:
+            break
+    return {"V": V, "X": X, "pi": pi, "iterations": it + 1, "K": K, "a": a, "delta": delta, "beta": beta}
+
+
+def pm_simulate(eq: dict, T: int = 2000, start=(0, 0), seed: int = 0) -> np.ndarray:
+    """A path of the two qualities under the equilibrium policies."""
+    rng = np.random.default_rng(seed)
+    K, a, delta = eq["K"], eq["a"], eq["delta"]
+    X = eq["X"]
+    i, j = start
+    out = np.zeros((T, 2), int)
+    for t in range(T):
+        xi, xj = X[i, j], X[j, i]
+        ui = rng.random() < a * xi / (1 + a * xi)
+        uj = rng.random() < a * xj / (1 + a * xj)
+        di, dj = rng.random() < delta, rng.random() < delta
+        i = min(max(i + ui - di, 0), K - 1)
+        j = min(max(j + uj - dj, 0), K - 1)
+        out[t] = (i, j)
+    return out
+
+
+# ---------------------------------------------------------------------------------------------------------------
+# vertical relations, platforms, networks
+
+
+def double_marginalization(a: float = 10.0, c: float = 2.0) -> dict:
+    """Linear demand P = a - Q, a manufacturer with cost c and a retailer: integrated, the price is (a + c)/2;
+    separated, the manufacturer charges w = (a + c)/2 and the retailer adds its own markup, (a + w)/2."""
+    pi_int = (a - c) ** 2 / 4
+    w = (a + c) / 2
+    p_sep = (a + w) / 2
+    q_sep = a - p_sep
+    return {"p_int": (a + c) / 2, "q_int": (a - c) / 2, "profit_int": pi_int, "w": w, "p_sep": p_sep, "q_sep": q_sep,
+            "profit_m": (w - c) * q_sep, "profit_r": (p_sep - w) * q_sep, "cs_int": ((a - c) / 2) ** 2 / 2,
+            "cs_sep": q_sep ** 2 / 2}
+
+
+def platform(a1: float, a2: float, alpha1: float, alpha2: float, c1: float = 0.0, c2: float = 0.0) -> dict:
+    """A monopoly platform with two sides (Armstrong 2006, linear version): participation n1 = a1 + alpha1 n2 - p1
+    and n2 = a2 + alpha2 n1 - p2, where alpha_i is what a member of side i gains from each member of the other side.
+    The platform maximizes (p1 - c1) n1 + (p2 - c2) n2; each price equals cost plus a markup minus the value the
+    side's members bring to the other side, alpha_j n_j."""
+    A = np.array([[1.0, -alpha1], [-alpha2, 1.0]])
+    Ai = np.linalg.inv(A)
+    a = np.array([a1, a2])
+    c = np.array([c1, c2])
+    # profit (p - c)' Ai (a - p); FOC: Ai (a - p) - Ai' (p - c) = 0
+    M = Ai + Ai.T
+    p = np.linalg.solve(M, Ai @ a + Ai.T @ c)
+    n = Ai @ (a - p)
+    return {"p": p.tolist(), "n": n.tolist(), "profit": float((p - c) @ n),
+            "subsidy": [float(alpha2 * n[1]), float(alpha1 * n[0])]}
+
+
+def inferior_lockin(quality: float = 0.3, network: float = 0.05, adopters: int = 600, runs: int = 400,
+                    seed: int = 0) -> dict:
+    """Adopters arrive one at a time; each likes technology B better than A by ``quality`` on average (tastes are
+    normal with sd 1), and gains ``network`` for every earlier adopter of the same technology.  A starts with a
+    head start of 20 adopters (it came first).  Returns how often the inferior A ends up with most adopters."""
+    rng = np.random.default_rng(seed)
+    wins_a, paths = 0, []
+    for r in range(runs):
+        na, nb = 20, 0
+        path = []
+        for k in range(adopters):
+            taste = rng.normal(quality, 1.0)                 # B's advantage for this adopter
+            if taste + network * nb > network * na:
+                nb += 1
+            else:
+                na += 1
+            path.append(na / (na + nb))
+        wins_a += na > nb
+        if r < 12:
+            paths.append(path)
+    return {"share_a_wins": wins_a / runs, "paths": paths}
+
+
+# ---------------------------------------------------------------------------------------------------------------
+# competition and innovation
+
+
+def arrow_replacement(a: float = 10.0, c: float = 4.0, c_new: float = 2.0) -> dict:
+    """Arrow (1962): the gain from a process innovation lowering unit cost from c to c_new under linear demand
+    P = a - Q, to a monopolist (its profit rises from pi_m(c) to pi_m(c_new)) and to an innovator in a competitive
+    (Bertrand) industry, who earns the monopoly profit at the new cost if the innovation is drastic and otherwise
+    undercuts at price c."""
+    pim = lambda k: (a - k) ** 2 / 4   # noqa: E731
+    drastic = (a + c_new) / 2 <= c
+    comp = pim(c_new) if drastic else (c - c_new) * (a - c)
+    return {"monopoly": pim(c_new) - pim(c), "competitive": comp, "planner": ((a - c_new) ** 2 - (a - c) ** 2) / 2,
+            "drastic": bool(drastic)}
+
+
+def step_by_step(delta: float, pi1: float = 1.0, r: float = 0.05, h: float = 0.1) -> dict:
+    """Aghion, Bloom, Blundell, Griffith and Howitt's (2005) step-by-step industries, solved numerically.  An
+    industry is either neck and neck (each firm earns (1 - delta) pi1: at delta = 0 they collude perfectly) or
+    unlevelled (the leader earns pi1, the laggard nothing).  Firms choose Poisson innovation rates at cost n^2 / 2;
+    a neck-and-neck innovator becomes the leader; a laggard who innovates (or imitates at rate h) catches up.
+    ``delta`` is the intensity of competition.  Returns the innovation rates, the share of neck-and-neck
+    industries in the steady state and aggregate innovation."""
+    pi0 = (1 - delta) * pi1
+    # values: V1 leader, V0 neck, Vm laggard; r V1 = pi1 + (nm + h)(V0 - V1)
+    # r V0 = pi0 + n0 (V1 - V0) + n0' (Vm - V0) - n0^2/2, with n0 = V1 - V0 (symmetric: rival's rate n0 too)
+    # r Vm = 0 + (nm + h)(V0 - Vm) - nm^2 / 2, nm = V0 - Vm
+    from scipy.optimize import fsolve
+
+    def eqs(v):
+        V1, V0, Vm = v
+        n0 = max(V1 - V0, 0.0)
+        nm = max(V0 - Vm, 0.0)
+        return [r * V1 - (pi1 + (nm + h) * (V0 - V1)),
+                r * V0 - (pi0 + n0 * (V1 - V0) + n0 * (Vm - V0) - n0 ** 2 / 2),
+                r * Vm - ((nm + h) * (V0 - Vm) - nm ** 2 / 2)]
+    V1, V0, Vm = fsolve(eqs, [pi1 / r, pi0 / r, 0.0])
+    n0 = max(V1 - V0, 0.0)
+    nm = max(V0 - Vm, 0.0)
+    mu1 = 2 * n0 / (2 * n0 + nm + h)          # share unlevelled: flows 2 n0 mu0 = (nm + h) mu1
+    mu0 = 1 - mu1
+    return {"n0": float(n0), "nm": float(nm), "mu0": float(mu0), "mu1": float(mu1),
+            "innovation": float(2 * mu0 * n0 + mu1 * nm)}
+
+
+def killer(pi_one: float = 100.0, pi_two: float = 110.0, pi_duo: float = 40.0, cost: float = 30.0) -> dict:
+    """Cunningham, Ederer and Ma's logic in numbers: a start-up's drug competes with an incumbent's.  Developing it
+    costs ``cost``.  Alone, the start-up earns the duopoly profit pi_duo; owned by the incumbent, the new drug adds
+    only pi_two - pi_one, because it steals the incumbent's own sales."""
+    return {"entrant_develops": pi_duo > cost, "incumbent_develops": pi_two - pi_one > cost,
+            "entrant_gain": pi_duo - cost, "incumbent_gain": pi_two - pi_one - cost,
+            "pay_up_to": (pi_one - pi_duo) + max(pi_duo - cost, 0.0)}
+
+
+# ---------------------------------------------------------------------------------------------------------------
+# algorithms that learn to collude (after Calvano, Calzolari, Denicolo and Pastorello 2020)
+
+
+def logit_bertrand(prices, a=(2.0, 2.0), a0: float = 0.0, mu: float = 0.25, c=(1.0, 1.0)) -> tuple:
+    """Two firms with logit demand q_i = e^((a_i - p_i)/mu) / (sum_j e^((a_j - p_j)/mu) + e^(a0/mu)); profits."""
+    p = np.asarray(prices, float)
+    a, c = np.asarray(a, float), np.asarray(c, float)
+    e = np.exp((a - p) / mu)
+    q = e / (e.sum() + np.exp(a0 / mu))
+    return q, (p - c) * q
+
+
+def logit_nash_monopoly(a=(2.0, 2.0), a0: float = 0.0, mu: float = 0.25, c=(1.0, 1.0)) -> tuple:
+    from scipy.optimize import minimize, minimize_scalar
+
+    p = np.array([1.5, 1.5])
+    for _ in range(500):
+        new = p.copy()
+        for i in range(2):
+            def neg(pi_, i=i):
+                pp = new.copy()
+                pp[i] = pi_
+                return -logit_bertrand(pp, a, a0, mu, c)[1][i]
+            new[i] = minimize_scalar(neg, bounds=(c[i], 5), method="bounded").x
+        if np.max(np.abs(new - p)) < 1e-10:
+            break
+        p = new
+    m = minimize(lambda q: -logit_bertrand(q, a, a0, mu, c)[1].sum(), np.array([1.9, 1.9]), method="Nelder-Mead",
+                 options={"xatol": 1e-10, "fatol": 1e-12}).x
+    return p, m
+
+
+def q_learning(n_prices: int = 15, xi: float = 0.1, alpha: float = 0.15, beta: float = 4e-6, delta: float = 0.95,
+               max_iter: int = 2_000_000, stable: int = 100_000, seed: int = 0) -> dict:
+    """Two Q-learning price setters with one-period memory (the state is last period's pair of prices) in the
+    logit Bertrand game, prices on a grid from the Nash price less xi times the Nash-monopoly gap to the monopoly
+    price plus the same; exploration falls as exp(-beta t).  Stops when both greedy strategies have not changed for
+    ``stable`` periods.  Returns the limit prices, the profit gain (0 at Nash, 1 at monopoly) and the strategies."""
+    rng = np.random.default_rng(seed)
+    pN, pM = logit_nash_monopoly()
+    gap = pM[0] - pN[0]
+    grid = np.linspace(pN[0] - xi * gap, pM[0] + xi * gap, n_prices)
+    m = n_prices
+    prof = np.zeros((m, m, 2))
+    for i in range(m):
+        for j in range(m):
+            prof[i, j] = logit_bertrand([grid[i], grid[j]])[1]
+    # initial Q: discounted payoff against a uniformly random rival
+    Q = np.zeros((2, m * m, m))
+    for k in range(2):
+        for a_ in range(m):
+            Q[k, :, a_] = (prof[a_, :, 0].mean() if k == 0 else prof[:, a_, 1].mean()) / (1 - delta)
+    s = int(rng.integers(m * m))
+    greedy = Q.argmax(axis=2)
+    same = 0
+    t = 0
+    u = rng.random((2, 4096))
+    acts = rng.integers(m, size=(2, 4096))
+    for t in range(max_iter):
+        if t % 4096 == 0 and t:
+            u = rng.random((2, 4096))
+            acts = rng.integers(m, size=(2, 4096))
+        k_ = t % 4096
+        eps = np.exp(-beta * t)
+        a0 = acts[0, k_] if u[0, k_] < eps else int(Q[0, s].argmax())
+        a1 = acts[1, k_] if u[1, k_] < eps else int(Q[1, s].argmax())
+        s2 = a0 * m + a1
+        r0, r1 = prof[a0, a1]
+        Q[0, s, a0] += alpha * (r0 + delta * Q[0, s2].max() - Q[0, s, a0])
+        Q[1, s, a1] += alpha * (r1 + delta * Q[1, s2].max() - Q[1, s, a1])
+        g0, g1 = int(Q[0, s].argmax()), int(Q[1, s].argmax())
+        if g0 == greedy[0, s] and g1 == greedy[1, s]:
+            same += 1
+        else:
+            greedy[0, s], greedy[1, s] = g0, g1
+            same = 0
+        s = s2
+        if same >= stable:
+            break
+    G = Q.argmax(axis=2)
+    # play the greedy strategies from the last state until a cycle
+    seen, path = {}, []
+    st = s
+    for k in range(200):
+        if st in seen:
+            break
+        seen[st] = k
+        a0, a1 = G[0, st], G[1, st]
+        path.append((a0, a1))
+        st = a0 * m + a1
+    cyc = path[seen[st]:] if st in seen else path[-10:]
+    pc = np.array([[grid[a0], grid[a1]] for a0, a1 in cyc])
+    pf = np.array([prof[a0, a1] for a0, a1 in cyc])
+    piN = logit_bertrand(pN)[1].mean()
+    piM = logit_bertrand(pM)[1].mean()
+    gain = (pf.mean() - piN) / (piM - piN)
+    return {"grid": grid.tolist(), "nash": float(pN[0]), "monopoly": float(pM[0]), "iterations": t + 1,
+            "prices": pc.mean(axis=0).tolist(), "gain": float(gain), "G": G, "cycle": [list(map(int, c)) for c in cyc],
+            "state": int(st)}
+
+
+def q_deviation(res: dict, periods: int = 15) -> dict:
+    """Impulse response: from the converged cycle, firm 1 deviates once to its static best response to firm 2's
+    price; both then follow their learned greedy strategies."""
+    grid = np.array(res["grid"])
+    m = len(grid)
+    G = res["G"]
+    a0, a1 = res["cycle"][0]
+    prof = lambda i, j: logit_bertrand([grid[i], grid[j]])[1]   # noqa: E731
+    br = int(np.argmax([prof(i, a1)[0] for i in range(m)]))
+    path = [(a0, a1), (br, a1)]
+    st = br * m + a1
+    for _ in range(periods):
+        b0, b1 = int(G[0, st]), int(G[1, st])
+        path.append((b0, b1))
+        st = b0 * m + b1
+    return {"p1": [float(grid[p[0]]) for p in path], "p2": [float(grid[p[1]]) for p in path]}
+
+
+# ---------------------------------------------------------------------------------------------------------------
+# regulating a firm that knows more than you (Baron and Myerson 1982, two types)
+
+
+def baron_myerson(a: float = 10.0, c_lo: float = 2.0, c_hi: float = 4.0, nu: float = 0.5, weight: float = 0.6) -> dict:
+    """A regulator buys output from a firm whose unit cost is c_lo (probability nu) or c_hi, with demand P = a - q.
+    It maximizes consumer surplus plus ``weight`` times the firm's profit, paying the transfers that make each type
+    willing to report truthfully.  The low-cost type produces efficiently; the high-cost type's output is cut so as
+    to shrink the low type's information rent."""
+    q_lo = a - c_lo
+    q_hi_full = a - c_hi
+    # virtual cost: c_hi + nu/(1 - nu) (1 - weight) (c_hi - c_lo)
+    virtual = c_hi + nu / (1 - nu) * (1 - weight) * (c_hi - c_lo)
+    q_hi = max(a - virtual, 0.0)
+    rent = (c_hi - c_lo) * q_hi
+    return {"q_lo": q_lo, "q_hi": q_hi, "q_hi_full": q_hi_full, "p_hi": a - q_hi, "p_hi_full": c_hi,
+            "virtual": virtual, "rent": rent, "rent_full": (c_hi - c_lo) * q_hi_full}

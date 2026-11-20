@@ -50,4 +50,48 @@ PARTS = [
               ("The Island's planted truths", "explainer/economics/island.py"),
               ("The Data Room's sources", "explainer/economics/data/SOURCES.md")),
     ),
+    Part(
+        n=44, level="U", widget="rebuild", prereq=(11, 12, 22, 43),
+        question="How do firms compete over time, and what is different when the product is a network?",
+        story="The part opens on Harold Zurcher's ledger: Rust's data on the Madison bus company's engines, drawn "
+              "as sawtooth lines of miles since each rebuild. The viewer picks a rebuild rule for the Island's buses "
+              "(150,000 miles is cheapest), then Rust's model is written down and estimated by the nested fixed "
+              "point on Zurcher's 104 buses: a rebuild cost of 9.79 and upkeep of 2.65 per thousand steps, with "
+              "myopia rejected and the discount factor itself barely identified. Hotz and Miller's conditional choice "
+              "probabilities skip the fixed point, and prove fragile with only 60 rebuilds but fine on simulated "
+              "fleets. A Markov-perfect duopoly races hardest when neck and neck; double marginalization, the "
+              "Chicago critique and resale price maintenance follow; a two-sided platform charges the valuable side "
+              "less, below cost if need be; and network effects let a worse first mover win, though the QWERTY "
+              "story is disputed. After an intermission of the Madison fleet's mileage, it shows Arrow's "
+              "replacement effect and the inverted U, killer acquisitions in numbers, Q-learning price setters that "
+              "learn to collude and punish deviations, antitrust's standards from Standard Oil to Google, and Baron "
+              "and Myerson's regulator, then two dials, platform strategy, Ballmer's iPhone prediction as Called "
+              "it?, and the frontier.",
+        handoff="Part 45 turns from firms that look ahead to people who do not always: behavioural economics.",
+        outside="Part 11: games and Markov strategies; Part 12: oligopoly and collusion; Part 22: discounting; Part "
+                "43: demand and markups. Chapter 2 uses a contraction mapping and maximum likelihood; chapter 4 a "
+                "Markov-perfect equilibrium; chapter 10 reinforcement learning; chapter 12 mechanism design.",
+        objectives={
+            "U": ["Explain the trade-off in replacing a machine, and why choices reveal costs.",
+                  "Say why a platform may charge one side below cost, and when markets tip.",
+                  "Describe how pricing algorithms can learn to collude without communicating."],
+            "M": ["Set out Rust's model, its fixed point and the nested fixed point estimator.",
+                  "Derive the CCP inversion with renewal, and say what it trades for speed.",
+                  "Solve a two-type regulation problem and explain the virtual cost."],
+            "D": ["Assess what dynamic and platform models identify, and what merger retrospectives show.",
+                  "State the open questions about data, interoperability and foundation models."],
+            "I": ["Apply platform pricing logic and merger screens to a case."],
+        },
+        results=[
+            ("Rust's choice probability", r"P(\text{rebuild}\mid x) = \frac{e^{v_1}}{e^{v_0(x)} + e^{v_1}}"),
+            ("The fixed point", r"EV(x) = \sum_j p_j \ln\big(e^{v_0(x+j)} + e^{v_1}\big)"),
+            ("Hotz-Miller", r"\ln \frac{P_1(x)}{P_0(x)} = v_1 - v_0(x)"),
+            ("Platform prices", r"p_i = c_i + \text{markup}_i - \alpha_j n_j"),
+            ("Virtual cost", r"c_H + \tfrac{\nu}{1-\nu}(1-w)(c_H - c_L)"),
+        ],
+        U=(0, 1, 5, 6, 7, "s09_intermission", 8, 9, 10, 11), D=(13, 15), I=(14,),
+        also=(("Agora's industrial organization", "explainer/economics/agora/io.py"),
+              ("Rust's data", "explainer/economics/data/rust_buses.csv"),
+              ("The Island's planted truths", "explainer/economics/island.py")),
+    ),
 ]

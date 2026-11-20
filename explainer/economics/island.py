@@ -1011,6 +1011,33 @@ TRUTHS = {
         # from 1 with one firm to 0.6 with two, 0.48 with three, then hardly at all; fixed cost 1
         "towns": {"n": 400, "F": 1.0, "sd": 0.25, "margins": (1.0, 0.6, 0.48, 0.46, 0.45), "seed": 43},
     },
+    44: {
+        # the game (chapter 1): an Island bus line rebuilds engines for $4,000; upkeep costs $6 a month for every
+        # 5,000 miles on the engine; monthly mileage as in Rust's data; four rules to choose from (miles)
+        "playit": {"RC": 4000.0, "per_bin": 6.0, "options": (50000, 150000, 250000, 350000)},
+        # Rust's model (chapters 2 and 3): his groups 1 to 4, bins of 5,000 miles, 90 states; discount factors
+        "rust": {"groups": (1, 2, 3, 4), "bin": 5000.0, "n": 90, "beta": 0.9999,
+                 "betas": (0.0, 0.9, 0.99, 0.995, 0.999, 0.9995, 0.9999)},
+        # simulated fleets for NFXP against CCP (chapter 3): ten years of monthly decisions
+        "fleets": {"sizes": (104, 1000), "months": 120, "seed": 44},
+        # dynamic duopoly (chapter 4): eight quality steps, market size 5, investment efficiency 1.5,
+        # depreciation 0.3, discount factor 0.925
+        "duopoly": {"K": 8, "M": 5.0, "a": 1.5, "delta": 0.3, "beta": 0.925, "T": 4000, "seed": 44},
+        # vertical (chapter 5): demand P = 10 - Q, the manufacturer's cost 2
+        "vertical": {"a": 10.0, "c": 2.0},
+        # the platform (chapter 6): both sides' stand-alone appeal 1; side 1 values side 2 at 0.2
+        "platform": {"a1": 1.0, "a2": 1.0, "alpha1": 0.2},
+        # lock-in (chapter 7): B is better by 0.3 on average (tastes sd 1); A came first with 20 adopters
+        "lockin": {"quality": 0.3, "adopters": 600, "runs": 300, "seed": 44},
+        # innovation (chapter 8): the leader's profit 1, interest 5%, imitation 0.1 a year
+        "innovation": {"pi1": 1.0, "r": 0.05, "h": 0.1, "a": 10.0, "c": 4.0, "c_new": 2.0},
+        # killer acquisitions (chapter 9)
+        "killer": {"pi_one": 100.0, "pi_two": 110.0, "pi_duo": 40.0, "cost": 30.0},
+        # algorithms (chapter 10): Calvano et al.'s logit duopoly, fifteen prices, alpha 0.15, beta 4e-6, delta 0.95
+        "qlearn": {"sessions": 12, "max_iter": 3000000, "stable": 100000, "seed": 44},
+        # regulation (chapter 12): demand P = 10 - q, unit cost 2 or 4 with equal chances, profits weighted 0.6
+        "regulation": {"a": 10.0, "c_lo": 2.0, "c_hi": 4.0, "nu": 0.5, "weight": 0.6},
+    },
 }
 
 

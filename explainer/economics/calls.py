@@ -414,6 +414,16 @@ CALLS = {c.key: c for c in [
           "of Technology on Employment and Unemployment, National Academy of Engineering (1983), as quoted in "
           "secondary listings",
           "BLS via FRED: LNS12300060 (employment-population ratio, 25-54) and PRS85006173 (labor share)")),
+    Call("ballmer_2007", 44, "Steve Ballmer, chief executive of Microsoft, in an interview with USA Today", "April 2007",
+         "there's no chance that the iPhone is going to get any significant market share; no chance",
+         "an expensive phone entering a market of established makers, against Microsoft's own mobile software with "
+         "its many licensed handset makers",
+         "the iPhone and the App Store built a two-sided platform of buyers and developers; in 2023 Apple shipped "
+         "234.6 million smartphones, 20.1% of the world market and the most of any maker (IDC), and Microsoft left "
+         "the phone business; Ballmer later said he had been wrong",
+         "wrong",
+         ("USA Today interview, April 2007, as reported by InformationWeek and MacRumors",
+          "IDC, press release of 15 January 2024")),
     Call("millercoors_2008", 43, "The U.S. Department of Justice, closing its investigation of the MillerCoors joint "
          "venture", "June 2008",
          "the joint venture of SABMiller and Molson Coors is not likely to lessen competition substantially, and its "

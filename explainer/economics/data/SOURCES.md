@@ -95,6 +95,7 @@ film that moves to a new vintage says so on screen.
 | `fred_W825RC1.csv` | unemployment insurance benefits paid to persons, billions of dollars at a seasonally adjusted annual rate, monthly from 1959 | U.S. Bureau of Economic Analysis, via FRED | public domain | 2026-11-20 |
 | `fred_UEMPMED.csv` | median duration of unemployment in weeks, monthly from 1967 | U.S. Bureau of Labor Statistics, via FRED | public domain | 2026-11-20 |
 | `fred_CPATAX.csv`, `fred_CP.csv` | corporate profits after tax, with and without the inventory valuation and capital consumption adjustments, billions of dollars at a seasonally adjusted annual rate, quarterly from 1947 | U.S. Bureau of Economic Analysis, via FRED | public domain | 2026-11-20 |
+| `rust_buses.csv` | Rust's Madison bus panel: 162 buses in eight groups, monthly odometer readings and engine replacements, December 1974 to May 1985 (one row per bus and month) | Rust (1987), via OpenSourceEconomics' zurcher-data mirror of his files | MIT (mirror); the data are Rust's | 2026-11-20 |
 | `blp_cars.csv` | Berry, Levinsohn and Pakes's automobile data: 2,217 model-years, 1971-1990 (price in thousands of 1983 dollars, horsepower over weight, air conditioning, miles per gallon, size, share, firm) | Berry, Levinsohn and Pakes (1995), via the R package BLPestimatoR 0.3.4 (CRAN) | GPL-3 (package); the data are BLP's | 2026-11-20 |
 
 The raw Maddison workbook (`mpd2023_web.xlsx`, dataverse file 421302) had SHA-256
@@ -339,3 +340,15 @@ publication, the copy that was read and the date the transcription was checked:
 | `millercoors` | the 2008 MillerCoors clearance and the two studies of its effects | 2026-11-20 |
 | `axtell_2001` | Axtell's Zipf law for 5.5 million American firms | 2026-11-20 |
 | `frontier43` | Part 43's frontier, stated in words | 2026-11-20 |
+| `rust_1987` | Rust's bus engine model, data and the rejection of myopia; Hotz and Miller's CCPs | 2026-11-20 |
+| `dynamic_io` | Ericson and Pakes, Pakes and McGuire, Bajari, Benkard and Levin, Ryan's cement | 2026-11-20 |
+| `vertical` | double marginalization, the Chicago critique, resale price maintenance after Leegin | 2026-11-20 |
+| `platforms` | Rochet and Tirole, Armstrong, Rysman's Yellow Pages, Ohio v. American Express | 2026-11-20 |
+| `qwerty` | David's QWERTY, Liebowitz and Margolis's reply, Arthur's lock-in | 2026-11-20 |
+| `innovation` | Arrow's replacement effect, the inverted U, killer acquisitions | 2026-11-20 |
+| `algorithms` | Q-learning collusion and German petrol stations' algorithms | 2026-11-20 |
+| `antitrust` | Standard Oil, Microsoft, Google's liability and remedies, the neo-Brandeisian critique | 2026-11-20 |
+| `regulation` | Baron and Myerson; Laffont and Tirole | 2026-11-20 |
+| `retrospectives` | Kwoka's merger retrospectives and their critics | 2026-11-20 |
+| `apple` | Ballmer's 2007 remark and IDC's 2023 shipments | 2026-11-20 |
+| `frontier44` | Part 44's frontier, stated in words | 2026-11-20 |

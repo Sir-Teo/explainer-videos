@@ -1075,6 +1075,29 @@ brackets on screen.
 | ordered probit | 有序 probit 模型 |
 | the value of new goods | 新产品的价值 |
 
+## Part 44
+
+| English | 中文 |
+|---|---|
+| dynamic discrete choice | 动态离散选择 |
+| optimal stopping; replacement | 最优停止；设备更换 |
+| nested fixed point (NFXP) | 嵌套不动点算法 |
+| conditional choice probabilities (CCP) | 条件选择概率 |
+| discount factor; myopia | 贴现因子；短视 |
+| Markov-perfect equilibrium | 马尔可夫完美均衡 |
+| double marginalization | 双重加价（双重边际化） |
+| resale price maintenance | 转售价格维持 |
+| foreclosure | 封锁（市场圈定） |
+| two-sided market; platform | 双边市场；平台 |
+| network effects; tipping; lock-in | 网络效应；市场倾覆；锁定 |
+| the replacement effect | 替代效应（阿罗替代效应） |
+| escape competition | 逃离竞争效应 |
+| killer acquisition | 扼杀式收购 |
+| algorithmic collusion; Q-learning | 算法合谋；Q 学习 |
+| consumer-welfare standard | 消费者福利标准 |
+| information rent; virtual cost | 信息租金；虚拟成本 |
+| merger retrospective | 合并事后评估 |
+
 ## Names
 
 | English | 中文 |

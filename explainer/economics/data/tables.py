@@ -3631,10 +3631,167 @@ FRONTIER43 = Table(
 )
 PART43 = (CEREAL_FTC, NEVO_2001, BAIN_1951, BRESNAHAN_1982, LANCASTER_1966, BLP_1995, PETRIN_2002, PRODUCTION_1996,
           DLW_2012, MARKUP_CRITIQUE, BR_1991, MERGER_2023, MILLERCOORS, AXTELL_2001, FRONTIER43)
+# ---------------------------------------------------------------------------
+# Part 44
+# ---------------------------------------------------------------------------
+RUST_1987 = Table(
+    key="rust_1987",
+    cite="J. Rust, \"Optimal Replacement of GMC Bus Engines: An Empirical Model of Harold Zurcher\", Econometrica "
+         "55(5): 999-1033 (1987); V. J. Hotz and R. A. Miller, \"Conditional Choice Probabilities and the Estimation "
+         "of Dynamic Models\", Review of Economic Studies 60(3): 497-529 (1993)",
+    tag="Rust, \\emph{Econometrica} (1987); \\ Hotz and Miller, \\emph{REStud} (1993)",
+    where="Harold Zurcher, superintendent of maintenance at the Madison (Wisconsin) Metropolitan Bus Company, decided "
+          "each month whether to rebuild each bus's engine; Rust's data cover 162 buses in eight groups from 1974 to "
+          "1985; the nested fixed point algorithm; the data reject a monthly discount factor of zero (myopia) in "
+          "favour of 0.9999; Hotz and Miller estimate dynamic models from choice probabilities without solving the "
+          "dynamic programme",
+    read="the abstracts and replication documentation (ruspy; Ferrall's replication)",
+    checked="2026-11-20",
+    data={"buses": 162, "first": 1974, "last": 1985},
+)
+DYNAMIC_IO = Table(
+    key="dynamic_io",
+    cite="R. Ericson and A. Pakes, \"Markov-Perfect Industry Dynamics: A Framework for Empirical Work\", Review of "
+         "Economic Studies 62(1): 53-82 (1995); A. Pakes and P. McGuire, \"Computing Markov-Perfect Nash Equilibria\", "
+         "RAND Journal of Economics 25(4): 555-589 (1994); P. Bajari, C. L. Benkard and J. Levin, \"Estimating Dynamic "
+         "Models of Imperfect Competition\", Econometrica 75(5): 1331-1370 (2007); S. P. Ryan, \"The Costs of "
+         "Environmental Regulation in a Concentrated Industry\", Econometrica 80(3): 1019-1061 (2012)",
+    tag="Ericson and Pakes (1995); \\ Bajari, \\ Benkard and Levin (2007); \\ Ryan (2012)",
+    where="firms invest, enter and exit in a Markov-perfect equilibrium; two-step estimation recovers policies first "
+          "and then the parameters that rationalize them; Ryan: the 1990 Clean Air Act Amendments raised the sunk "
+          "costs of entry in American cement, a cost a static analysis would miss",
+    read="the abstracts",
+    checked="2026-11-20",
+)
+VERTICAL = Table(
+    key="vertical",
+    cite="J. J. Spengler, \"Vertical Integration and Antitrust Policy\", Journal of Political Economy 58(4): 347-352 "
+         "(1950); R. Bork, The Antitrust Paradox (1978); Leegin Creative Leather Products v. PSKS, 551 U.S. 877 (2007), "
+         "overruling Dr. Miles Medical Co. v. John D. Park & Sons (1911)",
+    tag="Spengler (1950); \\ Bork (1978); \\ \\emph{Leegin} (2007)",
+    where="two successive markups raise the price above what an integrated firm would charge (double "
+          "marginalization); the Chicago critique of foreclosure: a monopolist has only one monopoly profit to "
+          "take; minimum resale price maintenance judged by the rule of reason since 2007",
+    read="the cases' summaries and standard texts",
+    checked="2026-11-20",
+)
+PLATFORMS = Table(
+    key="platforms",
+    cite="J.-C. Rochet and J. Tirole, \"Platform Competition in Two-Sided Markets\", Journal of the European "
+         "Economic Association 1(4): 990-1029 (2003); M. Armstrong, \"Competition in Two-Sided Markets\", RAND Journal "
+         "of Economics 37(3): 668-691 (2006); M. Rysman, \"Competition between Networks: A Study of the Market for "
+         "Yellow Pages\", Review of Economic Studies 71(2): 483-512 (2004); Ohio v. American Express Co., 585 U.S. "
+         "(2018)",
+    tag="Rochet and Tirole (2003); \\ Armstrong (2006); \\ Rysman (2004)",
+    where="a platform's price structure, not only its level, matters: the side whose presence is worth more to the "
+          "other is charged less, sometimes below cost; Rysman estimates that Yellow Pages advertisers value readers "
+          "and readers value advertising; the Supreme Court treated a card network as one two-sided market",
+    read="the abstracts and the decision's syllabus",
+    checked="2026-11-20",
+)
+QWERTY = Table(
+    key="qwerty",
+    cite="P. A. David, \"Clio and the Economics of QWERTY\", American Economic Review 75(2): 332-337 (1985); S. J. "
+         "Liebowitz and S. E. Margolis, \"The Fable of the Keys\", Journal of Law and Economics 33(1): 1-25 (1990); "
+         "W. B. Arthur, \"Competing Technologies, Increasing Returns, and Lock-In by Historical Events\", Economic "
+         "Journal 99: 116-131 (1989)",
+    tag="David (1985); \\ Liebowitz and Margolis (1990); \\ Arthur (1989)",
+    where="David: QWERTY as an inferior standard locked in by history; Liebowitz and Margolis: the evidence that "
+          "Dvorak's layout is better is weak, so the case for inefficient lock-in is unproven",
+    read="the articles' summaries",
+    checked="2026-11-20",
+)
+INNOVATION = Table(
+    key="innovation",
+    cite="K. J. Arrow, \"Economic Welfare and the Allocation of Resources for Invention\", in The Rate and Direction "
+         "of Inventive Activity (1962); J. A. Schumpeter, Capitalism, Socialism and Democracy (1942); P. Aghion, N. "
+         "Bloom, R. Blundell, R. Griffith and P. Howitt, \"Competition and Innovation: An Inverted-U Relationship\", "
+         "Quarterly Journal of Economics 120(2): 701-728 (2005); C. Cunningham, F. Ederer and S. Ma, \"Killer "
+         "Acquisitions\", Journal of Political Economy 129(3): 649-702 (2021)",
+    tag="Arrow (1962); \\ Aghion et al., \\emph{QJE} (2005); \\ Cunningham, \\ Ederer and Ma, \\emph{JPE} (2021)",
+    where="Arrow's replacement effect; Schumpeter's case for size; an inverted U between product-market competition "
+          "and patenting in British industries; incumbents in pharmaceuticals acquire projects that overlap with "
+          "their own drugs and are markedly less likely to continue developing them",
+    read="the abstracts",
+    checked="2026-11-20",
+)
+ALGORITHMS = Table(
+    key="algorithms",
+    cite="E. Calvano, G. Calzolari, V. Denicolo and S. Pastorello, \"Artificial Intelligence, Algorithmic Pricing, "
+         "and Collusion\", American Economic Review 110(10): 3267-3297 (2020); S. Assad, R. Clark, D. Ershov and L. "
+         "Xu, \"Algorithmic Pricing and Competition: Empirical Evidence from the German Retail Gasoline Market\", "
+         "Journal of Political Economy 132(3): 723-771 (2024)",
+    tag="Calvano et al., \\emph{AER} (2020); \\ Assad et al., \\emph{JPE} (2024)",
+    where="Q-learning algorithms in a repeated pricing game learn to charge supracompetitive prices without "
+          "communicating, sustained by punishments followed by a gradual return to cooperation; in German petrol "
+          "stations adoption raised margins only where stations faced rivals, and in duopolies only when both "
+          "adopted",
+    read="the abstracts",
+    checked="2026-11-20",
+)
+ANTITRUST = Table(
+    key="antitrust",
+    cite="Standard Oil Co. of New Jersey v. United States, 221 U.S. 1 (1911); United States v. Microsoft Corp., 253 "
+         "F.3d 34 (D.C. Cir. 2001); United States v. Google LLC (D.D.C., liability opinion of August 2024, remedies "
+         "decision of 2 September 2025); L. M. Khan, \"Amazon's Antitrust Paradox\", Yale Law Journal 126(3) (2017)",
+    tag="\\emph{Standard Oil} (1911); \\ \\emph{Microsoft} (2001); \\ \\emph{Google} (2024--25)",
+    where="Standard Oil broken up in 1911; the consumer-welfare standard after Bork; the neo-Brandeisian critique; "
+          "Microsoft: monopoly maintenance upheld on appeal in 2001, the break-up order reversed; Google: found in "
+          "August 2024 to have monopolized general search; in September 2025 the court declined to order Chrome "
+          "sold, barred exclusive distribution contracts and required some data to be shared with rivals",
+    read="the decisions' summaries and press reports of the 2025 remedies",
+    checked="2026-11-20",
+)
+REGULATION = Table(
+    key="regulation",
+    cite="D. P. Baron and R. B. Myerson, \"Regulating a Monopolist with Unknown Costs\", Econometrica 50(4): 911-930 "
+         "(1982); J.-J. Laffont and J. Tirole, A Theory of Incentives in Procurement and Regulation (1993)",
+    tag="Baron and Myerson (1982); \\ Laffont and Tirole (1993)",
+    where="a regulator who cannot see the firm's cost lets the efficient type earn an information rent and distorts "
+          "the inefficient type's output to limit it",
+    read="the abstracts and standard expositions",
+    checked="2026-11-20",
+)
+RETROSPECTIVES = Table(
+    key="retrospectives",
+    cite="J. Kwoka, \"Does Merger Control Work? A Retrospective on U.S. Enforcement Actions and Merger Outcomes\", "
+         "Antitrust Law Journal 78(3) (2013); J. Kwoka, Mergers, Merger Control, and Remedies (MIT Press, 2015); M. "
+         "Vita and F. D. Osinski, \"John Kwoka's Mergers, Merger Control, and Remedies: A Critical Review\", "
+         "Antitrust Law Journal 82 (2018)",
+    tag="Kwoka (2013, \\ 2015); \\ Vita and Osinski (2018)",
+    where="Kwoka's database of 46 mergers: 38 (83%) followed by price increases averaging almost 10%; in the 2015 "
+          "book, mergers the agencies challenged were followed by price increases averaging 7.71% (as reported in "
+          "reviews); Vita and Osinski dispute the sample and the averaging",
+    read="Northeastern's summary of the 2013 article and reviews of the book",
+    checked="2026-11-20",
+    data={"n2013": 46, "up2013": 38, "avg_up2013": 10.0, "challenged2015": 7.71},
+)
+APPLE = Table(
+    key="apple",
+    cite="USA Today, interview with Steve Ballmer (April 2007), as reported by InformationWeek and MacRumors; IDC, "
+         "Worldwide Quarterly Mobile Phone Tracker, press release of 15 January 2024",
+    tag="USA Today (2007); \\ IDC (2024)",
+    where="Ballmer: \"There's no chance that the iPhone is going to get any significant market share. No chance.\"; "
+          "IDC: in 2023 Apple shipped 234.6 million smartphones, 20.1% of the world market, the most of any vendor for "
+          "the first time",
+    read="the reports of the interview and IDC's release",
+    checked="2026-11-20",
+    data={"units": 234.6, "share": 20.1, "year": 2023},
+)
+FRONTIER44 = Table(
+    key="frontier44",
+    cite="the frontier chapter's sources, stated in words only",
+    tag="frontier",
+    where="data as a barrier to entry; interoperability and data portability; competition among foundation models",
+    read="the chapter states questions, not estimates",
+    checked="2026-11-20",
+)
+PART44 = (RUST_1987, DYNAMIC_IO, VERTICAL, PLATFORMS, QWERTY, INNOVATION, ALGORITHMS, ANTITRUST, REGULATION,
+          RETROSPECTIVES, APPLE, FRONTIER44)
 PART42 = (OREGON_2008, RAND_HIE, ARROW_1963, UI_THEORY, UI_EVIDENCE, CHETTY_DK_2014, DISABILITY_2013, EITC_2025,
           NIT_1968, UBI_TRIALS, MVPF_2020, PENSIONS, SS_1983, FRONTIER42)
 PART41 = (LAFFER_1974, HARBERGER_1962, RAMSEY_1927, MIRRLEES_1971, DIAMOND_SAEZ_2011, ETI_STUDIES, BUNCHING,
           CLK_2009, CAPITAL_TAX, HAVENS, EVASION, FRONTIER41, TCJA_2017)
 PART7 = (BERNOULLI_1738, SAMUELSON_1937, ALLAIS_1953, ELLSBERG_1961, RABIN_2000, THALER_1981, HOLT_LAURY_2005,
          HAYDEN_PLATT_2009, MADRIAN_SHEA_2001, THALER_BENARTZI_2004, BARSKY_1997, POST_2008, MEHRA_PRESCOTT_1985)
-ALL = {t.key: t for t in (*PART1, *PART3, *PART4, *PART5, *PART6, *PART7, *PART8, *PART9, *PART10, *PART11, *PART12, *PART13, *PART14, *PART15, *PART16, *PART17, *PART18, *PART19, *PART21, *PART22, *PART25, *PART26, *PART35, *PART36, *PART37, *PART38, *PART39, *PART40, *PART41, *PART42, *PART43)}
+ALL = {t.key: t for t in (*PART1, *PART3, *PART4, *PART5, *PART6, *PART7, *PART8, *PART9, *PART10, *PART11, *PART12, *PART13, *PART14, *PART15, *PART16, *PART17, *PART18, *PART19, *PART21, *PART22, *PART25, *PART26, *PART35, *PART36, *PART37, *PART38, *PART39, *PART40, *PART41, *PART42, *PART43, *PART44)}

@@ -123,4 +123,59 @@
             "cereal sales. Computed in your browser; nothing you do here is stored or sent.",
     });
   };
+
+  // ---- Part 44: dynamics, platforms and antitrust ----------------------------------------------------------------
+  W.rebuild = function (el) {
+    // Zurcher's problem without surprises (explainer.economics.agora.io: Rust.average_cost): rebuild an engine once it
+    // reaches T steps of 5,000 miles.  Monthly mileage moves 0, 1 or 2 steps with Rust's probabilities.  By renewal,
+    // the average monthly cost is (upkeep over a cycle + RC) / (months in a cycle), with the expected months spent at
+    // each mileage found by a short recursion.
+    var P = [0.3561, 0.6323, 0.0116];
+    function avg(RC, c, T) {
+      var v = [], k, up = 0, n = 0;
+      for (k = 0; k < T; k++) {
+        var init = k < 3 ? P[k] : 0;
+        v.push((init + (k >= 1 ? P[1] * v[k - 1] : 0) + (k >= 2 ? P[2] * v[k - 2] : 0)) / (1 - P[0]));
+        up += v[k] * c * k; n += v[k];
+      }
+      return (up + RC) / (n + 1);
+    }
+    QB.widget(el, {
+      title: "Rebuild the engine",
+      sub: "The average monthly cost per bus of rebuilding at each mileage (green), with your rule (gold) and the " +
+           "best one (dashed). Upkeep rises with the miles on the engine; a rebuild resets them.",
+      panels: 1, height: 290,
+      controls: [
+        { k: "RC", label: "Cost of a rebuild, dollars", min: 1000, max: 12000, step: 100, value: 4000,
+          fmt: function (x) { return "$" + x.toFixed(0); } },
+        { k: "c", label: "Upkeep per month for every 5,000 miles", min: 1, max: 20, step: 0.5, value: 6,
+          fmt: function (x) { return "$" + x.toFixed(1); } },
+        { k: "T", label: "Your rule: rebuild at (thousand miles)", min: 20, max: 440, step: 5, value: 250,
+          fmt: function (x) { return x.toFixed(0) + "k"; } },
+      ],
+      draw: function (g, v, st) {
+        var xs = [], ys = [], k, best = 0, bestC = 1e18;
+        for (k = 2; k <= 89; k++) {
+          var cost = avg(v.RC, v.c, k); xs.push(k * 5); ys.push(cost);
+          if (cost < bestC) { bestC = cost; best = k * 5; }
+        }
+        var mine = avg(v.RC, v.c, Math.max(1, Math.round(v.T / 5)));
+        var top = Math.min(Math.max.apply(null, ys), 3 * bestC);
+        var A = g[0].axes({ x: [0, 450], y: [0, top * 1.05], title: "average cost per bus per month, dollars",
+                            xlabel: "rebuild at (thousand miles)" });
+        A.line(xs, ys.map(function (y) { return Math.min(y, top * 1.05); }), { color: "#7BD88F", width: 2.5 });
+        A.vline(best, { color: "#9AA3B2", width: 1.5 });
+        A.dots([v.T], [Math.min(mine, top * 1.05)], { color: GOLD, r: 6 });
+        st.best = best; st.bestC = bestC; st.mine = mine;
+      },
+      readout: function (v, st) {
+        return [["your rule costs", "$" + st.mine.toFixed(0) + " a month"],
+                ["the best rule", st.best.toFixed(0) + "k miles, $" + st.bestC.toFixed(0) + " a month"],
+                ["you pay extra", (100 * (st.mine / st.bestC - 1)).toFixed(1) + "%"]];
+      },
+      note: "Part 44, chapter 1. Rust's estimates on Zurcher's buses put the rebuild cost at about 123 months of " +
+            "upkeep at 150,000 miles; surprises each month make real rebuilds earlier or later. Computed in your " +
+            "browser; nothing you do here is stored or sent.",
+    });
+  };
 })();
