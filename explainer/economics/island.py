@@ -605,6 +605,28 @@ TRUTHS = {
         "olg": {"alpha": 0.3, "n": 0.4, "A": 10.0, "betas": (0.9, 0.3), "pensions": (0.0, 0.1, 0.2, 0.3, 0.4, 0.5,
                                                                                      0.6, 0.7, 0.8)},
     },
+    # Part 23: what a claim on the future is worth
+    23: {
+        # Play it (chapter 5): a coconut tree pays 20 in a good year and 0 in a bad one (each half the time); the
+        # Island's stochastic discount factor is 0.8 in good years and 1.2 in bad (a safe coconut costs 1)
+        "playit": {"pay_good": 20.0, "pay_bad": 0.0, "m_good": 0.8, "m_bad": 1.2, "options": (6.0, 8.0, 10.0, 12.0)},
+        # the Gordon formula (chapter 1): dividends of 4 growing 3% a year, discounted at 7%
+        "gordon": {"D1": 4.0, "r": 0.07, "g": 0.03},
+        # the investing firm (chapter 2): adjustment-cost parameter, capital's share, interest, depreciation; productivity
+        # rises 20% (equivalently, the user cost falls)
+        "firm": {"phi": 4.0, "alpha": 0.33, "r": 0.05, "delta": 0.08, "A0": 1.0, "A1": 1.2, "years": 40},
+        # the option to wait (chapter 3)
+        "option": {"r": 0.04, "mu": 0.0, "sigmas": (0.1, 0.2, 0.3, 0.4)},
+        # Mehra and Prescott's economy (chapter 8): their two-state chain, and the grid of patience and risk aversion
+        "mp": {"mu": 0.018, "delta": 0.036, "phi": 0.43, "gamma_max": 10.0, "beta_min": 0.80, "rf_max": 0.04},
+        # rare disasters (chapter 9): Barro's 1.7% a year with sizes averaging about 29%; patience 3%, growth 2.5%
+        "disasters": {"p": 0.017, "sizes": (0.15, 0.25, 0.35, 0.50, 0.65), "weights": (0.35, 0.25, 0.20, 0.12, 0.08),
+                      "rho": 0.03, "g": 0.025, "sd": 0.02, "gammas": (1, 2, 3, 3.5, 4)},
+        # habits (chapter 9): Campbell and Cochrane's annual calibration
+        "habit": {"gamma": 2.0, "phi": 0.87, "g": 0.0189, "sd": 0.015, "years": 100, "seed": 23},
+        # the stylized laboratory market (chapter 11)
+        "ssw": {"periods": 15, "dividends": (0.0, 0.08, 0.28, 0.60), "share_trend": 0.7, "n": 12, "seed": 0},
+    },
 }
 
 

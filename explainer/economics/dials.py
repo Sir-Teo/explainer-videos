@@ -492,7 +492,6 @@ DIALS = {d.key: d for d in [
     Dial("ige", "intergenerational elasticity of income", "", (40,)),
     Dial("eti", "elasticity of taxable income", "", (41,)),
     Dial("ui_duration", "duration elasticity of unemployment benefits", "", (42,)),
-    Dial("mpc", "marginal propensity to consume out of a windfall", "share spent within a quarter", (22,)),
     Dial("matching", "elasticity of matches to unemployment", "", (24,)),
     Dial("price_frequency", "frequency of price changes", "share of prices changing per month", (30,)),
     Dial("phillips_slope", "slope of the Phillips curve", "points of inflation per point of slack", (28, 30)),

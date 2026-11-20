@@ -118,10 +118,9 @@ class HandToMouth(VoiceoverScene):
             f"{h['corr_liquid']:+.2f}. What a household spends out of a windfall depends on the cash it has, not on "
             "what it owns."
         ) as vo:
-            self.play(FadeIn(ax), FadeIn(tag))
+            self.play(FadeIn(ax), FadeIn(tag), LaggedStart(*[FadeIn(d) for d in dots], lag_ratio=0.001), run_time=2.5)
             vo.wait_until("a")
-            self.play(LaggedStart(*[FadeIn(d) for d in dots], lag_ratio=0.001), FadeIn(side[0]), FadeIn(side[1]),
-                      run_time=2.5)
+            self.play(FadeIn(side[0]), FadeIn(side[1]))
             vo.wait_until("b")
             self.play(FadeIn(side[2]))
             vo.wait_until("c")

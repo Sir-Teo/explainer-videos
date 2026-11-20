@@ -152,6 +152,12 @@ FRED_SERIES["DNDGRG3M086SBEA"] = ("Personal consumption expenditures: nondurable
                                   "index 2017 = 100, seasonally adjusted", "monthly", "U.S. Bureau of Economic Analysis")
 FRED_SERIES["DSERRG3M086SBEA"] = ("Personal consumption expenditures: services (chain-type price index)",
                                   "index 2017 = 100, seasonally adjusted", "monthly", "U.S. Bureau of Economic Analysis")
+# Part 23: housing as an asset: the national home price index against the CPI's rent of primary residence
+FRED_SERIES["CSUSHPINSA"] = ("S&P CoreLogic Case-Shiller U.S. National Home Price Index", "index January 2000 = 100, "
+                             "not seasonally adjusted", "monthly", "S&P Dow Jones Indices LLC")
+FRED_SERIES["CUSR0000SEHA"] = ("Consumer Price Index for All Urban Consumers: rent of primary residence in U.S. city "
+                               "average", "index 1982-1984 = 100, seasonally adjusted", "monthly",
+                               "U.S. Bureau of Labor Statistics")
 
 FRED_RETRIEVED = {s: "2026-11-19" for s in (
     "GDPA", "GDIA", "PCECA", "GPDIA", "GCEA", "EXPGSA", "IMPGSA", "A033RC1A027NBEA", "A191RD3A086NBEA", "U1RATE",
@@ -159,7 +165,8 @@ FRED_RETRIEVED = {s: "2026-11-19" for s in (
     "LABSHPUSA156NRUG", "B230RC0A052NBEA", "PCECCA", "DPCERG3A086NBEA", "TB3MS", "MCOILBRENTEU", "MCOILWTICO", "APU0000717311", "APU000074714", "CUSR0000SETA02", "CUSR0000SETA01", *(f"{c}{t}" for c in PCE_CATEGORIES for t in ("RG3A086NBEA",
                                                                                          "RC1A027NBEA")))}
 FRED_RETRIEVED.update({s: "2026-11-20" for s in ("PCECC96", "DSPIC96", "PSAVERT", "PCE", "PCEND", "PCES",
-                                                  "DNDGRG3M086SBEA", "DSERRG3M086SBEA")})
+                                                  "DNDGRG3M086SBEA", "DSERRG3M086SBEA", "CSUSHPINSA",
+                                                  "CUSR0000SEHA")})
 
 SPF_FILES = ("median_rgdp_level", "median_rgdp_growth", "median_recess_level")
 SPF_URL = ("https://www.philadelphiafed.org/-/media/frbp/assets/surveys-and-data/survey-of-professional-forecasters/"
@@ -402,6 +409,26 @@ DATASETS = {
         "vintage": "2026-11-20",
         "sha256": "3354b22752f0aa0c0d9c8c12b38810202b6380f2587e539be11d9a358412fe6a",
         "files": ("ajr_hdm.csv",),
+    },
+    "shiller": {
+        "title": "Robert Shiller's annual US stock market data with consumption: the S&P composite price, dividends and "
+                 "earnings, the one-year and long interest rates, the CPI, the real one-year rate, real consumption "
+                 "per head, and the real return on the S&P composite, 1871 onward",
+        "publisher": "Robert J. Shiller, Yale University (an update of chapter 26 of Market Volatility, 1989)",
+        "citation": "R. J. Shiller, Market Volatility (MIT Press, 1989), ch. 26, and Irrational Exuberance (Princeton, "
+                    "2015); data file chapt26.xlsx, sheet Data, from www.econ.yale.edu/~shiller/data.htm, retrieved "
+                    "2026-11-20",
+        "short": "Shiller, Market Volatility ch. 26 data (annual, updated)",
+        "url": "http://www.econ.yale.edu/~shiller/data/chapt26.xlsx",
+        "licence": "made freely available by the author for research and teaching, with citation",
+        "units": "P, D, E: index points and dollars a share; R, RLONG: percent; RealR: gross real one-year return; C: "
+                 "real consumption per head (2005 dollars); RealP, RealD: in the latest year's dollars; Return: real "
+                 "gross-minus-one return on the S&P composite over the year; Pstar, PstarR, PstarC: the present value of "
+                 "the real dividends that followed, discounted at a constant rate, at the one-year rate and by "
+                 "consumption growth (Shiller's ex post rational prices)",
+        "vintage": "2026-11-20",
+        "sha256": "d255bb1230a9a94c450ee4738d914ec8c6c79ceae58f1cc89559c7f40fa7c9c0",
+        "files": ("shiller_annual.csv",),
     },
     "draft1970": {
         "title": "The draft lottery of 1 December 1969 (for men born 1944-50): the rank drawn for each birthday",
@@ -1190,11 +1217,45 @@ def refresh_ajr() -> None:
             w.writerow([_fmt(float(cols[c][i])) for c in AJR_COLUMNS])
 
 
+SHILLER_COLUMNS = ("year", "P", "D", "E", "R", "RLONG", "CPI", "RealR", "C", "RealP", "Pstar", "PstarR", "PstarC", "RealD",
+                   "Return")
+
+
+def shiller() -> dict:
+    """Shiller's annual series (``{column: [values]}``, NaN where blank): see ``DATASETS["shiller"]["units"]``.
+    ``Return`` for year t is the real return from January of t to January of t + 1; ``RealR`` the gross real return on
+    a one-year bond bought in January of t; ``C`` real consumption per head in year t."""
+    rows = _read(HERE / "shiller_annual.csv")
+    return {c: [(_num(r[c]) if c != "year" else int(r[c])) for r in rows] for c in SHILLER_COLUMNS}
+
+
+def refresh_shiller() -> None:
+    import openpyxl
+
+    d = DATASETS["shiller"]
+    raw = RAW / "shiller_chapt26.xlsx"
+    sha = _download(d["url"], raw)
+    if sha != d["sha256"]:
+        print(f"shiller: the download differs from the recorded vintage ({sha[:12]} vs {d['sha256'][:12]})")
+    print(f"shiller: sha256 {sha}")
+    wb = openpyxl.load_workbook(raw, read_only=True, data_only=True)
+    idx = {"year": 0, "P": 1, "D": 2, "E": 3, "R": 4, "RLONG": 5, "CPI": 6, "RealR": 7, "C": 8, "RealP": 10,
+           "Pstar": 11, "PstarR": 12, "PstarC": 13, "RealD": 14, "Return": 15}
+    with open(HERE / "shiller_annual.csv", "w", newline="", encoding="utf-8") as f:
+        w = csv.writer(f)
+        w.writerow(SHILLER_COLUMNS)
+        for r in wb["Data"].iter_rows(values_only=True):
+            if not isinstance(r[0], (int, float)):
+                continue
+            w.writerow([int(r[0])] + [_fmt(r[idx[c]]) if isinstance(r[idx[c]], (int, float)) else ""
+                                      for c in SHILLER_COLUMNS[1:]])
+
+
 REFRESH = {"draft1970": refresh_draft1970, "ajr": refresh_ajr, "maddison2023": refresh_maddison, "fred": refresh_fred, "spf": refresh_spf,
            "pinksheet": refresh_pinksheet, "psd_coffee": refresh_psd_coffee, "wdi": refresh_wdi, "hdr": refresh_hdr,
            "rtdsm": refresh_rtdsm, "warheads": refresh_warheads, "so2": refresh_so2,
            "marriage": refresh_marriage, "democracy": refresh_democracy, "millennium": refresh_millennium,
-           "longrun": refresh_longrun, "pwt": refresh_pwt}
+           "longrun": refresh_longrun, "pwt": refresh_pwt, "shiller": refresh_shiller}
 
 
 def main() -> None:

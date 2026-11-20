@@ -38,7 +38,7 @@ class Ricardo(VoiceoverScene):
             label(r"private saving rises \\ one for one with the deficit", font_size=20, color=SAVE),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.3).to_edge(RIGHT, buff=0.4)
         hc = history_card(1974, r"Robert Barro", r"\emph{Are Government Bonds Net Wealth?}", color=SAVE, width=6.2,
-                          font_size=19).to_corner(UL, buff=0.25)
+                          font_size=19).to_corner(UR, buff=0.25)
         tag = published_tag(r"Barro, JPE 82(6) (1974): \ 1095--1117", corner=DR, font_size=12)
         with self.voiceover(
             "The 2001 rebate was a tax cut paid for by borrowing. Does that make households richer? "

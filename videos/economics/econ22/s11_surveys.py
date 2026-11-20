@@ -35,7 +35,7 @@ class Surveys(VoiceoverScene):
         for v, txt, col, side in marks:
             tri = Triangle(color=col, fill_color=col, fill_opacity=1).scale(0.12).rotate(PI if side > 0 else 0)
             tri.move_to([X(v), y0 + 0.25 * side, 0])
-            lb = label(txt, font_size=20, color=col).next_to(tri, UP if side > 0 else DOWN, buff=0.15)
+            lb = label(txt, font_size=20, color=col).next_to(tri, UP if side > 0 else DOWN, buff=0.15 if side > 0 else 0.5)
             objs.add(VGroup(tri, lb))
         head = label(r"share of an unexpected windfall spent \ (within the year)", font_size=26,
                      color=E.ACCENT).to_edge(UP, buff=0.8)
@@ -97,7 +97,7 @@ class Surveys(VoiceoverScene):
                             (r"what varied", r"the size of a lottery prize, \ and when it was won: \ luck"),
                             (r"the data", r"Norway's tax records: \ every winner's income, \ wealth and spending, "
                                           r"year by year"),
-                            (r"small prizes", rf"{f['small_prize']}, \ to winners with little liquid wealth: \ spent "
+                            (r"small prizes", rf"{tex_safe(f['small_prize'])}, \ to winners with little liquid wealth: \ spent "
                                               r"in full within the year"),
                             (r"large prizes", r"to winners with ample liquid wealth: \ slightly below one-half"),
                             (r"after", r"spending peaks in the year of winning, \ and is back to normal within five "
