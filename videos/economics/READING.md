@@ -10,7 +10,7 @@ the series leaves out.
 Both *Parts* columns are found, not typed. *Planned* lists the parts whose entry in
 [`SYLLABUS.md`](SYLLABUS.md) names the book or paper; *Built* lists the parts whose scenes, compute step or
 README cite it (a dot: none yet). Fuller notes (editions, chapters, what each source was used for) are in each
-part's README, under *Sources*. Built so far: Parts 1–38.
+part's README, under *Sources*. Built so far: Parts 1–39.
 
 ## 1. The textbook spine
 
@@ -31,7 +31,7 @@ part's README, under *Sources*. Built so far: Parts 1–38.
 | Varian | H. Varian, *Intermediate Microeconomics* (9th ed., 2014) | 2, 5–8, 10 | 2, 5–8, 10, 16 |
 | Nicholson–Snyder | W. Nicholson and C. Snyder, *Microeconomic Theory* (13th ed., 2021) | 5–6 | 5–6, 8 |
 | Jones | C. I. Jones, *Macroeconomics* (6th ed., 2023) | 20 | · |
-| Blanchard | O. Blanchard, *Macroeconomics* (8th ed., 2021) | 27, 32 | 20, 24, 27–28, 32 |
+| Blanchard | O. Blanchard, *Macroeconomics* (8th ed., 2021) | 27, 32 | 20, 24, 27–28, 32, 39 |
 | Stock–Watson | J. Stock and M. Watson, *Introduction to Econometrics* (4th ed., 2019) | 4 | 4 |
 | Angrist–Pischke | J. Angrist and J.-S. Pischke, *Mostly Harmless Econometrics* (2009) | 4, 50, 67 | 4 |
 | Osborne | M. Osborne, *An Introduction to Game Theory* (2004) | 11 | 11 |
@@ -80,7 +80,7 @@ part's README, under *Sources*. Built so far: Parts 1–38.
 | Short name | Book | Planned | Built |
 |---|---|---|---|
 | Hayashi | F. Hayashi, *Econometrics* (2000) | 54, 56 | 23 |
-| Wooldridge | J. Wooldridge, *Econometric Analysis of Cross Section and Panel Data* (2nd ed., 2010) | 54 | 38 |
+| Wooldridge | J. Wooldridge, *Econometric Analysis of Cross Section and Panel Data* (2nd ed., 2010) | 54 | 38–39 |
 | Hansen | B. Hansen, *Econometrics* (2022) | 54 | · |
 | Hamilton | J. Hamilton, *Time Series Analysis* (1994) | 55 | 6 |
 | Kilian–Lütkepohl | L. Kilian and H. Lütkepohl, *Structural Vector Autoregressive Analysis* (2017) | 55 | · |
@@ -107,7 +107,7 @@ part's README, under *Sources*. Built so far: Parts 1–38.
 
 | Short name | Book | Planned | Built |
 |---|---|---|---|
-| Blinder | A. Blinder, *Central Banking in Theory and Practice* (1998) | 31 | 30–31 |
+| Blinder | A. Blinder, *Central Banking in Theory and Practice* (1998) | 31 | 30–31, 39 |
 | Boardman | A. Boardman and others, *Cost-Benefit Analysis* (5th ed., 2018) | 50, 58 | · |
 | Davis–Garcés | P. Davis and E. Garces, *Quantitative Techniques for Competition and Antitrust Analysis* (2010) | 59 | · |
 | Talluri–van Ryzin | K. Talluri and G. van Ryzin, *The Theory and Practice of Revenue Management* (2004) | 10, 60 | 10 |
@@ -120,7 +120,7 @@ part's README, under *Sources*. Built so far: Parts 1–38.
 
 | Model or result | Paper | Planned | Built |
 |---|---|---|---|
-| the division of labour | Smith (1776), *The Wealth of Nations* | 1 | 1–2, 19, 21 |
+| the division of labour | Smith (1776), *The Wealth of Nations* | 1 | 1–2, 19, 21, 39 |
 | comparative advantage | Ricardo (1817), *Principles*, ch. 7 | 2, 8, 35–36 | 1–2, 8, 19, 22, 25, 33–36 |
 | supply and demand, the scissors | Marshall (1890), *Principles of Economics* | 2, 37 | 2, 14, 37 |
 | the price system as information | Hayek (1945), "The Use of Knowledge in Society" | 1, 9 | 1, 9 |
@@ -235,7 +235,7 @@ part's README, under *Sources*. Built so far: Parts 1–38.
 |---|---|---|---|
 | human capital | Becker (1964); Mincer (1974) | 38 | 13, 38 |
 | the minimum wage | Card and Krueger (1994) | 4, 38 | 4, 38 |
-| skills, tasks and technology | Autor, Levy and Murnane (2003); Acemoglu and Autor (2011) | 39 | · |
+| skills, tasks and technology | Autor, Levy and Murnane (2003); Acemoglu and Autor (2011) | 39 | 39 |
 | mobility and place | Chetty and others (2014) | 40, 42 | · |
 | top incomes | Piketty and Saez (2003) | 40 | · |
 | the economics of crime | Becker (1968) | 49 | · |
@@ -331,6 +331,8 @@ part's README, under *Sources*. Built so far: Parts 1–38.
 **Part 37, *Cities and Regions*.** Books: Jan Brueckner, *Lectures on Urban Economics* (2011); Edward Glaeser, *Triumph of the City* (2011); Masahisa Fujita, Paul Krugman and Anthony Venables, *The Spatial Economy* (1999); Stephen Redding and Esteban Rossi-Hansberg, "Quantitative Spatial Economics", *Annual Review of Economics* 9 (2017). Papers: von Thünen (1826); Alonso (1964); Schelling (1971); Rosen (1979); Roback (1982); Krugman (1991); Ciccone and Hall (1996); Gabaix (1999); Duranton and Puga (2004); Baum-Snow (2007); Saiz (2010); Combes et al. (2010); Kline and Moretti (2014); Ahlfeldt et al. (2015); Chetty, Hendren and Katz (2016); Donaldson (2018); Diamond, McQuade and Qian (2019); Hsieh and Moretti (2019); Greaney (2026).
 
 **Part 38, *Work and Wages*.** Books: David Card and Alan Krueger, *Myth and Measurement* (1995); Alan Manning, *Monopsony in Motion* (2003); George Borjas, *Labor Economics*; Pierre Cahuc, Stéphane Carcillo and André Zylberberg, *Labor Economics*; Jacob Mincer, *Schooling, Experience, and Earnings* (1974). Papers: Robinson (1933); Stigler (1946); Roy (1951); Becker (1964); Heckman (1979); Card (1990); Angrist and Krueger (1991); Card and Krueger (1994); Card (1995); Camerer et al. (1997); Neumark and Wascher (2000); Oreopoulos (2006); Chetty et al. (2011); Farber (2015); Borjas (2017); Cengiz et al. (2019); Peri and Yasenov (2019); Angrist, Caldwell and Hall (2021); Sokolova and Sorensen (2021); Jardim et al. (2022).
+
+**Part 39, *The Wage Structure*.** Books: Claudia Goldin and Lawrence Katz, *The Race between Education and Technology* (2008); Gary Becker, *The Economics of Discrimination* (1957); Claudia Goldin, *Career and Family* (2021); David Card, 'Who Set Your Wage?', *AER* (2022). Papers: Rosen (1974, 1981); Phelps (1972); Arrow (1973); Oaxaca (1973); Blinder (1973); Katz and Murphy (1992); Abowd, Kramarz and Margolis (1999); Goldin and Rouse (2000); Autor, Levy and Murnane (2003); Bertrand and Mullainathan (2004); Acemoglu and Autor (2011); Autor and Dorn (2013); Card, Heining and Kline (2013); Goldin (2014); Mas and Pallais (2017); Quillian et al. (2017); Kleven, Landais and S\ogaard (2019); Acemoglu and Restrepo (2020); Autor et al. (2020); Cullen and Pakzad-Hurson (2023).
 
 ## 4. What the series leaves out
 

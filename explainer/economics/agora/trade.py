@@ -558,6 +558,49 @@ def eaton_kortum_simulate(T, w, d, theta: float = 4.0, goods: int = 20000, seed:
     return out
 
 
+def eaton_kortum_prices(T, w, d, theta: float = 4.0, goods: int = 20000, seed: int = 0, buyer: int = 0) -> dict:
+    """Eaton and Kortum's striking property, checked by simulation: for one buyer, the prices it actually pays are
+    distributed the same way whichever country the good comes from.  A low-cost source wins more goods, but it wins
+    them at the margin, so the average price of what it sells is no lower.  Returns, by source, the share of goods
+    won and the mean and quartiles of the log price paid, and the log prices of the first ``show`` goods from every
+    source (to draw the race for each good)."""
+    rng = np.random.default_rng(seed)
+    T, w, d = np.asarray(T, float), np.asarray(w, float), np.asarray(d, float)
+    N = len(T)
+    z = (T[None, :] / -np.log(rng.uniform(size=(goods, N)))) ** (1 / theta)
+    cost = w[None, :] * d[buyer][None, :] / z
+    win = np.argmin(cost, axis=1)
+    paid = np.log(cost[np.arange(goods), win])
+    out = {"share": (np.bincount(win, minlength=N) / goods).tolist(), "mean_log": [], "q25": [], "q75": []}
+    for i in range(N):
+        v = paid[win == i]
+        out["mean_log"].append(float(v.mean()))
+        out["q25"].append(float(np.percentile(v, 25)))
+        out["q75"].append(float(np.percentile(v, 75)))
+    out["first"] = np.log(cost[:24]).tolist()
+    out["first_win"] = win[:24].tolist()
+    out["all_mean_log"] = float(paid.mean())
+    # the theory: the price paid is Weibull-type with the same parameter for every source; its mean log price is
+    # -(gamma_euler + ln Phi_n) / theta, with Phi_n = sum_k T_k (w_k d_nk)^-theta
+    Phi = float((T * (w * d[buyer]) ** (-theta)).sum())
+    out["theory_mean_log"] = float(-(np.euler_gamma + np.log(Phi)) / theta)
+    return out
+
+
+def value_added_trade(A, exports, names=None) -> dict:
+    """Trade in value added (Johnson and Noguera; Koopman, Wang and Wei): with input coefficients A[i, j] (dollars of
+    country i's output used to make a dollar of j's), value-added shares v_j = 1 - sum_i A[i, j], and a vector of
+    final-goods exports by each country, the value added each country contributes is diag(v) (I - A)^-1 exports.
+    Returns the gross exports, the value-added content by origin, and each origin's share."""
+    A = np.asarray(A, float)
+    e = np.asarray(exports, float)
+    v = 1 - A.sum(axis=0)
+    L = np.linalg.inv(np.eye(len(v)) - A)
+    va = v * (L @ e)
+    return {"gross": e.tolist(), "value_added": va.tolist(), "share": (va / va.sum()).tolist(), "v": v.tolist(),
+            "leontief": L.tolist(), "names": list(names) if names else None}
+
+
 def hat_algebra(X, dhat, theta: float = 4.0, iters: int = 20000, tol: float = 1e-12, step: float = 0.2) -> dict:
     """Dekle, Eaton and Kortum (2008): counterfactual wages and welfare from observed trade flows X[n, i] (spending
     by n on goods from i, domestic flows on the diagonal) and changes in trade costs dhat[n, i], in the Armington or

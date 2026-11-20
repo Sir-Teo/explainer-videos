@@ -402,6 +402,18 @@ CALLS = {c.key: c for c in [
           "D. Card and A. B. Krueger, American Economic Review 84(4): 772-793 (1994)",
           "D. Cengiz, A. Dube, A. Lindner and B. Zipperer, Quarterly Journal of Economics 134(3): 1405-1454 (2019)",
           "E. Jardim et al., American Economic Journal: Economic Policy 14(2): 263-314 (2022)")),
+    Call("leontief_1983", 39, "Wassily Leontief, at a National Academy of Engineering symposium", "1983",
+         "the role of humans as the most important factor of production is bound to diminish, as the role of horses "
+         "in agriculture was diminished and then eliminated by tractors",
+         "machines' substitution for human labour",
+         "forty years on, a larger share of prime-age Americans work than in 1983, but labour's share of business "
+         "income has fallen and the middle of the wage distribution has hollowed out; artificial intelligence "
+         "reopens the question",
+         "too early to say",
+         ("W. Leontief, \"National Perspective: The Definition of Problem and Opportunity\", in The Long-Term Impact "
+          "of Technology on Employment and Unemployment, National Academy of Engineering (1983), as quoted in "
+          "secondary listings",
+          "BLS via FRED: LNS12300060 (employment-population ratio, 25-54) and PRS85006173 (labor share)")),
     Call("cairncross_1997", 37, "Frances Cairncross, in The Death of Distance", "1997",
          "distance would no longer decide the cost of communicating; location would cease to matter for most "
          "business decisions, and more people would work from home",

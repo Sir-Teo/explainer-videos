@@ -8,6 +8,7 @@ class Chains(VoiceoverScene):
         card(self, 11, r"Value chains", r"Where is an iPhone made?", "Chapter eleven. Value chains.",
              lit={2010: r"Xing and Detert"}, scale=("firm", "world"), horizon=("a year",))
         self.iphone()
+        self.value_added()
 
     def iphone(self):
         C = load("chains")
@@ -65,4 +66,46 @@ class Chains(VoiceoverScene):
             self.play(GrowFromEdge(sliver, RIGHT), FadeIn(lab2[1]), FadeIn(foot[1]))
             vo.wait_until("d")
             self.play(FadeIn(foot[2]))
+        self.clear_scene()
+
+    def value_added(self):
+        V = load("chain_va")
+        names, cols = V["names"], (USA, ARCH, CHINA)
+        gross, va = V["gross"], V["value_added"]
+        bars = VGroup()
+        for k, (nm, g, v, col) in enumerate(zip(names, gross, va, cols)):
+            x = -3.6 + 3.0 * k
+            hg, hv = g / 100 * 3.6, v / 100 * 3.6
+            bg = Rectangle(width=0.9, height=max(hg, 0.02), stroke_width=0, fill_color=GREY_B,
+                           fill_opacity=0.6).move_to(np.array([x - 0.5, -2.3 + hg / 2, 0]))
+            bv = Rectangle(width=0.9, height=max(hv, 0.02), stroke_width=0, fill_color=col,
+                           fill_opacity=0.95).move_to(np.array([x + 0.5, -2.3 + hv / 2, 0]))
+            bars.add(VGroup(bg, label(f"{g:.0f}", font_size=17, color=GREY_A).next_to(bg, UP, buff=0.06),
+                            bv, label(f"{v:.0f}", font_size=17, color=col).next_to(bv, UP, buff=0.06),
+                            label(nm, font_size=18, color=col).move_to(np.array([x, -2.75, 0]))))
+        eq = MathTex(r"\text{value added} = \hat v\,(I - A)^{-1} e", font_size=34).to_edge(UP, buff=0.4)
+        keys = label(r"grey: \ gross exports; \ colour: \ value added in them; \ dollars of a \$100 phone",
+                     font_size=18, color=GREY_A).next_to(eq, DOWN, buff=0.25)
+        side = label(r"the Island's `deficit' \\ with the Far Isle: \\ \$100 gross, \\ \$30 in value added",
+                     font_size=18, color=WHITE).to_edge(RIGHT, buff=0.35).shift(UP * 0.4)
+        tag = island_tag(corner=DR, font_size=14)
+        with self.voiceover(
+            "The iPhone generalizes. Statistical offices now measure trade in value added, using the input-output "
+            "tables of Part three. <bookmark mark='a'/> On the Island's chain, the Far Isle assembles phones from "
+            "the Archipelago's components, which contain the Island's chips. When the Far Isle ships a hundred "
+            "dollars of phones to the Island, gross trade records a hundred dollars from the Far Isle and nothing "
+            "from anyone else. <bookmark mark='b'/> The Leontief inverse follows each dollar back through the chain: "
+            f"the Far Isle added {va[2]:.0f} dollars, the Archipelago {va[1]:.0f}, and the Island itself "
+            f"{va[0]:.0f}, its own chips coming home inside the phone. <bookmark mark='c'/> Bilateral deficits "
+            "measured in gross trade can be wildly misleading: the Island's deficit with the Far Isle is a hundred "
+            "dollars gross but thirty in value added. Johnson and Noguera, and Koopman, Wang and Wei, built these "
+            "measures for the whole world."
+        ) as vo:
+            self.play(Write(eq), FadeIn(keys), FadeIn(tag), *[FadeIn(b_[4]) for b_ in bars])
+            vo.wait_until("a")
+            self.play(*[FadeIn(b_[:2], shift=UP * 0.1) for b_ in bars])
+            vo.wait_until("b")
+            self.play(LaggedStart(*[FadeIn(b_[2:4], shift=UP * 0.1) for b_ in bars], lag_ratio=0.3), run_time=1.5)
+            vo.wait_until("c")
+            self.play(FadeIn(side))
         self.clear_scene()

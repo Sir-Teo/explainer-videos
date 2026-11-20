@@ -407,6 +407,35 @@ FRED_SERIES["FEDMINNFRWG"] = ("Federal minimum hourly wage for nonfarm workers f
                               "dollars an hour, not seasonally adjusted", "monthly",
                               "U.S. Department of Labor, Wage and Hour Division")
 FRED_RETRIEVED["FEDMINNFRWG"] = "2026-11-20"
+# Part 39: the wage structure: median weekly earnings of full-time workers by education and sex, the deciles, the
+# employment of college and high-school graduates, the labour share, and prime-age employment (BLS)
+_LEU = "Employed full time: median usual weekly nominal earnings (second quartile): wage and salary workers"
+WAGE_FRED = {
+    "LEU0252918500A": (f"{_LEU}: bachelor's degree and higher: 25 years and over", "dollars a week", "annual"),
+    "LEU0252917300A": (f"{_LEU}: high school graduates, no college: 25 years and over", "dollars a week", "annual"),
+    "LEU0252916700A": (f"{_LEU}: less than a high school diploma: 25 years and over", "dollars a week", "annual"),
+    "LEU0252881500A": (f"{_LEU}: 16 years and over", "dollars a week", "annual"),
+    "LEU0252881600A": ("Employed full time: median usual weekly real earnings: wage and salary workers: 16 years and "
+                       "over", "1982-84 dollars a week", "annual"),
+    "LEU0252881900A": ("Employed full time: median usual weekly real earnings: wage and salary workers: 16 years and "
+                       "over: men", "1982-84 dollars a week", "annual"),
+    "LEU0252882800A": ("Employed full time: median usual weekly real earnings: wage and salary workers: 16 years and "
+                       "over: women", "1982-84 dollars a week", "annual"),
+    "LEU0252911200A": ("Employed full time: usual weekly nominal earnings (first decile): wage and salary workers: 16 "
+                       "years and over", "dollars a week", "annual"),
+    "LEU0252911500A": ("Employed full time: usual weekly nominal earnings (ninth decile): wage and salary workers: 16 "
+                       "years and over", "dollars a week", "annual"),
+    "LNU02027662": ("Employment level: bachelor's degree and higher, 25 years and over", "thousands of persons, not "
+                    "seasonally adjusted", "monthly"),
+    "LNU02027660": ("Employment level: high school graduates, no college, 25 years and over", "thousands of persons, "
+                    "not seasonally adjusted", "monthly"),
+    "PRS85006173": ("Nonfarm business sector: labor share for all workers", "index 2017 = 100, seasonally adjusted",
+                    "quarterly"),
+    "LNS12300060": ("Employment-population ratio: 25-54 years", "percent, seasonally adjusted", "monthly"),
+}
+for _k, (_t, _u, _f) in WAGE_FRED.items():
+    FRED_SERIES[_k] = (_t, _u, _f, "U.S. Bureau of Labor Statistics")
+FRED_RETRIEVED.update({s: "2026-11-20" for s in WAGE_FRED})
 
 SPF_FILES = ("median_rgdp_level", "median_rgdp_growth", "median_recess_level")
 SPF_URL = ("https://www.philadelphiafed.org/-/media/frbp/assets/surveys-and-data/survey-of-professional-forecasters/"
@@ -870,21 +899,59 @@ DATASETS = {
         "files": ("njmin_1992.csv",),
     },
     "wooldridge": {
-        "title": "Three labour datasets from Wooldridge's Introductory Econometrics, as distributed in the R package "
+        "title": "Five labour datasets from Wooldridge's Introductory Econometrics, as distributed in the R package "
                  "wooldridge: card (Card's 1995 extract of the National Longitudinal Survey of Young Men, 1976), "
-                 "wage1 (the Current Population Survey, 1976) and wage2 (the National Longitudinal Survey, 1980)",
+                 "wage1 (the Current Population Survey, 1976), wage2 (the National Longitudinal Survey, 1980), "
+                 "wagepan (Vella and Verbeek's panel of 545 young men, 1980-87) and cps78_85 (the Current Population "
+                 "Survey, 1978 and 1985)",
         "publisher": "J. M. Wooldridge's textbook data, R package wooldridge (J. Shea), CRAN",
         "citation": "J. M. Wooldridge, Introductory Econometrics: A Modern Approach; D. Card, \"Using Geographic "
                     "Variation in College Proximity to Estimate the Return to Schooling\", in Aspects of Labour "
                     "Market Behaviour (1995); wooldridge 1.4-7 (CRAN), data/card.RData, wage1.RData, wage2.RData, "
-                    "retrieved 2026-11-20",
+                    "wagepan.RData, cps78_85.RData, retrieved 2026-11-20; F. Vella and M. Verbeek, Journal of Applied "
+                    "Econometrics 13(2): 163-183 (1998)",
         "short": "Wooldridge's data, via the R package wooldridge",
         "url": "https://cran.r-project.org/src/contrib/wooldridge_1.4-7.tar.gz",
         "licence": "GPL-3 (the package); the data are the cited surveys and studies",
         "units": "hourly wages in dollars (1976 or 1980) and their logs; years of schooling and experience; IQ",
         "vintage": "2026-11-20",
         "sha256": "2f790f58898225e53dd69d690df118d985ce1553dd554cc7a1f634e0f1bba746",
-        "files": ("card1995.csv", "wage1_1976.csv", "wage2_1980.csv"),
+        "files": ("card1995.csv", "wage1_1976.csv", "wage2_1980.csv", "wagepan_1980_87.csv", "cps78_85.csv"),
+    },
+    "autor_dorn": {
+        "title": "Autor and Dorn's replication data for \"The Growth of Low-Skill Service Jobs and the Polarization of "
+                 "the US Labor Market\": employment shares and wage changes by percentile of the 1980 occupational "
+                 "wage distribution, 1980-2005, the routine share by percentile, and employment shares and wages of "
+                 "330 occupations (occ1990dd), 1950-2005",
+        "publisher": "David Dorn's data page (ddorn.net/data.htm), file archive for Autor and Dorn (2013)",
+        "citation": "D. Autor and D. Dorn, American Economic Review 103(5): 1553-1597 (2013); "
+                    "Autor-Dorn-LowSkillServices-FileArchive.zip, dta/emp-bypctile-1980-2005-rewt-0-czall.dta, "
+                    "dwg-byperc-1980-2005-czall.dta, RTI-bypctile-1980.dta, occ1990dd_data2012.dta and "
+                    "occ-means-by-decade-1980-2005-czall.dta, retrieved 2026-11-20",
+        "short": "Autor and Dorn (2013), replication data",
+        "url": "https://www.ddorn.net/data/Autor-Dorn-LowSkillServices-FileArchive.zip",
+        "licence": "posted by the authors for research use with citation of Autor and Dorn (2013)",
+        "units": "employment shares (percent of employment in each 1980 percentile, or share of all employment); "
+                 "changes in mean log hourly wages; routine task intensity",
+        "vintage": "2026-11-20",
+        "sha256": "a4c9b8200a39d357c1141cfe3cb8b54b7ed586dcf9768e3b1c6689d79c45be0b",
+        "files": ("polarization_1980_2005.csv", "occ1990dd_1950_2005.csv"),
+    },
+    "resume": {
+        "title": "Bertrand and Mullainathan's correspondence experiment: 4,870 fictitious resumes sent to help-wanted "
+                 "advertisements in Boston and Chicago, 2001-02, as distributed in the R package openintro",
+        "publisher": "R package openintro (D. Diez, M. Cetinkaya-Rundel, C. Barr, OpenIntro), CRAN",
+        "citation": "M. Bertrand and S. Mullainathan, \"Are Emily and Greg More Employable Than Lakisha and Jamal?\", "
+                    "American Economic Review 94(4): 991-1013 (2004); openintro 2.5.1 (CRAN), data/resume.rda, "
+                    "retrieved 2026-11-20",
+        "short": "Bertrand and Mullainathan (2004), via openintro",
+        "url": "https://cran.r-project.org/src/contrib/openintro_2.5.1.tar.gz",
+        "licence": "GPL-3 (the package); the data are the cited experiment's",
+        "units": "one row per resume: the advertisement, the city, the job, the name and the race and sex it signals, "
+                 "the resume's contents, and whether the employer called back",
+        "vintage": "2026-11-20",
+        "sha256": "b1c53f2e1eef9bf20cf38bbd09b604933a4ed8d6776b91ff9978f55237ee76a8",
+        "files": ("resume_2001.csv",),
     },
     "trefler_hov": {
         "title": "Trefler's data for \"The Case of the Missing Trade and Other Mysteries\": the factor content of trade, "
@@ -1301,8 +1368,29 @@ WOOLDRIDGE_COLS = {
     "wage1": ("wage", "lwage", "educ", "exper", "tenure", "female", "nonwhite", "married"),
     "wage2": ("wage", "lwage", "educ", "exper", "tenure", "IQ", "KWW", "meduc", "feduc", "black", "urban", "south",
               "married"),
+    "wagepan": ("nr", "year", "lwage", "union", "educ", "exper", "expersq", "married", "black", "hisp", "hours",
+                "manuf", "south"),
+    "cps78_85": ("year", "lwage", "educ", "exper", "expersq", "female", "union", "nonwhite", "married", "south"),
 }
-WOOLDRIDGE_FILES = {"card": "card1995.csv", "wage1": "wage1_1976.csv", "wage2": "wage2_1980.csv"}
+WOOLDRIDGE_FILES = {"card": "card1995.csv", "wage1": "wage1_1976.csv", "wage2": "wage2_1980.csv",
+                    "wagepan": "wagepan_1980_87.csv", "cps78_85": "cps78_85.csv"}
+RESUME_COLS = ("job_ad_id", "job_city", "job_type", "job_industry", "received_callback", "firstname", "race", "gender",
+               "years_college", "college_degree", "honors", "years_experience", "computer_skills", "special_skills",
+               "volunteer", "military", "employment_holes", "has_email_address", "resume_quality")
+RESUME_TEXT = ("job_city", "job_type", "job_industry", "firstname", "race", "gender", "resume_quality")
+# Dorn's occupation groups (subfile_occ1990dd_occgroups.do): occ1990dd code ranges
+OCC_GROUPS = {
+    "managers": ((3, 22),), "management-related": ((23, 37),), "professionals": ((43, 200),),
+    "technicians": ((203, 235),), "financial sales": ((243, 258),), "retail sales": ((274, 283),),
+    "clerical and administrative": ((303, 389),), "police and fire": ((417, 423),),
+    "cleaning and housekeeping": ((405, 408),), "food preparation and service": ((433, 444),),
+    "health service aides": ((445, 447),), "building and grounds": ((448, 455),),
+    "guards": ((415, 415), (425, 427)), "personal appearance": ((457, 458),), "recreation and hospitality": ((459, 467),), "child care": ((468, 468),), "other personal care": ((469, 472),),
+    "farmers and farm managers": ((473, 475),), "other agricultural": ((479, 498),),
+    "mechanics and repairers": ((503, 549),), "construction trades": ((558, 599),), "extraction": ((614, 617),),
+    "precision production": ((628, 699),), "machine operators and assemblers": ((703, 799),),
+    "transport and material moving": ((803, 889),),
+}
 
 
 @functools.lru_cache(maxsize=None)
@@ -1319,6 +1407,34 @@ def wooldridge(name: str) -> dict:
     missing)."""
     rows = _read(HERE / WOOLDRIDGE_FILES[name])
     return {k: [_num(r[k]) for r in rows] for k in WOOLDRIDGE_COLS[name]}
+
+
+@functools.lru_cache(maxsize=None)
+def autor_dorn(table: str = "pctile") -> dict:
+    """Autor and Dorn's data.  ``pctile``: one row per percentile of the 1980 occupational wage distribution (1-100):
+    the percent of employment in it in 1980, 1990, 2000 and 2005 (100 percentiles of 1% each in 1980), the change in
+    mean log hourly wages over each period, and the 1980 share of its employment in routine-intensive occupations.
+    ``occ``: one row per occ1990dd occupation: percent of all employment, 1950-2005 (NaN where not coded), mean log
+    hourly wages in 1980 and 2005, and the 1980 routine task intensity."""
+    f = {"pctile": "polarization_1980_2005.csv", "occ": "occ1990dd_1950_2005.csv"}[table]
+    rows = _read(HERE / f)
+    return {k: [_num(r[k]) for r in rows] for k in rows[0]}
+
+
+def occ_group(code: int) -> str:
+    """Dorn's occupation group of an occ1990dd code (``OCC_GROUPS``), or '' if none."""
+    for name, ranges in OCC_GROUPS.items():
+        if any(a <= code <= b for a, b in ranges):
+            return name
+    return ""
+
+
+@functools.lru_cache(maxsize=None)
+def resume() -> dict:
+    """Bertrand and Mullainathan's 4,870 resumes: ``{column: [...]}`` for :data:`RESUME_COLS` (text columns as
+    strings; ``race`` is 'white' or 'black', ``gender`` 'f' or 'm', ``received_callback`` 0 or 1)."""
+    rows = _read(HERE / "resume_2001.csv")
+    return {k: ([r[k] for r in rows] if k in RESUME_TEXT else [_num(r[k]) for r in rows]) for k in RESUME_COLS}
 
 
 @functools.lru_cache(maxsize=None)
@@ -1863,6 +1979,92 @@ def refresh_wooldridge() -> None:
                     w.writerow(row)
 
 
+def refresh_autor_dorn() -> None:
+    import zipfile  # noqa: PLC0415
+
+    from explainer.economics.data.stata import read_dta  # noqa: PLC0415
+
+    d = DATASETS["autor_dorn"]
+    raw = RAW / "Autor-Dorn-LowSkillServices-FileArchive.zip"
+    # the site may answer automated requests with a browser check; a copy downloaded by hand (with its recorded
+    # SHA-256) in .cache/economics/raw is used as is
+    if raw.exists() and hashlib.sha256(raw.read_bytes()).hexdigest() == d["sha256"]:
+        sha = d["sha256"]
+    else:
+        sha = _download(d["url"], raw)
+    if not zipfile.is_zipfile(raw):
+        raise RuntimeError("autor_dorn: the download is not the archive (download it by hand from the data page)")
+    if sha != d["sha256"]:
+        print(f"autor_dorn: the download differs from the recorded vintage ({sha[:12]})")
+    pre = "Autor-Dorn-LowSkillServices-FileArchive.zip Folder/dta/"
+    tables = {}
+    with zipfile.ZipFile(raw) as z:
+        for name in ("emp-bypctile-1980-2005-rewt-0-czall", "dwg-byperc-1980-2005-czall", "RTI-bypctile-1980",
+                     "occ1990dd_data2012", "occ-means-by-decade-1980-2005-czall"):
+            tmp = RAW / f"{name}.dta"
+            tmp.write_bytes(z.read(pre + name + ".dta"))
+            tables[name] = read_dta(tmp)[0]
+    emp = tables["emp-bypctile-1980-2005-rewt-0-czall"]
+    share = {(int(y), int(p)): v for y, p, v in zip(emp["year"], emp["perc"], emp["empshare"])}
+    wg, rti = tables["dwg-byperc-1980-2005-czall"], tables["RTI-bypctile-1980"]
+    wk = {int(p): k for k, p in enumerate(wg["pctile"])}
+    rk = {int(p): k for k, p in enumerate(rti["pctile"])}
+    with open(HERE / "polarization_1980_2005.csv", "w", newline="", encoding="utf-8") as f:
+        w = csv.writer(f)
+        w.writerow(["pctile", "emp1980", "emp1990", "emp2000", "emp2005", "dwage8090", "dwage9000", "dwage0005",
+                    "dwage8005", "routine_share1980"])
+        for p in range(1, 101):
+            w.writerow([p, *(_fmt(share[(y, p)]) for y in (1980, 1990, 2000, 2005)),
+                        *(_fmt(wg[c][wk[p]]) for c in ("czall_dpercwg8090", "czall_dpercwg9000", "czall_dpercwg0005",
+                                                        "czall_dpercwg8005")),
+                        _fmt(rti["perc_R33a"][rk[p]])])
+    occ, means = tables["occ1990dd_data2012"], tables["occ-means-by-decade-1980-2005-czall"]
+    rti_occ = {int(o): r for o, r, y in zip(means["occ1990dd"], means["RTI_3a"], means["year"]) if int(y) == 1980}
+    cols = ["sh_empl1950", "sh_empl1970", "sh_empl1980", "sh_empl1990", "sh_empl2000", "sh_empl2005",
+            "avg_hrwage1980", "avg_hrwage2005"]
+    with open(HERE / "occ1990dd_1950_2005.csv", "w", newline="", encoding="utf-8") as f:
+        w = csv.writer(f)
+        w.writerow(["occ1990dd", *cols, "rti1980"])
+        for k, o in enumerate(occ["occ1990dd"]):
+            vals = [occ[c][k] for c in cols]
+            r = rti_occ.get(int(o), float("nan"))
+            # shares are written in percent, so that four decimals keep small occupations' shares precise
+            vals = [v * 100 if c.startswith("sh_") else v for c, v in zip(cols, vals)]
+            w.writerow([int(o), *("" if v != v else _fmt(float(v)) for v in vals), "" if r != r else _fmt(float(r))])
+
+
+def refresh_resume() -> None:
+    import tarfile  # noqa: PLC0415
+
+    from explainer.psychology import rdata  # noqa: PLC0415
+
+    d = DATASETS["resume"]
+    raw = RAW / "openintro_2.5.1.tar.gz"
+    if raw.exists() and hashlib.sha256(raw.read_bytes()).hexdigest() == d["sha256"]:
+        sha = d["sha256"]
+    else:
+        sha = _download(d["url"], raw)
+    if sha != d["sha256"]:
+        print(f"resume: the download differs from the recorded vintage ({sha[:12]})")
+    with tarfile.open(raw, "r:gz") as tf:
+        tmp = RAW / "openintro_resume.rda"
+        tmp.write_bytes(tf.extractfile("openintro/data/resume.rda").read())
+    obj = rdata.load(tmp)[0][1]
+    names = obj["attrs"]["names"]["value"]
+    data = {n: c["value"] for n, c in zip(names, obj["value"])}
+    with open(HERE / "resume_2001.csv", "w", newline="", encoding="utf-8") as f:
+        w = csv.writer(f)
+        w.writerow(RESUME_COLS)
+        for i in range(len(data["job_ad_id"])):
+            row = []
+            for c in RESUME_COLS:
+                v = data[c][i]
+                if c in RESUME_TEXT:
+                    row.append("" if v is None else str(v))
+                else:
+                    row.append("" if v is None or (isinstance(v, float) and v != v) else _fmt(float(v)))
+            w.writerow(row)
+
 def refresh_census_cbsa() -> None:
     d = DATASETS["census_cbsa"]
     raw = RAW / "cbsa-est2024-alldata.csv"
@@ -2307,7 +2509,7 @@ REFRESH = {"draft1970": refresh_draft1970, "ajr": refresh_ajr, "maddison2023": r
            "hlw": refresh_hlw, "ramey_zubairy": refresh_ramey_zubairy, "ramey_tax": refresh_ramey_tax,
            "blanchard_leigh": refresh_blanchard_leigh, "rr_hap": refresh_rr_hap, "jst": refresh_jst,
            "bigmac": refresh_bigmac, "wdi_ca": refresh_wdi_ca, "trefler_hov": refresh_trefler_hov,
-           "cepii_gravity": refresh_cepii_gravity}
+           "cepii_gravity": refresh_cepii_gravity, "autor_dorn": refresh_autor_dorn, "resume": refresh_resume}
 
 
 def main() -> None:

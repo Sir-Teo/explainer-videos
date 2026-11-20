@@ -210,3 +210,287 @@ def heckman_two_step(y, X, d, Z) -> dict:
     corr = ols(y[s], np.column_stack([X[s], imr[s]]))
     return {"probit": g.tolist(), "naive": naive["b"], "corrected": corr["b"][:-1], "lambda": corr["b"][-1],
             "n_selected": int(s.sum())}
+
+
+# ======================================================================================================================
+# Part II (Part 39): the wage structure
+# ======================================================================================================================
+# --- the canonical model: two skills and the race between education and technology ---------------------------------
+def skill_premium(rel_supply, rel_tech, sigma: float):
+    """The log college premium in the canonical model, with output (A_L L)^rho + (A_H H)^rho, rho = 1 - 1/sigma:
+    ln(w_H/w_L) = (1 - 1/sigma) ln(A_H/A_L) - (1/sigma) ln(H/L).  Arguments are logs of H/L and A_H/A_L."""
+    return (1 - 1 / sigma) * np.asarray(rel_tech, float) - np.asarray(rel_supply, float) / sigma
+
+
+def implied_demand(log_premium, log_supply, sigma: float):
+    """Katz and Murphy's relative demand index, D = ln(w_H/w_L) + ln(H/L)/sigma: the shift in relative demand that,
+    with elasticity ``sigma``, reconciles the observed premium with the observed supply."""
+    return np.asarray(log_premium, float) + np.asarray(log_supply, float) / sigma
+
+
+def katz_murphy(log_premium, log_supply, years) -> dict:
+    """Least squares of the log premium on a linear trend and log relative supply; sigma = -1/slope."""
+    y = np.asarray(log_premium, float)
+    t = np.asarray(years, float) - float(np.min(years))
+    X = np.column_stack([np.ones_like(t), t, np.asarray(log_supply, float)])
+    r = ols(y, X)
+    return {"trend": r["b"][1], "slope": r["b"][2], "se_slope": r["se"][2], "sigma": -1 / r["b"][2],
+            "corr_trend_supply": float(np.corrcoef(t, X[:, 2])[0, 1]), "n": r["n"]}
+
+
+# --- tasks: a Ricardian assignment of three skills to a continuum of tasks (Acemoglu and Autor 2011) -----------------
+def task_model(L: float = 1.0, M: float = 1.0, H: float = 1.0, beta=(0.0, 1.0, 2.0), auto=None) -> dict:
+    """Tasks on [0, 1] combined Cobb-Douglas, so each task gets the same spending.  Low, middle and high skills have
+    productivity exp(beta_k i) in task i, so higher skills have a comparative advantage in higher tasks.  Low skills do
+    [0, I_L], middle (I_L, I_H), high [I_H, 1]; a band ``auto`` = (a, b) inside the middle range is done by machines.
+    The thresholds solve w_k N_k = (spending on k's tasks) and, at each threshold, indifference between the two
+    skills: ln w_M - ln w_L = (beta_M - beta_L) I_L and ln w_H - ln w_M = (beta_H - beta_M) I_H.  Returns the
+    thresholds, relative wages and the share of output each group earns (machines earn the band's share)."""
+    from scipy.optimize import fsolve  # noqa: PLC0415
+
+    a, b = auto if auto else (0.5, 0.5)
+    band = b - a
+
+    def eqs(v):
+        il, ih = v
+        sl, sm, sh = il, (ih - il) - band, 1 - ih
+        sm = max(sm, 1e-9)
+        return [np.log(sm / M) - np.log(max(sl, 1e-9) / L) - (beta[1] - beta[0]) * il,
+                np.log(max(sh, 1e-9) / H) - np.log(sm / M) - (beta[2] - beta[1]) * ih]
+
+    il, ih = fsolve(eqs, [min(0.3, a - 0.05), max(0.7, b + 0.05)], xtol=1e-13)
+    sl, sm, sh = il, (ih - il) - band, 1 - ih
+    wl, wm, wh = sl / L, sm / M, sh / H
+    return {"I_L": float(il), "I_H": float(ih), "share_L": float(sl), "share_M": float(sm), "share_H": float(sh),
+            "share_K": float(band), "wM_wL": float(wm / wl), "wH_wM": float(wh / wm), "wH_wL": float(wh / wl),
+            "lnw": [float(np.log(wl)), float(np.log(wm)), float(np.log(wh))]}
+
+
+# --- firms: a worker-firm economy and the two-way fixed-effects (AKM) model -------------------------------------------
+def worker_firm_economy(n_workers: int = 20000, n_firms: int = 400, years: int = 6, sd_alpha: float = 0.40,
+                        sd_psi: float = 0.15, sort: float = 0.3, move: float = 0.10, sd_e: float = 0.12,
+                        seed: int = 0) -> dict:
+    """Log wage y_it = alpha_i + psi_j(i,t) + e_it.  Firms' premiums psi_j are drawn once; each worker starts at a
+    firm chosen with a tilt towards high-premium firms for high-alpha workers (``sort``); each year a share ``move``
+    of workers moves to a new firm chosen the same way.  Returns the panel and the true variance decomposition."""
+    rng = np.random.default_rng(seed)
+    alpha = rng.normal(0, sd_alpha, n_workers)
+    psi = rng.normal(0, sd_psi, n_firms)
+    rank = np.argsort(np.argsort(psi)) / (n_firms - 1)          # firm's premium rank in [0, 1]
+    z = (alpha - alpha.mean()) / alpha.std()
+
+    def pick(zz):
+        # a worker with standardized ability z draws a firm whose premium rank is near Phi(sort * z + noise)
+        target = norm.cdf(sort * zz + np.sqrt(1 - sort ** 2) * rng.normal(size=zz.size))
+        return np.clip(np.searchsorted(np.sort(rank), target), 0, n_firms - 1)
+    order = np.argsort(rank)
+    firm = np.empty((n_workers, years), int)
+    firm[:, 0] = order[pick(z)]
+    for t in range(1, years):
+        firm[:, t] = firm[:, t - 1]
+        mv = rng.random(n_workers) < move
+        firm[mv, t] = order[pick(z[mv])]
+    y = alpha[:, None] + psi[firm] + rng.normal(0, sd_e, (n_workers, years))
+    a_obs, p_obs = np.repeat(alpha, years), psi[firm].ravel()
+    tot = y.var()
+    truth = {"var_y": float(tot), "var_alpha": float(a_obs.var()), "var_psi": float(p_obs.var()),
+             "cov2": float(2 * np.cov(a_obs, p_obs)[0, 1]), "corr": float(np.corrcoef(a_obs, p_obs)[0, 1])}
+    movers = int((firm != firm[:, :1]).any(axis=1).sum())
+    return {"y": y, "firm": firm, "alpha": alpha, "psi": psi, "truth": truth, "movers": movers}
+
+
+def akm(y, firm) -> dict:
+    """The two-way fixed-effects model by sparse least squares (LSQR) on the panel: worker and firm dummies, one firm
+    normalized to zero.  The firms must be connected by movers.  Returns the estimated effects and the plug-in variance
+    decomposition (shares of the variance of y)."""
+    from scipy.sparse import csr_matrix, hstack  # noqa: PLC0415
+    from scipy.sparse.linalg import lsqr  # noqa: PLC0415
+
+    y = np.asarray(y, float)
+    n, T = y.shape
+    J = int(firm.max()) + 1
+    rows = np.arange(n * T)
+    W = csr_matrix((np.ones(n * T), (rows, np.repeat(np.arange(n), T))), shape=(n * T, n))
+    F = csr_matrix((np.ones(n * T), (rows, firm.ravel())), shape=(n * T, J))[:, 1:]
+    X = hstack([W, F]).tocsr()
+    sol = lsqr(X, y.ravel(), atol=1e-10, btol=1e-10, iter_lim=5000)[0]
+    a_hat, p_hat = sol[:n], np.r_[0.0, sol[n:]]
+    a_obs, p_obs = np.repeat(a_hat, T), p_hat[firm].ravel()
+    tot = y.var()
+    return {"alpha": a_hat, "psi": p_hat, "var_alpha": float(a_obs.var()), "var_psi": float(p_obs.var()),
+            "cov2": float(2 * np.cov(a_obs, p_obs)[0, 1]), "corr": float(np.corrcoef(a_obs, p_obs)[0, 1]),
+            "share_psi": float(p_obs.var() / tot), "share_alpha": float(a_obs.var() / tot),
+            "share_cov": float(2 * np.cov(a_obs, p_obs)[0, 1] / tot)}
+
+
+# --- superstars (Rosen 1981) ------------------------------------------------------------------------------------------
+def superstars(n: int = 100000, sd_talent: float = 0.10, reach=(1.0, 3.0, 8.0), seed: int = 0) -> dict:
+    """Talent q is lognormal with a small spread.  When one performer can serve a larger audience, earnings become a
+    steeper function of talent: earnings proportional to q^k, with k the 'reach' of the technology (k = 1: earnings
+    track talent).  Returns the top 1% share of talent and of earnings at each reach."""
+    rng = np.random.default_rng(seed)
+    q = np.exp(rng.normal(0, sd_talent, n))
+    qs = np.sort(q)[::-1]
+    top = n // 100
+    out = {"talent_top1": float(qs[:top].sum() / qs.sum()), "reach": list(reach), "top1": [], "p99_p50": []}
+    for k in reach:
+        e = qs ** k
+        out["top1"].append(float(e[:top].sum() / e.sum()))
+        out["p99_p50"].append(float(np.percentile(e, 99) / np.percentile(e, 50)))
+    return out
+
+
+# --- compensating differentials: the hedonic wage locus (Rosen 1974) --------------------------------------------------
+def hedonic(n: int = 60, seed: int = 0, r_max: float = 1.0) -> dict:
+    """Workers dislike risk r at rate d_i (utility w - d_i r); a firm finds safety costly at rate k_j, so reducing risk
+    from r_max costs k_j (r_max - r)^2 / 2.  In a match, the worker's marginal distaste equals the firm's marginal cost
+    of safety: d_i = k_j (r_max - r).  Workers who mind risk least sort into firms for which safety is dearest.  The
+    wage locus w(r) has slope d at each job's r: it is the envelope of the workers' indifference lines."""
+    rng = np.random.default_rng(seed)
+    d = np.sort(np.exp(rng.normal(np.log(1.0), 0.35, n)))       # ascending distaste
+    k = np.sort(np.exp(rng.normal(np.log(2.0), 0.35, n)))[::-1]  # descending cost of safety
+    r = np.clip(r_max - d / k, 0.0, r_max)
+    o = np.argsort(r)
+    r, d_at = r[o], d[o]
+    w = np.r_[0.0, np.cumsum(0.5 * (d_at[1:] + d_at[:-1]) * np.diff(r))]
+    slope = np.polyfit(r, w, 1)[0]
+    return {"r": r.tolist(), "w": w.tolist(), "d": d_at.tolist(), "slope_ols": float(slope),
+            "mean_d": float(d.mean())}
+
+
+# --- discrimination --------------------------------------------------------------------------------------------------
+def becker(share_minority: float, share_unprejudiced: float, d_scale: float = 0.15, n: int = 10000,
+           seed: int = 0) -> dict:
+    """Becker (1957): each employer hires the same number of workers; an employer with taste d acts as if a minority
+    worker cost w_m (1 + d).  Prejudice d is zero for a share of employers and exponential (mean ``d_scale``) for the
+    rest.  Minority workers go first to the least prejudiced; the market gap w_maj/w_min - 1 is the taste of the
+    marginal employer who must hire them.  If unprejudiced employers can absorb every minority worker, the gap is
+    zero."""
+    rng = np.random.default_rng(seed)
+    d = np.where(rng.random(n) < share_unprejudiced, 0.0, rng.exponential(d_scale, n))
+    ds = np.sort(d)
+    k = int(np.ceil(share_minority * n)) - 1
+    gap = float(ds[max(k, 0)])
+    return {"gap": gap, "d_sorted": ds[:: max(n // 400, 1)].tolist(), "share_minority": share_minority,
+            "share_unprejudiced": share_unprejudiced}
+
+
+def phelps(signal, mu=(0.0, 0.0), sd_q: float = 1.0, sd_noise=(0.5, 1.0)) -> dict:
+    """Statistical discrimination (Phelps 1972): an employer sees a test score s = q + e and pays expected
+    productivity, E[q | s] = (1 - lam) mu_g + lam s with lam = sd_q^2 / (sd_q^2 + sd_e^2).  A noisier score for one
+    group flattens its pay line: equal scores, unequal pay, though nobody's tastes enter."""
+    s = np.asarray(signal, float)
+    out = {}
+    for g, (m, se) in enumerate(zip(mu, sd_noise)):
+        lam = sd_q ** 2 / (sd_q ** 2 + se ** 2)
+        out[g] = {"lam": lam, "pay": ((1 - lam) * m + lam * s).tolist()}
+    return out
+
+
+def oaxaca(y_a, X_a, y_b, X_b) -> dict:
+    """The Oaxaca-Blinder decomposition of mean(y_a) - mean(y_b), with group b's coefficients as the reference:
+    explained = (xbar_a - xbar_b) beta_b, unexplained = xbar_a (beta_a - beta_b).  X includes a constant."""
+    ra, rb = ols(y_a, X_a), ols(y_b, X_b)
+    ba, bb = np.array(ra["b"]), np.array(rb["b"])
+    xa, xb = np.asarray(X_a, float).mean(0), np.asarray(X_b, float).mean(0)
+    gap = float(np.mean(y_a) - np.mean(y_b))
+    explained = float((xa - xb) @ bb)
+    return {"gap": gap, "explained": explained, "unexplained": gap - explained,
+            "by_variable": ((xa - xb) * bb).tolist(),
+            "beta_a": ba.tolist(), "beta_b": bb.tolist()}
+
+
+def within(y, X, ids) -> dict:
+    """The fixed-effects (within) estimator: demean y and X by ``ids`` and run least squares (no constant); the
+    standard errors are clustered by id."""
+    y, X, ids = np.asarray(y, float), np.asarray(X, float), np.asarray(ids)
+    u, inv = np.unique(ids, return_inverse=True)
+    cnt = np.bincount(inv)
+
+    def demean(v):
+        return v - (np.bincount(inv, weights=v) / cnt)[inv]
+    yd = demean(y)
+    Xd = np.column_stack([demean(X[:, j]) for j in range(X.shape[1])])
+    b = np.linalg.lstsq(Xd, yd, rcond=None)[0]
+    e = yd - Xd @ b
+    A = np.linalg.inv(Xd.T @ Xd)
+    S = np.zeros((X.shape[1], X.shape[1]))
+    for g in range(len(u)):
+        sc = Xd[inv == g].T @ e[inv == g]
+        S += np.outer(sc, sc)
+    G, n, k = len(u), len(y), X.shape[1]
+    V = A @ S @ A * G / (G - 1) * (n - 1) / (n - k - G)
+    return {"b": b.tolist(), "se": np.sqrt(np.diag(V)).tolist(), "n": n, "groups": G}
+
+
+# --- the child penalty: an event study around the first birth ---------------------------------------------------------
+def child_penalty(n: int = 6000, penalty=(0.0, -0.30, -0.25, -0.22, -0.20), seed: int = 0) -> dict:
+    """Simulated earnings of mothers and fathers from five years before to ten years after the first child, with
+    common age and year profiles; mothers' earnings fall by the planted ``penalty`` path (years 0, 1, 2, 5, 10, linear
+    between), fathers' do not.  The event study regresses log earnings on event-time dummies (year -1 omitted) with
+    age and calendar-year controls, separately by sex, and reports the penalty as in Kleven, Landais and Sogaard:
+    the gap between women's and men's event-time effects, relative to the counterfactual."""
+    rng = np.random.default_rng(seed)
+    ev = np.arange(-5, 11)
+    knots_t, knots_v = [0, 1, 2, 5, 10], list(penalty)
+    planted = np.where(ev < 0, 0.0, np.interp(ev, knots_t, knots_v))
+    out = {"event": ev.tolist(), "planted": planted.tolist()}
+    res = {}
+    for sex in ("men", "women"):
+        age0 = rng.integers(20, 41, n)                     # age at first birth
+        year0 = rng.integers(1985, 2016, n)
+        rows_y, rows_e, rows_age, rows_year = [], [], [], []
+        person = rng.normal(0, 0.4, n)
+        for i in range(n):
+            age = age0[i] + ev
+            yr = year0[i] + ev
+            base = 10 + person[i] + 0.06 * (age - 25) - 0.0012 * (age - 25) ** 2 + 0.01 * (yr - 2000)
+            eff = planted if sex == "women" else 0.0
+            rows_y.append(base + eff + rng.normal(0, 0.15, ev.size))
+            rows_e.append(ev)
+            rows_age.append(age)
+            rows_year.append(yr)
+        y = np.concatenate(rows_y)
+        e = np.concatenate(rows_e)
+        age = np.concatenate(rows_age)
+        yr = np.concatenate(rows_year)
+        D = np.column_stack([(e == k).astype(float) for k in ev if k != -1])
+        A = np.column_stack([(age == a).astype(float) for a in np.unique(age)[1:]])
+        Y = np.column_stack([(yr == t).astype(float) for t in np.unique(yr)[1:]])
+        X = np.column_stack([np.ones_like(y), D, A, Y])
+        b = np.linalg.lstsq(X, y, rcond=None)[0]
+        coefs = np.insert(b[1:1 + D.shape[1]], list(ev).index(-1), 0.0)
+        res[sex] = coefs.tolist()
+    out["men"], out["women"] = res["men"], res["women"]
+    out["penalty"] = (np.array(res["women"]) - np.array(res["men"])).tolist()
+    out["long_run"] = float(np.mean(out["penalty"][-5:]))
+    return out
+
+
+# --- robots across commuting zones (Acemoglu and Restrepo 2020) --------------------------------------------------------
+ROBOT_INDUSTRIES = (("cars", 8.0), ("electronics", 3.0), ("metals", 3.0), ("plastics", 2.0), ("food", 0.5),
+                    ("services", 0.0))
+
+
+def robot_zones(n_zones: int = 300, beta: float = -0.20, manuf_trend: float = -3.0, noise: float = 0.5,
+                industries=ROBOT_INDUSTRIES, seed: int = 0) -> dict:
+    """Zones differ in their mix of industries; each industry adopts robots at its own national rate (robots per
+    thousand workers), so a zone's exposure is its employment-weighted average.  The change in a zone's
+    employment-to-population ratio (percentage points) is ``beta`` times exposure, plus a decline common to all
+    manufacturing (``manuf_trend`` points per unit of manufacturing share: trade, offshoring) and noise.  Exposure
+    and the manufacturing share are correlated, so a regression that omits the share overstates the robots' effect;
+    controlling for it recovers ``beta``."""
+    rng = np.random.default_rng(seed)
+    names = [n for n, _ in industries]
+    dr = np.array([d for _, d in industries])
+    conc = np.array([0.6, 0.6, 0.8, 0.8, 1.0, 6.0])
+    shares = rng.dirichlet(conc, n_zones)
+    expo = shares @ dr
+    manuf = shares[:, :5].sum(1)
+    demp = beta * expo + manuf_trend * manuf + rng.normal(0, noise, n_zones)
+    one = np.ones(n_zones)
+    naive = ols(demp, np.column_stack([one, expo]))
+    ctrl = ols(demp, np.column_stack([one, expo, manuf]))
+    return {"names": names, "robots": dr.tolist(), "exposure": expo.tolist(), "manuf": manuf.tolist(),
+            "demp": demp.tolist(), "naive": naive["b"][1], "naive_se": naive["se"][1], "ctrl": ctrl["b"][1],
+            "ctrl_se": ctrl["se"][1], "beta": beta, "corr": float(np.corrcoef(expo, manuf)[0, 1])}

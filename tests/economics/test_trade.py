@@ -174,3 +174,18 @@ def test_hat_algebra_matches_acr_and_nothing_changes_at_unit_costs():
 def test_shift_share_iv_beats_ols():
     S = trade.shift_share(seed=3)
     assert abs(S["iv"] - S["beta"]) < abs(S["ols"] - S["beta"]) and S["first_stage"] > 0
+
+
+def test_eaton_kortum_prices_are_the_same_for_every_source():
+    T, d = (1.0, 2.0, 0.5), ((1.0, 1.5, 2.0), (1.5, 1.0, 1.8), (2.0, 1.8, 1.0))
+    r = trade.eaton_kortum_prices(T, np.ones(3), d, 4.0, goods=40000, seed=3, buyer=0)
+    shares = trade.eaton_kortum_shares(T, np.ones(3), d, 4.0)[0]
+    assert np.allclose(r["share"], shares, atol=0.01)
+    assert max(abs(m - r["theory_mean_log"]) for m in r["mean_log"]) < 0.02
+
+
+def test_value_added_trade_adds_up_and_traces_the_chain():
+    A = ((0.0, 0.15, 0.10), (0.0, 0.0, 0.60), (0.0, 0.0, 0.0))
+    r = trade.value_added_trade(A, (0.0, 0.0, 100.0))
+    assert abs(sum(r["value_added"]) - 100.0) < 1e-9
+    assert np.allclose(r["value_added"], (19.0, 51.0, 30.0))

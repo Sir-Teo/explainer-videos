@@ -851,6 +851,11 @@ TRUTHS = {
         # Eaton and Kortum (chapter 7): three islands' technology levels and shipping costs
         "ek": {"T": (1.0, 2.0, 0.5), "d": ((1.0, 1.5, 2.0), (1.5, 1.0, 1.8), (2.0, 1.8, 1.0)), "theta": 4.0,
                "goods": 20000, "seed": 7},
+        # a value chain (chapter 11): the Island designs, the Archipelago makes components, the Far Isle assembles;
+        # A[i, j] is the Island-dollars of i's output in a dollar of j's; the Far Isle sells $100 of phones
+        "chain": {"A": ((0.0, 0.15, 0.10), (0.0, 0.0, 0.60), (0.0, 0.0, 0.0)), "exports": (0.0, 0.0, 100.0)},
+        # the frontier (chapter 14): the share of traded intermediate inputs in costs
+        "intermediates": 0.5,
         # the China shock on the Island's 400 local labour markets (chapter 10): the planted effect of a unit of
         # import exposure on the manufacturing share
         "shock": {"n_zones": 400, "n_ind": 30, "beta": -0.6, "seed": 36},
@@ -895,6 +900,25 @@ TRUTHS = {
                    "noise": 0.25, "seeds": 200},
         # Roy's two occupations (chapter 11): fishing and the boatyard
         "roy": {"n": 20000, "mu": (2.6, 2.5), "sd": (0.4, 0.6), "rho": 0.3, "cost_sd": 0.3, "seed": 38},
+    },
+    39: {
+        # the task model (chapter 4): three skills, productivity exp(beta i); machines take the band (0.40, 0.60)
+        "tasks": {"L": 1.0, "M": 1.0, "H": 1.0, "beta": (0.0, 1.0, 2.0), "auto": (0.40, 0.60)},
+        # robots (chapter 5): 300 commuting zones; the planted effect is Acemoglu and Restrepo's -0.2 points per
+        # robot per thousand workers, and manufacturing declines for other reasons too
+        "robots": {"n_zones": 300, "beta": -0.20, "manuf_trend": -3.0, "noise": 0.4, "seed": 39},
+        # the worker-firm economy (chapter 6): worker and firm effects, sorting, mobility
+        "firms": {"n_workers": 20000, "n_firms": 400, "years": 6, "sd_alpha": 0.40, "sd_psi": 0.15, "sort": 0.3,
+                  "move": 0.10, "sd_e": 0.12, "seed": 39},
+        # superstars (chapter 7): talent's spread, and the reach of three technologies
+        "stars": {"n": 100000, "sd_talent": 0.10, "reach": (1.0, 3.0, 8.0), "seed": 39},
+        # compensating differentials (chapter 9): sixty jobs
+        "hedonic": {"n": 60, "seed": 39},
+        # discrimination (chapter 10): an eighth of workers in the minority; Phelps's two noise levels
+        "becker": {"share_minority": 0.125, "d_scale": 0.15},
+        "phelps": {"sd_q": 1.0, "sd_noise": (0.5, 1.0)},
+        # the child penalty (chapter 12): mothers' earnings in years 0, 1, 2, 5 and 10 after the first child
+        "child": {"n": 4000, "penalty": (0.0, -0.30, -0.25, -0.22, -0.20), "seed": 39},
     },
 }
 

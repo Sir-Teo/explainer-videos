@@ -949,6 +949,29 @@ brackets on screen.
 | the Mariel boatlift; synthetic control | 马里埃尔偷渡潮；合成控制法 |
 | employer concentration; non-compete agreements | 雇主集中度；竞业禁止协议 |
 
+## Part 39
+
+| English | 中文 |
+|---|---|
+| the wage structure; wage inequality | 工资结构；工资不平等 |
+| the college premium | 大学溢价 |
+| the race between education and technology | 教育与技术的赛跑 |
+| skill-biased technical change; the canonical model | 技能偏向型技术进步；标准模型 |
+| the elasticity of substitution between skill groups | 技能组之间的替代弹性 |
+| routine and non-routine tasks; task-based model | 常规任务与非常规任务；基于任务的模型 |
+| job polarization; the hollowing out of the middle | 就业极化；中间层的空心化 |
+| robot exposure | 机器人暴露度 |
+| the two-way fixed-effects (AKM) model; firm wage premium | 双向固定效应（AKM）模型；企业工资溢价 |
+| assortative matching; limited-mobility bias | 同类匹配；有限流动性偏误 |
+| superstars; the labour share | 超级明星；劳动收入份额 |
+| the union wage premium; wage compression | 工会工资溢价；工资压缩 |
+| compensating differentials; the hedonic wage function | 补偿性工资差异；特征工资函数 |
+| taste-based discrimination; statistical discrimination | 偏好型歧视；统计性歧视 |
+| correspondence study; audit study | 通信实验；审计研究 |
+| the Oaxaca-Blinder decomposition | 瓦哈卡—布林德分解 |
+| the gender pay gap; the child penalty | 性别工资差距；生育惩罚 |
+| pay transparency; algorithmic hiring | 薪酬透明；算法招聘 |
+
 ## Names
 
 | English | 中文 |

@@ -568,7 +568,54 @@ DIALS = {d.key: d for d in [
                       "wages (supply elasticity 3)", 1.16, where="videos/economics/econ38/compute.py, item border",
                       checked="2026-11-20"),
          )),
-    Dial("skill_substitution", "elasticity of substitution between skilled and unskilled labour", "", (39,)),
+    Dial("skill_substitution", "elasticity of substitution between skilled and unskilled labour",
+         "elasticity of substitution between college and high-school workers (sigma)", (39,),
+         status="settled within a range", checked="2026-11-20",
+         meaning="how far the college premium falls when college graduates become more plentiful: estimates from "
+                 "national time series, cohorts and states run from about 1.4 to 2.5; at the low end, a rise in "
+                 "graduates lowers the premium a lot, so education policy can offset technology's push; recent "
+                 "national data alone cannot pin it down, because supply has grown almost exactly in a line",
+         estimates=(
+             Estimate("Katz and Murphy", 1992, "regression", "US, 1963-87: the premium on a trend and relative "
+                      "supply (coefficient about -0.709)", 1.41,
+                      where="Quarterly Journal of Economics 107(1): 35-78; Blanchard's account (FRBNY EPR 1995)",
+                      checked="2026-11-20"),
+             Estimate("Ciccone and Peri", 2005, "IV", "US states, 1950-90, with child-labour and compulsory "
+                      "schooling laws as instruments", 1.5,
+                      where="Review of Economics and Statistics 87(4): 652-663, abstract", checked="2026-11-20"),
+             Estimate("Card and Lemieux", 2001, "structural", "US, UK and Canada, cohorts and age groups, 1959-95 "
+                      "(about 5 between age groups)", 2.5,
+                      where="Quarterly Journal of Economics 116(2): 705-746, abstract", checked="2026-11-20"),
+         )),
+    Dial("firm_premium_share", "the firm share of wage variance", "percent of the variance of log wages due to "
+         "firm effects in a two-way fixed-effects (AKM) model", (39,), status="depends on the setting",
+         checked="2026-11-20",
+         meaning="how much of pay is where you work rather than who you are: in large administrative panels "
+                 "firm premiums account for something like a fifth of wage variance, and the sorting of high-paid "
+                 "workers into high-paying firms has grown; with few movers the plug-in estimates overstate firm "
+                 "effects and understate sorting",
+         estimates=(
+             Estimate("Card Heining and Kline (1985-91)", 2013, "regression", "West German social security "
+                      "records, AKM", 18.5, where="NBER Working Paper 18522, Table 3", checked="2026-11-20"),
+             Estimate("Card Heining and Kline (2002-09)", 2013, "regression", "West German social security "
+                      "records, AKM", 21.2, where="NBER Working Paper 18522, Table 3", checked="2026-11-20"),
+             Estimate("this film (the Island)", 2026, "regression", "20,000 workers, 400 firms, six years, a tenth "
+                      "moving each year; planted share 10.7%", 11.0, where="videos/economics/econ39/compute.py, item firms",
+                      checked="2026-11-20"),
+         )),
+    Dial("callback_gap", "the call-back gap in hiring experiments", "call-backs for White applicants per call-back "
+         "for African-American applicants, minus one, percent", (39,), status="settled within a range",
+         checked="2026-11-20",
+         meaning="how much more often employers call back the same application under a White-sounding name: "
+                 "about a third to a half more in American field experiments, with no decline since 1989; it "
+                 "measures the first step of hiring, not wages",
+         estimates=(
+             Estimate("this film (Bertrand and Mullainathan's data)", 2004, "RCT", "4,870 resumes to 1,323 "
+                      "advertisements, Boston and Chicago, 2001-02; 95% interval", 49.7, lo=23.3, hi=81.7,
+                      where="videos/economics/econ39/compute.py, item resume", checked="2026-11-20"),
+             Estimate("Quillian Pager Hexel and Midtboen", 2017, "meta-analysis", "24 US field experiments since "
+                      "1989", 36.0, where="PNAS 114(41): 10870-10875", checked="2026-11-20"),
+         )),
     Dial("ige", "intergenerational elasticity of income", "", (40,)),
     Dial("eti", "elasticity of taxable income", "", (41,)),
     Dial("ui_duration", "duration elasticity of unemployment benefits", "", (42,)),
@@ -1741,6 +1788,29 @@ SHOWN = {
         ("Christiano, Eichenbaum and Evans (2005); Smets and Wouters (2007)", "medium-scale frictions; the hump "
          "computed with habits, indexation and smoothing"),
         ("Bernanke (2002)", "the Called it? card on deflation"),
+    ],
+    39: [
+        ("Bertrand and Mullainathan (2004)", "the resumes, recomputed from the data and entered in a dial"),
+        ("Katz and Murphy (1992); Goldin and Katz (2008); Tinbergen", "the race between education and technology, "
+         "the elasticity entered in a dial and the regression refitted"),
+        ("Card and Lemieux (2001); Ciccone and Peri (2005); Autor, Goldin and Katz (2020)", "elasticities and "
+         "shares, stated and entered in a dial"),
+        ("Autor, Levy and Murnane (2003); Acemoglu and Autor (2011)", "tasks, stated; the task model computed"),
+        ("Autor and Dorn (2013)", "polarization, from the replication data"),
+        ("Acemoglu and Restrepo (2020)", "robots, stated; the design mimicked on the Island"),
+        ("Abowd, Kramarz and Margolis (1999); Card, Heining and Kline (2013)", "AKM, computed on the Island; "
+         "Germany, stated and entered in a dial"),
+        ("Rosen (1981); Autor et al. (2020)", "superstars, computed; the labour share from FRED; firms, stated"),
+        ("Freeman and Medoff (1984); Vella and Verbeek (1998)", "unions, recomputed from the panel"),
+        ("Smith (1776); Rosen (1974); Mas and Pallais (2017)", "compensating differentials, computed and stated"),
+        ("Becker (1957); Phelps (1972); Arrow (1973)", "discrimination in theory, computed"),
+        ("Goldin and Rouse (2000); Quillian et al. (2017)", "field experiments, stated; the meta-analysis entered "
+         "in a dial"),
+        ("Oaxaca (1973); Blinder (1973)", "the decomposition, on the CPS"),
+        ("Goldin (2014); Kleven, Landais and Sogaard (2019)", "the gender gap, stated; the child penalty mimicked "
+         "on the Island"),
+        ("Cullen and Pakzad-Hurson (2023); Reuters (2018)", "pay transparency and a hiring algorithm, stated"),
+        ("Leontief (1983)", "the Called it? card"),
     ],
     38: [
         ("Card and Krueger (1994)", "the New Jersey-Pennsylvania border, recomputed from the public data; the own-wage "

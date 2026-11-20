@@ -9,6 +9,7 @@ class Firms(VoiceoverScene):
              lit={1995: r"Bernard and Jensen"}, scale=("firm", "nation"), horizon=("a year",))
         self.facts()
         self.island()
+        self.profits()
 
     def facts(self):
         F = load("firms")
@@ -75,4 +76,42 @@ class Firms(VoiceoverScene):
             for mk, r_ in zip("bcd", side[1:]):
                 vo.wait_until(mk)
                 self.play(FadeIn(r_))
+        self.clear_scene()
+
+    def profits(self):
+        M = load("melitz")
+        sig, f, fx, tau = M["sigma"], M["f"], M["fx"], M["tau"]
+        xt, xx = M["phi_trade"] ** (sig - 1), M["phi_export"] ** (sig - 1)
+        A = f / xt
+        ax = plane([0, 30], [-2.0, 6.0], center=LEFT * 1.8 + DOWN * 0.4, x_length=8.6, y_length=4.6,
+                   xticks=[0, 10, 20, 30], yticks=[-2, 0, 2, 4, 6], xlabel=r"productivity, \ $\varphi^{\sigma - 1}$",
+                   ylabel=r"profit", xfmt=lambda v: f"{v:.0f}", yfmt=lambda v: f"{v:+.0f}", font_size=14)
+        x = np.linspace(0, 30, 60)
+        zero = seg(ax, 0, 0, 30, 0, GREY_B, 1.5, dashed=True)
+        pd = path(ax, x, A * x - f, ISLAND, 3.4, smooth=False, yr=(-2.0, 6.0))
+        px = path(ax, x, A * tau ** (1 - sig) * x - fx, ARCH, 3.4, smooth=False, yr=(-2.0, 6.0))
+        c1, c2 = vline(ax, xt, -2.0, 6.0, ISLAND), vline(ax, xx, -2.0, 6.0, ARCH)
+        side = VGroup(
+            label(r"teal: \ profit at home: \\ sales, \ less a fixed cost", font_size=17, color=ISLAND),
+            label(r"gold: \ profit abroad: \\ shipping shrinks sales, \\ a larger fixed cost", font_size=17,
+                  color=ARCH),
+            label(r"the two cut-offs sort firms: \\ exit, \ home only, \ export", font_size=17, color=WHITE),
+        ).arrange(DOWN, aligned_edge=LEFT, buff=0.35).to_edge(RIGHT, buff=0.35)
+        tag = island_tag(corner=DR, font_size=14)
+        with self.voiceover(
+            "Why are exporters so few, and so much better? Draw each firm's profit against its productivity. "
+            "<bookmark mark='a'/> At home, profit rises with productivity, less a fixed cost of producing at all: "
+            "firms to the left of the teal cut-off lose money and close. <bookmark mark='b'/> Abroad, shipping costs "
+            "shrink every sale, and setting up to export costs more again, so the line starts lower and rises more "
+            "slowly. <bookmark mark='c'/> Only firms past the gold cut-off make money exporting. The same two lines "
+            "explain all of Bernard and Jensen's facts: exporters are rare, because few firms clear the higher bar; "
+            "and they are large and productive, because only the large and productive can."
+        ) as vo:
+            self.play(FadeIn(ax), FadeIn(zero), FadeIn(tag))
+            vo.wait_until("a")
+            self.play(Create(pd), Create(c1), FadeIn(side[0]), run_time=1.5)
+            vo.wait_until("b")
+            self.play(Create(px), FadeIn(side[1]), run_time=1.5)
+            vo.wait_until("c")
+            self.play(Create(c2), FadeIn(side[2]))
         self.clear_scene()

@@ -9,6 +9,7 @@ class Melitz(VoiceoverScene):
              "Chapter six. Melitz: selection.", lit={2003: r"Melitz"}, scale=("firm", "nation"),
              horizon=("a decade",))
         self.cutoffs()
+        self.reallocation()
         self.gains()
 
     def cutoffs(self):
@@ -94,6 +95,51 @@ class Melitz(VoiceoverScene):
             self.play(Create(e), FadeIn(side[1]), run_time=1.5)
             vo.wait_until("c")
             self.play(FadeIn(side[2]))
+            vo.wait_until("d")
+            self.play(FadeIn(side[3]))
+        self.clear_scene()
+
+    def reallocation(self):
+        R = load("realloc")
+        phi, ch = np.array(R["phi"]), np.array(R["change"])
+        ax = plane([1.6, 4.0], [-1.1, 0.6], center=LEFT * 1.6 + DOWN * 0.4, x_length=8.8, y_length=4.6,
+                   xticks=[2, 2.5, 3, 3.5, 4], yticks=[-1.0, -0.5, 0, 0.5], xlabel=r"productivity, \ $\varphi$",
+                   ylabel=r"the firm's sales with trade, \ against alone", xfmt=lambda v: f"{v:.1f}",
+                   yfmt=lambda v: f"{100 * v:+.0f}\\%", font_size=14)
+        zero = seg(ax, 1.6, 0, 4.0, 0, GREY_B, 1.5, dashed=True)
+        ex = (phi >= R["phi_a"]) & (phi < R["phi_t"])
+        mid = (phi >= R["phi_t"]) & (phi < R["phi_x"])
+        top = phi >= R["phi_x"]
+        l_ex = path(ax, phi[ex], ch[ex], TARIFF, 4, smooth=False)
+        l_mid = path(ax, phi[mid], ch[mid], GREY_B, 4, smooth=False)
+        l_top = path(ax, phi[top], ch[top], ARCH, 4, smooth=False, yr=(-1.1, 0.6))
+        side = VGroup(
+            label(r"red: \ the weakest \\ close: \ $-$100\%", font_size=18, color=TARIFF),
+            label(rf"grey: \ survivors who sell \\ only at home shrink, \\ by about {100 * -R['shrink']:.0f}\%",
+                  font_size=18, color=GREY_A),
+            label(rf"gold: \ exporters grow, \\ {100 * R['grow']:+.0f}\% and more", font_size=18, color=ARCH),
+            label(r"no firm changed; \\ the market moved \\ to the best", font_size=18, color=GAIN),
+        ).arrange(DOWN, aligned_edge=LEFT, buff=0.35).to_edge(RIGHT, buff=0.35)
+        tag = island_tag(corner=DR, font_size=14)
+        with self.voiceover(
+            "Follow each firm through the opening. Here is how a firm's sales with trade compare with its sales "
+            "alone, for every level of productivity. <bookmark mark='a'/> The weakest survivors of the closed "
+            "economy close: their sales fall to nothing. <bookmark mark='b'/> Firms good enough to survive but not "
+            "to export shrink, by about "
+            f"{100 * -R['shrink']:.0f} percent, because foreign competitors take part of their home market and the "
+            "exporters bid up wages. <bookmark mark='c'/> Only the exporters grow, and the more productive they are, "
+            "the more. <bookmark mark='d'/> Nothing about any firm has changed. The market has moved its workers "
+            "and its customers from the least productive firms to the most, and that reallocation is where the "
+            "gain comes from. Studies of real liberalizations, in Chile, Canada and elsewhere, find exactly this "
+            "pattern."
+        ) as vo:
+            self.play(FadeIn(ax), FadeIn(zero), FadeIn(tag))
+            vo.wait_until("a")
+            self.play(Create(l_ex), FadeIn(side[0]))
+            vo.wait_until("b")
+            self.play(Create(l_mid), FadeIn(side[1]))
+            vo.wait_until("c")
+            self.play(Create(l_top), FadeIn(side[2]), run_time=1.5)
             vo.wait_until("d")
             self.play(FadeIn(side[3]))
         self.clear_scene()

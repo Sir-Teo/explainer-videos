@@ -136,6 +136,11 @@ AGORA = {
                     "effects"),
     "few_exporters": (36, "in Agora, Melitz's firms: of 4,000 draws 260 survive, the most productive 19% export and "
                           "sell 67% of output, nine times the size of firms that sell only at home"),
+    # Part 39 ran Kleven, Landais and Sogaard's event study on the Island
+    "child_penalty": (39, "in Agora, an event study with age and year effects, run on 4,000 simulated mothers and "
+                          "4,000 fathers, recovers a planted penalty: mothers' log earnings fall 0.30 in the year "
+                          "after the first child and stay about 0.2 below their path ten years on; fathers' do not "
+                          "move"),
     # Part 38 fitted Mincer's equation with Agora's least squares
     "mincer": (38, "in Agora's least squares, the 1976 Current Population Survey's 526 workers earn 9.0% more per year "
                    "of schooling (s.e. 0.8), holding experience and its square; Card's 3,010 young men's mean log "

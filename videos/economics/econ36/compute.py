@@ -18,6 +18,10 @@ Items:
     firms        exporters are few and large: Bernard and Jensen, and the Island's firms
     melitz       Melitz's cutoffs, selection and the gain from opening
     ek           Eaton and Kortum: the shares by formula and by simulation
+    ek_prices    Eaton and Kortum: the prices a buyer pays, by source (the same distribution)
+    realloc      Melitz: each firm's sales with trade against alone, by productivity
+    chain_va     a value chain's gross and value-added exports (Leontief inverse)
+    gains_int    the gains formula with traded intermediate inputs
     hat          the gains from trade by the ACR formula and a counterfactual by hat algebra on 2019 trade
     china        the China shock: imports, manufacturing jobs, Autor, Dorn and Hanson, and the Island's zones
     tariffs      the 2018-19 tariffs and the 2025 ones
@@ -184,6 +188,46 @@ def compute_ek() -> dict:
             "max_gap": float(np.abs(a - s).max())}
 
 
+def compute_ek_prices() -> dict:
+    E = TRUTH["ek"]
+    return trade.eaton_kortum_prices(E["T"], np.ones(3), E["d"], E["theta"], E["goods"], E["seed"], buyer=0)
+
+
+def compute_realloc() -> dict:
+    Mt = TRUTH["melitz"]
+    kw = {k: Mt[k] for k in ("sigma", "k", "f", "fx", "fe", "tau", "delta")}
+    M = trade.melitz(**kw)
+    sig, tau = kw["sigma"], kw["tau"]
+    phi = np.exp(np.linspace(0, np.log(4.0), 400))
+    aut = np.where(phi >= M["phi_autarky"], (phi / M["phi_autarky"]) ** (sig - 1), 0.0)
+    dom = np.where(phi >= M["phi_trade"], (phi / M["phi_trade"]) ** (sig - 1), 0.0)
+    exp_ = np.where(phi >= M["phi_export"], dom * tau ** (1 - sig), 0.0)
+    tot = dom + exp_
+    with np.errstate(divide="ignore", invalid="ignore"):
+        chg = np.where(aut > 0, tot / aut - 1, np.nan)
+    k_mid = int(np.searchsorted(phi, (M["phi_trade"] + M["phi_export"]) / 2))
+    k_top = int(np.searchsorted(phi, M["phi_export"] * 1.2))
+    return {"phi": phi.tolist(), "change": chg.tolist(), "phi_a": M["phi_autarky"], "phi_t": M["phi_trade"],
+            "phi_x": M["phi_export"], "shrink": float(chg[k_mid]), "grow": float(chg[k_top])}
+
+
+def compute_chain_va() -> dict:
+    C = TRUTH["chain"]
+    return trade.value_added_trade(C["A"], C["exports"], names=("the Island", "the Archipelago", "the Far Isle"))
+
+
+def compute_gains_int() -> dict:
+    H = compute_hat()
+    beta = TRUTH["intermediates"]
+    lam = np.array(H["lambda"])
+    # as in item hat: the real income lost by moving to autarky, 1 - lambda^(1/theta); with a share beta of costs in
+    # traded intermediate inputs the exponent becomes 1/(theta (1 - beta))
+    one = 1 - lam ** (1 / H["theta"])
+    inter = 1 - lam ** (1 / (H["theta"] * (1 - beta)))
+    return {"regions": H["regions"], "lambda": lam.tolist(), "one": one.tolist(), "inter": inter.tolist(),
+            "beta": beta, "theta": H["theta"], "crc_lo": 2, "crc_hi": 8}
+
+
 def compute_hat() -> dict:
     H = TRUTH["hat"]
     G = _grav()
@@ -283,6 +327,10 @@ def compute_melody() -> dict:
 
 
 ITEMS = {
+    "ek_prices": compute_ek_prices,
+    "realloc": compute_realloc,
+    "chain_va": compute_chain_va,
+    "gains_int": compute_gains_int,
     "web": compute_web,
     "intra": compute_intra,
     "krugman": compute_krugman,

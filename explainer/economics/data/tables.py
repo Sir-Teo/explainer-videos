@@ -2649,6 +2649,178 @@ KEARL_1979 = Table(
 PART38 = (CK_1994, NW_2000, CDLZ_2019, JARDIM_2022, CABS, CHETTY_2011, SS_2021, AK_1991, OREOPOULOS_2006, MARIEL,
           KEARL_1979)
 
+# ---------------------------------------------------------------------------
+# Part 39: The Wage Structure
+KM_1992 = Table(
+    key="km_1992",
+    cite="L. F. Katz and K. M. Murphy, \"Changes in Relative Wages, 1963-1987: Supply and Demand Factors\", Quarterly "
+         "Journal of Economics 107(1): 35-78 (1992)",
+    tag="Katz and Murphy, \\ \\emph{QJE} 107(1) (1992)",
+    where="the relative-demand regression of the college/high-school premium on a trend and relative supply, "
+          "1963-87: a supply coefficient of about -0.709, an elasticity of substitution of 1/0.709 = 1.41",
+    read="O. Blanchard's account of the regression (Federal Reserve Bank of New York Economic Policy Review, 1995) "
+         "and later summaries",
+    checked="2026-11-20",
+    data={"sigma": 1.41, "coef": -0.709, "first": 1963, "last": 1987},
+)
+SIGMA_SKILL = Table(
+    key="sigma_skill",
+    cite="D. Card and T. Lemieux, Quarterly Journal of Economics 116(2): 705-746 (2001); A. Ciccone and G. Peri, "
+         "Review of Economics and Statistics 87(4): 652-663 (2005); D. Autor, C. Goldin and L. F. Katz, AEA Papers "
+         "and Proceedings 110: 347-351 (2020)",
+    tag="Card and Lemieux (2001); \\ Ciccone and Peri (2005); \\ Autor, \\ Goldin and Katz (2020)",
+    where="Card and Lemieux: an elasticity of about 2.5 between high-school and college workers (and about 5 between "
+          "age groups); Ciccone and Peri: about 1.5 from US states, 1950-90, with schooling laws as instruments; "
+          "Autor, Goldin and Katz: rising educational differentials explain 75% of the rise in US wage inequality "
+          "in 1980-2000 and 38% in 2000-17",
+    read="the abstracts",
+    checked="2026-11-20",
+    data={"cl": 2.5, "cl_age": 5.0, "cp": 1.5, "agk_8000": 75, "agk_0017": 38},
+)
+ALM_2003 = Table(
+    key="alm_2003",
+    cite="D. H. Autor, F. Levy and R. J. Murnane, \"The Skill Content of Recent Technological Change: An Empirical "
+         "Exploration\", Quarterly Journal of Economics 118(4): 1279-1333 (2003); D. Acemoglu and D. Autor, \"Skills, "
+         "Tasks and Technologies\", Handbook of Labor Economics 4B (2011); D. Autor and D. Dorn, American Economic "
+         "Review 103(5): 1553-1597 (2013)",
+    tag="Autor, \\ Levy and Murnane (2003); \\ Acemoglu and Autor (2011); \\ Autor and Dorn (2013)",
+    where="computers substitute for routine tasks, cognitive and manual, and complement non-routine analytic and "
+          "interactive tasks; the employment and wage polarization of 1980-2005 (Autor and Dorn's abstract)",
+    read="the abstracts; the polarization data are Autor and Dorn's replication files",
+    checked="2026-11-20",
+    data={},
+)
+AR_2020 = Table(
+    key="ar_2020",
+    cite="D. Acemoglu and P. Restrepo, \"Robots and Jobs: Evidence from US Labor Markets\", Journal of Political "
+         "Economy 128(6): 2188-2244 (2020)",
+    tag="Acemoglu and Restrepo, \\ \\emph{JPE} 128(6) (2020)",
+    where="across commuting zones, one more robot per thousand workers lowers the employment-to-population ratio by "
+          "0.2 percentage points and wages by 0.42% (the published abstract; the working paper's range is 0.18-0.34 "
+          "points and 0.25-0.5 percent); the effects are distinct from those of imports from China and Mexico, the "
+          "decline of routine jobs, offshoring and other IT capital, and the most exposed areas show no differential "
+          "trends before 1990",
+    read="the JPE abstract (via EconPapers), NBER Working Paper 23285 and MIT's summary",
+    checked="2026-11-20",
+    data={"emp_pp": 0.2, "wage_pct": 0.42, "emp_lo": 0.18, "emp_hi": 0.34, "wage_lo": 0.25, "wage_hi": 0.5},
+)
+CHK_2013 = Table(
+    key="chk_2013",
+    cite="D. Card, J. Heining and P. Kline, \"Workplace Heterogeneity and the Rise of West German Wage Inequality\", "
+         "Quarterly Journal of Economics 128(3): 967-1015 (2013)",
+    tag="Card, \\ Heining and Kline, \\ \\emph{QJE} 128(3) (2013)",
+    where="Table 3 of NBER Working Paper 18522: the variance of log wages rose from 0.137 (1985-91) to 0.249 "
+          "(2002-09); the establishment effects' share from 18.5% to 21.2%, twice the covariance of worker and "
+          "establishment effects from 2.3% to 16.4%; of the rise, worker effects 39%, establishment effects 25%, "
+          "sorting 34%",
+    read="the working paper's Table 3; the abstract for the conclusion",
+    checked="2026-11-20",
+    data={"var1": 0.137, "var4": 0.249, "psi1": 18.5, "psi4": 21.2, "cov1": 2.3, "cov4": 16.4, "rise_alpha": 39,
+          "rise_psi": 25, "rise_cov": 34},
+)
+ADKPV_2020 = Table(
+    key="adkpv_2020",
+    cite="D. Autor, D. Dorn, L. F. Katz, C. Patterson and J. Van Reenen, \"The Fall of the Labor Share and the Rise of "
+         "Superstar Firms\", Quarterly Journal of Economics 135(2): 645-709 (2020); S. Rosen, \"The Economics of "
+         "Superstars\", American Economic Review 71(5): 845-858 (1981)",
+    tag="Rosen (1981); \\ Autor et al., \\ \\emph{QJE} 135(2) (2020)",
+    where="the fall in the aggregate labour share is largely a reallocation of value added towards firms with low "
+          "labour shares, and industries where concentration rose most saw the largest falls in the labour share",
+    read="the abstract",
+    checked="2026-11-20",
+    data={},
+)
+UNIONS = Table(
+    key="unions",
+    cite="U.S. Bureau of Labor Statistics, \"Union Members - 2024\", news release USDL-25-0105 (28 January 2025)",
+    tag="BLS, \\ Union Members 2024",
+    where="union membership was 20.1% of wage and salary workers in 1983, the first year of comparable data, and 9.9% "
+          "in 2024; 32.2% in the public sector and 5.9% in the private sector in 2024",
+    read="the news release",
+    checked="2026-11-20",
+    data={"y1983": 20.1, "y2024": 9.9, "public": 32.2, "private": 5.9},
+)
+MAS_PALLAIS_2017 = Table(
+    key="mas_pallais_2017",
+    cite="A. Mas and A. Pallais, \"Valuing Alternative Work Arrangements\", American Economic Review 107(12): "
+         "3722-3759 (2017)",
+    tag="Mas and Pallais, \\ \\emph{AER} 107(12) (2017)",
+    where="in a discrete choice experiment among applicants to a national call centre, the average worker would give "
+          "up 20% of wages to avoid a schedule set by the employer on short notice, and 8% for the option to work "
+          "from home",
+    read="the AEA abstract",
+    checked="2026-11-20",
+    data={"avoid_short_notice": 20, "wfh": 8},
+)
+BM_2004 = Table(
+    key="bm_2004",
+    cite="M. Bertrand and S. Mullainathan, \"Are Emily and Greg More Employable Than Lakisha and Jamal? A Field "
+         "Experiment on Labor Market Discrimination\", American Economic Review 94(4): 991-1013 (2004)",
+    tag="Bertrand and Mullainathan, \\ \\emph{AER} 94(4) (2004)",
+    where="White names receive 50 percent more callbacks; callbacks respond more to resume quality for White names; "
+          "the gap is uniform across occupation, industry and employer size (abstract); the data recomputed from "
+          "openintro's copy",
+    read="the AEA abstract and the data",
+    checked="2026-11-20",
+    data={"ratio": 1.5},
+)
+DISCRIMINATION = Table(
+    key="discrimination",
+    cite="C. Goldin and C. Rouse, \"Orchestrating Impartiality\", American Economic Review 90(4): 715-741 (2000); L. "
+         "Quillian, D. Pager, O. Hexel and A. H. Midtboen, \"Meta-analysis of field experiments shows no change in "
+         "racial discrimination in hiring over time\", PNAS 114(41): 10870-10875 (2017); G. S. Becker, The Economics "
+         "of Discrimination (1957); E. S. Phelps, American Economic Review 62(4) (1972); K. J. Arrow (1973)",
+    tag="Goldin and Rouse (2000); \\ Quillian et al.\\ (2017)",
+    where="Goldin and Rouse: the screen increases the probability a woman will be advanced and hired, though some "
+          "estimates have large standard errors and one effect runs the other way; Quillian et al.: in 24 field "
+          "experiments since 1989, White applicants received 36% more callbacks than African Americans and 24% more "
+          "than Latinos, with no change over time for African Americans",
+    read="the abstracts and the PNAS summary",
+    checked="2026-11-20",
+    data={"meta_black": 36, "meta_latino": 24, "meta_studies": 24, "meta_since": 1989},
+)
+GENDER = Table(
+    key="gender",
+    cite="C. Goldin, \"A Grand Gender Convergence: Its Last Chapter\", American Economic Review 104(4): 1091-1119 "
+         "(2014); H. Kleven, C. Landais and J. E. Sogaard, \"Children and Gender Inequality: Evidence from Denmark\", "
+         "American Economic Journal: Applied Economics 11(4): 181-209 (2019)",
+    tag="Goldin (2014); \\ Kleven, \\ Landais and S\\o{}gaard (2019)",
+    where="Goldin: the gap would shrink and might vanish if firms did not disproportionately reward long hours and "
+          "particular hours; Kleven et al.: children create a long-run gender gap in earnings of about 20%, through "
+          "hours, participation and wage rates; the share of gender inequality due to children rose from about 40% in "
+          "1980 to about 80% in 2013 (working paper)",
+    read="the AEA abstracts; NBER Working Paper 24219 for the 40% and 80%",
+    checked="2026-11-20",
+    data={"penalty": 20, "share1980": 40, "share2013": 80},
+)
+FRONTIER39 = Table(
+    key="frontier39",
+    cite="Z. Cullen and B. Pakzad-Hurson, \"Equilibrium Effects of Pay Transparency\", Econometrica 91(3): 765-802 "
+         "(2023); J. Dastin, \"Amazon scraps secret AI recruiting tool that showed bias against women\", Reuters, 10 "
+         "October 2018",
+    tag="Cullen and Pakzad-Hurson, \\ \\emph{Econometrica} 91(3) (2023); \\ Reuters (2018)",
+    where="US state pay-transparency laws lowered wages by about 2%, least where workers' individual bargaining power "
+          "was low; Amazon's experimental resume-scoring tool, trained on ten years of resumes mostly from men, "
+          "penalized the word 'women's' and was dropped",
+    read="the abstract; Reuters's report as syndicated",
+    checked="2026-11-20",
+    data={"transparency": -2},
+)
+LEONTIEF_1983 = Table(
+    key="leontief_1983",
+    cite="W. Leontief, \"National Perspective: The Definition of Problem and Opportunity\", in The Long-Term Impact of "
+         "Technology on Employment and Unemployment, National Academy of Engineering symposium, 30 June 1983, p. 3",
+    tag="Leontief (1983)",
+    where="'the role of humans as the most important factor of production is bound to diminish in the same way that "
+          "the role of horses in agricultural production was first diminished and then eliminated by the "
+          "introduction of tractors'",
+    read="secondary listings (Wikiquote; the 'For Work / Against Work' bibliography)",
+    checked="2026-11-20",
+    data={"year": 1983},
+)
+PART39 = (KM_1992, SIGMA_SKILL, ALM_2003, AR_2020, CHK_2013, ADKPV_2020, UNIONS, MAS_PALLAIS_2017, BM_2004,
+          DISCRIMINATION, GENDER, FRONTIER39, LEONTIEF_1983)
+
 PART7 = (BERNOULLI_1738, SAMUELSON_1937, ALLAIS_1953, ELLSBERG_1961, RABIN_2000, THALER_1981, HOLT_LAURY_2005,
          HAYDEN_PLATT_2009, MADRIAN_SHEA_2001, THALER_BENARTZI_2004, BARSKY_1997, POST_2008, MEHRA_PRESCOTT_1985)
-ALL = {t.key: t for t in (*PART1, *PART3, *PART4, *PART5, *PART6, *PART7, *PART8, *PART9, *PART10, *PART11, *PART12, *PART13, *PART14, *PART15, *PART16, *PART17, *PART18, *PART19, *PART21, *PART22, *PART25, *PART26, *PART35, *PART36, *PART37, *PART38)}
+ALL = {t.key: t for t in (*PART1, *PART3, *PART4, *PART5, *PART6, *PART7, *PART8, *PART9, *PART10, *PART11, *PART12, *PART13, *PART14, *PART15, *PART16, *PART17, *PART18, *PART19, *PART21, *PART22, *PART25, *PART26, *PART35, *PART36, *PART37, *PART38, *PART39)}

@@ -25,8 +25,8 @@
     function f2(x) { return x.toFixed(2); }
     QB.widget(el, {
       title: "A minimum wage at a firm that sets wages",
-      sub: "Left: the firm's supply of workers (teal), the cost of one more worker (violet), what one more adds (red) " +
-           "and your minimum (gold). Right: workers hired against the minimum wage, with yours marked.",
+      sub: "Left: the firm's supply of workers (teal), the cost of one more worker (violet), what one more " +
+           "adds (red) and your minimum (gold). Right: workers hired against the minimum wage, with yours marked.",
       panels: 2, height: 270,
       controls: [
         { k: "m", label: "Minimum wage, $ an hour", min: 3.5, max: 8, step: 0.05, value: 5.5, fmt: f2 },
@@ -62,6 +62,68 @@
       },
       note: "The model of Part 38, chapter 7. A minimum between the firm's wage and the competitive $6 raises " +
             "employment; above $6 it lowers it. Computed in your browser; nothing you do here is stored or sent.",
+    });
+  };
+  // ---- Part 39: the wage structure -----------------------------------------------------------------------------
+  W.race = function (el) {
+    // The canonical model (explainer.economics.agora.labour: skill_premium, implied_demand): ln(premium) =
+    // D - S / sigma, with relative demand D and relative supply S growing at the reader's rates, against the
+    // college premium the BLS measured, 1979-2025 (median weekly earnings, bachelor's and higher over high school).
+    var BLS = [1.382, 1.414, 1.423, 1.45, 1.482, 1.505, 1.52, 1.526, 1.584, 1.59, 1.624, 1.653, 1.678, 1.727, 1.723,
+               1.741, 1.729, 1.711, 1.69, 1.714, 1.755, 1.764, 1.771, 1.759, 1.74, 1.718, 1.738, 1.746, 1.775, 1.804,
+               1.816, 1.827, 1.803, 1.787, 1.834, 1.786, 1.814, 1.819, 1.796, 1.814, 1.832, 1.819, 1.795, 1.81, 1.79,
+               1.819, 1.801];
+    var Y0 = 1979;
+    function pct(x) { return x.toFixed(1) + "%"; }
+    QB.widget(el, {
+      title: "The race between education and technology",
+      sub: "Left: the college premium your settings produce (gold) against the one measured (dots). Right: this " +
+           "year's market for skill: supply (teal) and demand (red), moving at your rates.",
+      panels: 2, height: 270,
+      controls: [
+        { k: "sigma", label: "Elasticity of substitution, sigma", min: 1, max: 4, step: 0.05, value: 1.41,
+          fmt: function (x) { return x.toFixed(2); } },
+        { k: "d1", label: "Demand growth before 1992, % a year", min: 0, max: 6, step: 0.1, value: 3.5, fmt: pct },
+        { k: "d2", label: "Demand growth after 1992, % a year", min: 0, max: 6, step: 0.1, value: 2.0, fmt: pct },
+        { k: "s", label: "Supply growth, % a year", min: 0, max: 6, step: 0.1, value: 2.7, fmt: pct },
+        { k: "yr", label: "Year shown on the right", min: 1979, max: 2025, step: 1, value: 2000,
+          fmt: function (x) { return x.toFixed(0); } },
+      ],
+      draw: function (g, v, st) {
+        var ys = [], pm = [], k;
+        var p0 = Math.log(BLS[0]);
+        for (k = 0; k <= 46; k++) {
+          var t = Y0 + k;
+          var D = (Math.min(t, 1992) - Y0) * v.d1 / 100 + Math.max(t - 1992, 0) * v.d2 / 100;
+          var S = k * v.s / 100;
+          ys.push(t); pm.push(Math.exp(p0 + D - S / v.sigma));
+        }
+        var a = g[0].axes({ x: [1978, 2026], y: [1.0, 2.6], title: "college premium", xlabel: "year" });
+        a.dots(ys, BLS, { color: "#9AA3B2", r: 2.5 });
+        a.line(ys, pm, { color: "#F2C14E", width: 2.5 });
+        var j = v.yr - Y0;
+        a.vline(v.yr, {});
+        var Dj = (Math.min(v.yr, 1992) - Y0) * v.d1 / 100 + Math.max(v.yr - 1992, 0) * v.d2 / 100;
+        var Sj = j * v.s / 100;
+        var b = g[1].axes({ x: [-0.2, 1.6], y: [0, 1.2], title: "log premium against log relative supply",
+                            xlabel: "relative supply (log, from 1979)" });
+        var xs = [], dl = [];
+        for (k = 0; k <= 40; k++) { var x = -0.2 + 1.8 * k / 40; xs.push(x); dl.push(p0 + Dj - x / v.sigma); }
+        b.line(xs, dl, { color: "#F25F5C", width: 2.5 });
+        b.vline(Sj, { color: "#7FD1B9", width: 2.5, dash: [] });
+        b.dots([Sj], [p0 + Dj - Sj / v.sigma], { color: "#F2C14E", r: 5 });
+        var err = 0;
+        for (k = 0; k <= 46; k++) { err += Math.pow(Math.log(pm[k]) - Math.log(BLS[k]), 2); }
+        st.rmse = Math.sqrt(err / 47); st.p2025 = pm[46]; st.pyr = pm[j];
+      },
+      readout: function (v, st) {
+        return [["premium in " + v.yr + ", your model", st.pyr.toFixed(2)],
+                ["premium in 2025: your model, measured", st.p2025.toFixed(2) + ", 1.80"],
+                ["fit to 1979-2025 (root mean square error in logs)", st.rmse.toFixed(3)]];
+      },
+      note: "Part 39, chapter 2. Supply pulls the premium down by its growth over sigma; demand pushes it up. " +
+            "Measured supply grew about 2.7% a year after 1992. Computed in your browser; nothing you do here is " +
+            "stored or sent.",
     });
   };
 })();
