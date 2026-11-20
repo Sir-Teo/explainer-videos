@@ -79,9 +79,9 @@ class Practice(VoiceoverScene):
         ax = plane([2022, 2024.1], [0, 6], center=LEFT * 1.8 + DOWN * 0.3, x_length=8.4, y_length=4.8,
                    xticks=[2022, 2023, 2024], yticks=[0, 1, 2, 3, 4, 5, 6], ylabel=r"percent",
                    xfmt=lambda v: f"{v:.0f}", yfmt=lambda v: f"{v:.0f}", font_size=16)
-        ff = path(ax, b["t"], b["ff"], color=RATE, width=3, smooth=False)
-        cd = path(ax, b["t"], b["cd"], color=BOND, width=3, smooth=False)
-        sv = path(ax, b["t"], b["sav"], color=DEPOSIT, width=4, smooth=False)
+        ff = path(ax, b["t"], b["ff"], color=RATE, width=3, smooth=False, xr=(2022, 2024.1))
+        cd = path(ax, b["t"], b["cd"], color=BOND, width=3, smooth=False, xr=(2022, 2024.1))
+        sv = path(ax, b["t"], b["sav"], color=DEPOSIT, width=4, smooth=False, xr=(2022, 2024.1))
         side = VGroup(
             label(rf"federal funds: \\ {b['ff_from']:.2f}\% to {b['ff_to']:.2f}\%", font_size=19, color=RATE),
             label(rf"12-month CDs: \\ {b['cd_from']:.2f}\% to {b['cd_to']:.2f}\%: \ beta {b['beta_cd']:.2f}",

@@ -18,7 +18,7 @@ class Shadow(VoiceoverScene):
         R = load("repo")
         dealer = tacct(r"a dealer bank", BOND, [(rf"securities \ {R['assets']:.0f}", BOND)],
                        [(rf"repo \ {R['repo_from']:.0f}", RUN), (rf"equity \ {R['equity']:.0f}", EQUITY)],
-                       width=5.0).move_to(UP * 1.2)
+                       width=5.0).scale(1.4).move_to(UP * 1.3)
         rows = VGroup(
             label(r"repo: \ sell a bond today, \ promise to buy it back tomorrow at a slightly higher price",
                   font_size=22,

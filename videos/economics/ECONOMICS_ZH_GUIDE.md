@@ -734,6 +734,19 @@ brackets on screen.
 | deposit beta; deposit franchise; duration; stress test | 存款贝塔；存款特许价值；久期；压力测试 |
 | narrow banking | 狭义银行 |
 
+## Part 27
+
+| English | 中文 |
+|---|---|
+| effective demand; the consumption function; the marginal propensity to consume | 有效需求；消费函数；边际消费倾向 |
+| the Keynesian cross; the multiplier; the balanced-budget multiplier | 凯恩斯交叉图；乘数；平衡预算乘数 |
+| Say's law; general glut; the paradox of thrift; the fallacy of composition | 萨伊定律；普遍过剩；节俭悖论；合成谬误 |
+| IS-LM; crowding out; the liquidity trap; the zero lower bound | IS-LM模型；挤出效应；流动性陷阱；零利率下限 |
+| aggregate demand and supply; demand shock; supply shock; stagflation | 总需求与总供给；需求冲击；供给冲击；滞胀 |
+| sticky wages; downward nominal wage rigidity; debt deflation | 工资粘性；名义工资向下刚性；债务通缩 |
+| the neoclassical synthesis; the gold standard | 新古典综合；金本位 |
+| Okun's law; the output gap; potential output | 奥肯定律；产出缺口；潜在产出 |
+
 ## Names
 
 | English | 中文 |

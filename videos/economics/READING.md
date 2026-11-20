@@ -10,7 +10,7 @@ the series leaves out.
 Both *Parts* columns are found, not typed. *Planned* lists the parts whose entry in
 [`SYLLABUS.md`](SYLLABUS.md) names the book or paper; *Built* lists the parts whose scenes, compute step or
 README cite it (a dot: none yet). Fuller notes (editions, chapters, what each source was used for) are in each
-part's README, under *Sources*. Built so far: Parts 1–26.
+part's README, under *Sources*. Built so far: Parts 1–27.
 
 ## 1. The textbook spine
 
@@ -31,7 +31,7 @@ part's README, under *Sources*. Built so far: Parts 1–26.
 | Varian | H. Varian, *Intermediate Microeconomics* (9th ed., 2014) | 2, 5–8, 10 | 2, 5–8, 10, 16 |
 | Nicholson–Snyder | W. Nicholson and C. Snyder, *Microeconomic Theory* (13th ed., 2021) | 5–6 | 5–6, 8 |
 | Jones | C. I. Jones, *Macroeconomics* (6th ed., 2023) | 20 | · |
-| Blanchard | O. Blanchard, *Macroeconomics* (8th ed., 2021) | 27, 32 | 20, 24 |
+| Blanchard | O. Blanchard, *Macroeconomics* (8th ed., 2021) | 27, 32 | 20, 24, 27 |
 | Stock–Watson | J. Stock and M. Watson, *Introduction to Econometrics* (4th ed., 2019) | 4 | 4 |
 | Angrist–Pischke | J. Angrist and J.-S. Pischke, *Mostly Harmless Econometrics* (2009) | 4, 50, 67 | 4 |
 | Osborne | M. Osborne, *An Introduction to Game Theory* (2004) | 11 | 11 |
@@ -307,6 +307,8 @@ part's README, under *Sources*. Built so far: Parts 1–26.
 **Part 25, *Money*.** Books: Carl Walsh, *Monetary Theory and Policy* (4th ed., 2017), chs. 1–4; Milton Friedman and Anna Schwartz, *A Monetary History of the United States, 1867–1960* (1963); Thomas Sargent, *Rational Expectations and Inflation* (3rd ed., 2013); Ricardo Lagos, Guillaume Rocheteau and Randall Wright, JEL 55(2) (2017): liquidity, a survey. Papers: Jevons (1875); Furness (1910); Friedman (1991); Kocherlakota (1998); Kiyotaki and Wright (1989); Duffy and Ochs (1999); Fisher (1896, 1911); McCandless and Weber (1995); Cagan (1956); Sargent (1982); Hanke and Krus (2012); Baumol (1952); Tobin (1956); Lucas and Nicolini (2015); McLeay, Radia and Thomas (2014); Sidrauski (1967); Friedman (1969); Lucas (2000); Ball (2001); Ireland (2009); Gorton and Zhang (2023).
 
 **Part 26, *Banks and Runs*.** Books: Xavier Freixas and Jean-Charles Rochet, *Microeconomics of Banking* (2nd ed., 2008), chs. 2, 7, 9; Gary Gorton, *Misunderstanding Financial Crises* (2012); Walter Bagehot, *Lombard Street* (1873); Anat Admati and Martin Hellwig, *The Bankers' New Clothes* (2013). Papers: Diamond and Dybvig (1983); Diamond (1984); Bernanke (1983); Merton (1977); Gorton and Metrick (2012); Morris and Shin (1998); Goldstein and Pauzner (2005); Friedman and Schwartz (1963); Calomiris and Mason (2003); Curry and Shibut (2000); Jiang, Matvos, Piskorski and Seru (2024); Drechsler, Savov and Schnabl (2017, 2021); Reinhart and Rogoff (2009); Cerra and Saxena (2008); Romer and Romer (2017); Cookson et al. (2023).
+
+**Part 27, *The Keynesian Revolution*.** Books: John Maynard Keynes, *The General Theory of Employment, Interest and Money* (1936); Olivier Blanchard, *Macroeconomics* (8th ed., 2021), chs. 3–9; Barry Eichengreen, *Golden Fetters* (1992); Robert Skidelsky, *John Maynard Keynes* (three volumes, 1983–2000). Papers: Say (1803); Keynes (1919, 1923, 1936); Kahn (1931); Hicks (1937); Fisher (1933); Hayek (1931); Sweeney and Sweeney (1977); Krugman (1998); Okun (1962); Samuelson (1955); Bewley (1999); Card and Hyslop (1997); Dickens et al. (2007); Friedman and Schwartz (1963); Eichengreen and Sachs (1985); Romer (1992); Lucas and Sargent (1979); Mantoux (1946); Ball, Leigh and Loungani (2017); Guerrieri, Lorenzoni, Straub and Werning (2022).
 
 ## 4. What the series leaves out
 

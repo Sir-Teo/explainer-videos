@@ -2964,6 +2964,7 @@ Young Economist*.
 | 24 | built, English | *Looking for Work.* Agora gains `search` (McCall's searcher, the DMP model with its curves, Beveridge curves and path, Hosios's condition, the elasticity of tightness, Shimer's flows and the ins-and-outs shares, Burdett and Mortensen's job ladder); the Data Room gains FRED's JOLTS (openings, hires, separations, quits), unemployment by duration, the labour force, output per hour and the CBO's natural rate; two new dials (the matching elasticity; the worker's bargaining share); Mortensen and Pissarides's 1994 claim as *Called it?* (partly right); the Beveridge curve gets its Agora column |
 | 25 | built, English | *Money.* Agora gains `money` (Kiyotaki and Wright's economy with its equilibrium check, barter's odds, Cagan's Laffer curve and a printed deficit, Baumol and Tobin, cash in advance, T-accounts); the Data Room gains the World Bank's money growth and inflation by country since 1960 and FRED's M1, M2, base money, currency, reserves, velocity and nominal GDP, and transcribes Hanke and Krus's hyperinflation peaks; a new dial (the interest semi-elasticity of money demand); Cagan's revenue ceiling as *Called it?* (wrong); the quantity theory gets its Agora column |
 | 26 | built, English | *Banks and Runs.* Agora gains `bank` (Diamond and Dybvig's contract and run threshold, sequential service, suspension, Bagehot's lender against a fire sale, Merton's deposit-insurance put, bond losses, capital ratios with risk weights, deposit betas, the repo squeeze, Morris and Shin's global game, Diamond's delegated monitor); the Island gets a bank; the Data Room gains FRED's bank suspensions (1921-41, and monthly to 1933), small and large banks' weekly deposits, the FDIC's national deposit rates, the federal funds rate, Treasury yields, banks' equity ratio, money funds' assets and real GDP, and transcribes Silicon Valley Bank's numbers and the 2022 stress scenario; two new dials (the deposit beta; the output cost of a banking crisis); the 2022 stress scenario as *Called it?* (wrong) |
+| 27 | built, English | *The Keynesian Revolution.* Agora gains `keynes` (the babysitting co-op and its curve, the cross and Kahn's multiplier, the paradox of thrift, IS-LM with a zero lower bound, AS-AD, Phillips's machine, frozen wage cuts, cycle spells); the Island has a recession; the Data Room gains FRED's real GNP from 1929, the NBER's recession months since 1854, America's gold stock 1914-1946, the CBO's potential GDP and Japan's call rate; a new dial (Okun's coefficient) and the propensity-to-spend dial shown again; Okun's law gets its Agora column; Keynes's *Economic Consequences of the Peace* as *Called it?* (partly right) |
 
 **Corrections found while building Part 1** (the plan's draft, written from memory, against the sources): Bastiat's
 Paris passage is in *Economic Sophisms*, First Series, ch. 18 (1845), not the *Harmonies*; Hume's is/ought passage is
@@ -3276,3 +3277,16 @@ from their own later summary. Cookson and coauthors' estimates differ across ver
 only. USDC's low is given as about 88 cents. The Bank Term Funding Program valued collateral at par; the film calls
 that beyond Bagehot rather than against him. Bernanke, Diamond and Dybvig shared the 2022 Nobel prize. An intermission
 follows chapter 8.
+
+**Corrections found while building Part 27.** The co-op had about 150 couples (Krugman 1998); sources differ on whether
+a coupon bought an hour or a half-hour of sitting, so the film does not say; Sweeney and Sweeney is JMCB 9(1) (1977):
+86-89. The film's unemployment rates for the 1930s are the NBER's monthly series (1.4% in 1929, 23% in 1933), which
+differs from Lebergott's annual figures; the film says so. Bewley interviewed 336 people in 1992-93 (Howitt's review);
+the syllabus's "Connecticut" is not used. About fourteen Phillips machines were built (the Science Museum Group); the
+first in a garage in Croydon. Ball, Leigh and Loungani give the US coefficient as about -0.45 (a range of -0.4 to
+-0.5), Japan -0.15 and Spain -0.85, in their working paper's introduction; the film's own estimate against the CBO's
+gaps is -0.62. Okun's 1962 figure is shown as one third (three points of output per point of unemployment). The
+Dickens project covered sixteen countries. Keynes's forecast is scored partly right: the reparations were cut and
+abandoned and never paid in full, but Mantoux (1946) argued Germany could have paid. Guerrieri, Lorenzoni, Straub and
+Werning's results are stated as in their working paper. Samuelson's "neoclassical synthesis" is dated to his 1955
+edition. An intermission follows chapter 8.

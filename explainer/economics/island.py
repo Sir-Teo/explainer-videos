@@ -687,6 +687,30 @@ TRUTHS = {
         # bank promises depositors 1 per loan; monitoring a borrower costs 0.02
         "monitor": {"p": 0.9, "R": 1.3, "D": 1.0, "cost": 0.02, "ns": (1, 10, 100, 1000), "depositors": 1000},
     },
+    27: {
+        # the Island's babysitting co-op (chapters 0, 3): 150 couples, each wanting a reserve of 10 coupons; each week a
+        # couple at its reserve wants to go out with probability 0.3; the co-op starts with 4 coupons a couple and the
+        # board raises it to 9 in week 100
+        "coop": {"n": 150, "target": 10.0, "p": 0.3, "start": 4.0, "print_to": 9.0, "print_at": 100, "weeks": 200,
+                 "seed": 3},
+        # Play it (chapter 2): you hold 3 coupons and want a reserve of 10 before the busy season
+        "playit": {"held": 3, "target": 10, "options": ("spend", "hoard")},
+        # the Island's spending (chapters 4-6): autonomous consumption 200, marginal propensity to consume 0.6, taxes
+        # 100, investment 300 (falling by 1 per point of the interest rate times 25), government purchases 200;
+        # money demand 0.5 Y - 50 i
+        "cross": {"a": 200.0, "b": 0.6, "T": 100.0, "I": 300.0, "G": 200.0, "dG": 100.0},
+        "thrift": {"a": 200.0, "b": 0.6, "I": 300.0, "da": 50.0, "h": 0.1},
+        "islm": {"a": 200.0, "b": 0.6, "T": 100.0, "I0": 300.0, "d": 25.0, "k": 0.5, "h": 50.0, "G": 200.0,
+                 "M": 600.0, "dG": 50.0, "dM": 100.0, "slump": 150.0},
+        # Phillips's machine (chapter 8): spending 0.6 of disposable income, taxes 20%, investment 150, government 200,
+        # which rises by 50
+        "moniac": {"b": 0.6, "tax": 0.2, "I": 150.0, "G": 200.0, "dG": 50.0, "speed": 0.25, "steps": 60,
+                   "shock_at": 8},
+        # pay (chapter 9): notional changes averaging +1% with a 4% spread; four in five cuts are not made
+        "wages": {"n": 20000, "mean": 0.01, "sd": 0.04, "rigid": 0.8, "seed": 2},
+        # AS-AD (chapter 10): potential output 1450, expected price level 1, wages sticky (slope 300)
+        "asad": {"Ystar": 1450.0, "Pe": 1.0, "kappa": 300.0, "dM": -100.0, "cost": 0.15},
+    },
 }
 
 

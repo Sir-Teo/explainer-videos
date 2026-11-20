@@ -2,10 +2,10 @@ from __future__ import annotations
 
 from videos.economics.econ26.common import *  # noqa: F403
 
-PANICS = ((1930.92, r"Dec 1930: \\ Bank of United States", 1930.55),
-          (1931.42, r"spring 1931", 1931.3),
-          (1931.75, r"Oct 1931: \\ after Britain \\ leaves gold", 1931.95),
-          (1933.0, r"early 1933", 1932.75))
+PANICS = ((r"Dec 1930: \\ Bank of United States", 1930.5, 400),
+          (r"spring 1931", 1931.3, 260),
+          (r"Oct 1931: \\ after Britain \\ leaves gold", 1931.35, 470),
+          (r"early 1933", 1932.75, 330))
 
 
 class Evidence(VoiceoverScene):
@@ -31,9 +31,8 @@ class Evidence(VoiceoverScene):
             bars.add(Rectangle(width=0.16, height=hi[1] - lo[1], fill_color=RUN, fill_opacity=0.8,
                                stroke_width=0).move_to((lo + hi) / 2))
         tags = VGroup()
-        for when, say, at in PANICS:
-            j = int(np.argmin(np.abs(t - when)))
-            tags.add(label(say, font_size=15, color=STAY).move_to(ax.ax.c2p(at, min(v[j] + 95, 540))))
+        for say, x, y in PANICS:
+            tags.add(label(say, font_size=15, color=STAY).move_to(ax.ax.c2p(x, y)))
         tag = data_tag(r"NBER Macrohistory Database: \ number of suspended banks, \ all banks, \ monthly, \ via FRED",
                        corner=DR, font_size=12)
         oct31 = int(v[np.argmin(np.abs(t - 1931.75))])

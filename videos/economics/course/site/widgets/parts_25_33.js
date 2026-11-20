@@ -155,4 +155,75 @@
             "nothing you do here is stored or sent.",
     });
   };
+
+  // ---- Part 27: the co-op ----------------------------------------------------------------------------------------
+  W.coop = function (el) {
+    // The babysitting co-op of Part 27 (explainer.economics.agora.keynes: coop): 150 couples, each wanting a reserve
+    // of coupons; a couple wants to go out with probability p min(1, b/target) and is willing to sit with probability
+    // p clip(2 - b/target, 0, 1) if it is not going out; evenings are the shorter queue and each costs a coupon.
+    // The reader is the board: set the coupons per couple and the reserve couples want, and watch a year of weeks.
+    var N = 150, P = 0.3, WEEKS = 52;
+    function run(coupons, target, seed) {
+      var r = QB.rng(seed), b = [], k;
+      for (k = 0; k < N; k++) b.push(Math.floor(coupons));
+      var extra = Math.round((coupons - Math.floor(coupons)) * N);
+      for (k = 0; k < extra; k++) b[k] += 1;
+      var ev = [];
+      for (var w = 0; w < WEEKS; w++) {
+        var go = [], sit = [];
+        for (k = 0; k < N; k++) {
+          var g = b[k] >= 1 && r() < P * Math.min(1, b[k] / target);
+          if (g) go.push(k);
+          else if (r() < P * Math.min(1, Math.max(0, 2 - b[k] / target))) sit.push(k);
+        }
+        var n = Math.min(go.length, sit.length);
+        for (k = 0; k < n; k++) { b[go[k]] -= 1; b[sit[k]] += 1; }
+        ev.push(n / N);
+      }
+      return ev;
+    }
+    QB.widget(el, {
+      title: "Run the co-op",
+      sub: "You are the co-op's board. 150 couples pay for babysitting with coupons, and each wants a reserve of " +
+           "coupons for later. Set how many coupons there are and how big a reserve couples want, and watch a year " +
+           "of weeks. Left: evenings out each week. Right: evenings against the number of coupons. Can you find the " +
+           "number of coupons that gets the most evenings, and see why too few and too many both fail?",
+      panels: 2, height: 280,
+      controls: [
+        { k: "m", label: "Coupons per couple", min: 1, max: 24, step: 0.5, value: 4,
+          fmt: function (x) { return x.toFixed(1); } },
+        { k: "t", label: "The reserve each couple wants", min: 4, max: 16, step: 1, value: 10,
+          fmt: function (x) { return x.toFixed(0); } },
+      ],
+      draw: function (g, v, st) {
+        var ev = run(v.m, v.t, 7), ws = [], k;
+        for (k = 0; k < ev.length; k++) ws.push(k + 1);
+        var a1 = g[0].axes({ x: [1, WEEKS], y: [0, 0.3], title: "Evenings per couple, week by week", xlabel: "week" });
+        a1.line(ws, ev, { color: GOLD, width: 2 });
+        a1.hline(P * (1 - P), { color: GREEN });
+        var ms = [], es = [];
+        for (var m = 1; m <= 24; m += 1) { ms.push(m); var e = run(m, v.t, 11); es.push(QB.mean(e.slice(12))); }
+        var a2 = g[1].axes({ x: [0, 24], y: [0, 0.3], title: "Evenings against coupons", xlabel: "coupons per couple" });
+        a2.line(ms, es, { color: BLUE, width: 2.5 });
+        var mine = QB.mean(ev.slice(12));
+        a2.dots([v.m], [mine], { color: GOLD, r: 5 });
+        a2.vline(v.t, { color: GREY_HINT });
+        var best = 0;
+        for (k = 1; k < es.length; k++) if (es[k] > es[best]) best = k;
+        st.mine = mine; st.best = ms[best]; st.bestEv = es[best];
+      },
+      readout: function (v, st) {
+        var verdict = st.mine > 0.9 * st.bestEv ? "close to the most the co-op can do" :
+          (v.m < st.best ? "a recession: everyone is hoarding, so nobody earns" :
+                           "too many coupons: nobody needs to sit, so evenings are scarce");
+        return [["evenings per couple a week", st.mine.toFixed(3)],
+                ["the best number of coupons", "about " + st.best.toFixed(0) + " per couple (" + st.bestEv.toFixed(3) +
+                  " evenings)"],
+                ["verdict", verdict]];
+      },
+      note: "Nobody in the co-op is lazy or unskilled, and nobody's taste for evenings out changes: only the quantity " +
+            "of money against the reserve people want. Part 27, chapters 0-3 (Sweeney and Sweeney 1977). Computed " +
+            "in your browser; nothing you do here is stored or sent.",
+    });
+  };
 })();

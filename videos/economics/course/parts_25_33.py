@@ -98,4 +98,49 @@ PARTS = [
               ("The Island's planted truths", "explainer/economics/island.py"),
               ("The Data Room's sources", "explainer/economics/data/SOURCES.md")),
     ),
+    Part(
+        n=27, level="U", widget="coop", prereq=(2, 22, 25),
+        question="How can a whole economy be short of buyers?",
+        story="The part opens on Capitol Hill, where a babysitting co-operative of about 150 couples fell into "
+              "recession because everyone wanted to save coupons and nobody went out, and on the Island's own "
+              "co-op, cured when the board prints coupons. It shows the Great Depression in the data against Say's "
+              "law, asks the viewer to hoard or spend, and runs the co-op over every quantity of money. It derives "
+              "Keynes's effective demand, the cross and Kahn's multiplier as a geometric series, computes the paradox "
+              "of thrift, derives Hicks's IS-LM and its fiscal and monetary policy, and follows the economy into the "
+              "liquidity trap, with Japan's and America's zero rates and Krugman's promise. Phillips's water machine "
+              "runs the multiplier in time. After an intermission of industrial production from 1919 to 1945, it "
+              "explains sticky wages with Bewley's interviews and the spike at zero, builds aggregate demand and "
+              "supply and the neoclassical synthesis, asks what ended the Depression (gold, money, war), hears the "
+              "critics, scores Keynes's forecast of 1919, reads two dials, measures Okun's law and the length of "
+              "expansions, and ends with supply shocks that cut demand.",
+        handoff="Part 28 turns to inflation, expectations and the Phillips curve; Part 29 to the cycle as an "
+                "equilibrium; Part 30 to sticky prices; Part 31 to the central bank; Part 32 to fiscal policy and "
+                "multipliers; Part 33 to crises.",
+        outside="Part 2: supply and demand; Part 22: the propensity to consume; Part 25: what money is. Chapter 4 "
+                "sums a geometric series; chapter 6 solves two linear equations; chapter 8 is a first-order "
+                "difference equation.",
+        objectives={
+            "U": ["Explain effective demand, the Keynesian cross and the multiplier, and why trying to save more can "
+                  "lower saving.",
+                  "Use IS-LM to show the effects of fiscal and monetary policy, and explain the liquidity trap.",
+                  "Explain why money wages are sticky and how aggregate demand and supply combine the short and the "
+                  "long run."],
+            "M": ["Derive equilibrium income and the multipliers in the cross and in IS-LM, with and without the zero "
+                  "bound.",
+                  "Solve aggregate demand and supply for demand and supply shocks, and estimate Okun's law."],
+            "D": ["Weigh the evidence on what ended the Great Depression and on the size of the propensity to spend "
+                  "and Okun's coefficient."],
+            "I": ["Build a demand-side forecast from its components and read the output gap."],
+        },
+        results=[
+            ("The cross", r"Y = \frac{a - bT + I + G}{1 - b}"),
+            ("Kahn's multiplier", r"\Delta G\,(1 + b + b^2 + \cdots) = \frac{\Delta G}{1 - b}"),
+            ("IS and LM", r"Y = \frac{A - d\,r}{1 - b}, \quad \frac{M}{P} = kY - h\,i, \quad i \ge 0"),
+            ("Okun's law", r"u - u^* = \beta\,\frac{Y - Y^*}{Y^*}, \quad \beta \approx -0.5"),
+        ],
+        U=(0, 1, 2, 3, 4, 5, 6, 7, 8, "s10_intermission", 9, 10, 11, 12), D=(13, 15), I=(14,),
+        also=(("Agora's Keynesian economy", "explainer/economics/agora/keynes.py"),
+              ("The Island's planted truths", "explainer/economics/island.py"),
+              ("The Data Room's sources", "explainer/economics/data/SOURCES.md")),
+    ),
 ]

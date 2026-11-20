@@ -24,6 +24,7 @@ def dial_rows(dial, lo, hi, ticks, unit, x0=-0.2, x1=6.3, top=2.75, step=0.47, l
         y = top - step * k
         c = DESIGN_COLOR.get(e.design, GREY_B)
         who = e.who.split(",")[0] + r" et al." if "," in e.who else e.who
+        who = who.replace("&", r"\&")
         t = VGroup(label(rf"{who} ({e.year}) \ $\cdot$ \ {e.design}", font_size=17, color=WHITE),
                    label(tex_safe(e.sample), font_size=12, color=GREY_B)).arrange(DOWN, aligned_edge=RIGHT, buff=0.03)
         if t.width > 6.4:

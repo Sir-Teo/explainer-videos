@@ -558,6 +558,27 @@ DIALS = {d.key: d for d in [
                       "positive for the high-skilled)", 0.0, where="Econometrica 74(2): 323-364, abstract and "
                       "post-print summary", checked="2026-11-20"),
          )),
+    Dial("okun", "Okun's coefficient", "percentage points of unemployment above its natural rate per percent of "
+         "output below potential (negative)", (27, 29), status="depends on the setting", checked="2026-11-20",
+         meaning="in the United States unemployment moves about half a point for each point output falls short of "
+                 "potential, so a recession that costs four points of output adds about two points of unemployment; "
+                 "the coefficient is stable over time but differs across countries with their labour markets: small "
+                 "in Japan, where firms hoard labour, large in Spain, where temporary contracts are cut first",
+         estimates=(
+             Estimate("Okun", 1962, "regression", "US quarterly, 1947-1960: about three points of output per point of "
+                      "unemployment (shown as one third)", -0.33, where="Proceedings of the Business and Economic "
+                      "Statistics Section, ASA (1962): 98-104", checked="2026-11-20"),
+             Estimate("Ball, Leigh and Loungani", 2017, "regression", "United States, annual, 1948-2011: gaps from "
+                      "an HP filter (a range of -0.4 to -0.5; R-squared about 0.8)", -0.45,
+                      where="JMCB 49(7): 1413-1441; NBER WP 18668, introduction", checked="2026-11-20"),
+             Estimate("Ball, Leigh and Loungani", 2017, "regression", "Japan, annual, 1980-2011", -0.15,
+                      where="NBER WP 18668, introduction", checked="2026-11-20"),
+             Estimate("Ball, Leigh and Loungani", 2017, "regression", "Spain, annual, 1980-2011", -0.85,
+                      where="NBER WP 18668, introduction", checked="2026-11-20"),
+             Estimate("this film (Agora)", 2026, "regression", "US quarterly, 1949-2025: unemployment less the CBO's "
+                      "natural rate on real GDP against the CBO's potential (R-squared 0.78)", -0.62,
+                      where="videos/economics/econ27/compute.py, item okun", checked="2026-11-20"),
+         )),
     Dial("price_frequency", "frequency of price changes", "share of prices changing per month", (30,)),
     Dial("phillips_slope", "slope of the Phillips curve", "points of inflation per point of slack", (28, 30)),
     Dial("sacrifice", "sacrifice ratio", "point-years of output per point of disinflation", (28,)),
@@ -1141,6 +1162,26 @@ SHOWN = {
         ("Pissarides (2000); Cahuc, Carcillo and Zylberberg (2014); Ljungqvist and Sargent (2018); Rogerson, Shimer "
          "and Wright (2005)", "the reading list"),
         ("Furness (1910)", "the next part's hook, stated"),
+    ],
+    27: [
+        ("Sweeney and Sweeney (1977); Krugman (1998)", "the babysitting co-op, stated; Agora's co-op is simulated"),
+        ("Say (1803); Keynes (1919, 1923, 1936); Kahn (1931); Hicks (1937); Samuelson (1955)", "theory, stated and "
+         "solved in Agora (the cross, the multiplier's series, IS-LM, AS-AD)"),
+        ("Mandeville (1714)", "the paradox of thrift's ancestor, stated"),
+        ("Krugman (1998)", "the liquidity trap and the promise of inflation, stated; computed in Agora's IS-LM"),
+        ("Phillips's machine (1949)", "its history stated; a water version of the multiplier simulated"),
+        ("Fisher (1933); Bewley (1999); Card and Hyslop (1997); Dickens et al. (2007)", "debt deflation and sticky "
+         "wages, stated; the spike at zero simulated on the Island"),
+        ("Eichengreen and Sachs (1985); Eichengreen (1992); Romer (1992)", "what ended the Depression, stated; the "
+         "gold stock and industrial production are the NBER's and the Fed's data"),
+        ("Hayek (1931); Friedman and Schwartz (1963); Lucas and Sargent (1979)", "the critics, stated"),
+        ("Keynes (1919); Mantoux (1946)", "the Called it? card"),
+        ("Johnson, Parker and Souleles (2006) and the other rows", "the propensity-to-spend dial, shown again from "
+         "Part 22"),
+        ("Okun (1962); Ball, Leigh and Loungani (2017)", "the Okun dial's rows; the film's own regression on the CBO's "
+         "gaps"),
+        ("the NBER's business cycle dates", "expansions and recessions measured from FRED's recession indicator"),
+        ("Guerrieri, Lorenzoni, Straub and Werning (2022)", "frontier theory, stated"),
     ],
     26: [
         ("Barr (2023); the Federal Reserve's review of Silicon Valley Bank (2023)", "the hook's thirty-six hours and "

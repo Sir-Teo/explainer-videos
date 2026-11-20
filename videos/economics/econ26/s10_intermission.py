@@ -49,9 +49,8 @@ class Intermission(SoundScene):
             m.set_value(float(np.clip(yr, t[0], t[-1])))
 
         marks = VGroup()
-        for when, say, c in EVENTS:
-            k = int(np.argmin(np.abs(t - when)))
-            marks.add(label(say, font_size=16, color=c).next_to(ax.ax.c2p(when, min(sm[k], lg[k])), DOWN, buff=0.35))
+        for (when, say, c), y in zip(EVENTS, (93.6, 103.6, 92.9)):
+            marks.add(label(say, font_size=16, color=c).move_to(ax.ax.c2p(when, y)))
 
         def appear(when, ttl=7.0):
             at = film_time(when)

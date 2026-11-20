@@ -9,7 +9,7 @@ class Run(VoiceoverScene):
              "Chapter four. Two equilibria: the bank and the run.", lit={1983: r"Diamond and Dybvig"},
              scale=("firm",), horizon=("a day",))
         self.table()
-        self.queue()
+        self.line_up()
         self.sunspots()
 
     def table(self):
@@ -49,7 +49,7 @@ class Run(VoiceoverScene):
             self.play(Indicate(rows, color=WHITE, scale_factor=1.02))
         self.clear_scene()
 
-    def queue(self):
+    def line_up(self):
         r = load("run")
         n = 40
         k = int(round(r["share_served"] * n))

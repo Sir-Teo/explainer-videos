@@ -119,6 +119,11 @@ AGORA = {
                                     "across 89 countries, 1960-2019, holding investment, population growth and "
                                     "schooling fixed, the gap closes at about 1.3% a year, and with no controls not at "
                                     "all"),
+    # Part 27 measured Okun's law against the CBO's potential and built the Keynesian economy
+    "okun": (27, "when spending, not capacity, sets output, firms hire and lay off with demand, so unemployment rises "
+                 "as output falls below potential; against the CBO's potential, 1949-2025, the unemployment gap moves "
+                 "0.62 points per point of the output gap (R-squared 0.78): about one and a half points of output per "
+                 "point of unemployment, against Okun's three and Ball, Leigh and Loungani's two"),
     # Part 25 drew the world's money and inflation and built Cagan's economy
     "quantity": (25, "with velocity steady and output growing for its own reasons, inflation is money growth less output "
                      "growth; across 146 countries' averages for 1990-2024 the slope is 0.96 (0.98 net of output "

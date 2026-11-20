@@ -17,7 +17,7 @@ class Bank(VoiceoverScene):
                      [(rf"reserves \ {S['reserves']:.0f}", CB), (rf"loans \ {S['loans']:.0f}", LOAN),
                       (rf"bonds \ {S['bonds']:.0f}", BOND)],
                      [(rf"deposits \ {S['deposits']:.0f}", DEPOSIT), (rf"equity \ {S['equity']:.0f}", EQUITY)],
-                     width=5.4).move_to(UP * 1.0)
+                     width=5.4).scale(1.45).move_to(UP * 1.1)
         rows = VGroup(
             label(r"its liabilities: \ deposits, \ repayable on demand, \ at par", font_size=23, color=DEPOSIT),
             label(r"its assets: \ loans and bonds that pay off over years, \ and a little cash", font_size=23,

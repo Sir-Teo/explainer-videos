@@ -79,7 +79,7 @@ class Capital(VoiceoverScene):
         rows = VGroup(
             label(r"how much capital?", font_size=28, color=E.ACCENT),
             label(r"banks: \ equity is expensive; \ more of it means less lending", font_size=23, color=LOAN),
-            label(r"Admati and Hellwig, \ 2013: \ equity is expensive only because debt is subsidized; \ ask for "
+            label(r"Admati and Hellwig, \ 2013: \ equity is expensive mainly because debt is subsidized; \ ask for "
                   r"20 to 30\% of assets", font_size=22, color=EQUITY),
             label(r"Modigliani and Miller \ (Part 23): \ more equity makes each share safer, \ so its required return "
                   r"falls", font_size=22, color=GREY_A),

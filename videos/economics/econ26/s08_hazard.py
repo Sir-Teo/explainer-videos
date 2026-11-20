@@ -20,14 +20,14 @@ class Hazard(VoiceoverScene):
                    font_size=16)
         own = DashedLine(ax.ax.c2p(0, m["V"] - m["D"]), ax.ax.c2p(0.3, m["V"] - m["D"]), color=GREY_B,
                          stroke_width=2)
-        put = path(ax, m["sigma"], m["put"], color=CB, width=4)
+        put = path(ax, m["sigma"], m["put"], color=RATE, width=4)
         eq = path(ax, m["sigma"], m["equity"], color=EQUITY, width=4)
         hi = m["points"][-1]
-        gap = Line(ax.ax.c2p(0.25, m["V"] - m["D"]), ax.ax.c2p(0.25, hi["equity"]), color=CB, stroke_width=5)
+        gap = Line(ax.ax.c2p(0.25, m["V"] - m["D"]), ax.ax.c2p(0.25, hi["equity"]), color=RATE, stroke_width=5)
         side = VGroup(
             label(rf"assets {m['V']:.0f}, \ insured deposits {m['D']:.0f}: \\ the owners' own money is "
                   rf"{m['V'] - m['D']:.0f}", font_size=20, color=GREY_A),
-            label(r"deposit insurance is a put: \\ the insurer pays any shortfall", font_size=20, color=CB),
+            label(r"deposit insurance is a put: \\ the insurer pays any shortfall", font_size=20, color=RATE),
             label(rf"at 25\% volatility: \ the put is worth {hi['put']:.1f}, \\ and the owners' stake "
                   rf"{hi['equity']:.1f}", font_size=20, color=EQUITY),
             label(r"with a flat premium, \\ the insurer's loss is the owners' gain: \\ insurance rewards "
@@ -39,7 +39,7 @@ class Hazard(VoiceoverScene):
             f"<bookmark mark='a'/> Take a bank with assets of {m['V']:.0f} and insured deposits of {m['D']:.0f}, so "
             f"the owners' own money, the dashed line, is {m['V'] - m['D']:.0f}. <bookmark mark='b'/> The insurer pays "
             "depositors whatever the assets fall short of a year from now. That is a put option on the bank's "
-            "assets, and its value, in blue, rises steeply with how risky those assets are. "
+            "assets, and its value, in pink, rises steeply with how risky those assets are. "
             "<bookmark mark='c'/> In green, the value of the owners' stake. With assets as volatile as a quarter of "
             f"their value in a year, the put is worth {hi['put']:.1f}, and the owners' stake is worth "
             f"{hi['equity']:.1f}, not {m['V'] - m['D']:.0f}. <bookmark mark='d'/> If the premium is flat, every "

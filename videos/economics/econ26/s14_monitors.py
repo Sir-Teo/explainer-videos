@@ -42,11 +42,11 @@ class Monitors(VoiceoverScene):
     def diversify(self):
         M = load("monitor")
         n = np.array(M["n"], float)
-        ax = plane([0, 3], [0, 0.12], center=LEFT * 2.2 + DOWN * 0.3, x_length=7.0, y_length=4.8,
-                   xticks=[0, 1, 2, 3], yticks=[0, 0.04, 0.08, 0.12], xlabel=r"loans the bank makes \ (log scale)",
+        ax = plane([0, 3], [0, 0.3], center=LEFT * 2.2 + DOWN * 0.3, x_length=7.0, y_length=4.8,
+                   xticks=[0, 1, 2, 3], yticks=[0, 0.1, 0.2, 0.3], xlabel=r"loans the bank makes \ (log scale)",
                    ylabel=r"chance it cannot repay its depositors", xfmt=lambda v: f"{10 ** v:,.0f}",
                    yfmt=lambda v: f"{100 * v:.0f}\\%", font_size=16)
-        curve = path(ax, np.log10(n), M["fail"], color=LOAN, width=4, smooth=False)
+        curve = path(ax, np.log10(n), M["fail"], color=LOAN, width=4, smooth=False, yr=(0, 0.3))
         P = M["points"]
         dots = VGroup(*[dot(ax, np.log10(int(k)), v, color=STAY, r=0.08) for k, v in P.items()])
         side = VGroup(
@@ -63,7 +63,8 @@ class Monitors(VoiceoverScene):
             "Diamond's answer is diversification. <bookmark mark='a'/> On the Island, each loan repays "
             f"{M['R']} with probability {M['p']} and nothing otherwise, and the bank promises its depositors one "
             f"for every loan. <bookmark mark='b'/> With a single loan, the bank fails to pay them one time in ten. "
-            f"<bookmark mark='c'/> With ten loans, about {100 * P['10']:.0f} percent of the time. "
+            f"<bookmark mark='c'/> With ten loans, about {100 * P['10']:.0f} percent of the time. The line "
+            "zigzags, because loans come in whole numbers, but its trend is down. "
             f"<bookmark mark='d'/> With a hundred, about four times in a hundred thousand. <bookmark mark='e'/> A bank "
             "with many independent loans can promise a fixed payment and nearly always keep it, so its depositors "
             "hardly need to watch it. That is why a bank's liabilities are simple debts. The catch is the word "

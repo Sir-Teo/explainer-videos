@@ -182,6 +182,21 @@ CALLS = {c.key: c for c in [
           "FRED: the federal funds rate and the 10-year Treasury yield",
           "Board of Governors, Review of the Federal Reserve's Supervision and Regulation of Silicon Valley Bank "
           "(April 2023)")),
+    Call("keynes_peace", 27, "John Maynard Keynes, in The Economic Consequences of the Peace",
+         "1919", "the reparations the Allies meant to demand were more than Germany could pay, and pressing them would "
+                 "impoverish Central Europe and end in disaster: if we aim deliberately at the impoverishment of "
+                 "Central Europe, vengeance, I dare predict, will not limp",
+         "his estimates of what Germany could export once it had lost its colonies, ships and much of its coal, and of "
+         "how far a defeated economy could be squeezed",
+         "the bill was set only in 1921, cut by the Dawes Plan (1924) and the Young Plan (1929), suspended in 1931 and "
+         "ended in 1932, so it was never paid in full; Germany went through hyperinflation in 1923 and depression "
+         "after 1929, and the peace ended in war; but Etienne Mantoux argued in 1946 that Germany could have paid, "
+         "as its spending on rearmament later showed, and Keynes himself judged the 1921 figure more reasonable",
+         "partly right",
+         ("J. M. Keynes, The Economic Consequences of the Peace (1919), chapter 6",
+          "E. Mantoux, The Carthaginian Peace, or the Economic Consequences of Mr. Keynes (1946)",
+          "P. Clavin, G. Corsetti, M. Obstfeld and A. Tooze (eds.), Keynes's Economic Consequences of the Peace after "
+          "100 Years (2023)")),
     Call("cagan_ceiling", 25, "the revenue theory of hyperinflation, in Phillip Cagan's estimates",
          "1956", "a government printing money to pay its bills raises the most real revenue at a steady inflation of "
                  "one over the semi-elasticity of money demand, about 20 percent a month for Germany; a government "
