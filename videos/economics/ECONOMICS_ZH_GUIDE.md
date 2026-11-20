@@ -908,6 +908,26 @@ brackets on screen.
 | tariff pass-through; trade diversion | 关税传导；贸易转移 |
 | global value chains; trade in value added | 全球价值链；增加值贸易 |
 
+## Part 37
+
+| English | 中文 |
+|---|---|
+| Schelling's segregation model; tipping | 谢林隔离模型；临界点 |
+| bid rent; von Thünen's rings | 竞租；杜能圈 |
+| the monocentric city; the rent gradient | 单中心城市；租金梯度 |
+| agglomeration economies; sharing, matching, learning | 集聚经济；共享、匹配、学习 |
+| the agglomeration elasticity; sorting | 集聚弹性；分选 |
+| Zipf's law; Gibrat's law | 齐普夫定律；吉布拉定律 |
+| core and periphery; the break point; the sustain point | 中心—外围；突破点；维持点 |
+| spatial equilibrium; quality of life; amenities | 空间均衡；生活质量；宜居性 |
+| the housing supply elasticity; land-use regulation | 住房供给弹性；土地使用管制 |
+| rent control | 租金管制 |
+| Moving to Opportunity; neighbourhood effects | "迁往机会"实验；邻里效应 |
+| a quantitative spatial model | 量化空间模型 |
+| place-based policy; special economic zone | 基于地区的政策；经济特区 |
+| the household registration system (hukou) | 户籍制度（户口） |
+| working from home; the donut effect | 居家办公；甜甜圈效应 |
+
 ## Names
 
 | English | 中文 |

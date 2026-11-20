@@ -136,6 +136,10 @@ AGORA = {
                     "effects"),
     "few_exporters": (36, "in Agora, Melitz's firms: of 4,000 draws 260 survive, the most productive 19% export and "
                           "sell 67% of output, nine times the size of firms that sell only at home"),
+    # Part 37 grew towns by Gibrat's law with a floor (Gabaix 1999)
+    "zipf_cities": (37, "in Agora, 20,000 towns growing at random rates independent of size, above a floor of 5% of "
+                        "the mean, settle at an exponent of 0.95 (theory 1.05); America's 100 largest metropolitan "
+                        "areas in 2024 give 1.18, all 387 give 0.90"),
     # Part 34 reran Meese and Rogoff and fitted the PPP half-life
     "random_walk": (34, "in Agora, overshooting makes the exchange rate jump 15% on a "
                         "10% rise in money because prices are sticky and asset markets are not; in the data, no "

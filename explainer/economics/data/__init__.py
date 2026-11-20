@@ -388,6 +388,20 @@ FRED_SERIES["EXPCH"] = ("U.S. exports of goods by F.A.S. basis to China", "milli
 FRED_SERIES["MANEMP"] = ("All employees, manufacturing", "thousands of persons, seasonally adjusted", "monthly",
                          "U.S. Bureau of Labor Statistics")
 FRED_RETRIEVED.update({s: "2026-11-20" for s in CHINA_FRED})
+# Part 37: the S&P CoreLogic Case-Shiller indices of the twenty metropolitan areas, and working from home
+CASE_SHILLER_METROS = {"AT": "Atlanta", "BO": "Boston", "CR": "Charlotte", "CH": "Chicago", "CE": "Cleveland",
+                       "DA": "Dallas", "DN": "Denver", "DE": "Detroit", "LV": "Las Vegas", "LX": "Los Angeles",
+                       "MI": "Miami", "MN": "Minneapolis", "NY": "New York", "PH": "Phoenix", "PO": "Portland",
+                       "SD": "San Diego", "SF": "San Francisco", "SE": "Seattle", "TP": "Tampa", "WD": "Washington"}
+CITY_FRED = (*(f"{k}XRSA" for k in CASE_SHILLER_METROS), "WFHCOVIDMATQUESTION")
+for _k, _n in CASE_SHILLER_METROS.items():
+    FRED_SERIES[f"{_k}XRSA"] = (f"S&P CoreLogic Case-Shiller {_n} Home Price Index", "index January 2000 = 100, "
+                                "seasonally adjusted", "monthly", "S&P Dow Jones Indices LLC")
+FRED_SERIES["WFHCOVIDMATQUESTION"] = ("Work from home rate (Survey of Working Arrangements and Attitudes)",
+                                      "percent of full paid working days, not seasonally adjusted; 2019 from the "
+                                      "American Time Use Survey", "monthly",
+                                      "J. M. Barrero, N. Bloom and S. J. Davis (CC BY 4.0)")
+FRED_RETRIEVED.update({s: "2026-11-20" for s in CITY_FRED})
 
 SPF_FILES = ("median_rgdp_level", "median_rgdp_growth", "median_recess_level")
 SPF_URL = ("https://www.philadelphiafed.org/-/media/frbp/assets/surveys-and-data/survey-of-professional-forecasters/"
@@ -804,6 +818,36 @@ DATASETS = {
         "sha256": "7ffea0510a536587f2f9295bbafef4a312a36b366acc256eb6d9770fe35e44b1",
         "files": ("cepii_gravity_2019.csv",),
     },
+    "census_cbsa": {
+        "title": "Annual estimates of the resident population for metropolitan and micropolitan statistical areas, "
+                 "April 1, 2020 to July 1, 2024 (CBSA-EST2024-ALLDATA)",
+        "publisher": "U.S. Census Bureau, Population Estimates Program",
+        "citation": "U.S. Census Bureau, Vintage 2024 population estimates, cbsa-est2024-alldata.csv, retrieved "
+                    "2026-11-20",
+        "short": "Census Bureau, Vintage 2024 CBSA estimates",
+        "url": "https://www2.census.gov/programs-surveys/popest/datasets/2020-2024/metro/totals/"
+               "cbsa-est2024-alldata.csv",
+        "licence": "public domain (U.S. government work)",
+        "units": "persons",
+        "vintage": "2026-11-20",
+        "sha256": "8bb9e59c3193ce1fc4f1bd08308fe435b2840d0a80a521f51db99b4185d28ea0",
+        "files": ("cbsa_2020_2024.csv",),
+    },
+    "urban_share": {
+        "title": "Share of the population living in urban areas, 1500-2025, for the world, its regions and 21 "
+                 "countries (an extract of the HYDE 3.5 series)",
+        "publisher": "PBL Netherlands Environmental Assessment Agency (HYDE 3.5), via Our World in Data",
+        "citation": "HYDE (2025), with minor processing by Our World in Data, \"Population share in urban areas\", "
+                    "grapher chart urbanization-last-500-years (updated 2026-06-08), retrieved 2026-11-20",
+        "short": "HYDE 3.5, via Our World in Data",
+        "url": "https://ourworldindata.org/grapher/urbanization-last-500-years.csv?v=1&csvType=full&"
+               "useColumnShortNames=true",
+        "licence": "CC BY 4.0",
+        "units": "percent of the population",
+        "vintage": "2026-11-20",
+        "sha256": "85f781e9247ecdc6c20b0ba47f3276325075635f02ac9a1e0b6bb3ee3e7ddebe",
+        "files": ("urban_share_1500_2025.csv",),
+    },
     "trefler_hov": {
         "title": "Trefler's data for \"The Case of the Missing Trade and Other Mysteries\": the factor content of trade, "
                  "endowments and GDP for 33 countries and 9 factors, 1983",
@@ -1208,6 +1252,26 @@ def gravity() -> dict:
     (NaN where missing)."""
     rows = _read(HERE / "cepii_gravity_2019.csv")
     return {k: [r[k] if k in ("iso3_o", "iso3_d") else _num(r[k]) for r in rows] for k in GRAVITY_COLS}
+
+
+@functools.lru_cache(maxsize=None)
+def cbsa(kind: str = "Metropolitan Statistical Area") -> dict:
+    """The Census Bureau's Vintage 2024 population estimates, one row per core-based statistical area of the given
+    kind ("Metropolitan Statistical Area" or "Micropolitan Statistical Area"): ``{"cbsa", "name", "pop2020" (the
+    estimates base, April 2020), "pop2024" (July 2024): [...]}``."""
+    rows = [r for r in _read(HERE / "cbsa_2020_2024.csv") if r["lsad"] == kind]
+    return {"cbsa": [r["cbsa"] for r in rows], "name": [r["name"] for r in rows],
+            "pop2020": [int(r["pop2020"]) for r in rows], "pop2024": [int(r["pop2024"]) for r in rows]}
+
+
+@functools.lru_cache(maxsize=None)
+def urban_share(entity: str) -> dict:
+    """The share of an entity's population living in urban areas (HYDE 3.5, via Our World in Data), percent:
+    ``{"year": [...], "value": [...]}`` from 1500 (centuries, then decades, then years)."""
+    rows = [r for r in _read(HERE / "urban_share_1500_2025.csv") if r["entity"] == entity]
+    if not rows:
+        raise KeyError(entity)
+    return {"year": [int(r["year"]) for r in rows], "value": [float(r["share"]) for r in rows]}
 
 
 @functools.lru_cache(maxsize=None)
@@ -1680,6 +1744,43 @@ def refresh_cepii_gravity() -> None:
             w.writerow([rec[k] for k in GRAVITY_COLS])
 
 
+def refresh_census_cbsa() -> None:
+    d = DATASETS["census_cbsa"]
+    raw = RAW / "cbsa-est2024-alldata.csv"
+    sha = _download(d["url"], raw)
+    if sha != d["sha256"]:
+        print(f"census_cbsa: the download differs from the recorded vintage ({sha[:12]})")
+    with open(raw, newline="", encoding="latin-1") as f:
+        rows = list(csv.DictReader(f))
+    with open(HERE / "cbsa_2020_2024.csv", "w", newline="", encoding="utf-8") as f:
+        w = csv.writer(f)
+        w.writerow(["cbsa", "name", "lsad", "pop2020", "pop2024"])
+        for r in rows:
+            if r["LSAD"] in ("Metropolitan Statistical Area", "Micropolitan Statistical Area"):
+                w.writerow([r["CBSA"], r["NAME"], r["LSAD"], r["ESTIMATESBASE2020"], r["POPESTIMATE2024"]])
+
+
+URBAN_ENTITIES = ("World", "United States", "China", "India", "Japan", "United Kingdom", "Germany", "France",
+                  "Italy", "Brazil", "Mexico", "Nigeria", "Indonesia", "Russia", "South Korea", "Egypt", "Pakistan",
+                  "Bangladesh", "Ethiopia", "Netherlands", "Spain", "Canada")
+
+
+def refresh_urban_share() -> None:
+    d = DATASETS["urban_share"]
+    raw = RAW / "urbanization-last-500-years.csv"
+    sha = _download(d["url"], raw)
+    if sha != d["sha256"]:
+        print(f"urban_share: the download differs from the recorded vintage ({sha[:12]})")
+    with open(raw, newline="", encoding="utf-8") as f:
+        rows = list(csv.DictReader(f))
+    with open(HERE / "urban_share_1500_2025.csv", "w", newline="", encoding="utf-8") as f:
+        w = csv.writer(f)
+        w.writerow(["entity", "code", "year", "share"])
+        for r in rows:
+            if int(r["year"]) >= 1500 and (r["entity"] in URBAN_ENTITIES or not r["code"]):
+                w.writerow([r["entity"], r["code"], r["year"], _fmt(float(r["urbc_c_share"]))])
+
+
 def refresh_trefler_hov() -> None:
     raw = RAW / "hov_pub.dat"
     sha = _download(DATASETS["trefler_hov"]["url"], raw)
@@ -2078,7 +2179,8 @@ def refresh_shiller() -> None:
 
 REFRESH = {"draft1970": refresh_draft1970, "ajr": refresh_ajr, "maddison2023": refresh_maddison, "fred": refresh_fred, "spf": refresh_spf,
            "pinksheet": refresh_pinksheet, "psd_coffee": refresh_psd_coffee, "wdi": refresh_wdi, "hdr": refresh_hdr,
-           "rtdsm": refresh_rtdsm, "warheads": refresh_warheads, "so2": refresh_so2,
+           "rtdsm": refresh_rtdsm, "warheads": refresh_warheads, "census_cbsa": refresh_census_cbsa,
+           "urban_share": refresh_urban_share, "so2": refresh_so2,
            "marriage": refresh_marriage, "democracy": refresh_democracy, "millennium": refresh_millennium,
            "longrun": refresh_longrun, "pwt": refresh_pwt, "shiller": refresh_shiller,
            "wdi_money": refresh_wdi_money, "greenbook": refresh_greenbook,

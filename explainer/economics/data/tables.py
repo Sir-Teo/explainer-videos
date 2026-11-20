@@ -2340,6 +2340,168 @@ PART36 = (IDEAL_X, BERNARD_JENSEN_1995, ADH_2013, FAJGELBAUM_2020, BOEHM_2023, K
           MCCALLUM_1995)
 
 
+# ---------------------------------------------------------------------------
+# Part 37: Cities and Regions
+SAIZ_2010 = Table(
+    key="saiz_2010",
+    cite="A. Saiz, \"The Geographic Determinants of Housing Supply\", Quarterly Journal of Economics 125(3): "
+         "1253-1296 (2010)",
+    tag="Saiz, \\ \\emph{QJE} 125(3) (2010)",
+    where="Table VI, supply elasticities for metropolitan areas with population over 500,000 (pp. 1283-1284); the "
+          "population-weighted (1.75) and unweighted (2.5) averages in the introduction and the conclusion, and the "
+          "common elasticity (1.54) of Table III, column (1)",
+    read="the published article (pdf)",
+    checked="2026-11-20",
+    data={"weighted": 1.75, "unweighted": 2.5, "common": 1.54,
+          "metros": {"Miami": 0.60, "Los Angeles": 0.63, "Fort Lauderdale": 0.65, "San Francisco": 0.66,
+                     "San Diego": 0.67, "Oakland": 0.70, "Salt Lake City": 0.75, "New York": 0.76, "San Jose": 0.76,
+                     "Chicago": 0.81, "Boston": 0.86, "Seattle": 0.88, "Riverside": 0.94, "Tampa": 1.00,
+                     "Cleveland": 1.02, "Portland": 1.07, "Orlando": 1.12, "Pittsburgh": 1.20, "Baltimore": 1.23,
+                     "Detroit": 1.24, "Las Vegas": 1.39, "Minneapolis": 1.45, "Denver": 1.53, "Washington": 1.61,
+                     "Phoenix": 1.61, "Philadelphia": 1.65, "Dallas": 2.18, "Nashville": 2.24, "Houston": 2.30,
+                     "St. Louis": 2.36, "Atlanta": 2.55, "Columbus": 2.71, "San Antonio": 2.98, "Austin": 3.00,
+                     "Charlotte": 3.09, "Kansas City": 3.19, "Oklahoma City": 3.29, "Indianapolis": 4.00,
+                     "Fort Wayne": 5.36, "Wichita": 5.45}},
+    note="Table VI ranks 95 metropolitan areas; the 40 here include the twenty with Case-Shiller indices",
+)
+CDGR_2010 = Table(
+    key="cdgr_2010",
+    cite="P.-P. Combes, G. Duranton, L. Gobillon and S. Roux, \"Estimating Agglomeration Economies with History, "
+         "Geology, and Worker Effects\", in E. L. Glaeser (ed.), Agglomeration Economics, University of Chicago Press "
+         "(2010), pp. 15-66",
+    tag="Combes, \\ Duranton, \\ Gobillon and Roux (2010)",
+    where="section 1.1: the raw elasticity of mean wages to density, the estimates controlling for the quantity and "
+          "the quality of labour, and the preferred estimate; 306 French employment areas, 1976-1996",
+    read="the NBER chapter (c7978, pdf)",
+    checked="2026-11-20",
+    data={"raw": 0.05, "quantity": 0.04, "quality": 0.033, "both": 0.027, "preferred": 0.02, "tfp_raw": 0.04,
+          "typical_lo": 0.04, "typical_hi": 0.10},
+)
+ARSW_2015 = Table(
+    key="arsw_2015",
+    cite="G. M. Ahlfeldt, S. J. Redding, D. M. Sturm and N. Wolf, \"The Economics of Density: Evidence from the "
+         "Berlin Wall\", Econometrica 83(6): 2127-2189 (2015)",
+    tag="Ahlfeldt, \\ Redding, \\ Sturm and Wolf, \\ \\emph{Econometrica} 83(6) (2015)",
+    where="the introduction and Table V, column (3): production externalities lambda = 0.0710 (s.e. 0.0054), their "
+          "decay delta = 0.3617, residential externalities eta = 0.1553, decay rho = 0.7595; commuting nu = 0.07 per "
+          "minute and epsilon = 6.83; 'towards the high end of the 3-8 percent range' of Rosenthal and Strange (2004)",
+    read="NBER Working Paper 20354 (2014, pdf)",
+    checked="2026-11-20",
+    data={"lambda": 0.0710, "delta": 0.3617, "eta": 0.1553, "rho": 0.7595, "nu": 0.07, "epsilon": 6.83,
+          "rs_lo": 3, "rs_hi": 8, "years": (1936, 1986, 2006)},
+)
+CICCONE_HALL_1996 = Table(
+    key="ciccone_hall_1996",
+    cite="A. Ciccone and R. E. Hall, \"Productivity and the Density of Economic Activity\", American Economic Review "
+         "86(1): 54-70 (1996); NBER Working Paper 4313 (1993)",
+    tag="Ciccone and Hall, \\ \\emph{AER} 86(1) (1996)",
+    where="US states' gross output; a doubling of employment density raises labour productivity by about 5 to 6 "
+          "percent, controlling for education; density explains more than half of the differences in productivity "
+          "between states (the working paper's abstract)",
+    read="the working paper's abstract (scanned pdf) and secondary summaries for the 5-6 percent",
+    checked="2026-11-20",
+    data={"lo": 5.0, "hi": 6.0, "share_explained": 0.5},
+)
+DMQ_2019 = Table(
+    key="dmq_2019",
+    cite="R. Diamond, T. McQuade and F. Qian, \"The Effects of Rent Control Expansion on Tenants, Landlords, and "
+         "Inequality: Evidence from San Francisco\", American Economic Review 109(9): 3365-3394 (2019)",
+    tag="Diamond, \\ McQuade and Qian, \\ \\emph{AER} 109(9) (2019)",
+    where="the abstract: a 1994 law change; rent control limits renters' mobility by 20 percent; treated landlords "
+          "reduce rental housing supply by 15 percent by selling to owner-occupants and redeveloping",
+    read="the AEA's abstract page",
+    checked="2026-11-20",
+    data={"year": 1994, "mobility": -0.20, "supply": -0.15, "built_before": 1980},
+)
+CHK_2016 = Table(
+    key="chk_2016",
+    cite="R. Chetty, N. Hendren and L. F. Katz, \"The Effects of Exposure to Better Neighborhoods on Children: New "
+         "Evidence from the Moving to Opportunity Experiment\", American Economic Review 106(4): 855-902 (2016)",
+    tag="Chetty, \\ Hendren and Katz, \\ \\emph{AER} 106(4) (2016)",
+    where="the abstract (NBER WP 21156): children whose families took up an experimental voucher before age 13 earn "
+          "$3,477 (31%) more a year in their mid-twenties, against a control mean of $11,270 (treatment on the "
+          "treated); moving as an adolescent has slightly negative effects; the experiment enrolled 4,604 families "
+          "in Baltimore, Boston, Chicago, Los Angeles and New York, 1994-1998, in three arms (vouchers usable only "
+          "in tracts with under 10% poverty, ordinary vouchers, control)",
+    read="the NBER and AEA abstracts; NBER WP 21156, section 2",
+    checked="2026-11-20",
+    data={"gain": 3477, "control": 11270, "pct": 31, "age": 13, "families": 4604, "cities": 5, "start": 1994,
+          "end": 1998, "poverty": 10},
+)
+HSIEH_MORETTI_2019 = Table(
+    key="hsieh_moretti_2019",
+    cite="C.-T. Hsieh and E. Moretti, \"Housing Constraints and Spatial Misallocation\", American Economic Journal: "
+         "Macroeconomics 11(2): 1-39 (2019); B. Greaney, \"Housing Constraints and Spatial Misallocation: Comment\", "
+         "American Economic Journal: Macroeconomics 18(2): 409-428 (2026)",
+    tag="Hsieh and Moretti (2019); \\ Greaney (2026)",
+    where="the abstracts: housing constraints lowered aggregate US growth by 36 percent from 1964 to 2009 (220 "
+          "metropolitan areas); the comment finds coding errors (the counterfactual as coded would lower output), "
+          "and in a unit-invariant version the effect is two orders of magnitude smaller than the 3.7 percent of GDP "
+          "reported for relaxing three cities' rules",
+    read="the AEA's abstract pages",
+    checked="2026-11-20",
+    data={"growth_cut": 36, "metros": 220, "gdp_three": 3.7, "greaney_orders": 2},
+)
+DONALDSON_2018 = Table(
+    key="donaldson_2018",
+    cite="D. Donaldson, \"Railroads of the Raj: Estimating the Impact of Transportation Infrastructure\", American "
+         "Economic Review 108(4-5): 899-934 (2018)",
+    tag="Donaldson, \\ \\emph{AER} 108(4-5) (2018)",
+    where="the abstract (railroads cut trade costs and price gaps, raised trade and real income); the 16 percent rise "
+          "in real agricultural income in a district reached by the railroad, from the NBER working paper and MIT's "
+          "summary of the published paper",
+    read="the AEA's abstract page; MIT News (27 April 2018)",
+    checked="2026-11-20",
+    data={"income": 16},
+)
+BAUM_SNOW_2007 = Table(
+    key="baum_snow_2007",
+    cite="N. Baum-Snow, \"Did Highways Cause Suburbanization?\", Quarterly Journal of Economics 122(2): 775-805 (2007)",
+    tag="Baum-Snow, \\ \\emph{QJE} 122(2) (2007)",
+    where="the abstract: one new highway through a central city reduces its population by about 18 percent; without "
+          "the interstates central-city population would have grown about 8 percent rather than falling 17 percent "
+          "(1950-1990); instruments from the 1947 plan",
+    read="the abstract (RePEc)",
+    checked="2026-11-20",
+    data={"per_highway": -18, "counterfactual": 8, "actual": -17},
+)
+KLINE_MORETTI_2014 = Table(
+    key="kline_moretti_2014",
+    cite="P. Kline and E. Moretti, \"Local Economic Development, Agglomeration Economies, and the Big Push: 100 Years "
+         "of Evidence from the Tennessee Valley Authority\", Quarterly Journal of Economics 129(1): 275-331 (2014)",
+    tag="Kline and Moretti, \\ \\emph{QJE} 129(1) (2014)",
+    where="the abstract (NBER WP 19293): agricultural gains reversed when transfers lapsed; manufacturing gains kept "
+          "growing; the local agglomeration gains were offset elsewhere; the infrastructure raised national "
+          "manufacturing productivity by more than its cost",
+    read="the NBER abstract",
+    checked="2026-11-20",
+    data={"start": 1933},
+)
+SHENZHEN = Table(
+    key="shenzhen",
+    cite="Shenzhen Statistical Bureau (1979 population, as tabulated by Wikipedia's 'Demographics of Shenzhen'); "
+         "the Seventh National Population Census of China (2020)",
+    tag="Shenzhen Statistical Bureau; \\ China's 2020 census",
+    where="1979: 314,100 residents; 2020 census: 17.56 million; the special economic zone approved in August 1980",
+    read="the census figure as reported; the 1979 figure from the tabulation",
+    checked="2026-11-20",
+    data={"pop1979": 314100, "pop2020": 17.56e6, "sez": 1980},
+)
+SCHELLING_1971 = Table(
+    key="schelling_1971",
+    cite="T. C. Schelling, \"Dynamic Models of Segregation\", Journal of Mathematical Sociology 1(2): 143-186 (1971); "
+         "R. Hegselmann, \"Thomas C. Schelling and James M. Sakoda: The Intellectual, Technical, and Social History "
+         "of a Model\", Journal of Artificial Societies and Social Simulation 20(3): 15 (2017)",
+    tag="Schelling, \\ \\emph{J. Math. Sociol.} 1(2) (1971); \\ Hegselmann (2017)",
+    where="the model first in a 1969 RAND memorandum, then the 1971 paper and Micromotives and Macrobehavior (1978); "
+          "Sakoda's precursor in his 1949 dissertation, published in the journal's first issue",
+    read="Hegselmann's history (JASSS)",
+    checked="2026-11-20",
+    data={"memo": 1969, "paper": 1971, "book": 1978, "sakoda": 1949},
+)
+PART37 = (SAIZ_2010, CDGR_2010, ARSW_2015, CICCONE_HALL_1996, DMQ_2019, CHK_2016, HSIEH_MORETTI_2019, DONALDSON_2018,
+          BAUM_SNOW_2007, KLINE_MORETTI_2014, SHENZHEN, SCHELLING_1971)
+
 PART7 = (BERNOULLI_1738, SAMUELSON_1937, ALLAIS_1953, ELLSBERG_1961, RABIN_2000, THALER_1981, HOLT_LAURY_2005,
          HAYDEN_PLATT_2009, MADRIAN_SHEA_2001, THALER_BENARTZI_2004, BARSKY_1997, POST_2008, MEHRA_PRESCOTT_1985)
-ALL = {t.key: t for t in (*PART1, *PART3, *PART4, *PART5, *PART6, *PART7, *PART8, *PART9, *PART10, *PART11, *PART12, *PART13, *PART14, *PART15, *PART16, *PART17, *PART18, *PART19, *PART21, *PART22, *PART25, *PART26, *PART35, *PART36)}
+ALL = {t.key: t for t in (*PART1, *PART3, *PART4, *PART5, *PART6, *PART7, *PART8, *PART9, *PART10, *PART11, *PART12, *PART13, *PART14, *PART15, *PART16, *PART17, *PART18, *PART19, *PART21, *PART22, *PART25, *PART26, *PART35, *PART36, *PART37)}

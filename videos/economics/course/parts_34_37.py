@@ -153,4 +153,52 @@ PARTS = [
               ("The Island's planted truths", "explainer/economics/island.py"),
               ("The Data Room's sources", "explainer/economics/data/SOURCES.md")),
     ),
+    Part(
+        n=37, level="U", widget="schelling", prereq=(8, 9, 15, 20, 36),
+        question="Why is economic activity piled up in a few places, and what does that do to the people in them?",
+        story="The part opens on Thomas Schelling's checkerboard, played by Agora: coins content with a third of their "
+              "neighbours alike end with three quarters alike. The viewer guesses the outcome, then sees the whole "
+              "tolerance curve. Von Thuenen's rings and the monocentric city derive rents from transport costs, with "
+              "the car spreading the town and the lift building it up. Why cities exist: sharing, matching and "
+              "learning, with sorting separated from agglomeration by movers on the Island and in France; Zipf's law "
+              "on America's metropolitan areas, grown from Gibrat's law; Krugman's core and periphery and its "
+              "tomahawk. After an intermission of five centuries of urbanization, spatial equilibrium reads "
+              "amenities from wages and rents; then housing supply with Saiz's elasticities and twenty cities' "
+              "prices, rent control in San Francisco, Moving to Opportunity, the Berlin Wall, railways and highways, "
+              "place-based policy, two dials, Cairncross's Death of Distance as Called it?, and a frontier on remote "
+              "work and the climate.",
+        handoff="Part 38 opens Act VIII with wages and the minimum wage; Part 40 maps mobility and neighbourhoods "
+                "county by county; Part 48 values clean air with the same spatial logic.",
+        outside="Part 8: production with land and capital; Part 9: equilibrium; Part 15: externalities; Part 20: "
+                "growth; Part 36: variety, scale and the gains-from-trade formula. Chapter 3 solves a differential "
+                "equation for the rent gradient and integrates a density; chapter 5 uses a rank-size regression and a "
+                "stationary distribution; chapter 6 a fixed point and bifurcation; chapter 11 a quantitative model "
+                "with Frechet commuting.",
+        objectives={
+            "U": ["Explain how mild preferences can produce strong segregation, and what Schelling's model does not "
+                  "show.",
+                  "State the forces for and against agglomeration, and why the raw big-city premium overstates it.",
+                  "Describe spatial equilibrium: why wages, rents and amenities move together, and who gains from a "
+                  "local boom."],
+            "M": ["Derive the rent gradient of the monocentric city from Muth's condition, and solve a closed city.",
+                  "Fit Zipf's law by the rank minus one half regression, and explain it with Gibrat's growth and a "
+                  "floor."],
+            "D": ["Solve Krugman's core and periphery and find its break and sustain points.",
+                  "Explain how a quantitative spatial model identifies agglomeration from the Berlin Wall."],
+            "I": ["Read a housing supply elasticity, a rent-control study and a transport appraisal, and say what "
+                  "each means for a city's policy."],
+        },
+        results=[
+            ("Muth's condition", r"p'(x)\,h(x) = -t"),
+            ("Bid rent", r"R_i(x) = Y_i\,(p_i - c_i - f_i x)"),
+            ("Zipf's law", r"\ln(\text{rank} - \tfrac12) = c - \zeta \ln S, \quad \zeta \approx 1"),
+            ("The break point", r"T_B^{\sigma-1} = \frac{(\rho+\mu)(1+\mu)}{(\rho-\mu)(1-\mu)}"),
+            ("Spatial equilibrium", r"\ln w_j - \alpha \ln r_j + q_j = \bar v"),
+            ("Quality of life", r"\hat q_j = \alpha \ln r_j - \ln w_j"),
+        ],
+        U=(0, 1, 2, 4, "s08_intermission", 7, 8, 9, 10, 12, 13, 14), D=(6, 11, 16), I=(15,),
+        also=(("Agora's city", "explainer/economics/agora/city.py"),
+              ("The Island's planted truths", "explainer/economics/island.py"),
+              ("The Data Room's sources", "explainer/economics/data/SOURCES.md")),
+    ),
 ]

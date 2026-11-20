@@ -857,6 +857,32 @@ TRUTHS = {
         # the hat-algebra counterfactual (chapter 9): trade costs between America and China up 25%, theta 4
         "hat": {"theta": 4.0, "rise": 1.25, "n_top": 15},
     },
+    37: {
+        # Schelling's board (the hook and chapter 1): 40 by 40, a tenth empty, content with a third alike
+        "schelling": {"n": 40, "empty": 0.1, "threshold": 1 / 3, "seed": 3},
+        # von Thuenen's crops around the Island's market town (chapter 2): yield per hectare, price and cost per ton
+        # at market, freight per ton-kilometre; the rings run 0-3, 3-10, 10-35 and 35-100 km
+        "thunen": ({"name": "vegetables and milk", "yield": 20.0, "price": 100.0, "cost": 53.2, "freight": 10.4},
+                   {"name": "firewood", "yield": 12.0, "price": 40.0, "cost": 7.5, "freight": 26.0 / 12.0},
+                   {"name": "grain", "yield": 2.6, "price": 150.0, "cost": 90.0, "freight": 1.0},
+                   {"name": "cattle", "yield": 0.5, "price": 320.0, "cost": 120.0, "freight": 2.0}),
+        # the monocentric town (chapter 3): a million households with $60,000, commuting at $1,000 a kilometre a
+        # year; the car halves the cost, the lift makes height 40% cheaper
+        "mono": {"N": 1.0e6, "y": 60.0, "t": 1.0, "alpha": 0.25, "theta": 0.25, "i": 0.06, "car": 0.5, "lift": 0.6},
+        # agglomeration (chapter 4): the planted elasticity of productivity to density, and abler workers' taste for
+        # dense towns
+        "agglo": {"gamma": 0.03, "sort": 0.3, "seed": 37},
+        # Gibrat with a floor (chapter 5)
+        "gibrat": {"n": 20000, "T": 3000, "sigma": 0.2, "floor": 0.05, "seed": 37},
+        # Krugman's core and periphery (chapter 6): manufacturing's share of spending and the elasticity
+        "cp": {"mu": 0.4, "sigma": 5.0},
+        # the Island's six towns (chapters 7, 8 and 13): productivity, amenity (log utility), housing supply
+        "towns": {"names": ("Harbour", "Boatyard", "Market", "Grove", "Ridge", "Lagoon"),
+                  "a": (0.30, 0.20, 0.10, 0.00, -0.10, 0.00), "q": (0.00, -0.05, 0.00, 0.05, -0.10, 0.15),
+                  "eta": (0.6, 1.5, 2.5, 3.0, 2.0, 0.8), "b": 0.3, "alpha": 0.3},
+        # the line city divided by a wall (chapter 11)
+        "berlin": {"J": 61, "half": 6.0, "cbd": 1.5, "sub": -3.5},
+    },
 }
 
 

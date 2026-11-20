@@ -208,4 +208,118 @@
             "with fixed effects: -0.71). Computed in your browser; nothing you do here is stored or sent.",
     });
   };
+
+  W.schelling = function (el) {
+    // Schelling's checkerboard of Part 37 (explainer.economics.agora.city.schelling): two kinds of coin on a board
+    // whose edges wrap; a coin is content if at least the chosen share of its occupied neighbours (of eight) are its
+    // own kind; discontented coins, in random order, move to a random empty square where they would be content.
+    var TEALC = "#7FD1B9", GOLDC = "#F2C14E", N = 30;
+    function rng(seed) {
+      var a = seed >>> 0;
+      return function () {
+        a = (a + 0x6D2B79F5) >>> 0;
+        var t = a;
+        t = Math.imul(t ^ (t >>> 15), t | 1);
+        t ^= t + Math.imul(t ^ (t >>> 7), t | 61);
+        return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+      };
+    }
+    function nb(g, r, c, kind) {
+      var own = 0, tot = 0, dr, dc;
+      for (dr = -1; dr <= 1; dr++) {
+        for (dc = -1; dc <= 1; dc++) {
+          if (!dr && !dc) continue;
+          var v = g[((r + dr + N) % N) * N + ((c + dc + N) % N)];
+          if (v) { tot++; if (v === kind) own++; }
+        }
+      }
+      return [own, tot];
+    }
+    function likeShare(g) {
+      var s = 0, n = 0, i;
+      for (i = 0; i < N * N; i++) {
+        if (!g[i]) continue;
+        var o = nb(g, Math.floor(i / N), i % N, g[i]);
+        if (o[1]) { s += o[0] / o[1]; n++; }
+      }
+      return n ? s / n : 0;
+    }
+    function run(th, empty, seed) {
+      var R = rng(seed), g = new Array(N * N).fill(0), idx = [], i, k;
+      for (i = 0; i < N * N; i++) idx.push(i);
+      for (i = idx.length - 1; i > 0; i--) { k = Math.floor(R() * (i + 1)); var t = idx[i]; idx[i] = idx[k]; idx[k] = t; }
+      var agents = N * N - Math.round(empty * N * N);
+      for (i = 0; i < agents; i++) g[idx[i]] = i < agents / 2 ? 1 : 2;
+      var like = [likeShare(g)], rounds = 0, settled = false;
+      for (var round = 0; round < 40; round++) {
+        var unhappy = [];
+        for (i = 0; i < N * N; i++) {
+          if (!g[i]) continue;
+          var o = nb(g, Math.floor(i / N), i % N, g[i]);
+          if (o[1] && o[0] / o[1] < th) unhappy.push(i);
+        }
+        if (!unhappy.length) { settled = true; break; }
+        for (i = unhappy.length - 1; i > 0; i--) {
+          k = Math.floor(R() * (i + 1)); var u = unhappy[i]; unhappy[i] = unhappy[k]; unhappy[k] = u;
+        }
+        unhappy.forEach(function (cell) {
+          var kind = g[cell];
+          var me = nb(g, Math.floor(cell / N), cell % N, kind);
+          if (!me[1] || me[0] / me[1] >= th) return;
+          g[cell] = 0;
+          var ok = [];
+          for (var j = 0; j < N * N; j++) {
+            if (g[j] || j === cell) continue;
+            var q = nb(g, Math.floor(j / N), j % N, kind);
+            if (!q[1] || q[0] / q[1] >= th) ok.push(j);
+          }
+          if (!ok.length) { g[cell] = kind; return; }
+          g[ok[Math.floor(R() * ok.length)]] = kind;
+        });
+        rounds = round + 1;
+        like.push(likeShare(g));
+      }
+      return { g: g, like: like, rounds: rounds, settled: settled };
+    }
+    QB.widget(el, {
+      title: "Schelling's checkerboard",
+      sub: "Two kinds of coin on a 30 by 30 board. Each is content if at least the share you choose of its " +
+           "neighbours are its own kind; otherwise it moves. Left: the board when it stops. Right: the share of a " +
+           "coin's neighbours who are its own kind, round by round.",
+      panels: 2, height: 280,
+      controls: [
+        { k: "th", label: "Share of like neighbours each coin wants", min: 0, max: 0.8, step: 0.05, value: 0.35,
+          fmt: function (x) { return Math.round(100 * x) + "%"; } },
+        { k: "empty", label: "Share of squares empty", min: 0.05, max: 0.4, step: 0.05, value: 0.1,
+          fmt: function (x) { return Math.round(100 * x) + "%"; } },
+        { k: "seed", label: "Another board (seed)", min: 1, max: 20, step: 1, value: 3,
+          fmt: function (x) { return x.toFixed(0); } },
+      ],
+      draw: function (g, v, st) {
+        var res = run(v.th, v.empty, v.seed), xs1 = [], ys1 = [], xs2 = [], ys2 = [], i;
+        for (i = 0; i < N * N; i++) {
+          var x = i % N, y = N - 1 - Math.floor(i / N);
+          if (res.g[i] === 1) { xs1.push(x); ys1.push(y); } else if (res.g[i] === 2) { xs2.push(x); ys2.push(y); }
+        }
+        var a = g[0].axes({ x: [-1, N], y: [-1, N], title: "the board when it stops", xlabel: "" });
+        a.dots(xs1, ys1, { color: TEALC, r: 3.2 });
+        a.dots(xs2, ys2, { color: GOLDC, r: 3.2 });
+        var b = g[1].axes({ x: [0, Math.max(5, res.like.length - 1)], y: [0.4, 1], title: "like neighbours",
+                            xlabel: "round" });
+        b.line(res.like.map(function (_, k) { return k; }), res.like, { color: GOLDC, width: 2.5 });
+        b.hline(v.th, { color: TEALC });
+        st.res = res;
+      },
+      readout: function (v, st) {
+        var r = st.res;
+        return [["like neighbours: at the start, at the end", Math.round(100 * r.like[0]) + "%, " +
+                 Math.round(100 * r.like[r.like.length - 1]) + "%"],
+                ["rounds", r.settled ? r.rounds + " (everyone content)" : "40 and still moving"],
+                ["what each coin asked for", Math.round(100 * v.th) + "%"]];
+      },
+      note: "The model of Part 37, chapter 1; Agora's version is explainer/economics/agora/city.py. A possibility, not " +
+            "a diagnosis: prices, laws and discrimination sort people too. Computed in your browser; nothing you do " +
+            "here is stored or sent.",
+    });
+  };
 })();

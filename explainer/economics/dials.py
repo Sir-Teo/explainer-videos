@@ -946,8 +946,57 @@ DIALS = {d.key: d for d in [
                       "services over GDP in 2025 (13.8%) as the import share, elasticities 5 to 10", 2.2, lo=1.5,
                       hi=2.9, where="videos/economics/econ35/compute.py, item dials", checked="2026-11-20"),
          )),
-    Dial("agglomeration", "agglomeration elasticity", "percent productivity per doubling of density", (37,)),
-    Dial("housing_supply", "elasticity of housing supply", "", (37,)),
+    Dial("agglomeration", "agglomeration elasticity", "percent productivity per doubling of density", (37,),
+         status="settled within a range", checked="2026-11-20",
+         meaning="how much more productive a worker is where work is denser: the raw premium of dense places is "
+                 "several percent per doubling, but much of it is who lives there; following the same workers "
+                 "leaves one to three percent, and within a city, holding commutes fixed, about five; small per "
+                 "worker, large summed over a city, and the case for letting productive cities grow",
+         estimates=(
+             Estimate("Ciccone and Hall", 1996, "regression", "US states' output per worker against employment "
+                      "density, controlling for education", 5.5, lo=5.0, hi=6.0,
+                      where="American Economic Review 86(1): 54-70; the 5-6 percent from secondary summaries",
+                      checked="2026-11-20"),
+             Estimate("Combes Duranton Gobillon and Roux (raw)", 2010, "regression", "306 French employment areas, "
+                      "1976-1996: mean log wages on density, an elasticity of about 0.05", 3.5,
+                      where="Agglomeration Economics (NBER, 2010), ch. 1, section 1.1", checked="2026-11-20"),
+             Estimate("Combes Duranton Gobillon and Roux (preferred)", 2010, "IV", "the same, with worker fixed "
+                      "effects, historical and geological instruments and spillovers across areas: 0.02 (0.033 "
+                      "with worker effects alone)", 1.4, lo=1.4, hi=2.3,
+                      where="Agglomeration Economics (NBER, 2010), ch. 1, section 1.1", checked="2026-11-20"),
+             Estimate("Ahlfeldt Redding Sturm and Wolf", 2015, "structural", "Berlin's blocks in 1936, 1986 and "
+                      "2006 and the Wall's division and fall: lambda = 0.071, holding travel times fixed", 5.0,
+                      lo=4.3, hi=5.8, where="Econometrica 83(6): 2127-2189, Table V, column (3)",
+                      checked="2026-11-20"),
+             Estimate("Rosenthal and Strange (review)", 2004, "review", "the survey's range for a doubling of city "
+                      "or industry size, as quoted by Ahlfeldt et al.", 5.5, lo=3.0, hi=8.0,
+                      where="Handbook of Regional and Urban Economics vol. 4, ch. 49", checked="2026-11-20"),
+             Estimate("this film (the Island)", 2026, "regression", "60,000 workers in 60 towns, planted at 0.03 "
+                      "(2.1 percent a doubling): movers' wage changes give 0.029", 2.0,
+                      where="videos/economics/econ37/compute.py, item agglo", checked="2026-11-20"),
+         )),
+    Dial("housing_supply", "elasticity of housing supply", "percent more housing for a 1 percent higher price",
+         (37,), status="depends on the setting", checked="2026-11-20",
+         meaning="how far new building, rather than price, absorbs a rise in demand for a place: below one in "
+                 "coastal cities hemmed in by water, hills and rules, above three on open plains; where it is low, a "
+                 "boom becomes rents and a transfer to landowners, where it is high, more homes and more people",
+         estimates=(
+             Estimate("Saiz (Miami)", 2010, "IV", "the least elastic of 95 large metropolitan areas, from developable "
+                      "land and regulation", 0.60, where="Quarterly Journal of Economics 125(3), Table VI",
+                      checked="2026-11-20"),
+             Estimate("Saiz (San Francisco)", 2010, "IV", "the same", 0.66,
+                      where="Quarterly Journal of Economics 125(3), Table VI", checked="2026-11-20"),
+             Estimate("Saiz (one elasticity for all)", 2010, "IV", "a common elasticity across metropolitan areas, "
+                      "1970-2000, instrumented with demand shocks", 1.54,
+                      where="Quarterly Journal of Economics 125(3), Table III, column (1)", checked="2026-11-20"),
+             Estimate("Saiz (population-weighted mean)", 2010, "IV", "the metropolitan elasticities weighted by "
+                      "population (2.5 unweighted)", 1.75, where="Quarterly Journal of Economics 125(3), "
+                      "introduction and conclusion", checked="2026-11-20"),
+             Estimate("Saiz (Houston)", 2010, "IV", "the same table", 2.30,
+                      where="Quarterly Journal of Economics 125(3), Table VI", checked="2026-11-20"),
+             Estimate("Saiz (Wichita)", 2010, "IV", "the most elastic of the 95", 5.45,
+                      where="Quarterly Journal of Economics 125(3), Table VI", checked="2026-11-20"),
+         )),
     Dial("return_capital_poor", "return to capital for small firms in poor countries", "percent a month", (46,)),
     Dial("vsl", "value of a statistical life", "millions of 2024 dollars (older figures converted with the CPI-U)",
          (18, 58), status="contested", checked="2026-11-19",
@@ -1639,6 +1688,27 @@ SHOWN = {
         ("Christiano, Eichenbaum and Evans (2005); Smets and Wouters (2007)", "medium-scale frictions; the hump "
          "computed with habits, indexation and smoothing"),
         ("Bernanke (2002)", "the Called it? card on deflation"),
+    ],
+    37: [
+        ("Schelling (1971); Sakoda (1949)", "the checkerboard, played by Agora"),
+        ("von Thuenen (1826)", "the rings, computed for the Island's crops"),
+        ("Alonso (1964); Mills (1967); Muth (1969)", "the monocentric city, computed"),
+        ("Marshall (1890); Duranton and Puga (2004)", "sharing, matching and learning, stated"),
+        ("Combes, Duranton, Gobillon and Roux (2010); Ciccone and Hall (1996)", "agglomeration and sorting, "
+         "entered in a dial; sorting reproduced on the Island"),
+        ("Zipf (1949); Gabaix (1999)", "Zipf's law on America's metropolitan areas and Gibrat's growth, computed"),
+        ("Krugman (1991); Fujita, Krugman and Venables (1999)", "core and periphery and the tomahawk, computed"),
+        ("Rosen (1979); Roback (1982); Albouy", "spatial equilibrium and quality of life, computed on the Island"),
+        ("Saiz (2010)", "housing supply elasticities, entered in a dial and set against Case-Shiller prices"),
+        ("Hsieh and Moretti (2019); Greaney (2026)", "the aggregate cost of tight housing and its correction, "
+         "stated"),
+        ("Diamond, McQuade and Qian (2019)", "San Francisco's rent control, stated"),
+        ("Chetty, Hendren and Katz (2016)", "Moving to Opportunity's children, stated"),
+        ("Ahlfeldt, Redding, Sturm and Wolf (2015)", "the Berlin Wall, stated, entered in a dial and mimicked on a "
+         "line city"),
+        ("Donaldson (2018); Baum-Snow (2007)", "railways and highways, stated; the highway mechanism computed"),
+        ("Kline and Moretti (2014)", "the Tennessee Valley Authority, stated"),
+        ("Barrero, Bloom and Davis", "working from home, shown from FRED"),
     ],
     36: [
         ("McLean's Ideal X (1956)", "the first container voyage and its costs, stated"),

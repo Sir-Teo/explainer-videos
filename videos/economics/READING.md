@@ -10,7 +10,7 @@ the series leaves out.
 Both *Parts* columns are found, not typed. *Planned* lists the parts whose entry in
 [`SYLLABUS.md`](SYLLABUS.md) names the book or paper; *Built* lists the parts whose scenes, compute step or
 README cite it (a dot: none yet). Fuller notes (editions, chapters, what each source was used for) are in each
-part's README, under *Sources*. Built so far: Parts 1–36.
+part's README, under *Sources*. Built so far: Parts 1–37.
 
 ## 1. The textbook spine
 
@@ -99,7 +99,7 @@ part's README, under *Sources*. Built so far: Parts 1–36.
 | Banerjee–Duflo | A. Banerjee and E. Duflo, *Poor Economics* (2011) | 46 | · |
 | Persson–Tabellini | T. Persson and G. Tabellini, *Political Economics* (2000) | 47 | · |
 | Dhami | S. Dhami, *The Foundations of Behavioral Economic Analysis* (2016) | 45 | · |
-| Fujita–Krugman–Venables | M. Fujita, P. Krugman and A. Venables, *The Spatial Economy* (1999) | 37 | · |
+| Fujita–Krugman–Venables | M. Fujita, P. Krugman and A. Venables, *The Spatial Economy* (1999) | 37 | 37 |
 | Nordhaus | W. Nordhaus, *A Question of Balance* (2008) | 48 | · |
 | Jackson | M. Jackson, *Social and Economic Networks* (2008) | 63 | · |
 
@@ -122,7 +122,7 @@ part's README, under *Sources*. Built so far: Parts 1–36.
 |---|---|---|---|
 | the division of labour | Smith (1776), *The Wealth of Nations* | 1 | 1–2, 19, 21 |
 | comparative advantage | Ricardo (1817), *Principles*, ch. 7 | 2, 8, 35–36 | 1–2, 8, 19, 22, 25, 33–36 |
-| supply and demand, the scissors | Marshall (1890), *Principles of Economics* | 2, 37 | 2, 14 |
+| supply and demand, the scissors | Marshall (1890), *Principles of Economics* | 2, 37 | 2, 14, 37 |
 | the price system as information | Hayek (1945), "The Use of Knowledge in Society" | 1, 9 | 1, 9 |
 | the double auction in the classroom | Chamberlin (1948); Smith (1962) | 1–2 | 1 |
 | zero-intelligence traders | Gode and Sunder (1993) | 2 | 1–2 |
@@ -327,6 +327,8 @@ part's README, under *Sources*. Built so far: Parts 1–36.
 **Part 35, *Trade I: Comparative Advantage*.** Books: Paul Krugman, Maurice Obstfeld and Marc Melitz, *International Economics* (12th ed., 2022), chs 3–6, 9–10; Robert Feenstra, *Advanced International Trade* (2nd ed., 2015), chs 1–3; Douglas Irwin, *Clashing over Commerce: A History of US Trade Policy* (2017); Arnaud Costinot and Andrés Rodríguez-Clare, "Trade Theory with Numbers", *Handbook of International Economics* vol. 4 (2014). Papers: Ricardo (1817); Heckscher (1919); Ohlin (1933); Stolper and Samuelson (1941); Lerner (1952); Leontief (1953); Jones (1971); Dornbusch, Fischer and Samuelson (1977); Leamer (1980); Grossman and Helpman (1994); Trefler (1995); Bagwell and Staiger (1999); Goldberg and Maggi (1999); Eaton and Kortum (2002); Bernhofen and Brown (2004, 2005); Irwin (2005); Arkolakis, Costinot and Rodríguez-Clare (2012); Costinot and Donaldson (2012).
 
 **Part 36, *Trade II: Scale, Firms and Gravity*.** Books: Paul Krugman, Maurice Obstfeld and Marc Melitz, *International Economics* (12th ed., 2022), chs 7–8; Robert Feenstra, *Advanced International Trade* (2nd ed., 2015), chs 5–6; Keith Head and Thierry Mayer, "Gravity Equations", *Handbook of International Economics* vol. 4 (2014); Marc Levinson, *The Box* (2006). Papers: Tinbergen (1962); Grubel and Lloyd (1975); Krugman (1979, 1980); McCallum (1995); Bernard and Jensen (1995); Eaton and Kortum (2002); Melitz (2003); Anderson and van Wincoop (2003); Santos Silva and Tenreyro (2006); Dekle, Eaton and Kortum (2008); Xing and Detert (2010); Arkolakis, Costinot and Rodríguez-Clare (2012); Autor, Dorn and Hanson (2013); Amiti, Redding and Weinstein (2019); Fajgelbaum et al. (2020); Boehm et al. (2023).
+
+**Part 37, *Cities and Regions*.** Books: Jan Brueckner, *Lectures on Urban Economics* (2011); Edward Glaeser, *Triumph of the City* (2011); Masahisa Fujita, Paul Krugman and Anthony Venables, *The Spatial Economy* (1999); Stephen Redding and Esteban Rossi-Hansberg, "Quantitative Spatial Economics", *Annual Review of Economics* 9 (2017). Papers: von Thünen (1826); Alonso (1964); Schelling (1971); Rosen (1979); Roback (1982); Krugman (1991); Ciccone and Hall (1996); Gabaix (1999); Duranton and Puga (2004); Baum-Snow (2007); Saiz (2010); Combes et al. (2010); Kline and Moretti (2014); Ahlfeldt et al. (2015); Chetty, Hendren and Katz (2016); Donaldson (2018); Diamond, McQuade and Qian (2019); Hsieh and Moretti (2019); Greaney (2026).
 
 ## 4. What the series leaves out
 

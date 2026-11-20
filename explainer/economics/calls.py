@@ -389,6 +389,19 @@ CALLS = {c.key: c for c in [
          "right",
          ("B. Holmström and P. Milgrom, Journal of Law, Economics and Organization 7 (1991): 24-52",
           "B. A. Jacob and S. D. Levitt, Quarterly Journal of Economics 118(3) (2003): 843-877, abstract")),
+    Call("cairncross_1997", 37, "Frances Cairncross, in The Death of Distance", "1997",
+         "distance would no longer decide the cost of communicating; location would cease to matter for most "
+         "business decisions, and more people would work from home",
+         "where economic activity locates once communication is nearly free",
+         "the cost of communicating did collapse, and after 2020 about a quarter of paid working days in America "
+         "were worked from home; but activity kept concentrating in large, expensive cities, whose wage premium "
+         "grew, and face-to-face work in them survived the shift",
+         "partly right",
+         ("F. Cairncross, The Death of Distance: How the Communications Revolution Will Change Our Lives, Harvard "
+          "Business School Press (1997)",
+          "J. M. Barrero, N. Bloom and S. J. Davis, the work-from-home rate (SWAA), via FRED, series "
+          "WFHCOVIDMATQUESTION",
+          "E. Moretti, The New Geography of Jobs, Houghton Mifflin Harcourt (2012)")),
     Call("krugman_1995", 36, "Paul Krugman, in the Brookings Papers on Economic Activity", "1995",
          "trade with low-wage countries had only a modest effect on American wage inequality: about 3 percentage "
          "points on the ratio of skilled to unskilled wages, in line with the decade's other estimates",
