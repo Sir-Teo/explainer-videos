@@ -775,6 +775,22 @@ TRUTHS = {
         # chosen so that the good equilibrium is 2.5% and the unstable one 6%; the backstop caps yields at 3.5%
         "debt": {"debt": 1.2, "rf": 0.02, "r_good": 0.025, "r_bad": 0.06, "cap": 0.035},
     },
+    32: {
+        # the Island's treasury (chapters 1-2): debt equal to a year's output, a 3% interest rate, 2% growth and a
+        # primary deficit of 2% of output
+        "budget": {"debt": 1.0, "r": 0.03, "g": 0.02, "deficit": 0.02, "years": 40},
+        # the multiplier in the Part 30 economy (chapter 3): spending raises potential by half its size (gamma)
+        "nk": {"gamma": 0.5, "gy": 0.2, "rhos": (0.0, 0.3, 0.5, 0.6, 0.7)},
+        # a currency union of 48 regions over 40 years (chapter 4): local multiplier 1.5, national 0.6
+        "regions": {"R": 48, "T": 40, "m_local": 1.5, "m_agg": 0.6, "seed": 32},
+        # a war (chapter 9): spending of 20% of output, 50% for five years
+        "war": {"before": 10, "length": 5, "after": 35, "normal": 0.2, "war": 0.5, "r": 0.03},
+        # unpleasant arithmetic (chapter 10): a primary deficit of 1% of output, a money base of 15%
+        "unpleasant": {"deficit": 0.01, "b0": 0.5, "r": 0.03, "g": 0.02, "base": 0.15, "mu_tight": 0.0,
+                       "T_tight": 12, "years": 30},
+        # the fiscal theory (chapter 10): nominal debt 100, a real rate of 2%, a surplus of 2 that falls to 1.5
+        "ftpl": {"B": 100.0, "r": 0.02, "surplus": 2.0, "surplus_low": 1.5},
+    },
 }
 
 

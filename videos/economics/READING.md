@@ -10,7 +10,7 @@ the series leaves out.
 Both *Parts* columns are found, not typed. *Planned* lists the parts whose entry in
 [`SYLLABUS.md`](SYLLABUS.md) names the book or paper; *Built* lists the parts whose scenes, compute step or
 README cite it (a dot: none yet). Fuller notes (editions, chapters, what each source was used for) are in each
-part's README, under *Sources*. Built so far: Parts 1–31.
+part's README, under *Sources*. Built so far: Parts 1–32.
 
 ## 1. The textbook spine
 
@@ -18,7 +18,7 @@ part's README, under *Sources*. Built so far: Parts 1–31.
 
 | Short name | Book | Planned | Built |
 |---|---|---|---|
-| Mankiw | N. G. Mankiw, *Principles of Economics* (10th ed., 2024) | 1–2 | 1–3, 20, 22, 28, 30 |
+| Mankiw | N. G. Mankiw, *Principles of Economics* (10th ed., 2024) | 1–2 | 1–3, 20, 22, 28, 30, 32 |
 | Krugman–Wells | P. Krugman and R. Wells, *Economics* (6th ed., 2021) | 2 | 2 |
 | Acemoglu–Laibson–List | D. Acemoglu, D. Laibson and J. List, *Economics* (3rd ed., 2022) | 4 | 4 |
 | CORE | The CORE Team, *The Economy* (2017; 2.0, 2023) | 1 | 1, 9, 30 |
@@ -31,7 +31,7 @@ part's README, under *Sources*. Built so far: Parts 1–31.
 | Varian | H. Varian, *Intermediate Microeconomics* (9th ed., 2014) | 2, 5–8, 10 | 2, 5–8, 10, 16 |
 | Nicholson–Snyder | W. Nicholson and C. Snyder, *Microeconomic Theory* (13th ed., 2021) | 5–6 | 5–6, 8 |
 | Jones | C. I. Jones, *Macroeconomics* (6th ed., 2023) | 20 | · |
-| Blanchard | O. Blanchard, *Macroeconomics* (8th ed., 2021) | 27, 32 | 20, 24, 27–28 |
+| Blanchard | O. Blanchard, *Macroeconomics* (8th ed., 2021) | 27, 32 | 20, 24, 27–28, 32 |
 | Stock–Watson | J. Stock and M. Watson, *Introduction to Econometrics* (4th ed., 2019) | 4 | 4 |
 | Angrist–Pischke | J. Angrist and J.-S. Pischke, *Mostly Harmless Econometrics* (2009) | 4, 50, 67 | 4 |
 | Osborne | M. Osborne, *An Introduction to Game Theory* (2004) | 11 | 11 |
@@ -68,7 +68,7 @@ part's README, under *Sources*. Built so far: Parts 1–31.
 | SLP | N. Stokey, R. Lucas and E. Prescott, *Recursive Methods in Economic Dynamics* (1989) | 29, 51 | 29 |
 | Acemoglu | D. Acemoglu, *Introduction to Modern Economic Growth* (2009) | 20–21 | · |
 | Galí | J. Galí, *Monetary Policy, Inflation, and the Business Cycle* (2nd ed., 2015) | 30, 56 | 29–30 |
-| Woodford | M. Woodford, *Interest and Prices* (2003) | 30 | 30 |
+| Woodford | M. Woodford, *Interest and Prices* (2003) | 30 | 30, 32 |
 | Walsh | C. Walsh, *Monetary Theory and Policy* (4th ed., 2017) | 25 | 25, 30–31 |
 | Obstfeld–Rogoff | M. Obstfeld and K. Rogoff, *Foundations of International Macroeconomics* (1996) | 34 | · |
 | Pissarides | C. Pissarides, *Equilibrium Unemployment Theory* (2nd ed., 2000) | 24 | 24 |
@@ -317,6 +317,8 @@ part's README, under *Sources*. Built so far: Parts 1–31.
 **Part 30, *Sticky Prices*.** Books: Jordi Galí, *Monetary Policy, Inflation, and the Business Cycle* (2nd ed., 2015), chs. 3–5; Michael Woodford, *Interest and Prices* (2003); David Romer, *Advanced Macroeconomics* (5th ed., 2019), chs. 7 and 12; Carl Walsh, *Monetary Theory and Policy* (4th ed., 2017). Papers: Calvo (1983); Mankiw (1985); Akerlof and Yellen (1985); Taylor (1993); Bils and Klenow (2004); Nakamura and Steinsson (2008); Golosov and Lucas (2007); Clarida, Galí and Gertler (1999, 2000); Blanchard and Galí (2007); Christiano, Eichenbaum and Evans (2005); Smets and Wouters (2007); Eggertsson and Woodford (2003); Del Negro, Giannoni and Patterson (2012); McKay, Nakamura and Steinsson (2016).
 
 **Part 31, *The Central Bank*.** Books: Frederic Mishkin, *The Economics of Money, Banking and Financial Markets*, chs. 14–16 and 23–25; Carl Walsh, *Monetary Theory and Policy* (4th ed., 2017), chs. 1, 11 and 12; Alan Blinder, *Central Banking in Theory and Practice* (1998); Valerie Ramey, "Macroeconomic Shocks and Their Propagation", *Handbook of Macroeconomics* 2A (2016). Papers: Sims (1992); Christiano, Eichenbaum and Evans (1999); Romer and Romer (1989, 2000, 2004); Kuttner (2001); Gertler and Karadi (2015); Nakamura and Steinsson (2018); Coibion (2012); Orphanides (2001, 2004); Laubach and Williams (2003); Holston, Laubach and Williams (2023); Wallace (1981); Gagnon, Raskin, Remache and Sack (2011); Swanson (2021); Bernanke (2020); Calvo (1988); De Grauwe (2011).
+
+**Part 32, *The Treasury*.** Books: Olivier Blanchard, *Fiscal Policy under Low Interest Rates* (2023); David Romer, *Advanced Macroeconomics* (5th ed., 2019), ch. 13; Valerie Ramey, "Ten Years After the Financial Crisis: What Have We Learned from the Renaissance in Fiscal Research?", *JEP* 33(2) (2019); John Cochrane, *The Fiscal Theory of the Price Level* (2023). Papers: Domar (1944); Barro (1974, 1979); Diamond (1965); Sargent and Wallace (1981); Sims (1994); Blanchard and Perotti (2002); Ramey (2011); Nakamura and Steinsson (2014); Ramey and Zubairy (2018); Romer and Romer (2010); Alesina and Ardagna (2010); Guajardo, Leigh and Pescatori (2014); Reinhart and Rogoff (2010); Herndon, Ash and Pollin (2014); Blanchard and Leigh (2013); Eaton and Gersovitz (1981); Arellano (2008); Blanchard (2019).
 
 ## 4. What the series leaves out
 

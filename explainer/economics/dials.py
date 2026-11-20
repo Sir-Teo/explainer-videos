@@ -749,7 +749,39 @@ DIALS = {d.key: d for d in [
                       "industrial production's trough, 29 months after the shock", -1.33, lo=-1.67, hi=-0.72,
                       where="videos/economics/econ31/compute.py, item usvar", checked="2026-11-20"),
          )),
-    Dial("multipliers", "government-spending and tax multipliers", "dollars of output per dollar", (32,)),
+    Dial("multipliers", "government-spending multiplier", "dollars of output per dollar of government purchases, "
+         "cumulative over about two years", (32,), status="depends on the setting", checked="2026-11-20",
+         meaning="whether a dollar of government spending adds more or less than a dollar to output: national "
+                 "estimates for the United States come out below one, because private spending falls and the central "
+                 "bank leans against the spending; comparisons across regions of one currency union come out above "
+                 "one, because they hold monetary policy and national taxes fixed; theory says the national "
+                 "multiplier should be larger at the zero bound, and whether it is larger in slumps is argued",
+         estimates=(
+             Estimate("Ramey and Zubairy", 2018, "narrative", "US 1889-2015, military news, local projections: two "
+                      "years", 0.67, where="JPE 126(2), replication output (Multiplier-Standard-Errors.xlsx); this "
+                      "film reproduces it", checked="2026-11-20"),
+             Estimate("Ramey and Zubairy", 2018, "structural", "the same data, Blanchard-Perotti timing: two years",
+                      0.41, where="JPE 126(2), replication output; this film reproduces it", checked="2026-11-20"),
+             Estimate("Nakamura and Steinsson", 2014, "IV", "US states, defence procurement: the open-economy "
+                      "relative multiplier", 1.5, where="AER 104(3): 753-792; NBER WP 17391, abstract",
+                      checked="2026-11-20"),
+             Estimate("Chodorow-Reich", 2019, "review", "cross-sectional (regional) studies, preferred estimate", 1.8,
+                      where="AEJ: Economic Policy 11(2): 1-34, abstract", checked="2026-11-20"),
+         )),
+    Dial("tax_multiplier", "tax multiplier", "percent fall in real GDP after a tax increase of 1% of GDP, at its "
+         "largest within three years", (32,), status="contested", checked="2026-11-20",
+         meaning="how much output a tax increase costs: estimates from the narrative record of tax laws are two to "
+                 "three, larger than most spending multipliers and the opposite of the simple Keynesian ranking, with "
+                 "much of the effect through investment; why they are so large, and whether tax increases made to "
+                 "close an inherited deficit cost less, are argued",
+         estimates=(
+             Estimate("Romer and Romer", 2010, "narrative", "US postwar exogenous tax changes: output over three years",
+                      3.0, lo=2.0, hi=3.0, where="AER 100(3): 763-801 (nearly 3%); NBER digest (2 to 3%)",
+                      checked="2026-11-20"),
+             Estimate("this film", 2026, "narrative", "the Romers' changes, local projections with four lags: the "
+                      "trough, ten quarters after", 2.2, where="videos/economics/econ32/compute.py, item taxes",
+                      checked="2026-11-20"),
+         )),
     Dial("neutral_rate", "neutral real interest rate", "percent a year: the real short rate that neither "
          "stimulates nor restrains the economy, once temporary shocks have passed", (31,), status="contested",
          checked="2026-11-20",
@@ -1488,6 +1520,33 @@ SHOWN = {
         ("Christiano, Eichenbaum and Evans (2005); Smets and Wouters (2007)", "medium-scale frictions; the hump "
          "computed with habits, indexation and smoothing"),
         ("Bernanke (2002)", "the Called it? card on deflation"),
+    ],
+    32: [
+        ("Reinhart and Rogoff (2010); Herndon, Ash and Pollin (2014)", "the 90% result, recomputed step by step from "
+         "the replication data"),
+        ("Domar (1944); Blanchard (2019)", "debt dynamics and r - g, computed for the Island and from FRED's data"),
+        ("Kahn (1931); Barro (1974, 1979); Diamond (1965)", "theories of the multiplier, of debt and of tax smoothing, "
+         "stated; tax smoothing computed for the Island"),
+        ("Woodford (2011); Christiano, Eichenbaum and Rebelo (2011)", "the multiplier at the zero bound, computed in "
+         "Agora"),
+        ("Blanchard and Perotti (2002); Ramey (2011); Ramey and Zubairy (2018)", "spending multipliers, recomputed "
+         "from the replication data and entered in the multipliers dial"),
+        ("Nakamura and Steinsson (2014); Chodorow-Reich (2019)", "regional multipliers, entered in the dial; the "
+         "missing intercept shown on the Island"),
+        ("Auerbach and Gorodnichenko (2012)", "larger multipliers in recessions, stated as a contrary finding"),
+        ("Romer and Romer (2010)", "the narrative tax changes, used for this film's projections and entered in the "
+         "tax-multiplier dial"),
+        ("Johnson, Parker and Souleles (2006); Parker, Souleles, Johnson and McClelland (2013)", "the rebates, "
+         "recalled from Part 22"),
+        ("Alesina and Ardagna (2010); Guajardo, Leigh and Pescatori (2014)", "expansionary austerity and the reply, "
+         "stated qualitatively"),
+        ("Sims (1994); Cochrane (2023); Sargent and Wallace (1981)", "the fiscal theory and unpleasant arithmetic, "
+         "computed for the Island"),
+        ("Eaton and Gersovitz (1981); Arellano (2008)", "sovereign default, Arellano's calibration solved and "
+         "simulated in Agora"),
+        ("Kelton (2020); Mankiw (2020)", "modern monetary theory and a critique, stated"),
+        ("Blanchard and Leigh (2013)", "the Called it? card on the IMF's 2010 forecasts, recomputed from the "
+         "replication data"),
     ],
     31: [
         ("Draghi (2012)", "the speech, quoted; the yields are the OECD's via FRED"),

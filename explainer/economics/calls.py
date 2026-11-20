@@ -221,6 +221,17 @@ CALLS = {c.key: c for c in [
          ("B. S. Bernanke, \"Deflation: Making Sure 'It' Doesn't Happen Here\", remarks before the National Economists "
           "Club, Washington, D.C., 21 November 2002",
           "BLS: the CPI; BEA: the core PCE price index; Federal Reserve: the federal funds rate; via FRED")),
+    Call("imf_2010", 32, "the IMF's forecasters, in the World Economic Outlook", "April 2010",
+         "growth in 2010-11 for the European economies, forecast with each government's planned budget consolidation "
+         "already taken into account",
+         "the IMF's models and judgement, with the consolidation plans of spring 2010",
+         "across 26 European economies, each percentage point of GDP of planned consolidation went with growth over "
+         "2010-11 about 1.1 points lower than forecast (Blanchard and Leigh's regression, recomputed here from their "
+         "replication data); the forecasts had underestimated the multiplier, by about one",
+         "wrong",
+         ("O. Blanchard and D. Leigh, \"Growth Forecast Errors and Fiscal Multipliers\", American Economic Review "
+          "103(3): 117-120 (2013), and NBER Working Paper 18779",
+          "IMF World Economic Outlook forecasts (spring 2010, fall 2012) as compiled in the replication files")),
     Call("romer_2000", 31, "Christina and David Romer, in the American Economic Review", "June 2000",
          "the Federal Reserve has considerable information about inflation beyond what is known to commercial "
          "forecasters: once its staff's forecast is known, the others add almost nothing",

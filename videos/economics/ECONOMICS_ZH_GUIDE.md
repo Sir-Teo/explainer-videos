@@ -807,6 +807,23 @@ brackets on screen.
 | the lender of last resort; a backstop; self-fulfilling expectations | 最后贷款人；兜底支持；自我实现的预期 |
 | the Greenbook (Tealbook); the dot plot; the taper tantrum | 绿皮书（蓝绿皮书）；点阵图；缩减恐慌 |
 
+## Part 32
+
+| English | 中文 |
+|---|---|
+| the government's budget constraint; the primary balance; debt held by the public | 政府预算约束；基本财政余额；公众持有的债务 |
+| r minus g; the debt-stabilizing surplus | 利率减增长率（r − g）；稳定债务的基本盈余 |
+| the government-spending multiplier; the tax multiplier; crowding out | 政府支出乘数；税收乘数；挤出效应 |
+| Ricardian equivalence; Ricardian households | 李嘉图等价；李嘉图式家庭 |
+| military news shocks; local projections by state | 军事新闻冲击；分状态局部投影 |
+| the regional (relative) multiplier; the missing intercept | 地区（相对）乘数；缺失的截距 |
+| narrative tax changes; automatic stabilizers | 叙事法税收变动；自动稳定器 |
+| fiscal consolidation; austerity; expansionary austerity | 财政整顿；紧缩；扩张性紧缩 |
+| tax smoothing; deadweight loss | 税收平滑；无谓损失 |
+| the fiscal theory of the price level; unpleasant monetarist arithmetic | 价格水平的财政理论；不愉快的货币主义算术 |
+| sovereign default; a haircut; a sovereign spread | 主权违约；债务减记（折价）；主权利差 |
+| modern monetary theory; fiscal space | 现代货币理论；财政空间 |
+
 ## Names
 
 | English | 中文 |

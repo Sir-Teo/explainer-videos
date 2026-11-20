@@ -320,4 +320,46 @@ PARTS = [
               ("The Island's planted truths", "explainer/economics/island.py"),
               ("The Data Room's sources", "explainer/economics/data/SOURCES.md")),
     ),
+    Part(
+        n=32, level="U", widget="budget", prereq=(22, 23, 27, 30, 31),
+        question="What can a government's budget do for the economy, and how much debt is too much?",
+        story="The part opens on Reinhart and Rogoff's 90% threshold and the graduate student who found the "
+              "spreadsheet's missing rows. It derives the budget constraint and debt dynamics around r minus g, has "
+              "the viewer balance the Island's budget, and sets out the multiplier in theory (the cross, crowding "
+              "out, Ricardian households, the New Keynesian model with and without the zero bound) and in four kinds "
+              "of evidence, recomputing Ramey and Zubairy's multipliers since 1889 and showing the missing intercept "
+              "of regional studies on the Island. It covers the Romers' narrative tax changes, automatic "
+              "stabilizers, austerity and the 90% result recomputed step by step; after an intermission of US debt "
+              "since 1889, it asks whether debt is a burden, why wars should be financed by debt, how the budget can "
+              "set the price level, and why countries repay, solving Arellano's default model; it weighs modern "
+              "monetary theory, reads two dials and scores the IMF's 2010 forecasts.",
+        handoff="Part 33 turns to financial crises; Part 41 to taxation's incidence and efficiency; Part 58 to "
+                "scoring a bill.",
+        outside="Part 22: consumption and the cheques; Part 23: Diamond's generations; Part 27: the Keynesian cross; "
+                "Part 30: the New Keynesian model; Part 31: identification and the euro. Chapter 4 uses local "
+                "projections; chapter 9 a constrained minimization; chapter 11 value function iteration (Part 29).",
+        objectives={
+            "U": ["Explain the government's budget constraint and why debt to GDP depends on r minus g.",
+                  "Explain the multiplier in the Keynesian cross, crowding out and Ricardian equivalence, and why "
+                  "estimates differ by design.",
+                  "Describe automatic stabilizers, the austerity debate and what the 90% result became."],
+            "M": ["Estimate spending multipliers by local projections and explain the missing intercept of regional "
+                  "estimates.",
+                  "Compute the spending multiplier in a New Keynesian model with and without the zero bound."],
+            "D": ["Derive tax smoothing, the fiscal theory of the price level and unpleasant monetarist arithmetic.",
+                  "Solve a sovereign default model by value function iteration and read its bond prices."],
+            "I": ["Assess a debt-sustainability analysis or a budget office's estimate of a bill."],
+        },
+        results=[
+            ("Debt dynamics", r"b_{t+1} = \tfrac{1+r}{1+g}\, b_t - s_t, \qquad s^{*} = \tfrac{r-g}{1+g}\, b"),
+            ("The cross with taxes", r"\Delta Y / \Delta G = 1 / (1 - c(1-t))"),
+            ("Tax smoothing", r"\tau = \sum \beta^t g_t \,/\, \sum \beta^t"),
+            ("The fiscal theory", r"B / P = \textstyle\sum \beta^t s_t"),
+            ("A defaultable bond", r"q(b) = (1 - F(b)) / (1 + r)"),
+        ],
+        U=(0, 1, 2, 3, 5, 6, 7, "s09_intermission", 8, 12), D=(9, 10, 11, 13, 15), I=(14,),
+        also=(("Agora's treasury", "explainer/economics/agora/fiscal.py"),
+              ("The Island's planted truths", "explainer/economics/island.py"),
+              ("The Data Room's sources", "explainer/economics/data/SOURCES.md")),
+    ),
 ]

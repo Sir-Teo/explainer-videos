@@ -534,4 +534,78 @@
             "Computed in your browser; nothing you do here is stored or sent.",
     });
   };
+  // ---- Part 32: the minister's budget ----------------------------------------------------------------------------
+  W.budget = function (el) {
+    // The minister's budget of Part 32 (explainer.economics.agora.fiscal: debt_path, stabilizing_surplus): debt to
+    // GDP evolves as b' = b (1 + r)/(1 + g) - s; a consolidation of size c (points of GDP, phased in over the years
+    // chosen) lowers output by multiplier * c while it is in place, and output recovers as the multiplier's effect
+    // fades; a smaller output makes the same debt a larger ratio.
+    var PINK = "#E8A0B4", TEAL = "#7FD1B9", LILAC = "#C9A0FF";
+    function run(r, g, b0, d0, c, phase, m, years) {
+      var b = [b0], gap = [0], s0 = -d0, t, cons;
+      var B = b0, Y = 1, Ypot = 1;
+      for (t = 1; t <= years; t++) {
+        cons = Math.min(1, t / Math.max(1, phase)) * c;          // consolidation in place, points of GDP
+        var gapt = -m * cons * Math.pow(0.6, Math.max(0, t - phase));  // the multiplier's bite fades after phasing
+        Ypot = Ypot * (1 + g);
+        Y = Ypot * (1 + gapt / 100);
+        var s = s0 + cons / 100 + 0.5 * gapt / 100;            // a slump lowers the surplus (stabilizers)
+        B = B * (1 + r) - s * Y;
+        b.push(B / Y); gap.push(gapt);
+      }
+      return { b: b, gap: gap };
+    }
+    QB.widget(el, {
+      title: "The minister's budget",
+      sub: "Debt to GDP evolves with the interest rate, growth and the primary surplus. You choose a consolidation, " +
+           "how fast to phase it in, and how big the multiplier is. Left: debt as a share of output (teal) and, " +
+           "dashed, with no consolidation. Right: the output gap. With a large multiplier, can austerity raise the " +
+           "debt ratio before it lowers it?",
+      panels: 2, height: 280,
+      controls: [
+        { k: "r", label: "Interest rate, %", min: 0, max: 8, step: 0.25, value: 3,
+          fmt: function (x) { return x.toFixed(2); } },
+        { k: "g", label: "Growth, %", min: -1, max: 6, step: 0.25, value: 2,
+          fmt: function (x) { return x.toFixed(2); } },
+        { k: "b0", label: "Starting debt, % of GDP", min: 20, max: 200, step: 5, value: 100,
+          fmt: function (x) { return x.toFixed(0); } },
+        { k: "c", label: "Consolidation, points of GDP", min: 0, max: 8, step: 0.5, value: 3,
+          fmt: function (x) { return x.toFixed(1); } },
+        { k: "phase", label: "Years to phase it in", min: 1, max: 6, step: 1, value: 1,
+          fmt: function (x) { return x.toFixed(0); } },
+        { k: "m", label: "Multiplier", min: 0, max: 2.5, step: 0.1, value: 1.0,
+          fmt: function (x) { return x.toFixed(1); } },
+      ],
+      draw: function (g, v, st) {
+        var Y = 20, i;
+        var a = run(v.r / 100, v.g / 100, v.b0 / 100, 2, v.c, Math.round(v.phase), v.m, Y);
+        var z = run(v.r / 100, v.g / 100, v.b0 / 100, 2, 0, 1, v.m, Y);
+        var yrs = []; for (i = 0; i <= Y; i++) yrs.push(i);
+        var pa = a.b.map(function (x) { return 100 * x; }), pz = z.b.map(function (x) { return 100 * x; });
+        var all = pa.concat(pz);
+        var a1 = g[0].axes({ x: [0, Y], y: [Math.min(0, Math.min.apply(null, all)) , Math.max.apply(null, all) * 1.1],
+                             title: "Debt, % of GDP", xlabel: "years" });
+        a1.line(yrs, pz, { color: GREY_HINT, width: 1.5, dash: [5, 4] });
+        a1.line(yrs, pa, { color: TEAL, width: 2.5 });
+        var lo = Math.min(-0.5, Math.min.apply(null, a.gap));
+        var a2 = g[1].axes({ x: [0, Y], y: [lo * 1.1, 0.5], title: "Output gap, %", xlabel: "years" });
+        a2.hline(0, { color: GREY_HINT });
+        a2.line(yrs, a.gap, { color: PINK, width: 2.5 });
+        st.a = a; st.z = z;
+        st.peak = Math.max.apply(null, pa.slice(0, 4)); st.start = pa[0];
+      },
+      readout: function (v, st) {
+        var stab = (v.r - v.g) / (100 + v.g) * v.b0;
+        return [["surplus that holds the starting debt steady", stab.toFixed(2) + "% of GDP"],
+                ["debt after 20 years", (100 * st.a.b[20]).toFixed(0) + "% (without the plan: " +
+                  (100 * st.z.b[20]).toFixed(0) + "%)"],
+                ["deepest output gap", Math.min.apply(null, st.a.gap).toFixed(1) + "%"],
+                ["verdict", st.peak > st.start + 0.5 ? "the debt ratio rose first: the slump shrank output faster " +
+                  "than the plan cut the deficit" : "the debt ratio falls from the start"]];
+      },
+      note: "A sketch, not a forecast: the multiplier's effect fades by 40% a year once the plan is fully in place, " +
+            "and a slump lowers the surplus by half the output gap. Part 32, chapters 1-2. Computed in your " +
+            "browser; nothing you do here is stored or sent.",
+    });
+  };
 })();
