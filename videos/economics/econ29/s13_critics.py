@@ -22,8 +22,8 @@ class Critics(VoiceoverScene):
                   font_size=21, color=HOURS),
             label(r"the shocks: \ what are they? \ Where is the evidence of technical regress in recessions?",
                   font_size=21, color=TECH),
-            label(r"prices: \ the theory makes predictions about wages and interest rates; \ nobody checks them",
-                  font_size=21, color=PROD),
+            label(r"prices: \ the theory predicts how wages and interest rates move; \ those predictions go "
+                  r"unchecked", font_size=21, color=PROD),
             label(r"exchange: \ in the Depression, \ markets and banks broke down; \ the theory has no room for "
                   r"that", font_size=21, color=HOLD),
             label(r"Prescott, \ in the same issue: \ theory ahead of measurement", font_size=21, color=GREY_A),

@@ -81,6 +81,7 @@ class Calibrate(VoiceoverScene):
                   font_size=22, color=CONS),
         ).arrange(DOWN, buff=0.35).next_to(eqs, DOWN, buff=0.5)
         tag = data_tag(r"the Island's truths; \ Penn World Table 11.0", corner=DR, font_size=12)
+        head = label(r"the Island's long run", font_size=26, color=E.ACCENT).to_edge(UP, buff=0.35)
         with self.voiceover(
             "With the numbers chosen, the model's long-run state follows from three equations. "
             "<bookmark mark='a'/> In the steady state the Euler equation says the return on capital must just repay "
@@ -92,7 +93,7 @@ class Calibrate(VoiceoverScene):
             f"{100 * C['iy']:.0f}, and consumes the rest. The long-run facts are matched by construction. The test "
             "is whether the short-run facts, which were never targeted, come out right."
         ) as vo:
-            self.play(FadeIn(tag))
+            self.play(FadeIn(tag), FadeIn(head))
             for mk, e in zip("abc", eqs):
                 vo.wait_until(mk)
                 self.play(Write(e), run_time=1.2)

@@ -23,19 +23,19 @@ class Growth(VoiceoverScene):
                      r"\mathbb{E}\big[ V(k', z') \mid z \big] \Big\}", font_size=32).to_edge(UP, buff=0.35)
         sol = MathTex(r"k' = \alpha\beta\, z k^{\alpha}", r"\qquad c = (1 - \alpha\beta)\, z k^{\alpha}",
                       font_size=32, color=POLICY).next_to(eq, DOWN, buff=0.3)
-        ax = plane([0, T], [-14, 14], center=LEFT * 1.9 + DOWN * 1.35, x_length=8.6, y_length=3.4,
-                   xticks=[0, 25, 50, 75, 100], yticks=[-10, 0, 10], xlabel=r"year",
+        ax = plane([0, T], [-20, 20], center=LEFT * 1.9 + DOWN * 1.35, x_length=8.6, y_length=3.4,
+                   xticks=[0, 25, 50, 75, 100], yticks=[-15, 0, 15], xlabel=r"year",
                    ylabel=r"\% from average", xfmt=lambda v: f"{v:.0f}", yfmt=lambda v: f"{v:.0f}", font_size=14)
         zero = seg(ax, 0, 0, T, 0, GREY_D, 1.2)
-        zl = path(ax, np.arange(T), z, TECH, 2, smooth=False, yr=(-14, 14))
-        yl = path(ax, np.arange(T), y, OUTPUT, 3, smooth=False, yr=(-14, 14))
+        zl = path(ax, np.arange(T), np.clip(z, -20, 20), TECH, 2, smooth=False)
+        yl = path(ax, np.arange(T), np.clip(y, -20, 20), OUTPUT, 3, smooth=False)
         side = VGroup(
             label(r"Brock and Mirman, \ 1972: \\ log utility, \ capital used up \\ in a year: \ a closed form",
                   font_size=18, color=E.ACCENT),
             label(rf"save $\alpha\beta = {B['saving_rate']:.2f}$ of output, \\ whatever happens", font_size=18,
                   color=POLICY),
             label(r"red: \ technology $z$", font_size=18, color=TECH),
-            label(r"green: \ output, \ smoother \\ and more persistent: \\ capital carries good years forward",
+            label(r"green: \ output, \ more persistent: \\ capital carries good years forward",
                   font_size=18, color=OUTPUT),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.3).to_edge(RIGHT, buff=0.3).shift(DOWN * 1.1)
         tag = published_tag(r"Brock and Mirman, \ \emph{Journal of Economic Theory} 4(3) (1972); \ the Island: \ "
@@ -102,6 +102,7 @@ class Growth(VoiceoverScene):
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.36).to_edge(RIGHT, buff=0.4)
         tag = published_tag(r"Tauchen, \ \emph{Economics Letters} 20 (1986); \ Rouwenhorst (1995); \ Kopecky and "
                             r"Suen, \ \emph{RED} 13 (2010)", corner=DR, font_size=12)
+        head = label(r"luck on a computer: \ a Markov chain", font_size=26, color=E.ACCENT).to_edge(UP, buff=0.35)
         with self.voiceover(
             "A computer cannot hold a continuous random variable, so technology is squeezed onto a few values, with "
             "a table of probabilities for moving between them: a Markov chain. <bookmark mark='a'/> Here are four "
@@ -116,7 +117,7 @@ class Growth(VoiceoverScene):
             "while Rouwenhorst's is still exact. Small numerical choices like this decide whether a solved model "
             "means anything."
         ) as vo:
-            self.play(FadeIn(tag))
+            self.play(FadeIn(tag), FadeIn(head))
             vo.wait_until("a")
             self.play(LaggedStart(*[FadeIn(m) for m in mats], lag_ratio=0.3), FadeIn(side[0]), run_time=2)
             for mk, r_ in zip("bcde", side[1:]):
@@ -130,23 +131,24 @@ class Growth(VoiceoverScene):
         k = np.array(P["k"])
         kp = np.array(P["kprime"])
         lo, hi = float(k[0]), float(k[-1])
-        ax = plane([lo, hi], [lo, hi], center=LEFT * 2.6 + DOWN * 0.3, x_length=5.4, y_length=5.0,
-                   xticks=[2.5, 3.5, 4.5, 5.5], yticks=[2.5, 3.5, 4.5, 5.5], xlabel=r"capital today, \ $k$",
-                   ylabel=r"capital tomorrow, \ $k'$", xfmt=lambda v: f"{v:.1f}", yfmt=lambda v: f"{v:.1f}",
-                   font_size=15)
-        diag = seg(ax, lo, lo, hi, hi, GREY_C, 2, dashed=True)
+        ax = plane([lo, hi], [-0.45, 0.45], center=LEFT * 2.6 + DOWN * 0.3, x_length=6.0, y_length=4.8,
+                   xticks=[2.5, 3.5, 4.5, 5.5], yticks=[-0.4, -0.2, 0, 0.2, 0.4], xlabel=r"capital today, \ $k$",
+                   ylabel=r"net investment, \ $k' - k$", xfmt=lambda v: f"{v:.1f}",
+                   yfmt=lambda v: f"{v:+.1f}" if abs(v) > 1e-9 else "0", font_size=15)
+        zero = seg(ax, lo, 0, hi, 0, GREY_C, 2, dashed=True)
         cols = [interpolate_color(ManimColor(TECH), ManimColor(OUTPUT), j / 4) for j in range(5)]
-        lines = VGroup(*[path(ax, k, kp[j], cols[j], 2.5, smooth=False, yr=(lo, hi)) for j in range(5)])
+        lines = VGroup(*[path(ax, k, kp[j] - k, cols[j], 2.5, smooth=False, yr=(-0.45, 0.45)) for j in range(5)])
+        cross = VGroup(*[dot(ax, float(k[np.argmin(np.abs(kp[j] - k))]), 0, cols[j], 0.07) for j in range(5)])
         side = VGroup(
             label(rf"capital used up each year: \ the grid's policy \\ is within {100 * F['max_rel_err']:.2f}\% of "
                   rf"Brock and Mirman's formula \\ (one grid step is {100 * F['step_rel']:.2f}\%)", font_size=18,
                   color=POLICY),
             label(r"now let capital last: \ 10\% wears out a year; \\ no formula exists", font_size=18,
                   color=GREY_A),
-            label(r"five lines: \ the policy in each \\ of five technology states, \\ bad (red) to good (green)",
-                  font_size=18, color=E.ACCENT),
-            label(r"each crosses the dashed line \\ where capital would stay put: \\ good luck, \ more capital",
-                  font_size=18, color=OUTPUT),
+            label(r"five lines: \ how much capital grows \\ in each of five technology states, \\ bad (red) to "
+                  r"good (green)", font_size=18, color=E.ACCENT),
+            label(r"dots: \ where capital would stay put; \\ good luck, \ a bigger target", font_size=18,
+                  color=OUTPUT),
             label(rf"{P['iterations']} iterations; \ the method \\ does not care that no formula exists",
                   font_size=18, color=VALUE),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.32).to_edge(RIGHT, buff=0.35)
@@ -157,21 +159,21 @@ class Growth(VoiceoverScene):
             "each year, the grid's policy is within "
             f"{100 * F['max_rel_err']:.2f} percent of Brock and Mirman's formula, less than one step of the grid. "
             "<bookmark mark='b'/> Then the real case: capital lasts, with a tenth wearing out each year, and there "
-            "is no formula. <bookmark mark='c'/> Here is next year's capital against this year's, one line for each "
-            "of five technology states, from bad in red to good in green. <bookmark mark='d'/> Each line crosses the "
-            "dashed diagonal where capital would stay the same; in good states the economy builds towards more "
-            "capital, in bad ones it runs capital down. <bookmark mark='e'/> The computer took "
+            "is no formula. <bookmark mark='c'/> Here is how much capital grows, against how much there is, one "
+            "line for each of five technology states, from bad in red to good in green. <bookmark mark='d'/> Each "
+            "line crosses zero where capital would stay the same: with good luck the economy builds towards more "
+            "capital, with bad luck it runs capital down towards less. <bookmark mark='e'/> The computer took "
             f"{P['iterations']} iterations and did not care that no formula exists. That is the power of the method."
         ) as vo:
-            self.play(FadeIn(tag))
+            self.play(FadeIn(tag), FadeIn(ax), Create(zero))
             vo.wait_until("a")
             self.play(FadeIn(side[0]))
             vo.wait_until("b")
-            self.play(FadeIn(side[1]), FadeIn(ax), Create(diag))
+            self.play(FadeIn(side[1]))
             vo.wait_until("c")
             self.play(LaggedStart(*[Create(l_) for l_ in lines], lag_ratio=0.3), FadeIn(side[2]), run_time=2.5)
             vo.wait_until("d")
-            self.play(FadeIn(side[3]))
+            self.play(LaggedStart(*[GrowFromCenter(d) for d in cross], lag_ratio=0.2), FadeIn(side[3]))
             vo.wait_until("e")
             self.play(FadeIn(side[4]))
         self.clear_scene()

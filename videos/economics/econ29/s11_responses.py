@@ -19,20 +19,18 @@ class Responses(VoiceoverScene):
                      xticks=[0, 10, 20, 30, 40], yticks=[0, 0.5, 1.0, 1.5, 2.0], xlabel=r"quarters after the shock",
                      ylabel=r"\% from steady state", xfmt=lambda v: f"{v:.0f}", yfmt=lambda v: f"{v:.1f}",
                      font_size=14)
-        right = plane([0, 40], [-1, 7], center=RIGHT * 3.2 + DOWN * 0.4, x_length=5.0, y_length=4.4,
+        right = plane([0, 40], [-1, 7], center=RIGHT * 3.75 + DOWN * 0.4, x_length=4.4, y_length=4.4,
                       xticks=[0, 10, 20, 30, 40], yticks=[0, 2, 4, 6], xlabel=r"quarters after the shock",
                       ylabel=r"\% from steady state", xfmt=lambda v: f"{v:.0f}", yfmt=lambda v: f"{v:.0f}",
                       font_size=14)
         z0 = seg(left, 0, 0, 40, 0, GREY_D, 1.2)
         z1 = seg(right, 0, 0, 40, 0, GREY_D, 1.2)
         spec = (("z", TECH, r"technology"), ("y", OUTPUT, r"output"), ("n", HOURS, r"hours"),
-                ("c", CONS, r"consumption \ (= the wage)"))
+                ("c", CONS, r"consumption, \\ wage"))
         curves = {k: path(left, q, R[k], c, 3, yr=(-0.3, 2.2)) for k, c, _ in spec}
         names = {k: label(n_, font_size=17, color=c) for k, c, n_ in spec}
-        names["y"].next_to(left.ax.c2p(1, R["y"][1]), UR, buff=0.05)
-        names["z"].next_to(left.ax.c2p(16, R["z"][16]), UP, buff=0.08)
-        names["n"].next_to(left.ax.c2p(4, R["n"][4]), DL, buff=0.05).shift(RIGHT * 0.6)
-        names["c"].next_to(left.ax.c2p(22, R["c"][22]), UP, buff=0.1)
+        for k_ in names:                               # each label at the right end of its curve
+            names[k_].next_to(left.ax.c2p(40, R[k_][-1]), RIGHT, buff=0.12)
         inv = path(right, q, R["i"], INVEST, 3, yr=(-1, 7))
         inv_n = label(r"investment", font_size=17, color=INVEST).next_to(right.ax.c2p(4, R["i"][4]), UR, buff=0.1)
         head = label(r"a 1\% improvement in technology, \ then fading at 5\% a quarter", font_size=22,

@@ -744,6 +744,19 @@ TRUTHS = {
         # Markov chains (chapter 5): seven states
         "chains": {"n": 7, "rho": 0.95, "sigma": 0.007, "rho_high": 0.995},
     },
+    30: {
+        # Bo's ferry fare, painted on the board by the pier (chapter 3): demand elasticity 6, so a markup of 20%
+        "menu": {"eps": 6.0, "gaps": (0.01, 0.02, 0.05, 0.10)},
+        # the Island's New Keynesian economy (chapters 5-13): Gali's (2015) quarterly baseline
+        "nk": {"beta": 0.99, "sigma": 1.0, "phi": 1.0, "alpha": 1 / 3, "eps": 6.0, "theta": 2 / 3, "phi_pi": 1.5,
+               "phi_x": 0.125, "rho_shock": 0.5, "size": 1.0, "thetas": (0.25, 0.5, 2 / 3, 0.75, 0.85)},
+        # the zero lower bound (chapter 12): the natural rate at -2% (annualized) for six quarters
+        "zlb": {"T": 6, "rn_low": -2.0, "extras": (0, 1, 2, 3), "fg_horizons": (1, 2, 4, 6, 8, 10, 12)},
+        # habits, indexation and smoothing (chapter 13)
+        "hybrid": {"habit": 0.9, "index": 0.9, "smooth": 0.8},
+        # a population of price setters (chapter 11): 10% change each month; targets drift 4% a month
+        "setters": {"n": 20000, "freq": 0.1, "shock": 0.05, "sigma_a": 0.04, "months": 24, "seed": 3},
+    },
 }
 
 

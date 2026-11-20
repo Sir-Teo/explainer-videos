@@ -31,6 +31,8 @@ class Cake(VoiceoverScene):
         if side.get_right()[0] > 7.0:
             side.shift(LEFT * (side.get_right()[0] - 6.95))
         tag = island_tag(corner=DR, font_size=14)
+        head = label(r"a small problem that contains the whole method", font_size=26, color=E.ACCENT).to_edge(
+            UP, buff=0.35)
         with self.voiceover(
             "Before an economy with shocks, a much smaller problem, which contains the whole method. "
             "<bookmark mark='a'/> You have a cake of size one, and it has to last for ever. <bookmark mark='b'/> "
@@ -42,9 +44,9 @@ class Cake(VoiceoverScene):
             "<bookmark mark='f'/> Written like this, it is a choice of infinitely many numbers at once, far too many "
             "to search."
         ) as vo:
-            self.play(FadeIn(tag))
+            self.play(FadeIn(tag), FadeIn(head))
             vo.wait_until("a")
-            self.play(GrowFromCenter(cake), FadeIn(cap))
+            self.play(GrowFromCenter(cake), FadeIn(cap), FadeOut(head))
             vo.wait_until("b")
             self.play(Write(eq), run_time=1.5)
             for mk, r_ in zip("cdef", side):
@@ -66,14 +68,15 @@ class Cake(VoiceoverScene):
             label(r"Richard Bellman, \ \emph{Dynamic Programming}, \ 1957: \ the principle of optimality", font_size=21,
                   color=E.ACCENT),
             label(r"``An optimal policy has the property that whatever the initial state and initial decision are, "
-                  r"\ the remaining decisions must constitute an optimal policy \ with regard to the state resulting "
-                  r"from the first decision.''", font_size=19, color=GREY_A),
+                  r"\\ the remaining decisions must constitute an optimal policy \ with regard to the state resulting "
+                  r"from the first decision.''", font_size=21, color=GREY_A),
         ).arrange(DOWN, buff=0.18).move_to(DOWN * 1.6)
         if quote.width > 13.0:
             quote.width = 13.0
         side = label(r"one choice, \ one number, \ and an unknown function on both sides", font_size=22,
                      color=HOLD).to_edge(DOWN, buff=0.45)
         tag = published_tag(r"Bellman, \ \emph{Dynamic Programming} (1957), \ ch.\ 3", corner=DR, font_size=12)
+        head = label(r"Bellman's trick: \ one day at a time", font_size=26, color=E.ACCENT).to_edge(UP, buff=0.35)
         with self.voiceover(
             "Richard Bellman's trick, from the 1950s, is to stop thinking about the whole path. "
             "<bookmark mark='a'/> Let V of w be the best you can do, in total, starting with a cake of size w. "
@@ -84,9 +87,9 @@ class Cake(VoiceoverScene):
             "today left you. <bookmark mark='d'/> The infinite choice has become one choice and one number, at the "
             "price of an unknown function, V, that appears on both sides."
         ) as vo:
-            self.play(FadeIn(tag))
+            self.play(FadeIn(tag), FadeIn(head))
             vo.wait_until("a")
-            self.play(Write(eq[:5]), GrowFromCenter(b1), FadeIn(t1), run_time=1.5)
+            self.play(Write(eq[:5]), GrowFromCenter(b1), FadeIn(t1), FadeOut(head), run_time=1.5)
             vo.wait_until("b")
             self.play(Write(eq[5:]), GrowFromCenter(b2), FadeIn(t2))
             vo.wait_until("c")

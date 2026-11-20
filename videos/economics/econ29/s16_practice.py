@@ -6,7 +6,7 @@ from videos.economics.econ29.common import *  # noqa: F403
 class Practice(VoiceoverScene):
     def construct(self):
         card(self, 14, r"In practice: \ the model in the institution", r"Who runs these models, \ and for what?",
-             "Chapter fourteen. In practice: the model in the institution.", lit={1996: r"Dynare"},
+             "Chapter fourteen. In practice: the model in the institution.",
              scale=("nation",), horizon=("a quarter", "a few years"))
         self.volatility()
         self.hours()

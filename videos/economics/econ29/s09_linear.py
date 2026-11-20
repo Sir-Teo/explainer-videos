@@ -37,6 +37,8 @@ class Linear(VoiceoverScene):
         for e, n_ in zip(eqs, notes):
             n_.next_to(e, RIGHT, buff=0.5).set_x(5.2)
         tag = island_tag(corner=DR, font_size=14)
+        head = label(r"what an equilibrium must satisfy, \ every quarter", font_size=26, color=E.ACCENT).to_edge(
+            UP, buff=0.3)
         with self.voiceover(
             "Value function iteration works, but with capital, technology and hours it gets slow, and real models "
             "have many more variables. The standard alternative starts from the conditions an equilibrium must "
@@ -47,7 +49,7 @@ class Linear(VoiceoverScene):
             "technology wanders at random, drifting back towards normal. Four equations, holding for every quarter, "
             "with an expectation of the future inside."
         ) as vo:
-            self.play(FadeIn(tag))
+            self.play(FadeIn(tag), FadeIn(head))
             for mk, e, n_ in zip("abcd", eqs, notes):
                 vo.wait_until(mk)
                 self.play(Write(e), FadeIn(n_), run_time=1.2)
@@ -103,9 +105,10 @@ class Linear(VoiceoverScene):
         xa = seg(ax, -1.3, 0, 1.3, 0, GREY_D, 1)
         ya = seg(ax, 0, -1.3, 0, 1.3, GREY_D, 1)
         dots = VGroup(*[dot(ax, m, 0, VALUE if m < 1 else TECH, 0.09) for m in sorted(mods)])
-        names = VGroup(*[label(f"{m:.3f}", font_size=16, color=VALUE if m < 1 else TECH) for m in sorted(mods)])
-        for k_, (d, n_) in enumerate(zip(dots, names)):
-            n_.next_to(d, UP if k_ != 1 else DOWN, buff=0.15)
+        ms = sorted(mods)
+        names = VGroup(label(rf"{ms[0]:.3f} \ and \ {ms[1]:.3f}", font_size=16, color=VALUE).next_to(
+                           dots[0], DL, buff=0.12),
+                       label(rf"{ms[2]:.3f}", font_size=16, color=TECH).next_to(dots[2], UR, buff=0.12))
         side = VGroup(
             label(r"the system's three roots", font_size=21, color=E.ACCENT),
             label(rf"two inside the unit circle: \ {sorted(mods)[0]:.3f} and {sorted(mods)[1]:.3f} \\ (stable: "
@@ -133,9 +136,9 @@ class Linear(VoiceoverScene):
         ) as vo:
             self.play(FadeIn(ax), Create(circ), FadeIn(xa), FadeIn(ya), FadeIn(tag), FadeIn(side[0]))
             vo.wait_until("b")
-            self.play(GrowFromCenter(dots[0]), GrowFromCenter(dots[1]), FadeIn(names[:2]), FadeIn(side[1]))
+            self.play(GrowFromCenter(dots[0]), GrowFromCenter(dots[1]), FadeIn(names[0]), FadeIn(side[1]))
             vo.wait_until("c")
-            self.play(GrowFromCenter(dots[2]), FadeIn(names[2]), FadeIn(side[2]))
+            self.play(GrowFromCenter(dots[2]), FadeIn(names[1]), FadeIn(side[2]))
             vo.wait_until("d")
             self.play(FadeIn(side[3]))
             vo.wait_until("e")

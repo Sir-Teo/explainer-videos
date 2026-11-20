@@ -243,6 +243,16 @@ FRED_SERIES["A011RA3Q086SBEA"] = ("Real gross private domestic investment: fixed
 FRED_SERIES["A008RA3Q086SBEA"] = ("Real gross private domestic investment: fixed investment: nonresidential (chain-type "
                                   "quantity index)", "index 2017 = 100, seasonally adjusted", "quarterly", "BEA")
 
+FRED_SERIES["GDPDEF"] = ("Gross domestic product: implicit price deflator", "index 2017 = 100, seasonally adjusted",
+                         "quarterly", "BEA")
+FRED_SERIES["PCEPILFE"] = ("Personal consumption expenditures excluding food and energy (chain-type price index)",
+                           "index 2017 = 100, seasonally adjusted", "monthly", "BEA")
+FRED_SERIES["CORESTICKM159SFRBATL"] = ("Sticky price consumer price index less food and energy", "percent change from "
+                                       "a year ago, seasonally adjusted", "monthly", "Federal Reserve Bank of Atlanta")
+FRED_SERIES["COREFLEXCPIM159SFRBATL"] = ("Flexible price consumer price index less food and energy", "percent change "
+                                         "from a year ago, seasonally adjusted", "monthly",
+                                         "Federal Reserve Bank of Atlanta")
+
 FRED_RETRIEVED = {s: "2026-11-19" for s in (
     "GDPA", "GDIA", "PCECA", "GPDIA", "GCEA", "EXPGSA", "IMPGSA", "A033RC1A027NBEA", "A191RD3A086NBEA", "U1RATE",
     "U2RATE", "U4RATE", "U5RATE", "U6RATE", "CIVPART", "EMRATIO", "CPIAUCSL", "SUUR0000SA0", "PCEPI",
@@ -258,7 +268,8 @@ FRED_RETRIEVED.update({s: "2026-11-20" for s in ("PCECC96", "DSPIC96", "PSAVERT"
                                                   "MMMFFAQ027S", "GNPCA", "USREC", "M1476BUSM027NNBR",
                                                   "GDPPOT", "IRSTCI01JPM156N", "MICH", "T5YIEM", "CPILFESL",
                                                   "GPDIC1", "HOANBS", "A011RA3Q086SBEA",
-                                                  "A008RA3Q086SBEA")})
+                                                  "A008RA3Q086SBEA", "GDPDEF", "PCEPILFE",
+                                                  "CORESTICKM159SFRBATL", "COREFLEXCPIM159SFRBATL")})
 
 SPF_FILES = ("median_rgdp_level", "median_rgdp_growth", "median_recess_level")
 SPF_URL = ("https://www.philadelphiafed.org/-/media/frbp/assets/surveys-and-data/survey-of-professional-forecasters/"

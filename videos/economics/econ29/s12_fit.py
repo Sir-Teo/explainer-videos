@@ -97,10 +97,11 @@ class Fit(VoiceoverScene):
         yrs = np.array(S["years"][1:])
         dA = np.array(S["dA"])
         dY = np.array(S["dY"])
-        ax = plane([1950, 2020], [-4, 8], center=LEFT * 1.8 + DOWN * 0.3, x_length=8.6, y_length=4.8,
+        ax = plane([1950, 2020], [-4, 10], center=LEFT * 1.8 + DOWN * 0.3, x_length=8.6, y_length=4.8,
                    xticks=[1950, 1970, 1990, 2010], yticks=[-4, 0, 4, 8], ylabel=r"growth, \ \% a year",
                    xfmt=lambda v: f"{v:.0f}", yfmt=lambda v: f"{v:+.0f}" if v else "0", font_size=15)
         zero = seg(ax, 1950, 0, 2020, 0, GREY_D, 1.5)
+        dY = np.clip(dY, -4, 10)
         bars = VGroup()
         for y, a in zip(yrs, dA):
             p0, p1 = ax.ax.c2p(y - 0.35, 0), ax.ax.c2p(y + 0.35, a)
@@ -113,7 +114,7 @@ class Fit(VoiceoverScene):
             label(r"bars: \ the Solow residual's growth", font_size=19, color=PROD),
             label(r"line: \ output's growth", font_size=19, color=OUTPUT),
             label(rf"their cycles: \ correlation {S['corr']:.2f}", font_size=19, color=E.ACCENT),
-            label(rf"{S['negative_years']} years of \emph{{negative}} technology: \\ "
+            label(rf"{S['negative_years']} years of \emph{{negative}} technology; \\ the worst: \ "
                   + r", \ ".join(str(w) for w in sorted(S["worst"])), font_size=19, color=TECH),
             label(rf"1982: \ {S['y1982']:.1f}\%. \ Did America \\ forget how to make things?", font_size=19,
                   color=HOLD),
@@ -131,12 +132,12 @@ class Fit(VoiceoverScene):
             f"1982, it fell {abs(S['y1982']):.1f} percent. Did America forget how to make things in 1982, in the "
             "middle of a recession caused, by almost every account, by the Federal Reserve's high interest rates?"
         ) as vo:
-            self.play(FadeIn(tag))
+            self.play(FadeIn(tag), FadeIn(ax), FadeIn(zero))
             vo.wait_until("a")
             self.play(Write(eq))
             vo.wait_until("b")
-            self.play(FadeIn(ax), FadeIn(zero), LaggedStart(*[GrowFromEdge(b, DOWN) for b in bars], lag_ratio=0.02),
-                      FadeIn(side[0]), run_time=2)
+            self.play(LaggedStart(*[GrowFromEdge(b, DOWN) for b in bars], lag_ratio=0.02), FadeIn(side[0]),
+                      run_time=2)
             vo.wait_until("c")
             self.play(Create(out), FadeIn(side[1]), run_time=1.5)
             vo.wait_until("d")

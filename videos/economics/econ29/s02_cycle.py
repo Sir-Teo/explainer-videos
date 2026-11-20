@@ -56,10 +56,10 @@ class Cycle(VoiceoverScene):
     def trend(self):
         C = load("cycle")
         t, ly, tr = np.array(C["t"]), np.array(C["ly"]), np.array(C["trend"])
-        top = plane([1946, 2027], [7.4, 10.4], center=UP * 1.5 + LEFT * 2.0, x_length=8.6, y_length=2.6,
+        top = plane([1946, 2027], [7.4, 10.4], center=UP * 1.5 + LEFT * 2.5, x_length=7.8, y_length=2.6,
                     xticks=[1950, 1970, 1990, 2010], yticks=[8, 9, 10], ylabel=r"log real GDP",
                     xfmt=lambda v: f"{v:.0f}", yfmt=lambda v: f"{v:.0f}", font_size=14)
-        bot = plane([1946, 2027], [-10, 6], center=DOWN * 2.0 + LEFT * 2.0, x_length=8.6, y_length=2.6,
+        bot = plane([1946, 2027], [-10, 6], center=DOWN * 2.0 + LEFT * 2.5, x_length=7.8, y_length=2.6,
                     xticks=[1950, 1970, 1990, 2010], yticks=[-10, -5, 0, 5], ylabel=r"cycle: \ \% from trend",
                     xfmt=lambda v: f"{v:.0f}", yfmt=lambda v: f"{v:.0f}", font_size=14)
         y_l = path(top, t, ly, OUTPUT, 2.5, smooth=False)
@@ -68,7 +68,7 @@ class Cycle(VoiceoverScene):
         zero = seg(bot, 1946, 0, 2027, 0, GREY_D, 1.5)
         cyc = path(bot, t, C["hp"], OUTPUT, 2.5, smooth=False, yr=(-10, 6))
         eq = MathTex(r"\min_{\tau}\ \sum_t (y_t-\tau_t)^2 + \lambda \sum_t \big(\Delta^2 \tau_t\big)^2",
-                     font_size=30).to_edge(RIGHT, buff=0.3).shift(UP * 2.2)
+                     font_size=26).to_edge(RIGHT, buff=0.25).shift(UP * 2.4)
         side = VGroup(
             label(r"fit the data closely...", font_size=19, color=OUTPUT),
             label(r"...but keep the trend smooth: \\ penalize changes in its slope", font_size=19, color=E.ACCENT),
