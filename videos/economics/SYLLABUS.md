@@ -2957,6 +2957,7 @@ Young Economist*.
 | 17 | built, English | *Markets by Design.* Agora gains `matching` (deferred acceptance either side asking, the Boston rule, blocking pairs and every stable matching, manipulation checks, top trading cycles, kidney cycles and chains, Clarke's pivot rule, the bilateral-trade bound, the assignment game's core, a lottery-based school study); the Data Room gains the crude marriage rate via Our World in Data and the transcribed Roth (2012) and exam-school and Denver charter estimates; a new dial (what a sought-after school adds) and Roth's stability *Called it?* |
 | 18 | built, English | *Social Choice and Welfare.* Agora gains `choice` (plurality, runoff, instant runoff, Borda, Condorcet and Copeland; agendas; Borda's failure of independence; Geanakoplos's pivotal voter; single peaks; bloc manipulation; Atkinson's family; the two veils; Scitovsky's reversal; Sen's liberal paradox); the Data Room gains V-Dem's electoral democracy index via Our World in Data and the transcribed values of a statistical life (DOT, EPA, Ashenfelter and Greenstone) and Duverger's law; a new dial (the value of a statistical life) and Duverger's *Called it?* |
 | 19 | built, English | *The Great Escape.* Agora gains `malthus` (a Malthusian economy with a plague and an invention, England's labour demand curve, Galor and Weil's household and a toy unified growth economy, spatial noise); the Data Room gains the Bank of England's millennium series for England and Our World in Data's long-run population, life expectancy, fertility and heights, and Malthus's 1798 passage from the first edition; a new dial (English living standards before 1700, three reconstructions, with a new 'reconstruction' design) and Ehrlich's *Called it?* |
+| 20 | built, English | *Growth I: Capital.* Agora gains `growth` (the Solow model, its golden rule and speed of convergence, Harrod-Domar, growth and development accounting, convergence regressions, Lucas's ratio, the Ramsey model by shooting); the Data Room gains the Penn World Table 11.0, with the internal rate of return; a new dial (the speed of convergence) and a row on capital's share; Samuelson's Soviet forecast as *Called it?*; Kaldor's facts and conditional convergence get their Agora columns |
 
 **Corrections found while building Part 1** (the plan's draft, written from memory, against the sources): Bastiat's
 Paris passage is in *Economic Sophisms*, First Series, ch. 18 (1845), not the *Harmonies*; Hume's is/ought passage is
@@ -3163,3 +3164,18 @@ the transition 8, unified growth 9, *Was it good?* 10, the Dials 11, practice 12
 it?* is folded into the hook; the formal call is Ehrlich's (1968), with the Simon-Ehrlich wager. Kelly's (2019) point
 about persistence studies is demonstrated in Agora with two independent smooth random fields (55% of slopes
 "significant" at 5%). The chapter cards' timeline now starts at the century of the earliest year a chapter lights.
+
+**Corrections found while building Part 20.** The night-time photograph of Korea is described, not shown; the hook's
+numbers are Maddison's, which have no estimates for the north from 1944 to 1989 and put the north ahead in 1940 (2,624
+against 1,975 dollars a head). Kaldor's facts are checked on the Penn World Table 11.0, with its internal rate of return
+for the return on capital. Easterly's (1999) Zambia counterfactual is read from his figure 1 (about 20,000 dollars a
+head against about 600). Solow's 1957 share of technical change is seven eighths as published; Hogan's (1958)
+correction made it 90%. Young's residuals are the published QJE figures (Hong Kong 2.3%, Singapore 0.2%, Korea 1.7%,
+Taiwan 2.6%, Korea and Taiwan outside agriculture); his 1994 working paper had Singapore at -0.3%. Hsieh (2002) is
+quoted from his abstract. Samuelson's forecast is documented by Levy and Peart (2011); the planned *Called it?* on
+Solow-model forecasts for Asia is left out. Hall and Jones's 31.7 = 1.8 x 2.2 x 8.3 is for the five richest and five
+poorest countries in 1988; Caselli's success measures (0.40, and 0.26 in Hall and Jones's form) are for 1996. Lucas's
+58, 5 and 1.04 are his 1988 calculation, redone on 2019 data. The Ramsey model is solved by shooting only (time
+elimination is left to the lab's extensions). An intermission (investment and income, 1960-2023) follows chapter 6, so
+the chapters after it keep the plan's numbers but sit after the film. Kremer, Willis and You's magnitudes are from
+their working paper's introduction; Acemoglu and Molina's comment is stated with them.

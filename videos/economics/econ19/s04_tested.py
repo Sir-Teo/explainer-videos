@@ -11,6 +11,7 @@ class Tested(VoiceoverScene):
              r"people rather than income?", "Chapter three. Malthus tested.",
              lit={2007: r"Clark", 2011: r"Ashraf and Galor"}, scale=("nation", "world"), horizon=("a century",))
         self.curve()
+        self.errors()
         self.across()
 
     def curve(self):
@@ -66,6 +67,63 @@ class Tested(VoiceoverScene):
             vo.wait_until("d")
             self.play(FadeIn(rows[3]), *[Indicate(d, color=GDP, scale_factor=1.6) for q, d in zip(pts, dots)
                                          if q["decade"] >= 1800])
+        self.clear_scene()
+
+    def errors(self):
+        e = load("elasticity")["before"]
+        yrs = np.array(e["years"], float)
+        u = np.array(e["residuals"])
+        top = plane([1265, 1645], [-0.6, 0.4], center=UP * 1.45 + LEFT * 1.6, x_length=8.8, y_length=2.7,
+                    xticks=[1300, 1400, 1500, 1600], yticks=[-0.5, 0, 0.3], xfmt=lambda v: f"{v:.0f}",
+                    ylabel=r"residual, \ log wage", yfmt=lambda v: f"{v:.1f}", font_size=14)
+        zero = DashedLine(top.ax.c2p(1265, 0), top.ax.c2p(1645, 0), color=GREY_B, stroke_width=1.5)
+        res = path(top, yrs, u, color=WAGE, width=2.5, smooth=False)
+        lags = ["0", "5", "10", "20", "40"]
+        se = [e["se_by_lag"][k] for k in lags]
+        bot = plane([-0.5, 4.5], [0, 0.08], center=DOWN * 1.85 + LEFT * 1.6, x_length=8.8, y_length=2.5,
+                    xticks=[], yticks=[0, 0.04, 0.08], ylabel=r"standard error \\ of the slope",
+                    yfmt=lambda v: f"{v:.2f}", font_size=14)
+        bars = VGroup()
+        for i, (k, v) in enumerate(zip(lags, se)):
+            h = bot.ax.c2p(0, v)[1] - bot.ax.c2p(0, 0)[1]
+            r = Rectangle(width=1.0, height=h, stroke_width=0, fill_color=WAGE if k != "10" else E.ACCENT,
+                          fill_opacity=0.85).move_to(bot.ax.c2p(i, 0), aligned_edge=DOWN)
+            lab = VGroup(label(r"no lags \\ (HC1)" if k == "0" else rf"{k} years", font_size=14, color=GREY_A),
+                         label(f"{v:.3f}", font_size=14, color=WHITE))
+            lab[0].next_to(r, DOWN, buff=0.08)
+            lab[1].next_to(r, UP, buff=0.05)
+            bars.add(VGroup(r, lab))
+        side = VGroup(
+            label(rf"neighbouring years' errors: \\ correlation {e['rho1']:.2f}", font_size=20, color=WAGE),
+            MathTex(r"\hat S = \sum_{\ell=-L}^{L}\Big(1-\tfrac{|\ell|}{L+1}\Big)\hat\Gamma_\ell", font_size=30),
+            label(r"Newey and West, \ 1987: \\ add the covariances, \ down-weighted", font_size=18, color=GREY_A),
+            label(rf"even at 40 years: \\ the slope is {abs(e['slope']) / se[-1]:.0f} \\ standard errors from zero",
+                  font_size=20, color=E.ACCENT),
+        ).arrange(DOWN, aligned_edge=LEFT, buff=0.35).to_edge(RIGHT, buff=0.35)
+        tag = published_tag(r"Newey and West, Econometrica 55(3) (1987)", corner=DR, font_size=12)
+        with self.voiceover(
+            "A word on that standard error, because time series need care. <bookmark mark='a'/> Here are the "
+            "regression's residuals, year by year: what wages did that population does not explain. They wander in "
+            f"long swings. A year's error is correlated with the next year's, at {e['rho1']:.2f}. "
+            "<bookmark mark='b'/> So the {n} years are not {n} independent pieces of evidence. The usual formula, "
+            f"even the one robust to unequal variances, treats them as if they were, and gives {e['se_hc1']:.3f}. "
+            "<bookmark mark='c'/> Whitney Newey and Kenneth West's estimator adds the covariances between nearby "
+            "years, each down-weighted the further apart they are. With ten years of lags, the standard error more "
+            f"than doubles, to {e['se_by_lag']['10']:.3f}. <bookmark mark='d'/> How many lags is a judgment, so "
+            "check it: with forty years, the error is larger still, and the slope is still about "
+            f"{abs(e['slope']) / se[-1]:.0f} standard errors from zero. The conclusion does not depend on the choice."
+            .replace("{n}", str(e["n"]))
+        ) as vo:
+            self.play(FadeIn(top), Create(zero), FadeIn(tag))
+            vo.wait_until("a")
+            self.play(Create(res), run_time=3, rate_func=linear)
+            self.play(FadeIn(side[0]))
+            vo.wait_until("b")
+            self.play(FadeIn(bot), FadeIn(bars[0]))
+            vo.wait_until("c")
+            self.play(FadeIn(side[1]), FadeIn(side[2]), FadeIn(bars[1]), FadeIn(bars[2]))
+            vo.wait_until("d")
+            self.play(FadeIn(bars[3]), FadeIn(bars[4]), FadeIn(side[3]))
         self.clear_scene()
 
     def across(self):

@@ -362,7 +362,7 @@ DATASETS = {
         "url": "https://dataverse.nl/api/access/datafile/554105",
         "licence": "CC BY 4.0",
         "units": "rgdpo, rgdpna, cn, rnna in millions of 2021 US dollars (PPP); pop and emp in millions; avh hours a "
-                 "year; hc an index; labsh, csh_i, delta shares; ctfp relative to the US = 1",
+                 "year; hc an index; labsh, csh_i, delta, irr shares; ctfp relative to the US = 1",
         "vintage": "2026-11-19",
         "sha256": "7b337e94f39dfe304bc459e433f8ce0624496c812707ae0c924888f5142b3ab3",
         "files": ("pwt110.csv",),
@@ -1074,7 +1074,7 @@ def refresh_longrun() -> None:
 
 
 PWT_COLUMNS = ("countrycode", "country", "year", "rgdpo", "rgdpna", "rgdpe", "pop", "emp", "avh", "hc", "cn", "rnna",
-               "labsh", "csh_i", "delta", "ctfp", "cgdpo", "ck")
+               "labsh", "csh_i", "delta", "ctfp", "cgdpo", "ck", "irr")
 
 
 def pwt(code: str | None = None, year: int | None = None) -> list[dict]:

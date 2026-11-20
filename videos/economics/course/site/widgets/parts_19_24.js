@@ -72,4 +72,83 @@
             "here is stored or sent.",
     });
   };
+  // ---- Part 20: the island saves ---------------------------------------------------------------------------------
+  W.solow = function (el) {
+    // the Solow island of Part 20 (explainer.economics.agora.growth: solow_path): k' = k + s k^alpha - (n+g+delta) k
+    // per effective worker, starting at the steady state of a 15% saving rate; the reader picks a new saving rate for
+    // a century and sees consumption per worker against staying at 15%, and the steady state's consumption against
+    // the saving rate, whose peak is the golden rule.
+    var T = 100, S0 = 0.15;
+    function kstar(s, v) { return Math.pow(s / (v.n + v.g + v.delta), 1 / (1 - v.alpha)); }
+    function run(s, v) {
+      var k = kstar(S0, v), cs = [], ts = [];
+      for (var t = 0; t <= T; t++) {
+        var y = Math.pow(k, v.alpha);
+        ts.push(t); cs.push((1 - s) * y * Math.pow(1 + v.g, t));
+        k = k + s * y - (v.n + v.g + v.delta) * k;
+      }
+      return { t: ts, c: cs };
+    }
+    QB.widget(el, {
+      title: "How much should the island save?",
+      sub: "The island has been saving 15% of its output. Choose a new saving rate for the next hundred years, and the " +
+           "technology: capital's share, population growth, technological progress and depreciation. The left chart " +
+           "shows consumption per worker relative to staying at 15%; the right, steady-state consumption for every " +
+           "saving rate. Can you find the rate that leaves the most to eat in year 100?",
+      panels: 2, height: 300,
+      controls: [
+        { k: "s", label: "New saving rate", min: 0.05, max: 0.9, step: 0.01, value: 0.25,
+          fmt: function (x) { return (100 * x).toFixed(0) + "%"; } },
+        { k: "alpha", label: "Capital's share, alpha", min: 0.2, max: 0.6, step: 0.01, value: 1 / 3,
+          fmt: function (x) { return x.toFixed(2); } },
+        { k: "n", label: "Population growth, a year", min: 0, max: 0.03, step: 0.001, value: 0.01,
+          fmt: function (x) { return (100 * x).toFixed(1) + "%"; } },
+        { k: "g", label: "Technological progress, a year", min: 0, max: 0.04, step: 0.001, value: 0.02,
+          fmt: function (x) { return (100 * x).toFixed(1) + "%"; } },
+        { k: "delta", label: "Depreciation, a year", min: 0.02, max: 0.1, step: 0.005, value: 0.05,
+          fmt: function (x) { return (100 * x).toFixed(1) + "%"; } },
+      ],
+      draw: function (gr, v, st) {
+        var a = run(v.s, v), b = run(S0, v);
+        var rel = a.c.map(function (x, i) { return x / b.c[i]; });
+        st.rel = rel;
+        var lo = Math.min(0.9, Math.min.apply(null, rel) * 0.95), hi = Math.max(1.1, Math.max.apply(null, rel) * 1.05);
+        var ax = gr[0].axes({ x: [0, T], y: [lo, hi], title: "Consumption per worker, relative to staying at 15%",
+                              xlabel: "year" });
+        ax.hline(1, { color: GREY_HINT });
+        ax.line(a.t, rel, { color: GREEN, width: 2.5 });
+        var ss = [], cc = [];
+        for (var i = 1; i < 100; i++) {
+          var s = i / 100, k = kstar(s, v);
+          ss.push(s); cc.push((1 - s) * Math.pow(k, v.alpha));
+        }
+        var cmax = Math.max.apply(null, cc);
+        var bx = gr[1].axes({ x: [0, 1], y: [0, cmax * 1.15], title: "Steady-state consumption per effective worker",
+                              xlabel: "saving rate" });
+        bx.line(ss, cc, { color: GOLD, width: 2.5 });
+        bx.vline(v.alpha, { color: GREY_HINT });
+        bx.vline(v.s, { color: GREEN });
+      },
+      readout: function (v, st) {
+        var rel = st.rel;
+        if (!rel) return [];
+        var lam = (1 - v.alpha) * (v.n + v.g + v.delta);
+        var end = rel[rel.length - 1], best = v.alpha;
+        var cross = null;
+        for (var i = 1; i < rel.length; i++) { if ((v.s > S0 && rel[i] >= 1) || (v.s < S0 && rel[i] < 1)) { cross = i; break; } }
+        var verdict = Math.abs(v.s - best) < 0.015 ? "at the golden rule: the most to eat in the long run" :
+          (v.s > best ? "above the golden rule: dynamically inefficient, the island could eat more now and later" :
+                        "below the golden rule: more saving would pay off, after a lean start");
+        return [["consumption in year 100, against staying at 15%", (end >= 1 ? "+" : "") + (100 * (end - 1)).toFixed(1) + "%"],
+                [v.s > S0 ? "year the new rate overtakes 15%" : "year the new rate falls behind 15%",
+                 cross === null ? (v.s === S0 ? "the same rate" : "never, within a century") : String(cross)],
+                ["the golden rule saving rate (= alpha)", (100 * best).toFixed(0) + "%"],
+                ["half-life of the transition, ln 2 / lambda", (Math.log(2) / lam).toFixed(0) + " years"],
+                ["verdict", verdict]];
+      },
+      note: "The golden rule maximizes consumption in the steady state, not in every year: every rate above 15% starts " +
+            "with a cut in consumption, and whether the later gain is worth it depends on how patient the islanders " +
+            "are (Part 20, chapter 11). Computed in your browser; nothing you do here is stored or sent.",
+    });
+  };
 })();

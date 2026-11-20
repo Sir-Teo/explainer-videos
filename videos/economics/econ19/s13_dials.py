@@ -10,6 +10,7 @@ class Dials(VoiceoverScene):
              r"centuries before 1700?", "Chapter eleven. The Dials: growth before the escape.",
              scale=("nation",), lit={2010: r"Clark's wages", 2015: r"Broadberry et al.", 2019: r"days worked"})
         self.dial()
+        self.compound()
         self.why()
 
     def dial(self):
@@ -41,6 +42,50 @@ class Dials(VoiceoverScene):
                 self.play(FadeIn(r))
             vo.wait_until("d")
             self.play(FadeIn(meaning), Indicate(head[1], color=WHITE))
+        self.clear_scene()
+
+    def compound(self):
+        dial = dials.DIALS["preindustrial_growth"]
+        dd = load("dial")
+        ax = plane([1300, 1700], [1.0, 2.3], center=LEFT * 1.7 + DOWN * 0.4, x_length=8.6, y_length=5.0,
+                   xticks=[1300, 1400, 1500, 1600, 1700], yticks=[1.0, 1.5, 2.0], xfmt=lambda v: f"{v:.0f}",
+                   ylabel=r"living standards, \ 1300 $= 1$", yfmt=lambda v: f"{v:.1f}", font_size=16)
+        yrs = np.arange(1300, 1701)
+        colors = (GDP, WAGE, E.ACCENT)
+        keys = ("gdppc", "real_wage", "earnings_days")
+        lines, ends = VGroup(), VGroup()
+        for e, k, c in zip(dial.estimates, keys, colors):
+            g = dd["computed"][k] / 100
+            v = (1 + g) ** (yrs - 1300)
+            lines.add(path(ax, yrs, v, color=c, width=4))
+            ends.add(label(rf"{e.value:.3f}\% a year: \ $\times${v[-1]:.2f}", font_size=19,
+                           color=c).next_to(ax.ax.c2p(1700, v[-1]), RIGHT, buff=0.12))
+        rule = VGroup(
+            label(r"the rule of 70:", font_size=22, color=GREY_A),
+            MathTex(r"t_{\times 2} \approx \frac{70}{\text{growth in \%}}", font_size=34),
+        ).arrange(DOWN, aligned_edge=LEFT, buff=0.15).to_corner(UR, buff=0.5)
+        today = label(r"since 1800: \ more than 1\% a year, \ a doubling every sixty years or so", font_size=20,
+                      color=GREY_A).to_edge(DOWN, buff=0.3)
+        r0, r1, r2 = dial.estimates
+        with self.voiceover(
+            "Numbers this small are hard to feel, so compound them. <bookmark mark='a'/> A rough rule: anything "
+            "growing at g percent a year doubles in about seventy divided by g years. <bookmark mark='b'/> At "
+            f"{r1.value:.2f} percent, the day wages' rate, four centuries leave living standards only "
+            f"{(1 + r1.value / 100) ** 400:.2f} times as high: a third better off, in sixteen generations. "
+            f"<bookmark mark='c'/> Counting the extra days worked, {(1 + r2.value / 100) ** 400:.2f} times. "
+            f"<bookmark mark='d'/> Output per head, at {r0.value:.2f} percent, more than doubles. "
+            "<bookmark mark='e'/> The disagreement is between a world that barely moved and one that was slowly "
+            "getting richer. Either way, it is nothing like the doubling every sixty years or so that began around "
+            "1800."
+        ) as vo:
+            self.play(FadeIn(ax))
+            vo.wait_until("a")
+            self.play(FadeIn(rule))
+            for mk, i in zip("bcd", (1, 2, 0)):
+                vo.wait_until(mk)
+                self.play(Create(lines[i]), FadeIn(ends[i]), run_time=1.5)
+            vo.wait_until("e")
+            self.play(FadeIn(today))
         self.clear_scene()
 
     def why(self):

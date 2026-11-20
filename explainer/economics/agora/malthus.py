@@ -94,8 +94,18 @@ def wage_elasticity(years, population, wages, first: int, last: int, lags: int =
         S += w * (G + G.T)
     nw = XtXi @ S @ XtXi * n / (n - 2)
     r2 = 1.0 - float(u @ u) / float(((y - y.mean()) ** 2).sum())
+
+    def nw_se(L):
+        S_ = meat.copy()
+        for l in range(1, L + 1):
+            G_ = (Xm[l:] * u[l:, None]).T @ (Xm[:-l] * u[:-l, None])
+            S_ += (1.0 - l / (L + 1)) * (G_ + G_.T)
+        return float(np.sqrt((XtXi @ S_ @ XtXi * n / (n - 2))[1, 1]))
+    rho1 = float(np.corrcoef(u[1:], u[:-1])[0, 1])
     return {"slope": float(beta[1]), "intercept": float(beta[0]), "se_hc1": float(np.sqrt(hc1[1, 1])),
-            "se_nw": float(np.sqrt(nw[1, 1])), "r2": r2, "n": n, "first": first, "last": last}
+            "se_nw": float(np.sqrt(nw[1, 1])), "r2": r2, "n": n, "first": first, "last": last,
+            "residuals": u.tolist(), "years": yv[keep].tolist(), "rho1": rho1,
+            "se_by_lag": {str(L): nw_se(L) for L in (0, 5, 10, 20, 40)}}
 
 
 # ---------------------------------------------------------------------------------------------------------------

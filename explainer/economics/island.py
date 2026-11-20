@@ -553,6 +553,19 @@ TRUTHS = {
         # persistence and spatial noise (chapter 13): 300 places, two independent smooth fields
         "noise": {"n_sites": 300, "length": 0.25, "reps": 400},
     },
+    20: {
+        # the island gets capital (chapters 3-5, 11): boats, nets and granaries; capital's share alpha, population
+        # growth n, technology growth g, depreciation delta, all a year
+        "solow": {"alpha": 1 / 3, "n": 0.01, "g": 0.02, "delta": 0.05, "s0": 0.15},
+        # Play it (chapter 4): five saving rates to choose for a century; and a jump from 15% to 30% in year 10
+        "playit": {"options": (0.10, 0.20, 0.33, 0.50, 0.70), "years": 100, "jump": (10, 0.15, 0.30)},
+        # Ramsey (chapter 11): patience rho and the curvature theta
+        "ramsey": {"rho": 0.03, "theta": 2.0, "k0_share": 0.5},
+        # the cross-country work (chapters 6, 9, 10): spans and the share alpha
+        "convergence": {"spans": ((1960, 1990), (1960, 2019), (2000, 2019)), "gd": 0.05, "min_pop": 1.0},
+        "development": {"year": 2019, "alpha": 1 / 3},
+        "lucas": {"poor": "IND", "rich": "USA", "year": 2019, "alpha": 0.4},
+    },
 }
 
 

@@ -10,7 +10,7 @@ the series leaves out.
 Both *Parts* columns are found, not typed. *Planned* lists the parts whose entry in
 [`SYLLABUS.md`](SYLLABUS.md) names the book or paper; *Built* lists the parts whose scenes, compute step or
 README cite it (a dot: none yet). Fuller notes (editions, chapters, what each source was used for) are in each
-part's README, under *Sources*. Built so far: Parts 1–19.
+part's README, under *Sources*. Built so far: Parts 1–20.
 
 ## 1. The textbook spine
 
@@ -18,7 +18,7 @@ part's README, under *Sources*. Built so far: Parts 1–19.
 
 | Short name | Book | Planned | Built |
 |---|---|---|---|
-| Mankiw | N. G. Mankiw, *Principles of Economics* (10th ed., 2024) | 1–2 | 1–3 |
+| Mankiw | N. G. Mankiw, *Principles of Economics* (10th ed., 2024) | 1–2 | 1–3, 20 |
 | Krugman–Wells | P. Krugman and R. Wells, *Economics* (6th ed., 2021) | 2 | 2 |
 | Acemoglu–Laibson–List | D. Acemoglu, D. Laibson and J. List, *Economics* (3rd ed., 2022) | 4 | 4 |
 | CORE | The CORE Team, *The Economy* (2017; 2.0, 2023) | 1 | 1, 9 |
@@ -31,7 +31,7 @@ part's README, under *Sources*. Built so far: Parts 1–19.
 | Varian | H. Varian, *Intermediate Microeconomics* (9th ed., 2014) | 2, 5–8, 10 | 2, 5–8, 10, 16 |
 | Nicholson–Snyder | W. Nicholson and C. Snyder, *Microeconomic Theory* (13th ed., 2021) | 5–6 | 5–6, 8 |
 | Jones | C. I. Jones, *Macroeconomics* (6th ed., 2023) | 20 | · |
-| Blanchard | O. Blanchard, *Macroeconomics* (8th ed., 2021) | 27, 32 | · |
+| Blanchard | O. Blanchard, *Macroeconomics* (8th ed., 2021) | 27, 32 | 20 |
 | Stock–Watson | J. Stock and M. Watson, *Introduction to Econometrics* (4th ed., 2019) | 4 | 4 |
 | Angrist–Pischke | J. Angrist and J.-S. Pischke, *Mostly Harmless Econometrics* (2009) | 4, 50, 67 | 4 |
 | Osborne | M. Osborne, *An Introduction to Game Theory* (2004) | 11 | 11 |
@@ -41,7 +41,7 @@ part's README, under *Sources*. Built so far: Parts 1–19.
 | Borjas | G. Borjas, *Labor Economics* (8th ed., 2020) | 38 | · |
 | Gruber | J. Gruber, *Public Finance and Public Policy* (7th ed., 2022) | 15, 41–42, 50 | 7, 15 |
 | Ray | D. Ray, *Development Economics* (1998) | 46 | · |
-| Weil | D. Weil, *Economic Growth* (3rd ed., 2013) | 7, 19 | 3, 7, 19 |
+| Weil | D. Weil, *Economic Growth* (3rd ed., 2013) | 7, 19 | 3, 7, 19–20 |
 
 ### Graduate micro
 
@@ -92,7 +92,7 @@ part's README, under *Sources*. Built so far: Parts 1–19.
 
 | Short name | Book | Planned | Built |
 |---|---|---|---|
-| Feenstra | R. Feenstra, *Advanced International Trade* (2nd ed., 2016) | 6, 35–36 | 6, 8 |
+| Feenstra | R. Feenstra, *Advanced International Trade* (2nd ed., 2016) | 6, 35–36 | 6, 8, 20 |
 | Cahuc–Carcillo–Zylberberg | P. Cahuc, S. Carcillo and A. Zylberberg, *Labor Economics* (2nd ed., 2014) | 24, 38 | · |
 | Atkinson–Stiglitz | A. Atkinson and J. Stiglitz, *Lectures on Public Economics* (1980; 2015) | 41 | 6 |
 | Salanié | B. Salanie, *The Economics of Taxation* (2nd ed., 2011) | 41 | 13–14 |
@@ -185,8 +185,8 @@ part's README, under *Sources*. Built so far: Parts 1–19.
 | Model or result | Paper | Planned | Built |
 |---|---|---|---|
 | the Malthusian economy | Malthus (1798) | 19 | 18–19 |
-| the long run in numbers | the Maddison Project (Bolt and van Zanden 2024) | 1 | 1, 3, 14, 19 |
-| the neoclassical growth model | Solow (1956); Ramsey (1928); Cass (1965) | 20 | · |
+| the long run in numbers | the Maddison Project (Bolt and van Zanden 2024) | 1 | 1, 3, 14, 19–20 |
+| the neoclassical growth model | Solow (1956); Ramsey (1928); Cass (1965) | 20 | 20 |
 | endogenous growth | Romer (1990); Aghion and Howitt (1992) | 21 | · |
 | misallocation | Hsieh and Klenow (2009) | 9, 21 | 9 |
 
@@ -293,6 +293,8 @@ part's README, under *Sources*. Built so far: Parts 1–19.
 **Part 18, *Social Choice and Welfare*.** Books: Kenneth J. Arrow, *Social Choice and Individual Values* (1951; 3rd ed. 2012); Amartya Sen, *Collective Choice and Social Welfare* (1970; expanded ed. 2017); Mas-Colell, Whinston and Green, *Microeconomic Theory* (1995), chs. 21–22; Matthew Adler, *Measuring Social Welfare* (2019). Papers: Condorcet (1785); Black (1948); May (1952); Downs (1957); McKelvey (1976); Gibbard (1973); Satterthwaite (1975); Duverger (1951); Riker (1982); Robbins (1932); Hammond (1976); d'Aspremont and Gevers (1977); Geanakoplos (2005); Harsanyi (1953, 1955, 1975); Rawls (1971); Atkinson (1970); Okun (1975); Kaldor (1939); Hicks (1939); Scitovsky (1941); Sen (1970); Kaplow and Shavell (1994); Schelling (1968); Thaler and Rosen (1976); Ashenfelter and Greenstone (2004); Ravallion (2012); Bernheim and Rangel (2009); Lalley and Weyl (2018); Conitzer et al. (2024).
 
 **Part 19, *The Great Escape*.** Books: Gregory Clark, *A Farewell to Alms* (2007); Robert C. Allen, *The British Industrial Revolution in Global Perspective* (2009); Joel Mokyr, *A Culture of Growth* (2016); Oded Galor, *Unified Growth Theory* (2011); Kenneth Pomeranz, *The Great Divergence* (2000). Papers: Malthus (1798); Ricardo (1817); Ashraf and Galor (2011, 2013); Broadberry, Campbell, Klein, Overton and van Leeuwen (2015); Humphries and Weisdorf (2019); Voigtländer and Voth (2013); North and Weingast (1989); Clark (1996); Humphries (2013); Kelly, Mokyr and Ó Gráda (2014); Broadberry, Guan and Li (2018); Crafts and Harley (1992); Crafts (2004); Allen (2009); Voth (2000); de Vries (1994); Becker and Lewis (1973); Kremer (1993); Galor and Weil (2000); Comin, Easterly and Gong (2010); Spolaore and Wacziarg (2009); Kelly (2019); Ehrlich (1968).
+
+**Part 20, *Growth I: Capital*.** Books: Charles I. Jones and Dietrich Vollrath, *Introduction to Economic Growth* (3rd ed., 2013); Daron Acemoglu, *Introduction to Modern Economic Growth* (2009), chs. 2–3 and 8; David Romer, *Advanced Macroeconomics* (5th ed., 2019), chs. 1–2; William Easterly, *The Elusive Quest for Growth* (2001). Papers: Harrod (1939); Domar (1946); Solow (1956, 1957); Swan (1956); Kaldor (1961); Phelps (1961); Ramsey (1928); Cass (1965); Koopmans (1965); Abel, Mankiw, Summers and Zeckhauser (1989); Barro (1991); Mankiw, Romer and Weil (1992); Islam (1995); Quah (1996); Pritchett (1997); Krugman (1994); Young (1995); Hsieh (2002); Hall and Jones (1999); Caselli (2005); Lucas (1990); Song, Storesletten and Zilibotti (2011); Easterly (1999); Blanchard (2019); Fernald (2015); Syverson (2017); Kremer, Willis and You (2022); Acemoglu and Molina (2022); Feenstra, Inklaar and Timmer, the Penn World Table (2015; version 11.0, 2025).
 
 ## 4. What the series leaves out
 

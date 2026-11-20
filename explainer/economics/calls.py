@@ -156,6 +156,19 @@ CALLS = {c.key: c for c in [
          ("P. R. Ehrlich, The Population Bomb (1968), prologue",
           "United Nations, World Population Prospects; Our World in Data, population",
           "J. Tierney, \"Betting on the Planet\", New York Times Magazine, 2 December 1990")),
+    Call("samuelson_soviet", 20, "Paul Samuelson, Economics (the textbook)",
+         "1961", "Soviet national income would overtake America's between 1984 and 1997, on the growth rates the "
+                 "edition assumed; the 1980 edition still drew the crossing, between 2002 and 2012",
+         "extrapolation of measured Soviet growth, which came mostly from accumulating capital and moving people out "
+         "of farming, into the future at its past rate",
+         "Soviet growth slowed through the 1970s and 1980s, as diminishing returns to capital say it must when the "
+         "residual is small, and the Soviet Union dissolved in 1991 without having overtaken; in the Maddison Project "
+         "its income per head grew 3.3% a year in the 1950s, 1.4% in the 1970s and 0.7% in the 1980s, and never passed 38% of "
+         "America's",
+         "wrong",
+         ("P. A. Samuelson, Economics, 5th ed. (1961) and 11th ed. (1980), as documented by D. M. Levy and S. J. Peart, "
+          "Journal of Economic Behavior & Organization 78(1-2) (2011): 110-125",
+          "Maddison Project Database 2023")),
     Call("duverger", 18, "Maurice Duverger, Les partis politiques",
          "1951", "plurality rule in single-member districts tends to produce two-party systems: voters desert third "
                  "parties that cannot win, and politicians stop joining them",

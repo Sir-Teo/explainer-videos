@@ -105,6 +105,20 @@ AGORA = {
     "auctions_converge": (2, "traders who adjust their margins converge by the third period in balanced and lopsided "
                              "markets alike; random traders capture most of the surplus, but find the price only when "
                              "the market is balanced"),
+    # Part 19 built the Malthusian economy and the unified growth toy
+    "flat_for_millennia": (19, "with diminishing returns to land and a population that grows when income is above "
+                               "subsistence, better technology raises population, not income; a unified model in which "
+                               "technology's growth rises with population and parents switch to education when it is "
+                               "fast enough stays flat for six centuries, then takes off around 1800"),
+    # Part 20 built the Solow model
+    "kaldor": (20, "the Solow model's balanced growth path has output and capital per worker growing at the rate of "
+                   "technical progress, a constant capital-output ratio, a constant return to capital and constant "
+                   "factor shares; it explains five of Kaldor's six facts and leaves the sixth, differences in growth "
+                   "rates, to transitions and to differences in technology"),
+    "conditional_convergence": (20, "a Solow economy below its own steady state grows faster the further below it is; "
+                                    "across 89 countries, 1960-2019, holding investment, population growth and "
+                                    "schooling fixed, the gap closes at about 1.3% a year, and with no controls not at "
+                                    "all"),
     # Part 16 showed the jar of coins and explained it
     "winners_curse": (16, "bidders who bid their own unbiased estimates of a common value lose, on average, the "
                           "expected overestimate of the highest of n estimates, which grows with n (a third of the "

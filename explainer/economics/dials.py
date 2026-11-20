@@ -193,6 +193,37 @@ DIALS = {d.key: d for d in [
              Estimate("Feenstra, Inklaar and Timmer (Penn World Table)", 2015, "survey", "the United States, "
                       "1950-1999: one minus the mean labour share", 0.375, where="PWT via FRED (LABSHPUSA156NRUG), "
                       "computed on screen", checked="2026-11-19"),
+             Estimate("Mankiw, Romer and Weil", 1992, "regression", "98 non-oil countries, income in 1985 on saving, "
+                      "population growth and schooling: the augmented Solow model's physical-capital share (a "
+                      "human-capital share of 0.28 beside it)", 0.31, 0.23, 0.39,
+                      where="QJE 107(2): 407-437, table II (restricted regression, s.e. 0.04)", checked="2026-11-19"),
+         )),
+    Dial("convergence_speed", "speed of convergence to the steady state", "percent of the gap to its own steady state "
+         "that a country closes in a year", (20, 46), status="contested", checked="2026-11-19",
+         meaning="the textbook Solow model with capital's share at a third predicts about 5% a year, a half-life of 13 "
+                 "years; cross-country regressions that hold saving and schooling fixed find 1 to 2% (half-lives of 35 "
+                 "to 70 years), which fits a broad capital share of about three quarters; panels with country fixed "
+                 "effects find 5% or more, because each country then converges to its own level. Without the "
+                 "controls, poor countries did not catch up at all until about 2000, and have since by about 0.7% a "
+                 "year",
+         estimates=(
+             Estimate("Mankiw, Romer and Weil", 1992, "regression", "98 non-oil countries, 1960-1985, conditional on "
+                      "investment, population growth and schooling", 1.37, 0.99, 1.75,
+                      where="QJE 107(2): 407-437, table V (implied lambda 0.0137, s.e. 0.0019)", checked="2026-11-19"),
+             Estimate("Mankiw, Romer and Weil", 1992, "regression", "22 OECD countries, 1960-1985, the same controls",
+                      2.03, 1.63, 2.43, where="as above, table V (0.0203, s.e. 0.0020)", checked="2026-11-19"),
+             Estimate("Islam", 1995, "regression", "the same non-oil countries in five-year panels with country fixed "
+                      "effects, 1960-1985", 5.07, 3.25, 6.89,
+                      where="QJE 110(4): 1127-1170, table IV (LSDV, unrestricted; 0.0507, s.e. 0.0091)",
+                      checked="2026-11-19"),
+             Estimate("this film (Penn World Table 11.0)", 2026, "regression", "89 countries of a million people or "
+                      "more, 1960-2019, conditional on investment, population growth and schooling in 1960", 1.3, 0.3,
+                      3.6, where="explainer/economics/agora/growth.py (convergence), computed on screen; interval from "
+                                 "two HC1 standard errors of the slope", checked="2026-11-19"),
+             Estimate("Kremer, Willis and You", 2022, "regression", "unconditional: all countries, 2005-2015 (they "
+                      "find divergence of about 0.5% a year in 1985-1995)", 0.7,
+                      where="NBER Macroeconomics Annual 36: 337-412; NBER WP 29484, introduction",
+                      checked="2026-11-19"),
          )),
     Dial("kl_substitution", "elasticity of substitution between capital and labour", "percent change in the "
          "capital-labour ratio per percent change in the wage relative to the rental of capital", (8, 20),
@@ -871,6 +902,24 @@ SHOWN = {
         ("Becker and Lewis (1973); Galor and Weil (2000); Kremer (1993)", "theory, run in Agora (agora.malthus)"),
         ("Spolaore and Wacziarg (2009); Ashraf and Galor (2013); Kelly (2019)", "frontier work, described, not "
          "dialled"),
+    ],
+    20: [
+        ("Kaldor (1961)", "the six facts, stated in Part 3 and checked here on the Penn World Table"),
+        ("Harrod (1939); Domar (1946); Easterly (1999)", "the knife edge, run on the island; Easterly's test of the "
+         "financing gap described with its published counterfactual for Zambia, not dialled"),
+        ("Solow (1956, 1957); Swan (1956); Phelps (1961)", "theory, run in Agora (agora.growth); the 1957 residual's "
+         "seven eighths quoted as published"),
+        ("Barro (1991)", "conditional convergence, described; the speed is dialled from MRW, Islam and this film"),
+        ("Young (1995); Krugman (1994); Hsieh (2002)", "the East Asian debate: Young's four residuals quoted as "
+                                                       "published beside the same accounting on the Penn World Table"),
+        ("Hall and Jones (1999); Caselli (2005)", "development accounting quoted as published beside the same "
+                                                  "accounting for 2019"),
+        ("Lucas (1990)", "the 58-to-1 calculation, redone on 2019 data"),
+        ("Ramsey (1928); Cass (1965); Koopmans (1965)", "theory, solved on screen by shooting"),
+        ("Song, Storesletten and Zilibotti (2011)", "a model of China's growth, described; the series shown are the "
+                                                    "Penn World Table's"),
+        ("Fernald (2015); Kremer, Willis and You (2022); Acemoglu and Molina (2022)", "frontier work: the slowdown "
+         "shown in the Penn World Table, the convergence finding dialled with its critics"),
     ],
 }
 

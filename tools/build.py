@@ -77,7 +77,7 @@ def master_filter(measure_cmd: list[str]) -> str:
 # loudness by 0.1 LU.  The music is never limited: a mix over the ceiling stops the build.
 MUSIC_GAIN_DB = 0.0
 NARRATION_LUFS = -16.0
-NARRATION_LIMIT = 0.75   # linear, about -2.5 dBFS: true peaks stay under -1.5 dBTP
+NARRATION_LIMIT = 0.72   # linear, about -2.9 dBFS: true peaks stay under -1.5 dBTP, with room for a sting on top
 PEAK_CEILING_DBTP = -1.0
 
 

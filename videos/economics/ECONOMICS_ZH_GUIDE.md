@@ -622,6 +622,24 @@ brackets on screen.
 | historical national accounts; real wages; reconstruction | 历史国民账户；实际工资；（历史数据）重建 |
 | deep roots; persistence; spatial noise; spatial HAC standard errors | 深层根源；持续性；空间噪声；空间异方差自相关稳健标准误 |
 
+## Part 20
+
+| English | 中文 |
+|---|---|
+| Kaldor's stylized facts; the balanced growth path | 卡尔多典型事实；平衡增长路径 |
+| the Harrod-Domar model; the knife edge; the financing gap; the incremental capital-output ratio (ICOR) | 哈罗德-多马模型；刃锋问题；融资缺口；增量资本产出比 |
+| the Solow model; capital per effective worker; break-even investment; the steady state | 索洛模型；每有效工人资本；持平投资；稳态 |
+| the golden rule of accumulation; dynamic inefficiency | 资本积累的黄金律；动态无效率 |
+| the speed of convergence; half-life; absolute and conditional convergence; convergence clubs | 收敛速度；半衰期；绝对收敛与条件收敛；收敛俱乐部 |
+| the augmented Solow model; human capital | 扩展的索洛模型；人力资本 |
+| growth accounting; the Solow residual; total factor productivity (TFP) | 增长核算；索洛余值；全要素生产率 |
+| primal and dual TFP | 原始（数量法）与对偶（价格法）全要素生产率 |
+| development accounting; capital intensity | 发展核算；资本密集度 |
+| the Lucas paradox; uphill capital flows | 卢卡斯悖论；资本"上坡"流动 |
+| the Ramsey-Cass-Koopmans model; the Hamiltonian; the Euler equation; the saddle path; shooting; the modified golden rule | 拉姆齐-卡斯-库普曼斯模型；哈密顿函数；欧拉方程；鞍点路径；打靶法；修正的黄金律 |
+| potential output; the output gap; debt dynamics, r and g | 潜在产出；产出缺口；债务动态，r 与 g |
+| the productivity slowdown | 生产率增长放缓 |
+
 ## Names
 
 | English | 中文 |
@@ -658,6 +676,16 @@ brackets on screen.
 | Irving Fisher | 欧文·费雪 |
 | Michael Boskin | 迈克尔·博斯金 |
 | Nicholas Kaldor | 尼古拉斯·卡尔多 |
+| Robert Solow | 罗伯特·索洛 |
+| Trevor Swan | 特雷弗·斯旺 |
+| Roy Harrod, Evsey Domar | 罗伊·哈罗德、埃弗塞·多马 |
+| Frank Ramsey | 弗兰克·拉姆齐 |
+| Edmund Phelps | 埃德蒙·费尔普斯 |
+| Alwyn Young | 阿尔温·扬 |
+| Chang-Tai Hsieh | 谢长泰 |
+| Robert E. Lucas Jr. | 小罗伯特·卢卡斯 |
+| William Easterly | 威廉·伊斯特利 |
+| Gregory Mankiw, David Romer, David Weil | 格雷戈里·曼昆、戴维·罗默、戴维·韦尔 |
 | William Nordhaus, James Tobin | 威廉·诺德豪斯、詹姆斯·托宾 |
 | Angus Deaton | 安格斯·迪顿 |
 | Henry Moore | 亨利·摩尔 |

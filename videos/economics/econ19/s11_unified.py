@@ -12,6 +12,7 @@ class Unified(VoiceoverScene):
              lit={1993: r"Kremer", 2000: r"Galor and Weil", 2011: r"Galor's book"}, scale=("household", "world"),
              horizon=("a century",))
         self.scale_effect()
+        self.threshold()
         self.run()
 
     def scale_effect(self):
@@ -39,6 +40,49 @@ class Unified(VoiceoverScene):
             for mk, r in zip("bcde", rows[1:]):
                 vo.wait_until(mk)
                 self.play(FadeIn(r, shift=UP * 0.1))
+        self.clear_scene()
+
+    def threshold(self):
+        tau, rho = 0.15, 0.5
+        gs = np.linspace(0.0, 0.4, 81)
+        es = [ml.education_choice(float(g), tau, rho) for g in gs]
+        gh = rho ** 2 * tau / (1 - rho)
+        ax = plane([0, 0.4], [0, 0.12], center=LEFT * 2.3 + DOWN * 0.5, x_length=7.4, y_length=4.6,
+                   xticks=[0, 0.1, 0.2, 0.3, 0.4], yticks=[0, 0.04, 0.08, 0.12],
+                   xlabel=r"technology's growth per generation, \ $g$", ylabel=r"schooling per child, \ $e$",
+                   xfmt=lambda v: f"{v:g}", yfmt=lambda v: f"{v:g}", font_size=16)
+        curve = path(ax, gs, es, color=EDU, width=4, smooth=False)
+        mark = VGroup(DashedLine(ax.ax.c2p(gh, 0), ax.ax.c2p(gh, 0.11), color=E.ACCENT, stroke_width=2),
+                      MathTex(r"\hat g", font_size=30, color=E.ACCENT).next_to(ax.ax.c2p(gh, 0.11), UP, buff=0.08))
+        side = VGroup(
+            MathTex(r"\max_e \; \frac{h(e, g)}{\tau + e}, \qquad h = \frac{e + \rho\tau}{e + \rho\tau + g}",
+                    font_size=30),
+            label(r"a child costs time $\tau$, \ plus $e$ for schooling;\\ change erodes skills, \ schooling "
+                  r"protects them", font_size=18, color=GREY_A),
+            MathTex(r"e > 0 \iff g > \hat g = \frac{\rho^2 \tau}{1-\rho}", font_size=32, color=E.ACCENT),
+            label(rf"here $\tau = {tau}$, \ $\rho = {rho}$: \ $\hat g = {gh:.3f}$", font_size=20, color=EDU),
+        ).arrange(DOWN, aligned_edge=LEFT, buff=0.35).to_edge(RIGHT, buff=0.35)
+        tag = agora_tag(corner=DR, font_size=14)
+        with self.voiceover(
+            "The parents' problem is small enough to solve on screen. <bookmark mark='a'/> A child costs a parent a "
+            "fixed amount of time, tau, plus whatever is spent on schooling, e. The child's human capital, h, rises "
+            "with schooling and is eroded by technological change, g, because a changing world makes old skills "
+            "obsolete. Parents choose e to get the most human capital per unit of time spent. "
+            "<bookmark mark='b'/> Solve it, and the answer has a corner. While technology changes slowly, the best "
+            "schooling is none: have more children instead. <bookmark mark='c'/> Above a threshold, g hat, equal to "
+            "rho squared tau over one minus rho, schooling starts to pay, and it rises with the pace of change. "
+            "<bookmark mark='d'/> That corner is the switch in the unified model: fast enough technology turns "
+            "parents from quantity to quality."
+        ) as vo:
+            self.play(FadeIn(ax), FadeIn(tag))
+            vo.wait_until("a")
+            self.play(FadeIn(side[0]), FadeIn(side[1]))
+            vo.wait_until("b")
+            self.play(Create(curve), run_time=2.5)
+            vo.wait_until("c")
+            self.play(Create(mark[0]), FadeIn(mark[1]), FadeIn(side[2]), FadeIn(side[3]))
+            vo.wait_until("d")
+            self.play(Indicate(mark[1], color=WHITE, scale_factor=1.4))
         self.clear_scene()
 
     def run(self):
