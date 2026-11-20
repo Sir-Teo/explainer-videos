@@ -352,3 +352,18 @@ publication, the copy that was read and the date the transcription was checked:
 | `retrospectives` | Kwoka's merger retrospectives and their critics | 2026-11-20 |
 | `apple` | Ballmer's 2007 remark and IDC's 2023 shipments | 2026-11-20 |
 | `frontier44` | Part 44's frontier, stated in words | 2026-11-20 |
+| `gym_2006` | DellaVigna and Malmendier's gym contracts and attendance (Part 45; draft, to be checked) | 2026-11-20 |
+| `departures_2009` | DellaVigna's three classes of departures (Part 45; draft, to be checked) | 2026-11-20 |
+| `kkt_1990` | Kahneman, Knetsch and Thaler's mug experiments; Tversky and Kahneman's 1992 parameters (Part 45) | 2026-11-20 |
+| `list_2003` | List's sports-card traders (Part 45; draft, to be checked) | 2026-11-20 |
+| `reference_field` | marathon finishing times, PGA putts and Boston condominium sellers (Part 45; draft, to be checked) | 2026-11-20 |
+| `present_bias` | Phelps and Pollak, Laibson, O'Donoghue and Rabin, DellaVigna and Malmendier (2004) (Part 45) | 2026-11-20 |
+| `seed_2006` | Ashraf, Karlan and Yin's commitment savings trial (Part 45; draft, to be checked) | 2026-11-20 |
+| `defaults_45` | Madrian and Shea; Save More Tomorrow; Carroll et al. (Part 45; draft, to be checked) | 2026-11-20 |
+| `inattention_45` | Gabaix and Laibson's shrouded attributes; left-digit bias in car prices (Part 45; draft) | 2026-11-20 |
+| `social_45` | Fehr and Schmidt; Gneezy and List; List's dictator games (Part 45; draft, to be checked) | 2026-11-20 |
+| `welfare_45` | Bernheim and Rangel; libertarian paternalism; the limits of arbitrage (Part 45; draft) | 2026-11-20 |
+| `nudges_2022` | DellaVigna and Linos's two nudge units against the academic journals (Part 45) | 2026-11-20 |
+| `limits_45` | rational inattention, sparsity, diagnostic expectations (Part 45; draft, to be checked) | 2026-11-20 |
+| `practice_45` | Part 45's practice chapter, stated in words | 2026-11-20 |
+| `frontier45` | Part 45's frontier, stated in words | 2026-11-20 |
