@@ -380,6 +380,14 @@ for _k, _d in (("A640RC1A027NBEA", "Exports of goods: capital goods, except auto
                ("A652RC1A027NBEA", "Imports of goods: consumer goods, except automotive")):
     FRED_SERIES[_k] = (_d, "billions of dollars", "annual", "U.S. Bureau of Economic Analysis (NIPA table 4.2.5)")
 FRED_RETRIEVED.update({s: "2026-11-20" for s in TRADE_FRED})
+CHINA_FRED = ("IMPCH", "EXPCH", "MANEMP")
+FRED_SERIES["IMPCH"] = ("U.S. imports of goods by customs basis from China", "millions of dollars", "monthly",
+                        "U.S. Census Bureau")
+FRED_SERIES["EXPCH"] = ("U.S. exports of goods by F.A.S. basis to China", "millions of dollars", "monthly",
+                        "U.S. Census Bureau")
+FRED_SERIES["MANEMP"] = ("All employees, manufacturing", "thousands of persons, seasonally adjusted", "monthly",
+                         "U.S. Bureau of Labor Statistics")
+FRED_RETRIEVED.update({s: "2026-11-20" for s in CHINA_FRED})
 
 SPF_FILES = ("median_rgdp_level", "median_rgdp_growth", "median_recess_level")
 SPF_URL = ("https://www.philadelphiafed.org/-/media/frbp/assets/surveys-and-data/survey-of-professional-forecasters/"
@@ -781,6 +789,21 @@ DATASETS = {
         "sha256": "c1bb91fe56ea50d4f27af5c0fc897d481e89ae38ce41eaecab62134c9354981d",
         "files": ("jst.csv",),
     },
+    "cepii_gravity": {
+        "title": "The CEPII Gravity database, V202211: bilateral trade, GDP, distance, borders, languages and trade "
+                 "agreements for every pair of countries, 2019 (an extract)",
+        "publisher": "CEPII",
+        "citation": "M. Conte, P. Cotterlaz and T. Mayer, \"The CEPII Gravity database\", CEPII Working Paper 2022-05 "
+                    "(2022); Gravity_csv_V202211.zip, retrieved 2026-11-20",
+        "short": "CEPII Gravity database V202211",
+        "url": "https://www.cepii.fr/DATA_DOWNLOAD/gravity/data/Gravity_csv_V202211.zip",
+        "licence": "Etalab Open Licence 2.0 (attribution)",
+        "units": "trade in thousands of current US dollars (BACI); GDP in thousands of current US dollars; distance in "
+                 "kilometres (population-weighted, harmonic)",
+        "vintage": "2026-11-20",
+        "sha256": "7ffea0510a536587f2f9295bbafef4a312a36b366acc256eb6d9770fe35e44b1",
+        "files": ("cepii_gravity_2019.csv",),
+    },
     "trefler_hov": {
         "title": "Trefler's data for \"The Case of the Missing Trade and Other Mysteries\": the factor content of trade, "
                  "endowments and GDP for 33 countries and 9 factors, 1983",
@@ -1171,6 +1194,20 @@ def wdi_ca() -> dict:
         d["year"].append(int(r["year"]))
         d["value"].append(_num(r["value"]))
     return out
+
+
+GRAVITY_COLS = ("iso3_o", "iso3_d", "distw_harmonic", "contig", "comlang_off", "col_dep_ever", "gdp_o", "gdp_d",
+                "fta_wto", "eu_o", "eu_d", "tradeflow_baci", "manuf_tradeflow_baci")
+
+
+@functools.lru_cache(maxsize=None)
+def gravity() -> dict:
+    """CEPII's Gravity database, 2019, one row per ordered pair of existing countries with BACI trade recorded:
+    ``{"iso3_o", "iso3_d", "distw_harmonic" (km), "contig", "comlang_off", "col_dep_ever", "gdp_o", "gdp_d" (thousands
+    of dollars), "fta_wto", "eu_o", "eu_d", "tradeflow_baci", "manuf_tradeflow_baci" (thousands of dollars): [...]}``
+    (NaN where missing)."""
+    rows = _read(HERE / "cepii_gravity_2019.csv")
+    return {k: [r[k] if k in ("iso3_o", "iso3_d") else _num(r[k]) for r in rows] for k in GRAVITY_COLS}
 
 
 @functools.lru_cache(maxsize=None)
@@ -1622,6 +1659,27 @@ def refresh_wdi_ca() -> None:
                 w.writerow([r["countryiso3code"], int(r["date"]), "" if r["value"] is None else _fmt(r["value"])])
 
 
+def refresh_cepii_gravity() -> None:
+    import io  # noqa: PLC0415
+    import zipfile  # noqa: PLC0415
+
+    raw = RAW / "Gravity_csv_V202211.zip"
+    sha = _download(DATASETS["cepii_gravity"]["url"], raw)
+    if sha != DATASETS["cepii_gravity"]["sha256"]:
+        print(f"cepii_gravity: the download differs from the recorded vintage ({sha[:12]})")
+    with zipfile.ZipFile(raw) as z, z.open("Gravity_V202211.csv") as f, \
+            open(HERE / "cepii_gravity_2019.csv", "w", newline="", encoding="utf-8") as g:
+        r = csv.DictReader(io.TextIOWrapper(f, encoding="utf-8"))
+        w = csv.writer(g)
+        w.writerow(GRAVITY_COLS)
+        for rec in r:
+            if rec["year"] != "2019" or rec["country_exists_o"] != "1" or rec["country_exists_d"] != "1":
+                continue
+            if rec["iso3_o"] == rec["iso3_d"] or not rec["tradeflow_baci"]:
+                continue
+            w.writerow([rec[k] for k in GRAVITY_COLS])
+
+
 def refresh_trefler_hov() -> None:
     raw = RAW / "hov_pub.dat"
     sha = _download(DATASETS["trefler_hov"]["url"], raw)
@@ -2026,7 +2084,8 @@ REFRESH = {"draft1970": refresh_draft1970, "ajr": refresh_ajr, "maddison2023": r
            "wdi_money": refresh_wdi_money, "greenbook": refresh_greenbook,
            "hlw": refresh_hlw, "ramey_zubairy": refresh_ramey_zubairy, "ramey_tax": refresh_ramey_tax,
            "blanchard_leigh": refresh_blanchard_leigh, "rr_hap": refresh_rr_hap, "jst": refresh_jst,
-           "bigmac": refresh_bigmac, "wdi_ca": refresh_wdi_ca, "trefler_hov": refresh_trefler_hov}
+           "bigmac": refresh_bigmac, "wdi_ca": refresh_wdi_ca, "trefler_hov": refresh_trefler_hov,
+           "cepii_gravity": refresh_cepii_gravity}
 
 
 def main() -> None:

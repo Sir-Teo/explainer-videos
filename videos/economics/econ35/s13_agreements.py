@@ -84,7 +84,9 @@ class Agreements(VoiceoverScene):
         tag = island_tag(corner=DR, font_size=14)
         with self.voiceover(
             "The same game as a picture. <bookmark mark='a'/> The teal line is the Island's best tariff for each "
-            "tariff the Archipelago might set; <bookmark mark='b'/> the gold line, the Archipelago's. "
+            "tariff the Archipelago might set; <bookmark mark='b'/> the gold line, the Archipelago's. In this model "
+            "the lines are straight: each country's best tariff does not depend on the other's at all, so taxing is a "
+            "dominant strategy. "
             f"<bookmark mark='c'/> They cross at {W['nash']:.2f} each, the equilibrium of a trade war, where neither "
             "wants to change. <bookmark mark='d'/> Both would be better off at the corner, with no tariffs, but "
             "neither will move there alone, because each tariff's gain comes out of the other's pocket."
