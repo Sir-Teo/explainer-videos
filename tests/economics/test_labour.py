@@ -137,7 +137,8 @@ def test_task_model_thresholds_and_automation():
     assert abs((lw[1] - lw[0]) - (T["beta"][1] - T["beta"][0]) * b["I_L"]) < 1e-8
     assert abs((lw[2] - lw[1]) - (T["beta"][2] - T["beta"][1]) * b["I_H"]) < 1e-8
     assert abs(b["share_L"] + b["share_M"] + b["share_H"] - 1) < 1e-12
-    # machines take the middle band: the middle loses against both neighbours, and moves out to both edges
+    # machines take the middle band: the middle loses against both neighbours and moves down into low-skill tasks;
+    # the band also takes some of the high-skill range
     assert a["wM_wL"] < b["wM_wL"] and a["wH_wM"] > b["wH_wM"]
     assert a["I_L"] < b["I_L"] and a["I_H"] > b["I_H"]
 
