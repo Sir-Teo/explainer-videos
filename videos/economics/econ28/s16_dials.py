@@ -17,7 +17,7 @@ class Dials(VoiceoverScene):
         head = status_head(dial, r"the slope of the Phillips curve \ (new)")
         frame, rows = dial_rows(dial, -2.0, 0.0, [-2.0, -1.5, -1.0, -0.5, 0.0], r"points of inflation per point of "
                                 r"unemployment", top=2.0, step=0.68, fmt="{:.2f}")
-        meaning = wrapped_label(tex_safe(dial.meaning), 12.6, 17, GREY_A).to_edge(DOWN, buff=0.3)
+        meaning = wrapped_label(tex_safe(dial.meaning), 12.0, 17, GREY_A).to_edge(DOWN, buff=0.55)
         tag = published_tag(r"Phillips (1958); \ Samuelson and Solow (1960); \ this film", corner=DR, font_size=12)
         with self.voiceover(
             "Two new dials. The first is the slope of the Phillips curve. <bookmark mark='a'/> Phillips's own wage "
@@ -43,7 +43,7 @@ class Dials(VoiceoverScene):
         head = status_head(dial, r"the sacrifice ratio \ (new)")
         frame, rows = dial_rows(dial, 0.0, 4.0, [0, 1, 2, 3, 4], r"point-years of output per point of disinflation",
                                 top=1.6, step=0.8, fmt="{:.1f}")
-        meaning = wrapped_label(tex_safe(dial.meaning), 12.6, 17, GREY_A).to_edge(DOWN, buff=0.4)
+        meaning = wrapped_label(tex_safe(dial.meaning), 12.0, 17, GREY_A).to_edge(DOWN, buff=0.55)
         tag = published_tag(r"Ball (1994); \ Mankiw (1991); \ this film", corner=DR, font_size=12)
         V = load("volcker")
         with self.voiceover(

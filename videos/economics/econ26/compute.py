@@ -175,7 +175,8 @@ def compute_repo() -> dict:
 
 def compute_monitor() -> dict:
     M = TRUTH["monitor"]
-    ns = np.unique(np.round(np.logspace(0, 3, 61)).astype(int))
+    # from ten loans up: below ten the whole-number count of loans makes the curve jump about
+    ns = np.unique(np.round(np.logspace(1, 3, 41)).astype(int))
     fail = [bk.diversified_failure(int(n), M["p"], M["R"], M["D"]) for n in ns]
     pts = {str(n): bk.diversified_failure(n, M["p"], M["R"], M["D"]) for n in M["ns"]}
     return {**M, "n": ns.tolist(), "fail": fail, "points": pts,

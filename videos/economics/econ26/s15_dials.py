@@ -18,7 +18,7 @@ class Dials(VoiceoverScene):
         head = status_head(dial, r"the deposit beta \ (new)")
         frame, rows = dial_rows(dial, 0.0, 0.7, [0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7], r"share of a rise in "
                                 r"the policy rate passed on to depositors", top=2.2, step=0.62)
-        meaning = wrapped_label(tex_safe(dial.meaning), 12.6, 17, GREY_A).to_edge(DOWN, buff=0.3)
+        meaning = wrapped_label(tex_safe(dial.meaning), 12.0, 17, GREY_A).to_edge(DOWN, buff=0.55)
         tag = published_tag(r"Liberty Street Economics (2022, 2023); \ S\&P Global (2023); \ this film", corner=DR,
                             font_size=12)
         b = load("betas")
@@ -49,7 +49,7 @@ class Dials(VoiceoverScene):
         head = status_head(dial, r"the output cost of a banking crisis \ (new)")
         frame, rows = dial_rows(dial, 0.0, 20.0, [0, 5, 10, 15, 20], r"percent of GDP", top=2.0, step=0.68,
                                 fmt="{:.1f}")
-        meaning = wrapped_label(tex_safe(dial.meaning), 12.6, 17, GREY_A).to_edge(DOWN, buff=0.3)
+        meaning = wrapped_label(tex_safe(dial.meaning), 12.0, 17, GREY_A).to_edge(DOWN, buff=0.55)
         tag = published_tag(r"Reinhart and Rogoff, \ AER 99(2) (2009); \ Cerra and Saxena, \ AER 98(1) (2008); \ "
                             r"Romer and Romer, \ AER 107(10) (2017); \ this film", corner=DR, font_size=12)
         with self.voiceover(

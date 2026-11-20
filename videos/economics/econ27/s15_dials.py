@@ -49,7 +49,7 @@ class Dials(VoiceoverScene):
         head = status_head(dial, r"Okun's coefficient \ (new)")
         frame, rows = dial_rows(dial, -1.0, 0.0, [-1.0, -0.75, -0.5, -0.25, 0.0], r"points of unemployment per "
                                 r"point of output gap", top=2.0, step=0.68, fmt="{:.2f}")
-        meaning = wrapped_label(tex_safe(dial.meaning), 12.6, 17, GREY_A).to_edge(DOWN, buff=0.3)
+        meaning = wrapped_label(tex_safe(dial.meaning), 12.0, 17, GREY_A).to_edge(DOWN, buff=0.55)
         tag = published_tag(r"Okun (1962); \ Ball, \ Leigh and Loungani, \ JMCB 49(7) (2017); \ this film",
                             corner=DR, font_size=12)
         o = load("okun")

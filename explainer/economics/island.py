@@ -731,6 +731,19 @@ TRUTHS = {
         # supply shocks of standard deviation 2
         "bg": {"lam": 1.0, "k": 2.0, "b": 1.0, "sigma": 2.0},
     },
+    29: {
+        # the cake (chapters 3-4): patience 0.9, a cake of 1 on a grid of 1,001 sizes
+        "cake": {"beta": 0.9, "w_max": 1.0, "n": 1001, "iters": 400, "keep": (0, 1, 2, 5, 10, 30, 100)},
+        # Brock and Mirman (chapter 5): capital's share 0.36, patience 0.96, TFP with persistence 0.9 and shocks 2%
+        "bm": {"alpha": 0.36, "beta": 0.96, "rho": 0.9, "sigma": 0.02, "T": 200, "seed": 7},
+        "growth": {"alpha": 0.36, "beta": 0.96, "delta": 0.1, "rho": 0.9, "sigma": 0.02, "nk": 151, "nz": 5},
+        # the Island's real business cycle (chapters 6-10): quarterly; capital's share 0.36, patience 0.99,
+        # depreciation 2.5% a quarter, TFP persistence 0.95 with shocks of 0.7%, a third of time at work
+        "rbc": {"alpha": 0.36, "beta": 0.99, "delta": 0.025, "rho": 0.95, "sigma": 0.007, "n_ss": 1 / 3,
+                "T": 20000, "seed": 11, "frisch_grid": (0.25, 0.5, 1.0, 2.0, 4.0)},
+        # Markov chains (chapter 5): seven states
+        "chains": {"n": 7, "rho": 0.95, "sigma": 0.007, "rho_high": 0.995},
+    },
 }
 
 

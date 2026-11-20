@@ -5,8 +5,9 @@ from explainer.music.sound import SoundScene
 
 from videos.economics.econ27.common import *  # noqa: F403
 
-EVENTS = ((1929.8, r"October 1929: \ the crash", PRICE), (1933.2, r"March 1933: \ the banks close", PRICE),
-          (1937.6, r"1937--38: \ a second slump", HOLD), (1941.9, r"December 1941: \ war", GOV))
+# (when, what, colour, where the label sits on the chart's scale)
+EVENTS = ((1929.8, r"October 1929: \ the crash", PRICE, 11.5), (1933.2, r"March 1933: \ the banks close", PRICE, 2.9),
+          (1937.6, r"1937--38: \ a second slump", HOLD, 12.0), (1941.9, r"December 1941: \ war", GOV, 6.5))
 
 
 class Intermission(SoundScene):
@@ -41,9 +42,8 @@ class Intermission(SoundScene):
             m.set_value(int(np.clip(yr, t[0], t[-1])))
 
         marks = VGroup()
-        for when, say, c in EVENTS:
-            k = int(np.argmin(np.abs(t - when)))
-            marks.add(label(say, font_size=16, color=c).next_to(ax.ax.c2p(when, np.log10(v[k])), DOWN, buff=0.4))
+        for when, say, c, y in EVENTS:
+            marks.add(label(say, font_size=16, color=c).move_to(ax.ax.c2p(when, np.log10(y))))
 
         def appear(when, ttl=6.0):
             at = film_time(when)
@@ -66,7 +66,7 @@ class Intermission(SoundScene):
             snd.caption(r"American industrial production, \ 1919--1945; \ the same series as a tune")
             snd.show(src, stag)
             snd.drive(grow, grower)
-            for mk, (when, _, _) in zip(marks, EVENTS):
+            for mk, (when, _, _, _) in zip(marks, EVENTS):
                 snd.drive(mk, appear(when))
             snd.drive(year, set_year)
             snd.show(ax, grow, year, *marks)

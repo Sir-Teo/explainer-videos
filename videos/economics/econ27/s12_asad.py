@@ -64,18 +64,18 @@ class ASAD(VoiceoverScene):
         ad0 = path(ax, A["ad0"], A["P"], color=SPEND, width=3, smooth=False)
         ad1 = path(ax, A["ad1"], A["P"], color=PRICE, width=4, smooth=False)
         as0 = path(ax, A["as0"], A["P"], color=OUTPUT, width=3, smooth=False)
-        as1 = path(ax, A["as1"], A["P"], color=HOLD, width=4, smooth=False)
+        as1 = path(ax, A["as1"], A["P"], color=INVEST, width=4, smooth=False)
         e0, dm, sp = A["e0"], A["demand"], A["supply"]
         d0 = dot(ax, e0["Y"], e0["P"], color=WHITE, r=0.07)
         d1 = dot(ax, dm["Y"], dm["P"], color=PRICE, r=0.09)
-        d2 = dot(ax, sp["Y"], sp["P"], color=HOLD, r=0.09)
+        d2 = dot(ax, sp["Y"], sp["P"], color=INVEST, r=0.09)
         side = VGroup(
             label(rf"a demand shock: \ money falls by {-A['dM']:.0f}", font_size=20, color=PRICE),
             label(rf"output {e0['Y']:.0f} $\to$ {dm['Y']:.0f}; \\ prices {e0['P']:.2f} $\to$ {dm['P']:.2f}: "
                   r"\\ both fall", font_size=20, color=PRICE),
-            label(rf"a supply shock: \ costs rise by {100 * A['cost']:.0f}\%", font_size=20, color=HOLD),
+            label(rf"a supply shock: \ costs rise by {100 * A['cost']:.0f}\%", font_size=20, color=INVEST),
             label(rf"output {e0['Y']:.0f} $\to$ {sp['Y']:.0f}; \\ prices {e0['P']:.2f} $\to$ {sp['P']:.2f}: "
-                  r"\\ opposite ways", font_size=20, color=HOLD),
+                  r"\\ opposite ways", font_size=20, color=INVEST),
             label(r"the sign of the price change \\ tells you which shock it was", font_size=20, color=E.ACCENT),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.3).to_edge(RIGHT, buff=0.35)
         tag = island_tag(corner=DR, font_size=14)

@@ -97,7 +97,9 @@ class Keynes(VoiceoverScene):
             h = 3.0 * R["adds"][k] / R["adds"][0]
             bars.add(Rectangle(width=w, height=max(h, 0.02), fill_color=GOV if k == 0 else SPEND, fill_opacity=0.8,
                                stroke_width=0))
-        bars.arrange(RIGHT, buff=0.15, aligned_edge=DOWN).move_to(LEFT * 1.6 + DOWN * 0.9)
+        bars.arrange(RIGHT, buff=0.15, aligned_edge=DOWN).move_to(LEFT * 1.2 + DOWN * 0.9)
+        intro = label(r"the government spends 100 on a bridge: \ follow the money round", font_size=24,
+                      color=GOV).next_to(bars, UP, buff=0.4).align_to(bars, LEFT)
         labels_ = VGroup(*[label(f"{R['adds'][k]:.0f}" if R["adds"][k] >= 1 else f"{R['adds'][k]:.1f}",
                                  font_size=16, color=GREY_A).next_to(bars[k], UP, buff=0.08) for k in range(n)])
         run = DecimalNumber(0, num_decimal_places=0, font_size=40, color=E.ACCENT).to_edge(RIGHT, buff=1.4).shift(
@@ -122,6 +124,7 @@ class Keynes(VoiceoverScene):
             "circle, into taxes, imports or higher interest rates. The next chapters add the leaks."
         ) as vo:
             self.add(run_lab, run)
+            self.play(FadeIn(intro))
             vo.wait_until("a")
             self.play(GrowFromEdge(bars[0], DOWN), FadeIn(labels_[0]), FadeIn(tag),
                       run.animate.set_value(R["cumulative"][0]))
@@ -132,7 +135,7 @@ class Keynes(VoiceoverScene):
                                     for k in range(2, n)], lag_ratio=0.4),
                       run.animate.set_value(R["cumulative"][n - 1]), run_time=3)
             vo.wait_until("d")
-            self.play(FadeIn(side[0]), FadeIn(side[1]), run.animate.set_value(R["limit"]))
+            self.play(FadeOut(intro), FadeIn(side[0]), FadeIn(side[1]), run.animate.set_value(R["limit"]))
             vo.wait_until("e")
             self.play(FadeIn(side[2]))
         self.clear_scene()
