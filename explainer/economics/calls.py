@@ -414,6 +414,21 @@ CALLS = {c.key: c for c in [
           "of Technology on Employment and Unemployment, National Academy of Engineering (1983), as quoted in "
           "secondary listings",
           "BLS via FRED: LNS12300060 (employment-population ratio, 25-54) and PRS85006173 (labor share)")),
+    Call("sachs_2005", 46, "Jeffrey Sachs, in The End of Poverty", "2005",
+         "extreme poverty can be ended by 2025, if rich countries raise their aid to about $135 to $195 billion a "
+         "year and spend it on investments in health, schools, farms and roads",
+         "the Millennium Development Goals and the falls in poverty already under way in China and India; the idea "
+         "of a poverty trap that a big push of aid could break",
+         "aid rose, but never to the share of rich countries' incomes the plan required; poverty fell fast, mostly in "
+         "Asia and with growth rather than aid, but in "
+         "2025 about 808 million people still lived below the World Bank's line of $3.00 a day, about one in ten; "
+         "the Millennium Villages' evaluation found gains on 30 of 40 outcomes, with poverty less conclusive",
+         "wrong",
+         ("J. D. Sachs, The End of Poverty: Economic Possibilities for Our Time (Penguin, 2005)",
+          "S. Mitchell et al., \"The Millennium Villages Project: A Retrospective, Observational, Endline "
+          "Evaluation\", Lancet Global Health 6(5), 2018, e500-e513",
+          "World Bank, Poverty, Prosperity and Planet Report and June 2025 update; the UN Sustainable Development "
+          "Goals Report 2025")),
     Call("experts_2018", 45, "many of 208 experts forecasting an effort experiment", "2016",
          "paying a token piece rate, a tenth of a cent, would crowd out effort: people paid almost nothing would work "
          "less than people paid nothing at all",

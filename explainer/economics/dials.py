@@ -523,7 +523,7 @@ DIALS = {d.key: d for d in [
                       checked="2026-11-19"),
          )),
     Dial("return_schooling", "return to a year of school", "proportional rise in earnings per year of schooling",
-         (4, 38), status="settled within a range", checked="2026-11-19",
+         (4, 38, 46), status="settled within a range", checked="2026-11-19",
          meaning="a year of school raises earnings by roughly 6 to 15 percent, a return few investments match; "
                  "the instruments' estimates sit at or above the regressions', which says less ability bias than "
                  "feared, and that the people an instrument moves gain more than the average",
@@ -572,6 +572,13 @@ DIALS = {d.key: d for d in [
                       where="Card (2001), Econometrica 69(5), table 2", checked="2026-11-19"),
              Estimate("Duflo", 1999, "regression", "Indonesia: OLS on the same data", 0.078,
                       where="Card (2001), table 2", checked="2026-11-19"),
+             Estimate("Duflo (published)", 2001, "IV", "Indonesia: over 61,000 schools built in 1973-79, by region "
+                      "and cohort", 0.087, 0.068, 0.106,
+                      where="American Economic Review 91(4), abstract: returns of 6.8 to 10.6 percent (the range "
+                            "shown; the dot its middle)", checked="2026-11-20"),
+             Estimate("this film (the Island's school-building programme)", 2026, "IV", "280 regions, the Wald ratio "
+                      "of the wage and schooling differences-in-differences (planted 0.08)", 0.095,
+                      where="videos/economics/econ46/compute.py, item inpres", checked="2026-11-20"),
              Estimate("this film (Card's data)", 1995, "IV", "Card's 3,010 young men of 1976, a four-year college "
                       "nearby as the instrument, with his controls (first-stage F 13)", 0.132, lo=0.025, hi=0.238,
                       where="videos/economics/econ38/compute.py, item returns", checked="2026-11-20"),
@@ -1266,7 +1273,47 @@ DIALS = {d.key: d for d in [
              Estimate("Saiz (Wichita)", 2010, "IV", "the most elastic of the 95", 5.45,
                       where="Quarterly Journal of Economics 125(3), Table VI", checked="2026-11-20"),
          )),
-    Dial("return_capital_poor", "return to capital for small firms in poor countries", "percent a month", (46,)),
+    Dial("return_capital_poor", "return to capital for small firms in poor countries", "percent a month", (46,),
+         status="depends on the setting", checked="2026-11-20",
+         meaning="what a small firm earns on one more dollar of capital: in randomized grants to Sri Lankan and Mexican "
+                 "microenterprises, 5 to 30 percent a month, far above the interest rates of banks and above most "
+                 "microlenders'; but zero on average for women-owned firms in Sri Lanka, and microcredit trials find "
+                 "modest average effects: high returns are real for some firms, not for the typical borrower",
+         estimates=(
+             Estimate("de Mel, McKenzie and Woodruff", 2008, "RCT", "Sri Lankan microenterprises given random grants "
+                      "of $100 or $200", 5.0, 4.6, 5.3,
+                      where="Quarterly Journal of Economics 123(4), abstract: real returns of 4.6 to 5.3 percent a "
+                            "month", checked="2026-11-20"),
+             Estimate("McKenzie and Woodruff", 2008, "RCT", "Mexican microenterprises given random grants in cash or "
+                      "equipment", 26.5, 20.0, 33.0,
+                      where="World Bank Economic Review 22(3), abstract: at least 20 to 33 percent a month",
+                      checked="2026-11-20"),
+             Estimate("de Mel, McKenzie and Woodruff (women)", 2009, "RCT", "the Sri Lankan grants, women-owned firms",
+                      0.0, where="AEJ: Applied Economics 1(3), abstract: zero on average for female owners",
+                      checked="2026-11-20"),
+             Estimate("this film (the Island's best businesses)", 2026, "calibration", "the 15 percent of the "
+                      "village's businesses planted with a return of 60 percent a year", 5.0,
+                      where="explainer/economics/island.py, TRUTHS[46]['credit']", checked="2026-11-20"),
+             Estimate("this film (the Island's other businesses)", 2026, "calibration", "the rest, planted with 5 "
+                      "percent a year", 0.42,
+                      where="explainer/economics/island.py, TRUTHS[46]['credit']", checked="2026-11-20"),
+         )),
+    Dial("cash_consumption", "the consumption effect of a cash transfer", "percent rise in household consumption",
+         (46,), status="depends on the setting", checked="2026-11-20",
+         meaning="how much a household's consumption rises after a large transfer: about a fifth in the year after "
+                 "GiveDirectly's transfers in Kenya, with neighbours who got nothing gaining about as much through "
+                 "local spending; the gains in Haushofer and Shapiro's study were no longer evident three years on, "
+                 "so the size depends on the transfer, the place and the horizon",
+         estimates=(
+             Estimate("Haushofer and Shapiro", 2016, "RCT", "GiveDirectly's transfers of $404 or $1,525 (PPP) in rural "
+                      "Kenya: monthly consumption, about nine months on", 22.2,
+                      where="QJE 131(4), abstract: $158 to $193 a month (PPP); the percentage computed here",
+                      checked="2026-11-20"),
+             Estimate("Egger et al. (non-recipients)", 2022, "RCT", "households that got nothing, in villages where "
+                      "others got about $1,000: annualized consumption 18 months on", 13.0,
+                      where="NBER Working Paper 26600, text: 13 percent, roughly comparable to recipients' gains",
+                      checked="2026-11-20"),
+         )),
     Dial("vsl", "value of a statistical life", "millions of 2024 dollars (older figures converted with the CPI-U)",
          (18, 58), status="contested", checked="2026-11-19",
          meaning="what people accept, in pay or in time, for a small change in the risk of death, scaled up to one "
@@ -1419,6 +1466,37 @@ DIALS = {d.key: d for d in [
 
 # What each part shows without entering a row, and why: {part: [(what is shown, the reason)]}
 SHOWN = {
+    46: [
+        ("Cohen and Dupas (2010)", "the nets' prices and use, stated from the abstract; the demand computed on the "
+         "Island"),
+        ("World Bank (1990-2025); Chen and Ravallion (2008); Deaton (2010)", "the line's history stated; the World "
+         "Bank's headcounts shown from the Data Room"),
+        ("Kraay and McKenzie (2014); Balboni et al. (2022)", "stated; a trap and a threshold computed on the Island"),
+        ("Lewis (1954); Gollin, Lagakos and Waugh (2014)", "the model computed; the raw gap recomputed from the World "
+         "Bank's data"),
+        ("Aleem (1990); Banerjee, Karlan and Zinman (2015); Meager (2019)", "stated; the lender's rate and a "
+         "randomized microlender computed on the Island"),
+        ("Schultz (2004); Haushofer and Shapiro (2016); Egger et al. (2022)", "stated, and entered in the "
+         "cash_consumption dial; the multiplier computed on the Island"),
+        ("Manacorda, Miguel and Vigorito (2011)", "their PANES households analysed here by regression discontinuity"),
+        ("Banerjee et al. (2015)", "the graduation programme's results stated"),
+        ("Duflo (2001); Banerjee et al. (2016); learning poverty (2022)", "stated; Duflo's design computed on the "
+         "Island and entered in the return_schooling dial"),
+        ("Miguel and Kremer (2004); the 2015 re-analyses", "stated; spillovers computed on the Island"),
+        ("Thornton (2008)", "her Malawi data analysed here: collecting results by incentive and by distance"),
+        ("Townsend (1994); Cole et al. (2013)", "stated; the test and index insurance computed on the Island"),
+        ("Cai, de Janvry and Sadoulet (2015)", "their farmers' take-up analysed here; the network result stated"),
+        ("Duflo, Kremer and Robinson (2011); Suri and Jack (2016)", "stated; present-biased farmers computed on the "
+         "Island"),
+        ("Dell (2010); Nunn (2008)", "stated; a boundary discontinuity computed on the Island"),
+        ("Deaton (2010); Vivalt (2020); Meager (2019); World Bank (2022) on China", "stated; heterogeneous sites "
+         "computed on the Island"),
+        ("de Mel, McKenzie and Woodruff (2008, 2009); McKenzie and Woodruff (2008)", "entered in the "
+         "return_capital_poor dial"),
+        ("Sachs (2005); Mitchell et al. (2018); GiveWell", "the Called it? card and the practice chapter"),
+        ("Muralidharan and Niehaus (2017); Jean et al. (2016); Blumenstock et al. (2015); Aiken et al. (2022)",
+         "the frontier chapter, stated"),
+    ],
     45: [
         ("DellaVigna and Malmendier (2006)", "the gym's contracts and attendance, stated from the abstract"),
         ("DellaVigna (2009)", "the survey's three classes of departures, stated"),

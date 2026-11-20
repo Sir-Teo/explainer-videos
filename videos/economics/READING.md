@@ -10,7 +10,7 @@ the series leaves out.
 Both *Parts* columns are found, not typed. *Planned* lists the parts whose entry in
 [`SYLLABUS.md`](SYLLABUS.md) names the book or paper; *Built* lists the parts whose scenes, compute step or
 README cite it (a dot: none yet). Fuller notes (editions, chapters, what each source was used for) are in each
-part's README, under *Sources*. Built so far: Parts 1–45.
+part's README, under *Sources*. Built so far: Parts 1–46.
 
 ## 1. The textbook spine
 
@@ -21,7 +21,7 @@ part's README, under *Sources*. Built so far: Parts 1–45.
 | Mankiw | N. G. Mankiw, *Principles of Economics* (10th ed., 2024) | 1–2 | 1–3, 20, 22, 28, 30, 32 |
 | Krugman–Wells | P. Krugman and R. Wells, *Economics* (6th ed., 2021) | 2 | 2 |
 | Acemoglu–Laibson–List | D. Acemoglu, D. Laibson and J. List, *Economics* (3rd ed., 2022) | 4 | 4 |
-| CORE | The CORE Team, *The Economy* (2017; 2.0, 2023) | 1 | 1, 9, 30 |
+| CORE | The CORE Team, *The Economy* (2017; 2.0, 2023) | 1 | 1, 9, 30, 46 |
 | Heilbroner | R. Heilbroner, *The Worldly Philosophers* (7th ed., 1999) | 1 | 1 |
 
 ### The major
@@ -40,7 +40,7 @@ part's README, under *Sources*. Built so far: Parts 1–45.
 | Cabral | L. Cabral, *Introduction to Industrial Organization* (2nd ed., 2017) | 12–13 | 12–13 |
 | Borjas | G. Borjas, *Labor Economics* (8th ed., 2020) | 38 | 38 |
 | Gruber | J. Gruber, *Public Finance and Public Policy* (7th ed., 2022) | 15, 41–42, 50 | 7, 15, 41–42 |
-| Ray | D. Ray, *Development Economics* (1998) | 46 | · |
+| Ray | D. Ray, *Development Economics* (1998) | 46 | 46 |
 | Weil | D. Weil, *Economic Growth* (3rd ed., 2013) | 7, 19 | 3, 7, 19–21, 23 |
 
 ### Graduate micro
@@ -96,7 +96,7 @@ part's README, under *Sources*. Built so far: Parts 1–45.
 | Cahuc–Carcillo–Zylberberg | P. Cahuc, S. Carcillo and A. Zylberberg, *Labor Economics* (2nd ed., 2014) | 24, 38 | 24, 38 |
 | Atkinson–Stiglitz | A. Atkinson and J. Stiglitz, *Lectures on Public Economics* (1980; 2015) | 41 | 6, 41 |
 | Salanié | B. Salanie, *The Economics of Taxation* (2nd ed., 2011) | 41 | 13–14, 41 |
-| Banerjee–Duflo | A. Banerjee and E. Duflo, *Poor Economics* (2011) | 46 | · |
+| Banerjee–Duflo | A. Banerjee and E. Duflo, *Poor Economics* (2011) | 46 | 46 |
 | Persson–Tabellini | T. Persson and G. Tabellini, *Political Economics* (2000) | 47 | · |
 | Dhami | S. Dhami, *The Foundations of Behavioral Economic Analysis* (2016) | 45 | 45 |
 | Fujita–Krugman–Venables | M. Fujita, P. Krugman and A. Venables, *The Spatial Economy* (1999) | 37 | 37 |
@@ -345,6 +345,8 @@ part's README, under *Sources*. Built so far: Parts 1–45.
 **Part 44, *Dynamics, Platforms and Antitrust*.** Books: Jean Tirole, *The Theory of Industrial Organization* (1988); Aguirregabiria, *Empirical Industrial Organization: Models, Methods, and Applications* (2021); Michael Whinston, *Lectures on Antitrust Economics* (2006); Jean Tirole, *Economics for the Common Good* (2017). Papers: Spengler (1950); Arrow (1962); Baron and Myerson (1982); David (1985); Rust (1987); Arthur (1989); Liebowitz and Margolis (1990); Hotz and Miller (1993); Pakes and McGuire (1994); Ericson and Pakes (1995); Rochet and Tirole (2003); Rysman (2004); Aghion et al. (2005); Armstrong (2006); Bajari, Benkard and Levin (2007); Ryan (2012); Kwoka (2013, 2015); Khan (2017); Calvano et al. (2020); Cunningham, Ederer and Ma (2021); Assad et al. (2024).
 
 **Part 45, *Behavioural Economics*.** Books: Richard Thaler, *Misbehaving: The Making of Behavioral Economics* (2015); Daniel Kahneman, *Thinking, Fast and Slow* (2011); Sanjit Dhami, *The Foundations of Behavioral Economic Analysis* (2016); Bernheim, DellaVigna and Laibson (eds.), *Handbook of Behavioral Economics* (2018–19). Papers: Kahneman and Tversky (1979); Thaler (1980); Kahneman, Knetsch and Thaler (1990); Laibson (1997); O'Donoghue and Rabin (1999); Fehr and Schmidt (1999); Madrian and Shea (2001); Genesove and Mayer (2001); List (2003); Thaler and Benartzi (2004); Sims (2003); DellaVigna and Malmendier (2004, 2006); Ashraf, Karlan and Yin (2006); Gabaix and Laibson (2006); DellaVigna (2009); Bernheim and Rangel (2009); Pope and Schweitzer (2011); DellaVigna and Linos (2022).
+
+**Part 46, *Development*.** Books: Abhijit Banerjee and Esther Duflo, *Poor Economics* (2011); Debraj Ray, *Development Economics* (1998); Amartya Sen, *Development as Freedom* (1999); Angus Deaton, *The Great Escape* (2013). Papers: Lewis (1954); Townsend (1994); Duflo (2001); Miguel and Kremer (2004); Schultz (2004); Thornton (2008); Nunn (2008); Cohen and Dupas (2010); Dell (2010); Deaton (2010); Duflo, Kremer and Robinson (2011); Banerjee et al. (2015); Banerjee, Karlan and Zinman (2015); Haushofer and Shapiro (2016); Suri and Jack (2016); Muralidharan and Niehaus (2017); Balboni et al. (2022); Egger et al. (2022); Aiken et al. (2022).
 
 ## 4. What the series leaves out
 

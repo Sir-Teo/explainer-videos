@@ -237,4 +237,64 @@
             "nothing you do here is stored or sent.",
     });
   };
+  W.aidbudget = function (el) {
+    // The Island's aid budget (explainer.economics.agora.village: aid_benefit, aid_allocate).  Each programme buys
+    // a s (1 - exp(-x/s)) thousand healthy years with x million dollars: a per million at first, flattening at s.
+    // If the reader's split spends more than the budget, every share is scaled down to fit.
+    var BUDGET = 10;
+    var P = [["deworming", 4.0, 1.5, "#7FD1B9"], ["cash", 2.0, 6.0, "#7BD88F"], ["nets", 5.0, 1.0, "#F2C14E"],
+             ["tutoring", 3.0, 2.5, "#7EC8F5"], ["credit", 0.8, 5.0, "#C9A0FF"], ["graduation", 2.2, 3.0, "#E8A0B4"]];
+    function ben(i, x) { return P[i][1] * P[i][2] * (1 - Math.exp(-x / P[i][2])); }
+    function marg(i, x) { return P[i][1] * Math.exp(-x / P[i][2]); }
+    var best = (function () {
+      var a = [0, 0, 0, 0, 0, 0], step = 0.05;
+      for (var n = 0; n < BUDGET / step; n++) {
+        var k = 0, gk = -1;
+        for (var i = 0; i < 6; i++) { var gi = ben(i, a[i] + step) - ben(i, a[i]); if (gi > gk) { gk = gi; k = i; } }
+        a[k] += step;
+      }
+      var t = 0; for (var j = 0; j < 6; j++) t += ben(j, a[j]);
+      return { alloc: a, total: t };
+    })();
+    var controls = P.map(function (p, i) {
+      return { k: "x" + i, label: p[0] + ", millions", min: 0, max: 10, step: 0.1, value: BUDGET / 6,
+               fmt: function (x) { return "$" + x.toFixed(1) + "m"; } };
+    });
+    QB.widget(el, {
+      title: "Spend the aid budget",
+      sub: "Ten million dollars, six programmes. Bars: what each buys with your split (coloured) and with the best " +
+           "split (grey outline). Each programme's next million buys less than its last.",
+      panels: 1, height: 300, controls: controls,
+      draw: function (g, v, st) {
+        var x = P.map(function (p, i) { return v["x" + i]; });
+        var tot = x.reduce(function (a, b) { return a + b; }, 0);
+        var f = tot > BUDGET ? BUDGET / tot : 1;
+        x = x.map(function (z) { return z * f; });
+        var mine = x.map(function (z, i) { return ben(i, z); });
+        var opt = best.alloc.map(function (z, i) { return ben(i, z); });
+        var top = Math.max.apply(null, mine.concat(opt).concat([2])) * 1.15;
+        var A = g[0].axes({ x: [0, 6], y: [0, top], title: "thousands of healthy years",
+                            xlabel: "deworming   cash   nets   tutoring   credit   graduation" });
+        A.bars([0.35, 1.35, 2.35, 3.35, 4.35, 5.35], mine, 0.35, { color: function (i) { return P[i][3]; } });
+        A.bars([0.7, 1.7, 2.7, 3.7, 4.7, 5.7], opt, 0.25, { color: function () { return "#6B7280"; } });
+        st.x = x; st.tot = tot; st.f = f;
+        st.total = mine.reduce(function (a, b) { return a + b; }, 0);
+        st.margs = x.map(function (z, i) { return marg(i, z); });
+      },
+      readout: function (v, st) {
+        var lo = Math.min.apply(null, st.margs), hi = Math.max.apply(null, st.margs);
+        var iLo = st.margs.indexOf(lo), iHi = st.margs.indexOf(hi);
+        return [["you spend", "$" + Math.min(st.tot, BUDGET).toFixed(1) + "m" +
+                 (st.f < 1 ? " (scaled down from $" + st.tot.toFixed(1) + "m)" : "")],
+                ["you buy", st.total.toFixed(2) + " thousand healthy years"],
+                ["the best split buys", best.total.toFixed(2) + " (" +
+                 (100 * st.total / best.total).toFixed(0) + "% of it is yours)"],
+                ["move money", "from " + P[iLo][0] + " (next million buys " + lo.toFixed(2) + ") to " + P[iHi][0] +
+                 " (" + hi.toFixed(2) + ")"]];
+      },
+      note: "Part 46, chapter 2. At the best split the next million buys the same in every funded programme; " +
+            "microcredit's first million buys less than that, so it gets nothing. Computed in your browser; " +
+            "nothing you do here is stored or sent.",
+    });
+  };
 })();

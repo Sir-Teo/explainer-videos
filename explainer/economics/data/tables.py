@@ -3984,6 +3984,282 @@ FRONTIER45 = Table(
     read="the abstracts",
     checked="2026-11-21",
 )
+# ---------------------------------------------------------------------------
+# Part 46
+# ---------------------------------------------------------------------------
+COHEN_DUPAS_2010 = Table(
+    key="cohen_dupas_2010",
+    cite="Jessica Cohen and Pascaline Dupas, \"Free Distribution or Cost-Sharing? Evidence from a Randomized Malaria "
+         "Prevention Experiment\", Quarterly Journal of Economics 125(1), 2010, 1-45",
+    tag="Cohen and Dupas, QJE (2010)",
+    where="the abstract and the 2008 working paper: long-lasting insecticide-treated nets sold at randomized prices "
+          "from free to 40 Kenyan shillings (about $0.60) at 20 prenatal clinics in western Kenya; demand drops by "
+          "about 60 percent as the price rises from zero to 40 shillings; women who paid were no more likely to use a "
+          "net, and appeared no sicker, than those who got one free",
+    read="the NBER working paper w14406 abstract, J-PAL's summary and the Brookings version",
+    checked="2026-11-20",
+    data={"clinics": 20, "price_ksh": 40, "price_usd": 0.60, "drop": 60},
+)
+POVERTY_LINES = Table(
+    key="poverty_lines",
+    cite="World Bank, World Development Report 1990: Poverty; Martin Ravallion, Gaurav Datt and Dominique van de "
+         "Walle, \"Quantifying Absolute Poverty in the Developing World\", Review of Income and Wealth 37(4), 1991; "
+         "Shaohua Chen and Martin Ravallion, \"The Developing World is Poorer Than We Thought, but No Less Successful "
+         "in the Fight Against Poverty\", World Bank Policy Research Working Paper 4703, 2008; World Bank, \"June "
+         "2025 Update to Global Poverty Lines\" (factsheet, 5 June 2025); Angus Deaton, \"Price Indexes, "
+         "Inequality, and the Measurement of World Poverty\", American Economic Review 100(1), 2010, 5-34",
+    tag="World Bank (1990-2025); Chen and Ravallion (2008); Deaton (2010)",
+    where="the line's history: about $1 a day (1990), $1.08 at 1993 prices (2001), $1.25 at 2005 prices (2008), $1.90 "
+          "at 2011 prices (2015), $2.15 at 2017 prices (September 2022), $3.00 at 2021 prices (June 2025); Chen and "
+          "Ravallion's abstract: 1.4 billion below $1.25 in 2005, a quarter of the developing world, against 1.9 "
+          "billion, half, in 1981; the new prices added about 400 million to the 2005 count; the June 2025 update: "
+          "the higher line reflects new prices, not a poorer world",
+    read="the World Bank factsheet and data blog (June 2025), Our World in Data's notes on the lines, the World "
+         "Bank's 2008 press release and feature, the working paper's abstract",
+    checked="2026-11-20",
+    data={"lines": ((1990, 1.00, 1985), (2001, 1.08, 1993), (2008, 1.25, 2005), (2015, 1.90, 2011), (2022, 2.15, 2017),
+                    (2025, 3.00, 2021)),
+          "poor_2005_bn": 1.4, "poor_1981_bn": 1.9, "revision_m": 400, "poor_2025_m": 808},
+)
+TRAPS_46 = Table(
+    key="traps_46",
+    cite="Aart Kraay and David McKenzie, \"Do Poverty Traps Exist? Assessing the Evidence\", Journal of Economic "
+         "Perspectives 28(3), 2014, 127-148; Clare Balboni, Oriana Bandiera, Robin Burgess, Maitreesh Ghatak and "
+         "Anton Heil, \"Why Do People Stay Poor?\", Quarterly Journal of Economics 137(2), 2022, 785-844",
+    tag="Kraay and McKenzie, JEP (2014); Balboni et al., QJE (2022)",
+    where="Kraay and McKenzie: little evidence for the traps of most models, the strongest for traps tied to "
+          "geography; Balboni et al.'s abstract and MIT's summary: 6,000 households in rural Bangladesh starting in "
+          "extreme poverty, followed for 11 years (2007-2018); half randomly given an asset (cows) by BRAC's Targeting "
+          "the Ultra-Poor programme; a threshold of initial assets above which households accumulate and take better "
+          "occupations, below which they stay poor; the misallocation from the trap is 15 times the one-time cost of "
+          "pushing households across",
+    read="the abstracts, MIT News (May 2022) and the LSE summary",
+    checked="2026-11-20",
+    data={"households": 6000, "years": 11, "misallocation": 15},
+)
+DUAL_46 = Table(
+    key="dual_46",
+    cite="W. Arthur Lewis, \"Economic Development with Unlimited Supplies of Labour\", The Manchester School 22(2), "
+         "1954, 139-191; Douglas Gollin, David Lagakos and Michael E. Waugh, \"The Agricultural Productivity Gap\", "
+         "Quarterly Journal of Economics 129(2), 2014, 939-993",
+    tag="Lewis (1954); Gollin, Lagakos and Waugh, QJE (2014)",
+    where="Lewis's model stated in words; Gollin, Lagakos and Waugh: value added per worker outside agriculture is "
+          "about three times that in agriculture in national accounts, higher in developing countries; after their "
+          "adjustments (hours, human capital, living costs, survey incomes) a gap of about two remains",
+    read="the NBER working paper's abstract (w19628) and the policy brief",
+    checked="2026-11-20",
+    data={"raw": 3, "adjusted": 2},
+)
+CREDIT_46 = Table(
+    key="credit_46",
+    cite="Irfan Aleem, \"Imperfect Information, Screening, and the Costs of Informal Lending: A Study of a Rural "
+         "Credit Market in Pakistan\", World Bank Economic Review 4(3), 1990, 329-349; Abhijit Banerjee, Dean Karlan "
+         "and Jonathan Zinman, \"Six Randomized Evaluations of Microcredit: Introduction and Further Steps\", "
+         "American Economic Journal: Applied Economics 7(1), 2015, 1-21; Rachael Meager, \"Understanding the Average "
+         "Impact of Microcredit Expansions\", AEJ: Applied Economics 11(1), 2019, 57-91; Suresh de Mel, David "
+         "McKenzie and Christopher Woodruff, \"Returns to Capital in Microenterprises: Evidence from a Field "
+         "Experiment\", QJE 123(4), 2008, 1329-1372; David McKenzie and Christopher Woodruff, \"Experimental "
+         "Evidence on Returns to Capital and Access to Finance in Mexico\", World Bank Economic Review 22(3), 2008, "
+         "457-482",
+    tag="Aleem (1990); Banerjee, Karlan and Zinman (2015); Meager (2019); de Mel et al. (2008)",
+    where="Aleem: fourteen moneylenders around Chambar, Sindh, 1980-81, charging about 78 percent a year on average, "
+          "with charges equal to their average cost of lending, screening and chasing defaults included (as reported "
+          "by the CORE textbook); Banerjee, Karlan and Zinman: six randomized evaluations (Bosnia, Ethiopia, India, "
+          "Mexico, Mongolia, Morocco), effects modestly positive but not transformative; Meager: across seven trials "
+          "the effects on business and consumption are modest, unlikely to be transformative and possibly negligible, "
+          "and about 60 percent of the variation across sites is sampling noise; de Mel et al.: random grants to Sri "
+          "Lankan microenterprises, real returns of 4.6 to 5.3 percent a month; McKenzie and Woodruff: in Mexico at "
+          "least 20 to 33 percent a month",
+    read="the abstracts (RePEc, World Bank Open Knowledge), the CORE Economics page on Chambar's moneylenders",
+    checked="2026-11-20",
+    data={"lenders": 14, "rate": 78, "countries": 6, "meager_noise": 60, "sl_lo": 4.6, "sl_hi": 5.3, "mx_lo": 20,
+          "mx_hi": 33},
+)
+CASH_46 = Table(
+    key="cash_46",
+    cite="T. Paul Schultz, \"School Subsidies for the Poor: Evaluating the Mexican Progresa Poverty Program\", "
+         "Journal of Development Economics 74(1), 2004, 199-250; Johannes Haushofer and Jeremy Shapiro, \"The "
+         "Short-Term Impact of Unconditional Cash Transfers to the Poor: Experimental Evidence from Kenya\", QJE "
+         "131(4), 2016, 1973-2042; Dennis Egger, Johannes Haushofer, Edward Miguel, Paul Niehaus and Michael Walker, "
+         "\"General Equilibrium Effects of Cash Transfers: Experimental Evidence from Kenya\", Econometrica 90(6), "
+         "2022, 2603-2643; Marco Manacorda, Edward Miguel and Andrea Vigorito, \"Government Transfers and Political "
+         "Support\", AEJ: Applied Economics 3(3), 2011, 1-28",
+    tag="Schultz (2004); Haushofer and Shapiro (2016); Egger et al. (2022); Manacorda et al. (2011)",
+    where="PROGRESA's evaluation sample: 506 localities, 320 randomly assigned to start in May 1998 and the rest after "
+          "2000 (IFPRI's evaluation summaries); Schultz: effects on enrolment concentrated after primary school "
+          "(primary enrolment was already high, a gain of about a point), an internal rate of return of about 8 "
+          "percent; Haushofer and Shapiro's abstract: GiveDirectly's transfers of $404 or $1,525 (PPP) raised monthly "
+          "consumption from $158 to $193; Egger et al.'s abstract: about $1,000 to over 10,500 households in 653 "
+          "villages, more than 15 percent of local GDP; large gains for recipients, spillovers to non-recipients and "
+          "firms, little inflation (about 0.1 percent on average, working paper), a local multiplier of 2.5; "
+          "Manacorda et al.: beneficiaries of Uruguay's PANES were 11 to 14 points more likely to favour the "
+          "government",
+    read="the abstracts; IFPRI, J-PAL and AgEcon summaries of the PROGRESA design; the NBER working papers",
+    checked="2026-11-20",
+    data={"localities": 506, "treated": 320, "hs_small": 404, "hs_large": 1525, "hs_before": 158, "hs_after": 193,
+          "egger_hh": 10500, "egger_villages": 653, "egger_m": 2.5, "egger_inflation": 0.1, "panes_lo": 11,
+          "panes_hi": 14},
+)
+GRADUATION_2015 = Table(
+    key="graduation_2015",
+    cite="Abhijit Banerjee, Esther Duflo, Nathanael Goldberg, Dean Karlan, Robert Osei, William Pariente, Jeremy "
+         "Shapiro, Bram Thuysbaert and Christopher Udry, \"A Multifaceted Program Causes Lasting Progress for the "
+         "Very Poor: Evidence from Six Countries\", Science 348(6236), 2015, 1260799",
+    tag="Banerjee et al., Science (2015)",
+    where="the abstract: six randomized trials (Ethiopia, Ghana, Honduras, India, Pakistan, Peru) with about 21,000 "
+          "people; a productive asset, training, a consumption allowance, savings and coaching; consumption higher "
+          "in five of the six sites (not Honduras) a year after the programme ended, and benefits greater than costs "
+          "in five of six",
+    read="the Science abstract and IPA's summary",
+    checked="2026-11-20",
+    data={"countries": 6, "people": 21000, "consumption_up": 5, "benefits_exceed": 5},
+)
+SCHOOLS_46 = Table(
+    key="schools_46",
+    cite="Esther Duflo, \"Schooling and Labor Market Consequences of School Construction in Indonesia: Evidence from "
+         "an Unusual Policy Experiment\", American Economic Review 91(4), 2001, 795-813; Abhijit Banerjee, Rukmini "
+         "Banerji, James Berry, Esther Duflo et al., \"Mainstreaming an Effective Intervention: Evidence from "
+         "Randomized Evaluations of 'Teaching at the Right Level' in India\", NBER Working Paper 22746, 2016; World "
+         "Bank, UNESCO and UNICEF, The State of Global Learning Poverty: 2022 Update; David Roodman, \"Schooling "
+         "and Labor Market Consequences of School Construction in Indonesia: Comment\" (2025)",
+    tag="Duflo, AER (2001); Banerjee et al. (2016); World Bank (2022)",
+    where="Duflo's abstract: over 61,000 primary schools built between 1973 and 1979; each school per 1,000 children "
+          "raised education by 0.12 to 0.19 years and wages by 1.5 to 2.7 percent, returns to education of 6.8 to "
+          "10.6 percent; Roodman's reanalysis argues the original intervals are too narrow; Teaching at the Right "
+          "Level: language gains of 0.15 standard deviations in Haryana and 0.70 in Uttar Pradesh's camps; learning "
+          "poverty: about 70 percent of 10-year-olds in low- and middle-income countries could not read a simple "
+          "text in 2022, against 57 percent before the pandemic",
+    read="the abstracts; the World Bank's press release of 23 June 2022",
+    checked="2026-11-20",
+    data={"schools": 61000, "years_lo": 0.12, "years_hi": 0.19, "wage_lo": 1.5, "wage_hi": 2.7, "ret_lo": 6.8,
+          "ret_hi": 10.6, "tarl_haryana": 0.15, "tarl_up": 0.70, "learning_poverty": 70, "pre_pandemic": 57},
+)
+HEALTH_46 = Table(
+    key="health_46",
+    cite="Edward Miguel and Michael Kremer, \"Worms: Identifying Impacts on Education and Health in the Presence of "
+         "Treatment Externalities\", Econometrica 72(1), 2004, 159-217; Alexander Aiken et al. and Calum Davey et al., "
+         "International Journal of Epidemiology 44(5), 2015 (the re-analyses); Rebecca Thornton, \"The Demand for, "
+         "and Impact of, Learning HIV Status\", American Economic Review 98(5), 2008, 1829-1863",
+    tag="Miguel and Kremer (2004); the 2015 re-analyses; Thornton (2008)",
+    where="Miguel and Kremer: 75 schools in Busia, Kenya, phased in at random; deworming cut absenteeism by a quarter, "
+          "with spillovers to untreated pupils in treated schools and to nearby schools, and no measurable effect on "
+          "test scores; the 2015 re-analyses disputed the size and robustness of the school-attendance effects and "
+          "the authors replied; Thornton: about 34 percent of people collected their HIV results with no incentive, "
+          "and even the smallest incentive doubled it",
+    read="the abstracts and J-PAL's summary",
+    checked="2026-11-20",
+    data={"schools": 75, "absence_cut": "a quarter", "thornton_none": 34},
+)
+RISK_46 = Table(
+    key="risk_46",
+    cite="Robert Townsend, \"Risk and Insurance in Village India\", Econometrica 62(3), 1994, 539-591; Shawn Cole, "
+         "Xavier Gine, Jeremy Tobacman, Petia Topalova, Robert Townsend and James Vickery, \"Barriers to Household "
+         "Risk Management: Evidence from India\", AEJ: Applied Economics 5(1), 2013, 104-135; Jing Cai, Alain de "
+         "Janvry and Elisabeth Sadoulet, \"Social Networks and the Decision to Insure\", AEJ: Applied Economics "
+         "7(2), 2015, 81-108",
+    tag="Townsend (1994); Cole et al. (2013); Cai, de Janvry and Sadoulet (2015)",
+    where="Townsend: in three ICRISAT villages household consumption moves with village consumption and little with "
+          "own income: full insurance is rejected but is a good benchmark; Cole et al.: rainfall insurance take-up "
+          "of 5 to 10 percent at market prices, sensitive to price and to trust in the insurer; Cai et al.: for "
+          "farmers not trained themselves, one more friend given the intensive session raised take-up as much as a "
+          "15 percent cut in the premium",
+    read="the abstracts",
+    checked="2026-11-20",
+    data={"take_lo": 5, "take_hi": 10, "friend_premium": 15},
+)
+FARMS_46 = Table(
+    key="farms_46",
+    cite="Esther Duflo, Michael Kremer and Jonathan Robinson, \"Nudging Farmers to Use Fertilizer: Theory and "
+         "Experimental Evidence from Kenya\", American Economic Review 101(6), 2011, 2350-2390; Tavneet Suri and "
+         "William Jack, \"The Long-Run Poverty and Gender Impacts of Mobile Money\", Science 354(6317), 2016, "
+         "1288-1292; William Jack and Tavneet Suri, \"Risk Sharing and Transactions Costs: Evidence from Kenya's "
+         "Mobile Money Revolution\", American Economic Review 104(1), 2014, 183-223; Nicholas Bloom, Benn Eifert, "
+         "Aprajit Mahajan, David McKenzie and John Roberts, \"Does Management Matter? Evidence from India\", "
+         "Quarterly Journal of Economics 128(1), 2013, 1-51",
+    tag="Duflo, Kremer and Robinson, AER (2011); Suri and Jack, Science (2016); Bloom et al., QJE (2013)",
+    where="Duflo, Kremer and Robinson: 1,230 maize farmers in western Kenya; an officer visiting right after harvest "
+          "to sell a voucher at the regular price with free delivery later (SAFI) raised use by 14 points from 24 in "
+          "the first season; the same offer later in the season had no significant effect; the effect was comparable "
+          "to that of a 50 percent subsidy offered later; Suri and Jack: access to M-PESA lifted about 194,000 "
+          "Kenyan households, 2 percent, out of extreme poverty, and moved about 185,000 women from farming into "
+          "business; Jack and Suri: households using M-PESA kept their consumption up after negative shocks, "
+          "through remittances, while others cut theirs; Bloom et al.: free management consulting for randomly "
+          "chosen Indian textile plants raised productivity by 17 percent in the first year",
+    read="the NBER working paper w15131 and J-PAL's summary; the abstracts",
+    checked="2026-11-20",
+    data={"farmers": 1230, "base": 24, "gain": 14, "households": 194000, "share": 2, "women": 185000,
+          "management": 17},
+)
+HISTORY_46 = Table(
+    key="history_46",
+    cite="Melissa Dell, \"The Persistent Effects of Peru's Mining Mita\", Econometrica 78(6), 2010, 1863-1903; Nathan "
+         "Nunn, \"The Long-Term Effects of Africa's Slave Trades\", Quarterly Journal of Economics 123(1), 2008, "
+         "139-176; Nathan Nunn and Leonard Wantchekon, \"The Slave Trade and the Origins of Mistrust in Africa\", "
+         "American Economic Review 101(7), 2011, 3221-3252",
+    tag="Dell, Econometrica (2010); Nunn, QJE (2008); Nunn and Wantchekon, AER (2011)",
+    where="Dell: the mita, a forced-labour system in Peru and Bolivia from 1573 to 1812; districts inside its boundary "
+          "have household consumption about 25 percent lower and stunting about 6 points higher today, found by "
+          "regression discontinuity at the boundary; haciendas formed mostly outside it, and their owners secured "
+          "roads that still connect farmers to markets; Nunn: the African countries from which most slaves were "
+          "taken are the poorest today, with sailing distances to the slave markets as instruments; Nunn and "
+          "Wantchekon: people from ethnic groups raided most heavily trust less today, mostly through beliefs and "
+          "norms carried by individuals",
+    read="the abstracts, MIT News (April 2010) and an excerpt of the paper",
+    checked="2026-11-20",
+    data={"start": 1573, "end": 1812, "consumption": 25, "stunting": 6},
+)
+DEBATE_46 = Table(
+    key="debate_46",
+    cite="Angus Deaton, \"Instruments, Randomization, and Learning about Development\", Journal of Economic "
+         "Literature 48(2), 2010, 424-455; Abhijit Banerjee and Esther Duflo, Poor Economics (2011); the Royal "
+         "Swedish Academy of Sciences, press release of 14 October 2019; Eva Vivalt, \"How Much Can We Generalize "
+         "from Impact Evaluations?\", Journal of the European Economic Association 18(6), 2020, 3045-3089; World "
+         "Bank and the Development Research Center of the State Council, Four Decades of Poverty Reduction in China "
+         "(2022)",
+    tag="Deaton (2010); Banerjee and Duflo (2011); Vivalt (2020); World Bank (2022)",
+    where="Deaton's critique of experiments as answers to narrow questions; the 2019 prize to Banerjee, Duflo and "
+          "Kremer \"for their experimental approach to alleviating global poverty\"; Vivalt: a large amount of "
+          "heterogeneity in impact evaluations, smaller effects in government-run programmes than in academic or NGO "
+          "ones; China: close to 800 million people lifted out of extreme poverty over four decades, about three "
+          "quarters of the global reduction",
+    read="the abstracts and the Nobel press release",
+    checked="2026-11-20",
+    data={"china_m": 800, "china_share": 75},
+)
+PRACTICE_46 = Table(
+    key="practice_46",
+    cite="GiveWell, Top Charities (updated September 2025); Jeffrey Sachs, The End of Poverty (2005); Shira Mitchell "
+         "et al., \"The Millennium Villages Project: A Retrospective, Observational, Endline Evaluation\", Lancet "
+         "Global Health 6(5), 2018, e500-e513",
+    tag="GiveWell (2025); Sachs (2005); Mitchell et al., Lancet GH (2018)",
+    where="GiveWell: about $6 a net; Against Malaria Foundation funding in 2022-2024 at about $5,500 per life saved, "
+          "a rough estimate; Sachs: extreme poverty can be ended by 2025 (with aid of $135 to $195 billion a year); "
+          "the Millennium Villages' endline evaluation: favourable effects on 30 of 40 outcomes, with poverty and "
+          "nutrition less conclusive",
+    read="GiveWell's top charities page; the book's summary; the Lancet abstract",
+    checked="2026-11-20",
+    data={"net": 6, "per_life": 5500, "mv_good": 30, "mv_all": 40},
+)
+FRONTIER46 = Table(
+    key="frontier46",
+    cite="Karthik Muralidharan and Paul Niehaus, \"Experimentation at Scale\", Journal of Economic Perspectives 31(4), "
+         "2017, 103-124; Neal Jean et al., \"Combining Satellite Imagery and Machine Learning to Predict Poverty\", "
+         "Science 353(6301), 2016, 790-794; Joshua Blumenstock, Gabriel Cadamuro and Robert On, \"Predicting Poverty "
+         "and Wealth from Mobile Phone Metadata\", Science 350(6264), 2015, 1073-1076; Emily Aiken, Suzanne Bellue, "
+         "Dean Karlan, Chris Udry and Joshua Blumenstock, \"Machine Learning and Phone Data Can Improve Targeting of "
+         "Humanitarian Aid\", Nature 603, 2022, 864-870",
+    tag="Muralidharan and Niehaus (2017); Jean et al. (2016); Blumenstock et al. (2015); Aiken et al. (2022)",
+    where="scaling stated in words; Jean et al.: night lights and daytime images explain up to 75 percent of the "
+          "variation in local economic outcomes in five African countries; Blumenstock et al.: phone records of 1.5 "
+          "million Rwandan subscribers, trained on 856 surveyed respondents, map wealth like the government's "
+          "surveys; Aiken et al.: in Togo's Novissi programme, phone-based targeting cut exclusion errors by 4 to 21 "
+          "percent against the geographic options considered, but did worse than a full social registry would",
+    read="the abstracts and Berkeley's summary",
+    checked="2026-11-20",
+    data={"satellite": 75, "rwanda_n": 856, "rwanda_subs": 1.5, "togo_lo": 4, "togo_hi": 21},
+)
+PART46 = (COHEN_DUPAS_2010, POVERTY_LINES, TRAPS_46, DUAL_46, CREDIT_46, CASH_46, GRADUATION_2015, SCHOOLS_46,
+          HEALTH_46, RISK_46, FARMS_46, HISTORY_46, DEBATE_46, PRACTICE_46, FRONTIER46)
 PART45 = (GYM_2006, DEPARTURES_2009, KKT_1990, LIST_2003, REFERENCE_FIELD, PRESENT_BIAS, SEED_2006, DEFAULTS_45,
           INATTENTION_45, SOCIAL_45, WELFARE_45, NUDGES_2022, LIMITS_45, PRACTICE_45, FRONTIER45)
 PART44 = (RUST_1987, DYNAMIC_IO, VERTICAL, PLATFORMS, QWERTY, INNOVATION, ALGORITHMS, ANTITRUST, REGULATION,
@@ -3994,4 +4270,4 @@ PART41 = (LAFFER_1974, HARBERGER_1962, RAMSEY_1927, MIRRLEES_1971, DIAMOND_SAEZ_
           CLK_2009, CAPITAL_TAX, HAVENS, EVASION, FRONTIER41, TCJA_2017)
 PART7 = (BERNOULLI_1738, SAMUELSON_1937, ALLAIS_1953, ELLSBERG_1961, RABIN_2000, THALER_1981, HOLT_LAURY_2005,
          HAYDEN_PLATT_2009, MADRIAN_SHEA_2001, THALER_BENARTZI_2004, BARSKY_1997, POST_2008, MEHRA_PRESCOTT_1985)
-ALL = {t.key: t for t in (*PART1, *PART3, *PART4, *PART5, *PART6, *PART7, *PART8, *PART9, *PART10, *PART11, *PART12, *PART13, *PART14, *PART15, *PART16, *PART17, *PART18, *PART19, *PART21, *PART22, *PART25, *PART26, *PART35, *PART36, *PART37, *PART38, *PART39, *PART40, *PART41, *PART42, *PART43, *PART44, *PART45)}
+ALL = {t.key: t for t in (*PART1, *PART3, *PART4, *PART5, *PART6, *PART7, *PART8, *PART9, *PART10, *PART11, *PART12, *PART13, *PART14, *PART15, *PART16, *PART17, *PART18, *PART19, *PART21, *PART22, *PART25, *PART26, *PART35, *PART36, *PART37, *PART38, *PART39, *PART40, *PART41, *PART42, *PART43, *PART44, *PART45, *PART46)}

@@ -1076,6 +1076,51 @@ TRUTHS = {
         # distortion 0.6
         "forecast": {"T": 600, "n": 40, "rho": 0.8, "sd_signal": 1.5, "theta": 0.6, "seed": 45},
     },
+    46: {
+        # the village's poverty trap (chapters 3 and 7): output the better of k^0.5 and 4 k^0.5 - 11; saving 30%,
+        # depreciation 10%; 3,000 households with assets lognormal around 10; shocks of 8%; twelve years
+        "trap": {"a_low": 1.0, "a_high": 4.0, "alpha": 0.5, "fixed": 11.0, "s": 0.3, "delta": 0.1, "n": 3000,
+                 "T": 12, "k_mu": 2.302585, "k_sd": 0.45, "shock_sd": 0.08, "seed": 46},
+        # the dual economy (chapter 4): 100 workers, 60 of them surplus at a subsistence wage of 1
+        "lewis": {"T": 60, "labour": 100.0, "wage": 1.0, "alpha": 0.4, "k0": 2.0, "saving": 1.0},
+        # credit (chapter 5): a lender's funds cost 10%, 15% of loans default, screening and collection cost 20%;
+        # a microlender randomized across villages: 15% of businesses return 60% a year on capital, the rest 5%,
+        # against an interest rate of 25%; one in five others borrow to buy a durable or smooth a bad month
+        "lender": {"cost_of_funds": 0.10, "default": 0.15, "monitoring": 0.20},
+        "credit": {"n": 40000, "share_high": 0.15, "r_low": 0.05, "r_high": 0.6, "loan": 100.0, "take_up": 0.2,
+                   "interest": 0.25, "seed": 46},
+        # cash (chapter 6): three quarters of spending stays in the village, sellers spend 80% of what they earn,
+        # and 98% of the extra demand is met by more output rather than higher prices
+        "cash": {"local_share": 0.75, "mpc": 0.8, "slack": 0.98},
+        # schools (chapter 8): 280 regions; children young enough gain 0.15 years of school per new school per
+        # 1,000 children; the return to a year of school is 8%
+        "inpres": {"regions": 280, "per_cell": 800, "effect_years": 0.15, "return_school": 0.08, "seed": 46},
+        # health (chapter 9): bed nets, willingness to pay lognormal around 42 cents; 65% of those with a net use
+        # it, whatever they paid; deworming in 75 schools with a spillover of a half
+        "nets": {"wtp_median": 0.42, "wtp_sigma": 1.2, "use": 0.65, "seed": 46},
+        "worms": {"schools": 75, "pupils": 200, "take": 0.75, "base_infect": 0.5, "cure": 0.9, "spill": 0.5,
+                  "seed": 46},
+        # risk (chapter 10): villages pool 85% of their members' own shocks; a farmer loses half the harvest in a
+        # drought (one year in five), trusts the insurer 80%, and pays a premium 30% above the expected payout
+        "risk": {"pooled": 0.85, "villages": 3, "households": 120, "T": 10, "seed": 46},
+        "index": {"p_drought": 0.2, "loss": 0.5, "trust": 0.8, "load": 0.3, "gamma": 2.0},
+        # fertilizer (chapter 11): values lognormal around 1.1 times the price, a trip's hassle exponential with
+        # mean 0.15, buying at planting costs 0.35 more, beta uniform on [0.7, 1], 70% naive
+        "fert": {"n": 20000, "value_mean": 1.1, "hassle_mean": 0.15, "cash_cost": 0.35, "beta_lo": 0.7,
+                 "naive": 0.7, "seed": 46},
+        # history (chapter 12): districts inside an old forced-labour boundary consume 25% less (log points)
+        "mita": {"n": 3000, "effect": -0.25, "slope": 0.004, "bandwidth": 50.0, "seed": 46},
+        # external validity (chapter 13): twelve sites, effects normal around 0.2 with sd 0.15, trials' se 0.05
+        "sites": {"k": 12, "mu": 0.2, "tau": 0.15, "se": 0.05, "seed": 46},
+        # targeting (chapter 16): log consumption = village (sd 0.25) + person (sd 0.55); a transfer for the poorest
+        # 30%; a phone-based prediction correlated 0.5 with consumption, a full registry 0.75
+        "target": {"n": 60000, "villages": 600, "share": 0.3, "sd_v": 0.25, "sd_e": 0.55, "rho_phone": 0.5,
+                   "rho_registry": 0.75, "seed": 46},
+        # the aid budget (chapter 2): six programmes, benefit = scale x saturation x (1 - exp(-spend/saturation)),
+        # in thousands of healthy years per million dollars at the first dollar; spending in millions
+        "aid": {"deworming": (4.0, 1.5), "cash": (2.0, 6.0), "nets": (5.0, 1.0), "tutoring": (3.0, 2.5),
+                "credit": (0.8, 5.0), "graduation": (2.2, 3.0)},
+    },
 }
 
 

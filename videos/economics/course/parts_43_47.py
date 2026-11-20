@@ -143,4 +143,52 @@ PARTS = [
               ("Prospect theory's functions", "explainer/psychology/psyche/choice.py"),
               ("The Island's planted truths", "explainer/economics/island.py")),
     ),
+    Part(
+        n=46, level="U", widget="aidbudget", prereq=(4, 20, 22, 45),
+        question="Why do the poor stay poor, and what actually helps?",
+        story="The part opens on Cohen and Dupas's bed nets: a price of about 60 cents, drawn at random at Kenyan "
+              "clinics, cut demand by about 60%, and those who paid used their nets no more than those who did not. "
+              "The Island's clinic repeats it. The World Bank's count of the poor, from a dollar a day to $3.00 at "
+              "2021 prices, falls from 47% of the world in 1981 to 10% in 2024, mostly in East and South Asia; the "
+              "viewer spends a ten-million-dollar aid budget across six programmes and learns to spend at the "
+              "margin. A technology with a fixed cost gives the Island's households an S-shaped capital map, a "
+              "threshold and a trap that only a large enough transfer breaks; Lewis's dual economy and the "
+              "agricultural productivity gap, recomputed for 172 countries, follow. The moneylender's rate is mostly "
+              "cost; a randomized microlender raises profits modestly, with the gains in the top tail. Cash: "
+              "PROGRESA's randomized roll-out, GiveDirectly, a village multiplier of 2.5, and Uruguay's PANES "
+              "households analysed here by regression discontinuity. The graduation programme in six countries and "
+              "the threshold in the Island's data come before an intermission of world poverty. Then schools "
+              "(Duflo's difference in differences and Wald ratio, learning poverty, Teaching at the Right Level), "
+              "health (deworming's spillovers, the worm wars, Thornton's incentives analysed from her data), risk "
+              "(Townsend's test, index insurance, a default in China's data), fertilizer and present bias, mobile "
+              "money, management, the mita's boundary and the slave trades, and the debate over what experiments "
+              "can teach, with twelve heterogeneous sites and China's growth. Three dials, practice and the "
+              "frontier close it.",
+        handoff="Part 47 turns from programmes that work to the governments that choose them: political economy.",
+        outside="Part 4: difference in differences, instruments and regression discontinuity; Part 20: the Solow "
+                "model; Part 22: saving and insurance; Part 27: the multiplier; Part 45: present bias and defaults; "
+                "Statistics, Built: quantile treatment effects, the bootstrap and partial pooling.",
+        objectives={
+            "U": ["Explain how the world's poor are counted, and why prices change the count.",
+                  "Say what makes a poverty trap, and why the size of a transfer matters in one.",
+                  "Explain why the moneylender charges so much and why microcredit's average effect is small."],
+            "M": ["Find the steady states of an S-shaped capital map and say which are stable.",
+                  "Run Townsend's test and say why village-year effects are needed.",
+                  "Compute a Wald estimate from a difference in differences, and a regression discontinuity."],
+            "D": ["Assess the external validity of randomized trials with heterogeneous sites, and what scaling "
+                  "changes.",
+                  "State the open questions in measuring and targeting poverty with satellites and phones."],
+            "I": ["Allocate a budget across programmes at the margin, and read a cost-effectiveness estimate."],
+        },
+        results=[
+            ("The trap's dynamics", r"k_{t+1} = s\, f(k_t) + (1-\delta)\, k_t"),
+            ("The lender's break-even rate", r"(1+i)(1-p) = 1 + r + m"),
+            ("The village multiplier", r"1 + a + a^2 + \cdots = \tfrac{1}{1-a}"),
+            ("Townsend's test", r"\Delta \log c_{ivt} = \beta\, \Delta \log y_{ivt} + \gamma_{vt} + e_{ivt}"),
+            ("The best split", r"a_i\, e^{-x_i/s_i} = \lambda \ \text{for every funded programme}"),
+        ],
+        U=(0, 1, 2, 3, 4, 5, 6, 7, "s09_intermission", 8, 9, 10, 11, 12), D=(13, 16), I=(15,),
+        also=(("Agora's village", "explainer/economics/agora/village.py"),
+              ("The Island's planted truths", "explainer/economics/island.py")),
+    ),
 ]

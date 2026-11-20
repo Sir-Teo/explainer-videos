@@ -101,7 +101,7 @@ film that moves to a new vintage says so on screen.
 | `wdi_poverty_1981_2025.csv` | the share of people living below $3.00 a day (2021 PPP), by survey year, for the world, sub-Saharan Africa, South Asia, East Asia and Pacific, Latin America and the Caribbean, the Middle East and North Africa, Europe and Central Asia, China and India (indicator SI.POV.DDAY) | World Bank, World Development Indicators (Poverty and Inequality Platform) | CC BY 4.0 | 2026-11-21 |
 | `wdi_agriculture_2015_2025.csv` | for each country, the latest year from 2015 with all three: agriculture's share of employment (SL.AGR.EMPL.ZS) and of value added (NV.AGR.TOTL.ZS), and GDP per head at PPP in constant 2021 dollars (NY.GDP.PCAP.PP.KD) | World Bank, World Development Indicators | CC BY 4.0 | 2026-11-21 |
 | `thornton_hiv_2004.csv` | Thornton's experiment in rural Malawi, 2004: 4,820 people in 125 villages (2,894 with a recorded collection), tested for HIV and randomly offered cash incentives of up to about $3 to learn their results at centres placed at random; the village, distance to the centre, incentive, whether they collected their result, age and HIV status | Thornton (2008), via the R package causaldata 0.1.4 (CRAN) | MIT (package); the data are Thornton's | 2026-11-21 |
-| `insure_china.csv` | Cai, de Janvry and Sadoulet's weather-insurance experiment in rural Jiangxi, China: the package's extract of 1,410 rice-farming households in 166 villages, randomly assigned a simple or an intensive information session and a default; take-up, the session, the default, age, rice area, perceived disaster probability, risk aversion, literacy and the take-up of the household's friends in the earlier round | Cai, de Janvry and Sadoulet (2015), via the R package causaldata 0.1.4 (CRAN) | MIT (package); the data are the authors' | 2026-11-21 |
+| `insure_china.csv` | Cai, de Janvry and Sadoulet's weather-insurance experiment in rural China: the package's extract of 1,410 rice-farming households in 166 villages, randomly assigned a simple or an intensive information session and a default; take-up, the session, the default, age, rice area, perceived disaster probability, risk aversion, literacy and the take-up of the household's friends in the earlier round | Cai, de Janvry and Sadoulet (2015), via the R package causaldata 0.1.4 (CRAN) | MIT (package); the data are the authors' | 2026-11-21 |
 | `panes_uruguay.csv` | Manacorda, Miguel and Vigorito's households near the eligibility cutoff of Uruguay's PANES transfer programme (2005-07): the standardized eligibility score, education, age, participation, and support for the government | Manacorda, Miguel and Vigorito (2011), via the R package causaldata 0.1.4 (CRAN) | MIT (package); the data are the authors' | 2026-11-21 |
 
 The raw Maddison workbook (`mpd2023_web.xlsx`, dataverse file 421302) had SHA-256
@@ -373,3 +373,18 @@ publication, the copy that was read and the date the transcription was checked:
 | `limits_45` | rational inattention, sparsity, diagnostic expectations (Part 45) | 2026-11-20 |
 | `practice_45` | Part 45's practice chapter, stated in words | 2026-11-20 |
 | `frontier45` | Part 45's frontier, stated in words | 2026-11-20 |
+| `cohen_dupas_2010` | Cohen and Dupas's randomized bed-net prices at Kenyan prenatal clinics (Part 46) | 2026-11-20 |
+| `poverty_lines` | the international poverty line's history, Chen and Ravallion's 2008 revision, Deaton on prices (Part 46) | 2026-11-20 |
+| `traps_46` | Kraay and McKenzie on poverty traps; Balboni et al.'s Bangladesh threshold (Part 46) | 2026-11-20 |
+| `dual_46` | Lewis's dual economy; Gollin, Lagakos and Waugh's agricultural productivity gap (Part 46) | 2026-11-20 |
+| `credit_46` | Aleem's moneylenders; six microcredit trials; Meager; returns to capital in Sri Lanka and Mexico (Part 46) | 2026-11-20 |
+| `cash_46` | PROGRESA's design and Schultz; Haushofer and Shapiro; Egger et al.'s multiplier; PANES and political support (Part 46) | 2026-11-20 |
+| `graduation_2015` | the graduation programme in six countries (Part 46) | 2026-11-20 |
+| `schools_46` | Duflo's Indonesian schools; Teaching at the Right Level; learning poverty (Part 46) | 2026-11-20 |
+| `health_46` | Miguel and Kremer's deworming and the 2015 re-analyses; Thornton's HIV-results incentives (Part 46) | 2026-11-20 |
+| `risk_46` | Townsend's village insurance; rainfall insurance take-up; Cai et al.'s networks (Part 46) | 2026-11-20 |
+| `farms_46` | Duflo, Kremer and Robinson's fertilizer offers; Suri and Jack's mobile money (Part 46) | 2026-11-20 |
+| `history_46` | Dell's mita; Nunn's slave trades (Part 46) | 2026-11-20 |
+| `debate_46` | Deaton's critique, the 2019 prize, Vivalt on generalizing, China's poverty reduction (Part 46) | 2026-11-20 |
+| `practice_46` | GiveWell's cost per life; Sachs's 2005 forecast; the Millennium Villages' evaluation (Part 46) | 2026-11-20 |
+| `frontier46` | scaling; poverty from satellites and phones; Togo's Novissi (Part 46) | 2026-11-20 |

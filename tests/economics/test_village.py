@@ -139,3 +139,10 @@ def test_aid_allocation_equalizes_marginal_benefits():
     assert max(marg) - min(marg) < 0.05
     even = sum(float(V.aid_benefit(2.0, *P[k])) for k in P)
     assert r["total"] >= even
+
+
+def test_targeting_orders_the_rules():
+    t = V.targeting()
+    assert t["registry"] < t["phone"] < t["geographic"] < t["random"]
+    assert t["random"] == pytest.approx(0.7, abs=0.02)
+    assert 0.02 < 1 - t["phone"] / t["geographic"] < 0.25      # a modest gain over geography, as in Togo

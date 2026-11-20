@@ -22,6 +22,8 @@ the experiments that study them.
 * **Behaviour on the farm** (:func:`fertilizer`): present-biased farmers who mean to buy fertilizer, and a small
   discount offered at harvest that works as commitment.
 * **External validity** (:func:`sites`): effects that differ by site, and what one site's trial says about another.
+* **Targeting** (:func:`targeting`): who an emergency transfer reaches when the poor are found by village, by a
+  phone-based prediction, or by a full registry.
 * **The aid budget** (:func:`aid_allocate`): six programmes with diminishing returns, and the allocation that buys the
   most.
 
@@ -158,12 +160,13 @@ def moneylender(cost_of_funds: float = 0.10, default: float = 0.15, monitoring: 
 
 def microcredit_trial(n: int = 6000, share_high: float = 0.15, r_low: float = 0.05, r_high: float = 0.6,
                       loan: float = 100.0, take_up: float = 0.2, interest: float = 0.25, base_sd: float = 60.0,
-                      seed: int = 0) -> dict:
+                      boot_reps: int = 0, seed: int = 0) -> dict:
     """Villages randomized to get a microlender.  Most would-be borrowers' businesses return little on extra capital
     (r_low a year), a few a great deal (r_high).  Those offered credit whose return beats the interest rate borrow
     and invest; some others (``take_up``) borrow anyway, to buy a durable good or smooth a bad month, which leaves
     their profits unchanged.  Returns the intention-to-treat effect on profits, the take-up, the effect on
-    borrowers, and quantile treatment effects (the gains sit in the top tail)."""
+    borrowers, and quantile treatment effects (the gains sit in the top tail) with bootstrap 95% bands if
+    ``boot_reps``."""
     rng = np.random.default_rng(seed)
     high = rng.random(n) < share_high
     r = np.where(high, r_high, r_low) + 0.02 * rng.standard_normal(n)
@@ -177,7 +180,13 @@ def microcredit_trial(n: int = 6000, share_high: float = 0.15, r_low: float = 0.
     tu = float(borrow[treat].mean())
     qs = np.linspace(0.05, 0.95, 19)
     qte = np.quantile(profit[treat], qs) - np.quantile(profit[~treat], qs)
+    pt, pc = profit[treat], profit[~treat]
+    boot = np.array([np.quantile(rng.choice(pt, len(pt)), qs) - np.quantile(rng.choice(pc, len(pc)), qs)
+                     for _ in range(boot_reps)]) if boot_reps else np.zeros((1, len(qs)))
+    lo, hi = np.quantile(boot, [0.025, 0.975], axis=0)
     return {"itt": itt, "take_up": tu, "tot": itt / tu, "qs": qs.tolist(), "qte": qte.tolist(),
+            "qte_lo": lo.tolist(), "qte_hi": hi.tolist(),
+            "itt_se": float(np.sqrt(pt.var(ddof=1) / len(pt) + pc.var(ddof=1) / len(pc))),
             "mean_control": float(profit[~treat].mean()), "share_high": share_high,
             "gain_high": float(loan * (r_high - interest)), "share_investing": float(invest[treat].mean())}
 
@@ -457,6 +466,37 @@ def sites(k: int = 12, mu: float = 0.2, tau: float = 0.15, se: float = 0.05, see
     return {"theta": theta.tolist(), "x": x.tolist(), "shrunk": shrunk.tolist(), "mean": pooled,
             "tau_hat": float(np.sqrt(tau2)), "next_lo": pooled - 1.96 * pred_sd, "next_hi": pooled + 1.96 * pred_sd,
             "se": se}
+
+
+def targeting(n: int = 60000, villages: int = 600, share: float = 0.3, sd_v: float = 0.25, sd_e: float = 0.55,
+              rho_phone: float = 0.5, rho_registry: float = 0.75, seed: int = 0) -> dict:
+    """Who gets an emergency transfer meant for the poorest ``share``?  Log consumption is a village effect plus an
+    individual one.  Four rules pick the same number of people: at random; by village (the poorest villages
+    first, everyone in them); by a phone-based prediction correlated ``rho_phone`` with consumption; by a full
+    survey registry, correlated ``rho_registry``.  Returns each rule's exclusion error, the share of the truly
+    poorest who are missed."""
+    rng = np.random.default_rng(seed)
+    vid = rng.integers(0, villages, n)
+    c = rng.normal(0, sd_v, villages)[vid] + rng.normal(0, sd_e, n)
+    k = int(share * n)
+    eligible = np.zeros(n, bool)
+    eligible[np.argsort(c)[:k]] = True
+    z = (c - c.mean()) / c.std()
+
+    def noisy(rho):
+        return rho * z + np.sqrt(1 - rho ** 2) * rng.standard_normal(n)
+    sums = np.bincount(vid, weights=c, minlength=villages)
+    counts = np.maximum(np.bincount(vid, minlength=villages), 1)
+    vmean = (sums / counts)[vid]
+    out = {}
+    for nm, score in (("random", rng.random(n)), ("geographic", vmean + 1e-9 * rng.random(n)),
+                      ("phone", noisy(rho_phone)), ("registry", noisy(rho_registry))):
+        sel = np.zeros(n, bool)
+        sel[np.argsort(score)[:k]] = True
+        out[nm] = float(np.mean(~sel[eligible]))
+    out["share"] = share
+    out["rho_geo"] = float(np.corrcoef(vmean, c)[0, 1])
+    return out
 
 
 # ---------------------------------------------------------------------------------------------------------------

@@ -1397,3 +1397,28 @@ brackets on screen.
 | sparsity | 稀疏性 |
 | diagnostic expectations; overreaction | 诊断性预期；过度反应 |
 | structural behavioural economics | 结构行为经济学 |
+
+## Part 46
+
+| English | 中文 |
+|---|---|
+| development economics | 发展经济学 |
+| international poverty line; purchasing-power parity | 国际贫困线；购买力平价 |
+| headcount ratio; extreme poverty | 贫困人口比例；极端贫困 |
+| poverty trap; threshold; steady state | 贫困陷阱；门槛；稳态 |
+| dual economy; surplus labour; Lewis turning point | 二元经济；剩余劳动力；刘易斯拐点 |
+| agricultural productivity gap | 农业生产率差距 |
+| moneylender; joint liability; group lending | 放贷人；连带责任；联保贷款 |
+| microcredit; microfinance | 小额信贷；微型金融 |
+| quantile treatment effect | 分位数处理效应 |
+| conditional cash transfer; unconditional cash transfer | 有条件现金转移支付；无条件现金转移支付 |
+| local multiplier | 地方乘数 |
+| graduation programme; asset transfer | 脱贫毕业项目；资产转移 |
+| learning poverty; teaching at the right level | 学习贫困；因材施教（按水平教学） |
+| deworming; spillover; externality | 驱虫；溢出效应；外部性 |
+| risk sharing; full insurance; index insurance; basis risk | 风险分担；完全保险；指数保险；基差风险 |
+| mobile money | 移动货币 |
+| persistence; the mita | 历史持续性；米塔制（强制劳役制） |
+| external validity; general equilibrium effects | 外部有效性；一般均衡效应 |
+| cost-effectiveness; room for more funding | 成本效益；追加资金空间 |
+| targeting; exclusion error | 瞄准；排斥性误差（漏保） |
