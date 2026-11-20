@@ -119,6 +119,12 @@ AGORA = {
                                     "across 89 countries, 1960-2019, holding investment, population growth and "
                                     "schooling fixed, the gap closes at about 1.3% a year, and with no controls not at "
                                     "all"),
+    # Part 24 drew the JOLTS curve and built the labour market with frictions
+    "beveridge": (24, "workers and jobs meet through a matching function with constant returns, so unemployment and "
+                      "vacancies coexist in a steady state; productivity moves the economy along a downward-sloping "
+                      "curve (the Island: 3.5% unemployment and 6.6% vacancies), and worse matching shifts the curve "
+                      "out; with Shimer's calibration, though, tightness moves only 1.7% per 1% of productivity, "
+                      "against about 25 in the data"),
     # Part 23 computed the premium from Shiller's data and built the trees
     "equity_premium": (23, "the premium is risk aversion times an asset's covariance with bad times; with consumption "
                            "as smooth as the data show, power utility gives at most a third of a point at sensible "

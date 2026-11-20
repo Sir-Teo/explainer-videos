@@ -689,6 +689,23 @@ brackets on screen.
 | rational bubbles; experimental asset markets | 理性泡沫；实验资产市场 |
 | the price-to-rent ratio; the user cost of housing | 房价租金比；住房使用成本 |
 
+## Part 24
+
+| English | 中文 |
+|---|---|
+| search frictions; job search; the reservation wage | 搜寻摩擦；工作搜寻；保留工资 |
+| stocks and flows; hires; separations; quits | 存量与流量；雇用；离职；主动辞职 |
+| the Beveridge curve; vacancies; tightness | 贝弗里奇曲线；职位空缺；劳动力市场紧张度 |
+| the matching function; the job-finding rate; the vacancy-filling rate | 匹配函数；求职成功率；职位填补率 |
+| the Diamond-Mortensen-Pissarides model; job creation; free entry | 戴蒙德-莫滕森-皮萨里德斯模型；职位创造；自由进入 |
+| Nash bargaining; the match surplus; the worker's bargaining share | 纳什议价；匹配剩余；工人议价份额 |
+| congestion externalities; the Hosios condition; coordination failure | 拥挤外部性；霍西奥斯条件；协调失灵 |
+| the unemployment volatility puzzle; wage rigidity; the fundamental surplus | 失业波动之谜；工资刚性；基本剩余 |
+| the ins and outs of unemployment; time aggregation | 失业的流入与流出；时间加总 |
+| job ladders; on-the-job search; wage dispersion; monopsony | 职业阶梯；在职搜寻；工资离散；买方垄断 |
+| the natural rate of unemployment; duration dependence; scarring | 自然失业率；持续期依赖；失业疤痕效应 |
+| online vacancy postings; remote work | 在线职位广告；远程工作 |
+
 ## Names
 
 | English | 中文 |

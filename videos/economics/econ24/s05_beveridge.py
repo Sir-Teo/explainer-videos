@@ -13,6 +13,7 @@ class Beveridge(VoiceoverScene):
         self.curve()
         self.read()
         self.landing()
+        self.fact()
 
     def axes_(self, center=LEFT * 1.7 + DOWN * 0.3):
         return plane([3, 15], [1.5, 7.5], center=center, x_length=8.0, y_length=5.2, xticks=[3, 5, 7, 9, 11, 13, 15],
@@ -139,4 +140,35 @@ class Beveridge(VoiceoverScene):
             self.play(FadeIn(side[3]))
             vo.wait_until("e")
             self.play(GrowFromCenter(end), FadeIn(side[4]))
+        self.clear_scene()
+
+    def fact(self):
+        b = load("beveridge")
+        d = load("dmp")
+        f = next(x for x in facts.FACTS if x.key == "beveridge")
+        data_m = label(rf"JOLTS, \ 2000--{b['last'][:4]}: \\ a downward curve, \ shifted \\ out after 2009 and in "
+                       r"2021", font_size=19, color=WHITE)
+        theory_m = label(r"flows balance: \ $u = s / (s + f)$; \\ $f$ rises with openings \\ per searcher",
+                         font_size=19, color=TIGHT)
+        agora_m = label(rf"the Island: \ {pc(d['steady']['u'])} \ unemployed \\ and {pc(d['steady']['v'])} \ "
+                        r"vacancies \\ at once \ (chapter 6)", font_size=19, color=E.AGORA)
+        fc = fact_card(tex_safe(f.statement), columns=((r"the data", data_m), (r"the theory", theory_m),
+                                                         (r"Agora", agora_m)), width=12.4, font_size=22,
+                       colors=(WHITE, TIGHT, None)).move_to(UP * 0.3)
+        tag = published_tag(r"Beveridge, \emph{Full Employment in a Free Society} (1944); \ Elsby, Michaels and "
+                            r"Ratner, JEL 53(3) (2015)", corner=DR, font_size=12)
+        with self.voiceover(
+            "One of the series' facts. <bookmark mark='a'/> In the data, openings and unemployment move in "
+            "opposite directions along a curve that sometimes shifts. <bookmark mark='b'/> In theory, the curve is "
+            "where the flows into and out of unemployment balance, with job finding rising in openings per "
+            "searcher. <bookmark mark='c'/> And Agora's Island, which chapter six builds, has both at once in a "
+            "perfectly steady state."
+        ) as vo:
+            self.play(FadeIn(fc.card), FadeIn(fc[1][0]), *[FadeIn(c[:2]) for c in fc.cols], FadeIn(tag))
+            vo.wait_until("a")
+            self.play(FadeIn(fc.cols[0][2:]))
+            vo.wait_until("b")
+            self.play(FadeIn(fc.cols[1][2:]))
+            vo.wait_until("c")
+            self.play(FadeIn(fc.cols[2][2:]))
         self.clear_scene()

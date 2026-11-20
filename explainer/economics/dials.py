@@ -519,7 +519,45 @@ DIALS = {d.key: d for d in [
     Dial("ige", "intergenerational elasticity of income", "", (40,)),
     Dial("eti", "elasticity of taxable income", "", (41,)),
     Dial("ui_duration", "duration elasticity of unemployment benefits", "", (42,)),
-    Dial("matching", "elasticity of matches to unemployment", "", (24,)),
+    Dial("matching", "elasticity of matches to unemployment", "eta in M = A U^eta V^(1-eta); one minus the elasticity "
+         "of the job-finding rate with respect to openings per searcher", (24, 29, 42), status="settled within a range",
+         checked="2026-11-20",
+         meaning="when the searchers counted are the unemployed, estimates cluster at a half to seven-tenths, with "
+                 "constant returns; counting all hires, job-to-job moves included, or correcting for endogenous "
+                 "matching efficiency gives lower values; by Hosios's condition it is also the worker's share of the "
+                 "surplus at which the market creates the right number of jobs",
+         estimates=(
+             Estimate("Petrongolo and Pissarides", 2001, "review", "aggregate matching functions across countries "
+                      "(the survey's range; midpoint shown)", 0.6, 0.5, 0.7, where="JEL 39(2): 390-431, as summarized "
+                      "by later papers", checked="2026-11-20"),
+             Estimate("Shimer", 2005, "regression", "US 1951-2003: the job-finding rate on the vacancy-unemployment "
+                      "ratio (help-wanted index and CPS); one minus the slope", 0.72, where="AER 95(1): 25-49, the "
+                      "calibration", checked="2026-11-20"),
+             Estimate("this film (Agora)", 2026, "regression", "US 2001-2019, quarterly: the CPS job-finding rate "
+                      "(Shimer's method) on JOLTS openings per unemployed worker; one minus the slope", 0.58,
+                      where="videos/economics/econ24/compute.py, item matching", checked="2026-11-20"),
+             Estimate("this film (Agora)", 2026, "regression", "US 2001-2019, monthly: JOLTS hires per unemployed "
+                      "worker on openings per unemployed worker; hires include job-to-job moves", 0.31,
+                      where="videos/economics/econ24/compute.py, item matching", checked="2026-11-20"),
+         )),
+    Dial("bargaining_share", "the worker's bargaining share", "beta, the worker's share of a match's surplus under "
+         "Nash bargaining", (24, 29, 38), status="contested", checked="2026-11-20",
+         meaning="it cannot be read off wages without knowing what the worker's fallback is worth, so calibrations "
+                 "choose it with the fallback: Hosios's condition gives about 0.7, the small-surplus calibration "
+                 "that makes unemployment volatile 0.05; structural estimates that let employers compete for workers "
+                 "find little bargaining power at all below the top of the skill distribution, the rent coming "
+                 "from competition between employers instead",
+         estimates=(
+             Estimate("Shimer", 2005, "calibration", "set equal to the matching elasticity (Hosios's condition)", 0.72,
+                      where="AER 95(1): 25-49, the calibration", checked="2026-11-20"),
+             Estimate("Hagedorn and Manovskii", 2008, "calibration", "chosen with the value of non-work (0.955) to "
+                      "match the costs of vacancies and the cyclicality of wages", 0.052,
+                      where="AER 98(4): 1692-1706, the calibration", checked="2026-11-20"),
+             Estimate("Cahuc, Postel-Vinay and Robin", 2006, "structural", "French matched employer-employee data, "
+                      "low- and intermediate-skill workers: no significant bargaining power (shown at zero; modestly "
+                      "positive for the high-skilled)", 0.0, where="Econometrica 74(2): 323-364, abstract and "
+                      "post-print summary", checked="2026-11-20"),
+         )),
     Dial("price_frequency", "frequency of price changes", "share of prices changing per month", (30,)),
     Dial("phillips_slope", "slope of the Phillips curve", "points of inflation per point of slack", (28, 30)),
     Dial("sacrifice", "sacrifice ratio", "point-years of output per point of disinflation", (28,)),
@@ -1001,6 +1039,39 @@ SHOWN = {
         ("Jordà, Knoll, Kuvshinov, Schularick and Taylor (2019); He and Krishnamurthy (2013); Adrian, Etula and "
          "Muir (2014)", "frontier, stated from the abstracts and the NBER working paper"),
         ("Diamond (1982)", "the next part's hook, stated"),
+    ],
+    24: [
+        ("Diamond (1982); Cooper and John (1988)", "the coconut island, computed in Agora; coordination failure, "
+         "stated"),
+        ("Davis and Haltiwanger (1992); Davis, Haltiwanger and Schuh (1996)", "gross job flows, stated in words; the "
+         "flows shown are JOLTS's"),
+        ("Stigler (1961); McCall (1970); Butters (1977); Hall (1979); Nash (1950); Rubinstein (1982)", "theory, "
+         "derived and computed in Agora"),
+        ("Katz and Meyer (1990); Card, Chetty and Weber (2007)", "two studies of benefits and job search, shown as "
+         "examples; the duration elasticity is the ui_duration dial, entered by Part 42"),
+        ("Beveridge (1944); Elsby, Michaels and Ratner (2015); Hobijn and Sahin", "the curve's history and survey, "
+         "stated; the curve shown is JOLTS's"),
+        ("Blanchard, Domash and Summers (2022); Figura and Waller (2022)", "the soft-landing debate, stated with what "
+         "followed in the data"),
+        ("Petrongolo and Pissarides (2001); Shimer (2005)", "the matching dial's rows"),
+        ("Mortensen and Pissarides (1994); Shimer (2005); Hall (2005); Hagedorn and Manovskii (2008); Pissarides "
+         "(2009); Hall and Milgrom (2008); Ljungqvist and Sargent (2017)", "the volatility puzzle: the Called it? "
+         "card, the calibrations solved in Agora, and the repairs stated; the bargaining dial's rows"),
+        ("Hosios (1990)", "the efficiency condition, computed in Agora"),
+        ("Shimer (2012); Elsby, Michaels and Solon (2009)", "the ins-and-outs decomposition, computed by this film "
+         "from the CPS"),
+        ("Topel and Ward (1992); Burdett and Mortensen (1998); Manning (2003)", "a single study of careers, shown as "
+         "an example; the ladder computed in Agora; monopsony, stated (Part 38 measures it)"),
+        ("Friedman (1968); the CBO's natural rate", "the concept, stated; the estimate shown as data"),
+        ("Kroft, Lange and Notowidigdo (2013); Davis and von Wachter (2011)", "duration dependence and the cost of job "
+         "loss: single studies, shown as examples"),
+        ("Cahuc, Postel-Vinay and Robin (2006)", "the bargaining dial's row"),
+        ("Horton (2017); Belot, Kircher and Muller (2019)", "two field experiments on platforms, shown as examples"),
+        ("Hershbein and Kahn (2018); Marinescu and Rathelot (2018); Hansen, Lambert, Bloom, Davis, Sadun and Taska "
+         "(2023)", "frontier work, stated from the abstracts and the paper's appendix"),
+        ("Pissarides (2000); Cahuc, Carcillo and Zylberberg (2014); Ljungqvist and Sargent (2018); Rogerson, Shimer "
+         "and Wright (2005)", "the reading list"),
+        ("Furness (1910)", "the next part's hook, stated"),
     ],
     22: [
         ("Johnson, Parker and Souleles (2006); Parker et al. (2013, 2022); Kueng (2018); Jappelli and Pistaferri "

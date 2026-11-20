@@ -87,8 +87,10 @@ class Ricardo(VoiceoverScene):
             "not be paying attention. <bookmark mark='e'/> And the cleanest test is the 2001 rebate itself, a cut "
             "financed by borrowing. Households spent twenty to forty percent of it in a single quarter."
         ) as vo:
-            self.play(FadeIn(rows[0]))
-            for mk, r_ in zip("abcde", rows[1:]):
+            self.play(FadeIn(rows[0]), FadeIn(rows[1], shift=RIGHT * 0.1))
+            vo.wait_until("a")
+            self.play(Indicate(rows[1], color=WHITE, scale_factor=1.02))
+            for mk, r_ in zip("bcde", rows[2:]):
                 vo.wait_until(mk)
                 self.play(FadeIn(r_, shift=RIGHT * 0.1))
         self.clear_scene()

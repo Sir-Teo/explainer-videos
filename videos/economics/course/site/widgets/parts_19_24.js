@@ -400,4 +400,96 @@
             "23, chapters 8-9). Computed in your browser; nothing you do here is stored or sent.",
     });
   };
+  // ---- Part 24: looking for work -----------------------------------------------------------------------------------
+  W.labour = function (el) {
+    // the Diamond-Mortensen-Pissarides model of Part 24 (explainer.economics.agora.search: dmp_steady), monthly:
+    // matching f = A theta^(1-eta), q = A theta^(-eta) with eta = 0.5; free entry c/q = (p - w)/(r + s); the Nash wage
+    // w = (1 - beta) b + beta (p + c theta); so (r + s) c / q + beta c theta = (1 - beta)(p - b), solved by bisection.
+    // The reader moves the benefit, the worker's share, separations and matching efficiency, and sees the two curves,
+    // the Beveridge curve, and how much a 1% rise in productivity moves tightness (the volatility puzzle).
+    var P = 1, ETA = 0.5, R = 0.004, C0 = 0.3;
+    var BASE = { b: 0.4, beta: 0.5, s: 0.03, A: 0.6 };
+    function steady(v, p) {
+      p = p || P;
+      var gap = function (th) { return (R + v.s) * C0 / (v.A * Math.pow(th, -ETA)) + v.beta * C0 * th - (1 - v.beta) * (p - v.b); };
+      if (gap(1e-8) > 0) return null;
+      var lo = 1e-8, hi = 1e4;
+      for (var i = 0; i < 200; i++) { var mid = Math.sqrt(lo * hi); if (gap(mid) > 0) hi = mid; else lo = mid; }
+      var th = Math.sqrt(lo * hi), f = v.A * Math.pow(th, 1 - ETA), u = v.s / (v.s + f);
+      return { theta: th, f: f, u: u, v: th * u, w: (1 - v.beta) * v.b + v.beta * (p + C0 * th) };
+    }
+    QB.widget(el, {
+      title: "Run the labour market",
+      sub: "Workers and firms must find each other. Firms open vacancies until hiring costs what a worker is worth; " +
+           "wages split each match's surplus. Move the benefit, the worker's share of the surplus, how often jobs " +
+           "end, and how efficiently workers and jobs meet. Left: job creation (gold) and the wage curve (blue), with " +
+           "the Island in grey. Right: the Beveridge curve and where the market sits. Can you find a benefit at which " +
+           "a 1% rise in productivity moves tightness by 10% or more?",
+      panels: 2, height: 280,
+      controls: [
+        { k: "b", label: "Benefit while unemployed, b (output = 1)", min: 0, max: 0.96, step: 0.01, value: 0.4,
+          fmt: function (x) { return x.toFixed(2); } },
+        { k: "beta", label: "Worker's share of the surplus, beta", min: 0.05, max: 0.95, step: 0.01, value: 0.5,
+          fmt: function (x) { return x.toFixed(2); } },
+        { k: "s", label: "Chance a job ends, a month", min: 0.01, max: 0.06, step: 0.001, value: 0.03,
+          fmt: function (x) { return (100 * x).toFixed(1) + "%"; } },
+        { k: "A", label: "Matching efficiency, A", min: 0.3, max: 1.0, step: 0.01, value: 0.6,
+          fmt: function (x) { return x.toFixed(2); } },
+      ],
+      draw: function (g, v, st) {
+        var th = [], jc = [], wc = [], jc0 = [], wc0 = [];
+        for (var k = 0; k <= 120; k++) {
+          var t = 0.02 + 5.98 * k / 120;
+          th.push(t);
+          jc.push(P - (R + v.s) * C0 / (v.A * Math.pow(t, -ETA)));
+          wc.push((1 - v.beta) * v.b + v.beta * (P + C0 * t));
+          jc0.push(P - (R + BASE.s) * C0 / (BASE.A * Math.pow(t, -ETA)));
+          wc0.push((1 - BASE.beta) * BASE.b + BASE.beta * (P + C0 * t));
+        }
+        var now = steady(v), base = steady(BASE);
+        var a1 = g[0].axes({ x: [0, 6], y: [0.8, 1.1], title: "Wage against tightness (openings per searcher)",
+                             xlabel: "tightness, theta" });
+        a1.line(th, jc0, { color: GREY_HINT, width: 1.5, dash: [4, 4] });
+        a1.line(th, wc0, { color: GREY_HINT, width: 1.5, dash: [4, 4] });
+        a1.line(th, jc, { color: GOLD, width: 2.5 });
+        a1.line(th, wc, { color: BLUE, width: 2.5 });
+        if (now) a1.dots([now.theta], [now.w], { color: RED, r: 5 });
+        var us = [], vs = [];
+        for (var j = 0; j <= 120; j++) {
+          var t2 = Math.exp(Math.log(0.05) + (Math.log(20) - Math.log(0.05)) * j / 120);
+          var f2 = v.A * Math.pow(t2, 1 - ETA), u2 = v.s / (v.s + f2);
+          us.push(100 * u2); vs.push(100 * t2 * u2);
+        }
+        var a2 = g[1].axes({ x: [0, 15], y: [0, 15], title: "Vacancies against unemployment, %", xlabel: "unemployment, %" });
+        a2.line(us, vs, { color: GREEN, width: 2.5 });
+        if (base) a2.dots([100 * base.u], [100 * base.v], { color: GREY_HINT, r: 4 });
+        if (now) {
+          a2.line([0, 15], [0, 15 * now.theta], { color: GOLD, width: 1.5, dash: [5, 4] });
+          a2.dots([100 * now.u], [100 * now.v], { color: RED, r: 5 });
+        }
+        st.now = now;
+        st.el = null;
+        if (now) {
+          var up = steady(v, 1.01), dn = steady(v, 0.99);
+          if (up && dn) st.el = (Math.log(up.theta) - Math.log(dn.theta)) / (Math.log(1.01) - Math.log(0.99));
+        }
+      },
+      readout: function (v, st) {
+        var s = st.now;
+        if (!s) return [["the market", "no firm opens a vacancy: the benefit leaves nothing to share"]];
+        var hos = Math.abs(v.beta - ETA) < 0.03 ? "efficient (beta = eta = 0.5, Hosios)" :
+          (v.beta < ETA ? "too many vacancies (beta below eta)" : "too few vacancies (beta above eta)");
+        return [["tightness; wage", s.theta.toFixed(2) + "; " + s.w.toFixed(3)],
+                ["unemployment; vacancies", (100 * s.u).toFixed(2) + "%; " + (100 * s.v).toFixed(2) + "%"],
+                ["job finding a month", (100 * s.f).toFixed(0) + "%"],
+                ["1% more productivity moves tightness by", st.el === null ? "n/a" : st.el.toFixed(1) + "%" +
+                  (st.el >= 10 ? ": volatile, as in the data" : ": too little, as in Shimer's puzzle")],
+                ["efficiency", hos]];
+      },
+      note: "Raising the benefit toward output shrinks the 'fundamental surplus' p - b, and tightness becomes far more " +
+            "sensitive to productivity: Hagedorn and Manovskii's answer to the volatility puzzle, and Ljungqvist and " +
+            "Sargent's diagnosis (Part 24, chapter 9). Lower matching efficiency shifts the Beveridge curve out. " +
+            "Computed in your browser; nothing you do here is stored or sent.",
+    });
+  };
 })();

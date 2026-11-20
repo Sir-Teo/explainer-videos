@@ -229,4 +229,49 @@ PARTS = [
               ("The Island's planted truths", "explainer/economics/island.py"),
               ("The Data Room's sources", "explainer/economics/data/SOURCES.md")),
     ),
+    Part(
+        n=24, level="U", widget="labour", prereq=(2, 11, 22),
+        question="Why are there unemployed workers and unfilled jobs at the same time?",
+        story="The part opens on Peter Diamond's coconut island, where climbing a palm pays only if others climb too, "
+              "and then puts the two numbers side by side: millions of openings and millions of unemployed people in "
+              "the same month. It shows the gross flows behind the small net change, lets the viewer choose a "
+              "stopping rule for job offers, and derives McCall's reservation wage; draws the American Beveridge "
+              "curve from JOLTS and the soft-landing debate of 2022; animates the matching function with urns and "
+              "balls and estimates it; derives the Diamond-Mortensen-Pissarides model, Nash bargaining and the "
+              "Hosios condition on the Island. After an intermission tracing the Beveridge curve month by month, it "
+              "meets the volatility puzzle and its repairs, scores Mortensen and Pissarides's 1994 claim, splits "
+              "unemployment's swings into ins and outs, climbs job ladders, measures the natural rate and the scars "
+              "of job loss, reads two dials, and ends with online vacancies and remote work.",
+        handoff="Part 25 opens Act VI with money, itself a search problem; Part 28 returns to the natural rate and the "
+                "Phillips curve; Part 29 puts search into the business cycle; Part 38 measures monopsony and the "
+                "minimum wage; Part 42 designs unemployment insurance.",
+        outside="Part 2: supply and demand; Part 7: discounting and expected values; Part 11: Nash's bargaining "
+                "solution and Rubinstein's game; Part 22: liquidity and spending. Chapter 10 uses the HP filter.",
+        objectives={
+            "U": ["Explain unemployment as a stock with flows in and out, and compute the steady-state rate from the "
+                  "two flows.",
+                  "Derive the reservation wage and explain how benefits and patience move it.",
+                  "Read the Beveridge curve: movements along it and shifts of it."],
+            "M": ["Derive the DMP model: job creation, the Nash wage, tightness, and unemployment and vacancies in a "
+                  "steady state; derive its comparative statics.",
+                  "State and prove the Hosios condition, and estimate the matching elasticity from data."],
+            "D": ["Explain the volatility puzzle, its repairs and the fundamental surplus, and weigh the evidence on "
+                  "the matching elasticity and the worker's bargaining share."],
+            "I": ["Read a labour-market dashboard (flows, quits, tightness) and explain how job platforms change "
+                  "matching efficiency."],
+        },
+        results=[
+            ("Steady-state unemployment", r"u^* = \frac{s}{s + f}"),
+            ("The reservation wage", r"w^* - b = \frac{\beta}{1-\beta} \int_{w^*} (w - w^*)\, dF(w)"),
+            ("The matching function", r"M = A U^{\eta} V^{1-\eta}, \quad f = A\theta^{1-\eta}"),
+            ("Job creation and the wage", r"\frac{c}{q(\theta)} = \frac{p - w}{r + s}, \quad w = (1-\beta) b + "
+                                           r"\beta (p + c\theta)"),
+            ("The fundamental surplus", r"\frac{d\ln\theta}{d\ln p} = \frac{r + s + \beta f}{\eta(r+s) + \beta f}"
+                                        r"\cdot\frac{p}{p - b}"),
+        ],
+        U=(0, 1, 2, 3, 4, 5, 6, 7, 8, "s10_intermission", 9, 10, 11, 12), D=(13, 15), I=(14,),
+        also=(("Agora's labour market with frictions", "explainer/economics/agora/search.py"),
+              ("The Island's planted truths", "explainer/economics/island.py"),
+              ("The Data Room's sources", "explainer/economics/data/SOURCES.md")),
+    ),
 ]

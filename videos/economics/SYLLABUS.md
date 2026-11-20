@@ -2961,6 +2961,7 @@ Young Economist*.
 | 21 | built, English | *Growth II: Ideas and Institutions.* Agora gains `ideas` (replication, AK, Romer's balanced path, Aghion and Howitt's market and planner research, semi-endogenous growth, directed technical change); the Data Room gains Acemoglu, Johnson and Robinson's 64 colonies (via hdm) and transcribes Nordhaus's price of light and Bloom et al.'s research numbers; a new dial (the social return to R&D); Romer's scale effect as *Called it?*; the price of light gets its Agora column |
 | 22 | built, English | *Consumption and Saving.* Agora gains `household` (Keynes's function, the permanent-income annuity, the life cycle, Carroll's buffer stock by the endogenous grid method, simulated populations and their MPC, the wealthy hand-to-mouth, Friedman's cross-section, Campbell and Mankiw's rule of thumb) and `olg` (Samuelson's money, Diamond's economy, a pension's welfare); the Data Room gains FRED's monthly consumption by type with its price indexes, real disposable income and the saving rate, the Penn World Table's consumption shares, and transcribes the windfall studies; a new dial (the propensity to spend a windfall); Hall's random walk as *Called it?*; consumption smoother than income gets its Agora column |
 | 23 | built, English | *Capital and Asset Prices.* Agora gains `assets` (Gordon, the user cost, Hayashi's firm, the option to wait, Mehra and Prescott's economy and region, the Hansen-Jagannathan bound, rare disasters, habits, a laboratory market); the Data Room gains Shiller's annual series and the Case-Shiller index against the CPI's rent; a new dial (investment's response to the user cost) and three rows on risk aversion; Fisher's 1929 plateau as *Called it?*; the equity premium and unpredictable returns get their Agora columns |
+| 24 | built, English | *Looking for Work.* Agora gains `search` (McCall's searcher, the DMP model with its curves, Beveridge curves and path, Hosios's condition, the elasticity of tightness, Shimer's flows and the ins-and-outs shares, Burdett and Mortensen's job ladder); the Data Room gains FRED's JOLTS (openings, hires, separations, quits), unemployment by duration, the labour force, output per hour and the CBO's natural rate; two new dials (the matching elasticity; the worker's bargaining share); Mortensen and Pissarides's 1994 claim as *Called it?* (partly right); the Beveridge curve gets its Agora column |
 
 **Corrections found while building Part 1** (the plan's draft, written from memory, against the sources): Bastiat's
 Paris passage is in *Economic Sophisms*, First Series, ch. 18 (1845), not the *Harmonies*; Hume's is/ought passage is
@@ -3222,3 +3223,21 @@ draft's were larger); their implied user-cost elasticity of about -1.6 is as the
 work. Hassett and Hubbard's range of -0.5 to -1 is quoted from the papers that cite it. Novy-Marx and Rauh's shortfall
 at Treasury rates is about $3 trillion for the fifty states' main plans; other versions give other totals. An
 intermission follows chapter 9.
+
+**Corrections found while building Part 24.** The Beveridge curve is drawn from JOLTS (December 2000 on); the plan's
+"since 1951" would need the help-wanted index, which the Data Room does not hold, so the film states Beveridge's 1944
+definition and draws the twenty-five years of JOLTS. The matching function is estimated with the CPS job-finding rate
+(Shimer's method) against JOLTS openings per unemployed worker, giving 0.58 for 2001-2019; JOLTS's own hires give 0.31,
+because they include people moving between jobs, and both are dial rows. The volatility ratio is recomputed for
+2001-2019 (about 25) rather than Shimer's 1951-2003 (almost 20). Mortensen and Pissarides's 1994 claim is scored
+partly right rather than wrong: their abstract claims only that aggregate shocks proxy the cyclical behaviour of job
+creation and destruction reasonably well, and the pattern held while the size did not. Petrongolo and Pissarides's
+range of 0.5 to 0.7 is quoted from the papers that summarize the survey. Kroft, Lange and Notowidigdo's callback rates
+(about 7% falling to about 4%) are from the working paper and J-PAL's summary; their percentage fall is stated
+differently in the two, so the film gives only the rates. Davis and von Wachter's 1.4 and 2.8 years of earnings are
+from the abstract (men with three or more years of tenure, mass layoffs, Social Security records from 1974). Cahuc,
+Postel-Vinay and Robin's finding of no significant bargaining power below the top of the skill distribution is from the
+abstract and post-print summary, and shown at zero. The remote-work shares are from Hansen et al.'s 2023 version
+(more than threefold in the United States, fivefold or more elsewhere, 2019 to early 2023). The Island's Burdett and
+Mortensen ladder has unemployment of 17% (offers at 0.1 a month, separations at 0.02): an illustration of the ladder,
+not a calibration. An intermission follows chapter 8.
