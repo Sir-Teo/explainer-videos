@@ -367,6 +367,22 @@ DATASETS = {
         "sha256": "7b337e94f39dfe304bc459e433f8ce0624496c812707ae0c924888f5142b3ab3",
         "files": ("pwt110.csv",),
     },
+    "ajr": {
+        "title": "Acemoglu, Johnson and Robinson's base sample of 64 former colonies: log GDP per head in 1995, "
+                 "average protection against expropriation risk 1985-95, settler mortality, latitude and continent",
+        "publisher": "Acemoglu, Johnson and Robinson (2001), as distributed in the R package hdm (Chernozhukov, "
+                     "Hansen and Spindler), dataset AJR",
+        "citation": "D. Acemoglu, S. Johnson and J. A. Robinson, \"The Colonial Origins of Comparative Development: "
+                    "An Empirical Investigation\", American Economic Review 91(5) (2001): 1369-1401; hdm 0.3.2 "
+                    "(CRAN, 2024), data/AJR.rda, retrieved 2026-11-20",
+        "short": "Acemoglu, Johnson and Robinson (2001), via the R package hdm",
+        "url": "https://cran.r-project.org/src/contrib/hdm_0.3.2.tar.gz",
+        "licence": "MIT (hdm); the data are AJR's, published with their paper",
+        "units": "GDP: log GDP per head, 1995 (PPP); Exprop: 0-10; Mort: settler deaths per 1,000 a year",
+        "vintage": "2026-11-20",
+        "sha256": "3354b22752f0aa0c0d9c8c12b38810202b6380f2587e539be11d9a358412fe6a",
+        "files": ("ajr_hdm.csv",),
+    },
     "draft1970": {
         "title": "The draft lottery of 1 December 1969 (for men born 1944-50): the rank drawn for each birthday",
         "publisher": "U.S. Selective Service System; as tabulated by the Journal of Statistics Education data archive",
@@ -1117,7 +1133,44 @@ def refresh_pwt() -> None:
                                                            for v in vals[3:]])
 
 
-REFRESH = {"draft1970": refresh_draft1970, "maddison2023": refresh_maddison, "fred": refresh_fred, "spf": refresh_spf,
+AJR_COLUMNS = ("GDP", "Exprop", "Mort", "logMort", "Latitude", "Neo", "Africa", "Asia", "Namer", "Samer")
+
+
+def ajr() -> dict:
+    """Acemoglu, Johnson and Robinson's 64 countries (no names in this copy): ``{column: [values]}`` for
+    :data:`AJR_COLUMNS`."""
+    rows = _read(HERE / "ajr_hdm.csv")
+    return {c: [float(r[c]) for r in rows] for c in AJR_COLUMNS}
+
+
+def refresh_ajr() -> None:
+    import tarfile
+
+    from explainer.psychology import rdata
+
+    d = DATASETS["ajr"]
+    raw = RAW / "hdm_0.3.2.tar.gz"
+    sha = _download(d["url"], raw)
+    if sha != d["sha256"]:
+        print(f"ajr: the download differs from the recorded vintage ({sha[:12]} vs {d['sha256'][:12]})")
+    print(f"ajr: sha256 {sha}")
+    with tarfile.open(raw, "r:gz") as tf:
+        member = tf.getmember("hdm/data/AJR.rda")
+        blob = tf.extractfile(member).read()
+    tmp = RAW / "AJR.rda"
+    tmp.write_bytes(blob)
+    obj = rdata.load(tmp)[0][1]
+    names = obj["attrs"]["names"]["value"]
+    cols = {n: c["value"] for n, c in zip(names, obj["value"])}
+    n = len(cols["GDP"])
+    with open(HERE / "ajr_hdm.csv", "w", newline="", encoding="utf-8") as f:
+        w = csv.writer(f)
+        w.writerow(AJR_COLUMNS)
+        for i in range(n):
+            w.writerow([_fmt(float(cols[c][i])) for c in AJR_COLUMNS])
+
+
+REFRESH = {"draft1970": refresh_draft1970, "ajr": refresh_ajr, "maddison2023": refresh_maddison, "fred": refresh_fred, "spf": refresh_spf,
            "pinksheet": refresh_pinksheet, "psd_coffee": refresh_psd_coffee, "wdi": refresh_wdi, "hdr": refresh_hdr,
            "rtdsm": refresh_rtdsm, "warheads": refresh_warheads, "so2": refresh_so2,
            "marriage": refresh_marriage, "democracy": refresh_democracy, "millennium": refresh_millennium,
