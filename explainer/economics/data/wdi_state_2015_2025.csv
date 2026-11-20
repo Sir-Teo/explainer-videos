@@ -1,0 +1,196 @@
+code,country,region,tax_year,tax,cc_year,cc,gdppc_year,gdppc
+ABW,Aruba,Latin America & Caribbean,,,2025,0.869,2024,45428.0027
+AFG,Afghanistan,"Middle East, North Africa, Afghanistan & Pakistan",2017,9.8985,2025,-1.3058,2024,1964.4523
+AGO,Angola,Sub-Saharan Africa,2024,7.588,2025,-0.6821,2025,8760.1908
+ALB,Albania,Europe & Central Asia,2024,18.0153,2025,-0.3011,2025,22724.2938
+AND,Andorra,Europe & Central Asia,2024,15.5693,2025,1.1798,2025,67993.0524
+ARE,United Arab Emirates,"Middle East, North Africa, Afghanistan & Pakistan",2024,0.6475,2025,1.1523,2024,69701.7858
+ARG,Argentina,Latin America & Caribbean,2024,10.4293,2025,-0.3861,2025,27846.5985
+ARM,Armenia,Europe & Central Asia,2024,22.366,2025,0.1125,2025,21153.4783
+ATG,Antigua and Barbuda,Latin America & Caribbean,,,2025,0.588,2025,30620.3076
+AUS,Australia,East Asia & Pacific,2022,23.5615,2025,1.8381,2025,60194.0634
+AUT,Austria,Europe & Central Asia,2024,25.7804,2025,1.3016,2025,63970.4009
+AZE,Azerbaijan,Europe & Central Asia,2024,17.3014,2025,-0.7781,2025,22314.2169
+BDI,Burundi,Sub-Saharan Africa,2021,12.672,2025,-1.539,2025,1066.513
+BEL,Belgium,Europe & Central Asia,2024,22.9599,2025,1.364,2025,63488.4218
+BEN,Benin,Sub-Saharan Africa,,,2025,-0.2113,2025,4116.2152
+BFA,Burkina Faso,Sub-Saharan Africa,2024,18.6826,2025,-0.2248,2025,2624.8286
+BGD,Bangladesh,South Asia,2021,7.6424,2025,-0.9836,2025,8676.7558
+BGR,Bulgaria,Europe & Central Asia,2024,20.6721,2025,-0.2886,2025,35325.5318
+BHR,Bahrain,"Middle East, North Africa, Afghanistan & Pakistan",2020,2.8232,2025,0.2813,2025,60669.6308
+BHS,"Bahamas, The",Latin America & Caribbean,2024,17.2812,2025,1.0443,2024,36244.05
+BIH,Bosnia and Herzegovina,Europe & Central Asia,2024,20.2214,2025,-0.4804,2025,21178.226
+BLR,Belarus,Europe & Central Asia,2024,13.0395,2025,-0.5723,2025,29666.2116
+BLZ,Belize,Latin America & Caribbean,2017,21.3467,2025,-0.1418,2025,12788.8424
+BMU,Bermuda,North America,,,2025,1.1798,2024,104299.9444
+BOL,Bolivia,Latin America & Caribbean,,,2025,-1.1856,2025,11000.5345
+BRA,Brazil,Latin America & Caribbean,2024,15.4102,2025,-0.3811,2025,20024.6968
+BRB,Barbados,Latin America & Caribbean,2016,23.384,2025,1.2276,2025,22127.3605
+BRN,Brunei Darussalam,East Asia & Pacific,,,2025,0.9929,2025,78985.122
+BTN,Bhutan,South Asia,2020,12.2846,2025,1.4734,2025,16743.8704
+BWA,Botswana,Sub-Saharan Africa,2023,22.4199,2025,0.5898,2025,17687.2042
+CAF,Central African Republic,Sub-Saharan Africa,2021,8.2063,2025,-1.3249,2025,1122.7608
+CAN,Canada,North America,2024,13.7146,2025,1.5949,2025,57989.5785
+CHE,Switzerland,Europe & Central Asia,2024,9.4507,2025,1.9834,2025,85732.1098
+CHL,Chile,Latin America & Caribbean,2024,18.2646,2025,1.0993,2025,30863.4223
+CHN,China,East Asia & Pacific,2024,7.0181,2025,0.0709,2025,25066.5215
+CIV,Cote d'Ivoire,Sub-Saharan Africa,2023,13.0372,2025,-0.2738,2025,7014.8458
+CMR,Cameroon,Sub-Saharan Africa,2021,11.3415,2025,-1.2045,2025,4945.9564
+COD,"Congo, Dem. Rep.",Sub-Saharan Africa,2022,10.6623,2025,-1.4904,2025,1640.5662
+COG,"Congo, Rep.",Sub-Saharan Africa,2021,6.5091,2025,-1.4237,2025,6194.0898
+COL,Colombia,Latin America & Caribbean,2024,15.22,2025,-0.3085,2025,18778.6483
+COM,Comoros,Sub-Saharan Africa,,,2025,-0.8782,2025,3621.7663
+CPV,Cabo Verde,Sub-Saharan Africa,2020,18.3857,2025,0.9069,2025,10395.7415
+CRI,Costa Rica,Latin America & Caribbean,2024,13.4598,2025,0.6939,2025,28443.4128
+CYM,Cayman Islands,Latin America & Caribbean,,,2025,0.6045,2024,80996.6507
+CYP,Cyprus,Europe & Central Asia,2024,23.9418,2025,0.5352,2025,54103.2617
+CZE,Czechia,Europe & Central Asia,2024,18.6482,2025,0.7817,2025,49292.4879
+DEU,Germany,Europe & Central Asia,2024,10.8908,2025,1.6761,2025,62823.7737
+DJI,Djibouti,"Middle East, North Africa, Afghanistan & Pakistan",,,2025,-0.9312,2025,7222.5499
+DMA,Dominica,Latin America & Caribbean,,,2025,0.5359,2025,19409.2901
+DNK,Denmark,Europe & Central Asia,2024,33.3583,2025,2.2594,2025,72723.2748
+DOM,Dominican Republic,Latin America & Caribbean,2024,14.7034,2025,0.0094,2025,24543.3422
+DZA,Algeria,"Middle East, North Africa, Afghanistan & Pakistan",,,2025,-0.5309,2025,15882.7139
+ECU,Ecuador,Latin America & Caribbean,2022,13.0892,2025,-0.7364,2025,14319.2407
+EGY,"Egypt, Arab Rep.","Middle East, North Africa, Afghanistan & Pakistan",2015,12.5192,2025,-0.7008,2025,17265.1489
+ESP,Spain,Europe & Central Asia,2024,14.9344,2025,0.6525,2025,49318.1056
+EST,Estonia,Europe & Central Asia,2024,22.668,2025,1.6369,2025,41604.3227
+ETH,Ethiopia,Sub-Saharan Africa,2024,3.3982,2025,-0.3744,2025,3094.8681
+FIN,Finland,Europe & Central Asia,2024,25.3282,2025,2.1379,2025,55735.2175
+FJI,Fiji,East Asia & Pacific,2024,23.9464,2025,0.5347,2025,13961.1184
+FRA,France,Europe & Central Asia,2024,22.7785,2025,1.2418,2025,55124.5393
+FSM,"Micronesia, Fed. Sts.",East Asia & Pacific,2020,7.0312,2025,0.6709,2025,3934.6427
+GAB,Gabon,Sub-Saharan Africa,2021,9.4903,2025,-0.7757,2025,18986.4739
+GBR,United Kingdom,Europe & Central Asia,2024,26.889,2025,1.5306,2025,53993.1173
+GEO,Georgia,Europe & Central Asia,2024,24.2582,2025,-0.1401,2025,25135.7822
+GHA,Ghana,Sub-Saharan Africa,2023,12.3931,2025,-0.1114,2025,7357.8333
+GIN,Guinea,Sub-Saharan Africa,,,2025,-1.0652,2025,4216.8597
+GMB,"Gambia, The",Sub-Saharan Africa,,,2025,-0.5107,2025,3166.6213
+GNB,Guinea-Bissau,Sub-Saharan Africa,2024,8.3038,2025,-1.3998,2025,2814.0836
+GNQ,Equatorial Guinea,Sub-Saharan Africa,2022,6.596,2025,-1.4808,2025,13786.3933
+GRC,Greece,Europe & Central Asia,2024,27.3811,2025,0.2505,2025,38218.7216
+GRD,Grenada,Latin America & Caribbean,,,2025,0.5044,2025,18240.9934
+GRL,Greenland,Europe & Central Asia,,,2025,1.48,2023,71037.5372
+GTM,Guatemala,Latin America & Caribbean,2024,11.63,2025,-0.9237,2025,12986.5241
+GUY,Guyana,Latin America & Caribbean,,,2025,-0.3772,2025,83658.6773
+HKG,"Hong Kong SAR, China",East Asia & Pacific,,,2025,1.6364,2025,68724.5566
+HND,Honduras,Latin America & Caribbean,2020,15.0661,2025,-1.2468,2025,6726.1669
+HRV,Croatia,Europe & Central Asia,2023,21.1835,2025,0.1281,2025,44172.0442
+HTI,Haiti,Latin America & Caribbean,,,2025,-1.5405,2025,2677.8939
+HUN,Hungary,Europe & Central Asia,2024,22.7431,2025,0.0021,2025,41160.6419
+IDN,Indonesia,East Asia & Pacific,,,2025,-0.5139,2025,15091.0089
+IND,India,South Asia,2022,6.9337,2025,-0.2792,2025,10039.0709
+IRL,Ireland,Europe & Central Asia,2024,17.942,2025,1.5097,2025,131338.4447
+IRN,"Iran, Islamic Rep.","Middle East, North Africa, Afghanistan & Pakistan",,,2025,-1.1415,2025,16833.7822
+IRQ,Iraq,"Middle East, North Africa, Afghanistan & Pakistan",2019,1.3446,2025,-1.2518,2025,12191.5565
+ISL,Iceland,Europe & Central Asia,2023,23.1575,2025,1.8236,2025,68064.6855
+ISR,Israel,"Middle East, North Africa, Afghanistan & Pakistan",2024,23.2419,2025,0.9572,2025,48196.6345
+ITA,Italy,Europe & Central Asia,2024,25.6045,2025,0.5839,2025,53606.079
+JAM,Jamaica,Latin America & Caribbean,2020,23.6737,2025,-0.0898,2025,11357.9156
+JOR,Jordan,"Middle East, North Africa, Afghanistan & Pakistan",2023,15.5196,2025,0.3033,2025,10794.2403
+JPN,Japan,East Asia & Pacific,,,2025,1.4545,2025,48283.3724
+KAZ,Kazakhstan,Europe & Central Asia,2023,11.8925,2025,-0.2621,2025,37850.5791
+KEN,Kenya,Sub-Saharan Africa,2023,14.0631,2025,-0.8551,2025,5995.4018
+KGZ,Kyrgyz Republic,Europe & Central Asia,2024,19.6153,2025,-1.1047,2025,7878.4491
+KHM,Cambodia,East Asia & Pacific,2023,12.2035,2025,-1.2635,2025,7300.0808
+KIR,Kiribati,East Asia & Pacific,2023,17.5319,2025,0.2968,2025,3363.9952
+KNA,St. Kitts and Nevis,Latin America & Caribbean,2020,15.0424,2025,0.318,2025,31427.6631
+KOR,"Korea, Rep.",East Asia & Pacific,2024,13.2937,2025,0.9239,2025,55697.0848
+KWT,Kuwait,"Middle East, North Africa, Afghanistan & Pakistan",,,2025,0.2831,2025,48253.9639
+LAO,Lao PDR,East Asia & Pacific,2022,12.1129,2025,-0.9922,2025,8872.694
+LBN,Lebanon,"Middle East, North Africa, Afghanistan & Pakistan",2024,11.1389,2025,-1.2245,2024,10469.2211
+LBR,Liberia,Sub-Saharan Africa,,,2025,-0.9643,2025,1692.9259
+LBY,Libya,"Middle East, North Africa, Afghanistan & Pakistan",,,2025,-1.5305,2025,14118.2064
+LCA,St. Lucia,Latin America & Caribbean,2017,18.2251,2025,0.486,2025,24502.9629
+LKA,Sri Lanka,South Asia,2023,9.8789,2025,-0.2831,2025,14582.7604
+LSO,Lesotho,Sub-Saharan Africa,2024,35.4195,2025,-0.2741,2025,2720.9574
+LTU,Lithuania,Europe & Central Asia,2024,21.8686,2025,1.0195,2025,48839.5436
+LUX,Luxembourg,Europe & Central Asia,2024,28.6369,2025,1.9255,2025,127420.6016
+LVA,Latvia,Europe & Central Asia,2024,17.647,2025,0.7699,2025,38800.5425
+MAC,"Macao SAR, China",East Asia & Pacific,2024,27.4162,2025,0.5738,2025,117098.2748
+MAR,Morocco,"Middle East, North Africa, Afghanistan & Pakistan",2024,22.6813,2025,-0.5028,2025,9495.4053
+MDA,Moldova,Europe & Central Asia,2024,18.7906,2025,-0.254,2025,17087.1874
+MDG,Madagascar,Sub-Saharan Africa,2024,10.9447,2025,-1.038,2025,1668.477
+MDV,Maldives,South Asia,2021,19.4532,2025,-0.3339,2025,24401.3159
+MEX,Mexico,Latin America & Caribbean,2024,14.8241,2025,-0.9424,2025,21911.9293
+MHL,Marshall Islands,East Asia & Pacific,2020,17.1555,2025,0.3548,2025,7660.377
+MKD,North Macedonia,Europe & Central Asia,2024,18.7571,2025,-0.2978,2025,25094.6225
+MLI,Mali,Sub-Saharan Africa,2020,11.952,2025,-0.9393,2025,2993.2517
+MLT,Malta,"Middle East, North Africa, Afghanistan & Pakistan",2024,24.0778,2025,0.1773,2025,63655.5161
+MMR,Myanmar,East Asia & Pacific,2019,6.0177,2025,-1.3052,2025,5137.1005
+MNE,Montenegro,Europe & Central Asia,,,2025,0.0755,2025,28895.3172
+MNG,Mongolia,East Asia & Pacific,2024,16.8549,2025,-0.4488,2025,17772.5342
+MOZ,Mozambique,Sub-Saharan Africa,2024,21.8459,2025,-1.0953,2025,1450.9596
+MRT,Mauritania,Sub-Saharan Africa,,,2025,-0.9454,2025,6559.0432
+MUS,Mauritius,Sub-Saharan Africa,2024,20.5321,2025,0.3925,2025,28769.5128
+MWI,Malawi,Sub-Saharan Africa,2024,15.5978,2025,-0.6618,2025,1623.0218
+MYS,Malaysia,East Asia & Pacific,2024,12.4305,2025,0.564,2025,35461.4466
+NAM,Namibia,Sub-Saharan Africa,2024,33.8715,2025,0.1479,2025,10242.284
+NER,Niger,Sub-Saharan Africa,,,2025,-0.7371,2025,1860.5486
+NGA,Nigeria,Sub-Saharan Africa,,,2025,-1.0679,2025,8145.1481
+NIC,Nicaragua,Latin America & Caribbean,2024,20.0901,2025,-1.38,2025,7933.4889
+NLD,Netherlands,Europe & Central Asia,2024,25.2759,2025,1.8744,2025,71378.4856
+NOR,Norway,Europe & Central Asia,2024,24.5425,2025,1.9303,2025,95173.4308
+NPL,Nepal,South Asia,2023,13.9449,2025,-0.773,2025,5276.9239
+NRU,Naoero,East Asia & Pacific,2024,21.4203,2025,0.4567,2025,12134.8921
+NZL,New Zealand,East Asia & Pacific,2024,29.5208,2025,1.8865,2025,48232.6652
+OMN,Oman,"Middle East, North Africa, Afghanistan & Pakistan",,,2025,0.503,2025,36142.944
+PAK,Pakistan,"Middle East, North Africa, Afghanistan & Pakistan",,,2025,-1.0686,2025,5617.2508
+PAN,Panama,Latin America & Caribbean,2024,7.1776,2025,-0.5575,2025,37516.1796
+PER,Peru,Latin America & Caribbean,2021,15.9189,2025,-0.7553,2025,16079.1247
+PHL,Philippines,East Asia & Pacific,2024,14.3697,2025,-0.5735,2025,10747.5454
+PLW,Palau,East Asia & Pacific,2020,18.0813,2025,0.5134,2025,19698.5947
+PNG,Papua New Guinea,East Asia & Pacific,2024,15.5435,2025,-0.7787,2025,4456.2311
+POL,Poland,Europe & Central Asia,2024,17.3897,2025,0.8484,2025,46924.5888
+PRI,Puerto Rico (US),Latin America & Caribbean,,,2025,0.5423,2025,44603.2181
+PRT,Portugal,Europe & Central Asia,2024,22.3473,2025,0.7725,2025,42576.814
+PRY,Paraguay,Latin America & Caribbean,2024,11.3333,2025,-1.0071,2025,17245.8458
+PSE,West Bank and Gaza,"Middle East, North Africa, Afghanistan & Pakistan",,,2025,-0.5839,2025,4272.4576
+QAT,Qatar,"Middle East, North Africa, Afghanistan & Pakistan",,,2025,0.8809,2025,110135.6963
+ROU,Romania,Europe & Central Asia,2024,16.2064,2025,-0.0026,2025,40845.9843
+RUS,Russian Federation,Europe & Central Asia,2024,10.8719,2025,-0.983,2025,42357.9883
+RWA,Rwanda,Sub-Saharan Africa,2024,12.6925,2025,0.6362,2025,3558.68
+SAU,Saudi Arabia,"Middle East, North Africa, Afghanistan & Pakistan",2024,8.0912,2025,0.8056,2025,63051.0467
+SDN,Sudan,Sub-Saharan Africa,2016,7.3903,2025,-1.5713,2025,1873.3856
+SEN,Senegal,Sub-Saharan Africa,2023,19.5371,2025,0.1501,2025,4668.5417
+SGP,Singapore,East Asia & Pacific,2024,13.5603,2025,1.9725,2025,139592.6122
+SLB,Solomon Islands,East Asia & Pacific,2024,23.2738,2025,-0.155,2025,2382.1315
+SLE,Sierra Leone,Sub-Saharan Africa,,,2025,-0.784,2025,3176.2368
+SLV,El Salvador,Latin America & Caribbean,2024,21.796,2025,-0.5474,2025,12050.0283
+SMR,San Marino,Europe & Central Asia,2023,17.2694,2025,1.1798,2023,70951.792
+SOM,"Somalia, Fed. Rep.",Sub-Saharan Africa,2024,2.2387,2025,-1.6919,2025,1403.8139
+SRB,Serbia,Europe & Central Asia,2022,23.893,2025,-0.6019,2025,27603.3916
+STP,Sao Tome and Principe,Sub-Saharan Africa,,,2025,0.1284,2025,5459.2131
+SUR,Suriname,Latin America & Caribbean,,,2025,-0.3819,2025,19357.3908
+SVK,Slovak Republic,Europe & Central Asia,2024,19.1423,2025,0.0561,2025,40689.818
+SVN,Slovenia,Europe & Central Asia,2024,20.9851,2025,0.6269,2025,49091.0184
+SWE,Sweden,Europe & Central Asia,2024,27.2263,2025,1.9551,2025,63362.4613
+SWZ,Eswatini,Sub-Saharan Africa,2021,24.3477,2025,-0.7998,2025,10706.7778
+SYC,Seychelles,Sub-Saharan Africa,,,2025,1.2258,2025,30638.7217
+SYR,Syrian Arab Republic,"Middle East, North Africa, Afghanistan & Pakistan",,,2025,-1.6179,2022,4579.4397
+TCD,Chad,Sub-Saharan Africa,,,2025,-1.3417,2025,2480.5096
+TGO,Togo,Sub-Saharan Africa,2023,13.9214,2025,-0.7052,2025,3485.9818
+THA,Thailand,East Asia & Pacific,2024,15.175,2025,-0.4954,2025,22431.7518
+TJK,Tajikistan,Europe & Central Asia,2024,10.7111,2025,-1.2539,2025,5061.847
+TKM,Turkmenistan,Europe & Central Asia,,,2025,-1.3062,2025,19313.943
+TLS,Timor-Leste,East Asia & Pacific,2022,21.6431,2025,-0.3909,2025,4109.9045
+TON,Tonga,East Asia & Pacific,2023,20.4539,2025,-0.4171,2025,7412.8664
+TTO,Trinidad and Tobago,Latin America & Caribbean,2019,16.7568,2025,-0.3386,2025,31721.5757
+TUN,Tunisia,"Middle East, North Africa, Afghanistan & Pakistan",,,2025,-0.2039,2025,13017.634
+TUR,Turkiye,Europe & Central Asia,2024,17.6239,2025,-0.5281,2025,37300.7486
+TUV,Tuvalu,East Asia & Pacific,,,2025,0.5831,2025,5776.0785
+TZA,Tanzania,Sub-Saharan Africa,2024,12.2609,2025,-0.3339,2025,3820.6118
+UGA,Uganda,Sub-Saharan Africa,2024,12.6256,2025,-1.1051,2025,2980.3794
+UKR,Ukraine,Europe & Central Asia,2024,21.0178,2025,-0.6909,2025,16155.0732
+URY,Uruguay,Latin America & Caribbean,2024,17.862,2025,1.5562,2025,32741.6247
+USA,United States,North America,2024,10.7695,2025,0.8652,2025,76931.3107
+UZB,Uzbekistan,Europe & Central Asia,2023,11.0059,2025,-0.6934,2025,11622.8556
+VCT,St. Vincent and the Grenadines,Latin America & Caribbean,2017,23.7995,2025,0.7227,2025,19483.0128
+VIR,Virgin Islands (U.S.),Latin America & Caribbean,,,2025,-0.0689,2022,46479.2997
+VNM,Viet Nam,East Asia & Pacific,,,2025,-0.1063,2025,15457.3499
+VUT,Vanuatu,East Asia & Pacific,2023,16.5024,2025,-0.1816,2025,3866.9981
+WSM,Samoa,East Asia & Pacific,2023,23.9563,2025,0.6582,2025,7963.4275
+XKX,Kosovo,Europe & Central Asia,,,2025,-0.2601,2025,16461.2944
+ZAF,South Africa,Sub-Saharan Africa,2024,25.8776,2025,-0.1334,2025,13592.0484
+ZMB,Zambia,Sub-Saharan Africa,2024,18.8305,2025,-0.4554,2025,3742.2565
+ZWE,Zimbabwe,Sub-Saharan Africa,2018,7.2148,2025,-1.2921,2025,5529.2331

@@ -676,7 +676,8 @@ DATASETS = {
         "vintage": "2026-11-19",
         "sha256": "a0843a64486708e1638e5051be67dde8ddb0c82ae7be264c512173f503445afc",
         "entities": ("World", "United States", "United Kingdom", "France", "India", "Germany", "Japan", "Brazil",
-                     "South Africa", "China"),
+                     "South Africa", "China", "South Korea", "Chile", "Spain", "Indonesia", "Poland", "Ghana",
+                     "Taiwan", "Russia", "Hungary", "Turkey", "Venezuela"),
         "files": ("democracy_vdem.csv",),
     },
     "millennium": {
@@ -1070,6 +1071,23 @@ DATASETS = {
         "sha256": "2f35e92208d596c487397c87d8011a9ccb4c376f33ce8fc88338d205e0ae7e7e",
         "files": ("sportscards_1998.csv",),
     },
+    "rdsenate": {
+        "title": "Cattaneo, Frandsen and Titiunik's U.S. Senate elections, 1914-2010, as distributed in the R package "
+                 "rdrobust: the Democratic margin at one election and the Democratic vote share at the next election "
+                 "for the same seat",
+        "publisher": "R package rdrobust (S. Calonico, M. D. Cattaneo, M. H. Farrell and R. Titiunik), CRAN",
+        "citation": "M. D. Cattaneo, B. Frandsen and R. Titiunik, \"Randomization Inference in the Regression "
+                    "Discontinuity Design: An Application to Party Advantages in the U.S. Senate\", Journal of "
+                    "Causal Inference 3(1): 1-24 (2015); rdrobust 4.1.2 (CRAN), data/rdrobust_RDsenate.rda, "
+                    "retrieved 2026-11-20",
+        "short": "Cattaneo, Frandsen and Titiunik (2015), via rdrobust",
+        "url": "https://cran.r-project.org/src/contrib/rdrobust_4.1.2.tar.gz",
+        "licence": "GPL-3 (the package); the data are the cited authors' compilation of election returns",
+        "units": "one row per state and Senate election: percentage points of the two-party vote",
+        "vintage": "2026-11-20",
+        "sha256": "66f94b297df8facf95be1e1a3f4c4a6f3807efa3b7f428c0250476af168f532c",
+        "files": ("rdsenate_1914_2010.csv",),
+    },
     "wdi_dev": {
         "title": "World Development Indicators for development: the share of people below $3.00 a day (2021 PPP) "
                  "for the world, its regions, China and India, 1981 onward; employment and value added in "
@@ -1083,6 +1101,20 @@ DATASETS = {
         "units": "percent of population; percent of employment; percent of GDP; constant 2021 international dollars",
         "vintage": "2026-11-21",
         "files": ("wdi_poverty_1981_2025.csv", "wdi_agriculture_2015_2025.csv"),
+    },
+    "wdi_state": {
+        "title": "World Bank data on the state: tax revenue as a share of GDP and the Worldwide Governance "
+                 "Indicators' control of corruption, with GDP per head at PPP, by country, latest year from 2015",
+        "publisher": "World Bank (World Development Indicators; Worldwide Governance Indicators)",
+        "citation": "World Bank, World Development Indicators, GC.TAX.TOTL.GD.ZS and NY.GDP.PCAP.PP.KD (API, last "
+                    "updated 11 November 2026); Worldwide Governance Indicators, GOV_WGI_CC.EST (API, last updated 25 "
+                    "September 2026); retrieved 2026-11-20",
+        "short": "World Bank WDI and WGI, Nov 2026",
+        "url": "https://api.worldbank.org/v2/country/{}/indicator/{}?format=json&date={}&per_page=20000",
+        "licence": "CC BY 4.0 (World Bank open data)",
+        "units": "percent of GDP; governance estimate (about -2.5 to +2.5); constant 2021 international dollars",
+        "vintage": "2026-11-20",
+        "files": ("wdi_state_2015_2025.csv",),
     },
     "causaldata": {
         "title": "Three development experiments as distributed in the R package causaldata: Thornton's HIV-results "
@@ -1230,6 +1262,7 @@ PINK_COLUMNS = (
     ("cotton", "Cotton, A Index", "$/kg"), ("rubber", "Rubber, RSS3", "$/kg"), ("aluminum", "Aluminum", "$/mt"),
     ("copper", "Copper", "$/mt"), ("tin", "Tin", "$/mt"), ("nickel", "Nickel", "$/mt"), ("zinc", "Zinc", "$/mt"),
     ("gold", "Gold", "$/troy oz"), ("silver", "Silver", "$/troy oz"),
+    ("sugar_us", "Sugar, US", "$/kg"), ("sugar_eu", "Sugar, EU", "$/kg"),
 )
 # The coffee producers kept by name in the PSD extract (the rest are in the world total)
 PSD_COUNTRIES = ("Brazil", "Vietnam", "Colombia", "Indonesia", "Ethiopia", "Honduras", "India", "Uganda", "Mexico",
@@ -1723,6 +1756,18 @@ def sportscards() -> dict:
             for k in SPORTSCARDS_COLS}
 
 
+RDSENATE_COLS = ("state", "year", "margin", "vote", "class", "open", "vote_now", "midterm")
+
+
+@functools.lru_cache(maxsize=None)
+def rdsenate() -> dict:
+    """Cattaneo, Frandsen and Titiunik's 1,390 Senate elections: ``{column: [...]}`` for :data:`RDSENATE_COLS`
+    (``margin``: the Democratic margin at election t; ``vote``: the Democratic share at the seat's next election,
+    t + 6; ``vote_now``: the share at t; ``open``: an open seat; NaN where missing)."""
+    rows = _read(HERE / "rdsenate_1914_2010.csv")
+    return {k: ([r[k] for r in rows] if k == "state" else [_num(r[k]) for r in rows]) for k in RDSENATE_COLS}
+
+
 @functools.lru_cache(maxsize=None)
 def saez() -> dict:
     """Piketty and Saez's top income shares for the United States, 1913-2022: ``{"year", "top10", "top5", "top1",
@@ -1901,7 +1946,10 @@ def refresh_pinksheet() -> None:
 
     d = DATASETS["pinksheet"]
     raw = RAW / "pinksheet_monthly.xlsx"
-    sha = _download(d["url"], raw)
+    if raw.exists() and hashlib.sha256(raw.read_bytes()).hexdigest() == d["sha256"]:
+        sha = d["sha256"]          # the recorded vintage is already here: re-read it rather than fetch a newer one
+    else:
+        sha = _download(d["url"], raw)
     if sha != d["sha256"]:
         print(f"pinksheet: the download differs from the recorded vintage ({sha[:12]} vs {d['sha256'][:12]})")
     ws = openpyxl.load_workbook(raw, read_only=True, data_only=True)["Monthly Prices"]
@@ -2466,6 +2514,52 @@ def refresh_wdi_dev() -> None:
                         _fmt(v["gdppc"])])
 
 
+def refresh_wdi_state() -> None:
+    import json  # noqa: PLC0415
+
+    d = DATASETS["wdi_state"]
+    raw = RAW / "wdi_countries.json"
+    _download("https://api.worldbank.org/v2/country?format=json&per_page=400", raw)
+    meta = {c["id"]: c for c in json.loads(raw.read_text())[1]}
+    vals: dict = {}
+    for col, ind in (("tax", "GC.TAX.TOTL.GD.ZS"), ("cc", "GOV_WGI_CC.EST"), ("gdppc", "NY.GDP.PCAP.PP.KD")):
+        f = RAW / f"wdi_{ind}.json"
+        _download(d["url"].format("all", ind, "2015:2025"), f)
+        for r in json.loads(f.read_text())[1]:
+            code = r["countryiso3code"]
+            c = meta.get(code)
+            if c is None or c["region"]["id"] == "NA" or r["value"] is None:
+                continue
+            vals.setdefault(code, {}).setdefault(col, {})[int(r["date"])] = r["value"]
+    with open(HERE / "wdi_state_2015_2025.csv", "w", newline="", encoding="utf-8") as out:
+        w = csv.writer(out)
+        w.writerow(["code", "country", "region", "tax_year", "tax", "cc_year", "cc", "gdppc_year", "gdppc"])
+        for code in sorted(vals):
+            v = vals[code]
+            if "gdppc" not in v or ("tax" not in v and "cc" not in v):
+                continue
+            row = [code, meta[code]["name"], meta[code]["region"]["value"].strip()]
+            for col in ("tax", "cc", "gdppc"):
+                if col in v:
+                    y = max(v[col])
+                    row += [y, _fmt(v[col][y])]
+                else:
+                    row += ["", ""]
+            w.writerow(row)
+
+
+def wdi_state() -> list[dict]:
+    """Countries' latest tax revenue (% of GDP), WGI control of corruption and GDP per head at PPP (each its latest
+    year from 2015): ``[{"code", "country", "region", "tax", "tax_year", "cc", "cc_year", "gdppc", "gdppc_year"}]``
+    (NaN where missing)."""
+    out = []
+    for r in _read(HERE / "wdi_state_2015_2025.csv"):
+        out.append({"code": r["code"], "country": r["country"], "region": r["region"], "tax": _num(r["tax"]),
+                    "tax_year": _num(r["tax_year"]), "cc": _num(r["cc"]), "cc_year": _num(r["cc_year"]),
+                    "gdppc": _num(r["gdppc"]), "gdppc_year": _num(r["gdppc_year"])})
+    return out
+
+
 def refresh_causaldata() -> None:
     import tarfile  # noqa: PLC0415
 
@@ -2510,6 +2604,37 @@ def refresh_causaldata() -> None:
     g = frame("gov_transfers")
     write("panes_uruguay.csv", [("score", "Income_Centered"), ("education", "Education"), ("age", "Age"),
                                 ("participation", "Participation"), ("support", "Support")], g)
+
+
+def refresh_rdsenate() -> None:
+    import tarfile  # noqa: PLC0415
+
+    from explainer.psychology import rdata  # noqa: PLC0415
+
+    d = DATASETS["rdsenate"]
+    raw = RAW / "rdrobust_4.1.2.tar.gz"
+    if raw.exists() and hashlib.sha256(raw.read_bytes()).hexdigest() == d["sha256"]:
+        sha = d["sha256"]
+    else:
+        sha = _download(d["url"], raw)
+    if sha != d["sha256"]:
+        print(f"rdsenate: the download differs from the recorded vintage ({sha[:12]})")
+    with tarfile.open(raw, "r:gz") as tf:
+        tmp = RAW / "rdrobust_RDsenate.rda"
+        tmp.write_bytes(tf.extractfile("rdrobust/data/rdrobust_RDsenate.rda").read())
+    obj = rdata.load(tmp)[0][1]
+    cols = {n: list(c["value"]) for n, c in zip(obj["attrs"]["names"]["value"], obj["value"])}
+    src = {"state": "state", "year": "year", "margin": "margin", "vote": "vote", "class": "class", "open": "dopen",
+           "vote_now": "demvoteshlag1", "midterm": "dmidterm"}
+    with open(HERE / "rdsenate_1914_2010.csv", "w", newline="", encoding="utf-8") as out:
+        w = csv.writer(out)
+        w.writerow(RDSENATE_COLS)
+        for i in range(len(cols["year"])):
+            row = []
+            for k in RDSENATE_COLS:
+                v = cols[src[k]][i]
+                row.append(v if isinstance(v, str) else ("" if v is None or v != v else _fmt(float(v))))
+            w.writerow(row)
 
 
 def refresh_saez() -> None:
@@ -2815,7 +2940,10 @@ def democracy(entity: str) -> dict:
 def refresh_democracy() -> None:
     d = DATASETS["democracy"]
     raw = RAW / "electoral-democracy-index.csv"
-    sha = _download(d["url"], raw)
+    if raw.exists() and hashlib.sha256(raw.read_bytes()).hexdigest() == d.get("sha256"):
+        sha = d["sha256"]          # the recorded vintage is already here
+    else:
+        sha = _download(d["url"], raw)
     if d.get("sha256") and sha != d["sha256"]:
         print(f"democracy: the download differs from the recorded vintage ({sha[:12]} vs {d['sha256'][:12]})")
     print(f"democracy: sha256 {sha}")
@@ -3171,7 +3299,7 @@ REFRESH = {"draft1970": refresh_draft1970, "ajr": refresh_ajr, "maddison2023": r
            "blanchard_leigh": refresh_blanchard_leigh, "rr_hap": refresh_rr_hap, "jst": refresh_jst,
            "bigmac": refresh_bigmac, "wdi_ca": refresh_wdi_ca, "trefler_hov": refresh_trefler_hov,
            "cepii_gravity": refresh_cepii_gravity, "autor_dorn": refresh_autor_dorn, "resume": refresh_resume, "sportscards": refresh_sportscards, "wdi_dev": refresh_wdi_dev,
-           "causaldata": refresh_causaldata,
+           "causaldata": refresh_causaldata, "rdsenate": refresh_rdsenate, "wdi_state": refresh_wdi_state,
            "saez": refresh_saez, "opportunity": refresh_opportunity, "wid_top1": refresh_wid_top1,
            "blp_cars": refresh_blp_cars, "rust_buses": refresh_rust_buses}
 
