@@ -64,8 +64,8 @@ class Melitz(VoiceoverScene):
 
     def gains(self):
         M = load("melitz")
-        ax = plane([1.0, 2.5], [0, 0.4], center=LEFT * 1.6 + DOWN * 0.4, x_length=8.6, y_length=4.4,
-                   xticks=[1.0, 1.5, 2.0, 2.5], yticks=[0, 0.1, 0.2, 0.3, 0.4], xlabel=r"shipping cost, \ $\tau$",
+        ax = plane([1.0, 2.5], [0, 0.6], center=LEFT * 1.6 + DOWN * 0.4, x_length=8.6, y_length=4.4,
+                   xticks=[1.0, 1.5, 2.0, 2.5], yticks=[0, 0.2, 0.4, 0.6], xlabel=r"shipping cost, \ $\tau$",
                    ylabel=r"share", xfmt=lambda v: f"{v:.1f}", yfmt=lambda v: f"{100 * v:.0f}\\%", font_size=14)
         g = path(ax, M["tau_grid"], M["gains"], GAIN, 3.2)
         e = path(ax, M["tau_grid"], M["export_shares"], ARCH, 3.2)

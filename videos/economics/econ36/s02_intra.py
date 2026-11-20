@@ -45,11 +45,13 @@ class Intra(VoiceoverScene):
             "is like this, and that it is not an artefact of lumping different goods together. Neither Ricardo nor "
             "Heckscher and Ohlin predicts it: a country should not export and import the same thing."
         ) as vo:
-            self.play(FadeIn(ax), FadeIn(tag), FadeIn(eq))
+            self.play(FadeIn(ax), FadeIn(tag), FadeIn(key))
+            self.play(*[Create(ln) for ln in lines.values()], run_time=2.5)
             vo.wait_until("a")
-            self.play(FadeIn(side[0]))
+            self.play(FadeIn(eq), FadeIn(side[0]))
             vo.wait_until("b")
-            self.play(*[Create(ln) for ln in lines.values()], FadeIn(key), FadeIn(side[1]), run_time=2.0)
+            self.play(Indicate(lines["cars and parts"], color=WHITE, scale_factor=1.0), FadeIn(side[1]),
+                      run_time=1.5)
             vo.wait_until("c")
             self.play(FadeIn(side[2]))
             vo.wait_until("d")

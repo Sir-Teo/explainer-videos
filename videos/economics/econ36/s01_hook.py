@@ -50,15 +50,17 @@ class Hook(VoiceoverScene):
         pos = {}
         for c, (lat, lon) in W["nodes"].items():
             pos[c] = web_point(lat, lon)
-            nodes.add(VGroup(Dot(pos[c], radius=0.06, color=WHITE),
-                             label(c, font_size=13, color=GREY_A).next_to(pos[c], UP, buff=0.05)))
+            node = VGroup(Dot(pos[c], radius=0.06, color=WHITE))
+            if c not in ("GBR", "FRA", "ITA", "ESP", "NLD", "CHE"):
+                node.add(label(c, font_size=13, color=GREY_A).next_to(pos[c], UP, buff=0.05))
+            nodes.add(node)
         vmax = max(v for _, _, v in W["links"])
         links = VGroup(*[Line(pos[a], pos[b], stroke_width=0.6 + 7 * v / vmax,
                               color=CHINA if "CHN" in (a, b) else (USA if "USA" in (a, b) else ARCH),
                               stroke_opacity=0.75) for a, b, v in W["links"]])
         a, b, v = W["largest"]
-        side = label(rf"the forty largest flows among twenty economies, \ 2019; \ the largest: \ {a}--{b}, \ "
-                     rf"\${v:.0f} billion", font_size=18, color=GREY_A).to_edge(DOWN, buff=0.3)
+        side = label(rf"the forty largest flows among twenty economies, \ 2019 \ (Europe's six unlabelled); \ the "
+                     rf"largest: \ {a}--{b}, \ \${v:.0f} billion", font_size=18, color=GREY_A).to_edge(DOWN, buff=0.3)
         tag = data_tag(r"CEPII Gravity database (BACI), \ 2019", corner=DR, font_size=12)
         with self.voiceover(
             "Here is the result in 2019: the forty largest trade flows among twenty large economies, each line as "

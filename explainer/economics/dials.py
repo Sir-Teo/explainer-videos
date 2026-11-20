@@ -855,8 +855,8 @@ DIALS = {d.key: d for d in [
     Dial("trade_elasticity", "the trade elasticity", "the percent fall in imports from a 1% rise in their cost "
          "(absolute value)", (36, 66), status="depends on the setting", checked="2026-11-20",
          meaning="how strongly trade responds to its costs: gravity studies across countries put it at five to ten; "
-                 "tariff changes traced over time give under one within a year and about two after a decade; since the "
-                 "gains from trade are 1 - lambda^(1/epsilon), the smaller long-run values imply larger gains",
+                 "tariff changes traced over time give under one within a year and about two after a decade; the gains "
+                 "from trade shrink as the elasticity rises, so the smaller long-run values imply larger gains",
          estimates=(
              Estimate("Anderson and van Wincoop (review)", 2004, "review", "the gravity literature's range, used by "
                       "Arkolakis, Costinot and Rodriguez-Clare (2012)", 7.5, lo=5.0, hi=10.0,

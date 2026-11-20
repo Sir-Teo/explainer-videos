@@ -29,6 +29,12 @@ class Formula(VoiceoverScene):
             nms.add(VGroup(label(SHOW[k], font_size=15, color=WHITE), label(f"{v:.1f}", font_size=14, color=GAIN))
                     .arrange(DOWN, buff=0.04).next_to(ax.ax.c2p(k + 1, 0), DOWN, buff=0.1))
         eq = MathTex(r"1 - \lambda^{1/\theta}", font_size=38).to_edge(UP, buff=0.3).shift(RIGHT * 3.5)
+        us = H["regions"].index("USA")
+        big = MathTex(r"\text{loss from autarky} = 1 - \lambda^{1/\theta}", font_size=54).move_to(UP * 0.9)
+        work = MathTex(rf"\text{{America, 2019:}} \quad 1 - {H['lambda'][us]:.3f}^{{1/{H['theta']:.0f}}} = "
+                       rf"{100 * H['acr'][us]:.1f}\%", font_size=40, color=GAIN).next_to(big, DOWN, buff=0.6)
+        keys = label(r"$\lambda$: \ the share of spending on home goods; \ $\theta$: \ the trade elasticity",
+                     font_size=22, color=GREY_A).next_to(work, DOWN, buff=0.5)
         side = VGroup(
             label(rf"$\theta$ = {H['theta']:.0f}; \\ $\lambda$: \ spending \\ on home goods", font_size=18,
                   color=GREY_A),
@@ -48,8 +54,10 @@ class Formula(VoiceoverScene):
             "autarky; open ones like Germany, Korea and Mexico around nine or ten. <bookmark mark='c'/> The models "
             "differ in how trade works, but not, at this level, in how much it is worth."
         ) as vo:
-            self.play(FadeIn(ax), FadeIn(tag), FadeIn(eq))
+            self.play(FadeIn(big), FadeIn(tag))
+            self.play(FadeIn(keys), FadeIn(work, shift=UP * 0.1))
             vo.wait_until("a")
+            self.play(FadeOut(work), FadeOut(keys), ReplacementTransform(big, eq), FadeIn(ax))
             self.play(LaggedStart(*[GrowFromEdge(b, DOWN) for b in bars], lag_ratio=0.12), FadeIn(nms),
                       FadeIn(side[0]), run_time=2.0)
             vo.wait_until("b")
@@ -87,6 +95,14 @@ class Formula(VoiceoverScene):
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.3).to_edge(RIGHT, buff=0.3)
         tag = data_tag(r"CEPII Gravity (BACI), \ 2019; \ Dekle, \ Eaton and Kortum (2008); \ this film", corner=DR,
                        font_size=12)
+        dek = VGroup(
+            MathTex(r"\hat\pi_{ni} = \frac{(\hat w_i\,\hat d_{ni})^{-\theta}}{\sum_k \pi_{nk}\,(\hat w_k\,"
+                    r"\hat d_{nk})^{-\theta}}", font_size=40),
+            MathTex(r"\hat w_i\,Y_i = \sum_n \pi_{ni}\,\hat\pi_{ni}\,(\hat w_n Y_n + D_n)", font_size=40),
+            label(r"hats: \ ratios of new to old; \ $\pi$: \ today's trade shares; \ $D$: \ deficits, \ held fixed",
+                  font_size=20, color=GREY_A),
+        ).arrange(DOWN, buff=0.45).move_to(LEFT * 1.5 + UP * 0.2)
+        small = VGroup(dek[0].copy(), dek[1].copy()).arrange(RIGHT, buff=0.6).scale(0.6).to_edge(UP, buff=0.25)
         with self.voiceover(
             "The same models answer what-if questions. Robert Dekle, Jonathan Eaton and Samuel Kortum showed in 2008 "
             "that a counterfactual needs only today's trade shares and the elasticity, solved in proportional "
@@ -100,12 +116,15 @@ class Formula(VoiceoverScene):
             "because the model is static and has no inputs crossing borders; Part sixty-six returns with richer "
             "versions."
         ) as vo:
-            self.play(FadeIn(ax), FadeIn(zero), FadeIn(tag), FadeIn(nms))
+            self.play(FadeIn(tag), FadeIn(dek[0]))
+            self.play(FadeIn(dek[1]), FadeIn(dek[2]))
             vo.wait_until("a")
             self.play(FadeIn(side[0]))
             vo.wait_until("b")
             self.play(FadeIn(side[1]))
             vo.wait_until("c")
+            self.play(FadeOut(dek[2]), ReplacementTransform(VGroup(dek[0], dek[1]), small), FadeIn(ax), FadeIn(zero),
+                      FadeIn(nms))
             self.play(LaggedStart(*[GrowFromEdge(b, UP if H["welfare"][i] < 0 else DOWN) for b, i in zip(bars, idx)],
                                   lag_ratio=0.12), FadeIn(side[2]), run_time=2.0)
             vo.wait_until("d")

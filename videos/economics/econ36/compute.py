@@ -241,7 +241,9 @@ def compute_tariffs() -> dict:
     rate = {y: 100 * duty[y] / impg[y] for y in duty if y in impg}
     return {**{k: v for k, v in F.items()}, "rate2017": rate[2017], "rate2019": rate[2019], "rate2024": rate[2024],
             "rate2025": rate[2025], "imp2018": imp[2018] / 1000, "imp2019": imp[2019] / 1000,
-            "imp2024": imp[2024] / 1000, "imp2025": imp.get(2025, np.nan) / 1000 if 2025 in imp else None}
+            "imp2024": imp[2024] / 1000, "imp2025": imp.get(2025, np.nan) / 1000 if 2025 in imp else None,
+            "years": sorted(rate), "rate": [rate[y] for y in sorted(rate)], "peak_y": max(rate, key=rate.get),
+            "peak": max(rate.values()), "since": max(y for y in rate if y < 2025 and rate[y] >= rate[2025])}
 
 
 def compute_chains() -> dict:

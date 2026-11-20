@@ -2318,10 +2318,11 @@ XING_DETERT_2010 = Table(
          "China\", ADBI Working Paper 257 (December 2010)",
     tag="Xing and Detert, \\ ADBI WP 257 (2010)",
     where="the abstract and summaries: the iPhone added $1.9 billion to the 2009 US deficit with China; China's value "
-          "added was $6.50 per iPhone 3G; in value added, the trade would show a US surplus of $48 million",
+          "added was $6.50 per iPhone 3G; in value added, the trade would show a US surplus of $48 million; the cost "
+          "breakdown they use (iSuppli's teardown, 2009): components $172.46 and manufacturing $6.50, $178.96 in all",
     read="the abstract and the authors' later summaries",
     checked="2026-11-20",
-    data={"deficit": 1.9e9, "china_va": 6.50, "va_surplus": 48e6, "year": 2009},
+    data={"deficit": 1.9e9, "china_va": 6.50, "va_surplus": 48e6, "year": 2009, "total": 178.96, "parts": 172.46},
 )
 MCCALLUM_1995 = Table(
     key="mccallum_1995",

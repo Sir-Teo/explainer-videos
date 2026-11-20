@@ -6,7 +6,7 @@ from explainer.music.sound import SoundScene
 from videos.economics.econ36.common import *  # noqa: F403
 
 EVENTS = ((1990.0, r"1990", UP), (2001.95, r"2001: \ China joins the WTO", LEFT), (2009.0, r"2009", DOWN),
-          (2018.5, r"2018: \ the tariffs", UP), (2025.0, r"2025", RIGHT))
+          (2018.0, r"2018: \ the tariffs", UP), (2025.0, r"2025", RIGHT))
 
 
 class Intermission(SoundScene):
