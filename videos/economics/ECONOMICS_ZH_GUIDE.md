@@ -1024,6 +1024,32 @@ brackets on screen.
 | third-party reporting | 第三方报告 |
 | static and dynamic (behavioural) scoring | 静态与动态（行为）评分 |
 
+## Part 42
+
+| English | 中文 |
+|---|---|
+| social insurance | 社会保险 |
+| risk pooling; common shocks | 风险分担（风险池化）；共同冲击 |
+| unemployment insurance; replacement rate | 失业保险；替代率 |
+| the Baily-Chetty formula | 贝利—切蒂公式 |
+| consumption smoothing | 消费平滑 |
+| duration elasticity | 失业持续期弹性 |
+| benefit exhaustion | 福利耗尽 |
+| liquidity effect; moral hazard | 流动性效应；道德风险 |
+| coinsurance; deductible; out-of-pocket maximum | 共付比例；免赔额；自付上限 |
+| the RAND Health Insurance Experiment | 兰德健康保险实验 |
+| the Oregon Health Insurance Experiment | 俄勒冈健康保险实验 |
+| first stage; Wald estimator; statistical power | 第一阶段；沃尔德估计量；统计功效 |
+| pay-as-you-go; funded pensions; implicit debt | 现收现付制；基金积累制；隐性债务 |
+| notional defined contribution | 名义账户制 |
+| default; automatic enrolment | 默认选项；自动加入 |
+| disability insurance; examiner leniency | 残疾保险；审查员宽严程度 |
+| the negative income tax | 负所得税 |
+| the Earned Income Tax Credit | 劳动所得税抵免 |
+| tagging | 标签式救助（按标识定向） |
+| universal basic income | 全民基本收入 |
+| the marginal value of public funds (MVPF) | 公共资金边际价值 |
+
 ## Names
 
 | English | 中文 |
@@ -1291,3 +1317,5 @@ brackets on screen.
 | Paul Ehrlich; Julian Simon; Diego Comin; William Easterly; Erick Gong; Enrico Spolaore; Romain Wacziarg | 保罗·埃利希；朱利安·西蒙；迭戈·科明；威廉·伊斯特利；Erick Gong（中文名待核）；恩里科·斯波劳雷；罗曼·瓦齐亚格 |
 | Arthur Laffer; Jude Wanniski; Arnold Harberger; Frank Ramsey; James Mirrlees; Peter Diamond | 阿瑟·拉弗；裘德·万尼斯基；阿诺德·哈伯格；弗兰克·拉姆齐；詹姆斯·米尔利斯（又译莫里斯）；彼得·戴蒙德 |
 | Emmanuel Saez; Joel Slemrod; Martin Feldstein; Henrik Kleven; Gabriel Zucman; Agnar Sandmo | 伊曼纽尔·赛斯；乔尔·斯莱姆罗德；马丁·费尔德斯坦；亨里克·克莱文；加布里埃尔·祖克曼；阿格纳·桑德莫 |
+| Martin Baily; Raj Chetty; Jonathan Gruber; Bruce Meyer; Amy Finkelstein; Katherine Baicker | 马丁·贝利；拉杰·切蒂；乔纳森·格鲁伯；布鲁斯·迈耶；埃米·芬克尔斯坦；凯瑟琳·贝克 |
+| Nathaniel Hendren; Brigitte Madrian; Nicole Maestas; Nada Eissa; Mark Pauly; Kenneth Arrow | 纳撒尼尔·亨德伦；布丽奇特·马德里安；妮科尔·梅斯塔斯；纳达·艾萨；马克·保利；肯尼斯·阿罗 |

@@ -3246,7 +3246,7 @@ RAND_HIE = Table(
          "Debate\", Research Brief RB-9174 (2006); W. Manning et al., American Economic Review 77(3): 251-277 (1987); "
          "A. Aron-Dine, L. Einav and A. Finkelstein, \"The RAND Health Insurance Experiment, Three Decades Later\", "
          "Journal of Economic Perspectives 27(1): 197-222 (2013)",
-    tag="RAND (1974--82); \\ Manning et al. (1987); \\ Aron-Dine, \\ Einav and Finkelstein (2013)",
+    tag="RAND (1970s--1982); \\ Manning et al. (1987); \\ Aron-Dine, \\ Einav and Finkelstein (2013)",
     where="2,750 families, more than 7,700 people under 65, at six sites, randomly assigned to free care, coinsurance "
           "of 25%, 50% or 95% (with income-related caps), or an HMO, for three to five years; those with 95% "
           "coinsurance spent about 30% less than those with free care, those with 25% about 20% less; on average, "

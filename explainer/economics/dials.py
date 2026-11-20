@@ -703,12 +703,12 @@ DIALS = {d.key: d for d in [
          )),
     Dial("med_price", "price elasticity of medical spending", "percent change in medical spending for a 1% higher "
          "out-of-pocket price", (42,), status="contested", checked="2026-11-20",
-         meaning="how much of insurance's extra spending is moral hazard: at -0.2, cutting the price from full to "
-                 "free raises spending by about 40%; the optimal coinsurance rate rises with the elasticity, and the "
+         meaning="how much of insurance's extra spending is moral hazard: at -0.2, a 10% higher out-of-pocket price "
+                 "cuts spending by about 2%; the optimal coinsurance rate rises with the elasticity, and the "
                  "summary itself is fragile because plans have deductibles and caps, so no single price applies",
          estimates=(
-             Estimate("RAND (Manning et al.)", 1987, "RCT", "2,750 families at six sites, 1974-1982, plans from free "
-                      "care to 95% coinsurance", -0.2, where="AER 77(3): 251-277", checked="2026-11-20"),
+             Estimate("RAND (Manning et al.)", 1987, "RCT", "2,750 families at six sites, the 1970s to 1982, "
+                      "plans from free care to 95% coinsurance", -0.2, where="AER 77(3): 251-277", checked="2026-11-20"),
              Estimate("this film (the Island)", 2026, "calibration", "arc elasticity between 25% and 95% "
                       "coinsurance, with free care costing 1/0.7 times the 95% plan", -0.23,
                       where="videos/economics/econ42/compute.py, item health", checked="2026-11-20"),

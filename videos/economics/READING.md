@@ -10,7 +10,7 @@ the series leaves out.
 Both *Parts* columns are found, not typed. *Planned* lists the parts whose entry in
 [`SYLLABUS.md`](SYLLABUS.md) names the book or paper; *Built* lists the parts whose scenes, compute step or
 README cite it (a dot: none yet). Fuller notes (editions, chapters, what each source was used for) are in each
-part's README, under *Sources*. Built so far: Parts 1–41.
+part's README, under *Sources*. Built so far: Parts 1–42.
 
 ## 1. The textbook spine
 
@@ -39,7 +39,7 @@ part's README, under *Sources*. Built so far: Parts 1–41.
 | Mishkin | F. Mishkin, *The Economics of Money, Banking, and Financial Markets* (13th ed., 2022) | 26 | 31 |
 | Cabral | L. Cabral, *Introduction to Industrial Organization* (2nd ed., 2017) | 12–13 | 12–13 |
 | Borjas | G. Borjas, *Labor Economics* (8th ed., 2020) | 38 | 38 |
-| Gruber | J. Gruber, *Public Finance and Public Policy* (7th ed., 2022) | 15, 41–42, 50 | 7, 15, 41 |
+| Gruber | J. Gruber, *Public Finance and Public Policy* (7th ed., 2022) | 15, 41–42, 50 | 7, 15, 41–42 |
 | Ray | D. Ray, *Development Economics* (1998) | 46 | · |
 | Weil | D. Weil, *Economic Growth* (3rd ed., 2013) | 7, 19 | 3, 7, 19–21, 23 |
 
@@ -153,7 +153,7 @@ part's README, under *Sources*. Built so far: Parts 1–41.
 |---|---|---|---|
 | equilibrium in games | Nash (1950, 1951) | 11 | 11 |
 | oligopoly in quantities and prices | Cournot (1838); Bertrand (1883) | 12 | 6, 12 |
-| demand estimation with differentiated products | Berry, Levinsohn and Pakes (1995) | 43 | 35 |
+| demand estimation with differentiated products | Berry, Levinsohn and Pakes (1995) | 43 | 35, 42 |
 
 ### Information and design
 
@@ -161,7 +161,7 @@ part's README, under *Sources*. Built so far: Parts 1–41.
 |---|---|---|---|
 | lemons | Akerlof (1970) | 13 | 13 |
 | signalling | Spence (1973) | 13 | · |
-| screening in insurance | Rothschild and Stiglitz (1976) | 7, 13 | 7, 13 |
+| screening in insurance | Rothschild and Stiglitz (1976) | 7, 13 | 7, 13, 42 |
 | second-price auctions | Vickrey (1961) | 16 | 16–17 |
 | optimal auctions | Myerson (1981) | 16 | 16 |
 | stable matching | Gale and Shapley (1962) | 17 | 17 |
@@ -337,6 +337,8 @@ part's README, under *Sources*. Built so far: Parts 1–41.
 **Part 40, *Inequality and Mobility*.** Books: Anthony Atkinson, *Inequality: What Can Be Done?* (2015); Thomas Piketty, *Capital in the Twenty-First Century* (2014); Branko Milanovic, *Global Inequality* (2016); Frank Cowell, *Measuring Inequality* (3rd edition, 2011). Papers: Pareto (1896); Champernowne (1953); Kuznets (1955); Atkinson (1970); Pen (1971); Solon (1992); Piketty and Saez (2003); Mazumder (2005); Gabaix (2009); Corak (2013); Chetty, Hendren, Kline and Saez (2014); Rognlie (2015); Krusell and Smith (2015); Gabaix, Lasry, Lions and Moll (2016); Lakner and Milanovic (2016); Chetty et al. (2016, 2017); Chetty and Hendren (2018); Piketty, Saez and Zucman (2018); Jakobsen et al. (2020); Black et al. (2020); Auten and Splinter (2024).
 
 **Part 41, *Taxes*.** Books: Bernard Salanié, *The Economics of Taxation* (2nd edition, 2011); Joel Slemrod and Jon Bakija, *Taxing Ourselves* (5th edition, 2017); Peter Diamond and Emmanuel Saez, 'The Case for a Progressive Tax', *JEP* (2011); Jonathan Gruber, *Public Finance and Public Policy*, chapters 18–25. Papers: Ramsey (1927); Harberger (1962); Mirrlees (1971); Diamond and Mirrlees (1971); Allingham and Sandmo (1972); Atkinson and Stiglitz (1976); Judd (1985); Chamley (1986); Feldstein (1995); Diamond (1998); Saez (2001, 2002, 2010); Gruber and Saez (2002); Chetty, Looney and Kroft (2009); Kleven et al. (2011); Saez, Slemrod and Giertz (2012); Kleven and Waseem (2013); Kleven, Landais and Saez (2013); Zucman (2013); Piketty, Saez and Stantcheva (2014); Fuest, Peichl and Siegloch (2018); Straub and Werning (2020).
+
+**Part 42, *Social Insurance*.** Books: Jonathan Gruber, *Public Finance and Public Policy*, chapters 12–17; Nicholas Barr, *The Economics of the Welfare State* (6th edition, 2020); Liran Einav and Amy Finkelstein, *Risky Business* (2023); Raj Chetty and Amy Finkelstein, 'Social Insurance: Connecting Theory to Data', *Handbook of Public Economics* 5 (2013). Papers: Arrow (1963); Pauly (1968); Zeckhauser (1970); Akerlof (1978); Baily (1978); Robins (1985); Manning et al. (1987); Meyer (1990); Eissa and Liebman (1996); Gruber (1997); Madrian and Shea (2001); Chetty (2006, 2008); Card, Chetty and Weber (2007); Finkelstein et al. (2012); Schmieder, von Wachter and Bender (2012); Baicker et al. (2013); Maestas, Mullen and Strand (2013); Chetty et al. (2014); Taubman et al. (2014); Ganong and Noel (2019); Finkelstein, Hendren and Luttmer (2019); Hendren and Sprung-Keyser (2020).
 
 ## 4. What the series leaves out
 

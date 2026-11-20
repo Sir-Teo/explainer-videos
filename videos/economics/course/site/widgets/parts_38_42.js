@@ -242,4 +242,59 @@
             "contested number. Computed in your browser; nothing you do here is stored or sent.",
     });
   };
+  W.ui = function (el) {
+    // Baily and Chetty's formula (explainer.economics.agora.insurance, Part 42): the gain from moving a dollar to the
+    // unemployed, (1/(1 - drop))^gamma - 1 for CRRA utility, against the cost through longer unemployment, eps / e.
+    // The consumption drop shrinks with the benefit as Gruber measured: 2.7% less for each 10 points of replacement.
+    var E_FIND = 0.8, SLOPE = 0.27;
+    function drop(b, d0) { return Math.max(d0 - SLOPE * b, 0.0005); }
+    function gain(b, g, d0) { return Math.pow(1 / (1 - drop(b, d0)), g) - 1; }
+    function best(g, eps, d0) {
+      var cost = eps / E_FIND, lo = 0, hi = 1.2, k;
+      if (gain(0, g, d0) <= cost) return 0;
+      for (k = 0; k < 60; k++) { var m = (lo + hi) / 2; if (gain(m, g, d0) > cost) lo = m; else hi = m; }
+      return (lo + hi) / 2;
+    }
+    QB.widget(el, {
+      title: "Set the unemployment benefit",
+      sub: "Left: the gain from smoothing consumption (blue) and the cost of longer unemployment (red) against the " +
+           "benefit; they cross at the best benefit (green). Right: the best benefit against risk aversion.",
+      panels: 2, height: 270,
+      controls: [
+        { k: "g", label: "Risk aversion, gamma", min: 1, max: 10, step: 0.1, value: 2,
+          fmt: function (x) { return x.toFixed(1); } },
+        { k: "eps", label: "Duration elasticity of benefits, eps", min: 0.1, max: 1.2, step: 0.01, value: 0.5,
+          fmt: function (x) { return x.toFixed(2); } },
+        { k: "d0", label: "Consumption drop with no benefit", min: 0.1, max: 0.4, step: 0.01, value: 0.22,
+          fmt: function (x) { return (100 * x).toFixed(0) + "%"; } },
+      ],
+      draw: function (g, v, st) {
+        var bs = [], gs = [], cs = [], k;
+        for (k = 0; k <= 80; k++) { var b = k / 100; bs.push(b); gs.push(gain(b, v.g, v.d0)); cs.push(v.eps / E_FIND); }
+        var A = g[0].axes({ x: [0, 0.8], y: [0, 2], title: "each side of the formula", xlabel: "benefit, share of the wage" });
+        A.line(bs, gs.map(function (y) { return Math.min(y, 2); }), { color: "#7EC8F5", width: 2.5 });
+        A.line(bs, cs, { color: "#F25F5C", width: 2.5 });
+        var bb = best(v.g, v.eps, v.d0);
+        A.vline(bb, { color: "#7BD88F", width: 2, dash: [4, 4] });
+        A.vline(0.5, { color: "#9AA3B2", width: 1 });
+        var gam = [], opt = [];
+        for (k = 0; k <= 45; k++) { var gg = 1 + k * 0.2; gam.push(gg); opt.push(best(gg, v.eps, v.d0)); }
+        var B = g[1].axes({ x: [1, 10], y: [0, 0.8], title: "best benefit", xlabel: "risk aversion" });
+        B.line(gam, opt, { color: "#7BD88F", width: 2.5 });
+        B.dots([v.g], [bb], { color: "#F2C14E", r: 5 });
+        var dr = drop(0.5, v.d0);
+        st.best = bb;
+        st.need = Math.log(1 + v.eps / E_FIND) / -Math.log(1 - dr);
+        st.verdict = gain(0.5, v.g, v.d0) > v.eps / E_FIND ? "raise it" : "lower it";
+      },
+      readout: function (v, st) {
+        return [["the best benefit", (100 * st.best).toFixed(0) + "% of the wage"],
+                ["at half the wage, the formula says", st.verdict],
+                ["risk aversion that makes half the wage right", st.need.toFixed(1)]];
+      },
+      note: "Part 42, chapters 3 and 4. The chance of finding work, e, is fixed at 0.8. Gruber's drop was about 7% " +
+            "with benefits; Chetty's liquidity share of 60% would make the gain side 1.5. Computed in your browser; " +
+            "nothing you do here is stored or sent.",
+    });
+  };
 })();

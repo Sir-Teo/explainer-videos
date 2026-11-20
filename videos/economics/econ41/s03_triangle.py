@@ -141,8 +141,9 @@ class Triangle(VoiceoverScene):
             "rates already are and how strongly the base responds."
         ) as vo:
             self.play(Write(eq), FadeIn(ax), FadeIn(tag), Create(one), FadeIn(side[0]), run_time=2.0)
+            self.play(Create(c_lo), run_time=3.0)
             vo.wait_until("a")
-            self.play(Create(c_lo), FadeIn(pts_lo), FadeIn(side[1]), run_time=2.0)
+            self.play(FadeIn(pts_lo), FadeIn(side[1]), Indicate(c_lo, color=WHITE, scale_factor=1.0))
             vo.wait_until("b")
             self.play(Create(c_hi), FadeIn(pts_hi), FadeIn(side[2]), run_time=2.0)
             vo.wait_until("c")

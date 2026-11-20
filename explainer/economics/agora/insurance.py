@@ -127,8 +127,9 @@ class Baily:
         return float(r.x)
 
     def split(self, b: float, h: float = 1e-5) -> dict:
-        """Chetty's (2008) decomposition of de/db at b: the liquidity effect de/dA (cash in both states) and the
-        moral hazard effect -de/dw (a subsidy to staying unemployed); the liquidity share, and the formula
+        """Chetty's (2008) decomposition of de/db at b into the liquidity effect de/dA (cash in both states) and the
+        moral hazard effect -de/dw (a subsidy to staying unemployed), both negative, which sum to de/db; the
+        liquidity share, and the formula
         (u'(c_u) - u'(c_e))/u'(c_u) that it equals in this model."""
         s = self.solve(b)
         tau = s["tau"]
@@ -348,8 +349,8 @@ def defaults(n: int = 20000, months: int = 48, attention: float = 0.045, want: f
     part_opt = (acted & joins[None, :]).mean(axis=1)
     part_auto = (~acted | joins[None, :]).mean(axis=1)
     at_def_auto = (~acted | (joins & (rate == default))[None, :]).mean(axis=1)
-    return {"t": t.tolist(), "opt_in": part_opt.tolist(), "auto": part_auto.tolist(), "at_default": at_def_auto.tolist(),
-            "attention": attention, "want": want}
+    return {"t": t.tolist(), "opt_in": part_opt.tolist(), "auto": part_auto.tolist(),
+            "at_default": at_def_auto.tolist(), "attention": attention, "want": want}
 
 
 # ---------------------------------------------------------------------------------------------------------------

@@ -185,4 +185,50 @@ PARTS = [
               ("The Island's planted truths", "explainer/economics/island.py"),
               ("The Data Room's sources", "explainer/economics/data/SOURCES.md")),
     ),
+    Part(
+        n=42, level="U", widget="ui", prereq=(7, 13, 22, 24, 41),
+        question="What should the state insure, and how generously?",
+        story="The part opens on Oregon's 2008 lottery for Medicaid places, drawn as dots: about 90,000 names, "
+              "30,000 drawn, 10,000 places. It shows why recessions put a floor under the risk any private pool can "
+              "remove, and how much of American unemployment the state's insurance reaches (35% on average since "
+              "1967). The viewer sets the Island's unemployment benefit (a third of the wage is best), and the "
+              "Baily-Chetty formula is derived and checked exactly at that optimum. A weekly search model shows "
+              "the hazard rising as benefits run out; the published durations and consumption drops are put into "
+              "the formula, which needs high risk aversion to justify today's benefits, while Chetty's liquidity "
+              "share of 60% says they are too low. RAND's experiment and the Island's coinsurance trade-off "
+              "(the best plan pays 28% of each bill) lead to Oregon's results and to 200 simulated lotteries that "
+              "show why a small effect on blood pressure could not be detected. After an intermission of weekly "
+              "claims since 1967, it covers pay-as-you-go arithmetic and the implicit debt, defaults against "
+              "subsidies, the examiner design for disability insurance, the negative income tax trials, the 2025 "
+              "EITC and tagging, a basic income financed by a flat tax and its trials, the MVPF of the Island's "
+              "programmes, three dials, an actuary's arithmetic, the 1983 Social Security reform as Called it?, "
+              "and the frontier.",
+        handoff="Part 43 opens Act IX, the fields, with industrial organization: measuring market power without "
+                "seeing costs.",
+        outside="Part 7: risk aversion and defaults; Part 13: adverse selection; Part 22: pay-as-you-go pensions; "
+                "Part 24: search and unemployment; Part 41: taxes and the cost of public funds. Chapter 3 uses a "
+                "first-order condition with an envelope argument; chapter 7 an instrumental variable.",
+        objectives={
+            "U": ["Explain why private markets underinsure some risks and what the state can pool.",
+                  "State the Baily-Chetty formula and what each side measures.",
+                  "Describe what the RAND and Oregon experiments found, and what they could not detect."],
+            "M": ["Derive the Baily-Chetty formula from a static model of search with a balanced budget.",
+                  "Split the response of search to benefits into liquidity and moral hazard.",
+                  "Find the optimal coinsurance rate when insurance raises spending."],
+            "D": ["Estimate the effect of coverage from a lottery with incomplete take-up, with its power.",
+                  "Use examiner leniency as an instrument and explain why the naive comparison is biased."],
+            "I": ["Compute pay-as-you-go replacement rates and the MVPF of a programme."],
+        },
+        results=[
+            ("Baily-Chetty", r"\frac{u'(c_u)-u'(c_e)}{u'(c_e)} = \frac{\varepsilon_{1-e,b}}{e}"),
+            ("Its measurable form", r"\gamma\,\frac{\Delta c}{c} \approx \varepsilon"),
+            ("Liquidity and moral hazard", r"\frac{de}{db} = \frac{de}{dA} - \frac{de}{dw}"),
+            ("Pay-as-you-go", r"\frac{b}{w} = \tau \cdot \frac{\text{workers}}{\text{retirees}}"),
+            ("The MVPF", r"\text{MVPF} = \frac{\text{WTP}}{\text{net cost}}"),
+        ],
+        U=(0, 1, 2, 3, 4, 6, 7, "s09_intermission", 8, 9, 11, 12), D=(5, 10, 13, 14, 16), I=(15,),
+        also=(("Agora's insurance", "explainer/economics/agora/insurance.py"),
+              ("The Island's planted truths", "explainer/economics/island.py"),
+              ("The Data Room's sources", "explainer/economics/data/SOURCES.md")),
+    ),
 ]
