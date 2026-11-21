@@ -129,4 +129,44 @@ PARTS = [
         also=(("Agora's automation module", "explainer/economics/agora/automation.py"),
               ("The Data Room: Maddison, the Penn World Table, FRED", "explainer/economics/data")),
     ),
+    Part(
+        n=66, level="D", widget="tradewar", prereq=(11, 34, 35, 36, 44, 48, 63),
+        question="What happens to the gains from trade when trade becomes a weapon?",
+        story="On 2 April 2025 the United States set a tariff on almost every country by one formula, the bilateral "
+              "deficit over imports, halved; one parameter, the assumed pass-through, multiplied the rates by "
+              "nearly four. The 2018-19 tariffs were paid by American buyers; in 2025 the effective rate rose from "
+              "2.9% to 11.3% before the Supreme Court struck down the emergency tariffs, and prices rose slowly. The "
+              "viewer plays ten rounds of tariff policy against an unknown partner. On CEPII's 2019 flows the "
+              "optimal tariff, the Nash war and a 15% tariff with and without retaliation are computed, and "
+              "bilateral deficits are put in their place. After an intermission of the trade balance since 1992 "
+              "(the rush before the tariffs), weaponized interdependence, dependence as power, resilience, "
+              "infant industries and the new evidence (Napoleon's blockade, Korea, shipbuilding), subsidy races, "
+              "the dollar as a hub, two Dials, the FOMC's 2025 projection as Called it?, and climate clubs.",
+        handoff="Part 67 turns from what economics says to whether it is true: replication, p-hacking and the "
+                "credibility revolution.",
+        outside="Part 11: games and the folk theorem; Part 34: pass-through and the current account; Parts 35 and 36: "
+                "tariffs, gravity and the quantitative trade model; Part 44: platforms and hubs; Part 48: climate "
+                "clubs; Part 63: networks.",
+        objectives={
+            "U": ["Explain who paid for the 2018-19 and 2025 tariffs, and how economists know.",
+                  "Explain why a bilateral deficit is not a measure of unfairness, and what sets the overall one.",
+                  "Describe how control of a hub, or of a scarce supply, becomes power over others."],
+            "M": ["Derive the optimal tariff and show why a tariff war leaves both sides worse off.",
+                  "Compute the cost of losing a supplier with the ACR formula.",
+                  "Apply Mill's, Bastable's and Baldwin's tests to an infant-industry case."],
+            "D": ["Run tariffs with revenue through exact hat algebra, with and without retaliation.",
+                  "Derive Brander and Spencer's one-sided and Nash subsidies.",
+                  "Separate private from social choices of resilience in a model with spillovers."],
+            "I": ["Score a proposed tariff for a ministry: revenue, prices, retaliation and who gains and loses."],
+        },
+        results=[
+            ("The optimal tariff", r"t^\ast = \frac{1}{\varepsilon^\ast}"),
+            ("The reciprocal formula", r"\Delta\tau_i = \frac{m_i - x_i}{\varepsilon\,\varphi\,m_i}"),
+            ("Losing a supplier", r"\text{loss} = 1 - (1 - s)^{1/\theta}"),
+            ("Brander and Spencer", r"s^{\text{Nash}} = \frac{a - c}{5}"),
+        ],
+        U=(0, 1, 2, 5, "s07_intermission", 6, 11, 13), D=(3, 4, 7, 8, 10, 14), I=(9, 12),
+        also=(("Agora's tradewar module", "explainer/economics/agora/tradewar.py"),
+              ("The Data Room: FRED and CEPII's Gravity database", "explainer/economics/data")),
+    ),
 ]

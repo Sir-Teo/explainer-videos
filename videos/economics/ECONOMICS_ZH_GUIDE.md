@@ -1820,3 +1820,21 @@ brackets on screen.
 | robot tax | 机器人税 |
 | model of sales; shopping agent | 促销模型；购物代理 |
 | technological unemployment | 技术性失业 |
+
+## Part 66
+
+| English | 中文 |
+|---|---|
+| geoeconomics; industrial policy | 地缘经济学；产业政策 |
+| reciprocal tariff; effective tariff rate | 对等关税；有效关税率 |
+| pass-through (of a tariff) | （关税的）传导 |
+| optimal tariff; Nash tariffs; terms of trade | 最优关税；纳什关税；贸易条件 |
+| retaliation; trade war; trade agreement | 报复；贸易战；贸易协定 |
+| bilateral deficit; current account | 双边逆差；经常账户 |
+| weaponized interdependence; chokepoint | 相互依赖的武器化；咽喉要道 |
+| resilience; friend-shoring; reshoring | 韧性；友岸外包；回流 |
+| infant industry; learning by doing | 幼稚产业；干中学 |
+| Mill's test; Bastable's test | 穆勒检验；巴斯塔布尔检验 |
+| strategic trade policy; subsidy race | 战略性贸易政策；补贴竞赛 |
+| reserve currency; exorbitant privilege | 储备货币；过度特权 |
+| climate club; border carbon adjustment | 气候俱乐部；碳边境调节 |

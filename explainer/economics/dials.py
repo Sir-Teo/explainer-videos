@@ -1384,6 +1384,10 @@ DIALS = {d.key: d for d in [
                       "Fed's broad dollar index, 2001-2019, twelve monthly lags: the "
                       "cumulative pass-through after a year", 0.44,
                       where="videos/economics/econ34/compute.py, item dollar", checked="2026-11-20"),
+             Estimate("Cavallo, Llamas and Vazquez (2025 tariffs, retail)", 2025, "event study", "daily prices of "
+                      "imported goods at large US retailers, to September 2025: the share of the tariff in shelf "
+                      "prices (a later stage than import prices)", 0.20,
+                      where="NBER Working Paper 34496, abstract", checked="2026-11-21"),
          )),
     Dial("ppp_halflife", "half-life of deviations from purchasing power parity", "years for half of a real "
          "exchange rate's deviation from its mean to disappear", (34,), status="settled within a range",
@@ -1930,10 +1934,57 @@ DIALS = {d.key: d for d in [
                       where="The Potentially Large Effects of Artificial Intelligence on Economic Growth (March "
                             "2023)", checked="2026-11-21"),
          )),
+    Dial("trade_war_loss", "the cost of a tariff war", "percent of real income lost when countries move from "
+         "cooperation to the tariffs each would choose alone (Nash tariffs)", (66,), status="depends on the setting",
+         checked="2026-11-21",
+         meaning="a breakdown of trade cooperation costs from a fraction of a percent of income to a few percent, "
+                 "more where trade is a larger share of the economy and where political pressures push tariffs up; "
+                 "a large country can gain from a tariff only while others do not answer",
+         estimates=(
+             Estimate("Ossa", 2014, "structural", "a multi-country, multi-industry model with lobbying: the average "
+                      "government welfare loss from a world trade war (Nash tariffs averaging 63%)", 2.9,
+                      where="American Economic Review 104(12): 4104-4146, abstract", checked="2026-11-21"),
+             Estimate("this film (the United States)", 2026, "calibration", "two blocs on CEPII's 2019 flows, "
+                      "theta = 4, deficits purged: Nash tariffs of 25% each", 0.59,
+                      where="videos/economics/econ66/compute.py, item bloc", checked="2026-11-21"),
+             Estimate("this film (the rest of the world)", 2026, "calibration", "the same, the rest of the world",
+                      0.17, where="videos/economics/econ66/compute.py, item bloc", checked="2026-11-21"),
+         )),
 ]}
 
 # What each part shows without entering a row, and why: {part: [(what is shown, the reason)]}
 SHOWN = {
+    66: [
+        ("USTR's reciprocal tariff calculation (April 2025); Corinth and Veuger (2025)", "the hook: the formula "
+         "computed for Vietnam with both pass-through values"),
+        ("Amiti, Redding and Weinstein (2019); Fajgelbaum et al. (2020); Flaaen and Pierce (2019)", "the 2018-19 "
+         "tariffs, stated; their pass-through rows are in the passthrough dial"),
+        ("Cavallo, Llamas and Vazquez (2025)", "retail pass-through of the 2025 tariffs, entered in the passthrough "
+         "dial; the effective rate and prices computed from FRED"),
+        ("the Supreme Court's IEEPA ruling (20 February 2026)", "stated"),
+        ("Bagwell and Staiger (1999); Ossa (2014)", "trade agreements and Nash tariffs; Ossa's loss entered in the "
+         "trade_war_loss dial; the two-bloc war computed"),
+        ("Dekle, Eaton and Kortum (2008); Costinot and Rodriguez-Clare (2014)", "exact hat algebra with tariff "
+         "revenue, computed on CEPII's 2019 flows"),
+        ("Boehm, Levchenko and Pandalai-Nayar (2023); Gopinath, Itskhoki and Rigobon (2010)", "already in the "
+         "trade_elasticity and passthrough dials; stated"),
+        ("Johnson and Noguera (2012)", "value-added trade, stated"),
+        ("Farrell and Newman (2019); Clayton, Maggiori and Schreger (2023)", "weaponized interdependence and "
+         "geoeconomic power, stated; the ACR cutoff loss computed"),
+        ("Grossman, Helpman and Lhuillier (2023); Alfaro and Chor (2023, 2025)", "resilience, a simple model computed; "
+         "the reallocation stated"),
+        ("Hamilton (1791); List (1841); Mill (1848); Bastable (1891); Baldwin (1969)", "the infant-industry argument "
+         "and its tests, computed in a learning-by-doing model"),
+        ("Krueger and Tuncer (1982); Juhász (2018); Lane (2025); Juhász, Lane and Rodrik (2024)", "the old and new "
+         "evidence on industrial policy, stated"),
+        ("Kalouptsidi (2018); Barwick, Kalouptsidi and Zahur (2025)", "Chinese shipbuilding subsidies, stated"),
+        ("Brander and Spencer (1985)", "the subsidy race, computed"),
+        ("the CHIPS and Science Act (2022); the Inflation Reduction Act (2022); the IEA's solar supply chains (2022)",
+         "stated"),
+        ("IMF COFER (2026Q1); Gourinchas and Rey (2007); Gopinath et al. (2020)", "the dollar's role, stated"),
+        ("Nordhaus (2015); the EU's border carbon adjustment", "climate clubs, stated"),
+        ("FOMC Summary of Economic Projections (June 2025)", "Called it? (calls.fomc_2025), computed from PCEPILFE"),
+    ],
     65: [
         ("Keynes (1930)", "the hook's story; Called it? (calls.keynes_1930), computed from the Maddison Project and "
          "the Penn World Table"),

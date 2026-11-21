@@ -271,4 +271,88 @@
       note: "Part 65, chapters 1 and 8. Computed in your browser; nothing you do here is stored or sent.",
     });
   };
+
+  W.tradewar = function (el) {
+    // Agora's tradewar module (explainer.economics.agora.tradewar.tariff_hat), with the world aggregated to two
+    // blocs: the United States and the rest, from CEPII's 2019 flows with deficits purged (spending shares below).
+    // Exact hat algebra with tariff revenue rebated; welfare is real spending.  Best responses on a grid of tariffs
+    // from 0 to 60%.
+    var X = [[0.214084, 0.020899], [0.020899, 0.744118]];
+    function solve(tu, tr, th) {
+      var E = [X[0][0] + X[0][1], X[1][0] + X[1][1]], Y = [X[0][0] + X[1][0], X[0][1] + X[1][1]];
+      var T = [[0, tu], [tr, 0]], w = [1, 1], pin, En, num, n, i, it;
+      for (it = 0; it < 4000; it++) {
+        num = [[0, 0], [0, 0]]; pin = [[0, 0], [0, 0]]; En = [0, 0];
+        for (n = 0; n < 2; n++) {
+          var tot = 0, rev = 0;
+          for (i = 0; i < 2; i++) { num[n][i] = X[n][i] / E[n] * Math.pow(w[i] * (1 + T[n][i]), -th); tot += num[n][i]; }
+          for (i = 0; i < 2; i++) { pin[n][i] = num[n][i] / tot; rev += pin[n][i] * T[n][i] / (1 + T[n][i]); }
+          En[n] = w[n] * Y[n] / (1 - rev);
+        }
+        var w2 = [0, 0], d = 0;
+        for (i = 0; i < 2; i++) {
+          var sales = 0;
+          for (n = 0; n < 2; n++) { sales += pin[n][i] * En[n] / (1 + T[n][i]); }
+          w2[i] = w[i] * (1 + 0.3 * (sales - w[i] * Y[i]) / Y[i]);
+        }
+        var norm = (w2[0] * Y[0] + w2[1] * Y[1]) / (Y[0] + Y[1]);
+        for (i = 0; i < 2; i++) { w2[i] /= norm; d = Math.max(d, Math.abs(w2[i] - w[i])); }
+        w = w2;
+        if (d < 1e-11) { break; }
+      }
+      var out = [0, 0];
+      for (n = 0; n < 2; n++) {
+        var P = Math.pow(num[n][0] + num[n][1], -1 / th);
+        out[n] = 100 * ((En[n] / E[n]) / P - 1);
+      }
+      return out;
+    }
+    QB.widget(el, {
+      title: "A tariff war between two blocs",
+      sub: "Set America's tariff on the rest of the world, the rest's tariff on America, and how strongly trade " +
+           "responds to prices. See each side's real income, and where each side's best responses meet.",
+      panels: 2, height: 280,
+      controls: [
+        { k: "tu", label: "US tariff on the rest", min: 0, max: 0.6, step: 0.05, value: 0.25,
+          fmt: function (x) { return Math.round(100 * x) + "%"; } },
+        { k: "tr", label: "The rest's tariff on the US", min: 0, max: 0.6, step: 0.05, value: 0,
+          fmt: function (x) { return Math.round(100 * x) + "%"; } },
+        { k: "th", label: "Trade elasticity (theta)", min: 2, max: 8, step: 1, value: 4,
+          fmt: function (x) { return x.toFixed(0); } },
+      ],
+      draw: function (g, v, st) {
+        var now = solve(v.tu, v.tr, v.th);
+        st.us = now[0]; st.ro = now[1];
+        var A1 = g[0].axes({ x: [-0.5, 1.5], y: [-1.5, 1.0], title: "real income, % change", xlabel: "" });
+        A1.bars([0, 1], [st.us, st.ro], 0.6, { color: function (j) { return j ? "#F2A65A" : "#7EC8F5"; } });
+        A1.hline(0, { color: "#9AA3B2" });
+        A1.legend([["the United States", "#7EC8F5"], ["the rest of the world", "#F2A65A"]], "tr");
+        var grid = [], k;
+        for (k = 0; k <= 12; k++) { grid.push(0.05 * k); }
+        var bu = [], br = [];
+        for (k = 0; k < grid.length; k++) {
+          var bestU = -1e9, argU = 0, bestR = -1e9, argR = 0, j;
+          for (j = 0; j < grid.length; j++) {
+            var a = solve(grid[j], grid[k], v.th)[0];
+            if (a > bestU) { bestU = a; argU = grid[j]; }
+            var b = solve(grid[k], grid[j], v.th)[1];
+            if (b > bestR) { bestR = b; argR = grid[j]; }
+          }
+          bu.push(argU); br.push(argR);
+        }
+        var A2 = g[1].axes({ x: [0, 0.6], y: [0, 0.6], title: "best responses (rest's tariff up)",
+                             xlabel: "US tariff" });
+        A2.line(bu, grid, { color: "#7EC8F5", width: 2.5 });
+        A2.line(grid, br, { color: "#F2A65A", width: 2.5 });
+        A2.dots([v.tu], [v.tr], { color: function () { return "#F2C14E"; }, r: 6 });
+        st.optimal = bu[0];
+      },
+      readout: function (v, st) {
+        return [["US real income", (st.us >= 0 ? "+" : "") + st.us.toFixed(2) + "%"],
+                ["the rest's", (st.ro >= 0 ? "+" : "") + st.ro.toFixed(2) + "%"],
+                ["US optimal tariff if nobody answers", Math.round(100 * st.optimal) + "%"]];
+      },
+      note: "Part 66, chapters 2 to 4. Computed in your browser; nothing you do here is stored or sent.",
+    });
+  };
 })();

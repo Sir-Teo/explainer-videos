@@ -10,7 +10,7 @@ the series leaves out.
 Both *Parts* columns are found, not typed. *Planned* lists the parts whose entry in
 [`SYLLABUS.md`](SYLLABUS.md) names the book or paper; *Built* lists the parts whose scenes, compute step or
 README cite it (a dot: none yet). Fuller notes (editions, chapters, what each source was used for) are in each
-part's README, under *Sources*. Built so far: Parts 1–65.
+part's README, under *Sources*. Built so far: Parts 1–66.
 
 ## 1. The textbook spine
 
@@ -152,7 +152,7 @@ part's README, under *Sources*. Built so far: Parts 1–65.
 | Model or result | Paper | Planned | Built |
 |---|---|---|---|
 | equilibrium in games | Nash (1950, 1951) | 11 | 11, 53 |
-| oligopoly in quantities and prices | Cournot (1838); Bertrand (1883) | 12 | 6, 12, 43, 53, 65 |
+| oligopoly in quantities and prices | Cournot (1838); Bertrand (1883) | 12 | 6, 12, 43, 53, 65–66 |
 | demand estimation with differentiated products | Berry, Levinsohn and Pakes (1995) | 43 | 35, 42–43 |
 
 ### Information and design
@@ -252,7 +252,7 @@ part's README, under *Sources*. Built so far: Parts 1–65.
 | dynamic discrete choice | Rust (1987) | 44, 54 | 54 |
 | generalized method of moments | Hansen (1982) | 54 | 54, 56 |
 | machine learning for causal questions | Chernozhukov and others (2018); Athey and Imbens (2019) | 64 | 21, 64 |
-| publication bias in economics | Brodeur and others (2016) | 67 | · |
+| publication bias in economics | Brodeur and others (2016) | 67 | 66 |
 
 ## 3. Every built part's reference card
 
@@ -385,6 +385,8 @@ part's README, under *Sources*. Built so far: Parts 1–65.
 **Part 64, *Machines that Learn*.** Books: Susan Athey and Guido Imbens, "Machine Learning Methods That Economists Should Know About", *Annual Review of Economics* (2019); Sendhil Mullainathan and Jann Spiess, "Machine Learning: An Applied Econometric Approach", *Journal of Economic Perspectives* (2017); Trevor Hastie, Robert Tibshirani and Jerome Friedman, *The Elements of Statistical Learning* (2nd ed., 2009). Papers: Meehl (1954); Brock and Mirman (1972); Robinson (1988); Kleinberg et al. (2015, 2017, 2018); Chernozhukov et al. (2018); Wager and Athey (2018); Kitagawa and Tetenov (2018); Athey and Wager (2021); Jean et al. (2016); Gentzkow, Kelly and Taddy (2019); Obermeyer et al. (2019); Angelopoulos et al. (2023); Calvano et al. (2020); Chouldechova (2017); Zheng et al. (2022); Horton (2023); Ludwig and Mullainathan (2024).
 
 **Part 65, *The Economics of AI*.** Books: Ajay Agrawal, Joshua Gans and Avi Goldfarb (eds), *The Economics of Artificial Intelligence: An Agenda* (2019); Daron Acemoglu and Simon Johnson, *Power and Progress* (2023); David Autor, "Why Are There Still So Many Jobs?", *Journal of Economic Perspectives* (2015). Papers: Keynes (1930); Zeira (1998); Acemoglu and Restrepo (2018, 2019, 2020, 2022); David (1990); Brynjolfsson, Rock and Syverson (2021); Noy and Zhang (2023); Dell'Acqua et al. (2023); Brynjolfsson, Li and Raymond (2025); Eloundou et al. (2024); Acemoglu (2024); Aghion, Jones and Jones (2019); Nordhaus (2021); Korinek and Suh (2024); Korinek and Vipra (2025); Guerreiro, Rebelo and Teles (2022); Varian (1980).
+
+**Part 66, *Geoeconomics and Industrial Policy*.** Books: Douglas Irwin, *Clashing over Commerce: A History of US Trade Policy* (2017); Kyle Bagwell and Robert Staiger, *The Economics of the World Trading System* (2002); Henry Farrell and Abraham Newman, *Underground Empire* (2023). Papers: Brander and Spencer (1985); Bagwell and Staiger (1999); Ossa (2014); Juhász (2018); Lane (2025); Amiti, Redding and Weinstein (2019); Fajgelbaum et al. (2020); Cavallo, Llamas and Vazquez (2025); Farrell and Newman (2019); Clayton, Maggiori and Schreger (2023); Alfaro and Chor (2023); Kalouptsidi (2018); Barwick, Kalouptsidi and Zahur (2025); Juhász, Lane and Rodrik (2024).
 
 ## 4. What the series leaves out
 

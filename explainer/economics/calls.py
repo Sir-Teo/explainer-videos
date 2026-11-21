@@ -784,4 +784,15 @@ CALLS = {c.key: c for c in [
          ("W. D. Nordhaus, \"Are We Approaching an Economic Singularity? Information Technology and the Future of "
           "Economic Growth\", American Economic Journal: Macroeconomics 13(1): 299-332 (2021)",
           "BLS via FRED (OPHNFB)", "Penn World Table 11.0 (labsh)")),
+    Call("fomc_2025", 66, "the Federal Open Market Committee (median participant)", "June 2025",
+         "core PCE inflation of 3.1% in 2025 (fourth quarter to fourth quarter), up from 2.8% projected in March, "
+         "as the new tariffs raised goods prices",
+         "the committee's projections after the April 2025 tariffs, assuming that much of the tariffs would reach "
+         "consumer prices within the year",
+         "core PCE prices rose 2.8% from the fourth quarter of 2024 to the fourth quarter of 2025: goods prices "
+         "turned up, but tariffs reached shelves slowly (about a fifth by September, in Cavallo, Llamas and "
+         "Vazquez's data), and some tariffs were cut or suspended",
+         "partly right",
+         ("Board of Governors of the Federal Reserve System, Summary of Economic Projections, 18 June 2025",
+          "BEA via FRED (PCEPILFE)", "A. Cavallo, P. Llamas and F. Vazquez, NBER Working Paper 34496 (2025)")),
 ]}

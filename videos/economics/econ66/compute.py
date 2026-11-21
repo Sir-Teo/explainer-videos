@@ -154,6 +154,8 @@ def compute_scenarios() -> dict:
 def compute_bloc() -> dict:
     W = load("world")
     B = TW.two_bloc(np.array(W["Xb"]), W["us"], 4.0, grid=np.round(np.linspace(0, 0.6, 25), 4))
+    # dials.trade_war_loss: this film's rows
+    assert abs(-100 * B["nash_us"] - 0.59) < 0.01 and abs(-100 * B["nash_ro"] - 0.17) < 0.01, B["nash"]
     return _jsonable(B)
 
 
