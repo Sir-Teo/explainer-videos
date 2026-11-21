@@ -1730,3 +1730,23 @@ brackets on screen.
 | personalized pricing; algorithmic collusion | 个性化定价；算法合谋 |
 | most-favoured-customer clause; list price; negotiated discount | 最惠客户条款；目录价；协商折扣 |
 | multi-armed bandit; Thompson sampling; test-then-commit | 多臂老虎机；汤普森采样；先测试后定价 |
+
+## Part 61
+
+| English | 中文 |
+|---|---|
+| platform; two-sided market; commission; cross-side effect | 平台；双边市场；佣金（抽成）；跨边效应 |
+| surge pricing; market clearing; surge multiplier | 峰时（动态加价）定价；市场出清；加价倍数 |
+| consumer surplus; regression discontinuity | 消费者剩余；断点回归 |
+| ranking; position effect; sponsored listing; self-preferencing | 排序；位置效应；付费推广位；自我优待 |
+| reputation system; percent positive; effective percent positive | 声誉系统；好评率；有效好评率 |
+| simultaneous reveal reviews; retaliation | 双盲（同时揭晓）评价；报复性评价 |
+| generalized second-price auction; quality score; reserve price; auto-bidding | 广义第二价格拍卖；质量得分；保留价；自动出价 |
+| attribution; return on advertising; incrementality | 归因；广告回报率；增量效应 |
+| A/A test; peeking; sequential test | A/A测试；偷看（中途查看）；序贯检验 |
+| CUPED; variance reduction; pre-period covariate | CUPED；方差缩减；实验前协变量 |
+| interference; switchback experiment; two-sided randomization | 干扰效应；切换实验；双边随机化 |
+| uplift modelling; heterogeneous treatment effects; gains (Qini) curve | 增益建模；异质处理效应；增益（Qini）曲线 |
+| surrogate index; long-term effect | 替代指标指数；长期效应 |
+| gig economy; reservation wage; flexibility; worker classification | 零工经济；保留工资；灵活性；劳动者身份认定 |
+| willingness to accept; free goods; GDP-B; privacy paradox | 受偿意愿；免费商品；GDP-B；隐私悖论 |

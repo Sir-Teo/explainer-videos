@@ -10,7 +10,7 @@ the series leaves out.
 Both *Parts* columns are found, not typed. *Planned* lists the parts whose entry in
 [`SYLLABUS.md`](SYLLABUS.md) names the book or paper; *Built* lists the parts whose scenes, compute step or
 README cite it (a dot: none yet). Fuller notes (editions, chapters, what each source was used for) are in each
-part's README, under *Sources*. Built so far: Parts 1–60.
+part's README, under *Sources*. Built so far: Parts 1–61.
 
 ## 1. The textbook spine
 
@@ -28,7 +28,7 @@ part's README, under *Sources*. Built so far: Parts 1–60.
 
 | Short name | Book | Planned | Built |
 |---|---|---|---|
-| Varian | H. Varian, *Intermediate Microeconomics* (9th ed., 2014) | 2, 5–8, 10 | 2, 5–8, 10, 16 |
+| Varian | H. Varian, *Intermediate Microeconomics* (9th ed., 2014) | 2, 5–8, 10 | 2, 5–8, 10, 16, 61 |
 | Nicholson–Snyder | W. Nicholson and C. Snyder, *Microeconomic Theory* (13th ed., 2021) | 5–6 | 5–6, 8 |
 | Jones | C. I. Jones, *Macroeconomics* (6th ed., 2023) | 20 | · |
 | Blanchard | O. Blanchard, *Macroeconomics* (8th ed., 2021) | 27, 32 | 20, 24, 27–28, 32, 39 |
@@ -111,7 +111,7 @@ part's README, under *Sources*. Built so far: Parts 1–60.
 | Boardman | A. Boardman and others, *Cost-Benefit Analysis* (5th ed., 2018) | 50, 58 | 50, 58 |
 | Davis–Garcés | P. Davis and E. Garces, *Quantitative Techniques for Competition and Antitrust Analysis* (2010) | 59 | 59 |
 | Talluri–van Ryzin | K. Talluri and G. van Ryzin, *The Theory and Practice of Revenue Management* (2004) | 10, 60 | 10, 60 |
-| Kohavi–Tang–Xu | R. Kohavi, D. Tang and Y. Xu, *Trustworthy Online Controlled Experiments* (2020) | 61 | · |
+| Kohavi–Tang–Xu | R. Kohavi, D. Tang and Y. Xu, *Trustworthy Online Controlled Experiments* (2020) | 61 | 61 |
 | Lazear–Gibbs | E. Lazear and M. Gibbs, *Personnel Economics in Practice* (3rd ed., 2014) | 62 | · |
 
 ## 2. Papers and models, and where they are taught
@@ -375,6 +375,8 @@ part's README, under *Sources*. Built so far: Parts 1–60.
 **Part 59, *The Expert Witness*.** Books: Peter Davis and Eliana Garcés, *Quantitative Techniques for Competition and Antitrust Analysis* (2010); John Kwoka, *Mergers, Merger Control, and Remedies* (2015); The U.S. Merger Guidelines (2010, 2023); the European Commission's horizontal merger guidelines (2004). Papers: Harris and Simons (1989); Werden (1996); Crooke, Froeb, Tschantz and Werden (1999); Katz and Shapiro (2003); Ashenfelter et al. (2006); Abrantes-Metz et al. (2006); Whinston (2007); Farrell and Shapiro (2010); Ashenfelter and Hosken (2010); Cooper et al. (2019); Prager and Schmitt (2021); Shapiro (2021) on AT&T; Krueger and Ashenfelter (2022); Brot-Goldberg et al. (2024).
 
 **Part 60, *The Price*.** Books: Kalyan Talluri and Garrett van Ryzin, *The Theory and Practice of Revenue Management* (2004); Robert Phillips, *Pricing and Revenue Optimization* (2nd ed., 2021); Thomas Nagle and Georg Müller, *The Strategy and Tactics of Pricing*. Papers: Hall and Hitch (1939); Becker, DeGroot and Marschak (1964); Littlewood (1972); Mussa and Rosen (1978); Belobaba (1987); Smith, Leimkuhler and Darrow (1992); Gallego and van Ryzin (1994); Deneckere and McAfee (1996); Blinder et al. (1998); Bakos and Brynjolfsson (1999); Murphy et al. (2005); Blake and Coey (2014); DellaVigna and Gentzkow (2019); Calvano et al. (2020); Blake et al. (2021); Williams (2022).
+
+**Part 61, *Economics at the Platforms*.** Books: Ron Kohavi, Diane Tang and Ya Xu, *Trustworthy Online Controlled Experiments* (2020); David Evans and Richard Schmalensee, *Matchmakers: The New Economics of Multisided Platforms* (2016). Papers: Rochet and Tirole (2003); Edelman, Ostrovsky and Schwarz (2007); Varian (2007); Ostrovsky and Schwarz (2009); Blake, Nosko and Tadelis (2015); Lewis and Rao (2015); Hall, Kendrick and Nosko (2015); Tadelis (2016); Cohen et al. (2016); Einav, Farronato and Levin (2016); Chen et al. (2019); Athey and Luca (2019); Athey, Chetty, Imbens and Kang (2019); Brynjolfsson, Collis and Eggers (2019); Fradkin, Grewal and Holtz (2021); Bajari et al. (2023).
 
 ## 4. What the series leaves out
 

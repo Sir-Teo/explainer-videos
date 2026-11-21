@@ -430,4 +430,82 @@
       note: "Part 60, chapters 4 to 6. Computed in your browser; nothing you do here is stored or sent.",
     });
   };
+  // ---- Part 61: economics at the platforms --------------------------------------------------------------------
+  W.platform = function (el) {
+    // Agora's platform module (explainer.economics.agora.platform.commission_market): riders (1,000 an hour who
+    // might ride) ride with logit probability in a_r - b_r fare - w_r wait; the wait, in minutes, is
+    // w_min + w_k u / (1 - u) with drivers' utilization u = trips / (drivers x cap); drivers (2,000 who might
+    // drive) drive with logit probability in (hourly earnings - w0) / s_d, earnings (1 - c) x fare x trips per
+    // driver.  For each commission c the equilibrium is found by nested bisection, as in the film's chapter two.
+    var P = { a_r: 3.5, b_r: 0.08, w_r: 0.8, riders: 1000, drivers: 2000, s_d: 2.0, cap: 2.0, w_min: 2.0, w_k: 3.0 };
+    function lg(x) { x = Math.max(-50, Math.min(50, x)); return 1 / (1 + Math.exp(-x)); }
+    function wait(t, D) { var u = t / (D * P.cap); return P.w_min + P.w_k * u / (1 - u); }
+    function trips(D, fare) {
+      var lo = 0, hi = D * P.cap * (1 - 1e-9);
+      for (var i = 0; i < 60; i++) {
+        var t = (lo + hi) / 2, f = t - P.riders * lg(P.a_r - P.b_r * fare - P.w_r * wait(t, D));
+        if (f > 0) { hi = t; } else { lo = t; }
+      }
+      return (lo + hi) / 2;
+    }
+    function market(c, fare, w0) {
+      var lo = 1e-3, hi = P.drivers;
+      for (var i = 0; i < 60; i++) {
+        var D = (lo + hi) / 2, e = (1 - c) * fare * trips(D, fare) / D;
+        var g = D - P.drivers * lg((e - w0) / P.s_d);
+        if (g > 0) { hi = D; } else { lo = D; }
+      }
+      var Dm = (lo + hi) / 2, t = trips(Dm, fare), w = wait(t, Dm), e2 = (1 - c) * fare * t / Dm;
+      var ur = P.a_r - P.b_r * fare - P.w_r * w;
+      return { c: c, trips: t, drivers: Dm, wait: w, earnings: e2, platform: c * fare * t,
+               riders: P.riders * Math.log(1 + Math.exp(ur)) / P.b_r,
+               driversS: P.drivers * P.s_d * Math.log(1 + Math.exp((e2 - w0) / P.s_d)) };
+    }
+    QB.widget(el, {
+      title: "Set the commission",
+      sub: "Run the Island's ride-hailing app. Choose the share of each fare the platform keeps, and the fare itself; " +
+           "drivers drive when their hourly pay beats their other work, riders ride when the wait is short. Find " +
+           "the commission that earns the platform the most, then look at what riders and drivers lose.",
+      panels: 2, height: 250,
+      controls: [
+        { k: "c", label: "Commission", min: 0, max: 60, step: 1, value: 20, fmt: function (x) { return x + "%"; } },
+        { k: "fare", label: "Fare per trip", min: 10, max: 40, step: 1, value: 20,
+          fmt: function (x) { return "$" + x; } },
+        { k: "w0", label: "Drivers' other work pays (an hour)", min: 10, max: 30, step: 1, value: 20,
+          fmt: function (x) { return "$" + x; } },
+      ],
+      draw: function (g, v, st) {
+        var cs = [], pf = [], rd = [], dr = [], tr = [], wt = [];
+        for (var k = 0; k <= 60; k += 1) {
+          var m = market(k / 100, v.fare, v.w0);
+          cs.push(k); pf.push(m.platform); rd.push(m.riders); dr.push(m.driversS); tr.push(m.trips); wt.push(m.wait);
+        }
+        var best = 0;
+        for (var j = 1; j < pf.length; j++) { if (pf[j] > pf[best]) { best = j; } }
+        st.m = market(v.c / 100, v.fare, v.w0); st.best = cs[best]; st.bestTake = pf[best];
+        var top = Math.max(Math.max.apply(null, rd), Math.max.apply(null, pf), 1) * 1.1;
+        var A = g[0].axes({ x: [0, 60], y: [0, top], title: "dollars an hour, by commission (%)",
+                            xlabel: "commission, %" });
+        A.line(cs, rd, { color: "#7EC8F5", width: 2.2 });
+        A.line(cs, dr, { color: "#F2C14E", width: 2.2 });
+        A.line(cs, pf, { color: "#C9A0FF", width: 2.6 });
+        A.vline(v.c, { color: "#FFFFFF", dash: [4, 4] });
+        A.legend([["riders' surplus", "#7EC8F5"], ["drivers' surplus", "#F2C14E"], ["platform's take", "#C9A0FF"]]);
+        var tt = Math.max(Math.max.apply(null, tr), 1) * 1.1;
+        var B = g[1].axes({ x: [0, 60], y: [0, tt], title: "trips an hour, by commission (%)",
+                            xlabel: "commission, %" });
+        B.line(cs, tr, { color: "#7FD1B9", width: 2.4 });
+        B.vline(v.c, { color: "#FFFFFF", dash: [4, 4] });
+      },
+      readout: function (v, st) {
+        var m = st.m;
+        return [["trips an hour, drivers driving", m.trips.toFixed(0) + ", " + m.drivers.toFixed(0)],
+                ["the wait, drivers' hourly pay", m.wait.toFixed(1) + " min, $" + m.earnings.toFixed(2)],
+                ["the platform's take an hour", "$" + m.platform.toFixed(0)],
+                ["riders' and drivers' surplus an hour", "$" + m.riders.toFixed(0) + ", $" + m.driversS.toFixed(0)],
+                ["the platform's best commission at this fare", st.best + "% ($" + st.bestTake.toFixed(0) + ")"]];
+      },
+      note: "Part 61, chapter 2. Computed in your browser; nothing you do here is stored or sent.",
+    });
+  };
 })();

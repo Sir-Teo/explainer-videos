@@ -187,4 +187,48 @@ PARTS = [
         also=(("Agora's revenue module", "explainer/economics/agora/revenue.py"),
               ("The Data Room: food prices", "explainer/economics/data")),
     ),
+    Part(
+        n=61, level="U", widget="platform", prereq=(16, 17, 43, 44, 45, 60),
+        question="What do the economists inside technology companies do?",
+        story="On New Year's Eve 2014 a fault switches off a ride-hailing app's surge pricing in New York for "
+              "twenty-six minutes, and about a quarter of requests are completed, against nearly all after a sold-out "
+              "concert with surge working. The Island's app has its own New Year's Eve: with surge off about 27% of "
+              "requests are filled at the peak, with it on all of them. A platform is a designed market; the viewer "
+              "sets the commission in a two-sided market (30% earns the platform the most, while riders and drivers "
+              "lose far more than it gains). Surge as market clearing and the consumer surplus its random prices "
+              "reveal; ranking and the value of position; ratings that pile up at 100% and the effective percent "
+              "positive; quality-scored ad auctions and reserves; an ad dashboard that reports +1,238% where the "
+              "truth is -64%, eBay's experiment and Lewis and Rao's arithmetic. After an intermission of online "
+              "sales' share of American retail, experiments at scale (peeking, CUPED), interference and switchbacks, "
+              "uplift and the surrogate index, the value of flexible work and the law, what free search is worth, "
+              "two new Dials, economists in tech, Google's advice on measuring advertising's return, and markets of "
+              "agents.",
+        handoff="Part 62 goes inside the firm: management practices, personnel economics, executive pay and "
+                "governance.",
+        outside="Part 15: public goods; Part 16: auctions and reserves; Part 17: market design; Part 43: demand "
+                "estimation; Part 44: two-sided platforms; Part 45: fairness; Part 60: pricing and interference; "
+                "Statistics, Built: experiments, sequential tests and heterogeneous effects.",
+        objectives={
+            "U": ["Explain how surge pricing clears a market, and who gains and loses.",
+                  "Explain why a platform's best commission differs from the one that maximizes total surplus.",
+                  "Explain why ratings inflate and how a reputation system can be redesigned."],
+            "M": ["Price a quality-scored generalized second-price auction.",
+                  "Show why attributed and regression returns on advertising overstate the truth, and design the "
+                  "experiment that measures it.",
+                  "Show how peeking inflates false positives and how a pre-period covariate reduces variance."],
+            "D": ["Show how interference biases an A/B test in a two-sided market, and compare switchback and "
+                  "cluster designs.",
+                  "Target a treatment by estimated effects, and estimate a long-term effect with a surrogate index."],
+            "I": ["Design the experiment for a platform change, with its guardrails, and say what could bias it."],
+        },
+        results=[
+            ("Surge clears the market", r"D\,e^{-\beta(m-1)} = S_0 + s\,(m-1)"),
+            ("Quality-scored second price", r"p_k = \frac{b_{k+1} q_{k+1}}{q_k}"),
+            ("CUPED", r"\operatorname{Var}(\hat\tau_{\mathrm{CUPED}}) = (1 - \rho^2)\operatorname{Var}(\hat\tau)"),
+            ("The platform's commission", r"\frac{d\ln T}{d\ln c} = -1"),
+        ],
+        U=(0, 1, 2, 3, 4, 5, 7, "s09_intermission", 11, 12), D=(9, 10, 15), I=(6, 8, 14),
+        also=(("Agora's platform module", "explainer/economics/agora/platform.py"),
+              ("The Data Room: e-commerce's share of retail", "explainer/economics/data")),
+    ),
 ]
