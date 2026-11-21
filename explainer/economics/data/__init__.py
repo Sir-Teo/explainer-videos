@@ -1318,6 +1318,20 @@ DATASETS = {
         "sha256": "71a7e5f82d324fcb2923318a28706f430c76860603c9d9bc898d5e677eefe988",
         "files": ("fao_fish_stocks.csv",),
     },
+    "transistors": {
+        "title": "Transistors per microprocessor, the largest each year, 1971-2021 (Moore's law)",
+        "publisher": "Karl Rupp, Microprocessor Trend Data; Our World in Data (compilation)",
+        "citation": "Rupp (2022), Microprocessor Trend Data, processed by Our World in Data, grapher "
+                    "transistors-per-microprocessor (last updated 2023-03-09), retrieved 2026-11-21",
+        "short": "Rupp (2022), via Our World in Data",
+        "url": "https://ourworldindata.org/grapher/transistors-per-microprocessor.csv?v=1&csvType=full&"
+               "useColumnShortNames=true",
+        "licence": "CC BY 4.0 (Our World in Data); Rupp's data CC BY 4.0",
+        "units": "transistors on the largest microprocessor of the year",
+        "vintage": "2026-11-21",
+        "sha256": "2c9fa190515619cfd5c5a929139c27fc120dca9e529cad751e3eb89a5b53ee04",
+        "files": ("transistors.csv",),
+    },
     "oil_production": {
         "title": "Oil production, the world and the United States, 1900-2025, in terawatt-hours",
         "publisher": "Energy Institute (Statistical Review of World Energy 2026); Etemad and Luciani (1991); U.S. EIA; "
@@ -3850,6 +3864,29 @@ def oil_production(entity: str = "United States") -> dict:
     return {"year": [int(r["year"]) for r in rows], "twh": [float(r["twh"]) for r in rows]}
 
 
+def transistors() -> dict:
+    """The number of transistors on the largest microprocessor of each year, 1971-2021 (Rupp's data via Our World in
+    Data; some years are missing): ``{"year": [...], "transistors": [...]}``."""
+    rows = _read(HERE / "transistors.csv")
+    return {"year": [int(r["year"]) for r in rows], "transistors": [float(r["transistors"]) for r in rows]}
+
+
+def refresh_transistors() -> None:
+    d = DATASETS["transistors"]
+    raw = RAW / "transistors-per-microprocessor.csv"
+    sha = _download(d["url"], raw)
+    if d.get("sha256") and sha != d["sha256"]:
+        print(f"transistors: the download differs from the recorded vintage ({sha[:12]} vs {d['sha256'][:12]})")
+    print(f"transistors: sha256 {sha}")
+    with open(raw, newline="", encoding="utf-8") as f:
+        rows = [r for r in csv.DictReader(f) if r["entity"] == "World" and r["transistors"]]
+    with open(HERE / "transistors.csv", "w", newline="", encoding="utf-8") as f:
+        w = csv.writer(f)
+        w.writerow(["year", "transistors"])
+        for r in rows:
+            w.writerow([r["year"], _fmt(round(float(r["transistors"]), 1))])
+
+
 def refresh_oil_production() -> None:
     d = DATASETS["oil_production"]
     raw = RAW / "oil-production-by-country.csv"
@@ -3884,7 +3921,8 @@ REFRESH = {"draft1970": refresh_draft1970, "ajr": refresh_ajr, "maddison2023": r
            "blp_cars": refresh_blp_cars, "rust_buses": refresh_rust_buses,
            "noaa_co2": refresh_noaa_co2, "hadcrut5": refresh_hadcrut5, "gcp_co2": refresh_gcp_co2,
            "era5_temp": refresh_era5_temp, "wdi_gdp_kd": refresh_wdi_gdp_kd, "solar_pv": refresh_solar_pv,
-           "fao_fish": refresh_fao_fish, "oil_production": refresh_oil_production}
+           "fao_fish": refresh_fao_fish, "oil_production": refresh_oil_production,
+           "transistors": refresh_transistors}
 
 
 def main() -> None:

@@ -73,8 +73,8 @@ class Market(VoiceoverScene):
                                                                                                     buff=0.1),
             label(rf"middle: \ +\${S['new_full'] - S['old_full']:,.0f}".replace(",", "{,}"), font_size=16,
                   color=NEW).next_to(mid, UP, buff=0.15),
-            label(rf"nothing above \${S['diff_zero_at'] / 1000:.0f}k", font_size=16, color=NEW).next_to(end, UP,
-                                                                                                    buff=0.25),
+            label(rf"nothing above \${S['diff_zero_at'] / 1000:.0f}k", font_size=16, color=NEW).next_to(end, UR,
+                                                                                                    buff=0.12),
         )
         side = VGroup(
             label(r"the gain is largest \\ where the old credit \\ was smallest", font_size=19, color=WHITE),

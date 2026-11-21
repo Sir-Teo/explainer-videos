@@ -45,6 +45,7 @@ class Margins(VoiceoverScene):
                          for a in (ax, bx)])
         side = VGroup(
             label(r"the poorest families \\ often file no tax \\ return at all", font_size=17, color=WHITE),
+            label(r"2021: \ a simplified \\ portal for them", font_size=17, color=GREY_A),
             label(r"on the Island \\ the missing are drawn \\ at random: \ the real \\ loss is likely larger",
                   font_size=17, color=HOLD),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.4).to_edge(RIGHT, buff=0.3)
@@ -53,7 +54,8 @@ class Margins(VoiceoverScene):
             "Textbook pictures assume that everyone eligible for a payment receives it. They do not. <bookmark "
             "mark='a'/> A credit paid through the tax system reaches families that file a tax return, and the "
             "families with the lowest incomes are the most likely not to file at all, because they owe nothing. "
-            "In 2021 the tax authority built a simplified portal for them. <bookmark mark='b'/> On the Island, "
+            "<bookmark mark='a2'/> In 2021 the tax authority built a simplified portal for them. <bookmark mark='b'/> "
+            "On the Island, "
             "if every family claims, child poverty under the allowance is "
             f"{100 * tp['at_high']:.1f} percent; <bookmark mark='c'/> if only eighty-five percent claim, it is "
             f"{100 * tp['at_low']:.1f}. <bookmark mark='d'/> The cost falls too, from {tc['at_high']:,.0f} dollars "
@@ -64,6 +66,8 @@ class Margins(VoiceoverScene):
             self.play(FadeIn(ax), FadeIn(bx), FadeIn(old), FadeIn(old_l), FadeIn(tag), FadeIn(names))
             vo.wait_until("a")
             self.play(FadeIn(side[0]))
+            vo.wait_until("a2")
+            self.play(FadeIn(side[1]), Indicate(names, color=WHITE, scale_factor=1.05))
             vo.wait_until("b")
             self.play(GrowFromEdge(pb[0][0], DOWN), FadeIn(pb[0][1]))
             vo.wait_until("c")
@@ -72,7 +76,7 @@ class Margins(VoiceoverScene):
             self.play(GrowFromEdge(cb[0][0], DOWN), FadeIn(cb[0][1]), GrowFromEdge(cb[1][0], DOWN), FadeIn(cb[1][1]),
                       run_time=1.5)
             vo.wait_until("e")
-            self.play(FadeIn(side[1], shift=UP * 0.1))
+            self.play(FadeIn(side[2], shift=UP * 0.1))
         self.clear_scene()
 
     def timing(self):
@@ -103,7 +107,7 @@ class Margins(VoiceoverScene):
         l_new = label(rf"the allowance: \\ \${full / 12:,.0f} every month".replace(",", "{,}"), font_size=16,
                       color=NEW).next_to(ax_new, RIGHT, buff=0.3)
         sch = label(r"schematic: \ when the money arrives in one year", font_size=13, color=GREY_B).to_corner(
-            DL, buff=0.3)
+            UL, buff=0.3)
         risk = label(r"the catch: \ monthly payments rest on last year's income, \ and someone must bear the "
                      r"overpayments", font_size=18, color=HOLD).to_edge(DOWN, buff=0.15)
         with self.voiceover(

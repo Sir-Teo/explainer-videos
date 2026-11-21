@@ -40,8 +40,9 @@ class Hook(VoiceoverScene):
             "On the fifteenth of July 2021, most American families with children received a payment they had never "
             "had before. <bookmark mark='a'/> Three hundred dollars for each child under six, two hundred and fifty "
             "for each child from six to seventeen, every month. <bookmark mark='b'/> The rest came at tax time: "
-            f"{T['young']:,} dollars a year for a young child and {T['older']:,} for an older one, even for families "
-            "with no earnings at all, who had received little or nothing from the old credit. <bookmark mark='c'/> "
+            f"{T['young']:,} dollars a year for a young child and {T['older']:,} for an older one, <bookmark "
+            "mark='b2'/> even for families with no earnings at all, who had received little or nothing from the old "
+            "credit. <bookmark mark='c'/> "
             "The payments came for six months. <bookmark mark='d'/> In January 2022 they stopped: the law that "
             "created them lapsed, and Congress did not renew it."
         ) as vo:
@@ -50,6 +51,8 @@ class Hook(VoiceoverScene):
             self.play(FadeIn(notes[0], shift=UP * 0.1))
             vo.wait_until("b")
             self.play(FadeIn(notes[1], shift=UP * 0.1))
+            vo.wait_until("b2")
+            self.play(Indicate(notes[1], color=NEW, scale_factor=1.04))
             vo.wait_until("c")
             self.play(LaggedStart(*[FadeIn(c, shift=UP * 0.1) for c in coins[1:6]], lag_ratio=0.4), run_time=3.0)
             vo.wait_until("d")

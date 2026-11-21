@@ -166,7 +166,8 @@ class Outro(VoiceoverScene):
 
     def next_part(self):
         hc = history_card(r"the 1950s", r"Richard Bellman at RAND", r"names his method for multistage decisions "
-                          r"`dynamic programming': \ a name, \ he later wrote, \ that no one could object to",
+                          r"`dynamic programming': \ a name, \ he later wrote, \ not even a Congressman could "
+                          r"object to",
                           color=E.ACCENT, width=10.4, font_size=24)
         nxt = VGroup(label(r"Next: \ Part 51 \ $\cdot$ \ Act X, \ The Graduate Core", font_size=30, color=GREY_B),
                      label(r"Computing Economies", font_size=46),
@@ -184,7 +185,7 @@ class Outro(VoiceoverScene):
         with self.voiceover(
             "That completes Act nine, the fields, and the course's first capstone. Next comes the graduate core. "
             "<bookmark mark='a'/> In the early 1950s at RAND, Richard Bellman needed a name for his work on "
-            "decisions made in stages, a name, he later wrote, that not even a hostile official could object to. "
+            "decisions made in stages, a name, he later wrote, that not even a Congressman could object to. "
             "He chose dynamic programming. <bookmark mark='b'/> Part fifty-one solves economies that have no "
             "formula: the Bellman equation, value and policy iteration, endogenous grids, <bookmark mark='c'/> "
             "and the checks that tell you whether a computed answer is right."

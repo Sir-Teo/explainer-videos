@@ -95,7 +95,7 @@ class Practice(VoiceoverScene):
                                                                                     buff=0.1))
         cap = label(r"temporary payments: \\ effects too small \\ to detect", font_size=12, color=GREY_A).next_to(
             ax, RIGHT, buff=0.35)
-        tag = published_tag(r"Corinth et al. (2021); \ Ananat et al. (2022); \ Baker et al. (2023)", corner=DL,
+        tag = published_tag(r"Corinth et al. (2021); \ Ananat et al. (2022); \ Baker et al. (2023)", corner=DR,
                             font_size=11)
         with self.voiceover(
             "Called it? A forecast about this very policy. <bookmark mark='a'/> In September 2021, while the "

@@ -34,6 +34,8 @@ class PlayIt(VoiceoverScene):
                   .replace("6,600", "6{,}600"), font_size=18, color=WHITE),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.18).next_to(opts, DOWN, buff=0.55)
         ring = countdown().scale(0.6).to_edge(DOWN, buff=0.35)
+        why = label(r"a memo is easier to bend towards what you already believe \\ than to write honestly: \ "
+                    r"write your advice down first", font_size=22, color=GREY_A).move_to(UP * 0.6)
         with self.voiceover(
             "Before the analysis, your advice. Write it down now, because a memo is easier to bend towards what "
             "you already believe than to write honestly, and the only defence is to know what you believed before "
@@ -45,7 +47,10 @@ class PlayIt(VoiceoverScene):
             "the bottom and a somewhat smaller reward for working. Choose."
         ) as vo:
             self.play(FadeIn(head))
-            for mk, o in zip("abcd", opts):
+            self.play(FadeIn(why, shift=UP * 0.1))
+            vo.wait_until("a")
+            self.play(FadeOut(why), FadeIn(opts[0], shift=UP * 0.1))
+            for mk, o in zip("bcd", opts[1:]):
                 vo.wait_until(mk)
                 self.play(FadeIn(o, shift=UP * 0.1))
             vo.wait_until("e")
