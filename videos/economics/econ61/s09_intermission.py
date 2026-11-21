@@ -42,8 +42,8 @@ class Intermission(SoundScene):
             m.ft = e["t"]
             m.set_opacity(0.0)
             marks.add(m)
-        key = label(r"the share of American retail sold online, \ quarterly, \ seasonally adjusted", font_size=17,
-                    color=ECOM).move_to(ax.ax.c2p(2008, top * 0.9))
+        key = label(r"the share of American retail \\ sold online, \ quarterly, \\ seasonally adjusted", font_size=17,
+                    color=ECOM).move_to(ax.ax.c2p(2003.3, top * 0.78))
         val = DecimalNumber(float(film["share"][0]), num_decimal_places=1, font_size=48, color=E.ACCENT,
                             unit=r"\%").move_to(ax.ax.c2p(2023, top * 0.3))
 

@@ -171,7 +171,8 @@ class AdWork(VoiceoverScene):
                        fill_opacity=0.85).move_to(ax.ax.c2p(n2 / 2, 0.28))
         l1 = label(rf"to detect any effect: \ {n1:.1f} million", font_size=17, color=TEST).next_to(b1, RIGHT,
                                                                                                    buff=0.15)
-        l2 = label(rf"to tell a 25\% return from zero: \ {n2:.0f} million", font_size=17, color=AD).move_to(b2)
+        l2 = label(rf"to tell a 25\% return from zero: \ {n2:.0f} million", font_size=17, color=AD).next_to(
+            b2, UP, buff=0.1).align_to(b2, LEFT)
         facts = VGroup(
             label(r"a campaign spends 10 cents a person; \ a 25\% return means 12.5 cents of extra sales", font_size=20,
                   color=WHITE),

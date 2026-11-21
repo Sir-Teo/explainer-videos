@@ -115,7 +115,7 @@ class CausalML(VoiceoverScene):
         chain = flow_chain([(r"the discount", TEST), (r"orders in the first month", RIDER),
                             (r"sessions in the second month", SELL), (r"orders over the year", TRUE)],
                            box_w=2.7, box_h=1.0, buff=0.5, font_size=19).to_edge(UP, buff=0.6)
-        ax = plane([-0.6, 2.6], [-6, 45], center=LEFT * 3.0 + DOWN * 1.3, x_length=6.0, y_length=3.6, xticks=[],
+        ax = plane([-0.6, 2.6], [-6, 45], center=LEFT * 3.0 + DOWN * 0.85, x_length=6.0, y_length=3.2, xticks=[],
                    yticks=[0, 20, 40], ylabel=r"effect, \ \%", yfmt=lambda v: f"{v:.0f}", font_size=14)
         vals = [100 * L["short"], 100 * L["surrogate"], 100 * L["truth"]]
         cols = (RIDER, TEST, TRUE)

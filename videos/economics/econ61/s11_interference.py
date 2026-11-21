@@ -92,8 +92,8 @@ class Interference(VoiceoverScene):
         labs = VGroup(*[label(n, font_size=16, color=c).next_to(ax.ax.c2p(k, 0), DOWN, buff=0.12)
                         for k, (n, c) in enumerate(zip(names, cols))])
         tl = DashedLine(ax.ax.c2p(-0.5, truth), ax.ax.c2p(2.5, truth), color=TRUE, stroke_width=2.4)
-        tll = label(rf"the truth: \ +{truth:.1f}", font_size=16, color=TRUE).next_to(ax.ax.c2p(2.5, truth), UP,
-                                                                                     buff=0.08).shift(LEFT * 0.6)
+        tll = label(rf"the truth \\ +{truth:.1f}", font_size=15, color=TRUE).next_to(ax.ax.c2p(1.5, truth), UP,
+                                                                                   buff=0.08)
         side = VGroup(
             label(rf"by user: \ +{vals[0]:.1f}, \ {S['naive_ratio']:.1f} times the truth", font_size=20, color=SURGE),
             label(rf"switchback: \ +{vals[1]:.1f}, \ give or take {2 * sds[1]:.1f}", font_size=20, color=TEST),

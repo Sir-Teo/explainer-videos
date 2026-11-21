@@ -16,14 +16,14 @@ class Reputation(VoiceoverScene):
         h1, h2 = np.array(R["pp_hist"], float), np.array(R["epp_hist"], float)
         e1, e2 = np.linspace(0.9, 1.0, 21), np.linspace(0.4, 0.65, 21)
         top = max(h1.max(), h2.max()) * 1.15
-        ax1 = plane([0.9, 1.0], [0, top], center=LEFT * 4.1 + UP * 0.2, x_length=4.2, y_length=3.6,
+        ax1 = plane([0.9, 1.0], [0, top], center=LEFT * 4.55 + UP * 0.2, x_length=3.5, y_length=3.6,
                     xticks=[0.9, 0.95, 1.0], yticks=[], xlabel=r"percent positive", ylabel=r"sellers",
                     xfmt=lambda v: f"{100 * v:.0f}\\%", font_size=14)
-        ax2 = plane([0.4, 0.65], [0, top], center=LEFT * 0.0 + UP * 0.2, x_length=4.2, y_length=3.6,
-                    xticks=[0.4, 0.5, 0.6], yticks=[], xlabel=r"effective percent positive", ylabel=r"sellers",
+        ax2 = plane([0.4, 0.65], [0, top], center=LEFT * 0.6 + UP * 0.2, x_length=3.5, y_length=3.6,
+                    xticks=[0.4, 0.5, 0.6], yticks=[], xlabel=r"effective percent positive", ylabel="",
                     xfmt=lambda v: f"{100 * v:.0f}\\%", font_size=14)
-        b1 = bars(ax1, (e1[:-1] + e1[1:]) / 2, h1, [SELL] * 20, width=0.0045)
-        b2 = bars(ax2, (e2[:-1] + e2[1:]) / 2, h2, [DRIVER] * 20, width=0.011)
+        b1 = bars(ax1, (e1[:-1] + e1[1:]) / 2, h1, [SELL] * 20, width=0.0042)
+        b2 = bars(ax2, (e2[:-1] + e2[1:]) / 2, h2, [DRIVER] * 20, width=0.0105)
         side = VGroup(
             label(r"2,000 Island sellers, \\ each good 80 to 99\% of the time".replace(",", "{,}"), font_size=18,
                   color=WHITE),
@@ -35,8 +35,8 @@ class Reputation(VoiceoverScene):
             label(rf"correlation with true quality: \\ {R['corr_pp']:.2f} \ against \ {R['corr_epp']:.2f}",
                   font_size=19, color=WHITE),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.3).to_edge(RIGHT, buff=0.35)
-        if side.width > 4.3:
-            side.width = 4.3
+        if side.width > 4.2:
+            side.width = 4.2
             side.to_edge(RIGHT, buff=0.35)
         foot = label(r"eBay's sellers (Nosko and Tadelis): \ percent positive, \ median 100\%, \ mean 99.3\%; \ "
                      r"effective percent positive, \ median 67\%, \ mean 64\%", font_size=18,

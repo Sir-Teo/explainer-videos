@@ -72,7 +72,7 @@ class Ranking(VoiceoverScene):
             num = label(rf"{k + 1}", font_size=17, color=GREY_A)
             rows.add(VGroup(num, bar))
         for k, r_ in enumerate(rows):
-            r_[0].move_to([-6.2, 2.4 - k * 0.5, 0])
+            r_[0].move_to([-5.2, 2.4 - k * 0.5, 0])
             r_[1].next_to(r_[0], RIGHT, buff=0.3)
         head = label(r"relevance of the listing in each position", font_size=18, color=GREY_A).next_to(
             rows, UP, buff=0.25).align_to(rows, LEFT)
