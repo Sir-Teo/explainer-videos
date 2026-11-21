@@ -51,8 +51,8 @@ class Design(VoiceoverScene):
         gap = DoubleArrow(ax.ax.c2p(2.62, 6.9), ax.ax.c2p(2.62, 7.45), buff=0, color=WHITE, stroke_width=2,
                           tip_length=0.14)
         side = VGroup(
-            label(r"parallel trends: \\ without the charge, \\ the tunnels would have moved \\ like the other crossings",
-                  font_size=17, color=CTRL),
+            label(r"parallel trends: \\ without the charge, \\ the tunnels would have moved \\ like the other "
+                  r"crossings", font_size=17, color=CTRL),
             label(r"the placebo years test it: \\ if the tunnels were already \\ drifting, \ the gap must be cut",
                   font_size=17, color=GREY_A),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.4).next_to(ax.ax, RIGHT, buff=0.5)

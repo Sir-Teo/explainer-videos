@@ -46,10 +46,10 @@ class Hook(VoiceoverScene):
                           width=11.6, font_size=22).to_edge(UP, buff=0.5)
         rows = VGroup(
             label(r"the first charge for entering a downtown in the United States", font_size=22, color=GREY_A),
-            label(rf"about {E['weekday_all'] / 1000:.0f},000 vehicles still enter on an average weekday", font_size=22,
-                  color=DATA),
-            label(rf"the state: \ {O['fewer_share'] * 100:.0f}\% fewer vehicles in the first year, \ \${O['revenue_m']} "
-                  r"million for transit", font_size=22, color=BUS),
+            label(rf"about {E['weekday_all'] / 1000:.0f},000 vehicles still enter on an average weekday",
+                  font_size=22, color=DATA),
+            label(rf"the state: \ {O['fewer_share'] * 100:.0f}\% fewer vehicles in the first year, \ "
+                  rf"\${O['revenue_m']} million for transit", font_size=22, color=BUS),
             label(r"the question of this part: \ what did it do, \ and how would an economist find out?",
                   font_size=24, color=E.ACCENT),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.32).next_to(hc, DOWN, buff=0.6)

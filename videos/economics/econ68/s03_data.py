@@ -92,7 +92,7 @@ class Data(VoiceoverScene):
         sl = label(r"the charge", font_size=15, color=TOLL).next_to(ax.ax.c2p(2025.01, 125), UP, buff=0.05)
         lt = path(ax, xs, X["treated"], TOLL, 3.0, smooth=False)
         lc = path(ax, xs, X["control"], CTRL, 3.0, smooth=False)
-        key = legend_rows([(TOLL, "the two tunnels into the zone, \ toward Manhattan"),
+        key = legend_rows([(TOLL, r"the two tunnels into the zone, \ toward Manhattan"),
                            (CTRL, f"{X['n_controls']} other crossings, \\ both ways")], font_size=15).next_to(
             ax.ax, RIGHT, buff=0.3).shift(UP * 1.2)
         if key.get_right()[0] > 6.9:
