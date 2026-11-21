@@ -53,7 +53,11 @@ class Media(VoiceoverScene):
                   rf"{P_['eC']:.2f} \ $\Rightarrow$ \ $f$ = {100 * P_['rate']:.0f}\%", font_size=21, color=VOTER),
             label(rf"Fox News: \ {T['pers_lo']} to {T['pers_hi']}\% of viewers who were not already Republican, \ "
                   r"depending on the audience measure", font_size=21, color=E.ACCENT),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.4).next_to(eq, DOWN, buff=0.55)
+        ).arrange(DOWN, aligned_edge=LEFT, buff=0.32).next_to(eq, DOWN, buff=0.45)
+        dy, de = P_["yT"] - P_["yC"], P_["eT"] - P_["eC"]
+        work = MathTex(rf"f = \frac{{{dy:.3f}}}{{{de:.2f}}}\cdot\frac{{1}}{{1 - {P_['yC']:.2f}}} = {dy / de:.2f}"
+                       rf"\times {1 / (1 - P_['yC']):.0f} = {P_['rate']:.2f}", font_size=34,
+                       color=VOTER).next_to(rows, DOWN, buff=0.45)
         tag = published_tag(tables.MEDIA_47.tag, corner=DR, font_size=11)
         with self.voiceover(
             "A small change in votes can hide a large effect on the people who watched. DellaVigna and Kaplan "
@@ -71,6 +75,10 @@ class Media(VoiceoverScene):
             for mk, r_ in zip("abcd", rows):
                 vo.wait_until(mk)
                 self.play(FadeIn(r_, shift=UP * 0.1))
+                if mk == "a":
+                    self.play(Indicate(eq[0][2:7], color=WHITE))
+                if mk == "c":
+                    self.play(Write(work), run_time=2.0)
         self.clear_scene()
 
     def polarization(self):

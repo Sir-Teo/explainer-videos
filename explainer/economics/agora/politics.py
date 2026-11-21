@@ -241,7 +241,8 @@ def road_projects(n: int = 600, base: float = 0.28, sd: float = 0.18, audit_effe
     perceived = 0.4 + perception_slope * true + 0.2 * rng.standard_normal(n)
     return {"control": float(measured[~audit & ~meet].mean()), "audit": float(b[1]), "audit_se": float(se[1]),
             "meetings": float(b[2]), "meetings_se": float(se[2]), "mean": float(measured.mean()),
-            "perception_corr": float(np.corrcoef(perceived, true)[0, 1])}
+            "perception_corr": float(np.corrcoef(perceived, true)[0, 1]),
+            "true": np.round(true[:300], 4).tolist(), "perceived": np.round(perceived[:300], 4).tolist()}
 
 
 # ---------------------------------------------------------------------------------------------------------------

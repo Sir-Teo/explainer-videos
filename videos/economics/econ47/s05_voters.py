@@ -38,6 +38,14 @@ class Voters(VoiceoverScene):
             label(r"the middle group \\ has twice the \\ swing voters", font_size=18, color=VOTER),
             label(r"both parties offer \\ it the most", font_size=18, color=E.ACCENT),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.3).to_edge(RIGHT, buff=0.35)
+        xs = np.linspace(-5.2, 1.0, 21)
+        line = Line([-5.5, 0.0, 0], [1.3, 0.0, 0], color=GREY_B, stroke_width=2)
+        voters = VGroup(*[Dot([x, 0.0, 0], radius=0.07, color=GREY_A) for x in xs])
+        med = voters[10].get_center()
+        pa = label(r"party A", font_size=18, color=POL).move_to([-5.2, 0.45, 0])
+        pb = label(r"party B", font_size=18, color=LOBBY).move_to([1.0, 0.95, 0])
+        strip = VGroup(line, voters, pa, pb)
+        swing_ix = (3, 7, 9, 10, 11, 13, 16)
         tag = island_tag(corner=DR, font_size=14)
         with self.voiceover(
             "Part eighteen's median voter theorem says that with one issue, two parties both move to the voter in "
@@ -51,11 +59,16 @@ class Voters(VoiceoverScene):
             "need, and not numbers, but how "
             "easily a group's votes can be bought."
         ) as vo:
-            self.play(FadeIn(ax), FadeIn(tag), Create(zero), FadeIn(side[0]), *[FadeIn(b[1]) for b in bars],
-                      run_time=1.0)
+            self.play(FadeIn(tag), FadeIn(side[0]), Create(strip[0]), LaggedStart(*[FadeIn(d) for d in strip[1]],
+                                                                                    lag_ratio=0.05),
+                      FadeIn(strip[2]), FadeIn(strip[3]), run_time=1.5)
+            self.play(strip[2].animate.move_to(med + UP * 0.45), strip[3].animate.move_to(med + UP * 0.95),
+                      run_time=2.5)
             vo.wait_until("a")
-            self.play(FadeIn(side[1]))
+            self.play(FadeIn(side[1]), *[strip[1][k].animate.set_color(VOTER).scale(1.4) for k in swing_ix])
             vo.wait_until("b")
+            self.play(FadeOut(strip), run_time=0.6)
+            self.play(FadeIn(ax), Create(zero), *[FadeIn(b[1]) for b in bars], run_time=0.8)
             self.play(*[GrowFromEdge(b[0], DOWN if V["plain"]["transfer"][i] >= 0 else UP) for i, b in enumerate(bars)],
                       *[FadeIn(b[2]) for b in bars], run_time=1.5)
             vo.wait_until("c")
@@ -143,8 +156,8 @@ class Voters(VoiceoverScene):
     def robust(self):
         S = load("senate")
         R = S["robust"]
-        ax = plane([0, len(R)], [0, 16], center=LEFT * 1.8 + DOWN * 0.35, x_length=7.6, y_length=4.4, xticks=[],
-                   yticks=[0, 4, 8, 12, 16], ylabel=r"the jump, \ points, \ with 95\% intervals",
+        ax = plane([0, len(R)], [0, 20], center=LEFT * 1.8 + DOWN * 0.35, x_length=7.6, y_length=4.4, xticks=[],
+                   yticks=[0, 4, 8, 12, 16, 20], ylabel=r"the jump, \ points, \ with 95\% intervals",
                    yfmt=lambda v: f"{v:.0f}", font_size=14)
         items = VGroup()
         for i, r in enumerate(R):

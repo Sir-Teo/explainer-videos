@@ -92,7 +92,7 @@ class Capture(VoiceoverScene):
     def weights(self):
         T = tables.CAPTURE_47.data
         eq = MathTex(r"G = \text{contributions} + a \times \text{welfare}", font_size=40, color=THEORY).move_to(
-            UP * 2.0)
+            UP * 2.9)
         rows = VGroup(
             label(r"Grossman and Helpman, \ 1994: \ a government sells protection \\ to organized industries, \ "
                   r"weighing their money against everyone's welfare", font_size=22, color=WHITE),
@@ -102,6 +102,11 @@ class Capture(VoiceoverScene):
                   r"times \\ the weight on money: \ the government is mostly benevolent, \\ and still sells "
                   r"protection at the margin", font_size=22, color=E.ACCENT),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.45).next_to(eq, DOWN, buff=0.55)
+        gh = MathTex(r"\frac{t_i}{1+t_i} = \frac{I_i - \alpha_L}{a + \alpha_L}\cdot\frac{z_i}{e_i}",
+                     font_size=34, color=THEORY).next_to(rows, DOWN, buff=0.4)
+        gh_note = label(r"$I_i$: \ organized or not; \ $z_i$: \ output over imports; \ $e_i$: \ how much imports "
+                        r"respond; \ $\alpha_L$: \ the share of people organized", font_size=16,
+                        color=GREY_A).next_to(gh, DOWN, buff=0.2)
         tag = published_tag(tables.CAPTURE_47.tag, corner=DR, font_size=11)
         with self.voiceover(
             "Part thirty-five met this in trade policy. <bookmark mark='a'/> In Gene Grossman and Elhanan "
@@ -117,6 +122,9 @@ class Capture(VoiceoverScene):
             for mk, r_ in zip("abc", rows):
                 vo.wait_until(mk)
                 self.play(FadeIn(r_, shift=UP * 0.1))
+                if mk == "b":
+                    self.play(Write(gh), FadeIn(gh_note), run_time=2.0)
+            self.play(Circumscribe(gh, color=E.ACCENT, buff=0.1))
         self.clear_scene()
 
     def connections(self):

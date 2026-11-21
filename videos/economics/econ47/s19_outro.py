@@ -72,8 +72,8 @@ class Outro(VoiceoverScene):
             (r"the franchise: \ the vote as a promise that cannot be withdrawn", ELITE),
             (rf"state capacity: \ poor states collect {Tx['median_poorest']:.0f}\% of GDP, \ rich "
              rf"{Tx['median_richest']:.0f}\%", DEM),
-            (rf"conflict: \ rain as an instrument, \ {say_num(C['iv'])} against a planted {say_num(C['truth'])}",
-             CORRUPT),
+            (rf"conflict: \ rain as an instrument, \ {C['iv']:.2f} against a planted "
+             rf"{C['truth']:.0f}".replace("-", "{-}"), CORRUPT),
             (r"media: \ persuasion rates; \ cycles: \ unemployment timed to elections", MANY),
         ]
         rows = VGroup(*[label(rf"{n + 1}.\ \ {txt}", font_size=28, color=col) for n, (txt, col) in enumerate(items)])

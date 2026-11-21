@@ -47,9 +47,15 @@ class Measure(VoiceoverScene):
                            notes=[r"grants for \\ each pupil", r"where most \\ of it stopped",
                                   r"about one-fifth \\ arrived, \ mid-1990s", r"the monthly \\ transfers to \\ "
                                                                                r"each district"],
-                           box_w=2.8, font_size=19, note_size=16).move_to(UP * 0.8)
+                           box_w=2.8, font_size=19, note_size=16).move_to(UP * 1.9)
         foot = label(r"a public expenditure tracking survey: \ follow the money, \ school by school", font_size=21,
-                     color=E.ACCENT).to_edge(DOWN, buff=0.9)
+                     color=E.ACCENT).to_edge(DOWN, buff=0.6)
+        grid = VGroup(*[Square(side_length=0.21, stroke_width=0, fill_color=FEW, fill_opacity=0.9)
+                        for _ in range(100)]).arrange_in_grid(rows=5, cols=20, buff=0.06).move_to(DOWN * 0.9)
+        keep = T["uganda_9195"]
+        glab = label(r"each square: \ 1\% of the grant sent", font_size=16, color=GREY_A).next_to(grid, UP, buff=0.15)
+        gres = label(rf"{keep} of every 100 arrived, \ on average, \ 1991--95; \ the rest stopped on the way",
+                     font_size=18, color=WHITE).next_to(grid, DOWN, buff=0.2)
         tag = published_tag(tables.CORRUPTION_47.tag, corner=DR, font_size=11)
         with self.voiceover(
             "A fifth way is to follow the money. <bookmark mark='a'/> In the early 1990s Uganda's central "
@@ -63,10 +69,14 @@ class Measure(VoiceoverScene):
         ) as vo:
             self.play(FadeIn(tag), FadeIn(foot), FadeIn(chain.boxes[0]), run_time=1.0)
             vo.wait_until("a")
-            self.play(FadeIn(chain.notes[0]))
+            self.play(FadeIn(chain.notes[0]), LaggedStart(*[FadeIn(q) for q in grid], lag_ratio=0.01), FadeIn(glab),
+                      run_time=1.5)
             for k, mk in enumerate("bcd"):
                 vo.wait_until(mk)
                 self.play(GrowArrow(chain.arrows[k]), FadeIn(chain.boxes[k + 1]), FadeIn(chain.notes[k + 1]))
+                if mk == "c":
+                    self.play(LaggedStart(*[q.animate.set_fill(LOSS, opacity=0.35) for q in grid[keep:]],
+                                          lag_ratio=0.01), FadeIn(gres), run_time=2.0)
         self.clear_scene()
 
     def surveys(self):

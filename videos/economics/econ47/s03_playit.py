@@ -21,8 +21,20 @@ class PlayIt(VoiceoverScene):
             label(rf"lobby with it: \ a prize of {T['prize']:.0f} tokens is shared in proportion to lobbying",
                   font_size=24, color=LOBBY),
             label(r"if nobody lobbies, \ the prize is shared equally", font_size=22, color=GREY_A),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.38).move_to(DOWN * 0.1)
+        ).arrange(DOWN, aligned_edge=LEFT, buff=0.34).move_to(UP * 0.75)
         head = label(r"Your turn: \ a hundred tokens", font_size=30, color=E.ACCENT).to_edge(UP, buff=0.5)
+        people = VGroup(*[Circle(radius=0.27, stroke_color=WHITE if i == 0 else GREY_B, stroke_width=2.2,
+                                 fill_color=E.ACCENT if i == 0 else GREY_D, fill_opacity=0.35)
+                          for i in range(T["N"])]).arrange(RIGHT, buff=0.38).move_to(DOWN * 2.35)
+        you = label(r"you", font_size=16, color=WHITE).next_to(people[0], DOWN, buff=0.12)
+        token = Dot(people[0].get_center(), radius=0.1, color=GAIN)
+        gains = VGroup(*[label(rf"+{T['mpcr']:.1f}", font_size=15, color=GAIN).next_to(c, UP, buff=0.1)
+                         for c in people])
+        prize = VGroup(RoundedRectangle(width=1.5, height=0.7, corner_radius=0.1, stroke_color=LOBBY,
+                                        fill_color=LOBBY, fill_opacity=0.25),
+                       label(rf"prize {T['prize']:.0f}", font_size=17, color=LOBBY))
+        prize[1].move_to(prize[0])
+        prize.next_to(people, RIGHT, buff=0.45)
         tag = island_tag(corner=DR, font_size=14)
         with self.voiceover(
             f"Your turn. You are one of {T['N']} players, each with {T['endowment']:.0f} tokens. <bookmark mark='a'/> "
@@ -32,10 +44,20 @@ class PlayIt(VoiceoverScene):
             f"prize of {T['prize']:.0f} tokens: the government's favours, divided in proportion to how much each "
             "player lobbied. <bookmark mark='d'/> If nobody lobbies, the prize is shared equally."
         ) as vo:
-            self.play(FadeIn(head), FadeIn(tag), FadeIn(rows[0], shift=RIGHT * 0.1))
-            for mk, r_ in zip("abcd", rows[1:]):
-                vo.wait_until(mk)
-                self.play(FadeIn(r_, shift=RIGHT * 0.1))
+            self.play(FadeIn(head), FadeIn(tag), FadeIn(rows[0], shift=RIGHT * 0.1),
+                      LaggedStart(*[FadeIn(c) for c in people], lag_ratio=0.1), FadeIn(you), run_time=1.5)
+            vo.wait_until("a")
+            self.play(FadeIn(rows[1], shift=RIGHT * 0.1))
+            vo.wait_until("b")
+            self.play(FadeIn(rows[2], shift=RIGHT * 0.1), FadeIn(token))
+            self.play(token.animate.move_to(people.get_center() + UP * 0.9), run_time=1.0)
+            self.play(FadeOut(token), LaggedStart(*[FadeIn(g, shift=UP * 0.1) for g in gains], lag_ratio=0.08),
+                      run_time=1.5)
+            vo.wait_until("c")
+            self.play(FadeIn(rows[3], shift=RIGHT * 0.1), FadeOut(gains), FadeIn(prize))
+            self.play(*[Indicate(c, color=LOBBY) for c in people], run_time=1.2)
+            vo.wait_until("d")
+            self.play(FadeIn(rows[4], shift=RIGHT * 0.1))
         self.clear_scene()
 
     def ask(self):

@@ -53,16 +53,29 @@ class Frontier(VoiceoverScene):
     def populism(self):
         T = tables.FRONTIER47.data
         rows = VGroup(
-            label(rf"Funke, \ Schularick and Trebesch, \ 2023: \ {T['leaders']} populist presidents and prime "
-                  r"ministers, \ 1900--2020", font_size=22, color=WHITE),
-            label(r"a populist: \ ``the people'' against ``the elite'', \ from the left or the right", font_size=22,
-                  color=GREY_A),
-            label(rf"after {T['years']} years, \ GDP per head about {T['loss']}\% below a plausible "
-                  r"non-populist path", font_size=24, color=LOSS),
-            label(r"with less trade, \ less macroeconomic stability \ and weaker institutions", font_size=22,
+            label(rf"Funke, \ Schularick and \\ Trebesch, \ 2023: \\ {T['leaders']} populist presidents \\ and prime "
+                  r"ministers, \ 1900--2020", font_size=19, color=WHITE),
+            label(r"a populist: \ ``the people'' \\ against ``the elite'', \\ from the left or the right",
+                  font_size=19, color=GREY_A),
+            label(rf"after {T['years']} years, \ GDP per head \\ about {T['loss']}\% below a \\ plausible "
+                  r"non-populist path", font_size=21, color=LOSS),
+            label(r"with less trade, \\ less macroeconomic stability \\ and weaker institutions", font_size=19,
                   color=E.ACCENT),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.42).move_to(DOWN * 0.1)
-        head = label(r"the economics of populism", font_size=30, color=E.ACCENT).to_edge(UP, buff=0.6)
+        ).arrange(DOWN, aligned_edge=LEFT, buff=0.35).to_edge(RIGHT, buff=0.4)
+        head = label(r"the economics of populism", font_size=30, color=E.ACCENT).to_edge(UP, buff=0.5)
+        ax = plane([0, 15], [-12, 2], center=LEFT * 2.4 + DOWN * 0.4, x_length=6.6, y_length=4.4,
+                   xticks=[0, 5, 10, 15], yticks=[-12, -8, -4, 0], xlabel=r"years after a populist takes office",
+                   ylabel=r"GDP per head, \ \% against a comparable path",
+                   xfmt=lambda v: f"{v:.0f}", yfmt=lambda v: f"{v:+.0f}".replace("-", "{-}") if v else "0",
+                   font_size=14)
+        zero = DashedLine(ax.ax.c2p(0, 0), ax.ax.c2p(15, 0), color=GREY_B, stroke_width=1.4)
+        ts = np.linspace(0, 15, 31)
+        sketch = path(ax, ts, -T["loss"] * ts / T["years"], LOSS, 3.2, smooth=False)
+        pin = dot(ax, T["years"], -T["loss"], E.ACCENT, 0.09)
+        pin_l = label(rf"about {T['loss']}\% lower \\ after {T['years']} years", font_size=17,
+                      color=E.ACCENT).next_to(pin, UL, buff=0.1)
+        note = label(r"a sketch of the shape, \ not the published estimates year by year", font_size=14,
+                     color=GREY_B).next_to(ax, DOWN, buff=0.55)
         tag = published_tag(tables.FRONTIER47.tag, corner=DR, font_size=11)
         with self.voiceover(
             "What does populism cost? <bookmark mark='a'/> Manuel Funke, Moritz Schularick and Christoph Trebesch "
@@ -74,12 +87,16 @@ class Frontier(VoiceoverScene):
             "institutions. Why voters choose such leaders anyway, after crises, trade shocks and the rest of this "
             "part's forces, is the open question."
         ) as vo:
-            self.play(FadeIn(head), FadeIn(tag), FadeIn(rows[0], shift=RIGHT * 0.1))
+            self.play(FadeIn(head), FadeIn(tag), FadeIn(rows[0], shift=RIGHT * 0.1), FadeIn(ax), Create(zero),
+                      FadeIn(note))
             vo.wait_until("a")
             self.play(Indicate(rows[0], color=WHITE, scale_factor=1.03))
             for mk, r_ in zip("bcd", rows[1:]):
                 vo.wait_until(mk)
                 self.play(FadeIn(r_, shift=RIGHT * 0.1))
+                if mk == "c":
+                    self.play(Create(sketch), run_time=2.5)
+                    self.play(FadeIn(pin), FadeIn(pin_l))
         self.clear_scene()
 
     def digital(self):

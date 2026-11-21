@@ -55,6 +55,7 @@ class Conflict(VoiceoverScene):
             bars.add(VGroup(r, label(nm, font_size=14, color=WHITE).next_to(ax.ax.c2p(0.5 + i, -3.0), DOWN, buff=0.1),
                             label(rf"{v:+.2f}".replace("-", "{-}"), font_size=16, color=WHITE).next_to(r, DOWN,
                                                                                                 buff=0.05)))
+        bars[2][2].next_to(bars[2][0].get_corner(DR), RIGHT, buff=0.12)
         err = Line(ax.ax.c2p(2.5, C["iv"] - 1.96 * C["iv_se"]), ax.ax.c2p(2.5, min(C["iv"] + 1.96 * C["iv_se"], 0)),
                    color=WHITE, stroke_width=2)
         side = VGroup(
@@ -77,8 +78,9 @@ class Conflict(VoiceoverScene):
             "rain and growth in Africa weaker after 2000, so the instrument itself has grown weaker."
         ) as vo:
             self.play(FadeIn(ax), FadeIn(tag), FadeIn(side[0]), *[FadeIn(b[1]) for b in bars], run_time=1.0)
-            vo.wait_until("a")
             self.play(GrowFromEdge(bars[0][0], UP), FadeIn(bars[0][2]))
+            vo.wait_until("a")
+            self.play(Indicate(bars[0][0], color=WHITE))
             vo.wait_until("b")
             self.play(GrowFromEdge(bars[1][0], UP), FadeIn(bars[1][2]), FadeIn(side[1]), FadeIn(side[2]))
             vo.wait_until("c")

@@ -122,9 +122,9 @@ class Agency(VoiceoverScene):
             self.play(FadeIn(ax), FadeIn(tag), FadeIn(side[0]), *[FadeIn(b[1]) for b in bars], run_time=1.0)
             vo.wait_until("a")
             self.play(Indicate(side[0], color=WHITE))
+            self.play(*[GrowFromEdge(b[0], DOWN) for b in bars], *[FadeIn(b[2]) for b in bars], run_time=2.0)
             vo.wait_until("b")
-            self.play(*[GrowFromEdge(b[0], DOWN) for b in bars], *[FadeIn(b[2]) for b in bars], FadeIn(side[1]),
-                      run_time=1.5)
+            self.play(FadeIn(side[1]), Indicate(bars[0][0], color=WHITE))
             vo.wait_until("c")
             self.play(FadeIn(side[2]))
             vo.wait_until("d")

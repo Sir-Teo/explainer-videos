@@ -29,6 +29,12 @@ class Collective(VoiceoverScene):
             label(rf"one member: \ {O['effort'][0]:.0f}; \\ ten: \ {O['effort'][9]:.1f}; \\ "
                   rf"{zero_n} or more: \ nothing", font_size=19, color=FEW),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.35).to_edge(RIGHT, buff=0.35)
+        marks = VGroup()
+        for k, txt in ((0, rf"one member: \\ {O['effort'][0]:.0f}"), (9, rf"ten: \\ {O['effort'][9]:.1f}"),
+                       (zero_n - 1, rf"{zero_n}: \\ nothing")):
+            p = ax.ax.c2p(n[k], O["effort"][k])
+            d = Dot(p, radius=0.07, color=WHITE)
+            marks.add(VGroup(d, label(txt, font_size=15, color=WHITE).next_to(d, UR, buff=0.08)))
         tag = island_tag(corner=DR, font_size=14)
         with self.voiceover(
             "In 1965 Mancur Olson pointed out something odd about groups. A policy may be worth a great deal to a "
@@ -44,13 +50,13 @@ class Collective(VoiceoverScene):
         ) as vo:
             self.play(FadeIn(ax), FadeIn(tag), run_time=1.0)
             vo.wait_until("a")
-            self.play(FadeIn(side[0]))
+            self.play(FadeIn(side[0]), Create(ln), run_time=3.0)
             vo.wait_until("b")
             self.play(Write(side[1]), FadeIn(side[2]))
             vo.wait_until("c")
-            self.play(Create(ln), run_time=3.0)
+            self.play(*[FadeIn(m) for m in marks[:2]])
             vo.wait_until("d")
-            self.play(FadeIn(side[3]))
+            self.play(FadeIn(marks[2]), FadeIn(side[3]))
         self.clear_scene()
 
     def sugar(self):
@@ -114,6 +120,16 @@ class Collective(VoiceoverScene):
             label(rf"on the Island's contest: \ each side lobbies by its stake per head; \ the quota survives with "
                   rf"probability {C['p_pass']:.4f}", font_size=19, color=E.ACCENT),
         ).arrange(DOWN, buff=0.2).to_edge(DOWN, buff=0.7)
+        x0, y0, wbar = -5.6, -1.25, 9.0
+        big = Rectangle(width=wbar, height=0.32, stroke_width=0, fill_color=FEW, fill_opacity=0.85)
+        big.move_to([x0 + wbar / 2, y0, 0])
+        tiny_w = max(wbar * S["per_person"] / S["per_farm"], 0.01)
+        tiny = Rectangle(width=tiny_w, height=0.32, stroke_width=0, fill_color=MANY, fill_opacity=1.0)
+        tiny.move_to([x0 + tiny_w / 2, y0 - 0.5, 0])
+        bars = VGroup(big, label(r"at stake per farm", font_size=16, color=FEW).next_to(big, RIGHT, buff=0.15),
+                      Dot([x0, y0 - 0.5, 0], radius=0.05, color=MANY),
+                      label(r"at stake per consumer: \ too small to see on this scale", font_size=16,
+                            color=MANY).next_to(tiny, RIGHT, buff=0.25))
         tag = published_tag(tables.OLSON_1965.tag, corner=DR, font_size=11)
         with self.voiceover(
             "Who gains and who loses? <bookmark mark='a'/> About four thousand farms grow sugar beet and sugar "
@@ -136,5 +152,7 @@ class Collective(VoiceoverScene):
             vo.wait_until("c")
             self.play(FadeIn(foot[0]))
             vo.wait_until("d")
+            self.play(GrowFromEdge(bars[0], LEFT), FadeIn(bars[1]), FadeIn(bars[2]), FadeIn(bars[3]), run_time=2.0)
             self.play(FadeIn(foot[1]))
+            self.play(Indicate(bars[2], color=WHITE, scale_factor=1.5))
         self.clear_scene()

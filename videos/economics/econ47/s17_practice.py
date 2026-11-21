@@ -75,7 +75,7 @@ class Practice(VoiceoverScene):
         cc = call_card(tex_safe(c.who), c.when, tex_safe(c.said), tex_safe(c.outcome), c.verdict, width=12.6,
                        font_size=18)
         cc.move_to(UP * 1.45)
-        ax = plane([0, 2], [-4, 3], center=DOWN * 2.0, x_length=5.2, y_length=2.4, xticks=[], yticks=[-4, -2, 0, 2],
+        ax = plane([0, 2], [-5, 3], center=DOWN * 2.0, x_length=5.2, y_length=2.4, xticks=[], yticks=[-4, -2, 0, 2],
                    yfmt=lambda v: f"{v:+.0f}".replace("-", "{-}") if v else "0", font_size=12)
         bars = VGroup()
         for i, (nm, v, col) in enumerate(((r"forecast: \ GDP after \\ two years, \ vs remain", -T["gdp"], LOSS),
@@ -83,7 +83,7 @@ class Practice(VoiceoverScene):
             p0, p1 = ax.ax.c2p(0.5 + i - 0.3, 0), ax.ax.c2p(0.5 + i + 0.3, v)
             r = Rectangle(width=p1[0] - p0[0], height=abs(p1[1] - p0[1]), stroke_width=0, fill_color=col,
                           fill_opacity=0.85).move_to((p0 + p1) / 2)
-            bars.add(VGroup(r, label(nm, font_size=12, color=WHITE).next_to(ax.ax.c2p(0.5 + i, -4), DOWN, buff=0.08),
+            bars.add(VGroup(r, label(nm, font_size=12, color=WHITE).next_to(ax.ax.c2p(0.5 + i, -5), DOWN, buff=0.08),
                             label(rf"{v:+.1f}\%".replace("-", "{-}"), font_size=14, color=WHITE).next_to(
                                 r, UP if v > 0 else DOWN, buff=0.04)))
         cap = label(r"not the same quantity: \\ a level against a \\ counterfactual, \ and \\ a growth rate",
@@ -103,8 +103,10 @@ class Practice(VoiceoverScene):
             "not a neutral fact."
         ) as vo:
             self.play(FadeIn(cc.card), FadeIn(cc[1][0]), FadeIn(cc.left), FadeIn(tag))
+            vo.wait_until("a")
+            self.play(FadeIn(ax), GrowFromEdge(bars[0][0], UP), FadeIn(bars[0][1:]), FadeIn(bars[1][1]))
             vo.wait_until("a2")
-            self.play(FadeIn(ax), FadeIn(cap), GrowFromEdge(bars[0][0], UP), FadeIn(bars[0][1:]), FadeIn(bars[1][1]))
+            self.play(FadeIn(cap), Indicate(bars[0][0], color=WHITE))
             vo.wait_until("b")
             self.play(FadeIn(cc.right), GrowFromEdge(bars[1][0], DOWN), FadeIn(bars[1][2]))
             vo.wait_until("c")

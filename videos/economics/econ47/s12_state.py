@@ -115,16 +115,29 @@ class State(VoiceoverScene):
     def growth(self):
         T = tables.FRANCHISE_47.data
         rows = VGroup(
-            label(r"Acemoglu, \ Naidu, \ Restrepo and Robinson, \ 2019: \ 175 countries, \ 1960--2010", font_size=22,
-                  color=WHITE),
-            label(r"compare countries that democratize with similar ones that do not, \\ allowing for the slump "
-                  r"that often comes first", font_size=22, color=GREY_A),
-            label(rf"GDP per head about {T['growth']}\% higher {T['years']} years after a democratization",
-                  font_size=24, color=DEM),
-            label(r"through investment, \ schooling, \ public goods, \ reforms \ and less unrest", font_size=22,
+            label(r"Acemoglu, \ Naidu, \ Restrepo \\ and Robinson, \ 2019: \\ 175 countries, \ 1960--2010",
+                  font_size=19, color=WHITE),
+            label(r"compare countries that \\ democratize with similar \\ ones that do not, \ allowing \\ for "
+                  r"the slump that \\ often comes first", font_size=19, color=GREY_A),
+            label(rf"GDP per head about \\ {T['growth']}\% higher {T['years']} years \\ after a democratization",
+                  font_size=21, color=DEM),
+            label(r"through investment, \\ schooling, \ public goods, \\ reforms \ and less unrest", font_size=19,
                   color=E.ACCENT),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.42).move_to(DOWN * 0.1)
-        head = label(r"democracy does cause growth", font_size=30, color=E.ACCENT).to_edge(UP, buff=0.6)
+        ).arrange(DOWN, aligned_edge=LEFT, buff=0.35).to_edge(RIGHT, buff=0.4)
+        head = label(r"democracy does cause growth", font_size=30, color=E.ACCENT).to_edge(UP, buff=0.5)
+        ax = plane([0, 30], [0, 25], center=LEFT * 2.4 + DOWN * 0.4, x_length=6.6, y_length=4.4,
+                   xticks=[0, 5, 10, 15, 20, 25, 30], yticks=[0, 5, 10, 15, 20, 25],
+                   xlabel=r"years after democratizing",
+                   ylabel=r"GDP per head, \ \% above similar countries that did not",
+                   xfmt=lambda v: f"{v:.0f}", yfmt=lambda v: f"{v:.0f}", font_size=14)
+        ts = np.linspace(0, 30, 61)
+        g = T["growth"] * (1 - np.exp(-ts / 15.0)) / (1 - np.exp(-T["years"] / 15.0))
+        sketch = path(ax, ts, g, DEM, 3.2, smooth=True)
+        pin = dot(ax, T["years"], T["growth"], E.ACCENT, 0.09)
+        pin_l = label(rf"about {T['growth']}\% after {T['years']} years", font_size=17, color=E.ACCENT).next_to(
+            pin, UL, buff=0.1)
+        note = label(r"a sketch of the shape: \ gradual, \ not the published estimates year by year",
+                     font_size=14, color=GREY_B).next_to(ax, DOWN, buff=0.55)
         tag = published_tag(tables.FRANCHISE_47.tag, corner=DR, font_size=11)
         with self.voiceover(
             "Daron Acemoglu, Suresh Naidu, Pascual Restrepo and James Robinson tried to make the comparison fair. "
@@ -134,13 +147,15 @@ class State(VoiceoverScene):
             f"percent higher {T['years']} years after a democratization, with similar answers from other methods. "
             "<bookmark mark='d'/> Democracies, they argue, invest more, school more of their people, provide more "
             "public goods, reform more, and suffer less unrest. The gains come slowly, which is part of why democracy "
-            "is "
-            "hard to defend in its first years."
+            "is hard to defend in its first years."
         ) as vo:
-            self.play(FadeIn(head), FadeIn(tag), FadeIn(rows[0], shift=RIGHT * 0.1))
+            self.play(FadeIn(head), FadeIn(tag), FadeIn(rows[0], shift=RIGHT * 0.1), FadeIn(ax), FadeIn(note))
             vo.wait_until("a")
             self.play(Indicate(rows[0], color=WHITE, scale_factor=1.03))
             for mk, r_ in zip("bcd", rows[1:]):
                 vo.wait_until(mk)
                 self.play(FadeIn(r_, shift=RIGHT * 0.1))
+                if mk == "c":
+                    self.play(Create(sketch), run_time=2.5)
+                    self.play(FadeIn(pin), FadeIn(pin_l))
         self.clear_scene()

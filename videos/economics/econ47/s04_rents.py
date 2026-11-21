@@ -31,6 +31,7 @@ class Rents(VoiceoverScene):
             label(r"Tullock: \ if people compete \\ to get the rent, \ they \\ spend up to the rectangle", font_size=19,
                   color=E.ACCENT),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.35).to_edge(RIGHT, buff=0.45)
+        wasted = label(r"spent \\ chasing it", font_size=17, color=WHITE).move_to(rect)
         tag = published_tag(tables.RENTS_47.tag, corner=DR, font_size=11)
         with self.voiceover(
             "Economists used to measure the cost of a monopoly, a tariff or a licence by a small triangle. "
@@ -51,6 +52,7 @@ class Rents(VoiceoverScene):
             self.play(FadeIn(rect), FadeIn(side[2]))
             vo.wait_until("d")
             self.play(FadeIn(side[3]), Indicate(rect, color=WHITE))
+            self.play(rect.animate.set_fill(LOSS, opacity=0.55), FadeIn(wasted), run_time=2.0)
         self.clear_scene()
 
     def contest(self):
@@ -80,11 +82,12 @@ class Rents(VoiceoverScene):
         ) as vo:
             self.play(FadeIn(ax), FadeIn(tag), Create(one), run_time=1.0)
             vo.wait_until("a")
-            self.play(FadeIn(side[0]))
+            self.play(FadeIn(side[0]), Create(ln), FadeIn(dots), run_time=2.5)
             vo.wait_until("b")
             self.play(Write(side[1]))
             vo.wait_until("c")
-            self.play(Create(ln), FadeIn(dots), FadeIn(side[2]), run_time=2.5)
+            self.play(FadeIn(side[2]), Indicate(dots[0], color=WHITE, scale_factor=3.0))
+            self.play(Indicate(dots[8], color=WHITE, scale_factor=3.0))
         self.clear_scene()
 
     def krueger(self):

@@ -84,16 +84,25 @@ class Audits(VoiceoverScene):
         R = load("roads")
         T = tables.OLKEN_2007.data
         rows = VGroup(
-            label(rf"Olken, \ 2009: \ 10\% more money missing \ $\rightarrow$ \ {T['perception']}\% more likely "
-                  r"that a villager \\ thinks there is any corruption", font_size=22, color=WHITE),
-            label(r"in ethnically mixed villages: \ more corruption perceived, \ less found", font_size=22,
+            label(rf"Olken, \ 2009: \ 10\% more money \\ missing \ $\rightarrow$ \ {T['perception']}\% more "
+                  r"likely \\ that a villager thinks there \\ is any corruption", font_size=19, color=WHITE),
+            label(r"ethnically mixed villages: \\ more corruption perceived, \\ less found", font_size=19,
                   color=HOLD),
-            label(rf"on the Island: \ the correlation of perceived and actual theft is "
-                  rf"{R['perception_corr']:.2f}", font_size=22, color=VOTER),
-            label(r"surveys of perceptions measure something, \ but not the theft itself", font_size=22,
+            label(rf"on the Island: \ perceived and \\ actual theft correlate \\ at {R['perception_corr']:.2f}",
+                  font_size=19, color=VOTER),
+            label(r"surveys of perceptions \\ measure something, \\ but not the theft itself", font_size=19,
                   color=E.ACCENT),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.45).move_to(DOWN * 0.1)
-        head = label(r"perception against reality", font_size=30, color=E.ACCENT).to_edge(UP, buff=0.6)
+        ).arrange(DOWN, aligned_edge=LEFT, buff=0.35).to_edge(RIGHT, buff=0.4)
+        head = label(r"perception against reality", font_size=30, color=E.ACCENT).to_edge(UP, buff=0.5)
+        ax = plane([-0.2, 0.9], [-0.2, 1.0], center=LEFT * 2.6 + DOWN * 0.45, x_length=6.0, y_length=4.4,
+                   xticks=[-0.2, 0, 0.2, 0.4, 0.6, 0.8], yticks=[0, 0.5, 1.0],
+                   xlabel=r"share of the project's money actually missing", ylabel=r"how corrupt villagers think it is",
+                   xfmt=lambda v: f"{100 * v:.0f}\\%".replace("-", "{-}"), yfmt=lambda v: f"{v:.1f}", font_size=14)
+        tx, py = np.array(R["true"]), np.clip(np.array(R["perceived"]), -0.2, 1.0)
+        pts = VGroup(*[dot(ax, x, y, VOTER, 0.035) for x, y in zip(tx, py)])
+        bfit = np.polyfit(tx, py, 1)
+        fit = seg(ax, -0.2, bfit[1] - 0.2 * bfit[0], 0.9, bfit[1] + 0.9 * bfit[0], E.ACCENT, 3.0)
+        itag = island_tag(corner=DL, font_size=12)
         tag = published_tag(tables.OLKEN_2007.tag, corner=DR, font_size=11)
         with self.voiceover(
             "Olken also asked the villagers how corrupt they thought their road project was. <bookmark mark='a'/> "
@@ -105,10 +114,13 @@ class Audits(VoiceoverScene):
             f"{R['perception_corr']:.2f}. <bookmark mark='d'/> That matters, because most of what the world knows "
             "about corruption comes from surveys of perceptions. The next chapters measure it four ways."
         ) as vo:
-            self.play(FadeIn(head), FadeIn(tag), FadeIn(rows[0], shift=RIGHT * 0.1))
+            self.play(FadeIn(head), FadeIn(tag), FadeIn(ax), FadeIn(itag), FadeIn(rows[0], shift=RIGHT * 0.1))
+            self.play(LaggedStart(*[FadeIn(p_) for p_ in pts], lag_ratio=0.005), run_time=2.0)
             vo.wait_until("a")
-            self.play(Indicate(rows[0], color=WHITE, scale_factor=1.03))
+            self.play(Create(fit), Indicate(rows[0], color=WHITE, scale_factor=1.03))
             for mk, r_ in zip("bcd", rows[1:]):
                 vo.wait_until(mk)
                 self.play(FadeIn(r_, shift=RIGHT * 0.1))
+                if mk == "c":
+                    self.play(Indicate(fit, color=WHITE))
         self.clear_scene()
