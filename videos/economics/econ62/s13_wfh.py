@@ -34,14 +34,15 @@ class WFH(VoiceoverScene):
             VGroup(Rectangle(width=4.0 * W["quit_home"], height=0.32, stroke_width=0, fill_color=GAIN,
                              fill_opacity=0.85), label(rf"home {100 * W['quit_home']:.0f}\%", font_size=15,
                                                        color=GAIN)).arrange(RIGHT, buff=0.12),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.12).next_to(ax, DOWN, buff=0.75).align_to(ax, LEFT)
+        ).arrange(DOWN, aligned_edge=LEFT, buff=0.12)
         side = VGroup(
             label(rf"{W['n']} call-centre volunteers, \ half sent home at random", font_size=19, color=WHITE),
             label(r"more minutes: \ fewer breaks and sick days", font_size=19, color=WORK),
             label(r"more calls a minute: \ a quieter room", font_size=19, color=OWN),
             label(rf"performance +{vals[2]:.0f}\% \ ($\pm${ses[2]:.0f})", font_size=21, color=GAIN),
             label(r"and quits fall by more than half", font_size=19, color=GAIN),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.3).to_edge(RIGHT, buff=0.35)
+        ).arrange(DOWN, aligned_edge=LEFT, buff=0.3).to_edge(RIGHT, buff=0.35).shift(UP * 0.6)
+        q.next_to(side, DOWN, buff=0.45).align_to(side, LEFT)
         tag = island_tag(r"the Island: \ agora.org.wfh; \ effects planted", corner=DL, font_size=12)
         with self.voiceover(
             "Working from home is a question about organization that became a question for everyone in 2020. The "

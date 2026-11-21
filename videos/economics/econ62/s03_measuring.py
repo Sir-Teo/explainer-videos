@@ -44,6 +44,9 @@ class Measuring(VoiceoverScene):
                     font_size=19, color=WHITE).next_to(sc, DOWN, buff=0.5)
         tag = published_tag(r"Bloom and Van Reenen, \ Quarterly Journal of Economics 122(4) (2007); \ the World "
                             r"Management Survey", corner=DL, font_size=12)
+        head = VGroup(label(r"the World Management Survey", font_size=34, color=MGR),
+                      label(r"Nicholas Bloom and John Van Reenen", font_size=20, color=GREY_B)).arrange(
+            DOWN, buff=0.15).to_edge(UP, buff=0.5)
         with self.voiceover(
             "If management matters, it has to be measured, and for a long time economists thought it could not be. "
             "Nicholas Bloom and John Van Reenen built a way. <bookmark mark='a'/> They score eighteen basic "
@@ -55,7 +58,7 @@ class Measuring(VoiceoverScene):
             "questions, so the manager does not know what a good answer is, and the interviewer never sees the "
             "firm's accounts. The survey has since covered thousands of firms in dozens of countries."
         ) as vo:
-            self.play(FadeIn(tag))
+            self.play(FadeIn(tag), FadeIn(head, shift=DOWN * 0.1))
             vo.wait_until("a")
             self.play(LaggedStart(*[FadeIn(c, shift=UP * 0.1) for c in cols], lag_ratio=0.3), run_time=2.0)
             vo.wait_until("b")
