@@ -501,6 +501,39 @@ DIALS = {d.key: d for d in [
                       "across regions and weeks, ads running everywhere", 26.07,
                       where="videos/economics/econ61/compute.py, item ads", checked="2026-11-21"),
          )),
+    Dial("management_effect", "what better management adds", "proportional change in productivity from adopting "
+         "basic management practices", (62,), status="settled within a range", checked="2026-11-21",
+         meaning="in the one large randomized test, free consulting on basic practices (quality records, inventory "
+                 "control, targets) raised large textile plants' productivity by about a sixth within a year; "
+                 "smaller trials elsewhere find gains of the same sign, measured differently; the practices are "
+                 "cheap, so the puzzle is why firms had not adopted them",
+         estimates=(
+             Estimate("Bloom, Eifert, Mahajan, McKenzie and Roberts", 2013, "RCT", "Indian textile plants near "
+                      "Mumbai, consulting randomized by firm: productivity in the first year", 0.17,
+                      where="Quarterly Journal of Economics 128(1): 1-51, abstract", checked="2026-11-21"),
+             Estimate("this film (the Island's experiment)", 2026, "RCT", "28 plants in 17 firms, consulting "
+                      "randomized by firm: the mean of 400 runs, plus or minus two standard deviations", 0.17,
+                      lo=0.10, hi=0.24, where="videos/economics/econ62/compute.py, item experiment",
+                      checked="2026-11-21"),
+         )),
+    Dial("ceo_pay_performance", "how a chief executive's wealth moves with the firm's", "dollars of the chief "
+         "executive's wealth per $1,000 change in shareholders' wealth", (62,), status="contested",
+         checked="2026-11-21",
+         meaning="counting only salary, bonus and dismissal, chief executives look like bureaucrats, gaining a few "
+                 "dollars per thousand their shareholders gain; counting the stock and options they hold, the "
+                 "typical sensitivity is several times larger and the average far larger still; which number "
+                 "matters depends on whether incentives come from holdings or from pay",
+         estimates=(
+             Estimate("Jensen and Murphy", 1990, "regression", "American chief executives, 1974-86: pay, options, "
+                      "stockholdings and dismissal", 3.25, where="Journal of Political Economy 98(2): 225-264, "
+                      "abstract", checked="2026-11-21"),
+             Estimate("Hall and Liebman (mean)", 1998, "regression", "American chief executives, 1994: the whole "
+                      "portfolio of stock and options", 25.11, where="Quarterly Journal of Economics 113(3), as "
+                      "reported in later surveys", checked="2026-11-21"),
+             Estimate("Hall and Liebman (median)", 1998, "regression", "the same, the median chief executive", 5.29,
+                      where="Quarterly Journal of Economics 113(3), as reported in later surveys",
+                      checked="2026-11-21"),
+         )),
     Dial("reasoning_depth", "depth of strategic reasoning", "average steps of thinking (the cognitive hierarchy's "
          "tau)", (11, 45, 53), status="depends on the setting", checked="2026-11-19",
          meaning="people typically think one or two steps ahead of a naive player, not the infinitely many steps that "
@@ -1794,6 +1827,33 @@ DIALS = {d.key: d for d in [
 
 # What each part shows without entering a row, and why: {part: [(what is shown, the reason)]}
 SHOWN = {
+    62: [
+        ("Bloom, Eifert, Mahajan, McKenzie and Roberts (2013)", "the hook's story and the management Dial; the "
+         "Island's experiment computed"),
+        ("Syverson (2004, 2011)", "productivity dispersion, stated; the Island's industry computed"),
+        ("Bloom and Van Reenen (2007)", "measuring management, stated; the Island's scores computed"),
+        ("Bruhn, Karlan and Schoar (2018)", "consulting in Mexico, stated"),
+        ("Lazear (2000); Benson, Li and Shue (2019); Peter and Hull (1969)", "piece rates and promotion, stated; "
+         "the Island's workers and teams computed"),
+        ("Gabaix and Landier (2008); Bertrand and Mullainathan (2001); Jensen and Murphy (1990); Hall and Liebman "
+         "(1998)", "executive pay: the Dial's rows; the assignment model and pay for luck computed"),
+        ("Modigliani and Miller (1958); Myers and Majluf (1984); Graham and Harvey (2001)", "capital structure, "
+         "stated; the trade-off computed"),
+        ("Jensen and Meckling (1976); Bennedsen, Nielsen, Perez-Gonzalez and Wolfenzon (2007)", "agency and "
+         "governance, stated; the owner-manager computed"),
+        ("Davis, Haltiwanger, Handley, Jarmin, Lerner and Miranda (2014)", "private equity, stated; the Island's "
+         "buyouts computed"),
+        ("Garicano (2000); Bloom, Garicano, Sadun and Van Reenen (2014)", "knowledge hierarchies, computed; the "
+         "evidence stated"),
+        ("Bloom, Liang, Roberts and Ying (2015); Bloom, Han and Liang (2024)", "working from home, stated; the "
+         "Island's trial computed"),
+        ("Gibbons and Henderson (2012); NUMMI (1984)", "relational contracts and copying, stated; Part 14's model "
+         "computed"),
+        ("Berger and Ofek (1995); Moeller, Schlingemann and Stulz (2005); DaimlerChrysler (1998, 2007)", "mergers, "
+         "stated; the Island's conglomerates computed"),
+        ("Brynjolfsson, Li and Raymond (2023, 2025)", "generative AI at work, stated"),
+        ("BLS via FRED: OPHNFB", "the intermission, from the Data Room"),
+    ],
     61: [
         ("Hall, Kendrick and Nosko (2015)", "the hook's story, stated; the Island's night computed"),
         ("Rochet and Tirole (2003); Einav, Farronato and Levin (2016); Athey and Luca (2019)", "platforms as designed "
