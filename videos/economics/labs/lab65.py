@@ -24,12 +24,14 @@ TASKS = [
 def run(seed=0):
     lab = labs.Lab()
     K = A.keynes()
+    assert all(4.0 < v < 8.0 for v in K["ratio"].values())       # inside Keynes's four to eight
     lab.row("Keynes: GDP per head in 2022 against 1930 (six countries)",
             ", ".join(f"{c} {v:.1f}" for c, v in sorted(K["ratio"].items(), key=lambda kv: kv[1])))
     hrs = {c: h["hours"][-1] for c, h in K["hours"].items()}
     lab.row("hours worked a year per worker, latest (Keynes's week: 780)",
             ", ".join(f"{c} {v:,.0f}" for c, v in sorted(hrs.items(), key=lambda kv: kv[1])))
     T = A.task_paths()
+    assert abs(T["displacement"] + T["productivity"] - T["dlnw"]) < 1e-9   # the wage decomposes exactly
     lab.row("the task model, capital fixed: displacement, productivity, net change in the log wage (x100)",
             f"{100 * T['displacement']:.0f}, +{100 * T['productivity']:.0f}, {100 * T['dlnw']:.0f}")
     lab.row("long run: labour's share as automation rises; then with new tasks",
@@ -42,6 +44,7 @@ def run(seed=0):
     lab.row("the J-curve: measured productivity at its low and at the end; the truth at the end",
             f"{J['low']:.3f} (year {J['low_year']}), {J['end']:.3f}; {J['end_true']:.3f}")
     D = A.support_desk(seed=65 + seed)
+    assert D["fifths"][0]["est"] > D["fifths"][-1]["est"]               # the least skilled gain most
     lab.row("the support desk: the assistant's average effect (95% interval); bottom and top fifths",
             f"{100 * D['est']:.0f}% ({100 * D['lo']:.0f} to {100 * D['hi']:.0f}); {100 * D['fifths'][0]['est']:.0f}% "
             f"and {100 * D['fifths'][-1]['est']:.0f}%")
@@ -49,6 +52,7 @@ def run(seed=0):
     lab.row("Hulten's arithmetic: TFP after ten years under three readings",
             ", ".join(f"{r['name']} {100 * r['tfp']:.2f}%" for r in H))
     G = {b: A.ideas_growth(b) for b in (0.0, 0.5, 0.9, 1.0)}
+    assert G[1.0]["exploded"] and not G[0.9]["exploded"]                 # only full automation explodes
     lab.row("growth with automated research: peak and year 100 (or the year it explodes)",
             "; ".join(f"{100 * b:.0f}%: {100 * max(g['growth']):.1f}% / "
                       + (f"explodes in year {g['year'][-1]}" if g["exploded"] else f"{100 * g['growth'][100]:.1f}%")
@@ -60,6 +64,7 @@ def run(seed=0):
     lab.row("the race: the wage after sixty years, by scenario", ", ".join(f"{k} {v['w'][-1]:.2f}"
                                                                          for k, v in R.items()))
     V = A.shoppers()["rows"]
+    assert all(abs(r["average_paid"] - (0.4 + 0.6 * (1 - r["mu"]))) < 2e-3 for r in V)   # c + (1 - mu)(v - c)
     lab.row("Varian's shoppers: the average price paid with 2%, 50% and 98% of buyers using agents",
             ", ".join(f"{r['average_paid']:.3f}" for r in (V[0], V[24], V[-1])))
 

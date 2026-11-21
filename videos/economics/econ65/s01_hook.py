@@ -75,6 +75,7 @@ class Hook(VoiceoverScene):
         kline = seg(axr, -0.6, K["keynes_hours"], len(order) - 0.4, K["keynes_hours"], E.ACCENT, 2.4, dashed=True)
         klab = label(rf"Keynes: \ 15 hours a week $\approx$ {K['keynes_hours']} a year", font_size=15,
                      color=E.ACCENT).next_to(axr.ax.c2p(2.5, K["keynes_hours"]), DOWN, buff=0.12)
+        klab.add_background_rectangle(color=BACKGROUND, opacity=0.85, buff=0.05)
         key = legend_rows([(GREY_C, f"{H['USA']['first_year']}"), (WORK, f"{H['USA']['last_year']}")],
                           font_size=14).next_to(axr.ax.c2p(len(order) - 0.4, 2600), DL, buff=0.1)
         tag = data_tag(r"Maddison Project Database 2023; \ Penn World Table 11.0 (avh)", corner=DL, font_size=12)
@@ -98,6 +99,7 @@ class Hook(VoiceoverScene):
             vo.wait_until("c")
             self.play(LaggedStart(*[GrowFromEdge(b, DOWN) for b in first], lag_ratio=0.1), run_time=1.2)
             self.play(LaggedStart(*[GrowFromEdge(b, DOWN) for b in last], lag_ratio=0.1), FadeIn(key), run_time=1.2)
+            self.bring_to_front(kline, klab)
         self.clear_scene()
 
     def question(self):

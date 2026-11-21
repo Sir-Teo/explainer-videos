@@ -63,9 +63,9 @@ class Tasks(VoiceoverScene):
             "do: the productivity effect. <bookmark mark='e'/> And the economy invents new tasks, in which people "
             "have the advantage: N moves right, the oldest tasks drop away, and people gain work: reinstatement."
         ) as vo:
-            self.play(FadeIn(tag))
+            self.play(FadeIn(tag), Write(eq))
             vo.wait_until("a")
-            self.play(Write(eq), FadeIn(ticks))
+            self.play(FadeIn(ticks), Indicate(eq, scale_factor=1.03))
             vo.wait_until("b")
             self.play(FadeIn(bar), FadeIn(cap), FadeIn(Ilab))
             vo.wait_until("c")
@@ -96,9 +96,14 @@ class Tasks(VoiceoverScene):
                                                          (r"net", WORK, -1)))])
         nums = VGroup(*[label(f"{v:+.0f}".replace("-", "{-}"), font_size=17, color=c).next_to(
             bb, UP if v > 0 else DOWN, buff=0.08) for bb, v, c in zip(b, vals, (GDP, NAIVE, WORK))])
-        side = label(rf"capital fixed; \ automation from 20\% of tasks to {100 * T['parity']:.0f}\%,"
-                     r"\ \\ where machines stop being cheaper", font_size=17, color=GREY_A)
+        side = VGroup(label(r"capital fixed", font_size=17, color=GREY_A),
+                      label(rf"automation from 20\% of tasks to {100 * T['parity']:.0f}\%,", font_size=17,
+                            color=GREY_A),
+                      label(r"where machines stop being cheaper", font_size=17, color=GREY_A)).arrange(
+            DOWN, aligned_edge=LEFT, buff=0.1)
         side.next_to(ax.ax, RIGHT, buff=0.4)
+        if side.get_right()[0] > 6.9:
+            side.shift(LEFT * (side.get_right()[0] - 6.9))
         tag = island_tag(r"computed: \ agora.automation.task\_paths \ ($\sigma = 0.8$)", corner=DL, font_size=12)
         with self.voiceover(
             "The model gives the wage in one line. <bookmark mark='a'/> The log wage is one over sigma times log "

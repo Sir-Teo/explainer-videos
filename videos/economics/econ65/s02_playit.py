@@ -42,7 +42,7 @@ class PlayIt(VoiceoverScene):
         rows.arrange(DOWN, aligned_edge=LEFT, buff=0.32).move_to(DOWN * 0.2)
         key = legend_rows([(WORK, "a task done by researchers (their number grows 1% a year)"),
                            (MACH, "a task done by machines (as many as capital allows)")], font_size=16)
-        key.to_edge(DOWN, buff=0.35)
+        key.to_edge(DOWN, buff=0.8)
         tag = island_tag(r"a model: \ semi-endogenous growth with automatable research \ (after Aghion, \ Jones "
                          r"and Jones); \ agora.automation.ideas\_growth", corner=DL, font_size=12)
         g0 = 100 * G["paths"]["0.00"]["growth"][100]
