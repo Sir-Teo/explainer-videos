@@ -700,4 +700,18 @@ CALLS = {c.key: c for c in [
          ("R. G. Rajan, \"Has Financial Development Made the World Riskier?\", Proceedings of the Economic Policy "
           "Symposium, Jackson Hole (2005): 313-369; NBER Working Paper 11728",
           "Federal Reserve Bank of Minneapolis, The Region (December 2009), on the paper's reception")),
+    Call("adwords_roi", 61, "Google's advice to AdWords advertisers on measuring their return, as quoted by Blake, "
+         "Nosko and Tadelis", "2014",
+         "determining your AdWords return can be a very straightforward process: take the revenue from sales made "
+         "via your AdWords advertising, subtract the cost of the advertising, and divide by that cost",
+         "every click on an ad, and every sale that follows it, is recorded, so the sales that come through the ads "
+         "look like the sales the ads produced",
+         "eBay's experiment: switching off non-brand paid search for 60 days in regions holding 30% of its American "
+         "traffic cost almost "
+         "no sales; the return was -63% (95% interval -124% to -3%), against over 1,400% from a regression of sales "
+         "on spending; most of the sales through the ads came from regular buyers who would have bought anyway",
+         "wrong",
+         ("T. Blake, C. Nosko and S. Tadelis, \"Consumer Heterogeneity and Paid Search Effectiveness: A Large Scale "
+          "Field Experiment\", NBER Working Paper 20171 (2014), section 6 and table 4; Econometrica 83(1): 155-174 "
+          "(2015)",)),
 ]}
