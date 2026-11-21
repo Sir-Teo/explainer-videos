@@ -1595,6 +1595,7 @@ SHOWN = {
         ("Hughes, Knittel and Sperling (2008); Deryugina, MacKay and Reif (2020)", "stated and entered in the "
          "energy_elasticity dial"),
         ("Hubbert (1956); Deming (2023)", "the Called it? card; oil production from the Data Room"),
+        ("Bilal and Känzig (2024); McGlade and Ekins (2015)", "the frontier chapter, stated"),
     ],
     47: [
         ("Olken (2006, 2007, 2009)", "the audit trial's results stated and entered in the corruption_share dial; the "

@@ -1455,3 +1455,31 @@ brackets on screen.
 | political business cycle | 政治经济周期 |
 | delegation; central bank independence; fiscal council | 授权；央行独立性；财政委员会 |
 | populism | 民粹主义 |
+
+## Part 48
+
+| English | 中文 |
+|---|---|
+| environmental economics; natural resource economics | 环境经济学；自然资源经济学 |
+| exhaustible resource; Hotelling's rule; scarcity rent | 可耗竭资源；霍特林法则；稀缺租金 |
+| choke price; extraction cost | 阻断价格；开采成本 |
+| the Simon-Ehrlich wager | 西蒙—埃尔利希赌约 |
+| renewable resource; open access; tragedy of the commons | 可再生资源；开放获取；公地悲剧 |
+| maximum sustainable yield; maximum economic yield | 最大可持续产量；最大经济产量 |
+| individual transferable quota; catch shares | 个人可转让配额；捕捞份额 |
+| carbon cycle; radiative forcing; aerosols | 碳循环；辐射强迫；气溶胶 |
+| equilibrium climate sensitivity; transient climate response | 平衡气候敏感度；瞬态气候响应 |
+| integrated assessment model (DICE) | 综合评估模型（DICE） |
+| social cost of carbon | 碳的社会成本 |
+| abatement cost; backstop technology; emissions control rate | 减排成本；后备技术；排放控制率 |
+| discount rate; pure rate of time preference; Ramsey rule | 贴现率；纯时间偏好率；拉姆齐法则 |
+| fat tails; dismal theorem; tipping points | 肥尾；悲观定理；临界点 |
+| carbon tax; cap and trade; emissions trading system | 碳税；总量控制与交易；排放交易体系 |
+| prices versus quantities | 价格与数量之争 |
+| carbon leakage; border carbon adjustment | 碳泄漏；碳边境调节 |
+| climate club | 气候俱乐部 |
+| learning curve; Wright's law; directed technical change | 学习曲线；莱特定律；定向技术变革 |
+| climate damages; adaptation | 气候损害；适应 |
+| merit order; capacity withholding; market power | 优先调度顺序；容量持留；市场势力 |
+| peak oil | 石油峰值 |
+| stranded assets | 搁浅资产 |

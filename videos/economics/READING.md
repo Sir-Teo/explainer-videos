@@ -10,7 +10,7 @@ the series leaves out.
 Both *Parts* columns are found, not typed. *Planned* lists the parts whose entry in
 [`SYLLABUS.md`](SYLLABUS.md) names the book or paper; *Built* lists the parts whose scenes, compute step or
 README cite it (a dot: none yet). Fuller notes (editions, chapters, what each source was used for) are in each
-part's README, under *Sources*. Built so far: Parts 1–47.
+part's README, under *Sources*. Built so far: Parts 1–48.
 
 ## 1. The textbook spine
 
@@ -100,7 +100,7 @@ part's README, under *Sources*. Built so far: Parts 1–47.
 | Persson–Tabellini | T. Persson and G. Tabellini, *Political Economics* (2000) | 47 | · |
 | Dhami | S. Dhami, *The Foundations of Behavioral Economic Analysis* (2016) | 45 | 45 |
 | Fujita–Krugman–Venables | M. Fujita, P. Krugman and A. Venables, *The Spatial Economy* (1999) | 37 | 37 |
-| Nordhaus | W. Nordhaus, *A Question of Balance* (2008) | 48 | · |
+| Nordhaus | W. Nordhaus, *A Question of Balance* (2008) | 48 | 48 |
 | Jackson | M. Jackson, *Social and Economic Networks* (2008) | 63 | · |
 
 ### Practice
@@ -349,6 +349,8 @@ part's README, under *Sources*. Built so far: Parts 1–47.
 **Part 46, *Development*.** Books: Abhijit Banerjee and Esther Duflo, *Poor Economics* (2011); Debraj Ray, *Development Economics* (1998); Amartya Sen, *Development as Freedom* (1999); Angus Deaton, *The Great Escape* (2013). Papers: Lewis (1954); Townsend (1994); Duflo (2001); Miguel and Kremer (2004); Schultz (2004); Thornton (2008); Nunn (2008); Cohen and Dupas (2010); Dell (2010); Deaton (2010); Duflo, Kremer and Robinson (2011); Banerjee et al. (2015); Banerjee, Karlan and Zinman (2015); Haushofer and Shapiro (2016); Suri and Jack (2016); Muralidharan and Niehaus (2017); Balboni et al. (2022); Egger et al. (2022); Aiken et al. (2022).
 
 **Part 47, *Political Economy*.** Books: Mancur Olson, *The Logic of Collective Action* (1965); Torsten Persson and Guido Tabellini, *Political Economics* (2000); Daron Acemoglu and James Robinson, *Economic Origins of Dictatorship and Democracy* (2006); Timothy Besley and Torsten Persson, *Pillars of Prosperity* (2011). Papers: Tullock (1967); Stigler (1971); Barro (1973); Krueger (1974); Nordhaus (1975); Ferejohn (1986); Grossman and Helpman (1994); Goldberg and Maggi (1999); Fisman (2001); Lee, Moretti and Butler (2004); Reinikka and Svensson (2004); Miguel et al. (2004); Olken (2007); Fisman and Miguel (2007); DellaVigna and Kaplan (2007); Lee (2008); Ferraz and Finan (2011); Cattaneo et al. (2015); Acemoglu et al. (2019); Funke et al. (2023).
+
+**Part 48, *Environment and Climate*.** Books: William Nordhaus, *A Question of Balance* (2008) and *The Climate Casino* (2013); Nicholas Stern, *The Economics of Climate Change: The Stern Review* (2007); Paul Sabin, *The Bet* (2013); Tom Tietenberg and Lynne Lewis, *Environmental and Natural Resource Economics*. Papers: Hotelling (1931); Gordon (1954); Smith (1969); Weitzman (1974); Slade (1982); Nordhaus (1992); Borenstein et al. (2002); Hughes et al. (2008); Costello et al. (2008); Weitzman (2009); Kiel et al. (2010); Acemoglu et al. (2012); Dell et al. (2012); Chen et al. (2013); Burke et al. (2015); McGlade and Ekins (2015); Nordhaus (2015, 2017); Barreca et al. (2016); Ebenstein et al. (2017); Deryugina et al. (2020); Dietz et al. (2021); Rennert et al. (2022); Barrage and Nordhaus (2024); Bilal and Känzig (2024).
 
 ## 4. What the series leaves out
 

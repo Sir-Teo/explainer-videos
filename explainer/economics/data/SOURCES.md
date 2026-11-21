@@ -426,3 +426,4 @@ publication, the copy that was read and the date the transcription was checked:
 | `california_2000` | Borenstein, Bushnell and Wolak on California's electricity market (Part 48) | 2026-11-21 |
 | `elasticity_48` | gasoline and electricity price elasticities (Part 48) | 2026-11-21 |
 | `hubbert_1956` | Hubbert's peak and Deming's review (Part 48) | 2026-11-21 |
+| `frontier48` | Bilal and Känzig's global temperature shocks; McGlade and Ekins's unburnable reserves (Part 48) | 2026-11-21 |

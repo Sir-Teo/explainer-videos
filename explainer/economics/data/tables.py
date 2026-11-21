@@ -4495,11 +4495,13 @@ BET_1980 = Table(
 HOTELLING_1931 = Table(
     key="hotelling_1931",
     cite="Harold Hotelling, \"The Economics of Exhaustible Resources\", Journal of Political Economy 39(2), 1931, "
-         "137-175",
-    tag="Hotelling, JPE (1931)",
+         "137-175; Margaret E. Slade, \"Trends in Natural-Resource Commodity Prices: An Analysis of the Time "
+         "Domain\", Journal of Environmental Economics and Management (1982)",
+    tag="Hotelling, JPE (1931); Slade, JEEM (1982)",
     where="the rule: under competition the net price (price less extraction cost) of an exhaustible resource rises "
-          "at the rate of interest",
-    read="the article's statement of the rule, as taught",
+          "at the rate of interest; Slade: exogenous technical change and falling ore grades imply a U-shaped path "
+          "for relative prices, tested on major metals and fuels",
+    read="the article's statement of the rule, as taught; Slade's summary and the FTC working paper's introduction",
     checked="2026-11-21",
 )
 FISH_48 = Table(
@@ -4548,7 +4550,10 @@ SCC_US = Table(
 )
 STERN_2006 = Table(
     key="stern_2006",
-    cite="Nicholas Stern, The Economics of Climate Change: The Stern Review (HM Treasury, 2006; Cambridge, 2007)",
+    cite="Nicholas Stern, The Economics of Climate Change: The Stern Review (HM Treasury, 2006; Cambridge, 2007); "
+         "William D. Nordhaus, \"A Review of the Stern Review on the Economics of Climate Change\" and Martin L. "
+         "Weitzman, \"A Review of the Stern Review on the Economics of Climate Change\", Journal of Economic "
+         "Literature 45(3), 2007",
     tag="The Stern Review (2006)",
     where="a pure rate of time preference of 0.1% a year with logarithmic utility (an elasticity of 1); a social cost "
           "of carbon of over $300 a tonne of carbon (over $80 a tonne of CO2), computed with PAGE2002",
@@ -4573,14 +4578,19 @@ WEITZMAN_2009 = Table(
 INSTRUMENTS_48 = Table(
     key="instruments_48",
     cite="British Columbia, Budget 2008 backgrounder on the carbon tax and the Province's notice of its elimination "
-         "(2025); reporting of the EU Emissions Trading System's prices (S&P Global, Reuters, BNP Paribas, 2023)",
-    tag="B.C. Ministry of Finance; S&P Global, Reuters (2023)",
+         "(2025); reporting of the EU Emissions Trading System's prices (S&P Global, Reuters, BNP Paribas, 2023); "
+         "European Commission, Carbon Border Adjustment Mechanism",
+    tag="B.C. Ministry of Finance; Reuters (2023); European Commission",
     where="B.C.: a revenue-neutral tax from 1 July 2008 at C$10 a tonne, rising C$5 a year to C$30 in 2012 (offset by "
           "income-tax cuts), C$40 in 2019, C$80 in 2024, eliminated 1 April 2025; the EU ETS began in 2005 and its "
-          "allowances first traded above EUR 100 a tonne on 21 February 2023, after long years below 25",
-    read="the province's 2008 backgrounder and 2025 notice as reported; the trade press on 20-21 February 2023",
+          "allowances first traded above EUR 100 a tonne on 21 February 2023, after long years below 25; the EU's "
+          "Carbon Border Adjustment Mechanism reported from 1 October 2023 and charges importers from 1 January "
+          "2026, for cement, aluminium, fertilisers, iron and steel, hydrogen and electricity",
+    read="the province's 2008 backgrounder and 2025 notice as reported; the trade press on 20-21 February 2023; the "
+         "European Commission's CBAM pages",
     checked="2026-11-21",
-    data={"bc_2008": 10, "bc_2012": 30, "bc_2019": 40, "bc_2024": 80, "eu_peak": 100, "eu_start": 2005},
+    data={"bc_2008": 10, "bc_2012": 30, "bc_2019": 40, "bc_2024": 80, "eu_peak": 100, "eu_start": 2005,
+          "cbam_report": 2023, "cbam_pay": 2026},
 )
 CLUBS_2015 = Table(
     key="clubs_2015",
@@ -4666,8 +4676,24 @@ HUBBERT_1956 = Table(
           "passed_bbl": 4.0},
 )
 
+FRONTIER48 = Table(
+    key="frontier48",
+    cite="Adrien Bilal and Diego R. Känzig, \"The Macroeconomic Impact of Climate Change: Global vs. Local "
+         "Temperature\", NBER Working Paper 32450, 2024 (and later versions); Christophe McGlade and Paul Ekins, \"The "
+         "Geographical Distribution of Fossil Fuels Unused When Limiting Global Warming to 2 C\", Nature 517, 2015, "
+         "187-190",
+    tag="Bilal and Känzig (2024); McGlade and Ekins, Nature (2015)",
+    where="Bilal and Känzig: a 1 C rise in global temperature lowers world GDP by about 12%, peaking about six years "
+          "on, about six times earlier estimates; their SCC is $1,056 in the May 2024 version, $1,065, $772 and "
+          "$1,367 in later ones; McGlade and Ekins: to meet 2 C at least cost, more than 80% of coal reserves, half of "
+          "gas and a third of oil must stay unburned (McGlade, in Nature's news story)",
+    read="the working papers' abstracts and Harvard's summary; Nature's news story and UCL's summary",
+    checked="2026-11-21",
+    data={"global_gdp": 12, "lag": 6, "times": 6, "scc_lo": 772, "scc_hi": 1367, "coal": 80, "gas": 50, "oil": 33},
+)
+
 PART48 = (BET_1980, HOTELLING_1931, FISH_48, DICE_2023, SCC_US, STERN_2006, WEITZMAN_2009, INSTRUMENTS_48,
-          CLUBS_2015, DAMAGES_48, HEALTH_48, CALIFORNIA_2000, ELASTICITY_48, HUBBERT_1956)
+          CLUBS_2015, DAMAGES_48, HEALTH_48, CALIFORNIA_2000, ELASTICITY_48, HUBBERT_1956, FRONTIER48)
 
 PART47 = (OLKEN_2007, OLSON_1965, RENTS_47, VOTERS_47, CAPTURE_47, AGENCY_47, CORRUPTION_47, FRANCHISE_47, STATE_47,
           CONFLICT_47, MEDIA_47, CYCLES_47, PRACTICE_47, FRONTIER47)
