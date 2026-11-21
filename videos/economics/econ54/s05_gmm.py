@@ -29,6 +29,9 @@ class GMM(VoiceoverScene):
                   r"$G$: \ how they respond to $\theta$", font_size=20, color=GREY_A),
         ).arrange(DOWN, buff=0.25).to_edge(DOWN, buff=0.5)
         tag = published_tag(r"Hansen, \ Econometrica 50(4) (1982)", corner=DR, font_size=12)
+        hc = history_card(1982, r"Lars Peter Hansen", r"``Large sample properties of generalized method of moments "
+                          r"estimators'': \ estimate from what the model says should be zero on average",
+                          color=THEORY, width=10.0, font_size=24).move_to(UP * 0.4)
         with self.voiceover(
             "Maximum likelihood needs the whole probability model. Often an economic model tells you less, but "
             "something sharp: some quantity should be zero on average. <bookmark mark='a'/> Write those as moment "
@@ -43,8 +46,9 @@ class GMM(VoiceoverScene):
             "minimized objective is itself a test, Hansen's J: if the model is right, it is roughly chi-squared, "
             "with as many degrees of freedom as extra conditions."
         ) as vo:
-            self.play(FadeIn(tag))
+            self.play(FadeIn(tag), FadeIn(hc, shift=UP * 0.1))
             vo.wait_until("a")
+            self.play(FadeOut(hc))
             self.play(Write(eqs[0]), FadeIn(notes[0]))
             vo.wait_until("b")
             self.play(FadeIn(eqs[1], shift=UP * 0.1))
@@ -78,6 +82,9 @@ class GMM(VoiceoverScene):
             label(rf"the two estimates' correlation: \ {Gm['corr']:.2f}", font_size=18, color=GREY_A),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.3).to_edge(RIGHT, buff=0.35).shift(DOWN * 0.4)
         tag = island_tag(r"simulated: \ the Island's returns and consumption", corner=DR, font_size=13)
+        hc = history_card(1982, r"Lars Peter Hansen and Kenneth Singleton", r"the consumer's Euler equation, \ "
+                          r"estimated from consumption and returns without solving the model", color=EST, width=10.0,
+                          font_size=24).move_to(DOWN * 0.3)
         with self.voiceover(
             "The most famous use is Hansen and Kenneth Singleton's, from the same year. <bookmark mark='a'/> A "
             "household that can save in an asset gives up a unit of consumption today only if it expects the "
@@ -95,8 +102,9 @@ class GMM(VoiceoverScene):
             "can stand in for each other, and the two estimates are strongly correlated. We met that ridge in the "
             "Play it, and we will meet it again."
         ) as vo:
-            self.play(FadeIn(tag))
+            self.play(FadeIn(tag), FadeIn(hc, shift=UP * 0.1))
             vo.wait_until("a")
+            self.play(FadeOut(hc))
             self.play(Write(eq), FadeIn(side[0]), run_time=1.5)
             vo.wait_until("b")
             self.play(FadeIn(side[1]))

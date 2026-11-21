@@ -28,15 +28,22 @@ class Simulate(VoiceoverScene):
                   color=THEORY),
             label(r"used for random-coefficient demand (Part 43), \ dynamic choice (Part 44), \ life cycles "
                   r"(next chapter)", font_size=20, color=GREY_A),
-        ).arrange(DOWN, buff=0.28).to_edge(DOWN, buff=0.45)
+        ).arrange(DOWN, buff=0.28).to_edge(DOWN, buff=0.8)
         tag = published_tag(r"McFadden, \ Econometrica 57(5) (1989); \ Pakes and Pollard, \ ibid.", corner=DR,
                             font_size=12)
+        integ = VGroup(
+            MathTex(r"\Pr(i \text{ chooses } j) = \int \frac{e^{V_{ij}(\beta)}}{\sum_k e^{V_{ik}(\beta)}}\, "
+                    r"f(\beta)\, d\beta", font_size=44, color=THEORY),
+            label(r"tastes that vary from person to person: \ an integral with no formula", font_size=22,
+                  color=GREY_A),
+            label(r"but one draw of $\beta$ at a time, \ the model is easy to simulate", font_size=22, color=MODEL),
+        ).arrange(DOWN, buff=0.5).move_to(UP * 0.3)
         with self.voiceover(
             "The logit had a formula for each choice's probability. Most realistic models do not. Let tastes vary "
             "from person to person, or let today's choice depend on expectations about tomorrow, and the "
-            "probability of what someone did becomes an integral nobody can write down. But you can still "
-            "simulate the model. In 1989 Daniel McFadden, and separately Ariel Pakes and David Pollard, showed "
-            "how to estimate with simulations. <bookmark mark='a'/> Guess the parameters. <bookmark mark='b'/> "
+            "probability of what someone did becomes an integral nobody can write down. <bookmark mark='z'/> But you "
+            "can still simulate the model. In 1989 Daniel McFadden, and separately Ariel Pakes and David Pollard, "
+            "showed how to estimate with simulations. <bookmark mark='a'/> Guess the parameters. <bookmark mark='b'/> "
             "Simulate the model several times, S data sets as large as the real one. <bookmark mark='c'/> Compute "
             "their moments, <bookmark mark='d'/> compare them with the data's, and adjust the guess until they "
             "match: the method of simulated moments. <bookmark mark='e'/> Two rules. Use the same random draws at "
@@ -45,9 +52,13 @@ class Simulate(VoiceoverScene):
             "multiplied by one plus one over S. <bookmark mark='g'/> This is the workhorse behind random-coefficient "
             "demand in Part forty-three, dynamic choice in Part forty-four, and the life cycle in the next chapter."
         ) as vo:
-            self.play(FadeIn(tag))
+            self.play(FadeIn(tag), Write(integ[0]), FadeIn(integ[1]), run_time=1.5)
+            vo.wait_until("z")
+            self.play(FadeIn(integ[2]))
             for mk, k in zip("abcd", range(4)):
                 vo.wait_until(mk)
+                if mk == "a":
+                    self.play(FadeOut(integ))
                 an = [FadeIn(loop.boxes[k], shift=UP * 0.1)]
                 if k > 0:
                     an.append(Create(loop.arrows[k - 1]))
