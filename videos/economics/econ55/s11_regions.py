@@ -41,6 +41,17 @@ class Regions(VoiceoverScene):
                   color=E.ACCENT),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.35).to_edge(RIGHT, buff=0.2)
         tag = island_tag(r"simulated: \ Part 32's currency union", corner=DR, font_size=13)
+        lo_, hi_ = np.percentile(g, 5), np.percentile(g, 95)
+
+        def shade_(v):
+            return interpolate_color(ManimColor(DATA), ManimColor(EST), float(np.clip((v - lo_) / (hi_ - lo_), 0, 1)))
+
+        tiles = VGroup(*[Square(side_length=0.46, stroke_width=1, stroke_color=GREY_D, fill_color=shade_(g[r_, 0]),
+                                fill_opacity=0.85) for r_ in range(G["R"])]).arrange_in_grid(6, 8, buff=0.08)
+        tiles.move_to(LEFT * 1.3 + DOWN * 0.2)
+        year = label(r"year 1", font_size=24, color=WHITE).next_to(tiles, UP, buff=0.3)
+        tkey = label(r"each square a region, \ shaded by its spending: \ blue low, \ gold high",
+                     font_size=18, color=GREY_B).next_to(tiles, DOWN, buff=0.3)
         with self.voiceover(
             "One history is one data point. A cross-section has many. Emi Nakamura and Jón Steinsson compared "
             "American states that receive more or less of national military spending. Part thirty-two built such "
@@ -54,9 +65,16 @@ class Regions(VoiceoverScene):
             "answers a different question. Christian Wolf showed how a model can bridge the two: the missing "
             "intercept is the price of using the cross-section."
         ) as vo:
-            self.play(FadeIn(axl), FadeIn(axr), FadeIn(tag), FadeIn(side[0]))
+            self.play(FadeIn(tag), FadeIn(side[0]), LaggedStart(*[FadeIn(t_) for t_ in tiles], lag_ratio=0.02),
+                      FadeIn(year), FadeIn(tkey), run_time=2.0)
+            for yr_ in (1, 2, 3):
+                self.wait(1.0)
+                self.play(*[t_.animate.set_fill(shade_(g[r_, yr_])) for r_, t_ in enumerate(tiles)],
+                          Transform(year, label(rf"year {yr_ + 1}", font_size=24, color=WHITE).move_to(year)),
+                          run_time=1.0)
             vo.wait_until("a")
-            self.play(FadeIn(dl), Create(ll), FadeIn(side[1]), run_time=1.5)
+            self.play(FadeOut(VGroup(tiles, year, tkey)), run_time=0.6)
+            self.play(FadeIn(axl), FadeIn(axr), FadeIn(dl), Create(ll), FadeIn(side[1]), run_time=1.5)
             vo.wait_until("b")
             self.play(FadeIn(dr), Create(lr), FadeIn(side[2]), run_time=1.5)
             vo.wait_until("c")

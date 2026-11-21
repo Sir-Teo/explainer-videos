@@ -20,9 +20,27 @@ class Instruments(VoiceoverScene):
              r"else happened in that window \ (Kuttner; \ G\"urkaynak, \ Sack and Swanson)", GAIN),
             (r"the catch", r"an announcement also reveals what the bank knows: \ the information effect "
              r"\ (Nakamura and Steinsson)", MODEL),
-        ], width=12.6, cols=3, font_size=20).move_to(UP * 0.4)
+        ], width=12.6, cols=3, font_size=20).move_to(UP * 1.0)
         foot = label(r"either can be the outside instrument of Chapter 3: \ Gertler and Karadi's proxy VAR",
-                     font_size=21, color=E.ACCENT).to_edge(DOWN, buff=0.8)
+                     font_size=21, color=E.ACCENT).to_edge(DOWN, buff=0.45)
+        head = label(r"a good instrument: \ moved by policy, \ and by nothing else", font_size=28,
+                     color=E.ACCENT).to_edge(UP, buff=0.5)
+        mins = np.arange(-60, 61)
+        rng = np.random.default_rng(55)
+        fut = 4.50 + np.cumsum(rng.normal(0.0, 0.004, len(mins))) + np.where(mins >= 0, 0.10, 0.0)
+        axm = plane([-60, 60], [4.35, 4.75], center=DOWN * 1.55, x_length=6.0, y_length=1.45,
+                    xticks=[-60, -30, 0, 30, 60], yticks=[4.4, 4.6], xlabel=r"minutes from the announcement",
+                    ylabel=r"", xfmt=lambda v: f"{v:+.0f}".replace("-", "{-}") if v else "0",
+                    yfmt=lambda v: f"{v:.1f}", font_size=12)
+        win = Polygon(axm.ax.c2p(-10, 4.35), axm.ax.c2p(20, 4.35), axm.ax.c2p(20, 4.75), axm.ax.c2p(-10, 4.75),
+                      stroke_width=0, fill_color=GAIN, fill_opacity=0.15)
+        fline = path(axm, mins, fut, GAIN, 2.2, smooth=False)
+        pre, post = fut[mins == -10][0], fut[mins == 20][0]
+        jump = Arrow(axm.ax.c2p(32, pre), axm.ax.c2p(32, post), buff=0, color=GAIN, stroke_width=2.5,
+                     max_tip_length_to_length_ratio=0.3)
+        jlab = label(r"the surprise", font_size=15, color=GAIN).next_to(jump, RIGHT, buff=0.1)
+        mnote = label(r"an illustration: \ a futures-implied rate, \ per cent", font_size=13,
+                      color=GREY_B).next_to(axm, LEFT, buff=0.3)
         tag = published_tag(r"Romer and Romer, \ AER (2004); \ Gertler and Karadi, \ AEJ: Macro (2015); \ Nakamura "
                             r"and Steinsson, \ QJE (2018)", corner=DR, font_size=12)
         with self.voiceover(
@@ -37,10 +55,14 @@ class Instruments(VoiceoverScene):
             "the outside instrument of Chapter three; Mark Gertler and Peter Karadi used market surprises that way "
             "in an autoregression."
         ) as vo:
-            self.play(FadeIn(tag))
+            self.play(FadeIn(tag), FadeIn(head, shift=DOWN * 0.1))
             for mk, c in zip("abc", cards.cards):
                 vo.wait_until(mk)
                 self.play(FadeIn(c, shift=UP * 0.1))
+                if mk == "b":
+                    self.play(FadeIn(axm), FadeIn(win), FadeIn(mnote), run_time=0.6)
+                    self.play(Create(fline), run_time=2.0, rate_func=linear)
+                    self.play(GrowArrow(jump), FadeIn(jlab))
             vo.wait_until("d")
             self.play(FadeIn(foot))
         self.clear_scene()

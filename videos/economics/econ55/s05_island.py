@@ -4,11 +4,11 @@ from videos.economics.econ55.common import *  # noqa: F403
 
 
 def pair(yr=(-0.9, 0.4), pr=(-0.6, 0.2), h=16, top=0.0):
-    axy = plane([0, h], list(yr), center=LEFT * 3.4 + DOWN * (0.45 - top), x_length=5.4, y_length=4.0,
+    axy = plane([0, h], list(yr), center=LEFT * 3.65 + DOWN * (0.45 - top), x_length=4.8, y_length=4.0,
                 xticks=[0, 4, 8, 12, 16], yticks=[-0.8, -0.4, 0, 0.4], xlabel=r"quarters",
                 ylabel=r"output, \ \% per point of the rate", xfmt=lambda v: f"{v:.0f}",
                 yfmt=lambda v: f"{v:+.1f}".replace("-", "{-}") if v else "0", font_size=12)
-    axp = plane([0, h], list(pr), center=RIGHT * 2.0 + DOWN * (0.45 - top), x_length=5.4, y_length=4.0,
+    axp = plane([0, h], list(pr), center=RIGHT * 1.75 + DOWN * (0.45 - top), x_length=4.8, y_length=4.0,
                 xticks=[0, 4, 8, 12, 16], yticks=[-0.6, -0.4, -0.2, 0, 0.2], xlabel=r"quarters",
                 ylabel=r"inflation, \ points", xfmt=lambda v: f"{v:.0f}",
                 yfmt=lambda v: f"{v:+.1f}".replace("-", "{-}") if v else "0", font_size=12)
@@ -32,8 +32,10 @@ class Island(VoiceoverScene):
         axy, axp, zs = pair()
         truth = VGroup(path(axy, h, tr["y"], TRUTHC, 3.0), path(axp, h, tr["pi"], TRUTHC, 3.0))
         sg = S["sign"]
-        sband = VGroup(band(axy, h, sg["y"]["lo"], sg["y"]["hi"], METHOD["sign"], 0.22),
-                       band(axp, h, sg["pi"]["lo"], sg["pi"]["hi"], METHOD["sign"], 0.22))
+        sband = VGroup(band(axy, h, sg["y"]["lo"], sg["y"]["hi"], METHOD["sign"], 0.22, yr=(-0.9, 0.4)),
+                       band(axp, h, sg["pi"]["lo"], sg["pi"]["hi"], METHOD["sign"], 0.22, yr=(-0.6, 0.2)))
+        deep = label(rf"the band runs on down to ${min(sg['y']['lo']):.1f}$".replace("-", "{-}"), font_size=15,
+                     color=METHOD["sign"]).move_to(axy.ax.c2p(10, -0.8))
         lines = {}
         for m in ("recursive", "proxy", "hetero"):
             lines[m] = VGroup(path(axy, h, S[m]["y"], METHOD[m], 2.4, yr=(-0.9, 0.4)),
@@ -64,7 +66,7 @@ class Island(VoiceoverScene):
             vo.wait_until("b")
             self.play(Create(lines["recursive"]), FadeIn(side[1]), run_time=1.5)
             vo.wait_until("c")
-            self.play(FadeIn(sband), FadeIn(side[2]))
+            self.play(FadeIn(sband), FadeIn(side[2]), FadeIn(deep))
             vo.wait_until("d")
             self.play(Create(lines["proxy"]), FadeIn(side[3]), run_time=1.5)
             vo.wait_until("e")
@@ -80,8 +82,8 @@ class Island(VoiceoverScene):
         groups = {}
         for m in ("recursive", "proxy", "hetero"):
             d = M["methods"][m]
-            groups[m] = VGroup(band(axy, h, d["y"]["lo"], d["y"]["hi"], METHOD[m], 0.14),
-                               band(axp, h, d["pi"]["lo"], d["pi"]["hi"], METHOD[m], 0.14),
+            groups[m] = VGroup(band(axy, h, d["y"]["lo"], d["y"]["hi"], METHOD[m], 0.14, yr=(-0.9, 0.4)),
+                               band(axp, h, d["pi"]["lo"], d["pi"]["hi"], METHOD[m], 0.14, yr=(-0.6, 0.2)),
                                path(axy, h, d["y"]["mean"], METHOD[m], 2.6, yr=(-0.9, 0.4)),
                                path(axp, h, d["pi"]["mean"], METHOD[m], 2.6, yr=(-0.6, 0.2)))
         rec, prx = M["methods"]["recursive"], M["methods"]["proxy"]

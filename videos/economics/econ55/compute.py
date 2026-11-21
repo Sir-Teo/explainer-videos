@@ -23,6 +23,8 @@ Items:
     profile     the likelihood profile of sigma, with and without the rate observed
     irfmatch    impulse-response matching
     regions     a currency union's regions: the relative multiplier and the missing intercept
+    forecasts   two forecasts at the turns, against what happened: the professional forecasters' August 2008 forecast
+                for 2009 (Part 1) and the Federal Reserve's June 2021 projection for 2022's inflation (Part 28)
     film        the intermission's data film: the yield curve's slope, 1953-2026, with recessions
     melody      its data melody
 """
@@ -245,6 +247,15 @@ def film_time(t: float, first: float = 1953.25, last: float = 2026.85) -> float:
     return 1.5 + FILM_SECONDS * (t - first) / (last - first)
 
 
+def compute_forecasts() -> dict:
+    from videos.economics.econ1.compute import compute_spf
+    from videos.economics.econ28.compute import compute_transitory
+
+    s, t = compute_spf(), compute_transitory()
+    return {"g_forecast": 100 * s["aug_2009"], "g_actual": 100 * s["actual_2009"],
+            "pi_forecast": t["projected_2022"], "pi_actual": t["actual_2022"]}
+
+
 def compute_film() -> dict:
     g10, tb, rec = _series("GS10"), _series("TB3MS"), _series("USREC")
     ds = [d for d in sorted(g10) if d in tb]
@@ -313,6 +324,7 @@ ITEMS = {
     "profile": compute_profile,
     "irfmatch": compute_irfmatch,
     "regions": compute_regions,
+    "forecasts": compute_forecasts,
     "film": compute_film,
     "melody": compute_melody,
 }

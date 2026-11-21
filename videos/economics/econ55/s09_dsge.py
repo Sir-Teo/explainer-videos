@@ -59,6 +59,17 @@ class DSGE(VoiceoverScene):
                      r"shocks", font_size=20, color=GREY_A).to_edge(DOWN, buff=0.6)
         tag = published_tag(r"An and Schorfheide, \ Econometric Reviews 26 (2007); \ Smets and Wouters, \ AER 97(3) "
                             r"(2007)", corner=DR, font_size=12)
+        nk = VGroup(
+            MathTex(r"x_t = \mathbb{E}_t x_{t+1} - \tfrac{1}{\sigma}\big(i_t - \mathbb{E}_t \pi_{t+1}\big) + d_t",
+                    font_size=36, color=OUT),
+            MathTex(r"\pi_t = \beta\, \mathbb{E}_t \pi_{t+1} + \kappa\, x_t + u_t", font_size=36, color=INFL),
+            MathTex(r"i_t = \phi_\pi \pi_t + \phi_x x_t + v_t", font_size=36, color=RATE),
+        ).arrange(DOWN, buff=0.5)
+        nk_lab = VGroup(*[label(t_, font_size=20, color=c_) for t_, c_ in
+                          ((r"demand", OUT), (r"Phillips curve", INFL), (r"Taylor rule", RATE))])
+        for l_, e_ in zip(nk_lab, nk):
+            l_.next_to(e_, LEFT, buff=0.6)
+        nk_all = VGroup(nk, nk_lab).move_to(UP * 0.5)
         with self.voiceover(
             "Autoregressions ask what the data say about one shock at a time. A dynamic stochastic general "
             "equilibrium model, a DSGE model, claims to account for everything at once, and can be estimated "
@@ -74,8 +85,12 @@ class DSGE(VoiceoverScene):
             "central banks still build on."
         ) as vo:
             self.play(FadeIn(tag), FadeIn(foot))
+            self.play(LaggedStart(*[FadeIn(VGroup(e_, l_), shift=UP * 0.1) for e_, l_ in zip(nk, nk_lab)],
+                                  lag_ratio=0.5), run_time=2.5)
             for mk, e_ in zip("abcd", eqs):
                 vo.wait_until(mk)
+                if mk == "a":
+                    self.play(FadeOut(nk_all, shift=UP * 0.2), run_time=0.7)
                 self.play(FadeIn(e_, shift=UP * 0.1), run_time=1.0)
         self.clear_scene()
 

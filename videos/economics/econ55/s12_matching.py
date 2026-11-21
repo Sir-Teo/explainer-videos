@@ -2,6 +2,8 @@ from __future__ import annotations
 
 from videos.economics.econ55.common import *  # noqa: F403
 
+YTICKS = ([-2.0, -1.0, 0], [-0.4, -0.2, 0, 0.2], [0, 0.5, 1.0])
+
 
 class Matching(VoiceoverScene):
     def construct(self):
@@ -47,8 +49,9 @@ class Matching(VoiceoverScene):
         ranges = ((-2.2, 0.8), (-0.6, 0.3), (-0.4, 1.2))
         panels = VGroup()
         for k in range(3):
-            ax = plane([0, M["h"]], list(ranges[k]), x_length=3.9, y_length=3.0, xticks=[0, 4, 8, 12], yticks=[],
-                       xlabel=r"quarters", ylabel=r"", xfmt=lambda v: f"{v:.0f}", font_size=11)
+            ax = plane([0, M["h"]], list(ranges[k]), x_length=3.9, y_length=3.0, xticks=[0, 4, 8, 12],
+                       yticks=YTICKS[k], xlabel=r"quarters", ylabel=r"", xfmt=lambda v: f"{v:.0f}",
+                       yfmt=lambda v: f"{v:+.1f}".replace("-", "{-}") if v else "0", font_size=11)
             z = DashedLine(ax.ax.c2p(0, 0), ax.ax.c2p(M["h"], 0), color=GREY_D, stroke_width=1)
             errs = VGroup(*[Line(ax.ax.c2p(t, max(tgt[t, k] - se[t, k], ranges[k][0])),
                                  ax.ax.c2p(t, min(tgt[t, k] + se[t, k], ranges[k][1])), color=cols[k],

@@ -11,20 +11,19 @@ class Practice(VoiceoverScene):
         self.places()
 
     def places(self):
-        rows = VGroup(
-            label(r"large estimated models, \ like the Federal Reserve Board's FRB/US, \ for forecasts and "
-                  r"scenarios", font_size=22, color=MODEL),
-            label(r"estimated DSGE models alongside them; \ the New York Fed publishes its model's forecasts",
-                  font_size=22, color=EST),
-            label(r"monetary surprises measured around every announcement, \ and narrative series kept up to "
-                  r"date", font_size=22, color=GAIN),
-            label(r"vector autoregressions and local projections for every new question: \ what did the last "
-                  r"hike do?", font_size=22, color=DATA),
-            label(r"and the same arguments as this part, \ inside every policy meeting's briefing", font_size=22,
-                  color=E.ACCENT),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.42).move_to(DOWN * 0.1)
-        if rows.width > 13.2:
-            rows.width = 13.2
+        chain = flow_chain([(r"large estimated models", MODEL), (r"estimated DSGE models", EST),
+                            (r"surprises and narratives", GAIN), (r"VARs and projections", DATA),
+                            (r"the briefing", E.ACCENT)], direction=DOWN, box_w=3.3, box_h=0.8, buff=0.32,
+                           font_size=21,
+                           notes=[r"FRB/US at the Federal Reserve Board: \ forecasts, \ and what other policies "
+                                  r"would do",
+                                  r"alongside them; \ the New York Fed publishes its model's forecasts",
+                                  r"the market's surprise around every announcement; \ narrative series of the "
+                                  r"bank's own decisions",
+                                  r"for every new question, \ first of all: \ what did the last hike do?",
+                                  r"this part's arguments about which assumption to trust: \ usually three answers "
+                                  r"on the table"], note_size=18)
+        chain.move_to(DOWN * 0.35)
         head = label(r"inside a central bank's research department", font_size=28, color=E.ACCENT).to_edge(
             UP, buff=0.6)
         with self.voiceover(
@@ -39,7 +38,10 @@ class Practice(VoiceoverScene):
             "with three answers on the table."
         ) as vo:
             self.play(FadeIn(head))
-            for mk, r_ in zip("abcde", rows):
+            for k, mk in enumerate("abcde"):
                 vo.wait_until(mk)
-                self.play(FadeIn(r_, shift=RIGHT * 0.1))
+                anims = [FadeIn(chain.boxes[k], shift=DOWN * 0.1), FadeIn(chain.notes[k], shift=RIGHT * 0.1)]
+                if k:
+                    anims.append(GrowArrow(chain.arrows[k - 1]))
+                self.play(*anims)
         self.clear_scene()

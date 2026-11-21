@@ -72,9 +72,11 @@ def path(ax, xs, ys, color=WHITE, width=3.0, xr=None, yr=None, smooth=True):
     return m
 
 
-def band(ax, xs, lo, hi, color, opacity=0.18):
-    """A shaded band between ``lo`` and ``hi``."""
+def band(ax, xs, lo, hi, color, opacity=0.18, yr=None):
+    """A shaded band between ``lo`` and ``hi``, clipped to ``yr`` when given."""
     a = ax.ax
+    if yr is not None:
+        lo, hi = np.clip(lo, *yr), np.clip(hi, *yr)
     up = [a.c2p(x, y) for x, y in zip(xs, hi)]
     dn = [a.c2p(x, y) for x, y in zip(xs, lo)][::-1]
     return Polygon(*up, *dn, stroke_width=0, fill_color=color, fill_opacity=opacity)

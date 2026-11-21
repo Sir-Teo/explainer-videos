@@ -29,6 +29,17 @@ class Projections(VoiceoverScene):
         ).arrange(DOWN, buff=0.3).next_to(eqs, DOWN, buff=0.7)
         tag = published_tag(r"Jord\`a, \ AER 95(1) (2005); \ Plagborg-M{\o}ller and Wolf, \ Econometrica 89(2) "
                             r"(2021)", corner=DR, font_size=12)
+        nodes = VGroup(*[VGroup(Circle(radius=0.34, color=DATA, stroke_width=2.2),
+                                MathTex(str(k), font_size=28, color=WHITE)) for k in range(7)])
+        nodes.arrange(RIGHT, buff=1.0).move_to(UP * 0.2)
+        steps = VGroup()
+        for a_, b_ in zip(nodes[:-1], nodes[1:]):
+            ar = Arrow(a_.get_right(), b_.get_left(), buff=0.08, color=DATA, stroke_width=2.5,
+                       max_tip_length_to_length_ratio=0.25)
+            steps.add(VGroup(ar, MathTex(r"\hat A", font_size=26, color=DATA).next_to(ar, UP, buff=0.12)))
+        start = VGroup(MathTex(r"\hat b", font_size=32, color=EST).next_to(nodes[0], DOWN, buff=0.3),
+                       label(r"quarters after the shock", font_size=20, color=GREY_B).next_to(nodes, DOWN, buff=0.9))
+        chain = VGroup(nodes, steps, start)
         with self.voiceover(
             "Every scheme so far identified a shock and then let the fitted autoregression carry it forward, one "
             "quarter at a time. <bookmark mark='a'/> That chains the answer at two years to the model's every "
@@ -39,11 +50,14 @@ class Projections(VoiceoverScene):
             "thing. <bookmark mark='d'/> In a real sample they differ in a familiar way: a short autoregression is "
             "biased but steady; a projection is nearly unbiased but noisy."
         ) as vo:
-            self.play(FadeIn(tag))
+            self.play(FadeIn(tag), FadeIn(nodes[0]), FadeIn(start))
+            for st, nd in zip(steps, nodes[1:]):
+                self.play(GrowArrow(st[0]), FadeIn(st[1]), FadeIn(nd), run_time=0.7)
             vo.wait_until("a")
+            self.play(chain.animate.scale(0.6).to_edge(DOWN, buff=0.35).set_opacity(0.5), run_time=0.8)
             self.play(Write(eqs[0]), run_time=1.5)
             vo.wait_until("b")
-            self.play(FadeIn(eqs[1], shift=UP * 0.1), FadeIn(rows[0]))
+            self.play(FadeOut(chain), FadeIn(eqs[1], shift=UP * 0.1), FadeIn(rows[0]))
             vo.wait_until("c")
             self.play(FadeIn(rows[1]))
             vo.wait_until("d")

@@ -42,6 +42,8 @@ class Schemes(VoiceoverScene):
             r[2].move_to([4.55, y, 0])
         head = label(r"three restrictions are missing: \ where can they come from?", font_size=26,
                      color=E.ACCENT).to_edge(UP, buff=0.45)
+        count = VGroup(MathTex(r"\Sigma = BB'", font_size=44, color=DATA),
+                       label(r"six equations, \ nine unknowns", font_size=26, color=WHITE)).arrange(DOWN, buff=0.35)
         with self.voiceover(
             "Three restrictions are missing. Economists have found five places to look for them. <bookmark "
             "mark='a'/> The first is timing. If the central bank sets its rate after seeing this quarter's output "
@@ -60,8 +62,11 @@ class Schemes(VoiceoverScene):
             "two covariances points straight at the monetary shock. Roberto Rigobon called this identification "
             "through heteroskedasticity."
         ) as vo:
-            self.play(FadeIn(head))
-            for mk, r_ in zip("abcde", rows):
+            self.play(FadeIn(head), FadeIn(count, shift=UP * 0.1))
+            for k, (mk, r_) in enumerate(zip("abcde", rows)):
                 vo.wait_until(mk)
-                self.play(FadeIn(r_[0]), FadeIn(r_[1]), Write(r_[2]), run_time=1.2)
+                if k == 0:
+                    self.play(FadeOut(count), run_time=0.6)
+                focus = [rows[j].animate.set_opacity(0.4 if k < 4 else 1.0) for j in range(k)]
+                self.play(FadeIn(r_[0]), FadeIn(r_[1]), Write(r_[2]), *focus, run_time=1.2)
         self.clear_scene()
