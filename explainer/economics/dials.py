@@ -1051,9 +1051,17 @@ DIALS = {d.key: d for d in [
              Estimate("this film (US 1965-2007)", 2026, "structural", "a recursive VAR with commodity prices: "
                       "industrial production's trough, 29 months after the shock", -1.33, lo=-1.67, hi=-0.72,
                       where="videos/economics/econ31/compute.py, item usvar", checked="2026-11-20"),
+             Estimate("this film (US 1965-1995)", 2026, "structural", "Sims's recursive VAR, 12 monthly lags, no "
+                      "commodity prices: industrial production's trough, 22 months", -0.80, lo=-1.01, hi=-0.65,
+                      where="videos/economics/econ55/compute.py, item puzzle (16-84% bootstrap band)",
+                      checked="2026-11-21"),
+             Estimate("this film (US 1965-1995)", 2026, "structural", "the same with commodity prices: the trough, "
+                      "23 months", -1.12, lo=-1.28, hi=-0.77,
+                      where="videos/economics/econ55/compute.py, item puzzle (16-84% bootstrap band)",
+                      checked="2026-11-21"),
          )),
     Dial("multipliers", "government-spending multiplier", "dollars of output per dollar of government purchases, "
-         "cumulative over about two years", (32,), status="depends on the setting", checked="2026-11-20",
+         "cumulative over about two years", (32, 55), status="depends on the setting", checked="2026-11-20",
          meaning="whether a dollar of government spending adds more or less than a dollar to output: national "
                  "estimates for the United States come out below one, because private spending falls and the central "
                  "bank leans against the spending; comparisons across regions of one currency union come out above "
@@ -1626,6 +1634,24 @@ DIALS = {d.key: d for d in [
 
 # What each part shows without entering a row, and why: {part: [(what is shown, the reason)]}
 SHOWN = {
+    55: [
+        ("Sims (1980, 1992)", "the hook's price puzzle, recomputed on FRED data; VARs stated"),
+        ("Blanchard and Quah (1989); Uhlig (2005); Stock and Watson (2012, 2018); Mertens and Ravn (2013); Rigobon "
+         "(2003); Baumeister and Hamilton (2015)", "the five schemes, stated and computed on the Island"),
+        ("Jorda (2005); Plagborg-Moller and Wolf (2021); Li, Plagborg-Moller and Wolf (2024)", "local projections, "
+         "stated and computed on the Island"),
+        ("Romer and Romer (2004); Kuttner (2001); Gurkaynak, Sack and Swanson (2005); Gertler and Karadi (2015); "
+         "Nakamura and Steinsson (2018)", "narrative and high-frequency instruments, stated; Part 31's Island "
+         "computed"),
+        ("An and Schorfheide (2007); Smets and Wouters (2007); Canova and Sala (2009)", "DSGE estimation and weak "
+         "identification, stated and computed on the Island"),
+        ("Nakamura and Steinsson (2014); Wolf (2023); Goldsmith-Pinkham, Sorkin and Swift (2020); Borusyak, Hull and "
+         "Jaravel (2022)", "cross-sectional macro, stated; Part 32's regions computed"),
+        ("Christiano, Eichenbaum and Evans (2005)", "impulse-response matching, computed on the Island"),
+        ("Ramey (2016); Nakamura and Steinsson (2018, JEP)", "what macroeconomics knows, stated"),
+        ("Federal Reserve Board, FRED: GS10, TB3MS, USREC, INDPRO, CPIAUCSL, FEDFUNDS, PPIACO", "the hook's VARs "
+         "and the intermission, from the Data Room"),
+    ],
     54: [
         ("McFadden (1974, 2001, 2002)", "the hook's BART forecast (the Called it? record of Part 5) and the logit, "
          "computed on the Island"),

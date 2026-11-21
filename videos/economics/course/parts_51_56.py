@@ -184,4 +184,50 @@ PARTS = [
         also=(("Agora's estimation harness", "explainer/economics/agora/estimate.py"),
               ("The Island's planted truths", "explainer/economics/island.py")),
     ),
+    Part(
+        n=55, level="M", widget="identify", prereq=(28, 29, 30, 31, 32, 54),
+        question="With one history and no control group, how can anyone say what a policy did?",
+        story="The part opens on Sims's price puzzle, recomputed from FRED data: a monthly VAR of production, prices "
+              "and the funds rate, 1965-1995, says prices rise for three years after a hike, until commodity prices "
+              "are added. A VAR alone knows six numbers and needs nine; three rotations of one Island history tell "
+              "three stories. The viewer picks the monetary tightening from three unlabelled responses. Five schemes "
+              "(timing, the long run, signs, an outside instrument, a change in variance) are run on the Island's "
+              "structural VAR, where the truth is known, on one history and on 300; local projections against VARs; "
+              "narrative and high-frequency instruments cure Part 31's price puzzle. After an intermission of the "
+              "yield curve's slope since 1953, Part 30's model is estimated by the Kalman filter and "
+              "Metropolis-Hastings, then without the rate observed, its posteriors mostly prior; regions and the "
+              "missing intercept; shift-share designs; impulse-response matching; forecasts at the turns and what "
+              "macroeconomics knows; the monetary-shock and multiplier dials; research departments and the "
+              "frontier.",
+        handoff="Part 56 closes the graduate core with the examination: twelve problems in micro, macro and "
+                "econometrics, solved the way a grader wants to see them.",
+        outside="Part 28: the Lucas critique; Part 29: Gali's long-run VAR; Part 30: the New Keynesian model; Part 31: "
+                "narrative and high-frequency shocks; Part 32: local projections and regional multipliers; Part 54: "
+                "estimation and identification; Statistics, Built: time series, the Kalman filter and Bayesian "
+                "computation.",
+        objectives={
+            "U": ["Explain why a correlation between interest rates and prices cannot by itself say what policy did.",
+                  "Read an impulse response and say what assumption produced it."],
+            "M": ["Estimate a VAR and identify a shock by timing, long-run, sign, instrument and variance "
+                  "restrictions.",
+                  "Estimate impulse responses by local projections and compare them with a VAR's.",
+                  "Estimate a small DSGE model by the Kalman filter and Metropolis-Hastings, and check its posteriors "
+                  "against its priors."],
+            "D": ["Prove that an external instrument and a variance change each identify a column of the impact "
+                  "matrix, and that projections and VARs share an estimand.",
+                  "Diagnose weak identification by likelihood profiles."],
+            "I": ["Brief a policy committee on what the last rate rise did, with the identifying assumption of "
+                  "each estimate stated."],
+        },
+        results=[
+            ("Order condition", r"\tfrac{n(n-1)}{2} \text{ restrictions beyond } \Sigma = BB'"),
+            ("An external instrument", r"b_m \propto \operatorname{Cov}(u_t, z_t)"),
+            ("A change in variance", r"\Sigma_1 - \Sigma_0 = (\sigma_1^2 - \sigma_0^2)\, b_m b_m'"),
+            ("Local projection", r"y_{t+h} = \alpha_h + \beta_h z_t + \gamma_h' w_t + e_{t+h}"),
+            ("The missing intercept", r"y_{rt} - \bar y_t = m_\ell (g_{rt} - \bar g_t) + \varepsilon_{rt}"),
+        ],
+        U=(0, 1, 2, "s08_intermission"), D=(3, 8), I=(13,),
+        also=(("Agora's macro-econometrics", "explainer/economics/agora/macrometrics.py"),
+              ("The Island's planted truths", "explainer/economics/island.py")),
+    ),
 ]

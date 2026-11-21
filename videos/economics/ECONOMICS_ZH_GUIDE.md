@@ -1606,3 +1606,21 @@ brackets on screen.
 | validation; out-of-sample prediction | 验证；样本外预测 |
 | partial identification; Manski bounds | 部分识别；曼斯基界 |
 | simulation-based inference; amortized estimator | 基于模拟的推断；摊销估计量 |
+
+## Part 55
+
+| English | 中文 |
+|---|---|
+| vector autoregression; reduced form; structural shock | 向量自回归；简约式；结构冲击 |
+| impulse response; identification scheme | 脉冲响应；识别方案 |
+| recursive (Cholesky) ordering; long-run restriction | 递归（Cholesky）排序；长期约束 |
+| sign restrictions; identified set | 符号约束；识别集 |
+| external instrument; proxy SVAR | 外部工具变量；代理结构向量自回归 |
+| identification through heteroskedasticity | 异方差识别 |
+| local projection | 局部投影 |
+| price puzzle; information effect | 价格之谜；信息效应 |
+| narrative shocks; high-frequency identification | 叙事冲击；高频识别 |
+| state-space model; Kalman filter; Metropolis–Hastings | 状态空间模型；卡尔曼滤波；Metropolis–Hastings 算法 |
+| prior; posterior; weak identification | 先验；后验；弱识别 |
+| relative multiplier; the missing intercept; shift-share design | 相对乘数；缺失的截距；份额-冲击设计 |
+| impulse-response matching | 脉冲响应匹配 |

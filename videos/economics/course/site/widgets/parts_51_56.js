@@ -544,4 +544,102 @@
             "gold line, you have found the maximum. Computed in your browser; nothing you do here is stored or sent.",
     });
   };
+  W.identify = function (el) {
+    // Agora's macro-econometrics (explainer.economics.agora.macrometrics): the Island's structural VAR(2) of output
+    // growth, inflation and the rate. Every impact matrix L Q (L the Cholesky factor of the surprises' covariance, Q a
+    // rotation) fits the data equally; the reader turns Q and reads its third column as "the monetary shock".
+    var A1 = [[0.35, -0.15, -0.04], [0.1, 0.55, -0.04], [0.15, 0.35, 0.65]];
+    var A2 = [[0.05, 0.0, 0.0], [0.0, 0.15, 0.0], [0.0, 0.05, 0.1]];
+    var B = [[0.6, 0.19286, -0.12], [-0.4, 0.3, -0.30505], [-0.05, 0.25, 0.9]];
+    var H = 16;
+    function mm(X, Y) {
+      var Z = [[0, 0, 0], [0, 0, 0], [0, 0, 0]];
+      for (var i = 0; i < 3; i++) { for (var j = 0; j < 3; j++) { for (var k = 0; k < 3; k++) { Z[i][j] += X[i][k] * Y[k][j]; } } }
+      return Z;
+    }
+    function mv(X, v) { return [0, 1, 2].map(function (i) { return X[i][0] * v[0] + X[i][1] * v[1] + X[i][2] * v[2]; }); }
+    function tr(X) { return [0, 1, 2].map(function (i) { return [X[0][i], X[1][i], X[2][i]]; }); }
+    var S = mm(B, tr(B));
+    function chol(M) {
+      var L = [[0, 0, 0], [0, 0, 0], [0, 0, 0]];
+      for (var i = 0; i < 3; i++) {
+        for (var j = 0; j <= i; j++) {
+          var s = M[i][j];
+          for (var k = 0; k < j; k++) { s -= L[i][k] * L[j][k]; }
+          L[i][j] = i === j ? Math.sqrt(s) : s / L[j][j];
+        }
+      }
+      return L;
+    }
+    var L = chol(S);
+    var Psi = [[[1, 0, 0], [0, 1, 0], [0, 0, 1]]];
+    for (var h = 1; h <= H; h++) {
+      var P = mm(A1, Psi[h - 1]);
+      if (h >= 2) {
+        var P2 = mm(A2, Psi[h - 2]);
+        for (var i = 0; i < 3; i++) { for (var j = 0; j < 3; j++) { P[i][j] += P2[i][j]; } }
+      }
+      Psi.push(P);
+    }
+    function irf(b) {
+      var out = Psi.map(function (P) { return mv(P, b); });
+      var r0 = out[0][2];
+      var y = [], pi = [], acc = 0;
+      out.forEach(function (o) { acc += o[0] / r0; y.push(acc); pi.push(o[1] / r0); });
+      return { y: y, pi: pi, raw: out };
+    }
+    var truth = irf([B[0][2], B[1][2], B[2][2]]);
+    function rot(a, b) {
+      var ca = Math.cos(a), sa = Math.sin(a), cb = Math.cos(b), sb = Math.sin(b);
+      var R12 = [[1, 0, 0], [0, ca, -sa], [0, sa, ca]];
+      var R02 = [[cb, 0, -sb], [0, 1, 0], [sb, 0, cb]];
+      return mm(R12, R02);
+    }
+    QB.widget(el, {
+      title: "Identify",
+      sub: "Every rotation of the mixing matrix fits the Island's data exactly. Turn the two dials and read the third " +
+           "column as the monetary shock: the responses of output (left) and inflation (right) to a one-point rise " +
+           "in the rate change with it. White: the truth.",
+      panels: 2, height: 250,
+      controls: [
+        { k: "a", label: "Rotation, first plane (degrees)", min: -90, max: 90, step: 1, value: 0,
+          fmt: function (x) { return x + "\u00b0"; } },
+        { k: "b", label: "Rotation, second plane (degrees)", min: -90, max: 90, step: 1, value: 0,
+          fmt: function (x) { return x + "\u00b0"; } },
+        { k: "signs", label: "Show whether the signs hold", min: 0, max: 1, step: 1, value: 1,
+          fmt: function (x) { return x ? "yes" : "no"; } },
+      ],
+      draw: function (g, v, st) {
+        var Q = rot(v.a * Math.PI / 180, v.b * Math.PI / 180);
+        var Bt = mm(L, Q);
+        var b = [Bt[0][2], Bt[1][2], Bt[2][2]];
+        var r = irf(b);
+        var hs = [];
+        for (var t = 0; t <= H; t++) { hs.push(t); }
+        var ok = r.raw[0][2] > 0 && [0, 1, 2].every(function (t) { return r.raw[t][0] <= 0 && r.raw[t][1] <= 0; });
+        var col = v.signs ? (ok ? "#7BD88F" : "#F25F5C") : "#F2C14E";
+        var lim = function (a) { return a.map(function (x) { return Math.max(-3, Math.min(3, x)); }); };
+        var Ly = g[0].axes({ x: [0, H], y: [-1.5, 1.0], title: "output, % per point of the rate", xlabel: "quarters" });
+        Ly.hline(0, {});
+        Ly.line(hs, truth.y, { color: "#FFFFFF", width: 1.6 });
+        Ly.line(hs, lim(r.y), { color: col, width: 2.4 });
+        var Lp = g[1].axes({ x: [0, H], y: [-1.0, 1.0], title: "inflation, points", xlabel: "quarters" });
+        Lp.hline(0, {});
+        Lp.line(hs, truth.pi, { color: "#FFFFFF", width: 1.6 });
+        Lp.line(hs, lim(r.pi), { color: col, width: 2.4 });
+        var err = 0;
+        for (var k = 0; k <= H; k++) { err += Math.pow(r.y[k] - truth.y[k], 2) + Math.pow(r.pi[k] - truth.pi[k], 2); }
+        st.ok = ok; st.err = Math.sqrt(err / (H + 1)); st.signs = v.signs; st.y0 = r.y[0]; st.pi0 = r.pi[0];
+      },
+      readout: function (v, st) {
+        var rows = [["output on impact", st.y0.toFixed(2) + " (truth -0.13)"],
+                    ["inflation on impact", st.pi0.toFixed(2) + " (truth -0.34)"],
+                    ["distance from the truth", st.err.toFixed(2)]];
+        if (st.signs) { rows.push(["obeys the signs (rate up; output and inflation down)", st.ok ? "yes" : "no"]); }
+        return rows;
+      },
+      note: "Part 55, chapters 1 to 3. Many rotations obey the signs; only one is the truth, and the data cannot " +
+            "tell you which. Computed in your browser; nothing you do here is stored or sent.",
+    });
+  };
 })();

@@ -10,7 +10,7 @@ the series leaves out.
 Both *Parts* columns are found, not typed. *Planned* lists the parts whose entry in
 [`SYLLABUS.md`](SYLLABUS.md) names the book or paper; *Built* lists the parts whose scenes, compute step or
 README cite it (a dot: none yet). Fuller notes (editions, chapters, what each source was used for) are in each
-part's README, under *Sources*. Built so far: Parts 1–54.
+part's README, under *Sources*. Built so far: Parts 1–55.
 
 ## 1. The textbook spine
 
@@ -32,7 +32,7 @@ part's README, under *Sources*. Built so far: Parts 1–54.
 | Nicholson–Snyder | W. Nicholson and C. Snyder, *Microeconomic Theory* (13th ed., 2021) | 5–6 | 5–6, 8 |
 | Jones | C. I. Jones, *Macroeconomics* (6th ed., 2023) | 20 | · |
 | Blanchard | O. Blanchard, *Macroeconomics* (8th ed., 2021) | 27, 32 | 20, 24, 27–28, 32, 39 |
-| Stock–Watson | J. Stock and M. Watson, *Introduction to Econometrics* (4th ed., 2019) | 4 | 4, 45, 49 |
+| Stock–Watson | J. Stock and M. Watson, *Introduction to Econometrics* (4th ed., 2019) | 4 | 4, 45, 49, 55 |
 | Angrist–Pischke | J. Angrist and J.-S. Pischke, *Mostly Harmless Econometrics* (2009) | 4, 50, 67 | 4, 50 |
 | Osborne | M. Osborne, *An Introduction to Game Theory* (2004) | 11 | 11 |
 | Krugman–Obstfeld–Melitz | P. Krugman, M. Obstfeld and M. Melitz, *International Economics* (12th ed., 2022) | 34–35 | 34–36 |
@@ -83,7 +83,7 @@ part's README, under *Sources*. Built so far: Parts 1–54.
 | Wooldridge | J. Wooldridge, *Econometric Analysis of Cross Section and Panel Data* (2nd ed., 2010) | 54 | 38–39 |
 | Hansen | B. Hansen, *Econometrics* (2022) | 54 | · |
 | Hamilton | J. Hamilton, *Time Series Analysis* (1994) | 55 | 6 |
-| Kilian–Lütkepohl | L. Kilian and H. Lütkepohl, *Structural Vector Autoregressive Analysis* (2017) | 55 | · |
+| Kilian–Lütkepohl | L. Kilian and H. Lütkepohl, *Structural Vector Autoregressive Analysis* (2017) | 55 | 55 |
 | Train | K. Train, *Discrete Choice Methods with Simulation* (2nd ed., 2009) | 43, 54 | 43, 54 |
 | Judd | K. Judd, *Numerical Methods in Economics* (1998) | 51 | 29, 41, 51 |
 | QuantEcon | T. Sargent and J. Stachurski, *Quantitative Economics* (QuantEcon lectures) | 51 | 51 |
@@ -248,7 +248,7 @@ part's README, under *Sources*. Built so far: Parts 1–54.
 | models as maps | Rodrik (2015), *Economics Rules* | 1, 67 | 1 |
 | identification by instruments | Wright (1928); Haavelmo (1944) | 4 | 4 |
 | the credibility of econometrics | Leamer (1983); LaLonde (1986) | 4 | 4 |
-| vector autoregressions | Sims (1980) | 55 | · |
+| vector autoregressions | Sims (1980) | 55 | 55 |
 | dynamic discrete choice | Rust (1987) | 44, 54 | 54 |
 | generalized method of moments | Hansen (1982) | 54 | 54 |
 | machine learning for causal questions | Chernozhukov and others (2018); Athey and Imbens (2019) | 64 | 21 |
@@ -363,6 +363,8 @@ part's README, under *Sources*. Built so far: Parts 1–54.
 **Part 53, *Information and Persuasion*.** Books: Drew Fudenberg and Jean Tirole, *Game Theory* (1991), chapters 6 to 10; Emir Kamenica, 'Bayesian persuasion and information design', *Annual Review of Economics* (2019); Dirk Bergemann and Stephen Morris, 'Information design: a unified perspective', *JEL* (2019); Stephen Morris and Hyun Song Shin, 'Global games: theory and applications' (2003). Papers: Harsanyi (1967–68); Nash (1950); Blackwell (1953); Coase (1972); Aumann (1976); Selten (1978); Crawford and Sobel (1982); Geanakoplos and Polemarchakis (1982); Rubinstein (1982); Kreps and Wilson (1982); Milgrom and Roberts (1982); Cho and Kreps (1987); Bull (1987); Rubinstein (1989); Banerjee (1992); Bikhchandani, Hirshleifer and Welch (1992); Carlsson and van Damme (1993); Morris and Shin (1998); Levin (2003); DellaVigna and Kaplan (2007); Kamenica and Gentzkow (2011).
 
 **Part 54, *Estimating Models*.** Books: Kenneth Train, *Discrete Choice Methods with Simulation* (2nd ed., 2009); Fumio Hayashi, *Econometrics* (2000), chapters 3, 4 and 7; Hamish Low and Costas Meghir, 'The use of structural models in econometrics', *JEP* (2017); Charles Manski, *Partial Identification of Probability Distributions* (2003). Papers: Marschak (1953); McFadden (1974, 1989); Hansen (1982); Hansen and Singleton (1982); Kydland and Prescott (1982); Rust (1987); Pakes and Pollard (1989); Manski (1990); Gouriéroux, Monfort and Renault (1993); Hotz and Miller (1993); Keane and Wolpin (1997); Gourinchas and Parker (2002); Todd and Wolpin (2006); Chetty (2009); Andrews, Gentzkow and Shapiro (2017); Cranmer, Brehmer and Louppe (2020).
+
+**Part 55, *Identifying Macro*.** Books: Lutz Kilian and Helmut Lütkepohl, *Structural Vector Autoregressive Analysis* (2017); James Hamilton, *Time Series Analysis* (1994), chapters 11 to 13; Valerie Ramey, 'Macroeconomic shocks and their propagation', *Handbook of Macroeconomics* (2016); Emi Nakamura and Jón Steinsson, 'Identification in macroeconomics', *JEP* (2018). Papers: Sims (1980, 1992); Blanchard and Quah (1989); Kuttner (2001); Rigobon (2003); Romer and Romer (2004); Jordá (2005); Uhlig (2005); Christiano, Eichenbaum and Evans (2005); An and Schorfheide (2007); Smets and Wouters (2007); Canova and Sala (2009); Stock and Watson (2012, 2018); Mertens and Ravn (2013); Nakamura and Steinsson (2014, 2018); Gertler and Karadi (2015); Goldsmith-Pinkham, Sorkin and Swift (2020); Plagborg-M\oller and Wolf (2021).
 
 ## 4. What the series leaves out
 
