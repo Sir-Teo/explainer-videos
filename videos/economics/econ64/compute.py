@@ -18,6 +18,7 @@ Items:
     euler       a neural network trained on Euler-equation errors, against Brock and Mirman
     agents      Q-learning price setters, eight sessions
     fairness    a calibrated score for two groups: error rates and Chouldechova's identity
+    sweep       the algorithm's advantage as the judges' courtroom signal grows
     film        the intermission's data film: transistors per microprocessor, 1971-2021
     melody      its data melody
 """
@@ -120,6 +121,10 @@ def compute_fairness() -> dict:
     return _jsonable(L.fairness())
 
 
+def compute_sweep() -> dict:
+    return _jsonable(L.signal_sweep())
+
+
 def compute_film() -> dict:
     t = data.transistors()
     yrs = np.array(t["year"], float)
@@ -161,6 +166,7 @@ ITEMS = {
     "euler": compute_euler,
     "agents": compute_agents,
     "fairness": compute_fairness,
+    "sweep": compute_sweep,
     "film": compute_film,
     "melody": compute_melody,
 }

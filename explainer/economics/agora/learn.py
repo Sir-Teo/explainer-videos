@@ -41,7 +41,7 @@ def _sigmoid(z):
 # the Island's bail courts
 
 
-def defendants(n: int = 40000, seed: int = 64) -> dict:
+def defendants(n: int = 40000, seed: int = 64, signal: float = 0.45) -> dict:
     """The Island's arrested: age, prior arrests, past missed court dates, the charge, a job; a signal s that the
     judge sees in court and the records do not (demeanour, a family in the gallery); and the true chance of failing
     to appear if released, which depends nonlinearly on the records and a little on s."""
@@ -55,24 +55,24 @@ def defendants(n: int = 40000, seed: int = 64) -> dict:
     s = rng.normal(0, 1, n)
     z = (-2.35 + 0.55 * np.log1p(priors) + 0.65 * np.minimum(missed, 3) + 0.55 * (age < 23)
          + 0.45 * (age < 23) * (priors >= 2) - 0.45 * employed + 0.25 * (charge == 2) - 0.25 * (charge == 3)
-         + 0.45 * s)
+         + signal * s)
     p = _sigmoid(z)
     y = (rng.random(n) < p).astype(int)               # what each would do if released
     X = np.c_[age, priors, missed, charge, employed].astype(float)
     return {"X": X, "s": s, "p": p, "y": y}
 
 
-def courts(n: int = 40000, judges: int = 50, seed: int = 64, trees: int = 80) -> dict:
+def courts(n: int = 40000, judges: int = 50, seed: int = 64, trees: int = 80, signal: float = 0.45) -> dict:
     """Cases assigned at random to judges whose release rates run from 55% to 88%.  A judge ranks defendants by a
     risk index that overweights the charge, misreads youth and priors, uses the courtroom signal, and adds noise of
     its own, and releases the lowest-risk share.  Failures are seen only for the released.  A random forest is
     trained on half the released and scores everyone in the other half (the test set)."""
     rng = np.random.default_rng(seed + 1)
-    D = defendants(n, seed)
+    D = defendants(n, seed, signal)
     X, s, p, y = D["X"], D["s"], D["p"], D["y"]
     judge = rng.integers(0, judges, n)
     rate = np.linspace(0.55, 0.88, judges)[rng.permutation(judges)]
-    index = (0.35 * X[:, 1] + 0.30 * X[:, 2] + 0.55 * X[:, 3] - 0.20 * X[:, 4] + 0.45 * s
+    index = (0.35 * X[:, 1] + 0.30 * X[:, 2] + 0.55 * X[:, 3] - 0.20 * X[:, 4] + signal * s
              + rng.normal(0, 0.7, n))
     released = np.zeros(n, bool)
     for j in range(judges):
@@ -178,6 +178,19 @@ def cases(C: dict, targets=(0.05, 0.07, 0.09, 0.12, 0.15, 0.19, 0.24, 0.31, 0.39
         rows.append({"age": int(a), "priors": int(pr), "missed": int(ms), "charge": CHARGES[int(ch)],
                      "employed": bool(em), "released": bool(C["released"][i]), "risk": float(C["risk"][i]),
                      "p": float(C["p"][i]), "y": int(C["y"][i])})
+    return {"rows": rows}
+
+
+def signal_sweep(signals=(0.0, 0.45, 0.9, 1.35, 1.8), n: int = 30000, seed: int = 64) -> dict:
+    """How much the algorithm adds as the judges' courtroom signal grows more informative: for each strength (the
+    signal's weight in both the true risk and the judges' index), the fall in failures at the judges' detention rate
+    when cases are ranked by the forest, which sees only the records, and the fall in detention at their failure
+    rate.  Negative values: the judges do better."""
+    rows = []
+    for w in signals:
+        C = courts(n=n, seed=seed, signal=w, trees=50)
+        P = policy_curves(C)
+        rows.append({"signal": float(w), "crime_cut": float(P["crime_cut"]), "detain_cut": float(P["detain_cut"])})
     return {"rows": rows}
 
 

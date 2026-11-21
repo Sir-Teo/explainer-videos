@@ -1862,10 +1862,50 @@ DIALS = {d.key: d for d in [
                       "of cost shares and prices, pair fixed effects; planted 0.15", 0.16, lo=0.14, hi=0.19,
                       where="videos/economics/econ63/compute.py, item dials", checked="2026-11-21"),
          )),
+    Dial("algorithm_gain", "what an algorithm adds to a judge's decision", "proportional fall in the outcome "
+         "to be prevented (crime, failure to appear) at the same detention rate, from ranking cases by a model",
+         (64,), status="depends on the setting", checked="2026-11-21",
+         meaning="where the decision is a prediction and the records carry most of the signal, ranking by a model "
+                 "can prevent a sixth to a quarter more of the bad outcomes at the same detention rate; the estimate "
+                 "rests on a design that copes with selective labels (random assignment of judges, contraction), "
+                 "and shrinks when the judges see what the records do not",
+         estimates=(
+             Estimate("Kleinberg, Lakkaraju, Leskovec, Ludwig and Mullainathan", 2018, "structural", "New York City "
+                      "bail decisions, 2008-13: crime at the judges' jailing rate, up to", 0.247,
+                      where="Quarterly Journal of Economics 133(1): 237-293, abstract", checked="2026-11-21"),
+             Estimate("this film (the Island, truth)", 2026, "regression", "the test half, with every defendant's "
+                      "outcome known: failures at the judges' detention rate", 0.18,
+                      where="videos/economics/econ64/compute.py, item courts", checked="2026-11-21"),
+             Estimate("this film (the Island, contraction)", 2026, "regression", "the most lenient fifth of judges' "
+                      "cases contracted to four stricter fifths' detention rates: the range", 0.157, lo=0.146,
+                      hi=0.165, where="videos/economics/econ64/compute.py, item contraction", checked="2026-11-21"),
+         )),
 ]}
 
 # What each part shows without entering a row, and why: {part: [(what is shown, the reason)]}
 SHOWN = {
+    64: [
+        ("Kleinberg, Lakkaraju, Leskovec, Ludwig and Mullainathan (2018); Lakkaraju et al. (2017)", "the hook's "
+         "story and the Dial; the Island's courts, contraction and selective labels computed"),
+        ("Kleinberg, Ludwig, Mullainathan and Obermeyer (2015); Mullainathan and Spiess (2017)", "prediction policy "
+         "problems, stated"),
+        ("Meehl (1954); Grove, Zald, Lebow, Snitz and Nelson (2000)", "clinical against statistical prediction: "
+         "Called it?, stated"),
+        ("Obermeyer, Powers, Vogeli and Mullainathan (2019)", "the label choice, stated"),
+        ("Chernozhukov et al. (2018); Robinson (1988)", "double machine learning, computed by Monte Carlo"),
+        ("Wager and Athey (2018); Athey and Wager (2021); Kitagawa and Tetenov (2018)", "causal forests and policy "
+         "learning, computed on the Island's programme"),
+        ("Gentzkow, Kelly and Taddy (2019); Jean et al. (2016); Angelopoulos et al. (2023)", "text and images as "
+         "data, stated; prediction-powered inference computed"),
+        ("Brock and Mirman (1972); Maliar, Maliar and Winant (2021); Azinovic, Gaegauf and Scheidegger (2022)",
+         "deep learning as a solution method, computed with the series' autodiff"),
+        ("Calvano, Calzolari, Denicolo and Pastorello (2020); Zheng et al. (2022)", "learning agents: Part 44's "
+         "Q-learners computed; the AI Economist stated"),
+        ("Horton (2023); Ludwig and Mullainathan (2024)", "language models as subjects and assistants, stated"),
+        ("Angwin et al. (2016); Chouldechova (2017); Kleinberg, Mullainathan and Raghavan (2017)", "fairness, stated; "
+         "the Island's two groups computed"),
+        ("Rupp, Microprocessor Trend Data, via Our World in Data", "the intermission, from the Data Room"),
+    ],
     63: [
         ("Carvalho, Nirei, Saito and Tahbaz-Salehi (2021)", "the hook's story, stated; the Island's supply web "
          "computed"),
