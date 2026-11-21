@@ -84,7 +84,7 @@ class Data(VoiceoverScene):
     def crossings(self):
         X = load("crossings")
         xs = [month_x(m) for m in X["months"]]
-        ax = plane([2019, 2027], [0, 125], center=LEFT * 1.2 + DOWN * 0.3, x_length=9.6, y_length=4.8,
+        ax = plane([2019, 2027], [0, 125], center=LEFT * 1.8 + DOWN * 0.3, x_length=8.6, y_length=4.8,
                    xticks=[2019, 2020, 2021, 2022, 2023, 2024, 2025, 2026, 2027], yticks=[0, 25, 50, 75, 100, 125],
                    ylabel=r"weekday traffic, \ 2019 = 100", xfmt=lambda v: f"{v:.0f}", yfmt=lambda v: f"{v:.0f}",
                    font_size=14)
@@ -92,8 +92,8 @@ class Data(VoiceoverScene):
         sl = label(r"the charge", font_size=15, color=TOLL).next_to(ax.ax.c2p(2025.01, 125), UP, buff=0.05)
         lt = path(ax, xs, X["treated"], TOLL, 3.0, smooth=False)
         lc = path(ax, xs, X["control"], CTRL, 3.0, smooth=False)
-        key = legend_rows([(TOLL, r"the two tunnels into the zone, \ toward Manhattan"),
-                           (CTRL, f"{X['n_controls']} other crossings, \\ both ways")], font_size=15).next_to(
+        key = legend_rows([(TOLL, r"the two tunnels into the zone, \\ toward Manhattan"),
+                           (CTRL, f"{X['n_controls']} directions of \\ other crossings")], font_size=15).next_to(
             ax.ax, RIGHT, buff=0.3).shift(UP * 1.2)
         if key.get_right()[0] > 6.9:
             key.scale_to_fit_width(6.9 - key.get_left()[0])

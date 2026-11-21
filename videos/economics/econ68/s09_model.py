@@ -28,9 +28,12 @@ class Model(VoiceoverScene):
             label(rf"assumed: \ {ASSUME['miles']:.0f} miles in the zone at {ASSUME['mph']:.0f} mph, \ time worth "
                   rf"\${ASSUME['vot']:.0f} an hour, \ other costs \${ASSUME['other']:.0f} a trip", font_size=18,
                   color=GREY_A),
-        ).arrange(DOWN, buff=0.18).to_edge(DOWN, buff=0.45)
+        ).arrange(DOWN, buff=0.18).to_edge(DOWN, buff=0.75)
         tag = published_tag(r"Vickrey (1963); \ Part 15; \ the value of time: \ Part 58 (half the wage, \ DOT)",
-                            corner=UL, font_size=12)
+                            corner=DL, font_size=12)
+        head = label(r"the smallest model that speaks to the estimates", font_size=26, color=E.ACCENT).to_edge(
+            UP, buff=0.35)
+        eqs.next_to(head, DOWN, buff=0.45)
         with self.voiceover(
             "The designs say what happened. To ask what a different toll would do, we need a model, and the rule is "
             "to use the smallest one that speaks to the estimates. <bookmark mark='a'/> Two pieces. First, time per "
@@ -45,7 +48,7 @@ class Model(VoiceoverScene):
             f"rose by the toll and fell a little with the faster trip, gives the elasticity: {say_num(M['eta'], 2)}. "
             "Driving into Manhattan is very inelastic."
         ) as vo:
-            self.play(FadeIn(tag))
+            self.play(FadeIn(tag), FadeIn(head))
             vo.wait_until("a")
             self.play(Write(eqs[0]), FadeIn(notes[0]))
             vo.wait_until("b")

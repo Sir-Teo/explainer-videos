@@ -103,11 +103,21 @@ def compute_crossings() -> dict:
 
 
 def compute_did() -> dict:
-    D = CG.yoy_did(CG.crossings_panel(data.mta_crossings()))
+    P = CG.crossings_panel(data.mta_crossings())
+    D = CG.yoy_did(P)
     adj = D["effect"] - D["placebo_mean"]
     se_adj = float(np.sqrt(D["se"] ** 2 + (D["placebo_sd"] / np.sqrt(24)) ** 2))
+    p24 = [r["did"] for r in D["rows"] if r["year"] == 2024]
+    adj24 = D["effect"] - float(np.mean(p24))
+    # the referee's other check: controls without the two bridges that also carry Manhattan traffic
+    ctrl = tuple(k for k in CG.CONTROLS if not k[0].startswith(("Robert F. Kennedy", "Henry Hudson")))
+    D2 = CG.yoy_did(P, controls=ctrl)
     assert D["effect"] < 0 and D["placebo_mean"] < 0, D
-    return _jsonable({**D, "adjusted": adj, "se_adjusted": se_adj})
+    return _jsonable({**D, "adjusted": adj, "se_adjusted": se_adj, "placebo_2024": float(np.mean(p24)),
+                      "adjusted_2024": adj24, "no_manhattan": {"effect": D2["effect"],
+                                                                "placebo": D2["placebo_mean"],
+                                                                "adjusted": D2["effect"] - D2["placebo_mean"],
+                                                                "n_controls": len(ctrl)}})
 
 
 def compute_buses() -> dict:

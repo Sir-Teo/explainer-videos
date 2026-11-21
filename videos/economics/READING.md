@@ -10,7 +10,7 @@ the series leaves out.
 Both *Parts* columns are found, not typed. *Planned* lists the parts whose entry in
 [`SYLLABUS.md`](SYLLABUS.md) names the book or paper; *Built* lists the parts whose scenes, compute step or
 README cite it (a dot: none yet). Fuller notes (editions, chapters, what each source was used for) are in each
-part's README, under *Sources*. Built so far: Parts 1–67.
+part's README, under *Sources*. Built so far: Parts 1–68.
 
 ## 1. The textbook spine
 
@@ -28,12 +28,12 @@ part's README, under *Sources*. Built so far: Parts 1–67.
 
 | Short name | Book | Planned | Built |
 |---|---|---|---|
-| Varian | H. Varian, *Intermediate Microeconomics* (9th ed., 2014) | 2, 5–8, 10 | 2, 5–8, 10, 16, 61, 65 |
+| Varian | H. Varian, *Intermediate Microeconomics* (9th ed., 2014) | 2, 5–8, 10 | 2, 5–8, 10, 16, 61, 65, 68 |
 | Nicholson–Snyder | W. Nicholson and C. Snyder, *Microeconomic Theory* (13th ed., 2021) | 5–6 | 5–6, 8 |
 | Jones | C. I. Jones, *Macroeconomics* (6th ed., 2023) | 20 | · |
 | Blanchard | O. Blanchard, *Macroeconomics* (8th ed., 2021) | 27, 32 | 20, 24, 27–28, 32, 39 |
 | Stock–Watson | J. Stock and M. Watson, *Introduction to Econometrics* (4th ed., 2019) | 4 | 4, 45, 49, 55, 57 |
-| Angrist–Pischke | J. Angrist and J.-S. Pischke, *Mostly Harmless Econometrics* (2009) | 4, 50, 67 | 4, 50, 67 |
+| Angrist–Pischke | J. Angrist and J.-S. Pischke, *Mostly Harmless Econometrics* (2009) | 4, 50, 67 | 4, 50, 67–68 |
 | Osborne | M. Osborne, *An Introduction to Game Theory* (2004) | 11 | 11, 65 |
 | Krugman–Obstfeld–Melitz | P. Krugman, M. Obstfeld and M. Melitz, *International Economics* (12th ed., 2022) | 34–35 | 34–36 |
 | Mishkin | F. Mishkin, *The Economics of Money, Banking, and Financial Markets* (13th ed., 2022) | 26 | 31, 57, 65 |
@@ -122,7 +122,7 @@ part's README, under *Sources*. Built so far: Parts 1–67.
 |---|---|---|---|
 | the division of labour | Smith (1776), *The Wealth of Nations* | 1 | 1–2, 19, 21, 39 |
 | comparative advantage | Ricardo (1817), *Principles*, ch. 7 | 2, 8, 35–36 | 1–2, 8, 19, 22, 25, 33–36, 52, 65 |
-| supply and demand, the scissors | Marshall (1890), *Principles of Economics* | 2, 37 | 2, 14, 37 |
+| supply and demand, the scissors | Marshall (1890), *Principles of Economics* | 2, 37 | 2, 14, 37, 68 |
 | the price system as information | Hayek (1945), "The Use of Knowledge in Society" | 1, 9 | 1, 9 |
 | the double auction in the classroom | Chamberlin (1948); Smith (1962) | 1–2 | 1 |
 | zero-intelligence traders | Gode and Sunder (1993) | 2 | 1–2 |
@@ -172,7 +172,7 @@ part's README, under *Sources*. Built so far: Parts 1–67.
 
 | Model or result | Paper | Planned | Built |
 |---|---|---|---|
-| externalities and their tax | Pigou (1920) | 10, 15, 56 | 10, 15, 41, 56 |
+| externalities and their tax | Pigou (1920) | 10, 15, 56 | 10, 15, 41, 56, 68 |
 | bargaining over externalities | Coase (1960) | 15 | 15, 56 |
 | public goods | Samuelson (1954) | 15 | · |
 | governing the commons | Ostrom (1990) | 15 | 15 |
@@ -233,7 +233,7 @@ part's README, under *Sources*. Built so far: Parts 1–67.
 
 | Model or result | Paper | Planned | Built |
 |---|---|---|---|
-| human capital | Becker (1964); Mincer (1974) | 38 | 13, 38 |
+| human capital | Becker (1964); Mincer (1974) | 38 | 13, 38, 68 |
 | the minimum wage | Card and Krueger (1994) | 4, 38 | 4, 38 |
 | skills, tasks and technology | Autor, Levy and Murnane (2003); Acemoglu and Autor (2011) | 39 | 39, 65 |
 | mobility and place | Chetty and others (2014) | 40, 42 | · |
@@ -389,6 +389,8 @@ part's README, under *Sources*. Built so far: Parts 1–67.
 **Part 66, *Geoeconomics and Industrial Policy*.** Books: Douglas Irwin, *Clashing over Commerce: A History of US Trade Policy* (2017); Kyle Bagwell and Robert Staiger, *The Economics of the World Trading System* (2002); Henry Farrell and Abraham Newman, *Underground Empire* (2023). Papers: Brander and Spencer (1985); Bagwell and Staiger (1999); Ossa (2014); Juhász (2018); Lane (2025); Amiti, Redding and Weinstein (2019); Fajgelbaum et al. (2020); Cavallo, Llamas and Vazquez (2025); Farrell and Newman (2019); Clayton, Maggiori and Schreger (2023); Alfaro and Chor (2023); Kalouptsidi (2018); Barwick, Kalouptsidi and Zahur (2025); Juhász, Lane and Rodrik (2024).
 
 **Part 67, *The Next Economics*.** Books: Garret Christensen, Jeremy Freese and Edward Miguel, *Transparent and Reproducible Social Science Research* (2019); Dani Rodrik, *Economics Rules* (2015); Joshua Angrist and Jörn-Steffen Pischke, *Mastering 'Metrics* (2015). Papers: Leamer (1983); Angrist and Pischke (2010); Hamermesh (2013); Christensen and Miguel (2018); Brodeur et al. (2016, 2020); Camerer et al. (2016, 2018); Andrews and Kasy (2019); Ioannidis, Stanley and Doucouliagos (2017); Huntington-Klein et al. (2021); DellaVigna and Pope (2018); Brock and Hommes (1997); Heckman and Moktan (2020); Akerlof (2020); Ludwig and Mullainathan (2024).
+
+**Part 68, *The Dissertation*.** Books: William Thomson, *A Guide for the Young Economist* (2nd ed., 2011); Hal Varian, 'How to Build an Economic Model in Your Spare Time' (1997); John Cochrane, 'Writing Tips for Ph.D. Students' (2005); Jesse Shapiro, 'How to Give an Applied Micro Talk'. Papers: Vickrey (1963); Walters (1961); Small and Verhoef, *The Economics of Urban Transportation*; Angrist and Pischke (2009); Cattaneo, Idrobo and Titiunik on regression discontinuity; the MTA's open data; the Office of the Governor (2024, 2026); and the sixty-seven parts before this one.
 
 ## 4. What the series leaves out
 

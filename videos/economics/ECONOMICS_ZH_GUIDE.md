@@ -1856,3 +1856,17 @@ brackets on screen.
 | credibility revolution | 可信性革命 |
 | agent-based model; complexity economics | 基于主体的模型；复杂经济学 |
 | prediction market | 预测市场 |
+
+## Part 68
+
+| English | 中文 |
+|---|---|
+| dissertation; research question | 博士论文；研究问题 |
+| congestion charge; congestion relief zone | 拥堵费；拥堵缓解区 |
+| difference in differences; placebo year | 双重差分；安慰剂年份 |
+| parallel trends; pre-trend (drift) | 平行趋势；事前趋势（漂移） |
+| regression discontinuity in time; retiming | 时间断点回归；出行时间调整 |
+| speed-flow curve; marginal external cost | 速度—流量曲线；边际外部成本 |
+| counterfactual; uncertainty propagation | 反事实；不确定性传播 |
+| referee report; reply | 审稿报告；回复 |
+| diversion bias | 绕行偏差 |

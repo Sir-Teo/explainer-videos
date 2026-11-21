@@ -11,15 +11,15 @@ class Island(VoiceoverScene):
 
     def trials(self):
         I = load("island")
-        ax = plane([-8, 0], [0, 4], center=RIGHT * 0.9 + DOWN * 0.2, x_length=8.6, y_length=4.4,
-                   xticks=[-8, -6, -4, -2, 0], yticks=[], xlabel=r"estimated effect, \ \%",
+        ax = plane([-10, 2], [0, 4], center=RIGHT * 0.9 + DOWN * 0.2, x_length=8.6, y_length=4.4,
+                   xticks=[-10, -8, -6, -4, -2, 0, 2], yticks=[], xlabel=r"estimated effect, \ \%",
                    xfmt=lambda v: f"{v:.0f}".replace("-", "{-}"), font_size=14)
         truth = vline(ax, 100 * I["clean"]["truth"], 0, 4, TRUE, 2.6)
         tl = label(rf"the truth: \ {100 * I['clean']['truth']:.0f}\%".replace("-", "{-}"), font_size=16,
                    color=TRUE).next_to(ax.ax.c2p(100 * I["clean"]["truth"], 4), UP, buff=0.06)
         cases = [(3.3, I["clean"], "mean", r"parallel trends hold", CTRL),
                  (2.4, I["divert"], "mean", r"30\% of lost trips divert \\ to the comparison crossings", ROW),
-                 (1.5, I["trend"], "mean", r"the tunnels drift \\ 1.5\% a year", TOLL),
+                 (1.5, I["trend"], "mean", r"the tolled crossings \\ drift 1.5\% a year", TOLL),
                  (0.6, I["trend"], "adjusted", r"the same, \ net of \\ the placebo year", BUS)]
         rows, names = VGroup(), VGroup()
         for y, R, key, nm, col in cases:
@@ -30,9 +30,15 @@ class Island(VoiceoverScene):
             d = Dot(ax.ax.c2p(m, y), radius=0.09, color=WHITE)
             t = label(rf"{m:.1f}\%".replace("-", "{-}"), font_size=16, color=col).next_to(bar, UP, buff=0.06)
             rows.add(VGroup(bar, d, t))
-            names.add(label(nm, font_size=16, color=col).next_to(ax.ax.c2p(-8, y), LEFT, buff=0.2))
+            names.add(label(nm, font_size=16, color=col).next_to(ax.ax.c2p(-10, y), LEFT, buff=0.2))
         if names.get_left()[0] < -6.9:
             VGroup(ax, truth, tl, rows, names).shift(RIGHT * (-6.9 - names.get_left()[0]))
+        setup = VGroup(
+            label(r"the Island: \ two tolled crossings, \ eight others", font_size=19, color=GREY_A),
+            label(r"a shared season, \ trends and noise", font_size=19, color=GREY_A),
+            label(r"a true effect of $-4\%$ from the charge", font_size=19, color=TRUE),
+        ).arrange(DOWN, aligned_edge=LEFT, buff=0.2)
+        setup.move_to(ax.ax.c2p(-5, 2.2))
         foot = label(r"400 Islands each: \ the mean estimate, \ and the range of 90\% of them", font_size=16,
                      color=GREY_A).to_edge(DOWN, buff=0.35)
         tag = island_tag(r"computed: \ agora.congestion.island\_study", corner=UL, font_size=12)
@@ -49,8 +55,11 @@ class Island(VoiceoverScene):
             f"placebo year recovers {say_pct(-I['trend']['adjusted'], 1)}, and more precisely. That is the "
             "correction chapter five applied to New York, checked where the answer is known."
         ) as vo:
-            self.play(FadeIn(ax), FadeIn(truth), FadeIn(tl), FadeIn(tag), FadeIn(foot))
+            self.play(FadeIn(ax), FadeIn(truth), FadeIn(tl), FadeIn(tag), FadeIn(foot), FadeIn(setup))
             for mk, r_, n_ in zip("abcd", rows, names):
+                if mk == "a":
+                    vo.wait_until(mk)
+                    self.play(FadeOut(setup))
                 vo.wait_until(mk)
                 self.play(FadeIn(n_), GrowFromCenter(r_[0]), FadeIn(r_[1]), FadeIn(r_[2]))
         self.clear_scene()
