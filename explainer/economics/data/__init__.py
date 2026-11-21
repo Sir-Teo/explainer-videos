@@ -518,6 +518,20 @@ ESTIMATE_FRED = {
 }
 FRED_SERIES.update(ESTIMATE_FRED)
 FRED_RETRIEVED.update({s: "2026-11-21" for s in ESTIMATE_FRED})
+# Part 57: payrolls with and without seasonal adjustment, the real-time Sahm rule, news-based policy uncertainty
+REALTIME_FRED = {
+    "PAYEMS": ("All employees, total nonfarm", "thousands of persons", "monthly, seasonally adjusted",
+               "U.S. Bureau of Labor Statistics, Current Employment Statistics"),
+    "PAYNSA": ("All employees, total nonfarm", "thousands of persons", "monthly, not seasonally adjusted",
+               "U.S. Bureau of Labor Statistics, Current Employment Statistics"),
+    "SAHMREALTIME": ("Real-time Sahm rule recession indicator", "percentage points", "monthly",
+                     "Claudia Sahm, computed by the Federal Reserve Bank of St. Louis from real-time unemployment "
+                     "rates"),
+    "USEPUINDXM": ("Economic policy uncertainty index for the United States", "index", "monthly",
+                   "Baker, Bloom and Davis, policyuncertainty.com"),
+}
+FRED_SERIES.update(REALTIME_FRED)
+FRED_RETRIEVED.update({s: "2026-11-21" for s in REALTIME_FRED})
 
 SPF_FILES = ("median_rgdp_level", "median_rgdp_growth", "median_recess_level")
 SPF_URL = ("https://www.philadelphiafed.org/-/media/frbp/assets/surveys-and-data/survey-of-professional-forecasters/"
@@ -569,6 +583,18 @@ DATASETS = {
         "licence": "free to use with attribution to the Federal Reserve Bank of Philadelphia",
         "vintage": "2026-11-18",
         "files": ("spf_2006_2011.csv",),
+    },
+    "spf_long": {
+        "title": "Survey of Professional Forecasters, median forecasts of real GDP growth and of the probability of "
+                 "a decline, every survey from 1968Q4",
+        "publisher": "Federal Reserve Bank of Philadelphia",
+        "citation": "Federal Reserve Bank of Philadelphia, Survey of Professional Forecasters, historical median "
+                    "forecasts (files median_rgdp_growth and median_recess_level), retrieved 2026-11-21",
+        "short": "Philadelphia Fed, Survey of Professional Forecasters",
+        "url": SPF_URL,
+        "licence": "free to use with attribution to the Federal Reserve Bank of Philadelphia",
+        "vintage": "2026-11-21",
+        "files": ("spf_rgdp_growth.csv", "spf_recess.csv"),
     },
     "pinksheet": {
         "title": "World Bank Commodity Price Data (The Pink Sheet), monthly prices",
@@ -1649,6 +1675,18 @@ def spf() -> list[dict]:
 
 
 @functools.lru_cache(maxsize=None)
+def spf_long() -> dict:
+    """Every survey from 1968Q4: ``{"growth": [{"quarter": "1968Q4", "f": [F0, ..., F4]}], "recess": [{"quarter",
+    "p": [P0, ..., P4]}]}``: the median forecast of annualized real GDP (GNP before 1992) growth for the survey quarter
+    and the four after (DRGDP2-6), and the median probability, in percent, of a decline in real GDP in the survey
+    quarter and the four after (RECESS1-5)."""
+    g = [{"quarter": r["quarter"], "f": [_num(r[f"f{k}"]) for k in range(5)]}
+         for r in _read(HERE / "spf_rgdp_growth.csv")]
+    p = [{"quarter": r["quarter"], "p": [_num(r[f"p{k}"]) for k in range(5)]} for r in _read(HERE / "spf_recess.csv")]
+    return {"growth": g, "recess": p}
+
+
+@functools.lru_cache(maxsize=None)
 def pinksheet(key: str) -> dict:
     """A Pink Sheet monthly price series: ``{"month": ["1960-01", ...], "value": [...], "name", "units"}`` (nominal
     US dollars; NaN where the sheet has no price).  ``key`` is one of :data:`PINK_COLUMNS`' keys ("arabica", "oil",
@@ -2276,6 +2314,37 @@ def refresh_spf() -> None:
             vals = [lv.get("rgdpa"), lv.get("rgdpb"), *[gr.get(f"drgdp{k}") for k in range(2, 7)],
                     *[rc.get(f"recess{k}") for k in range(1, 6)]]
             w.writerow([y, q, *[_fmt(v) if isinstance(v, (int, float)) else "" for v in vals]])
+
+
+def refresh_spf_long() -> None:
+    """Part 57's extracts of the Survey of Professional Forecasters, every survey from 1968Q4: the median forecasts
+    of annualized real GDP growth for the survey quarter and the four after (DRGDP2-6), and the median probability of
+    a decline in real GDP in the survey quarter and the four after (RECESS1-5)."""
+    import openpyxl  # noqa: PLC0415
+
+    tabs = {}
+    for name in ("median_rgdp_growth", "median_recess_level"):
+        raw = RAW / f"spf_{name}.xlsx"
+        if not raw.exists():
+            _download(SPF_URL.format(name), raw)
+        ws = openpyxl.load_workbook(raw, read_only=True, data_only=True).worksheets[0]
+        rows = list(ws.iter_rows(values_only=True))
+        head = [str(h).lower() for h in rows[0]]
+        tabs[name] = {(int(r[0]), int(r[1])): dict(zip(head, r)) for r in rows[1:] if isinstance(r[0], (int, float))}
+    with open(HERE / "spf_rgdp_growth.csv", "w", newline="", encoding="utf-8") as f:
+        w = csv.writer(f)
+        w.writerow(["quarter", *[f"f{k}" for k in range(5)]])
+        for (y, q) in sorted(tabs["median_rgdp_growth"]):
+            r = tabs["median_rgdp_growth"][(y, q)]
+            vals = [r.get(f"drgdp{k}") for k in range(2, 7)]
+            w.writerow([f"{y}Q{q}", *[_fmt(v) if isinstance(v, (int, float)) else "" for v in vals]])
+    with open(HERE / "spf_recess.csv", "w", newline="", encoding="utf-8") as f:
+        w = csv.writer(f)
+        w.writerow(["quarter", *[f"p{k}" for k in range(5)]])
+        for (y, q) in sorted(tabs["median_recess_level"]):
+            r = tabs["median_recess_level"][(y, q)]
+            vals = [r.get(f"recess{k}") for k in range(1, 6)]
+            w.writerow([f"{y}Q{q}", *[_fmt(v) if isinstance(v, (int, float)) else "" for v in vals]])
 
 
 def refresh_pinksheet() -> None:
