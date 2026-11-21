@@ -78,6 +78,9 @@ def compute_keynes() -> dict:
         hours[c] = {"name": h["name"], "first_year": first, "first": d[first], "last_year": last, "last": d[last],
                     "fall": 1 - d[last] / d[first]}
     ratio = k["ratio"]
+    # Called it? (calls.keynes_1930): the card's numbers
+    assert 4.3 < min(ratio.values()) < 4.5 and 7.3 < max(ratio.values()) < 7.5, ratio
+    assert all(1300 < h["last"] < 1950 and 0.1 < h["fall"] < 0.46 for h in hours.values()), hours
     return _jsonable({"ratio": ratio, "ratio_min": min(ratio.values()), "ratio_max": max(ratio.values()),
                       "hours": hours, "keynes_hours": k["keynes_hours"],
                       "lowest": min(hours, key=lambda c: hours[c]["last"])})
@@ -166,6 +169,7 @@ def compute_nordhaus() -> dict:
     ty, tv = np.array(t["year"], float), np.array(t["transistors"], float)
     doubling = 1 / np.polyfit(ty, np.log2(tv), 1)[0]
     return _jsonable({"decades": decades, "periods": periods, "last_year": last, "capital": cap, "doubling": doubling,
+                      "transistors": {"year": ty, "log10": np.log10(tv)},
                       "cap_first": cap["capital_share"][0], "cap_last": cap["capital_share"][-1],
                       "cap_first_year": cap["year"][0], "cap_last_year": cap["year"][-1],
                       "retrieved": data.FRED_RETRIEVED.get("OPHNFB")})
@@ -183,6 +187,7 @@ def compute_frey() -> dict:
     p = data.fred("PAYEMS")
     d = dict(zip(p["date"], p["value"]))
     start, last = "2013-09-01", p["date"][-1]
+    assert 0.14 < d[last] / d[start] - 1 < 0.19 and last == "2026-10-01"     # calls.frey_osborne_2013: a sixth
     return _jsonable({"start": start, "start_value": d[start], "last": last, "last_value": d[last],
                       "growth": d[last] / d[start] - 1, "retrieved": data.FRED_RETRIEVED.get("PAYEMS")})
 

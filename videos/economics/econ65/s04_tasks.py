@@ -135,8 +135,8 @@ class Tasks(VoiceoverScene):
         kl = legend_rows([(WORK, "capital fixed (short run)"), (MACH, "capital supplied (long run)")],
                          font_size=14).next_to(axl.ax.c2p(0.2, 2.4), DR, buff=0.15)
         axr = plane([0, 1], [0, 1], center=RIGHT * 3.3 + DOWN * 0.3, x_length=5.4, y_length=4.4,
-                    xticks=[0, 0.5, 1], yticks=[0, 0.25, 0.5, 0.75, 1.0], xlabel=r"automation, \ then new tasks",
-                    ylabel=r"labour's share of output", xfmt=lambda v: "", yfmt=lambda v: f"{100 * v:.0f}\\%",
+                    xticks=[], yticks=[0, 0.25, 0.5, 0.75, 1.0], xlabel=r"automation, \ then new tasks",
+                    ylabel=r"labour's share of output", yfmt=lambda v: f"{100 * v:.0f}\\%",
                     font_size=13)
         xa = np.linspace(0, 0.5, len(Is))
         xb = np.linspace(0.5, 1.0, len(Is))

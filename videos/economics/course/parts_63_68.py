@@ -87,4 +87,46 @@ PARTS = [
         also=(("Agora's learn module", "explainer/economics/agora/learn.py"),
               ("The Data Room: transistors", "explainer/economics/data")),
     ),
+    Part(
+        n=65, level="D", widget="automate", prereq=(19, 21, 39, 40, 44, 63, 64),
+        question="What happens to work, growth and incomes if machines can do most tasks?",
+        story="In 1930 Keynes predicted that in a hundred years the progressive countries would be four to eight times "
+              "richer and work fifteen hours a week; they are 4.4 to 7.4 times richer and still work 1,300-1,900 "
+              "hours a year. The viewer automates a share of research tasks and watches growth boom and fall back, "
+              "or explode when every task is automated. History (the Luddites, Engels's pause, the horse, the ATM) "
+              "leads to the task model: displacement against productivity and new tasks, so-so automation, and "
+              "labour's share. The dynamo and the J-curve explain why general-purpose technologies take decades; "
+              "the experiments with AI assistants find large task gains, most for the least skilled, which "
+              "Hulten's arithmetic turns into modest aggregate ones. After an intermission of hours worked since "
+              "1950, the race between automation and capital, the research bottleneck and Baumol's disease, "
+              "Nordhaus's tests, market structure, policy with Frey and Osborne's Called it?, agents that shop and "
+              "price, two new Dials, and Keynes's verdict: partly right.",
+        handoff="Part 66 turns from machines that change the economy to states that use trade as a weapon: tariffs, "
+                "sanctions and industrial policy.",
+        outside="Part 19: Engels's pause; Part 21: ideas and semi-endogenous growth; Part 39: tasks and polarization; "
+                "Part 40: the distribution of capital; Part 44: platforms and algorithmic pricing; Part 63: Hulten's "
+                "theorem; Part 64: machines that learn.",
+        objectives={
+            "U": ["Explain displacement, productivity and reinstatement in the task model.",
+                  "Explain why general-purpose technologies take decades to raise measured productivity.",
+                  "Summarize what the experiments with AI assistants find, and for whom."],
+            "M": ["Derive the wage in the task model and decompose its change.",
+                  "Compute an aggregate productivity gain from task-level evidence with Hulten's theorem.",
+                  "Show why the average price falls towards cost when buyers' agents compare every price."],
+            "D": ["Show why automating part of research gives a temporary boom, and automating all of it explosive "
+                  "growth.",
+                  "Derive Baumol's result that the slow sector sets aggregate growth.",
+                  "Explain why wages fall to the cost of a machine when every task can be automated."],
+            "I": ["Design a firm's experiment with an AI tool and translate its result into a productivity forecast."],
+        },
+        results=[
+            ("The wage in the task model", r"\ln w = \tfrac{1}{\sigma}\ln Y + \tfrac{1}{\sigma}\ln(N - I) + c"),
+            ("Hulten for AI", r"\Delta\ln\text{TFP} \approx s \cdot c"),
+            ("Semi-endogenous growth", r"g_A = \frac{\lambda n}{1-\phi}"),
+            ("Varian's average price", r"\bar p = c + (1-\mu)(v-c)"),
+        ],
+        U=(0, 1, 2, 3, 4, 5, 6, "s08_intermission", 7, 14), D=(8, 9, 10, 12, 15), I=(11, 13),
+        also=(("Agora's automation module", "explainer/economics/agora/automation.py"),
+              ("The Data Room: Maddison, the Penn World Table, FRED", "explainer/economics/data")),
+    ),
 ]

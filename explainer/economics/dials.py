@@ -1880,10 +1880,85 @@ DIALS = {d.key: d for d in [
                       "cases contracted to four stricter fifths' detention rates: the range", 0.157, lo=0.146,
                       hi=0.165, where="videos/economics/econ64/compute.py, item contraction", checked="2026-11-21"),
          )),
+    Dial("genai_task_effect", "the productivity effect of generative AI on a task", "percent gain in the measured "
+         "outcome, as reported: time saved on a set task, or output per hour (negative: slower)",
+         (65,), status="depends on the setting", checked="2026-11-21",
+         meaning="on short, well-defined tasks (writing, a small coding job, consulting tasks inside the model's "
+                 "abilities) time falls by a quarter to a half; in customer support output per hour rises by about "
+                 "a seventh, most for the least experienced; experienced developers in their own large code bases "
+                 "were slower in early 2025; tasks just outside the model's abilities get worse answers",
+         estimates=(
+             Estimate("Noy and Zhang", 2023, "RCT", "about 450 college-educated professionals, writing tasks: time "
+                      "per task", 40.0, where="Science 381(6654): 187-192, abstract", checked="2026-11-21"),
+             Estimate("Peng, Kalliamvakou, Cihon and Demirer", 2023, "RCT", "95 programmers writing an HTTP server "
+                      "in JavaScript: completion time", 55.8, lo=21.0, hi=89.0, where="arXiv 2302.06590, abstract",
+                      checked="2026-11-21"),
+             Estimate("Dell'Acqua, McFowland, Mollick et al.", 2023, "RCT", "758 BCG consultants, tasks inside the "
+                      "frontier: speed", 25.1, where="Harvard Business School working paper 24-013, abstract",
+                      checked="2026-11-21"),
+             Estimate("Brynjolfsson, Li and Raymond", 2023, "DiD", "5,172 customer-support agents, staggered "
+                      "rollout: resolutions per hour", 14.0, where="NBER working paper 31161, abstract; QJE 140(2) "
+                      "(2025)", checked="2026-11-21"),
+             Estimate("Becker, Rush, Barnes and Rein (METR)", 2025, "RCT", "16 experienced open-source developers, "
+                      "246 issues in their own repositories: completion time", -19.0,
+                      where="METR, Measuring the impact of early-2025 AI on experienced open-source developer "
+                            "productivity (July 2025)", checked="2026-11-21"),
+             Estimate("this film (the Island's support desk)", 2026, "RCT", "2,000 agents, half given an assistant "
+                      "at random: resolutions per hour", 15.0, lo=12.5, hi=17.6,
+                      where="videos/economics/econ65/compute.py, item desk", checked="2026-11-21"),
+         )),
+    Dial("ai_productivity_decade", "AI's addition to productivity growth over the next decade", "percentage points "
+         "a year of productivity growth over about ten years",
+         (65,), status="contested", checked="2026-11-21",
+         meaning="the same arithmetic (the share of the economy whose tasks AI makes cheaper, times the saving) gives "
+                 "under a tenth of a point a year on today's adoption and up to about a point if most exposed tasks "
+                 "adopt; analogies with electricity and computers give about one point; effects on the rate of "
+                 "invention are outside all of them",
+         estimates=(
+             Estimate("Acemoglu", 2024, "calibration", "Hulten's arithmetic: a fifth of tasks exposed, 23% of those "
+                      "adopted in ten years, a 14.4% cost saving; TFP (low: hard tasks)", 0.066, lo=0.053, hi=0.066,
+                      where="NBER working paper 32487, abstract; Economic Policy 40(121) (2025)",
+                      checked="2026-11-21"),
+             Estimate("Aghion and Bunel", 2024, "calibration", "Acemoglu's formula with their reading of the "
+                      "experiments: median and range", 0.68, lo=0.07, hi=1.24,
+                      where="AI and Growth: Where Do We Stand? (2024), introduction", checked="2026-11-21"),
+             Estimate("Aghion and Bunel", 2024, "calibration", "by analogy with electricity and information "
+                      "technology", 1.05, lo=0.8, hi=1.3,
+                      where="AI and Growth: Where Do We Stand? (2024), introduction", checked="2026-11-21"),
+             Estimate("Briggs and Kodnani (Goldman Sachs)", 2023, "calibration", "US labour productivity growth "
+                      "with widespread adoption over ten years", 1.5,
+                      where="The Potentially Large Effects of Artificial Intelligence on Economic Growth (March "
+                            "2023)", checked="2026-11-21"),
+         )),
 ]}
 
 # What each part shows without entering a row, and why: {part: [(what is shown, the reason)]}
 SHOWN = {
+    65: [
+        ("Keynes (1930)", "the hook's story; Called it? (calls.keynes_1930), computed from the Maddison Project and "
+         "the Penn World Table"),
+        ("Ricardo (1821); the Luddites; Leontief (1983)", "history, stated"),
+        ("Allen (2009)", "Engels's pause, computed from the Bank of England's millennium series"),
+        ("Hannan and Hanweck (2008); Bessen (2015); Autor, Chin, Salomons and Seegmiller (2024)", "the ATM and the "
+         "tellers, and new work, stated"),
+        ("Zeira (1998); Acemoglu and Restrepo (2018, 2019, 2020, 2022)", "the task model computed on the Island; "
+         "the robot and wage-structure findings stated"),
+        ("David (1990); Devine (1983); Solow (1987)", "the dynamo and the productivity paradox, stated; US "
+         "productivity growth by period computed from FRED"),
+        ("Brynjolfsson, Rock and Syverson (2021)", "the J-curve, computed on the Island"),
+        ("Eloundou, Manning, Mishkin and Rock (2024)", "exposure, stated"),
+        ("Aghion, Jones and Jones (2019); Jones (1995); Bloom, Jones, Van Reenen and Webb (2020); Baumol (1967); "
+         "Nordhaus (2008)", "growth with automated research and Baumol's disease, computed on the Island"),
+        ("Korinek and Suh (2024)", "the race between automation and capital, computed on the Island"),
+        ("Nordhaus (2021)", "the tests run on FRED, the Penn World Table and Rupp's transistors; Called it? "
+         "(calls.nordhaus_2021)"),
+        ("Frey and Osborne (2013)", "Called it? (calls.frey_osborne_2013), with payroll employment from FRED"),
+        ("Korinek and Vipra (2025); Epoch AI (2024)", "market structure, stated; the entry toy computed"),
+        ("Guerreiro, Rebelo and Teles (2022); Acemoglu, Manera and Restrepo (2020); Acemoglu and Johnson (2023)",
+         "policy, stated"),
+        ("Varian (1980); Calvano et al. (2020); Fish, Gonczarowski and Shorrer (2024)", "agents: Varian's model "
+         "computed; the pricing studies stated"),
+    ],
     64: [
         ("Kleinberg, Lakkaraju, Leskovec, Ludwig and Mullainathan (2018); Lakkaraju et al. (2017)", "the hook's "
          "story and the Dial; the Island's courts, contraction and selective labels computed"),

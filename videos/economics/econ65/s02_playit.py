@@ -86,7 +86,9 @@ class PlayIt(VoiceoverScene):
         side = VGroup()
         for k in ("0.00", "0.50", "0.75", "0.90", "1.00"):
             p = P[k]
-            if p["exploded"]:
+            if k == "0.00":
+                txt = rf"{LETTER[k]}: \ 0\%: \ about {100 * p['at100']:.1f}\% a year throughout"
+            elif p["exploded"]:
                 txt = rf"{LETTER[k]}: \ {100 * float(k):.0f}\%: \ above 50\% a year by year {p['last_year']}"
             else:
                 txt = (rf"{LETTER[k]}: \ {100 * float(k):.0f}\%: \ peak {100 * p['peak']:.0f}\% (year "

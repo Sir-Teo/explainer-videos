@@ -10,7 +10,7 @@ the series leaves out.
 Both *Parts* columns are found, not typed. *Planned* lists the parts whose entry in
 [`SYLLABUS.md`](SYLLABUS.md) names the book or paper; *Built* lists the parts whose scenes, compute step or
 README cite it (a dot: none yet). Fuller notes (editions, chapters, what each source was used for) are in each
-part's README, under *Sources*. Built so far: Parts 1–64.
+part's README, under *Sources*. Built so far: Parts 1–65.
 
 ## 1. The textbook spine
 
@@ -28,15 +28,15 @@ part's README, under *Sources*. Built so far: Parts 1–64.
 
 | Short name | Book | Planned | Built |
 |---|---|---|---|
-| Varian | H. Varian, *Intermediate Microeconomics* (9th ed., 2014) | 2, 5–8, 10 | 2, 5–8, 10, 16, 61 |
+| Varian | H. Varian, *Intermediate Microeconomics* (9th ed., 2014) | 2, 5–8, 10 | 2, 5–8, 10, 16, 61, 65 |
 | Nicholson–Snyder | W. Nicholson and C. Snyder, *Microeconomic Theory* (13th ed., 2021) | 5–6 | 5–6, 8 |
 | Jones | C. I. Jones, *Macroeconomics* (6th ed., 2023) | 20 | · |
 | Blanchard | O. Blanchard, *Macroeconomics* (8th ed., 2021) | 27, 32 | 20, 24, 27–28, 32, 39 |
 | Stock–Watson | J. Stock and M. Watson, *Introduction to Econometrics* (4th ed., 2019) | 4 | 4, 45, 49, 55, 57 |
 | Angrist–Pischke | J. Angrist and J.-S. Pischke, *Mostly Harmless Econometrics* (2009) | 4, 50, 67 | 4, 50 |
-| Osborne | M. Osborne, *An Introduction to Game Theory* (2004) | 11 | 11 |
+| Osborne | M. Osborne, *An Introduction to Game Theory* (2004) | 11 | 11, 65 |
 | Krugman–Obstfeld–Melitz | P. Krugman, M. Obstfeld and M. Melitz, *International Economics* (12th ed., 2022) | 34–35 | 34–36 |
-| Mishkin | F. Mishkin, *The Economics of Money, Banking, and Financial Markets* (13th ed., 2022) | 26 | 31, 57 |
+| Mishkin | F. Mishkin, *The Economics of Money, Banking, and Financial Markets* (13th ed., 2022) | 26 | 31, 57, 65 |
 | Cabral | L. Cabral, *Introduction to Industrial Organization* (2nd ed., 2017) | 12–13 | 12–13 |
 | Borjas | G. Borjas, *Labor Economics* (8th ed., 2020) | 38 | 38 |
 | Gruber | J. Gruber, *Public Finance and Public Policy* (7th ed., 2022) | 15, 41–42, 50 | 7, 15, 41–42, 49–51, 58 |
@@ -121,7 +121,7 @@ part's README, under *Sources*. Built so far: Parts 1–64.
 | Model or result | Paper | Planned | Built |
 |---|---|---|---|
 | the division of labour | Smith (1776), *The Wealth of Nations* | 1 | 1–2, 19, 21, 39 |
-| comparative advantage | Ricardo (1817), *Principles*, ch. 7 | 2, 8, 35–36 | 1–2, 8, 19, 22, 25, 33–36, 52 |
+| comparative advantage | Ricardo (1817), *Principles*, ch. 7 | 2, 8, 35–36 | 1–2, 8, 19, 22, 25, 33–36, 52, 65 |
 | supply and demand, the scissors | Marshall (1890), *Principles of Economics* | 2, 37 | 2, 14, 37 |
 | the price system as information | Hayek (1945), "The Use of Knowledge in Society" | 1, 9 | 1, 9 |
 | the double auction in the classroom | Chamberlin (1948); Smith (1962) | 1–2 | 1 |
@@ -152,7 +152,7 @@ part's README, under *Sources*. Built so far: Parts 1–64.
 | Model or result | Paper | Planned | Built |
 |---|---|---|---|
 | equilibrium in games | Nash (1950, 1951) | 11 | 11, 53 |
-| oligopoly in quantities and prices | Cournot (1838); Bertrand (1883) | 12 | 6, 12, 43, 53 |
+| oligopoly in quantities and prices | Cournot (1838); Bertrand (1883) | 12 | 6, 12, 43, 53, 65 |
 | demand estimation with differentiated products | Berry, Levinsohn and Pakes (1995) | 43 | 35, 42–43 |
 
 ### Information and design
@@ -185,7 +185,7 @@ part's README, under *Sources*. Built so far: Parts 1–64.
 | Model or result | Paper | Planned | Built |
 |---|---|---|---|
 | the Malthusian economy | Malthus (1798) | 19 | 18–19 |
-| the long run in numbers | the Maddison Project (Bolt and van Zanden 2024) | 1 | 1, 3, 14, 19–20 |
+| the long run in numbers | the Maddison Project (Bolt and van Zanden 2024) | 1 | 1, 3, 14, 19–20, 65 |
 | the neoclassical growth model | Solow (1956); Ramsey (1928); Cass (1965) | 20 | 20 |
 | endogenous growth | Romer (1990); Aghion and Howitt (1992) | 21 | · |
 | misallocation | Hsieh and Klenow (2009) | 9, 21 | 9, 21 |
@@ -235,7 +235,7 @@ part's README, under *Sources*. Built so far: Parts 1–64.
 |---|---|---|---|
 | human capital | Becker (1964); Mincer (1974) | 38 | 13, 38 |
 | the minimum wage | Card and Krueger (1994) | 4, 38 | 4, 38 |
-| skills, tasks and technology | Autor, Levy and Murnane (2003); Acemoglu and Autor (2011) | 39 | 39 |
+| skills, tasks and technology | Autor, Levy and Murnane (2003); Acemoglu and Autor (2011) | 39 | 39, 65 |
 | mobility and place | Chetty and others (2014) | 40, 42 | · |
 | top incomes | Piketty and Saez (2003) | 40 | 40–41 |
 | the economics of crime | Becker (1968) | 49 | 49 |
@@ -383,6 +383,8 @@ part's README, under *Sources*. Built so far: Parts 1–64.
 **Part 63, *The Economy as a Network*.** Books: Matthew O. Jackson, *Social and Economic Networks* (2008); Vasco Carvalho and Alireza Tahbaz-Salehi, "Production Networks: A Primer", *Annual Review of Economics* (2019); Sanjeev Goyal, *Connections: An Introduction to the Economics of Networks* (2007). Papers: Leontief (1936); Domar (1961); Hulten (1978); Lucas (1977); Granovetter (1973); Kremer (1993); Jackson and Wolinsky (1996); Eisenberg and Noe (2001); Ballester, Calvó-Armengol and Zenou (2006); Gabaix (2011); Acemoglu et al. (2012, 2015); Banerjee et al. (2013); Elliott, Golub and Jackson (2014); Barrot and Sauvagnat (2016); Baqaee and Farhi (2019); Boehm et al. (2019); Carvalho et al. (2021); Elliott, Golub and Leduc (2022); Rajkumar et al. (2022).
 
 **Part 64, *Machines that Learn*.** Books: Susan Athey and Guido Imbens, "Machine Learning Methods That Economists Should Know About", *Annual Review of Economics* (2019); Sendhil Mullainathan and Jann Spiess, "Machine Learning: An Applied Econometric Approach", *Journal of Economic Perspectives* (2017); Trevor Hastie, Robert Tibshirani and Jerome Friedman, *The Elements of Statistical Learning* (2nd ed., 2009). Papers: Meehl (1954); Brock and Mirman (1972); Robinson (1988); Kleinberg et al. (2015, 2017, 2018); Chernozhukov et al. (2018); Wager and Athey (2018); Kitagawa and Tetenov (2018); Athey and Wager (2021); Jean et al. (2016); Gentzkow, Kelly and Taddy (2019); Obermeyer et al. (2019); Angelopoulos et al. (2023); Calvano et al. (2020); Chouldechova (2017); Zheng et al. (2022); Horton (2023); Ludwig and Mullainathan (2024).
+
+**Part 65, *The Economics of AI*.** Books: Ajay Agrawal, Joshua Gans and Avi Goldfarb (eds), *The Economics of Artificial Intelligence: An Agenda* (2019); Daron Acemoglu and Simon Johnson, *Power and Progress* (2023); David Autor, "Why Are There Still So Many Jobs?", *Journal of Economic Perspectives* (2015). Papers: Keynes (1930); Zeira (1998); Acemoglu and Restrepo (2018, 2019, 2020, 2022); David (1990); Brynjolfsson, Rock and Syverson (2021); Noy and Zhang (2023); Dell'Acqua et al. (2023); Brynjolfsson, Li and Raymond (2025); Eloundou et al. (2024); Acemoglu (2024); Aghion, Jones and Jones (2019); Nordhaus (2021); Korinek and Suh (2024); Korinek and Vipra (2025); Guerreiro, Rebelo and Teles (2022); Varian (1980).
 
 ## 4. What the series leaves out
 

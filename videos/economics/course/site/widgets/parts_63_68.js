@@ -200,4 +200,75 @@
       note: "Part 64, chapters 2, 3 and 15. Computed in your browser; nothing you do here is stored or sent.",
     });
   };
+
+  W.automate = function (el) {
+    // Agora's automation module (explainer.economics.agora.automation.ideas_growth): goods Y = A K^0.35 L^0.65, 25%
+    // saved, 5% depreciation, people and researchers growing 1% a year; research input a CES (elasticity sigma) over
+    // a share beta of tasks done by machines (5% of capital, in researcher-equivalents) and the rest by people; new
+    // ideas 0.02 R A^0.5.  Growth of output per person for 200 years (stopped above 50% a year), and people's share
+    // of research costs; the grey line is no automation.
+    function run(beta, sigma) {
+      var A = 1, K = 3, L = 1, S = 1, n = 0.01, phi = 0.5, al = 0.35, sv = 0.25, dep = 0.05, rk = 0.05,
+          th = 0.02, mach = 6.67, r = (sigma - 1) / sigma, yPrev = A * Math.pow(K, al) * Math.pow(L, 1 - al);
+      var ys = [], gs = [], ps = [], R, people;
+      for (var t = 0; t < 200; t++) {
+        var kR = mach * rk * K;
+        if (beta >= 1) { R = kR; people = 0; }
+        else if (beta <= 0) { R = S; people = 1; }
+        else {
+          var hm = Math.pow(1 - beta, 1 / sigma) * Math.pow(S, r), mm = Math.pow(beta, 1 / sigma) * Math.pow(kR, r);
+          R = Math.pow(mm + hm, 1 / r); people = hm / (mm + hm);
+        }
+        A += th * R * Math.pow(A, phi);
+        var Y = A * Math.pow(K, al) * Math.pow(L, 1 - al);
+        K = (1 - dep) * K + sv * Y * (1 - rk);
+        L *= 1 + n; S *= 1 + n;
+        var gy = (Y / L) / (yPrev / (L / (1 + n))) - 1;
+        yPrev = Y;
+        ys.push(t); gs.push(100 * gy); ps.push(100 * people);
+        if (gy > 0.5) { break; }
+      }
+      return { t: ys, g: gs, p: ps, exploded: gs[gs.length - 1] > 50 };
+    }
+    QB.widget(el, {
+      title: "Automate the lab",
+      sub: "Ideas come from research tasks done by people or by machines. Choose the share of research tasks " +
+           "machines can do and how hard it is to substitute one task for another (lower: every task must be done). " +
+           "Watch the growth rate over two centuries, and who ends up bearing the cost of research.",
+      panels: 2, height: 280,
+      controls: [
+        { k: "b", label: "Share of research tasks automated", min: 0, max: 1, step: 0.05, value: 0.9,
+          fmt: function (x) { return Math.round(100 * x) + "%"; } },
+        { k: "s", label: "Elasticity of substitution between tasks", min: 0.1, max: 0.9, step: 0.05, value: 0.3,
+          fmt: function (x) { return x.toFixed(2); } },
+      ],
+      draw: function (g, v, st) {
+        var base = run(0, v.s), m = run(v.b, v.s), i, pk = 0, pkt = 0;
+        for (i = 0; i < m.g.length; i++) { if (m.g[i] > pk) { pk = m.g[i]; pkt = m.t[i]; } }
+        st.peak = pk; st.peakt = pkt; st.exploded = m.exploded; st.last = m.t[m.t.length - 1];
+        st.g100 = m.g.length > 100 ? m.g[100] : null; st.p100 = m.p.length > 100 ? m.p[100] : null;
+        st.base = base.g[100];
+        var top = Math.min(Math.max(30, pk * 1.1), 60);
+        var A1 = g[0].axes({ x: [0, 200], y: [0, top], title: "growth of output per person, % a year",
+                             xlabel: "years" });
+        A1.line(base.t, base.g, { color: "#9AA3B2", width: 2 });
+        A1.line(m.t, m.g.map(function (x) { return Math.min(x, top); }), { color: "#C9A0FF", width: 2.5 });
+        A1.legend([["no automation", "#9AA3B2"], ["your lab", "#C9A0FF"]], "tr");
+        var A2 = g[1].axes({ x: [0, 200], y: [0, 100], title: "people's share of research costs, %",
+                             xlabel: "years" });
+        A2.line(m.t, m.p, { color: "#E8A0B4", width: 2.5 });
+      },
+      readout: function (v, st) {
+        var out = [["growth without automation", st.base.toFixed(1) + "% a year"],
+                   ["your peak", st.peak.toFixed(1) + "% in year " + st.peakt]];
+        if (st.exploded) { out.push(["explodes", "above 50% a year by year " + st.last]); }
+        else {
+          out.push(["year 100", st.g100.toFixed(1) + "% a year"]);
+          out.push(["people's share of research costs, year 100", st.p100.toFixed(0) + "%"]);
+        }
+        return out;
+      },
+      note: "Part 65, chapters 1 and 8. Computed in your browser; nothing you do here is stored or sent.",
+    });
+  };
 })();

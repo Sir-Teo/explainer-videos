@@ -3,6 +3,8 @@ curves and colours."""
 
 from __future__ import annotations
 
+import re
+
 import numpy as np
 
 from explainer.economics import *  # noqa: F403
@@ -115,6 +117,7 @@ def legend_rows(items, font_size=17):
     """A key: [(colour, text)] as dots with labels, stacked."""
     rows = VGroup()
     for col, txt in items:
+        txt = re.sub(r"(?<!\\)%", r"\\%", txt)          # a bare % would start a TeX comment
         rows.add(VGroup(Dot(radius=0.07, color=col), label(txt, font_size=font_size, color=col)).arrange(
             RIGHT, buff=0.15))
     return rows.arrange(DOWN, aligned_edge=LEFT, buff=0.14)

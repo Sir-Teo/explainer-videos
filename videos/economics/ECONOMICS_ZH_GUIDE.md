@@ -1802,3 +1802,21 @@ brackets on screen.
 | reinforcement learning; Q-learning; algorithmic collusion | 强化学习；Q学习；算法合谋 |
 | large language model; simulated subjects | 大语言模型；模拟被试 |
 | algorithmic fairness; calibration; false positive rate | 算法公平；校准；假阳性率 |
+
+## Part 65
+
+| English | 中文 |
+|---|---|
+| the economics of AI; automation | 人工智能经济学；自动化 |
+| task model; displacement effect; productivity effect; reinstatement (new tasks) | 任务模型；置换效应（岗位被机器取代）；生产率效应；恢复效应（新任务） |
+| so-so automation | 平庸的自动化 |
+| labour share; capital share | 劳动收入份额；资本收入份额 |
+| general-purpose technology; productivity J-curve; intangible capital | 通用目的技术；生产率J曲线；无形资本 |
+| exposure (to language models); adoption | （对语言模型的）暴露度；采用率 |
+| Hulten's theorem | 赫尔滕定理 |
+| semi-endogenous growth; automated research; bottleneck | 半内生增长；研究自动化；瓶颈 |
+| Baumol's cost disease | 鲍莫尔成本病 |
+| economic singularity; explosive growth | 经济奇点；爆炸式增长 |
+| robot tax | 机器人税 |
+| model of sales; shopping agent | 促销模型；购物代理 |
+| technological unemployment | 技术性失业 |

@@ -750,4 +750,38 @@ CALLS = {c.key: c for c in [
           "(1954)",
           "W. M. Grove, D. H. Zald, B. S. Lebow, B. E. Snitz and C. Nelson, \"Clinical versus mechanical "
           "prediction: a meta-analysis\", Psychological Assessment 12(1): 19-30 (2000), abstract")),
+    Call("keynes_1930", 65, "John Maynard Keynes, Economic Possibilities for our Grandchildren", "1930",
+         "in a hundred years the standard of life in progressive countries will be four to eight times as high, and "
+         "people will work perhaps fifteen hours a week",
+         "compound growth of capital and technique at the rates of the previous century, and the belief that the "
+         "economic problem would be solved, so that people would choose leisure",
+         "GDP per head in 2022 was 4.4 to 7.4 times its 1930 level in six rich countries (Britain, the United "
+         "States, France, the Netherlands, Sweden, Germany); hours per worker fell from 1950 to 2023 by 11-45% in "
+         "six countries, to about 1,300-1,900 a year, against about 780 for a fifteen-hour week",
+         "partly right",
+         ("J. M. Keynes, \"Economic Possibilities for our Grandchildren\", The Nation and Athenaeum (1930); Essays "
+          "in Persuasion (1931)",
+          "Maddison Project Database 2023 (GDP per head)", "Penn World Table 11.0 (avh)")),
+    Call("frey_osborne_2013", 65, "Carl Benedikt Frey and Michael Osborne", "September 2013",
+         "about 47% of total US employment is in occupations at high risk of computerisation, perhaps over a decade "
+         "or two",
+         "experts' labels of 70 occupations as automatable or not, extended to 702 occupations by a classifier on "
+         "O*NET measures of perception and manipulation, creative intelligence and social intelligence",
+         "US payroll employment rose by about a sixth from September 2013 to October 2026; the paper rated "
+         "technical feasibility, not adoption or timing, and the second decade is not yet over",
+         "too early to say",
+         ("C. B. Frey and M. A. Osborne, \"The future of employment: How susceptible are jobs to "
+          "computerisation?\", Oxford Martin School working paper (2013); Technological Forecasting and Social "
+          "Change 114: 254-280 (2017)", "BLS via FRED (PAYEMS)")),
+    Call("nordhaus_2021", 65, "William D. Nordhaus", "2021",
+         "an economic singularity is not near: most of the tests point away from it, and those that point towards "
+         "it imply that it is many decades away",
+         "tests of whether information capital substitutes for labour well enough for growth to explode: "
+         "productivity growth, capital's share, information capital's share of capital, prices, and demand",
+         "since 2021 American productivity growth has picked up a little and capital's share is high; generative "
+         "AI arrived after his data ended, and the tests need another decade of data",
+         "too early to say",
+         ("W. D. Nordhaus, \"Are We Approaching an Economic Singularity? Information Technology and the Future of "
+          "Economic Growth\", American Economic Journal: Macroeconomics 13(1): 299-332 (2021)",
+          "BLS via FRED (OPHNFB)", "Penn World Table 11.0 (labsh)")),
 ]}

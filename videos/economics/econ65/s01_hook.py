@@ -9,7 +9,7 @@ NAMES = {"GBR": "Britain", "USA": "United States", "FRA": "France", "NLD": "Neth
 class Hook(VoiceoverScene):
     def construct(self):
         self.story()
-        self.record()
+        self.scorecard()
         self.question()
         self.title()
         self.objectives()
@@ -47,7 +47,7 @@ class Hook(VoiceoverScene):
                 self.play(FadeIn(c, shift=UP * 0.1))
         self.clear_scene()
 
-    def record(self):
+    def scorecard(self):
         K = load("keynes")
         ratio = sorted(K["ratio"].items(), key=lambda kv: kv[1])
         axl = plane([-0.6, len(ratio) - 0.4], [0, 9], center=LEFT * 3.5 + DOWN * 0.5, x_length=5.6, y_length=4.4,
