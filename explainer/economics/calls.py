@@ -414,6 +414,18 @@ CALLS = {c.key: c for c in [
           "of Technology on Employment and Unemployment, National Academy of Engineering (1983), as quoted in "
           "secondary listings",
           "BLS via FRED: LNS12300060 (employment-population ratio, 25-54) and PRS85006173 (labor share)")),
+    Call("aaa_2006", 53, "Moody's and Standard & Poor's, rating mortgage-backed securities",
+         "2006",
+         "the senior tranches of securities built from subprime and other risky mortgages deserved the highest "
+         "rating, triple-A: as unlikely to default as the safest corporate and government bonds",
+         "models of default fitted to years of rising house prices, and ratings paid for by the issuers who chose "
+         "which agency to hire",
+         "after house prices began to fall in 2006, most mortgage securities rated triple-A that year were "
+         "downgraded within a few years, many of them to junk, and the downgrades helped turn falling house prices "
+         "into a financial crisis",
+         "wrong",
+         ("Financial Crisis Inquiry Commission, The Financial Crisis Inquiry Report (2011), conclusions",
+          "U.S. Senate Permanent Subcommittee on Investigations, Wall Street and the Financial Crisis (2011)")),
     Call("krusell_smith_1998", 52, "Per Krusell and Anthony Smith, in the Journal of Political Economy",
          "October 1998",
          "in a calibrated economy with uninsurable income risk and aggregate shocks, the behaviour of the "

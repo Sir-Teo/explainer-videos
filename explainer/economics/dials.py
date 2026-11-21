@@ -412,7 +412,7 @@ DIALS = {d.key: d for d in [
                       "brand", -2.74, where="videos/economics/econ43/compute.py, item cereal", checked="2026-11-20"),
          )),
     Dial("reasoning_depth", "depth of strategic reasoning", "average steps of thinking (the cognitive hierarchy's "
-         "tau)", (11, 45), status="depends on the setting", checked="2026-11-19",
+         "tau)", (11, 45, 53), status="depends on the setting", checked="2026-11-19",
          meaning="people typically think one or two steps ahead of a naive player, not the infinitely many steps that "
                  "equilibrium assumes; newspaper readers with time to think, and players with experience, go deeper, "
                  "so how far reasoning goes depends on the setting, and first-time play is better predicted by levels "
@@ -1626,6 +1626,23 @@ DIALS = {d.key: d for d in [
 
 # What each part shows without entering a row, and why: {part: [(what is shown, the reason)]}
 SHOWN = {
+    53: [
+        ("Kamenica and Gentzkow (2011)", "the hook's prosecutor and the persuasion chapter, computed"),
+        ("Harsanyi (1967-68); Cho and Kreps (1987); Kreps and Wilson (1982)", "the theory, stated and computed on "
+         "examples"),
+        ("Crawford and Sobel (1982); Bergemann and Morris (2005, 2016, 2019); Blackwell (1953)", "the models, "
+         "computed here"),
+        ("Aumann (1976); Geanakoplos and Polemarchakis (1982); Rubinstein (1989)", "common knowledge, computed on "
+         "examples"),
+        ("Carlsson and van Damme (1993); Morris and Shin (1998, 2003)", "the global game, computed"),
+        ("Banerjee (1992); Bikhchandani, Hirshleifer and Welch (1992)", "cascades, computed exactly and simulated"),
+        ("Selten (1978); Milgrom and Roberts (1982); Nash (1950); Rubinstein (1982); Coase (1972); Bull (1987); Levin "
+         "(2003)", "the models, stated and computed"),
+        ("Camerer, Ho and Chong (2004); Nagel (1995); DellaVigna and Kaplan (2007)", "the reasoning_depth dial and "
+         "the persuasion rate, stated"),
+        ("Financial Crisis Inquiry Commission (2011); US Senate PSI (2011)", "the Called it? card, stated"),
+        ("University of Michigan, Surveys of Consumers; BLS CPI", "the intermission's data, shown from the Data Room"),
+    ],
     52: [
         ("Kirman (1992); Krusell and Smith (1998); Kaplan, Moll and Violante (2018)", "the hook's essay, finding and "
          "reversal, stated"),

@@ -375,4 +375,60 @@
             "do here is stored or sent.",
     });
   };
+  // ---- Part 53: information and persuasion --------------------------------------------------------------------
+  W.persuade = function (el) {
+    // Agora's information and persuasion (explainer.economics.agora.persuade): Kamenica and Gentzkow's prosecutor.
+    // The investigation flags every guilty defendant and a share p of the innocent; the judge, who knows the prior
+    // and the design, convicts a flagged defendant when Pr(guilty | flag) >= the threshold, and acquits otherwise.
+    QB.widget(el, {
+      title: "Persuade",
+      sub: "You design the investigation. Left: the judge's belief in guilt after a flag (purple) and the share of " +
+           "defendants convicted (gold) as the share of innocent defendants flagged varies; your design is the " +
+           "dot. Right: what the prosecutor gets at each belief, its concave closure, and the prior.",
+      panels: 2, height: 260,
+      controls: [
+        { k: "prior", label: "Share guilty (the prior)", min: 0.05, max: 0.95, step: 0.05, value: 0.3,
+          fmt: function (x) { return Math.round(100 * x) + "%"; } },
+        { k: "thr", label: "Judge's standard of proof", min: 0.2, max: 0.9, step: 0.05, value: 0.5,
+          fmt: function (x) { return Math.round(100 * x) + "%"; } },
+        { k: "p", label: "Innocent defendants flagged", min: 0, max: 1, step: 0.01, value: 0.2,
+          fmt: function (x) { return Math.round(100 * x) + "%"; } },
+      ],
+      draw: function (g, v, st) {
+        var pr = v.prior, t = v.thr;
+        function post(p) { return pr / (pr + (1 - pr) * p); }
+        function conv(p) {
+          if (pr >= t) { return 1; }
+          return post(p) >= t - 1e-12 ? pr + (1 - pr) * p : 0;
+        }
+        var ps = [], cs = [], bs = [];
+        for (var i = 0; i <= 200; i++) { var p = i / 200; ps.push(p); cs.push(conv(p)); bs.push(post(p)); }
+        var L = g[0].axes({ x: [0, 1], y: [0, 1], title: "after a flag", xlabel: "share of innocent flagged" });
+        L.hline(t, { color: "#7EC8F5" });
+        L.line(ps, bs, { color: "#C9A0FF", width: 1.6 });
+        L.line(ps, cs, { color: "#F2C14E", width: 2.2 });
+        L.dots([v.p], [conv(v.p)], { color: "#FFFFFF", r: 4 });
+        var mu = [], val = [], cav = [];
+        for (var j = 0; j <= 200; j++) {
+          var m = j / 200; mu.push(m); val.push(m >= t ? 1 : 0); cav.push(Math.min(1, m / t));
+        }
+        var R = g[1].axes({ x: [0, 1], y: [0, 1.05], title: "the prosecutor's value", xlabel: "the judge's belief" });
+        R.line(mu, val, { color: "#F2C14E", width: 2 });
+        R.line(mu, cav, { color: "#C9A0FF", width: 2, dash: [5, 4] });
+        R.vline(pr, { color: "#FFFFFF" });
+        st.post = post(v.p); st.conv = conv(v.p);
+        st.best = pr >= t ? 1 : pr / t;
+        st.pbest = pr >= t ? 1 : pr * (1 - t) / (t * (1 - pr));
+      },
+      readout: function (v, st) {
+        return [["judge's belief after a flag", QB.pct(st.post, 0)],
+                ["convicted, your design", QB.pct(st.conv, 0)],
+                ["the best design flags", QB.pct(st.pbest, 0) + " of the innocent"],
+                ["convicted, best design", QB.pct(st.best, 0) + " (prior / standard)"]];
+      },
+      note: "Part 53, chapters 1 and 5. The best investigation leaves the judge exactly at the standard after a " +
+            "flag; one step further and the flag stops working. Computed in your browser; nothing you do here is " +
+            "stored or sent.",
+    });
+  };
 })();

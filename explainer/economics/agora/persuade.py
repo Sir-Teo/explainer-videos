@@ -447,11 +447,11 @@ def coase_two_period(v_high: float = 1.0, v_low: float = 0.4, share_high: float 
 
 
 def relational(delta, theta: float = 1.0, c: float = 0.5, outside: float = 0.0) -> dict:
-    """Levin's relational contract with effort e producing theta e at cost c e^2 / 2, paid by a bonus the firm can
-    renege on. Self-enforcement: the bonus cannot exceed the discounted value of the relationship,
-    b <= delta/(1 - delta) (theta e - c e^2/2 - outside). The bonus needed to induce e is c e^2 (the agent's
-    incentive with a base wage absorbing the rest). Returns the highest enforceable effort for each delta (first
-    best theta / c)."""
+    """A relational contract in the spirit of Bull (1987) and Levin (2003): effort e produces theta e and costs the
+    worker c e^2 / 2; it is rewarded by a bonus the firm could refuse to pay. The bonus must cover the cost of the
+    effort, b = c e^2 / 2, and the firm pays only if the bonus is no more than the discounted value of the
+    relationship: b <= delta/(1 - delta) (theta e - c e^2/2 - outside). Returns the highest enforceable effort
+    for each delta (first best theta / c; with outside = 0 it is 2 delta theta / c up to delta = 1/2)."""
     deltas = np.atleast_1d(np.asarray(delta, float))
     first = theta / c
     out = []
@@ -459,7 +459,7 @@ def relational(delta, theta: float = 1.0, c: float = 0.5, outside: float = 0.0) 
         k = d / (1 - d)
 
         def slack(e):
-            return k * (theta * e - c * e * e / 2 - outside) - c * e * e
+            return k * (theta * e - c * e * e / 2 - outside) - c * e * e / 2
 
         if slack(first) >= 0:
             out.append(first)
@@ -467,7 +467,7 @@ def relational(delta, theta: float = 1.0, c: float = 0.5, outside: float = 0.0) 
         grid = np.linspace(1e-6, first, 2001)
         ok = grid[[slack(e) >= 0 for e in grid]]
         out.append(float(ok.max()) if len(ok) else 0.0)
-    need = theta ** 2 / c
+    need = theta ** 2 / (2 * c)
     surplus = theta ** 2 / (2 * c) - outside
     return {"delta": deltas.tolist(), "effort": out, "first_best": first,
             "delta_star": float(need / (need + surplus)) if surplus > 0 else None}

@@ -1284,7 +1284,20 @@ TRUTHS = {
         "chain": {"n": 20, "delta": 0.05, "b": 0.5, "a": 2.0},
         "bargain": {"deltas": (0.5, 0.8, 0.9, 0.95, 0.99), "v_high": 1.0, "v_low": 0.4, "share_high": 0.5,
                     "delta": 0.8},
-        "relational": {"theta": 1.0, "c": 0.5},
+        "relational": {"theta": 1.0, "c": 1.0},
+    },
+    54: {
+        # estimating models: the Island's commuters (car or bus, minutes and dollars; a new rail line, closer to the
+        # bus than to the car), a stock market whose returns obey the Euler equation, life-cycle households with a
+        # pension, an MA(1), a two-type panel, villages with a schooling subsidy, and missing outcomes
+        "commuters": {"n": 3000, "beta": (-0.06, -0.5), "asc": (0.0, -0.4), "seed": 54,
+                      "rail": {"time": 35.0, "cost": 2.5, "asc": -0.2}, "nest_lambda": 0.5},
+        "euler": {"T": 2000, "beta": 0.97, "gamma": 3.0, "seed": 54, "bad_premium": 0.01},
+        "lifecycle": {"beta": 0.95, "gamma": 2.0, "n": 3000, "S": 5, "seed": 7, "start": (0.93, 3.0)},
+        "ma1": {"theta": 0.5, "n": 200, "reps": 300},
+        "types": {"people": 800, "T": 8, "share_low": 0.4, "alpha": (-1.5, 1.0), "b": 0.8, "seed": 54},
+        "school": {"villages": 200, "per": 60, "subsidy": 10.0, "label_effect": 0.6, "seed": 54,
+                   "missing": 0.2},
     },
 }
 

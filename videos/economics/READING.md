@@ -10,7 +10,7 @@ the series leaves out.
 Both *Parts* columns are found, not typed. *Planned* lists the parts whose entry in
 [`SYLLABUS.md`](SYLLABUS.md) names the book or paper; *Built* lists the parts whose scenes, compute step or
 README cite it (a dot: none yet). Fuller notes (editions, chapters, what each source was used for) are in each
-part's README, under *Sources*. Built so far: Parts 1–52.
+part's README, under *Sources*. Built so far: Parts 1–53.
 
 ## 1. The textbook spine
 
@@ -48,9 +48,9 @@ part's README, under *Sources*. Built so far: Parts 1–52.
 | Short name | Book | Planned | Built |
 |---|---|---|---|
 | MWG | A. Mas-Colell, M. Whinston and J. Green, *Microeconomic Theory* (1995) | 5–9, 11, 13, 15, 18, 56 | 5–11, 13, 15–16, 18 |
-| Kreps | D. Kreps, *Microeconomic Foundations I* (2013) | 5, 7, 9, 11, 56 | 5, 7, 9, 11–13 |
+| Kreps | D. Kreps, *Microeconomic Foundations I* (2013) | 5, 7, 9, 11, 56 | 5, 7, 9, 11–13, 53 |
 | Jehle–Reny | G. Jehle and P. Reny, *Advanced Microeconomic Theory* (3rd ed., 2011) | 5, 9 | 5–6, 9 |
-| Fudenberg–Tirole | D. Fudenberg and J. Tirole, *Game Theory* (1991) | 11–12, 53 | 11–12 |
+| Fudenberg–Tirole | D. Fudenberg and J. Tirole, *Game Theory* (1991) | 11–12, 53 | 11–12, 53 |
 | Osborne–Rubinstein | M. Osborne and A. Rubinstein, *A Course in Game Theory* (1994) | 11 | 11 |
 | Bolton–Dewatripont | P. Bolton and M. Dewatripont, *Contract Theory* (2005) | 13–14 | 13–14 |
 | Krishna | V. Krishna, *Auction Theory* (2nd ed., 2010) | 16 | 16 |
@@ -151,8 +151,8 @@ part's README, under *Sources*. Built so far: Parts 1–52.
 
 | Model or result | Paper | Planned | Built |
 |---|---|---|---|
-| equilibrium in games | Nash (1950, 1951) | 11 | 11 |
-| oligopoly in quantities and prices | Cournot (1838); Bertrand (1883) | 12 | 6, 12, 43 |
+| equilibrium in games | Nash (1950, 1951) | 11 | 11, 53 |
+| oligopoly in quantities and prices | Cournot (1838); Bertrand (1883) | 12 | 6, 12, 43, 53 |
 | demand estimation with differentiated products | Berry, Levinsohn and Pakes (1995) | 43 | 35, 42–43 |
 
 ### Information and design
@@ -165,7 +165,7 @@ part's README, under *Sources*. Built so far: Parts 1–52.
 | second-price auctions | Vickrey (1961) | 16 | 16–17 |
 | optimal auctions | Myerson (1981) | 16 | 16 |
 | stable matching | Gale and Shapley (1962) | 17 | 17 |
-| Bayesian persuasion | Kamenica and Gentzkow (2011) | 53 | 52 |
+| Bayesian persuasion | Kamenica and Gentzkow (2011) | 53 | 52–53 |
 | incentives that crowd out | Gneezy and Rustichini (2000), "A Fine Is a Price" | 1, 14 | 1, 14, 45, 49 |
 
 ### Welfare and the state
@@ -359,6 +359,8 @@ part's README, under *Sources*. Built so far: Parts 1–52.
 **Part 51, *Computing Economies*.** Books: Kenneth Judd, *Numerical Methods in Economics* (1998); Nancy Stokey and Robert Lucas, with Edward Prescott, *Recursive Methods in Economic Dynamics* (1989), chapters 3, 4 and 9; Thomas Sargent and John Stachurski, *Dynamic Programming* and the QuantEcon lectures; Jesús Fernández-Villaverde, Juan Rubio-Ramírez and Frank Schorfheide, 'Solution and estimation methods for DSGE models', *Handbook of Macroeconomics* (2016). Papers: Bellman (1957); Howard (1960); Blackwell (1965); Smolyak (1963); Tauchen (1986); Judd (1992); Den Haan and Marcet (1994); Rouwenhorst (1995); Krueger and Kubler (2004); Schmitt-Grohé and Uribe (2004); Carroll (2006); Aruoba, Fernández-Villaverde and Rubio-Ramírez (2006); Kopecky and Suen (2010); Guerrieri and Iacoviello (2015); Maliar, Maliar and Winant (2021); Achdou, Han, Lasry, Lions and Moll (2022); Azinovic, Gaegauf and Scheidegger (2022).
 
 **Part 52, *Many Agents*.** Books: Lars Ljungqvist and Thomas Sargent, *Recursive Macroeconomic Theory*, chapters 17 and 18; Greg Kaplan, 'Heterogeneous agent macroeconomics', lecture notes, and Benjamin Moll's notes on continuous time; Per Krusell and Anthony Smith, 'Quantitative macroeconomic models with heterogeneous agents' (2006); Adrien Auclert and coauthors, the sequence-space Jacobian toolkit and its documentation. Papers: Gorman (1953); Bewley (1977); Kirman (1992); Hopenhayn (1992); Huggett (1993); Aiyagari (1994); Krusell and Smith (1998); Doepke and Schneider (2006); Khan and Thomas (2008); Den Haan (2010); Young (2010); Benhabib, Bisin and Zhu (2011, 2015); Kaplan and Violante (2014); Werning (2015); McKay, Nakamura and Steinsson (2016); Kaplan, Moll and Violante (2018); Auclert, Bardóczy, Rognlie and Straub (2021); Fagereng, Holm and Natvik (2021); Achdou et al. (2022).
+
+**Part 53, *Information and Persuasion*.** Books: Drew Fudenberg and Jean Tirole, *Game Theory* (1991), chapters 6 to 10; Emir Kamenica, 'Bayesian persuasion and information design', *Annual Review of Economics* (2019); Dirk Bergemann and Stephen Morris, 'Information design: a unified perspective', *JEL* (2019); Stephen Morris and Hyun Song Shin, 'Global games: theory and applications' (2003). Papers: Harsanyi (1967–68); Nash (1950); Blackwell (1953); Coase (1972); Aumann (1976); Selten (1978); Crawford and Sobel (1982); Geanakoplos and Polemarchakis (1982); Rubinstein (1982); Kreps and Wilson (1982); Milgrom and Roberts (1982); Cho and Kreps (1987); Bull (1987); Rubinstein (1989); Banerjee (1992); Bikhchandani, Hirshleifer and Welch (1992); Carlsson and van Damme (1993); Morris and Shin (1998); Levin (2003); DellaVigna and Kaplan (2007); Kamenica and Gentzkow (2011).
 
 ## 4. What the series leaves out
 

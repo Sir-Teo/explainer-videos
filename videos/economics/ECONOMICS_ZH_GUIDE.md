@@ -1567,3 +1567,23 @@ brackets on screen.
 | nominal positions; redistribution by inflation | 名义头寸；通胀的再分配 |
 | firm dynamics; entry and exit; Hopenhayn model | 企业动态；进入与退出；霍彭海恩模型 |
 | lumpy investment; (S,s) rule | 块状投资；(S,s) 规则 |
+
+## Part 53
+
+| English | 中文 |
+|---|---|
+| Bayesian persuasion; information design | 贝叶斯劝说；信息设计 |
+| sender; receiver; signal; posterior | 发送者；接收者；信号；后验 |
+| Bayes plausibility; concavification; concave closure | 贝叶斯一致性；凹化；凹包络 |
+| Bayesian game; type; Bayes–Nash equilibrium | 贝叶斯博弈；类型；贝叶斯–纳什均衡 |
+| perfect Bayesian equilibrium; off the equilibrium path; intuitive criterion | 完美贝叶斯均衡；均衡路径之外；直觉标准 |
+| cheap talk; partition equilibrium; babbling | 廉价交谈；分割均衡；胡言均衡 |
+| Bayes correlated equilibrium; obedience | 贝叶斯相关均衡；服从约束 |
+| Blackwell's order; garbling; experiment | 布莱克韦尔序；混淆；实验 |
+| common knowledge; agreeing to disagree; the email game | 共同知识；同意分歧；电子邮件博弈 |
+| global game; regime change; strategic uncertainty | 全局博弈；体制更替；策略不确定性 |
+| information cascade; herding | 信息瀑布；羊群行为 |
+| reputation; chain-store paradox | 声誉；连锁店悖论 |
+| Nash bargaining solution; alternating offers; the Coase conjecture | 纳什议价解；轮流出价；科斯猜想 |
+| relational contract; self-enforcing | 关系契约；自我执行 |
+| persuasion rate | 劝说率 |

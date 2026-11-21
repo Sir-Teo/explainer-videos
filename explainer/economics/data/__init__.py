@@ -511,6 +511,13 @@ MEMO_FRED = {
 }
 FRED_SERIES.update(MEMO_FRED)
 FRED_RETRIEVED.update({s: "2026-11-21" for s in MEMO_FRED})
+# Part 54: how far Americans drive (the Federal Highway Administration's traffic volume trends)
+ESTIMATE_FRED = {
+    "M12MTVUSM227NFWA": ("Moving 12-month total vehicle miles traveled", "millions of miles", "monthly",
+                         "U.S. Federal Highway Administration"),
+}
+FRED_SERIES.update(ESTIMATE_FRED)
+FRED_RETRIEVED.update({s: "2026-11-21" for s in ESTIMATE_FRED})
 
 SPF_FILES = ("median_rgdp_level", "median_rgdp_growth", "median_recess_level")
 SPF_URL = ("https://www.philadelphiafed.org/-/media/frbp/assets/surveys-and-data/survey-of-professional-forecasters/"

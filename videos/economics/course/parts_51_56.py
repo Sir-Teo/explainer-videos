@@ -98,4 +98,46 @@ PARTS = [
         also=(("Agora's many agents", "explainer/economics/agora/hetero.py"),
               ("The Island's planted truths", "explainer/economics/island.py")),
     ),
+    Part(
+        n=53, level="M", widget="persuade", prereq=(11, 13, 26, 34, 51),
+        question="How does someone who controls only what others learn get them to do what she wants?",
+        story="The part opens on Kamenica and Gentzkow's prosecutor: 30% of defendants guilty, a judge who convicts "
+              "only if guilt is more likely than not, and an investigation that flags every guilty defendant and 3 "
+              "in 7 of the innocent, convicting 60% with nobody deceived. The viewer designs the investigation. "
+              "Harsanyi's Bayesian games on a Cournot duopoly with an unknown rival; perfect Bayesian equilibrium "
+              "and Cho and Kreps's beer and quiche; Crawford and Sobel's cheap talk; Bayesian persuasion as "
+              "concavification; Bergemann and Morris's information design for two investors; Blackwell's order. "
+              "After an intermission of Michigan households' expected inflation against the actual since 1978, "
+              "Aumann's agreement theorem, Geanakoplos and Polemarchakis's dialogue and Rubinstein's email game; "
+              "global games; cascades; Kreps and Wilson's chain store; Nash, Rubinstein and Coase on bargaining; "
+              "Levin's relational contracts; the reasoning-depth dial and DellaVigna and Kaplan's persuasion rate; "
+              "information designers in practice, the 2006 triple-A ratings as Called it?, and robust design.",
+        handoff="Part 54 turns from what people know to what economists can measure: estimating models from the "
+                "choices they predict.",
+        outside="Part 11: games and correlated equilibrium; Part 13: signalling; Part 26: bank runs; Part 34: "
+                "currency attacks; Statistics, Built: Bayes's rule and the value of information.",
+        objectives={
+            "U": ["Explain how an investigation that cannot lie can still shift decisions, using Bayes's rule.",
+                  "Explain why talk is informative only when interests are close enough."],
+            "M": ["Solve Bayesian games and find perfect Bayesian equilibria, applying the intuitive criterion.",
+                  "Compute a sender's optimal signal by concavification, and Bayes correlated equilibria by linear "
+                  "programming.",
+                  "Derive Crawford and Sobel's partitions, a global game's threshold and a cascade's odds."],
+            "D": ["Prove Blackwell's theorem in the binary case, the uniform belief of the global game's marginal "
+                  "player, and Rubinstein's bargaining solution.",
+                  "State the open problems of robust and algorithmic information design."],
+            "I": ["Design a disclosure policy (a rating, an alert, a stress test) and test it against receivers who "
+                  "reason less deeply than the theory assumes."],
+        },
+        results=[
+            ("Bayes plausibility", r"\sum_k \tau_k \mu_k = \mu_0"),
+            ("The value of persuasion", r"V(\mu_0) = \operatorname{cav}\, v(\mu_0)"),
+            ("Cheap talk", r"a_i = \tfrac{i}{N} + 2 b\, i\, (i - N)"),
+            ("Global games", r"\theta^* = 1 - c"),
+            ("Rubinstein", r"x^* = \frac{1 - \delta_2}{1 - \delta_1 \delta_2}"),
+        ],
+        U=(0, 1, 5, "s09_intermission"), D=(7, 9), I=(15,),
+        also=(("Agora's information and persuasion", "explainer/economics/agora/persuade.py"),
+              ("The Island's planted truths", "explainer/economics/island.py")),
+    ),
 ]

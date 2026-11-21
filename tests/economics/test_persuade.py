@@ -121,7 +121,7 @@ def test_bargaining():
 
 
 def test_relational_threshold():
-    r = P.relational([0.5, 2 / 3 + 1e-9, 0.9])
-    assert r["delta_star"] == pytest.approx(2 / 3)
-    assert r["effort"][0] < r["first_best"]
+    r = P.relational([0.3, 0.5 + 1e-9, 0.9], theta=1.0, c=1.0)
+    assert r["delta_star"] == pytest.approx(0.5)
+    assert r["effort"][0] == pytest.approx(2 * 0.3, abs=1e-3)
     assert r["effort"][1] == pytest.approx(r["first_best"])
