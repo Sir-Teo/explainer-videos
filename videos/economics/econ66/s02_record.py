@@ -52,7 +52,7 @@ class Record(VoiceoverScene):
         E_ = load("effective")
         t = np.array(E_["t"])
         r = 100 * np.array(E_["rate"])
-        ax = plane([2015, 2027], [0, 12.5], center=LEFT * 1.2 + DOWN * 0.3, x_length=9.2, y_length=4.8,
+        ax = plane([2015, 2027], [0, 12.5], center=LEFT * 1.9 + DOWN * 0.3, x_length=8.6, y_length=4.8,
                    xticks=[2015, 2017, 2019, 2021, 2023, 2025, 2027], yticks=[0, 2, 4, 6, 8, 10, 12],
                    ylabel=r"customs duties over imports of goods, \ \%", xfmt=lambda v: f"{v:.0f}",
                    yfmt=lambda v: f"{v:.0f}", font_size=14)
@@ -67,7 +67,9 @@ class Record(VoiceoverScene):
             label(rf"early 2025: \ {100 * E_['q2025_1']:.1f}\%", font_size=18, color=GREY_A),
             label(rf"peak, \ end of 2025: \ {100 * E_['peak']:.1f}\%", font_size=18, color=TARIFF),
             label(rf"third quarter of 2026: \ {100 * E_['last']:.1f}\%", font_size=18, color=TARIFF),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.2).to_edge(RIGHT, buff=0.3).shift(DOWN * 0.6)
+        ).arrange(DOWN, aligned_edge=LEFT, buff=0.2).next_to(ax.ax, RIGHT, buff=0.35).shift(DOWN * 0.6)
+        if side.get_right()[0] > 6.95:
+            side.scale_to_fit_width(6.95 - side.get_left()[0])
         tag = data_tag(rf"BEA via FRED: \ B235RC1Q027SBEA over A255RC1Q027SBEA \ (retrieved {E_['retrieved']})",
                        corner=DL, font_size=12)
         with self.voiceover(
@@ -94,22 +96,25 @@ class Record(VoiceoverScene):
     def prices(self):
         P = load("prices")
         t = np.array(P["t"])
-        ax = plane([2023, 2027], [97, 108], center=LEFT * 1.6 + DOWN * 0.3, x_length=8.6, y_length=4.8,
-                   xticks=[2023, 2024, 2025, 2026, 2027], yticks=[98, 100, 102, 104, 106, 108],
+        keep = t < 2026.0
+        t = t[keep]
+        P = {**P, "goods": list(np.array(P["goods"])[keep]), "imports": list(np.array(P["imports"])[keep])}
+        ax = plane([2023, 2026], [97, 103], center=LEFT * 1.6 + DOWN * 0.3, x_length=8.6, y_length=4.8,
+                   xticks=[2023, 2024, 2025, 2026], yticks=[97, 99, 101, 103],
                    ylabel=r"index, \ January 2025 = 100", xfmt=lambda v: f"{v:.0f}", yfmt=lambda v: f"{v:.0f}",
                    font_size=14)
-        g = path(ax, t, P["goods"], PRICE, 3.0, smooth=False)
+        g = path(ax, t, P["goods"], TEXT, 3.0, smooth=False)
         im = path(ax, t, P["imports"], ROW, 3.0, smooth=False)
-        start = vline(ax, 2025 + 3.5 / 12, 97, 108, GREY_C)
-        key = legend_rows([(PRICE, "consumer prices of goods (less food and energy)"),
+        start = vline(ax, 2025 + 3.5 / 12, 97, 103, GREY_C)
+        key = legend_rows([(TEXT, "consumer prices of goods (less food and energy)"),
                            (ROW, "import prices, before the tariff (less food and fuel)")], font_size=15)
         key.next_to(ax.ax, RIGHT, buff=0.3).shift(UP * 1.5)
         if key.width > 4.2:
             key.scale_to_fit_width(4.2).next_to(ax.ax, RIGHT, buff=0.3).shift(UP * 1.5)
         side = VGroup(
             label(rf"goods prices, \ 2024: \ {100 * P['goods_2024']:+.1f}\%".replace("-", "{-}"), font_size=17,
-                  color=PRICE),
-            label(rf"goods prices, \ 2025: \ {100 * P['goods_2025']:+.1f}\%", font_size=17, color=PRICE),
+                  color=TEXT),
+            label(rf"goods prices, \ 2025: \ {100 * P['goods_2025']:+.1f}\%", font_size=17, color=TEXT),
             label(rf"import prices, \ 2025: \ {100 * P['imports_2025']:+.1f}\%", font_size=17, color=ROW),
             label(r"retail pass-through by September 2025: \\ about a fifth \ (Cavallo et al.)", font_size=17,
                   color=TEXT),
@@ -120,7 +125,7 @@ class Record(VoiceoverScene):
             "Who paid this time? <bookmark mark='a'/> In orange, the prices foreign sellers charged at the border, "
             "before the tariff, excluding food and fuel. They did not fall in 2025: they rose about "
             f"{100 * P['imports_2025']:.0f} percent. Foreign sellers did not absorb the tariff; as in 2018, it was "
-            "paid at the American border. <bookmark mark='b'/> In gold, the consumer prices of goods other than "
+            "paid at the American border. <bookmark mark='b'/> In green, the consumer prices of goods other than "
             f"food and energy: down {100 * -P['goods_2024']:.1f} percent in 2024, up {100 * P['goods_2025']:.1f} "
             "percent in 2025. <bookmark mark='c'/> The rise reached shoppers slowly. Alberto Cavallo, Paola Llamas "
             "and Franco Vazquez tracked daily prices in large American retailers: by September 2025 about a fifth "

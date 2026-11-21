@@ -65,9 +65,9 @@ class PlayIt(VoiceoverScene):
             "know your partner. It may copy your last move, it may never retaliate, or it may retaliate for ever "
             "once taxed. Each is equally likely, and next year counts nine tenths as much as this one. Which plan?"
         ) as vo:
-            self.play(FadeIn(tag))
+            self.play(FadeIn(tag), FadeIn(g), FadeIn(note))
             vo.wait_until("a")
-            self.play(FadeIn(g), FadeIn(note))
+            self.play(Indicate(g, scale_factor=1.02))
             vo.wait_until("b")
             self.play(LaggedStart(*[FadeIn(p, shift=RIGHT * 0.1) for p in plans], lag_ratio=0.4), run_time=1.6)
             vo.wait_until("c")

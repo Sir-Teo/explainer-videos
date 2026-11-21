@@ -57,9 +57,9 @@ class Power(VoiceoverScene):
             "held abroad were frozen. Interdependence, which economists had seen as a source of peace, had become "
             "a weapon."
         ) as vo:
-            self.play(FadeIn(tag))
+            self.play(FadeIn(tag), FadeIn(g), run_time=1.5)
             vo.wait_until("a")
-            self.play(FadeIn(g), run_time=1.5)
+            self.play(Indicate(g[3], color=US))
             vo.wait_until("b")
             self.play(FadeIn(rows[0]), Indicate(g[3], color=US))
             vo.wait_until("c")
@@ -80,11 +80,11 @@ class Power(VoiceoverScene):
         key = legend_rows([(THETA["2.0"], "hard to replace (theta = 2)"), (THETA["4.0"], "theta = 4"),
                            (THETA["8.0"], "easy to replace (theta = 8)")], font_size=15).next_to(
             ax.ax, RIGHT, buff=0.3).shift(UP * 1.4)
-        eq = MathTex(r"\text{loss} = 1 - (1 - s)^{1/\theta}", font_size=34, color=GREY_A).next_to(key, DOWN,
-                                                                                               buff=0.5)
+        eq = MathTex(r"\text{loss} = 1 - (1 - s)^{1/\theta}", font_size=34, color=GREY_A)
+        eq.next_to(ax.ax.c2p(0.01, 0.31), DR, buff=0.05)
         ex = Pw["examples"]
         side = label(rf"$s = 20\%$, \ $\theta = 4$: \ {100 * ex['0.20']:.1f}\%", font_size=19,
-                     color=THETA["4.0"]).next_to(eq, DOWN, buff=0.4)
+                     color=THETA["4.0"]).next_to(key, DOWN, buff=0.4).align_to(key, LEFT)
         tag = published_tag(r"Arkolakis, \ Costinot and Rodr\'iguez-Clare, \ AER 102(1) (2012); \ "
                             r"agora.tradewar.cutoff\_loss", corner=DL, font_size=12)
         with self.voiceover(

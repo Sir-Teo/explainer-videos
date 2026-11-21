@@ -39,9 +39,9 @@ class Hook(VoiceoverScene):
             "Four times a quarter is one, so they cancel. <bookmark mark='d'/> The result was then halved, with a "
             "floor of ten percent."
         ) as vo:
-            self.play(FadeIn(tag))
+            self.play(FadeIn(tag), FadeIn(hc, shift=UP * 0.1))
             vo.wait_until("a")
-            self.play(FadeIn(hc, shift=UP * 0.1))
+            self.play(Indicate(hc, scale_factor=1.02))
             vo.wait_until("b")
             self.play(Write(eq))
             vo.wait_until("c")

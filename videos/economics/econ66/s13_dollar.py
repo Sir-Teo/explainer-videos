@@ -24,12 +24,14 @@ class Dollar(VoiceoverScene):
         then = seg(ax, -0.3, 71, 0.3, 71, GREY_A, 2.4, dashed=True)
         tl = label(r"about 71\% in 2000", font_size=14, color=GREY_A).next_to(ax.ax.c2p(0.3, 71), RIGHT, buff=0.1)
         side = VGroup(
-            label(r"the exorbitant privilege: \ the world lends to America cheaply", font_size=19, color=US),
-            label(r"the hub: \ payments clear through American banks, \ and can be stopped there", font_size=19,
+            label(r"the exorbitant privilege: \\ the world lends to America cheaply", font_size=19, color=US),
+            label(r"the hub: \ payments clear through American banks, \\ and can be stopped there", font_size=19,
                   color=TARIFF),
             label(r"the slow drift: \ the dollar's share has fallen, \\ mostly to smaller currencies, \ not to one "
                   r"rival", font_size=19, color=GREY_A),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.4).next_to(ax.ax, RIGHT, buff=0.7)
+        if side.get_right()[0] > 6.9:
+            side.scale_to_fit_width(6.9 - side.get_left()[0])
         tag = published_tag(r"IMF, \ COFER, \ first quarter of 2026", corner=DL, font_size=12)
         with self.voiceover(
             "The most important hub of all is a currency. <bookmark mark='a'/> In the first quarter of 2026, by "

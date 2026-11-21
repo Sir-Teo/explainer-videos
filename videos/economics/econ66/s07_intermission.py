@@ -38,6 +38,8 @@ class Intermission(SoundScene):
             k = int(np.argmin(np.abs(yrs - when)))
             lab = label(txt, font_size=14, color=GREY_A).next_to(ax.ax.c2p(yrs[k], film["balance"][k] - y_off),
                                                                  DOWN, buff=0.02)
+            if when > 2025:                      # the rush: to the left of the trough, clear of the axis
+                lab.next_to(ax.ax.c2p(yrs[k] - 0.4, film["balance"][k]), LEFT, buff=0.1)
             lab.ft = film_time(float(yrs[k]))
             lab.set_opacity(0.0)
             marks.add(lab)

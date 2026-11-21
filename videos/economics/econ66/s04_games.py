@@ -30,8 +30,9 @@ class Games(VoiceoverScene):
             ax.ax.c2p(B["optimal"], 0.55), RIGHT, buff=0.1)
         key = legend_rows([(US, "the United States"), (ROW, "the rest of the world")], font_size=16).next_to(
             ax.ax, RIGHT, buff=0.3).shift(UP * 1.2)
-        eq = MathTex(r"t^\ast \approx \frac{1}{\varepsilon^\ast_{\text{foreign supply}}}", font_size=34,
-                     color=GREY_A).next_to(key, DOWN, buff=0.5)
+        eq = MathTex(r"t^\ast \approx \frac{1}{\varepsilon^\ast}", font_size=36, color=GREY_A)
+        eqn = label(r"$\varepsilon^\ast$: \ how readily \\ foreigners' supply responds", font_size=15, color=GREY_A)
+        VGroup(eq, eqn).arrange(DOWN, aligned_edge=LEFT, buff=0.15).next_to(key, DOWN, buff=0.5).align_to(key, LEFT)
         tag = island_tag(r"computed: \ agora.tradewar.two\_bloc \ ($\theta = 4$, \ CEPII flows of 2019, \ "
                          r"deficits purged)", corner=DL, font_size=12)
         with self.voiceover(
@@ -50,7 +51,7 @@ class Games(VoiceoverScene):
             vo.wait_until("b")
             self.play(Create(lu), run_time=2.0)
             vo.wait_until("c")
-            self.play(FadeIn(opt), FadeIn(olab), Write(eq))
+            self.play(FadeIn(opt), FadeIn(olab), Write(eq), FadeIn(eqn))
             vo.wait_until("d")
             self.play(Create(lr), FadeIn(key[1]), run_time=2.0)
         self.clear_scene()
