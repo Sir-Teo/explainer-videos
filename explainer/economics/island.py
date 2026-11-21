@@ -1299,6 +1299,16 @@ TRUTHS = {
         "school": {"villages": 200, "per": 60, "subsidy": 10.0, "label_effect": 0.6, "seed": 54,
                    "missing": 0.2},
     },
+    55: {
+        # identifying macro: the Island's structural VAR (agora.macrometrics.island_svar: supply, demand and monetary
+        # shocks, a non-recursive impact matrix, long-run neutrality of demand and money, a monetary shock twice as
+        # variable in meeting quarters, a market-surprise proxy), the small New Keynesian model estimated, and a
+        # currency union's regions (Part 32's)
+        "svar": {"T": 240, "seed": 5, "p": 4, "h": 16, "reps": 300},
+        "lp": {"T": 200, "reps": 300, "seed": 1},
+        "nk": {"T": 200, "seed": 3, "draws": 6000, "burn": 1500},
+        "regions": {"R": 48, "T": 40, "m_local": 1.5, "m_agg": 0.6, "seed": 55},
+    },
 }
 
 
