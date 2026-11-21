@@ -1709,3 +1709,24 @@ brackets on screen.
 | price cap; RPI − X; regulatory lag | 价格上限；RPI − X；监管时滞 |
 | access pricing; efficient component pricing rule | 接入定价；有效成分定价规则 |
 | nascent competitor; killer acquisition; serial acquisitions | 新生竞争者；扼杀式收购；连续收购 |
+
+## Part 60
+
+| English | 中文 |
+|---|---|
+| cost-plus pricing; full-cost pricing; markup | 成本加成定价；完全成本定价；加成 |
+| willingness to pay; hypothetical bias; conjoint analysis | 支付意愿；假设性偏差；联合分析 |
+| Becker-DeGroot-Marschak mechanism | 贝克尔-德格鲁特-马沙克机制 |
+| A/B test; interference; cluster randomization | A/B测试；干扰效应；整群随机化 |
+| revenue management; yield management; fare class; protection level | 收益管理；收益（座位）管理；票价等级；保护水平 |
+| Littlewood's rule; EMSR; bid price; overbooking | 利特尔伍德规则；期望边际座位收益；投标价格；超售 |
+| dynamic pricing; Bellman equation; backward induction | 动态定价；贝尔曼方程；逆向归纳 |
+| versioning; damaged goods; good-better-best | 版本化；故意降级产品；好-更好-最好分级 |
+| bundling; subscription; freemium | 捆绑销售；订阅；免费增值 |
+| reference price; high-low pricing; everyday low pricing | 参考价格；高低价策略；天天低价 |
+| drip pricing; hidden fees | 滴漏定价；隐性收费 |
+| uniform pricing; zone pricing | 统一定价；分区定价 |
+| cost pass-through; distributed lag | 成本传导；分布滞后 |
+| personalized pricing; algorithmic collusion | 个性化定价；算法合谋 |
+| most-favoured-customer clause; list price; negotiated discount | 最惠客户条款；目录价；协商折扣 |
+| multi-armed bandit; Thompson sampling; test-then-commit | 多臂老虎机；汤普森采样；先测试后定价 |

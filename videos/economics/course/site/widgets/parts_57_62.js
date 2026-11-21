@@ -328,4 +328,106 @@
       note: "Part 59, chapters 2, 5, 6, 7 and 12. Computed in your browser; nothing you do here is stored or sent.",
     });
   };
+  // ---- Part 60: the price ------------------------------------------------------------------------------------------
+  W.fares = function (el) {
+    // Agora's revenue module (explainer.economics.agora.revenue.flight and dp_prices): a hundred seats over sixty
+    // days; each day buyers arrive as a Poisson stream, 5 a day with exponential values of mean $90 for the first 39
+    // days and 4 a day with mean $260 in the last 21; at fare p the day's demand is Poisson with mean lambda e^(-p/mu).
+    // The reader sets a fare that moves in a straight line from the first week to the last, and may cap the seats
+    // sold before the business travellers arrive; the optimal policy comes from the same dynamic programme as the
+    // film's, on fares from $40 to $500 in steps of $10.
+    var SEATS = 100, DAYS = 60, SWITCH = 21;
+    var LAM = [], MU = [];
+    for (var d = 0; d < DAYS; d++) { var late = d >= DAYS - SWITCH; LAM.push(late ? 4 : 5); MU.push(late ? 260 : 90); }
+    var GRID = []; for (var g = 40; g <= 500; g += 10) { GRID.push(g); }
+    function pmfRow(mean, x) {
+      // P(sales = k), k = 0..x, demand Poisson(mean), x seats left
+      var out = new Array(x + 1), p = Math.exp(-mean), cum = 0;
+      for (var k = 0; k < x; k++) { out[k] = p; cum += p; p = p * mean / (k + 1); }
+      out[x] = Math.max(0, 1 - cum);
+      return out;
+    }
+    var DP = null;
+    function solve() {
+      if (DP) { return DP; }
+      var V = new Array(SEATS + 1).fill(0), pol = [];
+      for (var t = DAYS - 1; t >= 0; t--) {
+        var nV = new Array(SEATS + 1).fill(0), row = new Array(SEATS + 1).fill(0);
+        for (var x = 1; x <= SEATS; x++) {
+          var best = -1, bp = GRID[0];
+          for (var i = 0; i < GRID.length; i++) {
+            var p = GRID[i], m = LAM[t] * Math.exp(-p / MU[t]), pk = pmfRow(m, x), v = 0;
+            for (var k = 0; k <= x; k++) { v += pk[k] * (p * k + V[x - k]); }
+            if (v > best) { best = v; bp = p; }
+          }
+          nV[x] = best; row[x] = bp;
+        }
+        V = nV; pol[t] = row;
+      }
+      DP = { V0: V[SEATS], pol: pol };
+      return DP;
+    }
+    function poisson(u, mean) {
+      var L = Math.exp(-mean), k = 0, p = 1;
+      do { k++; p *= u(); } while (p > L);
+      return k - 1;
+    }
+    function fareOf(v, t) { var w = Math.floor(t / 7); return v.first + (v.last - v.first) * Math.min(w, 8) / 8; }
+    function run(v, seed, useOpt) {
+      var u = QB.rng(seed), x = SEATS, rev = 0, path = [], fares = [];
+      var D = useOpt ? solve() : null;
+      for (var t = 0; t < DAYS; t++) {
+        var p = useOpt ? D.pol[t][Math.max(x, 1)] : fareOf(v, t);
+        var cap = (!useOpt && t < DAYS - SWITCH) ? Math.max(0, x - v.protect) : x;
+        var dmd = poisson(u, LAM[t] * Math.exp(-p / MU[t]));
+        var s = Math.min(dmd, cap, x);
+        x -= s; rev += p * s; path.push(SEATS - x); fares.push(p);
+      }
+      return { rev: rev, sold: SEATS - x, path: path, fares: fares };
+    }
+    function expected(v, useOpt) {
+      var tot = 0, n = 200;
+      for (var r = 0; r < n; r++) { tot += run(v, 6000 + r, useOpt).rev; }
+      return tot / n;
+    }
+    QB.widget(el, {
+      title: "Fares",
+      sub: "Price the Island's flight: a hundred seats, sixty days. Set the first week's fare and the last week's " +
+           "(the fare moves in a straight line between them), and how many seats to hold back for business " +
+           "travellers, who arrive in the last three weeks. Then compare with the optimal policy.",
+      panels: 2, height: 250,
+      controls: [
+        { k: "first", label: "First week's fare", min: 40, max: 400, step: 10, value: 150,
+          fmt: function (x) { return "$" + x; } },
+        { k: "last", label: "Last week's fare", min: 40, max: 500, step: 10, value: 150,
+          fmt: function (x) { return "$" + x; } },
+        { k: "protect", label: "Seats held back until the last three weeks", min: 0, max: 60, step: 5, value: 0,
+          fmt: function (x) { return x + " seats"; } },
+        { k: "draw", label: "Which simulated flight", min: 1, max: 20, step: 1, value: 1,
+          fmt: function (x) { return "#" + x; } },
+      ],
+      draw: function (g, v, st) {
+        var mine = run(v, 7000 + v.draw, false), opt = run(v, 7000 + v.draw, true);
+        st.mine = mine; st.opt = opt;
+        st.expMine = expected(v, false); st.expOpt = solve().V0;
+        var days = []; for (var d = 0; d < DAYS; d++) { days.push(d + 1); }
+        var A = g[0].axes({ x: [0, 60], y: [0, 500], title: "the fare by day", xlabel: "day of the sale" });
+        A.vline(DAYS - SWITCH, { color: "#F2C14E", dash: [4, 4] });
+        A.line(days, mine.fares, { color: "#7FD1B9", width: 2.4 });
+        A.line(days, opt.fares, { color: "#F2A65A", width: 2.0 });
+        A.legend([["yours", "#7FD1B9"], ["optimal", "#F2A65A"]]);
+        var B = g[1].axes({ x: [0, 60], y: [0, 100], title: "seats sold on this flight", xlabel: "day of the sale" });
+        B.line(days, mine.path, { color: "#7FD1B9", width: 2.4 });
+        B.line(days, opt.path, { color: "#F2A65A", width: 2.0 });
+      },
+      readout: function (v, st) {
+        return [["this flight: your revenue, seats sold", "$" + st.mine.rev.toFixed(0) + ", " + st.mine.sold],
+                ["this flight: the optimal policy", "$" + st.opt.rev.toFixed(0) + ", " + st.opt.sold],
+                ["your rule, on average over 200 flights", "$" + st.expMine.toFixed(0)],
+                ["the optimal policy, expected", "$" + st.expOpt.toFixed(0)],
+                ["your share of the optimum", (100 * st.expMine / st.expOpt).toFixed(1) + "%"]];
+      },
+      note: "Part 60, chapters 4 to 6. Computed in your browser; nothing you do here is stored or sent.",
+    });
+  };
 })();

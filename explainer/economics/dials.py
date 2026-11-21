@@ -417,8 +417,8 @@ DIALS = {d.key: d for d in [
                             "best)", checked="2026-11-20"),
          )),
     Dial("product_elasticity", "own-price elasticity of demand for one differentiated product", "percent change in "
-         "a product's sales for a 1% rise in its own price", (43,), status="depends on the setting",
-         checked="2026-11-20",
+         "a product's sales for a 1% rise in its own price", (43, 60), status="depends on the setting",
+         checked="2026-11-21",
          meaning="one brand's demand is far more elastic than its category's, because buyers switch brands before "
                  "they stop buying; a firm that sets its price to maximize profit never prices where its own demand "
                  "is inelastic, so an estimate below one in magnitude is a sign that the method is biased, usually "
@@ -436,6 +436,27 @@ DIALS = {d.key: d for d in [
                             "deviations across Islands)", checked="2026-11-20"),
              Estimate("this film (the Island's cereal aisle)", 2026, "calibration", "twelve brands, the median "
                       "brand", -2.74, where="videos/economics/econ43/compute.py, item cereal", checked="2026-11-20"),
+             Estimate("DellaVigna and Gentzkow", 2019, "regression", "stores within the typical US retail chain: the "
+                      "10th to 90th percentile of store-level elasticity (the midpoint shown)", -2.52, lo=-2.81,
+                      hi=-2.22, where="QJE 134(4); NBER WP 23996", checked="2026-11-21"),
+         )),
+    Dial("retail_passthrough", "cost pass-through to retail prices", "share of a change in producers' prices that "
+         "reaches retail prices", (60,), status="depends on the setting", checked="2026-11-21",
+         meaning="retail prices move with producer prices, but by less than one for one when the retailer's own costs "
+                 "do not move, and by much less when only one firm's costs change; in 2021-23, when costs rose "
+                 "everywhere at once, American grocery prices followed factory-gate food prices more closely than "
+                 "the relation of the quiet years predicted",
+         estimates=(
+             Estimate("this film (food: CPI on PPI)", 2026, "regression", "monthly, 2000-2019: the cumulative effect "
+                      "after twelve months of processed-food producer prices on food-at-home consumer prices", 0.58,
+                      lo=0.47, hi=0.69, where="videos/economics/econ60/compute.py, item passthrough (plus or minus "
+                      "two standard errors)", checked="2026-11-21"),
+             Estimate("this film (food: 2021-23)", 2026, "reconstruction", "the rise in food-at-home prices over "
+                      "the rise in processed-food producer prices, December 2020 to December 2023", 0.93,
+                      where="videos/economics/econ60/compute.py, item passthrough", checked="2026-11-21"),
+             Estimate("Ashenfelter, Ashmore, Baker and McKernan", 1998, "regression", "Staples: a cost change at "
+                      "one firm only (Part 59's Dial)", 0.16, lo=0.15, hi=0.17, where="FTC working paper 217; FTC v. "
+                      "Staples (D.D.C. 1997)", checked="2026-11-21"),
          )),
     Dial("reasoning_depth", "depth of strategic reasoning", "average steps of thinking (the cognitive hierarchy's "
          "tau)", (11, 45, 53), status="depends on the setting", checked="2026-11-19",
@@ -1730,6 +1751,26 @@ DIALS = {d.key: d for d in [
 
 # What each part shows without entering a row, and why: {part: [(what is shown, the reason)]}
 SHOWN = {
+    60: [
+        ("Smith, Leimkuhler and Darrow (1992); People Express and American Airlines, 1981-86", "the hook's story, "
+         "stated; the Island's flight computed"),
+        ("Hall and Hitch (1939); Blinder, Canetti, Lebow and Rudd (1998)", "what firms say, stated; the markup's "
+         "robustness computed"),
+        ("Murphy, Allen, Stevens and Weatherhead (2005); Becker, DeGroot and Marschak (1964)", "measuring willingness "
+         "to pay, stated; a conjoint survey computed on the Island"),
+        ("Blake and Coey (2014)", "interference in marketplace experiments, stated; the Island's hotel test computed"),
+        ("Littlewood (1972); Belobaba (1987); Gallego and van Ryzin (1994)", "revenue management, computed on the "
+         "Island"),
+        ("Williams (2022); Hortacsu, Ory and Williams", "dynamic pricing's welfare, stated"),
+        ("Mussa and Rosen (1978); Deneckere and McAfee (1996); Bakos and Brynjolfsson (1999)", "versions and bundles, "
+         "computed on the Island; damaged goods, stated"),
+        ("Blake, Moshary, Sweeney and Tadelis (2021); the FTC's fee rule (2024)", "drip pricing, stated"),
+        ("DellaVigna and Gentzkow (2019)", "uniform pricing: the Dial row; the Island's chain computed"),
+        ("Calvano, Calzolari, Denicolo and Pastorello (2020); United States v. RealPage (2024); United States v. Apple "
+         "(2013)", "algorithms and clauses, stated"),
+        ("BLS via FRED: CUSR0000SAF11, WPU02", "the pass-through chapter and the intermission, from the Data Room"),
+        ("Misra, Schwartz and Abernethy (2019)", "bandit pricing, stated; Thompson sampling computed on the Island"),
+    ],
     59: [
         ("FTC v. Staples (D.D.C. 1997); the FTC's case summary", "the hook's story, stated; the Island's price map "
          "computed"),

@@ -559,6 +559,17 @@ CALLS = {c.key: c for c in [
          "wrong",
          ("USA Today interview, April 2007, as reported by InformationWeek and MacRumors",
           "IDC, press release of 15 January 2024")),
+    Call("jcpenney_2012", 60, "Ron Johnson, chief executive of J.C. Penney, launching `fair and square' pricing",
+         "January 2012",
+         "shoppers would welcome honest everyday prices in place of a store run on sales and coupons; the new "
+         "pricing went to every store at once, without a test",
+         "his experience at Apple, whose stores did not run sales, and a belief that shoppers disliked the game of "
+         "inflated list prices and constant markdowns",
+         "sales in 2012 fell 24.8% to $12.99 billion, and sales in comparable stores 25.2%; the board removed Johnson "
+         "in April 2013, and the company brought back sales and coupons",
+         "wrong",
+         ("Fortune, 8 April 2013", "J.C. Penney's fourth-quarter 2012 results, as reported by JCK (February 2013)",
+          "Knowledge at Wharton, 'J.C. Penney's new strategy: consumers aren't buying it -- yet' (2012)")),
     Call("att_2016", 59, "Randall Stephenson, chief executive of AT&T, announcing its purchase of Time Warner",
          "October 2016",
          "the future of video is mobile and the future of mobile is video: owning Time Warner's channels and studio "

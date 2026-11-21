@@ -10,7 +10,7 @@ the series leaves out.
 Both *Parts* columns are found, not typed. *Planned* lists the parts whose entry in
 [`SYLLABUS.md`](SYLLABUS.md) names the book or paper; *Built* lists the parts whose scenes, compute step or
 README cite it (a dot: none yet). Fuller notes (editions, chapters, what each source was used for) are in each
-part's README, under *Sources*. Built so far: Parts 1–59.
+part's README, under *Sources*. Built so far: Parts 1–60.
 
 ## 1. The textbook spine
 
@@ -107,10 +107,10 @@ part's README, under *Sources*. Built so far: Parts 1–59.
 
 | Short name | Book | Planned | Built |
 |---|---|---|---|
-| Blinder | A. Blinder, *Central Banking in Theory and Practice* (1998) | 31 | 30–31, 39 |
+| Blinder | A. Blinder, *Central Banking in Theory and Practice* (1998) | 31 | 30–31, 39, 60 |
 | Boardman | A. Boardman and others, *Cost-Benefit Analysis* (5th ed., 2018) | 50, 58 | 50, 58 |
 | Davis–Garcés | P. Davis and E. Garces, *Quantitative Techniques for Competition and Antitrust Analysis* (2010) | 59 | 59 |
-| Talluri–van Ryzin | K. Talluri and G. van Ryzin, *The Theory and Practice of Revenue Management* (2004) | 10, 60 | 10 |
+| Talluri–van Ryzin | K. Talluri and G. van Ryzin, *The Theory and Practice of Revenue Management* (2004) | 10, 60 | 10, 60 |
 | Kohavi–Tang–Xu | R. Kohavi, D. Tang and Y. Xu, *Trustworthy Online Controlled Experiments* (2020) | 61 | · |
 | Lazear–Gibbs | E. Lazear and M. Gibbs, *Personnel Economics in Practice* (3rd ed., 2014) | 62 | · |
 
@@ -373,6 +373,8 @@ part's README, under *Sources*. Built so far: Parts 1–59.
 **Part 58, *Scoring the Bill*.** Books: Anthony Boardman, David Greenberg, Aidan Vining and David Weimer, *Cost-Benefit Analysis: Concepts and Practice* (5th ed., 2018); HM Treasury, *The Green Book*; Office of Management and Budget, *Circular A-4*; Bent Flyvbjerg, Nils Bruzelius and Werner Rothengatter, *Megaprojects and Risk* (2003). Papers: Dupuit (1844); Hotelling (1947); Schelling (1968); Rosen (1974); Thaler and Rosen (1976); Harberger (1962); Goodhart (1975); Campbell (1979); Kahneman and Lovallo (1993); Diamond and Hausman (1994); Weitzman (1998, 2001); Saez (2001); Flyvbjerg, Holm and Buhl (2002, 2005); Viscusi and Aldy (2003); Auerbach (2005); Kehoe (2005); Bevan and Hood (2006); Drupp et al. (2018); Hendren and Sprung-Keyser (2020).
 
 **Part 59, *The Expert Witness*.** Books: Peter Davis and Eliana Garcés, *Quantitative Techniques for Competition and Antitrust Analysis* (2010); John Kwoka, *Mergers, Merger Control, and Remedies* (2015); The U.S. Merger Guidelines (2010, 2023); the European Commission's horizontal merger guidelines (2004). Papers: Harris and Simons (1989); Werden (1996); Crooke, Froeb, Tschantz and Werden (1999); Katz and Shapiro (2003); Ashenfelter et al. (2006); Abrantes-Metz et al. (2006); Whinston (2007); Farrell and Shapiro (2010); Ashenfelter and Hosken (2010); Cooper et al. (2019); Prager and Schmitt (2021); Shapiro (2021) on AT&T; Krueger and Ashenfelter (2022); Brot-Goldberg et al. (2024).
+
+**Part 60, *The Price*.** Books: Kalyan Talluri and Garrett van Ryzin, *The Theory and Practice of Revenue Management* (2004); Robert Phillips, *Pricing and Revenue Optimization* (2nd ed., 2021); Thomas Nagle and Georg Müller, *The Strategy and Tactics of Pricing*. Papers: Hall and Hitch (1939); Becker, DeGroot and Marschak (1964); Littlewood (1972); Mussa and Rosen (1978); Belobaba (1987); Smith, Leimkuhler and Darrow (1992); Gallego and van Ryzin (1994); Deneckere and McAfee (1996); Blinder et al. (1998); Bakos and Brynjolfsson (1999); Murphy et al. (2005); Blake and Coey (2014); DellaVigna and Gentzkow (2019); Calvano et al. (2020); Blake et al. (2021); Williams (2022).
 
 ## 4. What the series leaves out
 

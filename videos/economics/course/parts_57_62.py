@@ -142,4 +142,49 @@ PARTS = [
         also=(("Agora's merger module", "explainer/economics/agora/merger.py"),
               ("The Data Room: airline fares in the CPI", "explainer/economics/data")),
     ),
+    Part(
+        n=60, level="U", widget="fares", prereq=(5, 10, 16, 43, 45, 51, 59),
+        question="How do firms actually set prices, and how much of the theory do they use?",
+        story="In 1985 American Airlines answers People Express's low fares with Ultimate Super Savers on a limited "
+              "number of seats per flight, and People Express is sold within two years. The Island's flight has a "
+              "hundred seats and sixty days of sales. Firms say they price at cost plus a markup, and the flat top of "
+              "the profit curve shows why that survives when the elasticity is only estimated; willingness to pay "
+              "from surveys runs high, and an Island conjoint survey recovers what wifi and legroom are worth; an A/B "
+              "test in a market with scarce rooms doubles the true effect. The viewer prices the flight week by week "
+              "(start low and raise wins); Littlewood's rule is derived, with EMSR-b and overbooking, and the optimal "
+              "fare for every day and seat left comes from dynamic programming. Good, better, best, and damaged "
+              "goods. After an intermission of food prices at the factory gate and the grocer's, large bundles, "
+              "reference prices and the case for high-low, hidden fees and the FTC's rule, uniform prices across a "
+              "chain, cost pass-through in 2021-23 against the quiet years, algorithms and personalized prices, "
+              "business prices and most-favoured-customer clauses, two Dials, pricing teams, J.C. Penney's fair and "
+              "square pricing, and pricing that learns.",
+        handoff="Part 61 goes inside the technology platforms: surge pricing, marketplace design, experiments at scale "
+                "and ranking.",
+        outside="Part 5: what people want; Part 10: price discrimination, versions and bundles; Part 16: auctions; "
+                "Part 43: demand and elasticities; Part 45: reference points and left digits; Part 51: dynamic "
+                "programming; Part 59: pass-through; Statistics, Built: experiments and bandits.",
+        objectives={
+            "U": ["Explain why a fixed markup can be a sensible rule when the elasticity is uncertain.",
+                  "Derive Littlewood's rule and apply it to two fares.",
+                  "Explain why versions, bundles and promotions can raise profit."],
+            "M": ["Estimate willingness to pay from a conjoint survey with a multinomial logit.",
+                  "Show how interference biases an A/B test in a market with scarce capacity, and how to design "
+                  "around it.",
+                  "Estimate a cost pass-through rate with a distributed-lag regression."],
+            "D": ["Solve a dynamic pricing problem by backward induction, and derive the one-seat fare rule.",
+                  "Derive Bakos and Brynjolfsson's large-bundle result from the law of large numbers."],
+            "I": ["Design a pricing experiment or a revenue management rule for a real product, and say what could "
+                  "go wrong."],
+        },
+        results=[
+            ("The markup rule", r"\frac{p - c}{p} = \frac{1}{\varepsilon}"),
+            ("Littlewood's rule", r"P(D_H > y^{*}) \le \frac{p_L}{p_H}"),
+            ("The pricing Bellman equation",
+             r"V_t(x) = \max_p \mathbb{E}\big[p\min(D,x) + V_{t+1}(x - \min(D,x))\big]"),
+            ("Overbooking", r"P(S_{b-1} \ge C) \le \frac{\text{fare}}{\text{bump cost}}"),
+        ],
+        U=(0, 1, 2, 4, 5, 7, "s09_intermission", 8, 9, 10, 15), D=(6, 16), I=(3, 11, 13),
+        also=(("Agora's revenue module", "explainer/economics/agora/revenue.py"),
+              ("The Data Room: food prices", "explainer/economics/data")),
+    ),
 ]
