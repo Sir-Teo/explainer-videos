@@ -181,14 +181,14 @@ def cases(C: dict, targets=(0.05, 0.07, 0.09, 0.12, 0.15, 0.19, 0.24, 0.31, 0.39
     return {"rows": rows}
 
 
-def signal_sweep(signals=(0.0, 0.45, 0.9, 1.35, 1.8), n: int = 30000, seed: int = 64) -> dict:
+def signal_sweep(signals=(0.0, 0.45, 0.9, 1.35, 1.8), n: int = 40000, seed: int = 64, trees: int = 80) -> dict:
     """How much the algorithm adds as the judges' courtroom signal grows more informative: for each strength (the
     signal's weight in both the true risk and the judges' index), the fall in failures at the judges' detention rate
     when cases are ranked by the forest, which sees only the records, and the fall in detention at their failure
     rate.  Negative values: the judges do better."""
     rows = []
     for w in signals:
-        C = courts(n=n, seed=seed, signal=w, trees=50)
+        C = courts(n=n, seed=seed, signal=w, trees=trees)
         P = policy_curves(C)
         rows.append({"signal": float(w), "crime_cut": float(P["crime_cut"]), "detain_cut": float(P["detain_cut"])})
     return {"rows": rows}

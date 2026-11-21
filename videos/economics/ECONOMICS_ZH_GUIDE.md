@@ -1787,3 +1787,18 @@ brackets on screen.
 | key player; Bonacich centrality; peer effects; the reflection problem | 关键参与者；博纳西奇中心性；同伴效应；反射问题 |
 | network formation; pairwise stability; efficient network | 网络形成；成对稳定性；有效网络 |
 | supply network fragility | 供应网络脆弱性 |
+
+## Part 64
+
+| English | 中文 |
+|---|---|
+| prediction policy problem; machine learning | 预测型政策问题；机器学习 |
+| selective labels; contraction design | 选择性标签；收缩设计 |
+| random forest; gradient boosting | 随机森林；梯度提升 |
+| double/debiased machine learning; cross-fitting; Neyman orthogonality | 双重/去偏机器学习；交叉拟合；奈曼正交性 |
+| causal forest; heterogeneous treatment effects; policy learning | 因果森林；异质性处理效应；策略学习 |
+| text as data; prediction-powered inference | 文本即数据；预测驱动推断 |
+| neural network; Euler-equation error | 神经网络；欧拉方程误差 |
+| reinforcement learning; Q-learning; algorithmic collusion | 强化学习；Q学习；算法合谋 |
+| large language model; simulated subjects | 大语言模型；模拟被试 |
+| algorithmic fairness; calibration; false positive rate | 算法公平；校准；假阳性率 |

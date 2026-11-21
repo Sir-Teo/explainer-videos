@@ -16,8 +16,8 @@ class Frontier(VoiceoverScene):
         rows = S["rows"]
         w = [r["signal"] for r in rows]
         cut = [100 * r["crime_cut"] for r in rows]
-        ax = plane([-0.1, 1.9], [-45, 35], center=LEFT * 2.4 + DOWN * 0.3, x_length=6.6, y_length=4.6,
-                   xticks=[0, 0.45, 0.9, 1.35, 1.8], yticks=[-40, -20, 0, 20],
+        ax = plane([-0.1, 1.9], [-55, 30], center=LEFT * 2.4 + DOWN * 0.3, x_length=6.6, y_length=4.6,
+                   xticks=[0, 0.45, 0.9, 1.35, 1.8], yticks=[-50, -25, 0, 25],
                    xlabel=r"how much the judge sees that the records do not", ylabel=r"failures prevented by the "
                    r"algorithm, \ \%", xfmt=lambda v: f"{v:.2f}", yfmt=lambda v: f"{v:+.0f}".replace("-", "{-}")
                    if v else "0", font_size=14)

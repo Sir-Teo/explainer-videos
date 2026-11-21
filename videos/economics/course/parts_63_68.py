@@ -46,4 +46,45 @@ PARTS = [
         also=(("Agora's network module", "explainer/economics/agora/network.py"),
               ("The Data Room: Japan's industrial production", "explainer/economics/data")),
     ),
+    Part(
+        n=64, level="D", widget="bail", prereq=(4, 13, 20, 44, 54, 63),
+        question="What does machine learning change in how economics is done?",
+        story="Judges decide every day who waits for trial in jail; Kleinberg et al. trained an algorithm on 758,027 "
+              "New York City decisions and estimated large gains, but outcomes are seen only for the released. On "
+              "the Island's courts, a random forest ranks defendants better than judges who overweight the charge "
+              "(18% fewer failures at their detention rate), the viewer detains three of ten, and the contraction "
+              "design checks the gain with observed outcomes while filling in hidden ones flatters it; Meehl's 1954 "
+              "claim is Called it? (right). Targeting a job programme by risk does worse than at random; double "
+              "machine learning recovers an effect that linear controls and a plug-in learner miss; causal forests "
+              "allocate places; prediction-powered inference corrects a classifier's measurement. After an "
+              "intermission of transistor counts since 1971, a network learns Brock and Mirman's saving rule, "
+              "Q-learners learn to price near monopoly, language models serve as pilots and assistants, a calibrated "
+              "score makes unequal errors, a new Dial, and the frontier of when to defer.",
+        handoff="Part 65 turns from machines that help economists to machines that change the economy: automation, "
+                "work and growth.",
+        outside="Part 4: instruments and the judge design; Part 13: information; Part 20: the growth model; Part 44: "
+                "algorithmic pricing; Part 54: estimation by simulation; Statistics, Built: forests, double ML, "
+                "conformal and prediction-powered inference.",
+        objectives={
+            "U": ["Tell a prediction policy problem from a causal one, with examples.",
+                  "Explain why outcomes hidden by a decision make algorithms hard to evaluate.",
+                  "Explain why a calibrated score can still make unequal errors across groups."],
+            "M": ["Evaluate a decision rule with the contraction design, and say what it can and cannot claim.",
+                  "Derive double machine learning's orthogonal score and explain cross-fitting.",
+                  "Do inference on a mean measured by a classifier with prediction-powered inference."],
+            "D": ["Train a neural network on Euler-equation errors and check it against a known solution.",
+                  "Estimate heterogeneous effects with a causal forest and learn a treatment rule.",
+                  "Prove Chouldechova's identity and state the impossibility it implies."],
+            "I": ["Audit a deployed risk score: its label, its selective labels, and its errors by group."],
+        },
+        results=[
+            ("Orthogonal score", r"\hat\theta = \frac{\sum (d - \hat m)(y - \hat \ell)}{\sum (d - \hat m)^2}"),
+            ("Prediction-powered mean", r"\hat\mu = \bar f_N + \overline{(y - f)}_n"),
+            ("Chouldechova's identity", r"\text{FPR} = \frac{p}{1-p}\,\frac{1-\text{PPV}}{\text{PPV}}\,(1-\text{FNR})"),
+            ("Brock and Mirman", r"k' = \alpha\beta\, k^{\alpha}"),
+        ],
+        U=(0, 1, 2, 3, 4, "s09_intermission", 10, 12), D=(5, 6, 8, 15), I=(7, 11, 14),
+        also=(("Agora's learn module", "explainer/economics/agora/learn.py"),
+              ("The Data Room: transistors", "explainer/economics/data")),
+    ),
 ]

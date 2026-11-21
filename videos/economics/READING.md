@@ -10,7 +10,7 @@ the series leaves out.
 Both *Parts* columns are found, not typed. *Planned* lists the parts whose entry in
 [`SYLLABUS.md`](SYLLABUS.md) names the book or paper; *Built* lists the parts whose scenes, compute step or
 README cite it (a dot: none yet). Fuller notes (editions, chapters, what each source was used for) are in each
-part's README, under *Sources*. Built so far: Parts 1–63.
+part's README, under *Sources*. Built so far: Parts 1–64.
 
 ## 1. The textbook spine
 
@@ -251,7 +251,7 @@ part's README, under *Sources*. Built so far: Parts 1–63.
 | vector autoregressions | Sims (1980) | 55 | 55 |
 | dynamic discrete choice | Rust (1987) | 44, 54 | 54 |
 | generalized method of moments | Hansen (1982) | 54 | 54, 56 |
-| machine learning for causal questions | Chernozhukov and others (2018); Athey and Imbens (2019) | 64 | 21 |
+| machine learning for causal questions | Chernozhukov and others (2018); Athey and Imbens (2019) | 64 | 21, 64 |
 | publication bias in economics | Brodeur and others (2016) | 67 | · |
 
 ## 3. Every built part's reference card
@@ -381,6 +381,8 @@ part's README, under *Sources*. Built so far: Parts 1–63.
 **Part 62, *Inside the Firm*.** Books: Edward Lazear and Michael Gibbs, *Personnel Economics in Practice* (3rd ed., 2014); Robert Gibbons and John Roberts, eds., *The Handbook of Organizational Economics* (2013); Jean Tirole, *The Theory of Corporate Finance* (2006). Papers: Modigliani and Miller (1958); Jensen and Meckling (1976); Myers and Majluf (1984); Jensen and Murphy (1990); Garicano (2000); Lazear (2000); Bertrand and Mullainathan (2001); Graham and Harvey (2001); Syverson (2004, 2011); Bloom and Van Reenen (2007); Bennedsen et al. (2007); Gabaix and Landier (2008); Gibbons and Henderson (2012); Bloom et al. (2013, 2015); Davis et al. (2014); Bruhn, Karlan and Schoar (2018); Benson, Li and Shue (2019).
 
 **Part 63, *The Economy as a Network*.** Books: Matthew O. Jackson, *Social and Economic Networks* (2008); Vasco Carvalho and Alireza Tahbaz-Salehi, "Production Networks: A Primer", *Annual Review of Economics* (2019); Sanjeev Goyal, *Connections: An Introduction to the Economics of Networks* (2007). Papers: Leontief (1936); Domar (1961); Hulten (1978); Lucas (1977); Granovetter (1973); Kremer (1993); Jackson and Wolinsky (1996); Eisenberg and Noe (2001); Ballester, Calvó-Armengol and Zenou (2006); Gabaix (2011); Acemoglu et al. (2012, 2015); Banerjee et al. (2013); Elliott, Golub and Jackson (2014); Barrot and Sauvagnat (2016); Baqaee and Farhi (2019); Boehm et al. (2019); Carvalho et al. (2021); Elliott, Golub and Leduc (2022); Rajkumar et al. (2022).
+
+**Part 64, *Machines that Learn*.** Books: Susan Athey and Guido Imbens, "Machine Learning Methods That Economists Should Know About", *Annual Review of Economics* (2019); Sendhil Mullainathan and Jann Spiess, "Machine Learning: An Applied Econometric Approach", *Journal of Economic Perspectives* (2017); Trevor Hastie, Robert Tibshirani and Jerome Friedman, *The Elements of Statistical Learning* (2nd ed., 2009). Papers: Meehl (1954); Brock and Mirman (1972); Robinson (1988); Kleinberg et al. (2015, 2017, 2018); Chernozhukov et al. (2018); Wager and Athey (2018); Kitagawa and Tetenov (2018); Athey and Wager (2021); Jean et al. (2016); Gentzkow, Kelly and Taddy (2019); Obermeyer et al. (2019); Angelopoulos et al. (2023); Calvano et al. (2020); Chouldechova (2017); Zheng et al. (2022); Horton (2023); Ludwig and Mullainathan (2024).
 
 ## 4. What the series leaves out
 

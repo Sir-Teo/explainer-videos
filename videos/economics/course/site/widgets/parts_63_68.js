@@ -112,4 +112,92 @@
       note: "Part 63, chapters 2 to 5. Computed in your browser; nothing you do here is stored or sent.",
     });
   };
+
+  // ---- Part 64: machines that learn -------------------------------------------------------------------------------
+  W.bail = function (el) {
+    // Agora's learn module (explainer.economics.agora.learn.courts), simplified: defendants with records (age,
+    // priors, missed court dates, a charge, a job) and a courtroom signal s that only the judge sees.  The true
+    // chance of failing to appear is logistic in the records and w s.  The algorithm ranks by the best prediction
+    // from the records alone, E[p | records] (averaging over s by Gauss-Hermite); the judge ranks by an index that
+    // weights the charge by c, uses w s, and adds noise.  Expected failures per 100 defendants are computed for
+    // every detention rate, for both rankings; the reader sets w, c and the judge's strictness.
+    var GH = [[-2.0201828705, 0.0199532421], [-0.9585724646, 0.3936193232], [0, 0.9453087205],
+              [0.9585724646, 0.3936193232], [2.0201828705, 0.0199532421]];
+    function sig(z) { return 1 / (1 + Math.exp(-z)); }
+    function people(seed) {
+      var u = QB.rng(6400 + seed), N = 4000, D = [];
+      for (var i = 0; i < N; i++) {
+        var age = 18 + Math.floor(u() * 43), lam = 0.4 + 2.2 * Math.exp(-(age - 18) / 12), pr = 0, L = Math.exp(-lam),
+            prod = u();
+        while (prod > L) { pr += 1; prod *= u(); }
+        var ms = 0; for (var k = 0; k < Math.min(pr, 6); k++) { if (u() < 0.3) { ms += 1; } }
+        var r = u(), ch = r < 0.35 ? 0 : (r < 0.65 ? 1 : (r < 0.85 ? 2 : 3));
+        var job = u() < 0.40 + 0.25 * (age > 25 ? 1 : 0) ? 1 : 0;
+        var z0 = -2.35 + 0.55 * Math.log(1 + pr) + 0.65 * Math.min(ms, 3) + 0.55 * (age < 23 ? 1 : 0) +
+                 0.45 * (age < 23 && pr >= 2 ? 1 : 0) - 0.45 * job + 0.25 * (ch === 2 ? 1 : 0) -
+                 0.25 * (ch === 3 ? 1 : 0);
+        D.push({ z0: z0, s: u.normal(), e: u.normal(), pr: pr, ms: ms, ch: ch, job: job });
+      }
+      return D;
+    }
+    var POP = people(0);
+    function frontier(order, p) {
+      var N = p.length, xs = [], ys = [], tot = 0, k;
+      for (k = 0; k < N; k++) { tot += p[k]; }
+      var cum = 0, j = 0;
+      for (var d = 0; d <= 60; d += 2) {
+        var m = Math.round(d / 100 * N);
+        while (j < m) { cum += p[order[j]]; j += 1; }
+        xs.push(d); ys.push(100 * (tot - cum) / N);
+      }
+      return { x: xs, y: ys };
+    }
+    QB.widget(el, {
+      title: "The judge, the algorithm, and what the judge can see",
+      sub: "Detaining more defendants prevents more failures to appear. Choose how much the judge sees in court that " +
+           "the records do not, how heavily the judge weighs the charge (which barely predicts coming back), and how " +
+           "strict the judge is; compare the judge's failures with an algorithm that ranks by the records alone.",
+      panels: 1, height: 300,
+      controls: [
+        { k: "w", label: "What the judge sees beyond the records", min: 0, max: 1.8, step: 0.15, value: 0.45,
+          fmt: function (x) { return x.toFixed(2); } },
+        { k: "c", label: "Weight the judge gives the charge", min: 0, max: 1.2, step: 0.1, value: 0.55,
+          fmt: function (x) { return x.toFixed(1); } },
+        { k: "d", label: "Judge's detention rate", min: 10, max: 50, step: 2, value: 28,
+          fmt: function (x) { return x + "%"; } },
+      ],
+      draw: function (g, v, st) {
+        var N = POP.length, p = [], alg = [], jud = [], i, q;
+        for (i = 0; i < N; i++) {
+          var a = POP[i];
+          p.push(sig(a.z0 + v.w * a.s));
+          var ea = 0; for (q = 0; q < GH.length; q++) { ea += GH[q][1] * sig(a.z0 + v.w * Math.SQRT2 * GH[q][0]); }
+          alg.push(ea / Math.sqrt(Math.PI));
+          jud.push(0.35 * a.pr + 0.30 * a.ms + v.c * a.ch - 0.20 * a.job + v.w * a.s + 0.7 * a.e);
+        }
+        var idx = []; for (i = 0; i < N; i++) { idx.push(i); }
+        var oa = idx.slice().sort(function (x, y) { return alg[y] - alg[x]; });
+        var oj = idx.slice().sort(function (x, y) { return jud[y] - jud[x]; });
+        var fa = frontier(oa, p), fj = frontier(oj, p);
+        var k = Math.round(v.d / 2);
+        st.alg = fa.y[k]; st.jud = fj.y[k];
+        var top = Math.max.apply(null, fj.y.concat(fa.y)) * 1.05;
+        var A = g[0].axes({ x: [0, 60], y: [0, top], title: "failures to appear per 100 defendants",
+                            xlabel: "share detained, %" });
+        A.line(fj.x, fj.y, { color: "#E8A0B4", width: 2.5 });
+        A.line(fa.x, fa.y, { color: "#7EC8F5", width: 2.5 });
+        A.vline(v.d, { color: "#F2C14E" });
+        A.dots([v.d, v.d], [st.jud, st.alg], { color: function (j) { return j ? "#7EC8F5" : "#E8A0B4"; }, r: 5 });
+        A.legend([["the judge", "#E8A0B4"], ["the algorithm (records only)", "#7EC8F5"]], "tr");
+      },
+      readout: function (v, st) {
+        var diff = 100 * (1 - st.alg / st.jud);
+        return [["judge's failures per 100", st.jud.toFixed(1)],
+                ["algorithm's, same detention", st.alg.toFixed(1)],
+                ["the algorithm prevents", (diff >= 0 ? "" : "minus ") + Math.abs(diff).toFixed(0) +
+                 "% of the judge's failures"]];
+      },
+      note: "Part 64, chapters 2, 3 and 15. Computed in your browser; nothing you do here is stored or sent.",
+    });
+  };
 })();
