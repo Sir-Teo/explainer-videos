@@ -23,6 +23,8 @@ class Frontier(VoiceoverScene):
              r"countries; \ shocks shared across regions", GAIN),
         ], width=12.6, cols=2, font_size=20).move_to(DOWN * 0.15)
         head = label(r"what remains open", font_size=30, color=E.ACCENT).to_edge(UP, buff=0.5)
+        coda = label(r"each new source of variation is a new restriction, \ and a test of the old ones",
+                     font_size=24, color=E.ACCENT).next_to(cards, DOWN, buff=0.55)
         tag = published_tag(r"Coibion, \ Gorodnichenko and Kamdar, \ JEL 56(4) (2018); \ Bayer, \ Born and "
                             r"Luetticke, \ AER 114(5) (2024)", corner=DR, font_size=12)
         with self.voiceover(
@@ -34,11 +36,13 @@ class Frontier(VoiceoverScene):
             "Yuriy Gorodnichenko and Rupal Kamdar argued that surveys of what households, firms and forecasters "
             "expect should discipline the Phillips curve. <bookmark mark='d'/> And instruments keep improving: "
             "surprises cleaned of the information effect, narrative series for other countries, and shocks that "
-            "hit regions differently. Each new source of variation is a new restriction, and a new chance to find "
-            "out which of the old ones were wrong."
+            "hit regions differently. <bookmark mark='e'/> Each new source of variation is a new restriction, and "
+            "a new chance to find out which of the old ones were wrong."
         ) as vo:
             self.play(FadeIn(head), FadeIn(tag))
             for mk, c in zip("abcd", cards.cards):
                 vo.wait_until(mk)
                 self.play(FadeIn(c, shift=UP * 0.1))
+            vo.wait_until("e")
+            self.play(FadeIn(coda, shift=UP * 0.1))
         self.clear_scene()

@@ -58,7 +58,6 @@ class Knows(VoiceoverScene):
             "least reliable at exactly the turning points that matter most. <bookmark mark='e'/> Part fifty-seven "
             "grades the forecasters, and the models, properly."
         ) as vo:
-            vo.wait_until("a")
             self.play(FadeIn(top, shift=DOWN * 0.1))
             vo.wait_until("b")
             p = panels[0]

@@ -215,7 +215,7 @@ part's README, under *Sources*. Built so far: Parts 1–55.
 | bank runs | Diamond and Dybvig (1983) | 26 | 26 |
 | debt deflation and financial instability | Fisher (1933); Minsky (1986) | 33 | 33 |
 | the financial accelerator | Bernanke, Gertler and Gilchrist (1999) | 33 | 33 |
-| forecasting by professionals | the Survey of Professional Forecasters (Philadelphia Fed) | 1, 57 | 1, 31 |
+| forecasting by professionals | the Survey of Professional Forecasters (Philadelphia Fed) | 1, 57 | 1, 31, 55 |
 
 ### The world economy
 
