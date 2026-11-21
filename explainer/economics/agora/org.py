@@ -42,6 +42,7 @@ def dispersion(sigmas=(2.0, 3.0, 4.0, 6.0, 8.0, 10.0), n: int = 4000, sd: float 
     repeatedly, until none would.  Returns, by sigma, the survivors' 90/10 productivity ratio and their number."""
     rng = np.random.default_rng(seed)
     phi = np.exp(rng.normal(0.0, sd, n))
+    bins = np.linspace(-1.5, 1.5, 31)
     rows = []
     for s in sigmas:
         alive = np.ones(n, bool)
@@ -55,9 +56,10 @@ def dispersion(sigmas=(2.0, 3.0, 4.0, 6.0, 8.0, 10.0), n: int = 4000, sd: float 
         lp = np.log(phi[alive])
         rows.append({"sigma": float(s), "survivors": int(alive.sum()),
                      "ratio_90_10": float(np.exp(np.percentile(lp, 90) - np.percentile(lp, 10))),
-                     "cutoff": float(phi[alive].min())})
-    return {"rows": rows, "entry_ratio_90_10": float(np.exp(np.percentile(np.log(phi), 90)
-                                                            - np.percentile(np.log(phi), 10)))}
+                     "cutoff": float(phi[alive].min()), "hist": np.histogram(lp, bins=bins)[0].tolist(),
+                     "mean_log": float(lp.mean())})
+    return {"rows": rows, "bins": bins.tolist(), "entry_hist": np.histogram(np.log(phi), bins=bins)[0].tolist(),
+            "entry_ratio_90_10": float(np.exp(np.percentile(np.log(phi), 90) - np.percentile(np.log(phi), 10)))}
 
 
 # ---------------------------------------------------------------------------------------------------------------

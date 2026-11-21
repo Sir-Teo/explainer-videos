@@ -21,7 +21,7 @@ class Frontier(VoiceoverScene):
                    font_size=14)
         curve = path(ax, ks, paid, RIDER, 3.0)
         cost = seg(ax, 1, lo, 30, lo, GREY_B, 1.4, dashed=True)
-        cl = label(r"the lowest price on offer", font_size=15, color=GREY_B).next_to(ax.ax.c2p(30, lo), UP,
+        cl = label(r"the lowest price on offer", font_size=15, color=GREY_B).next_to(ax.ax.c2p(30, lo), DOWN,
                                                                                     buff=0.08).shift(LEFT * 1.0)
         p_h, p_a = dot(ax, 2, paid[1], WHITE, 0.08), dot(ax, 20, paid[19], PLAT, 0.08)
         side = VGroup(

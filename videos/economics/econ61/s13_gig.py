@@ -23,8 +23,6 @@ class Gig(VoiceoverScene):
                    ylabel=r"one driver's reservation wage, \ \$ an hour", xfmt=lambda v: f"{v:.0f}",
                    yfmt=lambda v: f"{v:.0f}", font_size=14)
         wage = seg(ax, -0.5, 20, 23.5, 20, DRIVER, 2.4)
-        wl = label(r"pay: \ \$20 an hour", font_size=15, color=DRIVER).next_to(ax.ax.c2p(23.5, 20), UP, buff=0.08
-                                                                                ).shift(LEFT * 0.8)
         bs = VGroup()
         for h, v in zip(hrs, r):
             p0, p1 = ax.ax.c2p(h - 0.35, 0), ax.ax.c2p(h + 0.35, float(np.clip(v, 0.5, 49)))
@@ -37,8 +35,8 @@ class Gig(VoiceoverScene):
                               fill_opacity=0).move_to((p0 + p1) / 2)
         side = VGroup(
             label(r"each hour, \ what it would take to get this driver on the road", font_size=19, color=GREY_A),
-            label(r"green: \ hours worth driving; \ a flexible driver drives exactly those", font_size=19,
-                  color=GAIN),
+            label(r"gold line: \ the pay, \ \$20 an hour; \ green: \ hours worth driving, \\ which a flexible "
+                  r"driver drives, \ and no others", font_size=19, color=GAIN),
             label(r"red box: \ the best fixed eight-hour shift, \\ taken whole or not at all", font_size=19,
                   color=SURGE),
             label(rf"5,000 Island drivers: \ surplus \${F['flex']:.0f} a day flexible, \ "
@@ -67,7 +65,7 @@ class Gig(VoiceoverScene):
             vo.wait_until("a")
             self.play(LaggedStart(*[GrowFromEdge(b, DOWN) for b in bs], lag_ratio=0.05), run_time=2.0)
             vo.wait_until("b")
-            self.play(Create(wage), FadeIn(wl), FadeIn(side[1]))
+            self.play(Create(wage), FadeIn(side[1]))
             vo.wait_until("c")
             self.play(Create(shift_box), FadeIn(side[2]))
             vo.wait_until("d")
