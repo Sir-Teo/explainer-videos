@@ -27,7 +27,7 @@ after. The Island's seventy-firm supply web shows the same in miniature. From th
   70-log-point loss costs 27 log points of GDP rather than 17.5, energy's sales share climbing from 0.25 to 0.60; the
   oil embargo of 1973; Baqaee and Farhi;
 - supply chains, measured: the Island's 3,000 firms, 5% of them losing 40% of output; direct customers lose 7.4%,
-  suppliers 17%; 2.0% of sales lost at the hit firms, 7.7% with the links; specific inputs carry the loss (17% against
+  suppliers 17%; 2.0% of sales lost at the hit firms, 7.6% with the links; specific inputs carry the loss (17% against
   4.4% if every input could be replaced); Barrot and Sauvagnat; Boehm, Flaaen and Pandalai-Nayar; Thailand's floods and
   the chip shortage;
 - the O-ring (Kremer): one weak link costs two fifths of a team's output; sorting the best with the best adds 11%;

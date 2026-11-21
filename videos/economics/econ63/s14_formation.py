@@ -36,7 +36,10 @@ class Formation(VoiceoverScene):
                   r"own links", font_size=22, color=WHITE),
             label(r"$\delta = 0.6$: \ a friend is worth 0.6, \ a friend of a friend 0.36", font_size=20,
                   color=GREY_A),
-        ).arrange(DOWN, buff=0.25).to_edge(UP, buff=0.5)
+        ).arrange(DOWN, buff=0.25)
+        head = label(r"suppliers, \ counterparties, \ friends: \ links chosen one pair at a time", font_size=28,
+                     color=E.ACCENT)
+        VGroup(head, rule).arrange(DOWN, buff=0.4).to_edge(UP, buff=0.45)
         tag = published_tag(r"Jackson and Wolinsky, \ Journal of Economic Theory 71(1) (1996)", corner=DL,
                             font_size=12)
         with self.voiceover(
@@ -48,7 +51,7 @@ class Formation(VoiceoverScene):
             "delta at 0.6, a friend is worth 0.6, a friend of a friend 0.36. <bookmark mark='c'/> With four "
             "players, three shapes matter: everyone linked to everyone, a star, and no links at all."
         ) as vo:
-            self.play(FadeIn(tag))
+            self.play(FadeIn(tag), FadeIn(head, shift=DOWN * 0.1))
             vo.wait_until("a")
             self.play(FadeIn(rule[0]))
             vo.wait_until("b")
@@ -65,8 +68,8 @@ class Formation(VoiceoverScene):
                    xticks=[0, 0.24, 0.6, 0.96, 1.2], yticks=[0, 2, 4, 6], xlabel=r"cost of a link, \ $c$",
                    ylabel=r"total payoff of all four", xfmt=lambda v: f"{v:.2f}", yfmt=lambda v: f"{v:.0f}",
                    font_size=14)
-        lc = path(ax, c, [r["complete_value"] for r in rows], LINK, 3.2, smooth=False)
-        ls = path(ax, c, [r["star_value"] for r in rows], SEED, 3.2, smooth=False)
+        lc = path(ax, c, [r["complete_value"] for r in rows], LINK, 3.2, yr=(-1, 6), smooth=False)
+        ls = path(ax, c, [r["star_value"] for r in rows], SEED, 3.2, yr=(-1, 6), smooth=False)
         le = path(ax, c, [0.0 for _ in rows], GREY_B, 3.2, smooth=False)
 
         def strip(flags, y, color):

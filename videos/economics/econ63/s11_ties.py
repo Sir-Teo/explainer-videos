@@ -55,14 +55,14 @@ class Ties(VoiceoverScene):
     def curves(self):
         W = load("ties")
         s = np.array(W["strength"])
-        ax = plane([0, 1], [0, 0.85], center=LEFT * 2.4 + DOWN * 0.3, x_length=6.6, y_length=4.6,
-                   xticks=[0, 0.25, 0.5, 0.75, 1.0], yticks=[0, 0.2, 0.4, 0.6, 0.8],
+        ax = plane([0, 1], [0, 1.05], center=LEFT * 2.4 + DOWN * 0.3, x_length=6.6, y_length=4.6,
+                   xticks=[0, 0.25, 0.5, 0.75, 1.0], yticks=[0, 0.25, 0.5, 0.75, 1.0],
                    xlabel=r"strength of the tie \ (how often you meet, \ how many friends you share)",
                    ylabel=r"chance", xfmt=lambda v: f"{v:.2f}", yfmt=lambda v: f"{v:.1f}", font_size=14)
         nv = path(ax, s, W["novel"], LINK, 3.2)
         ps = path(ax, s, W["passes"], PEOPLE, 3.2)
         vv = path(ax, s, 2.5 * np.array(W["value"]), GDP, 3.8)
-        pk = vline(ax, W["peak"], 0, 0.85, GDP)
+        pk = vline(ax, W["peak"], 0, 1.0, GDP)
         side = VGroup(
             label(r"blue: \ they know of a job you do not", font_size=19, color=LINK),
             label(r"green: \ they bother to tell you", font_size=19, color=PEOPLE),

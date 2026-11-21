@@ -127,7 +127,8 @@ def compute_diffusion() -> dict:
     deg = A.sum(1)
     hubs = np.flatnonzero(deg >= 15)
     ang = 2 * np.pi * np.arange(n) / n
-    rad = np.where(np.isin(np.arange(n), hubs), 0.45, 1.0)
+    jitter = np.random.default_rng(631).uniform(-0.13, 0.13, n)
+    rad = np.where(np.isin(np.arange(n), hubs), 0.42, 0.9 + jitter)
     xy = np.c_[rad * np.cos(ang), rad * np.sin(ang)]
     w, v = np.linalg.eigh(A.astype(float))
     cent = np.abs(v[:, -1])

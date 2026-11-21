@@ -5,6 +5,30 @@ from videos.economics.econ63.common import *  # noqa: F403
 NS = (("n_2", 2, LINK), ("n_3", 3, SEED), ("n_5", 5, GAIN))
 
 
+def schematic(inputs=4, suppliers=3):
+    """A firm, its essential inputs, and the possible suppliers of each (one relationship broken)."""
+    firm = VGroup(RoundedRectangle(width=1.2, height=0.5, corner_radius=0.1, stroke_color=GDP, stroke_width=2.2),
+                  label(r"firm", font_size=18, color=GDP))
+    firm[1].move_to(firm[0])
+    slots, links, sups = VGroup(), VGroup(), VGroup()
+    for k in range(inputs):
+        x = (k - (inputs - 1) / 2) * 1.05
+        sl = Square(side_length=0.28, stroke_color=NODE, stroke_width=2, fill_color=NODE,
+                    fill_opacity=0.25).move_to([x, -0.85, 0])
+        slots.add(sl)
+        links.add(Line(firm[0].get_bottom(), sl.get_top(), stroke_width=1.5, color=GREY_B))
+        for m in range(suppliers):
+            d = Dot([x + (m - (suppliers - 1) / 2) * 0.3, -1.65, 0], radius=0.06, color=LINK)
+            broken = (k == 1 and m == 0)
+            links.add(DashedLine(sl.get_bottom(), d.get_center(), stroke_width=1.4,
+                                 color=SHOCK if broken else LINK))
+            sups.add(d)
+    g = VGroup(links, firm, slots, sups)
+    cap = label(r"4 essential inputs, \ 3 possible suppliers of each", font_size=15, color=GREY_A).next_to(
+        g, DOWN, buff=0.15)
+    return VGroup(g, cap)
+
+
 class Frontier(VoiceoverScene):
     def construct(self):
         card(self, 15, r"Frontier: \ fragile by design", r"If firms choose their suppliers to insure themselves, \ "
@@ -28,7 +52,8 @@ class Frontier(VoiceoverScene):
             label(r"orange: \ 3; \ green: \ 5", font_size=19, color=SEED),
             label(r"weaken every link a little: \\ production falls off a cliff", font_size=19, color=SHOCK),
             label(r"more suppliers move the cliff, \\ they do not remove it", font_size=19, color=E.ACCENT),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.35).to_edge(RIGHT, buff=0.4)
+        ).arrange(DOWN, aligned_edge=LEFT, buff=0.3).to_edge(RIGHT, buff=0.4).shift(DOWN * 1.2)
+        sch = schematic().scale(0.8).next_to(side, UP, buff=0.35).align_to(side, LEFT)
         c3 = F["n_3"]
         tag = published_tag(r"Elliott, \ Golub and Leduc, \ American Economic Review 112(8) (2022); \ the Island: \ "
                             r"agora.network.fragility", corner=DL, font_size=12)
@@ -46,7 +71,7 @@ class Frontier(VoiceoverScene):
             "equilibrium, though never efficiently so. <bookmark mark='e'/> More suppliers move the cliff; they do "
             "not remove it."
         ) as vo:
-            self.play(FadeIn(ax), FadeIn(tag), FadeIn(side[0]))
+            self.play(FadeIn(ax), FadeIn(tag), FadeIn(sch), FadeIn(side[0]))
             vo.wait_until("a")
             self.play(Create(lines[0]), FadeIn(side[1]), run_time=1.5)
             vo.wait_until("b")

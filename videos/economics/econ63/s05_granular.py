@@ -87,8 +87,8 @@ class Granular(VoiceoverScene):
         zl = path(ax, yrs, 100 * zs, SHOCK, 3.0, smooth=False)
         el = path(ax, yrs, 100 * es, GREY_B, 3.0, smooth=False)
         key = legend_rows([(SHOCK, r"1,000 Zipf-sized firms".replace(",", "{,}")),
-                           (GREY_B, r"1,000 equal firms".replace(",", "{,}"))], font_size=16).next_to(
-            ax, RIGHT, buff=0.2).shift(UP * 0.6)
+                           (GREY_B, r"1,000 equal firms".replace(",", "{,}"))], font_size=16)
+        key.arrange(RIGHT, buff=0.5).next_to(ax, UP, buff=0.15).align_to(ax, RIGHT)
         hc = history_card(2011, r"Xavier Gabaix: \ the granular hypothesis", r"the year-to-year surprises of the 100 "
                           r"largest American firms account for about a third of the swings in output and in "
                           r"productivity", color=GDP, width=11.0, font_size=21).next_to(ax, DOWN, buff=0.6)

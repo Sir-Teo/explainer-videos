@@ -20,8 +20,8 @@ class Diffusion(VoiceoverScene):
         graphs = VGroup()
         nodes_by = []
         for k, (name, col) in enumerate(RULES):
-            es, ns = graph_mob(xy, edges, center=np.array([-4.6 + 4.6 * k, 0.5, 0]), scale=1.75, node_r=0.03,
-                               color=GREY_C, edge_color=GREY_E, edge_width=0.5)
+            es, ns = graph_mob(xy, edges, center=np.array([-4.6 + 4.6 * k, 0.5, 0]), scale=1.8, node_r=0.035,
+                               color=GREY_B, edge_color="#46506A", edge_width=0.7)
             ttl = label(rf"tell the five {name}" if name != "at random" else r"tell five at random", font_size=19,
                         color=col).next_to(VGroup(es, ns), DOWN, buff=0.3)
             cnt = label(r"", font_size=18, color=PEOPLE)

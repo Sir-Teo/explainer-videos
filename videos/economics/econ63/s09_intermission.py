@@ -38,8 +38,9 @@ class Intermission(SoundScene):
         marks = VGroup()
         for a, b, txt in EVENTS:
             r = shade(ax, [(a, b)], 70, 125, SHOCK if "March" in txt else RECESS, 0.35)
+            side_ = LEFT if a < 2010 else RIGHT
             tx = label(txt, font_size=15, color=SHOCK if "March" in txt else GREY_A).next_to(
-                ax.ax.c2p((a + b) / 2, 125), DOWN, buff=0.12)
+                ax.ax.c2p(a if a < 2010 else b, 123), side_, buff=0.1)
             m = VGroup(r, tx)
             m.ft = film_time(a)
             m.set_opacity(0.0)

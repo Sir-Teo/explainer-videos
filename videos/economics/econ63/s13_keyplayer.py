@@ -23,7 +23,7 @@ class KeyPlayer(VoiceoverScene):
              lit={1993: r"Manski", 2006: r"Ballester et al."}, scale=("person", "city"),
              horizon=("a year",))
         self.game()
-        self.remove()
+        self.removal()
         self.peers()
 
     def game(self):
@@ -73,7 +73,7 @@ class KeyPlayer(VoiceoverScene):
             self.play(FadeIn(side[4]))
         self.clear_scene()
 
-    def remove(self):
+    def removal(self):
         K = load("keyplayer")
         drop = np.array(K["drop"])
         who = ((0, r"the hub", SEED), (1, r"a follower", GREY_B), (8, r"the bridge \\ in the clique", SHOCK),
