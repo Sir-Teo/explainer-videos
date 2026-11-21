@@ -50,11 +50,11 @@ class Estimates(VoiceoverScene):
             "The crossings first. <bookmark mark='a'/> Each bar is one month: the tunnels' year-on-year change minus "
             "the other crossings', in percent. The grey and blue bars are 2023 and 2024, before any charge: the "
             "placebos. <bookmark mark='b'/> They are not zero. The tunnels were losing ground by "
-            f"{say_pct(-D['placebo_mean'], 1)} a year before anything happened. <bookmark mark='c'/> In 2025, the "
-            f"red bars, the gap averages {say_pct(-D['effect'], 1)}. <bookmark mark='d'/> Net of the drift, the "
-            f"charge's effect on the tunnels is about {say_pct(-D['adjusted'], 1)}, with a standard error of "
-            f"{say_pct(D['se_adjusted'], 1)}: real, and small. The orange bars of 2026 compare two charged years, "
-            "and look like the drift again."
+            f"{say_pct(-D['placebo_mean'], 1)} a year before anything happened. <bookmark mark='c'/> In 2025, the red "
+            f"bars, the gap averages {say_pct(-D['effect'], 1)}. <bookmark mark='d'/> Net of the drift, the charge's "
+            f"effect on the tunnels is about {say_pct(-D['adjusted'], 1)}, with a standard error of "
+            f"{say_pct(D['se_adjusted'], 1)}: small, and only just distinguishable from zero. The orange bars of 2026 "
+            "compare two charged years, and look like the drift again."
         ) as vo:
             self.play(FadeIn(ax), FadeIn(zero), FadeIn(tag), FadeIn(yl))
             vo.wait_until("a")
