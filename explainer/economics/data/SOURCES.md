@@ -452,3 +452,4 @@ publication, the copy that was read and the date the transcription was checked:
 | `ctc_2021` | the 2021 child tax credit, its monthly payments, child poverty on two measures, parents' work (Part 50) | 2026-11-21 |
 | `allowance_50` | a permanent allowance simulated; Canada's Child Benefit; Canadian benefits and children; Mothers' Pensions (Part 50) | 2026-11-21 |
 | `credits_50` | the child tax credit before and in 2021, and the 2021 EITC (Part 50) | 2026-11-21 |
+| `frontier50` | Baby's First Years at age four; Quebec's allowance for newborns; how the 2021 payments were spent (Part 50) | 2026-11-21 |

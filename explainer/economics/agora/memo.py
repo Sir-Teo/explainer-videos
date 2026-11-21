@@ -90,6 +90,18 @@ def allowance_2021(earnings, young, older, married):
     return base + extra
 
 
+def hybrid_2021(earnings, young, older, married):
+    """The allowance with a work requirement kept: the old credit exactly as before (phased in with earnings), plus
+    the 2021 extra (1,600 a child under six, 1,000 an older child) paid whatever the family earns, phased out as in
+    :func:`allowance_2021`."""
+    e = np.asarray(earnings, float)
+    y, o = np.asarray(young, float), np.asarray(older, float)
+    m = np.asarray(married, int)
+    extra = 1600.0 * y + 1000.0 * o
+    extra = np.maximum(extra - 0.05 * np.maximum(e - np.where(m == 1, 150000.0, 75000.0), 0.0), 0.0)
+    return ctc_2020(e, y + o, m) + extra
+
+
 def families(n: int = 40000, married_share: float = 0.65, seed: int = 0) -> dict:
     """The Island's families with children: married or single; one to four children, each under six with probability
     0.35; the potential earnings of the family's main worker log-normal (median 52,000 for a couple, 28,000 for a single
@@ -113,6 +125,8 @@ def _net_income(F, work, policy):
     tax = income_tax(e, F["married"]) - eitc_2021(e, F["kids"], F["married"])
     if policy == "ctc":
         credit = ctc_2020(e, F["kids"], F["married"])
+    elif policy == "hybrid":
+        credit = hybrid_2021(e, F["young"], F["older"], F["married"])
     else:
         credit = allowance_2021(e, F["young"], F["older"], F["married"])
     return e - tax + credit, e, tax, credit
@@ -127,7 +141,8 @@ def poverty_line(married, kids, base: float = 24000.0):
 
 def simulate(F: dict, policy: str, elasticity: float = 0.25, income_effect: float = 0.0, take_up: float = 1.0,
              line_base: float = 24000.0, seed: int = 0) -> dict:
-    """Who works under ``policy`` ("ctc" or "allowance"), and the outcomes.  A main worker's probability of working is
+    """Who works under ``policy`` ("ctc", "allowance" or "hybrid"), and the outcomes.  A main worker's probability
+    of working is
     a logistic function of the log net gain from work (net income working minus not working, against potential
     earnings) with slope set so that the participation elasticity at the old credit is ``elasticity``; an income
     effect lowers it by ``income_effect`` x (unearned transfer / potential earnings).  With ``take_up`` < 1 some
@@ -149,16 +164,16 @@ def simulate(F: dict, policy: str, elasticity: float = 0.25, income_effect: floa
         gain = gain_ctc
         transfer0 = 0.0
     else:
-        z1, _, _, _ = _net_income(F, np.ones(n, bool), "allowance")
-        z0, _, _, _ = _net_income(F, np.zeros(n, bool), "allowance")
+        z1, _, _, _ = _net_income(F, np.ones(n, bool), policy)
+        z0, _, _, _ = _net_income(F, np.zeros(n, bool), policy)
         gain = np.maximum(z1 - z0, 1.0) / F["potential"]
         transfer0 = (z0 - y0) / F["potential"]
     index = a + b * np.log(gain) - income_effect * transfer0
     p_work = 1.0 / (1.0 + np.exp(-index))
     work = u_work < p_work
-    got = u_take < take_up if policy == "allowance" else np.ones(n, bool)
+    got = u_take < take_up if policy != "ctc" else np.ones(n, bool)
     inc, e, tax, credit = _net_income(F, work, policy)
-    if policy == "allowance":
+    if policy != "ctc":
         inc_old, _, _, credit_old = _net_income(F, work, "ctc")
         inc = np.where(got, inc, inc_old)
         credit = np.where(got, credit, credit_old)
@@ -173,14 +188,16 @@ def simulate(F: dict, policy: str, elasticity: float = 0.25, income_effect: floa
 
 
 def compare(F: dict, elasticity: float = 0.25, income_effect: float = 0.0, take_up: float = 1.0,
-            line_base: float = 24000.0, seed: int = 0) -> dict:
-    """The old credit against the allowance for the same families and the same random draws: child poverty, deep
-    poverty, the budget cost (credits paid plus taxes lost), work, and the change in earnings."""
+            line_base: float = 24000.0, seed: int = 0, policy: str = "allowance") -> dict:
+    """The old credit against the allowance (or ``policy``) for the same families and the same random draws: child
+    poverty, deep poverty, the budget cost (credits paid plus taxes lost), work, and the change in earnings.  The
+    static numbers (``static_child_poverty``, ``static_cost``) hold work at the old credit's and assume full
+    take-up."""
     old = simulate(F, "ctc", elasticity, income_effect, 1.0, line_base, seed=seed)
-    new = simulate(F, "allowance", elasticity, income_effect, take_up, line_base, seed=seed)
+    new = simulate(F, policy, elasticity, income_effect, take_up, line_base, seed=seed)
     cost = float(np.sum(new["credit"] - old["credit"]) - np.sum(new["tax"] - old["tax"]))
     mech = old["work"]
-    static_new = _net_income(F, mech, "allowance")
+    static_new = _net_income(F, mech, policy)
     static_cost = float(np.sum(static_new[3] - old["credit"]))
     line = poverty_line(F["married"], F["kids"], line_base)
     static_poor = static_new[0] < line
@@ -202,6 +219,14 @@ def mvpf(wtp: float, cost: float, child_return: float = 0.0) -> float:
     return float("inf") if net <= 0 else wtp / net
 
 
+def top_mcpf(tau: float, a: float, e: float) -> float:
+    """The marginal cost of public funds raised by the top rate ``tau``: with Pareto incomes of exponent ``a`` above
+    the threshold and an elasticity of taxable income ``e``, each dollar of mechanical revenue loses tau a e/(1 - tau)
+    to smaller reported incomes, so a dollar of net revenue costs top earners (1 - tau)/(1 - tau - tau a e)."""
+    den = 1.0 - tau - tau * a * e
+    return float("inf") if den <= 0 else (1.0 - tau) / den
+
+
 def tornado(F: dict, base: dict, ranges: dict, metric: str = "child_poverty", seed: int = 0) -> list:
     """How the child poverty rate under the allowance (or another metric of :func:`compare`) moves as each dial takes
     its low and high value with the others at ``base``."""
@@ -216,5 +241,6 @@ def tornado(F: dict, base: dict, ranges: dict, metric: str = "child_poverty", se
     return out
 
 
-__all__ = ["income_tax", "eitc_2021", "ctc_2020", "allowance_2021", "families", "poverty_line", "simulate",
-           "compare", "mvpf", "tornado"]
+__all__ = ["income_tax", "eitc_2021", "ctc_2020", "allowance_2021", "hybrid_2021", "families", "poverty_line",
+           "simulate",
+           "compare", "mvpf", "top_mcpf", "tornado"]

@@ -4966,7 +4966,24 @@ CREDITS_50 = Table(
     data={},
 )
 
-PART50 = (CTC_2021, ALLOWANCE_50, CREDITS_50)
+FRONTIER50 = Table(
+    key="frontier50",
+    cite="Kimberly Noble, Katherine Magnuson, Greg Duncan, Lisa Gennetian et al., NBER Working Paper 33844 (2025); "
+         "Kevin Milligan, Review of Economics and Statistics 87(3), 2005; U.S. Census Bureau, \"Nearly a Third of "
+         "Parents Spent Child Tax Credit on School Expenses\" (October 2021) and the Household Pulse Survey",
+    tag="Noble et al. (2025); Milligan (2005); Census Household Pulse (2021)",
+    where="Baby's First Years recruited 1,000 mothers with incomes below the poverty line in 2018-19 and randomized "
+          "them to $333 or $20 a month; at age four (n = 891) no statistically significant effects on four "
+          "preregistered primary outcomes (language, executive function, social-emotional problems, high-frequency "
+          "brain activity); Quebec's Allowance for Newborn Children (1988-97) paid up to C$8,000 for a birth and "
+          "raised fertility by up to 25% among families eligible for the full amount; families most often spent the "
+          "2021 monthly payments on food, then on school costs, clothing, rent and bills",
+    read="the working paper's abstract, the Census stories and summaries of Milligan's abstract",
+    checked="2026-11-21",
+    data={"mothers": 1000, "high": 333, "low": 20, "age": 4, "n_age4": 891, "quebec_max": 8000, "quebec_rise": 25},
+)
+
+PART50 = (CTC_2021, ALLOWANCE_50, CREDITS_50, FRONTIER50)
 
 PART49 = (BECKER_1968, POLICE_49, CERTAINTY_49, MURDER_1950, FAMILY_49, FERTILITY_49, BARGAIN_49, SCHOOLS_49,
           EARLY_49, HEALTH_49, DRUGS_49, ADDICTION_49, CRITICS_49, FRONTIER49)

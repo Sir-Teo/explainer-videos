@@ -1221,8 +1221,9 @@ TRUTHS = {
         "base": {"elasticity": 0.25, "income_effect": 0.0, "take_up": 1.0},
         "ranges": {"elasticity": (0.0, 0.5), "income_effect": (0.0, 0.5), "take_up": (0.85, 1.0)},
         "child_return": (0.0, 0.25, 0.5),
-        # the cost of raising a dollar of tax: the marginal cost of public funds (Part 41)
-        "mcpf": (1.0, 1.2, 1.5),
+        # the cost of raising a dollar of tax (Part 41): a surtax on top incomes at a combined top rate of 40%, a
+        # Pareto exponent of 1.5 and an elasticity of taxable income of 0.1, 0.25 or 0.4; 1 for a lump-sum source
+        "surtax": {"tau": 0.4, "a": 1.5, "e": (0.1, 0.25, 0.4)},
     },
 }
 

@@ -1509,3 +1509,20 @@ brackets on screen.
 | rational addiction; adjacent complementarity; time inconsistency | 理性成瘾；相邻互补性；时间不一致 |
 | crowding out of intrinsic motivation; "a fine is a price" | 内在动机的挤出；"罚款即价格" |
 | sex ratio at birth; competitive saving motive | 出生性别比；竞争性储蓄动机 |
+
+## Part 50
+
+| English | 中文 |
+|---|---|
+| policy memo; the decision first; the two-minute version | 政策备忘录；结论先行；两分钟口头版 |
+| child allowance; child tax credit; fully refundable | 儿童津贴；儿童税收抵免；全额可退还 |
+| phase-in; phase-out; work requirement | 逐步加码（随收入递增）；逐步退出；工作要求 |
+| Supplemental Poverty Measure; official poverty measure; deep poverty | 补充贫困衡量标准；官方贫困衡量标准；深度贫困 |
+| microsimulation; common random numbers | 微观模拟；公共随机数 |
+| participation elasticity; the reward for work | 劳动参与弹性；工作回报 |
+| take-up; non-filers | 领取率；未报税者 |
+| fiscal externality; marginal value of public funds (MVPF); marginal cost of public funds | 财政外部性；公共资金的边际价值；公共资金的边际成本 |
+| tornado chart; switching value | 龙卷风图；转换值 |
+| distribution table; deciles | 分配表；十分位组 |
+| external validity; transferability | 外部有效性；可迁移性 |
+| budget score; ten-year window; dynamic scoring | 预算评分；十年窗口；动态评分 |

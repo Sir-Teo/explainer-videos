@@ -590,7 +590,7 @@ DIALS = {d.key: d for d in [
                       where="videos/economics/econ38/compute.py, item mincer", checked="2026-11-20"),
          )),
     Dial("labour_supply", "elasticity of labour supply (Hicksian, Frisch, extensive)", "elasticity of hours or "
-         "participation to the wage", (38, 41), status="depends on the setting", checked="2026-11-20",
+         "participation to the wage", (38, 41, 50), status="depends on the setting", checked="2026-11-20",
          meaning="how much people work more when pay rises: about 0.3 for hours and 0.25 for whether to work at "
                  "all when the change is permanent; about 0.5 for a temporary rise; far more where hours are free to "
                  "move, as for rideshare drivers; the permanent elasticities price a tax, the temporary ones a "
@@ -716,7 +716,7 @@ DIALS = {d.key: d for d in [
                       "average", 1.49, where="Economics Letters 90(2): 290-295", checked="2026-11-20"),
          )),
     Dial("eti", "elasticity of taxable income", "the percentage change in reported taxable income for a one percent "
-         "change in the net-of-tax rate, 1 - t", (41,), status="depends on the setting", checked="2026-11-20",
+         "change in the net-of-tax rate, 1 - t", (41, 50), status="depends on the setting", checked="2026-11-20",
          meaning="how much revenue a higher rate loses to smaller reported incomes; at 0.25 the revenue-maximizing top "
                  "rate is about 73%, at 1 about 40%; estimates are larger where income can be relabelled, deferred or "
                  "hidden, which is why the elasticity is partly a policy choice",
@@ -781,7 +781,7 @@ DIALS = {d.key: d for d in [
                       where="videos/economics/econ42/compute.py, item health", checked="2026-11-20"),
          )),
     Dial("mvpf", "marginal value of public funds", "dollars of benefit to recipients per dollar of net cost to the "
-         "government", (42,), status="depends on the setting", checked="2026-11-20",
+         "government", (42, 50), status="depends on the setting", checked="2026-11-20",
          meaning="one yardstick for every policy: above one, a dollar spent delivers more than a dollar of value, "
                  "because the policy raises other revenue; policies for children often pay for themselves, while "
                  "most for adults lie between a half and two",
@@ -1626,6 +1626,20 @@ DIALS = {d.key: d for d in [
 
 # What each part shows without entering a row, and why: {part: [(what is shown, the reason)]}
 SHOWN = {
+    50: [
+        ("American Rescue Plan Act (2021); Census Bureau (2022, 2023)", "the hook's payments and the poverty "
+         "measures, stated; the official rate since 1989 shown from the Data Room"),
+        ("Chetty, Guren, Manoli and Weber (2011); Gruber and Saez (2002); Diamond and Saez (2011); Hendren and "
+         "Sprung-Keyser (2020)", "the labour_supply, eti and mvpf dials, read for the memo"),
+        ("Ananat, Glasner, Hamilton and Parolin (2022); Baker, Messacar and Stabile (2023)", "stated as the evidence "
+         "on work and poverty; one temporary and one foreign policy, so not entered as a dial"),
+        ("Aizer, Eli, Ferrie and Lleras-Muney (2016); Milligan and Stabile (2011)", "stated as the long-run "
+         "evidence"),
+        ("Corinth, Meyer, Stadnicki and Wu (2021)", "stated, and the Called it? card"),
+        ("Orcutt (1957)", "the microsimulation, computed on the Island"),
+        ("Milligan (2005); Egger et al. (2022)", "stated in the chapter on the wider economy"),
+        ("Noble, Magnuson, Duncan, Gennetian et al. (2025)", "the frontier chapter, stated"),
+    ],
     49: [
         ("Becker (1968, 1992)", "the hook's story and the model of crime, computed on the Island"),
         ("Di Tella and Schargrodsky (2004); Draca, Machin and Witt (2011); Chalfin and McCrary (2018); Levitt "

@@ -102,4 +102,48 @@ PARTS = [
         also=(("Agora's economic approach", "explainer/economics/agora/family.py"),
               ("The Island's planted truths", "explainer/economics/island.py")),
     ),
+    Part(
+        n=50, level="U", widget="memo", prereq=(38, 41, 42, 46),
+        question="A minister asks whether to pay a child allowance. What do you write?",
+        story="The part opens on 15 July 2021, when most American families with children received a monthly payment "
+              "for the first time; child poverty on the measure that counts tax credits fell to a record 5.2% and "
+              "rose to 12.4% after the payments stopped, while the official measure barely moved. Then the Island's "
+              "finance minister asks for four pages in two weeks. The question is made answerable (the policy, the "
+              "people, the outcomes, the comparison, the horizon); one family's budget shows the allowance adding "
+              "most at the bottom and cutting the reward for starting work by a tenth; three dials (participation, "
+              "the elasticity of taxable income, the MVPF) are read; the viewer advises and forecasts before the "
+              "analysis. Take-up, timing and labels; the cost and three ways to pay; the evidence of 2021, Canada, "
+              "Mothers' Pensions and a simulation, and whether each transfers. After an intermission of American "
+              "child poverty since 1989, the Island's microsimulation (child poverty 14.3% to 11.6%, a fifth fewer; "
+              "deep poverty rising if parents respond strongly), the value of public funds by repayment and "
+              "financing, who gains, the uncertainty in tornado charts, and the memo itself, page by page, with a "
+              "second design that keeps the work requirement. Practice, Corinth et al.'s forecast and Baby's First "
+              "Years close it.",
+        handoff="Part 51 opens the graduate core: how economies without formulas are solved, and how to know the "
+                "answer is right.",
+        outside="Part 38: labour supply; Part 41: taxes and the elasticity of taxable income; Part 42: social "
+                "insurance and the MVPF; Part 46: cash transfers; Statistics, Built: designs and their validity.",
+        objectives={
+            "U": ["Turn a policy question into an answerable one: the policy, the people, the outcomes, the "
+                  "comparison and the horizon.",
+                  "Explain how a child allowance changes a family's budget and its reward for work.",
+                  "Read a microsimulation, a tornado chart and a distribution table, and separate the evidence from "
+                  "the value judgment."],
+            "M": ["Compute the credits, the reward for work and the participation response for one family.",
+                  "Run a microsimulation across the range of a dial, and compute an MVPF with a fiscal externality, "
+                  "children's later repayment and the cost of funds."],
+            "D": ["Derive the cost of funds from a top surtax and the envelope argument behind willingness to pay.",
+                  "Judge how far each piece of evidence transfers to a permanent policy elsewhere."],
+            "I": ["Write a four-page memo and its two-minute version, and recognise the six ways memos go wrong."],
+        },
+        results=[
+            ("Participation", r"P(\text{work}) = \frac{1}{1 + e^{-(a_i + b \log g_i)}}"),
+            ("The MVPF", r"\text{MVPF} = \frac{\text{WTP}}{\text{net cost}}"),
+            ("The cost of funds", r"\frac{1-\tau}{1-\tau-\tau a e}"),
+            ("Poverty", r"\frac{\sum_i k_i \,[\,y_i < z_i\,]}{\sum_i k_i}"),
+        ],
+        U=(0, 1, 2, 3, 4, 5, 7, "s09_intermission", 8, 10, 12), D=(6, 9, 11, 14), I=(13,),
+        also=(("Agora's policy memo", "explainer/economics/agora/memo.py"),
+              ("The Island's planted truths", "explainer/economics/island.py")),
+    ),
 ]

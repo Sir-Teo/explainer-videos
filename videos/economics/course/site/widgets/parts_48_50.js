@@ -182,4 +182,154 @@
             "the chance, as most evidence finds. Computed in your browser; nothing you do here is stored or sent.",
     });
   };
+  // ---- Part 50: the policy memo ---------------------------------------------------------------------------------
+  W.memo = function (el) {
+    // Agora's policy memo (explainer.economics.agora.memo): the 2021 income tax and EITC, the child credit before
+    // 2021, the allowance (3,600 and 3,000 a child, fully refundable) and the second design (the old credit plus
+    // the extra, unconditional), for 3,000 Island families drawn with a fixed seed; a main earner works with
+    // probability 1 / (1 + exp(-(a_i + b log g_i))), calibrated to 85% of single parents and 95% of couples under
+    // the old credit, with b set by the participation elasticity; the same draws under every policy.
+    function rng(seed) {                       // mulberry32
+      return function () {
+        seed |= 0; seed = (seed + 0x6D2B79F5) | 0;
+        var t = Math.imul(seed ^ (seed >>> 15), 1 | seed);
+        t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+        return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+      };
+    }
+    var R = rng(50);
+    function normal() { return Math.sqrt(-2 * Math.log(1 - R())) * Math.cos(2 * Math.PI * R()); }
+    var STD = [18800, 25100];
+    var BR = [[[14200, 0.10], [54200, 0.12], [86350, 0.22], [164900, 0.24], [Infinity, 0.32]],
+              [[19900, 0.10], [81050, 0.12], [172750, 0.22], [329850, 0.24], [Infinity, 0.32]]];
+    function tax(e, m) {
+      var x = Math.max(e - STD[m], 0), t = 0, lo = 0;
+      for (var i = 0; i < BR[m].length; i++) {
+        var hi = BR[m][i][0];
+        t += BR[m][i][1] * Math.min(Math.max(x - lo, 0), hi - lo); lo = hi;
+      }
+      return t;
+    }
+    var EI = { 1: [0.34, 3618, 0.1598], 2: [0.40, 5980, 0.2106], 3: [0.45, 6728, 0.2106] };
+    function eitc(e, k, m) {
+      var p = EI[Math.min(k, 3)], start = 19520 + 5950 * m;
+      return Math.max(Math.min(p[0] * e, p[1]) - p[2] * Math.max(e - start, 0), 0);
+    }
+    function ctc(e, k, m) {
+      var full = Math.max(2000 * k - 0.05 * Math.max(e - (m ? 400000 : 200000), 0), 0);
+      var ref = Math.min(1400 * k, 0.15 * Math.max(e - 2500, 0));
+      return Math.min(full, Math.max(ref, Math.min(full, tax(e, m) + ref)));
+    }
+    function extra(e, y, o, m) {
+      return Math.max(1600 * y + 1000 * o - 0.05 * Math.max(e - (m ? 150000 : 75000), 0), 0);
+    }
+    function allow(e, y, o, m) {
+      return Math.max(2000 * (y + o) - 0.05 * Math.max(e - (m ? 400000 : 200000), 0), 0) + extra(e, y, o, m);
+    }
+    function credit(pol, e, f) {
+      if (pol === 0) { return ctc(e, f.k, f.m); }
+      return pol === 1 ? allow(e, f.y, f.o, f.m) : ctc(e, f.k, f.m) + extra(e, f.y, f.o, f.m);
+    }
+    var N = 3000, F = [], i, j;
+    for (i = 0; i < N; i++) {
+      var m = R() < 0.65 ? 1 : 0, u = R(), k = u < 0.42 ? 1 : u < 0.79 ? 2 : u < 0.94 ? 3 : 4, y = 0;
+      for (j = 0; j < k; j++) { if (R() < 0.35) y++; }
+      var med = m ? 52000 : 28000, pot = med * Math.exp(0.75 * normal());
+      var sec = m ? 0.6 * med * Math.exp(0.8 * normal()) * (R() < 0.6 ? 1 : 0) : 0;
+      var f = { m: m, k: k, y: y, o: k - y, pot: pot, sec: sec, uw: R(), ut: R(),
+                line: 24000 * Math.sqrt((1 + m + k) / 4), target: m ? 0.95 : 0.85 };
+      f.inc = []; f.cr = []; f.tx = [];
+      for (var pol = 0; pol < 3; pol++) {
+        f.inc.push([]); f.cr.push([]); f.tx.push([]);
+        for (var w = 0; w < 2; w++) {
+          var e = (w ? pot : 0) + sec, t = tax(e, m) - eitc(e, k, m), c = credit(pol, e, f);
+          f.inc[pol].push(e - t + c); f.cr[pol].push(c); f.tx[pol].push(t);
+        }
+      }
+      f.g = [0, 1, 2].map(function (pp) { return Math.max(f.inc[pp][1] - f.inc[pp][0], 1) / pot; });
+      F.push(f);
+    }
+    var meanOut = 0, kids = 0;
+    for (i = 0; i < N; i++) { meanOut += 1 - F[i].target; kids += F[i].k; }
+    meanOut /= N;
+    function run(pol, el, ie, take) {
+      var b = el / meanOut, r = { pov: 0, deep: 0, exits: 0, cost: 0, wtp: 0, pov0: 0, deep0: 0 };
+      for (var i = 0; i < N; i++) {
+        var f = F[i], a = Math.log(f.target / (1 - f.target)) - b * Math.log(f.g[0]);
+        var w0 = f.uw < f.target ? 1 : 0;   // under the old credit the index equals the target exactly
+        var tr = (f.inc[pol][0] - f.inc[0][0]) / f.pot;
+        var p1 = 1 / (1 + Math.exp(-(a + b * Math.log(f.g[pol]) - ie * tr)));
+        var w1 = f.uw < p1 ? 1 : 0, got = f.ut < take;
+        var inc0 = f.inc[0][w0], inc1 = got ? f.inc[pol][w1] : f.inc[0][w1];
+        var c1 = got ? f.cr[pol][w1] : f.cr[0][w1], t1 = got ? f.tx[pol][w1] : f.tx[0][w1];
+        r.pov0 += f.k * (inc0 < f.line); r.deep0 += f.k * (inc0 < 0.5 * f.line);
+        r.pov += f.k * (inc1 < f.line); r.deep += f.k * (inc1 < 0.5 * f.line);
+        r.exits += w0 - w1;
+        r.cost += (c1 - f.cr[0][w0]) - (t1 - f.tx[0][w0]);
+        r.wtp += got ? f.cr[pol][w0] - f.cr[0][w0] : 0;
+      }
+      r.pov /= kids; r.deep /= kids; r.pov0 /= kids; r.deep0 /= kids; r.exits /= N;
+      return r;
+    }
+    QB.widget(el, {
+      title: "Memo",
+      sub: "You write the Island's memo. Left: the share of children in poverty as parents respond more strongly, " +
+           "under the old credit (grey), the full allowance (gold) and the second design (blue). Right: child " +
+           "poverty and deep poverty at your settings.",
+      panels: 2, height: 260,
+      controls: [
+        { k: "el", label: "Participation elasticity", min: 0, max: 0.6, step: 0.05, value: 0.25,
+          fmt: function (x) { return x.toFixed(2); } },
+        { k: "ie", label: "Income effect on work", min: 0, max: 0.5, step: 0.05, value: 0,
+          fmt: function (x) { return x.toFixed(2); } },
+        { k: "take", label: "Take-up of the new payment", min: 0.7, max: 1.0, step: 0.05, value: 1.0,
+          fmt: function (x) { return (100 * x).toFixed(0) + "%"; } },
+        { k: "repay", label: "Share of the cost children repay later", min: 0, max: 0.6, step: 0.05, value: 0,
+          fmt: function (x) { return (100 * x).toFixed(0) + "%"; } },
+        { k: "eti", label: "Top earners' elasticity (0: no extra cost of funds)", min: 0, max: 0.5, step: 0.05,
+          value: 0, fmt: function (x) { return x.toFixed(2); } },
+        { k: "design", label: "Design", min: 0, max: 1, step: 1, value: 0,
+          fmt: function (x) { return x < 0.5 ? "the full allowance" : "keep the work requirement"; } },
+      ],
+      draw: function (g, v, st) {
+        var els = [], full = [], hyb = [], base = [];
+        for (var q = 0; q <= 12; q++) {
+          var e = q * 0.05, a = run(1, e, v.ie, v.take), h = run(2, e, v.ie, v.take);
+          els.push(e); full.push(a.pov); hyb.push(h.pov); base.push(a.pov0);
+        }
+        var A = g[0].axes({ x: [0, 0.6], y: [0, 0.2], title: "children in poverty",
+                            xlabel: "participation elasticity" });
+        A.line(els, base, { color: "#9AA3B2", width: 2, dash: [5, 4] });
+        A.line(els, full, { color: "#F2C14E", width: 2.5 });
+        A.line(els, hyb, { color: "#7EC8F5", width: 2.5 });
+        A.vline(v.el, { color: "#6B7280", dash: [3, 3] });
+        var pol = v.design < 0.5 ? 1 : 2;
+        st.r = run(pol, v.el, v.ie, v.take);
+        var B = g[1].axes({ x: [0, 4], y: [0, 0.2], title: "share of children",
+                            xlabel: "poverty: old, new;  deep: old, new" });
+        B.bars([0.5, 1.5, 2.5, 3.5], [st.r.pov0, st.r.pov, st.r.deep0, st.r.deep], 0.7,
+               { color: function (i) {
+                 return ["#9AA3B2", pol === 1 ? "#F2C14E" : "#7EC8F5", "#9AA3B2", "#F25F5C"][i];
+               } });
+        var mc = 1 / (1 - v.eti);                 // a top surtax at 40% with a Pareto exponent of 1.5
+        var net = mc * (st.r.cost - v.repay * st.r.wtp);
+        st.mvpf = net > 0 ? st.r.wtp / net : Infinity;
+        st.mc = mc;
+      },
+      readout: function (v, st) {
+        var r = st.r;
+        return [["child poverty", (100 * r.pov0).toFixed(1) + "% to " + (100 * r.pov).toFixed(1) + "%"],
+                ["deep poverty", (100 * r.deep0).toFixed(1) + "% to " + (100 * r.deep).toFixed(1) + "%"],
+                ["parents who stop working", (100 * r.exits).toFixed(1) + "%"],
+                ["cost per child", "$" + Math.round(r.cost / kids).toLocaleString("en-US")],
+                ["cost of a dollar of revenue", "$" + st.mc.toFixed(2)],
+                ["value per dollar the payers give up", isFinite(st.mvpf) ? st.mvpf.toFixed(2) : "pays for itself"]];
+      },
+      note: "Part 50, chapters 8 to 12. Run on 3,000 simulated families (the film uses 40,000, so the numbers differ " +
+            "a little). The allowance cuts poverty most when parents keep working; the second design keeps the old " +
+            "credit's reward for work and is safer when they respond strongly. Whether either is worth it depends on " +
+            "the last two sliders and on how much you value a poor child's dollar. Computed in your browser; " +
+            "nothing you do here is stored or sent.",
+    });
+  };
 })();
