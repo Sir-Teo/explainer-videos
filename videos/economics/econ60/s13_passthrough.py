@@ -72,9 +72,9 @@ class PassThrough(VoiceoverScene):
         pr = DashedVMobject(path(ax, x, Pt["pred"], WHITE, 2.4, smooth=False), num_dashes=40)
         key = VGroup(label(r"orange: \ the factory gate", font_size=15, color=PPI),
                      label(r"green: \ the grocer's, \ actual", font_size=15, color=FOOD),
-                     label(r"white: \ the grocer's, \ predicted by 2000--19's pass-through", font_size=15,
-                           color=WHITE)).arrange(DOWN, aligned_edge=LEFT, buff=0.06).next_to(ax.ax.c2p(0, top), RIGHT,
-                                                                                            buff=0.1)
+                     label(r"white: \ the grocer's, \ predicted \\ by 2000--19's pass-through", font_size=15,
+                           color=WHITE)).arrange(DOWN, aligned_edge=LEFT, buff=0.06)
+        key.move_to(ax.ax.c2p(n - 1, 0.8), aligned_edge=DR)
         side = VGroup(
             label(rf"2021--2023: \ factory gate +{Pt['ppi_change']:.1f}\%; \ grocer's +{Pt['cpi_change']:.1f}\%",
                   font_size=20, color=WHITE),

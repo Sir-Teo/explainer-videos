@@ -15,7 +15,7 @@ class Frontier(VoiceoverScene):
         B = load("bandit")
         t, ts, tc = np.array(B["t"], float) / 1000, np.array(B["ts"]) / 1000, np.array(B["tc"]) / 1000
         top = float(max(tc.max(), ts.max())) * 1.1
-        ax = plane([0, 20], [0, top], center=LEFT * 2.7 + DOWN * 0.4, x_length=6.4, y_length=4.6,
+        ax = plane([0, 20], [0, top], center=LEFT * 3.1 + DOWN * 0.4, x_length=6.0, y_length=4.6,
                    xticks=[0, 5, 10, 15, 20], yticks=[0, 5, 10, 15, 20], xlabel=r"customers, \ thousands",
                    ylabel=r"revenue lost against the best price, \ \$000", xfmt=lambda v: f"{v:.0f}",
                    yfmt=lambda v: f"{v:.0f}", font_size=14)
@@ -33,8 +33,8 @@ class Frontier(VoiceoverScene):
                   r"as the evidence comes in", font_size=18, color=WHITE),
             label(r"the A/B test and the price are one activity", font_size=20, color=E.ACCENT),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.28).to_edge(RIGHT, buff=0.35)
-        if side.width > 6.4:
-            side.width = 6.4
+        if side.width > 6.1:
+            side.width = 6.1
             side.to_edge(RIGHT, buff=0.35)
         tag = island_tag(r"the Island: \ 40 runs of 20,000 customers; \ agora.revenue.bandit\_pricing"
                          .replace(",", "{,}"), corner=DL, font_size=12)

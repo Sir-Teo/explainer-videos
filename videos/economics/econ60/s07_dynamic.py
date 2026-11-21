@@ -49,7 +49,7 @@ class Dynamic(VoiceoverScene):
         pol = np.array(D["policy"])            # days x (seats 0, 5, ..., 100)
         seats = D["seats_axis"]
         T = pol.shape[0]
-        cw, ch = 0.1, 0.19
+        cw, ch = 0.09, 0.19
         cells = VGroup()
         lo, hi = 80.0, 320.0
         for t in range(T):
@@ -59,7 +59,7 @@ class Dynamic(VoiceoverScene):
                                     fill_color=interpolate_color(ManimColor(LEIS), ManimColor(COST), v)).move_to(
                     [t * cw, (j - 1) * ch, 0]))
         grid = VGroup(cells)
-        grid.move_to(LEFT * 2.6 + DOWN * 0.3)
+        grid.move_to(LEFT * 3.25 + DOWN * 0.3)
         xl = label(r"day of the sale $\to$ departure", font_size=15, color=GREY_A).next_to(grid, DOWN, buff=0.15)
         yl = label(r"seats left \\ (5 to 100)", font_size=15, color=GREY_A).next_to(grid, LEFT, buff=0.15)
         key = VGroup(label(r"green: \ about \$80", font_size=15, color=LEIS),
@@ -76,11 +76,11 @@ class Dynamic(VoiceoverScene):
             label(r"late, \ when business buyers arrive: \ the fare jumps", font_size=19, color=COST),
             label(r"and on any day, \ fewer seats left means a higher fare", font_size=19, color=WHITE),
             label(r"white dots: \ one simulated flight's seats left", font_size=17, color=GREY_A),
-            label(rf"expected revenue: \ \${D['V0']:,.0f} \ against \${F['best']:,.0f} \ for the best single fare "
+            label(rf"expected revenue: \ \${D['V0']:,.0f}, \\ against \${F['best']:,.0f} \ for the best single fare "
                   rf"(\${F['best_price']:.0f})".replace(",", "{,}"), font_size=19, color=OPT),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.3).to_edge(RIGHT, buff=0.35)
-        if side.width > 6.4:
-            side.width = 6.4
+        if side.width > 5.9:
+            side.width = 5.9
             side.to_edge(RIGHT, buff=0.35)
         tag = island_tag(r"the Island: \ the optimal fare for every day and every number of seats left", corner=DL,
                          font_size=12)

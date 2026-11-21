@@ -551,6 +551,14 @@ PRICE_FRED = {
 FRED_SERIES.update(PRICE_FRED)
 FRED_RETRIEVED.update({s: "2026-11-21" for s in PRICE_FRED})
 
+# Part 61: the share of American retail sold online (the intermission's data film)
+PLATFORM_FRED = {
+    "ECOMPCTSA": ("E-Commerce Retail Sales as a Percent of Total Sales", "percent", "quarterly, seasonally adjusted",
+                  "U.S. Census Bureau"),
+}
+FRED_SERIES.update(PLATFORM_FRED)
+FRED_RETRIEVED.update({s: "2026-11-21" for s in PLATFORM_FRED})
+
 SPF_FILES = ("median_rgdp_level", "median_rgdp_growth", "median_recess_level")
 SPF_URL = ("https://www.philadelphiafed.org/-/media/frbp/assets/surveys-and-data/survey-of-professional-forecasters/"
            "data-files/files/{}.xlsx")

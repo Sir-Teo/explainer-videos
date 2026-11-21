@@ -55,7 +55,7 @@ class WTP(VoiceoverScene):
         none = VGroup(label(r"none of \\ these", font_size=18, color=GREY_B))
         none.add(SurroundingRectangle(none[0], buff=0.25, color=GREY_C, corner_radius=0.1, stroke_width=1.4))
         opts.add(none)
-        opts.arrange(RIGHT, buff=0.3).to_edge(LEFT, buff=0.5).shift(UP * 1.5)
+        opts.arrange(RIGHT, buff=0.3).scale(1.3).to_edge(LEFT, buff=0.5).shift(UP * 1.6)
         q = label(r"which would you book?", font_size=20, color=GREY_A).next_to(opts, UP, buff=0.2)
         names = (r"wifi", r"legroom", r"a free bag")
         keys = ("wifi", "legroom", "bag")

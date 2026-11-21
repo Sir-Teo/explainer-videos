@@ -16,7 +16,7 @@ class Promotions(VoiceoverScene):
         H = load("hilo")
         etas, diff = np.array(H["etas"]), np.array(H["diff"]) / 1e3
         weeks = np.arange(12)
-        ax = plane([0, 12], [0, 60], center=LEFT * 3.0 + UP * 1.2, x_length=5.6, y_length=2.4,
+        ax = plane([0, 12], [0, 60], center=LEFT * 3.0 + UP * 1.65, x_length=5.6, y_length=2.4,
                    xticks=[0, 4, 8, 12], yticks=[0, 20, 40, 60], xlabel=r"week", ylabel=r"price, \ \$",
                    xfmt=lambda v: f"{v:.0f}", yfmt=lambda v: f"{v:.0f}", font_size=13)
         hl = [50.0 if w % 2 == 0 else 35.0 for w in weeks]
@@ -29,8 +29,8 @@ class Promotions(VoiceoverScene):
         key = VGroup(label(r"gold: \ high-low, \ \$50 with a sale at \$35 every other week", font_size=14,
                            color=BUS),
                      label(r"green: \ everyday low price, \ \$40", font_size=14, color=LEIS)).arrange(
-            DOWN, aligned_edge=LEFT, buff=0.06).next_to(ax, DOWN, buff=0.45).align_to(ax, LEFT)
-        bx = plane([0, 1.5], [-150, 200], center=LEFT * 3.0 + DOWN * 2.5, x_length=5.6, y_length=2.0,
+            DOWN, aligned_edge=LEFT, buff=0.06).move_to(ax.ax.c2p(6.2, 14))
+        bx = plane([0, 1.5], [-150, 200], center=LEFT * 3.0 + DOWN * 1.8, x_length=5.6, y_length=2.0,
                    xticks=[0, 0.5, 1.0, 1.5], yticks=[-100, 0, 100, 200],
                    xlabel=r"how much shoppers value a deal, \ $\eta$", ylabel=r"high-low minus EDLP, \ \$000",
                    xfmt=lambda v: f"{v:g}", yfmt=lambda v: f"{v:+.0f}".replace("-", "{-}") if v else "0",
