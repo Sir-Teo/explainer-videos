@@ -28,6 +28,12 @@ class Steps(VoiceoverScene):
                                   r"what moves the answer, \ and by how much"], note_size=19)
         chain.move_to(DOWN * 0.2)
         head = label(r"a cost-benefit analysis, \ in six steps", font_size=30, color=E.ACCENT).to_edge(UP, buff=0.4)
+        guides = VGroup(
+            history_card(2003, r"HM Treasury, \ \emph{The Green Book}", r"how British government appraises "
+                         r"projects, \ programmes and policies", color=RATE, width=5.4, font_size=20),
+            history_card(2003, r"OMB, \ \emph{Circular A-4}", r"how American agencies analyse their "
+                         r"regulations", color=CBO, width=5.4, font_size=20),
+        ).arrange(RIGHT, buff=0.5).move_to(DOWN * 0.2)
         with self.voiceover(
             "Every cost-benefit analysis, from a flood wall to a rule on lorry brakes, goes through the same steps, "
             "and the textbooks and the guidance manuals, the Treasury's Green Book in Britain and the Office of "
@@ -41,9 +47,11 @@ class Steps(VoiceoverScene):
             "mark='e'/> Fifth, discount them to today and add them up. <bookmark mark='f'/> And sixth, move every "
             "assumption to see which ones decide the answer, before recommending anything."
         ) as vo:
-            self.play(FadeIn(head))
+            self.play(FadeIn(head), FadeIn(guides, shift=UP * 0.1))
             for k, mk in enumerate("abcdef"):
                 vo.wait_until(mk)
+                if not k:
+                    self.play(FadeOut(guides), run_time=0.5)
                 anims = [FadeIn(chain.boxes[k], shift=DOWN * 0.1), FadeIn(chain.notes[k], shift=RIGHT * 0.1)]
                 if k:
                     anims.append(GrowArrow(chain.arrows[k - 1]))
@@ -66,18 +74,18 @@ class Steps(VoiceoverScene):
         ]
         tab = VGroup()
         for txt, val, col in rows:
-            tab.add(VGroup(label(txt, font_size=21, color=col), label(f"${val.replace('-', '{-}')}$",
-                                                                       font_size=22, color=col)))
+            tab.add(VGroup(label(txt, font_size=24, color=col), label(f"${val.replace('-', '{-}')}$",
+                                                                       font_size=26, color=col)))
         for r_ in tab:
             r_[1].next_to(r_[0], RIGHT, buff=0.3)
         tab.arrange(DOWN, aligned_edge=LEFT, buff=0.18)
         for r_ in tab:
-            r_[1].set_x(3.9, direction=RIGHT)
+            r_[1].set_x(4.6, direction=RIGHT)
         once = VGroup(label(rf"once: \ build {sum(B['build']):.0f} over three years; \ noise for "
-                            rf"{p['homes']} homes", font_size=21, color=COST),
-                      label(rf"every year: \ upkeep {p['maintenance']:.1f}", font_size=21, color=COST)).arrange(
+                            rf"{p['homes']} homes", font_size=24, color=COST),
+                      label(rf"every year: \ upkeep {p['maintenance']:.1f}", font_size=24, color=COST)).arrange(
             DOWN, aligned_edge=LEFT, buff=0.15)
-        head = label(r"a year of the bridge, \ millions of Island dollars", font_size=22, color=GREY_A)
+        head = label(r"a year of the bridge, \ millions of Island dollars", font_size=25, color=GREY_A)
         blk = VGroup(head, tab, once).arrange(DOWN, aligned_edge=LEFT, buff=0.3).next_to(st, DOWN, buff=0.35)
         blk.set_x(0)
         tag = island_tag(r"the Island: \ agora.appraisal.BRIDGE", corner=DR, font_size=12)

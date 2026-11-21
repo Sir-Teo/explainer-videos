@@ -30,6 +30,8 @@ class Unpriced(VoiceoverScene):
                   rf"dollars an hour", font_size=24, color=ISL),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.38).move_to(DOWN * 0.3)
         head = label(r"the value of time", font_size=32, color=E.ACCENT).to_edge(UP, buff=0.6)
+        saved = label(rf"the bridge saves {p['ferry_minutes'] - p['bridge_minutes']:.0f} minutes on every crossing",
+                      font_size=30, color=TRAV).move_to(UP * 0.2)
         tag = published_tag(tables.VALUES_58.tag, corner=DL, font_size=12)
         with self.voiceover(
             "Most of what a transport project produces is time, and time has no price tag. <bookmark mark='a'/> The "
@@ -41,9 +43,11 @@ class Unpriced(VoiceoverScene):
             f"Island, the bridge's travellers' time is valued at half a wage of {p['wage']:.0f} dollars: "
             f"{p['vot_share'] * p['wage']:.0f} dollars an hour."
         ) as vo:
-            self.play(FadeIn(head), FadeIn(tag))
+            self.play(FadeIn(head), FadeIn(tag), FadeIn(saved, shift=UP * 0.1))
             for mk, r_ in zip("abcd", rows):
                 vo.wait_until(mk)
+                if mk == "a":
+                    self.play(FadeOut(saved), run_time=0.5)
                 self.play(FadeIn(r_, shift=RIGHT * 0.15))
         self.clear_scene()
 
@@ -72,6 +76,9 @@ class Unpriced(VoiceoverScene):
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.28).to_edge(RIGHT, buff=0.3)
         tag = island_tag(rf"the Island: \ {H['n']:,} house sales, \ 500 shown".replace(",", "{,}"), corner=DR,
                          font_size=12)
+        rosen = history_card(1974, r"Sherwin Rosen", r"`Hedonic prices and implicit markets': \ the price of a "
+                             r"house is the sum of the prices of what comes with it", color=SAFE, width=6.0,
+                             font_size=19).move_to(ax.get_center())
         with self.voiceover(
             "Quiet has no market, but houses do, and a house comes with its noise. Sherwin Rosen's hedonic method, "
             "from 1974, reads the price of a characteristic from the prices of the things that carry it. <bookmark "
@@ -84,8 +91,9 @@ class Unpriced(VoiceoverScene):
             "price is only as good as the list of everything else that comes with the house. For the bridge's "
             "approach road, ten decibels for two hundred homes is a loss of about seven percent of their value."
         ) as vo:
-            self.play(FadeIn(ax), FadeIn(tag))
+            self.play(FadeIn(ax), FadeIn(tag), FadeIn(rosen, shift=UP * 0.1))
             vo.wait_until("a")
+            self.play(FadeOut(rosen), run_time=0.5)
             self.play(LaggedStart(*[FadeIn(d) for d in pts], lag_ratio=0.002), run_time=2.0)
             vo.wait_until("b")
             self.play(Create(naive), FadeIn(side[0]))
@@ -121,6 +129,9 @@ class Unpriced(VoiceoverScene):
                   r"year beyond their cost", font_size=20, color=BEN),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.32).to_edge(RIGHT, buff=0.35)
         tag = island_tag(r"the Island: \ visits to its beach", corner=DR, font_size=12)
+        hot = history_card(1947, r"Harold Hotelling, \ to the National Park Service", r"the cost of the journey "
+                           r"can stand in for the price of a park", color=BEN, width=6.0,
+                           font_size=19).move_to(ax.get_center())
         with self.voiceover(
             "A beach has no entry price either, but getting there does. In 1947 Harold Hotelling suggested to the "
             "National Park Service that the cost of the journey could stand in for a price, and Marion Clawson made "
@@ -133,8 +144,9 @@ class Unpriced(VoiceoverScene):
             f"worth about {T['value'] / 1e3:.0f} thousand dollars a year beyond what people spend reaching it, a "
             "number to set against a hotel that would close it."
         ) as vo:
-            self.play(FadeIn(ax), FadeIn(tag))
+            self.play(FadeIn(ax), FadeIn(tag), FadeIn(hot, shift=UP * 0.1))
             vo.wait_until("a")
+            self.play(FadeOut(hot), run_time=0.5)
             self.play(LaggedStart(*[GrowFromCenter(d) for d in pts], lag_ratio=0.1), FadeIn(side[0]), run_time=1.5)
             vo.wait_until("b")
             self.play(Create(fit), FadeIn(side[1]))

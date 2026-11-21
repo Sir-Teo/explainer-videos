@@ -1111,10 +1111,10 @@ DIALS = {d.key: d for d in [
                       "February 2025", checked="2026-11-21"),
              Estimate("OMB Circular A-4", 2003, "review", "the rate at which consumers trade consumption over time",
                       3.0, where="as above", checked="2026-11-21"),
-             Estimate("HM Treasury, the Green Book", 2003, "calibration", "Ramsey's rule: 0.5% time preference, 1.0% "
+             Estimate("HM Treasury's Green Book", 2003, "calibration", "Ramsey's rule: 0.5% time preference, 1.0% "
                       "catastrophe risk, 1.0 x 2.0% growth; years 0-30, declining after", 3.5,
                       where="The Green Book (2003 to 2026), discounting annex", checked="2026-11-21"),
-             Estimate("HM Treasury, the Green Book", 2026, "review", "the headline rate for years 1 to 30, accepted "
+             Estimate("HM Treasury's Green Book", 2026, "review", "the headline rate for years 1 to 30, accepted "
                       "after Freeman and Groom's review", 3.0,
                       where="Green Book Discount Rate Review: HM Treasury response, 28 October 2026",
                       checked="2026-11-21"),

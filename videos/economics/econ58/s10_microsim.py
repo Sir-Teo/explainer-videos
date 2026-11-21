@@ -45,7 +45,7 @@ class Microsim(VoiceoverScene):
                   r"million", font_size=23, color=GREY_A),
         ).arrange(DOWN, buff=0.25).next_to(chain, DOWN, buff=0.9)
         hc = history_card(1957, r"Guy Orcutt", r"simulate the economy one household at a time, \ then add them "
-                          r"up", color=E.ACCENT, width=6.0, font_size=19).next_to(gross, DOWN, buff=0.4)
+                          r"up", color=E.ACCENT, width=6.0, font_size=19).move_to(UP * 0.2)
         tag = island_tag(r"the Island: \ a household survey", corner=DR, font_size=12)
         with self.voiceover(
             "A tax law changes thousands of households in thousands of ways, and the only way to know who gains is "
@@ -58,19 +58,21 @@ class Microsim(VoiceoverScene):
             f"households and {M['people']:,.0f} people, paying {M['tax_total'] / 1000:.2f} billion of income tax a "
             "year. Every total in what follows is a weighted sum."
         ) as vo:
-            self.play(FadeIn(tag))
+            self.play(FadeIn(tag), FadeIn(hc, shift=UP * 0.1))
             for k, mk in enumerate("abcde"):
                 vo.wait_until(mk)
+                if not k:
+                    self.play(FadeOut(hc), run_time=0.5)
                 anims = [FadeIn(chain.boxes[k], shift=UP * 0.1), FadeIn(chain.notes[k])]
                 if k:
                     anims.append(GrowArrow(chain.arrows[k - 1]))
                 self.play(*anims)
             vo.wait_until("f")
-            self.play(FadeIn(gross, shift=UP * 0.1), FadeIn(hc, shift=UP * 0.1))
+            self.play(FadeIn(gross, shift=UP * 0.1))
         self.clear_scene()
 
     def table_axes(self):
-        return plane([0.4, 10.6], [-3.5, 2.5], center=LEFT * 2.4 + DOWN * 0.5, x_length=7.6, y_length=5.0,
+        return plane([0.4, 10.6], [-3.5, 2.5], center=LEFT * 3.1 + DOWN * 0.5, x_length=6.4, y_length=5.0,
                      xticks=list(range(1, 11)), yticks=[-3, -2, -1, 0, 1, 2], xlabel=r"decile of household income "
                      r"(poorest to richest)", ylabel=r"change in net income, \ \%", xfmt=lambda v: f"{v:.0f}",
                      yfmt=lambda v: f"{v:+.0f}".replace("-", "{-}") if v else "0", font_size=14)
@@ -92,6 +94,9 @@ class Microsim(VoiceoverScene):
             label(rf"the richest tenth: \ {r[9]['gain']:.0f} a year, \ {r[9]['pct']:.1f}\%", font_size=19,
                   color=GREY_A),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.28).to_edge(RIGHT, buff=0.35).shift(UP * 0.3)
+        if side.width > 6.0:
+            side.width = 6.0
+            side.to_edge(RIGHT, buff=0.35)
         tag = island_tag(r"the Island's survey, \ grossed up", corner=DR, font_size=12)
         with self.voiceover(
             "The output that ministers ask for first is the distribution table. <bookmark mark='a'/> Suppose the "

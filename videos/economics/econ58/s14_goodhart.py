@@ -20,7 +20,9 @@ class Goodhart(VoiceoverScene):
                          r"decision-making, \ the more subject it will be to corruption pressures \ and the more apt "
                          r"it will be to distort and corrupt the social processes it was intended to monitor.'",
                          color=COST, width=11.4, font_size=23)
-        VGroup(g, c).arrange(DOWN, buff=0.5).move_to(DOWN * 0.1)
+        VGroup(g, c).arrange(DOWN, buff=0.5).move_to(DOWN * 0.4)
+        top = label(r"once a decision depends on a number, \ people act on the number", font_size=28,
+                    color=E.ACCENT).to_edge(UP, buff=0.5)
         tag = published_tag(tables.TARGETS_58.tag, corner=DL, font_size=12)
         with self.voiceover(
             "Every number in this part is meant to inform a decision, and once a decision depends on a number, "
@@ -31,7 +33,7 @@ class Goodhart(VoiceoverScene):
             "the more subject it will be to corruption pressures, and the more apt it will be to distort and "
             "corrupt the social processes it was intended to monitor."
         ) as vo:
-            self.play(FadeIn(tag))
+            self.play(FadeIn(tag), FadeIn(top, shift=DOWN * 0.1))
             vo.wait_until("a")
             self.play(FadeIn(g, shift=UP * 0.1))
             vo.wait_until("b")
@@ -75,6 +77,9 @@ class Goodhart(VoiceoverScene):
             side.width = 6.0
             side.to_edge(RIGHT, buff=0.3)
         tag = island_tag(r"the Island: \ an emergency department, \ simulated", corner=DR, font_size=12)
+        eng = history_card(2005, r"England's emergency departments", rf"{T['target']}\% of patients admitted, "
+                           r"transferred or discharged within four hours", color=CBO, width=5.6,
+                           font_size=19).move_to(ax.get_center())
         with self.voiceover(
             "England gave its hospitals a target: patients in emergency departments should be admitted, transferred "
             "or discharged within four hours, for ninety-eight percent of them from 2005. <bookmark mark='a'/> Here "
@@ -90,8 +95,9 @@ class Goodhart(VoiceoverScene):
             "above one included, invites the same, which is the best argument for scoring forecasts against "
             "outcomes."
         ) as vo:
-            self.play(FadeIn(ax), FadeIn(tag))
+            self.play(FadeIn(ax), FadeIn(tag), FadeIn(eng, shift=UP * 0.1))
             vo.wait_until("a")
+            self.play(FadeOut(eng), run_time=0.5)
             self.play(LaggedStart(*[GrowFromEdge(b_, DOWN) for b_ in before], lag_ratio=0.02), run_time=1.6)
             vo.wait_until("b")
             self.play(Create(line), FadeIn(ll))

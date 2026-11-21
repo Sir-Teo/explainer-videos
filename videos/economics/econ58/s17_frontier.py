@@ -40,6 +40,8 @@ class Frontier(VoiceoverScene):
             side.width = 6.2
             side.to_edge(RIGHT, buff=0.3)
         tag = published_tag(tables.FRONTIER58.tag, corner=DL, font_size=12)
+        q1 = label(r"should a dollar count the same, \ whoever gets it?", font_size=32, color=E.ACCENT).move_to(
+            UP * 0.3)
         with self.voiceover(
             "Two questions at the edge of the method. The first: should a dollar count the same whoever gets it? "
             "Standard cost-benefit analysis says yes, and leaves the distribution to the tax system. <bookmark "
@@ -53,8 +55,9 @@ class Frontier(VoiceoverScene):
             f"of ten for one person for a year, valued at {V['wellby']:,} pounds at 2019 prices, if the effect on "
             "wellbeing has been measured by a credible experiment."
         ) as vo:
-            self.play(FadeIn(tag))
+            self.play(FadeIn(tag), FadeIn(q1, shift=UP * 0.1))
             vo.wait_until("a")
+            self.play(FadeOut(q1), run_time=0.5)
             self.play(FadeIn(ax), Create(one), FadeIn(side[0]))
             vo.wait_until("b")
             self.play(Create(cv), FadeIn(pts), FadeIn(pl), run_time=1.6)

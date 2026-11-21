@@ -26,6 +26,14 @@ class Scoring(VoiceoverScene):
         chain.move_to(DOWN * 0.1)
         head = label(r"the scorekeepers: \ CBO and the Joint Committee on Taxation; \ the OBR; \ the CPB",
                      font_size=24, color=E.ACCENT).to_edge(UP, buff=0.45)
+        offices = VGroup(
+            history_card(1975, r"the Congressional Budget Office", r"scores every bill reported by a committee of "
+                         r"Congress", color=CBO, width=4.1, font_size=18),
+            history_card(2010, r"the Office for Budget Responsibility", r"Britain's forecasts and the costing of "
+                         r"each budget's measures", color=BEN, width=4.1, font_size=18),
+            history_card(1945, r"the Central Planning Bureau", r"the Netherlands' forecasts, \ and the costing of "
+                         r"parties' manifestos", color=SAFE, width=4.1, font_size=18),
+        ).arrange(RIGHT, buff=0.3).move_to(DOWN * 0.2)
         with self.voiceover(
             "A law is scored, not appraised. In America the Congressional Budget Office, since 1975, and the Joint "
             "Committee on Taxation estimate what each bill does to the budget; in Britain the Office for Budget "
@@ -37,9 +45,12 @@ class Scoring(VoiceoverScene):
             "<bookmark mark='d'/> A dynamic score lets output, prices and interest rates move too, and is published "
             "alongside for the biggest bills."
         ) as vo:
-            self.play(FadeIn(head))
+            self.play(FadeIn(head), LaggedStart(*[FadeIn(o, shift=UP * 0.1) for o in offices], lag_ratio=0.4),
+                      run_time=2.0)
             for k, mk in enumerate("abcd"):
                 vo.wait_until(mk)
+                if not k:
+                    self.play(FadeOut(offices), run_time=0.5)
                 anims = [FadeIn(chain.boxes[k], shift=DOWN * 0.1), FadeIn(chain.notes[k], shift=RIGHT * 0.1)]
                 if k:
                     anims.append(GrowArrow(chain.arrows[k - 1]))
@@ -94,7 +105,7 @@ class Scoring(VoiceoverScene):
         D = S["dynamic"]
         TC = tables.TCJA_2017.data
         t = np.array(D["t"])
-        ax = plane([0.4, 10.6], [-0.3, 1.4], center=LEFT * 2.6 + DOWN * 0.5, x_length=7.0, y_length=4.4,
+        ax = plane([0.4, 10.6], [-0.3, 1.4], center=LEFT * 3.6 + DOWN * 0.5, x_length=5.6, y_length=4.4,
                    xticks=list(range(1, 11)), yticks=[0, 0.5, 1.0], xlabel=r"year",
                    ylabel=r"cost, \ \% of GDP", xfmt=lambda v: f"{v:.0f}", yfmt=lambda v: f"{v:g}", font_size=15)
         z = Line(ax.ax.c2p(0.4, 0), ax.ax.c2p(10.6, 0), color=GREY_C, stroke_width=1.2)
@@ -121,8 +132,8 @@ class Scoring(VoiceoverScene):
             label(r"CBO on the House's 2025 bill: \ the dynamic score \$0.4 trillion higher", font_size=18,
                   color=CBO),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.24).to_edge(RIGHT, buff=0.25)
-        if side.width > 6.6:
-            side.width = 6.6
+        if side.width > 6.4:
+            side.width = 6.4
             side.to_edge(RIGHT, buff=0.25)
         tag = published_tag(r"Island toy; \ CBO (April 2018); \ CBO's dynamic estimate of H.R. 1 (2025)", corner=DL,
                             font_size=12)

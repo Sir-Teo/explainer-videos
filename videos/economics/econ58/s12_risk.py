@@ -157,7 +157,8 @@ class Risk(VoiceoverScene):
 
         t1 = tree(W, r"the forecast costs", TRAV)
         t2 = tree(Wo, r"costs 28\% over, \ as the record suggests", SAFE)
-        VGroup(t1, t2).arrange(RIGHT, buff=1.2, aligned_edge=UP).move_to(DOWN * 0.1)
+        both = VGroup(t1, t2).arrange(RIGHT, buff=1.2, aligned_edge=UP)
+        both.scale(min(1.35, 12.4 / both.width)).move_to(DOWN * 0.2)
         head = label(r"the option to wait: \ next year the traffic is known, \ high or low", font_size=26,
                      color=E.ACCENT).to_edge(UP, buff=0.5)
         with self.voiceover(
@@ -209,9 +210,9 @@ class Risk(VoiceoverScene):
             "forecast; an evaluation is the score. Governments that commission both, and compare them, learn which "
             "of their forecasts to trust."
         ) as vo:
-            self.play(FadeIn(tag))
+            self.play(FadeIn(tag), FadeIn(hc, shift=UP * 0.1))
             vo.wait_until("a")
-            self.play(FadeIn(hc, shift=UP * 0.1))
+            self.play(Circumscribe(hc, color=BEN, time_width=0.6), run_time=1.2)
             for mk, r_ in zip("bcd", rows):
                 vo.wait_until(mk)
                 self.play(FadeIn(r_, shift=RIGHT * 0.15))

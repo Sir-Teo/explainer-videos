@@ -15,7 +15,7 @@ class Dials(VoiceoverScene):
     def discount(self):
         dial = dials.DIALS["social_discount_rate"]
         head = status_head(dial, r"the social discount rate \ (new)")
-        frame, rows = dial_rows(dial, 0, 8, [0, 1, 2, 3, 4, 5, 6, 7, 8], r"real \% a year", top=2.45, step=0.47,
+        frame, rows = dial_rows(dial, 0, 10, [0, 2, 4, 6, 8, 10], r"real \% a year", top=2.45, step=0.47,
                                 fmt="{:.2f}")
         meaning = wrapped_label(tex_safe(dial.meaning), 11.6, 17, GREY_A).to_edge(DOWN, buff=0.5)
         tag = published_tag(r"the dial's record: \ explainer/economics/dials.py", corner=DR, font_size=12)

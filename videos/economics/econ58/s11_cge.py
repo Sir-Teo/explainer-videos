@@ -48,7 +48,7 @@ class CGE(VoiceoverScene):
 
     def matrix(self):
         C = load("cge")
-        tab = sam_table(C["sam0"]["M"]).scale(0.95).move_to(LEFT * 0.6 + DOWN * 0.2)
+        tab = sam_table(C["sam0"]["M"], font_size=22).scale(1.1).move_to(DOWN * 0.35)
         head = label(r"the Island's social accounting matrix: \ each column pays the rows \ (billions)",
                      font_size=24, color=E.ACCENT).to_edge(UP, buff=0.45)
         p = C["params"]
@@ -98,18 +98,23 @@ class CGE(VoiceoverScene):
             label(rf"labour moves to food: \ {b['L']['F']:.1f} $\to$ {t['L']['F']:.1f}", font_size=19,
                   color=GREY_A),
             label(rf"the wage rises {wr:.1f}\% against the return to capital", font_size=19, color=TRAV),
-            label(r"so capital bears more of the tax than its owners' spending on manufactures", font_size=17,
+            label(r"so capital bears more of the tax \\ than its owners' spending on manufactures", font_size=17,
                   color=GREY_B),
-            label(rf"deadweight loss: \ {C['dwl']:.2f} \ (Harberger's triangle: \ {C['harberger']:.2f}), \ "
+            label(rf"deadweight loss: \ {C['dwl']:.2f} \ (Harberger's triangle: \ {C['harberger']:.2f}), \\ "
                   rf"on revenue of {C['revenue']:.1f}", font_size=19, color=BEN),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.24).to_edge(RIGHT, buff=0.3)
-        if rows.width > 7.4:
-            rows.width = 7.4
+        if rows.width > 6.0:
+            rows.width = 6.0
             rows.to_edge(RIGHT, buff=0.3)
         key = VGroup(label(r"green: \ general equilibrium", font_size=15, color=BEN),
                      label(r"white: \ the triangle", font_size=15, color=WHITE)).arrange(
             DOWN, aligned_edge=LEFT, buff=0.06).next_to(ax.ax.c2p(2, 3.8), RIGHT, buff=0.05)
         tag = island_tag(r"the Island: \ agora.appraisal.cge", corner=DR, font_size=12)
+        tab1 = sam_table(C["sam1"]["M"], font_size=22)
+        tab1.width = min(tab1.width, 13.4 - 0.3 - rows.width - 0.5)
+        tab1.to_edge(LEFT, buff=0.75).shift(DOWN * 0.2)
+        tl = label(r"with the tax: \ the government's row and column fill", font_size=17, color=E.ACCENT).next_to(
+            tab1, UP, buff=0.5)
         with self.voiceover(
             "Now tax manufactures at ten percent and hand the revenue back. <bookmark mark='a'/> In general "
             f"equilibrium, people buy fewer manufactures, {t['X']['M']:.1f} instead of {b['X']['M']:.1f}, and more "
@@ -123,7 +128,7 @@ class CGE(VoiceoverScene):
             "cannot leave without their prices changing, so output falls less. For a small tax, the triangle is "
             "enough; for a large change, the economy-wide model earns its keep."
         ) as vo:
-            self.play(FadeIn(tag), FadeIn(rows[0]))
+            self.play(FadeIn(tag), FadeIn(rows[0]), FadeIn(tab1), FadeIn(tl))
             vo.wait_until("a")
             self.play(FadeIn(rows[1]))
             vo.wait_until("b")
@@ -131,6 +136,7 @@ class CGE(VoiceoverScene):
             vo.wait_until("c")
             self.play(FadeIn(rows[3]), FadeIn(rows[4]))
             vo.wait_until("d")
+            self.play(FadeOut(tab1), FadeOut(tl), run_time=0.5)
             self.play(FadeIn(ax), Create(cl), FadeIn(key[0]), FadeIn(rows[5]), run_time=1.6)
             vo.wait_until("e")
             self.play(Create(ct), FadeIn(key[1]))

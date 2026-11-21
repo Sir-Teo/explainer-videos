@@ -22,8 +22,8 @@ class Discount(VoiceoverScene):
                    font_size=15)
         curves = [(D["df_2"], BEN, r"2\%"), (D["df_35"], RATE, r"3.5\%"), (D["df_7"], COST, r"7\%")]
         lines = VGroup(*[path(ax, t, df, c_, 3.0, smooth=False) for df, c_, _ in curves])
-        labs = VGroup(*[label(n_, font_size=19, color=c_).next_to(ax.ax.c2p(100, df[100]), RIGHT, buff=0.1)
-                        for df, c_, n_ in curves])
+        labs = VGroup(*[label(n_, font_size=19, color=c_).next_to(ax.ax.c2p(x_, df[x_]), UR, buff=0.06)
+                        for (df, c_, n_), x_ in zip(curves, (55, 35, 18))])
         v30 = vline(ax, 30, 0, 1.0, GREY_C, 1.5)
         p30 = D["pound30"]
         side = VGroup(
@@ -61,7 +61,7 @@ class Discount(VoiceoverScene):
                    ylabel=r"the bridge's NPV, \ millions", xfmt=lambda x: f"{x:.0f}",
                    yfmt=lambda y: f"{y:+.0f}".replace("-", "{-}") if y else "0", font_size=15)
         z = DashedLine(ax.ax.c2p(0, 0), ax.ax.c2p(10, 0), color=GREY_C, stroke_width=1.5)
-        curve = path(ax, r, v, RATE, 3.2)
+        curve = path(ax, r, v, RATE, 3.2, yr=(-200, 700))
         irr = dot(ax, 100 * B["irr"], 0, WHITE, 0.09)
         il = label(rf"IRR {100 * B['irr']:.1f}\%", font_size=19, color=WHITE).next_to(irr, UR, buff=0.1)
         marks = VGroup()

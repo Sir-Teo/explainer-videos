@@ -47,12 +47,12 @@ class PlayIt(VoiceoverScene):
             "forty-one's dial puts the elasticity of taxable income at about a quarter. What will the higher rate "
             "really raise?"
         ) as vo:
-            self.play(FadeIn(head), FadeIn(tag))
+            self.play(FadeIn(head), FadeIn(tag), FadeIn(ax))
+            self.play(LaggedStart(*[GrowFromEdge(b_, DOWN) for b_ in bars], lag_ratio=0.03), run_time=2.0)
             vo.wait_until("a")
             self.play(FadeIn(side[0]))
             vo.wait_until("b")
-            self.play(FadeIn(ax), LaggedStart(*[GrowFromEdge(b_, DOWN) for b_ in bars], lag_ratio=0.03),
-                      FadeIn(side[1]), run_time=2.0)
+            self.play(FadeIn(side[1]), Indicate(bars, color=WHITE, scale_factor=1.0))
             vo.wait_until("c")
             self.play(FadeIn(side[2]), FadeIn(side[3]))
             vo.wait_until("d")
@@ -93,6 +93,9 @@ class PlayIt(VoiceoverScene):
             label(rf"B was right; \ C needs an elasticity near {P['e_c']:.1f}", font_size=21, color=E.ACCENT),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.3).to_edge(RIGHT, buff=0.3)
         tag = island_tag(r"the Island: \ the grossed-up survey; \ white: \ Saez's formula", corner=DL, font_size=12)
+        one = DashedLine(ax.ax.c2p(0, 1), ax.ax.c2p(1.0, 1), color=STATIC, stroke_width=1.6)
+        onel = label(rf"the static score, \ {P['static']:.0f}", font_size=17, color=STATIC).next_to(
+            ax.ax.c2p(0.5, 1), UP, buff=0.08)
         with self.voiceover(
             "Here is what happened in the Island's model. <bookmark mark='a'/> With an elasticity of a quarter, "
             f"incomes in the top band fall by about {100 * (1 - ((1 - P['t1']) / (1 - P['t0'])) ** P['e']):.1f} "
@@ -107,7 +110,7 @@ class PlayIt(VoiceoverScene):
             "mark='e'/> So B. A score that ignores behaviour overstates what tax "
             "rises raise and what tax cuts cost, and the size of the error is the dial."
         ) as vo:
-            self.play(FadeIn(ax), FadeIn(tag), Create(zero))
+            self.play(FadeIn(ax), FadeIn(tag), Create(zero), Create(one), FadeIn(onel))
             vo.wait_until("a")
             self.play(FadeIn(side[0]))
             vo.wait_until("b")

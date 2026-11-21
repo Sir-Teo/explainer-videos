@@ -41,9 +41,9 @@ class Hook(VoiceoverScene):
             "north shore; the ministry is asked to build a bridge. Cost-benefit analysis is what ninety years of "
             "producing those two numbers has become, and this part does it, for the bridge and then for a law."
         ) as vo:
-            self.play(FadeIn(tag))
+            self.play(FadeIn(tag), FadeIn(card_, shift=UP * 0.1), run_time=1.5)
             vo.wait_until("a")
-            self.play(FadeIn(card_, shift=UP * 0.1), run_time=1.5)
+            self.play(Circumscribe(card_, color=E.ACCENT, time_width=0.6), run_time=1.5)
             vo.wait_until("b")
             self.play(FadeIn(who, shift=UP * 0.1))
             vo.wait_until("c")

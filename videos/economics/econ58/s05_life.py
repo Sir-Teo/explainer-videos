@@ -29,7 +29,9 @@ class Life(VoiceoverScene):
                   color=E.ACCENT),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.4).to_edge(RIGHT, buff=0.6)
         hc = history_card(1968, r"Thomas Schelling", r"`The Life You Save May Be Your Own': \ value the risk, \ not "
-                          r"the life", color=SAFE, width=5.4, font_size=19).next_to(eq, UP, buff=0.3)
+                          r"the life", color=SAFE, width=5.4, font_size=19)
+        hc.to_edge(UP, buff=0.5).to_edge(RIGHT, buff=0.4)
+        eq.next_to(hc, DOWN, buff=0.45).to_edge(RIGHT, buff=0.6)
         with self.voiceover(
             "The ferry kills people; the bridge would kill fewer. How is that valued? In 1968 Thomas Schelling "
             "pointed out that the question is not what a life is worth, but what a small change in risk is worth to "
@@ -78,6 +80,9 @@ class Life(VoiceoverScene):
             vls.add(label(f"{v:.1f}", font_size=17, color=c_).next_to(brs[-1], UP, buff=0.06))
         tag = island_tag(rf"the Island: \ {V['n']:,} workers, \ 600 shown".replace(",", "{,}"), corner=DR,
                          font_size=12)
+        tr = history_card(1976, r"Richard Thaler and Sherwin Rosen", r"`The value of saving a life': \ the extra pay "
+                          r"in riskier jobs, \ other things equal", color=SAFE, width=5.8, font_size=19).move_to(
+            ax.get_center())
         with self.voiceover(
             "Where do such numbers come from? Mostly from pay. Richard Thaler and Sherwin Rosen, in 1976, asked how "
             "much more dangerous jobs pay, other things equal. <bookmark mark='a'/> Here are the Island's workers: "
@@ -91,8 +96,9 @@ class Life(VoiceoverScene):
             f"{V['noisy']:.1f} million. Real studies face both problems with fewer cures, which is part of why "
             "their estimates range from a few million to more than ten."
         ) as vo:
-            self.play(FadeIn(ax), FadeIn(tag))
+            self.play(FadeIn(ax), FadeIn(tag), FadeIn(tr, shift=UP * 0.1))
             vo.wait_until("a")
+            self.play(FadeOut(tr), run_time=0.5)
             self.play(LaggedStart(*[FadeIn(d) for d in pts], lag_ratio=0.002), run_time=2.0)
             vo.wait_until("b")
             self.play(FadeIn(bx), Create(truth), FadeIn(tl), GrowFromEdge(brs[0], DOWN), FadeIn(lbs[0]),
