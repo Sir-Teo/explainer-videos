@@ -210,4 +210,42 @@ PARTS = [
               ("The Data Room: Reinhart and Rogoff's panel and the Macrohistory Database",
                "explainer/economics/data")),
     ),
+    Part(
+        n=68, level="D", widget="congestion", prereq=(1, 4, 15, 37, 54, 67),
+        question="How is a new piece of economics made?",
+        story="The series ends as it began, in a city. On 5 January 2025 New York began charging $9 to drive into "
+              "Manhattan below 60th Street, and the state soon reported 11% fewer vehicles. One question is carried "
+              "from idea to paper on the MTA's open data: four datasets described first; year-on-year differences "
+              "in differences with placebo years, which reveal that the tolled tunnels were already drifting; bus "
+              "speeds and miles; a discontinuity at 9 pm and 5 am that measures retiming; the smallest model, a "
+              "speed-flow curve and a demand elasticity, and the paused $15 plan with its uncertainty; the "
+              "referees; the same paper on the Island. Then the accounts close: 33 of 36 Facts, 93 Dials, 65 "
+              "calls, the Tableau with every pipe open, who feeds Paris now, the Queen's question, and twelve open "
+              "problems.",
+        handoff="This is the last part: the next economics is yours to write.",
+        outside="Part 4: identification; Part 15: Pigou and Vickrey; Part 37: cities; Part 54: estimating models; "
+                "Part 67: replication and the credibility of designs.",
+        objectives={
+            "U": ["Explain what makes a research question important, answerable and open.",
+                  "Explain why a jump at a price cutoff measures retiming rather than trips given up.",
+                  "Explain why two honest estimates of one policy can differ: different counterfactuals."],
+            "M": ["Compute a year-on-year difference in differences and subtract a placebo year.",
+                  "Estimate a discontinuity in time from binned counts.",
+                  "Compute the marginal external cost of a trip from a speed-flow curve."],
+            "D": ["Calibrate a congestion model to two estimates and simulate a counterfactual with both kinds of "
+                  "uncertainty.",
+                  "Derive the bias of a difference in differences when treated units' losses divert to controls.",
+                  "Test a design on simulated data where the truth is known."],
+            "I": ["Write the five-paragraph introduction and the referee replies for an empirical policy paper."],
+        },
+        results=[
+            ("Placebo-adjusted effect", r"\hat\tau = \Delta_{2025} - \Delta_{2024}"),
+            ("Marginal external cost", r"\text{MEC} = e \cdot T \cdot \text{VOT}"),
+            ("Speed-flow curve", r"T(V) = T_0\,(1 + a\,v^{b})"),
+            ("Diversion bias", r"\hat\tau \approx \tau\,(1 + d\,T/C)"),
+        ],
+        U=(0, 1, 2, 4, "s08_intermission", 11, 12, 13, 14), D=(3, 5, 6, 7, 8, 15), I=(9, 10),
+        also=(("Agora's congestion module", "explainer/economics/agora/congestion.py"),
+              ("The Data Room: the MTA's open data", "explainer/economics/data")),
+    ),
 ]

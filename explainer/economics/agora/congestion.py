@@ -80,9 +80,10 @@ def yoy_did(P: dict, treated=TREATED, controls=CONTROLS, years=(2023, 2024, 2025
                              "did": float(np.log(T[a] / T[b]) - np.log(C[a] / C[b]))})
     eff = np.array([r["did"] for r in rows if r["year"] == 2025])
     plc = np.array([r["did"] for r in rows if r["year"] in (2023, 2024)])
+    se = float(plc.std(ddof=1) / np.sqrt(len(eff)))
     return {"rows": rows, "effect": float(eff.mean()), "n": len(eff), "placebo_mean": float(plc.mean()),
-            "placebo_sd": float(plc.std(ddof=1)), "se": float(plc.std(ddof=1) / np.sqrt(len(eff))),
-            "t": float(eff.mean() / (plc.std(ddof=1) / np.sqrt(len(eff)))),
+            "placebo_sd": float(plc.std(ddof=1)), "se": se,
+            "t": float(eff.mean() / se) if se > 0 else float("inf"),
             "treated_level_2024": float(np.mean([T[f"2024-{m:02d}"] for m in range(1, 13)])),
             "after_2026": float(np.mean([r["did"] for r in rows if r["year"] == 2026])) if any(
                 r["year"] == 2026 for r in rows) else None}

@@ -1976,6 +1976,18 @@ DIALS = {d.key: d for d in [
 
 # What each part shows without entering a row, and why: {part: [(what is shown, the reason)]}
 SHOWN = {
+    68: [
+        ("Bastiat (1845); Besley and Hennessy's letter to the Queen (2009)", "the series' two opening questions, quoted "
+         "from the transcribed tables and answered"),
+        ("the MTA's congestion charge (5 January 2025); the Governor's first-year figures (2026); MTA v. Duffy "
+         "(2026)", "the dissertation's case, stated from tables.congestion_68; its effects computed from the MTA's "
+         "open data"),
+        ("Vickrey (1963); Singapore (1975); London (2003); Stockholm (2006-2007)", "the literature in one page, "
+         "stated"),
+        ("Walters (1961); the Bureau of Public Roads' speed-flow curve", "the smallest model, computed"),
+        ("the Facts, the Dials and the Calls", "the series' accounts, computed from facts.py, dials.py and calls.py"),
+        ("Quesnay (1758)", "the Tableau, drawn"),
+    ],
     67: [
         ("Brodeur, Lé, Sangnier and Zylberberg (2016); Brodeur, Cook and Heyes (2020)", "the camel and the bunching by "
          "design, stated; the shapes computed in a simulated field"),

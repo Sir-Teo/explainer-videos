@@ -441,4 +441,72 @@
       note: "Part 67, chapters 0 to 5. Computed in your browser; nothing you do here is stored or sent.",
     });
   };
+  W.congestion = function (el) {
+    // Agora's congestion model (explainer.economics.agora.congestion.congestion_model and equilibrium): time per trip
+    // in the zone T(V) = T0 (1 + a v^4), anchored at 3 miles and 10 mph; e = 4s, the elasticity of time with respect
+    // to traffic; demand V = A P^eta with P = toll + value of time x T + $25 of other costs; the marginal external
+    // cost of a trip e x T x value of time; the toll that equals it.
+    var B = 4, MILES = 3, MPH = 10, OTHER = 25;
+    function setup(e, vot) {
+      var Told = MILES / MPH, s = Math.min(Math.max(e / B, 1e-4), 0.95);
+      return { Told: Told, avb: s / (1 - s), T0: Told * (1 - s), vot: vot, Pold: vot * Told + OTHER };
+    }
+    function eq(M, eta, toll) {
+      var lo = -3, hi = 0.5, k, mid, T, P;
+      for (k = 0; k < 80; k++) {
+        mid = 0.5 * (lo + hi);
+        T = M.T0 * (1 + M.avb * Math.exp(B * mid));
+        P = toll + M.vot * T + OTHER;
+        if (mid - eta * Math.log(P / M.Pold) < 0) { lo = mid; } else { hi = mid; }
+      }
+      T = M.T0 * (1 + M.avb * Math.exp(B * lo));
+      return { lnV: lo, T: T, mec: M.vot * B * M.avb * Math.exp(B * lo) * M.T0 };
+    }
+    function optimal(M, eta) {
+      var lo = 0, hi = 60, k, mid;
+      for (k = 0; k < 60; k++) { mid = 0.5 * (lo + hi); if (mid < eq(M, eta, mid).mec) { lo = mid; } else { hi = mid; } }
+      return lo;
+    }
+    QB.widget(el, {
+      title: "Pricing a congested street",
+      sub: "Set the toll, what an hour of time is worth, how much a trip slows when traffic grows, and how strongly " +
+           "drivers respond to price. See traffic, the time per trip, the delay a car imposes on others, and the " +
+           "toll that would equal it.",
+      panels: 2, height: 280,
+      controls: [
+        { k: "toll", label: "Toll, dollars", min: 0, max: 20, step: 0.5, value: 9,
+          fmt: function (x) { return "$" + x.toFixed(2); } },
+        { k: "vot", label: "Value of an hour", min: 10, max: 40, step: 1, value: 20,
+          fmt: function (x) { return "$" + x.toFixed(0); } },
+        { k: "e", label: "Time elasticity e", min: 0.1, max: 2.0, step: 0.05, value: 0.48,
+          fmt: function (x) { return x.toFixed(2); } },
+        { k: "eta", label: "Demand elasticity", min: -0.6, max: -0.05, step: 0.01, value: -0.15,
+          fmt: function (x) { return x.toFixed(2); } },
+      ],
+      draw: function (g, v, st) {
+        var M = setup(v.e, v.vot), xs = [], ys = [], mec = [], t;
+        for (t = 0; t <= 20; t += 0.5) {
+          var r = eq(M, v.eta, t);
+          xs.push(t); ys.push(100 * (Math.exp(r.lnV) - 1)); mec.push(r.mec);
+        }
+        var now = eq(M, v.eta, v.toll);
+        st.dV = 100 * (Math.exp(now.lnV) - 1); st.dT = 100 * (now.T / M.Told - 1); st.mec = now.mec;
+        st.opt = optimal(M, v.eta);
+        var A1 = g[0].axes({ x: [0, 20], y: [-25, 0], title: "traffic, % against no toll", xlabel: "toll, $" });
+        A1.line(xs, ys, { color: "#F25F5C", width: 2.5 });
+        A1.dots([v.toll], [st.dV], { color: function () { return "#F2C14E"; }, r: 6 });
+        var A2 = g[1].axes({ x: [0, 20], y: [0, 20], title: "a car's delay to others, $", xlabel: "toll, $" });
+        A2.line(xs, mec, { color: "#7BD88F", width: 2.5 });
+        A2.line([0, 20], [0, 20], { color: "#9AA3B2", width: 1.2 });
+        A2.vline(st.opt, { color: "#C9A0FF" });
+        A2.legend([["delay cost at that toll", "#7BD88F"], ["toll = cost", "#9AA3B2"]], "tl");
+      },
+      readout: function (v, st) {
+        return [["traffic", st.dV.toFixed(1) + "%"], ["time per trip", st.dT.toFixed(1) + "%"],
+                ["a car's delay to others", "$" + st.mec.toFixed(2)],
+                ["toll equal to it (drivers' time only)", "$" + st.opt.toFixed(2)]];
+      },
+      note: "Part 68, chapters 7 and 8. Computed in your browser; nothing you do here is stored or sent.",
+    });
+  };
 })();

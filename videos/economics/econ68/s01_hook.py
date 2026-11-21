@@ -40,13 +40,13 @@ class Hook(VoiceoverScene):
 
     def city(self):
         O = load("official")
-        E = load("entries")
+        En = load("entries")
         hc = history_card(r"5 January 2025", r"a price on a street", r"New York begins charging \$9 to drive into "
                           r"Manhattan below 60th Street from 5 am to 9 pm on weekdays, \ \$2.25 at night", color=TOLL,
                           width=11.6, font_size=22).to_edge(UP, buff=0.5)
         rows = VGroup(
             label(r"the first charge for entering a downtown in the United States", font_size=22, color=GREY_A),
-            label(rf"about {E['weekday_all'] / 1000:.0f},000 vehicles still enter on an average weekday",
+            label(rf"about {En['weekday_all'] / 1000:.0f},000 vehicles still enter on an average weekday",
                   font_size=22, color=DATA),
             label(rf"the state: \ {O['fewer_share'] * 100:.0f}\% fewer vehicles in the first year, \ "
                   rf"\${O['revenue_m']} million for transit", font_size=22, color=BUS),
@@ -60,7 +60,7 @@ class Hook(VoiceoverScene):
             "nine dollars to drive into Manhattan below 60th Street in the day, two dollars twenty-five at night: "
             "the first price on entering a downtown in the United States, and William Vickrey's idea of Part "
             "fifteen, put into law. <bookmark mark='b'/> On an average weekday about "
-            f"{E['weekday_all'] / 1000:.0f} thousand vehicles still enter. <bookmark mark='c'/> A year in, the state "
+            f"{En['weekday_all'] / 1000:.0f} thousand vehicles still enter. <bookmark mark='c'/> A year in, the state "
             f"said {O['fewer_share'] * 100:.0f} percent fewer vehicles were entering, and {O['revenue_m']} million "
             "dollars had been raised for transit. <bookmark mark='d'/> Is that right? What did the charge do, to "
             "traffic, to buses, to when people travel? This last part carries one question from an idea to a "
