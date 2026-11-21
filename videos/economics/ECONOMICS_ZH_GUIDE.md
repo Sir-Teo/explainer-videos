@@ -1624,3 +1624,22 @@ brackets on screen.
 | prior; posterior; weak identification | 先验；后验；弱识别 |
 | relative multiplier; the missing intercept; shift-share design | 相对乘数；缺失的截距；份额-冲击设计 |
 | impulse-response matching | 脉冲响应匹配 |
+
+## Part 56
+
+| English | 中文 |
+|---|---|
+| core examination; qualifying examination; mark scheme; method marks | 核心课程考试；资格考试；评分方案；步骤分 |
+| kinked budget; increasing block tariff; virtual income | 折弯预算线；阶梯递增价格；虚拟收入 |
+| Slutsky decomposition; substitution effect; income effect | 斯勒茨基分解；替代效应；收入效应 |
+| compensating variation; Laspeyres approximation | 补偿变化；拉氏近似 |
+| externality; Pareto set; Pigouvian tax; lump-sum rebate | 外部性；帕累托集；庇古税；一次性返还 |
+| first-price auction; reserve price; virtual value; revenue equivalence | 第一价格拍卖；保留价；虚拟价值；收入等价 |
+| screening; information rent; no distortion at the top | 甄别；信息租金；顶端无扭曲 |
+| saddle path; phase diagram; golden rule | 鞍点路径；相图；黄金律 |
+| reservation wage; benefit exhaustion; backward induction | 保留工资；失业救济耗尽；逆向归纳 |
+| discretion; commitment; inflation bias | 相机抉择；承诺；通胀偏差 |
+| precautionary saving; supermartingale; borrowing limit | 预防性储蓄；上鞅；借贷约束 |
+| order condition; rank condition; exclusion restriction; Wald estimator | 阶条件；秩条件；排他性约束；沃尔德估计量 |
+| two-way fixed effects; staggered adoption; Goodman-Bacon decomposition; imputation estimator | 双向固定效应；交错实施；Goodman-Bacon 分解；插补估计量 |
+| long-run restriction; Cholesky factor | 长期约束；Cholesky 因子 |

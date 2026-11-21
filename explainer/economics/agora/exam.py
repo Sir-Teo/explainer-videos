@@ -442,7 +442,8 @@ def staggered_did(T: int = 10, g_early: int = 3, g_late: int = 7, slope: float =
     parts = quasi.bacon(Y, G, times)
     att = float(tau[D > 0].mean())
     imp = quasi.imputation(Y, G, times)
-    assert abs(imp["att"] - att) < 1e-6
+    if never:                        # with no never-treated unit, the last periods have no untreated cell
+        assert abs(imp["att"] - att) < 1e-6
     assert abs(sum(p["w"] * p["est"] for p in parts) - tw) < 1e-9
     # the TWFE weights on each treated cell: beta = sum w_it tau_it with w = Dd_it / sum Dd^2
     Dd = D - D.mean(1, keepdims=True) - D.mean(0, keepdims=True) + D.mean()

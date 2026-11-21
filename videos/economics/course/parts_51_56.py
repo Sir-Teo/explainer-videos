@@ -230,4 +230,52 @@ PARTS = [
         also=(("Agora's macro-econometrics", "explainer/economics/agora/macrometrics.py"),
               ("The Island's planted truths", "explainer/economics/island.py")),
     ),
+    Part(
+        n=56, level="M", widget="exam", prereq=(6, 15, 16, 14, 20, 24, 30, 52, 4, 54, 55),
+        question="Can you do it with the book closed?",
+        story="The night before the first-year examinations: an envelope with three papers, and where the core came "
+              "from (Samuelson's Foundations, Mas-Colell, Whinston and Green, Ljungqvist and Sargent, Hayashi, "
+              "Gali). Twelve questions, each with a pause before its solution and the mistakes that cost marks: a "
+              "consumer at an increasing block tariff (demand by segments, Slutsky with virtual income, the "
+              "compensating variation), an exchange economy with smoke (the Pareto line and Pigou's tax, with an "
+              "is/ought card), a first-price auction with a reserve (the boundary beta(r) = r, revenue 5/12 and a "
+              "simulation), screening with two types and a continuum, a capital tax in the Ramsey model (the phase "
+              "diagram and the jump), benefits that expire (backward induction and the exit spike's evidence); after "
+              "an intermission of the median duration of unemployment since 1967, discretion and commitment, why "
+              "r < rho in Aiyagari's economy, storms that identify a demand curve, GMM for the Euler equation with "
+              "its J test, staggered timing where two-way fixed effects halves the effect or flips its sign, and "
+              "Blanchard and Quah's long-run restriction. Then how answers are marked, what to do when stuck, and "
+              "where each question is still open.",
+        handoff="Part 57 opens Act XI, Economics at Work: reading the economy in real time, from how a number is made "
+                "to nowcasts and the record of forecasters.",
+        outside="Parts 5-6: demand and welfare; Part 15: externalities; Part 16: auctions; Parts 10, 13 and 14: "
+                "screening; Part 20: the Ramsey model; Parts 24 and 42: search and unemployment insurance; Parts 28 "
+                "and 30: discretion and the three-equation model; Part 52: Aiyagari; Part 4: instruments; Part 54: "
+                "GMM; Part 55: long-run restrictions; Statistics, Built: difference-in-differences.",
+        objectives={
+            "U": ["Solve a consumer's problem on a kinked budget and say where the consumer ends up.",
+                  "Explain why a market with an externality is inefficient, and what tax fixes it."],
+            "M": ["Solve the core's standard problems: an auction with a reserve, a screening menu, a Ramsey "
+                  "transition, a search problem with a deadline, discretion against commitment.",
+                  "Identify a demand curve with an instrument, estimate an Euler equation by GMM with the J test, and "
+                  "identify a VAR by a long-run restriction.",
+                  "Read what two-way fixed effects estimates when adoption is staggered."],
+            "D": ["Prove that an Aiyagari economy's interest rate lies below the rate of time preference, and that the "
+                  "reservation wage falls as benefits run out.",
+                  "Derive the screening menu for a continuum of types by the envelope theorem and virtual types."],
+            "I": ["Write an answer a grader, a referee or a manager can check: the set-up, the condition, the answer "
+                  "in a box, and a test of it."],
+        },
+        results=[
+            ("Slutsky at a kink", r"\frac{dx}{dp_2} = \frac{\partial h}{\partial p_2} - (x - \bar x)\,"
+                                  r"\frac{\partial x}{\partial m}"),
+            ("A first-price bid with a reserve", r"\beta(v) = v - \frac{v^n - r^n}{n\,v^{n-1}}"),
+            ("Screening", r"q(\theta) = \theta - \frac{1 - F(\theta)}{f(\theta)}"),
+            ("The inflation bias", r"\bar\pi = \frac{\lambda\kappa x^*}{\lambda(1 - \beta) + \kappa^2}"),
+            ("Blanchard and Quah", r"B = C(1)^{-1}\operatorname{chol}\big(C(1)\,\Sigma\,C(1)'\big)"),
+        ],
+        U=(0, 1, 2, 9, "s08_intermission"), D=(4, 8, 11, 12), I=(13,),
+        also=(("Agora's exam solvers", "explainer/economics/agora/exam.py"),
+              ("Part 52's Aiyagari economy", "explainer/economics/agora/hetero.py")),
+    ),
 ]

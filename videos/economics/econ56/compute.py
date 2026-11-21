@@ -128,8 +128,8 @@ def compute_metrics2() -> dict:
     dat = estimate.euler_data(T=out["T"], beta=out["beta"], gamma=out["gamma"], seed=56)
     f = estimate.euler_moments(dat)
     W = np.asarray(two["W"])
-    bs = np.linspace(two["theta"][0] - 0.03, two["theta"][0] + 0.03, 61)
-    gs = np.linspace(max(two["theta"][1] - 4.0, 0.05), two["theta"][1] + 4.0, 61)
+    bs = np.linspace(two["theta"][0] - 0.012, two["theta"][0] + 0.012, 61)
+    gs = np.linspace(two["theta"][1] - 0.6, two["theta"][1] + 0.6, 61)
     T = f(np.array(two["theta"])).shape[0]
     J = np.array([[T * float(f(np.array([b, g])).mean(0) @ W @ f(np.array([b, g])).mean(0)) for b in bs]
                   for g in gs])
@@ -140,7 +140,9 @@ def compute_metrics2() -> dict:
 
 
 def compute_metrics3() -> dict:
-    return _jsonable(exam.staggered_did())
+    out = exam.staggered_did()
+    out["twfe_no_never"] = exam.staggered_did(never=False)["twfe"]
+    return _jsonable(out)
 
 
 def compute_metrics4() -> dict:

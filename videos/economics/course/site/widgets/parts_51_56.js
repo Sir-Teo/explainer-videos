@@ -642,4 +642,116 @@
             "tell you which. Computed in your browser; nothing you do here is stored or sent.",
     });
   };
+  // ---- Part 56: the core exam ------------------------------------------------------------------------------------
+  W.exam = function (el) {
+    // Agora's exam module (explainer.economics.agora.exam): twelve questions, each solved by its formula and checked by
+    // brute force in Part 56's compute.py; the answers below are those numbers.  The reader reveals hints one at a
+    // time and is marked on the answer, with a mark lost for each hint used.
+    var Q = [
+      { t: "1. A kinked budget: the demand for x", s: ["u = 0.4 ln x + 0.6 ln y, income 100, y costs 1;",
+        "x costs 1 for the first 20 units and 2 beyond."], lo: 0, hi: 50, ans: 24, tol: 0.5, unit: " units",
+        h: ["First segment: 0.4 x 100 / 1 = 40. Is that at most 20?",
+            "No. Segment 2's virtual income: 100 + (2 - 1) x 20 = 120.",
+            "x = 0.4 x 120 / 2 = 24, beyond 20: on the segment."] },
+      { t: "2. An externality: the efficient x for A", s: ["u_A = 4 ln x_A + y_A, u_B = 4 ln x_B + y_B - 0.5 x_A;",
+        "10 units of x in all."], lo: 0, hi: 10, ans: 3.566, tol: 0.05, unit: "",
+        h: ["Quasilinear utility: maximize the sum of utilities.",
+            "A's marginal benefit less the harm equals B's: 4/x - 0.5 = 4/(10 - x).",
+            "x^2 - 26x + 80 = 0; the root below 5 is 3.57."] },
+      { t: "3. An auction: expected revenue", s: ["Two bidders, values uniform on [0, 1],",
+        "a first-price auction with a reserve of 0.5."], lo: 0, hi: 1, ans: 5 / 12, tol: 0.005, unit: "",
+        h: ["Revenue equivalence: the expected virtual value of the winner.",
+            "The virtual value is 2v - 1, counted only when the object sells.",
+            "2 x integral from 0.5 to 1 of (2v - 1) v dv = 5/12 = 0.417."] },
+      { t: "4. Screening: the low type's quality", s: ["Cost q^2/2; types 1 (probability 2/3) and 2 (1/3);",
+        "a buyer of type theta gets theta q - t."], lo: 0, hi: 2, ans: 0.5, tol: 0.01, unit: "",
+        h: ["The low type's participation and the high type's incentive bind.",
+            "Profit: (2/3)(q_L - q_L^2/2) + (1/3)(2q_H - q_L - q_H^2/2).",
+            "(2/3)(1 - q_L) = 1/3, so q_L = 0.5 (and q_H = 2)."] },
+      { t: "5. Ramsey: steady-state capital after the tax", s: ["f = k^(1/3), delta 0.05, rho 0.03;",
+        "a 25% tax on the net return to capital, rebated."], lo: 0, hi: 12, ans: 7.128, tol: 0.05, unit: "",
+        h: ["The tax enters the Euler equation, not the resource constraint.",
+            "Steady state: (1 - tau)(f'(k) - delta) = rho, so f'(k) = 0.09.",
+            "k = (1/3 / 0.09)^(3/2) = 7.13, down from 8.51."] },
+      { t: "6. McCall: the reservation wage after exhaustion", s: ["Offers uniform on [0, 1], beta 0.95;",
+        "after benefits run out, 0.1 a period."], lo: 0, hi: 1, ans: 0.7404, tol: 0.005, unit: "",
+        h: ["Once benefits are gone the problem is stationary: solve it first.",
+            "w = z + beta / (2(1 - beta)) x (1 - w)^2, with z = 0.1.",
+            "w = 0.740 (with benefits left it is higher, up to 0.809)."] },
+      { t: "7. Discretion: average inflation", s: ["Loss pi^2 + 0.25 (x - 0.5)^2; beta 0.99, kappa 0.1;",
+        "the bank cannot commit."], lo: 0, hi: 3, ans: 1.0, tol: 0.02, unit: " points",
+        h: ["First-order condition: kappa pi + lambda (x - x*) = 0.",
+            "Steady state: pi = beta pi + kappa x.",
+            "pi = lambda kappa x* / (lambda (1 - beta) + kappa^2) = 1.0."] },
+      { t: "8. Aiyagari: the bound on the interest rate", s: ["beta 0.96, income risk, no borrowing:",
+        "r must lie below what, in percent?"], lo: 0, hi: 10, ans: 100 * (1 / 0.96 - 1), tol: 0.05, unit: "%",
+        h: ["If beta(1 + r) >= 1, marginal utility is a supermartingale.",
+            "Then assets grow without bound: capital supply explodes.",
+            "So r < rho = 1/0.96 - 1 = 4.17% (computed: r = 1.62%)."] },
+      { t: "9. Demand: the Wald estimate of its slope", s: ["Storm days: mean q 5.04, mean p 5.02;",
+        "calm days: mean q 5.97, mean p 4.01."], lo: -2, hi: 0, ans: (5.04 - 5.97) / (5.02 - 4.01), tol: 0.01,
+        unit: "",
+        h: ["Storms move supply only, so the means lie on the demand curve.",
+            "Slope = change in mean q / change in mean p.",
+            "(5.04 - 5.97) / (5.02 - 4.01) = -0.92 (truth -1)."] },
+      { t: "10. GMM: the J test's degrees of freedom", s: ["Two assets; instruments 1, lagged growth, two",
+        "lagged returns; parameters beta and gamma."], lo: 0, hi: 12, ans: 6, tol: 0.4, unit: "",
+        h: ["Moments: assets x instruments.",
+            "2 x 4 = 8 moments, 2 parameters.",
+            "8 - 2 = 6 over-identifying restrictions."] },
+      { t: "11. Staggered timing: the TWFE coefficient", s: ["E adopts at 3, L at 7, N never; 10 periods;",
+        "effects 1, 2, 3, ... with exposure; no noise."], lo: -1, hi: 5, ans: 2.0, tol: 0.05, unit: "",
+        h: ["Comparisons: E vs N 4.5 (w 0.25), L vs N 2.5 (w 0.375).",
+            "E vs L before L 2.5 (0.125); L vs E after E -1.5 (0.25).",
+            "Weighted sum: 2.0, against a true average of 3.83."] },
+      { t: "12. The long run: restrictions still needed", s: ["A VAR in output growth and unemployment;",
+        "Sigma = BB' known. How many more restrictions?"], lo: 0, hi: 4, ans: 1, tol: 0.4, unit: "",
+        h: ["B has 4 unknowns.", "Sigma = BB' gives 3 equations.",
+            "One more: demand's long-run effect on output's level is zero."] },
+    ];
+    var GOLD = "#F2C14E", GREEN = "#7BD88F", RED = "#F25F5C", INK = "#E6EAF2", MUTED = "#9AA3B2";
+    QB.widget(el, {
+      title: "The exam",
+      sub: "Pick a question, work it, and set your answer with the slider. Reveal hints only if you need them: each " +
+           "costs a mark. The third hint gives the solution.",
+      panels: 2, height: 250,
+      controls: [
+        { k: "q", label: "Question", min: 1, max: 12, step: 1, value: 1, fmt: function (x) { return "Q" + x; } },
+        { k: "hints", label: "Hints revealed", min: 0, max: 3, step: 1, value: 0,
+          fmt: function (x) { return x ? String(x) : "none"; } },
+        { k: "a", label: "Your answer (the readout shows its value)", min: 0, max: 200, step: 1, value: 100,
+          fmt: function (x) { return x + " / 200"; } },
+      ],
+      draw: function (g, v, st) {
+        var q = Q[v.q - 1];
+        var ans = q.lo + (q.hi - q.lo) * v.a / 200;
+        var A = g[0].axes({ x: [0, 1], y: [0, 1], noX: true, noY: true, noFrame: true, title: q.t });
+        A.text(0.02, 0.9, q.s[0], { color: INK, size: 12 });
+        A.text(0.02, 0.78, q.s[1], { color: INK, size: 12 });
+        for (var i = 0; i < 3; i++) {
+          var shown = i < v.hints;
+          A.text(0.02, 0.58 - 0.17 * i, shown ? "Hint " + (i + 1) + ": " + q.h[i] : "Hint " + (i + 1) + ": hidden",
+                 { color: shown ? (i === 2 ? GREEN : GOLD) : MUTED, size: 11.5 });
+        }
+        var B = g[1].axes({ x: [q.lo, q.hi], y: [0, 1], noY: true, title: "your answer against the solution" });
+        B.dots([ans], [0.55], { color: GOLD, r: 6 });
+        B.text(ans, 0.55, ans.toFixed(3), { color: GOLD, align: "center", dy: -16 });
+        if (v.hints >= 3) {
+          B.line([q.ans - q.tol, q.ans + q.tol], [0.3, 0.3], { color: GREEN, width: 6 });
+          B.dots([q.ans], [0.3], { color: GREEN, r: 5 });
+          B.text(q.ans, 0.3, "solution " + q.ans.toFixed(3), { color: GREEN, align: "center", dy: 16 });
+        }
+        var ok = Math.abs(ans - q.ans) <= q.tol;
+        st.ans = ans; st.ok = ok; st.marks = ok ? 3 - v.hints : 0; st.unit = q.unit; st.hints = v.hints;
+        st.near = ok ? "" : (ans < q.ans ? "too low" : "too high");
+      },
+      readout: function (v, st) {
+        return [["your answer", st.ans.toFixed(3) + st.unit],
+                ["marked", st.ok ? "correct" : "not yet" + (st.hints >= 3 ? " (" + st.near + ")" : "")],
+                ["marks", st.marks + " of 3 (one lost per hint)"]];
+      },
+      note: "Part 56. Every answer was computed by Agora and checked by brute force. Computed in your browser; " +
+            "nothing you do here is stored or sent.",
+    });
+  };
 })();

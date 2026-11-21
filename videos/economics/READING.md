@@ -10,7 +10,7 @@ the series leaves out.
 Both *Parts* columns are found, not typed. *Planned* lists the parts whose entry in
 [`SYLLABUS.md`](SYLLABUS.md) names the book or paper; *Built* lists the parts whose scenes, compute step or
 README cite it (a dot: none yet). Fuller notes (editions, chapters, what each source was used for) are in each
-part's README, under *Sources*. Built so far: Parts 1–55.
+part's README, under *Sources*. Built so far: Parts 1–56.
 
 ## 1. The textbook spine
 
@@ -47,8 +47,8 @@ part's README, under *Sources*. Built so far: Parts 1–55.
 
 | Short name | Book | Planned | Built |
 |---|---|---|---|
-| MWG | A. Mas-Colell, M. Whinston and J. Green, *Microeconomic Theory* (1995) | 5–9, 11, 13, 15, 18, 56 | 5–11, 13, 15–16, 18 |
-| Kreps | D. Kreps, *Microeconomic Foundations I* (2013) | 5, 7, 9, 11, 56 | 5, 7, 9, 11–13, 53 |
+| MWG | A. Mas-Colell, M. Whinston and J. Green, *Microeconomic Theory* (1995) | 5–9, 11, 13, 15, 18, 56 | 5–11, 13, 15–16, 18, 56 |
+| Kreps | D. Kreps, *Microeconomic Foundations I* (2013) | 5, 7, 9, 11, 56 | 5, 7, 9, 11–13, 53, 56 |
 | Jehle–Reny | G. Jehle and P. Reny, *Advanced Microeconomic Theory* (3rd ed., 2011) | 5, 9 | 5–6, 9 |
 | Fudenberg–Tirole | D. Fudenberg and J. Tirole, *Game Theory* (1991) | 11–12, 53 | 11–12, 53 |
 | Osborne–Rubinstein | M. Osborne and A. Rubinstein, *A Course in Game Theory* (1994) | 11 | 11 |
@@ -64,10 +64,10 @@ part's README, under *Sources*. Built so far: Parts 1–55.
 | Short name | Book | Planned | Built |
 |---|---|---|---|
 | Romer | D. Romer, *Advanced Macroeconomics* (5th ed., 2019) | 20, 22–23, 28–29, 56 | · |
-| Ljungqvist–Sargent | L. Ljungqvist and T. Sargent, *Recursive Macroeconomic Theory* (4th ed., 2018) | 29, 52, 56 | 22, 24, 29, 52 |
+| Ljungqvist–Sargent | L. Ljungqvist and T. Sargent, *Recursive Macroeconomic Theory* (4th ed., 2018) | 29, 52, 56 | 22, 24, 29, 52, 56 |
 | SLP | N. Stokey, R. Lucas and E. Prescott, *Recursive Methods in Economic Dynamics* (1989) | 29, 51 | 29 |
 | Acemoglu | D. Acemoglu, *Introduction to Modern Economic Growth* (2009) | 20–21 | · |
-| Galí | J. Galí, *Monetary Policy, Inflation, and the Business Cycle* (2nd ed., 2015) | 30, 56 | 29–30 |
+| Galí | J. Galí, *Monetary Policy, Inflation, and the Business Cycle* (2nd ed., 2015) | 30, 56 | 29–30, 56 |
 | Woodford | M. Woodford, *Interest and Prices* (2003) | 30 | 30, 32 |
 | Walsh | C. Walsh, *Monetary Theory and Policy* (4th ed., 2017) | 25 | 25, 30–31 |
 | Obstfeld–Rogoff | M. Obstfeld and K. Rogoff, *Foundations of International Macroeconomics* (1996) | 34 | 34 |
@@ -79,7 +79,7 @@ part's README, under *Sources*. Built so far: Parts 1–55.
 
 | Short name | Book | Planned | Built |
 |---|---|---|---|
-| Hayashi | F. Hayashi, *Econometrics* (2000) | 54, 56 | 23, 54 |
+| Hayashi | F. Hayashi, *Econometrics* (2000) | 54, 56 | 23, 54, 56 |
 | Wooldridge | J. Wooldridge, *Econometric Analysis of Cross Section and Panel Data* (2nd ed., 2010) | 54 | 38–39 |
 | Hansen | B. Hansen, *Econometrics* (2022) | 54 | · |
 | Hamilton | J. Hamilton, *Time Series Analysis* (1994) | 55 | 6 |
@@ -162,8 +162,8 @@ part's README, under *Sources*. Built so far: Parts 1–55.
 | lemons | Akerlof (1970) | 13 | 13 |
 | signalling | Spence (1973) | 13 | · |
 | screening in insurance | Rothschild and Stiglitz (1976) | 7, 13 | 7, 13, 42 |
-| second-price auctions | Vickrey (1961) | 16 | 16–17 |
-| optimal auctions | Myerson (1981) | 16 | 16 |
+| second-price auctions | Vickrey (1961) | 16 | 16–17, 56 |
+| optimal auctions | Myerson (1981) | 16 | 16, 56 |
 | stable matching | Gale and Shapley (1962) | 17 | 17 |
 | Bayesian persuasion | Kamenica and Gentzkow (2011) | 53 | 52–53 |
 | incentives that crowd out | Gneezy and Rustichini (2000), "A Fine Is a Price" | 1, 14 | 1, 14, 45, 49 |
@@ -172,8 +172,8 @@ part's README, under *Sources*. Built so far: Parts 1–55.
 
 | Model or result | Paper | Planned | Built |
 |---|---|---|---|
-| externalities and their tax | Pigou (1920) | 10, 15, 56 | 10, 15, 41 |
-| bargaining over externalities | Coase (1960) | 15 | 15 |
+| externalities and their tax | Pigou (1920) | 10, 15, 56 | 10, 15, 41, 56 |
+| bargaining over externalities | Coase (1960) | 15 | 15, 56 |
 | public goods | Samuelson (1954) | 15 | · |
 | governing the commons | Ostrom (1990) | 15 | 15 |
 | the impossibility of social choice | Arrow (1951) | 18 | · |
@@ -199,12 +199,12 @@ part's README, under *Sources*. Built so far: Parts 1–55.
 | the permanent income hypothesis | Friedman (1957); Hall (1978) | 22 | 22 |
 | the Phillips curve and the natural rate | Phillips (1958); Friedman (1968); Phelps (1967) | 28 | · |
 | the Lucas critique | Lucas (1976) | 4, 28, 54 | 4, 28, 54 |
-| time inconsistency and rules | Kydland and Prescott (1977) | 28 | 28 |
+| time inconsistency and rules | Kydland and Prescott (1977) | 28 | 28, 56 |
 | real business cycles | Kydland and Prescott (1982) | 29 | 54 |
 | staggered prices | Calvo (1983) | 30 | 30 |
 | the Taylor rule | Taylor (1993) | 30 | · |
 | search and unemployment | Diamond (1982); Mortensen and Pissarides (1994) | 24 | 24 |
-| heterogeneous agents | Bewley (1977); Huggett (1993); Aiyagari (1994) | 52, 56 | 52 |
+| heterogeneous agents | Bewley (1977); Huggett (1993); Aiyagari (1994) | 52, 56 | 52, 56 |
 | the equity premium puzzle | Mehra and Prescott (1985) | 7, 23 | 7, 22–23 |
 
 ### Money and finance
@@ -250,7 +250,7 @@ part's README, under *Sources*. Built so far: Parts 1–55.
 | the credibility of econometrics | Leamer (1983); LaLonde (1986) | 4 | 4 |
 | vector autoregressions | Sims (1980) | 55 | 55 |
 | dynamic discrete choice | Rust (1987) | 44, 54 | 54 |
-| generalized method of moments | Hansen (1982) | 54 | 54 |
+| generalized method of moments | Hansen (1982) | 54 | 54, 56 |
 | machine learning for causal questions | Chernozhukov and others (2018); Athey and Imbens (2019) | 64 | 21 |
 | publication bias in economics | Brodeur and others (2016) | 67 | · |
 
@@ -365,6 +365,8 @@ part's README, under *Sources*. Built so far: Parts 1–55.
 **Part 54, *Estimating Models*.** Books: Kenneth Train, *Discrete Choice Methods with Simulation* (2nd ed., 2009); Fumio Hayashi, *Econometrics* (2000), chapters 3, 4 and 7; Hamish Low and Costas Meghir, 'The use of structural models in econometrics', *JEP* (2017); Charles Manski, *Partial Identification of Probability Distributions* (2003). Papers: Marschak (1953); McFadden (1974, 1989); Hansen (1982); Hansen and Singleton (1982); Kydland and Prescott (1982); Rust (1987); Pakes and Pollard (1989); Manski (1990); Gouriéroux, Monfort and Renault (1993); Hotz and Miller (1993); Keane and Wolpin (1997); Gourinchas and Parker (2002); Todd and Wolpin (2006); Chetty (2009); Andrews, Gentzkow and Shapiro (2017); Cranmer, Brehmer and Louppe (2020).
 
 **Part 55, *Identifying Macro*.** Books: Lutz Kilian and Helmut Lütkepohl, *Structural Vector Autoregressive Analysis* (2017); James Hamilton, *Time Series Analysis* (1994), chapters 11 to 13; Valerie Ramey, 'Macroeconomic shocks and their propagation', *Handbook of Macroeconomics* (2016); Emi Nakamura and Jón Steinsson, 'Identification in macroeconomics', *JEP* (2018). Papers: Sims (1980, 1992); Blanchard and Quah (1989); Kuttner (2001); Rigobon (2003); Romer and Romer (2004); Jordá (2005); Uhlig (2005); Christiano, Eichenbaum and Evans (2005); An and Schorfheide (2007); Smets and Wouters (2007); Canova and Sala (2009); Stock and Watson (2012, 2018); Mertens and Ravn (2013); Nakamura and Steinsson (2014, 2018); Gertler and Karadi (2015); Goldsmith-Pinkham, Sorkin and Swift (2020); Plagborg-M\oller and Wolf (2021).
+
+**Part 56, *The Core Exam*.** Books: Andreu Mas-Colell, Michael Whinston and Jerry Green, *Microeconomic Theory* (1995); David Kreps, *A Course in Microeconomic Theory* (1990); Lars Ljungqvist and Thomas Sargent, *Recursive Macroeconomic Theory* (2000; 4th ed. 2018); David Romer, *Advanced Macroeconomics* (1996; 5th ed. 2019); Jordi Galí, *Monetary Policy, Inflation, and the Business Cycle* (2008; 2nd ed. 2015); Fumio Hayashi, *Econometrics* (2000). Papers: Mussa and Rosen (1978); Myerson (1981); Riley and Samuelson (1981); Hansen (1982); Burtless and Hausman (1978); Chamley (1986); Blanchard and Quah (1989); Katz and Meyer (1990); Aiyagari (1994); Clarida, Galí and Gertler (1999); Chamberlain and Wilson (2000); Card, Chetty and Weber (2007); Goodman-Bacon (2021); Callaway and Sant'Anna (2021); Borusyak, Jaravel and Spiess (2024).
 
 ## 4. What the series leaves out
 

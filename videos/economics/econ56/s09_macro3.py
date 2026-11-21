@@ -164,6 +164,3 @@ class Macro3(VoiceoverScene):
             self.play(FadeIn(take, shift=UP * 0.1))
         self.clear_scene()
 
-
-def say_tex(x: float, digits: int = 2) -> str:
-    return f"{x:.{digits}f}"

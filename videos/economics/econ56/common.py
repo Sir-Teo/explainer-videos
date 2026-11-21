@@ -197,3 +197,8 @@ def answer_box(mob, color=GAIN, buff: float = 0.15) -> SurroundingRectangle:
 def part_tag(n: int, letter: str, field: str) -> Tex:
     """A small reminder in the corner of which question and part is being solved."""
     return label(rf"Question {n}\,({letter})", font_size=22, color=FIELD[field]).to_corner(UL, buff=0.35)
+
+
+def say_tex(x: float, digits: int = 2) -> str:
+    """A number for on-screen math (inside $...$ or MathTex, where a minus sign is a minus)."""
+    return f"{x:.{digits}f}"

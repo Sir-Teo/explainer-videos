@@ -1652,6 +1652,27 @@ SHOWN = {
         ("Federal Reserve Board, FRED: GS10, TB3MS, USREC, INDPRO, CPIAUCSL, FEDFUNDS, PPIACO", "the hook's VARs "
          "and the intermission, from the Data Room"),
     ],
+    56: [
+        ("Samuelson (1947); Mas-Colell, Whinston and Green (1995); Ljungqvist and Sargent (2000); Hayashi (2000); "
+         "Gali (2008)", "where the core came from: the textbooks, stated"),
+        ("Slutsky (1915); Burtless and Hausman (1978); Pigou (1920); Coase (1960); Vickrey (1961); Myerson (1981); "
+         "Riley and Samuelson (1981); Mussa and Rosen (1978); Maskin and Riley (1984)", "the micro questions' models, "
+         "stated and computed by Agora's exam module"),
+        ("Ramsey (1928); Cass (1965); Koopmans (1965); Chamley (1986); McCall (1970); Shavell and Weiss (1979); "
+         "Kydland and Prescott (1977); Barro and Gordon (1983); Clarida, Gali and Gertler (1999); Huggett (1993); "
+         "Aiyagari (1994); Chamberlain and Wilson (2000)", "the macro questions' models, stated and computed"),
+        ("Katz and Meyer (1990); Card, Chetty and Weber (2007)", "the exit spike at benefit exhaustion, stated as "
+         "findings; no estimate is shown"),
+        ("Philip Wright (1928); Wald (1940); Hansen (1982); Hansen and Singleton (1982); de Chaisemartin and "
+         "D'Haultfoeuille (2020); Goodman-Bacon (2021); Callaway and Sant'Anna (2021); Borusyak, Jaravel and Spiess "
+         "(2024); Blanchard and Quah (1989); Faust and Leeper (1997); Gali (1999)", "the econometrics questions' "
+         "methods, stated and computed on simulated data"),
+        ("Saez (2010); Kleven (2016); Ostrovsky and Schwarz; Rochet and Chone (1998); Straub and Werning (2020); "
+         "Kolsrud, Landais, Nilsson and Spinnewijn (2018); Kaplan, Moll and Violante (2018); Andrews, Stock and Sun "
+         "(2019); Roth, Sant'Anna, Bilinski and Poe (2023); Christiano, Eichenbaum and Vigfusson (2004)",
+         "the frontier: open questions, stated, with no numbers"),
+        ("BLS and NBER via FRED: UEMPMED, USREC", "the intermission's data film, from the Data Room"),
+    ],
     54: [
         ("McFadden (1974, 2001, 2002)", "the hook's BART forecast (the Called it? record of Part 5) and the logit, "
          "computed on the Island"),
