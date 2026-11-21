@@ -10,7 +10,7 @@ the series leaves out.
 Both *Parts* columns are found, not typed. *Planned* lists the parts whose entry in
 [`SYLLABUS.md`](SYLLABUS.md) names the book or paper; *Built* lists the parts whose scenes, compute step or
 README cite it (a dot: none yet). Fuller notes (editions, chapters, what each source was used for) are in each
-part's README, under *Sources*. Built so far: Parts 1–51.
+part's README, under *Sources*. Built so far: Parts 1–52.
 
 ## 1. The textbook spine
 
@@ -64,7 +64,7 @@ part's README, under *Sources*. Built so far: Parts 1–51.
 | Short name | Book | Planned | Built |
 |---|---|---|---|
 | Romer | D. Romer, *Advanced Macroeconomics* (5th ed., 2019) | 20, 22–23, 28–29, 56 | · |
-| Ljungqvist–Sargent | L. Ljungqvist and T. Sargent, *Recursive Macroeconomic Theory* (4th ed., 2018) | 29, 52, 56 | 22, 24, 29 |
+| Ljungqvist–Sargent | L. Ljungqvist and T. Sargent, *Recursive Macroeconomic Theory* (4th ed., 2018) | 29, 52, 56 | 22, 24, 29, 52 |
 | SLP | N. Stokey, R. Lucas and E. Prescott, *Recursive Methods in Economic Dynamics* (1989) | 29, 51 | 29 |
 | Acemoglu | D. Acemoglu, *Introduction to Modern Economic Growth* (2009) | 20–21 | · |
 | Galí | J. Galí, *Monetary Policy, Inflation, and the Business Cycle* (2nd ed., 2015) | 30, 56 | 29–30 |
@@ -121,7 +121,7 @@ part's README, under *Sources*. Built so far: Parts 1–51.
 | Model or result | Paper | Planned | Built |
 |---|---|---|---|
 | the division of labour | Smith (1776), *The Wealth of Nations* | 1 | 1–2, 19, 21, 39 |
-| comparative advantage | Ricardo (1817), *Principles*, ch. 7 | 2, 8, 35–36 | 1–2, 8, 19, 22, 25, 33–36 |
+| comparative advantage | Ricardo (1817), *Principles*, ch. 7 | 2, 8, 35–36 | 1–2, 8, 19, 22, 25, 33–36, 52 |
 | supply and demand, the scissors | Marshall (1890), *Principles of Economics* | 2, 37 | 2, 14, 37 |
 | the price system as information | Hayek (1945), "The Use of Knowledge in Society" | 1, 9 | 1, 9 |
 | the double auction in the classroom | Chamberlin (1948); Smith (1962) | 1–2 | 1 |
@@ -165,7 +165,7 @@ part's README, under *Sources*. Built so far: Parts 1–51.
 | second-price auctions | Vickrey (1961) | 16 | 16–17 |
 | optimal auctions | Myerson (1981) | 16 | 16 |
 | stable matching | Gale and Shapley (1962) | 17 | 17 |
-| Bayesian persuasion | Kamenica and Gentzkow (2011) | 53 | · |
+| Bayesian persuasion | Kamenica and Gentzkow (2011) | 53 | 52 |
 | incentives that crowd out | Gneezy and Rustichini (2000), "A Fine Is a Price" | 1, 14 | 1, 14, 45, 49 |
 
 ### Welfare and the state
@@ -204,7 +204,7 @@ part's README, under *Sources*. Built so far: Parts 1–51.
 | staggered prices | Calvo (1983) | 30 | 30 |
 | the Taylor rule | Taylor (1993) | 30 | · |
 | search and unemployment | Diamond (1982); Mortensen and Pissarides (1994) | 24 | 24 |
-| heterogeneous agents | Bewley (1977); Huggett (1993); Aiyagari (1994) | 52, 56 | · |
+| heterogeneous agents | Bewley (1977); Huggett (1993); Aiyagari (1994) | 52, 56 | 52 |
 | the equity premium puzzle | Mehra and Prescott (1985) | 7, 23 | 7, 22–23 |
 
 ### Money and finance
@@ -357,6 +357,8 @@ part's README, under *Sources*. Built so far: Parts 1–51.
 **Part 50, *The Policy Memo*.** Books: Jonathan Gruber, *Public Finance and Public Policy*, the chapters on cost-benefit analysis and on welfare programmes; Anthony Boardman, David Greenberg, Aidan Vining and David Weimer, *Cost-Benefit Analysis: Concepts and Practice*; Joshua Angrist and Jörn-Steffen Pischke, *Mastering 'Metrics* (2015); Eugene Bardach and Eric Patashnik, *A Practical Guide for Policy Analysis*. Papers: Orcutt (1957); Saez (2001); Chetty, Guren, Manoli and Weber (2011); Milligan (2005); Milligan and Stabile (2011); Aizer, Eli, Ferrie and Lleras-Muney (2016); Hendren and Sprung-Keyser (2020); Corinth, Meyer, Stadnicki and Wu (2021); Ananat, Glasner, Hamilton and Parolin (2022); Baker, Messacar and Stabile (2023); Noble, Magnuson, Duncan, Gennetian et al. (2025); Egger et al. (2022).
 
 **Part 51, *Computing Economies*.** Books: Kenneth Judd, *Numerical Methods in Economics* (1998); Nancy Stokey and Robert Lucas, with Edward Prescott, *Recursive Methods in Economic Dynamics* (1989), chapters 3, 4 and 9; Thomas Sargent and John Stachurski, *Dynamic Programming* and the QuantEcon lectures; Jesús Fernández-Villaverde, Juan Rubio-Ramírez and Frank Schorfheide, 'Solution and estimation methods for DSGE models', *Handbook of Macroeconomics* (2016). Papers: Bellman (1957); Howard (1960); Blackwell (1965); Smolyak (1963); Tauchen (1986); Judd (1992); Den Haan and Marcet (1994); Rouwenhorst (1995); Krueger and Kubler (2004); Schmitt-Grohé and Uribe (2004); Carroll (2006); Aruoba, Fernández-Villaverde and Rubio-Ramírez (2006); Kopecky and Suen (2010); Guerrieri and Iacoviello (2015); Maliar, Maliar and Winant (2021); Achdou, Han, Lasry, Lions and Moll (2022); Azinovic, Gaegauf and Scheidegger (2022).
+
+**Part 52, *Many Agents*.** Books: Lars Ljungqvist and Thomas Sargent, *Recursive Macroeconomic Theory*, chapters 17 and 18; Greg Kaplan, 'Heterogeneous agent macroeconomics', lecture notes, and Benjamin Moll's notes on continuous time; Per Krusell and Anthony Smith, 'Quantitative macroeconomic models with heterogeneous agents' (2006); Adrien Auclert and coauthors, the sequence-space Jacobian toolkit and its documentation. Papers: Gorman (1953); Bewley (1977); Kirman (1992); Hopenhayn (1992); Huggett (1993); Aiyagari (1994); Krusell and Smith (1998); Doepke and Schneider (2006); Khan and Thomas (2008); Den Haan (2010); Young (2010); Benhabib, Bisin and Zhu (2011, 2015); Kaplan and Violante (2014); Werning (2015); McKay, Nakamura and Steinsson (2016); Kaplan, Moll and Violante (2018); Auclert, Bardóczy, Rognlie and Straub (2021); Fagereng, Holm and Natvik (2021); Achdou et al. (2022).
 
 ## 4. What the series leaves out
 

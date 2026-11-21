@@ -49,4 +49,53 @@ PARTS = [
         also=(("Agora's solver harness", "explainer/economics/agora/solve.py"),
               ("The Island's planted truths", "explainer/economics/island.py")),
     ),
+    Part(
+        n=52, level="M", widget="households", prereq=(22, 26, 30, 40, 51),
+        question="What does macroeconomics get wrong by treating a country as one household?",
+        story="The part opens on Alan Kirman's 1992 essay asking whom or what the representative individual "
+              "represents (it 'deserves a decent burial'), on Krusell and Smith's 1998 finding that their economy's "
+              "aggregates are almost perfectly described by the mean of the wealth distribution, and on Kaplan, Moll "
+              "and Violante's reversal of the textbook account of monetary policy. Gorman's condition and MPCs that "
+              "fall with wealth; Bewley's and Huggett's households, whose uninsured risk pushes the interest rate "
+              "below time preference; Aiyagari's economy derived and solved, with 33% more capital than one "
+              "household would hold; the Island's 100,000 households against Young's histogram and Aiyagari's table "
+              "recomputed. The viewer guesses which fifth of households spends most after a rate cut (the second; "
+              "the poorest almost entirely through incomes). The wealth distribution's top, missed by the simple "
+              "model and reached by lucky returns; Krusell and Smith's algorithm, fit and Den Haan's test. After an "
+              "intermission of the top 1%'s and poorer half's shares of US wealth since 1989, continuous time as one "
+              "sparse matrix and its transpose; HANK's direct and indirect effects against a representative "
+              "household; sequence-space Jacobians by fake news, against brute force; multipliers, forward guidance "
+              "and who gains from inflation; Hopenhayn's industry and lumpy plants; the MPC dial against the models; "
+              "distributions at the central bank, Krusell and Smith as Called it?, and micro data in macro models.",
+        handoff="Part 53 turns from what households have to what they know: games of incomplete information, cheap "
+                "talk, and the design of information itself.",
+        outside="Part 22: consumption and the MPC; Part 26: banks and liquidity; Part 30: the New Keynesian model; "
+                "Part 40: the wealth distribution; Part 51: the methods; Statistics, Built: Markov chains and "
+                "stationary distributions.",
+        objectives={
+            "U": ["Explain when a representative household is exact (Gorman) and why differing MPCs break it.",
+                  "Explain why uninsurable risk lowers the interest rate and raises saving."],
+            "M": ["Solve Aiyagari's and Huggett's economies, with the stationary distribution by Young's method or the "
+                  "Kolmogorov forward equation, and simulate a population.",
+                  "Run Krusell and Smith's algorithm and judge its rule by R-squared and Den Haan's test.",
+                  "Compute sequence-space Jacobians by the fake-news algorithm and use them to split a rate cut into "
+                  "direct and indirect effects and to compute multipliers."],
+            "D": ["Prove the fake-news recursion and the balanced-budget multiplier of the intertemporal Keynesian "
+                  "cross; derive Hopenhayn's stationary industry.",
+                  "State what remains open: estimation with micro data, heterogeneous beliefs, nonlinear aggregate "
+                  "risk."],
+            "I": ["Write a distributional analysis of a policy: equilibrium paths, every household's response, and "
+                  "the change by group, reported beside its assumptions."],
+        },
+        results=[
+            ("Gorman", r"c_i = a_i(p) + b(p)\, m_i \Rightarrow \textstyle\sum_i c_i = \sum_i a_i(p) + b(p)\sum_i m_i"),
+            ("Aiyagari's market", r"K(r) = \int a\, d\lambda_r(a, e),\quad r = \alpha K^{\alpha - 1} - \delta"),
+            ("The forward equation", r"\mathbf{A}^{\top}\mathbf{g} = 0"),
+            ("Direct and indirect", r"dC = \mathbf{M}_r\, dr + \mathbf{M}_Z\, dZ"),
+            ("Fake news", r"\mathbf{J}_{t,s} = \mathbf{F}_{t,s} + \mathbf{J}_{t-1,s-1}"),
+        ],
+        U=(0, 1, 2, 5, "s09_intermission"), D=(10, 12), I=(14,),
+        also=(("Agora's many agents", "explainer/economics/agora/hetero.py"),
+              ("The Island's planted truths", "explainer/economics/island.py")),
+    ),
 ]

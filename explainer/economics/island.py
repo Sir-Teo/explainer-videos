@@ -1239,6 +1239,53 @@ TRUTHS = {
         "zlb": {"T": 4, "rn_low": -2.0},
         "gammas": (1.0, 2.0, 4.0),
     },
+    52: {
+        # many agents: Aiyagari's economy (a discount factor of 0.96 a year, risk aversion 3, log earnings with
+        # persistence 0.9 and a standard deviation of 0.4, a capital share of 0.36, depreciation of 8%), his table's
+        # grid, three degrees of patience, a business state that earns 6 or 8 points more; Huggett's bond economy in
+        # continuous time; Krusell and Smith in the comparison project's calibration; quarterly household blocks with
+        # liquid wealth of one to sixteen quarters of output and a real rate of 0.5% a quarter; a rate cut of a
+        # quarter point a quarter that decays by 30% a quarter; Hopenhayn's industry; plants with a fixed cost of
+        # adjusting; three households' nominal positions
+        "aiyagari": {"beta": 0.96, "gamma": 3.0, "rho": 0.9, "sd": 0.4, "n_e": 7, "alpha": 0.36, "delta": 0.08,
+                     "n_a": 300, "a_max": 250.0},
+        "table": {"rhos": (0.0, 0.3, 0.6, 0.9), "sds": (0.2, 0.4), "gammas": (1.0, 3.0, 5.0)},
+        "betas": (0.94, 0.96, 0.98),
+        "returns": {"premiums": (0.06, 0.08), "p_up": 0.02, "p_down": 0.2, "a_max": 20000.0, "n_a": 600},
+        "island_n": 100000,
+        "huggett": {"rho": 0.05, "gamma": 2.0, "z": (0.1, 0.2), "lam": (1.2, 1.2), "a_min": -0.15, "a_max": 5.0,
+                    "n": 500},
+        "hank": {"r": 0.005, "liquid": (1.0, 2.0, 4.0, 8.0, 16.0), "island": 4.0, "T": 300, "cut": -0.0025,
+                 "persist": 0.7, "rho_g": 0.8, "phi": 0.1},
+        "hopenhayn": {"c_f": 15.0, "entrant_shift": 0.5, "c_e": (40.0, 80.0)},
+        "plants": {"n": 20000, "T": 120, "band": 0.3, "shock_at": 80},
+        "nominal": {"surprise": 0.05,
+                    "households": (("a young family", -180000.0), ("a middle-aged couple", -40000.0),
+                                   ("a retired teacher", 250000.0))},
+    },
+    53: {
+        # information and persuasion: the prosecutor (30% guilty, conviction at more likely than not), a judge with a
+        # middle verdict, cheap talk at four biases, a Cournot duopoly with a rival of unknown cost, the beer-quiche
+        # duel, two investors and a designer, three experiments, a nine-state dialogue, the email game, the regime-
+        # change game, cascades with signals right 70% of the time, the chain store, bargaining, relational effort
+        "prosecutor": {"prior": 0.3, "threshold": 0.5},
+        "verdicts": {"thresholds": (1 / 3, 2 / 3), "values": (0.0, 0.5, 1.0)},
+        "biases": (0.02, 0.05, 0.1, 0.25),
+        "cournot": {"a": 10.0, "c1": 2.0, "c_high": 4.0, "c_low": 1.0, "p_high": 0.5},
+        "beer": {"p_strong": 0.9, "breakfast": 1.0, "duel": 2.0},
+        "invest": {"p_good": 0.4, "good": 1.0, "bad": -3.0, "together": 1.0},
+        "experiments": {"P": ((0.9, 0.1), (0.2, 0.8)), "garble": ((0.8, 0.2), (0.3, 0.7)),
+                        "R": ((0.99, 0.01), (0.55, 0.45))},
+        "dialogue": {"n": 9, "a": ((0, 1, 2), (3, 4, 5), (6, 7, 8)), "b": ((0, 1, 2, 3), (4, 5, 6, 7), (8,)),
+                     "event": (2, 3), "state": 0},
+        "email": {"eps": 0.1, "p": 0.2, "a": 2.0, "L": 3.5},
+        "global": {"c": 0.4, "sigma": 0.1, "prior_mean": 0.5, "prior_sds": (0.4, 0.2, 40 ** -0.5)},
+        "cascade": {"q": 0.7, "n": 30, "runs": 20000, "seed": 53},
+        "chain": {"n": 20, "delta": 0.05, "b": 0.5, "a": 2.0},
+        "bargain": {"deltas": (0.5, 0.8, 0.9, 0.95, 0.99), "v_high": 1.0, "v_low": 0.4, "share_high": 0.5,
+                    "delta": 0.8},
+        "relational": {"theta": 1.0, "c": 0.5},
+    },
 }
 
 

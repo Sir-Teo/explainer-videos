@@ -1545,3 +1545,25 @@ brackets on screen.
 | occasionally binding constraint; zero lower bound; guess and verify | 偶尔紧的约束；零利率下限；猜测与验证 |
 | curse of dimensionality; Smolyak sparse grid | 维数灾难；斯莫利亚克稀疏网格 |
 | replication package; random seed | 复现包；随机种子 |
+
+## Part 52
+
+| English | 中文 |
+|---|---|
+| representative agent; heterogeneous agents | 代表性行为人；异质性行为人 |
+| aggregation; Gorman form; linear Engel curves | 加总；戈尔曼形式；线性恩格尔曲线 |
+| incomplete markets; uninsurable idiosyncratic risk; borrowing limit | 不完全市场；不可保险的个体风险；借贷约束 |
+| Bewley model; Huggett economy; Aiyagari economy | 比利模型；哈格特经济；艾亚加里经济 |
+| stationary distribution; Young's method (lottery) | 平稳分布；杨氏方法（抽签法） |
+| wealth distribution; top share; Pareto tail | 财富分布；顶层份额；帕累托尾部 |
+| return heterogeneity; patience heterogeneity | 收益异质性；耐心异质性 |
+| approximate aggregation; Krusell–Smith algorithm; Den Haan's test | 近似加总；克鲁塞尔–史密斯算法；登哈恩检验 |
+| HANK (heterogeneous-agent New Keynesian) model | HANK（异质性行为人新凯恩斯）模型 |
+| direct and indirect effects of monetary policy | 货币政策的直接效应与间接效应 |
+| liquid wealth; wealthy hand-to-mouth | 流动性财富；富裕的月光族 |
+| sequence-space Jacobian; fake-news algorithm | 序列空间雅可比矩阵；“假新闻”算法 |
+| intertemporal MPC; intertemporal Keynesian cross | 跨期边际消费倾向；跨期凯恩斯交叉 |
+| forward guidance puzzle | 前瞻指引之谜 |
+| nominal positions; redistribution by inflation | 名义头寸；通胀的再分配 |
+| firm dynamics; entry and exit; Hopenhayn model | 企业动态；进入与退出；霍彭海恩模型 |
+| lumpy investment; (S,s) rule | 块状投资；(S,s) 规则 |

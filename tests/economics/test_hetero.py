@@ -108,6 +108,19 @@ def test_rate_cut_adds_up(hank):
     assert ra["direct_share_impact"] > rc["direct_share_impact"]
 
 
+def test_forward_guidance_matches_rate_cut(hank):
+    ss, jac = hank
+    fg = H.forward_guidance(ss, jac, [3, 10], -0.0025)
+    for h, v in zip((3, 10), fg["ha"]):
+        rc = H.hank_rate_cut(ss, jac, -0.0025, 0.0)
+        dr = np.zeros(jac["T"])
+        dr[h] = -0.0025
+        dZ = -np.linalg.solve(jac["J"][("A", "Z")], jac["J"][("A", "r")] @ dr)
+        dC0 = (jac["J"][("C", "r")] @ dr + jac["J"][("C", "Z")] @ dZ)[0]
+        assert v == pytest.approx(dC0)
+        assert rc["dr"][1] == pytest.approx(-0.0025)
+
+
 def test_hopenhayn_entry_barrier():
     lo, hi = H.hopenhayn(c_e=40.0), H.hopenhayn(c_e=80.0)
     assert lo["entry_rate"] == pytest.approx(lo["exit_rate"])

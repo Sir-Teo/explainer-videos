@@ -257,6 +257,23 @@ def simulate(res: dict, n: int = 100000, T: int = 400, seed: int = 0, keep: int 
     return {"wealth": k, "state": s, "paths": paths}
 
 
+def capital_supply(rs, beta: float = 0.96, gamma: float = 3.0, rho: float = 0.9, sigma: float = 0.2, n_e: int = 7,
+                   alpha: float = 0.36, delta: float = 0.08, n_a: int = 300, a_max: float = 250.0) -> list:
+    """The capital households want to hold at each interest rate in ``rs`` (with the wage firms pay at that rate),
+    and the capital firms want: the two curves whose crossing is Aiyagari's equilibrium."""
+    e, P, pi = income_chain(rho, sigma, n_e)
+    a = asset_grid(n_a, 0.0, a_max)
+    out, c0, D = [], None, None
+    for r in rs:
+        K = capital_demand(r, alpha, delta)
+        w = firm(K, alpha, delta)["w"]
+        h = household(r, w, beta, gamma, e, P, a, 0.0, c0=c0)
+        c0 = h["c"]
+        D = stationary(h["ap"], a, P, pi, D0=D)
+        out.append({"r": float(r), "supply": float(np.sum(D * a[:, None])), "demand": float(K)})
+    return out
+
+
 # ---------------------------------------------------------------------------------------------------------------
 # Huggett in continuous time
 
@@ -705,6 +722,46 @@ def impc(jac: dict, years: int = 6) -> np.ndarray:
     return np.array([col[4 * k:4 * k + 4].sum() for k in range(years)])
 
 
+def response(ss: dict, dr, dZ) -> np.ndarray:
+    """Every household's change in consumption at date 0 when the return and income follow ss + dr and ss + dZ
+    (rules solved backward from the end of the paths)."""
+    dr, dZ = np.asarray(dr, float), np.asarray(dZ, float)
+    T = len(dr)
+    rp = np.concatenate([ss["r"] + dr, [ss["r"]]])
+    Zp = ss["Z"] + dZ
+    c = ss["c"]
+    for t in range(T - 1, -1, -1):
+        c, _ = _egm_step(c, rp[t + 1], rp[t], Zp[t], ss["beta"], ss["gamma"], ss["e"], ss["P"], ss["a"],
+                         ss["a_min"])
+    return c - ss["c"]
+
+
+def by_wealth_group(ss: dict, dc, n_groups: int = 5) -> list:
+    """The percent change in consumption of each wealth group (fifths by default, poorest first), and each group's
+    share of wealth, from changes ``dc`` on the grid."""
+    D, a, c = ss["D"], ss["a"], ss["c"]
+    m = D.sum(axis=1)
+    mid = np.cumsum(m) - 0.5 * m
+    g = np.minimum((mid * n_groups).astype(int), n_groups - 1)
+    out = []
+    for k in range(n_groups):
+        sel = g == k
+        out.append({"group": k, "pct": float(100 * np.sum(D[sel] * dc[sel]) / np.sum(D[sel] * c[sel])),
+                    "mass": float(m[sel].sum()), "wealth_share": float(np.sum(m[sel] * a[sel]) / np.sum(m * a))})
+    return out
+
+
+def forward_guidance(ss: dict, jac: dict, horizons, size: float = -0.0025) -> dict:
+    """The response of consumption today to a cut of ``size`` in the real rate for one quarter, ``h`` quarters
+    ahead, debt constant: the representative household's response does not shrink with the horizon (the forward
+    guidance puzzle); households who may hit their limit discount the distant news."""
+    J, r = jac["J"], ss["r"]
+    G = J[("C", "r")] - J[("C", "Z")] @ np.linalg.solve(J[("A", "Z")], J[("A", "r")])
+    ha = [float(size * G[0, h]) for h in horizons]
+    ra = [float(-size / (1 + r)) if h >= 1 else 0.0 for h in horizons]
+    return {"horizons": list(horizons), "ha": ha, "ra": ra}
+
+
 def ra_rate_cut(r: float, B: float, dr) -> dict:
     """The same rate cut for a representative household with log utility (beta (1 + r) = 1) holding the debt B.
     Total: with debt constant and output set by demand, consumption follows the Euler equation alone,
@@ -827,4 +884,5 @@ __all__ = ["gorman_demand", "asset_grid", "income_chain", "household", "young_st
            "capital_demand", "gini", "top_share", "mpcs", "aiyagari", "aiyagari_types", "aiyagari_table", "simulate",
            "huggett_ct", "household_general", "aiyagari_returns", "pareto_tail", "pareto_from_shares", "ks_chain",
            "krusell_smith", "hank_steady_state", "jacobians", "jacobian_column_brute", "hank_rate_cut",
-           "hank_multiplier", "impc", "ra_rate_cut", "hopenhayn", "lumpy_plants"]
+           "hank_multiplier", "impc", "ra_rate_cut", "hopenhayn", "lumpy_plants", "capital_supply", "response",
+           "by_wealth_group", "forward_guidance"]

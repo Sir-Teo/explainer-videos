@@ -414,6 +414,17 @@ CALLS = {c.key: c for c in [
           "of Technology on Employment and Unemployment, National Academy of Engineering (1983), as quoted in "
           "secondary listings",
           "BLS via FRED: LNS12300060 (employment-population ratio, 25-54) and PRS85006173 (labor share)")),
+    Call("krusell_smith_1998", 52, "Per Krusell and Anthony Smith, in the Journal of Political Economy",
+         "October 1998",
+         "in a calibrated economy with uninsurable income risk and aggregate shocks, the behaviour of the "
+         "macroeconomic aggregates can be almost perfectly described using only the mean of the wealth distribution",
+         "a forecasting rule in mean capital, solved for and checked by its fit in simulations of the whole economy",
+         "for the path of capital the finding has held in many variants; but where many households have little "
+         "liquid wealth, aggregate spending and the transmission of monetary and fiscal policy depend on the "
+         "distribution, as heterogeneous-agent New Keynesian models showed twenty years later",
+         "partly right",
+         ("P. Krusell and A. A. Smith, Journal of Political Economy 106(5) (1998): 867-896",
+          "G. Kaplan, B. Moll and G. L. Violante, American Economic Review 108(3) (2018): 697-743")),
     Call("moore_1965", 51, "Gordon Moore, director of research at Fairchild Semiconductor, in Electronics",
          "April 1965",
          "by 1975 the number of components on an integrated circuit, at the lowest cost per component, would reach "

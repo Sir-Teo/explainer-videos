@@ -1626,6 +1626,27 @@ DIALS = {d.key: d for d in [
 
 # What each part shows without entering a row, and why: {part: [(what is shown, the reason)]}
 SHOWN = {
+    52: [
+        ("Kirman (1992); Krusell and Smith (1998); Kaplan, Moll and Violante (2018)", "the hook's essay, finding and "
+         "reversal, stated"),
+        ("Gorman (1953); Bewley (1977); Huggett (1993); Aiyagari (1994); Chamberlain and Wilson (2000)",
+         "the theory, stated and computed on the Island"),
+        ("Young (2010); Den Haan (2010); Den Haan, Judd and Juillard (2010)", "the methods and calibration, computed "
+         "here"),
+        ("Benhabib, Bisin and Zhu (2011, 2015); Federal Reserve, Distributional Financial Accounts", "the wealth "
+         "chapter: the mechanism computed, the top shares shown from the Data Room"),
+        ("Achdou, Han, Lasry, Lions and Moll (2022); Auclert, Bardóczy, Rognlie and Straub (2021)", "the methods, "
+         "computed here"),
+        ("Werning (2015); Kaplan and Violante (2014); Auclert, Rognlie and Straub (the intertemporal Keynesian cross); "
+         "McKay, Nakamura and Steinsson (2016)", "results stated and reproduced in this part's economy"),
+        ("Doepke and Schneider (2006)", "the inflation chapter's finding, stated"),
+        ("Hopenhayn (1992); Khan and Thomas (2008); Haltiwanger, Jarmin and Miranda (2013)", "the firms chapter: "
+         "Hopenhayn computed, the others stated"),
+        ("Johnson, Parker and Souleles (2006); Parker et al. (2013, 2022); Kueng (2018); Jappelli and Pistaferri "
+         "(2014); Fagereng, Holm and Natvik (2021)", "the mpc_windfall dial, read against the models"),
+        ("Krusell and Smith (1998)", "the Called it? card"),
+        ("Auclert, Rognlie and Straub (2020)", "the frontier chapter, stated"),
+    ],
     51: [
         ("Bellman (1957, 1984); Dreyfus (2002)", "the hook's story, stated"),
         ("Howard (1960); Blackwell (1965); Banach (1922)", "the methods and theorems, computed on the growth model"),
