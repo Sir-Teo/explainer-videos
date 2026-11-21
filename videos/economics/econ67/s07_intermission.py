@@ -35,7 +35,7 @@ class Intermission(SoundScene):
         line.set_points_as_corners([pts[0], pts[0]])
         marks = VGroup()
         for when, txt, dx, dy in ((1916, r"the First World War", -8, 70), (1946, r"1946: \ the peak", 3, 22),
-                                  (1975, r"growth through the debt's long fall", 14, 80),
+                                  (1975, r"growth through the debt's long fall", 14, 115),
                                   (2009, r"2008: \ the financial crisis", -12, 55)):
             k = int(np.argmin(np.abs(yrs - when)))
             lab = label(txt, font_size=14, color=GREY_A).move_to(ax.ax.c2p(yrs[k] + dx, film["debt"][k] + dy))

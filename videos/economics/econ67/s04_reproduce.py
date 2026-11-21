@@ -88,8 +88,8 @@ class Reproduce(VoiceoverScene):
         rr = [k for k, r_ in enumerate(rows) if r_["threshold"] == 90 and r_["weight"] == "country"
               and r_["start"] == 1946 and r_["drop"]][0]
         ring = Circle(radius=0.15, stroke_color=WHITE, stroke_width=2.4).move_to(pts[rr])
-        rrl = label(r"closest to Reinhart and Rogoff's choices", font_size=14, color=WHITE).next_to(ring, UP,
-                                                                                                   buff=0.1)
+        rrl = label(r"closest to Reinhart and Rogoff's choices", font_size=14, color=WHITE).next_to(ring, DR,
+                                                                                                   buff=0.08)
         # the choices, as a grid under the curve
         grid = VGroup()
         names = (r"country weights", r"start in 1950", r"their exclusions")

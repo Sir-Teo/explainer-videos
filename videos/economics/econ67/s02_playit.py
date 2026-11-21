@@ -3,6 +3,7 @@ from __future__ import annotations
 from videos.economics.econ67.common import *  # noqa: F403
 
 LETTERS = "ABCDEF"
+WORDS = ("None", "One", "Two", "Three", "Four", "Five", "All six")
 
 
 def study_card(k: int, r: dict, width: float = 3.9) -> VGroup:
@@ -75,7 +76,7 @@ class PlayIt(VoiceoverScene):
         verdict = label(rf"{n_ok} of 6 replicated", font_size=26, color=E.ACCENT).to_edge(DOWN, buff=0.6)
         tag = island_tag(r"the truth is known: \ each study's true $z$ is stored with it", corner=DL, font_size=12)
         with self.voiceover(
-            f"The results. <bookmark mark='a'/> {n_ok} of the six replicated. <bookmark mark='b'/> Study "
+            f"The results. <bookmark mark='a'/> {WORDS[n_ok]} of the six replicated. <bookmark mark='b'/> Study "
             f"B, an instrumental-variables result with z of {weak['z']:.2f}, failed: its true effect was small, "
             f"a true z of {weak['z_true']:.2f}, and it had cleared the line by luck and by search. <bookmark "
             f"mark='c'/> Study F is the surprise. Its z was {strong['z']:.1f}, the strongest of the six, and its "
