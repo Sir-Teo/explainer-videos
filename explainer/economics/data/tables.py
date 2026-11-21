@@ -4781,8 +4781,10 @@ FERTILITY_49 = Table(
          "one-child policy (1980) and its relaxation to two children (2016) and three (2021)",
     tag="Angrist and Evans (1998); Becker and Lewis (1973)",
     where="parents whose first two children are of the same sex are more likely to have a third; the sex mix is as "
-          "good as random, so it isolates the effect of a third child on the mother's work",
-    read="the abstract; dates of China's population policy from standard accounts",
+          "good as random, so it isolates the effect of a third child on the mother's work; the instrumental-variables "
+          "estimates for women are substantial but smaller than least squares, and absent for more educated women; "
+          "China's 'later, longer, fewer' campaign of the 1970s preceded the one-child policy",
+    read="the abstract (NBER and AER versions); dates of China's population policy from standard accounts",
     checked="2026-11-21",
     data={"one_child": 1980, "two_child": 2016, "three_child": 2021},
 )

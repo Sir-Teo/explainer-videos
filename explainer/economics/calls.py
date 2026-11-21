@@ -421,8 +421,8 @@ CALLS = {c.key: c for c in [
          "a projection from the number of boys who would be teenagers, the share of them assumed to be violent, and "
          "the rise in youth violence of the early 1990s",
          "juvenile violence was already falling: by 2004 the arrest rate of juveniles for violent crime was half its "
-         "1994 peak; DiIulio later said the prediction was wrong, but nearly every state had by then made it easier "
-         "to try juveniles as adults",
+         "1994 peak; DiIulio later said the prediction was wrong, but by then most states had made it easier to try "
+         "juveniles as adults",
          "wrong",
          ("J. DiIulio, \"The Coming of the Super-Predators\", The Weekly Standard, 27 November 1995",
           "Office of Juvenile Justice and Delinquency Prevention, juvenile arrest bulletins (1998-2006)")),

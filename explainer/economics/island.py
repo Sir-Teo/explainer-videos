@@ -1203,6 +1203,9 @@ TRUTHS = {
         "teachers": {"n_teachers": 1200, "years": 4, "class_size": 25, "sd_va": 0.12, "seed": 49},
         # health (chapter 10): Grossman's health stock, depreciation 2.5% at 20 rising 5.9% a year of age
         "grossman": {"r": 0.03, "delta0": 0.025, "delta_growth": 0.059, "a": 0.3, "h_min": 0.25},
+        # a patented drug (chapter 11): demand q = 100 - p (thousands of patients, dollars a course), a cost of 10 a
+        # course to make, a patent of 20 years (about ten of them on the market)
+        "drug": {"A": 100.0, "cost": 10.0, "patent_years": 10},
         # addiction (chapter 12): a price rise from 1 to 1.5 announced ten periods ahead
         "addiction": {"T": 60, "rise_at": 20, "announce_at": 10, "price0": 1.0, "price1": 1.5, "beta": 0.95,
                       "delta": 0.3, "alpha": 2.0, "reinforce": 0.2, "harm": 0.1},

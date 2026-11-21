@@ -52,4 +52,54 @@ PARTS = [
         also=(("Agora's climate", "explainer/economics/agora/climate.py"),
               ("The Island's planted truths", "explainer/economics/island.py")),
     ),
+    Part(
+        n=49, level="U", widget="deter", prereq=(5, 11, 17, 38),
+        question="How far can the model of choice under constraint be pushed into the rest of life?",
+        story="The part opens on a parking space: in the 1960s Gary Becker, late for an oral examination at "
+              "Columbia, weighed a car park against the chance and size of a fine, parked on the street, and began "
+              "to think of crime as a choice. Becker's offenders are built on the Island, with his planner's answer "
+              "(the largest fine, the thinnest enforcement) and why penalties are not like that. The viewer chooses "
+              "whether to double the chance of being caught or the sentence: the answer depends on the offenders, and "
+              "the data (Nagin; Lee and McCrary) say the chance. Police and crime are measured three ways on the "
+              "Island's blocks, then by Buenos Aires's guards and London's bombings; the 1950 murder rates show how "
+              "an estimate can follow its controls. The household is a small factory; women's work since 1948; a "
+              "Choo-Siow marriage market reads the gains from each match from the counts; quantity and quality, "
+              "fertility since 1950 and China before its one-child policy, Angrist and Evans's same-sex siblings on "
+              "the 1980 census, the pill; bargaining and the UK child benefit. After an intermission of the world's "
+              "fertility, schools on real data (California's districts, Tennessee's STAR, Maimonides' rule, teachers' "
+              "value added and the move test), early childhood and what replicates, Grossman's health capital and "
+              "doctor visits, patents, deaths of despair and the triplicate states, rational addiction and cigarette "
+              "demand by 2SLS, and the critics (the day-care fine, paid blood donors). Three dials, practice, "
+              "DiIulio's super-predators and a frontier of very low fertility and sex ratios close it.",
+        handoff="Part 50, the capstone of the act, writes a policy memo: a child allowance, from the question to the "
+                "evidence to the Island and the advice.",
+        outside="Part 5: choice under a budget; Part 11: equilibrium; Part 17: matching markets; Part 38: labour "
+                "supply; Statistics, Built: instrumental variables, regression discontinuity, shrinkage.",
+        objectives={
+            "U": ["Explain Becker's model of crime and why the chance of being caught may deter more than the "
+                  "sentence.",
+                  "Say why comparing places is a poor way to measure the effect of police, and what works instead.",
+                  "Explain the household as a producer, the quantity-quality trade-off, and why it matters whose "
+                  "purse the money reaches."],
+            "M": ["Solve Becker's planner's problem and compute the offence rate under different attitudes to risk "
+                  "and time.",
+                  "Estimate a Choo-Siow surplus from counts, a Wald estimate from same-sex siblings, and a class-size "
+                  "effect from STAR within schools.",
+                  "Shrink teachers' value added and test it with teacher moves; estimate cigarette demand by 2SLS."],
+            "D": ["Derive the rational addict's response to an announced price rise.",
+                  "State the open questions about very low fertility, sex ratios and saving."],
+            "I": ["Read a deterrence, class-size or value-added estimate critically, and recognise when a price may "
+                  "change the meaning of an act."],
+        },
+        results=[
+            ("Becker's offender", r"\text{offend if } (1-p)\,u(g) + p\,u(g - F) > u(0)"),
+            ("Choo and Siow", r"\mu_{ij} = \sqrt{\mu_{i0}\,\mu_{0j}}\; e^{\Phi_{ij}/2}"),
+            ("Quantity and quality", r"\max\ \log c + a\log n + b \log q \ \text{ s.t. } c + n(\pi + q) = Y"),
+            ("The Wald estimator", r"\beta = \frac{E[y \mid z=1] - E[y \mid z=0]}{E[d \mid z=1] - E[d \mid z=0]}"),
+            ("Shrinkage", r"\hat\mu_j = \frac{\sigma^2_\mu}{\sigma^2_\mu + \sigma^2_e / n}\; \bar y_j"),
+        ],
+        U=(0, 1, 2, 3, 4, 6, 7, "s09_intermission", 8, 13), D=(12, 16), I=(15,),
+        also=(("Agora's economic approach", "explainer/economics/agora/family.py"),
+              ("The Island's planted truths", "explainer/economics/island.py")),
+    ),
 ]

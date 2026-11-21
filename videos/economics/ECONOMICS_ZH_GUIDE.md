@@ -1483,3 +1483,29 @@ brackets on screen.
 | merit order; capacity withholding; market power | 优先调度顺序；容量持留；市场势力 |
 | peak oil | 石油峰值 |
 | stranded assets | 搁浅资产 |
+
+## Part 49
+
+| English | 中文 |
+|---|---|
+| the economic approach to human behaviour; economics imperialism | 人类行为的经济分析方法；经济学帝国主义 |
+| the economics of crime; deterrence; certainty and severity of punishment | 犯罪经济学；威慑；惩罚的确定性与严厉性 |
+| expected punishment; marginal deterrence; incapacitation | 预期惩罚；边际威慑；剥夺犯罪能力 |
+| elasticity of crime with respect to police; measurement error; attenuation bias | 犯罪对警力的弹性；测量误差；衰减偏误 |
+| household production; full income; the allocation of time | 家庭生产；完全收入；时间配置 |
+| comparative advantage within the household | 家庭内部的比较优势 |
+| marriage market; assortative mating; marital surplus | 婚姻市场；同类婚配；婚姻剩余 |
+| transferable utility; the Choo-Siow model | 可转移效用；Choo–Siow 模型 |
+| quantity-quality trade-off; total fertility rate; replacement fertility | 数量—质量权衡；总和生育率；更替水平生育率 |
+| same-sex sibling instrument; Wald estimator; compliers | 同性别子女工具变量；Wald 估计量；依从者 |
+| unitary household model; collective household model; income pooling | 单一家庭模型；集体家庭模型；收入共享 |
+| class size; Maimonides' rule; regression discontinuity | 班级规模；迈蒙尼德规则；断点回归 |
+| teacher value added; shrinkage; empirical Bayes; forecast bias | 教师增加值；收缩估计；经验贝叶斯；预测偏误 |
+| early childhood intervention; the Heckman curve; fade-out | 早期儿童干预；赫克曼曲线；效果消退 |
+| health capital; the demand for health; supplier-induced demand | 健康资本；健康需求；供给诱导需求 |
+| moral hazard in health insurance | 医疗保险中的道德风险 |
+| patent; deadweight loss; generic entry | 专利；无谓损失；仿制药进入 |
+| deaths of despair; the opioid crisis; triplicate prescription programmes | 绝望之死；阿片类药物危机；三联处方制度 |
+| rational addiction; adjacent complementarity; time inconsistency | 理性成瘾；相邻互补性；时间不一致 |
+| crowding out of intrinsic motivation; "a fine is a price" | 内在动机的挤出；"罚款即价格" |
+| sex ratio at birth; competitive saving motive | 出生性别比；竞争性储蓄动机 |

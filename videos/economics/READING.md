@@ -10,7 +10,7 @@ the series leaves out.
 Both *Parts* columns are found, not typed. *Planned* lists the parts whose entry in
 [`SYLLABUS.md`](SYLLABUS.md) names the book or paper; *Built* lists the parts whose scenes, compute step or
 README cite it (a dot: none yet). Fuller notes (editions, chapters, what each source was used for) are in each
-part's README, under *Sources*. Built so far: Parts 1–48.
+part's README, under *Sources*. Built so far: Parts 1–49.
 
 ## 1. The textbook spine
 
@@ -32,14 +32,14 @@ part's README, under *Sources*. Built so far: Parts 1–48.
 | Nicholson–Snyder | W. Nicholson and C. Snyder, *Microeconomic Theory* (13th ed., 2021) | 5–6 | 5–6, 8 |
 | Jones | C. I. Jones, *Macroeconomics* (6th ed., 2023) | 20 | · |
 | Blanchard | O. Blanchard, *Macroeconomics* (8th ed., 2021) | 27, 32 | 20, 24, 27–28, 32, 39 |
-| Stock–Watson | J. Stock and M. Watson, *Introduction to Econometrics* (4th ed., 2019) | 4 | 4, 45 |
+| Stock–Watson | J. Stock and M. Watson, *Introduction to Econometrics* (4th ed., 2019) | 4 | 4, 45, 49 |
 | Angrist–Pischke | J. Angrist and J.-S. Pischke, *Mostly Harmless Econometrics* (2009) | 4, 50, 67 | 4 |
 | Osborne | M. Osborne, *An Introduction to Game Theory* (2004) | 11 | 11 |
 | Krugman–Obstfeld–Melitz | P. Krugman, M. Obstfeld and M. Melitz, *International Economics* (12th ed., 2022) | 34–35 | 34–36 |
 | Mishkin | F. Mishkin, *The Economics of Money, Banking, and Financial Markets* (13th ed., 2022) | 26 | 31 |
 | Cabral | L. Cabral, *Introduction to Industrial Organization* (2nd ed., 2017) | 12–13 | 12–13 |
 | Borjas | G. Borjas, *Labor Economics* (8th ed., 2020) | 38 | 38 |
-| Gruber | J. Gruber, *Public Finance and Public Policy* (7th ed., 2022) | 15, 41–42, 50 | 7, 15, 41–42 |
+| Gruber | J. Gruber, *Public Finance and Public Policy* (7th ed., 2022) | 15, 41–42, 50 | 7, 15, 41–42, 49 |
 | Ray | D. Ray, *Development Economics* (1998) | 46 | 46 |
 | Weil | D. Weil, *Economic Growth* (3rd ed., 2013) | 7, 19 | 3, 7, 19–21, 23 |
 
@@ -166,7 +166,7 @@ part's README, under *Sources*. Built so far: Parts 1–48.
 | optimal auctions | Myerson (1981) | 16 | 16 |
 | stable matching | Gale and Shapley (1962) | 17 | 17 |
 | Bayesian persuasion | Kamenica and Gentzkow (2011) | 53 | · |
-| incentives that crowd out | Gneezy and Rustichini (2000), "A Fine Is a Price" | 1, 14 | 1, 14, 45 |
+| incentives that crowd out | Gneezy and Rustichini (2000), "A Fine Is a Price" | 1, 14 | 1, 14, 45, 49 |
 
 ### Welfare and the state
 
@@ -238,7 +238,7 @@ part's README, under *Sources*. Built so far: Parts 1–48.
 | skills, tasks and technology | Autor, Levy and Murnane (2003); Acemoglu and Autor (2011) | 39 | 39 |
 | mobility and place | Chetty and others (2014) | 40, 42 | · |
 | top incomes | Piketty and Saez (2003) | 40 | 40–41 |
-| the economics of crime | Becker (1968) | 49 | · |
+| the economics of crime | Becker (1968) | 49 | 49 |
 
 ### Method
 
@@ -351,6 +351,8 @@ part's README, under *Sources*. Built so far: Parts 1–48.
 **Part 47, *Political Economy*.** Books: Mancur Olson, *The Logic of Collective Action* (1965); Torsten Persson and Guido Tabellini, *Political Economics* (2000); Daron Acemoglu and James Robinson, *Economic Origins of Dictatorship and Democracy* (2006); Timothy Besley and Torsten Persson, *Pillars of Prosperity* (2011). Papers: Tullock (1967); Stigler (1971); Barro (1973); Krueger (1974); Nordhaus (1975); Ferejohn (1986); Grossman and Helpman (1994); Goldberg and Maggi (1999); Fisman (2001); Lee, Moretti and Butler (2004); Reinikka and Svensson (2004); Miguel et al. (2004); Olken (2007); Fisman and Miguel (2007); DellaVigna and Kaplan (2007); Lee (2008); Ferraz and Finan (2011); Cattaneo et al. (2015); Acemoglu et al. (2019); Funke et al. (2023).
 
 **Part 48, *Environment and Climate*.** Books: William Nordhaus, *A Question of Balance* (2008) and *The Climate Casino* (2013); Nicholas Stern, *The Economics of Climate Change: The Stern Review* (2007); Paul Sabin, *The Bet* (2013); Tom Tietenberg and Lynne Lewis, *Environmental and Natural Resource Economics*. Papers: Hotelling (1931); Gordon (1954); Smith (1969); Weitzman (1974); Slade (1982); Nordhaus (1992); Borenstein et al. (2002); Hughes et al. (2008); Costello et al. (2008); Weitzman (2009); Kiel et al. (2010); Acemoglu et al. (2012); Dell et al. (2012); Chen et al. (2013); Burke et al. (2015); McGlade and Ekins (2015); Nordhaus (2015, 2017); Barreca et al. (2016); Ebenstein et al. (2017); Deryugina et al. (2020); Dietz et al. (2021); Rennert et al. (2022); Barrage and Nordhaus (2024); Bilal and Känzig (2024).
+
+**Part 49, *The Economic Approach*.** Books: Gary Becker, *The Economic Approach to Human Behavior* (1976) and *A Treatise on the Family* (1981); Steven Levitt and Stephen Dubner, *Freakonomics* (2005), for the stories, read critically; Claudia Goldin, *Career and Family* (2021); Anne Case and Angus Deaton, *Deaths of Despair and the Future of Capitalism* (2020). Papers: Becker (1965, 1968, 1973); Becker and Lewis (1973); Grossman (1972); Becker and Murphy (1988); Levitt (1997); Angrist and Evans (1998); Krueger (1999); Angrist and Lavy (1999, 2019); Lazear (2000); Gneezy and Rustichini (2000); Goldin and Katz (2002); Di Tella and Schargrodsky (2004); Choo and Siow (2006); Heckman et al. (2010); Draca et al. (2011); Wei and Zhang (2011); Nagin (2013); Chetty et al. (2014); Case and Deaton (2015); Lee and McCrary (2017); Chalfin and McCrary (2018); Cooper et al. (2019); Alpert et al. (2022); Durkin et al. (2022).
 
 ## 4. What the series leaves out
 

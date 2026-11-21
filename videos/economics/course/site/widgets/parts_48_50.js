@@ -99,4 +99,87 @@
             "your browser; nothing you do here is stored or sent.",
     });
   };
+
+  // ---- Part 49: the economic approach ---------------------------------------------------------------------------
+  W.deter = function (el) {
+    // Agora's economic approach (explainer.economics.agora.family: offend_share): potential offenders with gains
+    // log-normal around one year of prison (log-sd 0.8), here 400 evenly spaced quantiles; an offender with CARA
+    // coefficient a, who counts each later year of a sentence beta times the one before, offends when
+    // (1 - p) u(g) + p u(g - F) > 0, with F the felt sentence.
+    function qnorm(p) {                       // Acklam's approximation to the normal quantile
+      var a = [-39.69683028665376, 220.9460984245205, -275.9285104469687, 138.3577518672690, -30.66479806614716,
+               2.506628277459239];
+      var b = [-54.47609879822406, 161.5858368580409, -155.6989798598866, 66.80131188771972, -13.28068155288572];
+      var c = [-0.007784894002430293, -0.3223964580411365, -2.400758277161838, -2.549732539343734,
+               4.374664141464968, 2.938163982698783];
+      var d = [0.007784695709041462, 0.3224671290700398, 2.445134137142996, 3.754408661907416];
+      var q, r;
+      if (p < 0.02425) {
+        q = Math.sqrt(-2 * Math.log(p));
+        return (((((c[0] * q + c[1]) * q + c[2]) * q + c[3]) * q + c[4]) * q + c[5]) /
+               ((((d[0] * q + d[1]) * q + d[2]) * q + d[3]) * q + 1);
+      }
+      if (p > 1 - 0.02425) { return -qnorm(1 - p); }
+      q = p - 0.5; r = q * q;
+      return (((((a[0] * r + a[1]) * r + a[2]) * r + a[3]) * r + a[4]) * r + a[5]) * q /
+             (((((b[0] * r + b[1]) * r + b[2]) * r + b[3]) * r + b[4]) * r + 1);
+    }
+    var N = 400, gains = [];
+    for (var i = 0; i < N; i++) { gains.push(Math.exp(0.8 * qnorm((i + 0.5) / N))); }
+    function u(x, a) { return Math.abs(a) < 1e-9 ? x : (1 - Math.exp(-a * x)) / a; }
+    function felt(S, beta) { return Math.abs(beta - 1) < 1e-9 ? S : (1 - Math.pow(beta, S)) / (1 - beta); }
+    function share(p, S, a, beta) {
+      var F = felt(S, beta), n = 0;
+      for (var i = 0; i < N; i++) { if ((1 - p) * u(gains[i], a) + p * u(gains[i] - F, a) > 0) n++; }
+      return n / N;
+    }
+    QB.widget(el, {
+      title: "Deter",
+      sub: "You run the Island's justice system. Left: the share who offend as the chance of being caught varies " +
+           "(purple) and as the sentence varies (gold), scaled so both start at your settings. Right: what doubling " +
+           "each would do.",
+      panels: 2, height: 260,
+      controls: [
+        { k: "p", label: "Chance of being caught", min: 0.02, max: 0.5, step: 0.01, value: 0.2,
+          fmt: function (x) { return (100 * x).toFixed(0) + "%"; } },
+        { k: "S", label: "Sentence, years", min: 0.5, max: 10, step: 0.5, value: 3,
+          fmt: function (x) { return x.toFixed(1); } },
+        { k: "a", label: "Dislike of risk (CARA)", min: -0.3, max: 1.0, step: 0.05, value: 0,
+          fmt: function (x) { return x.toFixed(2) + (x < 0 ? " (likes risk)" : x > 0 ? "" : " (indifferent)"); } },
+        { k: "beta", label: "Weight on each later year of prison", min: 0.6, max: 1.0, step: 0.01, value: 1.0,
+          fmt: function (x) { return x.toFixed(2); } },
+      ],
+      draw: function (g, v, st) {
+        var ks = [], sp = [], ss = [];
+        for (var k = 0; k <= 30; k++) {
+          var m = 0.25 + k * 0.125;                  // a multiple of today's setting, 0.25 to 4
+          ks.push(m);
+          sp.push(share(Math.min(v.p * m, 1), v.S, v.a, v.beta));
+          ss.push(share(v.p, v.S * m, v.a, v.beta));
+        }
+        var A = g[0].axes({ x: [0, 4], y: [0, 1], title: "share who offend", xlabel: "multiple of today's setting" });
+        A.line(ks, sp, { color: "#C9A0FF", width: 2.5 });
+        A.line(ks, ss, { color: "#F2C14E", width: 2.5 });
+        A.vline(1, { color: "#6B7280", dash: [3, 3] });
+        A.vline(2, { color: "#6B7280", dash: [2, 4] });
+        st.now = share(v.p, v.S, v.a, v.beta);
+        st.dp = share(Math.min(2 * v.p, 1), v.S, v.a, v.beta);
+        st.ds = share(v.p, 2 * v.S, v.a, v.beta);
+        var B = g[1].axes({ x: [0, 3], y: [0, 1], title: "share who offend", xlabel: "now, chance x2, sentence x2" });
+        B.bars([0.5, 1.5, 2.5], [st.now, st.dp, st.ds], 0.6,
+               { color: function (i) { return ["#9AA3B2", "#C9A0FF", "#F2C14E"][i]; } });
+      },
+      readout: function (v, st) {
+        var best = Math.abs(st.dp - st.ds) < 0.005 ? "no difference" : (st.dp < st.ds ? "the chance" : "the sentence");
+        return [["offend now", (100 * st.now).toFixed(0) + "%"],
+                ["with the chance doubled", (100 * st.dp).toFixed(0) + "%"],
+                ["with the sentence doubled", (100 * st.ds).toFixed(0) + "%"],
+                ["deters more", best],
+                ["expected sentence, p x S", (v.p * v.S).toFixed(2) + " years"]];
+      },
+      note: "Part 49, chapters 1 and 2. Risk-neutral offenders who count every year respond only to p x S; those " +
+            "who dislike risk fear the long sentence more; those who count later years for less are deterred more by " +
+            "the chance, as most evidence finds. Computed in your browser; nothing you do here is stored or sent.",
+    });
+  };
 })();
