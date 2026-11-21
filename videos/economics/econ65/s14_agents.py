@@ -31,7 +31,9 @@ class Agents(VoiceoverScene):
                            (MACH, "the lowest price, which agents find"),
                            (GDP, "the average price paid")], font_size=15).next_to(ax.ax, RIGHT, buff=0.3).shift(
             UP * 1.2)
-        eq = MathTex(r"\bar p = c + (1-\mu)(v-c)", font_size=34, color=GDP).next_to(key, DOWN, buff=0.5)
+        Fp = MathTex(r"F(p) = 1 - \Big[\frac{1-\mu}{n\mu}\,\frac{v-p}{p-c}\Big]^{\frac{1}{n-1}}", font_size=30,
+                     color=GREY_A).next_to(ax.ax, RIGHT, buff=0.3).shift(DOWN * 0.6)
+        eq = MathTex(r"\bar p = c + (1-\mu)(v-c)", font_size=34, color=GDP).next_to(Fp, DOWN, buff=0.4)
         tag = published_tag(rf"Varian, \ AER 70(4) (1980); \ {S['n']} sellers; \ agora.automation.shoppers",
                             corner=DL, font_size=12)
         with self.voiceover(
@@ -46,6 +48,8 @@ class Agents(VoiceoverScene):
             "full price. A world in which every buyer has an agent is close to perfect competition."
         ) as vo:
             self.play(FadeIn(ax), FadeIn(cost), FadeIn(clab), FadeIn(tag))
+            vo.wait_until("a")
+            self.play(Write(Fp))
             vo.wait_until("b")
             self.play(Create(lp), FadeIn(key[0]), run_time=1.6)
             vo.wait_until("c")

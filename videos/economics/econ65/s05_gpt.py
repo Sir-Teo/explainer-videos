@@ -50,21 +50,31 @@ class GPT(VoiceoverScene):
             DOWN, buff=0.5)
         tag = published_tag(r"David, \ AER 80(2) (1990); \ Devine, \ Journal of Economic History 43(2) (1983)",
                             corner=DL, font_size=12)
+        intro = VGroup(
+            label(r"general-purpose technologies: \ steam, \ electricity, \ the computer, \ AI", font_size=26,
+                  color=E.ACCENT),
+            label(r"used almost everywhere", font_size=22, color=MACH),
+            label(r"improving for decades", font_size=22, color=NEWT),
+            label(r"useful only with new inventions, \ processes and skills around them", font_size=22, color=WORK),
+        ).arrange(DOWN, aligned_edge=LEFT, buff=0.35).move_to(UP * 0.3)
         with self.voiceover(
             "Economists call technologies like electricity, the computer and now AI general-purpose technologies: "
-            "they can be used almost everywhere, and they keep improving. Paul David asked in 1990 why the electric "
-            "dynamo took so long to pay. <bookmark mark='a'/> In 1899, almost two decades after the first power "
-            "stations, electric motors supplied under five percent of the mechanical drive in American factories. "
-            "<bookmark mark='b'/> The old factory was built around a steam engine and a line shaft: every machine "
-            "had to sit along the shaft, often on several floors. Swapping the engine for one big electric motor "
-            "saved little. <bookmark mark='c'/> The gain came when each machine got its own small motor, and the "
-            "factory could be laid out around the flow of the work, on one floor. That meant new buildings, new "
-            "processes and new skills. <bookmark mark='d'/> By 1929, motors supplied about seventy-eight percent of "
-            "the drive, and manufacturing productivity surged in the nineteen-twenties."
+            "they can be used almost everywhere, they keep improving for decades, and they pay only once new "
+            "inventions, processes and skills grow up around them. Paul David asked in 1990 why the electric dynamo "
+            "took so long to pay. <bookmark mark='a'/> In 1899, almost two decades after the first power stations, "
+            "electric motors supplied under five percent of the mechanical drive in American factories. <bookmark "
+            "mark='b'/> The old factory was built around a steam engine and a line shaft: every machine had to sit "
+            "along the shaft, often on several floors. Swapping the engine for one big electric motor saved little. "
+            "<bookmark mark='c'/> The gain came when each machine got its own small motor, and the factory could be "
+            "laid out around the flow of the work, on one floor. That meant new buildings, new processes and new "
+            "skills. <bookmark mark='d'/> By 1929, motors supplied about seventy-eight percent of the drive, and "
+            "manufacturing productivity surged in the nineteen-twenties."
         ) as vo:
-            self.play(FadeIn(tag))
+            self.play(FadeIn(tag), FadeIn(intro[0]))
+            self.play(LaggedStart(*[FadeIn(r_, shift=RIGHT * 0.15) for r_ in intro[1:]], lag_ratio=0.6),
+                      run_time=3.0)
             vo.wait_until("a")
-            self.play(FadeIn(nums[0]))
+            self.play(FadeOut(intro), FadeIn(nums[0]))
             vo.wait_until("b")
             self.play(FadeIn(a), FadeIn(la))
             vo.wait_until("c")
@@ -86,9 +96,11 @@ class GPT(VoiceoverScene):
             ax.ax.c2p(J["start"] + J["build"] / 2, 1.15))
         m = path(ax, t, J["measured"], GDP, 3.2)
         tr = path(ax, t, J["true"], NEWT, 3.0)
-        key = legend_rows([(GDP, "measured: the investment not counted as output, the capital not as input"),
-                           (NEWT, "true: both counted")], font_size=15).next_to(ax.ax, DOWN, buff=0.5).align_to(
-            ax.ax, LEFT)
+        key = legend_rows([(GDP, r"measured: \ the investment not counted \\ as output, \ the capital not as "
+                                 r"input"), (NEWT, "true: both counted")], font_size=15)
+        key.next_to(ax.ax, RIGHT, buff=0.35).shift(UP * 1.4)
+        if key.width > 4.2:
+            key.scale_to_fit_width(4.2).next_to(ax.ax, RIGHT, buff=0.35).shift(UP * 1.4)
         tag = published_tag(r"Brynjolfsson, \ Rock and Syverson, \ AEJ: Macro 13(1) (2021); \ the Island: \ "
                             r"agora.automation.j\_curve", corner=DL, font_size=12)
         with self.voiceover(

@@ -18,8 +18,9 @@ class Intermission(SoundScene):
         film = load("film")
         T, J, D, H, G = (load(x) for x in ("tasks", "jcurve", "desk", "hulten", "growth"))
         clip = ClipStore("econ65").load("intermission.melody")
-        ax = plane([1948, 2026], [500, 2800], center=DOWN * 0.25 + LEFT * 0.8, x_length=10.8, y_length=5.2,
-                   xticks=[1950, 1960, 1970, 1980, 1990, 2000, 2010, 2020], yticks=[780, 1000, 1500, 2000, 2500],
+        ax = plane([1948, 2026], [500, 3200], center=DOWN * 0.25 + LEFT * 0.8, x_length=10.8, y_length=5.2,
+                   xticks=[1950, 1960, 1970, 1980, 1990, 2000, 2010, 2020],
+                   yticks=[780, 1000, 1500, 2000, 2500, 3000],
                    ylabel=r"hours worked a year, \ per worker", xfmt=lambda x: f"{x:.0f}",
                    yfmt=lambda y: f"{y:,.0f}".replace(",", "{,}"), font_size=15)
         kline = seg(ax, 1948, film["keynes"], 2026, film["keynes"], E.ACCENT, 2.6, dashed=True)
@@ -35,8 +36,17 @@ class Intermission(SoundScene):
             lines.add(m)
             e = label(SHORT[c], font_size=15, color=NATION[c]).next_to(pts[-1], RIGHT, buff=0.1)
             e.ft = float(ts[-1])
-            e.set_opacity(0.0)
+            e.y0 = float(pts[-1][1])
             ends.add(e)
+        # spread the end labels so that none overlaps: at least 0.3 apart, in the order of their lines
+        order = sorted(range(len(ends)), key=lambda i: ends[i].y0)
+        ys = [ends[i].y0 for i in order]
+        for j in range(1, len(ys)):
+            ys[j] = max(ys[j], ys[j - 1] + 0.3)
+        shift = (sum(ys) - sum(ends[i].y0 for i in order)) / len(ys)
+        for i, y in zip(order, ys):
+            ends[i].set_y(y - shift)
+            ends[i].set_opacity(0.0)
 
         def grower(m, tt):
             k = int(np.searchsorted(m.ts, tt, side="right"))
@@ -45,7 +55,7 @@ class Intermission(SoundScene):
                 ps = [m.pts[0], m.pts[0]]
             m.set_points_as_corners(ps)
 
-        yr = Integer(1950, font_size=48, color=E.ACCENT, group_with_commas=False).move_to(ax.ax.c2p(2012, 2550))
+        yr = Integer(1950, font_size=48, color=E.ACCENT, group_with_commas=False).move_to(ax.ax.c2p(2014, 3000))
 
         def set_year(m, tt):
             a, b = FILM_YEARS

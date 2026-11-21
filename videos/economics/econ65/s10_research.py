@@ -36,9 +36,9 @@ class Research(VoiceoverScene):
             "So in the long run, growth is tied to the growth of the number of researchers, which is tied to the "
             "growth of the population. Now suppose machines can be researchers."
         ) as vo:
-            self.play(FadeIn(tag))
+            self.play(FadeIn(tag), Write(eq))
             vo.wait_until("a")
-            self.play(Write(eq), FadeIn(rows[0]))
+            self.play(FadeIn(rows[0]))
             vo.wait_until("b")
             self.play(FadeIn(rows[1]))
             vo.wait_until("c")

@@ -82,10 +82,10 @@ class Wages(VoiceoverScene):
             f"{bau['Y'][-1] / bau['Y'][0]:.1f}-fold under business as usual. A far richer economy, in which work "
             "earns almost none of the income."
         ) as vo:
-            self.play(FadeIn(axl), FadeIn(axr), FadeIn(floor), FadeIn(flab), FadeIn(tag))
+            self.play(FadeIn(axl), FadeIn(axr), FadeIn(floor), FadeIn(flab), FadeIn(tag), FadeIn(key))
             for mk, k in zip("abc", ORDER):
                 vo.wait_until(mk)
-                self.play(Create(wl[k]), FadeIn(key[ORDER.index(k)]), run_time=1.8)
+                self.play(Create(wl[k]), Indicate(key[ORDER.index(k)], scale_factor=1.05), run_time=1.8)
             vo.wait_until("d")
             self.play(*[Create(sl[k]) for k in ORDER], run_time=2.2)
         self.clear_scene()

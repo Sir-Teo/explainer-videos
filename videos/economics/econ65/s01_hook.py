@@ -52,7 +52,7 @@ class Hook(VoiceoverScene):
         ratio = sorted(K["ratio"].items(), key=lambda kv: kv[1])
         axl = plane([-0.6, len(ratio) - 0.4], [0, 9], center=LEFT * 3.5 + DOWN * 0.5, x_length=5.6, y_length=4.4,
                     xticks=[], yticks=[0, 2, 4, 6, 8], ylabel=r"GDP per head, \ 2022 against 1930",
-                    yfmt=lambda v: rf"{v:.0f}$\times$", font_size=14)
+                    yfmt=lambda v: rf"{v:.0f}\times", font_size=14)
         bl = bars(axl, range(len(ratio)), [v for _, v in ratio], [GAIN] * len(ratio), width=0.62)
         band_ = shade(axl, [(-0.6, len(ratio) - 0.4)], 4, 8, GAIN, 0.12)
         names = VGroup(*[label(NAMES[c], font_size=13, color=GREY_A).rotate(PI / 6).next_to(

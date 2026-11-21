@@ -15,7 +15,7 @@ class Dials(VoiceoverScene):
     def task(self):
         dial = dials.DIALS["genai_task_effect"]
         head = status_head(dial, r"generative AI on a task \ (new)")
-        frame, rows = dial_rows(dial, -25, 65, [-20, 0, 20, 40, 60], r"percent gain in the measured outcome, \ as "
+        frame, rows = dial_rows(dial, -25, 95, [-20, 0, 20, 40, 60, 80], r"percent gain in the measured outcome, \ as "
                                 r"reported", top=2.3, step=0.72, fmt="{:.1f}")
         meaning = wrapped_label(tex_safe(dial.meaning), 11.6, 16, GREY_A).to_edge(DOWN, buff=0.35)
         tag = published_tag(r"the dial's record: \ explainer/economics/dials.py", corner=DR, font_size=12)

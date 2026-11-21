@@ -77,9 +77,9 @@ class Policy(VoiceoverScene):
             vo.wait_until("a")
             self.play(FadeIn(side[:2]))
             vo.wait_until("b")
-            self.play(FadeIn(side[2]))
+            self.play(FadeIn(side[2]), Create(tl), run_time=2.0)
             vo.wait_until("c")
-            self.play(Create(tl), FadeIn(ret), FadeIn(rlab), FadeIn(side[3]), run_time=2.0)
+            self.play(FadeIn(ret), FadeIn(rlab), FadeIn(side[3]))
         self.clear_scene()
 
     def levers(self):

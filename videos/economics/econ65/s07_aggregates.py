@@ -37,6 +37,11 @@ class Aggregates(VoiceoverScene):
                        font_size=20, color=HOLD).to_edge(DOWN, buff=0.6)
         tag = published_tag(r"Eloundou, \ Manning, \ Mishkin and Rock, \ Science 384 (2024); \ O*NET task "
                             r"lists", corner=DL, font_size=12)
+        head = label(r"how many tasks could a language model touch?", font_size=28, color=E.ACCENT).to_edge(
+            UP, buff=0.5)
+        how = label(r"every task in the American occupational database \ (O*NET), \ rated by people and by a "
+                    r"model: \ could it be done in half the time?", font_size=19, color=GREY_A).next_to(head, DOWN,
+                                                                                                     buff=0.3)
         with self.voiceover(
             "To go from a task to the economy, first ask how many tasks AI could touch. Tyna Eloundou, Sam "
             "Manning, Pamela Mishkin and Daniel Rock rated every task in the American occupational database, "
@@ -47,7 +52,7 @@ class Aggregates(VoiceoverScene):
             "first. <bookmark mark='d'/> But exposure is a judgement that a task could be sped up. It is not "
             "adoption, and it is not a forecast of jobs lost."
         ) as vo:
-            self.play(FadeIn(tag))
+            self.play(FadeIn(tag), FadeIn(head), FadeIn(how))
             for mk, r_ in zip("abc", rows):
                 vo.wait_until(mk)
                 self.play(FadeIn(r_, shift=RIGHT * 0.15))
@@ -96,9 +101,9 @@ class Aggregates(VoiceoverScene):
             "Less than a tenth of a percentage point a year. Allowing for harder tasks, his estimate falls to about "
             "half a percent."
         ) as vo:
-            self.play(FadeIn(tag))
+            self.play(FadeIn(tag), Write(eq))
             vo.wait_until("a")
-            self.play(Write(eq))
+            self.play(Indicate(eq[2], color=MACH, scale_factor=1.03), Indicate(eq[4], color=GDP, scale_factor=1.03))
             for mk, r_ in zip("bcdef", rows):
                 vo.wait_until(mk)
                 self.play(FadeIn(r_, shift=RIGHT * 0.15))
