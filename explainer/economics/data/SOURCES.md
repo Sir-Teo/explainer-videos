@@ -492,3 +492,5 @@ publication, the copy that was read and the date the transcription was checked:
 | `selection_67` | Brodeur et al. (2016, 2020), Andrews and Kasy, Ioannidis, Stanley and Doucouliagos, Doucouliagos and Stanley (Part 67) | 2026-11-21 |
 | `forecasts_67` | DellaVigna and Pope's 208 experts and 15 treatments (Part 67) | 2026-11-21 |
 | `remedies_67` | the JDE's pre-results review and the AEA Data Editor (Part 67) | 2026-11-21 |
+| `congestion_68` | New York's congestion charge: tolls, hours, the paused $15 plan and the phase-in, the state's first-year figures, the 2026 ruling (Part 68) | 2026-11-21 |
+| `literature_68` | Vickrey (1963) and the dates of Singapore's, London's and Stockholm's schemes (Part 68) | 2026-11-21 |

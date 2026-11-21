@@ -5236,6 +5236,46 @@ REMEDIES_67 = Table(
 
 PART67 = (HAMERMESH_2013, CAMERER_2016, REPLICATION_67, SELECTION_67, FORECASTS_67, REMEDIES_67)
 
+# ---------------------------------------------------------------------------
+# Part 68
+# ---------------------------------------------------------------------------
+CONGESTION_68 = Table(
+    key="congestion_68",
+    cite="MTA, Congestion Relief Zone frequently asked questions and toll rate calculator; Office of the Governor of "
+         "New York, press releases of 14 November 2024 and 5 January 2026 (\"Less Traffic, Better Transit\"); NY1, "
+         "17 November 2026; Metropolitan Transportation Authority v. Duffy, S.D.N.Y., opinion of 3 March 2026 "
+         "(Liman, J.), as reported",
+    tag="MTA; \\ Office of the Governor (2024, 2026); \\ \\emph{MTA v. Duffy} (S.D.N.Y. 2026)",
+    where="the charge began on 5 January 2025 for vehicles entering Manhattan south of 60th Street: $9 for a car with "
+          "E-ZPass from 5 am to 9 pm on weekdays and 9 am to 9 pm at weekends, $2.25 overnight (75% less), with "
+          "partial credits for tolled tunnels; a $15 plan due on 30 June 2024 was paused that June and revived at "
+          "$9 in November 2024, rising to $12 in 2028 and $15 in 2031; the state reported 27 million fewer vehicles "
+          "entering the zone in the first year (11%, over 73,000 a day) and over $550 million of net revenue; the "
+          "federal attempt to end the program was found arbitrary and capricious on 3 March 2026",
+    read="the MTA's pages, the Governor's releases, and press reports of the ruling (CBS, Bloomberg, Courthouse News)",
+    checked="2026-11-21",
+    data={"start": "2025-01-05", "peak": 9.0, "overnight": 2.25, "plan_2024": 15.0, "toll_2028": 12.0,
+          "toll_2031": 15.0, "fewer_vehicles_m": 27, "fewer_share": 0.11, "fewer_per_day": 73000,
+          "revenue_m": 550, "ruling": "2026-03-03"},
+    note="The state's 11% compares entries with what they were projected to be without the charge; the film's own "
+         "designs compare with other crossings, other bus routes and the year before.",
+)
+
+LITERATURE_68 = Table(
+    key="literature_68",
+    cite="William Vickrey, \"Pricing in Urban and Suburban Transport\", AER 53(2) (1963), 452-465; Singapore's Area "
+         "Licensing Scheme (1975); London's congestion charge (February 2003); Stockholm's congestion tax (trial "
+         "January-July 2006, referendum September 2006, permanent from August 2007)",
+    tag="Vickrey, \\emph{AER} 53(2) (1963); \\ Singapore (1975); \\ London (2003); \\ Stockholm (2006--2007)",
+    where="the dates of the schemes the literature studies; Vickrey's case for pricing roads and transit by time "
+          "and place",
+    read="the schemes' official histories and Vickrey's paper",
+    checked="2026-11-21",
+    data={"singapore": 1975, "london": 2003, "stockholm_trial": 2006, "stockholm": 2007, "vickrey": 1963},
+)
+
+PART68 = (CONGESTION_68, LITERATURE_68)
+
 PART58 = (FLOOD_1936, VALUES_58, STATED_58, DISCOUNT_58, MEGAPROJECTS, SCORING_58, TARGETS_58, FRONTIER58)
 
 PART50 = (CTC_2021, ALLOWANCE_50, CREDITS_50, FRONTIER50)
@@ -5260,4 +5300,4 @@ PART41 = (LAFFER_1974, HARBERGER_1962, RAMSEY_1927, MIRRLEES_1971, DIAMOND_SAEZ_
           CLK_2009, CAPITAL_TAX, HAVENS, EVASION, FRONTIER41, TCJA_2017)
 PART7 = (BERNOULLI_1738, SAMUELSON_1937, ALLAIS_1953, ELLSBERG_1961, RABIN_2000, THALER_1981, HOLT_LAURY_2005,
          HAYDEN_PLATT_2009, MADRIAN_SHEA_2001, THALER_BENARTZI_2004, BARSKY_1997, POST_2008, MEHRA_PRESCOTT_1985)
-ALL = {t.key: t for t in (*PART1, *PART3, *PART4, *PART5, *PART6, *PART7, *PART8, *PART9, *PART10, *PART11, *PART12, *PART13, *PART14, *PART15, *PART16, *PART17, *PART18, *PART19, *PART21, *PART22, *PART25, *PART26, *PART35, *PART36, *PART37, *PART38, *PART39, *PART40, *PART41, *PART42, *PART43, *PART44, *PART45, *PART46, *PART47, *PART48, *PART49, *PART50, *PART58, *PART67)}
+ALL = {t.key: t for t in (*PART1, *PART3, *PART4, *PART5, *PART6, *PART7, *PART8, *PART9, *PART10, *PART11, *PART12, *PART13, *PART14, *PART15, *PART16, *PART17, *PART18, *PART19, *PART21, *PART22, *PART25, *PART26, *PART35, *PART36, *PART37, *PART38, *PART39, *PART40, *PART41, *PART42, *PART43, *PART44, *PART45, *PART46, *PART47, *PART48, *PART49, *PART50, *PART58, *PART67, *PART68)}
