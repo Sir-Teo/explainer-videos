@@ -36,11 +36,13 @@ class Frontier(VoiceoverScene):
     def open_(self):
         cols = VGroup()
         for field, name, items in COLUMNS:
-            head = label(name, font_size=26, color=FIELD[field])
-            rows = VGroup(*[wrapped_label(t, 3.9, 17, WHITE) for t in items]).arrange(DOWN, aligned_edge=LEFT,
-                                                                                    buff=0.32)
+            head = label(name, font_size=28, color=FIELD[field])
+            rows = VGroup(*[wrapped_label(t, 4.15, 20, WHITE) for t in items]).arrange(DOWN, aligned_edge=LEFT,
+                                                                                     buff=0.42)
             cols.add(VGroup(head, rows).arrange(DOWN, aligned_edge=LEFT, buff=0.35))
-        cols.arrange(RIGHT, buff=0.45, aligned_edge=UP).move_to(DOWN * 0.25)
+        cols.arrange(RIGHT, buff=0.35, aligned_edge=UP).move_to(DOWN * 0.2)
+        if cols.width > 13.4:
+            cols.width = 13.4
         head = label(r"settled in the exam, \ open in the journals", font_size=30, color=E.ACCENT).to_edge(
             UP, buff=0.45)
         tag = published_tag(r"Saez, \ AEJ: Policy (2010); \ Rochet and Chon\'e, \ Econometrica (1998); \ Straub "

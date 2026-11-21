@@ -23,10 +23,10 @@ class Metrics4(VoiceoverScene):
         M = load("metrics4")
         S = np.array(M["Sigma"])
         lines = [
-            rf"Output growth and unemployment follow $y_t = A\,y_{{t-1}} + u_t$, \ with $A = {mat(M['A'])}$ and "
-            rf"$\mathbb{{E}}[u_t u_t'] = \Sigma = {mat(S)}$. \ There are two orthogonal shocks of unit variance, \ "
-            r"$u_t = B\,\varepsilon_t$: \ supply, \ which may move output's level for ever, \ and demand, \ which "
-            r"cannot.",
+            r"Output growth and unemployment follow $y_t = A\,y_{t-1} + u_t$, \ with",
+            rf"$A = {mat(M['A'])}, \qquad \mathbb{{E}}[u_t u_t'] = \Sigma = {mat(S)}$.",
+            r"There are two orthogonal shocks of unit variance, \ $u_t = B\,\varepsilon_t$: \ supply, \ which may "
+            r"move output's level for ever, \ and demand, \ which cannot.",
             r"(a) \ Count the unknowns and the restrictions. \quad (6 marks)",
             r"(b) \ Show how the long-run restriction identifies $B$. \quad (10 marks)",
             r"(c) \ Compute $B$, \ and say how well it is estimated from 400 quarters. \quad (9 marks)",
@@ -41,7 +41,8 @@ class Metrics4(VoiceoverScene):
             "does the zero go?"
         ) as vo:
             self.play(FadeIn(paper.box), FadeIn(paper.head), FadeIn(paper[1][1]), FadeIn(paper.rows[0]))
-            for mk, r_ in zip("abc", paper.rows[1:]):
+            self.play(FadeIn(paper.rows[1]), FadeIn(paper.rows[2]))
+            for mk, r_ in zip("abc", paper.rows[3:]):
                 vo.wait_until(mk)
                 self.play(FadeIn(r_, shift=RIGHT * 0.1))
         pause(self, 7.0)

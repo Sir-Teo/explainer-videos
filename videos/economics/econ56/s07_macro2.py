@@ -89,7 +89,7 @@ class Macro2(VoiceoverScene):
         xs = np.arange(D + 1)
         r_by_time = [res[D - k] for k in xs]
         h_by_time = [haz[D - k] for k in xs]
-        ax = plane([-0.6, D + 0.6], [0.7, 0.84], center=LEFT * 2.6 + UP * 0.6, x_length=7.2, y_length=3.0,
+        ax = plane([-0.6, D + 0.6], [0.7, 0.84], center=LEFT * 2.6 + UP * 0.85, x_length=7.2, y_length=3.0,
                    xticks=list(range(0, D + 1, 2)), yticks=[0.72, 0.76, 0.80], xlabel=r"",
                    ylabel=r"reservation wage", xfmt=lambda x: f"{x:.0f}", yfmt=lambda y: f"{y:.2f}", font_size=14)
         bars = VGroup()
@@ -101,7 +101,7 @@ class Macro2(VoiceoverScene):
                              stroke_width=1.8)
         fl = label(r"benefits for ever", font_size=15, color=GREY_B).next_to(ax.ax.c2p(D + 0.6, M["res_inf"]),
                                                                               RIGHT, buff=0.1)
-        axh = plane([-0.6, D + 0.6], [0.15, 0.3], center=LEFT * 2.6 + DOWN * 2.35, x_length=7.2, y_length=1.9,
+        axh = plane([-0.6, D + 0.6], [0.15, 0.3], center=LEFT * 2.6 + DOWN * 2.55, x_length=7.2, y_length=1.6,
                     xticks=list(range(0, D + 1, 2)), yticks=[0.2, 0.25], xlabel=r"periods since the spell began",
                     ylabel=r"chance of leaving", xfmt=lambda x: f"{x:.0f}", yfmt=lambda y: f"{y:.2f}",
                     font_size=14)
