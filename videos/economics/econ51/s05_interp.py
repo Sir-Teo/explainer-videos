@@ -7,7 +7,10 @@ KINDS = (("linear", r"linear, \ 40 points", VFI), ("cubic", r"cubic spline, \ 40
 
 
 def _one_in(e):
-    return f"{10 ** (-e):,.0f}".replace(",", "{,}")
+    v = 10 ** (-e)
+    if v >= 1e6:
+        return f"{v / 1e6:.1f} million"
+    return f"{v:,.0f}".replace(",", "{,}")
 
 
 class Interpolation(VoiceoverScene):
@@ -62,8 +65,9 @@ class Interpolation(VoiceoverScene):
                    xlabel=r"capital, \ share of steady state", ylabel=r"Euler-equation error, \ $\log_{10}$",
                    xfmt=lambda v: f"{v:.1f}", yfmt=lambda v: f"{v:.0f}", font_size=14)
         grid1000 = R["rows"][-1]["ee"]
-        ref = path(ax, grid1000["k"], grid1000["log10"], EGM, 1.2, smooth=False).set_opacity(0.45)
-        curves = VGroup(*[path(ax, It[k]["ee"]["k"], It[k]["ee"]["log10"], c, 1.6, smooth=False)
+        ref = path(ax, grid1000["k"], np.maximum(grid1000["log10"], -8), EGM, 1.2, smooth=False)
+        ref.set_stroke(opacity=0.45)
+        curves = VGroup(*[path(ax, It[k]["ee"]["k"], np.maximum(It[k]["ee"]["log10"], -8), c, 1.6, smooth=False)
                           for k, _, c in KINDS])
         side = VGroup(
             label(r"faint: \ the 1,000-point grid".replace(",", "{,}"), font_size=17, color=EGM),

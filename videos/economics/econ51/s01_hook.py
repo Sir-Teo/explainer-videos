@@ -26,7 +26,7 @@ class Hook(VoiceoverScene):
         quote = label(r"``something not even a Congressman could object to''", font_size=26, color=WHITE).next_to(
             words, DOWN, buff=0.5)
         caveat = label(r"his memory of the date has been questioned: \ Wilson became Secretary of Defense in 1953",
-                       font_size=16, color=GREY_B).to_edge(DOWN, buff=0.35)
+                       font_size=16, color=GREY_B).to_edge(DOWN, buff=0.8)
         tag = published_tag(r"Bellman, \ \emph{Eye of the Hurricane} (1984); \ Dreyfus, \ Operations Research (2002)",
                             corner=DR, font_size=11)
         with self.voiceover(

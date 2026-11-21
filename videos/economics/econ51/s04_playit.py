@@ -6,7 +6,10 @@ COLS = (ERR, POLICY, EGM)
 
 
 def _one_in(e):
-    return f"{10 ** (-e):,.0f}".replace(",", "{,}")
+    v = 10 ** (-e)
+    if v >= 1e6:
+        return f"{v / 1e6:.1f} million"
+    return f"{v:,.0f}".replace(",", "{,}")
 
 
 class PlayIt(VoiceoverScene):
@@ -31,7 +34,7 @@ class PlayIt(VoiceoverScene):
         key = VGroup(*[label(t, font_size=16, color=c) for t, c in (
             (rf"{R['rows'][0]['n']} points", COLS[0]), (rf"{R['rows'][1]['n']} points", COLS[1]),
             (r"1,000 points: \ indistinguishable".replace("1,000", "1{,}000"), COLS[2]))]).arrange(
-            DOWN, aligned_edge=LEFT, buff=0.12).next_to(ax, UP, buff=0.1).align_to(ax, LEFT)
+            DOWN, aligned_edge=LEFT, buff=0.12).move_to(ax.ax.c2p(1.22, 0.68))
         q = label(r"You must report the steady-state capital \\ to within 1\%. \ Which grid will do?", font_size=24,
                   color=E.ACCENT).to_edge(RIGHT, buff=0.5).shift(UP * 1.8)
         opts = VGroup()
@@ -40,7 +43,7 @@ class PlayIt(VoiceoverScene):
             b = RoundedRectangle(width=2.6, height=0.8, corner_radius=0.1, stroke_color=c, stroke_width=2,
                                  fill_color=c, fill_opacity=0.1)
             opts.add(VGroup(b, label(t, font_size=20, color=c).move_to(b)))
-        opts.arrange_in_grid(rows=2, cols=2, buff=0.25).next_to(q, DOWN, buff=0.45)
+        opts.arrange_in_grid(rows=2, cols=2, buff=0.25).next_to(q, DOWN, buff=0.45).align_to(q, RIGHT)
         ring = countdown().scale(0.55).next_to(opts, DOWN, buff=0.4)
         with self.voiceover(
             "Your turn. Value iteration chooses next year's capital from a grid of points. <bookmark mark='a'/> On "
@@ -108,18 +111,18 @@ class PlayIt(VoiceoverScene):
     def errors(self):
         R = load("grids")
         rows = R["rows"]
-        ax = plane([0.6, 1.4], [-4, 0], center=LEFT * 1.8 + DOWN * 0.3, x_length=7.0, y_length=4.4,
+        ax = plane([0.6, 1.4], [-4, 0], center=LEFT * 1.8 + UP * 0.1, x_length=7.0, y_length=4.2,
                    xticks=[0.6, 0.8, 1.0, 1.2, 1.4], yticks=[-4, -3, -2, -1, 0],
                    xlabel=r"capital, \ share of steady state", ylabel=r"Euler-equation error, \ $\log_{10}$",
                    xfmt=lambda v: f"{v:.1f}", yfmt=lambda v: f"{v:.0f}", font_size=14)
-        curves = VGroup(*[path(ax, r["ee"]["k"], r["ee"]["log10"], c, 1.6, smooth=False)
+        curves = VGroup(*[path(ax, r["ee"]["k"], np.maximum(r["ee"]["log10"], -4), c, 1.6, smooth=False)
                           for r, c in zip(rows, COLS)])
         side = VGroup(*[label(rf"{r['n']:,}".replace(",", "{,}") + rf" points: \ worst $10^{{{r['ee']['max']:.1f}}}$"
                               r" \\ one dollar in " + _one_in(r["ee"]["max"]), font_size=18, color=c)
                         for r, c in zip(rows, COLS)]).arrange(DOWN, aligned_edge=LEFT, buff=0.35)
         side.to_edge(RIGHT, buff=0.35)
         foot = label(r"fine enough depends on the question: \ measure the error, \ do not guess it", font_size=21,
-                     color=E.ACCENT).to_edge(DOWN, buff=0.35)
+                     color=E.ACCENT).to_edge(DOWN, buff=0.2)
         with self.voiceover(
             "A better yardstick than any one number is the Euler-equation error, which chapter eight builds "
             "properly. For now: at each capital stock, how far is the rule from satisfying the household's own "

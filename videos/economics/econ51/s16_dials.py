@@ -23,7 +23,7 @@ class Dials(VoiceoverScene):
                                                                           r"per point of interest", top=2.2,
                                 step=0.5, fmt="{:.2f}")
         meaning = wrapped_label(tex_safe(dial.meaning), 11.2, 15, GREY_A).to_edge(DOWN, buff=0.35)
-        tag = published_tag(r"explainer.economics.dials, \ checked 2026-11-19", corner=DR, font_size=12)
+        tag = published_tag(r"explainer.economics.dials, \ checked 2026-11-19", corner=UR, font_size=12)
         with self.voiceover(
             "Every solver in this part was fed numbers: a discount factor, a capital share, and an elasticity of "
             "intertemporal substitution of a half. The last is one of the Dials, from Part seven. <bookmark "

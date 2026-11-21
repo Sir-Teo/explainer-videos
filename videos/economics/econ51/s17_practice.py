@@ -87,15 +87,17 @@ class Practice(VoiceoverScene):
         cc.move_to(UP * 1.5)
         ax = plane([1969, 2023], [3, 11], center=DOWN * 2.1 + LEFT * 0.8, x_length=7.6, y_length=2.6,
                    xticks=[1970, 1990, 2010], yticks=[3, 7, 11], xfmt=lambda x: f"{x:.0f}",
-                   yfmt=lambda y: f"10^{{{y:.0f}}}", font_size=12)
+                   yfmt=lambda y: f"10^{{{y:.0f}}}", ylabel=r"transistors, \ log scale", font_size=14)
         t = np.array(F["t"])
         v = np.array(F["log10"])
         line = path(ax, t, v, VALUE, 2.4, smooth=False)
         rate = path(ax, [t[0], t[-1]], [v[0], v[0] + (t[-1] - t[0]) * np.log10(2) / 2], GREY_B, 1.4)
         rate = DashedVMobject(rate, num_dashes=30)
-        cap = label(rf"transistors per \\ microprocessor; \\ dashed: \ doubling \\ every two years \\ (measured: "
-                    rf"{F['doubling_years']:.1f})", font_size=12, color=GREY_A).next_to(ax, RIGHT, buff=0.35)
-        tag = published_tag(r"Moore (1965, 1975); \ Rupp (2022), \ via Our World in Data", corner=DL, font_size=11)
+        cap = VGroup(label(r"the largest \\ microprocessor", font_size=16, color=VALUE),
+                     label(r"dashed: \ doubling \\ every two years", font_size=16, color=GREY_B),
+                     label(rf"fitted: \ every \\ {F['doubling_years']:.1f} years", font_size=16, color=WHITE)).arrange(
+            DOWN, aligned_edge=LEFT, buff=0.22).next_to(ax, RIGHT, buff=0.45)
+        tag = published_tag(r"Moore (1965, 1975); \ Rupp (2022), \ via Our World in Data", corner=DR, font_size=11)
         with self.voiceover(
             "Called it? A forecast about the machines themselves. <bookmark mark='a'/> In April 1965 Gordon Moore, "
             "then director of research at Fairchild Semiconductor, plotted a handful of points and predicted in "
