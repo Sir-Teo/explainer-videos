@@ -55,8 +55,8 @@ class Island(VoiceoverScene):
             "the truth for a year and a half; for output its middle runs well below it. The set of mixing matrices "
             "that obey the signs is wide, and how the band looks depends on how the candidates were drawn, as "
             "Christiane Baumeister and James Hamilton warned. <bookmark mark='d'/> The outside instrument lands "
-            "near the truth, <bookmark mark='e'/> and so does the change in variance. One history is noisy, though; the instrument's output path wanders after "
-            "two years."
+            "near the truth, <bookmark mark='e'/> and so does the change in variance. One history is noisy, "
+            "though; the instrument's output path wanders after two years."
         ) as vo:
             self.play(FadeIn(axy), FadeIn(axp), FadeIn(zs), FadeIn(tag))
             vo.wait_until("a")
