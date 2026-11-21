@@ -481,3 +481,9 @@ publication, the copy that was read and the date the transcription was checked:
 | `scoring_58` | CBO's dynamic estimate of the House's 2025 bill; JCT's macroeconomic analysis of the 2017 act (Part 58) | 2026-11-21 |
 | `targets_58` | Goodhart's and Campbell's laws; England's four-hour target (Part 58) | 2026-11-21 |
 | `frontier58` | distributional weights in Circular A-4 (2023); the WELLBY; Kehoe's audit of the NAFTA models (Part 58) | 2026-11-21 |
+| `hamermesh_2013` | Hamermesh's methods, ages, women and co-authorship in the AER, JPE and QJE, 1963-2011, Tables 1, 2 and 4 (Part 67) | 2026-11-21 |
+| `camerer_2016` | Camerer et al.'s 18 laboratory replications, effect sizes, prediction markets and surveys (Part 67) | 2026-11-21 |
+| `replication_67` | the Open Science Collaboration, Camerer et al. (2018), Chang and Li, the Institute for Replication, Huntington-Klein et al. (Part 67) | 2026-11-21 |
+| `selection_67` | Brodeur et al. (2016, 2020), Andrews and Kasy, Ioannidis, Stanley and Doucouliagos, Doucouliagos and Stanley (Part 67) | 2026-11-21 |
+| `forecasts_67` | DellaVigna and Pope's 208 experts and 15 treatments (Part 67) | 2026-11-21 |
+| `remedies_67` | the JDE's pre-results review and the AEA Data Editor (Part 67) | 2026-11-21 |

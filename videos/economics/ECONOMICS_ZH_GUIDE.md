@@ -1838,3 +1838,21 @@ brackets on screen.
 | strategic trade policy; subsidy race | 战略性贸易政策；补贴竞赛 |
 | reserve currency; exorbitant privilege | 储备货币；过度特权 |
 | climate club; border carbon adjustment | 气候俱乐部；碳边境调节 |
+
+## Part 67
+
+| English | 中文 |
+|---|---|
+| replication; reproduction; robustness | 复制（重复研究）；可再现性；稳健性 |
+| publication bias; publication filter | 发表偏倚；发表筛选 |
+| specification search; p-hacking | 设定搜索；p值操纵 |
+| the garden of forking paths | 分岔路径花园 |
+| caliper test; z-curve | 卡尺检验；z值分布曲线 |
+| winner's curse (in replication) | （复制中的）赢家诅咒 |
+| selection model; meta-analysis; funnel plot | 选择模型；元分析；漏斗图 |
+| pre-analysis plan; registered report | 预分析计划；注册报告 |
+| multiple testing; false discovery rate | 多重检验；错误发现率 |
+| many analysts; specification curve | 多分析师研究；设定曲线 |
+| credibility revolution | 可信性革命 |
+| agent-based model; complexity economics | 基于主体的模型；复杂经济学 |
+| prediction market | 预测市场 |

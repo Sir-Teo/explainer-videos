@@ -10,7 +10,7 @@ the series leaves out.
 Both *Parts* columns are found, not typed. *Planned* lists the parts whose entry in
 [`SYLLABUS.md`](SYLLABUS.md) names the book or paper; *Built* lists the parts whose scenes, compute step or
 README cite it (a dot: none yet). Fuller notes (editions, chapters, what each source was used for) are in each
-part's README, under *Sources*. Built so far: Parts 1–66.
+part's README, under *Sources*. Built so far: Parts 1–67.
 
 ## 1. The textbook spine
 
@@ -33,7 +33,7 @@ part's README, under *Sources*. Built so far: Parts 1–66.
 | Jones | C. I. Jones, *Macroeconomics* (6th ed., 2023) | 20 | · |
 | Blanchard | O. Blanchard, *Macroeconomics* (8th ed., 2021) | 27, 32 | 20, 24, 27–28, 32, 39 |
 | Stock–Watson | J. Stock and M. Watson, *Introduction to Econometrics* (4th ed., 2019) | 4 | 4, 45, 49, 55, 57 |
-| Angrist–Pischke | J. Angrist and J.-S. Pischke, *Mostly Harmless Econometrics* (2009) | 4, 50, 67 | 4, 50 |
+| Angrist–Pischke | J. Angrist and J.-S. Pischke, *Mostly Harmless Econometrics* (2009) | 4, 50, 67 | 4, 50, 67 |
 | Osborne | M. Osborne, *An Introduction to Game Theory* (2004) | 11 | 11, 65 |
 | Krugman–Obstfeld–Melitz | P. Krugman, M. Obstfeld and M. Melitz, *International Economics* (12th ed., 2022) | 34–35 | 34–36 |
 | Mishkin | F. Mishkin, *The Economics of Money, Banking, and Financial Markets* (13th ed., 2022) | 26 | 31, 57, 65 |
@@ -245,14 +245,14 @@ part's README, under *Sources*. Built so far: Parts 1–66.
 | Model or result | Paper | Planned | Built |
 |---|---|---|---|
 | positive economics | Friedman (1953) | 8 | 1, 8 |
-| models as maps | Rodrik (2015), *Economics Rules* | 1, 67 | 1 |
+| models as maps | Rodrik (2015), *Economics Rules* | 1, 67 | 1, 67 |
 | identification by instruments | Wright (1928); Haavelmo (1944) | 4 | 4 |
 | the credibility of econometrics | Leamer (1983); LaLonde (1986) | 4 | 4 |
 | vector autoregressions | Sims (1980) | 55 | 55 |
 | dynamic discrete choice | Rust (1987) | 44, 54 | 54 |
 | generalized method of moments | Hansen (1982) | 54 | 54, 56 |
 | machine learning for causal questions | Chernozhukov and others (2018); Athey and Imbens (2019) | 64 | 21, 64 |
-| publication bias in economics | Brodeur and others (2016) | 67 | 66 |
+| publication bias in economics | Brodeur and others (2016) | 67 | 66–67 |
 
 ## 3. Every built part's reference card
 
@@ -387,6 +387,8 @@ part's README, under *Sources*. Built so far: Parts 1–66.
 **Part 65, *The Economics of AI*.** Books: Ajay Agrawal, Joshua Gans and Avi Goldfarb (eds), *The Economics of Artificial Intelligence: An Agenda* (2019); Daron Acemoglu and Simon Johnson, *Power and Progress* (2023); David Autor, "Why Are There Still So Many Jobs?", *Journal of Economic Perspectives* (2015). Papers: Keynes (1930); Zeira (1998); Acemoglu and Restrepo (2018, 2019, 2020, 2022); David (1990); Brynjolfsson, Rock and Syverson (2021); Noy and Zhang (2023); Dell'Acqua et al. (2023); Brynjolfsson, Li and Raymond (2025); Eloundou et al. (2024); Acemoglu (2024); Aghion, Jones and Jones (2019); Nordhaus (2021); Korinek and Suh (2024); Korinek and Vipra (2025); Guerreiro, Rebelo and Teles (2022); Varian (1980).
 
 **Part 66, *Geoeconomics and Industrial Policy*.** Books: Douglas Irwin, *Clashing over Commerce: A History of US Trade Policy* (2017); Kyle Bagwell and Robert Staiger, *The Economics of the World Trading System* (2002); Henry Farrell and Abraham Newman, *Underground Empire* (2023). Papers: Brander and Spencer (1985); Bagwell and Staiger (1999); Ossa (2014); Juhász (2018); Lane (2025); Amiti, Redding and Weinstein (2019); Fajgelbaum et al. (2020); Cavallo, Llamas and Vazquez (2025); Farrell and Newman (2019); Clayton, Maggiori and Schreger (2023); Alfaro and Chor (2023); Kalouptsidi (2018); Barwick, Kalouptsidi and Zahur (2025); Juhász, Lane and Rodrik (2024).
+
+**Part 67, *The Next Economics*.** Books: Garret Christensen, Jeremy Freese and Edward Miguel, *Transparent and Reproducible Social Science Research* (2019); Dani Rodrik, *Economics Rules* (2015); Joshua Angrist and Jörn-Steffen Pischke, *Mastering 'Metrics* (2015). Papers: Leamer (1983); Angrist and Pischke (2010); Hamermesh (2013); Christensen and Miguel (2018); Brodeur et al. (2016, 2020); Camerer et al. (2016, 2018); Andrews and Kasy (2019); Ioannidis, Stanley and Doucouliagos (2017); Huntington-Klein et al. (2021); DellaVigna and Pope (2018); Brock and Hommes (1997); Heckman and Moktan (2020); Akerlof (2020); Ludwig and Mullainathan (2024).
 
 ## 4. What the series leaves out
 

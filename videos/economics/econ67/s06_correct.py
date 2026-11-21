@@ -85,20 +85,21 @@ class Correct(VoiceoverScene):
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.35).next_to(ax.ax, RIGHT, buff=0.35)
         if key.get_right()[0] > 6.9:
             key.scale_to_fit_width(6.9 - key.get_left()[0])
+        over = 100 * (M["naive"] / M["theta"] - 1)
         tag = island_tag(r"a simulated meta-study: \ agora.field.meta\_literature \ and ak\_meta", corner=DL,
                          font_size=12)
         with self.voiceover(
             "Here is a meta-study built so the truth is known, shaped like the literature on the minimum wage. "
             f"<bookmark mark='a'/> {M['n']} published estimates of the elasticity of employment with respect to the "
-            "minimum wage, each plotted against its precision. Precise studies sit high, imprecise ones low. "
-            "Without selection this would be a symmetric funnel. <bookmark mark='b'/> It is not. Negative and "
-            "significant estimates were always published; the rest only three times in ten. In grey, a sample of "
-            "the studies that were run and never published: the funnel's missing side. <bookmark mark='c'/> The "
-            f"true average elasticity is {say_num(M['theta'], 3)}. The published average is "
-            f"{say_num(M['naive'], 3)}, {100 * (M['naive'] / M['theta'] - 1):.0f} percent more negative than the truth. <bookmark mark='d'/> Andrews and Kasy's model, "
-            f"fitted only to the published points, gives {say_num(M['ak']['theta'], 3)}, and finds that "
-            f"insignificant results were published {100 * M['ak']['b_ns']:.0f} percent as often as significant "
-            "ones, close to the thirty percent that was built in."
+            "minimum wage, each plotted against its precision. Precise studies sit high, imprecise ones low. Without "
+            "selection this would be a symmetric funnel. <bookmark mark='b'/> It is not. Negative and significant "
+            "estimates were always published; the rest only three times in ten. In grey, a sample of the studies that "
+            "were run and never published: the funnel's missing side. <bookmark mark='c'/> The true average "
+            f"elasticity is {say_num(M['theta'], 3)}. The published average is {say_num(M['naive'], 3)}, {over:.0f} "
+            "percent more negative than the truth. <bookmark mark='d'/> Andrews and Kasy's model, fitted only to the "
+            f"published points, gives {say_num(M['ak']['theta'], 3)}, and finds that insignificant results were "
+            f"published {100 * M['ak']['b_ns']:.0f} percent as often as significant ones, close to the thirty percent "
+            "that was built in."
         ) as vo:
             self.play(FadeIn(ax), FadeIn(tag))
             vo.wait_until("a")

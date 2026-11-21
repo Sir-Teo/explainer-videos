@@ -63,28 +63,39 @@ def caliper(z, width: float = 0.25, cut: float = 1.96) -> dict:
 
 
 def selection_mle(z, cut: float = 1.96) -> dict:
-    """Andrews and Kasy's step model for |z| with a unit standard error: the latent z is N(mu, 1 + s^2) (a normal
-    distribution of true effects plus sampling noise); a result with |z| < cut is published with relative probability
-    beta.  Maximum likelihood for (mu, s, beta) on the published |z|; beta near one means no selection."""
+    """Andrews and Kasy's step model for |z| with a unit standard error.  The latent z is a mixture: with weight w a
+    null effect, N(0, 1), otherwise N(mu, 1 + s^2) (a normal distribution of true effects plus sampling noise); a
+    result with |z| < cut is published with relative probability beta.  Maximum likelihood for (w, mu, s, beta) on
+    the published |z|; beta near one means no selection.  Search and the journals' filter both remove insignificant
+    results, so beta measures their joint effect."""
     from scipy import optimize, stats
 
     z = np.abs(np.asarray(z, float))
 
-    def nll(par):
-        mu, ls, lb = par
-        sd = np.sqrt(1 + np.exp(ls) ** 2)
-        beta = 1 / (1 + np.exp(-lb))
-        dens = stats.norm.pdf(z, mu, sd) + stats.norm.pdf(-z, mu, sd)        # folded
-        w = np.where(z < cut, beta, 1.0)
-        p_in = (stats.norm.cdf(cut, mu, sd) - stats.norm.cdf(-cut, mu, sd))
-        norm = beta * p_in + (1 - p_in)
-        return -np.sum(np.log(w * dens / norm + 1e-300))
+    def folded(x, m, sd):
+        return stats.norm.pdf(x, m, sd) + stats.norm.pdf(-x, m, sd)
 
-    res = optimize.minimize(nll, x0=[0.5, np.log(1.5), 0.0], method="Nelder-Mead",
-                            options={"maxiter": 4000, "xatol": 1e-6, "fatol": 1e-8})
-    mu, ls, lb = res.x
-    return {"mu": float(mu), "sd": float(np.sqrt(1 + np.exp(ls) ** 2)), "beta": float(1 / (1 + np.exp(-lb))),
-            "ok": bool(res.success)}
+    def inside(m, sd):
+        return stats.norm.cdf(cut, m, sd) - stats.norm.cdf(-cut, m, sd)
+
+    def nll(par):
+        lw, mu, ls, lb = par
+        w, beta = 1 / (1 + np.exp(-lw)), 1 / (1 + np.exp(-lb))
+        sd = np.sqrt(1 + np.exp(ls) ** 2)
+        dens = w * folded(z, 0.0, 1.0) + (1 - w) * folded(z, mu, sd)
+        p_in = w * inside(0.0, 1.0) + (1 - w) * inside(mu, sd)
+        wt = np.where(z < cut, beta, 1.0)
+        return -np.sum(np.log(wt * dens / (beta * p_in + 1 - p_in) + 1e-300))
+
+    best = None
+    for x0 in ([-1.0, 0.0, np.log(2.0), 0.0], [0.0, 0.5, np.log(1.5), -1.0], [1.0, 0.0, np.log(3.0), 1.0]):
+        res = optimize.minimize(nll, x0=x0, method="Nelder-Mead",
+                                options={"maxiter": 6000, "xatol": 1e-6, "fatol": 1e-8})
+        if best is None or res.fun < best.fun:
+            best = res
+    lw, mu, ls, lb = best.x
+    return {"w": float(1 / (1 + np.exp(-lw))), "mu": float(mu), "sd": float(np.sqrt(1 + np.exp(ls) ** 2)),
+            "beta": float(1 / (1 + np.exp(-lb))), "ok": bool(best.success)}
 
 
 def replicate(lit: dict, power: float = 0.9, seed: int = 671) -> dict:

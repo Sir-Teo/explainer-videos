@@ -62,8 +62,8 @@ class Complexity(VoiceoverScene):
                   font_size=19, color=PUB),
             label(r"each period, \ traders switch towards whichever rule did better, \ net of its cost; \ $\beta$: "
                   r"how fast", font_size=19, color=FIRST),
-            label(rf"here $b/B = {B['b_over_B']:.2f}$: \ naive traders alone would make the market explode", font_size=19,
-                  color=FAIL),
+            label(rf"here $b/B = {B['b_over_B']:.2f}$: \ naive traders alone would make the market explode",
+                  font_size=19, color=FAIL),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.25).next_to(eqs, DOWN, buff=0.55)
         tag = published_tag(r"Brock and Hommes, \ \emph{Econometrica} 65(5) (1997)", corner=DL, font_size=12)
         with self.voiceover(
@@ -104,7 +104,7 @@ class Complexity(VoiceoverScene):
         cb = [b_ for b_, _ in pts_]
         flip = vline(ax, B["beta_flip"], -1, 1, GREY_B, 1.6)
         fl = label(rf"$\beta = {B['beta_flip']:.2f}$", font_size=14, color=GREY_B).next_to(ax.ax.c2p(
-            B["beta_flip"], 1.0), UP, buff=0.05)
+            B["beta_flip"], 0.85), RIGHT, buff=0.08)
         # three paths on the right
         small = VGroup()
         for k, (bk, col) in enumerate(PATH_COL.items()):

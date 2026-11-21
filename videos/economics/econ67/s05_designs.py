@@ -74,7 +74,7 @@ class Designs(VoiceoverScene):
             "The simulated field was built with this in mind. <bookmark mark='a'/> Its researchers search more "
             "when the design allows it: one in ten after an insignificant trial, three in twenty after a "
             "discontinuity, three in ten with a difference in differences, nearly half with an instrument. Journals "
-            "treat every design alike. <bookmark mark='b'/> Draw each design's published results. The bump past "
+            "treat every design alike. <bookmark mark='b'/> In each design's published results, the bump past "
             f"1.96 grows from trials to instruments: the caliper ratio runs from {cal['RCT']:.1f} and "
             f"{cal['RDD']:.1f} to {cal['DiD']:.1f} and {cal['IV']:.1f}. <bookmark mark='c'/> Fit Andrews and Kasy's "
             "selection model, the subject of the next chapter, to each panel. It cannot tell a researcher's search "
@@ -86,9 +86,9 @@ class Designs(VoiceoverScene):
                       *[FadeIn(c[3]) for c in cells])
             vo.wait_until("a")
             self.play(*[Indicate(c[3], color=WHITE) for c in cells])
-            vo.wait_until("b")
             self.play(*[LaggedStart(*[GrowFromEdge(x, DOWN) for x in c[1]], lag_ratio=0.01) for c in cells],
                       run_time=2.5)
+            vo.wait_until("b")
             self.play(*[FadeIn(c[4]) for c in cells], FadeIn(note_))
             vo.wait_until("c")
             self.play(*[Indicate(c[4], color=WHITE) for c in cells])

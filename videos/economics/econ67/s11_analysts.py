@@ -49,7 +49,7 @@ class Analysts(VoiceoverScene):
     def teams(self):
         A = load("analysts")
         rows = A["rows"]
-        ax = plane([-0.05, 0.3], [0, 8], center=LEFT * 2.4 + DOWN * 0.2, x_length=7.2, y_length=5.0,
+        ax = plane([-0.05, 0.3], [0, 8], center=LEFT * 1.5 + DOWN * 0.2, x_length=6.4, y_length=5.0,
                    xticks=[0, 0.1, 0.2, 0.3], yticks=[], xlabel=r"estimated effect on earnings, \ log points",
                    xfmt=lambda v: f"{v:.1f}", font_size=14)
         zero = vline(ax, 0, 0, 8, GREY_C, 1.4)
@@ -73,6 +73,24 @@ class Analysts(VoiceoverScene):
             label(rf"ratio: \ {A['ratio']:.1f}", font_size=20, color=FAIL),
             label(r"every team defensible; \\ the choices are the uncertainty", font_size=17, color=E.ACCENT),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.25).next_to(key, DOWN, buff=0.5).align_to(key, LEFT)
+        facts = VGroup(
+            label(r"4,000 people, \ a training programme, \ earnings after", font_size=16, color=GREY_A),
+            label(r"it helps the young most, \ the old not at all", font_size=16, color=TRUE),
+            label(r"the young, \ the poor and some regions enrol more", font_size=16, color=GREY_A),
+            label(r"heavy tails, \ a few miscoded records, \ three in ten quit", font_size=16, color=GREY_A),
+        ).arrange(DOWN, aligned_edge=LEFT, buff=0.2)
+        choices = VGroup(
+            label(r"each analyst chooses:", font_size=17, color=E.ACCENT),
+            label(r"an age range", font_size=16, color=GREY_A),
+            label(r"whether to drop outliers", font_size=16, color=GREY_A),
+            label(r"age as a line or in bands", font_size=16, color=GREY_A),
+            label(r"income or log income; \ regions or not", font_size=16, color=GREY_A),
+            label(r"everyone who enrolled, \ or only those who finished", font_size=16, color=GREY_A),
+        ).arrange(DOWN, aligned_edge=LEFT, buff=0.16)
+        for g_ in (facts, choices):
+            g_.next_to(ax.ax, RIGHT, buff=0.4).align_to(ax.ax, UP)
+            if g_.get_right()[0] > 6.9:
+                g_.scale_to_fit_width(6.9 - g_.get_left()[0])
         tag = island_tag(r"a simulated dataset: \ agora.field.many\_analysts \ (4,000 people, \ the truth known)",
                          corner=DL, font_size=12)
         with self.voiceover(
@@ -88,10 +106,12 @@ class Analysts(VoiceoverScene):
         ) as vo:
             self.play(FadeIn(ax), FadeIn(zero), FadeIn(tag))
             vo.wait_until("a")
-            self.play(Create(truth), FadeIn(tl))
+            self.play(Create(truth), FadeIn(tl), LaggedStart(*[FadeIn(f_) for f_ in facts], lag_ratio=0.4),
+                      run_time=2.4)
             vo.wait_until("b")
-            self.play(FadeIn(key))
+            self.play(FadeOut(facts), LaggedStart(*[FadeIn(c_) for c_ in choices], lag_ratio=0.3), run_time=2.0)
             vo.wait_until("c")
+            self.play(FadeOut(choices), FadeIn(key))
             self.play(LaggedStart(*[FadeIn(l_) for l_ in lines], lag_ratio=0.25), run_time=2.4)
             vo.wait_until("d")
             self.play(LaggedStart(*[FadeIn(s_) for s_ in side], lag_ratio=0.3), run_time=1.8)

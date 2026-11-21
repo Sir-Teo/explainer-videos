@@ -69,14 +69,24 @@ class Hook(VoiceoverScene):
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.3).next_to(ax.ax, RIGHT, buff=0.3).shift(UP * 0.6)
         if side.get_right()[0] > 6.9:
             side.scale_to_fit_width(6.9 - side.get_left()[0])
+        rules = VGroup(
+            label(r"160,000 studies, \ true effects known \ (three in ten exactly zero)", font_size=16,
+                  color=GREY_A),
+            label(r"after an insignificant first try, \ some researchers search other specifications",
+                  font_size=16, color=FIRST),
+            label(r"journals publish every significant result \ and about a third of the rest", font_size=16,
+                  color=PUB),
+        ).arrange(DOWN, aligned_edge=LEFT, buff=0.18)
+        rules.next_to(ax.ax.c2p(2.7, 6000), DR, buff=0.0)
         tag = island_tag(r"a simulated field: \ agora.field.mixed\_field \ (160,000 studies, \ true effects known)",
                          corner=DL, font_size=12)
         with self.voiceover(
             "This series cannot reach into those journals' files, but it can build a field in which the truth is "
             "known. <bookmark mark='a'/> A hundred and sixty thousand studies, each with a true effect, which for "
-            "three in ten is exactly zero. Each researcher runs a first analysis. If it is not significant, some "
-            "try other reasonable specifications and report the first that works. Journals then publish every "
-            "significant result and about a third of the rest. <bookmark mark='b'/> Here is what gets published, "
+            "three in ten is exactly zero. <bookmark mark='a2'/> Each researcher runs a first analysis. If it is not "
+            "significant, some try other reasonable specifications and report the first that works. <bookmark "
+            "mark='a3'/> Journals then publish every significant result and about a third of the rest. <bookmark "
+            "mark='b'/> Here is what gets published, "
             f"{C['n_pub']:,} results. The camel's valley and its bump are both there. <bookmark mark='c'/> And here, "
             "in blue, is what the same studies found on their first try, rescaled to the same total: smooth, no "
             "valley, no bump. <bookmark mark='d'/> Just above the line against just below it, the published "
@@ -86,9 +96,14 @@ class Hook(VoiceoverScene):
         ) as vo:
             self.play(FadeIn(ax), FadeIn(line), FadeIn(llab), FadeIn(tag))
             vo.wait_until("a")
-            self.play(FadeIn(side[0][0]))
+            self.play(FadeIn(rules[0], shift=RIGHT * 0.1))
+            vo.wait_until("a2")
+            self.play(FadeIn(rules[1], shift=RIGHT * 0.1))
+            vo.wait_until("a3")
+            self.play(FadeIn(rules[2], shift=RIGHT * 0.1))
             vo.wait_until("b")
-            self.play(LaggedStart(*[GrowFromEdge(b, DOWN) for b in pub], lag_ratio=0.02), run_time=2.5)
+            self.play(FadeOut(rules), FadeIn(side[0][0]),
+                      LaggedStart(*[GrowFromEdge(b, DOWN) for b in pub], lag_ratio=0.02), run_time=2.5)
             vo.wait_until("c")
             self.play(Create(first), FadeIn(side[0][1]), run_time=2.0)
             vo.wait_until("d")

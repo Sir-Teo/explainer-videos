@@ -34,9 +34,9 @@ class Intermission(SoundScene):
         line = VMobject(stroke_color=PROD, stroke_width=3.0)
         line.set_points_as_corners([pts[0], pts[0]])
         marks = VGroup()
-        for when, txt, dx, dy in ((1916, r"the First World War", -6, 30), (1946, r"1946: \ the peak", 3, 22),
-                                  (1975, r"growth through the debt's long fall", 0, 40),
-                                  (2009, r"2008: \ the financial crisis", -12, 45)):
+        for when, txt, dx, dy in ((1916, r"the First World War", -8, 70), (1946, r"1946: \ the peak", 3, 22),
+                                  (1975, r"growth through the debt's long fall", 14, 80),
+                                  (2009, r"2008: \ the financial crisis", -12, 55)):
             k = int(np.argmin(np.abs(yrs - when)))
             lab = label(txt, font_size=14, color=GREY_A).move_to(ax.ax.c2p(yrs[k] + dx, film["debt"][k] + dy))
             lab.ft = film_time(float(yrs[k]))
@@ -66,9 +66,9 @@ class Intermission(SoundScene):
             self.wait(1.0)
             for m in [line, yr, *marks]:
                 m.clear_updaters()
-            stat = label(rf"years above 90\%: \ {film['n_hi']}, \ growth {film['g_hi']:.1f}\% a year; \ below: \ "
-                         rf"{film['g_lo']:.1f}\%; \ peacetime years above 90\%: \ {film['g_hi_peace']:.1f}\%",
-                         font_size=16, color=PROD).next_to(ax.ax, DOWN, buff=0.15)
+            stat = label(rf"years above 90\%: \ {film['n_hi']}, \ growth {film['g_hi']:.1f}\% a year \\ below 90\%: "
+                         rf"\ {film['g_lo']:.1f}\% \\ peacetime years above 90\%: \ {film['g_hi_peace']:.1f}\%",
+                         font_size=16, color=PROD).next_to(ax.ax.c2p(2025, 300), DL, buff=0.1)
             self.play(FadeIn(stat), run_time=0.8)
             self.wait(2.5)
             self.play(*[FadeOut(m) for m in (ax, ninety, nl, line, yr, marks, src, stag, stat)], run_time=1.0)

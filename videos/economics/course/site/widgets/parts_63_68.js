@@ -355,4 +355,90 @@
       note: "Part 66, chapters 2 to 4. Computed in your browser; nothing you do here is stored or sent.",
     });
   };
+  W.field = function (el) {
+    // Agora's field module (explainer.economics.agora.field.literature), in the browser: 20,000 studies with true
+    // effects (three in ten exactly zero, the rest N(0, 4) in z units), a first estimate with unit noise, a search
+    // over further specifications correlated 0.6 with the first after an insignificant try, and a journal that
+    // publishes every significant result and a share of the rest.  The same seeded draws for every setting.
+    var N = 20000, RHO = 0.6, ZP = 3.2415515655446;
+    function Phi(x) {
+      var t = 1 / (1 + 0.2316419 * Math.abs(x)), d = 0.3989422804014327 * Math.exp(-x * x / 2);
+      var p = d * t * (0.31938153 + t * (-0.356563782 + t * (1.781477937 + t * (-1.821255978 + t * 1.330274429))));
+      return x >= 0 ? 1 - p : p;
+    }
+    function simulate(s, k, pns) {
+      var r = QB.rng(67), bins = [], first = [], i, j;
+      for (i = 0; i < 50; i++) { bins.push(0); first.push(0); }
+      var below = 0, above = 0, b0 = 0, a0 = 0, nsig = 0, rep = 0, shrink = 0, npub = 0;
+      for (i = 0; i < N; i++) {
+        var real = r() < 0.7, zt = real ? 2 * r.normal() : 0, e0 = r.normal(), z0 = zt + e0, z = z0;
+        var srch = r(), pub = r(), alts = [];
+        for (j = 0; j < 20; j++) { alts.push(r.normal()); }
+        if (Math.abs(z0) < 1.96 && srch < s) {
+          var best = z0;
+          for (j = 0; j < k; j++) {
+            var alt = zt + RHO * e0 + Math.sqrt(1 - RHO * RHO) * alts[j];
+            if (Math.abs(alt) > Math.abs(best)) { best = alt; }
+            if (Math.abs(best) >= 1.96) { break; }
+          }
+          z = best;
+        }
+        var a = Math.abs(z), a1 = Math.abs(z0);
+        if (a1 < 5) { first[Math.floor(a1 * 10)] += 1; }
+        if (a1 >= 1.76 && a1 < 1.96) { b0 += 1; } else if (a1 >= 1.96 && a1 < 2.16) { a0 += 1; }
+        if (!(a >= 1.96 || pub < pns)) { continue; }
+        npub += 1;
+        if (a < 5) { bins[Math.floor(a * 10)] += 1; }
+        if (a >= 1.76 && a < 1.96) { below += 1; } else if (a >= 1.96 && a < 2.16) { above += 1; }
+        if (a >= 1.96) {
+          var signed = zt * (z > 0 ? 1 : -1), kk = ZP / a;
+          rep += 1 - Phi(1.96 - signed * kk);
+          shrink += signed / a;
+          nsig += 1;
+        }
+      }
+      return { bins: bins, first: first, caliper: above / Math.max(below, 1), caliper0: a0 / Math.max(b0, 1),
+               rep: rep / Math.max(nsig, 1), shrink: shrink / Math.max(nsig, 1), npub: npub, sig: nsig / npub };
+    }
+    QB.widget(el, {
+      title: "A field with search and selection",
+      sub: "Set how often researchers search after an insignificant first try, how many specifications they try, " +
+           "and how often journals publish insignificant results. Watch the published z-statistics, the bump at " +
+           "1.96 and how often the published significant results would replicate.",
+      panels: 2, height: 280,
+      controls: [
+        { k: "s", label: "Researchers who search", min: 0, max: 0.9, step: 0.1, value: 0.3,
+          fmt: function (x) { return Math.round(100 * x) + "%"; } },
+        { k: "k", label: "Specifications tried", min: 1, max: 20, step: 1, value: 5,
+          fmt: function (x) { return x.toFixed(0); } },
+        { k: "p", label: "Insignificant results published", min: 0.05, max: 1, step: 0.05, value: 0.35,
+          fmt: function (x) { return Math.round(100 * x) + "%"; } },
+      ],
+      draw: function (g, v, st) {
+        var R = simulate(v.s, v.k, v.p), xs = [], j, scale = R.npub / N, f2 = [];
+        for (j = 0; j < 50; j++) { xs.push(0.1 * j + 0.05); f2.push(R.first[j] * scale); }
+        st.R = R;
+        var top = 0;
+        for (j = 0; j < 50; j++) { top = Math.max(top, R.bins[j], f2[j]); }
+        var A1 = g[0].axes({ x: [0, 5], y: [0, top * 1.1], title: "published |z| (bars) and first tries (line)",
+                             xlabel: "|z|" });
+        A1.bars(xs, R.bins, 0.09, { color: function () { return "#F2C14E"; } });
+        A1.line(xs, f2, { color: "#7EC8F5", width: 2 });
+        A1.vline(1.96, { color: "#F25F5C" });
+        var A2 = g[1].axes({ x: [-0.5, 2.5], y: [0, 1], title: "replication and shrinkage", xlabel: "" });
+        A2.bars([0, 1, 2], [R.rep, R.shrink, R.sig], 0.6, { color: function (i) {
+          return ["#7BD88F", "#7EC8F5", "#C9A0FF"][i]; } });
+        A2.legend([["replicate at 90% planned power", "#7BD88F"], ["true effect / published", "#7EC8F5"],
+                   ["published that are significant", "#C9A0FF"]], "tr");
+      },
+      readout: function (v, st) {
+        var R = st.R;
+        return [["caliper ratio at 1.96, published", R.caliper.toFixed(2)],
+                ["the same, first tries", R.caliper0.toFixed(2)],
+                ["replication rate", Math.round(100 * R.rep) + "%"],
+                ["true effect as a share of the published", Math.round(100 * R.shrink) + "%"]];
+      },
+      note: "Part 67, chapters 0 to 5. Computed in your browser; nothing you do here is stored or sent.",
+    });
+  };
 })();

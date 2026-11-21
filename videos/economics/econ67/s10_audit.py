@@ -92,9 +92,9 @@ class Audit(VoiceoverScene):
             f"regression that neither camp admires, carry the series about equally: no kind is more than "
             f"{100 * max(vals) / tot:.0f} percent of the record."
         ) as vo:
-            self.play(FadeIn(ax), FadeIn(xl), FadeIn(tag))
+            self.play(FadeIn(ax), FadeIn(xl), FadeIn(tag), FadeIn(head))
             vo.wait_until("a")
-            self.play(FadeIn(head))
+            self.play(Indicate(head, color=WHITE, scale_factor=1.03))
             vo.wait_until("b")
             self.play(LaggedStart(*[GrowFromEdge(bb, DOWN) for bb in b[:3]], lag_ratio=0.3), FadeIn(nums[:3]),
                       run_time=1.8)

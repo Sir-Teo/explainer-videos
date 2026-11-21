@@ -122,18 +122,18 @@ class Remedies(VoiceoverScene):
                   font_size=20, color=E.ACCENT),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.25).next_to(tab, DOWN, buff=0.5)
         tag = island_tag(r"computed: \ 20,000 simulated studies", corner=DL, font_size=12)
+        no_, bf, bh = T["none"], T["Bonferroni"], T["Benjamini-Hochberg"]
+        p0, p1, p2 = (100 * x["any_false"] for x in (no_, bf, bh))
         with self.voiceover(
-            f"A plan also counts the tests. <bookmark mark='a'/> A trial with {F['m']} pre-registered outcomes, "
-            "three of them truly affected, each with eighty percent power. <bookmark mark='b'/> Test each at five "
-            f"percent and the trial finds {T['none']['true']:.1f} of the three real effects on average, but "
-            f"{100 * T['none']['any_false']:.0f} percent of the time it also reports at least one false one. "
-            "<bookmark mark='c'/> Bonferroni's rule, which divides the five percent by the number of tests, cuts "
-            f"that to {100 * T['Bonferroni']['any_false']:.0f} percent, and finds only "
-            f"{T['Bonferroni']['true']:.1f} real effects. <bookmark mark='d'/> Benjamini and Hochberg's rule "
-            "controls a different thing, the share of discoveries that are false, and sits between: "
-            f"{T['Benjamini-Hochberg']['true']:.1f} real effects, a false one {100 * T['Benjamini-Hochberg']['any_false']:.0f} "
-            "percent of the time. <bookmark mark='e'/> No rule is free; the choice depends on what each kind of "
-            "mistake costs."
+            f"A plan also counts the tests. <bookmark mark='a'/> A trial with {F['m']} pre-registered outcomes, three "
+            "of them truly affected, each with eighty percent power. <bookmark mark='b'/> Test each at five percent "
+            f"and the trial finds {no_['true']:.1f} of the three real effects on average, but {p0:.0f} "
+            "percent of the time it also reports at least one false one. <bookmark mark='c'/> Bonferroni's rule, "
+            f"which divides the five percent by the number of tests, cuts that to {p1:.0f} percent, "
+            f"and finds only {bf['true']:.1f} real effects. <bookmark mark='d'/> Benjamini and Hochberg's rule "
+            f"controls a different thing, the share of discoveries that are false, and sits between: {bh['true']:.1f} "
+            f"real effects, a false one {p2:.0f} percent of the time. <bookmark mark='e'/> No rule "
+            "is free; the choice depends on what each kind of mistake costs."
         ) as vo:
             self.play(FadeIn(head), FadeIn(tab[0]), FadeIn(tag))
             vo.wait_until("a")

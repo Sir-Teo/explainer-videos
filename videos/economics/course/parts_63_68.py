@@ -169,4 +169,45 @@ PARTS = [
         also=(("Agora's tradewar module", "explainer/economics/agora/tradewar.py"),
               ("The Data Room: FRED and CEPII's Gravity database", "explainer/economics/data")),
     ),
+    Part(
+        n=67, level="D", widget="field", prereq=(4, 16, 52, 54, 57, 64),
+        question="How much of what economics says is true, and how is the field changing the way it finds out?",
+        story="Brodeur and coauthors collected 50,000 test statistics from three top journals: a valley just below "
+              "the line of significance, a bump just above it. A simulated field with known true effects, "
+              "specification search and a publication filter reproduces the camel; the viewer bets on six "
+              "published results, and four replicate. Camerer and coauthors' 18 laboratory experiments (11 "
+              "replicated, effects two thirds as large) and the prediction markets that priced them; reproducing "
+              "papers, and Reinhart and Rogoff's question asked 48 ways; bunching by research design; Andrews and "
+              "Kasy's correction on a simulated meta-study. After an intermission of Britain's public debt since "
+              "1870, remedies, the empirical turn, the series' own Dials audited, many analysts and a 288-point "
+              "specification curve, Brock and Hommes's route to chaos, the profession, AI in the loop, a new "
+              "Dial, how to read a paper, and the Dials as a public good.",
+        handoff="Part 68, the last, turns from checking economics to making it: one research question carried from "
+                "idea to paper, and the series' accounts closed.",
+        outside="Part 4: identification and multiple testing; Part 16: the winner's curse; Part 32: Reinhart and "
+                "Rogoff; Parts 52 and 63: many agents and networks; Part 54: estimating models; Part 57: scoring "
+                "forecasts; Part 64: prediction-powered inference.",
+        objectives={
+            "U": ["Explain how specification search and publication selection shape a published literature.",
+                  "Distinguish reproduction, robustness, replication and generalization, and what each failure means.",
+                  "Explain why published effects shrink when studies are repeated."],
+            "M": ["Compute a caliper ratio and the false-positive rate of a search over k specifications.",
+                  "Write the likelihood of a selected literature and estimate its selection parameter.",
+                  "Build a specification curve and report the spread of analysts against the standard error."],
+            "D": ["Correct a meta-study for publication bias with study-specific standard errors.",
+                  "Size a replication for the true rather than the published effect.",
+                  "Derive the loss of stability in Brock and Hommes's switching cobweb."],
+            "I": ["Read a new paper with the field's prior: shrink its estimate and say what would change it."],
+        },
+        results=[
+            ("Search over k independent tests", r"P(\text{false positive}) = 1 - 0.95^{k}"),
+            ("A selected literature", r"f_{\text{pub}}(z) \propto p(z)\, f(z)"),
+            ("The winner's curse", r"E[Z \mid Z > c] = \mu + \frac{\phi(c - \mu)}{1 - \Phi(c - \mu)}"),
+            ("Brock and Hommes's flip", r"n^\ast = \frac{b - B}{2b}"),
+        ],
+        U=(0, 1, 2, 3, "s07_intermission", 7, 11, 13, 14), D=(4, 5, 6, 8, 9, 15), I=(10, 12),
+        also=(("Agora's field module", "explainer/economics/agora/field.py"),
+              ("The Data Room: Reinhart and Rogoff's panel and the Macrohistory Database",
+               "explainer/economics/data")),
+    ),
 ]
