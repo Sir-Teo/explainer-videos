@@ -286,14 +286,15 @@ def ad_power(spend_per_user: float = 0.10, roi: float = 0.25, sales_mean: float 
 # experiments at scale
 
 
-def peeking(days: int = 30, users_per_day: int = 2000, reps: int = 2000, seed: int = 61) -> dict:
+def peeking(days: int = 30, users_per_day: int = 2000, reps: int = 2000, keep: int = 12, seed: int = 61) -> dict:
     """A/A tests (no true effect) on a conversion rate of 5%, read every day; the share that ever show p < 0.05,
-    against the share that do on the last day only."""
+    against the share that do on the last day only.  The first ``keep`` tests' daily z statistics are returned."""
     rng = np.random.default_rng(seed)
     p = 0.05
     ever = 0
     last = 0
-    for _ in range(reps):
+    paths = []
+    for r in range(reps):
         a = rng.binomial(users_per_day, p, days).cumsum()
         b = rng.binomial(users_per_day, p, days).cumsum()
         n = users_per_day * np.arange(1, days + 1)
@@ -303,7 +304,9 @@ def peeking(days: int = 30, users_per_day: int = 2000, reps: int = 2000, seed: i
         sig = np.abs(z) > 1.96
         ever += sig.any()
         last += sig[-1]
-    return {"ever": ever / reps, "last": last / reps, "days": days}
+        if r < keep:
+            paths.append(z.tolist())
+    return {"ever": float(ever / reps), "last": float(last / reps), "days": days, "paths": paths}
 
 
 def cuped(n: int = 20000, rho: float = 0.7, effect: float = 0.02, reps: int = 400, seed: int = 61) -> dict:
