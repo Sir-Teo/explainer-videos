@@ -1309,6 +1309,20 @@ TRUTHS = {
         "nk": {"T": 200, "seed": 3, "draws": 6000, "burn": 1500},
         "regions": {"R": 48, "T": 40, "m_local": 1.5, "m_agg": 0.6, "seed": 55},
     },
+    58: {
+        # scoring the bill: the bridge across the strait against Bo's ferry (agora.appraisal.BRIDGE: demand for
+        # crossings 1.8 - 0.08 x generalized cost, millions a year; a fare of 4 and 40 minutes against a free bridge
+        # and 8 minutes; time at half a wage of 24 an hour; 0.24 and 0.05 deaths per million crossings; a value of a
+        # statistical life of 9 million; 300 million to build over three years, 1.2 a year to keep, a hundred years,
+        # traffic growing 1% a year for forty), its reference class (costs 28% over on average, s.d. 39 points;
+        # traffic 10% under, s.d. 25), the houses by the coast road (-0.7% a decibel), the beach's ten villages, the
+        # wage premium for risk (the same value of a statistical life), 400,000 taxpayers with a Pareto tail of 1.5
+        # above 150,000, a household survey of 6,000 records, a two-sector economy, a rule, an emergency department
+        "bridge": "agora.appraisal.BRIDGE",
+        "reference": {"cost": (1.28, 0.39), "traffic": (0.90, 0.25), "n": 60},
+        "noise_beta": -0.007, "vsl": 9.0, "pareto": 1.5, "eti": 0.25, "top_rate": (0.40, 0.45),
+        "seed": 58,
+    },
 }
 
 

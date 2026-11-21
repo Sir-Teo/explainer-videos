@@ -4983,6 +4983,145 @@ FRONTIER50 = Table(
     data={"mothers": 1000, "high": 333, "low": 20, "age": 4, "n_age4": 891, "quebec_max": 8000, "quebec_rise": 25},
 )
 
+# ---------------------------------------------------------------------------
+# Part 58
+
+FLOOD_1936 = Table(
+    key="flood_1936",
+    cite="Flood Control Act of June 22, 1936, ch. 688, section 1, 49 Stat. 1570, codified at 33 U.S.C. 701a "
+         "(declaration of policy)",
+    tag="Flood Control Act of 1936, \\ 49 Stat. 1570",
+    where="section 1, the declaration of policy",
+    read="the section as codified at 33 U.S.C. 701a (Cornell's Legal Information Institute and Justia) and the "
+         "University of Utah's copy of the statute",
+    checked="2026-11-21",
+    data={"text": "the Federal Government should improve or participate in the improvement of navigable waters or "
+                  "their tributaries, including watersheds thereof, for flood-control purposes if the benefits to "
+                  "whomsoever they may accrue are in excess of the estimated costs, and if the lives and social "
+                  "security of people are otherwise adversely affected",
+          "short": "if the benefits to whomsoever they may accrue are in excess of the estimated costs"},
+)
+VALUES_58 = Table(
+    key="values_58",
+    cite="U.S. Department of Transportation, Revised Departmental Guidance on Valuation of Travel Time in Economic "
+         "Analysis (September 2016); NOU 1997:27, Nytte-kostnadsanalyser (Norway); HM Treasury, Wellbeing Guidance "
+         "for Appraisal: Supplementary Green Book Guidance (July 2021); OIRA (J. Graham), memorandum to the "
+         "President's Management Council, 30 May 2003",
+    tag="US DOT (2016); \\ NOU 1997:27; \\ HM Treasury (2021); \\ OIRA (2003)",
+    where="personal local travel valued at 50% of median hourly household income (35% and 60% for sensitivity); "
+          "Norway's recommended marginal cost of public funds of 1.2, the practice since; a WELLBY (one point of "
+          "life satisfaction for a year) at 13,000 pounds in 2019 prices (10,000 to 16,000); an alternative estimate "
+          "for the Clear Skies proposal cut the value of a statistical life for older people by 37%, and agencies "
+          "were told in May 2003 to stop using that adjustment",
+    read="DOT's and FHWA's summaries of the 2016 guidance; Statistics Norway's 2015 report on the recommendation; "
+         "the Treasury's guidance and the OECD's note on it; the Yale law review account and the EHP article on the "
+         "senior discount",
+    checked="2026-11-21",
+    data={"vot_share": 0.50, "vot_lo": 0.35, "vot_hi": 0.60, "mcf_norway": 1.2, "wellby": 13000, "wellby_lo": 10000,
+          "wellby_hi": 16000, "senior_cut": 37},
+)
+STATED_58 = Table(
+    key="stated_58",
+    cite="W. H. Desvousges et al., \"Measuring Natural Resource Damages with Contingent Valuation: Tests of Validity "
+         "and Reliability\", in J. A. Hausman (ed.), Contingent Valuation: A Critical Assessment (North-Holland, "
+         "1993); "
+         "R. T. Carson et al., \"Contingent Valuation and Lost Passive Use: Damages from the Exxon Valdez Oil Spill\", "
+         "Environmental and Resource Economics 25: 257-286 (2003); K. Arrow et al., Report of the NOAA Panel on "
+         "Contingent Valuation (1993); P. Diamond and J. Hausman, \"Contingent Valuation: Is Some Number Better than "
+         "No Number?\", Journal of Economic Perspectives 8(4) (1994)",
+    tag="Desvousges et al. (1993); \\ Carson et al. (2003); \\ the NOAA panel (1993)",
+    where="average willingness to pay to keep 2,000, 20,000 or 200,000 migrating birds from dying in oil ponds: $80, "
+          "$78, $88; the Exxon Valdez survey put Americans' willingness to pay to prevent another such spill at about "
+          "$3 billion; the NOAA panel (Arrow, Solow and others) judged careful surveys usable, with a scope test among "
+          "its guidelines",
+    read="summaries of the bird study in the scope-insensitivity literature and Carson's retrospective",
+    checked="2026-11-21",
+    data={"birds": (2000, 20000, 200000), "wtp": (80, 78, 88), "valdez": 3.0},
+)
+DISCOUNT_58 = Table(
+    key="discount_58",
+    cite="HM Treasury, The Green Book (2003 to 2026 editions) and Green Book Discount Rate Review: HM Treasury "
+         "response (28 October 2026); OMB Circular A-4 (17 September 2003), its revision (9 November 2023) and OMB "
+         "memorandum M-25-15 (12 February 2025); M. Drupp, M. Freeman, B. Groom and F. Nesje, \"Discounting "
+         "Disentangled\", American Economic Journal: Economic Policy 10(4): 109-134 (2018)",
+    tag="HM Treasury (2003, 2026); \\ OMB Circular A-4 (2003, 2023); \\ Drupp et al. (2018)",
+    where="the Green Book's social time preference rate, 3.5% = 0.5% pure time preference + 1.0% catastrophe risk + "
+          "1.0 x 2.0% growth, for years 0-30, then 3.0% to year 75, 2.5% to 125, 2.0% to 200, 1.5% to 300 and 1.0%; "
+          "in October 2026 the Treasury accepted a headline rate of 3.00% for years 1 to 30; OMB: 7% and 3% (2003), "
+          "2.0% (2023), the 2003 circular reinstated in February 2025; over 200 experts: mean 2.27%, median 2%, over "
+          "90% content with 1-3%",
+    read="the Treasury's response page and its press coverage; the GW Regulatory Studies Center's and the Federal "
+         "Register's accounts of A-4; the LSE Grantham summary of Drupp et al.",
+    checked="2026-11-21",
+    data={"stpr": (0.5, 1.0, 1.0, 2.0), "gb_2003": 3.5, "gb_2026": 3.0, "omb_2003": (7.0, 3.0), "omb_2023": 2.0,
+          "drupp_mean": 2.27, "drupp_median": 2.0},
+)
+MEGAPROJECTS = Table(
+    key="megaprojects",
+    cite="B. Flyvbjerg, M. Skamris Holm and S. Buhl, \"Underestimating Costs in Public Works Projects: Error or "
+         "Lie?\", Journal of the American Planning Association 68(3): 279-295 (2002); B. Flyvbjerg, M. K. Skamris Holm "
+         "and S. L. Buhl, \"How (In)accurate Are Demand Forecasts in Public Works Projects?\", Journal of the American "
+         "Planning Association 71(2): 131-146 (2005); B. Flyvbjerg, N. Bruzelius and W. Rothengatter, Megaprojects "
+         "and Risk (Cambridge, 2003)",
+    tag="Flyvbjerg, \\ Holm and Buhl (2002, 2005)",
+    where="258 transport projects worth $90 billion, nine in ten over budget; cost escalation in constant prices: rail "
+          "44.7% (s.d. 38.4, 58 projects), bridges and tunnels 33.8% (s.d. 62.4, 33), roads 20.4% (s.d. 29.9, 167), "
+          "28% for all; passenger forecasts for rail overestimated by 106% on average; for half of road projects "
+          "traffic differs from the forecast by more than 20%; the Channel Tunnel about 80% over budget",
+    read="the papers' abstracts and tables as quoted in Flyvbjerg's later papers and the World Bank working paper",
+    checked="2026-11-21",
+    data={"rail": (44.7, 38.4, 58), "fixed": (33.8, 62.4, 33), "road": (20.4, 29.9, 167), "all": (28, 39, 258),
+          "rail_demand": 106, "chunnel": 80},
+)
+SCORING_58 = Table(
+    key="scoring_58",
+    cite="Congressional Budget Office, dynamic estimate of H.R. 1, the One Big Beautiful Bill Act, as passed by "
+         "the House (2025), as summarized by the Committee for a Responsible Federal Budget; Joint Committee on "
+         "Taxation, Macroeconomic "
+         "Analysis of the Conference Agreement for H.R. 1, the \"Tax Cuts and Jobs Act\" (JCX-69-17, 22 December 2017)",
+    tag="CBO (2025); \\ JCT (2017)",
+    where="CBO's dynamic estimate of the House-passed 2025 bill: deficits about $0.4 trillion larger than its "
+          "conventional estimate over ten years, mainly because higher interest rates raise the cost of all federal "
+          "debt; JCT on the 2017 act: output about 0.7% higher on average over the decade, recovering part of the "
+          "cost, not most of it",
+    read="CRFB's summaries of CBO's letters; the Tax Policy Center's and CRFB's accounts of JCX-69-17",
+    checked="2026-11-21",
+    data={"obbba_extra": 0.4, "tcja_gdp": 0.7},
+)
+TARGETS_58 = Table(
+    key="targets_58",
+    cite="C. A. E. Goodhart, \"Problems of Monetary Management: The U.K. Experience\" (1975); D. T. Campbell, "
+         "\"Assessing the Impact of Planned Social Change\", Evaluation and Program Planning 2(1): 67-90 (1979); "
+         "G. Bevan and C. Hood, \"What's Measured Is What Matters: Targets and Gaming in the English Public Health "
+         "Care System\", Public Administration 84(3): 517-538 (2006)",
+    tag="Goodhart (1975); \\ Campbell (1979); \\ Bevan and Hood (2006)",
+    where="Goodhart: any observed statistical regularity will tend to collapse once pressure is placed upon it for "
+          "control purposes; Campbell: the more a quantitative social indicator is used for social decision-making, "
+          "the more subject it is to corruption pressures; England's four-hour target in emergency departments (98% "
+          "of patients from January 2005): patients waiting over four hours fell from 23% in 2002 to 5.3% in 2004, "
+          "with reports of patients moved just before the deadline",
+    read="the laws as commonly quoted; Bevan and Hood's paper and later studies of the target",
+    checked="2026-11-21",
+    data={"before": 23, "after": 5.3, "target": 98},
+)
+FRONTIER58 = Table(
+    key="frontier58",
+    cite="OMB Circular A-4 (2023), section on distributional effects; HM Treasury, Wellbeing Guidance for Appraisal "
+         "(2021); N. Hendren and B. Sprung-Keyser (2020); T. J. Kehoe, \"An Evaluation of the Performance of Applied "
+         "General Equilibrium Models on the Impact of NAFTA\", in Frontiers in Applied General Equilibrium Modeling "
+         "(Cambridge, 2005)",
+    tag="OMB (2023); \\ HM Treasury (2021); \\ Kehoe (2005)",
+    where="weights proportional to (median income / group income) to the power 1.4; the WELLBY; the applied general "
+          "equilibrium models of NAFTA underestimated its effect on trade and their sectoral predictions were "
+          "uncorrelated with what happened, the largest growth coming in goods hardly traded before",
+    read="the circular's summaries, the Treasury's guidance, the Minneapolis Fed staff report's abstract and the "
+         "Dallas Fed's account",
+    checked="2026-11-21",
+    data={"eps": 1.4},
+)
+
+PART58 = (FLOOD_1936, VALUES_58, STATED_58, DISCOUNT_58, MEGAPROJECTS, SCORING_58, TARGETS_58, FRONTIER58)
+
 PART50 = (CTC_2021, ALLOWANCE_50, CREDITS_50, FRONTIER50)
 
 PART49 = (BECKER_1968, POLICE_49, CERTAINTY_49, MURDER_1950, FAMILY_49, FERTILITY_49, BARGAIN_49, SCHOOLS_49,
@@ -5005,4 +5144,4 @@ PART41 = (LAFFER_1974, HARBERGER_1962, RAMSEY_1927, MIRRLEES_1971, DIAMOND_SAEZ_
           CLK_2009, CAPITAL_TAX, HAVENS, EVASION, FRONTIER41, TCJA_2017)
 PART7 = (BERNOULLI_1738, SAMUELSON_1937, ALLAIS_1953, ELLSBERG_1961, RABIN_2000, THALER_1981, HOLT_LAURY_2005,
          HAYDEN_PLATT_2009, MADRIAN_SHEA_2001, THALER_BENARTZI_2004, BARSKY_1997, POST_2008, MEHRA_PRESCOTT_1985)
-ALL = {t.key: t for t in (*PART1, *PART3, *PART4, *PART5, *PART6, *PART7, *PART8, *PART9, *PART10, *PART11, *PART12, *PART13, *PART14, *PART15, *PART16, *PART17, *PART18, *PART19, *PART21, *PART22, *PART25, *PART26, *PART35, *PART36, *PART37, *PART38, *PART39, *PART40, *PART41, *PART42, *PART43, *PART44, *PART45, *PART46, *PART47, *PART48, *PART49, *PART50)}
+ALL = {t.key: t for t in (*PART1, *PART3, *PART4, *PART5, *PART6, *PART7, *PART8, *PART9, *PART10, *PART11, *PART12, *PART13, *PART14, *PART15, *PART16, *PART17, *PART18, *PART19, *PART21, *PART22, *PART25, *PART26, *PART35, *PART36, *PART37, *PART38, *PART39, *PART40, *PART41, *PART42, *PART43, *PART44, *PART45, *PART46, *PART47, *PART48, *PART49, *PART50, *PART58)}

@@ -35,7 +35,7 @@ from explainer.economics import calls, data, dials  # noqa: E402
 from explainer.economics.data import tables  # noqa: E402
 
 LOADERS = {"maddison_world": "maddison2023", "maddison_country": "maddison2023", "maddison_year": "maddison2023",
-           "fred": "fred", "spf": "spf", "spf_long": "spf_long", "pinksheet": "pinksheet", "psd_coffee": "psd_coffee", "wdi": "wdi",
+           "fred": "fred", "spf": "spf", "spf_long": "spf_long", "cbo": "cbo", "pinksheet": "pinksheet", "psd_coffee": "psd_coffee", "wdi": "wdi",
            "hdr": "hdr", "rtdsm": "rtdsm", "warheads": "warheads", "so2": "so2", "marriage": "marriage",
            "democracy": "democracy", "millennium": "millennium", "longrun": "longrun", "pwt": "pwt", "ajr": "ajr",
            "shiller": "shiller",

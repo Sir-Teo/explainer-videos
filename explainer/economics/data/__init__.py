@@ -541,6 +541,7 @@ HLW_URL = ("https://www.newyorkfed.org/medialibrary/media/research/economists/wi
            "Holston_Laubach_Williams_current_estimates.xlsx")
 GB_URL = ("https://www.philadelphiafed.org/-/media/FRBP/Assets/Surveys-And-Data/greenbook-data/documentation/"
           "GBweb_Row_Format.xlsx")
+CBO_URL = "https://raw.githubusercontent.com/US-CBO/eval-projections/main/output_data/{}.csv"
 PINK_URL = ("https://thedocs.worldbank.org/en/doc/74e8be41ceb20fa0da750cda2f6b9e4e-0050012026/related/"
             "CMO-Historical-Data-Monthly.xlsx")
 
@@ -595,6 +596,24 @@ DATASETS = {
         "licence": "free to use with attribution to the Federal Reserve Bank of Philadelphia",
         "vintage": "2026-11-21",
         "files": ("spf_rgdp_growth.csv", "spf_recess.csv"),
+    },
+    "cbo": {
+        "title": "The Congressional Budget Office's projections of the federal deficit, every baseline from 1984, with "
+                 "the outcomes and CBO's summary statistics of its errors in deficit and revenue projections",
+        "publisher": "Congressional Budget Office (US-CBO/eval-projections on GitHub)",
+        "citation": "Congressional Budget Office, Evaluating CBO's Projections of Components of the Federal Budget "
+                    "(github.com/US-CBO/eval-projections), output_data: deficit_projection_errors.csv, "
+                    "deficit_actuals_pct_GDP.csv, deficit_ and revenue_projection_errors_summary_stats.csv, "
+                    "accompanying "
+                    "An Evaluation of CBO's Projections of Deficits and Debt From 1984 to 2023 and The Accuracy of "
+                    "CBO's Budget Projections for Fiscal Year 2025; retrieved 2026-11-21",
+        "short": "CBO, eval-projections",
+        "url": CBO_URL,
+        "licence": "a work of the United States government, in the public domain",
+        "units": "billions of dollars (projections, outcomes, GDP); errors in percent of GDP (deficits) or percent of "
+                 "the outcome (revenues), after removing the estimated effects of laws enacted after each baseline",
+        "vintage": "2026-11-21",
+        "files": ("cbo_deficit_projections.csv", "cbo_deficit_actuals.csv", "cbo_error_stats.csv"),
     },
     "pinksheet": {
         "title": "World Bank Commodity Price Data (The Pink Sheet), monthly prices",
@@ -1687,6 +1706,24 @@ def spf_long() -> dict:
 
 
 @functools.lru_cache(maxsize=None)
+def cbo() -> dict:
+    """CBO's deficit projections: ``{"projections": [{"baseline": "1984-02-01", "fiscal_year", "year_number",
+    "projected", "actual", "gdp", "adjusted", "error_pct_gdp"}], "actual": {fiscal year: surplus or deficit (-) in
+    percent of GDP}, "stats": {(component, year number): {"n", "mean", "mae", "rmse", "spread"}}}``.  Dollars are
+    billions; a deficit is negative.  ``adjusted`` is the projection with the estimated effects of laws enacted after
+    the baseline added, and ``error_pct_gdp`` is the outcome minus that, in percent of the year's GDP (positive: a
+    smaller deficit than projected).  Revenue statistics are in percent of the outcome."""
+    rows = [{"baseline": r["baseline"], "fiscal_year": int(r["fiscal_year"]), "year_number": int(r["year_number"]),
+             "projected": _num(r["projected"]), "actual": _num(r["actual"]), "gdp": _num(r["gdp"]),
+             "adjusted": _num(r["adjusted"]), "error_pct_gdp": _num(r["error_pct_gdp"])}
+            for r in _read(HERE / "cbo_deficit_projections.csv")]
+    actual = {int(r["fiscal_year"]): _num(r["pct_gdp"]) for r in _read(HERE / "cbo_deficit_actuals.csv")}
+    stats = {(r["component"], int(r["year_number"])): {k: _num(r[k]) for k in ("n", "mean", "mae", "rmse", "spread")}
+             for r in _read(HERE / "cbo_error_stats.csv")}
+    return {"projections": rows, "actual": actual, "stats": stats}
+
+
+@functools.lru_cache(maxsize=None)
 def pinksheet(key: str) -> dict:
     """A Pink Sheet monthly price series: ``{"month": ["1960-01", ...], "value": [...], "name", "units"}`` (nominal
     US dollars; NaN where the sheet has no price).  ``key`` is one of :data:`PINK_COLUMNS`' keys ("arabica", "oil",
@@ -2345,6 +2382,44 @@ def refresh_spf_long() -> None:
             r = tabs["median_recess_level"][(y, q)]
             vals = [r.get(f"recess{k}") for k in range(1, 6)]
             w.writerow([f"{y}Q{q}", *[_fmt(v) if isinstance(v, (int, float)) else "" for v in vals]])
+
+
+def refresh_cbo() -> None:
+    """Part 58's extract of CBO's evaluation files: every deficit projection with its outcome and CBO's
+    legislation-adjusted error, the outcomes as a share of GDP, and the summary statistics for total deficits and
+    total revenues."""
+    raw = {}
+    for name in ("deficit_projection_errors", "deficit_actuals_pct_GDP", "deficit_projection_errors_summary_stats",
+                 "revenue_projection_errors_summary_stats"):
+        path = RAW / f"cbo_{name}.csv"
+        if not path.exists():
+            _download(CBO_URL.format(name), path)
+        raw[name] = _read(path)
+    with open(HERE / "cbo_deficit_projections.csv", "w", newline="", encoding="utf-8") as f:
+        w = csv.writer(f)
+        w.writerow(["baseline", "fiscal_year", "year_number", "projected", "actual", "gdp", "adjusted",
+                    "error_pct_gdp"])
+        for r in raw["deficit_projection_errors"]:
+            if r["category"] != "Total":
+                continue
+            w.writerow([r["baseline_date"], r["projected_fiscal_year"], r["projected_year_number"], _fmt(r["value"]),
+                        _fmt(r["actual_value"]), _fmt(r["GDP"]), _fmt(r["adjusted_projection"]),
+                        _fmt(r["projection_error_pct_GDP"])])
+    with open(HERE / "cbo_deficit_actuals.csv", "w", newline="", encoding="utf-8") as f:
+        w = csv.writer(f)
+        w.writerow(["fiscal_year", "actual", "gdp", "pct_gdp"])
+        for r in raw["deficit_actuals_pct_GDP"]:
+            w.writerow([r["fiscal_year"], _fmt(r["actual_value"]), _fmt(r["GDP"]), _fmt(r["actuals_pct_GDP"])])
+    with open(HERE / "cbo_error_stats.csv", "w", newline="", encoding="utf-8") as f:
+        w = csv.writer(f)
+        w.writerow(["component", "year_number", "years", "n", "mean", "mae", "rmse", "spread"])
+        for name in ("deficit_projection_errors_summary_stats", "revenue_projection_errors_summary_stats"):
+            for r in raw[name]:
+                if r["category"] != "Total":
+                    continue
+                w.writerow([r["component"], r["projected_year_number"], r["projection_year_range"],
+                            r["number_of_projections"], r["average_error"], r["average_absolute_error"], r["RMSE"],
+                            r["two_thirds_spread"]])
 
 
 def refresh_pinksheet() -> None:
@@ -3977,7 +4052,7 @@ def refresh_oil_production() -> None:
             w.writerow([r["entity"], r["year"], _fmt(round(float(r["oil_production_twh"]), 3))])
 
 
-REFRESH = {"draft1970": refresh_draft1970, "ajr": refresh_ajr, "maddison2023": refresh_maddison, "fred": refresh_fred, "spf": refresh_spf,
+REFRESH = {"cbo": refresh_cbo, "draft1970": refresh_draft1970, "ajr": refresh_ajr, "maddison2023": refresh_maddison, "fred": refresh_fred, "spf": refresh_spf,
            "pinksheet": refresh_pinksheet, "psd_coffee": refresh_psd_coffee, "wdi": refresh_wdi, "hdr": refresh_hdr,
            "rtdsm": refresh_rtdsm, "warheads": refresh_warheads, "census_cbsa": refresh_census_cbsa,
            "njmin": refresh_njmin, "wooldridge": refresh_wooldridge,

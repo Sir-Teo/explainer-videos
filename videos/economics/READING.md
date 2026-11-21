@@ -10,7 +10,7 @@ the series leaves out.
 Both *Parts* columns are found, not typed. *Planned* lists the parts whose entry in
 [`SYLLABUS.md`](SYLLABUS.md) names the book or paper; *Built* lists the parts whose scenes, compute step or
 README cite it (a dot: none yet). Fuller notes (editions, chapters, what each source was used for) are in each
-part's README, under *Sources*. Built so far: Parts 1–57.
+part's README, under *Sources*. Built so far: Parts 1–58.
 
 ## 1. The textbook spine
 
@@ -39,7 +39,7 @@ part's README, under *Sources*. Built so far: Parts 1–57.
 | Mishkin | F. Mishkin, *The Economics of Money, Banking, and Financial Markets* (13th ed., 2022) | 26 | 31, 57 |
 | Cabral | L. Cabral, *Introduction to Industrial Organization* (2nd ed., 2017) | 12–13 | 12–13 |
 | Borjas | G. Borjas, *Labor Economics* (8th ed., 2020) | 38 | 38 |
-| Gruber | J. Gruber, *Public Finance and Public Policy* (7th ed., 2022) | 15, 41–42, 50 | 7, 15, 41–42, 49–51 |
+| Gruber | J. Gruber, *Public Finance and Public Policy* (7th ed., 2022) | 15, 41–42, 50 | 7, 15, 41–42, 49–51, 58 |
 | Ray | D. Ray, *Development Economics* (1998) | 46 | 46 |
 | Weil | D. Weil, *Economic Growth* (3rd ed., 2013) | 7, 19 | 3, 7, 19–21, 23, 57 |
 
@@ -108,7 +108,7 @@ part's README, under *Sources*. Built so far: Parts 1–57.
 | Short name | Book | Planned | Built |
 |---|---|---|---|
 | Blinder | A. Blinder, *Central Banking in Theory and Practice* (1998) | 31 | 30–31, 39 |
-| Boardman | A. Boardman and others, *Cost-Benefit Analysis* (5th ed., 2018) | 50, 58 | 50 |
+| Boardman | A. Boardman and others, *Cost-Benefit Analysis* (5th ed., 2018) | 50, 58 | 50, 58 |
 | Davis–Garcés | P. Davis and E. Garces, *Quantitative Techniques for Competition and Antitrust Analysis* (2010) | 59 | · |
 | Talluri–van Ryzin | K. Talluri and G. van Ryzin, *The Theory and Practice of Revenue Management* (2004) | 10, 60 | 10 |
 | Kohavi–Tang–Xu | R. Kohavi, D. Tang and Y. Xu, *Trustworthy Online Controlled Experiments* (2020) | 61 | · |
@@ -127,7 +127,7 @@ part's README, under *Sources*. Built so far: Parts 1–57.
 | the double auction in the classroom | Chamberlin (1948); Smith (1962) | 1–2 | 1 |
 | zero-intelligence traders | Gode and Sunder (1993) | 2 | 1–2 |
 | general equilibrium and its welfare theorems | Arrow and Debreu (1954); Debreu (1959) | 9 | 8–9 |
-| consumer surplus | Dupuit (1844) | 2, 10 | 2, 9–10, 18, 41 |
+| consumer surplus | Dupuit (1844) | 2, 10 | 2, 9–10, 18, 41, 58 |
 
 ### Choice
 
@@ -369,6 +369,8 @@ part's README, under *Sources*. Built so far: Parts 1–57.
 **Part 56, *The Core Exam*.** Books: Andreu Mas-Colell, Michael Whinston and Jerry Green, *Microeconomic Theory* (1995); David Kreps, *A Course in Microeconomic Theory* (1990); Lars Ljungqvist and Thomas Sargent, *Recursive Macroeconomic Theory* (2000; 4th ed. 2018); David Romer, *Advanced Macroeconomics* (1996; 5th ed. 2019); Jordi Galí, *Monetary Policy, Inflation, and the Business Cycle* (2008; 2nd ed. 2015); Fumio Hayashi, *Econometrics* (2000). Papers: Mussa and Rosen (1978); Myerson (1981); Riley and Samuelson (1981); Hansen (1982); Burtless and Hausman (1978); Chamley (1986); Blanchard and Quah (1989); Katz and Meyer (1990); Aiyagari (1994); Clarida, Galí and Gertler (1999); Chamberlain and Wilson (2000); Card, Chetty and Weber (2007); Goodman-Bacon (2021); Callaway and Sant'Anna (2021); Borusyak, Jaravel and Spiess (2024).
 
 **Part 57, *Reading the Economy in Real Time*.** Books: Graham Elliott and Allan Timmermann, *Economic Forecasting* (2016); Marta Bańbura, Domenico Giannone, Michele Modugno and Lucrezia Reichlin, 'Now-casting and the real-time data flow', *Handbook of Economic Forecasting* 2A (2013); Dean Croushore, 'Frontiers of real-time data analysis', *JEL* 49(1) (2011). Papers: Bates and Granger (1969); Mankiw and Shapiro (1986); Hamilton (1989); Diebold and Mariano (1995); Estrella and Mishkin (1998); Romer and Romer (2000); Stock and Watson (2002, 2004); Giannone, Reichlin and Small (2008); Henderson, Storeygard and Weil (2012); Baker, Bloom and Davis (2016); Cavallo and Rigobon (2016); An, Jalles and Loungani (2018); Hansen, McMahon and Prat (2018); Sahm (2019); Gentzkow, Kelly and Taddy (2019); Blanchet, Saez and Zucman (2022); Bernanke (2024); Chetty et al. (2024).
+
+**Part 58, *Scoring the Bill*.** Books: Anthony Boardman, David Greenberg, Aidan Vining and David Weimer, *Cost-Benefit Analysis: Concepts and Practice* (5th ed., 2018); HM Treasury, *The Green Book*; Office of Management and Budget, *Circular A-4*; Bent Flyvbjerg, Nils Bruzelius and Werner Rothengatter, *Megaprojects and Risk* (2003). Papers: Dupuit (1844); Hotelling (1947); Schelling (1968); Rosen (1974); Thaler and Rosen (1976); Harberger (1962); Goodhart (1975); Campbell (1979); Kahneman and Lovallo (1993); Diamond and Hausman (1994); Weitzman (1998, 2001); Saez (2001); Flyvbjerg, Holm and Buhl (2002, 2005); Viscusi and Aldy (2003); Auerbach (2005); Kehoe (2005); Bevan and Hood (2006); Drupp et al. (2018); Hendren and Sprung-Keyser (2020).
 
 ## 4. What the series leaves out
 

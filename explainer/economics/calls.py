@@ -426,6 +426,14 @@ CALLS = {c.key: c for c in [
          "wrong",
          ("Financial Crisis Inquiry Commission, The Financial Crisis Inquiry Report (2011), conclusions",
           "U.S. Senate Permanent Subcommittee on Investigations, Wall Street and the Financial Crisis (2011)")),
+    Call("sydney_1957", 58, "the government of New South Wales", "1957",
+         "the Sydney Opera House would cost about A$7 million and be finished by January 1963",
+         "an estimate made when Jorn Utzon's competition-winning design was a sketch, before anyone knew how to build "
+         "its shells",
+         "it opened in October 1973, ten years late, at a cost of A$102 million, about fourteen times the estimate",
+         "wrong",
+         ("Sydney Opera House, Sydney Opera House facts", "National Museum of Australia, Defining Moments: Sydney "
+          "Opera House", "Guinness World Records, largest proportional increase in cost for a building project")),
     Call("sahm_2024", 57, "Claudia Sahm, in a Bloomberg Opinion column", "August 2024",
          "the United States was not in a recession, although her own rule had just been triggered by July's rise in "
          "unemployment", "unemployment had risen partly because more people were looking for work, not only because "

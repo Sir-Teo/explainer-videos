@@ -1661,3 +1661,25 @@ brackets on screen.
 | regime switching; Hamilton filter | 区制转换；汉密尔顿滤波 |
 | economic policy uncertainty index; text as data | 经济政策不确定性指数；文本即数据 |
 | fan chart; scenario analysis; calibrated language | 扇形图；情景分析；校准用语 |
+
+## Part 58
+
+| English | 中文 |
+|---|---|
+| cost-benefit analysis; appraisal; standing; counterfactual | 成本收益分析；项目评估；考量资格（谁的得失算数）；反事实 |
+| consumer surplus; the rule of a half; generalized cost | 消费者剩余；二分之一法则；广义成本 |
+| transfer; shadow price; shadow wage; marginal cost of public funds | 转移支付；影子价格；影子工资；公共资金边际成本 |
+| value of travel time; hedonic price; travel cost method | 出行时间价值；特征价格；旅行成本法 |
+| stated preference; contingent valuation; scope test | 陈述偏好；条件价值评估；范围检验 |
+| value of a statistical life; value of a statistical life-year | 统计生命价值；统计生命年价值 |
+| net present value; benefit-cost ratio; internal rate of return | 净现值；效益成本比；内部收益率 |
+| social discount rate; social time preference rate; declining discount rate | 社会贴现率；社会时间偏好率；递减贴现率 |
+| budget scoring; baseline; static, conventional and dynamic scores | 预算评分；基线；静态、常规与动态评分 |
+| budget window; sunset clause | 预算窗口期；日落条款 |
+| microsimulation; distribution table; survey weights; grossing up | 微观模拟；分配表；调查权重；加权推算总体 |
+| computable general equilibrium; social accounting matrix | 可计算一般均衡；社会核算矩阵 |
+| optimism bias; reference class forecasting; the outside view | 乐观偏差；参考类别预测；外部视角 |
+| option value; irreversibility | 期权价值；不可逆性 |
+| regulatory impact analysis; break-even analysis | 监管影响分析；盈亏平衡分析 |
+| Goodhart's law; Campbell's law; gaming a target | 古德哈特定律；坎贝尔定律；对指标的博弈 |
+| distributional weights; WELLBY | 分配权重；幸福感调整生命年（WELLBY） |

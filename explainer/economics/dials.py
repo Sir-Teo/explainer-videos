@@ -1099,6 +1099,53 @@ DIALS = {d.key: d for d in [
                       "for the current quarter", 3.06, where="videos/economics/econ57/compute.py, item score",
                       checked="2026-11-21"),
          )),
+    Dial("social_discount_rate", "the social discount rate", "real percent a year, applied to the costs and benefits "
+         "of public projects and rules in their first decades", (58,), status="contested", checked="2026-11-21",
+         meaning="how much a benefit decades away counts today: at 7% a pound in thirty years is worth 13 pence now, "
+                 "at 2% it is worth 55; the rates governments prescribe have drifted down with real interest rates and "
+                 "the experts' views, and they move with politics too, which is why a hundred-year bridge or a climate "
+                 "rule can pass or fail on this one number",
+         estimates=(
+             Estimate("OMB Circular A-4", 2003, "review", "the rate of return on private capital, for rules that "
+                      "displace investment", 7.0, where="Circular A-4 (2003); reinstated by memorandum M-25-15, "
+                      "February 2025", checked="2026-11-21"),
+             Estimate("OMB Circular A-4", 2003, "review", "the rate at which consumers trade consumption over time",
+                      3.0, where="as above", checked="2026-11-21"),
+             Estimate("HM Treasury, the Green Book", 2003, "calibration", "Ramsey's rule: 0.5% time preference, 1.0% "
+                      "catastrophe risk, 1.0 x 2.0% growth; years 0-30, declining after", 3.5,
+                      where="The Green Book (2003 to 2026), discounting annex", checked="2026-11-21"),
+             Estimate("HM Treasury, the Green Book", 2026, "review", "the headline rate for years 1 to 30, accepted "
+                      "after Freeman and Groom's review", 3.0,
+                      where="Green Book Discount Rate Review: HM Treasury response, 28 October 2026",
+                      checked="2026-11-21"),
+             Estimate("OMB Circular A-4", 2023, "review", "the 30-year average real yield on 10-year Treasury notes; "
+                      "rescinded in 2025", 2.0, where="Circular A-4 (9 November 2023)", checked="2026-11-21"),
+             Estimate("Drupp, Freeman, Groom and Nesje", 2018, "survey", "over 200 experts on discounting: the mean "
+                      "recommendation (the median is 2%)", 2.27, 0.0, 10.0,
+                      where="AEJ: Economic Policy 10(4): 109-134, as summarized by the LSE's Grantham Institute",
+                      checked="2026-11-21"),
+             Estimate("this film: the market", 2026, "reconstruction", "the average real yield on 10-year inflation-"
+                      "protected Treasuries, 2003-2025", 0.97, where="videos/economics/econ58/compute.py, item "
+                      "discount (FRED: DFII10)", checked="2026-11-21"),
+         )),
+    Dial("cost_overrun", "cost overruns of public works", "percent by which the outturn cost exceeds the cost "
+         "forecast at the decision to build, in constant prices", (58,), status="depends on the setting",
+         checked="2026-11-21",
+         meaning="how far to trust a project's cost estimate: transport projects come in over budget nine times in "
+                 "ten, by about a fifth for roads and nearly a half for rail, with long tails; the averages differ by "
+                 "type and by country, and samples of projects with good records may flatter or worsen them, but an "
+                 "appraisal that takes the estimate at face value is biased towards building",
+         estimates=(
+             Estimate("Flyvbjerg, Holm and Buhl", 2002, "review", "rail: 58 projects", 44.7,
+                      where="JAPA 68(3): 279-295, table of cost escalation by project type (s.d. 38.4)",
+                      checked="2026-11-21"),
+             Estimate("Flyvbjerg, Holm and Buhl", 2002, "review", "bridges and tunnels: 33 projects", 33.8,
+                      where="as above (s.d. 62.4)", checked="2026-11-21"),
+             Estimate("Flyvbjerg, Holm and Buhl", 2002, "review", "roads: 167 projects", 20.4,
+                      where="as above (s.d. 29.9)", checked="2026-11-21"),
+             Estimate("Flyvbjerg, Holm and Buhl", 2002, "review", "all 258 projects", 28.0,
+                      where="as above and Flyvbjerg's later papers (s.d. 39)", checked="2026-11-21"),
+         )),
     Dial("tax_multiplier", "tax multiplier", "percent fall in real GDP after a tax increase of 1% of GDP, at its "
          "largest within three years", (32,), status="contested", checked="2026-11-20",
          meaning="how much output a tax increase costs: estimates from the narrative record of tax laws are two to "
@@ -1671,6 +1718,35 @@ SHOWN = {
         ("Ramey (2016); Nakamura and Steinsson (2018, JEP)", "what macroeconomics knows, stated"),
         ("Federal Reserve Board, FRED: GS10, TB3MS, USREC, INDPRO, CPIAUCSL, FEDFUNDS, PPIACO", "the hook's VARs "
          "and the intermission, from the Data Room"),
+    ],
+    58: [
+        ("The Flood Control Act (1936); Dupuit (1844)", "the hook: the act's sentence and the first measure of "
+         "surplus, stated"),
+        ("Boardman et al. (2018); HM Treasury, The Green Book; OMB Circular A-4", "the method, stated; the Island's "
+         "bridge computed"),
+        ("US DOT (2016); Norway's NOU 1997:27", "the value of time and the cost of public funds, stated and used"),
+        ("Rosen (1974); Hotelling (1947) and Clawson (1959); Desvousges et al. (1993); Carson et al. (2003); the NOAA "
+         "panel (1993); Diamond and Hausman (1994)", "values without prices: hedonic and travel-cost methods computed "
+         "on the Island; stated preference, stated"),
+        ("Schelling (1968); Thaler and Rosen (1976); Viscusi and Aldy (2003); EPA (2003)", "a statistical life: the "
+         "Dial; the wage-risk regression computed on the Island; the senior discount, stated"),
+        ("Saez (2001); Gruber and Saez (2002)", "the Play-it score: the formula, and the Dials' elasticity of taxable "
+         "income"),
+        ("Weitzman (1998, 2001); Drupp et al. (2018); HM Treasury (2026)", "discounting: the Dial; Weitzman's rate "
+         "computed"),
+        ("CBO (eval-projections); CBO (2018, 2025); JCT (2017); Auerbach (2005)", "budget scoring: CBO's record "
+         "computed from its files; the scores of 2017 and 2025, stated"),
+        ("NBER TAXSIM; EUROMOD", "microsimulation, stated; the Island's calculator computed"),
+        ("Harberger (1962); Kehoe (2005)", "general equilibrium: the Island's model computed; NAFTA's models, stated"),
+        ("Flyvbjerg, Holm and Buhl (2002, 2005); Kahneman and Lovallo (1993); Dixit and Pindyck (1994); Hendren and "
+         "Sprung-Keyser (2020)", "risk and the record: the Dial; the reference class and the option computed on the "
+         "Island; the MVPF league table, stated"),
+        ("Executive Orders 12291 (1981) and 12866 (1993)", "regulatory impact analysis, stated; the Island's rule "
+         "computed"),
+        ("Goodhart (1975); Campbell (1979); Bevan and Hood (2006)", "targets, stated; the Island's emergency "
+         "department simulated"),
+        ("OMB Circular A-4 (2023); HM Treasury (2021)", "the frontier, stated"),
+        ("CBO, eval-projections; FRED: DFII10", "the data, from the Data Room"),
     ],
     57: [
         ("Samuelson (1966); An, Jalles and Loungani (2018)", "the hook's two scorecards, stated"),

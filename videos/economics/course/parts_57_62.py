@@ -48,4 +48,51 @@ PARTS = [
         also=(("Agora's nowcasting module", "explainer/economics/agora/nowcast.py"),
               ("The Data Room", "explainer/economics/data")),
     ),
+    Part(
+        n=58, level="U", widget="appraiser", prereq=(3, 15, 18, 23, 41, 42, 48, 50),
+        question="How does a government decide whether a project or a law is worth it?",
+        story="The Flood Control Act of 1936 tells the Army's engineers to build only where the benefits, 'to "
+              "whomsoever they may accrue', exceed the costs, and Dupuit had asked in 1844 what a bridge is worth. The "
+              "Island's case: a bridge across the strait, where Bo's ferry runs. Its ledger is built step by step: "
+              "the counterfactual and standing; Dupuit's surplus and the rule of a half; fares that net out against "
+              "Bo's lost profit; shadow wages and the cost of public funds; time, road noise priced from house sales, "
+              "a beach from the trips to it, birds from surveys; a statistical life from the wage premium for risk, "
+              "biased by unseen ability. The viewer scores a higher top rate (143 million static, 101 with behaviour). "
+              "Discounting decides the bridge (+139 at 3%, -118 at 7%): the Green Book's Ramsey rate and its 2026 cut, "
+              "OMB's rates, Weitzman. Budget scoring, the window and its sunsets, a dynamic toy, and CBO's own record "
+              "since 1984; after an intermission of forty-two baselines against the deficits that happened, "
+              "microsimulation and the distribution table, a small CGE and NAFTA's audited models, megaprojects' "
+              "overruns and the outside view (the bridge's forecast +77 becomes a 61% chance of loss), the option to "
+              "wait, a regulatory impact analysis, Goodhart's and Campbell's laws, two new Dials, the scorekeepers, "
+              "the Sydney Opera House, and weights and wellbeing.",
+        handoff="Part 59 takes economics into the courtroom: market definition, diversion ratios and merger "
+                "simulation under cross-examination.",
+        outside="Part 3: the social accounting matrix; Part 15: externalities and the value of the environment; Part "
+                "18: welfare and the value of a statistical life; Part 23: the option to wait; Part 41: taxes and the "
+                "elasticity of taxable income; Part 42: the MVPF; Part 48: the social cost of carbon; Part 50: the "
+                "policy memo; Statistics, Built: regression and its biases.",
+        objectives={
+            "U": ["List the steps of a cost-benefit analysis, and say what the counterfactual and standing are.",
+                  "Compute consumer surplus with the rule of a half, and explain why transfers net out.",
+                  "Explain why the discount rate can decide a long-lived project, and what the agencies use."],
+            "M": ["Estimate a hedonic price and a value of a statistical life, and name the biases in each.",
+                  "Score a tax change statically and with an elasticity of taxable income, on a weighted survey.",
+                  "Build a distribution table from a microsimulation, and a small CGE from a social accounting "
+                  "matrix."],
+            "D": ["Derive Saez's revenue ratio, Weitzman's declining rate and the value of the option to wait.",
+                  "Judge an appraisal's forecasts against a reference class, and the sources of optimism bias."],
+            "I": ["Write the break-even sentence and the tornado chart an appraisal or a regulatory analysis needs, "
+                  "and read a budget office's score and its record."],
+        },
+        results=[
+            ("Net present value", r"NPV = \sum_{t} \frac{B_t - C_t}{(1 + r)^t}"),
+            ("The rule of a half", r"\Delta CS = q_0 (g_0 - g_1) + \tfrac12 (q_1 - q_0)(g_0 - g_1)"),
+            ("Ramsey's rate", r"r = \delta + \eta\, g"),
+            ("Saez's revenue ratio", r"\frac{dR}{dR_{\text{static}}} = 1 - e\, a\, \frac{\tau}{1 - \tau}"),
+            ("Weitzman's rate", r"\bar P_t = \textstyle\sum_i p_i (1 + r_i)^{-t}"),
+        ],
+        U=(0, 1, 2, 3, 4, 5, 6, "s09_intermission", 12), D=(9, 15), I=(7, 8, 11, 14),
+        also=(("Agora's appraisal module", "explainer/economics/agora/appraisal.py"),
+              ("The Data Room: CBO's projections", "explainer/economics/data")),
+    ),
 ]
