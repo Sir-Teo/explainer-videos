@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from videos.economics.econ57.common import *  # noqa: F403
 
-MONTHS = ("J", "F", "M", "A", "M", "J", "J", "A", "S", "O", "N", "D")
+MONTHS = ("Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec")
 
 
 class Seasonal(VoiceoverScene):
@@ -60,7 +60,7 @@ class Seasonal(VoiceoverScene):
                            buff=0.35, font_size=17)
         chain.to_edge(UP, buff=0.9)
         eff = np.array(S["month_effect"])
-        ax = plane([-0.6, 11.6], [-1.8, 1.4], center=DOWN * 1.9 + LEFT * 0.8, x_length=8.0, y_length=2.6,
+        ax = plane([-0.6, 11.6], [-1.8, 1.4], center=DOWN * 1.9 + LEFT * 2.3, x_length=7.0, y_length=2.6,
                    xticks=list(range(12)), yticks=[-1, 0, 1], xlabel=r"", ylabel=r"seasonal factor, \ \%",
                    xfmt=lambda v: MONTHS[int(v)], yfmt=lambda v: f"{v:+.0f}".replace("-", "{-}") if v else "0",
                    font_size=13)
@@ -69,9 +69,12 @@ class Seasonal(VoiceoverScene):
             p0, p1 = ax.ax.c2p(k - 0.32, 0), ax.ax.c2p(k + 0.32, v)
             bars.add(Rectangle(width=p1[0] - p0[0], height=abs(p1[1] - p0[1]), stroke_width=0,
                                fill_color=SPF if v >= 0 else FIRST, fill_opacity=0.8).move_to((p0 + p1) / 2))
-        fit = label(rf"this simplified X-11 against the BLS, \\ 1948--2019: \ monthly changes differ by "
+        fit = label(rf"this simplified X-11 \\ against the BLS, \ 1948--2019: \\ monthly changes differ by "
                     rf"{S['rms_robust_pre']:.0f} thousand \\ (root mean square)", font_size=17,
-                    color=GREY_A).next_to(ax, RIGHT, buff=0.3)
+                    color=GREY_A).next_to(ax, RIGHT, buff=0.4)
+        shiskin = history_card(1965, r"Julius Shiskin, \ the Census Bureau", r"X-11: \ a seasonal factor for each "
+                               r"month, \ re-estimated as the years pass", color=LATEST, width=6.0, font_size=18)
+        shiskin.move_to(UP * 0.4)
         with self.voiceover(
             "How is it done? Julius Shiskin's X-11 method, developed at the Census Bureau in the 1960s, still sits "
             "inside the programmes statistical agencies use. <bookmark mark='a'/> Take logs. <bookmark mark='b'/> "
@@ -83,8 +86,11 @@ class Seasonal(VoiceoverScene):
             f"December's {eff[11]:.1f} percent above; its monthly changes differ from the official ones by "
             f"{S['rms_robust_pre']:.0f} thousand, on average, before 2020."
         ) as vo:
+            self.play(FadeIn(shiskin, shift=UP * 0.1))
             for k, mk in enumerate("abcde"):
                 vo.wait_until(mk)
+                if not k:
+                    self.play(FadeOut(shiskin), run_time=0.5)
                 anims = [FadeIn(chain.boxes[k], shift=UP * 0.1)]
                 if k:
                     anims.append(GrowArrow(chain.arrows[k - 1]))

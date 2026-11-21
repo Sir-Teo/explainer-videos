@@ -24,7 +24,7 @@ class Intermission(SoundScene):
         rec = shade(ax, film["recessions"], 0, 100, RECESS, 0.6)
         for r_, (a, _) in zip(rec, film["recessions"]):
             r_.ft = film_time(a)
-        year = Integer(int(t[0]), font_size=52, color=E.ACCENT, group_with_commas=False).move_to(ax.ax.c2p(1976, 88))
+        year = Integer(int(t[0]), font_size=52, color=E.ACCENT, group_with_commas=False).move_to(ax.ax.c2p(2021, 80))
         t0, t1 = film_time(t[0]), film_time(t[-1])
         pts = [ax.ax.c2p(x, y) for x, y in zip(t, v)]
         grow = VMobject(stroke_color=NOW, stroke_width=2.6)

@@ -17,7 +17,7 @@ class Hard(VoiceoverScene):
         y, s, pr = np.array(Rg["y"]), np.array(Rg["s"]), np.array(Rg["prob"])
         t = np.arange(len(y))
         ax = plane([0, len(y)], [-9, 9], center=UP * 0.9 + LEFT * 1.4, x_length=10.2, y_length=3.2,
-                   xticks=[0, 40, 80, 120, 160], yticks=[-6, 0, 6], xlabel=r"", ylabel=r"growth, \ \% a year",
+                   xticks=[], yticks=[-6, 0, 6], xlabel=r"", ylabel=r"growth, \ \% a year",
                    xfmt=lambda v: f"{v:.0f}", yfmt=lambda v: f"{v:+.0f}".replace("-", "{-}") if v else "0",
                    font_size=12)
         spans, cur = [], None
@@ -47,6 +47,19 @@ class Hard(VoiceoverScene):
                   rf"{Rg['mean_lag']:.1f} quarters late \ on average", font_size=17, color=GB),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.28).to_edge(RIGHT, buff=0.3)
         tag = island_tag(r"simulated: \ Hamilton's two regimes", corner=DR, font_size=12)
+        c_e = Circle(radius=0.55, color=SPF, stroke_width=3).move_to(ax.ax.c2p(len(y) * 0.3, 0))
+        c_r = Circle(radius=0.55, color=ERR, stroke_width=3).move_to(ax.ax.c2p(len(y) * 0.7, 0))
+        t_e = label(rf"expansion \\ ${Rg['mu'][0]:+.0f}$", font_size=17, color=SPF).move_to(c_e)
+        t_r = label(rf"recession \\ ${Rg['mu'][1]:+.0f}$".replace("-", "{-}"), font_size=17, color=ERR).move_to(c_r)
+        a1 = CurvedArrow(c_e.get_top() + RIGHT * 0.2, c_r.get_top() + LEFT * 0.2, angle=-PI / 4, color=GREY_B,
+                         stroke_width=2)
+        a2 = CurvedArrow(c_r.get_bottom() + LEFT * 0.2, c_e.get_bottom() + RIGHT * 0.2, angle=-PI / 4,
+                         color=GREY_B, stroke_width=2)
+        p1 = label(f"{1 - Rg['p_stay'][0]:.2f}", font_size=16, color=GREY_A).next_to(a1, UP, buff=0.05)
+        p2 = label(f"{1 - Rg['p_stay'][1]:.2f}", font_size=16, color=GREY_A).next_to(a2, DOWN, buff=0.05)
+        s1 = label(rf"stay {Rg['p_stay'][0]:.2f}", font_size=16, color=SPF).next_to(c_e, LEFT, buff=0.2)
+        s2 = label(rf"stay {Rg['p_stay'][1]:.2f}", font_size=16, color=ERR).next_to(c_r, RIGHT, buff=0.2)
+        chain2 = VGroup(c_e, c_r, t_e, t_r, a1, a2, p1, p2, s1, s2)
         with self.voiceover(
             "Why is it so hard? Start with James Hamilton's model of 1989. <bookmark mark='a'/> The economy is in "
             f"one of two states: expansion, with growth around {Rg['mu'][0]:.0f} percent a year, or recession, "
@@ -58,8 +71,9 @@ class Hard(VoiceoverScene):
         ) as vo:
             self.play(FadeIn(ax), FadeIn(tag), FadeIn(side[0]))
             vo.wait_until("a")
-            self.play(FadeIn(side[1]), FadeIn(side[2]))
+            self.play(FadeIn(side[1]), FadeIn(side[2]), FadeIn(chain2))
             vo.wait_until("b")
+            self.play(FadeOut(chain2), run_time=0.6)
             self.play(FadeIn(rec), Create(line), run_time=2.5)
             vo.wait_until("c")
             self.play(FadeIn(axp), FadeIn(rec2), Create(lp), FadeIn(side[3]), run_time=2.5)
@@ -85,7 +99,8 @@ class Hard(VoiceoverScene):
             label(rf"best forecasts a year ahead \\ below zero: \ {100 * rows[-1]['share_neg']:.0f}\%", font_size=18,
                   color=E.ACCENT),
             label(rf"the real forecasters, \ a year ahead: \\ below zero {100 * r4['share_neg_fc']:.0f}\% of the "
-                  rf"time; \\ growth was, \ {100 * r4['share_neg_act']:.0f}\%", font_size=18, color=FIRST),
+                  rf"time; \\ growth fell in {100 * r4['share_neg_act']:.0f}\% of quarters", font_size=18,
+                  color=FIRST),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.3).to_edge(RIGHT, buff=0.3)
         with self.voiceover(
             "Now suppose a forecaster knew the model exactly, and even knew today's state for certain. <bookmark "
@@ -118,6 +133,7 @@ class Hard(VoiceoverScene):
         chain.move_to(UP * 0.4)
         foot = label(r"a forecast that changes the outcome cannot be scored like a forecast of the weather",
                      font_size=22, color=E.ACCENT).next_to(chain, DOWN, buff=0.8)
+        top = label(r"forecasts that change what they forecast", font_size=28, color=WHITE).to_edge(UP, buff=0.8)
         with self.voiceover(
             "And there is a second difficulty, which weather forecasters do not have. <bookmark mark='a'/> A "
             "forecast of recession, if believed, <bookmark mark='b'/> can lead a central bank to cut rates and "
@@ -126,6 +142,7 @@ class Hard(VoiceoverScene):
             "applies to forecasts too: when people act on a prediction, the pattern it was fitted to can change. "
             "<bookmark mark='e'/> Some of 2023's missing recession may be of this kind; no one can say how much."
         ) as vo:
+            self.play(FadeIn(top))
             for k, mk in enumerate("abcd"):
                 vo.wait_until(mk)
                 anims = [FadeIn(chain.boxes[k], shift=UP * 0.1)]

@@ -18,13 +18,13 @@ class PlayIt(VoiceoverScene):
         X = np.array(Isl["pick_months"])            # 9 months x 4: six before the quarter, then its three
         nc = Isl["pick_nowcasts"]
         months = np.arange(-6, 3)
-        axl = plane([-6.4, 2.4], [-4.5, 3.5], center=LEFT * 3.5 + DOWN * 0.4, x_length=5.6, y_length=4.8,
+        axl = plane([-6.4, 2.4], [-4.5, 3.5], center=LEFT * 3.5 + UP * 0.55, x_length=5.6, y_length=4.0,
                     xticks=[-6, -4, -2, 0, 2], yticks=[-4, -2, 0, 2], xlabel=r"month \ (0 = the quarter's first)",
                     ylabel=r"monthly indicators, \ standardized", xfmt=lambda v: f"{v:+.0f}".replace("-", "{-}")
                     if v else "0", yfmt=lambda v: f"{v:+.0f}".replace("-", "{-}") if v else "0", font_size=13)
         q_shade = shade(axl, [(-0.5, 2.4)], -4.5, 3.5, RECESS, 0.45)
         zl = DashedLine(axl.ax.c2p(-6.4, 0), axl.ax.c2p(2.4, 0), color=GREY_D, stroke_width=1)
-        axr = plane([-0.5, 5.0], [-9, 7], center=RIGHT * 3.2 + DOWN * 0.4, x_length=5.0, y_length=4.8,
+        axr = plane([-0.5, 5.0], [-9, 7], center=RIGHT * 3.2 + UP * 0.55, x_length=5.0, y_length=4.0,
                     xticks=[0, 1, 2, 3, 4], yticks=[-8, -4, 0, 4], xlabel=r"release",
                     ylabel=r"GDP growth this quarter, \ \% a year", xfmt=lambda v: f"{v:.0f}",
                     yfmt=lambda v: f"{v:+.0f}".replace("-", "{-}") if v else "0", font_size=13)
@@ -56,9 +56,9 @@ class PlayIt(VoiceoverScene):
             return VGroup(bar, d)
 
         pn = Isl["p_neg"]
-        probs = VGroup(*[label(rf"{SHORT[k]}: \ chance of a fall {100 * pn[k]:.0f}\%", font_size=17,
-                               color=NOW) for k in range(5)]).arrange(DOWN, aligned_edge=LEFT, buff=0.12)
-        probs.to_edge(DOWN, buff=0.25).shift(RIGHT * 2.6)
+        probs = VGroup(*[label(rf"{SHORT[k]}: \ chance of a fall {100 * pn[k]:.0f}\%", font_size=16,
+                               color=NOW) for k in range(5)]).arrange(DOWN, aligned_edge=LEFT, buff=0.08)
+        probs.to_edge(DOWN, buff=0.2).align_to(axr, LEFT)
         tag = island_tag(r"simulated: \ the Island's factor model", corner=DL, font_size=12)
         lines0 = seg_lines(0)
         with self.voiceover(
@@ -78,7 +78,7 @@ class PlayIt(VoiceoverScene):
             l1 = seg_lines(1)
             self.play(Transform(lines0, l1), FadeIn(ncmark(1)), FadeIn(probs[1]))
             vo.wait_until("c")
-        ring = countdown().scale(0.55).move_to(axr.get_top() + UP * 0.1 + LEFT * 0.4)
+        ring = countdown().scale(0.55).move_to(axr.ax.c2p(4.3, 4.6))
         ask = label(r"fall, \ or not?", font_size=22, color=E.ACCENT).next_to(ring, LEFT, buff=0.25)
         self.play(FadeIn(ring), FadeIn(ask))
         self.add(ring[1])

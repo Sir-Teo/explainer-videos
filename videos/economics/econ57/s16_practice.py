@@ -26,6 +26,8 @@ class Practice(VoiceoverScene):
                                   r"Chapter 6's scoring, \ applied to yourself"], note_size=18)
         chain.move_to(DOWN * 0.3)
         head = label(r"a week on a forecasting desk", font_size=30, color=E.ACCENT).to_edge(UP, buff=0.5)
+        who = label(r"central banks \ $\cdot$ \ finance ministries \ $\cdot$ \ banks and funds \ $\cdot$ \ firms",
+                    font_size=22, color=GREY_A).move_to(UP * 0.3)
         with self.voiceover(
             "This part is the job of thousands of economists, in central banks, ministries, banks and firms. "
             "<bookmark mark='a'/> The week starts with the calendar: which numbers come out, and what everyone "
@@ -36,9 +38,11 @@ class Practice(VoiceoverScene):
             "good desks keep every forecast and score it, against a benchmark, which is the habit this part has "
             "been teaching."
         ) as vo:
-            self.play(FadeIn(head))
+            self.play(FadeIn(head), FadeIn(who, shift=UP * 0.1))
             for k, mk in enumerate("abcde"):
                 vo.wait_until(mk)
+                if not k:
+                    self.play(FadeOut(who), run_time=0.5)
                 anims = [FadeIn(chain.boxes[k], shift=DOWN * 0.1), FadeIn(chain.notes[k], shift=RIGHT * 0.1)]
                 if k:
                     anims.append(GrowArrow(chain.arrows[k - 1]))

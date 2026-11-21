@@ -4,6 +4,8 @@ from videos.economics.econ57.common import *  # noqa: F403
 
 EVENTS = {"2025-04": r"tariffs", "2020-05": r"pandemic", "2020-11": r"election", "2011-08": r"debt ceiling",
           "2019-01": r"shutdown"}
+# the close peaks of 2019-2020 get their labels set off in clear space, with a leader line to the dot
+POS = {"2019-01": (2015.4, 300), "2020-05": (2016.2, 400), "2020-11": (2022.6, 400)}
 
 
 class Text(VoiceoverScene):
@@ -36,9 +38,16 @@ class Text(VoiceoverScene):
                 continue
             x = int(p["month"][:4]) + (int(p["month"][5:7]) - 1) / 12
             d = dot(ax, x, p["value"], E.ACCENT, 0.06)
-            lab = label(rf"{EVENTS[p['month']]}, \ {p['month'][:4]}", font_size=14, color=E.ACCENT).next_to(
-                d, UP, buff=0.08)
-            peaks.add(VGroup(d, lab))
+            lab = label(rf"{EVENTS[p['month']]}, \ {p['month'][:4]}", font_size=14, color=E.ACCENT)
+            if p["month"] in POS:
+                lab.move_to(ax.ax.c2p(*POS[p["month"]]))
+                end = lab.get_right() if POS[p["month"]][0] < x else lab.get_left()
+                lead = Line(end + (RIGHT if POS[p["month"]][0] < x else LEFT) * 0.05, d.get_center(),
+                            color=E.ACCENT, stroke_width=1, stroke_opacity=0.6)
+                peaks.add(VGroup(d, lab, lead))
+            else:
+                lab.next_to(d, UP, buff=0.08)
+                peaks.add(VGroup(d, lab))
         tag = data_tag(r"Baker, \ Bloom and Davis, \ policyuncertainty.com, \ via FRED \ (USEPUINDXM)", corner=DR,
                        font_size=12)
         top = E_["peaks"][0]

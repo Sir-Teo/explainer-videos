@@ -20,11 +20,11 @@ class Signals(VoiceoverScene):
         P = load("probit")
         t = np.array([_t(k) for k in P["months"]])
         sp, pr = np.array(P["spread"]), np.array(P["prob"])
-        top = plane([1959, 2027], [-3, 5], center=UP * 1.3 + LEFT * 1.2, x_length=10.6, y_length=2.6,
+        top = plane([1959, 2027], [-3, 5], center=UP * 1.3 + LEFT * 2.0, x_length=9.2, y_length=2.6,
                     xticks=[1960, 1980, 2000, 2020], yticks=[-2, 0, 2, 4], xlabel=r"",
                     ylabel=r"10-year minus 3-month, \ points", xfmt=lambda v: f"{v:.0f}",
                     yfmt=lambda v: f"{v:+.0f}".replace("-", "{-}") if v else "0", font_size=12)
-        bot = plane([1959, 2027], [0, 1], center=DOWN * 2.0 + LEFT * 1.2, x_length=10.6, y_length=2.2,
+        bot = plane([1959, 2027], [0, 1], center=DOWN * 2.0 + LEFT * 2.0, x_length=9.2, y_length=2.2,
                     xticks=[1960, 1980, 2000, 2020], yticks=[0, 0.5, 1], xlabel=r"",
                     ylabel=r"chance of recession in 12 months", xfmt=lambda v: f"{v:.0f}",
                     yfmt=lambda v: f"{100 * v:.0f}\\%", font_size=12)
@@ -33,16 +33,16 @@ class Signals(VoiceoverScene):
         z = DashedLine(top.ax.c2p(1959, 0), top.ax.c2p(2027, 0), color=GREY_C, stroke_width=1.2)
         ls = path(top, t, sp, NOW, 1.8, smooth=False)
         lp = path(bot, t, pr, GB, 2.2, smooth=False)
-        eq = MathTex(r"\Pr(\text{recession}_{t+12}) = \Phi\big(" + f"{P['b'][0]:.2f}" +
-                     r" " + f"{P['b'][1]:+.2f}" + r"\, \text{spread}_t\big)", font_size=26, color=GB)
+        eq = MathTex(r"\Pr(\text{recession}_{t+12}) \\ = \Phi\big(" + f"{P['b'][0]:.2f}" +
+                     r" " + f"{P['b'][1]:+.2f}" + r"\, \text{spread}_t\big)", font_size=25, color=GB)
         side = VGroup(
             eq,
             label(rf"area under the ROC curve: \ {P['auc']:.2f}", font_size=18, color=GB),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.25).to_edge(RIGHT, buff=0.25).shift(DOWN * 1.0)
         eps = P["episodes"]
         hit = [e for e in eps if e["recession_after"] is not None]
-        tbl = label(rf"inversions of 3 months or more: \ {len(eps)}; \\ followed by a recession within 2 years: \ "
-                    rf"{len(hit)}", font_size=18, color=NOW).to_edge(RIGHT, buff=0.25).shift(UP * 1.6)
+        tbl = label(rf"inversions of 3 months \\ or more: \ {len(eps)}; \\ followed by a recession \\ "
+                    rf"within 2 years: \ {len(hit)}", font_size=18, color=NOW).to_edge(RIGHT, buff=0.25).shift(UP * 1.6)
         tag = data_tag(r"FRED: \ GS10, \ TB3MS, \ USREC", corner=DR, font_size=12)
         with self.voiceover(
             "The most famous recession signal is the slope of the yield curve. <bookmark mark='a'/> In pink, the "
@@ -69,19 +69,22 @@ class Signals(VoiceoverScene):
         S = load("sahm")
         t = np.array([_t(k) for k in S["rt_months"]])
         v = np.array(S["rt"], float)
-        ax = plane([1959, 2027], [-0.5, 4.0], center=LEFT * 1.4 + DOWN * 0.2, x_length=10.2, y_length=4.8,
+        ax = plane([1959, 2027], [-0.5, 5.5], center=LEFT * 1.9 + DOWN * 0.2, x_length=9.4, y_length=4.8,
                    xticks=[1960, 1980, 2000, 2020], yticks=[0, 0.5, 2, 4], xlabel=r"",
                    ylabel=r"Sahm indicator, \ real time, \ points", xfmt=lambda x: f"{x:.0f}",
                    yfmt=lambda y: f"{y:g}", font_size=13)
-        rec = shade(ax, S["spans"], -0.5, 4.0, RECESS, 0.55)
+        rec = shade(ax, S["spans"], -0.5, 5.5, RECESS, 0.55)
         thr = DashedLine(ax.ax.c2p(1959, 0.5), ax.ax.c2p(2027, 0.5), color=ERR, stroke_width=1.8)
-        line = path(ax, t, np.clip(v, -0.5, 4.0), SPF, 1.8, smooth=False)
+        line = path(ax, t, np.clip(v, -0.5, 5.5), SPF, 1.8, smooth=False)
+        k20 = int(np.nanargmax(v))
+        top20 = label(rf"{S['rt_months'][k20][:4]}: \ {v[k20]:.1f}", font_size=14, color=SPF).next_to(
+            ax.ax.c2p(t[k20], 5.5), LEFT, buff=0.12)
         trig = S["rt_triggers"]
         marks = VGroup()
         for tr in trig:
             x = _t(tr["month"])
             marks.add(Triangle(color=ERR if tr["recession"] is None else GAIN, fill_opacity=1).scale(0.09).rotate(
-                PI).move_to(ax.ax.c2p(x, 3.7)))
+                PI).move_to(ax.ax.c2p(x, 5.2)))
         false = [tr["month"] for tr in trig if tr["recession"] is None]
         side = VGroup(
             MathTex(r"\bar u_t - \min_{t-12 \le s < t} \bar u_s \ \ge\ 0.5", font_size=26, color=SPF),
@@ -105,6 +108,7 @@ class Signals(VoiceoverScene):
             self.play(FadeIn(side[0]), FadeIn(side[1]), Create(thr))
             vo.wait_until("b")
             self.play(Create(line), run_time=3.0)
+            self.play(FadeIn(top20))
             vo.wait_until("c")
             self.play(LaggedStart(*[FadeIn(m_, shift=DOWN * 0.1) for m_ in marks], lag_ratio=0.15), FadeIn(side[2]),
                       run_time=2.0)

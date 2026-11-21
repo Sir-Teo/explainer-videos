@@ -98,6 +98,9 @@ class Nowcast(VoiceoverScene):
                   color=E.ACCENT),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.3).to_edge(RIGHT, buff=0.35).shift(DOWN * 1.4)
         tag = island_tag(r"simulated: \ the Island's factor model", corner=DR, font_size=12)
+        grs = history_card(2008, r"Giannone, \ Reichlin and Small", r"a dynamic factor model of some two hundred "
+                           r"monthly series, \ run through the Kalman filter as each is released", color=NOW,
+                           width=6.4, font_size=19).move_to(UP * 0.2)
         with self.voiceover(
             "The method central banks use now is a dynamic factor model, after James Stock and Mark Watson, run "
             "through the Kalman filter, as Domenico Giannone, Lucrezia Reichlin and David Small showed in 2008. "
@@ -113,9 +116,11 @@ class Nowcast(VoiceoverScene):
             "number moved us by this much. The Atlanta Fed's GDPNow, since 2014, and the New York Fed's staff "
             "nowcast, first published in 2016, publish exactly such numbers."
         ) as vo:
-            self.play(FadeIn(tag))
+            self.play(FadeIn(tag), FadeIn(grs, shift=UP * 0.1))
             for k, mk in enumerate("abc"):
                 vo.wait_until(mk)
+                if not k:
+                    self.play(FadeOut(grs), run_time=0.5)
                 self.play(FadeIn(eqs[k], shift=UP * 0.1))
             vo.wait_until("d")
             self.play(FadeIn(why))

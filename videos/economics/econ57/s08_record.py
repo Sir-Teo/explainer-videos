@@ -33,6 +33,9 @@ class Record(VoiceoverScene):
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.3).to_edge(RIGHT, buff=0.35)
         tag = data_tag(r"Philadelphia Fed: \ Greenbook data set; \ SPF; \ FRED GDPDEF", corner=DR, font_size=12)
         better = sum(r["rmse_gb"] < r["rmse_spf"] for r in rows)
+        romers = history_card(2000, r"Christina and David Romer", r"the Federal Reserve staff's Greenbook against "
+                              r"commercial forecasters: \ the staff's inflation forecasts are better", color=GB,
+                              width=5.2, font_size=19).move_to(ax.get_center() + UP * 0.6)
         h_sig = min([r["h"] for r in rows if r["dm_p"] < 0.05], default=None)
         with self.voiceover(
             "Who forecasts best? In 2000 Christina and David Romer compared the Federal Reserve staff's "
@@ -46,8 +49,9 @@ class Record(VoiceoverScene):
             "The Romers' reading was that the "
             "Federal Reserve knows things the market does not, which is why markets watch what it does so closely."
         ) as vo:
-            self.play(FadeIn(ax), FadeIn(tag), FadeIn(side[3]))
+            self.play(FadeIn(ax), FadeIn(tag), FadeIn(side[3]), FadeIn(romers, shift=UP * 0.1))
             vo.wait_until("a")
+            self.play(FadeOut(romers), run_time=0.5)
             self.play(Create(sp), FadeIn(side[1]), run_time=1.5)
             vo.wait_until("b")
             self.play(Create(gb), FadeIn(side[0]), run_time=1.5)
@@ -101,8 +105,11 @@ class Record(VoiceoverScene):
             self.play(FadeIn(title))
             vo.wait_until("a")
             self.play(FadeIn(head))
-            vo.wait_until("b")
             self.play(LaggedStart(*[FadeIn(r_, shift=RIGHT * 0.1) for r_ in rows], lag_ratio=0.25), run_time=3.0)
+            vo.wait_until("b")
+            hi = [r_[1] for r_, s_ in zip(rows, st) if s_["p_before"] > 50]
+            if hi:
+                self.play(*[Indicate(m_, color=E.ACCENT, scale_factor=1.3) for m_ in hi], run_time=1.5)
             vo.wait_until("c")
             self.play(FadeIn(recs[0], shift=UP * 0.1))
             vo.wait_until("d")

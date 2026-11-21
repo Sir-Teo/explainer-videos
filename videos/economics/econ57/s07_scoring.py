@@ -58,8 +58,8 @@ class Scoring(VoiceoverScene):
         mean = path(ax, h, [r["rmse_mean"] for r in rows], BENCH, 2.6, smooth=False)
         rw = path(ax, h, [r["rmse_rw"] for r in rows], FIRST, 2.6, smooth=False)
         dots = VGroup(*[dot(ax, r["h"], r["rmse"], SPF if r["dm_p"] < 0.05 else GREY_C, 0.09) for r in rows])
-        stars = VGroup(*[label(r"$\ast$", font_size=30, color=SPF).next_to(ax.ax.c2p(r["h"], r["rmse"]), DOWN,
-                                                                            buff=0.08) for r in rows
+        stars = VGroup(*[label(r"$\ast$", font_size=38, color=SPF).next_to(ax.ax.c2p(r["h"], r["rmse"]), DOWN,
+                                                                            buff=0.16) for r in rows
                          if r["dm_p"] < 0.05])
         n_sig = len(stars)
         r4 = rows[-1]
@@ -90,9 +90,9 @@ class Scoring(VoiceoverScene):
             "read the present, and a little of the next six months; beyond that, the forecast is mostly the "
             "average."
         ) as vo:
-            self.play(FadeIn(ax), FadeIn(tag))
+            self.play(FadeIn(ax), FadeIn(tag), FadeIn(side[0]))
             vo.wait_until("a")
-            self.play(FadeIn(side[0]), FadeIn(dots[0]))
+            self.play(FadeIn(dots[0], scale=1.5))
             vo.wait_until("b")
             self.play(Create(spf), FadeIn(dots[1:]), run_time=2.0)
             vo.wait_until("c")

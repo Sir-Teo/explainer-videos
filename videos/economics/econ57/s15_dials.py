@@ -15,7 +15,7 @@ class Dials(VoiceoverScene):
         head = status_head(dial, r"error of forecasts of real GDP growth \ (new)")
         frame, rows = dial_rows(dial, 0, 4, [0, 1, 2, 3, 4], r"points of annual growth \ (root mean square)",
                                 top=2.3, step=0.5, fmt="{:.2f}")
-        meaning = wrapped_label(tex_safe(dial.meaning), 12.6, 17, GREY_A).to_edge(DOWN, buff=0.15)
+        meaning = wrapped_label(tex_safe(dial.meaning), 11.6, 17, GREY_A).to_edge(DOWN, buff=0.5)
         tag = published_tag(r"the dial's record: \ explainer/economics/dials.py", corner=DR, font_size=12)
         e = dial.estimates
         with self.voiceover(
