@@ -227,7 +227,11 @@ def compute_audit() -> dict:
     parts = sorted({p for d in dials.DIALS.values() for p in d.parts})
     per_part = {p: sum(1 for d in dials.DIALS.values() if p in d.parts) for p in parts}
     most = sorted(A["rows"], key=lambda r: (-len(r["parts"]), r["key"]))[:6]
-    return _jsonable({**A, "per_part": per_part, "most_visited": most})
+    by_design: dict = {}
+    for d in dials.DIALS.values():
+        for e in d.estimates:
+            by_design[e.design] = by_design.get(e.design, 0) + 1
+    return _jsonable({**A, "per_part": per_part, "most_visited": most, "by_design": by_design})
 
 
 def compute_analysts() -> dict:

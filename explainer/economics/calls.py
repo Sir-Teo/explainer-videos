@@ -795,4 +795,16 @@ CALLS = {c.key: c for c in [
          "partly right",
          ("Board of Governors of the Federal Reserve System, Summary of Economic Projections, 18 June 2025",
           "BEA via FRED (PCEPILFE)", "A. Cavallo, P. Llamas and F. Vazquez, NBER Working Paper 34496 (2025)")),
+    Call("replication_markets_2016", 67, "97 economists trading in prediction markets", "before the replications "
+         "(reported in 2016)",
+         "on average a 75% chance that each of 18 laboratory results from the AER and QJE would replicate, with "
+         "every market above one half",
+         "markets in which each share paid out if a named study replicated, run by Camerer and coauthors before the "
+         "replications were done",
+         "11 of the 18 replicated (61%), and the replicated effects were on average 66% of the originals; the "
+         "market prices ranked the studies only weakly (a rank correlation of 0.30, not significant), while the "
+         "traders' own survey answers did better (0.52)",
+         "partly right",
+         ("C. F. Camerer et al., \"Evaluating Replicability of Laboratory Experiments in Economics\", Science "
+          "351(6280): 1433-1436 (2016)", "the authors' working paper, MPRA paper 75461, pp. 8-9")),
 ]}

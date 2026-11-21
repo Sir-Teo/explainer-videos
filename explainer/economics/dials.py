@@ -1950,10 +1950,54 @@ DIALS = {d.key: d for d in [
              Estimate("this film (the rest of the world)", 2026, "calibration", "the same, the rest of the world",
                       0.17, where="videos/economics/econ66/compute.py, item bloc", checked="2026-11-21"),
          )),
+    Dial("replication_rate", "how often results replicate", "share of published, statistically significant results "
+         "that are significant again, in the same direction, when the study is repeated on new subjects with high "
+         "power", (67,), status="depends on the setting", checked="2026-11-21",
+         meaning="in economics laboratories and in the social-science experiments of the most cited general "
+                 "journals about three in five published results replicate, and the replicated effects are smaller; "
+                 "the rate depends on the field's power, its selection of significant results and the latitude of "
+                 "its analyses",
+         estimates=(
+             Estimate("Camerer et al. (economics experiments)", 2016, "lab", "18 laboratory experiments from "
+                      "the AER and QJE, 2011-2014, repeated with at least 90% power by preregistered plans", 0.611,
+                      lo=0.362, hi=0.861, where="Science 351(6280): 1433-1436, abstract; the interval from the "
+                      "authors' working paper (MPRA 75461), p. 9", checked="2026-11-21"),
+             Estimate("Camerer et al. (social science in Nature and Science)", 2018, "lab", "21 experiments "
+                      "published 2010-2015, with samples about five times the originals", 0.62,
+                      where="Nature Human Behaviour 2: 637-644, abstract", checked="2026-11-21"),
+             Estimate("Open Science Collaboration (psychology)", 2015, "lab", "100 studies from three "
+                      "psychology journals of 2008", 0.36, where="Science 349(6251): aac4716, abstract",
+                      checked="2026-11-21"),
+             Estimate("this film (a simulated field)", 2026, "calibration", "true effects, specification search by "
+                      "design and a publication filter, the published significant results repeated at 90% power",
+                      0.60, where="videos/economics/econ67/compute.py, item replication", checked="2026-11-21"),
+         )),
 ]}
 
 # What each part shows without entering a row, and why: {part: [(what is shown, the reason)]}
 SHOWN = {
+    67: [
+        ("Brodeur, Lé, Sangnier and Zylberberg (2016); Brodeur, Cook and Heyes (2020)", "the camel and the bunching by "
+         "design, stated; the shapes computed in a simulated field"),
+        ("Camerer et al. (2016, 2018); Open Science Collaboration (2015)", "entered in the replication_rate dial; "
+         "Called it? (calls.replication_markets_2016)"),
+        ("Chang and Li (2022); Brodeur et al. (2024); the AEA Data Editor", "reproducibility, stated"),
+        ("Reinhart and Rogoff (2010); Herndon, Ash and Pollin (2014)", "the 90% question asked 48 ways on the HAP "
+         "data, computed"),
+        ("Andrews and Kasy (2019); Ioannidis, Stanley and Doucouliagos (2017); Doucouliagos and Stanley (2009)",
+         "publication bias, stated; the correction computed on a simulated meta-study"),
+        ("Olken (2015); the JDE's pre-results review", "remedies, stated; the forking paths and multiple-testing "
+         "rules computed"),
+        ("Leamer (1983); Angrist and Pischke (2010); Hamermesh (2013)", "the empirical turn, Hamermesh's tables "
+         "transcribed"),
+        ("Huntington-Klein et al. (2021); DellaVigna and Pope (2018)", "many analysts and forecasts, stated; a "
+         "many-analysts study and a specification curve computed on a simulated dataset"),
+        ("Brock and Hommes (1997); Arthur (2021); Farmer and Foley (2009)", "complexity economics, the cobweb with "
+         "switching forecasters computed"),
+        ("Heckman and Moktan (2020)", "the top five, stated"),
+        ("Korinek (2023); Ludwig and Mullainathan (2024)", "AI in research, stated"),
+        ("the Jordà-Schularick-Taylor Macrohistory Database", "the intermission's film: Britain's public debt"),
+    ],
     66: [
         ("USTR's reciprocal tariff calculation (April 2025); Corinth and Veuger (2025)", "the hook: the formula "
          "computed for Vietnam with both pass-through values"),
