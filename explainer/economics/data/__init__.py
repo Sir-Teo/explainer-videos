@@ -567,6 +567,25 @@ NETWORK_FRED = {
 FRED_SERIES.update(NETWORK_FRED)
 FRED_RETRIEVED.update({s: "2026-11-21" for s in NETWORK_FRED})
 
+# Part 66 (geoeconomics): the effective tariff rate by quarter, the monthly trade balance, core goods prices and
+# import prices
+GEO_FRED = {
+    "B235RC1Q027SBEA": ("Federal government current tax receipts: taxes on production and imports: customs duties",
+                        "billions of dollars, seasonally adjusted annual rate", "quarterly",
+                        "U.S. Bureau of Economic Analysis"),
+    "A255RC1Q027SBEA": ("Current payments to the rest of the world: imports of goods",
+                        "billions of dollars, seasonally adjusted annual rate", "quarterly",
+                        "U.S. Bureau of Economic Analysis"),
+    "BOPGSTB": ("Trade balance: goods and services, balance of payments basis", "millions of dollars",
+                "monthly, seasonally adjusted", "U.S. Census Bureau and U.S. Bureau of Economic Analysis"),
+    "CUSR0000SACL1E": ("Consumer price index for all urban consumers: commodities less food and energy commodities",
+                       "index 1982-84 = 100", "monthly, seasonally adjusted", "U.S. Bureau of Labor Statistics"),
+    "IREXFDFLS": ("Import price index (end use): all imports excluding food and fuels", "index December 2010 = 100",
+                  "monthly, not seasonally adjusted", "U.S. Bureau of Labor Statistics"),
+}
+FRED_SERIES.update(GEO_FRED)
+FRED_RETRIEVED.update({s: "2026-11-21" for s in GEO_FRED})
+
 SPF_FILES = ("median_rgdp_level", "median_rgdp_growth", "median_recess_level")
 SPF_URL = ("https://www.philadelphiafed.org/-/media/frbp/assets/surveys-and-data/survey-of-professional-forecasters/"
            "data-files/files/{}.xlsx")
