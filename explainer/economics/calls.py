@@ -725,4 +725,16 @@ CALLS = {c.key: c for c in [
          ("L. J. Peter and R. Hull, The Peter Principle: Why Things Always Go Wrong (1969)",
           "A. Benson, D. Li and K. Shue, \"Promotions and the Peter Principle\", Quarterly Journal of Economics "
           "134(4): 2085-2134 (2019), abstract")),
+    Call("granovetter_1973", 63, "Mark Granovetter, \"The Strength of Weak Ties\"", "1973",
+         "weak ties are more likely than strong ones to carry news of a job you have not heard of",
+         "people you see rarely move in other circles and know what your close friends already know you know; of 54 "
+         "Boston-area professionals who found a job through a contact, 17% saw the contact often, 56% occasionally "
+         "and 28% rarely",
+         "Rajkumar, Saint-Jacques, Bojinov, Brynjolfsson and Aral used LinkedIn's randomized variation in suggested "
+         "connections among 20 million people over five years: moderately weak ties raised job mobility the most, "
+         "the strongest and the weakest the least, and weak ties mattered most in digital industries",
+         "right",
+         ("M. S. Granovetter, \"The Strength of Weak Ties\", American Journal of Sociology 78(6): 1360-1380 (1973)",
+          "K. Rajkumar, G. Saint-Jacques, I. Bojinov, E. Brynjolfsson and S. Aral, \"A causal test of the strength "
+          "of weak ties\", Science 377(6612): 1304-1310 (2022), abstract")),
 ]}

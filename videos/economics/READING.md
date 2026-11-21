@@ -10,7 +10,7 @@ the series leaves out.
 Both *Parts* columns are found, not typed. *Planned* lists the parts whose entry in
 [`SYLLABUS.md`](SYLLABUS.md) names the book or paper; *Built* lists the parts whose scenes, compute step or
 README cite it (a dot: none yet). Fuller notes (editions, chapters, what each source was used for) are in each
-part's README, under *Sources*. Built so far: Parts 1–62.
+part's README, under *Sources*. Built so far: Parts 1–63.
 
 ## 1. The textbook spine
 
@@ -379,6 +379,8 @@ part's README, under *Sources*. Built so far: Parts 1–62.
 **Part 61, *Economics at the Platforms*.** Books: Ron Kohavi, Diane Tang and Ya Xu, *Trustworthy Online Controlled Experiments* (2020); David Evans and Richard Schmalensee, *Matchmakers: The New Economics of Multisided Platforms* (2016). Papers: Rochet and Tirole (2003); Edelman, Ostrovsky and Schwarz (2007); Varian (2007); Ostrovsky and Schwarz (2009); Blake, Nosko and Tadelis (2015); Lewis and Rao (2015); Hall, Kendrick and Nosko (2015); Tadelis (2016); Cohen et al. (2016); Einav, Farronato and Levin (2016); Chen et al. (2019); Athey and Luca (2019); Athey, Chetty, Imbens and Kang (2019); Brynjolfsson, Collis and Eggers (2019); Fradkin, Grewal and Holtz (2021); Bajari et al. (2023).
 
 **Part 62, *Inside the Firm*.** Books: Edward Lazear and Michael Gibbs, *Personnel Economics in Practice* (3rd ed., 2014); Robert Gibbons and John Roberts, eds., *The Handbook of Organizational Economics* (2013); Jean Tirole, *The Theory of Corporate Finance* (2006). Papers: Modigliani and Miller (1958); Jensen and Meckling (1976); Myers and Majluf (1984); Jensen and Murphy (1990); Garicano (2000); Lazear (2000); Bertrand and Mullainathan (2001); Graham and Harvey (2001); Syverson (2004, 2011); Bloom and Van Reenen (2007); Bennedsen et al. (2007); Gabaix and Landier (2008); Gibbons and Henderson (2012); Bloom et al. (2013, 2015); Davis et al. (2014); Bruhn, Karlan and Schoar (2018); Benson, Li and Shue (2019).
+
+**Part 63, *The Economy as a Network*.** Books: Matthew O. Jackson, *Social and Economic Networks* (2008); Vasco Carvalho and Alireza Tahbaz-Salehi, "Production Networks: A Primer", *Annual Review of Economics* (2019); Sanjeev Goyal, *Connections: An Introduction to the Economics of Networks* (2007). Papers: Leontief (1936); Domar (1961); Hulten (1978); Lucas (1977); Granovetter (1973); Kremer (1993); Jackson and Wolinsky (1996); Eisenberg and Noe (2001); Ballester, Calvó-Armengol and Zenou (2006); Gabaix (2011); Acemoglu et al. (2012, 2015); Banerjee et al. (2013); Elliott, Golub and Jackson (2014); Barrot and Sauvagnat (2016); Baqaee and Farhi (2019); Boehm et al. (2019); Carvalho et al. (2021); Elliott, Golub and Leduc (2022); Rajkumar et al. (2022).
 
 ## 4. What the series leaves out
 

@@ -1823,10 +1823,71 @@ DIALS = {d.key: d for d in [
              Estimate("Hanushek and Rivkin (reading)", 2010, "review", "the average across the studies they survey",
                       0.13, where="American Economic Review 100(2): 267-271", checked="2026-11-21"),
          )),
+    Dial("idiosyncratic_share", "how much of the cycle comes from firms' and sectors' own shocks", "share of the "
+         "variance of aggregate output growth", (63,), status="contested", checked="2026-11-21",
+         meaning="the old view was that millions of firm-level shocks cancel out, leaving the cycle to aggregate "
+                 "shocks; with fat-tailed firm sizes and lopsided input-output networks they need not, and estimates "
+                 "of their share range from about a third to more than half, depending on the period, the data and "
+                 "how much the elasticities of substitution are allowed to amplify sectoral shocks",
+         estimates=(
+             Estimate("Gabaix", 2011, "regression", "the 100 largest American firms: output growth on their "
+                      "idiosyncratic growth (the granular residual)", 0.33, where="Econometrica 79(3): 733-772, "
+                      "abstract (about one third)", checked="2026-11-21"),
+             Estimate("Foerster, Sarte and Watson", 2011, "structural", "American industrial production by "
+                      "industry, quarterly, after the mid-1980s", 0.5, where="Journal of Political Economy 119(1), "
+                      "abstract (about half)", checked="2026-11-21"),
+             Estimate("Atalay", 2017, "structural", "American industries, with the elasticities of substitution "
+                      "estimated rather than set to one: at least half", 0.5, where="American Economic Journal: "
+                      "Macroeconomics 9(4), working-paper abstract", checked="2026-11-21"),
+             Estimate("this film (the Island's granular residual)", 2026, "regression", "1,000 Zipf-sized firms, 40 "
+                      "years: the median R-squared over 400 histories, 5th to 95th percentile; the planted share is "
+                      "0.34", 0.27, lo=0.09, hi=0.49, where="videos/economics/econ63/compute.py, item dials",
+                      checked="2026-11-21"),
+         )),
+    Dial("input_substitution", "how easily firms swap one input for another within a year", "elasticity of "
+         "substitution between intermediate inputs, short run", (63,), status="settled within a range",
+         checked="2026-11-21",
+         meaning="within a year, firms can hardly replace one input with another: the estimates are well below one, "
+                 "near zero to about 0.2, so production networks behave almost like Leontief's and large shocks to "
+                 "essential inputs cost more than their sales share; over longer horizons substitution is easier, "
+                 "and how much easier is still being measured",
+         estimates=(
+             Estimate("Atalay (range of specifications)", 2017, "structural", "American industries' input "
+                      "shares and prices: the elasticity among intermediate inputs", 0.075, lo=0.0, hi=0.15,
+                      where="American Economic Journal: Macroeconomics 9(4), working paper", checked="2026-11-21"),
+             Estimate("Boehm, Flaaen and Pandalai-Nayar", 2019, "event study", "Japanese-owned plants in America "
+                      "after the 2011 earthquake: among material inputs", 0.2, where="Review of Economics and "
+                      "Statistics 101(1): 60-75 (structural estimate in the working paper)", checked="2026-11-21"),
+             Estimate("this film (the Island's input-output tables)", 2026, "regression", "eight sectors, 30 years "
+                      "of cost shares and prices, pair fixed effects; planted 0.15", 0.16, lo=0.14, hi=0.19,
+                      where="videos/economics/econ63/compute.py, item dials", checked="2026-11-21"),
+         )),
 ]}
 
 # What each part shows without entering a row, and why: {part: [(what is shown, the reason)]}
 SHOWN = {
+    63: [
+        ("Carvalho, Nirei, Saito and Tahbaz-Salehi (2021)", "the hook's story, stated; the Island's supply web "
+         "computed"),
+        ("Leontief (1936); Domar (1961); Antras, Chor, Fally and Hillberry (2012)", "input-output paths and "
+         "upstreamness, computed on the Island's table"),
+        ("Hulten (1978); Baqaee and Farhi (2019)", "Hulten's theorem and its second-order terms, computed on the "
+         "Island's CES network"),
+        ("Lucas (1977); Gabaix (2011); Acemoglu, Carvalho, Ozdaglar and Tahbaz-Salehi (2012)", "granular and "
+         "network volatility: the Dial's rows; Zipf firms, stars and rings computed"),
+        ("Barrot and Sauvagnat (2016); Boehm, Flaaen and Pandalai-Nayar (2019)", "supply chains measured, stated; "
+         "the Dial's rows"),
+        ("Kremer (1993); Challenger (1986)", "the O-ring, computed"),
+        ("Eisenberg and Noe (2001); Acemoglu, Ozdaglar and Tahbaz-Salehi (2015); Elliott, Golub and Jackson (2014)",
+         "financial networks: a clearing example and ring against complete contagion computed"),
+        ("Granovetter (1973); Rajkumar et al. (2022)", "weak ties: Called it?, stated; the two forces illustrated"),
+        ("Banerjee, Chandrasekhar, Duflo and Jackson (2013)", "diffusion, stated; the Island's village computed"),
+        ("Ballester, Calvo-Armengol and Zenou (2006); Manski (1993); Bramoulle, Djebbari and Fortin (2009)",
+         "the key player computed; peer effects' identification stated"),
+        ("Jackson and Wolinsky (1996)", "network formation, computed for four players"),
+        ("Elliott, Golub and Leduc (2022)", "fragile supply networks, computed"),
+        ("OECD via FRED: JPNPROINDMISMEI", "the intermission, from the Data Room"),
+    ],
     62: [
         ("Bloom, Eifert, Mahajan, McKenzie and Roberts (2013)", "the hook's story and the management Dial; the "
          "Island's experiment computed"),
