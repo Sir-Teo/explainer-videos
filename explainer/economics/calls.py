@@ -714,4 +714,15 @@ CALLS = {c.key: c for c in [
          ("T. Blake, C. Nosko and S. Tadelis, \"Consumer Heterogeneity and Paid Search Effectiveness: A Large Scale "
           "Field Experiment\", NBER Working Paper 20171 (2014), section 6 and table 4; Econometrica 83(1): 155-174 "
           "(2015)",)),
+    Call("peter_1969", 62, "Laurence J. Peter and Raymond Hull, The Peter Principle", "1969",
+         "in a hierarchy every employee tends to rise to his level of incompetence",
+         "people are promoted for doing their present job well, until they reach a job they do badly, where they "
+         "stay, because nobody is promoted for doing a job badly",
+         "Benson, Li and Shue's sales workers at 131 firms: firms do promote their best salespeople, who then make "
+         "worse managers than colleagues who sold less; but firms limit the cost, giving sales less weight when the "
+         "manager's job carries more responsibility",
+         "partly right",
+         ("L. J. Peter and R. Hull, The Peter Principle: Why Things Always Go Wrong (1969)",
+          "A. Benson, D. Li and K. Shue, \"Promotions and the Peter Principle\", Quarterly Journal of Economics "
+          "134(4): 2085-2134 (2019), abstract")),
 ]}
