@@ -37,7 +37,8 @@ class Forests(VoiceoverScene):
                             corner=DL, font_size=12)
         with self.voiceover(
             "To target by effects, you have to estimate them, person by person, and they are never observed: "
-            "nobody is both treated and untreated. <bookmark mark='a'/> Start from a randomized trial: on the "
+            "nobody is both treated and untreated. In gold, the effect the Island knows, by risk. <bookmark "
+            "mark='a'/> Start from a randomized trial: on the "
             f"Island, {T['trial']:,} unemployed people, half given a place at random. <bookmark mark='b'/> Stefan "
             "Wager and Susan Athey's causal forest grows trees that split where the effect differs, not where the "
             "outcome does. <bookmark mark='c'/> And it is honest: one half of each tree's sample chooses the splits "
@@ -45,12 +46,12 @@ class Forests(VoiceoverScene):
             "<bookmark mark='d'/> Averaged by risk, the forest's estimates follow the true hump, flattened at the "
             "edges where data are thin."
         ) as vo:
-            self.play(FadeIn(ax), FadeIn(tag))
+            self.play(FadeIn(ax), FadeIn(tag), Create(tru), run_time=1.5)
             for k, mk in enumerate("abc"):
                 vo.wait_until(mk)
                 self.play(FadeIn(side[k], shift=LEFT * 0.1))
             vo.wait_until("d")
-            self.play(Create(tru), Create(est), FadeIn(side[3]), run_time=1.8)
+            self.play(Create(est), FadeIn(side[3]), run_time=1.8)
         self.clear_scene()
 
     def policy(self):

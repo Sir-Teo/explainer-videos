@@ -26,6 +26,9 @@ class Silicus(VoiceoverScene):
              r"where the effects might be", ALGO),
         ], cols=2, width=12.8, font_size=20).next_to(steps, DOWN, buff=0.7)
         tag = published_tag(r"Horton, \ NBER Working Paper 31122 (2023)", corner=DL, font_size=12)
+        title_ = VGroup(label(r"homo silicus", font_size=48, color=NET),
+                        label(r"a language model as a simulated subject", font_size=24, color=GREY_A)).arrange(
+            DOWN, buff=0.25)
         with self.voiceover(
             "Language models answer questions the way people write about them. John Horton asked whether they "
             "could serve as simulated subjects, homo silicus. <bookmark mark='a'/> Give the model a persona, a "
@@ -36,10 +39,12 @@ class Silicus(VoiceoverScene):
             "and a preference for the status quo. <bookmark mark='f'/> Used this way, a model is a cheap pilot: "
             "which treatments are worth running on people, how a question reads, where effects might be."
         ) as vo:
-            self.play(FadeIn(tag))
+            self.play(FadeIn(tag), FadeIn(title_, shift=UP * 0.1))
             for k, mk in enumerate("abcd"):
                 vo.wait_until(mk)
                 anims = [FadeIn(steps.boxes[k])]
+                if k == 0:
+                    anims.append(FadeOut(title_))
                 if k:
                     anims.append(GrowArrow(steps.arrows[k - 1]))
                 self.play(*anims)

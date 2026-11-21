@@ -30,6 +30,7 @@ GROUPB = "#F2A65A"
 GAIN = "#7BD88F"
 COST = "#F25F5C"
 PROD = "#C9A0FF"           # the data film
+GDP = "#F2C14E"            # aggregates
 WHITEC = "#FFFFFF"
 
 

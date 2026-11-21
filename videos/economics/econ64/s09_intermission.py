@@ -18,7 +18,7 @@ class Intermission(SoundScene):
         ax = plane([1969, 2023], [3, 11], center=DOWN * 0.25 + LEFT * 0.3, x_length=11.6, y_length=5.2,
                    xticks=[1970, 1980, 1990, 2000, 2010, 2020], yticks=[3, 5, 7, 9, 11],
                    ylabel=r"transistors on the largest microprocessor \ (log scale)", xfmt=lambda x: f"{x:.0f}",
-                   yfmt=lambda y: rf"$10^{{{y:.0f}}}$", font_size=15)
+                   yfmt=lambda y: f"10^{{{y:.0f}}}", font_size=15)
         yrs, ts = np.array(film["years"], float), np.array(film["t"], float)
         pts = [ax.ax.c2p(x, y) for x, y in zip(yrs, lv)]
         dots_ = VGroup(*[Dot(p_, radius=0.05, color=PROD) for p_ in pts])

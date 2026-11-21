@@ -82,6 +82,8 @@ class Labels(VoiceoverScene):
         key = legend_rows([(JUDGE, r"the stricter judges"), (ALGO, r"the lenient judges' cases, \ contracted by "
                                                                   r"the algorithm")], font_size=16)
         key.next_to(ax, RIGHT, buff=0.4)
+        idea = label(r"cases go to judges at random: \ lenient and strict judges see the same kind of defendant",
+                     font_size=22, color=E.ACCENT).move_to(DOWN * 1.2)
         tag = published_tag(r"Lakkaraju, \ Kleinberg, \ Leskovec, \ Ludwig and Mullainathan, \ KDD (2017); \ "
                             r"Kleinberg et al.\ (2018)", corner=DL, font_size=12)
         with self.voiceover(
@@ -94,7 +96,7 @@ class Labels(VoiceoverScene):
             "stricter group's detention rate, the algorithm's contracted caseload has fewer failures than those "
             "judges' own, using no outcome that was never seen."
         ) as vo:
-            self.play(FadeIn(tag))
+            self.play(FadeIn(tag), FadeIn(idea, shift=UP * 0.1))
             for k, mk in enumerate("abcd"):
                 vo.wait_until(mk)
                 anims = [FadeIn(steps.boxes[k])]
@@ -102,6 +104,7 @@ class Labels(VoiceoverScene):
                     anims.append(GrowArrow(steps.arrows[k - 1]))
                 self.play(*anims)
             vo.wait_until("e")
+            self.play(FadeOut(idea), run_time=0.5)
             self.play(FadeIn(ax), FadeIn(labs), FadeIn(key), *[GrowFromEdge(b, DOWN) for b in jb],
                       *[GrowFromEdge(b, DOWN) for b in ab], run_time=1.5)
         self.clear_scene()

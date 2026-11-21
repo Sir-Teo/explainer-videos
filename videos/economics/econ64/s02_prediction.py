@@ -78,7 +78,8 @@ class Prediction(VoiceoverScene):
             "resample, each split chosen to separate those who came back from those who did not, using age, prior "
             "arrests, missed court dates, the charge and whether the person has a job. <bookmark mark='d'/> On the "
             "test half, group defendants by their predicted risk, in tenths, and compare with the truth the "
-            "simulation knows. The forest ranks them well."
+            "simulation knows. The forest ranks them well, but it underestimates the riskiest tenth: it learned "
+            "from the released, who were the less risky of their kind. Remember that for chapter three."
         ) as vo:
             self.play(FadeIn(ax), FadeIn(diag), FadeIn(tag))
             for k, mk in enumerate("abcd"):

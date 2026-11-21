@@ -52,7 +52,7 @@ class DML(VoiceoverScene):
 
     def strips(self):
         D = load("dml")
-        ax = plane([0.8, 1.7], [-0.5, 3.5], center=LEFT * 1.4 + DOWN * 0.2, x_length=8.0, y_length=4.8,
+        ax = plane([0.8, 1.7], [-0.5, 3.5], center=RIGHT * 0.6 + DOWN * 0.2, x_length=7.6, y_length=4.8,
                    xticks=[0.8, 1.0, 1.2, 1.4, 1.6], yticks=[], xlabel=r"the estimate of $\theta$ \ (the truth is 1)",
                    xfmt=lambda v: f"{v:.1f}", font_size=15)
         truth = vline(ax, 1.0, -0.5, 3.5, TRUTHC)
