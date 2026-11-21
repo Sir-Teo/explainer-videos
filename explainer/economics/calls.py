@@ -414,6 +414,18 @@ CALLS = {c.key: c for c in [
           "of Technology on Employment and Unemployment, National Academy of Engineering (1983), as quoted in "
           "secondary listings",
           "BLS via FRED: LNS12300060 (employment-population ratio, 25-54) and PRS85006173 (labor share)")),
+    Call("diiulio_1995", 49, "John DiIulio, a political scientist at Princeton, in The Weekly Standard",
+         "November 1995",
+         "a coming wave of juvenile 'super-predators': some 270,000 more young predators on the streets by 2010 than "
+         "in 1990",
+         "a projection from the number of boys who would be teenagers, the share of them assumed to be violent, and "
+         "the rise in youth violence of the early 1990s",
+         "juvenile violence was already falling: by 2004 the arrest rate of juveniles for violent crime was half its "
+         "1994 peak; DiIulio later said the prediction was wrong, but nearly every state had by then made it easier "
+         "to try juveniles as adults",
+         "wrong",
+         ("J. DiIulio, \"The Coming of the Super-Predators\", The Weekly Standard, 27 November 1995",
+          "Office of Juvenile Justice and Delinquency Prevention, juvenile arrest bulletins (1998-2006)")),
     Call("hubbert_1956", 48, "M. King Hubbert, a geophysicist at Shell", "March 1956",
          "US oil production would peak between 1965, the likeliest year, and 1970, then decline for good",
          "a bell-shaped curve fitted to the discoveries and production of the lower 48 states",

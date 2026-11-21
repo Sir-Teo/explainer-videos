@@ -50,7 +50,8 @@ class Dice(VoiceoverScene):
             "output. The world can cut emissions by a share mu, at a cost that rises steeply with the share, until "
             f"cutting the last tonne costs the backstop price of {D['backstop2050']:.0f} dollars in 2050. "
             "<bookmark mark='f'/> And a planner chooses how much to cut each year to make the sum of everyone's "
-            "discounted well-being, now and in the future, as large as possible."
+            "discounted well-being, now and in the future, as large as possible, raising the share it cuts by no "
+            "more than three points a year, as old plants, buildings and cars are replaced."
         ) as vo:
             self.play(FadeIn(tag), FadeIn(intro[0]), run_time=1.0)
             self.play(FadeIn(intro[1]), FadeIn(intro[2]), run_time=1.5)

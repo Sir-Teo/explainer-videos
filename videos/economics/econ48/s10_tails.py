@@ -79,6 +79,13 @@ class Tails(VoiceoverScene):
                   rf"{100 * L['fat'][4]:.0f}\% at 10, \\ {100 * L['fat'][-1]:.0f}\% at 20", font_size=18, color=HEAT),
             label(r"the answer is set \\ by an assumption \\ about the extreme", font_size=19, color=E.ACCENT),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.35).to_edge(RIGHT, buff=0.3)
+        inset = plane([0, 20], [0, 1.0], center=LEFT * 1.6 + UP * 0.3, x_length=4.2, y_length=2.4,
+                      xticks=[0, 5, 10, 15, 20], yticks=[0, 0.5, 1.0], xlabel=r"warming, \ \textdegree C",
+                      ylabel=r"share of output lost", xfmt=lambda v: f"{v:.0f}", yfmt=lambda v: f"{100 * v:.0f}\\%",
+                      font_size=12)
+        Ts = np.linspace(0, 20, 201)
+        om = 1 - 1 / (1 + (0.031 / 9) * Ts ** 2 + (Ts / 6.5) ** 7)
+        dmg = path(inset, Ts, om, LOSS, 3.0)
         tag = island_tag(corner=DR, font_size=14)
         with self.voiceover(
             "Here is the problem with numbers. <bookmark mark='a'/> Let damages follow DICE below four degrees but "
@@ -93,11 +100,13 @@ class Tails(VoiceoverScene):
             "<bookmark mark='d'/> His conclusion was not that the number is infinite, but that climate policy is "
             "partly insurance, against outcomes too bad and too uncertain for a single best guess."
         ) as vo:
-            self.play(FadeIn(ax), FadeIn(tag), run_time=1.0)
+            self.play(FadeIn(tag), run_time=0.5)
             vo.wait_until("a")
-            self.play(FadeIn(side[0]))
+            self.play(FadeIn(inset), FadeIn(side[0]), run_time=1.0)
+            self.play(Create(dmg), run_time=2.0)
             vo.wait_until("b")
-            self.play(Create(lt), FadeIn(dt), FadeIn(side[1]), run_time=2.0)
+            self.play(FadeOut(inset), FadeOut(dmg), run_time=0.6)
+            self.play(FadeIn(ax), Create(lt), FadeIn(dt), FadeIn(side[1]), run_time=2.0)
             vo.wait_until("c")
             self.play(Create(lf), FadeIn(df), FadeIn(side[2]), run_time=2.5)
             vo.wait_until("d")

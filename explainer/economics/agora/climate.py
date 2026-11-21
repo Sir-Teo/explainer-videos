@@ -323,16 +323,21 @@ class Dice:
         mu[self.year > ny[-1]] = np.maximum(nodes[-1], 1.0)
         return mu
 
-    def optimize(self, rho=None, eta=None, n_nodes: int = 36, first: float = 0.05) -> dict:
-        """The control path that maximizes welfare (savings held fixed), with this year's rate fixed at ``first``."""
-        def neg(x):
-            mu = self.mu_path(np.concatenate([[first], x]))
-            return -self.welfare(self.run(mu), rho, eta)
+    def optimize(self, rho=None, eta=None, n_nodes: int = 36, first: float = 0.05, max_step: float = 0.15) -> dict:
+        """The control path that maximizes welfare (savings held fixed), with this year's rate fixed at ``first``.
+        The search is over steps between 5-year nodes of at least zero, so the path never turns down, and at most
+        ``max_step``: the share of emissions cut can rise by at most 3 points a year, as plants, buildings and
+        vehicles are replaced."""
+        def nodes(x):
+            return np.clip(first + np.concatenate([[0.0], np.cumsum(x)]), 0.0, 1.0)
 
-        x0 = np.linspace(0.15, 1.0, n_nodes - 1)
-        r = minimize(neg, x0, method="L-BFGS-B", bounds=[(0, 1)] * (n_nodes - 1),
-                     options={"maxiter": 400})
-        mu = self.mu_path(np.concatenate([[first], r.x]))
+        def neg(x):
+            return -self.welfare(self.run(self.mu_path(nodes(x))), rho, eta)
+
+        x0 = np.full(n_nodes - 1, (1.0 - first) / (n_nodes - 1))
+        x0 = np.minimum(x0, max_step)
+        r = minimize(neg, x0, method="L-BFGS-B", bounds=[(0, max_step)] * (n_nodes - 1), options={"maxiter": 600})
+        mu = self.mu_path(nodes(r.x))
         return {"mu": mu, "run": self.run(mu), "welfare": -r.fun}
 
     def scc(self, mu, rho=None, eta=None, rates=(), pulse: float = 1.0) -> dict:

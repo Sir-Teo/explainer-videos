@@ -1570,10 +1570,90 @@ DIALS = {d.key: d for d in [
              Estimate("Seale and Regmi", 2006, "structural", "high-income countries", 0.2, 0.1, 0.3,
                       where="as above", checked="2026-11-19"),
          )),
+    Dial("crime_police", "the elasticity of crime with respect to police", "percent change in crime per percent "
+         "change in police", (49,), status="contested", checked="2026-11-21",
+         meaning="police go where crime is, so a simple comparison makes police look as if they cause crime; designs "
+                 "that move police for reasons unrelated to crime find that more police mean less crime, by about a "
+                 "third of a percent for each percent more police in London; how large the effect is for the most "
+                 "costly crimes, murder above all, decides whether cities have too few officers or too many",
+         estimates=(
+             Estimate("Levitt (murder)", 1997, "IV", "US cities, 1970-92, police hired before mayoral and "
+                      "gubernatorial elections", -3.05, -7.11, 1.01,
+                      where="American Economic Review 87(3), as quoted by Chalfin and McCrary (2018): -3.05 +/- 4.06",
+                      checked="2026-11-21"),
+             Estimate("Evans and Owens (murder)", 2007, "IV", "US cities, federal COPS hiring grants", -0.84, -1.78,
+                      0.10, where="Journal of Public Economics 91, as quoted by Chalfin and McCrary (2018): -0.84 +/- "
+                      "0.94", checked="2026-11-21"),
+             Estimate("Draca, Machin and Witt", 2011, "IV", "London's boroughs after the July 2005 bombings: police "
+                      "moved to central London", -0.35, -0.4, -0.3,
+                      where="American Economic Review 101(5): 2157-2181, abstract (about -0.3 to -0.4)",
+                      checked="2026-11-21"),
+         )),
+    Dial("class_size", "the effect of a smaller class on test scores", "percentile points from a class of 13-17 "
+         "rather than 22-25 pupils", (49,), status="contested", checked="2026-11-21",
+         meaning="Tennessee's experiment found a few percentile points for a class a third smaller, more for poor and "
+                 "black pupils; designs on other data range from that to nothing; at the cost of a third more "
+                 "teachers, whether smaller classes beat other uses of the money turns on which estimate holds where",
+         estimates=(
+             Estimate("Krueger (STAR, first year)", 1999, "RCT", "Tennessee, 79 schools, 1985-89: pupils and teachers "
+                      "assigned at random within schools", 4.0,
+                      where="Quarterly Journal of Economics 114(2), abstract: about 4 percentile points the first year "
+                            "in a small class", checked="2026-11-21"),
+             Estimate("this film (STAR, kindergarten)", 2026, "RCT", "5,786 kindergarteners, reading and maths "
+                      "percentiles against regular classes, within schools, errors clustered by school", 5.63, 2.82,
+                      8.44, where="videos/economics/econ49/compute.py, item star", checked="2026-11-21"),
+             Estimate("Angrist, Lavy, Leder-Luis and Shany", 2019, "RD", "Israel, 2002-2011: Maimonides' rule with "
+                      "later data", 0.0, where="AER: Insights 1(3): 309-324, abstract: no effect, a precisely "
+                      "estimated zero", checked="2026-11-21"),
+         )),
+    Dial("teacher_va", "the spread of teachers' effects", "standard deviations of pupils' scores from a teacher one "
+         "standard deviation better", (49,), status="settled within a range", checked="2026-11-21",
+         meaning="a teacher one standard deviation better raises a class's scores by about a tenth of a standard "
+                 "deviation in a year, and the gains show up in earnings; how far value added can be used to hire, "
+                 "pay or dismiss teachers turns on whether it is biased by which pupils a teacher gets, and on how "
+                 "noisy a few years of classes are",
+         estimates=(
+             Estimate("Chetty, Friedman and Rockoff (maths)", 2014, "regression", "New York City-area district, "
+                      "grades 3-8, 1989-2009, value added validated by teachers' moves", 0.14,
+                      where="American Economic Review 104(9), 'Measuring the Impacts of Teachers I', NBER WP 19423",
+                      checked="2026-11-21"),
+             Estimate("Chetty, Friedman and Rockoff (English)", 2014, "regression", "the same", 0.10,
+                      where="as above", checked="2026-11-21"),
+             Estimate("Hanushek and Rivkin (reading)", 2010, "review", "the average across the studies they survey",
+                      0.13, where="American Economic Review 100(2): 267-271", checked="2026-11-21"),
+         )),
 ]}
 
 # What each part shows without entering a row, and why: {part: [(what is shown, the reason)]}
 SHOWN = {
+    49: [
+        ("Becker (1968, 1992)", "the hook's story and the model of crime, computed on the Island"),
+        ("Di Tella and Schargrodsky (2004); Draca, Machin and Witt (2011); Chalfin and McCrary (2018); Levitt "
+         "(1997); Evans and Owens (2007)", "stated and entered in the crime_police dial; the biases computed on the "
+         "Island"),
+        ("Ehrlich (1975); Leamer (1983); McManus (1985)", "stated; the 1950 murder rates shown from the Data Room"),
+        ("Becker (1965, 1973); Choo and Siow (2006); Goldin and Katz (2002)", "stated; household production and the "
+         "marriage market computed on the Island; participation shown from the Data Room"),
+        ("Angrist and Evans (1998)", "estimated here on AER's extract of their census sample"),
+        ("Becker and Lewis (1973)", "computed on the Island; fertility shown from the Data Room"),
+        ("Lundberg, Pollak and Wales (1997)", "stated; the collective household computed on the Island"),
+        ("Krueger (1999); Angrist and Lavy (1999, 2019)", "stated and entered in the class_size dial; STAR and the "
+         "California districts analysed here; Maimonides' rule computed on the Island"),
+        ("Chetty, Friedman and Rockoff (2014); Hanushek and Rivkin (2010)", "stated and entered in the teacher_va "
+         "dial; value added computed on the Island"),
+        ("Heckman et al. (2010); Head Start Impact Study (2010, 2012); Durkin et al. (2022); Rea and Burton (2020)",
+         "stated"),
+        ("Grossman (1972); Gruber and Owings (1996); Cooper et al. (2019)", "stated; the demand for health computed; "
+         "the Australian Health Survey analysed here"),
+        ("Case and Deaton (2015); Alpert et al. (2022)", "stated"),
+        ("Becker and Murphy (1988); Gruber and Kőszegi (2001)", "the model computed on the Island; cigarette demand "
+         "estimated here on AER's state data"),
+        ("Lazear (2000); Gneezy and Rustichini (2000); Mellström and Johannesson (2008); Frey and Oberholzer-Gee "
+         "(1997)", "stated"),
+        ("DiIulio (1995)", "the Called it? card"),
+        ("Wei and Zhang (2011); Doepke et al. (2023)", "the frontier chapter, stated; fertility shown from the Data "
+         "Room"),
+    ],
     48: [
         ("Simon and Ehrlich (1980); Sabin (2013); Kiel, Matheson and Golembiewski (2010)", "the wager stated; the "
          "metals' real prices and every ten-year window computed from the Data Room"),

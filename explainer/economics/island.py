@@ -1172,7 +1172,40 @@ TRUTHS = {
         "power": {"name": ("hydro", "nuclear", "coal", "gas A", "gas B", "peakers", "oil"),
                   "capacity": (5.0, 8.0, 10.0, 7.0, 7.0, 5.0, 3.0),
                   "cost": (5.0, 12.0, 35.0, 45.0, 48.0, 95.0, 160.0),
-                  "owner": (0, 0, 0, 1, 1, 0, 0), "cap_price": 250.0},
+                  "owner": (0, 0, 0, 1, 1, 0, 0), "cap_price": 250.0,
+                  # tonnes of CO2 per MWh, typical of each kind of plant; and a carbon price in $ a tonne
+                  "intensity": (0.0, 0.0, 1.0, 0.37, 0.40, 0.55, 0.75), "carbon": 50.0},
+    },
+    49: {
+        # crime as a choice (chapters 1-2): 20,000 of the Island's potential offenders, each with a gain from an
+        # offence (log-normal, median the equivalent of one year in prison, log-sd 0.8); caught with probability 0.2,
+        # sentenced to three years
+        "offenders": {"n": 20000, "median": 1.0, "sigma": 0.8, "p": 0.2, "sentence": 3.0, "seed": 49},
+        # the kinds of offender in the Play-it game: (CARA coefficient, the weight on each later year of a sentence)
+        "kinds": {"risk-neutral": (0.0, 1.0), "risk-averse": (0.5, 1.0), "present-minded": (0.0, 0.75)},
+        # Becker's planner: harm 2 per offence, catching costs 1 per unit of probability, fines (which cost nothing to
+        # impose) up to 40
+        "planner": {"harm": 2.0, "cost_p": 1.0, "f_max": 40.0},
+        # police and crime (chapter 3): 1,000 blocks; police go where crime is expected; elasticity -0.3
+        "police": {"n_blocks": 1000, "elasticity": -0.3, "response": 0.8, "noise_police": 0.35, "seed": 49},
+        # the household (chapter 4): the husband's wage 1, home productivities 0.6 (him) and 1 (her); goods' share 0.6
+        "household": {"w1": 1.0, "h1": 0.6, "h2": 1.0, "alpha": 0.4},
+        # marriage (chapter 5): men and women with school only, some college, a degree; the surplus of each pairing
+        "marriage": {"men": (3000, 2600, 1800), "women": (2600, 2800, 2400),
+                     "phi": ((1.0, 0.4, -0.6), (0.4, 1.3, 0.5), (-0.6, 0.5, 1.8)), "seed": 49},
+        # children (chapter 6): Becker and Lewis with full income 3 + the mother's wage
+        "children": {"income": 3.0, "time": 0.15, "goods": 0.05, "a": 0.3, "b": 0.15},
+        # bargaining (chapter 7): how much each parent cares for the child good (father, mother); the weight's slope
+        "bargain": {"child_taste": (0.15, 0.40), "slope": 1.5},
+        # schools (chapter 8): Maimonides' cap of 40, a planted effect of -0.02 sd per pupil; teachers' value added
+        # with a spread of 0.12 sd, classes of 25
+        "maimonides": {"n_schools": 2000, "effect": -0.02, "cap": 40, "seed": 49},
+        "teachers": {"n_teachers": 1200, "years": 4, "class_size": 25, "sd_va": 0.12, "seed": 49},
+        # health (chapter 10): Grossman's health stock, depreciation 2.5% at 20 rising 5.9% a year of age
+        "grossman": {"r": 0.03, "delta0": 0.025, "delta_growth": 0.059, "a": 0.3, "h_min": 0.25},
+        # addiction (chapter 12): a price rise from 1 to 1.5 announced ten periods ahead
+        "addiction": {"T": 60, "rise_at": 20, "announce_at": 10, "price0": 1.0, "price1": 1.5, "beta": 0.95,
+                      "delta": 0.3, "alpha": 2.0, "reinforce": 0.2, "harm": 0.1},
     },
 }
 

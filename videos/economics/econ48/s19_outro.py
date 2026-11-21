@@ -52,7 +52,8 @@ class Outro(VoiceoverScene):
             self.play(FadeIn(q, shift=UP * 0.2))
             vo.wait_until("a")
             self.play(FadeIn(a, shift=UP * 0.1), run_time=2)
-            self.play(Create(logo), run_time=1.5)
+            self.play(Create(logo), run_time=16.0, rate_func=linear)
+            self.play(Indicate(a, color=E.ACCENT, scale_factor=1.0), run_time=2.0)
         self.clear_scene()
 
     def recap(self):
@@ -66,8 +67,8 @@ class Outro(VoiceoverScene):
             (r"Hotelling: \ the rent rises at the rate of interest; \ prices need not, \ and mostly did not", METAL),
             (rf"the fishery: \ open access, \ stock {Fi['open_end']:.1f}; \ a quota, \ {Fi['quota_end']:.1f}; \ "
              rf"overexploited: \ {Fa['first']:.0f}\% to {Fa['last']:.0f}\%", FISH),
-            (rf"the climate: \ four equations, \ {C['decade_model']:.2f}\textdegree \ against "
-             rf"{C['decade_obs']:.2f}\textdegree", HEAT),
+            (rf"the climate: \ four equations; \ the last decade, \ {C['decade_model']:.2f}\textdegree \ fitted, \ "
+             rf"{C['decade_obs']:.2f}\textdegree \ measured", HEAT),
             (rf"the model: \ optimal warming {O['T2100']:.1f}\textdegree \ in 2100, \ \${O['price2050']:.0f} a tonne "
              r"in 2050", OPT),
             (rf"the discount rate: \ \${S['by_rate'][0]:.0f} \ at 1\%, \ \${S['by_rate'][4]:.0f} \ at 3\%, \ "
@@ -94,20 +95,25 @@ class Outro(VoiceoverScene):
         rows.next_to(head, DOWN, buff=0.35)
         del B
         with self.voiceover(
-            "Part forty-eight in twelve lines. <bookmark mark='a'/> Simon won his bet, but a decade of metal prices "
-            "is close to a coin toss. Hotelling's rent rises at the rate of interest, while the prices of metals "
-            "barely rose, because costs fell and supply grew. Fish without owners are overfished; quotas that can be "
-            "traded save them. Four equations, fitted to the record, reproduce the warming so far. A climate-economy "
-            "model built on them finds an optimal path to about two and a half degrees, with a carbon price near a "
-            "hundred dollars by 2050. The social cost of carbon falls from hundreds of dollars to tens as the "
-            "discount rate rises, and the rate is partly an ethical choice. With fat tails, the answer depends on "
-            "the worst case allowed. A flat damage favours a price over a cap. A club with a penalty tariff can "
-            "hold together where goodwill cannot. Solar power got cheaper the more was built. Hot, poor places lose "
-            "the most from warm years. And in electricity, holding back a little capacity can pay a great deal."
+            "Part forty-eight in twelve lines. <bookmark mark='r1'/> Simon won his bet, but a decade of metal prices "
+            "is close to a coin toss. <bookmark mark='r2'/> Hotelling's rent rises at the rate of interest, while the "
+            "prices of metals barely rose, because costs fell and supply grew. <bookmark mark='r3'/> Fish without "
+            "owners are overfished; quotas that can be traded save them. <bookmark mark='r4'/> Four equations, "
+            "fitted to the record, reproduce the warming so far. <bookmark mark='r5'/> A climate-economy model built "
+            "on them finds an optimal path to about two and a half degrees, with a carbon price near a hundred "
+            "dollars by 2050. <bookmark mark='r6'/> The social cost of carbon falls from hundreds of dollars to tens "
+            "as the discount rate rises, <bookmark mark='r7'/> and the rate is partly an ethical choice. <bookmark "
+            "mark='r8'/> With fat tails, the answer depends on the worst case allowed. <bookmark mark='r9'/> A flat "
+            "damage favours a price over a cap. <bookmark mark='r10'/> A club with a penalty tariff can hold together "
+            "where goodwill cannot, and solar power got cheaper the more was built. <bookmark mark='r11'/> Hot, poor "
+            "places lose the most from warm years. <bookmark mark='r12'/> And in electricity, holding back a little "
+            "capacity can pay a great deal."
         ) as vo:
             self.play(FadeIn(head))
-            vo.wait_until("a")
-            self.play(LaggedStart(*[FadeIn(r_, shift=RIGHT * 0.15) for r_ in rows], lag_ratio=0.8), run_time=40.0)
+            for i, r_ in enumerate(rows):
+                vo.wait_until(f"r{i + 1}")
+                self.play(FadeIn(r_, shift=RIGHT * 0.15), run_time=0.8)
+            self.play(Indicate(rows, color=WHITE, scale_factor=1.0), run_time=2.0)
         self.clear_scene()
 
     def problems(self):
@@ -153,18 +159,30 @@ class Outro(VoiceoverScene):
                      label(r"how far can the model of choice under constraint be pushed into the rest of life?",
                            font_size=24, color=E.ACCENT)).arrange(DOWN, buff=0.22)
         head = label(r"from the planet \ to the rest of life", font_size=26, color=GREY_A).to_edge(UP, buff=0.5)
-        VGroup(hc, nxt).arrange(DOWN, buff=0.6).next_to(head, DOWN, buff=0.5)
+        opts = VGroup(*[VGroup(RoundedRectangle(width=4.6, height=1.0, corner_radius=0.12, stroke_color=c_,
+                                                stroke_width=2.0), label(t_, font_size=20, color=c_))
+                        for t_, c_ in ((r"the car park: \ a sure cost", GREY_A),
+                                       (r"the street: \ the chance of a ticket \\ times the fine", E.ACCENT))])
+        for o_ in opts:
+            o_[1].move_to(o_[0])
+        opts.arrange(RIGHT, buff=0.8)
+        vs = label(r"or", font_size=20, color=GREY_B).move_to(opts)
+        VGroup(hc, VGroup(opts, vs), nxt).arrange(DOWN, buff=0.45).next_to(head, DOWN, buff=0.4)
         with self.voiceover(
             "Next time, the economic approach to everything else. <bookmark mark='a'/> In the 1960s Gary Becker, "
-            "late for a student's oral examination, had to choose between a car park and the street. He weighed "
-            "the chance of a ticket and the fine against the cost of the car park, parked in the street, and did "
-            "not get a ticket. By the time he reached the room he was thinking of crime as a choice, the idea of "
-            "his 1968 paper. <bookmark mark='b'/> Part forty-nine asks how far the model of choice under "
-            "constraint can be pushed into the rest of life, and where it breaks."
+            "late for a student's oral examination, had to choose between a car park and the street. <bookmark "
+            "mark='a2'/> He weighed the chance of a ticket and the fine against the cost of the car park, <bookmark "
+            "mark='a3'/> parked in the street, and did not get a ticket. By the time he reached the room he was "
+            "thinking of crime as a choice, the idea of his 1968 paper. <bookmark mark='b'/> Part forty-nine asks "
+            "how far the model of choice under constraint can be pushed into the rest of life, and where it breaks."
         ) as vo:
             self.play(FadeIn(head))
             vo.wait_until("a")
             self.play(FadeIn(hc, shift=UP * 0.1))
+            vo.wait_until("a2")
+            self.play(FadeIn(opts[0]), FadeIn(vs), FadeIn(opts[1]), run_time=1.2)
+            vo.wait_until("a3")
+            self.play(Indicate(opts[1], color=WHITE, scale_factor=1.05), opts[0].animate.set_opacity(0.35))
             vo.wait_until("b")
             self.play(FadeIn(nxt, shift=UP * 0.1))
         self.wait(9.5)

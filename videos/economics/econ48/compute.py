@@ -296,7 +296,11 @@ def compute_power() -> dict:
         k = int(np.argmax(np.array(wh["price"]) == p_))
         steps.append({"price": p_, "held": float(held[k]), "profit": wh["profit"][k]})
     names = [P["name"][i] for i in mo["order"]]
+    taxed = [c + P["carbon"] * e for c, e in zip(cost, P["intensity"])]
+    mt = cl.merit_order(cap, taxed, [peak])
     return {"name": names, "cum": mo["cum"], "cost": mo["cost"], "hours": hours.tolist(), "load": load_gw.tolist(),
+            "carbon": P["carbon"], "taxed": {"name": [P["name"][i] for i in mt["order"]], "cum": mt["cum"],
+                                             "cost": mt["cost"], "peak_price": mt["price"][0]},
             "price": mo["price"], "peak": peak, "withhold": wh, "steps": steps, "total": float(sum(cap)),
             "cap_price": P["cap_price"],
             "dynamo_cap": float(sum(c for c, o in zip(cap, owner) if o == 1))}

@@ -75,6 +75,14 @@ class Clubs(VoiceoverScene):
             label(r"Nordhaus, \ 2015: \ without \\ sanctions, \ only clubs \\ that do little are stable", font_size=17,
                   color=E.ACCENT),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.3).to_edge(RIGHT, buff=0.3)
+        full = climate.club(tariff=0.2, **Tc)
+        sizes = np.array(full["size"])
+        order = np.argsort(-sizes)
+        dots_ = VGroup(*[Circle(radius=0.08 + 0.9 * np.sqrt(sizes[i]) * 0.5, stroke_width=1.5, stroke_color=WHITE,
+                                fill_color=GREY_B, fill_opacity=0.8) for i in order]).arrange(RIGHT, buff=0.12)
+        dots_.next_to(ax, UP, buff=0.25)
+        if dots_.width > ax.width:
+            dots_.width = ax.width
         tag = island_tag(corner=DR, font_size=14)
         with self.voiceover(
             "William Nordhaus took the idea further: a climate club. <bookmark mark='a'/> Fifteen Island countries "
@@ -87,14 +95,25 @@ class Clubs(VoiceoverScene):
             f"{100 * C['first']:.0f} percent, {C['members'][list(tr).index(C['first'])]} countries stay; at "
             f"{100 * C['full']:.0f} percent, all {Tc['n']}. <bookmark mark='d'/> Nordhaus found the same in a "
             "far richer model: without sanctions on non-participants, the only stable coalitions are those that "
-            "cut very little. The Kyoto Protocol, which had no sanctions, lost its members; a club with a penalty "
-            "can hold together."
+            "cut very little. <bookmark mark='e'/> The Kyoto Protocol had no such penalty: the United States never "
+            "ratified it, and Canada withdrew. <bookmark mark='f'/> A club with a penalty can hold together."
         ) as vo:
-            self.play(FadeIn(ax), FadeIn(tag), FadeIn(side[0]), run_time=1.0)
+            self.play(FadeIn(ax), FadeIn(tag), run_time=1.0)
+            vo.wait_until("a")
+            self.play(LaggedStart(*[FadeIn(d_) for d_ in dots_], lag_ratio=0.1), FadeIn(side[0]), run_time=2.0)
             vo.wait_until("b")
-            self.play(Create(steps), FadeIn(side[1]), run_time=3.0)
+            self.play(LaggedStart(*[d_.animate.set_fill(LOSS, opacity=0.8) for d_ in dots_[::-1]], lag_ratio=0.1),
+                      FadeIn(side[1]), run_time=2.0)
+            self.play(Create(steps), run_time=3.0)
             vo.wait_until("c")
-            self.play(FadeIn(side[2]))
+            self.play(LaggedStart(*[d_.animate.set_fill(GAIN, opacity=0.8) for d_ in dots_], lag_ratio=0.1),
+                      FadeIn(side[2]), run_time=2.0)
             vo.wait_until("d")
             self.play(FadeIn(side[3]))
+            vo.wait_until("e")
+            self.play(LaggedStart(*[d_.animate.set_fill(LOSS, opacity=0.8) for d_ in dots_[::-1]], lag_ratio=0.08),
+                      run_time=2.0)
+            vo.wait_until("f")
+            self.play(LaggedStart(*[d_.animate.set_fill(GAIN, opacity=0.8) for d_ in dots_], lag_ratio=0.08),
+                      Indicate(steps, color=WHITE, scale_factor=1.0), run_time=2.0)
         self.clear_scene()

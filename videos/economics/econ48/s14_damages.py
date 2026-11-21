@@ -85,6 +85,10 @@ class Damages(VoiceoverScene):
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.3).to_edge(RIGHT, buff=0.3)
         tag = data_tag(r"ERA5 (Copernicus) via Our World in Data; \ World Bank WDI; \ estimated here", corner=DL,
                        font_size=12)
+        q_add = label(r"add up? \ each hot \\ year's loss stays", font_size=17, color=HEAT)
+        q_fade = label(r"or fade? \ output \\ catches up", font_size=17, color=COOL)
+        VGroup(q_add, q_fade).arrange(DOWN, aligned_edge=LEFT, buff=0.2).next_to(side, DOWN, aligned_edge=LEFT,
+                                                                                buff=0.35)
         with self.voiceover(
             "Here is that regression, run for this film on newer data. <bookmark mark='a'/> Temperatures for "
             f"{P['countries']} countries from the ERA5 reanalysis, growth of GDP per head from the World Bank, "
@@ -95,16 +99,24 @@ class Damages(VoiceoverScene):
             "points lower; for a cool country, a little higher. <bookmark mark='d'/> Splitting the countries by "
             f"income instead, as Dell, Jones and Olken did, gives {100 * P['djo_poor']:+.1f} points for the poorer "
             f"half, with a standard error of {100 * P['djo_poor_se']:.1f}: the same sign as theirs, and much less "
-            "certain. The open question is whether such losses add up, year after year, or fade as people adapt. "
-            "If they add up, the damage from warming is several times DICE's."
+            "certain. <bookmark mark='e'/> The open question is whether such losses add up, year after year, "
+            "<bookmark mark='f'/> or fade as people adapt. If they add up, the damage from warming is several times "
+            "DICE's."
         ) as vo:
-            self.play(FadeIn(ax), FadeIn(tag), FadeIn(side[0]), run_time=1.0)
+            self.play(FadeIn(ax), FadeIn(tag), run_time=1.0)
+            self.play(Create(ln), FadeIn(rug), run_time=2.5)
+            vo.wait_until("a")
+            self.play(FadeIn(side[0]))
             vo.wait_until("b")
-            self.play(Create(ln), Create(opt), FadeIn(side[1]), FadeIn(rug), run_time=2.5)
+            self.play(Create(opt), FadeIn(side[1]), Indicate(rug, color=WHITE, scale_factor=1.0), run_time=1.5)
             vo.wait_until("c")
             self.play(LaggedStart(*[FadeIn(n_) for n_ in named], lag_ratio=0.2), FadeIn(side[2]), run_time=2.0)
             vo.wait_until("d")
             self.play(FadeIn(side[3]))
+            vo.wait_until("e")
+            self.play(FadeIn(q_add, shift=UP * 0.1), Indicate(named, color=WHITE, scale_factor=1.1), run_time=1.2)
+            vo.wait_until("f")
+            self.play(FadeIn(q_fade, shift=UP * 0.1))
         self.clear_scene()
 
     def health(self):

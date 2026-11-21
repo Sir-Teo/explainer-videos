@@ -493,6 +493,15 @@ IO_FRED = {
 }
 FRED_SERIES.update(IO_FRED)
 FRED_RETRIEVED.update({s: "2026-11-20" for s in IO_FRED})
+# Part 49: men's and women's labour force participation
+FAMILY_FRED = {
+    "LNS11300002": ("Labor force participation rate - women", "percent", "monthly, seasonally adjusted",
+                    "U.S. Bureau of Labor Statistics"),
+    "LNS11300001": ("Labor force participation rate - men", "percent", "monthly, seasonally adjusted",
+                    "U.S. Bureau of Labor Statistics"),
+}
+FRED_SERIES.update(FAMILY_FRED)
+FRED_RETRIEVED.update({s: "2026-11-21" for s in FAMILY_FRED})
 
 SPF_FILES = ("median_rgdp_level", "median_rgdp_growth", "median_recess_level")
 SPF_URL = ("https://www.philadelphiafed.org/-/media/frbp/assets/surveys-and-data/survey-of-professional-forecasters/"
@@ -1070,6 +1079,107 @@ DATASETS = {
         "vintage": "2026-11-21",
         "sha256": "2f35e92208d596c487397c87d8011a9ccb4c376f33ce8fc88338d205e0ae7e7e",
         "files": ("sportscards_1998.csv",),
+    },
+    "star": {
+        "title": "Tennessee's Project STAR: 11,598 pupils assigned at random to small classes, regular classes or regular "
+                 "classes with an aide, from kindergarten (1985) to third grade, with their test scores, as distributed in "
+                 "the R package AER",
+        "publisher": "R package AER (C. Kleiber and A. Zeileis), CRAN; from the online complements to Stock and Watson "
+                     "(2007)",
+        "citation": "The Project STAR public access data set (Tennessee State Department of Education; Word et al. 1990; "
+                    "Krueger 1999); AER 1.2-17 (CRAN), data/STAR.rda, retrieved 2026-11-21",
+        "short": "Project STAR, via AER",
+        "url": "https://cran.r-project.org/src/contrib/AER_1.2-17.tar.gz",
+        "licence": "GPL-2 | GPL-3 (the package); the data are the cited project's",
+        "units": "one row per pupil: gender, ethnicity, birth quarter, class type, reading and maths scaled scores, free "
+                 "lunch and school type in kindergarten, teacher's experience and ethnicity, school id, class types in "
+                 "grades 1-3 and scores in grade 3",
+        "vintage": "2026-11-21",
+        "sha256": "2f35e92208d596c487397c87d8011a9ccb4c376f33ce8fc88338d205e0ae7e7e",
+        "files": ("star_1985_1989.csv",),
+    },
+    "caschools": {
+        "title": "California's 420 K-6 and K-8 school districts in 1998-99: test scores, pupils per teacher, spending and "
+                 "pupils' backgrounds, as distributed in the R package AER",
+        "publisher": "R package AER (C. Kleiber and A. Zeileis), CRAN; from the online complements to Stock and Watson "
+                     "(2007)",
+        "citation": "California Department of Education, Standardized Testing and Reporting (1999), as compiled by Stock "
+                    "and Watson (2007); AER 1.2-17 (CRAN), data/CASchools.rda, retrieved 2026-11-21",
+        "short": "California districts (1999), via AER",
+        "url": "https://cran.r-project.org/src/contrib/AER_1.2-17.tar.gz",
+        "licence": "GPL-2 | GPL-3 (the package); public records",
+        "units": "one row per district: enrolment, teachers, the shares on income assistance, reduced-price lunch and "
+                 "learning English, computers, spending per pupil, average income ($1,000), reading and maths scores",
+        "vintage": "2026-11-21",
+        "sha256": "2f35e92208d596c487397c87d8011a9ccb4c376f33ce8fc88338d205e0ae7e7e",
+        "files": ("caschools_1999.csv",),
+    },
+    "fertility": {
+        "title": "Angrist and Evans's sample from the 1980 US Census: married women aged 21-35 with two or more "
+                 "children, the sexes of their first two children, whether they had a third, and weeks worked in 1979 "
+                 "(AER's random subsample of 30,000)",
+        "publisher": "R package AER (C. Kleiber and A. Zeileis), CRAN; from the online complements to Stock and Watson "
+                     "(2007)",
+        "citation": "J. D. Angrist and W. N. Evans, \"Children and Their Parents' Labor Supply: Evidence from Exogenous "
+                    "Variation in Family Size\", American Economic Review 88(3): 450-477 (1998); AER 1.2-17 (CRAN), "
+                    "data/Fertility2.rda, retrieved 2026-11-21",
+        "short": "Angrist and Evans (1998), via AER",
+        "url": "https://cran.r-project.org/src/contrib/AER_1.2-17.tar.gz",
+        "licence": "GPL-2 | GPL-3 (the package); public-use census microdata",
+        "units": "one row per mother: more than two children (0/1), first and second child a boy (0/1), age, "
+                 "African-American, Hispanic, other (0/1), weeks worked in 1979",
+        "vintage": "2026-11-21",
+        "sha256": "2f35e92208d596c487397c87d8011a9ccb4c376f33ce8fc88338d205e0ae7e7e",
+        "files": ("fertility_1980.csv",),
+    },
+    "cigarettes": {
+        "title": "Cigarette consumption in the 48 continental US states, 1985 and 1995: packs a head, prices, taxes, "
+                 "income and the CPI, as distributed in the R package AER",
+        "publisher": "R package AER (C. Kleiber and A. Zeileis), CRAN; from the online complements to Stock and Watson "
+                     "(2007)",
+        "citation": "Stock and Watson (2007), Introduction to Econometrics, from The Tax Burden on Tobacco; AER 1.2-17 "
+                    "(CRAN), data/CigarettesSW.rda, retrieved 2026-11-21",
+        "short": "Cigarettes by state, via AER",
+        "url": "https://cran.r-project.org/src/contrib/AER_1.2-17.tar.gz",
+        "licence": "GPL-2 | GPL-3 (the package); public records",
+        "units": "one row per state and year: CPI, population, packs a head, personal income (nominal, total), excise "
+                 "taxes (cents a pack), price including sales tax (cents), excise and sales taxes (cents)",
+        "vintage": "2026-11-21",
+        "sha256": "2f35e92208d596c487397c87d8011a9ccb4c376f33ce8fc88338d205e0ae7e7e",
+        "files": ("cigarettes_1985_1995.csv",),
+    },
+    "doctor_visits": {
+        "title": "The 1977-78 Australian Health Survey: 5,190 adults' doctor visits in two weeks, illness, income and "
+                 "insurance, as distributed in the R package AER",
+        "publisher": "R package AER (C. Kleiber and A. Zeileis), CRAN; from the Journal of Applied Econometrics Data "
+                     "Archive",
+        "citation": "A. C. Cameron and P. K. Trivedi, \"Econometric Models Based on Count Data\", Journal of Applied "
+                    "Econometrics 1: 29-53 (1986); AER 1.2-17 (CRAN), data/DoctorVisits.rda, retrieved 2026-11-21",
+        "short": "Cameron and Trivedi (1986), via AER",
+        "url": "https://cran.r-project.org/src/contrib/AER_1.2-17.tar.gz",
+        "licence": "GPL-2 | GPL-3 (the package); the data are the cited survey's",
+        "units": "one row per adult: visits in the past two weeks, female (0/1), age / 100, income ($10,000s), illnesses "
+                 "and days of reduced activity in two weeks, a health score, private insurance, free insurance for low "
+                 "income, free insurance for age or service (0/1), chronic conditions (0/1)",
+        "vintage": "2026-11-21",
+        "sha256": "2f35e92208d596c487397c87d8011a9ccb4c376f33ce8fc88338d205e0ae7e7e",
+        "files": ("doctor_visits_1977.csv",),
+    },
+    "murder_rates": {
+        "title": "Murder and its punishment in 44 US states in 1950: the murder rate, convictions per murder, "
+                 "executions per conviction and median time served, as distributed in the R package AER",
+        "publisher": "R package AER (C. Kleiber and A. Zeileis), CRAN; from Maddala (2001), Table 8.4",
+        "citation": "G. S. Maddala, Introduction to Econometrics, 3rd ed. (2001), Table 8.4, after McManus (1985); AER "
+                    "1.2-17 (CRAN), data/MurderRates.rda, retrieved 2026-11-21",
+        "short": "Murder rates, 1950 (Maddala), via AER",
+        "url": "https://cran.r-project.org/src/contrib/AER_1.2-17.tar.gz",
+        "licence": "GPL-2 | GPL-3 (the package); public records",
+        "units": "one row per state: murders per 100,000, convictions per murder, executions (1946-50 average) per "
+                 "conviction, median months served, median family income ($1,000), labour force participation (%), "
+                 "non-white share, southern (0/1)",
+        "vintage": "2026-11-21",
+        "sha256": "2f35e92208d596c487397c87d8011a9ccb4c376f33ce8fc88338d205e0ae7e7e",
+        "files": ("murder_rates_1950.csv",),
     },
     "rdsenate": {
         "title": "Cattaneo, Frandsen and Titiunik's U.S. Senate elections, 1914-2010, as distributed in the R package "
@@ -1869,6 +1979,90 @@ def sportscards() -> dict:
             for k in SPORTSCARDS_COLS}
 
 
+AER_FAMILY = {
+    # extract: (rda name, csv file, columns kept, {column: how to code it})
+    "star": ("STAR", "star_1985_1989.csv",
+             ("gender", "ethnicity", "birth", "stark", "readk", "mathk", "lunchk", "schoolk", "experiencek",
+              "tethnicityk", "schoolidk", "star1", "star2", "star3", "read3", "math3"), {}),
+    "caschools": ("CASchools", "caschools_1999.csv",
+                  ("district", "county", "grades", "students", "teachers", "calworks", "lunch", "computer",
+                   "expenditure", "income", "english", "read", "math"), {}),
+    "fertility": ("Fertility2", "fertility_1980.csv", ("morekids", "gender1", "gender2", "age", "afam", "hispanic",
+                                                       "other", "work"),
+                  {"morekids": "yes", "gender1": "male", "gender2": "male", "afam": "yes", "hispanic": "yes",
+                   "other": "yes"}),
+    "cigarettes": ("CigarettesSW", "cigarettes_1985_1995.csv",
+                   ("state", "year", "cpi", "population", "packs", "income", "tax", "price", "taxs"), {}),
+    "doctor_visits": ("DoctorVisits", "doctor_visits_1977.csv",
+                      ("visits", "gender", "age", "income", "illness", "reduced", "health", "private", "freepoor",
+                       "freerepat", "nchronic", "lchronic"),
+                      {"gender": "female", "private": "yes", "freepoor": "yes", "freerepat": "yes", "nchronic": "yes",
+                       "lchronic": "yes"}),
+    "murder_rates": ("MurderRates", "murder_rates_1950.csv",
+                     ("rate", "convictions", "executions", "time", "income", "lfp", "noncauc", "southern"),
+                     {"southern": "yes"}),
+}
+# columns coded 0/1 are renamed so the name says what 1 means
+AER_RENAME = {"gender1": "boy1", "gender2": "boy2", "gender": "female"}
+
+
+def _aer_rows(key: str) -> dict:
+    rows = _read(HERE / AER_FAMILY[key][1])
+    out = {}
+    for k in rows[0]:
+        vals = [r[k] for r in rows]
+        try:
+            out[k] = [_num(v) for v in vals]
+        except ValueError:
+            out[k] = vals
+    return out
+
+
+@functools.lru_cache(maxsize=None)
+def star() -> dict:
+    """Project STAR's 11,598 pupils: ``{column: [...]}`` with ``stark`` ('small', 'regular' or 'regular+aide'; '' if
+    not in a STAR class in kindergarten), ``readk``/``mathk`` (kindergarten scaled scores; NaN if missing),
+    ``schoolidk`` (school), ``experiencek`` (teacher's years), ``lunchk`` ('free' or 'non-free'), and grade-3 class
+    type and scores (``star3``, ``read3``, ``math3``)."""
+    return _aer_rows("star")
+
+
+@functools.lru_cache(maxsize=None)
+def caschools() -> dict:
+    """California's 420 school districts, 1998-99: ``{column: [...]}`` (``students``, ``teachers``, ``read``, ``math``,
+    ``income`` in $1,000, ``english``/``lunch``/``calworks`` in percent, ``expenditure`` per pupil)."""
+    return _aer_rows("caschools")
+
+
+@functools.lru_cache(maxsize=None)
+def fertility() -> dict:
+    """Angrist and Evans's mothers (AER's 30,000): ``{"morekids", "boy1", "boy2", "age", "afam", "hispanic", "other",
+    "work": [...]}``, the 0/1 columns coded 1 for yes (``boy1``: the first child is a boy), ``work`` weeks in 1979."""
+    return _aer_rows("fertility")
+
+
+@functools.lru_cache(maxsize=None)
+def cigarettes() -> dict:
+    """Cigarettes in the 48 continental states, 1985 and 1995: ``{"state", "year", "cpi", "population", "packs",
+    "income", "tax", "price", "taxs": [...]}`` (prices and taxes in cents a pack, nominal)."""
+    return _aer_rows("cigarettes")
+
+
+@functools.lru_cache(maxsize=None)
+def doctor_visits() -> dict:
+    """The 1977-78 Australian Health Survey's 5,190 adults: ``{column: [...]}``, ``visits`` in two weeks, ``female``,
+    ``private``, ``freepoor``, ``freerepat``, ``nchronic``, ``lchronic`` coded 0/1, ``age`` in years / 100, ``income``
+    in $10,000s."""
+    return _aer_rows("doctor_visits")
+
+
+@functools.lru_cache(maxsize=None)
+def murder_rates() -> dict:
+    """Murder in 44 states, 1950: ``{"rate", "convictions", "executions", "time", "income", "lfp", "noncauc",
+    "southern": [...]}`` (``southern`` 0/1)."""
+    return _aer_rows("murder_rates")
+
+
 RDSENATE_COLS = ("state", "year", "margin", "vote", "class", "open", "vote_now", "midterm")
 
 
@@ -2586,6 +2780,57 @@ def refresh_sportscards() -> None:
                 v = cols[c][i]
                 row.append(str(v) if c in SPORTSCARDS_TEXT else _fmt(float(v)))
             w.writerow(row)
+
+
+def refresh_aer_family() -> None:
+    """Write the Part 49 extracts (STAR, CASchools, Fertility2, CigarettesSW, DoctorVisits, MurderRates) from AER."""
+    import tarfile  # noqa: PLC0415
+
+    from explainer.psychology import rdata  # noqa: PLC0415
+
+    d = DATASETS["star"]
+    raw = RAW / "AER_1.2-17.tar.gz"
+    if raw.exists() and hashlib.sha256(raw.read_bytes()).hexdigest() == d["sha256"]:
+        sha = d["sha256"]
+    else:
+        sha = _download(d["url"], raw)
+    if sha != d["sha256"]:
+        print(f"aer: the download differs from the recorded vintage ({sha[:12]})")
+    for key, (rda, csv_name, keep, code) in AER_FAMILY.items():
+        with tarfile.open(raw, "r:gz") as tf:
+            tmp = RAW / f"AER_{rda}.rda"
+            tmp.write_bytes(tf.extractfile(f"AER/data/{rda}.rda").read())
+        obj = rdata.load(tmp)[0][1]
+        names = obj["attrs"]["names"]["value"]
+        cols = {}
+        for n, c in zip(names, obj["value"]):
+            if n not in keep:
+                continue
+            v = c["value"]
+            attrs = c.get("attrs") or {}
+            levels = attrs.get("levels", {}).get("value") if isinstance(attrs, dict) else None
+            if levels:
+                cols[n] = ["" if (x is None or (isinstance(x, float) and x != x) or int(x) < 1) else
+                           levels[int(x) - 1] for x in v]
+            else:
+                cols[n] = list(v)
+        for n, yes in code.items():
+            cols[n] = [1 if x == yes else 0 for x in cols[n]]
+        header = [AER_RENAME.get(n, n) if n in code else n for n in keep]
+        with open(HERE / csv_name, "w", newline="", encoding="utf-8") as f:
+            w = csv.writer(f)
+            w.writerow(header)
+            for i in range(len(cols[keep[0]])):
+                row = []
+                for n in keep:
+                    x = cols[n][i]
+                    if isinstance(x, str):
+                        row.append(x)
+                    elif x is None or (isinstance(x, float) and x != x):
+                        row.append("")
+                    else:
+                        row.append(_fmt(float(x)))
+                w.writerow(row)
 
 
 def refresh_wdi_dev() -> None:
@@ -3621,7 +3866,10 @@ REFRESH = {"draft1970": refresh_draft1970, "ajr": refresh_ajr, "maddison2023": r
            "hlw": refresh_hlw, "ramey_zubairy": refresh_ramey_zubairy, "ramey_tax": refresh_ramey_tax,
            "blanchard_leigh": refresh_blanchard_leigh, "rr_hap": refresh_rr_hap, "jst": refresh_jst,
            "bigmac": refresh_bigmac, "wdi_ca": refresh_wdi_ca, "trefler_hov": refresh_trefler_hov,
-           "cepii_gravity": refresh_cepii_gravity, "autor_dorn": refresh_autor_dorn, "resume": refresh_resume, "sportscards": refresh_sportscards, "wdi_dev": refresh_wdi_dev,
+           "cepii_gravity": refresh_cepii_gravity, "autor_dorn": refresh_autor_dorn, "resume": refresh_resume, "sportscards": refresh_sportscards,
+           "wdi_dev": refresh_wdi_dev, "star": refresh_aer_family, "caschools": refresh_aer_family,
+           "fertility": refresh_aer_family, "cigarettes": refresh_aer_family, "doctor_visits": refresh_aer_family,
+           "murder_rates": refresh_aer_family,
            "causaldata": refresh_causaldata, "rdsenate": refresh_rdsenate, "wdi_state": refresh_wdi_state,
            "saez": refresh_saez, "opportunity": refresh_opportunity, "wid_top1": refresh_wid_top1,
            "blp_cars": refresh_blp_cars, "rust_buses": refresh_rust_buses,

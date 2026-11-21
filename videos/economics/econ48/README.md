@@ -34,7 +34,7 @@ covers:
 - Play it: the reader chooses a discount rate; the social cost of carbon is $561 at 1%, $183 at 2%, $88 at 3% and
   $37 at 5% (DICE-2023: $485, $176, $87, $32), with 31% of it, at 3%, from damage after 2100;
 - the Ramsey rule r = rho + eta g; with rho 1.5% and eta 1.45 a tonne costs $63 and warming peaks at 2.7 degrees;
-  with the Stern Review's 0.1% and log utility it costs $408, emissions end by 2069 and warming peaks at 1.8; an
+  with the Stern Review's 0.1% and log utility it costs $408, emissions end by 2060 and warming peaks at 1.9; an
   is/ought card; official and academic estimates (DICE-2016R $31, the US interim figure $51, DICE-2023 $66, Rennert et
   al. $185, EPA $190);
 - an intermission of HadCRUT5's warming since 1850-1900, year by year, as stripes and as a tune;
@@ -92,10 +92,10 @@ FAO's fish stocks and the Energy Institute's oil production, via Our World in Da
 | 10 | Leakage, borders and clubs | Leakage and the CBAM; the club and its tariff |
 | 11 | Learning curves and directed technical change | Solar's prices; Wright's law; a toy of AABH |
 | 12 | Damages measured | The design; the curve estimated here; heat, air conditioning, the Huai River |
-| 13 | Electricity markets | The merit order; a day; withholding; California, 2000 |
+| 13 | Electricity markets | The merit order and what a carbon price does to it; a day; withholding; California, 2000 |
 | 14 | The Dials | Carbon, energy elasticities, warm years |
 | 15 | In practice: energy, carbon and regulation | Who uses this; *Called it?* (partly right) |
-| 16 | Frontier | Global damage; the transition and stranded reserves; adaptation |
+| 16 | Frontier | Global damage and its social cost of carbon; the reserves left unburned; adaptation |
 | — | Outro | The answer; twelve lines; problems; reading; next, Part 49, *The Economic Approach* |
 
 ## What is computed, and from what
@@ -119,7 +119,8 @@ Island's Part 48 truths, or from the data named above; the narration states the 
   intensity falling 1.5% a year (the decline slowing 0.1% a year); land-use emissions 4.4 GtCO2 falling 2% a year;
   abatement cost theta1 mu^2.6 with the backstop at $515 in 2050 (rising 1% a year back to 2025, falling 0.1% a year
   after); damages 0.031/9 T^2; welfare with rho and eta; the optimal path by L-BFGS-B over control rates at 5-year
-  nodes; the social cost of carbon from a 1 GtCO2 pulse in 2025.
+  nodes, never falling and rising at most 15 points in five years (capital turns over slowly); the social cost of
+  carbon from a 1 GtCO2 pulse in 2025.
 - **Fat tails.** 200,000 draws of the sensitivity: log-normal (median 3, log-sd 0.25) or log-Student-t with 2 degrees
   of freedom; damages 1 - 1/(1 + 0.00344 T^2 + (T/6.5)^7); certainty equivalents with relative risk aversion 2.
 - **The club.** Fifteen countries with log-normal sizes and costs and damages that vary around 1% and 3% of output;
@@ -131,7 +132,9 @@ Island's Part 48 truths, or from the data named above; the narration states the 
   observations with growth beyond 50% either way dropped; the poorer half are countries below the median GDP per head
   in their first year from 1980.
 - **The power market.** Seven plants (capacities and costs in the island file), a price cap of 250, a day's load; a
-  firm's profit as it withholds capacity from its costliest plant first.
+  firm's profit as it withholds capacity from its costliest plant first. A carbon price of $50 a tonne adds 50 times
+  each plant's typical tonnes per MWh (coal 1.0, the two gas plants 0.37 and 0.40, peakers 0.55, oil 0.75) to its
+  cost, and the merit order is sorted again.
 
 ## Problems and solutions
 

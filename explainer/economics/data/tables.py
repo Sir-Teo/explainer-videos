@@ -4692,6 +4692,227 @@ FRONTIER48 = Table(
     data={"global_gdp": 12, "lag": 6, "times": 6, "scc_lo": 772, "scc_hi": 1367, "coal": 80, "gas": 50, "oil": 33},
 )
 
+BECKER_1968 = Table(
+    key="becker_1968",
+    cite="Gary S. Becker, \"Crime and Punishment: An Economic Approach\", Journal of Political Economy 76(2), 1968, "
+         "169-217; \"The Economic Way of Looking at Life\", Nobel lecture, 9 December 1992 (Journal of Political "
+         "Economy 101(3), 1993); interview, Federal Reserve Bank of Minneapolis, The Region, 2002",
+    tag="Becker, JPE (1968); Nobel lecture (1992)",
+    where="the lecture's section on crime: in the 1960s, late for the oral examination of a student in economic theory "
+          "at Columbia, he weighed a car park against the chance and size of a fine for parking on the street, parked "
+          "on the street, and was not ticketed; Columbia then had no faculty parking (the 2002 interview)",
+    read="the Nobel lecture's text (University of Chicago Magazine reprint) and the 2002 interview",
+    checked="2026-11-21",
+    data={"paper": 1968, "nobel": 1992},
+)
+
+POLICE_49 = Table(
+    key="police_49",
+    cite="Rafael Di Tella and Ernesto Schargrodsky, \"Do Police Reduce Crime?\", American Economic Review 94(1), 2004, "
+         "115-133; Mirko Draca, Stephen Machin and Robert Witt, \"Panic on the Streets of London\", American Economic "
+         "Review 101(5), 2011, 2157-2181; Aaron Chalfin and Justin McCrary, \"Are U.S. Cities Underpoliced?\", Review "
+         "of Economics and Statistics 100(1), 2018, 167-186; Steven Levitt, American Economic Review 87(3), 1997",
+    tag="Di Tella and Schargrodsky (2004); Draca, Machin and Witt (2011); Chalfin and McCrary (2018)",
+    where="after the July 1994 bombing of the AMIA Jewish centre in Buenos Aires, Jewish institutions got "
+          "round-the-clock police; car thefts fell 75% on their blocks relative to others, with no effect one or two "
+          "blocks away; after the July 2005 London bombings police were moved to central London and crime fell there "
+          "relative to outer London: an elasticity of crime to police of about -0.3 to -0.4; Chalfin and McCrary found "
+          "that errors in counting police had biased earlier panel estimates toward zero, by a factor of about four or "
+          "five; Levitt's 1997 murder elasticity, -3.05, had a confidence interval of plus or minus 4.06 (as quoted by "
+          "Chalfin and McCrary)",
+    read="the abstracts; Chalfin and McCrary's working-paper text",
+    checked="2026-11-21",
+    data={"ba_fall": 75, "ba_year": 1994, "london_lo": -0.4, "london_hi": -0.3, "london_year": 2005,
+          "levitt": -3.05, "levitt_ci": 4.06, "evans_owens": -0.84, "evans_owens_ci": 0.94},
+)
+
+CERTAINTY_49 = Table(
+    key="certainty_49",
+    cite="Daniel Nagin, \"Deterrence in the Twenty-First Century\", Crime and Justice 42, 2013, 199-263; David Lee "
+         "and Justin McCrary, \"The Deterrence Effect of Prison: Dynamic Theory and Evidence\", Advances in "
+         "Econometrics 38, 2017; Gary Becker, Journal of Political Economy 76(2), 1968",
+    tag="Nagin (2013); Lee and McCrary (2017); Becker (1968)",
+    where="Nagin's review: the evidence that the certainty of being caught deters is far more consistent than the "
+          "evidence on severity, and long sentences cannot be justified on grounds of deterrence; Lee and McCrary: "
+          "at 18 Florida's offenders face adult penalties, yet the log-odds of offending fall by only about 2% (ruling "
+          "out 11% or more), so the elasticity of offending to sentence length is no more negative than -0.13 for "
+          "the young; Becker had noted that if the chance deters more than the penalty, offenders behave as if they "
+          "like risk",
+    read="the abstracts and NIJ's summary of Nagin",
+    checked="2026-11-21",
+    data={"lm_drop": 2, "lm_bound": 11, "lm_elasticity": -0.13},
+)
+
+MURDER_1950 = Table(
+    key="murder_1950",
+    cite="Isaac Ehrlich, \"The Deterrent Effect of Capital Punishment\", American Economic Review 65(3), 1975, "
+         "397-417; Edward Leamer, \"Let's Take the Con out of Econometrics\", American Economic Review 73(1), 1983, "
+         "31-43; Walter McManus, Journal of Political Economy 93(2), 1985, 417-425",
+    tag="Ehrlich (1975); Leamer (1983); McManus (1985)",
+    where="Ehrlich estimated from US time series that each execution deterred several murders; Leamer and then McManus "
+          "showed, on the 1950 state cross-section, that the estimated deterrent effect of executions depends on the "
+          "prior beliefs and the variables the researcher chooses to include",
+    read="the abstracts and the AER package's documentation of MurderRates",
+    checked="2026-11-21",
+    data={},
+)
+
+FAMILY_49 = Table(
+    key="family_49",
+    cite="Gary S. Becker, \"A Theory of the Allocation of Time\", Economic Journal 75, 1965; \"A Theory of Marriage: "
+         "Part I\", Journal of Political Economy 81(4), 1973; A Treatise on the Family (1981); Eugene Choo and "
+         "Aloysius Siow, \"Who Marries Whom and Why\", Journal of Political Economy 114(1), 2006; Claudia Goldin and "
+         "Lawrence Katz, \"The Power of the Pill\", Journal of Political Economy 110(4), 2002",
+    tag="Becker (1965, 1973, 1981); Choo and Siow (2006); Goldin and Katz (2002)",
+    where="the household as a producer of commodities from goods and time; positive assortative mating when the "
+          "partners' traits are complements; Choo and Siow's transferable-utility model identified the gains to "
+          "marriage from counts of who married whom and found that the gains for young adults fell in the 1970s, "
+          "partly with the legalization of abortion; Goldin and Katz linked young unmarried women's access to the pill "
+          "to a later age at first marriage and to women's entry into professional degree programmes",
+    read="the abstracts",
+    checked="2026-11-21",
+    data={},
+)
+
+FERTILITY_49 = Table(
+    key="fertility_49",
+    cite="Joshua Angrist and William Evans, \"Children and Their Parents' Labor Supply\", American Economic Review "
+         "88(3), 1998, 450-477; Gary Becker and H. Gregg Lewis, Journal of Political Economy 81(2), 1973; China's "
+         "one-child policy (1980) and its relaxation to two children (2016) and three (2021)",
+    tag="Angrist and Evans (1998); Becker and Lewis (1973)",
+    where="parents whose first two children are of the same sex are more likely to have a third; the sex mix is as "
+          "good as random, so it isolates the effect of a third child on the mother's work",
+    read="the abstract; dates of China's population policy from standard accounts",
+    checked="2026-11-21",
+    data={"one_child": 1980, "two_child": 2016, "three_child": 2021},
+)
+
+BARGAIN_49 = Table(
+    key="bargain_49",
+    cite="Shelly Lundberg, Robert Pollak and Terence Wales, \"Do Husbands and Wives Pool Their Resources? Evidence "
+         "from the United Kingdom Child Benefit\", Journal of Human Resources 32(3), 1997, 463-480",
+    tag="Lundberg, Pollak and Wales, JHR (1997)",
+    where="in the late 1970s the UK moved a substantial child allowance from the father's pay packet (a tax allowance) "
+          "to a cash benefit paid to the mother; spending on women's and children's clothing rose relative to men's",
+    read="the abstract and later citations",
+    checked="2026-11-21",
+    data={},
+)
+
+SCHOOLS_49 = Table(
+    key="schools_49",
+    cite="Alan Krueger, Quarterly Journal of Economics 114(2), 1999; Joshua Angrist and Victor Lavy, \"Using "
+         "Maimonides' Rule\", Quarterly Journal of Economics 114(2), 1999; Angrist, Lavy, Leder-Luis and Shany, "
+         "\"Maimonides' Rule Redux\", American Economic Review: Insights 1(3), 2019; Raj Chetty, John Friedman and "
+         "Jonah Rockoff, American Economic Review 104(9), 2014 (both papers); Eric Hanushek and Steven Rivkin, "
+         "American Economic Review 100(2), 2010",
+    tag="Krueger (1999); Angrist and Lavy (1999, 2019); Chetty, Friedman and Rockoff (2014)",
+    where="Israel caps classes at 40, so a grade of 41 is split in two; Angrist and Lavy's 1991 data showed gains from "
+          "smaller classes, but data from 2002-2011 show no effect, and enrolments bunch just above the cutoffs; "
+          "Chetty, Friedman and Rockoff: a teacher one standard deviation better in value added raises scores by about "
+          "0.14 standard deviations in maths and 0.10 in English, and earnings at 28 by 1.3%; replacing a teacher in "
+          "the bottom 5% with an average one raises a classroom's lifetime earnings by about $250,000 in present "
+          "value; Hanushek and Rivkin's survey: an average spread of about 0.13 in reading",
+    read="the abstracts and working-paper texts",
+    checked="2026-11-21",
+    data={"cap": 40, "cfr_math": 0.14, "cfr_eng": 0.10, "cfr_earn": 1.3, "cfr_class": 250000, "hr_read": 0.13},
+)
+
+EARLY_49 = Table(
+    key="early_49",
+    cite="James Heckman, Seong Hyeok Moon, Rodrigo Pinto, Peter Savelyev and Adam Yavitz, \"The Rate of Return to the "
+         "HighScope Perry Preschool Program\", Journal of Public Economics 94(1-2), 2010; US DHHS, Head Start Impact "
+         "Study (2010) and Third Grade Follow-up (2012); Kelley Durkin, Mark Lipsey, Dale Farran and Sarah Wiesen, "
+         "Developmental Psychology 58(3), 2022; David Rea and Tony Burton, Journal of Economic Surveys 34(2), 2020",
+    tag="Heckman et al. (2010); Head Start Impact Study (2010, 2012); Durkin et al. (2022); Rea and Burton (2020)",
+    where="Perry: 123 children in Ypsilanti, Michigan, from 1962, a return of 7-10% a year; Head Start's national "
+          "trial: gains at the end of the programme had largely faded by the end of first grade, with few differences "
+          "by third; Tennessee's statewide pre-K trial (2,990 children): lower test scores in grades 3-6 and more "
+          "disciplinary infractions and special education among those offered a place; Rea and Burton: the "
+          "benefit-cost ratios of programmes do not fall with the age of those served",
+    read="the abstracts and the reports' executive summaries",
+    checked="2026-11-21",
+    data={"perry_n": 123, "perry_year": 1962, "perry_lo": 7, "perry_hi": 10, "tn_n": 2990},
+)
+
+HEALTH_49 = Table(
+    key="health_49",
+    cite="Michael Grossman, \"On the Concept of Health Capital and the Demand for Health\", Journal of Political "
+         "Economy 80(2), 1972; Jonathan Gruber and Maria Owings, RAND Journal of Economics 27(1), 1996; Zack Cooper, "
+         "Stuart Craig, Martin Gaynor and John Van Reenen, \"The Price Ain't Right?\", Quarterly Journal of Economics "
+         "134(1), 2019",
+    tag="Grossman (1972); Gruber and Owings (1996); Cooper et al. (2019)",
+    where="US births per 100 people fell 13.5% in 1970-1982; where they fell most, caesarean deliveries, which pay "
+          "obstetricians more, rose most, though this explains little of the overall rise; hospitals with no "
+          "competitor nearby charge prices about 12% higher than those with four or more",
+    read="the abstracts and working papers",
+    checked="2026-11-21",
+    data={"births_fall": 13.5, "monopoly": 12},
+)
+
+DRUGS_49 = Table(
+    key="drugs_49",
+    cite="Anne Case and Angus Deaton, \"Rising Morbidity and Mortality in Midlife among White Non-Hispanic Americans "
+         "in the 21st Century\", PNAS 112(49), 2015; Abby Alpert, William Evans, Ethan Lieber and David Powell, "
+         "\"Origins of the Opioid Crisis and Its Enduring Impacts\", Quarterly Journal of Economics 137(2), 2022",
+    tag="Case and Deaton, PNAS (2015); Alpert et al., QJE (2022)",
+    where="mortality of white non-Hispanic Americans aged 45-54 rose from 1999 to 2013, driven by suicide, drug and "
+          "alcohol poisonings and liver disease; had it held at its 1998 rate, 96,000 deaths would have been avoided "
+          "(Princeton's release); OxyContin's distribution was about 50% lower in the five states that required "
+          "triplicate prescription forms; states without them would have had 34% fewer drug overdose deaths and 45% "
+          "fewer opioid overdose deaths a year, 1996-2017, with the triplicate states' exposure",
+    read="the abstracts and Princeton's release",
+    checked="2026-11-21",
+    data={"avoided": 96000, "oxy_lower": 50, "drug": 34, "opioid": 45, "triplicate": 5},
+)
+
+ADDICTION_49 = Table(
+    key="addiction_49",
+    cite="Gary Becker and Kevin Murphy, \"A Theory of Rational Addiction\", Journal of Political Economy 96(4), 1988; "
+         "Jonathan Gruber and Botond Kőszegi, \"Is Addiction 'Rational'?\", Quarterly Journal of Economics 116(4), "
+         "2001",
+    tag="Becker and Murphy (1988); Gruber and Kőszegi (2001)",
+    where="a rational addict's consumption depends on past and future consumption, so an announced future price rise "
+          "cuts consumption now; Gruber and Kőszegi found smokers forward-looking in this sense, but argued that "
+          "time-inconsistent smokers fit the evidence as well and imply a much larger optimal tax",
+    read="the abstracts",
+    checked="2026-11-21",
+    data={},
+)
+
+CRITICS_49 = Table(
+    key="critics_49",
+    cite="Edward Lazear, \"Economic Imperialism\", Quarterly Journal of Economics 115(1), 2000; Uri Gneezy and Aldo "
+         "Rustichini, \"A Fine Is a Price\", Journal of Legal Studies 29(1), 2000; Carl Mellström and Magnus "
+         "Johannesson, Journal of the European Economic Association 6(4), 2008; Bruno Frey and Felix Oberholzer-Gee, "
+         "American Economic Review 87(4), 1997; Richard Titmuss, The Gift Relationship (1970)",
+    tag="Lazear (2000); Gneezy and Rustichini (2000); Mellström and Johannesson (2008); Frey and Oberholzer-Gee",
+    where="ten Israeli day-care centres watched for four weeks, then a fine for parents more than ten minutes late in "
+          "six of them: lateness rose, and stayed up after the fine was removed; in Sweden, offering women about $7 "
+          "to give blood cut the share who did from 52% to 30%, and letting them give the money to charity undid the "
+          "fall (no effect for men); Swiss support for a nuclear waste site fell when compensation was offered",
+    read="the abstracts and working papers",
+    checked="2026-11-21",
+    data={"centres": 10, "fined": 6, "late_min": 10, "weeks": 4, "blood_before": 52, "blood_paid": 30, "sek": 50},
+)
+
+FRONTIER49 = Table(
+    key="frontier49",
+    cite="Shang-Jin Wei and Xiaobo Zhang, \"The Competitive Saving Motive\", Journal of Political Economy 119(3), "
+         "2011; Matthias Doepke, Anne Hannusch, Fabian Kindermann and Michèle Tertilt, \"The Economics of "
+         "Fertility: A New Era\", Handbook of the Economics of the Family (2023)",
+    tag="Wei and Zhang, JPE (2011); Doepke et al. (2023)",
+    where="as China's sex ratio rose, parents of sons saved more to improve their sons' prospects in the marriage "
+          "market, which can explain about half of the rise in household saving in 1990-2007; across rich countries "
+          "fertility is now higher where more women work, the reverse of the pattern of the 1980s",
+    read="the abstracts",
+    checked="2026-11-21",
+    data={"saving_share": 50},
+)
+
+PART49 = (BECKER_1968, POLICE_49, CERTAINTY_49, MURDER_1950, FAMILY_49, FERTILITY_49, BARGAIN_49, SCHOOLS_49,
+          EARLY_49, HEALTH_49, DRUGS_49, ADDICTION_49, CRITICS_49, FRONTIER49)
+
 PART48 = (BET_1980, HOTELLING_1931, FISH_48, DICE_2023, SCC_US, STERN_2006, WEITZMAN_2009, INSTRUMENTS_48,
           CLUBS_2015, DAMAGES_48, HEALTH_48, CALIFORNIA_2000, ELASTICITY_48, HUBBERT_1956, FRONTIER48)
 
@@ -4709,4 +4930,4 @@ PART41 = (LAFFER_1974, HARBERGER_1962, RAMSEY_1927, MIRRLEES_1971, DIAMOND_SAEZ_
           CLK_2009, CAPITAL_TAX, HAVENS, EVASION, FRONTIER41, TCJA_2017)
 PART7 = (BERNOULLI_1738, SAMUELSON_1937, ALLAIS_1953, ELLSBERG_1961, RABIN_2000, THALER_1981, HOLT_LAURY_2005,
          HAYDEN_PLATT_2009, MADRIAN_SHEA_2001, THALER_BENARTZI_2004, BARSKY_1997, POST_2008, MEHRA_PRESCOTT_1985)
-ALL = {t.key: t for t in (*PART1, *PART3, *PART4, *PART5, *PART6, *PART7, *PART8, *PART9, *PART10, *PART11, *PART12, *PART13, *PART14, *PART15, *PART16, *PART17, *PART18, *PART19, *PART21, *PART22, *PART25, *PART26, *PART35, *PART36, *PART37, *PART38, *PART39, *PART40, *PART41, *PART42, *PART43, *PART44, *PART45, *PART46, *PART47, *PART48)}
+ALL = {t.key: t for t in (*PART1, *PART3, *PART4, *PART5, *PART6, *PART7, *PART8, *PART9, *PART10, *PART11, *PART12, *PART13, *PART14, *PART15, *PART16, *PART17, *PART18, *PART19, *PART21, *PART22, *PART25, *PART26, *PART35, *PART36, *PART37, *PART38, *PART39, *PART40, *PART41, *PART42, *PART43, *PART44, *PART45, *PART46, *PART47, *PART48, *PART49)}

@@ -44,10 +44,10 @@ class Innovation(VoiceoverScene):
             "question for climate policy is whether it was luck or something policy can cause."
         ) as vo:
             self.play(FadeIn(ax), FadeIn(tag), run_time=1.0)
+            self.play(Create(ln), run_time=3.0)
             vo.wait_until("a")
             self.play(FadeIn(pins[0]))
             vo.wait_until("b")
-            self.play(Create(ln), run_time=3.0)
             self.play(FadeIn(pins[1]))
             vo.wait_until("c")
             self.play(FadeIn(side[0]), FadeIn(side[1]))
@@ -90,8 +90,9 @@ class Innovation(VoiceoverScene):
             "though how much of the fall came from learning, and how much from research and scale, is still argued."
         ) as vo:
             self.play(FadeIn(ax), FadeIn(tag), FadeIn(eq), run_time=1.0)
-            vo.wait_until("a")
             self.play(LaggedStart(*[FadeIn(p_) for p_ in pts], lag_ratio=0.08), run_time=2.0)
+            vo.wait_until("a")
+            self.play(Indicate(pts, color=WHITE, scale_factor=1.2))
             vo.wait_until("b")
             self.play(FadeIn(side[0]))
             vo.wait_until("c")
@@ -134,7 +135,10 @@ class Innovation(VoiceoverScene):
             "of technology for good, and acting early is cheaper than acting late."
         ) as vo:
             self.play(FadeIn(ax), FadeIn(tag), FadeIn(policy), run_time=1.0)
-            for mk, ln, s_ in zip("abcd", lines, side):
+            self.play(Create(lines[0]), run_time=2.0)
+            vo.wait_until("a")
+            self.play(FadeIn(side[0]), Indicate(lines[0], color=WHITE))
+            for mk, ln, s_ in zip("bcd", lines[1:], side[1:]):
                 vo.wait_until(mk)
                 self.play(Create(ln), FadeIn(s_), run_time=2.0)
         self.clear_scene()

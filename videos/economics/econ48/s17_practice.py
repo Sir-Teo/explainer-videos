@@ -56,8 +56,16 @@ class Practice(VoiceoverScene):
                    yfmt=lambda x: f"{x:.0f}", font_size=12)
         yl = label(r"US oil output, \ thousand TWh", font_size=13, color=GREY_A).next_to(ax, UP, buff=0.05).align_to(
             ax, LEFT)
-        ln = path(ax, y, v, OIL, 2.8, smooth=False)
+        cuts = (1956, T["peak"], T["low"], int(y[-1]))
+        parts = [path(ax, y[(y >= a) & (y <= b)], v[(y >= a) & (y <= b)], OIL, 2.8, smooth=False)
+                 for a, b in zip((int(y[0]),) + cuts[:-1], cuts)]
         pk = vline(ax, T["peak"], 0, 11, GREY_B)
+        seen = label(r"what Hubbert \\ could see", font_size=12, color=GREY_A).next_to(
+            ax.ax.c2p(1950, float(np.interp(1956, y, v))), UP, buff=0.25)
+        lo = dot(ax, O["low_year"], O["low"] / 1000, OIL, 0.06)
+        lo_l = label(rf"{O['low_year']}", font_size=12, color=OIL).next_to(lo, DOWN, buff=0.08)
+        ps = dot(ax, O["passed"], float(np.interp(O["passed"], y, v)), WHITE, 0.06)
+        ps_l = label(rf"{O['passed']}", font_size=12, color=WHITE).next_to(ps, LEFT, buff=0.08)
         window = shade(ax, [(T["most_likely"], T["upper"])], 0, 11, color=RECESS, opacity=0.7)
         cap = label(rf"grey: \ Hubbert's window, \\ {T['most_likely']}--{T['upper']}; \\ the series counts \\ natural "
                     rf"gas liquids, \\ so passes 1970 in {O['passed']}", font_size=13, color=GREY_A).next_to(
@@ -69,20 +77,30 @@ class Practice(VoiceoverScene):
             "M. King Hubbert, then at Shell, fitted a bell-shaped curve to the oil found and produced in the United "
             f"States and predicted that production would peak between {T['most_likely']}, his likeliest year, and "
             f"{T['upper']}, then decline. <bookmark mark='a2'/> The record, from the Energy Institute: <bookmark "
-            f"mark='b'/> production peaked in {T['peak']} and fell for 38 years, to its low in {T['low']}. For half "
-            "a century Hubbert looked like a prophet. Then horizontal drilling and fracturing opened the shale, and "
-            f"in {T['passed']} American crude output passed its 1970 peak; this series, which also counts natural "
-            f"gas liquids, passed it in {O['passed']}. <bookmark mark='c'/> The verdict: partly right. Right about "
+            f"mark='b'/> production peaked in {T['peak']} <bookmark mark='b2'/> and fell for 38 years, to its low in "
+            f"{T['low']}. For half a century Hubbert looked like a prophet. <bookmark mark='b3'/> Then horizontal "
+            f"drilling and fracturing opened the shale, and in {T['passed']} American crude output passed its 1970 "
+            "peak; this series, which also counts natural gas liquids, passed it in "
+            f"{O['passed']}. <bookmark mark='c'/> The verdict: partly right. Right about "
             "the peak and the decline of the oil that could be got with the technology of his day; wrong that it "
             "was the end, for the reason Simon gave in the hook: prices high enough call forth new technology."
         ) as vo:
             self.play(FadeIn(cc.card), FadeIn(cc[1][0]), FadeIn(cc.left), FadeIn(tag))
             vo.wait_until("a")
-            self.play(FadeIn(ax), FadeIn(yl), FadeIn(window), run_time=1.0)
+            self.play(FadeIn(ax), FadeIn(yl), run_time=1.0)
+            self.play(Create(parts[0]), FadeIn(seen), run_time=2.5)
+            self.play(FadeIn(window), FadeIn(cap), run_time=1.0)
             vo.wait_until("a2")
-            self.play(FadeIn(cap), Indicate(window, color=WHITE, scale_factor=1.0))
+            self.play(Indicate(window, color=WHITE, scale_factor=1.0), FadeOut(seen))
             vo.wait_until("b")
-            self.play(Create(ln), Create(pk), FadeIn(cc.right), run_time=3.0)
+            self.play(Create(parts[1]), run_time=1.2)
+            self.play(Create(pk), run_time=0.6)
+            vo.wait_until("b2")
+            self.play(Create(parts[2]), run_time=3.0)
+            self.play(FadeIn(lo), FadeIn(lo_l))
+            vo.wait_until("b3")
+            self.play(Create(parts[3]), run_time=2.5)
+            self.play(FadeIn(ps), FadeIn(ps_l), FadeIn(cc.right))
             vo.wait_until("c")
             self.play(FadeIn(cc.stamp, scale=1.3))
         self.clear_scene()

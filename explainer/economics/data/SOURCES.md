@@ -113,6 +113,13 @@ film that moves to a new vintage says so on screen.
 | `fao_fish_stocks.csv` | the shares of the world's assessed fish stocks within biologically sustainable levels and overexploited, 1974-2021 | FAO, The State of World Fisheries and Aquaculture (2025), via Our World in Data | CC BY 4.0; FAO's terms | 2026-11-21 |
 | `oil_production.csv` | oil production (crude, shale, oil sands, condensates and natural gas liquids) in terawatt-hours a year, 1900-2025, for the world and the United States | Energy Institute, Statistical Review of World Energy (2026), Etemad and Luciani (1991) and the U.S. EIA, via Our World in Data (oil-production-by-country) | CC BY 4.0 | 2026-11-21 |
 | `wdi_state_2015_2025.csv` | for each country, the latest year from 2015 of tax revenue as a percent of GDP (GC.TAX.TOTL.GD.ZS), the Worldwide Governance Indicators' control of corruption estimate (GOV_WGI_CC.EST, about -2.5 to +2.5) and GDP per head at PPP in constant 2021 dollars (NY.GDP.PCAP.PP.KD), each with its year | World Bank, World Development Indicators and Worldwide Governance Indicators | CC BY 4.0 | 2026-11-20 |
+| `fred_LNS11300002.csv`, `fred_LNS11300001.csv` | labour force participation rates of women and of men 16 and over, percent, monthly, seasonally adjusted, from 1948 | U.S. Bureau of Labor Statistics, via FRED | public domain | 2026-11-21 |
+| `star_1985_1989.csv` | Tennessee's Project STAR: 11,598 pupils assigned at random within schools to small classes, regular classes or regular classes with an aide; gender, ethnicity, birth quarter, class type, reading and maths scaled scores, free lunch, school type, teacher's experience and ethnicity and school id in kindergarten; class types in grades 1-3 and scores in grade 3 | the Project STAR public access data set (Tennessee State Department of Education), via the R package AER 1.2-17 (CRAN), from the online complements to Stock and Watson (2007) | GPL-2 or GPL-3 (the package); the data are the project's | 2026-11-21 |
+| `caschools_1999.csv` | California's 420 K-6 and K-8 school districts, 1998-99: enrolment, teachers, the shares on income assistance, reduced-price lunch and learning English, computers, spending per pupil, average income, reading and maths scores | California Department of Education, as compiled by Stock and Watson (2007), via the R package AER 1.2-17 (CRAN) | GPL-2 or GPL-3 (the package); public records | 2026-11-21 |
+| `fertility_1980.csv` | AER's random subsample of 30,000 of Angrist and Evans's (1998) married women aged 21-35 with two or more children in the 1980 US Census: a third child, the sexes of the first two, age, ethnicity, weeks worked in 1979 | Angrist and Evans (1998), via the R package AER 1.2-17 (CRAN), from the online complements to Stock and Watson (2007) | GPL-2 or GPL-3 (the package); public-use census microdata | 2026-11-21 |
+| `cigarettes_1985_1995.csv` | cigarettes in the 48 continental US states, 1985 and 1995: CPI, population, packs a head, personal income, excise taxes, price including sales tax, all taxes (cents a pack, nominal) | Stock and Watson (2007), from *The Tax Burden on Tobacco*, via the R package AER 1.2-17 (CRAN) | GPL-2 or GPL-3 (the package); public records | 2026-11-21 |
+| `doctor_visits_1977.csv` | the 1977-78 Australian Health Survey: 5,190 adults' doctor visits in two weeks, sex, age, income, illness, days of reduced activity, a health score, private insurance, free government insurance for low income and for age or service, chronic conditions | Cameron and Trivedi (1986), via the R package AER 1.2-17 (CRAN), from the Journal of Applied Econometrics Data Archive | GPL-2 or GPL-3 (the package); the data are the survey's | 2026-11-21 |
+| `murder_rates_1950.csv` | murder in 44 US states, 1950: murders per 100,000, convictions per murder, executions per conviction, median months served, median family income, labour force participation, non-white share, southern | Maddala (2001), Table 8.4, after McManus (1985), via the R package AER 1.2-17 (CRAN) | GPL-2 or GPL-3 (the package); public records | 2026-11-21 |
 
 The raw Maddison workbook (`mpd2023_web.xlsx`, dataverse file 421302) had SHA-256
 `ecc5916ca12789b983fc4be437f8a354bbf4291323605324ac3e0aea4c57cbb6` when the extract was made. The raw Pink Sheet
@@ -427,3 +434,17 @@ publication, the copy that was read and the date the transcription was checked:
 | `elasticity_48` | gasoline and electricity price elasticities (Part 48) | 2026-11-21 |
 | `hubbert_1956` | Hubbert's peak and Deming's review (Part 48) | 2026-11-21 |
 | `frontier48` | Bilal and Känzig's global temperature shocks; McGlade and Ekins's unburnable reserves (Part 48) | 2026-11-21 |
+| `becker_1968` | Becker's parking space, his 1968 paper and Nobel lecture (Part 49) | 2026-11-21 |
+| `police_49` | police and crime: Buenos Aires, London, measurement error, Levitt's and Evans and Owens's elasticities (Part 49) | 2026-11-21 |
+| `certainty_49` | certainty against severity: Nagin's review, Lee and McCrary's age-18 discontinuity (Part 49) | 2026-11-21 |
+| `murder_1950` | Ehrlich's executions, Leamer's and McManus's critiques (Part 49) | 2026-11-21 |
+| `family_49` | the household, marriage (Becker, Choo and Siow) and the pill (Part 49) | 2026-11-21 |
+| `fertility_49` | Angrist and Evans's same-sex siblings; China's population policy (Part 49) | 2026-11-21 |
+| `bargain_49` | Lundberg, Pollak and Wales on the UK child benefit (Part 49) | 2026-11-21 |
+| `schools_49` | STAR, Maimonides' rule and its redux, teachers' value added (Part 49) | 2026-11-21 |
+| `early_49` | Perry Preschool, Head Start, Tennessee's pre-K trial, the Heckman curve (Part 49) | 2026-11-21 |
+| `health_49` | Grossman, caesarean sections, hospital prices (Part 49) | 2026-11-21 |
+| `drugs_49` | deaths of despair and the origins of the opioid crisis (Part 49) | 2026-11-21 |
+| `addiction_49` | rational addiction and its test (Part 49) | 2026-11-21 |
+| `critics_49` | economics imperialism and crowding out: fines, blood, a nuclear site (Part 49) | 2026-11-21 |
+| `frontier49` | sex ratios and saving; fertility and women's work (Part 49) | 2026-11-21 |
