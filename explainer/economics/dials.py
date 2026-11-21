@@ -1079,6 +1079,26 @@ DIALS = {d.key: d for d in [
              Estimate("Chodorow-Reich", 2019, "review", "cross-sectional (regional) studies, preferred estimate", 1.8,
                       where="AEJ: Economic Policy 11(2): 1-34, abstract", checked="2026-11-20"),
          )),
+    Dial("gdp_forecast_rmse", "error of forecasts of real GDP growth", "root mean squared error of forecasts of "
+         "US real GDP growth, percentage points at an annual rate, against the first published estimate", (57,),
+         status="settled within a range", checked="2026-11-21",
+         meaning="how far ahead the economy can be read: professional forecasts of the current quarter miss by about "
+                 "two points, and by three a year ahead, no better than the average of the past decade; so policy "
+                 "a year out is made with the average, and what matters is how fast forecasts are revised",
+         estimates=(
+             Estimate("this film: the SPF", 2026, "survey", "median forecast for the current quarter, surveys "
+                      "1968Q4-2026Q3, the pandemic's 2020Q2-Q3 left out", 1.86,
+                      where="videos/economics/econ57/compute.py, item score", checked="2026-11-21"),
+             Estimate("this film: the SPF", 2026, "survey", "one quarter ahead", 2.47,
+                      where="videos/economics/econ57/compute.py, item score", checked="2026-11-21"),
+             Estimate("this film: the SPF", 2026, "survey", "two quarters ahead", 2.78,
+                      where="videos/economics/econ57/compute.py, item score", checked="2026-11-21"),
+             Estimate("this film: the SPF", 2026, "survey", "four quarters ahead", 2.97,
+                      where="videos/economics/econ57/compute.py, item score", checked="2026-11-21"),
+             Estimate("this film: a benchmark", 2026, "reconstruction", "the previous ten years' average growth, "
+                      "for the current quarter", 3.06, where="videos/economics/econ57/compute.py, item score",
+                      checked="2026-11-21"),
+         )),
     Dial("tax_multiplier", "tax multiplier", "percent fall in real GDP after a tax increase of 1% of GDP, at its "
          "largest within three years", (32,), status="contested", checked="2026-11-20",
          meaning="how much output a tax increase costs: estimates from the narrative record of tax laws are two to "
@@ -1651,6 +1671,27 @@ SHOWN = {
         ("Ramey (2016); Nakamura and Steinsson (2018, JEP)", "what macroeconomics knows, stated"),
         ("Federal Reserve Board, FRED: GS10, TB3MS, USREC, INDPRO, CPIAUCSL, FEDFUNDS, PPIACO", "the hook's VARs "
          "and the intermission, from the Data Room"),
+    ],
+    57: [
+        ("Samuelson (1966); An, Jalles and Loungani (2018)", "the hook's two scorecards, stated"),
+        ("Mankiw and Shapiro (1986); BLS benchmark releases (2024, 2025, 2026)", "revisions, stated; first and "
+         "latest estimates computed from the real-time data set"),
+        ("Shiskin, Young and Musgrave (1967)", "X-11, stated and computed in simplified form on payrolls"),
+        ("Stock and Watson (2002); Giannone, Reichlin and Small (2008); GDPNow; the New York Fed staff nowcast",
+         "nowcasting, stated; bridge equations on FRED data and a factor model on the Island computed"),
+        ("Estrella and Mishkin (1998); Sahm (2019)", "recession signals, computed on FRED data"),
+        ("Diebold and Mariano (1995); Romer and Romer (2000); Bates and Granger (1969); Stock and Watson (2004)",
+         "forecast scoring and combination, computed on the SPF and Greenbook data"),
+        ("Hamilton (1989); Lucas (1976)", "regime switching, computed on a simulated economy; the critique, stated"),
+        ("Cavallo and Rigobon (2016); Chetty et al. (2024); Henderson, Storeygard and Weil (2012)", "new data, "
+         "stated as findings"),
+        ("Baker, Bloom and Davis (2016); Hansen, McMahon and Prat (2018); Gentzkow, Kelly and Taddy (2019)",
+         "text as data: the index plotted from FRED; the others stated"),
+        ("Bernanke (2024); the Bank of England's fan chart (1996); the IPCC's calibrated language", "communicating "
+         "uncertainty, stated"),
+        ("Halawi et al. (2024); Blanchet, Saez and Zucman (2022)", "the frontier, stated"),
+        ("Philadelphia Fed (real-time data set, SPF, Greenbook); FRED: PAYEMS, PAYNSA, GDPC1, INDPRO, GDPDEF, GS10, "
+         "TB3MS, USREC, UNRATE, SAHMREALTIME, USEPUINDXM", "the data, from the Data Room"),
     ],
     56: [
         ("Samuelson (1947); Mas-Colell, Whinston and Green (1995); Ljungqvist and Sargent (2000); Hayashi (2000); "

@@ -614,7 +614,12 @@ def greenbook_vs_spf(h_max: int = 4) -> dict:
             e_avg.append((g + s) / 2 - a)
         e_gb, e_spf, e_avg = map(np.array, (e_gb, e_spf, e_avg))
         dm = hac_mean_test(e_spf ** 2 - e_gb ** 2, lags=h + 1)
-        rows.append({"h": h, "n": len(e_gb), "rmse_gb": float(np.sqrt(np.mean(e_gb ** 2))),
+        # Bates and Granger (1969): the weight on the Greenbook that minimizes the combination's squared error
+        dd = e_gb - e_spf
+        w = float(np.clip(-(e_spf @ dd) / (dd @ dd), 0, 1)) if dd @ dd > 0 else 0.5
+        e_bg = w * e_gb + (1 - w) * e_spf
+        rows.append({"h": h, "n": len(e_gb), "rmse_gb": float(np.sqrt(np.mean(e_gb ** 2))), "w_gb": w,
+                     "rmse_bg": float(np.sqrt(np.mean(e_bg ** 2))), "corr": float(np.corrcoef(e_gb, e_spf)[0, 1]),
                      "rmse_spf": float(np.sqrt(np.mean(e_spf ** 2))), "rmse_avg": float(np.sqrt(np.mean(e_avg ** 2))),
                      "dm_t": dm["t"], "dm_p": dm["p"]})
     years = sorted({q[0] for q in by_q if q in spf})
@@ -636,3 +641,49 @@ def epu_peaks(k: int = 6, gap: int = 6) -> dict:
             break
     return {"months": ks, "value": v.tolist(), "peaks": [{"month": ks[i], "value": float(v[i])} for i in picked],
             "mean": float(v.mean())}
+
+
+# ---------------------------------------------------------------------------------------------------------------
+# why recessions are hard to forecast: a regime-switching economy
+
+
+def regime_forecasts(T: int = 4000, seed: int = 57, mu=(3.0, -3.0), p_stay=(0.95, 0.75), sd: float = 2.0,
+                     h_max: int = 4) -> dict:
+    """Hamilton's (1989) economy: annualized growth is mu[s] + noise, with s an expansion or a recession that
+    persists with probabilities ``p_stay``.  A forecaster who knows the model and the current state perfectly makes
+    the best squared-error forecast E[y_{t+h} | s_t].  How often is that forecast below zero, against how often growth
+    is?  And with the state only inferred from growth (Hamilton's filter), when does the probability of recession
+    cross a half?"""
+    rng = np.random.default_rng(seed)
+    P = np.array([[p_stay[0], 1 - p_stay[0]], [1 - p_stay[1], p_stay[1]]])
+    st = np.zeros(T, int)
+    for t in range(1, T):
+        st[t] = st[t - 1] if rng.random() < P[st[t - 1], st[t - 1]] else 1 - st[t - 1]
+    mu = np.array(mu)
+    y = mu[st] + sd * rng.standard_normal(T)
+    rows = []
+    for h in range(h_max + 1):
+        Ph = np.linalg.matrix_power(P, h)
+        f = Ph[st] @ mu                      # E[y_{t+h} | s_t], the best forecast given the true state
+        rows.append({"h": h, "f_exp": float(Ph[0] @ mu), "f_rec": float(Ph[1] @ mu),
+                     "share_neg": float(np.mean(f < 0))})
+    # Hamilton's filter on growth alone
+    pr = np.zeros(T)
+    xi = np.array([0.5, 0.5])
+    for t in range(T):
+        xi = P.T @ xi
+        lik = norm.pdf(y[t], mu, sd)
+        xi = xi * lik / (xi @ lik)
+        pr[t] = xi[1]
+    starts = [t for t in range(1, T) if st[t] == 1 and st[t - 1] == 0]
+    lags = []
+    for t0 in starts:
+        k = next((k for k in range(0, 8) if t0 + k < T and pr[t0 + k] > 0.5), None)
+        lags.append(k)
+    found = [k for k in lags if k is not None]
+    pi_rec = (1 - p_stay[0]) / (2 - p_stay[0] - p_stay[1])
+    return {"rows": rows, "share_neg_growth": float(np.mean(y < 0)), "share_rec": float(np.mean(st == 1)),
+            "pi_rec": pi_rec, "mean_lag": float(np.mean(found)) if found else None,
+            "found": len(found), "starts": len(starts), "false": int(np.sum((pr > 0.5) & (st == 0))),
+            "y": y[:160].tolist(), "s": st[:160].tolist(), "prob": pr[:160].tolist(), "mu": mu.tolist(),
+            "p_stay": list(p_stay), "sd": sd}

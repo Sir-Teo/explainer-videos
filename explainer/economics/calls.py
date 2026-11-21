@@ -426,6 +426,14 @@ CALLS = {c.key: c for c in [
          "wrong",
          ("Financial Crisis Inquiry Commission, The Financial Crisis Inquiry Report (2011), conclusions",
           "U.S. Senate Permanent Subcommittee on Investigations, Wall Street and the Financial Crisis (2011)")),
+    Call("sahm_2024", 57, "Claudia Sahm, in a Bloomberg Opinion column", "August 2024",
+         "the United States was not in a recession, although her own rule had just been triggered by July's rise in "
+         "unemployment", "unemployment had risen partly because more people were looking for work, not only because "
+         "people were losing jobs, so the rule's signal could be false",
+         "no recession followed: output kept growing, and no business-cycle peak has been dated since 2020",
+         "right",
+         ("C. Sahm, Bloomberg Opinion, 7 August 2024", "Congressional Research Service, Insight IN12410 (August 2024)",
+          "NBER business-cycle dates via FRED (USREC)")),
     Call("google_flu", 54, "Google's flu-tracking model (Ginsberg and colleagues, in Nature)", "2008",
          "the share of doctor visits for influenza-like illness in each region of the United States could be "
          "estimated from the volume of 45 search queries, a week or two before the CDC's surveillance reports",

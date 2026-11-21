@@ -1643,3 +1643,21 @@ brackets on screen.
 | order condition; rank condition; exclusion restriction; Wald estimator | 阶条件；秩条件；排他性约束；沃尔德估计量 |
 | two-way fixed effects; staggered adoption; Goodman-Bacon decomposition; imputation estimator | 双向固定效应；交错实施；Goodman-Bacon 分解；插补估计量 |
 | long-run restriction; Cholesky factor | 长期约束；Cholesky 因子 |
+
+## Part 57
+
+| English | 中文 |
+|---|---|
+| nowcast; nowcasting; ragged edge | 现时预测；即时预测；参差边缘 |
+| advance estimate; revision; vintage; real-time data | 初步估计；修订；数据版本；实时数据 |
+| benchmark revision; birth-death model | 基准修订；企业生灭模型 |
+| seasonal adjustment; seasonal factor; X-11 | 季节调整；季节因子；X-11 方法 |
+| bridge equation; dynamic factor model | 桥接方程；动态因子模型 |
+| yield curve inversion; term spread; probit | 收益率曲线倒挂；期限利差；概率单位模型 |
+| the Sahm rule; recession signal; false alarm | 萨姆规则；衰退信号；误报 |
+| forecast error; bias; root mean squared error | 预测误差；偏差；均方根误差 |
+| Diebold–Mariano test; forecast combination | 迪博尔德–马里亚诺检验；预测组合 |
+| the anxious index; Survey of Professional Forecasters | 焦虑指数；专业预测者调查 |
+| regime switching; Hamilton filter | 区制转换；汉密尔顿滤波 |
+| economic policy uncertainty index; text as data | 经济政策不确定性指数；文本即数据 |
+| fan chart; scenario analysis; calibrated language | 扇形图；情景分析；校准用语 |

@@ -10,7 +10,7 @@ the series leaves out.
 Both *Parts* columns are found, not typed. *Planned* lists the parts whose entry in
 [`SYLLABUS.md`](SYLLABUS.md) names the book or paper; *Built* lists the parts whose scenes, compute step or
 README cite it (a dot: none yet). Fuller notes (editions, chapters, what each source was used for) are in each
-part's README, under *Sources*. Built so far: Parts 1–56.
+part's README, under *Sources*. Built so far: Parts 1–57.
 
 ## 1. The textbook spine
 
@@ -32,16 +32,16 @@ part's README, under *Sources*. Built so far: Parts 1–56.
 | Nicholson–Snyder | W. Nicholson and C. Snyder, *Microeconomic Theory* (13th ed., 2021) | 5–6 | 5–6, 8 |
 | Jones | C. I. Jones, *Macroeconomics* (6th ed., 2023) | 20 | · |
 | Blanchard | O. Blanchard, *Macroeconomics* (8th ed., 2021) | 27, 32 | 20, 24, 27–28, 32, 39 |
-| Stock–Watson | J. Stock and M. Watson, *Introduction to Econometrics* (4th ed., 2019) | 4 | 4, 45, 49, 55 |
+| Stock–Watson | J. Stock and M. Watson, *Introduction to Econometrics* (4th ed., 2019) | 4 | 4, 45, 49, 55, 57 |
 | Angrist–Pischke | J. Angrist and J.-S. Pischke, *Mostly Harmless Econometrics* (2009) | 4, 50, 67 | 4, 50 |
 | Osborne | M. Osborne, *An Introduction to Game Theory* (2004) | 11 | 11 |
 | Krugman–Obstfeld–Melitz | P. Krugman, M. Obstfeld and M. Melitz, *International Economics* (12th ed., 2022) | 34–35 | 34–36 |
-| Mishkin | F. Mishkin, *The Economics of Money, Banking, and Financial Markets* (13th ed., 2022) | 26 | 31 |
+| Mishkin | F. Mishkin, *The Economics of Money, Banking, and Financial Markets* (13th ed., 2022) | 26 | 31, 57 |
 | Cabral | L. Cabral, *Introduction to Industrial Organization* (2nd ed., 2017) | 12–13 | 12–13 |
 | Borjas | G. Borjas, *Labor Economics* (8th ed., 2020) | 38 | 38 |
 | Gruber | J. Gruber, *Public Finance and Public Policy* (7th ed., 2022) | 15, 41–42, 50 | 7, 15, 41–42, 49–51 |
 | Ray | D. Ray, *Development Economics* (1998) | 46 | 46 |
-| Weil | D. Weil, *Economic Growth* (3rd ed., 2013) | 7, 19 | 3, 7, 19–21, 23 |
+| Weil | D. Weil, *Economic Growth* (3rd ed., 2013) | 7, 19 | 3, 7, 19–21, 23, 57 |
 
 ### Graduate micro
 
@@ -198,7 +198,7 @@ part's README, under *Sources*. Built so far: Parts 1–56.
 | the General Theory and IS-LM | Keynes (1936); Hicks (1937) | 27 | · |
 | the permanent income hypothesis | Friedman (1957); Hall (1978) | 22 | 22 |
 | the Phillips curve and the natural rate | Phillips (1958); Friedman (1968); Phelps (1967) | 28 | · |
-| the Lucas critique | Lucas (1976) | 4, 28, 54 | 4, 28, 54 |
+| the Lucas critique | Lucas (1976) | 4, 28, 54 | 4, 28, 54, 57 |
 | time inconsistency and rules | Kydland and Prescott (1977) | 28 | 28, 56 |
 | real business cycles | Kydland and Prescott (1982) | 29 | 54 |
 | staggered prices | Calvo (1983) | 30 | 30 |
@@ -215,7 +215,7 @@ part's README, under *Sources*. Built so far: Parts 1–56.
 | bank runs | Diamond and Dybvig (1983) | 26 | 26 |
 | debt deflation and financial instability | Fisher (1933); Minsky (1986) | 33 | 33 |
 | the financial accelerator | Bernanke, Gertler and Gilchrist (1999) | 33 | 33 |
-| forecasting by professionals | the Survey of Professional Forecasters (Philadelphia Fed) | 1, 57 | 1, 31, 55 |
+| forecasting by professionals | the Survey of Professional Forecasters (Philadelphia Fed) | 1, 57 | 1, 31, 55, 57 |
 
 ### The world economy
 
@@ -367,6 +367,8 @@ part's README, under *Sources*. Built so far: Parts 1–56.
 **Part 55, *Identifying Macro*.** Books: Lutz Kilian and Helmut Lütkepohl, *Structural Vector Autoregressive Analysis* (2017); James Hamilton, *Time Series Analysis* (1994), chapters 11 to 13; Valerie Ramey, 'Macroeconomic shocks and their propagation', *Handbook of Macroeconomics* (2016); Emi Nakamura and Jón Steinsson, 'Identification in macroeconomics', *JEP* (2018). Papers: Sims (1980, 1992); Blanchard and Quah (1989); Kuttner (2001); Rigobon (2003); Romer and Romer (2004); Jordá (2005); Uhlig (2005); Christiano, Eichenbaum and Evans (2005); An and Schorfheide (2007); Smets and Wouters (2007); Canova and Sala (2009); Stock and Watson (2012, 2018); Mertens and Ravn (2013); Nakamura and Steinsson (2014, 2018); Gertler and Karadi (2015); Goldsmith-Pinkham, Sorkin and Swift (2020); Plagborg-M\oller and Wolf (2021).
 
 **Part 56, *The Core Exam*.** Books: Andreu Mas-Colell, Michael Whinston and Jerry Green, *Microeconomic Theory* (1995); David Kreps, *A Course in Microeconomic Theory* (1990); Lars Ljungqvist and Thomas Sargent, *Recursive Macroeconomic Theory* (2000; 4th ed. 2018); David Romer, *Advanced Macroeconomics* (1996; 5th ed. 2019); Jordi Galí, *Monetary Policy, Inflation, and the Business Cycle* (2008; 2nd ed. 2015); Fumio Hayashi, *Econometrics* (2000). Papers: Mussa and Rosen (1978); Myerson (1981); Riley and Samuelson (1981); Hansen (1982); Burtless and Hausman (1978); Chamley (1986); Blanchard and Quah (1989); Katz and Meyer (1990); Aiyagari (1994); Clarida, Galí and Gertler (1999); Chamberlain and Wilson (2000); Card, Chetty and Weber (2007); Goodman-Bacon (2021); Callaway and Sant'Anna (2021); Borusyak, Jaravel and Spiess (2024).
+
+**Part 57, *Reading the Economy in Real Time*.** Books: Graham Elliott and Allan Timmermann, *Economic Forecasting* (2016); Marta Bańbura, Domenico Giannone, Michele Modugno and Lucrezia Reichlin, 'Now-casting and the real-time data flow', *Handbook of Economic Forecasting* 2A (2013); Dean Croushore, 'Frontiers of real-time data analysis', *JEL* 49(1) (2011). Papers: Bates and Granger (1969); Mankiw and Shapiro (1986); Hamilton (1989); Diebold and Mariano (1995); Estrella and Mishkin (1998); Romer and Romer (2000); Stock and Watson (2002, 2004); Giannone, Reichlin and Small (2008); Henderson, Storeygard and Weil (2012); Baker, Bloom and Davis (2016); Cavallo and Rigobon (2016); An, Jalles and Loungani (2018); Hansen, McMahon and Prat (2018); Sahm (2019); Gentzkow, Kelly and Taddy (2019); Blanchet, Saez and Zucman (2022); Bernanke (2024); Chetty et al. (2024).
 
 ## 4. What the series leaves out
 
