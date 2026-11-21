@@ -34,6 +34,8 @@ class Hook(VoiceoverScene):
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.5).to_edge(RIGHT, buff=0.5)
         tag = published_tag(r"McFadden, \ Access 20 (2002); \ Nobel lecture, \ AER 91(3) (2001)", corner=DR,
                             font_size=12)
+        head = label(r"the San Francisco Bay Area's new railway, \ BART", font_size=26, color=E.ACCENT).to_edge(
+            UP, buff=0.45).shift(RIGHT * 2.6)
         with self.voiceover(
             "In the early 1970s the San Francisco Bay Area was building a railway, BART, and planners had to say "
             "how many people would ride it. <bookmark mark='a'/> The official forecast, from a model of the trips "
@@ -44,7 +46,7 @@ class Hook(VoiceoverScene):
             f"never had. His model said {B['mcfadden']:.1f} percent. <bookmark mark='c'/> When BART was running, "
             f"in 1975, it carried {B['actual']:.1f} percent. McFadden went back to the same travellers to check."
         ) as vo:
-            self.play(FadeIn(ax), FadeIn(tag))
+            self.play(FadeIn(ax), FadeIn(tag), FadeIn(head, shift=DOWN * 0.1))
             vo.wait_until("a")
             self.play(FadeIn(bars[0], shift=UP * 0.1), FadeIn(side[0]))
             vo.wait_until("b")

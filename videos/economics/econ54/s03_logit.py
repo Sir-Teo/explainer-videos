@@ -224,9 +224,11 @@ class Logit(VoiceoverScene):
         side = VGroup(
             label(rf"rail's riders from the bus: \\ logit {100 * fb_l:.0f}\%, \ truth {100 * fb_t:.0f}\%",
                   font_size=19, color=BUS),
-            label(rf"cars left: \ logit {100 * al[0]:.0f}\%, \ truth {100 * at[0]:.0f}\%", font_size=19,
+            label(rf"still driving: \\ logit {100 * al[0]:.0f}\%, \ truth {100 * at[0]:.0f}\%", font_size=19,
                   color=CAR),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.3).next_to(key, DOWN, buff=0.5, aligned_edge=LEFT)
+        if side.get_right()[0] > 6.9:
+            side.shift(LEFT * (side.get_right()[0] - 6.9))
         tag = island_tag(r"simulated: \ the Island's commuters", corner=DR, font_size=13)
         with self.voiceover(
             "Now the reason for all this: a forecast. The Island opens a railway, "
