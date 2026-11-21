@@ -71,7 +71,7 @@ class Outro(VoiceoverScene):
             (r"causal forests and policy learning: \ close to the best allocation", ALGO),
             (rf"predicted labels: \ a classifier's {100 * X['classifier']['mean']:.1f}\% against "
              rf"{100 * X['share']:.0f}\%; \ PPI corrects", TEXT),
-            (rf"a network learns $s = \alpha\beta$ to within {E_['max_err']:.4f}", NET),
+            (rf"a network learns $s = \alpha\beta$ to within {E_['max_err']:.5f}", NET),
             (rf"Q-learners price {A['mean_gain']:.0%} of the way to monopoly".replace("%", r"\%"), COST),
             (r"language models: \ cheap pilots and assistants, \ validated against people", NET),
             (rf"fairness: \ false positives {100 * F['A']['fpr']:.0f}\% and {100 * F['B']['fpr']:.0f}\% from a "

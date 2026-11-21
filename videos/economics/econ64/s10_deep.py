@@ -71,15 +71,16 @@ class Deep(VoiceoverScene):
                     ylabel=r"saving rate $s(k)$", xfmt=lambda v: f"{v:.1f}", yfmt=lambda v: f"{v:.1f}",
                     font_size=13)
         ex = seg(axr, 0.2, E_["exact"], 2.5, E_["exact"], TRUTHC, 2.4, dashed=True)
-        snaps = VGroup(*[path(axr, k, sn["s"], NET, 2.6) for sn in E_["snaps"]])
+        snaps = VGroup(*[path(axr, k, sn["s"], NET, 2.6, yr=(0.15, 0.45)) for sn in E_["snaps"]])
+        orders = {6: "six", 7: "seven", 8: "eight", 9: "nine"}.get(int(lo[0] - lo[-1]), "many")
         for j, s_ in enumerate(snaps):
-            s_.set_opacity(0.35 + 0.65 * j / max(len(snaps) - 1, 1))
+            s_.set_fill(opacity=0).set_stroke(opacity=0.35 + 0.65 * j / max(len(snaps) - 1, 1))
         cap = label(rf"after training: \ largest gap {E_['max_err']:.5f}", font_size=19, color=E.ACCENT).to_edge(
             DOWN, buff=0.35)
         tag = island_tag(r"computed: \ agora.learn.euler\_net, \ explainer.ai.autodiff", corner=DL, font_size=12)
         with self.voiceover(
-            "Train it. <bookmark mark='a'/> On the left, the squared Euler error, falling by six orders of "
-            "magnitude. <bookmark mark='b'/> On the right, the rule the network has learned, at the start, after "
+            f"Train it. <bookmark mark='a'/> On the left, the squared Euler error, falling by {orders} orders "
+            "of magnitude. <bookmark mark='b'/> On the right, the rule the network has learned, at the start, after "
             "fifty steps, after two hundred, and at the end, against Brock and Mirman's answer in gold. <bookmark "
             f"mark='c'/> The learned rule is flat at alpha times beta, within {E_['max_err']:.5f} everywhere on "
             "the grid. The network found the closed form without being told it."

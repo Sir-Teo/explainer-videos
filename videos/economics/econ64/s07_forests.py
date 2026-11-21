@@ -59,8 +59,10 @@ class Forests(VoiceoverScene):
         sh = np.array(T["shares"])
         A = T["averted"]
         top = max(max(v) for v in A.values()) * 1.1
+        step = 2 if top < 14 else 5
         ax = plane([0, 0.62], [0, top], center=LEFT * 2.4 + DOWN * 0.3, x_length=6.6, y_length=4.6,
-                   xticks=[0, 0.2, 0.4, 0.6], yticks=None, xlabel=r"share of the unemployed given a place",
+                   xticks=[0, 0.2, 0.4, 0.6], yticks=list(np.arange(0, top, step)),
+                   xlabel=r"share of the unemployed given a place",
                    ylabel=r"unemployment averted, \ per 100 unemployed", xfmt=lambda v: rf"{100 * v:.0f}\%",
                    yfmt=lambda v: f"{v:.0f}", font_size=14)
         ls = VGroup(*[path(ax, sh, A[k], c, 3.2) for k, c in CURVES])

@@ -366,11 +366,12 @@ def euler_net(alpha: float = 0.33, beta: float = 0.95, hidden: int = 12, steps: 
         resid = (c * (k1 ** (alpha - 1)) * (beta * alpha)) / c1 - 1.0
         loss = (resid * resid).mean()
         loss.backward()
+        lr_t = lr * 0.5 * (1 + np.cos(np.pi * it / steps))     # cosine decay: no late spikes
         for j, p in enumerate(params):          # Adam
             m_[j] = 0.9 * m_[j] + 0.1 * p.grad
             v_[j] = 0.999 * v_[j] + 0.001 * p.grad ** 2
             mh, vh = m_[j] / (1 - 0.9 ** (it + 1)), v_[j] / (1 - 0.999 ** (it + 1))
-            p.data -= lr * mh / (np.sqrt(vh) + 1e-8)
+            p.data -= lr_t * mh / (np.sqrt(vh) + 1e-8)
         losses.append(float(loss.data))
         if it in (0, 50, 200, steps - 1):
             snaps.append({"step": it, "s": srate(x0).data.ravel().tolist()})

@@ -56,7 +56,7 @@ class Text(VoiceoverScene):
 
     def measure(self):
         X = load("text")
-        ax = plane([0.08, 0.17], [-0.5, 2.5], center=LEFT * 1.6 + DOWN * 0.1, x_length=8.0, y_length=4.2,
+        ax = plane([0.08, 0.17], [-0.5, 2.5], center=RIGHT * 1.5 + DOWN * 0.1, x_length=7.4, y_length=4.2,
                    xticks=[0.09, 0.11, 0.13, 0.15], yticks=[], xlabel=r"estimated share of news about layoffs",
                    xfmt=lambda v: rf"{100 * v:.0f}\%", font_size=15)
         truth = vline(ax, X["share"], -0.5, 2.5, TRUTHC)
@@ -69,8 +69,8 @@ class Text(VoiceoverScene):
             names.add(label(rf"{k}: \ $\pm${50 * X[k]['width']:.1f} points, \ covers "
                             rf"{100 * X[k]['coverage']:.0f}\%", font_size=16, color=c).next_to(ax.ax.c2p(0.08, y0),
                                                                                               LEFT, buff=0.15))
-        if names.width > 5.0:
-            names.scale_to_fit_width(5.0)
+        if names.width > 4.2:
+            names.scale_to_fit_width(4.2)
             for r, nm in enumerate(names):
                 nm.next_to(ax.ax.c2p(0.08, 2 - r), LEFT, buff=0.15)
         head = label(rf"{X['N']:,} articles, \ {100 * X['share']:.0f}\% about layoffs; \ a classifier that catches "
