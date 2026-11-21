@@ -101,6 +101,27 @@ BY_KEY = {f.key: f for f in FACTS}
 
 # Agora's column: {fact key: (part, what the built economy produces)}.  Filled as parts land.
 AGORA = {
+    # Rows entered in Part 68, when Agora sat the whole list: each from the part that computed it
+    "engel": (6, "Working and Leser's system fitted to American spending since 1929: food's budget share falls by "
+                 "0.096 for each unit of log real spending; the poorest fifth spends a third of its budget on food, "
+                 "the richest a sixteenth"),
+    "demand_slopes": (6, "every compensated demand curve slopes down (Slutsky's equation); an ordinary one can bend "
+                         "back only for a staple that is most of a poor household's budget, and in Jensen and Miller's "
+                         "Hunan data rice demand rose with its price only for households getting between about 53 and "
+                         "84 percent of their calories from rice"),
+    "dispersion": (62, "survivors of competition with free entry differ in productivity by a 90/10 ratio of 2.8 when "
+                       "goods substitute with an elasticity of 2, and of 1.9 with an elasticity of 3: tougher "
+                       "competition trims the tail"),
+    "one_price": (34, "with goods arbitraged and services not, real exchange rates in the Macrohistory Database revert "
+                      "with a half-life of 5.2 years (2.6 under floating rates), and Big Mac prices rise with income "
+                      "across 51 countries"),
+    "passthrough": (10, "a monopolist facing linear demand passes on half of a cost increase, one facing a constant "
+                        "elasticity of 3 passes on one and a half times; in coffee, retail prices move 0.15 of the "
+                        "bean price's change at first and 0.55 in the long run"),
+    "persistence": (30, "in Calvo's model inflation's response to a demand shock is largest on impact and halves every "
+                        "quarter; with indexation and habits it builds for two quarters and lasts more than a year"),
+    "labour_share": (65, "in the task model, automating tasks up to cost parity moves the labour share from 81% to "
+                         "23%; new tasks in which people have a comparative advantage bring it back to 62%"),
     # Part 1 entered the row; Part 2 tested it on lopsided markets (Cliff and Bruten's question) and kept it
     "auctions_converge": (2, "traders who adjust their margins converge by the third period in balanced and lopsided "
                              "markets alike; random traders capture most of the surplus, but find the price only when "

@@ -1601,6 +1601,33 @@ DATASETS = {
         "sha256": "6a7971b31b7336551705465de8a0855826f3652abe112406f52b2c2ed0994c0c",
         "files": ("rtdsm_2006_2010.csv", "rtdsm_first_latest.csv", "rtdsm_q1_vintages.csv"),
     },
+    "mta_congestion": {
+        "title": "New York's Congestion Relief Zone in the MTA's open data: crossings of the MTA's bridges and tunnels "
+                 "(weekly, 2019-), entries into the zone (daily and by ten-minute block on weekdays, 2025-), daily "
+                 "miles driven in the zone and on its excluded roadways (monthly, 2024-) and bus speeds inside and "
+                 "outside the central business district (monthly, 2023-)",
+        "publisher": "Metropolitan Transportation Authority, via New York State's open data portal (data.ny.gov)",
+        "citation": "MTA Bridges and Tunnels Hourly Crossings: Beginning 2019 (ebfx-2m7v); MTA Congestion Relief Zone "
+                    "Vehicle Entries: Beginning 2025 (t6yz-b64h); MTA Vehicle Miles Traveled in the Central Business "
+                    "District: Beginning 2024 (jbxx-kxff); MTA Central Business District Bus Speeds: Beginning 2023 "
+                    "(r6db-kkzj); data.ny.gov, retrieved 2026-11-21",
+        "short": "MTA open data (data.ny.gov)",
+        "url": "https://data.ny.gov/resource/",
+        "licence": "New York State open data terms of use (public data)",
+        "units": "vehicles; vehicle-miles a day; miles and hours of bus operation",
+        "vintage": "2026-11-21",
+        "sha256": "023f3d410b4b396c (crossings query; the others are recorded by refresh_mta_congestion)",
+        "files": ("mta_crossings.csv", "crz_daily.csv", "crz_tod.csv", "cbd_vmt.csv", "cbd_bus.csv"),
+        "queries": {
+            "ebfx-2m7v": "$select=date,facility,direction,sum(traffic_count) as n&$group=date,facility,direction",
+            "t6yz-b64h": "$select=toll_date,vehicle_class,sum(crz_entries) as n&$group=toll_date,vehicle_class; and "
+                         "$select=hour_of_day,minute_of_hour,vehicle_class,sum(crz_entries) as n&$where="
+                         "day_of_week_int between 2 and 6&$group=hour_of_day,minute_of_hour,vehicle_class",
+            "jbxx-kxff": "every row",
+            "r6db-kkzj": "$select=month,cbd_relation,day_type,time_period,sum(sum_mileage) as miles,sum(sum_time) "
+                         "as hours&$group=month,cbd_relation,day_type,time_period",
+        },
+    },
 }
 
 # The Pink Sheet columns kept in the extract: (key, the column's heading in the sheet, units)
@@ -4075,6 +4102,119 @@ def transistors() -> dict:
     return {"year": [int(r["year"]) for r in rows], "transistors": [float(r["transistors"]) for r in rows]}
 
 
+def mta_crossings() -> dict:
+    """Weekly crossings of the MTA's bridges and tunnels by facility and direction (weeks start on Monday):
+    ``{"week", "facility", "direction", "vehicles", "weekday_vehicles", "days": [...]}``."""
+    rows = _read(HERE / "mta_crossings.csv")
+    return {"week": [r["week"] for r in rows], "facility": [r["facility"] for r in rows],
+            "direction": [r["direction"] for r in rows], "vehicles": [int(r["vehicles"]) for r in rows],
+            "weekday_vehicles": [int(r["weekday_vehicles"]) for r in rows], "days": [int(r["days"]) for r in rows]}
+
+
+def crz_daily() -> dict:
+    """Daily entries into the Congestion Relief Zone since 5 January 2025: ``{"date", "cars", "all": [...]}``."""
+    rows = _read(HERE / "crz_daily.csv")
+    return {"date": [r["date"] for r in rows], "cars": [int(r["cars"]) for r in rows],
+            "all": [int(r["all"]) for r in rows]}
+
+
+def crz_tod() -> dict:
+    """Weekday entries into the zone by ten-minute block, summed over ``weekdays`` weekdays:
+    ``{"hour", "minute", "cars", "all": [...], "weekdays": n}``."""
+    rows = _read(HERE / "crz_tod.csv")
+    return {"hour": [int(r["hour"]) for r in rows], "minute": [int(r["minute"]) for r in rows],
+            "cars": [int(r["cars"]) for r in rows], "all": [int(r["all"]) for r in rows],
+            "weekdays": int(rows[0]["weekdays"])}
+
+
+def cbd_vmt() -> dict:
+    """Daily vehicle-miles driven in the zone (``CRZ``) and on its excluded roadways (``ER``, the FDR Drive and the
+    West Side Highway), monthly since 2024, by two methods, and an index (January 2024 = 100)."""
+    rows = _read(HERE / "cbd_vmt.csv")
+    return {"month": [r["month"] for r in rows], "area": [r["area"] for r in rows],
+            "vmt_gps": [float(r["vmt_gps"]) for r in rows], "vmt_cv": [float(r["vmt_cv"]) for r in rows],
+            "index": [float(r["index"]) for r in rows]}
+
+
+def cbd_bus() -> dict:
+    """Bus miles and hours by month, inside (``CBD``) or outside (``Non-CBD``) the central business district, by day
+    type and period (``Peak``, ``Overnight``), since 2023; speed is miles over hours."""
+    rows = _read(HERE / "cbd_bus.csv")
+    return {"month": [r["month"] for r in rows], "cbd": [r["cbd"] for r in rows],
+            "day_type": [r["day_type"] for r in rows], "period": [r["period"] for r in rows],
+            "miles": [float(r["miles"]) for r in rows], "hours": [float(r["hours"]) for r in rows]}
+
+
+def refresh_mta_congestion() -> None:
+    """Re-run the four aggregate queries against data.ny.gov and rebuild the five files (see the registry)."""
+    import collections  # noqa: PLC0415
+    import datetime as dt  # noqa: PLC0415
+    import urllib.parse  # noqa: PLC0415
+
+    base = "https://data.ny.gov/resource/"
+
+    def get(ds, **q):
+        url = base + ds + ".csv?" + urllib.parse.urlencode({"$limit": 500000, **q})
+        raw = RAW / f"{ds}.csv"
+        print(ds, _download(url, raw)[:12])
+        return list(csv.DictReader(open(raw, encoding="utf-8")))
+
+    cx = get("ebfx-2m7v", **{"$select": "date,facility,direction,sum(traffic_count) as n",
+                             "$group": "date,facility,direction"})
+    agg = collections.defaultdict(lambda: [0, 0, 0])
+    for r in cx:
+        d = dt.date.fromisoformat(r["date"][:10])
+        a = agg[((d - dt.timedelta(days=d.weekday())).isoformat(), r["facility"], r["direction"])]
+        n = int(float(r["n"]))
+        a[0] += n
+        a[1] += n if d.weekday() < 5 else 0
+        a[2] += 1
+    with open(HERE / "mta_crossings.csv", "w", newline="", encoding="utf-8") as f:
+        w = csv.writer(f)
+        w.writerow(["week", "facility", "direction", "vehicles", "weekday_vehicles", "days"])
+        for k in sorted(agg):
+            w.writerow([*k, *agg[k]])
+    day = collections.defaultdict(lambda: [0, 0])
+    for r in get("t6yz-b64h", **{"$select": "toll_date,vehicle_class,sum(crz_entries) as n",
+                                 "$group": "toll_date,vehicle_class"}):
+        n = int(float(r["n"]))
+        day[r["toll_date"][:10]][1] += n
+        day[r["toll_date"][:10]][0] += n if r["vehicle_class"].startswith("1 ") else 0
+    with open(HERE / "crz_daily.csv", "w", newline="", encoding="utf-8") as f:
+        w = csv.writer(f)
+        w.writerow(["date", "cars", "all"])
+        for d in sorted(day):
+            w.writerow([d, *day[d]])
+    weekdays = sum(1 for d in day if dt.date.fromisoformat(d).weekday() < 5)
+    tod = collections.defaultdict(lambda: [0, 0])
+    for r in get("t6yz-b64h", **{"$select": "hour_of_day,minute_of_hour,vehicle_class,sum(crz_entries) as n",
+                                 "$where": "day_of_week_int between 2 and 6",
+                                 "$group": "hour_of_day,minute_of_hour,vehicle_class"}):
+        k = (int(r["hour_of_day"]), int(r["minute_of_hour"]))
+        n = int(float(r["n"]))
+        tod[k][1] += n
+        tod[k][0] += n if r["vehicle_class"].startswith("1 ") else 0
+    with open(HERE / "crz_tod.csv", "w", newline="", encoding="utf-8") as f:
+        w = csv.writer(f)
+        w.writerow(["hour", "minute", "cars", "all", "weekdays"])
+        for k in sorted(tod):
+            w.writerow([*k, *tod[k], weekdays])
+    with open(HERE / "cbd_vmt.csv", "w", newline="", encoding="utf-8") as f:
+        w = csv.writer(f)
+        w.writerow(["month", "area", "vmt_gps", "vmt_cv", "index"])
+        for r in sorted(get("jbxx-kxff"), key=lambda r: (r["area"], r["date"])):
+            w.writerow([r["date"][:7], r["area"], r["daily_vmt_agps"], r["daily_vmt_cvd"],
+                        round(float(r["indexed_average_vmt"]), 4)])
+    bus = get("r6db-kkzj", **{"$select": "month,cbd_relation,day_type,time_period,sum(sum_mileage) as miles,"
+                                         "sum(sum_time) as hours", "$group": "month,cbd_relation,day_type,time_period"})
+    with open(HERE / "cbd_bus.csv", "w", newline="", encoding="utf-8") as f:
+        w = csv.writer(f)
+        w.writerow(["month", "cbd", "day_type", "period", "miles", "hours"])
+        for r in sorted(bus, key=lambda r: (r["month"], r["cbd_relation"], r["day_type"], r["time_period"])):
+            w.writerow([r["month"][:7], r["cbd_relation"], r["day_type"], r["time_period"],
+                        round(float(r["miles"]), 3), round(float(r["hours"]), 4)])
+
+
 def refresh_transistors() -> None:
     d = DATASETS["transistors"]
     raw = RAW / "transistors-per-microprocessor.csv"
@@ -4126,7 +4266,7 @@ REFRESH = {"cbo": refresh_cbo, "draft1970": refresh_draft1970, "ajr": refresh_aj
            "noaa_co2": refresh_noaa_co2, "hadcrut5": refresh_hadcrut5, "gcp_co2": refresh_gcp_co2,
            "era5_temp": refresh_era5_temp, "wdi_gdp_kd": refresh_wdi_gdp_kd, "solar_pv": refresh_solar_pv,
            "fao_fish": refresh_fao_fish, "oil_production": refresh_oil_production,
-           "transistors": refresh_transistors}
+           "transistors": refresh_transistors, "mta_congestion": refresh_mta_congestion}
 
 
 def main() -> None:
