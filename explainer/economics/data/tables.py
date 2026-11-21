@@ -5120,6 +5120,122 @@ FRONTIER58 = Table(
     data={"eps": 1.4},
 )
 
+# ---------------------------------------------------------------------------
+# Part 67
+# ---------------------------------------------------------------------------
+HAMERMESH_2013 = Table(
+    key="hamermesh_2013",
+    cite="Daniel S. Hamermesh, \"Six Decades of Top Economics Publishing: Who and How?\", Journal of Economic "
+         "Literature 51(1) (2013), 162-172; NBER Working Paper 18635 (2012)",
+    tag="Hamermesh, \\emph{JEL} 51(1) (2013), Tables 1, 2 and 4",
+    where="Tables 1, 2 and 4: the 748 full-length articles in the AER, JPE and QJE in 1963, 1973, 1983, 1993, 2003 "
+          "and 2011; shares in Tables 1 and 4 weighted by the inverse of the number of authors",
+    read="NBER Working Paper 18635, pp. 14-17",
+    checked="2026-11-21",
+    data={
+        "years": (1963, 1973, 1983, 1993, 2003, 2011),
+        "methods": ("theory", "theory with simulation", "empirical, borrowed data", "empirical, own data",
+                    "experiment"),
+        "shares": ((50.7, 1.5, 39.1, 8.7, 0.0), (54.6, 4.2, 37.0, 4.2, 0.0), (57.6, 4.0, 35.2, 2.4, 0.8),
+                   (32.4, 7.3, 47.8, 8.8, 3.7), (28.9, 11.1, 38.5, 17.8, 3.7), (19.1, 8.8, 29.9, 34.0, 8.2)),
+        "female": (4.7, 3.4, 6.8, 9.3, 10.3, 12.6),
+        "age35": (50.5, 61.5, 48.5, 49.8, 36.8, 33.0),
+        "coauthored": (16.3, 28.6, 45.6, 55.1, 74.1, 79.6),
+        "articles": (86, 119, 125, 136, 135, 147),
+        "authors": (100, 154, 190, 234, 269, 322),
+    },
+    note="Seventeen articles of 1963 could not be assigned a method; Table 4's rows sum to about 100.",
+)
+
+CAMERER_2016 = Table(
+    key="camerer_2016",
+    cite="Colin F. Camerer, Anna Dreber, Eskil Forsell, Teck-Hua Ho, Jürgen Huber, Magnus Johannesson, Michael "
+         "Kirchler et al., \"Evaluating Replicability of Laboratory Experiments in Economics\", Science 351(6280) "
+         "(2016), 1433-1436",
+    tag="Camerer et al., \\emph{Science} 351 (2016)",
+    where="abstract and main text: 18 laboratory experiments published in the AER and QJE, 2011-2014; replications "
+          "with at least 90% power to detect the original effect at the 5% level, by preregistered plans; prediction "
+          "markets with 97 traders run before the replications",
+    read="the PubMed abstract and the authors' working-paper version (MPRA paper 75461), pp. 7-9",
+    checked="2026-11-21",
+    data={"studies": 18, "replicated": 11, "rate": 0.611, "effect_ratio": 0.66, "market": 0.752, "survey": 0.711,
+          "traders": 97, "rho_market": 0.30, "p_market": 0.232, "rho_survey": 0.52, "p_survey": 0.028,
+          "power": 0.90},
+    note="Every market price and every survey average was above one half, so read as a forecast of which studies "
+         "would replicate, the markets were right 61% of the time.",
+)
+
+REPLICATION_67 = Table(
+    key="replication_67",
+    cite="Open Science Collaboration, Science 349(6251) (2015), aac4716; Colin F. Camerer et al., Nature Human "
+         "Behaviour 2 (2018), 637-644; Andrew C. Chang and Phillip Li, Critical Finance Review 11(1) (2022), 185-206 "
+         "(FEDS 2015-083); Abel Brodeur et al., \"Mass Reproducibility and Replicability: A New Hope\", IZA DP 16912 "
+         "(2024); Nick Huntington-Klein et al., Economic Inquiry 59(3) (2021), 944-960",
+    tag="OSC (2015); \\ Camerer et al. (2018); \\ Chang and Li (2022); \\ Brodeur et al. (2024); \\ "
+        "Huntington-Klein et al. (2021)",
+    where="abstracts: psychology 36%; social science in Nature and Science 13 of 21; 22 of 67 economics papers "
+          "reproduced without the authors' help and 29 of 59 with it; 110 papers, over 85% computationally "
+          "reproducible, coding errors in about a quarter, robustness about 70%; seven replicators of each of two "
+          "studies, no two with the same sample size, a spread of estimates three to four times the mean reported "
+          "standard error",
+    read="the abstracts on the publishers' pages, the Federal Reserve's FEDS page, IZA and RePEc",
+    checked="2026-11-21",
+    data={"osc": 0.36, "ss_rep": 13, "ss_n": 21, "cl_alone": (22, 67), "cl_help": (29, 59), "i4r_papers": 110,
+          "i4r_repro": 0.85, "i4r_errors": 0.25, "i4r_robust": 0.70, "hk_ratio": (3, 4), "hk_teams": 7},
+)
+
+SELECTION_67 = Table(
+    key="selection_67",
+    cite="Abel Brodeur, Mathias Lé, Marc Sangnier and Yanos Zylberberg, \"Star Wars: The Empirics Strike Back\", "
+         "AEJ: Applied 8(1) (2016), 1-32; Abel Brodeur, Nikolai Cook and Anthony Heyes, \"Methods Matter\", AER "
+         "110(11) (2020), 3634-60; Isaiah Andrews and Maximilian Kasy, \"Identification of and Correction for "
+         "Publication Bias\", AER 109(8) (2019), 2766-94; John P. A. Ioannidis, T. D. Stanley and Hristos "
+         "Doucouliagos, \"The Power of Bias in Economics Research\", Economic Journal 127(605) (2017), F236-F265; "
+         "Hristos Doucouliagos and T. D. Stanley, British Journal of Industrial Relations 47(2) (2009), 406-428",
+    tag="Brodeur et al. (2016, 2020); \\ Andrews and Kasy (2019); \\ Ioannidis, \\ Stanley and Doucouliagos "
+        "(2017)",
+    where="Brodeur et al. 2016: 50,000 tests in the AER, JPE and QJE, 2005-2011, a valley for p between 0.25 and 0.10 "
+          "and a bump just below 0.05, the missing tests 10-20% of marginally rejected ones; 2020: over 21,000 tests "
+          "in 25 journals, IV and to a lesser extent DiD most affected, RCTs and RDDs least; Andrews and Kasy: "
+          "significant results in Camerer et al.'s experiments more than thirty times as likely to be published, "
+          "negative significant minimum-wage estimates about three times, the corrected mean about half the naive "
+          "one; Ioannidis et al.: 159 literatures, 64,076 estimates, median power 18% or less, nearly 80% of "
+          "effects exaggerated, typically by a factor of two",
+    read="the abstracts; Andrews and Kasy's published article, pp. 2768 and 2779-2783",
+    checked="2026-11-21",
+    data={"brodeur_tests": 50000, "missing": (0.10, 0.20), "bch_tests": 21000, "bch_journals": 25,
+          "ak_lab": 30, "ak_minwage": 3, "isd_power": 0.18, "isd_exaggerated": 0.80, "isd_literatures": 159,
+          "isd_estimates": 64076, "ds_studies": 64},
+)
+
+FORECASTS_67 = Table(
+    key="forecasts_67",
+    cite="Stefano DellaVigna and Devin Pope, \"Predicting Experimental Results: Who Knows What?\", Journal of "
+         "Political Economy 126(6) (2018), 2410-2456",
+    tag="DellaVigna and Pope, \\emph{JPE} 126(6) (2018)",
+    where="abstract: 208 experts forecast 15 treatments of a real-effort experiment with nearly 10,000 subjects; the "
+          "average forecast beat 96% of individual forecasts; citations, rank and field did not predict accuracy",
+    read="the NBER abstract (w22566) and the JPE listing",
+    checked="2026-11-21",
+    data={"experts": 208, "treatments": 15, "beats": 0.96},
+)
+
+REMEDIES_67 = Table(
+    key="remedies_67",
+    cite="Benjamin A. Olken, \"Promises and Perils of Pre-analysis Plans\", JEP 29(3) (2015), 61-80; the Journal "
+         "of Development Economics' pre-results review (BITSS and the JDE, 2018-2019); the AEA's Data and Code "
+         "Availability Policy and its Data Editor (2018-)",
+    tag="Olken (2015); \\ JDE pre-results review (2018); \\ AEA Data Editor",
+    where="the JDE piloted pre-results review from March 2018 and made it a permanent track in 2019 (46 stage-one "
+          "submissions in the first fifteen months); the AEA Data Editor, Lars Vilhuber, since 2018, runs "
+          "reproducibility checks before publication",
+    read="the World Bank Development Impact blog and BITSS's posts; the AEA's policy page and the Data Editor's site",
+    checked="2026-11-21",
+    data={"jde_start": 2018, "jde_permanent": 2019, "jde_stage1": 46, "editor_since": 2018},
+)
+
+PART67 = (HAMERMESH_2013, CAMERER_2016, REPLICATION_67, SELECTION_67, FORECASTS_67, REMEDIES_67)
+
 PART58 = (FLOOD_1936, VALUES_58, STATED_58, DISCOUNT_58, MEGAPROJECTS, SCORING_58, TARGETS_58, FRONTIER58)
 
 PART50 = (CTC_2021, ALLOWANCE_50, CREDITS_50, FRONTIER50)
@@ -5144,4 +5260,4 @@ PART41 = (LAFFER_1974, HARBERGER_1962, RAMSEY_1927, MIRRLEES_1971, DIAMOND_SAEZ_
           CLK_2009, CAPITAL_TAX, HAVENS, EVASION, FRONTIER41, TCJA_2017)
 PART7 = (BERNOULLI_1738, SAMUELSON_1937, ALLAIS_1953, ELLSBERG_1961, RABIN_2000, THALER_1981, HOLT_LAURY_2005,
          HAYDEN_PLATT_2009, MADRIAN_SHEA_2001, THALER_BENARTZI_2004, BARSKY_1997, POST_2008, MEHRA_PRESCOTT_1985)
-ALL = {t.key: t for t in (*PART1, *PART3, *PART4, *PART5, *PART6, *PART7, *PART8, *PART9, *PART10, *PART11, *PART12, *PART13, *PART14, *PART15, *PART16, *PART17, *PART18, *PART19, *PART21, *PART22, *PART25, *PART26, *PART35, *PART36, *PART37, *PART38, *PART39, *PART40, *PART41, *PART42, *PART43, *PART44, *PART45, *PART46, *PART47, *PART48, *PART49, *PART50, *PART58)}
+ALL = {t.key: t for t in (*PART1, *PART3, *PART4, *PART5, *PART6, *PART7, *PART8, *PART9, *PART10, *PART11, *PART12, *PART13, *PART14, *PART15, *PART16, *PART17, *PART18, *PART19, *PART21, *PART22, *PART25, *PART26, *PART35, *PART36, *PART37, *PART38, *PART39, *PART40, *PART41, *PART42, *PART43, *PART44, *PART45, *PART46, *PART47, *PART48, *PART49, *PART50, *PART58, *PART67)}
