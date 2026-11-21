@@ -118,14 +118,15 @@ def _net_income(F, work, policy):
     return e - tax + credit, e, tax, credit
 
 
-def poverty_line(married, kids, base: float = 30000.0):
-    """The Island's poverty line: 30,000 for two adults and two children, scaled by the square root of family size."""
+def poverty_line(married, kids, base: float = 24000.0):
+    """The Island's poverty line: ``base`` for two adults and two children, scaled by the square root of family
+    size."""
     size = 1 + np.asarray(married) + np.asarray(kids)
     return base * np.sqrt(size / 4.0)
 
 
 def simulate(F: dict, policy: str, elasticity: float = 0.25, income_effect: float = 0.0, take_up: float = 1.0,
-             seed: int = 0) -> dict:
+             line_base: float = 24000.0, seed: int = 0) -> dict:
     """Who works under ``policy`` ("ctc" or "allowance"), and the outcomes.  A main worker's probability of working is
     a logistic function of the log net gain from work (net income working minus not working, against potential
     earnings) with slope set so that the participation elasticity at the old credit is ``elasticity``; an income
@@ -161,7 +162,7 @@ def simulate(F: dict, policy: str, elasticity: float = 0.25, income_effect: floa
         inc_old, _, _, credit_old = _net_income(F, work, "ctc")
         inc = np.where(got, inc, inc_old)
         credit = np.where(got, credit, credit_old)
-    line = poverty_line(F["married"], F["kids"])
+    line = poverty_line(F["married"], F["kids"], line_base)
     poor = inc < line
     kids = F["kids"]
     return {"work": work, "income": inc, "earnings": e, "tax": tax, "credit": credit, "poor": poor,
@@ -172,16 +173,16 @@ def simulate(F: dict, policy: str, elasticity: float = 0.25, income_effect: floa
 
 
 def compare(F: dict, elasticity: float = 0.25, income_effect: float = 0.0, take_up: float = 1.0,
-            seed: int = 0) -> dict:
+            line_base: float = 24000.0, seed: int = 0) -> dict:
     """The old credit against the allowance for the same families and the same random draws: child poverty, deep
     poverty, the budget cost (credits paid plus taxes lost), work, and the change in earnings."""
-    old = simulate(F, "ctc", elasticity, income_effect, 1.0, seed=seed)
-    new = simulate(F, "allowance", elasticity, income_effect, take_up, seed=seed)
+    old = simulate(F, "ctc", elasticity, income_effect, 1.0, line_base, seed=seed)
+    new = simulate(F, "allowance", elasticity, income_effect, take_up, line_base, seed=seed)
     cost = float(np.sum(new["credit"] - old["credit"]) - np.sum(new["tax"] - old["tax"]))
     mech = old["work"]
     static_new = _net_income(F, mech, "allowance")
     static_cost = float(np.sum(static_new[3] - old["credit"]))
-    line = poverty_line(F["married"], F["kids"])
+    line = poverty_line(F["married"], F["kids"], line_base)
     static_poor = static_new[0] < line
     kids = F["kids"]
     return {"old": {k: old[k] for k in ("child_poverty", "deep", "work_single", "work_married")},

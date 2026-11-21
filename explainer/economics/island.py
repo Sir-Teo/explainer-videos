@@ -1210,6 +1210,20 @@ TRUTHS = {
         "addiction": {"T": 60, "rise_at": 20, "announce_at": 10, "price0": 1.0, "price1": 1.5, "beta": 0.95,
                       "delta": 0.3, "alpha": 2.0, "reinforce": 0.2, "harm": 0.1},
     },
+    50: {
+        # the policy memo: 40,000 Island families with children, 65% of them couples; the Island's poverty line,
+        # 24,000 for two adults and two children (scaled by the square root of family size)
+        "families": {"n": 40000, "married_share": 0.65, "seed": 50},
+        "line_base": 24000.0,
+        # the dials at their central values and their ranges: the participation elasticity (Part 38's dial: 0.25;
+        # Corinth et al.'s simulation used larger ones), an income effect on work, take-up of the allowance, and
+        # how much of each dollar children later repay in taxes (a planted range: the evidence is long-run and thin)
+        "base": {"elasticity": 0.25, "income_effect": 0.0, "take_up": 1.0},
+        "ranges": {"elasticity": (0.0, 0.5), "income_effect": (0.0, 0.5), "take_up": (0.85, 1.0)},
+        "child_return": (0.0, 0.25, 0.5),
+        # the cost of raising a dollar of tax: the marginal cost of public funds (Part 41)
+        "mcpf": (1.0, 1.2, 1.5),
+    },
 }
 
 

@@ -502,6 +502,15 @@ FAMILY_FRED = {
 }
 FRED_SERIES.update(FAMILY_FRED)
 FRED_RETRIEVED.update({s: "2026-11-21" for s in FAMILY_FRED})
+# Part 50: the official poverty rate of children and of everyone (Census SAIPE)
+MEMO_FRED = {
+    "PPU18US00000A156NCEN": ("Estimated percent of people age 0-17 in poverty for the United States", "percent",
+                             "annual", "U.S. Census Bureau, Small Area Income and Poverty Estimates"),
+    "PPAAUS00000A156NCEN": ("Estimated percent of people of all ages in poverty for the United States", "percent",
+                            "annual", "U.S. Census Bureau, Small Area Income and Poverty Estimates"),
+}
+FRED_SERIES.update(MEMO_FRED)
+FRED_RETRIEVED.update({s: "2026-11-21" for s in MEMO_FRED})
 
 SPF_FILES = ("median_rgdp_level", "median_rgdp_growth", "median_recess_level")
 SPF_URL = ("https://www.philadelphiafed.org/-/media/frbp/assets/surveys-and-data/survey-of-professional-forecasters/"

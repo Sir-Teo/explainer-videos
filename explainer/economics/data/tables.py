@@ -4912,6 +4912,62 @@ FRONTIER49 = Table(
     data={"saving_share": 50},
 )
 
+CTC_2021 = Table(
+    key="ctc_2021",
+    cite="American Rescue Plan Act of 2021, s. 9611; U.S. Census Bureau, \"Expansions to Child Tax Credit Contributed "
+         "to 46% Decline in Child Poverty Since 2020\" (September 2022) and \"Poverty Measure That Includes Government "
+         "Assistance Increased to 12.4% in 2022, When Pandemic Relief Ended\" (September 2023); Elizabeth Ananat, "
+         "Benjamin Glasner, Christal Hamilton and Zachary Parolin, NBER Working Paper 29823 (2022)",
+    tag="ARPA (2021); Census Bureau (2022, 2023); Ananat et al. (2022)",
+    where="for 2021 the credit became 3,600 a child under six and 3,000 for children six to seventeen, fully "
+          "refundable, half of it paid monthly from July to December ($300 and $250 a child a month); before, at "
+          "most 2,000 a child, with many children not receiving the full refundable amount; it expired at the end of "
+          "2021; child poverty on the Supplemental Poverty Measure fell from 9.7% in 2020 to 5.2% in 2021 and rose to "
+          "12.4% in 2022; on the official measure, which ignores tax credits, it fell only from 16.0% to 15.3%; "
+          "Ananat et al. found very small, inconsistently signed and insignificant effects on parents' employment",
+    read="the Census stories and the working paper's abstract; BLS later re-released the SPM thresholds for 2019-24 "
+         "after finding coding errors, so the published figures may since have been revised",
+    checked="2026-11-21",
+    data={"young": 3600, "older": 3000, "monthly_young": 300, "monthly_older": 250, "old_max": 2000,
+          "spm_2020": 9.7, "spm_2021": 5.2, "spm_2022": 12.4, "opm_2020": 16.0, "opm_2021": 15.3},
+)
+
+ALLOWANCE_50 = Table(
+    key="allowance_50",
+    cite="Kevin Corinth, Bruce Meyer, Matthew Stadnicki and Derek Wu, NBER Working Paper 29366 (2021); Michael Baker, "
+         "Derek Messacar and Mark Stabile, Journal of Labor Economics (2023), NBER Working Paper 28556; Kevin Milligan "
+         "and Mark Stabile, American Economic Journal: Economic Policy 3(3), 2011; Anna Aizer, Shari Eli, Joseph "
+         "Ferrie and Adriana Lleras-Muney, American Economic Review 106(4), 2016",
+    tag="Corinth et al. (2021); Baker, Messacar and Stabile (2023); Milligan and Stabile (2011); Aizer et al. (2016)",
+    where="Corinth et al. simulated that replacing the credit with a permanent child allowance would lead 1.5 million "
+          "working parents (2.6%) to leave work and cut child poverty by at most 22%; Canada's Child Benefit of 2016 "
+          "cut poverty by about 11% in single-mother families and 17% in two-parent families by 2018, with no sign of "
+          "less work on either margin; Canadian child benefits raised test scores and mothers' mental health; sons of "
+          "mothers accepted for Mothers' Pensions (16,000 boys born 1900-25) lived about a year longer, had a third "
+          "of a year more schooling and higher adult incomes than sons of mothers rejected",
+    read="the abstracts and working papers",
+    checked="2026-11-21",
+    data={"exits": 1.5, "exit_share": 2.6, "max_cut": 22, "ccb_single": 11, "ccb_two": 17, "boys": 16000},
+)
+
+CREDITS_50 = Table(
+    key="credits_50",
+    cite="Internal Revenue Code s. 24 as amended by the Tax Cuts and Jobs Act (2017) and the American Rescue Plan Act "
+         "(2021); s. 32 (the earned income tax credit), 2021 parameters as tabulated by the Congressional Research "
+         "Service (R44825) and others",
+    tag="IRC ss. 24 and 32; CRS",
+    where="the credit before 2021: 2,000 a child under 17, refundable up to 1,400, phased in at 15% of earnings above "
+          "2,500, phased out above 200,000 (400,000 for a couple); the 2021 credit: 3,600 and 3,000, fully "
+          "refundable, the extra phased out above 75,000 (single) and 150,000 (couple); the 2021 EITC: 34%, 40% and "
+          "45% of earnings up to 10,640 or 14,950, maxima 3,618, 5,980 and 6,728, phased out above 19,520 at 15.98% "
+          "or 21.06%",
+    read="the statute's summaries and CRS tables",
+    checked="2026-11-21",
+    data={},
+)
+
+PART50 = (CTC_2021, ALLOWANCE_50, CREDITS_50)
+
 PART49 = (BECKER_1968, POLICE_49, CERTAINTY_49, MURDER_1950, FAMILY_49, FERTILITY_49, BARGAIN_49, SCHOOLS_49,
           EARLY_49, HEALTH_49, DRUGS_49, ADDICTION_49, CRITICS_49, FRONTIER49)
 
@@ -4932,4 +4988,4 @@ PART41 = (LAFFER_1974, HARBERGER_1962, RAMSEY_1927, MIRRLEES_1971, DIAMOND_SAEZ_
           CLK_2009, CAPITAL_TAX, HAVENS, EVASION, FRONTIER41, TCJA_2017)
 PART7 = (BERNOULLI_1738, SAMUELSON_1937, ALLAIS_1953, ELLSBERG_1961, RABIN_2000, THALER_1981, HOLT_LAURY_2005,
          HAYDEN_PLATT_2009, MADRIAN_SHEA_2001, THALER_BENARTZI_2004, BARSKY_1997, POST_2008, MEHRA_PRESCOTT_1985)
-ALL = {t.key: t for t in (*PART1, *PART3, *PART4, *PART5, *PART6, *PART7, *PART8, *PART9, *PART10, *PART11, *PART12, *PART13, *PART14, *PART15, *PART16, *PART17, *PART18, *PART19, *PART21, *PART22, *PART25, *PART26, *PART35, *PART36, *PART37, *PART38, *PART39, *PART40, *PART41, *PART42, *PART43, *PART44, *PART45, *PART46, *PART47, *PART48, *PART49)}
+ALL = {t.key: t for t in (*PART1, *PART3, *PART4, *PART5, *PART6, *PART7, *PART8, *PART9, *PART10, *PART11, *PART12, *PART13, *PART14, *PART15, *PART16, *PART17, *PART18, *PART19, *PART21, *PART22, *PART25, *PART26, *PART35, *PART36, *PART37, *PART38, *PART39, *PART40, *PART41, *PART42, *PART43, *PART44, *PART45, *PART46, *PART47, *PART48, *PART49, *PART50)}

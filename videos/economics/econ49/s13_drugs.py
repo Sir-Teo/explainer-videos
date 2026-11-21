@@ -60,7 +60,7 @@ class Drugs(VoiceoverScene):
             vo.wait_until("e")
             gen = dot(ax, qc, c, WHITE, 0.09)
             gen_l = label(rf"generics: \ \${c:.0f}, \ {qc:.0f} thousand", font_size=15, color=WHITE).next_to(
-                gen, UP, buff=0.12)
+                gen, UR, buff=0.1)
             self.play(pmk.animate.shift(ax.ax.c2p(0, c) - ax.ax.c2p(0, pm)), FadeIn(gen), FadeIn(gen_l),
                       prof.animate.set_opacity(0.15), dwl.animate.set_opacity(0.15), run_time=2.0)
             vo.wait_until("f")

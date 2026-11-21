@@ -414,6 +414,19 @@ CALLS = {c.key: c for c in [
           "of Technology on Employment and Unemployment, National Academy of Engineering (1983), as quoted in "
           "secondary listings",
           "BLS via FRED: LNS12300060 (employment-population ratio, 25-54) and PRS85006173 (labor share)")),
+    Call("corinth_2021", 50, "Kevin Corinth, Bruce Meyer, Matthew Stadnicki and Derek Wu, in an NBER working paper",
+         "September 2021",
+         "replacing the child tax credit with a permanent child allowance would lead about 1.5 million working parents "
+         "to leave work, and child poverty would fall by at most 22%",
+         "simulation with participation elasticities from the mainstream of the literature, applied to the end of "
+         "the credit's work requirement and to the income the allowance adds",
+         "the temporary 2021 allowance showed no detectable effect on parents' work; Canada's permanent Child "
+         "Benefit showed none either; but no permanent American allowance has been tried, and a temporary payment "
+         "may not change behaviour as a permanent one would",
+         "too early to say",
+         ("K. Corinth, B. Meyer, M. Stadnicki and D. Wu, NBER Working Paper 29366 (2021)",
+          "E. Ananat, B. Glasner, C. Hamilton and Z. Parolin, NBER Working Paper 29823 (2022); M. Baker, D. Messacar "
+          "and M. Stabile, Journal of Labor Economics (2023)")),
     Call("diiulio_1995", 49, "John DiIulio, a political scientist at Princeton, in The Weekly Standard",
          "November 1995",
          "a coming wave of juvenile 'super-predators': some 270,000 more young predators on the streets by 2010 than "
