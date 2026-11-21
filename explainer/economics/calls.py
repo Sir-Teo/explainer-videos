@@ -414,6 +414,18 @@ CALLS = {c.key: c for c in [
           "of Technology on Employment and Unemployment, National Academy of Engineering (1983), as quoted in "
           "secondary listings",
           "BLS via FRED: LNS12300060 (employment-population ratio, 25-54) and PRS85006173 (labor share)")),
+    Call("moore_1965", 51, "Gordon Moore, director of research at Fairchild Semiconductor, in Electronics",
+         "April 1965",
+         "by 1975 the number of components on an integrated circuit, at the lowest cost per component, would reach "
+         "about 65,000, doubling every year",
+         "a handful of points from 1959 to 1965 on a logarithmic scale, and the economics of making chips",
+         "in 1975 Moore reported that the projection had been realized, and revised the pace to a doubling every two "
+         "years; at that pace the largest microprocessor grew from about 2,300 transistors in 1971 to tens of "
+         "billions fifty years later",
+         "right",
+         ("G. Moore, Electronics 38(8), 19 April 1965; G. Moore, IEEE International Electron Devices Meeting (1975)",
+          "Computer History Museum, The Silicon Engine; K. Rupp, Microprocessor Trend Data (2022), via Our World in "
+          "Data")),
     Call("corinth_2021", 50, "Kevin Corinth, Bruce Meyer, Matthew Stadnicki and Derek Wu, in an NBER working paper",
          "September 2021",
          "replacing the child tax credit with a permanent child allowance would lead about 1.5 million working parents "

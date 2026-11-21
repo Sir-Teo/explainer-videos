@@ -1526,3 +1526,22 @@ brackets on screen.
 | distribution table; deciles | 分配表；十分位组 |
 | external validity; transferability | 外部有效性；可迁移性 |
 | budget score; ten-year window; dynamic scoring | 预算评分；十年窗口；动态评分 |
+
+## Part 51
+
+| English | 中文 |
+|---|---|
+| dynamic programming; the Bellman equation; the Bellman operator | 动态规划；贝尔曼方程；贝尔曼算子 |
+| contraction mapping; fixed point; Blackwell's sufficient conditions | 压缩映射；不动点；布莱克韦尔充分条件 |
+| value function iteration; policy iteration (Howard) | 值函数迭代；策略迭代（霍华德） |
+| grid; interpolation; cubic spline; Chebyshev nodes; Runge's phenomenon | 网格；插值；三次样条；切比雪夫节点；龙格现象 |
+| golden-section search | 黄金分割搜索 |
+| endogenous grid method | 内生网格法 |
+| projection; collocation; Galerkin method; spectral convergence | 投影法；配置法；伽辽金法；谱收敛 |
+| perturbation; certainty equivalence; precautionary saving | 摄动法；确定性等价；预防性储蓄 |
+| Euler-equation error | 欧拉方程误差 |
+| Tauchen's method; Rouwenhorst's method; Gauss–Hermite quadrature | 陶钦方法；鲁文霍斯特方法；高斯–埃尔米特求积 |
+| Hamilton–Jacobi–Bellman equation; upwind scheme; Kolmogorov forward equation | 哈密顿–雅可比–贝尔曼方程；迎风格式；柯尔莫哥洛夫前向方程 |
+| occasionally binding constraint; zero lower bound; guess and verify | 偶尔紧的约束；零利率下限；猜测与验证 |
+| curse of dimensionality; Smolyak sparse grid | 维数灾难；斯莫利亚克稀疏网格 |
+| replication package; random seed | 复现包；随机种子 |

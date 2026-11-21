@@ -10,7 +10,7 @@ the series leaves out.
 Both *Parts* columns are found, not typed. *Planned* lists the parts whose entry in
 [`SYLLABUS.md`](SYLLABUS.md) names the book or paper; *Built* lists the parts whose scenes, compute step or
 README cite it (a dot: none yet). Fuller notes (editions, chapters, what each source was used for) are in each
-part's README, under *Sources*. Built so far: Parts 1–50.
+part's README, under *Sources*. Built so far: Parts 1–51.
 
 ## 1. The textbook spine
 
@@ -39,7 +39,7 @@ part's README, under *Sources*. Built so far: Parts 1–50.
 | Mishkin | F. Mishkin, *The Economics of Money, Banking, and Financial Markets* (13th ed., 2022) | 26 | 31 |
 | Cabral | L. Cabral, *Introduction to Industrial Organization* (2nd ed., 2017) | 12–13 | 12–13 |
 | Borjas | G. Borjas, *Labor Economics* (8th ed., 2020) | 38 | 38 |
-| Gruber | J. Gruber, *Public Finance and Public Policy* (7th ed., 2022) | 15, 41–42, 50 | 7, 15, 41–42, 49–50 |
+| Gruber | J. Gruber, *Public Finance and Public Policy* (7th ed., 2022) | 15, 41–42, 50 | 7, 15, 41–42, 49–51 |
 | Ray | D. Ray, *Development Economics* (1998) | 46 | 46 |
 | Weil | D. Weil, *Economic Growth* (3rd ed., 2013) | 7, 19 | 3, 7, 19–21, 23 |
 
@@ -85,8 +85,8 @@ part's README, under *Sources*. Built so far: Parts 1–50.
 | Hamilton | J. Hamilton, *Time Series Analysis* (1994) | 55 | 6 |
 | Kilian–Lütkepohl | L. Kilian and H. Lütkepohl, *Structural Vector Autoregressive Analysis* (2017) | 55 | · |
 | Train | K. Train, *Discrete Choice Methods with Simulation* (2nd ed., 2009) | 43, 54 | 43 |
-| Judd | K. Judd, *Numerical Methods in Economics* (1998) | 51 | 29, 41 |
-| QuantEcon | T. Sargent and J. Stachurski, *Quantitative Economics* (QuantEcon lectures) | 51 | · |
+| Judd | K. Judd, *Numerical Methods in Economics* (1998) | 51 | 29, 41, 51 |
+| QuantEcon | T. Sargent and J. Stachurski, *Quantitative Economics* (QuantEcon lectures) | 51 | 51 |
 
 ### The fields
 
@@ -355,6 +355,8 @@ part's README, under *Sources*. Built so far: Parts 1–50.
 **Part 49, *The Economic Approach*.** Books: Gary Becker, *The Economic Approach to Human Behavior* (1976) and *A Treatise on the Family* (1981); Steven Levitt and Stephen Dubner, *Freakonomics* (2005), for the stories, read critically; Claudia Goldin, *Career and Family* (2021); Anne Case and Angus Deaton, *Deaths of Despair and the Future of Capitalism* (2020). Papers: Becker (1965, 1968, 1973); Becker and Lewis (1973); Grossman (1972); Becker and Murphy (1988); Levitt (1997); Angrist and Evans (1998); Krueger (1999); Angrist and Lavy (1999, 2019); Lazear (2000); Gneezy and Rustichini (2000); Goldin and Katz (2002); Di Tella and Schargrodsky (2004); Choo and Siow (2006); Heckman et al. (2010); Draca et al. (2011); Wei and Zhang (2011); Nagin (2013); Chetty et al. (2014); Case and Deaton (2015); Lee and McCrary (2017); Chalfin and McCrary (2018); Cooper et al. (2019); Alpert et al. (2022); Durkin et al. (2022).
 
 **Part 50, *The Policy Memo*.** Books: Jonathan Gruber, *Public Finance and Public Policy*, the chapters on cost-benefit analysis and on welfare programmes; Anthony Boardman, David Greenberg, Aidan Vining and David Weimer, *Cost-Benefit Analysis: Concepts and Practice*; Joshua Angrist and Jörn-Steffen Pischke, *Mastering 'Metrics* (2015); Eugene Bardach and Eric Patashnik, *A Practical Guide for Policy Analysis*. Papers: Orcutt (1957); Saez (2001); Chetty, Guren, Manoli and Weber (2011); Milligan (2005); Milligan and Stabile (2011); Aizer, Eli, Ferrie and Lleras-Muney (2016); Hendren and Sprung-Keyser (2020); Corinth, Meyer, Stadnicki and Wu (2021); Ananat, Glasner, Hamilton and Parolin (2022); Baker, Messacar and Stabile (2023); Noble, Magnuson, Duncan, Gennetian et al. (2025); Egger et al. (2022).
+
+**Part 51, *Computing Economies*.** Books: Kenneth Judd, *Numerical Methods in Economics* (1998); Nancy Stokey and Robert Lucas, with Edward Prescott, *Recursive Methods in Economic Dynamics* (1989), chapters 3, 4 and 9; Thomas Sargent and John Stachurski, *Dynamic Programming* and the QuantEcon lectures; Jesús Fernández-Villaverde, Juan Rubio-Ramírez and Frank Schorfheide, 'Solution and estimation methods for DSGE models', *Handbook of Macroeconomics* (2016). Papers: Bellman (1957); Howard (1960); Blackwell (1965); Smolyak (1963); Tauchen (1986); Judd (1992); Den Haan and Marcet (1994); Rouwenhorst (1995); Krueger and Kubler (2004); Schmitt-Grohé and Uribe (2004); Carroll (2006); Aruoba, Fernández-Villaverde and Rubio-Ramírez (2006); Kopecky and Suen (2010); Guerrieri and Iacoviello (2015); Maliar, Maliar and Winant (2021); Achdou, Han, Lasry, Lions and Moll (2022); Azinovic, Gaegauf and Scheidegger (2022).
 
 ## 4. What the series leaves out
 

@@ -118,7 +118,7 @@ DIALS = {d.key: d for d in [
                       checked="2026-11-19"),
          )),
     Dial("eis", "elasticity of intertemporal substitution", "percent change in consumption growth per percentage "
-         "point of the real interest rate", (7, 22, 23), status="contested", checked="2026-11-19",
+         "point of the real interest rate", (7, 22, 23, 51), status="contested", checked="2026-11-19",
          meaning="near zero in aggregate data, about a third for stockholders and near one for bondholders, about two "
                  "from tax variation, and 1.5 or more in the calibrations of asset pricing; it decides how much "
                  "saving responds to interest rates and to taxes on interest, and how strongly a change in the "
@@ -1626,6 +1626,22 @@ DIALS = {d.key: d for d in [
 
 # What each part shows without entering a row, and why: {part: [(what is shown, the reason)]}
 SHOWN = {
+    51: [
+        ("Bellman (1957, 1984); Dreyfus (2002)", "the hook's story, stated"),
+        ("Howard (1960); Blackwell (1965); Banach (1922)", "the methods and theorems, computed on the growth model"),
+        ("Judd (1992); Den Haan and Marcet (1994); Aruoba, Fernández-Villaverde and Rubio-Ramírez (2006)",
+         "Euler-equation errors and the comparison of methods, computed here"),
+        ("Carroll (2006); Tauchen (1986); Rouwenhorst (1995); Kopecky and Suen (2010); Runge (1901)",
+         "the methods, computed here"),
+        ("Achdou, Han, Lasry, Lions and Moll (2022); Guerrieri and Iacoviello (2015); Smolyak (1963); Krueger and "
+         "Kubler (2004); Schmitt-Grohé and Uribe (2004)", "the methods, computed here"),
+        ("Hall (1988); Vissing-Jorgensen (2002); Gruber (2013); Havranek (2015)", "the eis dial, read against method "
+         "error"),
+        ("Moore (1965, 1975)", "the Called it? card; the transistor counts shown from the Data Room"),
+        ("Rust (1987); FRB/US; Dynare", "practice, stated"),
+        ("Maliar, Maliar and Winant (2021); Azinovic, Gaegauf and Scheidegger (2022)", "the frontier chapter, "
+         "stated"),
+    ],
     50: [
         ("American Rescue Plan Act (2021); Census Bureau (2022, 2023)", "the hook's payments and the poverty "
          "measures, stated; the official rate since 1989 shown from the Data Room"),
