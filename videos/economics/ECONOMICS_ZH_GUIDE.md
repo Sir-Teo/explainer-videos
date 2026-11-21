@@ -1768,3 +1768,22 @@ brackets on screen.
 | working from home; hybrid work | 居家办公；混合办公 |
 | relational contract; organizational capability | 关系契约；组织能力 |
 | diversification discount; conglomerate | 多元化折价；企业集团 |
+
+## Part 63
+
+| English | 中文 |
+|---|---|
+| production network; input-output table; Leontief inverse | 生产网络；投入产出表；里昂惕夫逆矩阵 |
+| Domar weight; upstreamness | 多马权重；上游度 |
+| Hulten's theorem; second-order effects | 赫尔滕定理；二阶效应 |
+| idiosyncratic shock; granular hypothesis; Zipf's law | 异质性冲击；颗粒假说；齐普夫定律 |
+| elasticity of substitution; complements | 替代弹性；互补品 |
+| supply chain disruption; input specificity | 供应链中断；投入专用性 |
+| O-ring theory; assortative matching | O形环理论；同类匹配 |
+| clearing vector; financial contagion; robust yet fragile | 清算向量；金融传染；稳健而又脆弱 |
+| central counterparty; systemic risk | 中央对手方；系统性风险 |
+| the strength of weak ties | 弱关系的力量 |
+| diffusion; eigenvector centrality; seeding | 扩散；特征向量中心性；种子节点选择 |
+| key player; Bonacich centrality; peer effects; the reflection problem | 关键参与者；博纳西奇中心性；同伴效应；反射问题 |
+| network formation; pairwise stability; efficient network | 网络形成；成对稳定性；有效网络 |
+| supply network fragility | 供应网络脆弱性 |
