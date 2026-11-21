@@ -65,7 +65,7 @@ class Deficits(VoiceoverScene):
             start, end = pos[o], pos[d]
             direction = (end - start) / np.linalg.norm(end - start)
             normal = np.array([-direction[1], direction[0], 0])
-            off = normal * (0.26 if v > 50 else -0.26)
+            off = normal * 0.26             # the reverse flow's normal flips, so each pair sits apart
             a = Arrow(start + direction * 0.6 + off, end - direction * 0.6 + off, buff=0,
                       stroke_width=2 + v / 25, color=FREE if v > 50 else GREY_B, max_tip_length_to_length_ratio=0.08)
             lab = label(f"{v:.0f}", font_size=18, color=FREE if v > 50 else GREY_B).move_to(
