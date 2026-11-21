@@ -431,4 +431,117 @@
             "stored or sent.",
     });
   };
+  W.estimate = function (el) {
+    // Agora's estimation harness (explainer.economics.agora.estimate): the Island's commuters, car or bus, with
+    // utility b_time x minutes + b_cost x dollars (+ a bus constant of -0.4) and Gumbel errors. The reader moves the
+    // two weights to raise the log likelihood; the maximum is found by Newton's method, as in Part 54, chapter 2.
+    var N = 1500, TRUE = [-0.06, -0.5, -0.4];
+    var r = QB.rng(54), X = [];
+    for (var i = 0; i < N; i++) {
+      var tc = 15 + 30 * r(), tb = 25 + 45 * r(), cc = 2 + 6 * r(), cb = 0.5 + 2 * r();
+      var vc = TRUE[0] * tc + TRUE[1] * cc, vb = TRUE[0] * tb + TRUE[1] * cb + TRUE[2];
+      var gc = -Math.log(-Math.log(r() * 0.999998 + 1e-6)), gb = -Math.log(-Math.log(r() * 0.999998 + 1e-6));
+      X.push({ dt: tb - tc, dc: cb - cc, y: vb + gb > vc + gc ? 1 : 0 });
+    }
+    function ll(b) {
+      var s = 0;
+      for (var i = 0; i < N; i++) {
+        var d = b[0] * X[i].dt + b[1] * X[i].dc + b[2], p = 1 / (1 + Math.exp(-d));
+        s += X[i].y ? Math.log(Math.max(p, 1e-300)) : Math.log(Math.max(1 - p, 1e-300));
+      }
+      return s;
+    }
+    function newton() {
+      var b = [0, 0, 0];
+      for (var it = 0; it < 50; it++) {
+        var g = [0, 0, 0], H = [[0, 0, 0], [0, 0, 0], [0, 0, 0]];
+        for (var i = 0; i < N; i++) {
+          var z = [X[i].dt, X[i].dc, 1], d = b[0] * z[0] + b[1] * z[1] + b[2], p = 1 / (1 + Math.exp(-d));
+          for (var a = 0; a < 3; a++) {
+            g[a] += (X[i].y - p) * z[a];
+            for (var c = 0; c < 3; c++) { H[a][c] -= p * (1 - p) * z[a] * z[c]; }
+          }
+        }
+        var step = solve3(H, g.map(function (x) { return -x; }));
+        b = [b[0] + step[0], b[1] + step[1], b[2] + step[2]];
+        if (Math.max(Math.abs(step[0]), Math.abs(step[1]), Math.abs(step[2])) < 1e-10) { break; }
+      }
+      return b;
+    }
+    function solve3(A, y) {
+      var M = A.map(function (row, k) { return row.concat([y[k]]); });
+      for (var c = 0; c < 3; c++) {
+        var piv = c;
+        for (var k = c + 1; k < 3; k++) { if (Math.abs(M[k][c]) > Math.abs(M[piv][c])) { piv = k; } }
+        var tmp = M[c]; M[c] = M[piv]; M[piv] = tmp;
+        for (var k2 = c + 1; k2 < 3; k2++) {
+          var f = M[k2][c] / M[c][c];
+          for (var j = c; j < 4; j++) { M[k2][j] -= f * M[c][j]; }
+        }
+      }
+      var out = [0, 0, 0];
+      for (var c2 = 2; c2 >= 0; c2--) {
+        var s = M[c2][3];
+        for (var j2 = c2 + 1; j2 < 3; j2++) { s -= M[c2][j2] * out[j2]; }
+        out[c2] = s / M[c2][c2];
+      }
+      return out;
+    }
+    var BEST = newton(), LLMAX = ll(BEST);
+    QB.widget(el, {
+      title: "Estimate",
+      sub: "You are the econometrician. Move the weights on a minute and a dollar to make the commuters' choices as " +
+           "likely as you can. Left: the log likelihood along the minute's weight, at your dollar weight (gold), and " +
+           "your guess (white). Right: the share who take the bus, grouped by how much better the bus looks under " +
+           "your guess (blue), against your model's curve (purple).",
+      panels: 2, height: 260,
+      controls: [
+        { k: "bt", label: "Weight on a minute", min: -0.12, max: 0, step: 0.002, value: -0.02,
+          fmt: function (x) { return x.toFixed(3); } },
+        { k: "bc", label: "Weight on a dollar", min: -1.2, max: 0, step: 0.01, value: -0.2,
+          fmt: function (x) { return x.toFixed(2); } },
+        { k: "show", label: "Reveal the maximum and the truth", min: 0, max: 1, step: 1, value: 0,
+          fmt: function (x) { return x ? "yes" : "no"; } },
+      ],
+      draw: function (g, v, st) {
+        var b = [v.bt, v.bc, BEST[2]];
+        var xs = [], ys = [];
+        for (var i = 0; i <= 60; i++) {
+          var t = -0.12 + 0.12 * i / 60; xs.push(t); ys.push(ll([t, v.bc, BEST[2]]) - LLMAX);
+        }
+        var L = g[0].axes({ x: [-0.12, 0], y: [-400, 5], title: "log likelihood, below the maximum",
+                             xlabel: "weight on a minute" });
+        L.line(xs, ys, { color: "#F2C14E", width: 2 });
+        var cur = ll(b) - LLMAX;
+        L.dots([v.bt], [Math.max(cur, -400)], { color: "#FFFFFF", r: 4 });
+        if (v.show) { L.vline(BEST[0], { color: "#C9A0FF" }); L.vline(TRUE[0], { color: "#FFFFFF" }); }
+        // binned shares under the reader's model
+        var d = X.map(function (o) { return { d: b[0] * o.dt + b[1] * o.dc + b[2], y: o.y }; });
+        d.sort(function (p, q) { return p.d - q.d; });
+        var bx = [], by = [], k = 0, per = Math.floor(N / 12);
+        for (var gI = 0; gI < 12; gI++) {
+          var sd = 0, sy = 0;
+          for (var j = 0; j < per; j++) { sd += d[k].d; sy += d[k].y; k++; }
+          bx.push(sd / per); by.push(sy / per);
+        }
+        var cx = [], cy = [];
+        for (var m = 0; m <= 80; m++) { var z = -4 + 8 * m / 80; cx.push(z); cy.push(1 / (1 + Math.exp(-z))); }
+        var R = g[1].axes({ x: [-4, 4], y: [0, 1], title: "the bus's share", xlabel: "how much better the bus looks" });
+        R.line(cx, cy, { color: "#C9A0FF", width: 2 });
+        R.dots(bx, by, { color: "#7EC8F5", r: 4 });
+        st.ll = cur; st.vot = 60 * v.bt / v.bc; st.best = BEST; st.show = v.show;
+      },
+      readout: function (v, st) {
+        var rows = [["log likelihood, below the maximum", st.ll.toFixed(1)],
+                    ["your value of an hour", isFinite(st.vot) ? "$" + st.vot.toFixed(2) : "-"]];
+        if (st.show) {
+          rows.push(["the maximum: minute, dollar", st.best[0].toFixed(3) + ", " + st.best[1].toFixed(3)]);
+          rows.push(["its value of an hour (truth $7.20)", "$" + (60 * st.best[0] / st.best[1]).toFixed(2)]);
+        }
+        return rows;
+      },
+      note: "Part 54, chapter 2. When the blue dots sit on the purple curve and the white dot reaches the top of the " +
+            "gold line, you have found the maximum. Computed in your browser; nothing you do here is stored or sent.",
+    });
+  };
 })();

@@ -426,6 +426,19 @@ CALLS = {c.key: c for c in [
          "wrong",
          ("Financial Crisis Inquiry Commission, The Financial Crisis Inquiry Report (2011), conclusions",
           "U.S. Senate Permanent Subcommittee on Investigations, Wall Street and the Financial Crisis (2011)")),
+    Call("google_flu", 54, "Google's flu-tracking model (Ginsberg and colleagues, in Nature)", "2008",
+         "the share of doctor visits for influenza-like illness in each region of the United States could be "
+         "estimated from the volume of 45 search queries, a week or two before the CDC's surveillance reports",
+         "a correlation, fitted to past years of the CDC's reports, between the rate of flu-like illness and the "
+         "share of searches for terms like it; no model of why people search",
+         "the first version missed the 2009 pandemic, which came out of season; in the 2012-13 season its estimate "
+         "of doctor visits for flu-like illness was about twice what the CDC recorded, and three-week-old CDC "
+         "data forecast the present better than it did",
+         "partly right",
+         ("J. Ginsberg et al., \"Detecting influenza epidemics using search engine query data\", Nature 457 "
+          "(2009): 1012-1014",
+          "D. Lazer, R. Kennedy, G. King and A. Vespignani, \"The parable of Google Flu: traps in big data analysis\","
+          " Science 343 (2014): 1203-1205")),
     Call("krusell_smith_1998", 52, "Per Krusell and Anthony Smith, in the Journal of Political Economy",
          "October 1998",
          "in a calibrated economy with uninsurable income risk and aggregate shocks, the behaviour of the "

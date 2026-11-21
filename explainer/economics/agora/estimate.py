@@ -334,8 +334,10 @@ def smm(data_moments, data_contrib, simulate, theta0, step=None, S: int = 5, dia
 
 
 def sensitivity(G, W) -> np.ndarray:
-    """Andrews, Gentzkow and Shapiro's sensitivity of the estimates to the moments: Lambda = -(G'WG)^-1 G'W, so a
-    small change dm in the moments moves the estimate by Lambda dm."""
+    """Andrews, Gentzkow and Shapiro's sensitivity of the estimates to the moment conditions: Lambda =
+    -(G'WG)^-1 G'W, with G the derivative of the conditions, so a small change dg in the conditions moves the
+    estimate by Lambda dg. Written as simulated minus data moments (as in :func:`smm`), the conditions fall by dm
+    when the data moments rise by dm, so the estimate moves by -Lambda dm."""
     G, W = np.asarray(G, float), np.asarray(W, float)
     return -np.linalg.inv(G.T @ W @ G) @ G.T @ W
 

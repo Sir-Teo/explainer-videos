@@ -132,3 +132,18 @@ def test_mixture_with_two_covariates_removes_spurious_state_dependence():
     assert pooled["b"][2] > 0.5
     mix = E.mixture_logit_em(np.column_stack([x[keep], lag[keep]]), y[keep], T - 1, g[keep])
     assert abs(mix["b"][1]) < 0.3
+
+
+def test_sensitivity_sign_for_data_moments():
+    # conditions written as model minus data: a rise dm in the data moves the estimate by -Lambda dm
+    rng = np.random.default_rng(9)
+    A = rng.standard_normal((6, 2))
+    W = np.diag(rng.uniform(0.5, 2.0, 6))
+    m = rng.standard_normal(6)
+
+    def est(data):
+        return np.linalg.solve(A.T @ W @ A, A.T @ W @ data)
+
+    dm = 1e-3 * rng.standard_normal(6)
+    L = E.sensitivity(A, W)
+    assert np.allclose(est(m + dm) - est(m), -L @ dm)

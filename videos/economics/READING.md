@@ -10,7 +10,7 @@ the series leaves out.
 Both *Parts* columns are found, not typed. *Planned* lists the parts whose entry in
 [`SYLLABUS.md`](SYLLABUS.md) names the book or paper; *Built* lists the parts whose scenes, compute step or
 README cite it (a dot: none yet). Fuller notes (editions, chapters, what each source was used for) are in each
-part's README, under *Sources*. Built so far: Parts 1–53.
+part's README, under *Sources*. Built so far: Parts 1–54.
 
 ## 1. The textbook spine
 
@@ -79,12 +79,12 @@ part's README, under *Sources*. Built so far: Parts 1–53.
 
 | Short name | Book | Planned | Built |
 |---|---|---|---|
-| Hayashi | F. Hayashi, *Econometrics* (2000) | 54, 56 | 23 |
+| Hayashi | F. Hayashi, *Econometrics* (2000) | 54, 56 | 23, 54 |
 | Wooldridge | J. Wooldridge, *Econometric Analysis of Cross Section and Panel Data* (2nd ed., 2010) | 54 | 38–39 |
 | Hansen | B. Hansen, *Econometrics* (2022) | 54 | · |
 | Hamilton | J. Hamilton, *Time Series Analysis* (1994) | 55 | 6 |
 | Kilian–Lütkepohl | L. Kilian and H. Lütkepohl, *Structural Vector Autoregressive Analysis* (2017) | 55 | · |
-| Train | K. Train, *Discrete Choice Methods with Simulation* (2nd ed., 2009) | 43, 54 | 43 |
+| Train | K. Train, *Discrete Choice Methods with Simulation* (2nd ed., 2009) | 43, 54 | 43, 54 |
 | Judd | K. Judd, *Numerical Methods in Economics* (1998) | 51 | 29, 41, 51 |
 | QuantEcon | T. Sargent and J. Stachurski, *Quantitative Economics* (QuantEcon lectures) | 51 | 51 |
 
@@ -198,9 +198,9 @@ part's README, under *Sources*. Built so far: Parts 1–53.
 | the General Theory and IS-LM | Keynes (1936); Hicks (1937) | 27 | · |
 | the permanent income hypothesis | Friedman (1957); Hall (1978) | 22 | 22 |
 | the Phillips curve and the natural rate | Phillips (1958); Friedman (1968); Phelps (1967) | 28 | · |
-| the Lucas critique | Lucas (1976) | 4, 28, 54 | 4, 28 |
+| the Lucas critique | Lucas (1976) | 4, 28, 54 | 4, 28, 54 |
 | time inconsistency and rules | Kydland and Prescott (1977) | 28 | 28 |
-| real business cycles | Kydland and Prescott (1982) | 29 | · |
+| real business cycles | Kydland and Prescott (1982) | 29 | 54 |
 | staggered prices | Calvo (1983) | 30 | 30 |
 | the Taylor rule | Taylor (1993) | 30 | · |
 | search and unemployment | Diamond (1982); Mortensen and Pissarides (1994) | 24 | 24 |
@@ -249,8 +249,8 @@ part's README, under *Sources*. Built so far: Parts 1–53.
 | identification by instruments | Wright (1928); Haavelmo (1944) | 4 | 4 |
 | the credibility of econometrics | Leamer (1983); LaLonde (1986) | 4 | 4 |
 | vector autoregressions | Sims (1980) | 55 | · |
-| dynamic discrete choice | Rust (1987) | 44, 54 | · |
-| generalized method of moments | Hansen (1982) | 54 | · |
+| dynamic discrete choice | Rust (1987) | 44, 54 | 54 |
+| generalized method of moments | Hansen (1982) | 54 | 54 |
 | machine learning for causal questions | Chernozhukov and others (2018); Athey and Imbens (2019) | 64 | 21 |
 | publication bias in economics | Brodeur and others (2016) | 67 | · |
 
@@ -361,6 +361,8 @@ part's README, under *Sources*. Built so far: Parts 1–53.
 **Part 52, *Many Agents*.** Books: Lars Ljungqvist and Thomas Sargent, *Recursive Macroeconomic Theory*, chapters 17 and 18; Greg Kaplan, 'Heterogeneous agent macroeconomics', lecture notes, and Benjamin Moll's notes on continuous time; Per Krusell and Anthony Smith, 'Quantitative macroeconomic models with heterogeneous agents' (2006); Adrien Auclert and coauthors, the sequence-space Jacobian toolkit and its documentation. Papers: Gorman (1953); Bewley (1977); Kirman (1992); Hopenhayn (1992); Huggett (1993); Aiyagari (1994); Krusell and Smith (1998); Doepke and Schneider (2006); Khan and Thomas (2008); Den Haan (2010); Young (2010); Benhabib, Bisin and Zhu (2011, 2015); Kaplan and Violante (2014); Werning (2015); McKay, Nakamura and Steinsson (2016); Kaplan, Moll and Violante (2018); Auclert, Bardóczy, Rognlie and Straub (2021); Fagereng, Holm and Natvik (2021); Achdou et al. (2022).
 
 **Part 53, *Information and Persuasion*.** Books: Drew Fudenberg and Jean Tirole, *Game Theory* (1991), chapters 6 to 10; Emir Kamenica, 'Bayesian persuasion and information design', *Annual Review of Economics* (2019); Dirk Bergemann and Stephen Morris, 'Information design: a unified perspective', *JEL* (2019); Stephen Morris and Hyun Song Shin, 'Global games: theory and applications' (2003). Papers: Harsanyi (1967–68); Nash (1950); Blackwell (1953); Coase (1972); Aumann (1976); Selten (1978); Crawford and Sobel (1982); Geanakoplos and Polemarchakis (1982); Rubinstein (1982); Kreps and Wilson (1982); Milgrom and Roberts (1982); Cho and Kreps (1987); Bull (1987); Rubinstein (1989); Banerjee (1992); Bikhchandani, Hirshleifer and Welch (1992); Carlsson and van Damme (1993); Morris and Shin (1998); Levin (2003); DellaVigna and Kaplan (2007); Kamenica and Gentzkow (2011).
+
+**Part 54, *Estimating Models*.** Books: Kenneth Train, *Discrete Choice Methods with Simulation* (2nd ed., 2009); Fumio Hayashi, *Econometrics* (2000), chapters 3, 4 and 7; Hamish Low and Costas Meghir, 'The use of structural models in econometrics', *JEP* (2017); Charles Manski, *Partial Identification of Probability Distributions* (2003). Papers: Marschak (1953); McFadden (1974, 1989); Hansen (1982); Hansen and Singleton (1982); Kydland and Prescott (1982); Rust (1987); Pakes and Pollard (1989); Manski (1990); Gouriéroux, Monfort and Renault (1993); Hotz and Miller (1993); Keane and Wolpin (1997); Gourinchas and Parker (2002); Todd and Wolpin (2006); Chetty (2009); Andrews, Gentzkow and Shapiro (2017); Cranmer, Brehmer and Louppe (2020).
 
 ## 4. What the series leaves out
 

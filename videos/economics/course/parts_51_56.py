@@ -140,4 +140,48 @@ PARTS = [
         also=(("Agora's information and persuasion", "explainer/economics/agora/persuade.py"),
               ("The Island's planted truths", "explainer/economics/island.py")),
     ),
+    Part(
+        n=54, level="M", widget="estimate", prereq=(4, 5, 7, 22, 44, 51),
+        question="How is a model's hidden machinery measured from the choices it predicts?",
+        story="The part opens on BART: an official forecast of about 15% of work trips, Daniel McFadden's 6.3% from "
+              "a model of commuters' choices, and 6.2% in 1975. On the Island, where the truth is planted: a straight "
+              "line through a fuel-price history predicts a negative share of drivers under a congestion charge, a "
+              "logit does not; McFadden's logit by maximum likelihood, the value of time, and a railway forecast "
+              "undone by the independence of irrelevant alternatives. The viewer asks which of four facts separates "
+              "patience from caution (none). Hansen's GMM on the Euler equation with the J-test; simulated moments "
+              "and indirect inference; the life-cycle household estimated by simulated moments with the truth "
+              "recovered on a narrow ridge. After an intermission of America's vehicle miles since 1971, hidden "
+              "types and spurious habit, Andrews, Gentzkow and Shapiro's sensitivity matrix and a 1% error in "
+              "wealth worth 38 standard errors, calibration against estimation, Chetty's sufficient statistics, "
+              "Todd and Wolpin's validation, Manski's bounds, the risk-aversion dial, estimation at work, Google "
+              "Flu Trends as Called it?, and learned estimators.",
+        handoff="Part 55 turns from people's choices to an economy's one history: identifying the effects of "
+                "monetary and fiscal policy.",
+        outside="Part 4: the Lucas critique and instruments; Part 5: random utility; Part 22: the life-cycle "
+                "household; Part 42: sufficient statistics; Part 44: Rust's buses; Statistics, Built: likelihood, "
+                "GMM, the bootstrap and partial identification.",
+        objectives={
+            "U": ["Explain why a forecast of a new policy needs a model of why people choose, not a pattern in "
+                  "history.",
+                  "Read a value of time off a logit's coefficients."],
+            "M": ["Estimate a logit by maximum likelihood and a model by GMM, with standard errors and the J-test.",
+                  "Estimate a model you can only simulate, by simulated moments or indirect inference.",
+                  "Diagnose weak identification and compute the sensitivity of an estimate to its moments."],
+            "D": ["Derive the efficient GMM weighting and the (1 + 1/S) correction, and the spurious state "
+                  "dependence a hidden type creates.",
+                  "Derive Manski's bounds and narrow them with a monotonicity assumption."],
+            "I": ["Estimate demand for a new product or service and say which facts in the data the forecast leans "
+                  "on, before anyone acts on it."],
+        },
+        results=[
+            ("The logit", r"\Pr(j) = \frac{e^{V_j}}{\sum_k e^{V_k}}"),
+            ("Efficient GMM", r"\operatorname{Var}(\hat\theta) \approx \tfrac{1}{n}\left(G' S^{-1} G\right)^{-1}"),
+            ("Hansen's J", r"J = n\, \bar g' S^{-1} \bar g \sim \chi^2_{m-k}"),
+            ("Sensitivity", r"\Lambda = -\left(G'WG\right)^{-1} G'W"),
+            ("Manski's bounds", r"\text{width} = p_1 + p_0"),
+        ],
+        U=(0, 1, 2, "s08_intermission"), D=(8, 12), I=(14,),
+        also=(("Agora's estimation harness", "explainer/economics/agora/estimate.py"),
+              ("The Island's planted truths", "explainer/economics/island.py")),
+    ),
 ]

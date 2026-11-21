@@ -1587,3 +1587,22 @@ brackets on screen.
 | Nash bargaining solution; alternating offers; the Coase conjecture | 纳什议价解；轮流出价；科斯猜想 |
 | relational contract; self-enforcing | 关系契约；自我执行 |
 | persuasion rate | 劝说率 |
+
+## Part 54
+
+| English | 中文 |
+|---|---|
+| structural model; reduced form; the Lucas critique | 结构模型；简约式；卢卡斯批判 |
+| random utility; conditional logit; nested logit | 随机效用；条件 logit；嵌套 logit |
+| independence of irrelevant alternatives | 无关选项独立性 |
+| maximum likelihood; log likelihood; Newton's method | 极大似然；对数似然；牛顿法 |
+| value of time | 时间价值 |
+| generalized method of moments; moment condition; weighting matrix | 广义矩方法；矩条件；权重矩阵 |
+| Hansen's J test; over-identifying restrictions | 汉森 J 检验；过度识别约束 |
+| method of simulated moments; indirect inference; auxiliary model | 模拟矩方法；间接推断；辅助模型 |
+| identification; weak identification; sensitivity matrix | 识别；弱识别；敏感性矩阵 |
+| unobserved heterogeneity; spurious state dependence; EM algorithm | 未观测异质性；伪状态依赖；EM 算法 |
+| calibration; sufficient statistic | 校准；充分统计量 |
+| validation; out-of-sample prediction | 验证；样本外预测 |
+| partial identification; Manski bounds | 部分识别；曼斯基界 |
+| simulation-based inference; amortized estimator | 基于模拟的推断；摊销估计量 |

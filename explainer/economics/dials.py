@@ -144,7 +144,7 @@ DIALS = {d.key: d for d in [
                       where="Journal of Finance 59(4): 1481-1509, abstract", checked="2026-11-19"),
          )),
     Dial("risk_aversion", "relative risk aversion", "the percentage fall in marginal utility per percent rise in "
-         "consumption", (7, 22, 23), status="contested", checked="2026-11-19",
+         "consumption", (7, 22, 23, 54), status="contested", checked="2026-11-19",
          meaning="about one when read from consumption or labour supply, two to seven in finance's estimates, four "
                  "from survey gambles over lifetime income, ten in the calibrations that fit asset prices; laboratory "
                  "choices over a few dollars give a fraction of one, which expected utility cannot square with the "
@@ -380,7 +380,7 @@ DIALS = {d.key: d for d in [
                       where="videos/economics/econ43/compute.py, item merger", checked="2026-11-20"),
          )),
     Dial("dynamic_beta", "the discount factor of a dynamic decision maker", "monthly discount factor implied by "
-         "choices", (44,), status="not identified", checked="2026-11-20",
+         "choices", (44, 54), status="not identified", checked="2026-11-20",
          meaning="the data can reject myopia, but the likelihood is nearly flat among patient discount factors, so "
                  "the value is usually fixed by assumption; with it fixed, the estimated costs follow",
          estimates=(
@@ -1626,6 +1626,26 @@ DIALS = {d.key: d for d in [
 
 # What each part shows without entering a row, and why: {part: [(what is shown, the reason)]}
 SHOWN = {
+    54: [
+        ("McFadden (1974, 2001, 2002)", "the hook's BART forecast (the Called it? record of Part 5) and the logit, "
+         "computed on the Island"),
+        ("Marschak (1953); Lucas (1976); Koopmans (1949)", "structural models and identification, stated"),
+        ("Hansen (1982); Hansen and Singleton (1982)", "GMM and the Euler equation, computed on the Island"),
+        ("McFadden (1989); Pakes and Pollard (1989); Gourieroux, Monfort and Renault (1993); Smith (1993)",
+         "simulated moments and indirect inference, computed"),
+        ("Gourinchas and Parker (2002)", "the method, applied to the Island's households; no estimate of theirs "
+         "is shown"),
+        ("Rust (1987); Hotz and Miller (1993); Keane and Wolpin (1997); Heckman (1981); Heckman and Singer (1984)",
+         "dynamic choice and hidden types, stated and computed on the Island"),
+        ("Andrews, Gentzkow and Shapiro (2017)", "the sensitivity matrix, computed"),
+        ("Kydland and Prescott (1982, 1996); Hansen and Heckman (1996)", "the calibration debate, stated"),
+        ("Baily (1978); Chetty (2006, 2009)", "sufficient statistics, computed on Part 42's model"),
+        ("Todd and Wolpin (2006)", "PROGRESA's validation, stated without numbers; the Island's version computed"),
+        ("Manski (1990, 2003)", "bounds, computed on the Island"),
+        ("Ginsberg et al. (2009); Lazer, Kennedy, King and Vespignani (2014)", "the Called it? card, stated"),
+        ("Federal Highway Administration, vehicle miles travelled", "the intermission's data, shown from the Data "
+         "Room"),
+    ],
     53: [
         ("Kamenica and Gentzkow (2011)", "the hook's prosecutor and the persuasion chapter, computed"),
         ("Harsanyi (1967-68); Cho and Kreps (1987); Kreps and Wilson (1982)", "the theory, stated and computed on "
