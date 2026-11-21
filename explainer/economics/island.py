@@ -1225,6 +1225,20 @@ TRUTHS = {
         # Pareto exponent of 1.5 and an elasticity of taxable income of 0.1, 0.25 or 0.4; 1 for a lump-sum source
         "surtax": {"tau": 0.4, "a": 1.5, "e": (0.1, 0.25, 0.4)},
     },
+    51: {
+        # computing economies: the growth model the methods are compared on (a capital share of 0.36, a discount
+        # factor of 0.96 a year, depreciation of 8%, an elasticity of intertemporal substitution of a half), the
+        # household of Part 22 with a borrowing limit and persistent income risk, a household in continuous time
+        # with two income states, and a New Keynesian economy whose natural rate falls below zero for a year
+        "growth": {"alpha": 0.36, "beta": 0.96, "delta": 0.08, "gamma": 2.0},
+        "grids": (30, 100, 1000),
+        "household": {"beta": 0.95, "R": 1.03, "gamma": 2.0, "rho": 0.9, "sigma": 0.2, "n_y": 5, "a_max": 40.0,
+                      "n_a": 200},
+        "hjb": {"rho": 0.05, "r": 0.03, "gamma": 2.0, "z": (0.1, 0.2), "lam": (1.2, 1.2), "a_min": -0.15,
+                "a_max": 5.0, "n": 500},
+        "zlb": {"T": 4, "rn_low": -2.0},
+        "gammas": (1.0, 2.0, 4.0),
+    },
 }
 
 
