@@ -49,11 +49,11 @@ class Sufficient(VoiceoverScene):
         b = np.array(S["b"])
         w = 1000 * (np.array(S["welfare"]) - max(S["welfare"]))
         f = np.array(S["formula"])
-        axw = plane([0, 0.62], [-2.4, 0.2], center=UP * 1.35 + LEFT * 1.2, x_length=8.6, y_length=2.6,
-                    xticks=[0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6], yticks=[-2, -1, 0], xlabel=r"",
+        axw = plane([0, 0.62], [-2.4, 0.2], center=UP * 1.6 + LEFT * 1.2, x_length=8.6, y_length=2.4,
+                    xticks=[], yticks=[-2, -1, 0], xlabel=r"",
                     ylabel=r"welfare, \ thousandths below its best", xfmt=lambda v: f"{v:.1f}",
                     yfmt=lambda v: f"{v:.0f}".replace("-", "{-}"), font_size=13)
-        axf = plane([0, 0.62], [-1.9, 0.9], center=DOWN * 1.9 + LEFT * 1.2, x_length=8.6, y_length=2.6,
+        axf = plane([0, 0.62], [-1.9, 0.9], center=DOWN * 1.95 + LEFT * 1.2, x_length=8.6, y_length=2.4,
                     xticks=[0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6], yticks=[-1.5, -0.5, 0.5],
                     xlabel=r"the benefit, \ as a share of the wage", ylabel=r"the formula: \ gain minus cost",
                     xfmt=lambda v: f"{v:.1f}", yfmt=lambda v: f"{v:+.1f}".replace("-", "{-}"), font_size=13)
