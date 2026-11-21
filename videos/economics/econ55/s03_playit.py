@@ -5,7 +5,7 @@ from videos.economics.econ55.common import *  # noqa: F403
 LETTERS = ("A", "B", "C")
 
 
-def panels(P, width=3.9, height=2.7):
+def panels(P, width=3.5, height=2.6):
     """Three small plots of output (level), inflation and the rate after one shock each."""
     g = VGroup()
     for k, pan in enumerate(P["panels"]):
@@ -19,7 +19,7 @@ def panels(P, width=3.9, height=2.7):
                        path(ax, h, pan["i"], RATE, 2.4))
         name = label(LETTERS[k], font_size=30, color=WHITE).next_to(ax, UP, buff=0.15)
         g.add(VGroup(ax, z, lines, name))
-    return g.arrange(RIGHT, buff=0.55)
+    return g.arrange(RIGHT, buff=0.6)
 
 
 class PlayIt(VoiceoverScene):
@@ -41,14 +41,21 @@ class PlayIt(VoiceoverScene):
             key, DOWN, buff=0.4)
         ring = countdown().scale(0.5).next_to(q, DOWN, buff=0.3)
         tag = island_tag(r"simulated: \ the Island's three shocks", corner=DR, font_size=13)
+        intro = VGroup(
+            label(r"supply: \ a change in what the Island can produce", font_size=24, color=SUPPLY),
+            label(r"demand: \ a change in what people want to spend", font_size=24, color=DEMAND),
+            label(r"monetary: \ a surprise from the central bank", font_size=24, color=MONEY),
+        ).arrange(DOWN, aligned_edge=LEFT, buff=0.45).move_to(UP * 0.3)
         with self.voiceover(
             "Your turn. The Island's economy is hit by three kinds of shock: a change in what it can produce, a "
             "change in what people want to spend, and a surprise from the central bank. <bookmark mark='a'/> Here "
             "is what each one does, unlabelled: output in blue, inflation in orange, the policy rate in pink, over "
             "three years. <bookmark mark='b'/> Which of A, B and C is a monetary tightening? Pause, and choose."
         ) as vo:
-            self.play(FadeIn(tag))
+            self.play(FadeIn(tag), LaggedStart(*[FadeIn(r_, shift=RIGHT * 0.1) for r_ in intro], lag_ratio=0.5),
+                      run_time=2.5)
             vo.wait_until("a")
+            self.play(FadeOut(intro))
             self.play(LaggedStart(*[FadeIn(p_, shift=UP * 0.1) for p_ in g], lag_ratio=0.3), FadeIn(key),
                       run_time=2.0)
             vo.wait_until("b")
