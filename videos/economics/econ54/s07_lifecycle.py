@@ -61,8 +61,8 @@ class LifeCycle(VoiceoverScene):
                     xfmt=lambda v: f"{v:.0f}", yfmt=lambda v: f"{v:.0f}", font_size=13)
         dc = VGroup(*[dot(axc, a, v, DATA, 0.08) for a, v in zip(ages, d[:10])])
         dw = VGroup(*[dot(axw, a, v, DATA, 0.08) for a, v in zip(ages[4:], d[10:])])
-        fc = path(axc, ages, f[:10], MODEL, 2.6)
-        fw = path(axw, ages[4:], f[10:], MODEL, 2.6)
+        fc = path(axc, ages, f[:10], MODEL, 2.6, smooth=False)
+        fw = path(axw, ages[4:], f[10:], MODEL, 2.6, smooth=False)
         ret_c = vline(axc, 60, 0.9, 1.45, GREY_C, 1.2)
         ret_w = vline(axw, 60, 0, 4.5, GREY_C, 1.2)
         key = VGroup(label(r"blue: \ the Island's data", font_size=18, color=DATA),
