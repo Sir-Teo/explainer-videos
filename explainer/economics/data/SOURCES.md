@@ -390,3 +390,17 @@ publication, the copy that was read and the date the transcription was checked:
 | `debate_46` | Deaton's critique, the 2019 prize, Vivalt on generalizing, China's poverty reduction (Part 46) | 2026-11-20 |
 | `practice_46` | GiveWell's cost per life; Sachs's 2005 forecast; the Millennium Villages' evaluation (Part 46) | 2026-11-20 |
 | `frontier46` | scaling; poverty from satellites and phones; Togo's Novissi (Part 46) | 2026-11-20 |
+| `olken_2007` | Olken's road audits, perceptions and missing rice (Part 47) | 2026-11-21 |
+| `olson_1965` | Olson's collective action; GAO on the sugar program; the number of sugar farms (Part 47) | 2026-11-21 |
+| `rents_47` | Tullock's rectangle; Krueger's rents in India and Turkey (Part 47) | 2026-11-21 |
+| `voters_47` | voters elect rather than affect policies; Lee's incumbency estimate and its critics (Part 47) | 2026-11-21 |
+| `capture_47` | Stigler's capture; protection for sale and Goldberg and Maggi; Fisman's political connections (Part 47) | 2026-11-21 |
+| `agency_47` | Barro and Ferejohn's agency model; Ferraz and Finan's audited mayors (Part 47) | 2026-11-21 |
+| `corruption_47` | diplomats' parking tickets; Uganda's school grants (Part 47) | 2026-11-21 |
+| `franchise_47` | Acemoglu and Robinson's franchise; democracy and growth (Part 47) | 2026-11-21 |
+| `state_47` | Besley and Persson's state capacity (Part 47) | 2026-11-21 |
+| `conflict_47` | rainfall, growth and civil conflict; the resource curse (Part 47) | 2026-11-21 |
+| `media_47` | the Fox News effect; trade exposure and polarization (Part 47) | 2026-11-21 |
+| `cycles_47` | the political business cycle; delegation to a conservative central bank (Part 47) | 2026-11-21 |
+| `practice_47` | the Treasury's 2016 short-term forecast and what followed (Part 47) | 2026-11-21 |
+| `frontier47` | populist leaders and the economy; V-Dem (Part 47) | 2026-11-21 |

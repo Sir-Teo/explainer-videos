@@ -10,7 +10,7 @@ the series leaves out.
 Both *Parts* columns are found, not typed. *Planned* lists the parts whose entry in
 [`SYLLABUS.md`](SYLLABUS.md) names the book or paper; *Built* lists the parts whose scenes, compute step or
 README cite it (a dot: none yet). Fuller notes (editions, chapters, what each source was used for) are in each
-part's README, under *Sources*. Built so far: Parts 1–46.
+part's README, under *Sources*. Built so far: Parts 1–47.
 
 ## 1. The textbook spine
 
@@ -347,6 +347,8 @@ part's README, under *Sources*. Built so far: Parts 1–46.
 **Part 45, *Behavioural Economics*.** Books: Richard Thaler, *Misbehaving: The Making of Behavioral Economics* (2015); Daniel Kahneman, *Thinking, Fast and Slow* (2011); Sanjit Dhami, *The Foundations of Behavioral Economic Analysis* (2016); Bernheim, DellaVigna and Laibson (eds.), *Handbook of Behavioral Economics* (2018–19). Papers: Kahneman and Tversky (1979); Thaler (1980); Kahneman, Knetsch and Thaler (1990); Laibson (1997); O'Donoghue and Rabin (1999); Fehr and Schmidt (1999); Madrian and Shea (2001); Genesove and Mayer (2001); List (2003); Thaler and Benartzi (2004); Sims (2003); DellaVigna and Malmendier (2004, 2006); Ashraf, Karlan and Yin (2006); Gabaix and Laibson (2006); DellaVigna (2009); Bernheim and Rangel (2009); Pope and Schweitzer (2011); DellaVigna and Linos (2022).
 
 **Part 46, *Development*.** Books: Abhijit Banerjee and Esther Duflo, *Poor Economics* (2011); Debraj Ray, *Development Economics* (1998); Amartya Sen, *Development as Freedom* (1999); Angus Deaton, *The Great Escape* (2013). Papers: Lewis (1954); Townsend (1994); Duflo (2001); Miguel and Kremer (2004); Schultz (2004); Thornton (2008); Nunn (2008); Cohen and Dupas (2010); Dell (2010); Deaton (2010); Duflo, Kremer and Robinson (2011); Banerjee et al. (2015); Banerjee, Karlan and Zinman (2015); Haushofer and Shapiro (2016); Suri and Jack (2016); Muralidharan and Niehaus (2017); Balboni et al. (2022); Egger et al. (2022); Aiken et al. (2022).
+
+**Part 47, *Political Economy*.** Books: Mancur Olson, *The Logic of Collective Action* (1965); Torsten Persson and Guido Tabellini, *Political Economics* (2000); Daron Acemoglu and James Robinson, *Economic Origins of Dictatorship and Democracy* (2006); Timothy Besley and Torsten Persson, *Pillars of Prosperity* (2011). Papers: Tullock (1967); Stigler (1971); Barro (1973); Krueger (1974); Nordhaus (1975); Ferejohn (1986); Grossman and Helpman (1994); Goldberg and Maggi (1999); Fisman (2001); Lee, Moretti and Butler (2004); Reinikka and Svensson (2004); Miguel et al. (2004); Olken (2007); Fisman and Miguel (2007); DellaVigna and Kaplan (2007); Lee (2008); Ferraz and Finan (2011); Cattaneo et al. (2015); Acemoglu et al. (2019); Funke et al. (2023).
 
 ## 4. What the series leaves out
 

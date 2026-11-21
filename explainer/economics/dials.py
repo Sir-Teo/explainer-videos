@@ -1273,6 +1273,47 @@ DIALS = {d.key: d for d in [
              Estimate("Saiz (Wichita)", 2010, "IV", "the most elastic of the 95", 5.45,
                       where="Quarterly Journal of Economics 125(3), Table VI", checked="2026-11-20"),
          )),
+    Dial("corruption_share", "the share of public spending lost to corruption in audited programmes",
+         "percent of the money", (47,), status="depends on the setting", checked="2026-11-21",
+         meaning="how much of a programme's money never reaches its purpose, where someone has measured it directly: "
+                 "about a quarter of road spending in Indonesian villages before audits, at least a fifth of "
+                 "subsidized rice, and four-fifths of school grants in Uganda in the mid-1990s before the transfers "
+                 "were published; it depends on the programme and on whether anyone is looking, and it can be cut",
+         estimates=(
+             Estimate("Olken (roads, no audit)", 2007, "RCT", "over 600 Indonesian village roads: missing "
+                      "expenditure where the audit probability stayed at 4 percent", 27.7,
+                      where="J-PAL's summary of the JPE 115(2) study: 27.7 to 19.2 percent with audits",
+                      checked="2026-11-21"),
+             Estimate("Olken (roads, audited)", 2007, "RCT", "the same, where every project was audited", 19.2,
+                      where="J-PAL's summary of the JPE 115(2) study", checked="2026-11-21"),
+             Estimate("Olken (rice)", 2006, "survey", "Indonesia's subsidized rice: administrative records against "
+                      "what households reported receiving (a lower bound)", 18.0,
+                      where="Journal of Public Economics 90(4-5), abstract: at least 18 percent",
+                      checked="2026-11-21"),
+             Estimate("Reinikka and Svensson", 2004, "survey", "Ugandan primary schools' capitation grants, 1996 "
+                      "tracking survey: the share that did not reach the schools", 80.0,
+                      where="QJE 119(2): about one-fifth reached the schools", checked="2026-11-21"),
+             Estimate("this film (the Island's roads, no audit)", 2026, "RCT", "600 projects, planted at 28 percent "
+                      "missing without an audit", 28.0,
+                      where="explainer/economics/island.py, TRUTHS[47]['roads']", checked="2026-11-21"),
+         )),
+    Dial("incumbency", "the incumbency advantage in close elections", "percentage points of the vote at the next "
+         "election", (47,), status="contested", checked="2026-11-21",
+         meaning="how much a party gains at the next election from barely winning this one, by regression "
+                 "discontinuity at a margin of zero: about seven or eight points in the U.S. House and Senate; "
+                 "critics show bare winners and losers in the House differ before the election, and in Indian state "
+                 "elections the same design finds incumbents at a disadvantage, so the number belongs to a place and "
+                 "a period",
+         estimates=(
+             Estimate("Lee", 2008, "RD", "U.S. House elections, 1946-1998: the party's vote share at the next "
+                      "election (global quartic)", 7.7,
+                      where="Journal of Econometrics 142(2), as reported by later reanalyses", checked="2026-11-21"),
+             Estimate("this film (Cattaneo, Frandsen and Titiunik's Senate data)", 2026, "RD", "U.S. Senate, "
+                      "1914-2010: the party's share at the seat's next election; local linear, triangular kernel, "
+                      "bandwidth 17.75 points", 7.41, lo=4.56, hi=10.27,
+                      where="videos/economics/econ47/compute.py, item senate (matching rdrobust's documented "
+                            "conventional estimate)", checked="2026-11-21"),
+         )),
     Dial("return_capital_poor", "return to capital for small firms in poor countries", "percent a month", (46,),
          status="depends on the setting", checked="2026-11-20",
          meaning="what a small firm earns on one more dollar of capital: in randomized grants to Sri Lankan and Mexican "
@@ -1466,6 +1507,29 @@ DIALS = {d.key: d for d in [
 
 # What each part shows without entering a row, and why: {part: [(what is shown, the reason)]}
 SHOWN = {
+    47: [
+        ("Olken (2006, 2007, 2009)", "the audit trial's results stated and entered in the corruption_share dial; the "
+         "design computed on the Island"),
+        ("Olson (1965); GAO (2023); USDA (2022)", "stated; the sugar prices shown from the Data Room; collective action "
+         "computed on the Island"),
+        ("Tullock (1967); Krueger (1974)", "the contest computed; Krueger's estimates stated"),
+        ("Lee, Moretti and Butler (2004); Lee (2008); Caughey and Sekhon (2011)", "stated and entered in the "
+         "incumbency dial; the Senate data analysed here"),
+        ("Stigler (1971); Grossman and Helpman (1994); Goldberg and Maggi (1999); Fisman (2001)", "stated; "
+         "probabilistic voting with lobbying computed on the Island"),
+        ("Barro (1973); Ferejohn (1986); Ferraz and Finan (2011)", "the model computed on the Island; the audit "
+         "result stated"),
+        ("Fisman and Miguel (2007); Reinikka and Svensson (2004)", "stated; the WGI shown from the Data Room"),
+        ("Acemoglu and Robinson (2000, 2006); Acemoglu et al. (2019)", "the franchise model computed; democracy and "
+         "growth stated; V-Dem shown from the Data Room"),
+        ("Besley and Persson (2009)", "stated; tax revenue shown from the Data Room"),
+        ("Miguel, Satyanath and Sergenti (2004); Sachs and Warner (1995)", "stated; the instrument computed on the "
+         "Island"),
+        ("DellaVigna and Kaplan (2007); Autor et al. (2020)", "stated; the persuasion rate computed"),
+        ("Nordhaus (1975); Rogoff (1985)", "the cycle computed on the Island"),
+        ("HM Treasury (2016)", "the Called it? card"),
+        ("Funke, Schularick and Trebesch (2023)", "the frontier chapter, stated"),
+    ],
     46: [
         ("Cohen and Dupas (2010)", "the nets' prices and use, stated from the abstract; the demand computed on the "
          "Island"),

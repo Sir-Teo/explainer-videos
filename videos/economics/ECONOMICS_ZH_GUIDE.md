@@ -1422,3 +1422,36 @@ brackets on screen.
 | external validity; general equilibrium effects | 外部有效性；一般均衡效应 |
 | cost-effectiveness; room for more funding | 成本效益；追加资金空间 |
 | targeting; exclusion error | 瞄准；排斥性误差（漏保） |
+
+## Part 47
+
+| English | 中文 |
+|---|---|
+| political economy | 政治经济学 |
+| collective action; free riding | 集体行动；搭便车 |
+| interest group; lobbying | 利益集团；游说 |
+| rent seeking; rent dissipation | 寻租；租金耗散 |
+| Harberger triangle; Tullock rectangle | 哈伯格三角；塔洛克矩形 |
+| contest success function | 竞赛成功函数 |
+| probabilistic voting; swing voter | 概率投票；摇摆选民 |
+| median voter | 中位数选民 |
+| incumbency advantage | 在任优势 |
+| close-election regression discontinuity | 势均力敌选举的断点回归 |
+| regulatory capture | 监管俘获 |
+| protection for sale | 保护待售 |
+| political connections | 政治关联 |
+| political agency; electoral accountability | 政治代理；选举问责 |
+| term limit; lame duck | 任期限制；跛脚鸭 |
+| audit; top-down monitoring; grassroots participation | 审计；自上而下的监督；基层参与 |
+| corruption; misappropriation | 腐败；挪用 |
+| control of corruption (Worldwide Governance Indicators) | 腐败控制（全球治理指标） |
+| extractive and inclusive institutions | 汲取性制度与包容性制度 |
+| commitment problem; franchise extension | 承诺问题；扩大选举权 |
+| democratization; democratic backsliding | 民主化；民主倒退 |
+| state capacity; fiscal capacity | 国家能力；财政能力 |
+| civil conflict; rainfall instrument | 内战；降雨工具变量 |
+| resource curse | 资源诅咒 |
+| persuasion rate | 说服率 |
+| political business cycle | 政治经济周期 |
+| delegation; central bank independence; fiscal council | 授权；央行独立性；财政委员会 |
+| populism | 民粹主义 |

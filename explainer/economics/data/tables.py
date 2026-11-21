@@ -4258,6 +4258,222 @@ FRONTIER46 = Table(
     checked="2026-11-20",
     data={"satellite": 75, "rwanda_n": 856, "rwanda_subs": 1.5, "togo_lo": 4, "togo_hi": 21},
 )
+# ---------------------------------------------------------------------------
+# Part 47
+# ---------------------------------------------------------------------------
+OLKEN_2007 = Table(
+    key="olken_2007",
+    cite="Benjamin A. Olken, \"Monitoring Corruption: Evidence from a Field Experiment in Indonesia\", Journal of "
+         "Political Economy 115(2), 2007, 200-249; Benjamin A. Olken, \"Corruption Perceptions vs. Corruption "
+         "Reality\", Journal of Public Economics 93(7-8), 2009, 950-964; Benjamin A. Olken, \"Corruption and the "
+         "Costs of Redistribution: Micro Evidence from Indonesia\", Journal of Public Economics 90(4-5), 2006, 853-870",
+    tag="Olken, JPE (2007); JPubE (2006, 2009)",
+    where="the abstracts and J-PAL's summary: over 600 village road projects; engineers estimated the prices and "
+          "quantities of all inputs (with core samples of the roads) and compared them with official reports; raising "
+          "the probability of an audit from 4 to 100 percent cut missing expenditures by about 8 percentage points "
+          "(from 27.7 to 19.2 percent in J-PAL's summary), more than enough to make the audits cost-effective; "
+          "invitations to meetings and anonymous comment forms had little average effect; perceptions: 10 percent "
+          "more missing expenditure raised the probability a villager perceived any corruption by 0.8 percent; "
+          "rice: at least 18 percent of subsidized rice disappeared",
+    read="the NBER working papers' abstracts (w11753, w12428) and J-PAL's evaluation summary",
+    checked="2026-11-21",
+    data={"projects": 600, "audit_from": 4, "audit_to": 100, "effect": 8, "missing_control": 27.7,
+          "missing_audit": 19.2, "perception": 0.8, "rice": 18},
+)
+OLSON_1965 = Table(
+    key="olson_1965",
+    cite="Mancur Olson, The Logic of Collective Action: Public Goods and the Theory of Groups (Harvard, 1965); U.S. "
+         "Government Accountability Office, Sugar Program: Alternative Methods for Implementing Import Restrictions "
+         "Could Increase Effectiveness, GAO-24-106144 (2023); USDA Census of Agriculture counts of sugarbeet and "
+         "sugarcane farms (2022)",
+    tag="Olson (1965); GAO-24-106144 (2023); USDA (2022)",
+    where="Olson's argument, stated in words (free riding grows with group size; selective incentives; the "
+          "exploitation of the great by the small); GAO: studies put the program's cost to consumers at about $2.5 "
+          "to 3.5 billion a year and its benefit to producers at $1.4 to 2.7 billion, a net cost to the economy of "
+          "about $1 billion; US users paid about twice the world price in 2022; about 4,000 farms (3,257 sugarbeet and "
+          "745 sugarcane in 2022)",
+    read="GAO's report summary and coverage of it; secondary summaries of the census counts",
+    checked="2026-11-21",
+    data={"consumer_lo": 2.5, "consumer_hi": 3.5, "producer_lo": 1.4, "producer_hi": 2.7, "net": 1.0,
+          "farms": 4000, "beet": 3257, "cane": 745},
+)
+RENTS_47 = Table(
+    key="rents_47",
+    cite="Gordon Tullock, \"The Welfare Costs of Tariffs, Monopolies, and Theft\", Western Economic Journal 5(3), "
+         "1967, 224-232; Anne O. Krueger, \"The Political Economy of the Rent-Seeking Society\", American Economic "
+         "Review 64(3), 1974, 291-303",
+    tag="Tullock (1967); Krueger (1974)",
+    where="Tullock's argument stated in words; Krueger's estimates: rents from government regulation in India in 1964 "
+          "of about 7.3 percent of national income (5.1 percent from import restrictions alone), and rents from "
+          "import licences in Turkey in 1968 of about 15 percent of GNP; she did not estimate how much was dissipated",
+    read="Econlib's entries on rent seeking and on Krueger",
+    checked="2026-11-21",
+    data={"india": 7.3, "india_imports": 5.1, "turkey": 15},
+)
+VOTERS_47 = Table(
+    key="voters_47",
+    cite="David S. Lee, Enrico Moretti and Matthew J. Butler, \"Do Voters Affect or Elect Policies? Evidence from the "
+         "U.S. House\", Quarterly Journal of Economics 119(3), 2004, 807-859; David S. Lee, \"Randomized "
+         "Experiments from Non-random Selection in U.S. House Elections\", Journal of Econometrics 142(2), 2008, "
+         "675-697; Devin Caughey and Jasjeet Sekhon, \"Elections and the Regression Discontinuity Design: Lessons "
+         "from Close U.S. House Races, 1942-2008\", Political Analysis 19(4), 2011, 385-408",
+    tag="Lee, Moretti and Butler (2004); Lee (2008); Caughey and Sekhon (2011)",
+    where="Lee, Moretti and Butler: close House elections, 1946-1995: electoral strength has no effect on a "
+          "legislator's roll-call votes; voters elect policies rather than affect them, because candidates cannot "
+          "commit to compromise; Lee: close elections as natural experiments, 1946-1998, an incumbent-party advantage "
+          "of about 7.7 points of vote share (global quartic, as reported by later reanalyses); Caughey and Sekhon: "
+          "bare winners and bare losers in the House differ on pretreatment covariates, so the advantage there may "
+          "be smaller",
+    read="the abstracts and later reanalyses",
+    checked="2026-11-21",
+    data={"lee": 7.7},
+)
+CAPTURE_47 = Table(
+    key="capture_47",
+    cite="George J. Stigler, \"The Theory of Economic Regulation\", Bell Journal of Economics and Management Science "
+         "2(1), 1971, 3-21; Gene Grossman and Elhanan Helpman, \"Protection for Sale\", American Economic Review "
+         "84(4), 1994, 833-850; Pinelopi Koujianou Goldberg and Giovanni Maggi, \"Protection for Sale: An Empirical "
+         "Investigation\", American Economic Review 89(5), 1999, 1135-1155; Raymond Fisman, \"Estimating the Value "
+         "of Political Connections\", American Economic Review 91(4), 2001, 1095-1102",
+    tag="Stigler (1971); Grossman and Helpman (1994); Goldberg and Maggi (1999); Fisman (2001)",
+    where="Stigler and Grossman-Helpman stated in words; Goldberg and Maggi: the weight on welfare in the "
+          "government's objective is estimated at 50 to 88 times the weight on contributions (working paper); "
+          "Fisman: rumours about President Suharto's health moved the share prices of firms connected to him more "
+          "than those of other firms, so a large share of a connected firm's value came from the connection",
+    read="the abstracts and NBER working papers",
+    checked="2026-11-21",
+    data={"gm_lo": 50, "gm_hi": 88},
+)
+AGENCY_47 = Table(
+    key="agency_47",
+    cite="Robert J. Barro, \"The Control of Politicians: An Economic Model\", Public Choice 14, 1973, 19-42; John "
+         "Ferejohn, \"Incumbent Performance and Electoral Control\", Public Choice 50, 1986, 5-25; Claudio Ferraz and "
+         "Frederico Finan, \"Electoral Accountability and Corruption: Evidence from the Audits of Local "
+         "Governments\", American Economic Review 101(4), 2011, 1274-1311",
+    tag="Barro (1973); Ferejohn (1986); Ferraz and Finan, AER (2011)",
+    where="the models stated in words; Ferraz and Finan's abstract: Brazil's random audits of municipal spending; "
+          "mayors who can run for re-election misappropriate 27 percent fewer resources than mayors in their last "
+          "permitted term; a 2025 replication finds smaller, more precise effects for the same period and near zero "
+          "later",
+    read="the abstract and NBER working paper; the replication's abstract",
+    checked="2026-11-21",
+    data={"fewer": 27},
+)
+CORRUPTION_47 = Table(
+    key="corruption_47",
+    cite="Raymond Fisman and Edward Miguel, \"Corruption, Norms, and Legal Enforcement: Evidence from Diplomatic "
+         "Parking Tickets\", Journal of Political Economy 115(6), 2007, 1020-1048; Ritva Reinikka and Jakob Svensson, "
+         "\"Local Capture: Evidence from a Central Government Transfer Program in Uganda\", Quarterly Journal of "
+         "Economics 119(2), 2004, 679-705; World Bank, Worldwide Governance Indicators",
+    tag="Fisman and Miguel (2007); Reinikka and Svensson (2004); World Bank WGI",
+    where="Fisman and Miguel: until 2002 diplomatic immunity shielded UN diplomats in New York from parking "
+          "enforcement; diplomats from countries with more corruption ran up many more unpaid tickets, and the "
+          "differences persisted; Reinikka and Svensson: in the mid-1990s only about a fifth of central grants for "
+          "Ugandan primary schools reached the schools (13 percent on average in 1991-95), rising after the government "
+          "published the transfers in newspapers",
+    read="the abstracts, NBER Digest and the working papers",
+    checked="2026-11-21",
+    data={"uganda_share": 20, "uganda_9195": 13},
+)
+FRANCHISE_47 = Table(
+    key="franchise_47",
+    cite="Daron Acemoglu and James A. Robinson, \"Why Did the West Extend the Franchise?\", Quarterly Journal of "
+         "Economics 115(4), 2000, 1167-1199; Daron Acemoglu and James A. Robinson, Economic Origins of Dictatorship "
+         "and Democracy (Cambridge, 2006); Daron Acemoglu, Suresh Naidu, Pascual Restrepo and James A. Robinson, "
+         "\"Democracy Does Cause Growth\", Journal of Political Economy 127(1), 2019, 47-100",
+    tag="Acemoglu and Robinson (2000, 2006); Acemoglu et al., JPE (2019)",
+    where="the commitment argument stated in words; Acemoglu, Naidu, Restrepo and Robinson: democratizations raise "
+          "GDP per head by about 20 percent over the following 25 years, with similar estimates from reweighting and "
+          "instrumental variables",
+    read="the abstracts and MIT's summary",
+    checked="2026-11-21",
+    data={"growth": 20, "years": 25},
+)
+STATE_47 = Table(
+    key="state_47",
+    cite="Timothy Besley and Torsten Persson, \"The Origins of State Capacity: Property Rights, Taxation, and "
+         "Politics\", American Economic Review 99(4), 2009, 1218-1244; Timothy Besley and Torsten Persson, Pillars of "
+         "Prosperity (Princeton, 2011)",
+    tag="Besley and Persson (2009, 2011)",
+    where="the model stated in words: legal and fiscal capacity are investments; they are complements; common-interest "
+          "spending (such as defence), political stability and inclusive institutions encourage them",
+    read="the abstract",
+    checked="2026-11-21",
+)
+CONFLICT_47 = Table(
+    key="conflict_47",
+    cite="Edward Miguel, Shanker Satyanath and Ernest Sergenti, \"Economic Shocks and Civil Conflict: An "
+         "Instrumental Variables Approach\", Journal of Political Economy 112(4), 2004, 725-753; Jeffrey Sachs and "
+         "Andrew Warner, \"Natural Resource Abundance and Economic Growth\", NBER Working Paper 5398, 1995",
+    tag="Miguel, Satyanath and Sergenti (2004); Sachs and Warner (1995)",
+    where="Miguel, Satyanath and Sergenti: 41 African countries, 1981-1999, rainfall as an instrument for growth; a "
+          "5 percent drop in income growth raises the likelihood of civil conflict the following year by up to 10 "
+          "percentage points, nearly one half (Miguel's NBER Reporter summary); the rainfall-growth link is weaker "
+          "after 2000; Sachs and Warner: countries with high natural-resource exports relative to GDP in 1971 grew "
+          "more slowly over 1971-89, with controls; critics find the result sensitive to how abundance is measured",
+    read="the abstracts and the NBER Reporter",
+    checked="2026-11-21",
+    data={"countries": 41, "drop": 5, "rise": 10},
+)
+MEDIA_47 = Table(
+    key="media_47",
+    cite="Stefano DellaVigna and Ethan Kaplan, \"The Fox News Effect: Media Bias and Voting\", Quarterly Journal of "
+         "Economics 122(3), 2007, 1187-1234; David Autor, David Dorn, Gordon Hanson and Kaveh Majlesi, \"Importing "
+         "Political Polarization? The Electoral Consequences of Rising Trade Exposure\", American Economic Review "
+         "110(10), 2020, 3139-3183",
+    tag="DellaVigna and Kaplan (2007); Autor, Dorn, Hanson and Majlesi (2020)",
+    where="DellaVigna and Kaplan: Fox News's entry into cable markets between 1996 and 2000 raised the Republican "
+          "presidential vote share by 0.4 to 0.7 points; it persuaded 3 to 28 percent of its viewers, depending on the "
+          "audience measure (3 to 8 percent with the inclusive measures); Autor et al.: congressional districts more "
+          "exposed to Chinese import competition removed moderate representatives in the 2000s, with majority-white "
+          "districts electing conservative Republicans",
+    read="the abstracts and working papers",
+    checked="2026-11-21",
+    data={"vote_lo": 0.4, "vote_hi": 0.7, "pers_lo": 3, "pers_hi": 28},
+)
+CYCLES_47 = Table(
+    key="cycles_47",
+    cite="William D. Nordhaus, \"The Political Business Cycle\", Review of Economic Studies 42(2), 1975, 169-190; "
+         "Kenneth Rogoff, \"The Optimal Degree of Commitment to an Intermediate Monetary Target\", Quarterly Journal "
+         "of Economics 100(4), 1985, 1169-1189",
+    tag="Nordhaus (1975); Rogoff (1985)",
+    where="the models stated in words: an incumbent facing myopic voters engineers low unemployment before elections "
+          "and inflation after; delegating to an independent, conservative central bank removes the incentive",
+    read="the abstracts",
+    checked="2026-11-21",
+)
+PRACTICE_47 = Table(
+    key="practice_47",
+    cite="HM Treasury, HM Treasury Analysis: The Immediate Economic Impact of Leaving the EU, Cm 9292 (May 2016); "
+         "Institute for Fiscal Studies and Office for Budget Responsibility, post-referendum assessments (2016-17)",
+    tag="HM Treasury (2016); IFS; OBR",
+    where="the Treasury: a vote to leave would tip the economy into a year-long recession, with GDP about 3.6 percent "
+          "lower after two years (6 percent in a severe shock) and about 500,000 more unemployed; the outcome: the "
+          "economy grew by about 2 percent in 2016 and unemployment fell, though business investment came in well "
+          "below the OBR's pre-referendum forecast",
+    read="the report's summary and press release; the IFS and OBR assessments",
+    checked="2026-11-21",
+    data={"gdp": 3.6, "severe": 6.0, "jobs": 500000, "growth_2016": 2},
+)
+FRONTIER47 = Table(
+    key="frontier47",
+    cite="Manuel Funke, Moritz Schularick and Christoph Trebesch, \"Populist Leaders and the Economy\", American "
+         "Economic Review 113(12), 2023, 3249-3288; V-Dem Institute, Democracy Report (2026); Karthik Muralidharan, "
+         "Paul Niehaus and Sandip Sukhtankar, \"Building State Capacity: Evidence from Biometric Smartcards in "
+         "India\", American Economic Review 106(10), 2016, 2895-2929",
+    tag="Funke, Schularick and Trebesch, AER (2023); V-Dem (2026); Muralidharan et al., AER (2016)",
+    where="Funke, Schularick and Trebesch: 51 populist presidents and prime ministers, 1900-2020; after 15 years GDP "
+          "per head is 10 percent lower than a plausible non-populist counterfactual; V-Dem's index for the world, "
+          "shown from the Data Room; Muralidharan, Niehaus and Sukhtankar: biometric smartcard payments, rolled out "
+          "at random across 157 sub-districts of Andhra Pradesh (about 19 million people), made payments of "
+          "employment and pension programmes faster, more predictable and less corrupt, with a significant drop in "
+          "leakage, and beneficiaries preferred them",
+    read="the AER abstract",
+    checked="2026-11-21",
+    data={"leaders": 51, "loss": 10, "years": 15, "subdistricts": 157, "people_m": 19},
+)
+PART47 = (OLKEN_2007, OLSON_1965, RENTS_47, VOTERS_47, CAPTURE_47, AGENCY_47, CORRUPTION_47, FRANCHISE_47, STATE_47,
+          CONFLICT_47, MEDIA_47, CYCLES_47, PRACTICE_47, FRONTIER47)
 PART46 = (COHEN_DUPAS_2010, POVERTY_LINES, TRAPS_46, DUAL_46, CREDIT_46, CASH_46, GRADUATION_2015, SCHOOLS_46,
           HEALTH_46, RISK_46, FARMS_46, HISTORY_46, DEBATE_46, PRACTICE_46, FRONTIER46)
 PART45 = (GYM_2006, DEPARTURES_2009, KKT_1990, LIST_2003, REFERENCE_FIELD, PRESENT_BIAS, SEED_2006, DEFAULTS_45,
@@ -4270,4 +4486,4 @@ PART41 = (LAFFER_1974, HARBERGER_1962, RAMSEY_1927, MIRRLEES_1971, DIAMOND_SAEZ_
           CLK_2009, CAPITAL_TAX, HAVENS, EVASION, FRONTIER41, TCJA_2017)
 PART7 = (BERNOULLI_1738, SAMUELSON_1937, ALLAIS_1953, ELLSBERG_1961, RABIN_2000, THALER_1981, HOLT_LAURY_2005,
          HAYDEN_PLATT_2009, MADRIAN_SHEA_2001, THALER_BENARTZI_2004, BARSKY_1997, POST_2008, MEHRA_PRESCOTT_1985)
-ALL = {t.key: t for t in (*PART1, *PART3, *PART4, *PART5, *PART6, *PART7, *PART8, *PART9, *PART10, *PART11, *PART12, *PART13, *PART14, *PART15, *PART16, *PART17, *PART18, *PART19, *PART21, *PART22, *PART25, *PART26, *PART35, *PART36, *PART37, *PART38, *PART39, *PART40, *PART41, *PART42, *PART43, *PART44, *PART45, *PART46)}
+ALL = {t.key: t for t in (*PART1, *PART3, *PART4, *PART5, *PART6, *PART7, *PART8, *PART9, *PART10, *PART11, *PART12, *PART13, *PART14, *PART15, *PART16, *PART17, *PART18, *PART19, *PART21, *PART22, *PART25, *PART26, *PART35, *PART36, *PART37, *PART38, *PART39, *PART40, *PART41, *PART42, *PART43, *PART44, *PART45, *PART46, *PART47)}

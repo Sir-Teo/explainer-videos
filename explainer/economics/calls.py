@@ -414,6 +414,18 @@ CALLS = {c.key: c for c in [
           "of Technology on Employment and Unemployment, National Academy of Engineering (1983), as quoted in "
           "secondary listings",
           "BLS via FRED: LNS12300060 (employment-population ratio, 25-54) and PRS85006173 (labor share)")),
+    Call("treasury_2016", 47, "HM Treasury, in its analysis of the immediate impact of leaving the EU", "May 2016",
+         "a vote to leave would tip the economy into a year-long recession, with GDP about 3.6 percent lower after two "
+         "years than after a vote to remain (6 percent in a severe shock) and around 500,000 more people unemployed",
+         "a shock to confidence and to the financial markets, with business investment and spending held back by "
+         "uncertainty, in a model run by a government campaigning for one side",
+         "there was no recession: the economy grew by about 2 percent in 2016 and unemployment kept falling; business "
+         "investment did come in well below forecasts, and the longer-run costs of leaving are a separate, and "
+         "continuing, argument",
+         "wrong",
+         ("HM Treasury, HM Treasury Analysis: The Immediate Economic Impact of Leaving the EU, Cm 9292 (May 2016)",
+          "Institute for Fiscal Studies, post-referendum assessments (2016-17); Office for Budget Responsibility, "
+          "Economic and Fiscal Outlook, November 2016")),
     Call("sachs_2005", 46, "Jeffrey Sachs, in The End of Poverty", "2005",
          "extreme poverty can be ended by 2025, if rich countries raise their aid to about $135 to $195 billion a "
          "year and spend it on investments in health, schools, farms and roads",

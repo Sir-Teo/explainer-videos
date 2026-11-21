@@ -297,4 +297,74 @@
             "nothing you do here is stored or sent.",
     });
   };
+  // ---- Part 47: political economy --------------------------------------------------------------------------------
+  W.buildlobby = function (el) {
+    // The Play-it game of Part 47 (explainer.economics.agora.politics: tokens_game).  Ten players with 100 tokens
+    // each keep them (worth 1), build (each token returns 0.3 to every player) or lobby (a prize of 400 is shared
+    // in proportion to lobbying, equally if nobody lobbies).  If a player's build and lobby exceed 100, both are
+    // scaled down to fit.
+    var N = 10, END = 100, MPCR = 0.3, PRIZE = 400;
+    function fit(b, l) { var t = b + l; return t > END ? [b * END / t, l * END / t] : [b, l]; }
+    function payoffs(b, l, ob, ol) {
+      var B = b + (N - 1) * ob, L = l + (N - 1) * ol;
+      var sMe = L > 0 ? l / L : 1 / N, sOt = L > 0 ? ol / L : 1 / N;
+      return [END - b - l + MPCR * B + PRIZE * sMe, END - ob - ol + MPCR * B + PRIZE * sOt];
+    }
+    function best(ob, ol) {
+      // building costs you 1 and returns 0.3 to you, so never build; lobby to maximize 400 l/(l + L) - l
+      var L = (N - 1) * ol, l = L > 0 ? Math.max(0, Math.min(END, Math.sqrt(PRIZE * L) - L)) : 0.01;
+      return { l: l, pay: payoffs(0, l, ob, ol)[0] };
+    }
+    var NASH = PRIZE * (N - 1) / (N * N);
+    QB.widget(el, {
+      title: "Build or lobby?",
+      sub: "You and nine others each have 100 tokens. Left: what you, each of the others, and everyone together end " +
+           "with. Right: what you end with as your lobbying varies, with your building fixed; the dot is your choice.",
+      panels: 2, height: 270,
+      controls: [
+        { k: "b", label: "You build with", min: 0, max: 100, step: 1, value: 50,
+          fmt: function (x) { return x.toFixed(0) + " tokens"; } },
+        { k: "l", label: "You lobby with", min: 0, max: 100, step: 1, value: 10,
+          fmt: function (x) { return x.toFixed(0) + " tokens"; } },
+        { k: "ob", label: "Each other player builds with", min: 0, max: 100, step: 1, value: 50,
+          fmt: function (x) { return x.toFixed(0) + " tokens"; } },
+        { k: "ol", label: "Each other player lobbies with", min: 0, max: 100, step: 1, value: 10,
+          fmt: function (x) { return x.toFixed(0) + " tokens"; } },
+      ],
+      draw: function (g, v, st) {
+        var me = fit(v.b, v.l), ot = fit(v.ob, v.ol), p = payoffs(me[0], me[1], ot[0], ot[1]);
+        var avg = (p[0] + (N - 1) * p[1]) / N;
+        var A = g[0].axes({ x: [0, 4], y: [0, 450], title: "tokens at the end",
+                            xlabel: "you   each other   average   all build" });
+        A.bars([0.5, 1.5, 2.5, 3.5], [p[0], p[1], avg, END * N * MPCR + PRIZE / N], 0.6,
+               { color: function (i) { return ["#F2C14E", "#7EC8F5", "#C9A0FF", "#6B7280"][i]; } });
+        A.hline(PRIZE * (1 / N) + END - NASH, { color: "#E8A0B4", dash: [4, 3] });
+        A.text(3.9, PRIZE / N + END - NASH, "everyone lobbies " + NASH.toFixed(0) + ": " +
+               (PRIZE / N + END - NASH).toFixed(0), { align: "right", dy: -8, bg: true });
+        var ls = [], ys = [], top = 0;
+        for (var k = 0; k <= 100 - Math.round(me[0]); k += 1) {
+          var y = payoffs(me[0], k, ot[0], ot[1])[0]; ls.push(k); ys.push(y); top = Math.max(top, y);
+        }
+        var B = g[1].axes({ x: [0, 100], y: [0, Math.max(450, top * 1.1)], title: "what you end with",
+                            xlabel: "your lobbying, tokens" });
+        B.line(ls, ys, { color: "#F2C14E", width: 2.5 });
+        B.dots([me[1]], [p[0]], { color: "#FFFFFF", r: 5 });
+        var br = best(ot[0], ot[1]);
+        B.vline(Math.min(br.l, 100 - me[0]), { color: "#E8A0B4", dash: [4, 3] });
+        st.me = me; st.ot = ot; st.p = p; st.avg = avg; st.br = br;
+      },
+      readout: function (v, st) {
+        return [["you keep, build, lobby", (END - st.me[0] - st.me[1]).toFixed(0) + ", " + st.me[0].toFixed(0) +
+                 ", " + st.me[1].toFixed(0)],
+                ["you end with", st.p[0].toFixed(1) + " tokens"],
+                ["each other player ends with", st.p[1].toFixed(1)],
+                ["your best reply", "build 0, lobby " + st.br.l.toFixed(0) + ": " + st.br.pay.toFixed(1) + " tokens"],
+                ["the average player", st.avg.toFixed(1) + " (340 if all build, 104 if all lobby " +
+                 NASH.toFixed(0) + ")"]];
+      },
+      note: "Part 47, chapters 2 and 3. A token you build with returns 0.3 to you, so whatever the others do, " +
+            "building never pays you, and lobbying pays until your share of the prize stops growing fast enough. " +
+            "Computed in your browser; nothing you do here is stored or sent.",
+    });
+  };
 })();

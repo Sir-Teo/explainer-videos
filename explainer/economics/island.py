@@ -1121,6 +1121,34 @@ TRUTHS = {
         "aid": {"deworming": (4.0, 1.5), "cash": (2.0, 6.0), "nets": (5.0, 1.0), "tutoring": (3.0, 2.5),
                 "credit": (0.8, 5.0), "graduation": (2.2, 3.0)},
     },
+    47: {
+        # the road audit (hook and chapter 7): 600 projects, 28% of spending missing on average without an audit,
+        # audits cut it by 8 points, meetings by 1; villagers' perceptions barely track the truth
+        "roads": {"n": 600, "base": 0.28, "sd": 0.18, "audit_effect": -0.08, "meeting_effect": -0.01,
+                  "perception_slope": 0.08, "seed": 48},
+        # collective action (chapter 1): a policy worth 100 to a group, against resistance 1
+        "olson": {"B": 100.0, "K": 1.0},
+        # the sugar contest (chapter 1): about 4,000 farms that gain about 2 billion dollars a year, 335 million consumers
+        # who lose about 3 billion (GAO 2024's ranges, rounded)
+        "sugar": {"n_small": 4000, "B_small": 2.0e9, "n_large": 3.35e8, "B_large": 3.0e9},
+        # Play it (chapter 2): ten players, 100 tokens each, a public good returning 0.3 per token to every player,
+        # a prize of 400 shared by lobbying
+        "tokens": {"N": 10, "endowment": 100.0, "mpcr": 0.3, "prize": 400.0},
+        # voters (chapter 4): three groups of 30%, 40% and 30% with incomes 0.6, 1.0, 1.6; the middle group has
+        # twice the swing voters; the rich group is organized and its money adds 1 to its weight
+        "voting": {"alpha": (0.3, 0.4, 0.3), "phi": (1.0, 2.0, 1.0), "income": (0.6, 1.0, 1.6),
+                   "organized": (0, 0, 1), "h": 1.0},
+        # agency (chapter 6): office worth W (normal 0.1, sd 0.3) a term, rents up to 1, politicians discount 0.43
+        "mayors": {"n": 2000, "W_mean": 0.1, "W_sd": 0.3, "delta": 0.43, "seed": 51},
+        # the franchise (chapter 9): the richest 10% earn 70%, a tax costs tau^2/2, discount 0.95
+        "franchise": {"elite": 0.1, "elite_income": 0.7, "beta": 0.95},
+        # the political business cycle (chapter 13): four-year terms over sixteen years
+        "cycle": {"years": 16, "term": 4, "a": 0.5, "u_star": 5.0, "myopia": 0.5, "b": 0.4},
+        # conflict (chapter 11): 41 countries over 19 years; a five-point fall in growth raises the risk of conflict
+        # by ten points; growth measured with error of 4 points
+        "conflict": {"countries": 41, "years": 19, "first": 1.0, "effect": -2.0, "feedback": -0.01,
+                     "error_sd": 0.04, "seed": 53},
+    },
 }
 
 

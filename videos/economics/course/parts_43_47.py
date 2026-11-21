@@ -191,4 +191,53 @@ PARTS = [
         also=(("Agora's village", "explainer/economics/agora/village.py"),
               ("The Island's planted truths", "explainer/economics/island.py")),
     ),
+    Part(
+        n=47, level="U", widget="buildlobby", prereq=(4, 11, 15, 18),
+        question="Why do governments so often choose policies that economists can show are wasteful?",
+        story="The part opens on Olken's roads: engineers took core samples from over 600 new village roads in "
+              "Indonesia, and more than a fifth of the money was missing; announced audits cut that by about 8 "
+              "points and village meetings did little, and the Island's 600 projects with the truth planted give "
+              "the same answer. Olson's free riding follows, with a group's lobbying falling to nothing as it grows "
+              "and America's sugar at twice the world price, about $500,000 a year for each of 4,000 farms against "
+              "$9 for each consumer. The viewer plays build or lobby with a hundred tokens and finds that everyone "
+              "ends with 104 instead of 340; Tullock's contest, Harberger's triangle and Krueger's rents in India and "
+              "Turkey measure the waste. Voters come next: probabilistic voting, Lee, Moretti and Butler's affect or "
+              "elect, and 1,297 Senate elections analysed here by regression discontinuity, where barely winning is "
+              "worth 7.4 points next time. Capture (Stigler, Grossman and Helpman, Fisman's connections), the agency "
+              "model with the Island's lame-duck mayors and Brazil's random audits, and Olken's results with why "
+              "meetings failed lead to an intermission of the world's democracy index since 1900. Then corruption "
+              "measured four ways and the World Bank's governance scores; Acemoglu and Robinson's franchise as a "
+              "commitment, with the Island's elite and a map of revolution, democratization and promises; state "
+              "capacity in taxes and democracy and growth; conflict with a rainfall instrument; media and "
+              "persuasion; Nordhaus's political business cycle. Two dials, practice, the Treasury's 2016 forecast "
+              "and a frontier of backsliding, populism and the digital state close it.",
+        handoff="Part 48 turns from failures of government to a market failure the size of the planet: the climate.",
+        outside="Part 4: regression discontinuity and instruments; Part 11: games and equilibrium; Part 14: agency and "
+                "efficiency wages; Part 15: public goods and free riding; Part 18: voting and social choice; "
+                "Statistics, Built: local linear regression and two-stage least squares.",
+        objectives={
+            "U": ["Explain why small groups with large stakes win against large groups with small ones.",
+                  "Distinguish the Harberger triangle from the Tullock rectangle, and say why rents are competed "
+                  "away.",
+                  "Say what a close-election regression discontinuity identifies, and what it assumes."],
+            "M": ["Solve a Tullock contest for equilibrium spending and dissipation, with equal or unequal players.",
+                  "Derive the threshold of the Barro-Ferejohn agency model and say what lowers it.",
+                  "Estimate a regression discontinuity by local linear regression and check it across bandwidths."],
+            "D": ["Explain the commitment problem in Acemoglu and Robinson's model of the franchise, and when an "
+                  "elite democratizes.",
+                  "State the open questions about backsliding, populism and the digital state."],
+            "I": ["Design an anti-corruption or anti-capture rule (publication, random audits, cooling-off, rules "
+                  "over discretion) and say what it costs."],
+        },
+        results=[
+            ("A group's lobbying", r"E^{*} = \sqrt{B K / n} - K"),
+            ("Tullock's contest", r"x^{*} = R\, \tfrac{n-1}{n^2}, \quad n x^{*} = \tfrac{n-1}{n} R"),
+            ("The agency threshold", r"r^{*} = (1-\delta)(W + R) - W"),
+            ("The persuasion rate", r"f = \frac{y_T - y_C}{e_T - e_C} \cdot \frac{1}{1 - y_C}"),
+            ("The close-election jump", r"\tau = \lim_{m \downarrow 0} E[y \mid m] - \lim_{m \uparrow 0} E[y \mid m]"),
+        ],
+        U=(0, 1, 2, 3, 4, 6, 7, "s09_intermission", 8, 12, 13), D=(9, 16), I=(15,),
+        also=(("Agora's political economy", "explainer/economics/agora/politics.py"),
+              ("The Island's planted truths", "explainer/economics/island.py")),
+    ),
 ]
