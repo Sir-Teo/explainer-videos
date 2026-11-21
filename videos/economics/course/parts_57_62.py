@@ -95,4 +95,51 @@ PARTS = [
         also=(("Agora's appraisal module", "explainer/economics/agora/appraisal.py"),
               ("The Data Room: CBO's projections", "explainer/economics/data")),
     ),
+    Part(
+        n=59, level="M", widget="expert", prereq=(4, 10, 12, 38, 43, 44),
+        question="How is economics used to decide a merger, and what survives cross-examination?",
+        story="Staples and Office Depot say they compete with everyone who sells a pen; the FTC answers with their "
+              "own prices, and in 1997 the court stops the merger. The Island has its own version: Alder in every "
+              "town, Birch and Cedar in some, and a proposed merger of Alder and Birch whose true effect is known. "
+              "Section 7 and the burden of proof; the viewer decides which of three pairs is one market, by diversion "
+              "against the critical value X/(X + M); the hypothetical monopolist, critical loss and the cellophane "
+              "trap; the HHI's lines of 1982, 2010 and 2023; upward pricing pressure derived, GUPPIs against a "
+              "simulation; four demand curves fitted to the same numbers predicting rises from 6.4% to 22.5%, and an "
+              "agency's plain logit that predicts 6.9% against a truth of 11.9%; pass-through, Staples' 15-17% "
+              "against a claimed two-thirds, and Cedar's discipline. After an intermission of airline fares since "
+              "1964, the AT&T-Time Warner bargaining model and the departure rate that decides it; a cartel's "
+              "variance screen, overcharge and damages; the price regression under cross-examination; a hospital "
+              "merger that lowers nurses' wages; the retrospective that scores the tools; rate cases, price caps and "
+              "access pricing; two Dials, the profession, AT&T's bet, and FTC v. Meta.",
+        handoff="Part 60 turns from judging prices in court to setting them: willingness to pay, price experiments, "
+                "revenue management and dynamic pricing.",
+        outside="Part 4: regression and its biases; Part 10: the price maker and Averch-Johnson; Part 12: oligopoly "
+                "and collusion; Part 38: monopsony; Part 43: demand estimation and merger simulation; Part 44: "
+                "vertical relations and antitrust's standards; Statistics, Built: difference in differences and "
+                "specification curves.",
+        objectives={
+            "U": ["State what section 7 of the Clayton Act asks, and how the burden of proof moves in a merger case.",
+                  "Run the hypothetical-monopolist test with critical loss, and explain the cellophane trap.",
+                  "Compute the HHI and its rise, and apply the guidelines' presumptions."],
+            "M": ["Derive upward pricing pressure from the merged firm's first-order condition, and compute GUPPIs "
+                  "from diversion ratios and margins.",
+                  "Explain why merged firms pass on less of a cost saving, and how pass-through is measured.",
+                  "Estimate a cartel's overcharge and damages with a before-during-after regression."],
+            "D": ["Show how the curvature of demand drives a simulated price effect, and why a misspecified "
+                  "substitution pattern biases it.",
+                  "Derive the fee change in a Nash-bargaining model of a vertical merger."],
+            "I": ["Defend a price regression under cross-examination: specifications, influence, subsamples, and "
+                  "what Daubert asks of a method."],
+        },
+        results=[
+            ("Critical loss", r"L^{*} = \frac{X}{X + M}"),
+            ("Critical diversion", r"D > \frac{X}{X + M}"),
+            ("The rise in the HHI", r"\Delta\text{HHI} = 2\, s_A s_B"),
+            ("Upward pricing pressure", r"\text{UPP}_A = D_{AB}(p_B - c_B) - E_A c_A"),
+            ("The bargaining fee change", r"\Delta f = w\, d\, s\, m"),
+        ],
+        U=(0, 1, 2, 3, 4, 5, "s09_intermission", 9, 11, 12), D=(6, 8, 16), I=(10, 13, 15),
+        also=(("Agora's merger module", "explainer/economics/agora/merger.py"),
+              ("The Data Room: airline fares in the CPI", "explainer/economics/data")),
+    ),
 ]

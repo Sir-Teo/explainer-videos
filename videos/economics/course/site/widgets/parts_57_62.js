@@ -226,4 +226,106 @@
       note: "Part 58, chapters 2, 6 and 10. Computed in your browser; nothing you do here is stored or sent.",
     });
   };
+  // ---- Part 59: the expert witness ---------------------------------------------------------------------------------
+  W.expert = function (el) {
+    // Agora's merger module (explainer.economics.agora.merger.functional_forms): two symmetric firms at price 1 with
+    // margin m (own elasticity 1/m) and diversion D merge; the merged price from the joint first-order condition under
+    // linear, logit (outside good), linear-in-log-price and constant-elasticity demand, with the merged firm's
+    // marginal cost cut by any saving.  Each case is an Island merger whose true diversion, margin, saving and demand
+    // curve are drawn from a seed; the reader sees noisy estimates and the parties' (inflated) claim of savings,
+    // chooses a curve and how much of the claim to credit, decides, and then sees the retrospective.
+    var FORMS = ["linear", "logit", "log-linear", "const. elasticity"];
+    var COLS = ["#7FD1B9", "#7EC8F5", "#F2C14E", "#F25F5C"];
+    function rise(form, m, D, saving) {
+      var e = 1 / m, c = (1 - m) * (1 - saving), b = e, d = D * e, q, dq;
+      if (form === 0) {
+        var a = 1 + b - d;
+        return 100 * ((a + (b - d) * c) / (2 * (b - d)) - 1);
+      }
+      if (form === 1) {
+        var s = D / (1 + D), al = e / (1 - s), dl = Math.log(s / (1 - 2 * s)) + al;
+        q = function (p) { var x = Math.exp(dl - al * p); return x / (1 + 2 * x); };
+        dq = function (p) { var y = q(p); return -al * y * (1 - 2 * y); };
+      } else if (form === 2) {
+        q = function (p) { return 1 - (b - d) * Math.log(p); };
+        dq = function (p) { return -(b - d) / p; };
+      } else {
+        if (e * (1 - D) <= 1.02) { return Infinity; }
+        q = function (p) { return Math.pow(p, -e + d); };
+        dq = function (p) { return (-e + d) * Math.pow(p, -e + d - 1); };
+      }
+      var f = function (p) { return q(p) + (p - c) * dq(p); }, lo = c + 1e-6, hi = 20, k;
+      if (f(hi) > 0) { return Infinity; }
+      for (k = 0; k < 80; k++) { var mid = (lo + hi) / 2; if (f(mid) > 0) { lo = mid; } else { hi = mid; } }
+      return 100 * ((lo + hi) / 2 - 1);
+    }
+    function makeCase(n) {
+      var u = QB.rng(5900 + n), D = 0.05 + 0.4 * u(), m = 0.15 + 0.23 * u(), sav = 0.14 * u();
+      var claim = sav * (1 + 1.5 * u()), Dh = D * Math.exp(0.15 * u.normal()), mh = m * Math.exp(0.1 * u.normal());
+      var r = u(), form = r < 0.15 ? 0 : (r < 0.55 ? 1 : (r < 0.9 ? 2 : 3));
+      var truth = rise(form, m, D, sav), noise = 1.2 * u.normal();
+      return { D: D, m: m, saving: sav, claim: claim, Dh: Math.min(Dh, 0.6), mh: Math.min(mh, 0.42), form: form,
+               truth: truth, measured: truth + noise };
+    }
+    QB.widget(el, {
+      title: "Expert",
+      sub: "You are the agency's economist. Each case is an Island merger of two shops: you see estimates of the " +
+           "diversion ratio and the margin, and the companies' claim of savings. Screen it, simulate it, decide, " +
+           "then open the retrospective.",
+      panels: 2, height: 250,
+      controls: [
+        { k: "case", label: "Case", min: 1, max: 12, step: 1, value: 1, fmt: function (x) { return "#" + x; } },
+        { k: "form", label: "Your demand curve", min: 0, max: 3, step: 1, value: 1,
+          fmt: function (x) { return FORMS[x]; } },
+        { k: "credit", label: "Credit for the claimed savings", min: 0, max: 1, step: 0.25, value: 0.5,
+          fmt: function (x) { return (100 * x).toFixed(0) + "%"; } },
+        { k: "challenge", label: "Your decision", min: 0, max: 1, step: 1, value: 0,
+          fmt: function (x) { return x ? "challenge" : "clear"; } },
+        { k: "retro", label: "Retrospective", min: 0, max: 1, step: 1, value: 0,
+          fmt: function (x) { return x ? "open" : "sealed"; } },
+      ],
+      draw: function (g, v, st) {
+        var C = makeCase(v.case), X = 0.05;
+        st.C = C;
+        st.crit = X / (X + C.mh);
+        st.guppi = 100 * C.Dh * C.mh;
+        st.net = st.guppi - 100 * v.credit * C.claim * (1 - C.mh);
+        var A = g[0].axes({ x: [-0.5, 2.5], y: [0, 0.7], title: "the screen: diversion against X/(X + M)",
+                            xticks: [0, 1, 2], xfmt: function (i) { return ["diversion", "critical", "GUPPI"][i] || ""; },
+                            yfmt: function (y) { return (100 * y).toFixed(0) + "%"; } });
+        A.bars([0, 1, 2], [C.Dh, st.crit, Math.max(0, st.guppi / 100)], 0.6,
+               { color: function (i) { return ["#E8A0B4", "#FFFFFF", "#F2A65A"][i]; } });
+        var preds = [0, 1, 2, 3].map(function (f) { return rise(f, C.mh, C.Dh, v.credit * C.claim); });
+        st.preds = preds;
+        st.pred = preds[v.form];
+        var B = g[1].axes({ x: [-0.5, 3.5], y: [-10, 40], title: "simulated price rise, %",
+                            xticks: [0, 1, 2, 3], xfmt: function (i) { return FORMS[i] || ""; } });
+        B.hline(0, {});
+        B.bars([0, 1, 2, 3], preds.map(function (x) { return Math.max(-10, Math.min(40, x)); }), 0.6,
+               { color: function (i) { return i === v.form ? COLS[i] : "#555B66"; } });
+        if (v.retro) {
+          B.hline(Math.max(-10, Math.min(40, C.measured)), { color: "#F25F5C", dash: [5, 4] });
+          B.text(3.4, Math.max(-10, Math.min(38, C.measured)), "measured afterwards", { color: "#F25F5C", dx: -120 });
+        }
+      },
+      readout: function (v, st) {
+        var C = st.C, fmt = function (x) { return isFinite(x) ? (x > 0 ? "+" : "") + x.toFixed(1) + "%" : "unbounded"; };
+        var rows = [["diversion (estimated)", (100 * C.Dh).toFixed(0) + "%"],
+                    ["margin (estimated)", (100 * C.mh).toFixed(0) + "%"],
+                    ["the companies' claimed saving", (100 * C.claim).toFixed(1) + "% of marginal cost"],
+                    ["one market? (diversion > critical)", C.Dh > st.crit ? "yes" : "no"],
+                    ["GUPPI, and net of credited savings", st.guppi.toFixed(1) + "%, " + st.net.toFixed(1) + "%"],
+                    ["your simulation (" + FORMS[v.form] + ")", fmt(st.pred)],
+                    ["your decision", v.challenge ? "challenge" : "clear"]];
+        if (v.retro) {
+          var harm = C.truth > 0, right = (v.challenge === 1) === harm;
+          rows.push(["the retrospective measured", fmt(C.measured)]);
+          rows.push(["the truth (" + FORMS[C.form] + ", saving " + (100 * C.saving).toFixed(1) + "%)", fmt(C.truth)]);
+          rows.push(["your decision, in hindsight", right ? "right" : "wrong"]);
+        }
+        return rows;
+      },
+      note: "Part 59, chapters 2, 5, 6, 7 and 12. Computed in your browser; nothing you do here is stored or sent.",
+    });
+  };
 })();

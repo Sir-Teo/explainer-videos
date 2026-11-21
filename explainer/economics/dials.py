@@ -358,7 +358,7 @@ DIALS = {d.key: d for d in [
                       where="videos/economics/econ43/compute.py, item dlw", checked="2026-11-20"),
          )),
     Dial("merger_retro", "price effects of mergers, measured after the fact", "percent change in the merging "
-         "firms' prices after a merger, against a control", (43, 44), status="contested", checked="2026-11-20",
+         "firms' prices after a merger, against a control", (43, 44, 59), status="contested", checked="2026-11-21",
          meaning="if mergers the agencies cleared or settled are followed by price rises of several percent, review "
                  "has been too lenient; critics reply that the studied mergers are a selected sample and that "
                  "simple averages of different studies mislead, so how much enforcement errs remains disputed",
@@ -378,6 +378,32 @@ DIALS = {d.key: d for d in [
              Estimate("this film (the Island's aisle)", 2026, "calibration", "the two smaller of four cereal makers, "
                       "simulated with random-coefficient logit", 5.8,
                       where="videos/economics/econ43/compute.py, item merger", checked="2026-11-20"),
+             Estimate("Ashenfelter and Hosken", 2010, "DiD", "five consumer-product mergers near the enforcement "
+                      "margin: four raised prices, typically by 3-7%", 5.0, lo=3.0, hi=7.0,
+                      where="Journal of Law and Economics 53(3); NBER WP 13859, abstract", checked="2026-11-21"),
+             Estimate("Cooper, Craig, Gaynor and Van Reenen", 2019, "DiD", "hospital mergers within five miles of each "
+                      "other", 6.0, where="QJE 134(1), as summarized in M. Gaynor's testimony to the House "
+                      "Judiciary Committee, 7 March 2019", checked="2026-11-21"),
+             Estimate("this film (the Island's superstores)", 2026, "DiD", "Alder and Birch, consummated: 36 towns "
+                      "against 24, twelve months either side (planted effect 11.9)", 11.7,
+                      where="videos/economics/econ59/compute.py, item retro", checked="2026-11-21"),
+         )),
+    Dial("merger_passthrough", "pass-through of a merger's cost savings", "percent of a cut in one firm's marginal "
+         "cost that reaches its prices", (59,), status="depends on the setting", checked="2026-11-21",
+         meaning="a saving that only the merging firm enjoys is passed on far less than a cost change that hits a "
+                 "whole industry, and a merged firm passes on less than an independent one, because a lower price "
+                 "now also takes sales from its own other products; claimed savings must be discounted accordingly",
+         estimates=(
+             Estimate("Ashenfelter, Ashmore, Baker and McKernan", 1998, "regression", "Staples' historical pass-through "
+                      "of firm-specific cost changes, cited by the court against the parties' claim of two-thirds",
+                      16.0, lo=15.0, hi=17.0, where="FTC working paper 217; FTC v. Staples, 970 F. Supp. 1066 "
+                      "(D.D.C. 1997), as quoted in an FTC speech", checked="2026-11-21"),
+             Estimate("this film (the Island, one chain alone)", 2026, "calibration", "a 2% cut in Alder's marginal "
+                      "cost, nested logit with Bertrand pricing", 66.9,
+                      where="videos/economics/econ59/compute.py, item efficiency", checked="2026-11-21"),
+             Estimate("this film (the Island, merged)", 2026, "calibration", "the same cut at Alder and Birch once "
+                      "they have one owner", 53.3, where="videos/economics/econ59/compute.py, item efficiency",
+                      checked="2026-11-21"),
          )),
     Dial("dynamic_beta", "the discount factor of a dynamic decision maker", "monthly discount factor implied by "
          "choices", (44, 54), status="not identified", checked="2026-11-20",
@@ -442,6 +468,9 @@ DIALS = {d.key: d for d in [
              Estimate("Connor", 1998, "narrative", "the lysine cartel of 1992-95, from the overcharge on direct "
                       "buyers ($65-140 million) and sales ($495-550 million)", 20.0, 12.0, 28.0,
                       where="Choices 13(3), p. 17", checked="2026-11-19"),
+             Estimate("this film (the Island's cement)", 2026, "regression", "before-during-after regression on "
+                      "fifteen years of monthly prices (planted 18)", 17.7,
+                      where="videos/economics/econ59/compute.py, item cartel", checked="2026-11-21"),
          )),
     Dial("selection_cost", "welfare cost of adverse selection", "percent of the money at stake (each study's own "
          "measure)", (13, 42), status="depends on the setting", checked="2026-11-19",
@@ -1701,6 +1730,33 @@ DIALS = {d.key: d for d in [
 
 # What each part shows without entering a row, and why: {part: [(what is shown, the reason)]}
 SHOWN = {
+    59: [
+        ("FTC v. Staples (D.D.C. 1997); the FTC's case summary", "the hook's story, stated; the Island's price map "
+         "computed"),
+        ("the Clayton Act, section 7; Hart-Scott-Rodino (1976); Philadelphia National Bank (1963); Baker Hughes "
+         "(1990)", "the law and the burden of proof, stated"),
+        ("Harris and Simons (1989); Katz and Shapiro (2003); O'Brien and Wickelgren (2003); du Pont (1956)",
+         "market definition: the test computed on the Island; the critical-loss debate and cellophane, stated"),
+        ("the Horizontal Merger Guidelines (1982, 2010, 2023)", "the presumptions, applied to the Island's "
+         "industries"),
+        ("Farrell and Shapiro (2010); Crooke, Froeb, Tschantz and Werden (1999)", "pricing pressure and the "
+         "functional-form problem, computed on the Island"),
+        ("United States v. AT&T (D.D.C. 2018; D.C. Cir. 2019)", "the vertical case, stated; the bargaining model "
+         "computed on the Island"),
+        ("Abrantes-Metz, Froeb, Geweke and Taylor (2006)", "the variance screen: computed on the Island's cement; "
+         "the frozen-perch case, stated"),
+        ("Daubert (1993); Kumho Tire (1999); Federal Rule of Evidence 702 (2023); Ashenfelter, Ashmore, Baker, "
+         "Gleason and Hosken (2006)", "regression in court: the standard stated; the cross-examination computed on "
+         "the Island; Staples' 8.6% and 0.9%, stated"),
+        ("Prager and Schmitt (2021); Krueger and Ashenfelter (2022); the 2023 Merger Guidelines, Guideline 10",
+         "labour markets, stated; the Island's hospitals computed"),
+        ("Brot-Goldberg, Cooper, Craig and Klarnet (2024)", "hospital merger enforcement, stated"),
+        ("Hope Natural Gas (1944); Littlechild (1983); Baumol and Willig's rule", "regulated prices, stated; the "
+         "Island's utility computed"),
+        ("BLS via FRED: CUUR0000SETG01, CPIAUCNS; BLS, Monthly Labor Review (2005)", "the intermission's data film, "
+         "from the Data Room; the index caveat, stated"),
+        ("FTC v. Meta (D.D.C. 2025)", "the frontier, stated"),
+    ],
     55: [
         ("Sims (1980, 1992)", "the hook's price puzzle, recomputed on FRED data; VARs stated"),
         ("Blanchard and Quah (1989); Uhlig (2005); Stock and Watson (2012, 2018); Mertens and Ravn (2013); Rigobon "

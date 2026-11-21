@@ -1683,3 +1683,29 @@ brackets on screen.
 | regulatory impact analysis; break-even analysis | 监管影响分析；盈亏平衡分析 |
 | Goodhart's law; Campbell's law; gaming a target | 古德哈特定律；坎贝尔定律；对指标的博弈 |
 | distributional weights; WELLBY | 分配权重；幸福感调整生命年（WELLBY） |
+
+## Part 59
+
+| English | 中文 |
+|---|---|
+| merger review; expert witness; cross-examination | 并购审查；专家证人；交叉询问 |
+| substantial lessening of competition; burden of proof; presumption | 实质性减少竞争；举证责任；推定 |
+| premerger notification; second request; consent decree; divestiture | 并购前申报；第二次信息请求；和解令；资产剥离 |
+| relevant market; hypothetical monopolist test; SSNIP | 相关市场；假定垄断者测试；小幅但显著且非暂时的涨价 |
+| critical loss; actual loss; critical diversion ratio | 临界损失；实际损失；临界转移比率 |
+| cellophane fallacy | 玻璃纸谬误 |
+| Herfindahl-Hirschman index; change in HHI | 赫芬达尔-赫希曼指数；HHI增量 |
+| unilateral effects; coordinated effects; maverick | 单边效应；协同效应；搅局者 |
+| diversion ratio; upward pricing pressure; GUPPI | 转移比率；向上定价压力；总向上定价压力指数 |
+| merger simulation; functional form; curvature of demand | 并购模拟；函数形式；需求曲线的曲率 |
+| efficiencies; pass-through; compensating marginal-cost reduction | 效率抗辩；成本传导；补偿性边际成本降幅 |
+| entry: timely, likely and sufficient | 进入：及时、可能且充分 |
+| vertical merger; raising rivals' costs; Nash bargaining; elimination of double marginalization | 纵向并购；提高竞争对手成本；纳什议价；消除双重加价 |
+| cartel; leniency; screen; overcharge; but-for price; treble damages | 卡特尔；宽大制度；筛查；超额收费；假设无违法情形下的价格；三倍损害赔偿 |
+| Daubert standard; gatekeeper; specification curve | 道伯特标准；守门人；设定曲线 |
+| monopsony; markdown; no-poach agreement | 买方垄断；工资压低幅度；互不挖角协议 |
+| merger retrospective; difference in differences | 并购事后评估；双重差分 |
+| rate of return regulation; rate base; revenue requirement | 收益率管制；费率基数；收入需求 |
+| price cap; RPI − X; regulatory lag | 价格上限；RPI − X；监管时滞 |
+| access pricing; efficient component pricing rule | 接入定价；有效成分定价规则 |
+| nascent competitor; killer acquisition; serial acquisitions | 新生竞争者；扼杀式收购；连续收购 |

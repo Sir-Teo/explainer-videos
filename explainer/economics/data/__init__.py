@@ -533,6 +533,14 @@ REALTIME_FRED = {
 FRED_SERIES.update(REALTIME_FRED)
 FRED_RETRIEVED.update({s: "2026-11-21" for s in REALTIME_FRED})
 
+# Part 59: airline fares in the consumer price index (the intermission's data film, deflated by CPIAUCNS)
+MERGER_FRED = {
+    "CUUR0000SETG01": ("Consumer Price Index for All Urban Consumers: Airline Fares in U.S. City Average",
+                       "index 1982-1984=100", "monthly, not seasonally adjusted", "U.S. Bureau of Labor Statistics"),
+}
+FRED_SERIES.update(MERGER_FRED)
+FRED_RETRIEVED.update({s: "2026-11-21" for s in MERGER_FRED})
+
 SPF_FILES = ("median_rgdp_level", "median_rgdp_growth", "median_recess_level")
 SPF_URL = ("https://www.philadelphiafed.org/-/media/frbp/assets/surveys-and-data/survey-of-professional-forecasters/"
            "data-files/files/{}.xlsx")

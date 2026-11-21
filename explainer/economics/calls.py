@@ -559,6 +559,19 @@ CALLS = {c.key: c for c in [
          "wrong",
          ("USA Today interview, April 2007, as reported by InformationWeek and MacRumors",
           "IDC, press release of 15 January 2024")),
+    Call("att_2016", 59, "Randall Stephenson, chief executive of AT&T, announcing its purchase of Time Warner",
+         "October 2016",
+         "the future of video is mobile and the future of mobile is video: owning Time Warner's channels and studio "
+         "alongside AT&T's networks would create a stronger company, worth $85.4 billion to buy",
+         "the bet that content and distribution are worth more under one owner, with about $1 billion a year of cost "
+         "savings expected within three years",
+         "the government's suit failed and the purchase closed in June 2018; in May 2021 AT&T agreed to spin "
+         "WarnerMedia off and combine it with Discovery, and the transaction closed in April 2022, less than four "
+         "years after the purchase",
+         "wrong",
+         ("AT&T, press release of 22 October 2016",
+          "United States v. AT&T, 310 F. Supp. 3d 161 (D.D.C. 2018)",
+          "AT&T, press release on the completion of the WarnerMedia transaction, April 2022")),
     Call("millercoors_2008", 43, "The U.S. Department of Justice, closing its investigation of the MillerCoors joint "
          "venture", "June 2008",
          "the joint venture of SABMiller and Molson Coors is not likely to lessen competition substantially, and its "
