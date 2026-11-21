@@ -67,7 +67,7 @@ Manim videos with local neural narration. See README.md for layout and build com
   `tools/lecture_length.py musicN` (30–60 minutes, listening included). `videos/music/soundcheck/` is the pipeline's
   two-minute test film.
 - *Economics, Built* (`videos/economics/`): sixty-eight parts planned in twelve acts (`econ1` … `econ68`; the series
-  key is `economics`, the prefix `econ`, as `psych` is to `psychology`), Parts 1–62 built (English; Acts I to X complete, Act XI begun). The plan and the open
+  key is `economics`, the prefix `econ`, as `psych` is to `psychology`), Parts 1–62 built (English; Acts I to XI complete). The plan and the open
   decisions are `videos/economics/README.md`; the standard (cold opens, the Island as a serial, Play it in the first
   third, the intermission with a data film, Called it?, the is/ought card, the computed score), the devices and every
   part chapter by chapter are `videos/economics/SYLLABUS.md`. Shared code in `explainer/economics/` (tested in

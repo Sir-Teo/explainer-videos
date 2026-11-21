@@ -559,6 +559,14 @@ PLATFORM_FRED = {
 FRED_SERIES.update(PLATFORM_FRED)
 FRED_RETRIEVED.update({s: "2026-11-21" for s in PLATFORM_FRED})
 
+# Part 63 (the economy as a network): Japan's industrial production through the 2011 earthquake (OECD, discontinued)
+NETWORK_FRED = {
+    "JPNPROINDMISMEI": ("Production of Total Industry in Japan", "index 2015 = 100", "monthly, seasonally adjusted",
+                        "OECD Main Economic Indicators"),
+}
+FRED_SERIES.update(NETWORK_FRED)
+FRED_RETRIEVED.update({s: "2026-11-21" for s in NETWORK_FRED})
+
 SPF_FILES = ("median_rgdp_level", "median_rgdp_growth", "median_recess_level")
 SPF_URL = ("https://www.philadelphiafed.org/-/media/frbp/assets/surveys-and-data/survey-of-professional-forecasters/"
            "data-files/files/{}.xlsx")

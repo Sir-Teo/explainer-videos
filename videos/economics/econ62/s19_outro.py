@@ -141,7 +141,7 @@ class Outro(VoiceoverScene):
         hc = history_card(2011, r"11 March, \ north-east Japan", r"an earthquake and tsunami; \ firms far from the "
                           r"coast, \ undamaged, \ lose sales because a supplier's supplier is under water",
                           color=E.ACCENT, width=10.4, font_size=23)
-        nxt = VGroup(label(r"Next: \ Part 63 \ $\cdot$ \ Act XI, \ Economics at Work", font_size=30, color=GREY_B),
+        nxt = VGroup(label(r"Next: \ Part 63 \ $\cdot$ \ Act XII, \ The Frontier", font_size=30, color=GREY_B),
                      label(r"The Economy as a Network", font_size=46),
                      label(r"when does a shock to one firm become a shock to everyone?", font_size=24,
                            color=E.ACCENT)).arrange(DOWN, buff=0.22)
