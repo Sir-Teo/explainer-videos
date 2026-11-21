@@ -114,9 +114,10 @@ class Debate(VoiceoverScene):
             "charities, ran them."
         ) as vo:
             self.play(FadeIn(ax), FadeIn(tag), Create(zero), FadeIn(side[0]), run_time=1.0)
-            vo.wait_until("a")
             self.play(LaggedStart(*[AnimationGroup(Create(b), FadeIn(e)) for b, e in zip(bars, est)],
                                   lag_ratio=0.15), run_time=2.5)
+            vo.wait_until("a")
+            self.play(*[Indicate(b, color=WHITE) for b in bars])
             vo.wait_until("b")
             self.play(Create(mean), FadeIn(side[1]))
             vo.wait_until("c")

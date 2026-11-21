@@ -89,6 +89,8 @@ class Frontier(VoiceoverScene):
                             label(rf"{100 * v:.0f}\%", font_size=20, color=WHITE).next_to(r, RIGHT, buff=0.15)))
         head = label(rf"the poorest {100 * Tg['share']:.0f}\%: \ the share each rule misses", font_size=26,
                      color=E.ACCENT).to_edge(UP, buff=0.6)
+        ctx = label(r"April 2020: \ Togo's Novissi sends emergency cash, \ with no register of who is poor",
+                    font_size=21, color=GREY_A).next_to(head, DOWN, buff=0.3)
         foot = label(rf"Togo, \ 2020: \ phone-based targeting cut exclusion errors by {T['togo_lo']}--{T['togo_hi']}\% "
                      r"against the geographic options, \\ but did worse than a full registry would have", font_size=19,
                      color=GREY_A).to_edge(DOWN, buff=0.7)
@@ -108,7 +110,7 @@ class Frontier(VoiceoverScene):
             "a full registry would have. The frontier is to make such tools accurate, fair, and accountable to "
             "the people they sort."
         ) as vo:
-            self.play(FadeIn(head), FadeIn(tag), *[FadeIn(b[0]) for b in bars])
+            self.play(FadeIn(head), FadeIn(tag), FadeIn(ctx), *[FadeIn(b[0]) for b in bars])
             for mk, b in zip("abcd", bars):
                 vo.wait_until(mk)
                 self.play(GrowFromEdge(b[1], LEFT), FadeIn(b[2]))
