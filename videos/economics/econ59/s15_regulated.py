@@ -29,6 +29,9 @@ class Regulated(VoiceoverScene):
             y0 += h
         tot = label(rf"revenue requirement: \ {R['requirement']:.0f}", font_size=22, color=WHITE).next_to(
             bars, UP, buff=0.25)
+        head = label(r"cost of service: \ the rate case", font_size=30, color=E.ACCENT).to_edge(UP, buff=0.45)
+        nat = label(r"one water main, \ one grid: \ room for one firm only", font_size=21, color=GREY_A).next_to(
+            head, DOWN, buff=0.25)
         side = VGroup(
             label(rf"price $=$ requirement $\div$ volume $=$ {R['requirement']:.0f} $\div$ 100 $=$ "
                   rf"\${R['price']:.2f}", font_size=21, color=WHITE),
@@ -53,8 +56,9 @@ class Regulated(VoiceoverScene):
             "beats the cost of capital, the firm uses too much capital; and since every saving is passed straight "
             "to customers at the next case, the firm has little reason to look for one."
         ) as vo:
-            self.play(FadeIn(tag))
+            self.play(FadeIn(tag), FadeIn(head), FadeIn(nat))
             vo.wait_until("a")
+            self.play(FadeOut(nat), run_time=0.5)
             for k in range(3):
                 self.play(GrowFromEdge(bars[k], DOWN), FadeIn(labs[k]), run_time=0.6)
             vo.wait_until("b")
@@ -83,7 +87,8 @@ class Regulated(VoiceoverScene):
                      label(r"green: \ cost under the cap \ (falls 4\% a year)", font_size=15, color=SAVE),
                      label(r"blue: \ the capped price, \ RPI $-$ X, \ reset every 5 years", font_size=15,
                            color=REG)).arrange(DOWN, aligned_edge=LEFT, buff=0.08).next_to(ax.ax.c2p(0, 1.4),
-                                                                                         RIGHT, buff=0.1)
+                                                                                         RIGHT, buff=0.1).shift(
+            DOWN * 0.3)
         side = VGroup(
             MathTex(r"P_t = P_{t-1}\,(1 + \text{RPI}_t - X)", font_size=34, color=REG),
             label(rf"inflation {100 * Cp['rpi']:.0f}\%, \ X $=$ {100 * Cp['X']:.0f}\%", font_size=20, color=GREY_A),
@@ -95,8 +100,8 @@ class Regulated(VoiceoverScene):
                   rf"{Cp['real_cos_end']:.2f} under cost of service", font_size=19, color=E.ACCENT),
             label(r"(the effort each regime induces is assumed, \ not derived)", font_size=16, color=GREY_B),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.28).to_edge(RIGHT, buff=0.3)
-        if side.width > 6.2:
-            side.width = 6.2
+        if side.width > 5.6:
+            side.width = 5.6
             side.to_edge(RIGHT, buff=0.3)
         tag = published_tag(r"Littlechild, \ Regulation of British Telecommunications' Profitability (1983)",
                             corner=DL, font_size=12)

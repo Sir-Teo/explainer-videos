@@ -69,6 +69,8 @@ class Intermission(SoundScene):
             self.play(FadeIn(ax), FadeIn(z), FadeIn(key), run_time=1.2)
             snd.wait_until("film_end")
             self.wait(1.0)
+            for m in lines:
+                m.clear_updaters()
             self.play(*[FadeOut(m) for m in (ax, z, lines, grow, year, key, src, stag)], run_time=1.0)
             b35 = B["by_rate"]["0.035"]["npv"]
             story = point_cards([

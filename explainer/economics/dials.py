@@ -398,10 +398,10 @@ DIALS = {d.key: d for d in [
                       "of firm-specific cost changes, cited by the court against the parties' claim of two-thirds",
                       16.0, lo=15.0, hi=17.0, where="FTC working paper 217; FTC v. Staples, 970 F. Supp. 1066 "
                       "(D.D.C. 1997), as quoted in an FTC speech", checked="2026-11-21"),
-             Estimate("this film (the Island, one chain alone)", 2026, "calibration", "a 2% cut in Alder's marginal "
+             Estimate("this film (the Island: one chain alone)", 2026, "calibration", "a 2% cut in Alder's marginal "
                       "cost, nested logit with Bertrand pricing", 66.9,
                       where="videos/economics/econ59/compute.py, item efficiency", checked="2026-11-21"),
-             Estimate("this film (the Island, merged)", 2026, "calibration", "the same cut at Alder and Birch once "
+             Estimate("this film (the Island: merged)", 2026, "calibration", "the same cut at Alder and Birch once "
                       "they have one owner", 53.3, where="videos/economics/econ59/compute.py, item efficiency",
                       checked="2026-11-21"),
          )),

@@ -18,11 +18,11 @@ class PlayIt(VoiceoverScene):
         cards = VGroup()
         for q, col in zip(pairs, cols):
             body = VGroup(
-                wrapped_label(tex_safe(q["what"]), 3.5, 17, GREY_A),
+                wrapped_label(tex_safe(q["what"]), 3.5, 18, GREY_A),
                 label(rf"diversion: \ {100 * q['D']:.0f}\% of {tex_safe(q['a'])}'s lost sales go to "
-                      rf"{tex_safe(q['b'])}".replace("the corner shops", r"the shops"), font_size=17, color=WHITE),
+                      rf"{tex_safe(q['b'])}".replace("the corner shops", r"the shops"), font_size=18, color=WHITE),
                 label(rf"{tex_safe(q['b'])}'s margin: \ {100 * q['M']:.0f}\% of its price"
-                      .replace("the corner shops", r"the shops'"), font_size=17, color=WHITE),
+                      .replace("the corner shops", r"the shops'"), font_size=18, color=WHITE),
             ).arrange(DOWN, aligned_edge=LEFT, buff=0.18)
             for m in body[1:]:
                 if m.width > 3.6:
@@ -31,7 +31,7 @@ class PlayIt(VoiceoverScene):
             inner = VGroup(t, body).arrange(DOWN, aligned_edge=LEFT, buff=0.25)
             box = SurroundingRectangle(inner, buff=0.25, color=col, corner_radius=0.12, stroke_width=2)
             cards.add(VGroup(box, inner))
-        cards.arrange(RIGHT, buff=0.35).move_to(UP * 0.4)
+        cards.arrange(RIGHT, buff=0.35).move_to(DOWN * 0.2)
         if cards.width > 13.2:
             cards.width = 13.2
         head = label(r"one owner of both raises both prices by 5\%: \ does it gain?", font_size=26,
@@ -40,13 +40,18 @@ class PlayIt(VoiceoverScene):
             cards, DOWN, buff=0.6)
         tag = island_tag(r"the Island: \ diversion and margins from agora.merger; \ the kilns are given",
                          corner=DL, font_size=12)
+        defs = VGroup(
+            label(r"diversion ratio $D$: \ the share of one product's lost sales that go to the other", font_size=21,
+                  color=GOV),
+            label(r"margin $M$: \ (price $-$ the cost of one more unit) $\div$ price", font_size=21, color=SAVE),
+        ).arrange(DOWN, aligned_edge=LEFT, buff=0.2).next_to(head, DOWN, buff=0.45)
         with self.voiceover(
             "Your turn. A market, for the law, is a set of products that a single owner could profitably make "
             "dearer. The test imagines a hypothetical monopolist of both products in a pair, who raises both prices "
             "by five percent. If that pays, the pair is a market; if customers would escape to something else, it "
-            "is not. You are given two numbers for each pair. The diversion ratio: when one product's price rises, "
-            "the share of the sales it loses that go to the other. And the other's margin: how much of its price "
-            "is profit on one more sale. <bookmark mark='a'/> Pair one: Alder and Birch, two superstores. "
+            "is not. You are given two numbers for each pair. <bookmark mark='d1'/> The diversion ratio: when one "
+            "product's price rises, the share of the sales it loses that go to the other. <bookmark mark='d2'/> And "
+            "the other's margin: how much of its price is profit on one more sale. <bookmark mark='a'/> Pair one: Alder and Birch, two superstores. "
             f"{100 * pairs[0]['D']:.0f} percent of the sales Alder loses go to Birch, and Birch's margin is "
             f"{100 * pairs[0]['M']:.0f} percent. <bookmark mark='b'/> Pair two: Alder and the corner shops. Only "
             f"{100 * pairs[1]['D']:.0f} percent of Alder's lost sales go to the shops, whose margin is "
@@ -55,6 +60,10 @@ class PlayIt(VoiceoverScene):
             "tonne is sixty percent. <bookmark mark='d'/> Which pairs are one market?"
         ) as vo:
             self.play(FadeIn(head), FadeIn(tag))
+            vo.wait_until("d1")
+            self.play(FadeIn(defs[0], shift=DOWN * 0.1))
+            vo.wait_until("d2")
+            self.play(FadeIn(defs[1], shift=DOWN * 0.1))
             for k, mk in enumerate("abc"):
                 vo.wait_until(mk)
                 self.play(FadeIn(cards[k], shift=UP * 0.1))

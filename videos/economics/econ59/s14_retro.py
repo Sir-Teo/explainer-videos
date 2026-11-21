@@ -18,16 +18,16 @@ class Retro(VoiceoverScene):
         tr, co = np.array(R["treated"]), np.array(R["control"])
         tr = 100 * tr / tr[months < 0].mean()
         co = 100 * co / co[months < 0].mean()
-        ax = plane([-12, 12], [96, 116], center=LEFT * 2.7 + DOWN * 0.4, x_length=6.4, y_length=4.6,
-                   xticks=[-12, -6, 0, 6, 12], yticks=[100, 105, 110, 115], xlabel=r"months from the merger",
+        ax = plane([-12, 12], [96, 120], center=LEFT * 2.7 + DOWN * 0.4, x_length=6.4, y_length=4.8,
+                   xticks=[-12, -6, 0, 6, 12], yticks=[100, 105, 110, 115, 120], xlabel=r"months from the merger",
                    ylabel=r"Alder's price, \ before = 100", xfmt=lambda v: f"{v:+.0f}".replace("-", "{-}") if v
                    else "0", yfmt=lambda v: f"{v:.0f}", font_size=14)
-        zero = vline(ax, -0.5, 96, 116, E.ACCENT, 1.6)
+        zero = vline(ax, -0.5, 96, 120, E.ACCENT, 1.6)
         pt = path(ax, months, tr, BIRCH, 3.0, smooth=False)
         pc = path(ax, months, co, ALDER, 3.0, smooth=False)
         key = VGroup(label(rf"gold: \ {R['n_treated']} towns where Alder and Birch met", font_size=15, color=BIRCH),
                      label(rf"blue: \ {R['n_control']} towns where they did not", font_size=15, color=ALDER)).arrange(
-            DOWN, aligned_edge=LEFT, buff=0.08).next_to(ax.ax.c2p(-12, 116), RIGHT, buff=0.1).shift(DOWN * 0.2)
+            DOWN, aligned_edge=LEFT, buff=0.08).next_to(ax.ax.c2p(-12, 120), RIGHT, buff=0.1).shift(DOWN * 0.15)
         rows = VGroup(
             label(r"difference in differences:", font_size=20, color=GREY_A),
             label(rf"the merger raised Alder's price {R['estimate']:.1f}\%", font_size=23, color=WHITE),

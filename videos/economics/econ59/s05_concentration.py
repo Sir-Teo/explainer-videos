@@ -124,12 +124,14 @@ class Concentration(VoiceoverScene):
             label(r"1982 \ (grey): \ above 1,800, \ rise above 100".replace(",", "{,}"), font_size=16,
                   color=GREY_B),
             label(r"2010 \ (red): \ above 2,500, \ rise above 200".replace(",", "{,}"), font_size=16, color=CARTEL),
-            label(r"2023 \ (pink): \ back to 1,800 and 100, \ or a 30\% share with a rise above 100"
+            label(r"2023 \ (pink): \ back to 1,800 and 100, \\ or a 30\% share with a rise above 100"
                   .replace(",", "{,}"), font_size=16, color=GOV),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.14).next_to(tab, DOWN, buff=0.45).align_to(tab, LEFT)
-        if notes.width > 5.6:
-            notes.width = 5.6
-            notes.align_to(tab, LEFT)
+        if notes.width > 5.2:
+            notes.width = 5.2
+        notes.align_to(tab, LEFT)
+        if notes.get_right()[0] > 6.8:
+            notes.shift(LEFT * (notes.get_right()[0] - 6.8))
         tag = island_tag(r"the Island: \ five industries, \ a proposed merger in each", corner=DL, font_size=12)
         tw = C["towns"]
         with self.voiceover(

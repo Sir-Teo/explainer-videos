@@ -53,28 +53,25 @@ class Hook(VoiceoverScene):
     def price_map(self):
         T = load("towns")
         G = T["groups"]
-        mp = island_map(T, width=7.6, height=4.6).to_edge(LEFT, buff=0.5).shift(DOWN * 0.3)
+        mp = island_map(T, width=6.6, height=4.2).to_edge(LEFT, buff=0.4).shift(DOWN * 0.2)
         key = legend_rows([(ALDER, r"Alder alone"), (BIRCH, r"Alder and Birch"), (CEDAR, r"Alder and Cedar"),
                            (WHITE, r"all three")], font_size=17).next_to(mp, DOWN, buff=0.25).align_to(mp, LEFT)
         head = label(r"the Island: \ sixty towns, \ three superstore chains, \ and the corner shops", font_size=24,
                      color=E.ACCENT).to_edge(UP, buff=0.45)
         rows = VGroup()
-        for name, col in (("Alder alone", ALDER), ("Alder and Birch", BIRCH), ("Alder and Cedar", CEDAR),
-                          ("all three", WHITE)):
+        for i, (name, col) in enumerate((("Alder alone", ALDER), ("Alder and Birch", BIRCH),
+                                         ("Alder and Cedar", CEDAR), ("all three", WHITE))):
             g = G[name]
-            rows.add(VGroup(label(rf"{name}", font_size=20, color=col),
-                            label(rf"{g['n']} towns", font_size=18, color=GREY_B),
-                            label(rf"\${g['price']:.2f}", font_size=22, color=col)))
-        for r_ in rows:
-            r_[1].next_to(r_[0], RIGHT, buff=0.3)
-        rows.arrange(DOWN, aligned_edge=LEFT, buff=0.32)
-        for r_ in rows:
-            r_[2].move_to([0, r_[0].get_y(), 0]).align_to(rows, RIGHT).shift(RIGHT * 1.1)
+            y = -0.5 * i
+            rows.add(VGroup(label(rf"{name}", font_size=20, color=col).next_to([0, y, 0], RIGHT, buff=0),
+                            label(rf"{g['n']} towns", font_size=18, color=GREY_B).next_to([2.6, y, 0], RIGHT, buff=0),
+                            label(rf"\${g['price']:.2f}", font_size=22, color=col).next_to([5.0, y, 0], LEFT,
+                                                                                           buff=0)))
         rh = label(r"Alder's price for a basket of supplies, \ average", font_size=18, color=GREY_A)
-        side = VGroup(rh, rows).arrange(DOWN, aligned_edge=LEFT, buff=0.3).to_edge(RIGHT, buff=0.6).shift(UP * 0.4)
+        side = VGroup(rh, rows).arrange(DOWN, aligned_edge=LEFT, buff=0.3).to_edge(RIGHT, buff=0.5).shift(UP * 0.4)
         prem = label(rf"alone: \ {T['lone_premium']:.0f}\% above towns with all three", font_size=21,
                      color=GOV).next_to(side, DOWN, buff=0.45).align_to(side, LEFT)
-        catch = label(r"but towns with more stores are bigger, \ with dearer rents", font_size=19,
+        catch = label(r"but towns with more stores are bigger, \\ with dearer rents", font_size=19,
                       color=HOLD).next_to(prem, DOWN, buff=0.25).align_to(side, LEFT)
         tag = island_tag(r"the Island: \ agora.merger, \ a nested logit with Bertrand pricing", corner=DR,
                          font_size=12)

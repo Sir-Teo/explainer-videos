@@ -22,7 +22,7 @@ def dial_rows(dial, lo, hi, ticks, unit, x0=-0.2, x1=6.3, top=2.6, step=0.5, fmt
     for k, e in enumerate(dial.estimates):
         y = top - step * k
         c = DESIGN_COLOR.get(e.design, GREY_B)
-        who = e.who.split(",")[0] + r" et al." if "," in e.who else e.who
+        who = e.who.split(",")[0] + r" et al." if ("," in e.who and not e.who.startswith("this film")) else e.who
         t = VGroup(label(rf"{who} ({e.year})", font_size=18, color=WHITE),
                    label(tex_safe(e.sample), font_size=13, color=GREY_B)).arrange(DOWN, aligned_edge=RIGHT, buff=0.03)
         if t.width > 6.3:

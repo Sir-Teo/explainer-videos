@@ -23,7 +23,7 @@ class Market(VoiceoverScene):
                    font_size=14)
         zero = DashedLine(ax.ax.c2p(0, 0), ax.ax.c2p(25, 0), color=GREY_C, stroke_width=1.2)
         five = vline(ax, 5, -0.8, 0.9, E.ACCENT, 1.6)
-        fl = label(r"5\%", font_size=16, color=E.ACCENT).next_to(ax.ax.c2p(5, 0.9), UP, buff=0.05)
+        fl = label(r"5\%", font_size=16, color=E.ACCENT).next_to(ax.ax.c2p(5, 0.85), RIGHT, buff=0.08)
         cols = {"Alder alone": ALDER, "Alder and Birch": BIRCH, "the three superstores": WHITE}
         curves = VGroup(*[path(ax, xs, C[k]["curve"], cols[k], 3.0, yr=(-0.8, 0.9)) for k in cols])
         side = VGroup()

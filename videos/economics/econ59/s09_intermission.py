@@ -72,6 +72,8 @@ class Intermission(SoundScene):
                 DOWN, buff=0.35)
             self.play(FadeIn(caveat), run_time=0.8)
             self.wait(2.5)
+            for m in marks:
+                m.clear_updaters()
             self.play(*[FadeOut(m) for m in (ax, base, grow, year, marks, src, stag, caveat)], run_time=1.0)
             pairs = P["pairs"]
             story = point_cards([
