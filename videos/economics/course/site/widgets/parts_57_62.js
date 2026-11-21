@@ -508,4 +508,84 @@
       note: "Part 61, chapter 2. Computed in your browser; nothing you do here is stored or sent.",
     });
   };
+  // ---- Part 62: inside the firm -----------------------------------------------------------------------------------
+  W.management = function (el) {
+    // Agora's org module (explainer.economics.agora.org.experiment), summarized plant by plant: each plant's change in
+    // log productivity, after against before, is the effect (if its firm is treated, scaled by how well it adopts),
+    // plus a persistent shift of its own and the weekly noise averaged over the weeks before and after.  Firms have one
+    // or two plants; consulting is randomized by firm; the estimate is the difference in mean changes, with a
+    // standard error from firm-level means.  The reader sets the number of firms, the treated share, the noise and the
+    // effect, and sees how often the experiment finds it.
+    function run(v, seed) {
+      var u = QB.rng(seed), F = v.firms, T = Math.round(F * v.share / 100), weeks = v.weeks;
+      var idx = []; for (var f = 0; f < F; f++) { idx.push(f); }
+      for (var i = F - 1; i > 0; i--) { var j = Math.floor(u() * (i + 1)); var t = idx[i]; idx[i] = idx[j]; idx[j] = t; }
+      var treated = new Array(F).fill(false);
+      for (var k = 0; k < T; k++) { treated[idx[k]] = true; }
+      var mt = [], mc = [];
+      var sdNoise = v.noise / 100 * Math.sqrt(1 / 40 + 1 / weeks);
+      for (var f2 = 0; f2 < F; f2++) {
+        var plants = f2 % 3 === 0 ? 1 : 2, sum = 0;
+        for (var p = 0; p < plants; p++) {
+          var adopt = Math.max(0, 1 + 0.25 * u.normal());
+          var d = (treated[f2] ? v.effect / 100 * adopt : 0) + 0.08 * u.normal() + sdNoise * u.normal();
+          sum += d;
+        }
+        (treated[f2] ? mt : mc).push(sum / plants);
+      }
+      function mean(a) { var s2 = 0; for (var q = 0; q < a.length; q++) { s2 += a[q]; } return s2 / a.length; }
+      function vr(a) { var m = mean(a), s3 = 0; for (var q = 0; q < a.length; q++) { s3 += (a[q] - m) * (a[q] - m); }
+        return s3 / Math.max(a.length - 1, 1); }
+      var est = mean(mt) - mean(mc), se = Math.sqrt(vr(mt) / mt.length + vr(mc) / mc.length);
+      return { est: est, se: se };
+    }
+    QB.widget(el, {
+      title: "Run the management experiment",
+      sub: "Give free consulting to firms chosen at random, then compare their plants' productivity with the " +
+           "others'. Choose how many firms take part, what share is treated, how noisy the plants are, how long you " +
+           "watch, and how large the true effect is; see how often the experiment finds it.",
+      panels: 1, height: 260,
+      controls: [
+        { k: "firms", label: "Firms in the experiment", min: 6, max: 80, step: 1, value: 17 },
+        { k: "share", label: "Share of firms treated", min: 20, max: 80, step: 5, value: 65,
+          fmt: function (x) { return x + "%"; } },
+        { k: "effect", label: "True effect on productivity", min: 0, max: 30, step: 1, value: 17,
+          fmt: function (x) { return x + "%"; } },
+        { k: "noise", label: "Weekly noise in a plant's productivity", min: 2, max: 30, step: 1, value: 8,
+          fmt: function (x) { return x + "%"; } },
+        { k: "weeks", label: "Weeks watched after the change", min: 4, max: 104, step: 4, value: 52 },
+      ],
+      draw: function (g, v, st) {
+        var R = 400, ests = [], hits = 0;
+        for (var r = 0; r < R; r++) {
+          var o = run(v, 6200 + r);
+          ests.push(100 * o.est);
+          if (Math.abs(o.est / o.se) > 2) { hits += 1; }
+        }
+        st.power = hits / R;
+        var lo = -20, hi = 50, nb = 35, w = (hi - lo) / nb, counts = new Array(nb).fill(0), xs = [];
+        for (var b = 0; b < nb; b++) { xs.push(lo + (b + 0.5) * w); }
+        var s4 = 0;
+        for (var q = 0; q < ests.length; q++) {
+          s4 += ests[q];
+          var kb = Math.floor((ests[q] - lo) / w);
+          if (kb >= 0 && kb < nb) { counts[kb] += 1; }
+        }
+        st.mean = s4 / ests.length;
+        var sd = 0; for (var q2 = 0; q2 < ests.length; q2++) { sd += (ests[q2] - st.mean) * (ests[q2] - st.mean); }
+        st.sd = Math.sqrt(sd / ests.length);
+        var A = g[0].axes({ x: [lo, hi], y: [0, Math.max.apply(null, counts) * 1.15 + 1],
+                            title: "400 runs of the experiment: the estimated effect (%)", xlabel: "estimate, %" });
+        A.bars(xs, counts, w * 0.85, { color: "#7BD88F" });
+        A.vline(v.effect, { color: "#FFFFFF", dash: [5, 4] });
+        A.vline(0, { color: "#9AA3B2" });
+      },
+      readout: function (v, st) {
+        return [["the true effect", v.effect + "%"],
+                ["the estimates: mean, spread", st.mean.toFixed(1) + "%, ±" + st.sd.toFixed(1) + " points"],
+                ["share of runs that find an effect (|t| > 2)", (100 * st.power).toFixed(0) + "%"]];
+      },
+      note: "Part 62, chapters 3 and 4. Computed in your browser; nothing you do here is stored or sent.",
+    });
+  };
 })();

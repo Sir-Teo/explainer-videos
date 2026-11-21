@@ -1750,3 +1750,21 @@ brackets on screen.
 | surrogate index; long-term effect | 替代指标指数；长期效应 |
 | gig economy; reservation wage; flexibility; worker classification | 零工经济；保留工资；灵活性；劳动者身份认定 |
 | willingness to accept; free goods; GDP-B; privacy paradox | 受偿意愿；免费商品；GDP-B；隐私悖论 |
+
+## Part 62
+
+| English | 中文 |
+|---|---|
+| productivity dispersion; total factor productivity; survival cutoff | 生产率离散；全要素生产率；生存门槛 |
+| management practices; World Management Survey | 管理实践；世界管理调查 |
+| management consulting experiment; randomized by firm; clustered standard errors | 管理咨询实验；按企业随机化；聚类标准误 |
+| piece rate; sorting; personnel economics | 计件工资；分选效应；人事经济学 |
+| the Peter principle; promotion | 彼得原理；晋升 |
+| executive pay; pay-performance sensitivity; pay for luck | 高管薪酬；薪酬绩效敏感度；为运气付薪 |
+| capital structure; trade-off theory; pecking order | 资本结构；权衡理论；优序融资理论 |
+| agency cost; perquisites; corporate governance | 代理成本；在职消费；公司治理 |
+| private equity; leveraged buyout | 私募股权；杠杆收购 |
+| knowledge hierarchy; span of control | 知识层级；管理幅度 |
+| working from home; hybrid work | 居家办公；混合办公 |
+| relational contract; organizational capability | 关系契约；组织能力 |
+| diversification discount; conglomerate | 多元化折价；企业集团 |

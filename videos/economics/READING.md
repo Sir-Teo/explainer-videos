@@ -10,7 +10,7 @@ the series leaves out.
 Both *Parts* columns are found, not typed. *Planned* lists the parts whose entry in
 [`SYLLABUS.md`](SYLLABUS.md) names the book or paper; *Built* lists the parts whose scenes, compute step or
 README cite it (a dot: none yet). Fuller notes (editions, chapters, what each source was used for) are in each
-part's README, under *Sources*. Built so far: Parts 1–61.
+part's README, under *Sources*. Built so far: Parts 1–62.
 
 ## 1. The textbook spine
 
@@ -112,7 +112,7 @@ part's README, under *Sources*. Built so far: Parts 1–61.
 | Davis–Garcés | P. Davis and E. Garces, *Quantitative Techniques for Competition and Antitrust Analysis* (2010) | 59 | 59 |
 | Talluri–van Ryzin | K. Talluri and G. van Ryzin, *The Theory and Practice of Revenue Management* (2004) | 10, 60 | 10, 60 |
 | Kohavi–Tang–Xu | R. Kohavi, D. Tang and Y. Xu, *Trustworthy Online Controlled Experiments* (2020) | 61 | 61 |
-| Lazear–Gibbs | E. Lazear and M. Gibbs, *Personnel Economics in Practice* (3rd ed., 2014) | 62 | · |
+| Lazear–Gibbs | E. Lazear and M. Gibbs, *Personnel Economics in Practice* (3rd ed., 2014) | 62 | 62 |
 
 ## 2. Papers and models, and where they are taught
 
@@ -377,6 +377,8 @@ part's README, under *Sources*. Built so far: Parts 1–61.
 **Part 60, *The Price*.** Books: Kalyan Talluri and Garrett van Ryzin, *The Theory and Practice of Revenue Management* (2004); Robert Phillips, *Pricing and Revenue Optimization* (2nd ed., 2021); Thomas Nagle and Georg Müller, *The Strategy and Tactics of Pricing*. Papers: Hall and Hitch (1939); Becker, DeGroot and Marschak (1964); Littlewood (1972); Mussa and Rosen (1978); Belobaba (1987); Smith, Leimkuhler and Darrow (1992); Gallego and van Ryzin (1994); Deneckere and McAfee (1996); Blinder et al. (1998); Bakos and Brynjolfsson (1999); Murphy et al. (2005); Blake and Coey (2014); DellaVigna and Gentzkow (2019); Calvano et al. (2020); Blake et al. (2021); Williams (2022).
 
 **Part 61, *Economics at the Platforms*.** Books: Ron Kohavi, Diane Tang and Ya Xu, *Trustworthy Online Controlled Experiments* (2020); David Evans and Richard Schmalensee, *Matchmakers: The New Economics of Multisided Platforms* (2016). Papers: Rochet and Tirole (2003); Edelman, Ostrovsky and Schwarz (2007); Varian (2007); Ostrovsky and Schwarz (2009); Blake, Nosko and Tadelis (2015); Lewis and Rao (2015); Hall, Kendrick and Nosko (2015); Tadelis (2016); Cohen et al. (2016); Einav, Farronato and Levin (2016); Chen et al. (2019); Athey and Luca (2019); Athey, Chetty, Imbens and Kang (2019); Brynjolfsson, Collis and Eggers (2019); Fradkin, Grewal and Holtz (2021); Bajari et al. (2023).
+
+**Part 62, *Inside the Firm*.** Books: Edward Lazear and Michael Gibbs, *Personnel Economics in Practice* (3rd ed., 2014); Robert Gibbons and John Roberts, eds., *The Handbook of Organizational Economics* (2013); Jean Tirole, *The Theory of Corporate Finance* (2006). Papers: Modigliani and Miller (1958); Jensen and Meckling (1976); Myers and Majluf (1984); Jensen and Murphy (1990); Garicano (2000); Lazear (2000); Bertrand and Mullainathan (2001); Graham and Harvey (2001); Syverson (2004, 2011); Bloom and Van Reenen (2007); Bennedsen et al. (2007); Gabaix and Landier (2008); Gibbons and Henderson (2012); Bloom et al. (2013, 2015); Davis et al. (2014); Bruhn, Karlan and Schoar (2018); Benson, Li and Shue (2019).
 
 ## 4. What the series leaves out
 

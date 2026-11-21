@@ -231,4 +231,46 @@ PARTS = [
         also=(("Agora's platform module", "explainer/economics/agora/platform.py"),
               ("The Data Room: e-commerce's share of retail", "explainer/economics/data")),
     ),
+    Part(
+        n=62, level="U", widget="management", prereq=(4, 8, 13, 14, 23, 61),
+        question="Why are some firms so much better run than others, and can it be taught?",
+        story="In 2008 economists give free management consulting to a randomly chosen group of large textile plants "
+              "near Mumbai; within a year the treated plants' productivity is 17% higher, and the practices had been "
+              "free all along. On the Island, plants in the same industry differ nearly two to one in productivity, "
+              "less where buyers switch easily; management is scored on eighteen practices, and the score tracks "
+              "productivity. The viewer chooses among four practices for one plant (recording defects pays most, a "
+              "new loom loses money), and the Island's own experiment with 28 plants finds the effect, with the "
+              "spread seventeen firms allow. Piece rates work through effort and sorting (Safelite); the Peter "
+              "principle is tested (partly right); executive pay follows firm size and, under weak boards, luck; "
+              "the trade-off and the pecking order. After an intermission of American output per hour since 1947, "
+              "Jensen and Meckling's agency cost and family successions, private equity's jobs, Garicano's "
+              "hierarchies, working from home randomized, relational contracts and why practices do not travel, the "
+              "diversification discount and acquirers' losses, two new Dials, and generative AI at work.",
+        handoff="Part 63 turns from inside one firm to the links between all of them: supply chains and the economy "
+                "as a network.",
+        outside="Part 4: instruments and experiments; Part 8: the firm's technology; Part 13: adverse selection; "
+                "Part 14: incentives and relational contracts; Part 16: the winner's curse; Part 23: Modigliani and "
+                "Miller; Part 61: experiments inside firms.",
+        objectives={
+            "U": ["Explain why productivity differs so much across plants, and why competition narrows the spread.",
+                  "Explain how piece rates raise output through effort and through sorting.",
+                  "Explain the agency cost of separating ownership from control."],
+            "M": ["Design and analyse a management experiment randomized by firm, with clustered errors.",
+                  "Derive CEO pay's relation to firm size in Gabaix and Landier's assignment model.",
+                  "Find the best debt in the trade-off theory, and say why the pecking order differs."],
+            "D": ["Solve Garicano's knowledge hierarchy and say how communication and information costs move it.",
+                  "Show how selection biases the diversification discount, and how to correct for it."],
+            "I": ["Propose a management or pay change for a real organization, with the experiment that would test "
+                  "it."],
+        },
+        results=[
+            ("CES survival", r"\text{revenue}_i \propto \varphi_i^{\sigma - 1}"),
+            ("Perks", r"P^{*} = \frac{k}{\alpha} - 1"),
+            ("CEO pay and firm size", r"w(n) \propto S(n^{*})^{\beta/\alpha}\, S(n)^{\gamma - \beta/\alpha}"),
+            ("Span of control", r"n = \frac{e^{z_w}}{h}"),
+        ],
+        U=(0, 1, 2, 3, 5, 6, "s09_intermission", 8, 9, 11, 12, 15), D=(10, 13, 16), I=(4, 7, 14),
+        also=(("Agora's org module", "explainer/economics/agora/org.py"),
+              ("The Data Room: output per hour", "explainer/economics/data")),
+    ),
 ]
