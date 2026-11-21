@@ -1396,9 +1396,76 @@ DIALS = {d.key: d for d in [
                                    "(after Humphries and Weisdorf's 2016 working paper, published in the Economic "
                                    "Journal 129(623), 2019); compound growth computed here", checked="2026-11-19"),
          )),
-    Dial("discount", "social discount rate and the social cost of carbon", "percent a year; dollars per tonne",
-         (48, 58)),
-    Dial("energy_elasticity", "price elasticity of gasoline and of electricity", "", (48,)),
+    Dial("discount", "the social cost of carbon, and the discount rate behind it", "dollars per tonne of CO2 (each "
+         "study's own dollars)", (48, 58), status="contested", checked="2026-11-21",
+         meaning="what one more tonne of carbon dioxide emitted today costs, in today's money, summed over the "
+                 "centuries it stays in the air: about 30 to 90 dollars where future damages are discounted at 3 to "
+                 "5 percent, nearly 200 at 2 percent, and several hundred near zero; the models agree more than the "
+                 "headline numbers suggest once their discount rates are matched, and the choice of rate is partly "
+                 "ethics, partly evidence about returns, so the carbon price a country should set depends on it",
+         estimates=(
+             Estimate("Nordhaus (DICE-2016R)", 2017, "calibration", "the social cost of carbon for 2015, 2010 dollars",
+                      31.0, where="PNAS 114(7): 1518-1523, abstract", checked="2026-11-21"),
+             Estimate("Barrage and Nordhaus (DICE-2023, base)", 2024, "calibration", "for 2020, 2019 dollars; the "
+                      "cost-benefit optimum's is 50", 66.0, where="PNAS 121(13), Table 2", checked="2026-11-21"),
+             Estimate("Barrage and Nordhaus (DICE-2023, 2%)", 2024, "calibration", "for 2020, a constant 2 percent "
+                      "discount rate", 176.0, where="PNAS 121(13), Table 2", checked="2026-11-21"),
+             Estimate("Stern Review", 2006, "calibration", "PAGE2002, 0.1 percent pure time preference and log "
+                      "utility: over $300 a tonne of carbon", 82.0,
+                      where="as reported by Anthoff, Tol and Yohe and by Hope and Newbery; $300/tC is $82/tCO2",
+                      checked="2026-11-21"),
+             Estimate("Rennert et al. (GIVE)", 2022, "calibration", "for 2020, 2020 dollars, a 2 percent near-term "
+                      "rate; 5-95 percent range", 185.0, 44.0, 413.0, where="Nature 610: 687-692, abstract",
+                      checked="2026-11-21"),
+             Estimate("EPA", 2023, "review", "central estimate for 2020 emissions, 2020 dollars", 190.0,
+                      where="EPA's report on the social cost of greenhouse gases (2023), as summarized by RFF and EPA",
+                      checked="2026-11-21"),
+             Estimate("this film (Agora's DICE-style model)", 2026, "calibration", "for 2025, 2019 dollars: "
+                      "Ramsey discounting with rho 1.5 percent and eta 1.45", 63.0,
+                      where="videos/economics/econ48/compute.py, scc", checked="2026-11-21"),
+             Estimate("this film (the same, 2%)", 2026, "calibration", "a constant 2 percent discount rate", 183.0,
+                      where="videos/economics/econ48/compute.py, scc", checked="2026-11-21"),
+         )),
+    Dial("energy_elasticity", "price elasticity of gasoline and of electricity", "percent change in quantity per "
+         "percent change in price", (48,), status="depends on the setting", checked="2026-11-21",
+         meaning="small in the short run and larger in the long run, as people change cars, appliances and where "
+                 "they live: a fuel tax or a carbon price cuts emissions little in its first months and more over "
+                 "years, and how much depends on the period and on how the response is measured",
+         estimates=(
+             Estimate("Hughes, Knittel and Sperling (gasoline, 2001-06)", 2008, "regression", "US, short run",
+                      -0.055, -0.077, -0.034, where="The Energy Journal 29(1): 113-134, abstract",
+                      checked="2026-11-21"),
+             Estimate("Hughes, Knittel and Sperling (gasoline, 1975-80)", 2008, "regression", "US, short run",
+                      -0.275, -0.34, -0.21, where="The Energy Journal 29(1): 113-134, abstract",
+                      checked="2026-11-21"),
+             Estimate("Havranek, Irsova and Janda (gasoline)", 2012, "meta-analysis", "long run, corrected for "
+                      "publication bias", -0.31, where="Energy Economics 34(1): 201-207, abstract (as in Part 2)",
+                      checked="2026-11-18"),
+             Estimate("Deryugina, MacKay and Reif (electricity, 6 months)", 2020, "DiD", "Illinois towns whose "
+                      "prices changed with municipal aggregation", -0.09,
+                      where="AEJ: Applied 12(1): 86-114, abstract", checked="2026-11-21"),
+             Estimate("Deryugina, MacKay and Reif (electricity, 2 years)", 2020, "DiD", "the same, two years later",
+                      -0.27, where="AEJ: Applied 12(1): 86-114, abstract", checked="2026-11-21"),
+         )),
+    Dial("warming_output", "the effect of a warmer year on economic growth", "percentage points of growth per "
+         "degree C", (48,), status="contested", checked="2026-11-21",
+         meaning="how much a year one degree warmer than usual changes a country's growth: in hot, poor countries "
+                 "about a point lower, in cool, rich ones little or nothing; whether the losses add up over the "
+                 "decades or fade with adaptation is what separates small estimates of climate damage from large ones",
+         estimates=(
+             Estimate("Dell, Jones and Olken (poor countries)", 2012, "regression", "all countries, 1950-2003, "
+                      "country and year effects", -1.3, where="AEJ: Macroeconomics 4(3): 66-95, abstract",
+                      checked="2026-11-21"),
+             Estimate("this film (a country averaging 25 C)", 2026, "regression", "185 countries, 1961-2023, ERA5 "
+                      "temperature, World Bank growth; Burke, Hsiang and Miguel's specification", -1.03,
+                      where="videos/economics/econ48/compute.py, panel: b1 + 2 b2 x 25", checked="2026-11-21"),
+             Estimate("this film (poorer half, linear)", 2026, "regression", "the same data, Dell, Jones and Olken's "
+                      "interaction", -0.39, -0.97, 0.19,
+                      where="videos/economics/econ48/compute.py, panel: djo_poor +/- 1.96 s.e.",
+                      checked="2026-11-21"),
+             Estimate("this film (a country averaging 5 C)", 2026, "regression", "the same quadratic at 5 C", 0.39,
+                      where="videos/economics/econ48/compute.py, panel", checked="2026-11-21"),
+         )),
     Dial("loss_aversion", "loss aversion", "lambda: how many times more a loss is felt than an equal gain", (7, 45),
          status="contested", checked="2026-11-21",
          meaning="losses weigh more than equal gains in most settings, but how much depends on the setting and on how "
@@ -1507,6 +1574,28 @@ DIALS = {d.key: d for d in [
 
 # What each part shows without entering a row, and why: {part: [(what is shown, the reason)]}
 SHOWN = {
+    48: [
+        ("Simon and Ehrlich (1980); Sabin (2013); Kiel, Matheson and Golembiewski (2010)", "the wager stated; the "
+         "metals' real prices and every ten-year window computed from the Data Room"),
+        ("Hotelling (1931)", "the rule derived and computed on the Island; real resource prices from the Data Room"),
+        ("Gordon (1954); Smith (1969); Costello, Gaines and Lynham (2008)", "the fishery computed on the Island; "
+         "catch shares stated; FAO's stocks from the Data Room"),
+        ("Nordhaus (1992, 2017); Barrage and Nordhaus (2024)", "the DICE-style model built and fitted here; "
+         "DICE-2023's results stated and entered in the discount dial"),
+        ("Stern (2006); Rennert et al. (2022); EPA (2023)", "stated and entered in the discount dial"),
+        ("Weitzman (2009); Dietz et al. (2021)", "the dismal theorem's logic computed on the Island; tipping points "
+         "stated"),
+        ("British Columbia (2008-2025); the EU ETS", "stated"),
+        ("Nordhaus (2015); Acemoglu, Aghion, Bursztyn and Hemous (2012)", "toys computed on the Island; findings "
+         "stated"),
+        ("Dell, Jones and Olken (2012); Burke, Hsiang and Miguel (2015)", "stated and entered in the warming_output "
+         "dial; the specification run here on ERA5 and World Bank data"),
+        ("Barreca et al. (2016); Chen et al. (2013); Ebenstein et al. (2017)", "stated"),
+        ("Borenstein, Bushnell and Wolak (2002)", "stated; the merit order computed on the Island"),
+        ("Hughes, Knittel and Sperling (2008); Deryugina, MacKay and Reif (2020)", "stated and entered in the "
+         "energy_elasticity dial"),
+        ("Hubbert (1956); Deming (2023)", "the Called it? card; oil production from the Data Room"),
+    ],
     47: [
         ("Olken (2006, 2007, 2009)", "the audit trial's results stated and entered in the corruption_share dial; the "
          "design computed on the Island"),

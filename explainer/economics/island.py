@@ -1128,8 +1128,8 @@ TRUTHS = {
                   "perception_slope": 0.08, "seed": 48},
         # collective action (chapter 1): a policy worth 100 to a group, against resistance 1
         "olson": {"B": 100.0, "K": 1.0},
-        # the sugar contest (chapter 1): about 4,000 farms that gain about 2 billion dollars a year, 335 million consumers
-        # who lose about 3 billion (GAO 2024's ranges, rounded)
+        # the sugar contest (chapter 1): about 4,000 farms that gain about 2 billion dollars a year, 335 million
+        # consumers who lose about 3 billion (GAO 2024's ranges, rounded)
         "sugar": {"n_small": 4000, "B_small": 2.0e9, "n_large": 3.35e8, "B_large": 3.0e9},
         # Play it (chapter 2): ten players, 100 tokens each, a public good returning 0.3 per token to every player,
         # a prize of 400 shared by lobbying
@@ -1148,6 +1148,31 @@ TRUTHS = {
         # by ten points; growth measured with error of 4 points
         "conflict": {"countries": 41, "years": 19, "first": 1.0, "effect": -2.0, "feedback": -0.01,
                      "error_sd": 0.04, "seed": 53},
+    },
+    48: {
+        # an exhaustible resource (chapter 1): a stock of 200, linear demand with a choke price of 10, interest 5%;
+        # extraction costs 2 a unit, or start at 6 and fall 4% a year
+        "mine": {"stock": 200.0, "choke": 10.0, "slope": 1.0, "r": 0.05, "cost": 2.0},
+        "mine_falling": {"stock": 200.0, "choke": 10.0, "slope": 1.0, "r": 0.05, "cost": 6.0, "cost_growth": -0.04},
+        # the fishery (chapter 3): logistic growth 0.5 a year, capacity 1, price 1, cost 0.2 per unit of effort;
+        # boats enter at rate 2 while fishing pays; a quota of 0.1 a year
+        "fishery": {"growth": 0.5, "capacity": 1.0, "catchability": 1.0, "price": 1.0, "cost": 0.2},
+        "fleet": {"entry": 2.0, "stock0": 1.0, "effort0": 0.02, "quota": 0.1},
+        # fat tails (chapter 8): warming from doubled CO2 with median 3 degrees, spread 0.25 in logs; the fat tail is a
+        # Student t with 2 degrees of freedom; relative risk aversion 2
+        "tails": {"median": 3.0, "spread": 0.25, "df": 2.0, "eta": 2.0, "seed": 48},
+        # the club (chapter 10): 15 countries; abating costs about 1% of output and the damage avoided is about 3% of
+        # output if the whole world abates; non-members export a fifth of their output
+        "club": {"n": 15, "cost": 0.01, "damage": 0.03, "exports": 0.2, "size_sd": 0.8, "spread": 0.5, "seed": 0},
+        # directed technical change (chapter 11): clean and dirty inputs substitute with elasticity 3; clean starts
+        # at 60% of dirty's productivity; the sector that gets the scientists improves 2% a year
+        "dtc": {"eps": 3.0, "gamma": 0.02, "A_clean0": 0.6, "A_dirty0": 1.0},
+        # the Island's power system (chapter 13): GW of capacity and marginal costs in dollars per MWh; Dynamo owns
+        # the two combined-cycle gas plants; the market's price is capped at 250
+        "power": {"name": ("hydro", "nuclear", "coal", "gas A", "gas B", "peakers", "oil"),
+                  "capacity": (5.0, 8.0, 10.0, 7.0, 7.0, 5.0, 3.0),
+                  "cost": (5.0, 12.0, 35.0, 45.0, 48.0, 95.0, 160.0),
+                  "owner": (0, 0, 0, 1, 1, 0, 0), "cap_price": 250.0},
     },
 }
 

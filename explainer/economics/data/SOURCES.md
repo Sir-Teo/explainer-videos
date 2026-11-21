@@ -104,6 +104,14 @@ film that moves to a new vintage says so on screen.
 | `insure_china.csv` | Cai, de Janvry and Sadoulet's weather-insurance experiment in rural China: the package's extract of 1,410 rice-farming households in 166 villages, randomly assigned a simple or an intensive information session and a default; take-up, the session, the default, age, rice area, perceived disaster probability, risk aversion, literacy and the take-up of the household's friends in the earlier round | Cai, de Janvry and Sadoulet (2015), via the R package causaldata 0.1.4 (CRAN) | MIT (package); the data are the authors' | 2026-11-21 |
 | `panes_uruguay.csv` | Manacorda, Miguel and Vigorito's households near the eligibility cutoff of Uruguay's PANES transfer programme (2005-07): the standardized eligibility score, education, age, participation, and support for the government | Manacorda, Miguel and Vigorito (2011), via the R package causaldata 0.1.4 (CRAN) | MIT (package); the data are the authors' | 2026-11-21 |
 | `rdsenate_1914_2010.csv` | Cattaneo, Frandsen and Titiunik's 1,390 U.S. Senate elections, 1914-2010: state, year, Senate class, the Democratic margin at election t, the Democratic share of the vote at t and at the same seat's next election, open seats and midterms | Cattaneo, Frandsen and Titiunik (2015), via the R package rdrobust 4.1.2 (CRAN) | GPL-3 (package); the data are the authors' compilation of election returns | 2026-11-20 |
+| `co2_mlo_annual.csv` | Mauna Loa's annual mean atmospheric CO2, 1959-2025, in parts per million, with its uncertainty | NOAA Global Monitoring Laboratory (Scripps before 1974), co2_annmean_mlo.csv | U.S. government work, freely available with credit to NOAA GML | 2026-11-21 |
+| `hadcrut5_global_annual.csv` | HadCRUT5's global mean surface temperature anomaly, 1850-2025, relative to 1961-1990, with 95% limits (analysis version 5.0.2.0) | Met Office Hadley Centre and CRU (Morice et al. 2021) | Open Government Licence v3 | 2026-11-21 |
+| `gcp_co2_world.csv` | the world's CO2 emissions in billions of tonnes a year: fossil fuels and industry, 1750-2025, and land-use change, 1850-2025 | Global Carbon Budget 2026, via Our World in Data (annual-co2-emissions-per-country, co2-land-use) | CC BY 4.0 | 2026-11-21 |
+| `era5_country_annual.csv` | annual mean surface air temperature for 193 countries, 1940-2025 (complete years), the mean of ERA5's monthly latitude-weighted country averages | Copernicus Climate Change Service (ERA5), via Our World in Data (average-monthly-surface-temperature); annual means computed here | CC BY 4.0; Copernicus licence (contains modified Copernicus Climate Change Service information) | 2026-11-21 |
+| `wdi_gdppc_kd.csv` | GDP per head in constant 2015 US dollars (NY.GDP.PCAP.KD), 1960-2025, for 213 countries | World Bank, World Development Indicators | CC BY 4.0 | 2026-11-21 |
+| `solar_pv.csv` | solar photovoltaic module prices in constant 2025 dollars per watt, 1975-2025, and the world's installed solar capacity in gigawatts, 2000-2025 | IRENA and other sources, via Our World in Data (solar-pv-prices, installed-solar-pv-capacity) | CC BY 4.0 | 2026-11-21 |
+| `fao_fish_stocks.csv` | the shares of the world's assessed fish stocks within biologically sustainable levels and overexploited, 1974-2021 | FAO, The State of World Fisheries and Aquaculture (2025), via Our World in Data | CC BY 4.0; FAO's terms | 2026-11-21 |
+| `oil_production.csv` | oil production (crude, shale, oil sands, condensates and natural gas liquids) in terawatt-hours a year, 1900-2025, for the world and the United States | Energy Institute, Statistical Review of World Energy (2026), Etemad and Luciani (1991) and the U.S. EIA, via Our World in Data (oil-production-by-country) | CC BY 4.0 | 2026-11-21 |
 | `wdi_state_2015_2025.csv` | for each country, the latest year from 2015 of tax revenue as a percent of GDP (GC.TAX.TOTL.GD.ZS), the Worldwide Governance Indicators' control of corruption estimate (GOV_WGI_CC.EST, about -2.5 to +2.5) and GDP per head at PPP in constant 2021 dollars (NY.GDP.PCAP.PP.KD), each with its year | World Bank, World Development Indicators and Worldwide Governance Indicators | CC BY 4.0 | 2026-11-20 |
 
 The raw Maddison workbook (`mpd2023_web.xlsx`, dataverse file 421302) had SHA-256
@@ -404,3 +412,17 @@ publication, the copy that was read and the date the transcription was checked:
 | `cycles_47` | the political business cycle; delegation to a conservative central bank (Part 47) | 2026-11-21 |
 | `practice_47` | the Treasury's 2016 short-term forecast and what followed (Part 47) | 2026-11-21 |
 | `frontier47` | populist leaders and the economy; V-Dem (Part 47) | 2026-11-21 |
+| `bet_1980` | Simon and Ehrlich's wager and Kiel, Matheson and Golembiewski's rerun (Part 48) | 2026-11-21 |
+| `hotelling_1931` | Hotelling's rule (Part 48) | 2026-11-21 |
+| `fish_48` | Costello, Gaines and Lynham on catch shares (Part 48) | 2026-11-21 |
+| `dice_2023` | DICE-2023's damages, control rates, temperatures and social cost of carbon (Part 48) | 2026-11-21 |
+| `scc_us` | Rennert et al.'s and EPA's social cost of carbon (Part 48) | 2026-11-21 |
+| `stern_2006` | the Stern Review's discounting and social cost of carbon (Part 48) | 2026-11-21 |
+| `weitzman_2009` | Weitzman's dismal theorem and Dietz et al.'s tipping points (Part 48) | 2026-11-21 |
+| `instruments_48` | British Columbia's carbon tax and the EU ETS's prices (Part 48) | 2026-11-21 |
+| `clubs_2015` | Nordhaus's climate clubs and Acemoglu et al.'s directed technical change (Part 48) | 2026-11-21 |
+| `damages_48` | Dell, Jones and Olken; Burke, Hsiang and Miguel (Part 48) | 2026-11-21 |
+| `health_48` | heat, air conditioning and the Huai River (Part 48) | 2026-11-21 |
+| `california_2000` | Borenstein, Bushnell and Wolak on California's electricity market (Part 48) | 2026-11-21 |
+| `elasticity_48` | gasoline and electricity price elasticities (Part 48) | 2026-11-21 |
+| `hubbert_1956` | Hubbert's peak and Deming's review (Part 48) | 2026-11-21 |

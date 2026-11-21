@@ -4472,6 +4472,203 @@ FRONTIER47 = Table(
     checked="2026-11-21",
     data={"leaders": 51, "loss": 10, "years": 15, "subdistricts": 157, "people_m": 19},
 )
+
+# ---------------------------------------------------------------------------
+# Part 48
+# ---------------------------------------------------------------------------
+BET_1980 = Table(
+    key="bet_1980",
+    cite="Paul Sabin, The Bet: Paul Ehrlich, Julian Simon, and Our Gamble over Earth's Future (Yale, 2013); Kiel, "
+         "Katherine, Victor A. Matheson and Kevin Golembiewski, \"Luck or Skill? An Examination of the Ehrlich-Simon "
+         "Bet\", Ecological Economics 69(7), 2010, 1365-1367",
+    tag="Sabin, The Bet (2013); Kiel, Matheson and Golembiewski (2010)",
+    where="the wager: formalized 29 September 1980, settled 29 September 1990; $200 in each of chromium, copper, "
+          "nickel, tin and tungsten, $1,000 in all; all five real prices fell; in October 1990 Ehrlich mailed Simon a "
+          "cheque for $576.07; Kiel et al., Table 1: over 1900-2008 Ehrlich would have won 61.6% of the 99 ten-year "
+          "intervals",
+    read="the accounts of the wager (NPR, Our World in Data, Wikipedia's summary of Sabin) and the paper's abstract "
+         "and Table 1 as quoted",
+    checked="2026-11-21",
+    data={"stake": 1000, "each": 200, "cheque": 576.07, "kiel_share": 61.6, "kiel_n": 99, "kiel_from": 1900,
+          "kiel_to": 2008},
+)
+HOTELLING_1931 = Table(
+    key="hotelling_1931",
+    cite="Harold Hotelling, \"The Economics of Exhaustible Resources\", Journal of Political Economy 39(2), 1931, "
+         "137-175",
+    tag="Hotelling, JPE (1931)",
+    where="the rule: under competition the net price (price less extraction cost) of an exhaustible resource rises "
+          "at the rate of interest",
+    read="the article's statement of the rule, as taught",
+    checked="2026-11-21",
+)
+FISH_48 = Table(
+    key="fish_48",
+    cite="Christopher Costello, Steven D. Gaines and John Lynham, \"Can Catch Shares Prevent Fisheries Collapse?\", "
+         "Science 321(5896), 2008, 1678-1681; FAO, The State of World Fisheries and Aquaculture (2025), via Our World "
+         "in Data",
+    tag="Costello, Gaines and Lynham, Science (2008); FAO via OWID",
+    where="Costello et al.: over 11,000 fisheries worldwide; catch shares (individual transferable quotas) halt, and "
+          "even reverse, the trend toward collapse; by 2003 the share of ITQ fisheries that had collapsed was half "
+          "that of the others",
+    read="the abstract, UCSB's release and Nature's research highlight",
+    checked="2026-11-21",
+    data={"fisheries": 11000},
+)
+DICE_2023 = Table(
+    key="dice_2023",
+    cite="Lint Barrage and William Nordhaus, \"Policies, Projections, and the Social Cost of Carbon: Results from "
+         "the DICE-2023 Model\", Proceedings of the National Academy of Sciences 121(13), 2024, e2312030121; William "
+         "D. Nordhaus, \"Revisiting the Social Cost of Carbon\", PNAS 114(7), 2017, 1518-1523",
+    tag="Barrage and Nordhaus, PNAS (2024); Nordhaus, PNAS (2017)",
+    where="DICE-2023: damages 3.1% of output at 3 C and 7.0% at 4.5 C (about twice DICE-2016's coefficient); "
+          "ECS 3.0 C, TCR 1.8 C; backstop $515/tCO2 in 2050 (2019$); Table 1: control rates base 5%, 10%, 22% and "
+          "cost-benefit optimal 5%, 39%, 84% in 2020, 2050, 2100; Table 2: the 2020 SCC (2019$) is $66 in the base "
+          "run, $50 cost-benefit optimal, $75 under a 2 C limit, $124 with the alternative damages, and $485, $176, "
+          "$87, $49, $32 at constant discount rates of 1-5%; 2100 warming 3.6 C base, 2.6 C optimal (from 1765); "
+          "the optimal carbon price reaches $115 by 2050; the optimum raises the present value of consumption by "
+          "$120 trillion; DICE-2016R's SCC was $31 (2010$, for 2015)",
+    read="the published article (PNAS, open access) and the 2017 article's abstract",
+    checked="2026-11-21",
+    data={"scc_base": 66, "scc_cb": 50, "scc_2c": 75, "scc_alt": 124, "scc_r": {1: 485, 2: 176, 3: 87, 4: 49, 5: 32},
+          "t2100_base": 3.6, "t2100_cb": 2.6, "price2050": 115, "dmg3": 3.1, "dmg45": 7.0, "ecs": 3.0, "tcr": 1.8,
+          "backstop": 515, "mu2050": 39, "mu2100": 84, "wealth": 120, "scc_2016": 31},
+)
+SCC_US = Table(
+    key="scc_us",
+    cite="Kevin Rennert et al., \"Comprehensive Evidence Implies a Higher Social Cost of CO2\", Nature 610, 2022, "
+         "687-692; U.S. Environmental Protection Agency, Report on the Social Cost of Greenhouse Gases (2023)",
+    tag="Rennert et al., Nature (2022); EPA (2023)",
+    where="Rennert et al.: $185 per tonne of CO2 (5-95%: $44-413), 2020 dollars, a near-term discount rate of 2%; "
+          "EPA's central estimate for 2020 emissions, $190 a tonne, more than three times the earlier interagency "
+          "figure of $51",
+    read="the abstracts and RFF's and EPA's summaries",
+    checked="2026-11-21",
+    data={"rennert": 185, "rennert_lo": 44, "rennert_hi": 413, "epa": 190, "iwg": 51},
+)
+STERN_2006 = Table(
+    key="stern_2006",
+    cite="Nicholas Stern, The Economics of Climate Change: The Stern Review (HM Treasury, 2006; Cambridge, 2007)",
+    tag="The Stern Review (2006)",
+    where="a pure rate of time preference of 0.1% a year with logarithmic utility (an elasticity of 1); a social cost "
+          "of carbon of over $300 a tonne of carbon (over $80 a tonne of CO2), computed with PAGE2002",
+    read="Hope and Newbery's and Anthoff, Tol and Yohe's accounts of the Review's discounting and SCC",
+    checked="2026-11-21",
+    data={"rho": 0.1, "eta": 1.0, "scc_tc": 300},
+)
+WEITZMAN_2009 = Table(
+    key="weitzman_2009",
+    cite="Martin L. Weitzman, \"On Modeling and Interpreting the Economics of Catastrophic Climate Change\", Review "
+         "of Economics and Statistics 91(1), 2009, 1-19; Simon Dietz, James Rising, Thomas Stoerk and Gernot Wagner, "
+         "\"Economic Impacts of Tipping Points in the Climate System\", PNAS 118(34), 2021, e2103081118",
+    tag="Weitzman, REStat (2009); Dietz et al., PNAS (2021)",
+    where="Weitzman's dismal theorem: with fat-tailed uncertainty about climate sensitivity, expected marginal "
+          "utility can be unbounded, so the willingness to pay to avoid catastrophe is driven by the tail; Dietz et "
+          "al.: eight tipping points together raise the SCC by about 25% in the main specification, with about a 10% "
+          "chance of more than doubling it",
+    read="the abstracts",
+    checked="2026-11-21",
+    data={"tipping": 25, "double": 10},
+)
+INSTRUMENTS_48 = Table(
+    key="instruments_48",
+    cite="British Columbia, Budget 2008 backgrounder on the carbon tax and the Province's notice of its elimination "
+         "(2025); reporting of the EU Emissions Trading System's prices (S&P Global, Reuters, BNP Paribas, 2023)",
+    tag="B.C. Ministry of Finance; S&P Global, Reuters (2023)",
+    where="B.C.: a revenue-neutral tax from 1 July 2008 at C$10 a tonne, rising C$5 a year to C$30 in 2012 (offset by "
+          "income-tax cuts), C$40 in 2019, C$80 in 2024, eliminated 1 April 2025; the EU ETS began in 2005 and its "
+          "allowances first traded above EUR 100 a tonne on 21 February 2023, after long years below 25",
+    read="the province's 2008 backgrounder and 2025 notice as reported; the trade press on 20-21 February 2023",
+    checked="2026-11-21",
+    data={"bc_2008": 10, "bc_2012": 30, "bc_2019": 40, "bc_2024": 80, "eu_peak": 100, "eu_start": 2005},
+)
+CLUBS_2015 = Table(
+    key="clubs_2015",
+    cite="William Nordhaus, \"Climate Clubs: Overcoming Free-Riding in International Climate Policy\", American "
+         "Economic Review 105(4), 2015, 1339-1370; Daron Acemoglu, Philippe Aghion, Leonardo Bursztyn and David "
+         "Hemous, \"The Environment and Directed Technical Change\", American Economic Review 102(1), 2012, 131-166",
+    tag="Nordhaus, AER (2015); Acemoglu et al., AER (2012)",
+    where="Nordhaus: absent sanctions on non-participants, the only stable coalitions are those that abate very "
+          "little; a club penalizing non-members can do better; Acemoglu et al.: with clean and dirty inputs strong "
+          "substitutes, a temporary carbon tax with research subsidies can redirect innovation for good",
+    read="the abstracts",
+    checked="2026-11-21",
+)
+DAMAGES_48 = Table(
+    key="damages_48",
+    cite="Melissa Dell, Benjamin F. Jones and Benjamin A. Olken, \"Temperature Shocks and Economic Growth: Evidence "
+         "from the Last Half Century\", AEJ: Macroeconomics 4(3), 2012, 66-95; Marshall Burke, Solomon M. Hsiang and "
+         "Edward Miguel, \"Global Non-linear Effect of Temperature on Economic Production\", Nature 527, 2015, 235-239",
+    tag="Dell, Jones and Olken (2012); Burke, Hsiang and Miguel (2015)",
+    where="DJO: all countries, 1950-2003; a 1 C warmer year cut growth in poor countries by about 1.3 percentage "
+          "points, with no robust effect in rich countries, and raised the chance of an irregular change of leader "
+          "by 3.1 points; BHM: 166 countries, 1960-2010; productivity peaks at an annual average of 13 C; unmitigated "
+          "warming lowers projected world output by 2100 by more than a fifth",
+    read="the published abstracts and the authors' summaries",
+    checked="2026-11-21",
+    data={"djo": 1.3, "djo_leaders": 3.1, "bhm_opt": 13, "bhm_n": 166},
+)
+HEALTH_48 = Table(
+    key="health_48",
+    cite="Alan Barreca, Karen Clay, Olivier Deschenes, Michael Greenstone and Joseph S. Shapiro, \"Adapting to "
+         "Climate Change\", Journal of Political Economy 124(1), 2016, 105-159; Yuyu Chen, Avraham Ebenstein, Michael "
+         "Greenstone and Hongbin Li, PNAS 110(32), 2013, 12936-12941; Avraham Ebenstein, Maoyong Fan, Michael "
+         "Greenstone, Guojun He and Maigeng Zhou, PNAS 114(39), 2017, 10384-10389",
+    tag="Barreca et al., JPE (2016); Chen et al. (2013), Ebenstein et al. (2017), PNAS",
+    where="Barreca et al.: the mortality effect of days above 80 F in the US fell by about 75%, chiefly through "
+          "residential air conditioning; days above 90 F caused about 600 premature deaths a year in 1960-2004 against "
+          "about 3,600 under the pre-1960 relationship; Chen et al.: north of the Huai River total suspended "
+          "particulates 184 ug/m3 higher and life expectancy 5.5 years lower; Ebenstein et al.: PM10 41.7 ug/m3 "
+          "higher and life expectancy 3.1 years lower just north of the river; 10 ug/m3 more PM10 costs 0.64 years",
+    read="the abstracts",
+    checked="2026-11-21",
+    data={"ac": 75, "deaths_now": 600, "deaths_then": 3600, "tsp": 184, "years_2013": 5.5, "pm10": 41.7,
+          "years_2017": 3.1, "per10": 0.64},
+)
+CALIFORNIA_2000 = Table(
+    key="california_2000",
+    cite="Severin Borenstein, James B. Bushnell and Frank A. Wolak, \"Measuring Market Inefficiencies in "
+         "California's Restructured Wholesale Electricity Market\", American Economic Review 92(5), 2002, 1376-1405",
+    tag="Borenstein, Bushnell and Wolak, AER (2002)",
+    where="summer (June to October) wholesale expenditures rose from $2.04 billion in 1999 to $8.98 billion in 2000; "
+          "of the increase 21% was production costs, 20% competitive rents and 59% market power; market power's share "
+          "of expenditures rose from 25% in summer 1998 to 50% in summer 2000",
+    read="the abstract and the working paper's summary",
+    checked="2026-11-21",
+    data={"spend_1999": 2.04, "spend_2000": 8.98, "costs": 21, "rents": 20, "power": 59, "share_1998": 25,
+          "share_2000": 50},
+)
+ELASTICITY_48 = Table(
+    key="elasticity_48",
+    cite="Jonathan E. Hughes, Christopher R. Knittel and Daniel Sperling, \"Evidence of a Shift in the Short-Run "
+         "Price Elasticity of Gasoline Demand\", The Energy Journal 29(1), 2008, 113-134; Tatyana Deryugina, "
+         "Alexander MacKay and Julian Reif, \"The Long-Run Dynamics of Electricity Demand: Evidence from Municipal "
+         "Aggregation\", AEJ: Applied Economics 12(1), 2020, 86-114",
+    tag="Hughes, Knittel and Sperling (2008); Deryugina, MacKay and Reif (2020)",
+    where="gasoline: short-run elasticities of -0.034 to -0.077 in 2001-06 against -0.21 to -0.34 in 1975-80; "
+          "electricity: -0.09 in the first six months, growing to -0.27 two years later",
+    read="the abstracts",
+    checked="2026-11-21",
+    data={"gas_new_lo": -0.034, "gas_new_hi": -0.077, "gas_old_lo": -0.21, "gas_old_hi": -0.34, "elec_short": -0.09,
+          "elec_two": -0.27},
+)
+HUBBERT_1956 = Table(
+    key="hubbert_1956",
+    cite="M. King Hubbert, \"Nuclear Energy and the Fossil Fuels\", American Petroleum Institute, San Antonio, "
+         "March 1956; David Deming, AAPG Bulletin 107(6), 2023",
+    tag="Hubbert (1956); Deming, AAPG Bulletin (2023)",
+    where="Hubbert put the peak of US oil production between 1965 (most likely) and 1970 (an upper bound); it peaked "
+          "in 1970 and fell for 38 years to a low of 1.8 billion barrels in 2008; in 2018 the US produced 4.0 billion "
+          "barrels, above the 1970 peak (crude oil, Deming)",
+    read="accounts of the 1956 paper and Deming's 2023 review",
+    checked="2026-11-21",
+    data={"most_likely": 1965, "upper": 1970, "peak": 1970, "low": 2008, "low_bbl": 1.8, "passed": 2018,
+          "passed_bbl": 4.0},
+)
+
+PART48 = (BET_1980, HOTELLING_1931, FISH_48, DICE_2023, SCC_US, STERN_2006, WEITZMAN_2009, INSTRUMENTS_48,
+          CLUBS_2015, DAMAGES_48, HEALTH_48, CALIFORNIA_2000, ELASTICITY_48, HUBBERT_1956)
+
 PART47 = (OLKEN_2007, OLSON_1965, RENTS_47, VOTERS_47, CAPTURE_47, AGENCY_47, CORRUPTION_47, FRANCHISE_47, STATE_47,
           CONFLICT_47, MEDIA_47, CYCLES_47, PRACTICE_47, FRONTIER47)
 PART46 = (COHEN_DUPAS_2010, POVERTY_LINES, TRAPS_46, DUAL_46, CREDIT_46, CASH_46, GRADUATION_2015, SCHOOLS_46,
@@ -4486,4 +4683,4 @@ PART41 = (LAFFER_1974, HARBERGER_1962, RAMSEY_1927, MIRRLEES_1971, DIAMOND_SAEZ_
           CLK_2009, CAPITAL_TAX, HAVENS, EVASION, FRONTIER41, TCJA_2017)
 PART7 = (BERNOULLI_1738, SAMUELSON_1937, ALLAIS_1953, ELLSBERG_1961, RABIN_2000, THALER_1981, HOLT_LAURY_2005,
          HAYDEN_PLATT_2009, MADRIAN_SHEA_2001, THALER_BENARTZI_2004, BARSKY_1997, POST_2008, MEHRA_PRESCOTT_1985)
-ALL = {t.key: t for t in (*PART1, *PART3, *PART4, *PART5, *PART6, *PART7, *PART8, *PART9, *PART10, *PART11, *PART12, *PART13, *PART14, *PART15, *PART16, *PART17, *PART18, *PART19, *PART21, *PART22, *PART25, *PART26, *PART35, *PART36, *PART37, *PART38, *PART39, *PART40, *PART41, *PART42, *PART43, *PART44, *PART45, *PART46, *PART47)}
+ALL = {t.key: t for t in (*PART1, *PART3, *PART4, *PART5, *PART6, *PART7, *PART8, *PART9, *PART10, *PART11, *PART12, *PART13, *PART14, *PART15, *PART16, *PART17, *PART18, *PART19, *PART21, *PART22, *PART25, *PART26, *PART35, *PART36, *PART37, *PART38, *PART39, *PART40, *PART41, *PART42, *PART43, *PART44, *PART45, *PART46, *PART47, *PART48)}

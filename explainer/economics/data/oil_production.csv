@@ -1,0 +1,253 @@
+entity,year,twh
+United States,1900,98.646
+United States,1901,107.601
+United States,1902,137.641
+United States,1903,155.784
+United States,1904,181.556
+United States,1905,208.898
+United States,1906,196.152
+United States,1907,257.558
+United States,1908,276.841
+United States,1909,284.039
+United States,1910,324.954
+United States,1911,341.841
+United States,1912,345.702
+United States,1913,385.255
+United States,1914,412.109
+United States,1915,435.892
+United States,1916,466.363
+United States,1917,519.977
+United States,1918,551.925
+United States,1919,605.911
+United States,1920,722.479
+United States,1921,752.67
+United States,1922,888.707
+United States,1923,1167.315
+United States,1924,1140.019
+United States,1925,1216.754
+United States,1926,1238.293
+United States,1927,1436.142
+United States,1928,1437.375
+United States,1929,1606.149
+United States,1930,1431.851
+United States,1931,1357.023
+United States,1932,1251.911
+United States,1933,1425.094
+United States,1934,1429.688
+United States,1935,1566.27
+United States,1936,1728.288
+United States,1937,2010.42
+United States,1938,1908.564
+United States,1939,1988.102
+United States,1940,2126.813
+United States,1941,2203.839
+United States,1942,2179.346
+United States,1943,2365.635
+United States,1944,2637.114
+United States,1945,2693.299
+United States,1946,2725.177
+United States,1947,2918.572
+United States,1948,3175.071
+United States,1949,2894.928
+United States,1950,3101.814
+United States,1951,3532.659
+United States,1952,3598.868
+United States,1953,3704.562
+United States,1954,3638.399
+United States,1955,3904.703
+United States,1956,4113.508
+United States,1957,4112.903
+United States,1958,3849.007
+United States,1959,4046.414
+United States,1960,4046.949
+United States,1961,4120.544
+United States,1962,4206.094
+United States,1963,4326.372
+United States,1964,4379.963
+United States,1965,4974.086
+United States,1966,5286.287
+United States,1967,5631.498
+United States,1968,5848.498
+United States,1969,5947.02
+United States,1970,6204.487
+United States,1971,6116.076
+United States,1972,6139.336
+United States,1973,5985.406
+United States,1974,5715.055
+United States,1975,5463.43
+United States,1976,5326.305
+United States,1977,5382.408
+United States,1978,5631.312
+United States,1979,5547.409
+United States,1980,5584.649
+United States,1981,5568.406
+United States,1982,5590.811
+United States,1983,5616.855
+United States,1984,5770.069
+United States,1985,5799.941
+United States,1986,5609.492
+United States,1987,5434.237
+United States,1988,5338.891
+United States,1989,4989.655
+United States,1990,4845.259
+United States,1991,4918.289
+United States,1992,4803.56
+United States,1993,4617.185
+United States,1994,4506.618
+United States,1995,4460.73
+United States,1996,4443.334
+United States,1997,4418.819
+United States,1998,4281.347
+United States,1999,4101.04
+United States,2000,4042.373
+United States,2001,4006.665
+United States,2002,3976.362
+United States,2003,3867.633
+United States,2004,3783.905
+United States,2005,3593.534
+United States,2006,3541.373
+United States,2007,3546.877
+United States,2008,3514.844
+United States,2009,3751.68
+United States,2010,3874.478
+United States,2011,4028.887
+United States,2012,4597.08
+United States,2013,5216.947
+United States,2014,6095.636
+United States,2015,6591.239
+United States,2016,6314.941
+United States,2017,6679.736
+United States,2018,7788.324
+United States,2019,8735.928
+United States,2020,8306.166
+United States,2021,8351.302
+United States,2022,8917.285
+United States,2023,9652.758
+United States,2024,10035.543
+United States,2025,10349.585
+World,1900,234.949
+World,1901,262.838
+World,1902,285.389
+World,1903,305.043
+World,1904,342.538
+World,1905,336.898
+World,1906,335.549
+World,1907,414.9
+World,1908,448.534
+World,1909,471.317
+World,1910,512.639
+World,1911,543.005
+World,1912,551.75
+World,1913,608.33
+World,1914,626.59
+World,1915,672.563
+World,1916,721.49
+World,1917,797.539
+World,1918,791.817
+World,1919,901.779
+World,1920,1155.382
+World,1921,1250.841
+World,1922,1396.228
+World,1923,1651.332
+World,1924,1646.668
+World,1925,1726.508
+World,1926,1771.993
+World,1927,2023.12
+World,1928,2124.592
+World,1929,2381.731
+World,1930,2271.234
+World,1931,2197.512
+World,1932,2097.377
+World,1933,2290.273
+World,1934,2416.888
+World,1935,2627.659
+World,1936,2861.701
+World,1937,3257.144
+World,1938,3179.63
+World,1939,3312.782
+World,1940,3419.488
+World,1941,3522.425
+World,1942,3315.608
+World,1943,3568.095
+World,1944,4098.133
+World,1945,4093.341
+World,1946,4354.179
+World,1947,4796.538
+World,1948,5428.873
+World,1949,5397.739
+World,1950,6055.578
+World,1951,6867.236
+World,1952,7218.299
+World,1953,7632.513
+World,1954,7990.694
+World,1955,8955.484
+World,1956,9745.858
+World,1957,10270.768
+World,1958,10527.976
+World,1959,11360.858
+World,1960,12240.842
+World,1961,13029.392
+World,1962,14133.671
+World,1963,15164.044
+World,1964,16376.738
+World,1965,18231.082
+World,1966,19796.81
+World,1967,21238.463
+World,1968,23170.031
+World,1969,24940.334
+World,1970,27433.883
+World,1971,29000.791
+World,1972,30649.97
+World,1973,33445.12
+World,1974,33519.68
+World,1975,31837.768
+World,1976,34590.74
+World,1977,35798.867
+World,1978,36124.168
+World,1979,37653.043
+World,1980,35949.586
+World,1981,33858.336
+World,1982,32518.732
+World,1983,32122.473
+World,1984,32752.219
+World,1985,32465.682
+World,1986,34069.39
+World,1987,34148.086
+World,1988,35607.57
+World,1989,36037.48
+World,1990,36726.777
+World,1991,36627.707
+World,1992,37157.996
+World,1993,37105.156
+World,1994,37619.203
+World,1995,38135.516
+World,1996,39151.24
+World,1997,40023.195
+World,1998,41034.703
+World,1999,40104.688
+World,2000,41854.137
+World,2001,41841.957
+World,2002,41337.355
+World,2003,43173.074
+World,2004,45335.4
+World,2005,45723.043
+World,2006,46090.08
+World,2007,45991.156
+World,2008,46480.855
+World,2009,45325.113
+World,2010,46225.66
+World,2011,46611.812
+World,2012,47885.32
+World,2013,47959.934
+World,2014,49086.574
+World,2015,50739.492
+World,2016,50943.246
+World,2017,51010.57
+World,2018,52217.19
+World,2019,52177.61
+World,2020,48732.34
+World,2021,49332.04
+World,2022,51576.973
+World,2023,52583.195
+World,2024,52977.074
+World,2025,54673.586

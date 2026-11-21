@@ -1102,6 +1102,119 @@ DATASETS = {
         "vintage": "2026-11-21",
         "files": ("wdi_poverty_1981_2025.csv", "wdi_agriculture_2015_2025.csv"),
     },
+    "noaa_co2": {
+        "title": "Atmospheric carbon dioxide at Mauna Loa, annual means, 1959-2025",
+        "publisher": "NOAA Global Monitoring Laboratory (with Scripps Institution of Oceanography before 1974)",
+        "citation": "Lan, X., Tans, P. and Thoning, K. W., Trends in globally-averaged CO2 determined from NOAA Global "
+                    "Monitoring Laboratory measurements; Mauna Loa annual mean CO2 (co2_annmean_mlo.csv, file created "
+                    "19 November 2026), retrieved 2026-11-21",
+        "short": "NOAA GML, Mauna Loa CO2",
+        "url": "https://gml.noaa.gov/webdata/ccgg/trends/co2/co2_annmean_mlo.csv",
+        "licence": "U.S. government work, made freely available by NOAA GML (cite the providers)",
+        "units": "parts per million (dry air mole fraction)",
+        "vintage": "2026-11-21",
+        "files": ("co2_mlo_annual.csv",),
+    },
+    "hadcrut5": {
+        "title": "HadCRUT5 global mean surface temperature anomaly, annual, 1850-2025",
+        "publisher": "Met Office Hadley Centre and the Climatic Research Unit, University of East Anglia",
+        "citation": "Morice, C. P. et al. (2021), An updated assessment of near-surface temperature change from "
+                    "1850: the HadCRUT5 data set, JGR Atmospheres 126; HadCRUT.5.0.2.0 analysis, global annual "
+                    "summary series, retrieved 2026-11-21",
+        "short": "HadCRUT5 (Met Office and CRU)",
+        "url": "https://www.metoffice.gov.uk/hadobs/hadcrut5/data/HadCRUT.5.0.2.0/analysis/diagnostics/"
+               "HadCRUT.5.0.2.0.analysis.summary_series.global.annual.csv",
+        "licence": "Open Government Licence v3 (Crown copyright, Met Office)",
+        "units": "degrees C relative to 1961-1990, with 95% limits",
+        "vintage": "2026-11-21",
+        "sha256": "a1441ab5aef8f3baf43cca417bca271f6d674d4f235ea01129f0432c948882e0",
+        "files": ("hadcrut5_global_annual.csv",),
+    },
+    "gcp_co2": {
+        "title": "World emissions of carbon dioxide from fossil fuels and industry (1750-2025) and from land-use "
+                 "change (1850-2025)",
+        "publisher": "Global Carbon Project (Global Carbon Budget 2026); Our World in Data (compilation)",
+        "citation": "Global Carbon Budget (2026), processed by Our World in Data, grapher "
+                    "annual-co2-emissions-per-country and co2-land-use (entity World), retrieved 2026-11-21",
+        "short": "Global Carbon Budget 2026, via Our World in Data",
+        "url": "https://ourworldindata.org/grapher/{}.csv?v=1&csvType=full&useColumnShortNames=true",
+        "licence": "CC BY 4.0",
+        "units": "tonnes of CO2 a year",
+        "vintage": "2026-11-21",
+        "files": ("gcp_co2_world.csv",),
+    },
+    "era5_temp": {
+        "title": "Average surface air temperature by country and year, 1940-2025, from ERA5 (annual means of monthly "
+                 "values, complete years only)",
+        "publisher": "Copernicus Climate Change Service (ERA5); Our World in Data (country averages)",
+        "citation": "Contains modified Copernicus Climate Change Service information (2026): ERA5 monthly averaged 2 m "
+                    "temperature, latitude-weighted country averages by Our World in Data, grapher "
+                    "average-monthly-surface-temperature, retrieved 2026-11-21; annual means computed here",
+        "short": "Copernicus ERA5, via Our World in Data",
+        "url": "https://ourworldindata.org/grapher/{}.csv?v=1&csvType=full&useColumnShortNames=true",
+        "licence": "CC BY 4.0 (Our World in Data); Copernicus licence (free, with attribution)",
+        "units": "degrees C, annual mean of the twelve monthly means",
+        "vintage": "2026-11-21",
+        "sha256": "67a1b3668b3ff8ef8b08ddb677cbfa3e8ec23bb335b5b34f1195f22dd4f82c8e",
+        "files": ("era5_country_annual.csv",),
+    },
+    "wdi_gdp_kd": {
+        "title": "GDP per head in constant 2015 US dollars, by country, 1960-2025",
+        "publisher": "World Bank (World Development Indicators)",
+        "citation": "World Bank, World Development Indicators, NY.GDP.PCAP.KD (API, last updated 11 November 2026), "
+                    "retrieved 2026-11-21",
+        "short": "World Bank WDI, Nov 2026",
+        "url": "https://api.worldbank.org/v2/country/all/indicator/NY.GDP.PCAP.KD?format=json&date=1960:2025&"
+               "per_page=20000",
+        "licence": "CC BY 4.0 (World Bank open data)",
+        "units": "constant 2015 US dollars",
+        "vintage": "2026-11-21",
+        "sha256": "2f28c4d403c136cfb6805e339144ccfca163347bea844f0c139de9ed092c024b",
+        "files": ("wdi_gdppc_kd.csv",),
+    },
+    "solar_pv": {
+        "title": "Solar photovoltaic module prices (1975-2025) and the world's installed solar capacity (2000-2025)",
+        "publisher": "IRENA (2025, 2026) and other sources (Nemet; Farmer and Lafond); Our World in Data (compilation)",
+        "citation": "IRENA (2025) and other sources, processed by Our World in Data, grapher solar-pv-prices; IRENA "
+                    "(2026), processed by Our World in Data, grapher installed-solar-pv-capacity (entity World); "
+                    "retrieved 2026-11-21",
+        "short": "IRENA and others, via Our World in Data",
+        "url": "https://ourworldindata.org/grapher/{}.csv?v=1&csvType=full&useColumnShortNames=true",
+        "licence": "CC BY 4.0 (Our World in Data, as downloadable)",
+        "units": "constant 2025 US dollars per watt; gigawatts",
+        "vintage": "2026-11-21",
+        "files": ("solar_pv.csv",),
+    },
+    "fao_fish": {
+        "title": "The share of the world's assessed fish stocks within biologically sustainable levels and "
+                 "overexploited, 1974-2021",
+        "publisher": "Food and Agriculture Organization of the United Nations; Our World in Data (compilation)",
+        "citation": "FAO (2025), The State of World Fisheries and Aquaculture, processed by Our World in Data, grapher "
+                    "fish-stocks-within-sustainable-levels (entity World), retrieved 2026-11-21",
+        "short": "FAO, via Our World in Data",
+        "url": "https://ourworldindata.org/grapher/{}.csv?v=1&csvType=full&useColumnShortNames=true",
+        "licence": "CC BY 4.0 (Our World in Data); FAO's terms (free with citation)",
+        "units": "percent of assessed stocks",
+        "vintage": "2026-11-21",
+        "sha256": "71a7e5f82d324fcb2923318a28706f430c76860603c9d9bc898d5e677eefe988",
+        "files": ("fao_fish_stocks.csv",),
+    },
+    "oil_production": {
+        "title": "Oil production, the world and the United States, 1900-2025, in terawatt-hours",
+        "publisher": "Energy Institute (Statistical Review of World Energy 2026); Etemad and Luciani (1991); U.S. EIA; "
+                     "Our World in Data (compilation)",
+        "citation": "Energy Institute, Statistical Review of World Energy (2026); Etemad and Luciani (1991); U.S. Energy "
+                    "Information Administration (2026); processed by Our World in Data, grapher "
+                    "oil-production-by-country, retrieved 2026-11-21",
+        "short": "Energy Institute and others, via Our World in Data",
+        "url": "https://ourworldindata.org/grapher/{}.csv?v=1&csvType=full&useColumnShortNames=true",
+        "licence": "CC BY 4.0 (Our World in Data)",
+        "units": "terawatt-hours a year (crude oil, shale oil, oil sands, condensates and natural gas liquids)",
+        "vintage": "2026-11-21",
+        "sha256": "6d30bdfa282fffe26ee1090335e2e0688e276334f5bcc1641fe3a10f9a717be0",
+        "entities": ("World", "United States"),
+        "files": ("oil_production.csv",),
+    },
     "wdi_state": {
         "title": "World Bank data on the state: tax revenue as a share of GDP and the Worldwide Governance "
                  "Indicators' control of corruption, with GDP per head at PPP, by country, latest year from 2015",
@@ -3287,6 +3400,216 @@ def refresh_shiller() -> None:
                                       for c in SHILLER_COLUMNS[1:]])
 
 
+# ---------------------------------------------------------------------------
+# Part 48: the climate and the environment
+
+
+def co2_mlo() -> dict:
+    """Mauna Loa's annual mean CO2, 1959-2025: ``{"year": [...], "ppm": [...]}``."""
+    rows = _read(HERE / "co2_mlo_annual.csv")
+    return {"year": [int(r["year"]) for r in rows], "ppm": [float(r["ppm"]) for r in rows]}
+
+
+def refresh_noaa_co2() -> None:
+    d = DATASETS["noaa_co2"]
+    raw = RAW / "co2_annmean_mlo.csv"
+    sha = _download(d["url"], raw)
+    print(f"noaa_co2: sha256 {sha}")
+    lines = [ln for ln in raw.read_text(encoding="utf-8").splitlines() if ln and not ln.startswith("#")]
+    rows = list(csv.DictReader(lines))
+    with open(HERE / "co2_mlo_annual.csv", "w", newline="", encoding="utf-8") as f:
+        w = csv.writer(f)
+        w.writerow(["year", "ppm", "unc"])
+        for r in rows:
+            w.writerow([r["year"], r["mean"], r["unc"]])
+
+
+def hadcrut5() -> dict:
+    """HadCRUT5's global annual temperature anomaly, 1850-2025, relative to 1961-1990, with 95% limits:
+    ``{"year": [...], "anomaly": [...], "lo": [...], "hi": [...]}``.  Subtract the 1850-1900 mean to measure warming
+    since pre-industrial times."""
+    rows = _read(HERE / "hadcrut5_global_annual.csv")
+    return {"year": [int(r["year"]) for r in rows], "anomaly": [float(r["anomaly"]) for r in rows],
+            "lo": [float(r["lo"]) for r in rows], "hi": [float(r["hi"]) for r in rows]}
+
+
+def refresh_hadcrut5() -> None:
+    d = DATASETS["hadcrut5"]
+    raw = RAW / "hadcrut5_global_annual_raw.csv"
+    sha = _download(d["url"], raw)
+    print(f"hadcrut5: sha256 {sha}")
+    with open(raw, newline="", encoding="utf-8") as f:
+        rows = list(csv.reader(f))[1:]
+    with open(HERE / "hadcrut5_global_annual.csv", "w", newline="", encoding="utf-8") as f:
+        w = csv.writer(f)
+        w.writerow(["year", "anomaly", "lo", "hi"])
+        for r in rows:
+            w.writerow([r[0], _fmt(float(r[1])), _fmt(float(r[2])), _fmt(float(r[3]))])
+
+
+def gcp_co2() -> dict:
+    """The world's CO2 emissions in billions of tonnes a year: ``{"year": [...], "fossil": [...], "land": [...]}``
+    (fossil fuels and industry from 1750; land-use change from 1850, nan before)."""
+    rows = _read(HERE / "gcp_co2_world.csv")
+    return {"year": [int(r["year"]) for r in rows], "fossil": [_num(r["fossil_gt"]) for r in rows],
+            "land": [_num(r["land_gt"]) for r in rows]}
+
+
+def refresh_gcp_co2() -> None:
+    d = DATASETS["gcp_co2"]
+    vals: dict = {}
+    for slug, col, key in (("annual-co2-emissions-per-country", "emissions_total", "fossil"),
+                           ("co2-land-use", "emissions_from_land_use_change", "land")):
+        raw = RAW / f"{slug}.csv"
+        sha = _download(d["url"].format(slug), raw)
+        print(f"gcp_co2: {slug} sha256 {sha}")
+        with open(raw, newline="", encoding="utf-8") as f:
+            for r in csv.DictReader(f):
+                if r["entity"] == "World" and r[col] not in ("", None):
+                    vals.setdefault(int(r["year"]), {})[key] = float(r[col]) / 1e9
+    with open(HERE / "gcp_co2_world.csv", "w", newline="", encoding="utf-8") as f:
+        w = csv.writer(f)
+        w.writerow(["year", "fossil_gt", "land_gt"])
+        for y in sorted(vals):
+            w.writerow([y] + [_fmt(round(vals[y][k], 5)) if k in vals[y] else "" for k in ("fossil", "land")])
+
+
+def era5_temperature() -> list[dict]:
+    """Countries' annual mean surface air temperature (ERA5), 1940-2025: ``[{"code", "country", "year", "temp"}]``
+    (countries with an ISO code only; complete years only)."""
+    return [{"code": r["code"], "country": r["country"], "year": int(r["year"]), "temp": float(r["temp"])}
+            for r in _read(HERE / "era5_country_annual.csv")]
+
+
+def refresh_era5_temp() -> None:
+    d = DATASETS["era5_temp"]
+    raw = RAW / "average-monthly-surface-temperature.csv"
+    sha = _download(d["url"].format("average-monthly-surface-temperature"), raw)
+    print(f"era5_temp: sha256 {sha}")
+    acc: dict = {}
+    with open(raw, newline="", encoding="utf-8") as f:
+        for r in csv.DictReader(f):
+            code = r["code"]
+            if not code or code.startswith("OWID") or r["temperature_2m"] in ("", None):
+                continue
+            y = int(r["month"][:4])
+            acc.setdefault((code, r["entity"], y), []).append(float(r["temperature_2m"]))
+    with open(HERE / "era5_country_annual.csv", "w", newline="", encoding="utf-8") as f:
+        w = csv.writer(f)
+        w.writerow(["code", "country", "year", "temp"])
+        for (code, name, y), v in sorted(acc.items()):
+            if len(v) == 12:
+                w.writerow([code, name, y, f"{sum(v) / 12:.3f}"])
+
+
+def wdi_gdppc_kd() -> dict:
+    """GDP per head in constant 2015 dollars: ``{code: {"country": name, "values": {year: value}}}`` for countries
+    (not aggregates)."""
+    out: dict = {}
+    for r in _read(HERE / "wdi_gdppc_kd.csv"):
+        out.setdefault(r["code"], {"country": r["country"], "values": {}})["values"][int(r["year"])] = float(r["gdppc"])
+    return out
+
+
+def refresh_wdi_gdp_kd() -> None:
+    import json  # noqa: PLC0415
+
+    d = DATASETS["wdi_gdp_kd"]
+    meta_raw = RAW / "wdi_countries.json"
+    _download("https://api.worldbank.org/v2/country?format=json&per_page=400", meta_raw)
+    meta = {c["id"]: c for c in json.loads(meta_raw.read_text())[1]}
+    raw = RAW / "wdi_NY.GDP.PCAP.KD.json"
+    sha = _download(d["url"], raw)
+    print(f"wdi_gdp_kd: sha256 {sha}")
+    rows = []
+    for r in json.loads(raw.read_text())[1]:
+        code = r["countryiso3code"]
+        c = meta.get(code)
+        if c is None or c["region"]["id"] == "NA" or r["value"] is None:
+            continue
+        rows.append((code, c["name"], int(r["date"]), r["value"]))
+    with open(HERE / "wdi_gdppc_kd.csv", "w", newline="", encoding="utf-8") as f:
+        w = csv.writer(f)
+        w.writerow(["code", "country", "year", "gdppc"])
+        for code, name, y, v in sorted(rows):
+            w.writerow([code, name, y, f"{v:.2f}"])
+
+
+def solar_pv() -> dict:
+    """Solar module prices in constant 2025 dollars per watt (1975-2025) and the world's installed solar capacity in
+    gigawatts (2000-2025): ``{"price_year", "price", "cap_year", "capacity"}``."""
+    rows = _read(HERE / "solar_pv.csv")
+    p = [r for r in rows if r["series"] == "price"]
+    c = [r for r in rows if r["series"] == "capacity_gw"]
+    return {"price_year": [int(r["year"]) for r in p], "price": [float(r["value"]) for r in p],
+            "cap_year": [int(r["year"]) for r in c], "capacity": [float(r["value"]) for r in c]}
+
+
+def refresh_solar_pv() -> None:
+    d = DATASETS["solar_pv"]
+    out = []
+    for slug, col, name in (("solar-pv-prices", "cost", "price"),
+                            ("installed-solar-pv-capacity", "solar__total_gw", "capacity_gw")):
+        raw = RAW / f"{slug}.csv"
+        sha = _download(d["url"].format(slug), raw)
+        print(f"solar_pv: {slug} sha256 {sha}")
+        with open(raw, newline="", encoding="utf-8") as f:
+            for r in csv.DictReader(f):
+                if r["entity"] == "World" and r[col] not in ("", None):
+                    out.append((name, int(r["year"]), float(r[col])))
+    with open(HERE / "solar_pv.csv", "w", newline="", encoding="utf-8") as f:
+        w = csv.writer(f)
+        w.writerow(["series", "year", "value"])
+        for name, y, v in out:
+            w.writerow([name, y, _fmt(round(v, 5))])
+
+
+def fish_stocks() -> dict:
+    """FAO's shares of the world's assessed fish stocks, 1974-2021 (not every year):
+    ``{"year": [...], "sustainable": [...], "overexploited": [...]}`` in percent."""
+    rows = _read(HERE / "fao_fish_stocks.csv")
+    return {"year": [int(r["year"]) for r in rows], "sustainable": [float(r["sustainable"]) for r in rows],
+            "overexploited": [float(r["overexploited"]) for r in rows]}
+
+
+def refresh_fao_fish() -> None:
+    d = DATASETS["fao_fish"]
+    raw = RAW / "fish-stocks-within-sustainable-levels.csv"
+    sha = _download(d["url"].format("fish-stocks-within-sustainable-levels"), raw)
+    print(f"fao_fish: sha256 {sha}")
+    with open(raw, newline="", encoding="utf-8") as f:
+        rows = [r for r in csv.DictReader(f) if r["entity"] == "World"]
+    with open(HERE / "fao_fish_stocks.csv", "w", newline="", encoding="utf-8") as f:
+        w = csv.writer(f)
+        w.writerow(["year", "sustainable", "overexploited"])
+        for r in rows:
+            w.writerow([r["year"], _fmt(round(float(r["sustainable_fish"]), 3)),
+                        _fmt(round(float(r["overexploited_fish"]), 3))])
+
+
+def oil_production(entity: str = "United States") -> dict:
+    """Oil production in terawatt-hours a year, 1900-2025, for "World" or "United States":
+    ``{"year": [...], "twh": [...]}``."""
+    rows = [r for r in _read(HERE / "oil_production.csv") if r["entity"] == entity]
+    if not rows:
+        raise KeyError(entity)
+    return {"year": [int(r["year"]) for r in rows], "twh": [float(r["twh"]) for r in rows]}
+
+
+def refresh_oil_production() -> None:
+    d = DATASETS["oil_production"]
+    raw = RAW / "oil-production-by-country.csv"
+    sha = _download(d["url"].format("oil-production-by-country"), raw)
+    print(f"oil_production: sha256 {sha}")
+    with open(raw, newline="", encoding="utf-8") as f:
+        rows = [r for r in csv.DictReader(f) if r["entity"] in d["entities"] and r["oil_production_twh"]]
+    with open(HERE / "oil_production.csv", "w", newline="", encoding="utf-8") as f:
+        w = csv.writer(f)
+        w.writerow(["entity", "year", "twh"])
+        for r in rows:
+            w.writerow([r["entity"], r["year"], _fmt(round(float(r["oil_production_twh"]), 3))])
+
+
 REFRESH = {"draft1970": refresh_draft1970, "ajr": refresh_ajr, "maddison2023": refresh_maddison, "fred": refresh_fred, "spf": refresh_spf,
            "pinksheet": refresh_pinksheet, "psd_coffee": refresh_psd_coffee, "wdi": refresh_wdi, "hdr": refresh_hdr,
            "rtdsm": refresh_rtdsm, "warheads": refresh_warheads, "census_cbsa": refresh_census_cbsa,
@@ -3301,7 +3624,10 @@ REFRESH = {"draft1970": refresh_draft1970, "ajr": refresh_ajr, "maddison2023": r
            "cepii_gravity": refresh_cepii_gravity, "autor_dorn": refresh_autor_dorn, "resume": refresh_resume, "sportscards": refresh_sportscards, "wdi_dev": refresh_wdi_dev,
            "causaldata": refresh_causaldata, "rdsenate": refresh_rdsenate, "wdi_state": refresh_wdi_state,
            "saez": refresh_saez, "opportunity": refresh_opportunity, "wid_top1": refresh_wid_top1,
-           "blp_cars": refresh_blp_cars, "rust_buses": refresh_rust_buses}
+           "blp_cars": refresh_blp_cars, "rust_buses": refresh_rust_buses,
+           "noaa_co2": refresh_noaa_co2, "hadcrut5": refresh_hadcrut5, "gcp_co2": refresh_gcp_co2,
+           "era5_temp": refresh_era5_temp, "wdi_gdp_kd": refresh_wdi_gdp_kd, "solar_pv": refresh_solar_pv,
+           "fao_fish": refresh_fao_fish, "oil_production": refresh_oil_production}
 
 
 def main() -> None:

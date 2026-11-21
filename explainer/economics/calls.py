@@ -414,6 +414,13 @@ CALLS = {c.key: c for c in [
           "of Technology on Employment and Unemployment, National Academy of Engineering (1983), as quoted in "
           "secondary listings",
           "BLS via FRED: LNS12300060 (employment-population ratio, 25-54) and PRS85006173 (labor share)")),
+    Call("hubbert_1956", 48, "M. King Hubbert, a geophysicist at Shell", "March 1956",
+         "US oil production would peak between 1965, the likeliest year, and 1970, then decline for good",
+         "a bell-shaped curve fitted to the discoveries and production of the lower 48 states",
+         "production peaked in 1970 and fell for 38 years to its low in 2008; then shale drilling took crude "
+         "output past the 1970 peak in 2018", "partly right",
+         ("Hubbert (1956), as summarized by Deming, AAPG Bulletin 107(6), 2023",
+          "Energy Institute, Statistical Review of World Energy (2026), via Our World in Data")),
     Call("treasury_2016", 47, "HM Treasury, in its analysis of the immediate impact of leaving the EU", "May 2016",
          "a vote to leave would tip the economy into a year-long recession, with GDP about 3.6 percent lower after two "
          "years than after a vote to remain (6 percent in a severe shock) and around 500,000 more people unemployed",
