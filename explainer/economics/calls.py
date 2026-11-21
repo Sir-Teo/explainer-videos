@@ -737,4 +737,17 @@ CALLS = {c.key: c for c in [
          ("M. S. Granovetter, \"The Strength of Weak Ties\", American Journal of Sociology 78(6): 1360-1380 (1973)",
           "K. Rajkumar, G. Saint-Jacques, I. Bojinov, E. Brynjolfsson and S. Aral, \"A causal test of the strength "
           "of weak ties\", Science 377(6612): 1304-1310 (2022), abstract")),
+    Call("meehl_1954", 64, "Paul E. Meehl, Clinical versus Statistical Prediction", "1954",
+         "a simple statistical rule predicts as well as, or better than, the trained clinician's judgement",
+         "in the studies he could find, mechanical combinations of a few facts matched or beat the experts who "
+         "weighed the same facts in their heads, who are inconsistent and give weight to vivid details",
+         "Grove, Zald, Lebow, Snitz and Nelson's meta-analysis of 136 studies: mechanical prediction was about 10% "
+         "more accurate on average, substantially better in 33-47% of studies and substantially worse in 6-16%; "
+         "Kleinberg et al.'s bail algorithm (2018) and later deployments extend the finding, with the caveat that "
+         "experts sometimes see what the records do not",
+         "right",
+         ("P. E. Meehl, Clinical versus Statistical Prediction: A Theoretical Analysis and a Review of the Evidence "
+          "(1954)",
+          "W. M. Grove, D. H. Zald, B. S. Lebow, B. E. Snitz and C. Nelson, \"Clinical versus mechanical "
+          "prediction: a meta-analysis\", Psychological Assessment 12(1): 19-30 (2000), abstract")),
 ]}

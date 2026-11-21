@@ -157,17 +157,20 @@ def contraction(C: dict) -> dict:
             "risk_detained": float(np.nanmean(risk[~rel]))}
 
 
-def cases(C: dict, k: int = 10, seed: int = 640) -> dict:
-    """Ten test-set defendants spread over the range of risk, for the Play-it: their records, the judge's decision,
-    the algorithm's risk, and what they would have done if released."""
+def cases(C: dict, targets=(0.05, 0.07, 0.09, 0.12, 0.15, 0.19, 0.24, 0.31, 0.39, 0.48), seed: int = 640) -> dict:
+    """Ten test-set defendants whose predicted risks are near ``targets``, shuffled, for the Play-it: their records,
+    the judge's decision, the algorithm's risk, the true chance of failing to appear (which the Island knows), and
+    what each would have done if released."""
     rng = np.random.default_rng(seed)
     t = np.flatnonzero(C["test"])
     r = C["risk"][t]
-    picks = []
-    for lo, hi in zip(np.linspace(0, 1, k + 1)[:-1], np.linspace(0, 1, k + 1)[1:]):
-        a, b = np.quantile(r, [0.02 + 0.96 * lo, 0.02 + 0.96 * hi])
-        pool = t[(r >= a) & (r <= b)]
-        picks.append(int(rng.choice(pool)))
+    used, picks = set(), []
+    for x in targets:
+        for j in np.argsort(np.abs(r - x)):
+            if t[j] not in used:
+                used.add(t[j])
+                picks.append(int(t[j]))
+                break
     picks = rng.permutation(picks)
     rows = []
     for i in picks:
@@ -206,13 +209,21 @@ def targeting(n: int = 20000, budget: float = 0.2, trial: int = 4000, seed: int 
     cf = KC.CausalForest(Xt, yt, d.astype(float), B=100, min_leaf=30, rng=rng)
     est = -cf.predict(X)
     out["largest effect (estimated)"] = float(tau[np.argsort(-est)[:k]].mean())
+    shares = np.round(np.linspace(0.05, 0.6, 12), 3)
+    curves = {"highest risk": np.argsort(-p0), "largest effect (estimated)": np.argsort(-est),
+              "largest effect (truth)": np.argsort(-tau)}
+    averted = {k: [float(tau[o[:int(b * n)]].sum() / n * 100) for b in shares] for k, o in curves.items()}
+    averted["at random"] = [float(tau.mean() * b * 100) for b in shares]
+    est_by = [float(est[(p0 >= a) & (p0 < b)].mean()) if ((p0 >= a) & (p0 < b)).any() else 0.0
+              for a, b in zip(np.linspace(0, 1, 11)[:-1], np.linspace(0, 1, 11)[1:])]
     corr = float(np.corrcoef(p0, tau)[0, 1])
     bins = np.linspace(0, 1, 11)
     mid = (bins[:-1] + bins[1:]) / 2
     by = [float(tau[(p0 >= a) & (p0 < b)].mean()) if ((p0 >= a) & (p0 < b)).any() else 0.0
           for a, b in zip(bins[:-1], bins[1:])]
     return {"per100": {k_: 100 * v for k_, v in out.items()}, "corr": corr, "risk_bins": mid.tolist(),
-            "effect_by_risk": by, "budget": budget, "trial": trial}
+            "effect_by_risk": by, "estimate_by_risk": est_by, "budget": budget, "trial": trial,
+            "shares": shares.tolist(), "averted": averted}
 
 
 # ---------------------------------------------------------------------------------------------------------------
