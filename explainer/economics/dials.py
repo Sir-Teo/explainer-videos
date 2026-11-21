@@ -458,6 +458,49 @@ DIALS = {d.key: d for d in [
                       "one firm only (Part 59's Dial)", 0.16, lo=0.15, hi=0.17, where="FTC working paper 217; FTC v. "
                       "Staples (D.D.C. 1997)", checked="2026-11-21"),
          )),
+    Dial("surge_elasticity", "the elasticity of rides to the surge price", "percent change in rides booked per "
+         "percent change in the fare shown", (61,), status="depends on the setting", checked="2026-11-21",
+         meaning="ride-hailing demand is inelastic in the short run: a fare 10% higher loses about 5% of bookings, "
+                 "less in a city where the alternatives are poor and more on weekend days; inelastic demand is why a "
+                 "surge clears the market mainly by bringing out drivers, and why riders keep a large surplus",
+         estimates=(
+             Estimate("Cohen, Hahn, Hall, Levitt and Metcalfe", 2016, "RD", "UberX in its four largest American "
+                      "markets, 2015: the whole sample, from the surge's rounding thresholds", -0.55, lo=-0.59,
+                      hi=-0.51, where="NBER Working Paper 22627, table 4, top row (standard error 0.02)",
+                      checked="2026-11-21"),
+             Estimate("Cohen, Hahn, Hall, Levitt and Metcalfe", 2016, "RD", "the same, Los Angeles", -0.33, lo=-0.43,
+                      hi=-0.23, where="NBER Working Paper 22627, table 4 (standard error 0.05)", checked="2026-11-21"),
+             Estimate("Cohen, Hahn, Hall, Levitt and Metcalfe", 2016, "RD", "the same, weekend days", -0.66,
+                      lo=-0.76, hi=-0.56, where="NBER Working Paper 22627, table 4 (standard error 0.05)",
+                      checked="2026-11-21"),
+             Estimate("Cohen, Hahn, Hall, Levitt and Metcalfe", 2016, "RD", "the same, weekdays outside rush hours",
+                      -0.46, lo=-0.58, hi=-0.34, where="NBER Working Paper 22627, table 4 (standard error 0.06)",
+                      checked="2026-11-21"),
+             Estimate("this film (the Island's sessions)", 2026, "regression", "200,000 sessions at random surge "
+                      "levels: the fitted demand curve's elasticity at the normal fare", -0.59,
+                      where="videos/economics/econ61/compute.py, item surplus", checked="2026-11-21"),
+         )),
+    Dial("search_ad_return", "the return on search advertising", "extra revenue per dollar spent on paid search, "
+         "less the dollar (0 breaks even)", (61,), status="contested", checked="2026-11-21",
+         meaning="measured without an experiment, search ads look enormously profitable, because the people who "
+                 "click them are often on their way to buy anyway; switched off at random, a well-known brand's "
+                 "ads returned less than they cost, while ads that reach new customers can pay; the observational "
+                 "and experimental numbers disagree in sign, and most advertisers cannot run the experiment",
+         estimates=(
+             Estimate("Blake, Nosko and Tadelis", 2015, "RCT", "eBay: non-brand keywords switched off for 60 days "
+                      "in regions holding 30% of American traffic, by difference in differences", -0.63, lo=-1.24,
+                      hi=-0.03, where="NBER Working Paper 20171, table 4, columns 4-5; Econometrica 83(1): 155-174",
+                      checked="2026-11-21"),
+             Estimate("Blake, Nosko and Tadelis", 2015, "regression", "the same data without the experiment: log "
+                      "revenue on log spending with region and day controls", 16.32, lo=6.97, hi=22.65,
+                      where="NBER Working Paper 20171, table 4, column 2", checked="2026-11-21"),
+             Estimate("this film (the Island's experiment)", 2026, "RCT", "ads off in a random 30% of 210 regions "
+                      "for eight weeks: the mean of 200 runs, plus or minus two standard deviations", -0.64,
+                      lo=-1.29, hi=0.01, where="videos/economics/econ61/compute.py, item ads", checked="2026-11-21"),
+             Estimate("this film (the Island's regression)", 2026, "regression", "log revenue on log ad spending "
+                      "across regions and weeks, ads running everywhere", 26.07,
+                      where="videos/economics/econ61/compute.py, item ads", checked="2026-11-21"),
+         )),
     Dial("reasoning_depth", "depth of strategic reasoning", "average steps of thinking (the cognitive hierarchy's "
          "tau)", (11, 45, 53), status="depends on the setting", checked="2026-11-19",
          meaning="people typically think one or two steps ahead of a naive player, not the infinitely many steps that "
@@ -1751,6 +1794,32 @@ DIALS = {d.key: d for d in [
 
 # What each part shows without entering a row, and why: {part: [(what is shown, the reason)]}
 SHOWN = {
+    61: [
+        ("Hall, Kendrick and Nosko (2015)", "the hook's story, stated; the Island's night computed"),
+        ("Rochet and Tirole (2003); Einav, Farronato and Levin (2016); Athey and Luca (2019)", "platforms as designed "
+         "markets and economists in tech, stated"),
+        ("Cohen, Hahn, Hall, Levitt and Metcalfe (2016)", "consumer surplus from surge, stated; the Dial's rows"),
+        ("the New York Attorney General's agreement with Uber (2014)", "the emergency cap, stated"),
+        ("Ursu (2018); European Commission, AT.39740 (2017); Court of Justice, C-48/22 P (2024)", "ranking and "
+         "self-preferencing, stated; the Island's click model computed"),
+        ("Nosko and Tadelis (2015); Fradkin, Grewal and Holtz (2021); Tadelis (2016)", "reputation, stated; the "
+         "Island's ratings computed"),
+        ("Varian (2007); Edelman, Ostrovsky and Schwarz (2007); Ostrovsky and Schwarz (2009)", "ad auctions, stated; "
+         "the reserve Dial returns"),
+        ("Blake, Nosko and Tadelis (2015); Lewis and Rao (2015)", "advertising's returns: the Dial's rows; the "
+         "arithmetic of power computed for the Island"),
+        ("Deng, Xu, Kohavi and Walker (2013); Kohavi, Tang and Xu (2020)", "experimentation practice, stated; peeking "
+         "and CUPED computed on the Island"),
+        ("Johari, Li, Liskovich and Weintraub; Bajari et al. (2023)", "two-sided randomization, stated; the Island's "
+         "switchback computed"),
+        ("Athey, Chetty, Imbens and Kang (2019)", "the surrogate index, computed on the Island"),
+        ("Chen, Chevalier, Rossi and Oehlsen (2019); Cook, Diamond, Hall, List and Oyer (2021); AB5 (2019); "
+         "Proposition 22 (2020); Uber v Aslam (2021)", "gig work and the law, stated; flexibility computed on the "
+         "Island"),
+        ("Brynjolfsson, Collis and Eggers (2019); Athey, Catalini and Tucker (2017)", "free goods and privacy, "
+         "stated; the Island's survey computed"),
+        ("Census Bureau via FRED: ECOMPCTSA", "the intermission, from the Data Room"),
+    ],
     60: [
         ("Smith, Leimkuhler and Darrow (1992); People Express and American Airlines, 1981-86", "the hook's story, "
          "stated; the Island's flight computed"),

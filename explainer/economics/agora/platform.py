@@ -466,7 +466,7 @@ def flexibility(n_drivers: int = 5000, hours: int = 24, wage: float = 20.0, shif
     chooses the best block of ``shift`` consecutive hours, or none.  Surplus is the wage less the reservation wage on
     hours worked, summed (after Chen, Chevalier, Rossi and Oehlsen)."""
     rng = np.random.default_rng(seed)
-    level = rng.normal(22.0, 6.0, n_drivers)
+    level = rng.normal(25.0, 6.0, n_drivers)
     shock = rng.normal(0.0, 9.0, (n_drivers, hours))
     r = level[:, None] + shock
     gain = np.maximum(wage - r, 0.0)
