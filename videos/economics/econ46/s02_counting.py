@@ -109,8 +109,9 @@ class Counting(VoiceoverScene):
         for code, nm, col in REG:
             d = P[code]
             curves.add(path(ax, d["year"], d["value"], col, 3.4 if code == "WLD" else 2.6, smooth=False))
-            names.add(label(nm, font_size=15, color=col).next_to(ax.ax.c2p(d["year"][-1], d["value"][-1]), RIGHT,
-                                                                  buff=0.12))
+            nl = label(nm, font_size=15, color=col).next_to(ax.ax.c2p(d["year"][-1], d["value"][-1]), RIGHT, buff=0.12)
+            nl.shift({"SAS": UP * 0.42, "EAS": DOWN * 0.12}.get(code, ORIGIN))
+            names.add(nl)
         W, A, S, E_ = P["WLD"], P["SSF"], P["SAS"], P["EAS"]
         side = VGroup(
             label(rf"the world: \\ {W['first']:.0f}\% in {W['first_year']} \\ to {W['last']:.0f}\% in "

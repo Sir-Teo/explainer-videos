@@ -54,15 +54,15 @@ class Credit(VoiceoverScene):
             "to what their lending cost them. The high price of credit is mostly the high cost of information, not "
             "monopoly profit."
         ) as vo:
-            self.play(FadeIn(tag), Write(eq), run_time=1.2)
+            self.play(FadeIn(tag), FadeIn(aleem), run_time=1.0)
             vo.wait_until("a")
-            self.play(FadeIn(eql))
+            self.play(Write(eq), FadeIn(eql), run_time=1.5)
             for mk, b in zip("bcd", bars):
                 vo.wait_until(mk)
                 self.play(GrowFromEdge(b[0], LEFT), FadeIn(b[1]))
             self.play(FadeIn(total))
             vo.wait_until("e")
-            self.play(FadeIn(aleem))
+            self.play(Indicate(aleem, color=WHITE, scale_factor=1.04))
         self.clear_scene()
 
     def groups(self):

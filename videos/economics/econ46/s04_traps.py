@@ -55,47 +55,55 @@ class Traps(VoiceoverScene):
         T = load("trap")
         k = np.array(T["k"])
         sel = k <= 70
-        ax = plane([0, 70], [0, 70], center=LEFT * 2.3 + DOWN * 0.3, x_length=5.6, y_length=5.2,
-                   xticks=[0, 10, 20, 30, 40, 50, 60, 70], yticks=[0, 20, 40, 60],
-                   xlabel=r"capital this year, \ $k_t$", ylabel=r"capital next year, \ $k_{t+1}$",
-                   xfmt=lambda v: f"{v:.0f}", yfmt=lambda v: f"{v:.0f}", font_size=14)
-        diag = seg(ax, 0, 0, 70, 70, GREY_B, 1.8, dashed=True)
-        mp = path(ax, k[sel], np.array(T["next"])[sel], POOR, 3.4)
-        pts = VGroup(dot(ax, T["low"], T["low"], TRAP, 0.1), dot(ax, T["threshold"], T["threshold"], WHITE, 0.1),
-                     dot(ax, T["high"], T["high"], ESCAPE, 0.1))
-        eq = MathTex(r"k_{t+1} = s\,f(k_t) + (1-\delta)\,k_t", font_size=34, color=THEORY)
+        dk = (np.array(T["next"]) - k)[sel]
+        ax = plane([0, 70], [-0.35, 0.35], center=LEFT * 2.0 + DOWN * 0.3, x_length=7.2, y_length=4.8,
+                   xticks=[0, 10, 20, 30, 40, 50, 60, 70], yticks=[-0.3, -0.15, 0, 0.15, 0.3],
+                   xlabel=r"capital this year, \ $k_t$", ylabel=r"change over the year, \ $k_{t+1} - k_t$",
+                   xfmt=lambda v: f"{v:.0f}", yfmt=lambda v: f"{v:+.2f}".replace("-", "{-}") if v else "0",
+                   font_size=14)
+        zero = DashedLine(ax.ax.c2p(0, 0), ax.ax.c2p(70, 0), color=GREY_B, stroke_width=1.6)
+        mp = path(ax, k[sel], dk, POOR, 3.4)
+        pts = VGroup(dot(ax, T["low"], 0, TRAP, 0.1), dot(ax, T["threshold"], 0, WHITE, 0.1),
+                     dot(ax, T["high"], 0, ESCAPE, 0.1))
+
+        def flow(x0, x1, col):
+            y = ax.ax.c2p(0, -0.3)[1]
+            return Arrow(np.array([ax.ax.c2p(x0, 0)[0], y, 0]), np.array([ax.ax.c2p(x1, 0)[0], y, 0]), buff=0,
+                         color=col, stroke_width=4, max_tip_length_to_length_ratio=0.25)
+        arrows = VGroup(flow(1, 8, TRAP), flow(17, 10, TRAP), flow(19.5, 57, ESCAPE), flow(69, 61.5, ESCAPE))
+        eq = MathTex(r"k_{t+1} = s\,f(k_t) + (1-\delta)\,k_t", font_size=32, color=THEORY)
         side = VGroup(
             eq,
-            label(rf"save {100 * T['s']:.0f}\%, \ lose {100 * T['delta']:.0f}\% a year", font_size=19, color=GREY_A),
-            label(rf"a low steady state: \ $k$ = {T['low']:.0f}", font_size=19, color=TRAP),
-            label(rf"a threshold: \ $k$ = {T['threshold']:.1f}", font_size=19, color=WHITE),
-            label(rf"a high steady state: \ $k$ = {T['high']:.1f}", font_size=19, color=ESCAPE),
-            label(r"below the threshold, \\ capital shrinks back; \\ above it, \ it grows", font_size=19, color=HOLD),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.3).to_edge(RIGHT, buff=0.4)
+            label(rf"save {100 * T['s']:.0f}\%, \ lose {100 * T['delta']:.0f}\% a year", font_size=18, color=GREY_A),
+            label(rf"a low steady state: \ $k$ = {T['low']:.0f}", font_size=18, color=TRAP),
+            label(rf"a threshold: \ $k$ = {T['threshold']:.1f}", font_size=18, color=WHITE),
+            label(rf"a high steady state: \ $k$ = {T['high']:.1f}", font_size=18, color=ESCAPE),
+            label(r"arrows: \ where capital drifts", font_size=18, color=HOLD),
+        ).arrange(DOWN, aligned_edge=LEFT, buff=0.3).to_edge(RIGHT, buff=0.35)
         tag = island_tag(corner=DR, font_size=14)
         with self.voiceover(
             "Now let households save. <bookmark mark='a'/> Each year a household saves "
             f"{100 * T['s']:.0f} percent of its output, and loses {100 * T['delta']:.0f} percent of its capital to "
-            "wear and death. Next year's capital, up the side, against this year's, across. <bookmark mark='b'/> "
-            "The dashed line is where capital stands still. Where the curve is above it, capital grows; where it is "
-            f"below, capital shrinks. <bookmark mark='c'/> The curve is S-shaped, and it crosses three times. At "
-            f"{T['low']:.0f}, a low steady state: the hoe, forever. <bookmark mark='d'/> At "
-            f"{T['high']:.0f}, a high one. <bookmark mark='e'/> And between them, at {T['threshold']:.1f}, a "
-            "threshold. Start below it and capital drifts down to the low state; start above it and it climbs to "
-            "the high one. Two households with the same skills and the same patience end up in different worlds, "
-            "because of where they started. That is a poverty trap."
+            "wear and death. Here is how much its capital changes over a year, at each level of capital. <bookmark "
+            "mark='b'/> Above the dashed line capital grows; below it, capital shrinks. <bookmark mark='c'/> The "
+            f"curve crosses the line three times. At {T['low']:.0f}, a low steady state: the hoe, forever. "
+            f"<bookmark mark='d'/> At {T['high']:.0f}, a high one. <bookmark mark='e'/> And between them, at "
+            f"{T['threshold']:.1f}, a threshold. Start below it and capital drifts down to the low state; start "
+            "above it and it climbs to the high one. Two households with the same skills and the same patience "
+            "end up in different worlds, because of where they started. That is a poverty trap."
         ) as vo:
-            self.play(FadeIn(ax), FadeIn(tag), FadeIn(side[0]), run_time=1.0)
+            self.play(FadeIn(ax), FadeIn(tag), FadeIn(side[0]), Create(zero), run_time=1.0)
             vo.wait_until("a")
             self.play(FadeIn(side[1]), Create(mp), run_time=2.0)
             vo.wait_until("b")
-            self.play(Create(diag))
+            self.play(Indicate(zero, color=WHITE))
             vo.wait_until("c")
             self.play(FadeIn(pts[0], scale=1.5), FadeIn(side[2]))
             vo.wait_until("d")
             self.play(FadeIn(pts[2], scale=1.5), FadeIn(side[4]))
             vo.wait_until("e")
-            self.play(FadeIn(pts[1], scale=1.5), FadeIn(side[3]), FadeIn(side[5]))
+            self.play(FadeIn(pts[1], scale=1.5), FadeIn(side[3]), FadeIn(side[5]),
+                      LaggedStart(*[GrowArrow(a) for a in arrows], lag_ratio=0.3), run_time=2.0)
         self.clear_scene()
 
     def paths(self):

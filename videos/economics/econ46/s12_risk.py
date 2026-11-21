@@ -93,7 +93,7 @@ class Risk(VoiceoverScene):
         I = load("index")
         Tr = TRUTH["index"]
         Tk = tables.RISK_46.data
-        ax = plane([0, 0.5], [0, 1.05], center=LEFT * 2.0 + DOWN * 0.35, x_length=6.6, y_length=4.6,
+        ax = plane([0, 0.5], [0, 1.05], center=LEFT * 2.0 + DOWN * 0.55, x_length=6.6, y_length=4.4,
                    xticks=[0, 0.1, 0.2, 0.3, 0.4, 0.5], yticks=[0, 0.25, 0.5, 0.75, 1.0],
                    xlabel=r"basis risk: \ chance the gauge misses the farm's drought",
                    ylabel=r"the best cover, \ share of the loss", xfmt=lambda v: f"{v:.1f}", yfmt=lambda v: f"{v:.2f}",
@@ -110,6 +110,8 @@ class Risk(VoiceoverScene):
             label(rf"India: \ take-up {Tk['take_lo']}--{Tk['take_hi']}\% \\ at market prices", font_size=18,
                   color=GREY_A),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.3).to_edge(RIGHT, buff=0.3)
+        head = label(r"index insurance: \ a rain gauge pays when it records a drought \ (no claims to check, \ "
+                     r"nothing to cheat)", font_size=20, color=RISK).to_edge(UP, buff=0.35)
         tag = island_tag(corner=DR, font_size=14)
         with self.voiceover(
             "What the village cannot insure is the shock that hits everyone at once, like a drought. That is what "
@@ -126,7 +128,7 @@ class Risk(VoiceoverScene):
             "the price and to whether farmers trusted the seller. Insurance is a promise, and promises from "
             "strangers are worth less."
         ) as vo:
-            self.play(FadeIn(ax), FadeIn(tag), run_time=1.0)
+            self.play(FadeIn(ax), FadeIn(tag), FadeIn(head), run_time=1.0)
             vo.wait_until("a")
             self.play(FadeIn(side[0]))
             for mk, k in zip("bcd", range(3)):
@@ -176,11 +178,11 @@ class Risk(VoiceoverScene):
         ) as vo:
             self.play(FadeIn(ax), FadeIn(tag), *[FadeIn(b[1]) for b in bars], run_time=1.0)
             vo.wait_until("a")
-            self.play(FadeIn(side[0]))
+            self.play(FadeIn(side[0]), *[GrowFromEdge(b[0], DOWN) for b in bars], run_time=1.5)
             vo.wait_until("b")
             self.play(FadeIn(side[1]))
             vo.wait_until("c")
-            self.play(*[GrowFromEdge(b[0], DOWN) for b in bars], *[FadeIn(b[2]) for b in bars], FadeIn(side[2]),
+            self.play(*[FadeIn(b[2]) for b in bars], FadeIn(side[2]), Indicate(bars[1][0], color=WHITE),
                       run_time=1.5)
             vo.wait_until("d")
             self.play(FadeIn(side[3]))

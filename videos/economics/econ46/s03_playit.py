@@ -24,10 +24,20 @@ class PlayIt(VoiceoverScene):
                    ylabel=r"thousands of healthy years", xfmt=lambda v: f"{v:.0f}", yfmt=lambda v: f"{v:.0f}",
                    font_size=14)
         curves, names = VGroup(), VGroup()
+        ends = {}
         for k in A["programmes"]:
             ys = A["curves"][k]
             curves.add(path(ax, A["xs"], ys, COLS[k], 3.0))
-            names.add(label(NAMES[k], font_size=15, color=COLS[k]).next_to(ax.ax.c2p(6, ys[-1]), RIGHT, buff=0.1))
+            ends[k] = ax.ax.c2p(6, ys[-1])[1]
+        # spread the end labels so that none overlap (at least 0.27 apart), keeping their order
+        order = sorted(ends, key=lambda k: ends[k])
+        ypos, last = {}, -1e9
+        for k in order:
+            ypos[k] = max(ends[k], last + 0.27)
+            last = ypos[k]
+        for k in A["programmes"]:
+            names.add(label(NAMES[k], font_size=15, color=COLS[k]).move_to(
+                np.array([ax.ax.c2p(6, 0)[0] + 0.15, ypos[k], 0]), aligned_edge=LEFT))
         side = VGroup(
             label(r"the Island's six \\ programmes, \ measured \\ in one unit", font_size=19, color=WHITE),
             label(r"the slope at zero: \\ what the first \\ million buys", font_size=19, color=GREY_A),
@@ -131,9 +141,9 @@ class PlayIt(VoiceoverScene):
         rows = VGroup()
         for i, k in enumerate(A["programmes"]):
             m = A["marginal_at_best"][k]
-            rows.add(label(rf"{NAMES[k]}: \ the last million buys {m:.2f}" + (r" \ (at its first dollar)"
-                                                                             if A["alloc"][k] == 0 else ""),
-                           font_size=21, color=COLS[k]))
+            txt = (rf"{NAMES[k]}: \ its first million buys {m:.2f}, \ so it gets nothing" if A["alloc"][k] == 0
+                   else rf"{NAMES[k]}: \ the last million buys {m:.2f}")
+            rows.add(label(txt, font_size=21, color=COLS[k]))
         rows.arrange(DOWN, aligned_edge=LEFT, buff=0.22).next_to(eq, DOWN, buff=0.55)
         foot = label(r"cost-effectiveness at the margin, \ not on average: \ GiveWell calls it \emph{room for more "
                      r"funding}", font_size=20, color=GREY_A).to_edge(DOWN, buff=0.55)
@@ -151,9 +161,10 @@ class PlayIt(VoiceoverScene):
         ) as vo:
             self.play(FadeIn(tag), Write(eq), run_time=1.5)
             vo.wait_until("a")
-            self.play(Indicate(eq, color=WHITE))
+            self.play(Indicate(eq, color=WHITE), LaggedStart(*[FadeIn(r_, shift=RIGHT * 0.1) for r_ in rows],
+                                                             lag_ratio=0.3), run_time=2.5)
             vo.wait_until("b")
-            self.play(LaggedStart(*[FadeIn(r_, shift=RIGHT * 0.1) for r_ in rows], lag_ratio=0.3), run_time=2.5)
+            self.play(*[Indicate(r_, color=WHITE, scale_factor=1.03) for r_ in rows])
             vo.wait_until("c")
             self.play(FadeIn(foot))
         self.clear_scene()

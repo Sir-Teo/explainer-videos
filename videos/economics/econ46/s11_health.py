@@ -54,7 +54,7 @@ class Health(VoiceoverScene):
         rows = [(r"within treated schools: \\ treated minus untreated pupils", W["within"], CONTROL),
                 (r"untreated pupils: \\ treated schools minus control", W["spillover"], HEALTH),
                 (r"whole schools: \\ treated minus control", W["between_schools"], GAIN)]
-        ax = plane([0, 3], [-0.12, 0], center=LEFT * 1.6 + DOWN * 0.2, x_length=6.6, y_length=4.4, xticks=[],
+        ax = plane([0, 3], [-0.12, 0], center=LEFT * 1.6 + UP * 0.35, x_length=6.6, y_length=4.2, xticks=[],
                    yticks=[-0.12, -0.08, -0.04, 0], ylabel=r"change in the share of days absent",
                    yfmt=lambda v: f"{100 * v:+.0f}".replace("-", "{-}"), font_size=14)
         bars = VGroup()
@@ -62,7 +62,8 @@ class Health(VoiceoverScene):
             p0, p1 = ax.ax.c2p(0.5 + i - 0.3, 0), ax.ax.c2p(0.5 + i + 0.3, v)
             r = Rectangle(width=p1[0] - p0[0], height=abs(p1[1] - p0[1]), stroke_width=0, fill_color=col,
                           fill_opacity=0.85).move_to((p0 + p1) / 2)
-            bars.add(VGroup(r, label(nm, font_size=13, color=WHITE).next_to(ax.ax.c2p(0.5 + i, 0), UP, buff=0.12),
+            bars.add(VGroup(r, label(nm, font_size=13, color=WHITE).next_to(ax.ax.c2p(0.5 + i, -0.12), DOWN,
+                                                                                buff=0.15),
                             label(rf"{100 * v:+.1f}".replace("-", "{-}"), font_size=16, color=WHITE).next_to(r, DOWN,
                                                                                                       buff=0.06)))
         side = VGroup(
@@ -162,9 +163,9 @@ class Health(VoiceoverScene):
             self.play(FadeIn(ax), FadeIn(tag), FadeIn(xl), FadeIn(side[0]), *[FadeIn(b[1]) for b in bars],
                       run_time=1.0)
             vo.wait_until("a")
-            self.play(Indicate(xl, color=WHITE))
+            self.play(Indicate(xl, color=WHITE), GrowFromEdge(bars[0][0], DOWN), FadeIn(bars[0][2]))
             vo.wait_until("b")
-            self.play(GrowFromEdge(bars[0][0], DOWN), FadeIn(bars[0][2]), FadeIn(side[1]))
+            self.play(FadeIn(side[1]), Indicate(bars[0], color=WHITE))
             vo.wait_until("c")
             self.play(LaggedStart(*[AnimationGroup(GrowFromEdge(b[0], DOWN), FadeIn(b[2])) for b in bars[1:]],
                                   lag_ratio=0.3), FadeIn(side[2]), run_time=2.5)
@@ -202,10 +203,10 @@ class Health(VoiceoverScene):
         ) as vo:
             self.play(FadeIn(ax), FadeIn(tag), *[FadeIn(b[1]) for b in bars], run_time=1.0)
             vo.wait_until("a")
-            self.play(FadeIn(side[0]))
+            self.play(FadeIn(side[0]), LaggedStart(*[AnimationGroup(GrowFromEdge(b[0], DOWN), FadeIn(b[2]))
+                                                     for b in bars], lag_ratio=0.3), run_time=2.0)
             vo.wait_until("b")
-            self.play(LaggedStart(*[AnimationGroup(GrowFromEdge(b[0], DOWN), FadeIn(b[2])) for b in bars],
-                                  lag_ratio=0.3), FadeIn(side[1]), run_time=2.0)
+            self.play(FadeIn(side[1]), Indicate(bars[0], color=WHITE), Indicate(bars[-1], color=WHITE))
             vo.wait_until("c")
             self.play(FadeIn(side[2]))
         self.clear_scene()

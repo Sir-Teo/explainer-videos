@@ -96,9 +96,8 @@ class Dual(VoiceoverScene):
         g = np.array(G["gap"])
         pts = VGroup(*[dot(ax, a, min(b, 12), FARM if b <= 12 else HOLD, 0.045) for a, b in zip(x, g)])
         n_top = int(np.sum(g > 12))
-        top = label(rf"{n_top} above 12, \ drawn at the top, \\ among them Equatorial Guinea's \\ oil and Zambia's "
-                    r"copper", font_size=13,
-                    color=HOLD).next_to(ax.ax.c2p(4.4, 12), DOWN, buff=0.05)
+        top = label(rf"red: \ {n_top} above 12, \\ drawn at the top, \\ among them Equatorial \\ Guinea's oil and "
+                    r"\\ Zambia's copper", font_size=14, color=HOLD)
         one = DashedLine(ax.ax.c2p(2.9, 1), ax.ax.c2p(5.25, 1), color=GREY_B, stroke_width=1.6)
         ol = label(r"no gap", font_size=14, color=GREY_B).next_to(ax.ax.c2p(5.25, 1), UP, buff=0.05).shift(LEFT * 0.4)
         names = VGroup()
@@ -107,15 +106,16 @@ class Dual(VoiceoverScene):
                 p = G["pick"][c]
                 names.add(label(p["name"], font_size=13, color=WHITE).next_to(
                     ax.ax.c2p(np.log10(p["gdppc"]), min(p["gap"], 12)), UR, buff=0.04))
+        eq = MathTex(r"\text{gap} = \frac{(1-v)/(1-e)}{v/e}", font_size=28, color=THEORY)
+        el = label(r"$v$: \ farms' share of value added \\ $e$: \ farms' share of workers", font_size=14,
+                   color=GREY_A)
         side = VGroup(
+            VGroup(eq, el).arrange(DOWN, aligned_edge=LEFT, buff=0.12),
             label(rf"{G['n']} countries, \\ latest year", font_size=18, color=WHITE),
             label(rf"poorest quarter: \\ median gap {G['median_poorest']:.1f}", font_size=18, color=FARM),
             label(rf"richest quarter: \\ median gap {G['median_richest']:.1f}", font_size=18, color=TOWN),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.35).to_edge(RIGHT, buff=0.3)
-        eq = MathTex(r"\text{gap} = \frac{(1-v)/(1-e)}{v/e}", font_size=30, color=THEORY).next_to(side, DOWN,
-                                                                                                  buff=0.4)
-        el = label(r"$v$: \ farms' share of value added \\ $e$: \ farms' share of workers", font_size=14,
-                   color=GREY_A).next_to(eq, DOWN, buff=0.15)
+            top,
+        ).arrange(DOWN, aligned_edge=LEFT, buff=0.3).to_edge(RIGHT, buff=0.3)
         tag = data_tag(r"World Bank, \ WDI: \ SL.AGR.EMPL.ZS, \ NV.AGR.TOTL.ZS, \ NY.GDP.PCAP.PP.KD", corner=DL,
                        font_size=11)
         with self.voiceover(
@@ -133,12 +133,12 @@ class Dual(VoiceoverScene):
             vo.wait_until("a")
             self.play(Write(eq), FadeIn(el))
             vo.wait_until("b")
-            self.play(LaggedStart(*[FadeIn(p) for p in pts], lag_ratio=0.01), FadeIn(names), FadeIn(side[0]),
+            self.play(LaggedStart(*[FadeIn(p) for p in pts], lag_ratio=0.01), FadeIn(names), FadeIn(side[1]),
                       FadeIn(top), run_time=2.5)
             vo.wait_until("c")
-            self.play(FadeIn(side[1]))
-            vo.wait_until("d")
             self.play(FadeIn(side[2]))
+            vo.wait_until("d")
+            self.play(FadeIn(side[3]))
         self.clear_scene()
 
     def why(self):

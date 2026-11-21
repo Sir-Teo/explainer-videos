@@ -90,18 +90,21 @@ class Graduation(VoiceoverScene):
         G = load("grad")
         after, end = np.array(G["after"]), np.array(G["end"])
         th = G["threshold"]
-        ax = plane([5, 40], [-15, 25], center=LEFT * 1.9 + DOWN * 0.35, x_length=8.0, y_length=4.8,
-                   xticks=[5, 10, 15, 20, 25, 30, 35, 40], yticks=[-15, -10, -5, 0, 5, 10, 15, 20, 25],
+        ax = plane([8, 38], [-8, 10], center=LEFT * 1.9 + DOWN * 0.35, x_length=8.0, y_length=4.8,
+                   xticks=[10, 15, 20, 25, 30, 35], yticks=[-8, -4, 0, 4, 8],
                    xlabel=r"capital just after the transfer", ylabel=r"change in capital over twelve years",
-                   xfmt=lambda v: f"{v:.0f}", yfmt=lambda v: f"{v:+.0f}".replace("-", "{-}"), font_size=13)
-        zero = DashedLine(ax.ax.c2p(5, 0), ax.ax.c2p(40, 0), color=GREY_B, stroke_width=1.6)
-        tl = vline(ax, th, -15, 25, WHITE)
-        tlab = label(rf"the threshold, \ {th:.1f}", font_size=15, color=WHITE).next_to(ax.ax.c2p(th, 25), RIGHT,
+                   xfmt=lambda v: f"{v:.0f}", yfmt=lambda v: f"{v:+.0f}".replace("-", "{-}") if v else "0",
+                   font_size=13)
+        zero = DashedLine(ax.ax.c2p(8, 0), ax.ax.c2p(38, 0), color=GREY_B, stroke_width=1.6)
+        tl = vline(ax, th, -8, 10, WHITE)
+        tlab = label(rf"the threshold, \ {th:.1f}", font_size=15, color=WHITE).next_to(ax.ax.c2p(th, 10), RIGHT,
                                                                                       buff=0.1).shift(DOWN * 0.2)
         d = end - after
-        sel = (after >= 5) & (after <= 40) & (d >= -15) & (d <= 25)
-        pts = VGroup(*[dot(ax, a, b, ESCAPE if a > th else TRAP, 0.035) for a, b in zip(after[sel], d[sel])])
-        med = path(ax, G["mids"], G["gain"], E.ACCENT, 3.4)
+        sel = (after >= 8) & (after <= 38) & (d >= -8) & (d <= 10)
+        pts = VGroup(*[dot(ax, a, b, ESCAPE if a > th else TRAP, 0.03).set_opacity(0.45)
+                       for a, b in zip(after[sel], d[sel])])
+        med = VGroup(path(ax, G["mids"], G["gain"], E.ACCENT, 4.5),
+                     *[dot(ax, x_, y_, E.ACCENT, 0.07) for x_, y_ in zip(G["mids"], G["gain"])])
         side = VGroup(
             label(r"the Island's households, \\ each given 10", font_size=18, color=WHITE),
             label(r"left of the line: \\ they lose ground", font_size=18, color=TRAP),
@@ -130,7 +133,7 @@ class Graduation(VoiceoverScene):
             vo.wait_until("c")
             self.play(FadeIn(side[2]))
             vo.wait_until("d")
-            self.play(Create(med), FadeIn(side[3]), run_time=1.5)
+            self.play(Create(med[0]), FadeIn(med[1:]), FadeIn(side[3]), run_time=1.5)
             vo.wait_until("e")
             self.play(FadeIn(side[4]))
         self.clear_scene()
