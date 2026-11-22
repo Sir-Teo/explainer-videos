@@ -4,7 +4,7 @@ from explainer.cs import *  # noqa: F403
 from videos.cs.cs15.common import (CODE, COST, CTRL, DATA, FUNC, HEAD, LAM, NO, PART, YES, load, mono, words)
 
 
-class Frontier(VoiceoverScene):
+class Frontier(WatchScene):
     def construct(self):
         self.card()
         self.memory()
@@ -14,11 +14,7 @@ class Frontier(VoiceoverScene):
         self.open()
 
     def card(self):
-        card = chapter_card(15, r"Frontier: \ the limits of runtimes", r"What can a runtime not yet promise?",
-                            lit=(2005,), extra=((2005, r"Hertz and Berger: \ the price of collection"),), part=PART)
-        with self.voiceover("Chapter fifteen. Frontier: the limits of runtimes."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(15, r"Frontier: \ the limits of runtimes", r"What can a runtime not yet promise?", lit=(2005,), extra=((2005, r"Hertz and Berger: \ the price of collection"),), part=PART, said="Chapter fifteen. Frontier: the limits of runtimes.")
 
     def memory(self):
         d = load("cost")
@@ -110,6 +106,10 @@ class Frontier(VoiceoverScene):
         self.clear_scene()
 
     def futamura(self):
+        self.ask(r"Specialize an interpreter to one fixed program. \\ What do you get?", [r"the same interpreter",
+                 r"a compiled version of that program"], 1,
+                 say="Take an interpreter, and specialize it to one fixed program. What comes out?",
+                 reveal="A compiled version of that program: Futamura's first projection.")
         head = label(r"Compilers from interpreters", font_size=34).to_edge(UP, buff=0.3)
         def block(text,width,color):
             r=RoundedRectangle(width=width,height=.9,corner_radius=.1,color=color,fill_color=color,fill_opacity=.1)

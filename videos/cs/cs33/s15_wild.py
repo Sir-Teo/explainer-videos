@@ -4,19 +4,14 @@ from explainer.cs import *  # noqa: F403
 from videos.cs.cs33.common import (HEAD, LAM, NO, PART, YES, load, mono, num)
 
 
-class Wild(VoiceoverScene):
+class Wild(WatchScene):
     def construct(self):
         self.card()
         self.cases()
         self.detectors()
 
     def card(self):
-        card = chapter_card(14, r"Concurrency bugs in the wild", r"What happens when a race escapes?",
-                            lit=(1985, 2003), extra=((1985, r"Therac-25"), (2003, r"the Northeast blackout")),
-                            part=PART)
-        with self.voiceover("Chapter fourteen. Concurrency bugs in the wild."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(14, r"Concurrency bugs in the wild", r"What happens when a race escapes?", lit=(1985, 2003), extra=((1985, r"Therac-25"), (2003, r"the Northeast blackout")), part=PART, said="Chapter fourteen. Concurrency bugs in the wild.")
 
     def cases(self):
         head = label(r"Three races that escaped", font_size=36).to_edge(UP, buff=0.3)
@@ -50,6 +45,10 @@ class Wild(VoiceoverScene):
         self.clear_scene()
 
     def detectors(self):
+        self.ask(r"ThreadSanitizer on the counter program. \\ It reports the race...",
+                 [r"only when an update is lost", r"on a run where the count is right"], 1,
+                 say="Run the counter program under ThreadSanitizer. Must an update actually be lost for it to report the race?",
+                 reveal="No. It tracks happens-before, and reports two unordered accesses, whatever the result.")
         d = load("tsan")
         head = label(r"Race detectors", font_size=36).to_edge(UP, buff=0.3)
         rep = VGroup(*[mono(t, 16, NO if "WARNING" in t else WHITE) for t in d["racy"]["lines"][:6]]).arrange(

@@ -4,27 +4,23 @@ from explainer.cs import *  # noqa: F403
 from videos.cs.cs20.common import (CTRL, DATA, HEAD, LAM, NO, PART, YES, grid_table, load, mono, words)
 
 
-class Frontier(VoiceoverScene):
+class Frontier(WatchScene):
     def construct(self):
         self.card()
         self.derandomized()
         self.hardness()
-        self.pit()
         self.sketches()
         self.open_()
 
     def card(self):
-        card = chapter_card(16, r"Frontier: \ does randomness help?", r"Is every coin flip removable?",
-                            lit=(1997, 2002, 2016), extra=((1997, r"hardness against randomness"),
+        self.chapter(16, r"Frontier: \ does randomness help?", r"Is every coin flip removable?", lit=(1997, 2002, 2016), extra=((1997, r"hardness against randomness"),
                                                            (2002, r"PRIMES is in P"),
-                                                           (2016, r"matching in quasi-NC")), part=PART)
-        with self.voiceover((
-            'Chapter sixteen. Frontier: does randomness help?'
-        )):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+                                                           (2016, r"matching in quasi-NC")), part=PART, said='Chapter sixteen. Frontier: does randomness help?')
 
     def derandomized(self):
+        self.ask(r"Is primality testable deterministically \\ in polynomial time?", [r"no", r"yes, since 2002"], 1,
+                 say="Can primality be decided deterministically in polynomial time?",
+                 reveal="Yes, since 2002: Agrawal, Kayal and Saxena. Miller-Rabin is still what everyone runs.")
         head = label(r"Coins that were removed", font_size=34).to_edge(UP, buff=0.35)
         rows = [
             [r"primality", r"Miller--Rabin \ (1976--80)", r"AKS \ (2002)"],
@@ -109,42 +105,6 @@ class Frontier(VoiceoverScene):
         self.wait(0.3)
         self.clear_scene()
 
-    def pit(self):
-        head = label(r"The test we can't derandomize", font_size=34).to_edge(UP, buff=0.35)
-        pts = VGroup(
-            label(r"polynomial identity testing: \ is this arithmetic circuit the zero polynomial?", font_size=22,
-                  color=WHITE),
-            label(r"with coins: \ Schwartz--Zippel, \ chapter 3, \ one evaluation", font_size=21, color=YES),
-            label(r"without: \ no polynomial-time algorithm is known", font_size=21, color=NO),
-            label(r"Kabanets and Impagliazzo (2004): \ a deterministic PIT would prove circuit lower bounds \ "
-                  r"($\mathsf{NEXP} \not\subseteq \mathsf{P/poly}$, \ or the permanent needs large arithmetic "
-                  r"circuits)", font_size=20, color=HEAD),
-            label(r"integer PIT derandomization implies one of these lower bounds; \ a specific implication",
-                  font_size=21, color=LAM),
-            label(r"solved special cases: \ sparse polynomials, \ read-once branching programs (quasi-polynomial), "
-                  r"\ depth-3 circuits with few gates", font_size=19, color=GREY_A),
-        ).arrange(DOWN, buff=0.32).next_to(head, DOWN, buff=0.45)
-        with self.voiceover(
-            (
-            "Derandomization also implies hardness in important settings. <bookmark mark='a'/> Polynomial identity "
-            "testing asks whether an arithmetic circuit computes the zero formal polynomial. <bookmark mark='b'/> "
-            'Random evaluation gives a bounded-error test when the field, degree and evaluation set satisfy the '
-            "required conditions. <bookmark mark='c'/> General deterministic polynomial-time identity testing "
-            "remains open. <bookmark mark='d'/> Kabanets and Impagliazzo showed in 2004 that deterministic "
-            'polynomial-time identity testing over the integers implies a major lower bound: either NEXP lacks '
-            'polynomial-size Boolean circuits, or the permanent lacks polynomial-size arithmetic circuits. <bookmark'
-            " mark='e'/> This is a specific implication, not an unconditional equivalence between every form of "
-            "hardness and derandomization. <bookmark mark='f'/> Restricted circuit classes admit progress. The 2016 "
-            'bipartite matching quasi-NC result uses related isolation ideas, with quasi-polynomial size still '
-            'present.'
-        )
-        ) as vo:
-            self.play(FadeIn(head))
-            for mk, p in zip("abcdef", pts):
-                vo.wait_until(mk)
-                self.play(FadeIn(p))
-        self.wait(0.3)
-        self.clear_scene()
 
     def sketches(self):
         head = label(r"How small can a sketch be?", font_size=34).to_edge(UP, buff=0.35)

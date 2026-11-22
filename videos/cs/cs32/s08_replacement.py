@@ -55,7 +55,7 @@ def fmt_k(v):
     return f"{v:,}".replace(",", "{,}")
 
 
-class Replacement(VoiceoverScene):
+class Replacement(WatchScene):
     def construct(self):
         self.card()
         self.opt()
@@ -65,12 +65,8 @@ class Replacement(VoiceoverScene):
         self.clock()
 
     def card(self):
-        card = chapter_card(7, r"Which page to evict", r"When memory is full, which page should go?",
-                            lit=(1966, 1969, 2003), extra=((1966, r"Belady: \ OPT"), (1969, r"Belady's anomaly"),
-                                                          (2003, r"ARC")), part=PART)
-        with self.voiceover("Chapter seven. Which page to evict."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(7, r"Which page to evict", r"When memory is full, which page should go?", lit=(1966, 1969, 2003), extra=((1966, r"Belady: \ OPT"), (1969, r"Belady's anomaly"),
+                                                          (2003, r"ARC")), part=PART, said="Chapter seven. Which page to evict.")
 
     def opt(self):
         d = load("belady")
@@ -120,6 +116,10 @@ class Replacement(VoiceoverScene):
         self.clear_scene()
 
     def anomaly(self):
+        self.ask(r"First in, first out replacement. \\ Give it more frames, and faults can...", [r"only fall",
+                 r"rise"], 1,
+                 say="First in, first out page replacement. Give it more memory. Can it fault more often?",
+                 reveal="Yes: Belady's anomaly. More frames, more faults.")
         d = load("belady")
         head = label(r"Belady's anomaly: \ more memory, \ more faults", font_size=34).to_edge(UP, buff=0.25)
         g3 = fifo_grid(d["fifo3"], 3).next_to(head, DOWN, buff=0.35)

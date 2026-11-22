@@ -5,7 +5,7 @@ from videos.cs.cs38.common import (DATA, HEAD, KERN, LAM, NO, PART, PROCC, YES, 
                                    trace)
 
 
-class OurRaft(VoiceoverScene):
+class OurRaft(WatchScene):
     def construct(self):
         self.card()
         self.invariants()
@@ -15,12 +15,8 @@ class OurRaft(VoiceoverScene):
         self.reads()
 
     def card(self):
-        card = chapter_card(8, r"Our Raft, \ attacked", r"How do you know a consensus implementation is right?",
-                            lit=(1990, 2014), extra=((1990, r"Schneider: \ state machine replication"),
-                                                     (2013, r"Kingsbury: \ Jepsen")), part=PART)
-        with self.voiceover("Chapter eight. Our Raft, attacked."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(8, r"Our Raft, \ attacked", r"How do you know a consensus implementation is right?", lit=(1990, 2014), extra=((1990, r"Schneider: \ state machine replication"),
+                                                     (2013, r"Kingsbury: \ Jepsen")), part=PART, said="Chapter eight. Our Raft, attacked.")
 
     def invariants(self):
         head = label(r"Four invariants, \ checked after every event", font_size=36).to_edge(UP, buff=0.3)
@@ -106,6 +102,10 @@ class OurRaft(VoiceoverScene):
         self.clear_scene()
 
     def campaign(self):
+        self.ask(r"Break one Raft rule, then run a thousand storms. \\ The checkers...", [r"rarely notice",
+                 r"catch it"], 1,
+                 say="We break one rule of Raft, and run a thousand random storms of crashes and partitions. Do the invariant checks notice?",
+                 reveal="They catch every broken version. Correct Raft survives every storm.")
         r = load("raft")
         head = label(r"A thousand storms each", font_size=36).to_edge(UP, buff=0.3)
         spec = [("correct", r"correct Raft", r"random"), ("correct targeted", r"correct Raft", r"targeted"),

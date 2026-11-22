@@ -4,12 +4,12 @@ from explainer.cs import *  # noqa: F403
 from videos.cs.cs47.common import BG, DATA, HEAD, KERN, LAM, NO, PART, YES, load
 
 
-class Hook(VoiceoverScene):
+class Hook(WatchScene):
     def construct(self):
         self.history()
         self.pieces()
         self.ours()
-        self.plan()
+        self.title(PART)
 
     def history(self):
         head = label(r"Finding things", font_size=38).to_edge(UP, buff=0.35)
@@ -129,29 +129,6 @@ class Hook(VoiceoverScene):
         self.wait(0.4)
         self.clear_scene()
 
-    def plan(self):
-        title = label(rf"Part {PART}: \ Search Engines", font_size=36).to_edge(UP, buff=0.3)
-        smap = series_map(current=PART, done=PART - 1).scale(0.92).next_to(title, DOWN, buff=0.35)
-        obj = objectives_card([
-            r"Zipf's and Heaps' laws on the novels",
-            r"the inverted index and fast intersection",
-            r"gap codes: \ vbyte, \ Elias, \ Golomb--Rice",
-            r"BM25 from the probability ranking principle; \ nDCG",
-            r"WAND, \ PageRank, \ SimHash",
-            r"learning to rank, \ product quantization and HNSW",
-        ], font_size=25).move_to(DOWN * 0.2)
-        with self.voiceover(
-            "This is Part 47 of Computer Science, Built. <bookmark mark='a'/> We will fit Zipf's and Heaps' laws to "
-            "the novels; build an inverted index and intersect its lists with as few comparisons as possible; "
-            "compress them with codes whose lengths we derive; derive BM25 from a model of relevance and measure "
-            "it; skip most of the work with WAND; rank pages by a random walk; find near-duplicates; and search "
-            "by meaning, with vectors compressed by product quantization and searched by a layered graph."
-        ) as vo:
-            self.play(FadeIn(title), FadeIn(smap))
-            vo.wait_until("a")
-            self.play(FadeOut(smap), FadeIn(obj))
-        self.wait(0.5)
-        self.clear_scene()
 
 
 _ = (KERN, LAM, NO, YES)

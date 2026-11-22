@@ -17,7 +17,7 @@ def tile(content, caption, color, TW=3.6, TH=2.3):
     return Group(frame, content, cap)
 
 
-class Outro(VoiceoverScene):
+class Outro(WatchScene):
     def construct(self):
         self.recap()
         self.payoffs()
@@ -51,6 +51,12 @@ class Outro(VoiceoverScene):
             self.play(LaggedStart(*[FadeIn(t, shift=UP * 0.15) for t in tiles], lag_ratio=0.25), run_time=4.0)
         self.wait(0.5)
         self.clear_scene()
+        self.checkpoint(
+            [(r"Why do schema changes need two releases?", r"Old and new code share the database during rollout"),
+             (r"Why progressive rollout?", r"Small exposure first; rare bugs need traffic")],
+            narration="Last checkpoint. Why does a schema change need several releases? And why roll out in stages?",
+            answers_narration="During a rollout old and new code run against the same data. And because a rare failure needs "
+                              "enough traffic to show itself before it reaches everyone.")
 
     def payoffs(self):
         card = payoff_card([

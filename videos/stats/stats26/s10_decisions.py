@@ -5,21 +5,25 @@ import numpy as np
 from videos.stats.stats26.common import *  # noqa: F403
 
 
-class Decisions(VoiceoverScene):
+class Decisions(StatsScene):
     def construct(self):
         self.card()
+        self.ask("The expected value of perfect information is...",
+                 ["never negative", "sometimes negative"], 0,
+                 say="Before deciding, you could pay to learn theta exactly. What can the expected value of that "
+                     "perfect information be?",
+                 reveal="Never negative: you can always ignore it. It's the most any study is worth, an upper bound "
+                        "on what to spend.")
         self.utility()
         self.losses()
         self.admissible()
         self.coaching()
         self.voi()
         self.evsi()
+        self.answer()
 
     def card(self):
-        card = chapter_card(9, r"Decisions", r"Expected utility, \ and what information is worth", lit=(1954,), part=PART)
-        with self.voiceover("Chapter nine. Decisions."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(9, r"Decisions", r"Expected utility, \ and what information is worth", lit=(1954,), part=PART, said="Chapter nine. Decisions.")
 
     def utility(self):
         rows = [

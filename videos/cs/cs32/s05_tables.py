@@ -18,20 +18,20 @@ def slots(n, used, color, w=0.11, h=0.34):
     return g
 
 
-class Tables(VoiceoverScene):
+class Tables(WatchScene):
     def construct(self):
         self.card()
         self.tree()
         self.sizes()
 
     def card(self):
-        card = chapter_card(4, r"Multi-level page tables", r"How big must a page table be?", lit=(2019,),
-                            extra=((2019, r"five-level paging"),), part=PART)
-        with self.voiceover("Chapter four. Multi-level page tables."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(4, r"Multi-level page tables", r"How big must a page table be?", lit=(2019,), extra=((2019, r"five-level paging"),), part=PART, said="Chapter four. Multi-level page tables.")
 
     def tree(self):
+        self.ask(r"A flat page table for 32-bit addresses, \\ one 4-byte entry per page. Size per process:",
+                 [r"4 KiB", r"4 MiB", r"4 GiB"], 1,
+                 say="One four-byte entry for every page of a thirty-two-bit address space. How big is a flat table, per process?",
+                 reveal="Four mebibytes, almost all of it saying not mapped. A tree skips the empty parts.")
         d = load("sameva")
         maps = d["walks"][0]["maps"]
         head = label(r"A page table is a radix tree", font_size=36).to_edge(UP, buff=0.3)

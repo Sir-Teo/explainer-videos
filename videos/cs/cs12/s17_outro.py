@@ -23,7 +23,7 @@ def lr_actions():
     return ["  ".join(acts[k:k + 4]) for k in range(0, len(acts), 4)]
 
 
-class Outro(VoiceoverScene):
+class Outro(WatchScene):
     def construct(self):
         self.recap()
         self.payoffs()
@@ -61,6 +61,12 @@ class Outro(VoiceoverScene):
             self.play(LaggedStart(*[FadeIn(t, shift=UP * 0.15) for t in tiles], lag_ratio=0.25), run_time=4.0)
         self.wait(0.5)
         self.clear_scene()
+        self.checkpoint(
+            [(r"LL or LR: which decides after seeing the whole phrase?", r"LR, bottom-up"),
+             (r"Why did the outage regex take so long?", r"Backtracking tried exponentially many splits")],
+            narration="Last checkpoint. Which parser decides after seeing the whole phrase, LL or LR? And why did the outage "
+                      "pattern take so long?",
+            answers_narration="LR, bottom up. And the backtracking engine tried exponentially many ways to split the input.")
 
     def payoffs(self):
         card = payoff_card([

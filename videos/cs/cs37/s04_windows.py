@@ -31,21 +31,16 @@ def window_frame(st, base, w, color=WIN):
     return r
 
 
-class Windows(VoiceoverScene):
+class Windows(WatchScene):
     def construct(self):
         self.card()
         self.sliding()
         self.gbn_sr()
-        self.measured()
         self.sequence_space()
 
     def card(self):
-        card = chapter_card(3, r"Sliding windows", r"How many packets may be unacknowledged at once?",
-                            lit=(1974, 1981), extra=((1974, r"Cerf and Kahn: \ windows"),
-                                                     (1978, r"Go-Back-N in HDLC")), part=PART)
-        with self.voiceover("Chapter three. Sliding windows."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(3, r"Sliding windows", r"How many packets may be unacknowledged at once?", lit=(1974, 1981), extra=((1974, r"Cerf and Kahn: \ windows"),
+                                                     (1978, r"Go-Back-N in HDLC")), part=PART, said="Chapter three. Sliding windows.")
 
     def sliding(self):
         head = label(r"A window over the stream", font_size=36).to_edge(UP, buff=0.3)
@@ -114,56 +109,12 @@ class Windows(VoiceoverScene):
         self.wait(0.4)
         self.clear_scene()
 
-    def measured(self):
-        w = load("windows")
-        head = label(r"Utilization against window", font_size=36).to_edge(UP, buff=0.3)
-        g = axes([0, 7, 1], [0, 1.05, 0.25], x_length=7.2, y_length=4.2, x_label=r"window $W$ \ (packets)",
-                 y_label=r"utilization", xticks=range(0, 8), yticks=(0.25, 0.5, 0.75, 1.0),
-                 fx=lambda v: f"{2 ** int(v)}", fy=lambda v: f"{v:.2f}").move_to([-2.4, -0.5, 0])
-        ax = g.ax
-        rows = w["rows"]
-        X = [math.log2(r["W"]) for r in rows]
-        f = trace(ax, [(x, r["formula"]) for x, r in zip(X, rows)], GREY_B, width=2)
-        series = {}
-        for key, c in (("go-back-n_0.0", WHITE), ("go-back-n_0.02", KERN), ("selective-repeat_0.02", LAM)):
-            series[key] = VGroup(trace(ax, [(x, r[key]) for x, r in zip(X, rows)], c, width=3),
-                                 *[Dot(ax.c2p(x, r[key]), radius=0.05, color=c) for x, r in zip(X, rows)])
-        leg = VGroup(
-            label(r"formula, \ no loss", font_size=19, color=GREY_B),
-            label(r"either protocol, \ no loss", font_size=19, color=WHITE),
-            label(r"Go-Back-N, \ 2\% loss", font_size=19, color=KERN),
-            label(r"Selective Repeat, \ 2\% loss", font_size=19, color=LAM),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.15).move_to([4.3, 1.4, 0])
-        last = rows[-1]
-        notes = VGroup(
-            wrapped_label(rf"at $W = 128$ with 2\% loss: \ Go-Back-N sends {last['go-back-n_0.02_retx']:,} "
-                          rf"retransmissions for 2{{,}}000 packets, \ Selective Repeat "
-                          rf"{last['selective-repeat_0.02_retx']}", 4.9, font_size=19, color=WHITE),
-            wrapped_label(r"both stall waiting out a whole timeout for each loss: \ the reason TCP added "
-                          r"\textbf{fast retransmit}", 4.9, font_size=19, color=YES),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.25).move_to([4.3, -1.5, 0])
-        with self.voiceover(
-            "We measured both, on a channel with a hundred-millisecond round trip and a thousand packets a second. "
-            "<bookmark mark='a'/> With no loss, both follow the formula exactly: utilization doubles with the "
-            "window, until a hundred and twenty-eight packets fill the pipe. <bookmark mark='b'/> With two percent "
-            "loss, Go-Back-N falls apart as the window grows. Every loss throws away a window's worth of good "
-            "packets: at a window of a hundred and twenty-eight it sends nearly five thousand retransmissions for "
-            "two thousand packets. <bookmark mark='c'/> Selective Repeat resends only what was lost, eighty-eight "
-            "packets, and does three times better. But both still stall for a whole timeout after each loss, "
-            "waiting to be sure. TCP's answer, fast retransmit, will be to treat a few later ACKs as evidence of a "
-            "loss, without waiting for the timer."
-        ) as vo:
-            self.play(FadeIn(head), FadeIn(g), Create(f), FadeIn(leg[0]))
-            vo.wait_until("a")
-            self.play(Create(series["go-back-n_0.0"]), FadeIn(leg[1]))
-            vo.wait_until("b")
-            self.play(Create(series["go-back-n_0.02"]), FadeIn(leg[2]), FadeIn(notes[0]))
-            vo.wait_until("c")
-            self.play(Create(series["selective-repeat_0.02"]), FadeIn(leg[3]), FadeIn(notes[1]))
-        self.wait(0.4)
-        self.clear_scene()
 
     def sequence_space(self):
+        self.ask(r"Selective Repeat, sequence numbers modulo $S$. \\ The largest safe window:", [r"$S - 1$",
+                 r"$S / 2$"], 1,
+                 say="Selective Repeat numbers packets modulo S. How large can its window safely be?",
+                 reveal="Half of S. Any more, and an old packet looks like a new one.")
         w = load("windows")
         head = label(r"How many sequence numbers?", font_size=36).to_edge(UP, buff=0.3)
         thm = VGroup(

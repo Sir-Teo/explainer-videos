@@ -7,21 +7,25 @@ from explainer.stats.board import coverage_board, load_all
 from videos.stats.stats15.common import *  # noqa: F403
 
 
-class Frequency(VoiceoverScene):
+class Frequency(StatsScene):
     def construct(self):
         self.card()
+        self.ask(r"A 95\% credible interval built on a strong but wrong prior. Its coverage...",
+                 [r"is 95\% anyway", r"can be far below 95\%", r"is always above 95\%"], 1,
+                 say="A ninety-five percent credible interval from a strong prior that happens to be wrong. Over "
+                     "repeated data, how often does it cover the truth?",
+                 reveal="It can be far below ninety-five percent. Credible intervals are calibrated on average over "
+                        "their prior, not for every truth.")
         self.question()
         self.wrong_prior()
         self.average()
         self.sbc()
         self.board()
         self.lessons()
+        self.answer()
 
     def card(self):
-        card = chapter_card(9, r"Bayes and frequency", r"How often does a credible interval catch the truth?", part=PART)
-        with self.voiceover("Chapter nine. Bayes and frequency."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(9, r"Bayes and frequency", r"How often does a credible interval catch the truth?", part=PART, said="Chapter nine. Bayes and frequency.")
 
     def question(self):
         rows = [

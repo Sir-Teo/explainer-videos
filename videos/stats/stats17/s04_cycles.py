@@ -6,21 +6,29 @@ from explainer.stats.kit import ts as T
 from videos.stats.stats17.common import *  # noqa: F403
 
 
-class Cycles(VoiceoverScene):
+class Cycles(StatsScene):
     def construct(self):
         self.card()
+        self.ask("An AR(2) with complex roots. Its autocorrelation function is...",
+                 ["an exponential decay", "a damped cosine", "zero after lag 2"], 1,
+                 say="An autoregression of order two whose polynomial has complex roots. What does its "
+                     "autocorrelation function look like?",
+                 reveal="A damped cosine: correlations swinging positive and negative as they shrink. Rhythm "
+                        "without a clock, Yule's model of the sunspots.")
         self.complex_roots()
         self.ar2_path()
         self.slutsky()
         self.sunspots()
         self.acf_compare()
         self.lesson()
+        self.answer()
+        self.checkpoint([("100 observations with lag-one correlation 0.9: worth about?", "5 independent ones"),
+                         ("An AR(2) with complex roots: its ACF?", "a damped cosine")],
+                        narration="Checkpoint. Memory.",
+                        answers_narration="About five. And a damped cosine.")
 
     def card(self):
-        card = chapter_card(3, r"Pseudo-cycles", r"Rhythm without a clock", part=PART)
-        with self.voiceover("Chapter three. Pseudo-cycles."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(3, r"Pseudo-cycles", r"Rhythm without a clock", part=PART, said="Chapter three. Pseudo-cycles.")
 
     def complex_roots(self):
         p = T.ar2_period(1.3, -0.6)

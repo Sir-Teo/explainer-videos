@@ -41,7 +41,7 @@ def short_name(name: str) -> str:
     return next(s for k, s in SHORT if k in name)
 
 
-class Bsearch(VoiceoverScene):
+class Bsearch(WatchScene):
     def construct(self):
         self.card()
         self.invariant()
@@ -49,15 +49,10 @@ class Bsearch(VoiceoverScene):
         self.overflow()
         self.midpoints()
         self.variant()
-        self.wellfounded()
 
     def card(self):
-        card = chapter_card(3, r"Binary search, \ proved", r"Can a proof catch what years of use missed?",
-                            lit=(1967, 2006), extra=((1967, r"Floyd: \ well-founded sets"),
-                                                     (2006, r"Bloch: \ the midpoint overflow")), part=PART)
-        with self.voiceover("Chapter three. Binary search, proved."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(3, r"Binary search, \ proved", r"Can a proof catch what years of use missed?", lit=(1967, 2006), extra=((1967, r"Floyd: \ well-founded sets"),
+                                                     (2006, r"Bloch: \ the midpoint overflow")), part=PART, said="Chapter three. Binary search, proved.")
 
     def invariant(self):
         head = label(r"The invariant of binary search", font_size=36).to_edge(UP, buff=0.3)
@@ -205,6 +200,10 @@ class Bsearch(VoiceoverScene):
         self.clear_scene()
 
     def overflow(self):
+        self.ask(r"\texttt{mid = (low + high) / 2} in 32-bit integers, \\ on an array of two billion elements:",
+                 [r"fine", r"overflows to a negative index"], 1,
+                 say="The textbook midpoint, low plus high over two, in thirty-two-bit integers, on an array of two billion elements. What happens?",
+                 reveal="low plus high overflows, and mid becomes negative.")
         bad = load("hoare")["programs"]["binsearch_buggy"]
         pres = next(v for v in bad["vcs"] if "preserved" in v["name"])
         ce = pres["counterexample"]
@@ -392,58 +391,6 @@ class Bsearch(VoiceoverScene):
         self.wait(0.4)
         self.clear_scene()
 
-    def wellfounded(self):
-        head = label(r"Well-founded orders", font_size=36).to_edge(UP, buff=0.3)
-        M, N, sp = 3, 6, 0.62
-        ox, oy = -6.0, -2.6
-
-        def P(m, n):
-            return np.array([ox + n * sp, oy + m * 1.2, 0])
-        grid = VGroup(*[Dot(P(m, n), radius=0.05, color=GREY_D) for m in range(M + 1) for n in range(N + 1)])
-        ax_m = VGroup(*[label(rf"$m = {m}$", font_size=17, color=GREY_B).next_to(P(m, 0), LEFT, buff=0.25)
-                        for m in range(M + 1)])
-        ax_n = label(r"$n \to$", font_size=17, color=GREY_B).next_to(P(0, N), DOWN, buff=0.3)
-        # an illustrative descent in the lexicographic order: n falls; when it cannot, m falls and n jumps up
-        chain = [(3, 2), (3, 1), (3, 0), (2, 5), (2, 4), (2, 3), (2, 2), (1, 6), (1, 5), (1, 4), (0, 3), (0, 2),
-                 (0, 1), (0, 0)]
-        assert all(a > b for a, b in zip(chain, chain[1:]))      # Python compares tuples lexicographically
-        path = VGroup(*[Arrow(P(*a), P(*b), buff=0.08, stroke_width=2.5,
-                              color=HEAD if a[0] == b[0] else KERN, max_tip_length_to_length_ratio=0.25)
-                        for a, b in zip(chain, chain[1:])])
-        pts = VGroup(*[Dot(P(*c), radius=0.08, color=WHITE) for c in chain])
-        notes = VGroup(
-            wrapped_label(r"\textbf{well-founded}: \ no infinite descending chain; \ the natural numbers under $<$ "
-                          r"are the first example", 5.4, font_size=20, color=WHITE),
-            wrapped_label(r"pairs in dictionary order: \ $(m, n) > (m', n')$ if $m > m'$, \ or $m = m'$ and "
-                          r"$n > n'$; \ $n$ may jump up \ (orange) \ whenever $m$ falls", 5.4, font_size=20,
-                          color=KERN),
-            wrapped_label(r"Ackermann's function terminates so: \ every recursive call makes $(m, n)$ smaller in "
-                          r"this order, \ though its values explode", 5.4, font_size=20, color=YES),
-            wrapped_label(r"Floyd \ (1967) \ proved termination with well-founded sets", 5.4, font_size=20,
-                          color=DATA),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.3).move_to([3.7, -0.2, 0])
-        ill = note(r"illustrative chain", font_size=16).next_to(ax_n, DOWN, buff=0.15).align_to(ax_m, LEFT)
-        with self.voiceover(
-            "Variants need not be numbers. <bookmark mark='a'/> A termination proof needs only an order with no "
-            "infinite descending chain: a well-founded order. <bookmark mark='b'/> Pairs compared like words in a"
-            " dictionary are one. The second number may jump up whenever the first goes down, so a descent can be"
-            " long, but never endless. <bookmark mark='c'/> That is how one proves that Ackermann's function "
-            "terminates, though its values explode: every recursive call makes its pair of arguments smaller in "
-            "this order. <bookmark mark='d'/> Floyd proved termination with such sets in 1967."
-        ) as vo:
-            self.play(FadeIn(head), FadeIn(grid), FadeIn(ax_m), FadeIn(ax_n), FadeIn(ill))
-            vo.wait_until("a")
-            self.play(FadeIn(notes[0]), FadeIn(pts[0]))
-            vo.wait_until("b")
-            self.play(FadeIn(notes[1]))
-            for a, d in zip(path, pts[1:]):
-                self.play(GrowArrow(a), FadeIn(d), run_time=0.35)
-            vo.wait_until("c")
-            self.play(FadeIn(notes[2]))
-            vo.wait_until("d")
-            self.play(FadeIn(notes[3]))
-        self.wait(0.4)
-        self.clear_scene()
 
 
 _ = (BG, mono)

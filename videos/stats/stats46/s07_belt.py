@@ -5,21 +5,29 @@ import numpy as np
 from videos.stats.stats46.common import *  # noqa: F403
 
 
-class Belt(VoiceoverScene):
+class Belt(StatsScene):
     def construct(self):
         self.card()
+        self.ask(r"Invert a family of level-$\alpha$ tests. The result is...",
+                 [r"a $1 - \alpha$ confidence set", "a credible set"], 0,
+                 say="Neyman's construction: for each candidate value, the acceptance region of a level-alpha test. "
+                     "Collect the values each data set accepts. What do you get?",
+                 reveal="A one minus alpha confidence set. Every confidence set arises this way, and its quality is "
+                        "the tests'.")
         self.duality()
         self.belt()
         self.coverage()
         self.uma()
         self.pratt()
+        self.answer()
+        self.checkpoint([("Two-sided normal mean: is there a UMP test?", "no; a UMP unbiased one exists"),
+                         ("Wilks fails when?", "the null is on the boundary, or parameters vanish under it")],
+                        narration="Checkpoint. Nuisances and boundaries.",
+                        answers_narration="No, but an unbiased one. And at boundaries.")
 
     def card(self):
-        card = chapter_card(6, r"Confidence sets by inversion", r"Invert a family of tests into a confidence set", lit=(1937,), part=PART)
-        with self.voiceover("Chapter six. Confidence sets by inversion: inverting a family of tests gives a confidence set, which "
-            "need not be an interval."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(6, r"Confidence sets by inversion", r"Invert a family of tests into a confidence set", lit=(1937,), part=PART, said="Chapter six. Confidence sets by inversion: inverting a family of tests gives a confidence set, which "
+            "need not be an interval.")
 
     def duality(self):
         rows = [

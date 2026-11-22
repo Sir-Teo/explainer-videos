@@ -22,23 +22,22 @@ def vec(o, deg, length, color, tex, side=RIGHT, width=5):
     return VGroup(a, t)
 
 
-class Shading(VoiceoverScene):
+class Shading(WatchScene):
     def construct(self):
         self.card()
         self.cosine()
         self.phong()
         self.blinn()
-        self.gouraud()
         self.normals()
 
     def card(self):
-        card = chapter_card(4, r"Shading", r"How bright is a surface, \ seen from here?", lit=(1971, 1975, 1977),
-                            extra=((1971, r"Gouraud shading"), (1975, r"Phong"), (1977, r"Blinn")), part=PART)
-        with self.voiceover("Chapter four. Shading."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(4, r"Shading", r"How bright is a surface, \ seen from here?", lit=(1971, 1975, 1977), extra=((1971, r"Gouraud shading"), (1975, r"Phong"), (1977, r"Blinn")), part=PART, said="Chapter four. Shading.")
 
     def cosine(self):
+        self.ask(r"Light arrives $60^\circ$ from the normal. \\ Brightness, against head on:", [r"the same",
+                 r"half", r"a third"], 1,
+                 say="Light falls on a matte surface sixty degrees from straight on. How bright is it, compared with head on?",
+                 reveal="Half: the cosine of sixty degrees. The same beam spreads over twice the area.")
         sh = load("shading")
         head = label(r"Lambert's cosine law", font_size=36).to_edge(UP, buff=0.3)
         C = np.array([-3.5, -1.1, 0])
@@ -227,62 +226,6 @@ class Shading(VoiceoverScene):
         self.wait(0.4)
         self.clear_scene()
 
-    def gouraud(self):
-        sh = load("shading")
-        head = label(r"Gouraud against Phong shading", font_size=36).to_edge(UP, buff=0.3)
-        names = (("gouraud", r"Gouraud: \ light the vertices, \ blend colours", NO),
-                 ("phong", r"Phong: \ blend normals, \ light every pixel", YES),
-                 ("truth", r"the exact sphere, \ ray cast", GREY_A))
-        imgs = Group(*[image(sh[k], height=2.7) for k, _, _ in names]).arrange(RIGHT, buff=0.3).next_to(
-            head, DOWN, buff=0.4)
-        caps = VGroup(*[label(t, font_size=18, color=c).next_to(im, DOWN, buff=0.12)
-                        for (_, t, c), im in zip(names, imgs)])
-        x, y = sh["max_diff_at"]
-        H, W = sh["gouraud"].shape[:2]
-        x0, x1, y0, y1 = x - 20, x + 20, y - 15, y + 15
-        boxes = VGroup()
-        for im in imgs:
-            pic = im[0]
-            ul = pic.get_corner(UL)
-            sx, sy = pic.width / W, pic.height / H
-            boxes.add(Rectangle(width=(x1 - x0) * sx, height=(y1 - y0) * sy, color=HEAD, stroke_width=2).move_to(
-                ul + np.array([(x0 + x1) / 2 * sx, -(y0 + y1) / 2 * sy, 0])))
-        crops = Group(*[image(sh[k][y0:y1, x0:x1], height=2.7) for k, _, _ in names]).arrange(RIGHT, buff=0.3)
-        crops.move_to(imgs)
-        zl = note(rf"zoomed: \ 40 $\times$ 30 pixels around pixel ({x}, {y})", font_size=17).next_to(caps, DOWN,
-                                                                                                    buff=0.15)
-        notes = VGroup(
-            wrapped_label(rf"{sh['triangles']} triangles; \ Gouraud \ (1971) \ evaluates the lighting only at "
-                          r"vertices, \ so a highlight that falls between them is smeared into a star, \ or missed",
-                          12.4, font_size=20, color=WHITE),
-            wrapped_label(rf"largest per-pixel difference: \ {sh['max_diff_gouraud_phong']:.2f} of full brightness; "
-                          rf"\ error against the exact sphere: \ Gouraud {sh['rmse_gouraud']:.3f}, \ Phong "
-                          rf"{sh['rmse_phong']:.4f}, \ {sh['rmse_gouraud'] / sh['rmse_phong']:.0f} times smaller",
-                          12.4, font_size=20, color=YES),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.2).to_edge(DOWN, buff=0.4)
-        with self.voiceover(
-            "Where should the lighting be computed? <bookmark mark='a'/> Henri Gouraud, in 1971, evaluated it once "
-            "per vertex and let the rasterizer blend the colours, which is cheap. Phong's paper of 1975 also "
-            "proposed the alternative: blend the normals, renormalize, and light every pixel. "
-            "<bookmark mark='b'/> On a sphere of three hundred and sixty triangles the difference is in the "
-            "highlight. <bookmark mark='c'/> Zoom in. Gouraud's highlight is a star of straight-edged blends, "
-            "because a peak between vertices cannot be made by blending the values at the vertices. Phong's is "
-            "round. <bookmark mark='d'/> Our rasterizer measures it: against the exact sphere, Gouraud's error is "
-            "five times larger. Diffuse light varies slowly and survives vertex lighting; highlights do not, which "
-            "is why every modern renderer lights per pixel."
-        ) as vo:
-            self.play(FadeIn(head))
-            vo.wait_until("a")
-            self.play(FadeIn(imgs[0]), FadeIn(caps[0]), FadeIn(notes[0]))
-            self.play(FadeIn(imgs[1]), FadeIn(caps[1]))
-            vo.wait_until("b")
-            self.play(FadeIn(imgs[2]), FadeIn(caps[2]), Create(boxes))
-            vo.wait_until("c")
-            self.play(FadeOut(boxes), FadeOut(imgs), FadeIn(crops), FadeIn(zl))
-            vo.wait_until("d")
-            self.play(FadeIn(notes[1]))
-        self.wait(0.4)
-        self.clear_scene()
 
     def normals(self):
         head = label(r"Normals need the inverse transpose", font_size=36).to_edge(UP, buff=0.3)
@@ -350,6 +293,12 @@ class Shading(VoiceoverScene):
             self.play(FadeIn(foot))
         self.wait(0.4)
         self.clear_scene()
+        self.checkpoint(
+            [(r"Why homogeneous coordinates?", r"Translation and projection become matrices"),
+             (r"Why interpolate $u/w$ and $1/w$?", r"Perspective-correct interpolation")],
+            narration="Checkpoint. Why do renderers use homogeneous coordinates? And why interpolate u over w and one over w?",
+            answers_narration="So translations and perspective become matrix products. And because only those are linear "
+                              "across the screen, so dividing gives perspective-correct values.")
 
 
 _ = (BG, DATA, HEAD, KERN, LAM, NO, YES)

@@ -5,7 +5,7 @@ import numpy as np
 from videos.stats.stats56.common import *  # noqa: F403
 
 
-class Hook(VoiceoverScene):
+class Hook(StatsScene):
     def construct(self):
         self.ioannidis()
         self.genes()
@@ -13,7 +13,7 @@ class Hook(VoiceoverScene):
         self.history()
         self.window()
         self.upgrade()
-        self.objectives()
+        self.title(PART)
 
     def ioannidis(self):
         tl = timeline(lit=(2008,)).to_edge(UP, buff=0.35)
@@ -167,28 +167,5 @@ class Hook(VoiceoverScene):
             self.play(FadeIn(cards[0], shift=UP * 0.2))
             vo.wait_until("b")
             self.play(FadeIn(cards[1], shift=UP * 0.2))
-        self.wait(1.0)
-        self.clear_scene()
-
-    def objectives(self):
-        head = VGroup(label(r"Part 56", font_size=34, color=GREY_B), label(r"Inference After Selection", font_size=56)).arrange(DOWN, buff=0.25)
-        obj = objectives_card([
-            r"the problem; \ PoSI's simultaneous constant",
-            r"the polyhedral lemma, \ proved; \ the lasso's selective intervals on Stamey's data",
-            r"randomization, \ splitting and fission; \ knockoffs and conformal selection",
-            r"inference on winners; \ inference after clustering; \ open problems",
-        ], color=S.ACCENT, font_size=26)
-        prereq = note(r"prerequisites: \ Parts 33, \ 46, \ 52").to_corner(DL, buff=0.3)
-        built = note(r"built: \ \texttt{statkit.selective}, \ the selection window").to_corner(DR, buff=0.3)
-        with self.voiceover(
-            "<bookmark mark='a'/> Part fifty-six: inference after selection. <bookmark mark='b'/> The problem, and PoSI's "
-            "simultaneous answer; the polyhedral lemma, proved, and the lasso's selective intervals on Stamey's prostate "
-            "data; randomization, splitting and fission; knockoffs and conformal selection; inference on winners, with the "
-            "prostate microarray's top gene; inference after clustering, with Old Faithful; and the open problems."
-        ) as vo:
-            vo.wait_until("a")
-            self.play(FadeIn(head, shift=UP * 0.2))
-            vo.wait_until("b")
-            self.play(FadeOut(head), FadeIn(obj, shift=UP * 0.2), FadeIn(prereq), FadeIn(built))
         self.wait(1.0)
         self.clear_scene()

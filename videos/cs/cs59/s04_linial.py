@@ -27,7 +27,7 @@ def f_example(a, b):
     return ((a - 1) ^ (b - 1)).bit_length() - 1
 
 
-class Linial(VoiceoverScene):
+class Linial(WatchScene):
     def construct(self):
         self.card()
         self.windows()
@@ -38,13 +38,9 @@ class Linial(VoiceoverScene):
         self.elimination()
 
     def card(self):
-        card = chapter_card(3, r"Linial's lower bound", r"Could a ring be coloured in constant time?",
-                            lit=(1987, 2019), extra=((1987, r"Linial: \ global solutions from local data"),
+        self.chapter(3, r"Linial's lower bound", r"Could a ring be coloured in constant time?", lit=(1987, 2019), extra=((1987, r"Linial: \ global solutions from local data"),
                                                      (1992, r"the journal version, \ SIAM J.\ Computing"),
-                                                     (2019, r"Brandt: \ automatic round elimination")), part=PART)
-        with self.voiceover("Chapter three. Linial's lower bound."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+                                                     (2019, r"Brandt: \ automatic round elimination")), part=PART, said="Chapter three. Linial's lower bound.")
 
     def windows(self):
         head = label(r"An algorithm is a function of windows", font_size=36).to_edge(UP, buff=0.3)
@@ -270,6 +266,10 @@ class Linial(VoiceoverScene):
         self.clear_scene()
 
     def tower(self):
+        self.ask(r"Three-colour a ring of $n$ nodes \\ in a constant number of rounds?", [r"possible",
+                 r"impossible"], 1,
+                 say="Can a ring of n nodes be three-coloured in a constant number of rounds, independent of n?",
+                 reveal="No: Linial proved half of log star n rounds are needed. Cole and Vishkin is optimal.")
         c = load("cv")
         head = label(r"Iterate: \ a tower of exponentials", font_size=36).to_edge(UP, buff=0.3)
         chain_vals = [(r"2t + 1", r"3"), (r"2t", r"8"), (r"2t - 1", r"256"), (r"2t - 2", r"2^{256}"),
@@ -393,6 +393,12 @@ class Linial(VoiceoverScene):
                 self.play(FadeIn(ln))
         self.wait(0.4)
         self.clear_scene()
+        self.checkpoint(
+            [(r"How does Cole--Vishkin shrink colours?", r"A bit position where a node differs from its successor"),
+             (r"How does Linial's proof work?", r"Speed-up: each round removed costs an exponential in colours")],
+            narration="Checkpoint. How does Cole and Vishkin's trick shrink the colours? And how does Linial's lower bound work?",
+            answers_narration="Each node's new colour is a position where it differs from its successor, plus that bit. And "
+                              "by speed-up: removing a round turns c colours into about two to the c.")
 
 
 _ = (KERN, LAM, NO, YES)

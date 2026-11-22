@@ -5,21 +5,29 @@ import numpy as np
 from videos.stats.stats45.common import *  # noqa: F403
 
 
-class CompleteClass(VoiceoverScene):
+class CompleteClass(StatsScene):
     def construct(self):
         self.card()
+        self.ask("A unique Bayes rule under a proper prior is...",
+                 ["admissible", "possibly inadmissible"], 0,
+                 say="Which rules are worth considering? Take a proper prior whose Bayes rule is unique. Is that "
+                     "rule admissible?",
+                 reveal="Yes: anything that dominated it would be Bayes too, contradicting uniqueness. The complete "
+                        "class theorems run the other way: admissible rules are Bayes, or limits of Bayes.")
         self.bayes_admissible()
         self.traced()
         self.wald()
         self.limits()
         self.blyth()
         self.variance()
+        self.answer()
+        self.checkpoint([("Two crossing risk curves: which rule is better?", "neither dominates"),
+                         ("A unique Bayes rule under a proper prior?", "admissible")],
+                        narration="Checkpoint. Decisions.",
+                        answers_narration="Neither. And admissible.")
 
     def card(self):
-        card = chapter_card(3, r"Complete class theorems", r"Which rules are worth considering?", lit=(1950,), part=PART)
-        with self.voiceover("Chapter three. Complete class theorems: which rules are worth considering at all?"):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(3, r"Complete class theorems", r"Which rules are worth considering?", lit=(1950,), part=PART, said="Chapter three. Complete class theorems: which rules are worth considering at all?")
 
     def bayes_admissible(self):
         rows = [

@@ -25,22 +25,16 @@ def draw_graph(g, pos, n_proc, color=DATA, r=0.09, scale=1.0, wrap=False):
     return VGroup(edges, dots)
 
 
-class Models(VoiceoverScene):
+class Models(WatchScene):
     def construct(self):
         self.card()
         self.pram()
         self.bsp()
         self.networks()
-        self.table()
-        self.top500()
 
     def card(self):
-        card = chapter_card(13, r"Models and networks", r"What is a parallel computer, \ abstractly?",
-                            lit=(1978, 1990, 1993), extra=((1978, r"the PRAM"), (1990, r"Valiant: \ BSP"),
-                                                           (1993, r"LogP")), part=PART)
-        with self.voiceover("Chapter thirteen. Models and networks."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(13, r"Models and networks", r"What is a parallel computer, \ abstractly?", lit=(1978, 1990, 1993), extra=((1978, r"the PRAM"), (1990, r"Valiant: \ BSP"),
+                                                           (1993, r"LogP")), part=PART, said="Chapter thirteen. Models and networks.")
 
     # ------------------------------------------------------------------
     def pram(self):
@@ -139,6 +133,9 @@ class Models(VoiceoverScene):
 
     # ------------------------------------------------------------------
     def networks(self):
+        self.ask(r"1024 processors wired as a hypercube. \\ Hops between the farthest pair?", [r"10", r"32", r"1023"], 0,
+                 say="A thousand and twenty-four processors, wired as a hypercube. How many hops between the farthest two?",
+                 reveal="Ten: one hop for each bit of the address that differs.")
         head = label(r"How processors are wired: \ 16 nodes", font_size=34).to_edge(UP, buff=0.3)
         ring = Pa.ring(16)
         rpos = {v: (np.cos(2 * np.pi * v / 16) * 1.1, np.sin(2 * np.pi * v / 16) * 1.1) for v in range(16)}
@@ -189,90 +186,4 @@ class Models(VoiceoverScene):
         self.wait(0.3)
         self.clear_scene()
 
-    # ------------------------------------------------------------------
-    def table(self):
-        tp = load("topology")
-        head = label(r"Diameter and bisection width", font_size=34).to_edge(UP, buff=0.3)
-        rows = []
-        for r in tp["rows"]:
-            f = tp["formulas"].get(r["name"], {})
-            rows.append([r["name"], str(r["n"]), str(r["links"]), str(r["diameter"]), str(r["bisection"]),
-                         str(f.get("diameter", "")), f"{f.get('bisection', ''):,}" if f else ""])
-        hdr = [r"network", r"nodes", r"links", r"diameter", r"bisection", r"diameter, \ 1024", r"bisection, \ 1024"]
-        colors = [[GREY_A, GREY_B, GREY_B, CTRL, YES, CTRL, YES]] * len(rows)
-        t = grid_table(hdr, rows, [2.0, 1.0, 1.0, 1.4, 1.5, 2.1, 2.2], row_h=0.48, font_size=19, colors=colors,
-                       mono_cols=()).move_to(UP * 0.4)
-        defs = VGroup(
-            label(r"\textit{diameter}: \ largest shortest-path hop count; \ latency also depends on links and traffic", font_size=20, color=CTRL),
-            label(r"\textit{bisection width}: \ the fewest links that cut the nodes into two halves \ (found here by "
-                  r"trying every split)", font_size=20, color=YES),
-            label(r"uniform all-to-all traffic stresses the cut; \ tree row: \ 8 processor leaves + 7 switches", font_size=20,
-                  color=HEAD),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.15).to_edge(DOWN, buff=0.35)
-        with self.voiceover(
-            (
-            "Two graph properties help compare these ideal networks. <bookmark mark='a'/> Diameter is the largest "
-            "shortest-path hop count. It is not latency by itself: link speed, contention and routing also "
-            "matter. <bookmark mark='b'/> Bisection width is the fewest links crossing an equal split of "
-            "processor nodes. For each sixteen-processor graph we test six thousand four hundred and thirty-five "
-            "unique balanced splits. The tree row instead has eight processor leaves and seven internal switches, "
-            "whose side assignments are also searched. <bookmark mark='c'/> Uniform all-to-all traffic sends a "
-            "substantial fraction across such a cut, approximately half at large scale, so cut capacity limits "
-            "throughput. A ring has width two, a 1024-node hypercube width 512, and this binary tree width one. A "
-            "sufficiently provisioned fat tree increases capacity toward the root; its performance depends on its "
-            "actual wiring and oversubscription."
-        )
-        ) as vo:
-            self.play(FadeIn(head), FadeIn(VGroup(*t.cells[0])), FadeIn(t.rule))
-            self.play(LaggedStart(*[FadeIn(VGroup(*t.cells[r])) for r in range(1, len(t.cells))], lag_ratio=0.3))
-            for mk, d in zip("abc", defs):
-                vo.wait_until(mk)
-                self.play(FadeIn(d))
-        self.wait(0.3)
-        self.clear_scene()
 
-    # ------------------------------------------------------------------
-    def top500(self):
-        tp = load("top500")
-        ms = tp["milestones"]
-        head = label(r"Supercomputers, \ 1976 to 2024", font_size=34).to_edge(UP, buff=0.3)
-        ax = Axes(x_range=[1975, 2026, 10], y_range=[8, 19, 1], x_length=9.0, y_length=4.2, tips=False,
-                  axis_config={"color": GREY_C, "font_size": 16}).shift(DOWN * 0.4 + LEFT * 0.3)
-        xt = VGroup(*[label(str(y), font_size=16, color=GREY_B).next_to(ax.c2p(y, 8), DOWN, buff=0.1)
-                      for y in (1980, 1990, 2000, 2010, 2020)])
-        units = {9: r"giga", 12: r"tera", 15: r"peta", 18: r"exa"}
-        yt = VGroup(*[label(rf"1 {u}flop/s", font_size=15, color=GREY_B).next_to(ax.c2p(1975, e), LEFT, buff=0.1)
-                      for e, u in units.items()])
-        dots = VGroup()
-        for m in ms:
-            p = ax.c2p(m["year"], np.log10(m["flops"]))
-            d = Dot(p, radius=0.08, color=YES)
-            side = DOWN if m["year"] >= 2024 else (UL if m["year"] > 2015 else UR)
-            t = label(rf"{m['name']} \ ({m['year']})", font_size=17, color=GREY_A).next_to(d, side, buff=0.12)
-            dots.add(VGroup(d, t))
-        fit = DashedLine(ax.c2p(1976, np.log10(160e6)), ax.c2p(2024, np.log10(1.742e18)), color=GREY_D)
-        gain = (1.742e18 / 160e6) ** (1 / 48)
-        cap = label(r"dated throughput milestones: \ early peak figures, \ later HPL; \ not one fixed application",
-                    font_size=21, color=HEAD).to_edge(DOWN, buff=0.3)
-        fr = note(rf"Frontier \ (2022): \ {tp['frontier_cores']:,} cores, \ {tp['frontier_power_mw']:.0f} MW", font_size=17
-                  ).next_to(cap, UP, buff=0.12)
-        with self.voiceover(
-            (
-            "These are selected historical milestones through 2024, not a claim about the current ranking. "
-            "<bookmark mark='a'/> In 1976 the Cray-1 peaked at a hundred and sixty million floating-point "
-            "operations a second. ASCI Red, in 1997, was the first to pass a trillion on the LINPACK benchmark; "
-            "Roadrunner, in 2008, a thousand trillion. In 2022 Frontier, at Oak Ridge, passed a quintillion, an "
-            "exaflop, and in 2024 El Capitan reached one point seven. <bookmark mark='b'/> The endpoints differ "
-            "by about ten billion in reported operations per second, but mix early peak specifications with later "
-            "HPL measurements. Parallelism, vectors, specialized arithmetic and other improvements all "
-            "contribute; this is not the speedup of one fixed application: Frontier has almost nine million "
-            "cores, mostly in GPUs, and draws twenty-one megawatts."
-        )
-        ) as vo:
-            self.play(FadeIn(head), Create(ax), FadeIn(xt), FadeIn(yt))
-            vo.wait_until("a")
-            self.play(LaggedStart(*[FadeIn(d) for d in dots], lag_ratio=0.5), run_time=4)
-            vo.wait_until("b")
-            self.play(Create(fit), FadeIn(cap), FadeIn(fr))
-        self.wait(0.3)
-        self.clear_scene()

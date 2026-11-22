@@ -46,7 +46,7 @@ def tag(name: str, color, target, depth: float, dx: float = 0.0):
     return VGroup(t, a)
 
 
-class Separation(VoiceoverScene):
+class Separation(WatchScene):
     def construct(self):
         self.card()
         self.aliasing()
@@ -54,17 +54,16 @@ class Separation(VoiceoverScene):
         self.frame()
         self.reversal()
         self.proof()
-        self.infer()
 
     def card(self):
-        card = chapter_card(5, r"Separation logic", r"How do we reason about pointers?", lit=(2002, 2015),
-                            extra=((2002, r"Reynolds: \ separation logic"),
-                                   (2015, r"Facebook's Infer, \ open source")), part=PART)
-        with self.voiceover("Chapter five. Separation logic."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(5, r"Separation logic", r"How do we reason about pointers?", lit=(2002, 2015), extra=((2002, r"Reynolds: \ separation logic"),
+                                   (2015, r"Facebook's Infer, \ open source")), part=PART, said="Chapter five. Separation logic.")
 
     def aliasing(self):
+        self.ask(r"Store 3 through pointer \texttt{x}. \\ Did the cell \texttt{y} points to change?", [r"no",
+                 r"only if x and y alias"], 1,
+                 say="Store three through pointer x. Did the cell that y points to change?",
+                 reveal="Only if x and y point to the same cell. Separation logic makes that explicit.")
         head = label(r"Pointers break the assignment axiom", font_size=36).to_edge(UP, buff=0.3)
         triple = MathTex(r"\{\, y.f = 2 \,\}", r"\quad x.f := 3 \quad", r"\{\, y.f = 2 \,\}", font_size=40)
         triple[0].set_color(DATA)
@@ -398,60 +397,6 @@ class Separation(VoiceoverScene):
         self.wait(0.4)
         self.clear_scene()
 
-    def infer(self):
-        head = label(r"Separation logic at scale", font_size=36).to_edge(UP, buff=0.3)
-        names = {"main": (0.0, 1.9), "parse": (-2.2, 0.75), "render": (2.2, 0.75), "push": (-3.4, -0.4),
-                 "new_node": (-2.2, -1.55), "draw": (1.2, -0.4), "free_tree": (3.4, -0.4)}
-        calls = [("main", "parse"), ("main", "render"), ("parse", "new_node"), ("parse", "push"),
-                 ("render", "draw"), ("render", "free_tree"), ("push", "new_node")]
-        boxes = {k: tag_box_(k).move_to([x - 2.4, y, 0]) for k, (x, y) in names.items()}
-        edges = VGroup(*[Arrow(boxes[a].get_bottom(), boxes[b].get_top(), buff=0.05, color=GREY_C, stroke_width=1.8,
-                               max_tip_length_to_length_ratio=0.12) for a, b in calls])
-        order = ["new_node", "push", "draw", "free_tree", "parse", "render", "main"]
-        specs = {k: SurroundingRectangle(boxes[k], color=YES, buff=0.06, stroke_width=2.5) for k in order}
-        ill = note(r"an illustrative call graph", font_size=16).next_to(VGroup(*boxes.values()), DOWN, buff=0.3)
-        bi = MathTex(r"H", r"\ast", r"\,?M", r"\;\vdash\;", r"P", r"\ast", r"\,?F", font_size=40).move_to(
-            [-2.4, -2.75, 0])
-        bi[2].set_color(HEAD)
-        bi[6].set_color(LAM)
-        bil = VGroup(label(r"$?M$: \ the missing heap, \ added to the caller's precondition", font_size=17,
-                           color=HEAD),
-                     label(r"$?F$: \ the frame, \ left untouched by the call", font_size=17, color=LAM)
-                     ).arrange(DOWN, aligned_edge=LEFT, buff=0.08).next_to(bi, DOWN, buff=0.15)
-        notes = VGroup(
-            wrapped_label(r"\textbf{bi-abduction} \ (Calcagno, \ Distefano, \ O'Hearn and Yang, \ 2009): \ infer each "
-                          r"procedure's footprint from its body, \ callees first; \ each is analysed once, \ alone",
-                          4.6, font_size=19, color=WHITE),
-            wrapped_label(r"Facebook bought Monoidics, \ the start-up behind it, \ in 2013; \ \textbf{Infer}, \ "
-                          r"open source since 2015, \ checks code changes for null dereferences and leaks before "
-                          r"they are merged", 4.6, font_size=19, color=DATA),
-            wrapped_label(r"concurrent separation logic \ (O'Hearn; \ Brookes): \ the 2016 G\"odel Prize; \ its "
-                          r"descendant Iris is the logic of RustBelt's proofs about Rust \ (Part 55)", 4.6, font_size=19,
-                          color=LAM),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.3).move_to([4.3, -0.2, 0])
-        with self.voiceover(
-            "The frame rule also makes proofs compositional. <bookmark mark='a'/> A procedure's specification "
-            "mentions only its footprint, so it is proved once, alone, and reused anywhere. <bookmark mark='b'/> In "
-            "2009 Calcagno, Distefano, O'Hearn and Yang inferred such specifications by bi-abduction: at each call, "
-            "find the heap the caller is missing, and the frame the call leaves alone. <bookmark mark='c'/> Facebook "
-            "bought Monoidics, the start-up behind it, in 2013. Its analyser, Infer, open source since 2015, checks "
-            "code changes for null dereferences and leaks. <bookmark mark='d'/> Concurrent separation logic won "
-            "O'Hearn and Stephen Brookes the 2016 Gödel Prize, and its descendant, Iris, underlies the RustBelt "
-            "proofs about Rust that Part 55 returns to."
-        ) as vo:
-            self.play(FadeIn(head), *[FadeIn(b) for b in boxes.values()], Create(edges), FadeIn(ill))
-            vo.wait_until("a")
-            self.play(Create(specs["new_node"]))
-            vo.wait_until("b")
-            self.play(FadeIn(notes[0]))
-            self.play(LaggedStart(*[Create(specs[k]) for k in order[1:]], lag_ratio=0.5), run_time=3)
-            self.play(Write(bi), FadeIn(bil))
-            vo.wait_until("c")
-            self.play(FadeIn(notes[1]))
-            vo.wait_until("d")
-            self.play(FadeIn(notes[2]))
-        self.wait(0.4)
-        self.clear_scene()
 
 
 def tag_box_(name: str):

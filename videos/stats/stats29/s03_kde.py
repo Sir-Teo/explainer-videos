@@ -5,9 +5,20 @@ import numpy as np
 from videos.stats.stats29.common import *  # noqa: F403
 
 
-class KDE(VoiceoverScene):
+class KDE(StatsScene):
     def construct(self):
         self.card()
+        self.wrong_idea("The choice of kernel is what matters most",
+                        "The kernel hardly matters; the bandwidth matters enormously",
+                        narration="A natural worry: which kernel should you use? Surely that's the key choice.",
+                        right_narration="The kernel hardly matters: the worst common one needs about seven percent "
+                                        "more data than the best. The bandwidth matters enormously.")
+        self.ask("A kernel density estimate's best error rate is...",
+                 ["$n^{-1}$", "$n^{-4/5}$", "$n^{-2/3}$"], 1,
+                 say="Replace the bins by smooth bumps. What's the best rate at which a kernel density estimate's "
+                     "mean integrated squared error can fall?",
+                 reveal="N to the minus four fifths: better than the histogram's two thirds, worse than a "
+                        "parametric model's one. The price of not assuming a shape.")
         self.bumps()
         self.bias()
         self.variance()
@@ -16,12 +27,10 @@ class KDE(VoiceoverScene):
         self.mise_curves()
         self.epanechnikov()
         self.efficiency()
+        self.answer()
 
     def card(self):
-        card = chapter_card(2, r"Kernel density estimates", r"Smooth bumps, \ and the rate $n^{-4/5}$", lit=(1956,), part=PART)
-        with self.voiceover("Chapter two. Kernel density estimates."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(2, r"Kernel density estimates", r"Smooth bumps, \ and the rate $n^{-4/5}$", lit=(1956,), part=PART, said="Chapter two. Kernel density estimates.")
 
     def bumps(self):
         d = load("faithful")

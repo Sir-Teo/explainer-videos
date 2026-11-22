@@ -5,21 +5,25 @@ import numpy as np
 from videos.stats.stats50.common import *  # noqa: F403
 
 
-class MinimaxTesting(VoiceoverScene):
+class MinimaxTesting(StatsScene):
     def construct(self):
         self.card()
+        self.ask("A few faint signals among many. Detecting that they exist, against finding which they are, is...",
+                 ["easier", "harder", "the same"], 0,
+                 say="Minimax testing. A few faint signals hidden among many null coordinates. Is it easier to "
+                     "detect that they're there, or to find which ones they are?",
+                 reveal="Easier to detect. Ingster's boundary lies below the threshold for locating them, and "
+                        "Donoho and Jin's higher criticism reaches it.")
         self.separation()
         self.chi2()
         self.sparse()
         self.vsest()
         self.chart()
         self.hc()
+        self.answer()
 
     def card(self):
-        card = chapter_card(8, r"Minimax testing", r"How faint a signal can anyone detect?", lit=(1997, 2004), part=PART)
-        with self.voiceover("Chapter eight. Minimax testing: how faint a signal can anyone detect?"):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(8, r"Minimax testing", r"How faint a signal can anyone detect?", lit=(1997, 2004), part=PART, said="Chapter eight. Minimax testing: how faint a signal can anyone detect?")
 
     def separation(self):
         rows = [

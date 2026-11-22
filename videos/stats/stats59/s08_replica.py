@@ -5,10 +5,16 @@ import numpy as np
 from videos.stats.stats59.common import *  # noqa: F403
 
 
-class Replica(LectureMixin, VoiceoverScene):
+class Replica(LectureMixin, StatsScene):
     def construct(self):
         self.card_voiceover("Chapter seven. The replica method: the physicists' predictions, and their proofs.", 7,
                             r"The replica method", r"Predictions first, \ proofs later", lit=(2019,))
+        self.ask("The replica method's predictions are...",
+                 ["heuristic, and often later proved", "rigorous from the start", "usually wrong"], 0,
+                 say="The physicists' replica method computes average free energies by a trick nobody can justify "
+                     "directly. What's the status of its predictions?",
+                 reveal="Heuristic, and remarkably often proved later, for the planted models of statistics, by "
+                        "interpolation and adaptive arguments. Predictions first, proofs later.")
         self.idea()
         self.formula()
         self.bayes_amp()
@@ -16,6 +22,7 @@ class Replica(LectureMixin, VoiceoverScene):
         self.chart()
         self.hard()
         self.proofs()
+        self.answer()
 
     def idea(self):
         heading = label('The replica heuristic and its mathematical limits', font_size=30, color=PROPC).move_to([0, 3.35, 0])

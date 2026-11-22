@@ -13,12 +13,12 @@ def dur(s):
     return rf"{s * 1000:.1f} ms"
 
 
-class Hook(VoiceoverScene):
+class Hook(WatchScene):
     def construct(self):
         self.million()
         self.multiply()
         self.ideas()
-        self.plan()
+        self.title(PART)
 
     def million(self):
         d = load("pi")
@@ -120,25 +120,3 @@ class Hook(VoiceoverScene):
         self.wait(0.3)
         self.clear_scene()
 
-    def plan(self):
-        title = label(rf"Part {PART}: \ The Great Paradigms", font_size=46).to_edge(UP, buff=0.4)
-        smap = series_map(current=PART, done=PART - 1).scale(0.92).next_to(title, DOWN, buff=0.35)
-        obj = objectives_card([
-            r"greedy algorithms, \ exchange arguments, \ and matroids",
-            r"Karatsuba and Strassen: \ fewer products, \ by algebra",
-            r"the fast Fourier transform, \ derived, \ and what it multiplies",
-            r"dynamic programming: \ edit distance, \ knapsack, \ chains, \ trees",
-            r"backtracking and Dancing Links; \ one problem solved four ways",
-            r"the frontier: \ the exponent of matrix multiplication, \ and why edit distance seems quadratic",
-        ], font_size=26).move_to(DOWN * 0.2)
-        with self.voiceover(
-            "Part 19 of Computer Science, Built: The Great Paradigms. <bookmark mark='a'/> In this part: greedy "
-            "algorithms and when they are right; multiplying numbers and matrices with fewer products; the fast "
-            "Fourier transform, from scratch; dynamic programming in five settings; search, from the eight queens "
-            "to Sudoku; one problem solved four ways; and the open questions about how fast we can multiply."
-        ) as vo:
-            self.play(FadeIn(title), FadeIn(smap))
-            vo.wait_until("a")
-            self.play(FadeOut(smap), FadeIn(obj))
-        self.wait(0.5)
-        self.clear_scene()

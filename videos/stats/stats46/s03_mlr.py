@@ -5,20 +5,24 @@ import numpy as np
 from videos.stats.stats46.common import *  # noqa: F403
 
 
-class MLR(VoiceoverScene):
+class MLR(StatsScene):
     def construct(self):
         self.card()
+        self.ask("A one-sided test in a family with monotone likelihood ratio is...",
+                 ["uniformly most powerful", "only locally most powerful"], 0,
+                 say="A family with a monotone likelihood ratio in a statistic T. What can be said of the one-sided "
+                     "test that rejects for large T?",
+                 reveal="It's uniformly most powerful: best against every alternative at once. Karlin and Rubin's "
+                        "theorem.")
         self.definition()
         self.ratios()
         self.karlin()
         self.twosided()
         self.cauchy()
+        self.answer()
 
     def card(self):
-        card = chapter_card(2, r"Monotone likelihood ratio and Karlin--Rubin", r"When one test is best against every alternative", lit=(1956,), part=PART)
-        with self.voiceover("Chapter two. Monotone likelihood ratio and the Karlin–Rubin theorem: when one test is best against every alternative."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(2, r"Monotone likelihood ratio and Karlin--Rubin", r"When one test is best against every alternative", lit=(1956,), part=PART, said="Chapter two. Monotone likelihood ratio and the Karlin–Rubin theorem: when one test is best against every alternative.")
 
     def definition(self):
         rows = [

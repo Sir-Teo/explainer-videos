@@ -11,7 +11,7 @@ def term_tex(t):
     return r" \wedge ".join((rf"x_{{{v}}}" if b else rf"\bar x_{{{v}}}") for v, b in t)
 
 
-class Circuits(VoiceoverScene):
+class Circuits(WatchScene):
     def construct(self):
         self.card()
         self.karp_lipton()
@@ -20,11 +20,7 @@ class Circuits(VoiceoverScene):
         self.others()
 
     def card(self):
-        card = chapter_card(3, r"Circuit lower bounds", r"Which functions need big circuits?", lit=(1981, 2011),
-                            extra=((1986, r"H\aa stad's switching lemma"), (2011, r"Williams")), part=PART)
-        with self.voiceover("Chapter three. Circuit lower bounds."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(3, r"Circuit lower bounds", r"Which functions need big circuits?", lit=(1981, 2011), extra=((1986, r"H\aa stad's switching lemma"), (2011, r"Williams")), part=PART, said="Chapter three. Circuit lower bounds.")
 
     def karp_lipton(self):
         head = label(r"Why circuits?", font_size=34).to_edge(UP, buff=0.35)
@@ -42,7 +38,7 @@ class Circuits(VoiceoverScene):
                   color=YES),
         ).arrange(DOWN, buff=0.32).next_to(head, DOWN, buff=0.5)
         with self.voiceover(
-            "Circuits give a sufficient route to separating P from NP. <bookmark mark='a'/> P over poly allows a nonuniform family, with one circuit per input length and a common polynomial size bound. <bookmark mark='b'/> Every P language and, by Adleman’s argument, every BPP language has such a family. <bookmark mark='c'/> Proving SAT has no polynomial-size circuit family would imply P differs from NP, and would establish the stronger statement that NP is not contained in P over poly. It is a sufficient route, not an equivalence. <bookmark mark='d'/> Karp and Lipton showed that if NP were contained in P over poly, the polynomial hierarchy would collapse to its second level. <bookmark mark='e'/> These implications explain the interest in circuit lower bounds while retaining the natural-proof and other barriers discussed in Part 26. <bookmark mark='f'/> The following chapters study restricted circuit classes, for which lower bounds are known under their precise model assumptions."
+            "Circuits give a sufficient route to separating P from NP. <bookmark mark='a'/> P over poly allows a nonuniform family, with one circuit per input length and a common polynomial size bound. <bookmark mark='b'/> Every P language and, by Adleman’s argument, every BPP language has such a family. <bookmark mark='c'/> Proving SAT has no polynomial-size circuit family would imply P differs from NP, and would establish the stronger statement that NP is not contained in P over poly. It is a sufficient route, not an equivalence. <bookmark mark='d'/> Karp and Lipton showed that if NP were contained in P over poly, the polynomial hierarchy would collapse to its second level. <bookmark mark='e'/> These implications explain the interest in circuit lower bounds while retaining the natural-proof and other barriers discussed in Part 26. <bookmark mark='f'/>"
         ) as vo:
             self.play(FadeIn(head))
             for mk, ln in zip("abcdef", lines):
@@ -52,6 +48,10 @@ class Circuits(VoiceoverScene):
         self.clear_scene()
 
     def restriction(self):
+        self.ask(r"Fix most variables of a width-3 DNF at random. \\ What's left?", [r"still a complicated formula",
+                 r"a tiny function: a shallow decision tree"], 1,
+                 say="Take a formula of twenty three-literal terms. Fix most of its variables at random. What is left?",
+                 reveal="Almost nothing: a function a very shallow decision tree computes. That's the switching lemma.")
         s = load("switching")
         f = [tuple((v, b) for v, b in t) for t in s["dnf"]]
         n = s["n"]
@@ -129,7 +129,7 @@ class Circuits(VoiceoverScene):
             label(r"so constant-depth circuits for parity need $2^{n^{\Omega(1/d)}}$ gates", font_size=22, color=YES),
         ).arrange(DOWN, buff=0.2).next_to(tl, DOWN, buff=0.35)
         with self.voiceover(
-            "This experiment fixes one width-three DNF and samples restrictions independently. <bookmark mark='a'/> Each variable is left free with probability p; otherwise it is fixed to a fair Boolean value. We retain every actual restriction and compute the exact minimum decision-tree depth of its resulting truth table. <bookmark mark='b'/> The switching lemma bounds the probability of depth at least t by five p times the width, raised to t, in this standard formulation. The bound can be vacuous when it exceeds one. <bookmark mark='c'/> A shallow decision tree yields a small-width CNF, explaining the switch between OR-of-ANDs and AND-of-ORs. <bookmark mark='d'/> Iterating carefully chosen restrictions controls fixed-depth circuits. Parity on the remaining free variables still has decision-tree depth equal to their number; it becomes constant if none remain. <bookmark mark='e'/> The finite table illustrates this mechanism. Håstad’s lower-bound theorem, with fixed circuit depth and its quantitative parameters, is a separate asymptotic result."
+            "This experiment fixes one width-three DNF and samples restrictions independently. <bookmark mark='a'/> Each variable is left free with probability p; otherwise it is fixed to a fair Boolean value. <bookmark mark='b'/> The switching lemma bounds the probability of depth at least t by five p times the width, raised to t, in this standard formulation. The bound can be vacuous when it exceeds one. <bookmark mark='c'/> A shallow decision tree yields a small-width CNF, explaining the switch between OR-of-ANDs and AND-of-ORs. <bookmark mark='d'/> Iterating carefully chosen restrictions controls fixed-depth circuits. Parity on the remaining free variables still has decision-tree depth equal to their number; it becomes constant if none remain. <bookmark mark='e'/> Håstad’s lower-bound theorem, with fixed circuit depth and its quantitative parameters, is a separate asymptotic result."
         ) as vo:
             self.play(FadeIn(head))
             vo.wait_until("a")

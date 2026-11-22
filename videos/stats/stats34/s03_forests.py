@@ -9,9 +9,15 @@ from videos.stats.stats34.common import *  # noqa: F403
 MTRY_C = {"10": GREY_B, "5": TREEC, "3": PREDC, "1": BOOSTC}
 
 
-class Forests(VoiceoverScene):
+class Forests(StatsScene):
     def construct(self):
         self.card()
+        self.ask(r"Average $B$ trees, each of variance $\sigma^2$, pairwise correlation $\rho$. As $B \to \infty$ the variance tends to...",
+                 ["0", r"$\rho\sigma^2$", r"$\sigma^2$"], 1,
+                 say="A forest averages many noisy trees. Each tree has variance sigma squared, and any two "
+                     "correlate at rho. With infinitely many trees, what's the average's variance?",
+                 reveal="Rho sigma squared: correlation sets a floor that more trees can't break. That's why random "
+                        "forests pick a random subset of variables at each split, to decorrelate the trees.")
         self.bagging()
         self.var_ladder()
         self.var_chart()
@@ -24,12 +30,14 @@ class Forests(VoiceoverScene):
         self.ij_result()
         self.ij_sub()
         self.board()
+        self.answer()
+        self.checkpoint([("Breiman's Rashomon effect?", "many models fit equally well, with different explanations"),
+                         ("Averaging correlated trees: the variance floor?", r"$\rho\sigma^2$")],
+                        narration="Checkpoint. Explanations and forests.",
+                        answers_narration="Many models, many explanations. And rho sigma squared.")
 
     def card(self):
-        card = chapter_card(2, r"Forests", r"An average of many noisy trees", lit=(2001,), part=PART)
-        with self.voiceover("Chapter two. Forests."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(2, r"Forests", r"An average of many noisy trees", lit=(2001,), part=PART, said="Chapter two. Forests.")
 
     def bagging(self):
         rows = [

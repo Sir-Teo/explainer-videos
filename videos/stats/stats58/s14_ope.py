@@ -3,16 +3,23 @@ from __future__ import annotations
 from videos.stats.stats58.common import *  # noqa: F403
 
 
-class OffPolicy(LectureMixin, VoiceoverScene):
+class OffPolicy(LectureMixin, StatsScene):
     def construct(self):
         self.card_voiceover("Chapter thirteen. Off-policy evaluation: what would have happened under a policy we did not "
                        "run?", 13, r"Off-policy evaluation", r"Evaluating the policy you did not run")
+        self.ask("To evaluate a new policy from logged data, IPW weights each logged action by...",
+                 [r"$\pi_{\mathrm{new}}(a \mid x) / \pi_{\mathrm{log}}(a \mid x)$", "1"], 0,
+                 say="Off-policy evaluation: what would have happened under a policy we didn't run? Inverse "
+                     "probability weighting weights each logged action by what?",
+                 reveal="The new policy's probability of that action over the logging policy's. Doubly robust "
+                        "estimators add an outcome model; logged propensities are essential.")
         self.question()
         self.ipw()
         self.dr()
         self.results()
         self.variance()
         self.uses()
+        self.answer()
 
     def question(self):
         heading = label('A fixed target policy and logged actions', font_size=30, color=WEALTHC).move_to([0, 3.35, 0])

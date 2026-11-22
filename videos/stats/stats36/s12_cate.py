@@ -7,21 +7,25 @@ from videos.stats.stats36.common import *  # noqa: F403
 LC = {"T-learner": GREY_B, "X-learner": Y0C, "DR-learner": PSC, "causal forest": BANDC, "linear, interacted": TAUC}
 
 
-class CATE(VoiceoverScene):
+class CATE(StatsScene):
     def construct(self):
         self.card()
+        self.ask("Search many subgroups for a different effect. Most differences found are...",
+                 ["real", "noise"], 1,
+                 say="An average effect may hide differences between people. Search many subgroups for one with a "
+                     "different effect. Are most of the differences you find real?",
+                 reveal="Most are noise, unless the search was planned and the evidence strong. Honest causal "
+                        "forests split the data to estimate heterogeneity without fooling themselves.")
         self.goal()
         self.learners()
         self.forest()
         self.grade()
         self.calib()
         self.cautions()
+        self.answer()
 
     def card(self):
-        card = chapter_card(11, r"Heterogeneous effects", r"For whom does it work?", lit=(2018,), part=PART)
-        with self.voiceover("Chapter eleven. Heterogeneous effects."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(11, r"Heterogeneous effects", r"For whom does it work?", lit=(2018,), part=PART, said="Chapter eleven. Heterogeneous effects.")
 
     def goal(self):
         rows = [

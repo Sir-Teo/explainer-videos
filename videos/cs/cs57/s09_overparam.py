@@ -47,7 +47,7 @@ def theory(p, n, D, noise):
     return float("inf")
 
 
-class Overparam(VoiceoverScene):
+class Overparam(WatchScene):
     def construct(self):
         self.card()
         self.fit()
@@ -57,15 +57,15 @@ class Overparam(VoiceoverScene):
         self.peak()
 
     def card(self):
-        card = chapter_card(8, r"More parameters than data", r"Why does a model that can fit noise generalize?",
-                            lit=(2017, 2019), extra=((2017, r"Zhang et al.: \ random labels"),
-                                                     (2019, r"Belkin et al.: \ double descent")), part=PART)
-        with self.voiceover("Chapter eight. More parameters than data."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(8, r"More parameters than data", r"Why does a model that can fit noise generalize?", lit=(2017, 2019), extra=((2017, r"Zhang et al.: \ random labels"),
+                                                     (2019, r"Belkin et al.: \ double descent")), part=PART, said="Chapter eight. More parameters than data.")
 
     # ------------------------------------------------------------------ the measured curves
     def fit(self):
+        self.ask(r"Fifty noisy examples, a linear model on $p$ features. \\ As $p$ passes fifty, test error...",
+                 [r"keeps rising", r"peaks, then falls"], 1,
+                 say="Fifty noisy examples, fitted by a linear model with p features. As p grows past fifty, what does the test error do?",
+                 reveal="It peaks at fifty, then falls again: double descent.")
         d = load("descent")
         n, D, rows = d["n"], d["D"], d["rows"]
         head = label(r"Fitting perfectly, \ and still predicting", font_size=36).to_edge(UP, buff=0.3)
@@ -214,6 +214,12 @@ class Overparam(VoiceoverScene):
         return ax, x, yv, bh, dirn
 
     def minnorm(self):
+        self.wrong_idea(r"more parameters than data always overfits",
+                        r"past the threshold, the smallest-norm fit \\ can generalize well",
+                        narration="Classical intuition says a model with more parameters than examples must overfit.",
+                        right_narration="Past the threshold there are many perfect fits, and the one gradient descent finds, "
+                                        "the smallest, can generalize well.")
+        self.clear_scene()
         head = label(r"The smallest interpolator", font_size=36).to_edge(UP, buff=0.3)
         ax, x, yv, bh, dirn = self.plane()
         ax.next_to(head, DOWN, buff=0.45).to_edge(LEFT, buff=0.8)

@@ -18,22 +18,15 @@ def measured(rows, a, b, key="array"):
     return ra, rb, 100 * (rb - ra) / ra
 
 
-class Optimize(VoiceoverScene):
+class Optimize(WatchScene):
     def construct(self):
         self.card()
         self.lattice()
         self.sccp()
-        self.dce()
         self.gvn()
-        self.identities()
-        self.ordering()
 
     def card(self):
-        card = chapter_card(7, r"Optimizations on SSA", r"Which work can be proved unnecessary?", lit=(1991,),
-                            extra=((1991, r"Wegman--Zadeck: \ SCCP"),), part=PART)
-        with self.voiceover("Chapter seven. Optimizations on SSA."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(7, r"Optimizations on SSA", r"Which work can be proved unnecessary?", lit=(1991,), extra=((1991, r"Wegman--Zadeck: \ SCCP"),), part=PART, said="Chapter seven. Optimizations on SSA.")
 
     def lattice(self):
         head = label(r"Constant propagation: \ a three-level lattice", font_size=34).to_edge(UP, buff=0.3)
@@ -64,6 +57,11 @@ class Optimize(VoiceoverScene):
         self.clear_scene()
 
     def sccp(self):
+        self.ask(r"\texttt{a = 4; b = a * 8; if (b > 16) ... else ...} \\ Can the compiler delete the else branch?",
+                 [r"no", r"yes"], 1,
+                 say="a is four, b is a times eight, and if b is more than sixteen we do one thing, else another. Can the "
+                     "compiler delete the else?",
+                 reveal="Yes. b is always thirty-two, so the else can never run.")
         o = load("opts")
         p = load("passes")
         head = label(r"Sparse conditional constant propagation", font_size=32).to_edge(UP, buff=0.3)
@@ -119,48 +117,6 @@ class Optimize(VoiceoverScene):
         self.wait(0.3)
         self.clear_scene()
 
-    def dce(self):
-        head = label(r"Dead code, \ and copies", font_size=34).to_edge(UP, buff=0.3)
-        lines = ["%a  = 4", "%t1 = %a * 8", "%b  = %t1", "%c.1 = 0", "%t6 = %x + %b", "%t8 = %t6 * 2", "ret %t8"]
-        lst = VGroup(*[mono(l, 20, CODE) for l in lines]).arrange(DOWN, aligned_edge=LEFT, buff=0.18).move_to(
-            LEFT * 3.4 + DOWN * 0.2)
-        steps = VGroup(
-            label(r"\textbf{copy propagation}: \ after \ \texttt{\%b = \%t1}, \ use \texttt{\%t1} for \texttt{\%b}",
-                  font_size=21, color=GREY_A),
-            label(r"\textbf{dead code}: \ mark what is useful, \ sweep the rest", font_size=21, color=GREY_A),
-            label(r"useful: \ returns, \ stores, \ calls, \ branches; \ and whatever they use", font_size=20,
-                  color=GREY_A),
-            label(r"in SSA, \ a definition with no uses is dead at once", font_size=20, color=GREY_A),
-            label(r"like a garbage collector, \ over instructions \ (Part 15)", font_size=20, color=HEAD),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.22).move_to(RIGHT * 2.8 + DOWN * 0.1)
-        dead = [0, 1, 2, 3]
-        with self.voiceover(
-            (
-            "Two cleanup passes use those value links. <bookmark mark='a'/> Copy propagation replaces a use of an "
-            "SSA copy by its source, because the copied names do not acquire later assignments. <bookmark "
-            "mark='b'/> Dead code elimination can resemble a garbage collector over instructions. <bookmark "
-            "mark='c'/> Start from instructions whose behavior must remain: returns, memory effects, calls and "
-            "required control flow. An operation that can trap may also need preservation unless the semantics or "
-            "a proof allows removing it. Follow their dependencies backward through the def-use links. <bookmark "
-            "mark='d'/> Unneeded computations can then disappear. In the constant example, folding the branch and "
-            "values makes several old arithmetic definitions unused. Our simple pass keeps control-flow roots "
-            "conservatively rather than proving every possible dead branch itself. <bookmark mark='e'/> Part 15 "
-            "develops the related mark-and-sweep idea for objects in memory."
-        )
-        ) as vo:
-            self.play(FadeIn(head), FadeIn(lst))
-            vo.wait_until("a")
-            self.play(FadeIn(steps[0]))
-            vo.wait_until("b")
-            self.play(FadeIn(steps[1]))
-            vo.wait_until("c")
-            self.play(FadeIn(steps[2]), *[lst[k].animate.set_color(YES) for k in (4, 5, 6)])
-            vo.wait_until("d")
-            self.play(FadeIn(steps[3]), *[lst[k].animate.set_color(NO).set_opacity(0.35) for k in dead])
-            vo.wait_until("e")
-            self.play(FadeIn(steps[4]))
-        self.wait(0.3)
-        self.clear_scene()
 
     def gvn(self):
         o = load("opts")
@@ -209,73 +165,4 @@ class Optimize(VoiceoverScene):
         self.wait(0.3)
         self.clear_scene()
 
-    def identities(self):
-        head = label(r"Algebra, \ and its traps", font_size=34).to_edge(UP, buff=0.3)
-        good = VGroup(*[mono(t, 20, YES) for t in ("x * 8   →  x << 3", "x * 1   →  x", "x + 0   →  x",
-                                                    "4 * x   →  x * 4   (constants to the right)")]).arrange(
-            DOWN, aligned_edge=LEFT, buff=0.2)
-        bad = VGroup(*[mono(t, 20, NO) for t in ("x / 2   →  x >> 1   ?", "(x + 1) > x   →  true   ?",
-                                                  "x * 2 / 2   →  x   ?")]).arrange(DOWN, aligned_edge=LEFT,
-                                                                                    buff=0.2)
-        VGroup(good, bad).arrange(DOWN, buff=0.6, aligned_edge=LEFT).next_to(head, DOWN, buff=0.5).to_edge(
-            LEFT, buff=1.2)
-        gl = label(r"always true on 32-bit integers", font_size=20, color=YES).next_to(good, RIGHT, buff=0.8)
-        bl = VGroup(label(r"false for $x = -1$: \ $-1 / 2 = 0$, \ but $-1 \gg 1 = -1$", font_size=20, color=NO),
-                    label(r"false when $x + 1$ overflows", font_size=20, color=NO),
-                    label(r"false when $x \cdot 2$ overflows", font_size=20, color=NO)).arrange(
-            DOWN, aligned_edge=LEFT, buff=0.2)
-        for b, r in zip(bl, bad):
-            b.next_to(r, RIGHT, buff=0.6)
-            b.align_to(gl, LEFT)
-        foot = label(r"chapter 14: \ a solver checks such rules for all $2^{32}$ inputs at once", font_size=21,
-                     color=HEAD).to_edge(DOWN, buff=0.5)
-        with self.voiceover("Many small rewrites are pure algebra. <bookmark mark='a'/> Multiplying by eight is a shift left by three, which is cheaper. Multiplying by one, or adding zero, does nothing. Our strength pass also moves constants to the right, so that value numbering sees four times x and x times four as the same. <bookmark mark='b'/> But machine integers are not the integers of school. Dividing by two is not a shift right by one: minus one divided by two is zero, rounding toward zero, but minus one shifted right is still minus one. x plus one is not always more than x, because it can overflow. Every rewrite rule has to be true for all four billion values of x, including the awkward ones. <bookmark mark='c'/> In chapter fourteen a solver will check such rules for all of them at once.") as vo:
-            self.play(FadeIn(head), run_time=0.5)
-            self.play(LaggedStart(*[FadeIn(g) for g in good], lag_ratio=0.3), FadeIn(gl), run_time=0.6)
-            vo.wait_until('a')
-            vo.wait_until('b')
-            for r, b in zip(bad, bl):
-                self.play(FadeIn(r), FadeIn(b), run_time=0.8)
-            vo.wait_until('c')
-            self.play(FadeIn(foot))
-        self.wait(0.3)
-        self.clear_scene()
 
-    def ordering(self):
-        lv = load("llvm")
-        head = label(r"Which order? \ The phase-ordering problem", font_size=34).to_edge(UP, buff=0.3)
-        from explainer.cs.lang.compiler.opt import PIPELINE
-        names = {"copyprop": r"copies", "sccp": r"SCCP", "strength": r"algebra", "gvn": r"GVN", "licm": r"LICM",
-                 "ivsr": r"IVSR", "dce": r"DCE"}
-        cols = {"copyprop": GREY_B, "sccp": YES, "strength": CTRL, "gvn": DATA, "licm": FUNC, "ivsr": FUNC,
-                "dce": NO}
-        chips = VGroup(*[region(1.25, 0.6, names[p], cols[p], font_size=19) for p in PIPELINE]).arrange(
-            RIGHT, buff=0.12).next_to(head, DOWN, buff=0.6)
-        if chips.width > 13:
-            chips.scale_to_fit_width(13)
-        cap = label(r"our \texttt{-O2}: \ eleven passes, \ some run twice", font_size=20, color=GREY_A).next_to(
-            chips, DOWN, buff=0.2)
-        pts = VGroup(
-            label(r"each pass creates work for others: \ SCCP leaves copies, \ GVN leaves dead code", font_size=21,
-                  color=GREY_A),
-            label(r"the best order depends on the program; \ finding it is itself a search problem", font_size=21,
-                  color=GREY_A),
-            label(rf"opt \texttt{{-O2}} pipeline text: \ {lv['passes']} parsed names, \ {lv['distinct']} distinct",
-                  font_size=22, color=FUNC),
-            label(r"chosen by decades of measurement; \ machine learning now tunes some (chapter 15)",
-                  font_size=21, color=HEAD),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.22).next_to(cap, DOWN, buff=0.6)
-        with self.voiceover(f"Passes run in an order, and sometimes repeat. <bookmark mark='a'/> Our level-two pipeline lists {len(PIPELINE)} pass invocations. <bookmark mark='b'/> A pass creates opportunities for others: constant propagation can leave copies, value numbering can leave unused code, and loop motion changes which expressions dominate later uses. <bookmark mark='c'/> Selecting a useful sequence is the phase-ordering problem. The best choice depends on the input and the cost objective. <bookmark mark='d'/> For the recorded LLVM version and pipeline-printing command, our parser counts {lv['passes']} pass-name occurrences and {lv['distinct']} distinct names. This is a textual pipeline statistic, not a count of every per-function runtime invocation or a universal Clang constant. <bookmark mark='e'/> Production pipelines combine engineering measurements and heuristics; some decisions can also use learned policies.") as vo:
-            self.play(FadeIn(head), run_time=0.5)
-            self.play(LaggedStart(*[FadeIn(c, shift=RIGHT * 0.1) for c in chips], lag_ratio=0.15), FadeIn(cap), run_time=0.6)
-            vo.wait_until('a')
-            vo.wait_until('b')
-            self.play(FadeIn(pts[0]))
-            vo.wait_until('c')
-            self.play(FadeIn(pts[1]))
-            vo.wait_until('d')
-            self.play(FadeIn(pts[2]))
-            vo.wait_until('e')
-            self.play(FadeIn(pts[3]))
-        self.wait(0.3)
-        self.clear_scene()

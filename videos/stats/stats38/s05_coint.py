@@ -5,9 +5,15 @@ import numpy as np
 from videos.stats.stats38.common import *  # noqa: F403
 
 
-class Coint(VoiceoverScene):
+class Coint(StatsScene):
     def construct(self):
         self.card()
+        self.ask("Two random walks tied together, like one good's price in two markets. Their difference...",
+                 ["wanders too", "is stationary"], 1,
+                 say="Two random walks that are tied together, such as the price of one good in two markets. What "
+                     "about their difference?",
+                 reveal="It's stationary: they wander, but together. That's cointegration, Engle and Granger's "
+                        "idea, and it makes regressions of one on the other meaningful.")
         self.pair()
         self.tstats()
         self.idea()
@@ -15,13 +21,14 @@ class Coint(VoiceoverScene):
         self.superconsistent()
         self.tests()
         self.board()
+        self.answer()
+        self.checkpoint([("A shock to a random walk?", "permanent"),
+                         ("Cointegrated series: a combination that is?", "stationary")],
+                        narration="Checkpoint. Unit roots.",
+                        answers_narration="Permanent. And stationary.")
 
     def card(self):
-        card = chapter_card(4, r"Spurious regression and cointegration", r"When two wanderers are tied together",
-                            lit=(1974, 1987, 1988), part=PART)
-        with self.voiceover("Chapter four. Spurious regression, and cointegration."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(4, r"Spurious regression and cointegration", r"When two wanderers are tied together", lit=(1974, 1987, 1988), part=PART, said="Chapter four. Spurious regression, and cointegration.")
 
     def pair(self):
         d = load("coint")

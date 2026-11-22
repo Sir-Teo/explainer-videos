@@ -5,21 +5,25 @@ import numpy as np
 from videos.stats.stats14.common import *  # noqa: F403
 
 
-class CaseControl(VoiceoverScene):
+class CaseControl(StatsScene):
     def construct(self):
         self.card()
+        self.ask("Sample on the outcome: cases and controls. Which measure survives?",
+                 ["the risk of disease", "the odds ratio", "the relative risk, directly"], 1,
+                 say="Doll and Hill sampled on the outcome: lung-cancer patients, and matched controls. Which "
+                     "measure of association survives that sampling?",
+                 reveal="The odds ratio. The case-control sampling fractions cancel out of it, and for a rare "
+                        "disease it approximates the relative risk.")
         self.doll_hill()
         self.symmetry()
         self.sampling()
         self.world()
         self.ages()
         self.rare()
+        self.answer()
 
     def card(self):
-        card = chapter_card(10, r"Case--control studies", r"Sampling on the outcome, \ and what survives it", lit=(1950,), part=PART)
-        with self.voiceover("Chapter ten. Case–control studies."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(10, r"Case--control studies", r"Sampling on the outcome, \ and what survives it", lit=(1950,), part=PART, said="Chapter ten. Case–control studies.")
 
     def doll_hill(self):
         dh = museum.DOLL_HILL

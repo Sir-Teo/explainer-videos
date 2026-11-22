@@ -14,14 +14,14 @@ def beetle_panel(d, center=(-1.6, 0.2, 0)):
                         xticks=[1.7, 1.75, 1.8, 1.85, 1.9], center=list(center))
 
 
-class Hook(VoiceoverScene):
+class Hook(StatsScene):
     def construct(self):
         self.bliss()
         self.data()
         self.probits()
         self.curves()
         self.ld50()
-        self.objectives()
+        self.title(PART)
 
     def bliss(self):
         tl = timeline(lit=(1935,)).to_edge(UP, buff=0.35)
@@ -168,30 +168,4 @@ class Hook(VoiceoverScene):
             for k, m_ in enumerate("bcde"):
                 vo.wait_until(m_)
                 self.play(FadeIn(rows[k + 1]))
-        self.clear_scene()
-
-    def objectives(self):
-        head = VGroup(label(r"Part 24", font_size=34, color=GREY_B), label(r"Generalized Linear Models", font_size=60)).arrange(DOWN, buff=0.25)
-        obj = objectives_card([
-            r"the exponential dispersion family; \ links and variance functions",
-            r"IRLS derived; \ deviance, \ residuals and analysis of deviance",
-            r"separation and Firth; \ quasi-likelihood and overdispersion",
-            r"counts with too many zeros; \ log-linear, \ multinomial and ordinal models",
-            r"GEE for clustered outcomes; \ proper scoring rules",
-        ], color=MODEL, font_size=26)
-        prereq = note(r"prerequisites: \ Parts 14, \ 21 and 22").to_corner(DL, buff=0.3)
-        built = note(r"built: \ \texttt{statkit.glm} II; \ the dose--response panel").to_corner(DR, buff=0.3)
-        with self.voiceover(
-            "<bookmark mark='a'/> Part twenty-four: generalized linear models. <bookmark mark='b'/> We'll meet the "
-            "exponential dispersion family that unifies them; derive iteratively reweighted least squares; read deviances "
-            "and residuals; see what goes wrong under separation and how Firth fixes it; handle overdispersion with "
-            "quasi-likelihood; model counts with too many zeros; fit log-linear, multinomial and ordinal models; extend "
-            "the whole thing to clustered outcomes with generalized estimating equations; and finish with how to score a "
-            "probability forecast."
-        ) as vo:
-            vo.wait_until("a")
-            self.play(FadeIn(head, shift=UP * 0.2))
-            vo.wait_until("b")
-            self.play(FadeOut(head), FadeIn(obj, shift=UP * 0.2), FadeIn(prereq), FadeIn(built))
-        self.wait(1.0)
         self.clear_scene()

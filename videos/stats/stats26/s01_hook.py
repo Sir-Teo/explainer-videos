@@ -21,13 +21,13 @@ def school_bars(ax, y, s, labels, width=2.0, color=None):
     return g
 
 
-class Hook(VoiceoverScene):
+class Hook(StatsScene):
     def construct(self):
         self.story()
         self.data()
         self.two_answers()
         self.question()
-        self.objectives()
+        self.title(PART)
 
     def story(self):
         tl = timeline(lit=(1981,)).to_edge(UP, buff=0.35)
@@ -149,29 +149,4 @@ class Hook(VoiceoverScene):
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
                 self.play(FadeIn(rows[k], shift=RIGHT * 0.2))
-        self.clear_scene()
-
-    def objectives(self):
-        head = VGroup(label(r"Part 26", font_size=34, color=GREY_B), label(r"Bayesian Data Analysis", font_size=60)).arrange(DOWN, buff=0.25)
-        obj = objectives_card([
-            r"hierarchical models, \ exchangeability, \ and the eight schools on a grid",
-            r"priors: \ Jeffreys, \ reference, \ weakly informative; \ conjugate families",
-            r"Bernstein--von Mises; \ Bayes factors, \ Lindley's paradox, \ Occam's razor",
-            r"decisions and the value of information",
-            r"checking and workflow; \ the argument; \ the Dirichlet process",
-        ], color=SHRUNK, font_size=26)
-        prereq = note(r"prerequisites: \ Parts 15 and 25").to_corner(DL, buff=0.3)
-        built = note(r"built: \ \texttt{statkit.bayes} II; \ the $\tau$ explorer").to_corner(DR, buff=0.3)
-        with self.voiceover(
-            "<bookmark mark='a'/> Part twenty-six: Bayesian data analysis. <bookmark mark='b'/> We'll fit hierarchical models "
-            "and justify them by exchangeability; choose priors, from Jeffreys's to weakly informative ones; see when "
-            "posteriors and sampling distributions agree; test hypotheses with Bayes factors and meet Lindley's paradox and "
-            "Occam's razor; make decisions and price information; check models and follow a workflow; weigh the "
-            "philosophical argument honestly; and take a first look at Bayesian nonparametrics."
-        ) as vo:
-            vo.wait_until("a")
-            self.play(FadeIn(head, shift=UP * 0.2))
-            vo.wait_until("b")
-            self.play(FadeOut(head), FadeIn(obj, shift=UP * 0.2), FadeIn(prereq), FadeIn(built))
-        self.wait(1.0)
         self.clear_scene()

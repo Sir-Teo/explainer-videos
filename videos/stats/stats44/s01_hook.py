@@ -5,14 +5,14 @@ import numpy as np
 from videos.stats.stats44.common import *  # noqa: F403
 
 
-class Hook(VoiceoverScene):
+class Hook(StatsScene):
     def construct(self):
         self.quarrel()
         self.letters()
         self.chain()
         self.dispersion()
         self.upgrades()
-        self.objectives()
+        self.title(PART)
 
     def quarrel(self):
         tl = timeline(lit=(1906, 1913)).to_edge(UP, buff=0.35)
@@ -168,30 +168,5 @@ class Hook(VoiceoverScene):
             for k, m_ in enumerate("abc"):
                 vo.wait_until(m_)
                 self.play(FadeIn(cards[k], shift=UP * 0.15))
-        self.wait(1.0)
-        self.clear_scene()
-
-    def objectives(self):
-        head = VGroup(label(r"Part 44", font_size=34, color=GREY_B), label(r"Martingales, Markov Chains and Brownian Motion", font_size=48)).arrange(DOWN, buff=0.25)
-        obj = objectives_card([
-            r"conditional expectation, \ martingales, \ optional stopping, \ Ville's inequality",
-            r"martingale convergence, \ concentration and the martingale CLT",
-            r"Markov chains on general spaces, \ the MCMC CLT, \ coupling and mixing",
-            r"Brownian motion, \ Donsker, \ the iterated logarithm, \ counting processes",
-        ], color=S.ACCENT, font_size=26)
-        prereq = note(r"prerequisites: \ Part 43").to_corner(DL, buff=0.3)
-        built = note(r"built: \ \texttt{statkit.chains}, \ the coupling and mixing lab; \ betting paths").to_corner(DR, buff=0.3)
-        with self.voiceover(
-            "<bookmark mark='a'/> Part forty-four: martingales, Markov chains and Brownian motion. <bookmark "
-            "mark='b'/> We'll define conditional expectation properly, build martingales and their stopping, maximal "
-            "and convergence theorems, with Ville's inequality, the root of anytime-valid testing; prove "
-            "concentration and a central limit theorem for martingales; give Markov chains on general spaces their "
-            "ergodic theory, with a coupling and mixing lab; and construct Brownian motion, the limit of centered "
-            "independent identically distributed walks with finite positive variance after standardization."
-        ) as vo:
-            vo.wait_until("a")
-            self.play(FadeIn(head, shift=UP * 0.2))
-            vo.wait_until("b")
-            self.play(FadeOut(head), FadeIn(obj, shift=UP * 0.2), FadeIn(prereq), FadeIn(built))
         self.wait(1.0)
         self.clear_scene()

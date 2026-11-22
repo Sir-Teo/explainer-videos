@@ -11,7 +11,7 @@ def _clean(s: str) -> str:
     return s
 
 
-class Engine(VoiceoverScene):
+class Engine(WatchScene):
     def construct(self):
         self.card()
         self.pipeline()
@@ -20,14 +20,14 @@ class Engine(VoiceoverScene):
         self.missing()
 
     def card(self):
-        card = chapter_card(14, r"A search engine for the novels", r"What does it take to answer a query well?",
-                            lit=(1980, 1994), extra=((1980, r"Porter's stemmer"),
-                                                     (1994, r"Okapi BM25 at TREC")), part=PART)
-        with self.voiceover("Chapter fourteen. A search engine for the novels."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(14, r"A search engine for the novels", r"What does it take to answer a query well?", lit=(1980, 1994), extra=((1980, r"Porter's stemmer"),
+                                                     (1994, r"Okapi BM25 at TREC")), part=PART, said="Chapter fourteen. A search engine for the novels.")
 
     def pipeline(self):
+        self.ask(r"Our engine answers a query. \\ What keeps most passages from being scored?", [r"the tokenizer",
+                 r"WAND's upper bounds"], 1,
+                 say="Our engine answers a query over eleven thousand passages. What saves it from scoring most of them?",
+                 reveal="WAND's upper bounds, against a rising threshold.")
         ix = load("index")
         e = load("engine")
         q = e["queries"][3]

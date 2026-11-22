@@ -5,9 +5,15 @@ import numpy as np
 from videos.stats.stats26.common import *  # noqa: F403
 
 
-class Hierarchy(VoiceoverScene):
+class Hierarchy(StatsScene):
     def construct(self):
         self.card()
+        self.ask(r"With only eight schools, the between-school SD $\tau$ is...",
+                 ["pinned down precisely", "poorly determined"], 1,
+                 say="The schools' true effects vary with some standard deviation tau. With only eight schools, how "
+                     "well do the data determine tau?",
+                 reveal="Poorly: its posterior runs from zero to large values. With few groups, the prior on tau "
+                        "matters.")
         self.model()
         self.marginal()
         self.explorer()
@@ -15,12 +21,10 @@ class Hierarchy(VoiceoverScene):
         self.summaries()
         self.questions()
         self.vs_eb()
+        self.answer()
 
     def card(self):
-        card = chapter_card(2, r"Hierarchical models", r"The eight schools on a grid", lit=(1981,), part=PART)
-        with self.voiceover("Chapter two. Hierarchical models."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(2, r"Hierarchical models", r"The eight schools on a grid", lit=(1981,), part=PART, said="Chapter two. Hierarchical models.")
 
     def model(self):
         rows = [

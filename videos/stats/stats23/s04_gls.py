@@ -5,9 +5,15 @@ import numpy as np
 from videos.stats.stats23.common import *  # noqa: F403
 
 
-class GLS(VoiceoverScene):
+class GLS(StatsScene):
     def construct(self):
         self.card()
+        self.ask(r"Errors with known covariance $\Omega$. The best linear unbiased estimator is...",
+                 ["OLS", "GLS: whiten, then least squares", "median regression"], 1,
+                 say="The errors' covariance has a known shape, sigma squared times omega. What's the best linear "
+                     "unbiased estimator?",
+                 reveal="Generalized least squares: whiten the data with omega's Cholesky factor, then ordinary "
+                        "least squares. That's Aitken's theorem.")
         self.aitken()
         self.wls()
         self.series()
@@ -15,12 +21,10 @@ class GLS(VoiceoverScene):
         self.coverage()
         self.durbin()
         self.feasible()
+        self.answer()
 
     def card(self):
-        card = chapter_card(3, r"GLS and Aitken", r"When the errors have a shape", lit=(1935,), part=PART)
-        with self.voiceover("Chapter three. Generalized least squares."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(3, r"GLS and Aitken", r"When the errors have a shape", lit=(1935,), part=PART, said="Chapter three. Generalized least squares.")
 
     def aitken(self):
         rows = [

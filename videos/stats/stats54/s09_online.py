@@ -5,9 +5,15 @@ import numpy as np
 from videos.stats.stats54.common import *  # noqa: F403
 
 
-class Online(VoiceoverScene):
+class Online(StatsScene):
     def construct(self):
         self.card()
+        self.ask("Hedge with $N$ experts over $T$ rounds has regret about...",
+                 [r"$\sqrt{T \log N}$", "$T$", r"$\log N$"], 0,
+                 say="Online learning against an adversary: expert advice, with Hedge. Over T rounds and N experts, "
+                     "what's the regret?",
+                 reveal="About root T log N: sublinear in T, logarithmic in N. Average regret vanishes, whatever "
+                        "the adversary does.")
         self.game()
         self.hedge()
         self.chart()
@@ -15,12 +21,10 @@ class Online(VoiceoverScene):
         self.bandit_chart()
         self.batch()
         self.mirror()
+        self.answer()
 
     def card(self):
-        card = chapter_card(8, r"Online learning", r"Regret against an adversary", part=PART)
-        with self.voiceover("Chapter eight. Online learning: regret against an adversary."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(8, r"Online learning", r"Regret against an adversary", part=PART, said="Chapter eight. Online learning: regret against an adversary.")
 
     def game(self):
         rows = [

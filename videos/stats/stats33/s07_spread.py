@@ -6,9 +6,15 @@ from explainer.stats.board import coverage_board, load_all
 from videos.stats.stats33.common import *  # noqa: F403
 
 
-class Spread(VoiceoverScene):
+class Spread(StatsScene):
     def construct(self):
         self.card()
+        self.ask(r"BH at 10\%, tests strongly dependent. One study's false discovery proportion...",
+                 [r"is always at most 10\%", r"can be far above 10\%"], 1,
+                 say="Benjamini-Hochberg at ten percent, but the tests are strongly correlated. In one particular "
+                     "study, can the proportion of false discoveries be far above ten percent?",
+                 reveal="Yes. The FDR is only an average over studies; with dependence, the proportion in one study "
+                        "swings widely, sometimes zero, sometimes much more.")
         self.setup_()
         self.hists()
         self.numbers()
@@ -16,12 +22,14 @@ class Spread(VoiceoverScene):
         self.widen()
         self.board()
         self.fdx()
+        self.answer()
+        self.checkpoint([("BH at $q$, half the nulls false, controls at?", "$q/2$"),
+                         ("The local fdr is?", "the chance this case is null, given its $z$")],
+                        narration="Checkpoint. Discovery rates.",
+                        answers_narration="Q over two. And the chance this case is null.")
 
     def card(self):
-        card = chapter_card(6, r"FDR is an average", r"The false discovery proportion of one study", lit=(2001,), part=PART)
-        with self.voiceover("Chapter six. The false discovery rate is an average."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(6, r"FDR is an average", r"The false discovery proportion of one study", lit=(2001,), part=PART, said="Chapter six. The false discovery rate is an average.")
 
     def setup_(self):
         rows = [

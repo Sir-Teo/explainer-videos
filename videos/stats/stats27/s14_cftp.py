@@ -16,21 +16,29 @@ def spin_grid(state, cell=0.22, center=ORIGIN):
     return g.move_to(center)
 
 
-class CFTP(VoiceoverScene):
+class CFTP(StatsScene):
     def construct(self):
         self.card()
+        self.ask("Coupling from the past returns draws that are...",
+                 ["approximately from the target", "exactly from the target"], 1,
+                 say="Every chain so far reaches its target only in the limit. Propp and Wilson's coupling from the "
+                     "past: are its draws approximately or exactly from the target?",
+                 reveal="Exactly. Run coupled chains from every start, from further and further back, until they "
+                        "all agree by time zero. Where they agree is an exact draw.")
         self.problem()
         self.idea()
         self.ising()
         self.coalescence()
         self.coupling_now()
         self.limits()
+        self.answer()
+        self.checkpoint([("Laplace's approximation is exact for?", "a normal posterior"),
+                         ("Coupling from the past gives?", "exact draws from the target")],
+                        narration="Checkpoint. Approximate and exact.",
+                        answers_narration="A normal posterior. And exact draws.")
 
     def card(self):
-        card = chapter_card(13, r"Exact sampling", r"Coupling from the past", lit=(1996,), part=PART)
-        with self.voiceover("Chapter thirteen. Exact sampling."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(13, r"Exact sampling", r"Coupling from the past", lit=(1996,), part=PART, said="Chapter thirteen. Exact sampling.")
 
     def problem(self):
         rows = fit_rows(VGroup(

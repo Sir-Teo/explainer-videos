@@ -3,14 +3,25 @@ from __future__ import annotations
 from videos.stats.stats65.common import *  # noqa: F403
 
 
-class WhereNext(LectureMixin, VoiceoverScene):
+class WhereNext(LectureMixin, StatsScene):
     def construct(self):
         self.card_voiceover("Chapter ten. Where to go next.", 10, r"Where to go next", r"Beyond the series")
+        self.ask("Beyond the series, the best way to keep learning statistics is to...",
+                 ["read, reproduce, and do a project", "memorize theorems"], 0,
+                 say="Where to go next. What's the best way to keep learning statistics after the series?",
+                 reveal="Read the books and papers, reproduce their results, and take on a real project, testing "
+                        "your methods against the truth where you can. And report what you find, including the "
+                        "broken rows.")
         self.books()
         self.problems_left()
         self.journals()
         self.replicate()
         self.habits()
+        self.answer()
+        self.checkpoint([("Broken promises came mostly from?", "violated assumptions and habits"),
+                         ("What makes a number worth believing?", "a check against a known truth or a sourced record")],
+                        narration="The last checkpoint of the degree.",
+                        answers_narration="Assumptions and habits. And a check against the truth.")
 
     def books(self):
         self.list_voiceover(

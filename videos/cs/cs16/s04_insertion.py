@@ -5,7 +5,7 @@ from videos.cs.cs16.common import (CODE, COST, CTRL, DATA, FUNC, HEAD, LAM, NO, 
                                    mono, value_bars, words)
 
 
-class Insertion(VoiceoverScene):
+class Insertion(WatchScene):
     def construct(self):
         self.card()
         self.invariant()
@@ -13,11 +13,7 @@ class Insertion(VoiceoverScene):
         self.binary()
 
     def card(self):
-        card = chapter_card(3, r"Insertion sort and its invariant", r"How do we know a loop is right?", lit=(1969,),
-                            extra=((1969, r"Hoare's logic"),), part=PART)
-        with self.voiceover("Chapter three. Insertion sort and its invariant."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(3, r"Insertion sort and its invariant", r"How do we know a loop is right?", lit=(1969,), extra=((1969, r"Hoare's logic"),), part=PART, said="Chapter three. Insertion sort and its invariant.")
 
     def invariant(self):
         d = load("insertion")
@@ -90,6 +86,10 @@ class Insertion(VoiceoverScene):
         self.clear_scene()
 
     def inversions(self):
+        self.ask(r"Insertion sort's number of shifts equals the number of...", [r"elements", r"inversions",
+                 r"elements squared"], 1,
+                 say="Every shift in insertion sort fixes something. The number of shifts equals the number of what?",
+                 reveal="Inversions: pairs in the wrong order. Each shift removes exactly one.")
         d = load("insertion")
         head = label(r"Counting the work: \ inversions", font_size=34).to_edge(UP, buff=0.3)
         defs = VGroup(

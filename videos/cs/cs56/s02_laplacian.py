@@ -38,7 +38,7 @@ def two_clusters():
     return pos, edges
 
 
-class Laplacian(VoiceoverScene):
+class Laplacian(WatchScene):
     def construct(self):
         self.card()
         self.matrices()
@@ -46,15 +46,10 @@ class Laplacian(VoiceoverScene):
         self.zero()
         self.connectivity()
         self.spectrum()
-        self.normalized()
 
     def card(self):
-        card = chapter_card(1, r"The Laplacian", r"Which matrix sees the shape of a graph?", lit=(1847, 1973),
-                            extra=((1847, r"Kirchhoff: \ circuits and spanning trees"),
-                                   (1973, r"Fiedler: \ algebraic connectivity")), part=PART)
-        with self.voiceover("Chapter one. The Laplacian, the matrix that sees the shape of a graph."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(1, r"The Laplacian", r"Which matrix sees the shape of a graph?", lit=(1847, 1973), extra=((1847, r"Kirchhoff: \ circuits and spanning trees"),
+                                   (1973, r"Fiedler: \ algebraic connectivity")), part=PART, said="Chapter one. The Laplacian, the matrix that sees the shape of a graph.")
 
     def matrices(self):
         head = label(r"$L = D - A$", font_size=36).to_edge(UP, buff=0.3)
@@ -244,6 +239,10 @@ class Laplacian(VoiceoverScene):
         self.clear_scene()
 
     def connectivity(self):
+        self.ask(r"The Laplacian's second eigenvalue $\lambda_2$ is zero \\ exactly when the graph...",
+                 [r"is a tree", r"falls apart"], 1,
+                 say="The second smallest eigenvalue of the Laplacian is zero. What does that say about the graph?",
+                 reveal="It is disconnected. And a small lambda two means it nearly is.")
         head = label(r"$\lambda_2$: \ algebraic connectivity", font_size=36).to_edge(UP, buff=0.3)
         n = 8
         path = [(i, i + 1) for i in range(n - 1)]
@@ -352,51 +351,6 @@ class Laplacian(VoiceoverScene):
         self.wait(0.4)
         self.clear_scene()
 
-    def normalized(self):
-        s = load("series")
-        head = label(r"The normalized Laplacian", font_size=36).to_edge(UP, buff=0.3)
-        steps = VGroup(
-            cmath(r"N", r"=", r"D^{-1/2}", r"L", r"D^{-1/2}", font_size=36),
-            cmath(r"N", r"=", r"D^{-1/2}", r"(D - A)", r"D^{-1/2}", font_size=36),
-            cmath(r"N", r"=", r"I", r"-", r"D^{-1/2} A D^{-1/2}", font_size=36),
-        )
-        for st in steps:
-            st.move_to(UP * 1.95)
-        props = VGroup(
-            label(r"eigenvalues between 0 and 2", font_size=24, color=HEAD),
-            label(r"as many zeros as components, \ as before", font_size=24, color=YES),
-            label(r"degree-weighted; \ isolated vertices have zero rows", font_size=24, color=GREY_A),
-        ).arrange(DOWN, buff=0.25).next_to(steps[0], DOWN, buff=0.45)
-        if props.width > 13.2:
-            props.scale_to_fit_width(13.2)
-        rows = [[nm, rf"{r['n']}", rf"{r['edges']:,}", rf"{r['lambda2']:.3f}"] for nm, r in s.items()]
-        tab = grid_table([r"graph", r"vertices", r"edges", r"$\lambda_2(N)$"], rows, widths=[4.8, 2.0, 1.8, 2.2],
-                         row_h=0.68, font_size=25, mono_cols=())
-        tab.next_to(props, DOWN, buff=0.6)
-        for c in tab.cells[1:]:
-            c[3].set_color(HEAD)
-        with self.voiceover(
-            "One adjustment makes graphs with very uneven degrees comparable. <bookmark mark='a'/> Scale the "
-            "Laplacian on both sides by one over the square root of each degree. <bookmark mark='b'/> Expanding, "
-            "this normalized Laplacian is the identity minus a rescaled adjacency matrix. <bookmark mark='c'/> Its "
-            "eigenvalues lie between zero and two, its zeros still count the components, and every vertex counts "
-            "in proportion to its degree, so a hub cannot dominate. <bookmark mark='d'/> This is the version the "
-            "hook measured on the series' own graphs: the city grid of Part 18 barely holds together, while the "
-            "internet and the novel's words are far better knit. Cheeger's inequality and random walks, chapters "
-            "three and four, are both about this matrix."
-        ) as vo:
-            self.play(FadeIn(head))
-            vo.wait_until("a")
-            self.play(Write(steps[0]))
-            vo.wait_until("b")
-            self.play(TransformMatchingTex(steps[0], steps[1]))
-            self.play(TransformMatchingTex(steps[1], steps[2]))
-            vo.wait_until("c")
-            self.play(LaggedStart(*[FadeIn(p_) for p_ in props], lag_ratio=0.4))
-            vo.wait_until("d")
-            self.play(FadeIn(tab))
-        self.wait(0.4)
-        self.clear_scene()
 
 
 _ = (BG, LAM, NO)

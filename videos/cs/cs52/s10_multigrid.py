@@ -29,7 +29,7 @@ def spectrum_bars(vals, half, x0=-5.6, y0=-1.6, width=11.2, height=3.3, top=2.4)
     return g
 
 
-class Multigrid(VoiceoverScene):
+class Multigrid(WatchScene):
     def construct(self):
         self.card()
         self.smoothing()
@@ -39,14 +39,14 @@ class Multigrid(VoiceoverScene):
         self.cost()
 
     def card(self):
-        card = chapter_card(9, r"Multigrid", r"Can a solver cost no more than reading its input?",
-                            lit=(1964, 1977), extra=((1964, r"Fedorenko: \ two grids"),
-                                                     (1977, r"Brandt: \ multilevel solvers")), part=PART)
-        with self.voiceover("Chapter nine. Multigrid."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(9, r"Multigrid", r"Can a solver cost no more than reading its input?", lit=(1964, 1977), extra=((1964, r"Fedorenko: \ two grids"),
+                                                     (1977, r"Brandt: \ multilevel solvers")), part=PART, said="Chapter nine. Multigrid.")
 
     def smoothing(self):
+        self.ask(r"Jacobi relaxation removes which error quickly?", [r"smooth error",
+                 r"rough, oscillating error"], 1,
+                 say="Simple relaxation, like Jacobi's, removes error quickly. Which kind?",
+                 reveal="Rough, oscillating error. Smooth error lingers, which is what coarse grids are for.")
         s = load("spectrum")
         n, fac = s["n"], s["factor"]
         head = label(r"Relaxation smooths", font_size=36).to_edge(UP, buff=0.3)
@@ -358,6 +358,12 @@ class Multigrid(VoiceoverScene):
             self.play(FadeIn(foot))
         self.wait(0.4)
         self.clear_scene()
+        self.checkpoint(
+            [(r"What makes QR iteration fast?", r"Hessenberg form, shifts, deflation"),
+             (r"Why does multigrid cost $O(n)$?", r"Coarse grids are a geometric series of work")],
+            narration="Checkpoint. What makes the QR algorithm fast? And why does a multigrid cycle cost only order n?",
+            answers_narration="Reducing to Hessenberg form once, shifting, and deflating converged eigenvalues. And each coarser "
+                              "grid has a quarter of the points, so the work is a geometric series.")
 
 
 _ = (BG, DATA, HEAD, KERN, LAM, NO, YES)

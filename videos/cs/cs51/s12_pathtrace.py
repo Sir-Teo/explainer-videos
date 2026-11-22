@@ -26,7 +26,7 @@ def hemi(p, n, r=0.42, color=GREY_B):
     return Arc(radius=r, start_angle=a - PI / 2, angle=PI, arc_center=P(p), color=color, stroke_width=1.8)
 
 
-class Pathtrace(VoiceoverScene):
+class Pathtrace(WatchScene):
     def construct(self):
         self.card()
         self.estimator()
@@ -36,17 +36,15 @@ class Pathtrace(VoiceoverScene):
         self.mis()
 
     def card(self):
-        card = chapter_card(11, r"Path tracing", r"How do we sample an infinite sum of integrals?",
-                            lit=(1986, 1990, 1997), extra=((1986, r"Kajiya: \ path tracing"),
+        self.chapter(11, r"Path tracing", r"How do we sample an infinite sum of integrals?", lit=(1986, 1990, 1997), extra=((1986, r"Kajiya: \ path tracing"),
                                                            (1990, r"Arvo and Kirk: \ Russian roulette"),
-                                                           (1997, r"Veach: \ multiple importance sampling")),
-                            part=PART)
-        with self.voiceover("Chapter eleven. Path tracing."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+                                                           (1997, r"Veach: \ multiple importance sampling")), part=PART, said="Chapter eleven. Path tracing.")
 
     # ------------------------------------------------------------------ the estimator
     def estimator(self):
+        self.ask(r"Monte Carlo with $N$ samples. \\ The error falls like...", [r"$1/N$", r"$1/\sqrt{N}$"], 1,
+                 say="A Monte Carlo estimate with N random samples. How does its error fall?",
+                 reveal="As one over the square root of N, in any dimension.")
         head = label(r"One sample per bounce: \ a path", font_size=36).to_edge(UP, buff=0.3)
         box = box2d()
         d = np.array([X1, 0.8]) - EYE

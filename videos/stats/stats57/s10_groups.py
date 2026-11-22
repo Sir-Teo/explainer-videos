@@ -5,9 +5,15 @@ import numpy as np
 from videos.stats.stats57.common import *  # noqa: F403
 
 
-class Groups(VoiceoverScene):
+class Groups(StatsScene):
     def construct(self):
         self.card()
+        self.ask("Calibrating conformal separately within each group gives coverage...",
+                 ["within each group", "only overall"], 0,
+                 say="Vovk's Mondrian conformal prediction calibrates separately within each group. What does it "
+                     "guarantee?",
+                 reveal="Coverage within each group, for groups named in advance. It can't cover every group at "
+                        "once: that impossibility still stands.")
         self.mondrian()
         self.mondrian_worked()
         self.table()
@@ -15,12 +21,10 @@ class Groups(VoiceoverScene):
         self.board()
         self.slack()
         self.fairness()
+        self.answer()
 
     def card(self):
-        card = chapter_card(9, r"Mondrian and group-conditional coverage", r"Coverage for every group, \ on NHANES", lit=(2005, 2023), part=PART)
-        with self.voiceover("Chapter nine. Mondrian and group-conditional coverage, on NHANES blood pressures."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(9, r"Mondrian and group-conditional coverage", r"Coverage for every group, \ on NHANES", lit=(2005, 2023), part=PART, said="Chapter nine. Mondrian and group-conditional coverage, on NHANES blood pressures.")
 
     def mondrian(self):
         rows = [

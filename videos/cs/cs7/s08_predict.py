@@ -3,196 +3,192 @@ from __future__ import annotations
 import numpy as np
 
 from explainer.cs import *  # noqa: F403
-from videos.cs.cs7.common import (BG, CLOCK, CODE, COST, CTRL, DATA, FUNC, HEAD, HIST, INF, NO, PART, YES, PipeChart,
-                                  box, fmt, load, mono)
+from videos.cs.cs7.common import BG, DATA, HEAD, NO, PART, YES, chapter, load, mono
 
 SHORT = {"insertion sort": "sort", "sieve": "sieve", "threshold, random": "threshold (random)",
          "threshold, sorted": "threshold (sorted)", "Fibonacci (recursive)": "Fibonacci",
          "correlated branches": "correlated", "the Job, chapter 1": "the Job"}
 
 
-def acc_table(pred, names, font_size=20, cw=1.45, rh=0.42, highlight=None):
+def acc_table(pred, names, font_size=22, cw=1.7, rh=0.5):
     tab = pred["table"]
-    progs = list(tab)
-    g = VGroup()
-    x0 = -4.6
+    g, cells = VGroup(), VGroup()
+    x0 = -4.4
     for j, n in enumerate(names):
-        g.add(label(n, font_size=font_size - 2, color=GREY_B).move_to([x0 + 2.0 + j * cw, 0.45, 0]))
-    for i, p in enumerate(progs):
+        g.add(label(n, font_size=font_size - 2, color=GREY_B).move_to([x0 + 2.1 + j * cw, 0.55, 0]))
+    for i, p in enumerate(tab):
         y = -i * rh
         g.add(label(SHORT[p], font_size=font_size, color=GREY_A).move_to([x0, y, 0], aligned_edge=RIGHT))
         for j, n in enumerate(names):
             a = tab[p]["rows"][n]["accuracy"]
             c = interpolate_color(ManimColor(NO), ManimColor(YES), max(0.0, min(1.0, (a - 0.5) / 0.5)))
-            cell = VGroup(Rectangle(width=cw * 0.92, height=rh * 0.85, stroke_width=0, fill_color=c, fill_opacity=0.35),
-                          label(rf"{100 * a:.1f}", font_size=font_size, color=WHITE))
+            cell = VGroup(RoundedRectangle(width=cw * 0.92, height=rh * 0.86, corner_radius=0.06, stroke_width=0,
+                                           fill_color=c, fill_opacity=0.4),
+                          Text(f"{100 * a:.1f}", font="DejaVu Sans Mono", font_size=font_size - 2, color=WHITE))
             cell[1].move_to(cell[0])
-            cell.move_to([x0 + 2.0 + j * cw, y, 0])
-            g.add(cell)
-    return g
+            cell.move_to([x0 + 2.1 + j * cw, y, 0])
+            cells.add(cell)
+    return g, cells
 
 
-class Predict(VoiceoverScene):
+class Predict(WatchScene):
     def construct(self):
-        self.card()
+        chapter(self, 7, r"Predicting branches", r"Can the past predict a branch?", lit=(1981,),
+                extra=((1981, r"Smith's branch predictors"),))
         self.static()
         self.counters()
         self.fsm()
         self.table()
 
-    def card(self):
-        card = chapter_card(7, r"Predicting branches", r"Can the past predict a branch?", lit=(1981,), extra=((1981, r"Smith's branch predictors"),), part=PART)
-        with self.voiceover("Chapter seven. Predicting branches."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
-
     # ------------------------------------------------------------------
     def static(self):
         pr = load("predictors")["table"]
-        head = label(r"Guesses that never learn", font_size=38).to_edge(UP, buff=0.35)
-        items = VGroup(
-            label(r"always not taken: \ what the pipeline did so far", font_size=26, color=GREY_A),
-            label(r"always taken: \ right for loops", font_size=26, color=GREY_A),
-            label(r"backward taken, \ forward not: \ loops close backwards, \ \texttt{if}s jump forwards", font_size=26,
-                  color=GREY_A),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.3).move_to(UP * 1.2)
-        res = VGroup(
-            label(rf"sort: \ backward-taken is right {100 * pr['insertion sort']['rows']['backward taken']['accuracy']:.0f}\% "
-                  r"of the time", font_size=24, color=YES),
-            label(rf"the Job: \ only {100 * pr['the Job, chapter 1']['rows']['backward taken']['accuracy']:.0f}\%: \ its "
-                  r"hot branches are forward, \ and data-dependent", font_size=24, color=NO),
-        ).arrange(DOWN, buff=0.25).to_edge(DOWN, buff=0.8)
+        sort_bt = pr["insertion sort"]["rows"]["backward taken"]["accuracy"]
+        job_bt = pr["the Job, chapter 1"]["rows"]["backward taken"]["accuracy"]
+        # a loop closes backwards; an if jumps forwards
+        code = VGroup(mono("loop:", 28, GREY_B), mono("    ...", 28), mono("    beq  t0, t1, skip", 28),
+                      mono("    ...", 28), mono("skip:", 28, GREY_B), mono("    bne  a0, zero, loop", 28)).arrange(
+            DOWN, aligned_edge=LEFT, buff=0.16).move_to(LEFT * 2.2)
+        back = CurvedArrow(code[5].get_left() + LEFT * 0.15, code[0].get_left() + LEFT * 0.15, angle=-1.4,
+                           color=YES, stroke_width=5)
+        fwd = CurvedArrow(code[2].get_right() + RIGHT * 0.15, code[4].get_right() + RIGHT * 0.15, angle=-1.3,
+                          color=NO, stroke_width=5)
+        col = code.get_right()[0] + 1.7
+        bl = label(r"backwards: \ a loop. \ Guess taken.", font_size=30, color=YES)
+        bl.move_to([col + bl.width / 2, code[5].get_center()[1], 0])
+        fl = label(r"forwards: \ an \texttt{if}. \ Guess not taken.", font_size=30, color=NO)
+        fl.move_to([col + fl.width / 2, code[2].get_center()[1] + 0.2, 0])
         with self.voiceover(
-            "The simplest guesses are fixed rules. <bookmark mark='a'/> Predict not taken, which is what our pipeline "
-            "has done so far. Predict always taken, which suits loops, since a loop's closing branch is taken every time "
-            "but the last. Or the compromise many early machines used: a branch that jumps backwards is probably a loop, "
-            "so predict taken; a branch that jumps forwards is probably an if, so predict not taken. "
-            "<bookmark mark='b'/> On the insertion sort, backward-taken is right ninety-nine percent of the time. On the "
-            "Job it is right only fifty-seven percent: its busiest branches jump forwards, and whether they are taken "
-            "depends on the text. To do better, a predictor has to watch what each branch actually does."
+            "The cheapest guess is a fixed rule. Early machines used this one. <bookmark mark='a'/> A branch that "
+            "jumps backwards is probably closing a loop: guess taken. <bookmark mark='b'/> A branch that jumps "
+            f"forwards is probably an if: guess not taken. On the insertion sort, that rule is right "
+            f"{100 * sort_bt:.0f} percent of the time."
         ) as vo:
-            self.play(FadeIn(head))
-            self.play(LaggedStart(*[FadeIn(i) for i in items], lag_ratio=0.5), run_time=2.5)
+            self.play(LaggedStart(*[FadeIn(c, shift=RIGHT * 0.2) for c in code], lag_ratio=0.12), run_time=1.5)
+            vo.wait_until("a")
+            self.play(Create(back), FadeIn(bl))
             vo.wait_until("b")
-            self.play(FadeIn(res[0]))
-            self.play(FadeIn(res[1]))
-        self.wait(0.3)
+            self.play(Create(fwd), FadeIn(fl))
+        grp = VGroup(code, back, fwd, bl, fl)
+        card = self.predict(r"Backward-taken on the Job's branches: \ how often right?",
+                            [rf"about {100 * sort_bt:.0f}\%, \ like the sort", rf"about {100 * job_bt:.0f}\%",
+                             r"about 10\%"],
+                            narration="And on the Job? Is it right about as often, near "
+                                      f"{100 * job_bt:.0f} percent, or almost never?", room=grp)
+        self.reveal(card, 1, narration=(
+            f"{100 * job_bt:.0f} percent: barely better than a coin. The Job's busiest branches jump forwards, and "
+            "which way they go depends on the text. To do better, a predictor has to watch each branch."))
         self.clear_scene()
 
     # ------------------------------------------------------------------
     def counters(self):
-        head = label(r"Remember what each branch did \ (Smith, 1981)", font_size=34).to_edge(UP, buff=0.35)
+        bits = [1, 0, 1, 1, 0, 1, 1, 0]
         tab = VGroup()
-        for k in range(8):
-            r = Rectangle(width=1.0, height=0.42, stroke_color=GREY_C, stroke_width=1.2)
-            t = MathTex(["1", "0", "1", "1", "0", "1", "1", "0"][k], font_size=24, color=YES)
-            tab.add(VGroup(r, t.move_to(r)))
-        tab.arrange(DOWN, buff=0.0).move_to(RIGHT * 2.8)
-        tl = label(r"a table of bits, \\ indexed by low bits of \texttt{pc}", font_size=20, color=GREY_A).next_to(tab, UP,
-                                                                                                         buff=0.15)
-        pc = mono("pc = 0x0074", 22, DATA).move_to(LEFT * 3.6 + UP * 0.6)
-        idx = MathTex(r"(\texttt{pc} \gg 2) \bmod 1024", font_size=28, color=GREY_A).next_to(pc, DOWN, buff=0.3)
-        arr = Arrow(idx.get_right(), tab[5].get_left(), buff=0.15, color=HEAD)
-        pred = label(r"predict: \ taken if the bit is 1; \\ when the branch resolves, \ write what it did", font_size=24,
-                     color=HEAD).to_edge(DOWN, buff=0.8)
+        for b in bits:
+            r = Rectangle(width=1.1, height=0.48, stroke_color=GREY_C, stroke_width=1.4)
+            t = Text(str(b), font="DejaVu Sans Mono", font_size=26, color=YES if b else NO).move_to(r)
+            tab.add(VGroup(r, t))
+        tab.arrange(DOWN, buff=0.0).move_to(RIGHT * 3.0)
+        tl = label(r"one bit per branch, \\ indexed by its address", font_size=24, color=GREY_A).next_to(tab, UP,
+                                                                                                   buff=0.2)
+        pc = mono("pc = 0x0074", 28, DATA).move_to(LEFT * 3.8 + UP * 0.8)
+        idx = MathTex(r"(\texttt{pc} \gg 2) \bmod 8 = 5", font_size=34, color=GREY_A).next_to(pc, DOWN, buff=0.35)
+        arr = Arrow(idx.get_right(), tab[5].get_left(), buff=0.15, color=HEAD, stroke_width=4)
+        guess = label(r"guess: \ taken", font_size=30, color=YES).next_to(idx, DOWN, buff=0.6)
         with self.voiceover(
             "In 1981 James Smith measured the obvious learning rule. <bookmark mark='a'/> Keep a small table of bits, "
-            "indexed by the low bits of the branch's address. <bookmark mark='b'/> To predict, look up the branch's "
-            "bit: one means it was taken last time, so predict taken again. When the branch resolves, write down what "
-            "it actually did. The table is tiny and fast enough to consult in the fetch stage, alongside the "
-            "instruction memory."
+            "indexed by the low bits of the branch's address. <bookmark mark='b'/> To predict, look the branch up: a "
+            "one means it was taken last time, so guess taken again. <bookmark mark='c'/> When it resolves, write down "
+            "what it actually did."
         ) as vo:
-            self.play(FadeIn(head))
-            self.play(FadeIn(tab), FadeIn(tl))
+            self.play(LaggedStart(*[GrowFromEdge(c, LEFT) for c in tab], lag_ratio=0.08), FadeIn(tl), run_time=1.3)
+            vo.wait_until("a")
+            self.play(Write(pc))
             vo.wait_until("b")
-            self.play(FadeIn(pc), FadeIn(idx), GrowArrow(arr), Indicate(tab[5], color=HEAD))
-            self.play(FadeIn(pred))
-        self.wait(0.3)
+            self.play(FadeIn(idx, shift=DOWN * 0.1), GrowArrow(arr))
+            self.play(Indicate(tab[5], color=HEAD), FadeIn(guess, shift=UP * 0.1))
+            vo.wait_until("c")
+            new = Text("0", font="DejaVu Sans Mono", font_size=26, color=NO).move_to(tab[5][1])
+            nl = label(r"it wasn't: \ write 0", font_size=30, color=NO).move_to(guess)
+            self.play(Transform(tab[5][1], new), Transform(guess, nl), Flash(tab[5], color=NO))
         self.clear_scene()
 
     # ------------------------------------------------------------------
     def fsm(self):
         f = load("predictors")
-        pat = f["pattern"]
-        head = label(r"A loop of ten: \ one bit against two", font_size=36).to_edge(UP, buff=0.3)
-        names = [r"\text{strongly}\\\text{not}", r"\text{weakly}\\\text{not}", r"\text{weakly}\\\text{taken}",
-                 r"\text{strongly}\\\text{taken}"]
+        pat = [bool(x) for x in f["pattern"]]
+        p1, p2 = f["fsm"]["1-bit"]["predictions"], f["fsm"]["2-bit"]["predictions"]
+        s2 = f["fsm"]["2-bit"]["states"]
+        names = [r"strongly\\not", r"weakly\\not", r"weakly\\taken", r"strongly\\taken"]
         states = VGroup()
         for k, n in enumerate(names):
-            c = Circle(radius=0.55, color=NO if k < 2 else YES, stroke_width=3, fill_color=BG, fill_opacity=1)
-            parts = n.split(r"\\")
-            t = VGroup(*[MathTex(p_, font_size=18, color=NO if k < 2 else YES) for p_ in parts]).arrange(DOWN, buff=0.04)
-            t.move_to(c)
+            c = Circle(radius=0.62, color=NO if k < 2 else YES, stroke_width=3, fill_color=BG, fill_opacity=1)
+            t = label(n, font_size=20, color=NO if k < 2 else YES).move_to(c)
             states.add(VGroup(c, t))
-        states.arrange(RIGHT, buff=0.9).move_to(UP * 1.4)
+        states.arrange(RIGHT, buff=1.0).move_to(UP * 1.9 + LEFT * 1.3)
         arrows = VGroup()
         for k in range(3):
-            arrows.add(CurvedArrow(states[k].get_top() + RIGHT * 0.2, states[k + 1].get_top() + LEFT * 0.2, angle=-0.8,
-                                   color=YES, stroke_width=2))
-            arrows.add(CurvedArrow(states[k + 1].get_bottom() + LEFT * 0.2, states[k].get_bottom() + RIGHT * 0.2,
-                                   angle=-0.8, color=NO, stroke_width=2))
-        tl = VGroup(label(r"taken", font_size=18, color=YES).next_to(arrows[2], UP, buff=0.05),
-                    label(r"not taken", font_size=18, color=NO).next_to(arrows[3], DOWN, buff=0.05))
-        fl = label(r"a saturating counter: \ Part 5's state machine, \ two flip-flops per branch", font_size=22,
-                   color=GREY_B).next_to(states, DOWN, buff=0.9)
-        # the run: outcomes and the two predictors' mistakes
-        x0 = -5.6
-        dx = 0.28
-        row_o = VGroup(*[Square(0.22, stroke_width=0, fill_color=YES if t else NO, fill_opacity=0.8).move_to(
-            [x0 + k * dx, -1.0, 0]) for k, t in enumerate(pat)])
-        rows = {}
-        for j, name in enumerate(("1-bit", "2-bit")):
-            preds = f["fsm"][name]["predictions"]
-            rows[name] = VGroup(*[Text("x", font_size=16, color=NO).move_to([x0 + k * dx, -1.55 - 0.5 * j, 0])
-                                  if p_ != t else Dot([x0 + k * dx, -1.55 - 0.5 * j, 0], radius=0.03, color=GREY_D)
-                                  for k, (p_, t) in enumerate(zip(preds, pat))])
-        labs = VGroup(label(r"outcome", font_size=18, color=GREY_B).next_to(row_o, LEFT, buff=0.2),
-                      label(r"1-bit", font_size=18, color=GREY_B).next_to(rows["1-bit"], LEFT, buff=0.2),
-                      label(r"2-bit", font_size=18, color=GREY_B).next_to(rows["2-bit"], LEFT, buff=0.2))
-        m1 = sum(p_ != t for p_, t in zip(f["fsm"]["1-bit"]["predictions"], pat))
-        m2 = sum(p_ != t for p_, t in zip(f["fsm"]["2-bit"]["predictions"], pat))
-        res = label(rf"wrong: \ 1-bit {m1} times, \ 2-bit {m2} \ in four trips round the loop", font_size=24,
-                    color=HEAD).to_edge(DOWN, buff=0.25)
+            arrows.add(CurvedArrow(states[k].get_top() + RIGHT * 0.25, states[k + 1].get_top() + LEFT * 0.25,
+                                   angle=-0.8, color=YES, stroke_width=2.5))
+            arrows.add(CurvedArrow(states[k + 1].get_bottom() + LEFT * 0.25, states[k].get_bottom() + RIGHT * 0.25,
+                                   angle=-0.8, color=NO, stroke_width=2.5))
+        rows = [[(YES if t else NO, None) for t in pat],
+                [((NO, "x") if a != t else (GREY_E, None)) for a, t in zip(p1, pat)],
+                [((NO, "x") if a != t else (GREY_E, None)) for a, t in zip(p2, pat)]]
+        strip = EventStrip(rows, names=[r"outcome", r"1-bit", r"2-bit"], window=len(pat), cell=0.27, gap=0.04)
+        strip.move_to(DOWN * 1.4 + RIGHT * 0.5)
+        m1 = np.concatenate([[0], np.cumsum([a != t for a, t in zip(p1, pat)])])
+        m2 = np.concatenate([[0], np.cumsum([a != t for a, t in zip(p2, pat)])])
+        meters = VGroup(Meter(r"1-bit misses", strip.t, values=m1, fmt="{:.0f}", color=NO, font_size=26),
+                        Meter(r"2-bit misses", strip.t, values=m2, fmt="{:.0f}", color=YES, font_size=26)).arrange(
+            RIGHT, buff=1.2).to_edge(DOWN, buff=0.35)
+        token = always_redraw(lambda: Dot(states[s2[min(len(s2) - 1, max(0, int(strip.t.get_value()) - 1))]][0]
+                                          .get_top() + DOWN * 0.18, color=HEAD, radius=0.09))
         with self.voiceover(
-            "Consider a ten-iteration loop repeated four times. <bookmark mark='a'/> Its branch is taken nine times, "
-            "then not taken. A one-bit predictor forgets its usual direction after each exit, so it misses again when "
-            "the loop restarts. <bookmark mark='b'/> A two-bit saturating counter needs two contrary outcomes to "
-            "reverse its strong belief. After training, it usually misses only the exit, assuming no table aliasing. "
-            "<bookmark mark='c'/> The displayed trace includes startup: eight one-bit misses and five two-bit misses "
-            "in forty outcomes. Exit misses are not inevitable for every predictor: a loop predictor that learns the "
-            "trip count can anticipate them. Counter initialization, aliasing and changing loop lengths matter."
+            "A loop that runs ten times shows the flaw. <bookmark mark='a'/> Its branch is taken nine times, then not. "
+            "A one-bit table flips on the exit, so it misses the exit, and then misses again when the loop restarts."
         ) as vo:
-            self.play(FadeIn(head))
-            self.play(FadeIn(labs), LaggedStart(*[FadeIn(r) for r in row_o], lag_ratio=0.02), run_time=1.5)
-            self.play(LaggedStart(*[FadeIn(r) for r in rows["1-bit"]], lag_ratio=0.02), run_time=1.5)
-            vo.wait_until("b")
-            self.play(FadeIn(states), Create(arrows), FadeIn(tl), FadeIn(fl), run_time=2.0)
-            vo.wait_until("c")
-            self.play(LaggedStart(*[FadeIn(r) for r in rows["2-bit"]], lag_ratio=0.02), run_time=1.5)
-            self.play(FadeIn(res))
-        self.wait(0.3)
+            self.play(FadeIn(strip.labels), FadeIn(meters))
+            self.add(strip)
+            vo.wait_until("a")
+            strip.advance(self, 11, per_step=0.3)
+        card = self.predict(r"Four trips round a ten-iteration loop. \\ Which predictor misses less?",
+                            [r"one bit", r"two bits", r"they tie"],
+                            narration="Smith's fix was a second bit: a counter that needs two surprises in a row to "
+                                      "change its mind. Over four trips round the loop, which misses less?",
+                            where="right")
+        self.park(card)
+        self.play(LaggedStart(*[GrowFromCenter(s) for s in states], lag_ratio=0.2), Create(arrows), run_time=1.4)
+        self.add(token)
+        with self.voiceover(
+            "Watch the yellow dot. It sits at strongly taken. The exit nudges it to weakly taken, not across, so the "
+            "restart is still guessed right."
+        ):
+            strip.advance(self, 12, per_step=0.25)
+        strip.advance(self, len(pat) - 23, per_step=0.16)
+        self.reveal(card, 1, narration=(
+            f"Two bits: {int(m2[-1])} misses against {int(m1[-1])}, startup included. It misses the exits, and only "
+            "the exits."))
         self.clear_scene()
 
     # ------------------------------------------------------------------
     def table(self):
         pr = load("predictors")
-        head = label(r"Percent predicted correctly", font_size=36).to_edge(UP, buff=0.35)
-        tab = acc_table(pr, ["always taken", "backward taken", "1-bit", "2-bit"], font_size=20, cw=1.9).move_to(
-            DOWN * 0.1 + RIGHT * 0.6)
-        notes = label('one counter per branch misses these patterns; \\\\ this does not test every local-history predictor', font_size=22, color=HEAD).to_edge(DOWN,
-                                                                                                buff=0.35)
+        names = ["always taken", "backward taken", "1-bit", "2-bit"]
+        g, cells = acc_table(pr, names)
+        VGroup(g, cells).move_to(DOWN * 0.1 + RIGHT * 0.6)
+        src = tag("simulated", r"online, over each program's full trace").to_corner(DR, buff=0.3)
+        hard = [k for k in range(len(cells)) if k % 4 == 3]
         with self.voiceover(
-            "These predictors run online over the same benchmark traces, predicting before each update. <bookmark "
-            "mark='a'/> The table reports these runs, including startup and aliasing. The threshold benchmark's "
-            "aggregate accuracy is about seventy-five percent on irregular data because it includes predictable loop "
-            "branches as well as the difficult data branch. Sorting groups the data branch's outcomes. <bookmark "
-            "mark='b'/> A single counter per branch leaves substantial errors on some benchmarks. That does not prove "
-            "the branch's full local history is uninformative: a counter remembers much less than a history model. "
-            "Next we add information from other branches and compare again."
+            "Here are all seven programs, percent predicted correctly. <bookmark mark='a'/> Two bits are a big step "
+            "up from fixed rules. <bookmark mark='b'/> But look at the threshold loop on random data and the "
+            "Fibonacci recursion: a counter per branch remembers only which way it usually goes. To do better, it "
+            "has to know what happened just before."
         ) as vo:
-            self.play(FadeIn(head))
-            self.play(FadeIn(tab, lag_ratio=0.02), run_time=2.5)
+            self.play(FadeIn(g), FadeIn(src))
+            self.play(LaggedStart(*[GrowFromCenter(c) for c in cells], lag_ratio=0.02), run_time=2.0)
+            vo.wait_until("a")
+            self.play(*[Indicate(cells[k], color=YES, scale_factor=1.05) for k in hard], run_time=1.0)
             vo.wait_until("b")
-            self.play(FadeIn(notes))
-        self.wait(0.3)
+            self.play(Indicate(VGroup(cells[2 * 4 + 3], cells[4 * 4 + 3]), color=NO, scale_factor=1.15), run_time=1.2)
         self.clear_scene()

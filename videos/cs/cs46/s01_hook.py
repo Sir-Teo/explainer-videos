@@ -10,12 +10,12 @@ def box(name, color, w=2.3, h=0.7, size=19):
     return VGroup(r, label(name, font_size=size, color=color).move_to(r))
 
 
-class Hook(VoiceoverScene):
+class Hook(WatchScene):
     def construct(self):
         self.everywhere()
         self.pipes()
         self.two_places()
-        self.plan()
+        self.title(PART)
 
     def everywhere(self):
         head = label(r"The same structure, \ again and again", font_size=36).to_edge(UP, buff=0.3)
@@ -122,29 +122,6 @@ class Hook(VoiceoverScene):
         self.wait(0.4)
         self.clear_scene()
 
-    def plan(self):
-        title = label(rf"Part {PART}: \ Logs, \ Streams and Warehouses", font_size=36).to_edge(UP, buff=0.3)
-        smap = series_map(current=PART, done=PART - 1).scale(0.92).next_to(title, DOWN, buff=0.35)
-        obj = objectives_card([
-            r"the partitioned log: \ offsets, \ keys, \ consumer groups",
-            r"change data capture and event sourcing",
-            r"event time, \ windows and watermarks",
-            r"exactly-once state by barrier snapshots",
-            r"columnar files: \ encodings and Dremel's levels",
-            r"lakehouses, \ distributed joins, \ and the Job as a stream",
-        ], font_size=25).move_to(DOWN * 0.2)
-        with self.voiceover(
-            "This is Part 46 of Computer Science, Built. <bookmark mark='a'/> We will build a partitioned log with "
-            "consumer groups; turn a database's changes into a stream; give windows of events a notion of time that "
-            "survives lateness; checkpoint a running computation so that it recovers with exactly-once state; take "
-            "apart a columnar file down to its encodings and the levels that let nested data live in columns; and "
-            "end with the Job as a live top twenty over a stream of novels."
-        ) as vo:
-            self.play(FadeIn(title), FadeIn(smap))
-            vo.wait_until("a")
-            self.play(FadeOut(smap), FadeIn(obj))
-        self.wait(0.5)
-        self.clear_scene()
 
 
 _ = (KERN, LAM, NO, YES)

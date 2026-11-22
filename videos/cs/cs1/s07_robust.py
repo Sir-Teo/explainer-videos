@@ -9,21 +9,16 @@ PHASE = {"copy": r"copy the input onto tape 2", "rewind": r"rewind tape 1", "com
          r"compare: \ tape 1 forwards, \ tape 2 backwards", "accept": r"accept"}
 
 
-class Robust(VoiceoverScene):
+class Robust(WatchScene):
     def construct(self):
         self.card()
         self.two_tapes()
         self.race()
         self.simulation()
-        self.variants()
         self.nondeterminism()
 
     def card(self):
-        card = chapter_card(6, r"More tapes, same power", r"Does a more elaborate machine compute more?",
-                            lit=(1936,), part=PART)
-        with self.voiceover("Chapter six. More tapes, same power."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(6, r"More tapes, same power", r"Does a more elaborate machine compute more?", lit=(1936,), part=PART, said="Chapter six. More tapes, same power.")
 
     # ------------------------------------------------------------------
     def two_tapes(self):
@@ -68,6 +63,10 @@ class Robust(VoiceoverScene):
 
     # ------------------------------------------------------------------
     def race(self):
+        self.ask(r"Give the machine a second tape. \\ Palindromes of length $n$ now take...",
+                 [r"still about $n^2/2$ steps", r"about $3n$ steps", r"about $\log n$ steps"], 1,
+                 say="Give the machine a second tape. How fast does it check a palindrome now?",
+                 reveal="Three n plus three steps, exactly: linear instead of quadratic.")
         d = load("palindrome")
         ns, one, two = (np.array(d[k], float) for k in ("n", "one", "two"))
         ax = CornerAxes(x_range=[0, 60, 10], y_range=[0, 1900, 500], x_length=8.4, y_length=4.8, tips=False,
@@ -169,44 +168,6 @@ class Robust(VoiceoverScene):
         self.wait(0.3)
         self.clear_scene()
 
-    # ------------------------------------------------------------------
-    def variants(self):
-        head = label(r"Every reasonable variation computes the same things", font_size=36).to_edge(UP, buff=0.4)
-        rows = [
-            (r"a tape infinite in both directions", r"fold it in half: \ two tracks", r"constant"),
-            (r"more symbols", r"write each in binary", r"constant"),
-            (r"a ``stay'' move", r"move right and back", r"constant"),
-            (r"$k$ tapes", r"tracks and dots, \ as above", r"quadratic"),
-            (r"a 2-dimensional tape", r"store the grid row by row", r"polynomial"),
-            (r"random access memory", r"a tape of (address, value) pairs", r"polynomial"),
-        ]
-        hdr = VGroup(*[label(t, font_size=24, color=GREY_B) for t in
-                       (r"the extra feature", r"how one tape simulates it", r"slowdown")])
-        tab = VGroup(hdr, *[VGroup(label(a, font_size=26), label(b, font_size=26, color=GREY_A),
-                                   label(c, font_size=26, color=COST)) for a, b, c in rows])
-        for r in tab:
-            r[0].move_to([-3.6, 0, 0], aligned_edge=LEFT).shift(LEFT * 0.0)
-        tab.arrange(DOWN, buff=0.32, aligned_edge=LEFT).move_to(DOWN * 0.2)
-        for r in tab:
-            r[0].set_x(-6.4 + r[0].width / 2)
-            r[1].set_x(-0.6 + r[1].width / 2)
-            r[2].set_x(4.9 + r[2].width / 2)
-        line = Line([-6.4, 0, 0], [6.6, 0, 0], color=GREY_D).next_to(hdr, DOWN, buff=0.15)
-        line.set_x(0.1)
-        with self.voiceover(
-            "The same trick works for every variation anyone proposed. <bookmark mark='a'/> A tape infinite in both "
-            "directions: fold it into two tracks. More symbols: write each one as a few binary digits. A stay-put move: "
-            "step right and back. Several tapes: tracks and dots. A two-dimensional tape, or memory you can jump around "
-            "in by address: lay it out in a row. <bookmark mark='b'/> Each extra feature can be simulated by the plain "
-            "machine, at worst with a polynomial slowdown. The set of things that can be computed does not move."
-        ) as vo:
-            self.play(FadeIn(head), FadeIn(hdr), Create(line))
-            vo.wait_until("a")
-            self.play(LaggedStart(*[FadeIn(r, shift=RIGHT * 0.15) for r in tab[1:]], lag_ratio=0.35), run_time=3.0)
-            vo.wait_until("b")
-            self.play(*[Indicate(r[2], color=COST) for r in tab[1:]])
-        self.wait(0.3)
-        self.clear_scene()
 
     # ------------------------------------------------------------------
     def nondeterminism(self):
@@ -256,3 +217,10 @@ class Robust(VoiceoverScene):
             self.play(FadeIn(cost))
         self.wait(0.3)
         self.clear_scene()
+        self.checkpoint(
+            [(r"Does a second tape let a machine compute more?", r"No: it computes faster, not more"),
+             (r"Why must Euclid's algorithm stop?", r"The remainder shrinks every step, and can't go below zero")],
+            narration="Checkpoint. Does a second tape let a machine compute anything new? And why must Euclid's algorithm "
+                      "always stop?",
+            answers_narration="No: two tapes are faster, not more powerful. And the remainder shrinks every step, but can "
+                              "never go below zero.")

@@ -5,21 +5,29 @@ import numpy as np
 from videos.stats.stats53.common import *  # noqa: F403
 
 
-class BvM(VoiceoverScene):
+class BvM(StatsScene):
     def construct(self):
         self.card()
+        self.ask(r"Regular parametric model, lots of data. A 95\% credible interval's frequentist coverage tends to...",
+                 [r"95\%", "anything at all"], 0,
+                 say="A regular parametric model with plenty of data. What happens to a ninety-five percent "
+                     "credible interval's frequentist coverage?",
+                 reveal="It tends to ninety-five percent: Bernstein-von Mises. The posterior becomes a normal at an "
+                        "efficient estimator, with the inverse information as its variance.")
         self.theorem()
         self.proof()
         self.chart()
         self.merge()
         self.dimension()
         self.meaning()
+        self.answer()
+        self.checkpoint([("Doob guarantees consistency for?", "prior-almost every truth"),
+                         ("Schwartz's prior-mass condition?", "positive mass on every KL neighbourhood of the truth")],
+                        narration="Checkpoint. Consistency.",
+                        answers_narration="Prior-almost every truth. And mass near the truth in KL.")
 
     def card(self):
-        card = chapter_card(4, r"Bernstein--von Mises", r"When a posterior is a confidence distribution", part=PART)
-        with self.voiceover("Chapter four. Bernstein–von Mises: when a posterior is a confidence distribution."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(4, r"Bernstein--von Mises", r"When a posterior is a confidence distribution", part=PART, said="Chapter four. Bernstein–von Mises: when a posterior is a confidence distribution.")
 
     def theorem(self):
         rows = [

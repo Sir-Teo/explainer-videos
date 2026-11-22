@@ -9,7 +9,7 @@ from videos.cs.cs19.common import (BG, CODE, COST, CTRL, DATA, FUNC, HEAD, LAM, 
                                    mono, words)
 
 
-class Closest(VoiceoverScene):
+class Closest(WatchScene):
     def construct(self):
         self.card()
         self.split()
@@ -17,13 +17,13 @@ class Closest(VoiceoverScene):
         self.measured()
 
     def card(self):
-        card = chapter_card(8, r"The closest pair", r"Must we compare every pair of points?", lit=(1975,),
-                            extra=((1975, r"Shamos and Hoey"),), part=PART)
-        with self.voiceover("Chapter eight. The closest pair."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(8, r"The closest pair", r"Must we compare every pair of points?", lit=(1975,), extra=((1975, r"Shamos and Hoey"),), part=PART, said="Chapter eight. The closest pair.")
 
     def split(self):
+        self.ask(r"The closest pair among a million points. \\ The work, divide and conquer?",
+                 [r"half a trillion distances", r"about $n \log n$"], 1,
+                 say="Find the closest two of a million points by divide and conquer. How much work?",
+                 reveal="About n log n: only a thin strip near the dividing line needs checking.")
         d = load("closest")
         head = label(r"Divide and conquer, \ in the plane", font_size=34).to_edge(UP, buff=0.3)
         pts = sorted(map(tuple, d["show"]))

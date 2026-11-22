@@ -4,7 +4,7 @@ from explainer.cs import *  # noqa: F403
 from videos.cs.cs44.common import BG, DATA, HEAD, KERN, LAM, NO, PART, YES, axes, bar_chart, load
 
 
-class Fitts(VoiceoverScene):
+class Fitts(WatchScene):
     def construct(self):
         self.card()
         self.tapping()
@@ -14,13 +14,9 @@ class Fitts(VoiceoverScene):
         self.steering()
 
     def card(self):
-        card = chapter_card(1, r"Pointing is a channel", r"How long does it take to hit a target?",
-                            lit=(1954, 1992), extra=((1954, r"Fitts: \ reciprocal tapping"),
+        self.chapter(1, r"Pointing is a channel", r"How long does it take to hit a target?", lit=(1954, 1992), extra=((1954, r"Fitts: \ reciprocal tapping"),
                                                      (1988, r"Meyer et al.: \ submovements"),
-                                                     (1992, r"MacKenzie: \ the Shannon form")), part=PART)
-        with self.voiceover("Chapter one. Pointing is a channel."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+                                                     (1992, r"MacKenzie: \ the Shannon form")), part=PART, said="Chapter one. Pointing is a channel.")
 
     def tapping(self):
         head = label(r"Fitts's tapping experiment, \ 1954", font_size=36).to_edge(UP, buff=0.3)
@@ -188,6 +184,10 @@ class Fitts(VoiceoverScene):
         self.clear_scene()
 
     def edges(self):
+        self.ask(r"The same target, in the middle of the screen \\ or against its edge. At the edge it is...",
+                 [r"the same", r"faster to hit"], 1,
+                 say="The same target, once in the middle of the screen and once against its edge. Which is quicker to hit?",
+                 reveal="The edge: the pointer stops there, so the target is effectively infinitely deep.")
         e = load("edge")
         head = label(r"Infinitely deep targets", font_size=36).to_edge(UP, buff=0.3)
         scr = Rectangle(width=5.6, height=3.6, stroke_color=GREY_B, stroke_width=2).move_to([-3.6, -0.1, 0])

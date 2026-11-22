@@ -10,7 +10,7 @@ def forest_node(k, col=DATA):
                   mono(str(k), 18, WHITE))
 
 
-class UnionFind(VoiceoverScene):
+class UnionFind(WatchScene):
     def construct(self):
         self.card()
         self.forest()
@@ -19,11 +19,7 @@ class UnionFind(VoiceoverScene):
         self.ackermann()
 
     def card(self):
-        card = chapter_card(11, r"Union--find", r"How slowly can a function grow?", lit=(1975,),
-                            extra=((1964, r"Galler and Fischer"), (1975, r"Tarjan: \ inverse Ackermann")), part=PART)
-        with self.voiceover("Chapter eleven. Union–find."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(11, r"Union--find", r"How slowly can a function grow?", lit=(1975,), extra=((1964, r"Galler and Fischer"), (1975, r"Tarjan: \ inverse Ackermann")), part=PART, said="Chapter eleven. Union–find.")
 
     def forest(self):
         head = label(r"Disjoint sets as a forest", font_size=34).to_edge(UP, buff=0.3)
@@ -65,6 +61,11 @@ class UnionFind(VoiceoverScene):
         self.clear_scene()
 
     def compression(self):
+        self.ask(r"Union by rank, plus path compression. \\ Cost per operation, for any realistic $n$?",
+                 [r"about $\log n$", r"at most about 4"], 1,
+                 say="Union-find with union by rank and path compression. What does each operation cost, for any n you'll "
+                     "ever meet?",
+                 reveal="At most about four: the inverse Ackermann function.")
         head = label(r"Path compression", font_size=34).to_edge(UP, buff=0.3)
         chain = [1, 2, 3, 4, 5]
         before = VGroup(*[forest_node(k, DATA if k != 5 else HEAD) for k in chain]).arrange(UP, buff=0.45).move_to(
@@ -154,8 +155,7 @@ class UnionFind(VoiceoverScene):
             "displayed recurrence; different texts define variants. <bookmark mark='b'/> Its small values"
             " already jump from three to five to thirteen to sixty-five thousand five hundred and "
             "thirty-three. <bookmark mark='c'/> The next displayed value is two to sixty-five thousand "
-            "five hundred and thirty-six, minus three. <bookmark mark='d'/> The displayed inverse is one "
-            "illustrative diagonal convention. Formal union-find bounds may use a two-parameter inverse "
+            "five hundred and thirty-six, minus three. <bookmark mark='d'/> Formal union-find bounds may use a two-parameter inverse "
             "and setup terms; those conventions differ by small constants, not by practical growth. A "
             "worst-case sequence lower bound does not make every operation superconstant. <bookmark "
             "mark='e'/> The iterated logarithm is a simpler comparison: the table counts base-two "

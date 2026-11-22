@@ -5,21 +5,29 @@ import numpy as np
 from videos.stats.stats53.common import *  # noqa: F403
 
 
-class Adaptation(VoiceoverScene):
+class Adaptation(StatsScene):
     def construct(self):
         self.card()
+        self.ask("Choosing the prior's smoothness by maximizing the marginal likelihood can give...",
+                 ["adaptive rates", "only the worst rate"], 0,
+                 say="Let the data choose the prior's smoothness, by maximizing the marginal likelihood: empirical "
+                     "Bayes. What rates can that achieve?",
+                 reveal="Adaptive ones: near the minimax rate for the truth's own smoothness, unknown in advance. A "
+                        "hierarchical prior on the smoothness does the same.")
         self.methods()
         self.likelihood()
         self.table()
         self.why_eb()
         self.hb()
         self.hierarchical()
+        self.answer()
+        self.checkpoint([("Regular model: credible intervals' coverage?", "tends to nominal: Bernstein--von Mises"),
+                         ("The DP posterior mean CDF?", "a mix of the prior guess and the empirical CDF")],
+                        narration="Checkpoint. Posteriors and frequencies.",
+                        answers_narration="It tends to nominal. And a mix.")
 
     def card(self):
-        card = chapter_card(8, r"Adaptation", r"Letting the data choose the prior's smoothness", lit=(2008,), part=PART)
-        with self.voiceover("Chapter eight. Adaptation: letting the data choose the prior's smoothness."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(8, r"Adaptation", r"Letting the data choose the prior's smoothness", lit=(2008,), part=PART, said="Chapter eight. Adaptation: letting the data choose the prior's smoothness.")
 
     def methods(self):
         rows = [

@@ -3,17 +3,24 @@ from __future__ import annotations
 from videos.stats.stats58.common import *  # noqa: F403
 
 
-class EBH(LectureMixin, VoiceoverScene):
+class EBH(LectureMixin, StatsScene):
     def construct(self):
         self.card_voiceover("Chapter nine. Multiple testing with e-values: false discovery rate control under any "
                        "dependence, and for experiments that each stop when they like.", 9, r"Multiple testing with e-values",
                        r"Many bets at once", lit=(2022,))
+        self.ask("e-BH controls the false discovery rate under...",
+                 ["any dependence", "independence only"], 0,
+                 say="Multiple testing with e-values: Wang and Ramdas's e-BH. Under what dependence does it control "
+                     "the false discovery rate?",
+                 reveal="Any dependence at all, with no correction. That's the payoff of e-values' linearity: "
+                        "expectations add.")
         self.rule()
         self.proof()
         self.results()
         self.why_use()
         self.closure()
         self.platform()
+        self.answer()
 
     def rule(self):
         heading = label('e-BH for a specified family', font_size=30, color=WEALTHC).move_to([0, 3.35, 0])

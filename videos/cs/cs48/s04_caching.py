@@ -10,73 +10,19 @@ def pct(x: float, d: int = 0) -> str:
     return f"{100 * x:.{d}f}"
 
 
-class Caching(VoiceoverScene):
+class Caching(WatchScene):
     def construct(self):
         self.card()
-        self.where()
         self.patterns()
         self.evict()
         self.che()
         self.curve()
 
     def card(self):
-        card = chapter_card(3, r"Caching: \ where, \ and what to keep", r"Which few answers deserve the fast memory?",
-                            lit=(1966, 2017), extra=((1966, r"Belady: \ the optimal replacement"),
+        self.chapter(3, r"Caching: \ where, \ and what to keep", r"Which few answers deserve the fast memory?", lit=(1966, 2017), extra=((1966, r"Belady: \ the optimal replacement"),
                                                      (2002, r"Che, \ Tung and Wang: \ the characteristic time"),
-                                                     (2017, r"Einziger, \ Friedman and Manes: \ TinyLFU")),
-                            part=PART)
-        with self.voiceover("Chapter three. Caching: where, and what to keep."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+                                                     (2017, r"Einziger, \ Friedman and Manes: \ TinyLFU")), part=PART, said="Chapter three. Caching: where, and what to keep.")
 
-    def where(self):
-        head = label(r"Where caches sit", font_size=36).to_edge(UP, buff=0.3)
-        layers = [(r"browser", DATA, r"responses, \ as Cache-Control allows \ (Part 42)"),
-                  (r"CDN edge", DATA, r"public responses, \ near the user"),
-                  (r"reverse proxy", HEAD, r"whole responses, \ shared by many users"),
-                  (r"application", YES, r"objects and query results: \ in process, \ Redis, \ Memcached"),
-                  (r"database", LAM, r"pages of tables and indexes: \ the buffer pool"),
-                  (r"storage", GREY_B, r"the data itself")]
-        boxes = VGroup(*[module_box(n, c, w=1.85, h=0.7, font=19) for n, c, _ in layers]).arrange(RIGHT, buff=0.3)
-        boxes.move_to([0, 0.6, 0])
-        links = VGroup(*[Arrow(boxes[i][0].get_right(), boxes[i + 1][0].get_left(), buff=0.03, stroke_width=2,
-                               color=GREY_B, max_tip_length_to_length_ratio=0.35) for i in range(5)])
-        descs = VGroup(*[wrapped_label(d, 1.85, font_size=17, color=c).next_to(b, DOWN, buff=0.25)
-                         for (_, c, d), b in zip(layers, boxes)])
-        y = boxes.get_top()[1] + 0.35
-        full = Dot([boxes[0].get_left()[0], y, 0], radius=0.09, color=GREY_A)
-        hit = Dot([boxes[0].get_left()[0], y, 0], radius=0.09, color=YES)
-        hl = label(r"a hit at the application: \ the rest of the trip is saved", font_size=19, color=YES).next_to(
-            boxes, UP, buff=0.65)
-        foot = wrapped_label(r"each hit ends the journey early; \ each layer is one more copy that can be stale \ "
-                             r"(chapter 4)", 12.4, font_size=20, color=WHITE).to_edge(DOWN, buff=0.5)
-        with self.voiceover(
-            "A cache keeps a copy of an answer closer to whoever asks, and there is room for one at every hop. "
-            "<bookmark mark='a'/> The browser keeps responses, as Part 42's Cache-Control headers allow; a content "
-            "delivery network keeps them at the edge, near the user. <bookmark mark='b'/> A reverse proxy keeps "
-            "whole responses shared by many users. The application keeps objects and query results, in its own "
-            "memory or in Redis or Memcached. <bookmark mark='c'/> And the database keeps pages of its tables and "
-            "indexes in a buffer pool. <bookmark mark='d'/> Each hit ends the journey early; each layer is one "
-            "more copy that can be stale."
-        ) as vo:
-            self.play(FadeIn(head), LaggedStart(*[FadeIn(b) for b in boxes], lag_ratio=0.15), Create(links))
-            self.play(FadeIn(full))
-            self.play(full.animate.set_x(boxes[-1].get_x()), run_time=2.0, rate_func=linear)
-            self.play(full.animate.set_x(boxes[0].get_left()[0]), run_time=1.5, rate_func=linear)
-            self.play(FadeOut(full))
-            vo.wait_until("a")
-            self.play(FadeIn(descs[0]), FadeIn(descs[1]))
-            vo.wait_until("b")
-            self.play(FadeIn(descs[2]), FadeIn(descs[3]))
-            vo.wait_until("c")
-            self.play(FadeIn(descs[4]), FadeIn(descs[5]))
-            vo.wait_until("d")
-            self.play(FadeIn(hit))
-            self.play(hit.animate.set_x(boxes[3].get_x()), run_time=1.0, rate_func=linear)
-            self.play(hit.animate.set_x(boxes[0].get_left()[0]), FadeIn(hl), run_time=1.0, rate_func=linear)
-            self.play(FadeIn(foot))
-        self.wait(0.4)
-        self.clear_scene()
 
     def patterns(self):
         head = label(r"Four ways to wire a cache", font_size=36).to_edge(UP, buff=0.3)
@@ -280,6 +226,10 @@ class Caching(VoiceoverScene):
         self.clear_scene()
 
     def curve(self):
+        self.ask(r"Requests follow Zipf's law. \\ A cache holding $1\%$ of the items catches...", [r"about $1\%$",
+                 r"a large share"], 1,
+                 say="Requests follow Zipf's law. A cache holds one percent of the items. What share of requests does it catch?",
+                 reveal="A large share: the popular few get most of the requests.")
         c = load("caches")
         rows = c["rows"]
         by = {r["size"]: r for r in rows}

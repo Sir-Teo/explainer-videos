@@ -5,9 +5,15 @@ import numpy as np
 from videos.stats.stats56.common import *  # noqa: F403
 
 
-class Knockoffs(VoiceoverScene):
+class Knockoffs(StatsScene):
     def construct(self):
         self.card()
+        self.ask("Knockoffs control the FDR because a null variable's statistic is...",
+                 ["equally likely positive or negative", "exactly zero"], 0,
+                 say="Why do Barber and Candès's knockoffs control the false discovery rate?",
+                 reveal="Because a null variable can't tell itself from its knockoff: its statistic is equally "
+                        "likely to be positive or negative. Negative statistics count the false positives among the "
+                        "positive.")
         self.fixed_x()
         self.model_x()
         self.flip()
@@ -15,12 +21,14 @@ class Knockoffs(VoiceoverScene):
         self.martingale()
         self.chart()
         self.robust()
+        self.answer()
+        self.checkpoint([("Randomized selection does what to conditional intervals?", "shortens them"),
+                         ("Why do knockoffs control FDR?", "null statistics are sign-symmetric")],
+                        narration="Checkpoint. Noise as a tool.",
+                        answers_narration="Shortens them. And sign symmetry.")
 
     def card(self):
-        card = chapter_card(6, r"Knockoff theory", r"Fake variables that keep the selection honest", lit=(2015,), part=PART)
-        with self.voiceover("Chapter six. Knockoff theory: fake variables that keep the selection honest."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(6, r"Knockoff theory", r"Fake variables that keep the selection honest", lit=(2015,), part=PART, said="Chapter six. Knockoff theory: fake variables that keep the selection honest.")
 
     def fixed_x(self):
         rows = [

@@ -3,10 +3,16 @@ from __future__ import annotations
 from videos.stats.stats65.common import *  # noqa: F403
 
 
-class Theorem(LectureMixin, VoiceoverScene):
+class Theorem(LectureMixin, StatsScene):
     def construct(self):
         self.card_voiceover("Chapter four. The conjecture becomes a theorem, and here is its proof.", 4, r"A theorem",
                             r"Proved on screen")
+        self.ask("If the estimated weights are exactly right, the theorem's bound reduces to...",
+                 ["the usual weighted-conformal guarantee", "nothing useful"], 0,
+                 say="The conjecture becomes a theorem, proved on screen. If the estimated weights happen to be "
+                     "exactly right, what does the bound reduce to?",
+                 reveal="The usual weighted conformal guarantee of Tibshirani, Barber, Candès and Ramdas. A good "
+                        "theorem contains the known case as a special one.")
         self.statement()
         self.step1()
         self.step2()
@@ -16,6 +22,7 @@ class Theorem(LectureMixin, VoiceoverScene):
         self.upper()
         self.kl()
         self.remarks()
+        self.answer()
 
     def statement(self):
         self.lad_voiceover(

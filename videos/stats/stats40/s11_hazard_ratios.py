@@ -6,21 +6,25 @@ from videos.stats.stats40.common import *  # noqa: F403
 from videos.stats.stats40.s04_km import km_axes
 
 
-class HazardRatios(VoiceoverScene):
+class HazardRatios(StatsScene):
     def construct(self):
         self.card()
+        self.ask("In a randomized trial, the hazard ratio at year 3 compares...",
+                 ["comparable groups", "survivors who may no longer be comparable"], 1,
+                 say="Randomization makes the arms comparable at the start. A hazard ratio at year three compares "
+                     "whom?",
+                 reveal="Survivors to year three, who may no longer be comparable: each arm has lost its frailest "
+                        "at different rates. Survival curves and restricted mean times are easier to read causally.")
         self.selection()
         self.drift()
         self.frail_share()
         self.why()
         self.rmst_def()
         self.rmst_gehan()
+        self.answer()
 
     def card(self):
-        card = chapter_card(10, r"What hazard ratios mean", r"A ratio among survivors who are no longer comparable", lit=(2010, 2013), part=PART)
-        with self.voiceover("Chapter ten. What hazard ratios mean."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(10, r"What hazard ratios mean", r"A ratio among survivors who are no longer comparable", lit=(2010, 2013), part=PART, said="Chapter ten. What hazard ratios mean.")
 
     def selection(self):
         rows = [

@@ -8,9 +8,15 @@ from videos.stats.stats13.common import *  # noqa: F403
 NAMES = [r"control", r"A", r"B", r"C", r"D"]
 
 
-class Contrasts(VoiceoverScene):
+class Contrasts(StatsScene):
     def construct(self):
         self.card()
+        self.ask(r"All six pairwise comparisons of four means, each at 5\%. The chance of any false alarm?",
+                 [r"5\%", r"well above 5\%", r"below 5\%"], 1,
+                 say="Four fertilizers that are all the same. Compare every pair, six comparisons, each at five "
+                     "percent. What's the chance of at least one false alarm?",
+                 reveal="Well above five percent. Tukey's honestly significant difference widens each comparison so "
+                        "the whole family keeps the five percent promise.")
         self.contrasts()
         self.split_bar()
         self.five()
@@ -19,12 +25,10 @@ class Contrasts(VoiceoverScene):
         self.tukey_grid()
         self.dunnett()
         self.advice()
+        self.answer()
 
     def card(self):
-        card = chapter_card(4, r"Contrasts", r"Asking sharper questions, \ and asking many honestly", part=PART)
-        with self.voiceover("Chapter four. Contrasts, and many comparisons."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(4, r"Contrasts", r"Asking sharper questions, \ and asking many honestly", part=PART, said="Chapter four. Contrasts, and many comparisons.")
 
     def contrasts(self):
         d = load("anova")

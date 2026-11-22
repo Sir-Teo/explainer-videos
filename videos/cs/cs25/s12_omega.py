@@ -4,7 +4,7 @@ from explainer.cs import *  # noqa: F403
 from videos.cs.cs25.common import (fit_right, CTRL, DATA, HEAD, LAM, NO, PART, YES, load, mono, words)
 
 
-class Omega(VoiceoverScene):
+class Omega(WatchScene):
     def construct(self):
         self.card()
         self.definition()
@@ -12,13 +12,13 @@ class Omega(VoiceoverScene):
         self.oracle()
 
     def card(self):
-        card = chapter_card(11, r"Chaitin's $\Omega$", r"What is the probability that a program halts?", lit=(1975,),
-                            extra=((1975, r"Chaitin"),), part=PART)
-        with self.voiceover("Chapter eleven. Chaitin's Omega."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(11, r"Chaitin's $\Omega$", r"What is the probability that a program halts?", lit=(1975,), extra=((1975, r"Chaitin"),), part=PART, said="Chapter eleven. Chaitin's Omega.")
 
     def definition(self):
+        self.ask(r"Chaitin's $\Omega$ is a definite real number. \\ Can its digits be computed?", [r"yes",
+                 r"only finitely many, ever"], 1,
+                 say="Chaitin's Omega is a perfectly definite number. Can its digits be computed?",
+                 reveal="Only finitely many, by any given theory. Knowing n bits would solve halting for programs of n bits.")
         head = label(r"The halting probability", font_size=34).to_edge(UP, buff=0.35)
         eq = MathTex(r"\Omega \;=\; \sum_{p \text{ halts}} 2^{-|p|}", font_size=48, color=HEAD).next_to(head, DOWN,
                                                                                                     buff=0.4)

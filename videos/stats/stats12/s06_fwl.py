@@ -5,21 +5,25 @@ import numpy as np
 from videos.stats.stats12.common import *  # noqa: F403
 
 
-class FWL(VoiceoverScene):
+class FWL(StatsScene):
     def construct(self):
         self.card()
+        self.ask("Regress $y$ on $x$ and $z$. The coefficient on $x$ equals the slope of...",
+                 ["$y$ on $x$ alone", "$y$'s residuals on $x$'s residuals, after $z$", "$x$ on $y$"], 1,
+                 say="Regress y on x and z together. The coefficient on x equals the slope of which simple "
+                     "regression?",
+                 reveal="Y's residuals on x's residuals, both after removing z. That's Frisch-Waugh-Lovell, and "
+                        "it's what controlling for z means.")
         self.theorem()
         self.demo()
         self.ovb()
         self.ovb_sim()
         self.simpson()
         self.lesson()
+        self.answer()
 
     def card(self):
-        card = chapter_card(5, r"Controlling for", r"What a coefficient in a multiple regression means", part=PART)
-        with self.voiceover("Chapter five. Controlling for."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(5, r"Controlling for", r"What a coefficient in a multiple regression means", part=PART, said="Chapter five. Controlling for.")
 
     def theorem(self):
         tc = theorem_card(r"Frisch--Waugh--Lovell", r"In $y = X_1\beta_1 + X_2\beta_2 + \varepsilon$, \ the least squares $\hat\beta_1$ equals the "

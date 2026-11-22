@@ -5,21 +5,25 @@ import numpy as np
 from videos.stats.stats16.common import *  # noqa: F403
 
 
-class Principle(VoiceoverScene):
+class Principle(StatsScene):
     def construct(self):
         self.card()
+        self.ask("A bootstrap resample of 15 schools contains, on average, how many distinct schools?",
+                 ["all 15", "about 10", "about 5"], 1,
+                 say="Draw fifteen law schools with replacement from fifteen. On average, how many different "
+                     "schools appear?",
+                 reveal="About ten: each school is left out with chance fourteen fifteenths to the fifteenth, about "
+                        "thirty-six percent. Some appear twice, some not at all.")
         self.resampler()
         self.histogram()
         self.two_worlds()
         self.check()
         self.how_many()
         self.assumes()
+        self.answer()
 
     def card(self):
-        card = chapter_card(7, r"The bootstrap principle", r"Sample from the sample", lit=(1979,), part=PART)
-        with self.voiceover("Chapter seven. The bootstrap principle."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(7, r"The bootstrap principle", r"Sample from the sample", lit=(1979,), part=PART, said="Chapter seven. The bootstrap principle.")
 
     def resampler(self):
         d = load("law")

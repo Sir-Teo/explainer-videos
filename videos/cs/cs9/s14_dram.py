@@ -7,7 +7,7 @@ from videos.cs.cs9.common import (BG, CODE, COST, CTRL, DATA, FUNC, HEAD, HIST, 
                                   fmt, load)
 
 
-class Dram(VoiceoverScene):
+class Dram(WatchScene):
     def construct(self):
         self.card()
         self.inside()
@@ -15,13 +15,7 @@ class Dram(VoiceoverScene):
         self.beyond()
 
     def card(self):
-        card = chapter_card(13, r"Inside DRAM", r"Why is main memory slow, \ and when is it fast?", lit=(1966,),
-                            extra=((1966, r"Dennard's one-transistor cell"),), part=PART)
-        with self.voiceover(
-            "Chapter thirteen. Inside DRAM."
-        ):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(13, r"Inside DRAM", r"Why is main memory slow, \ and when is it fast?", lit=(1966,), extra=((1966, r"Dennard's one-transistor cell"),), part=PART, said="Chapter thirteen. Inside DRAM.")
 
     def inside(self):
         head = label(r"A DRAM bank: \ rows of capacitors, \ one row buffer", font_size=34).to_edge(UP, buff=0.35)
@@ -40,7 +34,7 @@ class Dram(VoiceoverScene):
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.22).to_edge(RIGHT, buff=0.35).shift(UP * 0.3)
         with self.voiceover(
             "A DRAM bank contains arrays of cells and sense amplifiers that hold an open row. This diagram uses an "
-            "illustrative eight-kibibyte row and assigned timing values. <bookmark mark='a'/> Activation senses a "
+            " eight-kibibyte row and assigned timing values. <bookmark mark='a'/> Activation senses a "
             "row's small charge differences and restores the cells while holding their values in the sense "
             "amplifiers. <bookmark mark='b'/> A read command selects columns for transfer, subject to the device and "
             "interface timings. <bookmark mark='c'/> To switch rows, the controller observes minimum active-time and "
@@ -64,6 +58,10 @@ class Dram(VoiceoverScene):
         self.clear_scene()
 
     def rowbuffer(self):
+        self.ask(r"Two DRAM reads: \\ the same open row, \\ or two different rows. Which is faster?",
+                 [r"the same row", r"different rows", r"no difference"], 0,
+                 say="Two reads from DRAM: from the row that's already open, or from two different rows. Which is faster?",
+                 reveal="The same open row: no new activation is needed.")
         d = load("dram")["rows"]
         head = label(r"Row-buffer hits, \ by access pattern", font_size=36).to_edge(UP, buff=0.35)
         keys = ["sequential", "stride 4 KB", "random"]
@@ -79,8 +77,7 @@ class Dram(VoiceoverScene):
             "stride gives the second. <bookmark mark='c'/> Seeded random addresses give the third. These are "
             "simulated row-buffer hits, not measured cache hits on the host. <bookmark mark='d'/> A row hit can "
             "avoid closing and activating a different row, but real time also depends on bank parallelism, "
-            "controller scheduling, bus transfers, refresh and timing constraints. A universal one-third access time "
-            "cannot be inferred by adding three illustrative fourteen-nanosecond constants."
+            "controller scheduling, bus transfers, refresh and timing constraints."
         ) as vo:
             self.play(FadeIn(head), FadeIn(cap), FadeIn(ch[0]))
             for mk, k in zip("abc", range(3)):

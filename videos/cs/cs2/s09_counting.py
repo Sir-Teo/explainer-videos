@@ -8,24 +8,23 @@ from explainer.cs import *  # noqa: F403
 from videos.cs.cs2.common import COST, CTRL, DATA, FUNC, HEAD, INF, NO, PART, YES, fmt, load
 
 
-class Counting(VoiceoverScene):
+class Counting(WatchScene):
     def construct(self):
         self.card()
         self.rules()
         self.choose()
         self.pascal()
         self.sierpinski()
-        self.identities()
-        self.stars()
 
     def card(self):
-        card = chapter_card(8, r"Counting", r"How many ways are there?", part=PART)
-        with self.voiceover("Chapter eight. Counting."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(8, r"Counting", r"How many ways are there?", part=PART, said="Chapter eight. Counting.")
 
     # ------------------------------------------------------------------
     def rules(self):
+        self.ask(r"Every 8-character password of letters and digits, \\ at ten billion guesses a second. \\ How long?",
+                 [r"about a second", r"about six hours", r"about a century"], 1,
+                 say="Try every eight-character password of letters and digits, at ten billion guesses a second. How long?",
+                 reveal="About six hours. Sixty-two to the eighth is two hundred trillion.")
         head = label(r"The product rule", font_size=38).to_edge(UP, buff=0.35)
         root = Dot(LEFT * 5.2 + DOWN * 0.3, color=GREY_A)
         firsts = VGroup(*[Dot(LEFT * 3.0 + UP * (1.6 - 1.6 * i) + DOWN * 0.3, color=DATA) for i in range(3)])
@@ -195,83 +194,4 @@ class Counting(VoiceoverScene):
         self.wait(0.3)
         self.clear_scene()
 
-    # ------------------------------------------------------------------
-    def identities(self):
-        d = load("pascal")
-        v = d["vandermonde"]
-        head = label(r"Proof by counting twice", font_size=38).to_edge(UP, buff=0.35)
-        q = label(r"choose a committee of $3$ \ from $5$ engineers and $4$ designers", font_size=30, color=GREY_A)
-        q.next_to(head, DOWN, buff=0.4)
-        eng = VGroup(*[Circle(0.22, stroke_width=0, fill_color=DATA, fill_opacity=0.9) for _ in range(5)]).arrange(
-            RIGHT, buff=0.18)
-        des = VGroup(*[Circle(0.22, stroke_width=0, fill_color=CTRL, fill_opacity=0.9) for _ in range(4)]).arrange(
-            RIGHT, buff=0.18)
-        people = VGroup(eng, des).arrange(RIGHT, buff=0.6).next_to(q, DOWN, buff=0.4)
-        one = MathTex(r"\text{ignore the jobs: } \binom{9}{3} = " + str(v[1]), font_size=36, color=YES)
-        two = MathTex(r"\text{by how many engineers: } " + " + ".join(
-            rf"\binom{{5}}{{{k}}}\binom{{4}}{{{3 - k}}}" for k in range(4)), font_size=34, color=CTRL)
-        two_v = MathTex(" + ".join(str(x) for x in v[0]) + rf" = {sum(v[0])}", font_size=36, color=CTRL)
-        VGroup(one, two, two_v).arrange(DOWN, buff=0.35).next_to(people, DOWN, buff=0.5)
-        gen = MathTex(r"\binom{m + n}{r} = \sum_k \binom{m}{k}\binom{n}{r - k}", font_size=40, color=HEAD).to_edge(
-            DOWN, buff=0.45)
-        gl = note(r"Vandermonde's identity", font_size=22).next_to(gen, UP, buff=0.12)
-        with self.voiceover(
-            "Counting the same set in two ways proves identities that would be tedious by algebra. "
-            "<bookmark mark='a'/> Choose a committee of three from five engineers and four designers. "
-            "<bookmark mark='b'/> Ignoring jobs, it is nine choose three: eighty-four. <bookmark mark='c'/> Or split by "
-            "how many engineers it has, zero to three, and choose each part separately: four, plus thirty, plus forty, "
-            "plus ten. Eighty-four again, as it must be. <bookmark mark='d'/> In general this is Vandermonde's identity, "
-            "and the argument proves it for every m, n and r at once."
-        ) as vo:
-            self.play(FadeIn(head))
-            vo.wait_until("a")
-            self.play(FadeIn(q), FadeIn(people, lag_ratio=0.1))
-            vo.wait_until("b")
-            self.play(FadeIn(one))
-            vo.wait_until("c")
-            self.play(FadeIn(two))
-            self.play(FadeIn(two_v))
-            vo.wait_until("d")
-            self.play(FadeIn(gl), FadeIn(gen))
-        self.wait(0.3)
-        self.clear_scene()
 
-    # ------------------------------------------------------------------
-    def stars(self):
-        head = label(r"Stars and bars", font_size=38).to_edge(UP, buff=0.35)
-        q = label(r"$10$ identical cookies \ shared among $4$ children: \ how many ways?", font_size=30,
-                  color=GREY_A).next_to(head, DOWN, buff=0.4)
-        seqs = ["***|**||*****", "|****|***|***", "**********|||"]
-        rows = VGroup()
-        for sq in seqs:
-            r = VGroup()
-            for ch in sq:
-                if ch == "*":
-                    r.add(Star(5, outer_radius=0.2, stroke_width=0, fill_color=HEAD, fill_opacity=1))
-                else:
-                    r.add(Line(UP * 0.3, DOWN * 0.3, color=CTRL, stroke_width=5))
-            r.arrange(RIGHT, buff=0.16)
-            counts = [len(p) for p in sq.split("|")]
-            tag = MathTex(r"(" + ", ".join(map(str, counts)) + ")", font_size=32, color=DATA).next_to(r, RIGHT, buff=0.6)
-            rows.add(VGroup(r, tag))
-        rows.arrange(DOWN, buff=0.5, aligned_edge=LEFT).next_to(q, DOWN, buff=0.5)
-        ans = MathTex(r"\binom{10 + 3}{3} = \binom{13}{3} = 286", font_size=44, color=YES).next_to(rows, DOWN, buff=0.6)
-        expl = note(r"13 positions; \ choose which 3 hold the bars", font_size=24).next_to(ans, DOWN, buff=0.2)
-        with self.voiceover(
-            "One more bijection, because it is so neat. Share ten identical cookies among four children: how many ways? "
-            "<bookmark mark='a'/> Write the cookies as stars, and put three bars between them to mark where one child's "
-            "share ends and the next begins. Three, two, none, five. <bookmark mark='b'/> Every sharing is a row of "
-            "thirteen symbols with exactly three bars, and every such row is a sharing. <bookmark mark='c'/> So count "
-            "the rows instead: choose which three of the thirteen positions hold bars. Thirteen choose three, two "
-            "hundred and eighty-six. Turning one counting problem into another that is easier is what a bijection is "
-            "for."
-        ) as vo:
-            self.play(FadeIn(head), FadeIn(q))
-            vo.wait_until("a")
-            self.play(FadeIn(rows[0], lag_ratio=0.05))
-            vo.wait_until("b")
-            self.play(FadeIn(rows[1], lag_ratio=0.05), FadeIn(rows[2], lag_ratio=0.05))
-            vo.wait_until("c")
-            self.play(Write(ans), FadeIn(expl))
-        self.wait(0.3)
-        self.clear_scene()

@@ -4,7 +4,7 @@ from explainer.cs import *  # noqa: F403
 from videos.cs.cs28.common import (BG, CTRL, DATA, HEAD, LAM, NO, PART, YES, fit_right, grid_table, load)
 
 
-class Frontier(VoiceoverScene):
+class Frontier(WatchScene):
     def construct(self):
         self.card()
         self.capacity()
@@ -13,12 +13,8 @@ class Frontier(VoiceoverScene):
         self.open_()
 
     def card(self):
-        card = chapter_card(14, r"Frontier: \ capacity and locality", r"What is still unknown about codes?",
-                            lit=(2008, 2023), extra=((2008, r"Guruswami--Rudra"), (2021, r"c$^3$-LTCs; \ good qLDPC"),
-                                                     (2023, r"Reed--Muller")), part=PART)
-        with self.voiceover("Chapter fourteen. The frontier: capacity and locality."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(14, r"Frontier: \ capacity and locality", r"What is still unknown about codes?", lit=(2008, 2023), extra=((2008, r"Guruswami--Rudra"), (2021, r"c$^3$-LTCs; \ good qLDPC"),
+                                                     (2023, r"Reed--Muller")), part=PART, said="Chapter fourteen. The frontier: capacity and locality.")
 
     def capacity(self):
         head = label(r"Old codes, \ new theorems", font_size=34).to_edge(UP, buff=0.35)
@@ -56,6 +52,10 @@ class Frontier(VoiceoverScene):
         self.clear_scene()
 
     def local(self):
+        self.ask(r"A message encoded with every parity of its bits, \\ then corrupted. To read one bit you need...",
+                 [r"the whole word", r"two queries"], 1,
+                 say="Store every parity of a message, then corrupt some of it. How much must you read to recover one bit?",
+                 reveal="Two queries: f of x plus f of x plus e i, at a random x.")
         d = load("local")
         head = label(r"Reading one bit from a damaged codeword", font_size=34).to_edge(UP, buff=0.35)
         rows = [[f"{r['delta'] * 100:g}\\%", f"{r['one'] * 100:.1f}\\%", f"{r['bound'] * 100:.0f}\\%",

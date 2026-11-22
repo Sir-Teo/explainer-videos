@@ -6,11 +6,11 @@ from videos.cs.cs59.common import BG, DATA, HEAD, KERN, LAM, NO, PART, YES, load
 PALETTE = [YES, DATA, HEAD, NO, LAM, KERN]
 
 
-class Hook(VoiceoverScene):
+class Hook(WatchScene):
     def construct(self):
         self.ring()
         self.questions()
-        self.plan()
+        self.title(PART)
 
     def ring(self):
         c = load("cv")
@@ -106,29 +106,6 @@ class Hook(VoiceoverScene):
         self.wait(0.4)
         self.clear_scene()
 
-    def plan(self):
-        title = label(rf"Part {PART}: \ Distributed Computing Theory", font_size=36).to_edge(UP, buff=0.3)
-        smap = series_map(current=PART, done=PART - 1).scale(0.92).next_to(title, DOWN, buff=0.35)
-        obj = objectives_card([
-            r"models: \ synchrony, \ asynchrony and faults",
-            r"locality: \ Cole--Vishkin and Linial's lower bound",
-            r"agreement: \ $f + 1$ rounds and the hexagon",
-            r"randomized consensus and shared memory",
-            r"topology and $k$-set agreement",
-            r"failure detectors, \ costs and population protocols",
-        ], font_size=25).move_to(DOWN * 0.2)
-        with self.voiceover(
-            "This is Part 59 of Computer Science, Built. <bookmark mark='a'/> We will fix the models; colour rings in "
-            "log star rounds and prove no one can do better; prove the limits of agreement with crashes and liars; "
-            "beat impossibility with randomness; climb the consensus hierarchy of shared objects; meet the "
-            "topological proof that k-set agreement is impossible; and end with failure detectors, the cost of "
-            "agreement, and protocols for chemical computers."
-        ) as vo:
-            self.play(FadeIn(title), FadeIn(smap))
-            vo.wait_until("a")
-            self.play(FadeOut(smap), FadeIn(obj))
-        self.wait(0.5)
-        self.clear_scene()
 
 
 _ = (BG, DATA, KERN, LAM, NO, YES)

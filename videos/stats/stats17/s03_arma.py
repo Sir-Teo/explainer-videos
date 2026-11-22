@@ -6,9 +6,15 @@ from explainer.stats.kit import ts as T
 from videos.stats.stats17.common import *  # noqa: F403
 
 
-class Arma(VoiceoverScene):
+class Arma(StatsScene):
     def construct(self):
         self.card()
+        self.ask(r"An AR(1) with $\phi = 0.5$. Its lag-2 autocorrelation?",
+                 ["0.5", "0.25", "0"], 1,
+                 say="This period is point five times the last, plus a fresh shock. What's the correlation between "
+                     "values two periods apart?",
+                 reveal="Point two five: point five squared. An autoregression's memory fades geometrically, lag by "
+                        "lag.")
         self.ar1()
         self.gallery()
         self.explode()
@@ -16,12 +22,10 @@ class Arma(VoiceoverScene):
         self.triangle()
         self.ma_invert()
         self.wold()
+        self.answer()
 
     def card(self):
-        card = chapter_card(2, r"AR, \ MA, \ ARMA", r"Building memory out of shocks", part=PART)
-        with self.voiceover("Chapter two. Autoregressive and moving-average models."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(2, r"AR, \ MA, \ ARMA", r"Building memory out of shocks", part=PART, said="Chapter two. Autoregressive and moving-average models.")
 
     def ar1(self):
         rows = [

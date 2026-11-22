@@ -16,7 +16,7 @@ def cell(w=0.62, h=0.5, color=GREY_B, fill=None, text=None, size=16):
     return g
 
 
-class Partitioned(VoiceoverScene):
+class Partitioned(WatchScene):
     def construct(self):
         self.card()
         self.segments()
@@ -26,13 +26,15 @@ class Partitioned(VoiceoverScene):
         self.replicas()
 
     def card(self):
-        card = chapter_card(1, r"The partitioned log", r"How does one log carry a whole company's events?",
-                            lit=(2011,), extra=((2011, r"Kreps, \ Narkhede and Rao: \ Kafka"),), part=PART)
-        with self.voiceover("Chapter one. The partitioned log."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(1, r"The partitioned log", r"How does one log carry a whole company's events?", lit=(2011,), extra=((2011, r"Kreps, \ Narkhede and Rao: \ Kafka"),), part=PART, said="Chapter one. The partitioned log.")
 
     def segments(self):
+        self.wrong_idea(r"a log is a queue: reading a message removes it",
+                        r"reading leaves the log unchanged; \\ each reader keeps its own offset",
+                        narration="A common picture: Kafka is a message queue, and a message is gone once someone reads it.",
+                        right_narration="Reading changes nothing. Each consumer keeps an offset, records stay until retention "
+                                        "removes them, and any reader can go back and replay.")
+        self.clear_scene()
         head = label(r"Partitions, \ segments and offsets", font_size=36).to_edge(UP, buff=0.3)
         per, nseg, filled = 5, 3, 12
         segs = VGroup()
@@ -94,6 +96,10 @@ class Partitioned(VoiceoverScene):
         self.clear_scene()
 
     def keys(self):
+        self.ask(r"Records with the same key, in a partitioned log. \\ Order is kept...", [r"across all partitions",
+                 r"within the key's partition"], 1,
+                 say="Records with the same key go into a partitioned log. Where is their order guaranteed?",
+                 reveal="Within the one partition the key hashes to. Across partitions there is no order.")
         o = load("ordering")
         words = "the whale and the sea and the ship and the whale".split()
         parts = {int(p): v for p, v in o["partitions"].items()}

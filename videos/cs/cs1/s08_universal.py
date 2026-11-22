@@ -27,21 +27,16 @@ def color_encoding(view: TapeView, text: str, offset: int = 0):
             m.set_color(FIELD_COLOR[field])
 
 
-class Universal(VoiceoverScene):
+class Universal(WatchScene):
     def construct(self):
         self.card()
         self.encode()
         self.machine_u()
         self.run_u()
-        self.overhead()
         self.software()
 
     def card(self):
-        card = chapter_card(7, r"The universal machine", r"Can one machine do the work of all of them?", lit=(1936,),
-                            part=PART)
-        with self.voiceover("Chapter seven. The universal machine."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(7, r"The universal machine", r"Can one machine do the work of all of them?", lit=(1936,), part=PART, said="Chapter seven. The universal machine.")
 
     # ------------------------------------------------------------------
     def encode(self):
@@ -92,6 +87,11 @@ class Universal(VoiceoverScene):
 
     # ------------------------------------------------------------------
     def machine_u(self):
+        self.ask(r"Can one fixed machine do the job of every other machine?",
+                 [r"no: every task needs its own table", r"yes, given the other's description",
+                  r"only for machines smaller than itself"], 1,
+                 say="Can one fixed table do the work of every other machine, including machines bigger than itself?",
+                 reveal="Yes, given the other machine's description on its tape. That is the universal machine.")
         d = load("universal")
         defn = definition_card(r"Universal Turing machine $U$",
                                r"given the description $\langle M \rangle$ of any machine $M$, and an input $w$, \ $U$ does "
@@ -212,42 +212,6 @@ class Universal(VoiceoverScene):
         self.wait(0.3)
         self.clear_scene()
 
-    # ------------------------------------------------------------------
-    def overhead(self):
-        d = load("universal")
-        rows = d["rows"]
-        head = label(r"The price of universality", font_size=40).to_edge(UP, buff=0.4)
-        hdr = [r"machine $M$", r"$|\langle M \rangle|$", r"$M$'s steps", r"$U$'s steps", r"ratio"]
-        tab = VGroup(VGroup(*[label(h, font_size=26, color=GREY_B) for h in hdr]))
-        for r in rows:
-            tab.add(VGroup(label(rf"busy beaver, \ {r['n']} states", font_size=28),
-                           label(rf"${r['len']}$", font_size=30, color=CODE),
-                           label(rf"${fmt(r['m_steps'])}$", font_size=30, color=YES),
-                           label(rf"${fmt(r['u_steps'])}$", font_size=30, color=COST),
-                           label(rf"${r['u_steps'] / r['m_steps']:.0f}\times$", font_size=30, color=GREY_A)))
-        xs = [-4.6, -1.6, 0.6, 2.9, 5.2]
-        for k, r in enumerate(tab):
-            for j, c in enumerate(r):
-                c.move_to([xs[j], 1.4 - k * 0.8, 0])
-        line = Line([-6.6, 1.0, 0], [6.6, 1.0, 0], color=GREY_D)
-        expl = label(r"every simulated step scans the description: \\ the bigger $M$, \ the longer each step takes",
-                     font_size=28, color=GREY_A).to_edge(DOWN, buff=0.9)
-        with self.voiceover(
-            "Universality has a price, and we can measure it. <bookmark mark='a'/> For the two-state busy beaver, U "
-            f"runs about {rows[0]['u_steps'] // rows[0]['m_steps']} times slower than M. For three states, about "
-            f"{rows[1]['u_steps'] // rows[1]['m_steps']} times. For four, about {rows[2]['u_steps'] // rows[2]['m_steps']}. "
-            "<bookmark mark='b'/> Every simulated step scans the description, so the slowdown grows with the size of M. "
-            "Real universal machines are built to make that price small, and much of this series is about how: "
-            "the stored-program computer in Part 6, and the interpreters, compilers and virtual machines of Parts 13 "
-            "to 15."
-        ) as vo:
-            self.play(FadeIn(head), FadeIn(tab[0]), Create(line))
-            vo.wait_until("a")
-            self.play(LaggedStart(*[FadeIn(r, shift=RIGHT * 0.15) for r in tab[1:]], lag_ratio=0.4), run_time=2.0)
-            vo.wait_until("b")
-            self.play(FadeIn(expl))
-        self.wait(0.3)
-        self.clear_scene()
 
     # ------------------------------------------------------------------
     def software(self):

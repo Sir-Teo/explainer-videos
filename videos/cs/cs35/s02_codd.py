@@ -4,7 +4,7 @@ from explainer.cs import *  # noqa: F403
 from videos.cs.cs35.common import (CODE, DATA, HEAD, LAM, NO, PART, YES, box, code, load, mono)
 
 
-class Codd(VoiceoverScene):
+class Codd(WatchScene):
     def construct(self):
         self.card()
         self.before()
@@ -12,12 +12,7 @@ class Codd(VoiceoverScene):
         self.independence()
 
     def card(self):
-        card = chapter_card(1, r"Ask for what, \ not how", r"Can a program stop caring where the data is?",
-                            lit=(1968, 1970), extra=((1968, r"IBM's IMS"), (1970, r"Codd: \ the relational model")),
-                            part=PART)
-        with self.voiceover("Chapter one. Ask for what, not how."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(1, r"Ask for what, \ not how", r"Can a program stop caring where the data is?", lit=(1968, 1970), extra=((1968, r"IBM's IMS"), (1970, r"Codd: \ the relational model")), part=PART, said="Chapter one. Ask for what, not how.")
 
     def before(self):
         head = label(r"Before Codd: \ databases you walk", font_size=36).to_edge(UP, buff=0.3)
@@ -63,6 +58,12 @@ class Codd(VoiceoverScene):
         self.clear_scene()
 
     def relations(self):
+        self.wrong_idea(r"a query tells the database how to find the data",
+                        r"a query says \emph{what}; \\ the database decides how",
+                        narration="A natural assumption: a query is a little program, telling the database where to look.",
+                        right_narration="Codd's point was the opposite. A query only says what you want. Indexes, join orders "
+                                        "and algorithms are the database's choice, and can change without touching the query.")
+        self.clear_scene()
         head = label(r"Codd, \ 1970: \ relations", font_size=36).to_edge(UP, buff=0.3)
         quote = label(r"``Future users of large data banks must be protected from having to know how the data is "
                       r"organized in the machine''", font_size=22, color=GREY_A).next_to(head, DOWN, buff=0.4)
@@ -105,6 +106,10 @@ class Codd(VoiceoverScene):
         self.clear_scene()
 
     def independence(self):
+        self.ask(r"Add an index on the word column. \\ The whale query...", [r"must be rewritten",
+                 r"stays the same, and runs faster"], 1,
+                 say="We add an index on the word column. What happens to the query about whales?",
+                 reveal="Not one character changes, and it runs faster. The database noticed the index by itself.")
         it = load("iterators")
         head = label(r"Data independence, \ measured", font_size=36).to_edge(UP, buff=0.3)
         q = VGroup(*[mono(t, 17, YES) for t in (

@@ -3,20 +3,24 @@ from __future__ import annotations
 from videos.stats.stats49.common import *  # noqa: F403
 
 
-class MissingData(VoiceoverScene):
+class MissingData(StatsScene):
     def construct(self):
         self.card()
+        self.ask("Robins, Rotnitzky and Zhao's augmented IPW for a MAR mean is...",
+                 ["doubly robust", "only as good as its weights"], 0,
+                 say="Estimating a mean when values are missing at random. Robins, Rotnitzky and Zhao augmented the "
+                     "inverse weights. What property does their estimator have?",
+                 reveal="Double robustness: consistent if either the response model or the outcome model is right, "
+                        "and efficient when both are.")
         self.eif()
         self.survey()
         self.robust()
         self.imputation()
         self.general()
+        self.answer()
 
     def card(self):
-        card = chapter_card(9, r"Missing data, \ semiparametrically", r"Robins, \ Rotnitzky \& Zhao's augmented weights", lit=(1994,), part=PART)
-        with self.voiceover("Chapter nine. Missing data, semiparametrically: Robins, Rotnitzky and Zhao's augmented weights."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(9, r"Missing data, \ semiparametrically", r"Robins, \ Rotnitzky \& Zhao's augmented weights", lit=(1994,), part=PART, said="Chapter nine. Missing data, semiparametrically: Robins, Rotnitzky and Zhao's augmented weights.")
 
     def eif(self):
         rows = [

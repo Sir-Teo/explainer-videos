@@ -5,13 +5,13 @@ import numpy as np
 from videos.stats.stats3.common import *  # noqa: F403
 
 
-class Hook(VoiceoverScene):
+class Hook(StatsScene):
     def construct(self):
         self.corps()
         self.table()
         self.fit()
         self.question()
-        self.objectives()
+        self.title(PART)
 
     def corps(self):
         d = load("horsekick")
@@ -128,30 +128,4 @@ class Hook(VoiceoverScene):
             vo.wait_until("c")
             self.play(*ft.light_nodes(*FAMILY_NODES.keys()), run_time=2.0)
             self.play(*[n.animate.set_opacity(0.35) for n in ft.nodes.values()], run_time=1.0)
-        self.clear_scene()
-
-    def objectives(self):
-        head = VGroup(label(r"Part 3", font_size=34, color=GREY_B), label(r"The Family of Distributions", font_size=60))
-        head.arrange(DOWN, buff=0.25)
-        obj = objectives_card([
-            r"Bernoulli, binomial, \ and the law of rare events that makes the Poisson",
-            r"waiting: \ geometric, negative binomial, exponential, gamma; \ the Poisson process and the inspection "
-            r"paradox",
-            r"sampling without replacement: \ the hypergeometric, \ and counting the fish in the World's lake",
-            r"the normal, derived three ways; \ transformations and Jacobians; \ $\chi^2$, $t$, $F$ and Cauchy",
-            r"order statistics, \ heavy tails, \ moment generating functions, \ mixtures, \ exponential families",
-        ], color=S.ACCENT, font_size=26)
-        prereq = note(r"prerequisites: \ Part 2; \ calculus").to_corner(DL, buff=0.3)
-        with self.voiceover(
-            "Part three: the family of distributions. <bookmark mark='a'/> In this part: the binomial and the law of "
-            "rare events. Waiting times, and a paradox about buses. Sampling without replacement, and an estimate of "
-            "the number of fish in the World's lake. The normal distribution, derived three different ways; "
-            "transformations; the distributions that statistics itself creates, chi-squared, t and F; order "
-            "statistics; heavy tails; generating functions; mixtures; and the exponential families that hold most "
-            "of them together."
-        ) as vo:
-            self.play(FadeIn(head, shift=UP * 0.2))
-            vo.wait_until("a")
-            self.play(FadeOut(head), FadeIn(obj, shift=UP * 0.2), FadeIn(prereq))
-        self.wait(1.0)
         self.clear_scene()

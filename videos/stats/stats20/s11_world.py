@@ -9,21 +9,29 @@ METHODS = [("naive", r"one-day recall (the plan)", SALT), ("calib", r"regression
            ("oracle", r"true intake, \ as if measured perfectly", TEAL)]
 
 
-class OnTheWorld(VoiceoverScene):
+class OnTheWorld(StatsScene):
     def construct(self):
         self.card()
+        self.ask(r"On the World, the truth is known. Whose interval covered it at about 95\%?",
+                 ["the survey regression", "the survey, corrected for measurement", "a randomized trial"], 2,
+                 say="Run the same pipeline on the World, where we wrote the true effect of salt. Which design's "
+                     "interval covered the truth about ninety-five percent of the time?",
+                 reveal="The randomized trial. The survey analyses fell short, even after correcting for "
+                        "measurement error, because their causal assumptions weren't met.")
         self.laws()
         self.one_survey()
         self.many()
         self.why_short()
         self.trial()
         self.board()
+        self.answer()
+        self.checkpoint([("Income drives both salt and pressure: it's a?", "confounder"),
+                         ("On the World, which design kept its promise?", "the randomized trial")],
+                        narration="Checkpoint. Cause.",
+                        answers_narration="A confounder. And the trial.")
 
     def card(self):
-        card = chapter_card(10, r"The same pipeline on the World", r"Where the answer is known", part=PART)
-        with self.voiceover("Chapter ten. The same pipeline, on the World."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(10, r"The same pipeline on the World", r"Where the answer is known", part=PART, said="Chapter ten. The same pipeline, on the World.")
 
     def laws(self):
         rows = [

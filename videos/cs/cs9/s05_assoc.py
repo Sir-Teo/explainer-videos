@@ -7,7 +7,7 @@ from videos.cs.cs9.common import (BG, CODE, COST, CTRL, DATA, FUNC, HEAD, HIST, 
                                   bar_chart, box, fmt, load, mono)
 
 
-class Assoc(VoiceoverScene):
+class Assoc(WatchScene):
     def construct(self):
         self.card()
         self.ways()
@@ -17,13 +17,7 @@ class Assoc(VoiceoverScene):
         self.writes()
 
     def card(self):
-        card = chapter_card(4, r"Associativity and replacement", r"When a line must go, which one?", lit=(1966,),
-                            extra=((1966, r"Belady: \ the optimal policy"),), part=PART)
-        with self.voiceover(
-            "Chapter four. Associativity and replacement."
-        ):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(4, r"Associativity and replacement", r"When a line must go, which one?", lit=(1966,), extra=((1966, r"Belady: \ the optimal policy"),), part=PART, said="Chapter four. Associativity and replacement.")
 
     # ------------------------------------------------------------------
     def ways(self):
@@ -62,6 +56,10 @@ class Assoc(VoiceoverScene):
 
     # ------------------------------------------------------------------
     def replace(self):
+        self.ask(r"If you knew the future, \\ which line would you evict?",
+                 [r"the least recently used", r"the one used farthest in the future", r"a random one"], 1,
+                 say="If you knew every future access, which line should you evict?",
+                 reveal="The one needed farthest in the future. That's Belady's optimum, and real policies guess at it.")
         head = label(r"A set is full: \ which line goes?", font_size=36).to_edge(UP, buff=0.4)
         items = VGroup(
             label(r"\textit{LRU}: \ the least recently used \ (a timestamp, \ or an order, \ per set)", font_size=25,

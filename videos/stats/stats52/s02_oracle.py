@@ -5,21 +5,25 @@ import numpy as np
 from videos.stats.stats52.common import *  # noqa: F403
 
 
-class Oracle(VoiceoverScene):
+class Oracle(StatsScene):
     def construct(self):
         self.card()
+        self.ask(r"$s$-sparse truth, $p \gg n$. The lasso's squared prediction error scales like...",
+                 [r"$\sigma^2 s / n$", r"$\sigma^2 s \log p / n$", r"$\sigma^2 p / n$"], 1,
+                 say="Many more coefficients than observations, only s of them nonzero. How does the lasso's "
+                     "squared prediction error scale?",
+                 reveal="Like sigma squared s log p over n: as good as knowing the support, up to log p, the price "
+                        "of not knowing where the s are. That's the oracle inequality.")
         self.setting()
         self.cone()
         self.proof()
         self.chart()
         self.penalty()
         self.random_design()
+        self.answer()
 
     def card(self):
-        card = chapter_card(1, r"The lasso's oracle inequality", r"As good as knowing the support, \ up to $\log p$", lit=(2009,), part=PART)
-        with self.voiceover("Chapter one. The lasso's oracle inequality: as good as knowing the support, up to a log p."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(1, r"The lasso's oracle inequality", r"As good as knowing the support, \ up to $\log p$", lit=(2009,), part=PART, said="Chapter one. The lasso's oracle inequality: as good as knowing the support, up to a log p.")
 
     def setting(self):
         rows = [

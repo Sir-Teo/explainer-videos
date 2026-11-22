@@ -5,22 +5,25 @@ import numpy as np
 from videos.stats.stats37.common import *  # noqa: F403
 
 
-class Weak(VoiceoverScene):
+class Weak(StatsScene):
     def construct(self):
         self.card()
+        self.ask("First-stage $F$ below 10. Two-stage least squares is...",
+                 ["unbiased", "biased toward OLS, with misleading intervals"], 1,
+                 say="The instrument barely moves the treatment: the first-stage F is below ten. How does two-stage "
+                     "least squares behave?",
+                 reveal="It's biased toward ordinary least squares, and its intervals are too narrow. "
+                        "Anderson-Rubin intervals stay honest, and can be very wide.")
         self.one()
         self.spread()
         self.size()
         self.rules()
         self.ar()
         self.arset()
+        self.answer()
 
     def card(self):
-        card = chapter_card(3, r"Weak instruments", r"When the nudge is too small to measure",
-                            lit=(1995, 1997, 2022), part=PART)
-        with self.voiceover("Chapter three. Weak instruments."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(3, r"Weak instruments", r"When the nudge is too small to measure", lit=(1995, 1997, 2022), part=PART, said="Chapter three. Weak instruments.")
 
     def one(self):
         d = load("iv")

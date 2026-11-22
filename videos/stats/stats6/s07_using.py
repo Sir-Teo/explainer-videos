@@ -6,19 +6,28 @@ from scipy import stats as st
 from videos.stats.stats6.common import *  # noqa: F403
 
 
-class Using(VoiceoverScene):
+class Using(StatsScene):
     def construct(self):
         self.card()
+        self.ask(r"Normal approximation to a binomial $P(X \le 55)$: evaluate the normal CDF at...",
+                 ["$55$", "$55.5$", "$54.5$"], 1,
+                 say="Approximating a binomial chance of fifty-five or fewer by a normal curve. Where should you "
+                     "evaluate the normal: at fifty-five, fifty-five and a half, or fifty-four and a half?",
+                 reveal="At fifty-five and a half. Each count owns a bar a unit wide, and the bar for fifty-five "
+                        "reaches to fifty-five and a half: the continuity correction.")
         self.demoivre()
         self.local()
         self.continuity()
         self.rare()
+        self.answer()
+        self.checkpoint([("What does the CLT ask of the variance?", "that it's finite and positive"),
+                         ("The normal approximation to a binomial: a rule of thumb?", r"$npq \ge 10$; for rare events, Poisson")],
+                        narration="Checkpoint. The central limit theorem.",
+                        answers_narration="A finite, positive variance. And n p q of ten or more, or else the "
+                                          "Poisson.")
 
     def card(self):
-        card = chapter_card(6, r"Using it", r"The normal approximation, \ and how to apply it well", lit=(1733,), part=PART)
-        with self.voiceover("Chapter six. Using the normal approximation."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(6, r"Using it", r"The normal approximation, \ and how to apply it well", lit=(1733,), part=PART, said="Chapter six. Using the normal approximation.")
 
     def demoivre(self):
         tl = timeline(lit=(1733,)).to_edge(UP, buff=0.35)

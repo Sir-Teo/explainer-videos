@@ -5,9 +5,15 @@ import numpy as np
 from videos.stats.stats28.common import *  # noqa: F403
 
 
-class BIC(VoiceoverScene):
+class BIC(StatsScene):
     def construct(self):
         self.card()
+        self.ask("The true model is among the candidates. As $n$ grows, AIC...",
+                 [r"picks it with probability $\to 1$", "keeps a chance of choosing a larger model"], 1,
+                 say="The true model is among the candidates. As the sample grows, BIC picks it with probability "
+                     "tending to one. What about AIC?",
+                 reveal="AIC keeps a fixed chance of choosing a larger model. It's efficient for prediction, not "
+                        "consistent for selection. Consistency against efficiency.")
         self.derivation()
         self.unit_info()
         self.bench()
@@ -15,12 +21,10 @@ class BIC(VoiceoverScene):
         self.efficient()
         self.plateau()
         self.choose()
+        self.answer()
 
     def card(self):
-        card = chapter_card(3, r"BIC", r"Consistency against efficiency", lit=(1978,), part=PART)
-        with self.voiceover("Chapter three. The Bayesian information criterion."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(3, r"BIC", r"Consistency against efficiency", lit=(1978,), part=PART, said="Chapter three. The Bayesian information criterion.")
 
     def derivation(self):
         rows = [

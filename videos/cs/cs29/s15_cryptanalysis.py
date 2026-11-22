@@ -56,7 +56,7 @@ def spn_diagram(dx=0.34, top=2.4, rh=1.25):
     return g, trail
 
 
-class Cryptanalysis(VoiceoverScene):
+class Cryptanalysis(WatchScene):
     def construct(self):
         self.card()
         self.trail()
@@ -64,11 +64,7 @@ class Cryptanalysis(VoiceoverScene):
         self.mitm()
 
     def card(self):
-        card = chapter_card(14, r"Cryptanalysis", r"How are real ciphers attacked?", lit=(1990, 1993),
-                            extra=((1990, r"Biham--Shamir: \ differential"), (1993, r"Matsui: \ linear")), part=PART)
-        with self.voiceover("Chapter fourteen. Cryptanalysis."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(14, r"Cryptanalysis", r"How are real ciphers attacked?", lit=(1990, 1993), extra=((1990, r"Biham--Shamir: \ differential"), (1993, r"Matsui: \ linear")), part=PART, said="Chapter fourteen. Cryptanalysis.")
 
     def trail(self):
         s = load("spn")
@@ -196,6 +192,9 @@ class Cryptanalysis(VoiceoverScene):
         self.clear_scene()
 
     def mitm(self):
+        self.ask(r"Encrypt twice, with two 56-bit keys. \\ An attack costs about...", [r"$2^{112}$", r"$2^{57}$"], 1,
+                 say="Encrypt twice with two independent fifty-six-bit keys. How much work does an attacker need?",
+                 reveal="About two to the fifty-seven, by meeting in the middle.")
         s = load("spn")["mitm"]
         head = label(r"Meet in the middle", font_size=34).to_edge(UP, buff=0.3)
         p = mono("p", 26, WHITE).move_to([-5.6, 1.2, 0])

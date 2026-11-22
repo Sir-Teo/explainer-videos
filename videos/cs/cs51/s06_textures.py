@@ -30,25 +30,26 @@ def lod_colours(lod: np.ndarray, top: float) -> np.ndarray:
     return (rgb * 255 + 0.5).astype(np.uint8)
 
 
-class Textures(VoiceoverScene):
+class Textures(WatchScene):
     def construct(self):
         self.card()
         self.alias()
         self.floor()
         self.pyramid()
         self.level()
-        self.aniso()
         self.msaa()
 
     def card(self):
-        card = chapter_card(5, r"Textures and sampling", r"How do you draw a pattern finer than a pixel?",
-                            lit=(1974, 1983), extra=((1974, r"Catmull: \ texture mapping"),
-                                                     (1983, r"Williams: \ mipmaps")), part=PART)
-        with self.voiceover("Chapter five. Textures and sampling."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(5, r"Textures and sampling", r"How do you draw a pattern finer than a pixel?", lit=(1974, 1983), extra=((1974, r"Catmull: \ texture mapping"),
+                                                     (1983, r"Williams: \ mipmaps")), part=PART, said="Chapter five. Textures and sampling.")
 
     def alias(self):
+        self.wrong_idea(r"a pixel is a little square",
+                        r"a pixel is a sample of a continuous picture",
+                        narration="We picture a pixel as a little square of colour.",
+                        right_narration="A pixel is a sample of a continuous picture, and sampling has rules: detail finer "
+                                        "than the samples doesn't vanish, it aliases into false patterns.")
+        self.clear_scene()
         t = load("texture")
         head = label(r"Moir\'e is aliasing", font_size=36).to_edge(UP, buff=0.3)
         ax = Axes(x_range=[0, 1, 0.1], y_range=[-1.3, 1.3, 1], x_length=6.2, y_length=2.4,
@@ -153,6 +154,10 @@ class Textures(VoiceoverScene):
         self.clear_scene()
 
     def pyramid(self):
+        self.ask(r"A mipmap stores every half-size copy of a texture. \\ Extra memory:", [r"$100\%$",
+                 r"about a third"], 1,
+                 say="A mipmap stores the texture at half size, quarter size, and so on. How much extra memory does it cost?",
+                 reveal="About a third: one quarter plus one sixteenth plus...")
         t = load("texture")
         py = t["pyramid"]
         head = label(r"Mipmaps: \ a pyramid of prefiltered textures", font_size=36).to_edge(UP, buff=0.3)
@@ -267,61 +272,6 @@ class Textures(VoiceoverScene):
         self.wait(0.4)
         self.clear_scene()
 
-    def aniso(self):
-        t = load("texture")
-        head = label(r"Grazing angles: \ anisotropic filtering", font_size=36).to_edge(UP, buff=0.3)
-        C = np.array([-3.6, 0.6, 0])
-        grid = VGroup(*[Square(0.4, stroke_color=GREY_D, stroke_width=0.8).move_to(C + np.array([i * 0.4, j * 0.4,
-                                                                                               0]))
-                        for i in range(-6, 7) for j in range(-4, 5)])
-        tl = label(r"texture space, \ one pixel's footprint", font_size=18, color=GREY_A).next_to(grid, UP,
-                                                                                               buff=0.1)
-        ang = 0.35
-        ell = Ellipse(width=3.4, height=0.48, color=WHITE, stroke_width=3, fill_color=WHITE,
-                      fill_opacity=0.12).move_to(C).rotate(ang)
-        iso = Circle(radius=1.7, color=NO, stroke_width=3).move_to(C)
-        axis_dir = np.array([math.cos(ang), math.sin(ang), 0])
-        probes = VGroup(*[Circle(radius=0.23, color=YES, stroke_width=3).move_to(C + s * axis_dir)
-                          for s in (-1.2, -0.4, 0.4, 1.2)])
-        ill = note(r"illustrative", font_size=16).next_to(grid, DOWN, buff=0.1).align_to(grid, RIGHT)
-        leg = VGroup(label(r"trilinear: \ one circle as wide as the long axis \ (blur)", font_size=18, color=NO),
-                     label(r"anisotropic: \ $N$ probes along it, \ each as wide as the short axis", font_size=18,
-                           color=YES)).arrange(DOWN, aligned_edge=LEFT, buff=0.12).next_to(grid, DOWN, buff=0.45)
-        leg.align_to(grid, LEFT)
-        rows = VGroup(MathTex(r"N = \Big\lceil \frac{\rho_{\max}}{\rho_{\min}} \Big\rceil", font_size=32),
-                      MathTex(r"\lambda = \log_2 \frac{\rho_{\max}}{N}", font_size=32)).arrange(RIGHT, buff=0.6)
-        rows.next_to(leg, DOWN, buff=0.3).align_to(grid, LEFT)
-        H = 60
-        crops = Group(image(t["mip"][:H], height=1.55), image(t["reference"][:H], height=1.55)).arrange(
-            DOWN, buff=0.55).move_to([3.9, 0.55, 0])
-        cl = VGroup(label(r"trilinear mipmap, \ top half of the frame", font_size=18, color=NO).next_to(
-            crops[0], UP, buff=0.08),
-                    label(r"reference", font_size=18, color=GREY_A).next_to(crops[1], UP, buff=0.08))
-        foot = wrapped_label(r"hardware takes up to 16 probes per pixel; \ the blur is the trilinear filter's fault, "
-                             r"\ not the mipmap's", 5.4, font_size=18, color=WHITE).next_to(crops, DOWN, buff=0.3)
-        with self.voiceover(
-            "The mipmap has one flaw, and our floor shows it. <bookmark mark='a'/> At a grazing angle a square pixel "
-            "lands on the texture as a long, thin footprint. <bookmark mark='b'/> Trilinear filtering uses one "
-            "number, the larger derivative, so it filters a disc as wide as the long axis. <bookmark mark='c'/> "
-            "Compare the top of our trilinear image with the reference: towards the horizon the squares have "
-            "blurred into grey. <bookmark mark='d'/> Anisotropic filtering takes several probes along the long axis, "
-            "each sized to the short axis, and averages them. <bookmark mark='e'/> The number of probes is the ratio "
-            "of the axes, capped, and each probe reads a finer level."
-        ) as vo:
-            self.play(FadeIn(head), FadeIn(grid), FadeIn(tl), FadeIn(ill))
-            vo.wait_until("a")
-            self.play(GrowFromCenter(ell))
-            vo.wait_until("b")
-            self.play(Create(iso), FadeIn(leg[0]))
-            vo.wait_until("c")
-            self.play(FadeIn(crops), FadeIn(cl))
-            vo.wait_until("d")
-            self.play(iso.animate.set_stroke(opacity=0.3), LaggedStart(*[Create(p) for p in probes], lag_ratio=0.3),
-                      FadeIn(leg[1]))
-            vo.wait_until("e")
-            self.play(Write(rows), FadeIn(foot))
-        self.wait(0.4)
-        self.clear_scene()
 
     def msaa(self):
         t = load("texture")

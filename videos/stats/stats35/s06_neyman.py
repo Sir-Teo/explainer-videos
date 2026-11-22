@@ -5,21 +5,26 @@ import numpy as np
 from videos.stats.stats35.common import *  # noqa: F403
 
 
-class Neyman(VoiceoverScene):
+class Neyman(StatsScene):
     def construct(self):
         self.card()
+        self.ask("Neyman's variance estimate for a difference in means is...",
+                 ["exact", "conservative: too large on average"], 1,
+                 say="Neyman asked how precisely the difference in means estimates the average effect. How does his "
+                     "standard variance estimate behave?",
+                 reveal="It's conservative, too large on average, because the variance of the unit effects can't be "
+                        "estimated from one realized half of the science. It's exact only if the effect is "
+                        "constant.")
         self.variance()
         self.why_cons()
         self.numbers()
         self.dist()
         self.board()
         self.bounds()
+        self.answer()
 
     def card(self):
-        card = chapter_card(5, r"Neyman's variance", r"Repeated randomization of a fixed science", lit=(1923,), part=PART)
-        with self.voiceover("Chapter five. Neyman's variance."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(5, r"Neyman's variance", r"Repeated randomization of a fixed science", lit=(1923,), part=PART, said="Chapter five. Neyman's variance.")
 
     def variance(self):
         rows = [

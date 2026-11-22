@@ -4,7 +4,7 @@ from explainer.cs import *  # noqa: F403
 from videos.cs.cs11.common import (BG, CODE, CTRL, DATA, FUNC, HEAD, NO, PART, YES, code, grid_table, load, region)
 
 
-class Undefined(VoiceoverScene):
+class Undefined(WatchScene):
     def construct(self):
         self.card()
         self.what()
@@ -14,12 +14,16 @@ class Undefined(VoiceoverScene):
         self.shadow()
 
     def card(self):
-        card = chapter_card(13, r"Undefined behaviour", r"What may a compiler assume about your program?", part=PART)
-        with self.voiceover("Chapter thirteen. Undefined behaviour."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(13, r"Undefined behaviour", r"What may a compiler assume about your program?", part=PART, said="Chapter thirteen. Undefined behaviour.")
 
     def what(self):
+        self.wrong_idea(r"Undefined behaviour gives you \\ whatever the machine naturally does",
+                        r"It gives you anything: \\ the optimizer assumes it never happens",
+                        narration="Many programmers think undefined behaviour just means: you get whatever the hardware does, "
+                                  "say, wraparound on overflow.",
+                        right_narration="It means much more. The compiler may assume it never happens, and optimize on that "
+                                        "assumption.")
+        self.clear_scene()
         head = label(r"Behaviour the standard leaves undefined", font_size=34).to_edge(UP, buff=0.35)
         pts = VGroup(
             label(r"signed integer overflow; \ reading past an array; \ dereferencing a null pointer; \ "
@@ -91,6 +95,11 @@ class Undefined(VoiceoverScene):
         self.clear_scene()
 
     def nullcheck(self):
+        self.ask(r"Read through \texttt{p}, then test \texttt{p == NULL}. \\ Can the compiler delete the test?",
+                 [r"no", r"yes"], 1,
+                 say="A function reads through a pointer, and only then checks whether it was null. May the compiler delete "
+                     "the check?",
+                 reveal="Yes. If p were null the read was already undefined, so the compiler assumes it isn't.")
         u = load("ub")
         head = label(r"A null check, \ deleted", font_size=34).to_edge(UP, buff=0.3)
         src = code(["int deref(int *p) {", "    int v = *p;          // use it", "    if (!p) return -1;   // then check it",
@@ -185,7 +194,7 @@ class Undefined(VoiceoverScene):
                             color=NO),
                       label("ASan: testing-oriented runtime; \\\\ assess overhead and security limitations", font_size=20, color=YES)
                       ).arrange(DOWN, aligned_edge=LEFT, buff=0.15).to_edge(RIGHT, buff=0.6).to_edge(DOWN, buff=0.9)
-        with self.voiceover(f"A typical AddressSanitizer implementation tracks addressability with shadow memory. <bookmark mark='a'/> It poisons allocation red zones and can quarantine freed blocks, delaying reuse. Detection still depends on instrumentation and what executes. <bookmark mark='b'/> In the usual one-to-eight mapping, zero means all eight bytes are addressable; positive values describe partially addressable groups, and negative poison codes describe inaccessible regions. <bookmark mark='c'/> The compiler instruments eligible accesses with checks of their shadow state and access size. The schematic check includes partial groups: a nonzero shadow byte is not automatically an error. <bookmark mark='d'/> Here the compiled word-count experiment takes {w:.1f} times the plain time, and the allocation-only loop {m:.0f} times. Those workload-specific launch-inclusive measurements are not universal slowdowns. Sanitizers are especially useful in testing and fuzzing. Clang describes the standard ASan runtime as a testing tool that is not hardened for production security. Other instrumentation choices have different tradeoffs. Passing a run does not prove memory safety.") as vo:
+        with self.voiceover(f"A typical AddressSanitizer implementation tracks addressability with shadow memory. <bookmark mark='a'/> It poisons allocation red zones and can quarantine freed blocks, delaying reuse. Detection still depends on instrumentation and what executes. <bookmark mark='b'/> In the usual one-to-eight mapping, zero means all eight bytes are addressable; positive values describe partially addressable groups, and negative poison codes describe inaccessible regions. <bookmark mark='c'/> The compiler instruments eligible accesses with checks of their shadow state and access size. <bookmark mark='d'/> Here the compiled word-count experiment takes {w:.1f} times the plain time, and the allocation-only loop {m:.0f} times. Those workload-specific launch-inclusive measurements are not universal slowdowns. Sanitizers are especially useful in testing and fuzzing. Clang describes the standard ASan runtime as a testing tool that is not hardened for production security. Other instrumentation choices have different tradeoffs. Passing a run does not prove memory safety.") as vo:
             self.play(FadeIn(head), run_time=0.5)
             self.play(FadeIn(mem), FadeIn(ml), run_time=0.6)
             vo.wait_until('a')

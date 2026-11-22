@@ -6,21 +6,37 @@ from explainer.stats.board import coverage_board, load_all
 from videos.stats.stats22.common import *  # noqa: F403
 
 
-class NeymanScott(VoiceoverScene):
+class NeymanScott(StatsScene):
     def construct(self):
         self.card()
+        self.wrong_idea("More data always rescues maximum likelihood",
+                        r"Not when parameters grow with the data: Neyman--Scott's MLE tends to $\sigma^2/2$",
+                        narration="A comforting belief: whatever its faults in small samples, maximum likelihood "
+                                  "gets it right as the data grow.",
+                        right_narration="Not when the number of parameters grows with the data. Neyman and Scott's "
+                                        "estimate of the variance converges to exactly half the truth, however much "
+                                        "data you collect.")
+        self.ask(r"1,000 data sets of 200 pairs. How many MLE-based intervals for $\sigma^2$ cover it?",
+                 ["about 950", "about 500", "none"], 2,
+                 say="Neyman and Scott: pairs of measurements, each pair with its own mean, all with one variance. "
+                     "A thousand data sets of two hundred pairs. How many of the maximum likelihood intervals for "
+                     "the variance cover it?",
+                 reveal="None. The estimate converges to half the variance, so every interval is centred on the "
+                        "wrong value.")
         self.setup_problem()
         self.derive()
         self.simulate()
         self.why_profile()
         self.fixes()
         self.board()
+        self.answer()
+        self.checkpoint([("The trinity's test that needs only the null fit?", "the score test"),
+                         (r"Neyman--Scott: the MLE of $\sigma^2$ tends to?", r"$\sigma^2/2$")],
+                        narration="Checkpoint. Tests and traps.",
+                        answers_narration="The score test. And half the variance.")
 
     def card(self):
-        card = chapter_card(7, r"Neyman--Scott", r"When the parameters grow with the data", lit=(1948,), part=PART)
-        with self.voiceover("Chapter seven. The Neyman–Scott problem."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(7, r"Neyman--Scott", r"When the parameters grow with the data", lit=(1948,), part=PART, said="Chapter seven. The Neyman–Scott problem.")
 
     def setup_problem(self):
         rows = [

@@ -5,7 +5,7 @@ import numpy as np
 from videos.stats.stats30.common import *  # noqa: F403
 
 
-class Hook(VoiceoverScene):
+class Hook(StatsScene):
     def construct(self):
         self.story()
         self.rejection()
@@ -15,7 +15,7 @@ class Hook(VoiceoverScene):
         self.estimates()
         self.stigler()
         self.lesson()
-        self.objectives()
+        self.title(PART)
 
     def story(self):
         tl = timeline(lit=(1960,)).to_edge(UP, buff=0.35)
@@ -188,31 +188,6 @@ class Hook(VoiceoverScene):
                 self.play(FadeIn(rows[k], shift=RIGHT * 0.2))
         self.clear_scene()
 
-    def objectives(self):
-        head = VGroup(label(r"Part 30", font_size=34, color=GREY_B), label(r"Robust Statistics", font_size=60)).arrange(DOWN, buff=0.25)
-        obj = objectives_card([
-            r"Pitman efficiency: \ Wilcoxon bound in a regular location model",
-            r"Hodges--Lehmann; \ influence functions; \ breakdown",
-            r"Huber's minimax M-estimator; \ robust scale",
-            r"robust regression and covariance: \ LTS, \ MM, \ MCD",
-            r"heavy-tailed means: \ median of means; \ contamination on the World",
-        ], color=HLC, font_size=26)
-        prereq = note(r"prerequisites: \ Parts 16, \ 22 and 23").to_corner(DL, buff=0.3)
-        built = note(r"built: \ \texttt{statkit.robust}; \ the estimator rail").to_corner(DR, buff=0.3)
-        with self.voiceover(
-            "<bookmark mark='a'/> Part thirty: robust statistics. <bookmark mark='b'/> We'll derive the efficiency of"
-            " rank methods and prove the Wilcoxon local asymptotic bound under a regular continuous symmetric "
-            "location model with finite variance; build the Hodges–Lehmann estimator; measure influence and "
-            "breakdown; derive Huber's minimax estimator; estimate scale robustly; fit regressions and covariances "
-            "that refuse to be dragged; estimate means of heavy-tailed data; and test it all on contaminated samples "
-            "from the World."
-        ) as vo:
-            vo.wait_until("a")
-            self.play(FadeIn(head, shift=UP * 0.2))
-            vo.wait_until("b")
-            self.play(FadeOut(head), FadeIn(obj, shift=UP * 0.2), FadeIn(prereq), FadeIn(built))
-        self.wait(1.0)
-        self.clear_scene()
 
     def stigler(self):
         rows = [

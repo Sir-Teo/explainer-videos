@@ -5,9 +5,22 @@ import numpy as np
 from videos.stats.stats21.common import *  # noqa: F403
 
 
-class Convexity(VoiceoverScene):
+class Convexity(StatsScene):
     def construct(self):
         self.card()
+        self.wrong_idea("If the optimizer converged, it found the best answer",
+                        "Only convex problems promise that: mixtures and neural networks have many local optima",
+                        narration="A comforting thought: the optimizer reported convergence, so it found the best "
+                                  "answer.",
+                        right_narration="Only convex problems promise that. Mixtures, factor models and neural "
+                                        "networks have many local optima. For them, use several starting points, "
+                                        "and some humility.")
+        self.ask("For a convex function, a local minimum is...",
+                 ["always global", "not necessarily global"], 0,
+                 say="A function is convex if every chord lies above its graph. For a convex function, is a local "
+                     "minimum always the global one?",
+                 reveal="Always. Convexity makes local global, which is why convex problems are the ones we can "
+                        "solve reliably.")
         self.definitions()
         self.picture()
         self.jensen()
@@ -15,12 +28,10 @@ class Convexity(VoiceoverScene):
         self.partition()
         self.conditioning()
         self.families()
+        self.answer()
 
     def card(self):
-        card = chapter_card(1, r"Convex sets and functions", r"When local is global", part=PART)
-        with self.voiceover("Chapter one. Convex sets and functions."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(1, r"Convex sets and functions", r"When local is global", part=PART, said="Chapter one. Convex sets and functions.")
 
     def definitions(self):
         rows = [

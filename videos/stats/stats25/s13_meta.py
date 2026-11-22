@@ -6,9 +6,15 @@ from explainer.stats.board import coverage_board, load_all
 from videos.stats.stats25.common import *  # noqa: F403
 
 
-class Meta(VoiceoverScene):
+class Meta(StatsScene):
     def construct(self):
         self.card()
+        self.ask("Studies differ in their true effects. Random-effects weights, against fixed-effect ones, are...",
+                 ["more equal across studies", "more extreme"], 0,
+                 say="Meta-analysis with studies whose true effects differ. Compared with the fixed-effect weights, "
+                     "are the random-effects weights more equal across studies, or more extreme?",
+                 reveal="More equal: the between-study variance is added to every study's, so a huge study can't "
+                        "dominate. Each study's effect is shrunk toward the mean.")
         self.model()
         self.forest()
         self.heterogeneity()
@@ -16,12 +22,10 @@ class Meta(VoiceoverScene):
         self.hk()
         self.board()
         self.cautions()
+        self.answer()
 
     def card(self):
-        card = chapter_card(12, r"Meta-analysis", r"Studies as a sample of studies", lit=(1986,), part=PART)
-        with self.voiceover("Chapter twelve. Meta-analysis."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(12, r"Meta-analysis", r"Studies as a sample of studies", lit=(1986,), part=PART, said="Chapter twelve. Meta-analysis.")
 
     def model(self):
         rows = [

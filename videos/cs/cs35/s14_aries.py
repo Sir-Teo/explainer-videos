@@ -17,7 +17,7 @@ def log_cell(r, w=0.92):
     return g
 
 
-class Aries(VoiceoverScene):
+class Aries(WatchScene):
     def construct(self):
         self.card()
         self.rules()
@@ -26,13 +26,13 @@ class Aries(VoiceoverScene):
         self.tested()
 
     def card(self):
-        card = chapter_card(13, r"Recovery: \ ARIES", r"How does a database survive a crash at any instant?",
-                            lit=(1992,), extra=((1992, r"Mohan et al.: \ ARIES"),), part=PART)
-        with self.voiceover("Chapter thirteen. Recovery."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(13, r"Recovery: \ ARIES", r"How does a database survive a crash at any instant?", lit=(1992,), extra=((1992, r"Mohan et al.: \ ARIES"),), part=PART, said="Chapter thirteen. Recovery.")
 
     def rules(self):
+        self.ask(r"Can a page holding an uncommitted change \\ be written to disk?", [r"never",
+                 r"yes, once its log record is"], 1,
+                 say="A page holds a change from a transaction that hasn't committed. May the database write that page to disk?",
+                 reveal="Yes, as long as the log record describing it is written first. Recovery can undo it.")
         head = label(r"Pages, \ a buffer, \ and a log", font_size=36).to_edge(UP, buff=0.3)
         mem = VGroup(*[Square(0.6, stroke_color=HEAD, stroke_width=1.8) for _ in range(4)]).arrange(RIGHT, buff=0.15)
         disk = VGroup(*[Square(0.6, stroke_color=DATA, stroke_width=1.8) for _ in range(6)]).arrange(RIGHT, buff=0.15)

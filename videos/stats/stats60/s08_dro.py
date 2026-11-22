@@ -5,10 +5,16 @@ import numpy as np
 from videos.stats.stats60.common import *  # noqa: F403
 
 
-class DRO(LectureMixin, VoiceoverScene):
+class DRO(LectureMixin, StatsScene):
     def construct(self):
         self.card_voiceover("Chapter seven. Distributionally robust optimization: guarding against every shift in a ball.", 7,
                             r"Distributionally robust optimization", r"The worst case, within reason", lit=(2013,))
+        self.ask("Distributionally robust optimization minimizes...",
+                 ["the worst-case risk over a ball of distributions", "the average risk"], 0,
+                 say="Guarding against every shift within reason. What does distributionally robust optimization "
+                     "minimize?",
+                 reveal="The worst-case risk over a ball of distributions around the training data. By duality, "
+                        "it's often a reweighting that penalizes the high-loss points.")
         self.idea()
         self.balls()
         self.duality()
@@ -17,6 +23,11 @@ class DRO(LectureMixin, VoiceoverScene):
         self.chart()
         self.wasserstein()
         self.price()
+        self.answer()
+        self.checkpoint([("Importance weighting with poor overlap?", "the effective sample size collapses"),
+                         ("Label-shift estimation uses?", "the classifier's confusion matrix")],
+                        narration="Checkpoint. Shifts.",
+                        answers_narration="It collapses. And the confusion matrix.")
 
     def idea(self):
         self.lad_voiceover(

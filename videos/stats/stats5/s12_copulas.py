@@ -7,19 +7,23 @@ from videos.stats.stats5.common import *  # noqa: F403
 COP = {"gauss": (r"Gaussian", S.EST), "clayton": (r"Clayton", S.LIK), "gumbel": (r"Gumbel", S.POST)}
 
 
-class Copulas(VoiceoverScene):
+class Copulas(StatsScene):
     def construct(self):
         self.card()
+        self.ask("Two pairs of risks with the same correlation, 0.5. Their chances of crashing together...",
+                 ["must be the same", "can be very different"], 1,
+                 say="Two pairs of risks, both with correlation one half. Must their chances of a joint crash be "
+                     "the same?",
+                 reveal="No. The copula, not the correlation, decides the tails. One number can't describe how "
+                        "things fall together.")
         self.sklar()
         self.three()
         self.recipe()
         self.crisis()
+        self.answer()
 
     def card(self):
-        card = chapter_card(11, r"Copulas", r"Separating the margins from the dependence", lit=(), part=PART)
-        with self.voiceover("Chapter eleven. Copulas."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(11, r"Copulas", r"Separating the margins from the dependence", lit=(), part=PART, said="Chapter eleven. Copulas.")
 
     def sklar(self):
         rows = [

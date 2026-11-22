@@ -5,20 +5,24 @@ import numpy as np
 from videos.stats.stats47.common import *  # noqa: F403
 
 
-class Influence(VoiceoverScene):
+class Influence(StatsScene):
     def construct(self):
         self.card()
+        self.ask("The functional delta method gives a smooth statistic's asymptotic variance as...",
+                 ["the variance of its influence function, over $n$", "zero"], 0,
+                 say="Von Mises's view: a statistic is a functional of the empirical distribution. Differentiate "
+                     "it. What's its asymptotic variance?",
+                 reveal="The variance of its influence function, over n. The influence function is the derivative, "
+                        "and the statistic is approximately its average.")
         self.functional()
         self.curves()
         self.hadamard()
         self.variance()
         self.uses()
+        self.answer()
 
     def card(self):
-        card = chapter_card(4, r"Influence functions and the functional delta method", r"Differentiating a statistic with respect to the data", lit=(1974,), part=PART)
-        with self.voiceover("Chapter four. Influence functions and the functional delta method: differentiating a statistic with respect to the data."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(4, r"Influence functions and the functional delta method", r"Differentiating a statistic with respect to the data", lit=(1974,), part=PART, said="Chapter four. Influence functions and the functional delta method: differentiating a statistic with respect to the data.")
 
     def functional(self):
         rows = [

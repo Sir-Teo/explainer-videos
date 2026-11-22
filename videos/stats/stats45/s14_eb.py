@@ -5,21 +5,29 @@ import numpy as np
 from videos.stats.stats45.common import *  # noqa: F403
 
 
-class EmpiricalBayes(VoiceoverScene):
+class EmpiricalBayes(StatsScene):
     def construct(self):
         self.card()
+        self.ask("Robbins's estimate of a Poisson unit's rate, given its count $x$, is...",
+                 ["$x$ itself", r"$(x + 1)\,N(x + 1)/N(x)$"], 1,
+                 say="Robbins's empirical Bayes, 1956: many units, each a Poisson count with its own rate. What "
+                     "does he estimate for a unit that counted x?",
+                 reveal="X plus one, times the number of units that counted x plus one, over the number that "
+                        "counted x. The prior is never estimated; the other units stand in for it.")
         self.robbins()
         self.table()
         self.chart()
         self.npmle()
         self.regret()
         self.modeling()
+        self.answer()
+        self.checkpoint([("Is James--Stein admissible?", "no: its positive part beats it"),
+                         ("Robbins's estimate for count $x$?", r"$(x + 1)\,N(x + 1)/N(x)$")],
+                        narration="Checkpoint. Shrinkage, made rigorous.",
+                        answers_narration="No. And x plus one times the ratio of counts.")
 
     def card(self):
-        card = chapter_card(13, r"Empirical Bayes theory", r"Learning the prior from many problems at once", lit=(1956,), part=PART)
-        with self.voiceover("Chapter thirteen. Empirical Bayes theory: learning the prior from many problems at once."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(13, r"Empirical Bayes theory", r"Learning the prior from many problems at once", lit=(1956,), part=PART, said="Chapter thirteen. Empirical Bayes theory: learning the prior from many problems at once.")
 
     def robbins(self):
         rows = [

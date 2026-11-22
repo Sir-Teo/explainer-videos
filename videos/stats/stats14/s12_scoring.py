@@ -5,9 +5,22 @@ import numpy as np
 from videos.stats.stats14.common import *  # noqa: F403
 
 
-class Scoring(VoiceoverScene):
+class Scoring(StatsScene):
     def construct(self):
         self.card()
+        self.wrong_idea("A high AUC means the predicted probabilities are good",
+                        "AUC measures ranking only: risks can be inflated and rank perfectly",
+                        narration="A common shortcut: the model has a high AUC, so its predicted probabilities can "
+                                  "be trusted.",
+                        right_narration="No. The AUC measures ranking only. Double every risk and the AUC doesn't "
+                                        "change, but a threshold on those risks flags far too many people. Check "
+                                        "calibration too.")
+        self.ask(r"A forecaster says 70\% on days when it rains 70\% of the time. They are...",
+                 ["calibrated", "overconfident", "underconfident"], 0,
+                 say="A forecaster says seventy percent chance of rain, and on those days it rains seventy percent "
+                     "of the time. Is the forecaster calibrated, overconfident, or underconfident?",
+                 reveal="Calibrated. Calibration and ranking are different virtues, and the Brier score rewards "
+                        "both.")
         self.task()
         self.roc()
         self.auc_meaning()
@@ -15,12 +28,14 @@ class Scoring(VoiceoverScene):
         self.brier()
         self.proper()
         self.threshold()
+        self.answer()
+        self.checkpoint([("What survives sampling on the outcome?", "the odds ratio"),
+                         ("Risks doubled, ranking unchanged: what's wrong?", "calibration")],
+                        narration="Checkpoint. Tables and forecasts.",
+                        answers_narration="The odds ratio. And calibration.")
 
     def card(self):
-        card = chapter_card(11, r"Scoring predictions", r"Ranking, \ calibration, \ and the Brier score", lit=(1950,), part=PART)
-        with self.voiceover("Chapter eleven. Scoring predictions."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(11, r"Scoring predictions", r"Ranking, \ calibration, \ and the Brier score", lit=(1950,), part=PART, said="Chapter eleven. Scoring predictions.")
 
     def task(self):
         d = load("scoring")

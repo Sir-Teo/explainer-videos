@@ -9,7 +9,7 @@ from videos.cs.cs9.common import (BG, CODE, COST, CTRL, DATA, FUNC, HEAD, HIST, 
 CHASE_C = ["for (i = 0; i < steps; i++)", "    p = *p;      /* the next address is in the line just read */"]
 
 
-class Measured(VoiceoverScene):
+class Measured(WatchScene):
     def construct(self):
         self.card()
         self.method()
@@ -18,13 +18,7 @@ class Measured(VoiceoverScene):
         self.bandwidth()
 
     def card(self):
-        card = chapter_card(7, r"This machine's staircase", r"How far away is each level, \ really?", lit=(2007,),
-                            extra=((2007, r"Drepper: \ What every programmer should know"),), part=PART)
-        with self.voiceover(
-            "Chapter seven. This machine's staircase."
-        ):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(7, r"This machine's staircase", r"How far away is each level, \ really?", lit=(2007,), extra=((2007, r"Drepper: \ What every programmer should know"),), part=PART, said="Chapter seven. This machine's staircase.")
 
     # ------------------------------------------------------------------
     def method(self):
@@ -64,6 +58,10 @@ class Measured(VoiceoverScene):
 
     # ------------------------------------------------------------------
     def stairs(self):
+        self.ask(r"Dependent random reads, \\ the working set growing. \\ The time per read rises...",
+                 [r"smoothly", r"in steps, one per cache level", r"not at all"], 1,
+                 say="Make the working set bigger and bigger, reading it at random. How does the time per read change?",
+                 reveal="In steps: each time the set outgrows one level of cache.")
         st = load("staircase")
         m = st["machine"]
         pts = st["points"]
@@ -94,7 +92,7 @@ class Measured(VoiceoverScene):
                    color=GREY_A).to_edge(DOWN, buff=0.2)
         with self.voiceover(
             "Read the host identity and the measured points together. The current data come from the processor named "
-            "above the plot; the source is not tied to an older Xeon run. <bookmark mark='a'/> Small working sets "
+            "above the plot. <bookmark mark='a'/> Small working sets "
             "have the lowest measured delay. <bookmark mark='b'/> Increasing the footprint exposes further plateaus "
             "and transitions. <bookmark mark='c'/> A selected point is a sample at that footprint, not proof of one "
             "exact cache-level boundary. <bookmark mark='d'/> The largest walks can combine last-level misses, "
@@ -182,8 +180,7 @@ class Measured(VoiceoverScene):
             "Sequential throughput measures a different workload from the dependent random walk. This C loop sums a "
             "repeatedly reused array, with several independent accumulators, and reports the best of five trials. "
             "<bookmark mark='a'/> The bars show bytes read per second at each array footprint on this host. "
-            "Cache-resident trials can reuse previously fetched lines, so logical bytes processed are not "
-            "necessarily new DRAM traffic. <bookmark mark='b'/> Multiplying a compatible throughput by a compatible "
+            " <bookmark mark='b'/> Multiplying a compatible throughput by a compatible "
             "latency estimates required average concurrency by Little's law. These separate workloads do not "
             "directly count outstanding hardware requests or prove that a particular prefetcher caused the "
             "throughput. Latency, available parallelism and sustainable bandwidth all constrain performance; measure "

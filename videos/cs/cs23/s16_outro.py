@@ -17,7 +17,7 @@ def tile(content, caption, color, TW=3.6, TH=2.3):
     return Group(frame, content, cap)
 
 
-class Outro(VoiceoverScene):
+class Outro(WatchScene):
     def construct(self):
         self.recap()
         self.payoffs()
@@ -54,6 +54,12 @@ class Outro(VoiceoverScene):
             self.play(LaggedStart(*[FadeIn(t, shift=UP * 0.15) for t in tiles], lag_ratio=0.25), run_time=4.0)
         self.wait(0.5)
         self.clear_scene()
+        self.checkpoint(
+            [(r"Goemans--Williamson's ratio?", r"About 0.878"),
+             (r"What does an online algorithm lack?", r"Knowledge of the future")],
+            narration="Last checkpoint. What ratio does Goemans and Williamson's algorithm guarantee? And what does an online "
+                      "algorithm lack?",
+            answers_narration="About point eight seven eight. And knowledge of the future: it decides as requests arrive.")
 
     def payoffs(self):
         card = payoff_card([
@@ -114,7 +120,7 @@ class Outro(VoiceoverScene):
             (
             'Six exercises in the notes have worked guidance. The fifth designs a bounded three-by-three '
             'rational simplex port in Pebble; prove intermediate word bounds and verify it on the emulator '
-            'before claiming a working build. We have not executed that port here. The last is a finite '
+            'before claiming a working build. The last is a finite '
             'reproducible study of certified bounded polytopes and routing rules, with independent '
             'breadth-first-search references. Its deliverable is measured evidence and explicit limits, not a '
             'solution to the polynomial Hirsch conjecture.'

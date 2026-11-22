@@ -12,20 +12,28 @@ def typewriter(n: int) -> tuple[float, float]:
     return j / 2 ** k, (j + 1) / 2 ** k
 
 
-class Convergence(VoiceoverScene):
+class Convergence(StatsScene):
     def construct(self):
         self.card()
+        self.ask("Convergence in distribution implies convergence in probability...",
+                 ["always", "never", "when the limit is a constant"], 2,
+                 say="Two ways a random quantity can settle down. Does convergence in distribution imply "
+                     "convergence in probability: always, never, or only sometimes?",
+                 reveal="Only when the limit is a constant. Otherwise the laws can match while the variables "
+                        "themselves never get close.")
         self.definitions()
         self.mirror()
         self.typewriter()
         self.strong()
         self.hierarchy()
+        self.answer()
+        self.checkpoint([(r"Markov's inequality: $P(X \ge a) \le$?", r"$E[X]/a$, for $X \ge 0$"),
+                         ("In distribution implies in probability when?", "when the limit is a constant")],
+                        narration="Checkpoint. Inequalities and convergence.",
+                        answers_narration="E of X over a. And only when the limit is a constant.")
 
     def card(self):
-        card = chapter_card(3, r"Kinds of convergence", r"What does it mean for a random quantity to settle?", part=PART)
-        with self.voiceover("Chapter three. What it means for random things to converge."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(3, r"Kinds of convergence", r"What does it mean for a random quantity to settle?", part=PART, said="Chapter three. What it means for random things to converge.")
 
     def definitions(self):
         dfs = VGroup(

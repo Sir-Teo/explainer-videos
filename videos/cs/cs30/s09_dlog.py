@@ -6,7 +6,7 @@ from explainer.cs import *  # noqa: F403
 from videos.cs.cs30.common import (BG, CTRL, DATA, HEAD, LAM, NO, PART, YES, fit_right, load, mono)
 
 
-class DiscreteLogs(VoiceoverScene):
+class DiscreteLogs(WatchScene):
     def construct(self):
         self.card()
         self.bsgs()
@@ -14,14 +14,14 @@ class DiscreteLogs(VoiceoverScene):
         self.index()
 
     def card(self):
-        card = chapter_card(8, r"Discrete logarithms", r"How hard is it to undo $g^x$?", lit=(1971, 1978, 2015),
-                            extra=((1971, r"Shanks: \ baby-step giant-step"), (1978, r"Pohlig--Hellman; \ rho"),
-                                   (2015, r"Logjam")), part=PART)
-        with self.voiceover("Chapter eight. Discrete logarithms."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(8, r"Discrete logarithms", r"How hard is it to undo $g^x$?", lit=(1971, 1978, 2015), extra=((1971, r"Shanks: \ baby-step giant-step"), (1978, r"Pohlig--Hellman; \ rho"),
+                                   (2015, r"Logjam")), part=PART, said="Chapter eight. Discrete logarithms.")
 
     def bsgs(self):
+        self.ask(r"Discrete log in a group of order $p$. \\ Baby-step giant-step takes about...", [r"$p$",
+                 r"$\sqrt{p}$", r"$\log p$"], 1,
+                 say="A discrete logarithm in a group with p elements. How many steps does baby-step giant-step need?",
+                 reveal="About the square root of p, in time and in memory.")
         d = load("dlog")
         head = label(r"Baby steps, \ giant steps", font_size=34).to_edge(UP, buff=0.3)
         m = 6

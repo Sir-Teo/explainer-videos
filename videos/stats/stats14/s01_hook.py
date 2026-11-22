@@ -5,13 +5,13 @@ import numpy as np
 from videos.stats.stats14.common import *  # noqa: F403
 
 
-class Hook(VoiceoverScene):
+class Hook(StatsScene):
     def construct(self):
         self.teleconference()
         self.chart()
         self.all_flights()
         self.aftermath()
-        self.objectives()
+        self.title(PART)
 
     def teleconference(self):
         tl = timeline(lit=(1986,)).to_edge(UP, buff=0.35)
@@ -144,30 +144,4 @@ class Hook(VoiceoverScene):
             for k, m_ in enumerate("bcde"):
                 vo.wait_until(m_)
                 self.play(FadeIn(rows[k], shift=RIGHT * 0.2))
-        self.clear_scene()
-
-    def objectives(self):
-        head = VGroup(label(r"Part 14", font_size=34, color=GREY_B), label(r"Counts and Categories", font_size=60)).arrange(DOWN, buff=0.25)
-        obj = objectives_card([
-            r"why least squares fails for yes/no outcomes; \ logistic regression and odds ratios",
-            r"fitting by maximum likelihood: \ Newton's method as weighted least squares",
-            r"the Challenger fit, \ its intervals, \ and the danger of extrapolating",
-            r"Poisson regression with offsets; \ overdispersion",
-            r"tables: \ $\chi^2$, \ odds ratios, \ Simpson's paradox, \ Mantel--Haenszel; \ case--control studies; \ scoring predictions",
-        ], color=OBS, font_size=26)
-        prereq = note(r"prerequisites: \ Parts 10 and 12").to_corner(DL, buff=0.3)
-        built = note(r"built: \ \texttt{statkit.glm}; \ the Challenger dashboard").to_corner(DR, buff=0.3)
-        with self.voiceover(
-            "<bookmark mark='a'/> Part fourteen: counts and categories. <bookmark mark='b'/> We'll see why least squares "
-            "breaks on yes-or-no outcomes, and build logistic regression and the odds ratio; fit it by maximum likelihood, "
-            "with Newton's method as a sequence of weighted regressions; redo the Challenger analysis, intervals and all; "
-            "regress counts with Poisson models, and meet overdispersion; then read tables: chi-squared, odds ratios, "
-            "Simpson's paradox at Berkeley, Mantel and Haenszel's pooling, case–control studies, and how to score a "
-            "probability forecast."
-        ) as vo:
-            vo.wait_until("a")
-            self.play(FadeIn(head, shift=UP * 0.2))
-            vo.wait_until("b")
-            self.play(FadeOut(head), FadeIn(obj, shift=UP * 0.2), FadeIn(prereq), FadeIn(built))
-        self.wait(1.0)
         self.clear_scene()

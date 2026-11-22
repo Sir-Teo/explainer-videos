@@ -5,21 +5,25 @@ import numpy as np
 from videos.stats.stats29.common import *  # noqa: F403
 
 
-class Histogram(VoiceoverScene):
+class Histogram(StatsScene):
     def construct(self):
         self.card()
+        self.ask("As $n$ grows, a histogram's best bin width shrinks like...",
+                 ["$n^{-1/2}$", "$n^{-1/3}$", "$n^{-1/5}$"], 1,
+                 say="The histogram's bin width trades bias against variance. As the sample grows, how fast should "
+                     "the best bin width shrink?",
+                 reveal="Like n to the minus one third: Scott's cube-root rule. Bias grows with the width, variance "
+                        "with its inverse, and the balance falls there.")
         self.upgrade()
         self.target()
         self.bias_var()
         self.optimum()
         self.curves()
         self.rate()
+        self.answer()
 
     def card(self):
-        card = chapter_card(1, r"Histograms as estimators", r"Bias, \ variance, \ and the cube-root bin", lit=(1926,), part=PART)
-        with self.voiceover("Chapter one. The histogram, as an estimator."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(1, r"Histograms as estimators", r"Bias, \ variance, \ and the cube-root bin", lit=(1926,), part=PART, said="Chapter one. The histogram, as an estimator.")
 
     def upgrade(self):
         card = upgrade_card(1, r"bin width trades variance against bias; \ Scott's rule is $3.49\, s\, n^{-1/3}$",

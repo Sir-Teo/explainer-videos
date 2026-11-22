@@ -60,19 +60,22 @@ PROBLEMS = [
 ]
 
 
-class BScProblems(VoiceoverScene):
+class BScProblems(StatsScene):
     def construct(self):
         self.card()
+        self.ask("Six problems from Stages I and II. How many of their ideas turned up in this one analysis?",
+                 ["two", "four", "all six"], 2,
+                 say="Last, the bachelor's problem set: Bayes's rule, a margin of error, attenuation, power, the "
+                     "bootstrap and multiplicity. How many of those turned up in this one analysis?",
+                 reveal="All six. A real analysis uses the whole degree at once.")
         for p in PROBLEMS:
             self.problem(p)
         self.close()
+        self.answer()
 
     def card(self):
-        card = chapter_card(13, r"The BSc problem set", r"Stages I and II, \ in six problems", part=PART)
-        with self.voiceover("Chapter thirteen. The bachelor's problem set: six problems that draw on the whole of the first two "
-                            "stages, each solved on screen."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(13, r"The BSc problem set", r"Stages I and II, \ in six problems", part=PART, said="Chapter thirteen. The bachelor's problem set: six problems that draw on the whole of the first two "
+                            "stages, each solved on screen.")
 
     def problem(self, p):
         tag = label(p["part"], font_size=22, color=p["color"]).to_edge(UP, buff=0.4)

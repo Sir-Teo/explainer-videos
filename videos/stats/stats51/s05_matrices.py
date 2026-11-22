@@ -5,21 +5,25 @@ import numpy as np
 from videos.stats.stats51.common import *  # noqa: F403
 
 
-class RandomMatrices(VoiceoverScene):
+class RandomMatrices(StatsScene):
     def construct(self):
         self.card()
+        self.ask(r"An $n \times p$ Gaussian matrix, $n > p$. Its singular values lie roughly between...",
+                 [r"$\sqrt n - \sqrt p$ and $\sqrt n + \sqrt p$", "$n - p$ and $n + p$", r"$0$ and $\sqrt{np}$"], 0,
+                 say="An n by p matrix of independent standard normals, with n bigger than p. Where do its singular "
+                     "values lie?",
+                 reveal="Between root n minus root p and root n plus root p, with high probability. So the sample "
+                        "covariance's error is of order root p over n, not zero.")
         self.nets()
         self.singular()
         self.mp()
         self.covariance()
         self.cancer()
         self.shuffle()
+        self.answer()
 
     def card(self):
-        card = chapter_card(4, r"Random matrices, \ non-asymptotically", r"$\sqrt n \pm \sqrt p$, \ and what it says about covariances", lit=(1985,), part=PART)
-        with self.voiceover("Chapter four. Random matrices, non-asymptotically: root n plus or minus root p, and what it says about covariances."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(4, r"Random matrices, \ non-asymptotically", r"$\sqrt n \pm \sqrt p$, \ and what it says about covariances", lit=(1985,), part=PART, said="Chapter four. Random matrices, non-asymptotically: root n plus or minus root p, and what it says about covariances.")
 
     def nets(self):
         rows = [

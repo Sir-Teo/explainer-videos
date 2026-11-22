@@ -5,21 +5,25 @@ import numpy as np
 from videos.stats.stats27.common import *  # noqa: F403
 
 
-class NUTS(VoiceoverScene):
+class NUTS(StatsScene):
     def construct(self):
         self.card()
+        self.ask("NUTS chooses the trajectory's length by...",
+                 ["a fixed number of steps", "stopping when the path turns back", "a random draw"], 1,
+                 say="The No-U-Turn Sampler removes a tuning parameter. How does it choose how long each trajectory "
+                     "runs?",
+                 reveal="It stops when the path starts to turn back on itself, building the trajectory both ways in "
+                        "doubling steps so the balance is kept.")
         self.uturn()
         self.trajectory()
         self.adaptation()
         self.depths()
         self.divergences()
         self.discrete()
+        self.answer()
 
     def card(self):
-        card = chapter_card(6, r"NUTS", r"Stop when the path turns back", lit=(2014,), part=PART)
-        with self.voiceover("Chapter six. The No-U-Turn Sampler."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(6, r"NUTS", r"Stop when the path turns back", lit=(2014,), part=PART, said="Chapter six. The No-U-Turn Sampler.")
 
     def uturn(self):
         rows = [

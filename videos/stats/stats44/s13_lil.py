@@ -5,19 +5,23 @@ import numpy as np
 from videos.stats.stats44.common import *  # noqa: F403
 
 
-class IteratedLogarithm(VoiceoverScene):
+class IteratedLogarithm(StatsScene):
     def construct(self):
         self.card()
+        self.ask(r"For a $\pm 1$ walk, $\limsup S_n / \sqrt{2n \log\log n}$ is...",
+                 ["0", "1", r"$\infty$"], 1,
+                 say="The central limit theorem looks at one time. Over all times, how far does a random walk "
+                     "stray? What's the lim sup of S n over root two n log log n?",
+                 reveal="One, almost surely: Khinchin's law of the iterated logarithm. Any envelope a little wider "
+                        "is crossed finitely often.")
         self.statement()
         self.proof()
         self.paths()
         self.meaning()
+        self.answer()
 
     def card(self):
-        card = chapter_card(12, r"The law of the iterated logarithm", r"How far does a random walk stray?", lit=(1924,), part=PART)
-        with self.voiceover("Chapter twelve. The law of the iterated logarithm: exactly how far a random walk strays."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(12, r"The law of the iterated logarithm", r"How far does a random walk stray?", lit=(1924,), part=PART, said="Chapter twelve. The law of the iterated logarithm: exactly how far a random walk strays.")
 
     def statement(self):
         rows = [

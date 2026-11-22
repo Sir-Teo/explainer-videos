@@ -20,7 +20,7 @@ def tile(content, caption, color, TW=3.6, TH=2.3):
     return Group(frame, content, cap)
 
 
-class Outro(VoiceoverScene):
+class Outro(WatchScene):
     def construct(self):
         self.recap()
         self.payoffs()
@@ -69,13 +69,20 @@ class Outro(VoiceoverScene):
             "on finite tests. Trace-oracle studies exposed the importance of their own knowledge, resource and "
             "ordering assumptions. A simulated Spectre gadget showed that squashed architectural work can leave "
             "observable cache effects, while two mitigations stopped that supplied witness under the model's rules. "
-            "Finally, passage simulations supported a fitted full-corpus ledger projection at an assumed clock. "
+            "Finally, passage simulations supported a fitted full-corpus ledger projection. "
             "Each conclusion travels with that evidence and scope."
         ):
             self.play(FadeIn(head))
             self.play(LaggedStart(*[FadeIn(t, shift=UP * 0.15) for t in tiles], lag_ratio=0.25), run_time=4.0)
         self.wait(0.5)
         self.clear_scene()
+        self.checkpoint(
+            [(r"What limits any schedule of a program?", r"The longest dependency chain, and the width"),
+             (r"VLIW or out-of-order: who schedules?", r"The compiler, or the hardware at run time")],
+            narration="Last checkpoint. What limits any schedule of a program? And who schedules in a VLIW machine, and in an "
+                      "out-of-order one?",
+            answers_narration="Its longest dependency chain, and the width of the machine. And the compiler schedules for VLIW; "
+                              "the hardware schedules at run time out of order.")
 
     def payoffs(self):
         card = payoff_card([
@@ -90,9 +97,7 @@ class Outro(VoiceoverScene):
         with self.voiceover(
             "These ideas return in several later parts. Larger windows interact with cache misses and memory-level "
             "parallelism in Part 9. Width, energy and multiple cores interact in Part 10. Static scheduling and "
-            "software pipelining return with compiler transformations. The Job's repeated length checks motivate "
-            "different data structures and algorithms; a measured predictor's difficulty does not prove a branch "
-            "unlearnable. Reordering loads and stores connects to concurrency and memory models, where "
+            "software pipelining return with compiler transformations. Reordering loads and stores connects to concurrency and memory models, where "
             "single-thread correctness and inter-thread visibility are different questions. The simulated security "
             "example leads into threat models and operating-system defenses, and static scheduling reappears in "
             "specialized hardware. The common habit is to connect a mechanism to a measured workload and explicit "
@@ -169,12 +174,10 @@ class Outro(VoiceoverScene):
         q = label("illustrative latency hierarchy; \\ core-cycle costs depend on the system", font_size=28,
                   color=HEAD).to_edge(DOWN, buff=0.7)
         with self.voiceover(
-            "Next, the memory hierarchy. Part 7 assigned illustrative memory delays; physical DRAM latency in core "
-            "cycles depends on clock, configuration and access pattern. Part 9 studies caches, locality and the "
+            "Next, the memory hierarchy. Part 9 studies caches, locality and the "
             "Job's miss-rate curves, and measures a latency staircase on this host. It also develops data-movement "
             "bounds for classical matrix multiplication under a specified computation model and limited fast "
-            "memory. Those assumptions matter: a bound for one algorithmic model is not automatically a theorem "
-            "about every possible matrix multiplication algorithm."
+            "memory."
         ):
             self.play(FadeIn(nxt), LaggedStart(*[GrowFromEdge(b, DOWN) for b in bars], lag_ratio=0.3), FadeIn(names))
             self.play(FadeIn(q))

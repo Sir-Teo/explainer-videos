@@ -6,22 +6,26 @@ from explainer.stats.board import coverage_board, load_all
 from videos.stats.stats18.common import *  # noqa: F403
 
 
-class Meng(VoiceoverScene):
+class Meng(StatsScene):
     def construct(self):
         self.card()
+        self.ask("2.3 million responses from 230 million voters, data-defect correlation 0.005. Worth a random sample of about...",
+                 ["2 million", "40,000", "400"], 2,
+                 say="A poll gets two point three million responses, one percent of the voters, with a tiny "
+                     "correlation of point zero zero five between answering and the answer. It's worth a simple "
+                     "random sample of about how many?",
+                 reveal="About four hundred. Meng's identity: the error is data quality times data quantity times "
+                        "problem difficulty, and a tiny defect multiplied by a huge population wipes out the size.")
         self.derive()
         self.three_factors()
         self.digest_numbers()
         self.neff()
         self.curves()
         self.board()
+        self.answer()
 
     def card(self):
-        card = chapter_card(2, r"Meng's identity", r"Data quality $\times$ data quantity $\times$ problem difficulty", lit=(2018,),
-                            part=PART)
-        with self.voiceover("Chapter two. Meng's identity."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(2, r"Meng's identity", r"Data quality $\times$ data quantity $\times$ problem difficulty", lit=(2018,), part=PART, said="Chapter two. Meng's identity.")
 
     def derive(self):
         rows = [

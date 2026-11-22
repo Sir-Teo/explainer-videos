@@ -7,7 +7,7 @@ from videos.cs.cs18.common import (BG, CODE, COST, CTRL, DATA, FUNC, HEAD, LAM, 
                                    mono, words)
 
 
-class Planar(VoiceoverScene):
+class Planar(WatchScene):
     def construct(self):
         self.card()
         self.formula()
@@ -16,12 +16,8 @@ class Planar(VoiceoverScene):
         self.mapview()
 
     def card(self):
-        card = chapter_card(15, r"Planar graphs and four colours", r"How many colours does a map need?", lit=(1976,),
-                            extra=((1852, r"Guthrie's question"), (1976, r"Appel and Haken"),
-                                   (2005, r"Gonthier: \ checked in Coq")), part=PART)
-        with self.voiceover("Chapter fifteen. Planar graphs and four colours."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(15, r"Planar graphs and four colours", r"How many colours does a map need?", lit=(1976,), extra=((1852, r"Guthrie's question"), (1976, r"Appel and Haken"),
+                                   (2005, r"Gonthier: \ checked in Coq")), part=PART, said="Chapter fifteen. Planar graphs and four colours.")
 
     def formula(self):
         d = load("planar")
@@ -63,6 +59,9 @@ class Planar(VoiceoverScene):
         self.clear_scene()
 
     def colours(self):
+        self.ask(r"How many colours suffice for any map?", [r"3", r"4", r"5"], 1,
+                 say="How many colours are enough for every map, if neighbouring regions must differ?",
+                 reveal="Four, proved with a computer in 1976. Five has a proof on one page.")
         head = label(r"Four colours suffice", font_size=34).to_edge(UP, buff=0.3)
         steps = VGroup(
             label(r"1852: \ Francis Guthrie colours the counties of England with four colours, \\ and asks if that "

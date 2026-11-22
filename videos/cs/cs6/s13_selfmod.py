@@ -12,20 +12,21 @@ def mono(s, size=19, color=CODE):
     return Text(s, font="DejaVu Sans Mono", font_size=size, color=color)
 
 
-class SelfMod(VoiceoverScene):
+class SelfMod(WatchScene):
     def construct(self):
         self.card()
         self.rewrite()
         self.why_not()
 
     def card(self):
-        card = chapter_card(12, r"Code is data", r"What if a program rewrites itself?", lit=(1949,), part=PART)
-        with self.voiceover("Chapter twelve. Code is data."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(12, r"Code is data", r"What if a program rewrites itself?", lit=(1949,), part=PART, said="Chapter twelve. Code is data.")
 
     # ------------------------------------------------------------------
     def rewrite(self):
+        self.ask(r"Why did EDSAC's programmers rewrite their own instructions?",
+                 [r"to save memory", r"to step through an array", r"to hide their code"], 1,
+                 say="Why did early programmers write programs that rewrote their own instructions?",
+                 reveal="To step through an array: there was no other way to change an address.")
         d = load("programs")["selfmod"]
         head = label(r"Summing an array \ by rewriting an instruction", font_size=36).to_edge(UP, buff=0.35)
         src = [s_ for s_ in d["source"] if s_.strip() and not s_.strip().startswith("#")][:10]

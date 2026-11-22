@@ -6,9 +6,15 @@ from scipy import special, stats
 from videos.stats.stats24.common import *  # noqa: F403
 
 
-class Family(VoiceoverScene):
+class Family(StatsScene):
     def construct(self):
         self.card()
+        self.ask("Bliss's beetles, killed by carbon disulphide. Which link fits best?",
+                 ["the logit", "the probit", "the complementary log-log"], 2,
+                 say="Bliss's beetles: the share killed at each dose of carbon disulphide. Which link fits them "
+                     "best: the logit, the probit, or the complementary log-log?",
+                 reveal="The complementary log-log: its asymmetric curve follows the beetles where the canonical "
+                        "logit can't. A canonical link is convenient, not necessarily right.")
         self.edf()
         self.moments()
         self.table()
@@ -16,12 +22,10 @@ class Family(VoiceoverScene):
         self.tweedie()
         self.links()
         self.canonical()
+        self.answer()
 
     def card(self):
-        card = chapter_card(2, r"The exponential dispersion family", r"One form for many distributions", lit=(1972,), part=PART)
-        with self.voiceover("Chapter two. The exponential dispersion family."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(2, r"The exponential dispersion family", r"One form for many distributions", lit=(1972,), part=PART, said="Chapter two. The exponential dispersion family.")
 
     def edf(self):
         rows = [

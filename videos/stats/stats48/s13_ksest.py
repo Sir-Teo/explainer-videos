@@ -5,20 +5,28 @@ import numpy as np
 from videos.stats.stats48.common import *  # noqa: F403
 
 
-class EstimatedParameters(VoiceoverScene):
+class EstimatedParameters(StatsScene):
     def construct(self):
         self.card()
+        self.ask("Estimate a distribution's parameters, then run KS. The limiting law...",
+                 ["is unchanged", "depends on the family and the estimator"], 1,
+                 say="Testing a family, not a single law: estimate the parameters, then compute the "
+                     "Kolmogorov-Smirnov statistic. What's its limit?",
+                 reveal="It depends on the family and the estimator: Durbin's estimated-parameter process. No "
+                        "universal table exists; a parametric bootstrap gets it right.")
         self.process()
         self.chart()
         self.sizes()
         self.newcomb()
         self.board()
+        self.answer()
+        self.checkpoint([("Isotonic and mode estimators' rate?", "$n^{1/3}$"),
+                         ("KS with estimated parameters?", "a family-specific limit: no universal table")],
+                        narration="Checkpoint. Rates and tests.",
+                        answers_narration="N to the one third. And no universal table.")
 
     def card(self):
-        card = chapter_card(12, r"KS with estimated parameters, \ done right", r"Testing a family, \ not a single law", lit=(1973,), part=PART)
-        with self.voiceover("Chapter twelve. The Kolmogorov–Smirnov test with estimated parameters, done right: testing a family, not a single law."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(12, r"KS with estimated parameters, \ done right", r"Testing a family, \ not a single law", lit=(1973,), part=PART, said="Chapter twelve. The Kolmogorov–Smirnov test with estimated parameters, done right: testing a family, not a single law.")
 
     def process(self):
         rows = [

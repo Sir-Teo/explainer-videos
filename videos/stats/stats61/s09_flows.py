@@ -5,10 +5,16 @@ import numpy as np
 from videos.stats.stats61.common import *  # noqa: F403
 
 
-class GradientFlows(LectureMixin, VoiceoverScene):
+class GradientFlows(LectureMixin, StatsScene):
     def construct(self):
         self.card_voiceover("Chapter eight. Gradient flows: sampling as optimization over distributions.", 8,
                             r"Gradient flows", r"Langevin, \ seen from Wasserstein space", lit=(1998,))
+        self.ask("Langevin dynamics, seen in Wasserstein space, is the gradient flow of...",
+                 ["KL divergence to the target", "the target density itself"], 0,
+                 say="Sampling as optimization over distributions. Seen in Wasserstein space, Langevin dynamics is "
+                     "the gradient flow of what?",
+                 reveal="The Kullback-Leibler divergence to the target: Jordan, Kinderlehrer and Otto, 1998. "
+                        "Sampling is optimization in the space of laws.")
         self.jko()
         self.particles()
         self.kl_chart()
@@ -16,6 +22,7 @@ class GradientFlows(LectureMixin, VoiceoverScene):
         self.others()
         self.discretize()
         self.svgd()
+        self.answer()
 
     def jko(self):
         self.lad_voiceover(

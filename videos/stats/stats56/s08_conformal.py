@@ -3,21 +3,25 @@ from __future__ import annotations
 from videos.stats.stats56.common import *  # noqa: F403
 
 
-class ConformalSelection(VoiceoverScene):
+class ConformalSelection(StatsScene):
     def construct(self):
         self.card()
+        self.ask(r"Jin and Cand\`es select test units with large unseen outcomes, controlling...",
+                 ["the false discovery rate", "the family-wise error rate"], 0,
+                 say="Conformal selection: choose the job applicants whose unseen outcome will be good, from their "
+                     "features. What does Jin and Candès's procedure control?",
+                 reveal="The false discovery rate among the units selected, with conformal p-values against "
+                        "labelled calibration data, and no model assumptions.")
         self.problem()
         self.pvalues()
         self.proof()
         self.example()
         self.shift()
         self.lesson()
+        self.answer()
 
     def card(self):
-        card = chapter_card(7, r"Conformal selection", r"Choosing units, \ not variables, \ with FDR control", lit=(2023,), part=PART)
-        with self.voiceover("Chapter seven. Conformal selection: choosing units, not variables, with false discovery rate control."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(7, r"Conformal selection", r"Choosing units, \ not variables, \ with FDR control", lit=(2023,), part=PART, said="Chapter seven. Conformal selection: choosing units, not variables, with false discovery rate control.")
 
     def problem(self):
         rows = [

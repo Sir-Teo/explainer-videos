@@ -5,19 +5,23 @@ import numpy as np
 from videos.stats.stats49.common import *  # noqa: F403
 
 
-class HigherOrder(VoiceoverScene):
+class HigherOrder(StatsScene):
     def construct(self):
         self.card()
+        self.ask(r"The integrated squared density, $\int f^2$, is estimable at rate $\sqrt n$ when the smoothness $s$ exceeds...",
+                 ["$1/4$", "$1/2$", "nothing: always"], 0,
+                 say="When the first-order correction isn't enough: the integrated square of a density. For which "
+                     "smoothness can it be estimated at the root-n rate?",
+                 reveal="Smoothness at least a quarter, Bickel and Ritov showed; below that, the best rate is "
+                        "slower. Higher-order influence functions reach the minimax rate.")
         self.problem()
         self.estimators()
         self.chart()
         self.beyond()
+        self.answer()
 
     def card(self):
-        card = chapter_card(10, r"Higher-order influence functions", r"When the first-order correction is not enough", lit=(2008,), part=PART)
-        with self.voiceover("Chapter ten. Higher-order influence functions: when the first-order correction is not enough."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(10, r"Higher-order influence functions", r"When the first-order correction is not enough", lit=(2008,), part=PART, said="Chapter ten. Higher-order influence functions: when the first-order correction is not enough.")
 
     def problem(self):
         rows = [

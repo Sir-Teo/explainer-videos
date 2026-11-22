@@ -4,7 +4,7 @@ from explainer.cs import *  # noqa: F403
 from videos.cs.cs27.common import (BG, CTRL, DATA, HEAD, LAM, NO, PART, YES, fit_right, grid_table, load, mono)
 
 
-class Pcp(VoiceoverScene):
+class Pcp(WatchScene):
     def construct(self):
         self.card()
         self.theorem()
@@ -12,11 +12,7 @@ class Pcp(VoiceoverScene):
         self.dinur()
 
     def card(self):
-        card = chapter_card(8, r"The PCP theorem", r"How few bits of a proof must you read?", lit=(1992, 2005),
-                            extra=((1992, r"Arora--Safra; \ ALMSS"), (2005, r"Dinur")), part=PART)
-        with self.voiceover("Chapter eight. The PCP theorem."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(8, r"The PCP theorem", r"How few bits of a proof must you read?", lit=(1992, 2005), extra=((1992, r"Arora--Safra; \ ALMSS"), (2005, r"Dinur")), part=PART, said="Chapter eight. The PCP theorem.")
 
     def theorem(self):
         head = label(r"Probabilistically checkable proofs", font_size=34).to_edge(UP, buff=0.3)
@@ -52,6 +48,10 @@ class Pcp(VoiceoverScene):
         self.clear_scene()
 
     def linearity(self):
+        self.ask(r"Test $f(x) + f(y) = f(x + y)$ at random $x, y$. \\ A function far from linear...",
+                 [r"may pass almost always", r"fails at least as often as its distance"], 1,
+                 say="Check whether f of x plus f of y equals f of x plus y, at random points. Can a far-from-linear function pass?",
+                 reveal="No: it fails at least as often as its distance from every linear function.")
         b = load("blr")
         head = label(r"A 3-bit test you can run: \ linearity", font_size=32).to_edge(UP, buff=0.3)
         ax = Axes(x_range=[0, 0.45, 0.1], y_range=[0, 0.55, 0.1], x_length=5.4, y_length=3.6,
@@ -80,7 +80,7 @@ class Pcp(VoiceoverScene):
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.25).next_to(ax, RIGHT, buff=0.6).align_to(ax, UP)
         fit_right(notes)
         with self.voiceover(
-            "The BLR test provides an executable local-testing example, rather than a complete PCP construction. <bookmark mark='a'/> The target is a linear Boolean function: parity of a subset of the input bits, including the zero function. A constant-one offset is not linear in this convention. <bookmark mark='b'/> Draw x and y independently and uniformly, then test whether f of x plus f of y equals f of x exclusive-or y, with output addition in the field of two elements. <bookmark mark='c'/> Linear functions always pass. <bookmark mark='d'/> We retain each full eight-bit truth table and compute both its exact rejection probability and its distance to the nearest linear function. Independent Walsh-spectrum identities check both results. <bookmark mark='e'/> The curve three delta minus six delta squared is a lower bound in its stated distance range, not an asserted exact value for every corrupted function. Our exercise exhaustively determines all four-bit minima. <bookmark mark='f'/> Local robustness is a component used in PCP constructions; this experiment does not by itself establish the PCP theorem."
+            "The BLR test provides an executable local-testing example, rather than a complete PCP construction. <bookmark mark='a'/> The target is a linear Boolean function: parity of a subset of the input bits, including the zero function. A constant-one offset is not linear in this convention. <bookmark mark='b'/> Draw x and y independently and uniformly, then test whether f of x plus f of y equals f of x exclusive-or y, with output addition in the field of two elements. <bookmark mark='c'/> Linear functions always pass. <bookmark mark='d'/> Independent Walsh-spectrum identities check both results. <bookmark mark='e'/> The curve three delta minus six delta squared is a lower bound in its stated distance range, not an asserted exact value for every corrupted function. Our exercise exhaustively determines all four-bit minima. <bookmark mark='f'/> Local robustness is a component used in PCP constructions; this experiment does not by itself establish the PCP theorem."
         ) as vo:
             self.play(FadeIn(head), Create(ax), FadeIn(xl), FadeIn(yl), FadeIn(ticks), FadeIn(notes[0]))
             for mk, n_ in zip("bcd", notes[1:4]):
@@ -110,7 +110,7 @@ class Pcp(VoiceoverScene):
                   font_size=21, color=GREY_A),
         ).arrange(DOWN, buff=0.32).next_to(head, DOWN, buff=0.55)
         with self.voiceover(
-            "Dinur’s combinatorial PCP proof amplifies a constraint-satisfaction gap. This panel is an outline of its ingredients. <bookmark mark='a'/> A constraint graph represents a verifier: an assignment to its labels must satisfy all constraints in a yes-instance. <bookmark mark='b'/> Initially, a no-instance may force only an inverse-polynomial fraction of constraints to fail. <bookmark mark='c'/> Expander-based powering increases a sufficiently small gap by a controlled constant factor; it also changes the alphabet and graph size. <bookmark mark='d'/> Alphabet reduction and composition control that growth. These steps require careful completeness and size analysis; the gap does not double without limits. <bookmark mark='e'/> After logarithmically many amplification stages, the no-instance has a constant unsatisfied fraction while the total construction remains polynomial. <bookmark mark='f'/> This gives the PCP theorem through a combinatorial route. We illustrate the proof architecture rather than execute a full PCP reduction here."
+            "Dinur’s combinatorial PCP proof amplifies a constraint-satisfaction gap. <bookmark mark='a'/> A constraint graph represents a verifier: an assignment to its labels must satisfy all constraints in a yes-instance. <bookmark mark='b'/> Initially, a no-instance may force only an inverse-polynomial fraction of constraints to fail. <bookmark mark='c'/> Expander-based powering increases a sufficiently small gap by a controlled constant factor; it also changes the alphabet and graph size. <bookmark mark='d'/> Alphabet reduction and composition control that growth. These steps require careful completeness and size analysis; the gap does not double without limits. <bookmark mark='e'/> After logarithmically many amplification stages, the no-instance has a constant unsatisfied fraction while the total construction remains polynomial. <bookmark mark='f'/> This gives the PCP theorem through a combinatorial route."
         ) as vo:
             self.play(FadeIn(head))
             for mk, ln in zip("abcdef", lines):

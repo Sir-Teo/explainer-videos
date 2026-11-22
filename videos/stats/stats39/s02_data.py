@@ -5,21 +5,25 @@ import numpy as np
 from videos.stats.stats39.common import *  # noqa: F403
 
 
-class SpatialData(VoiceoverScene):
+class SpatialData(StatsScene):
     def construct(self):
         self.card()
+        self.ask("Spatially correlated readings treated as independent. The SE of their mean is...",
+                 ["too small", "too large", "right"], 0,
+                 say="Near things are more related, Tobler wrote. Treat a network of spatially correlated readings "
+                     "as independent. Is the standard error of their mean too small, too large, or right?",
+                 reveal="Too small: neighbouring stations largely repeat each other. For estimating a mean, "
+                        "correlation costs; for predicting at a place, it's exactly what helps.")
         self.tobler()
         self.kinds()
         self.meuse_map()
         self.world_map()
         self.model()
         self.neff()
+        self.answer()
 
     def card(self):
-        card = chapter_card(1, r"Spatial data", r"Near things are more related", lit=(1970,), part=PART)
-        with self.voiceover("Chapter one. Spatial data."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(1, r"Spatial data", r"Near things are more related", lit=(1970,), part=PART, said="Chapter one. Spatial data.")
 
     def tobler(self):
         q = label(r"\emph{``Everything is related to everything else, \ but near things are more related than distant things.''}",

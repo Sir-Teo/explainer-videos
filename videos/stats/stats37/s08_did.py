@@ -5,21 +5,29 @@ import numpy as np
 from videos.stats.stats37.common import *  # noqa: F403
 
 
-class DiD(VoiceoverScene):
+class DiD(StatsScene):
     def construct(self):
         self.card()
+        self.ask("Difference-in-differences assumes...",
+                 ["parallel trends without the treatment", "equal levels in both groups"], 0,
+                 say="Snow compared the two water companies' death rates before and after one moved its intake "
+                     "upstream. What does difference-in-differences assume?",
+                 reveal="Parallel trends: without the change, both groups would have moved alike. Their levels may "
+                        "differ; their paths may not.")
         self.story()
         self.picture()
         self.formula()
         self.debate()
         self.world()
         self.event()
+        self.answer()
+        self.checkpoint([("RD estimates the effect for?", "units at the cutoff"),
+                         ("McCrary's test looks for?", "a jump in the running variable's density")],
+                        narration="Checkpoint. Cutoffs.",
+                        answers_narration="At the cutoff. And a jump in the density.")
 
     def card(self):
-        card = chapter_card(7, r"Difference-in-differences", r"Two changes, \ subtracted", lit=(1855, 1994), part=PART)
-        with self.voiceover("Chapter seven. Difference-in-differences."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(7, r"Difference-in-differences", r"Two changes, \ subtracted", lit=(1855, 1994), part=PART, said="Chapter seven. Difference-in-differences.")
 
     def story(self):
         rows = fit_rows(VGroup(

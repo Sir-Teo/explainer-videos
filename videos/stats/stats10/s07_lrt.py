@@ -6,21 +6,29 @@ from scipy import stats
 from videos.stats.stats10.common import *  # noqa: F403
 
 
-class LRT(VoiceoverScene):
+class LRT(StatsScene):
     def construct(self):
         self.card()
+        self.ask(r"Under the null, $-2 \log \Lambda$ is approximately...",
+                 ["normal", r"$\chi^2$, with one df per restriction", "$F$"], 1,
+                 say="The likelihood ratio test works for composite hypotheses too. Under the null, what's the "
+                     "approximate law of minus two log the likelihood ratio?",
+                 reveal="Chi-squared, with one degree of freedom for each restriction the null imposes. That's "
+                        "Wilks' theorem.")
         self.definition()
         self.wilks()
         self.simulation()
         self.trinity()
         self.trinity_numbers()
         self.sides()
+        self.answer()
+        self.checkpoint([("The Neyman--Pearson test rejects when?", "the likelihood ratio is large"),
+                         (r"Wilks: $-2 \log \Lambda$ under the null?", r"about $\chi^2$, one df per restriction")],
+                        narration="Checkpoint. Neyman and Pearson.",
+                        answers_narration="When the likelihood ratio is large. And chi-squared, by Wilks.")
 
     def card(self):
-        card = chapter_card(6, r"The likelihood ratio test", r"One recipe for almost every test", part=PART)
-        with self.voiceover("Chapter six. The likelihood ratio test."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(6, r"The likelihood ratio test", r"One recipe for almost every test", part=PART, said="Chapter six. The likelihood ratio test.")
 
     def definition(self):
         rows = [

@@ -7,7 +7,7 @@ from videos.cs.cs5.common import (BG, CLOCK, CODE, COST, CTRL, DATA, FUNC, HEAD,
                                   load, say)
 
 
-class Frontier(VoiceoverScene):
+class Frontier(WatchScene):
     """The research tier (videos/cs/SYLLABUS.md 1.1): defending memory against Rowhammer, by probability (PARA) and
     by counting (Misra-Gries), against thresholds that keep falling; and the open problem of a provably safe, cheap
     defence."""
@@ -21,13 +21,8 @@ class Frontier(VoiceoverScene):
         self.open()
 
     def card(self):
-        card = chapter_card(15, r"Frontier: \ defending memory", r"How do you protect memory that leaks?",
-                            lit=(1982, 2014, 2020, 2024), part=PART,
-                            extra=((1982, r"Misra and Gries: frequent items"), (2014, r"Rowhammer"),
-                                   (2020, r"TRRespass; \ Graphene"), (2024, r"DDR5 adds PRAC")))
-        with self.voiceover("Chapter fifteen. Frontier: defending memory."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(15, r"Frontier: \ defending memory", r"How do you protect memory that leaks?", lit=(1982, 2014, 2020, 2024), part=PART, extra=((1982, r"Misra and Gries: frequent items"), (2014, r"Rowhammer"),
+                                   (2020, r"TRRespass; \ Graphene"), (2024, r"DDR5 adds PRAC")), said="Chapter fifteen. Frontier: defending memory.")
 
     # ------------------------------------------------------------------
     def falling(self):
@@ -79,6 +74,10 @@ class Frontier(VoiceoverScene):
 
     # ------------------------------------------------------------------
     def para(self):
+        self.ask(r"PARA: refresh a row's neighbours with probability $p$ \\ on each activation. It protects...",
+                 [r"deterministically", r"with high probability", r"not at all"], 1,
+                 say="The simplest defence flips a coin on every activation. How strong is its guarantee?",
+                 reveal="Probabilistic: the chance of a flip falls exponentially with the threshold.")
         d = load("hammerdefence")
         head = label('Coin-toss model, inspired by PARA (2014)', font_size=36).to_edge(UP, buff=0.3)
         eqs = VGroup(
@@ -102,7 +101,7 @@ class Frontier(VoiceoverScene):
             "activation. Original PARA selects an adjacent row; its selection probability must also be included. "
             "<bookmark mark='b'/> An attacker who needs T activations in a row without a refresh succeeds with "
             "probability one minus p to the T, about e to the minus p T. <bookmark mark='c'/> For a conservative "
-            "one-percent annual bound per bank in this model, count every possible ending activation: at most "
+            "one-percent annual bound per bank, count every possible ending activation: at most "
             "seconds per year divided by the row-cycle time. Multiply that budget by the probability of one "
             "unrefreshed run. This union bound also covers overlapping runs; it does not assume those runs are "
             "independent. <bookmark mark='d'/> At a hundred and thirty-nine thousand, p is about three hundredths "
@@ -215,8 +214,7 @@ class Frontier(VoiceoverScene):
             "TRRespass in 2020, rather than reproducing its proprietary hardware trackers: the manufacturers' "
             "trackers had only a few counters, and hammering many rows at once broke them. <bookmark mark='d'/> "
             "Sixty-four counters happened to survive this particular pattern; two hundred and seventy-seven is a "
-            "sufficient choice from our conservative bound for this one-window model. A passed trace alone is not "
-            "a guarantee, and a sufficient bound does not prove smaller trackers impossible. Measured luck is not "
+            "sufficient choice from our conservative bound for this one-window model. Measured luck is not "
             "a guarantee; a proof is."
         ) as vo:
             self.play(FadeIn(head), FadeIn(sub))

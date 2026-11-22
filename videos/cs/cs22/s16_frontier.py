@@ -4,7 +4,7 @@ from explainer.cs import *  # noqa: F403
 from videos.cs.cs22.common import (CTRL, DATA, HEAD, LAM, NO, PART, YES, load, mono, words)
 
 
-class Frontier(VoiceoverScene):
+class Frontier(WatchScene):
     def construct(self):
         self.card()
         self.exact()
@@ -13,12 +13,7 @@ class Frontier(VoiceoverScene):
         self.open_()
 
     def card(self):
-        card = chapter_card(15, r"Frontier: \ exactness, \ 3SUM \ and nearest neighbours",
-                            r"What can geometry still not do fast, \ or right?", lit=(1995, 2015),
-                            extra=((1995, r"Gajentaan--Overmars"), (2015, r"Andoni--Razenshteyn")), part=PART)
-        with self.voiceover("Chapter fifteen. Frontier: exactness, three-sum, and nearest neighbours."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(15, r"Frontier: \ exactness, \ 3SUM \ and nearest neighbours", r"What can geometry still not do fast, \ or right?", lit=(1995, 2015), extra=((1995, r"Gajentaan--Overmars"), (2015, r"Andoni--Razenshteyn")), part=PART, said="Chapter fifteen. Frontier: exactness, three-sum, and nearest neighbours.")
 
     def exact(self):
         d = load("frontier")
@@ -48,6 +43,9 @@ class Frontier(VoiceoverScene):
         self.clear_scene()
 
     def threesum(self):
+        self.ask(r"Three-sum in time $n^{1.9}$?", [r"known", r"conjectured impossible"], 1,
+                 say="Could three-sum be solved in time n to the one point nine?",
+                 reveal="It's conjectured not, and many geometry problems inherit that conjectured quadratic wall.")
         d = load("frontier")
         head = label(r"3SUM: \ the quadratic wall of the plane", font_size=34).to_edge(UP, buff=0.35)
         nums = d["nums"]
@@ -114,7 +112,7 @@ class Frontier(VoiceoverScene):
                   font_size=22, color=GREY_A),
         ).arrange(DOWN, buff=0.34).next_to(head, DOWN, buff=0.5)
         with self.voiceover(
-            "Approximate near-neighbour theory needs a precise problem. <bookmark mark='a'/> Exact-search lower bounds depend on dimension, metric, storage and the cell-probe model; they do not prohibit every small fast index on structured data. <bookmark mark='b'/> For the randomized Euclidean near-neighbour task at a chosen radius, with constant success probability and approximation c greater than one, data-independent hashing has an exponent approaching one over c squared under its standard asymptotic assumptions. <bookmark mark='c'/> Andoni and Razenshteyn's 2015 data-dependent scheme attains rho equal to one over two c squared minus one, with dimension and space factors shown here. Its optimality comparison concerns a hashing model, not every possible index. <bookmark mark='d'/> Indyk and Xu's 2023 paper already gives hard instances for HNSW, NSG and fast-preprocessing DiskANN. Our teaching experiment does not establish that graphs beat all hashing methods. <bookmark mark='e'/> The paper also proves low-intrinsic-dimension guarantees for slow-preprocessing DiskANN, a distinct construction. An algorithm name alone does not transfer a theorem between those variants."
+            "Approximate near-neighbour theory needs a precise problem. <bookmark mark='a'/> Exact-search lower bounds depend on dimension, metric, storage and the cell-probe model; they do not prohibit every small fast index on structured data. <bookmark mark='b'/> For the randomized Euclidean near-neighbour task at a chosen radius, with constant success probability and approximation c greater than one, data-independent hashing has an exponent approaching one over c squared under its standard asymptotic assumptions. <bookmark mark='c'/> Andoni and Razenshteyn's 2015 data-dependent scheme attains rho equal to one over two c squared minus one, with dimension and space factors shown here. Its optimality comparison concerns a hashing model, not every possible index. <bookmark mark='d'/> Indyk and Xu's 2023 paper already gives hard instances for HNSW, NSG and fast-preprocessing DiskANN. <bookmark mark='e'/> The paper also proves low-intrinsic-dimension guarantees for slow-preprocessing DiskANN, a distinct construction. An algorithm name alone does not transfer a theorem between those variants."
         ) as vo:
             self.play(FadeIn(head), FadeIn(lines[0]))
             for mk, ln in zip("abcde", lines):

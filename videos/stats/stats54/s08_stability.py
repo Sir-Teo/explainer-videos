@@ -5,21 +5,28 @@ import numpy as np
 from videos.stats.stats54.common import *  # noqa: F403
 
 
-class Stability(VoiceoverScene):
+class Stability(StatsScene):
     def construct(self):
         self.card()
+        self.ask("Without strong convexity, SGD's stability is controlled by...",
+                 ["the number of steps", "nothing"], 0,
+                 say="Generalization from the algorithm, not the class: stability. For stochastic gradient descent "
+                     "without strong convexity, what controls stability?",
+                 reveal="The number of steps: fewer steps, more stable. Early stopping, in theory as in practice.")
         self.definition()
         self.ridge()
         self.chart()
         self.privacy()
         self.sgd()
         self.sgd_chart()
+        self.answer()
+        self.checkpoint([("Why did boosting improve after zero training error?", "growing margins"),
+                         ("PAC-Bayes's complexity term?", r"$\mathrm{KL}(Q \,\|\, P)$")],
+                        narration="Checkpoint. Margins and priors.",
+                        answers_narration="Growing margins. And KL from the prior.")
 
     def card(self):
-        card = chapter_card(7, r"Stability", r"Generalization from the algorithm, \ not the class", lit=(2002,), part=PART)
-        with self.voiceover("Chapter seven. Stability: generalization from the algorithm, not the class."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(7, r"Stability", r"Generalization from the algorithm, \ not the class", lit=(2002,), part=PART, said="Chapter seven. Stability: generalization from the algorithm, not the class.")
 
     def definition(self):
         rows = [

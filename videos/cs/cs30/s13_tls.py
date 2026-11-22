@@ -4,20 +4,19 @@ from explainer.cs import *  # noqa: F403
 from videos.cs.cs30.common import (BG, CTRL, DATA, HEAD, LAM, NO, PART, YES, flow_box, load, mono)
 
 
-class Tls(VoiceoverScene):
+class Tls(WatchScene):
     def construct(self):
         self.card()
         self.handshake()
         self.schedule()
 
     def card(self):
-        card = chapter_card(12, r"TLS 1.3", r"What happens when you open a website?", lit=(1995, 2018),
-                            extra=((1995, r"SSL 2.0"), (2018, r"TLS 1.3 \ (RFC 8446)")), part=PART)
-        with self.voiceover("Chapter twelve. TLS 1.3."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(12, r"TLS 1.3", r"What happens when you open a website?", lit=(1995, 2018), extra=((1995, r"SSL 2.0"), (2018, r"TLS 1.3 \ (RFC 8446)")), part=PART, said="Chapter twelve. TLS 1.3.")
 
     def handshake(self):
+        self.ask(r"TLS 1.3, a fresh connection. \\ Round trips before data flows:", [r"$1$", r"$2$", r"$3$"], 0,
+                 say="A fresh TLS one point three connection. How many round trips before application data can flow?",
+                 reveal="One. TLS 1.2 needed two.")
         t = load("tls")
         head = label(r"A handshake between two of our machines", font_size=34).to_edge(UP, buff=0.3)
         lx, rx = -4.6, 4.6
@@ -120,3 +119,8 @@ class Tls(VoiceoverScene):
             self.play(FadeIn(lines[4]))
         self.wait(0.3)
         self.clear_scene()
+        self.checkpoint(
+            [(r"What does Diffie--Hellman not protect against?", r"A man in the middle"),
+             (r"What does a certificate bind?", r"A name to a public key, signed by an authority")],
+            narration="Checkpoint. What does Diffie-Hellman alone not protect against? And what does a certificate bind together?",
+            answers_narration="A man in the middle. And a name to a public key, under a trusted signature.")

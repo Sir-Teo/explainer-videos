@@ -5,9 +5,15 @@ import numpy as np
 from videos.stats.stats27.common import *  # noqa: F403
 
 
-class HMC(VoiceoverScene):
+class HMC(StatsScene):
     def construct(self):
         self.card()
+        self.ask("HMC uses what that random-walk Metropolis doesn't?",
+                 ["the gradient of the log density", "the normalizing constant", "nothing more"], 0,
+                 say="Hamiltonian Monte Carlo slides rather than stumbles. What does it use that random-walk "
+                     "Metropolis doesn't?",
+                 reveal="The gradient of the log density: the posterior becomes a landscape a particle rolls "
+                        "across, so it travels far and is still accepted.")
         self.physics()
         self.leapfrog()
         self.phase()
@@ -15,12 +21,10 @@ class HMC(VoiceoverScene):
         self.dimension()
         self.metric()
         self.tuning()
+        self.answer()
 
     def card(self):
-        card = chapter_card(5, r"Hamiltonian Monte Carlo", r"Slide, \ don't stumble", lit=(1987,), part=PART)
-        with self.voiceover("Chapter five. Hamiltonian Monte Carlo."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(5, r"Hamiltonian Monte Carlo", r"Slide, \ don't stumble", lit=(1987,), part=PART, said="Chapter five. Hamiltonian Monte Carlo.")
 
     def physics(self):
         rows = [

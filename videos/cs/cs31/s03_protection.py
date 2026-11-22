@@ -4,7 +4,7 @@ from explainer.cs import *  # noqa: F403
 from videos.cs.cs31.common import (BG, DATA, HEAD, KERN, LAM, NO, PART, YES, grid_table, load, mono)
 
 
-class Protection(VoiceoverScene):
+class Protection(WatchScene):
     def construct(self):
         self.card()
         self.danger()
@@ -12,12 +12,7 @@ class Protection(VoiceoverScene):
         self.experiment()
 
     def card(self):
-        card = chapter_card(2, r"Protection: \ the mode bit", r"What stops one program from wrecking another?",
-                            lit=(1961, 1964), extra=((1961, r"CTSS"), (1964, r"System/360: \ supervisor state")),
-                            part=PART)
-        with self.voiceover("Chapter two. Protection, and the mode bit."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(2, r"Protection: \ the mode bit", r"What stops one program from wrecking another?", lit=(1961, 1964), extra=((1961, r"CTSS"), (1964, r"System/360: \ supervisor state")), part=PART, said="Chapter two. Protection, and the mode bit.")
 
     def danger(self):
         p = load("protect")
@@ -110,6 +105,10 @@ class Protection(VoiceoverScene):
         self.clear_scene()
 
     def experiment(self):
+        self.ask(r"A hostile process runs an infinite loop. \\ What takes the processor back?",
+                 [r"nothing", r"the timer interrupt"], 1,
+                 say="One process just loops forever and never asks the kernel for anything. What takes the processor back?",
+                 reveal="The timer. When it reaches zero, the hardware jumps into the kernel.")
         p = load("protect")
         head = label(r"Four processes, \ three of them hostile", font_size=34).to_edge(UP, buff=0.3)
         procs = {q["name"]: q for q in p["procs"]}

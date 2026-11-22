@@ -7,7 +7,7 @@ from videos.cs.cs18.common import (BG, CODE, COST, CTRL, DATA, FUNC, HEAD, LAM, 
                                    mono, words)
 
 
-class Matching(VoiceoverScene):
+class Matching(WatchScene):
     def construct(self):
         self.card()
         self.asflow()
@@ -15,11 +15,7 @@ class Matching(VoiceoverScene):
         self.measured()
 
     def card(self):
-        card = chapter_card(12, r"Matching", r"Who goes with whom, \ and will they stay?", lit=(1962,),
-                            extra=((1935, r"Hall's theorem"), (1962, r"Gale and Shapley")), part=PART)
-        with self.voiceover("Chapter twelve. Matching."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(12, r"Matching", r"Who goes with whom, \ and will they stay?", lit=(1962,), extra=((1935, r"Hall's theorem"), (1962, r"Gale and Shapley")), part=PART, said="Chapter twelve. Matching.")
 
     def asflow(self):
         head = label(r"Bipartite matching is a flow", font_size=34).to_edge(UP, buff=0.3)
@@ -70,6 +66,10 @@ class Matching(VoiceoverScene):
         self.clear_scene()
 
     def stable(self):
+        self.ask(r"Equal sides, strict complete preferences. \\ Does a stable matching always exist?", [r"yes",
+                 r"not always"], 0,
+                 say="Two equal sides, everyone ranks everyone. Is there always a stable matching?",
+                 reveal="Always, and Gale and Shapley's proposals find one.")
         d = load("matching")
         head = label(r"Stable matching \ (Gale and Shapley, \ 1962)", font_size=34).to_edge(UP, buff=0.3)
         n = 4
@@ -145,8 +145,7 @@ class Matching(VoiceoverScene):
             "harmonic-number column is an order n log n scale reference, not an exact finite expectation "
             "for this experiment. <bookmark mark='b'/> Minimum-cost assignment is different. On our fixed"
             " sixty-by-sixty cost matrix, the Hungarian algorithm returns a checked permutation and "
-            "total, compared with a row-wise greedy assignment. Cubic complexity describes growth; this "
-            "one matrix does not establish a universal timing or quality ratio."
+            "total, compared with a row-wise greedy assignment."
         ) as vo:
             self.play(FadeIn(head), FadeIn(tab))
             vo.wait_until("a")

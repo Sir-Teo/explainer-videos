@@ -5,21 +5,29 @@ import numpy as np
 from videos.stats.stats51.common import *  # noqa: F403
 
 
-class Chaining(VoiceoverScene):
+class Chaining(StatsScene):
     def construct(self):
         self.card()
+        self.ask("Up to constants, the expected supremum of a Gaussian process is characterized by...",
+                 ["Dudley's entropy integral", r"Talagrand's $\gamma_2$ functional"], 1,
+                 say="The supremum of a Gaussian process, scale by scale. Dudley's integral bounds it. What "
+                     "characterizes it exactly, up to constants?",
+                 reveal="Talagrand's gamma-two functional: generic chaining, the majorizing measure theorem. "
+                        "Dudley's integral can be loose by a log.")
         self.problem()
         self.dudley()
         self.chart()
         self.sudakov()
         self.ellipsoid()
         self.generic()
+        self.answer()
+        self.checkpoint([(r"Singular values of an $n \times p$ Gaussian matrix?", r"between $\sqrt n - \sqrt p$ and $\sqrt n + \sqrt p$"),
+                         ("Matrix Bernstein's extra factor?", r"$\log d$")],
+                        narration="Checkpoint. Random matrices.",
+                        answers_narration="Root n plus or minus root p. And log d.")
 
     def card(self):
-        card = chapter_card(6, r"Chaining revisited", r"The supremum of a Gaussian process, \ scale by scale", part=PART)
-        with self.voiceover("Chapter six. Chaining revisited: the supremum of a Gaussian process, scale by scale."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(6, r"Chaining revisited", r"The supremum of a Gaussian process, \ scale by scale", part=PART, said="Chapter six. Chaining revisited: the supremum of a Gaussian process, scale by scale.")
 
     def problem(self):
         rows = [

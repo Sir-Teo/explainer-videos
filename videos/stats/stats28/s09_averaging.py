@@ -6,9 +6,14 @@ from scipy import stats
 from videos.stats.stats28.common import *  # noqa: F403
 
 
-class Averaging(VoiceoverScene):
+class Averaging(StatsScene):
     def construct(self):
         self.card()
+        self.ask("Stacking weights models to...",
+                 ["maximize their posterior probability", "maximize out-of-sample predictive performance"], 1,
+                 say="Instead of choosing one model, weight them. Stacking chooses the weights to do what?",
+                 reveal="To maximize out-of-sample predictive performance, measured by leave-one-out. Unlike "
+                        "Bayesian model averaging, it doesn't assume one of the models is true.")
         self.bma()
         self.occam()
         self.closed_open()
@@ -17,12 +22,14 @@ class Averaging(VoiceoverScene):
         self.scores()
         self.stacking()
         self.prostate_avg()
+        self.answer()
+        self.checkpoint([("WAIC and PSIS-LOO estimate?", "out-of-sample predictive accuracy"),
+                         ("Probability $1/8$ costs how many bits?", "3")],
+                        narration="Checkpoint. Bayes and codes.",
+                        answers_narration="Predictive accuracy. And three bits.")
 
     def card(self):
-        card = chapter_card(8, r"Averaging", r"Weight the models instead of choosing one", lit=(1999,), part=PART)
-        with self.voiceover("Chapter eight. Averaging models."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(8, r"Averaging", r"Weight the models instead of choosing one", lit=(1999,), part=PART, said="Chapter eight. Averaging models.")
 
     def bma(self):
         rows = [

@@ -5,9 +5,15 @@ import numpy as np
 from videos.stats.stats54.common import *  # noqa: F403
 
 
-class Rademacher(VoiceoverScene):
+class Rademacher(StatsScene):
     def construct(self):
         self.card()
+        self.ask("Rademacher complexity measures...",
+                 ["how well a class can fit random signs", "how many rules the class has"], 0,
+                 say="Draw independent random signs, and ask a class to correlate with them. What does that "
+                     "measure?",
+                 reveal="How well the class can fit pure noise: its Rademacher complexity. A class that can fit "
+                        "noise can't be trusted when it fits data.")
         self.definition()
         self.theorem()
         self.contraction()
@@ -15,12 +21,14 @@ class Rademacher(VoiceoverScene):
         self.chart()
         self.networks()
         self.data_dependent()
+        self.answer()
+        self.checkpoint([(r"The VC dimension of linear classifiers in $\mathbb R^d$?", "$d + 1$"),
+                         ("Rademacher complexity measures?", "how well a class fits random signs")],
+                        narration="Checkpoint. Complexity.",
+                        answers_narration="D plus one. And fitting noise.")
 
     def card(self):
-        card = chapter_card(3, r"Rademacher complexity", r"How well can a class fit pure noise?", lit=(2002,), part=PART)
-        with self.voiceover("Chapter three. Rademacher complexity: how well can a class fit pure noise?"):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(3, r"Rademacher complexity", r"How well can a class fit pure noise?", lit=(2002,), part=PART, said="Chapter three. Rademacher complexity: how well can a class fit pure noise?")
 
     def definition(self):
         rows = [

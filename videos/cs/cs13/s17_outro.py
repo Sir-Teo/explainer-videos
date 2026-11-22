@@ -18,11 +18,10 @@ def tile(content, caption, color, TW=3.6, TH=2.3):
     return Group(frame, content, cap)
 
 
-class Outro(VoiceoverScene):
+class Outro(WatchScene):
     def construct(self):
         self.recap()
         self.payoffs()
-        self.practice()
         self.problems()
         self.next_time()
         self.references()
@@ -66,6 +65,12 @@ class Outro(VoiceoverScene):
             self.play(LaggedStart(*[FadeIn(t, shift=UP * 0.15) for t in tiles], lag_ratio=0.25), run_time=4.0)
         self.wait(0.5)
         self.clear_scene()
+        self.checkpoint(
+            [(r"Name the compiler's three parts.", r"Front end, middle end, back end"),
+             (r"How does Csmith test compilers?", r"Random defined programs, compared across compilers")],
+            narration="Last checkpoint. What are a compiler's three parts? And how does Csmith find compiler bugs?",
+            answers_narration="Front end, middle end, back end. And it generates random well-defined programs and compares "
+                              "what different compilers make of them.")
 
     def payoffs(self):
         card = payoff_card([
@@ -91,34 +96,6 @@ class Outro(VoiceoverScene):
         self.wait(0.5)
         self.clear_scene()
 
-    def practice(self):
-        card = practice_card([
-            (r"levels", r"ship \texttt{-O2}; \ debug at \texttt{-O0} or \texttt{-Og}; \ \texttt{-O3} only when "
-                        r"measured to help"),
-            (r"read the output", r"Compiler Explorer (godbolt.org); \ \texttt{-S}; \ \texttt{-fopt-info}, \ "
-                                 r"\texttt{-Rpass}"),
-            (r"help the optimizer", r"\texttt{restrict}, \ \texttt{const}, \ \texttt{static}; \ profile-guided "
-                                    r"and link-time optimization"),
-            (r"JIT tiers", r"V8, \ the JVM, \ .NET: \ interpret, \ then compile what is hot"),
-            (r"the job", r"compiler engineers: \ LLVM, \ GCC, \ GPU and ML compilers \ (XLA, \ MLIR, \ Triton)"),
-        ])
-        with self.voiceover(
-            (
-            "In practice, choose optimization and debugging settings for the workload and toolchain, then "
-            "measure. O zero favors straightforward debugging; O two is a common release starting point, while O "
-            "three, profile-guided optimization and link-time optimization can help or hurt a particular build. "
-            "Read generated assembly and optimization reports to understand a missed opportunity. Express only "
-            "contracts the program actually satisfies: C restrict has aliasing obligations, and const and static "
-            "have several meanings that do not automatically imply independent memory. Managed runtimes can "
-            "interpret, compile and recompile hot code in tiers, with startup and steady-state tradeoffs. "
-            "Compiler work also serves accelerators and machine learning, through projects such as XLA, MLIR and "
-            "Triton."
-        )
-        ):
-            self.play(FadeIn(card.head), LaggedStart(*[FadeIn(r, shift=RIGHT * 0.15) for r in card.rows],
-                                                     lag_ratio=0.35), run_time=3.0)
-        self.wait(0.3)
-        self.clear_scene()
 
     def problems(self):
         ps = problem_set([

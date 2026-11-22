@@ -9,7 +9,7 @@ from explainer.cs import *  # noqa: F403
 from videos.cs.cs36.common import (DATA, HEAD, KERN, LAM, NO, PART, YES, box, grid_table, load)
 
 
-class Mac(VoiceoverScene):
+class Mac(WatchScene):
     def construct(self):
         self.card()
         self.aloha_timeline()
@@ -18,12 +18,7 @@ class Mac(VoiceoverScene):
         self.hidden()
 
     def card(self):
-        card = chapter_card(5, r"Sharing a channel", r"How do strangers take turns on one wire?", lit=(1970, 1976),
-                            extra=((1970, r"Abramson: \ ALOHAnet"), (1976, r"Metcalfe and Boggs: \ Ethernet")),
-                            part=PART)
-        with self.voiceover("Chapter five. Sharing a channel."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(5, r"Sharing a channel", r"How do strangers take turns on one wire?", lit=(1970, 1976), extra=((1970, r"Abramson: \ ALOHAnet"), (1976, r"Metcalfe and Boggs: \ Ethernet")), part=PART, said="Chapter five. Sharing a channel.")
 
     def aloha_timeline(self):
         head = label(r"ALOHA: \ just send", font_size=36).to_edge(UP, buff=0.3)
@@ -78,6 +73,10 @@ class Mac(VoiceoverScene):
         self.clear_scene()
 
     def aloha_curve(self):
+        self.ask(r"Pure ALOHA: send whenever you have a frame. \\ Best throughput:", [r"$18\%$", r"$37\%$",
+                 r"$100\%$"], 0,
+                 say="Pure ALOHA: send whenever you have a frame, and retry after collisions. What is the best throughput?",
+                 reveal="Eighteen percent: one over two e. Slotting doubles it.")
         m = load("mac")
         head = label(r"Measured against the formulas", font_size=36).to_edge(UP, buff=0.3)
         ax = Axes(x_range=[0, 3, 0.5], y_range=[0, 0.4, 0.1], x_length=7.0, y_length=4.0,
@@ -213,6 +212,12 @@ class Mac(VoiceoverScene):
             self.play(FadeIn(lines[3]))
         self.wait(0.3)
         self.clear_scene()
+        self.checkpoint(
+            [(r"Why do packets beat circuits for bursty traffic?", r"Idle users' capacity is shared"),
+             (r"Why can't Wi-Fi detect collisions?", r"A radio can't listen while it sends; hidden stations")],
+            narration="Checkpoint. Why do packets beat circuits for bursty traffic? And why can't Wi-Fi detect collisions?",
+            answers_narration="An idle user's share goes to the others. And a radio can't hear while it transmits, and some "
+                              "stations can't hear each other at all.")
 
 
 _ = (np, KERN)

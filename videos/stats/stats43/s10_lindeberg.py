@@ -6,20 +6,24 @@ from scipy import stats
 from videos.stats.stats43.common import *  # noqa: F403
 
 
-class Lindeberg(VoiceoverScene):
+class Lindeberg(StatsScene):
     def construct(self):
         self.card()
+        self.ask("Lindeberg's condition says...",
+                 ["no single summand dominates the variance", "all summands are identically distributed"], 0,
+                 say="The central limit theorem for triangular arrays, exactly. What does Lindeberg's condition "
+                     "say?",
+                 reveal="That no single summand carries a non-negligible share of the variance, in its tails. "
+                        "Feller showed that's also necessary when the summands are individually small.")
         self.statement()
         self.replacement()
         self.taylor()
         self.counter()
         self.part6()
+        self.answer()
 
     def card(self):
-        card = chapter_card(9, r"Lindeberg--Feller", r"The central limit theorem, \ exactly", lit=(1922,), part=PART)
-        with self.voiceover("Chapter nine. The central limit theorem in its exact form: Lindeberg and Feller."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(9, r"Lindeberg--Feller", r"The central limit theorem, \ exactly", lit=(1922,), part=PART, said="Chapter nine. The central limit theorem in its exact form: Lindeberg and Feller.")
 
     def statement(self):
         rows = [

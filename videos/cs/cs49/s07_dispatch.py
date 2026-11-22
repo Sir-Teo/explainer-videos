@@ -23,7 +23,7 @@ def hex_grid(cols=7, rows=5, r=0.46, center=ORIGIN):
     return cells, [p + shift for p in cs]
 
 
-class Dispatch(VoiceoverScene):
+class Dispatch(WatchScene):
     def construct(self):
         self.card()
         self.locations()
@@ -33,13 +33,8 @@ class Dispatch(VoiceoverScene):
         self.surge()
 
     def card(self):
-        card = chapter_card(6, r"Ride-hailing dispatch", r"Which driver should fetch which rider?",
-                            lit=(1955, 2008), extra=((1955, r"Kuhn: \ the Hungarian method"),
-                                                     (2008, r"Geisberger et al.: \ contraction hierarchies")),
-                            part=PART)
-        with self.voiceover("Chapter six. Ride-hailing dispatch."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(6, r"Ride-hailing dispatch", r"Which driver should fetch which rider?", lit=(1955, 2008), extra=((1955, r"Kuhn: \ the Hungarian method"),
+                                                     (2008, r"Geisberger et al.: \ contraction hierarchies")), part=PART, said="Chapter six. Ride-hailing dispatch.")
 
     def locations(self):
         head = label(r"Where is every driver?", font_size=36).to_edge(UP, buff=0.3)
@@ -165,6 +160,10 @@ class Dispatch(VoiceoverScene):
         self.clear_scene()
 
     def matching(self):
+        self.ask(r"Nearest free driver per request, or match \\ every few seconds in a batch. Total pickup distance:",
+                 [r"greedy is best", r"batching is shorter"], 1,
+                 say="Give each request the nearest free driver as it arrives, or match everyone waiting every few seconds. Which gives shorter pickups overall?",
+                 reveal="Batching. Greedy grabs a driver that a later rider needed more.")
         d = load("dispatch")
         head = label(r"Greedy, \ or batched?", font_size=36).to_edge(UP, buff=0.3)
         # an illustrative line of two riders and two drivers: greedy serves A first with the driver B needed

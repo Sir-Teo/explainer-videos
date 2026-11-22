@@ -4,7 +4,7 @@ from explainer.cs import *  # noqa: F403
 from videos.cs.cs24.common import (CTRL, DATA, HEAD, LAM, NO, PART, YES, grid_table, load, mono, words)
 
 
-class Frontier(VoiceoverScene):
+class Frontier(WatchScene):
     def construct(self):
         self.card()
         self.learned()
@@ -13,14 +13,14 @@ class Frontier(VoiceoverScene):
         self.open_()
 
     def card(self):
-        card = chapter_card(15, r"Frontier: \ learned indexes and predictions", r"Can an algorithm learn its input?",
-                            lit=(2018, 2020), extra=((2018, r"Kraska et al.; \ Lykouris--Vassilvitskii"),
-                                                     (2020, r"the PGM index")), part=PART)
-        with self.voiceover("Chapter fifteen. Frontier: learned indexes, and algorithms with predictions."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(15, r"Frontier: \ learned indexes and predictions", r"Can an algorithm learn its input?", lit=(2018, 2020), extra=((2018, r"Kraska et al.; \ Lykouris--Vassilvitskii"),
+                                                     (2020, r"the PGM index")), part=PART, said="Chapter fifteen. Frontier: learned indexes, and algorithms with predictions.")
 
     def learned(self):
+        self.ask(r"Replace a B-tree with a model that predicts positions. \\ Smaller and faster?", [r"never",
+                 r"sometimes, on smooth key distributions"], 1,
+                 say="Replace a search tree with a learned model that predicts where each key sits. Can it win?",
+                 reveal="Sometimes: on smooth distributions it's smaller and faster; on adversarial ones it isn't.")
         f = load("frontier")
         head = label(r"A learned index over the corpus's word offsets", font_size=30).to_edge(UP, buff=0.3)
         rows = [[str(r["eps"]), words(r["segments"]), f"{r['model_bytes'] / 1024:,.1f} KiB", f"{r['binary_ns']:.0f}",

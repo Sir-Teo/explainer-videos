@@ -13,7 +13,7 @@ def edges_of(tris):
     return out
 
 
-class Delaunay(VoiceoverScene):
+class Delaunay(WatchScene):
     def construct(self):
         self.card()
         self.empty_circles()
@@ -22,13 +22,13 @@ class Delaunay(VoiceoverScene):
         self.emst()
 
     def card(self):
-        card = chapter_card(6, r"Delaunay triangulations", r"Which triangulation is the best?", lit=(1934, 1977),
-                            extra=((1934, r"Delaunay"), (1977, r"Lawson's flips")), part=PART)
-        with self.voiceover("Chapter six. Delaunay triangulations."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(6, r"Delaunay triangulations", r"Which triangulation is the best?", lit=(1934, 1977), extra=((1934, r"Delaunay"), (1977, r"Lawson's flips")), part=PART, said="Chapter six. Delaunay triangulations.")
 
     def empty_circles(self):
+        self.ask(r"In a Delaunay triangulation, \\ what is always empty?", [r"every triangle's circumcircle",
+                 r"every edge's midpoint"], 0,
+                 say="What is always empty in a Delaunay triangulation?",
+                 reveal="Every triangle's circumcircle: no other site lies inside it.")
         d = load("voronoi")
         sites = [tuple(s) for s in d["sites"]]
         tris = [tuple(t) for t in d["tris"]]
@@ -200,3 +200,8 @@ class Delaunay(VoiceoverScene):
             self.play(FadeIn(side[1]), FadeIn(side[2]))
         self.wait(0.3)
         self.clear_scene()
+        self.checkpoint(
+            [(r"Why can't hulls beat $n \log n$?", r"Sorting reduces to them"),
+             (r"What does a Voronoi cell contain?", r"Every point nearer that site than any other")],
+            narration="Checkpoint. Why can't convex hulls be found faster than n log n? And what is a Voronoi cell?",
+            answers_narration="Because sorting reduces to the hull. And the set of points nearer that site than any other.")

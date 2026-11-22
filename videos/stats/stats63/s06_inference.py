@@ -5,10 +5,16 @@ import numpy as np
 from videos.stats.stats63.common import *  # noqa: F403
 
 
-class Inference(LectureMixin, VoiceoverScene):
+class Inference(LectureMixin, StatsScene):
     def construct(self):
         self.card_voiceover("Chapter five. Private inference: confidence intervals and tests that survive the noise.", 5,
                             r"Private inference", r"Intervals that know about the noise")
+        self.ask("A Laplace-noised count, with an interval that ignores the noise. Its coverage...",
+                 ["is fine", "falls short"], 1,
+                 say="Private inference. An analyst receives a count with Laplace noise added, and computes the "
+                     "usual interval, ignoring the noise. How does it cover?",
+                 reveal="It falls short: the noise is part of the uncertainty. Noise-aware intervals, using the "
+                        "published mechanism, keep the promise.")
         self.problem()
         self.aware()
         self.chart()
@@ -16,6 +22,7 @@ class Inference(LectureMixin, VoiceoverScene):
         self.beyond()
         self.tests()
         self.public()
+        self.answer()
 
     def problem(self):
         self.lad_voiceover(

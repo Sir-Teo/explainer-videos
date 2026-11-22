@@ -6,9 +6,15 @@ from explainer.stats.kit import spatial as SPK
 from videos.stats.stats39.common import *  # noqa: F403
 
 
-class Matern(VoiceoverScene):
+class Matern(StatsScene):
     def construct(self):
         self.card()
+        self.ask(r"One Mat\'ern field, observed ever more densely in a fixed region. Its variance and range...",
+                 ["can each be learned", "can't be separated: only a combination"], 1,
+                 say="Observe one Matérn field more and more densely in a fixed region. Can you learn its variance "
+                     "and its range separately?",
+                 reveal="No: only a combination of them, Zhang showed in 2004. Fortunately that combination is what "
+                        "governs prediction.")
         self.family()
         self.curves()
         self.spectrum()
@@ -16,12 +22,10 @@ class Matern(VoiceoverScene):
         self.ridge()
         self.zhang()
         self.ridge_pred()
+        self.answer()
 
     def card(self):
-        card = chapter_card(5, r"Mat\'ern and identifiability", r"What can one field tell us?", lit=(1960, 1999, 2004), part=PART)
-        with self.voiceover("Chapter five. Matérn, and what cannot be learned."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(5, r"Mat\'ern and identifiability", r"What can one field tell us?", lit=(1960, 1999, 2004), part=PART, said="Chapter five. Matérn, and what cannot be learned.")
 
     def family(self):
         rows = [

@@ -15,23 +15,16 @@ def sci(v: float, digits: int = 1) -> str:
     return rf"{m:.{digits}f} \times 10^{{{e}}}"
 
 
-class Backward(VoiceoverScene):
+class Backward(WatchScene):
     def construct(self):
         self.card()
         self.model()
         self.picture()
         self.residual()
-        self.hilbert()
-        self.digits()
 
     def card(self):
-        card = chapter_card(2, r"Backward error analysis",
-                            r"Is the computed answer the exact answer to a nearby question?", lit=(1963, 1970),
-                            extra=((1963, r"Wilkinson: \ \textit{Rounding Errors in Algebraic Processes}"),
-                                   (1970, r"Wilkinson's Turing Award")), part=PART)
-        with self.voiceover("Chapter two. Backward error analysis."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(2, r"Backward error analysis", r"Is the computed answer the exact answer to a nearby question?", lit=(1963, 1970), extra=((1963, r"Wilkinson: \ \textit{Rounding Errors in Algebraic Processes}"),
+                                   (1970, r"Wilkinson's Turing Award")), part=PART, said="Chapter two. Backward error analysis.")
 
     def model(self):
         head = label(r"Wilkinson's model of rounding", font_size=36).to_edge(UP, buff=0.3)
@@ -89,6 +82,10 @@ class Backward(VoiceoverScene):
         self.clear_scene()
 
     def picture(self):
+        self.ask(r"Forward error is at most...", [r"the backward error",
+                 r"condition number $\times$ backward error"], 1,
+                 say="An algorithm's backward error is small. How large can the forward error be?",
+                 reveal="Up to the condition number times the backward error.")
         head = label(r"Forward error $\le$ condition $\times$ backward error", font_size=36).to_edge(UP, buff=0.3)
         cx = -3.8
         l_in = Line([cx - 2.7, 1.3, 0], [cx + 2.7, 1.3, 0], color=GREY_C)
@@ -157,6 +154,12 @@ class Backward(VoiceoverScene):
         self.clear_scene()
 
     def residual(self):
+        self.wrong_idea(r"a small residual means an accurate answer",
+                        r"a small residual is a small \emph{backward} error; \\ the answer can still be off by $\kappa$",
+                        narration="A natural test: plug the answer back in, and if the residual is tiny, the answer must be right.",
+                        right_narration="A tiny residual says the answer solves a nearby problem exactly. Its error can still "
+                                        "be the condition number times larger.")
+        self.clear_scene()
         head = label(r"For $Ax = b$, \ the residual is the backward error", font_size=36).to_edge(UP, buff=0.3)
         cols = {r"r": DATA, r"\Delta A": HEAD, r"\eta": HEAD, r"\kappa(A)\,\eta": KERN}
         rows = VGroup(
@@ -203,107 +206,7 @@ class Backward(VoiceoverScene):
         self.wait(0.4)
         self.clear_scene()
 
-    def hilbert(self):
-        rows = load("backward")["rows"]
-        head = label(r"Testing the rule on Hilbert systems", font_size=36).to_edge(UP, buff=0.3)
-        ax = CornerAxes(x_range=[3, 13, 1], y_range=[-18, 0, 2], x_length=7.2, y_length=4.7, tips=False,
-                        axis_config={"stroke_color": GREY_C})
-        ax.move_to([-2.3, -0.4, 0])
-        xt = VGroup(*[label(rf"{n}", font_size=17, color=GREY_B).next_to(ax.c2p(n, -18), DOWN, buff=0.12)
-                      for n in (4, 6, 8, 10, 12)])
-        yt = VGroup(*[MathTex(rf"10^{{{p}}}", font_size=22, color=GREY_B).next_to(ax.c2p(3, p), LEFT, buff=0.1)
-                      for p in (-16, -12, -8, -4, 0)])
-        xl = label(r"size $n$ of the Hilbert matrix", font_size=18, color=GREY_A).next_to(xt, DOWN, buff=0.15)
-        yl = label(r"relative error", font_size=18, color=GREY_A).next_to(ax, UP, buff=0.12).align_to(ax, LEFT)
-        yl.shift(RIGHT * 0.45)
 
-        def series(key, color, dashed=False):
-            pts = [ax.c2p(r["n"], math.log10(r[key])) for r in rows]
-            line = VMobject(color=color, stroke_width=3).set_points_as_corners(pts)
-            if dashed:
-                line = DashedVMobject(line, num_dashes=40)
-            dots = VGroup(*[Dot(p, radius=0.06, color=color) for p in pts])
-            return VGroup(line, dots)
-        back = series("backward", YES)
-        fwd = series("forward", NO)
-        bnd = series("bound", HEAD, dashed=True)
-        keys = VGroup(
-            label(r"backward error $\eta$", font_size=20, color=YES),
-            label(r"forward error", font_size=20, color=NO),
-            label(r"bound $\kappa\,\eta$", font_size=20, color=HEAD),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.25)
-        keys.move_to([0, 1.6, 0]).align_to([2.0, 0, 0], LEFT)
-        r4, r12 = rows[0], rows[-1]
-        notes = VGroup(
-            wrapped_label(rf"$\eta$ stays between ${sci(min(r['backward'] for r in rows))}$ and "
-                          rf"${sci(max(r['backward'] for r in rows))}$: \ as stable as rounding allows", 4.6,
-                          font_size=18, color=YES),
-            wrapped_label(rf"forward error: \ ${sci(r4['forward'])}$ at $n = 4$, \ ${r12['forward']:.3f}$ at "
-                          rf"$n = 12$", 4.6, font_size=18, color=NO),
-            wrapped_label(r"$x$ known, \ $b = Hx$, \ solved by LAPACK's pivoted elimination \ (computed)", 4.6,
-                          font_size=17, color=GREY_B),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.3).next_to(keys, DOWN, buff=0.45).align_to(keys, LEFT)
-        with self.voiceover(
-            "Our instrument tests the rule on Hilbert systems. It picks x, sets b to H times x, and solves with "
-            "LAPACK's pivoted elimination, through NumPy. <bookmark mark='a'/> The backward error stays near ten "
-            "to the minus seventeen at every size: the algorithm is as stable as rounding allows. "
-            "<bookmark mark='b'/> The forward error climbs from two times ten to the minus thirteen at size four "
-            "to about five percent at size twelve. <bookmark mark='c'/> And at every size it stays below kappa "
-            "times eta, the bound we derived. Nothing went wrong inside the algorithm; the problem amplified the "
-            "rounding of its own data."
-        ) as vo:
-            self.play(FadeIn(head), Create(ax), FadeIn(xt), FadeIn(yt), FadeIn(xl), FadeIn(yl), FadeIn(notes[2]))
-            vo.wait_until("a")
-            self.play(Create(back), FadeIn(keys[0]), FadeIn(notes[0]), run_time=1.5)
-            vo.wait_until("b")
-            self.play(Create(fwd), FadeIn(keys[1]), FadeIn(notes[1]), run_time=1.5)
-            vo.wait_until("c")
-            self.play(Create(bnd), FadeIn(keys[2]), run_time=1.5)
-        self.wait(0.4)
-        self.clear_scene()
-
-    def digits(self):
-        rows = {r["n"]: r for r in load("backward")["rows"]}
-        head = label(r"Which digits can we trust?", font_size=36).to_edge(UP, buff=0.3)
-        strips = VGroup()
-        for n, y in ((4, 1.7), (8, 0.55), (12, -0.6)):
-            r = rows[n]
-            good = max(0, math.floor(-math.log10(r["forward"])))
-            boxes = VGroup(*[Square(side_length=0.4, stroke_width=1, stroke_color=GREY_D,
-                                    fill_color=YES if i < good else NO, fill_opacity=0.75) for i in range(16)])
-            boxes.arrange(RIGHT, buff=0.06).move_to([0.9, y, 0])
-            name = label(rf"$n = {n}$: \ $\kappa \approx {sci(r['kappa'])}$", font_size=20, color=WHITE)
-            name.next_to(boxes, LEFT, buff=0.35)
-            tail = label(rf"{good} right", font_size=20, color=YES).next_to(boxes, RIGHT, buff=0.3)
-            strips.add(VGroup(name, boxes, tail))
-        cap = note(r"each box a significant decimal digit of $x$; \ computed from the forward error", font_size=17)
-        cap.next_to(strips, DOWN, buff=0.3)
-        lines = VGroup(
-            wrapped_label(r"digits lost $\approx \log_{10}\kappa$: \ a backward stable algorithm loses only what the "
-                          r"problem itself destroys", 12.4, font_size=21, color=WHITE),
-            wrapped_label(r"Wilkinson, \ \textit{Rounding Errors in Algebraic Processes} \ (1963); \ the Turing Award, "
-                          r"\ 1970", 12.4, font_size=20, color=HEAD),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.25).to_edge(DOWN, buff=0.45)
-        with self.voiceover(
-            "In digits, the picture is simple. <bookmark mark='a'/> At size four, twelve of the sixteen digits are "
-            "right. <bookmark mark='b'/> At size eight, seven. <bookmark mark='c'/> At size twelve, one. "
-            "<bookmark mark='d'/> Each time, the digits lost are about the logarithm of kappa: a backward stable "
-            "algorithm loses only what the problem itself destroys. <bookmark mark='e'/> This was Wilkinson's "
-            "great clarification, set out in his 1963 book, Rounding Errors in Algebraic Processes, and it earned "
-            "him the Turing Award in 1970. The next chapter applies it to the most used algorithm of all, Gaussian "
-            "elimination."
-        ) as vo:
-            self.play(FadeIn(head))
-            for mk, s in zip("abc", strips):
-                vo.wait_until(mk)
-                self.play(FadeIn(s[0]), LaggedStart(*[FadeIn(b) for b in s[1]], lag_ratio=0.05), FadeIn(s[2]))
-            self.play(FadeIn(cap))
-            vo.wait_until("d")
-            self.play(FadeIn(lines[0]))
-            vo.wait_until("e")
-            self.play(FadeIn(lines[1]))
-        self.wait(0.4)
-        self.clear_scene()
 
 
 _ = (BG, DATA, LAM)

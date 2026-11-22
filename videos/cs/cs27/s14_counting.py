@@ -6,7 +6,7 @@ from explainer.cs import *  # noqa: F403
 from videos.cs.cs27.common import (BG, CTRL, DATA, HEAD, LAM, NO, PART, YES, fit_right, grid_table, load, mono, words)
 
 
-class Counting(VoiceoverScene):
+class Counting(WatchScene):
     def construct(self):
         self.card()
         self.sharp()
@@ -14,12 +14,7 @@ class Counting(VoiceoverScene):
         self.toda()
 
     def card(self):
-        card = chapter_card(13, r"Counting", r"Is counting solutions harder than finding one?", lit=(1979, 2004),
-                            extra=((1979, r"Valiant: \ \#P"), (1991, r"Toda"), (2004, r"Jerrum--Sinclair--Vigoda")),
-                            part=PART)
-        with self.voiceover("Chapter thirteen. Counting."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(13, r"Counting", r"Is counting solutions harder than finding one?", lit=(1979, 2004), extra=((1979, r"Valiant: \ \#P"), (1991, r"Toda"), (2004, r"Jerrum--Sinclair--Vigoda")), part=PART, said="Chapter thirteen. Counting.")
 
     def sharp(self):
         head = label(r"\#P: \ how many certificates?", font_size=34).to_edge(UP, buff=0.3)
@@ -42,7 +37,7 @@ class Counting(VoiceoverScene):
                   r"in P \ (Part 18)", font_size=22, color=NO),
         ).arrange(DOWN, buff=0.24).next_to(forms, DOWN, buff=0.45)
         with self.voiceover(
-            "NP asks whether a polynomially bounded witness exists. Counting asks how many such witnesses are accepted. <bookmark mark='a'/> A number-P function counts accepting witnesses of a polynomial-time verifier under a fixed polynomial witness-length convention. <bookmark mark='b'/> For zero-one matrices, compare the determinant’s signed permutation sum with the permanent’s unsigned sum. <bookmark mark='c'/> The determinant is computable in polynomial time. Gaussian elimination has cubic arithmetic-operation complexity; integer bit complexity needs an additional size analysis. <bookmark mark='d'/> The permanent of a bipartite adjacency matrix counts perfect matchings exactly. <bookmark mark='e'/> Valiant proved that this counting problem is number-P-complete even though deciding whether a perfect matching exists is in P. <bookmark mark='f'/> This is a complexity classification, not a proof that counting requires exponential time. Such a separation would require an unproved complexity assumption."
+            "NP asks whether a polynomially bounded witness exists. Counting asks how many such witnesses are accepted. <bookmark mark='a'/> A number-P function counts accepting witnesses of a polynomial-time verifier under a fixed polynomial witness-length convention. <bookmark mark='b'/> For zero-one matrices, compare the determinant’s signed permutation sum with the permanent’s unsigned sum. <bookmark mark='c'/> The determinant is computable in polynomial time. Gaussian elimination has cubic arithmetic-operation complexity; integer bit complexity needs an additional size analysis. <bookmark mark='d'/> The permanent of a bipartite adjacency matrix counts perfect matchings exactly. <bookmark mark='e'/> Valiant proved that this counting problem is number-P-complete even though deciding whether a perfect matching exists is in P. <bookmark mark='f'/>"
         ) as vo:
             self.play(FadeIn(head))
             vo.wait_until("a")
@@ -62,6 +57,10 @@ class Counting(VoiceoverScene):
         self.clear_scene()
 
     def permanent(self):
+        self.ask(r"Determinant and permanent differ only in signs. \\ Which is easy?", [r"both",
+                 r"only the determinant", r"neither"], 1,
+                 say="The determinant and the permanent differ only in their signs. Which can be computed in polynomial time?",
+                 reveal="Only the determinant. The permanent is sharp-P-hard, as Valiant proved.")
         d = load("permanent")
         head = label(r"Permanent against determinant, \ measured", font_size=32).to_edge(UP, buff=0.3)
         ax = Axes(x_range=[7, 21, 2], y_range=[0, 6, 1], x_length=6.0, y_length=4.0,
@@ -95,7 +94,7 @@ class Counting(VoiceoverScene):
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.3).next_to(ax, RIGHT, buff=0.7).align_to(ax, UP)
         fit_right(notes)
         with self.voiceover(
-            "The measurements compare two exact integer implementations on retained random zero-one matrices. <bookmark mark='a'/> Ryser’s inclusion-exclusion formula uses exponentially many subsets with Gray-code updates. We independently check its complete integer result using a native assignment-subset dynamic program. <bookmark mark='b'/> The twenty-by-twenty matrix has the displayed exact perfect-matching count. The time is a median of thirty actual calls on this host, not a universal runtime claim. <bookmark mark='c'/> Bareiss elimination gives exact determinants, including for the retained two-hundred-by-two-hundred matrix. An independent native modular determinant plus Chinese-remainder reconstruction certifies each complete integer using a Hadamard bound. <bookmark mark='d'/> The observed growth illustrates these implementations. Increasing n by two does not force an exact factor-four wall-clock increase, and this comparison does not prove an exponential lower bound for every permanent algorithm."
+            "The measurements compare two exact integer implementations on retained random zero-one matrices. <bookmark mark='a'/> Ryser’s inclusion-exclusion formula uses exponentially many subsets with Gray-code updates. We independently check its complete integer result using a native assignment-subset dynamic program. <bookmark mark='b'/> The twenty-by-twenty matrix has the displayed exact perfect-matching count. <bookmark mark='c'/> Bareiss elimination gives exact determinants, including for the retained two-hundred-by-two-hundred matrix. An independent native modular determinant plus Chinese-remainder reconstruction certifies each complete integer using a Hadamard bound. <bookmark mark='d'/>"
         ) as vo:
             self.play(FadeIn(head), Create(ax), FadeIn(xt), FadeIn(yt), FadeIn(xl), FadeIn(notes[0]))
             vo.wait_until("a")
@@ -125,7 +124,7 @@ class Counting(VoiceoverScene):
                   r"determinant with chosen signs", font_size=22, color=LAM),
         ).arrange(DOWN, buff=0.32).next_to(head, DOWN, buff=0.5)
         with self.voiceover(
-            "Counting has striking relationships with decision and approximation. <bookmark mark='a'/> Toda’s theorem places the polynomial hierarchy inside deterministic polynomial time with a number-P oracle. We state this oracle-class inclusion without deriving a query-count refinement here. <bookmark mark='b'/> Valiant and Vazirani give randomized isolation reductions connecting SAT with the promise of a unique solution. This is not a deterministic NP-completeness claim for the unique-solution promise problem. <bookmark mark='c'/> Stockmeyer’s approximate counting uses randomness and an NP oracle to obtain a specified multiplicative accuracy with polynomial dependence on the relevant precision parameters. It is not an ordinary polynomial-time counting algorithm. <bookmark mark='d'/> Jerrum, Sinclair and Vigoda give a fully polynomial randomized approximation scheme for the permanent of nonnegative rational matrices, including input-bit, accuracy and failure-probability costs. <bookmark mark='e'/> Their sampling method depends on a carefully analysed Markov chain; the existence of a chain alone does not guarantee fast mixing or accurate counting. <bookmark mark='f'/> For planar graphs, Pfaffian methods count perfect matchings exactly under their specified graph and weight conventions. Structural restrictions can therefore change the counting problem substantially."
+            "Counting has striking relationships with decision and approximation. <bookmark mark='a'/> Toda’s theorem places the polynomial hierarchy inside deterministic polynomial time with a number-P oracle. We state this oracle-class inclusion without deriving a query-count refinement here. <bookmark mark='b'/> Valiant and Vazirani give randomized isolation reductions connecting SAT with the promise of a unique solution. This is not a deterministic NP-completeness claim for the unique-solution promise problem. <bookmark mark='c'/> Stockmeyer’s approximate counting uses randomness and an NP oracle to obtain a specified multiplicative accuracy with polynomial dependence on the relevant precision parameters. It is not an ordinary polynomial-time counting algorithm. <bookmark mark='d'/> Jerrum, Sinclair and Vigoda give a fully polynomial randomized approximation scheme for the permanent of nonnegative rational matrices, including input-bit, accuracy and failure-probability costs. <bookmark mark='e'/> <bookmark mark='f'/> For planar graphs, Pfaffian methods count perfect matchings exactly under their specified graph and weight conventions. Structural restrictions can therefore change the counting problem substantially."
         ) as vo:
             self.play(FadeIn(head))
             for mk, ln in zip("abcdef", lines):

@@ -4,7 +4,7 @@ from explainer.cs import *  # noqa: F403
 from videos.cs.cs29.common import (DATA, HEAD, LAM, NO, PART, YES, flow_box, load, mono)
 
 
-class Enigma(VoiceoverScene):
+class Enigma(WatchScene):
     def construct(self):
         self.card()
         self.machine()
@@ -12,12 +12,8 @@ class Enigma(VoiceoverScene):
         self.cribs()
 
     def card(self):
-        card = chapter_card(3, r"Enigma", r"How do you break a machine with $10^{20}$ keys?",
-                            lit=(1932, 1940), extra=((1918, r"Scherbius's patent"), (1932, r"Rejewski"),
-                                                     (1940, r"Turing's Bombe")), part=PART)
-        with self.voiceover("Chapter three. Enigma."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(3, r"Enigma", r"How do you break a machine with $10^{20}$ keys?", lit=(1932, 1940), extra=((1918, r"Scherbius's patent"), (1932, r"Rejewski"),
+                                                     (1940, r"Turing's Bombe")), part=PART, said="Chapter three. Enigma.")
 
     def machine(self):
         e = load("enigma")
@@ -139,6 +135,10 @@ class Enigma(VoiceoverScene):
         self.clear_scene()
 
     def cribs(self):
+        self.ask(r"Slide a guessed word along an Enigma message. \\ Which positions are ruled out at once?",
+                 [r"none", r"any where a letter meets itself"], 1,
+                 say="Slide a guessed word along an Enigma message. Which positions can you rule out without any machine?",
+                 reveal="Any position where a letter would encipher as itself. Enigma never does that.")
         e = load("enigma")
         head = label(r"Cribs, \ and a machine to test them", font_size=34).to_edge(UP, buff=0.3)
         ct, crib = e["cipher"], "WETTERBERICHT"

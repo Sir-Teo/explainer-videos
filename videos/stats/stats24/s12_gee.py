@@ -6,21 +6,25 @@ from explainer.stats.board import coverage_board, load_all
 from videos.stats.stats24.common import *  # noqa: F403
 
 
-class GEE(VoiceoverScene):
+class GEE(StatsScene):
     def construct(self):
         self.card()
+        self.ask("GEE with an independence working correlation, truly exchangeable data. The estimates are...",
+                 ["still consistent", "biased"], 0,
+                 say="Generalized estimating equations with a working correlation of independence, when pupils in a "
+                     "school are truly correlated. Are the coefficient estimates still consistent?",
+                 reveal="Still consistent, and the robust standard errors are honest. The working correlation only "
+                        "affects efficiency.")
         self.problem()
         self.equations()
         self.results()
         self.marginal()
         self.working()
         self.board()
+        self.answer()
 
     def card(self):
-        card = chapter_card(11, r"GEE", r"Clustered outcomes, \ honest standard errors", lit=(1986,), part=PART)
-        with self.voiceover("Chapter eleven. Generalized estimating equations."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(11, r"GEE", r"Clustered outcomes, \ honest standard errors", lit=(1986,), part=PART, said="Chapter eleven. Generalized estimating equations.")
 
     def problem(self):
         d = load("gee")

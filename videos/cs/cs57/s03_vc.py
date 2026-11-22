@@ -52,7 +52,7 @@ def stacked(rows, whys, buff=0.2):
     return pairs
 
 
-class Vc(VoiceoverScene):
+class Vc(WatchScene):
     def construct(self):
         self.card()
         self.shatter()
@@ -63,12 +63,8 @@ class Vc(VoiceoverScene):
         self.fundamental()
 
     def card(self):
-        card = chapter_card(2, r"VC dimension", r"How do you count an infinite class?", lit=(1971, 1989),
-                            extra=((1971, r"Vapnik and Chervonenkis: \ uniform convergence"),
-                                   (1989, r"Blumer et al.: \ learnability and the VC dimension")), part=PART)
-        with self.voiceover("Chapter two. The VC dimension."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(2, r"VC dimension", r"How do you count an infinite class?", lit=(1971, 1989), extra=((1971, r"Vapnik and Chervonenkis: \ uniform convergence"),
+                                   (1989, r"Blumer et al.: \ learnability and the VC dimension")), part=PART, said="Chapter two. The VC dimension.")
 
     def shatter(self):
         s = load("shatter")["three"]
@@ -108,6 +104,9 @@ class Vc(VoiceoverScene):
         self.clear_scene()
 
     def four(self):
+        self.ask(r"Four points at the corners of a square. \\ Can half-planes produce every labelling?", [r"yes", r"no"], 1,
+                 say="Four points at the corners of a square. Can half-planes produce all sixteen labellings?",
+                 reveal="No: the two diagonal labellings fail. The VC dimension of half-planes is three.")
         sh = load("shatter")
         sq, tr = sh["square"], sh["triangle with a point inside"]
         head = label(r"No four points are shattered", font_size=36).to_edge(UP, buff=0.3)

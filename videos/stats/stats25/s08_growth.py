@@ -5,20 +5,28 @@ import numpy as np
 from videos.stats.stats25.common import *  # noqa: F403
 
 
-class Growth(VoiceoverScene):
+class Growth(StatsScene):
     def construct(self):
         self.card()
+        self.ask("Children miss visits, at random given their earlier heights. The mixed model's likelihood...",
+                 ["can ignore the missingness", "is biased by it"], 0,
+                 say="Sixty children, measured at five ages, but some miss visits, at random given their earlier "
+                     "measurements. Is the mixed model's likelihood analysis biased by the missing visits?",
+                 reveal="No: when missingness depends only on what was observed, likelihood can ignore the "
+                        "mechanism. Visits missed because of the unseen value are another matter, Part 41's.")
         self.spaghetti()
         self.model()
         self.fits()
         self.blups()
         self.covariance()
+        self.answer()
+        self.checkpoint([("What does REML account for?", "the fixed effects estimated"),
+                         ("Testing a variance is zero: the LRT's null law?", r"a 50:50 mix of 0 and $\chi^2_1$")],
+                        narration="Checkpoint. Variance components.",
+                        answers_narration="The estimated fixed effects. And a fifty-fifty mixture.")
 
     def card(self):
-        card = chapter_card(7, r"Longitudinal data", r"Each child its own line", lit=(1982,), part=PART)
-        with self.voiceover("Chapter seven. Longitudinal data."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(7, r"Longitudinal data", r"Each child its own line", lit=(1982,), part=PART, said="Chapter seven. Longitudinal data.")
 
     def axes_(self):
         return axes([3, 13], [70, 160], x_length=7.4, y_length=4.6, xlabel=r"age", ylabel=r"height, \ cm",

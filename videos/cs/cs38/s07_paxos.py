@@ -4,7 +4,7 @@ from explainer.cs import *  # noqa: F403
 from videos.cs.cs38.common import (DATA, HEAD, KERN, LAM, NO, PART, YES, box, grid_table, load)
 
 
-class Paxos(VoiceoverScene):
+class Paxos(WatchScene):
     def construct(self):
         self.card()
         self.protocol()
@@ -13,13 +13,9 @@ class Paxos(VoiceoverScene):
         self.multi()
 
     def card(self):
-        card = chapter_card(6, r"Paxos", r"How do you choose one value when proposers and acceptors can fail?",
-                            lit=(1989, 2001), extra=((1989, r"Lamport: \ The Part-Time Parliament"),
+        self.chapter(6, r"Paxos", r"How do you choose one value when proposers and acceptors can fail?", lit=(1989, 2001), extra=((1989, r"Lamport: \ The Part-Time Parliament"),
                                                      (1988, r"Oki and Liskov: \ Viewstamped Replication"),
-                                                     (2001, r"Paxos Made Simple")), part=PART)
-        with self.voiceover("Chapter six. Paxos."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+                                                     (2001, r"Paxos Made Simple")), part=PART, said="Chapter six. Paxos.")
 
     def protocol(self):
         head = label(r"Two phases, \ numbered ballots", font_size=36).to_edge(UP, buff=0.3)
@@ -91,6 +87,10 @@ class Paxos(VoiceoverScene):
         self.clear_scene()
 
     def duel(self):
+        self.ask(r"Two Paxos proposers keep pre-empting each other. \\ Paxos...", [r"chooses two values",
+                 r"may never decide, but stays safe"], 1,
+                 say="Two Paxos proposers keep pre-empting each other with higher ballots. What happens?",
+                 reveal="Nothing is decided, possibly for ever. But no two values are ever chosen.")
         p = load("paxos")
         head = label(r"Duelling proposers", font_size=36).to_edge(UP, buff=0.3)
         rows = []
@@ -171,6 +171,12 @@ class Paxos(VoiceoverScene):
                 self.play(FadeIn(l))
         self.wait(0.4)
         self.clear_scene()
+        self.checkpoint(
+            [(r"How does FLP get sidestepped?", r"Randomness, failure detectors, or eventual synchrony"),
+             (r"Why is Paxos safe?", r"Any two majorities intersect")],
+            narration="Checkpoint. How do real systems get around FLP? And why is Paxos always safe?",
+            answers_narration="By flipping coins, by failure detectors, or by assuming the network eventually behaves. And "
+                              "because any two majorities share a member.")
 
 
 _ = (NO,)

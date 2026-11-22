@@ -6,21 +6,29 @@ from scipy import stats as st
 from videos.stats.stats7.common import *  # noqa: F403
 
 
-class VarRed(VoiceoverScene):
+class VarRed(StatsScene):
     def construct(self):
         self.card()
+        self.ask("Pair each uniform $U$ with $1 - U$ for a monotone integrand. The variance...",
+                 ["goes up", "goes down", "stays the same"], 1,
+                 say="Variance reduction. Pair each uniform U with one minus U before averaging a monotone "
+                     "function. Does the variance go up, go down, or stay the same?",
+                 reveal="It goes down. The pair is negatively correlated, so its errors partly cancel: antithetic "
+                        "variates.")
         self.antithetic()
         self.control()
         self.stratified()
         self.compare()
         self.importance()
         self.warning()
+        self.answer()
+        self.checkpoint([("Halving the Monte Carlo error costs?", "four times as many draws"),
+                         ("A simulation study reports, beside each estimate?", "its Monte Carlo standard error")],
+                        narration="Checkpoint. Monte Carlo.",
+                        answers_narration="Four times the draws. And every estimate gets its Monte Carlo error bar.")
 
     def card(self):
-        card = chapter_card(7, r"Variance reduction", r"The same accuracy, \ for less computing", part=PART)
-        with self.voiceover("Chapter seven. Variance reduction."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(7, r"Variance reduction", r"The same accuracy, \ for less computing", part=PART, said="Chapter seven. Variance reduction.")
 
     def antithetic(self):
         A = axes([0, 1], [0.8, 2.9], x_length=5.0, y_length=4.0, xlabel=r"$u$", ylabel=r"$e^u$", xticks=[0, 0.5, 1],

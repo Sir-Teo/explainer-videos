@@ -5,9 +5,22 @@ import numpy as np
 from videos.stats.stats54.common import *  # noqa: F403
 
 
-class Interpolation(VoiceoverScene):
+class Interpolation(StatsScene):
     def construct(self):
         self.card()
+        self.wrong_idea("A model that fits noisy training data perfectly must be overfitting",
+                        "In high dimensions interpolation can be benign: test error can stay low",
+                        narration="The textbook rule: a model that fits noisy training data perfectly must be "
+                                  "overfitting.",
+                        right_narration="Not always. Some networks fit even random labels, and in high dimensions, "
+                                        "minimum-norm interpolators can predict nearly optimally: benign "
+                                        "overfitting. The classical bounds simply don't apply.")
+        self.ask("Minimum-norm least squares, the number of parameters passing $n$. The test error...",
+                 ["rises forever", "peaks near $p = n$, then falls again"], 1,
+                 say="Minimum-norm least squares, with the number of parameters growing past the number of "
+                     "observations. What does the test error do?",
+                 reveal="It peaks near p equal to n, then falls again: double descent. Past the peak, among all "
+                        "interpolators, the minimum-norm one can generalize.")
         self.puzzle()
         self.double()
         self.benign_theory()
@@ -15,12 +28,14 @@ class Interpolation(VoiceoverScene):
         self.kernels()
         self.uniform()
         self.lesson()
+        self.answer()
+        self.checkpoint([("Hedge's regret?", r"about $\sqrt{T \log N}$"),
+                         ("Why train with cross-entropy?", "it's calibrated for classification, and convex")],
+                        narration="Checkpoint. Online and surrogate.",
+                        answers_narration="Root T log N. And calibration with convexity.")
 
     def card(self):
-        card = chapter_card(10, r"Interpolation", r"Double descent and benign overfitting", lit=(2020,), part=PART)
-        with self.voiceover("Chapter ten. Interpolation: double descent and benign overfitting."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(10, r"Interpolation", r"Double descent and benign overfitting", lit=(2020,), part=PART, said="Chapter ten. Interpolation: double descent and benign overfitting.")
 
     def puzzle(self):
         rows = [

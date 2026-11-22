@@ -24,7 +24,7 @@ def _origin(url):
     return u.scheme, u.hostname, u.port or {"http": 80, "https": 443}[u.scheme]
 
 
-class Security(VoiceoverScene):
+class Security(WatchScene):
     def construct(self):
         self.card()
         self.origins()
@@ -33,18 +33,16 @@ class Security(VoiceoverScene):
         self.csp()
         self.csrf()
         self.isolation()
-        self.wasm()
 
     def card(self):
-        card = chapter_card(11, r"The security model", r"How can one program safely run code from strangers?",
-                            lit=(1995, 2017, 2018), extra=((1995, r"JavaScript; \ the same-origin policy"),
+        self.chapter(11, r"The security model", r"How can one program safely run code from strangers?", lit=(1995, 2017, 2018), extra=((1995, r"JavaScript; \ the same-origin policy"),
                                                            (2017, r"WebAssembly"),
-                                                           (2018, r"Spectre; \ site isolation")), part=PART)
-        with self.voiceover("Chapter eleven. The security model."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+                                                           (2018, r"Spectre; \ site isolation")), part=PART, said="Chapter eleven. The security model.")
 
     def origins(self):
+        self.ask(r"\texttt{https://a.com} and \texttt{http://a.com}. \\ Same origin?", [r"yes", r"no"], 1,
+                 say="https colon a dot com, and http colon a dot com. Same origin?",
+                 reveal="No: the scheme differs. Scheme, host and port must all match.")
         d = load("cors")
         head = label(r"The same-origin policy", font_size=36).to_edge(UP, buff=0.3)
         url = Text("https://a.example:443/cart?id=7", font="DejaVu Sans Mono", font_size=30,
@@ -378,52 +376,6 @@ class Security(VoiceoverScene):
         self.wait(0.4)
         self.clear_scene()
 
-    def wasm(self):
-        head = label(r"WebAssembly", font_size=36).to_edge(UP, buff=0.3)
-        steps = [module_box(r"C, \ C++, \ Rust", DATA, w=2.0), module_box(r"a compiler", GREY_B, w=1.8),
-                 module_box(r"\texttt{.wasm}: \ typed bytecode", LAM, w=2.9),
-                 module_box(r"validate", YES, w=1.6), module_box(r"compile to machine code", KERN, w=3.1)]
-        row = VGroup(*steps).arrange(RIGHT, buff=0.45).move_to([0, 1.7, 0])
-        if row.width > 13.4:
-            row.width = 13.4
-        arrows = VGroup(*[Arrow(steps[i].get_right(), steps[i + 1].get_left(), buff=0.05, stroke_width=2.5,
-                                color=GREY_B, max_tip_length_to_length_ratio=0.3) for i in range(4)])
-        sandbox = DashedVMobject(SurroundingRectangle(VGroup(steps[3], steps[4]), buff=0.22, corner_radius=0.1,
-                                                      color=YES, stroke_width=2), num_dashes=60)
-        sb_t = label(r"inside the browser's sandbox", font_size=17, color=YES).next_to(sandbox, DOWN, buff=0.1)
-        # linear memory: one array of bytes; an access past its end traps
-        n = 16
-        cells = VGroup(*[Square(0.42, stroke_color=GREY_C, stroke_width=1.5, fill_color=LAM,
-                                fill_opacity=0.2) for _ in range(n)]).arrange(RIGHT, buff=0).move_to([-0.6, -0.6, 0])
-        mem_t = label(r"linear memory: \ the only memory the module can address", font_size=18,
-                      color=LAM).next_to(cells, UP, buff=0.15)
-        out = Square(0.42, stroke_color=NO, stroke_width=2).next_to(cells, RIGHT, buff=0.35)
-        ok_ptr = Arrow(cells[5].get_bottom() + DOWN * 0.6, cells[5].get_bottom(), buff=0.03, color=YES,
-                       stroke_width=3, max_tip_length_to_length_ratio=0.3)
-        bad_ptr = Arrow(out.get_bottom() + DOWN * 0.6, out.get_bottom(), buff=0.03, color=NO, stroke_width=3,
-                        max_tip_length_to_length_ratio=0.3)
-        trap = label(r"out of bounds: \ trap", font_size=18, color=NO).next_to(bad_ptr, DOWN, buff=0.08)
-        ok_t = label(r"in bounds", font_size=18, color=YES).next_to(ok_ptr, DOWN, buff=0.08)
-        lines = wrapped_label(r"shipped in every major browser in 2017: \ near-native speed for compiled languages, "
-                              r"\ with no new way out of the sandbox; \ the engine compiles it like Part 15's JIT, \ "
-                              r"but from a typed format it can check first", 12.6, font_size=19,
-                              color=WHITE).to_edge(DOWN, buff=0.35)
-        with self.voiceover(
-            "WebAssembly, in every major browser since 2017, brings compiled languages into the same sandbox. "
-            "<bookmark mark='a'/> C, C++ or Rust compile to a compact, typed bytecode. The browser validates it "
-            "before it runs, then compiles it to machine code, as Part 15's JIT did. <bookmark mark='b'/> A module "
-            "can address only its own linear memory, and an access outside it traps."
-        ) as vo:
-            self.play(FadeIn(head))
-            vo.wait_until("a")
-            self.play(LaggedStart(*[FadeIn(s) for s in steps], lag_ratio=0.3), Create(arrows), run_time=2)
-            self.play(Create(sandbox), FadeIn(sb_t), FadeIn(lines))
-            vo.wait_until("b")
-            self.play(FadeIn(cells), FadeIn(mem_t), FadeIn(out))
-            self.play(GrowArrow(ok_ptr), FadeIn(ok_t))
-            self.play(GrowArrow(bad_ptr), FadeIn(trap), out.animate.set_fill(NO, opacity=0.3))
-        self.wait(0.4)
-        self.clear_scene()
 
 
 _ = (HEAD,)

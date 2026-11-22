@@ -3,21 +3,25 @@ from __future__ import annotations
 from videos.stats.stats35.common import *  # noqa: F403
 
 
-class Cluster(VoiceoverScene):
+class Cluster(StatsScene):
     def construct(self):
         self.card()
+        self.ask("20 villages randomized, 10,000 people. The units of analysis are...",
+                 ["the 10,000 people", "the 20 villages"], 1,
+                 say="Clean water given to whole villages: twenty villages randomized, ten thousand people. What "
+                     "are the units of analysis?",
+                 reveal="The twenty villages: the coin was tossed for villages, not people. Analyse as randomized, "
+                        "or the standard errors are far too small.")
         self.why_()
         self.schools()
         self.deff()
         self.result()
         self.board()
         self.analysis()
+        self.answer()
 
     def card(self):
-        card = chapter_card(8, r"Cluster randomization", r"When whole groups are assigned", lit=(1978,), part=PART)
-        with self.voiceover("Chapter eight. Cluster randomization."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(8, r"Cluster randomization", r"When whole groups are assigned", lit=(1978,), part=PART, said="Chapter eight. Cluster randomization.")
 
     def why_(self):
         rows = fit_rows(VGroup(

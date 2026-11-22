@@ -46,7 +46,7 @@ def surface_lattice(d, origin, sp):
     return q, faces
 
 
-class Qec(VoiceoverScene):
+class Qec(WatchScene):
     def construct(self):
         self.card()
         self.obstacles()
@@ -57,14 +57,9 @@ class Qec(VoiceoverScene):
         self.threshold()
 
     def card(self):
-        card = chapter_card(12, r"Quantum error correction",
-                            r"How do we protect a state we may neither copy nor look at?", lit=(1995, 2024),
-                            extra=((1995, r"Shor: \ the nine-qubit code"),
-                                   (2024, r"Google: \ below threshold")), part=PART)
-        with self.voiceover("Chapter twelve. Quantum error correction. How do we protect a state we may neither copy "
-                            "nor look at?"):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(12, r"Quantum error correction", r"How do we protect a state we may neither copy nor look at?", lit=(1995, 2024), extra=((1995, r"Shor: \ the nine-qubit code"),
+                                   (2024, r"Google: \ below threshold")), part=PART, said="Chapter twelve. Quantum error correction. How do we protect a state we may neither copy "
+                            "nor look at?")
 
     # ------------------------------------------------------------------ why it seemed impossible
     def obstacles(self):
@@ -127,6 +122,10 @@ class Qec(VoiceoverScene):
 
     # ------------------------------------------------------------------ the three-qubit code
     def three(self):
+        self.ask(r"Measure the three-qubit code's syndrome. \\ Does it collapse the encoded state?", [r"yes",
+                 r"no: it reveals only the error"], 1,
+                 say="Measure the parities of the three-qubit code. Does that collapse the protected state?",
+                 reveal="No. The parities reveal which qubit flipped, and nothing about the encoded amplitudes.")
         cases = load("code3")["cases"]
         al, be = cases[0]["alpha"], cases[0]["beta"]
         head = label(r"The three-qubit code and its syndromes", font_size=36).to_edge(UP, buff=0.3)

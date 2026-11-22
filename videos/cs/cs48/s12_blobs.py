@@ -37,22 +37,17 @@ def strip(cuts, unit, y, x0, colors, names=None, insert=0):
     return g
 
 
-class Blobs(VoiceoverScene):
+class Blobs(WatchScene):
     def construct(self):
         self.card()
         self.split()
         self.durable()
-        self.chunks()
         self.signed()
         self.edge()
 
     def card(self):
-        card = chapter_card(11, r"Blobs and the edge", r"Where do the big bytes live, \ and how do they travel?",
-                            lit=(2001, 2006), extra=((2001, r"LBFS: \ content-defined chunks"),
-                                                     (2006, r"Amazon S3")), part=PART)
-        with self.voiceover("Chapter eleven. Blobs and the edge."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(11, r"Blobs and the edge", r"Where do the big bytes live, \ and how do they travel?", lit=(2001, 2006), extra=((2001, r"LBFS: \ content-defined chunks"),
+                                                     (2006, r"Amazon S3")), part=PART, said="Chapter eleven. Blobs and the edge.")
 
     # ------------------------------------------------------------------ metadata here, bytes there
     def split(self):
@@ -110,6 +105,10 @@ class Blobs(VoiceoverScene):
 
     # ------------------------------------------------------------------ durability: copies against erasure codes
     def durable(self):
+        self.ask(r"Three copies, or a 10 + 4 erasure code. \\ Space used:", [r"$3\times$ and $3\times$",
+                 r"$3\times$ and $1.4\times$"], 1,
+                 say="Keep three copies of every object, or cut it into ten pieces plus four parity. How much space does each use?",
+                 reveal="Three times, against one point four times, for similar durability.")
         sch = {s["name"]: s for s in load45("durability")["schemes"]}
         head = label(r"Bytes that are not lost", font_size=36).to_edge(UP, buff=0.3)
         n_data, n_par = 10, 4
@@ -177,67 +176,6 @@ class Blobs(VoiceoverScene):
         self.wait(0.4)
         self.clear_scene()
 
-    # ------------------------------------------------------------------ chunks and content addresses
-    def chunks(self):
-        obj = load41("objects")
-        readme = obj["git"]["blobs"]["README.md"]
-        same = obj["ours"]["blobs"]["README.md"] == readme
-        head = label(r"Chunks named by their contents", font_size=36).to_edge(UP, buff=0.3)
-        L, unit, x0 = 48, 0.14, -6.5
-        fixed = list(range(0, L + 1, 6))
-        cdc = [0, 7, 13, 22, 27, 35, 41, 48]                             # illustrative content-chosen cuts
-        names = "ABCDEFGH"
-        t1 = label(r"cut every 6 bytes", font_size=19, color=GREY_A).move_to([x0, 2.35, 0], aligned_edge=LEFT)
-        f0 = strip(fixed, unit, 1.85, x0, [DATA] * 8, names)
-        f1 = strip([c + 1 for c in fixed[:-1]] + [L + 1], unit, 1.25, x0, [NO] * 8,
-                   [n + "'" for n in names], insert=1)
-        t2 = label(r"cut where the content says", font_size=19, color=GREY_A).move_to([x0, 0.45, 0],
-                                                                                    aligned_edge=LEFT)
-        c0 = strip(cdc, unit, -0.05, x0, [DATA] * 7, names[:7])
-        c1 = strip([1] + [c + 1 for c in cdc[1:]], unit, -0.65, x0, [NO] + [YES] * 6,
-                   [names[0] + "'"] + list(names[1:7]), insert=1)
-        ins = VGroup(label(r"one byte inserted", font_size=16, color=HEAD).next_to(f1, LEFT, buff=0.1))
-        ins.next_to(f1[0], DOWN, buff=0.08).align_to(f1, LEFT)
-        ins2 = ins.copy().next_to(c1[0], DOWN, buff=0.08).align_to(c1, LEFT)
-        r1 = label(r"every chunk changes", font_size=18, color=NO).next_to(f1, RIGHT, buff=0.2)
-        r2 = label(r"one chunk changes", font_size=18, color=YES).next_to(c1, RIGHT, buff=0.2)
-        addr = VGroup(mono("README.md", size=17, color=GREY_A), mono("->", size=17, color=GREY_B),
-                      mono(readme[:16] + "...", size=17, color=YES)).arrange(RIGHT, buff=0.2)
-        addr_l = label(rf"Part 41: \ a file's name is the hash of its bytes; \ ours and real git's agree: \ "
-                       rf"{'yes' if same else 'no'}", font_size=18, color=WHITE)
-        addr_g = VGroup(addr_l, addr).arrange(DOWN, aligned_edge=LEFT, buff=0.15).move_to([x0, -2.05, 0],
-                                                                                        aligned_edge=LEFT)
-        notes = VGroup(
-            wrapped_label(r"\textbf{multipart upload}: \ pieces sent in parallel, \ a failed piece retried alone, "
-                          r"\ one final call stitches the object", 4.0, font_size=19, color=WHITE),
-            wrapped_label(r"name each chunk by its hash: \ identical chunks are stored once, \ and every download "
-                          r"can be checked", 4.0, font_size=19, color=YES),
-            wrapped_label(r"\textbf{content-defined chunking}: \ cut wherever a rolling hash of the last few dozen "
-                          r"bytes matches a pattern \ (LBFS, \ 2001); \ cuts move with the content", 4.0,
-                          font_size=19, color=HEAD),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.35).move_to([4.75, 0.3, 0])
-        foot = note(r"chunk boundaries illustrative", font_size=16).to_edge(DOWN, buff=0.12)
-        with self.voiceover(
-            "Big files travel in pieces. <bookmark mark='a'/> A multipart upload sends pieces in parallel, retries "
-            "only a piece that failed, and stitches them together at the end. <bookmark mark='b'/> Name each piece by"
-            " the hash of its bytes, as Part 41's git names every object: identical pieces are stored once, and every"
-            " download can be checked. <bookmark mark='c'/> But where do the cuts go? Cut every six bytes, and one "
-            "byte inserted at the start shifts every boundary: every piece changes. <bookmark mark='d'/> "
-            "Content-defined chunking cuts wherever a rolling hash of the last few dozen bytes matches a pattern, as "
-            "the low-bandwidth file system did in 2001. Now an insertion changes only the piece it lands in."
-        ) as vo:
-            self.play(FadeIn(head), FadeIn(t1), FadeIn(f0), FadeIn(foot))
-            vo.wait_until("a")
-            self.play(FadeIn(notes[0]))
-            vo.wait_until("b")
-            self.play(FadeIn(notes[1]), FadeIn(addr_g))
-            vo.wait_until("c")
-            self.play(FadeIn(f1), FadeIn(ins), FadeIn(r1))
-            vo.wait_until("d")
-            self.play(FadeIn(t2), FadeIn(c0), FadeIn(notes[2]))
-            self.play(FadeIn(c1), FadeIn(ins2), FadeIn(r2))
-        self.wait(0.4)
-        self.clear_scene()
 
     # ------------------------------------------------------------------ signed URLs
     def signed(self):

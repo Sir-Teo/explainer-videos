@@ -6,7 +6,7 @@ from explainer.cs import *  # noqa: F403
 from videos.cs.cs35.common import (CODE, COST, DATA, HEAD, KERN, LAM, NO, PART, YES, grid_table, load, mono, num)
 
 
-class Estimation(VoiceoverScene):
+class Estimation(WatchScene):
     def construct(self):
         self.card()
         self.statistics()
@@ -14,12 +14,8 @@ class Estimation(VoiceoverScene):
         self.compound()
 
     def card(self):
-        card = chapter_card(7, r"Guessing sizes", r"How many rows will this return?", lit=(1991, 2015),
-                            extra=((1991, r"Ioannidis and Christodoulakis: \ errors compound"),
-                                   (2015, r"Leis et al.: \ how good are optimizers?")), part=PART)
-        with self.voiceover("Chapter seven. Guessing sizes."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(7, r"Guessing sizes", r"How many rows will this return?", lit=(1991, 2015), extra=((1991, r"Ioannidis and Christodoulakis: \ errors compound"),
+                                   (2015, r"Leis et al.: \ how good are optimizers?")), part=PART, said="Chapter seven. Guessing sizes.")
 
     def statistics(self):
         e = load("estimation")
@@ -123,6 +119,10 @@ class Estimation(VoiceoverScene):
         self.clear_scene()
 
     def compound(self):
+        self.ask(r"Each join's size estimate is off by $2\times$. \\ After five joins, up to...", [r"$2\times$",
+                 r"$10\times$", r"$32\times$"], 2,
+                 say="Each join's estimate is off by a factor of two. After five joins, how far off can the final estimate be?",
+                 reveal="Thirty-two times: the errors multiply.")
         o = load("optimizer")
         head = label(r"Errors multiply through joins", font_size=36).to_edge(UP, buff=0.3)
         joins = [(k, v) for k, v in o["stats"].items() if k.startswith("Nested loops")]

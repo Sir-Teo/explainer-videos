@@ -17,7 +17,7 @@ def tile(content, caption, color, TW=3.6, TH=2.3):
     return Group(frame, content, cap)
 
 
-class Outro(VoiceoverScene):
+class Outro(WatchScene):
     def construct(self):
         self.recap()
         self.payoffs()
@@ -49,6 +49,12 @@ class Outro(VoiceoverScene):
             self.play(LaggedStart(*[FadeIn(t, shift=UP * 0.15) for t in tiles], lag_ratio=0.25), run_time=4.0)
         self.wait(0.5)
         self.clear_scene()
+        self.checkpoint(
+            [(r"What does a failure detector add?", r"Just enough synchrony to solve consensus"),
+             (r"What can population protocols compute?", r"Exactly the semilinear predicates")],
+            narration="Last checkpoint. What does a failure detector add to an asynchronous system? And what can population protocols compute?",
+            answers_narration="Just enough information about crashes to make consensus solvable. And exactly the semilinear "
+                              "predicates: counting thresholds and remainders.")
 
     def payoffs(self):
         card = payoff_card([

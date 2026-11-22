@@ -8,23 +8,17 @@ QC = {"droptail": NO, "red": KERN, "codel": YES}
 QN = {"droptail": r"drop-tail", "red": r"RED", "codel": r"CoDel"}
 
 
-class Buffers(VoiceoverScene):
+class Buffers(WatchScene):
     def construct(self):
         self.card()
         self.sizes()
         self.bloat()
         self.aqm()
-        self.appenzeller()
 
     def card(self):
-        card = chapter_card(9, r"Queues", r"How big should a router's buffer be?", lit=(1993, 2012),
-                            extra=((1993, r"Floyd and Jacobson: \ RED"), (2004, r"Appenzeller et al.: \ "
+        self.chapter(9, r"Queues", r"How big should a router's buffer be?", lit=(1993, 2012), extra=((1993, r"Floyd and Jacobson: \ RED"), (2004, r"Appenzeller et al.: \ "
                                                                                 r"$\text{BDP}/\sqrt{n}$"),
-                                   (2010, r"Gettys: \ bufferbloat"), (2012, r"Nichols and Jacobson: \ CoDel")),
-                            part=PART)
-        with self.voiceover("Chapter nine. Queues."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+                                   (2010, r"Gettys: \ bufferbloat"), (2012, r"Nichols and Jacobson: \ CoDel")), part=PART, said="Chapter nine. Queues.")
 
     def sizes(self):
         b = load("buffers")
@@ -68,6 +62,10 @@ class Buffers(VoiceoverScene):
         self.clear_scene()
 
     def bloat(self):
+        self.ask(r"A modem buffers hundreds of packets \\ on a 1 Mbit/s uplink. During an upload, delay is...",
+                 [r"milliseconds", r"seconds"], 1,
+                 say="A cable modem buffers a few hundred packets on an uplink of about a megabit a second. During an upload, what's the delay?",
+                 reveal="Seconds. The upload keeps the buffer full, and everything waits behind it.")
         head = label(r"Bufferbloat", font_size=36).to_edge(UP, buff=0.3)
         house = RoundedRectangle(width=3.0, height=1.6, corner_radius=0.15, stroke_color=DATA, stroke_width=2)
         house.move_to([-4.6, 0.8, 0])
@@ -164,52 +162,6 @@ class Buffers(VoiceoverScene):
         self.wait(0.4)
         self.clear_scene()
 
-    def appenzeller(self):
-        b = load("buffers")
-        head = label(r"Many flows need less buffer", font_size=36).to_edge(UP, buff=0.3)
-        app = b["appenzeller"]
-        rows = []
-        for n in (1, 4, 16, 64):
-            a = next(x for x in app if x["n"] == n and x["rule"] == "BDP")
-            s = next(x for x in app if x["n"] == n and x["rule"] != "BDP")
-            rows.append([f"{n}", f"{a['buffer']}", f"{a['util'] * 100:.1f}\\%", f"{s['buffer']}",
-                         f"{s['util'] * 100:.1f}\\%"])
-        tab = grid_table([r"flows $n$", r"BDP", r"busy", r"$\text{BDP}/\sqrt{n}$", r"busy"], rows,
-                         widths=[1.6, 1.4, 1.5, 2.2, 1.5], row_h=0.44, font_size=20, mono_cols=())
-        tab.next_to(head, DOWN, buff=0.5).set_x(0)
-        for k in range(1, 5):
-            tab.cells[k][3].set_color(YES)
-            tab.cells[k][4].set_color(YES)
-        lines = VGroup(
-            wrapped_label(r"100 Mb/s, \ round trips of 80 to 120 ms: \ BDP = 833 packets", 12.4, font_size=20,
-                          color=GREY_A),
-            wrapped_label(r"one flow's window swings by half; \ $n$ unsynchronized flows' windows swing "
-                          r"independently, \ and their \textit{sum} varies only by about $1/\sqrt{n}$ of it \ "
-                          r"(the central limit theorem, \ Part 27)", 12.4, font_size=21, color=WHITE),
-            wrapped_label(r"Appenzeller, Keslassy and McKeown \ (2004): \ a backbone link carrying 10{,}000 flows "
-                          r"needs a hundredth of the classic buffer", 12.4, font_size=21, color=YES),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.25).next_to(tab, DOWN, buff=0.45)
-        with self.voiceover(
-            "At the other end of the Internet, the backbone, the rule of one bandwidth-delay product had become "
-            "expensive: at a hundred gigabits a second, a quarter-second of buffer is three gigabytes of very fast "
-            "memory per port. <bookmark mark='a'/> In 2004 Guido Appenzeller, Isaac Keslassy and Nick McKeown "
-            "pointed out that the rule was derived for one flow. One flow's window swings by half. But many flows, "
-            "out of step with each other, swing independently, and their total varies only by about one over the "
-            "square root of n as much: the central limit theorem. So the buffer can shrink by the square root of "
-            "n. <bookmark mark='b'/> We checked. With one flow, both rules are the same. With sixty-four flows, a "
-            "buffer an eighth the size keeps the link ninety-seven and a half percent busy, against ninety-eight "
-            "and a half with the full one. <bookmark mark='c'/> A backbone link carrying ten thousand flows needs a "
-            "hundredth of the old buffer, and router designers took notice."
-        ) as vo:
-            self.play(FadeIn(head), FadeIn(lines[0]))
-            vo.wait_until("a")
-            self.play(FadeIn(lines[1]))
-            vo.wait_until("b")
-            self.play(FadeIn(tab))
-            vo.wait_until("c")
-            self.play(FadeIn(lines[2]))
-        self.wait(0.4)
-        self.clear_scene()
 
 
 _ = (CCC, HEAD, LAM, SEG, WIN)

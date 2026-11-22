@@ -3,20 +3,24 @@ from __future__ import annotations
 from videos.stats.stats26.common import *  # noqa: F403
 
 
-class Upgrade(VoiceoverScene):
+class Upgrade(StatsScene):
     def construct(self):
         self.card()
+        self.ask("Eight schools' coaching effects, each noisy. Estimate each school's effect by...",
+                 ["its own estimate", "the overall mean", "a compromise between the two"], 2,
+                 say="Eight schools each report a coaching effect, each with its own noise. Do you estimate each "
+                     "school's effect by its own number, by the overall mean, or by a compromise?",
+                 reveal="A compromise: partial pooling. The hierarchy learns from the data how far apart the "
+                        "schools really are, and pulls each estimate toward the mean by that much.")
         self.upgrade()
         self.exchangeable()
         self.definetti()
         self.partial()
         self.everywhere()
+        self.answer()
 
     def card(self):
-        card = chapter_card(1, r"Upgrade", r"What Part 15 assumed", lit=(1931,), part=PART)
-        with self.voiceover("Chapter one. The upgrade."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(1, r"Upgrade", r"What Part 15 assumed", lit=(1931,), part=PART, said="Chapter one. The upgrade.")
 
     def upgrade(self):
         card = upgrade_card(15, r"choose a prior, \ multiply by the likelihood, \ normalize: \ the posterior is the answer",

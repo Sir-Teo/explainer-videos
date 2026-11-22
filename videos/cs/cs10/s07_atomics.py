@@ -7,24 +7,23 @@ from videos.cs.cs10.common import (BG, CODE, CORE_COLORS, CTRL, DATA, FUNC, HEAD
                                    grid_table, load, mono, timeline)
 
 
-class Atomics(VoiceoverScene):
+class Atomics(WatchScene):
     def construct(self):
         self.card()
         self.lost()
         self.instructions()
         self.costs()
-        self.consensus()
 
     def card(self):
-        card = chapter_card(6, r"Atomic instructions", r"How do two cores agree on anything?", lit=(1964, 1991),
-                            extra=((1964, r"test-and-set, \ IBM System/360"), (1991, r"Herlihy: \ wait-free "
-                                                                                    r"synchronization")), part=PART)
-        with self.voiceover("Chapter six. Atomic instructions."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(6, r"Atomic instructions", r"How do two cores agree on anything?", lit=(1964, 1991), extra=((1964, r"test-and-set, \ IBM System/360"), (1991, r"Herlihy: \ wait-free "
+                                                                                    r"synchronization")), part=PART, said="Chapter six. Atomic instructions.")
 
     # ------------------------------------------------------------------
     def lost(self):
+        self.ask(r"Two threads each add 1 to a shared counter, \\ a million times, unsynchronized. Final count?",
+                 [r"2{,}000{,}000", r"less than 2{,}000{,}000", r"more"], 1,
+                 say="Two threads each add one to a shared counter a million times, with no synchronization. The final count?",
+                 reveal="Less than two million. Read, add, write is three steps, and the other thread gets in between.")
         at = load("atomics")["rows"][0]["t4"]
         head = label(r"A lost update", font_size=36).to_edge(UP, buff=0.35)
         code = mono("long v = atomic_load_explicit(&count, memory_order_relaxed);\n"
@@ -138,47 +137,3 @@ class Atomics(VoiceoverScene):
         self.wait(0.3)
         self.clear_scene()
 
-    # ------------------------------------------------------------------
-    def consensus(self):
-        head = label(r"Not all atomics are equal \ (Herlihy, \ 1991)", font_size=34).to_edge(UP, buff=0.3)
-        q = label(r"\textit{consensus}: \ $n$ threads each propose a value; \ all must decide the same one, \ "
-                  r"and no thread may wait for another", font_size=22, color=GREY_A).next_to(head, DOWN, buff=0.35)
-        rows = [[r"reads and writes", r"1"], [r"test-and-set, \ fetch-and-add, \ swap", r"2"],
-                [r"compare-and-swap, \ LL/SC", r"$\infty$"]]
-        colors = [[GREY_A, NO], [GREY_A, CTRL], [GREY_A, YES]]
-        t = grid_table([r"primitive", r"consensus number"], rows, [5.6, 2.8], row_h=0.6, font_size=22, colors=colors,
-                       mono_cols=()).next_to(q, DOWN, buff=0.45)
-        univ = label(r"a primitive that solves consensus for $n$ threads \ can build \textit{any} shared data structure "
-                     r"for $n$ threads, \ wait-free", font_size=22, color=HEAD).next_to(t, DOWN, buff=0.45)
-        why = note(r"so every modern instruction set has compare-and-swap or LL/SC; \ Part 33 builds lock-free "
-                   r"structures with them", font_size=18).next_to(univ, DOWN, buff=0.3)
-        with self.voiceover(
-            (
-            "There is a beautiful theory behind these instructions. <bookmark mark='a'/> In 1991 Maurice Herlihy "
-            "asked which of them can solve consensus: several threads each propose a value, and all must agree on "
-            "one of them, with every participating thread completing in finitely many of its own steps, even if "
-            "others stall: the deterministic wait-free shared-memory setting. <bookmark mark='b'/> With ordinary "
-            "reads and writes, not even two threads can do it. Test-and-set, fetch-and-add and swap can do it for "
-            "two threads, but provably not for three. Ideal compare-and-swap and suitable ideal LL/SC objects "
-            "have unbounded consensus number. Real weak-CAS and reservation instructions require their progress "
-            "assumptions to be checked. <bookmark mark='c'/> And Herlihy showed that consensus is the key: a "
-            "primitive that solves consensus for n threads can support a wait-free universal construction for n "
-            "threads, with read/write registers and repeated instances of the object. This is an existence "
-            "result, not a guarantee of practical efficiency. <bookmark mark='d'/> That is why every modern "
-            "instruction set has compare-and-swap or LL/SC, and Part 33 uses them to build data structures with "
-            "no locks at all."
-        )
-        ) as vo:
-            self.play(FadeIn(head), run_time=0.5)
-            self.play(FadeIn(q), run_time=0.6)
-            vo.wait_until('a')
-            vo.wait_until("b")
-            self.play(FadeIn(VGroup(*t.cells[0])), FadeIn(t.rule))
-            for r in (1, 2, 3):
-                self.play(FadeIn(VGroup(*t.cells[r])), run_time=0.8)
-            vo.wait_until("c")
-            self.play(FadeIn(univ))
-            vo.wait_until("d")
-            self.play(FadeIn(why))
-        self.wait(0.3)
-        self.clear_scene()

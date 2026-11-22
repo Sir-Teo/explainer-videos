@@ -8,7 +8,7 @@ def tnode(text, color, w=0.9, h=0.5, font=16, fill=0.25):
     return blk(text, color, w=w, h=h, font=font, fill=fill)
 
 
-class Cow(VoiceoverScene):
+class Cow(WatchScene):
     def construct(self):
         self.card()
         self.tree()
@@ -16,11 +16,7 @@ class Cow(VoiceoverScene):
         self.snapshots()
 
     def card(self):
-        card = chapter_card(10, r"Copy-on-write and checksums", r"What if nothing were ever overwritten?",
-                            lit=(1994, 2005), extra=((1994, r"WAFL"), (2005, r"ZFS")), part=PART)
-        with self.voiceover("Chapter ten. Copy-on-write and checksums."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(10, r"Copy-on-write and checksums", r"What if nothing were ever overwritten?", lit=(1994, 2005), extra=((1994, r"WAFL"), (2005, r"ZFS")), part=PART, said="Chapter ten. Copy-on-write and checksums.")
 
     def _tree(self):
         root = tnode(r"root", KERN, w=1.2).move_to([-2.5, 2.2, 0])
@@ -90,6 +86,10 @@ class Cow(VoiceoverScene):
         self.clear_scene()
 
     def checksums(self):
+        self.ask(r"Where should a block's checksum be stored?", [r"inside the block",
+                 r"in the parent's pointer to it"], 1,
+                 say="To catch corrupted blocks, where should each block's checksum live?",
+                 reveal="In the parent's pointer. A block written to the wrong place carries a correct checksum of itself.")
         d = load("cow")
         head = label(r"Every pointer carries a checksum", font_size=36).to_edge(UP, buff=0.3)
         root = tnode(r"root", KERN, w=1.6).move_to([0, 2.0, 0])

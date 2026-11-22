@@ -37,20 +37,31 @@ def arrow(a, b, color=GREY_B, dashed=False):
     return ln
 
 
-class CausalOrNot(VoiceoverScene):
+class CausalOrNot(StatsScene):
     def construct(self):
         self.card()
+        self.wrong_idea("With enough covariates, a survey can show what an experiment would",
+                        "Unmeasured confounding and measurement error remain: a survey shows association",
+                        narration="A hope behind many observational studies: adjust for enough covariates, and a "
+                                  "survey can answer the question an experiment would.",
+                        right_narration="Adjustment removes only the confounders you measured, and measured well. A "
+                                        "survey can show an association; establishing the cause takes a design, a "
+                                        "trial, or the methods of Parts 35 to 37.")
+        self.ask("Income affects both salt intake and blood pressure. Income is a...",
+                 ["mediator", "confounder", "collider"], 1,
+                 say="Draw the causal story. Income affects both how much salt people eat and their blood pressure. "
+                     "What is income in this diagram?",
+                 reveal="A confounder: a common cause of the exposure and the outcome. Adjust for it, but there may "
+                        "be others you never measured.")
         self.dag()
         self.reverse()
         self.trials()
         self.hierarchy()
         self.can_say()
+        self.answer()
 
     def card(self):
-        card = chapter_card(9, r"Causal or not?", r"What a survey can, \ and cannot, \ say", lit=(1988,), part=PART)
-        with self.voiceover("Chapter nine. Causal, or not?"):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(9, r"Causal or not?", r"What a survey can, \ and cannot, \ say", lit=(1988,), part=PART, said="Chapter nine. Causal, or not?")
 
     def dag(self):
         n = {k: node(k) for k in NODES}

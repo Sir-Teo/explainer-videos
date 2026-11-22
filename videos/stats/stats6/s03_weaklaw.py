@@ -5,20 +5,24 @@ import numpy as np
 from videos.stats.stats6.common import *  # noqa: F403
 
 
-class WeakLaw(VoiceoverScene):
+class WeakLaw(StatsScene):
     def construct(self):
         self.card()
+        self.ask(r"An average of $n$ independent draws, each with variance $\sigma^2$, has variance...",
+                 [r"$\sigma^2$", r"$\sigma^2 / n$", r"$\sigma^2/\sqrt n$"], 1,
+                 say="Average n independent draws, each with variance sigma squared. What's the variance of the "
+                     "average?",
+                 reveal="Sigma squared over n. Feed that to Chebyshev, and the weak law of large numbers takes "
+                        "three lines.")
         self.proof()
         self.paths()
         self.no_compensation()
         self.bernoulli()
         self.compare()
+        self.answer()
 
     def card(self):
-        card = chapter_card(2, r"The weak law", r"Why the average settles down", lit=(1713,), part=PART)
-        with self.voiceover("Chapter two. The weak law of large numbers."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(2, r"The weak law", r"Why the average settles down", lit=(1713,), part=PART, said="Chapter two. The weak law of large numbers.")
 
     def proof(self):
         rows = [

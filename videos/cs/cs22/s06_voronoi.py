@@ -60,7 +60,7 @@ def voronoi_edges(sites, tris):
     return out
 
 
-class Voronoi(VoiceoverScene):
+class Voronoi(WatchScene):
     def construct(self):
         self.card()
         self.diagram()
@@ -68,11 +68,7 @@ class Voronoi(VoiceoverScene):
         self.measured()
 
     def card(self):
-        card = chapter_card(5, r"Voronoi diagrams", r"Which post office is nearest?", lit=(1908, 1986),
-                            extra=((1908, r"Vorono\"i"), (1986, r"Fortune's sweep")), part=PART)
-        with self.voiceover("Chapter five. Voronoi diagrams."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(5, r"Voronoi diagrams", r"Which post office is nearest?", lit=(1908, 1986), extra=((1908, r"Vorono\"i"), (1986, r"Fortune's sweep")), part=PART, said="Chapter five. Voronoi diagrams.")
 
     def diagram(self):
         d = load("voronoi")
@@ -118,6 +114,9 @@ class Voronoi(VoiceoverScene):
         self.clear_scene()
 
     def fortune(self):
+        self.ask(r"The Voronoi diagram of $n$ sites. \\ The time to build it?", [r"$n^2$", r"$n \log n$"], 1,
+                 say="How fast can the Voronoi diagram of n sites be built?",
+                 reveal="n log n, by Fortune's sweep.")
         d = load("voronoi")
         sites = [tuple(s) for s in d["sites"]]
         tris = [tuple(t) for t in d["tris"]]

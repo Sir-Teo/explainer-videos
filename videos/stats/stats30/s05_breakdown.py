@@ -5,9 +5,15 @@ import numpy as np
 from videos.stats.stats30.common import *  # noqa: F403
 
 
-class Breakdown(VoiceoverScene):
+class Breakdown(StatsScene):
     def construct(self):
         self.card()
+        self.ask("The median's breakdown point?",
+                 [r"0\%", r"25\%", r"50\%"], 2,
+                 say="Breakdown: the smallest fraction of the data that, replaced by arbitrary values, can carry an "
+                     "estimator off to infinity. What's the median's?",
+                 reveal="Fifty percent, the most any equivariant estimator can have. The mean's is zero: one point "
+                        "suffices.")
         self.definition()
         self.implosion()
         self.picture()
@@ -15,12 +21,10 @@ class Breakdown(VoiceoverScene):
         self.maxbias()
         self.hl_bound()
         self.limits()
+        self.answer()
 
     def card(self):
-        card = chapter_card(4, r"Breakdown", r"How many bad points to ruin it?", lit=(1971,), part=PART)
-        with self.voiceover("Chapter four. Breakdown."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(4, r"Breakdown", r"How many bad points to ruin it?", lit=(1971,), part=PART, said="Chapter four. Breakdown.")
 
     def definition(self):
         rows = [

@@ -5,21 +5,25 @@ import numpy as np
 from videos.stats.stats38.common import *  # noqa: F403
 
 
-class Kalman(VoiceoverScene):
+class Kalman(StatsScene):
     def construct(self):
         self.card()
+        self.ask("The Kalman filter trusts the new observation more when...",
+                 ["measurement noise is small relative to the state's uncertainty", "measurement noise is large"], 0,
+                 say="The Kalman filter blends its prediction with each new observation. When does it trust the "
+                     "observation more?",
+                 reveal="When the measurement noise is small relative to its uncertainty about the state: the "
+                        "Kalman gain grows. Predict, then update, one step at a time.")
         self.conditioning()
         self.ellipses()
         self.equations()
         self.steady()
         self.nile()
         self.drop()
+        self.answer()
 
     def card(self):
-        card = chapter_card(7, r"State space and the Kalman filter", r"Tracking what cannot be seen", lit=(1960,), part=PART)
-        with self.voiceover("Chapter seven. The state space, and the Kalman filter."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(7, r"State space and the Kalman filter", r"Tracking what cannot be seen", lit=(1960,), part=PART, said="Chapter seven. The state space, and the Kalman filter.")
 
     def conditioning(self):
         rows = [

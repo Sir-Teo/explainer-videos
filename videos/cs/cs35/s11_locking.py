@@ -5,7 +5,7 @@ from videos.cs.cs35.common import (DATA, HEAD, KERN, LAM, NO, PART, T1C, T2C, YE
                                    precedence_view, schedule_view)
 
 
-class Locking(VoiceoverScene):
+class Locking(WatchScene):
     def construct(self):
         self.card()
         self.two_phase()
@@ -13,13 +13,8 @@ class Locking(VoiceoverScene):
         self.policies()
 
     def card(self):
-        card = chapter_card(10, r"Two-phase locking", r"How can a scheduler guarantee serializability as it goes?",
-                            lit=(1976, 1978), extra=((1976, r"Eswaran et al.: \ two-phase locking"),
-                                                     (1978, r"Rosenkrantz et al.: \ wait-die, \ wound-wait")),
-                            part=PART)
-        with self.voiceover("Chapter ten. Two-phase locking."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(10, r"Two-phase locking", r"How can a scheduler guarantee serializability as it goes?", lit=(1976, 1978), extra=((1976, r"Eswaran et al.: \ two-phase locking"),
+                                                     (1978, r"Rosenkrantz et al.: \ wait-die, \ wound-wait")), part=PART, said="Chapter ten. Two-phase locking.")
 
     def two_phase(self):
         head = label(r"Lock, \ then unlock: \ never lock again", font_size=36).to_edge(UP, buff=0.3)
@@ -87,6 +82,10 @@ class Locking(VoiceoverScene):
         self.clear_scene()
 
     def deadlock(self):
+        self.ask(r"T1 locks A, wants B. T2 locks B, wants A. \\ Under two-phase locking...", [r"both finish",
+                 r"they deadlock"], 1,
+                 say="T1 holds a lock on A and wants B. T2 holds B and wants A. What happens under two-phase locking?",
+                 reveal="Deadlock. Someone must be aborted.")
         lk = load("locking")
         ex = lk["deadlock_example"]
         head = label(r"Deadlock", font_size=36).to_edge(UP, buff=0.3)
@@ -173,6 +172,11 @@ class Locking(VoiceoverScene):
             self.play(FadeIn(foot))
         self.wait(0.3)
         self.clear_scene()
+        self.checkpoint(
+            [(r"How does Selinger's optimizer search?", r"Dynamic programming over subsets"),
+             (r"What does two-phase locking guarantee?", r"Conflict-serializable schedules")],
+            narration="Checkpoint. How does Selinger's optimizer search the join orders? And what does two-phase locking guarantee?",
+            answers_narration="Dynamic programming, from small sets of tables to large. And conflict-serializable schedules.")
 
 
 _ = (DATA,)

@@ -5,21 +5,29 @@ import numpy as np
 from videos.stats.stats20.common import *  # noqa: F403
 
 
-class Exploration(VoiceoverScene):
+class Exploration(StatsScene):
     def construct(self):
         self.card()
+        self.ask("Exploring, you spot an intriguing interaction. Change the planned model?",
+                 ["yes", "no: report it as exploratory"], 1,
+                 say="Exploring the data, you spot an intriguing interaction between sodium and age. Should you "
+                     "change the planned model to include it?",
+                 reveal="No. Report it, labelled exploratory. A plan changed by what you saw no longer protects "
+                        "you.")
         self.pressure()
         self.sodium()
         self.by_age()
         self.energy()
         self.deciles()
         self.lessons()
+        self.answer()
+        self.checkpoint([("An estimand pins down?", "population, variables, contrast and summary"),
+                         ("A pattern found while exploring?", "is labelled exploratory, not tested on the same data")],
+                        narration="Checkpoint. Question and plan.",
+                        answers_narration="Population, variables, contrast and summary. And it's exploratory.")
 
     def card(self):
-        card = chapter_card(4, r"Exploration", r"Look before you model", part=PART)
-        with self.voiceover("Chapter four. Exploration."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(4, r"Exploration", r"Look before you model", part=PART, said="Chapter four. Exploration.")
 
     def pressure(self):
         d = load("explore")

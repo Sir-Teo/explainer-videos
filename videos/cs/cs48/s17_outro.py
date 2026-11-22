@@ -17,7 +17,7 @@ def tile(content, caption, color, TW=3.6, TH=2.3):
     return Group(frame, content, cap)
 
 
-class Outro(VoiceoverScene):
+class Outro(WatchScene):
     def construct(self):
         self.recap()
         self.payoffs()
@@ -49,6 +49,12 @@ class Outro(VoiceoverScene):
             self.play(LaggedStart(*[FadeIn(t, shift=UP * 0.15) for t in tiles], lag_ratio=0.25), run_time=4.0)
         self.wait(0.5)
         self.clear_scene()
+        self.checkpoint(
+            [(r"Why time-ordered IDs?", r"Inserts land at the B-tree's right edge"),
+             (r"Why sign upload URLs?", r"Bytes bypass app servers, with a scoped capability")],
+            narration="Last checkpoint. Why use time-ordered IDs? And why hand out signed URLs for uploads?",
+            answers_narration="New keys land together at the right edge of the index. And the bytes go straight to the object "
+                              "store, under a capability limited in scope and time.")
 
     def payoffs(self):
         card = payoff_card([

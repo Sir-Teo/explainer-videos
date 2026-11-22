@@ -5,20 +5,24 @@ import numpy as np
 from videos.stats.stats25.common import *  # noqa: F403
 
 
-class Components(VoiceoverScene):
+class Components(StatsScene):
     def construct(self):
         self.card()
+        self.ask("School-effect variance 20, pupil variance 80. The intraclass correlation?",
+                 ["0.2", "0.25", "0.8"], 0,
+                 say="A pupil's score is a school effect plus the pupil's own deviation. School variance twenty, "
+                     "pupil variance eighty. What's the intraclass correlation?",
+                 reveal="Point two: twenty over a hundred. Two pupils from the same school share a fifth of their "
+                        "variance.")
         self.model()
         self.picture()
         self.estimates()
         self.anova()
         self.deff()
+        self.answer()
 
     def card(self):
-        card = chapter_card(3, r"Random effects", r"Variance has parts", lit=(1918,), part=PART)
-        with self.voiceover("Chapter three. Random effects and variance components."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(3, r"Random effects", r"Variance has parts", lit=(1918,), part=PART, said="Chapter three. Random effects and variance components.")
 
     def model(self):
         rows = [

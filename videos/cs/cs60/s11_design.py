@@ -58,25 +58,20 @@ HLS_C = [
 ]
 
 
-class Design(VoiceoverScene):
+class Design(WatchScene):
     def construct(self):
         self.card()
         self.flow()
         self.hls()
-        self.agile()
         self.explore()
         self.widths()
         self.codesign()
 
     def card(self):
-        card = chapter_card(10, r"How hardware is designed", r"How does an idea become a circuit, \ and which "
-                            r"circuit?", lit=(2012, 2016, 2019),
-                            extra=((2012, r"Bachrach et al.: \ Chisel"),
+        self.chapter(10, r"How hardware is designed", r"How does an idea become a circuit, \ and which "
+                            r"circuit?", lit=(2012, 2016, 2019), extra=((2012, r"Bachrach et al.: \ Chisel"),
                                    (2016, r"Lee et al.: \ agile RISC-V chips"),
-                                   (2019, r"Hennessy and Patterson: \ a new golden age")), part=PART)
-        with self.voiceover("Chapter ten. How hardware is designed."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+                                   (2019, r"Hennessy and Patterson: \ a new golden age")), part=PART, said="Chapter ten. How hardware is designed.")
 
     def flow(self):
         head = label(r"Programs that build circuits", font_size=36).to_edge(UP, buff=0.3)
@@ -194,66 +189,6 @@ class Design(VoiceoverScene):
         self.wait(0.4)
         self.clear_scene()
 
-    def agile(self):
-        head = label(r"Agile hardware", font_size=36).to_edge(UP, buff=0.3)
-        sc = 0.28                                  # scene units per month
-        x_off = -4.4
-        months = 36
-
-        def bar(a, b, y, col, txt=None):
-            return timeline_bar(a, b, y, col, h=0.5, scale=sc, label_text=txt, size=17).shift(RIGHT * x_off)
-        wy, ay = 1.3, -0.9
-        water = VGroup(bar(0, 4, wy, LAM, r"spec"), bar(4, 14, wy, DATA, r"write RTL"),
-                       bar(14, 26, wy, KERN, r"verify"), bar(26, 30, wy, HEAD, r"layout"),
-                       bar(30, 34, wy, GREY_C, r"fab"))
-        first = Star(n=5, outer_radius=0.17, color=YES, fill_opacity=1).move_to([x_off + 34 * sc, wy + 0.5, 0])
-        fl = label(r"first silicon", font_size=17, color=YES).next_to(first, UP, buff=0.06)
-        sprints = VGroup()
-        ticks = VGroup()
-        for k in range(12):
-            a = 3 * k
-            sprints.add(VGroup(bar(a, a + 1.6, ay, DATA), bar(a + 1.6, a + 2.8, ay, KERN)))
-            ticks.add(Dot([x_off + (a + 2.9) * sc, ay + 0.38, 0], radius=0.06, color=HEAD))
-        tapes = VGroup(*[Star(n=5, outer_radius=0.15, color=YES, fill_opacity=1).move_to([x_off + m * sc, ay - 0.5, 0])
-                         for m in (12, 24, 36)])
-        names = VGroup(label(r"waterfall", font_size=22, color=WHITE).next_to([x_off, wy, 0], LEFT, buff=0.2),
-                       label(r"agile", font_size=22, color=WHITE).next_to([x_off, ay, 0], LEFT, buff=0.2))
-        axis = VGroup(Line([x_off, -2.1, 0], [x_off + months * sc, -2.1, 0], color=GREY_C, stroke_width=1.5))
-        for m in range(0, months + 1, 6):
-            axis.add(Line([x_off + m * sc, -2.15, 0], [x_off + m * sc, -2.05, 0], color=GREY_C, stroke_width=1.5),
-                     label(f"{m}", font_size=16, color=GREY_B).move_to([x_off + m * sc, -2.35, 0]))
-        axis.add(label(r"months", font_size=17, color=GREY_B).move_to([x_off + months * sc / 2, -2.65, 0]))
-        keys = VGroup(label(r"every few weeks: \ a working design, \ run in simulation or on an FPGA", font_size=17,
-                            color=HEAD).next_to(sprints, UP, buff=0.32).align_to(sprints, LEFT),
-                      label(r"small test chips along the way", font_size=17, color=YES).next_to(tapes[0], DOWN,
-                                                                                                buff=0.12))
-        foot = wrapped_label(r"Lee, \ Waterman, \ Asanovi\'c and colleagues \ (IEEE Micro, \ 2016): \ RISC-V chips "
-                             r"built from generators such as Rocket Chip, \ in small iterations", 12.4, font_size=19,
-                             color=GREY_A).to_edge(DOWN, buff=0.3)
-        ill = note(r"illustrative schedules", font_size=16).to_corner(UR, buff=0.3).shift(DOWN * 0.5)
-        with self.voiceover(
-            "Generators also changed how chips are planned. <bookmark mark='a'/> The traditional flow is a "
-            "waterfall: specify, design, spend a year verifying, lay out, and only years in does anything run on "
-            "silicon, so a mistake in the specification is found last. <bookmark mark='b'/> In 2016 Yunsup Lee, "
-            "Andrew Waterman, Krste Asanovic and colleagues at Berkeley described the agile alternative behind "
-            "their RISC-V chips: keep a working design at all times, change it in small steps, and run every "
-            "version, in simulation or on an FPGA. <bookmark mark='c'/> Tape out small test chips along the way. "
-            "With a generator, a new configuration is a change of parameters, not a rewrite."
-        ) as vo:
-            self.play(FadeIn(head), FadeIn(axis), FadeIn(names), FadeIn(ill))
-            vo.wait_until("a")
-            for b in water:
-                self.play(GrowFromEdge(b, LEFT), run_time=0.6)
-            self.play(FadeIn(first, scale=1.6), FadeIn(fl))
-            vo.wait_until("b")
-            self.play(FadeIn(keys[0]))
-            self.play(LaggedStart(*[AnimationGroup(GrowFromEdge(s, LEFT), FadeIn(t)) for s, t in zip(sprints, ticks)],
-                                  lag_ratio=0.3), run_time=3)
-            vo.wait_until("c")
-            self.play(LaggedStart(*[FadeIn(t, scale=1.6) for t in tapes], lag_ratio=0.3), FadeIn(keys[1]))
-            self.play(FadeIn(foot))
-        self.wait(0.4)
-        self.clear_scene()
 
     def explore(self):
         c = load("cells")
@@ -323,6 +258,9 @@ class Design(VoiceoverScene):
         self.clear_scene()
 
     def widths(self):
+        self.ask(r"Double a multiplier's width, 8 bits to 16. \\ Its area...", [r"doubles", r"about quadruples"], 1,
+                 say="Widen a tree multiplier from eight bits to sixteen. What happens to its area?",
+                 reveal="It roughly quadruples: the partial products grow as the square.")
         g = load("energy")["our_multipliers"]
         ws = sorted(int(k) for k in g)
         head = label(r"The biggest knob: \ how many bits", font_size=36).to_edge(UP, buff=0.3)

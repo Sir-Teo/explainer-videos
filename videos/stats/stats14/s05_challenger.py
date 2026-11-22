@@ -13,21 +13,30 @@ def challenger_fit():
     return T, Y, glm.logistic(np.column_stack([np.ones(23), T]), Y)
 
 
-class ChallengerFit(VoiceoverScene):
+class ChallengerFit(StatsScene):
     def construct(self):
         self.card()
+        self.ask(r"A forecast at 31\textdegree F from flights launched at 53--81\textdegree F. Its uncertainty is...",
+                 ["small: the curve is fitted", "large: it's an extrapolation"], 1,
+                 say="The night before Challenger, the forecast was thirty-one degrees Fahrenheit. Every earlier "
+                     "flight launched between fifty-three and eighty-one. How uncertain is the model's prediction "
+                     "at thirty-one?",
+                 reveal="Very: it's an extrapolation far outside the data, and it rests on the model's assumptions. "
+                        "Say so plainly; it doesn't make the danger smaller.")
         self.dashboard()
         self.wald()
         self.profile()
         self.compare()
         self.extrapolation()
         self.verdict()
+        self.answer()
+        self.checkpoint([("A probability of 0.8 as odds?", "4 to 1"),
+                         ("A forecast far outside the data rests on?", "the model's assumptions, not the data")],
+                        narration="Checkpoint. Logistic regression.",
+                        answers_narration="Four to one. And on the model's assumptions.")
 
     def card(self):
-        card = chapter_card(4, r"The Challenger fit", r"What 23 flights say about 31$^\circ$F", lit=(1986,), part=PART)
-        with self.voiceover("Chapter four. The Challenger fit."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(4, r"The Challenger fit", r"What 23 flights say about 31$^\circ$F", lit=(1986,), part=PART, said="Chapter four. The Challenger fit.")
 
     def dashboard(self):
         T, Y, f = challenger_fit()

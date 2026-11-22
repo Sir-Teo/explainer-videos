@@ -5,20 +5,24 @@ import numpy as np
 from videos.stats.stats25.common import *  # noqa: F403
 
 
-class SmallArea(VoiceoverScene):
+class SmallArea(StatsScene):
     def construct(self):
         self.card()
+        self.ask("Fay--Herriot shrinks a town's direct estimate toward a regression prediction more when...",
+                 ["the town's sample is small", "the town's sample is large"], 0,
+                 say="A survey too thin for every town. Fay and Herriot shrink each town's direct estimate toward a "
+                     "regression prediction. When do they shrink more?",
+                 reveal="When the town's sample is small and its direct estimate noisy. Large towns keep their own "
+                        "numbers.")
         self.problem()
         self.model()
         self.errors()
         self.table()
         self.practice()
+        self.answer()
 
     def card(self):
-        card = chapter_card(11, r"Small areas", r"A survey too thin for every town", lit=(1979,), part=PART)
-        with self.voiceover("Chapter eleven. Small-area estimation."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(11, r"Small areas", r"A survey too thin for every town", lit=(1979,), part=PART, said="Chapter eleven. Small-area estimation.")
 
     def problem(self):
         d = load("smallarea")

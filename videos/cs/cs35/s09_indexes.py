@@ -54,7 +54,7 @@ def draw_tree(t: BPlusTree, width=12.5, top=1.6, dy=1.25):
     return g
 
 
-class Indexes(VoiceoverScene):
+class Indexes(WatchScene):
     def construct(self):
         self.card()
         self.grow()
@@ -62,12 +62,8 @@ class Indexes(VoiceoverScene):
         self.clustering()
 
     def card(self):
-        card = chapter_card(8, r"Indexes", r"How do you find one row among billions in three reads?",
-                            lit=(1972, 1979), extra=((1972, r"Bayer and McCreight: \ B-trees"),
-                                                     (1979, r"Comer: \ the ubiquitous B-tree")), part=PART)
-        with self.voiceover("Chapter eight. Indexes."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(8, r"Indexes", r"How do you find one row among billions in three reads?", lit=(1972, 1979), extra=((1972, r"Bayer and McCreight: \ B-trees"),
+                                                     (1979, r"Comer: \ the ubiquitous B-tree")), part=PART, said="Chapter eight. Indexes.")
 
     def grow(self):
         head = label(r"A B+ tree, \ grown one key at a time", font_size=36).to_edge(UP, buff=0.3)
@@ -128,6 +124,10 @@ class Indexes(VoiceoverScene):
         self.clear_scene()
 
     def fanout(self):
+        self.ask(r"A B-plus tree with 400 keys per page. \\ Three levels reach about...", [r"$1200$ keys",
+                 r"$160{,}000$", r"$64$ million"], 2,
+                 say="Each page of a B-plus tree holds about four hundred keys. How many keys can three levels reach?",
+                 reveal="Sixty-four million, in three page reads.")
         b = load("btree")
         head = label(r"Wide nodes, \ few levels", font_size=36).to_edge(UP, buff=0.3)
         lv = [r for r in b["levels"] if r["rows"] in (10 ** 3, 10 ** 5, 10 ** 6, 10 ** 8, 10 ** 9, 10 ** 11, 10 ** 12)]

@@ -3,19 +3,34 @@ from __future__ import annotations
 from videos.stats.stats49.common import *  # noqa: F403
 
 
-class DoubleRobust(VoiceoverScene):
+class DoubleRobust(StatsScene):
     def construct(self):
         self.card()
+        self.wrong_idea("Double robustness means both models can be sloppy",
+                        "The bias is a product of the errors: both must be good enough",
+                        narration="A tempting reading of double robustness: with two chances to be right, you can "
+                                  "be sloppy with both models.",
+                        right_narration="The bias is the product of the two errors. If both models are badly wrong, "
+                                        "the product isn't small, and the estimator can be worse than either alone, "
+                                        "as Kang and Schafer showed.")
+        self.ask("The AIPW estimator's bias is...",
+                 ["a product of the two models' errors", "a sum of the two models' errors"], 0,
+                 say="Augmented inverse probability weighting for the average treatment effect. Compute its "
+                     "conditional bias. What form does it take?",
+                 reveal="A product: the outcome model's error times the propensity model's. That's double "
+                        "robustness, a property of the influence function, not a trick.")
         self.remainder()
         self.table()
         self.others()
         self.structure()
+        self.answer()
+        self.checkpoint([("The efficient score?", "the score minus its projection on the nuisance tangent space"),
+                         ("A one-step estimator adds?", "the average estimated influence function")],
+                        narration="Checkpoint. Scores and estimators.",
+                        answers_narration="The score's residual. And the average influence function.")
 
     def card(self):
-        card = chapter_card(7, r"Double robustness", r"A property of the influence function, \ not a trick", lit=(1994,), part=PART)
-        with self.voiceover("Chapter seven. Double robustness: a property of the influence function, not a trick."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(7, r"Double robustness", r"A property of the influence function, \ not a trick", lit=(1994,), part=PART, said="Chapter seven. Double robustness: a property of the influence function, not a trick.")
 
     def remainder(self):
         rows = [

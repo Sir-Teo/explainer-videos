@@ -5,9 +5,15 @@ import numpy as np
 from videos.stats.stats32.common import *  # noqa: F403
 
 
-class Compressed(VoiceoverScene):
+class Compressed(StatsScene):
     def construct(self):
         self.card()
+        self.ask(r"An $s$-sparse vector in $p$ dimensions. $\ell_1$ recovers it exactly from about how many random measurements?",
+                 ["$p$", r"$s\log(p/s)$", "$s$"], 1,
+                 say="Noiseless measurements of an s-sparse vector in p dimensions, with fewer measurements than "
+                     "unknowns. How many random measurements does l one minimization need to recover it exactly?",
+                 reveal="About s log of p over s: far fewer than p. Candès, Romberg and Tao, and Donoho, in 2006. "
+                        "Compressed sensing.")
         self.bp()
         self.spikes()
         self.nsp()
@@ -17,12 +23,14 @@ class Compressed(VoiceoverScene):
         self.lines()
         self.panels()
         self.noise()
+        self.answer()
+        self.checkpoint([(r"CV-chosen $\lambda$ selects?", "too many variables, some false"),
+                         ("Measurements for $s$-sparse recovery?", r"about $s \log(p/s)$")],
+                        narration="Checkpoint. Tuning and recovery.",
+                        answers_narration="Too many. And about s log p over s.")
 
     def card(self):
-        card = chapter_card(9, r"Compressed sensing", r"When $\ell_1$ finds the sparsest answer exactly", lit=(2006,), part=PART)
-        with self.voiceover("Chapter nine. Compressed sensing."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(9, r"Compressed sensing", r"When $\ell_1$ finds the sparsest answer exactly", lit=(2006,), part=PART, said="Chapter nine. Compressed sensing.")
 
     def bp(self):
         rows = [

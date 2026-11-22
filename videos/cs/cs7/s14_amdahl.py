@@ -3,11 +3,11 @@ from __future__ import annotations
 import numpy as np
 
 from explainer.cs import *  # noqa: F403
-from videos.cs.cs7.common import (BG, CLOCK, CODE, COST, CTRL, DATA, FUNC, HEAD, HIST, INF, NO, PART, YES, box, fmt,
+from videos.cs.cs7.common import (chapter, BG, CLOCK, CODE, COST, CTRL, DATA, FUNC, HEAD, HIST, INF, NO, PART, YES, box, fmt,
                                   load, mono)
 
 
-class Amdahl(VoiceoverScene):
+class Amdahl(WatchScene):
     def construct(self):
         self.card()
         self.derive()
@@ -15,10 +15,7 @@ class Amdahl(VoiceoverScene):
         self.job()
 
     def card(self):
-        card = chapter_card(13, r"Amdahl's law", r"How much can speeding up one part help?", lit=(1967,), extra=((1967, r"Amdahl's law"),), part=PART)
-        with self.voiceover("Chapter thirteen. Amdahl's law."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        chapter(self, 13, r"Amdahl's law", r"How much can speeding up one part help?", lit=(1967,), extra=((1967, r"Amdahl's law"),))
 
     # ------------------------------------------------------------------
     def derive(self):
@@ -105,6 +102,14 @@ class Amdahl(VoiceoverScene):
 
     # ------------------------------------------------------------------
     def job(self):
+        _a = load("amdahl")
+        card = self.predict(rf"The Job spends {100 * _a['job_scan_share']:.1f}\% of its cycles in one loop. \\ "
+                            r"Make that loop infinitely fast: \\ the Job speeds up by...",
+                            [r"about $3\times$", rf"about ${_a['job_limit']:.0f}\times$", r"infinitely"],
+                            narration=f"The Job spends {100 * _a['job_scan_share']:.1f} percent of its cycles in "
+                                      "one search loop. Make that loop infinitely fast. How much faster is the Job?")
+        self.park(card)
+        self.expect(card, 1, narration=f"About {_a['job_limit']:.0f} times, and no more: the rest is the ceiling.")
         a = load("amdahl")
         il = load("ironlaw")
         head = label(r"Amdahl and the Job", font_size=38).to_edge(UP, buff=0.35)
@@ -123,8 +128,7 @@ class Amdahl(VoiceoverScene):
             "clock-rate ratio divided by the CPI ratio. <bookmark mark='b'/> Linear search accounts for ninety-nine "
             "point seven percent of this Job's single-cycle instructions. That is also its time share only in the "
             "uniform-cost single-cycle model. <bookmark mark='c'/> Eliminating that work with no replacement cost "
-            "would give an ideal ceiling of about three hundred and fifty in that model. It is not a measured pipeline "
-            "speedup or a promise for a hash table. <bookmark mark='d'/> On a pipeline, measure the time share and new "
+            "would give an ideal ceiling of about three hundred and fifty. <bookmark mark='d'/> On a pipeline, measure the time share and new "
             "costs again. Hardware schedules the work better; algorithms can change how much work remains."
         ) as vo:
             self.play(FadeIn(head))

@@ -4,7 +4,7 @@ from explainer.cs import *  # noqa: F403
 from videos.cs.cs34.common import (DATA, FILEC, HEAD, KERN, LAM, META, NO, PART, YES, load)
 
 
-class Field(VoiceoverScene):
+class Field(WatchScene):
     def construct(self):
         self.card()
         self.rates()
@@ -12,14 +12,14 @@ class Field(VoiceoverScene):
         self.end_to_end()
 
     def card(self):
-        card = chapter_card(12, r"Disks in the field", r"How do real disks fail?", lit=(1984, 2007),
-                            extra=((1984, r"Saltzer, Reed and Clark: \ end to end"),
-                                   (2007, r"Schroeder and Gibson")), part=PART)
-        with self.voiceover("Chapter twelve. Disks in the field."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(12, r"Disks in the field", r"How do real disks fail?", lit=(1984, 2007), extra=((1984, r"Saltzer, Reed and Clark: \ end to end"),
+                                   (2007, r"Schroeder and Gibson")), part=PART, said="Chapter twelve. Disks in the field.")
 
     def rates(self):
+        self.ask(r"Datasheet: a million hours between failures. \\ Disks replaced each year in the field:",
+                 [r"about $0.9\%$", r"$2$ to $4\%$, sometimes more"], 1,
+                 say="The datasheet promises a million hours between failures, under one percent a year. How many disks are actually replaced each year?",
+                 reveal="Two to four percent, and up to thirteen in some systems.")
         d = load("raid")
         head = label(r"What an MTTF of a million hours means", font_size=36).to_edge(UP, buff=0.3)
         W = 9.0

@@ -6,9 +6,15 @@ from explainer.stats.board import coverage_board, load_all
 from videos.stats.stats30.common import *  # noqa: F403
 
 
-class World(VoiceoverScene):
+class World(StatsScene):
     def construct(self):
         self.card()
+        self.ask("Some heights entered in inches as centimetres, all errors one-sided. Can a robust estimator remove the bias?",
+                 ["yes, the median does", "no: one-sided contamination shifts them all"], 1,
+                 say="Some women's heights were entered in inches as if they were centimetres: every error pulls "
+                     "the same way. Can any robust estimator remove the bias entirely?",
+                 reveal="No. Robust estimators bound the damage, but one-sided contamination still shifts them. "
+                        "Removing it needs a model of the error itself.")
         self.setup_world()
         self.onesided()
         self.widths()
@@ -16,12 +22,14 @@ class World(VoiceoverScene):
         self.board()
         self.unseen()
         self.lesson()
+        self.answer()
+        self.checkpoint([("Masking is?", "outliers hiding each other by inflating mean and covariance"),
+                         ("Heavy tails, finite variance: sub-Gaussian deviations from?", "the median of means")],
+                        narration="Checkpoint. Many dimensions, heavy tails.",
+                        answers_narration="Outliers hiding each other. And the median of means.")
 
     def card(self):
-        card = chapter_card(10, r"Contamination on the World", r"Mean vs Hodges--Lehmann intervals", lit=(1960,), part=PART)
-        with self.voiceover("Chapter ten. Contamination on the World."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(10, r"Contamination on the World", r"Mean vs Hodges--Lehmann intervals", lit=(1960,), part=PART, said="Chapter ten. Contamination on the World.")
 
     def setup_world(self):
         d = load("board")

@@ -5,16 +5,24 @@ import numpy as np
 from videos.stats.stats63.common import *  # noqa: F403
 
 
-class Cost(LectureMixin, VoiceoverScene):
+class Cost(LectureMixin, StatsScene):
     def construct(self):
         self.card_voiceover("Chapter four. The cost of privacy, measured as a minimax rate.", 4,
                             r"The cost of privacy", r"Minimax rates with a budget", lit=(2013,))
+        self.ask("Estimating a proportion: local or central DP. Which costs more accuracy?",
+                 ["local DP, by far", "central DP", "they cost the same"], 0,
+                 say="The cost of privacy, as a minimax rate. Estimate a proportion with randomized response, each "
+                     "person adding their own noise, or with a trusted curator adding noise once. Which costs more "
+                     "accuracy?",
+                 reveal="Local privacy, by far: its error shrinks like one over epsilon root n, the central one "
+                        "like one over n epsilon. Local privacy suits only enormous populations.")
         self.central()
         self.local()
         self.chart()
         self.dims()
         self.lower()
         self.lessons()
+        self.answer()
 
     def central(self):
         self.lad_voiceover(

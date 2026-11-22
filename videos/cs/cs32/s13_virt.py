@@ -10,7 +10,7 @@ def layer(text, color, w=5.2, h=0.8):
     return VGroup(r, label(text, font_size=21, color=WHITE).move_to(r))
 
 
-class Virt(VoiceoverScene):
+class Virt(WatchScene):
     def construct(self):
         self.card()
         self.popek()
@@ -19,14 +19,13 @@ class Virt(VoiceoverScene):
         self.nested()
 
     def card(self):
-        card = chapter_card(12, r"Virtual machines", r"Can one machine pretend to be several?", lit=(1972, 1974, 1999),
-                            extra=((1972, r"IBM VM/370"), (1974, r"Popek and Goldberg"), (1999, r"VMware")),
-                            part=PART)
-        with self.voiceover("Chapter twelve. Virtual machines."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(12, r"Virtual machines", r"Can one machine pretend to be several?", lit=(1972, 1974, 1999), extra=((1972, r"IBM VM/370"), (1974, r"Popek and Goldberg"), (1999, r"VMware")), part=PART, said="Chapter twelve. Virtual machines.")
 
     def popek(self):
+        self.ask(r"Popek and Goldberg: a machine can be virtualized \\ by trap and emulate if every sensitive instruction...",
+                 [r"is rare", r"traps in user mode"], 1,
+                 say="When can a hypervisor simply trap and emulate? What must every sensitive instruction do?",
+                 reveal="Trap when run in user mode. Then the hypervisor sees everything that matters.")
         head = label(r"Trap and emulate", font_size=36).to_edge(UP, buff=0.3)
         gu = layer(r"guest processes \ (user mode)", DATA)
         gk = layer(r"guest kernel: \ PebbleOS, \ unmodified \ (\textbf{user} mode)", HEAD)

@@ -4,11 +4,11 @@ from explainer.cs import *  # noqa: F403
 from videos.cs.cs13.common import CODE, CTRL, DATA, FUNC, HEAD, NO, PART, YES, code, load
 
 
-class Hook(VoiceoverScene):
+class Hook(WatchScene):
     def construct(self):
         self.race()
         self.preview()
-        self.plan()
+        self.title(PART)
 
     def race(self):
         lp = load("loops")
@@ -81,30 +81,3 @@ class Hook(VoiceoverScene):
         self.wait(0.3)
         self.clear_scene()
 
-    def plan(self):
-        title = label(rf"Part {PART}: \ The Compiler", font_size=46).to_edge(UP, buff=0.4)
-        smap = series_map(current=PART, done=PART - 1).scale(0.92).next_to(title, DOWN, buff=0.35)
-        obj = objectives_card([
-            r"FORTRAN's promise; \ front end, \ middle end, \ back end",
-            r"semantic analysis; \ three-address code; \ control-flow graphs",
-            r"dominators, \ SSA, \ dataflow on lattices",
-            r"SCCP, \ GVN, \ LICM, \ strength reduction, \ inlining",
-            r"instruction selection, \ register allocation, \ scheduling",
-            r"the Job compiled; \ fuzzing, \ verification, \ superoptimization",
-        ], font_size=26).move_to(DOWN * 0.2)
-        with self.voiceover(
-            (
-            "This is Part 13 of Computer Science, Built, in Act Three, Speaking to the Machine. <bookmark "
-            "mark='a'/> We follow a common compiler architecture: checking names and types, lowering into "
-            "intermediate code, analyzing its control-flow graph, transforming that code, and selecting machine "
-            "instructions. Dominators and static single assignment connect the graph to dataflow equations. We "
-            "measure individual optimizations on the Job, then study register allocation and scheduling. Finally, "
-            "testing, proof and candidate search tell us different things about the result. Each has a model and "
-            "a limit."
-        )
-        ) as vo:
-            self.play(FadeIn(title), FadeIn(smap))
-            vo.wait_until("a")
-            self.play(FadeOut(smap), FadeIn(obj))
-        self.wait(0.4)
-        self.clear_scene()

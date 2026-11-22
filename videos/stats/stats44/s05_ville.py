@@ -7,21 +7,29 @@ import numpy as np
 from videos.stats.stats44.common import *  # noqa: F403
 
 
-class Maximal(VoiceoverScene):
+class Maximal(StatsScene):
     def construct(self):
         self.card()
+        self.ask("A nonnegative martingale starts at 1. The chance it ever exceeds 20 is at most...",
+                 [r"5\%", r"50\%", "$1/400$"], 0,
+                 say="A nonnegative martingale, a fair game's wealth, starting at one. What's the most chance it "
+                     "ever climbs above twenty?",
+                 reveal="Five percent: one over twenty, over all time at once. That's Ville's inequality, and Part "
+                        "58's tests are built on it.")
         self.doob()
         self.ville_card()
         self.ville()
         self.paths()
         self.pvalues()
         self.board()
+        self.answer()
+        self.checkpoint([(r"The tower property: $E[E[X \mid \mathcal G]]$?", "$E[X]$"),
+                         ("Ville: from 1, ever above 20, with chance at most?", "1/20")],
+                        narration="Checkpoint. Fair games.",
+                        answers_narration="E of X. And one in twenty.")
 
     def card(self):
-        card = chapter_card(4, r"Maximal inequalities and Ville", r"How high can a fair game climb?", lit=(1939,), part=PART)
-        with self.voiceover("Chapter four. Maximal inequalities: how high can a fair game climb?"):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(4, r"Maximal inequalities and Ville", r"How high can a fair game climb?", lit=(1939,), part=PART, said="Chapter four. Maximal inequalities: how high can a fair game climb?")
 
     def doob(self):
         rows = [

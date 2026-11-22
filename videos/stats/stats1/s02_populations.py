@@ -5,20 +5,23 @@ import numpy as np
 from videos.stats.stats1.common import *  # noqa: F403
 
 
-class Populations(VoiceoverScene):
+class Populations(StatsScene):
     def construct(self):
         self.card()
+        self.ask(r"A poll of 1,000 voters finds 52\% support. Which number is the parameter?",
+                 [r"the 52\%", "the share among all voters", "the 1,000"], 1,
+                 say="First, a quick one. A poll of a thousand voters finds fifty-two percent support. Which number "
+                     "is the parameter: the fifty-two percent, the share among all voters, or the thousand?",
+                 reveal="The share among all voters. A parameter describes the whole population, and nobody gets to "
+                        "see it. The fifty-two percent describes the sample: it's a statistic.")
         self.two_sides()
         self.hidden()
         self.promise()
         self.colours()
+        self.answer()
 
     def card(self):
-        card = chapter_card(1, r"Populations and samples", r"What we want to know, and what we get to see",
-                            lit=(1662,), part=PART)
-        with self.voiceover("Chapter one. Populations and samples."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(1, r"Populations and samples", r"What we want to know, and what we get to see", lit=(1662,), part=PART, said="Chapter one. Populations and samples.")
 
     def two_sides(self):
         d = load("populations")

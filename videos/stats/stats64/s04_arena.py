@@ -7,10 +7,16 @@ from videos.stats.stats64.common import *  # noqa: F403
 NAMES = [r"A", r"B", r"C", r"D", r"E", r"F", r"G", r"H"]
 
 
-class Arena(LectureMixin, VoiceoverScene):
+class Arena(LectureMixin, StatsScene):
     def construct(self):
         self.card_voiceover("Chapter three. Arenas: pairwise votes, and the Bradley-Terry model behind the ranking.", 3,
                             r"Arenas", r"Ranking by pairwise votes")
+        self.ask("An arena's Bradley--Terry ranking estimates...",
+                 ["which answers this crowd prefers", "which model is most accurate"], 0,
+                 say="Chatbot Arena ranks models by pairwise votes, through the Bradley-Terry model. What does the "
+                     "ranking estimate?",
+                 reveal="Which answers this crowd of voters prefers, on the prompts they chose. Not accuracy, and "
+                        "not helpfulness for your use. Style can move it, and style control adjusts for it.")
         self.votes()
         self.model()
         self.board_chart()
@@ -18,6 +24,11 @@ class Arena(LectureMixin, VoiceoverScene):
         self.elo_()
         self.style()
         self.cautions()
+        self.answer()
+        self.checkpoint([(r"80\% on 1,000 questions: the standard error?", "about 1.3 points"),
+                         ("Paired on the same questions: the difference's SE?", "smaller than unpaired")],
+                        narration="Checkpoint. Evaluations as samples.",
+                        answers_narration="About one point three. And smaller.")
 
     def votes(self):
         self.lad_voiceover(

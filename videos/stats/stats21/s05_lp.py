@@ -5,9 +5,14 @@ import numpy as np
 from videos.stats.stats21.common import *  # noqa: F403
 
 
-class LinearProgramming(VoiceoverScene):
+class LinearProgramming(StatsScene):
     def construct(self):
         self.card()
+        self.ask("Least absolute deviations regression is solved by...",
+                 ["a closed formula", "linear programming", "Newton's method"], 1,
+                 say="Boscovich fitted lines by least absolute deviations in 1757. How is that problem solved?",
+                 reveal="By linear programming: split each residual into positive and negative parts, and the "
+                        "absolute values become linear. Quantile regression works the same way.")
         self.boscovich()
         self.arcs()
         self.as_lp()
@@ -15,12 +20,14 @@ class LinearProgramming(VoiceoverScene):
         self.check()
         self.engel()
         self.summary()
+        self.answer()
+        self.checkpoint([("Convex: a local minimum is?", "global"),
+                         ("Least absolute deviations is solved by?", "linear programming")],
+                        narration="Checkpoint. Convexity and duality.",
+                        answers_narration="Global. And linear programming.")
 
     def card(self):
-        card = chapter_card(4, r"Linear programming", r"Absolute deviations and quantiles", part=PART)
-        with self.voiceover("Chapter four. Linear programming in statistics."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(4, r"Linear programming", r"Absolute deviations and quantiles", part=PART, said="Chapter four. Linear programming in statistics.")
 
     def boscovich(self):
         hc = history_card(1757, r"Roger Boscovich, \ Rome",

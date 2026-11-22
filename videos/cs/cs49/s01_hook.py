@@ -14,11 +14,11 @@ def tile(title, idea, part, col, w=3.1, h=1.55):
     return VGroup(frame, t, i, p)
 
 
-class Hook(VoiceoverScene):
+class Hook(WatchScene):
     def construct(self):
         self.eight()
         self.method()
-        self.plan()
+        self.title(PART)
 
     def eight(self):
         head = label(r"Eight systems, \ eight hard ideas", font_size=36).to_edge(UP, buff=0.3)
@@ -93,29 +93,6 @@ class Hook(VoiceoverScene):
         self.wait(0.4)
         self.clear_scene()
 
-    def plan(self):
-        title = label(rf"Part {PART}: \ System Design II: \ Case Studies", font_size=36).to_edge(UP, buff=0.3)
-        smap = series_map(current=PART, done=PART - 1).scale(0.92).next_to(title, DOWN, buff=0.35)
-        obj = objectives_card([
-            r"a shortener's ID space and a feed's fan-out",
-            r"ordering, \ receipts and offline sync in chat",
-            r"a crawler's politeness and a dispatcher's matching",
-            r"adaptive bitrate as a control problem",
-            r"a ledger whose sum is always zero",
-            r"editors that converge; \ a Dynamo; \ the Job at scale",
-        ], font_size=25).move_to(DOWN * 0.2)
-        with self.voiceover(
-            "This is Part 49 of Computer Science, Built. <bookmark mark='a'/> We will size a shortener's identifiers "
-            "and choose a feed's fan-out on a power-law graph; order a chat's messages; keep a crawler polite; match "
-            "riders to drivers as an assignment problem; adapt a video's bitrate as a control loop; keep a ledger "
-            "that always sums to zero; make two editors converge; assemble a Dynamo-style store; and run the Job at "
-            "a million books a day."
-        ) as vo:
-            self.play(FadeIn(title), FadeIn(smap))
-            vo.wait_until("a")
-            self.play(FadeOut(smap), FadeIn(obj))
-        self.wait(0.5)
-        self.clear_scene()
 
 
 _ = (KERN, LAM, NO, YES)

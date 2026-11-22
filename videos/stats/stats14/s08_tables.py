@@ -5,21 +5,25 @@ import numpy as np
 from videos.stats.stats14.common import *  # noqa: F403
 
 
-class Tables(VoiceoverScene):
+class Tables(StatsScene):
     def construct(self):
         self.card()
+        self.ask(r"Berkeley, 1973: 44\% of men admitted, 35\% of women. Does that show bias against women?",
+                 ["yes", "not by itself"], 1,
+                 say="Berkeley's graduate admissions in 1973: forty-four percent of men admitted, thirty-five "
+                     "percent of women. Does that, by itself, show bias against women?",
+                 reveal="Not by itself. Men and women applied to very different departments, and that's the "
+                        "ingredient of the next chapter.")
         self.berkeley_table()
         self.chi2()
         self.measures()
         self.or_vs_rr()
         self.logistic_link()
         self.rxc()
+        self.answer()
 
     def card(self):
-        card = chapter_card(7, r"Two-way tables", r"Counting by category, \ and comparing proportions", lit=(1900,), part=PART)
-        with self.voiceover("Chapter seven. Two-way tables."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(7, r"Two-way tables", r"Counting by category, \ and comparing proportions", lit=(1900,), part=PART, said="Chapter seven. Two-way tables.")
 
     def berkeley_table(self):
         d = load("tables")

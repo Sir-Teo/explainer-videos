@@ -5,7 +5,7 @@ from videos.cs.cs27.common import (BG, CTRL, DATA, HEAD, LAM, NO, PART, YES, fit
                                    words)
 
 
-class Communication(VoiceoverScene):
+class Communication(WatchScene):
     def construct(self):
         self.card()
         self.equality()
@@ -13,13 +13,13 @@ class Communication(VoiceoverScene):
         self.streaming()
 
     def card(self):
-        card = chapter_card(4, r"Communication complexity", r"How many bits must two people exchange?",
-                            lit=(1979,), extra=((1979, r"Yao"),), part=PART)
-        with self.voiceover("Chapter four. Communication complexity."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(4, r"Communication complexity", r"How many bits must two people exchange?", lit=(1979,), extra=((1979, r"Yao"),), part=PART, said="Chapter four. Communication complexity.")
 
     def equality(self):
+        self.ask(r"Alice and Bob each hold $n$ bits. Are they equal? \\ Deterministically: $n$ bits. With shared coins...",
+                 [r"still about $n$", r"about $\log n$"], 1,
+                 say="Alice and Bob each hold n bits. Deterministically, deciding equality costs n bits. With randomness?",
+                 reveal="About log n bits: send a fingerprint, a polynomial evaluated at a random point.")
         e = load("equality")
         head = label(r"Are our strings equal?", font_size=34).to_edge(UP, buff=0.3)
         alice = VGroup(RoundedRectangle(width=2.4, height=1.0, corner_radius=0.1, color=DATA).set_fill(DATA, 0.12),
@@ -45,7 +45,7 @@ class Communication(VoiceoverScene):
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.3).next_to(tab, RIGHT, buff=0.6).align_to(tab, UP)
         fit_right(notes)
         with self.voiceover(
-            "Equality illustrates how randomness can reduce communication. Assume equal-length n-bit strings and a prime field. <bookmark mark='a'/> Alice chooses a uniform field element, evaluates her string polynomial there, and sends the point and value. Bob evaluates his own polynomial at that point. This is a private-coin one-way protocol. <bookmark mark='b'/> Each field element uses the ceiling of log base two of the field size bits. The large-input rows are analytic communication bounds, not experiments on trillion-bit inputs. <bookmark mark='c'/> Equal strings always agree. For unequal strings, the difference polynomial has degree at most n minus one, so the error is at most that degree divided by the field size. Every actual sampled challenge is retained. <bookmark mark='d'/> Deterministic equality needs linear communication in the standard model. Randomization trades this communication for explicitly bounded one-sided error."
+            "Equality illustrates how randomness can reduce communication. Assume equal-length n-bit strings and a prime field. <bookmark mark='a'/> Alice chooses a uniform field element, evaluates her string polynomial there, and sends the point and value. Bob evaluates his own polynomial at that point. This is a private-coin one-way protocol. <bookmark mark='b'/> Each field element uses the ceiling of log base two of the field size bits. The large-input rows are analytic communication bounds, not experiments on trillion-bit inputs. <bookmark mark='c'/> Equal strings always agree. For unequal strings, the difference polynomial has degree at most n minus one, so the error is at most that degree divided by the field size. <bookmark mark='d'/> Deterministic equality needs linear communication in the standard model. Randomization trades this communication for explicitly bounded one-sided error."
         ) as vo:
             self.play(FadeIn(head), FadeIn(alice), FadeIn(bob))
             vo.wait_until("b")
@@ -101,6 +101,12 @@ class Communication(VoiceoverScene):
                 self.play(FadeIn(ln, shift=UP * 0.1))
         self.wait(0.3)
         self.clear_scene()
+        self.checkpoint(
+            [(r"Why does majority vote amplify?", r"Errors are independent: the tail falls exponentially"),
+             (r"What does the switching lemma do?", r"Random restrictions collapse a DNF to a shallow tree")],
+            narration="Checkpoint. Why does a majority vote amplify a randomized algorithm? And what does the switching lemma do?",
+            answers_narration="Independent errors make the binomial tail fall exponentially. And random restrictions "
+                              "collapse a small-width formula to a shallow decision tree.")
 
     def streaming(self):
         head = label(r"Why streaming algorithms must approximate", font_size=32).to_edge(UP, buff=0.35)

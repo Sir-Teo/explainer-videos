@@ -5,19 +5,23 @@ import numpy as np
 from videos.stats.stats5.common import *  # noqa: F403
 
 
-class Dependence(VoiceoverScene):
+class Dependence(StatsScene):
     def construct(self):
         self.card()
+        self.ask("$y = x^2 +$ noise, with $x$ symmetric about 0. The correlation of $x$ and $y$?",
+                 ["strongly positive", "about zero", "negative"], 1,
+                 say="Y is x squared plus noise, and x is symmetric about zero. Y depends on x completely. What's "
+                     "their correlation?",
+                 reveal="About zero. Correlation measures how well a straight line fits, and no line fits a "
+                        "symmetric parabola. Uncorrelated is not independent.")
         self.gallery()
         self.covariance()
         self.diversify()
         self.pairwise()
+        self.answer()
 
     def card(self):
-        card = chapter_card(2, r"Dependence", r"Uncorrelated is not independent", lit=(), part=PART)
-        with self.voiceover("Chapter two. Dependence."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(2, r"Dependence", r"Uncorrelated is not independent", lit=(), part=PART, said="Chapter two. Dependence.")
 
     def gallery(self):
         d = load("dependence")

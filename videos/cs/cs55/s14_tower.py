@@ -101,7 +101,7 @@ def trust_row(key, name, trusts, earned, width=8.0):
     return VGroup(head, body)
 
 
-class Tower(VoiceoverScene):
+class Tower(WatchScene):
     def construct(self):
         self.card()
         self.rise()
@@ -112,13 +112,13 @@ class Tower(VoiceoverScene):
         self.lit()
 
     def card(self):
-        card = chapter_card(13, r"The tower, end to end", r"What does each layer trust, \ and why?",
-                            lit=(1937, 1984), part=PART)
-        with self.voiceover("Chapter thirteen. The tower, end to end."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(13, r"The tower, end to end", r"What does each layer trust, \ and why?", lit=(1937, 1984), part=PART, said="Chapter thirteen. The tower, end to end.")
 
     def rise(self):
+        self.ask(r"Which layer of the tower can be trusted \\ with no assumption at all?", [r"the hardware",
+                 r"the compiler", r"none entirely"], 2,
+                 say="Which layer of everything we built can be trusted without any assumption?",
+                 reveal="None entirely. Each rests on proof, testing, measurement or diversity, and on the layer below.")
         nbytes = load("job")["timing"]["bytes"]
         head = label(r"From a NAND gate to the cluster", font_size=36).to_edge(UP, buff=0.3)
         mask = Rectangle(width=15, height=1.7, stroke_width=0, fill_color=self.camera.background_color,

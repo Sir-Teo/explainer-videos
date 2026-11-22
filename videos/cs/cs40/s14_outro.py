@@ -17,7 +17,7 @@ def tile(content, caption, color, TW=3.6, TH=2.3):
     return Group(frame, content, cap)
 
 
-class Outro(VoiceoverScene):
+class Outro(WatchScene):
     def construct(self):
         self.recap()
         self.payoffs()
@@ -51,6 +51,12 @@ class Outro(VoiceoverScene):
             self.play(LaggedStart(*[FadeIn(t, shift=UP * 0.15) for t in tiles], lag_ratio=0.25), run_time=4.0)
         self.wait(0.5)
         self.clear_scene()
+        self.checkpoint(
+            [(r"What is Conway's law?", r"Systems mirror the communication of the teams that build them"),
+             (r"How should you give an estimate?", r"As a range or a percentile")],
+            narration="Last checkpoint. What is Conway's law? And how should you give an estimate?",
+            answers_narration="Systems mirror the communication structure of the teams that build them. And as a range or a "
+                              "percentile, never a single date.")
 
     def payoffs(self):
         card = payoff_card([

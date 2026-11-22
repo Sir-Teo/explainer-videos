@@ -45,7 +45,7 @@ def perceptron_path(X, y, cap=40):
     return path
 
 
-class Margins(VoiceoverScene):
+class Margins(WatchScene):
     def construct(self):
         self.card()
         self.perceptron()
@@ -55,13 +55,7 @@ class Margins(VoiceoverScene):
         self.linear()
 
     def card(self):
-        card = chapter_card(3, r"Margins and Rademacher complexity",
-                            r"Why does the margin matter more than the dimension?", lit=(1958, 1962),
-                            extra=((1958, r"Rosenblatt's perceptron"), (1962, r"Novikoff's mistake bound")),
-                            part=PART)
-        with self.voiceover("Chapter three. Margins and Rademacher complexity."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(3, r"Margins and Rademacher complexity", r"Why does the margin matter more than the dimension?", lit=(1958, 1962), extra=((1958, r"Rosenblatt's perceptron"), (1962, r"Novikoff's mistake bound")), part=PART, said="Chapter three. Margins and Rademacher complexity.")
 
     def perceptron(self):
         head = label(r"The perceptron, \ and its margin", font_size=36).to_edge(UP, buff=0.3)
@@ -209,6 +203,10 @@ class Margins(VoiceoverScene):
         self.clear_scene()
 
     def dims(self):
+        self.ask(r"Data separated with margin $0.1$, in 10 or 1000 dimensions. \\ The perceptron's mistakes...",
+                 [r"grow with the dimension", r"are at most $(R/\gamma)^2$ either way"], 1,
+                 say="Data on the unit sphere, separated with margin a tenth, in ten dimensions or a thousand. Do the perceptron's mistakes grow with the dimension?",
+                 reveal="No: at most R over gamma squared, a hundred, in any dimension.")
         rows = load("perceptron")["rows"]
         bound = rows[0]["bound"]
         head = label(r"Mistakes do not grow with the dimension", font_size=36).to_edge(UP, buff=0.3)
@@ -408,6 +406,12 @@ class Margins(VoiceoverScene):
             self.play(FadeIn(side[3]))
         self.wait(0.4)
         self.clear_scene()
+        self.checkpoint(
+            [(r"What does the VC dimension count?", r"The most points the class can shatter"),
+             (r"What does Sauer's lemma do?", r"Turns $2^m$ labellings into a polynomial")],
+            narration="Checkpoint. What does the VC dimension count? And what does Sauer's lemma do?",
+            answers_narration="The largest number of points the class can label every way. And it caps the growth function by "
+                              "a polynomial of degree d, instead of two to the m.")
 
 
 _ = (BG, LAM)

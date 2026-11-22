@@ -24,25 +24,20 @@ def box_num(v, color, size=0.62, fs=22, dim=False):
     return VGroup(sq, t)
 
 
-class Sparsity(VoiceoverScene):
+class Sparsity(WatchScene):
     def construct(self):
         self.card()
         self.skip()
         self.formats()
         self.structured()
         self.rounding()
-        self.drift()
         self.approximate()
 
     def card(self):
-        card = chapter_card(9, r"Sparsity and approximation", r"What if most numbers are zero, \ or need not be "
-                            r"exact?", lit=(2015, 2016, 2020),
-                            extra=((2015, r"Gupta et al.: \ stochastic rounding"),
+        self.chapter(9, r"Sparsity and approximation", r"What if most numbers are zero, \ or need not be "
+                            r"exact?", lit=(2015, 2016, 2020), extra=((2015, r"Gupta et al.: \ stochastic rounding"),
                                    (2016, r"Han et al.: \ EIE, \ a sparse engine"),
-                                   (2020, r"NVIDIA A100: \ 2:4 sparsity")), part=PART)
-        with self.voiceover("Chapter nine. Sparsity and approximation."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+                                   (2020, r"NVIDIA A100: \ 2:4 sparsity")), part=PART, said="Chapter nine. Sparsity and approximation.")
 
     def skip(self):
         head = label(r"Zero times anything is zero", font_size=36).to_edge(UP, buff=0.3)
@@ -269,6 +264,10 @@ class Sparsity(VoiceoverScene):
         self.clear_scene()
 
     def rounding(self):
+        self.ask(r"Round up with probability equal to the remainder. \\ On average, the result equals...",
+                 [r"the nearest grid point", r"$x$ exactly"], 1,
+                 say="Round x up with probability equal to how far it is past the lower grid point. On average, what do you get?",
+                 reveal="x exactly. Stochastic rounding is unbiased.")
         head = label(r"Stochastic rounding: \ right on average", font_size=36).to_edge(UP, buff=0.3)
         rows = VGroup(
             MathTex(r"x", r"=", r"L", r"+", r"p\,\Delta", r",\quad 0 \le p < 1", font_size=34),
@@ -327,61 +326,6 @@ class Sparsity(VoiceoverScene):
         self.wait(0.4)
         self.clear_scene()
 
-    def drift(self):
-        head = label(r"Many small updates", font_size=36).to_edge(UP, buff=0.3)
-        T = SR_STEPS
-        top = int(SR_STEP * T) + 2
-        ax = Axes(x_range=[0, T, 4], y_range=[0, top, 2], x_length=7.0, y_length=4.2, tips=False,
-                  axis_config={"color": GREY_C, "include_numbers": True, "font_size": 20})
-        ax.to_edge(LEFT, buff=0.9).shift(DOWN * 0.3)
-        xl = label(r"updates of a quarter step", font_size=19, color=GREY_A).next_to(ax, DOWN, buff=0.15)
-        yl = label(r"stored value \ (in steps)", font_size=19, color=GREY_A).next_to(ax, UP, buff=0.15).align_to(
-            ax, LEFT)
-        rng = random.Random(SR_SEED)
-        s, path = 0, [0]
-        for _ in range(T):
-            v = s + SR_STEP
-            s = int(v) + (1 if rng.random() < v - int(v) else 0)
-            path.append(s)
-        exact = DashedLine(ax.c2p(0, 0), ax.c2p(T, SR_STEP * T), color=GREY_A, stroke_width=2.5)
-        pts = [ax.c2p(0, 0)]
-        for t in range(1, T + 1):
-            pts += [ax.c2p(t, path[t - 1]), ax.c2p(t, path[t])]
-        sr = VMobject(color=YES, stroke_width=4).set_points_as_corners(pts)
-        rn = Line(ax.c2p(0, 0), ax.c2p(T, 0), color=NO, stroke_width=5)
-        keys = VGroup(label(r"exact sum", font_size=20, color=GREY_A),
-                      label(r"round to nearest: \ stuck at 0", font_size=20, color=NO),
-                      label(rf"stochastic: \ one random run, \ ends at {path[-1]}", font_size=20, color=YES)
-                      ).arrange(DOWN, aligned_edge=LEFT, buff=0.25).next_to(ax, RIGHT, buff=0.45).shift(UP * 1.2)
-        why = wrapped_label(r"a quarter step rounds back down every time; \ Part 23's gradient descent makes exactly "
-                            r"such tiny updates", 4.9, font_size=19, color=GREY_A).next_to(keys, DOWN, buff=0.45
-                                                                                          ).align_to(keys, LEFT)
-        cite = wrapped_label(r"Gupta, \ Agrawal, \ Gopalakrishnan and Narayanan \ (2015): \ networks trained in "
-                             r"16-bit fixed point with stochastic rounding matched 32-bit floats", 4.9, font_size=18,
-                             color=HEAD).next_to(why, DOWN, buff=0.3).align_to(keys, LEFT)
-        ill = note(r"illustrative: \ one seeded random run", font_size=16).to_corner(DL, buff=0.2)
-        with self.voiceover(
-            "Why want noise? <bookmark mark='a'/> Add a quarter of a step, again and again, to a number stored on"
-            " a coarse grid. The exact sum climbs steadily. <bookmark mark='b'/> Round to nearest sends every "
-            "quarter step back down, so the stored value never moves. <bookmark mark='c'/> Stochastic rounding "
-            "moves up one time in four, on average, and follows the sum. <bookmark mark='d'/> This is Part 23's "
-            "gradient descent in low precision: millions of tiny updates. In 2015 Suyog Gupta and colleagues "
-            "trained networks in sixteen-bit fixed point, and with stochastic rounding they matched thirty-two-"
-            "bit floats."
-        ) as vo:
-            self.play(FadeIn(head), Create(ax), FadeIn(xl), FadeIn(yl), FadeIn(ill))
-            vo.wait_until("a")
-            self.play(Create(exact), FadeIn(keys[0]))
-            vo.wait_until("b")
-            self.play(Create(rn), FadeIn(keys[1]), run_time=1.5)
-            vo.wait_until("c")
-            self.play(Create(sr), run_time=3.5, rate_func=linear)
-            self.play(FadeIn(keys[2]))
-            vo.wait_until("d")
-            self.play(FadeIn(why))
-            self.play(FadeIn(cite))
-        self.wait(0.4)
-        self.clear_scene()
 
     def approximate(self):
         q = load("quant")

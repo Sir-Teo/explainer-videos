@@ -6,21 +6,29 @@ from scipy import optimize, special
 from videos.stats.stats25.common import *  # noqa: F403
 
 
-class GLMM(VoiceoverScene):
+class GLMM(StatsScene):
     def construct(self):
         self.card()
+        self.ask("Schools with small true differences, ranked in a league table. The ranking is...",
+                 ["reliable", "mostly noise"], 1,
+                 say="Rank schools by their pass rates in a league table. If the true differences are small, how "
+                     "reliable is the ranking?",
+                 reveal="Mostly noise. Goldstein and Spiegelhalter warned in 1996: report intervals for ranks, not "
+                        "ranks.")
         self.model()
         self.integrals()
         self.fit()
         self.marginal()
         self.league_funnel()
         self.league_table()
+        self.answer()
+        self.checkpoint([("Essays and raters are?", "crossed"),
+                         ("Group effects correlated with $x$: which stays consistent?", "fixed effects, the within slope")],
+                        narration="Checkpoint. Structures.",
+                        answers_narration="Crossed. And fixed effects.")
 
     def card(self):
-        card = chapter_card(10, r"GLMMs", r"Random effects inside a link", lit=(1993,), part=PART)
-        with self.voiceover("Chapter ten. Generalized linear mixed models."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(10, r"GLMMs", r"Random effects inside a link", lit=(1993,), part=PART, said="Chapter ten. Generalized linear mixed models.")
 
     def model(self):
         rows = [

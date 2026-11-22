@@ -6,21 +6,21 @@ from explainer.cs import *  # noqa: F403
 from videos.cs.cs9.common import (BG, CODE, COST, CTRL, DATA, FUNC, HEAD, HIST, INF, NO, PART, YES, fmt, load)
 
 
-class Amat(VoiceoverScene):
+class Amat(WatchScene):
     def construct(self):
         self.card()
         self.formula()
         self.levels()
 
     def card(self):
-        card = chapter_card(6, r"Average memory access time", r"What does a hierarchy cost, on average?", part=PART)
-        with self.voiceover(
-            "Chapter six. Average memory access time."
-        ):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(6, r"Average memory access time", r"What does a hierarchy cost, on average?", part=PART, said="Chapter six. Average memory access time.")
 
     def formula(self):
+        self.ask(r"Hits take 1 cycle. 5\% of accesses miss, \\ and a miss costs 100 more. \\ The average access?",
+                 [r"1.05 cycles", r"6 cycles", r"100 cycles"], 1,
+                 say="Hits take one cycle. Five percent of accesses miss, and a miss costs a hundred cycles more. What's the "
+                     "average?",
+                 reveal="Six cycles: one, plus five percent of a hundred. Small miss rates still dominate.")
         head = label(r"One level", font_size=38).to_edge(UP, buff=0.4)
         f = MathTex(r"\text{AMAT}", r"=", r"t_{\text{hit}}", r"+", r"m", r"\times", r"t_{\text{penalty}}",
                     font_size=56).move_to(UP * 1.0)

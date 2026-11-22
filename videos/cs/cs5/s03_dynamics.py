@@ -12,7 +12,7 @@ def inv(v):
     return 0.5 * (1 - np.tanh(GAIN * (v - 0.5)))
 
 
-class Dynamics(VoiceoverScene):
+class Dynamics(WatchScene):
     def construct(self):
         self.card()
         self.model()
@@ -20,11 +20,7 @@ class Dynamics(VoiceoverScene):
         self.saddle()
 
     def card(self):
-        card = chapter_card(2, r"Two wells and a saddle", r"Why does a latch settle, and where can it get stuck?",
-                            part=PART)
-        with self.voiceover("Chapter two. Two wells and a saddle."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(2, r"Two wells and a saddle", r"Why does a latch settle, and where can it get stuck?", part=PART, said="Chapter two. Two wells and a saddle.")
 
     # ------------------------------------------------------------------
     def model(self):
@@ -134,6 +130,10 @@ class Dynamics(VoiceoverScene):
 
     # ------------------------------------------------------------------
     def saddle(self):
+        self.ask(r"A latch starts almost perfectly balanced. \\ How long does it take to decide?",
+                 [r"one gate delay, always", r"longer the closer it is to balance, without limit", r"it never decides"], 1,
+                 say="Start a latch almost exactly balanced between its two states. How long does it take to decide?",
+                 reveal="Longer the closer it starts to balance, with no upper limit.")
         d = load("phase")
         head = label(r"Near the saddle", font_size=38).to_edge(UP, buff=0.35)
         J = MathTex(r"J = \begin{pmatrix} -1 & f'(\tfrac12) \\ f'(\tfrac12) & -1 \end{pmatrix}, \qquad f'(\tfrac12) = -3",

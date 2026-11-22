@@ -36,22 +36,17 @@ def spikes(probs, x0, y0, width, scale, color=DATA, w=0.07, lo=1e-4):
     return base, g, (lambda y: x0 + (y + 0.5) * step)
 
 
-class Shor(VoiceoverScene):
+class Shor(WatchScene):
     def construct(self):
         self.card()
         self.reduction()
         self.eigen()
         self.fifteen()
-        self.twentyone()
         self.cost()
 
     def card(self):
-        card = chapter_card(9, r"Shor's algorithm", r"How does finding a period factor a number?", lit=(1994, 1997),
-                            extra=((1994, r"Shor: \ factoring and discrete logarithms"),
-                                   (1997, r"the journal version")), part=PART)
-        with self.voiceover("Chapter nine. Shor's algorithm. How does finding a period factor a number?"):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(9, r"Shor's algorithm", r"How does finding a period factor a number?", lit=(1994, 1997), extra=((1994, r"Shor: \ factoring and discrete logarithms"),
+                                   (1997, r"the journal version")), part=PART, said="Chapter nine. Shor's algorithm. How does finding a period factor a number?")
 
     # ------------------------------------------------------------------ factoring reduces to order finding
     def reduction(self):
@@ -194,6 +189,9 @@ class Shor(VoiceoverScene):
 
     # ------------------------------------------------------------------ 15 on our simulator
     def fifteen(self):
+        self.ask(r"The order of $7$ modulo $15$:", [r"$2$", r"$4$", r"$15$"], 1,
+                 say="Shor's algorithm factors fifteen using a equals seven. What is the order of seven modulo fifteen?",
+                 reveal="Four. Seven squared minus one is forty-eight, and gcds give three and five.")
         s = load("shor15")
         a, N, r, t, Q = s["a"], s["N"], s["r"], s["t"], s["Q"]
         head = label(rf"Our simulator factors {N}: \ $a = {a}$, \ {t} counting qubits", font_size=36).to_edge(
@@ -247,94 +245,6 @@ class Shor(VoiceoverScene):
         self.wait(0.4)
         self.clear_scene()
 
-    # ------------------------------------------------------------------ 21, and continued fractions
-    def twentyone(self):
-        s = load("shor21")
-        a, N, r, t, Q, P = s["a"], s["N"], s["r"], s["t"], s["Q"], s["probs"]
-        head = label(rf"Twenty-one: \ $r = {r}$ does not divide $2^{{{t}}}$", font_size=36).to_edge(UP, buff=0.3)
-        x0, y0, W, S = -6.4, 0.55, 6.2, 11.0
-        base, bars, xp = spikes(P, x0, y0, W, S, color=DATA, w=0.05, lo=2e-3)
-        ticks = VGroup(*[label(f"{v}", font_size=16, color=GREY_A).move_to([xp(v), y0 - 0.22, 0])
-                         for v in (0, 1024, Q - 1)])
-        tl = label(rf"$y$, \ out of {Q}; \ peaks near $k \cdot {Q}/{r}$", font_size=17, color=GREY_B).next_to(
-            ticks, DOWN, buff=0.08)
-        y = next(x["y"] for x in s["samples"] if x["ok"] and x["fraction"] == "5/6")
-        ring = Circle(radius=0.16, color=HEAD, stroke_width=2.5).move_to([xp(y), y0 + P[y] * S + 0.2, 0])
-        # the zoom around y
-        zs = list(range(y - 3, y + 4))
-        zw, zg, zS = 0.42, 0.14, 13.0
-        zx0, zy0 = -6.0, -2.55
-        zb = VGroup(*[Rectangle(width=zw, height=max(P[v] * zS, 0.005), stroke_width=0,
-                                fill_color=HEAD if v == y else DATA, fill_opacity=0.9).move_to(
-            [zx0 + i * (zw + zg), zy0, 0], aligned_edge=DOWN) for i, v in enumerate(zs)])
-        zbase = Line([zx0 - zw, zy0, 0], [zx0 + (len(zs) - 1) * (zw + zg) + zw, zy0, 0], color=GREY_C)
-        zt = VGroup(*[label(f"{v}", font_size=16, color=GREY_A).next_to(b, DOWN, buff=0.08).set_y(zy0 - 0.2)
-                      for v, b in zip(zs, zb)])
-        zp = VGroup(*[label(f"{P[v]:.3f}", font_size=16, color=HEAD if v == y else DATA).next_to(b, UP, buff=0.06)
-                      .shift(RIGHT * (0.22 if v == y else 0)) for v, b in zip(zs, zb) if P[v] > 0.02])
-        exact = Q * 5 / r
-        mk = DashedLine([zx0 + (exact - zs[0]) * (zw + zg), zy0, 0], [zx0 + (exact - zs[0]) * (zw + zg),
-                                                                     zy0 + 1.85, 0], color=YES, dash_length=0.06)
-        mkl = MathTex(rf"5 \cdot \tfrac{{{Q}}}{{{r}}} = {exact:.2f}", font_size=20, color=YES).next_to(
-            mk, UP, buff=0.05)
-        zl = label(r"zoomed in:", font_size=17, color=GREY_B).next_to(zbase, UP, buff=1.95).align_to(zbase, LEFT)
-        fs = 26
-        rows = VGroup(
-            MathTex(rf"\frac{{{y}}}{{{Q}}}", r"=", rf"\cfrac{{1}}{{1 + \cfrac{{{Q - y}}}{{{y}}}}}", font_size=fs),
-            MathTex(r"=", rf"\cfrac{{1}}{{1 + \cfrac{{1}}{{5 + \cfrac{{{y - 5 * (Q - y)}}}{{{Q - y}}}}}}}",
-                    font_size=fs),
-            MathTex(r"\approx", r"\cfrac{1}{1 + \cfrac{1}{5}}", r"=", r"\frac{5}{6}", font_size=fs),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.3)
-        rows.next_to(head, DOWN, buff=0.35).align_to([0.6, 0, 0], LEFT)
-        rows[1].align_to(rows[0][1], LEFT)
-        rows[2].align_to(rows[0][1], LEFT)
-        rows[2][3].set_color(YES)
-        assert Q - y == 341 and y - 5 * (Q - y) == 2
-        cfw = label(r"Euclid's algorithm, \ kept as a fraction: \ stop before the denominator passes $N$",
-                    font_size=17, color=GREY_B).next_to(rows, DOWN, buff=0.12).align_to(rows, LEFT)
-        h = pow(a, r // 2)
-        fac = MathTex(rf"r = {r}:\quad {a}^{{{r // 2}}} = {h},\quad \gcd({h - 1}, {N}) = {math.gcd(h - 1, N)},\quad "
-                      rf"\gcd({h + 1}, {N}) = {math.gcd(h + 1, N)}", font_size=24, color=YES).next_to(
-            cfw, DOWN, buff=0.25).align_to(rows, LEFT)
-        assert sorted((math.gcd(h - 1, N), math.gcd(h + 1, N))) == s["factors"]
-        why = wrapped_label(rf"why it works: \ $2^t = {Q} \ge N^2 = {N * N}$, \ so the nearest $y$ is within "
-                            r"$1/2^{t+1} < 1/(2r^2)$ of $s/r$, \ and then $s/r$ must be a convergent \ (Legendre)",
-                            6.2, font_size=18, color=WHITE).next_to(fac, DOWN, buff=0.3).align_to(rows, LEFT)
-        k = sum(x["ok"] for x in s["samples"])
-        lcm = wrapped_label(rf"{k} of 20 shots give $\tfrac{{s}}{{6}}$ in lowest terms; \ $\tfrac23$ and $\tfrac12$ "
-                            r"give divisors of $r$, \ and $\mathrm{lcm}(3, 2) = 6$ recovers it", 6.2, font_size=18,
-                            color=HEAD).next_to(why, DOWN, buff=0.2).align_to(rows, LEFT)
-        with self.voiceover(
-            "Twenty-one, with a equal to two, is less tidy: the order is six, which does not divide two thousand and "
-            "forty-eight. <bookmark mark='a'/> So the peaks fall between outcomes, and probability leaks to the "
-            "neighbours: about eleven per cent on the nearest, almost three on the next. <bookmark mark='b'/> "
-            "Suppose a shot gives seventeen hundred and seven. Expand it over two thousand and forty-eight as a "
-            "continued fraction, Euclid's algorithm in disguise, and stop before the denominator passes twenty-one: "
-            "five sixths. <bookmark mark='c'/> The order is six. Two cubed is eight, and seven and nine share the "
-            "factors seven and three with twenty-one. <bookmark mark='d'/> Why does it work? With two to the t at "
-            "least N squared, the nearest outcome is so close to s over r that s over r must be a convergent. "
-            "<bookmark mark='e'/> A shot giving two thirds or one half yields a divisor of six, and the least common "
-            "multiple of two such divisors recovers it."
-        ) as vo:
-            self.play(FadeIn(head), Create(base), FadeIn(ticks), FadeIn(tl))
-            self.play(LaggedStart(*[GrowFromEdge(b, DOWN) for b in bars], lag_ratio=0.05), run_time=1.5)
-            vo.wait_until("a")
-            self.play(Create(ring))
-            self.play(FadeIn(zl), Create(zbase), FadeIn(zt), LaggedStart(*[GrowFromEdge(b, DOWN) for b in zb],
-                                                                        lag_ratio=0.1))
-            self.play(FadeIn(zp), Create(mk), FadeIn(mkl))
-            vo.wait_until("b")
-            self.play(Write(rows[0]))
-            self.play(FadeIn(rows[1], shift=DOWN * 0.1))
-            self.play(FadeIn(rows[2], shift=DOWN * 0.1), FadeIn(cfw))
-            vo.wait_until("c")
-            self.play(FadeIn(fac))
-            vo.wait_until("d")
-            self.play(FadeIn(why))
-            vo.wait_until("e")
-            self.play(FadeIn(lcm))
-        self.wait(0.4)
-        self.clear_scene()
 
     # ------------------------------------------------------------------ the gap, and a caution
     def cost(self):

@@ -3,10 +3,16 @@ from __future__ import annotations
 from videos.stats.stats59.common import *  # noqa: F403
 
 
-class OpenProblems(LectureMixin, VoiceoverScene):
+class OpenProblems(LectureMixin, StatsScene):
     def construct(self):
         self.card_voiceover("Chapter ten. Open problems in high-dimensional asymptotics.", 10, r"Open problems",
                             r"Where the exact theory stops")
+        self.ask("Bootstrapping residuals, $p$ a fraction of $n$. The variance estimate...",
+                 ["is still valid", "is misstated"], 1,
+                 say="Where the exact theory stops. Bootstrap the residuals of a regression whose p is a fraction "
+                     "of n. Is the variance estimate valid?",
+                 reveal="No: it misstates the variance, El Karoui and Purdom showed, and pairs bootstrapping fails "
+                        "too. The classical toolkit needs rebuilding for p growing with n.")
         self.map_()
         self.op_hard()
         self.op_design()
@@ -14,6 +20,11 @@ class OpenProblems(LectureMixin, VoiceoverScene):
         self.op_finite()
         self.op_uncertainty()
         self.problems()
+        self.answer()
+        self.checkpoint([("Random features: the error peaks at?", r"$N \approx n$"),
+                         ("The logistic LRT in the proportional regime?", r"a rescaled $\chi^2$")],
+                        narration="Checkpoint. Corrections.",
+                        answers_narration="N near n. And a rescaled chi-squared.")
 
     def map_(self):
         hdr = [r"question", r"tool", r"answer"]

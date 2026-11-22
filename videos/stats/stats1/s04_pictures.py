@@ -5,21 +5,24 @@ import numpy as np
 from videos.stats.stats1.common import *  # noqa: F403
 
 
-class Pictures(VoiceoverScene):
+class Pictures(StatsScene):
     def construct(self):
         self.card()
+        self.ask("The same 200 heights, with bins ten times narrower. The histogram...",
+                 ["gets more accurate", "turns spiky and noisy", "doesn't change"], 1,
+                 say="Here's a choice you make with every histogram. Take two hundred heights and make the bins ten "
+                     "times narrower. Does the picture get more accurate, turn spiky, or stay the same?",
+                 reveal="It turns spiky. Narrow bins follow the luck of the sample; wide bins blur the shape. A "
+                        "histogram is an estimate, and its bin width trades noise against blur.")
         self.dots()
         self.to_histogram()
         self.density()
         self.width_sweep()
         self.rules()
+        self.answer()
 
     def card(self):
-        card = chapter_card(3, r"Pictures first", r"Before any formula: what does the data look like?",
-                            lit=(1786,), part=PART)
-        with self.voiceover("Chapter three. Pictures first."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(3, r"Pictures first", r"Before any formula: what does the data look like?", lit=(1786,), part=PART, said="Chapter three. Pictures first.")
 
     def dots(self):
         d = load("heights")

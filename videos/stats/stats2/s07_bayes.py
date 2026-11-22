@@ -5,22 +5,29 @@ import numpy as np
 from videos.stats.stats2.common import *  # noqa: F403
 
 
-class Bayes(VoiceoverScene):
+class Bayes(StatsScene):
     def construct(self):
         self.card()
+        self.ask(r"1 in 1,000 has a disease. A test is 99\% accurate. You test positive. Chance you have it?",
+                 [r"about 99\%", r"about 50\%", r"about 9\%"], 2,
+                 say="A disease affects one person in a thousand. A test is ninety-nine percent accurate either "
+                     "way. You test positive. What's the chance you have it?",
+                 reveal="About nine percent. In a thousand people, one true positive and about ten false ones. "
+                        "Evidence multiplies the odds; it doesn't replace the prior.")
         self.theorem()
         self.screening()
         self.frequencies()
         self.odds()
         self.ages()
         self.second_test()
+        self.answer()
+        self.checkpoint([("Two dice, sum 8: chance of at least one six?", "$2/5$"),
+                         ("In Bayes' theorem, what does the evidence multiply?", r"the odds: posterior odds = likelihood ratio $\times$ prior odds")],
+                        narration="Checkpoint. Conditioning.",
+                        answers_narration="Two fifths. And evidence multiplies the odds by the likelihood ratio.")
 
     def card(self):
-        card = chapter_card(6, r"Bayes' theorem", r"From the chance of the evidence to the chance of the cause",
-                            lit=(1763,), part=PART)
-        with self.voiceover("Chapter six. Bayes' theorem."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(6, r"Bayes' theorem", r"From the chance of the evidence to the chance of the cause", lit=(1763,), part=PART, said="Chapter six. Bayes' theorem.")
 
     def theorem(self):
         hc = history_card(1763, r"Thomas Bayes, \ a Presbyterian minister (d.\ 1761)", r"``An essay towards solving "

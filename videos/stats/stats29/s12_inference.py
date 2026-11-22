@@ -7,21 +7,25 @@ from explainer.stats.board import coverage_board, load_all
 from videos.stats.stats29.common import *  # noqa: F403
 
 
-class Inference(VoiceoverScene):
+class Inference(StatsScene):
     def construct(self):
         self.card()
+        self.ask(r"A 95\% band from a smoother, its bias ignored, covers...",
+                 [r"95\% everywhere", "less, where the bias is large"], 1,
+                 say="Draw estimate plus or minus one point nine six standard errors around a smoothed curve, "
+                     "ignoring its bias. How does it cover?",
+                 reveal="Less than promised where the bias is large, at peaks and troughs. Undersmooth, or correct "
+                        "the bias, and remember the data alone can't see it.")
         self.problem()
         self.picture()
         self.fixes()
         self.rbc()
         self.board()
         self.bands()
+        self.answer()
 
     def card(self):
-        card = chapter_card(11, r"Inference for curves", r"Intervals that admit their bias", lit=(2018,), part=PART)
-        with self.voiceover("Chapter eleven. Inference for curves."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(11, r"Inference for curves", r"Intervals that admit their bias", lit=(2018,), part=PART, said="Chapter eleven. Inference for curves.")
 
     def problem(self):
         rows = [

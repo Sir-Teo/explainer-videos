@@ -5,20 +5,20 @@ from videos.cs.cs19.common import (BG, CODE, COST, CTRL, DATA, FUNC, HEAD, LAM, 
                                    mono, words)
 
 
-class Chain(VoiceoverScene):
+class Chain(WatchScene):
     def construct(self):
         self.card()
         self.chain()
         self.bst()
 
     def card(self):
-        card = chapter_card(12, r"Matrix chains and optimal search trees", r"Where do the brackets go?",
-                            lit=(1971,), extra=((1971, r"Knuth's speedup"),), part=PART)
-        with self.voiceover("Chapter twelve. Matrix chains and optimal search trees."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(12, r"Matrix chains and optimal search trees", r"Where do the brackets go?", lit=(1971,), extra=((1971, r"Knuth's speedup"),), part=PART, said="Chapter twelve. Matrix chains and optimal search trees.")
 
     def chain(self):
+        self.ask(r"$A$ is $10{\times}100$, $B$ is $100{\times}5$, $C$ is $5{\times}50$. \\ $(AB)C$ against "
+                 r"$A(BC)$?", [r"the same work", r"ten times different"], 1,
+                 say="Multiply three matrices, ten by a hundred, a hundred by five, five by fifty. Does the bracketing matter?",
+                 reveal="Ten times: seven thousand five hundred scalar products one way, seventy-five thousand the other.")
         d = load("chain")
         dims = d["dims"]
         head = label(r"The order of multiplication", font_size=34).to_edge(UP, buff=0.3)

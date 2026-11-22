@@ -24,7 +24,7 @@ def heap_tree(vals, dy=0.85, dx0=3.2, font_size=18, color=DATA):
     return VGroup(edges, VGroup(*nodes))
 
 
-class Heap(VoiceoverScene):
+class Heap(WatchScene):
     def construct(self):
         self.card()
         self.shape()
@@ -32,11 +32,7 @@ class Heap(VoiceoverScene):
         self.sort()
 
     def card(self):
-        card = chapter_card(7, r"Heapsort", r"Can a tree live in an array?", lit=(1964,),
-                            extra=((1964, r"Williams: \ heapsort; \ Floyd: \ heapify"),), part=PART)
-        with self.voiceover("Chapter seven. Heapsort."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(7, r"Heapsort", r"Can a tree live in an array?", lit=(1964,), extra=((1964, r"Williams: \ heapsort; \ Floyd: \ heapify"),), part=PART, said="Chapter seven. Heapsort.")
 
     def shape(self):
         head = label(r"A heap: \ a tree stored in an array", font_size=34).to_edge(UP, buff=0.3)
@@ -80,6 +76,9 @@ class Heap(VoiceoverScene):
         self.clear_scene()
 
     def heapify(self):
+        self.ask(r"Floyd builds a heap from $n$ elements bottom-up. \\ The time?", [r"$n$", r"$n \log n$"], 0,
+                 say="Floyd builds a heap from the bottom up. How long does it take?",
+                 reveal="Linear time: most nodes sit near the bottom, where sifting is cheap.")
         d = load("heap")
         head = label(r"Building a heap in linear time \ (Floyd, \ 1964)", font_size=32).to_edge(UP, buff=0.3)
         steps = VGroup(

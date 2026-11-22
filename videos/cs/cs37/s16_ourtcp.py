@@ -4,7 +4,7 @@ from explainer.cs import *  # noqa: F403
 from videos.cs.cs37.common import (CCC, CCN, DATA, HEAD, KERN, NO, PART, WIN, YES, grid_table, load, window_axes)
 
 
-class OurTcp(VoiceoverScene):
+class OurTcp(WatchScene):
     def construct(self):
         self.card()
         self.traces()
@@ -12,13 +12,13 @@ class OurTcp(VoiceoverScene):
         self.ledger()
 
     def card(self):
-        card = chapter_card(15, r"The novels, \ over our TCP", r"Where do the thirty-five seconds go?",
-                            lit=(2026, 2026), extra=((2026, r"ledger row 14"),), part=PART)
-        with self.voiceover("Chapter fifteen. The novels, over our TCP."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(15, r"The novels, \ over our TCP", r"Where do the thirty-five seconds go?", lit=(2026, 2026), extra=((2026, r"ledger row 14"),), part=PART, said="Chapter fifteen. The novels, over our TCP.")
 
     def traces(self):
+        self.ask(r"Fetch the novels with Reno, CUBIC and BBR. \\ Slowest over fastest:", [r"$1.1\times$",
+                 r"$3\times$", r"$11\times$"], 2,
+                 say="We fetch the novels from Frankfurt with Reno, CUBIC and BBR, with thirteen random losses. How much slower is the slowest?",
+                 reveal="Eleven times, from how each one reads thirteen lost packets.")
         j = load("job")
         head = label(r"The first five seconds", font_size=36).to_edge(UP, buff=0.3)
         g = window_axes(5, x_length=10.0, y_length=4.4, step=1).move_to(DOWN * 0.3)

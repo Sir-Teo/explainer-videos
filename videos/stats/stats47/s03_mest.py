@@ -5,21 +5,26 @@ import numpy as np
 from videos.stats.stats47.common import *  # noqa: F403
 
 
-class MEstimators(VoiceoverScene):
+class MEstimators(StatsScene):
     def construct(self):
         self.card()
+        self.ask("A misspecified M-estimator's asymptotic variance is...",
+                 ["the inverse Fisher information", "the sandwich $A^{-1} B A^{-1}$"], 1,
+                 say="An M-estimator maximizes an average of some criterion, which need not be a true likelihood. "
+                     "What's its asymptotic variance?",
+                 reveal="The sandwich: the inverse curvature, times the variance of the score, times the inverse "
+                        "curvature again. When the model is right, the two pieces cancel to the inverse "
+                        "information.")
         self.definition()
         self.consistency()
         self.normality()
         self.table()
         self.newcomb()
         self.misspec()
+        self.answer()
 
     def card(self):
-        card = chapter_card(2, r"M- and Z-estimators", r"Maximize an average, \ or solve one", lit=(1964,), part=PART)
-        with self.voiceover("Chapter two. M- and Z-estimators: maximize an average, or solve one."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(2, r"M- and Z-estimators", r"Maximize an average, \ or solve one", lit=(1964,), part=PART, said="Chapter two. M- and Z-estimators: maximize an average, or solve one.")
 
     def definition(self):
         rows = [

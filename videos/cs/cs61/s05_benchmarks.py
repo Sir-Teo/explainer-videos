@@ -41,22 +41,17 @@ P_ANY = 1 - (1 - ALPHA) ** K
 GAIN = SLOW["median"] / FAST["median"] - 1
 
 
-class Benchmarks(VoiceoverScene):
+class Benchmarks(WatchScene):
     def construct(self):
         self.card()
         self.failures()
         self.goodhart()
-        self.spec()
         self.forking()
         self.reproduce()
 
     def card(self):
-        card = chapter_card(4, r"Benchmarks and reproducibility", r"What does a benchmark score promise?",
-                            lit=(1975, 2016), extra=((1975, r"Goodhart's law"), (1988, r"SPEC founded"),
-                                                     (2011, r"artifact evaluation")), part=PART)
-        with self.voiceover("Chapter four. Benchmarks and reproducibility."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(4, r"Benchmarks and reproducibility", r"What does a benchmark score promise?", lit=(1975, 2016), extra=((1975, r"Goodhart's law"), (1988, r"SPEC founded"),
+                                                     (2011, r"artifact evaluation")), part=PART, said="Chapter four. Benchmarks and reproducibility.")
 
     def failures(self):
         head = label(r"When benchmarks break", font_size=36).to_edge(UP, buff=0.3)
@@ -186,61 +181,12 @@ class Benchmarks(VoiceoverScene):
         self.wait(0.4)
         self.clear_scene()
 
-    def spec(self):
-        head = label(r"How SPEC keeps score", font_size=36).to_edge(UP, buff=0.3)
-        cols = {r"t_{\text{ref},i}": DATA, r"\text{score}": YES, r"\frac{\text{score}_X}{\text{score}_Y}": YES}
-        r0 = cmath(r"\text{ratio}_i", r"=", r"\frac{t_{\text{ref},i}}{t_i}", colors=cols, font_size=34)
-        r1 = cmath(r"\text{score}", r"=", r"\Big(\prod_{i=1}^{n} \text{ratio}_i\Big)^{1/n}", colors=cols,
-                   font_size=34)
-        r2 = cmath(r"\frac{\text{score}_X}{\text{score}_Y}", r"=",
-                   r"\Big(\prod_{i=1}^{n} \frac{t_{\text{ref},i} / t_{X,i}}{t_{\text{ref},i} / t_{Y,i}}\Big)^{1/n}",
-                   colors=cols, font_size=34)
-        r3 = cmath(r"\frac{\text{score}_X}{\text{score}_Y}", r"=",
-                   r"\Big(\prod_{i=1}^{n} \frac{t_{Y,i}}{t_{X,i}}\Big)^{1/n}", colors=cols, font_size=34)
-        der = VGroup(r0, r1, r2).arrange(DOWN, aligned_edge=LEFT, buff=0.5).move_to([-3.2, 0.5, 0])
-        r3.move_to(r2, aligned_edge=LEFT)
-        whys = VGroup(
-            label(r"a reference machine's time over yours: \ bigger is better", font_size=17, color=GREY_B),
-            label(r"the geometric mean \ (Chapter 3)", font_size=17, color=GREY_B),
-            label(r"compare two machines", font_size=17, color=GREY_B),
-        )
-        for w, r in zip(whys, der):
-            w.next_to(r, DOWN, buff=0.12).align_to(r, LEFT)
-        why3 = label(r"the reference times cancel: \ the ranking does not depend on them", font_size=17,
-                     color=YES).move_to(whys[2], aligned_edge=LEFT)
-        rules = VGroup(
-            box(r"\textbf{base}: \ one set of flags for every benchmark in a language", DATA, size=17, w=5.6, h=0.7),
-            box(r"\textbf{peak}: \ flags tuned for each benchmark", LAM, size=17, w=5.6, h=0.7),
-            box(r"full disclosure: \ hardware, \ software, \ flags", HEAD, size=17, w=5.6, h=0.7),
-            box(r"results reviewed before SPEC publishes them", YES, size=17, w=5.6, h=0.7),
-            box(r"broken benchmarks retired with the next suite", NO, size=17, w=5.6, h=0.7),
-        ).arrange(DOWN, buff=0.22).move_to([3.7, 0.0, 0])
-        rl = label(r"the rules", font_size=21, color=GREY_A).next_to(rules, UP, buff=0.2)
-        with self.voiceover(
-            "SPEC's answer to Goodhart is a careful score and strict rules. <bookmark mark='a'/> Each benchmark's "
-            "time is divided into the time a fixed reference machine took, giving a ratio where bigger is better. "
-            "<bookmark mark='b'/> The score is the geometric mean of the ratios, the mean from chapter three. "
-            "<bookmark mark='c'/> Divide two machines' scores, and the reference times cancel, so the ranking does "
-            "not depend on which reference machine was chosen. <bookmark mark='d'/> Then the rules. A base result "
-            "must use one set of compiler flags for every benchmark in a language; a peak result may tune each. "
-            "Every result discloses its hardware, software and flags, and is reviewed before SPEC publishes "
-            "it. And when a benchmark breaks, it is retired with the next suite."
-        ) as vo:
-            self.play(FadeIn(head))
-            vo.wait_until("a")
-            self.play(Write(r0), FadeIn(whys[0]))
-            vo.wait_until("b")
-            self.play(TransformMatchingTex(r0.copy(), r1), FadeIn(whys[1]))
-            vo.wait_until("c")
-            self.play(TransformMatchingTex(r1.copy(), r2), FadeIn(whys[2]))
-            self.play(TransformMatchingTex(r2, r3), ReplacementTransform(whys[2], why3))
-            vo.wait_until("d")
-            self.play(FadeIn(rl), LaggedStart(*[FadeIn(r, shift=LEFT * 0.2) for r in rules], lag_ratio=0.35),
-                      run_time=3)
-        self.wait(0.4)
-        self.clear_scene()
 
     def forking(self):
+        self.ask(r"Many reasonable analysis choices; \\ report the one that looks best. False positives...",
+                 [r"unchanged", r"inflated"], 1,
+                 say="Between the runs and the claim lie many reasonable choices. Report whichever looks best. What happens to false positives?",
+                 reveal="They inflate: the garden of forking paths. Decide the analysis before seeing the data.")
         head = label(r"The garden of forking paths", font_size=36).to_edge(UP, buff=0.3)
         # a tree of reasonable choices
         root = box(r"the runs", DATA, size=17)

@@ -7,7 +7,7 @@ from videos.cs.cs19.common import (BG, CODE, COST, CTRL, DATA, FUNC, HEAD, LAM, 
                                    mono, words)
 
 
-class Matroid(VoiceoverScene):
+class Matroid(WatchScene):
     def construct(self):
         self.card()
         self.axioms()
@@ -15,12 +15,8 @@ class Matroid(VoiceoverScene):
         self.matching()
 
     def card(self):
-        card = chapter_card(2, r"When greedy is right: \ matroids", r"What structure makes greedy optimal?",
-                            lit=(1971,), extra=((1935, r"Whitney: \ matroids"), (1971, r"Edmonds: \ the greedy "
-                                                                                       r"theorem")), part=PART)
-        with self.voiceover("Chapter two. When greedy is right: matroids."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(2, r"When greedy is right: \ matroids", r"What structure makes greedy optimal?", lit=(1971,), extra=((1935, r"Whitney: \ matroids"), (1971, r"Edmonds: \ the greedy "
+                                                                                       r"theorem")), part=PART, said="Chapter two. When greedy is right: matroids.")
 
     def axioms(self):
         head = label(r"Independence, \ abstracted \ (Whitney, \ 1935)", font_size=34).to_edge(UP, buff=0.3)
@@ -111,6 +107,10 @@ class Matroid(VoiceoverScene):
         self.clear_scene()
 
     def matching(self):
+        self.ask(r"A path with edge weights 2, 3, 2. \\ Greedy matching takes the 3 first. Optimal?", [r"yes",
+                 r"no: 4 was possible"], 1,
+                 say="Three edges in a row, weighing two, three and two. Greedy takes the three. Is that the best matching?",
+                 reveal="No. The two outer edges together weigh four. Matchings aren't a matroid.")
         d = load("matroid")
         head = label(r"Matchings are not a matroid", font_size=34).to_edge(UP, buff=0.3)
         pos = {"a": (-5.6, 0.6), "b": (-3.8, 0.6), "c": (-2.0, 0.6), "d": (-0.2, 0.6)}
@@ -136,7 +136,7 @@ class Matroid(VoiceoverScene):
             "nonnegative graphs, not a universal distribution. <bookmark mark='d'/> For nonnegative edge weights, "
             'greedy always gets at least half the optimum: charge each rejected optimum edge to a greedy edge at '
             "least as heavy; at most two charges meet one chosen edge. <bookmark mark='e'/> Exact cardinality and "
-            'weighted matching need further algorithms; a greedy approximation is not a proof of optimality.'
+            'weighted matching need further algorithms.'
         ) as vo:
             self.play(FadeIn(head), FadeIn(g))
             vo.wait_until("a")

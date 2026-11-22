@@ -5,21 +5,29 @@ import numpy as np
 from videos.stats.stats29.common import *  # noqa: F403
 
 
-class RKHS(VoiceoverScene):
+class RKHS(StatsScene):
     def construct(self):
         self.card()
+        self.ask("Minimize over an infinite-dimensional function space. The solution lives in a space of dimension...",
+                 ["infinity", "$n$", "1"], 1,
+                 say="Kernel ridge regression searches an infinite-dimensional space of functions. In how many "
+                     "dimensions does the solution actually live?",
+                 reveal="N: one kernel bump at each data point. That's the representer theorem, infinite "
+                        "dimensions, finite answers.")
         self.space()
         self.representer()
         self.splines_are()
         self.fits()
         self.gp()
         self.bridge()
+        self.answer()
+        self.checkpoint([("Near the boundary: local linear or Nadaraya--Watson?", "local linear: smaller bias"),
+                         (r"A smoothing spline with $\lambda \to \infty$?", "the least-squares line")],
+                        narration="Checkpoint. Regression curves.",
+                        answers_narration="Local linear. And the straight line.")
 
     def card(self):
-        card = chapter_card(8, r"Kernels and the representer theorem", r"Infinite dimensions, \ finite answers", lit=(1970,), part=PART)
-        with self.voiceover("Chapter eight. Reproducing kernels and the representer theorem."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(8, r"Kernels and the representer theorem", r"Infinite dimensions, \ finite answers", lit=(1970,), part=PART, said="Chapter eight. Reproducing kernels and the representer theorem.")
 
     def space(self):
         rows = [

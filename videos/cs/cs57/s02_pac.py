@@ -41,7 +41,7 @@ def stacked(rows, whys, buff=0.2):
     return pairs
 
 
-class Pac(VoiceoverScene):
+class Pac(WatchScene):
     def construct(self):
         self.card()
         self.game()
@@ -52,12 +52,8 @@ class Pac(VoiceoverScene):
         self.bridge()
 
     def card(self):
-        card = chapter_card(1, r"Probably approximately correct", r"How many examples are enough?",
-                            lit=(1984, 2010), extra=((1984, r"Valiant: \ \textit{A Theory of the Learnable}"),
-                                                     (2010, r"Valiant's Turing Award")), part=PART)
-        with self.voiceover("Chapter one. Probably approximately correct."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(1, r"Probably approximately correct", r"How many examples are enough?", lit=(1984, 2010), extra=((1984, r"Valiant: \ \textit{A Theory of the Learnable}"),
+                                                     (2010, r"Valiant's Turing Award")), part=PART, said="Chapter one. Probably approximately correct.")
 
     def game(self):
         c = load("compress")
@@ -125,6 +121,10 @@ class Pac(VoiceoverScene):
         self.clear_scene()
 
     def finite(self):
+        self.ask(r"A finite class $H$ with a perfect hypothesis. \\ Examples needed grow with...", [r"$|H|$",
+                 r"$\log |H|$"], 1,
+                 say="A finite class of hypotheses, one of them perfect. How do the examples needed grow with the size of the class?",
+                 reveal="With its logarithm: each example halves the doubt, roughly.")
         f = load("finite")
         H, eps, delta, m = f["H"], f["eps"], f["delta"], f["m"]
         head = label(r"A finite class: \ the union bound", font_size=36).to_edge(UP, buff=0.3)

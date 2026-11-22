@@ -85,7 +85,7 @@ def show(recs):
     return "[" + ", ".join("[" + ", ".join(ch) + "]" for ch in recs) + "]"
 
 
-class Dremel(VoiceoverScene):
+class Dremel(WatchScene):
     def construct(self):
         self.card()
         self.problem()
@@ -95,12 +95,8 @@ class Dremel(VoiceoverScene):
         self.payoff()
 
     def card(self):
-        card = chapter_card(9, r"Nested data in columns", r"How can a tree be stored as flat columns, \ and come back?",
-                            lit=(2010, 2013), extra=((2010, r"Melnik et al.: \ Dremel"),
-                                                     (2013, r"Parquet")), part=PART)
-        with self.voiceover("Chapter nine. Nested data in columns."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(9, r"Nested data in columns", r"How can a tree be stored as flat columns, \ and come back?", lit=(2010, 2013), extra=((2010, r"Melnik et al.: \ Dremel"),
+                                                     (2013, r"Parquet")), part=PART, said="Chapter nine. Nested data in columns.")
 
     def problem(self):
         d = load("dremel")
@@ -144,6 +140,10 @@ class Dremel(VoiceoverScene):
         return tr, names
 
     def repetition(self):
+        self.ask(r"Store nested records by column. \\ To rebuild the tree, each value carries...", [r"its full path",
+                 r"two small integers"], 1,
+                 say="Store nested records column by column. What does each value need to carry so the records can be rebuilt?",
+                 reveal="Two small integers: a repetition level and a definition level.")
         d = load("dremel")
         lv = d["levels"]
         head = label(r"Repetition level: \ where does the value repeat?", font_size=36).to_edge(UP, buff=0.3)
@@ -358,6 +358,12 @@ class Dremel(VoiceoverScene):
             self.play(FadeIn(sys_[2]), FadeIn(caps[2]))
         self.wait(0.4)
         self.clear_scene()
+        self.checkpoint(
+            [(r"What is a star schema?", r"A fact table joined to dimension tables"),
+             (r"Why store columns apart?", r"Read only needed columns; encode similar values")],
+            narration="Checkpoint. What is a star schema? And why do warehouses store columns apart?",
+            answers_narration="A central fact table, one row per event, joined to its dimensions. And so a query reads only "
+                              "the columns it needs, each compressed among values of its own kind.")
 
 
 _ = (LAM, mono, YES)

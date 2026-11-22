@@ -25,7 +25,7 @@ def toy_pagerank(d=0.85, iters=100):
     return r
 
 
-class Links(VoiceoverScene):
+class Links(WatchScene):
     def construct(self):
         self.card()
         self.votes()
@@ -35,13 +35,7 @@ class Links(VoiceoverScene):
         self.spam()
 
     def card(self):
-        card = chapter_card(8, r"Links and the random surfer", r"Which pages does the web itself vouch for?",
-                            lit=(1998, 1999),
-                            extra=((1998, r"Brin and Page: \ PageRank"), (1999, r"Kleinberg: \ hubs and authorities")),
-                            part=PART)
-        with self.voiceover("Chapter eight. Links and the random surfer."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(8, r"Links and the random surfer", r"Which pages does the web itself vouch for?", lit=(1998, 1999), extra=((1998, r"Brin and Page: \ PageRank"), (1999, r"Kleinberg: \ hubs and authorities")), part=PART, said="Chapter eight. Links and the random surfer.")
 
     def votes(self):
         head = label(r"Links as votes", font_size=36).to_edge(UP, buff=0.3)
@@ -104,6 +98,10 @@ class Links(VoiceoverScene):
         self.clear_scene()
 
     def surfer(self):
+        self.ask(r"The random surfer sometimes teleports. \\ Why?", [r"to go faster",
+                 r"to escape dead ends, and make the rank unique"], 1,
+                 say="PageRank's random surfer sometimes jumps to a random page. Why?",
+                 reveal="To escape dead ends and traps, so the chain has one stationary distribution.")
         head = label(r"The random surfer, \ written down", font_size=36).to_edge(UP, buff=0.3)
         eq = label(r"$\mathrm{PR}(p) \;=\; \dfrac{1-d}{N} \;+\; d \displaystyle\sum_{q \to p} "
                    r"\dfrac{\mathrm{PR}(q)}{L(q)}$",
@@ -342,6 +340,12 @@ class Links(VoiceoverScene):
             self.play(FadeIn(lines[1]))
         self.wait(0.4)
         self.clear_scene()
+        self.checkpoint(
+            [(r"What does BM25 add to tf-idf?", r"Saturation and length normalization"),
+             (r"What is PageRank?", r"The stationary distribution of a random surfer")],
+            narration="Checkpoint. What does BM25 add to tf-idf? And what is PageRank?",
+            answers_narration="Saturation of term frequency, and normalization by length. And the stationary distribution of "
+                              "a random surfer who sometimes teleports.")
 
 
 _ = (BG, DATA)

@@ -13,7 +13,7 @@ def box(w, h, text, color=CTRL, font_size=24):
     return VGroup(b, MathTex(text, font_size=font_size, color=color).move_to(b))
 
 
-class Meta(VoiceoverScene):
+class Meta(WatchScene):
     def construct(self):
         self.card()
         self.violation()
@@ -23,11 +23,7 @@ class Meta(VoiceoverScene):
         self.buridan()
 
     def card(self):
-        card = chapter_card(5, r"Metastability", r"What happens when the outside world ignores the clock?",
-                            lit=(1973,), part=PART)
-        with self.voiceover("Chapter five. Metastability."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(5, r"Metastability", r"What happens when the outside world ignores the clock?", lit=(1973,), part=PART, said="Chapter five. Metastability.")
 
     # ------------------------------------------------------------------
     def violation(self):
@@ -63,7 +59,7 @@ class Meta(VoiceoverScene):
             "the specified operating conditions. But signals from outside, a key press, a network packet, a "
             "sensor, arrive whenever they like. <bookmark mark='a'/> Here is the flip-flop of chapter three "
             "again, simulated gate by gate, with D changing on the very tick of the clock edge. <bookmark "
-            "mark='b'/> The master latch is caught half shut, with its two halves fighting, and in this model "
+            "mark='b'/> The master latch is caught half shut, with its two halves fighting, and "
             "they oscillate for several gate delays before the slave copies out a value. For that time, the "
             "binary waveform is not a stable value that downstream logic can safely sample. In a real circuit the "
             "voltages hover near the saddle instead of oscillating, but the effect is the same: an output that is "
@@ -109,7 +105,7 @@ class Meta(VoiceoverScene):
         with self.voiceover(
             "How late? Use the dynamical system of chapter two. <bookmark mark='a'/> A data edge arrives at a "
             "random moment near the clock edge and leaves the latch with a small random imbalance. Here are forty "
-            "thousand uniformly sampled initial imbalances, integrated through the illustrative analog model "
+            "thousand uniformly sampled initial imbalances, integrated through the analog model "
             "until they resolve. Most decide quickly. But the histogram has a long tail. <bookmark mark='b'/> "
             "Plot the fraction still undecided on a logarithmic scale, and the tail is a straight line: the "
             "probability of taking longer than T falls like e to the minus lambda T, with lambda the saddle's "
@@ -170,7 +166,7 @@ class Meta(VoiceoverScene):
             "Engineers turn this into a single number. <bookmark mark='a'/> The mean time between failures grows "
             "exponentially with the time t r allowed for resolving, divided by the latch's time constant tau, and "
             "falls with how often the data changes inside the dangerous window around the clock edge. <bookmark "
-            "mark='b'/> With illustrative textbook-scale numbers, twenty-picosecond constants, a one gigahertz "
+            "mark='b'/> With textbook-scale numbers, twenty-picosecond constants, a one gigahertz "
             "clock and data changing a hundred million times a second, a single flip-flop given half a nanosecond "
             "to settle fails about once every ten hours. For a chip that runs for years, that is a disaster."
         ) as vo:
@@ -187,6 +183,10 @@ class Meta(VoiceoverScene):
 
     # ------------------------------------------------------------------
     def synchronizer(self):
+        self.ask(r"Add a second flip-flop in a row. \\ The chance of a metastable failure...", [r"halves",
+                 r"falls exponentially", r"doesn't change"], 1,
+                 say="Pass the outside signal through a second flip-flop. What happens to the chance of failure?",
+                 reveal="It falls exponentially: a whole extra cycle to resolve.")
         m = load("meta")["mtbf"]
         head = label(r"The two-flip-flop synchronizer", font_size=38).to_edge(UP, buff=0.35)
         f1 = box(1.4, 1.0, r"\text{FF}_1", NO).move_to(LEFT * 2.2 + UP * 1.2)

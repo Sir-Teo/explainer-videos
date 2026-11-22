@@ -5,20 +5,24 @@ import numpy as np
 from videos.stats.stats11.common import *  # noqa: F403
 
 
-class Fieller(VoiceoverScene):
+class Fieller(StatsScene):
     def construct(self):
         self.card()
+        self.ask(r"A ratio whose denominator may be near zero. An honest 95\% interval can be...",
+                 ["always a finite interval", "infinite, or two pieces", "empty"], 1,
+                 say="A ratio of two means whose denominator might be near zero. What can an honest ninety-five "
+                     "percent interval for it look like?",
+                 reveal="Infinite, or two separate pieces. Fieller's interval does exactly this, and any interval "
+                        "that is always finite must break its promise near a zero denominator.")
         self.problem()
         self.derivation()
         self.shapes()
         self.g_rule()
         self.impossible()
+        self.answer()
 
     def card(self):
-        card = chapter_card(7, r"Ratios: \ Fieller", r"When the denominator might be near zero", part=PART)
-        with self.voiceover("Chapter seven. Ratios, and Fieller's interval."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(7, r"Ratios: \ Fieller", r"When the denominator might be near zero", part=PART, said="Chapter seven. Ratios, and Fieller's interval.")
 
     def problem(self):
         rows = fit_rows(VGroup(

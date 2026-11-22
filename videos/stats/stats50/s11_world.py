@@ -5,9 +5,16 @@ import numpy as np
 from videos.stats.stats50.common import *  # noqa: F403
 
 
-class HonestIntervals(VoiceoverScene):
+class HonestIntervals(StatsScene):
     def construct(self):
         self.card()
+        self.ask("Can a confidence band adapt to unknown smoothness and keep honest coverage?",
+                 ["yes, at no cost", "not in general"], 1,
+                 say="Adaptive estimators match the best rate without knowing the smoothness. Can a confidence band "
+                     "do the same, adapting its width and keeping honest coverage over the whole class?",
+                 reveal="Not in general, Low proved: honest adaptive bands are impossible without assumptions that "
+                        "rule out the hardest functions. Adaptation in estimation is often free; in confidence, it "
+                        "isn't.")
         self.problem()
         self.chart()
         self.honest()
@@ -15,12 +22,14 @@ class HonestIntervals(VoiceoverScene):
         self.board()
         self.hcboard()
         self.lesson()
+        self.answer()
+        self.checkpoint([("Lepski chooses a bandwidth by?", "comparing estimates across bandwidths"),
+                         ("Honest adaptive confidence bands?", "impossible in general")],
+                        narration="Checkpoint. Adaptation.",
+                        answers_narration="Comparing bandwidths. And impossible in general.")
 
     def card(self):
-        card = chapter_card(10, r"The Board: \ adaptation and honest intervals", r"What a minimax view does to confidence", part=PART)
-        with self.voiceover("Chapter ten. The Board: adaptation and honest intervals, or what a minimax view does to confidence."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(10, r"The Board: \ adaptation and honest intervals", r"What a minimax view does to confidence", part=PART, said="Chapter ten. The Board: adaptation and honest intervals, or what a minimax view does to confidence.")
 
     def problem(self):
         rows = [

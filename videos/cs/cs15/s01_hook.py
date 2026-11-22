@@ -5,12 +5,12 @@ from videos.cs.cs15.common import (CODE, COST, CTRL, DATA, FUNC, HEAD, LAM, NO, 
                                    sawtooth, words)
 
 
-class Hook(VoiceoverScene):
+class Hook(WatchScene):
     def construct(self):
         self.question()
         self.heap()
         self.preview()
-        self.plan()
+        self.title(PART)
 
     def question(self):
         h = load("hook")
@@ -116,27 +116,3 @@ class Hook(VoiceoverScene):
         self.wait(0.3)
         self.clear_scene()
 
-    def plan(self):
-        title = label(rf"Part {PART}: \ Runtimes", font_size=46).to_edge(UP, buff=0.4)
-        smap = series_map(current=PART, done=PART - 1).scale(0.92).next_to(title, DOWN, buff=0.35)
-        obj = objectives_card([
-            r"interpreters, \ environments and closures",
-            r"continuations, \ CPS and tail calls",
-            r"bytecode virtual machines and dispatch",
-            r"reference counting, \ tracing, \ copying and generational collection",
-            r"incremental collection: \ the tri-color invariant",
-            r"JITs, \ dynamic dispatch, \ exceptions, \ WebAssembly",
-        ], font_size=26).move_to(DOWN * 0.2)
-        with self.voiceover(
-            "Part 15 of Computer Science, Built: Runtimes, the last part of Act Three. We have a machine, a "
-            "compiler, and a language with types. Now we give the language somewhere to live. <bookmark "
-            "mark='a'/> In this part: interpreters, environments and closures; continuations and tail calls; "
-            "bytecode machines and the cost of dispatch; reference counting, tracing, copying and generational "
-            "collection; collecting while the program runs; and just-in-time compilers, dynamic dispatch, "
-            "exceptions and WebAssembly."
-        ) as vo:
-            self.play(FadeIn(title), FadeIn(smap))
-            vo.wait_until("a")
-            self.play(FadeOut(smap), FadeIn(obj))
-        self.wait(0.5)
-        self.clear_scene()

@@ -48,23 +48,17 @@ def row_mob(k, size=18):
     return VGroup(t, gb).arrange(RIGHT, buff=0.12)
 
 
-class Ltr(VoiceoverScene):
+class Ltr(WatchScene):
     def construct(self):
         self.card()
         self.features()
         self.three()
         self.lambdas()
-        self.mart()
         self.clicks()
 
     def card(self):
-        card = chapter_card(12, r"Learning to rank", r"Hundreds of signals: \ how should they be combined?",
-                            lit=(2005, 2010, 2017),
-                            extra=((2005, r"Burges et al.: \ RankNet"), (2010, r"Burges: \ LambdaMART"),
-                                   (2017, r"Joachims et al.: \ unbiased learning to rank")), part=PART)
-        with self.voiceover("Chapter twelve. Learning to rank."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(12, r"Learning to rank", r"Hundreds of signals: \ how should they be combined?", lit=(2005, 2010, 2017), extra=((2005, r"Burges et al.: \ RankNet"), (2010, r"Burges: \ LambdaMART"),
+                                   (2017, r"Joachims et al.: \ unbiased learning to rank")), part=PART, said="Chapter twelve. Learning to rank.")
 
     def features(self):
         ev = load("bm25")
@@ -119,6 +113,10 @@ class Ltr(VoiceoverScene):
         self.clear_scene()
 
     def three(self):
+        self.ask(r"Train a ranker to predict each grade separately. \\ The problem:", [r"none",
+                 r"it fixes errors that don't change the order"], 1,
+                 say="Train a ranker to predict each passage's grade on its own. What's wrong with that?",
+                 reveal="It spends effort on errors that never change the order a reader sees.")
         head = label(r"Pointwise, \ pairwise, \ listwise", font_size=36).to_edge(UP, buff=0.3)
 
         def mini(ks):
@@ -233,80 +231,6 @@ class Ltr(VoiceoverScene):
         self.wait(0.4)
         self.clear_scene()
 
-    def mart(self):
-        head = label(r"LambdaMART: \ boosted trees on lambdas", font_size=36).to_edge(UP, buff=0.3)
-        # rounds of boosting, each tree taken to fit the lambdas exactly (illustrative)
-        states = [list(SCORES)]
-        for _ in range(2):
-            s = states[-1]
-            states.append([a + ETA * b for a, b in zip(s, lambdas(s))])
-        y_top, dy = 1.55, 0.58
-
-        def place(scores):
-            order = sorted(range(6), key=lambda k: -scores[k])
-            return {k: y_top - r * dy for r, k in enumerate(order)}
-        mobs = [row_mob(k) for k in range(6)]
-        x_list = -4.6
-        for k, y in place(states[0]).items():
-            mobs[k].move_to([x_list, y, 0])
-        ranks = VGroup(*[label(rf"{r + 1}", font_size=18, color=GREY_B).move_to([x_list - 1.65, y_top - r * dy, 0])
-                         for r in range(6)])
-        nd = [ndcg_of(s) for s in states]
-        nd_t = [label(rf"nDCG $= {v:.2f}$", font_size=21, color=YES if v > 0.99 else HEAD) for v in nd]
-        for t in nd_t:
-            t.move_to([x_list, y_top - 6 * dy - 0.05, 0])
-
-        def tree(feat, col):
-            root = tag_box(feat, color=col, size=17, h=0.42)
-            l1 = mono(r"+0.4", size=17, color=YES)
-            l2 = mono(r"-0.2", size=17, color=NO)
-            leaves = VGroup(l1, l2).arrange(RIGHT, buff=0.3).next_to(root, DOWN, buff=0.4)
-            ed = VGroup(Line(root.get_bottom(), l1.get_top(), color=GREY_C, stroke_width=1.5),
-                        Line(root.get_bottom(), l2.get_top(), color=GREY_C, stroke_width=1.5))
-            return VGroup(root, leaves, ed)
-        trees = VGroup(tree(r"BM25>8?", DATA), tree(r"phrase?", HEAD), tree(r"len<300?", GREY_B))
-        plus = [label(r"$\eta\,\cdot$" if i == 0 else r"$+\;\eta\,\cdot$", font_size=26) for i in range(3)]
-        f0 = label(r"$f(x) \;=\;$", font_size=26)
-        dots = label(r"$+ \cdots$", font_size=24)
-        expr = VGroup(f0, plus[0], trees[0], plus[1], trees[1], plus[2], trees[2], dots).arrange(RIGHT, buff=0.15)
-        if expr.width > 9.4:
-            expr.scale_to_fit_width(9.4)
-        expr.move_to([2.0, 1.3, 0])
-        ill = label(r"illustrative: \ scores, \ trees, \ and each tree fitting the lambdas exactly", font_size=16,
-                    color=GREY_B).next_to(expr, DOWN, buff=0.25)
-        lines = VGroup(
-            wrapped_label(r"gradient boosting \ (\textit{AI, Built} \ Part 6): \ each round fits a small regression "
-                          r"tree to the current lambdas, \ over the features, \ and adds it, \ shrunk by $\eta$", 8.6,
-                          font_size=19, color=WHITE),
-            wrapped_label(r"an ensemble of lambda-gradient models won the Yahoo! \ Learning to Rank Challenge \ "
-                          r"(2010); \ LightGBM and XGBoost ship it as an objective today", 8.6, font_size=19,
-                          color=HEAD),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.3).move_to([2.2, -1.55, 0])
-        last = "one, the ideal order" if nd[2] > 0.999 else f"{nd[2]:.2f}"
-        with self.voiceover(
-            "Lambdas are gradients, and AI, Built Part 6 showed what to do with gradients over tabular features: "
-            "boost trees. <bookmark mark='a'/> LambdaMART starts from some scores, computes every passage's lambda, "
-            "and fits a small regression tree that predicts them from the features, added with a small weight. "
-            "<bookmark mark='b'/> Then the lambdas are recomputed, and another tree fits them. In our picture "
-            f"nDCG climbs from {nd[0]:.2f} to {nd[1]:.2f}, and "
-            f"then to {last}. <bookmark mark='c'/> Because trees split on features, the model generalizes to "
-            "queries it never saw. An ensemble built on these lambda gradients won Yahoo's Learning to Rank "
-            "Challenge in 2010, and LightGBM and XGBoost offer it as a standard objective."
-        ) as vo:
-            self.play(FadeIn(head), FadeIn(ranks), *[FadeIn(m) for m in mobs], FadeIn(nd_t[0]))
-            vo.wait_until("a")
-            self.play(FadeIn(f0), FadeIn(plus[0]), FadeIn(trees[0]), FadeIn(ill), FadeIn(lines[0]))
-            for r in (1, 2):
-                if r == 2:
-                    vo.wait_until("b")
-                self.play(*[mobs[k].animate.move_to([x_list, y, 0]) for k, y in place(states[r]).items()],
-                          ReplacementTransform(nd_t[r - 1], nd_t[r]),
-                          FadeIn(plus[r]), FadeIn(trees[r]), run_time=1.5)
-            self.play(FadeIn(dots))
-            vo.wait_until("c")
-            self.play(FadeIn(lines[1]))
-        self.wait(0.4)
-        self.clear_scene()
 
     def clicks(self):
         head = label(r"Clicks and position bias", font_size=36).to_edge(UP, buff=0.3)

@@ -7,7 +7,7 @@ from videos.cs.cs17.common import (BG, CODE, COST, CTRL, DATA, FUNC, HEAD, LAM, 
                                    mono, slots, words)
 
 
-class Cuckoo(VoiceoverScene):
+class Cuckoo(WatchScene):
     def construct(self):
         self.card()
         self.kicks()
@@ -15,14 +15,13 @@ class Cuckoo(VoiceoverScene):
         self.perfect()
 
     def card(self):
-        card = chapter_card(4, r"Cuckoo hashing and perfect hashing", r"Can every lookup take two probes?",
-                            lit=(2001,), extra=((1984, r"Fredman, Koml\'os and Szemer\'edi"),
-                                                (2001, r"Pagh and Rodler: \ cuckoo hashing")), part=PART)
-        with self.voiceover("Chapter four. Cuckoo hashing, and perfect hashing."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(4, r"Cuckoo hashing and perfect hashing", r"Can every lookup take two probes?", lit=(2001,), extra=((1984, r"Fredman, Koml\'os and Szemer\'edi"),
+                                                (2001, r"Pagh and Rodler: \ cuckoo hashing")), part=PART, said="Chapter four. Cuckoo hashing, and perfect hashing.")
 
     def kicks(self):
+        self.ask(r"Cuckoo hashing: \\ how many probes can any lookup take?", [r"at most 2, always", r"2 on average"], 0,
+                 say="With cuckoo hashing, how many places must a lookup check?",
+                 reveal="At most two, always: each key lives in one of its two possible slots.")
         head = label(r"Two tables, \ two hash functions", font_size=34).to_edge(UP, buff=0.3)
         m = 8
         t1 = slots([False] * m, w=0.8, h=0.6, color=DATA).move_to(UP * 1.3)
@@ -169,3 +168,10 @@ class Cuckoo(VoiceoverScene):
             self.play(FadeOut(example), FadeIn(tab))
         self.wait(0.3)
         self.clear_scene()
+        self.checkpoint(
+            [(r"Why is a secret, random hash safer than a fixed one?", r"An attacker can't pick keys that collide"),
+             (r"What happens to linear probing as the table fills?", r"Runs cluster, and probe counts explode")],
+            narration="Checkpoint. Why choose the hash function at random? And what happens to linear probing as the table "
+                      "fills up?",
+            answers_narration="So an attacker can't choose keys that collide. And full slots form runs that grow, so probe "
+                              "counts explode near full.")

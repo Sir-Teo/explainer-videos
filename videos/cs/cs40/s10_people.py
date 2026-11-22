@@ -6,7 +6,7 @@ from explainer.cs import *  # noqa: F403
 from videos.cs.cs40.common import (DATA, HEAD, KERN, LAM, NO, PART, YES, axes, load, trace)
 
 
-class People(VoiceoverScene):
+class People(WatchScene):
     def construct(self):
         self.card()
         self.conway()
@@ -15,12 +15,8 @@ class People(VoiceoverScene):
         self.truck()
 
     def card(self):
-        card = chapter_card(9, r"Teams", r"Why does the shape of a team become the shape of its software?",
-                            lit=(1968, 1975), extra=((1968, r"Conway: \ How Do Committees Invent?"),
-                                                     (1975, r"Brooks: \ The Mythical Man-Month")), part=PART)
-        with self.voiceover("Chapter nine. Teams."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(9, r"Teams", r"Why does the shape of a team become the shape of its software?", lit=(1968, 1975), extra=((1968, r"Conway: \ How Do Committees Invent?"),
+                                                     (1975, r"Brooks: \ The Mythical Man-Month")), part=PART, said="Chapter nine. Teams.")
 
     def conway(self):
         head = label(r"Conway's law", font_size=36).to_edge(UP, buff=0.3)
@@ -107,6 +103,9 @@ class People(VoiceoverScene):
         self.clear_scene()
 
     def brooks(self):
+        self.ask(r"Add people to a late project. \\ It finishes...", [r"earlier", r"later"], 1,
+                 say="Add people to a software project that is already late. Does it finish earlier or later?",
+                 reveal="Later, when it is already late and the newcomers need training. Brooks' law, with its condition.")
         b = load("brooks")
         head = label(r"Brooks' law, \ simulated", font_size=36).to_edge(UP, buff=0.3)
         g = axes([0, 22, 4], [16, 24, 2], x_length=6.4, y_length=3.6, x_label=rf"month when {b['add']} people join",

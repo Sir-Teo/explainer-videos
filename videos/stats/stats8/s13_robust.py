@@ -7,19 +7,28 @@ from videos.stats.stats8.common import *  # noqa: F403
 DISTS = [("normal", r"normal", S.EST), ("uniform", r"uniform", S.LIK), ("t5", r"$t_5$", S.POST), ("exponential", r"exponential", S.RESID)]
 
 
-class Robust(VoiceoverScene):
+class Robust(StatsScene):
     def construct(self):
         self.card()
+        self.ask("Non-normal data. Which test is more fragile?",
+                 ["the $t$-test for a mean", "the $F$-test for two variances", "equally fragile"], 1,
+                 say="Normal theory with data that aren't normal. Which is more fragile: the t-test for a mean, or "
+                     "the F-test for comparing two variances?",
+                 reveal="The F-test for variances. The t-test leans on the central limit theorem; the F-test leans "
+                        "on the normal's kurtosis, and it fails badly.")
         self.sizes()
         self.why()
         self.onesided()
         self.box()
+        self.answer()
+        self.checkpoint([("Does a huge sample fix a biased design?", "no: it measures its own bias precisely"),
+                         ("Fragile under non-normality: the $t$-test or the $F$-test for variances?", "the $F$-test for variances")],
+                        narration="Checkpoint. Samples and their promises.",
+                        answers_narration="No: size can't fix bias. And the F-test for variances is the fragile "
+                                          "one.")
 
     def card(self):
-        card = chapter_card(12, r"How robust is normal theory?", r"When the data are not normal", lit=(1953,), part=PART)
-        with self.voiceover("Chapter twelve. How robust is normal theory?"):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(12, r"How robust is normal theory?", r"When the data are not normal", lit=(1953,), part=PART, said="Chapter twelve. How robust is normal theory?")
 
     def sizes(self):
         d = load("robust")

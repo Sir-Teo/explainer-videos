@@ -9,7 +9,7 @@ HRS = [("start at 350: \\ death", 1.01, 0.84, 1.22), ("start at 200: \\ death", 
        ("start at 350: \\ AIDS or death", 1.38, 1.23, 1.56), ("start at 200: \\ AIDS or death", 1.90, 1.67, 2.15)]
 
 
-class Hook(LectureMixin, VoiceoverScene):
+class Hook(LectureMixin, StatsScene):
     def construct(self):
         self.story()
         self.forest()
@@ -18,7 +18,7 @@ class Hook(LectureMixin, VoiceoverScene):
         self.lesson()
         self.taxonomy()
         self.upgrade()
-        self.objectives()
+        self.title(PART)
 
     def story(self):
         tl = timeline(lit=(2011,)).to_edge(UP, buff=0.35)
@@ -131,28 +131,6 @@ class Hook(LectureMixin, VoiceoverScene):
         self.wait(1.0)
         self.clear_scene()
 
-    def objectives(self):
-        head = VGroup(label(r"Part 62", font_size=34, color=GREY_B), label(r"Frontiers of Causal Inference", font_size=56)).arrange(DOWN, buff=0.25)
-        obj = objectives_card([
-            r"the front door; \ sensitivity bounds on the NSW job-training data; \ proximal inference",
-            r"spillovers on a network; \ learning and evaluating treatment rules; \ Q-learning",
-            r"what causal discovery can and cannot do; \ transporting a trial; \ surrogate outcomes",
-            r"four Board rows; \ open problems",
-        ], color=S.ACCENT, font_size=26)
-        prereq = note(r"prerequisites: \ Parts 35, \ 36, \ 37, \ 49").to_corner(DL, buff=0.3)
-        built = note(r"built: \ \texttt{statkit.frontier}, \ the exposure map").to_corner(DR, buff=0.3)
-        with self.voiceover(
-            "<bookmark mark='a'/> Part sixty-two: frontiers of causal inference. <bookmark mark='b'/> The front door; "
-            "sensitivity bounds on the National Supported Work data; proximal inference; spillovers on a network; learning "
-            "and honestly evaluating treatment rules; Q-learning for dynamic regimes; what causal discovery can and cannot "
-            "do; transporting a trial to its target population; surrogate outcomes; and open problems."
-        ) as vo:
-            vo.wait_until("a")
-            self.play(FadeIn(head, shift=UP * 0.2))
-            vo.wait_until("b")
-            self.play(FadeOut(head), FadeIn(obj, shift=UP * 0.2), FadeIn(prereq), FadeIn(built))
-        self.wait(1.0)
-        self.clear_scene()
 
     def clone(self):
         self.lad_voiceover(

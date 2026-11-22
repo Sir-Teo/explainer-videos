@@ -12,20 +12,15 @@ def cell(bit, size=0.55, col=DATA):
     return VGroup(b, MathTex(str(bit), font_size=30, color=col if bit else GREY_B).move_to(b))
 
 
-class Lfsr(VoiceoverScene):
+class Lfsr(WatchScene):
     def construct(self):
         self.card()
         self.counters()
         self.lfsr()
         self.algebra()
-        self.table()
 
     def card(self):
-        card = chapter_card(8, r"Counters and shift registers", r"What can a register do with almost no logic?",
-                            lit=(1954, 1967), part=PART)
-        with self.voiceover("Chapter eight. Counters and shift registers."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(8, r"Counters and shift registers", r"What can a register do with almost no logic?", lit=(1954, 1967), part=PART, said="Chapter eight. Counters and shift registers.")
 
     # ------------------------------------------------------------------
     def counters(self):
@@ -62,6 +57,10 @@ class Lfsr(VoiceoverScene):
 
     # ------------------------------------------------------------------
     def lfsr(self):
+        self.ask(r"A 4-bit linear-feedback shift register, from a nonzero seed. \\ States before it repeats?",
+                 [r"4", r"15", r"16"], 1,
+                 say="A four-bit feedback shift register, started anywhere but zero. How many states before it repeats?",
+                 reveal="Fifteen: every pattern except all zeros.")
         d = load("lfsr")
         seq = d["seq4"]
         head = label(r"A linear-feedback shift register", font_size=38).to_edge(UP, buff=0.35)
@@ -203,43 +202,3 @@ class Lfsr(VoiceoverScene):
         self.wait(0.3)
         self.clear_scene()
 
-    # ------------------------------------------------------------------
-    def table(self):
-        d = load("lfsr")
-        head = label(r"Monic $p(x)$, degree 2--8, constant term 1", font_size=36).to_edge(UP, buff=0.35)
-        hdr = VGroup(*[label(t, font_size=22, color=GREY_B) for t in (r"degree $n$", r"polynomials", r"maximal (period "
-                                                                       r"$2^n - 1$)", r"$\varphi(2^n - 1)/n$")])
-        rows = VGroup(hdr)
-        for r in d["rows"]:
-            rows.add(VGroup(MathTex(str(r["n"]), font_size=28, color=GREY_A),
-                            MathTex(str(r["polys"]), font_size=28, color=GREY_A),
-                            MathTex(str(r["maximal"]), font_size=28, color=YES),
-                            MathTex(str(r["expected"]), font_size=28, color=HEAD)))
-        for i, r in enumerate(rows):
-            for j, m in enumerate(r):
-                m.move_to([-3.8 + [0, 2.4, 5.0, 7.6][j], 2.2 - 0.5 * i, 0])
-        uses = VGroup(
-            label(r"CRC checksums: \ dividing by a polynomial over $\mathrm{GF}(2)$ \ (Part 28)", font_size=24,
-                  color=GREY_A),
-            label(r"stream ciphers, \ and why linearity makes them breakable \ (Part 29)", font_size=24, color=GREY_A),
-            label(r"scramblers on every serial link; \ GPS codes; \ built-in self-test of chips", font_size=24,
-                  color=GREY_A),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.18).to_edge(DOWN, buff=0.4)
-        with self.voiceover(
-            "Here are all monic feedback polynomials of degrees two through eight with constant coefficient one, "
-            "so the shift is invertible, each simulated from a nonzero seed until it repeats. <bookmark "
-            "mark='a'/> At degree eight there are a hundred and twenty-eight of them, and sixteen give the "
-            "maximal period of two hundred and fifty-five. In every row the count matches the formula from field "
-            "theory: Euler's phi of two to the n minus one, divided by n. <bookmark mark='b'/> These little "
-            "machines are everywhere. The checksums that catch errors on disks and networks divide by such "
-            "polynomials, in Part 28. Stream ciphers were built from them, and Part 29 shows why their linearity "
-            "makes them easy to break. Serial links scramble their bits with them, GPS satellites are told apart "
-            "by them, and chips test themselves with them."
-        ) as vo:
-            self.play(FadeIn(head), FadeIn(hdr), FadeIn(rows[1:]))
-            vo.wait_until("a")
-            self.play(Indicate(rows[1:], scale_factor=1.02))
-            vo.wait_until("b")
-            self.play(LaggedStart(*[FadeIn(u) for u in uses], lag_ratio=0.4))
-        self.wait(0.3)
-        self.clear_scene()

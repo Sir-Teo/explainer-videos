@@ -29,9 +29,15 @@ def graph(pc, pos, color=GREY_B, tol=1e-6):
     return g
 
 
-class Graphs(VoiceoverScene):
+class Graphs(StatsScene):
     def construct(self):
         self.card()
+        self.ask("A zero in a Gaussian's inverse covariance matrix means...",
+                 ["zero correlation", "conditional independence, given the rest"], 1,
+                 say="The twenty-four tests: every pair correlated. Now look at the inverse of the covariance "
+                     "matrix. What does a zero entry there mean?",
+                 reveal="Conditional independence of the two variables, given all the others: no direct link. The "
+                        "precision matrix draws the graph.")
         self.partial()
         self.theorem()
         self.full()
@@ -39,12 +45,10 @@ class Graphs(VoiceoverScene):
         self.neighbourhood()
         self.path()
         self.reading()
+        self.answer()
 
     def card(self):
-        card = chapter_card(9, r"Graphical models", r"Who is directly connected to whom", lit=(2008,), part=PART)
-        with self.voiceover("Chapter nine. Graphical models."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(9, r"Graphical models", r"Who is directly connected to whom", lit=(2008,), part=PART, said="Chapter nine. Graphical models.")
 
     def partial(self):
         rows = [

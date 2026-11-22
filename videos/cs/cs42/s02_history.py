@@ -22,7 +22,7 @@ def piece(title, sub, color, w=3.8, h=1.05):
     return VGroup(box, t, s)
 
 
-class History(VoiceoverScene):
+class History(WatchScene):
     def construct(self):
         self.card()
         self.strip()
@@ -30,16 +30,10 @@ class History(VoiceoverScene):
         self.mosaic()
         self.layers()
         self.ajax()
-        self.engines()
-        self.standard()
 
     def card(self):
-        card = chapter_card(1, r"Thirty years of the web", r"How did a format for documents become a platform?",
-                            lit=(1989, 1995, 2005), extra=((1989, r"Berners-Lee's proposal"),
-                                                           (1995, r"JavaScript"), (2005, r"Ajax")), part=PART)
-        with self.voiceover("Chapter one. Thirty years of the web."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(1, r"Thirty years of the web", r"How did a format for documents become a platform?", lit=(1989, 1995, 2005), extra=((1989, r"Berners-Lee's proposal"),
+                                                           (1995, r"JavaScript"), (2005, r"Ajax")), part=PART, said="Chapter one. Thirty years of the web.")
 
     # ------------------------------------------------------------------ the strip that fills, section by section
     def strip(self):
@@ -222,6 +216,10 @@ class History(VoiceoverScene):
         self.clear_scene(self.tl)
 
     def ajax(self):
+        self.ask(r"What let a page fetch data \\ without loading a new page?", [r"a new HTML tag",
+                 r"XMLHttpRequest"], 1,
+                 say="Classic pages loaded a whole new page on every click. What let a page fetch data and stay put?",
+                 reveal="XMLHttpRequest, a feature Microsoft added for Outlook, which almost nobody noticed until Gmail and Maps.")
         head = label(r"Pages that talk back", font_size=36).to_edge(UP, buff=0.3)
 
         def lane(cx, title, color):
@@ -282,110 +280,7 @@ class History(VoiceoverScene):
         self.wait(0.4)
         self.clear_scene(self.tl)
 
-    def engines(self):
-        head = label(r"New engines, \ new processes", font_size=36).to_edge(UP, buff=0.3)
-        one = RoundedRectangle(width=5.4, height=2.7, corner_radius=0.12, stroke_color=GREY_B, stroke_width=2,
-                               fill_color=GREY_D, fill_opacity=0.15).move_to([-3.6, -0.25, 0])
-        one_t = label(r"one process for every tab", font_size=19, color=GREY_A).next_to(one, UP, buff=0.1)
-        tabs = VGroup(*[module_box(rf"tab {k + 1}", DATA, w=2.2, h=0.8, font=18) for k in range(4)])
-        tabs.arrange_in_grid(2, 2, buff=0.3).move_to(one)
-        bp = module_box(r"browser process: \ windows, \ network, \ disk", KERN, w=5.6, h=0.6, font=18)
-        bp.move_to([3.6, 0.8, 0])
-        rend = VGroup(*[VGroup(module_box(rf"tab {k + 1}", DATA, w=1.25, h=0.5, font=17),
-                               label(r"V8", font_size=16, color=HEAD)).arrange(DOWN, buff=0.08)
-                        for k in range(4)]).arrange(RIGHT, buff=0.18).move_to([3.6, -0.85, 0])
-        frames = VGroup(*[SurroundingRectangle(r, buff=0.08, color=GREY_B, stroke_width=1.2, corner_radius=0.08)
-                          for r in rend])
-        links = VGroup(*[Line(bp.get_bottom(), f.get_top(), color=GREY_C, stroke_width=1.5) for f in frames])
-        rend_t = label(r"Chrome \ (2008): \ a process per tab, \ roughly", font_size=19, color=YES).next_to(
-            frames, DOWN, buff=0.15)
-        crash_one = Cross(tabs[2], stroke_color=NO, stroke_width=5)
-        crash_two = Cross(rend[2], stroke_color=NO, stroke_width=5)
-        notes = VGroup(
-            wrapped_label(r"Safari and WebKit \ (Apple, 2003); \ Firefox 1.0 \ (Mozilla, November 2004)", 12.4,
-                          font_size=19, color=DATA),
-            wrapped_label(r"V8 compiles JavaScript to machine code \ (the JIT compilers of Part 15, \ opened up in "
-                          r"Chapter 7); \ separate processes come from Part 31", 12.4, font_size=19, color=HEAD),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.15).to_edge(DOWN, buff=0.5)
-        with self.voiceover(
-            "Competition came back. <bookmark mark='a'/> Apple released Safari, on its WebKit engine, in 2003, and "
-            "Mozilla released Firefox 1.0 in November 2004. <bookmark mark='b'/> In September 2008 Google released "
-            "Chrome, with two ideas. Its engine, V8, compiled JavaScript to machine code, the just-in-time "
-            "compilation of Part 15, and began a race that made JavaScript many times faster. <bookmark mark='c'/> "
-            "And where browsers had run every page in one process, so that one bad page could take down them all, "
-            "Chrome gave each tab, roughly, a process of its own: the isolation of Part 31."
-        ) as vo:
-            self.play(FadeIn(head), FadeIn(one), FadeIn(one_t), FadeIn(tabs))
-            vo.wait_until("a")
-            self.play(*self.mark([2003, 2004], 2004.9), FadeIn(notes[0]))
-            vo.wait_until("b")
-            self.play(*self.mark([2008], 2008.8), FadeIn(bp), FadeIn(rend), FadeIn(frames), Create(links),
-                      FadeIn(rend_t), FadeIn(notes[1]))
-            vo.wait_until("c")
-            self.play(Create(crash_one))
-            self.play(one.animate.set_stroke(NO).set_fill(NO, opacity=0.25), tabs.animate.set_opacity(0.3))
-            self.play(Create(crash_two))
-            self.play(frames[2].animate.set_stroke(NO), rend[2].animate.set_opacity(0.3),
-                      *[Indicate(rend[k], color=YES, scale_factor=1.08) for k in (0, 1, 3)])
-        self.wait(0.4)
-        self.clear_scene(self.tl)
 
-    def standard(self):
-        head = label(r"A living standard", font_size=36).to_edge(UP, buff=0.3)
-        yw, yl = 0.95, -0.65
-        w3c_t = label(r"W3C versions", font_size=19, color=DATA).move_to([-5.3, yw, 0])
-        wl = Line([X(1994.5), yw, 0], [X(2019), yw, 0], color=GREY_D, stroke_width=1.5)
-        vers = [(1995, r"2.0"), (1997, r"3.2"), (1999, r"4.01"), (2000, r"XHTML 1.0"), (2014, r"HTML5"),
-                (2016, r"5.1"), (2017, r"5.2")]
-        vg = VGroup()
-        for k, (yr, name) in enumerate(vers):
-            col = NO if "XHTML" in name else DATA
-            d = Dot([X(yr), yw, 0], radius=0.08, color=col)
-            t = label(name, font_size=16, color=col).next_to(d, UP if k % 2 == 0 else DOWN, buff=0.1)
-            vg.add(VGroup(d, t))
-        x_note = label(r"served as XML, \ one error and no page", font_size=16, color=NO).next_to(
-            vg[3], DOWN, buff=0.08).shift(RIGHT * 0.6)
-        wh_t = label(r"WHATWG", font_size=19, color=YES).move_to([X(2004) - 0.75, yl, 0])
-        band = Rectangle(width=X(2020) - X(2004), height=0.34, stroke_width=0, fill_color=YES, fill_opacity=0.45)
-        band.move_to([X(2004), yl, 0], aligned_edge=LEFT)
-        pulses = VGroup(*[Line([X(2004.4 + k * 0.55), yl - 0.17, 0], [X(2004.4 + k * 0.55), yl + 0.17, 0],
-                               color=YES, stroke_width=1.2) for k in range(28)])
-        band_t = label(r"the living standard: \ edited continuously, \ no version numbers", font_size=16,
-                       color=YES).next_to(band, DOWN, buff=0.1)
-        merge = Arrow([X(2019), yw - 0.05, 0], [X(2019), yl + 0.2, 0], buff=0, stroke_width=3, color=HEAD,
-                      max_tip_length_to_length_ratio=0.25)
-        merge_t = label(r"2019", font_size=16, color=HEAD).next_to(merge, LEFT, buff=0.08)
-        notes = VGroup(
-            wrapped_label(r"June 2004: \ Apple, \ Mozilla and Opera found the WHATWG, \ to extend HTML as browsers "
-                          r"really used it", 12.4, font_size=19, color=YES),
-            wrapped_label(r"HTML5 specifies, \ for the first time, \ exactly how to parse \textit{any} page, \ "
-                          r"valid or not: \ Chapter 2", 12.4, font_size=19, color=HEAD),
-            wrapped_label(r"May 2019: \ the W3C and the WHATWG agree on one HTML and one DOM, \ the WHATWG's living "
-                          r"standards", 12.4, font_size=19, color=WHITE),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.2).to_edge(DOWN, buff=0.5)
-        with self.voiceover(
-            "The standards, meanwhile, had stalled. <bookmark mark='a'/> The W3C published numbered versions of HTML "
-            "through the nineties, and then XHTML, which, served as XML, treated a single error as fatal, though real"
-            " pages were full of errors. <bookmark mark='b'/> In June 2004 people from Apple, Mozilla and Opera "
-            "founded the WHATWG, to extend HTML as browsers really used it. Their HTML5 said, for the first time, "
-            "exactly how to parse any page, valid or not, and the W3C published it in 2014. <bookmark mark='c'/> In "
-            "May 2019 the two bodies agreed on one HTML: the WHATWG's living standard, edited continuously, with no "
-            "version numbers. Its parser is next."
-        ) as vo:
-            self.play(FadeIn(head), FadeIn(w3c_t), Create(wl))
-            vo.wait_until("a")
-            self.play(LaggedStart(*[FadeIn(v, scale=1.5) for v in vg[:4]], lag_ratio=0.4), run_time=2)
-            self.play(FadeIn(x_note))
-            vo.wait_until("b")
-            self.play(*self.mark([2004], 2014.5), FadeIn(wh_t), GrowFromEdge(band, LEFT), FadeIn(band_t),
-                      FadeIn(notes[0]), run_time=1.5)
-            self.play(LaggedStart(*[Create(p) for p in pulses], lag_ratio=0.1), FadeIn(vg[4]), FadeIn(notes[1]),
-                      run_time=2)
-            vo.wait_until("c")
-            self.play(*self.mark([2019], 2019.8), FadeIn(vg[5:]), GrowArrow(merge), FadeIn(merge_t),
-                      FadeIn(notes[2]))
-        self.wait(0.4)
-        self.clear_scene()
 
 
 _ = (LAM, YES, mono)

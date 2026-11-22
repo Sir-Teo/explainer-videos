@@ -5,20 +5,24 @@ import numpy as np
 from videos.stats.stats44.common import *  # noqa: F403
 
 
-class MarkovChains(VoiceoverScene):
+class MarkovChains(StatsScene):
     def construct(self):
         self.card()
+        self.ask("MCMC batch-means standard errors are consistent when...",
+                 ["batch length and the number of batches both grow", "the number of batches is fixed"], 0,
+                 say="Split one long MCMC run into batches and use their means' spread for a standard error. When "
+                     "is that estimate consistent?",
+                 reveal="When both the batch length and the number of batches grow. A fixed number of batches gives "
+                        "a noisy, inconsistent standard error.")
         self.harris()
         self.drift()
         self.clt()
         self.trace()
         self.board()
+        self.answer()
 
     def card(self):
-        card = chapter_card(8, r"Markov chains on general spaces", r"When can you trust an MCMC average?", lit=(1953,), part=PART)
-        with self.voiceover("Chapter eight. Markov chains on general spaces, and when an MCMC average can be trusted."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(8, r"Markov chains on general spaces", r"When can you trust an MCMC average?", lit=(1953,), part=PART, said="Chapter eight. Markov chains on general spaces, and when an MCMC average can be trusted.")
 
     def harris(self):
         rows = [

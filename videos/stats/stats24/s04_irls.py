@@ -7,21 +7,25 @@ from videos.stats.stats24.common import *  # noqa: F403
 from videos.stats.stats24.s01_hook import beetle_panel
 
 
-class IRLS(VoiceoverScene):
+class IRLS(StatsScene):
     def construct(self):
         self.card()
+        self.ask("In IRLS for logistic regression, each observation's weight is...",
+                 [r"$\mu(1 - \mu)$", "1", "$y$"], 0,
+                 say="Fisher scoring is weighted least squares. For logistic regression, what's each observation's "
+                     "weight?",
+                 reveal="Mu times one minus mu: the binomial variance. Points with fitted probabilities near zero "
+                        "or one carry little weight.")
         self.derive()
         self.working()
         self.steps()
         self.deviance_drop()
         self.noncanonical()
         self.cost()
+        self.answer()
 
     def card(self):
-        card = chapter_card(3, r"IRLS derived", r"Fisher scoring is weighted least squares", part=PART)
-        with self.voiceover("Chapter three. Iteratively reweighted least squares, derived."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(3, r"IRLS derived", r"Fisher scoring is weighted least squares", part=PART, said="Chapter three. Iteratively reweighted least squares, derived.")
 
     def derive(self):
         rows = [

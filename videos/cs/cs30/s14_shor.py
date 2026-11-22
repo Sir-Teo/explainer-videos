@@ -4,20 +4,20 @@ from explainer.cs import *  # noqa: F403
 from videos.cs.cs30.common import (BG, CTRL, DATA, HEAD, LAM, NO, PART, YES, load, mono)
 
 
-class Shor(VoiceoverScene):
+class Shor(WatchScene):
     def construct(self):
         self.card()
         self.period()
         self.harvest()
 
     def card(self):
-        card = chapter_card(13, r"Shor's threat", r"What would a quantum computer break?", lit=(1994, 2024),
-                            extra=((1994, r"Shor"), (2024, r"FIPS 203, \ 204, \ 205")), part=PART)
-        with self.voiceover("Chapter thirteen. Shor's threat."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(13, r"Shor's threat", r"What would a quantum computer break?", lit=(1994, 2024), extra=((1994, r"Shor"), (2024, r"FIPS 203, \ 204, \ 205")), part=PART, said="Chapter thirteen. Shor's threat.")
 
     def period(self):
+        self.ask(r"Shor's quantum algorithm factors $n$ by finding...", [r"a lucky divisor",
+                 r"the period of $a^x \bmod n$"], 1,
+                 say="Shor's quantum algorithm factors n. What does the quantum computer actually find?",
+                 reveal="The period of a to the x modulo n. From the period, a gcd gives the factors.")
         s = load("shor")["rows"]
         head = label(r"Factoring is finding a period", font_size=34).to_edge(UP, buff=0.3)
         r0 = s[0]

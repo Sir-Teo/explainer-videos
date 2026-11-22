@@ -4,7 +4,7 @@ from explainer.cs import *  # noqa: F403
 from videos.cs.cs25.common import (fit_right, CTRL, DATA, HEAD, LAM, NO, PART, YES, bar_chart, grid_table, load, mono, words)
 
 
-class Kolmogorov(VoiceoverScene):
+class Kolmogorov(WatchScene):
     def construct(self):
         self.card()
         self.compress()
@@ -13,11 +13,7 @@ class Kolmogorov(VoiceoverScene):
         self.berry()
 
     def card(self):
-        card = chapter_card(10, r"Kolmogorov complexity", r"How much information is in a string?", lit=(1960, 1975),
-                            extra=((1965, r"Kolmogorov"), (1975, r"Chaitin's incompleteness")), part=PART)
-        with self.voiceover("Chapter ten. Kolmogorov complexity."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(10, r"Kolmogorov complexity", r"How much information is in a string?", lit=(1960, 1975), extra=((1965, r"Kolmogorov"), (1975, r"Chaitin's incompleteness")), part=PART, said="Chapter ten. Kolmogorov complexity.")
 
     def compress(self):
         k = load("kolmo")
@@ -79,6 +75,10 @@ class Kolmogorov(VoiceoverScene):
         self.clear_scene()
 
     def counting(self):
+        self.ask(r"Can most 1000-bit strings \\ be compressed by even 10 bits?", [r"yes",
+                 r"no: fewer than 1 in 1000 can"], 1,
+                 say="Take all thousand-bit strings. Can most of them be compressed by even ten bits?",
+                 reveal="No: fewer than one in a thousand can. There aren't enough short programs.")
         head = label(r"Most strings cannot be compressed", font_size=34).to_edge(UP, buff=0.35)
         n = 8
         cols = []
@@ -149,3 +149,9 @@ class Kolmogorov(VoiceoverScene):
                 self.play(FadeIn(ln, shift=UP * 0.1))
         self.wait(0.3)
         self.clear_scene()
+        self.checkpoint(
+            [(r"Why are most strings incompressible?", r"Fewer than $2^n$ programs are shorter than $n$ bits"),
+             (r"How does halting give G\"odel's theorem?", r"A complete theory would decide halting")],
+            narration="Checkpoint. Why are most strings incompressible? And how does halting give Gödel's theorem?",
+            answers_narration="There are fewer short programs than strings. And a complete, consistent theory could decide "
+                              "halting, which is impossible.")

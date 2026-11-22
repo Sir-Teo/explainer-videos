@@ -50,7 +50,7 @@ def hline(h, color, width=2.0):
     return Line(S(seg[0]), S(seg[1]), color=color, stroke_width=width)
 
 
-class Lp(VoiceoverScene):
+class Lp(WatchScene):
     def construct(self):
         self.card()
         self.seidel()
@@ -58,13 +58,13 @@ class Lp(VoiceoverScene):
         self.circle()
 
     def card(self):
-        card = chapter_card(9, r"Linear programming in the plane", r"Where is the best point of a polygon?",
-                            lit=(1984, 1991), extra=((1984, r"Megiddo"), (1991, r"Seidel")), part=PART)
-        with self.voiceover("Chapter nine. Linear programming in the plane."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(9, r"Linear programming in the plane", r"Where is the best point of a polygon?", lit=(1984, 1991), extra=((1984, r"Megiddo"), (1991, r"Seidel")), part=PART, said="Chapter nine. Linear programming in the plane.")
 
     def seidel(self):
+        self.ask(r"Linear programming in the plane, $n$ constraints, random order. \\ Expected time?",
+                 [r"$n$", r"$n \log n$", r"$n^2$"], 0,
+                 say="A linear program in the plane, n constraints in random order. How long, on average?",
+                 reveal="Linear time: Seidel's algorithm.")
         d = load("lp")
         H = [tuple(h) for h in d["H"]]
         c = d["c"]

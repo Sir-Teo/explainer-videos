@@ -83,22 +83,17 @@ class WSView(VGroup):
         return anims
 
 
-class Dataflow(VoiceoverScene):
+class Dataflow(WatchScene):
     def construct(self):
         self.card()
         self.stays()
         self.ws_run()
         self.derive()
         self.curves()
-        self.scale()
 
     def card(self):
-        card = chapter_card(4, r"Which number stays put", r"Should the grid hold the outputs, \ or the weights?",
-                            lit=(2016, 2017), extra=((2016, r"Chen, \ Emer and Sze: \ Eyeriss"),
-                                                     (2017, r"Jouppi et al.: \ the TPU")), part=PART)
-        with self.voiceover("Chapter four. Which number stays put?"):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(4, r"Which number stays put", r"Should the grid hold the outputs, \ or the weights?", lit=(2016, 2017), extra=((2016, r"Chen, \ Emer and Sze: \ Eyeriss"),
+                                                     (2017, r"Jouppi et al.: \ the TPU")), part=PART, said="Chapter four. Which number stays put?")
 
     def stays(self):
         head = label(r"Three numbers meet in every multiply-add", font_size=36).to_edge(UP, buff=0.3)
@@ -205,6 +200,9 @@ class Dataflow(VoiceoverScene):
         self.clear_scene()
 
     def derive(self):
+        self.ask(r"A bigger grid, the same small product. \\ Utilization...", [r"rises", r"falls"], 1,
+                 say="Run the same small matrix product on a bigger systolic grid. What happens to the fraction of cells doing useful work?",
+                 reveal="It falls: filling and draining the grid takes longer, and most cells idle.")
         ws = load("wave")["ws"]
         os_ = load("wave")["os"]
         head = label(r"How busy is the grid?", font_size=36).to_edge(UP, buff=0.3)
@@ -328,54 +326,6 @@ class Dataflow(VoiceoverScene):
         self.wait(0.4)
         self.clear_scene()
 
-    def scale(self):
-        sc = load("scaling")["rows"]
-        g = load("gates")["rows"]
-        head = label(r"At the TPU's size", font_size=36).to_edge(UP, buff=0.3)
-        rows, cols = [], []
-        for r in sc:
-            kind = r"output-stationary" if r["dataflow"] == "os" else rf"weight-stationary, \ $M$ = {r['m']:,}".replace(
-                ",", "{,}")
-            same = abs(r["utilization"] - r["closed_form"]) < 1e-12 and r["correct"]
-            rows.append([rf"{r['n']}", kind, f"{r['cycles']:,}".replace(",", "{,}"),
-                         rf"{100 * r['utilization']:.1f}\%", r"yes" if same else r"no"])
-            col = HEAD if r["dataflow"] == "os" else (LAM if r["m"] == r["n"] else YES)
-            cols.append([WHITE, col, WHITE, col, YES if same else NO])
-        tab = grid_table([r"$N$", r"dataflow", r"cycles", r"utilization", r"formula and product check"], rows,
-                         widths=[0.9, 4.0, 1.4, 1.7, 3.6], row_h=0.38, font_size=19, colors=cols, mono_cols=())
-        tab.next_to(head, DOWN, buff=0.35).set_x(0)
-        per = {}
-        for r in g:
-            per.setdefault(r["n"], {})[r["dataflow"]] = r["gates"]
-        extra = {nn: (v["weight-stationary"] - v["output-stationary"]) / nn ** 2 for nn, v in per.items()}
-        same_extra = len(set(extra.values())) == 1
-        e0 = next(iter(extra.values()))
-        notes = VGroup(
-            label(rf"the price of holding weights: \ {e0:.0f} more gates per cell \ (multiplexers), \ at every $N$"
-                  if same_extra else r"holding weights costs multiplexers in every cell", font_size=20, color=KERN),
-            label(r"$N = 256$: \ the TPU's grid; \ chapter 5 reads its paper", font_size=20, color=GREY_A),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.25).next_to(tab, DOWN, buff=0.5).set_x(0)
-        with self.voiceover(
-            "Finally, the sizes that matter. <bookmark mark='a'/> For grids of sixteen, sixty-four and two hundred "
-            "and fifty-six cells a side, the integer model counts the cycles of each dataflow, checks the product "
-            "against NumPy, and every utilization equals its formula exactly. At two hundred and fifty-six, one "
-            "output-stationary product keeps the grid a third busy; weight-stationary with a long stream, over "
-            "eighty percent. <bookmark mark='b'/> Holding a weight is not free: each cell needs multiplexers to "
-            f"keep its weight while the load signal is off, {say_n(round(e0))} more gates per cell in our circuits. "
-            "<bookmark mark='c'/> Two hundred and fifty-six by two hundred and fifty-six, weight-stationary, fed "
-            "with batches: that is the heart of the Tensor Processing Unit that Google put into its data centres "
-            "from 2015, the subject of the next chapter."
-        ) as vo:
-            self.play(FadeIn(head), *[FadeIn(c) for c in tab.cells[0]], FadeIn(tab.rule))
-            vo.wait_until("a")
-            self.play(LaggedStart(*[FadeIn(VGroup(*tab.cells[i])) for i in range(1, len(rows) + 1)], lag_ratio=0.2),
-                      run_time=3)
-            vo.wait_until("b")
-            self.play(FadeIn(notes[0]))
-            vo.wait_until("c")
-            self.play(FadeIn(notes[1]))
-        self.wait(0.4)
-        self.clear_scene()
 
 
 def say(n: int) -> str:

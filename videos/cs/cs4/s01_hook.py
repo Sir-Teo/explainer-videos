@@ -6,13 +6,12 @@ from explainer.cs import *  # noqa: F403
 from videos.cs.cs4.common import BG, CODE, COST, DATA, FUNC, HEAD, NO, PART, YES, bit_cells, fmt, load
 
 
-class Hook(VoiceoverScene):
+class Hook(WatchScene):
     def construct(self):
         self.counter()
-        self.boeing()
         self.tenth()
         self.story()
-        self.plan()
+        self.title(PART)
 
     # ------------------------------------------------------------------
     def counter(self):
@@ -52,44 +51,6 @@ class Hook(VoiceoverScene):
         self.wait(0.4)
         self.clear_scene()
 
-    # ------------------------------------------------------------------
-    def boeing(self):
-        d = load("clock")
-        days = d["days_2_31_cs"]
-        head = label(r"May 2015", font_size=40, color=GREY_A).to_edge(UP, buff=0.5)
-        ax = NumberLine(x_range=[0, 260, 50], length=10.5, include_numbers=True, color=GREY_C,
-                        font_size=22).move_to(DOWN * 0.4)
-        axl = note(r"days of continuous power", font_size=22).next_to(ax, DOWN, buff=0.5)
-        t = ValueTracker(0)
-        bar = always_redraw(lambda: Rectangle(width=max(ax.n2p(t.get_value())[0] - ax.n2p(0)[0], 0.001), height=0.4,
-                                              stroke_width=0, fill_color=HEAD if t.get_value() < days else NO,
-                                              fill_opacity=0.85).move_to(ax.n2p(0), aligned_edge=LEFT).shift(UP * 0.6))
-        mark = DashedLine(ax.n2p(days) + UP * 1.4, ax.n2p(days) + DOWN * 0.1, color=NO)
-        mtxt = MathTex(r"\frac{2^{31}\ \text{centiseconds}}{8{,}640{,}000\ \text{per day}} = " + f"{days:.2f}"
-                       + r"\ \text{days}", font_size=30, color=NO).next_to(mark, UP, buff=0.2).shift(LEFT * 2.6)
-        what = label(r"FAA: counter overflow after 248 days \ could shut down all generator control units", font_size=28,
-                     color=GREY_A).to_edge(DOWN, buff=0.5)
-        model = note(r"illustrative 32-bit centisecond model; FAA did not specify counter width or units",
-                     font_size=18).next_to(what, UP, buff=0.2)
-        with self.voiceover(
-            "In May 2015 the Federal Aviation Administration told airlines to switch their Boeing 787s off and on "
-            "again, regularly. <bookmark mark='a'/> Each of the plane's electrical generators was run "
-            "by a control unit. The FAA reported that an internal counter could overflow after two hundred and "
-            "forty-eight days of continuous power, putting the units into failsafe mode. "
-            "<bookmark mark='b'/> To see the scale, imagine a signed thirty-two-bit counter ticking in hundredths "
-            "of a second: its limit is two hundred and forty-eight point five five days. That is an illustrative "
-            "model; the directive does not specify the actual width or units. Units powered up together could "
-            "shut down together, causing loss of electrical power."
-        ) as vo:
-            self.play(FadeIn(head), Create(ax), FadeIn(axl))
-            vo.wait_until("a")
-            self.add(bar)
-            self.play(t.animate.set_value(days - 0.01), run_time=4.0, rate_func=linear)
-            vo.wait_until("b")
-            self.play(Create(mark), FadeIn(mtxt), t.animate.set_value(days + 0.5), run_time=1.0)
-            self.play(FadeIn(what), FadeIn(model))
-        self.wait(0.4)
-        self.clear_scene()
 
     # ------------------------------------------------------------------
     def tenth(self):
@@ -150,29 +111,3 @@ class Hook(VoiceoverScene):
         self.wait(0.4)
         self.clear_scene()
 
-    # ------------------------------------------------------------------
-    def plan(self):
-        title = label(rf"Part {PART}: \ Arithmetic", font_size=46).to_edge(UP, buff=0.4)
-        smap = series_map(current=PART, done=PART - 1).scale(0.92).next_to(title, DOWN, buff=0.35)
-        obj = objectives_card([
-            r"binary and two's complement: \ one adder for signed and unsigned numbers",
-            r"the ripple-carry adder, \ and carries as a parallel prefix: \ addition in $\log n$ time",
-            r"multipliers as trees of adders; \ division, \ SRT, \ and the Pentium's bug",
-            r"Pebble's ALU, \ built and verified",
-            r"IEEE 754 floating point: \ the uneven ruler, \ rounding, \ and its error analysis",
-            r"Wilkinson's polynomial, \ new number formats for AI, \ and how sin and exp are computed",
-        ], font_size=26).move_to(DOWN * 0.2)
-        with self.voiceover(
-            "This is Part 4 of Computer Science, Built. Part 3 gave us gates; this part teaches them arithmetic. "
-            "<bookmark mark='a'/> In this part: binary and two's complement, the trick that lets one adder serve both "
-            "signed and unsigned numbers. The ripple-carry adder, and the beautiful idea that makes addition "
-            "logarithmic: carries as a parallel prefix. Multipliers as trees of adders, division, and the most "
-            "expensive table in the history of chips. Pebble's arithmetic logic unit, built and verified. Then "
-            "floating point: the uneven ruler, rounding, and how errors grow, with a polynomial whose roots fly apart, "
-            "the new formats that machine learning runs on, and how a chip computes a sine."
-        ) as vo:
-            self.play(FadeIn(title), FadeIn(smap))
-            vo.wait_until("a")
-            self.play(FadeOut(smap), FadeIn(obj))
-        self.wait(0.4)
-        self.clear_scene()

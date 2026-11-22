@@ -5,9 +5,15 @@ import numpy as np
 from videos.stats.stats34.common import *  # noqa: F403
 
 
-class Interpret(VoiceoverScene):
+class Interpret(StatsScene):
     def construct(self):
         self.card()
+        self.ask("A model learned that asthma lowers pneumonia patients' risk of death. Why?",
+                 ["asthma protects", "asthmatic patients got more aggressive care"], 1,
+                 say="A model predicting death from pneumonia learned that asthma lowers the risk. Why?",
+                 reveal="Asthmatic patients were sent straight to intensive care, and the care saved them. The "
+                        "model was right about the data and wrong about what to do: an explanation estimates the "
+                        "data, not the cause.")
         self.estimands()
         self.pdp()
         self.twin()
@@ -17,12 +23,14 @@ class Interpret(VoiceoverScene):
         self.shap_bars()
         self.inference()
         self.lesson()
+        self.answer()
+        self.checkpoint([("Predictions used as labels give?", "a biased estimate; PPI corrects it"),
+                         ("Why did asthma seem protective?", "asthmatics received more aggressive care")],
+                        narration="Checkpoint. Using and explaining black boxes.",
+                        answers_narration="A biased estimate. And the care, not the asthma.")
 
     def card(self):
-        card = chapter_card(11, r"Interpretation as estimation", r"What does an explanation estimate?", lit=(2017,), part=PART)
-        with self.voiceover("Chapter eleven. Interpretation as estimation."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(11, r"Interpretation as estimation", r"What does an explanation estimate?", lit=(2017,), part=PART, said="Chapter eleven. Interpretation as estimation.")
 
     def estimands(self):
         rows = [

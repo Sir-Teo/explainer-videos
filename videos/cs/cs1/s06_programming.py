@@ -29,20 +29,15 @@ def node_of(state: str, pos: int, n: int) -> str:
     return state
 
 
-class Programming(VoiceoverScene):
+class Programming(WatchScene):
     def construct(self):
         self.card()
         self.problem()
         self.run_it()
         self.cost()
-        self.lower_bound()
 
     def card(self):
-        card = chapter_card(5, r"Programming with a table", r"How do you write a program with nothing but rules?",
-                            lit=(1936,), part=PART)
-        with self.voiceover("Chapter five. Programming with a table."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(5, r"Programming with a table", r"How do you write a program with nothing but rules?", lit=(1936,), part=PART, said="Chapter five. Programming with a table.")
 
     # ------------------------------------------------------------------
     def problem(self):
@@ -129,6 +124,10 @@ class Programming(VoiceoverScene):
 
     # ------------------------------------------------------------------
     def cost(self):
+        self.ask(r"Double the length of the input. \\ How many more steps does the palindrome check take?",
+                 [r"twice as many", r"four times as many", r"eight times as many"], 1,
+                 say="Double the length of the string. How many more steps does the palindrome machine need?",
+                 reveal="Four times as many: the steps grow like the square of the length.")
         d = load("palindrome")
         st = np.asarray(d["st_long"])
         n = len(d["long"])
@@ -165,44 +164,6 @@ class Programming(VoiceoverScene):
         self.wait(0.3)
         self.clear_scene()
 
-    # ------------------------------------------------------------------
-    def lower_bound(self):
-        thm = theorem_card(r"Hennie (1965)", r"Every one-tape Turing machine that recognizes palindromes takes at least "
-                           r"$c\, n^2$ steps on some inputs of length $n$, for a constant $c > 0$.", width=11.0,
-                           font_size=28, kind=r"Theorem").to_edge(UP, buff=0.5)
-        tape = TapeView(list("01101001" + "10010110"), head=None, state=None, cell=0.5, font_size=22, ellipsis=False)
-        tape.move_to(DOWN * 0.6)
-        mid = DashedLine(tape.get_top() + UP * 0.5, tape.get_bottom() + DOWN * 0.5, color=HEAD, stroke_width=3)
-        mid.move_to(tape.get_center())
-        left = Brace(VGroup(*tape.cells[:8]), DOWN, color=DATA)
-        ll = label(r"$n/2$ bits that must be compared \\ with the other half", font_size=24, color=DATA).next_to(
-            left, DOWN, buff=0.1)
-        cross = label(r"each crossing of the middle \\ carries only the state: \\ a constant number of bits", font_size=24,
-                      color=HEAD).next_to(mid, RIGHT, buff=1.8).shift(DOWN * 1.6)
-        idea = label(r"the crossing-sequence argument: \ many crossings, \ each far from where its bits came from",
-                     font_size=24, color=GREY_A).to_edge(DOWN, buff=0.4)
-        with self.voiceover(
-            "Is that just a clumsy program? No. <bookmark mark='a'/> In 1965 Frederick Hennie proved that every "
-            "one-tape machine that recognizes palindromes needs a number of steps proportional to n squared on some "
-            "inputs. <bookmark mark='b'/> The idea: the first half of the input has to be compared with the second half. "
-            "That is n over two bits of information that must cross the middle of the tape. <bookmark mark='c'/> But "
-            "the only thing that crosses the middle is the head, carrying its state, which is a constant number of bits. "
-            "So the head must cross the middle many times, and far from the middle, each crossing costs a long walk. "
-            "<bookmark mark='d'/> It is one of the first lower bounds in complexity theory: a proof that something cannot "
-            "be done quickly on this machine. Part 27 builds this into a whole theory, communication complexity. And the "
-            "obvious way around it is to give the machine a second tape."
-        ) as vo:
-            self.play(FadeIn(tape))
-            vo.wait_until("a")
-            self.play(FadeIn(thm, shift=DOWN * 0.2))
-            vo.wait_until("b")
-            self.play(Create(mid), GrowFromCenter(left), FadeIn(ll))
-            vo.wait_until("c")
-            self.play(FadeIn(cross))
-            vo.wait_until("d")
-            self.play(FadeIn(idea))
-        self.wait(0.3)
-        self.clear_scene()
 
 
 def fmt_(n) -> str:

@@ -5,14 +5,14 @@ import numpy as np
 from videos.stats.stats47.common import *  # noqa: F403
 
 
-class Hook(VoiceoverScene):
+class Hook(StatsScene):
     def construct(self):
         self.story()
         self.risk()
         self.local()
         self.price()
         self.upgrades()
-        self.objectives()
+        self.title(PART)
 
     def story(self):
         tl = timeline(lit=(1951,)).to_edge(UP, buff=0.35)
@@ -154,30 +154,5 @@ class Hook(VoiceoverScene):
             for k, m_ in enumerate("abc"):
                 vo.wait_until(m_)
                 self.play(FadeIn(cards[k], shift=UP * 0.15))
-        self.wait(1.0)
-        self.clear_scene()
-
-    def objectives(self):
-        head = VGroup(label(r"Part 47", font_size=34, color=GREY_B), label(r"Asymptotic Statistics", font_size=48)).arrange(DOWN, buff=0.25)
-        obj = objectives_card([
-            r"stochastic orders; \ M- and Z-estimators; \ the Bahadur representation",
-            r"influence functions and the functional delta method; \ U- and rank statistics",
-            r"LAN, \ contiguity, \ Le Cam's lemmas; \ Hájek's convolution and LAM theorems",
-            r"efficiency of tests; \ the bootstrap's second-order accuracy; \ saddlepoints; \ non-regular models",
-        ], color=S.ACCENT, font_size=26)
-        prereq = note(r"prerequisites: \ Parts 22, \ 43, \ 45, \ 46").to_corner(DL, buff=0.3)
-        built = note(r"built: \ \texttt{statkit.asymptotics}, \ the risk-bump explorer").to_corner(DR, buff=0.3)
-        with self.voiceover(
-            "<bookmark mark='a'/> Part forty-seven: asymptotic statistics. <bookmark mark='b'/> We'll set up "
-            "stochastic orders and prove the asymptotics of M-estimators and sample quantiles; differentiate "
-            "statistical functionals with influence functions; analyse U-statistics and rank statistics by Hájek's "
-            "projection; build Le Cam's theory of local asymptotic normality and contiguity, and outline Hájek's "
-            "convolution and local asymptotic minimax theorems, with a risk-bump explorer for Hodges's estimator; and"
-            " then turn the theory on tests, the bootstrap, saddlepoints and non-regular models."
-        ) as vo:
-            vo.wait_until("a")
-            self.play(FadeIn(head, shift=UP * 0.2))
-            vo.wait_until("b")
-            self.play(FadeOut(head), FadeIn(obj, shift=UP * 0.2), FadeIn(prereq), FadeIn(built))
         self.wait(1.0)
         self.clear_scene()

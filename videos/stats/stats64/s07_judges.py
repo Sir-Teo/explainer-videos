@@ -5,16 +5,27 @@ import numpy as np
 from videos.stats.stats64.common import *  # noqa: F403
 
 
-class Judges(LectureMixin, VoiceoverScene):
+class Judges(LectureMixin, StatsScene):
     def construct(self):
         self.card_voiceover("Chapter six. Labels from models: judges with errors, and how to correct for them.", 6,
                             r"Labels from models", r"A judge is a measurement")
+        self.ask("An AI judge labels every answer; humans label a few. Combine them by...",
+                 ["trusting the judge", "prediction-powered inference"], 1,
+                 say="A model grades open-ended answers, cheaply but with errors; humans grade a small random "
+                     "subset. How should the two be combined?",
+                 reveal="Prediction-powered inference: use the judge everywhere, and correct its bias with the "
+                        "human-graded subset. A judge is a measurement, with an error to estimate.")
         self.judges()
         self.bias()
         self.ppi()
         self.chart()
         self.dsl()
         self.cautions()
+        self.answer()
+        self.checkpoint([("An item every model gets right carries?", "almost no information"),
+                         ("A judge on all, humans on a few: combine by?", "prediction-powered inference")],
+                        narration="Checkpoint. Items and judges.",
+                        answers_narration="Almost none. And prediction-powered inference.")
 
     def judges(self):
         self.lad_voiceover(

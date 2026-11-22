@@ -7,20 +7,28 @@ from videos.stats.stats14.common import *  # noqa: F403
 DEPTS = "ABCDEF"
 
 
-class Simpson(VoiceoverScene):
+class Simpson(StatsScene):
     def construct(self):
         self.card()
+        self.ask("Department by department, who had the higher admission rate in most?",
+                 ["men", "women", "neither"], 1,
+                 say="Now break Berkeley's table down by department. In most departments, who had the higher "
+                     "admission rate?",
+                 reveal="Women, in four of the six largest. Women applied mostly to the hardest departments: every "
+                        "part one way, the whole the other.")
         self.by_department()
         self.where_applied()
         self.mosaics()
         self.weights()
         self.meaning()
+        self.answer()
+        self.checkpoint([("Counts from groups of different sizes: model the rate with?", r"an offset, $\log(\text{size})$"),
+                         ("Overdispersed counts: the Poisson SEs are?", "too small")],
+                        narration="Checkpoint. Counts.",
+                        answers_narration="An offset. And too small.")
 
     def card(self):
-        card = chapter_card(8, r"Simpson's paradox", r"Every part one way, \ the whole the other", lit=(1975,), part=PART)
-        with self.voiceover("Chapter eight. Simpson's paradox."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(8, r"Simpson's paradox", r"Every part one way, \ the whole the other", lit=(1975,), part=PART, said="Chapter eight. Simpson's paradox.")
 
     def by_department(self):
         d = load("tables")["depts"]

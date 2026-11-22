@@ -7,23 +7,17 @@ from videos.cs.cs43.common import (BG, DATA, HEAD, KERN, LAM, NO, PART, YES, cod
                                    tag_box)
 
 
-class Rpc(VoiceoverScene):
+class Rpc(WatchScene):
     def construct(self):
         self.card()
         self.stubs()
         self.latency()
-        self.memory()
         self.partial()
         self.generals()
-        self.idl()
 
     def card(self):
-        card = chapter_card(1, r"Calls across a network", r"Can a remote call be made to look local?",
-                            lit=(1984, 1994), extra=((1984, r"Birrell \& Nelson: \ RPC"),
-                                                     (1994, r"Waldo et al.: \ a note")), part=PART)
-        with self.voiceover("Chapter one. Calls across a network."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(1, r"Calls across a network", r"Can a remote call be made to look local?", lit=(1984, 1994), extra=((1984, r"Birrell \& Nelson: \ RPC"),
+                                                     (1994, r"Waldo et al.: \ a note")), part=PART, said="Chapter one. Calls across a network.")
 
     def stubs(self):
         head = label(r"Remote procedure call", font_size=36).to_edge(UP, buff=0.3)
@@ -144,62 +138,11 @@ class Rpc(VoiceoverScene):
         self.wait(0.4)
         self.clear_scene()
 
-    def memory(self):
-        head = label(r"No shared memory, \ no single thread", font_size=36).to_edge(UP, buff=0.3)
-
-        def space(title, x, color):
-            r = RoundedRectangle(width=2.9, height=3.4, corner_radius=0.12, stroke_color=color, stroke_width=2)
-            r.move_to([x, 0.5, 0])
-            t = label(title, font_size=19, color=color).next_to(r, UP, buff=0.12)
-            return VGroup(r, t)
-        cs = space(r"client's memory", -4.9, DATA)
-        ss = space(r"server's memory", -0.9, LAM)
-        obj = tag_box(r"{count: 1}", color=WHITE, size=17).move_to([-4.4, 0.5, 0])
-        refs = VGroup()
-        for nm, dy in (("a", 0.9), ("b", -0.9)):
-            d = mono(nm, size=19, color=DATA).move_to([-5.9, 0.5 + dy, 0])
-            refs.add(VGroup(d, Arrow(d.get_right(), obj.get_left(), buff=0.1, color=DATA, stroke_width=2,
-                                     max_tip_length_to_length_ratio=0.15)))
-        addr = mono("0x7ffd5a10", size=16, color=GREY_B).next_to(obj, DOWN, buff=0.15)
-        call = mono("f(a, b)", size=19, color=HEAD).next_to(cs[0], DOWN, buff=0.2)
-        copies = VGroup(*[tag_box(r"{count: 1}", color=WHITE, size=17).move_to([-0.6, 0.5 + dy, 0])
-                          for dy in (0.9, -0.9)])
-        cnames = VGroup(*[mono(nm, size=19, color=LAM).next_to(c, LEFT, buff=0.2) for nm, c in zip("ab", copies)])
-        ship = Arrow(cs[0].get_right(), ss[0].get_left(), buff=0.08, color=GREY_B, stroke_width=2)
-        bumped = tag_box(r"{count: 2}", color=YES, size=17).move_to(copies[0])
-        notes = VGroup(
-            wrapped_label(r"a pointer is an address in one process \ (Part 32): \ meaningless anywhere else, \ so "
-                          r"arguments travel as copies", 4.3, font_size=19, color=WHITE),
-            wrapped_label(r"copies break sharing: \ one object passed twice arrives as two, \ and the server's "
-                          r"update never reaches the caller", 4.3, font_size=19, color=NO),
-            wrapped_label(r"and the server runs many clients' calls at once, \ on its own threads: \ concurrency "
-                          r"the caller never wrote \ (Part 33)", 4.3, font_size=19, color=KERN),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.35).move_to([4.4, 0.4, 0])
-        ill = note(r"illustrative", font_size=17).to_corner(DR, buff=0.35)
-        with self.voiceover(
-            "The second reason is memory. <bookmark mark='a'/> Here the caller passes one object twice, as a and"
-            " as b. Locally, that is one address, passed twice. <bookmark mark='b'/> But an address means "
-            "something only inside one process, Part 32's lesson, so the stub copies what it points to, and the "
-            "server receives two separate objects. <bookmark mark='c'/> When it increments one, the other is "
-            "unchanged, and so is the caller's original. <bookmark mark='d'/> The third reason is concurrency: a"
-            " server runs many clients' calls at once, so every caller becomes part of a concurrent program, "
-            "with all of Part 33's hazards."
-        ) as vo:
-            self.play(FadeIn(head), FadeIn(cs), FadeIn(ss), FadeIn(ill))
-            vo.wait_until("a")
-            self.play(FadeIn(obj), FadeIn(refs), FadeIn(addr), FadeIn(call))
-            vo.wait_until("b")
-            self.play(GrowArrow(ship), FadeIn(notes[0]))
-            self.play(TransformFromCopy(obj, copies[0]), TransformFromCopy(obj, copies[1]), FadeIn(cnames))
-            vo.wait_until("c")
-            self.play(ReplacementTransform(copies[0], bumped), FadeIn(notes[1]))
-            self.play(Indicate(obj, color=NO))
-            vo.wait_until("d")
-            self.play(FadeIn(notes[2]))
-        self.wait(0.4)
-        self.clear_scene()
 
     def partial(self):
+        self.ask(r"A remote call times out. \\ Did the server run it?", [r"no", r"you can't tell"], 1,
+                 say="A remote call times out. Did the server run it?",
+                 reveal="You can't tell. The request, the server, or only the reply may have been lost.")
         head = label(r"Partial failure: \ three ways to hear nothing", font_size=36).to_edge(UP, buff=0.3)
         x0, x1 = -5.3, 2.4
         xs, xa, xw, xr, xt = -5.0, -3.6, -2.8, -1.3, 1.6      # send, arrive, work done, reply back, timeout
@@ -311,52 +254,6 @@ class Rpc(VoiceoverScene):
         self.wait(0.4)
         self.clear_scene()
 
-    def idl(self):
-        head = label(r"Interfaces, \ described once", font_size=36).to_edge(UP, buff=0.3)
-        src = code_block(["service Counter {", "  rpc Add (Counts) returns (Ack);", "}", "",
-                          "message Counts {", "  string word  = 1;", "  int64  count = 2;", "}"], size=17)
-        frame = SurroundingRectangle(src, buff=0.2, color=GREY_C, stroke_width=1.5, corner_radius=0.08)
-        idl = VGroup(frame, src).move_to([-4.3, 1.0, 0])
-        cap = label(r"an interface description \ (Protocol Buffers)", font_size=18, color=GREY_B).next_to(
-            idl, UP, buff=0.12)
-        gen = module_box(r"stub generator", KERN, w=2.0, h=0.62).move_to([-0.1, 1.0, 0])
-        outs = VGroup(*[module_box(t, HEAD, w=3.0, h=0.5, font=17) for t in
-                        (r"Go client stub", r"Java server stub", r"Python client stub")]).arrange(
-            DOWN, buff=0.22).move_to([3.7, 1.0, 0])
-        a1 = Arrow(idl.get_right(), gen.get_left(), buff=0.12, color=GREY_B, stroke_width=2)
-        a2 = VGroup(*[Arrow(gen.get_right(), o.get_left(), buff=0.12, color=GREY_B, stroke_width=2,
-                            max_tip_length_to_length_ratio=0.15) for o in outs])
-        hist = [(r"Sun RPC", r"1988, \ RFC 1057", DATA), (r"CORBA", r"1991, \ OMG", LAM),
-                (r"Thrift", r"2007, \ Facebook", KERN), (r"gRPC", r"2015, \ Google", YES)]
-        chips = VGroup(*[VGroup(label(n, font_size=21, color=c), label(d, font_size=17, color=GREY_B)).arrange(
-            DOWN, buff=0.08) for n, d, c in hist]).arrange(RIGHT, buff=1.0).move_to([0, -1.55, 0])
-        rule = Line(chips.get_left() + LEFT * 0.3, chips.get_right() + RIGHT * 0.3, color=GREY_D).next_to(
-            chips, UP, buff=0.12)
-        foot = wrapped_label(r"gRPC's generated calls take a \textbf{deadline} and return a \textbf{status} \ "
-                             r"(\texttt{DEADLINE\_EXCEEDED}, \ \texttt{UNAVAILABLE}, \ ...): \ the stub admits the "
-                             r"network is there", 12.4, font_size=20, color=WHITE).to_edge(DOWN, buff=0.4)
-        with self.voiceover(
-            "What survived from Birrell and Nelson is the stub generator. <bookmark mark='a'/> An interface is "
-            "written once, in an interface description language: here a service with one call, and its message. "
-            "<bookmark mark='b'/> A generator writes the stubs, in whatever languages each side uses. <bookmark "
-            "mark='c'/> The idea runs from Sun RPC, which carried the NFS file system, through CORBA and "
-            "Facebook's Thrift, to Google's gRPC. <bookmark mark='d'/> What changed is honesty. A gRPC call "
-            "takes a deadline and returns a status, such as deadline exceeded or unavailable: it looks local, "
-            "but admits the network is there."
-        ) as vo:
-            self.play(FadeIn(head))
-            vo.wait_until("a")
-            self.play(FadeIn(idl), FadeIn(cap))
-            vo.wait_until("b")
-            self.play(GrowArrow(a1), FadeIn(gen))
-            self.play(LaggedStart(*[GrowArrow(a) for a in a2], lag_ratio=0.2),
-                      LaggedStart(*[FadeIn(o) for o in outs], lag_ratio=0.2))
-            vo.wait_until("c")
-            self.play(Create(rule), LaggedStart(*[FadeIn(c, shift=UP * 0.1) for c in chips], lag_ratio=0.3))
-            vo.wait_until("d")
-            self.play(FadeIn(foot))
-        self.wait(0.4)
-        self.clear_scene()
 
 
 _ = (BG, LAM)

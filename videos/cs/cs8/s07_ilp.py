@@ -7,24 +7,23 @@ from videos.cs.cs8.common import (BG, CODE, COST, CTRL, DATA, FUNC, HEAD, HIST, 
                                   mono)
 
 
-class Ilp(VoiceoverScene):
+class Ilp(WatchScene):
     def construct(self):
         self.card()
         self.wall()
         self.curves()
-        self.core()
         self.verdict()
 
     def card(self):
-        card = chapter_card(6, r"Wider, \ and the ILP wall", r"How much parallelism is in a real program?",
-                            lit=(1972, 1991), extra=((1972, r"Riseman and Foster"), (1991, r"Wall's limits of ILP")),
-                            part=PART)
-        with self.voiceover("Chapter six. Wider, and the wall."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(6, r"Wider, \ and the ILP wall", r"How much parallelism is in a real program?", lit=(1972, 1991), extra=((1972, r"Riseman and Foster"), (1991, r"Wall's limits of ILP")), part=PART, said="Chapter six. Wider, and the wall.")
 
     # ------------------------------------------------------------------
     def wall(self):
+        self.ask(r"Perfect prediction, unlimited hardware. \\ How much parallelism is there in a real program?",
+                 [r"about 2 instructions at a time", r"dozens", r"no limit"], 1,
+                 say="Give a machine perfect prediction and unlimited hardware. How many instructions at a time could a real "
+                     "program keep busy?",
+                 reveal="Dozens, for an oracle. Take its knowledge of the future away, and most of it vanishes.")
         d = load("limits")
         head = label("Oracle sensitivity: \\ one baseline assumption changed per bar", font_size=32).to_edge(UP, buff=0.3)
         names = [r"the oracle", r"no renaming", r"memory: \\ wait for \\ every store", "branches: \\\\ predictor \\\\ barriers", r"branches: \\ no \\ speculation"]
@@ -103,15 +102,12 @@ class Ilp(VoiceoverScene):
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.3).to_edge(RIGHT, buff=0.4).shift(UP * 0.5)
         with self.voiceover(
             "Now vary start width and the scheduler's window parameter. This parameter constrains an instruction's "
-            "start relative to the start of an earlier trace position. It does not wait for the oldest unfinished "
-            "operation to retire, so it is not a physical reorder-buffer capacity. <bookmark mark='a'/> With the "
+            "start relative to the start of an earlier trace position. <bookmark mark='a'/> With the "
             "modeled predictor barriers, curves for the tested window parameters almost overlap and flatten near "
-            "three point four. That shows little benefit from this parameter on this trace under these assumptions. "
+            "three point four. "
             "<bookmark mark='b'/> With perfect control, a parameter of one hundred twenty-eight permits "
             "considerably more overlap. <bookmark mark='c'/> Two thousand forty-eight permits still more. Control "
-            "assumptions interact strongly with start-width and lookahead assumptions here. The result does not "
-            "prove that larger buffers are useless on other programs, or that the oracle's distant future inputs "
-            "can be supplied by hardware."
+            "assumptions interact strongly with start-width and lookahead assumptions here."
         ) as vo:
             self.play(FadeIn(head), Create(ax), FadeIn(xt), FadeIn(xl), FadeIn(yl), FadeIn(side[0]))
             vo.wait_until("a")
@@ -124,54 +120,6 @@ class Ilp(VoiceoverScene):
         self.wait(0.3)
         self.clear_scene()
 
-    # ------------------------------------------------------------------
-    def core(self):
-        d = load("sweep")
-        head = label("Functional core: \\ front-end width and queue capacities", font_size=34).to_edge(UP, buff=0.3)
-        runs = d["runs"]
-        robs = [16, 32, 64, 128, 256, 512]
-        widths = [1, 2, 4, 8]
-        cw, chh = 1.3, 0.62
-        grid = VGroup()
-        for r, w in enumerate(widths):
-            for c, rb in enumerate(robs):
-                v = [x["ipc"] for x in runs if x["width"] == w and x["rob"] == rb][0]
-                cell = Rectangle(width=cw * 0.95, height=chh * 0.9, stroke_width=0, fill_color=FUNC,
-                                 fill_opacity=0.15 + 0.4 * v / 2.0)
-                cell.move_to([c * cw, -r * chh, 0])
-                grid.add(VGroup(cell, label(f"{v:.2f}", font_size=20, color=WHITE).move_to(cell)))
-        rl = VGroup(*[label(rf"{w} wide", font_size=20, color=GREY_A).move_to([-1.1, -r * chh, 0])
-                      for r, w in enumerate(widths)])
-        cl = VGroup(*[label(str(rb), font_size=20, color=GREY_A).move_to([c * cw, 0.6, 0]) for c, rb in enumerate(robs)])
-        ct = note(r"reorder-buffer entries", font_size=20).move_to([2.5 * cw, 1.05, 0])
-        tab = VGroup(grid, rl, cl, ct).move_to(UP * 0.4)
-        pp = d["perfect_512"]
-        perf = label(rf"oracle-assisted \ (512 ROB entries): \ {pp[0]:.2f}, \ {pp[1]:.2f}, \ {pp[2]:.2f}, \ "
-                     rf"{pp[3]:.2f}", font_size=24, color=YES).next_to(tab, DOWN, buff=0.5)
-        why = label("constraints include one taken fetch branch/cycle and two memory ports", font_size=22,
-                    color=GREY_B).next_to(perf, DOWN, buff=0.2)
-        with self.voiceover(
-            "Compare that oracle with the functional core's actual model runs. <bookmark mark='a'/> Each heatmap "
-            "cell reports retired IPC while varying the front-end and retirement width, reorder-buffer capacity and "
-            "proportional queue sizes. The four-width configuration is about one point eight nine; eight increases "
-            "it only slightly on this chapter. Execution starts have their own unit and port limits. <bookmark "
-            "mark='b'/> Increasing these capacities beyond the smaller tested settings brings little benefit here. "
-            "That is a workload-specific observation, consistent with low whole-run occupancy. <bookmark mark='c'/> "
-            "Oracle-assisted correct-path prediction improves IPC substantially, but the implementation can still "
-            "redirect after speculative memory-order mistakes. Front-end taken-branch bandwidth, memory ports and "
-            "other resources remain constraints; this sweep alone does not uniquely assign the remaining gap to one "
-            "of them."
-        ) as vo:
-            self.play(FadeIn(head), FadeIn(rl), FadeIn(cl), FadeIn(ct))
-            self.play(LaggedStart(*[FadeIn(g) for g in grid], lag_ratio=0.03), run_time=2.0)
-            vo.wait_until("a")
-            vo.wait_until("b")
-            self.play(*[Indicate(grid[2 * 6 + c], color=HEAD, scale_factor=1.05) for c in range(6)])
-            vo.wait_until("c")
-            self.play(FadeIn(perf))
-            self.play(FadeIn(why))
-        self.wait(0.3)
-        self.clear_scene()
 
     # ------------------------------------------------------------------
     def verdict(self):

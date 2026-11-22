@@ -6,11 +6,11 @@ from explainer.cs import *  # noqa: F403
 from videos.cs.cs24.common import (CTRL, DATA, HEAD, LAM, NO, PART, YES, curve, load, log_axes, mono, words)
 
 
-class Hook(VoiceoverScene):
+class Hook(WatchScene):
     def construct(self):
         self.race()
         self.chart()
-        self.plan()
+        self.title(PART)
 
     def race(self):
         head = label(r"Two loops, \ both $O(n)$", font_size=36).to_edge(UP, buff=0.4)
@@ -104,27 +104,3 @@ class Hook(VoiceoverScene):
         self.wait(0.3)
         self.clear_scene()
 
-    def plan(self):
-        title = label(rf"Part {PART}: \ Algorithms in Practice", font_size=46).to_edge(UP, buff=0.4)
-        smap = series_map(current=PART, done=PART - 1).scale(0.92).next_to(title, DOWN, buff=0.35)
-        obj = objectives_card([
-            r"the everyday tools: \ prefix sums, \ Fenwick and segment trees, \ range minimum and LCA",
-            r"linear-time patterns: \ two pointers, \ monotonic stacks and deques, \ searching for the answer",
-            r"bits: \ word tricks, \ submasks, \ the Four Russians; \ meet in the middle; \ square roots",
-            r"algorithm engineering: \ search layouts, \ SIMD, \ Swiss tables, \ radix sort, \ measured",
-            r"benchmarking honestly, \ and problem solving as a craft",
-            r"the Job engineered \ (ledger row 10); \ the frontier: \ learned indexes and predictions",
-        ], font_size=26).move_to(DOWN * 0.2)
-        with self.voiceover(
-            "Part 24 of Computer Science, Built: Algorithms in Practice. <bookmark mark='a'/> In this part: the "
-            "everyday data structures of real code, prefix sums, Fenwick and segment trees, range minimum and lowest "
-            "common ancestors; the linear-time patterns, two pointers, monotonic stacks and binary search on the "
-            "answer; word-level tricks and the Four Russians; meet in the middle and square roots; then algorithm "
-            "engineering, measured on this machine: memory layouts, vector instructions, hash tables and sorting; "
-            "how to benchmark honestly; and the Job, engineered, for the ledger's tenth row."
-        ) as vo:
-            self.play(FadeIn(title), FadeIn(smap))
-            vo.wait_until("a")
-            self.play(FadeOut(smap), FadeIn(obj))
-        self.wait(0.5)
-        self.clear_scene()

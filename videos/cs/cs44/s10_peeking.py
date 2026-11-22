@@ -32,7 +32,7 @@ def _msprt_z(n, tau2, V=2 * 0.05 * 0.95, alpha=0.05):
     return math.sqrt(r * (2 * math.log(1 / alpha) + math.log((V + n * tau2) / V)))
 
 
-class Peeking(VoiceoverScene):
+class Peeking(WatchScene):
     def construct(self):
         self.card()
         self.paths()
@@ -42,13 +42,9 @@ class Peeking(VoiceoverScene):
         self.trade()
 
     def card(self):
-        card = chapter_card(9, r"Looking too often", r"Why does checking an experiment every day break it?",
-                            lit=(1970, 2017), extra=((1970, r"Robbins: \ mixture sequential tests"),
+        self.chapter(9, r"Looking too often", r"Why does checking an experiment every day break it?", lit=(1970, 2017), extra=((1970, r"Robbins: \ mixture sequential tests"),
                                                      (2017, r"Johari et al.: \ always-valid "
-                                                            r"p-values")), part=PART)
-        with self.voiceover("Chapter nine. Looking too often."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+                                                            r"p-values")), part=PART, said="Chapter nine. Looking too often.")
 
     def paths(self):
         pk = load("peeking")
@@ -104,6 +100,10 @@ class Peeking(VoiceoverScene):
         self.clear_scene()
 
     def climb(self):
+        self.ask(r"An A/A test, checked every morning for a month, \\ stopped at the first $p < 0.05$. False winners:",
+                 [r"$5\%$", r"far more than $5\%$"], 1,
+                 say="Two identical versions, checked every morning for a month, stopped the first time p falls below five percent. How often is a winner declared?",
+                 reveal="Far more often than five percent. Every look is another chance.")
         pk = load("peeking")
         fpr = pk["fpr_peeking"]
         days = pk["days"]
@@ -345,6 +345,12 @@ class Peeking(VoiceoverScene):
             self.play(FadeIn(foot[1]))
         self.wait(0.4)
         self.clear_scene()
+        self.checkpoint(
+            [(r"Why does peeking inflate false positives?", r"A watched walk crosses any fixed line"),
+             (r"What do the 1.96 and 0.84 in the sample size mean?", r"5\% level, two-sided; 80\% power")],
+            narration="Checkpoint. Why does peeking inflate false positives? And what are the one point nine six and point eight four in the sample size?",
+            answers_narration="A random walk watched for long enough crosses any fixed line. And a five percent two-sided "
+                              "level, and eighty percent power.")
 
 
 _ = (BG, HEAD, KERN)

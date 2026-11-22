@@ -4,7 +4,7 @@ from explainer.cs import *  # noqa: F403
 from videos.cs.cs36.common import (DATA, HEAD, KERN, LAM, NO, PART, YES, graph, grid_table, load)
 
 
-class Frontier(VoiceoverScene):
+class Frontier(WatchScene):
     def construct(self):
         self.card()
         self.verify()
@@ -13,13 +13,8 @@ class Frontier(VoiceoverScene):
         self.open_problems()
 
     def card(self):
-        card = chapter_card(15, r"Frontier: \ programmable, \ verified, \ convergent", r"What is still unsolved?",
-                            lit=(2002, 2012, 2015), extra=((2002, r"Griffin et al.: \ the stable paths problem"),
-                                                           (2012, r"header space analysis"), (2015, r"Batfish")),
-                            part=PART)
-        with self.voiceover("Chapter fifteen. Frontier: programmable, verified, convergent."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(15, r"Frontier: \ programmable, \ verified, \ convergent", r"What is still unsolved?", lit=(2002, 2012, 2015), extra=((2002, r"Griffin et al.: \ the stable paths problem"),
+                                                           (2012, r"header space analysis"), (2015, r"Batfish")), part=PART, said="Chapter fifteen. Frontier: programmable, verified, convergent.")
 
     def verify(self):
         f = load("frontier")
@@ -108,6 +103,9 @@ class Frontier(VoiceoverScene):
         self.clear_scene()
 
     def gadget(self):
+        self.ask(r"Each network follows its own preferences. \\ Can BGP oscillate forever?", [r"no", r"yes"], 1,
+                 say="Each network chooses routes by its own policy. Can BGP oscillate forever?",
+                 reveal="Yes. Three networks can chase each other indefinitely.")
         f = load("frontier")
         head = label(r"Policies that never settle", font_size=36).to_edge(UP, buff=0.3)
         pos = {0: [-3.6, -1.5, 0], 1: [-3.6, 1.4, 0], 2: [-1.2, -0.2, 0], 3: [-6.0, -0.2, 0]}

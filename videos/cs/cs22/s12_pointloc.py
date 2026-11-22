@@ -4,18 +4,14 @@ from explainer.cs import *  # noqa: F403
 from videos.cs.cs22.common import (CTRL, DATA, HEAD, LAM, NO, PART, YES, fit, grid_table, load, mono, words)
 
 
-class PointLocation(VoiceoverScene):
+class PointLocation(WatchScene):
     def construct(self):
         self.card()
         self.slabs()
         self.trapezoids()
 
     def card(self):
-        card = chapter_card(11, r"Point location", r"Which region of the map am I in?", lit=(1976, 1991),
-                            extra=((1976, r"Dobkin--Lipton slabs"), (1991, r"Seidel's trapezoids")), part=PART)
-        with self.voiceover("Chapter eleven. Point location."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(11, r"Point location", r"Which region of the map am I in?", lit=(1976, 1991), extra=((1976, r"Dobkin--Lipton slabs"), (1991, r"Seidel's trapezoids")), part=PART, said="Chapter eleven. Point location.")
 
     def _base(self, d):
         segs = [tuple(map(tuple, s)) for s in d["segs"]]
@@ -27,6 +23,9 @@ class PointLocation(VoiceoverScene):
         return segs, f, frame, S, ends
 
     def slabs(self):
+        self.ask(r"Point location with vertical slabs. \\ Query time?", [r"$\log n$", r"$n$"], 0,
+                 say="Cut the map into vertical slabs. How long does it take to find which region a point is in?",
+                 reveal="Log n: one binary search for the slab, one inside it.")
         d = load("pointloc")
         segs, f, frame, S, ends = self._base(d)
         head = label(r"Slabs: \ fast, \ but too big", font_size=34).to_edge(UP, buff=0.3)
@@ -115,3 +114,10 @@ class PointLocation(VoiceoverScene):
             self.play(FadeIn(side[6]))
         self.wait(0.3)
         self.clear_scene()
+        self.checkpoint(
+            [(r"What does the lifting map turn Delaunay into?", r"A lower convex hull in 3-D"),
+             (r"What does backwards analysis exploit?", r"The last point inserted is a random one")],
+            narration="Checkpoint. What does the lifting map turn a Delaunay triangulation into? And what does backwards "
+                      "analysis exploit?",
+            answers_narration="A lower convex hull in three dimensions. And that the last point inserted is equally likely to "
+                              "be any of them.")

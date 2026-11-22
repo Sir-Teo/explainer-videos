@@ -6,9 +6,15 @@ from scipy import stats
 from videos.stats.stats27.common import *  # noqa: F403
 
 
-class Funnel(VoiceoverScene):
+class Funnel(StatsScene):
     def construct(self):
         self.card()
+        self.ask("Eight schools, few data per school. Which parametrization samples better?",
+                 ["centred", "non-centred"], 1,
+                 say="The eight schools have Neal's funnel inside them. With little data per school, which "
+                     "parametrization samples better: centred or non-centred?",
+                 reveal="Non-centred: write each effect as mu plus tau times a standard normal. The funnel "
+                        "straightens, and the divergences go away.")
         self.shape()
         self.neal()
         self.schools_centred()
@@ -16,12 +22,14 @@ class Funnel(VoiceoverScene):
         self.table()
         self.other()
         self.lessons()
+        self.answer()
+        self.checkpoint([("What does HMC use that random-walk Metropolis doesn't?", "the gradient of the log density"),
+                         ("The eight schools sample better?", "non-centred")],
+                        narration="Checkpoint. Hamiltonian Monte Carlo.",
+                        answers_narration="The gradient. And non-centred.")
 
     def card(self):
-        card = chapter_card(7, r"Neal's funnel", r"The eight schools' hidden geometry", lit=(2003,), part=PART)
-        with self.voiceover("Chapter seven. Neal's funnel and the eight schools."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(7, r"Neal's funnel", r"The eight schools' hidden geometry", lit=(2003,), part=PART, said="Chapter seven. Neal's funnel and the eight schools.")
 
     def shape(self):
         rows = [

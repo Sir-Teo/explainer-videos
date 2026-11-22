@@ -17,7 +17,7 @@ def tile(content, caption, color, TW=3.6, TH=2.3):
     return Group(frame, content, cap)
 
 
-class Outro(VoiceoverScene):
+class Outro(WatchScene):
     def construct(self):
         self.recap()
         self.payoffs()
@@ -48,6 +48,12 @@ class Outro(VoiceoverScene):
             self.play(LaggedStart(*[FadeIn(t, shift=UP * 0.15) for t in tiles], lag_ratio=0.25), run_time=4.0)
         self.wait(0.5)
         self.clear_scene()
+        self.checkpoint(
+            [(r"Why do checksums live in parent pointers?", r"They catch misdirected and lost writes"),
+             (r"What do LSM trees trade?", r"Write, read and space amplification")],
+            narration="Last checkpoint. Why do copy-on-write file systems keep checksums in the parent? And what do LSM designs trade against each other?",
+            answers_narration="A parent's checksum catches lost and misdirected writes. And write, read and space "
+                              "amplification: no design wins all three.")
 
     def payoffs(self):
         card = payoff_card([

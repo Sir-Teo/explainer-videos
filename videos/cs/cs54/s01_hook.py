@@ -12,11 +12,11 @@ def card_(title, when, what, col, w=4.2, h=3.0):
     return VGroup(frame, g)
 
 
-class Hook(VoiceoverScene):
+class Hook(WatchScene):
     def construct(self):
         self.bugs()
         self.midpoint()
-        self.plan()
+        self.title(PART)
 
     def bugs(self):
         head = label(r"Three bugs", font_size=36).to_edge(UP, buff=0.3)
@@ -96,30 +96,6 @@ class Hook(VoiceoverScene):
         self.wait(0.4)
         self.clear_scene()
 
-    def plan(self):
-        title = label(rf"Part {PART}: \ Proving Programs Correct", font_size=36).to_edge(UP, buff=0.3)
-        smap = series_map(current=PART, done=PART - 1).scale(0.92).next_to(title, DOWN, buff=0.35)
-        obj = objectives_card([
-            r"Floyd--Hoare logic, \ invariants and variants",
-            r"weakest preconditions, \ checked by our SAT solver",
-            r"separation logic for the heap",
-            r"model checking, \ explicit, \ symbolic and bounded",
-            r"abstract interpretation and proof assistants",
-            r"verified systems; \ fuzzing our own compiler",
-        ], font_size=25).move_to(DOWN * 0.2)
-        with self.voiceover(
-            "This is Part 54 of Computer Science, Built. <bookmark mark='a'/> The three ways around Rice's theorem "
-            "are to write the invariants ourselves, to exhaust a finite state space, or to approximate soundly. We "
-            "will prove programs with Hoare logic and weakest preconditions; reason about the heap with separation "
-            "logic; model-check protocols explicitly, symbolically and with SAT; analyse programs by abstract "
-            "interpretation; meet the proof assistants that check mathematics and the systems proved with them; and "
-            "fuzz our own compiler until it confesses."
-        ) as vo:
-            self.play(FadeIn(title), FadeIn(smap))
-            vo.wait_until("a")
-            self.play(FadeOut(smap), FadeIn(obj))
-        self.wait(0.5)
-        self.clear_scene()
 
 
 _ = (BG, DATA, KERN, LAM, NO, YES)

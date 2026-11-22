@@ -4,7 +4,7 @@ from explainer.cs import *  # noqa: F403
 from videos.cs.cs23.common import (CTRL, DATA, HEAD, LAM, NO, PART, YES, View3, grid_table, load, mono, words)
 
 
-class Frontier(VoiceoverScene):
+class Frontier(WatchScene):
     def construct(self):
         self.card()
         self.fast()
@@ -13,13 +13,8 @@ class Frontier(VoiceoverScene):
         self.open_()
 
     def card(self):
-        card = chapter_card(14, r"Frontier: \ faster LPs, \ the Hirsch question \ and the UGC",
-                            r"What is still open about optimization?", lit=(2010, 2022),
-                            extra=((2010, r"Santos"), (2022, r"almost-linear max flow")), part=PART)
-        with self.voiceover("Chapter fourteen. Frontier: faster linear programs, the Hirsch question, and the unique "
-                            "games conjecture."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(14, r"Frontier: \ faster LPs, \ the Hirsch question \ and the UGC", r"What is still open about optimization?", lit=(2010, 2022), extra=((2010, r"Santos"), (2022, r"almost-linear max flow")), part=PART, said="Chapter fourteen. Frontier: faster linear programs, the Hirsch question, and the unique "
+                            "games conjecture.")
 
     def fast(self):
         head = label(r"How fast can a linear program be solved?", font_size=32).to_edge(UP, buff=0.35)
@@ -65,6 +60,9 @@ class Frontier(VoiceoverScene):
         self.clear_scene()
 
     def hirsch(self):
+        self.ask(r"The polynomial Hirsch conjecture: \\ is a polytope's diameter polynomial?", [r"proved", r"open"], 1,
+                 say="Is the edge diameter of every polytope bounded by a polynomial in its dimension and faces?",
+                 reveal="Open. The original Hirsch bound was disproved by Santos in 2010; the polynomial version stands.")
         f = load("frontier")
         d = f["draw"]
         V = [tuple(v) for v in d["V"]]

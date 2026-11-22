@@ -7,19 +7,23 @@ from videos.stats.stats3.common import *  # noqa: F403
 LS, MLE = S.RESID, S.LIK
 
 
-class Tails(VoiceoverScene, TreeMixin):
+class Tails(StatsScene, TreeMixin):
     def construct(self):
         self.card()
+        self.ask("Estimating a power-law exponent from a straight line on a log--log histogram is...",
+                 ["the standard method", "systematically misleading", "exact in large samples"], 1,
+                 say="To estimate a power law's exponent, fit a straight line to the histogram on log-log axes. Is "
+                     "that the standard method, systematically misleading, or exact in large samples?",
+                 reveal="Systematically misleading. Clauset, Shalizi and Newman showed it; maximum likelihood does "
+                        "the job, and a test decides whether it's a power law at all.")
         self.pareto()
         self.zipf()
         self.pareto_rule()
         self.fitting()
+        self.answer()
 
     def card(self):
-        card = chapter_card(10, r"Heavy tails", r"Power laws, and how not to fit them", lit=(), part=PART)
-        with self.voiceover("Chapter ten. Heavy tails."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(10, r"Heavy tails", r"Power laws, and how not to fit them", lit=(), part=PART, said="Chapter ten. Heavy tails.")
 
     def pareto(self):
         dfn = definition_card(r"Pareto (power-law) tail", r"$P(X > x) = (x_{\min} / x)^{\alpha}$ \ for $x \ge x_{\min}$: "

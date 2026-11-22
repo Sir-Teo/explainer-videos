@@ -13,22 +13,17 @@ def step_box(num, title, body, col, w=3.9, h=1.45):
     return VGroup(r, t, b)
 
 
-class Chaos(VoiceoverScene):
+class Chaos(WatchScene):
     def construct(self):
         self.card()
         self.monkey()
         self.principles()
         self.blast()
-        self.inject()
 
     def card(self):
-        card = chapter_card(13, r"Chaos engineering", r"Will it survive a failure it has not had yet?",
-                            lit=(2011, 2016), extra=((2011, r"Netflix: \ Chaos Monkey"),
-                                                     (2016, r"Basiri et al.: \ Chaos Engineering")), part=PART)
-        with self.voiceover("Chapter thirteen. Chaos engineering: breaking a system on purpose, before the world "
-                            "does it for you."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(13, r"Chaos engineering", r"Will it survive a failure it has not had yet?", lit=(2011, 2016), extra=((2011, r"Netflix: \ Chaos Monkey"),
+                                                     (2016, r"Basiri et al.: \ Chaos Engineering")), part=PART, said="Chapter thirteen. Chaos engineering: breaking a system on purpose, before the world "
+                            "does it for you.")
 
     def monkey(self):
         head = label(r"Chaos Monkey", font_size=36).to_edge(UP, buff=0.3)
@@ -82,6 +77,9 @@ class Chaos(VoiceoverScene):
         self.clear_scene()
 
     def principles(self):
+        self.ask(r"A chaos experiment's first step:", [r"break something", r"define the steady state"], 1,
+                 say="What is the first step of a chaos experiment?",
+                 reveal="Define the steady state: a measurable sign that the system works.")
         head = label(r"An experiment, \ not an accident", font_size=36).to_edge(UP, buff=0.3)
         steps = VGroup(
             step_box(1, r"steady state", r"a measurable output users feel: \ Netflix used stream starts per second",
@@ -199,63 +197,6 @@ class Chaos(VoiceoverScene):
         self.wait(0.4)
         self.clear_scene()
 
-    def inject(self):
-        r = load("raft")
-        head = label(r"How faults are injected", font_size=36).to_edge(UP, buff=0.3)
-        rows = [[r"crash", r"kill the process; \ terminate the instance", r"refused at once"],
-                [r"partition", r"a firewall rule drops the packets", r"no reply: \ wait out the timeout"],
-                [r"slow", r"queueing delay added in the kernel \ (\texttt{tc netem})", r"ten times the latency"]]
-        tab = grid_table([r"fault", r"in production", r"in our simulator"], rows, widths=[1.8, 5.6, 4.4],
-                         row_h=0.7, font_size=20, mono_cols=())
-        tab.next_to(head, DOWN, buff=0.4)
-        for i, col in enumerate((NO, LAM, KERN), start=1):
-            tab.cells[i][0].set_color(col)
-        steps = [m["what"] for m in r["script"]]
-        hyp = {"crash the leader": r"a new leader within a few election timeouts; \ nothing committed is lost",
-               "partition 2 | 3": r"the old leader, \ in the minority, \ can commit nothing; \ the majority goes on",
-               "crash two followers": r"no pause at all: \ three of five is still a majority"}
-        hrows = VGroup()
-        for s in steps:
-            if s in hyp:
-                a = label(s.replace("|", r"$|$"), font_size=19, color=HEAD)
-                b = wrapped_label(hyp[s], 7.4, font_size=19, color=WHITE)
-                hrows.add(VGroup(a, b))
-        for row in hrows:
-            row[0].move_to([-6.4, 0, 0], aligned_edge=LEFT)
-            row[1].move_to([-2.0, 0, 0], aligned_edge=LEFT)
-        hrows.arrange(DOWN, buff=0.4, aligned_edge=LEFT)
-        for row in hrows:
-            row[1].align_to([-2.0, 0, 0], LEFT)
-        ttl = label(r"Part 38's Raft cluster: \ the hypotheses, \ written before the run", font_size=21,
-                    color=GREY_A)
-        VGroup(ttl, hrows).arrange(DOWN, buff=0.4, aligned_edge=LEFT).next_to(tab, DOWN, buff=0.8).to_edge(
-            LEFT, buff=0.55)
-        foot = label(r"chapter 14 runs both experiments", font_size=20, color=YES).to_edge(DOWN, buff=0.3).to_edge(
-            RIGHT, buff=0.6)
-        with self.voiceover(
-            "How is a fault injected? <bookmark mark='a'/> A crash is the easiest: kill the process, or terminate "
-            "the machine, and connections are refused at once. <bookmark mark='b'/> A partition is a firewall rule "
-            "that silently drops packets, so a caller hears nothing and must wait out its timeout. <bookmark "
-            "mark='c'/> Slowness is added in the kernel's queueing layer by Linux's network emulator: chapter "
-            "three's gray failure. Our simulator models all three. <bookmark mark='d'/> For Part 38's Raft cluster "
-            "the hypotheses are stronger, because consensus promises more. Crash the leader: a new one within a few "
-            "election timeouts, and nothing committed lost. Cut the leader off in a minority: it can commit "
-            "nothing, while the majority carries on. Crash two of five followers: no pause at all. <bookmark "
-            "mark='e'/> Written down before the run, each is a claim that can fail. Chapter fourteen runs both "
-            "experiments."
-        ) as vo:
-            self.play(FadeIn(head), FadeIn(tab.rule), FadeIn(VGroup(*tab.cells[0])))
-            for mk, row in zip("abc", tab.cells[1:]):
-                vo.wait_until(mk)
-                self.play(FadeIn(VGroup(*row)))
-            vo.wait_until("d")
-            self.play(FadeIn(ttl))
-            for row in hrows:
-                self.play(FadeIn(row), run_time=0.8)
-            vo.wait_until("e")
-            self.play(FadeIn(foot))
-        self.wait(0.4)
-        self.clear_scene()
 
 
 _ = (LAM, YES)

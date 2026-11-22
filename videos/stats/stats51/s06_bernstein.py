@@ -5,20 +5,24 @@ import numpy as np
 from videos.stats.stats51.common import *  # noqa: F403
 
 
-class MatrixBernstein(VoiceoverScene):
+class MatrixBernstein(StatsScene):
     def construct(self):
         self.card()
+        self.ask("Bernstein's inequality for sums of random matrices picks up an extra factor of...",
+                 [r"$\log d$, the dimension's log", "$d$, the dimension", "nothing"], 0,
+                 say="Matrix Bernstein: a tail bound for sums of independent random matrices. Compared with the "
+                     "scalar version, what extra factor appears?",
+                 reveal="The log of the dimension, in front of the tail. Tropp's form: sample covariances, random "
+                        "graphs and randomized linear algebra all follow.")
         self.why_matrices()
         self.theorem()
         self.chart()
         self.dimension()
         self.uses()
+        self.answer()
 
     def card(self):
-        card = chapter_card(5, r"Matrix concentration", r"Bernstein's inequality, \ for sums of random matrices", lit=(2012,), part=PART)
-        with self.voiceover("Chapter five. Matrix concentration: Bernstein's inequality, for sums of random matrices."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(5, r"Matrix concentration", r"Bernstein's inequality, \ for sums of random matrices", lit=(2012,), part=PART, said="Chapter five. Matrix concentration: Bernstein's inequality, for sums of random matrices.")
 
     def why_matrices(self):
         rows = fit_rows(VGroup(

@@ -36,7 +36,7 @@ def insertion_tree():
     return build(())
 
 
-class Lower(VoiceoverScene):
+class Lower(WatchScene):
     def construct(self):
         self.card()
         self.tree()
@@ -45,11 +45,7 @@ class Lower(VoiceoverScene):
         self.adversary()
 
     def card(self):
-        card = chapter_card(6, r"The comparison lower bound", r"Can any sort beat $n \log n$?", lit=(1959,),
-                            extra=((1959, r"Ford and Johnson: \ merge insertion"),), part=PART)
-        with self.voiceover("Chapter six. The comparison lower bound."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(6, r"The comparison lower bound", r"Can any sort beat $n \log n$?", lit=(1959,), extra=((1959, r"Ford and Johnson: \ merge insertion"),), part=PART, said="Chapter six. The comparison lower bound.")
 
     def tree(self):
         head = label(r"Every comparison sort is a tree", font_size=34).to_edge(UP, buff=0.3)
@@ -106,6 +102,10 @@ class Lower(VoiceoverScene):
         self.clear_scene()
 
     def bound(self):
+        self.ask(r"Sort $n$ distinct keys by comparisons. \\ In the worst case, at least...",
+                 [r"$n$ comparisons", r"$\log_2 n!$ comparisons", r"$n^2$ comparisons"], 1,
+                 say="Any sort that only compares keys. In the worst case, how many comparisons must it make at least?",
+                 reveal="Log base two of n factorial, about n log n. Each comparison can only halve the possibilities.")
         d = load("lower")
         head = label(r"A bound from information", font_size=34).to_edge(UP, buff=0.3)
         eq = MathTex(r"h \;\ge\; \lg n! \;=\; n \lg n - n \lg e + O(\log n) \;\approx\; n \lg n - 1.44\, n",
@@ -220,3 +220,9 @@ class Lower(VoiceoverScene):
             self.play(FadeIn(pts[2]), Indicate(VGroup(*tab.cells[-1]), color=NO))
         self.wait(0.3)
         self.clear_scene()
+        self.checkpoint(
+            [(r"What does insertion sort's invariant say?", r"The prefix so far is sorted"),
+             (r"Why must comparison sorts take $n \log n$?", r"$n!$ orders, and each comparison halves them at best")],
+            narration="Checkpoint. What invariant makes insertion sort correct? And why must every comparison sort take n log n?",
+            answers_narration="The prefix so far is sorted. And there are n factorial orders to tell apart, and each comparison "
+                              "can at best halve them.")

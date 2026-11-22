@@ -14,7 +14,7 @@ def size_text(b):
     return f"{b} B"
 
 
-class Frontier(VoiceoverScene):
+class Frontier(WatchScene):
     def construct(self):
         self.card()
         self.reach()
@@ -24,15 +24,13 @@ class Frontier(VoiceoverScene):
         self.open_()
 
     def card(self):
-        card = chapter_card(15, r"Frontier: \ translation reach and memory tiers",
-                            r"What is still unsolved in virtual memory?", lit=(2013, 2019, 2023),
-                            extra=((2013, r"direct segments"), (2019, r"CXL"), (2023, r"TPP; \ Mosaic pages")),
-                            part=PART)
-        with self.voiceover("Chapter fifteen. The frontier: translation reach, and memory in tiers."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(15, r"Frontier: \ translation reach and memory tiers", r"What is still unsolved in virtual memory?", lit=(2013, 2019, 2023), extra=((2013, r"direct segments"), (2019, r"CXL"), (2023, r"TPP; \ Mosaic pages")), part=PART, said="Chapter fifteen. The frontier: translation reach, and memory in tiers.")
 
     def reach(self):
+        self.ask(r"A 64-entry TLB with 4 KiB pages \\ covers how much memory?", [r"256 KiB", r"64 MiB",
+                 r"4 GiB"], 0,
+                 say="A data TLB of sixty-four entries, with four-kibibyte pages. How much memory can it translate without a walk?",
+                 reveal="Two hundred and fifty-six kibibytes, less than the L2 cache.")
         d = load("frontier")
         st = next(r for r in load("staircase")["rows"] if r[0] == 65536)
         head = label(r"TLB reach has fallen behind memory", font_size=36).to_edge(UP, buff=0.3)

@@ -5,21 +5,29 @@ import numpy as np
 from videos.stats.stats15.common import *  # noqa: F403
 
 
-class Hypotheses(VoiceoverScene):
+class Hypotheses(StatsScene):
     def construct(self):
         self.card()
+        self.ask("A very diffuse prior under $H_1$ pushes the Bayes factor toward...",
+                 ["$H_1$", "$H_0$", "neither"], 1,
+                 say="Testing the Bayesian way, with a Bayes factor. Make the prior under the alternative very "
+                     "diffuse. Which way does the Bayes factor move?",
+                 reveal="Toward the null. A diffuse alternative spreads its prior over values the data rule out, so "
+                        "the simpler hypothesis wins: Lindley's paradox.")
         self.odds()
         self.coin()
         self.lindley()
         self.births_bf()
         self.bound()
         self.scale()
+        self.answer()
+        self.checkpoint([("Does Metropolis need the normalizing constant?", "no: only ratios of the posterior"),
+                         ("A vague prior under $H_1$ pushes the Bayes factor toward?", "$H_0$")],
+                        narration="Checkpoint. Computing and testing.",
+                        answers_narration="No, only ratios. And toward the null.")
 
     def card(self):
-        card = chapter_card(10, r"Hypotheses, \ the Bayesian way", r"Posterior odds and Bayes factors, \ a first look", lit=(1939,), part=PART)
-        with self.voiceover("Chapter ten. Hypotheses, the Bayesian way."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(10, r"Hypotheses, \ the Bayesian way", r"Posterior odds and Bayes factors, \ a first look", lit=(1939,), part=PART, said="Chapter ten. Hypotheses, the Bayesian way.")
 
     def odds(self):
         rows = [

@@ -59,22 +59,17 @@ def gentzen(node, fs=28, gap=1.0, depth=0, out=None):
     return g, out
 
 
-class Assistants(VoiceoverScene):
+class Assistants(WatchScene):
     def construct(self):
         self.card()
         self.lcf()
         self.rules()
         self.proof()
         self.refused()
-        self.systems()
         self.mathematics()
 
     def card(self):
-        card = chapter_card(10, r"Proof assistants", r"Who checks the checker?", lit=(1972, 2014),
-                            extra=((1972, r"Milner's LCF"), (2014, r"Flyspeck: \ Kepler, \ checked")), part=PART)
-        with self.voiceover("Chapter ten. Proof assistants."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(10, r"Proof assistants", r"Who checks the checker?", lit=(1972, 2014), extra=((1972, r"Milner's LCF"), (2014, r"Flyspeck: \ Kepler, \ checked")), part=PART, said="Chapter ten. Proof assistants.")
 
     def lcf(self):
         size = load("lcf")["size"]
@@ -219,6 +214,9 @@ class Assistants(VoiceoverScene):
         self.clear_scene()
 
     def refused(self):
+        self.ask(r"In an LCF-style system, can a user \\ make a theorem without the kernel's rules?", [r"yes", r"no"], 1,
+                 say="In an LCF-style proof assistant, can user code produce a theorem without going through the kernel's rules?",
+                 reveal="No: theorems are an abstract type only the kernel can build.")
         bad = load("lcf")["illegal"]
         assert all(b["refused"] for b in bad)
         head = label(r"What the kernel refuses", font_size=36).to_edge(UP, buff=0.3)
@@ -263,48 +261,6 @@ class Assistants(VoiceoverScene):
         self.wait(0.4)
         self.clear_scene()
 
-    def systems(self):
-        head = label(r"Two ways to trust a prover", font_size=36).to_edge(UP, buff=0.3)
-
-        def lane(title, steps, color, who, y):
-            t = label(title, font_size=24, color=color)
-            boxes = VGroup(*[module_box(s, c, w=2.7, font=19) for s, c in steps]).arrange(RIGHT, buff=0.75)
-            arrows = VGroup(*[Arrow(boxes[k].get_right(), boxes[k + 1].get_left(), buff=0.06, color=GREY_B,
-                                    stroke_width=2, max_tip_length_to_length_ratio=0.15)
-                              for k in range(len(boxes) - 1)])
-            w = label(who, font_size=19, color=GREY_A)
-            g = VGroup(t, VGroup(boxes, arrows), w).arrange(DOWN, buff=0.25)
-            g.move_to([0, y, 0])
-            return g, boxes, arrows
-        l1, b1, a1 = lane(r"LCF style: \ a theorem is an abstract value",
-                          [(r"tactic", DATA), (r"kernel rules", KERN), (r"thm", YES)], DATA,
-                          r"HOL, \ HOL Light, \ Isabelle", 1.55)
-        l2, b2, a2 = lane(r"proof terms: \ a proof is a program",
-                          [(r"tactic", DATA), (r"proof term", LAM), (r"type-checking kernel", KERN), (r"thm", YES)],
-                          LAM, r"Rocq \ (called Coq until 2025), \ Lean, \ Agda", -1.15)
-        foot = wrapped_label(r"either way, \ what sits above the kernel can be enormous, \ automated and wrong: \ "
-                             r"the result is still trusted", 12.4, font_size=20, color=YES).to_edge(DOWN, buff=0.35)
-        with self.voiceover(
-            "Proof assistants trust their kernels in one of two ways. <bookmark mark='a'/> In the LCF style, as in "
-            "HOL Light and Isabelle, a theorem is an abstract value that only the kernel's rules can make; HOL "
-            "Light's kernel is a few hundred lines. <bookmark mark='b'/> In the other, as in Rocq, called Coq until "
-            "2025, and in Lean, a tactic builds a proof term, which is a program, and a small kernel type-checks it. "
-            "<bookmark mark='c'/> Either way, what sits above the kernel can be enormous, automated and wrong, and "
-            "the result can still be trusted, which is why the frontier chapter can let language models write proofs."
-        ) as vo:
-            self.play(FadeIn(head))
-            vo.wait_until("a")
-            self.play(FadeIn(l1[0]), FadeIn(b1[0]))
-            self.play(GrowArrow(a1[0]), FadeIn(b1[1]), GrowArrow(a1[1]), FadeIn(b1[2]), FadeIn(l1[2]))
-            vo.wait_until("b")
-            self.play(FadeIn(l2[0]), FadeIn(b2[0]))
-            for k in range(3):
-                self.play(GrowArrow(a2[k]), FadeIn(b2[k + 1]), run_time=0.7)
-            self.play(FadeIn(l2[2]))
-            vo.wait_until("c")
-            self.play(FadeIn(foot), Indicate(b1[1], color=KERN), Indicate(b2[2], color=KERN))
-        self.wait(0.4)
-        self.clear_scene()
 
     def mathematics(self):
         head = label(r"Mathematics, \ checked", font_size=36).to_edge(UP, buff=0.3)

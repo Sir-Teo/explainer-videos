@@ -4,21 +4,16 @@ from explainer.cs import *  # noqa: F403
 from videos.cs.cs14.common import CODE, CTRL, DATA, FUNC, HEAD, LAM, NO, PART, YES, grid_table, load, mono
 
 
-class CurryHoward(VoiceoverScene):
+class CurryHoward(WatchScene):
     def construct(self):
         self.card()
         self.dictionary()
         self.programs()
         self.missing()
         self.kripke()
-        self.callcc()
 
     def card(self):
-        card = chapter_card(12, r"Propositions as types", r"Is a type a theorem?", lit=(1969,),
-                            extra=((1969, r"Unix; \ ARPANET; \ Howard's correspondence"),), part=PART)
-        with self.voiceover("Chapter twelve. Propositions as types."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(12, r"Propositions as types", r"Is a type a theorem?", lit=(1969,), extra=((1969, r"Unix; \ ARPANET; \ Howard's correspondence"),), part=PART, said="Chapter twelve. Propositions as types.")
 
     def dictionary(self):
         head = label(r"The Curry--Howard correspondence", font_size=36).to_edge(UP, buff=0.3)
@@ -54,6 +49,9 @@ class CurryHoward(VoiceoverScene):
         self.clear_scene()
 
     def programs(self):
+        self.ask(r"Is there a program of type $A \lor \lnot A$, \\ for every $A$?", [r"yes", r"no"], 1,
+                 say="Read types as propositions. Is there a program whose type is A or not A, for every A?",
+                 reveal="No. Excluded middle has no constructive proof, so no such program exists.")
         c = load("curry")
         head = label(r"Proof search is program search", font_size=34).to_edge(UP, buff=0.3)
         names = ["K", "composition", "swap", "cases", "contraposition", "not not excluded middle"]
@@ -173,29 +171,3 @@ class CurryHoward(VoiceoverScene):
         self.wait(0.3)
         self.clear_scene()
 
-    def callcc(self):
-        head = label(r"Classical logic is control flow", font_size=34).to_edge(UP, buff=0.3)
-        t = MathTex(r"\mathsf{call/cc} \;:\; ((A \to B) \to A) \to A", font_size=42, color=HEAD).next_to(head, DOWN,
-                                                                                                    buff=0.6)
-        pts = VGroup(
-            label(r"Peirce's law \textit{is} the type of call-with-current-continuation \ (Griffin, \ 1990)",
-                  font_size=23, color=GREY_A),
-            label("a captured continuation transfers control; it does not undo prior effects", font_size=23,
-                  color=GREY_A),
-            label(r"the continuation: \ ``the rest of the program'', \ made into a value \ (Part 15)", font_size=22,
-                  color=YES),
-            label(r"and propositions as types are the foundation of proof assistants: \ Lean, \ Rocq \ (Part 54)",
-                  font_size=22, color=HEAD),
-        ).arrange(DOWN, buff=0.3).next_to(t, DOWN, buff=0.6)
-        with self.voiceover("Control operators change the logical calculus. <bookmark mark='a'/> Griffin's 1990 work connects a typed control operator with classical reasoning. The displayed Peirce type is uninhabited in the pure intuitionistic calculus, but a suitable call-with-current-continuation operator provides it in an extended control calculus. <bookmark mark='b'/> Operationally, call cc captures the current continuation: what the program would do next. Invoking that captured continuation supplies a result and transfers control to that saved context. It does not reverse time, roll back arbitrary effects or erase earlier output. The typing and evaluation rules determine the corresponding classical interpretation. <bookmark mark='c'/> Part 15 builds continuations and shows their execution directly. <bookmark mark='d'/> Proof assistants also use propositions as types, with a specified trusted kernel, rules and axioms. Checking a proof term establishes a proposition relative to those assumptions; the presence of a control operator in a programming language does not automatically extend a proof assistant's logic.") as vo:
-            self.play(FadeIn(head), run_time=0.5)
-            self.play(Write(t), FadeIn(pts[0]), run_time=0.6)
-            vo.wait_until('a')
-            vo.wait_until('b')
-            self.play(FadeIn(pts[1]))
-            vo.wait_until('c')
-            self.play(FadeIn(pts[2]))
-            vo.wait_until('d')
-            self.play(FadeIn(pts[3]))
-        self.wait(0.3)
-        self.clear_scene()

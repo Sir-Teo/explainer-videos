@@ -4,7 +4,7 @@ from explainer.cs import *  # noqa: F403
 from videos.cs.cs11.common import (BG, CODE, CTRL, DATA, FUNC, HEAD, NO, PART, YES, bar_chart, code, load, region)
 
 
-class Dynamic(VoiceoverScene):
+class Dynamic(WatchScene):
     def construct(self):
         self.card()
         self.compare()
@@ -12,13 +12,13 @@ class Dynamic(VoiceoverScene):
         self.interpose()
 
     def card(self):
-        card = chapter_card(11, r"Dynamic linking", r"Why isn't every program a copy of the C library?",
-                            lit=(1987,), extra=((1987, r"SunOS 4: \ shared libraries"),), part=PART)
-        with self.voiceover("Chapter eleven. Dynamic linking."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(11, r"Dynamic linking", r"Why isn't every program a copy of the C library?", lit=(1987,), extra=((1987, r"SunOS 4: \ shared libraries"),), part=PART, said="Chapter eleven. Dynamic linking.")
 
     def compare(self):
+        self.ask(r"Hello world, linked statically, \\ against linked dynamically. The static file is...",
+                 [r"about the same size", r"much bigger"], 1,
+                 say="Link hello world statically, or dynamically. Which file is bigger?",
+                 reveal="The static one, by far: it carries its own copy of the C library.")
         d = load("dynamic")
         dy, st = d["dynamic"], d["static"]
         head = label(r"\texttt{hello.c}, \ linked two ways on this machine", font_size=32).to_edge(UP, buff=0.3)
@@ -75,9 +75,7 @@ class Dynamic(VoiceoverScene):
             "through a procedure linkage table stub and a GOT slot. <bookmark mark='c'/> With lazy binding "
             "enabled, the first call invokes the dynamic resolver, which looks up the symbol and updates the "
             "slot. <bookmark mark='d'/> Later calls use the resolved destination. Eager binding resolves such "
-            "slots at startup, and options such as no-PLT generate other call sequences. A PLT32 relocation in an "
-            "object permits linker handling of a call; it does not prove that the final call must use lazy "
-            "binding."
+            "slots at startup, and options such as no-PLT generate other call sequences."
         )
         ) as vo:
             self.play(FadeIn(head), FadeIn(pts[0]))

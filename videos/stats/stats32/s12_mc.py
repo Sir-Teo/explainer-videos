@@ -5,9 +5,15 @@ import numpy as np
 from videos.stats.stats32.common import *  # noqa: F403
 
 
-class Completion(VoiceoverScene):
+class Completion(StatsScene):
     def construct(self):
         self.card()
+        self.ask("Netflix's ratings matrix: recover the missing entries by assuming the matrix is...",
+                 ["sparse", "low rank"], 1,
+                 say="Netflix's matrix of ratings, mostly missing. To fill it in, what do you assume about the full "
+                     "matrix?",
+                 reveal="That it's low rank: a few hidden tastes explain the ratings. Penalize the nuclear norm, "
+                        "sparsity in the singular values, and the entries come back.")
         self.netflix()
         self.lowrank()
         self.nuclear()
@@ -16,12 +22,14 @@ class Completion(VoiceoverScene):
         self.path()
         self.singular()
         self.theory()
+        self.answer()
+        self.checkpoint([("Refit-the-selected $t$-intervals cover?", "less than promised"),
+                         ("Matrix completion assumes?", "low rank")],
+                        narration="Checkpoint. Inference and matrices.",
+                        answers_narration="Less than promised. And low rank.")
 
     def card(self):
-        card = chapter_card(11, r"Matrix completion", r"Sparsity in the singular values", lit=(2010,), part=PART)
-        with self.voiceover("Chapter eleven. Matrix completion."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(11, r"Matrix completion", r"Sparsity in the singular values", lit=(2010,), part=PART, said="Chapter eleven. Matrix completion.")
 
     def netflix(self):
         rows = fit_rows(VGroup(

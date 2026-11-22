@@ -5,20 +5,23 @@ import numpy as np
 from videos.stats.stats27.common import *  # noqa: F403
 
 
-class Laplace(VoiceoverScene):
+class Laplace(StatsScene):
     def construct(self):
         self.card()
+        self.ask("Laplace's approximation is exact when the posterior is...",
+                 ["normal", "uniform", "anything"], 0,
+                 say="Laplace's approximation replaces the posterior by a normal at its mode. When is it exact?",
+                 reveal="When the posterior is normal. INLA nests such approximations cleverly, and it's very "
+                        "accurate for latent Gaussian models.")
         self.idea()
         self.compare()
         self.evidence()
         self.inla()
         self.guide()
+        self.answer()
 
     def card(self):
-        card = chapter_card(11, r"Laplace and INLA", r"A normal at the mode", lit=(2009,), part=PART)
-        with self.voiceover("Chapter eleven. Laplace approximations and INLA."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(11, r"Laplace and INLA", r"A normal at the mode", lit=(2009,), part=PART, said="Chapter eleven. Laplace approximations and INLA.")
 
     def idea(self):
         rows = [

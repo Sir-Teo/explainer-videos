@@ -4,7 +4,7 @@ from explainer.cs import *  # noqa: F403
 from videos.cs.cs27.common import (CTRL, DATA, HEAD, LAM, NO, PART, YES, fit_right, grid_table, load, sci)
 
 
-class Classes(VoiceoverScene):
+class Classes(WatchScene):
     def construct(self):
         self.card()
         self.kinds()
@@ -12,14 +12,15 @@ class Classes(VoiceoverScene):
         self.adleman()
 
     def card(self):
-        card = chapter_card(1, r"Randomized classes", r"What can an algorithm with coins decide?", lit=(1977, 1983),
-                            extra=((1977, r"Gill"), (1978, r"Adleman"), (1983, r"Sipser--G\'acs--Lautemann")),
-                            part=PART)
-        with self.voiceover("Chapter one. Randomized classes."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(1, r"Randomized classes", r"What can an algorithm with coins decide?", lit=(1977, 1983), extra=((1977, r"Gill"), (1978, r"Adleman"), (1983, r"Sipser--G\'acs--Lautemann")), part=PART, said="Chapter one. Randomized classes.")
 
     def kinds(self):
+        self.wrong_idea(r"randomized algorithms are unreliable guesses",
+                        r"their error can be made smaller than a hardware fault, \\ and may not add power at all",
+                        narration="A common belief: an algorithm that flips coins is a guess, and can't be trusted.",
+                        right_narration="In fact its error can be driven below the chance of a hardware fault. And many "
+                                        "believe randomness adds no power at all: P may equal BPP.")
+        self.clear_scene()
         head = label(r"Four ways to use coins \ (Gill, 1977)", font_size=34).to_edge(UP, buff=0.35)
         rows = [[r"\textbf{RP}", r"never wrong on \textbf{no}; \ says yes with probability $\ge \tfrac12$ on yes",
                  r"compositeness \ (Miller--Rabin, \ Part 20)"],
@@ -39,7 +40,7 @@ class Classes(VoiceoverScene):
                   color=NO),
         ).arrange(DOWN, buff=0.22).next_to(tab, DOWN, buff=0.45)
         with self.voiceover(
-            "Randomized decision classes use probabilities over the algorithm’s own independent coins, for each fixed input. <bookmark mark='a'/> RP has polynomial worst-case running time, rejects every no-instance, and accepts each yes-instance with probability at least one half. Compositeness supplies an example. <bookmark mark='b'/> coRP reverses those roles: yes-instances always pass, and no-instances are rejected with probability at least one half. <bookmark mark='c'/> ZPP requires zero error and expected polynomial running time on every input. Randomized quicksort illustrates the Las Vegas style, although sorting itself is a function problem. <bookmark mark='d'/> BPP has polynomial worst-case running time and error at most one third on every input. Identity testing is a one-sided example within BPP. <bookmark mark='e'/> P is contained in ZPP, which equals the intersection of RP and coRP; these classes lie within BPP and PSPACE. <bookmark mark='f'/> None of these definitions averages over an input distribution. An adversary may choose the input."
+            "Randomized decision classes use probabilities over the algorithm’s own independent coins, for each fixed input. <bookmark mark='a'/> RP has polynomial worst-case running time, rejects every no-instance, and accepts each yes-instance with probability at least one half. Compositeness supplies an example. <bookmark mark='b'/> coRP reverses those roles: yes-instances always pass, and no-instances are rejected with probability at least one half. <bookmark mark='c'/> ZPP requires zero error and expected polynomial running time on every input. <bookmark mark='d'/> BPP has polynomial worst-case running time and error at most one third on every input. Identity testing is a one-sided example within BPP. <bookmark mark='e'/> P is contained in ZPP, which equals the intersection of RP and coRP; these classes lie within BPP and PSPACE. <bookmark mark='f'/> None of these definitions averages over an input distribution. An adversary may choose the input."
         ) as vo:
             self.play(FadeIn(head), FadeIn(VGroup(*tab.cells[0])), FadeIn(tab.rule))
             for mk, r in zip("abcd", tab.cells[1:]):
@@ -52,6 +53,10 @@ class Classes(VoiceoverScene):
         self.clear_scene()
 
     def amplify(self):
+        self.ask(r"An algorithm is right with probability $2/3$. \\ Run it $k$ times, take the majority. The error...",
+                 [r"stays near $1/3$", r"falls like $1/k$", r"falls exponentially in $k$"], 2,
+                 say="An algorithm is right two times in three. Run it k times and take the majority vote. What happens to the error?",
+                 reveal="It falls exponentially in k. A few hundred runs beat the chance of a cosmic ray flipping a bit.")
         a = load("amplify")
         head = label(r"Amplification: \ repeat and vote", font_size=34).to_edge(UP, buff=0.35)
         rows = [[str(r["k"]), f"{r['error']:#.3g}" if r["error"] > 1e-4 else rf"${sci(r['error'], 2)}$"]
@@ -70,7 +75,7 @@ class Classes(VoiceoverScene):
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.32).next_to(tab, RIGHT, buff=0.8).align_to(tab, UP)
         fit_right(notes)
         with self.voiceover(
-            "Any fixed error bound below one half can be amplified. <bookmark mark='a'/> Run the algorithm independently an odd number of times and take the majority answer. <bookmark mark='b'/> The displayed binomial tail assumes each run errs with probability exactly one third; for smaller errors it is an upper bound. We evaluate this expression numerically and check it against exact rational sums. <bookmark mark='c'/> Hoeffding’s inequality gives the simpler upper bound exponential in minus the number of runs divided by eighteen. <bookmark mark='d'/> Thus a linear number of independent repetitions in the desired error exponent suffices; independence and a constant gap below one half are essential."
+            "Any fixed error bound below one half can be amplified. <bookmark mark='a'/> Run the algorithm independently an odd number of times and take the majority answer. <bookmark mark='b'/> We evaluate this expression numerically and check it against exact rational sums. <bookmark mark='c'/> Hoeffding’s inequality gives the simpler upper bound exponential in minus the number of runs divided by eighteen. <bookmark mark='d'/> Thus a linear number of independent repetitions in the desired error exponent suffices; independence and a constant gap below one half are essential."
         ) as vo:
             self.play(FadeIn(head))
             vo.wait_until("a")

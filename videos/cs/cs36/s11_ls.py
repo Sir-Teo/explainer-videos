@@ -4,18 +4,14 @@ from explainer.cs import *  # noqa: F403
 from videos.cs.cs36.common import (DATA, HEAD, KERN, LAM, NO, PART, YES, graph, grid_table, load, world)
 
 
-class Ls(VoiceoverScene):
+class Ls(WatchScene):
     def construct(self):
         self.card()
         self.flood()
         self.loops()
 
     def card(self):
-        card = chapter_card(10, r"Link state", r"What if every router had the whole map?", lit=(1980, 1989),
-                            extra=((1980, r"McQuillan et al.: \ new ARPANET routing"), (1989, r"OSPF")), part=PART)
-        with self.voiceover("Chapter ten. Link state."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(10, r"Link state", r"What if every router had the whole map?", lit=(1980, 1989), extra=((1980, r"McQuillan et al.: \ new ARPANET routing"), (1989, r"OSPF")), part=PART, said="Chapter ten. Link state.")
 
     def flood(self):
         ls = load("ls")
@@ -61,6 +57,10 @@ class Ls(VoiceoverScene):
         self.clear_scene()
 
     def loops(self):
+        self.ask(r"Link state: a cable fails. \\ While routers update, packets can...", [r"never loop",
+                 r"loop for a moment"], 1,
+                 say="With link state routing, a cable fails. While the routers update, can packets loop?",
+                 reveal="Yes, briefly: some routers have the new map and some the old.")
         ls = load("ls")
         it = load("internet")
         head = label(r"Until everyone has the news", font_size=36).to_edge(UP, buff=0.3)
@@ -116,6 +116,12 @@ class Ls(VoiceoverScene):
             self.play(FadeIn(key))
         self.wait(0.3)
         self.clear_scene()
+        self.checkpoint(
+            [(r"How does a router choose among matching prefixes?", r"Longest prefix wins"),
+             (r"Distance vector versus link state?", r"Gossip distances, or flood the map and run Dijkstra")],
+            narration="Checkpoint. How does a router choose among matching prefixes? And how do distance vector and link state differ?",
+            answers_narration="The longest match wins. And distance vector gossips distances with neighbours, while link "
+                              "state floods the whole map and runs Dijkstra.")
 
 
 _ = (DATA, grid_table)

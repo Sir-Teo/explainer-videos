@@ -3,10 +3,16 @@ from __future__ import annotations
 from videos.stats.stats58.common import *  # noqa: F403
 
 
-class OpenProblems(LectureMixin, VoiceoverScene):
+class OpenProblems(LectureMixin, StatsScene):
     def construct(self):
         self.card_voiceover("Chapter fourteen. Open problems in anytime-valid inference and adaptive experiments.", 14,
                        r"Open problems", r"Where the theory is still being written")
+        self.ask("To stop whenever the evidence suffices, without inflating error, you need...",
+                 ["an e-process, or test martingale", "a fixed sample size"], 0,
+                 say="The part in one table. To stop whenever the evidence suffices, without inflating the error "
+                     "rate, what do you need?",
+                 reveal="An e-process: a test martingale, or something bounded by one. The open problems are power, "
+                        "composite nulls, and getting regulators to accept them.")
         self.map_()
         self.op_power()
         self.op_asymptotic()
@@ -14,6 +20,11 @@ class OpenProblems(LectureMixin, VoiceoverScene):
         self.op_regulation()
         self.op_delays()
         self.problems()
+        self.answer()
+        self.checkpoint([("Thompson sampling plays an arm with probability?", "its posterior probability of being best"),
+                         ("An adaptively sampled arm's sample mean?", "biased")],
+                        narration="Checkpoint. Adaptive designs.",
+                        answers_narration="Its posterior chance of being best. And biased.")
 
     def map_(self):
         hdr = [r"question", r"tool", r"guarantee"]

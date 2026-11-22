@@ -6,7 +6,7 @@ from videos.cs.cs40.common import (DATA, HEAD, KERN, LAM, NO, PART, YES, axes, c
 RC = {"0.0": NO, "0.1": HEAD, "0.2": YES, "0.3": LAM}
 
 
-class Change(VoiceoverScene):
+class Change(WatchScene):
     def construct(self):
         self.card()
         self.refactoring()
@@ -14,13 +14,9 @@ class Change(VoiceoverScene):
         self.evidence()
 
     def card(self):
-        card = chapter_card(7, r"Changing code that works", r"How do you improve code without breaking it?",
-                            lit=(1992, 2016), extra=((1992, r"Opdyke: \ refactoring; \ Cunningham: \ technical debt"),
+        self.chapter(7, r"Changing code that works", r"How do you improve code without breaking it?", lit=(1992, 2016), extra=((1992, r"Opdyke: \ refactoring; \ Cunningham: \ technical debt"),
                                                      (2004, r"Feathers: \ legacy code"),
-                                                     (2016, r"Menzies et al.: \ the cost of delay")), part=PART)
-        with self.voiceover("Chapter seven. Changing code that works."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+                                                     (2016, r"Menzies et al.: \ the cost of delay")), part=PART, said="Chapter seven. Changing code that works.")
 
     def refactoring(self):
         head = label(r"Refactoring", font_size=36).to_edge(UP, buff=0.3)
@@ -105,8 +101,7 @@ class Change(VoiceoverScene):
             "week on clean code. Every feature shipped in haste adds debt, and debt slows all later work: that is "
             "the interest. Time spent refactoring pays it back. <bookmark mark='b'/> A team that never refactors is "
             "ahead after a quarter and far behind after two years, crawling at a third of its first speed. Spending "
-            "a fifth of the time on cleanup delivers the most. Spending more also loses. <bookmark mark='c'/> This "
-            "is a model of a metaphor, not data. The shape is the lesson: debt is a loan, and like a loan it can be "
+            "a fifth of the time on cleanup delivers the most. Spending more also loses. <bookmark mark='c'/> The shape is the lesson: debt is a loan, and like a loan it can be "
             "worth taking, if you know the rate and plan to repay."
         ) as vo:
             self.play(FadeIn(head), FadeIn(g), FadeIn(notes[0]))
@@ -121,6 +116,9 @@ class Change(VoiceoverScene):
         self.clear_scene()
 
     def evidence(self):
+        self.ask(r"``A production bug costs $100\times$ a design bug.'' \\ The evidence is...", [r"solid", r"thin"], 1,
+                 say="A famous curve says a bug fixed in production costs a hundred times one fixed in design. How good is the evidence?",
+                 reveal="Thin: a few old projects, often cited second-hand.")
         head = label(r"How much does a late fix cost?", font_size=36).to_edge(UP, buff=0.3)
         lines = VGroup(
             wrapped_label(r"the textbook curve: \ a defect fixed in production costs 100 times one fixed in "

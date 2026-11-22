@@ -5,9 +5,14 @@ import numpy as np
 from videos.stats.stats38.common import *  # noqa: F403
 
 
-class Volatility(VoiceoverScene):
+class Volatility(StatsScene):
     def construct(self):
         self.card()
+        self.ask("Daily returns are nearly uncorrelated. Their squares are...",
+                 ["also uncorrelated", "strongly autocorrelated"], 1,
+                 say="The DAX's daily returns are nearly uncorrelated from day to day. What about their squares?",
+                 reveal="Strongly autocorrelated: calm days follow calm, wild days follow wild. Volatility "
+                        "clusters, and ARCH and GARCH model it.")
         self.returns()
         self.facts()
         self.model()
@@ -15,12 +20,10 @@ class Volatility(VoiceoverScene):
         self.forecast_vol()
         self.var_()
         self.lesson()
+        self.answer()
 
     def card(self):
-        card = chapter_card(5, r"Volatility", r"When the variance has a memory", lit=(1963, 1982, 1986), part=PART)
-        with self.voiceover("Chapter five. Volatility."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(5, r"Volatility", r"When the variance has a memory", lit=(1963, 1982, 1986), part=PART, said="Chapter five. Volatility.")
 
     def returns(self):
         d = load("garch")

@@ -17,21 +17,29 @@ def graph(center=(-2.4, 0.1, 0), scale=0.78):
     return CausalGraph(POS, EDGES, center=center, scale=scale, font_size=26, radius=0.34, colors=cols)
 
 
-class SurveyGraph(VoiceoverScene):
+class SurveyGraph(StatsScene):
     def construct(self):
         self.card()
+        self.ask("In the survey, substitute users have higher blood pressure. This shows...",
+                 ["the substitute raises pressure", "nothing causal: people with high pressure were told to switch"], 1,
+                 say="The second case: a survey after the substitute went on sale. Users have higher blood pressure "
+                     "than non-users. What does that show?",
+                 reveal="Nothing causal by itself. Doctors told people with high pressure to switch: the arrow runs "
+                        "the other way. Draw the graph before reading the difference.")
         self.naive()
         self.users()
         self.dag()
         self.backdoor()
         self.bad_controls()
         self.numbers()
+        self.answer()
+        self.checkpoint([("When is the analysis plan fixed?", "before any outcome data"),
+                         ("Users have higher pressure: why not causal?", "high-pressure patients were told to switch")],
+                        narration="Checkpoint. Plans and graphs.",
+                        answers_narration="Before the data. And the arrow runs backwards.")
 
     def card(self):
-        card = chapter_card(4, r"Case 2: \ the survey and its graph", r"Users have higher pressure: \ so what?", part=PART)
-        with self.voiceover("Chapter four. The second case: an observational survey, and the graph that has to come before any estimate."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(4, r"Case 2: \ the survey and its graph", r"Users have higher pressure: \ so what?", part=PART, said="Chapter four. The second case: an observational survey, and the graph that has to come before any estimate.")
 
     def naive(self):
         o = load("obs")

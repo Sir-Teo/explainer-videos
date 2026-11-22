@@ -6,9 +6,15 @@ from explainer.stats.kit import ols as O
 from videos.stats.stats23.common import *  # noqa: F403
 
 
-class Numerics(VoiceoverScene):
+class Numerics(StatsScene):
     def construct(self):
         self.card()
+        self.ask("Longley's data, normal equations in single precision. The coefficients come out...",
+                 ["right to six digits", "mostly wrong", "exactly right"], 1,
+                 say="Longley's 1967 economic data, nearly collinear. Solve least squares through the normal "
+                     "equations in single precision. How do the coefficients come out?",
+                 reveal="Mostly wrong: forming X transpose X squares the condition number, and single precision has "
+                        "no digits to spare. Householder's QR gets them right.")
         self.mirror()
         self.columns()
         self.routes()
@@ -16,12 +22,10 @@ class Numerics(VoiceoverScene):
         self.accuracy()
         self.kappa_plot()
         self.advice()
+        self.answer()
 
     def card(self):
-        card = chapter_card(10, r"Numerics", r"How the computer solves least squares", part=PART)
-        with self.voiceover("Chapter ten. The numerics of least squares."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(10, r"Numerics", r"How the computer solves least squares", part=PART, said="Chapter ten. The numerics of least squares.")
 
     def mirror(self):
         u = 0.55

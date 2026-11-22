@@ -5,9 +5,15 @@ import numpy as np
 from videos.stats.stats24.common import *  # noqa: F403
 
 
-class Counts(VoiceoverScene):
+class Counts(StatsScene):
     def construct(self):
         self.card()
+        self.ask("Too many zeros for a Poisson. Which model adds a separate chance of a structural zero?",
+                 ["zero-inflated Poisson", "quasi-Poisson", "log-linear"], 0,
+                 say="Many people never visit a doctor at all: too many zeros for a Poisson. Which model adds a "
+                     "separate chance of a structural zero?",
+                 reveal="The zero-inflated Poisson: a mixture of certain zeros and Poisson counts. But the model "
+                        "that fits best need not be the mechanism that made the data.")
         self.negbin()
         self.offsets()
         self.histogram()
@@ -15,12 +21,14 @@ class Counts(VoiceoverScene):
         self.compare()
         self.ppml()
         self.truth()
+        self.answer()
+        self.checkpoint([("Perfect separation: the logistic MLE?", "doesn't exist"),
+                         ("Variance five times the mean: quasi-Poisson SEs grow by?", r"about $\sqrt 5$")],
+                        narration="Checkpoint. When things go wrong.",
+                        answers_narration="It doesn't exist. And by about root five.")
 
     def card(self):
-        card = chapter_card(8, r"Counts", r"Overdispersion and too many zeros", lit=(1992,), part=PART)
-        with self.voiceover("Chapter eight. Counts: overdispersion and too many zeros."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(8, r"Counts", r"Overdispersion and too many zeros", lit=(1992,), part=PART, said="Chapter eight. Counts: overdispersion and too many zeros.")
 
     def negbin(self):
         rows = [

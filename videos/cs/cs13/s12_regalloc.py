@@ -13,23 +13,17 @@ def demo_graph(colors=None, radius=2.55, at=LEFT * 3.0):
     return g
 
 
-class RegAlloc(VoiceoverScene):
+class RegAlloc(WatchScene):
     def construct(self):
         self.card()
         self.interference()
         self.colouring()
         self.chaitin()
-        self.hard()
         self.chordal()
-        self.hole()
         self.sweep()
 
     def card(self):
-        card = chapter_card(11, r"Register allocation", r"Thirteen registers: \ which value goes where?",
-                            lit=(1981,), extra=((1981, r"Chaitin: \ allocation by colouring"),), part=PART)
-        with self.voiceover("Chapter eleven. Register allocation."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(11, r"Register allocation", r"Thirteen registers: \ which value goes where?", lit=(1981,), extra=((1981, r"Chaitin: \ allocation by colouring"),), part=PART, said="Chapter eleven. Register allocation.")
 
     def interference(self):
         d = load("regalloc")["demo"]
@@ -65,6 +59,10 @@ class RegAlloc(VoiceoverScene):
         self.clear_scene()
 
     def colouring(self):
+        self.ask(r"17 virtual registers, 13 real ones. \\ Must something spill to memory?", [r"yes",
+                 r"not necessarily"], 1,
+                 say="The function uses seventeen virtual registers, and Pebble has thirteen to give. Must something spill?",
+                 reveal="Not necessarily. Only values alive at the same time conflict, and here five colours are enough.")
         d = load("regalloc")["demo"]
         head = label(r"Register allocation is graph colouring", font_size=34).to_edge(UP, buff=0.3)
         g = demo_graph()
@@ -134,31 +132,6 @@ class RegAlloc(VoiceoverScene):
         self.wait(0.3)
         self.clear_scene()
 
-    def hard(self):
-        head = label(r"In general: \ NP-hard", font_size=34).to_edge(UP, buff=0.3)
-        pts = VGroup(
-            label(r"can a graph be coloured with $k$ colours? \ NP-complete \ (Karp, \ 1972), \ even for $k = 3$",
-                  font_size=22, color=GREY_A),
-            label(r"Chaitin: \ \textit{every} graph is the interference graph of some program", font_size=22,
-                  color=GREY_A),
-            label(r"so optimal register allocation, \ in general, \ is NP-hard", font_size=24, color=NO),
-            label(r"what NP-hard means, \ and why it is believed to be truly hard: \ Part 26", font_size=21,
-                  color=GREY_B),
-        ).arrange(DOWN, buff=0.3).next_to(head, DOWN, buff=0.6)
-        prog = code(["a = ...;  b = ...;", "use(a, b);        // edge a-b", "c = ...;", "use(b, c);        // edge b-c",
-                     "..."], size=18).next_to(pts, DOWN, buff=0.5)
-        with self.voiceover("Why use allocation heuristics? <bookmark mark='a'/> General graph k-colorability is NP-complete when k is part of the input, and remains NP-complete for each fixed k of at least three. One and two colors have easier tests. <bookmark mark='b'/> Chaitin's register-allocation work connects sufficiently general programs to arbitrary interference graphs. The code sketch suggests pairwise conflicts; it is not the full reduction, which must also control every unintended live overlap. <bookmark mark='c'/> Thus the general uniform-register allocation problem contains hard instances. Particular program forms and register models can be easier, as strict SSA will show. Spilling, physical-register constraints and copy costs add further objectives. <bookmark mark='d'/> Part 26 explains these complexity claims and why polynomial special cases do not contradict general NP-hardness.") as vo:
-            self.play(FadeIn(head), run_time=0.5)
-            self.play(FadeIn(pts[0]), run_time=0.6)
-            vo.wait_until('a')
-            vo.wait_until('b')
-            self.play(FadeIn(pts[1]), FadeIn(prog))
-            vo.wait_until('c')
-            self.play(FadeIn(pts[2]))
-            vo.wait_until('d')
-            self.play(FadeIn(pts[3]))
-        self.wait(0.3)
-        self.clear_scene()
 
     def chordal(self):
         ra = load("regalloc")
@@ -195,42 +168,6 @@ class RegAlloc(VoiceoverScene):
         self.wait(0.3)
         self.clear_scene()
 
-    def hole(self):
-        ra = load("regalloc")
-        head = label(r"What leaving SSA breaks", font_size=34).to_edge(UP, buff=0.3)
-        cyc = [c.replace("%", "") for c in ra["hole"]["cycle"]]
-        pos = {cyc[0]: (-1.6, 1.4), cyc[1]: (1.6, 1.4), cyc[2]: (1.6, -1.4), cyc[3]: (-1.6, -1.4)}
-        nodes = {}
-        for n, (x, y) in pos.items():
-            c = Circle(radius=0.55, stroke_color=NO, fill_color=NO, fill_opacity=0.2).move_to([x - 2.5, y - 0.3, 0])
-            nodes[n] = VGroup(c, mono(n, 18, WHITE).move_to(c))
-        es = VGroup(*[Line(nodes[a][0].get_center(), nodes[b][0].get_center(), buff=0.55, color=NO, stroke_width=3)
-                      for a, b in zip(cyc, cyc[1:] + cyc[:1])])
-        miss = VGroup(DashedLine(nodes[cyc[0]][0].get_center(), nodes[cyc[2]][0].get_center(), buff=0.55,
-                                 color=GREY_D),
-                      DashedLine(nodes[cyc[1]][0].get_center(), nodes[cyc[3]][0].get_center(), buff=0.55,
-                                 color=GREY_D))
-        txt = VGroup(
-            label(rf"in \texttt{{{ra['hole']['func']}}}, \ after the $\phi$s become copies:", font_size=21,
-                  color=GREY_A),
-            label(r"a 4-cycle with no chord: \ a hole", font_size=22, color=NO),
-            label(r"the primed values are the copies, \ placed on the loop's back edge", font_size=20,
-                  color=GREY_A),
-            label(r"so allocate \textit{before} leaving SSA, \ and coalesce the copies afterwards", font_size=21,
-                  color=YES),
-            label(r"allocators built this way: \ libFirm \ (Hack's own compiler)", font_size=20, color=GREY_B),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.2).to_edge(RIGHT, buff=0.5)
-        with self.voiceover("Here is what goes wrong. <bookmark mark='a'/> In the function same, after the phis become copies on the loop's back edge, these four values form a cycle: each interferes with the next. <bookmark mark='b'/> But neither diagonal is an edge. A cycle of four with no chord is a hole, and the graph is no longer chordal. The primed values are the copies, which overlap the originals they copy. <bookmark mark='c'/> The lesson for compiler writers is to colour while the program is still in SSA form, where it is easy, and deal with the copies afterwards, by coalescing. The libFirm compiler, Hack's own, is built this way; LLVM and GCC leave SSA first and rely on heuristics.") as vo:
-            self.play(FadeIn(head), run_time=0.5)
-            self.play(*[FadeIn(n) for n in nodes.values()], FadeIn(txt[0]), run_time=0.6)
-            vo.wait_until('a')
-            self.play(Create(es), run_time=1.5)
-            vo.wait_until('b')
-            self.play(Create(miss), FadeIn(txt[1:3]))
-            vo.wait_until('c')
-            self.play(FadeIn(txt[3:]))
-        self.wait(0.3)
-        self.clear_scene()
 
     def sweep(self):
         ra = load("regalloc")
@@ -264,3 +201,9 @@ class RegAlloc(VoiceoverScene):
             self.play(FadeIn(side[3:]))
         self.wait(0.3)
         self.clear_scene()
+        self.checkpoint(
+            [(r"Register allocation is which graph problem?", r"Colouring the interference graph"),
+             (r"What is a spill?", r"A value kept in memory because no register was free")],
+            narration="Checkpoint. Register allocation is which classic graph problem? And what is a spill?",
+            answers_narration="Colouring the interference graph, one colour per register. And a spill is a value kept in "
+                              "memory because no register was free.")

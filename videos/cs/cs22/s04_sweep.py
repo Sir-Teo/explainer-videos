@@ -6,20 +6,19 @@ from videos.cs.cs22.common import (CTRL, DATA, HEAD, LAM, NO, PART, YES, fit, gr
 COLS = [DATA, YES, LAM, HEAD, CTRL, "#e07b9a", "#7fd1d1"]
 
 
-class Sweep(VoiceoverScene):
+class Sweep(WatchScene):
     def construct(self):
         self.card()
         self.animate_sweep()
         self.measured()
 
     def card(self):
-        card = chapter_card(3, r"The sweep line", r"Which of $n$ segments cross, \ without testing every pair?",
-                            lit=(1979,), extra=((1979, r"Bentley--Ottmann"),), part=PART)
-        with self.voiceover("Chapter three. The sweep line."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(3, r"The sweep line", r"Which of $n$ segments cross, \ without testing every pair?", lit=(1979,), extra=((1979, r"Bentley--Ottmann"),), part=PART, said="Chapter three. The sweep line.")
 
     def animate_sweep(self):
+        self.ask(r"$n$ segments, $k$ crossings. \\ The sweep line takes...", [r"$n^2$", r"$(n + k)\log n$"], 1,
+                 say="n segments with k crossings among them. How long does the sweep take?",
+                 reveal="n plus k, times log n: only neighbours on the sweep line are ever tested.")
         d = load("sweep")
         segs = [tuple(map(tuple, s)) for s in d["segs"]]
         allp = [p for s in segs for p in s]

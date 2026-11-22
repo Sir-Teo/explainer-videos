@@ -5,7 +5,7 @@ from videos.cs.cs14.common import (CODE, CTRL, DATA, FUNC, HEAD, LAM, NO, PART, 
                                    grid_table, load, mono)
 
 
-class Church(VoiceoverScene):
+class Church(WatchScene):
     def construct(self):
         self.card()
         self.booleans()
@@ -15,10 +15,7 @@ class Church(VoiceoverScene):
         self.lists()
 
     def card(self):
-        card = chapter_card(3, r"Programming with nothing", r"Can functions alone be data?", lit=(1936,), part=PART)
-        with self.voiceover("Chapter three. Programming with nothing."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(3, r"Programming with nothing", r"Can functions alone be data?", lit=(1936,), part=PART, said="Chapter three. Programming with nothing.")
 
     def booleans(self):
         c = load("church")
@@ -73,14 +70,20 @@ class Church(VoiceoverScene):
         ) as vo:
             self.play(FadeIn(head))
             vo.wait_until("a")
-            for r in rows:
-                self.play(FadeIn(r, shift=RIGHT * 0.1), run_time=0.8)
+            self.play(FadeIn(rows[0], shift=RIGHT * 0.1), run_time=0.8)
+            for prev, r in zip(rows, rows[1:]):  # each numeral grows from the one before: one more f, one more box
+                self.play(TransformMatchingShapes(prev[0].copy(), r[0]), TransformFromCopy(prev[1], r[1]),
+                          run_time=0.8)
             vo.wait_until("b")
             self.play(FadeIn(succ), FadeIn(sl))
         self.wait(0.3)
         self.clear_scene()
 
     def arithmetic(self):
+        self.ask(r"Church numerals: \\ $\textsf{times}\ 2\ 3$ reduces to...", [r"the numeral 5", r"the numeral 6",
+                 r"the numeral 8"], 1,
+                 say="With Church numerals, what does times two three reduce to?",
+                 reveal="The numeral six: apply f three times, two times over.")
         c = load("church")
         head = label(r"Arithmetic from repetition", font_size=36).to_edge(UP, buff=0.3)
         defs = VGroup(

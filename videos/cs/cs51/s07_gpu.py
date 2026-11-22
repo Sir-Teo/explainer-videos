@@ -16,23 +16,18 @@ def pixel_tri(cols: int, rows: int, cell: float, a, b, c):
             if all(s * e(p, q, i + 0.5, j + 0.5) > 0 for p, q in ((a, b), (b, c), (c, a)))}
 
 
-class Gpu(VoiceoverScene):
+class Gpu(WatchScene):
     def construct(self):
         self.card()
         self.stages()
         self.shaders()
         self.simt()
-        self.quads()
         self.earlyz()
 
     def card(self):
-        card = chapter_card(6, r"The GPU pipeline", r"How does a chip run one small program on every pixel?",
-                            lit=(1982, 2001, 2005), extra=((1982, r"Clark: \ the Geometry Engine"),
+        self.chapter(6, r"The GPU pipeline", r"How does a chip run one small program on every pixel?", lit=(1982, 2001, 2005), extra=((1982, r"Clark: \ the Geometry Engine"),
                                                            (2001, r"programmable shaders"),
-                                                           (2005, r"unified shaders")), part=PART)
-        with self.voiceover("Chapter six. The GPU pipeline."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+                                                           (2005, r"unified shaders")), part=PART, said="Chapter six. The GPU pipeline.")
 
     def stages(self):
         head = label(r"The graphics pipeline", font_size=36).to_edge(UP, buff=0.3)
@@ -177,6 +172,10 @@ class Gpu(VoiceoverScene):
         self.clear_scene()
 
     def simt(self):
+        self.ask(r"$1920 \times 1080$ at 60 frames a second. \\ Fragment shader runs per second:", [r"about 2 million",
+                 r"over a hundred million"], 1,
+                 say="A screen of nineteen twenty by ten eighty, sixty frames a second. How many fragment shader runs per second?",
+                 reveal="Over a hundred million, at least, which is why the GPU runs them in lockstep groups.")
         head = label(r"Thousands of fragments, \ one instruction stream", font_size=36).to_edge(UP, buff=0.3)
         cols, rows, cell = 16, 8, 0.36
         o = np.array([-6.4, 2.4, 0])
@@ -240,81 +239,6 @@ class Gpu(VoiceoverScene):
         self.wait(0.4)
         self.clear_scene()
 
-    def quads(self):
-        b = load("bary")
-        im = b["image"]
-        m = im.sum(-1) > 0
-        H, W = m.shape
-        touched = m.reshape(H // 2, 2, W // 2, 2).any((1, 3))
-        nq = int(touched.sum())
-        lanes = 4 * nq
-        helpers = lanes - int(m.sum())
-        head = label(r"Quads: \ derivatives by subtraction", font_size=36).to_edge(UP, buff=0.3)
-        r0, r1, c0, c1 = 52, 64, 42, 58
-        cell = 0.3
-        o = np.array([-6.4, 2.4, 0])
-
-        def S(i, j):
-            return o + np.array([(i + 0.5) * cell, -(j + 0.5) * cell, 0])
-        cells, helps = VGroup(), VGroup()
-        for j in range(r1 - r0):
-            for i in range(c1 - c0):
-                y, x = r0 + j, c0 + i
-                if m[y, x]:
-                    col = ManimColor.from_rgb(tuple(int(v) for v in im[y, x]))
-                    cells.add(Square(cell, stroke_width=0.6, stroke_color=BG, fill_color=col,
-                                     fill_opacity=1).move_to(S(i, j)))
-                else:
-                    sq = Square(cell, stroke_width=0.6, stroke_color=GREY_D).move_to(S(i, j))
-                    cells.add(sq)
-                    if touched[y // 2, x // 2]:
-                        helps.add(Square(cell * 0.8, stroke_width=0, fill_color=KERN, fill_opacity=0.75).move_to(
-                            S(i, j)))
-        qgrid = VGroup(*[Square(2 * cell, stroke_color=GREY_B, stroke_width=1.6).move_to(
-            (S(2 * a, 2 * q) + S(2 * a + 1, 2 * q + 1)) / 2) for q in range((r1 - r0) // 2)
-            for a in range((c1 - c0) // 2)])
-        crop_l = label(rf"columns {c0}--{c1 - 1}, \ rows {r0}--{r1 - 1} of chapter 3's triangle",
-                       font_size=17, color=GREY_A).next_to(VGroup(cells), DOWN, buff=0.12).align_to(o, LEFT)
-        leg = label(r"orange: \ helper lanes, \ run only to be subtracted", font_size=18, color=KERN).next_to(
-            crop_l, DOWN, buff=0.12).align_to(o, LEFT)
-        full = image(im, height=2.3).move_to([4.6, -1.55, 0])
-        sx, sy = full[0].width / W, full[0].height / H
-        ul = full[0].get_corner(UL)
-        box = Rectangle(width=(c1 - c0) * sx, height=(r1 - r0) * sy, color=HEAD, stroke_width=2).move_to(
-            ul + np.array([(c0 + c1) / 2 * sx, -(r0 + r1) / 2 * sy, 0]))
-        fl = label(r"chapter 3's triangle", font_size=17, color=GREY_A).next_to(full, UP, buff=0.1)
-        rows = VGroup(MathTex(r"\frac{\partial u}{\partial x} \approx u_{x+1,\,y} - u_{x,\,y}", font_size=32),
-                      MathTex(r"\frac{\partial u}{\partial y} \approx u_{x,\,y+1} - u_{x,\,y}", font_size=32)).arrange(
-            DOWN, aligned_edge=LEFT, buff=0.3).move_to([3.6, 2.1, 0])
-        why = note(r"within each quad: \ chapter 5's $\rho$, \ and so the mip level", font_size=17,
-                   color=YES).next_to(rows, DOWN, buff=0.15)
-        count = wrapped_label(rf"{int(m.sum()):,} pixels touch {nq:,} quads $=$ {lanes:,} lanes: \ {helpers} helper "
-                              rf"lanes, \ {100 * helpers / m.sum():.0f}\% extra".replace(",", "{,}"), 6.4,
-                              font_size=19, color=HEAD).next_to(leg, DOWN, buff=0.35).align_to(o, LEFT)
-        small = wrapped_label(r"a triangle covering one pixel still costs a whole quad: \ 3 lanes in 4 wasted", 6.4,
-                              font_size=19, color=NO).next_to(count, DOWN, buff=0.15).align_to(o, LEFT)
-        with self.voiceover(
-            "Quads are how a GPU gets derivatives. <bookmark mark='a'/> Within a two by two block, the value at the "
-            "right-hand pixel minus the value at the left is the derivative across the screen, and the same "
-            "vertically. That is chapter five's rho, and so the mip level, by one subtraction. "
-            "<bookmark mark='b'/> But along a triangle's edge, a quad may cover only one, two or three pixels. The "
-            "rest still run, as helper lanes, only to supply the differences, and their colours are thrown away. "
-            "<bookmark mark='c'/> For chapter three's triangle, our rasterizer's coverage touches one thousand two "
-            "hundred and thirty-six quads: one hundred and ninety-six helper lanes, four per cent extra. "
-            "<bookmark mark='d'/> A triangle covering a single pixel wastes three lanes of four, which is why very "
-            "small triangles are expensive on GPUs."
-        ) as vo:
-            self.play(FadeIn(head), FadeIn(cells), FadeIn(qgrid), FadeIn(crop_l))
-            vo.wait_until("a")
-            self.play(Write(rows), FadeIn(why))
-            vo.wait_until("b")
-            self.play(FadeIn(helps), FadeIn(leg))
-            vo.wait_until("c")
-            self.play(FadeIn(full), FadeIn(fl), Create(box), FadeIn(count))
-            vo.wait_until("d")
-            self.play(FadeIn(small))
-        self.wait(0.4)
-        self.clear_scene()
 
     def earlyz(self):
         z = load("zbuffer")

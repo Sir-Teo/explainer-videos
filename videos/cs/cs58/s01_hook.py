@@ -4,11 +4,11 @@ from explainer.cs import *  # noqa: F403
 from videos.cs.cs58.common import BG, DATA, HEAD, KERN, LAM, NO, PART, YES, load, mono
 
 
-class Hook(VoiceoverScene):
+class Hook(WatchScene):
     def construct(self):
         self.three()
         self.why()
-        self.plan()
+        self.title(PART)
 
     def three(self):
         f = load("fact")
@@ -93,29 +93,6 @@ class Hook(VoiceoverScene):
         self.wait(0.4)
         self.clear_scene()
 
-    def plan(self):
-        title = label(rf"Part {PART}: \ Semantics", font_size=36).to_edge(UP, buff=0.3)
-        smap = series_map(current=PART, done=PART - 1).scale(0.92).next_to(title, DOWN, buff=0.35)
-        obj = objectives_card([
-            r"small-step, \ big-step and the CEK machine",
-            r"denotations, \ domains and least fixed points",
-            r"adequacy, \ full abstraction and parallel-or",
-            r"equivalence, \ bisimulation and logical relations",
-            r"parametricity: \ theorems for free",
-            r"effects, \ dependent types and processes",
-        ], font_size=25).move_to(DOWN * 0.2)
-        with self.voiceover(
-            "This is Part 58 of Computer Science, Built. <bookmark mark='a'/> We will give one language three "
-            "operational semantics; build its denotational semantics on domains and least fixed points; ask when the "
-            "two agree; decide when two programs are the same, by bisimulation and logical relations; derive "
-            "theorems for free from types alone; and extend meaning to effects, dependent types and communicating "
-            "processes."
-        ) as vo:
-            self.play(FadeIn(title), FadeIn(smap))
-            vo.wait_until("a")
-            self.play(FadeOut(smap), FadeIn(obj))
-        self.wait(0.5)
-        self.clear_scene()
 
 
 _ = (BG, DATA, KERN, LAM, NO, YES)

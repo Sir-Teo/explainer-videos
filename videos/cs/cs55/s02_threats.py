@@ -26,22 +26,17 @@ HISTORY = [
 ]
 
 
-class Threats(VoiceoverScene):
+class Threats(WatchScene):
     def construct(self):
         self.card()
         self.triad()
         self.model()
-        self.history()
         self.principles()
         self.asymmetry()
 
     def card(self):
-        card = chapter_card(1, r"Threat models and principles", r"What are we defending, \ and against whom?",
-                            lit=(1975, 2024), extra=((1975, r"Saltzer \& Schroeder"), (1988, r"the Morris worm"),
-                                                     (2024, r"xz-utils")), part=PART)
-        with self.voiceover("Chapter one. Threat models, and principles."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(1, r"Threat models and principles", r"What are we defending, \ and against whom?", lit=(1975, 2024), extra=((1975, r"Saltzer \& Schroeder"), (1988, r"the Morris worm"),
+                                                     (2024, r"xz-utils")), part=PART, said="Chapter one. Threat models, and principles.")
 
     def triad(self):
         head = label(r"Security is three promises", font_size=36).to_edge(UP, buff=0.3)
@@ -123,51 +118,12 @@ class Threats(VoiceoverScene):
         self.wait(0.4)
         self.clear_scene()
 
-    def history(self):
-        head = label(r"The attacks this part meets", font_size=36).to_edge(UP, buff=0.3)
-        x0, x1 = -6.0, 6.0
-        y = 1.6
-        spine = Line([x0, y, 0], [x1, y, 0], color=GREY_C, stroke_width=2)
-
-        def xof(yr):
-            return x0 + (yr - 1985) / (2025 - 1985) * (x1 - x0)
-        rows = VGroup()
-        up = True
-        for yr, txt, col in HISTORY:
-            x = xof(yr)
-            dot = Dot([x, y, 0], radius=0.09, color=col)
-            yl = label(str(yr), font_size=20, color=HEAD).next_to(dot, DOWN if up else UP, buff=0.12)
-            tx = wrapped_label(txt, 3.4, font_size=18, color=col)
-            tx.next_to(dot, UP if up else DOWN, buff=0.5 if up else 0.55)
-            tick = Line([x, y - 0.12, 0], [x, y + 0.12, 0], color=col, stroke_width=2)
-            rows.add(VGroup(dot, tick, yl, tx))
-            up = not up
-        foot = wrapped_label(r"four decades, \ and every layer of the tower: \ a program, \ the hardware, \ the "
-                             r"microarchitecture, \ the supply chain", 12.4, font_size=21,
-                             color=WHITE).to_edge(DOWN, buff=0.5)
-        with self.voiceover(
-            "This part is a tour of attacks, so here are the landmarks, with the dates this series is sure of. "
-            "<bookmark mark='a'/> In 1988 the Morris worm spread across the early internet, partly through a buffer "
-            "overflow in a network service. "
-            "<bookmark mark='b'/> In 1996 an article by the author who wrote as Aleph One explained the stack "
-            "overflow carefully enough that anyone could follow it. <bookmark mark='c'/> In 2014 Rowhammer showed "
-            "that software could flip bits in memory it never touched; in 2018 Spectre and Meltdown showed that "
-            "speculation leaks secrets; and in 2024 a backdoor was found hidden in a widely used compression "
-            "library. <bookmark mark='d'/> Four decades, and every layer of the tower we built."
-        ) as vo:
-            self.play(FadeIn(head), Create(spine))
-            vo.wait_until("a")
-            self.play(FadeIn(rows[0]))
-            vo.wait_until("b")
-            self.play(FadeIn(rows[1]))
-            vo.wait_until("c")
-            self.play(LaggedStart(*[FadeIn(r) for r in rows[2:]], lag_ratio=0.4), run_time=2.5)
-            vo.wait_until("d")
-            self.play(FadeIn(foot))
-        self.wait(0.4)
-        self.clear_scene()
 
     def principles(self):
+        self.ask(r"Kerckhoffs: a system's security \\ should rest on...", [r"keeping its design secret",
+                 r"the key alone"], 1,
+                 say="Kerckhoffs' principle: what should a system's security rest on?",
+                 reveal="The key alone. Assume the enemy knows the design.")
         head = label(r"Saltzer and Schroeder, 1975", font_size=36).to_edge(UP, buff=0.3)
         cells = VGroup()
         cols = (DATA, YES, HEAD, LAM, KERN, DATA, YES, HEAD)

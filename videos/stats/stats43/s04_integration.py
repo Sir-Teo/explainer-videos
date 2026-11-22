@@ -5,21 +5,26 @@ import numpy as np
 from videos.stats.stats43.common import *  # noqa: F403
 
 
-class Integration(VoiceoverScene):
+class Integration(StatsScene):
     def construct(self):
         self.card()
+        self.ask(r"$X_n \to 0$ almost surely. Must $E[X_n] \to 0$?",
+                 ["yes", "not without more"], 1,
+                 say="A sequence of random variables converges to zero almost surely. Must their expectations "
+                     "converge to zero?",
+                 reveal="Not without more. N times the indicator that a uniform is below one over n goes to zero, "
+                        "yet its expectation stays one. Domination or uniform integrability lets the limit pass "
+                        "inside.")
         self.layer_cake()
         self.theorems()
         self.bumps()
         self.typewriter()
         self.ui()
         self.estimator()
+        self.answer()
 
     def card(self):
-        card = chapter_card(3, r"Integration", r"When can a limit pass inside an expectation?", part=PART)
-        with self.voiceover("Chapter three. Integration, and when a limit can pass inside an expectation."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(3, r"Integration", r"When can a limit pass inside an expectation?", part=PART, said="Chapter three. Integration, and when a limit can pass inside an expectation.")
 
     def layer_cake(self):
         A = axes([0, 4], [0, 1.2], x_length=5.4, y_length=3.6, xlabel=r"$x$", ylabel=r"$f(x)$", xticks=[0, 1, 2, 3, 4],

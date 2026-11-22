@@ -6,7 +6,7 @@ from explainer.cs import *  # noqa: F403
 from videos.cs.cs39.common import (DATA, HEAD, KERN, LAM, NO, PART, YES, axes, grid_table, load, trace)
 
 
-class Tail(VoiceoverScene):
+class Tail(WatchScene):
     def construct(self):
         self.card()
         self.fanout()
@@ -16,13 +16,13 @@ class Tail(VoiceoverScene):
         self.chain()
 
     def card(self):
-        card = chapter_card(7, r"The tail at scale", r"Why is a fast service slow?", lit=(2013, 2013),
-                            extra=((2013, r"Dean and Barroso: \ The Tail at Scale"),), part=PART)
-        with self.voiceover("Chapter seven. The tail at scale."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(7, r"The tail at scale", r"Why is a fast service slow?", lit=(2013, 2013), extra=((2013, r"Dean and Barroso: \ The Tail at Scale"),), part=PART, said="Chapter seven. The tail at scale.")
 
     def fanout(self):
+        self.ask(r"Each server is slow $1\%$ of the time. \\ A request fans out to 100. Slow requests:",
+                 [r"$1\%$", r"about $37\%$", r"about $63\%$"], 2,
+                 say="Each server is slow one time in a hundred. A request fans out to a hundred servers. How many requests are slow?",
+                 reveal="About sixty-three percent: one minus point nine nine to the hundredth.")
         t = load("tail")
         head = label(r"One slow server in a hundred", font_size=36).to_edge(UP, buff=0.3)
         g = axes([0, 3, 1], [0, 1.05, 0.25], x_length=6.4, y_length=3.8, x_label=r"servers each request waits for",

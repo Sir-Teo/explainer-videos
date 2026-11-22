@@ -24,10 +24,11 @@ def marked(tex: str, font_size=30, color=HEAD):
     parts = [p for p in (a, mid, b) if p]
     m = MathTex(*parts, font_size=font_size)
     m[parts.index(mid)].set_color(color)
+    m.redex = m[parts.index(mid)]
     return m
 
 
-class Beta(VoiceoverScene):
+class Beta(WatchScene):
     def construct(self):
         self.card()
         self.rule()
@@ -36,11 +37,7 @@ class Beta(VoiceoverScene):
         self.omega()
 
     def card(self):
-        card = chapter_card(2, r"Reduction and normal forms", r"How does a function compute?", lit=(1936,),
-                            part=PART)
-        with self.voiceover("Chapter two. Reduction and normal forms."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(2, r"Reduction and normal forms", r"How does a function compute?", lit=(1936,), part=PART, said="Chapter two. Reduction and normal forms.")
 
     def rule(self):
         head = label(r"One rule: \ $\beta$-reduction", font_size=36).to_edge(UP, buff=0.3)
@@ -54,8 +51,8 @@ class Beta(VoiceoverScene):
                   color=GREY_A),
             label(r"it may be anywhere inside a term, \ even under a $\lambda$", font_size=24, color=GREY_A),
         ).arrange(DOWN, buff=0.25).next_to(r, DOWN, buff=0.6)
-        ex = MathTex(r"(\lambda x.\, x\;x)\;z \;\to_\beta\; z\;z", font_size=40, color=YES).next_to(notes, DOWN,
-                                                                                                 buff=0.5)
+        ex = MathTex(r"(\lambda x.\, x\;x)\;z", font_size=40, color=YES).next_to(notes, DOWN, buff=0.5)
+        ex_to = MathTex(r"z\;z", font_size=40, color=YES)
         with self.voiceover(
             "The calculus computes with a single rule, called beta reduction. <bookmark mark='a'/> Wherever a "
             "lambda is applied to an argument, the pair is a redex, a reducible expression. <bookmark mark='b'/> "
@@ -72,7 +69,7 @@ class Beta(VoiceoverScene):
             vo.wait_until("c")
             self.play(FadeIn(notes[2]))
             vo.wait_until("d")
-            self.play(FadeIn(ex))
+            self.rewrite([ex, ex_to], first=Write, run_time=1.2)
         self.wait(0.3)
         self.clear_scene()
 
@@ -97,9 +94,12 @@ class Beta(VoiceoverScene):
             self.play(FadeIn(trees[0]), FadeIn(labels[0]), Create(root_box), run_time=0.6)
             vo.wait_until('a')
             vo.wait_until('b')
-            self.play(FadeIn(arrows[0]), FadeIn(trees[1]), FadeIn(labels[1]), FadeIn(dup))
+            self.play(GrowFromCenter(arrows[0]), TransformFromCopy(trees[0], trees[1], path_arc=-0.4),
+                      TransformFromCopy(labels[0], labels[1]), run_time=1.4)
+            self.play(FadeIn(dup, shift=UP * 0.1))
             vo.wait_until('c')
-            self.play(FadeIn(arrows[1]), FadeIn(trees[2]), FadeIn(labels[2]))
+            self.play(GrowFromCenter(arrows[1]), TransformFromCopy(trees[1], trees[2], path_arc=-0.4),
+                      TransformFromCopy(labels[1], labels[2]), run_time=1.4)
         self.wait(0.3)
         self.clear_scene()
 
@@ -111,10 +111,11 @@ class Beta(VoiceoverScene):
                     font_size=30),
             MathTex(r"\mathit{plus} = \lambda m\,n\,f\,x.\; m\,f\,(n\,f\,x)", font_size=30),
         ).arrange(DOWN, buff=0.15).next_to(head, DOWN, buff=0.3)
-        steps = VGroup(*[marked(s["tex"], 26) for s in b["plus"]]).arrange(DOWN, aligned_edge=LEFT, buff=0.2)
-        steps.next_to(defs, DOWN, buff=0.4)
-        if steps.width > 13:
-            steps.scale_to_fit_width(13)
+        steps = [marked(s["tex"], 34) for s in b["plus"]]
+        for s in steps:
+            if s.width > 13:
+                s.scale_to_fit_width(13)
+        steps[0].move_to(DOWN * 0.4)
         cap = label(r"the redex reduced next, \ in yellow; \ the last term has none: \ a \textbf{normal form}",
                     font_size=20, color=GREY_A).to_edge(DOWN, buff=0.3)
         with self.voiceover("Here is two plus three again, slowly. <bookmark mark='a'/> A numeral n is the function that applies f to x n times, and plus takes m and n and applies f m times on top of n applications. <bookmark mark='b'/> Each line reduces the redex shown in yellow. First plus swallows its arguments, one at a time. Then three is applied to f and x, and expands into three applications of f, and two adds two more on the outside. <bookmark mark='c'/> The last line has no redex left. It is a normal form: the answer, five applications of f.") as vo:
@@ -122,14 +123,18 @@ class Beta(VoiceoverScene):
             self.play(FadeIn(defs), run_time=0.6)
             vo.wait_until('a')
             vo.wait_until('b')
-            for s in steps[:-1]:
-                self.play(FadeIn(s, shift=DOWN * 0.05), run_time=0.8)
+            last = self.rewrite(steps, focus=lambda k: getattr(steps[k], "redex", None), counter="step",
+                                run_time=1.0, hold=0.15)
             vo.wait_until('c')
-            self.play(FadeIn(steps[-1]), FadeIn(cap))
+            self.play(Circumscribe(last, color=YES), FadeIn(cap))
         self.wait(0.3)
         self.clear_scene()
 
     def omega(self):
+        self.ask(r"$(\lambda x.\, x\,x)(\lambda x.\, x\,x)$. \\ Does it reach a normal form?",
+                 [r"yes", r"no: it reduces to itself forever"], 1,
+                 say="Lambda x dot x x, applied to itself. Does it ever reach a normal form?",
+                 reveal="No. One step gives back exactly the same term, forever.")
         b = load("beta")
         head = label(r"Terms that never stop", font_size=36).to_edge(UP, buff=0.3)
         om = MathTex(r"\Omega \;=\; (\lambda x.\, x\,x)\;(\lambda x.\, x\,x)", font_size=44).next_to(head, DOWN,
@@ -150,7 +155,12 @@ class Beta(VoiceoverScene):
             self.play(Write(om), run_time=0.6)
             vo.wait_until('a')
             vo.wait_until('b')
-            self.play(FadeIn(loop), FadeIn(note))
+            ring = Arc(radius=0.45, start_angle=PI / 2, angle=-1.8 * PI, color=NO, stroke_width=4).add_tip(
+                tip_length=0.18).next_to(om, RIGHT, buff=0.3)
+            self.play(Create(ring), run_time=0.6)
+            for _ in range(2):
+                self.play(Rotate(ring, -2 * PI), Indicate(om, color=NO, scale_factor=1.05), run_time=0.9)
+            self.play(FadeIn(loop, shift=DOWN * 0.1), FadeIn(note))
             vo.wait_until('c')
             self.play(FadeIn(k))
             vo.wait_until('d')

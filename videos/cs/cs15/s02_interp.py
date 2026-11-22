@@ -7,7 +7,7 @@ from videos.cs.cs15.common import (CODE, COST, CTRL, DATA, FUNC, HEAD, LAM, NO, 
                                    mono, words)
 
 
-class Interpreters(VoiceoverScene):
+class Interpreters(WatchScene):
     def construct(self):
         self.card()
         self.evalapply()
@@ -15,11 +15,7 @@ class Interpreters(VoiceoverScene):
         self.ladder()
 
     def card(self):
-        card = chapter_card(1, r"Interpreters: \ eval and apply", r"What does it take to run a program?",
-                            lit=(1960,), extra=((1960, r"McCarthy's LISP: \ \texttt{eval}"),), part=PART)
-        with self.voiceover("Chapter one. Interpreters: eval and apply."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(1, r"Interpreters: \ eval and apply", r"What does it take to run a program?", lit=(1960,), extra=((1960, r"McCarthy's LISP: \ \texttt{eval}"),), part=PART, said="Chapter one. Interpreters: eval and apply.")
 
     def evalapply(self):
         head = label(r"Two procedures that call each other", font_size=34).to_edge(UP, buff=0.3)
@@ -119,6 +115,10 @@ class Interpreters(VoiceoverScene):
         self.clear_scene()
 
     def ladder(self):
+        self.ask(r"The same program: a tree-walking interpreter \\ against compiled machine code. The interpreter is...",
+                 [r"about as fast", r"tens to hundreds of times slower"], 1,
+                 say="Run the same program in a tree-walking interpreter, and as compiled machine code. How do they compare?",
+                 reveal="The interpreter is tens to hundreds of times slower: it rediscovers the program at every step.")
         d = load("interp")
         head = label(rf"One function, \ every runtime on this machine: \ \texttt{{fib({d['fib_n']})}}", font_size=32
                      ).to_edge(UP, buff=0.3)

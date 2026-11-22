@@ -3,11 +3,11 @@ from __future__ import annotations
 import numpy as np
 
 from explainer.cs import *  # noqa: F403
-from videos.cs.cs7.common import (BG, CLOCK, CODE, COST, CTRL, DATA, FUNC, HEAD, HIST, INF, NO, PART, STAGES, YES,
+from videos.cs.cs7.common import (chapter, BG, CLOCK, CODE, COST, CTRL, DATA, FUNC, HEAD, HIST, INF, NO, PART, STAGES, YES,
                                   PipeFigure, box, fmt, load, mono)
 
 
-class Precise(VoiceoverScene):
+class Precise(WatchScene):
     def construct(self):
         self.card()
         self.problem()
@@ -15,10 +15,7 @@ class Precise(VoiceoverScene):
         self.stale()
 
     def card(self):
-        card = chapter_card(10, r"Precise exceptions", r"Where exactly was the machine when it stopped?", part=PART)
-        with self.voiceover("Chapter ten. Precise exceptions."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        chapter(self, 10, r"Precise exceptions", r"Where exactly was the machine when it stopped?")
 
     # ------------------------------------------------------------------
     def problem(self):
@@ -90,6 +87,12 @@ class Precise(VoiceoverScene):
 
     # ------------------------------------------------------------------
     def stale(self):
+        card = self.predict(r"A loop rewrites the instruction two ahead of itself. \\ The emulator prints 31. \\"
+                            r" Pipelined Pebble, with prediction, prints...", [r"31", r"26", r"nothing: it crashes"],
+                            narration="One more trap. A loop rewrites an instruction two ahead of itself. The emulator "
+                                      "prints thirty-one. What does the pipeline print?")
+        self.park(card)
+        self.expect(card, 1, narration="Twenty-six. It had already fetched the old instruction.")
         head = label(r"Part 6's warning, \ come true", font_size=36).to_edge(UP, buff=0.35)
         code = VGroup(*[mono(t, 19) for t in ("load:   lw   t0, 0(s0)       # its offset: rewritten",
                                               "        add  a1, a1, t0",

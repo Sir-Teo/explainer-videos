@@ -4,7 +4,7 @@ from explainer.cs import *  # noqa: F403
 from videos.cs.cs55.common import BG, DATA, HEAD, KERN, LAM, NO, PART, YES, grid_table, load, mono
 
 
-class Safety(VoiceoverScene):
+class Safety(WatchScene):
     def construct(self):
         self.card()
         self.statistic()
@@ -13,13 +13,13 @@ class Safety(VoiceoverScene):
         self.proof()
 
     def card(self):
-        card = chapter_card(3, r"Memory safety", r"Can the language rule the bug out?", lit=(2015, 2018),
-                            extra=((2015, r"Rust 1.0"), (2018, r"RustBelt")), part=PART)
-        with self.voiceover("Chapter three. Memory safety."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(3, r"Memory safety", r"Can the language rule the bug out?", lit=(2015, 2018), extra=((2015, r"Rust 1.0"), (2018, r"RustBelt")), part=PART, said="Chapter three. Memory safety.")
 
     def statistic(self):
+        self.ask(r"In large C and C++ code bases, the share of \\ serious security bugs that are memory-safety bugs:",
+                 [r"about $10\%$", r"about $70\%$"], 1,
+                 say="In big C and C plus plus code bases, what share of serious security bugs are memory-safety bugs?",
+                 reveal="About seventy percent, in both Microsoft's and Chrome's counts.")
         head = label(r"Why this is worth the trouble", font_size=36).to_edge(UP, buff=0.3)
         bar = Rectangle(width=8.0, height=1.0, stroke_color=GREY_B, stroke_width=1.5, fill_color=BG, fill_opacity=1)
         bar.move_to([0, 1.1, 0])

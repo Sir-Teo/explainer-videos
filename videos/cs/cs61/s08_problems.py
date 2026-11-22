@@ -67,23 +67,17 @@ YEARS2 = math.log(2) / math.log(1.1)
 CPB17 = R17["cycles"] / (ROWS[6]["cycles"] / ROWS[6]["cycles_per_byte"])
 
 
-class Problems(VoiceoverScene):
+class Problems(WatchScene):
     def construct(self):
         self.card()
         self.hamming()
-        self.compound()
         self.polya()
         self.headroom()
         self.ideal()
 
     def card(self):
-        card = chapter_card(7, r"Finding problems", r"Which problem is worth your years?", lit=(1945, 1991),
-                            extra=((1945, r"P\'olya: \ \textit{How to Solve It}"), (1966, r"Belady: \ the ideal cache"),
-                                   (1986, r"Hamming: \ You and Your Research"), (1991, r"Wall: \ limits of ILP")),
-                            part=PART)
-        with self.voiceover("Chapter seven. Finding problems."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(7, r"Finding problems", r"Which problem is worth your years?", lit=(1945, 1991), extra=((1945, r"P\'olya: \ \textit{How to Solve It}"), (1966, r"Belady: \ the ideal cache"),
+                                   (1986, r"Hamming: \ You and Your Research"), (1991, r"Wall: \ limits of ILP")), part=PART, said="Chapter seven. Finding problems.")
 
     # ------------------------------------------------------------------
     def hamming(self):
@@ -150,68 +144,6 @@ class Problems(VoiceoverScene):
         self.wait(0.4)
         self.clear_scene()
 
-    # ------------------------------------------------------------------
-    def compound(self):
-        head = label(r"Knowledge compounds", font_size=36).to_edge(UP, buff=0.3)
-        ax = Axes(x_range=[0, 20, 5], y_range=[0, 7, 1], x_length=5.6, y_length=4.0, tips=False,
-                  axis_config={"color": GREY_C, "font_size": 18, "include_numbers": True}).to_edge(LEFT, buff=0.8)
-        xl = label(r"years", font_size=18, color=GREY_A).next_to(ax, DOWN, buff=0.35)
-        yl = label(r"output, \ relative", font_size=18, color=GREY_A).next_to(ax, UP, buff=0.1).align_to(ax, LEFT)
-        base = ax.plot(lambda n: 1.0, x_range=[0, 20], color=GREY_B, stroke_width=2.5)
-        grow = ax.plot(lambda n: 1.1 ** n, x_range=[0, 20], color=YES, stroke_width=3)
-        bl = label(r"the same ability", font_size=17, color=GREY_B).next_to(ax.c2p(20, 1), UP, buff=0.1).align_to(
-            ax.c2p(20, 1), RIGHT)
-        gl = label(r"ten percent more, \ compounding", font_size=17, color=YES).next_to(ax.c2p(17, 1.1 ** 17), LEFT,
-                                                                                         buff=0.15)
-        two = DashedLine(ax.c2p(0, 2), ax.c2p(YEARS2, 2), color=HEAD, stroke_width=2)
-        drop = DashedLine(ax.c2p(YEARS2, 2), ax.c2p(YEARS2, 0), color=HEAD, stroke_width=2)
-        dot = Dot(ax.c2p(YEARS2, 2), radius=0.07, color=HEAD)
-        cols = {r"(1.1)^n": YES, r"2": HEAD}
-        rows = VGroup(
-            cmath(r"\frac{\text{output}_A}{\text{output}_B}", r"=", r"(1.1)^n", colors=cols, font_size=32),
-            cmath(r"(1.1)^n", r"=", r"2", colors=cols, font_size=32),
-            cmath(r"n \ln 1.1", r"=", r"\ln 2", colors=cols, font_size=32),
-            cmath(r"n", r"=", r"\frac{\ln 2}{\ln 1.1}", r"\approx", r"\frac{0.693}{0.0953}", r"\approx",
-                  rf"{YEARS2:.1f}", colors=cols, font_size=32),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.42)
-        rows.next_to(ax, RIGHT, buff=1.0).align_to(ax, UP).shift(UP * 0.3)
-        whys = VGroup(label(r"each year builds on the last", font_size=17, color=GREY_B),
-                      label(r"when is it twice as much?", font_size=17, color=GREY_B),
-                      label(r"take logarithms", font_size=17, color=GREY_B),
-                      label(r"just over seven years", font_size=17, color=GREY_B))
-        for wl, r in zip(whys, rows):
-            wl.next_to(r, DOWN, buff=0.08).align_to(r, LEFT)
-        ill = note(r"illustrative: \ Hamming's metaphor, \ taken literally", font_size=16).next_to(
-            xl, DOWN, buff=0.1).align_to(ax, LEFT)
-        habits = wrapped_label(r"also from the talk: \ keep the door open, \ for the clues that interruptions "
-                               r"bring; \ keep Friday afternoons for great thoughts", 12.4, font_size=20,
-                               color=WHITE).to_edge(DOWN, buff=0.3)
-        with self.voiceover(
-            "Hamming said that knowledge and productivity are like compound interest: of two people of about the "
-            "same ability, one who works ten percent more will, over a career, produce more than twice as much. "
-            "<bookmark mark='a'/> Take the metaphor literally, as an illustration: grow ten percent a year on top "
-            "of what you already have, and after n years the ratio is one point one to the n. "
-            "<bookmark mark='b'/> When is that two? <bookmark mark='c'/> Take logarithms: n times the log of one "
-            "point one equals the log of two. <bookmark mark='d'/> So n is about nought point six nine three over "
-            "nought point nought nine five: just over seven years. <bookmark mark='e'/> The talk has other habits "
-            "too: keep your door open, for the clues that interruptions bring, and keep Friday afternoons for "
-            "great thoughts."
-        ) as vo:
-            self.play(FadeIn(head), Create(ax), FadeIn(xl), FadeIn(yl), FadeIn(ill))
-            vo.wait_until("a")
-            self.play(Create(base), FadeIn(bl))
-            self.play(Create(grow), FadeIn(gl), Write(rows[0]), FadeIn(whys[0]), run_time=2)
-            vo.wait_until("b")
-            self.play(TransformMatchingTex(rows[0].copy(), rows[1]), FadeIn(whys[1]), Create(two))
-            vo.wait_until("c")
-            self.play(TransformMatchingTex(rows[1].copy(), rows[2]), FadeIn(whys[2]))
-            vo.wait_until("d")
-            self.play(TransformMatchingTex(rows[2].copy(), rows[3]), FadeIn(whys[3]))
-            self.play(Create(drop), FadeIn(dot))
-            vo.wait_until("e")
-            self.play(FadeIn(habits))
-        self.wait(0.4)
-        self.clear_scene()
 
     # ------------------------------------------------------------------
     def polya(self):
@@ -287,6 +219,10 @@ class Problems(VoiceoverScene):
 
     # ------------------------------------------------------------------
     def headroom(self):
+        self.ask(r"Before chasing a better branch predictor, \\ measure...", [r"nothing",
+                 r"what a perfect predictor would gain"], 1,
+                 say="Before spending years on a better branch predictor, what should you measure first?",
+                 reveal="The headroom: what a perfect one would gain. A limit study.")
         head = label(r"Limit studies: \ how much is left?", font_size=36).to_edge(UP, buff=0.3)
         wrong = [(r"2-bit counters, \ $\tfrac14$ KB", 100 * (1 - TWO), GREY_B),
                  (rf"TAGE, \ {TAGE9['kb']:.0f} KB", 100 * (1 - TAGE9["accuracy"]), YES),
@@ -422,6 +358,12 @@ class Problems(VoiceoverScene):
             self.play(FadeIn(foot))
         self.wait(0.4)
         self.clear_scene()
+        self.checkpoint(
+            [(r"What does a search prove about a conjecture?", r"Only the cases searched, unless it finds a counterexample"),
+             (r"What are Keshav's three passes?", r"Survey, grasp, re-create")],
+            narration="Checkpoint. What does a computer search prove about a conjecture? And what are Keshav's three passes?",
+            answers_narration="Only the cases it checked, unless it finds a counterexample. And a quick survey, a careful "
+                              "read, and a re-creation of the work.")
 
 
 _ = (BG, LAM)

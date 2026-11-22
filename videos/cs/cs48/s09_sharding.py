@@ -5,23 +5,18 @@ from videos.cs.cs39.compute import load as load39
 from videos.cs.cs48.common import BG, DATA, HEAD, KERN, LAM, NO, PART, YES, grid_table, load, module_box, mono, tag_box
 
 
-class Sharding(VoiceoverScene):
+class Sharding(WatchScene):
     def construct(self):
         self.card()
         self.keys()
         self.hot()
         self.reshard()
-        self.secondary()
         self.cross()
 
     def card(self):
-        card = chapter_card(8, r"Sharding", r"How do you split data that no longer fits on one machine?",
-                            lit=(2006, 2012), extra=((2006, r"Bigtable's tablets: \ ranges of keys"),
+        self.chapter(8, r"Sharding", r"How do you split data that no longer fits on one machine?", lit=(2006, 2012), extra=((2006, r"Bigtable's tablets: \ ranges of keys"),
                                                      (2007, r"Dynamo: \ a hashed ring"),
-                                                     (2012, r"Spanner: \ shards that move")), part=PART)
-        with self.voiceover("Chapter eight. Sharding."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+                                                     (2012, r"Spanner: \ shards that move")), part=PART, said="Chapter eight. Sharding.")
 
     # ------------------------------------------------------------------ ranges against hashes
     def keys(self):
@@ -93,6 +88,10 @@ class Sharding(VoiceoverScene):
 
     # ------------------------------------------------------------------ hot keys
     def hot(self):
+        self.ask(r"A perfect hash over 100 shards, Zipf requests. \\ The busiest shard gets...", [r"about $1\%$",
+                 r"far more than $1\%$"], 1,
+                 say="A million keys hashed perfectly over a hundred shards, with Zipf-distributed requests. How much load does the busiest shard get?",
+                 reveal="Far more than its share: the hottest key cannot be split.")
         h = load39("hot")
         rows = h["rows"]
         head = label(r"Hot keys and celebrities", font_size=36).to_edge(UP, buff=0.3)
@@ -231,71 +230,6 @@ class Sharding(VoiceoverScene):
         self.wait(0.4)
         self.clear_scene()
 
-    # ------------------------------------------------------------------ secondary indexes
-    def secondary(self):
-        t = load39("tail")
-        tail = {r["fanout"]: r["frac_slow"] for r in t["plain"]}
-        head = label(r"Local or global secondary indexes", font_size=36).to_edge(UP, buff=0.3)
-        query = tag_box("language = 'rust'", HEAD, size=17).move_to([-3.0, 2.45, 0])
-        shards = VGroup(*[module_box(rf"shard {i + 1}", KERN, w=1.45, h=0.6, font=18) for i in range(4)]).arrange(
-            RIGHT, buff=0.25).move_to([-3.0, 0.85, 0])
-        local = VGroup(*[module_box(r"local index", LAM, w=1.3, h=0.4, font=16).next_to(s, DOWN, buff=0.12)
-                         for s in shards])
-        fan = VGroup(*[Arrow(query.get_bottom(), s.get_top(), buff=0.06, stroke_width=2, color=HEAD,
-                             max_tip_length_to_length_ratio=0.12) for s in shards])
-        gidx = VGroup(*[module_box(rf"index {r}", YES, w=1.45, h=0.55, font=17) for r in
-                        (r"a--f", r"g--m", r"n--s", r"t--z")]).arrange(RIGHT, buff=0.25).move_to([-3.0, -1.55, 0])
-        gl = label(r"a global index, \ sharded by the indexed value", font_size=19, color=YES).next_to(
-            gidx, DOWN, buff=0.15)
-        gap_x = (shards[1].get_right()[0] + shards[2].get_left()[0]) / 2
-        bend = [gap_x, gidx.get_top()[1] + 0.45, 0]
-        one = VGroup(Line(query.get_bottom() + DOWN * 0.05, bend, color=YES, stroke_width=2.5),
-                     Arrow(bend, gidx[2].get_top(), buff=0.04, color=YES, stroke_width=2.5,
-                           max_tip_length_to_length_ratio=0.25))
-        new = Square(side_length=0.2, stroke_width=0, fill_color=DATA, fill_opacity=1).move_to([1.0, 0.85, 0])
-        upd = DashedLine(shards[3].get_bottom() + DOWN * 0.05, gidx[2].get_top() + RIGHT * 0.3, buff=0.05,
-                         color=NO, stroke_width=2, dash_length=0.1).add_tip(tip_length=0.15)
-        ul = wrapped_label(r"second write, \ often asynchronous", 1.9, font_size=17, color=NO).next_to(
-            upd.get_center(), RIGHT, buff=0.15)
-        tab = grid_table([r"shards asked", r"queries slow"],
-                         [[f"{k}", rf"{100 * tail[k]:.1f}\%"] for k in (1, 10, 100)], widths=[2.3, 2.3],
-                         row_h=0.5, font_size=20, colors=[[WHITE, NO]] * 3, mono_cols=())
-        tab.move_to([4.3, 1.5, 0])
-        tl = wrapped_label(rf"each shard slow one time in {round(1 / t['p_slow'])} \ (Part 39)", 4.6,
-                           font_size=18, color=GREY_A).next_to(tab, UP, buff=0.2)
-        notes = VGroup(
-            wrapped_label(r"\textbf{local}: \ writes stay on one shard; \ a query on any other field asks every "
-                          r"shard and waits for the slowest", 4.6, font_size=19, color=LAM),
-            wrapped_label(r"\textbf{global}: \ the query asks one index shard; \ the write touches two, \ and the "
-                          r"index lags: \ DynamoDB's global secondary indexes are eventually consistent", 4.6,
-                          font_size=19, color=YES),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.3).next_to(tab, DOWN, buff=0.4).align_to(tab, LEFT)
-        with self.voiceover(
-            "Other access paths need secondary indexes, and those can be sharded in two ways. "
-            "<bookmark mark='a'/> A local index lives beside the data: each shard indexes its own rows. "
-            "Writes stay on one shard, but a query on any other field must ask every shard, and wait for the "
-            "slowest. <bookmark mark='b'/> In Part 39's model, each server is slow one time in a hundred. A query "
-            "to ten shards is then slow nearly one time in ten, and to a hundred shards, nearly two times in "
-            "three. <bookmark mark='c'/> A global index is sharded by the indexed value itself, so the query asks "
-            "one index shard. <bookmark mark='d'/> Now a write touches two shards, and the index is usually "
-            "updated asynchronously. DynamoDB's global secondary indexes are eventually consistent."
-        ) as vo:
-            self.play(FadeIn(head), FadeIn(query), FadeIn(shards))
-            vo.wait_until("a")
-            self.play(FadeIn(local), FadeIn(notes[0]))
-            self.play(LaggedStart(*[GrowArrow(a) for a in fan], lag_ratio=0.15))
-            vo.wait_until("b")
-            self.play(FadeIn(tl), FadeIn(VGroup(*tab.cells[0])), Create(tab.rule))
-            self.play(LaggedStart(*[FadeIn(VGroup(*row)) for row in tab.cells[1:]], lag_ratio=0.5))
-            vo.wait_until("c")
-            self.play(FadeOut(fan), FadeOut(local), FadeIn(gidx), FadeIn(gl))
-            self.play(Create(one[0]), GrowArrow(one[1]))
-            vo.wait_until("d")
-            self.play(FadeIn(new))
-            self.play(new.animate.move_to(shards[3]))
-            self.play(Create(upd), FadeIn(ul), FadeIn(notes[1]), FadeOut(new))
-        self.wait(0.4)
-        self.clear_scene()
 
     # ------------------------------------------------------------------ across shards
     def cross(self):

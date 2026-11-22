@@ -3,11 +3,11 @@ from __future__ import annotations
 import numpy as np
 
 from explainer.cs import *  # noqa: F403
-from videos.cs.cs7.common import (BG, CLOCK, CODE, COST, CTRL, DATA, FUNC, HEAD, HIST, NO, PART, YES, box, fmt, load,
+from videos.cs.cs7.common import (chapter, BG, CLOCK, CODE, COST, CTRL, DATA, FUNC, HEAD, HIST, NO, PART, YES, box, fmt, load,
                                   mono)
 
 
-class IronLaw(VoiceoverScene):
+class IronLaw(WatchScene):
     def construct(self):
         self.card()
         self.derive()
@@ -15,10 +15,7 @@ class IronLaw(VoiceoverScene):
         self.myth()
 
     def card(self):
-        card = chapter_card(1, r"The iron law", r"What does ``faster'' mean?", part=PART)
-        with self.voiceover("Chapter one. The iron law."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        chapter(self, 1, r"The iron law", r"What does ``faster'' mean?")
 
     # ------------------------------------------------------------------
     def derive(self):
@@ -112,46 +109,50 @@ class IronLaw(VoiceoverScene):
 
     # ------------------------------------------------------------------
     def myth(self):
-        m = load("ironlaw")["myth"]
+        il = load("ironlaw")
+        m = il["myth"]
         a, b = m["subtract"], m["div"]
-        head = label(r"The MIPS myth", font_size=38).to_edge(UP, buff=0.35)
-        task = label(rf"print the numbers 1 to {fmt(load('ironlaw')['myth_numbers'])} in decimal", font_size=26,
-                     color=GREY_A).next_to(head, DOWN, buff=0.3)
+        task = label(rf"print the numbers 1 to {fmt(il['myth_numbers'])}", font_size=30, color=GREY_A).to_edge(
+            UP, buff=0.5)
         cols = VGroup()
-        for name, r, c in ((r"subtract powers of ten \\ (as the Job does)", a, DATA),
-                           (r"divide by ten \\ (\texttt{div}, \texttt{rem})", b, FUNC)):
+        for name, r, c in ((r"subtract powers of ten", a, DATA), (r"divide by ten", b, FUNC)):
             items = VGroup(
-                label(name, font_size=24, color=c),
-                label(rf"{fmt(r['instructions'])} instructions", font_size=24, color=CODE),
-                label(rf"CPI {r['cpi']:.2f}", font_size=24, color=YES),
-                label(rf"{r['mips']:.0f} MIPS", font_size=30, color=HEAD),
-                label(rf"{r['seconds'] * 1e3:.3f} ms", font_size=30, color=COST),
-            ).arrange(DOWN, buff=0.22)
+                label(name, font_size=28, color=c),
+                label(rf"{fmt(r['instructions'])} instructions", font_size=26, color=CODE),
+                label(rf"CPI {r['cpi']:.2f}", font_size=26, color=YES),
+                label(rf"{r['mips']:.0f} MIPS", font_size=40, color=HEAD),
+            ).arrange(DOWN, buff=0.25)
             cols.add(items)
-        cols.arrange(RIGHT, buff=2.2).move_to(DOWN * 0.4)
-        win = SurroundingRectangle(cols[1][4], buff=0.1, color=YES)
-        lose = SurroundingRectangle(cols[0][3], buff=0.1, color=NO)
-        moral = label(r"a higher MIPS rating \ and a slower program: \ only time is a measure of speed", font_size=24,
-                      color=HEAD).to_edge(DOWN, buff=0.35)
+        cols.arrange(RIGHT, buff=2.4).move_to(UP * 0.3)
         with self.voiceover(
             "For decades processors were sold by MIPS, millions of instructions per second, a number that leaves out "
-            "the first factor of the law. Here is why that misleads. <bookmark mark='a'/> Two programs print the numbers "
-            "from one to two thousand. One finds each digit by subtracting powers of ten, as the Job does. The other "
-            "uses the divide instruction this part adds to Pebble. <bookmark mark='b'/> The subtracting program runs "
-            "five times as many instructions, all of them simple, so it scores a splendid eight hundred MIPS. The "
-            "dividing program runs few instructions, but each divide occupies the divider for sixteen cycles, so it "
-            "scores barely two hundred and forty. <bookmark mark='c'/> And it finishes first. A program with fewer, "
-            "slower instructions can beat one with many fast ones; only the time to run the program measures speed. "
-            "Engineers took to calling MIPS a meaningless indicator of performance."
+            "the first factor of the law. <bookmark mark='a'/> Two programs print the numbers from one to two "
+            "thousand. One finds each digit by subtracting powers of ten, as the Job does. The other uses the divide "
+            "instruction this part adds to Pebble. <bookmark mark='b'/> The subtracting program runs many simple "
+            f"instructions and scores {a['mips']:.0f} MIPS. Each divide holds the divider for sixteen cycles, so the "
+            f"dividing program scores only {b['mips']:.0f}."
         ) as vo:
-            self.play(FadeIn(head))
-            self.play(FadeIn(task), FadeIn(cols[0][0]), FadeIn(cols[1][0]))
+            self.play(FadeIn(task))
+            vo.wait_until("a")
+            self.play(FadeIn(cols[0][0], shift=DOWN * 0.1), FadeIn(cols[1][0], shift=DOWN * 0.1))
             vo.wait_until("b")
-            self.play(LaggedStart(*[FadeIn(x) for x in cols[0][1:4]], lag_ratio=0.3),
-                      LaggedStart(*[FadeIn(x) for x in cols[1][1:4]], lag_ratio=0.3), run_time=2.4)
-            self.play(Create(lose))
-            vo.wait_until("c")
-            self.play(FadeIn(cols[0][4]), FadeIn(cols[1][4]))
-            self.play(Create(win), FadeIn(moral))
-        self.wait(0.3)
+            self.play(LaggedStart(*[FadeIn(x, shift=UP * 0.1) for x in cols[0][1:]], lag_ratio=0.3),
+                      LaggedStart(*[FadeIn(x, shift=UP * 0.1) for x in cols[1][1:]], lag_ratio=0.3), run_time=2.2)
+        card = self.predict(rf"{a['mips']:.0f} MIPS against {b['mips']:.0f}. \\ Which program finishes first?",
+                            [r"subtracting", r"dividing", r"a tie"],
+                            narration=f"{a['mips']:.0f} MIPS against {b['mips']:.0f}. Which program finishes first?",
+                            room=VGroup(task, cols))
+        self.park(card)
+        self.play(VGroup(task, cols).animate.scale(0.75).to_edge(UP, buff=0.3))
+        race = Race([(r"dividing", b["seconds"], FUNC), (r"subtracting", a["seconds"], DATA)], unit="ms", scale=1e3,
+                    fmt="{:.3f}", width=6.4, lane_h=0.5, gap=0.45, font_size=26).move_to(DOWN * 1.6 + LEFT * 0.6)
+        src = tag("simulated", r"Pebble's pipeline").to_corner(DL, buff=0.3)
+        self.play(FadeIn(race.lanes), *[FadeIn(c) for c in race.clocks], FadeIn(src))
+        self.add(*race.bars)
+        race.go(self, seconds=4.0)
+        race.freeze()
+        self.reveal(card, 1, narration=(
+            "The dividing program, with a quarter of the MIPS. Fewer, slower instructions beat many fast ones. Only "
+            "the time to run the program measures speed. Engineers took to calling MIPS a meaningless indicator of "
+            "performance."))
         self.clear_scene()

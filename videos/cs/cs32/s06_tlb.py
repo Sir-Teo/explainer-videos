@@ -6,18 +6,14 @@ from explainer.cs import *  # noqa: F403
 from videos.cs.cs32.common import (HEAD, NO, PART, YES, curve, fit_right, grid_table, load)
 
 
-class Tlb(VoiceoverScene):
+class Tlb(WatchScene):
     def construct(self):
         self.card()
         self.ours()
         self.staircase()
 
     def card(self):
-        card = chapter_card(5, r"The TLB", r"How can translation be nearly free?", lit=(1967, 1985),
-                            extra=((1967, r"IBM 360/67: \ a TLB"), (1985, r"the 386: \ paging on PCs")), part=PART)
-        with self.voiceover("Chapter five. The translation lookaside buffer."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(5, r"The TLB", r"How can translation be nearly free?", lit=(1967, 1985), extra=((1967, r"IBM 360/67: \ a TLB"), (1985, r"the 386: \ paging on PCs")), part=PART, said="Chapter five. The translation lookaside buffer.")
 
     def ours(self):
         d = load("tlb")
@@ -72,6 +68,10 @@ class Tlb(VoiceoverScene):
         self.clear_scene()
 
     def staircase(self):
+        self.ask(r"Touch one line in each of more and more pages. \\ Time per step jumps when the pages outgrow...",
+                 [r"the L1 cache", r"the TLB"], 1,
+                 say="Touch one cache line in each of more and more pages. When does the time per step jump?",
+                 reveal="When the pages outgrow the TLB's entries, and every step needs a walk.")
         d = load("staircase")
         rows = d["rows"]
         head = label(r"The TLB staircase, \ on this machine", font_size=34).to_edge(UP, buff=0.3)
@@ -122,3 +122,9 @@ class Tlb(VoiceoverScene):
             self.play(FadeIn(notes[4]))
         self.wait(0.3)
         self.clear_scene()
+        self.checkpoint(
+            [(r"Why pages, not segments?", r"One size: no external fragmentation"),
+             (r"Why a tree of page tables?", r"Empty regions cost nothing")],
+            narration="Checkpoint. Why did pages beat segments? And why is a page table a tree?",
+            answers_narration="Every page has one size, so memory never fragments into odd holes. And a tree leaves the empty "
+                              "parts of the address space unmapped, at no cost.")

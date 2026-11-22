@@ -3,20 +3,31 @@ from __future__ import annotations
 from videos.stats.stats36.common import *  # noqa: F403
 
 
-class Backdoor(VoiceoverScene):
+class Backdoor(StatsScene):
     def construct(self):
         self.card()
+        self.wrong_idea("Adjust for every variable you have: more control is safer",
+                        "Adjusting for a collider or a mediator creates bias: the graph decides",
+                        narration="A natural rule of thumb: adjust for every variable you have. More control is "
+                                  "always safer.",
+                        right_narration="Not so. Adjusting for a common effect, a collider, opens a path and "
+                                        "creates bias; adjusting for a mediator removes part of the effect. What to "
+                                        "adjust for is decided by the causal graph.")
+        self.ask(r"Treatment $\to$ mediator $\to$ outcome. For the total effect, adjust for the mediator?",
+                 ["yes", "no"], 1,
+                 say="The treatment works through a mediator, which then affects the outcome. To estimate the total "
+                     "effect, should you adjust for the mediator?",
+                 reveal="No: adjusting for it blocks part of the effect you want. Pearl's back-door criterion "
+                        "forbids consequences of the treatment in the adjustment set.")
         self.criterion()
         self.berkson()
         self.mbias()
         self.mediator()
         self.rules()
+        self.answer()
 
     def card(self):
-        card = chapter_card(3, r"The back door", r"What to adjust for, \ and what not to", lit=(1946, 1995), part=PART)
-        with self.voiceover("Chapter three. The back door."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(3, r"The back door", r"What to adjust for, \ and what not to", lit=(1946, 1995), part=PART, said="Chapter three. The back door.")
 
     def criterion(self):
         rows = [

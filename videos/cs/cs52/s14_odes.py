@@ -23,7 +23,7 @@ def sci(v: float, digits: int = 1) -> str:
     return rf"{v / 10 ** e:.{digits}f} \times 10^{{{e}}}"
 
 
-class Odes(VoiceoverScene):
+class Odes(WatchScene):
     def construct(self):
         self.card()
         self.steps()
@@ -34,12 +34,8 @@ class Odes(VoiceoverScene):
         self.drift()
 
     def card(self):
-        card = chapter_card(13, r"Differential equations", r"How do we step through time and stay on course?",
-                            lit=(1895, 1901, 1963), extra=((1895, r"Runge"), (1901, r"Kutta"),
-                                                           (1963, r"Dahlquist: \ A-stability")), part=PART)
-        with self.voiceover("Chapter thirteen. Differential equations."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(13, r"Differential equations", r"How do we step through time and stay on course?", lit=(1895, 1901, 1963), extra=((1895, r"Runge"), (1901, r"Kutta"),
+                                                           (1963, r"Dahlquist: \ A-stability")), part=PART, said="Chapter thirteen. Differential equations.")
 
     def steps(self):
         head = label(r"Euler, \ then Runge and Kutta", font_size=36).to_edge(UP, buff=0.3)
@@ -159,6 +155,10 @@ class Odes(VoiceoverScene):
         self.clear_scene()
 
     def stiffness(self):
+        self.ask(r"A stiff equation, explicit Euler, \\ step larger than $2/|\lambda|$. The solution...",
+                 [r"is inaccurate but bounded", r"blows up"], 1,
+                 say="A stiff equation, solved by explicit Euler with a step larger than two over the size of lambda. What happens?",
+                 reveal="It blows up, though the true solution is perfectly smooth.")
         rows_ = load("stiff")["rows"]
         head = label(r"Stiffness", font_size=36).to_edge(UP, buff=0.3)
         cols = {r"\lambda": HEAD}

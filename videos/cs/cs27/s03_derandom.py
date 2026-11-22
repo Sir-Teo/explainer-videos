@@ -5,7 +5,7 @@ from videos.cs.cs27.common import (BG, CTRL, DATA, HEAD, LAM, NO, PART, YES, fit
                                    words)
 
 
-class Derandom(VoiceoverScene):
+class Derandom(WatchScene):
     def construct(self):
         self.card()
         self.generator()
@@ -13,12 +13,7 @@ class Derandom(VoiceoverScene):
         self.tradeoff()
 
     def card(self):
-        card = chapter_card(2, r"Hardness against randomness", r"Could every coin be replaced by a hard function?",
-                            lit=(1988, 1997), extra=((1988, r"Nisan--Wigderson"), (1997, r"Impagliazzo--Wigderson")),
-                            part=PART)
-        with self.voiceover("Chapter two. Hardness against randomness."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(2, r"Hardness against randomness", r"Could every coin be replaced by a hard function?", lit=(1988, 1997), extra=((1988, r"Nisan--Wigderson"), (1997, r"Impagliazzo--Wigderson")), part=PART, said="Chapter two. Hardness against randomness.")
 
     def generator(self):
         head = label(r"The Nisan--Wigderson generator", font_size=34).to_edge(UP, buff=0.3)
@@ -54,7 +49,7 @@ class Derandom(VoiceoverScene):
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.32).next_to(seed, RIGHT, buff=1.6).align_to(seed, UP)
         fit_right(lines)
         with self.voiceover(
-            "The Nisan–Wigderson construction links circuit hardness with pseudorandomness. <bookmark mark='a'/> Apply a hard Boolean function to overlapping subsets of a random seed. The subset system must satisfy quantitative design bounds. <bookmark mark='b'/> The picture is schematic: small overlaps alone do not prove that arbitrary output bits are independent. The theorem controls distinguishability by circuits of a specified size. <bookmark mark='c'/> A hybrid argument converts a successful distinguisher into a circuit predicting the hard function; suitable hardness amplification supplies the needed average-case hardness. <bookmark mark='d'/> Under sufficiently strong, efficiently evaluable hardness assumptions, the seed can be logarithmic in the simulated input length. Enumerating all seeds then yields deterministic polynomial-time simulation."
+            "The Nisan–Wigderson construction links circuit hardness with pseudorandomness. <bookmark mark='a'/> Apply a hard Boolean function to overlapping subsets of a random seed. The subset system must satisfy quantitative design bounds. <bookmark mark='b'/> The theorem controls distinguishability by circuits of a specified size. <bookmark mark='c'/> A hybrid argument converts a successful distinguisher into a circuit predicting the hard function; suitable hardness amplification supplies the needed average-case hardness. <bookmark mark='d'/> Under sufficiently strong, efficiently evaluable hardness assumptions, the seed can be logarithmic in the simulated input length. Enumerating all seeds then yields deterministic polynomial-time simulation."
         ) as vo:
             self.play(FadeIn(head), FadeIn(seed), FadeIn(sl))
             vo.wait_until("a")
@@ -67,6 +62,10 @@ class Derandom(VoiceoverScene):
         self.clear_scene()
 
     def identity(self):
+        self.ask(r"Two polynomial expressions of degree $d$ differ. \\ A random point from a field of size $q$ fools you with probability...",
+                 [r"about $1/2$", r"at most $d/q$"], 1,
+                 say="Two polynomial expressions of degree d are different. You test them at one random point. How often can they agree there?",
+                 reveal="At most d over q: the Schwartz-Zippel lemma. Nobody knows how to do it without the coin.")
         d = load("pit")
         head = label('General circuit PIT; a known identity as an example', font_size=34).to_edge(UP, buff=0.3)
         eq = MathTex(r"\det \begin{pmatrix} 1 & x_1 & x_1^2 & \cdots \\ 1 & x_2 & x_2^2 & \cdots \\ \vdots & & & "
@@ -90,7 +89,7 @@ class Derandom(VoiceoverScene):
                   color=NO),
         ).arrange(DOWN, buff=0.2).next_to(tl, DOWN, buff=0.3)
         with self.voiceover(
-            "General arithmetic-circuit identity testing remains a central derandomization problem. The Vandermonde formula is a known identity used to illustrate the randomized test. <bookmark mark='a'/> Evaluating a determinant and its product expression at a point avoids explicitly expanding all factorially many permutation terms. The recorded timings measure this implementation on this host. <bookmark mark='b'/> Over a prime field, a nonzero polynomial of total degree d has at most d divided by the field size probability of vanishing at uniformly independent coordinates. The field and formal-polynomial assumptions matter. <bookmark mark='c'/> We retain every sampled point and compare both true and deliberately false expressions with an independent native computation. Zero observed false passes is a finite sample result. <bookmark mark='d'/> The open problem concerns general circuit representations with suitable degree and field access, not this specific identity, which has a deterministic proof."
+            "General arithmetic-circuit identity testing remains a central derandomization problem. <bookmark mark='a'/> Evaluating a determinant and its product expression at a point avoids explicitly expanding all factorially many permutation terms. The recorded timings measure this implementation on this host. <bookmark mark='b'/> Over a prime field, a nonzero polynomial of total degree d has at most d divided by the field size probability of vanishing at uniformly independent coordinates. <bookmark mark='c'/> <bookmark mark='d'/> The open problem concerns general circuit representations with suitable degree and field access, not this specific identity, which has a deterministic proof."
         ) as vo:
             self.play(FadeIn(head), Write(eq))
             vo.wait_until("a")

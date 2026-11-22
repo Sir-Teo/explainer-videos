@@ -11,7 +11,7 @@ SETS, LINE = 8, 16
 ACCESSES = [0x14, 0x18, 0x24, 0x94, 0x14, 0x60, 0x64, 0xA4, 0x24]
 
 
-class Direct(VoiceoverScene):
+class Direct(WatchScene):
     def construct(self):
         self.card()
         self.split()
@@ -20,13 +20,7 @@ class Direct(VoiceoverScene):
         self.real()
 
     def card(self):
-        card = chapter_card(3, r"A direct-mapped cache", r"Where in the cache does an address go?", lit=(1965,),
-                            extra=((1965, r"Wilkes: \ slave memories"),), part=PART)
-        with self.voiceover(
-            "Chapter three. A direct-mapped cache."
-        ):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(3, r"A direct-mapped cache", r"Where in the cache does an address go?", lit=(1965,), extra=((1965, r"Wilkes: \ slave memories"),), part=PART, said="Chapter three. A direct-mapped cache.")
 
     # ------------------------------------------------------------------
     def split(self):
@@ -117,6 +111,10 @@ class Direct(VoiceoverScene):
 
     # ------------------------------------------------------------------
     def walk(self):
+        self.ask(r"Eight lines of 16 bytes. \\ Address \texttt{0x14} goes to which line?", [r"line 0", r"line 1",
+                 r"line 4"], 1,
+                 say="A cache of eight sixteen-byte lines. Which line does address hex fourteen use?",
+                 reveal="Line one: drop the four offset bits, and the next three bits are zero zero one.")
         head = label(r"Eight lines, \ nine accesses", font_size=34).to_edge(UP, buff=0.3)
         sh = Shelves(SETS, 1, w=1.9, h=0.48).move_to(RIGHT * 2.6 + DOWN * 0.3)
         legend = label(r"8-bit addresses: \ tag 1 bit, \ index 3, \ offset 4", font_size=20, color=GREY_B).next_to(

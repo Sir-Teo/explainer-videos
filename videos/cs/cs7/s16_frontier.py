@@ -3,11 +3,11 @@ from __future__ import annotations
 import numpy as np
 
 from explainer.cs import *  # noqa: F403
-from videos.cs.cs7.common import (BG, CLOCK, CODE, COST, CTRL, DATA, FUNC, HEAD, HIST, INF, NO, PART, YES, box, fmt,
+from videos.cs.cs7.common import (chapter, BG, CLOCK, CODE, COST, CTRL, DATA, FUNC, HEAD, HIST, INF, NO, PART, YES, box, fmt,
                                   load, mono)
 
 
-class Frontier(VoiceoverScene):
+class Frontier(WatchScene):
     """The research tier (videos/cs/SYLLABUS.md 1.1): how close do predictors come to the limit of what history can
     tell them, and what can a perceptron never learn?"""
 
@@ -19,14 +19,18 @@ class Frontier(VoiceoverScene):
         self.now()
 
     def card(self):
-        card = chapter_card(15, r"Frontier: \ the limits of prediction", r"How good could a branch predictor be?",
-                            lit=(1991, 1996, 2016, 2020), extra=((1991, r"Wall's limits of ILP"), (1996, r"prediction as compression"), (2016, r"TAGE-SC-L"), (2020, r"BranchNet")), part=PART)
-        with self.voiceover("Chapter fifteen. Frontier: the limits of prediction."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        chapter(self, 15, r"Frontier: \ the limits of prediction", r"How good could a branch predictor be?", lit=(1991, 1996, 2016, 2020), extra=((1991, r"Wall's limits of ILP"), (1996, r"prediction as compression"), (2016, r"TAGE-SC-L"), (2020, r"BranchNet")))
 
     # ------------------------------------------------------------------
     def storage(self):
+        _fr = load("frontier")
+        card = self.predict(r"An ideal predictor with unlimited memory \\ on the Job's branches: \\ how often right?",
+                            [r"about 95\%", rf"about {100 * _fr['ppm']['accuracy']:.1f}\%", r"100\%"],
+                            narration="Give a predictor unlimited memory, every history length at once. On the Job's "
+                                      "branches, how often can it be right?")
+        self.park(card)
+        self.expect(card, 1, narration=f"{100 * _fr['ppm']['accuracy']:.1f} percent: some branches depend on the "
+                                       "text itself, and no history can know it.")
         d = load("frontier")
         two = load("predictors")["table"]["the Job, chapter 1"]["rows"]["2-bit"]["accuracy"]
         head = label('One trace: empirical accuracy versus nominal table payload', font_size=36).to_edge(UP, buff=0.3)
@@ -69,7 +73,7 @@ class Frontier(VoiceoverScene):
             "table is our baseline. <bookmark mark='b'/> Our simplified TAGE improves as its arrays grow. The "
             "horizontal axis estimates nominal packed table payload, excluding history, validity and implementation "
             "overhead; it is not Python memory or a complete hardware budget. <bookmark mark='c'/> The perceptron "
-            "changes little over the tested sizes. A plateau alone does not prove a representation ceiling. <bookmark "
+            "changes little over the tested sizes. <bookmark "
             "mark='d'/> The dashed PPM result uses a different algorithm with unbounded context-table growth but a "
             "bounded set of history lengths. Its advantage cannot be assigned entirely to storage, and its remaining "
             "errors are not proved impossible. Compare algorithms under a defined training protocol before drawing "
@@ -192,8 +196,7 @@ class Frontier(VoiceoverScene):
             "perceptron about forty-nine percent. Other histories, initialization and learning rules can change that "
             "empirical result; it does not explain the entire Job plateau. <bookmark mark='d'/> Research expands "
             "features and combines predictors: piecewise-linear methods select functions by path; multiperspective "
-            "predictors hash several history features. TAGE-SC-L combines TAGE, a statistical corrector and a loop "
-            "predictor, not necessarily three serial hardware stages."
+            "predictors hash several history features."
         ) as vo:
             self.play(FadeIn(head), Create(ax), FadeIn(axl))
             self.play(FadeIn(pts), Write(rule))

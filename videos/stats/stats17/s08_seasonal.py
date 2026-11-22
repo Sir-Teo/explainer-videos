@@ -8,9 +8,15 @@ from videos.stats.stats17.common import *  # noqa: F403
 MONTHS = ["J", "F", "M", "A", "M", "J", "J", "A", "S", "O", "N", "D"]
 
 
-class Seasonal(VoiceoverScene):
+class Seasonal(StatsScene):
     def construct(self):
         self.card()
+        self.ask("Mauna Loa's CO$_2$ peaks each year in...",
+                 ["May", "September", "December"], 0,
+                 say="Keeling's carbon dioxide record from Mauna Loa rises every year, with a seasonal wiggle on "
+                     "top. In which month does it peak?",
+                 reveal="In May. The northern forests draw carbon down through the summer, and the low comes in the "
+                        "autumn.")
         self.keeling()
         self.model()
         self.panels()
@@ -18,12 +24,10 @@ class Seasonal(VoiceoverScene):
         self.growth()
         self.leftover()
         self.variants()
+        self.answer()
 
     def card(self):
-        card = chapter_card(7, r"Trend and seasonality", r"Taking a series apart", part=PART)
-        with self.voiceover("Chapter seven. Trend and seasonality."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(7, r"Trend and seasonality", r"Taking a series apart", part=PART, said="Chapter seven. Trend and seasonality.")
 
     def keeling(self):
         d = load("co2")

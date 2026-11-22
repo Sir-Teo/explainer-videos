@@ -157,7 +157,7 @@ def bfs_tree(n, edges, root):
     return par, used
 
 
-class Maxflow(VoiceoverScene):
+class Maxflow(WatchScene):
     def construct(self):
         self.card()
         self.problem()
@@ -168,12 +168,8 @@ class Maxflow(VoiceoverScene):
         self.history()
 
     def card(self):
-        card = chapter_card(10, r"From electrical flows to max-flow", r"Can current find the maximum flow?",
-                            lit=(2011, 2022), extra=((2011, r"Christiano et al.: \ electrical flows"),
-                                                     (2022, r"Chen et al.: \ almost-linear max-flow")), part=PART)
-        with self.voiceover("Chapter ten. From electrical flows to maximum flow."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(10, r"From electrical flows to max-flow", r"Can current find the maximum flow?", lit=(2011, 2022), extra=((2011, r"Christiano et al.: \ electrical flows"),
+                                                     (2022, r"Chen et al.: \ almost-linear max-flow")), part=PART, said="Chapter ten. From electrical flows to maximum flow.")
 
     # ------------------------------------------------------------------ current ignores capacities
     def problem(self):
@@ -524,6 +520,10 @@ class Maxflow(VoiceoverScene):
 
     # ------------------------------------------------------------------ the exponent comes down
     def history(self):
+        self.ask(r"Maximum flow, after fifty years of progress. \\ The 2022 running time:", [r"$n m^2$",
+                 r"$m^{1.5}$", r"$m^{1 + o(1)}$"], 2,
+                 say="Maximum flow started at n times m squared. What did the 2022 algorithm achieve?",
+                 reveal="Almost linear: m to the one plus little o of one.")
         head = label(r"Maximum flow: \ the exponent comes down", font_size=36).to_edge(UP, buff=0.3)
         vals = [3.0, 1.5, 4 / 3, 1.0]
         names = [r"1972", r"1998", r"2011", r"2022"]

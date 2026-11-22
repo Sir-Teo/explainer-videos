@@ -4,7 +4,7 @@ from explainer.cs import *  # noqa: F403
 from videos.cs.cs27.common import (BG, CTRL, DATA, HEAD, LAM, NO, PART, YES, fit_right, grid_table, load, words)
 
 
-class FineGrained(VoiceoverScene):
+class FineGrained(WatchScene):
     def construct(self):
         self.card()
         self.hypotheses()
@@ -12,14 +12,13 @@ class FineGrained(VoiceoverScene):
         self.measured()
 
     def card(self):
-        card = chapter_card(11, r"Fine-grained complexity", r"Why can't we beat quadratic time?", lit=(1995, 2015),
-                            extra=((1995, r"3SUM-hardness"), (2005, r"Williams: OV"), (2015, r"edit distance")),
-                            part=PART)
-        with self.voiceover("Chapter eleven. Fine-grained complexity."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(11, r"Fine-grained complexity", r"Why can't we beat quadratic time?", lit=(1995, 2015), extra=((1995, r"3SUM-hardness"), (2005, r"Williams: OV"), (2015, r"edit distance")), part=PART, said="Chapter eleven. Fine-grained complexity.")
 
     def hypotheses(self):
+        self.ask(r"$n$ vectors: is any pair orthogonal? Naive: $n^2$. \\ An $n^{1.99}$ algorithm would...",
+                 [r"be a minor speed-up", r"refute the Strong Exponential Time Hypothesis"], 1,
+                 say="Orthogonal vectors takes n squared time naively. What would an n to the one point nine nine algorithm mean?",
+                 reveal="It would refute the Strong Exponential Time Hypothesis, and give faster SAT algorithms.")
         head = label(r"Three conjectures, \ and what they explain", font_size=32).to_edge(UP, buff=0.3)
         rows = [[r"\textbf{SETH}: \ $k$-SAT needs $2^{(1 - o(1))n}$ as $k \to \infty$", r"orthogonal vectors, \ edit "
                  r"distance, \ LCS \ (Part 21), \ graph diameter"],
@@ -39,7 +38,7 @@ class FineGrained(VoiceoverScene):
             label(r"these are not P vs NP questions: \ they ask for the \textbf{exponent}", font_size=21, color=YES),
         ).arrange(DOWN, buff=0.2).next_to(tab, DOWN, buff=0.4)
         with self.voiceover(
-            "NP-hardness alone does not prove an exponential lower bound. Fine-grained hypotheses ask more specific questions about achievable exponents. <bookmark mark='a'/> SETH says that for every fixed positive epsilon, some fixed clause width rules out a two-to-the-one-minus-epsilon-times-n SAT algorithm in the specified deterministic model. <bookmark mark='b'/> The 3SUM and APSP hypotheses concern fixed exponent improvements over quadratic and cubic time, with input and machine models stated. Logarithmic speedups do not refute them. <bookmark mark='c'/> Split a sparse bounded-width SAT instance’s variables into two halves. Each partial assignment becomes a vector whose coordinates identify clauses it fails to satisfy. <bookmark mark='d'/> Two vectors are orthogonal exactly when their combined assignment satisfies every clause. Under the dimensional and polynomial-overhead conditions, a fixed exponent improvement for the relevant OV family would refute SETH. <bookmark mark='e'/> The three hypotheses are distinct conditional assumptions. Their reductions and precise variants must be stated rather than treating all fast-problem lower bounds as one conjecture."
+            "NP-hardness alone does not prove an exponential lower bound. Fine-grained hypotheses ask more specific questions about achievable exponents. <bookmark mark='a'/> SETH says that for every fixed positive epsilon, some fixed clause width rules out a two-to-the-one-minus-epsilon-times-n SAT algorithm in the specified deterministic model. <bookmark mark='b'/> The 3SUM and APSP hypotheses concern fixed exponent improvements over quadratic and cubic time, with input and machine models stated. Logarithmic speedups do not refute them. <bookmark mark='c'/> Split a sparse bounded-width SAT instance’s variables into two halves. Each partial assignment becomes a vector whose coordinates identify clauses it fails to satisfy. <bookmark mark='d'/> Two vectors are orthogonal exactly when their combined assignment satisfies every clause. Under the dimensional and polynomial-overhead conditions, a fixed exponent improvement for the relevant OV family would refute SETH. <bookmark mark='e'/> The three hypotheses are distinct conditional assumptions."
         ) as vo:
             self.play(FadeIn(head))
             vo.wait_until("a")
@@ -73,7 +72,7 @@ class FineGrained(VoiceoverScene):
                   r"\ which check every pair, \ are the slow rows", font_size=21, color=NO),
         ).arrange(DOWN, buff=0.22).next_to(tl, DOWN, buff=0.35)
         with self.voiceover(
-            "We execute the SAT-to-orthogonal-vectors reduction on six complete finite inputs. <bookmark mark='a'/> Each formula has twenty-four variables and a hundred and one clauses. Every one of the two halves’ four thousand and ninety-six vectors is retained and independently reconstructed. <bookmark mark='b'/> Orthogonal-vector search is checked with a separate native implementation. Positive pairs decode to satisfying assignments; SAT statuses are also cross-checked with native Glucose. Native UNSAT agreement is implementation evidence rather than a retained refutation proof. <bookmark mark='c'/> Each pair of half assignments corresponds to one full assignment, so the full cross-product has two to the twenty-fourth pairs. <bookmark mark='d'/> Search may stop early on positive instances. The measured times describe these specific inputs and implementations, not an exponential lower bound or an asymptotic theorem."
+            "We execute the SAT-to-orthogonal-vectors reduction on six complete finite inputs. <bookmark mark='a'/> Each formula has twenty-four variables and a hundred and one clauses. <bookmark mark='b'/> Orthogonal-vector search is checked with a separate native implementation. Positive pairs decode to satisfying assignments; SAT statuses are also cross-checked with native Glucose. <bookmark mark='c'/> Each pair of half assignments corresponds to one full assignment, so the full cross-product has two to the twenty-fourth pairs. <bookmark mark='d'/> Search may stop early on positive instances."
         ) as vo:
             self.play(FadeIn(head), FadeIn(VGroup(*tab.cells[0])), FadeIn(tab.rule), FadeIn(tl))
             vo.wait_until("a")
@@ -104,7 +103,7 @@ class FineGrained(VoiceoverScene):
                   r"constants, \ or approximate", font_size=21, color=YES),
         ).arrange(DOWN, buff=0.25).next_to(tab, DOWN, buff=0.45)
         with self.voiceover(
-            "The timing table uses finite negative instances with explicit certificates. <bookmark mark='a'/> Every vector in the OV fixtures shares bit sixty-three, so no orthogonal pair exists. Every integer in the 3SUM fixtures is odd, so three of them cannot sum to zero. Full inputs are retained. <bookmark mark='b'/> We report the median of thirty teaching-call intervals per size; serialization and independent checking occur outside those timers. <bookmark mark='c'/> These loops show roughly quadratic growth over the measured sizes. Fixed sixty-four-bit vectors are an implementation benchmark, distinct from growing-dimension OV hardness assumptions. <bookmark mark='d'/> Known logarithmic 3SUM improvements and future algorithmic changes must be distinguished from a fixed polynomial-exponent improvement. Conditional lower bounds are useful only within their stated models and assumptions."
+            "The timing table uses finite negative instances with explicit certificates. <bookmark mark='a'/> Every vector in the OV fixtures shares bit sixty-three, so no orthogonal pair exists. Every integer in the 3SUM fixtures is odd, so three of them cannot sum to zero. <bookmark mark='b'/> <bookmark mark='c'/> These loops show roughly quadratic growth over the measured sizes. <bookmark mark='d'/>"
         ) as vo:
             self.play(FadeIn(head), FadeIn(tab))
             for mk, ln in zip("abcd", lines):

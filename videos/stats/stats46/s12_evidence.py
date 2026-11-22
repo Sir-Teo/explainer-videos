@@ -5,20 +5,31 @@ import numpy as np
 from videos.stats.stats46.common import *  # noqa: F403
 
 
-class Evidence(VoiceoverScene):
+class Evidence(StatsScene):
     def construct(self):
         self.card()
+        self.wrong_idea("$p = 0.05$ is strong evidence against the null",
+                        r"Against a point null it's weak: the null's posterior probability stays well above 5\%",
+                        narration="A belief built into many fields: p equal to point zero five is strong evidence "
+                                  "against the null hypothesis.",
+                        right_narration="Against a point null it's weak. Berger and Sellke showed the null's "
+                                        "posterior probability stays at thirteen percent or more over all priors, "
+                                        "and nearer thirty for symmetric ones.")
+        self.ask(r"$p = 0.05$. The bound $-e\,p\log p$ caps the odds against the null at about...",
+                 ["2.5 to 1", "20 to 1"], 0,
+                 say="Calibrate a p-value as evidence. Sellke, Bayarri and Berger's bound on the Bayes factor is "
+                     "minus e p log p. At p equal to point zero five, at most what odds against the null?",
+                 reveal="About two and a half to one. A p-value of point zero five is weak evidence against a point "
+                        "null, however the prior is chosen within a broad class.")
         self.framing()
         self.table()
         self.chart()
         self.calibration()
         self.lessons()
+        self.answer()
 
     def card(self):
-        card = chapter_card(11, r"p-values and evidence", r"How strong is $p = 0.05$?", lit=(1987,), part=PART)
-        with self.voiceover("Chapter eleven. p-values and evidence: how strong is a p-value of point zero five?"):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(11, r"p-values and evidence", r"How strong is $p = 0.05$?", lit=(1987,), part=PART, said="Chapter eleven. p-values and evidence: how strong is a p-value of point zero five?")
 
     def framing(self):
         rows = [

@@ -16,7 +16,7 @@ def box(text, col, w=2.4, h=1.0, size=22):
     return VGroup(r, label(text, font_size=size, color=col).move_to(r))
 
 
-class Retries(VoiceoverScene):
+class Retries(WatchScene):
     def construct(self):
         self.card()
         self.timeouts()
@@ -26,14 +26,16 @@ class Retries(VoiceoverScene):
         self.hedging()
 
     def card(self):
-        card = chapter_card(4, r"Timeouts, retries, backoff and jitter", r"When should a client try again?",
-                            lit=(1976, 2015), extra=((1976, r"Metcalfe and Boggs: \ Ethernet's backoff"),
-                                                     (2015, r"Brooker: \ backoff and jitter")), part=PART)
-        with self.voiceover("Chapter four. Timeouts, retries, backoff and jitter."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(4, r"Timeouts, retries, backoff and jitter", r"When should a client try again?", lit=(1976, 2015), extra=((1976, r"Metcalfe and Boggs: \ Ethernet's backoff"),
+                                                     (2015, r"Brooker: \ backoff and jitter")), part=PART, said="Chapter four. Timeouts, retries, backoff and jitter.")
 
     def timeouts(self):
+        self.wrong_idea(r"more retries make a system more reliable",
+                        r"retries multiply load: \\ without backoff and budgets they sustain outages",
+                        narration="It seems obvious: if a call might fail, retry it, and the system becomes more reliable.",
+                        right_narration="Retries multiply load exactly when a dependency is struggling. Without backoff, "
+                                        "jitter and a retry budget, they turn a blip into an outage that sustains itself.")
+        self.clear_scene()
         head = label(r"Timeouts, \ and retries that multiply", font_size=36).to_edge(UP, buff=0.3)
         names = (r"user's app", r"front end", r"service", r"database")
         cols = (DATA, GREY_A, GREY_A, NO)
@@ -166,6 +168,10 @@ class Retries(VoiceoverScene):
         self.clear_scene()
 
     def compared(self):
+        self.ask(r"A hundred clients collide on one record. \\ The best way to back off:", [r"retry at once",
+                 r"exponential backoff", r"exponential backoff with full jitter"], 2,
+                 say="A hundred clients keep colliding on one record. Which retry policy finishes with the fewest calls?",
+                 reveal="Exponential backoff with full jitter: randomness breaks up the crowd.")
         rows = load("jitter")["rows"]
         head = label(r"Four ways to back off", font_size=36).to_edge(UP, buff=0.3)
         by = {(r["clients"], r["strategy"]): r for r in rows}

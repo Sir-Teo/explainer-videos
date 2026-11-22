@@ -5,20 +5,22 @@ import numpy as np
 from videos.stats.stats1.common import *  # noqa: F403
 
 
-class SameStats(VoiceoverScene):
+class SameStats(StatsScene):
     def construct(self):
         self.card()
+        self.ask("Four datasets share their means, variances, correlation and fitted line. Their scatterplots...",
+                 ["must look alike", "can look completely different", "differ only by noise"], 1,
+                 say="Four datasets share their means, their variances, their correlation, and their best-fitting "
+                     "line. Must their scatterplots look alike?",
+                 reveal="No: they can look completely different. Anscombe made four, and the datasaurus a dozen. A "
+                        "summary is a shadow, and many shapes cast the same one.")
         self.anscombe()
         self.morph()
         self.algorithm()
+        self.answer()
 
     def card(self):
-        card = chapter_card(11, r"Same statistics, different pictures", r"What do the numbers leave out?",
-                            lit={1973: r"Anscombe's quartet", 2017: r"Matejka--Fitzmaurice: same stats, different graphs"},
-                            part=PART)
-        with self.voiceover("Chapter eleven. Same statistics, different pictures."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(11, r"Same statistics, different pictures", r"What do the numbers leave out?", lit={1973: r"Anscombe's quartet", 2017: r"Matejka--Fitzmaurice: same stats, different graphs"}, part=PART, said="Chapter eleven. Same statistics, different pictures.")
 
     def anscombe(self):
         d = load("anscombe")["sets"]

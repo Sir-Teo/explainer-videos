@@ -10,21 +10,16 @@ def _button(text, color=DATA, w=1.5):
     return tag_box(text, color=color, size=20, w=w, h=0.6)
 
 
-class Access(VoiceoverScene):
+class Access(WatchScene):
     def construct(self):
         self.card()
         self.who()
         self.assistive()
         self.motor()
         self.cognitive()
-        self.universal()
 
     def card(self):
-        card = chapter_card(6, r"Accessibility", r"Who is the interface for?", lit=(1999, 2023),
-                            extra=((1999, r"WCAG 1.0"), (2023, r"WCAG 2.2")), part=PART)
-        with self.voiceover("Chapter six. Accessibility."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(6, r"Accessibility", r"Who is the interface for?", lit=(1999, 2023), extra=((1999, r"WCAG 1.0"), (2023, r"WCAG 2.2")), part=PART, said="Chapter six. Accessibility.")
 
     def who(self):
         head = label(r"Who it is for", font_size=36).to_edge(UP, buff=0.3)
@@ -122,6 +117,10 @@ class Access(VoiceoverScene):
         self.clear_scene()
 
     def motor(self):
+        self.ask(r"WCAG 2.2's minimum target size:", [r"$12 \times 12$ px", r"$24 \times 24$ px",
+                 r"$44 \times 44$ px"], 1,
+                 say="WCAG two point two sets a minimum size for targets. How big?",
+                 reveal="Twenty-four by twenty-four CSS pixels.")
         f = load("fitts")
         a, b = f["a"], f["b"]
         head = label(r"Motor accessibility: \ bigger targets", font_size=36).to_edge(UP, buff=0.3)
@@ -241,68 +240,6 @@ class Access(VoiceoverScene):
         self.wait(0.4)
         self.clear_scene()
 
-    def universal(self):
-        head = label(r"Universal design", font_size=36).to_edge(UP, buff=0.3)
-        y0, y1 = 0.6, 1.3                                  # the road and the pavement
-        road = Line([-4.6, y0, 0], [-2.8, y0, 0], color=GREY_B, stroke_width=4)
-        kerb = VGroup(Line([-6.6, y1, 0], [-5.4, y1, 0], color=GREY_B, stroke_width=4),
-                      Line([-5.4, y1, 0], [-4.6, y0, 0], color=YES, stroke_width=6))
-        step = VGroup(DashedLine([-5.4, y1, 0], [-4.6, y1, 0], color=GREY_C, stroke_width=2),
-                      DashedLine([-4.6, y1, 0], [-4.6, y0, 0], color=GREY_C, stroke_width=2))
-        kinds = ((r"wheelchair", HEAD), (r"pram", DATA), (r"suitcase", LAM), (r"bicycle", KERN))
-        names = VGroup(*[label(t, font_size=18, color=c) for t, c in kinds]).arrange(RIGHT, buff=0.3).next_to(
-            VGroup(road, kerb), UP, buff=0.9).align_to(kerb, LEFT)
-        riders = VGroup(*[Dot([-6.3, y1 + 0.1, 0], radius=0.1, color=c) for _, c in kinds])
-        cap = wrapped_label(r"a kerb cut, \ made for wheelchairs, \ used by everyone pushing anything", 3.6,
-                            font_size=18, color=YES).next_to(road, DOWN, buff=0.3).align_to(kerb, LEFT)
-        pillars = VGroup()
-        for name, ex, c in ((r"Perceivable", r"text alternatives, \\ captions, \ contrast", DATA),
-                            (r"Operable", r"keyboard, \ time, \\ target size", HEAD),
-                            (r"Understandable", r"plain, \ predictable, \\ helps with errors", YES),
-                            (r"Robust", r"a correct tree \\ for assistive tech", LAM)):
-            box = RoundedRectangle(width=2.15, height=1.7, corner_radius=0.1, stroke_color=c, fill_color=c,
-                                   fill_opacity=0.1)
-            t = label(name, font_size=20, color=c)
-            e = label(ex, font_size=17, color=GREY_A)
-            VGroup(t, e).arrange(DOWN, buff=0.2).move_to(box)
-            if t.width > 2.0:
-                t.width = 2.0
-            pillars.add(VGroup(box, t, e))
-        pillars.arrange(RIGHT, buff=0.15).move_to([2.25, 0.9, 0])
-        pt = label(r"WCAG's four principles", font_size=20, color=WHITE).next_to(pillars, UP, buff=0.15)
-        lines = VGroup(
-            wrapped_label(r"\textbf{universal design} \ (the architect Ronald Mace's term): \ design once for the "
-                          r"widest range of people, \ instead of adding a special version later", 12.4, font_size=20,
-                          color=WHITE),
-            wrapped_label(r"contrast was derived in Part 42, \ and chapter 4 checked this series' own palette "
-                          r"against it", 12.4, font_size=20, color=GREY_A),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.22).to_edge(DOWN, buff=0.45)
-        with self.voiceover(
-            "Designing for the edges usually helps the middle. <bookmark mark='a'/> Cuts in the kerb were fought for "
-            "by wheelchair users; now everyone with a pram, a suitcase or a bicycle uses them, and the pattern is "
-            "called the curb-cut effect. Captions, made for deaf viewers, are read in every noisy room. "
-            "<bookmark mark='b'/> The architect Ronald Mace called this universal design: one design for the widest "
-            "range of people, rather than a special version added later. <bookmark mark='c'/> The web's guidelines "
-            "rest on four principles. Content must be perceivable, operable, understandable, and robust enough to "
-            "work with assistive technology. <bookmark mark='d'/> Contrast belongs to the first; Part 42 derived it, "
-            "and chapter four checked this series' palette."
-        ) as vo:
-            self.play(FadeIn(head), Create(road), Create(step), Create(kerb[0]))
-            vo.wait_until("a")
-            self.play(FadeOut(step), Create(kerb[1]), FadeIn(cap))
-            for k, (dot, nm) in enumerate(zip(riders, names)):
-                self.play(FadeIn(dot), FadeIn(nm), run_time=0.3)
-                path = VMobject().set_points_as_corners([dot.get_center(), [-5.4, y1 + 0.1, 0],
-                                                         [-4.6, y0 + 0.1, 0], [-3.4 - 0.25 * k, y0 + 0.1, 0]])
-                self.play(MoveAlongPath(dot, path), run_time=1.0)
-            vo.wait_until("b")
-            self.play(FadeIn(lines[0]))
-            vo.wait_until("c")
-            self.play(FadeIn(pt), LaggedStart(*[FadeIn(p) for p in pillars], lag_ratio=0.3), run_time=2)
-            vo.wait_until("d")
-            self.play(FadeIn(lines[1]), Indicate(pillars[0], color=DATA))
-        self.wait(0.4)
-        self.clear_scene()
 
 
 _ = (BG, DATA, KERN, LAM, NO, YES)

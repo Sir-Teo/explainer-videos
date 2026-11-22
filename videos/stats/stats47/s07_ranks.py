@@ -5,20 +5,28 @@ import numpy as np
 from videos.stats.stats47.common import *  # noqa: F403
 
 
-class Ranks(VoiceoverScene):
+class Ranks(StatsScene):
     def construct(self):
         self.card()
+        self.ask("The Wilcoxon test's efficiency relative to $t$ can never fall below...",
+                 ["0", "0.864", "0.955"], 1,
+                 say="Ranks keep only the order. Over all symmetric distributions, what's the lowest the Wilcoxon "
+                     "test's efficiency relative to the t-test can go?",
+                 reveal="Point eight six four: Hodges and Lehmann's bound. And it can be infinite, for heavy tails. "
+                        "Ranks lose little and can gain much.")
         self.signed()
         self.power()
         self.are()
         self.hodges_lehmann()
         self.scores()
+        self.answer()
+        self.checkpoint([("The median's asymptotic variance?", "$1/(4 n f(m)^2)$"),
+                         ("A U-statistic's leading term?", r"its H\'ajek projection")],
+                        narration="Checkpoint. Statistics as averages.",
+                        answers_narration="One over four n f of m squared. And its projection.")
 
     def card(self):
-        card = chapter_card(6, r"Rank statistics", r"How much is lost by keeping only the order?", lit=(1945,), part=PART)
-        with self.voiceover("Chapter six. Rank statistics: how much is lost by keeping only the order?"):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(6, r"Rank statistics", r"How much is lost by keeping only the order?", lit=(1945,), part=PART, said="Chapter six. Rank statistics: how much is lost by keeping only the order?")
 
     def signed(self):
         rows = [

@@ -15,7 +15,7 @@ def strip(blocks, unit=0.42, y=0.0, x0=-6.72):
     return g
 
 
-class Alloc(VoiceoverScene):
+class Alloc(WatchScene):
     def construct(self):
         self.card()
         self.buddy()
@@ -24,14 +24,13 @@ class Alloc(VoiceoverScene):
         self.slab()
 
     def card(self):
-        card = chapter_card(11, r"Kernel allocators", r"How does the kernel hand out its own memory?",
-                            lit=(1965, 1994), extra=((1965, r"Knowlton: \ buddy system"), (1994, r"Bonwick: \ slab")),
-                            part=PART)
-        with self.voiceover("Chapter eleven. How the kernel allocates memory for itself."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(11, r"Kernel allocators", r"How does the kernel hand out its own memory?", lit=(1965, 1994), extra=((1965, r"Knowlton: \ buddy system"), (1994, r"Bonwick: \ slab")), part=PART, said="Chapter eleven. How the kernel allocates memory for itself.")
 
     def buddy(self):
+        self.ask(r"Buddy allocator: free a block whose buddy is free. \\ Then...", [r"keep two free blocks",
+                 r"merge into one block twice the size"], 1,
+                 say="In the buddy system, you free a block, and its buddy is free too. What happens?",
+                 reveal="They merge into one block twice the size, and the merge may cascade upwards.")
         d = load("alloc")
         sd = d["split_demo"]
         head = label(r"The buddy system: \ split in halves, \ merge with your buddy", font_size=34).to_edge(UP, buff=0.3)

@@ -6,7 +6,7 @@ from videos.cs.cs22.common import (CTRL, DATA, HEAD, LAM, NO, PART, YES, fit, lo
 COL5 = [DATA, YES, LAM, HEAD, CTRL]
 
 
-class Duality(VoiceoverScene):
+class Duality(WatchScene):
     def construct(self):
         self.card()
         self.dual()
@@ -14,11 +14,7 @@ class Duality(VoiceoverScene):
         self.ham()
 
     def card(self):
-        card = chapter_card(13, r"Duality and the ham sandwich", r"Can points become lines?", lit=(1942, 1994),
-                            extra=((1942, r"Stone--Tukey"), (1994, r"Lo, \ Matou\v{s}ek and Steiger")), part=PART)
-        with self.voiceover("Chapter thirteen. Duality and the ham sandwich."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(13, r"Duality and the ham sandwich", r"Can points become lines?", lit=(1942, 1994), extra=((1942, r"Stone--Tukey"), (1994, r"Lo, \ Matou\v{s}ek and Steiger")), part=PART, said="Chapter thirteen. Duality and the ham sandwich.")
 
     def dual(self):
         d = load("duality")
@@ -98,6 +94,10 @@ class Duality(VoiceoverScene):
         self.clear_scene()
 
     def ham(self):
+        self.ask(r"Any red points and blue points in the plane. \\ Is there one line that halves both?", [r"not always",
+                 r"always"], 1,
+                 say="Any set of red points and any set of blue points. Is there always one line that cuts both in half?",
+                 reveal="Always: the ham sandwich theorem.")
         d = load("duality")
         red = [tuple(p) for p in d["red"]]
         blue = [tuple(p) for p in d["blue"]]

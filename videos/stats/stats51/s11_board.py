@@ -22,15 +22,26 @@ def bernstein(p):
     return np.sqrt(2 * p * (1 - p) * N / (N - 1) * LA / N) + 7 * LA / (3 * (N - 1))
 
 
-class ConcentrationIntervals(VoiceoverScene):
+class ConcentrationIntervals(StatsScene):
     def construct(self):
         self.card()
+        self.ask("A Hoeffding interval for a proportion, against Wilson's, is...",
+                 ["narrower", "wider, but valid at every $n$"], 1,
+                 say="Three intervals for a probability: Wald, Wilson, and one from Hoeffding's inequality. How "
+                     "does the Hoeffding interval compare?",
+                 reveal="Wider, but valid at every sample size, with no asymptotics. That's the cost of a guarantee "
+                        "that never fails.")
         self.intervals()
         self.widths()
         self.board()
         self.exact()
         self.anytime()
         self.lesson()
+        self.answer()
+        self.checkpoint([("Less correlated Gaussians have?", "a larger expected maximum"),
+                         (r"$\ell_1$ recovery's transition at?", r"the statistical dimension, about $2s\log(p/s)$")],
+                        narration="Checkpoint. Comparison and widths.",
+                        answers_narration="A larger maximum. And the statistical dimension.")
 
     def exact(self):
         from scipy import stats as ST
@@ -65,10 +76,7 @@ class ConcentrationIntervals(VoiceoverScene):
         self.clear_scene()
 
     def card(self):
-        card = chapter_card(10, r"The Board: \ intervals from concentration", r"Valid at every $n$, \ and what that costs", part=PART)
-        with self.voiceover("Chapter ten. The Board: intervals from concentration, valid at every n, and what that costs."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(10, r"The Board: \ intervals from concentration", r"Valid at every $n$, \ and what that costs", part=PART, said="Chapter ten. The Board: intervals from concentration, valid at every n, and what that costs.")
 
     def intervals(self):
         rows = [

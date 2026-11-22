@@ -12,7 +12,7 @@ def mono(s, size=19, color=CODE):
     return Text(s, font="DejaVu Sans Mono", font_size=size, color=color)
 
 
-class Job(VoiceoverScene):
+class Job(WatchScene):
     def construct(self):
         self.card()
         self.algorithm()
@@ -22,11 +22,7 @@ class Job(VoiceoverScene):
         self.novels()
 
     def card(self):
-        card = chapter_card(10, r"The Job, \ version 0", r"How long would Pebble take to count thirty novels?",
-                            part=PART)
-        with self.voiceover("Chapter ten. The Job, version zero."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(10, r"The Job, \ version 0", r"How long would Pebble take to count thirty novels?", part=PART, said="Chapter ten. The Job, version zero.")
 
     # ------------------------------------------------------------------
     def algorithm(self):
@@ -179,6 +175,10 @@ class Job(VoiceoverScene):
 
     # ------------------------------------------------------------------
     def formula(self):
+        self.ask(r"The Job, version 0, on all thirty novels, \\ at Pebble's clock. How long?",
+                 [r"a few seconds", r"a few minutes", r"a few days"], 1,
+                 say="Version zero of the Job, on all thirty novels, at Pebble's clock rate. How long?",
+                 reveal="A few minutes. The formula predicts it without running every instruction.")
         j = load("job")
         checks = np.array(j["checks"], dtype=float)
         head = label(r"An exact count, \ without running it", font_size=38).to_edge(UP, buff=0.35)
@@ -268,8 +268,7 @@ class Job(VoiceoverScene):
             " of them inside the linear search. <bookmark mark='c'/> For scale, divide that same Pebble instruction "
             "count by historical operation rates: at five point three operations per second, six centuries; at five "
             "thousand, eight months. These are rate illustrations, not ports to the Z3 or ENIAC. Under our assumed "
-            "single-cycle budget of about three hundred and eighty megahertz, the projection is under five minutes; we"
-            " have not built that silicon machine. <bookmark mark='d'/> That is the first row of the ledger. Every "
+            "single-cycle budget of about three hundred and eighty megahertz, the projection is under five minutes. <bookmark mark='d'/> That is the first row of the ledger. Every "
             "later row will say what a better machine, or a better idea, buys; and the numbers on this screen already "
             "hint which will matter more."
         ) as vo:
@@ -286,3 +285,9 @@ class Job(VoiceoverScene):
             self.play(FadeIn(led.axis), LaggedStart(*[FadeIn(r) for r in led.rows], lag_ratio=0.1), run_time=2.0)
         self.wait(0.3)
         self.clear_scene()
+        self.checkpoint(
+            [(r"Why does the single-cycle machine's clock wait for the load?", r"Every instruction gets the slowest one's time"),
+             (r"What does the iron law multiply?", r"Instructions, times cycles per instruction, times seconds per cycle")],
+            narration="Checkpoint. Why must every instruction wait as long as a load? And what does the iron law multiply?",
+            answers_narration="One clock serves every instruction, so it must fit the slowest. And the iron law multiplies "
+                              "instructions, cycles per instruction and seconds per cycle.")

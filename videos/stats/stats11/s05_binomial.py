@@ -5,9 +5,15 @@ import numpy as np
 from videos.stats.stats11.common import *  # noqa: F403
 
 
-class Binomial(VoiceoverScene):
+class Binomial(StatsScene):
     def construct(self):
         self.card()
+        self.ask(r"For a small $p$, Wald's interval $\hat p \pm 1.96\sqrt{\hat p(1-\hat p)/n}$ covers...",
+                 [r"about 95\%", r"often well below 95\%", r"always above 95\%"], 1,
+                 say="The textbook interval for a proportion: p hat plus or minus one point nine six standard "
+                     "errors. When the true proportion is small, how often does it cover?",
+                 reveal="Often well below ninety-five percent. Wilson's interval, from 1927, inverts the score test "
+                        "and keeps the promise far better.")
         self.history()
         self.wilson()
         self.panels()
@@ -15,12 +21,15 @@ class Binomial(VoiceoverScene):
         self.widths()
         self.world_case()
         self.advice()
+        self.answer()
+        self.checkpoint([(r"A 95\% confidence set from a test?", r"every value the 5\% test wouldn't reject"),
+                         ("For small $p$, Wald's interval?", r"often covers well below 95\%: use Wilson")],
+                        narration="Checkpoint. Building intervals.",
+                        answers_narration="Every value the test wouldn't reject. And Wald's interval falls short; "
+                                          "Wilson's keeps the promise.")
 
     def card(self):
-        card = chapter_card(4, r"The binomial family", r"Six intervals for a proportion", lit=(1927,), part=PART)
-        with self.voiceover("Chapter four. The binomial family."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(4, r"The binomial family", r"Six intervals for a proportion", lit=(1927,), part=PART, said="Chapter four. The binomial family.")
 
     def history(self):
         cards = VGroup(

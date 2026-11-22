@@ -19,22 +19,22 @@ def graph(pos: dict, edges: list, r=0.2, color=DATA, edge_color=GREY_B, labels=F
     return g
 
 
-class Graphs(VoiceoverScene):
+class Graphs(WatchScene):
     def construct(self):
         self.card()
         self.konigsberg()
         self.handshake()
-        self.trees()
         self.bipartite()
 
     def card(self):
-        card = chapter_card(14, r"Graphs", r"What is the simplest model of a network?", part=PART)
-        with self.voiceover("Chapter fourteen. Graphs."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(14, r"Graphs", r"What is the simplest model of a network?", part=PART, said="Chapter fourteen. Graphs.")
 
     # ------------------------------------------------------------------
     def konigsberg(self):
+        self.ask(r"Seven bridges. \\ Can you cross each exactly once?", [r"yes", r"no",
+                 r"only if you start on the island"], 1,
+                 say="Can you walk through Königsberg crossing each of its seven bridges exactly once?",
+                 reveal="No. Every land mass touches an odd number of bridges.")
         head = label(r"Seven bridges", font_size=38).to_edge(UP, buff=0.35)
         # the four land masses and seven bridges, as a multigraph
         P = {"N": np.array([-3.4, 1.6, 0]), "S": np.array([-3.4, -2.2, 0]), "I": np.array([-3.4, -0.3, 0]),
@@ -121,49 +121,6 @@ class Graphs(VoiceoverScene):
         self.wait(0.3)
         self.clear_scene()
 
-    # ------------------------------------------------------------------
-    def trees(self):
-        head = label(r"Trees: \ connected, \ with no cycles", font_size=38).to_edge(UP, buff=0.35)
-        pos = {0: (-3.0, 1.4), 1: (-4.6, 0.3), 2: (-3.0, 0.2), 3: (-1.4, 0.3), 4: (-5.3, -1.0), 5: (-3.9, -1.0),
-               6: (-1.9, -1.0), 7: (-0.7, -1.0), 8: (-3.0, -2.2)}
-        edges = [(0, 1), (0, 2), (0, 3), (1, 4), (1, 5), (3, 6), (3, 7), (5, 8)]
-        g = graph(pos, edges)
-        eq = VGroup(*[label(t, font_size=27, color=c) for t, c in (
-            (r"for a graph on $n$ vertices, \ these say the same thing:", GREY_A),
-            (r"connected, \ and no cycles", YES),
-            (r"connected, \ and exactly $n - 1$ edges", YES),
-            (r"exactly one path between any two vertices", YES),
-            (r"connected, \ but removing any edge disconnects it", YES),
-        )]).arrange(DOWN, aligned_edge=LEFT, buff=0.3).move_to(RIGHT * 3.0 + UP * 0.4)
-        n_e = label(rf"$9$ vertices, \ $8$ edges", font_size=26, color=CTRL).next_to(eq, DOWN, buff=0.5).align_to(
-            eq, LEFT)
-        extra = Line(g.v[4].get_center(), g.v[8].get_center(), buff=0.2, color=NO, stroke_width=4)
-        cyc = label(r"one more edge: \ a cycle", font_size=26, color=NO).next_to(n_e, DOWN, buff=0.15)
-        cut = label(r"one fewer: \ two pieces", font_size=26, color=HEAD).next_to(cyc, DOWN, buff=0.15)
-        later = note(r"spanning trees, \ shortest-path trees, \ the routing tables of the internet: \ Parts 18 and 36",
-                     font_size=22).to_edge(DOWN, buff=0.25)
-        with self.voiceover(
-            "A tree, in graph theory, is a connected graph with no cycles. <bookmark mark='a'/> Several quite different "
-            "descriptions turn out to be the same: connected with no cycles; connected with exactly n minus one edges; "
-            "exactly one path between any two vertices; connected, but fragile, so that removing any edge disconnects "
-            "it. Proving they are equivalent is a good exercise in induction. <bookmark mark='b'/> Nine vertices, eight "
-            "edges. <bookmark mark='c'/> Add any edge, and it closes a cycle. <bookmark mark='d'/> Remove any edge, and "
-            "the tree falls into two pieces. Trees are the cheapest way to connect things, which is why a network that "
-            "must reach every machine without loops, from a power grid to the routing of the internet, builds one."
-        ) as vo:
-            self.play(FadeIn(head), Create(g.e), FadeIn(VGroup(*g.v.values())))
-            vo.wait_until("a")
-            self.play(LaggedStart(*[FadeIn(l_) for l_ in eq], lag_ratio=0.4), run_time=3.0)
-            vo.wait_until("b")
-            self.play(FadeIn(n_e))
-            vo.wait_until("c")
-            self.play(Create(extra), FadeIn(cyc))
-            vo.wait_until("d")
-            self.play(FadeOut(extra), g.e[2].animate.set_stroke(opacity=0.15), FadeIn(cut))
-            self.play(VGroup(g.v[3], g.v[6], g.v[7], g.e[5], g.e[6]).animate.shift(RIGHT * 0.5), run_time=0.8)
-            self.play(FadeIn(later))
-        self.wait(0.3)
-        self.clear_scene()
 
     # ------------------------------------------------------------------
     def bipartite(self):

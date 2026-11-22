@@ -10,7 +10,7 @@ def hexrow(b, color, font=18, hi=()):
                                                                                                          buff=0.12)
 
 
-class Integrity(VoiceoverScene):
+class Integrity(WatchScene):
     def construct(self):
         self.card()
         self.malleable()
@@ -18,14 +18,14 @@ class Integrity(VoiceoverScene):
         self.aead()
 
     def card(self):
-        card = chapter_card(11, r"Integrity", r"How do you know nobody changed the message?", lit=(1996, 2007),
-                            extra=((1996, r"HMAC"), (2007, r"GCM \ (NIST SP 800-38D)"),
-                                   (2015, r"ChaCha20-Poly1305")), part=PART)
-        with self.voiceover("Chapter eleven. Integrity."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(11, r"Integrity", r"How do you know nobody changed the message?", lit=(1996, 2007), extra=((1996, r"HMAC"), (2007, r"GCM \ (NIST SP 800-38D)"),
+                                   (2015, r"ChaCha20-Poly1305")), part=PART, said="Chapter eleven. Integrity.")
 
     def malleable(self):
+        self.ask(r"CTR-mode ciphertext of ``pay 100''. Without the key, \\ can an attacker make it ``pay 900''?",
+                 [r"no", r"yes"], 1,
+                 say="A counter-mode ciphertext says pay one hundred. Without the key, can an attacker make it say pay nine hundred?",
+                 reveal="Yes: flip the right ciphertext bits, and the same plaintext bits flip.")
         head = label(r"Encryption is not protection", font_size=34).to_edge(UP, buff=0.3)
         aes = K.AES(bytes(range(16)))
         nonce = bytes(8)

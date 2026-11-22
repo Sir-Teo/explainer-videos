@@ -17,22 +17,18 @@ def cell(text, color, w=0.6, h=0.42, size=17, fill=0.15):
     return VGroup(r, label(text, font_size=size, color=WHITE).move_to(r))
 
 
-class Mpp(VoiceoverScene):
+class Mpp(WatchScene):
     def construct(self):
         self.card()
         self.partitioned()
         self.joins()
         self.joincost()
         self.skew()
-        self.vectorized()
 
     def card(self):
-        card = chapter_card(11, r"Queries on a thousand machines", r"How does one query use a thousand machines "
+        self.chapter(11, r"Queries on a thousand machines", r"How does one query use a thousand machines "
                             r"at once?", lit=(1986, 2005), extra=((1986, r"DeWitt et al.: \ Gamma"),
-                                                                 (2005, r"Boncz et al.: \ MonetDB/X100")), part=PART)
-        with self.voiceover("Chapter eleven. Queries on a thousand machines."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+                                                                 (2005, r"Boncz et al.: \ MonetDB/X100")), part=PART, said="Chapter eleven. Queries on a thousand machines.")
 
     def partitioned(self):
         head = label(r"Partitioned execution", font_size=36).to_edge(UP, buff=0.3)
@@ -105,6 +101,10 @@ class Mpp(VoiceoverScene):
         self.clear_scene()
 
     def joins(self):
+        self.ask(r"A small table joins a huge one on 100 workers. \\ Cheaper:", [r"broadcast the small table",
+                 r"shuffle both by key"], 0,
+                 say="A small table joins a huge one across a hundred workers. Which is cheaper: copy the small table to everyone, or reshuffle both?",
+                 reveal="Broadcast the small one, until it grows past the crossover.")
         head = label(r"Broadcast or shuffle", font_size=36).to_edge(UP, buff=0.3)
         lx = [-5.6, -4.15, -2.7, -1.25]
         rx = [1.6, 3.05, 4.5, 5.95]
@@ -303,77 +303,6 @@ class Mpp(VoiceoverScene):
         self.wait(0.4)
         self.clear_scene()
 
-    def vectorized(self):
-        head = label(r"A batch at a time", font_size=36).to_edge(UP, buff=0.3)
-        left = code_block(["while row := child.next():", "    if row.price > 100:", "        total += row.amount"],
-                          size=16)
-        right = code_block(["while batch := child.next_batch():", "    sel = select_gt(batch.price, 100)",
-                            "    total += sum_at(batch.amount, sel)"], size=16)
-        t_l = label(r"one row per call: \ Volcano \ (Graefe, \ 1994)", font_size=19, color=NO)
-        t_r = label(r"a batch per call: \ MonetDB/X100 \ (Boncz et al., \ 2005)", font_size=19, color=YES)
-        g_l = VGroup(t_l, left).arrange(DOWN, aligned_edge=LEFT, buff=0.2).move_to([-4.0, 1.85, 0])
-        g_r = VGroup(t_r, right).arrange(DOWN, aligned_edge=LEFT, buff=0.2).move_to([3.2, 1.85, 0])
-        g_l.align_to([-6.6, 0, 0], LEFT)
-        price = [40, 120, 90, 300, 150, 20, 110, 60]
-        amount = [3, 5, 2, 7, 4, 1, 6, 2]
-        sel = [i for i, p in enumerate(price) if p > 100]
-        x0, cw = -1.6, 0.66
-        ys = (0.0, -0.75, -1.5)
-        p_cells = VGroup(*[cell(f"{v}", DATA, w=cw).move_to([x0 + i * cw, ys[0], 0]) for i, v in enumerate(price)])
-        a_cells = VGroup(*[cell(f"{v}", LAM, w=cw).move_to([x0 + i * cw, ys[1], 0]) for i, v in enumerate(amount)])
-        s_cells = VGroup(*[cell(f"{v}", YES, w=cw).move_to([x0 + k * cw, ys[2], 0]) for k, v in enumerate(sel)])
-        rn = VGroup(*[label(t, font_size=18, color=c).move_to([0, y, 0]) for t, c, y in (
-            (r"price", DATA, ys[0]), (r"amount", LAM, ys[1]), (r"selection vector", YES, ys[2]))])
-        for r in rn:
-            r.align_to([x0 - cw / 2 - 0.25, 0, 0], RIGHT)
-        sweep = Rectangle(width=cw, height=0.5, stroke_color=HEAD, stroke_width=3).move_to(p_cells[0])
-        total = label(rf"sum $=$ {sum(amount[i] for i in sel)}", font_size=22, color=YES).next_to(
-            a_cells, RIGHT, buff=0.5)
-        illus = note(r"illustrative batch of 8", font_size=16).next_to(p_cells, RIGHT, buff=0.5)
-        lines = VGroup(
-            wrapped_label(r"the call's overhead is paid once per batch of about a thousand values \ (DuckDB: \ "
-                          r"2{,}048); \ loops with no calls inside become SIMD \ (Part 24), \ often run on Chapter "
-                          r"8's dictionary codes without decoding", 12.4, font_size=20, color=WHITE),
-            wrapped_label(r"or compile each query to machine code \ (HyPer, \ Neumann, \ 2011); \ either way, \ "
-                          r"exchanges pass whole batches between machines", 12.4, font_size=20, color=HEAD),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.2).to_edge(DOWN, buff=0.35)
-        with self.voiceover(
-            "Inside each worker, how operators pass data matters as much as the network. <bookmark mark='a'/> Part "
-            "35's iterator model, Volcano's, passes one row per call: a function call and a branch for every row and "
-            "every operator. <bookmark mark='b'/> Vectorized execution, from MonetDB X100 in 2005, passes a batch: "
-            "about a thousand values of each column, two thousand and forty-eight in DuckDB. <bookmark mark='c'/> A "
-            "filter runs one tight loop over the price column and writes a selection vector, the positions that "
-            "passed; the sum reads only those positions of the amount column. <bookmark mark='d'/> Loops without "
-            "calls become Part 24's SIMD instructions, often on chapter eight's dictionary codes. The other answer, "
-            "HyPer's, compiles each query to machine code."
-        ) as vo:
-            self.play(FadeIn(head))
-            vo.wait_until("a")
-            self.play(FadeIn(g_l))
-            vo.wait_until("b")
-            self.play(FadeIn(g_r), FadeIn(p_cells), FadeIn(a_cells), FadeIn(rn[:2]), FadeIn(illus))
-            vo.wait_until("c")
-            self.play(Create(sweep), FadeIn(rn[2]))
-            k = 0
-            for i, p in enumerate(price):
-                anims = [sweep.animate.move_to(p_cells[i])] if i else []
-                if anims:
-                    self.play(*anims, run_time=0.25)
-                if p > 100:
-                    self.play(p_cells[i][0].animate.set_stroke(YES, width=3), FadeIn(s_cells[k], shift=DOWN * 0.2),
-                              run_time=0.35)
-                    k += 1
-                else:
-                    self.play(p_cells[i].animate.set_opacity(0.35), run_time=0.25)
-            self.play(FadeOut(sweep))
-            self.play(*[a_cells[i][0].animate.set_stroke(YES, width=3).set_fill(YES, opacity=0.3) for i in sel],
-                      *[a_cells[i].animate.set_opacity(0.35) for i in range(len(amount)) if i not in sel])
-            self.play(FadeIn(total))
-            vo.wait_until("d")
-            self.play(FadeIn(lines[0]))
-            self.play(FadeIn(lines[1]))
-        self.wait(0.4)
-        self.clear_scene()
 
 
 _ = (BG, KERN, HOT_SHARE, mono)

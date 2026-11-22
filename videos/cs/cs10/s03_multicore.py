@@ -7,20 +7,15 @@ from videos.cs.cs10.common import (BG, CORE_COLORS, CTRL, DATA, FUNC, HEAD, NO, 
                                    fmt, load)
 
 
-class Multicore(VoiceoverScene):
+class Multicore(WatchScene):
     def construct(self):
         self.card()
         self.shared()
         self.split()
-        self.shards()
         self.merges()
-        self.heaps()
 
     def card(self):
-        card = chapter_card(2, r"Four cores, \ one Job", r"How do you split a program across cores?", part=PART)
-        with self.voiceover("Chapter two. Four cores, one Job."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(2, r"Four cores, \ one Job", r"How do you split a program across cores?", part=PART, said="Chapter two. Four cores, one Job.")
 
     # ------------------------------------------------------------------
     def shared(self):
@@ -59,6 +54,10 @@ class Multicore(VoiceoverScene):
 
     # ------------------------------------------------------------------
     def split(self):
+        self.ask(r"Split the Job across four cores. \\ How much faster?", [r"less than $4\times$",
+                 r"exactly $4\times$", r"more than $4\times$"], 2,
+                 say="Split the Job's text into four pieces, one per core. How much faster does it get?",
+                 reveal="More than four times. Each quarter of the text has a smaller word table, so each lookup is shorter.")
         head = label(r"The plan: \ count in parallel, \ then combine", font_size=34).to_edge(UP, buff=0.35)
         text = Rectangle(width=10.0, height=0.5, stroke_color=GREY_B, stroke_width=1.5).shift(UP * 1.6)
         tl = label(rf"thirty novels, \ {load('split')['one']['bytes'] / 1e6:.0f} MB of text", font_size=20, color=GREY_B).next_to(text, UP, buff=0.12)
@@ -105,37 +104,6 @@ class Multicore(VoiceoverScene):
         self.wait(0.3)
         self.clear_scene()
 
-    # ------------------------------------------------------------------
-    def shards(self):
-        sp = load("split")
-        one = sp["one"]
-        four = next(r for r in sp["rows"] if r["p"] == 4)
-        secs = [c / (884.9557522123894e6) for c in four["shard_cycles"]]
-        head = label(r"Counting: \ each core's quarter", font_size=34).to_edge(UP, buff=0.35)
-        ch = bar_chart(secs, [rf"core {k} \\ {four['shard_distinct'][k]:,} words" for k in range(4)],
-                       CORE_COLORS, height=3.2, bar_w=1.1, gap=1.0, vmax=one["seconds"] / 4 * 1.15,
-                       fmt_=lambda v: f"{v:.1f} s", font_size=20).move_to(DOWN * 0.3)
-        y0 = ch.bars[0].get_bottom()[1]
-        q = one["seconds"] / 4
-        h = 3.2 * q / (one["seconds"] / 4 * 1.15)
-        ql = DashedLine([ch.get_left()[0] - 0.2, y0 + h, 0], [ch.get_right()[0] + 0.2, y0 + h, 0], color=HEAD,
-                        stroke_width=2.5)
-        qlab = label(rf"a quarter of one core's time: \ {q:.1f} s", font_size=20, color=HEAD).next_to(ql, UP,
-                                                                                                     buff=0.1)
-        why = label(rf"private tables: \ {min(four['shard_distinct']):,}--{max(four['shard_distinct']):,} entries; \ "
-                    r"many lookup prefixes shrink", font_size=22, color=YES).to_edge(DOWN, buff=0.3)
-        with self.voiceover(
-            f"Each bar is one shard's fitted counting time. <bookmark mark='a'/> Perfect division of fifty-seven seconds would give about fourteen seconds per core. <bookmark mark='b'/> The projected slowest shard takes {max(secs):.0f} seconds, below that reference. <bookmark mark='c'/> A quarter of this text contains roughly half the full vocabulary. Smaller private tables reduce many lookup prefixes, so the total scan work falls. Common words can still be found near the front; not every lookup becomes exactly half as long. The feature model prices the actual shard features rather than assuming a universal factor of two."
-        ) as vo:
-            self.play(FadeIn(head), FadeIn(ch[0]), FadeIn(ch.names))
-            vo.wait_until("a")
-            self.play(Create(ql), FadeIn(qlab))
-            vo.wait_until("b")
-            self.play(*[GrowFromEdge(b, DOWN) for b in ch.bars], *[FadeIn(v) for v in ch.vals])
-            vo.wait_until("c")
-            self.play(FadeIn(why))
-        self.wait(0.3)
-        self.clear_scene()
 
     # ------------------------------------------------------------------
     def merges(self):
@@ -196,52 +164,3 @@ class Multicore(VoiceoverScene):
         self.wait(0.3)
         self.clear_scene()
 
-    # ------------------------------------------------------------------
-    def heaps(self):
-        sp = load("split")
-        rows = sp["rows"]
-        one = sp["one"]
-        head = label(r"Why a quarter of the text has half the words", font_size=34).to_edge(UP, buff=0.35)
-        ax = Axes(x_range=[0, 5.5, 1], y_range=[0, 60000, 20000], x_length=6.5, y_length=3.6, tips=False,
-                  axis_config={"color": GREY_C, "font_size": 16}).shift(LEFT * 1.6 + DOWN * 0.4)
-        pts = [(0, 0)] + [(np.log2(32 // r["p"]), np.mean(r["shard_distinct"])) for r in rows if r["p"] > 1] + [
-            (5, one["distinct"])]
-        pts = sorted(pts)
-        xt = VGroup(*[label(t, font_size=16, color=GREY_B).next_to(ax.c2p(x, 0), DOWN, buff=0.12) for x, t in
-                      zip(range(6), [r"$\frac{1}{32}$", r"$\frac{1}{16}$", r"$\frac{1}{8}$", r"$\frac14$",
-                                     r"$\frac12$", r"all"])])
-        yt = VGroup(*[label(rf"{v // 1000}K", font_size=16, color=GREY_B).next_to(ax.c2p(0, v), LEFT, buff=0.1)
-                      for v in (20000, 40000, 60000)])
-        xl = label(r"fraction of the text \ (log scale)", font_size=18, color=GREY_B).next_to(ax, DOWN, buff=0.45)
-        line = VMobject(color=DATA, stroke_width=4).set_points_as_corners([ax.c2p(x, y) for x, y in pts[1:]])
-        dots = VGroup(*[Dot(ax.c2p(x, y), radius=0.06, color=DATA) for x, y in pts[1:]])
-        law = MathTex(r"V(n) \approx K n^{\beta}, \quad \beta \approx \tfrac12", font_size=36, color=HEAD).next_to(
-            ax, RIGHT, buff=0.5).shift(UP * 0.8)
-        lname = label(r"Heaps' law \ (1978): \ distinct words grow \\ like a power of the text, \ less than 1",
-                      font_size=20, color=GREY_A).next_to(law, DOWN, buff=0.3)
-        warn = label(r"superlinear model gain: \ shrinking tables reduces scan work; \ Part 16 changes the algorithm",
-                     font_size=22, color=NO).to_edge(DOWN, buff=0.3)
-        with self.voiceover(
-            (
-            "Why does a quarter of the text hold half the vocabulary? <bookmark mark='a'/> Count the distinct "
-            "words in a thirty-second of the corpus, a sixteenth, an eighth, and so on. The count grows, but more "
-            "and more slowly: common words appear in every piece, and only rare ones are new. <bookmark "
-            "mark='b'/> This is Heaps' law, named for Harold Heaps in 1978: the number of distinct words in a "
-            "text of n words grows roughly like n to a power below one, often around one half in illustrative "
-            "English corpora, with the fitted exponent depending on corpus and tokenization. <bookmark mark='c'/> "
-            "So be careful with the Job's superlinear speedup. In this model it comes from reducing the work of a "
-            "linear-scan dictionary: each lookup visits a prefix, possibly the whole vocabulary. This can become "
-            "quadratic in the worst case; the observed corpus need not follow an exact quadratic law. Splitting "
-            "the text makes the tables shorter, which is the same as making the algorithm better. In Part 16 a "
-            "better algorithm removes the scan, and with it this free gift."
-        )
-        ) as vo:
-            self.play(FadeIn(head), Create(ax), FadeIn(xt), FadeIn(yt), FadeIn(xl))
-            vo.wait_until("a")
-            self.play(Create(line), FadeIn(dots), run_time=2)
-            vo.wait_until("b")
-            self.play(Write(law), FadeIn(lname))
-            vo.wait_until("c")
-            self.play(FadeIn(warn))
-        self.wait(0.3)
-        self.clear_scene()

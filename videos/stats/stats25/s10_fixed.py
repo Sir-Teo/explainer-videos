@@ -5,21 +5,25 @@ import numpy as np
 from videos.stats.stats25.common import *  # noqa: F403
 
 
-class Fixed(VoiceoverScene):
+class Fixed(StatsScene):
     def construct(self):
         self.card()
+        self.ask("School effects correlated with a pupil-level $x$. The random-effects slope on $x$ is...",
+                 ["unbiased", "biased", "the same as fixed effects"], 1,
+                 say="The school effects are correlated with a pupil-level predictor, say family income. Is the "
+                     "random-effects estimate of its slope unbiased?",
+                 reveal="No, it's biased: it assumes the school effects are unrelated to x. Fixed effects, the "
+                        "within-school slope, stays consistent, and Mundlak's model gets both.")
         self.two_views()
         self.picture()
         self.mundlak()
         self.numbers()
         self.hausman()
         self.advice()
+        self.answer()
 
     def card(self):
-        card = chapter_card(9, r"Fixed or random?", r"When the groups are correlated with $x$", lit=(1978,), part=PART)
-        with self.voiceover("Chapter nine. Fixed effects or random effects?"):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(9, r"Fixed or random?", r"When the groups are correlated with $x$", lit=(1978,), part=PART, said="Chapter nine. Fixed effects or random effects?")
 
     def two_views(self):
         rows = [

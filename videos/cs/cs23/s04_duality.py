@@ -10,7 +10,7 @@ def num(v):
     return str(f.numerator) if f.denominator == 1 else rf"\tfrac{{{f.numerator}}}{{{f.denominator}}}"
 
 
-class Duality(VoiceoverScene):
+class Duality(WatchScene):
     def construct(self):
         self.card()
         self.bounds()
@@ -18,11 +18,7 @@ class Duality(VoiceoverScene):
         self.prices()
 
     def card(self):
-        card = chapter_card(3, r"Duality", r"How do you prove that nothing is better?", lit=(1947, 1902),
-                            extra=((1947, r"von Neumann's duality"), (1902, r"Farkas' lemma")), part=PART)
-        with self.voiceover("Chapter three. Duality."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(3, r"Duality", r"How do you prove that nothing is better?", lit=(1947, 1902), extra=((1947, r"von Neumann's duality"), (1902, r"Farkas' lemma")), part=PART, said="Chapter three. Duality.")
 
     def bounds(self):
         d = load("duality")
@@ -71,6 +67,10 @@ class Duality(VoiceoverScene):
         self.clear_scene()
 
     def strong(self):
+        self.ask(r"The primal's maximum profit is 13. \\ The dual's minimum is...", [r"less than 13", r"exactly 13",
+                 r"more than 13"], 1,
+                 say="The best profit is thirteen. What is the smallest value of the dual?",
+                 reveal="Exactly thirteen: strong duality. The dual is a certificate of optimality.")
         head = label(r"Weak and strong duality", font_size=34).to_edge(UP, buff=0.35)
         lines = VGroup(
             MathTex(r"\text{primal: } \max\ c^{\mathsf T}x \ \ \text{s.t. } Ax \le b,\ x \ge 0 \qquad \qquad "

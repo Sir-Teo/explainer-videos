@@ -18,7 +18,7 @@ def _d2(a, b):
     return (a[0] - b[0]) ** 2 + (a[1] - b[1]) ** 2
 
 
-class Dense(VoiceoverScene):
+class Dense(WatchScene):
     def construct(self):
         self.card()
         self.mismatch()
@@ -28,16 +28,13 @@ class Dense(VoiceoverScene):
         self.hybrid()
 
     def card(self):
-        card = chapter_card(13, r"Dense retrieval", r"How do you find a passage that shares no words with the query?",
-                            lit=(2011, 2018, 2020),
-                            extra=((2011, r"J\'egou, \ Douze and Schmid: \ product quantization"),
-                                   (2018, r"Malkov and Yashunin: \ HNSW"), (2020, r"Karpukhin et al.: \ DPR")),
-                            part=PART)
-        with self.voiceover("Chapter thirteen. Dense retrieval."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(13, r"Dense retrieval", r"How do you find a passage that shares no words with the query?", lit=(2011, 2018, 2020), extra=((2011, r"J\'egou, \ Douze and Schmid: \ product quantization"),
+                                   (2018, r"Malkov and Yashunin: \ HNSW"), (2020, r"Karpukhin et al.: \ DPR")), part=PART, said="Chapter thirteen. Dense retrieval.")
 
     def mismatch(self):
+        self.ask(r"Query: a voyage on the ocean. \\ Passage: a ship at sea. BM25 scores it...", [r"zero", r"high"], 0,
+                 say="The query is a voyage on the ocean. A passage describes a ship at sea. What does BM25 give it?",
+                 reveal="Zero: they share no words. Dense vectors can match the meaning.")
         ix = load("index")
         dim = load("pq")["dim"]
         float_bytes = load("pq")["rows"][0]["float_bytes"]

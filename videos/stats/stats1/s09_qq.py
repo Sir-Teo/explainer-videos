@@ -7,19 +7,23 @@ from videos.stats.stats1.common import *  # noqa: F403
 from videos.stats.stats1.compute import qq_demo
 
 
-class QQ(VoiceoverScene):
+class QQ(StatsScene):
     def construct(self):
         self.card()
+        self.ask("On a normal QQ plot, data with heavier tails than a bell curve look like...",
+                 ["a straight line", "an S, the ends bending away", "a flat line"], 1,
+                 say="Before we build it: on a normal QQ plot, what do data with heavier tails than a bell curve "
+                     "look like? A straight line, an S whose ends bend away, or a flat line?",
+                 reveal="An S whose ends bend away. The extremes sit farther out than a bell's quantiles predict, "
+                        "so both ends of the plot peel away from the line.")
         self.build()
         self.why_straight()
         self.quetelet()
         self.curvature()
+        self.answer()
 
     def card(self):
-        card = chapter_card(8, r"The QQ plot", r"Is this a bell curve? Ask the quantiles", lit=(1835,), part=PART)
-        with self.voiceover("Chapter eight. The QQ plot."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(8, r"The QQ plot", r"Is this a bell curve? Ask the quantiles", lit=(1835,), part=PART, said="Chapter eight. The QQ plot.")
 
     def build(self):
         d = load("qq")

@@ -5,7 +5,7 @@ import numpy as np
 from videos.stats.stats32.common import *  # noqa: F403
 
 
-class Hook(VoiceoverScene):
+class Hook(StatsScene):
     def construct(self):
         self.story()
         self.mri()
@@ -14,7 +14,7 @@ class Hook(VoiceoverScene):
         self.recover()
         self.why()
         self.count()
-        self.objectives()
+        self.title(PART)
 
     def story(self):
         tl = timeline(lit=(1974, 2006)).to_edge(UP, buff=0.35)
@@ -197,30 +197,4 @@ class Hook(VoiceoverScene):
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
                 self.play(FadeIn(rows[k], shift=RIGHT * 0.2))
-        self.clear_scene()
-
-    def objectives(self):
-        head = VGroup(label(r"Part 32", font_size=34, color=GREY_B), label(r"Sparsity", font_size=60)).arrange(DOWN, buff=0.25)
-        obj = objectives_card([
-            r"ridge, \ and why it never selects; \ from $\ell_0$ to $\ell_1$",
-            r"the lasso: \ KKT conditions, \ soft thresholding, \ the octahedron",
-            r"computing and tuning it: \ coordinate descent, \ LARS, \ CV, \ stability",
-            r"the penalty zoo; \ Bayesian sparsity and the horseshoe",
-            r"compressed sensing; \ inference after selection; \ matrix completion",
-        ], color=LASSO, font_size=26)
-        prereq = note(r"prerequisites: \ Parts 19, \ 21 and 23").to_corner(DL, buff=0.3)
-        built = note(r"built: \ \texttt{statkit.sparse}; \ the phantom").to_corner(DR, buff=0.3)
-        with self.voiceover(
-            "<bookmark mark='a'/> Part thirty-two: sparsity. <bookmark mark='b'/> We start with ridge regression and "
-            "see why it does not generally select variables; move from the hopeless count of best subsets to the "
-            "convex absolute-value penalty; derive the lasso's optimality conditions and its geometry; compute its "
-            "whole path and choose its tuning parameter; survey its relatives and its Bayesian counterparts; prove "
-            "what we can about compressed sensing; repair inference after selection; and finish with matrices that "
-            "are sparse in their singular values."
-        ) as vo:
-            vo.wait_until("a")
-            self.play(FadeIn(head, shift=UP * 0.2))
-            vo.wait_until("b")
-            self.play(FadeOut(head), FadeIn(obj, shift=UP * 0.2), FadeIn(prereq), FadeIn(built))
-        self.wait(1.0)
         self.clear_scene()

@@ -12,7 +12,7 @@ def disk(name, data, color, w=1.25):
     return VGroup(body, nm, bytes_)
 
 
-class Storage(VoiceoverScene):
+class Storage(WatchScene):
     def construct(self):
         self.card()
         self.raid()
@@ -20,14 +20,12 @@ class Storage(VoiceoverScene):
         self.fountain()
 
     def card(self):
-        card = chapter_card(13, r"Codes for storage", r"How do data centres survive losing whole machines?",
-                            lit=(1988, 2012), extra=((1988, r"RAID"), (2002, r"LT codes"), (2012, r"Azure LRC")),
-                            part=PART)
-        with self.voiceover("Chapter thirteen. Codes for storage."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(13, r"Codes for storage", r"How do data centres survive losing whole machines?", lit=(1988, 2012), extra=((1988, r"RAID"), (2002, r"LT codes"), (2012, r"Azure LRC")), part=PART, said="Chapter thirteen. Codes for storage.")
 
     def raid(self):
+        self.ask(r"RAID-5: one disk holds the XOR of the rest. \\ Two disks die. Can it rebuild?", [r"yes", r"no"], 1,
+                 say="RAID five keeps one disk of exclusive-or parity. Two disks die. Can it rebuild them?",
+                 reveal="No. A second check disk, a Reed-Solomon symbol, rebuilds both.")
         s = load("storage")
         head = label(r"RAID-6: \ lose any two disks", font_size=34).to_edge(UP, buff=0.3)
         disks = VGroup(*[disk(f"D{i}", d, DATA) for i, d in enumerate(s["disks"])],

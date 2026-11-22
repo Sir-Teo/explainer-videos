@@ -13,20 +13,24 @@ def grid_surface(vals, center, width, lo=-2.5, hi=2.5):
     return FieldSurface(X.ravel(), Y.ravel(), v.ravel(), 1.0, width=width, center=center, lo=lo, hi=hi)
 
 
-class GMRF(VoiceoverScene):
+class GMRF(StatsScene):
     def construct(self):
         self.card()
+        self.ask(r"The SPDE approach gives Mat\'ern fields a precision matrix that is...",
+                 ["dense", "sparse"], 1,
+                 say="Lindgren, Rue and Lindström wrote Matérn fields as solutions of a stochastic partial "
+                     "differential equation. What does their precision matrix look like?",
+                 reveal="Sparse: each location is linked only to its mesh neighbours. Sparse precision, not sparse "
+                        "covariance, and INLA computes with it fast.")
         self.markov()
         self.sparsity()
         self.spde()
         self.condition()
         self.inla()
+        self.answer()
 
     def card(self):
-        card = chapter_card(8, r"Markov random fields", r"Sparse precision, \ not sparse covariance", lit=(1974, 2011), part=PART)
-        with self.voiceover("Chapter eight. Markov random fields."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(8, r"Markov random fields", r"Sparse precision, \ not sparse covariance", lit=(1974, 2011), part=PART, said="Chapter eight. Markov random fields.")
 
     def markov(self):
         rows = [

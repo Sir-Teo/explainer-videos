@@ -12,9 +12,15 @@ AGE = [r"18--29", r"30--49", r"50--66", r"67+"]
 
 
 
-class Weighting(VoiceoverScene):
+class Weighting(StatsScene):
     def construct(self):
         self.card()
+        self.ask("Raking adjusts the weights until the sample matches...",
+                 ["the population's known margins", "the sample's own margins", "equal weights"], 0,
+                 say="A real survey's weights get a final calibration, called raking. What does raking make the "
+                     "weighted sample match?",
+                 reveal="The population's known margins: age, sex, region, education, one variable at a time, until "
+                        "all fit together.")
         self.layers()
         self.cells()
         self.raking()
@@ -22,12 +28,10 @@ class Weighting(VoiceoverScene):
         self.why_not()
         self.board()
         self.costs()
+        self.answer()
 
     def card(self):
-        card = chapter_card(9, r"Weighting", r"Making the sample look like the population", lit=(1940,), part=PART)
-        with self.voiceover("Chapter nine. Weighting."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(9, r"Weighting", r"Making the sample look like the population", lit=(1940,), part=PART, said="Chapter nine. Weighting.")
 
     def layers(self):
         rows = [

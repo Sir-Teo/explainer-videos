@@ -6,25 +6,25 @@ from explainer.cs import *  # noqa: F403
 from videos.cs.cs47.common import BG, DATA, HEAD, KERN, LAM, NO, PART, YES, load, mono, tag_box
 
 
-class Index(VoiceoverScene):
+class Index(WatchScene):
     def construct(self):
         self.card()
         self.matrix()
         self.postings()
         self.sorting()
-        self.spimi()
-        self.segments()
 
     def card(self):
-        card = chapter_card(2, r"The inverted index", r"Which passages contain this word?", lit=(1994, 2003),
-                            extra=((1994, r"Witten, \ Moffat and Bell: \ \textit{Managing Gigabytes}"),
+        self.chapter(2, r"The inverted index", r"Which passages contain this word?", lit=(1994, 2003), extra=((1994, r"Witten, \ Moffat and Bell: \ \textit{Managing Gigabytes}"),
                                    (1999, r"Cutting: \ Lucene"),
-                                   (2003, r"Heinz and Zobel: \ single-pass indexing")), part=PART)
-        with self.voiceover("Chapter two. The inverted index."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+                                   (2003, r"Heinz and Zobel: \ single-pass indexing")), part=PART, said="Chapter two. The inverted index.")
 
     def matrix(self):
+        self.wrong_idea(r"a search engine scans pages for your words",
+                        r"it looks up lists computed in advance: \\ the inverted index",
+                        narration="It is natural to imagine a search engine reading through pages, looking for your words.",
+                        right_narration="It reads nothing at query time. For every word it keeps, in advance, the sorted list "
+                                        "of documents containing it, and a query merges a few lists.")
+        self.clear_scene()
         ix = load("index")
         head = label(r"Every term, \ every passage", font_size=36).to_edge(UP, buff=0.3)
         # an illustrative incidence matrix: three "books" of eight passages each, terms clustered by book
@@ -146,6 +146,10 @@ class Index(VoiceoverScene):
         self.clear_scene()
 
     def sorting(self):
+        self.ask(r"The postings don't fit in memory. \\ Build the index by...", [r"one big sort in memory",
+                 r"sorting runs, then merging them"], 1,
+                 say="The term and passage pairs don't fit in memory. How do you build the index?",
+                 reveal="Sort as many as fit, write each run to disk, and merge the runs.")
         ix = load("index")
         head = label(r"Building it by sorting", font_size=36).to_edge(UP, buff=0.3)
         passages = ["the whale and the sea", "the white whale", "the sea"]
@@ -211,131 +215,4 @@ class Index(VoiceoverScene):
         self.wait(0.4)
         self.clear_scene()
 
-    def spimi(self):
-        ix = load("index")
-        head = label(r"Single pass, \ in memory", font_size=36).to_edge(UP, buff=0.3)
-        stream = [(1, ["the", "whale", "sea"]), (2, ["the", "ahab", "whale"]), (3, ["the", "sea", "ship"])]
-        pbs = VGroup(*[tag_box(f"passage {k}", color=DATA, size=19, h=0.5) for k, _ in stream]).arrange(
-            DOWN, buff=0.35).move_to([-5.6, 0.85, 0])
-        frame = RoundedRectangle(width=4.9, height=3.0, corner_radius=0.12, stroke_color=KERN, stroke_width=2)
-        frame.move_to([-1.2, 0.65, 0])
-        ftitle = label(r"memory: \ a hash table", font_size=20, color=KERN).next_to(frame, UP, buff=0.1)
-        xs = frame.get_left()[0] + 0.25
-        slots = [frame.get_top()[1] - 0.38 - k * 0.55 for k in range(5)]
-        rows, row_of = {}, []
-        steps = []
-        for k, ts in stream:
-            anims = []
-            for t in ts:
-                if t not in rows:
-                    term = mono(t, size=20, color=WHITE).move_to([0, slots[len(rows)], 0]).align_to([xs, 0, 0], LEFT)
-                    rows[t] = VGroup(term)
-                    row_of.append(t)
-                    anims.append(FadeIn(term))
-                r = rows[t]
-                num = mono(str(k), size=20, color=DATA).move_to([xs + 1.5 + 0.5 * (len(r) - 1), r[0].get_y(), 0])
-                r.add(num)
-                anims.append(FadeIn(num, shift=LEFT * 0.3))
-            steps.append((k - 1, anims))
-        content = VGroup(*[rows[t] for t in row_of])
-        disk_t = label(r"disk", font_size=20, color=GREY_A).move_to([4.4, 2.35, 0])
-        blocks = VGroup()
-        for b in range(3):
-            r = Rectangle(width=1.5, height=1.1, stroke_color=LAM, stroke_width=2, fill_color=LAM,
-                          fill_opacity=0.12)
-            t = label(rf"block {b + 1}", font_size=19, color=WHITE).move_to(r).shift(UP * 0.17)
-            s = label(r"sorted", font_size=17, color=GREY_A).move_to(r).shift(DOWN * 0.2)
-            blocks.add(VGroup(r, t, s))
-        blocks.arrange(RIGHT, buff=0.15).move_to([4.4, 1.45, 0])
-        final = RoundedRectangle(width=3.6, height=0.6, corner_radius=0.1, stroke_color=YES, stroke_width=2,
-                                 fill_color=YES, fill_opacity=0.12).move_to([4.4, -0.2, 0])
-        final_t = label(r"the index", font_size=21, color=WHITE).move_to(final)
-        merges = VGroup(*[Arrow(b.get_bottom(), final.get_top(), buff=0.06, stroke_width=2, color=YES,
-                                max_tip_length_to_length_ratio=0.2) for b in blocks])
-        notes = VGroup(
-            wrapped_label(r"Heinz and Zobel \ (2003): \ no table of term ids; \ a hash table maps each term to a "
-                          r"growing list, \ and since passages arrive in order, \ every list is born sorted", 12.4,
-                          font_size=20, color=WHITE),
-            wrapped_label(r"when memory fills: \ sort the terms, \ write the block to disk, \ empty the table, \ "
-                          r"go on", 12.4, font_size=20, color=LAM),
-            wrapped_label(rf"at the end, \ merge all the blocks at once \ (a $k$-way merge, \ Part 16); \ our builder "
-                          rf"is this with a single block: \ one pass over {ix['docs']:,} passages", 12.4,
-                          font_size=20, color=YES),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.22).next_to(frame, DOWN, buff=0.7).set_x(0)
-        with self.voiceover(
-            "Blocked sorting needs a table from every term to an integer, kept in memory throughout, and it sorts "
-            "pairs that could have been grouped as they arrived. <bookmark mark='a'/> Single-pass in-memory "
-            "indexing, described by Steffen Heinz and Justin Zobel in 2003, uses a hash table instead. Each term "
-            "maps to a growing list, and because passages arrive in order, every list is born sorted. "
-            "<bookmark mark='b'/> When memory fills, the terms are sorted, the block is written to disk, and the "
-            "table starts again, empty. <bookmark mark='c'/> At the end, all the blocks are merged at once, as in "
-            "Part 16. Our own builder is this algorithm with a single block: one pass over every passage."
-        ) as vo:
-            self.play(FadeIn(head), FadeIn(pbs), Create(frame), FadeIn(ftitle), FadeIn(disk_t))
-            vo.wait_until("a")
-            self.play(FadeIn(notes[0]))
-            for k, anims in steps:
-                self.play(Indicate(pbs[k], color=HEAD, scale_factor=1.1), run_time=0.5)
-                self.play(*anims, run_time=0.8)
-            vo.wait_until("b")
-            ordered = sorted(row_of)
-            self.play(*[rows[t].animate.set_y(slots[ordered.index(t)]) for t in row_of], run_time=1.2)
-            self.play(FadeIn(notes[1]), FadeTransform(content.copy(), blocks[0]), run_time=1.2)
-            self.play(FadeOut(content), FadeIn(blocks[1]), run_time=0.8)
-            self.play(FadeIn(blocks[2]), run_time=0.8)
-            vo.wait_until("c")
-            self.play(*[GrowArrow(a) for a in merges], FadeIn(final), FadeIn(final_t), FadeIn(notes[2]))
-        self.wait(0.4)
-        self.clear_scene()
 
-    def segments(self):
-        head = label(r"Indexes that change", font_size=36).to_edge(UP, buff=0.3)
-        unit = 1.0
-
-        def state(sizes):
-            g = VGroup()
-            for s in sizes:
-                r = Rectangle(width=unit * s - 0.1, height=0.8, stroke_color=LAM, stroke_width=2, fill_color=LAM,
-                              fill_opacity=0.25)
-                g.add(VGroup(r, label(f"{s}", font_size=22, color=WHITE).move_to(r)))
-            g.arrange(RIGHT, buff=0.1)
-            return g.move_to([0, 1.0, 0]).align_to([-4.4, 0, 0], LEFT)
-        seq = [[1], [1, 1], [2], [2, 1], [2, 1, 1], [2, 2], [4], [4, 1], [4, 1, 1], [4, 2], [4, 2, 1], [4, 2, 1, 1],
-               [4, 2, 2], [4, 4], [8]]
-        cap = label(r"segments on disk, \ oldest on the left \ (sizes in flushes of the memory index)", font_size=20,
-                    color=GREY_A).move_to([0, 2.1, 0]).align_to([-4.4, 0, 0], LEFT)
-        illus = note(r"illustrative", font_size=16).next_to(cap, RIGHT, buff=0.3)
-        row = state(seq[0])
-        bits = VGroup(*[Square(side_length=0.36, stroke_color=GREY_C, stroke_width=1.2,
-                               fill_color=NO if k in (3, 9, 10) else BG, fill_opacity=0.9 if k in (3, 9, 10) else 1)
-                        for k in range(16)]).arrange(RIGHT, buff=0.05)
-        bl = label(r"deleted documents: \ a bitmap", font_size=21, color=NO)
-        bitrow = VGroup(bl, bits).arrange(RIGHT, buff=0.3).move_to([0, -0.35, 0]).align_to([-4.4, 0, 0], LEFT)
-        notes = VGroup(
-            wrapped_label(r"new documents go into a small index in memory, \ searched beside the others; \ when it "
-                          r"fills, \ it is written out as a \textbf{segment}", 12.4, font_size=20, color=WHITE),
-            wrapped_label(r"segments of equal size are merged, \ like carries in a binary counter: \ each posting "
-                          r"is copied only about $\log_2 n$ times in $n$ flushes", 12.4, font_size=20, color=LAM),
-            wrapped_label(r"deletions are marked in a bitmap and dropped at the next merge; \ Lucene, \ beneath "
-                          r"Elasticsearch and OpenSearch, \ keeps immutable segments merged in much this way, \ like "
-                          r"Part 34's LSM trees", 12.4, font_size=20, color=NO),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.25).next_to(bitrow, DOWN, buff=0.9).set_x(0)
-        with self.voiceover(
-            "Real collections change. <bookmark mark='a'/> New documents go into a small index in memory, searched "
-            "beside the others, and when it fills it is written out as a segment. <bookmark mark='b'/> Segments of "
-            "equal size are merged, like the carries of a binary counter, so each posting is copied only a "
-            "logarithmic number of times. <bookmark mark='c'/> Deleted documents are marked in a bitmap, and "
-            "dropped at the next merge. Lucene, the library beneath Elasticsearch and OpenSearch, keeps its index "
-            "as immutable segments merged in much this way: the design of Part 34's log-structured merge trees."
-        ) as vo:
-            self.play(FadeIn(head), FadeIn(cap), FadeIn(illus))
-            vo.wait_until("a")
-            self.play(FadeIn(row), FadeIn(notes[0]))
-            vo.wait_until("b")
-            self.play(FadeIn(notes[1]))
-            for s in seq[1:]:
-                self.play(Transform(row, state(s)), run_time=0.5)
-            vo.wait_until("c")
-            self.play(FadeIn(bitrow), FadeIn(notes[2]))
-        self.wait(0.4)
-        self.clear_scene()

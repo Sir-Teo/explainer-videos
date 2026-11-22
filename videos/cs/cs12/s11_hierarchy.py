@@ -13,7 +13,7 @@ def stack_mob(st, w=0.9, h=0.45):
     return cells.arrange(UP, buff=0)
 
 
-class Hierarchy(VoiceoverScene):
+class Hierarchy(WatchScene):
     def construct(self):
         self.card()
         self.pda()
@@ -22,13 +22,12 @@ class Hierarchy(VoiceoverScene):
         self.edges()
 
     def card(self):
-        card = chapter_card(10, r"Stacks and the Chomsky hierarchy", r"What does one stack add?", lit=(1956,),
-                            extra=((1956, r"Chomsky: \ the hierarchy"),), part=PART)
-        with self.voiceover("Chapter ten. Stacks, and the Chomsky hierarchy."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(10, r"Stacks and the Chomsky hierarchy", r"What does one stack add?", lit=(1956,), extra=((1956, r"Chomsky: \ the hierarchy"),), part=PART, said="Chapter ten. Stacks, and the Chomsky hierarchy.")
 
     def pda(self):
+        self.ask(r"Give a finite automaton a stack. \\ Can it check balanced parentheses?", [r"no", r"yes"], 1,
+                 say="Give a finite automaton a stack. Can it now check balanced parentheses?",
+                 reveal="Yes: push on every opening bracket, pop on every closing one.")
         pd = load("pda")
         path = pd["anbn_path"]
         head = label(r"A pushdown automaton for $a^n b^n$", font_size=34).to_edge(UP, buff=0.3)

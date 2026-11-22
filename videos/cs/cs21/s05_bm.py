@@ -14,7 +14,7 @@ def row(s, color, font=20):
     return g
 
 
-class BoyerMoore(VoiceoverScene):
+class BoyerMoore(WatchScene):
     def construct(self):
         self.card()
         self.skip()
@@ -23,13 +23,15 @@ class BoyerMoore(VoiceoverScene):
         self.measured()
 
     def card(self):
-        card = chapter_card(4, r"Boyer and Moore: \ skip ahead", r"Can a search read less than the whole text?",
-                            lit=(1977,), extra=((1977, r"Boyer--Moore"),), part=PART)
-        with self.voiceover("Chapter four. Boyer and Moore: skip ahead."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(4, r"Boyer and Moore: \ skip ahead", r"Can a search read less than the whole text?", lit=(1977,), extra=((1977, r"Boyer--Moore"),), part=PART, said="Chapter four. Boyer and Moore: skip ahead.")
 
     def skip(self):
+        self.wrong_idea(r"To search a text, \\ you must read every character",
+                        r"Boyer--Moore skips most of them. \\ An index never reads the text at all",
+                        narration="It seems obvious that searching a text means reading every character of it.",
+                        right_narration="It doesn't. Boyer and Moore skip most of the text, and an index answers without "
+                                        "reading it at all.")
+        self.clear_scene()
         head = label(r"Compare from the right", font_size=34).to_edge(UP, buff=0.35)
         text = "a whale, a harpoon, Queequeg"
         pat = "Queequeg"
@@ -140,6 +142,10 @@ class BoyerMoore(VoiceoverScene):
         self.clear_scene()
 
     def measured(self):
+        self.ask(r"Boyer--Moore on English, a long pattern. \\ Comparisons per text character?", [r"more than 1",
+                 r"about 1", r"fewer than 1"], 2,
+                 say="Boyer-Moore on English text, with a long pattern. How many comparisons per character of text?",
+                 reveal="Fewer than one: it skips most of the text. Longer patterns skip further.")
         d = load("bm")
         h = load("hook")
         head = label(r"Comparisons per character of \textit{Moby-Dick}", font_size=32).to_edge(UP, buff=0.35)

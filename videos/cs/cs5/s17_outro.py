@@ -19,7 +19,7 @@ def tile(content, caption, color, TW=3.6, TH=2.3):
     return Group(box, content, cap)
 
 
-class Outro(VoiceoverScene):
+class Outro(WatchScene):
     def construct(self):
         self.recap()
         self.payoffs()
@@ -70,6 +70,12 @@ class Outro(VoiceoverScene):
             self.play(LaggedStart(*[FadeIn(t, shift=UP * 0.15) for t in tiles], lag_ratio=0.25), run_time=4.0)
         self.wait(0.5)
         self.clear_scene()
+        self.checkpoint(
+            [(r"SRAM or DRAM: which needs refreshing, and why?", r"DRAM: its bit is charge on a capacitor, and it leaks"),
+             (r"Why do synchronizers use two flip-flops?", r"The second gives the first a whole cycle to resolve")],
+            narration="Last checkpoint. Which memory needs refreshing, and why? And why does a synchronizer use two flip-flops?",
+            answers_narration="DRAM, whose bit is charge on a capacitor that leaks. And the second flip-flop gives the first a "
+                              "whole cycle to settle.")
 
     def payoffs(self):
         card = payoff_card([

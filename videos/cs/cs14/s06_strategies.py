@@ -4,7 +4,7 @@ from explainer.cs import *  # noqa: F403
 from videos.cs.cs14.common import CODE, CTRL, DATA, FUNC, HEAD, LAM, NO, PART, YES, grid_table, load, mono, region
 
 
-class Strategies(VoiceoverScene):
+class Strategies(WatchScene):
     def construct(self):
         self.card()
         self.kinds()
@@ -13,10 +13,7 @@ class Strategies(VoiceoverScene):
         self.theorem()
 
     def card(self):
-        card = chapter_card(5, r"Evaluation strategies", r"Which redex first?", lit=(1960,), part=PART)
-        with self.voiceover("Chapter five. Evaluation strategies."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(5, r"Evaluation strategies", r"Which redex first?", lit=(1960,), part=PART, said="Chapter five. Evaluation strategies.")
 
     def kinds(self):
         head = label(r"Which redex should be reduced first?", font_size=34).to_edge(UP, buff=0.3)
@@ -57,6 +54,10 @@ class Strategies(VoiceoverScene):
         self.clear_scene()
 
     def table(self):
+        self.ask(r"$(\lambda x.\,\lambda y.\, x)\ a\ \Omega$. \\ Does call-by-value finish?", [r"yes",
+                 r"no"], 1,
+                 say="A function that ignores its second argument, given a and omega. Does call by value finish?",
+                 reveal="No. It evaluates omega first, which never ends. Normal order returns a.")
         s = load("strategies")
         head = label(r"$(\lambda x\,y.\; x)\;a\;\Omega$, \ four ways", font_size=34).to_edge(UP, buff=0.3)
         rows, cols = [], []
@@ -152,3 +153,10 @@ class Strategies(VoiceoverScene):
             self.play(FadeIn(pts[2]))
         self.wait(0.3)
         self.clear_scene()
+        self.checkpoint(
+            [(r"How do Church numerals represent $n$?", r"Apply $f$ to $x$, $n$ times"),
+             (r"Why can call-by-value miss a normal form?", r"It evaluates arguments that are never used, and may loop")],
+            narration="Checkpoint. How does a Church numeral represent n? And why can call by value miss a normal form that "
+                      "normal order finds?",
+            answers_narration="It applies f to x n times. And call by value evaluates every argument first, even one that's "
+                              "never used and never finishes.")

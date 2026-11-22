@@ -5,9 +5,15 @@ import numpy as np
 from videos.stats.stats35.common import *  # noqa: F403
 
 
-class Sequential(VoiceoverScene):
+class Sequential(StatsScene):
     def construct(self):
         self.card()
+        self.ask(r"Look 5 times, each at 5\%, stop at the first significance. The overall false-positive rate?",
+                 [r"5\%", r"about 14\%", r"about 25\%"], 1,
+                 say="A trial looks at its data five times, each at the five percent level, and stops at the first "
+                     "significant result. With no true effect, what's the overall false-positive rate?",
+                 reveal="About fourteen percent. Group-sequential boundaries, Pocock's or O'Brien and Fleming's, "
+                        "spend the five percent across the looks.")
         self.why_()
         self.peek()
         self.boundaries()
@@ -16,12 +22,10 @@ class Sequential(VoiceoverScene):
         self.spending_()
         self.board()
         self.dsmb()
+        self.answer()
 
     def card(self):
-        card = chapter_card(12, r"Sequential trials", r"Looking early without cheating", lit=(1977, 1979, 1983), part=PART)
-        with self.voiceover("Chapter twelve. Sequential trials."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(12, r"Sequential trials", r"Looking early without cheating", lit=(1977, 1979, 1983), part=PART, said="Chapter twelve. Sequential trials.")
 
     def why_(self):
         rows = fit_rows(VGroup(

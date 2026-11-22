@@ -6,21 +6,29 @@ from scipy import stats
 from videos.stats.stats15.common import *  # noqa: F403
 
 
-class Summaries(VoiceoverScene):
+class Summaries(StatsScene):
     def construct(self):
         self.card()
+        self.ask("Posterior Beta$(3, 12)$, skewed right. Which is largest?",
+                 ["the mode", "the median", "the mean"], 2,
+                 say="The posterior Beta three, twelve is skewed to the right. Which summary is largest: its mode, "
+                     "its median, or its mean?",
+                 reveal="The mean, point two. The median is about point one nine, and the mode about point one "
+                        "five. The long right tail pulls the mean furthest.")
         self.centres()
         self.losses()
         self.intervals()
         self.invariance()
         self.laplace_approx()
         self.reading()
+        self.answer()
+        self.checkpoint([("Uniform prior, 2 successes in 13: the posterior?", "Beta$(3, 12)$"),
+                         ("Doubling the prior everywhere changes the posterior?", "not at all")],
+                        narration="Checkpoint. The machinery.",
+                        answers_narration="Beta three, twelve. And not at all.")
 
     def card(self):
-        card = chapter_card(3, r"Summaries", r"Point estimates and credible intervals from a posterior", part=PART)
-        with self.voiceover("Chapter three. Summaries."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(3, r"Summaries", r"Point estimates and credible intervals from a posterior", part=PART, said="Chapter three. Summaries.")
 
     def axes_beta(self, center=(-2.2, 0.2, 0)):
         A = axes([0, 0.7], [0, 5], x_length=7.4, y_length=4.2, xlabel=r"$p$", ylabel=r"posterior density", xticks=[0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6],

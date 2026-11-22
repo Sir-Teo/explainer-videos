@@ -4,7 +4,7 @@ from explainer.cs import *  # noqa: F403
 from videos.cs.cs21.common import (CTRL, DATA, HEAD, LAM, NO, PART, YES, big, grid_table, load, mono, words)
 
 
-class SuffixArray(VoiceoverScene):
+class SuffixArray(WatchScene):
     def construct(self):
         self.card()
         self.sorted_()
@@ -14,11 +14,7 @@ class SuffixArray(VoiceoverScene):
         self.repeat_witness()
 
     def card(self):
-        card = chapter_card(7, r"Suffix arrays", r"What if we just sort the suffixes?", lit=(1990,),
-                            extra=((1990, r"Manber--Myers"),), part=PART)
-        with self.voiceover("Chapter seven. Suffix arrays."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(7, r"Suffix arrays", r"What if we just sort the suffixes?", lit=(1990,), extra=((1990, r"Manber--Myers"),), part=PART, said="Chapter seven. Suffix arrays.")
 
     def sorted_(self):
         d = load("sa")
@@ -103,6 +99,10 @@ class SuffixArray(VoiceoverScene):
         self.clear_scene()
 
     def build(self):
+        self.ask(r"The suffix array of 25 million characters. \\ How many entries?", [r"25 million",
+                 r"about $3 \times 10^{14}$"], 0,
+                 say="The suffix array of twenty-five million characters. How many entries?",
+                 reveal="Twenty-five million: one integer per suffix, not the suffixes themselves.")
         head = label(r"Building it: \ prefix doubling", font_size=34).to_edge(UP, buff=0.35)
         w = "banana$"
         n = len(w)

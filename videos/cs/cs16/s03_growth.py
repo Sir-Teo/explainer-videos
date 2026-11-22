@@ -20,7 +20,7 @@ def _sci(n):
     return rf"${prefix}{rounded/10**exponent:.2f}\times10^{{{exponent}}}$"
 
 
-class Growth(VoiceoverScene):
+class Growth(WatchScene):
     def construct(self):
         self.card()
         self.notation()
@@ -28,11 +28,7 @@ class Growth(VoiceoverScene):
         self.stirling()
 
     def card(self):
-        card = chapter_card(2, r"Orders of growth", r"What survives when constants are ignored?", lit=(1894,),
-                            extra=((1894, r"Bachmann's $O$"),), part=PART)
-        with self.voiceover("Chapter two. Orders of growth."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(2, r"Orders of growth", r"What survives when constants are ignored?", lit=(1894,), extra=((1894, r"Bachmann's $O$"),), part=PART, said="Chapter two. Orders of growth.")
 
     def notation(self):
         head = label(r"Asymptotic notation, \ precisely", font_size=34).to_edge(UP, buff=0.3)
@@ -71,6 +67,17 @@ class Growth(VoiceoverScene):
         self.clear_scene()
 
     def ladder(self):
+        self.wrong_idea(r"Faster hardware fixes a slow algorithm",
+                        r"A better algorithm can beat decades of hardware",
+                        narration="When a program is slow, the natural fix is a faster computer.",
+                        right_narration="For small problems, maybe. But growth rates compound: a better algorithm can beat "
+                                        "decades of hardware, and the ledger is about to show it.")
+        self.clear_scene()
+        self.ask(r"A computer 1000 times faster, an $n^2$ algorithm. \\ In the same time, $n$ can grow by...",
+                 [r"$1000\times$", r"about $32\times$", r"$10\times$"], 1,
+                 say="Buy a computer a thousand times faster. With an n squared algorithm, how much bigger a problem can you "
+                     "solve in the same time?",
+                 reveal="About thirty-two times: the square root of a thousand.")
         d=load("growth")
         head=label(r"Growth rates, and an explicit step budget",font_size=34).to_edge(UP,buff=0.3)
         ax=Axes(x_range=[0,10,2],y_range=[0,30,10],x_length=5.1,y_length=3.8,
@@ -101,7 +108,7 @@ class Growth(VoiceoverScene):
         cap=label(r"$\approx$ marks display rounding; no machine overhead modeled",font_size=17,color=GREY_B)
         right=VGroup(title,tab,cap).arrange(DOWN,buff=0.22).to_edge(RIGHT,buff=0.32).shift(UP*0.2)
         note=label(r"$1000\times$ speed: $n^2$ permits about $32\times$ more items; $2^n$ about 10 more",font_size=21,color=HEAD).to_edge(DOWN,buff=0.35)
-        with self.voiceover("The axes now show base-ten logarithms of input size and step count. Powers become straight lines; the exponential bends upward. <bookmark mark='a'/> For the table, assume exactly one nanosecond per abstract step, with no extra overhead. Solve each displayed cost function against one second's budget. The entries are integer maxima, except where explicitly rounded for display. <bookmark mark='b'/> Even a year only permits fifty-four items when the cost is two to the n. These are consequences of the assumed functions, not timing predictions for real sorts. <bookmark mark='c'/> A thousandfold speedup expands a quadratic input limit by about thirty-two, and an exponential limit by about ten items. Changing growth can matter much more than changing a constant.") as vo:
+        with self.voiceover("The axes now show base-ten logarithms of input size and step count. Powers become straight lines; the exponential bends upward. <bookmark mark='a'/> For the table, assume exactly one nanosecond per abstract step, with no extra overhead. Solve each displayed cost function against one second's budget. The entries are integer maxima, except where explicitly rounded for display. <bookmark mark='b'/> Even a year only permits fifty-four items when the cost is two to the n. <bookmark mark='c'/> A thousandfold speedup expands a quadratic input limit by about thirty-two, and an exponential limit by about ten items. Changing growth can matter much more than changing a constant.") as vo:
             self.play(FadeIn(head),Create(ax),FadeIn(xt),FadeIn(yt),FadeIn(xl),FadeIn(yl))
             self.play(LaggedStart(*[Create(c) for c in curves],lag_ratio=0.08),FadeIn(tags),run_time=1.4)
             vo.wait_until("a")

@@ -12,7 +12,7 @@ PROBLEMS = [
 ]
 
 
-class Outro(LectureMixin, VoiceoverScene):
+class Outro(LectureMixin, StatsScene):
     def construct(self):
         self.recap()
         self.upgrade()

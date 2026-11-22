@@ -38,7 +38,7 @@ def tree_layout(tree):
     return nodes, children, pos
 
 
-class IntegerPrograms(VoiceoverScene):
+class IntegerPrograms(WatchScene):
     def construct(self):
         self.card()
         self.bnb()
@@ -47,13 +47,12 @@ class IntegerPrograms(VoiceoverScene):
         self.fptas()
 
     def card(self):
-        card = chapter_card(7, r"Integer programming", r"What changes when the answer must be whole?", lit=(1958, 1960),
-                            extra=((1958, r"Gomory cuts"), (1960, r"Land--Doig branch and bound")), part=PART)
-        with self.voiceover("Chapter seven. Integer programming."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(7, r"Integer programming", r"What changes when the answer must be whole?", lit=(1958, 1960), extra=((1958, r"Gomory cuts"), (1960, r"Land--Doig branch and bound")), part=PART, said="Chapter seven. Integer programming.")
 
     def bnb(self):
+        self.ask(r"An integer program's linear relaxation gives...", [r"the exact answer", r"a bound on it"], 1,
+                 say="Drop the integer requirement and solve the linear program. What does it give you?",
+                 reveal="A bound: the best fraction is at least as good as any whole answer.")
         d = load("ip")
         head = label(r"Branch and bound on a knapsack", font_size=34).to_edge(UP, buff=0.3)
         items = VGroup(*[mono(f"{i}: {v}/{w}", 15, GREY_A) for i, (v, w) in enumerate(zip(d["vals"], d["wts"]))])

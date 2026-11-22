@@ -29,7 +29,7 @@ def num(x, digits=0):
     return f"{x:,.{digits}f}".replace(",", "{,}")
 
 
-class Chat(VoiceoverScene):
+class Chat(WatchScene):
     def construct(self):
         self.card()
         self.napkin()
@@ -39,12 +39,9 @@ class Chat(VoiceoverScene):
         self.secrets()
 
     def card(self):
-        card = chapter_card(4, r"A chat service", r"How do messages arrive once, \ in order, \ on phones that come "
+        self.chapter(4, r"A chat service", r"How do messages arrive once, \ in order, \ on phones that come "
                             r"and go?", lit=(2011, 2016), extra=((2011, r"WebSocket, \ RFC 6455"),
-                                                                (2016, r"the double ratchet published")), part=PART)
-        with self.voiceover("Chapter four. A chat service."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+                                                                (2016, r"the double ratchet published")), part=PART, said="Chapter four. A chat service.")
 
     def napkin(self):
         head = label(r"Requirements and the napkin", font_size=36).to_edge(UP, buff=0.3)
@@ -149,6 +146,10 @@ class Chat(VoiceoverScene):
         self.clear_scene()
 
     def ordering(self):
+        self.ask(r"Order chat messages by the senders' clocks? ", [r"safe",
+                 r"an answer can appear before its question"], 1,
+                 say="Could a chat service order messages by the time on each sender's phone?",
+                 reveal="No: a skewed clock can put an answer before its question. The server numbers them instead.")
         head = label(r"The hard part: \ order", font_size=36).to_edge(UP, buff=0.3)
         xs = {"ben": -4.6, "srv": -2.7, "ana": -0.8}
         top, bot = 2.2, -2.0
@@ -336,6 +337,12 @@ class Chat(VoiceoverScene):
             self.play(FadeIn(foot))
         self.wait(0.4)
         self.clear_scene()
+        self.checkpoint(
+            [(r"Push or pull for a feed?", r"Push for most, pull for the very large"),
+             (r"How does chat sync offline phones?", r"Per-conversation sequence numbers")],
+            narration="Checkpoint. Should a feed push or pull? And how does a chat service catch up a phone that was offline?",
+            answers_narration="Push for ordinary accounts and pull for the largest, merged at read time. And each conversation "
+                              "numbers its messages, so the phone asks for everything after the last number it has.")
 
 
 _ = (KERN,)

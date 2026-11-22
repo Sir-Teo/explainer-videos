@@ -6,7 +6,7 @@ from explainer.cs import *  # noqa: F403
 from videos.cs.cs5.common import BG, CLOCK, CODE, COST, CTRL, DATA, FUNC, HEAD, INF, NO, PART, WIRE, YES, gate, load
 
 
-class Sram(VoiceoverScene):
+class Sram(WatchScene):
     def construct(self):
         self.card()
         self.cell()
@@ -14,13 +14,13 @@ class Sram(VoiceoverScene):
         self.array()
 
     def card(self):
-        card = chapter_card(10, r"Static memory", r"How do you build a million bits?", part=PART)
-        with self.voiceover("Chapter ten. Static memory."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(10, r"Static memory", r"How do you build a million bits?", part=PART, said="Chapter ten. Static memory.")
 
     # ------------------------------------------------------------------
     def cell(self):
+        self.ask(r"Transistors per bit of static RAM?", [r"1", r"4", r"6"], 2,
+                 say="How many transistors does static RAM spend on one bit?",
+                 reveal="Six: two cross-coupled inverters and two access switches.")
         head = label(r"The 6-transistor SRAM cell", font_size=38).to_edge(UP, buff=0.35)
         g1 = gate("NOT", size=0.8).move_to(UP * 0.9)
         g2 = gate("NOT", size=0.8).rotate(PI).move_to(DOWN * 0.3)

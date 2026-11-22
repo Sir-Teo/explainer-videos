@@ -12,7 +12,7 @@ def item_text(prod, dot, origin):
     return f"{lhs} → {' '.join(syms[:dot] + ['•'] + syms[dot:])}   ({origin})"
 
 
-class General(VoiceoverScene):
+class General(WatchScene):
     def construct(self):
         self.card()
         self.cyk()
@@ -20,14 +20,14 @@ class General(VoiceoverScene):
         self.cost()
 
     def card(self):
-        card = chapter_card(11, r"Parsing any grammar: \ CYK and Earley", r"Can every context-free grammar be "
-                                                                          r"parsed efficiently?",
-                            lit=(1967, 1970), extra=((1967, r"Younger: \ CYK in $n^3$"), (1970, r"Earley")), part=PART)
-        with self.voiceover("Chapter eleven. Parsing any grammar: CYK and Earley."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(11, r"Parsing any grammar: \ CYK and Earley", r"Can every context-free grammar be "
+                                                                          r"parsed efficiently?", lit=(1967, 1970), extra=((1967, r"Younger: \ CYK in $n^3$"), (1970, r"Earley")), part=PART, said="Chapter eleven. Parsing any grammar: CYK and Earley.")
 
     def cyk(self):
+        self.ask(r"CYK parses a string of length $n$, \\ for any fixed grammar. Its time grows like...",
+                 [r"$n$", r"$n^2$", r"$n^3$"], 2,
+                 say="CYK parses any context-free grammar. How does its time grow with the length of the input?",
+                 reveal="Like n cubed: every substring, split every way.")
         c = load("cyk")
         toks = c["tokens"]
         n = len(toks)
@@ -146,7 +146,7 @@ class General(VoiceoverScene):
             label(rf"CYK: \ {1000 * last['cyk']:.1f} ms \\ fixed-grammar cubic upper bound", font_size=20, color=CTRL),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.2).next_to(ax, RIGHT, buff=0.6)
         with self.voiceover(
-            "These curves count stored Earley items, separately from elapsed time. <bookmark mark='a'/> On sums of identifiers in our layered expression grammar, the sampled item counts grow approximately linearly with token count. <bookmark mark='b'/> On the ambiguous grammar, the counts grow faster: the sixty-five-token sample stores two thousand three hundred and seventy-seven items. More parse trees need not mean that every tree is explicitly enumerated. <bookmark mark='c'/> The side panel also records a CYK duration from this host. Its cubic worst-case bound is a mathematical statement for fixed grammars; a finite item-count plot does not prove a runtime bound. Restricted predictive and LR grammars let the next chapters use simpler, linear-time parsing strategies."
+            "These curves count stored Earley items, separately from elapsed time. <bookmark mark='a'/> On sums of identifiers in our layered expression grammar, the sampled item counts grow approximately linearly with token count. <bookmark mark='b'/> On the ambiguous grammar, the counts grow faster: the sixty-five-token sample stores two thousand three hundred and seventy-seven items. More parse trees need not mean that every tree is explicitly enumerated. <bookmark mark='c'/> The side panel also records a CYK duration from this host. Restricted predictive and LR grammars let the next chapters use simpler, linear-time parsing strategies."
         ) as vo:
             self.play(FadeIn(head), Create(ax), FadeIn(xl), FadeIn(yl))
             self.play(Create(u), FadeIn(ul), FadeIn(side[0]), FadeIn(side[1]), run_time=.6)
@@ -158,3 +158,8 @@ class General(VoiceoverScene):
             self.play(FadeIn(side[3]))
         self.wait(0.3)
         self.clear_scene()
+        self.checkpoint(
+            [(r"What makes a grammar ambiguous?", r"Some string has two parse trees"),
+             (r"What does a pushdown automaton add to a DFA?", r"A stack")],
+            narration="Checkpoint. What makes a grammar ambiguous? And what does a pushdown automaton add?",
+            answers_narration="Some string has two different parse trees. And a stack, which is exactly what nesting needs.")

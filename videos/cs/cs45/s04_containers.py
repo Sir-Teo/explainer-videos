@@ -20,22 +20,17 @@ LAYERS = [(r"FROM debian:12-slim", "debian 12 base files"),
 APP_V2 = "app/main.py, version 2"
 
 
-class Containers(VoiceoverScene):
+class Containers(WatchScene):
     def construct(self):
         self.card()
         self.walls()
         self.limits()
         self.layers()
         self.overlay()
-        self.pull()
 
     def card(self):
-        card = chapter_card(3, r"Containers", r"What is in a container, \ and what holds it in?", lit=(2008, 2015),
-                            extra=((2008, r"cgroups in Linux"), (2013, r"Docker"),
-                                   (2015, r"Open Container Initiative")), part=PART)
-        with self.voiceover("Chapter three. Containers."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(3, r"Containers", r"What is in a container, \ and what holds it in?", lit=(2008, 2015), extra=((2008, r"cgroups in Linux"), (2013, r"Docker"),
+                                   (2015, r"Open Container Initiative")), part=PART, said="Chapter three. Containers.")
 
     def walls(self):
         head = label(r"Processes with walls", font_size=36).to_edge(UP, buff=0.3)
@@ -87,6 +82,10 @@ class Containers(VoiceoverScene):
         self.clear_scene()
 
     def limits(self):
+        self.ask(r"A cgroup quota: $50{,}000\,\mu$s of CPU \\ every $100{,}000\,\mu$s. The group gets...",
+                 [r"half a processor", r"fifty processors"], 0,
+                 say="A control group may use fifty thousand microseconds of processor time every hundred thousand. What does it get?",
+                 reveal="Half a processor, enforced by throttling.")
         head = label(r"Limits, \ enforced", font_size=36).to_edge(UP, buff=0.3)
         files = code_block(["/sys/fs/cgroup/web/cpu.max      50000 100000",
                             "/sys/fs/cgroup/web/memory.max   268435456"], size=17)
@@ -293,63 +292,6 @@ class Containers(VoiceoverScene):
         self.wait(0.4)
         self.clear_scene()
 
-    def pull(self):
-        head = label(r"Pull only what you lack", font_size=36).to_edge(UP, buff=0.3)
-        names = [c for _, c in LAYERS[:4]] + [LAYERS[4][1], APP_V2, "worker code"]
-        short = ["debian", "python3", "requirements", "packages", "app v1", "app v2", "worker"]
-        blob_col = [GREY_B, LAM, DATA, DATA, YES, HEAD, KERN]
-        blobs = VGroup(*[tag_box(f"{s:<12} {digest(n)}", color=c, size=16, w=3.3, h=0.4)
-                         for s, n, c in zip(short, names, blob_col)]).arrange(DOWN, buff=0.1)
-        mans = VGroup(*[tag_box(t, color=WHITE, size=16, w=1.7, h=0.42) for t in ("web:v1", "web:v2", "worker")])
-        mans.arrange(DOWN, buff=0.9)
-        reg_inner = VGroup(mans, blobs).arrange(RIGHT, buff=0.8)
-        reg = RoundedRectangle(width=reg_inner.width + 0.5, height=reg_inner.height + 0.8, corner_radius=0.15,
-                               stroke_color=GREY_B, stroke_width=2)
-        reg_inner.move_to(reg).shift(DOWN * 0.15)
-        reg_l = label(r"a registry: \ each blob stored once, \ by hash", font_size=18, color=GREY_A).next_to(
-            reg.get_top(), DOWN, buff=0.12)
-        registry = VGroup(reg, reg_inner, reg_l).to_edge(LEFT, buff=0.35).shift(DOWN * 0.15)
-        uses = {0: [0, 1, 2, 3, 4], 1: [0, 1, 2, 3, 5], 2: [0, 1, 6]}
-        refs = VGroup()
-        for m, bs in uses.items():
-            for b in bs:
-                refs.add(Line(mans[m].get_right(), blobs[b].get_left(), color=GREY_D, stroke_width=1.2))
-        have = VGroup(*[tag_box(f"{s:<12} {digest(n)}", color=c, size=16, w=3.3, h=0.4)
-                        for s, n, c in zip(short[:5], names[:5], blob_col[:5])]).arrange(DOWN, buff=0.1)
-        hbox = RoundedRectangle(width=3.9, height=3.6, corner_radius=0.15, stroke_color=DATA, stroke_width=2)
-        have.move_to(hbox).shift(UP * 0.1)
-        host_l = label(r"a machine that ran web:v1", font_size=18, color=DATA).next_to(hbox, UP, buff=0.12)
-        VGroup(hbox, have, host_l).to_edge(RIGHT, buff=0.4).align_to(registry, UP).shift(DOWN * 0.1)
-        new = blobs[5].copy()
-        target = new.copy().next_to(have, DOWN, buff=0.1)
-        go = Arrow(blobs[5].get_right(), target.get_left(), buff=0.1, color=HEAD, stroke_width=3,
-                   max_tip_length_to_length_ratio=0.06)
-        got_l = wrapped_label(r"one layer downloaded, \ checked against its hash", 1.9, font_size=17,
-                              color=HEAD).next_to(go, UP, buff=0.12)
-        foot = wrapped_label(r"the \textbf{Open Container Initiative} \ (2015): \ one image format and one runtime "
-                             r"specification, \ so an image built by one tool runs under any compliant runtime, \ "
-                             r"such as runc", 12.4, font_size=19, color=WHITE).to_edge(DOWN, buff=0.3)
-        with self.voiceover(
-            "Content addressing pays again when images move. <bookmark mark='a'/> A registry stores each blob once, "
-            "under its hash, and an image is only a manifest that points at blobs. Our images "
-            "share their lower layers. <bookmark mark='b'/> A machine that already ran version one pulls version "
-            "two by fetching the manifest, comparing names, and downloading the single layer it lacks, checking it "
-            "against its hash as Part 41's store did. <bookmark mark='c'/> In 2015 Docker and others founded the "
-            "Open Container Initiative, which standardized the image format and the runtime, so an image built "
-            "with one tool runs under any compliant runtime, such as runc. Every orchestrator in the next chapter "
-            "starts here: pull, unpack, and start a process with walls."
-        ) as vo:
-            self.play(FadeIn(head), Create(reg), FadeIn(reg_l), FadeIn(blobs))
-            vo.wait_until("a")
-            self.play(FadeIn(mans), Create(refs), run_time=2)
-            vo.wait_until("b")
-            self.play(Create(hbox), FadeIn(have), FadeIn(host_l))
-            self.play(GrowArrow(go), FadeIn(got_l))
-            self.play(Transform(new, target))
-            vo.wait_until("c")
-            self.play(FadeIn(foot))
-        self.wait(0.4)
-        self.clear_scene()
 
 
 _ = (BG, LAM)

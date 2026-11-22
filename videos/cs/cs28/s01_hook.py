@@ -5,11 +5,11 @@ from videos.cs.cs28.common import (BG, CTRL, DATA, HEAD, LAM, NO, PART, YES, bit
                                    qr_grid)
 
 
-class Hook(VoiceoverScene):
+class Hook(WatchScene):
     def construct(self):
         self.weekend()
         self.scratched()
-        self.plan()
+        self.title(PART)
 
     def weekend(self):
         head = label(r"Bell Labs, \ 1947", font_size=36).to_edge(UP, buff=0.35)
@@ -87,26 +87,3 @@ class Hook(VoiceoverScene):
         self.wait(0.3)
         self.clear_scene()
 
-    def plan(self):
-        title = label(rf"Part {PART}: \ Error-Correcting Codes", font_size=46).to_edge(UP, buff=0.4)
-        smap = series_map(current=PART, done=PART - 1).scale(0.92).next_to(title, DOWN, buff=0.35)
-        obj = objectives_card([
-            r"the noisy channel, \ repetition, \ Hamming distance and Hamming(7,4)",
-            r"how good a code can be: \ the bounds, \ and the perfect Golay code",
-            r"finite fields, \ Reed--Solomon codes, \ and our QR code, \ scratched and read",
-            r"CRCs: \ the shift registers of Part 5, \ dividing polynomials",
-            r"Shannon's theorem, \ and the codes that reach it: \ Viterbi, \ LDPC, \ polar",
-            r"codes for storage; \ the frontier: \ capacity, \ list decoding, \ locality",
-        ], font_size=26).move_to(DOWN * 0.2)
-        with self.voiceover(
-            "Part 28 of Computer Science, Built: Error-Correcting Codes. <bookmark mark='a'/> In this part: the noisy "
-            "channel and the simplest codes; Hamming distance and Hamming's code; the limits on how good any code can "
-            "be, and a perfect code; finite fields, Reed-Solomon codes, and our QR code; cyclic redundancy checks, "
-            "built from Part 5's shift registers; Shannon's theorem and the codes that finally reach it; codes for "
-            "storage; and the frontier."
-        ) as vo:
-            self.play(FadeIn(title), FadeIn(smap))
-            vo.wait_until("a")
-            self.play(FadeOut(smap), FadeIn(obj))
-        self.wait(0.5)
-        self.clear_scene()

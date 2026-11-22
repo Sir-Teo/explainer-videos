@@ -4,21 +4,25 @@ from explainer.stats import museum
 from videos.stats.stats35.common import *  # noqa: F403
 
 
-class Surrogates(VoiceoverScene):
+class Surrogates(StatsScene):
     def construct(self):
         self.card()
+        self.ask("CAST: two drugs suppressed post-infarction arrhythmias. Mortality...",
+                 ["fell", "rose"], 1,
+                 say="The Cardiac Arrhythmia Suppression Trial: encainide and flecainide suppressed the irregular "
+                     "heartbeats that predict death after a heart attack. What happened to mortality?",
+                 reveal="It rose: more than twice as many deaths on the drugs as on placebo. Fixing a surrogate "
+                        "isn't the same as helping the patient.")
         self.why_()
         self.cast()
         self.prentice_()
         self.world()
         self.table()
         self.lessons()
+        self.answer()
 
     def card(self):
-        card = chapter_card(13, r"Surrogates", r"When the endpoint you measure is not the one you care about", lit=(1989,), part=PART)
-        with self.voiceover("Chapter thirteen. Surrogate endpoints."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(13, r"Surrogates", r"When the endpoint you measure is not the one you care about", lit=(1989,), part=PART, said="Chapter thirteen. Surrogate endpoints.")
 
     def why_(self):
         rows = fit_rows(VGroup(

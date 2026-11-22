@@ -5,9 +5,15 @@ import numpy as np
 from videos.stats.stats28.common import *  # noqa: F403
 
 
-class Singular(VoiceoverScene):
+class Singular(StatsScene):
     def construct(self):
         self.card()
+        self.ask("A two-component mixture whose truth has one component. BIC's penalty is...",
+                 ["about right", "too big"], 1,
+                 say="Fit a two-component mixture when the truth has one. The true parameters form a set, not a "
+                     "point. Is BIC's penalty right?",
+                 reveal="Too big. In singular models the effective dimension, Watanabe's learning coefficient, is "
+                        "smaller than half the parameter count, and WAIC and singular BIC use it.")
         self.mixture()
         self.plane()
         self.breaks()
@@ -15,12 +21,10 @@ class Singular(VoiceoverScene):
         self.free_energy()
         self.table()
         self.where()
+        self.answer()
 
     def card(self):
-        card = chapter_card(6, r"Singular models", r"When the truth is a set, \ not a point", lit=(2009,), part=PART)
-        with self.voiceover("Chapter six. Singular models."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(6, r"Singular models", r"When the truth is a set, \ not a point", lit=(2009,), part=PART, said="Chapter six. Singular models.")
 
     def mixture(self):
         rows = [

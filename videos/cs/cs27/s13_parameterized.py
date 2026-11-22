@@ -4,20 +4,20 @@ from explainer.cs import *  # noqa: F403
 from videos.cs.cs27.common import (BG, CTRL, DATA, HEAD, LAM, NO, PART, YES, fit_right, grid_table, load, sci, words)
 
 
-class Parameterized(VoiceoverScene):
+class Parameterized(WatchScene):
     def construct(self):
         self.card()
         self.search()
         self.theory()
 
     def card(self):
-        card = chapter_card(12, r"Parameterized complexity", r"Can hardness be confined to one small number?",
-                            lit=(1992, 1999), extra=((1993, r"Buss's kernel"), (1999, r"Downey--Fellows")), part=PART)
-        with self.voiceover("Chapter twelve. Parameterized complexity."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(12, r"Parameterized complexity", r"Can hardness be confined to one small number?", lit=(1992, 1999), extra=((1993, r"Buss's kernel"), (1999, r"Downey--Fellows")), part=PART, said="Chapter twelve. Parameterized complexity.")
 
     def search(self):
+        self.ask(r"Vertex cover of size $k$: branch on an uncovered edge. \\ Running time?", [r"$n^k$",
+                 r"$2^k \cdot$ poly$(n)$"], 1,
+                 say="Find a vertex cover of size k by branching on an uncovered edge. How does the running time grow?",
+                 reveal="Two to the k times a polynomial in n: exponential only in the parameter.")
         v = load("vc")
         head = label(r"Vertex cover of size $k$: \ exponential only in $k$", font_size=32).to_edge(UP, buff=0.3)
         rows = [[str(r["k"]), str(r["edges"]), words(r["nodes"]), words(r["bound"]), rf"${sci(r['brute_subsets'], 2)}$",
@@ -39,7 +39,7 @@ class Parameterized(VoiceoverScene):
                   color=HEAD),
         ).arrange(DOWN, buff=0.22).next_to(tl, DOWN, buff=0.35)
         with self.voiceover(
-            "Parameterized algorithms separate dependence on a small parameter from dependence on the input size. <bookmark mark='a'/> For vertex cover of budget k, choose an uncovered edge. Every valid cover contains at least one endpoint, so branch on the two choices. <bookmark mark='b'/> The search tree has at most two to the k-plus-one minus one nodes. Each node still performs graph work; a small parameter does not by itself promise a practical runtime on arbitrarily large inputs. <bookmark mark='c'/> Buss’s rule forces a vertex whose degree exceeds the remaining budget. After applying it, too many remaining edges certify failure; otherwise an equivalent quadratic-size kernel remains. <bookmark mark='d'/> We retain the complete graph, cover, forced vertices, residual kernel and thirty raw timing intervals. Linear-time kernelization is a theorem about efficient implementations; this teaching routine repeatedly scans its edges."
+            "Parameterized algorithms separate dependence on a small parameter from dependence on the input size. <bookmark mark='a'/> For vertex cover of budget k, choose an uncovered edge. Every valid cover contains at least one endpoint, so branch on the two choices. <bookmark mark='b'/> The search tree has at most two to the k-plus-one minus one nodes. Each node still performs graph work; a small parameter does not by itself promise a practical runtime on arbitrarily large inputs. <bookmark mark='c'/> Buss’s rule forces a vertex whose degree exceeds the remaining budget. After applying it, too many remaining edges certify failure; otherwise an equivalent quadratic-size kernel remains. <bookmark mark='d'/>"
         ) as vo:
             self.play(FadeIn(head), FadeIn(tab), FadeIn(tl))
             for mk, ln in zip("abcd", lines):

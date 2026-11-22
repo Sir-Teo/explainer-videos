@@ -21,14 +21,14 @@ def crab_bars(ax, x, w, color=None):
     return g
 
 
-class Hook(VoiceoverScene):
+class Hook(StatsScene):
     def construct(self):
         self.weldon()
         self.histogram()
         self.nonic()
         self.solutions()
         self.likelihood_way()
-        self.objectives()
+        self.title(PART)
 
     def weldon(self):
         tl = timeline(lit=(1894, 1922)).to_edge(UP, buff=0.35)
@@ -190,29 +190,4 @@ class Hook(VoiceoverScene):
             self.play(FadeIn(rows[3]))
             vo.wait_until("e")
             self.play(FadeIn(rows[4]))
-        self.clear_scene()
-
-    def objectives(self):
-        head = VGroup(label(r"Part 22", font_size=34, color=GREY_B), label(r"Likelihood in Depth", font_size=60)).arrange(DOWN, buff=0.25)
-        obj = objectives_card([
-            r"why the MLE is consistent and asymptotically normal: \ the proofs",
-            r"observed vs expected information; \ many parameters and the profile likelihood",
-            r"Wald, \ score and likelihood-ratio tests; \ Neyman--Scott",
-            r"the EM algorithm, \ and where likelihood misbehaves",
-            r"misspecification and the sandwich; \ quasi- and pseudo-likelihood; \ the likelihood principle",
-        ], color=LIK, font_size=26)
-        prereq = note(r"prerequisites: \ Parts 9, \ 10 and 21").to_corner(DL, buff=0.3)
-        built = note(r"built: \ \texttt{statkit.mle}; \ the likelihood landscape").to_corner(DR, buff=0.3)
-        with self.voiceover(
-            "<bookmark mark='a'/> Part twenty-two: likelihood in depth. <bookmark mark='b'/> We'll prove the two properties Part "
-            "9 promised; separate observed from expected information; handle many parameters with the profile likelihood; "
-            "compare the three classical tests; meet a problem where maximum likelihood fails; derive the EM algorithm and "
-            "refit the crabs; see where likelihood misbehaves; derive the sandwich for wrong models; meet quasi- and "
-            "pseudo-likelihood; argue about the likelihood principle; and glimpse the geometry of information."
-        ) as vo:
-            vo.wait_until("a")
-            self.play(FadeIn(head, shift=UP * 0.2))
-            vo.wait_until("b")
-            self.play(FadeOut(head), FadeIn(obj, shift=UP * 0.2), FadeIn(prereq), FadeIn(built))
-        self.wait(1.0)
         self.clear_scene()

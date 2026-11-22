@@ -3,10 +3,16 @@ from __future__ import annotations
 from videos.stats.stats64.common import *  # noqa: F403
 
 
-class OpenProblems(LectureMixin, VoiceoverScene):
+class OpenProblems(LectureMixin, StatsScene):
     def construct(self):
         self.card_voiceover("Chapter thirteen. Open problems for statistics in the age of AI.", 13, r"Open problems",
                             r"What the degree cannot yet answer")
+        self.ask("The top model on a leaderboard. Its score, as an estimate of its true score, is...",
+                 ["unbiased", "biased upward"], 1,
+                 say="What the degree can't yet answer, and what it can. The top model on a crowded leaderboard: is "
+                     "its score an unbiased estimate of how good it really is?",
+                 reveal="Biased upward: the winner's curse. Being first selects for luck as well as skill, as Part "
+                        "56 showed; inference on winners corrects it.")
         self.map_()
         self.op_construct()
         self.op_moving()
@@ -14,6 +20,11 @@ class OpenProblems(LectureMixin, VoiceoverScene):
         self.op_feedback()
         self.op_conditional()
         self.problems()
+        self.answer()
+        self.checkpoint([("Simulation-based calibration checks?", "uniform ranks of the true parameters"),
+                         ("Individual randomization in shared markets?", "biased by spillovers: randomize markets")],
+                        narration="Checkpoint. Simulators and deployments.",
+                        answers_narration="Uniform ranks. And randomize markets.")
 
     def map_(self):
         hdr = [r"the claim", r"the old tool", r"the new setting"]

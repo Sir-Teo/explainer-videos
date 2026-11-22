@@ -5,9 +5,15 @@ import numpy as np
 from videos.stats.stats56.common import *  # noqa: F403
 
 
-class Winners(VoiceoverScene):
+class Winners(StatsScene):
     def construct(self):
         self.card()
+        self.ask("The best-looking of $K$ options. Its naive estimate is biased...",
+                 ["upward", "downward", "not at all"], 0,
+                 say="Pick the best-looking of K options and report its estimate. Which way is that estimate "
+                     "biased?",
+                 reveal="Upward: the winner's curse. Andrews, Kitagawa and McCloskey's median-unbiased estimate and "
+                        "hybrid interval correct for having picked it.")
         self.conditional()
         self.window()
         self.hybrid()
@@ -15,12 +21,10 @@ class Winners(VoiceoverScene):
         self.microarray()
         self.practice()
         self.board()
+        self.answer()
 
     def card(self):
-        card = chapter_card(8, r"Inference on winners", r"The best-looking option, \ honestly", lit=(2024,), part=PART)
-        with self.voiceover("Chapter eight. Inference on winners: the best-looking option, honestly."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(8, r"Inference on winners", r"The best-looking option, \ honestly", lit=(2024,), part=PART, said="Chapter eight. Inference on winners: the best-looking option, honestly.")
 
     def conditional(self):
         rows = [

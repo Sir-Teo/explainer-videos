@@ -37,22 +37,17 @@ def sci(v: float, digits: int = 1) -> str:
     return rf"{v / 10 ** e:.{digits}f} \times 10^{{{e}}}"
 
 
-class Quadrature(VoiceoverScene):
+class Quadrature(WatchScene):
     def construct(self):
         self.card()
         self.rules()
         self.gauss()
         self.measured()
-        self.adaptive()
         self.montecarlo()
 
     def card(self):
-        card = chapter_card(12, r"Quadrature", r"How few samples does an integral need?",
-                            lit=(1814, 1949), extra=((1814, r"Gauss: \ optimal nodes"),
-                                                     (1949, r"Metropolis and Ulam: \ Monte Carlo")), part=PART)
-        with self.voiceover("Chapter twelve. Quadrature."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(12, r"Quadrature", r"How few samples does an integral need?", lit=(1814, 1949), extra=((1814, r"Gauss: \ optimal nodes"),
+                                                     (1949, r"Metropolis and Ulam: \ Monte Carlo")), part=PART, said="Chapter twelve. Quadrature.")
 
     def plot(self, center, x_length=5.8, y_length=3.8):
         ax = Axes(x_range=[0, 2, 0.5], y_range=[-3, 8, 1], x_length=x_length, y_length=y_length, tips=False,
@@ -117,6 +112,10 @@ class Quadrature(VoiceoverScene):
         self.clear_scene()
 
     def gauss(self):
+        self.ask(r"Gauss quadrature with $n$ points \\ is exact for polynomials of degree up to...", [r"$n - 1$",
+                 r"$2n - 1$"], 1,
+                 say="Gauss quadrature uses n points, chosen freely. Up to what degree is it exact?",
+                 reveal="Two n minus one: the points are free parameters too.")
         head = label(r"Gauss: \ choose the points too", font_size=36).to_edge(UP, buff=0.3)
         rows = VGroup(
             cmath(r"\int_{-1}^{1} f", r"\approx", r"w_1 f(x_1) + w_2 f(x_2)", font_size=30),
@@ -228,75 +227,6 @@ class Quadrature(VoiceoverScene):
         self.wait(0.4)
         self.clear_scene()
 
-    def adaptive(self):
-        q = load("quad")
-        ad = q["adaptive"]
-        head = label(r"Adaptive quadrature", font_size=36).to_edge(UP, buff=0.3)
-        ax = Axes(x_range=[0, 2, 0.5], y_range=[0, 1.2, 0.5], x_length=5.8, y_length=3.0, tips=False,
-                  axis_config={"stroke_color": GREY_D, "include_ticks": False})
-        ax.move_to([-3.5, 0.9, 0])
-        cusp = 0.7
-
-        def g(x):
-            return math.sqrt(abs(x - cusp))
-        curve = VGroup(ax.plot(g, x_range=[0, cusp, 0.002], color=DATA, stroke_width=3),
-                       ax.plot(g, x_range=[cusp, 2, 0.002], color=DATA, stroke_width=3))
-        gl = MathTex(r"\sqrt{|x - 0.7|}", font_size=26, color=DATA).next_to(ax.c2p(1.6, 1.1), UP, buff=0.05)
-        ticks = VGroup(*[label(f"{v:g}", font_size=16, color=GREY_B).next_to(ax.c2p(v, 0), DOWN, buff=0.1)
-                         for v in (0, 1, 2)], gl)
-        parts = partition(g, 0.0, 2.0, 1e-3)
-        marks = VGroup(*[Line(ax.c2p(a, 0), ax.c2p(a, 0) + DOWN * 0.3, color=HEAD, stroke_width=2)
-                         for a, _ in parts], Line(ax.c2p(2, 0), ax.c2p(2, 0) + DOWN * 0.3, color=HEAD,
-                                                  stroke_width=2))
-        marks.shift(DOWN * 0.45)
-        ml = note(rf"illustrative: \ the {len(parts)} intervals accepted for a tolerance of $10^{{-3}}$, \ "
-                  rf"crowded at the cusp", font_size=17).next_to(marks, DOWN, buff=0.15)
-        res = wrapped_label(rf"our smooth test integral, \ tolerance $10^{{-10}}$: \ {ad['calls']:.0f} "
-                            rf"evaluations, \ error ${sci(ad['error'])}$ \ (computed); \ Gauss needed 16: \ "
-                            rf"adaptivity pays when the trouble is local, \ a kink or a spike", 5.8, font_size=19,
-                            color=HEAD).next_to(ml, DOWN, buff=0.35)
-        cols = {r"\frac{S_2 - S_1}{15}": YES}
-        rows = VGroup(
-            cmath(r"S_1 = S(a, b)", r",\quad", r"S_2 = S(a, m) + S(m, b)", font_size=30),
-            cmath(r"I - S_1 \approx E", r",\quad", r"I - S_2 \approx 2\cdot\frac{E}{2^5} = \frac{E}{16}",
-                  font_size=30),
-            cmath(r"I - S_2", r"\approx", r"\frac{S_2 - S_1}{15}", colors=cols, font_size=30),
-            cmath(r"|S_2 - S_1| \le 15\,\text{tol}", r"\ ?", font_size=30),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.62).move_to([3.3, 0.45, 0])
-        whys = VGroup(
-            label(r"Simpson on the interval, \ and on its halves", font_size=18, color=GREY_B),
-            label(r"the error grows like the width to the fifth", font_size=18, color=GREY_B),
-            label(r"subtract: \ an error estimate, \ for free", font_size=18, color=YES),
-            wrapped_label(r"yes: \ accept $S_2$ plus the estimate; \ no: \ split, \ and recurse on each half with "
-                          r"half the tolerance", 5.4, font_size=18, color=GREY_B),
-        )
-        for w, rr in zip(whys, rows):
-            w.next_to(rr, DOWN, buff=0.1).align_to(rr, LEFT)
-        with self.voiceover(
-            "A smooth stretch deserves few points and a wild one many. Adaptive quadrature decides where, by "
-            "itself. <bookmark mark='a'/> Apply Simpson's rule to an interval, and again to its two halves. "
-            "<bookmark mark='b'/> Simpson's error grows like the fifth power of the width, so the two halves "
-            "together err by a sixteenth as much. <bookmark mark='c'/> Subtracting gives an estimate of the error, "
-            "for free. <bookmark mark='d'/> If it is small enough, accept, adding the estimate back as a "
-            "correction; if not, split and recurse, each half with half the tolerance. <bookmark mark='e'/> On an "
-            "integrand with a cusp, the intervals pile up at the cusp and stay wide elsewhere. On our smooth test "
-            "integral, asked for ten to the minus ten, our instrument used nine hundred and eighty-five "
-            "evaluations, where Gauss needed sixteen: adaptivity pays when the trouble is local."
-        ) as vo:
-            self.play(FadeIn(head), Create(ax), FadeIn(ticks), Create(curve))
-            vo.wait_until("a")
-            self.play(Write(rows[0]), FadeIn(whys[0]))
-            vo.wait_until("b")
-            self.play(FadeIn(rows[1]), FadeIn(whys[1]))
-            vo.wait_until("c")
-            self.play(FadeIn(rows[2]), FadeIn(whys[2]))
-            vo.wait_until("d")
-            self.play(FadeIn(rows[3]), FadeIn(whys[3]))
-            vo.wait_until("e")
-            self.play(LaggedStart(*[Create(m) for m in marks], lag_ratio=0.05), FadeIn(ml), run_time=2)
-            self.play(FadeIn(res))
-        self.wait(0.4)
-        self.clear_scene()
 
     def montecarlo(self):
         head = label(r"Monte Carlo: \ slow, \ but blind to dimension", font_size=36).to_edge(UP, buff=0.3)

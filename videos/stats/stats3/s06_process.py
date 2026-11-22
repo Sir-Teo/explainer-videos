@@ -7,9 +7,15 @@ from videos.stats.stats3.common import *  # noqa: F403
 BUS = S.ACCENT
 
 
-class Process(VoiceoverScene, TreeMixin):
+class Process(StatsScene, TreeMixin):
     def construct(self):
         self.card()
+        self.ask("Buses at random, one every 10 minutes on average. Your average wait?",
+                 ["5 minutes", "10 minutes", "20 minutes"], 1,
+                 say="Buses come at random, on average one every ten minutes. You arrive at a random moment. How "
+                     "long do you wait, on average: five minutes, ten, or twenty?",
+                 reveal="Ten. The exponential has no memory, and you're more likely to arrive in a long gap than a "
+                        "short one. That's why you always seem to wait longer.")
         self.buses()
         self.gaps()
         self.merge_thin()
@@ -17,13 +23,15 @@ class Process(VoiceoverScene, TreeMixin):
         self.tree_voiceover("Three arrows: <bookmark mark='t'/> the gaps of a Poisson process are exponential; sums "
                             "of exponential gaps are gamma; and the geometric, shrunk to infinitely many tiny trials, "
                             "becomes the exponential.", 5)
+        self.answer()
+        self.checkpoint([("Average number of throws until the first six?", "6"),
+                         ("Buses at random, 10 minutes apart on average: your average wait?", "10 minutes: no memory")],
+                        narration="Checkpoint. Waiting.",
+                        answers_narration="Six throws. And ten minutes: the exponential forgets how long you've "
+                                          "waited.")
 
     def card(self):
-        card = chapter_card(5, r"Continuous time", r"Buses at random, \ and why you always seem to wait longer",
-                            lit=(1898,), part=PART)
-        with self.voiceover("Chapter five. Continuous time."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(5, r"Continuous time", r"Buses at random, \ and why you always seem to wait longer", lit=(1898,), part=PART, said="Chapter five. Continuous time.")
 
     def buses(self):
         d = load("process")

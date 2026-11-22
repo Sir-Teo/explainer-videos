@@ -8,7 +8,7 @@ from videos.cs.cs61.common import BG, DATA, HEAD, KERN, LAM, NO, PART, YES, load
 COLS = (NO, HEAD, YES, DATA, LAM, KERN)
 
 
-class Frontier(VoiceoverScene):
+class Frontier(WatchScene):
     def construct(self):
         self.card()
         self.sky()
@@ -16,12 +16,7 @@ class Frontier(VoiceoverScene):
         self.choose()
 
     def card(self):
-        card = chapter_card(9, r"Frontier: \ the open-problems map",
-                            r"What is still unknown, \ and where would you start?", lit=(1900, 2024),
-                            extra=((1900, r"Hilbert's twenty-three problems"), (2024, r"BB(5) settled")), part=PART)
-        with self.voiceover("Chapter nine, the frontier. What is still unknown, and where would you start?"):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(9, r"Frontier: \ the open-problems map", r"What is still unknown, \ and where would you start?", lit=(1900, 2024), extra=((1900, r"Hilbert's twenty-three problems"), (2024, r"BB(5) settled")), part=PART, said="Chapter nine, the frontier. What is still unknown, and where would you start?")
 
     def sky(self):
         rows = load("open")["rows"]
@@ -63,6 +58,9 @@ class Frontier(VoiceoverScene):
         self.clear_scene()
 
     def small_cases(self):
+        self.ask(r"Goldbach's conjecture is checked \\ beyond $4 \times 10^{18}$. Proved?", [r"yes", r"no"], 1,
+                 say="Goldbach's conjecture has been checked for every even number beyond four times ten to the eighteenth. Is it proved?",
+                 reveal="No. Checking is evidence, not proof.")
         g = load("goldbach")
         c = load("collatz")
         head = label(r"Start with the small cases", font_size=36).to_edge(UP, buff=0.3)

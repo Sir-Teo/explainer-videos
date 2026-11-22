@@ -18,7 +18,7 @@ def tile(content, caption, color, TW=3.6, TH=2.3):
     return Group(frame, content, cap)
 
 
-class Outro(VoiceoverScene):
+class Outro(WatchScene):
     def construct(self):
         self.recap()
         self.payoffs()
@@ -66,6 +66,12 @@ class Outro(VoiceoverScene):
             self.play(LaggedStart(*[FadeIn(t, shift=UP * 0.15) for t in tiles], lag_ratio=0.25), run_time=4.0)
         self.wait(0.5)
         self.clear_scene()
+        self.checkpoint(
+            [(r"How does a stack smash take control?", r"It overwrites the saved return address"),
+             (r"Name two defences.", r"Stack canaries, non-executable stacks, address randomization")],
+            narration="Last checkpoint. How does a stack smash take control? And name two defences.",
+            answers_narration="By overwriting the saved return address. And canaries, non-executable stacks, and address "
+                              "randomization, among others.")
 
     def payoffs(self):
         card = payoff_card([

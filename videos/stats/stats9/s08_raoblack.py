@@ -5,9 +5,15 @@ import numpy as np
 from videos.stats.stats9.common import *  # noqa: F403
 
 
-class RaoBlackwell(VoiceoverScene):
+class RaoBlackwell(StatsScene):
     def construct(self):
         self.card()
+        self.ask("Condition an unbiased estimator on a sufficient statistic. Its variance...",
+                 ["can go up", "never goes up", "always halves"], 1,
+                 say="Take an unbiased estimator and average it over everything except a sufficient statistic. Can "
+                     "its variance go up?",
+                 reveal="Never. Rao-Blackwell: the result is still unbiased, and its variance is no larger. "
+                        "Randomness that carries no information only adds noise.")
         self.history()
         self.theorem()
         self.proof()
@@ -16,12 +22,15 @@ class RaoBlackwell(VoiceoverScene):
         self.tank_algebra()
         self.tank_collapse()
         self.legacy()
+        self.answer()
+        self.checkpoint([("Given the number of heads, the order of the tosses tells you?", "nothing more about $p$"),
+                         ("Where does the MLE's standard error come from?", "the curvature of the log-likelihood at its peak")],
+                        narration="Checkpoint. Two questions on what the data carry.",
+                        answers_narration="Nothing more: the count is sufficient. And the curvature of the "
+                                          "log-likelihood.")
 
     def card(self):
-        card = chapter_card(7, r"Rao--Blackwell", r"Conditioning on a sufficient statistic never hurts", part=PART)
-        with self.voiceover("Chapter seven. The Rao–Blackwell theorem."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(7, r"Rao--Blackwell", r"Conditioning on a sufficient statistic never hurts", part=PART, said="Chapter seven. The Rao–Blackwell theorem.")
 
     def history(self):
         h1 = history_card(1945, r"C. R. Rao, \ aged 24, \ Calcutta", r"``Information and the accuracy attainable in the estimation of "

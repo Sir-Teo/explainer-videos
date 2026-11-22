@@ -5,21 +5,29 @@ import numpy as np
 from videos.stats.stats50.common import *  # noqa: F403
 
 
-class UpperBounds(VoiceoverScene):
+class UpperBounds(StatsScene):
     def construct(self):
         self.card()
+        self.ask("Over a sparse, spiky class, the minimax-optimal estimators are...",
+                 ["linear", "nonlinear: thresholding"], 1,
+                 say="Round classes favour linear estimators. Over a sparse, spiky class, such as an l one ball, "
+                     "what kind of estimator is optimal?",
+                 reveal="Nonlinear: thresholding. Linear estimators lose by a factor that grows with the dimension. "
+                        "The shape of the class decides which estimator can be optimal.")
         self.estimators()
         self.whyjs()
         self.chart()
         self.table()
         self.oracle()
         self.besov()
+        self.answer()
+        self.checkpoint([("Fano: telling $M$ hypotheses apart needs?", r"about $\log M$ of information"),
+                         ("Over sparse classes, optimal estimators are?", "nonlinear: thresholding")],
+                        narration="Checkpoint. Lower bounds and their match.",
+                        answers_narration="Log M. And thresholding.")
 
     def card(self):
-        card = chapter_card(6, r"Upper bounds that match", r"Blockwise James--Stein and thresholding", part=PART)
-        with self.voiceover("Chapter six. Upper bounds that match: blockwise James–Stein and thresholding."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(6, r"Upper bounds that match", r"Blockwise James--Stein and thresholding", part=PART, said="Chapter six. Upper bounds that match: blockwise James–Stein and thresholding.")
 
     def estimators(self):
         rows = [

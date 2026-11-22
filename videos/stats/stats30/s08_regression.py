@@ -5,9 +5,21 @@ import numpy as np
 from videos.stats.stats30.common import *  # noqa: F403
 
 
-class Regression(VoiceoverScene):
+class Regression(StatsScene):
     def construct(self):
         self.card()
+        self.wrong_idea("Outliers are errors: delete them",
+                        "Treat an outlier as a question: CYG OB1's four were giant stars",
+                        narration="A common habit: points that don't fit are errors, so delete them and move on.",
+                        right_narration="Treat an outlier as a question. In CYG OB1 the four points weren't errors "
+                                        "at all, but a different kind of star. Robust fits find them; only you can "
+                                        "say what they are.")
+        self.ask("Four giant stars far from the main sequence. The least-squares line...",
+                 ["follows the main sequence", "is tilted, even reversed, by the giants"], 1,
+                 say="The star cluster CYG OB1: forty-seven stars, four of them giants far from the main sequence. "
+                     "What does a least-squares line do?",
+                 reveal="It's tilted by the four giants until its slope even reverses. A high-breakdown fit, least "
+                        "trimmed squares, follows the main sequence and flags them.")
         self.stars()
         self.leverage()
         self.gm()
@@ -18,12 +30,10 @@ class Regression(VoiceoverScene):
         self.inference()
         self.residuals()
         self.advice()
+        self.answer()
 
     def card(self):
-        card = chapter_card(7, r"Robust regression", r"LMS, \ LTS, \ S and MM", lit=(1984,), part=PART)
-        with self.voiceover("Chapter seven. Robust regression."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(7, r"Robust regression", r"LMS, \ LTS, \ S and MM", lit=(1984,), part=PART, said="Chapter seven. Robust regression.")
 
     def _axes(self):
         return axes([3.3, 4.8], [3.8, 6.4], x_length=7.4, y_length=4.4, xlabel=r"log surface temperature",

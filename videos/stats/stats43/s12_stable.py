@@ -6,21 +6,25 @@ from scipy import stats
 from videos.stats.stats43.common import *  # noqa: F403
 
 
-class Stable(VoiceoverScene):
+class Stable(StatsScene):
     def construct(self):
         self.card()
+        self.ask("Sums of i.i.d. variables with infinite variance, rescaled, can converge to...",
+                 ["only the normal", "stable laws, such as the Cauchy"], 1,
+                 say="Sums of independent copies of a variable with infinite variance, suitably rescaled. What can "
+                     "they converge to?",
+                 reveal="Stable laws, indexed by a tail exponent below two: the Cauchy is one. The normal is the "
+                        "stable law of finite variance.")
         self.divisible()
         self.stable()
         self.pareto()
         self.dax()
         self.aggregate()
         self.board()
+        self.answer()
 
     def card(self):
-        card = chapter_card(11, r"Infinitely divisible and stable laws", r"What can a sum converge to?", lit=(1925,), part=PART)
-        with self.voiceover("Chapter eleven. Infinitely divisible and stable laws: what else a sum can converge to."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(11, r"Infinitely divisible and stable laws", r"What can a sum converge to?", lit=(1925,), part=PART, said="Chapter eleven. Infinitely divisible and stable laws: what else a sum can converge to.")
 
     def divisible(self):
         rows = [

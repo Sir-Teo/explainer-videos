@@ -4,7 +4,7 @@ from explainer.cs import *  # noqa: F403
 from videos.cs.cs26.common import (BG, CTRL, DATA, HEAD, LAM, NO, PART, YES, fit_right)
 
 
-class Barriers(VoiceoverScene):
+class Barriers(WatchScene):
     def construct(self):
         self.card()
         self.relativize()
@@ -12,14 +12,13 @@ class Barriers(VoiceoverScene):
         self.algebrize()
 
     def card(self):
-        card = chapter_card(14, r"Why it is hard", r"Why haven't fifty years of attacks worked?", lit=(1975, 2008),
-                            extra=((1975, r"Baker--Gill--Solovay"), (1994, r"natural proofs"), (2008, r"algebrization")),
-                            part=PART)
-        with self.voiceover("Chapter fourteen. Why it is hard."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(14, r"Why it is hard", r"Why haven't fifty years of attacks worked?", lit=(1975, 2008), extra=((1975, r"Baker--Gill--Solovay"), (1994, r"natural proofs"), (2008, r"algebrization")), part=PART, said="Chapter fourteen. Why it is hard.")
 
     def relativize(self):
+        self.ask(r"A proof technique that works relative to every oracle. \\ Can it settle P versus NP?", [r"yes", r"no"],
+                 1,
+                 say="Suppose a proof works the same whatever oracle the machines can consult. Could it settle P versus NP?",
+                 reveal="No: some oracles make P equal NP, others separate them. That's the relativization barrier.")
         head = label(r"Barrier 1: \ relativization", font_size=34).to_edge(UP, buff=0.35)
         two = VGroup()
         for nm, eq, col, why in ((r"oracle $A$", r"$\mathrm{P}^A = \mathrm{NP}^A$", YES,

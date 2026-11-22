@@ -5,9 +5,15 @@ import numpy as np
 from videos.stats.stats42.common import *  # noqa: F403
 
 
-class TrialPlan(VoiceoverScene):
+class TrialPlan(StatsScene):
     def construct(self):
         self.card()
+        self.ask("When should the trial's analysis plan be fixed?",
+                 ["before the data", "after a first look"], 0,
+                 say="Six lines of protocol: towns, randomization, outcome, model, standard errors, and the test. "
+                     "When should they be fixed?",
+                 reveal="Before any outcome data exist. A plan written after looking no longer protects you from "
+                        "yourself.")
         self.protocol()
         self.ancova()
         self.check()
@@ -15,12 +21,10 @@ class TrialPlan(VoiceoverScene):
         self.result()
         self.board()
         self.reporting()
+        self.answer()
 
     def card(self):
-        card = chapter_card(3, r"Case 1: \ the analysis plan", r"Decide the analysis before the data", part=PART)
-        with self.voiceover("Chapter three. The analysis plan, written before any data exist."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(3, r"Case 1: \ the analysis plan", r"Decide the analysis before the data", part=PART, said="Chapter three. The analysis plan, written before any data exist.")
 
     def protocol(self):
         head = label(r"The protocol", font_size=36, color=CASE1).to_edge(UP, buff=0.5)

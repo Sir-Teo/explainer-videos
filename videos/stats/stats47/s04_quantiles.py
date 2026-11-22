@@ -5,20 +5,27 @@ import numpy as np
 from videos.stats.stats47.common import *  # noqa: F403
 
 
-class Quantiles(VoiceoverScene):
+class Quantiles(StatsScene):
     def construct(self):
         self.card()
+        self.ask("The sample median's asymptotic variance is...",
+                 [r"$\sigma^2/n$", "$1/(4 n f(m)^2)$"], 1,
+                 say="A sample quantile is an average in disguise. What's the sample median's asymptotic variance?",
+                 reveal="One over four n f of m squared: it depends on the density at the median, not on the "
+                        "variance. Bahadur's representation turns the median into an average of signs.")
         self.limit()
         self.bahadur()
         self.table()
         self.orderci()
         self.uses()
+        self.answer()
+        self.checkpoint([("$O_P(1)$ means?", "bounded in probability"),
+                         ("A misspecified M-estimator's variance?", "the sandwich $A^{-1} B A^{-1}$")],
+                        narration="Checkpoint. The toolkit.",
+                        answers_narration="Bounded in probability. And the sandwich.")
 
     def card(self):
-        card = chapter_card(3, r"Quantiles and the Bahadur representation", r"A sample quantile is an average in disguise", lit=(1966,), part=PART)
-        with self.voiceover("Chapter three. Quantiles and the Bahadur representation: a sample quantile is an average in disguise."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(3, r"Quantiles and the Bahadur representation", r"A sample quantile is an average in disguise", lit=(1966,), part=PART, said="Chapter three. Quantiles and the Bahadur representation: a sample quantile is an average in disguise.")
 
     def limit(self):
         rows = [

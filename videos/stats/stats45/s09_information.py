@@ -5,9 +5,15 @@ import numpy as np
 from videos.stats.stats45.common import *  # noqa: F403
 
 
-class Information(VoiceoverScene):
+class Information(StatsScene):
     def construct(self):
         self.card()
+        self.ask(r"For Uniform$(0, \theta)$, the Cram\'er--Rao bound...",
+                 ["applies", r"doesn't apply: the support depends on $\theta$"], 1,
+                 say="How small can a variance be? Does the Cramér-Rao bound apply to estimating theta for the "
+                     "uniform on zero to theta?",
+                 reveal="No: the support moves with theta, so differentiation under the integral fails, and the "
+                        "maximum beats the bound's rate. Chapman and Robbins's bound needs no differentiation.")
         self.multi()
         self.normal()
         self.bhattacharyya()
@@ -15,12 +21,10 @@ class Information(VoiceoverScene):
         self.chapman()
         self.uniform()
         self.hodges()
+        self.answer()
 
     def card(self):
-        card = chapter_card(8, r"Information inequalities", r"How small can a variance be?", lit=(1945, 1946), part=PART)
-        with self.voiceover("Chapter eight. Information inequalities: how small can the variance of an unbiased estimator be?"):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(8, r"Information inequalities", r"How small can a variance be?", lit=(1945, 1946), part=PART, said="Chapter eight. Information inequalities: how small can the variance of an unbiased estimator be?")
 
     def multi(self):
         rows = [

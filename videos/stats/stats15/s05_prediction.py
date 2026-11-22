@@ -5,21 +5,25 @@ import numpy as np
 from videos.stats.stats15.common import *  # noqa: F403
 
 
-class Prediction(VoiceoverScene):
+class Prediction(StatsScene):
     def construct(self):
         self.card()
+        self.ask("Average the prediction over the posterior, or plug in one estimate. The averaged one is...",
+                 ["wider", "narrower", "the same"], 0,
+                 say="To predict new data, you can plug in a single estimate, or average over the whole posterior. "
+                     "Which predictive distribution is wider?",
+                 reveal="The averaged one: it carries the uncertainty about the parameter as well as the noise in "
+                        "the data.")
         self.formula()
         self.bars()
         self.why_wider()
         self.kicks()
         self.normal_pred()
         self.checks()
+        self.answer()
 
     def card(self):
-        card = chapter_card(4, r"Prediction", r"What will the next data look like?", lit=(1774,), part=PART)
-        with self.voiceover("Chapter four. Prediction."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(4, r"Prediction", r"What will the next data look like?", lit=(1774,), part=PART, said="Chapter four. Prediction.")
 
     def formula(self):
         rows = [

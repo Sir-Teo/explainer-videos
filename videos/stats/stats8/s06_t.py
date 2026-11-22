@@ -7,20 +7,24 @@ from videos.stats.stats8.common import *  # noqa: F403
 T_COLS = {"1": S.RESID, "3": S.POST, "10": S.LIK, "30": SIM}
 
 
-class StudentT(VoiceoverScene):
+class StudentT(StatsScene):
     def construct(self):
         self.card()
+        self.ask("Two sleeping drugs, tried on the same ten patients. Analyse as...",
+                 ["two independent groups", "ten pairs", "either: same answer"], 1,
+                 say="Gosset's data: two sleeping drugs, each tried on the same ten patients. Do you analyse two "
+                     "independent groups, or ten pairs?",
+                 reveal="Ten pairs. Subtract each patient's own result, and the big differences between patients "
+                        "cancel. The way the data were collected decides the analysis.")
         self.density()
         self.family()
         self.multipliers()
         self.sleep()
         self.unpaired()
+        self.answer()
 
     def card(self):
-        card = chapter_card(5, r"Student's $t$", r"A normal, divided by its own estimated scale", lit=(1908,), part=PART)
-        with self.voiceover("Chapter five. Student's t."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(5, r"Student's $t$", r"A normal, divided by its own estimated scale", lit=(1908,), part=PART, said="Chapter five. Student's t.")
 
     def density(self):
         rows = [

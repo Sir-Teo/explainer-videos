@@ -8,19 +8,23 @@ def rows8():
     return [Row(**{k: v for k, v in r.items() if k not in ("verdict", "se")}) for r in load("board")["rows"]]
 
 
-class Board(VoiceoverScene):
+class Board(StatsScene):
     def construct(self):
         self.card()
+        self.ask(r"A nominal 95\% interval covers the truth 99.5\% of the time. Verdict?",
+                 ["better than promised", "conservative: wider than it needs to be", "impossible"], 1,
+                 say="A ninety-five percent interval that covers the truth ninety-nine point five percent of the "
+                     "time. Is that better than promised?",
+                 reveal="Not really: it's conservative. It keeps its promise by being wider than it needs to be, so "
+                        "it gives away precision.")
         self.protocol()
         self.stack()
         self.board()
         self.read()
+        self.answer()
 
     def card(self):
-        card = chapter_card(11, r"The Coverage Board opens", r"Promises, tested on a population we know", part=PART)
-        with self.voiceover("Chapter eleven. The Coverage Board opens."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(11, r"The Coverage Board opens", r"Promises, tested on a population we know", part=PART, said="Chapter eleven. The Coverage Board opens.")
 
     def protocol(self):
         rows = fit_rows(VGroup(

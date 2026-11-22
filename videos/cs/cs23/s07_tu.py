@@ -4,7 +4,7 @@ from explainer.cs import *  # noqa: F403
 from videos.cs.cs23.common import (CTRL, DATA, HEAD, LAM, NO, PART, YES, grid_table, load, mono, words)
 
 
-class Unimodular(VoiceoverScene):
+class Unimodular(WatchScene):
     def construct(self):
         self.card()
         self.bipartite()
@@ -12,11 +12,7 @@ class Unimodular(VoiceoverScene):
         self.flows()
 
     def card(self):
-        card = chapter_card(6, r"When the vertices are integers", r"When is an integer program secretly easy?",
-                            lit=(1956,), extra=((1956, r"Hoffman--Kruskal"),), part=PART)
-        with self.voiceover("Chapter six. When the vertices are integers."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(6, r"When the vertices are integers", r"When is an integer program secretly easy?", lit=(1956,), extra=((1956, r"Hoffman--Kruskal"),), part=PART, said="Chapter six. When the vertices are integers.")
 
     def bipartite(self):
         d = load("tu")
@@ -76,6 +72,9 @@ class Unimodular(VoiceoverScene):
         self.clear_scene()
 
     def triangle(self):
+        self.ask(r"The matching relaxation on a triangle. \\ Its optimum?", [r"1", r"1.5"], 1,
+                 say="Relax matching on a triangle to fractions between zero and one. What's the best value?",
+                 reveal="One and a half: a half on each edge. The integer answer is one.")
         d = load("tu")
         head = label(r"An odd cycle breaks it", font_size=34).to_edge(UP, buff=0.35)
         P = [np.array([-4.0, 1.4, 0]), np.array([-5.4, -1.0, 0]), np.array([-2.6, -1.0, 0])]

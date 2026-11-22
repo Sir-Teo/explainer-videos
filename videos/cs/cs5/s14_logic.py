@@ -12,18 +12,14 @@ def box(w, h, text, color=CTRL, font_size=24):
     return VGroup(b, MathTex(text, font_size=font_size, color=color).move_to(b))
 
 
-class Logic(VoiceoverScene):
+class Logic(WatchScene):
     def construct(self):
         self.card()
         self.sync()
         self.celement()
-        self.rom()
 
     def card(self):
-        card = chapter_card(13, r"Clocks, \ and memory as logic", r"Must everything march to one clock?", part=PART)
-        with self.voiceover("Chapter thirteen. Clocks, and memory as logic."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(13, r"Clocks, \ and memory as logic", r"Must everything march to one clock?", part=PART, said="Chapter thirteen. Clocks, and memory as logic.")
 
     # ------------------------------------------------------------------
     def sync(self):
@@ -63,6 +59,9 @@ class Logic(VoiceoverScene):
 
     # ------------------------------------------------------------------
     def celement(self):
+        self.ask(r"Can a digital circuit work with no clock at all?", [r"no", r"yes"], 1,
+                 say="Could a digital circuit work with no clock at all?",
+                 reveal="Yes: its parts tell each other when they are done.")
         head = label(r"Without a clock: \ the Muller C-element", font_size=36).to_edge(UP, buff=0.35)
         c = box(1.4, 1.2, r"\mathbf{C}", CTRL, 40).move_to(LEFT * 3.6 + UP * 1.0)
         ins = VGroup(Line(c.get_left() + UP * 0.3 + LEFT * 0.8, c.get_left() + UP * 0.3, color=WIRE, stroke_width=3),
@@ -108,52 +107,3 @@ class Logic(VoiceoverScene):
         self.wait(0.3)
         self.clear_scene()
 
-    # ------------------------------------------------------------------
-    def rom(self):
-        head = label(r"Memory as logic", font_size=38).to_edge(UP, buff=0.35)
-        rom = VGroup()
-        for addr in range(8):
-            maj = int(bin(addr).count("1") >= 2)
-            par = bin(addr).count("1") % 2
-            rom.add(VGroup(MathTex(format(addr, "03b"), font_size=26, color=DATA),
-                           MathTex(rf"{maj}\;{par}", font_size=26, color=YES)).arrange(RIGHT, buff=0.6))
-        rom.arrange(DOWN, buff=0.1).move_to(LEFT * 4.0 + DOWN * 0.2)
-        rl = label(r"a ROM: \ address in, \\ stored word out", font_size=24, color=GREY_A).next_to(rom, UP, buff=0.3)
-        cols = VGroup(MathTex(r"abc", font_size=22, color=DATA).next_to(rom[0][0], UP, buff=0.12),
-                      MathTex(r"\text{maj}\,\text{par}", font_size=20, color=YES).next_to(rom[0][1], UP, buff=0.12))
-        rl.next_to(cols, UP, buff=0.2)
-        rom_note = label(r"here: \ majority and parity, \\ as a table", font_size=22, color=GREY_B).next_to(rom, DOWN,
-                                                                                                 buff=0.25)
-        probe = MathTex(r"abc = 101", font_size=28, color=DATA).next_to(rom, LEFT, buff=0.35).align_to(rom[5], UP)
-        hl = SurroundingRectangle(rom[5], buff=0.06, color=HEAD)
-        items = VGroup(
-            label(r"any truth table \ is a memory: \\ store the outputs, \ use the inputs as the address", font_size=25,
-                  color=GREY_A),
-            label(r"PLA: \ a programmable AND plane and OR plane, \\ a sum of products in silicon", font_size=25,
-                  color=GREY_A),
-            label(r"FPGA: \ Part 3's lookup tables, \ each with a flip-flop beside it", font_size=25, color=GREY_A),
-            label(r"microcode: \ a ROM of control words, \ indexed by an instruction and a step: \\ how many processors "
-                  r"turn instructions into control signals \ (Part 6)", font_size=25, color=HEAD),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.4).move_to(RIGHT * 1.9 + DOWN * 0.2)
-        with self.voiceover(
-            "Memory and logic are closer than they look. <bookmark mark='a'/> A read-only memory takes an address and "
-            "returns a stored word. Store a truth table in it, use the inputs as the address, and it computes the "
-            "function: here, majority and parity of three bits. <bookmark mark='b'/> A programmable logic array does "
-            "the same with a programmable plane of and gates feeding a plane of or gates, a normal form from Part 3 "
-            "laid out in silicon. FPGAs pair Part 3's lookup tables with flip-flops, so they can hold state machines "
-            "too. Because an FPGA can be rewired in a second, chip designers run their next processor on racks of them "
-            "long before it is manufactured, and data centres use them for network cards and search engines whose "
-            "logic changes every few months. <bookmark mark='c'/> And many processors keep a ROM of control words, indexed by the instruction and "
-            "the step within it, to generate the signals that steer their datapaths. That is microcode, and Part 6 "
-            "builds Pebble's control the same way, or with plain logic, and compares the two."
-        ) as vo:
-            self.play(FadeIn(head), FadeIn(rl), FadeIn(cols), FadeIn(rom), FadeIn(rom_note))
-            vo.wait_until("a")
-            self.play(Indicate(cols, scale_factor=1.03))
-            self.play(FadeIn(probe), Create(hl), FadeIn(items[0]))
-            vo.wait_until("b")
-            self.play(FadeIn(items[1]), FadeIn(items[2]))
-            vo.wait_until("c")
-            self.play(FadeIn(items[3]))
-        self.wait(0.3)
-        self.clear_scene()

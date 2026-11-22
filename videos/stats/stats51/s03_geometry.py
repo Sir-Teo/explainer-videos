@@ -5,20 +5,31 @@ import numpy as np
 from videos.stats.stats51.common import *  # noqa: F403
 
 
-class Geometry(VoiceoverScene):
+class Geometry(StatsScene):
     def construct(self):
         self.card()
+        self.wrong_idea("A high-dimensional Gaussian's mass sits near its centre",
+                        r"It sits in a thin shell at radius $\sqrt n$: the centre has almost no volume",
+                        narration="Intuition from one dimension: a Gaussian's density peaks at the centre, so "
+                                  "that's where its mass is.",
+                        right_narration="In high dimensions it isn't. The squared length is chi-squared with n "
+                                        "degrees of freedom, so almost all the mass sits in a thin shell at radius "
+                                        "root n. The centre has almost no volume.")
+        self.ask("Two independent random unit vectors in 10,000 dimensions. The angle between them is close to...",
+                 [r"$0^\circ$", r"$45^\circ$", r"$90^\circ$"], 2,
+                 say="Two independent random directions in ten thousand dimensions. What's the angle between them, "
+                     "almost certainly?",
+                 reveal="Very close to ninety degrees: their inner product is of order one over root n. In high "
+                        "dimensions, almost everything is nearly orthogonal to almost everything else.")
         self.shell()
         self.table()
         self.angles()
         self.jl()
         self.chart()
+        self.answer()
 
     def card(self):
-        card = chapter_card(2, r"High-dimensional geometry", r"Thin shells, \ right angles, \ and random projections", lit=(1984,), part=PART)
-        with self.voiceover("Chapter two. High-dimensional geometry: thin shells, right angles, and random projections."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(2, r"High-dimensional geometry", r"Thin shells, \ right angles, \ and random projections", lit=(1984,), part=PART, said="Chapter two. High-dimensional geometry: thin shells, right angles, and random projections.")
 
     def shell(self):
         rows = [

@@ -5,9 +5,15 @@ import numpy as np
 from videos.stats.stats54.common import *  # noqa: F403
 
 
-class ERM(VoiceoverScene):
+class ERM(StatsScene):
     def construct(self):
         self.card()
+        self.ask("The rule with the smallest training error. Its training error, against its true error, is usually...",
+                 ["too low", "unbiased", "too high"], 0,
+                 say="Pick, from a class, the rule with the smallest training error. Is its training error a fair "
+                     "estimate of its true error?",
+                 reveal="No, too low: it was chosen for looking good on these data. Only a bound uniform over the "
+                        "class can say how much it lies.")
         self.setup_ladder()
         self.decomposition()
         self.chart()
@@ -15,12 +21,10 @@ class ERM(VoiceoverScene):
         self.pac()
         self.nfl()
         self.srm()
+        self.answer()
 
     def card(self):
-        card = chapter_card(1, r"ERM and uniform convergence", r"Why the chosen rule's sample error lies", lit=(1971,), part=PART)
-        with self.voiceover("Chapter one. Empirical risk minimization and uniform convergence: why the chosen rule's sample error lies."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(1, r"ERM and uniform convergence", r"Why the chosen rule's sample error lies", lit=(1971,), part=PART, said="Chapter one. Empirical risk minimization and uniform convergence: why the chosen rule's sample error lies.")
 
     def setup_ladder(self):
         rows = [

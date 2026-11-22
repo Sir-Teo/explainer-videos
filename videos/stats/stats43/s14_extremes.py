@@ -14,20 +14,28 @@ def sci(v: float) -> str:
     return rf"${v / 10 ** e:.1f} \times 10^{{{e}}}$"
 
 
-class Extremes(VoiceoverScene):
+class Extremes(StatsScene):
     def construct(self):
         self.card()
+        self.ask("Maxima of $n$ normals, suitably rescaled, converge to...",
+                 ["Gumbel", r"Fr\'echet", "Weibull"], 0,
+                 say="The maximum of n independent normals, suitably centred and scaled. Which extreme-value law is "
+                     "its limit?",
+                 reveal="Gumbel, and slowly, at a rate one over log n. Heavy tails go to Fréchet; bounded ones to "
+                        "Weibull.")
         self.maxstable()
         self.proof()
         self.domains()
         self.table()
         self.portpirie()
+        self.answer()
+        self.checkpoint([("Infinite-variance sums converge to?", "stable laws"),
+                         ("Maxima of normals converge to?", "Gumbel, slowly")],
+                        narration="Checkpoint. Beyond the normal.",
+                        answers_narration="Stable laws. And Gumbel.")
 
     def card(self):
-        card = chapter_card(13, r"Extremes", r"What can a maximum converge to?", lit=(1928, 1943), part=PART)
-        with self.voiceover("Chapter thirteen. Extremes: what a maximum can converge to."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(13, r"Extremes", r"What can a maximum converge to?", lit=(1928, 1943), part=PART, said="Chapter thirteen. Extremes: what a maximum can converge to.")
 
     def maxstable(self):
         rows = [

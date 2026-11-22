@@ -17,7 +17,7 @@ def tile(content, caption, color, TW=3.6, TH=2.3):
     return Group(frame, content, cap)
 
 
-class Outro(VoiceoverScene):
+class Outro(WatchScene):
     def construct(self):
         self.recap()
         self.payoffs()
@@ -47,6 +47,11 @@ class Outro(VoiceoverScene):
             self.play(LaggedStart(*[FadeIn(t, shift=UP * 0.15) for t in tiles], lag_ratio=0.25), run_time=4.0)
         self.wait(0.5)
         self.clear_scene()
+        self.checkpoint(
+            [(r"Karatsuba's exponent?", r"$\log_2 3 \approx 1.58$"),
+             (r"When does greedy provably work?", r"On matroids")],
+            narration="Last checkpoint. What exponent does Karatsuba's trick give? And when does greedy provably work?",
+            answers_narration="Log base two of three, about one point five eight. And on matroids.")
 
     def payoffs(self):
         card = payoff_card([

@@ -24,22 +24,17 @@ def plane_vec(o, R, ang, color, sw=4):
                  max_tip_length_to_length_ratio=0.06)
 
 
-class Grover(VoiceoverScene):
+class Grover(WatchScene):
     def construct(self):
         self.card()
         self.rotation()
         self.mean()
         self.overshoot()
-        self.counting()
         self.optimal()
 
     def card(self):
-        card = chapter_card(10, r"Grover's search", r"How fast can a quantum computer find a needle?",
-                            lit=(1996, 1997), extra=((1996, r"Grover: \ search in $\sqrt N$ queries"),
-                                                     (1997, r"Bennett et al.: \ and no faster")), part=PART)
-        with self.voiceover("Chapter ten. Grover's search. How fast can a quantum computer find a needle?"):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(10, r"Grover's search", r"How fast can a quantum computer find a needle?", lit=(1996, 1997), extra=((1996, r"Grover: \ search in $\sqrt N$ queries"),
+                                                     (1997, r"Bennett et al.: \ and no faster")), part=PART, said="Chapter ten. Grover's search. How fast can a quantum computer find a needle?")
 
     # ------------------------------------------------------------------ two reflections make a rotation
     def rotation(self):
@@ -186,6 +181,10 @@ class Grover(VoiceoverScene):
 
     # ------------------------------------------------------------------ success against rounds; scaling
     def overshoot(self):
+        self.ask(r"Run Grover past the right number of rounds. \\ Success probability...", [r"stays near one",
+                 r"falls again"], 1,
+                 say="Keep running Grover's iteration past the optimal number of rounds. What happens to the chance of success?",
+                 reveal="It falls again: the state rotates past the target.")
         g = load("grover")
         rows_ = load("gscale")["rows"]
         th, P, N = g["theta"], g["probs"], g["N"]
@@ -257,73 +256,6 @@ class Grover(VoiceoverScene):
         self.wait(0.4)
         self.clear_scene()
 
-    # ------------------------------------------------------------------ counting, and amplitude amplification
-    def counting(self):
-        g = load("grover")
-        th, N = g["theta"], g["N"]
-        head = label(r"Counting solutions, \ amplifying anything", font_size=36).to_edge(UP, buff=0.3)
-        c = np.array([-4.4, 0.6, 0])
-        R = 1.9
-        circ = Circle(radius=R, color=GREY_C, stroke_width=1.8).move_to(c)
-        axes_ = VGroup(DashedLine(c + LEFT * (R + 0.25), c + RIGHT * (R + 0.25), color=GREY_D, dash_length=0.07),
-                       DashedLine(c + DOWN * (R + 0.25), c + UP * (R + 0.25), color=GREY_D, dash_length=0.07))
-        one = Dot(c + RIGHT * R, radius=0.06, color=GREY_B)
-        e_plus = Dot(c + R * np.array([math.cos(2 * th), math.sin(2 * th), 0]), radius=0.09, color=YES)
-        e_minus = Dot(c + R * np.array([math.cos(2 * th), -math.sin(2 * th), 0]), radius=0.09, color=YES)
-        lp = MathTex(r"e^{+2i\theta}", font_size=24, color=YES).next_to(e_plus, UR, buff=0.08)
-        lm = MathTex(r"e^{-2i\theta}", font_size=24, color=YES).next_to(e_minus, DR, buff=0.08)
-        arc = Arc(radius=0.9, start_angle=0, angle=2 * th, arc_center=c, color=YES, stroke_width=2.5)
-        cl = wrapped_label(rf"the Grover step's eigenvalues on the unit circle: \ for $N = {N}$, $M = 1$, \ "
-                           rf"$2\theta = {2 * th:.3f}$ rad, \ {th / PI:.4f} of a turn", 4.6, font_size=18,
-                           color=GREY_A).next_to(circ, DOWN, buff=0.35)
-        fs = 28
-        rows = VGroup(
-            MathTex(r"\sin^2\theta", r"=", r"\frac{M}{N}", font_size=fs),
-            MathTex(r"G", r"=", r"\begin{pmatrix}\cos 2\theta & -\sin 2\theta\\ \sin 2\theta & \cos 2\theta"
-                    r"\end{pmatrix}", font_size=fs),
-            MathTex(r"\lambda", r"=", r"e^{\pm 2i\theta}", font_size=fs),
-            MathTex(r"M", r"=", r"N\sin^2\theta", font_size=fs),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.32)
-        rows.move_to([2.0, 1.0, 0]).align_to([-1.2, 0, 0], LEFT)
-        rows[3][2].set_color(YES)
-        whys = VGroup(label(r"$M$ of the $N$ items marked: \ the same plane", font_size=18, color=GREY_B),
-                      label(r"one round, \ in that plane", font_size=18, color=GREY_B),
-                      label(r"a rotation's angle is in its eigenvalues", font_size=18, color=GREY_B),
-                      wrapped_label(r"phase estimation \ (chapter 8) \ reads $\theta$: \ \textbf{quantum "
-                                    r"counting} \ (Brassard, \ H{\o}yer and Tapp, \ 1998)", 4.4, font_size=18,
-                                    color=YES))
-        for w_, r in zip(whys, rows):
-            w_.next_to(r, RIGHT, buff=0.4)
-        if whys[3].get_right()[0] > 6.85:
-            whys[3].shift(LEFT * (whys[3].get_right()[0] - 6.85))
-        amp = wrapped_label(r"\textbf{amplitude amplification}: \ replace the Hadamards by any algorithm $A$ that "
-                            r"succeeds with probability $p$, \ and $|s\rangle$ by $A|0\rangle$: \ about "
-                            r"$1/\sqrt p$ rounds instead of $1/p$ repetitions \ (Brassard, \ H{\o}yer, \ Mosca and "
-                            r"Tapp, \ 2002)", 12.4, font_size=19, color=HEAD).to_edge(DOWN, buff=0.35)
-        with self.voiceover(
-            "Chapter eight promised another use for Grover's rotation. <bookmark mark='a'/> If M of the N items are "
-            "marked, the same picture holds, with sine squared theta equal to M over N. Each round is a rotation by "
-            "two theta in the plane. <bookmark mark='b'/> A rotation's eigenvalues are e to the plus and minus two "
-            "i theta: its angle is written in its phases. <bookmark mark='c'/> So phase estimation applied to the "
-            "Grover step reads theta, and N sine squared theta counts the solutions without finding them. This is "
-            "quantum counting, from Brassard, Høyer and Tapp in 1998, and it also says how many rounds to run. "
-            "<bookmark mark='d'/> Nothing requires the Hadamards. Replace them by any algorithm that succeeds with "
-            "probability p, and about one over root p rounds replace one over p repetitions."
-        ) as vo:
-            self.play(FadeIn(head))
-            vo.wait_until("a")
-            self.play(Write(rows[0]), FadeIn(whys[0]))
-            self.play(FadeIn(rows[1]), FadeIn(whys[1]))
-            vo.wait_until("b")
-            self.play(Create(circ), FadeIn(axes_), FadeIn(one))
-            self.play(FadeIn(e_plus), FadeIn(e_minus), Create(arc), FadeIn(lp), FadeIn(lm), FadeIn(cl))
-            self.play(FadeIn(rows[2]), FadeIn(whys[2]))
-            vo.wait_until("c")
-            self.play(TransformMatchingTex(rows[0].copy(), rows[3]), FadeIn(whys[3]))
-            vo.wait_until("d")
-            self.play(FadeIn(amp))
-        self.wait(0.4)
-        self.clear_scene()
 
     # ------------------------------------------------------------------ BBBV: no faster
     def optimal(self):

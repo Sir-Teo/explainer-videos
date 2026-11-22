@@ -5,9 +5,15 @@ import numpy as np
 from videos.stats.stats10.common import *  # noqa: F403
 
 
-class Exact(VoiceoverScene):
+class Exact(StatsScene):
     def construct(self):
         self.card()
+        self.ask("Eight cups, four milk-first. If she's guessing, the chance she names all four?",
+                 ["$1/16$", "$1/70$", "$1/256$"], 1,
+                 say="The lady tasting tea. Eight cups, four with the milk poured first, and she must pick those "
+                     "four. If she's guessing, what's the chance she gets all four right?",
+                 reveal="One in seventy: there are seventy ways to choose four cups of eight. The randomization "
+                        "itself makes the null distribution.")
         self.tea_null()
         self.designs()
         self.table()
@@ -15,12 +21,10 @@ class Exact(VoiceoverScene):
         self.flips()
         self.machine()
         self.why_random()
+        self.answer()
 
     def card(self):
-        card = chapter_card(2, r"Exact tests by design", r"Randomization makes the null distribution", lit=(1935,), part=PART)
-        with self.voiceover("Chapter two. Exact tests by design."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(2, r"Exact tests by design", r"Randomization makes the null distribution", lit=(1935,), part=PART, said="Chapter two. Exact tests by design.")
 
     def tea_null(self):
         d = load("tea")["8"]

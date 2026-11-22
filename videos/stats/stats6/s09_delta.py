@@ -5,21 +5,24 @@ import numpy as np
 from videos.stats.stats6.common import *  # noqa: F403
 
 
-class Delta(VoiceoverScene):
+class Delta(StatsScene):
     def construct(self):
         self.card()
+        self.ask(r"$\mathrm{SE}(\bar x) = s/\sqrt n$. Then $\mathrm{SE}(\log \bar x)$ is about...",
+                 [r"$\log(s/\sqrt n)$", r"$(s/\sqrt n)/\bar x$", r"$s/\sqrt n$"], 1,
+                 say="The standard error of a mean is s over root n. What's the standard error of its logarithm?",
+                 reveal="About s over root n, divided by x bar: the slope of the log at x bar, times the standard "
+                        "error. That's the delta method.")
         self.picture()
         self.derive()
         self.poisson()
         self.arcsine()
         self.several()
         self.second_order()
+        self.answer()
 
     def card(self):
-        card = chapter_card(8, r"The delta method", r"The CLT, pushed through a smooth function", part=PART)
-        with self.voiceover("Chapter eight. The delta method."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(8, r"The delta method", r"The CLT, pushed through a smooth function", part=PART, said="Chapter eight. The delta method.")
 
     def picture(self):
         A = axes([0, 9], [0, 3.4], x_length=7.0, y_length=5.2, xlabel=r"$\bar X$", ylabel=r"$g(\bar X) = \sqrt{\bar X}$",

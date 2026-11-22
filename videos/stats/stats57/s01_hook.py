@@ -5,7 +5,7 @@ import numpy as np
 from videos.stats.stats57.common import *  # noqa: F403
 
 
-class Hook(VoiceoverScene):
+class Hook(StatsScene):
     def construct(self):
         self.story()
         self.family()
@@ -16,7 +16,7 @@ class Hook(VoiceoverScene):
         self.turn()
         self.testing()
         self.upgrade()
-        self.objectives()
+        self.title(PART)
 
     def story(self):
         tl = timeline(lit=(1956,)).to_edge(UP, buff=0.35)
@@ -221,28 +221,5 @@ class Hook(VoiceoverScene):
             self.play(FadeIn(cards[0], shift=UP * 0.2))
             vo.wait_until("b")
             self.play(FadeIn(cards[1], shift=UP * 0.2))
-        self.wait(1.0)
-        self.clear_scene()
-
-    def objectives(self):
-        head = VGroup(label(r"Part 57", font_size=34, color=GREY_B), label(r"Distribution-Free Inference", font_size=56)).arrange(DOWN, buff=0.25)
-        obj = objectives_card([
-            r"the quantile lemma, \ proved; \ full, \ split and jackknife$+$ conformal",
-            r"impossibility: \ conditional coverage, \ distribution-free functionals",
-            r"conditional guarantees over function classes; \ group coverage on NHANES",
-            r"beyond exchangeability; \ online coverage; \ outliers; \ risk control; \ open problems",
-        ], color=S.ACCENT, font_size=26)
-        prereq = note(r"prerequisites: \ Parts 34, \ 46, \ 47").to_corner(DL, buff=0.3)
-        built = note(r"built: \ \texttt{statkit.dfree}, \ the rank strip").to_corner(DR, buff=0.3)
-        with self.voiceover(
-            "<bookmark mark='a'/> Part fifty-seven: distribution-free inference. <bookmark mark='b'/> The quantile lemma, "
-            "proved, with full, split and jackknife plus conformal; the impossibility theorems for conditional coverage and for "
-            "distribution-free functionals; conditional guarantees over function classes, with group coverage on NHANES blood "
-            "pressures; going beyond exchangeability; coverage online; outlier detection; risk control; and open problems."
-        ) as vo:
-            vo.wait_until("a")
-            self.play(FadeIn(head, shift=UP * 0.2))
-            vo.wait_until("b")
-            self.play(FadeOut(head), FadeIn(obj, shift=UP * 0.2), FadeIn(prereq), FadeIn(built))
         self.wait(1.0)
         self.clear_scene()

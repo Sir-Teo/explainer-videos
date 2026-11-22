@@ -5,9 +5,20 @@ import numpy as np
 from videos.stats.stats28.common import *  # noqa: F403
 
 
-class AIC(VoiceoverScene):
+class AIC(StatsScene):
     def construct(self):
         self.card()
+        self.wrong_idea("The model with the lowest AIC is the true model",
+                        "AIC estimates predictive accuracy: near-ties mean no winner",
+                        narration="A natural reading: the model with the lowest AIC is the true model.",
+                        right_narration="AIC estimates predictive accuracy, not truth. And when five models sit "
+                                        "within two units of each other, AIC has a favourite, but not a winner.")
+        self.ask("A model 10 AIC units behind the best has...",
+                 ["essentially no support", "nearly equal support"], 0,
+                 say="Akaike's criterion ranks models. A model ten AIC units behind the best: how much support does "
+                     "it have?",
+                 reveal="Essentially none. Within two, models are competitive; four to seven behind, considerably "
+                        "less; beyond ten, almost nothing.")
         self.cp()
         self.kl()
         self.derivation()
@@ -15,12 +26,10 @@ class AIC(VoiceoverScene):
         self.aicc()
         self.bench()
         self.deltas()
+        self.answer()
 
     def card(self):
-        card = chapter_card(2, r"Cp and AIC", r"Estimate the optimism, \ add it back", lit=(1973,), part=PART)
-        with self.voiceover("Chapter two. Mallows's Cp and Akaike's information criterion."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(2, r"Cp and AIC", r"Estimate the optimism, \ add it back", lit=(1973,), part=PART, said="Chapter two. Mallows's Cp and Akaike's information criterion.")
 
     def cp(self):
         rows = [

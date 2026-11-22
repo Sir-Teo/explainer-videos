@@ -3,20 +3,24 @@ from __future__ import annotations
 from videos.stats.stats36.common import *  # noqa: F403
 
 
-class TimeVarying(VoiceoverScene):
+class TimeVarying(StatsScene):
     def construct(self):
         self.card()
+        self.ask("A time-varying confounder is also affected by earlier treatment. Regression adjustment for it is...",
+                 ["correct", "biased: g-methods are needed"], 1,
+                 say="HIV drugs adjusted to the latest viral load, which the earlier drugs changed. Adjust for "
+                     "viral load by regression?",
+                 reveal="Biased: it blocks part of the effect and can open other paths. Robins' g-methods, such as "
+                        "marginal structural models, handle confounders that are also results.")
         self.graph()
         self.dilemma()
         self.msm()
         self.numbers()
         self.target()
+        self.answer()
 
     def card(self):
-        card = chapter_card(14, r"Time-varying treatments", r"When the confounder is also a result", lit={1986: r"the g-formula", 2000: r"marginal structural models", 2016: r"target trials"}, part=PART)
-        with self.voiceover("Chapter fourteen. Treatments that vary over time."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(14, r"Time-varying treatments", r"When the confounder is also a result", lit={1986: r"the g-formula", 2000: r"marginal structural models", 2016: r"target trials"}, part=PART, said="Chapter fourteen. Treatments that vary over time.")
 
     def graph(self):
         G = CausalGraph({"A0": (-3.0, 0), "L1": (-0.8, 0), "A1": (1.4, 0), "Y": (3.4, 0), "U": (0.3, -2.0)},

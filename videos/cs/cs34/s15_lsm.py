@@ -22,7 +22,7 @@ def levels_fig(shape, unit=0.055, h=0.42, gap=0.12, color=FILEC, width=5.5):
     return g
 
 
-class Lsm(VoiceoverScene):
+class Lsm(WatchScene):
     def construct(self):
         self.card()
         self.idea()
@@ -30,14 +30,12 @@ class Lsm(VoiceoverScene):
         self.amplification()
 
     def card(self):
-        card = chapter_card(14, r"LSM trees", r"How do you index data that arrives faster than a disk can seek?",
-                            lit=(1996, 2006), extra=((1996, r"O'Neil et al.: \ the LSM tree"), (2006, r"Bigtable")),
-                            part=PART)
-        with self.voiceover("Chapter fourteen. LSM trees."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(14, r"LSM trees", r"How do you index data that arrives faster than a disk can seek?", lit=(1996, 2006), extra=((1996, r"O'Neil et al.: \ the LSM tree"), (2006, r"Bigtable")), part=PART, said="Chapter fourteen. LSM trees.")
 
     def idea(self):
+        self.ask(r"An LSM tree turns each random write into...", [r"a random write", r"a sequential append"], 1,
+                 say="A B-tree turns each insert into a random write. What does an LSM tree turn it into?",
+                 reveal="A sequential append: a memtable flushed as a sorted run, merged later.")
         head = label(r"Buffer, \ sort, \ write once, \ merge later", font_size=36).to_edge(UP, buff=0.3)
         mem = blk(r"memtable: \ sorted, \ in memory", HEAD, w=4.2, h=0.7, font=19, fill=0.2).move_to([-3.2, 1.8, 0])
         wal = blk(r"log: \ every put, \ appended", JRN, w=3.4, h=0.6, font=17, fill=0.2).move_to([2.6, 1.8, 0])

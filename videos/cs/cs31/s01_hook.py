@@ -4,11 +4,11 @@ from explainer.cs import *  # noqa: F403
 from videos.cs.cs31.common import (BG, DATA, HEAD, KERN, NO, PART, YES, gantt, load, mono, time_axis)
 
 
-class Hook(VoiceoverScene):
+class Hook(WatchScene):
     def construct(self):
         self.idle()
         self.boot()
-        self.plan()
+        self.title(PART)
 
     def idle(self):
         h = load("history")
@@ -106,26 +106,3 @@ class Hook(VoiceoverScene):
         self.wait(0.3)
         self.clear_scene()
 
-    def plan(self):
-        title = label(rf"Part {PART}: \ The Kernel", font_size=46).to_edge(UP, buff=0.4)
-        smap = series_map(current=PART, done=PART - 1).scale(0.92).next_to(title, DOWN, buff=0.35)
-        obj = objectives_card([
-            r"from batch to time-sharing: \ CTSS, \ Multics, \ Unix and Linux",
-            r"protection: \ a mode bit, \ traps, \ and the system call, \ built into Pebble",
-            r"processes, \ context switches, \ fork, exec and wait, \ measured on this machine",
-            r"scheduling: \ FCFS to MLFQ, \ lottery, \ stride and Linux's CFS, \ and real time",
-            r"queueing theory: \ Little's law, \ M/M/1's hockey stick, \ and why variance matters",
-            r"PebbleOS: \ our kernel runs the Job as two processes joined by a pipe",
-        ], font_size=26).move_to(DOWN * 0.2)
-        with self.voiceover(
-            "Part 31 of Computer Science, Built: The Kernel, and the start of Act Six. <bookmark mark='a'/> In this "
-            "part: how time-sharing began; the protection hardware an operating system needs, which we add to Pebble; "
-            "traps and system calls; processes and what it costs to switch between them; fork, exec and the shell; the "
-            "schedulers, from first come first served to the one in Linux, and the rules for machines with deadlines; "
-            "the queueing theory that explains why a busy server is slow; and finally PebbleOS running the Job."
-        ) as vo:
-            self.play(FadeIn(title), FadeIn(smap))
-            vo.wait_until("a")
-            self.play(FadeOut(smap), FadeIn(obj))
-        self.wait(0.5)
-        self.clear_scene()

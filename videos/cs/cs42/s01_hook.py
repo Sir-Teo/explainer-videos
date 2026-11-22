@@ -17,12 +17,12 @@ STEPS = [
 ]
 
 
-class Hook(VoiceoverScene):
+class Hook(WatchScene):
     def construct(self):
         self.url()
         self.machines()
         self.toy()
-        self.plan()
+        self.title(PART)
 
     def url(self):
         head = label(r"What happens when you type a URL?", font_size=36).to_edge(UP, buff=0.3)
@@ -153,29 +153,6 @@ class Hook(VoiceoverScene):
         self.wait(0.4)
         self.clear_scene()
 
-    def plan(self):
-        title = label(rf"Part {PART}: \ The Browser and the Web", font_size=36).to_edge(UP, buff=0.3)
-        smap = series_map(current=PART, done=PART - 1).scale(0.92).next_to(title, DOWN, buff=0.35)
-        obj = objectives_card([
-            r"why HTML is parsed by a state machine, \ not a grammar",
-            r"the cascade, \ specificity and selector matching",
-            r"layout: \ flexbox and Knuth--Plass line breaking",
-            r"the event loop and the 16.7 ms frame",
-            r"inside a JavaScript engine; \ virtual DOMs and signals",
-            r"caching, \ performance, \ security and accessibility",
-        ], font_size=25).move_to(DOWN * 0.2)
-        with self.voiceover(
-            "This is Part 42 of Computer Science, Built, the third part of Act Eight. <bookmark mark='a'/> We will "
-            "see why HTML is parsed by a state machine rather than a grammar; how the cascade decides which style "
-            "wins; how a page is laid out, down to the dynamic program that breaks a paragraph into lines; how the "
-            "event loop schedules everything into frames; what a JavaScript engine does to make dynamic code fast; "
-            "and how frameworks, caches, the security model and accessibility rest on all of it."
-        ) as vo:
-            self.play(FadeIn(title), FadeIn(smap))
-            vo.wait_until("a")
-            self.play(FadeOut(smap), FadeIn(obj))
-        self.wait(0.5)
-        self.clear_scene()
 
 
 _ = (LAM, NO, YES)

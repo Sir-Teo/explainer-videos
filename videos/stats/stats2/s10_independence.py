@@ -36,20 +36,29 @@ def face_mob(pts, paint):
     return Polygon(*pts, stroke_color=WHITE, stroke_width=2, fill_color=col, fill_opacity=0.9)
 
 
-class Independence(VoiceoverScene):
+class Independence(StatsScene):
     def construct(self):
         self.card()
+        self.ask("Talent and looks are independent among applicants. Among those hired for one or the other, they are...",
+                 ["still independent", "negatively related", "positively related"], 1,
+                 say="Among actors who apply, talent and looks are independent. The studio hires anyone with one or "
+                     "the other. Among those hired, are they still independent, negatively related, or positively "
+                     "related?",
+                 reveal="Negatively related. Condition on a common effect, being hired, and independence "
+                        "disappears. It's Berkson's bias.")
         self.definition()
         self.tetrahedron()
         self.conditional()
         self.lesson()
+        self.answer()
+        self.checkpoint([("Monty Hall: stay or switch?", "switch: it wins $2/3$ when the host knowingly shows a goat"),
+                         ("Selected on talent or looks: the two among the selected?", "negatively related: Berkson's bias")],
+                        narration="Checkpoint. Evidence and independence.",
+                        answers_narration="Switch, two times in three. And selection on a common effect makes "
+                                          "independent things dependent.")
 
     def card(self):
-        card = chapter_card(9, r"Independence", r"When does knowing one thing tell you nothing about another?",
-                            lit=(1933,), part=PART)
-        with self.voiceover("Chapter nine. Independence."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(9, r"Independence", r"When does knowing one thing tell you nothing about another?", lit=(1933,), part=PART, said="Chapter nine. Independence.")
 
     def definition(self):
         dfn = definition_card(r"Independent events", r"$P(A \cap B) = P(A)\,P(B)$; \ equivalently, \ when "

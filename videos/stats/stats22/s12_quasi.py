@@ -18,21 +18,25 @@ def lattice_grid(L, size=3.6, center=ORIGIN, up=None, down=None):
     return VGroup(g, frame).move_to(center)
 
 
-class Quasi(VoiceoverScene):
+class Quasi(StatsScene):
     def construct(self):
         self.card()
+        self.ask("Quasi-likelihood needs...",
+                 ["the full distribution", "only the mean and the variance function"], 1,
+                 say="Wedderburn's quasi-likelihood builds doubt in from the start. What does it need to know about "
+                     "the data?",
+                 reveal="Only how the mean depends on the predictors, and how the variance depends on the mean. "
+                        "That's enough for consistent estimates and honest standard errors.")
         self.quasi()
         self.lattices()
         self.constant()
         self.pseudo()
         self.estimates()
         self.composite()
+        self.answer()
 
     def card(self):
-        card = chapter_card(11, r"Quasi-, \ composite and pseudo-likelihood", r"When the full likelihood is too much", lit=(1975,), part=PART)
-        with self.voiceover("Chapter eleven. Quasi-likelihood, composite likelihood and pseudo-likelihood."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(11, r"Quasi-, \ composite and pseudo-likelihood", r"When the full likelihood is too much", lit=(1975,), part=PART, said="Chapter eleven. Quasi-likelihood, composite likelihood and pseudo-likelihood.")
 
     def quasi(self):
         d = load("sandwich")

@@ -6,21 +6,25 @@ from explainer.stats.board import coverage_board, load_all
 from videos.stats.stats27.common import *  # noqa: F403
 
 
-class ABC(VoiceoverScene):
+class ABC(StatsScene):
     def construct(self):
         self.card()
+        self.ask("ABC keeps parameters whose simulated summaries land near the data's. As the tolerance shrinks, it targets...",
+                 ["the posterior given the summaries", "the prior"], 0,
+                 say="Approximate Bayesian computation keeps parameters whose simulated data land close to the "
+                     "observed, measured by summaries. As the tolerance shrinks, what does it target?",
+                 reveal="The posterior given the summaries. With sufficient summaries that's the full posterior; "
+                        "otherwise information is lost, silently.")
         self.idea()
         self.sufficient()
         self.insufficient()
         self.abc_smc()
         self.neural()
         self.sbc_board()
+        self.answer()
 
     def card(self):
-        card = chapter_card(12, r"Likelihood-free inference", r"When you can simulate but not evaluate", lit=(2002,), part=PART)
-        with self.voiceover("Chapter twelve. Likelihood-free inference."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(12, r"Likelihood-free inference", r"When you can simulate but not evaluate", lit=(2002,), part=PART, said="Chapter twelve. Likelihood-free inference.")
 
     def idea(self):
         rows = [

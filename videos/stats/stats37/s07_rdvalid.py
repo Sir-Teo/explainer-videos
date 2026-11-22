@@ -5,9 +5,15 @@ import numpy as np
 from videos.stats.stats37.common import *  # noqa: F403
 
 
-class RDValid(VoiceoverScene):
+class RDValid(StatsScene):
     def construct(self):
         self.card()
+        self.ask("McCrary's test looks for...",
+                 ["a jump in the running variable's density at the cutoff", "a jump in the outcome"], 0,
+                 say="A threat to the design: people sorting themselves across the cutoff. What does McCrary's test "
+                     "look for?",
+                 reveal="A jump in the density of the running variable at the cutoff: too many people just above, "
+                        "too few just below. Precise manipulation shows up as a pile.")
         self.remark()
         self.density()
         self.balance()
@@ -15,12 +21,10 @@ class RDValid(VoiceoverScene):
         self.fuzzy_math()
         self.elections()
         self.checklist()
+        self.answer()
 
     def card(self):
-        card = chapter_card(6, r"RD validity", r"What a cutoff can hide", lit=(2008,), part=PART)
-        with self.voiceover("Chapter six. Is the discontinuity valid?"):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(6, r"RD validity", r"What a cutoff can hide", lit=(2008,), part=PART, said="Chapter six. Is the discontinuity valid?")
 
     def remark(self):
         rows = fit_rows(VGroup(

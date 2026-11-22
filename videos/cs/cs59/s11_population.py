@@ -66,24 +66,19 @@ def stacked(rows, whys, buff=0.22):
     return pairs
 
 
-class Population(VoiceoverScene):
+class Population(WatchScene):
     def construct(self):
         self.card()
         self.model()
         self.rules()
         self.run()
         self.timing()
-        self.approx()
         self.power()
 
     def card(self):
-        card = chapter_card(10, r"Population protocols", r"What can a crowd of anonymous, \ forgetful agents "
-                            r"compute?", lit=(2004, 2006),
-                            extra=((2004, r"Angluin et al.: \ population protocols"),
-                                   (2006, r"the semilinear predicates")), part=PART)
-        with self.voiceover("Chapter ten. Population protocols."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(10, r"Population protocols", r"What can a crowd of anonymous, \ forgetful agents "
+                            r"compute?", lit=(2004, 2006), extra=((2004, r"Angluin et al.: \ population protocols"),
+                                   (2006, r"the semilinear predicates")), part=PART, said="Chapter ten. Population protocols.")
 
     # ------------------------------------------------------------------ the model
     def model(self):
@@ -217,6 +212,10 @@ class Population(VoiceoverScene):
 
     # ------------------------------------------------------------------ the run
     def run(self):
+        self.ask(r"Four-state majority: 100 agents, 52 against 48. \\ The population decides...",
+                 [r"correctly only sometimes", r"correctly, always, eventually"], 1,
+                 say="A hundred anonymous agents, fifty-two for A and forty-eight for B, meeting at random with four states. Do they decide correctly?",
+                 reveal="Always, eventually, however small the margin. Only the time depends on it.")
         m = load("majority")["run"]
         tr = [{"A": (m["n"] + m["margin"]) // 2, "B": m["n"] - (m["n"] + m["margin"]) // 2, "a": 0, "b": 0}]
         tr += m["trace"]
@@ -373,115 +372,6 @@ class Population(VoiceoverScene):
         self.wait(0.4)
         self.clear_scene()
 
-    # ------------------------------------------------------------------ approximate majority
-    def approx(self):
-        head = label(r"Approximate majority in three states", font_size=36).to_edge(UP, buff=0.3)
-        CX, CY, BL = DATA, LAM, GREY_B
-        rows = VGroup(
-            rule_row([(CX, r"x", 0.9), (CY, r"y", 0.9)], [(CX, r"x", 0.9), (BL, r"", 0.0, True)], r"", r=0.21,
-                     size=22),
-            rule_row([(CY, r"y", 0.9), (CX, r"x", 0.9)], [(CY, r"y", 0.9), (BL, r"", 0.0, True)], r"", r=0.21,
-                     size=22),
-            rule_row([(CX, r"x", 0.9), (BL, r"", 0.0, True)], [(CX, r"x", 0.9), (CX, r"x", 0.9)], r"", r=0.21,
-                     size=22),
-            rule_row([(CY, r"y", 0.9), (BL, r"", 0.0, True)], [(CY, r"y", 0.9), (CY, r"y", 0.9)], r"", r=0.21,
-                     size=22),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.18)
-        tags = VGroup(label(r"the responder of an opposite opinion goes blank", font_size=18, color=NO),
-                      label(r"an opinion recruits a blank", font_size=18, color=YES))
-        tags[0].next_to(VGroup(rows[0], rows[1]), RIGHT, buff=0.3)
-        tags[1].next_to(VGroup(rows[2], rows[3]), RIGHT, buff=0.3)
-        rules = VGroup(rows, tags).move_to([3.0, 1.55, 0])
-        if rules.get_right()[0] > 6.7:
-            rules.shift(LEFT * (rules.get_right()[0] - 6.7))
-        # an illustrative run, 16 agents, 10 x against 6 y
-        n = 16
-        C = np.array([-4.3, -0.55, 0])
-        P = [C + 1.75 * np.array([math.cos(2 * math.pi * k / n), math.sin(2 * math.pi * k / n), 0])
-             for k in range(n)]
-        init = ["x"] * 10 + ["y"] * 6
-
-        def simulate(seed):
-            r = random.Random(seed)
-            st = init[:]
-            r.shuffle(st)
-            start = st[:]
-            seq = []
-            while len(set(st)) > 1 and len(seq) < 400:
-                i, j = r.sample(range(n), 2)
-                a, b = st[i], st[j]
-                if {a, b} == {"x", "y"}:
-                    st[j] = "-"
-                elif b == "-" and a != "-":
-                    st[j] = a
-                else:
-                    seq.append((i, j, None))
-                    continue
-                seq.append((i, j, st[j]))
-            return start, seq, st
-        seed = 0
-        while True:
-            start, seq, end = simulate(seed)
-            if set(end) == {"x"} and len(seq) <= 140:
-                break
-            seed += 1
-        col = {"x": CX, "y": CY, "-": BL}
-
-        def ag(s):
-            return Circle(radius=0.2, stroke_color=col[s], stroke_width=2.2, fill_color=col[s],
-                          fill_opacity=0.9 if s != "-" else 0.0)
-        ags = VGroup(*[ag(s).move_to(P[k]) for k, s in enumerate(start)])
-
-        def to(k, s):
-            return ags[k].animate.set_fill(col[s], opacity=0.9 if s != "-" else 0.0).set_stroke(col[s])
-        ill = note(r"illustrative: \ 10 $x$ against 6 $y$", font_size=16).next_to(VGroup(*ags), DOWN, buff=0.2)
-        W = 6.0
-        notes = VGroup(
-            wrapped_label(r"Angluin, \ Aspnes and Eisenstat \ (2008): \ with high probability it converges in "
-                          r"$O(\log n)$ parallel time, \ to the initial majority when the margin exceeds about "
-                          r"$\sqrt{n}\,\log n$", W, font_size=19, color=WHITE),
-            wrapped_label(r"fast, \ but it can err on a close vote; \ the four-state protocol is always right, \ "
-                          r"but slow", W, font_size=19, color=HEAD),
-            wrapped_label(r"Cardelli and Csik\'asz-Nagy \ (2012): \ the switch that drives the cell cycle has the "
-                          r"same structure", W, font_size=19, color=YES),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.3).move_to([3.4, -1.65, 0])
-        with self.voiceover(
-            "If a small chance of error is acceptable, three states and logarithmic time are enough. "
-            "<bookmark mark='a'/> In Dana Angluin, James Aspnes and David Eisenstat's protocol of 2008, when x "
-            "meets y, the responder goes blank; <bookmark mark='b'/> and an opinion that meets a blank recruits "
-            "it. <bookmark mark='c'/> Opinions knock each other out and recruit, and the larger side snowballs. "
-            "<bookmark mark='d'/> With high probability it converges in logarithmic parallel time, and to the "
-            "initial majority whenever the margin is larger than about the square root of n times log n. "
-            "<bookmark mark='e'/> Fast, but it can err on a close vote. <bookmark mark='f'/> In 2012 Luca "
-            "Cardelli and Attila Csikász-Nagy noticed that the switch controlling the cell cycle has the same "
-            "structure."
-        ) as vo:
-            self.play(FadeIn(head), FadeIn(ags), FadeIn(ill))
-            vo.wait_until("a")
-            self.play(FadeIn(rows[0]), FadeIn(rows[1]), FadeIn(tags[0]))
-            vo.wait_until("b")
-            self.play(FadeIn(rows[2]), FadeIn(rows[3]), FadeIn(tags[1]))
-            vo.wait_until("c")
-            active = [(i, j, s) for i, j, s in seq if s is not None]
-            for i, j, s in active[:10]:
-                ln = Line(P[i], P[j], color=GREY_A, stroke_width=2.5, buff=0.2)
-                self.play(Create(ln), to(j, s), run_time=0.35)
-                self.play(FadeOut(ln), run_time=0.1)
-            rest = active[10:]
-            k = max(1, len(rest) // 6)
-            for b in range(0, len(rest), k):
-                last = {}
-                for i, j, s in rest[b:b + k]:
-                    last[j] = s
-                self.play(*[to(j, s) for j, s in last.items()], run_time=0.45)
-            vo.wait_until("d")
-            self.play(FadeIn(notes[0]))
-            vo.wait_until("e")
-            self.play(FadeIn(notes[1]))
-            vo.wait_until("f")
-            self.play(FadeIn(notes[2]))
-        self.wait(0.4)
-        self.clear_scene()
 
     # ------------------------------------------------------------------ what is computable
     def power(self):

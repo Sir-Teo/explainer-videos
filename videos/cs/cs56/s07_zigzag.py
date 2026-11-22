@@ -63,7 +63,7 @@ def clouds(center, R=2.15, rc=0.42):
     return cen, ports, rot
 
 
-class Zigzag(VoiceoverScene):
+class Zigzag(WatchScene):
     def construct(self):
         self.card()
         self.explicit()
@@ -74,14 +74,9 @@ class Zigzag(VoiceoverScene):
         self.reingold()
 
     def card(self):
-        card = chapter_card(6, r"Explicit expanders: \ the zig-zag product",
-                            r"How do you build an expander you can describe in a few lines?",
-                            lit=(1973, 2005), extra=((1973, r"Margulis"),
+        self.chapter(6, r"Explicit expanders: \ the zig-zag product", r"How do you build an expander you can describe in a few lines?", lit=(1973, 2005), extra=((1973, r"Margulis"),
                                                      (2000, r"Reingold, \ Vadhan and Wigderson"),
-                                                     (2005, r"Reingold: \ SL = L")), part=PART)
-        with self.voiceover("Chapter six. Explicit expanders, and the zig-zag product."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+                                                     (2005, r"Reingold: \ SL = L")), part=PART, said="Chapter six. Explicit expanders, and the zig-zag product.")
 
     # ------------------------------------------------------------------ what explicit means
     def explicit(self):
@@ -148,6 +143,10 @@ class Zigzag(VoiceoverScene):
 
     # ------------------------------------------------------------------ the product, drawn
     def product(self):
+        self.ask(r"Zig-zag product of a big graph $G$ with a small $H$ \\ of degree $D$. The result's degree:",
+                 [r"$\deg G \times D$", r"$D^2$"], 1,
+                 say="Take the zig-zag product of a big graph G with a small graph H of degree D. What is the new degree?",
+                 reveal="D squared, whatever G's degree. That's what lets the recursion keep degree constant.")
         head = label(r"A step, \ a cloud move, \ a step", font_size=36).to_edge(UP, buff=0.3)
         center = LEFT * 3.35 + DOWN * 0.3
         cen, ports, rot = clouds(center)

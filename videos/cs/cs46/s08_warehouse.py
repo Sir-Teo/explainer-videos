@@ -21,25 +21,24 @@ def table_card(title, fields, color, w=2.4):
     return g
 
 
-class Warehouse(VoiceoverScene):
+class Warehouse(WatchScene):
     def construct(self):
         self.card()
         self.lambda_kappa()
         self.oltp_olap()
         self.star()
         self.star_join()
-        self.scd()
 
     def card(self):
-        card = chapter_card(7, r"The warehouse", r"How should data be laid out to answer questions about all of it?",
-                            lit=(1993, 1996, 2014), extra=((1993, r"Codd: \ OLAP"),
+        self.chapter(7, r"The warehouse", r"How should data be laid out to answer questions about all of it?", lit=(1993, 1996, 2014), extra=((1993, r"Codd: \ OLAP"),
                                                            (1996, r"Kimball: \ The Data Warehouse Toolkit"),
-                                                           (2014, r"Kreps: \ Kappa")), part=PART)
-        with self.voiceover("Chapter seven. The warehouse."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+                                                           (2014, r"Kreps: \ Kappa")), part=PART, said="Chapter seven. The warehouse.")
 
     def lambda_kappa(self):
+        self.ask(r"Lambda runs a batch and a streaming pipeline. \\ Can one stream pipeline do both?", [r"no",
+                 r"yes, by replaying the log"], 1,
+                 say="The Lambda architecture runs one batch pipeline and one streaming pipeline. Can a single streaming pipeline do both jobs?",
+                 reveal="Yes, if the log is kept: to recompute, replay it from the start. That's the Kappa architecture.")
         head = label(r"Lambda against Kappa", font_size=36).to_edge(UP, buff=0.3)
         # Lambda: one log, two code paths, merged when queried
         t1 = label(r"Lambda \ (Marz, \ 2011)", font_size=22, color=HEAD).move_to([-5.0, 2.55, 0])
@@ -266,60 +265,6 @@ class Warehouse(VoiceoverScene):
         self.wait(0.4)
         self.clear_scene()
 
-    def scd(self):
-        head = label(r"Slowly changing dimensions", font_size=36).to_edge(UP, buff=0.3)
-        event = label(r"customer 17, \ Ann, \ moves from Leeds to York in 2024", font_size=22, color=HEAD)
-        event.next_to(head, DOWN, buff=0.35)
-        illus = note(r"illustrative", font_size=16).next_to(event, RIGHT, buff=0.3)
-        t1 = grid_table([r"key", r"name", r"city"], [["17", "Ann", "Leeds"]], widths=[1.0, 1.2, 1.4], row_h=0.45,
-                        font_size=20, mono_cols=())
-        t2 = grid_table([r"key", r"name", r"city", r"from", r"to"],
-                        [["17", "Ann", "Leeds", "2019", "2024"], ["42", "Ann", "York", "2024", ""]],
-                        widths=[1.0, 1.1, 1.3, 1.1, 1.1], row_h=0.45, font_size=20, mono_cols=())
-        t1.move_to([-4.4, 0.3, 0])
-        t2.move_to([2.95, 0.55, 0]).align_to(t1, UP)
-        h1 = label(r"type 1: \ overwrite", font_size=22, color=NO).next_to(t1, UP, buff=0.25)
-        h2 = label(r"type 2: \ add a version", font_size=22, color=YES).next_to(t2, UP, buff=0.25)
-        hidden = VGroup(t2.cells[1][4], *t2.cells[2])
-        york = label(r"York", font_size=20, color=NO).move_to(t1.cells[1][2])
-        f1 = wrapped_label(r"a 2021 sale, \ key 17: \ now reported in York; \ last year's report changes when "
-                           r"run again", 5.0, font_size=19, color=NO).next_to(t1, DOWN, buff=0.45).align_to(t1, LEFT)
-        f2 = VGroup(label(r"a 2021 sale, \ key 17: \ Leeds", font_size=19, color=YES),
-                    label(r"a 2025 sale, \ key 42: \ York", font_size=19, color=YES)).arrange(
-            DOWN, aligned_edge=LEFT, buff=0.15).next_to(t2, DOWN, buff=0.45).align_to(t2, LEFT)
-        hi_old = Rectangle(width=5.6, height=0.45, stroke_color=YES, stroke_width=2).move_to(
-            [t2.rule.get_center()[0], t2.cells[1][0].get_y(), 0])
-        hi_new = hi_old.copy().move_to([t2.rule.get_center()[0], t2.cells[2][0].get_y(), 0])
-        foot = wrapped_label(r"type 3 keeps a ``previous city'' column; \ type 2 turns the dimension into a log of "
-                             r"versions, \ a table that can be asked what was true on any date \ (Chapter 10's time "
-                             r"travel)", 12.4, font_size=20, color=WHITE)
-        foot.next_to(VGroup(f1, f2), DOWN, buff=0.8).set_x(0)
-        with self.voiceover(
-            "Dimensions change, slowly. <bookmark mark='a'/> A customer, Ann, moves from Leeds to York. What should "
-            "happen to her row? <bookmark mark='b'/> The simplest answer, Kimball's type one, overwrites the city. "
-            "But then every sale she made in Leeds is now reported as a sale in York, and "
-            "last year's report changes when it is run again. <bookmark mark='c'/> Type two keeps the history. The "
-            "old row gets an end date, and a new row, with a new surrogate key, forty-two, begins. Each sale points "
-            "to the version that was true when it happened. <bookmark mark='d'/> The dimension has become a log of "
-            "versions, a table that can say what was true on any date, which is where Chapter 10's time travel "
-            "begins."
-        ) as vo:
-            self.play(FadeIn(head))
-            vo.wait_until("a")
-            self.play(FadeIn(event), FadeIn(illus), FadeIn(h1), FadeIn(t1), FadeIn(h2),
-                      FadeIn(VGroup(*[m for m in t2 if m not in hidden])))
-            vo.wait_until("b")
-            self.play(Transform(t1.cells[1][2], york))
-            self.play(FadeIn(f1))
-            vo.wait_until("c")
-            self.play(FadeIn(t2.cells[1][4]))
-            self.play(LaggedStart(*[FadeIn(c) for c in t2.cells[2]], lag_ratio=0.15))
-            self.play(Create(hi_old), FadeIn(f2[0]))
-            self.play(Create(hi_new), FadeIn(f2[1]))
-            vo.wait_until("d")
-            self.play(FadeIn(foot))
-        self.wait(0.4)
-        self.clear_scene()
 
 
 _ = (KERN, LAM, load)

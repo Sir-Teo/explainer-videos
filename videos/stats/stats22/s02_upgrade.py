@@ -3,19 +3,23 @@ from __future__ import annotations
 from videos.stats.stats22.common import *  # noqa: F403
 
 
-class Upgrade(VoiceoverScene):
+class Upgrade(StatsScene):
     def construct(self):
         self.card()
+        self.ask(r"For Uniform$(0, \theta)$, the MLE's error shrinks like...",
+                 [r"$1/\sqrt n$", "$1/n$", "$1/n^2$"], 1,
+                 say="Part 9 promised that maximum likelihood errors shrink like one over root n. For the uniform "
+                     "on zero to theta, the estimate is the sample maximum. How fast does its error shrink?",
+                 reveal="Like one over n: faster than the promise, because the model isn't regular. Its support "
+                        "moves with theta, and the theory of this part doesn't apply.")
         self.upgrade()
         self.score()
         self.conditions()
         self.tanks()
+        self.answer()
 
     def card(self):
-        card = chapter_card(1, r"Upgrade: \ what Part 9 promised", r"From statement to proof", lit=(1922,), part=PART)
-        with self.voiceover("Chapter one. An upgrade of Part 9."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(1, r"Upgrade: \ what Part 9 promised", r"From statement to proof", lit=(1922,), part=PART, said="Chapter one. An upgrade of Part 9.")
 
     def upgrade(self):
         u = upgrade_card(9, r"the MLE is consistent and approximately normal, \ with variance $1/(n\,I(\theta))$",

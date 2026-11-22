@@ -15,7 +15,7 @@ def entry(v, w=0.95, h=0.5, font_size=22, color=None):
     return VGroup(sq, t.move_to(sq))
 
 
-class Halting(VoiceoverScene):
+class Halting(WatchScene):
     def construct(self):
         self.card()
         self.question()
@@ -25,14 +25,16 @@ class Halting(VoiceoverScene):
         self.hilbert()
 
     def card(self):
-        card = chapter_card(11, r"The halting problem", r"Can a program tell whether another program will finish?",
-                            lit=(1936,), part=PART)
-        with self.voiceover("Chapter eleven. The halting problem."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(11, r"The halting problem", r"Can a program tell whether another program will finish?", lit=(1936,), part=PART, said="Chapter eleven. The halting problem.")
 
     # ------------------------------------------------------------------
     def question(self):
+        self.wrong_idea(r"Given enough time and memory, \\ a computer can solve any well-posed problem",
+                        r"Some problems no program can ever solve: \\ halting is one",
+                        narration="Here is something almost everyone believes. Give a computer enough time and memory, and "
+                                  "it can answer any precise question.",
+                        right_narration="It's false, and we can prove it. Some questions have no program, ever.")
+        self.clear_scene()
         box = RoundedRectangle(width=3.6, height=1.6, corner_radius=0.2, stroke_color=CTRL, stroke_width=3,
                                fill_color=CTRL, fill_opacity=0.08).move_to(RIGHT * 0.6 + UP * 0.7)
         h = label(r"$H$", font_size=60, color=CTRL).move_to(box)
@@ -61,6 +63,10 @@ class Halting(VoiceoverScene):
 
     # ------------------------------------------------------------------
     def table(self):
+        self.ask(r"Run a program for ten thousand steps. \\ What can you know for sure?",
+                 [r"that it halts, if it did", r"that it never halts, if it didn't", r"both"], 0,
+                 say="Run a program for ten thousand steps. What do you then know for certain?",
+                 reveal="Only that it halts, if it did. Still running might mean not yet, or never.")
         d = load("diagonal")
         rows = d["rows"]
         nI = len(d["inputs"])
@@ -238,3 +244,10 @@ class Halting(VoiceoverScene):
             self.play(FadeIn(ans, scale=1.1))
         self.wait(0.3)
         self.clear_scene()
+        self.checkpoint(
+            [(r"Why can't you decide halting by running the program?", r"Still running could mean not yet, or never"),
+             (r"What breaks the perfect halting checker $H$?", r"$D$ does the opposite of whatever $H$ says about $D$")],
+            narration="Checkpoint. Why can't you decide halting just by running the program? And what breaks the perfect "
+                      "checker H?",
+            answers_narration="Because still running could mean not yet, or never. And D, built from H, does the opposite of "
+                              "whatever H predicts about D itself.")

@@ -6,12 +6,12 @@ from explainer.cs import *  # noqa: F403
 from videos.cs.cs5.common import (BG, CODE, CTRL, DATA, FUNC, HEAD, NO, PART, WIRE, YES, gate, load, nand_latch, wave)
 
 
-class Hook(VoiceoverScene):
+class Hook(WatchScene):
     def construct(self):
         self.forgets()
         self.loop()
         self.balance()
-        self.plan()
+        self.title(PART)
 
     # ------------------------------------------------------------------
     def forgets(self):
@@ -104,29 +104,3 @@ class Hook(VoiceoverScene):
         self.wait(0.3)
         self.clear_scene()
 
-    # ------------------------------------------------------------------
-    def plan(self):
-        title = label(rf"Part {PART}: \ Memory and Time", font_size=46).to_edge(UP, buff=0.4)
-        smap = series_map(current=PART, done=PART - 1).scale(0.92).next_to(title, DOWN, buff=0.35)
-        obj = objectives_card([
-            r"feedback: \ the SR latch, \ and the latch as a dynamical system with two stable states",
-            r"flip-flops and the clock; \ setup, \ hold, \ and the fastest clock a circuit allows",
-            r"metastability, \ measured, \ and the synchronizer that tames it",
-            r"finite-state machines, \ Myhill--Nerode, \ and the first rung of a theory of languages",
-            r"counters and LFSRs; \ Pebble's register file, \ built and verified",
-            r"SRAM, \ DRAM, \ Rowhammer, \ and how computers remembered before chips",
-        ], font_size=26).move_to(DOWN * 0.2)
-        with self.voiceover(
-            "This is Part 5 of Computer Science, Built. <bookmark mark='a'/> In this part: feedback, and the latch "
-            "seen as a dynamical system with two stable states and a saddle between them. Flip-flops and the clock, "
-            "setup and hold times, and the fastest clock a circuit can take. Metastability, measured, and the "
-            "synchronizer that tames it. Finite-state machines, and the theorem that makes them the first rung of a "
-            "theory of languages. Counters and linear feedback shift registers, and Pebble's register file, built and "
-            "verified. Then real memory chips, static and dynamic, an attack that flips bits in them, and the strange "
-            "machines that remembered before chips existed."
-        ) as vo:
-            self.play(FadeIn(title), FadeIn(smap))
-            vo.wait_until("a")
-            self.play(FadeOut(smap), FadeIn(obj))
-        self.wait(0.4)
-        self.clear_scene()

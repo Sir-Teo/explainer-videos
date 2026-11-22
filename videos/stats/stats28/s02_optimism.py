@@ -5,21 +5,25 @@ import numpy as np
 from videos.stats.stats28.common import *  # noqa: F403
 
 
-class Optimism(VoiceoverScene):
+class Optimism(StatsScene):
     def construct(self):
         self.card()
+        self.ask("Fit $d$ parameters by least squares. The training error flatters the test error by about...",
+                 ["nothing", r"$2d\sigma^2/n$", "$d$"], 1,
+                 say="Fit d parameters to n noisy points by least squares. By about how much does the training "
+                     "error flatter the error on new data?",
+                 reveal="About two d sigma squared over n: each parameter spent fitting the noise makes the "
+                        "training error look better. That's the optimism Mallows' Cp adds back.")
         self.fits()
         self.curves()
         self.decomp()
         self.theory()
         self.df()
         self.lasso()
+        self.answer()
 
     def card(self):
-        card = chapter_card(1, r"Optimism", r"Training error flatters", lit=(1986,), part=PART)
-        with self.voiceover("Chapter one. Optimism."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(1, r"Optimism", r"Training error flatters", lit=(1986,), part=PART, said="Chapter one. Optimism.")
 
     def fits(self):
         d = load("optimism")

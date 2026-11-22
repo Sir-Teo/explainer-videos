@@ -41,7 +41,8 @@ Contents:
 **Per part:**
 
 - A cold-open hook (2–4 min): the historical problem the part answers, with its people, place and year.
-- An objectives card listing prerequisites by part number, and the part's place on the Transcript.
+- After the cold open, the title: the part's name and its place among the sixty-five, under the series' theme
+  (§1.2; the objectives card it replaced is gone, and prerequisites are on the course page).
 - Theorem and definition cards, with at least one complete proof on screen.
 - **One build.** A tool or toy the part constructs and the viewer watches working.
 - **Coverage Board rows** for every interval or test the part introduces (§3).
@@ -149,12 +150,58 @@ New instruments, in `explainer/stats/viz.py`:
   倾向得分, 工具变量, 断点回归, 双重差分, 删失, 克里金, 测度论概率, 鞅, 经验过程, 半参数有效性, 极小极大,
   后验收缩, e 值, 置信序列, 最优传输, 差分隐私, …).
 
-**Gates per part:**
+**Gates per part** (and §1.2's):
 
 - `tools/lecture_length.py` fails under 50 min.
 - `contact_sheet.py`, `dead_air.py`, `collect_text.py --check`, `check_narration.py`.
 - `tests/test_stats_*`: statkit against references, World invariants, Board reproducibility.
 - The QA evidence loop of *AI, Built* (`qa_series.py --series stats`).
+
+### 1.2 The watch standard (2026-11-19)
+
+The series is a degree, but a viewer stays only while the film earns it. The user asked for "a full enhancement of
+viewer experience", music included. This section is that enhancement; where it conflicts with §1 it wins. It follows
+*Computer Science, Built*'s watch standard (`videos/cs/SYLLABUS.md` §1.2) and the evidence it cites: Crouch et al.
+(2004) on predicting before a demonstration, Szpunar, Khan & Schacter (2013) on interpolated quizzes, Muller et al.
+(2008) on refuting a misconception, Mayer's signalling and segmenting, and Moreno & Mayer (2000) on music under
+explanation.
+
+**Every chapter** asks a prediction right after its card: a question with two to four answers, asked aloud, a
+three-second countdown, and the card put away (`self.ask(...)`). The chapter then runs as written, and when it ends
+the card comes back with the right answer lit and one spoken sentence of why (`self.answer()`). The question is
+self-contained and concrete (a number, a direction, a yes or no), so it can be asked before the chapter's setup.
+The exam parts (42, 55) keep their posed, timed problems as their predictions.
+
+**Every part** has a checkpoint about every fifteen minutes of narration (`self.checkpoint(...)`: two questions, a
+four-second pause, the answers) and at least one misconception, stated, struck through and replaced
+(`self.wrong_idea(...)`), chosen from what the part refutes on screen.
+
+**The first minute.** The cold open stays the historical problem. After it, the title sequence: the part's name
+and the degree's sixty-five dots in five stages (milestones as diamonds, this part lit), in silence under the theme
+(`self.title(PART)`). The objectives card is gone.
+
+**Picture.** Every scene is a `StatsScene` (`explainer/stats/watch.py`): a narrated moving-camera scene whose plain
+`FadeIn`s get the entrance their content suggests (`lively`: arrows grow, lines and curves draw, short formulas
+write themselves, small groups arrive part by part; end states unchanged, `EXPLAINER_PLAIN_FADES=1` turns it off).
+Chapter cards are animated (`self.chapter(...)`): the title writes itself, the timeline strip draws from 1650 to
+2030, and the chapter's years flash. `self.rewrite(...)` plays a derivation in one place, line morphing into line,
+for chapters rebuilt from here on.
+
+**Sound** (`explainer/stats/score.py`, mixed by `tools/build.py`; `--no-score` leaves it out). Computed,
+deterministic, 8–20 LU below the narration, and never under an explanation. The motif is a Galton board you can
+hear: a ball strikes pegs on its way down (right is a step up the C major pentatonic scale, left a step down; the
+pegs come faster as it falls, at times proportional to √r) and lands in a bin, and many balls ring together as the
+bell, a chord whose notes sound as loud as the binomial probabilities of their bins. Each stage has its own
+instrument (marimba, vibraphone, electric piano, celesta, bell over a pad), so the ear hears the degree grow up;
+the milestone parts close on a fuller chord. Seven cues, placed on marks the kit records: the theme at the title,
+a sting under each chapter card (the chapter number's binary digits as one ball's bounces), soft peg clicks under
+every countdown, a chime when an answer lights, a thud when a wrong idea is struck, a quiet bed wherever the
+narration pauses for more than 2.6 s, and the close under the last words (one ball rising back up the board).
+
+**Gates.** `tools/check_watch.py statsN` (predictions in every numbered chapter, checkpoints, a misconception,
+sentence length, spoken hedges, and a source-counted motion ratio); `tests/test_stats_score.py`,
+`tests/test_stats_watch.py`. The retrofit is applied by `tools/stats_watch.py` (mechanical steps for every part, and
+a per-part spec of predictions, checkpoints and misconceptions); §8 records where it stands.
 
 ## 2. The World
 
@@ -2000,6 +2047,18 @@ independently verified, and the corrected rerun is reported with that limitation
    Expect one part per one or two long sessions.
 
 ## 8. Progress (updated as parts land)
+
+**The watch retrofit (2026-11-19).** All sixty-five parts meet §1.2's structure: every scene is a `StatsScene`
+with livelier entrances; 668 chapter cards are animated; every hook ends its cold open on the title sequence
+(the objectives cards are gone); 748 chapter predictions are asked and answered (the exam parts' posed problems serve as theirs), 230
+checkpoints and 65 misconceptions are placed; the score plays in every film. `tools/check_watch.py --series stats` now fails only
+two measures in some parts. The motion ratio is counted in the source, where most entrances are still written as
+`FadeIn` (at render time `lively` turns many of them into motion); chapters built as fade decks still want
+rebuilding on live instruments, worst first. And nineteen parts keep more than six spoken caveats: they were
+placed by the scientific review, and moving each to an on-screen tag or the notes is a per-sentence judgement left
+for that review. Part 12 was rebuilt end to end as the pilot (silent 480p: title, theme, stings, predictions,
+checkpoints, the wrong idea and the close all in place). Narration lengths grow by about four minutes a part
+(the estimates in the table predate the retrofit; `tools/lecture_length.py` gives current ones).
 
 | Part | State | Length |
 |---|---|---|

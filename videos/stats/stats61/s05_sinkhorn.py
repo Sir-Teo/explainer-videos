@@ -5,10 +5,15 @@ import numpy as np
 from videos.stats.stats61.common import *  # noqa: F403
 
 
-class Sinkhorn(LectureMixin, VoiceoverScene):
+class Sinkhorn(LectureMixin, StatsScene):
     def construct(self):
         self.card_voiceover("Chapter four. Entropic transport and Sinkhorn's algorithm: blur the plan, and everything gets easier.", 4,
                             r"Entropic transport", r"Sinkhorn's algorithm", lit=(2013,))
+        self.ask("Sinkhorn's algorithm for entropic transport alternately...",
+                 ["rescales the rows and columns of a kernel matrix", "solves a linear program"], 0,
+                 say="Blur the plan with entropy, and everything gets easier. What does Sinkhorn's algorithm do?",
+                 reveal="It alternately rescales the rows and the columns of a Gibbs kernel matrix until both "
+                        "margins match: matrix scaling, fast and parallel.")
         self.entropic()
         self.plans()
         self.algorithm()
@@ -17,6 +22,7 @@ class Sinkhorn(LectureMixin, VoiceoverScene):
         self.complexity()
         self.divergence()
         self.unbalanced()
+        self.answer()
 
     def entropic(self):
         self.lad_voiceover(

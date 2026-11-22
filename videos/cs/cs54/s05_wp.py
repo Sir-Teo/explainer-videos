@@ -36,7 +36,7 @@ def short_name(name: str) -> str:
     return next(s for k, s in SHORT if k in name)
 
 
-class Wp(VoiceoverScene):
+class Wp(WatchScene):
     def construct(self):
         self.card()
         self.definition()
@@ -44,15 +44,10 @@ class Wp(VoiceoverScene):
         self.vcgen()
         self.blast()
         self.table()
-        self.scaling()
 
     def card(self):
-        card = chapter_card(4, r"Weakest preconditions, \ checked by SAT", r"Can a machine do the bookkeeping?",
-                            lit=(1975, 2008), extra=((1975, r"Dijkstra: \ guarded commands"),
-                                                     (2008, r"de Moura and Bj{\o}rner: \ Z3")), part=PART)
-        with self.voiceover("Chapter four. Weakest preconditions, checked by SAT."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(4, r"Weakest preconditions, \ checked by SAT", r"Can a machine do the bookkeeping?", lit=(1975, 2008), extra=((1975, r"Dijkstra: \ guarded commands"),
+                                                     (2008, r"de Moura and Bj{\o}rner: \ Z3")), part=PART, said="Chapter four. Weakest preconditions, checked by SAT.")
 
     def definition(self):
         head = label(r"The weakest precondition", font_size=36).to_edge(UP, buff=0.3)
@@ -224,6 +219,10 @@ class Wp(VoiceoverScene):
         self.clear_scene()
 
     def blast(self):
+        self.ask(r"A SAT solver proves ``$P(x)$ for every $x$'' by...", [r"trying every $x$",
+                 r"showing $\neg P(x)$ has no solution"], 1,
+                 say="How does a SAT solver prove that a property holds for every sixteen-bit x?",
+                 reveal="By showing its negation is unsatisfiable: no counterexample exists.")
         sw = load("hoare")["programs"]["swap"]["vcs"][0]
         head = label(r"From a formula to clauses", font_size=36).to_edge(UP, buff=0.3)
         names = [r"VC $f$", r"negate: \ $\neg f$", r"bit-blast", r"CNF clauses", r"CDCL \ (Part 26)"]
@@ -340,48 +339,13 @@ class Wp(VoiceoverScene):
             self.play(FadeIn(recheck))
         self.wait(0.4)
         self.clear_scene()
+        self.checkpoint(
+            [(r"What does a loop invariant need?", r"True at entry, preserved by the body, gives Q at exit"),
+             (r"What does a variant prove?", r"Termination")],
+            narration="Checkpoint. What three things must a loop invariant satisfy? And what does a variant prove?",
+            answers_narration="It holds on entry, the body preserves it, and with the test false it gives the postcondition. "
+                              "And termination: a quantity that falls in a well-founded order.")
 
-    def scaling(self):
-        sc = load("hoare")["gauss_scaling"]
-        head = label(r"Multipliers are hard", font_size=36).to_edge(UP, buff=0.3)
-        ms = [r["seconds"] * 1000 for r in sc]
-        chart = bar_chart(ms, [rf"{r['w']} bits" for r in sc], [HEAD] * len(sc), height=3.6, bar_w=0.9, gap=0.55,
-                          fmt_=lambda v: f"{v:,.0f} ms", font_size=20, log=True)
-        chart.move_to([-3.6, -0.5, 0])
-        cap = label(r"SAT time for Gauss's two product conditions \ (log scale)", font_size=18, color=GREY_A).next_to(
-            chart, UP, buff=0.35)
-        assert all(all(s == "valid" for s in r["status"]) for r in sc)
-        notes = VGroup(
-            wrapped_label(r"comparing two multipliers is the classic hard case for SAT: \ every two more bits of word "
-                          r"length cost several times as long", 5.6, font_size=20, color=HEAD),
-            wrapped_label(r"\textbf{SMT} solvers such as Z3 \ (de Moura and Bj{\o}rner, \ Microsoft Research, \ "
-                          r"2008) \ pair a SAT search with decision procedures for arithmetic, \ arrays and "
-                          r"bit-vectors; \ Dafny hands its conditions to Z3", 5.6, font_size=20, color=YES),
-            wrapped_label(r"an UNSAT answer can come with a proof that a small independent checker verifies: \ "
-                          r"Chapter 10's theme", 5.6, font_size=20, color=LAM),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.35).move_to([3.6, -0.3, 0])
-        with self.voiceover(
-            "Multiplication is where this approach strains. <bookmark mark='a'/> Gauss's conditions compare two "
-            "products, and multipliers are the classic hard case for SAT. Every two extra bits of word cost our "
-            "solver several times as long: from five milliseconds at four bits to over two seconds at ten. "
-            "<bookmark mark='b'/> Industrial verifiers hand their conditions to SMT solvers such as Z3, from "
-            "Microsoft Research, which pair a SAT search with decision procedures for arithmetic, arrays and bit-"
-            "vectors. Dafny, for one, works this way. <bookmark mark='c'/> And when a solver says unsatisfiable, "
-            "it can also emit a proof that a small independent checker verifies, a theme that Chapter ten makes "
-            "central."
-        ) as vo:
-            self.play(FadeIn(head), FadeIn(cap))
-            vo.wait_until("a")
-            self.play(LaggedStart(*[AnimationGroup(GrowFromEdge(b, DOWN), FadeIn(v), FadeIn(n))
-                                    for b, v, n in zip(chart.bars, chart.vals, chart.names)], lag_ratio=0.4),
-                      FadeIn(chart[0]), run_time=2.5)
-            self.play(FadeIn(notes[0]))
-            vo.wait_until("b")
-            self.play(FadeIn(notes[1]))
-            vo.wait_until("c")
-            self.play(FadeIn(notes[2]))
-        self.wait(0.4)
-        self.clear_scene()
 
 
 _ = (mono,)

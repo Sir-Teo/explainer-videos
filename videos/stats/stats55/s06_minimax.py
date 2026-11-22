@@ -7,17 +7,14 @@ import numpy as np
 from videos.stats.stats55.common import *  # noqa: F403
 
 
-class ExamMinimax(ExamMixin, VoiceoverScene):
+class ExamMinimax(ExamMixin, StatsScene):
     def construct(self):
         self.card()
         self.p9()
         self.p10()
 
     def card(self):
-        card = chapter_card(5, r"Sitting V: \ minimax and high-dimensional probability", r"Problems 9 and 10", lit=(1994, 2012), part=PART)
-        with self.voiceover("Sitting five: minimax theory and high-dimensional probability. Fano's inequality for sparse means, and matrix Bernstein."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(5, r"Sitting V: \ minimax and high-dimensional probability", r"Problems 9 and 10", lit=(1994, 2012), part=PART, said="Sitting five: minimax theory and high-dimensional probability. Fano's inequality for sparse means, and matrix Bernstein.")
 
     # ------------------------------------------------------------------------------------------ Problem 9
     def p9(self):

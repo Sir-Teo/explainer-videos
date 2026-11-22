@@ -10,21 +10,28 @@ def block(label_tex, color, w=1.4, h=1.4) -> VGroup:
     return VGroup(r, MathTex(label_tex, font_size=38, color=color).move_to(r))
 
 
-class Blocks(VoiceoverScene):
+class Blocks(StatsScene):
     def construct(self):
         self.card()
+        self.ask("Leave-one-out residuals for all $n$ points need...",
+                 ["$n$ refits", "one fit and the leverages"], 1,
+                 say="To get every leave-one-out residual, must you refit the regression n times?",
+                 reveal="No. One fit and the leverages suffice: the residual divided by one minus the leverage. The "
+                        "Schur complement does the bookkeeping.")
         self.schur()
         self.inverse()
         self.woodbury()
         self.fwl()
         self.loo()
+        self.answer()
+        self.checkpoint([("The minimum-length solution of an underdetermined system?", "the pseudoinverse's"),
+                         ("A leave-one-out residual from one fit?", "$e_i / (1 - h_{ii})$")],
+                        narration="Checkpoint. Inverses and blocks.",
+                        answers_narration="The pseudoinverse gives the shortest solution. And the leave-one-out "
+                                          "residual is e i over one minus h i i.")
 
     def card(self):
-        card = chapter_card(8, r"Block matrices", r"Eliminate a block, \ and the Schur complement is what is left",
-                            lit=(), part=PART)
-        with self.voiceover("Chapter eight. Block matrices."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(8, r"Block matrices", r"Eliminate a block, \ and the Schur complement is what is left", lit=(), part=PART, said="Chapter eight. Block matrices.")
 
     def schur(self):
         M = VGroup(block("A", SPACE), block("B", GREY_A), block("C", GREY_A), block("D", RES))

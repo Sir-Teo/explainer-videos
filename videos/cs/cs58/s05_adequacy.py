@@ -33,7 +33,7 @@ def mini(values, w=0.42, h=0.34, fs=18):
     return cells.arrange(RIGHT, buff=0.04)
 
 
-class Adequacy(VoiceoverScene):
+class Adequacy(WatchScene):
     def construct(self):
         self.card()
         self.bridge()
@@ -41,15 +41,9 @@ class Adequacy(VoiceoverScene):
         self.ladder()
         self.proof()
         self.full_abstraction()
-        self.games()
 
     def card(self):
-        card = chapter_card(4, r"Adequacy and full abstraction", r"Do the steps and the mathematics agree?",
-                            lit=(1977,), extra=((1977, r"Plotkin: \ LCF considered as a programming language"),),
-                            part=PART)
-        with self.voiceover("Chapter four. Adequacy and full abstraction. Do the steps and the mathematics agree?"):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(4, r"Adequacy and full abstraction", r"Do the steps and the mathematics agree?", lit=(1977,), extra=((1977, r"Plotkin: \ LCF considered as a programming language"),), part=PART, said="Chapter four. Adequacy and full abstraction. Do the steps and the mathematics agree?")
 
     def bridge(self):
         f = load("fact")
@@ -294,6 +288,10 @@ class Adequacy(VoiceoverScene):
         self.clear_scene()
 
     def full_abstraction(self):
+        self.ask(r"Equal meanings imply contextual equivalence. \\ For PCF in Scott's model, the converse:",
+                 [r"holds", r"fails"], 1,
+                 say="If two programs have the same meaning, no context can tell them apart. In Scott's model of PCF, does the converse hold?",
+                 reveal="It fails: the model contains parallel or, which no PCF program can define.")
         head = label(r"Full abstraction, \ and parallel-or", font_size=36).to_edge(UP, buff=0.3)
         ce = MathTex(r"e_1 \cong e_2", r"\iff", r"\text{for every context } C:\ \ C[e_1] \Downarrow n \iff "
                      r"C[e_2] \Downarrow n", font_size=30, color=WHITE).next_to(head, DOWN, buff=0.35)
@@ -358,58 +356,6 @@ class Adequacy(VoiceoverScene):
         self.wait(0.4)
         self.clear_scene()
 
-    def games(self):
-        head = label(r"Games: \ sequentiality built in", font_size=36).to_edge(UP, buff=0.3)
-        xo, xp = -4.6, -0.6
-        to = label(r"Opponent \ (the environment)", font_size=21, color=DATA).move_to([xo, 2.4, 0])
-        tp = label(r"Player \ (the program)", font_size=21, color=HEAD).move_to([xp, 2.4, 0])
-        vo_l = DashedLine([xo, 2.1, 0], [xo, -2.7, 0], color=GREY_D, dash_length=0.1)
-        vp_l = DashedLine([xp, 2.1, 0], [xp, -2.7, 0], color=GREY_D, dash_length=0.1)
-        moves = [("O", r"result?", DATA), ("P", r"argument?", HEAD), ("O", r"true", DATA), ("P", r"false", HEAD)]
-        ys = [1.5, 0.5, -0.5, -1.5]
-        arrows, tags = VGroup(), VGroup()
-        for (who, txt, c), y in zip(moves, ys):
-            a, b = ([xo, y + 0.3, 0], [xp, y - 0.3, 0]) if who == "O" else ([xp, y + 0.3, 0], [xo, y - 0.3, 0])
-            arr = Arrow(a, b, buff=0.1, color=c, stroke_width=2.5, max_tip_length_to_length_ratio=0.08)
-            t = label(txt, font_size=20, color=c).next_to(arr.get_center(), UP, buff=0.12)
-            arrows.add(arr)
-            tags.add(t)
-        game = label(r"the game for $\mathsf{bool} \to \mathsf{bool}$: \ the strategy of \ \textsf{not}", font_size=19,
-                     color=GREY_B).move_to([(xo + xp) / 2, -3.1, 0])
-        notes = VGroup(
-            wrapped_label(r"fully abstract models of PCF \ (1990s): \ Abramsky, \ Jagadeesan and Malacaria; \ Hyland "
-                          r"and Ong; \ Nickau", 4.6, font_size=21, color=YES),
-            wrapped_label(r"after identifying strategies that no test can tell apart", 4.6, font_size=18,
-                          color=GREY_B),
-            wrapped_label(r"a type is a game; \ a program is a strategy: \ a rule for its next move", 4.6,
-                          font_size=21, color=WHITE),
-            wrapped_label(r"one move at a time: \ parallel-or would have to ask both arguments at once, \ so it is "
-                          r"not a strategy", 4.6, font_size=21, color=NO),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.35).move_to([4.3, 0.0, 0])
-        if notes.get_right()[0] > 6.85:
-            notes.shift(LEFT * (notes.get_right()[0] - 6.85))
-        with self.voiceover(
-            "A fully abstract model of PCF itself was found in the nineteen nineties, in games: by Samson Abramsky, "
-            "Radha Jagadeesan and Pasquale Malacaria, by Martin Hyland and Luke Ong, and independently by Hanno "
-            "Nickau. <bookmark mark='a'/> A type becomes a game between the program and its environment, taking turns"
-            " to ask and answer. <bookmark mark='b'/> A program is a strategy, a rule for its next move. Here the "
-            "environment asks for a result; the program asks for its argument; told true, it answers false. <bookmark"
-            " mark='c'/> A strategy makes one move at a time, so parallel-or, which must ask both of its arguments at"
-            " once, is not a strategy: sequentiality is built in. <bookmark mark='d'/> Next, we ask directly when two"
-            " programs are the same."
-        ) as vo:
-            self.play(FadeIn(head), FadeIn(to), FadeIn(tp), Create(vo_l), Create(vp_l), FadeIn(notes[0]),
-                      FadeIn(notes[1]))
-            vo.wait_until("a")
-            self.play(FadeIn(notes[2]))
-            vo.wait_until("b")
-            for a, t in zip(arrows, tags):
-                self.play(GrowArrow(a), FadeIn(t), run_time=0.8)
-            self.play(FadeIn(game))
-            vo.wait_until("c")
-            self.play(FadeIn(notes[3]))
-        self.wait(0.6)
-        self.clear_scene()
 
 
 _ = (LAM,)

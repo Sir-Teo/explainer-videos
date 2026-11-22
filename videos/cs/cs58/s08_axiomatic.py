@@ -53,24 +53,18 @@ def stepwise(self, rows, whys, marks, vo, run_time=1.3):
         self.play(TransformMatchingTex(rows[k - 1].copy(), rows[k]), FadeIn(whys[k]), run_time=run_time)
 
 
-class Axiomatic(VoiceoverScene):
+class Axiomatic(WatchScene):
     def construct(self):
         self.card()
         self.triples()
         self.machine()
         self.assign()
         self.loop()
-        self.scott()
         self.completeness()
 
     def card(self):
-        card = chapter_card(7, r"Hoare logic, \ proved sound", r"Why should we believe the rules?",
-                            lit=(1969, 1978), extra=((1969, r"Hoare: \ an axiomatic basis for computer programming"),
-                                                     (1978, r"Cook: \ soundness and relative completeness")),
-                            part=PART)
-        with self.voiceover("Chapter seven. Hoare logic, proved sound. Why should we believe the rules?"):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(7, r"Hoare logic, \ proved sound", r"Why should we believe the rules?", lit=(1969, 1978), extra=((1969, r"Hoare: \ an axiomatic basis for computer programming"),
+                                                     (1978, r"Cook: \ soundness and relative completeness")), part=PART, said="Chapter seven. Hoare logic, proved sound. Why should we believe the rules?")
 
     # ------------------------------------------------------------------ derivable against true
     def triples(self):
@@ -307,88 +301,13 @@ class Axiomatic(VoiceoverScene):
         self.wait(0.4)
         self.clear_scene()
 
-    # ------------------------------------------------------------------ the same proof, by fixed-point induction
-    def scott(self):
-        rows_k = load("kleene")["rows"]
-        head = label(r"The same proof, \ against the denotation", font_size=36).to_edge(UP, buff=0.3)
-        fs = 27
-        eqs = VGroup(
-            M(sem(r"\mathsf{while}\ b\ \mathsf{do}\ c") + r"= \mathrm{fix}\,\Phi", fs, DATA),
-            M(r"\Phi(w)\,\sigma = \begin{cases} w(" + sem("c") + r"\sigma) & \text{if } " + sem("b") + r"\sigma \\ "
-              r"\sigma & \text{otherwise} \end{cases}", fs, DATA),
-            M(r"S(w):\ \ \sigma \models I \ \text{ and } \ w(\sigma) \neq \bot \implies w(\sigma) \models I \wedge "
-              r"\neg b", fs, HEAD),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.18).next_to(head, DOWN, buff=0.3).to_edge(LEFT, buff=0.5)
-        fs2 = 28
-        rows = VGroup(
-            M(r"S(\bot)", fs2),
-            M(r"S(w) \implies S(\Phi\,w)", fs2),
-            M(r"S(\Phi^k(\bot)) \ \text{ for every } k", fs2),
-            M(r"S\big(\textstyle\bigsqcup_k \Phi^k(\bot)\big)", fs2),
-            M(r"S(" + sem(r"\mathsf{while}\ b\ \mathsf{do}\ c") + r")", fs2 + 2, YES),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.24).next_to(eqs, DOWN, buff=0.35).align_to(eqs, LEFT)
-        whys = VGroup(
-            label(r"vacuous: \ $\bot$ never answers", font_size=19, color=GREY_B),
-            label(r"the hypothesis for the body $c$", font_size=19, color=GREY_B),
-            label(r"induction on $k$", font_size=19, color=GREY_B),
-            label(r"$S$ is closed under limits of chains", font_size=19, color=YES),
-            label(r"Scott's fixed-point induction", font_size=19, color=YES),
-        )
-        wx = max(r.get_right()[0] for r in rows) + 0.4
-        for w, r in zip(whys, rows):
-            w.move_to([wx + w.width / 2, r.get_y(), 0])
-        ks = range(5)
-        x0 = 3.0
-        ys = [-2.4 + 1.0 * k for k in ks]
-        strips = VGroup(*[VGroup(*[cell(v) for v in rows_k[k]["table"][:5]]).arrange(RIGHT, buff=0.04).move_to(
-            [x0 + 1.4, y, 0]) for k, y in zip(ks, ys)])
-        names = VGroup(*[MathTex(r"\bot" if k == 0 else (r"\Phi(\bot)" if k == 1 else rf"\Phi^{{{k}}}(\bot)"),
-                                 font_size=22, color=DATA).next_to(strips[k], LEFT, buff=0.2) for k in ks])
-        ticks = VGroup(*[VGroup(*[MathTex(r"\checkmark", font_size=16, color=YES).next_to(c, DOWN, buff=0.03)
-                                  for c, v in zip(strips[k], rows_k[k]["table"][:5]) if v is not None])
-                         for k in ks])
-        idx = VGroup(*[MathTex(str(i), font_size=18, color=GREY_B).next_to(c, UP, buff=0.06)
-                       for i, c in enumerate(strips[-1])])
-        xl = MathTex(r"x =", font_size=18, color=GREY_B).next_to(idx, LEFT, buff=0.15)
-        cap = wrapped_label(r"the loop's iterates from $x = n,\ y = 1$: \ final $y$ \ (the numbers of chapter "
-                            r"three's chain)", 3.6, font_size=18, color=GREY_B).next_to(idx, UP, buff=0.15)
-        right = VGroup(strips, names, ticks, idx, xl, cap)
-        if right.get_right()[0] > 6.85:
-            right.shift(LEFT * (right.get_right()[0] - 6.85))
-        if whys.get_right()[0] > right.get_left()[0] - 0.2:
-            VGroup(eqs, rows, whys).scale((right.get_left()[0] - 0.2 + 6.7) / (whys.get_right()[0] + 6.7),
-                                          about_point=np.array([-6.7, 0, 0]))
-        with self.voiceover(
-            "The same theorem can be proved against chapter two's denotation instead. <bookmark mark='a'/> There, "
-            "a loop means the least fixed point of a functional, phi: test, and either run the body and continue, "
-            "or stop. <bookmark mark='b'/> Call a meaning w safe if, from any state satisfying the invariant, "
-            "whenever it answers at all, it answers with the invariant and not the test. <bookmark mark='c'/> "
-            "Bottom is safe: it never answers. <bookmark mark='d'/> Phi preserves safety, by the hypothesis for the"
-            " body. <bookmark mark='e'/> So every approximation in the Kleene chain is safe. <bookmark mark='f'/> "
-            "Safety is a property closed under limits of chains, so the limit is safe, <bookmark mark='g'/> and the"
-            " limit is the loop. This is Scott's fixed-point induction; it is exactly chapter four's admissibility "
-            "again."
-        ) as vo:
-            self.play(FadeIn(head))
-            vo.wait_until("a")
-            self.play(FadeIn(eqs[0]), FadeIn(eqs[1]))
-            vo.wait_until("b")
-            self.play(FadeIn(eqs[2]))
-            vo.wait_until("c")
-            self.play(FadeIn(cap), FadeIn(idx), FadeIn(xl), FadeIn(names[0]), FadeIn(strips[0]))
-            stepwise(self, rows, whys, "de", vo)
-            for k in range(1, 5):
-                self.play(FadeIn(names[k]), FadeIn(strips[k]), FadeIn(ticks[k]), run_time=0.6)
-            vo.wait_until("f")
-            self.play(TransformMatchingTex(rows[2].copy(), rows[3]), FadeIn(whys[3]), run_time=1.3)
-            vo.wait_until("g")
-            self.play(TransformMatchingTex(rows[3].copy(), rows[4]), FadeIn(whys[4]), run_time=1.3)
-            self.play(Circumscribe(rows[4], color=YES))
-        self.wait(0.4)
-        self.clear_scene()
 
     # ------------------------------------------------------------------ Cook: relative completeness
     def completeness(self):
+        self.ask(r"Is Hoare logic complete \\ for programs over the integers?", [r"absolutely",
+                 r"relative to true arithmetic"], 1,
+                 say="Can Hoare logic prove every true triple about programs over the integers?",
+                 reveal="Only relative to arithmetic: given every true assertion, as Cook showed. Godel rules out more.")
         head = label(r"Cook: \ complete, \ relative to arithmetic", font_size=36).to_edge(UP, buff=0.3)
         fs = 32
         rows = VGroup(
@@ -447,6 +366,12 @@ class Axiomatic(VoiceoverScene):
             self.play(FadeIn(foot))
         self.wait(0.6)
         self.clear_scene()
+        self.checkpoint(
+            [(r"What is a bisimulation?", r"A relation preserved step by step, both ways"),
+             (r"Where do free theorems come from?", r"Reading types as relations")],
+            narration="Checkpoint. What is a bisimulation? And where do free theorems come from?",
+            answers_narration="A relation where each side can match the other's every step, forever. And from reading every "
+                              "type as a relation, which polymorphic functions must preserve.")
 
 
 _ = (LAM, DATA)

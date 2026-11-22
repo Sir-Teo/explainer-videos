@@ -3,14 +3,14 @@ from __future__ import annotations
 from videos.stats.stats55.common import *  # noqa: F403
 
 
-class Hook(VoiceoverScene):
+class Hook(StatsScene):
     def construct(self):
         self.hilbert()
         self.letter()
         self.format()
         self.map_demo()
         self.upgrade()
-        self.objectives()
+        self.title(PART)
 
     def hilbert(self):
         tl = timeline(lit=(1900, 1933)).to_edge(UP, buff=0.35)
@@ -136,30 +136,5 @@ class Hook(VoiceoverScene):
             self.play(FadeIn(cards[0], shift=UP * 0.2))
             vo.wait_until("b")
             self.play(FadeIn(cards[1], shift=UP * 0.2))
-        self.wait(1.0)
-        self.clear_scene()
-
-    def objectives(self):
-        head = VGroup(label(r"Part 55", font_size=34, color=GREY_B), label(r"The Qualifying Exam", font_size=56)).arrange(DOWN, buff=0.25)
-        obj = objectives_card([
-            r"probability: \ Borel--Cantelli for maxima; \ optional stopping when it fails",
-            r"estimation and testing: \ a UMVUE, \ Blyth's method, \ Snow's Table IX",
-            r"asymptotics and efficiency: \ local power, \ brackets, \ Newcomb's median",
-            r"high dimensions: \ Fano, \ matrix Bernstein, \ the lasso's oracle, \ a contraction rate",
-        ], color=S.ACCENT, font_size=26)
-        prereq = note(r"prerequisites: \ Parts 43--54").to_corner(DL, buff=0.3)
-        built = note(r"built: \ \texttt{statkit.qual}, \ the PhD problem bank, \ the proof map").to_corner(DR, buff=0.3)
-        with self.voiceover(
-            "<bookmark mark='a'/> Part fifty-five: the qualifying exam. <bookmark mark='b'/> Twelve problems in six sittings: "
-            "probability, with Borel–Cantelli for maxima and optional stopping where it fails; estimation and testing, with a "
-            "UMVUE, Blyth's method, and Neyman structure applied to John Snow's cholera table; asymptotics and efficiency, "
-            "with local power, a bracketing bound and the median's influence function on Newcomb's measurements of the speed "
-            "of light; and high dimensions, with Fano's inequality, matrix Bernstein, the lasso's oracle inequality and a "
-            "posterior contraction rate."
-        ) as vo:
-            vo.wait_until("a")
-            self.play(FadeIn(head, shift=UP * 0.2))
-            vo.wait_until("b")
-            self.play(FadeOut(head), FadeIn(obj, shift=UP * 0.2), FadeIn(prereq), FadeIn(built))
         self.wait(1.0)
         self.clear_scene()

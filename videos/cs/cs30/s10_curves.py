@@ -10,7 +10,7 @@ def f(x):
     return x ** 3 - x + 1
 
 
-class Curves(VoiceoverScene):
+class Curves(WatchScene):
     def construct(self):
         self.card()
         self.chord()
@@ -19,11 +19,7 @@ class Curves(VoiceoverScene):
         self.why()
 
     def card(self):
-        card = chapter_card(9, r"Elliptic curves", r"Can a curve be a group?", lit=(1985, 2006),
-                            extra=((1985, r"Miller; \ Koblitz"), (2006, r"Curve25519")), part=PART)
-        with self.voiceover("Chapter nine. Elliptic curves."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(9, r"Elliptic curves", r"Can a curve be a group?", lit=(1985, 2006), extra=((1985, r"Miller; \ Koblitz"), (2006, r"Curve25519")), part=PART, said="Chapter nine. Elliptic curves.")
 
     def axes(self):
         ax = Axes(x_range=[-2, 4, 1], y_range=[-6, 6, 2], x_length=5.6, y_length=5.8,
@@ -175,6 +171,10 @@ class Curves(VoiceoverScene):
         self.clear_scene()
 
     def why(self):
+        self.ask(r"A 256-bit elliptic-curve key is about as strong as \\ an RSA key of...", [r"$256$ bits",
+                 r"$3072$ bits", r"$15{,}360$ bits"], 1,
+                 say="A two-hundred-and-fifty-six-bit elliptic-curve key. How long an RSA key gives the same strength?",
+                 reveal="About three thousand bits: no index calculus works on a curve.")
         c = load("curves")
         head = label(r"Why curves won", font_size=34).to_edge(UP, buff=0.3)
         rows = [(r"128-bit security", "3072-bit RSA", "256-bit curve"),

@@ -5,7 +5,7 @@ from videos.cs.cs19.common import (BG, CODE, COST, CTRL, DATA, FUNC, HEAD, LAM, 
                                    mono, words)
 
 
-class Knapsack(VoiceoverScene):
+class Knapsack(WatchScene):
     def construct(self):
         self.card()
         self.table()
@@ -13,11 +13,7 @@ class Knapsack(VoiceoverScene):
         self.pseudo()
 
     def card(self):
-        card = chapter_card(11, r"Knapsack, \ and pseudo-polynomial time", r"When is $O(nW)$ not polynomial?",
-                            lit=(1957,), extra=((1957, r"Dantzig"), (1975, r"Ibarra and Kim")), part=PART)
-        with self.voiceover("Chapter eleven. Knapsack, and pseudo-polynomial time."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(11, r"Knapsack, \ and pseudo-polynomial time", r"When is $O(nW)$ not polynomial?", lit=(1957,), extra=((1957, r"Dantzig"), (1975, r"Ibarra and Kim")), part=PART, said="Chapter eleven. Knapsack, and pseudo-polynomial time.")
 
     def table(self):
         d = load("knapsack")
@@ -73,6 +69,9 @@ class Knapsack(VoiceoverScene):
         self.clear_scene()
 
     def greedy(self):
+        self.ask(r"Fill the knapsack greedily, best value per kilogram first. \\ Optimal?", [r"always", r"not always"], 1,
+                 say="Fill the knapsack with the best value per kilogram first. Is that always optimal?",
+                 reveal="Not always: one valuable heavy item can beat several dense light ones.")
         d = load("knapsack")
         head = label(r"Greedy by value per kilogram", font_size=34).to_edge(UP, buff=0.3)
         pts = VGroup(
@@ -133,3 +132,9 @@ class Knapsack(VoiceoverScene):
                 self.play(FadeIn(p))
         self.wait(0.3)
         self.clear_scene()
+        self.checkpoint(
+            [(r"What is dynamic programming?", r"Solve each subproblem once, in dependency order"),
+             (r"Why is knapsack's table only pseudo-polynomial?", r"It's polynomial in the capacity, exponential in its bits")],
+            narration="Checkpoint. What is dynamic programming? And why is the knapsack table only pseudo-polynomial?",
+            answers_narration="Solving each subproblem once, in an order that respects dependencies. And the table grows with "
+                              "the capacity's value, which is exponential in the number of its digits.")

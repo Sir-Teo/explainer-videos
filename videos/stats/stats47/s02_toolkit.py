@@ -5,21 +5,25 @@ import numpy as np
 from videos.stats.stats47.common import *  # noqa: F403
 
 
-class Toolkit(VoiceoverScene):
+class Toolkit(StatsScene):
     def construct(self):
         self.card()
+        self.ask("$X_n = O_P(1)$ means...",
+                 ["bounded in probability", "converging to zero", "converging to one"], 0,
+                 say="The bookkeeping of asymptotics: little oh P and big oh P. What does X n equals big oh P of "
+                     "one mean?",
+                 reveal="Bounded in probability: for any small risk, one bound holds for all large n. Little oh P "
+                        "of one means converging to zero in probability.")
         self.orders()
         self.slutsky()
         self.delta()
         self.multi()
         self.chart()
         self.second()
+        self.answer()
 
     def card(self):
-        card = chapter_card(1, r"Stochastic orders and the toolkit", r"Bookkeeping for things that go to zero at random", part=PART)
-        with self.voiceover("Chapter one. Stochastic orders and the toolkit: bookkeeping for things that go to zero at random."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(1, r"Stochastic orders and the toolkit", r"Bookkeeping for things that go to zero at random", part=PART, said="Chapter one. Stochastic orders and the toolkit: bookkeeping for things that go to zero at random.")
 
     def orders(self):
         rows = [

@@ -12,22 +12,16 @@ BURST = 20
 RATE = LP["limit"] / LP["window"]          # tokens a second
 
 
-class Limits(VoiceoverScene):
+class Limits(WatchScene):
     def construct(self):
         self.card()
         self.bucket()
         self.envelope()
-        self.gcra()
         self.windows()
-        self.distributed()
 
     def card(self):
-        card = chapter_card(5, r"Rate limiting", r"How does a service say no, \ fairly and cheaply?",
-                            lit=(1991, 2017), extra=((1991, r"Cruz: \ $(\sigma, \rho)$ envelopes"),
-                                                     (2017, r"Cloudflare's sliding windows")), part=PART)
-        with self.voiceover("Chapter five. Rate limiting."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(5, r"Rate limiting", r"How does a service say no, \ fairly and cheaply?", lit=(1991, 2017), extra=((1991, r"Cruz: \ $(\sigma, \rho)$ envelopes"),
+                                                     (2017, r"Cloudflare's sliding windows")), part=PART, said="Chapter five. Rate limiting.")
 
     def bucket(self):
         lim = load("limiter")
@@ -159,59 +153,12 @@ class Limits(VoiceoverScene):
         self.wait(0.4)
         self.clear_scene()
 
-    def gcra(self):
-        head = label(r"The same bucket in one number", font_size=36).to_edge(UP, buff=0.3)
-        code = code_block([
-            "T   = 1 / rate               # spacing",
-            "tau = (burst - 1) * T        # tolerance",
-            "",
-            "def allow(now):",
-            "    if now < tat - tau:",
-            "        return False         # too early",
-            "    tat = max(tat, now) + T",
-            "    return True",
-        ], size=17).to_edge(LEFT, buff=0.6).shift(UP * 0.7)
-        # a timeline: the theoretical arrival time running ahead of the clock during a burst
-        x0, x1, y = 0.6, 6.4, 1.2
-        line = Line([x0, y, 0], [x1, y, 0], color=GREY_C, stroke_width=2)
-        now = VGroup(Line([x0 + 1.0, y - 0.25, 0], [x0 + 1.0, y + 0.25, 0], color=DATA, stroke_width=3),
-                     label(r"now", font_size=17, color=DATA).move_to([x0 + 1.0, y - 0.5, 0]))
-        tat = Triangle(color=HEAD, fill_opacity=1).scale(0.1).rotate(PI).move_to([x0 + 1.0, y + 0.4, 0])
-        tat_l = label(r"TAT", font_size=17, color=HEAD).next_to(tat, UP, buff=0.08)
-        tol = Rectangle(width=3.2, height=0.18, stroke_width=0, fill_color=YES, fill_opacity=0.35).move_to(
-            [x0 + 1.0 + 1.6, y, 0])
-        tol_l = label(r"tolerance $\tau$", font_size=17, color=YES).next_to(tol, DOWN, buff=0.12).shift(RIGHT * 0.6)
-        notes = VGroup(
-            wrapped_label(r"the \textbf{generic cell rate algorithm}, \ from ATM networks: \ keep only the "
-                          r"\textit{theoretical arrival time} of the next request", 5.6, font_size=19, color=WHITE),
-            wrapped_label(r"each admission pushes it $T$ ahead; \ refuse once it runs more than $\tau$ ahead of "
-                          r"the clock", 5.6, font_size=19, color=HEAD),
-            wrapped_label(r"with $\tau = (\sigma - 1)T$ it admits exactly what the token bucket admits: \ one "
-                          r"timestamp per key, \ no refill to compute", 5.6, font_size=19, color=YES),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.28).move_to([3.5, -1.3, 0])
-        with self.voiceover(
-            "A token bucket stores two numbers per caller. "
-            "<bookmark mark='a'/> The generic cell rate algorithm, from ATM networks, stores one: the theoretical "
-            "arrival time of the next request. <bookmark mark='b'/> Each admitted request "
-            "pushes it one spacing, T, further ahead. Once it runs more than a tolerance tau ahead of the clock, "
-            "requests are refused until the clock catches up. <bookmark mark='c'/> With tau "
-            "equal to sigma minus one spacings, it admits exactly what the token bucket admits, with a single "
-            "timestamp per key in a shared store."
-        ) as vo:
-            self.play(FadeIn(head), FadeIn(code), Create(line), FadeIn(now))
-            vo.wait_until("a")
-            self.play(FadeIn(tat), FadeIn(tat_l), FadeIn(notes[0]))
-            vo.wait_until("b")
-            self.play(FadeIn(tol), FadeIn(tol_l), FadeIn(notes[1]))
-            for _ in range(5):
-                self.play(VGroup(tat, tat_l).animate.shift(RIGHT * 0.75), run_time=0.45)
-            self.play(Indicate(tat, color=NO), VGroup(tat, tat_l).animate.set_color(NO))
-            vo.wait_until("c")
-            self.play(FadeIn(notes[2]))
-        self.wait(0.4)
-        self.clear_scene()
 
     def windows(self):
+        self.ask(r"A limit counted per calendar minute. \\ A burst across the boundary lets through...",
+                 [r"the limit", r"up to twice the limit"], 1,
+                 say="A limiter counts requests per calendar minute. A caller bursts just before and just after the minute changes. How many get through?",
+                 reveal="Up to twice the limit, within a few seconds.")
         lim = load("limiter")
         head = label(r"Counting in windows", font_size=36).to_edge(UP, buff=0.3)
         L = lim["limit"]
@@ -297,51 +244,6 @@ class Limits(VoiceoverScene):
         self.wait(0.4)
         self.clear_scene()
 
-    def distributed(self):
-        head = label(r"One limit, \ many servers", font_size=36).to_edge(UP, buff=0.3)
-        lb = module_box(r"load balancer", HEAD, w=2.6, h=0.55, font=18).move_to([-2.6, 2.3, 0])
-        servers = VGroup(*[module_box(rf"server {i + 1}", KERN, w=1.5, h=0.55, font=17) for i in range(4)]).arrange(
-            RIGHT, buff=0.35).move_to([-2.6, 0.9, 0])
-        buckets = VGroup(*[VGroup(Rectangle(width=0.5, height=0.5, stroke_color=YES, stroke_width=2),
-                                  Rectangle(width=0.44, height=0.25, stroke_width=0, fill_color=YES,
-                                            fill_opacity=0.5)).next_to(s, DOWN, buff=0.15) for s in servers])
-        for b in buckets:
-            b[1].align_to(b[0], DOWN).shift(UP * 0.03)
-        store = module_box(r"shared counters", LAM, w=3.0, h=0.6, font=18).move_to([-2.6, -1.4, 0])
-        down = VGroup(*[Arrow(lb.get_bottom(), s.get_top(), buff=0.08, stroke_width=1.8, color=GREY_B,
-                              max_tip_length_to_length_ratio=0.15) for s in servers])
-        sync = VGroup(*[DashedLine(b.get_bottom(), store.get_top(), color=LAM, stroke_width=1.6) for b in buckets])
-        opts = VGroup(
-            wrapped_label(r"\textbf{central}: \ an atomic increment in a shared store per request; \ exact, \ but a "
-                          r"round trip each time, \ and the store must stay up", 5.4, font_size=19, color=LAM),
-            wrapped_label(r"\textbf{local}: \ each of $N$ servers enforces $\rho/N$; \ free, \ but unfair when the "
-                          r"balancer spreads one caller unevenly", 5.4, font_size=19, color=YES),
-            wrapped_label(r"\textbf{approximate}: \ count locally, \ share every so often; \ the overshoot grows with "
-                          r"the interval; \ for millions of keys, \ a Count-Min sketch \ (Part 20) \ errs only "
-                          r"towards refusing", 5.4, font_size=19, color=HEAD),
-            wrapped_label(r"either way, \ answer 429 with a \texttt{Retry-After} \ (Part 43), \ and clients back off",
-                          5.4, font_size=19, color=WHITE),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.28).move_to([3.9, 0.15, 0])
-        foot = note(r"schematic", font_size=16).to_edge(DOWN, buff=0.3).set_x(-2.6)
-        with self.voiceover(
-            "A fleet needs one limit per caller across all its servers. <bookmark mark='a'/> The exact answer is a "
-            "shared counter, an atomic increment in a store such as "
-            "Redis on every request. It costs a round trip each time. "
-            "<bookmark mark='b'/> The cheapest splits the limit: each of N servers enforces its share, with no "
-            "coordination, but unfairly when one caller's traffic is spread unevenly. "
-            "<bookmark mark='c'/> Between them, count locally and share the counts every so often, accepting an "
-            "overshoot that grows with the interval. For millions of keys, Part 20's Count-Min sketch only "
-            "overestimates, so it errs towards refusing. <bookmark mark='d'/> Whichever you choose, "
-            "refuse politely, with a four twenty-nine and a hint of when to retry."
-        ) as vo:
-            self.play(FadeIn(head), FadeIn(lb), FadeIn(servers), Create(down), FadeIn(buckets), FadeIn(foot))
-            vo.wait_until("a")
-            self.play(FadeIn(store), Create(sync), FadeIn(opts[0]))
-            for mk, o in zip("bcd", opts[1:]):
-                vo.wait_until(mk)
-                self.play(FadeIn(o))
-        self.wait(0.4)
-        self.clear_scene()
 
 
 _ = (BG, DATA, axes)

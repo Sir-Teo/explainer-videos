@@ -25,6 +25,8 @@ import numpy as np
 from explainer.ai import *  # noqa: F401,F403
 from explainer.ai import _zh, label, note, wrapped_label, zh  # noqa: F401
 from explainer.cs.viz import *  # noqa: F401,F403,E402
+from explainer.cs.flow import EventStrip, Meter, PipelineFlow, Race  # noqa: F401,E402
+from explainer.cs.watch import WatchScene, countdown_ring, predict_card, tag  # noqa: F401,E402
 
 SERIES_EN = "Computer Science, Built"
 SERIES_ZH = "计算机科学，从零搭建"

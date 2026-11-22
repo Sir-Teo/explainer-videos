@@ -5,21 +5,25 @@ import numpy as np
 from videos.stats.stats16.common import *  # noqa: F403
 
 
-class Permutation(VoiceoverScene):
+class Permutation(StatsScene):
     def construct(self):
         self.card()
+        self.ask("Two samples of 5. How many ways to split the 10 values into two groups of 5?",
+                 ["25", "252", "3,628,800"], 1,
+                 say="Two samples of five. If the labels mean nothing, every split of the ten values into two "
+                     "groups of five is equally likely. How many splits are there?",
+                 reveal="Two hundred and fifty-two: ten choose five. The test's p-value is the share of them at "
+                        "least as extreme as the one observed, exactly.")
         self.exchangeable()
         self.machine()
         self.exact()
         self.any_stat()
         self.correlation()
         self.limits()
+        self.answer()
 
     def card(self):
-        card = chapter_card(1, r"Permutation tests", r"Exact $p$-values from exchangeability", lit=(1935,), part=PART)
-        with self.voiceover("Chapter one. Permutation tests."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(1, r"Permutation tests", r"Exact $p$-values from exchangeability", lit=(1935,), part=PART, said="Chapter one. Permutation tests.")
 
     def exchangeable(self):
         rows = [

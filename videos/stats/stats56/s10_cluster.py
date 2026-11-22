@@ -5,21 +5,25 @@ import numpy as np
 from videos.stats.stats56.common import *  # noqa: F403
 
 
-class Clustering(VoiceoverScene):
+class Clustering(StatsScene):
     def construct(self):
         self.card()
+        self.ask("Cluster data into two groups, then $t$-test their means. With only one true group, the $p$-value is...",
+                 ["uniform", "tiny, almost always"], 1,
+                 say="Run a clustering algorithm into two groups, then t-test the difference in their means. If "
+                     "there's really only one group, what does the p-value look like?",
+                 reveal="Tiny, almost always: the algorithm put the split exactly where the difference is largest. "
+                        "Gao, Bien and Witten's selective test conditions on the clustering.")
         self.double_dip()
         self.test()
         self.faithful()
         self.null_hist()
         self.why_works()
         self.extensions()
+        self.answer()
 
     def card(self):
-        card = chapter_card(9, r"Selection in unsupervised problems", r"Testing the clusters you found", lit=(2022,), part=PART)
-        with self.voiceover("Chapter nine. Selection in unsupervised problems: testing the clusters you found."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(9, r"Selection in unsupervised problems", r"Testing the clusters you found", lit=(2022,), part=PART, said="Chapter nine. Selection in unsupervised problems: testing the clusters you found.")
 
     def double_dip(self):
         rows = [

@@ -4,11 +4,11 @@ from explainer.cs import *  # noqa: F403
 from videos.cs.cs38.common import (DATA, HEAD, KERN, NO, PART, ROLEC, YES, load, role_strip)
 
 
-class Hook(VoiceoverScene):
+class Hook(WatchScene):
     def construct(self):
         self.storm()
         self.paradox()
-        self.plan()
+        self.title(PART)
 
     def storm(self):
         h = load("hook")
@@ -92,28 +92,3 @@ class Hook(VoiceoverScene):
         self.wait(0.5)
         self.clear_scene()
 
-    def plan(self):
-        title = label(rf"Part {PART}: \ Distributed Systems I: \ Agreement", font_size=38).to_edge(UP, buff=0.3)
-        smap = series_map(current=PART, done=PART - 1).scale(0.92).next_to(title, DOWN, buff=0.35)
-        obj = objectives_card([
-            r"partial failure and asynchrony: \ the two generals, \ proved hopeless",
-            r"time without a clock: \ Lamport clocks, \ vector clocks, \ consistent snapshots",
-            r"consensus: \ $f + 1$ rounds when time is kept; \ FLP when it is not",
-            r"around FLP: \ randomness, \ failure detectors, \ partial synchrony",
-            r"Paxos and Raft, \ proved safe, \ and our Raft attacked a thousand times",
-            r"traitors: \ Byzantine generals, \ PBFT, \ and Nakamoto's longest chain",
-        ], font_size=25).move_to(DOWN * 0.2)
-        with self.voiceover(
-            "This is Part 38 of Computer Science, Built: Distributed systems, agreement. <bookmark mark='a'/> We "
-            "start with two generals who provably cannot coordinate, and with time when there is no clock to read: "
-            "Lamport's clocks, vector clocks, and snapshots of a system that never stops. We define consensus, solve "
-            "it in f plus one rounds when time is kept, and prove, with Fischer, Lynch and Paterson, that it cannot "
-            "be guaranteed when it is not. Then the ways around: randomness, failure detectors, partial synchrony; "
-            "Paxos and Raft, with their proofs; our own Raft, attacked a thousand times; and finally traitors, from "
-            "the Byzantine generals to Bitcoin."
-        ) as vo:
-            self.play(FadeIn(title), FadeIn(smap))
-            vo.wait_until("a")
-            self.play(FadeOut(smap), FadeIn(obj))
-        self.wait(0.5)
-        self.clear_scene()

@@ -18,7 +18,7 @@ def view(p, az=0.0, el=15.0):
     return float(p @ e1), float(p @ e2), float(p @ e3)
 
 
-class Transforms(VoiceoverScene):
+class Transforms(WatchScene):
     def construct(self):
         self.card()
         self.linear()
@@ -26,16 +26,11 @@ class Transforms(VoiceoverScene):
         self.order()
         self.gimbal()
         self.quaternions()
-        self.slerp()
 
     def card(self):
-        card = chapter_card(1, r"Transforms and rotations", r"How does one matrix move a whole scene?",
-                            lit=(1827, 1843, 1985), extra=((1827, r"M\"obius: \ homogeneous coordinates"),
+        self.chapter(1, r"Transforms and rotations", r"How does one matrix move a whole scene?", lit=(1827, 1843, 1985), extra=((1827, r"M\"obius: \ homogeneous coordinates"),
                                                            (1843, r"Hamilton: \ quaternions"),
-                                                           (1985, r"Shoemake: \ slerp")), part=PART)
-        with self.voiceover("Chapter one. Transforms and rotations."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+                                                           (1985, r"Shoemake: \ slerp")), part=PART, said="Chapter one. Transforms and rotations.")
 
     def linear(self):
         head = label(r"A matrix moves every point at once", font_size=36).to_edge(UP, buff=0.3)
@@ -140,6 +135,9 @@ class Transforms(VoiceoverScene):
         self.clear_scene()
 
     def order(self):
+        self.ask(r"Rotate then translate, or translate then rotate. \\ Same result?", [r"yes", r"no"], 1,
+                 say="Rotate a square and then move it, or move it and then rotate it. Same result?",
+                 reveal="No: matrix products don't commute, and they act from right to left.")
         d = load("order")
         head = label(r"Order matters: \ matrices apply right to left", font_size=36).to_edge(UP, buff=0.3)
 
@@ -300,70 +298,6 @@ class Transforms(VoiceoverScene):
         self.wait(0.4)
         self.clear_scene()
 
-    def slerp(self):
-        s = load("slerp")
-        head = label(r"Slerp: \ the shortest way round", font_size=36).to_edge(UP, buff=0.3)
-        R = 2.0
-        c = np.array([-3.6, -0.55, 0])
-        sphere = Circle(radius=R, color=GREY_C, stroke_width=1.5).move_to(c)
-        eqt = VGroup(*[ParametricFunction(lambda t, lat=lat: c + R * np.array(view(
-            (math.cos(lat) * math.cos(t), math.cos(lat) * math.sin(t), math.sin(lat)))[:2] + (0,)),
-            t_range=[0, TAU], color=GREY_D, stroke_width=1) for lat in (0.0, -0.7)])
-
-        def path(pts, col):
-            g = VGroup()
-            P = [c + R * np.array(view(p)[:2] + (0,)) for p in pts]
-            D = [view(p)[2] for p in pts]
-            for k in range(len(P) - 1):
-                front = D[k] + D[k + 1] >= 0
-                g.add(Line(P[k], P[k + 1], color=col, stroke_width=5 if front else 2.5,
-                           stroke_opacity=1.0 if front else 0.45))
-            return g
-        pe = path(s["euler"]["path"], NO)
-        ps = path(s["slerp"]["path"], YES)
-        ends = VGroup(Dot(pe[0].get_start(), color=WHITE, radius=0.08), Dot(pe[-1].get_end(), color=WHITE,
-                                                                             radius=0.08))
-        sl = note(r"the nose's path, \ 40 steps each", font_size=17).next_to(sphere, DOWN, buff=0.12)
-        form = MathTex(r"\mathrm{slerp}(a, b; t) = \frac{\sin\big((1-t)\theta\big)}{\sin\theta}\,a + "
-                       r"\frac{\sin(t\theta)}{\sin\theta}\,b", font_size=30).move_to([3.3, 2.35, 0])
-        fn = note(r"$\cos\theta = a \cdot b$; \ Shoemake, \ 1985", font_size=17).next_to(form, DOWN, buff=0.1)
-        ax = axes([0, 40, 10], [0, 7, 1], x_length=5.2, y_length=2.6, x_label=r"step",
-                  y_label=r"degrees turned in each step", xticks=[0, 10, 20, 30, 40], yticks=[0, 2, 4, 6])
-        ax.next_to(fn, DOWN, buff=0.35)
-        ce = ax.ax.plot_line_graph(list(range(1, 41)), s["euler"]["per_step_deg"], line_color=NO,
-                                   add_vertex_dots=False, stroke_width=3)
-        cs = ax.ax.plot_line_graph(list(range(1, 41)), s["slerp"]["per_step_deg"], line_color=YES,
-                                   add_vertex_dots=False, stroke_width=3)
-        lab = VGroup(
-            label(rf"Euler angles in a straight line: \ {s['euler']['total_deg']:.1f}$^\circ$ in all, \ uneven",
-                  font_size=19, color=NO),
-            label(rf"slerp: \ {s['slerp']['total_deg']:.1f}$^\circ$, \ constant speed \ (shortest: \ "
-                  rf"{s['geodesic_deg']:.1f}$^\circ$)", font_size=19, color=YES),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.12).next_to(ax, DOWN, buff=0.2)
-        a, b = s["a"], s["b"]
-        src = note(rf"from (yaw, pitch, roll) = ({a[0]:g}, {a[1]:g}, {a[2]:g}) to ({b[0]:g}, {b[1]:g}, {b[2]:g}) "
-                   r"degrees; \ computed", font_size=16).to_edge(DOWN, buff=0.12)
-        with self.voiceover(
-            "Quaternions also answer the animator's question: how do you turn smoothly between two orientations? "
-            "<bookmark mark='a'/> The naive way slides the three Euler angles in straight lines, and the nose "
-            "wanders along this red path. <bookmark mark='b'/> Ken Shoemake's slerp, from 1985, follows the great "
-            "circle between the two quaternions, with these sine weights. <bookmark mark='c'/> The green path turns "
-            "the same amount every step, and its total is exactly the single rotation between the ends, about one "
-            "hundred and thirty-nine degrees. <bookmark mark='d'/> The Euler path turns about two hundred and "
-            "thirty-seven, unevenly. That is why game engines interpolate rotations with quaternions."
-        ) as vo:
-            self.play(FadeIn(head), Create(sphere), Create(eqt), FadeIn(ends), FadeIn(sl), FadeIn(src))
-            vo.wait_until("a")
-            self.play(Create(pe), run_time=2.5)
-            vo.wait_until("b")
-            self.play(Write(form), FadeIn(fn))
-            vo.wait_until("c")
-            self.play(Create(ps), FadeIn(ax), run_time=2.0)
-            self.play(Create(cs), FadeIn(lab[1]))
-            vo.wait_until("d")
-            self.play(Create(ce), FadeIn(lab[0]))
-        self.wait(0.4)
-        self.clear_scene()
 
 
 _ = (BG, DATA, HEAD, KERN, LAM, NO, YES)

@@ -6,7 +6,7 @@ from videos.cs.cs35.common import (CODE, DATA, HEAD, KERN, LAM, NO, PART, YES, b
 COLS = [DATA, HEAD, LAM, KERN, YES, NO]
 
 
-class Columns(VoiceoverScene):
+class Columns(WatchScene):
     def construct(self):
         self.card()
         self.layouts()
@@ -14,11 +14,7 @@ class Columns(VoiceoverScene):
         self.compression()
 
     def card(self):
-        card = chapter_card(14, r"Column stores", r"Why store a table sideways?", lit=(2005,),
-                            extra=((2005, r"C-Store; \ MonetDB/X100"),), part=PART)
-        with self.voiceover("Chapter fourteen. Column stores."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(14, r"Column stores", r"Why store a table sideways?", lit=(2005,), extra=((2005, r"C-Store; \ MonetDB/X100"),), part=PART, said="Chapter fourteen. Column stores.")
 
     def layouts(self):
         head = label(r"Rows or columns, \ in the same pages", font_size=36).to_edge(UP, buff=0.3)
@@ -69,6 +65,10 @@ class Columns(VoiceoverScene):
         self.clear_scene()
 
     def measured(self):
+        self.ask(r"Sum one column of sixteen, filtered by another. \\ Stored by column instead of by row...",
+                 [r"about the same", r"much faster"], 1,
+                 say="Sum one column of a sixteen-column table, filtered by another. Is a column store faster than a row store?",
+                 reveal="Much faster: it reads two columns of sixteen, in tight loops.")
         c = load("columns")
         head = label(rf"{num(c['n'])} rows, \ {c['cols']} columns, \ measured", font_size=36).to_edge(UP, buff=0.3)
         vals = [c["tuple_s"] * 1000, c["row_s"] * 1000, c["col_s"] * 1000]

@@ -18,7 +18,7 @@ def cube_points(scale=1.6, origin=ORIGIN):
     return pts
 
 
-class Normal(VoiceoverScene):
+class Normal(WatchScene):
     def construct(self):
         self.card()
         self.cube()
@@ -27,10 +27,7 @@ class Normal(VoiceoverScene):
         self.hard()
 
     def card(self):
-        card = chapter_card(6, r"Normal forms and maps", r"How small can a formula for a function be?", part=PART)
-        with self.voiceover("Chapter six. Normal forms and maps."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(6, r"Normal forms and maps", r"How small can a formula for a function be?", part=PART, said="Chapter six. Normal forms and maps.")
 
     # ------------------------------------------------------------------
     def cube(self):
@@ -151,6 +148,9 @@ class Normal(VoiceoverScene):
 
     # ------------------------------------------------------------------
     def parity(self):
+        self.ask(r"Parity of $n$ inputs, written as an OR of ANDs. \\ How many terms?", [r"$n$", r"$n^2$", r"$2^{n-1}$"], 2,
+                 say="Write parity of n inputs as an or of ands. How many terms?",
+                 reveal="Two to the n minus one: every one of the odd corners, and none of them merge.")
         d = load("parity")
         head = label(r"Where normal forms explode: \ parity", font_size=38).to_edge(UP, buff=0.35)
         ones = {m for m in range(16) if bin(m).count("1") % 2}

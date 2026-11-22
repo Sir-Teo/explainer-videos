@@ -3,19 +3,22 @@ from __future__ import annotations
 from videos.stats.stats24.common import *  # noqa: F403
 
 
-class Upgrade(VoiceoverScene):
+class Upgrade(StatsScene):
     def construct(self):
         self.card()
+        self.ask("Logistic and Poisson regression are fitted by one algorithm. Which?",
+                 ["IRLS: Fisher scoring as weighted least squares", "gradient descent", "one least-squares solve"], 0,
+                 say="Part 14 fitted logistic and Poisson regression with the same algorithm. Which one?",
+                 reveal="Iteratively reweighted least squares: Fisher scoring, written as a weighted least squares "
+                        "refitted until it settles. It fits every model in this part.")
         self.upgrade()
         self.three()
         self.lpm()
         self.recipe()
+        self.answer()
 
     def card(self):
-        card = chapter_card(1, r"Upgrade: \ what Part 14 fitted", r"Two models become one family", lit=(1972,), part=PART)
-        with self.voiceover("Chapter one. An upgrade of Part 14."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(1, r"Upgrade: \ what Part 14 fitted", r"Two models become one family", lit=(1972,), part=PART, said="Chapter one. An upgrade of Part 14.")
 
     def upgrade(self):
         u = upgrade_card(14, r"logistic regression for yes-or-no, \ Poisson regression for counts, \ fitted by IRLS",

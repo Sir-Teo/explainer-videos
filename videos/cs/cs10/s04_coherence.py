@@ -7,24 +7,22 @@ from videos.cs.cs10.common import (BG, CORE_COLORS, CTRL, DATA, FUNC, HEAD, NO, 
                                    CacheLine, core_box, load)
 
 
-class Coherence(VoiceoverScene):
+class Coherence(WatchScene):
     def construct(self):
         self.card()
         self.problem()
         self.rules()
         self.diagram()
-        self.script()
-        self.directory()
 
     def card(self):
-        card = chapter_card(3, r"Cache coherence", r"What if two caches disagree about one address?",
-                            lit=(1984,), extra=((1984, r"Papamarcos and Patel: \ MESI"),), part=PART)
-        with self.voiceover("Chapter three. Cache coherence."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(3, r"Cache coherence", r"What if two caches disagree about one address?", lit=(1984,), extra=((1984, r"Papamarcos and Patel: \ MESI"),), part=PART, said="Chapter three. Cache coherence.")
 
     # ------------------------------------------------------------------
     def problem(self):
+        self.ask(r"Two cores have cached $x = 0$. Core 0 writes $x = 1$. \\ With no coherence, core 1 reads...",
+                 [r"1", r"0, from its stale copy"], 1,
+                 say="Two cores have x, zero, in their caches. Core zero writes one. Without coherence, what does core one read?",
+                 reveal="Zero, from its stale copy. Coherence exists to stop exactly that.")
         head = label(r"Without coherence: \ two stale private copies", font_size=34).to_edge(UP, buff=0.35)
         c0 = core_box(0).move_to(LEFT * 3 + UP * 1.4)
         c1 = core_box(1).move_to(RIGHT * 3 + UP * 1.4)
@@ -163,109 +161,4 @@ class Coherence(VoiceoverScene):
         self.wait(0.3)
         self.clear_scene()
 
-    # ------------------------------------------------------------------
-    def script(self):
-        sc = load("mesi")["script"]
-        head = label(r"One line, \ four cores, \ eight accesses", font_size=34).to_edge(UP, buff=0.3)
-        cores = VGroup(*[core_box(k, w=1.8, h=0.7, font_size=20) for k in range(4)]).arrange(RIGHT, buff=0.9).shift(
-            UP * 1.6)
-        lines = [CacheLine("I", "", w=1.8).next_to(cores[k], DOWN, buff=0.35) for k in range(4)]
-        bus = Line(LEFT * 6.2, RIGHT * 6.2, color=GREY_C, stroke_width=4).shift(DOWN * 0.35)
-        bl = label(r"the bus", font_size=18, color=GREY_B).next_to(bus, DOWN, buff=0.08).align_to(bus, LEFT)
-        links = VGroup(*[Line(l.get_bottom(), [l.get_x(), bus.get_y(), 0], color=GREY_D, stroke_width=2)
-                         for l in lines])
-        event = label(r"", font_size=24)
-        log = VGroup()
-        cur = 0
-        with self.voiceover(
-            (
-            "Follow one line through eight accesses in our serialized MESI simulator. <bookmark mark='a'/> Core "
-            "zero reads zero: no other copy, so it gets Exclusive. <bookmark mark='c'/> Core one reads the same "
-            "zero, making both copies Shared. <bookmark mark='d'/> Core zero writes three: it invalidates core "
-            "one's copy and becomes Modified. <bookmark mark='e'/> Core two reads three: core zero supplies its "
-            "dirty data and both become Shared. <bookmark mark='f'/> Core three writes five, invalidating the "
-            "other two copies. <bookmark mark='g'/> It writes six next: a Modified hit, without a bus request. "
-            "<bookmark mark='h'/> Core one reads six, supplied by core three; both become Shared. <bookmark "
-            "mark='i'/> Core two writes eight, invalidating those two copies and becoming the sole owner. "
-            "<bookmark mark='b'/> The displayed values and permissions follow the simulator. Twenty thousand "
-            "random accesses also check single-writer permissions and returned values. Those tests are evidence "
-            "for this teaching implementation, not a proof of a real chip's complete protocol."
-        )
-        ) as vo:
-            self.play(FadeIn(head), FadeIn(cores), *[FadeIn(l) for l in lines], Create(bus), FadeIn(bl),
-                      Create(links))
-            for k, st in enumerate(sc):
-                vo.wait_until(("a", "c", "d", "e", "f", "g", "h", "i")[k])
-                op = rf"core {st['core']}, \ {'a write' if st['op'] == 'write' else 'a read'}: \ " + st[
-                    "event"].replace(";", r";\ ")
-                ev = label(op, font_size=22, color=CORE_COLORS[st["core"]]).move_to(DOWN * 1.1)
-                anims = []
-                if st["op"] == "write":
-                    cur = k + 1
-                for c in range(4):
-                    want = "" if st["states"][c] == "I" else f"x={cur}"
-                    if lines[c].state != st["states"][c] or lines[c].value != want:
-                        anims += lines[c].set(st["states"][c], want)
-                arrow = Arrow(cores[st["core"]].get_bottom(), lines[st["core"]].get_top(), buff=0.03,
-                              color=CORE_COLORS[st["core"]], stroke_width=3)
-                entry = label(rf"{k + 1}. \ core {st['core']}, \ {st['op']} \ $\to$ \ " + " ".join(st["states"]),
-                              font_size=17, color=GREY_B)
-                log.add(entry)
-                entry.move_to(DOWN * (1.75 + 0.27 * (k % 4)) + (LEFT * 3.3 if k < 4 else RIGHT * 2.8))
-                self.play(FadeIn(arrow), Transform(event, ev) if k else FadeIn(ev), *anims, FadeIn(entry),
-                          run_time=0.6)
-                if not k:
-                    event = ev
-                self.wait(0.5)
-                self.play(FadeOut(arrow), run_time=0.2)
-            vo.wait_until("b")
-            self.play(Indicate(VGroup(*lines), color=YES))
-        self.wait(0.3)
-        self.clear_scene()
 
-    # ------------------------------------------------------------------
-    def directory(self):
-        m = load("mesi")
-        head = label(r"Beyond a bus: \ directories, \ and a fourth C", font_size=34).to_edge(UP, buff=0.3)
-        pts = VGroup(
-            label(r"a bus carries one miss at a time, \ and every cache must look at every one: \ fine for a few "
-                  r"cores", font_size=22, color=GREY_A),
-            label(r"a \textit{directory} records ownership and sharers; \ a bit per core is one possible design",
-                  font_size=22, color=DATA),
-            label(r"a miss asks the directory, \ which messages only the holders: \ point to point, \ over a network",
-                  font_size=22, color=DATA),
-            label(r"so a fourth kind of miss: \ \textit{coherence misses}, \ lines taken away by another core's "
-                  r"write", font_size=22, color=NO),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.3).move_to(UP * 0.5)
-        s1, s2 = m["same line"], m["own lines"]
-        sim = label(rf"two cores, \ each writing its own counter 500 times, \ alternately: \ "
-                    rf"{s1['invalidations']} invalidations if the counters share a line, \ {s2['invalidations']} if "
-                    r"not", font_size=22, color=HEAD).to_edge(DOWN, buff=0.5)
-        with self.voiceover(
-            (
-            "Snooping has limits. <bookmark mark='a'/> A bus carries one transaction at a time, and every cache "
-            "has to check every one, which works for a handful of cores but not for a hundred. <bookmark "
-            "mark='b'/> Large chips keep a directory instead: a directory at a home agent records ownership and "
-            "sharers. One bit per core is a simple design; sparse and compressed directories use other "
-            "representations. <bookmark mark='c'/> A miss goes to the directory, which forwards it only to the "
-            "caches that hold the line, as point-to-point messages over an on-chip network. <bookmark mark='d'/> "
-            "Either way, sharing adds a fourth kind of miss to Part 9's three: the coherence miss, a line that "
-            "was in the cache until another core's write took it away. <bookmark mark='e'/> Our simulator shows "
-            "how lopsided this can be. Two cores take turns writing their own counters, five hundred times each. "
-            "If the two counters happen to sit in the same cache line, after the first write, each alternating "
-            "write invalidates the other copy: nine hundred and ninety-nine invalidations in this particular "
-            "schedule. If they sit in different lines, there are no invalidations at all. The next chapter "
-            "measures what that costs on real hardware."
-        )
-        ) as vo:
-            self.play(FadeIn(head), run_time=0.5)
-            for mk, p in zip('abcd', pts):
-                if mk != 'a':
-                    vo.wait_until(mk)
-                self.play(FadeIn(p, shift=RIGHT * 0.1), run_time=0.6 if mk == 'a' else 1.0)
-                if mk == 'a':
-                    vo.wait_until(mk)
-            vo.wait_until("e")
-            self.play(FadeIn(sim))
-        self.wait(0.3)
-        self.clear_scene()

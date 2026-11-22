@@ -75,25 +75,24 @@ B = load("bias")
 ENV_SPREAD = 100 * B["env_spread"]
 
 
-class Reading(VoiceoverScene):
+class Reading(WatchScene):
     def construct(self):
         self.card()
         self.passes()
         self.five_cs()
         self.unsaid()
         self.third()
-        self.review()
 
     def card(self):
-        card = chapter_card(6, r"Reading and reviewing", r"How do you read a paper, \ and judge one?",
-                            lit=(1990, 2007), extra=((1990, r"Smith: \ the task of the referee"),
-                                                     (2007, r"Keshav: \ how to read a paper")), part=PART)
-        with self.voiceover("Chapter six. Reading and reviewing."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(6, r"Reading and reviewing", r"How do you read a paper, \ and judge one?", lit=(1990, 2007), extra=((1990, r"Smith: \ the task of the referee"),
+                                                     (2007, r"Keshav: \ how to read a paper")), part=PART, said="Chapter six. Reading and reviewing.")
 
     # ------------------------------------------------------------------
     def passes(self):
+        self.ask(r"Keshav's first pass over a paper \\ should take...", [r"five to ten minutes", r"an hour",
+                 r"a day"], 0,
+                 say="Keshav says to read a paper in three passes. How long should the first take?",
+                 reveal="Five to ten minutes: title, abstract, introduction, headings, conclusion.")
         head = label(r"Three passes \ (Keshav, \ 2007)", font_size=36).to_edge(UP, buff=0.3)
         blocks = [(r"title, \ authors", 0.32), (r"abstract", 0.39), (r"1 \ introduction", 0.57),
                   (r"2 \ design", 0.55), (r"figure", 0.48), (r"3 \ proofs, \ details", 0.55),
@@ -286,51 +285,6 @@ class Reading(VoiceoverScene):
         self.wait(0.4)
         self.clear_scene()
 
-    # ------------------------------------------------------------------
-    def review(self):
-        head = label(r"Writing a review", font_size=36).to_edge(UP, buff=0.3)
-        fields = [
-            (r"summary", r"in your own words: \ Skim hashes each word once, \ and reports a 2.1-fold speedup on "
-                         r"thirty novels", GREY_A),
-            (r"strengths", r"a simple idea; \ a claim that is easy to check", YES),
-            (r"weaknesses", r"one benchmark, \ no intervals, \ an unnamed baseline, \ memory not measured: \ "
-                            r"\textit{each could be fixed, \ and the review says how}", NO),
-            (r"questions", r"how many runs, \ on which machine? \ will the code be released?", DATA),
-            (r"verdict", r"not yet: \ accept with intervals, \ a second benchmark and a named baseline; \ "
-                         r"confidence: \ high", HEAD),
-        ]
-        rows = VGroup()
-        for t, body, c in fields:
-            rows.add(VGroup(label(t, font_size=24, color=c), wrapped_label(body, 9.4, font_size=21, color=WHITE)))
-        for r in rows:
-            r[0].move_to([-6.6, 0, 0], aligned_edge=LEFT)
-        rows.arrange(DOWN, aligned_edge=LEFT, buff=0.62).next_to(head, DOWN, buff=0.6)
-        for r in rows:
-            r[0].set_x(-6.6 + r[0].width / 2)
-            r[1].set_x(-3.7 + r[1].width / 2).align_to(r[0], UP)
-        rules = VGroup(*[Line([-6.6, r.get_bottom()[1] - 0.2, 0], [6.6, r.get_bottom()[1] - 0.2, 0], color=GREY_D,
-                              stroke_width=1) for r in rows[:-1]])
-        ill = note(r"illustrative: \ a review of the invented paper", font_size=16).to_corner(DR, buff=0.3)
-        with self.voiceover(
-            "Reviewing is reading with a duty attached. Most review forms ask for the same few things. "
-            "<bookmark mark='a'/> First a summary, in your own words, so that the authors can see you understood "
-            "them. <bookmark mark='b'/> Then the strengths: say what is good, and mean it. <bookmark mark='c'/> "
-            "Then the weaknesses, and here the craft is to separate what is fatal from what can be fixed, and for "
-            "each fixable flaw, to say what would fix it. Judge the paper that was submitted, not the one you "
-            "would have written. <bookmark mark='d'/> Then questions the authors can answer. <bookmark mark='e'/> "
-            "And a verdict, with your confidence in it. A review is confidential, and it is written to a person: "
-            "specific, courteous and checkable. Alan Jay Smith's guide for referees, The Task of the Referee, "
-            "from 1990, is still worth reading."
-        ) as vo:
-            self.play(FadeIn(head), FadeIn(ill))
-            for mk, r, i in zip("abcde", rows, range(5)):
-                vo.wait_until(mk)
-                anims = [FadeIn(r[0], shift=RIGHT * 0.15), FadeIn(r[1])]
-                if i:
-                    anims.append(Create(rules[i - 1]))
-                self.play(*anims)
-        self.wait(0.4)
-        self.clear_scene()
 
 
 _ = (BG, KERN, YES)

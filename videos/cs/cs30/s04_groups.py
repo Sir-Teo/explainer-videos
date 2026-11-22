@@ -6,7 +6,7 @@ from explainer.cs import *  # noqa: F403
 from videos.cs.cs30.common import (BG, CTRL, DATA, HEAD, LAM, NO, PART, YES, fit_right, load, mono)
 
 
-class Groups(VoiceoverScene):
+class Groups(WatchScene):
     def construct(self):
         self.card()
         self.cycle()
@@ -14,11 +14,7 @@ class Groups(VoiceoverScene):
         self.scatter()
 
     def card(self):
-        card = chapter_card(3, r"Groups and the discrete logarithm", r"Which problems are easy one way only?",
-                            lit=(1801, 1832), extra=((1832, r"Galois: \ groups"),), part=PART)
-        with self.voiceover("Chapter three. Groups, and the discrete logarithm."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(3, r"Groups and the discrete logarithm", r"Which problems are easy one way only?", lit=(1801, 1832), extra=((1832, r"Galois: \ groups"),), part=PART, said="Chapter three. Groups, and the discrete logarithm.")
 
     def cycle(self):
         d = load("groups")
@@ -121,6 +117,10 @@ class Groups(VoiceoverScene):
         self.clear_scene()
 
     def scatter(self):
+        self.ask(r"Plot $2^x \bmod 1019$ for every $x$. \\ What do you see?", [r"a smooth curve",
+                 r"no visible pattern"], 1,
+                 say="Plot two to the x, modulo a thousand and nineteen, for every x. What shape do you expect?",
+                 reveal="No visible pattern. That's why the way back is hard.")
         d = load("groups")
         q, gq = d["q"], d["gq"]
         head = label(rf"$x \mapsto {gq}^x \bmod {q}$", font_size=34).to_edge(UP, buff=0.3)

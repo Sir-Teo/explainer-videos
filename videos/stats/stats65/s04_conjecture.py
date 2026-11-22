@@ -5,15 +5,26 @@ import numpy as np
 from videos.stats.stats65.common import *  # noqa: F403
 
 
-class Conjecture(LectureMixin, VoiceoverScene):
+class Conjecture(LectureMixin, StatsScene):
     def construct(self):
         self.card_voiceover("Chapter three. A conjecture, stated precisely enough to be wrong.", 3, r"A conjecture",
                             r"Precise enough to be wrong")
+        self.ask("Weighted conformal with estimated weights. The coverage loss should be bounded by...",
+                 ["the weights' error, in total variation", "nothing: coverage is exact"], 0,
+                 say="A conjecture, precise enough to be wrong. Weighted conformal prediction needs density-ratio "
+                     "weights, and in practice they're estimated. How much coverage should the estimation cost?",
+                 reveal="No more than the weights' error, measured as a total-variation distance between the true "
+                        "and estimated weighted laws. Precise enough to test, and to be wrong.")
         self.idea()
         self.statement()
         self.gaussian()
         self.chart()
         self.doubts()
+        self.answer()
+        self.checkpoint([("A good dissertation question is?", "important, open, and small enough"),
+                         ("Estimated weights cost coverage of about?", "the weights' error in total variation")],
+                        narration="Checkpoint. Question and conjecture.",
+                        answers_narration="Important, open, and small. And the weights' error.")
 
     def idea(self):
         self.lad_voiceover(

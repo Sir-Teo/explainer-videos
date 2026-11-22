@@ -66,26 +66,24 @@ def mesh_mob(V, F, center, scale=0.72, yaw=35, pitch=24, stroke=0.6):
     return g
 
 
-class Curves(VoiceoverScene):
+class Curves(WatchScene):
     def construct(self):
         self.card()
         self.casteljau()
         self.bernstein()
-        self.bspline()
-        self.subdivision()
         self.fonts()
 
     def card(self):
-        card = chapter_card(13, r"Curves, \ surfaces and fonts", r"How do a few numbers draw a smooth shape?",
-                            lit=(1959, 1978, 1997), extra=((1959, r"de Casteljau at Citro\"en"),
+        self.chapter(13, r"Curves, \ surfaces and fonts", r"How do a few numbers draw a smooth shape?", lit=(1959, 1978, 1997), extra=((1959, r"de Casteljau at Citro\"en"),
                                                            (1978, r"Catmull and Clark"),
-                                                           (1997, r"\textit{Geri's Game}")), part=PART)
-        with self.voiceover("Chapter thirteen. Curves, surfaces and fonts."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+                                                           (1997, r"\textit{Geri's Game}")), part=PART, said="Chapter thirteen. Curves, surfaces and fonts.")
 
     # ------------------------------------------------------------------ de Casteljau
     def casteljau(self):
+        self.ask(r"De Casteljau finds a point on a B\'ezier curve \\ using only...", [r"derivatives",
+                 r"repeated linear interpolation"], 1,
+                 say="De Casteljau's construction finds points on a Bezier curve. What operation does it use?",
+                 reveal="Only linear interpolation, repeated, between control points.")
         cj = load("casteljau")
         Pts = cj["points"]
         M = lambda p: np.array([-6.2 + 1.3 * p[0], -2.4 + 1.7 * p[1], 0])
@@ -230,133 +228,7 @@ class Curves(VoiceoverScene):
         self.wait(0.4)
         self.clear_scene()
 
-    # ------------------------------------------------------------------ B-splines
-    def bspline(self):
-        rows = load("bspline")["rows"]
-        head = label(r"B-splines: \ smooth joins, \ local control", font_size=36).to_edge(UP, buff=0.3)
-        ctrl = [(0, 0), (1, 2), (3, 3), (4, 0), (6, -1), (7, 2), (9, 3)]   # the instrument's default control points
-        M = lambda p: np.array([-6.3 + 0.6 * p[0], -0.6 + 0.75 * p[1], 0])
-        dy = ValueTracker(0.0)
-        cols = [DATA, YES, LAM, HEAD]
 
-        def control():
-            P = [np.array(p, float) for p in ctrl]
-            P[1] = P[1] + np.array([0, dy.get_value()])
-            return P
-
-        def drawing():
-            P = control()
-            g = VGroup(VMobject(color=GREY_C, stroke_width=1.5).set_points_as_corners([M(p) for p in P]),
-                       *[Dot(M(p), radius=0.07, color=NO if k == 1 else WHITE) for k, p in enumerate(P)])
-            ts = np.linspace(0, 1, 30)
-            for i in range(4):
-                g.add(VMobject(color=cols[i], stroke_width=5).set_points_smoothly(
-                    [M(p) for p in bspline_span(P, i, ts)]))
-            for i in range(1, 4):
-                g.add(Dot(M(bspline_span(P, i, [0.0])[0]), radius=0.06, color=WHITE))
-            return g
-        dr = always_redraw(drawing)
-        p1l = MathTex(r"P_1", font_size=26, color=NO).add_updater(
-            lambda m: m.next_to(M(control()[1]), LEFT, buff=0.12))
-        r0 = MathTex(r"C(t) = \sum_i N_{i,3}(t)\,P_i", font_size=32)
-        r0n = note(r"Cox and de Boor \ (1972): \ each piece blends four neighbouring points", font_size=17)
-        VGroup(r0, r0n).arrange(DOWN, aligned_edge=LEFT, buff=0.08).to_edge(RIGHT, buff=0.35).set_y(2.25)
-
-        def sci(v):
-            e = int(math.floor(math.log10(abs(v))))
-            return rf"$10^{{{e}}}$"
-        tab = grid_table([r"knot", r"position", r"slope", r"curvature", r"3rd deriv."],
-                         [[f"{r['knot']:.0f}", sci(r["jump_c0"]), sci(r["jump_c1"]), sci(r["jump_c2"]),
-                           f"{r['jump_c3']:.2f}"] for r in rows], widths=[0.8, 1.3, 1.3, 1.4, 1.5], row_h=0.42,
-                         font_size=19, mono_cols=(), colors=[[WHITE, YES, YES, YES, NO]] * len(rows))
-        tcap = label(r"jump across each knot, \ measured by our instrument", font_size=17, color=GREY_A)
-        tblk = VGroup(tcap, tab).arrange(DOWN, aligned_edge=LEFT, buff=0.15).to_edge(DOWN, buff=0.45).set_x(-2.6)
-        notes = VGroup(
-            wrapped_label(r"$C^2$: \ position, \ slope and curvature continuous at every knot \ (jumps at "
-                          r"rounding level); \ only the third derivative jumps", 4.2, font_size=19, color=YES),
-            wrapped_label(r"local: \ moving $P_1$ changes only the two pieces that use it", 4.2, font_size=19,
-                          color=NO),
-            wrapped_label(r"with weights and uneven knots: \ NURBS, \ the curves of CAD", 4.2, font_size=19,
-                          color=HEAD),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.3).to_edge(RIGHT, buff=0.35).set_y(-1.6)
-        with self.voiceover(
-            "Long curves are made of many pieces, and joining Bézier pieces smoothly takes care at every joint. "
-            "B-splines build the smoothness in. <bookmark mark='a'/> A cubic B-spline makes each piece from four "
-            "neighbouring control points, with weights from the recursion that Maurice Cox and Carl de Boor "
-            "published in 1972. Here, seven points make four pieces. <bookmark mark='b'/> Our instrument measures "
-            "the joins. At each knot the position, the slope and the curvature agree to rounding error, about ten to the "
-            "minus ten; only the third derivative jumps. The curve is C two. <bookmark mark='c'/> And "
-            "control is local: move one point, and only the pieces that use it change. <bookmark mark='d'/> Add "
-            "weights and uneven knots, and these become NURBS, the curves of computer-aided design."
-        ) as vo:
-            self.play(FadeIn(head))
-            vo.wait_until("a")
-            self.play(FadeIn(dr), FadeIn(p1l), Write(r0), FadeIn(r0n))
-            vo.wait_until("b")
-            self.play(FadeIn(tblk), FadeIn(notes[0]))
-            vo.wait_until("c")
-            self.play(FadeIn(notes[1]))
-            self.play(dy.animate.set_value(-1.6), run_time=2)
-            self.play(dy.animate.set_value(0.8), run_time=2)
-            self.play(dy.animate.set_value(0.0), run_time=1.2)
-            vo.wait_until("d")
-            self.play(FadeIn(notes[2]))
-        p1l.clear_updaters()
-        self.wait(0.4)
-        self.clear_scene()
-
-    # ------------------------------------------------------------------ Catmull-Clark
-    def subdivision(self):
-        sd = load("subdiv")
-        levels = sd["levels"]
-        head = label(r"Catmull--Clark: \ surfaces by subdivision", font_size=36).to_edge(UP, buff=0.3)
-        xs = [-5.2, -1.75, 1.75, 5.2]
-        meshes = VGroup(*[mesh_mob(levels[k]["vertices"], levels[k]["faces"], (xs[k], 1.0),
-                                   stroke=0.8 if k < 3 else 0.4) for k in range(4)])
-        caps = VGroup(*[label(rf"level {k}: \ {levels[k]['F']} faces", font_size=18, color=GREY_A).next_to(
-            meshes[k], DOWN, buff=0.15) for k in range(4)])
-        caps.set_y(min(c.get_y() for c in caps))
-        tab = grid_table([r"level", r"$V$", r"$E$", r"$F$", r"$V - E + F$", r"corner distance"],
-                         [[f"{l['level']}", f"{l['V']:,}".replace(",", "{,}"), f"{l['E']:,}".replace(",", "{,}"),
-                           f"{l['F']:,}".replace(",", "{,}"), f"{l['euler']}", f"{l['corner_radius']:.4f}"]
-                          for l in levels], widths=[0.8, 0.8, 0.8, 0.8, 1.3, 1.7], row_h=0.36, font_size=18,
-                         mono_cols=())
-        lim = label(rf"limit \ (Halstead et al. 1993): \ {sd['limit_radius']:.4f}", font_size=18, color=YES)
-        VGroup(tab, lim).arrange(DOWN, aligned_edge=LEFT, buff=0.15).to_corner(DL, buff=0.4)
-        rules = VGroup(
-            MathTex(r"\text{face point} = \text{mean of the face's vertices}", font_size=26),
-            MathTex(r"\text{edge point} = \tfrac14\,(V_a + V_b + F_1 + F_2)", font_size=26),
-            MathTex(r"P' = \frac{F + 2R + (n-3)\,P}{n}", font_size=28, color=HEAD),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.22)
-        rn = note(r"$F$, $R$: \ means of the adjacent face points and edge midpoints; \ $n$: \ the valence",
-                  font_size=16)
-        VGroup(rules, rn).arrange(DOWN, aligned_edge=LEFT, buff=0.1).to_corner(DR, buff=0.4)
-        with self.voiceover(
-            "Surfaces follow the same idea. In 1978 Edwin Catmull and Jim Clark gave rules that refine any mesh of "
-            "polygons. <bookmark mark='a'/> Each face gets a point at its centre; each edge gets a point averaged "
-            "from its two ends and its two faces; <bookmark mark='b'/> and each old vertex moves towards a weighted "
-            "average of its neighbours. Every face becomes quadrilaterals. <bookmark mark='c'/> Applied to a cube, "
-            "each step multiplies the faces by four, while vertices minus edges plus faces stays two: the surface "
-            "keeps a sphere's topology. <bookmark mark='d'/> The corners pull in, from one point seven three "
-            "towards nought point eight six six, the limit an exact formula predicts. <bookmark mark='e'/> The "
-            "limit surface is smooth almost everywhere, and Pixar first animated a character with such surfaces "
-            "in its short film Geri's Game, in 1997."
-        ) as vo:
-            self.play(FadeIn(head), FadeIn(meshes[0]), FadeIn(caps[0]))
-            vo.wait_until("a")
-            self.play(FadeIn(rules[0]), FadeIn(rules[1]))
-            vo.wait_until("b")
-            self.play(FadeIn(rules[2]), FadeIn(rn))
-            self.play(FadeIn(meshes[1]), FadeIn(caps[1]))
-            vo.wait_until("c")
-            self.play(FadeIn(meshes[2]), FadeIn(caps[2]))
-            self.play(FadeIn(meshes[3]), FadeIn(caps[3]), FadeIn(tab))
-            vo.wait_until("d")
-            self.play(FadeIn(lim), Indicate(VGroup(*[r[-1] for r in tab.cells[1:]]), color=HEAD))
-            vo.wait_until("e")
-            self.play(Indicate(meshes[3], scale_factor=1.05, color=HEAD))
-        self.wait(0.4)
-        self.clear_scene()
 
     # ------------------------------------------------------------------ the letters on this screen
     def fonts(self):

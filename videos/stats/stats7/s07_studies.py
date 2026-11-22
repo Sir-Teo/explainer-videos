@@ -5,20 +5,24 @@ import numpy as np
 from videos.stats.stats7.common import *  # noqa: F403
 
 
-class Studies(VoiceoverScene):
+class Studies(StatsScene):
     def construct(self):
         self.card()
+        self.ask(r"Coverage 95.4\% from 1,000 replications. Its Monte Carlo SE is about...",
+                 ["0.07 points", "0.7 points", "7 points"], 1,
+                 say="A simulation study reports ninety-five point four percent coverage from a thousand "
+                     "replications. How uncertain is that number?",
+                 reveal="About zero point seven percentage points: the root of point nine five times point zero "
+                        "five over a thousand. Ninety-five point four is indistinguishable from ninety-five.")
         self.ademp()
         self.wald()
         self.mcse()
         self.streams_()
         self.harness()
+        self.answer()
 
     def card(self):
-        card = chapter_card(6, r"Simulation studies done right", r"Experiments on methods, \ with error bars", part=PART)
-        with self.voiceover("Chapter six. Simulation studies, done right."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(6, r"Simulation studies done right", r"Experiments on methods, \ with error bars", part=PART, said="Chapter six. Simulation studies, done right.")
 
     def ademp(self):
         items = [("A", r"Aims", r"what question about which methods?"),

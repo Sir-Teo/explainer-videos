@@ -5,7 +5,7 @@ from videos.cs.cs38.common import (DATA, HEAD, KERN, LAM, NO, PART, YES, grid_ta
                                    space_time)
 
 
-class Time(VoiceoverScene):
+class Time(WatchScene):
     def construct(self):
         self.card()
         self.ntp()
@@ -14,13 +14,9 @@ class Time(VoiceoverScene):
         self.vector()
 
     def card(self):
-        card = chapter_card(2, r"Time without a clock", r"What can ``before'' mean with no shared clock?",
-                            lit=(1978, 1991), extra=((1978, r"Lamport: \ Time, Clocks, \\ and the Ordering of Events"),
+        self.chapter(2, r"Time without a clock", r"What can ``before'' mean with no shared clock?", lit=(1978, 1991), extra=((1978, r"Lamport: \ Time, Clocks, \\ and the Ordering of Events"),
                                                      (1988, r"Fidge, Mattern: \ vector clocks"),
-                                                     (1991, r"Mills: \ NTP")), part=PART)
-        with self.voiceover("Chapter two. Time without a clock."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+                                                     (1991, r"Mills: \ NTP")), part=PART, said="Chapter two. Time without a clock.")
 
     def ntp(self):
         c = load("clocks")
@@ -95,6 +91,9 @@ class Time(VoiceoverScene):
         self.clear_scene()
 
     def lamport(self):
+        self.ask(r"Lamport clocks: $C(a) < C(b)$. \\ Did $a$ happen before $b$?", [r"yes", r"not necessarily"], 1,
+                 say="Event a has a smaller Lamport clock than event b. Did a happen before b?",
+                 reveal="Not necessarily. Causality implies smaller clocks, not the other way round.")
         c = load("clocks")
         tr = c["trace"]
         head = label(r"Lamport clocks", font_size=36).to_edge(UP, buff=0.3)

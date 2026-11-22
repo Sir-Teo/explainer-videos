@@ -17,7 +17,7 @@ def log_row(entries, cell=0.55, committed=0, font=16):
     return g
 
 
-class Raft(VoiceoverScene):
+class Raft(WatchScene):
     def construct(self):
         self.card()
         self.roles()
@@ -26,12 +26,8 @@ class Raft(VoiceoverScene):
         self.commit_rule()
 
     def card(self):
-        card = chapter_card(7, r"Raft", r"Can consensus be made understandable?", lit=(2014, 2014),
-                            extra=((2014, r"Ongaro and Ousterhout: \ In Search of an \\ Understandable Consensus "
-                                          r"Algorithm"),), part=PART)
-        with self.voiceover("Chapter seven. Raft."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(7, r"Raft", r"Can consensus be made understandable?", lit=(2014, 2014), extra=((2014, r"Ongaro and Ousterhout: \ In Search of an \\ Understandable Consensus "
+                                          r"Algorithm"),), part=PART, said="Chapter seven. Raft.")
 
     def roles(self):
         head = label(r"Terms, \ and three roles", font_size=36).to_edge(UP, buff=0.3)
@@ -74,6 +70,10 @@ class Raft(VoiceoverScene):
         self.clear_scene()
 
     def elections(self):
+        self.ask(r"Raft with identical election timeouts, no randomness. \\ Elections...", [r"finish quickly",
+                 r"split votes, again and again"], 1,
+                 say="Give every Raft server the same election timeout, with no randomness. What happens at elections?",
+                 reveal="Everyone stands at once, the votes split, and it repeats.")
         e = load("election")
         head = label(r"Elections, \ and why timeouts are random", font_size=36).to_edge(UP, buff=0.3)
         rules = VGroup(

@@ -16,7 +16,7 @@ def _barrier(edge, t=0.0):
     return b.move_to(edge.point_from_proportion(t))
 
 
-class Exactly(VoiceoverScene):
+class Exactly(WatchScene):
     def construct(self):
         self.card()
         self.keyed()
@@ -26,12 +26,8 @@ class Exactly(VoiceoverScene):
         self.endtoend()
 
     def card(self):
-        card = chapter_card(5, r"Exactly-once state", r"What does a crash do to a running count?",
-                            lit=(1985, 2015), extra=((1985, r"Chandy and Lamport: \ snapshots"),
-                                                     (2015, r"Carbone et al.: \ barrier snapshots")), part=PART)
-        with self.voiceover("Chapter five. Exactly-once state."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(5, r"Exactly-once state", r"What does a crash do to a running count?", lit=(1985, 2015), extra=((1985, r"Chandy and Lamport: \ snapshots"),
+                                                     (2015, r"Carbone et al.: \ barrier snapshots")), part=PART, said="Chapter five. Exactly-once state.")
 
     def keyed(self):
         head = label(r"Keyed state", font_size=36).to_edge(UP, buff=0.3)
@@ -200,6 +196,10 @@ class Exactly(VoiceoverScene):
         self.clear_scene()
 
     def recover(self):
+        self.ask(r"Crash; restore the last checkpoint; \\ replay the log from its offsets. Counts:", [r"some doubled",
+                 r"exact"], 1,
+                 say="The stream processor crashes. It restores the last checkpoint and replays the log from the offsets it saved. Are the counts right?",
+                 reveal="Exact: state and offsets were saved together.")
         c = load("checkpoint")
         N, r0, rep = c["events"], c["restored_from"], c["replayed"]
         crash = r0 + rep
@@ -386,6 +386,12 @@ class Exactly(VoiceoverScene):
             self.play(FadeIn(lines))
         self.wait(0.4)
         self.clear_scene()
+        self.checkpoint(
+            [(r"How does a log move a gigabyte a second?", r"Sequential writes, batches, zero copy, the page cache"),
+             (r"What does a watermark claim?", r"No older events are still coming")],
+            narration="Checkpoint. How does a log move a gigabyte a second? And what does a watermark claim?",
+            answers_narration="Long sequential writes, batches, zero-copy sends and the operating system's page cache. And "
+                              "that no event older than it is still on the way.")
 
 
 def tag_like(text, color):

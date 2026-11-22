@@ -13,23 +13,21 @@ def tile(title, body, col, w=4.2, h=3.0):
     return VGroup(frame, t, b)
 
 
-class Frontier(VoiceoverScene):
+class Frontier(WatchScene):
     def construct(self):
         self.card()
         self.industry()
         self.machines()
-        self.open()
 
     def card(self):
-        card = chapter_card(15, r"Frontier: \ proofs at scale",
-                            r"Can proof become as routine as testing?", lit=(2015, 2024),
-                            extra=((2015, r"Newcombe et al.: \ TLA+ at Amazon"),
-                                   (2024, r"language models writing formal proofs")), part=PART)
-        with self.voiceover("Chapter fifteen, the frontier. Can proof become as routine as testing?"):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(15, r"Frontier: \ proofs at scale", r"Can proof become as routine as testing?", lit=(2015, 2024), extra=((2015, r"Newcombe et al.: \ TLA+ at Amazon"),
+                                   (2024, r"language models writing formal proofs")), part=PART, said="Chapter fifteen, the frontier. Can proof become as routine as testing?")
 
     def industry(self):
+        self.ask(r"Amazon engineers modelled their protocols in TLA+. \\ They found...", [r"no bugs",
+                 r"subtle bugs testing had missed"], 1,
+                 say="Amazon's engineers wrote TLA-plus models of their core protocols. What did they find?",
+                 reveal="Subtle bugs, some needing dozens of steps, that testing had missed.")
         head = label(r"Where proofs already pay", font_size=36).to_edge(UP, buff=0.3)
         tiles = VGroup(
             tile(r"designs", r"Amazon engineers model-checked TLA$^+$ specifications of core services and found "
@@ -104,39 +102,6 @@ class Frontier(VoiceoverScene):
         self.wait(0.4)
         self.clear_scene()
 
-    def open(self):
-        head = label(r"Open", font_size=36).to_edge(UP, buff=0.3)
-        items = VGroup(
-            wrapped_label(r"1. \ \textbf{Invariant inference}: \ finding the inductive invariants proofs need, \ "
-                          r"automatically.", 12.4, font_size=24, color=WHITE),
-            wrapped_label(r"2. \ \textbf{Specifications}: \ where they come from, \ and how to know they say what "
-                          r"was meant.", 12.4, font_size=24, color=YES),
-            wrapped_label(r"3. \ \textbf{Scale}: \ proofs that survive a million-line system's changes.", 12.4,
-                          font_size=24, color=HEAD),
-            wrapped_label(r"4. \ \textbf{Concurrency and hardware}: \ verified software on relaxed memory and "
-                          r"speculative processors.", 12.4, font_size=24, color=KERN),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.35).next_to(head, DOWN, buff=0.45)
-        star = wrapped_label(r"$\bigstar$ \ this part's research problem: \ an invariant-inference procedure that is "
-                             r"complete for loops over integer arithmetic with multiplication, \ in a stated class "
-                             r"of invariants, \ and fast enough to use", 12.4, font_size=23,
-                             color=LAM).to_edge(DOWN, buff=0.35)
-        with self.voiceover(
-            "Open problems. <bookmark mark='a'/> Finding the inductive invariants that proofs need, automatically. "
-            "<bookmark mark='b'/> Knowing where specifications come from, and whether they say what was meant. "
-            "<bookmark mark='c'/> Proofs that survive the constant change of a million-line system. "
-            "<bookmark mark='d'/> And verified software on relaxed memory and speculative processors. "
-            "<bookmark mark='e'/> This part's research problem is the first: an invariant-inference procedure for "
-            "loops with multiplication, the case where our SAT checking slowed down most, that is complete for a "
-            "stated class of invariants and fast enough to use."
-        ) as vo:
-            self.play(FadeIn(head))
-            for mk, it in zip("abcd", items):
-                vo.wait_until(mk)
-                self.play(FadeIn(it))
-            vo.wait_until("e")
-            self.play(FadeIn(star))
-        self.wait(0.6)
-        self.clear_scene()
 
 
 _ = (DATA, KERN, LAM, NO, YES)

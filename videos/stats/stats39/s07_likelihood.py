@@ -5,20 +5,24 @@ import numpy as np
 from videos.stats.stats39.common import *  # noqa: F403
 
 
-class Likelihood(VoiceoverScene):
+class Likelihood(StatsScene):
     def construct(self):
         self.card()
+        self.ask("The exact Gaussian likelihood for $n$ locations costs about...",
+                 ["$n$", "$n^2$", "$n^3$"], 2,
+                 say="Fit the covariance by maximum likelihood. For n locations, about how many operations does "
+                     "each evaluation of the Gaussian likelihood cost?",
+                 reveal="About n cubed, for the Cholesky factor of an n by n matrix. Ten thousand locations is "
+                        "slow; a hundred thousand, impossible without approximation.")
         self.loglik()
         self.reml()
         self.table()
         self.nu()
         self.cost()
+        self.answer()
 
     def card(self):
-        card = chapter_card(6, r"Likelihood", r"Fitting the covariance and the trend together", lit=(1985,), part=PART)
-        with self.voiceover("Chapter six. Likelihood."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(6, r"Likelihood", r"Fitting the covariance and the trend together", lit=(1985,), part=PART, said="Chapter six. Likelihood.")
 
     def loglik(self):
         rows = [

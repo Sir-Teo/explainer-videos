@@ -3,10 +3,15 @@ from __future__ import annotations
 from videos.stats.stats65.common import *  # noqa: F403
 
 
-class Literature(LectureMixin, VoiceoverScene):
+class Literature(LectureMixin, StatsScene):
     def construct(self):
         self.card_voiceover("Chapter two. Reading the literature: what is known, and where the gap is.", 2,
                             r"Reading the literature", r"Theorem, \ conditions, \ evidence, \ gap")
+        self.ask("Reading a statistics paper, find first...",
+                 ["the main theorem and its conditions", "the simulations"], 0,
+                 say="Reading the literature. When you open a statistics paper, what do you look for first?",
+                 reveal="The main theorem and its conditions. Then the evidence for it, and then the gap: what it "
+                        "doesn't cover, which may be your question.")
         self.how()
         self.weighted()
         self.exch()
@@ -14,6 +19,7 @@ class Literature(LectureMixin, VoiceoverScene):
         self.tables()
         self.check()
         self.gap()
+        self.answer()
 
     def how(self):
         self.lad_voiceover(

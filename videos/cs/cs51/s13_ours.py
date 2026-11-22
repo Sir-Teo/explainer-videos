@@ -20,24 +20,17 @@ def secs(s: float) -> str:
     return f"{s:.3f} s" if s < 0.1 else f"{s:.2f} s"
 
 
-class Ours(VoiceoverScene):
+class Ours(WatchScene):
     def construct(self):
         self.card()
         self.convergence()
         self.loglog()
-        self.strategies()
-        self.roulette()
-        self.mis()
         self.atrous()
         self.denoised()
 
     def card(self):
-        card = chapter_card(12, r"Our path tracer, \ and denoising", r"How fast does the noise go away?",
-                            lit=(1990, 2010), extra=((1990, r"Arvo and Kirk: \ Russian roulette"),
-                                                     (2010, r"Dammertz et al.: \ \`a-trous denoising")), part=PART)
-        with self.voiceover("Chapter twelve. Our path tracer, and denoising."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(12, r"Our path tracer, \ and denoising", r"How fast does the noise go away?", lit=(1990, 2010), extra=((1990, r"Arvo and Kirk: \ Russian roulette"),
+                                                     (2010, r"Dammertz et al.: \ \`a-trous denoising")), part=PART, said="Chapter twelve. Our path tracer, and denoising.")
 
     # ------------------------------------------------------------------ the noise, up close
     def convergence(self):
@@ -92,6 +85,9 @@ class Ours(VoiceoverScene):
 
     # ------------------------------------------------------------------ the rate, measured
     def loglog(self):
+        self.ask(r"To halve the noise in our render, \\ paths per pixel must...", [r"double", r"quadruple"], 1,
+                 say="To halve the noise in our path-traced image, how many more paths per pixel do we need?",
+                 reveal="Four times as many.")
         c = load("path")["convergence"]
         rows = c["rows"]
         head = label(r"$1/\sqrt{N}$, \ measured", font_size=36).to_edge(UP, buff=0.3)
@@ -154,207 +150,8 @@ class Ours(VoiceoverScene):
         self.wait(0.4)
         self.clear_scene()
 
-    # ------------------------------------------------------------------ sampling strategies, measured
-    def strategies(self):
-        rows = load("sampling")["rows"]
-        head = label(r"Four ways to sample, \ measured", font_size=36).to_edge(UP, buff=0.3)
-        names = {"cosine + NEE": r"cosine $+$ NEE", "uniform + NEE": r"uniform $+$ NEE",
-                 "cosine, no NEE": r"cosine, \ no NEE", "uniform, no NEE": r"uniform, \ no NEE"}
-        cols = [YES, DATA, KERN, NO]
-        tab = grid_table([r"strategy", r"error", r"time", r"efficiency"],
-                         [[names[r["name"]], f"{r['rmse_surfaces']:.3f}", secs(r["seconds"]),
-                           f"{r['efficiency']:.2f}"] for r in rows],
-                         widths=[2.8, 1.3, 1.3, 1.5], row_h=0.5, font_size=20, mono_cols=(),
-                         colors=[[c, WHITE, WHITE, c] for c in cols])
-        tcap = label(r"our path tracer, \ 16 paths per pixel, \ error on surfaces", font_size=17, color=GREY_A)
-        VGroup(tcap, tab).arrange(DOWN, aligned_edge=LEFT, buff=0.18).move_to([-3.0, 1.1, 0])
-        eff = [r["efficiency"] for r in rows]
-        bars = VGroup()
-        bw, gap, H = 0.7, 0.45, 2.6
-        for k, (v, c) in enumerate(zip(eff, cols)):
-            b = Rectangle(width=bw, height=H * v / max(eff), stroke_width=0, fill_color=c, fill_opacity=0.85)
-            b.move_to([2.4 + k * (bw + gap), -0.9 + b.height / 2, 0])
-            bars.add(VGroup(b, label(f"{v:.2f}", font_size=17, color=c).next_to(b, UP, buff=0.06)))
-        base = Line([2.4 - 0.5, -0.9, 0], [2.4 + 3 * (bw + gap) + 0.5, -0.9, 0], color=GREY_C, stroke_width=1.5)
-        bnames = VGroup(*[label(t, font_size=16, color=GREY_A).next_to([2.4 + k * (bw + gap), -0.9, 0], DOWN,
-                                                                       buff=0.1)
-                          for k, t in enumerate((r"cos, NEE", r"unif., NEE", r"cos", r"unif."))])
-        bcap = wrapped_label(r"efficiency $= 1/(\text{error}^2 \times \text{time})$, \ relative: \ the inverse of the "
-                             r"work for a given error", 4.6, font_size=17, color=GREY_A).next_to(
-            VGroup(base, bars), UP, buff=0.25).align_to(base, LEFT)
-        nee_gain = eff[0] / eff[2]
-        cos_gain = eff[0] / eff[1]
-        cos_gain2 = eff[2] / eff[3]
-        notes = VGroup(
-            wrapped_label(rf"aiming at the light \ (NEE): \ {nee_gain:.1f} times the efficiency", 6.0,
-                          font_size=19, color=YES),
-            wrapped_label(rf"sampling the cosine: \ {cos_gain:.2f} times with NEE, \ {cos_gain2:.2f} times "
-                          r"without", 6.0, font_size=19, color=DATA),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.2).move_to([-3.0, -2.0, 0])
-        with self.voiceover(
-            "Our instrument renders the same image four ways, at sixteen paths per pixel, and scores each by its "
-            "efficiency: one over the error squared times the time. <bookmark mark='a'/> Cosine sampling with "
-            "next-event estimation is our default. <bookmark mark='b'/> Uniform hemisphere sampling is about seventy"
-            " per cent as efficient. <bookmark mark='c'/> Without next-event estimation the small light is found "
-            "only by chance, and efficiency collapses to about a ninth. <bookmark mark='d'/> Aiming at the light is "
-            "worth nine times the work; sampling the cosine, about one and a half."
-        ) as vo:
-            self.play(FadeIn(head), FadeIn(tcap), FadeIn(tab.cells[0][0]), FadeIn(VGroup(*tab.cells[0][1:])),
-                      FadeIn(tab.rule), Create(base), FadeIn(bcap))
-            for k, mk in enumerate("abc"):
-                vo.wait_until(mk)
-                anims = [FadeIn(VGroup(*tab.cells[k + 1])), GrowFromEdge(bars[k][0], DOWN), FadeIn(bars[k][1]),
-                         FadeIn(bnames[k])]
-                if k == 2:
-                    anims += [FadeIn(VGroup(*tab.cells[4])), GrowFromEdge(bars[3][0], DOWN), FadeIn(bars[3][1]),
-                              FadeIn(bnames[3])]
-                self.play(*anims)
-            vo.wait_until("d")
-            self.play(FadeIn(notes))
-        self.wait(0.4)
-        self.clear_scene()
 
-    # ------------------------------------------------------------------ Russian roulette, measured
-    def roulette(self):
-        r = load("roulette")
-        head = label(r"Russian roulette, \ tested", font_size=36).to_edge(UP, buff=0.3)
-        lo, hi = 0.2435, 0.2505
-        nl = NumberLine(x_range=[lo, hi, 0.001], length=6.2, color=GREY_C, include_ticks=True,
-                        include_numbers=False).move_to([-3.2, 0.6, 0])
-        ticks = VGroup(*[label(f"{v:.3f}", font_size=16, color=GREY_B).next_to(nl.n2p(v), DOWN, buff=0.12)
-                         for v in (0.244, 0.246, 0.248, 0.250)])
-        nlab = label(r"mean brightness of the image, \ 12 renders each", font_size=17, color=GREY_A).next_to(
-            nl, UP, buff=1.25)
 
-        def interval(m, se, col, dy, text):
-            y = nl.n2p(m)[1] + dy
-            bar = Line([nl.n2p(m - 2 * se)[0], y, 0], [nl.n2p(m + 2 * se)[0], y, 0], color=col, stroke_width=5)
-            caps = VGroup(*[Line([nl.n2p(v)[0], y - 0.1, 0], [nl.n2p(v)[0], y + 0.1, 0], color=col,
-                                 stroke_width=3) for v in (m - 2 * se, m + 2 * se)])
-            dot = Dot([nl.n2p(m)[0], y, 0], radius=0.08, color=col)
-            t = label(text, font_size=17, color=col).next_to(bar, UP if dy > 0 else DOWN, buff=0.1)
-            return VGroup(bar, caps, dot, t)
-        a = interval(r["mean_rr"], r["se_rr"], YES, 0.45, rf"with roulette: \ {r['mean_rr']:.4f} $\pm$ "
-                                                          rf"{r['se_rr']:.4f}")
-        b = interval(r["mean_no_rr"], r["se_no_rr"], DATA, -0.95, rf"without: \ {r['mean_no_rr']:.4f} $\pm$ "
-                                                                  rf"{r['se_no_rr']:.4f}")
-        bnote = note(r"bars: \ $\pm$ two standard errors", font_size=16).next_to(nl, DOWN, buff=1.45).align_to(
-            nl, LEFT)
-
-        def pair(v1, v2, title, fmt, x):
-            m = max(v1, v2)
-            H = 2.2
-            g = VGroup()
-            for k, (v, c) in enumerate(((v1, YES), (v2, DATA))):
-                bb = Rectangle(width=0.6, height=H * v / m, stroke_width=0, fill_color=c, fill_opacity=0.85)
-                bb.move_to([x + k * 0.95, -1.6 + bb.height / 2, 0])
-                g.add(bb, label(fmt(v), font_size=17, color=c).next_to(bb, UP, buff=0.06))
-            base = Line([x - 0.5, -1.6, 0], [x + 1.45, -1.6, 0], color=GREY_C, stroke_width=1.5)
-            t = wrapped_label(title, 2.2, font_size=17, color=GREY_A).next_to(base, DOWN, buff=0.15)
-            return VGroup(base, g, t)
-        p1 = pair(r["path_length_rr"], r["path_length_no_rr"], r"rays per path", lambda v: f"{v:.2f}", 2.0)
-        p2 = pair(r["seconds_rr"], r["seconds_no_rr"], r"seconds for 12 renders", lambda v: f"{v:.2f}", 4.8)
-        leg = VGroup(label(r"with roulette", font_size=17, color=YES), label(r"without", font_size=17,
-                                                                              color=DATA)).arrange(
-            RIGHT, buff=0.4).move_to([3.9, 1.6, 0])
-        notes = VGroup(
-            wrapped_label(rf"difference of the means: \ $z = {r['z']:.2f}$; \ per pixel, \ the RMS $z$-score is "
-                          rf"{r['pixel_z_rms']:.2f} \ (noise alone gives about 1)", 6.3, font_size=19, color=YES),
-            wrapped_label(rf"{100 * r['saved']:.0f}\% fewer rays; \ both capped at 32 bounces; \ 64 $\times$ 64 "
-                          r"at 16 paths per pixel", 6.3, font_size=19, color=WHITE),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.18).to_edge(DOWN, buff=0.3).set_x(-3.2)
-        with self.voiceover(
-            "The last chapter proved Russian roulette unbiased; now we test it. <bookmark mark='a'/> Twelve renders "
-            "with roulette and twelve without, both capped at thirty-two bounces. <bookmark mark='b'/> The mean "
-            "brightness agrees to within one standard error. <bookmark mark='c'/> Pixel by pixel, the differences "
-            "are the size that noise alone would make: their root mean square z-score is one point nought four. "
-            "<bookmark mark='d'/> And roulette ends paths early: three point one six rays per path instead of nearly"
-            " seven, fifty-five per cent fewer, in about half the time."
-        ) as vo:
-            self.play(FadeIn(head), Create(nl), FadeIn(ticks), FadeIn(nlab))
-            vo.wait_until("a")
-            self.play(FadeIn(a), FadeIn(b), FadeIn(bnote))
-            vo.wait_until("b")
-            self.play(FadeIn(notes[0]))
-            vo.wait_until("c")
-            self.play(Indicate(notes[0], color=HEAD, scale_factor=1.03))
-            vo.wait_until("d")
-            self.play(FadeIn(leg), FadeIn(p1), FadeIn(p2), FadeIn(notes[1]))
-        self.wait(0.4)
-        self.clear_scene()
-
-    # ------------------------------------------------------------------ MIS, measured
-    def mis(self):
-        rows = load("mis")["rows"]
-        head = label(r"Multiple importance sampling, \ measured", font_size=36).to_edge(UP, buff=0.3)
-        ns = sorted({r["n"] for r in rows})
-        rs = sorted({r["r"] for r in rows})
-        cw, chh = 1.9, 1.35
-        x0, y0 = -4.0, 1.25
-        cells = VGroup()
-        strat = (("light", HEAD), ("brdf", DATA), ("power", YES))
-        for i, n in enumerate(ns):
-            for j, rad in enumerate(rs):
-                r = next(x for x in rows if x["n"] == n and x["r"] == rad)
-                c = np.array([x0 + j * cw, y0 - i * chh, 0])
-                fr = Rectangle(width=cw - 0.1, height=chh - 0.1, stroke_color=GREY_D, stroke_width=1.2).move_to(c)
-                g = VGroup(fr)
-                for k, (s, col) in enumerate(strat):
-                    v = r[f"rel_rmse_{s}"]
-                    h = max(0.04, (math.log10(v) + 3) / 4 * (chh - 0.3))
-                    b = Rectangle(width=0.32, height=h, stroke_width=0, fill_color=col, fill_opacity=0.9)
-                    b.move_to(c + np.array([(k - 1) * 0.45, -(chh - 0.3) / 2 + h / 2 - 0.02, 0]))
-                    g.add(b)
-                cells.add(g)
-        clab = VGroup(*[label(rf"{r_['cone_half_angle_deg']:.1f}$^\circ$", font_size=17, color=HEAD).next_to(
-            [x0 + j * cw, y0 + chh / 2, 0], UP, buff=0.08) for j, r_ in
-            enumerate(next(x for x in rows if x["n"] == ns[0] and x["r"] == rad) for rad in rs)])
-        rlab = VGroup(*[label(rf"{next(x for x in rows if x['n'] == n)['lobe_width_deg']:.1f}$^\circ$",
-                              font_size=17, color=DATA).next_to([x0 - cw / 2, y0 - i * chh, 0], LEFT, buff=0.1)
-                        for i, n in enumerate(ns)])
-        ctitle = label(r"light's angular radius $\rightarrow$", font_size=17, color=HEAD).next_to(clab, UP,
-                                                                                                  buff=0.08)
-        rtitle = label(r"lobe width $\downarrow$", font_size=17, color=DATA).next_to(rlab, UP, buff=0.25).shift(
-            LEFT * 0.1)
-        leg = VGroup(label(r"light sampling", font_size=17, color=HEAD), label(r"BRDF sampling", font_size=17,
-                                                                                color=DATA),
-                     label(r"MIS, \ power heuristic", font_size=17, color=YES)).arrange(RIGHT, buff=0.35)
-        scale = note(r"bar height: \ relative error, \ log scale from 0.001 to 10", font_size=16)
-        VGroup(leg, scale).arrange(DOWN, buff=0.08).next_to(cells, DOWN, buff=0.2)
-        worst = {s: max(r[f"rel_rmse_{s}"] for r in rows) for s in ("light", "brdf", "balance", "power")}
-        tab = grid_table([r"strategy", r"worst relative error"],
-                         [[r"light sampling", f"{worst['light']:.2f}"], [r"BRDF sampling", f"{worst['brdf']:.2f}"],
-                          [r"MIS, \ balance", f"{worst['balance']:.3f}"], [r"MIS, \ power", f"{worst['power']:.3f}"]],
-                         widths=[2.3, 2.3], row_h=0.42, font_size=19, mono_cols=(),
-                         colors=[[HEAD, HEAD], [DATA, DATA], [YES, YES], [YES, YES]])
-        setup = wrapped_label(r"one glossy point \ (normalized Phong) \ under a round light; \ 32 samples, \ "
-                              r"4000 trials per cell; \ MIS takes half from each strategy", 4.6, font_size=18,
-                              color=GREY_A)
-        verdict = wrapped_label(r"MIS is never the single best, \ and never a disaster", 4.6,
-                                font_size=19, color=YES)
-        VGroup(setup, tab, verdict).arrange(DOWN, aligned_edge=LEFT, buff=0.35).to_edge(RIGHT, buff=0.35).set_y(
-            -0.1)
-        with self.voiceover(
-            "Our box is all matte, so we test multiple importance sampling where it matters: one glossy point under "
-            "a round light, thirty-two samples, four thousand times over. <bookmark mark='a'/> Down the grid the "
-            "glossy lobe narrows; to the right the light grows. <bookmark mark='b'/> Light sampling wins at the top "
-            "left, wrong by under a fifth of one per cent, but is wrong by ninety-three per cent at the bottom "
-            "right. <bookmark mark='c'/> BRDF sampling is the reverse: wrong by four hundred and sixty per cent with"
-            " the tiniest light. <bookmark mark='d'/> The power heuristic is never the single best, but its worst "
-            "case is eight per cent."
-        ) as vo:
-            self.play(FadeIn(head), FadeIn(setup), *[FadeIn(c[0]) for c in cells])
-            vo.wait_until("a")
-            self.play(FadeIn(clab), FadeIn(rlab), FadeIn(ctitle), FadeIn(rtitle), FadeIn(leg), FadeIn(scale))
-            vo.wait_until("b")
-            self.play(*[GrowFromEdge(c[1], DOWN) for c in cells])
-            vo.wait_until("c")
-            self.play(*[GrowFromEdge(c[2], DOWN) for c in cells])
-            vo.wait_until("d")
-            self.play(*[GrowFromEdge(c[3], DOWN) for c in cells])
-            self.play(FadeIn(tab), FadeIn(verdict))
-        self.wait(0.4)
-        self.clear_scene()
 
     # ------------------------------------------------------------------ the a-trous filter
     def atrous(self):

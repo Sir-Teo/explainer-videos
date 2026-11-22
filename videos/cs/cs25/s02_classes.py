@@ -4,20 +4,21 @@ from explainer.cs import *  # noqa: F403
 from videos.cs.cs25.common import (CTRL, DATA, HEAD, LAM, NO, PART, YES, mono)
 
 
-class Classes(VoiceoverScene):
+class Classes(WatchScene):
     def construct(self):
         self.card()
         self.defs()
         self.map_()
 
     def card(self):
-        card = chapter_card(1, r"Decidable and recognizable", r"What does it mean to half-solve a problem?",
-                            lit=(1936, 1944), extra=((1936, r"Turing; \ Church"), (1944, r"Post's r.e. sets")), part=PART)
-        with self.voiceover("Chapter one. Decidable, and recognizable."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(1, r"Decidable and recognizable", r"What does it mean to half-solve a problem?", lit=(1936, 1944), extra=((1936, r"Turing; \ Church"), (1944, r"Post's r.e. sets")), part=PART, said="Chapter one. Decidable, and recognizable.")
 
     def defs(self):
+        self.wrong_idea(r"Undecidable means \\ nobody has found the algorithm yet",
+                        r"It means a proof that no algorithm can exist",
+                        narration="Undecidable sounds like unsolved: nobody has found the algorithm yet.",
+                        right_narration="It's much stronger: a proof that no algorithm can ever exist, however clever.")
+        self.clear_scene()
         head = label(r"Three ways a machine can answer", font_size=34).to_edge(UP, buff=0.35)
         rows = VGroup(
             label(r"\textbf{decidable}: \ a machine that \textbf{always halts}, \ saying yes on members and no on the "
@@ -42,6 +43,9 @@ class Classes(VoiceoverScene):
         self.clear_scene()
 
     def map_(self):
+        self.ask(r"The set of halting machines. \\ Recognizable?", [r"yes", r"no"], 0,
+                 say="Halting is undecidable. But is it recognizable: can a machine at least say yes to every halting program?",
+                 reveal="Yes: run it, and say yes if it halts. It's the no answers that can never be guaranteed.")
         head = label(r"The map", font_size=34).to_edge(UP, buff=0.3)
         re_ = Ellipse(width=7.0, height=4.2, color=DATA).set_fill(DATA, 0.08).shift(LEFT * 1.3 + DOWN * 0.3)
         co = Ellipse(width=7.0, height=4.2, color=LAM).set_fill(LAM, 0.08).shift(RIGHT * 1.3 + DOWN * 0.3)

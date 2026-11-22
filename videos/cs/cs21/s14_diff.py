@@ -6,7 +6,7 @@ from explainer.cs import *  # noqa: F403
 from videos.cs.cs21.common import (CTRL, DATA, HEAD, LAM, NO, PART, YES, big, grid_table, load, mono, words)
 
 
-class Diff(VoiceoverScene):
+class Diff(WatchScene):
     def construct(self):
         self.card()
         self.graph()
@@ -14,11 +14,7 @@ class Diff(VoiceoverScene):
         self.history()
 
     def card(self):
-        card = chapter_card(13, r"Myers' diff", r"What changed between two versions of a file?", lit=(1986,),
-                            extra=((1986, r"Myers' $O(ND)$ diff"),), part=PART)
-        with self.voiceover("Chapter thirteen. Myers' diff."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(13, r"Myers' diff", r"What changed between two versions of a file?", lit=(1986,), extra=((1986, r"Myers' $O(ND)$ diff"),), part=PART, said="Chapter thirteen. Myers' diff.")
 
     def graph(self):
         d = load("diff")
@@ -73,6 +69,10 @@ class Diff(VoiceoverScene):
         self.clear_scene()
 
     def greedy(self):
+        self.ask(r"Myers' diff on files of $n$ and $m$ lines, \\ differing by $D$ edits. Its time?",
+                 [r"$n \cdot m$", r"$(n + m) \cdot D$"], 1,
+                 say="Myers' diff compares two files that differ by D edits. How does the time grow?",
+                 reveal="Like n plus m, times D: fast when the files are nearly the same, which they usually are.")
         d = load("diff")
         a, b = d["ex_a"], d["ex_b"]
         head = label('$O(N(D+1))$: \\ follow the diagonals', font_size=34).to_edge(UP, buff=0.35)

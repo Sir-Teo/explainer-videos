@@ -5,19 +5,23 @@ import numpy as np
 from videos.stats.stats12.common import *  # noqa: F403
 
 
-class Bands(VoiceoverScene):
+class Bands(StatsScene):
     def construct(self):
         self.card()
+        self.ask(r"Far from $\bar x$, which band is wider?",
+                 ["the confidence band for the line", "the prediction band for a new point", "they're equal"], 1,
+                 say="Two bands around a fitted line: one for where the line is, one for where the next point will "
+                     "fall. Far from the mean of x, which is wider?",
+                 reveal="The prediction band, everywhere: it adds the new point's own noise to the line's "
+                        "uncertainty.")
         self.formulas()
         self.picture()
         self.one_family()
         self.lesson()
+        self.answer()
 
     def card(self):
-        card = chapter_card(7, r"Bands", r"How sure are we of the line, \ and of the next point?", part=PART)
-        with self.voiceover("Chapter seven. Confidence and prediction bands."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(7, r"Bands", r"How sure are we of the line, \ and of the next point?", part=PART, said="Chapter seven. Confidence and prediction bands.")
 
     def formulas(self):
         rows = [

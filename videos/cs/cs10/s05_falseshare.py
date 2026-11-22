@@ -7,19 +7,14 @@ from videos.cs.cs10.common import (BG, CODE, CORE_COLORS, CTRL, DATA, FUNC, HEAD
 from videos.cs.cs9.common import plot_range
 
 
-class FalseShare(VoiceoverScene):
+class FalseShare(WatchScene):
     def construct(self):
         self.card()
         self.layout()
         self.measure()
-        self.fixes()
 
     def card(self):
-        card = chapter_card(4, r"False sharing", r"Can two cores slow each other down without sharing anything?",
-                            part=PART)
-        with self.voiceover("Chapter four. False sharing."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(4, r"False sharing", r"Can two cores slow each other down without sharing anything?", part=PART, said="Chapter four. False sharing.")
 
     # ------------------------------------------------------------------
     def layout(self):
@@ -68,6 +63,11 @@ class FalseShare(VoiceoverScene):
 
     # ------------------------------------------------------------------
     def measure(self):
+        self.ask(r"Four threads, each incrementing its own counter. \\ The counters sit side by side. Against padded "
+                 r"counters...", [r"the same speed", r"much slower"], 1,
+                 say="Four threads each increment their own counter, but the counters sit side by side in memory. Compared "
+                     "with counters on separate cache lines?",
+                 reveal="Much slower. The line ping-pongs between cores, though no thread touches another's counter.")
         fs = load("falseshare")["rows"]
         head = label(r"Measured on this computer", font_size=34).to_edge(UP, buff=0.3)
         ymax, ystep = plot_range([r[k] for r in fs for k in ("same", "padded")])
@@ -104,38 +104,10 @@ class FalseShare(VoiceoverScene):
             self.play(FadeIn(punch))
         self.wait(0.3)
         self.clear_scene()
+        self.checkpoint(
+            [(r"Why did clocks stop getting faster?", r"Voltage stopped scaling, so power per hertz soared"),
+             (r"What is false sharing?", r"Different variables on one cache line, bouncing between cores")],
+            narration="Checkpoint. Why did clock speeds stop rising? And what is false sharing?",
+            answers_narration="Voltage stopped falling, so every extra hertz cost power. And false sharing is different "
+                              "variables on one cache line, bouncing between cores.")
 
-    # ------------------------------------------------------------------
-    def fixes(self):
-        head = label(r"Finding it, \ and fixing it", font_size=34).to_edge(UP, buff=0.35)
-        pts = VGroup(
-            mono("struct alignas(64) counter { long n; };    // C++: a line each", 19),
-            label(r"pad or align per-thread data to the line size \ (C++17: "
-                  r"\texttt{std::hardware\_destructive\_interference\_size})", font_size=21, color=GREY_A),
-            label(r"better: \ let each thread count in a local variable, \ and add it in once at the end", font_size=21,
-                  color=YES),
-            label(r"that is what the Job does: \ private tables, \ combined once", font_size=21, color=YES),
-            label(r"finding it: \ \texttt{perf c2c} reports lines that bounce between cores, \ and who touches them",
-                  font_size=21, color=DATA),
-            label(r"in the wild: \ statistics counters, \ locks packed next to the data they guard, \ arrays of "
-                  r"per-thread structs", font_size=21, color=NO),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.3).move_to(DOWN * 0.1)
-        with self.voiceover(
-            "The fixes are simple once you know. <bookmark mark='a'/> Align or pad each thread's data to a whole cache "
-            "line. <bookmark mark='b'/> C++ even has a name for the size to pad to. <bookmark mark='c'/> Better "
-            "still, keep per-thread work in local variables, which live in registers or in lines no one else touches, "
-            "and combine them once at the end. <bookmark mark='d'/> That is exactly the Job's design: four private "
-            "tables, combined once. <bookmark mark='e'/> To find false sharing in a real program, Linux's perf tool "
-            "has a mode, c2c, for cache to cache, that reports which lines bounce between cores and which "
-            "instructions touch them. <bookmark mark='f'/> The usual culprits are statistics counters, a lock "
-            "stored next to the data it protects, and arrays of small per-thread structures."
-        ) as vo:
-            self.play(FadeIn(head), run_time=0.5)
-            for mk, p in zip('abcdef', pts):
-                if mk != 'a':
-                    vo.wait_until(mk)
-                self.play(FadeIn(p, shift=RIGHT * 0.1), run_time=0.6 if mk == 'a' else 1.0)
-                if mk == 'a':
-                    vo.wait_until(mk)
-        self.wait(0.3)
-        self.clear_scene()

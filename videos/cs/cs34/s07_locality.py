@@ -4,7 +4,7 @@ from explainer.cs import *  # noqa: F403
 from videos.cs.cs34.common import (BITS, FILEC, HEAD, META, NO, PART, YES, LAM, load, ms)
 
 
-class Locality(VoiceoverScene):
+class Locality(WatchScene):
     def construct(self):
         self.card()
         self.ffs()
@@ -12,11 +12,7 @@ class Locality(VoiceoverScene):
         self.extents()
 
     def card(self):
-        card = chapter_card(6, r"Locality", r"Where should the blocks of a file go?", lit=(1984,),
-                            extra=((1984, r"McKusick et al.: \ FFS"),), part=PART)
-        with self.voiceover("Chapter six. Locality."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(6, r"Locality", r"Where should the blocks of a file go?", lit=(1984,), extra=((1984, r"McKusick et al.: \ FFS"),), part=PART, said="Chapter six. Locality.")
 
     def ffs(self):
         head = label(r"The fast file system, \ 1984", font_size=36).to_edge(UP, buff=0.3)
@@ -71,6 +67,10 @@ class Locality(VoiceoverScene):
         self.clear_scene()
 
     def measured(self):
+        self.ask(r"A 4 MB file: contiguous, or scattered over the disk. \\ Scattered is slower by...", [r"$2\times$",
+                 r"$20\times$", r"$400\times$"], 2,
+                 say="Read a four-megabyte file whose blocks lie in a row, then one whose blocks are scattered over the disk. How much slower is the scattered one?",
+                 reveal="About four hundred times.")
         d = load("locality")
         head = label(r"One 4 MiB file, \ three ways", font_size=36).to_edge(UP, buff=0.3)
         names = {"contiguous": (r"written alone", YES), "interleaved": (r"beside another file", HEAD),

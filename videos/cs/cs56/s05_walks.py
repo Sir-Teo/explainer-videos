@@ -41,7 +41,7 @@ def masses(pts, p, color=HEAD, k=0.55):
                            fill_opacity=0.75).move_to(q) for q, v in zip(pts, p)])
 
 
-class Walks(VoiceoverScene):
+class Walks(WatchScene):
     def construct(self):
         self.card()
         self.walk()
@@ -52,12 +52,8 @@ class Walks(VoiceoverScene):
         self.pagerank()
 
     def card(self):
-        card = chapter_card(4, r"Random walks and mixing", r"How fast does a random walk forget where it started?",
-                            lit=(1906, 1998), extra=((1906, r"Markov: \ chains"),
-                                                     (1998, r"Brin and Page: \ PageRank")), part=PART)
-        with self.voiceover("Chapter four. Random walks, and how fast they mix."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(4, r"Random walks and mixing", r"How fast does a random walk forget where it started?", lit=(1906, 1998), extra=((1906, r"Markov: \ chains"),
+                                                     (1998, r"Brin and Page: \ PageRank")), part=PART, said="Chapter four. Random walks, and how fast they mix.")
 
     def walk(self):
         head = label(r"A walk forgets where it started", font_size=36).to_edge(UP, buff=0.3)
@@ -297,6 +293,10 @@ class Walks(VoiceoverScene):
         self.clear_scene()
 
     def measured(self):
+        self.ask(r"A cycle, a grid, a random 4-regular graph; \\ 64 vertices each. Fastest to mix:", [r"the cycle",
+                 r"the grid", r"the random graph"], 2,
+                 say="A cycle, a grid, and a random graph where every vertex has four neighbours, each on sixty-four vertices. Which mixes fastest?",
+                 reveal="The random graph, by far: its spectral gap is large.")
         m = load("mixing")
         head = label(r"Four graphs, \ 64 vertices each", font_size=36).to_edge(UP, buff=0.3)
         ax = CornerAxes(x_range=[0, 300, 50], y_range=[-4, 0, 1], x_length=5.4, y_length=4.2, tips=False,

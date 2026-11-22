@@ -5,9 +5,15 @@ import numpy as np
 from videos.stats.stats34.common import *  # noqa: F403
 
 
-class CV(VoiceoverScene):
+class CV(StatsScene):
     def construct(self):
         self.card()
+        self.ask("Cross-validation's estimate is closer to the error of...",
+                 ["this fitted model", "models trained on data like these"], 1,
+                 say="Two errors: the error of the model you actually fitted, and the average error of models "
+                     "trained on datasets like yours. Which does cross-validation estimate better?",
+                 reveal="The average over datasets like yours, Bates, Hastie and Tibshirani showed. For this "
+                        "model's own error, it says surprisingly little.")
         self.targets()
         self.setup_()
         self.scatter()
@@ -17,12 +23,14 @@ class CV(VoiceoverScene):
         self.selection()
         self.board()
         self.lesson()
+        self.answer()
+        self.checkpoint([("Boosting fits each tree to?", "the current residuals"),
+                         ("Cross-validation estimates the error of?", "models trained on data like these")],
+                        narration="Checkpoint. Boosting and validation.",
+                        answers_narration="The residuals. And models like yours, on average.")
 
     def card(self):
-        card = chapter_card(4, r"What cross-validation estimates", r"This model, or models like it?", lit=(1974,), part=PART)
-        with self.voiceover("Chapter four. What cross-validation estimates."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(4, r"What cross-validation estimates", r"This model, or models like it?", lit=(1974,), part=PART, said="Chapter four. What cross-validation estimates.")
 
     def targets(self):
         rows = [

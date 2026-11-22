@@ -7,19 +7,23 @@ from videos.stats.stats5.common import *  # noqa: F403
 MEN, WOMEN = "#6FA8DC", "#E59AB8"
 
 
-class Latent(VoiceoverScene):
+class Latent(StatsScene):
     def construct(self):
         self.card()
+        self.ask("Heights: men and women, means 13 cm apart, each SD 7 cm. The histogram has...",
+                 ["two humps", "one hump", "a flat top"], 1,
+                 say="All the World's heights: a blend of men and women, means thirteen centimetres apart, each "
+                     "with a standard deviation of seven. How many humps does the histogram have?",
+                 reveal="One. Two normals of the same spread make two humps only when their means are more than two "
+                        "standard deviations apart, and thirteen is less than fourteen.")
         self.heights()
         self.marginalize()
         self.posterior()
         self.simpson()
+        self.answer()
 
     def card(self):
-        card = chapter_card(10, r"Latent variables", r"A variable you never see, \ shaping the ones you do", lit=(1894,), part=PART)
-        with self.voiceover("Chapter ten. Latent variables."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(10, r"Latent variables", r"A variable you never see, \ shaping the ones you do", lit=(1894,), part=PART, said="Chapter ten. Latent variables.")
 
     def heights(self):
         d = load("latent")

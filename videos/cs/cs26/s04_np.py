@@ -4,7 +4,7 @@ from explainer.cs import *  # noqa: F403
 from videos.cs.cs26.common import (CTRL, DATA, HEAD, LAM, NO, PART, YES, grid_table, mono)
 
 
-class Np(VoiceoverScene):
+class Np(WatchScene):
     def construct(self):
         self.card()
         self.verifiers()
@@ -12,13 +12,20 @@ class Np(VoiceoverScene):
         self.examples()
 
     def card(self):
-        card = chapter_card(3, r"NP: \ problems with checkable answers", r"What does it mean that an answer is easy to "
-                            r"check?", lit=(1971, 2015), extra=((1971, r"Cook"), (2015, r"Babai")), part=PART)
-        with self.voiceover("Chapter three. NP: problems with checkable answers."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(3, r"NP: \ problems with checkable answers", r"What does it mean that an answer is easy to "
+                            r"check?", lit=(1971, 2015), extra=((1971, r"Cook"), (2015, r"Babai")), part=PART, said="Chapter three. NP: problems with checkable answers.")
 
     def verifiers(self):
+        self.wrong_idea(r"NP means ``not polynomial''",
+                        r"NP means answers are checkable in polynomial time. \\ P might even equal NP",
+                        narration="Many people read NP as not polynomial: problems too hard to solve efficiently.",
+                        right_narration="NP means nondeterministic polynomial: problems whose answers can be checked quickly. "
+                                        "Whether they can also be found quickly is the open question.")
+        self.clear_scene()
+        self.ask(r"Someone hands you a 3-colouring of the sixty-vertex graph. \\ Checking it takes...",
+                 [r"a long search", r"one pass over the edges"], 1,
+                 say="Finding a three-colouring of the sixty-vertex graph is hard. Someone hands you one. How long to check it?",
+                 reveal="One pass over the edges. Easy to check: that's what NP means.")
         head = label(r"A problem is in NP if \textbf{yes}-answers have short, \ checkable proofs", font_size=30).to_edge(
             UP, buff=0.35)
         boxes = VGroup(
@@ -136,7 +143,7 @@ class Np(VoiceoverScene):
             label('unknown = polynomial-time decision is unknown; binary input size and problem-specific bounds matter', font_size=21, color=GREY_A),
         ).arrange(DOWN, buff=0.2).next_to(tab, DOWN, buff=0.4)
         with self.voiceover(
-            "Consider six decision problems. <bookmark mark='a'/> SAT, clique, Hamiltonian cycle and binary-encoded subset sum have polynomially checkable yes-certificates. For these general problems, polynomial-time algorithms remain unknown. This is not a claim that every best known algorithm has the same exponential bound. <bookmark mark='b'/> Graph isomorphism asks for an adjacency-preserving bijection. Babai's quasipolynomial upper bound is faster than a general exponential bound, while polynomial time remains open. <bookmark mark='c'/> Primality is in P by the AKS theorem, so it needs no extra certificate for polynomial-time decision. <bookmark mark='d'/> A verifier can always exhaust all polynomial-length certificates using exponential time. That is an upper bound, not a proof that exhaustive search is necessary."
+            "Consider six decision problems. <bookmark mark='a'/> SAT, clique, Hamiltonian cycle and binary-encoded subset sum have polynomially checkable yes-certificates. For these general problems, polynomial-time algorithms remain unknown. This is not a claim that every best known algorithm has the same exponential bound. <bookmark mark='b'/> Graph isomorphism asks for an adjacency-preserving bijection. Babai's quasipolynomial upper bound is faster than a general exponential bound, while polynomial time remains open. <bookmark mark='c'/> Primality is in P by the AKS theorem, so it needs no extra certificate for polynomial-time decision. <bookmark mark='d'/> A verifier can always exhaust all polynomial-length certificates using exponential time."
         ) as vo:
             self.play(FadeIn(head), FadeIn(VGroup(*tab.cells[0])), FadeIn(tab.rule))
             vo.wait_until("a")

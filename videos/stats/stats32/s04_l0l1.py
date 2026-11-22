@@ -15,21 +15,36 @@ def lq_curve(q, center, r=1.25, color=None, n=400):
     return m
 
 
-class FromL0(VoiceoverScene):
+class FromL0(StatsScene):
     def construct(self):
         self.card()
+        self.wrong_idea("Best subset selection always beats the lasso",
+                        "At low signal-to-noise, the lasso's shrinkage predicts better",
+                        narration="A natural assumption: if we could afford it, best subset selection would always "
+                                  "beat the lasso.",
+                        right_narration="Not so. When the signal is weak relative to the noise, the lasso's "
+                                        "shrinkage predicts better, as Hastie, Tibshirani and Tibshirani found in "
+                                        "2020. Best subset wins when the signal is strong.")
+        self.ask("On the unit box, the convex function closest to counting nonzeros is...",
+                 [r"the $\ell_2$ norm", r"the $\ell_1$ norm", r"the $\ell_\infty$ norm"], 1,
+                 say="Counting the nonzero coefficients is not convex. On the unit box, what's the closest convex "
+                     "function to it from below?",
+                 reveal="The l one norm, the sum of absolute values: counting's convex envelope. That's why the "
+                        "lasso is the natural convex stand-in for best subsets.")
         self.subset()
         self.hard()
         self.balls()
         self.relax()
         self.octahedron()
         self.hull()
+        self.answer()
+        self.checkpoint([("Best subset over 50 variables: how many models?", "$2^{50}$, about $10^{15}$"),
+                         ("The convex envelope of counting nonzeros?", r"the $\ell_1$ norm")],
+                        narration="Checkpoint. Ridge and counting.",
+                        answers_narration="Two to the fiftieth. And the l one norm.")
 
     def card(self):
-        card = chapter_card(3, r"From $\ell_0$ to $\ell_1$", r"The closest convex penalty to counting", lit=(1996,), part=PART)
-        with self.voiceover("Chapter three. From counting to absolute values."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(3, r"From $\ell_0$ to $\ell_1$", r"The closest convex penalty to counting", lit=(1996,), part=PART, said="Chapter three. From counting to absolute values.")
 
     def subset(self):
         rows = [

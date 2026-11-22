@@ -5,7 +5,7 @@ import numpy as np
 from videos.stats.stats51.common import *  # noqa: F403
 
 
-class Hook(VoiceoverScene):
+class Hook(StatsScene):
     def construct(self):
         self.story()
         self.sphere()
@@ -13,7 +13,7 @@ class Hook(VoiceoverScene):
         self.table()
         self.question()
         self.upgrades()
-        self.objectives()
+        self.title(PART)
 
     def story(self):
         tl = timeline(lit=(1922,)).to_edge(UP, buff=0.35)
@@ -159,24 +159,4 @@ class Hook(VoiceoverScene):
             for k, m_ in enumerate("abc"):
                 vo.wait_until(m_)
                 self.play(FadeIn(cards[k], shift=UP * 0.2))
-        self.clear_scene()
-
-    def objectives(self):
-        head = VGroup(label(r"Part 51", font_size=34, color=GREY_B), label(r"High-Dimensional Probability", font_size=48)).arrange(DOWN, buff=0.25)
-        obj = objectives_card([
-            r"sub-Gaussian and sub-exponential variables; \ Hoeffding and Bernstein, \ sharp",
-            r"thin shells, \ near-orthogonality, \ Johnson--Lindenstrauss; \ concentration of Lipschitz functions",
-            r"random matrices, \ non-asymptotically; \ matrix Bernstein; \ a real covariance spectrum",
-            r"chaining revisited; \ Slepian, \ Sudakov, \ Gordon; \ widths and the statistical dimension",
-        ], color=SPHC, font_size=26)
-        prereq = note(r"prerequisites: \ Parts 43, \ 48").to_corner(DL, buff=0.3)
-        built = note(r"built: \ \texttt{statkit.hdp}, \ the sphere-and-shell picture").to_corner(DR, buff=0.3)
-        with self.voiceover(
-            "<bookmark mark='a'/> Part fifty-one: high-dimensional probability. <bookmark mark='b'/> We'll define sub-Gaussian and sub-exponential variables and sharpen Hoeffding and Bernstein; meet thin shells, near-orthogonality and the Johnson–Lindenstrauss lemma; prove that Lipschitz functions of Gaussians concentrate; bound random matrices without asymptotics, and test the bounds on a real covariance matrix; revisit chaining; compare Gaussian processes with Slepian, Sudakov and Gordon; and end with Gaussian widths and the statistical dimension, which locate the sparse-recovery transition, with a finite-dimensional uncertainty window."
-        ) as vo:
-            vo.wait_until("a")
-            self.play(FadeIn(head, shift=UP * 0.2))
-            vo.wait_until("b")
-            self.play(FadeOut(head), FadeIn(obj, shift=UP * 0.2), FadeIn(prereq), FadeIn(built))
-        self.wait(1.0)
         self.clear_scene()

@@ -7,7 +7,7 @@ from videos.cs.cs9.common import (BG, CODE, COST, CTRL, DATA, FUNC, HEAD, HIST, 
                                   size_label)
 
 
-class Locality(VoiceoverScene):
+class Locality(WatchScene):
     def construct(self):
         self.card()
         self.scatter()
@@ -15,16 +15,13 @@ class Locality(VoiceoverScene):
         self.curve()
 
     def card(self):
-        card = chapter_card(2, r"Locality", r"Why does a small memory help a big program?", lit=(1968,),
-                            extra=((1968, r"Denning: \ the working set"),), part=PART)
-        with self.voiceover(
-            "Chapter two. Locality."
-        ):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(2, r"Locality", r"Why does a small memory help a big program?", lit=(1968,), extra=((1968, r"Denning: \ the working set"),), part=PART, said="Chapter two. Locality.")
 
     # ------------------------------------------------------------------
     def scatter(self):
+        self.ask(r"You read one byte. \\ How many bytes come in from memory?", [r"1", r"8", r"64"], 2,
+                 say="A program reads a single byte that isn't in the cache. How many bytes come in from memory?",
+                 reveal="A whole sixty-four-byte line, betting that the neighbours are next.")
         d = load("trace")
         sc = d["scatter"]
         head = label("Sampled chapter-1 data references; \\ instruction count versus address", font_size=34).to_edge(UP, buff=0.3)
@@ -50,7 +47,7 @@ class Locality(VoiceoverScene):
         xl = note(rf"time: \ {d['instructions']:,} instructions \quad (one dot for every {d['accesses'] // len(steps)} accesses)",
                   font_size=18).to_edge(DOWN, buff=0.25)
         with self.voiceover(
-            "The plot samples the Job's chapter-1 data-access trace; it does not draw every access separately. "
+            "The plot samples the Job's chapter-1 data-access trace. "
             "Horizontal position is instruction count, and vertical position is byte address. Device reads and "
             "instruction fetches are excluded. <bookmark mark='a'/> The table scans produce repeated rising strokes "
             "as entries are visited. <bookmark mark='b'/> The lower region holds letters, revisited during "

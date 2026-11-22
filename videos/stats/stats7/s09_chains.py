@@ -12,21 +12,25 @@ def node_positions():
     return [np.array([-3.0, 1.0, 0]), np.array([0.0, -1.6, 0]), np.array([3.0, 1.0, 0])]
 
 
-class Chains(VoiceoverScene):
+class Chains(StatsScene):
     def construct(self):
         self.card()
+        self.ask("In Pushkin's verse, a vowel follows a vowel...",
+                 ["about as often as after a consonant", "much less often", "much more often"], 1,
+                 say="In 1913 Markov counted twenty thousand letters of Pushkin. How often does a vowel follow a "
+                     "vowel: about as often as after a consonant, much less often, or much more often?",
+                 reveal="Much less often: about thirteen percent of the time after a vowel, sixty-six after a "
+                        "consonant. Letters have a memory of one step.")
         self.markov()
         self.onegin()
         self.graph()
         self.flow()
         self.rate()
         self.ergodic()
+        self.answer()
 
     def card(self):
-        card = chapter_card(8, r"Markov chains", r"Randomness with a memory of one step", part=PART)
-        with self.voiceover("Chapter eight. Markov chains."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(8, r"Markov chains", r"Randomness with a memory of one step", part=PART, said="Chapter eight. Markov chains.")
 
     def markov(self):
         hc = history_card(1913, r"Andrey Markov, \ on Pushkin's \emph{Eugene Onegin}", r"20,000 letters, \ classified as vowel or "

@@ -5,23 +5,21 @@ from videos.cs.cs13.common import (CODE, COST, CTRL, DATA, FUNC, HEAD, NO, PART,
                                    load, mono)
 
 
-class Job(VoiceoverScene):
+class Job(WatchScene):
     def construct(self):
         self.card()
         self.passes()
-        self.levels()
         self.core()
         self.ledger()
-        self.gcc()
 
     def card(self):
-        card = chapter_card(13, r"The Job, compiled", r"Did the program write it better than we did?",
-                            lit=(1957,), part=PART)
-        with self.voiceover("Chapter thirteen. The Job, compiled."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(13, r"The Job, compiled", r"Did the program write it better than we did?", lit=(1957,), part=PART, said="Chapter thirteen. The Job, compiled.")
 
     def passes(self):
+        self.ask(r"The Job compiled with optimizations, \\ against without. Instructions executed?",
+                 [r"about the same", r"far fewer"], 1,
+                 say="Compile the Job with optimizations, and without. How many fewer instructions run?",
+                 reveal="Far fewer: values stay in registers, and repeated work disappears.")
         p = load("passes")
         rows = p["rows"]
         head = label(r"Every pass, \ switched on in turn", font_size=34).to_edge(UP, buff=0.25)
@@ -76,30 +74,6 @@ class Job(VoiceoverScene):
         self.wait(0.4)
         self.clear_scene()
 
-    def levels(self):
-        j = load("job")
-        e = j["emulator"]
-        head = label(r"Optimization levels", font_size=34).to_edge(UP, buff=0.3)
-        keys = ["array -O0", "array -O1", "array -O2", "array -O3", "hand-written (Part 6)",
-                "hand-written, linked (Part 11)"]
-        names = [r"\texttt{-O0}", r"\texttt{-O1}", r"\texttt{-O2}", r"\texttt{-O3}", r"by hand", r"by hand, linked"]
-        ch = bar_chart([e[k] / 1e6 for k in keys], names, [NO, CTRL, YES, YES, DATA, DATA], height=3.6, bar_w=0.85,
-                       gap=0.6, fmt_=lambda v: f"{v:.2f}M", font_size=18).move_to(LEFT * 2.2 + DOWN * 0.3)
-        lv = VGroup(
-            label(r"\texttt{-O0}: \ every variable in memory, \ for the debugger", font_size=19, color=GREY_A),
-            label(r"\texttt{-O1}: \ registers", font_size=19, color=GREY_A),
-            label(r"\texttt{-O2}: \ loop inversion, \ SSA and every pass", font_size=19, color=GREY_A),
-            label(r"\texttt{-O3}: \ and inlining", font_size=19, color=GREY_A),
-            label(rf"list Job: \ {e['list -O0']:,} \ $\to$ \ {e['list -O3']:,}", font_size=19, color=FUNC),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.15).to_edge(RIGHT, buff=0.4)
-        with self.voiceover("Our compiler groups transformations into named levels. <bookmark mark='a'/> In this implementation, level zero gives source variables stack storage; level one allocates registers; level two adds loop inversion, SSA and the optimization pipeline; level three also inlines selected functions. The array Job's final bars coincide in this run. GCC and Clang use their own version-dependent sets of transformations, so matching level names do not imply matching pipelines. Stack storage alone also does not provide a complete source debugger. <bookmark mark='b'/> Compare these bars with the hand-written Part 6 program and its linked Part 11 variant. They report executed instructions on one input, including the implementations' actual overhead. The cycle comparison is a separate experiment.") as vo:
-            self.play(FadeIn(head), run_time=0.5)
-            self.play(FadeIn(ch.bars[:4]), FadeIn(ch.vals[:4]), FadeIn(ch.names[:4]), FadeIn(lv), run_time=0.6)
-            vo.wait_until('a')
-            vo.wait_until('b')
-            self.play(FadeIn(ch.bars[4:]), FadeIn(ch.vals[4:]), FadeIn(ch.names[4:]))
-        self.wait(0.3)
-        self.clear_scene()
 
     def core(self):
         j = load("job")
@@ -160,32 +134,3 @@ class Job(VoiceoverScene):
         self.wait(0.3)
         self.clear_scene()
 
-    def gcc(self):
-        g = load("gcc")
-        head = label(r"On this machine: \ gcc and the C Job of Part 10", font_size=32).to_edge(UP, buff=0.3)
-        ch = bar_chart([r["seconds"] for r in g["rows"]], [rf"\texttt{{{r['level']}}}" for r in g["rows"]],
-                       [NO, YES, YES, YES], height=3.4, bar_w=1.0, gap=0.8, fmt_=lambda v: f"{v * 1000:.0f} ms",
-                       font_size=19).move_to(LEFT * 2.6 + DOWN * 0.3)
-        cap = label(rf"\textit{{Pride and Prejudice}}, \ {g['bytes'] / 1e3:.0f} KB, \ one thread; \ best of 3",
-                    font_size=17, color=GREY_B).next_to(ch, DOWN, buff=0.4)
-        pts = VGroup(
-            label("compare the recorded best-of-three host times", font_size=21, color=YES),
-            label("level ordering can vary with host, compiler version and workload", font_size=21,
-                  color=GREY_A),
-            label("elapsed time is distinct from instruction counts and simulated cycles", font_size=21, color=HEAD),
-            label(g["gcc"].split(" (")[0] + " " + g["gcc"].split()[-1], font_size=16, color=GREY_B),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.2)
-        if pts.width > 5.2:
-            pts.scale_to_fit_width(5.2)
-        pts.to_edge(RIGHT, buff=0.5)
-        with self.voiceover(f"The host experiment uses the C Job from Part 10 and the recorded GCC version. <bookmark mark='a'/> Each bar is the best of three one-thread runs on the same input. Level zero records {g['rows'][0]['seconds'] * 1000:.1f} milliseconds; level one records {g['rows'][1]['seconds'] * 1000:.1f}. <bookmark mark='b'/> Levels two and three record {g['rows'][2]['seconds'] * 1000:.1f} and {g['rows'][3]['seconds'] * 1000:.1f} milliseconds. Read this run's ordering from the bars; it can change across hosts and repetitions. Optimization levels change several decisions, so these timings alone do not isolate register allocation or prove a particular memory bottleneck. <bookmark mark='c'/> They do show why choosing a level should include measurement of the real workload. Instruction counts, simulated cycles and host elapsed time are related evidence with different boundaries.") as vo:
-            self.play(FadeIn(head), run_time=0.5)
-            self.play(FadeIn(ch), FadeIn(cap), run_time=0.6)
-            vo.wait_until('a')
-            self.play(FadeIn(pts[0]))
-            vo.wait_until('b')
-            self.play(FadeIn(pts[1]))
-            vo.wait_until('c')
-            self.play(FadeIn(pts[2:]))
-        self.wait(0.3)
-        self.clear_scene()

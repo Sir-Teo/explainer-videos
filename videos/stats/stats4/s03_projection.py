@@ -5,21 +5,25 @@ import numpy as np
 from videos.stats.stats4.common import *  # noqa: F403
 
 
-class Projection(VoiceoverScene):
+class Projection(StatsScene):
     def construct(self):
         self.card()
+        self.ask("Which families pull hardest on Galton's fitted line?",
+                 ["those with average parents", "those with unusually short or tall parents", "the largest families"], 1,
+                 say="Least squares is a projection. Which families pull hardest on Galton's fitted line: those "
+                     "with average parents, those with unusually short or tall parents, or the largest families?",
+                 reveal="Those with unusually short or tall parents. Their leverage, the diagonal of the hat "
+                        "matrix, is largest.")
         self.derive()
         self.lab()
         self.gram_schmidt()
         self.eigen()
         self.anova()
         self.leverage()
+        self.answer()
 
     def card(self):
-        card = chapter_card(2, r"Projections", r"The closest point in a subspace", lit=(1805,), part=PART)
-        with self.voiceover("Chapter two. Projections."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(2, r"Projections", r"The closest point in a subspace", lit=(1805,), part=PART, said="Chapter two. Projections.")
 
     def derive(self):
         rows = [

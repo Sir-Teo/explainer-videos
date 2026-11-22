@@ -26,22 +26,17 @@ def dag_mob(preds, r=0.26):
     return nodes, edges, emap
 
 
-class WorkSpan(VoiceoverScene):
+class WorkSpan(WatchScene):
     def construct(self):
         self.card()
         self.dag()
         self.greedy()
         self.brent()
-        self.checked()
         self.stealing()
 
     def card(self):
-        card = chapter_card(9, r"Work, \ span and Brent's theorem", r"How fast can a computation go on $p$ processors?",
-                            lit=(1974, 1999), extra=((1974, r"Brent"), (1999, r"Blumofe and Leiserson: \ work "
-                                                                              r"stealing")), part=PART)
-        with self.voiceover("Chapter nine. Work, span, and Brent's theorem."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(9, r"Work, \ span and Brent's theorem", r"How fast can a computation go on $p$ processors?", lit=(1974, 1999), extra=((1974, r"Brent"), (1999, r"Blumofe and Leiserson: \ work "
+                                                                              r"stealing")), part=PART, said="Chapter nine. Work, span, and Brent's theorem.")
 
     # ------------------------------------------------------------------
     def dag(self):
@@ -133,6 +128,10 @@ class WorkSpan(VoiceoverScene):
 
     # ------------------------------------------------------------------
     def brent(self):
+        self.ask(r"Work 1000, span 10, four processors. \\ A greedy schedule finishes within...",
+                 [r"250 steps", r"260 steps", r"1000 steps"], 1,
+                 say="A thousand units of work, a span of ten, four processors. A greedy schedule finishes within how many steps?",
+                 reveal="Two hundred and sixty: the work over p, plus the span. That's Brent's theorem.")
         head = label(r"Brent's theorem", font_size=36).to_edge(UP, buff=0.3)
         thm = MathTex(r"T_p \;\le\; \frac{T_1}{p} \;+\; T_\infty", font_size=54, color=HEAD).next_to(head, DOWN,
                                                                                                     buff=0.3)
@@ -175,54 +174,6 @@ class WorkSpan(VoiceoverScene):
         self.wait(0.3)
         self.clear_scene()
 
-    # ------------------------------------------------------------------
-    def checked(self):
-        ws = load("workspan")["random"]
-        t1, tinf = ws["t1"], ws["tinf"]
-        ex = ws["example"]
-        head = label(rf"Checked: \ a random computation of {t1:,} nodes, \ span {tinf}", font_size=32).to_edge(
-            UP, buff=0.3)
-        ps = [e["p"] for e in ex]
-        ax = Axes(x_range=[0, 6.3, 1], y_range=[1, 3.5, 1], x_length=7.5, y_length=4.0, tips=False,
-                  axis_config={"color": GREY_C, "font_size": 16}).shift(LEFT * 1.6 + DOWN * 0.4)
-        lx = lambda p: np.log2(p)
-        ly = lambda t: np.log10(t)
-        xt = VGroup(*[label(str(p), font_size=17, color=GREY_B).next_to(ax.c2p(lx(p), 1), DOWN, buff=0.12)
-                      for p in ps])
-        yt = VGroup(*[label(rf"{v:,}", font_size=16, color=GREY_B).next_to(ax.c2p(0, ly(v)), LEFT, buff=0.1)
-                      for v in (10, 100, 1000)])
-        xl = label(r"processors $p$", font_size=18, color=GREY_B).next_to(ax, DOWN, buff=0.45)
-        yl = label(r"steps \ (log)", font_size=18, color=GREY_B).next_to(ax, UP, buff=0.1).align_to(ax, LEFT)
-        pp = np.linspace(0, 6, 60)
-        up = ax.plot_line_graph([*pp], [ly(t1 / 2 ** x + tinf) for x in pp], add_vertex_dots=False,
-                                line_color=CTRL, stroke_width=3)
-        lo = ax.plot_line_graph([*pp], [ly(max(t1 / 2 ** x, tinf)) for x in pp], add_vertex_dots=False,
-                                line_color=GREY_B, stroke_width=3)
-        dots = VGroup(*[Dot(ax.c2p(lx(e["p"]), ly(e["makespan"])), radius=0.07, color=YES) for e in ex])
-        lu = label(r"Brent: \ $T_1/p + T_\infty$", font_size=20, color=CTRL).next_to(ax.c2p(2.0, ly(t1 / 4 + tinf)),
-                                                                                    UR, buff=0.1)
-        ll = label(r"$\max(T_1/p, \ T_\infty)$", font_size=20, color=GREY_B).next_to(ax.c2p(5.0, ly(tinf)), DOWN,
-                                                                                   buff=0.15)
-        w = ws["worst"]
-        worst = max(v["ratio_to_lower"] for v in w.values())
-        side = VGroup(label(r"greedy, \ measured", font_size=20, color=YES),
-                      label(r"40 random graphs, \ $p$ from 1 to 64:", font_size=20, color=GREY_A),
-                      label(r"never above Brent's bound", font_size=20, color=GREY_A),
-                      label(rf"at worst {worst:.2f} times \\ the lower bound", font_size=20, color=HEAD)).arrange(
-            DOWN, aligned_edge=LEFT, buff=0.2).next_to(ax, RIGHT, buff=0.5)
-        with self.voiceover(
-            f"Here is the theorem checked on a larger computation: two thousand nodes, each depending on up to three recent ones, with a span of {tinf}. <bookmark mark='a'/> The grey curve is the lower bound, the larger of T one over p and T infinity. The orange curve is Brent's upper bound. <bookmark mark='b'/> And the green dots are a greedy schedule, from one processor to sixty-four. These points approach the lower bound as processors are added, then flatten near the span. This is one graph and one priority order; another greedy schedule need not achieve the lower bound. <bookmark mark='c'/> Over forty random graphs, greedy was never above Brent's bound, and never more than {worst:.2f} times the lower bound."
-        ) as vo:
-            self.play(FadeIn(head), Create(ax), FadeIn(xt), FadeIn(yt), FadeIn(xl), FadeIn(yl))
-            vo.wait_until("a")
-            self.play(Create(lo), FadeIn(ll))
-            self.play(Create(up), FadeIn(lu))
-            vo.wait_until("b")
-            self.play(LaggedStart(*[FadeIn(d, scale=1.5) for d in dots], lag_ratio=0.2), FadeIn(side[0]))
-            vo.wait_until("c")
-            self.play(FadeIn(side[1:]))
-        self.wait(0.3)
-        self.clear_scene()
 
     # ------------------------------------------------------------------
     def stealing(self):
@@ -258,7 +209,7 @@ class WorkSpan(VoiceoverScene):
         tab.arrange(DOWN, aligned_edge=LEFT, buff=0.12).to_edge(RIGHT, buff=0.4).shift(UP * 0.2)
         worst = max((r["makespan"] - st["t1"] / r["p"]) / st["tinf"] for r in rows[1:])
         with self.voiceover(
-            f"Greedy assumes someone hands out the ready nodes. Real runtimes cannot afford a central list that every core fights over, so they use work stealing. <bookmark mark='a'/> Each core keeps its own double-ended queue of tasks and works on the newest. When a task spawns another, the new one goes on the same core's queue. <bookmark mark='b'/> A core with nothing to do picks another core at random and steals the oldest task from its queue, which tends to be a big one. <bookmark mark='c'/> In 1999 Robert Blumofe and Charles Leiserson proved, for fully strict computations under their scheduler and cost assumptions, an expected bound of T one over p plus a constant times T infinity, in expectation, with expected steal attempts bounded by order p times the span. This is an upper bound under a specific model, not a universal claim about communication. <bookmark mark='d'/> Our simplified deque simulation illustrates the scaling on one fork-join tree; it is not the full theorem model: the extra time stays under {worst + 0.05:.1f} spans, and steals are rare. <bookmark mark='e'/> Work stealing appears in Cilk, oneTBB, Java fork-join, Rayon and Go, with different task, queue and scheduling policies; the theorem does not automatically cover each runtime."
+            f"Greedy assumes someone hands out the ready nodes. Real runtimes cannot afford a central list that every core fights over, so they use work stealing. <bookmark mark='a'/> Each core keeps its own double-ended queue of tasks and works on the newest. When a task spawns another, the new one goes on the same core's queue. <bookmark mark='b'/> A core with nothing to do picks another core at random and steals the oldest task from its queue, which tends to be a big one. <bookmark mark='c'/> In 1999 Robert Blumofe and Charles Leiserson proved, for fully strict computations under their scheduler and cost assumptions, an expected bound of T one over p plus a constant times T infinity, in expectation, with expected steal attempts bounded by order p times the span. This is an upper bound under a specific model, not a universal claim about communication. <bookmark mark='d'/> Our simplified deque simulation illustrates the scaling on one fork-join tree; it is not the full theorem model: the extra time stays under {worst + 0.05:.1f} spans, and steals are rare. <bookmark mark='e'/> Work stealing appears in Cilk, oneTBB, Java fork-join, Rayon and Go, with different task, queue and scheduling policies."
         ) as vo:
             self.play(FadeIn(head), FadeIn(deqs))
             vo.wait_until("a")
@@ -273,3 +224,9 @@ class WorkSpan(VoiceoverScene):
             self.play(FadeIn(rules[3]))
         self.wait(0.3)
         self.clear_scene()
+        self.checkpoint(
+            [(r"What do work and span bound?", r"Time on $p$ processors: at least $\max(T_1/p, T_\infty)$"),
+             (r"What does a store buffer allow?", r"A later load to pass an earlier store")],
+            narration="Checkpoint. What do work and span tell you about running time? And what does a store buffer allow?",
+            answers_narration="No schedule beats the larger of the work over p and the span, and greedy comes within the "
+                              "sum. And a store buffer lets a later load pass an earlier store.")

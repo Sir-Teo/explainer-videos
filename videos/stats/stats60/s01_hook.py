@@ -5,7 +5,7 @@ import numpy as np
 from videos.stats.stats60.common import *  # noqa: F403
 
 
-class Hook(LectureMixin, VoiceoverScene):
+class Hook(LectureMixin, StatsScene):
     def construct(self):
         self.story()
         self.lesson()
@@ -14,7 +14,7 @@ class Hook(LectureMixin, VoiceoverScene):
         self.board()
         self.taxonomy()
         self.upgrade()
-        self.objectives()
+        self.title(PART)
 
     def story(self):
         tl = timeline(lit=(2019,)).to_edge(UP, buff=0.35)
@@ -118,28 +118,5 @@ class Hook(LectureMixin, VoiceoverScene):
             self.play(FadeIn(cards[0], shift=UP * 0.2))
             vo.wait_until("b")
             self.play(FadeIn(cards[1], shift=UP * 0.2))
-        self.wait(1.0)
-        self.clear_scene()
-
-    def objectives(self):
-        head = VGroup(label(r"Part 60", font_size=34, color=GREY_B), label(r"Robustness and Distribution Shift", font_size=56)).arrange(DOWN, buff=0.25)
-        obj = objectives_card([
-            r"Tukey's depth; \ efficient robust means in high dimensions; \ list decoding; \ heavy tails",
-            r"covariate shift on NHANES; \ label shift on the biopsies; \ their Board rows",
-            r"distributionally robust optimization; \ invariance and anchor regression; \ transfer",
-            r"detecting shift; \ open problems",
-        ], color=S.ACCENT, font_size=26)
-        prereq = note(r"prerequisites: \ Parts 30, \ 51, \ 57").to_corner(DL, buff=0.3)
-        built = note(r"built: \ \texttt{statkit.shift}, \ the depth map").to_corner(DR, buff=0.3)
-        with self.voiceover(
-            "<bookmark mark='a'/> Part sixty: robustness and distribution shift. <bookmark mark='b'/> Tukey's depth, efficient "
-            "robust means in high dimensions, list decoding and heavy tails; covariate shift on NHANES and label shift on the "
-            "breast cancer biopsies; distributionally robust optimization, invariance and anchor regression, and transfer "
-            "learning; detecting shift; and open problems."
-        ) as vo:
-            vo.wait_until("a")
-            self.play(FadeIn(head, shift=UP * 0.2))
-            vo.wait_until("b")
-            self.play(FadeOut(head), FadeIn(obj, shift=UP * 0.2), FadeIn(prereq), FadeIn(built))
         self.wait(1.0)
         self.clear_scene()

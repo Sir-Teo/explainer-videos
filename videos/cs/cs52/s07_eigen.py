@@ -61,25 +61,23 @@ def log_ticks(ax, x0, ys, size=20):
                     for p in ys])
 
 
-class Eigen(VoiceoverScene):
+class Eigen(WatchScene):
     def construct(self):
         self.card()
         self.noformula()
-        self.power()
         self.qralg()
         self.shifts()
         self.cubic()
 
     def card(self):
-        card = chapter_card(6, r"Eigenvalues: \ the QR algorithm",
-                            r"How do we find eigenvalues when no formula exists?",
-                            lit=(1824, 1961), extra=((1824, r"Abel: \ no formula for degree five"),
-                                                     (1961, r"Francis; \ Kublanovskaya: \ QR")), part=PART)
-        with self.voiceover("Chapter six. Eigenvalues, and the QR algorithm."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(6, r"Eigenvalues: \ the QR algorithm", r"How do we find eigenvalues when no formula exists?", lit=(1824, 1961), extra=((1824, r"Abel: \ no formula for degree five"),
+                                                     (1961, r"Francis; \ Kublanovskaya: \ QR")), part=PART, said="Chapter six. Eigenvalues, and the QR algorithm.")
 
     def noformula(self):
+        self.ask(r"The eigenvalues of a $5 \times 5$ matrix: \\ a formula in radicals?", [r"yes",
+                 r"no general formula exists"], 1,
+                 say="Is there a formula, with roots and arithmetic, for the eigenvalues of every five by five matrix?",
+                 reveal="No: Abel and Ruffini. Every eigenvalue algorithm must iterate.")
         q = load("qr")
         lam = q["true"]
         head = label(r"No formula, \ so iterate", font_size=36).to_edge(UP, buff=0.3)
@@ -141,72 +139,6 @@ class Eigen(VoiceoverScene):
         self.wait(0.4)
         self.clear_scene()
 
-    def power(self):
-        q = load("qr")
-        pe, ie = q["power"]["errors"], q["inverse"]["errors"]
-        lam = sorted(q["true"], key=abs, reverse=True)
-        ratio = abs(lam[1] / lam[0])
-        kp = next(k for k, e in enumerate(pe) if e < 1e-13) + 1
-        ki = next(k for k, e in enumerate(ie) if e < 1e-13) + 1
-        head = label(r"Power iteration, \ and inverse iteration", font_size=36).to_edge(UP, buff=0.3)
-        cols = {r"\lambda_1^k": HEAD, r"\left(\frac{\lambda_2}{\lambda_1}\right)^{k}": YES}
-        rows = VGroup(
-            cmath(r"x_0", r"=", r"c_1 v_1", r"+", r"c_2 v_2", r"+", r"\cdots", colors=cols, font_size=32),
-            cmath(r"A^k x_0", r"=", r"c_1", r"\lambda_1^k", r"v_1", r"+", r"c_2", r"\lambda_2^k", r"v_2", r"+",
-                  r"\cdots", colors=cols, font_size=32),
-            cmath(r"A^k x_0", r"=", r"\lambda_1^k", r"\Big(", r"c_1", r"v_1", r"+", r"c_2",
-                  r"\left(\frac{\lambda_2}{\lambda_1}\right)^{k}", r"v_2", r"+", r"\cdots", r"\Big)", colors=cols,
-                  font_size=32),
-            cmath(r"(A - \mu I)^{-1}", r"\ \text{has eigenvalues}\ ", r"\frac{1}{\lambda_i - \mu}", font_size=32),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.55).move_to([-3.5, 0.2, 0])
-        rows[3][2].set_color(LAM)
-        whys = VGroup(label(r"write the start in eigenvectors", font_size=18, color=GREY_B),
-                      label(r"each component is multiplied by $\lambda_i^k$", font_size=18, color=GREY_B),
-                      label(r"the others die like a ratio to the $k$", font_size=18, color=YES),
-                      label(r"the eigenvalue nearest the shift $\mu$ dominates", font_size=18, color=LAM))
-        for w, r in zip(whys, rows):
-            w.next_to(r, DOWN, buff=0.1).align_to(r, LEFT)
-        ax = CornerAxes(x_range=[0, 60, 10], y_range=[-16, 1, 4], x_length=4.6, y_length=4.2, tips=False,
-                        axis_config={"stroke_color": GREY_C})
-        ax.move_to([4.2, -0.2, 0])
-        yt = log_ticks(ax, 0, (-16, -12, -8, -4, 0))
-        xt = VGroup(*[label(rf"{v}", font_size=16, color=GREY_B).next_to(ax.c2p(v, -16), DOWN, buff=0.1)
-                      for v in (0, 20, 40, 60)])
-        xl = label(r"steps", font_size=17, color=GREY_A).next_to(xt, DOWN, buff=0.08)
-        yl = label(r"eigenvalue error, \ computed", font_size=17, color=GREY_A).next_to(ax, UP, buff=0.1).align_to(
-            ax, LEFT)
-
-        def series(es, color):
-            pts = [ax.c2p(k + 1, math.log10(e)) for k, e in enumerate(es)]
-            return VMobject(color=color, stroke_width=3).set_points_as_corners(pts)
-        sp, si = series(pe, YES), series(ie, LAM)
-        kpl = label(rf"power: \ $|\lambda_2/\lambda_1| = {ratio:.2f}$; \ {kp} steps to $10^{{-13}}$", font_size=17,
-                    color=YES).next_to(ax.c2p(60, 0.5), DOWN, buff=0.1).align_to(ax.c2p(60, 0), RIGHT)
-        kil = label(rf"inverse, \ shift 0.3 away: \ {ki} steps", font_size=17, color=LAM).next_to(
-            ax.c2p(14, -14.5), RIGHT, buff=0.05)
-        with self.voiceover(
-            "The simplest iteration is the power method. <bookmark mark='a'/> Write a starting vector in terms of "
-            "the eigenvectors. <bookmark mark='b'/> Multiplying by A k times multiplies each component by its "
-            "eigenvalue to the k. <bookmark mark='c'/> Factor out the largest: every other component shrinks like "
-            "a ratio to the k. Here the ratio is about two thirds, and the error reaches ten to the minus "
-            f"thirteen after {kp} steps. <bookmark mark='d'/> Inverse iteration uses the inverse of A minus a "
-            "shift, mu, whose eigenvalues are one over lambda minus mu, so the eigenvalue nearest the shift "
-            f"dominates overwhelmingly. With a shift nought point three away, {ki} steps suffice, each a linear "
-            "solve with chapter three's factors."
-        ) as vo:
-            self.play(FadeIn(head), Create(ax), FadeIn(yt), FadeIn(xt), FadeIn(xl), FadeIn(yl))
-            vo.wait_until("a")
-            self.play(Write(rows[0]), FadeIn(whys[0]))
-            vo.wait_until("b")
-            self.play(TransformMatchingTex(rows[0].copy(), rows[1]), FadeIn(whys[1]))
-            vo.wait_until("c")
-            self.play(TransformMatchingTex(rows[1].copy(), rows[2]), FadeIn(whys[2]))
-            self.play(Create(sp), FadeIn(kpl), run_time=2)
-            vo.wait_until("d")
-            self.play(FadeIn(rows[3]), FadeIn(whys[3]))
-            self.play(Create(si), FadeIn(kil), run_time=1.5)
-        self.wait(0.4)
-        self.clear_scene()
 
     def qralg(self):
         q = load("qr")

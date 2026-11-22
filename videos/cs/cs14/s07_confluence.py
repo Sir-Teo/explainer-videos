@@ -6,20 +6,14 @@ from explainer.cs import *  # noqa: F403
 from videos.cs.cs14.common import CODE, CTRL, DATA, FUNC, HEAD, LAM, NO, PART, YES, grid_table, load, mono
 
 
-class Confluence(VoiceoverScene):
+class Confluence(WatchScene):
     def construct(self):
         self.card()
         self.graph_small()
         self.diamond()
-        self.bigger()
-        self.debruijn()
 
     def card(self):
-        card = chapter_card(6, r"Church--Rosser, \ and de Bruijn", r"Can two orders give two answers?",
-                            lit=(1936,), extra=((1936, r"Church and Rosser; \ Turing"),), part=PART)
-        with self.voiceover("Chapter six. Church Rosser, and de Bruijn."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(6, r"Church--Rosser, \ and de Bruijn", r"Can two orders give two answers?", lit=(1936,), extra=((1936, r"Church and Rosser; \ Turing"),), part=PART, said="Chapter six. Church Rosser, and de Bruijn.")
 
     def graph_small(self):
         c = load("confluence")["small"]
@@ -65,6 +59,9 @@ class Confluence(VoiceoverScene):
         self.clear_scene()
 
     def diamond(self):
+        self.ask(r"Two reduction orders both reach normal forms. \\ Can the normal forms differ?", [r"yes", r"no"], 1,
+                 say="Two different reduction orders both reach a normal form. Can they reach different ones?",
+                 reveal="No. Church and Rosser proved normal forms are unique.")
         head = label(r"The Church--Rosser theorem \ (1936)", font_size=34).to_edge(UP, buff=0.3)
         M = MathTex("M", font_size=40).move_to(UP * 1.6)
         A = MathTex("N_1", font_size=40).move_to(LEFT * 2 + UP * 0.0)
@@ -93,9 +90,7 @@ class Confluence(VoiceoverScene):
             "Church and Rosser's theorem concerns beta reduction in the pure calculus. <bookmark mark='a'/> If M "
             "reduces by zero or more steps to N one and N two, some P is reachable from both. The four sides of "
             "this diamond are reduction sequences, not necessarily single steps. <bookmark mark='b'/> Thus a beta "
-            "normal form, if one exists, is unique up to renaming bound variables. This does not guarantee "
-            "termination, and two weak evaluators can stop at different lambda bodies that are still beta "
-            "equivalent. Effects or additional rewrite rules need their own confluence argument. <bookmark "
+            "normal form, if one exists, is unique up to renaming bound variables. Effects or additional rewrite rules need their own confluence argument. <bookmark "
             "mark='c'/> Ordinary one-step beta reduction lacks the diamond property because a contracted redex "
             "can copy another redex. The formal parallel-reduction relation permits coordinated contraction with "
             "substitution; it has the joining property used to establish confluence. It is a proof device, not a "
@@ -113,78 +108,4 @@ class Confluence(VoiceoverScene):
         self.wait(0.3)
         self.clear_scene()
 
-    def bigger(self):
-        c = load("confluence")
-        head = label(r"A bigger graph", font_size=34).to_edge(UP, buff=0.3)
-        b = c["big"]
-        src = mono(b["source"].replace("\\", "λ"), 20, CODE).next_to(head, DOWN, buff=0.4)
-        depth = b["depth"]
-        levels = {}
-        for k, d in enumerate(depth):
-            levels.setdefault(d, []).append(k)
-        maxd = max(levels)
-        pts = {}
-        for d, ks in levels.items():
-            for r, k in enumerate(ks):
-                pts[k] = np.array([(r - (len(ks) - 1) / 2) * min(1.3, 11.0 / max(len(ks), 1)),
-                                   1.7 - 4.2 * d / max(maxd, 1), 0])
-        nf = set(b["normal_index"])
-        dots = VGroup(*[Dot(pts[k], radius=0.09 if k in nf else 0.07, color=YES if k in nf else CODE)
-                        for k in range(len(depth))])
-        lines = VGroup(*[Line(pts[i], pts[j], color=GREY_D, stroke_width=1.0) for i, j in b["edge_list"]])
-        fact = VGroup(
-            label(rf"{b['nodes']} terms, \ {b['edges']} single steps, \ {b['normal']} normal form", font_size=24,
-                  color=YES),
-            label(r"confluent: \ every pair of reducts has a common reduct \ (checked on the whole graph)",
-                  font_size=21, color=GREY_A),
-        ).arrange(DOWN, buff=0.15).to_edge(DOWN, buff=0.4)
-        with self.voiceover(
-            "A slightly bigger term already has a large graph of possible reductions. <bookmark mark='a'/> This one "
-            "has thirty terms connected by ninety-three single steps. <bookmark mark='b'/> Our reducer checks every "
-            "pair of terms in the graph: each pair has a common reduct, and there is exactly one normal form. The "
-            "theorem, confirmed on a small example."
-        ) as vo:
-            self.play(FadeIn(head), FadeIn(src))
-            vo.wait_until("a")
-            self.play(Create(lines), LaggedStart(*[FadeIn(d) for d in dots], lag_ratio=0.05), run_time=2.5)
-            vo.wait_until("b")
-            self.play(FadeIn(fact))
-        self.wait(0.3)
-        self.clear_scene()
 
-    def debruijn(self):
-        c = load("confluence")
-        head = label(r"Names, \ removed: \ de Bruijn indices", font_size=34).to_edge(UP, buff=0.3)
-        rows = [[k.replace("\\", "λ"), v] for k, v in c["debruijn"].items()]
-        tab = grid_table([r"with names", r"de Bruijn \ (1972)"], rows, widths=[5.6, 4.6], row_h=0.55, font_size=22,
-                         mono_cols=(0, 1)).next_to(head, DOWN, buff=0.6)
-        pts = VGroup(
-            label(r"a variable becomes a number: \ how many $\lambda$s up its binder is", font_size=22,
-                  color=GREY_A),
-            label("$\\alpha$-equivalent terms share indices; substitution still needs correct shifting", font_size=22,
-                  color=YES),
-            label(r"compilers and proof assistants use them inside; \ environments replace substitution \ "
-                  r"(Part 15)", font_size=22, color=HEAD),
-        ).arrange(DOWN, buff=0.2).next_to(tab, DOWN, buff=0.5)
-        with self.voiceover(
-            (
-            "De Bruijn indices remove bound-variable names. <bookmark mark='a'/> Zero refers to the nearest "
-            "enclosing binder, one to the next, and so on. Lambda x, x becomes lambda, zero. The Church numeral "
-            "two becomes lambda lambda, one applied to one applied to zero. Free variables require their own "
-            "representation. <bookmark mark='b'/> Alpha-equivalent terms then have the same bound-variable "
-            "structure. This removes fresh-name choices, but substitution still requires correct index shifting "
-            "when crossing binders. Indices do not make capture bugs impossible. <bookmark mark='c'/> Compilers "
-            "and proof assistants use these representations to make binding precise. Part 15 adds environments "
-            "and closures, which can implement application without repeatedly copying and renaming whole term "
-            "trees."
-        )
-        ) as vo:
-            self.play(FadeIn(head), FadeIn(tab))
-            vo.wait_until("a")
-            self.play(FadeIn(pts[0]))
-            vo.wait_until("b")
-            self.play(FadeIn(pts[1]))
-            vo.wait_until("c")
-            self.play(FadeIn(pts[2]))
-        self.wait(0.3)
-        self.clear_scene()

@@ -5,20 +5,24 @@ import numpy as np
 from videos.stats.stats48.common import *  # noqa: F403
 
 
-class Donsker(VoiceoverScene):
+class Donsker(StatsScene):
     def construct(self):
         self.card()
+        self.ask(r"$\sqrt n\,(F_n - F)$ converges to...",
+                 ["a Brownian bridge, run on the scale of $F$", "Brownian motion", "zero"], 0,
+                 say="A central limit theorem uniformly over a class. What does the scaled empirical process root n "
+                     "times F n minus F converge to?",
+                 reveal="A Brownian bridge, run on the scale of F: Donsker's theorem. It pins down to zero at both "
+                        "ends, because every CDF does.")
         self.definition()
         self.conditions()
         self.table()
         self.faithful()
         self.failures()
+        self.answer()
 
     def card(self):
-        card = chapter_card(5, r"Donsker classes", r"A central limit theorem, uniformly over a class", lit=(1952,), part=PART)
-        with self.voiceover("Chapter five. Donsker classes: a central limit theorem, uniformly over a class."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(5, r"Donsker classes", r"A central limit theorem, uniformly over a class", lit=(1952,), part=PART, said="Chapter five. Donsker classes: a central limit theorem, uniformly over a class.")
 
     def definition(self):
         rows = [

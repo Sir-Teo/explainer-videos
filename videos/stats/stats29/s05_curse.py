@@ -5,21 +5,29 @@ import numpy as np
 from videos.stats.stats29.common import *  # noqa: F403
 
 
-class Curse(VoiceoverScene):
+class Curse(StatsScene):
     def construct(self):
         self.card()
+        self.ask("Keep a kernel estimate's error fixed going from 1 to 10 dimensions. The sample size must grow...",
+                 ["tenfold", "exponentially"], 1,
+                 say="A kernel estimate in one dimension does well with a few hundred points. To keep the same "
+                     "error in ten dimensions, how must the sample grow?",
+                 reveal="Exponentially. The rate becomes n to the minus four over four plus d, because a local "
+                        "window holds almost no points: the curse of dimensionality.")
         self.rate()
         self.table()
         self.corners()
         self.neighbours()
         self.shell()
         self.escape()
+        self.answer()
+        self.checkpoint([("A kernel density estimate's best error rate?", "$n^{-4/5}$"),
+                         ("Why does smoothing fail in many dimensions?", "local windows hold too few points")],
+                        narration="Checkpoint. Densities.",
+                        answers_narration="N to the minus four fifths. And windows run out of points.")
 
     def card(self):
-        card = chapter_card(4, r"The curse of dimensionality", r"Why smoothing fails in many dimensions", lit=(1961,), part=PART)
-        with self.voiceover("Chapter four. The curse of dimensionality."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(4, r"The curse of dimensionality", r"Why smoothing fails in many dimensions", lit=(1961,), part=PART, said="Chapter four. The curse of dimensionality.")
 
     def rate(self):
         rows = [

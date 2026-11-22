@@ -5,9 +5,16 @@ import numpy as np
 from videos.stats.stats31.common import *  # noqa: F403
 
 
-class DataMatrix(VoiceoverScene):
+class DataMatrix(StatsScene):
     def construct(self):
         self.card()
+        self.ask("Mahalanobis distance from the mean accounts for...",
+                 ["only the means", "the variances and correlations", "nothing beyond Euclid"], 1,
+                 say="Mahalanobis distance measures how far a point sits from the centre of a cloud. What does it "
+                     "account for that ordinary distance doesn't?",
+                 reveal="The variances and correlations: distance in the cloud's own metric, standard deviations "
+                        "along its axes. A point off the cloud's diagonal is far even if it's close in Euclid's "
+                        "sense.")
         self.matrix()
         self.mvn()
         self.mahalanobis_def()
@@ -15,12 +22,10 @@ class DataMatrix(VoiceoverScene):
         self.picture()
         self.qq()
         self.history()
+        self.answer()
 
     def card(self):
-        card = chapter_card(1, r"The data matrix", r"Means, \ covariances, \ and distance", lit=(1936,), part=PART)
-        with self.voiceover("Chapter one. The data matrix."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(1, r"The data matrix", r"Means, \ covariances, \ and distance", lit=(1936,), part=PART, said="Chapter one. The data matrix.")
 
     def matrix(self):
         rows = [

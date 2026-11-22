@@ -9,21 +9,25 @@ PC = {"narrow": RES, "wide": SAMPLER, "t3": HIT}
 PN = {"narrow": r"$N(0, 0.5^2)$", "wide": r"$N(0, 3^2)$", "t3": r"Student $t_3$"}
 
 
-class Importance(VoiceoverScene):
+class Importance(StatsScene):
     def construct(self):
         self.card()
+        self.ask("Importance sampling with a proposal whose tails are lighter than the target's. The weights...",
+                 ["behave fine", "can have infinite variance"], 1,
+                 say="Sample from a distribution you can, and reweight toward the one you want. What if the "
+                     "proposal's tails are lighter than the target's?",
+                 reveal="The weights can have infinite variance: rare draws far out get enormous weights. The "
+                        "estimate looks stable, until it jumps.")
         self.idea()
         self.weights()
         self.table()
         self.optimal()
         self.reweight()
         self.psis_idea()
+        self.answer()
 
     def card(self):
-        card = chapter_card(1, r"Importance sampling", r"Sample from the wrong distribution, \ reweight", lit=(), part=PART)
-        with self.voiceover("Chapter one. Importance sampling."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(1, r"Importance sampling", r"Sample from the wrong distribution, \ reweight", lit=(), part=PART, said="Chapter one. Importance sampling.")
 
     def idea(self):
         rows = [

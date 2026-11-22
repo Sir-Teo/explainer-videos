@@ -27,7 +27,7 @@ def edge_point(box, v):
     return box.get_center() + v * (k + 0.06)
 
 
-class Iac(VoiceoverScene):
+class Iac(WatchScene):
     def construct(self):
         self.card()
         self.declare()
@@ -37,12 +37,7 @@ class Iac(VoiceoverScene):
         self.immutable()
 
     def card(self):
-        card = chapter_card(10, r"Infrastructure as code", r"How do you put a datacentre under version control?",
-                            lit=(1993, 2014), extra=((1993, r"Burgess: \ CFEngine"), (2014, r"Terraform")),
-                            part=PART)
-        with self.voiceover("Chapter ten. Infrastructure as code."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(10, r"Infrastructure as code", r"How do you put a datacentre under version control?", lit=(1993, 2014), extra=((1993, r"Burgess: \ CFEngine"), (2014, r"Terraform")), part=PART, said="Chapter ten. Infrastructure as code.")
 
     def declare(self):
         head = label(r"From clicks to code", font_size=36).to_edge(UP, buff=0.3)
@@ -106,6 +101,10 @@ class Iac(VoiceoverScene):
         self.clear_scene()
 
     def diff(self):
+        self.ask(r"An infrastructure tool's plan compares the code with...", [r"nothing: it creates everything",
+                 r"its recorded state of the cloud"], 1,
+                 say="An infrastructure-as-code tool prints a plan. What does it compare the code against?",
+                 reveal="Its recorded state: the diff is the plan.")
         p = load("plan")
         head = label(r"A plan is a diff", font_size=36).to_edge(UP, buff=0.3)
         widths = [1.8, 2.6, 1.9]

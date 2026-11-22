@@ -9,7 +9,7 @@ def t(s):
     return f"{s * 1e6:.0f} µs" if s < 1e-3 else (f"{s * 1000:.1f} ms" if s < 1 else f"{s:.2f} s")
 
 
-class BigMul(VoiceoverScene):
+class BigMul(WatchScene):
     def construct(self):
         self.card()
         self.numbers()
@@ -18,12 +18,8 @@ class BigMul(VoiceoverScene):
         self.timeline()
 
     def card(self):
-        card = chapter_card(7, r"What the FFT multiplies", r"How do you multiply numbers a million digits long?",
-                            lit=(1971,), extra=((1971, r"Sch\"onhage and Strassen"),
-                                                (2019, r"Harvey and van der Hoeven")), part=PART)
-        with self.voiceover("Chapter seven. What the FFT multiplies."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(7, r"What the FFT multiplies", r"How do you multiply numbers a million digits long?", lit=(1971,), extra=((1971, r"Sch\"onhage and Strassen"),
+                                                (2019, r"Harvey and van der Hoeven")), part=PART, said="Chapter seven. What the FFT multiplies.")
 
     def numbers(self):
         d = load("fft")
@@ -63,6 +59,10 @@ class BigMul(VoiceoverScene):
         self.clear_scene()
 
     def precision(self):
+        self.ask(r"Multiply huge integers with a floating-point FFT. \\ Can rounding give a wrong digit?", [r"never",
+                 r"yes, if the precision runs out"], 1,
+                 say="Multiply enormous numbers with a floating-point FFT. Can rounding produce a wrong digit?",
+                 reveal="Yes, once the numbers are big enough. The number-theoretic transform does the same work exactly.")
         c=load("fftcore")
         head=label("Certify every convolution coefficient",font_size=34).to_edge(UP,buff=.3)
         rows=[[f"{r['digits']:,}",t(r['fft_core_s']),f"{r['certificate']['coefficients']:,}",f"{r['max_residual']:.5f}"] for r in c['rows']]

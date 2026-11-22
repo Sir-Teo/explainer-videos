@@ -5,16 +5,23 @@ import numpy as np
 from videos.stats.stats64.common import *  # noqa: F403
 
 
-class IRT(LectureMixin, VoiceoverScene):
+class IRT(LectureMixin, StatsScene):
     def construct(self):
         self.card_voiceover("Chapter four. Item response theory: benchmarks as tests, models as test-takers.", 4,
                             r"IRT for benchmarks", r"Not every question is worth the same")
+        self.ask("In item response theory, a question every model answers correctly carries...",
+                 ["a lot of information", "almost no information"], 1,
+                 say="Not every question is worth the same. In item response theory, how much information does a "
+                     "question that every model answers correctly carry about their abilities?",
+                 reveal="Almost none: it can't separate anyone. The informative items are those near a model's "
+                        "ability, which is how a hundred well-chosen questions can stand in for thousands.")
         self.model()
         self.fit()
         self.chart()
         self.info()
         self.tiny()
         self.cautions()
+        self.answer()
 
     def model(self):
         self.lad_voiceover(

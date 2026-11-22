@@ -32,7 +32,7 @@ def comp_bound(k, m, delta):
     return (k * math.log(m) + math.log(1 / delta)) / (m - k)
 
 
-class Compression(VoiceoverScene):
+class Compression(WatchScene):
     def construct(self):
         self.card()
         self.occam()
@@ -42,13 +42,8 @@ class Compression(VoiceoverScene):
         self.summary()
 
     def card(self):
-        card = chapter_card(9, r"Learning is compression", r"Does a short description generalize?",
-                            lit=(1978, 1986), extra=((1978, r"Rissanen: \ minimum description length"),
-                                                     (1986, r"Littlestone and Warmuth: \ sample compression")),
-                            part=PART)
-        with self.voiceover("Chapter nine. Learning is compression."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(9, r"Learning is compression", r"Does a short description generalize?", lit=(1978, 1986), extra=((1978, r"Rissanen: \ minimum description length"),
+                                                     (1986, r"Littlestone and Warmuth: \ sample compression")), part=PART, said="Chapter nine. Learning is compression.")
 
     # ------------------------------------------------------------------ Occam's razor, as a theorem
     def occam(self):
@@ -135,6 +130,10 @@ class Compression(VoiceoverScene):
 
     # ------------------------------------------------------------------ a compression scheme, and its bound
     def scheme(self):
+        self.ask(r"Two hundred points labelled by a hidden rectangle. \\ Points needed to rebuild a consistent one:",
+                 [r"$200$", r"$4$"], 1,
+                 say="Two hundred points labelled by a hidden rectangle. How many of them do you need to keep to rebuild a consistent rectangle?",
+                 reveal="Four: the extreme positive points. A compression scheme of size four.")
         c = load("compress")
         r = {row["m"]: row for row in load("rect")["rows"]}
         m, kept = c["m"], c["kept"]

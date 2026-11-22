@@ -5,20 +5,27 @@ import numpy as np
 from videos.stats.stats48.common import *  # noqa: F403
 
 
-class Chaining(VoiceoverScene):
+class Chaining(StatsScene):
     def construct(self):
         self.card()
+        self.ask("The expected maximum of $N$ standard Gaussians grows like...",
+                 [r"$\sqrt{2 \log N}$", r"$\sqrt N$", "$N$"], 0,
+                 say="The union bound for a maximum. N standard Gaussians: how does their expected maximum grow?",
+                 reveal="Like root two log N: very slowly. Chaining refines nets at every scale, adding up these "
+                        "logarithms into Dudley's integral.")
         self.problem()
         self.tree()
         self.path()
         self.chart()
         self.dudley()
+        self.answer()
+        self.checkpoint([("The VC dimension of half-lines?", "1"),
+                         ("The expected max of $N$ standard Gaussians?", r"about $\sqrt{2 \log N}$")],
+                        narration="Checkpoint. Measuring classes.",
+                        answers_narration="One. And root two log N.")
 
     def card(self):
-        card = chapter_card(4, r"Chaining", r"Dudley's refining nets", lit=(1967,), part=PART)
-        with self.voiceover("Chapter four. Chaining: Dudley's refining nets."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(4, r"Chaining", r"Dudley's refining nets", lit=(1967,), part=PART, said="Chapter four. Chaining: Dudley's refining nets.")
 
     def problem(self):
         rows = [

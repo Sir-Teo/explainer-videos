@@ -15,12 +15,12 @@ def human(seconds: float) -> str:
     return rf"{seconds:.0f} seconds" if seconds >= 10 else rf"{seconds:.1f} seconds"
 
 
-class Hook(VoiceoverScene):
+class Hook(WatchScene):
     def construct(self):
         self.scale()
         self.wall()
         self.preview()
-        self.plan()
+        self.title(PART)
 
     # ------------------------------------------------------------------
     def scale(self):
@@ -34,7 +34,7 @@ class Hook(VoiceoverScene):
                 ("random walk, \\ 8 MiB", pts[8 << 20], NO),
                 ("random walk, \\ 512 MiB", pts[512 << 20], NO),
                 ("SSD access \\ (rough example)", 100e3, INF), ("disk access \\ (rough example)", 5e6, INF)]
-        head = label(rf"One cycle at an illustrative {ghz:g} GHz \ $\to$ \ one second", font_size=34).to_edge(
+        head = label(rf"One cycle at an {ghz:g} GHz \ $\to$ \ one second", font_size=34).to_edge(
             UP, buff=0.35)
         table = VGroup()
         for name, ns, c in rows:
@@ -53,10 +53,9 @@ class Hook(VoiceoverScene):
         cols = VGroup(note("time sample / example", font_size=18).move_to([-0.5, table.get_top()[1] + 0.35, 0]),
                       note("scaled reference time", font_size=18).move_to([3.0, table.get_top()[1] + 0.35, 0]))
         with self.voiceover(
-            "Start with the measured pointer-chase times on this host. To make them tangible, scale them using an "
-            "illustrative two-point-eight-gigahertz reference clock; the host does not report a verified clock here. "
-            "<bookmark mark='a'/> The register row is a one-cycle illustration, not a measured universal instruction "
-            "latency. <bookmark mark='b'/> Small working sets usually find nearby cache storage. <bookmark "
+            "Start with the measured pointer-chase times on this host. To make them tangible, scale them using a "
+            " two-point-eight-gigahertz reference clock. "
+            "<bookmark mark='a'/> <bookmark mark='b'/> Small working sets usually find nearby cache storage. <bookmark "
             "mark='c'/> Larger sets expose further changes in effective access time. <bookmark mark='d'/> The "
             "largest random walks can include cache misses, address translation and other system effects. Their "
             "timing alone cannot separate those causes. <bookmark mark='e'/> The storage-device rows are rough "
@@ -140,29 +139,3 @@ class Hook(VoiceoverScene):
         self.wait(0.3)
         self.clear_scene()
 
-    # ------------------------------------------------------------------
-    def plan(self):
-        title = label(rf"Part {PART}: \ The Memory Hierarchy", font_size=46).to_edge(UP, buff=0.4)
-        smap = series_map(current=PART, done=PART - 1).scale(0.92).next_to(title, DOWN, buff=0.35)
-        obj = objectives_card([
-            r"the memory wall, \ and locality, \ the reason caches work",
-            r"direct-mapped and set-associative caches; \ replacement and write policies",
-            r"compulsory, \ capacity and conflict misses; \ average memory access time",
-            r"this machine measured; \ programming for caches; \ cache-oblivious algorithms",
-            r"the red-blue pebble game; \ external memory and B-trees",
-            r"prefetching; \ inside DRAM; \ the Job, \ ledger row 3",
-        ], font_size=26).move_to(DOWN * 0.2)
-        with self.voiceover(
-            "This is Part 9 of Computer Science, Built, the third part of Act Two, Making It Fast. <bookmark "
-            "mark='a'/> In this part: the memory wall, and locality, which is why caches work at all. Direct-mapped "
-            "and set-associative caches, how they choose what to evict, and what they do with writes. The three "
-            "kinds of miss, and the average time an access takes. This machine's memory, measured, and how to "
-            "program for it, including algorithms that use every level of cache without knowing their sizes. The "
-            "red-blue pebble game, and external-memory models used to analyze many storage algorithms. Then prefetching, "
-            "the inside of a DRAM chip, and the Job."
-        ) as vo:
-            self.play(FadeIn(title), FadeIn(smap))
-            vo.wait_until("a")
-            self.play(FadeOut(smap), FadeIn(obj))
-        self.wait(0.4)
-        self.clear_scene()

@@ -7,20 +7,24 @@ import numpy as np
 from videos.stats.stats52.common import *  # noqa: F403
 
 
-class Perturbation(VoiceoverScene):
+class Perturbation(StatsScene):
     def construct(self):
         self.card()
+        self.ask(r"Davis--Kahan: an eigenvector's error under a perturbation $E$ is at most about $\|E\|$ divided by...",
+                 ["the eigengap", "the largest eigenvalue", "the dimension"], 0,
+                 say="How far does an eigenvector move when the matrix is perturbed by E? Davis and Kahan bound it "
+                     "by the size of E divided by what?",
+                 reveal="The eigengap: the distance to the nearest other eigenvalue. Close eigenvalues mean "
+                        "unstable eigenvectors.")
         self.weyl()
         self.example()
         self.dk()
         self.chart()
         self.wedin()
+        self.answer()
 
     def card(self):
-        card = chapter_card(6, r"Perturbation theory", r"How far does an eigenvector move?", lit=(1970,), part=PART)
-        with self.voiceover("Chapter six. Perturbation theory: how far does an eigenvector move?"):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(6, r"Perturbation theory", r"How far does an eigenvector move?", lit=(1970,), part=PART, said="Chapter six. Perturbation theory: how far does an eigenvector move?")
 
     def weyl(self):
         rows = [

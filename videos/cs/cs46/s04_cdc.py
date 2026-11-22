@@ -5,23 +5,22 @@ from videos.cs.cs46.common import (BG, DATA, HEAD, KERN, LAM, NO, PART, YES, cod
                                    module_box, mono, tag_box)
 
 
-class Cdc(VoiceoverScene):
+class Cdc(WatchScene):
     def construct(self):
         self.card()
         self.dual()
         self.wal()
         self.outbox()
         self.fold()
-        self.cqrs()
 
     def card(self):
-        card = chapter_card(3, r"Changes as events", r"Can a database's history become everyone's input?",
-                            lit=(2005,), extra=((2005, r"Fowler: \ event sourcing"),), part=PART)
-        with self.voiceover("Chapter three. Changes as events."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(3, r"Changes as events", r"Can a database's history become everyone's input?", lit=(2005,), extra=((2005, r"Fowler: \ event sourcing"),), part=PART, said="Chapter three. Changes as events.")
 
     def dual(self):
+        self.ask(r"An app writes the database, then the search index. \\ Two concurrent updates can leave them...",
+                 [r"always agreeing", r"disagreeing for ever"], 1,
+                 say="An application writes each change to its database and then to the search index. Two updates race. What can happen?",
+                 reveal="They land in different orders, and the two disagree for ever.")
         head = label(r"Two writes, \ no transaction", font_size=36).to_edge(UP, buff=0.3)
         app = module_box(r"application", HEAD, w=2.4, h=0.7).move_to([-4.6, 1.0, 0])
         db = module_box(r"database", DATA, w=2.4, h=0.7).move_to([0.4, 1.9, 0])
@@ -255,57 +254,6 @@ class Cdc(VoiceoverScene):
         self.wait(0.4)
         self.clear_scene()
 
-    def cqrs(self):
-        head = label(r"Event sourcing and CQRS", font_size=36).to_edge(UP, buff=0.3)
-        cmd = module_box(r"commands", HEAD, w=2.0, h=0.6).move_to([-5.6, 1.5, 0])
-        log = VGroup(*[Rectangle(width=0.42, height=0.6, stroke_color=GREY_B, stroke_width=1.2, fill_color=DATA,
-                                 fill_opacity=0.5) for _ in range(9)]).arrange(RIGHT, buff=0).move_to([-0.7, 1.5, 0])
-        log_l = label(r"the event log: \ the system of record", font_size=17, color=DATA).next_to(log, UP, buff=0.12)
-        a0 = Arrow(cmd.get_right(), log.get_left(), buff=0.1, color=GREY_B, stroke_width=2)
-        a0_l = label(r"validate, \ append", font_size=16, color=GREY_B).next_to(a0, DOWN, buff=0.08)
-        views = VGroup(*[module_box(t, c, w=2.8, h=0.55, font=17) for t, c in (
-            (r"balances by account", YES), (r"monthly statements", LAM), (r"search index", KERN),
-            (r"fraud features", NO))]).arrange(DOWN, buff=0.18).move_to([4.6, 1.0, 0])
-        views_l = label(r"read models: \ folds", font_size=17, color=YES).next_to(views, UP, buff=0.12)
-        fan = VGroup(*[Arrow(log.get_right(), v.get_left(), buff=0.1, color=GREY_C, stroke_width=1.5,
-                             max_tip_length_to_length_ratio=0.08) for v in views])
-        pros = VGroup(
-            wrapped_label(r"commands and queries are separated: \ one write model, \ as many read models as there "
-                          r"are questions, \ each rebuilt by replaying the log", 6.2, font_size=19, color=YES),
-            wrapped_label(r"an audit trail for free, \ and a bug in a view is fixed by replaying into a corrected "
-                          r"one", 6.2, font_size=19, color=YES),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.22)
-        cons = VGroup(
-            wrapped_label(r"read models lag the log: \ a user may not see their own write at once \ (Part 39)", 6.0,
-                          font_size=19, color=NO),
-            wrapped_label(r"events are kept for ever, \ so their schemas must evolve compatibly \ (Part 43), \ and "
-                          r"forgetting a person is hard", 6.0, font_size=19, color=NO),
-            wrapped_label(r"replay grows with history: \ periodic snapshots of the state bound it", 6.0,
-                          font_size=19, color=HEAD),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.22)
-        VGroup(pros, cons).arrange(RIGHT, buff=0.5, aligned_edge=UP).next_to(views, DOWN, buff=0.6).set_x(0)
-        with self.voiceover(
-            "Event sourcing, as Martin Fowler described it in 2005, builds a whole application this way. "
-            "<bookmark mark='a'/> Commands are checked against the current state and, if valid, append events to a "
-            "log, and that log is the system of record. <bookmark mark='b'/> Each question gets its own read model, a"
-            " fold over the same events: balances, statements, a search index, fraud features. Separating the write "
-            "model from the read models is called command query responsibility segregation, or CQRS. A buggy view is "
-            "rebuilt by replay. <bookmark mark='c'/> The costs: read models lag the log, so users may not see their "
-            "own writes at once. Events are kept for ever, so their schemas must evolve, as in Part 43, and "
-            "forgetting a person is hard. And replay grows with history, which snapshots bound."
-        ) as vo:
-            self.play(FadeIn(head), FadeIn(cmd))
-            vo.wait_until("a")
-            self.play(GrowArrow(a0), FadeIn(a0_l), FadeIn(log_l))
-            self.play(LaggedStart(*[FadeIn(r, shift=LEFT * 0.2) for r in log], lag_ratio=0.2), run_time=1.8)
-            vo.wait_until("b")
-            self.play(FadeIn(views_l), LaggedStart(*[AnimationGroup(GrowArrow(f), FadeIn(v)) for f, v in
-                                                     zip(fan, views)], lag_ratio=0.4), run_time=2.4)
-            self.play(FadeIn(pros))
-            vo.wait_until("c")
-            self.play(LaggedStart(*[FadeIn(x) for x in cons], lag_ratio=0.6), run_time=3)
-        self.wait(0.4)
-        self.clear_scene()
 
 
 _ = (BG, LAM)

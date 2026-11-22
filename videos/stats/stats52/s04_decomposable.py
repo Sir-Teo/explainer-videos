@@ -3,20 +3,23 @@ from __future__ import annotations
 from videos.stats.stats52.common import *  # noqa: F403
 
 
-class Decomposable(VoiceoverScene):
+class Decomposable(StatsScene):
     def construct(self):
         self.card()
+        self.ask("Negahban, Ravikumar, Wainwright and Yu's theorem needs the regularizer to be...",
+                 ["decomposable over a pair of subspaces", "differentiable"], 0,
+                 say="One theorem for sparse, group and low-rank problems. What does it ask of the regularizer?",
+                 reveal="Decomposability: the penalty splits additively across a model subspace and its complement, "
+                        "as l one does over a support and the nuclear norm over a row and column space.")
         self.idea()
         self.theorem()
         self.examples()
         self.rsc()
         self.rates()
+        self.answer()
 
     def card(self):
-        card = chapter_card(3, r"Decomposable regularizers", r"One theorem for sparse, \ group and low-rank problems", lit=(2012,), part=PART)
-        with self.voiceover("Chapter three. Decomposable regularizers: one theorem for sparse, group and low-rank problems."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(3, r"Decomposable regularizers", r"One theorem for sparse, \ group and low-rank problems", lit=(2012,), part=PART, said="Chapter three. Decomposable regularizers: one theorem for sparse, group and low-rank problems.")
 
     def idea(self):
         rows = [

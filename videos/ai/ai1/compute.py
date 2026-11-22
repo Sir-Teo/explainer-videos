@@ -182,7 +182,7 @@ def _download(url: str, dst: Path) -> Path:
         return dst
     dst.parent.mkdir(parents=True, exist_ok=True)
     for attempt in range(5):  # Gutenberg resets the odd connection
-        r = subprocess.run(["curl", "-f", "-sS", "-L", "--retry", "5", "-m", "600", "-o",
+        r = subprocess.run(["curl", "-f", "-sS", "-L", "--retry", "2", "-m", "600", "-o",
                             str(dst) + ".part", url])
         partial = Path(str(dst) + ".part")
         if r.returncode == 0 and partial.exists() and partial.stat().st_size > 0:
@@ -236,13 +236,37 @@ def falcon_chapter(t: str, n: int) -> str:
     return clean(body)
 
 
+def mirror_urls(n: int) -> list[str]:
+    """The book on Project Gutenberg's own mirror (pglaf.org), for when www.gutenberg.org is down: the file tree
+    is the book number's digits but the last, then the number (1342 -> 1/3/4/1342/)."""
+    d = str(n)
+    path = "/".join(d[:-1]) if len(d) > 1 else "0"
+    base = f"https://gutenberg.pglaf.org/{path}/{n}"
+    return [f"{base}/{n}-0.txt", f"{base}/{n}.txt", f"{base}/{n}-8.txt"]
+
+
+def _book(n: int, dst: Path) -> Path:
+    """Download book n from Gutenberg, falling back to its mirror (the texts are the same releases; the corpus
+    check below notes any revision)."""
+    try:
+        return _download(GUTENBERG.format(n=n), dst)
+    except RuntimeError as err:
+        for url in mirror_urls(n):
+            try:
+                print(f"    {err}; trying the mirror {url}", flush=True)
+                return _download(url, dst)
+            except RuntimeError:
+                continue
+        raise
+
+
 def compute_corpus():
     books = {}
     for n, title in BOOKS.items():
-        raw = _download(GUTENBERG.format(n=n), BOOK_DIR / f"{n}.txt").read_text(encoding="utf-8", errors="replace")
+        raw = _book(n, BOOK_DIR / f"{n}.txt").read_text(encoding="utf-8", errors="replace")
         books[n] = clean(strip_gutenberg(raw))
         assert len(books[n]) > 30_000, (n, title, len(books[n]))
-    raw = _download(GUTENBERG.format(n=FALCON), BOOK_DIR / f"{FALCON}.txt").read_text(encoding="utf-8")
+    raw = _book(FALCON, BOOK_DIR / f"{FALCON}.txt").read_text(encoding="utf-8")
     assert "Release date: January 1, 2026" in raw and "The Maltese falcon" in raw
     body = strip_gutenberg(raw)
     texts = {**books, FALCON: body}

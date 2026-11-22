@@ -3,10 +3,16 @@ from __future__ import annotations
 from videos.stats.stats58.common import *  # noqa: F403
 
 
-class Games(LectureMixin, VoiceoverScene):
+class Games(LectureMixin, StatsScene):
     def construct(self):
         self.card_voiceover("Chapter eight. Game-theoretic probability: Shafer and Vovk's foundation, in which probability "
                        "itself is defined by betting.", 8, r"Game-theoretic probability", r"Probability as a game", lit=(1939,))
+        self.ask("In Shafer and Vovk's game, ``this event has probability zero'' means...",
+                 ["a gambler can grow infinitely rich if it happens", "it never happens"], 0,
+                 say="Game-theoretic probability: Shafer and Vovk define probability by betting. What does "
+                     "probability zero mean in their game?",
+                 reveal="That a gambler, betting only on fair terms, can become infinitely rich if the event "
+                        "happens. Laws of probability become strategies that win when they fail.")
         self.protocol()
         self.upper()
         self.lln()
@@ -14,6 +20,11 @@ class Games(LectureMixin, VoiceoverScene):
         self.forecaster_worked()
         self.evidence()
         self.scale()
+        self.answer()
+        self.checkpoint([("A confidence sequence against a fixed-$n$ interval?", "wider, valid at every time"),
+                         ("A product of e-values from successive batches?", "a valid e-value")],
+                        narration="Checkpoint. Evidence over time.",
+                        answers_narration="Wider. And still a valid e-value.")
 
     def protocol(self):
         heading = label('The forecasting game', font_size=30, color=WEALTHC).move_to([0, 3.35, 0])

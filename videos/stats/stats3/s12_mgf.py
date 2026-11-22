@@ -5,20 +5,24 @@ import numpy as np
 from videos.stats.stats3.common import *  # noqa: F403
 
 
-class MGF(VoiceoverScene):
+class MGF(StatsScene):
     def construct(self):
         self.card()
+        self.ask("Which of these has no moment generating function?",
+                 ["the normal", "the exponential", "the Cauchy"], 2,
+                 say="Which of these has no moment generating function near zero: the normal, the exponential, or "
+                     "the Cauchy?",
+                 reveal="The Cauchy: its tails are too heavy for any exponential moment. Its characteristic "
+                        "function still exists, and that's the tool that always works.")
         self.definition()
         self.normal()
         self.sums()
         self.gamma_sum()
         self.cf()
+        self.answer()
 
     def card(self):
-        card = chapter_card(11, r"Generating functions", r"Part 2's polynomials, \ grown up", lit=(1810,), part=PART)
-        with self.voiceover("Chapter eleven. Generating functions."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(11, r"Generating functions", r"Part 2's polynomials, \ grown up", lit=(1810,), part=PART, said="Chapter eleven. Generating functions.")
 
     def definition(self):
         rows = [

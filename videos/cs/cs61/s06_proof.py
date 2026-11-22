@@ -70,7 +70,7 @@ while PATH7[-1] >= 7:
     PATH7.append(x // 2 if x % 2 == 0 else 3 * x + 1)
 
 
-class Proof(VoiceoverScene):
+class Proof(WatchScene):
     def construct(self):
         self.card()
         self.life()
@@ -81,12 +81,8 @@ class Proof(VoiceoverScene):
         self.trust()
 
     def card(self):
-        card = chapter_card(5, r"Proof as research", r"How does a conjecture become a theorem?", lit=(1958, 2014),
-                            extra=((1958, r"Haselgrove: \ P\'olya refuted"), (1966, r"Lander and Parkin"),
-                                   (1976, r"four colours, \ by computer"), (2014, r"Flyspeck")), part=PART)
-        with self.voiceover("Chapter five. Proof as research."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(5, r"Proof as research", r"How does a conjecture become a theorem?", lit=(1958, 2014), extra=((1958, r"Haselgrove: \ P\'olya refuted"), (1966, r"Lander and Parkin"),
+                                   (1976, r"four colours, \ by computer"), (2014, r"Flyspeck")), part=PART, said="Chapter five. Proof as research.")
 
     # ------------------------------------------------------------------
     def life(self):
@@ -352,6 +348,10 @@ class Proof(VoiceoverScene):
 
     # ------------------------------------------------------------------
     def polya(self):
+        self.ask(r"P\'olya's conjecture holds for every $n$ \\ up to hundreds of millions. True for all $n$?",
+                 [r"yes", r"no"], 1,
+                 say="Polya's conjecture holds for every number up to hundreds of millions. Is it true for all of them?",
+                 reveal="No: it first fails near nine hundred and six million. Small cases can lie.")
         head = label(r"When the evidence misleads", font_size=36).to_edge(UP, buff=0.3)
         cols = {r"\Omega(n)": DATA}
         lam = cmath(r"\lambda(n) = (-1)^{", r"\Omega(n)", r"}", colors=cols, font_size=32)

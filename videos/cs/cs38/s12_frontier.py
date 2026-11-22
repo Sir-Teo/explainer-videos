@@ -4,7 +4,7 @@ from explainer.cs import *  # noqa: F403
 from videos.cs.cs38.common import (DATA, HEAD, KERN, LAM, NO, PART, YES, grid_table, load)
 
 
-class Frontier(VoiceoverScene):
+class Frontier(WatchScene):
     def construct(self):
         self.card()
         self.checking()
@@ -12,15 +12,15 @@ class Frontier(VoiceoverScene):
         self.open()
 
     def card(self):
-        card = chapter_card(11, r"Frontier: \ proving and breaking", r"How do we know a distributed system is correct?",
-                            lit=(2013, 2022), extra=((2015, r"Newcombe et al.: \ TLA$^+$ at Amazon"),
+        self.chapter(11, r"Frontier: \ proving and breaking", r"How do we know a distributed system is correct?", lit=(2013, 2022), extra=((2015, r"Newcombe et al.: \ TLA$^+$ at Amazon"),
                                                      (2015, r"Verdi, \ IronFleet"),
-                                                     (2022, r"Lewis-Pye: \ quadratic BFT")), part=PART)
-        with self.voiceover("Chapter eleven. Frontier: proving and breaking."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+                                                     (2022, r"Lewis-Pye: \ quadratic BFT")), part=PART, said="Chapter eleven. Frontier: proving and breaking.")
 
     def checking(self):
+        self.ask(r"Can a working distributed system be \\ \emph{proved} correct by machine?", [r"not yet",
+                 r"yes: Verdi and IronFleet, 2015"], 1,
+                 say="Can an implementation of a replicated system be proved correct, machine-checked, all the way down?",
+                 reveal="Yes. Verdi and IronFleet did it in 2015.")
         r = load("raft")
         head = label(r"Three ways to be sure", font_size=36).to_edge(UP, buff=0.3)
         rows = VGroup(

@@ -5,20 +5,28 @@ import numpy as np
 from videos.stats.stats20.common import *  # noqa: F403
 
 
-class Uncertainty(VoiceoverScene):
+class Uncertainty(StatsScene):
     def construct(self):
         self.card()
+        self.ask("Four standard errors on offer. For a complex survey, use...",
+                 ["the model-based SE", "the design-based SE", "a bootstrap of individuals"], 1,
+                 say="Four standard errors are on offer for the sodium slope. For a stratified, clustered, weighted "
+                     "survey, which is right?",
+                 reveal="The design-based one, which respects the strata, the clusters and the weights. The others "
+                        "treat the people as independent draws, and they weren't.")
         self.four()
         self.bootstrap()
         self.intervals()
         self.mean()
         self.silent()
+        self.answer()
+        self.checkpoint([("One day's recall as the exposure biases the slope?", "toward zero: attenuation"),
+                         ("A complex survey's standard error?", "design-based: strata, PSUs and weights")],
+                        narration="Checkpoint. The model and its uncertainty.",
+                        answers_narration="Toward zero. And design-based.")
 
     def card(self):
-        card = chapter_card(7, r"Uncertainty", r"Which standard error?", part=PART)
-        with self.voiceover("Chapter seven. Uncertainty."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(7, r"Uncertainty", r"Which standard error?", part=PART, said="Chapter seven. Uncertainty.")
 
     def four(self):
         d = load("uncert")

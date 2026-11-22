@@ -5,20 +5,24 @@ import numpy as np
 from videos.stats.stats5.common import *  # noqa: F403
 
 
-class Joint(VoiceoverScene):
+class Joint(StatsScene):
     def construct(self):
         self.card()
+        self.ask("Two dice. The larger shows 2. Chance the smaller is 1?",
+                 ["$1/2$", "$2/3$", "$1/3$"], 1,
+                 say="Two dice. You learn the larger of the two shows a two. What's the chance the smaller shows a "
+                     "one?",
+                 reveal="Two thirds. Three cells have a maximum of two, and two of them hold a one. A conditional "
+                        "distribution is one row of the joint table, rescaled.")
         self.discrete()
         self.surface()
         self.slicing()
         self.bayes()
         self.dice()
+        self.answer()
 
     def card(self):
-        card = chapter_card(1, r"Joint, marginal, conditional", r"Three ways to read one table", lit=(1886,), part=PART)
-        with self.voiceover("Chapter one. Joint, marginal, conditional."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(1, r"Joint, marginal, conditional", r"Three ways to read one table", lit=(1886,), part=PART, said="Chapter one. Joint, marginal, conditional.")
 
     def discrete(self):
         d = load("galton")

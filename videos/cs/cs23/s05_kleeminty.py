@@ -4,7 +4,7 @@ from explainer.cs import *  # noqa: F403
 from videos.cs.cs23.common import (CTRL, DATA, HEAD, LAM, NO, PART, YES, View3, grid_table, load, mono, words)
 
 
-class KleeMinty(VoiceoverScene):
+class KleeMinty(WatchScene):
     def construct(self):
         self.card()
         self.cube()
@@ -12,13 +12,15 @@ class KleeMinty(VoiceoverScene):
         self.smoothed()
 
     def card(self):
-        card = chapter_card(4, r"Exponential in theory, \ fast in practice", r"Can the walk take forever?",
-                            lit=(1972, 2001), extra=((1972, r"Klee--Minty"), (2001, r"smoothed analysis")), part=PART)
-        with self.voiceover("Chapter four. Exponential in theory, fast in practice."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(4, r"Exponential in theory, \ fast in practice", r"Can the walk take forever?", lit=(1972, 2001), extra=((1972, r"Klee--Minty"), (2001, r"smoothed analysis")), part=PART, said="Chapter four. Exponential in theory, fast in practice.")
 
     def cube(self):
+        self.wrong_idea(r"An exponential worst case \\ means a slow algorithm",
+                        r"Worst cases can be vanishingly rare: \\ simplex is fast in practice",
+                        narration="Simplex has an exponential worst case. Surely that makes it slow?",
+                        right_narration="In practice it's fast. Its worst cases are fragile, and smoothed analysis explains "
+                                        "why: a little noise destroys them.")
+        self.clear_scene()
         k = load("kleeminty")
         V = [tuple(v) for v in k["cube_vertices"]]
         F = k["cube_faces"]
@@ -82,6 +84,9 @@ class KleeMinty(VoiceoverScene):
         self.clear_scene()
 
     def counts(self):
+        self.ask(r"The Klee--Minty cube in $n$ dimensions, Dantzig's rule. \\ Pivots?", [r"$n$", r"$n^2$", r"$2^n - 1$"], 2,
+                 say="Klee and Minty's squashed cube in n dimensions. How many pivots does Dantzig's rule take?",
+                 reveal="Two to the n minus one: every vertex of the cube.")
         k = load("kleeminty")
         head = label(r"Pivots on Klee--Minty cubes", font_size=34).to_edge(UP, buff=0.35)
         rows = [[str(r["n"]), words(r["dantzig"]), words(2 ** r["n"] - 1), words(r["bland"]), words(r["steepest"])]
@@ -170,3 +175,10 @@ class KleeMinty(VoiceoverScene):
             self.play(FadeIn(notes[3]))
         self.wait(0.3)
         self.clear_scene()
+        self.checkpoint(
+            [(r"What does the dual of an LP give you?", r"A bound, and at optimum a certificate"),
+             (r"Why is simplex fast in practice?", r"Bad cases are fragile: smoothed analysis")],
+            narration="Checkpoint. What does the dual of a linear program give you? And why is simplex fast in practice, "
+                      "despite Klee and Minty?",
+            answers_narration="A bound on the primal, which at the optimum certifies it. And its bad cases are fragile, which "
+                              "smoothed analysis makes precise.")

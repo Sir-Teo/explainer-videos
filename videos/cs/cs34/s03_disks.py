@@ -4,7 +4,7 @@ from explainer.cs import *  # noqa: F403
 from videos.cs.cs34.common import (HEAD, LAM, NO, PART, YES, grid_table, load, platter)
 
 
-class Disks(VoiceoverScene):
+class Disks(WatchScene):
     def construct(self):
         self.card()
         self.mechanics()
@@ -13,11 +13,7 @@ class Disks(VoiceoverScene):
         self.load_()
 
     def card(self):
-        card = chapter_card(2, r"Disks", r"Why is reading in order hundreds of times faster?", lit=(1956, 1973),
-                            extra=((1956, r"IBM 350"), (1973, r"IBM 3340, \ ``Winchester''")), part=PART)
-        with self.voiceover("Chapter two. Disks."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(2, r"Disks", r"Why is reading in order hundreds of times faster?", lit=(1956, 1973), extra=((1956, r"IBM 350"), (1973, r"IBM 3340, \ ``Winchester''")), part=PART, said="Chapter two. Disks.")
 
     def mechanics(self):
         d = load("disk")
@@ -83,6 +79,10 @@ class Disks(VoiceoverScene):
         self.clear_scene()
 
     def sequential(self):
+        self.ask(r"A disk reads $150$ MB/s in order. \\ Random 4 KiB reads manage about...", [r"the same",
+                 r"a tenth", r"a five-hundredth"], 2,
+                 say="A disk reads a hundred and fifty megabytes a second in order. How fast are random four-kilobyte reads?",
+                 reveal="Hundreds of times slower: every read waits for a seek and a turn of the platter.")
         d = load("disk")
         head = label(r"Random against sequential", font_size=36).to_edge(UP, buff=0.3)
         W = 10.0

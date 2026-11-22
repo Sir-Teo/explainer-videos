@@ -6,21 +6,29 @@ from scipy import special
 from videos.stats.stats25.common import *  # noqa: F403
 
 
-class Rasch(VoiceoverScene):
+class Rasch(StatsScene):
     def construct(self):
         self.card()
+        self.ask("Rasch: ability 2, item difficulty 2. The chance of a correct answer?",
+                 ["0.5", "0.88", "0.12"], 0,
+                 say="Rasch's model: the log odds of a correct answer is ability minus difficulty. A person of "
+                     "ability two meets an item of difficulty two. What's the chance of a correct answer?",
+                 reveal="One half: the log odds are zero. An item's difficulty is the ability at which it's a coin "
+                        "flip.")
         self.model()
         self.curves()
         self.recovery()
         self.abilities()
         self.information()
         self.beyond()
+        self.answer()
+        self.checkpoint([("Fay--Herriot shrinks most where?", "the area's sample is small"),
+                         (r"Rasch: ability equals difficulty. $P(\text{correct})$?", "$1/2$")],
+                        narration="Checkpoint. Small areas, studies, and exams.",
+                        answers_narration="Where the sample is small. And one half.")
 
     def card(self):
-        card = chapter_card(13, r"Item response theory", r"Exams as mixed models", lit=(1960,), part=PART)
-        with self.voiceover("Chapter thirteen. Item response theory."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(13, r"Item response theory", r"Exams as mixed models", lit=(1960,), part=PART, said="Chapter thirteen. Item response theory.")
 
     def model(self):
         rows = [

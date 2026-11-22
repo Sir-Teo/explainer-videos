@@ -6,21 +6,25 @@ from explainer.stats.board import coverage_board, load_all
 from videos.stats.stats17.common import *  # noqa: F403
 
 
-class Stationarity(VoiceoverScene):
+class Stationarity(StatsScene):
     def construct(self):
         self.card()
+        self.ask("100 observations, lag-one correlation 0.9. For the mean, worth about how many independent ones?",
+                 ["100", "about 50", "about 5"], 2,
+                 say="A hundred observations of a series whose neighbours correlate at point nine. For estimating "
+                     "the mean, they're worth about how many independent observations?",
+                 reveal="About five: a hundred times one minus point nine over one plus point nine. Dependence is "
+                        "expensive.")
         self.definitions()
         self.trio()
         self.sample_acf()
         self.mean_variance()
         self.intervals()
         self.board()
+        self.answer()
 
     def card(self):
-        card = chapter_card(1, r"Stationarity and the ACF", r"What stays the same while the series moves?", part=PART)
-        with self.voiceover("Chapter one. Stationarity and the autocorrelation function."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(1, r"Stationarity and the ACF", r"What stays the same while the series moves?", part=PART, said="Chapter one. Stationarity and the autocorrelation function.")
 
     def definitions(self):
         rows = [

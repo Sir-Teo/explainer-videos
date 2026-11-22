@@ -8,21 +8,32 @@ INNOCENT = S.KEPT
 GUILTY = S.RESID
 
 
-class Prosecutor(VoiceoverScene):
+class Prosecutor(StatsScene):
     def construct(self):
         self.card()
+        self.wrong_idea("The chance of the evidence if innocent is the chance of innocence",
+                        r"$P(\text{evidence} \mid \text{innocent}) \neq P(\text{innocent} \mid \text{evidence})$: the prior odds count",
+                        narration="Here's the prosecutor's fallacy. If evidence this rare would arise by chance "
+                                  "only once in seventy-three million, then the chance of innocence is one in "
+                                  "seventy-three million.",
+                        right_narration="No. That's the chance of the evidence given innocence, not the chance of "
+                                        "innocence given the evidence. Bayes' theorem needs the alternative and the "
+                                        "prior odds too.")
+        self.ask("Squaring ``1 in 8,500'' for two deaths in one family assumes...",
+                 ["the deaths are rare", "the two deaths are independent", "the parent is guilty"], 1,
+                 say="In court, an expert squared one in eight thousand five hundred to get the chance of two such "
+                     "deaths in one family. What did squaring assume?",
+                 reveal="That the two deaths were independent. Shared genes and shared homes make that doubtful, "
+                        "and a probability of the evidence is still not a probability of guilt.")
         self.case()
         self.squared()
         self.transposed()
         self.compare()
         self.aftermath()
+        self.answer()
 
     def card(self):
-        card = chapter_card(7, r"The prosecutor's fallacy", r"The chance of the evidence is not the chance of guilt",
-                            lit=(1763,), part=PART)
-        with self.voiceover("Chapter seven. The prosecutor's fallacy."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(7, r"The prosecutor's fallacy", r"The chance of the evidence is not the chance of guilt", lit=(1763,), part=PART, said="Chapter seven. The prosecutor's fallacy.")
 
     def case(self):
         d = load("clark")

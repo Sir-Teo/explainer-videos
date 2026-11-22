@@ -31,7 +31,7 @@ def frames_rgba(frames: np.ndarray, on, off) -> np.ndarray:
     return a
 
 
-class Models(VoiceoverScene, MovingCameraScene):
+class Models(WatchScene):
     def construct(self):
         self.card()
         self.church()
@@ -39,14 +39,9 @@ class Models(VoiceoverScene, MovingCameraScene):
         self.counters()
         self.minsky()
         self.automata()
-        self.web()
 
     def card(self):
-        card = chapter_card(8, r"Other machines, same power", r"Do different definitions of computing agree?",
-                            lit=(1936, 1967, 1970, 2004), part=PART)
-        with self.voiceover("Chapter eight. Other machines, same power."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(8, r"Other machines, same power", r"Do different definitions of computing agree?", lit=(1936, 1967, 1970, 2004), part=PART, said="Chapter eight. Other machines, same power.")
 
     # ------------------------------------------------------------------
     def church(self):
@@ -208,6 +203,10 @@ class Models(VoiceoverScene, MovingCameraScene):
 
     # ------------------------------------------------------------------
     def minsky(self):
+        self.ask(r"Counter machines: pack every counter into one number. \\ How many bowls are enough?",
+                 [r"one", r"two", r"one per counter"], 1,
+                 say="Pack all the counters into a single number. How many bowls of pebbles does a machine then need?",
+                 reveal="Two. Same power, at an exponential price in steps.")
         d = load("counters")
         r = next(x for x in d["runs"] if x["a"] == 3 and x["b"] == 4)
         thm = theorem_card(r"Minsky (1961, 1967)", r"Two counters are enough: \ any counter machine, and so any Turing "
@@ -312,37 +311,3 @@ class Models(VoiceoverScene, MovingCameraScene):
         self.wait(0.3)
         self.clear_scene()
 
-    # ------------------------------------------------------------------
-    def web(self):
-        names = [(r"Turing \\ machines", CTRL), (r"$\lambda$-calculus", FUNC), (r"recursive \\ functions", FUNC),
-                 (r"counter \\ machines", DATA), (r"Rule 110", HEAD), (r"Game of \\ Life", YES),
-                 (r"Pebble-32 \\ (Part 6)", C.CS_CODE), (r"your \\ laptop", GREY_A)]
-        R = 2.8
-        boxes = VGroup()
-        for i, (t, c) in enumerate(names):
-            ang = PI / 2 - i * TAU / len(names)
-            b = node_box(t, c, font_size=24).move_to([R * 1.45 * np.cos(ang), R * np.sin(ang) - 0.3, 0])
-            boxes.add(b)
-        links = VGroup()
-        for i in range(len(boxes)):
-            for j in range(i + 1, len(boxes)):
-                links.add(Line(boxes[i].get_center(), boxes[j].get_center(), color=GREY_D, stroke_width=1.2))
-        links.set_z_index(-1)
-        for b in boxes:
-            b[0].set_fill(BACKGROUND, opacity=1)
-        center = label(r"each simulates \\ every other", font_size=30, color=GREY_A).move_to(DOWN * 0.3)
-        center.add_background_rectangle(color=BACKGROUND, opacity=1, buff=0.1)
-        with self.voiceover(
-            "Machines with tapes; functions alone; recursive definitions, which Gödel and Kleene studied; bowls of "
-            "pebbles; a row of cells; a grid of cells. <bookmark mark='a'/> Each was proposed independently, each looks "
-            "completely different, and each can simulate every other one. They all compute exactly the same functions. "
-            "<bookmark mark='b'/> So will Pebble, the computer we build in Part 6, and so does the laptop you are "
-            "watching on, apart from its finite memory."
-        ) as vo:
-            self.play(LaggedStart(*[FadeIn(b, scale=0.9) for b in boxes[:6]], lag_ratio=0.15), run_time=2.0)
-            vo.wait_until("a")
-            self.play(Create(links, lag_ratio=0.02), FadeIn(center), run_time=2.0)
-            vo.wait_until("b")
-            self.play(LaggedStart(*[FadeIn(b, scale=0.9) for b in boxes[6:]], lag_ratio=0.3))
-        self.wait(0.3)
-        self.clear_scene()

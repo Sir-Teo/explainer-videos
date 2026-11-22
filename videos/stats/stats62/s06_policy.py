@@ -6,10 +6,16 @@ from videos.stats.stats62.common import *  # noqa: F403
 from videos.stats.stats62.compute import _true_value
 
 
-class Policy(LectureMixin, VoiceoverScene):
+class Policy(LectureMixin, StatsScene):
     def construct(self):
         self.card_voiceover("Chapter five. Policy learning: whom should we treat, and how good is the rule we learned?", 5,
                             r"Policy learning", r"From effects to decisions", lit=(2018,))
+        self.ask("Empirical welfare maximization picks the treatment rule that maximizes...",
+                 ["estimated welfare, from doubly robust scores", "the outcome model's fit"], 0,
+                 say="From effects to decisions: whom should we treat? Kitagawa and Tetenov's empirical welfare "
+                     "maximization picks the rule that maximizes what?",
+                 reveal="Estimated welfare: the average of doubly robust scores under the rule, within a class of "
+                        "simple rules. Its regret shrinks like root of the class's complexity over n.")
         self.problem()
         self.ewm()
         self.scores()
@@ -19,6 +25,7 @@ class Policy(LectureMixin, VoiceoverScene):
         self.board()
         self.winners()
         self.regret()
+        self.answer()
 
     def problem(self):
         self.lad_voiceover(

@@ -4,21 +4,16 @@ from explainer.cs import *  # noqa: F403
 from videos.cs.cs29.common import (BG, DATA, HEAD, NO, PART, YES, flow_box, grid_table, load, mono)
 
 
-class Prf(VoiceoverScene):
+class Prf(WatchScene):
     def construct(self):
         self.card()
         self.ggm()
         self.feistel()
-        self.switching()
 
     def card(self):
-        card = chapter_card(7, r"Pseudorandom functions and permutations", r"Can a key choose a random-looking "
-                            r"function?", lit=(1973, 1986, 1988),
-                            extra=((1973, r"Feistel's networks"), (1986, r"Goldreich--Goldwasser--Micali"),
-                                   (1988, r"Luby--Rackoff")), part=PART)
-        with self.voiceover("Chapter seven. Pseudorandom functions and permutations."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(7, r"Pseudorandom functions and permutations", r"Can a key choose a random-looking "
+                            r"function?", lit=(1973, 1986, 1988), extra=((1973, r"Feistel's networks"), (1986, r"Goldreich--Goldwasser--Micali"),
+                                   (1988, r"Luby--Rackoff")), part=PART, said="Chapter seven. Pseudorandom functions and permutations.")
 
     def ggm(self):
         g = load("ggm")
@@ -82,6 +77,10 @@ class Prf(VoiceoverScene):
         self.clear_scene()
 
     def feistel(self):
+        self.ask(r"A Feistel round uses a function $F$ that is \emph{not} invertible. \\ Is the round invertible?",
+                 [r"no", r"yes"], 1,
+                 say="Each Feistel round uses a function that can't be inverted. Can the round still be undone?",
+                 reveal="Yes: XOR the same F of the same half again. Any function gives a permutation.")
         f = load("feistel")
         head = label(r"Feistel networks: \ permutations from functions", font_size=34).to_edge(UP, buff=0.3)
         Lb = flow_box(r"$L$", DATA, w=1.3, h=0.6, font=24)
@@ -141,57 +140,3 @@ class Prf(VoiceoverScene):
         self.wait(0.3)
         self.clear_scene()
 
-    def switching(self):
-        head = label(r"Function or permutation? \ The birthday again", font_size=34).to_edge(UP, buff=0.3)
-        ax = Axes(x_range=[0, 40, 8], y_range=[0, 1.0, 0.25], x_length=6.4, y_length=3.4,
-                  axis_config={"color": GREY_D, "include_numbers": False}).next_to(head, DOWN, buff=0.6).to_edge(
-            LEFT, buff=1.0)
-        import math
-        n = 64
-        pts = [ax.c2p(e, 1 - math.exp(-(2.0 ** e) ** 2 / 2 ** (n + 1))) for e in [x / 4 for x in range(0, 161)]]
-        cur = VMobject(color=NO, stroke_width=3).set_points_as_corners(pts)
-        xt = VGroup(*[MathTex(rf"2^{{{e}}}", font_size=20, color=GREY_A).next_to(ax.c2p(e, 0), DOWN, buff=0.1)
-                      for e in (0, 8, 16, 24, 32, 40)])
-        yt = VGroup(*[label(t, font_size=15, color=GREY_A).next_to(ax.c2p(0, y), LEFT, buff=0.1)
-                      for y, t in ((0, "0"), (0.5, "0.5"), (1, "1"))])
-        xl = label(r"blocks encrypted under one key \ (64-bit blocks)", font_size=17, color=GREY_A).next_to(
-            xt, DOWN, buff=0.12)
-        yl = label(r"chance a random \textbf{function} would have repeated", font_size=17, color=GREY_A).next_to(
-            ax, UP, buff=0.1).align_to(ax, LEFT)
-        mark = DashedLine(ax.c2p(32, 0), ax.c2p(32, 1), color=HEAD, stroke_width=1.5)
-        notes = VGroup(
-            label(r"a permutation never repeats an output; \\ a random function does, \ after about \\ "
-                  r"$2^{n/2}$ queries \ (Part 17's birthday)", font_size=20, color=WHITE),
-            label(r"so a PRP is a PRF, \\ up to an advantage of $q^2 / 2^{n+1}$", font_size=20, color=DATA),
-            label(r"for 64-bit blocks \ (3DES, \ Blowfish): \\ $2^{32}$ blocks is only 32 GB", font_size=20,
-                  color=NO),
-            label(r"Sweet32 \ (2016): \ colliding blocks in \\ long HTTPS sessions leaked cookies", font_size=20,
-                  color=HEAD),
-            label(r"so AES has 128-bit blocks, \\ and keys are changed long before $2^{64}$", font_size=20,
-                  color=YES),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.28).next_to(ax, RIGHT, buff=0.6).align_to(ax, UP)
-        with self.voiceover(
-            "Is a pseudorandom permutation also a pseudorandom function? Almost, and the difference matters. "
-            "<bookmark mark='a'/> A permutation never gives the same output twice. A random function does, by the "
-            "birthday paradox of Part 17, after about the square root of the number of possible outputs. <bookmark "
-            "mark='b'/> Until then the two look the same: the advantage of telling them apart is at most q squared "
-            "over two to the n plus one, for q queries. <bookmark mark='c'/> For a sixty-four-bit block, as in "
-            "triple DES or Blowfish, the square root is two to the thirty-two blocks: just thirty-two gigabytes. "
-            "<bookmark mark='d'/> In 2016 the Sweet32 attack used exactly this. In long-lived HTTPS connections "
-            "with sixty-four-bit ciphers, colliding ciphertext blocks revealed the XOR of two plaintext blocks, and "
-            "eventually a secret cookie. <bookmark mark='e'/> This is why AES has a hundred-and-twenty-eight-bit "
-            "block, and why protocols change keys long before the birthday bound."
-        ) as vo:
-            self.play(FadeIn(head), Create(ax), FadeIn(xt), FadeIn(yt), FadeIn(xl), FadeIn(yl))
-            vo.wait_until("a")
-            self.play(Create(cur), FadeIn(notes[0]), run_time=2.0)
-            vo.wait_until("b")
-            self.play(FadeIn(notes[1]))
-            vo.wait_until("c")
-            self.play(Create(mark), FadeIn(notes[2]))
-            vo.wait_until("d")
-            self.play(FadeIn(notes[3]))
-            vo.wait_until("e")
-            self.play(FadeIn(notes[4]))
-        self.wait(0.3)
-        self.clear_scene()

@@ -5,20 +5,24 @@ import numpy as np
 from videos.stats.stats48.common import *  # noqa: F403
 
 
-class GlivenkoCantelli(VoiceoverScene):
+class GlivenkoCantelli(StatsScene):
     def construct(self):
         self.card()
+        self.ask(r"$\sup_t |F_n(t) - F(t)| \to 0$ almost surely. That is...",
+                 ["the Glivenko--Cantelli theorem", "the central limit theorem", "Donsker's theorem"], 0,
+                 say="A law of large numbers for a whole class at once: the empirical CDF approaches the true one, "
+                     "uniformly in t, almost surely. Whose theorem is that?",
+                 reveal="Glivenko and Cantelli's, 1933: the fundamental theorem of statistics. The class of "
+                        "half-lines is small enough for uniformity.")
         self.definition()
         self.sequences()
         self.symmetrization()
         self.chart()
         self.finite()
+        self.answer()
 
     def card(self):
-        card = chapter_card(1, r"Glivenko--Cantelli classes", r"A law of large numbers for a whole class at once", lit=(1933,), part=PART)
-        with self.voiceover("Chapter one. Glivenko–Cantelli classes: a law of large numbers for a whole class at once."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(1, r"Glivenko--Cantelli classes", r"A law of large numbers for a whole class at once", lit=(1933,), part=PART, said="Chapter one. Glivenko–Cantelli classes: a law of large numbers for a whole class at once.")
 
     def definition(self):
         rows = [

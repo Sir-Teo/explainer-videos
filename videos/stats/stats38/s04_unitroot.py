@@ -6,9 +6,15 @@ from scipy import stats
 from videos.stats.stats38.common import *  # noqa: F403
 
 
-class UnitRoot(VoiceoverScene):
+class UnitRoot(StatsScene):
     def construct(self):
         self.card()
+        self.ask("A shock to a random walk...",
+                 ["dies out", "is permanent"], 1,
+                 say="Two series driven by the same shocks: a random walk, and a stationary autoregression. What "
+                     "happens to a shock in the random walk?",
+                 reveal="It's permanent: every shock moves the level for good. In the autoregression it fades. "
+                        "Unit-root tests ask which world you're in, and they have little power.")
         self.two()
         self.regression()
         self.distribution()
@@ -16,12 +22,10 @@ class UnitRoot(VoiceoverScene):
         self.breaks()
         self.macro()
         self.board()
+        self.answer()
 
     def card(self):
-        card = chapter_card(3, r"Unit roots", r"Does the series come back?", lit=(1979, 1992), part=PART)
-        with self.voiceover("Chapter three. Unit roots."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(3, r"Unit roots", r"Does the series come back?", lit=(1979, 1992), part=PART, said="Chapter three. Unit roots.")
 
     def two(self):
         d = load("unitroot")

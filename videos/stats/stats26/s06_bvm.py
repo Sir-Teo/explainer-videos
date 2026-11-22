@@ -5,21 +5,24 @@ import numpy as np
 from videos.stats.stats26.common import *  # noqa: F403
 
 
-class BvM(VoiceoverScene):
+class BvM(StatsScene):
     def construct(self):
         self.card()
+        self.ask("A regular model, plenty of data. The posterior looks like...",
+                 ["the prior", "a normal at the MLE, variance $1/(nI)$", "a uniform"], 1,
+                 say="A correctly specified, regular model, and plenty of data. What does the posterior look like?",
+                 reveal="A normal centred at the maximum likelihood estimate, with variance one over n I. That's "
+                        "Bernstein and von Mises: the truce between Bayesians and frequentists.")
         self.statement()
         self.why()
         self.panels()
         self.coverage()
         self.tau_case()
         self.failures()
+        self.answer()
 
     def card(self):
-        card = chapter_card(5, r"Bernstein--von Mises", r"The truce, \ stated and seen", lit=(), part=PART)
-        with self.voiceover("Chapter five. The Bernstein–von Mises theorem."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(5, r"Bernstein--von Mises", r"The truce, \ stated and seen", lit=(), part=PART, said="Chapter five. The Bernstein–von Mises theorem.")
 
     def statement(self):
         rows = [

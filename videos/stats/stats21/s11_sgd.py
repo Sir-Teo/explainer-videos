@@ -6,9 +6,15 @@ from explainer.stats.board import coverage_board, load_all
 from videos.stats.stats21.common import *  # noqa: F403
 
 
-class Stochastic(VoiceoverScene):
+class Stochastic(StatsScene):
     def construct(self):
         self.card()
+        self.ask("SGD with averaged iterates (Polyak--Ruppert) is, asymptotically...",
+                 ["worse than its last iterate", "as efficient as the full optimum", "not convergent"], 1,
+                 say="Stochastic gradient takes one noisy observation at a time. Average its iterates, as Polyak "
+                     "and Ruppert suggested. How good is the average, asymptotically?",
+                 reveal="As efficient as the full-data optimum: the averaged iterate attains the best variance, "
+                        "from one pass through the data.")
         self.robbins_monro()
         self.median_path()
         self.sgd()
@@ -16,12 +22,10 @@ class Stochastic(VoiceoverScene):
         self.step_sizes()
         self.beyond()
         self.board()
+        self.answer()
 
     def card(self):
-        card = chapter_card(10, r"Stochastic gradient", r"One observation at a time", lit=(1951,), part=PART)
-        with self.voiceover("Chapter ten. Stochastic gradient methods."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(10, r"Stochastic gradient", r"One observation at a time", lit=(1951,), part=PART, said="Chapter ten. Stochastic gradient methods.")
 
     def robbins_monro(self):
         rows = [

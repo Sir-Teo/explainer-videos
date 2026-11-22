@@ -5,9 +5,14 @@ import numpy as np
 from videos.stats.stats32.common import *  # noqa: F403
 
 
-class Computing(VoiceoverScene):
+class Computing(StatsScene):
     def construct(self):
         self.card()
+        self.ask("Least angle regression computes the whole lasso path at the cost of about...",
+                 ["one least-squares fit", "$n$ fits", "$p^2$ fits"], 0,
+                 say="The lasso's coefficients trace a path as lambda falls. Efron, Hastie, Johnstone and "
+                     "Tibshirani's least angle regression computes the whole path. At what cost?",
+                 reveal="About one least-squares fit: the path is piecewise linear, so it only needs its kinks.")
         self.cd()
         self.tricks()
         self.lars_idea()
@@ -15,12 +20,10 @@ class Computing(VoiceoverScene):
         self.path()
         self.order()
         self.ols_end()
+        self.answer()
 
     def card(self):
-        card = chapter_card(5, r"Computing the path", r"Coordinate descent and least angle regression", lit=(2004,), part=PART)
-        with self.voiceover("Chapter five. Computing the lasso."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(5, r"Computing the path", r"Coordinate descent and least angle regression", lit=(2004,), part=PART, said="Chapter five. Computing the lasso.")
 
     def cd(self):
         rows = [

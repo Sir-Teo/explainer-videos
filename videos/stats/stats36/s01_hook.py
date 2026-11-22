@@ -3,7 +3,7 @@ from __future__ import annotations
 from videos.stats.stats36.common import *  # noqa: F403
 
 
-class Hook(VoiceoverScene):
+class Hook(StatsScene):
     def construct(self):
         self.story()
         self.experiment()
@@ -11,7 +11,7 @@ class Hook(VoiceoverScene):
         self.table()
         self.verdict()
         self.question()
-        self.objectives()
+        self.title(PART)
 
     def story(self):
         tl = timeline(lit=(1986,)).to_edge(UP, buff=0.35)
@@ -153,30 +153,4 @@ class Hook(VoiceoverScene):
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
                 self.play(FadeIn(rows[k], shift=RIGHT * 0.2))
-        self.clear_scene()
-
-    def objectives(self):
-        head = VGroup(label(r"Part 36", font_size=34, color=GREY_B), label(r"Causes Without Experiments", font_size=56)).arrange(DOWN, buff=0.25)
-        obj = objectives_card([
-            r"unconfoundedness and overlap; \ causal diagrams and d-separation",
-            r"back door, \ front door, \ do-calculus; \ Simpson resolved",
-            r"g-computation, \ propensity scores, \ weighting, \ double robustness, \ DML",
-            r"heterogeneous effects and causal forests; \ sensitivity analysis",
-            r"smoking and lung cancer; \ time-varying treatments; \ LaLonde revisited",
-        ], color=TAUC, font_size=26)
-        prereq = note(r"prerequisites: \ Part 35").to_corner(DL, buff=0.3)
-        built = note(r"built: \ \texttt{statkit.causal} (II); \ the causal graph; \ data: \ NSW").to_corner(DR, buff=0.3)
-        with self.voiceover(
-            "<bookmark mark='a'/> Part thirty-six: causes without experiments. <bookmark mark='b'/> We'll state the "
-            "assumptions that replace randomization; draw causal diagrams and read off what to adjust for, and what not to; "
-            "resolve Simpson's paradox; estimate effects by g-computation, propensity scores, weighting, doubly robust and "
-            "double machine learning methods, each graded against the World's truth; estimate effects that vary between "
-            "people; measure how wrong an unmeasured confounder could make us; revisit smoking and lung cancer and "
-            "treatments that change over time; and return to LaLonde."
-        ) as vo:
-            vo.wait_until("a")
-            self.play(FadeIn(head, shift=UP * 0.2))
-            vo.wait_until("b")
-            self.play(FadeOut(head), FadeIn(obj, shift=UP * 0.2), FadeIn(prereq), FadeIn(built))
-        self.wait(1.0)
         self.clear_scene()

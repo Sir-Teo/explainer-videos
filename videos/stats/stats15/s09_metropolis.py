@@ -10,9 +10,14 @@ def trace(ax, ys, color, n=None):
     return polyline(ax, np.arange(len(ys)), ys, color, stroke_width=1.6)
 
 
-class Metropolis(VoiceoverScene):
+class Metropolis(StatsScene):
     def construct(self):
         self.card()
+        self.ask("Does a Metropolis walk need the posterior's normalizing constant?",
+                 ["yes", "no: only ratios"], 1,
+                 say="The Metropolis walk samples the posterior. Does it need the normalizing constant, the "
+                     "integral we couldn't compute?",
+                 reveal="No. It only ever uses ratios of the posterior at two points, and the constant cancels.")
         self.algorithm()
         self.why_works()
         self.steps()
@@ -20,12 +25,10 @@ class Metropolis(VoiceoverScene):
         self.burnin()
         self.answer()
         self.functions()
+        self.answer()
 
     def card(self):
-        card = chapter_card(8, r"When grids fail", r"A Metropolis walk through the posterior", lit=(1953,), part=PART)
-        with self.voiceover("Chapter eight. When grids fail."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(8, r"When grids fail", r"A Metropolis walk through the posterior", lit=(1953,), part=PART, said="Chapter eight. When grids fail.")
 
     def algorithm(self):
         rows = [

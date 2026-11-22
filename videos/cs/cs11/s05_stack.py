@@ -7,7 +7,7 @@ from videos.cs.cs11.common import (BG, CODE, CTRL, DATA, FUNC, HEAD, NO, PART, Y
                                    load, region)
 
 
-class Stack(VoiceoverScene):
+class Stack(WatchScene):
     def construct(self):
         self.card()
         self.convention()
@@ -16,11 +16,7 @@ class Stack(VoiceoverScene):
         self.debugger()
 
     def card(self):
-        card = chapter_card(4, r"The call stack", r"How can separately written functions call each other?",
-                            part=PART)
-        with self.voiceover("Chapter four. The call stack."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(4, r"The call stack", r"How can separately written functions call each other?", part=PART, said="Chapter four. The call stack.")
 
     def convention(self):
         head = label(r"A calling convention: \ Pebble's", font_size=34).to_edge(UP, buff=0.3)
@@ -95,6 +91,9 @@ class Stack(VoiceoverScene):
         self.clear_scene()
 
     def fact(self):
+        self.ask(r"\texttt{fact(10)}, recursively. \\ Frames on the stack at the deepest point?", [r"1", r"10", r"100"], 1,
+                 say="The recursive factorial of ten. At its deepest point, how many frames are on the stack?",
+                 reveal="Ten, one for each pending multiplication.")
         st = load("stack")["fact"]
         head = label(r"\texttt{fact(10)}, \ frame by frame", font_size=34).to_edge(UP, buff=0.3)
         frames = VGroup()

@@ -5,9 +5,15 @@ import numpy as np
 from videos.stats.stats41.common import *  # noqa: F403
 
 
-class MultipleImputation(VoiceoverScene):
+class MultipleImputation(StatsScene):
     def construct(self):
         self.card()
+        self.ask("Rubin's rules: total variance = average within-imputation variance plus...",
+                 ["$(1 + 1/m)$ times the between-imputation variance", "nothing"], 0,
+                 say="Multiple imputation fills the holes m times and combines. Rubin's rules: the total variance "
+                     "is the average within-imputation variance plus what?",
+                 reveal="One plus one over m, times the variance between imputations: how much the imputations "
+                        "disagree is how much the holes cost.")
         self.idea()
         self.copies()
         self.rules()
@@ -20,12 +26,10 @@ class MultipleImputation(VoiceoverScene):
         self.congenial()
         self.derived()
         self.board()
+        self.answer()
 
     def card(self):
-        card = chapter_card(4, r"Multiple imputation", r"Fill the holes several times, \ and say how much they differ", lit=(1987,), part=PART)
-        with self.voiceover("Chapter four. Multiple imputation."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(4, r"Multiple imputation", r"Fill the holes several times, \ and say how much they differ", lit=(1987,), part=PART, said="Chapter four. Multiple imputation.")
 
     def idea(self):
         rows = fit_rows(VGroup(

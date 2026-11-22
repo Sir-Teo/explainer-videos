@@ -17,7 +17,7 @@ def petersen(center, r1=1.5, r2=0.75):
     return pos
 
 
-class ZeroKnowledge(VoiceoverScene):
+class ZeroKnowledge(WatchScene):
     def construct(self):
         self.card()
         self.cave()
@@ -26,14 +26,13 @@ class ZeroKnowledge(VoiceoverScene):
         self.simulator()
 
     def card(self):
-        card = chapter_card(7, r"Zero knowledge", r"Can you prove something without revealing anything else?",
-                            lit=(1985, 1986), extra=((1985, r"GMR"), (1986, r"Goldreich--Micali--Wigderson")),
-                            part=PART)
-        with self.voiceover("Chapter seven. Zero knowledge."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(7, r"Zero knowledge", r"Can you prove something without revealing anything else?", lit=(1985, 1986), extra=((1985, r"GMR"), (1986, r"Goldreich--Micali--Wigderson")), part=PART, said="Chapter seven. Zero knowledge.")
 
     def cave(self):
+        self.ask(r"Someone without the secret word enters the cave. \\ They survive one challenge with probability...",
+                 [r"$0$", r"$1/2$", r"$1/4$"], 1,
+                 say="Someone who doesn't know the secret word walks into the cave. What's their chance of surviving one challenge?",
+                 reveal="One half: they guess which side you'll call. Twenty rounds bring it below one in a million.")
         head = label(r"Ali Baba's cave", font_size=34).to_edge(UP, buff=0.35)
         ring = Annulus(inner_radius=1.0, outer_radius=1.5, color=GREY_D, fill_opacity=0.6).shift(LEFT * 3.4)
         door = Line(ring.get_center() + UP * 1.0, ring.get_center() + UP * 1.5, color=NO, stroke_width=8)
@@ -91,7 +90,7 @@ class ZeroKnowledge(VoiceoverScene):
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.3).to_edge(RIGHT, buff=0.5).shift(UP * 0.4)
         fit_right(steps)
         with self.voiceover(
-            "Goldreich, Micali and Wigderson obtained zero-knowledge proofs for NP using suitable commitments and reductions. Here is the three-colouring teaching protocol. <bookmark mark='a'/> Every round freshly permutes the three colours. <bookmark mark='b'/> The prover commits to each vertex using a salted hash. Binding and hiding require computational assumptions; a fixed hash and a seeded Python generator do not supply an unconditional security theorem. <bookmark mark='c'/> The honest verifier uniformly selects an edge only after commitments have been sent. <bookmark mark='d'/> The prover opens the endpoint commitments, and the verifier checks both hashes and the two colours. Our full public commitment and opening records are retained. <bookmark mark='e'/> Different colours pass; equal colours fail. Fresh independent rounds amplify soundness under the commitment assumptions. The public graph and the claim of colourability are already known to the verifier."
+            "Goldreich, Micali and Wigderson obtained zero-knowledge proofs for NP using suitable commitments and reductions. Here is the three-colouring teaching protocol. <bookmark mark='a'/> Every round freshly permutes the three colours. <bookmark mark='b'/> The prover commits to each vertex using a salted hash. <bookmark mark='c'/> The honest verifier uniformly selects an edge only after commitments have been sent. <bookmark mark='d'/> The prover opens the endpoint commitments, and the verifier checks both hashes and the two colours. <bookmark mark='e'/> Different colours pass; equal colours fail. Fresh independent rounds amplify soundness under the commitment assumptions. The public graph and the claim of colourability are already known to the verifier."
         ) as vo:
             self.play(FadeIn(head), Create(es), FadeIn(boxes))
             vo.wait_until("a")
@@ -123,7 +122,7 @@ class ZeroKnowledge(VoiceoverScene):
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.3).next_to(tab, RIGHT, buff=0.7).align_to(tab, UP)
         fit_right(notes)
         with self.voiceover(
-            "The measured cheating experiment fixes an invalid colouring rather than solving a cryptographic attack. <bookmark mark='a'/> The supplied colouring has two bad edges among fifteen. <bookmark mark='b'/> With independent uniform edge challenges and binding commitments, it survives k rounds with probability thirteen fifteenths to the k. The table compares two thousand actual trials with this exact finite model. <bookmark mark='c'/> A colouring with only one bad edge has the weaker survival bound one minus one over the number of edges, raised to k. <bookmark mark='d'/> Three hundred and one rounds put that bound below one in a billion. These probabilities assume correct commitment binding and independent challenges; our seeded experiment demonstrates the mechanics."
+            "The measured cheating experiment fixes an invalid colouring rather than solving a cryptographic attack. <bookmark mark='a'/> The supplied colouring has two bad edges among fifteen. <bookmark mark='b'/> With independent uniform edge challenges and binding commitments, it survives k rounds with probability thirteen fifteenths to the k. The table compares two thousand actual trials with this exact finite model. <bookmark mark='c'/> A colouring with only one bad edge has the weaker survival bound one minus one over the number of edges, raised to k. <bookmark mark='d'/> Three hundred and one rounds put that bound below one in a billion."
         ) as vo:
             self.play(FadeIn(head), FadeIn(tab), FadeIn(notes[0]))
             for mk, n_ in zip("bcd", notes[1:]):
@@ -160,7 +159,7 @@ class ZeroKnowledge(VoiceoverScene):
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.3).next_to(bars, RIGHT, buff=0.8).align_to(bars, UP)
         fit_right(lines)
         with self.voiceover(
-            "The histogram measures one carefully limited part of the verifier’s view. <bookmark mark='a'/> For a valid colouring and a fresh uniform colour permutation, the two opened endpoint colours form a uniform ordered pair of distinct colours. <bookmark mark='b'/> A simulator can sample that pair distribution without knowing the colouring. This equality is exact for the marginal distribution. <bookmark mark='c'/> Six thousand real and simulated pair samples fluctuate around one sixth for each ordered pair. Their empirical similarity alone is not a proof of zero knowledge. <bookmark mark='d'/> A complete zero-knowledge argument must simulate commitments, openings, verifier randomness and the full interaction. It uses the commitment assumptions and, for arbitrary verifiers, the appropriate simulator and rewinding analysis. <bookmark mark='e'/> Fiat–Shamir can remove interaction from suitable public-coin protocols under additional security conditions. It is not a universal transformation from any proof into a secure signature. Our exercise is explicitly a transcript-bound teaching demonstration."
+            "The histogram measures one carefully limited part of the verifier’s view. <bookmark mark='a'/> For a valid colouring and a fresh uniform colour permutation, the two opened endpoint colours form a uniform ordered pair of distinct colours. <bookmark mark='b'/> A simulator can sample that pair distribution without knowing the colouring. This equality is exact for the marginal distribution. <bookmark mark='c'/> Six thousand real and simulated pair samples fluctuate around one sixth for each ordered pair. <bookmark mark='d'/> A complete zero-knowledge argument must simulate commitments, openings, verifier randomness and the full interaction. It uses the commitment assumptions and, for arbitrary verifiers, the appropriate simulator and rewinding analysis. <bookmark mark='e'/> Fiat–Shamir can remove interaction from suitable public-coin protocols under additional security conditions."
         ) as vo:
             self.play(FadeIn(head), FadeIn(bars), FadeIn(leg))
             for mk, ln in zip("abcde", lines):

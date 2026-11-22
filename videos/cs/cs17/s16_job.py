@@ -7,23 +7,21 @@ from videos.cs.cs17.common import (BG, CODE, COST, CTRL, DATA, FUNC, HEAD, LAM, 
                                    grid_table, load, mono, words)
 
 
-class Job(VoiceoverScene):
+class Job(WatchScene):
     def construct(self):
         self.card()
         self.program()
         self.counts()
-        self.where()
         self.ledger()
         self.verdict()
 
     def card(self):
-        card = chapter_card(15, r"The Job, \ hashed", r"How fast is constant time?", lit=(1953,),
-                            extra=((1953, r"Luhn's hash table"),), part=PART)
-        with self.voiceover("Chapter fifteen. The Job, hashed."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(15, r"The Job, \ hashed", r"How fast is constant time?", lit=(1953,), extra=((1953, r"Luhn's hash table"),), part=PART, said="Chapter fifteen. The Job, hashed.")
 
     def program(self):
+        self.ask(r"The Job, version 2, with a hash table. \\ Against version 1's sort?", [r"slower", r"faster"], 1,
+                 say="Version two of the Job uses a hash table. Faster or slower than sorting?",
+                 reveal="Faster: expected constant time per word instead of n log n overall.")
         d = load("job")
         src = d["source"]
         k = next(i for i, l in enumerate(src) if l.startswith("fn count"))
@@ -113,43 +111,6 @@ class Job(VoiceoverScene):
         self.wait(0.3)
         self.clear_scene()
 
-    def where(self):
-        d = load("job")
-        model, mem = d["model"], d["memory"]
-        head = label(r"Audit the projection: \ which quantities were executed?", font_size=32).to_edge(UP, buff=0.3)
-        tab = grid_table([r"evidence", r"what ran", r"scope"], [
-            [r"native event counter", r"all thirty novels; \ full report checked", r"observed control-flow events"],
-            [r"emulator", r"48 passages, \ one corpus-sized image", r"36 fit / 12 held out"],
-            [r"out-of-order core", rf"3 passages; \ weighted IPC {d['ipc']:.2f}", r"passage throughput only"],
-            [r"toy cache hierarchy", r"selected accesses; \ assumed array layout", r"partial trace model"],
-        ], widths=[3.0, 6.0, 3.7], row_h=0.62, font_size=20, mono_cols=(),
-            colors=[[DATA, GREY_A, DATA], [LAM, GREY_A, LAM], [HEAD, GREY_A, HEAD], [GREY_B, GREY_A, GREY_B]]).next_to(head, DOWN, buff=0.48)
-        warnings = VGroup(
-            label(rf"fit rank {model['rank']} of {model['columns']}: \ correlated coefficients do not identify unique category costs", font_size=21, color=NO),
-            label(rf"{len(d['full_exceeds_training_max'])} corpus event features exceed the training maximum; \ held-out error is local validation", font_size=20, color=HEAD),
-            MathTex(r"\text{scenario cycles}=\frac{\text{fitted instructions}}{\text{sampled IPC}}+\text{assumed miss penalties}", font_size=29, color=YES),
-            label(r"overlap omitted; \ sampled stalls may be counted twice; \ not a proved upper bound", font_size=20, color=GREY_B),
-        ).arrange(DOWN, buff=0.22).next_to(tab, DOWN, buff=0.4)
-        with self.voiceover(
-            "This panel is a model audit, not a measured time breakdown. <bookmark mark='a'/> The fitted "
-            "event matrix is rank deficient. Different coefficient choices can predict the same sampled "
-            "counts, so grouped coefficients cannot uniquely attribute instructions or identify a "
-            "bottleneck. <bookmark mark='b'/> A separate C trace follows selected data accesses using an "
-            "assumed array layout through the toy cache hierarchy. It is not the compiled program's full "
-            "memory trace and omits some accesses. <bookmark mark='c'/> We add incremental miss penalties"
-            " to instructions divided by sampled IPC. This additive scenario omits overlap and may double"
-            " count stalls already reflected in IPC; it is not a proven upper bound. <bookmark mark='d'/>"
-            " The three core samples use the same corpus-sized image. Their weighted IPC is observed on "
-            "those passages. Neither that IPC nor the cache model is a full-corpus execution, and neither"
-            " alone proves the causal effect of division."
-        ) as vo:
-            self.play(FadeIn(head), FadeIn(tab))
-            vo.wait_until("a"); self.play(FadeIn(warnings[0]))
-            vo.wait_until("b"); self.play(FadeIn(warnings[1]))
-            vo.wait_until("c"); self.play(FadeIn(warnings[2:]))
-            vo.wait_until("d"); self.play(Indicate(tab.cells[3][1], color=HEAD))
-        self.wait(0.3)
-        self.clear_scene()
 
     def ledger(self):
         d = load("job")
@@ -164,7 +125,7 @@ class Job(VoiceoverScene):
         ).arrange(DOWN, buff=0.12).to_edge(DOWN, buff=0.3)
         with self.voiceover(
             "The ledger adds a projected row. <bookmark mark='a'/> Its time combines native corpus "
-            "events, fitted instructions, three-passage core throughput and an assumed partial cache "
+            "events, fitted instructions, three-passage core throughput and an partial cache "
             "trace at the ledger clock. The number on screen is the scenario estimate; the full corpus "
             "was not executed by the emulator or core. <bookmark mark='b'/> The displayed speed ratios "
             "compare those ledger estimates under their stated assumptions. They illustrate the possible "

@@ -4,7 +4,7 @@ from explainer.cs import *  # noqa: F403
 from videos.cs.cs36.common import (CODE, DATA, HEAD, KERN, LAM, NO, PART, YES, box, grid_table, load, mono)
 
 
-class Sdn(VoiceoverScene):
+class Sdn(WatchScene):
     def construct(self):
         self.card()
         self.split()
@@ -12,11 +12,7 @@ class Sdn(VoiceoverScene):
         self.pipeline()
 
     def card(self):
-        card = chapter_card(12, r"Software-defined networks", r"What if the network were a program?", lit=(2008, 2014),
-                            extra=((2008, r"OpenFlow"), (2014, r"P4")), part=PART)
-        with self.voiceover("Chapter twelve. Software-defined networks."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(12, r"Software-defined networks", r"What if the network were a program?", lit=(2008, 2014), extra=((2008, r"OpenFlow"), (2014, r"P4")), part=PART, said="Chapter twelve. Software-defined networks.")
 
     def split(self):
         head = label(r"Separate the brain from the muscle", font_size=36).to_edge(UP, buff=0.3)
@@ -53,6 +49,10 @@ class Sdn(VoiceoverScene):
         self.clear_scene()
 
     def fabrics(self):
+        self.ask(r"A data centre of small identical switches, a Clos network. \\ Between two racks there are...",
+                 [r"one path", r"many equal paths"], 1,
+                 say="A data-centre network of thousands of small identical switches, wired in layers. How many paths between two racks?",
+                 reveal="Many equal ones. Flows are spread across them by hashing.")
         e = load("ecmp")
         head = label(r"Data-centre fabrics: \ many equal paths", font_size=34).to_edge(UP, buff=0.3)
         ft = e["fat_tree"]

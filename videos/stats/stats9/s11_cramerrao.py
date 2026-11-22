@@ -5,9 +5,15 @@ import numpy as np
 from videos.stats.stats9.common import *  # noqa: F403
 
 
-class CramerRao(VoiceoverScene):
+class CramerRao(StatsScene):
     def construct(self):
         self.card()
+        self.ask(r"In a regular model, can an unbiased estimator have variance below $1/(nI(\theta))$?",
+                 ["never", "yes, often", "only for small $n$"], 0,
+                 say="Cramér and Rao set a floor under the variance of unbiased estimators. In a regular model, can "
+                     "an unbiased estimator get below it?",
+                 reveal="Never. Estimators can beat it only by giving up unbiasedness or regularity, and those that "
+                        "cheat at one point pay nearby.")
         self.history()
         self.statement()
         self.proof()
@@ -16,12 +22,10 @@ class CramerRao(VoiceoverScene):
         self.exponential()
         self.tanks()
         self.biased()
+        self.answer()
 
     def card(self):
-        card = chapter_card(10, r"The Cram\'er--Rao bound", r"How good can an unbiased estimator possibly be?", lit=(1946,), part=PART)
-        with self.voiceover("Chapter ten. The Cramér–Rao bound."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(10, r"The Cram\'er--Rao bound", r"How good can an unbiased estimator possibly be?", lit=(1946,), part=PART, said="Chapter ten. The Cramér–Rao bound.")
 
     def history(self):
         h1 = history_card(1945, r"C. R. Rao, \ Calcutta", r"the bound, \ with information as its measure of accuracy", color=LIK,

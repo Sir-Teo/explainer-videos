@@ -5,21 +5,36 @@ import numpy as np
 from videos.stats.stats47.common import *  # noqa: F403
 
 
-class NonRegular(VoiceoverScene):
+class NonRegular(StatsScene):
     def construct(self):
         self.card()
+        self.wrong_idea(r"Every reasonable estimator converges at rate $\sqrt n$",
+                        "Non-regular problems differ: the uniform's maximum at rate $n$, cube-root estimators at $n^{1/3}$",
+                        narration="A habit from the regular theory: every reasonable estimator converges at rate "
+                                  "root n, to a normal.",
+                        right_narration="Only in regular problems. A moving support gives rate n and an exponential "
+                                        "limit; isotonic and mode estimators converge at n to the one third, with "
+                                        "Chernoff's distribution. Check the smoothness first.")
+        self.ask(r"Uniform$(0, \theta)$: $n(\theta - \max)/\theta$ converges to...",
+                 ["a normal", "an exponential"], 1,
+                 say="The uniform on zero to theta, estimated by the maximum. Scale the error by n. What's the "
+                     "limit?",
+                 reveal="An exponential: the maximum sits just below theta with a one-sided, non-normal error. Rate "
+                        "n, and no Gaussian anywhere.")
         self.uniform()
         self.failure()
         self.chart()
         self.mofn()
         self.others()
         self.board()
+        self.answer()
+        self.checkpoint([("The studentized bootstrap's error?", "$O(n^{-1})$: better than the normal's"),
+                         ("The uniform maximum's rate?", "$n$, with an exponential limit")],
+                        narration="Checkpoint. Beyond the normal approximation.",
+                        answers_narration="One over n. And rate n.")
 
     def card(self):
-        card = chapter_card(13, r"Non-regular models", r"When the support moves, \ the rate changes", part=PART)
-        with self.voiceover("Chapter thirteen. Non-regular models: when the support moves, the rate changes."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(13, r"Non-regular models", r"When the support moves, \ the rate changes", part=PART, said="Chapter thirteen. Non-regular models: when the support moves, the rate changes.")
 
     def uniform(self):
         rows = [

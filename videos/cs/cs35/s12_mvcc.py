@@ -11,7 +11,7 @@ def version(txt, color, w=1.5):
     return VGroup(r, Text(txt, font="DejaVu Sans Mono", font_size=15, color=color).move_to(r))
 
 
-class Mvcc(VoiceoverScene):
+class Mvcc(WatchScene):
     def construct(self):
         self.card()
         self.optimism()
@@ -20,13 +20,8 @@ class Mvcc(VoiceoverScene):
         self.ssi()
 
     def card(self):
-        card = chapter_card(11, r"Optimism and snapshots", r"Can readers and writers stop blocking each other?",
-                            lit=(1981, 1995, 2008), extra=((1981, r"Kung and Robinson: \ optimistic control"),
-                                                           (2008, r"Cahill et al.: \ serializable snapshots")),
-                            part=PART)
-        with self.voiceover("Chapter eleven. Optimism and snapshots."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(11, r"Optimism and snapshots", r"Can readers and writers stop blocking each other?", lit=(1981, 1995, 2008), extra=((1981, r"Kung and Robinson: \ optimistic control"),
+                                                           (2008, r"Cahill et al.: \ serializable snapshots")), part=PART, said="Chapter eleven. Optimism and snapshots.")
 
     def optimism(self):
         head = label(r"Don't lock: \ check at the end", font_size=36).to_edge(UP, buff=0.3)
@@ -118,6 +113,10 @@ class Mvcc(VoiceoverScene):
         self.clear_scene()
 
     def doctors(self):
+        self.ask(r"Two doctors on call, each under snapshot isolation \\ sees the other on call, and leaves. Result?",
+                 [r"one is blocked", r"nobody is on call"], 1,
+                 say="Two doctors on call. Each, in its own snapshot, sees the other still on call, and goes off. What happens?",
+                 reveal="Both commit, and nobody is on call: write skew.")
         iso = load("isolation")
         d = iso["doctors"]
         head = label(r"Write skew: \ two doctors on call", font_size=36).to_edge(UP, buff=0.3)

@@ -5,10 +5,16 @@ import numpy as np
 from videos.stats.stats64.common import *  # noqa: F403
 
 
-class Diffusion(LectureMixin, VoiceoverScene):
+class Diffusion(LectureMixin, StatsScene):
     def construct(self):
         self.card_voiceover("Chapter eleven. Generative models are density estimators: Tweedie's formula inside diffusion.", 11,
                             r"Generative models as estimators", r"Denoising is Bayes")
+        self.ask(r"Tweedie's formula: the posterior mean given a noisy $y$ is $y$ plus $\sigma^2$ times...",
+                 ["the score of $y$'s marginal density", "the prior mean"], 0,
+                 say="Denoising is Bayes. Tweedie's formula: the posterior mean of a signal, given a noisy "
+                     "observation y, is y plus sigma squared times what?",
+                 reveal="The score of y's marginal density: the gradient of its log. Diffusion models learn exactly "
+                        "that score, at every noise level, and denoise their way from noise to data.")
         self.idea()
         self.tweedie_()
         self.tweedie_chart()
@@ -16,6 +22,7 @@ class Diffusion(LectureMixin, VoiceoverScene):
         self.memorize()
         self.chart()
         self.rates()
+        self.answer()
 
     def idea(self):
         head = label(r"Diffusion learns the score of a noisy data distribution", font_size=36, color=WHITE).move_to([0, 3.4, 0])

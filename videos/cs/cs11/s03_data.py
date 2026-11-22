@@ -17,7 +17,7 @@ def byte_row(vals, colors, w=0.75, h=0.55, font_size=20, labels=None):
     return g
 
 
-class Data(VoiceoverScene):
+class Data(WatchScene):
     def construct(self):
         self.card()
         self.endian()
@@ -25,11 +25,7 @@ class Data(VoiceoverScene):
         self.arrays()
 
     def card(self):
-        card = chapter_card(2, r"Data in memory", r"How does a program's data become bytes?", lit=(1980,),
-                            extra=((1980, r"Cohen: \ ``On holy wars''"),), part=PART)
-        with self.voiceover("Chapter two. Data in memory."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(2, r"Data in memory", r"How does a program's data become bytes?", lit=(1980,), extra=((1980, r"Cohen: \ ``On holy wars''"),), part=PART, said="Chapter two. Data in memory.")
 
     def endian(self):
         lay = load("layout")
@@ -63,6 +59,10 @@ class Data(VoiceoverScene):
         self.clear_scene()
 
     def padding(self):
+        self.ask(r"\texttt{struct \{ char c; int i; \}} \\ on a typical machine. Its size?", [r"5 bytes", r"8 bytes",
+                 r"16 bytes"], 1,
+                 say="A structure holding one char and one int. How many bytes does it take?",
+                 reveal="Eight: three bytes of padding keep the int on a four-byte boundary.")
         lay = load("layout")
         a, b, n = lay["a"], lay["b"], lay["node"]
         head = label(r"Alignment and padding", font_size=34).to_edge(UP, buff=0.3)
@@ -99,7 +99,7 @@ class Data(VoiceoverScene):
         VGroup(sa, sb, sn).arrange(DOWN, buff=0.45, aligned_edge=LEFT).next_to(rule, DOWN, buff=0.4)
         cap = note(r"sizes and offsets compiled and measured on this machine \ (x86-64: \ 8-byte pointers)",
                    font_size=17).to_edge(DOWN, buff=0.3)
-        with self.voiceover(f"Alignment is part of a machine and language implementation's layout rules. <bookmark mark='a'/> Here a four-byte integer has four-byte alignment. This often makes access simpler and can avoid crossing a normally aligned cache line, but it does not guarantee a particular number of transfers. Pebble requires aligned word accesses; x86 also supports many unaligned accesses. <bookmark mark='b'/> In this compiled structure, char, int, char occupy {a[0]} bytes: padding aligns the integer, then trailing padding aligns consecutive array elements. <bookmark mark='c'/> Reordering the integer first reduces the size to {b[0]}. This is a layout change, so an external binary format must agree. <bookmark mark='d'/> The two-pointer, two-integer node occupies {n[0]} bytes under this host ABI and sixteen on Pebble. Pointer width, alignment and ABI determine these sizes; they are not universal C constants.") as vo:
+        with self.voiceover(f"Alignment is part of a machine and language implementation's layout rules. <bookmark mark='a'/> Here a four-byte integer has four-byte alignment. This often makes access simpler and can avoid crossing a normally aligned cache line. Pebble requires aligned word accesses; x86 also supports many unaligned accesses. <bookmark mark='b'/> In this compiled structure, char, int, char occupy {a[0]} bytes: padding aligns the integer, then trailing padding aligns consecutive array elements. <bookmark mark='c'/> Reordering the integer first reduces the size to {b[0]}. This is a layout change, so an external binary format must agree. <bookmark mark='d'/> The two-pointer, two-integer node occupies {n[0]} bytes under this host ABI and sixteen on Pebble. Pointer width, alignment and ABI determine these sizes; they are not universal C constants.") as vo:
             self.play(FadeIn(head), run_time=0.5)
             self.play(FadeIn(rule), FadeIn(sa), run_time=0.6)
             vo.wait_until('a')

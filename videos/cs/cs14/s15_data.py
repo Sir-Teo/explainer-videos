@@ -4,7 +4,7 @@ from explainer.cs import *  # noqa: F403
 from videos.cs.cs14.common import CODE, CTRL, DATA, FUNC, HEAD, LAM, NO, PART, YES, code, load, mono
 
 
-class Data(VoiceoverScene):
+class Data(WatchScene):
     def construct(self):
         self.card()
         self.adts()
@@ -13,11 +13,7 @@ class Data(VoiceoverScene):
         self.gradual()
 
     def card(self):
-        card = chapter_card(14, r"Data, subtyping and gradual types", r"How do real languages bend the rules?",
-                            lit=(2006,), extra=((2006, r"EC2 and S3; \ gradual typing"),), part=PART)
-        with self.voiceover("Chapter fourteen. Data, subtyping and gradual types."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(14, r"Data, subtyping and gradual types", r"How do real languages bend the rules?", lit=(2006,), extra=((2006, r"EC2 and S3; \ gradual typing"),), part=PART, said="Chapter fourteen. Data, subtyping and gradual types.")
 
     def adts(self):
         head = label(r"Algebraic data types", font_size=36).to_edge(UP, buff=0.3)
@@ -45,8 +41,7 @@ class Data(VoiceoverScene):
             "it. Nested patterns need more analysis than counting constructor names. <bookmark mark='d'/> An "
             "option type makes absence an explicit alternative. It can rule out an unhandled null dereference "
             "when programs respect its interface; extracting a value can still require handling the empty case. "
-            "<bookmark mark='e'/> Make illegal states unrepresentable is a useful design goal. A type can encode "
-            "a chosen invariant, not automatically every property the application needs."
+            "<bookmark mark='e'/> Make illegal states unrepresentable is a useful design goal."
         )
         ) as vo:
             self.play(FadeIn(head), FadeIn(src[:3]))
@@ -93,6 +88,11 @@ class Data(VoiceoverScene):
         self.clear_scene()
 
     def unsound(self):
+        self.ask(r"TypeScript: put a \texttt{Dog[]} in an \texttt{Animal[]} variable, \\ then push a \texttt{Cat}. "
+                 r"Type error?", [r"yes, at compile time", r"no: accepted, on purpose"], 1,
+                 say="In TypeScript, store an array of dogs in an animal-array variable, then push a cat into it. Does the type "
+                     "checker complain?",
+                 reveal="No. TypeScript accepts it on purpose: it trades soundness for convenience.")
         g = load("gradual")
         c = g["covariant"]
         head = label(r"A deliberate hole, \ measured", font_size=34).to_edge(UP, buff=0.3)

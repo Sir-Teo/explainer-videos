@@ -43,23 +43,17 @@ def chip(text, color, size=18, w=None, h=0.5):
     return VGroup(box, t)
 
 
-class Access(VoiceoverScene):
+class Access(WatchScene):
     def construct(self):
         self.card()
         self.matrix()
         self.slices()
         self.deputy()
-        self.lattice()
         self.hru()
         self.undecidable()
 
     def card(self):
-        card = chapter_card(6, r"Access control", r"Who may do what, \ to which thing?", lit=(1971, 1976, 1988),
-                            extra=((1971, r"Lampson's matrix"), (1976, r"HRU"), (1988, r"the confused deputy")),
-                            part=PART)
-        with self.voiceover("Chapter six. Access control."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(6, r"Access control", r"Who may do what, \ to which thing?", lit=(1971, 1976, 1988), extra=((1971, r"Lampson's matrix"), (1976, r"HRU"), (1988, r"the confused deputy")), part=PART, said="Chapter six. Access control.")
 
     def matrix(self):
         m = load("access")["matrix"]
@@ -153,6 +147,10 @@ class Access(VoiceoverScene):
         self.clear_scene()
 
     def deputy(self):
+        self.ask(r"A compiler service may write its billing file. \\ A user names that file as the output. It...",
+                 [r"refuses", r"overwrites it"], 1,
+                 say="A compiler service may write its own billing file. A user asks it to write the compiled output to that file. What happens?",
+                 reveal="It overwrites it, using its own authority for the user's request: the confused deputy.")
         d = load("access")["deputy"]
         amb, cap = d["ambient"], d["capability"]
         head = label(r"The confused deputy \ (Hardy, \ 1988)", font_size=36).to_edge(UP, buff=0.3)
@@ -210,87 +208,6 @@ class Access(VoiceoverScene):
         self.wait(0.4)
         self.clear_scene()
 
-    def lattice(self):
-        b = load("access")["blp"]
-        head = label(r"Bell--LaPadula \ (1973): \ no read up, \ no write down", font_size=36).to_edge(UP, buff=0.3)
-        names = [("topsecret", r"top secret"), ("secret", r"secret"), ("confidential", r"confidential"),
-                 ("unclassified", r"unclassified")]
-        lv = {}
-        stack = VGroup()
-        for k, (key, nm) in enumerate(names):
-            c = [NO, HEAD, KERN, YES][k]
-            box = RoundedRectangle(width=2.8, height=0.58, corner_radius=0.08, stroke_color=c, stroke_width=1.8,
-                                   fill_color=c, fill_opacity=0.12)
-            t = label(nm, font_size=21, color=WHITE).move_to(box)
-            lv[key] = VGroup(box, t)
-            stack.add(lv[key])
-        stack.arrange(DOWN, buff=0.28).move_to([-5.1, 1.3, 0])
-
-        def flow(src, dst, x, color, num):
-            """An information flow between two levels, drawn beside the stack at x, numbered."""
-            y0, y1 = lv[src].get_y(), lv[dst].get_y()
-            a = Arrow([x, y0, 0], [x, y1, 0], buff=0.08, stroke_width=3, color=color,
-                      max_tip_length_to_length_ratio=0.15)
-            n = label(str(num), font_size=19, color=color).next_to(a, RIGHT, buff=0.05)
-            return VGroup(a, n)
-        ck = b["checks"]
-        lvl = {"secret/ENG": "secret", "unclassified": "unclassified", "topsecret/ENG,OPS": "topsecret",
-               "confidential/OPS": "confidential"}
-        flows = VGroup()
-        for i, c in enumerate(ck):
-            s, o = lvl[c["subject"]], lvl[c["object"]]
-            src, dst = (o, s) if c["op"] == "read" else (s, o)      # information moves from the read or written
-            flows.add(flow(src, dst, -3.4 + 0.5 * i, YES if c["allowed"] else NO, i + 1))
-        rows = []
-        for i, c in enumerate(ck):
-            rows.append([f"{i + 1}", c["subject"].replace("topsecret", "top secret"), c["op"],
-                         c["object"].replace("topsecret", "top secret"),
-                         r"allowed" if c["allowed"] else r"denied"])
-        tab = grid_table([r"", r"subject", r"op", r"object", r"verdict"], rows, widths=[0.4, 1.9, 0.8, 2.6, 1.2],
-                         row_h=0.4, font_size=19, mono_cols=(1, 3))
-        for i, c in enumerate(ck):
-            tab.cells[i + 1][4].set_color(YES if c["allowed"] else NO)
-        tab.to_edge(LEFT, buff=0.4).set_y(-1.9)
-        der = [MathTex(r"\text{read}(s, o_1)", r"\Rightarrow", r"\lambda(o_1) \le \lambda(s)", font_size=32),
-               MathTex(r"\text{write}(s, o_2)", r"\Rightarrow", r"\lambda(s) \le \lambda(o_2)", font_size=32),
-               MathTex(r"\lambda(o_1) \le \lambda(s)", r"\le \lambda(o_2)", font_size=32),
-               MathTex(r"\lambda(o_1)", r"\le \lambda(o_2)", font_size=32)]
-        whys = [r"simple security: \ no read up", r"the $\star$-property: \ no write down",
-                r"$s$ copies $o_1$ into $o_2$", r"information only flows up"]
-        ladder = VGroup(*[VGroup(e, label(w, font_size=18, color=GREY_A)).arrange(DOWN, buff=0.08)
-                          for e, w in zip(der, whys)]).arrange(DOWN, buff=0.18)
-        ladder.next_to(head, DOWN, buff=0.35).set_x(3.8)
-        cat = wrapped_label(r"labels are a level \textit{and} a set of categories; \ $\le$ is a lattice, \ not a line: "
-                            r"\ flow 5 goes up a level and is still denied", 5.4, font_size=18,
-                            color=HEAD).next_to(ladder, DOWN, buff=0.35)
-        biba = label(r"Biba \ (1977): \ the mirror image, \ for integrity", font_size=17,
-                     color=GREY_B).next_to(cat, DOWN, buff=0.25).align_to(cat, LEFT)
-        with self.voiceover(
-            "Sometimes the rule is about secrecy, not ownership. <bookmark mark='a'/> In 1973 David Bell and Leonard "
-            "LaPadula formalised military classification: every subject and object carries a label, a level and a set "
-            "of categories. <bookmark mark='b'/> A subject may read only what its label dominates: no read up. "
-            "<bookmark mark='c'/> And it may write only to what dominates it: no write down, so a secret process "
-            "cannot copy into an unclassified file. <bookmark mark='d'/> Chain the two, and whatever a subject copies "
-            "from one object to another moves up, never down. <bookmark mark='e'/> Our checks agree, including one "
-            "flow that climbs a level and is still refused, for lack of a category. Biba's model of 1977 is the "
-            "mirror image, for integrity."
-        ) as vo:
-            self.play(FadeIn(head))
-            vo.wait_until("a")
-            self.play(LaggedStart(*[FadeIn(x) for x in stack], lag_ratio=0.2))
-            vo.wait_until("b")
-            self.play(FadeIn(ladder[0]))
-            vo.wait_until("c")
-            self.play(FadeIn(ladder[1]))
-            vo.wait_until("d")
-            self.play(TransformFromCopy(VGroup(der[0][2], der[1][2]), der[2]), FadeIn(ladder[2][1]))
-            self.play(TransformMatchingTex(der[2].copy(), der[3]), FadeIn(ladder[3][1]))
-            vo.wait_until("e")
-            self.play(LaggedStart(*[GrowArrow(f[0]) for f in flows], lag_ratio=0.3),
-                      LaggedStart(*[FadeIn(f[1]) for f in flows], lag_ratio=0.3), FadeIn(tab), run_time=2.5)
-            self.play(FadeIn(cat), FadeIn(biba))
-        self.wait(0.4)
-        self.clear_scene()
 
     def hru(self):
         a = load("access")

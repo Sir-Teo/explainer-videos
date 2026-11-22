@@ -5,21 +5,25 @@ import numpy as np
 from videos.stats.stats46.common import *  # noqa: F403
 
 
-class Bounded(VoiceoverScene):
+class Bounded(StatsScene):
     def construct(self):
         self.card()
+        self.ask("Choosing an upper limit or a two-sided interval after seeing the data makes coverage...",
+                 ["exact", "fall below nominal"], 1,
+                 say="A physicist sees the data, then decides whether to report an upper limit or a two-sided "
+                     "interval. What happens to coverage?",
+                 reveal="It falls below nominal: flip-flopping. Feldman and Cousins's unified construction makes "
+                        "the choice by likelihood ratio ordering, before the data.")
         self.problem()
         self.ordering()
         self.table()
         self.coverage()
         self.lessons()
         self.board()
+        self.answer()
 
     def card(self):
-        card = chapter_card(8, r"Bounded parameters: \ Feldman--Cousins", r"A signal that cannot be negative", lit=(1998,), part=PART)
-        with self.voiceover("Chapter eight. Bounded parameters, and Feldman and Cousins's unified intervals: a signal that cannot be negative."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(8, r"Bounded parameters: \ Feldman--Cousins", r"A signal that cannot be negative", lit=(1998,), part=PART, said="Chapter eight. Bounded parameters, and Feldman and Cousins's unified intervals: a signal that cannot be negative.")
 
     def problem(self):
         d = load("fc")

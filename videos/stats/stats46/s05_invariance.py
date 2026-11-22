@@ -5,20 +5,24 @@ import numpy as np
 from videos.stats.stats46.common import *  # noqa: F403
 
 
-class Invariance(VoiceoverScene):
+class Invariance(StatsScene):
     def construct(self):
         self.card()
+        self.ask(r"Testing a normal mean, $\sigma$ unknown. Which is UMP among scale-invariant tests?",
+                 ["the $z$-test", "the $t$-test"], 1,
+                 say="Testing a normal mean with unknown variance. Require the test not to care about the units of "
+                     "measurement. Which test is uniformly most powerful among those?",
+                 reveal="The t-test. Invariance removes sigma's nuisance, and among invariant tests, Student's is "
+                        "best.")
         self.groups()
         self.ttest()
         self.power()
         self.huntstein()
         self.ftest()
+        self.answer()
 
     def card(self):
-        card = chapter_card(4, r"Invariance", r"Tests that respect the symmetry of the problem", part=PART)
-        with self.voiceover("Chapter four. Invariance: tests that respect the symmetry of the problem."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(4, r"Invariance", r"Tests that respect the symmetry of the problem", part=PART, said="Chapter four. Invariance: tests that respect the symmetry of the problem.")
 
     def groups(self):
         rows = [

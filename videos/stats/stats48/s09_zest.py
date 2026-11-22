@@ -3,20 +3,29 @@ from __future__ import annotations
 from videos.stats.stats48.common import *  # noqa: F403
 
 
-class ZEstimators(VoiceoverScene):
+class ZEstimators(StatsScene):
     def construct(self):
         self.card()
+        self.ask("Estimating a nuisance first costs nothing asymptotically when...",
+                 ["the estimating equation is orthogonal to the nuisance", "never"], 0,
+                 say="An estimating equation contains a nuisance estimated first. When does that first step cost "
+                     "nothing in the limit?",
+                 reveal="When the estimating function is orthogonal to the nuisance: its derivative in the "
+                        "nuisance's direction is zero. Then the nuisance's footprint vanishes, even if it's "
+                        "infinite-dimensional.")
         self.theorem()
         self.example()
         self.table()
         self.newcomb()
         self.lesson()
+        self.answer()
+        self.checkpoint([(r"$\sqrt n\,(F_n - F)$ converges to?", "a Brownian bridge on the scale of $F$"),
+                         ("Kaplan--Meier's CLT follows from?", "Donsker plus the functional delta method")],
+                        narration="Checkpoint. Uniform limits.",
+                        answers_narration="A Brownian bridge. And the functional delta method.")
 
     def card(self):
-        card = chapter_card(8, r"Z-estimators with nuisance parameters", r"When estimating something else first costs, \ and when it does not", part=PART)
-        with self.voiceover("Chapter eight. Z-estimators with nuisance parameters: when estimating something else first costs, and when it does not."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(8, r"Z-estimators with nuisance parameters", r"When estimating something else first costs, \ and when it does not", part=PART, said="Chapter eight. Z-estimators with nuisance parameters: when estimating something else first costs, and when it does not.")
 
     def theorem(self):
         rows = [

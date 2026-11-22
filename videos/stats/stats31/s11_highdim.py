@@ -6,9 +6,15 @@ from explainer.stats.board import coverage_board, load_all
 from videos.stats.stats31.common import *  # noqa: F403
 
 
-class HighDim(VoiceoverScene):
+class HighDim(StatsScene):
     def construct(self):
         self.card()
+        self.ask(r"$p = 100$, $n = 120$. The $T^2$ test calibrated by $\chi^2_p$ is...",
+                 ["accurate", "badly miscalibrated"], 1,
+                 say="A hundred variables and a hundred and twenty observations. Calibrate Hotelling's T squared by "
+                     "its large-sample chi-squared law. How does it do?",
+                 reveal="Badly. The calibration assumed p fixed while n grows; with p comparable to n the "
+                        "covariance estimate is poor and the test's level and power both suffer.")
         self.problem()
         self.sizes()
         self.board()
@@ -16,12 +22,14 @@ class HighDim(VoiceoverScene):
         self.shrinkage()
         self.power()
         self.lesson()
+        self.answer()
+        self.checkpoint([("A zero in a Gaussian precision matrix?", "conditional independence given the rest"),
+                         (r"$p = 100$, $n = 120$: $T^2$ with $\chi^2_p$?", "badly miscalibrated")],
+                        narration="Checkpoint. Graphs and dimensions.",
+                        answers_narration="Conditional independence. And badly miscalibrated.")
 
     def card(self):
-        card = chapter_card(10, r"A high-dimensional warning", r"When $p$ grows with $n$", lit=(1967, 1996), part=PART)
-        with self.voiceover("Chapter ten. A high-dimensional warning."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(10, r"A high-dimensional warning", r"When $p$ grows with $n$", lit=(1967, 1996), part=PART, said="Chapter ten. A high-dimensional warning.")
 
     def problem(self):
         rows = [

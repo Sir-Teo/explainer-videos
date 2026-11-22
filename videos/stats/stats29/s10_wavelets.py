@@ -5,9 +5,15 @@ import numpy as np
 from videos.stats.stats29.common import *  # noqa: F403
 
 
-class Wavelets(VoiceoverScene):
+class Wavelets(StatsScene):
     def construct(self):
         self.card()
+        self.ask("A signal with a few sharp jumps is sparse in...",
+                 ["the Fourier basis", "a wavelet basis"], 1,
+                 say="A signal that is flat except for a few sharp jumps. In which basis is it sparse, needing only "
+                     "a few coefficients?",
+                 reveal="A wavelet basis: each jump touches only a few local wavelets. Threshold the small "
+                        "coefficients, and the fit adapts locally, sharp at jumps and smooth elsewhere.")
         self.haar()
         self.signals()
         self.coefficients()
@@ -15,12 +21,10 @@ class Wavelets(VoiceoverScene):
         self.maxima()
         self.denoise()
         self.scores()
+        self.answer()
 
     def card(self):
-        card = chapter_card(9, r"Wavelets", r"Sparse in the right basis", lit=(1994,), part=PART)
-        with self.voiceover("Chapter nine. Wavelets."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(9, r"Wavelets", r"Sparse in the right basis", lit=(1994,), part=PART, said="Chapter nine. Wavelets.")
 
     def haar(self):
         rows = [

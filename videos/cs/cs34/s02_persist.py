@@ -6,7 +6,7 @@ from explainer.cs import *  # noqa: F403
 from videos.cs.cs34.common import (DATA, FILEC, HEAD, KERN, LAM, NO, PART, YES, blk, load, mono, num)
 
 
-class Persist(VoiceoverScene):
+class Persist(WatchScene):
     def construct(self):
         self.card()
         self.ladder()
@@ -14,13 +14,13 @@ class Persist(VoiceoverScene):
         self.blocks()
 
     def card(self):
-        card = chapter_card(1, r"Persistence", r"Where does data go when the power does?", lit=(1956,),
-                            extra=((1956, r"IBM 350: \ the first disk"),), part=PART)
-        with self.voiceover("Chapter one. Persistence."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(1, r"Persistence", r"Where does data go when the power does?", lit=(1956,), extra=((1956, r"IBM 350: \ the first disk"),), part=PART, said="Chapter one. Persistence.")
 
     def ladder(self):
+        self.ask(r"If a memory read took one second, \\ a disk read would take...", [r"a minute",
+                 r"a day and a half", r"a year"], 1,
+                 say="Scale a memory read up to one second. How long would a read from a spinning disk take?",
+                 reveal="About a day and a half.")
         d = load("disk")
         head = label(r"The bottom of the hierarchy \ (Part 9)", font_size=36).to_edge(UP, buff=0.3)
         rungs = [(r"a register", 0.3e-9, GREY_B), (r"the L1 cache", 1e-9, DATA), (r"main memory", 100e-9, HEAD),

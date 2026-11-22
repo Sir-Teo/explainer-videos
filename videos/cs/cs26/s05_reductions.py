@@ -4,7 +4,7 @@ from explainer.cs import *  # noqa: F403
 from videos.cs.cs26.common import (CTRL, DATA, HEAD, LAM, NO, PART, YES, load, mono)
 
 
-class Reductions(VoiceoverScene):
+class Reductions(WatchScene):
     def construct(self):
         self.card()
         self.poly()
@@ -12,11 +12,7 @@ class Reductions(VoiceoverScene):
         self.search()
 
     def card(self):
-        card = chapter_card(4, r"Reductions and completeness", r"How can one problem be as hard as all of them?",
-                            lit=(1971, 1972), extra=((1971, r"Cook"), (1972, r"Karp")), part=PART)
-        with self.voiceover("Chapter four. Reductions and completeness."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(4, r"Reductions and completeness", r"How can one problem be as hard as all of them?", lit=(1971, 1972), extra=((1971, r"Cook"), (1972, r"Karp")), part=PART, said="Chapter four. Reductions and completeness.")
 
     def poly(self):
         head = label(r"$A \le_p B$: \ a \textbf{polynomial-time} $f$ with $\ x \in A \iff f(x) \in B$", font_size=30).to_edge(
@@ -101,6 +97,10 @@ class Reductions(VoiceoverScene):
         self.clear_scene()
 
     def search(self):
+        self.ask(r"An oracle answers only yes or no: \\ is this formula satisfiable? \\ Can you get an actual solution?",
+                 [r"no", r"yes, with $n$ more questions"], 1,
+                 say="An oracle only answers yes or no: is this formula satisfiable? Can you use it to find an actual solution?",
+                 reveal="Yes: fix one variable at a time and ask again. Search reduces to decision.")
         d = load("selfreduce")
         head = label(r"Deciding is enough: \ search reduces to decision", font_size=32).to_edge(UP, buff=0.35)
         rows = VGroup()

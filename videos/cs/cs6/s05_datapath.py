@@ -18,7 +18,7 @@ def instr_tag(src, color=CODE):
     return VGroup(b, t).to_corner(UL, buff=0.25)
 
 
-class Datapath(VoiceoverScene):
+class Datapath(WatchScene):
     def construct(self):
         self.card()
         dp = DatapathFigure().scale(0.9).shift(DOWN * 0.3)
@@ -32,10 +32,7 @@ class Datapath(VoiceoverScene):
         self.one_cycle()
 
     def card(self):
-        card = chapter_card(4, r"The datapath, \ one instruction at a time", r"Where do the bits go?", part=PART)
-        with self.voiceover("Chapter four. The datapath, one instruction at a time."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(4, r"The datapath, \ one instruction at a time", r"Where do the bits go?", part=PART, said="Chapter four. The datapath, one instruction at a time.")
 
     def show(self, keys):
         return [FadeIn(self.dp.blocks[k]) for k in keys]
@@ -130,6 +127,10 @@ class Datapath(VoiceoverScene):
 
     # ------------------------------------------------------------------
     def memory(self):
+        self.ask(r"Which instruction takes the longest path \\ through the single-cycle machine?",
+                 [r"an add", r"a load", r"a branch"], 1,
+                 say="Which instruction has the longest journey through this machine?",
+                 reveal="The load: instruction memory, registers, ALU, data memory, and back to the registers.")
         dp = self.dp
         tag = instr_tag("lw   t0, 8(sp)")
         cap = caption(r"load: \ the ALU adds base and offset; \ the word read from memory is written back")
@@ -263,7 +264,7 @@ class Datapath(VoiceoverScene):
             "after their timing requirements are met. <bookmark mark='c'/> At the next rising edge, the register file "
             "and the program counter capture what is on their inputs, and the cycle starts again. Part 5's timing "
             "rules still apply: values must settle before the next edge with setup margin, and remain stable for the "
-            "required hold window. This drawing illustrates the settling order, not a measured physical waveform. The "
+            "required hold window. The "
             "next chapter opens the one block we have treated as a black box: the control unit."
         ) as vo:
             self.play(FadeIn(head), FadeIn(edges), *[FadeIn(r[0]) for r in g])

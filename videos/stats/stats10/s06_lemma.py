@@ -5,21 +5,24 @@ import numpy as np
 from videos.stats.stats10.common import *  # noqa: F403
 
 
-class Lemma(VoiceoverScene):
+class Lemma(StatsScene):
     def construct(self):
         self.card()
+        self.ask("The most powerful test of one distribution against another rejects when...",
+                 ["the likelihood ratio is large", "the p-value is small", "the mean is far from zero"], 0,
+                 say="One null distribution against one alternative. Which test is most powerful at a given size?",
+                 reveal="Reject where the likelihood ratio is largest: buy the outcomes with the most power per "
+                        "unit of size, like filling a knapsack.")
         self.statement()
         self.dice()
         self.knapsack()
         self.frontier()
         self.proof()
         self.consequences()
+        self.answer()
 
     def card(self):
-        card = chapter_card(5, r"The Neyman--Pearson lemma", r"The most powerful test is a knapsack", lit=(1933,), part=PART)
-        with self.voiceover("Chapter five. The Neyman–Pearson lemma."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(5, r"The Neyman--Pearson lemma", r"The most powerful test is a knapsack", lit=(1933,), part=PART, said="Chapter five. The Neyman–Pearson lemma.")
 
     def statement(self):
         tc = theorem_card(r"Neyman--Pearson lemma", r"To test $H_0: X \sim p_0$ against $H_1: X \sim p_1$ (both simple), \ the test that "

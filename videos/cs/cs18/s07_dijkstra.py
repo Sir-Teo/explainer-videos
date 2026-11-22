@@ -7,7 +7,7 @@ from videos.cs.cs18.common import (BG, CODE, COST, CTRL, DATA, FUNC, HEAD, LAM, 
                                    load, mono, words)
 
 
-class Dijkstra(VoiceoverScene):
+class Dijkstra(WatchScene):
     def construct(self):
         self.card()
         self.small()
@@ -15,12 +15,7 @@ class Dijkstra(VoiceoverScene):
         self.wavefront()
 
     def card(self):
-        card = chapter_card(6, r"Dijkstra's algorithm", r"How do you find the shortest road?", lit=(1959,),
-                            extra=((1956, r"designed in twenty minutes, \ at a caf\'e"), (1959, r"published")),
-                            part=PART)
-        with self.voiceover("Chapter six. Dijkstra's algorithm."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(6, r"Dijkstra's algorithm", r"How do you find the shortest road?", lit=(1959,), extra=((1956, r"designed in twenty minutes, \ at a caf\'e"), (1959, r"published")), part=PART, said="Chapter six. Dijkstra's algorithm.")
 
     def small(self):
         head = label(r"Settle the nearest unsettled vertex", font_size=34).to_edge(UP, buff=0.3)
@@ -80,6 +75,10 @@ class Dijkstra(VoiceoverScene):
         self.clear_scene()
 
     def invariant(self):
+        self.ask(r"Dijkstra's algorithm settles vertices in order of...", [r"when they're discovered",
+                 r"their distance from the source"], 1,
+                 say="In what order does Dijkstra's algorithm settle the vertices?",
+                 reveal="By distance from the source, nearest first. That's what the invariant guarantees.")
         head = label(r"Why it is right: \ an invariant", font_size=34).to_edge(UP, buff=0.3)
         steps = VGroup(
             label(r"\textbf{invariant}: \ every settled vertex's distance is its true shortest distance", font_size=23,
@@ -174,3 +173,9 @@ class Dijkstra(VoiceoverScene):
             vo.wait_until("c")
         self.wait(0.3)
         self.clear_scene()
+        self.checkpoint(
+            [(r"BFS or DFS: which finds shortest unweighted paths?", r"BFS"),
+             (r"What does a topological order require?", r"No directed cycles")],
+            narration="Checkpoint. Which search finds shortest paths in an unweighted graph? And when does a topological order "
+                      "exist?",
+            answers_narration="Breadth-first search. And exactly when the graph has no directed cycle.")

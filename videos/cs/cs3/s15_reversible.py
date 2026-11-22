@@ -8,7 +8,7 @@ from explainer.cs import *  # noqa: F403
 from videos.cs.cs3.common import COST, CTRL, DATA, FUNC, HEAD, INF, NO, PART, WIRE, YES
 
 
-class Reversible(VoiceoverScene):
+class Reversible(WatchScene):
     def construct(self):
         self.card()
         self.forgetting()
@@ -16,10 +16,7 @@ class Reversible(VoiceoverScene):
         self.future()
 
     def card(self):
-        card = chapter_card(14, r"Gates that forget nothing", r"Does computing have to cost energy?", part=PART)
-        with self.voiceover("Chapter fourteen. Gates that forget nothing."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(14, r"Gates that forget nothing", r"Does computing have to cost energy?", part=PART, said="Chapter fourteen. Gates that forget nothing.")
 
     # ------------------------------------------------------------------
     def forgetting(self):
@@ -59,6 +56,10 @@ class Reversible(VoiceoverScene):
 
     # ------------------------------------------------------------------
     def toffoli(self):
+        self.ask(r"Can a computer compute anything \\ without ever erasing a bit?",
+                 [r"no: logic must forget", r"yes, in principle", r"only for addition"], 1,
+                 say="An and gate forgets its inputs. Must computing forget?",
+                 reveal="No. Reversible gates compute anything, if you keep the extra outputs.")
         head = label(r"The Toffoli gate: \ reversible, \ and universal", font_size=36).to_edge(UP, buff=0.35)
         rows = VGroup()
         for k in range(8):

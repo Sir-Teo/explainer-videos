@@ -15,21 +15,24 @@ def box(text, sub, col, pos, w=2.6):
     return VGroup(r, inner)
 
 
-class Trees(VoiceoverScene):
+class Trees(StatsScene):
     def construct(self):
         self.card()
+        self.ask("A single deep classification tree has...",
+                 ["low variance", "high variance"], 1,
+                 say="A tree asks twenty questions of the data. Grow one deep tree. Is its variance low or high?",
+                 reveal="High: change a few points and the first split, and everything below it, can change. "
+                        "Averaging many trees, a random forest, tames it.")
         self.idea()
         self.diagram()
         self.partition()
         self.prune()
         self.cv_size()
         self.pros_cons()
+        self.answer()
 
     def card(self):
-        card = chapter_card(6, r"Trees", r"Twenty questions, \ asked by the data", part=PART)
-        with self.voiceover("Chapter six. Trees."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(6, r"Trees", r"Twenty questions, \ asked by the data", part=PART, said="Chapter six. Trees.")
 
     def idea(self):
         rows = [

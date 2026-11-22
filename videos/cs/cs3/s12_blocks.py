@@ -16,7 +16,7 @@ def byte_row(bits, cell=0.5, color=DATA):
     return g
 
 
-class Blocks(VoiceoverScene):
+class Blocks(WatchScene):
     def construct(self):
         self.card()
         self.comparator()
@@ -25,10 +25,7 @@ class Blocks(VoiceoverScene):
         self.table()
 
     def card(self):
-        card = chapter_card(11, r"The blocks Pebble needs", r"What does a processor build from gates?", part=PART)
-        with self.voiceover("Chapter eleven. The blocks Pebble needs."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(11, r"The blocks Pebble needs", r"What does a processor build from gates?", part=PART, said="Chapter eleven. The blocks Pebble needs.")
 
     # ------------------------------------------------------------------
     def comparator(self):
@@ -99,6 +96,10 @@ class Blocks(VoiceoverScene):
 
     # ------------------------------------------------------------------
     def shifter(self):
+        self.ask(r"Shift a 32-bit word by any amount, 0 to 31. \\ How many layers of multiplexers?",
+                 [r"31", r"5", r"1"], 1,
+                 say="Shift a word by any amount from zero to thirty-one. How many layers of multiplexers?",
+                 reveal="Five: shift by sixteen, eight, four, two and one, each layer on or off.")
         head = label(r"A barrel shifter: \ shift by any amount, \ in $\log_2 n$ stages", font_size=34).to_edge(UP, buff=0.3)
         x = [0, 0, 0, 1, 0, 1, 1, 1]  # bit 7 first: 00010111 = 23
         stages = []

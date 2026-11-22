@@ -5,7 +5,7 @@ from videos.cs.cs27.common import (BG, CTRL, DATA, HEAD, LAM, NO, PART, YES, fit
                                    words)
 
 
-class Ugc(VoiceoverScene):
+class Ugc(WatchScene):
     def construct(self):
         self.card()
         self.games()
@@ -13,13 +13,13 @@ class Ugc(VoiceoverScene):
         self.consequences()
 
     def card(self):
-        card = chapter_card(10, r"The Unique Games Conjecture", r"One conjecture that would close many gaps",
-                            lit=(2002, 2018), extra=((2002, r"Khot"), (2018, r"the 2-to-2 theorem")), part=PART)
-        with self.voiceover("Chapter ten. The Unique Games Conjecture."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(10, r"The Unique Games Conjecture", r"One conjecture that would close many gaps", lit=(2002, 2018), extra=((2002, r"Khot"), (2018, r"the 2-to-2 theorem")), part=PART, said="Chapter ten. The Unique Games Conjecture.")
 
     def games(self):
+        self.ask(r"A unique game that can be fully satisfied. \\ Finding the labelling is...", [r"NP-hard",
+                 r"easy: guess one label and propagate"], 1,
+                 say="A unique game where every constraint can be satisfied. Is it hard to find the labels?",
+                 reveal="It's easy: fix one label and propagate. The conjecture is about games that are only almost satisfiable.")
         head = label(r"Unique games", font_size=34).to_edge(UP, buff=0.3)
         P = {0: (-5.4, 1.2), 1: (-3.6, 1.8), 2: (-2.2, 0.6), 3: (-4.4, -0.4), 4: (-2.8, -1.3)}
         E = [(0, 1, "+1"), (1, 2, "+2"), (0, 3, "+3"), (3, 4, "+1"), (2, 4, "+4"), (1, 3, "+0")]
@@ -77,7 +77,7 @@ class Ugc(VoiceoverScene):
             label(r"UGC says that is essentially the best any efficient algorithm can do", font_size=21, color=LAM),
         ).arrange(DOWN, buff=0.2).next_to(tl, DOWN, buff=0.35)
         with self.voiceover(
-            "This finite experiment plants a labelling on a connected simple graph, then corrupts a specified number of edge shifts. <bookmark mark='a'/> We retain all three thousand vertices, nine thousand distinct edges and seven-symbol labels. Ten chosen roots supply the displayed best propagation score. <bookmark mark='b'/> With no corrupted edges, propagation satisfies every constraint. <bookmark mark='c'/> After corruption, a spanning-tree mistake can spread through a subtree. The planted labelling’s displayed score is a lower bound on the true optimum, not a computed optimum certificate. <bookmark mark='d'/> The random baseline now uses independent label draws from one seeded generator per trial. An earlier implementation reset the generator at every vertex and produced constant labels; that original data is preserved. <bookmark mark='e'/> These finite results compare two heuristics on one planted model. General unique-game approximation theorems and conjectured worst-case hardness use their own promises and alphabet parameters."
+            "This finite experiment plants a labelling on a connected simple graph, then corrupts a specified number of edge shifts. <bookmark mark='a'/> Ten chosen roots supply the displayed best propagation score. <bookmark mark='b'/> With no corrupted edges, propagation satisfies every constraint. <bookmark mark='c'/> After corruption, a spanning-tree mistake can spread through a subtree. The planted labelling’s displayed score is a lower bound on the true optimum, not a computed optimum certificate. <bookmark mark='d'/> The random baseline now uses independent label draws from one seeded generator per trial. An earlier implementation reset the generator at every vertex and produced constant labels; that original data is preserved. <bookmark mark='e'/> General unique-game approximation theorems and conjectured worst-case hardness use their own promises and alphabet parameters."
         ) as vo:
             self.play(FadeIn(head), FadeIn(VGroup(*tab.cells[0])), FadeIn(tab.rule), FadeIn(tl))
             self.play(LaggedStart(*[FadeIn(VGroup(*r)) for r in tab.cells[1:]], lag_ratio=0.3), run_time=2.5)

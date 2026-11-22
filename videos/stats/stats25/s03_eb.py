@@ -5,21 +5,26 @@ import numpy as np
 from videos.stats.stats25.common import *  # noqa: F403
 
 
-class EB(VoiceoverScene):
+class EB(StatsScene):
     def construct(self):
         self.card()
+        self.ask("Early-season batting averages, shrunk toward their mean, predict the rest of the season...",
+                 ["better", "worse", "about the same"], 0,
+                 say="Efron and Morris took eighteen players' batting averages after their first forty-five "
+                     "at-bats. Shrink them toward the overall average. Do they predict the rest of the season "
+                     "better or worse?",
+                 reveal="Better, with a fraction of the total squared error. The data estimate the prior, and the "
+                        "prior pulls the lucky and the unlucky back.")
         self.upgrade()
         self.normal()
         self.js_is_eb()
         self.robbins()
         self.prior()
         self.winners()
+        self.answer()
 
     def card(self):
-        card = chapter_card(2, r"Empirical Bayes", r"Estimate the prior from the data", lit=(1956,), part=PART)
-        with self.voiceover("Chapter two. Empirical Bayes."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(2, r"Empirical Bayes", r"Estimate the prior from the data", lit=(1956,), part=PART, said="Chapter two. Empirical Bayes.")
 
     def upgrade(self):
         u = upgrade_card(15, r"with a normal prior, \ the posterior mean pulls the data towards the prior mean",

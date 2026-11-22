@@ -7,7 +7,7 @@ from videos.cs.cs12.common import (BG, CODE, CTRL, DATA, FUNC, HEAD, NO, PART, Y
                                    region, tree)
 
 
-class Pebble(VoiceoverScene):
+class Pebble(WatchScene):
     def construct(self):
         self.card()
         self.design()
@@ -16,11 +16,7 @@ class Pebble(VoiceoverScene):
         self.errors()
 
     def card(self):
-        card = chapter_card(14, r"The Pebble language, \ parsed", r"What does the Job look like to a compiler?",
-                            part=PART)
-        with self.voiceover("Chapter fourteen. The Pebble language, parsed."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(14, r"The Pebble language, \ parsed", r"What does the Job look like to a compiler?", part=PART, said="Chapter fourteen. The Pebble language, parsed.")
 
     def design(self):
         head = label(r"A language designed to be parsed", font_size=36).to_edge(UP, buff=0.3)
@@ -91,6 +87,10 @@ class Pebble(VoiceoverScene):
         self.clear_scene()
 
     def tree_(self):
+        self.ask(r"The whole Job, as an abstract syntax tree. \\ About how many nodes?", [r"about 37", r"about 370",
+                 r"about 3{,}700"], 1,
+                 say="The whole Job, parsed into a syntax tree. About how many nodes?",
+                 reveal="Three hundred and seventy-one.")
         pb = load("pebble")
         from explainer.cs.lang import pebble_lang as P
         prog = P.parse(P.JOB)
@@ -136,7 +136,7 @@ class Pebble(VoiceoverScene):
             label(r"saying \textit{why}, \ and recovering to find the next error, \ is an art: \ Part 13 and the "
                   r"notes", font_size=20, color=GREY_B),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.15).to_edge(DOWN, buff=0.4)
-        with self.voiceover("A parser must also handle invalid input. <bookmark mark='a'/> These four fragments omit an expression, semicolon, name or colon, and our parser reports a token position and an expectation. <bookmark mark='b'/> A conflict-free predictive or LR parser can detect when the input prefix can no longer extend to a sentence of its grammar, under its parsing conventions. That detection point need not be where the programmer made the original mistake, and syntax acceptance does not establish type correctness. <bookmark mark='c'/> Good diagnostics explain likely causes. Recovery must then choose how to continue without flooding the user with errors caused by the first one. Our small parser demonstrates detection; production-quality recovery requires additional design.") as vo:
+        with self.voiceover("A parser must also handle invalid input. <bookmark mark='a'/> These four fragments omit an expression, semicolon, name or colon, and our parser reports a token position and an expectation. <bookmark mark='b'/> A conflict-free predictive or LR parser can detect when the input prefix can no longer extend to a sentence of its grammar, under its parsing conventions. That detection point need not be where the programmer made the original mistake. <bookmark mark='c'/> Good diagnostics explain likely causes. Recovery must then choose how to continue without flooding the user with errors caused by the first one. Our small parser demonstrates detection; production-quality recovery requires additional design.") as vo:
             self.play(FadeIn(head), run_time=0.5)
             self.play(LaggedStart(*[FadeIn(r) for r in rows], lag_ratio=0.4), run_time=0.6)
             vo.wait_until('a')

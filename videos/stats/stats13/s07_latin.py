@@ -5,21 +5,24 @@ import numpy as np
 from videos.stats.stats13.common import *  # noqa: F403
 
 
-class Latin(VoiceoverScene):
+class Latin(StatsScene):
     def construct(self):
         self.card()
+        self.ask("A crossover trial gives each patient both treatments. It's useless when...",
+                 ["the condition is chronic", "the treatment cures", "there's a washout period"], 1,
+                 say="A crossover trial gives each patient both treatments in turn. When is that design useless?",
+                 reveal="When the treatment cures. The second period has nothing left to treat. Crossovers suit "
+                        "chronic conditions and bioequivalence studies.")
         self.square()
         self.table()
         self.random_square()
         self.euler()
         self.crossover()
         self.carryover()
+        self.answer()
 
     def card(self):
-        card = chapter_card(6, r"Latin squares", r"Blocking in two directions at once", lit=(1935,), part=PART)
-        with self.voiceover("Chapter six. Latin squares, and crossover trials."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(6, r"Latin squares", r"Blocking in two directions at once", lit=(1935,), part=PART, said="Chapter six. Latin squares, and crossover trials.")
 
     def square(self):
         d = load("latin")

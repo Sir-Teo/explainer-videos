@@ -13,7 +13,7 @@ def letter_row(s, color=WHITE, font=22, dx=0.42):
     return g.center()
 
 
-class Substitution(VoiceoverScene):
+class Substitution(WatchScene):
     def construct(self):
         self.card()
         self.keys()
@@ -21,13 +21,15 @@ class Substitution(VoiceoverScene):
         self.climbing()
 
     def card(self):
-        card = chapter_card(1, r"Substitution and frequency analysis", r"Can you read a cipher without the key?",
-                            lit=(1843,), extra=((1843, r"Poe's \textit{The Gold-Bug}"),), part=PART)
-        with self.voiceover("Chapter one. Substitution, and frequency analysis."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(1, r"Substitution and frequency analysis", r"Can you read a cipher without the key?", lit=(1843,), extra=((1843, r"Poe's \textit{The Gold-Bug}"),), part=PART, said="Chapter one. Substitution, and frequency analysis.")
 
     def keys(self):
+        self.wrong_idea(r"a big enough key space makes a cipher secure",
+                        r"substitution has $2^{88}$ keys, \\ and falls in seconds",
+                        narration="A tempting rule: if there are too many keys to try, the cipher is safe.",
+                        right_narration="Simple substitution has about two to the eighty-eight keys, and falls in seconds. "
+                                        "Size is necessary, not enough.")
+        self.clear_scene()
         s = load("subst")
         head = label(r"Replace every letter", font_size=34).to_edge(UP, buff=0.3)
         top = letter_row(A2Z, GREY_A).next_to(head, DOWN, buff=0.6)
@@ -112,6 +114,10 @@ class Substitution(VoiceoverScene):
         self.clear_scene()
 
     def climbing(self):
+        self.ask(r"Swap letters while a four-letter score improves. \\ Six hundred letters of ciphertext. What comes out?",
+                 [r"a few words", r"most of it", r"every letter"], 2,
+                 say="Score each guess by its runs of four letters, and keep swapping while the score improves. With six hundred letters, how much comes out right?",
+                 reveal="Every letter, in a few seconds.")
         s = load("subst")
         head = label(r"Climbing toward English", font_size=34).to_edge(UP, buff=0.3)
         tr = s["trace"]

@@ -40,24 +40,18 @@ def perm_table(fn, hi, color, size=17):
     return rows
 
 
-class Reversible(VoiceoverScene):
+class Reversible(WatchScene):
     def construct(self):
         self.card()
         self.forget()
         self.landauer()
         self.gates()
-        self.bennett()
         self.bridge()
 
     def card(self):
-        card = chapter_card(1, r"The cost of forgetting", r"Does computing have to cost energy?",
-                            lit=(1961, 1973, 1982),
-                            extra=((1961, r"Landauer: \ erasure costs $kT\ln 2$"),
+        self.chapter(1, r"The cost of forgetting", r"Does computing have to cost energy?", lit=(1961, 1973, 1982), extra=((1961, r"Landauer: \ erasure costs $kT\ln 2$"),
                                    (1973, r"Bennett: \ reversible computation"),
-                                   (1982, r"Fredkin and Toffoli: \ conservative logic")), part=PART)
-        with self.voiceover("Chapter one. The cost of forgetting. Does computing have to cost energy?"):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+                                   (1982, r"Fredkin and Toffoli: \ conservative logic")), part=PART, said="Chapter one. The cost of forgetting. Does computing have to cost energy?")
 
     def forget(self):
         head = label(r"An AND gate forgets", font_size=36).to_edge(UP, buff=0.3)
@@ -115,6 +109,10 @@ class Reversible(VoiceoverScene):
         self.clear_scene()
 
     def landauer(self):
+        self.ask(r"Erasing one unknown bit at room temperature \\ costs at least...", [r"nothing",
+                 r"$kT \ln 2$ of heat"], 1,
+                 say="Erase one bit whose value you don't know, at room temperature. Is there a minimum energy cost?",
+                 reveal="Yes: k T log two of heat, about three times ten to the minus twenty-one joules.")
         d = load("landauer")
         head = label(r"Landauer's principle", font_size=36).to_edge(UP, buff=0.3)
         rows = VGroup(
@@ -231,65 +229,6 @@ class Reversible(VoiceoverScene):
         self.wait(0.4)
         self.clear_scene()
 
-    def bennett(self):
-        head = label(r"Bennett: \ compute, \ copy, \ uncompute", font_size=36).to_edge(UP, buff=0.3)
-        wires, labs, ys = wire_set([r"input", r"work", r"output"], -5.6, 5.6, 1.8, 1.0, size=21)
-        def gate_box(x, y0, y1, tex, color):
-            r = Rectangle(width=1.5, height=abs(y0 - y1) + 0.6, stroke_color=color, stroke_width=2.5, fill_color=BG,
-                          fill_opacity=1).move_to([x, (y0 + y1) / 2, 0])
-            return VGroup(r, MathTex(tex, font_size=34, color=color).move_to(r))
-        comp = gate_box(-3.0, ys[0], ys[1], r"C", DATA)
-        copy = VGroup(Line([0, ys[1], 0], [0, ys[2] - 0.2, 0], color=WHITE, stroke_width=2.5), control(0, ys[1]),
-                      target(0, ys[2]))
-        unc = gate_box(3.0, ys[0], ys[1], r"C^{-1}", LAM)
-        stage_tex = [
-            (r"(", r"x", r",\;", r"0", r",\;", r"0", r")"),
-            (r"(", r"x", r",\;", r"f(x)\,g(x)", r",\;", r"0", r")"),
-            (r"(", r"x", r",\;", r"f(x)\,g(x)", r",\;", r"f(x)", r")"),
-            (r"(", r"x", r",\;", r"0", r",\;", r"f(x)", r")"),
-        ]
-        xs = [-4.65, -1.5, 1.5, 4.65]
-        stages = [MathTex(*s, font_size=26, color=WHITE).move_to([x, -1.05, 0]) for s, x in zip(stage_tex, xs)]
-        stages[1].set_color_by_tex(r"f(x)\,g(x)", DATA)
-        stages[2].set_color_by_tex(r"f(x)\,g(x)", DATA)
-        stages[2][5].set_color(YES)
-        stages[3][5].set_color(YES)
-        cursor = DashedLine([-4.65, 2.35, 0], [-4.65, -0.7, 0], color=HEAD, dash_length=0.08)
-        notes = VGroup(
-            wrapped_label(r"the garbage $g(x)$ is never erased: \ it is \textbf{uncomputed}, \ run backwards to "
-                          r"zero, \ so no $kT \ln 2$ is owed (Bennett, \ 1973)", 12.4, font_size=19, color=WHITE),
-            wrapped_label(r"the price: \ about twice the steps, \ and room for the garbage meanwhile \ (Bennett "
-                          r"traded the two off in 1989)", 12.4, font_size=19, color=GREY_A),
-            wrapped_label(r"every quantum oracle in chapters 5 to 10 is built this way: \ leftover garbage would "
-                          r"stay entangled with the answer and spoil the interference", 12.4, font_size=19,
-                          color=HEAD),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.18).to_edge(DOWN, buff=0.35)
-        with self.voiceover(
-            "Charles Bennett, also at IBM, showed in 1973 that any computation can be done reversibly. <bookmark "
-            "mark='a'/> Give the circuit three registers: the input, a work area of zeros, and an output of zeros. "
-            "<bookmark mark='b'/> First compute, reversibly: the work area now holds the answer, f of x, and a pile "
-            "of intermediate garbage. <bookmark mark='c'/> Then copy the answer into the output, with "
-            "controlled-NOTs, which is reversible too. <bookmark mark='d'/> Finally run the first circuit backwards. "
-            "It turns the work area back into zeros, garbage and all. Nothing was ever erased, so no heat is owed. "
-            "<bookmark mark='e'/> The price is about twice the steps, and space for the garbage in between. And this "
-            "trick returns in every quantum algorithm in this part: garbage left behind would stay entangled with "
-            "the answer and spoil the interference."
-        ) as vo:
-            self.play(FadeIn(head))
-            vo.wait_until("a")
-            self.play(Create(wires), FadeIn(labs), Create(cursor), FadeIn(stages[0]))
-            vo.wait_until("b")
-            self.play(FadeIn(comp), cursor.animate.set_x(-1.5), TransformMatchingTex(stages[0].copy(), stages[1]))
-            vo.wait_until("c")
-            self.play(FadeIn(copy), cursor.animate.set_x(1.5), TransformMatchingTex(stages[1].copy(), stages[2]))
-            vo.wait_until("d")
-            self.play(FadeIn(unc), cursor.animate.set_x(4.65), TransformMatchingTex(stages[2].copy(), stages[3]))
-            self.play(FadeIn(notes[0]))
-            vo.wait_until("e")
-            self.play(FadeIn(notes[1]))
-            self.play(FadeIn(notes[2]))
-        self.wait(0.4)
-        self.clear_scene()
 
     def bridge(self):
         head = label(r"From permutations to rotations", font_size=36).to_edge(UP, buff=0.3)

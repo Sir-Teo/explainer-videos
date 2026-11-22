@@ -63,7 +63,7 @@ class _Setter:
         return rows, margin, slacks
 
 
-class Layout(VoiceoverScene):
+class Layout(WatchScene):
     def construct(self):
         self.card()
         self.flow()
@@ -74,13 +74,9 @@ class Layout(VoiceoverScene):
         self.relayout()
 
     def card(self):
-        card = chapter_card(4, r"Layout", r"Where does every box go, and where does every line break?",
-                            lit=(1981, 2017), extra=((1981, r"Knuth and Plass: \ total-fit line breaking"),
+        self.chapter(4, r"Layout", r"Where does every box go, and where does every line break?", lit=(1981, 2017), extra=((1981, r"Knuth and Plass: \ total-fit line breaking"),
                                                      (1996, r"CSS1: \ the box model"),
-                                                     (2017, r"CSS grid ships in browsers")), part=PART)
-        with self.voiceover("Chapter four. Layout."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+                                                     (2017, r"CSS grid ships in browsers")), part=PART, said="Chapter four. Layout.")
 
     # ------------------------------------------------------------------ the box model and normal flow
     def flow(self):
@@ -297,6 +293,10 @@ class Layout(VoiceoverScene):
 
     # ------------------------------------------------------------------ greedy against Knuth-Plass
     def breaking(self):
+        self.ask(r"Break a paragraph into lines. \\ Which gives evener lines?", [r"greedy, line by line",
+                 r"Knuth--Plass, the whole paragraph at once"], 1,
+                 say="Which breaks a paragraph into more even lines: greedy, one line at a time, or choosing all the breaks at once?",
+                 reveal="All at once: a shortest path through the possible breaks, Knuth and Plass's algorithm.")
         b = load("breaking")
         words, widths, space, lw = b["words"], b["widths"], b["space"], b["line_width"]
         gs, ks, corpus = b["greedy_stats"], b["kp_stats"], b["corpus"]
@@ -502,6 +502,12 @@ class Layout(VoiceoverScene):
             self.play(FadeIn(notes[2]))
         self.wait(0.4)
         self.clear_scene()
+        self.checkpoint(
+            [(r"How does the cascade decide?", r"Origin and importance, then specificity, then order"),
+             (r"Why match selectors right to left?", r"Most rules fail on their last part at once")],
+            narration="Checkpoint. How does the cascade pick a winner? And why do browsers match selectors from the right?",
+            answers_narration="Origin and importance first, then specificity, then order in the source. And because most rules "
+                              "fail on their rightmost part immediately.")
 
 
 _ = (BG, LAM)

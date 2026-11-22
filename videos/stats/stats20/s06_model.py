@@ -6,21 +6,25 @@ NAMES = {"intercept": r"intercept", "sodium": r"sodium, \ per g", "age": r"age, 
          "bmi": r"BMI, \ per kg/m$^2$", "energy": r"energy, \ per 1,000 kcal"}
 
 
-class FirstModel(VoiceoverScene):
+class FirstModel(StatsScene):
     def construct(self):
         self.card()
+        self.ask("One day's dietary recall stands in for usual sodium. The slope is biased...",
+                 ["toward zero", "away from zero", "not at all"], 0,
+                 say="The model uses one day's dietary recall in place of a person's usual sodium intake. Which way "
+                     "is the slope on sodium biased?",
+                 reveal="Toward zero. Noise in a predictor dilutes its slope: attenuation, Spearman's correction "
+                        "from 1904.")
         self.equation()
         self.weighting()
         self.table()
         self.reading()
         self.forest()
         self.verdict()
+        self.answer()
 
     def card(self):
-        card = chapter_card(5, r"A first model", r"The plan, \ fitted", part=PART)
-        with self.voiceover("Chapter five. A first model."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(5, r"A first model", r"The plan, \ fitted", part=PART, said="Chapter five. A first model.")
 
     def equation(self):
         rows = [

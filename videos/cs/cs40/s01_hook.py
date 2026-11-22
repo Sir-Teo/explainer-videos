@@ -6,11 +6,11 @@ from videos.cs.cs40.common import (DATA, HEAD, KERN, LAM, NO, PART, YES, load)
 PKC = [DATA, LAM, YES, HEAD, KERN, NO, GREY_B]
 
 
-class Hook(VoiceoverScene):
+class Hook(WatchScene):
     def construct(self):
         self.crisis()
         self.repo()
-        self.plan()
+        self.title(PART)
 
     def crisis(self):
         head = label(r"Garmisch, \ October 1968", font_size=38).to_edge(UP, buff=0.35)
@@ -102,30 +102,6 @@ class Hook(VoiceoverScene):
         self.wait(0.5)
         self.clear_scene()
 
-    def plan(self):
-        title = label(rf"Part {PART}: \ Software Engineering", font_size=38).to_edge(UP, buff=0.3)
-        smap = series_map(current=PART, done=PART - 1).scale(0.92).next_to(title, DOWN, buff=0.35)
-        obj = objectives_card([
-            r"complexity, \ and Parnas' rule: \ one module per design decision",
-            r"abstraction, \ contracts and behavioural subtyping",
-            r"coupling, \ measured on this repository",
-            r"design: \ SOLID, \ patterns, \ the expression problem",
-            r"testing: \ flakiness, \ coverage and mutation",
-            r"change, \ review, \ process; \ Conway, \ Brooks and estimates",
-        ], font_size=25).move_to(DOWN * 0.2)
-        with self.voiceover(
-            "This is Part 40 of Computer Science, Built, and the start of Act Eight, Building Software. "
-            "<bookmark mark='a'/> We begin where the discipline began, with complexity, and with David Parnas' rule "
-            "for dividing a program into modules, tested by building one program both ways. Then abstraction and "
-            "contracts; coupling, measured on this repository; the design principles and patterns of industry; "
-            "testing, and how to tell whether tests are any good; and the human side: review, process, teams, and "
-            "the estimates that are always wrong in the same direction."
-        ) as vo:
-            self.play(FadeIn(title), FadeIn(smap))
-            vo.wait_until("a")
-            self.play(FadeOut(smap), FadeIn(obj))
-        self.wait(0.5)
-        self.clear_scene()
 
 
 _ = (KERN,)

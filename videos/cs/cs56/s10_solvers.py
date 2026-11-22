@@ -84,7 +84,7 @@ def tree_path(n, T, a, b):
     return path
 
 
-class Solvers(VoiceoverScene):
+class Solvers(WatchScene):
     def construct(self):
         self.card()
         self.krylov()
@@ -95,12 +95,8 @@ class Solvers(VoiceoverScene):
         self.trees()
 
     def card(self):
-        card = chapter_card(9, r"Laplacian solvers and sparsifiers", r"How fast can we solve $Lx = b$?",
-                            lit=(2004, 2008), extra=((2004, r"Spielman and Teng: \ nearly-linear solver"),
-                                                     (2008, r"Spielman and Srivastava: \ sparsifiers")), part=PART)
-        with self.voiceover("Chapter nine. Laplacian solvers, and the sparse graphs that make them fast."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(9, r"Laplacian solvers and sparsifiers", r"How fast can we solve $Lx = b$?", lit=(2004, 2008), extra=((2004, r"Spielman and Teng: \ nearly-linear solver"),
+                                                     (2008, r"Spielman and Srivastava: \ sparsifiers")), part=PART, said="Chapter nine. Laplacian solvers, and the sparse graphs that make them fast.")
 
     # ------------------------------------------------------------------ each iteration sees one hop further
     def krylov(self):
@@ -236,6 +232,10 @@ class Solvers(VoiceoverScene):
 
     # ------------------------------------------------------------------ which edges matter: Foster's theorem
     def foster(self):
+        self.ask(r"Sum of effective resistances over all edges \\ of a connected graph on $n$ vertices:", [r"$m$",
+                 r"$n - 1$", r"$n^2$"], 1,
+                 say="Add up the effective resistances of all the edges of a connected graph with n vertices. What do you get?",
+                 reveal="Exactly n minus one, for every connected graph: Foster's theorem.")
         head = label(r"Which edges matter? \ Their resistance says", font_size=36).to_edge(UP, buff=0.3)
         k = 8
         E = [(a, b) for a in range(k) for b in range(a + 1, k)]

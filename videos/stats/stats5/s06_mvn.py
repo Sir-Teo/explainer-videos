@@ -5,19 +5,22 @@ import numpy as np
 from videos.stats.stats5.common import *  # noqa: F403
 
 
-class MVN(VoiceoverScene):
+class MVN(StatsScene):
     def construct(self):
         self.card()
+        self.ask("$X$ and $Y$ are each normal. Is $(X, Y)$ jointly normal?",
+                 ["always", "not necessarily"], 1,
+                 say="X is normal, and Y is normal. Must the pair be jointly normal?",
+                 reveal="Not necessarily. Flip Y's sign whenever X is small, and both margins stay normal while the "
+                        "pair is not. Normal margins can't establish joint normality.")
         self.affine()
         self.properties()
         self.counterexample()
         self.check()
+        self.answer()
 
     def card(self):
-        card = chapter_card(5, r"The multivariate normal", r"Independent normals, \ stretched and turned", lit=(1886,), part=PART)
-        with self.voiceover("Chapter five. The multivariate normal."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(5, r"The multivariate normal", r"Independent normals, \ stretched and turned", lit=(1886,), part=PART, said="Chapter five. The multivariate normal.")
 
     def affine(self):
         d = load("mvn")

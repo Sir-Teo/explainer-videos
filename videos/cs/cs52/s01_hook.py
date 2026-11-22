@@ -10,11 +10,11 @@ TOP10 = [(r"1946", r"the Monte Carlo method", True), (r"1947", r"the simplex met
          (r"1977", r"integer relation detection", True), (r"1987", r"the fast multipole method", True)]
 
 
-class Hook(VoiceoverScene):
+class Hook(WatchScene):
     def construct(self):
         self.ten()
         self.trust()
-        self.plan()
+        self.title(PART)
 
     def ten(self):
         head = label(r"Ten algorithms of the twentieth century", font_size=36).to_edge(UP, buff=0.3)
@@ -86,30 +86,6 @@ class Hook(VoiceoverScene):
         self.wait(0.4)
         self.clear_scene()
 
-    def plan(self):
-        title = label(rf"Part {PART}: \ Computing with Real Numbers", font_size=36).to_edge(UP, buff=0.3)
-        smap = series_map(current=PART, done=PART - 1).scale(0.92).next_to(title, DOWN, buff=0.35)
-        obj = objectives_card([
-            r"conditioning against stability, \ and backward error",
-            r"elimination, \ pivoting, \ QR and the SVD",
-            r"the QR algorithm, \ conjugate gradients and multigrid",
-            r"Newton's method, \ and its fractal",
-            r"interpolation, \ quadrature and stiff equations",
-            r"why fast code is matrix multiplication",
-        ], font_size=25).move_to(DOWN * 0.2)
-        with self.voiceover(
-            "This is Part 52 of Computer Science, Built, and it opens where Part 4 left off, with numbers that round. "
-            "<bookmark mark='a'/> We will separate a problem's conditioning from an algorithm's stability; solve "
-            "linear systems by elimination, QR and the SVD; find eigenvalues by an iteration that converges "
-            "cubically; solve a million equations with conjugate gradients and multigrid; follow Newton's method into "
-            "its fractal; interpolate, integrate, and step through stiff equations; and see why the fastest code on "
-            "every machine is matrix multiplication."
-        ) as vo:
-            self.play(FadeIn(title), FadeIn(smap))
-            vo.wait_until("a")
-            self.play(FadeOut(smap), FadeIn(obj))
-        self.wait(0.5)
-        self.clear_scene()
 
 
 _ = (BG, DATA, KERN, LAM, NO, YES)

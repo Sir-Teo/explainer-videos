@@ -14,7 +14,7 @@ def pages(n, color, w=0.32, h=0.42, cols=10):
     return g
 
 
-class Joins(VoiceoverScene):
+class Joins(WatchScene):
     def construct(self):
         self.card()
         self.model()
@@ -22,13 +22,13 @@ class Joins(VoiceoverScene):
         self.measured()
 
     def card(self):
-        card = chapter_card(5, r"Joins, \ page by page", r"Which way of matching two tables is cheapest?",
-                            lit=(1983,), extra=((1983, r"Kitsuregawa: \ the Grace hash join"),), part=PART)
-        with self.voiceover("Chapter five. Joins, page by page."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(5, r"Joins, \ page by page", r"Which way of matching two tables is cheapest?", lit=(1983,), extra=((1983, r"Kitsuregawa: \ the Grace hash join"),), part=PART, said="Chapter five. Joins, page by page.")
 
     def model(self):
+        self.ask(r"A random page read: milliseconds. \\ Processing a page: microseconds. So count...",
+                 [r"instructions", r"page reads"], 1,
+                 say="A random page read costs milliseconds, and the work on it microseconds. What should we count to compare joins?",
+                 reveal="Pages read and written.")
         head = label(r"The unit of cost is the page", font_size=36).to_edge(UP, buff=0.3)
         R = pages(20, DATA).move_to([-3.4, 1.6, 0])
         S = pages(10, HEAD).move_to([-3.4, -0.05, 0])
@@ -172,3 +172,9 @@ class Joins(VoiceoverScene):
                 self.play(FadeIn(ln))
         self.wait(0.3)
         self.clear_scene()
+        self.checkpoint(
+            [(r"Why decompose a table?", r"Remove redundancy that causes anomalies"),
+             (r"What does a hash join need?", r"Memory for one side's partitions")],
+            narration="Checkpoint. Why decompose a table into normal form? And what does a hash join need?",
+            answers_narration="To remove the redundancy behind update anomalies. And enough memory to hold one side's "
+                              "partitions, one at a time.")

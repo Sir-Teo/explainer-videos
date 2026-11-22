@@ -4,7 +4,7 @@ from explainer.cs import *  # noqa: F403
 from videos.cs.cs24.common import (CTRL, DATA, HEAD, LAM, NO, PART, YES, cells_row, load, mono)
 
 
-class Monotone(VoiceoverScene):
+class Monotone(WatchScene):
     def construct(self):
         self.card()
         self.window()
@@ -12,13 +12,13 @@ class Monotone(VoiceoverScene):
         self.stacks()
 
     def card(self):
-        card = chapter_card(5, r"Two pointers and monotonic stacks", r"How can a nested loop run in linear time?",
-                            lit=(1977,), extra=((1977, r"Knuth--Morris--Pratt's amortization"),), part=PART)
-        with self.voiceover("Chapter five. Two pointers, and monotonic stacks."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(5, r"Two pointers and monotonic stacks", r"How can a nested loop run in linear time?", lit=(1977,), extra=((1977, r"Knuth--Morris--Pratt's amortization"),), part=PART, said="Chapter five. Two pointers, and monotonic stacks.")
 
     def window(self):
+        self.ask(r"The maximum of every window of $k$, \\ across $n$ elements. With a deque, the total work?",
+                 [r"$n \cdot k$", r"$n \log k$", r"$n$"], 2,
+                 say="The maximum of every window of width k, across n numbers, with a monotonic deque. How much work in total?",
+                 reveal="Linear: each element enters and leaves the deque once.")
         d = load("monotone")
         a, k, tr, mx = d["a"], d["k"], d["trace"], d["max"]
         head = label(r"The maximum of every window", font_size=34).to_edge(UP, buff=0.3)
@@ -182,3 +182,8 @@ class Monotone(VoiceoverScene):
             self.play(FadeIn(side[4]))
         self.wait(0.3)
         self.clear_scene()
+        self.checkpoint(
+            [(r"What does a difference array make cheap?", r"Adding to a whole range at once"),
+             (r"Fenwick or segment tree for range minimum?", r"Segment tree")],
+            narration="Checkpoint. What does a difference array make cheap? And which tree handles range minimums?",
+            answers_narration="Adding a value to a whole range in constant time. And the segment tree.")

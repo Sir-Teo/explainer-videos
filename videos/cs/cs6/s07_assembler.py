@@ -12,20 +12,16 @@ def mono(s, size=20, color=CODE):
     return Text(s, font="DejaVu Sans Mono", font_size=size, color=color)
 
 
-class Assembler(VoiceoverScene):
+class Assembler(WatchScene):
     def construct(self):
         self.card()
         self.why()
         self.pass1()
         self.pass2()
         self.pseudo()
-        self.linking()
 
     def card(self):
-        card = chapter_card(6, r"The assembler", r"Who writes the numbers?", lit=(1947, 1949), part=PART)
-        with self.voiceover("Chapter six. The assembler."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(6, r"The assembler", r"Who writes the numbers?", lit=(1947, 1949), part=PART, said="Chapter six. The assembler.")
 
     # ------------------------------------------------------------------
     def why(self):
@@ -65,6 +61,10 @@ class Assembler(VoiceoverScene):
 
     # ------------------------------------------------------------------
     def pass1(self):
+        self.ask(r"A branch names a label further down the program. \\ How does the assembler know its address?",
+                 [r"it guesses and fixes it later", r"it reads the program twice", r"the programmer writes it in"], 1,
+                 say="A branch at the top names a label at the bottom. How can the assembler know that label's address?",
+                 reveal="By reading the program twice: once to find the labels, once to encode.")
         d = load("assembler")
         head = label(r"Pass 1: \ where does everything go?", font_size=36).to_edge(UP, buff=0.35)
         src = [s_ for s_ in d["source"] if s_.strip()]
@@ -183,54 +183,10 @@ class Assembler(VoiceoverScene):
             self.play(FadeIn(side[2]), FadeIn(side[3]))
         self.wait(0.3)
         self.clear_scene()
+        self.checkpoint(
+            [(r"What is an instruction set architecture?", r"A contract: what each instruction does, not how"),
+             (r"What is the von Neumann bottleneck?", r"Instructions and data squeezing through one path to memory")],
+            narration="Checkpoint. What is an instruction set architecture? And what is the von Neumann bottleneck?",
+            answers_narration="A contract that says what each instruction does, and not how. And the single path that every "
+                              "instruction and most data must squeeze through, one word at a time.")
 
-    # ------------------------------------------------------------------
-    def linking(self):
-        head = label(r"From text to a running program", font_size=36).to_edge(UP, buff=0.35)
-        a = box(2.4, 1.6, r"\texttt{main.s}\\ \texttt{call print}", CODE, 22).move_to(LEFT * 5.0 + UP * 1.0)
-        b = box(2.4, 1.6, r"\texttt{print.s}\\ \texttt{print:} \ldots", CODE, 22).move_to(LEFT * 5.0 + DOWN * 1.2)
-        oa = box(2.2, 1.6, r"\text{object file}\\ \text{a hole at } \texttt{print}", HEAD, 20).move_to(LEFT * 1.6 +
-                                                                                                    UP * 1.0)
-        ob = box(2.2, 1.6, r"\text{object file}\\ \texttt{print} = \texttt{0x00}", HEAD, 20).move_to(LEFT * 1.6 +
-                                                                                                  DOWN * 1.2)
-        ln = box(1.8, 1.0, r"\text{linker}", YES, 26).move_to(RIGHT * 1.6 + DOWN * 0.1)
-        img = box(1.9, 2.6, r"\text{one image}", DATA, 22).move_to(RIGHT * 4.6 + DOWN * 0.1)
-        arr = VGroup(Arrow(a.get_right(), oa.get_left(), buff=0.1, color=GREY_B),
-                     Arrow(b.get_right(), ob.get_left(), buff=0.1, color=GREY_B),
-                     Arrow(oa.get_right(), ln.get_left() + UP * 0.2, buff=0.1, color=GREY_B),
-                     Arrow(ob.get_right(), ln.get_left() + DOWN * 0.2, buff=0.1, color=GREY_B),
-                     Arrow(ln.get_right(), img.get_left(), buff=0.1, color=GREY_B))
-        tags = VGroup(label(r"assemble \\ each file", font_size=18, color=GREY_B).next_to(arr[0], UP, buff=0.05),
-                      label("patch symbol references \\\\ and relocations", font_size=18, color=GREY_B).next_to(
-                          ln, UP, buff=0.15))
-        notes = VGroup(
-            label("PC-relative references stay fixed only when source and target move together", font_size=22,
-                  color=GREY_A),
-            label("cross-object calls and absolute addresses can need relocation; \\ diagram: conventional toolchain",
-                  font_size=22, color=GREY_A),
-            label("Pebble currently assembles one image directly; \\ its loader copies it and sets \\texttt{pc}", font_size=22, color=GREY_B),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.18).to_edge(DOWN, buff=0.3)
-        with self.voiceover(
-            "Real programs are written in many files. <bookmark mark='a'/> Each file is assembled on its own, into an "
-            "object file: the machine code, plus a list of the labels it defines, plus holes where it uses a label "
-            "defined somewhere else, like a call to a print routine in another file. <bookmark mark='b'/> A linker "
-            "joins the object files into one image, decides where each piece goes, and fills in the holes. A relative "
-            "branch within a block needs no change when that block moves as a unit. A call to another object can still"
-            " need its relative offset patched, because the caller and target may move separately. Absolute addresses,"
-            " the kind la builds, also need patching. These fixes are relocations. The diagram explains a conventional"
-            " object-file workflow; Pebble's current assembler builds a single image directly. <bookmark mark='c'/> "
-            "Finally a loader copies the image into memory and points the program counter at its first instruction. "
-            "Pebble's loader is three lines of Python; EDSAC's was its initial orders, wired into the machine. Part 11"
-            " returns to linking, and Part 41 to building programs from thousands of files."
-        ) as vo:
-            self.play(FadeIn(head), FadeIn(a), FadeIn(b))
-            self.play(GrowArrow(arr[0]), GrowArrow(arr[1]), FadeIn(oa), FadeIn(ob), FadeIn(tags[0]))
-            vo.wait_until("a")
-            vo.wait_until("b")
-            self.play(GrowArrow(arr[2]), GrowArrow(arr[3]), FadeIn(ln), FadeIn(tags[1]))
-            self.play(GrowArrow(arr[4]), FadeIn(img))
-            self.play(FadeIn(notes[0]), FadeIn(notes[1]))
-            vo.wait_until("c")
-            self.play(FadeIn(notes[2]))
-        self.wait(0.3)
-        self.clear_scene()

@@ -5,20 +5,24 @@ import numpy as np
 from videos.stats.stats36.common import *  # noqa: F403
 
 
-class Unconfounded(VoiceoverScene):
+class Unconfounded(StatsScene):
     def construct(self):
         self.card()
+        self.ask("Some patients are never treated, whatever happens. Can we estimate the effect for them?",
+                 ["yes, by adjustment", "no: there is no overlap"], 1,
+                 say="Without a coin, we need two assumptions. Suppose some kinds of patient are never treated, "
+                     "whatever happens. Can adjustment estimate the treatment's effect for them?",
+                 reveal="No: there's no one like them in the treated group to compare with. Overlap fails, and only "
+                        "extrapolation remains.")
         self.assumption()
         self.identify()
         self.world()
         self.overlap()
         self.untestable()
+        self.answer()
 
     def card(self):
-        card = chapter_card(1, r"Unconfoundedness and overlap", r"The assumptions that replace a coin", lit=(1983,), part=PART)
-        with self.voiceover("Chapter one. Unconfoundedness and overlap."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(1, r"Unconfoundedness and overlap", r"The assumptions that replace a coin", lit=(1983,), part=PART, said="Chapter one. Unconfoundedness and overlap.")
 
     def assumption(self):
         rows = [

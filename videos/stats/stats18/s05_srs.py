@@ -6,21 +6,26 @@ from scipy import stats
 from videos.stats.stats18.common import *  # noqa: F403
 
 
-class SimpleRandom(VoiceoverScene):
+class SimpleRandom(StatsScene):
     def construct(self):
         self.card()
+        self.ask("A simple random sample of half the population. The variance is multiplied by...",
+                 ["1", "about 0.5", "0"], 1,
+                 say="A simple random sample without replacement that takes half the population. Compared with "
+                     "sampling with replacement, what does the finite population correction multiply the variance "
+                     "by?",
+                 reveal="About a half: one minus the sampling fraction. Sample everyone and the variance is zero. "
+                        "Sample a thousand from millions and the correction is negligible.")
         self.fpc_derive()
         self.polls()
         self.size()
         self.town()
         self.systematic()
         self.soup()
+        self.answer()
 
     def card(self):
-        card = chapter_card(4, r"Simple random sampling", r"Every set of $n$ equally likely", part=PART)
-        with self.voiceover("Chapter four. Simple random sampling."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(4, r"Simple random sampling", r"Every set of $n$ equally likely", part=PART, said="Chapter four. Simple random sampling.")
 
     def fpc_derive(self):
         rows = [

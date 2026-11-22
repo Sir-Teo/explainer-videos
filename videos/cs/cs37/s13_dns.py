@@ -4,22 +4,21 @@ from explainer.cs import *  # noqa: F403
 from videos.cs.cs37.common import (ACKC, DATA, HEAD, KERN, LAM, NO, PART, SEG, YES, box, grid_table, load, mono)
 
 
-class Dns(VoiceoverScene):
+class Dns(WatchScene):
     def construct(self):
         self.card()
         self.hierarchy()
-        self.caching()
         self.kaminsky()
 
     def card(self):
-        card = chapter_card(12, r"Names", r"How does a name become an address, a billion times a second?",
-                            lit=(1983, 2008), extra=((1983, r"Mockapetris: \ DNS"), (2005, r"DNSSEC"),
-                                                     (2008, r"Kaminsky: \ cache poisoning")), part=PART)
-        with self.voiceover("Chapter twelve. Names."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(12, r"Names", r"How does a name become an address, a billion times a second?", lit=(1983, 2008), extra=((1983, r"Mockapetris: \ DNS"), (2005, r"DNSSEC"),
+                                                     (2008, r"Kaminsky: \ cache poisoning")), part=PART, said="Chapter twelve. Names.")
 
     def hierarchy(self):
+        self.ask(r"A resolver with an empty cache looks up a name. \\ It asks...", [r"one master server",
+                 r"a root, a top-level, then an authoritative server"], 1,
+                 say="A resolver with an empty cache looks up a name. Whom does it ask?",
+                 reveal="A root server, then the top-level domain's server, then the name's own authoritative server.")
         head = label(r"A distributed, \ cached tree", font_size=36).to_edge(UP, buff=0.3)
         root = box(1.6, 0.6, r"root \ .", HEAD, font_size=20).move_to([0, 1.8, 0])
         tlds = VGroup(*[box(1.3, 0.55, t, KERN, font_size=19) for t in (r".com", r".org", r".de", r".jp")]).arrange(
@@ -58,43 +57,6 @@ class Dns(VoiceoverScene):
         self.wait(0.4)
         self.clear_scene()
 
-    def caching(self):
-        d = load("dns")
-        head = label(r"A day of lookups", font_size=36).to_edge(UP, buff=0.3)
-        rows = [[r"lookups", f"{d['lookups']:,}"], [r"answered from the cache", f"{d['hits']:,} \\ "
-                                                                                   f"({d['hit_rate'] * 100:.0f}\\%)"],
-                [r"round trips to servers", f"{d['trips']:,}"],
-                [r"round trips per lookup", f"{d['trips_per_lookup']:.2f} \\ (3 without a cache)"]]
-        tab = grid_table([r"", r""], rows, widths=[4.6, 4.6], row_h=0.46, font_size=21, mono_cols=())
-        tab.next_to(head, DOWN, buff=0.5).set_x(0)
-        tab.cells[2][1].set_color(YES)
-        tab.cells[4][1].set_color(YES)
-        lines = VGroup(
-            wrapped_label(r"our resolver, \ 2{,}000 names requested with Zipf popularity, \ TTLs of 1 minute to 1 "
-                          r"day", 12.4, font_size=20, color=GREY_A),
-            wrapped_label(r"the root and TLD referrals are cached for two days, \ so almost every miss costs only "
-                          r"the last one or two round trips", 12.4, font_size=21, color=WHITE),
-            wrapped_label(r"the TTL is a dial: \ long TTLs make lookups fast and the servers idle; \ short ones let "
-                          r"an address change quickly, \ which is how CDNs steer users \ (chapter 14)", 12.4,
-                          font_size=21, color=LAM),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.25).next_to(tab, DOWN, buff=0.45)
-        with self.voiceover(
-            "We gave our resolver a day of lookups: fifty thousand of them, for two thousand names whose popularity "
-            "falls off as a power law, each with a time to live between a minute and a day. "
-            "<bookmark mark='a'/> Fifty-six percent were answered from the cache without sending a packet. The "
-            "rest needed nought point eight seven round trips on average, not three, because the referrals from "
-            "the root and the top-level domains are themselves cached for two days. <bookmark mark='b'/> The time "
-            "to live is a dial. Long ones make lookups fast and servers idle. Short ones let a name move to a new "
-            "address within seconds, which is how content delivery networks steer each user to a nearby server, as "
-            "we will see."
-        ) as vo:
-            self.play(FadeIn(head), FadeIn(lines[0]))
-            vo.wait_until("a")
-            self.play(FadeIn(tab), FadeIn(lines[1]))
-            vo.wait_until("b")
-            self.play(FadeIn(lines[2]))
-        self.wait(0.4)
-        self.clear_scene()
 
     def kaminsky(self):
         d = load("dns")

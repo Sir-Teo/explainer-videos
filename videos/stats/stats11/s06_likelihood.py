@@ -5,20 +5,24 @@ import numpy as np
 from videos.stats.stats11.common import *  # noqa: F403
 
 
-class Likelihood(VoiceoverScene):
+class Likelihood(StatsScene):
     def construct(self):
         self.card()
+        self.ask(r"Zero events in 100 trials. A 95\% upper bound for the rate is about...",
+                 [r"0\%", r"1\%", r"3\%"], 2,
+                 say="No side effects at all in a hundred patients. What's a ninety-five percent upper bound for "
+                     "the side-effect rate?",
+                 reveal="About three percent: the rule of three, three over n. If nothing goes wrong, everything "
+                        "isn't necessarily all right.")
         self.two_of_thirty()
         self.curve()
         self.invariance()
         self.large_n()
         self.rule_of_three()
+        self.answer()
 
     def card(self):
-        card = chapter_card(5, r"Likelihood intervals", r"Where the log-likelihood drops by 1.92", part=PART)
-        with self.voiceover("Chapter five. Likelihood intervals."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(5, r"Likelihood intervals", r"Where the log-likelihood drops by 1.92", part=PART, said="Chapter five. Likelihood intervals.")
 
     def two_of_thirty(self):
         d = load("likelihood")

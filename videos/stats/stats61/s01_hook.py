@@ -5,7 +5,7 @@ import numpy as np
 from videos.stats.stats61.common import *  # noqa: F403
 
 
-class Hook(LectureMixin, VoiceoverScene):
+class Hook(LectureMixin, StatsScene):
     def construct(self):
         self.story()
         self.earth()
@@ -13,7 +13,7 @@ class Hook(LectureMixin, VoiceoverScene):
         self.why_stats()
         self.taxonomy()
         self.upgrade()
-        self.objectives()
+        self.title(PART)
 
     def story(self):
         tl = timeline(lit=(1781,)).to_edge(UP, buff=0.35)
@@ -151,28 +151,5 @@ class Hook(LectureMixin, VoiceoverScene):
             self.play(FadeIn(cards[0], shift=UP * 0.2))
             vo.wait_until("b")
             self.play(FadeIn(cards[1], shift=UP * 0.2))
-        self.wait(1.0)
-        self.clear_scene()
-
-    def objectives(self):
-        head = VGroup(label(r"Part 61", font_size=34, color=GREY_B), label(r"Optimal Transport in Statistics", font_size=56)).arrange(DOWN, buff=0.25)
-        obj = objectives_card([
-            r"Kantorovich duality; \ Wasserstein distances on NHANES; \ geodesics on Old Faithful",
-            r"the curse of dimensionality; \ Sinkhorn; \ estimating transport maps",
-            r"barycenters of blood pressure by age; \ center-outward ranks; \ a distribution-free test",
-            r"Langevin as a gradient flow; \ flow matching; \ open problems",
-        ], color=S.ACCENT, font_size=26)
-        prereq = note(r"prerequisites: \ Parts 21, \ 43, \ 48, \ 51").to_corner(DL, buff=0.3)
-        built = note(r"built: \ \texttt{statkit.ot}, \ the transport flow").to_corner(DR, buff=0.3)
-        with self.voiceover(
-            "<bookmark mark='a'/> Part sixty-one: optimal transport in statistics. <bookmark mark='b'/> Kantorovich duality, "
-            "Wasserstein distances on NHANES and geodesics on Old Faithful; the curse of dimensionality, Sinkhorn's "
-            "algorithm, and estimating transport maps; barycenters of blood pressure by age, center-outward ranks and a "
-            "distribution-free test; Langevin dynamics as a gradient flow, flow matching, and open problems."
-        ) as vo:
-            vo.wait_until("a")
-            self.play(FadeIn(head, shift=UP * 0.2))
-            vo.wait_until("b")
-            self.play(FadeOut(head), FadeIn(obj, shift=UP * 0.2), FadeIn(prereq), FadeIn(built))
         self.wait(1.0)
         self.clear_scene()

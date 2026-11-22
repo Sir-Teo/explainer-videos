@@ -6,7 +6,7 @@ from explainer.cs import *  # noqa: F403
 from videos.cs.cs6.common import (BG, CODE, COST, CTRL, DATA, FUNC, HEAD, HIST, NO, PART, YES, box, fmt, load)
 
 
-class Interrupts(VoiceoverScene):
+class Interrupts(WatchScene):
     def construct(self):
         self.card()
         self.interrupt()
@@ -14,11 +14,7 @@ class Interrupts(VoiceoverScene):
         self.exceptions()
 
     def card(self):
-        card = chapter_card(13, r"When the world interrupts", r"How does a processor notice a key press?",
-                            lit=(1954,), part=PART)
-        with self.voiceover("Chapter thirteen. When the world interrupts."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(13, r"When the world interrupts", r"How does a processor notice a key press?", lit=(1954,), part=PART, said="Chapter thirteen. When the world interrupts.")
 
     # ------------------------------------------------------------------
     def interrupt(self):
@@ -72,6 +68,10 @@ class Interrupts(VoiceoverScene):
 
     # ------------------------------------------------------------------
     def saving(self):
+        self.ask(r"A key is pressed in the middle of an instruction. \\ When does the processor respond?",
+                 [r"immediately", r"at the end of that instruction", r"when the program ends"], 1,
+                 say="A key is pressed halfway through an instruction. When does the processor respond?",
+                 reveal="At the end of that instruction, so the saved state is clean.")
         head = label(r"Saving the machine's place", font_size=38).to_edge(UP, buff=0.35)
         steps = VGroup(*[box(3.0, 0.8, t, c, 22) for t, c in (
             (r"\text{finish this instruction}", YES), (r"\texttt{epc} \leftarrow \texttt{pc}, \ \text{cause}", HEAD),

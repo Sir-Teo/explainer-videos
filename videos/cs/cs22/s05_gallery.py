@@ -6,7 +6,7 @@ from videos.cs.cs22.common import (CTRL, DATA, HEAD, LAM, NO, PART, YES, fit, lo
 THREE = [DATA, YES, HEAD]
 
 
-class Gallery(VoiceoverScene):
+class Gallery(WatchScene):
     def construct(self):
         self.card()
         self.comb()
@@ -14,11 +14,7 @@ class Gallery(VoiceoverScene):
         self.cost()
 
     def card(self):
-        card = chapter_card(4, r"Guarding an art gallery", r"How many guards does a polygon need?",
-                            lit=(1975, 1978), extra=((1975, r"Chv\'atal"), (1978, r"Fisk's proof")), part=PART)
-        with self.voiceover("Chapter four. Guarding an art gallery."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(4, r"Guarding an art gallery", r"How many guards does a polygon need?", lit=(1975, 1978), extra=((1975, r"Chv\'atal"), (1978, r"Fisk's proof")), part=PART, said="Chapter four. Guarding an art gallery.")
 
     def comb(self):
         d = load("gallery")
@@ -57,6 +53,10 @@ class Gallery(VoiceoverScene):
         self.clear_scene()
 
     def fisk(self):
+        self.ask(r"A gallery with $n$ walls. \\ How many guards are always enough?", [r"$n/2$", r"$\lfloor n/3 \rfloor$",
+                 r"$n$"], 1,
+                 say="An art gallery with n walls. How many guards are always enough to see everything?",
+                 reveal="n over three, rounded down, and Fisk's colouring proof shows why.")
         d = load("gallery")
         P = [tuple(p) for p in d["poly"]]
         tris = [tuple(t) for t in d["tris"]]
@@ -141,7 +141,7 @@ class Gallery(VoiceoverScene):
                   font_size=21, color=GREY_A),
         ).arrange(DOWN, buff=0.32).next_to(head, DOWN, buff=0.5)
         with self.voiceover(
-            "How fast can we triangulate a simple polygon without holes? <bookmark mark='a'/> Maintaining a set of valid ears gives a quadratic algorithm. Our short implementation repeatedly rescans candidates and containment points, and can take cubic time. The displayed count records candidate and containment tests, not every arithmetic operation. <bookmark mark='b'/> Splitting into monotone pieces, then using stacks, gives n log n time. <bookmark mark='c'/> Chazelle proved a linear-time bound in 1991; we have not implemented that algorithm. <bookmark mark='d'/> Our two hundred polygons, each with sixty vertices, all pass independent triangle, area and colouring checks. The smallest colour gives a valid guard set, usually smaller than the worst-case bound, without certifying a minimum. <bookmark mark='e'/> Finding a minimum continuous point-guard set is existential-real complete, hence NP-hard. This is a different task from Fisk's constructive guarantee. <bookmark mark='f'/> Coverage and triangulation motivate practical variants, whose geometric and visibility assumptions must be stated separately."
+            "How fast can we triangulate a simple polygon without holes? <bookmark mark='a'/> Maintaining a set of valid ears gives a quadratic algorithm. Our short implementation repeatedly rescans candidates and containment points, and can take cubic time. The displayed count records candidate and containment tests, not every arithmetic operation. <bookmark mark='b'/> Splitting into monotone pieces, then using stacks, gives n log n time. <bookmark mark='c'/> Chazelle proved a linear-time bound in 1991. <bookmark mark='d'/> Our two hundred polygons, each with sixty vertices, all pass independent triangle, area and colouring checks. The smallest colour gives a valid guard set, usually smaller than the worst-case bound, without certifying a minimum. <bookmark mark='e'/> Finding a minimum continuous point-guard set is existential-real complete, hence NP-hard. This is a different task from Fisk's constructive guarantee. <bookmark mark='f'/> Coverage and triangulation motivate practical variants, whose geometric and visibility assumptions must be stated separately."
         ) as vo:
             self.play(FadeIn(head), FadeIn(lines[0]))
             for mk, ln in zip("abcdef", lines):

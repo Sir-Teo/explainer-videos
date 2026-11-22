@@ -16,20 +16,15 @@ def era(year, name, lines, color, w=2.5, h=4.3):
     return VGroup(r, yr, nm, body)
 
 
-class History(VoiceoverScene):
+class History(WatchScene):
     def construct(self):
         self.card()
         self.eras()
         self.model()
 
     def card(self):
-        card = chapter_card(1, r"From batch to time-sharing", r"How did one computer come to serve many people?",
-                            lit=(1956, 1961, 1965, 1969, 1991),
-                            extra=((1956, r"GM-NAA I/O: \ batch"), (1961, r"CTSS"), (1965, r"Multics"),
-                                   (1969, r"Unix"), (1991, r"Linux")), part=PART)
-        with self.voiceover("Chapter one. From batch to time-sharing."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(1, r"From batch to time-sharing", r"How did one computer come to serve many people?", lit=(1956, 1961, 1965, 1969, 1991), extra=((1956, r"GM-NAA I/O: \ batch"), (1961, r"CTSS"), (1965, r"Multics"),
+                                   (1969, r"Unix"), (1991, r"Linux")), part=PART, said="Chapter one. From batch to time-sharing.")
 
     def eras(self):
         head = label(r"Five systems", font_size=36).to_edge(UP, buff=0.3)
@@ -73,6 +68,10 @@ class History(VoiceoverScene):
         self.clear_scene()
 
     def model(self):
+        self.ask(r"Each user thinks 10 s, then asks for 0.5 s of computing. \\ How many users before responses slow?",
+                 [r"$2$", r"about $20$", r"$200$"], 1,
+                 say="Each user thinks for ten seconds, then asks for half a second of computing. How many users can share before responses slow down?",
+                 reveal="About twenty: ten and a half seconds per cycle, half a second each.")
         h = load("history")
         head = label(r"How many users can share one machine?", font_size=34).to_edge(UP, buff=0.3)
         ax = Axes(x_range=[0, 60, 10], y_range=[0, 22, 5], x_length=6.4, y_length=3.9,

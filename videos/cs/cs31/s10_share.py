@@ -7,22 +7,15 @@ from videos.cs.cs31.common import (BG, DATA, HEAD, KERN, LAM, NO, PART, YES, cur
                                    load, time_axis)
 
 
-class Share(VoiceoverScene):
+class Share(WatchScene):
     def construct(self):
         self.card()
         self.lottery()
-        self.unfair()
         self.cfs()
 
     def card(self):
-        card = chapter_card(9, r"Proportional share: \ lottery, \ stride, \ CFS",
-                            r"How do you give each job its fair share?", lit=(1994, 2007, 2023),
-                            extra=((1994, r"lottery scheduling"), (2007, r"Linux's CFS"), (2023, r"EEVDF")),
-                            part=PART)
-        with self.voiceover("Chapter nine. Proportional share: lottery, stride, and Linux's completely fair "
-                            "scheduler."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(9, r"Proportional share: \ lottery, \ stride, \ CFS", r"How do you give each job its fair share?", lit=(1994, 2007, 2023), extra=((1994, r"lottery scheduling"), (2007, r"Linux's CFS"), (2023, r"EEVDF")), part=PART, said="Chapter nine. Proportional share: lottery, stride, and Linux's completely fair "
+                            "scheduler.")
 
     def lottery(self):
         d = load("share")
@@ -77,52 +70,12 @@ class Share(VoiceoverScene):
         self.wait(0.3)
         self.clear_scene()
 
-    def unfair(self):
-        d = load("share")
-        head = label(r"Randomness is fair only in the long run", font_size=34).to_edge(UP, buff=0.3)
-        u = d["unfair"]
-        ax = Axes(x_range=[0, 2.4, 0.5], y_range=[0.5, 1.0, 0.1], x_length=6.4, y_length=3.6,
-                  axis_config={"color": GREY_D, "include_numbers": False}).to_edge(LEFT, buff=1.0).shift(DOWN * 0.3)
-        xt = VGroup(*[label(str(x), font_size=15, color=GREY_A).next_to(ax.c2p(math.log10(x), 0.5), DOWN, buff=0.08)
-                      for x in (1, 3, 10, 30, 100)])
-        yt = VGroup(*[label(f"{y:.1f}", font_size=15, color=GREY_A).next_to(ax.c2p(0, y), LEFT, buff=0.08)
-                      for y in (0.5, 0.6, 0.7, 0.8, 0.9, 1.0)])
-        xl = label(r"job length, \ in quanta", font_size=17, color=GREY_A).next_to(xt, DOWN, buff=0.1)
-        yl = label(r"unfairness: \ first finish / second finish \ (1 is fair)", font_size=17, color=GREY_A).next_to(
-            ax, UP, buff=0.1).align_to(ax, LEFT)
-        c1 = curve(ax, [math.log10(r["L"]) for r in u], [r["lottery"] for r in u], DATA)
-        c2 = curve(ax, [math.log10(r["L"]) for r in u], [r["stride"] for r in u], YES)
-        k1 = label(r"lottery \ (200 runs each)", font_size=18, color=DATA).move_to(ax.c2p(1.6, 0.72))
-        k2 = label(r"stride", font_size=18, color=YES).move_to(ax.c2p(0.55, 0.95))
-        notes = VGroup(
-            label(r"two equal jobs, \ equal tickets: \\ they should finish together", font_size=21, color=WHITE),
-            label(rf"jobs of 10 quanta: \ lottery {u[3]['lottery']:.2f}, \ stride {u[3]['stride']:.2f}",
-                  font_size=21, color=GREY_A),
-            label(r"lottery's error shrinks like $1/\sqrt{n}$; \\ stride's like $1/n$", font_size=21, color=HEAD),
-            label(r"lottery's strength: \ no state to keep, \\ tickets you can hand to a server you call",
-                  font_size=21, color=DATA),
-        ).arrange(DOWN, buff=0.22, aligned_edge=LEFT).next_to(ax, RIGHT, buff=0.5).align_to(ax, UP)
-        fit_right(notes)
-        with self.voiceover(
-            "How unfair is the lottery? Waldspurger's measure: run two jobs of equal length with equal tickets, and "
-            "divide the first finishing time by the second. One means perfectly fair. <bookmark mark='a'/> For jobs "
-            "of one quantum, either one finishes first, and the ratio is a half for both methods. <bookmark "
-            "mark='b'/> For jobs of ten quanta, the lottery averages eighty-two hundredths, and stride ninety-five. "
-            "<bookmark mark='c'/> Random draws even out only slowly, with the error shrinking like one over the "
-            "square root of the number of draws; stride's shrinks like one over the number itself. <bookmark "
-            "mark='d'/> The lottery has other virtues: it keeps no state, and a client can lend its tickets to a "
-            "server that works on its behalf."
-        ) as vo:
-            self.play(FadeIn(head), Create(ax), FadeIn(xt), FadeIn(yt), FadeIn(xl), FadeIn(yl), FadeIn(notes[0]))
-            vo.wait_until("a")
-            self.play(Create(c1), Create(c2), FadeIn(k1), FadeIn(k2), run_time=2.0)
-            for mk, n_ in zip("bcd", notes[1:]):
-                vo.wait_until(mk)
-                self.play(FadeIn(n_))
-        self.wait(0.3)
-        self.clear_scene()
 
     def cfs(self):
+        self.ask(r"Linux CFS: a task at nice 0 against one at nice 5. \\ Share for the first:", [r"$50\%$",
+                 r"about $75\%$", r"$99\%$"], 1,
+                 say="Linux's fair scheduler. A task at nice zero runs against one at nice five. What share does the first get?",
+                 reveal="About three quarters: each nice level is a factor of one point two five in weight.")
         d = load("share")
         head = label(r"Linux's completely fair scheduler", font_size=36).to_edge(UP, buff=0.3)
         c3 = d["cfs3"]

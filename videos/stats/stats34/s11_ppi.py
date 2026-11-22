@@ -11,9 +11,15 @@ def ci_row(ax, y, est, lo, hi, color, xmin, xmax):
                   Dot(ax.c2p(est, y), radius=0.08, color=WHITE))
 
 
-class PPI(VoiceoverScene):
+class PPI(StatsScene):
     def construct(self):
         self.card()
+        self.ask("Many unlabelled cases with predictions, a few labelled. Treating predictions as truth gives an estimate that is...",
+                 ["unbiased", "biased by the predictor's errors"], 1,
+                 say="Measuring the truth is expensive, predicting it cheap. Treat a model's predictions on many "
+                     "unlabelled cases as if they were the truth. Is the estimate unbiased?",
+                 reveal="No: it inherits the predictor's errors. Prediction-powered inference measures that bias on "
+                        "the few labelled cases and removes it, keeping most of the precision.")
         self.problem()
         self.watch()
         self.bias()
@@ -24,12 +30,10 @@ class PPI(VoiceoverScene):
         self.board()
         self.lineage()
         self.uses()
+        self.answer()
 
     def card(self):
-        card = chapter_card(10, r"Prediction-powered inference", r"Many guesses, \ a few labels", lit=(2023,), part=PART)
-        with self.voiceover("Chapter ten. Prediction-powered inference."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(10, r"Prediction-powered inference", r"Many guesses, \ a few labels", lit=(2023,), part=PART, said="Chapter ten. Prediction-powered inference.")
 
     def problem(self):
         rows = fit_rows(VGroup(

@@ -17,7 +17,7 @@ def tile(content, caption, color, TW=3.6, TH=2.3):
     return Group(frame, content, cap)
 
 
-class Outro(VoiceoverScene):
+class Outro(WatchScene):
     def construct(self):
         self.recap()
         self.payoffs()
@@ -49,6 +49,12 @@ class Outro(VoiceoverScene):
             self.play(LaggedStart(*[FadeIn(t, shift=UP * 0.15) for t in tiles], lag_ratio=0.25), run_time=4.0)
         self.wait(0.5)
         self.clear_scene()
+        self.checkpoint(
+            [(r"What does BBR measure?", r"Bottleneck bandwidth and minimum round trip"),
+             (r"Why build QUIC on UDP?", r"Middleboxes break new TCP; streams don't block each other")],
+            narration="Last checkpoint. What does BBR measure? And why is QUIC built on UDP?",
+            answers_narration="The bottleneck bandwidth and the minimum round trip. And because boxes in the network break "
+                              "anything new in TCP, while QUIC's streams don't block each other.")
 
     def payoffs(self):
         card = payoff_card([

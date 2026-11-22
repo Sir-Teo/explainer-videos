@@ -5,21 +5,15 @@ from videos.cs.cs37.common import (ACKC, DATA, HEAD, KERN, LAM, NO, PART, SEG, Y
                                    seq_diagram, trace)
 
 
-class Rtt(VoiceoverScene):
+class Rtt(WatchScene):
     def construct(self):
         self.card()
         self.samples()
         self.estimators()
-        self.karn()
 
     def card(self):
-        card = chapter_card(5, r"Timers that learn", r"How long should a sender wait before resending?",
-                            lit=(1981, 1988), extra=((1981, r"RFC 793: \ $\beta \cdot$ SRTT"),
-                                                     (1987, r"Karn and Partridge"), (1988, r"Jacobson and Karels")),
-                            part=PART)
-        with self.voiceover("Chapter five. Timers that learn."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(5, r"Timers that learn", r"How long should a sender wait before resending?", lit=(1981, 1988), extra=((1981, r"RFC 793: \ $\beta \cdot$ SRTT"),
+                                                     (1987, r"Karn and Partridge"), (1988, r"Jacobson and Karels")), part=PART, said="Chapter five. Timers that learn.")
 
     def samples(self):
         r = load("rtt")
@@ -54,6 +48,10 @@ class Rtt(VoiceoverScene):
         _ = t0
 
     def estimators(self):
+        self.ask(r"Round trips vary a lot. \\ A good timeout waits...", [r"a fixed multiple of the mean",
+                 r"the mean plus four deviations"], 1,
+                 say="Round-trip times vary a lot from packet to packet. How long should a retransmission timer wait?",
+                 reveal="The smoothed mean plus four times the mean deviation: Jacobson and Karels.")
         r = load("rtt")
         head = label(r"Two estimators", font_size=36).to_edge(UP, buff=0.3)
         eqs = VGroup(
@@ -110,47 +108,6 @@ class Rtt(VoiceoverScene):
         self.wait(0.4)
         self.clear_scene()
 
-    def karn(self):
-        head = label(r"Karn's rule: \ which ACK is this?", font_size=36).to_edge(UP, buff=0.3)
-        ev = [(0.0, None, r"segment", True, SEG), (3.0, 4.0, r"segment \ (again)", True, SEG),
-              (4.0, 5.0, r"ACK", False, ACKC)]
-        sd = seq_diagram(ev, t_max=5.6, height=4.4, gap=5.0).move_to([-3.2, -0.6, 0])
-        b1 = Brace(Line(sd.arrows[0][0].get_start(), sd.arrows[0][0].get_start() + DOWN * (5.0 / 5.6 * 4.4)),
-                   LEFT, color=NO)
-        b1l = label(r"from the first send?", font_size=17, color=NO).next_to(b1, LEFT, buff=0.08)
-        side = VGroup(
-            wrapped_label(r"an ACK for a retransmitted segment could belong to either copy: \ the sample is "
-                          r"\textbf{ambiguous}", 5.4, font_size=21, color=WHITE),
-            wrapped_label(r"\textbf{Karn's rule} \ (1987): \ take no samples from retransmitted segments, \ and "
-                          r"after a timeout \textbf{double} the timer until a fresh sample arrives", 5.4,
-                          font_size=21, color=YES),
-            wrapped_label(r"exponential backoff again \ (Ethernet, Part 36): \ the more the network fails to answer, "
-                          r"\ the more patiently we ask", 5.4, font_size=20, color=KERN),
-            wrapped_label(r"today the timestamp option tags each segment, \ so even retransmissions give "
-                          r"unambiguous samples", 5.4, font_size=20, color=GREY_A),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.28).move_to([3.5, -0.4, 0])
-        with self.voiceover(
-            "One trap remains. <bookmark mark='a'/> A segment is lost, the timer fires, and it is sent again. An ACK "
-            "arrives. Did it answer the first copy, or the second? If we guess wrong, we measure a round trip that "
-            "is far too long or far too short. <bookmark mark='b'/> Phil Karn, writing amateur radio packet "
-            "software, proposed the fix with Craig Partridge in 1987: take no samples from a segment that was "
-            "retransmitted, and each time the timer fires, double it, until a clean sample arrives. "
-            "<bookmark mark='c'/> It is Ethernet's exponential backoff once more. A network that keeps failing to "
-            "answer is asked more and more patiently. <bookmark mark='d'/> Modern TCPs also stamp each segment with "
-            "the time it was sent, and the receiver echoes the stamp, which removes the ambiguity entirely."
-        ) as vo:
-            self.play(FadeIn(head), FadeIn(sd[:4]))
-            vo.wait_until("a")
-            self.play(LaggedStart(*[FadeIn(a) for a in sd.arrows], lag_ratio=0.4))
-            self.play(GrowFromCenter(b1), FadeIn(b1l), FadeIn(side[0]))
-            vo.wait_until("b")
-            self.play(FadeIn(side[1]))
-            vo.wait_until("c")
-            self.play(FadeIn(side[2]))
-            vo.wait_until("d")
-            self.play(FadeIn(side[3]))
-        self.wait(0.4)
-        self.clear_scene()
 
 
 _ = (DATA, HEAD, LAM)

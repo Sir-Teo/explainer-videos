@@ -5,20 +5,23 @@ import numpy as np
 from videos.stats.stats43.common import *  # noqa: F403
 
 
-class RandomVariables(VoiceoverScene):
+class RandomVariables(StatsScene):
     def construct(self):
         self.card()
+        self.ask("A random variable is...",
+                 ["a variable whose value is random", "a measurable function from outcomes to numbers"], 1,
+                 say="What is a random variable, really?",
+                 reveal="A measurable function from outcomes to numbers: neither random nor a variable. "
+                        "Measurability means every question about its value is an event with a probability.")
         self.definition()
         self.digits()
         self.everything()
         self.quantile()
         self.information()
+        self.answer()
 
     def card(self):
-        card = chapter_card(2, r"Random variables as measurable maps", r"What is $X$, \ really?", lit=(1909,), part=PART)
-        with self.voiceover("Chapter two. What is a random variable, really?"):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(2, r"Random variables as measurable maps", r"What is $X$, \ really?", lit=(1909,), part=PART, said="Chapter two. What is a random variable, really?")
 
     def definition(self):
         rows = [

@@ -44,23 +44,21 @@ def mountain(path, unit=0.22, color=INF) -> VGroup:
     return VGroup(base, line)
 
 
-class Recurrences(VoiceoverScene):
+class Recurrences(WatchScene):
     def construct(self):
         self.card()
         self.tilings()
         self.catalan()
         self.recurrence()
-        self.stirling()
 
     def card(self):
-        card = chapter_card(11, r"Counting by recursion", r"What if the answer for $n$ is built from smaller answers?",
-                            part=PART)
-        with self.voiceover("Chapter eleven. Counting by recursion."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(11, r"Counting by recursion", r"What if the answer for $n$ is built from smaller answers?", part=PART, said="Chapter eleven. Counting by recursion.")
 
     # ------------------------------------------------------------------
     def tilings(self):
+        self.ask(r"Tile a strip of length 6 \\ with squares and dominoes. \\ How many ways?", [r"8", r"13", r"21"], 1,
+                 say="Tile a strip six long with squares and dominoes. How many ways?",
+                 reveal="Thirteen. Each count is the sum of the two before it.")
         d = load("catalan")
         head = label(r"Tiling a strip with squares and dominoes", font_size=38).to_edge(UP, buff=0.35)
         rows = VGroup(*[strip(t) for t in d["tilings4"]]).arrange(DOWN, buff=0.25, aligned_edge=LEFT)
@@ -167,46 +165,3 @@ class Recurrences(VoiceoverScene):
         self.wait(0.3)
         self.clear_scene()
 
-    # ------------------------------------------------------------------
-    def stirling(self):
-        d = load("catalan")
-        S = d["stirling"]
-        head = label(r"Splitting a set into groups", font_size=38).to_edge(UP, buff=0.35)
-        q = label(r"$S(n, k)$: \ ways to split $n$ people into $k$ non-empty teams", font_size=28,
-                  color=GREY_A).next_to(head, DOWN, buff=0.35)
-        rows = VGroup()
-        for n in range(1, 7):
-            rows.add(VGroup(MathTex(rf"n = {n}", font_size=28, color=GREY_B),
-                            *[MathTex(str(S[n][k]), font_size=30, color=WHITE) for k in range(1, n + 1)],
-                            MathTex(rf"\Sigma = {d['bell'][n]}", font_size=28, color=YES)))
-        for i, r in enumerate(rows):
-            r[0].move_to([-5.2, 1.1 - 0.55 * i, 0])
-            for k in range(1, len(r) - 1):
-                r[k].move_to([-4.0 + (k - 1) * 0.95, 1.1 - 0.55 * i, 0])
-            r[-1].move_to([1.5, 1.1 - 0.55 * i, 0], aligned_edge=LEFT)
-        hdr = VGroup(*[MathTex(rf"k = {k}", font_size=24, color=GREY_B).move_to([-4.0 + (k - 1) * 0.95, 1.7, 0])
-                       for k in range(1, 7)])
-        rec = MathTex(r"S(n, k) = k\, S(n - 1, k) + S(n - 1, k - 1)", font_size=34, color=CTRL).to_edge(DOWN, buff=1.1)
-        why = note(r"person $n$ joins one of $k$ existing teams, \ or is a team alone", font_size=22).next_to(
-            rec, DOWN, buff=0.15)
-        bell = note(r"row sums: \ the Bell numbers, \\ every way to split $n$ things at all", font_size=21).move_to(
-            RIGHT * 4.9 + UP * 0.2)
-        with self.voiceover(
-            "One more family. <bookmark mark='a'/> In how many ways can n people be split into k non-empty teams, "
-            "where teams have no names? <bookmark mark='b'/> Follow the last person. Either they join one of the k "
-            "teams the others already formed, in k ways, or they are a team by themselves, and the others form k minus "
-            "one teams. That recurrence fills this table. <bookmark mark='c'/> Add up a row, and you get every way to "
-            "split n things at all: one, two, five, fifteen, fifty-two, two hundred and three, the Bell numbers. A "
-            "database that groups records, or a cluster that assigns jobs to machines, is choosing one point in this "
-            "fast-growing space."
-        ) as vo:
-            self.play(FadeIn(head))
-            vo.wait_until("a")
-            self.play(FadeIn(q))
-            vo.wait_until("b")
-            self.play(FadeIn(hdr), LaggedStart(*[FadeIn(VGroup(*r[:-1])) for r in rows], lag_ratio=0.25),
-                      FadeIn(rec), FadeIn(why), run_time=2.4)
-            vo.wait_until("c")
-            self.play(LaggedStart(*[FadeIn(r[-1]) for r in rows], lag_ratio=0.2), FadeIn(bell))
-        self.wait(0.3)
-        self.clear_scene()

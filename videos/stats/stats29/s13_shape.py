@@ -5,21 +5,29 @@ import numpy as np
 from videos.stats.stats29.common import *  # noqa: F403
 
 
-class Shape(VoiceoverScene):
+class Shape(StatsScene):
     def construct(self):
         self.card()
+        self.ask("Isotonic regression needs a bandwidth?",
+                 ["yes", "no"], 1,
+                 say="All you know is the shape: the curve rises. Fit the best monotone curve. What tuning "
+                     "parameter does it need?",
+                 reveal="None at all. The pool-adjacent-violators algorithm averages neighbours until the fit is "
+                        "monotone, and the shape constraint does the smoothing.")
         self.isotonic()
         self.pava_picture()
         self.grenander_idea()
         self.grenander_picture()
         self.rate()
         self.more()
+        self.answer()
+        self.checkpoint([("The representer theorem's solution dimension?", "$n$: one kernel per point"),
+                         ("Isotonic regression's tuning parameter?", "none")],
+                        narration="Checkpoint. Kernels, waves and shapes.",
+                        answers_narration="N. And none.")
 
     def card(self):
-        card = chapter_card(12, r"Shape constraints", r"Only monotone: \ no bandwidth at all", lit=(1956,), part=PART)
-        with self.voiceover("Chapter twelve. Shape constraints."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(12, r"Shape constraints", r"Only monotone: \ no bandwidth at all", lit=(1956,), part=PART, said="Chapter twelve. Shape constraints.")
 
     def isotonic(self):
         rows = [

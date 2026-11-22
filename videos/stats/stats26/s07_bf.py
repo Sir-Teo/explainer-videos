@@ -5,9 +5,14 @@ import numpy as np
 from videos.stats.stats26.common import *  # noqa: F403
 
 
-class BayesFactors(VoiceoverScene):
+class BayesFactors(StatsScene):
     def construct(self):
         self.card()
+        self.ask("A Bayes factor of 10 for $H_1$ means...",
+                 ["$H_1$ is 10 times as probable", "the data were 10 times as likely under $H_1$", "$p = 0.1$"], 1,
+                 say="A Bayes factor of ten in favour of the alternative. What does that mean?",
+                 reveal="The observed data were ten times as likely under the alternative as under the null, "
+                        "averaging over each hypothesis's prior. It multiplies the prior odds.")
         self.definition()
         self.scale()
         self.normal()
@@ -15,12 +20,10 @@ class BayesFactors(VoiceoverScene):
         self.bic()
         self.bma()
         self.cautions()
+        self.answer()
 
     def card(self):
-        card = chapter_card(6, r"Bayes factors", r"Evidence as a ratio of predictions", lit=(1939, 1995), part=PART)
-        with self.voiceover("Chapter six. Bayes factors."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(6, r"Bayes factors", r"Evidence as a ratio of predictions", lit=(1939, 1995), part=PART, said="Chapter six. Bayes factors.")
 
     def definition(self):
         rows = [

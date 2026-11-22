@@ -6,7 +6,7 @@ from videos.cs.cs36.common import (DATA, ETH, HEAD, KERN, LAM, NO, PART, YES, gr
 POS = {1: [-4.6, 1.6, 0], 2: [-2.4, 1.6, 0], 3: [-4.6, -0.4, 0], 4: [-2.4, -0.4, 0], 5: [-3.5, -1.8, 0]}
 
 
-class Bridges(VoiceoverScene):
+class Bridges(WatchScene):
     def construct(self):
         self.card()
         self.storm()
@@ -14,13 +14,13 @@ class Bridges(VoiceoverScene):
         self.learning()
 
     def card(self):
-        card = chapter_card(6, r"Bridges and switches", r"How do you join links without loops killing you?",
-                            lit=(1985,), extra=((1985, r"Perlman: \ the spanning tree"),), part=PART)
-        with self.voiceover("Chapter six. Bridges and switches."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(6, r"Bridges and switches", r"How do you join links without loops killing you?", lit=(1985,), extra=((1985, r"Perlman: \ the spanning tree"),), part=PART, said="Chapter six. Bridges and switches.")
 
     def storm(self):
+        self.ask(r"Bridges wired in a loop. One broadcast frame. \\ What happens?", [r"it dies out",
+                 r"it multiplies forever"], 1,
+                 say="Bridges joined in a loop, and one broadcast frame. What happens to it?",
+                 reveal="It multiplies forever: Ethernet frames have no time to live.")
         b = load("bridges")
         head = label(r"A loop, \ and one broadcast", font_size=36).to_edge(UP, buff=0.3)
         g = graph(POS, [(l["a"], l["b"]) for l in b["links"]], node_color=ETH)

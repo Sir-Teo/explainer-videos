@@ -5,7 +5,7 @@ from explainer.cs.algo import geometry as G
 from videos.cs.cs22.common import (CTRL, DATA, HEAD, LAM, NO, PART, YES, fit, load, mono, words)
 
 
-class Planning(VoiceoverScene):
+class Planning(WatchScene):
     def construct(self):
         self.card()
         self.cspace()
@@ -14,13 +14,12 @@ class Planning(VoiceoverScene):
         self.beyond()
 
     def card(self):
-        card = chapter_card(14, r"Moving a robot", r"How does a robot find a way between obstacles?", lit=(1979, 1998),
-                            extra=((1979, r"Lozano-P\'erez and Wesley"), (1998, r"RRTs")), part=PART)
-        with self.voiceover("Chapter fourteen. Moving a robot."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(14, r"Moving a robot", r"How does a robot find a way between obstacles?", lit=(1979, 1998), extra=((1979, r"Lozano-P\'erez and Wesley"), (1998, r"RRTs")), part=PART, said="Chapter fourteen. Moving a robot.")
 
     def cspace(self):
+        self.ask(r"Grow every obstacle by the robot's shape. \\ The robot becomes...", [r"a point", r"a disk"], 0,
+                 say="Grow every obstacle by the shape of the robot. What does the robot become?",
+                 reveal="A point. Planning a path for a shape becomes planning a path for a dot.")
         d = load("planning")
         robot = [tuple(p) for p in d["robot"]]
         obs = [[tuple(p) for p in o] for o in d["obs"]]
@@ -113,7 +112,7 @@ class Planning(VoiceoverScene):
             side.width = 4.4
             side.to_edge(RIGHT, buff=0.35)
         with self.voiceover(
-            "Explicit visibility graphs become difficult in large configuration spaces. <bookmark mark='a'/> An RRT samples a point, finds the nearest tree node, and accepts a short collision-free step toward the sample. Our nearest-node search is a linear scan. <bookmark mark='b'/> This seeded tree reaches the goal after the displayed number of nodes. All parent edges, including branches off the final path, pass independent segment checks. <bookmark mark='c'/> Its path is longer than the visibility optimum in green. <bookmark mark='d'/> All twenty tested seeds find a path in this scene, with the displayed mean length ratio. This finite result is not a guarantee for every environment. RRT star has asymptotic optimality under its sampling, clearance and connection assumptions. <bookmark mark='e'/> Sampling avoids explicitly constructing every obstacle boundary, but still depends on the geometry of collision checking and the chosen configuration metric."
+            "Explicit visibility graphs become difficult in large configuration spaces. <bookmark mark='a'/> An RRT samples a point, finds the nearest tree node, and accepts a short collision-free step toward the sample. Our nearest-node search is a linear scan. <bookmark mark='b'/> This seeded tree reaches the goal after the displayed number of nodes. All parent edges, including branches off the final path, pass independent segment checks. <bookmark mark='c'/> Its path is longer than the visibility optimum in green. <bookmark mark='d'/> All twenty tested seeds find a path in this scene, with the displayed mean length ratio. RRT star has asymptotic optimality under its sampling, clearance and connection assumptions. <bookmark mark='e'/> Sampling avoids explicitly constructing every obstacle boundary, but still depends on the geometry of collision checking and the chosen configuration metric."
         ) as vo:
             self.play(FadeIn(head), FadeIn(C), FadeIn(sd), FadeIn(gd))
             vo.wait_until("a")

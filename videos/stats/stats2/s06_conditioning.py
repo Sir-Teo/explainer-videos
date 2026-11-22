@@ -17,20 +17,24 @@ def urn(name, reds, n=8, color=GREY_B) -> VGroup:
     return VGroup(body, balls, nm)
 
 
-class Conditioning(VoiceoverScene):
+class Conditioning(StatsScene):
     def construct(self):
         self.card()
+        self.ask("Two dice. You're told the sum is 8. Chance at least one shows a six?",
+                 ["$11/36$", "$2/5$", "$1/6$"], 1,
+                 say="Two dice, rolled where you can't see them. Someone tells you the sum is eight. Now what's the "
+                     "chance that at least one shows a six: eleven thirty-sixths, two fifths, or one sixth?",
+                 reveal="Two fifths. A sum of eight leaves five equally likely cells, and two of them hold a six. "
+                        "Learning something shrinks the space of cases.")
         self.slice()
         self.definition()
         self.multiply()
         self.total()
         self.children()
+        self.answer()
 
     def card(self):
-        card = chapter_card(5, r"Conditioning", r"What changes when we learn something?", lit=(1654,), part=PART)
-        with self.voiceover("Chapter five. Conditioning."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(5, r"Conditioning", r"What changes when we learn something?", lit=(1654,), part=PART, said="Chapter five. Conditioning.")
 
     def slice(self):
         d = load("conditioning")

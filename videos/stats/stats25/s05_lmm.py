@@ -5,21 +5,29 @@ import numpy as np
 from videos.stats.stats25.common import *  # noqa: F403
 
 
-class LMM(VoiceoverScene):
+class LMM(StatsScene):
     def construct(self):
         self.card()
+        self.ask("A school with only three pupils sampled. Its predicted effect is pulled...",
+                 ["strongly toward the overall mean", "not at all", "away from the mean"], 0,
+                 say="The mixed model predicts each school's effect, a BLUP. For a school with only three pupils "
+                     "sampled, where does its prediction go?",
+                 reveal="Strongly toward the overall mean. A school's own data earn weight in proportion to how "
+                        "much of them there is: shrinkage, as in James-Stein.")
         self.model()
         self.henderson()
         self.blup_formula()
         self.fit()
         self.picture()
         self.predict()
+        self.answer()
+        self.checkpoint([(r"James--Stein beats the raw means once $p \ge$?", "3"),
+                         ("A school with few pupils: its BLUP is pulled?", "strongly toward the overall mean")],
+                        narration="Checkpoint. Shrinkage.",
+                        answers_narration="Three. And toward the mean.")
 
     def card(self):
-        card = chapter_card(4, r"The linear mixed model", r"GLS, \ and predictions for each group", lit=(1982,), part=PART)
-        with self.voiceover("Chapter four. The linear mixed model."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(4, r"The linear mixed model", r"GLS, \ and predictions for each group", lit=(1982,), part=PART, said="Chapter four. The linear mixed model.")
 
     def model(self):
         rows = [

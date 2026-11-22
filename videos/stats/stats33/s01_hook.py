@@ -13,7 +13,7 @@ def fish_map(d, key, color):
     return PhantomPanel(arr, size=3.4, lo=0, hi=1, tint=color, center=[-2.3, 0.4, 0])
 
 
-class Hook(VoiceoverScene):
+class Hook(StatsScene):
     def construct(self):
         self.story()
         self.scan()
@@ -22,7 +22,7 @@ class Hook(VoiceoverScene):
         self.corrected()
         self.arith()
         self.lesson()
-        self.objectives()
+        self.title(PART)
 
     def story(self):
         tl = timeline(lit=(2009,)).to_edge(UP, buff=0.35)
@@ -205,30 +205,4 @@ class Hook(VoiceoverScene):
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
                 self.play(FadeIn(rows[k], shift=RIGHT * 0.2))
-        self.clear_scene()
-
-    def objectives(self):
-        head = VGroup(label(r"Part 33", font_size=34, color=GREY_B), label(r"Thousands of Questions", font_size=60)).arrange(DOWN, buff=0.25)
-        obj = objectives_card([
-            r"family-wise error: \ Bonferroni, \ Holm, \ closed testing, \ Westfall--Young",
-            r"the false discovery rate: \ Benjamini--Hochberg, \ BY, \ Storey's $q$-values",
-            r"empirical Bayes: \ local fdr and the empirical null; \ FDR as an average",
-            r"knockoffs; \ the garden of forking paths; \ the p-hacking simulator",
-            r"replication, \ publication bias, \ remedies; \ the false coverage rate",
-        ], color=BHC, font_size=26)
-        prereq = note(r"prerequisites: \ Parts 10 and 25").to_corner(DL, buff=0.3)
-        built = note(r"built: \ \texttt{statkit.multiple}; \ the p-hacking simulator").to_corner(DR, buff=0.3)
-        with self.voiceover(
-            "<bookmark mark='a'/> Part thirty-three: thousands of questions. <bookmark mark='b'/> We'll control the chance "
-            "of any false positive, with Bonferroni, Holm and the permutation method of Westfall and Young; change the goal "
-            "to the false discovery rate with Benjamini and Hochberg; estimate the proportion of nulls and the local false "
-            "discovery rate with Efron's empirical Bayes; see that the false discovery rate is only an average; build "
-            "knockoffs; simulate p-hacking; measure the replication crisis and publication bias; argue about remedies; and "
-            "finish with intervals for selected effects."
-        ) as vo:
-            vo.wait_until("a")
-            self.play(FadeIn(head, shift=UP * 0.2))
-            vo.wait_until("b")
-            self.play(FadeOut(head), FadeIn(obj, shift=UP * 0.2), FadeIn(prereq), FadeIn(built))
-        self.wait(1.0)
         self.clear_scene()

@@ -5,9 +5,15 @@ import numpy as np
 from videos.stats.stats32.common import *  # noqa: F403
 
 
-class Zoo(VoiceoverScene):
+class Zoo(StatsScene):
     def construct(self):
         self.card()
+        self.ask("Two nearly identical predictors. The lasso...",
+                 ["keeps both, sharing the effect", "picks one, and which can flip with the data"], 1,
+                 say="Two predictors that are nearly copies of each other, both related to the outcome. What does "
+                     "the lasso do?",
+                 reveal="It tends to pick one and drop the other, and which one can flip with a small change in the "
+                        "data. The elastic net adds a ridge and keeps them together.")
         self.enet()
         self.enet_paths()
         self.group()
@@ -17,12 +23,14 @@ class Zoo(VoiceoverScene):
         self.nonconvex()
         self.rules()
         self.recovery()
+        self.answer()
+        self.checkpoint([("Orthonormal design: the lasso's estimate?", "soft-thresholded least squares"),
+                         ("Two near-identical predictors: the lasso?", "picks one, unstably; the elastic net keeps both")],
+                        narration="Checkpoint. The lasso.",
+                        answers_narration="Soft-thresholding. And it picks one.")
 
     def card(self):
-        card = chapter_card(6, r"The penalty zoo", r"Changing the corner to fit the problem", lit=(2001, 2005), part=PART)
-        with self.voiceover("Chapter six. The penalty zoo."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(6, r"The penalty zoo", r"Changing the corner to fit the problem", lit=(2001, 2005), part=PART, said="Chapter six. The penalty zoo.")
 
     def enet(self):
         rows = [

@@ -5,20 +5,23 @@ import numpy as np
 from videos.stats.stats37.common import *  # noqa: F403
 
 
-class SDID(VoiceoverScene):
+class SDID(StatsScene):
     def construct(self):
         self.card()
+        self.ask("Synthetic difference-in-differences weights...",
+                 ["units only", "units and time periods"], 1,
+                 say="Synthetic difference-in-differences joins the two rivals. What does it weight?",
+                 reveal="Both units and time periods: units that track the treated before, and pre-periods that "
+                        "resemble the post-periods.")
         self.two()
         self.formula()
         self.weights()
         self.table()
         self.lesson()
+        self.answer()
 
     def card(self):
-        card = chapter_card(12, r"Synthetic difference-in-differences", r"Weights for units, \ and for years", lit=(2021,), part=PART)
-        with self.voiceover("Chapter twelve. Synthetic difference-in-differences."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(12, r"Synthetic difference-in-differences", r"Weights for units, \ and for years", lit=(2021,), part=PART, said="Chapter twelve. Synthetic difference-in-differences.")
 
     def two(self):
         rows = [[r"", r"units", r"periods", r"matches"],

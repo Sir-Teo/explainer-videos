@@ -19,24 +19,22 @@ def tile(title, body, col, w=4.2, h=3.4):
     return VGroup(frame, t, b)
 
 
-class Frontier(VoiceoverScene):
+class Frontier(WatchScene):
     def construct(self):
         self.card()
         self.decode()
         self.scale()
-        self.open()
 
     def card(self):
-        card = chapter_card(12, r"Frontier: \ accelerators for language models",
-                            r"Why does generating one word at a time waste a chip?", lit=(2017, 2022),
-                            extra=((2017, r"Jouppi et al.: \ the TPU"),
-                                   (2022, r"Dao et al.: \ FlashAttention")), part=PART)
-        with self.voiceover("Chapter twelve, the frontier. Why does generating text one word at a time leave most of a "
-                            "chip idle?"):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(12, r"Frontier: \ accelerators for language models", r"Why does generating one word at a time waste a chip?", lit=(2017, 2022), extra=((2017, r"Jouppi et al.: \ the TPU"),
+                                   (2022, r"Dao et al.: \ FlashAttention")), part=PART, said="Chapter twelve, the frontier. Why does generating text one word at a time leave most of a "
+                            "chip idle?")
 
     def decode(self):
+        self.ask(r"A language model generates one token, batch of one. \\ The accelerator is limited by...",
+                 [r"arithmetic", r"memory bandwidth"], 1,
+                 say="A language model generates one token at a time for one user. What limits the accelerator?",
+                 reveal="Memory bandwidth: every weight is read for a handful of operations.")
         head = label(r"One token at a time is memory-bound", font_size=36).to_edge(UP, buff=0.3)
         ridge = GPU_TFLOPS / GPU_TBS
         ax = Axes(x_range=[0, 4, 1], y_range=[0, 3.3, 1], x_length=7.6, y_length=4.4,
@@ -133,41 +131,6 @@ class Frontier(VoiceoverScene):
         self.wait(0.4)
         self.clear_scene()
 
-    def open(self):
-        head = label(r"Open", font_size=36).to_edge(UP, buff=0.3)
-        items = VGroup(
-            wrapped_label(r"1. \ \textbf{Design automation}: \ placement and routing are still heuristics; \ whether "
-                          r"learned placers beat them is disputed.", 12.4, font_size=24, color=WHITE),
-            wrapped_label(r"2. \ \textbf{Verified hardware at scale}: \ the proofs of Part 54 for a whole "
-                          r"accelerator, \ not one unit.", 12.4, font_size=24, color=YES),
-            wrapped_label(r"3. \ \textbf{Programming spatial machines}: \ a compiler that maps any loop nest onto a "
-                          r"grid as well as an expert does.", 12.4, font_size=24, color=HEAD),
-            wrapped_label(r"4. \ \textbf{Past the memory wall}: \ serving large models at the speed of their "
-                          r"arithmetic, \ not their memory.", 12.4, font_size=24, color=KERN),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.35).next_to(head, DOWN, buff=0.45)
-        star = wrapped_label(r"$\bigstar$ \ this part's research problem: \ the least data movement for a matrix "
-                             r"product on an $N \times N$ grid of cells with $M$ words each \ (Hong and Kung's "
-                             r"red--blue pebble game, \ 1981, \ on a grid), \ matched by a dataflow, \ with a proof",
-                             12.4, font_size=23, color=LAM).to_edge(DOWN, buff=0.35)
-        with self.voiceover(
-            "Open problems. <bookmark mark='a'/> Placing and wiring billions of transistors is still done by "
-            "heuristics, and whether learned placement beats them is disputed. <bookmark mark='b'/> Proofs of "
-            "correctness, Part 54's kind, for a whole accelerator rather than one unit. <bookmark mark='c'/> A "
-            "compiler that maps any loop nest onto a grid of cells as well as an expert does by hand. "
-            "<bookmark mark='d'/> And serving large models at the speed of their arithmetic rather than their memory. "
-            "<bookmark mark='e'/> This part's research problem returns to pebbles. In 1981 Hong Jia-Wei and H. T. "
-            "Kung proved how many words the classical matrix product must move between a small fast memory and a large slow "
-            "one, with a game of red and blue pebbles. Find the same bound for a grid of cells, each with its own "
-            "small memory, and a dataflow that meets it."
-        ) as vo:
-            self.play(FadeIn(head))
-            for mk, it in zip("abcd", items):
-                vo.wait_until(mk)
-                self.play(FadeIn(it))
-            vo.wait_until("e")
-            self.play(FadeIn(star))
-        self.wait(0.6)
-        self.clear_scene()
 
 
 _ = (DATA, KERN, LAM, NO, YES)

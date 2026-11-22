@@ -3,21 +3,24 @@ from __future__ import annotations
 from videos.stats.stats26.common import *  # noqa: F403
 
 
-class Argument(VoiceoverScene):
+class Argument(StatsScene):
     def construct(self):
         self.card()
+        self.ask("Can a Bayesian procedure have frequentist guarantees?",
+                 ["never", "yes"], 1,
+                 say="Two hundred years of argument. Can a Bayesian procedure also have frequentist guarantees?",
+                 reveal="Yes, and often does: posteriors that are calibrated, intervals that cover. The Board holds "
+                        "both kinds to the same test.")
         self.history()
         self.coherence()
         self.likelihood_principle()
         self.objections()
         self.calibrated()
         self.schools_differ()
+        self.answer()
 
     def card(self):
-        card = chapter_card(12, r"The argument, \ honestly", r"Two hundred years of disagreement", lit=(1763, 1990), part=PART)
-        with self.voiceover("Chapter twelve. The argument, honestly."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(12, r"The argument, \ honestly", r"Two hundred years of disagreement", lit=(1763, 1990), part=PART, said="Chapter twelve. The argument, honestly.")
 
     def history(self):
         items = [

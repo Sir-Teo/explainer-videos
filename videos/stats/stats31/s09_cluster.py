@@ -7,9 +7,21 @@ from videos.stats.stats31.common import *  # noqa: F403
 KC = [S.ACCENT, S.RESID, S.ALT]  # k-means clusters: gold, red, teal (not species colours)
 
 
-class Cluster(VoiceoverScene):
+class Cluster(StatsScene):
     def construct(self):
         self.card()
+        self.wrong_idea("Clustering finds the natural groups in the data",
+                        "$k$-means returns $k$ groups whatever the data: check stability and relevance",
+                        narration="A tempting belief: run a clustering algorithm, and it finds the natural groups "
+                                  "in the data.",
+                        right_narration="K-means returns k groups whatever the data look like. A clustering is a "
+                                        "summary, not a discovery, until its stability and its relevance to the "
+                                        "question have been checked.")
+        self.ask("$k$-means with $k = 3$, on data with no groups at all, returns...",
+                 ["an error", "three clusters anyway"], 1,
+                 say="Run k-means with k equal to three on data that have no groups at all. What does it return?",
+                 reveal="Three clusters anyway. It always partitions; it never tells you the groups aren't there. "
+                        "Check stability under resampling, and whether the groups matter for the task.")
         self.objective()
         self.lloyd()
         self.hard_em()
@@ -18,12 +30,10 @@ class Cluster(VoiceoverScene):
         self.compare()
         self.choose_k()
         self.cautions()
+        self.answer()
 
     def card(self):
-        card = chapter_card(8, r"Clustering", r"Finding groups nobody told you about", lit=(1957, 1977), part=PART)
-        with self.voiceover("Chapter eight. Clustering."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(8, r"Clustering", r"Finding groups nobody told you about", lit=(1957, 1977), part=PART, said="Chapter eight. Clustering.")
 
     def objective(self):
         rows = [

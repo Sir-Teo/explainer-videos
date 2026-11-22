@@ -5,9 +5,15 @@ import numpy as np
 from videos.stats.stats53.common import *  # noqa: F403
 
 
-class SparseBayes(VoiceoverScene):
+class SparseBayes(StatsScene):
     def construct(self):
         self.card()
+        self.ask("Large signals: which prior shrinks them less, horseshoe or Laplace?",
+                 ["the horseshoe", "the Laplace"], 0,
+                 say="Sparse normal means, the Bayesian way. Which prior shrinks the large signals less: the "
+                     "horseshoe, or the Laplace prior behind the lasso?",
+                 reveal="The horseshoe: its heavy tails leave big signals almost untouched, while its spike at zero "
+                        "crushes noise. The Laplace shrinks everything by the same amount.")
         self.priors()
         self.shrinkage()
         self.globallocal()
@@ -15,12 +21,10 @@ class SparseBayes(VoiceoverScene):
         self.computation()
         self.board()
         self.lesson()
+        self.answer()
 
     def card(self):
-        card = chapter_card(10, r"High-dimensional Bayes", r"Spike-and-slab and the horseshoe", lit=(2015,), part=PART)
-        with self.voiceover("Chapter ten. High-dimensional Bayes: the spike-and-slab and the horseshoe."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(10, r"High-dimensional Bayes", r"Spike-and-slab and the horseshoe", lit=(2015,), part=PART, said="Chapter ten. High-dimensional Bayes: the spike-and-slab and the horseshoe.")
 
     def priors(self):
         rows = [

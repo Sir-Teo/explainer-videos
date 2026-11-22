@@ -4,7 +4,7 @@ from explainer.cs import *  # noqa: F403
 from videos.cs.cs33.common import (BG, HEAD, LAM, NO, PART, T0C, T1C, YES, load, mono)
 
 
-class Sema(VoiceoverScene):
+class Sema(WatchScene):
     def construct(self):
         self.card()
         self.def_()
@@ -12,11 +12,7 @@ class Sema(VoiceoverScene):
         self.rw()
 
     def card(self):
-        card = chapter_card(6, r"Semaphores", r"Can one primitive express every kind of waiting?", lit=(1965,),
-                            extra=((1965, r"Dijkstra: \ P and V"),), part=PART)
-        with self.voiceover("Chapter six. Semaphores."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(6, r"Semaphores", r"Can one primitive express every kind of waiting?", lit=(1965,), extra=((1965, r"Dijkstra: \ P and V"),), part=PART, said="Chapter six. Semaphores.")
 
     def def_(self):
         head = label(r"Dijkstra's semaphore, \ 1965", font_size=36).to_edge(UP, buff=0.3)
@@ -56,6 +52,10 @@ class Sema(VoiceoverScene):
         self.clear_scene()
 
     def buffer(self):
+        self.ask(r"A bounded buffer with two counting semaphores. \\ They count...", [r"threads",
+                 r"empty slots and full slots"], 1,
+                 say="A bounded buffer uses two counting semaphores. What do they count?",
+                 reveal="Empty slots, for producers to wait on, and full slots, for consumers.")
         d = load("sema")
         head = label(r"The bounded buffer", font_size=36).to_edge(UP, buff=0.3)
         prod = VGroup(mono("producer:", 19, T0C), mono("  P(empty)", 19, WHITE), mono("  P(mutex)", 19, GREY_B),

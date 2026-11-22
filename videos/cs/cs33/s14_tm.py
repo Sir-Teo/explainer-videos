@@ -4,22 +4,21 @@ from explainer.cs import *  # noqa: F403
 from videos.cs.cs33.common import (LAM, NO, PART, YES, grid_table, load, mono, num)
 
 
-class Tm(VoiceoverScene):
+class Tm(WatchScene):
     def construct(self):
         self.card()
         self.tm()
         self.messages()
 
     def card(self):
-        card = chapter_card(13, r"Transactional memory, \ channels and actors",
-                            r"Can we stop writing locks altogether?", lit=(1973, 1978, 1993),
-                            extra=((1973, r"Hewitt: \ actors"), (1978, r"Hoare: \ CSP"),
-                                   (1993, r"Herlihy and Moss: \ transactional memory")), part=PART)
-        with self.voiceover("Chapter thirteen. Transactional memory, channels, and actors."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(13, r"Transactional memory, \ channels and actors", r"Can we stop writing locks altogether?", lit=(1973, 1978, 1993), extra=((1973, r"Hewitt: \ actors"), (1978, r"Hoare: \ CSP"),
+                                   (1993, r"Herlihy and Moss: \ transactional memory")), part=PART, said="Chapter thirteen. Transactional memory, channels, and actors.")
 
     def tm(self):
+        self.ask(r"Hardware transactional memory, in Intel chips since 2013. \\ Today it is...", [r"everywhere",
+                 r"mostly disabled"], 1,
+                 say="Intel shipped hardware transactional memory in 2013. How widely is it used today?",
+                 reveal="It's mostly switched off, after bugs and side-channel attacks.")
         d = load("tsx")
         head = label(r"Transactional memory", font_size=36).to_edge(UP, buff=0.3)
         code = VGroup(mono("if (_xbegin() == _XBEGIN_STARTED) {", 19, YES),

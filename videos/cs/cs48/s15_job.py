@@ -28,7 +28,7 @@ def box(name, color, w=2.3, h=0.75, size=19):
     return VGroup(r, label(name, font_size=size, color=color).move_to(r))
 
 
-class Job(VoiceoverScene):
+class Job(WatchScene):
     def construct(self):
         self.card()
         self.design()
@@ -36,12 +36,8 @@ class Job(VoiceoverScene):
         self.cache()
 
     def card(self):
-        card = chapter_card(14, r"The Job as a service", r"Does the design survive its load?",
-                            lit=(1961, 2007), extra=((1961, r"Kleinrock: \ queueing networks"),
-                                                     (2007, r"Dynamo's 99.9th percentile SLAs")), part=PART)
-        with self.voiceover("Chapter fourteen. The Job as a service."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(14, r"The Job as a service", r"Does the design survive its load?", lit=(1961, 2007), extra=((1961, r"Kleinrock: \ queueing networks"),
+                                                     (2007, r"Dynamo's 99.9th percentile SLAs")), part=PART, said="Chapter fourteen. The Job as a service.")
 
     def design(self):
         p = load("jobsvc")["plain"]
@@ -152,6 +148,10 @@ class Job(VoiceoverScene):
         self.clear_scene()
 
     def cache(self):
+        self.ask(r"A cache with a $90\%$ hit rate \\ in front of the counters. Capacity multiplies by...",
+                 [r"$1.9$", r"$10$"], 1,
+                 say="A cache in front of the Job's counters catches ninety percent of requests. By how much does capacity grow?",
+                 reveal="Ten times: only one request in ten reaches a counter.")
         c = load("caches")
         head = label(r"What the cache bought, \ and why", font_size=36).to_edge(UP, buff=0.3)
         r = next(x for x in c["rows"] if x["size"] == 300)

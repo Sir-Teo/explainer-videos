@@ -11,20 +11,24 @@ def km_axes(center=(-2.5, 0.2, 0), xlen=7.4):
                 center=list(center))
 
 
-class KaplanMeier(VoiceoverScene):
+class KaplanMeier(StatsScene):
     def construct(self):
         self.card()
+        self.ask("Kaplan--Meier, at an event time: survival is multiplied by...",
+                 ["$1 - d/n$, among those at risk", "$d/n$", "$n/N$"], 0,
+                 say="Kaplan and Meier wrote survival as a chain of conditional survivals. At each event time, what "
+                     "factor multiplies the running estimate?",
+                 reveal="One minus d over n: the share of those still at risk who survive that moment. Censored "
+                        "patients leave the risk set without dragging survival down.")
         self.derive()
         self.staircase()
         self.both()
         self.redistribute()
         self.median()
+        self.answer()
 
     def card(self):
-        card = chapter_card(3, r"Kaplan--Meier", r"A product of conditional survivals", lit=(1958,), part=PART)
-        with self.voiceover("Chapter three. Kaplan and Meier."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(3, r"Kaplan--Meier", r"A product of conditional survivals", lit=(1958,), part=PART, said="Chapter three. Kaplan and Meier.")
 
     def derive(self):
         rows = [

@@ -5,9 +5,15 @@ import numpy as np
 from videos.stats.stats56.common import *  # noqa: F403
 
 
-class Fission(VoiceoverScene):
+class Fission(StatsScene):
     def construct(self):
         self.card()
+        self.ask("Data fission splits one Gaussian observation into two pieces that are...",
+                 ["independent", "identical"], 0,
+                 say="Data fission: split a single Gaussian observation, using added noise, into two pieces. How "
+                     "are the pieces related?",
+                 reveal="Independent: X plus noise and X minus scaled noise. Select with one, infer with the other, "
+                        "with no double dipping, even with one observation.")
         self.splitting()
         self.fission()
         self.thinning()
@@ -16,12 +22,10 @@ class Fission(VoiceoverScene):
         self.compare()
         self.counts()
         self.board()
+        self.answer()
 
     def card(self):
-        card = chapter_card(5, r"Data fission and thinning", r"Splitting a single observation", lit=(2023,), part=PART)
-        with self.voiceover("Chapter five. Data fission and data thinning: splitting a single observation in two."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(5, r"Data fission and thinning", r"Splitting a single observation", lit=(2023,), part=PART, said="Chapter five. Data fission and data thinning: splitting a single observation in two.")
 
     def splitting(self):
         rows = [

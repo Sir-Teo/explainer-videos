@@ -7,21 +7,28 @@ from videos.stats.stats2.common import *  # noqa: F403
 FREQ, LOGIC, BELIEF = S.EST, S.LIK, S.PRIOR
 
 
-class Meaning(VoiceoverScene):
+class Meaning(StatsScene):
     def construct(self):
         self.card()
+        self.ask("Can a one-off event, like a particular election, have a frequency probability?",
+                 ["yes, like a coin", "not directly: there's no long run of repeats", "only if it happened before"], 1,
+                 say="A one-off event, a particular election. Can it have a probability in the frequency sense?",
+                 reveal="Not directly: a frequency needs a long run of repeats. A degree of belief has no such "
+                        "limit, which is one reason both readings survive.")
         self.frequency()
         self.logic_belief()
         self.dutch_book()
         self.cox()
         self.synthesis()
+        self.answer()
+        self.checkpoint([("What do Kolmogorov's axioms leave open?", r"what a probability \emph{is}"),
+                         ("Two readings of probability this series uses?", "a long-run frequency, and a degree of belief")],
+                        narration="Last checkpoint of the part.",
+                        answers_narration="The axioms say how probabilities fit together, not what they are. And "
+                                          "the series uses both readings.")
 
     def card(self):
-        card = chapter_card(14, r"What probability means", r"A frequency, a logic, or a degree of belief?",
-                            lit=(1933,), part=PART)
-        with self.voiceover("Chapter fourteen. What probability means."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(14, r"What probability means", r"A frequency, a logic, or a degree of belief?", lit=(1933,), part=PART, said="Chapter fourteen. What probability means.")
 
     def frequency(self):
         g = np.random.Generator(np.random.PCG64(1866))

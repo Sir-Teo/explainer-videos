@@ -3,10 +3,16 @@ from __future__ import annotations
 from videos.stats.stats61.common import *  # noqa: F403
 
 
-class OpenProblems(LectureMixin, VoiceoverScene):
+class OpenProblems(LectureMixin, StatsScene):
     def construct(self):
         self.card_voiceover("Chapter ten. Open problems in optimal transport for statistics.", 10, r"Open problems",
                             r"Where the transport theory stops")
+        self.ask("Plug-in Wasserstein estimation in high dimensions suffers from...",
+                 ["the curse of dimensionality", "nothing"], 0,
+                 say="Where the transport theory stops. Estimate a Wasserstein distance by plugging in two "
+                     "empirical measures, in high dimension. What's the problem?",
+                 reveal="The curse of dimensionality: the plug-in error shrinks like n to the minus one over d. "
+                        "Entropic, sliced and smoothed distances trade the target for the rate.")
         self.map_()
         self.op_curse()
         self.op_inference()
@@ -14,6 +20,11 @@ class OpenProblems(LectureMixin, VoiceoverScene):
         self.op_sampling()
         self.op_generative()
         self.problems()
+        self.answer()
+        self.checkpoint([("The barycenter of $N(0, 1)$ and $N(0, 9)$?", "$N(0, 4)$"),
+                         ("Langevin is the Wasserstein gradient flow of?", "KL to the target")],
+                        narration="Checkpoint. Averages and flows.",
+                        answers_narration="Variance four. And KL to the target.")
 
     def map_(self):
         hdr = [r"object", r"estimator", r"rate or guarantee"]

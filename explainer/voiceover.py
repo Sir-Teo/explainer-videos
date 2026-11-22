@@ -115,6 +115,12 @@ class VoiceoverScene(Scene):
     def setup(self):
         super().setup()
         self._narration: list[dict] = []
+        self._marks: list[dict] = []
+
+    def mark(self, name: str) -> None:
+        """Record a named moment of the scene (``title``, ``run``, ...) in its ``.narration.json``, for whatever
+        follows the film's timeline (a series' score places its theme at the ``title`` mark)."""
+        self._marks.append({"name": name, "time": self.renderer.time})
 
     @contextmanager
     def voiceover(self, text: str, gain: float | None = None, pad: float = 0.15):
@@ -179,7 +185,8 @@ class VoiceoverScene(Scene):
         super().tear_down()
         out = os.environ.get("EXPLAINER_NARRATION_OUT")  # a dry run (no frames) can still record what is said
         if out and self._narration:
-            meta = {"scene": type(self).__name__, "duration": self.renderer.time, "lines": self._narration}
+            meta = {"scene": type(self).__name__, "duration": self.renderer.time, "lines": self._narration,
+                    "marks": getattr(self, "_marks", [])}
             path = Path(out) / f"{type(self).__name__}.narration.json"
             path.parent.mkdir(parents=True, exist_ok=True)
             path.write_text(json.dumps(meta, ensure_ascii=False, indent=1))
@@ -191,7 +198,8 @@ class VoiceoverScene(Scene):
         if not self._narration or movie is None:
             return
         movie.parent.mkdir(parents=True, exist_ok=True)
-        meta = {"scene": type(self).__name__, "duration": self.renderer.time, "lines": self._narration}
+        meta = {"scene": type(self).__name__, "duration": self.renderer.time, "lines": self._narration,
+                    "marks": getattr(self, "_marks", [])}
         movie.with_suffix(".narration.json").write_text(json.dumps(meta, ensure_ascii=False, indent=1))
         manifest = Path(inspect.getfile(type(self))).with_name("manifest.py")
         movie.with_suffix(".srt").write_text(to_srt(subtitle_cues(

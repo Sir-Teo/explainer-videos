@@ -5,9 +5,15 @@ import numpy as np
 from videos.stats.stats41.common import *  # noqa: F403
 
 
-class Mechanisms(VoiceoverScene):
+class Mechanisms(StatsScene):
     def construct(self):
         self.card()
+        self.ask("Income is missing more often for high earners. The mechanism is...",
+                 ["MCAR", "MAR", "MNAR"], 2,
+                 say="Rubin's three mechanisms. Suppose income is missing more often for people with high incomes. "
+                     "Which mechanism is that?",
+                 reveal="Missing not at random: the chance of being missing depends on the value that's missing. No "
+                        "analysis of the observed data alone can rule it out.")
         self.notation()
         self.three()
         self.grid()
@@ -17,12 +23,10 @@ class Mechanisms(VoiceoverScene):
         self.graphs()
         self.dropout()
         self.untestable()
+        self.answer()
 
     def card(self):
-        card = chapter_card(1, r"Mechanisms", r"Why is it missing?", lit=(1976,), part=PART)
-        with self.voiceover("Chapter one. Mechanisms."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(1, r"Mechanisms", r"Why is it missing?", lit=(1976,), part=PART, said="Chapter one. Mechanisms.")
 
     def notation(self):
         rows = [

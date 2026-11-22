@@ -4,7 +4,7 @@ from explainer.cs import *  # noqa: F403
 from videos.cs.cs24.common import (CTRL, DATA, HEAD, LAM, NO, PART, YES, grid_table, load, mono, words)
 
 
-class Simd(VoiceoverScene):
+class Simd(WatchScene):
     def construct(self):
         self.card()
         self.scan()
@@ -12,14 +12,14 @@ class Simd(VoiceoverScene):
         self.swiss()
 
     def card(self):
-        card = chapter_card(10, r"Algorithm engineering II: \ SIMD and hashing", r"What if one instruction could "
+        self.chapter(10, r"Algorithm engineering II: \ SIMD and hashing", r"What if one instruction could "
                             r"look at 32 bytes?", lit=(2017, 2019), extra=((2017, r"Abseil's Swiss tables"),
-                                                                           (2019, r"simdjson")), part=PART)
-        with self.voiceover("Chapter ten. Algorithm engineering, part two: vector instructions and hashing."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+                                                                           (2019, r"simdjson")), part=PART, said="Chapter ten. Algorithm engineering, part two: vector instructions and hashing.")
 
     def scan(self):
+        self.ask(r"One AVX2 compare classifies \\ how many bytes as letters?", [r"1", r"8", r"32"], 2,
+                 say="One AVX2 instruction checks bytes against a range. How many bytes at once?",
+                 reveal="Thirty-two.")
         t = load("simd")["token"]
         head = label(r"Finding words, \ 32 bytes at a time", font_size=34).to_edge(UP, buff=0.3)
         text = "It was the best of times, it wa"
@@ -57,8 +57,7 @@ class Simd(VoiceoverScene):
             'letter has a non-letter predecessor; the mask carries boundary state between vector blocks. '
             "<bookmark mark='d'/> The table reports scalar and vector timings on the complete corpus. After each "
             'trial, we check every transformed byte and every word-start mask, as well as total words and '
-            "letters. <bookmark mark='e'/> The simdjson work illustrates related classification techniques. An "
-            "isolated tokenizer's timing is not a measured phase fraction of the complete word-count program."
+            "letters. <bookmark mark='e'/> The simdjson work illustrates related classification techniques."
         ) as vo:
             self.play(FadeIn(head), FadeIn(cells))
             vo.wait_until("a")
@@ -169,7 +168,7 @@ class Simd(VoiceoverScene):
             "mark='b'/> An SSE2 comparison filters candidate slots, followed by full key checks. Group probing "
             "and collisions still require work. <bookmark mark='c'/> The two open-addressing tables use the same "
             'requested capacity and occupancies. The standard unordered map chooses its own bucket count, which '
-            "is recorded separately. Its occupancy is not automatically seven eighths. <bookmark mark='d'/> Read "
+            "is recorded separately. <bookmark mark='d'/> Read "
             'insertion and lookup times for each workload. Every inserted-key count and every lookup is checked '
             "against an independently sorted multiset after timing. <bookmark mark='e'/> Production Abseil and "
             'other modern tables develop related ideas with additional policies and guarantees; this small '
@@ -189,3 +188,9 @@ class Simd(VoiceoverScene):
             self.play(FadeIn(notes[2]), FadeIn(notes[3]))
         self.wait(0.3)
         self.clear_scene()
+        self.checkpoint(
+            [(r"Why is $3^n$ the submask total?", r"Each bit: outside, mask only, or both"),
+             (r"What does SIMD trade?", r"One instruction across many data lanes")],
+            narration="Checkpoint. Why do submask enumerations total three to the n? And what does SIMD trade?",
+            answers_narration="Each bit is outside the mask, in the mask only, or in both. And it applies one instruction "
+                              "to many lanes of data at once.")

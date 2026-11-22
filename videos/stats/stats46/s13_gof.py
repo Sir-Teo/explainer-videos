@@ -5,9 +5,15 @@ import numpy as np
 from videos.stats.stats46.common import *  # noqa: F403
 
 
-class GoodnessOfFit(VoiceoverScene):
+class GoodnessOfFit(StatsScene):
     def construct(self):
         self.card()
+        self.ask("Kolmogorov--Smirnov with the mean and SD estimated from the same data, the usual table. The test is...",
+                 ["exact", "far too conservative"], 1,
+                 say="Test normality with the Kolmogorov-Smirnov statistic, estimating the mean and standard "
+                     "deviation from the same data, and read the usual table. How does it behave?",
+                 reveal="Far too conservative: the fitted normal hugs the data. Lilliefors computed the right "
+                        "table; in general, estimated parameters change the limit.")
         self.pearson()
         self.check()
         self.estimated()
@@ -15,12 +21,14 @@ class GoodnessOfFit(VoiceoverScene):
         self.chart()
         self.durbin()
         self.board()
+        self.answer()
+        self.checkpoint([("Welch's uniform pair, 0.9 apart: the interval covers?", "certainly"),
+                         ("KS with estimated parameters and the usual table?", "far too conservative: use Lilliefors")],
+                        narration="Checkpoint. Conditioning and fit.",
+                        answers_narration="Certainly. And far too conservative.")
 
     def card(self):
-        card = chapter_card(12, r"Goodness of fit, \ rigorously", r"Testing a whole distribution", lit=(1900, 1967), part=PART)
-        with self.voiceover("Chapter twelve. Goodness of fit, rigorously: testing a whole distribution."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(12, r"Goodness of fit, \ rigorously", r"Testing a whole distribution", lit=(1900, 1967), part=PART, said="Chapter twelve. Goodness of fit, rigorously: testing a whole distribution.")
 
     def pearson(self):
         rows = [

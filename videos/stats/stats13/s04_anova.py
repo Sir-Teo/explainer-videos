@@ -7,9 +7,15 @@ from videos.stats.stats13.common import *  # noqa: F403
 FERT = [r"none", r"N", r"P", r"NPK"]
 
 
-class Anova(VoiceoverScene):
+class Anova(StatsScene):
     def construct(self):
         self.card()
+        self.ask("Four fertilizers, six plots each. The ANOVA $F$-test's degrees of freedom?",
+                 ["$(4, 24)$", "$(3, 20)$", "$(3, 23)$"], 1,
+                 say="Four fertilizers, six plots each, twenty-four in all. What are the degrees of freedom of the "
+                     "F-test?",
+                 reveal="Three and twenty: three for the differences among four means, twenty for the plots within "
+                        "groups. Pythagoras again: the sums of squares add up.")
         self.trial()
         self.decompose()
         self.pythagoras()
@@ -17,12 +23,14 @@ class Anova(VoiceoverScene):
         self.table()
         self.regression()
         self.expectations()
+        self.answer()
+        self.checkpoint([("Does Fisher's randomization test need a soil model?", "no: the randomization is the model"),
+                         ("One-way ANOVA, 4 groups of 6: the $F$-test's df?", "$(3, 20)$")],
+                        narration="Checkpoint. Fisher's principles.",
+                        answers_narration="No model needed. And three and twenty.")
 
     def card(self):
-        card = chapter_card(3, r"One-way ANOVA", r"Splitting the variation, \ and Pythagoras again", lit=(1919,), part=PART)
-        with self.voiceover("Chapter three. The analysis of variance."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(3, r"One-way ANOVA", r"Splitting the variation, \ and Pythagoras again", lit=(1919,), part=PART, said="Chapter three. The analysis of variance.")
 
     def dotplot(self, d, center, x_length=6.2, y_length=4.4):
         y = np.asarray(d["y"])

@@ -8,19 +8,23 @@ SHAPES = [("line", r"line"), ("parabola", r"parabola"), ("circle", r"circle"), (
           ("noise", r"noise")]
 
 
-class Measures(VoiceoverScene):
+class Measures(StatsScene):
     def construct(self):
         self.card()
+        self.ask("On a perfect parabola $y = x^2$, which measure detects the dependence?",
+                 ["Pearson's $r$", r"Spearman's $\rho$", "distance correlation"], 2,
+                 say="Six shapes, five measures of dependence. On a perfect parabola, which detects the dependence: "
+                     "Pearson's r, Spearman's rho, or distance correlation?",
+                 reveal="Distance correlation. Pearson and Spearman both look for a monotone trend, and a symmetric "
+                        "parabola has none.")
         self.gallery()
         self.ranks()
         self.monotone()
         self.dcor_mi()
+        self.answer()
 
     def card(self):
-        card = chapter_card(13, r"Measuring dependence", r"One number for a relationship: \ which one?", lit=(), part=PART)
-        with self.voiceover("Chapter thirteen. Measuring dependence."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(13, r"Measuring dependence", r"One number for a relationship: \ which one?", lit=(), part=PART, said="Chapter thirteen. Measuring dependence.")
 
     def gallery(self):
         d = load("measures")

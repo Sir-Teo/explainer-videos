@@ -5,21 +5,25 @@ import numpy as np
 from videos.stats.stats28.common import *  # noqa: F403
 
 
-class Subsets(VoiceoverScene):
+class Subsets(StatsScene):
     def construct(self):
         self.card()
+        self.ask("Stepwise regression's reported $p$-values...",
+                 ["are valid", "ignore the search, so they are too small"], 1,
+                 say="Stepwise regression adds and drops variables by their p-values. Are the p-values it finally "
+                     "reports valid?",
+                 reveal="No: they ignore the search that produced the model, so they're too small and the intervals "
+                        "too narrow. Tune by cross-validation, and don't believe the chosen model's p-values.")
         self.sins()
         self.search()
         self.race()
         self.prostate_test()
         self.stability()
         self.lesson()
+        self.answer()
 
     def card(self):
-        card = chapter_card(10, r"Subset selection", r"Best subsets, \ stepwise, \ and the lasso", lit=(2020,), part=PART)
-        with self.voiceover("Chapter ten. Subset selection."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(10, r"Subset selection", r"Best subsets, \ stepwise, \ and the lasso", lit=(2020,), part=PART, said="Chapter ten. Subset selection.")
 
     def sins(self):
         rows = fit_rows(VGroup(

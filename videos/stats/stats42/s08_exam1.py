@@ -7,7 +7,7 @@ from videos.stats.stats42.common import *  # noqa: F403
 LTOP = 1.45  # the first ladder row, under a lifted card
 
 
-class ExamLikelihood(ExamMixin, VoiceoverScene):
+class ExamLikelihood(ExamMixin, StatsScene):
     def construct(self):
         self.card()
         self.p1()
@@ -15,10 +15,7 @@ class ExamLikelihood(ExamMixin, VoiceoverScene):
         self.p3()
 
     def card(self):
-        card = chapter_card(7, r"Exam I: \ likelihood", r"Problems 1--3", part=PART)
-        with self.voiceover("Chapter seven. The exam begins, with three problems on likelihood."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(7, r"Exam I: \ likelihood", r"Problems 1--3", part=PART, said="Chapter seven. The exam begins, with three problems on likelihood.")
 
     # ------------------------------------------------------------------------------------------ Problem 1
     def p1(self):

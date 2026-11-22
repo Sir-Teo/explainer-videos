@@ -5,21 +5,24 @@ import numpy as np
 from videos.stats.stats7.common import *  # noqa: F403
 
 
-class MonteCarlo(VoiceoverScene):
+class MonteCarlo(StatsScene):
     def construct(self):
         self.card()
+        self.ask("To halve a Monte Carlo error, multiply the number of draws by...",
+                 ["2", "4", "10"], 1,
+                 say="Monte Carlo turns an integral into an average. To halve its error, how many times more draws "
+                     "do you need?",
+                 reveal="Four: the error falls like one over root n. And report that error bar, decided in advance.")
         self.darts()
         self.rate()
         self.dimension()
         self.quasi()
         self.buffon()
         self.lazzarini()
+        self.answer()
 
     def card(self):
-        card = chapter_card(5, r"Monte Carlo integration", r"Integrals as averages", lit=(1777,), part=PART)
-        with self.voiceover("Chapter five. Monte Carlo integration."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(5, r"Monte Carlo integration", r"Integrals as averages", lit=(1777,), part=PART, said="Chapter five. Monte Carlo integration.")
 
     def darts(self):
         d = load("montecarlo")

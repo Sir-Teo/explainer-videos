@@ -4,7 +4,7 @@ from explainer.cs import *  # noqa: F403
 from videos.cs.cs46.common import BG, DATA, HEAD, KERN, LAM, NO, PART, YES, grid_table, load
 
 
-class Job(VoiceoverScene):
+class Job(WatchScene):
     def construct(self):
         self.card()
         self.arrivals()
@@ -12,12 +12,8 @@ class Job(VoiceoverScene):
         self.ledger()
 
     def card(self):
-        card = chapter_card(13, r"The Job as a stream", r"Can a live answer equal the batch answer?",
-                            lit=(2013, 2015), extra=((2013, r"Kreps: \ the log"),
-                                                     (2015, r"Akidau et al.: \ the Dataflow model")), part=PART)
-        with self.voiceover("Chapter thirteen. The Job as a stream."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(13, r"The Job as a stream", r"Can a live answer equal the batch answer?", lit=(2013, 2015), extra=((2013, r"Kreps: \ the log"),
+                                                     (2015, r"Akidau et al.: \ the Dataflow model")), part=PART, said="Chapter thirteen. The Job as a stream.")
 
     def arrivals(self):
         j = load("job")
@@ -68,6 +64,10 @@ class Job(VoiceoverScene):
         self.clear_scene()
 
     def three(self):
+        self.ask(r"Books arrive as events, some delivered twice. \\ Without deduplication the counts are...",
+                 [r"exact", r"too high"], 1,
+                 say="The novels arrive as a stream of events, and some are delivered twice. Without deduplication, what are the counts?",
+                 reveal="Too high, by every duplicate book.")
         j = load("job")
         r = j["results"]
         head = label(r"Three pipelines, \ one stream", font_size=36).to_edge(UP, buff=0.3)

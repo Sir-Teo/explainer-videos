@@ -14,21 +14,25 @@ def spline_est(d):
     raise KeyError
 
 
-class Checking(VoiceoverScene):
+class Checking(StatsScene):
     def construct(self):
         self.card()
+        self.ask("Three thousand residuals make a blur. Instead, plot...",
+                 ["binned averages of the residuals", "nothing", "only the outliers"], 0,
+                 say="With three thousand points, a plot of residuals against fitted values is a blur. What do you "
+                     "plot instead?",
+                 reveal="Binned averages: each dot the average residual of a slice. A curve in the averages shows "
+                        "what the blur hides.")
         self.residuals()
         self.qq()
         self.age_curve()
         self.interaction()
         self.influence()
         self.summary()
+        self.answer()
 
     def card(self):
-        card = chapter_card(6, r"Checking it", r"Is the model hiding something?", part=PART)
-        with self.voiceover("Chapter six. Checking the model."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(6, r"Checking it", r"Is the model hiding something?", part=PART, said="Chapter six. Checking the model.")
 
     def residuals(self):
         d = load("checks")

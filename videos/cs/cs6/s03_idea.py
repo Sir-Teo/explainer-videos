@@ -9,7 +9,7 @@ from videos.cs.cs6.common import (BG, CODE, COST, CTRL, DATA, FUNC, HEAD, HIST, 
                                   say, word_bits)
 
 
-class Idea(VoiceoverScene):
+class Idea(WatchScene):
     def construct(self):
         self.card()
         self.cycle()
@@ -18,10 +18,7 @@ class Idea(VoiceoverScene):
         self.bottleneck()
 
     def card(self):
-        card = chapter_card(2, r"Instructions are data", r"What does a processor do, over and over?", part=PART)
-        with self.voiceover("Chapter two. Instructions are data."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(2, r"Instructions are data", r"What does a processor do, over and over?", part=PART, said="Chapter two. Instructions are data.")
 
     # ------------------------------------------------------------------
     def cycle(self):
@@ -72,6 +69,16 @@ class Idea(VoiceoverScene):
 
     # ------------------------------------------------------------------
     def step(self):
+        self.wrong_idea(r"Programs and data are different kinds of thing",
+                        r"They are the same bits in the same memory. \\ The program counter decides",
+                        narration="It's natural to think of a program and its data as different kinds of thing.",
+                        right_narration="In a stored-program computer they are the same bits in the same memory. Whatever the "
+                                        "program counter points at is an instruction.")
+        self.clear_scene()
+        self.ask(r"In memory, \\ how can the machine tell an instruction from data?",
+                 [r"a tag bit marks instructions", r"it can't: only by how a word is used", r"they're in separate memories"], 1,
+                 say="Instructions and data sit in the same memory. How does the machine tell them apart?",
+                 reveal="It can't. A word is an instruction only because the program counter points at it.")
         head = label(r"One instruction, \ one step", font_size=38).to_edge(UP, buff=0.35)
         src = ["addi a0, zero, 5", "addi a1, zero, 7", "add  a2, a0, a1", "sw   a2, 64(zero)", "halt"]
         p = assemble("\n".join(src))

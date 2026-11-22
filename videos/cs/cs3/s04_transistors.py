@@ -7,7 +7,7 @@ from videos.cs.cs3.common import (COST, CTRL, DATA, HEAD, HIST, NO, ONE, PART, V
                                   load, nmos, pmos, rail)
 
 
-class Transistors(VoiceoverScene):
+class Transistors(WatchScene):
     def construct(self):
         self.card()
         self.speed()
@@ -17,11 +17,7 @@ class Transistors(VoiceoverScene):
         self.restore()
 
     def card(self):
-        card = chapter_card(3, r"The transistor", r"How do you make a switch with no moving parts?", lit=(1947, 1958),
-                            part=PART)
-        with self.voiceover("Chapter three. The transistor."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(3, r"The transistor", r"How do you make a switch with no moving parts?", lit=(1947, 1958), part=PART, said="Chapter three. The transistor.")
 
     # ------------------------------------------------------------------
     def speed(self):
@@ -159,6 +155,13 @@ class Transistors(VoiceoverScene):
 
     # ------------------------------------------------------------------
     def curve(self):
+        self.wrong_idea(r"Inside a computer, \\ signals are exact zeros and ones",
+                        r"They are analog voltages. \\ Every gate pulls them back to clean values",
+                        narration="Here's a picture most people have: inside a computer, every wire holds an exact zero or "
+                                  "an exact one.",
+                        right_narration="Not so. Every wire carries a voltage that can be anything in between. What makes it "
+                                        "digital is that every gate pulls the voltage back towards a clean value.")
+        self.clear_scene()
         d = load("cmos")
         vin, vout = np.asarray(d["vin"]), np.asarray(d["vout"])
         head = label(r"Between 0 and 1: \ the transfer curve", font_size=38).to_edge(UP, buff=0.35)
@@ -207,6 +210,10 @@ class Transistors(VoiceoverScene):
 
     # ------------------------------------------------------------------
     def restore(self):
+        self.ask(r"A sloppy 0, at 38\% of the supply, \\ goes through five inverters. \\ What comes out?",
+                 [r"still about 38\%", r"a clean 0 or 1", r"noise"], 1,
+                 say="Feed a chain of inverters a sloppy zero, at thirty-eight percent of the supply. What comes out the far end?",
+                 reveal="A clean value. Every gate restores the signal, so noise never accumulates.")
         d = load("cmos")
         vin, vout = np.asarray(d["vin"]), np.asarray(d["vout"])
 

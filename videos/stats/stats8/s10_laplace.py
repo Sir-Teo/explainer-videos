@@ -6,20 +6,24 @@ from videos.stats.stats8.common import *  # noqa: F403
 from videos.stats.stats8.compute import histogram_density
 
 
-class Laplace(VoiceoverScene):
+class Laplace(StatsScene):
     def construct(self):
         self.card()
+        self.ask("The SE of a ratio of two estimates needs...",
+                 ["the two SEs only", "the two SEs and their correlation", "nothing more"], 1,
+                 say="Laplace counted France as total births times a ratio estimated from a sample. What does the "
+                     "standard error of a ratio need?",
+                 reveal="Both standard errors and the correlation between the two estimates. Births and population "
+                        "move together, and the correlation shrinks the ratio's error.")
         self.history()
         self.ratio()
         self.delta()
         self.design()
         self.world()
+        self.answer()
 
     def card(self):
-        card = chapter_card(9, r"Standard errors for ratios", r"Laplace counts France", lit=(1802,), part=PART)
-        with self.voiceover("Chapter nine. Standard errors for ratios, and Laplace's census of France."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(9, r"Standard errors for ratios", r"Laplace counts France", lit=(1802,), part=PART, said="Chapter nine. Standard errors for ratios, and Laplace's census of France.")
 
     def history(self):
         d = load("laplace")["laplace"]

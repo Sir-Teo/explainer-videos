@@ -5,9 +5,15 @@ import numpy as np
 from videos.stats.stats34.common import *  # noqa: F403
 
 
-class Shift(VoiceoverScene):
+class Shift(StatsScene):
     def construct(self):
         self.card()
+        self.ask("Calibrate at one hospital, predict at another with a different patient mix. The guarantee...",
+                 ["still holds", "can fail, unless reweighted"], 1,
+                 say="Calibrate a conformal predictor at one hospital, then use it at another whose patients are "
+                     "older. Does the coverage guarantee still hold?",
+                 reveal="It can fail: the new cases aren't exchangeable with the old. Weighted conformal reweights "
+                        "by the likelihood ratio between the populations, if you can estimate it.")
         self.covariate()
         self.ages()
         self.unweighted()
@@ -19,12 +25,14 @@ class Shift(VoiceoverScene):
         self.aci_rule()
         self.aci_chart()
         self.aci_bound()
+        self.answer()
+        self.checkpoint([("CQR's bands are?", "wider where the noise is larger"),
+                         ("Under covariate shift, conformal needs?", "reweighting by the likelihood ratio")],
+                        narration="Checkpoint. Bands and shifts.",
+                        answers_narration="Wider where the noise is. And reweighting.")
 
     def card(self):
-        card = chapter_card(8, r"Under shift", r"When the future is not exchangeable with the past", lit=(2019, 2021), part=PART)
-        with self.voiceover("Chapter eight. Conformal prediction under shift."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(8, r"Under shift", r"When the future is not exchangeable with the past", lit=(2019, 2021), part=PART, said="Chapter eight. Conformal prediction under shift.")
 
     def covariate(self):
         rows = [

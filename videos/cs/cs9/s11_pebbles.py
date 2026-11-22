@@ -7,7 +7,7 @@ from videos.cs.cs9.common import (BG, CODE, COST, CTRL, DATA, FUNC, HEAD, HIST, 
                                   load)
 
 
-class Pebbles(VoiceoverScene):
+class Pebbles(WatchScene):
     def construct(self):
         self.card()
         self.game()
@@ -16,13 +16,7 @@ class Pebbles(VoiceoverScene):
         self.against()
 
     def card(self):
-        card = chapter_card(10, r"The red-blue pebble game", "How much data must this computation move?",
-                            lit=(1981,), extra=((1981, r"Hong and Kung"),), part=PART)
-        with self.voiceover(
-            "Chapter ten. The red-blue pebble game."
-        ):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(10, r"The red-blue pebble game", "How much data must this computation move?", lit=(1981,), extra=((1981, r"Hong and Kung"),), part=PART, said="Chapter ten. The red-blue pebble game.")
 
     def game(self):
         head = label(r"Hong and Kung, \ 1981", font_size=38).to_edge(UP, buff=0.35)
@@ -117,6 +111,10 @@ class Pebbles(VoiceoverScene):
         self.clear_scene()
 
     def proof(self):
+        self.ask(r"Multiply $n \times n$ matrices with $M$ words of fast memory. \\ Data moved grows like...",
+                 [r"$n^2$", r"$n^3/\sqrt{M}$", r"$n^3$"], 1,
+                 say="Multiply two n by n matrices, the classical way, with M words of fast memory. How much data must move?",
+                 reveal="Order n cubed over the square root of M, and Hong and Kung proved no schedule does better.")
         head = label("Classical multiplication: \\ two-level movement proof sketch", font_size=36).to_edge(UP, buff=0.35)
         steps = VGroup(
             label(r"1. \ cut any schedule into segments of $M$ loads and stores", font_size=24, color=GREY_A),
@@ -193,3 +191,9 @@ class Pebbles(VoiceoverScene):
             self.play(FadeIn(punch))
         self.wait(0.3)
         self.clear_scene()
+        self.checkpoint(
+            [(r"Average access: hit 1, miss rate 2\%, penalty 200?", r"5 cycles"),
+             (r"Why does tiling speed up matrix multiply?", r"Each tile is reused many times while it fits in cache")],
+            narration="Checkpoint. Hits take one cycle, two percent miss, and a miss costs two hundred. What's the average? "
+                      "And why does tiling help matrix multiply?",
+            answers_narration="Five cycles. And each small tile is reused many times while it sits in the cache.")

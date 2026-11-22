@@ -4,7 +4,7 @@ from explainer.cs import *  # noqa: F403
 from videos.cs.cs33.common import (GREY_B, HEAD, LAM, NO, PART, T0C, T1C, T2C, YES, load, mono)
 
 
-class Consensus(VoiceoverScene):
+class Consensus(WatchScene):
     def construct(self):
         self.card()
         self.problem()
@@ -13,11 +13,7 @@ class Consensus(VoiceoverScene):
         self.valency()
 
     def card(self):
-        card = chapter_card(12, r"Consensus numbers", r"Which atomic instructions are more powerful?", lit=(1991,),
-                            extra=((1991, r"Herlihy: \ wait-free synchronization"),), part=PART)
-        with self.voiceover("Chapter twelve. Consensus numbers."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(12, r"Consensus numbers", r"Which atomic instructions are more powerful?", lit=(1991,), extra=((1991, r"Herlihy: \ wait-free synchronization"),), part=PART, said="Chapter twelve. Consensus numbers.")
 
     def problem(self):
         d = load("consensus")
@@ -72,6 +68,9 @@ class Consensus(VoiceoverScene):
         self.clear_scene()
 
     def ladder(self):
+        self.ask(r"Consensus number of compare-and-swap:", [r"$1$", r"$2$", r"$\infty$"], 2,
+                 say="Reads and writes solve consensus for one thread. How many threads can compare-and-swap handle?",
+                 reveal="Any number: infinity. It sits at the top of Herlihy's hierarchy.")
         head = label(r"Herlihy's hierarchy", font_size=36).to_edge(UP, buff=0.3)
         rungs = [(r"1", r"atomic reads and writes", GREY_B),
                  (r"2", r"test-and-set, \ swap, \ fetch-and-add, \ queues, \ stacks", LAM),

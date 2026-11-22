@@ -19,7 +19,7 @@ CHIPS = [(1971, 2300, r"4004"), (1978, 29000, r"8086"), (1985, 275000, r"386"), 
          (2022, 8.0e10, r"H100"), (2024, 2.08e11, r"B200")]
 
 
-class History(VoiceoverScene):
+class History(WatchScene):
     def construct(self):
         self.card()
         self.machines()
@@ -27,11 +27,7 @@ class History(VoiceoverScene):
         self.moore()
 
     def card(self):
-        card = chapter_card(13, r"Machines of switches", r"Who built the first computers out of switches?",
-                            lit=(1941, 1944, 1945, 1947, 1958, 1965), part=PART)
-        with self.voiceover("Chapter thirteen. Machines of switches."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(13, r"Machines of switches", r"Who built the first computers out of switches?", lit=(1941, 1944, 1945, 1947, 1958, 1965), part=PART, said="Chapter thirteen. Machines of switches.")
 
     # ------------------------------------------------------------------
     def machines(self):
@@ -66,6 +62,10 @@ class History(VoiceoverScene):
 
     # ------------------------------------------------------------------
     def z3(self):
+        self.ask(r"Konrad Zuse's Z3 (1941), \\ built of relays. \\ Additions per second?",
+                 [r"about 5", r"about 5{,}000", r"about 5 million"], 0,
+                 say="Zuse's Z3, built from relays in 1941. How many additions a second?",
+                 reveal="About five.")
         head = label(r"Two machines, \ closer up", font_size=38).to_edge(UP, buff=0.35)
         z = VGroup(label(r"Zuse's Z3 \ (1941)", font_size=30, color=CTRL),
                    label(r"22-bit binary floating point", font_size=24, color=GREY_A),

@@ -5,10 +5,23 @@ import numpy as np
 from videos.stats.stats59.common import *  # noqa: F403
 
 
-class Regime(LectureMixin, VoiceoverScene):
+class Regime(LectureMixin, StatsScene):
     def construct(self):
         self.card_voiceover("Chapter one. The proportional regime: what changes when p grows with n, and what takes the "
                             "place of the old answers.", 1, r"The proportional regime", r"$p/n \to \kappa$", lit=(2019,))
+        self.wrong_idea("With $n$ in the thousands, classical asymptotics apply",
+                        "If $p$ grows with $n$, they fail: inflated MLEs, miscalibrated tests",
+                        narration="A reassuring rule of thumb: with thousands of observations, the classical "
+                                  "large-sample results apply.",
+                        right_narration="Not when the number of parameters grows with n. With p a fixed fraction of "
+                                        "n, maximum likelihood estimates are inflated and likelihood-ratio tests "
+                                        "reject far too often, however large n is.")
+        self.ask("Logistic regression with $p/n = 0.2$. The MLE's coefficients are...",
+                 ["unbiased", "inflated in magnitude", "shrunk toward zero"], 1,
+                 say="The proportional regime: p grows with n. Logistic regression with p over n equal to point "
+                     "two. How do the maximum likelihood coefficients behave?",
+                 reveal="They're inflated in magnitude, systematically, and their standard errors are too small. "
+                        "Sur and Candès computed the factor exactly.")
         self.scaling()
         self.ols()
         self.mp_chart()
@@ -17,6 +30,7 @@ class Regime(LectureMixin, VoiceoverScene):
         self.null_worked()
         self.existence()
         self.universality()
+        self.answer()
 
     def scaling(self):
         heading = label('The proportional regime and model assumptions', font_size=30, color=PROPC).move_to([0, 3.35, 0])

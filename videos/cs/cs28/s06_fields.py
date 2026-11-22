@@ -8,7 +8,7 @@ from explainer.cs import *  # noqa: F403
 from videos.cs.cs28.common import (BG, CTRL, DATA, HEAD, LAM, NO, PART, YES, fit_right, load, mono)
 
 
-class Fields(VoiceoverScene):
+class Fields(WatchScene):
     def construct(self):
         self.card()
         self.prime()
@@ -16,13 +16,12 @@ class Fields(VoiceoverScene):
         self.which()
 
     def card(self):
-        card = chapter_card(5, r"Finite fields", r"Can bytes be added, multiplied and divided?", lit=(1830, 1960),
-                            extra=((1830, r"Galois"), (1960, r"Reed--Solomon")), part=PART)
-        with self.voiceover("Chapter five. Finite fields."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(5, r"Finite fields", r"Can bytes be added, multiplied and divided?", lit=(1830, 1960), extra=((1830, r"Galois"), (1960, r"Reed--Solomon")), part=PART, said="Chapter five. Finite fields.")
 
     def prime(self):
+        self.ask(r"Arithmetic modulo $10$. \\ Can you divide by every nonzero number?", [r"yes", r"no"], 1,
+                 say="Arithmetic modulo ten. Can you divide by every number except zero?",
+                 reveal="No: two times five is zero, so two has no inverse. Modulo a prime, every nonzero number does.")
         head = label(r"Arithmetic modulo a prime", font_size=34).to_edge(UP, buff=0.3)
         p = 7
         cells = VGroup()

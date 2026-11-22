@@ -17,7 +17,7 @@ def tile(content, caption, color, TW=3.6, TH=2.3):
     return Group(frame, content, cap)
 
 
-class Outro(VoiceoverScene):
+class Outro(WatchScene):
     def construct(self):
         self.recap()
         self.payoffs()
@@ -48,6 +48,12 @@ class Outro(VoiceoverScene):
             self.play(LaggedStart(*[FadeIn(t, shift=UP * 0.15) for t in tiles], lag_ratio=0.25), run_time=4.0)
         self.wait(0.5)
         self.clear_scene()
+        self.checkpoint(
+            [(r"What is a data-race-free program promised?", r"Sequential consistency"),
+             (r"Why can't reads and writes solve 2-thread consensus?", r"A bivalent state can never be decided")],
+            narration="Last checkpoint. What does a data-race-free program get in return? And why can't reads and writes solve consensus for two threads?",
+            answers_narration="Sequentially consistent behaviour. And the valency argument: from a bivalent state, no single "
+                              "read or write can force a decision both threads see.")
 
     def payoffs(self):
         card = payoff_card([

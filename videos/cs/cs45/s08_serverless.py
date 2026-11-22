@@ -10,7 +10,7 @@ from videos.cs.cs45.common import (BG, DATA, HEAD, KERN, LAM, NO, PART, YES, cod
 PER_SERVER_RPS = 200    # the model's assumption in explainer/cs/cloud/cost.serverless_vs_server (one m5.large)
 
 
-class Serverless(VoiceoverScene):
+class Serverless(WatchScene):
     def construct(self):
         self.card()
         self.model()
@@ -19,15 +19,17 @@ class Serverless(VoiceoverScene):
         self.concurrency()
 
     def card(self):
-        card = chapter_card(7, r"Serverless", r"What if you rented only the milliseconds?",
-                            lit=(2014, 2020), extra=((2014, r"AWS Lambda"),
+        self.chapter(7, r"Serverless", r"What if you rented only the milliseconds?", lit=(2014, 2020), extra=((2014, r"AWS Lambda"),
                                                      (2019, r"Jonas et al.: \ the Berkeley view"),
-                                                     (2020, r"Shahrad et al.: \ serverless in the wild")), part=PART)
-        with self.voiceover("Chapter seven. Serverless."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+                                                     (2020, r"Shahrad et al.: \ serverless in the wild")), part=PART, said="Chapter seven. Serverless.")
 
     def model(self):
+        self.wrong_idea(r"serverless means no servers",
+                        r"the servers are there; \\ you just don't rent them by the hour",
+                        narration="The name suggests it: serverless computing runs without servers.",
+                        right_narration="The servers are all there, in micro-VMs, packed by a scheduler. What changes is the "
+                                        "contract: you pay per request and per millisecond, and the provider manages them.")
+        self.clear_scene()
         head = label(r"A function, \ not a server", font_size=36).to_edge(UP, buff=0.3)
         srcs = VGroup(*[tag_box(t, color=DATA, size=19, w=2.7, h=0.56) for t in
                         ("HTTP request", "file uploaded", "queue message", "timer")]).arrange(DOWN, buff=0.32)
@@ -162,6 +164,10 @@ class Serverless(VoiceoverScene):
         self.clear_scene()
 
     def cold(self):
+        self.ask(r"A request reaches a function with no warm instance. \\ It waits for...", [r"nothing extra",
+                 r"a micro-VM, a runtime and the code to start"], 1,
+                 say="A request arrives for a function, and no instance is warm. What does it wait for?",
+                 reveal="A cold start: a micro-VM, the language runtime, and the function's own initialization.")
         head = label(r"Cold starts", font_size=36).to_edge(UP, buff=0.3)
         arrivals = [2, 4, 6, 13, 15, 24, 26, 28, 39, 47, 49, 58]      # minutes into an hour (illustrative)
         x0, w = -3.6, 10.0

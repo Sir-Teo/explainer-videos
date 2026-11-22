@@ -5,20 +5,30 @@ import numpy as np
 from videos.stats.stats53.common import *  # noqa: F403
 
 
-class Doob(VoiceoverScene):
+class Doob(StatsScene):
     def construct(self):
         self.card()
+        self.wrong_idea("Consistent for almost every truth means consistent for the truth",
+                        "Doob's exceptional null set can hold the truths you care about",
+                        narration="A comforting reading of Doob's theorem: the posterior is consistent almost "
+                                  "surely, so it will find the truth.",
+                        right_narration="Almost every truth as the prior sees it. Diaconis and Freedman built "
+                                        "priors that are inconsistent at natural truths: the null set can be where "
+                                        "you live. Schwartz's theorem tells you which truths are safe.")
+        self.ask("Doob's theorem guarantees posterior consistency for...",
+                 ["every truth", "almost every truth, under the prior"], 1,
+                 say="Doob's theorem of 1949: posterior consistency. For which truths does it guarantee it?",
+                 reveal="For almost every truth, as the prior weighs them. The exceptional set has prior "
+                        "probability zero, and it can still contain the truth you care about.")
         self.theorem()
         self.proof()
         self.chart()
         self.finite()
         self.catch()
+        self.answer()
 
     def card(self):
-        card = chapter_card(1, r"Doob's theorem", r"Consistency, \ almost surely \ under the prior", lit=(1949,), part=PART)
-        with self.voiceover("Chapter one. Doob's theorem: consistency, almost surely under the prior."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(1, r"Doob's theorem", r"Consistency, \ almost surely \ under the prior", lit=(1949,), part=PART, said="Chapter one. Doob's theorem: consistency, almost surely under the prior.")
 
     def theorem(self):
         rows = [

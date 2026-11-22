@@ -13,7 +13,7 @@ def packet(parts, size=15, h=0.5):
     return VGroup(*[tag_box(t, color=c, size=size, h=h) for t, c in parts]).arrange(RIGHT, buff=0.04)
 
 
-class Network(VoiceoverScene):
+class Network(WatchScene):
     def construct(self):
         self.card()
         self.vpc()
@@ -22,12 +22,8 @@ class Network(VoiceoverScene):
         self.egress()
 
     def card(self):
-        card = chapter_card(9, r"Cloud networking", r"How do a million private networks share one set of wires?",
-                            lit=(2009, 2016), extra=((2009, r"Amazon VPC"),
-                                                     (2016, r"Maglev: \ load balancing in software")), part=PART)
-        with self.voiceover("Chapter nine. Cloud networking."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(9, r"Cloud networking", r"How do a million private networks share one set of wires?", lit=(2009, 2016), extra=((2009, r"Amazon VPC"),
+                                                     (2016, r"Maglev: \ load balancing in software")), part=PART, said="Chapter nine. Cloud networking.")
 
     def vpc(self):
         head = label(r"A private network, \ rented", font_size=36).to_edge(UP, buff=0.3)
@@ -227,6 +223,10 @@ class Network(VoiceoverScene):
         self.clear_scene()
 
     def egress(self):
+        self.ask(r"Moving data into a cloud, and out of it. \\ The prices:", [r"both free",
+                 r"in is free, out is charged"], 1,
+                 say="What does a cloud charge to move data in, and to move it out?",
+                 reveal="In is free; out is charged by the gigabyte. Data has gravity.")
         j = load("job")
         pr = j["prices"]
         out, store = pr["egress per GB"], pr["s3 standard per GB-month"]

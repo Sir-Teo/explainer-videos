@@ -26,23 +26,19 @@ def _item(text, done=False, color=WHITE, w=2.6):
     return VGroup(r, box, tick, t)
 
 
-class Client(VoiceoverScene):
+class Client(WatchScene):
     def construct(self):
         self.card()
         self.revalidate()
         self.afternoon()
         self.assets()
         self.worker()
-        self.storage()
         self.localfirst()
 
     def card(self):
-        card = chapter_card(9, r"Caches, \ offline and local-first", r"What should the browser keep, \ and for how "
+        self.chapter(9, r"Caches, \ offline and local-first", r"What should the browser keep, \ and for how "
                             r"long?", lit=(1997, 2019), extra=((1997, r"HTTP/1.1: \ Cache-Control"),
-                                                               (2019, r"Kleppmann et al.: \ local-first")), part=PART)
-        with self.voiceover("Chapter nine. Caches, offline, and local-first software."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+                                                               (2019, r"Kleppmann et al.: \ local-first")), part=PART, said="Chapter nine. Caches, offline, and local-first software.")
 
     def revalidate(self):
         head = label(r"Fresh, \ stale, \ revalidated", font_size=36).to_edge(UP, buff=0.3)
@@ -174,6 +170,10 @@ class Client(VoiceoverScene):
         self.clear_scene()
 
     def assets(self):
+        self.ask(r"A script's file name carries a hash of its content. \\ Cache it for...", [r"a minute",
+                 r"a day", r"forever"], 2,
+                 say="A script's file name includes a hash of its content. How long may a browser cache it?",
+                 reveal="Forever: a new version gets a new name.")
         head = label(r"Names that never go stale", font_size=36).to_edge(UP, buff=0.3)
         html = VGroup(mono("index.html", size=19, color=WHITE),
                       mono("Cache-Control: no-cache", size=16, color=HEAD)).arrange(DOWN, buff=0.12)
@@ -281,37 +281,6 @@ class Client(VoiceoverScene):
         self.wait(0.4)
         self.clear_scene()
 
-    def storage(self):
-        head = label(r"Where the copies live", font_size=36).to_edge(UP, buff=0.3)
-        rows = [[r"Cache Storage", r"requests and responses", r"asynchronous", r"the service worker's files"],
-                [r"IndexedDB", r"objects, \ indexes, \ transactions", r"asynchronous", r"the app's data"],
-                [r"localStorage", r"strings by key", r"synchronous", r"a few small settings"]]
-        tab = grid_table([r"store", r"holds", r"access", r"good for"], rows, widths=[2.6, 3.9, 2.4, 3.6],
-                         row_h=0.62, font_size=21, mono_cols=())
-        tab.next_to(head, DOWN, buff=0.7).set_x(0)
-        tab.cells[3][2].set_color(NO)
-        for r in (1, 2):
-            tab.cells[r][2].set_color(YES)
-        lines = VGroup(
-            wrapped_label(r"each is per origin \ (Chapter 11); \ a synchronous read blocks the main thread, \ "
-                          r"Chapter 5's one long task", 12.4, font_size=20, color=WHITE),
-            wrapped_label(r"browsers may evict an origin's storage when the disk fills, \ unless the page asks for "
-                          r"persistent storage", 12.4, font_size=20, color=HEAD),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.25).next_to(tab, DOWN, buff=0.6)
-        with self.voiceover(
-            "Those copies need somewhere to live. <bookmark mark='a'/> Cache storage holds responses, for"
-            " the worker. IndexedDB is a small transactional database of objects with indexes, for the "
-            "app's data. localStorage holds strings by key, synchronously, so a large read blocks the "
-            "main thread. <bookmark mark='b'/> All of it belongs to one origin, and may be evicted under "
-            "pressure, unless the page asks for persistent storage."
-        ) as vo:
-            self.play(FadeIn(head))
-            vo.wait_until("a")
-            self.play(FadeIn(tab))
-            vo.wait_until("b")
-            self.play(FadeIn(lines))
-        self.wait(0.4)
-        self.clear_scene()
 
     def localfirst(self):
         head = label(r"Local-first software", font_size=36).to_edge(UP, buff=0.3)
@@ -377,6 +346,12 @@ class Client(VoiceoverScene):
             self.play(FadeOut(ill), FadeIn(same), FadeIn(lines[1]))
         self.wait(0.4)
         self.clear_scene()
+        self.checkpoint(
+            [(r"Why must long tasks be split?", r"Input and frames wait behind them"),
+             (r"What do keys tell a framework?", r"Which elements survive a change")],
+            narration="Checkpoint. Why must long JavaScript tasks be split up? And what do keys tell a UI framework?",
+            answers_narration="Because input and the next frame wait until the task ends. And which elements are the same "
+                              "ones after a change.")
 
 
 _ = (KERN, HEAD)

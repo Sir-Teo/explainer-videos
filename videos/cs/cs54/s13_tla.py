@@ -21,7 +21,7 @@ def rm_cell(state, w=1.6, h=0.5):
     return VGroup(r, label(state, font_size=17, color=WHITE).move_to(r))
 
 
-class Tla(VoiceoverScene):
+class Tla(WatchScene):
     def construct(self):
         self.card()
         self.machines()
@@ -29,15 +29,10 @@ class Tla(VoiceoverScene):
         self.twophase()
         self.bug()
         self.refine()
-        self.small()
 
     def card(self):
-        card = chapter_card(12, r"Specifying systems: \ TLA$^+$", r"What exactly should a system do?",
-                            lit=(1994, 2006), extra=((1994, r"Lamport: \ TLA"),
-                                                     (2006, r"Gray and Lamport: \ TCommit")), part=PART)
-        with self.voiceover("Chapter twelve. Specifying systems with TLA plus."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(12, r"Specifying systems: \ TLA$^+$", r"What exactly should a system do?", lit=(1994, 2006), extra=((1994, r"Lamport: \ TLA"),
+                                                     (2006, r"Gray and Lamport: \ TCommit")), part=PART, said="Chapter twelve. Specifying systems with TLA plus.")
 
     def machines(self):
         head = label(r"A system is a state machine", font_size=36).to_edge(UP, buff=0.3)
@@ -215,6 +210,10 @@ class Tla(VoiceoverScene):
         self.clear_scene()
 
     def bug(self):
+        self.ask(r"The coordinator commits after a timeout, \\ without hearing from everyone. The checker finds...",
+                 [r"nothing", r"a run where one commits and another aborts"], 1,
+                 say="Let the coordinator commit after a timeout without hearing from every resource manager. What does the model checker find?",
+                 reveal="A run in which one manager commits and another aborts.")
         bg = load("twophase")["bug"]
         assert not bg["consistent"] and bg["length"] == len(bg["counterexample"]) - 1
         cx = bg["counterexample"]
@@ -339,50 +338,6 @@ class Tla(VoiceoverScene):
         self.wait(0.4)
         self.clear_scene()
 
-    def small(self):
-        tp = load("twophase")
-        rows_d = tp["rows"]
-        bg = tp["bug"]
-        head = label(r"Small models, \ real bugs", font_size=36).to_edge(UP, buff=0.3)
-        chart = bar_chart([r["twophase_states"] for r in rows_d], [rf"$n = {r['n']}$" for r in rows_d],
-                          [DATA] * len(rows_d), height=3.2, bar_w=0.7, gap=0.45, fmt_=lambda v: f"{v:,.0f}",
-                          font_size=19, log=True).move_to([-3.6, -0.4, 0])
-        cap = label(r"TwoPhase states \ (log scale)", font_size=18, color=GREY_A).next_to(chart, UP, buff=0.3)
-        ratios = [rows_d[k + 1]["twophase_states"] / rows_d[k]["twophase_states"] for k in range(len(rows_d) - 1)]
-        notes = VGroup(
-            wrapped_label(rf"each manager multiplies the states by {min(ratios):.1f} to {max(ratios):.1f}", 5.4,
-                          font_size=20, color=DATA),
-            wrapped_label(rf"the timeout bug needed only {bg['n']} managers and {bg['length']} steps: \ "
-                          r"Jackson's \textbf{small scope hypothesis}, \ most bugs have small counterexamples", 5.4,
-                          font_size=20, color=NO),
-            wrapped_label(r"for every $n$: \ TLAPS, \ TLA$^+$'s proof system, \ proves invariants by induction, "
-                          r"\ like chapter 2's loops", 5.4, font_size=20, color=YES),
-            wrapped_label(r"engineers at Amazon and Microsoft have described specifying storage and database "
-                          r"designs this way \ (chapter 15)", 5.4, font_size=20, color=HEAD),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.35).move_to([3.6, -0.2, 0])
-        with self.voiceover(
-            "A model checker covers small instances only. <bookmark mark='a'/> The protocol's states grow about five-"
-            "fold with each manager, to eight thousand eight hundred and thirty-two at five. <bookmark mark='b'/> But"
-            " the timeout bug needed only three managers and three steps. Daniel Jackson's small scope hypothesis "
-            "says this is typical: most design bugs have small counterexamples. <bookmark mark='c'/> For every n, TLA"
-            " plus has a proof system, TLAPS, in which invariants are proved by induction, like the loops of chapter "
-            "two. <bookmark mark='d'/> Engineers at Amazon and Microsoft have described finding design bugs this way "
-            "before writing code, as the frontier chapter tells."
-        ) as vo:
-            self.play(FadeIn(head), FadeIn(cap), FadeIn(chart[0]))
-            vo.wait_until("a")
-            self.play(LaggedStart(*[AnimationGroup(GrowFromEdge(b, DOWN), FadeIn(v), FadeIn(nm))
-                                    for b, v, nm in zip(chart.bars, chart.vals, chart.names)], lag_ratio=0.3),
-                      run_time=2.5)
-            self.play(FadeIn(notes[0]))
-            vo.wait_until("b")
-            self.play(FadeIn(notes[1]), Indicate(chart.bars[1], color=NO))
-            vo.wait_until("c")
-            self.play(FadeIn(notes[2]))
-            vo.wait_until("d")
-            self.play(FadeIn(notes[3]))
-        self.wait(0.4)
-        self.clear_scene()
 
 
 def col_cell(text, color, w=1.6, h=0.5):

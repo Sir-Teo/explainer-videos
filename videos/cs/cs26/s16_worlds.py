@@ -4,7 +4,7 @@ from explainer.cs import *  # noqa: F403
 from videos.cs.cs26.common import (BG, CTRL, DATA, HEAD, LAM, NO, PART, YES, fit_right)
 
 
-class Worlds(VoiceoverScene):
+class Worlds(WatchScene):
     def construct(self):
         self.card()
         self.five()
@@ -12,11 +12,7 @@ class Worlds(VoiceoverScene):
         self.unprovable()
 
     def card(self):
-        card = chapter_card(15, r"Five possible worlds", r"What would each answer mean?", lit=(1995,),
-                            extra=((1995, r"Impagliazzo"),), part=PART)
-        with self.voiceover("Chapter fifteen. Five possible worlds."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(15, r"Five possible worlds", r"What would each answer mean?", lit=(1995,), extra=((1995, r"Impagliazzo"),), part=PART, said="Chapter fifteen. Five possible worlds.")
 
     def five(self):
         head = label(r"Impagliazzo's five worlds \ (1995)", font_size=34).to_edge(UP, buff=0.3)
@@ -57,6 +53,10 @@ class Worlds(VoiceoverScene):
         self.clear_scene()
 
     def if_equal(self):
+        self.ask(r"If $P = NP$, with a fast algorithm. \\ What breaks first?", [r"nothing much",
+                 r"most of public-key cryptography"], 1,
+                 say="Suppose P equals NP, with a practical algorithm. What would break?",
+                 reveal="Most of public-key cryptography, along with the hardness of finding proofs.")
         head = label(r"If P = NP", font_size=34).to_edge(UP, buff=0.35)
         lines = VGroup(
             label('proofs: polynomially bounded, efficiently checkable formal proof search; not unbounded truth', font_size=21, color=YES),
@@ -73,7 +73,7 @@ class Worlds(VoiceoverScene):
             label(r"a Clay Millennium Prize problem \ (2000): \ \$1,000,000", font_size=21, color=LAM),
         ).arrange(DOWN, buff=0.3).next_to(head, DOWN, buff=0.5)
         with self.voiceover(
-            "What would P equals NP imply? <bookmark mark='a'/> A bounded proof search with an efficiently checkable formal proof could recover a proof in polynomial time in the statement and the chosen length bound. It would not decide unbounded mathematical truth. <bookmark mark='b'/> Efficiently verifiable finite scheduling and routing objectives could be optimized through decision queries. Physical protein behaviour is not automatically such a model. <bookmark mark='c'/> Certain bounded circuit-learning searches would become efficient; finding the smallest unrestricted program remains undecidable. <bookmark mark='d'/> Computational cryptography based on one-way functions would fail. Information-theoretic secrecy, including a properly used one-time pad, is outside that conclusion. <bookmark mark='e'/> Large exponents, constants and the need to identify an algorithm could still make the theorem impractical. <bookmark mark='f'/> Historical opinion polls measure researchers' beliefs, not evidence of a mathematical separation. <bookmark mark='g'/> The Clay prize recognizes a valid resolution; neither applications nor consensus substitute for a proof."
+            "What would P equals NP imply? <bookmark mark='a'/> A bounded proof search with an efficiently checkable formal proof could recover a proof in polynomial time in the statement and the chosen length bound. It would not decide unbounded mathematical truth. <bookmark mark='b'/> Efficiently verifiable finite scheduling and routing objectives could be optimized through decision queries. <bookmark mark='c'/> Certain bounded circuit-learning searches would become efficient; finding the smallest unrestricted program remains undecidable. <bookmark mark='d'/> Computational cryptography based on one-way functions would fail. Information-theoretic secrecy, including a properly used one-time pad, is outside that conclusion. <bookmark mark='e'/> Large exponents, constants and the need to identify an algorithm could still make the theorem impractical. <bookmark mark='f'/> Historical opinion polls measure researchers' beliefs, not evidence of a mathematical separation. <bookmark mark='g'/> The Clay prize recognizes a valid resolution; neither applications nor consensus substitute for a proof."
         ) as vo:
             self.play(FadeIn(head))
             for mk, ln in zip("abcdefg", lines):

@@ -5,21 +5,29 @@ import numpy as np
 from videos.stats.stats15.common import *  # noqa: F403
 
 
-class Grids(VoiceoverScene):
+class Grids(StatsScene):
     def construct(self):
         self.card()
+        self.ask("A grid of 100 points per parameter, for 10 parameters, needs...",
+                 ["1,000 points", "10,000 points", "$10^{20}$ points"], 2,
+                 say="A grid works beautifully in one or two dimensions. With a hundred points per parameter and "
+                     "ten parameters, how many points do you need?",
+                 reveal="Ten to the twenty. And nearly all of them land where the posterior is negligible. Grids "
+                        "die of dimension.")
         self.recipe()
         self.challenger()
         self.marginal()
         self.p31()
         self.mixture_prior()
         self.curse()
+        self.answer()
+        self.checkpoint([(r"Normal model, flat prior: the posterior of $\mu$?", "Student's $t$"),
+                         ("Why do grids fail in many dimensions?", "the points needed grow exponentially")],
+                        narration="Checkpoint. Models and grids.",
+                        answers_narration="Student's t. And the grid grows exponentially.")
 
     def card(self):
-        card = chapter_card(7, r"Grids", r"Any posterior in one or two dimensions, \ by brute force", part=PART)
-        with self.voiceover("Chapter seven. Grids."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(7, r"Grids", r"Any posterior in one or two dimensions, \ by brute force", part=PART, said="Chapter seven. Grids.")
 
     def recipe(self):
         rows = [

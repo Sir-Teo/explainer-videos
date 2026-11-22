@@ -15,20 +15,24 @@ def point_panel(pts, labels, width=2.2, color_in=None, color_out=None):
     return VGroup(box, dots)
 
 
-class VC(VoiceoverScene):
+class VC(StatsScene):
     def construct(self):
         self.card()
+        self.ask(r"Half-lines $(-\infty, t]$ on the real line have VC dimension...",
+                 ["1", "2", "infinite"], 0,
+                 say="Count the patterns a class can pick out. What's the VC dimension of the half-lines, minus "
+                     "infinity to t?",
+                 reveal="One. They can pick out either of one point, but of two points, never the right one alone. "
+                        "Complexity is what a class can do, not how many members it has.")
         self.shatter()
         self.pictures()
         self.table()
         self.chart()
         self.covering()
+        self.answer()
 
     def card(self):
-        card = chapter_card(2, r"VC classes", r"Counting the patterns a class can draw", lit=(1971,), part=PART)
-        with self.voiceover("Chapter two. VC classes: counting the patterns a class can draw."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(2, r"VC classes", r"Counting the patterns a class can draw", lit=(1971,), part=PART, said="Chapter two. VC classes: counting the patterns a class can draw.")
 
     def shatter(self):
         rows = [

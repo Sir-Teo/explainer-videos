@@ -5,16 +5,23 @@ import numpy as np
 from videos.stats.stats64.common import *  # noqa: F403
 
 
-class Deployment(LectureMixin, VoiceoverScene):
+class Deployment(LectureMixin, StatsScene):
     def construct(self):
         self.card_voiceover("Chapter twelve. Causal questions about deployed AI systems.", 12,
                             r"Causal questions about deployments", r"When users share a world")
+        self.ask("Teams share a market. Randomizing individual users to the assistant can...",
+                 ["estimate the market-wide effect", "be biased by spillovers"], 1,
+                 say="A causal question about deployment: does giving workers an AI assistant change their "
+                     "earnings, when they compete in one market? What can randomizing individual users do?",
+                 reveal="Be biased by spillovers: treated users take business from controls, so the difference "
+                        "overstates the effect of giving it to everyone. Randomize whole markets.")
         self.questions()
         self.market()
         self.chart()
         self.designs()
         self.longterm()
         self.observational()
+        self.answer()
 
     def questions(self):
         self.lad_voiceover(

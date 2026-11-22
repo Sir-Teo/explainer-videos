@@ -6,7 +6,7 @@ from explainer.cs import *  # noqa: F403
 from videos.cs.cs9.common import (BG, CODE, COST, CTRL, DATA, FUNC, HEAD, HIST, INF, NO, PART, YES, box, fmt, load)
 
 
-class External(VoiceoverScene):
+class External(WatchScene):
     def construct(self):
         self.card()
         self.model()
@@ -14,13 +14,7 @@ class External(VoiceoverScene):
         self.btree()
 
     def card(self):
-        card = chapter_card(11, r"External memory and B-trees", r"What if the data is on a disk?", lit=(1972, 1988),
-                            extra=((1972, r"Bayer and McCreight: \ B-trees"), (1988, r"Aggarwal and Vitter")), part=PART)
-        with self.voiceover(
-            "Chapter eleven. External memory and B-trees."
-        ):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(11, r"External memory and B-trees", r"What if the data is on a disk?", lit=(1972, 1988), extra=((1972, r"Bayer and McCreight: \ B-trees"), (1988, r"Aggarwal and Vitter")), part=PART, said="Chapter eleven. External memory and B-trees.")
 
     def model(self):
         head = label(r"The external-memory model \ (Aggarwal and Vitter, \ 1988)", font_size=34).to_edge(UP, buff=0.35)
@@ -96,6 +90,10 @@ class External(VoiceoverScene):
         self.clear_scene()
 
     def btree(self):
+        self.ask(r"A billion keys in a B-tree, \\ a thousand keys per block. \\ Block reads to find one?",
+                 [r"about 3", r"about 30", r"about 1{,}000"], 0,
+                 say="A billion keys, a thousand per block. How many block reads to find one key?",
+                 reveal="About three: log base a thousand of a billion.")
         head = label(r"The B-tree: \ a node is a block", font_size=36).to_edge(UP, buff=0.35)
         root = box(4.2, 0.6, r"\text{keys} \ 1 \ \dots \ B", HEAD, 20).move_to(UP * 1.6)
         kids = VGroup(*[box(2.0, 0.5, r"\dots", DATA, 18) for _ in range(5)]).arrange(RIGHT, buff=0.3).move_to(UP * 0.2)
@@ -115,8 +113,7 @@ class External(VoiceoverScene):
             "B, search height is on the order of one plus log base B of N. Cached upper nodes can reduce slow-store "
             "reads, while variable-size records, updates and concurrency add design choices. B-tree relatives are "
             "common in databases and file systems, alongside hash indexes, log-structured merge trees and other "
-            "structures. The drawing is a layout illustration, not a guarantee that every billion-key index has "
-            "exactly three or four physical reads."
+            "structures."
         ) as vo:
             self.play(FadeIn(head))
             self.play(FadeIn(root), Create(edges), FadeIn(kids), FadeIn(dots))

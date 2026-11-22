@@ -7,16 +7,27 @@ import numpy as np
 from videos.stats.stats64.common import *  # noqa: F403
 
 
-class Watermark(LectureMixin, VoiceoverScene):
+class Watermark(LectureMixin, StatsScene):
     def construct(self):
         self.card_voiceover("Chapter nine. Watermarks: hiding a hypothesis test in the text.", 9,
                             r"Watermarks as tests", r"A signal in the word choices")
+        self.ask("A green-list watermark is detected by a test on...",
+                 ["the count of green-list tokens", "the writing style"], 0,
+                 say="Kirchenbauer and colleagues' watermark nudges each word toward a pseudorandom green list. How "
+                     "is the watermark detected?",
+                 reveal="By a test on the count of green-list tokens: under no watermark it's binomial, so a "
+                        "one-sided z-test decides. Paraphrasing dilutes it.")
         self.scheme()
         self.test()
         self.chart()
         self.entropy()
         self.attacks()
         self.deployed()
+        self.answer()
+        self.checkpoint([("A Gaussian refitted to its own samples, generation after generation?", "its variance collapses"),
+                         ("A green-list watermark is detected by?", "a test on the count of green tokens")],
+                        narration="Checkpoint. Synthetic data and signals.",
+                        answers_narration="It collapses. And a count test.")
 
     def scheme(self):
         d = load("watermark")

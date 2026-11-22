@@ -7,9 +7,15 @@ from videos.stats.stats18.common import *  # noqa: F403
 BANDS = [r"under 30k", r"30--100k", r"over 100k"]
 
 
-class Strata(VoiceoverScene):
+class Strata(StatsScene):
     def construct(self):
         self.card()
+        self.ask("Proportional stratified sampling vs a simple random sample of the same size. Its variance is...",
+                 ["no larger, and smaller when strata differ", "always larger", "the same"], 0,
+                 say="Split the population into strata of known size and sample each in proportion. Compared with a "
+                     "simple random sample of the same size, is the variance larger, smaller, or the same?",
+                 reveal="No larger, and smaller whenever the strata differ: the variation between strata is removed "
+                        "from the error. Neyman's allocation does better still.")
         self.idea()
         self.bands()
         self.neyman()
@@ -17,12 +23,10 @@ class Strata(VoiceoverScene):
         self.results()
         self.region_vote()
         self.post()
+        self.answer()
 
     def card(self):
-        card = chapter_card(5, r"Stratification", r"Divide, \ then sample each part", part=PART)
-        with self.voiceover("Chapter five. Stratification."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(5, r"Stratification", r"Divide, \ then sample each part", part=PART, said="Chapter five. Stratification.")
 
     def idea(self):
         rows = [

@@ -4,7 +4,7 @@ from explainer.cs import *  # noqa: F403
 from videos.cs.cs26.common import (CTRL, DATA, HEAD, LAM, NO, PART, YES, grid_table, load, mono, words)
 
 
-class Hierarchy(VoiceoverScene):
+class Hierarchy(WatchScene):
     def construct(self):
         self.card()
         self.time()
@@ -12,13 +12,12 @@ class Hierarchy(VoiceoverScene):
         self.savitch()
 
     def card(self):
-        card = chapter_card(2, r"More time, more problems", r"Does extra time always buy extra power?",
-                            lit=(1965, 1970), extra=((1965, r"Hartmanis--Stearns"), (1970, r"Savitch")), part=PART)
-        with self.voiceover("Chapter two. More time, more problems."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(2, r"More time, more problems", r"Does extra time always buy extra power?", lit=(1965, 1970), extra=((1965, r"Hartmanis--Stearns"), (1970, r"Savitch")), part=PART, said="Chapter two. More time, more problems.")
 
     def time(self):
+        self.ask(r"Does more time let a machine \\ solve strictly more problems?", [r"no", r"yes"], 1,
+                 say="Give a machine more time. Can it then solve problems it provably couldn't before?",
+                 reveal="Yes: the time hierarchy theorem, by diagonalization.")
         head = label(r"The time hierarchy theorem", font_size=34).to_edge(UP, buff=0.35)
         thm = MathTex('f\\log f=o(g)\\ \\Longrightarrow\\ \\mathrm{TIME}(f)\\subsetneq\\mathrm{TIME}(g)', font_size=40,
                       color=HEAD).next_to(head, DOWN, buff=0.35)
@@ -124,7 +123,7 @@ class Hierarchy(VoiceoverScene):
             notes.width = 6.9 - notes.get_left()[0]
             notes.next_to(tab, RIGHT, buff=0.7).align_to(tab, UP)
         with self.voiceover(
-            "Savitch's theorem removes nondeterminism at a space cost. <bookmark mark='a'/> For a suitable space bound s at least log n, nondeterministic space s is contained in deterministic space of order s squared. To test reachability within t edges, use zero edges for equality, one for an edge or equality, and otherwise try every midpoint with integer half-budgets. <bookmark mark='b'/> Our path examples measure actual recursive calls and depths. <bookmark mark='c'/> A theoretical recursive frame stores only a constant number of configurations, the midpoint iterator and a budget. The displayed three-slot count is illustrative, excluding the already stored graph and Python overhead. <bookmark mark='d'/> With a read-only input and s at least log n, the configuration count is exponential in s. Logarithmically many recursive levels therefore use order s squared space. <bookmark mark='e'/> Time can be very large; these finite path counts illustrate that cost without proving a growth law. <bookmark mark='f'/> Consequently PSPACE equals NPSPACE. The analogous polynomial-time question is still open."
+            "Savitch's theorem removes nondeterminism at a space cost. <bookmark mark='a'/> For a suitable space bound s at least log n, nondeterministic space s is contained in deterministic space of order s squared. To test reachability within t edges, use zero edges for equality, one for an edge or equality, and otherwise try every midpoint with integer half-budgets. <bookmark mark='b'/> Our path examples measure actual recursive calls and depths. <bookmark mark='c'/> A theoretical recursive frame stores only a constant number of configurations, the midpoint iterator and a budget. <bookmark mark='d'/> With a read-only input and s at least log n, the configuration count is exponential in s. Logarithmically many recursive levels therefore use order s squared space. <bookmark mark='e'/> Time can be very large; these finite path counts illustrate that cost without proving a growth law. <bookmark mark='f'/> Consequently PSPACE equals NPSPACE. The analogous polynomial-time question is still open."
         ) as vo:
             self.play(FadeIn(head))
             vo.wait_until("a")

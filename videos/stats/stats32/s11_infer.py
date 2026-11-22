@@ -9,9 +9,15 @@ DEB = S.KEPT  # debiased: green
 NAIVE = S.RESID  # naive: red
 
 
-class Inference(VoiceoverScene):
+class Inference(StatsScene):
     def construct(self):
         self.card()
+        self.ask("Refit the lasso's selected variables by least squares; report $t$-intervals. Coverage?",
+                 [r"95\%", r"often below 95\%"], 1,
+                 say="Common practice: take the lasso's selected variables, refit them by least squares, and report "
+                     "the usual ninety-five percent t-intervals. Do they cover?",
+                 reveal="Often below ninety-five percent: they ignore that the same data chose the variables. The "
+                        "debiased lasso and selective inference give honest intervals.")
         self.why_fails()
         self.one_data()
         self.winners()
@@ -22,12 +28,10 @@ class Inference(VoiceoverScene):
         self.double_num()
         self.board()
         self.posi()
+        self.answer()
 
     def card(self):
-        card = chapter_card(10, r"Inference after the lasso", r"Confidence intervals for selected coefficients", lit=(2014,), part=PART)
-        with self.voiceover("Chapter ten. Inference after the lasso."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(10, r"Inference after the lasso", r"Confidence intervals for selected coefficients", lit=(2014,), part=PART, said="Chapter ten. Inference after the lasso.")
 
     def why_fails(self):
         rows = [

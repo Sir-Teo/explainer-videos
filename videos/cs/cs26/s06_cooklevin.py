@@ -10,7 +10,7 @@ def cell_text(c):
     return c
 
 
-class CookLevin(VoiceoverScene):
+class CookLevin(WatchScene):
     def construct(self):
         self.card()
         self.tableau()
@@ -18,11 +18,7 @@ class CookLevin(VoiceoverScene):
         self.sizes()
 
     def card(self):
-        card = chapter_card(5, r"Cook--Levin: \ SAT is NP-complete", r"How can one formula capture every NP problem?",
-                            lit=(1971, 1973), extra=((1971, r"Cook"), (1973, r"Levin")), part=PART)
-        with self.voiceover("Chapter five. Cook-Levin: SAT is NP-complete."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(5, r"Cook--Levin: \ SAT is NP-complete", r"How can one formula capture every NP problem?", lit=(1971, 1973), extra=((1971, r"Cook"), (1973, r"Levin")), part=PART, said="Chapter five. Cook-Levin: SAT is NP-complete.")
 
     def grid(self, tab, cw=0.62, ch=0.5, origin=LEFT * 5.6 + UP * 1.6):
         g = VGroup()
@@ -40,6 +36,9 @@ class CookLevin(VoiceoverScene):
         return g, cells
 
     def tableau(self):
+        self.ask(r"Can every NP problem be written \\ as a polynomial-size SAT formula?", [r"no", r"yes"], 1,
+                 say="Can any problem in NP be translated into a satisfiability formula of polynomial size?",
+                 reveal="Yes: encode the verifier's whole computation as a tableau. That's Cook and Levin.")
         d = load("tableau")
         head = label('Tableau: one configuration per row; $T$ rows allow $T-1$ transitions', font_size=30).to_edge(UP,
                                                                                                  buff=0.3)

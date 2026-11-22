@@ -65,7 +65,7 @@ def three_clusters():
     return pos, edges + [(2, 8), (7, 13), (12, 3)]
 
 
-class Fiedler(VoiceoverScene):
+class Fiedler(WatchScene):
     def construct(self):
         self.card()
         self.rayleigh()
@@ -73,16 +73,10 @@ class Fiedler(VoiceoverScene):
         self.relax()
         self.vector()
         self.planted()
-        self.clustering()
 
     def card(self):
-        card = chapter_card(2, r"Rayleigh quotients and the Fiedler vector",
-                            r"Why does an eigenvector know where to cut?", lit=(1905, 1973),
-                            extra=((1905, r"Fischer: \ the min-max principle"),
-                                   (1973, r"Fiedler: \ algebraic connectivity")), part=PART)
-        with self.voiceover("Chapter two. Rayleigh quotients, and the Fiedler vector."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(2, r"Rayleigh quotients and the Fiedler vector", r"Why does an eigenvector know where to cut?", lit=(1905, 1973), extra=((1905, r"Fischer: \ the min-max principle"),
+                                   (1973, r"Fiedler: \ algebraic connectivity")), part=PART, said="Chapter two. Rayleigh quotients, and the Fiedler vector.")
 
     def rayleigh(self):
         head = label(r"The Rayleigh quotient", font_size=36).to_edge(UP, buff=0.3)
@@ -347,6 +341,10 @@ class Fiedler(VoiceoverScene):
         self.clear_scene()
 
     def planted(self):
+        self.ask(r"Two planted communities, 120 vertices. \\ The signs of the second eigenvector give...",
+                 [r"a random split", r"the communities"], 1,
+                 say="A graph of a hundred and twenty vertices hides two communities. What do the signs of its second eigenvector give?",
+                 reveal="The communities, almost exactly.")
         p = load("partition")
         f = np.array(p["fiedler"])
         lab = np.array(p["labels"])
@@ -389,55 +387,6 @@ class Fiedler(VoiceoverScene):
         self.wait(0.4)
         self.clear_scene()
 
-    def clustering(self):
-        head = label(r"Spectral clustering", font_size=36).to_edge(UP, buff=0.3)
-        pos, edges = three_clusters()
-        n = 15
-        w, V = np.linalg.eigh(lap(adjacency(n, edges)))
-        g = draw(pos, edges, center=LEFT * 4.0 + DOWN * 0.15, scale=0.95, r=0.11)
-        gcap = label(r"three clusters, \ one edge between each pair", font_size=19, color=GREY_A).next_to(
-            g, DOWN, buff=0.3)
-        ax = Axes(x_range=[-0.5, 0.5, 0.25], y_range=[-0.5, 0.5, 0.25], x_length=3.8, y_length=3.8, tips=False,
-                  axis_config={"stroke_color": GREY_D, "include_ticks": False}).move_to(RIGHT * 0.1 + DOWN * 0.15)
-        axl = VGroup(label(r"$v_2$", font_size=20, color=GREY_B).next_to(ax.x_axis, RIGHT, buff=0.1),
-                     label(r"$v_3$", font_size=20, color=GREY_B).next_to(ax.y_axis, UP, buff=0.1))
-        acap = label(r"each vertex placed at $(v_2, v_3)$", font_size=19, color=GREY_A).next_to(ax, DOWN, buff=0.3)
-        moved = VGroup(*[g[1][i].copy() for i in range(n)])
-        targets = [ax.c2p(float(V[i, 1]), float(V[i, 2])) for i in range(n)]
-        cols = [DATA, KERN, LAM]
-        side = VGroup(
-            wrapped_label(r"embed by the bottom $k$ eigenvectors, \ then group the points \ (k-means): \ Shi and "
-                          r"Malik \ (2000), \ Ng, \ Jordan and Weiss \ (2001)", 4.0, font_size=19, color=WHITE),
-            wrapped_label(r"multilevel partitioners such as METIS \ (Karypis and Kumar, \ 1998) \ shard huge graphs "
-                          r"faster, \ with the same goal: \ few cut edges, \ balanced parts", 4.0, font_size=19,
-                          color=GREY_A),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.45).move_to(RIGHT * 4.6 + DOWN * 0.1)
-        ill = note(r"illustrative graph; \ eigenvectors computed", font_size=16).to_corner(DR, buff=0.25)
-        with self.voiceover(
-            "With more than two communities, use more eigenvectors. <bookmark mark='a'/> This graph has three "
-            "clusters, joined by one edge between each pair, so it has three small eigenvalues. "
-            "<bookmark mark='b'/> Give each vertex the coordinates of its entries in the second and third "
-            "eigenvectors. The clusters collapse into three tight clumps, and any simple clustering of points, "
-            "such as k-means, separates them. <bookmark mark='c'/> That is spectral clustering, in the forms "
-            "popularized by Jianbo Shi and Jitendra Malik in 2000 for segmenting images, and by Andrew Ng, Michael "
-            "Jordan and Yair Weiss in 2001. <bookmark mark='d'/> For sharding graphs with billions of edges, "
-            "multilevel partitioners such as METIS, by George Karypis and Vipin Kumar, are faster, but they chase "
-            "the same goal: few cut edges, balanced parts."
-        ) as vo:
-            self.play(FadeIn(head))
-            vo.wait_until("a")
-            self.play(Create(g[0]), FadeIn(g[1]), FadeIn(gcap), FadeIn(ill))
-            vo.wait_until("b")
-            self.play(Create(ax), FadeIn(axl), FadeIn(acap))
-            self.play(*[d.animate.move_to(t) for d, t in zip(moved, targets)], run_time=2.2)
-            self.play(*[d.animate.set_color(cols[i // 5]) for i, d in enumerate(moved)],
-                      *[d.animate.set_color(cols[i // 5]) for i, d in enumerate(g[1])])
-            vo.wait_until("c")
-            self.play(FadeIn(side[0]))
-            vo.wait_until("d")
-            self.play(FadeIn(side[1]))
-        self.wait(0.4)
-        self.clear_scene()
 
 
 _ = (BG, LAM, NO, YES)

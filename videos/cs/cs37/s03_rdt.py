@@ -4,7 +4,7 @@ from explainer.cs import *  # noqa: F403
 from videos.cs.cs37.common import (ACKC, DATA, HEAD, KERN, LAM, NO, PART, SEG, YES, grid_table, load, seq_diagram)
 
 
-class Rdt(VoiceoverScene):
+class Rdt(WatchScene):
     def construct(self):
         self.card()
         self.stop_and_wait()
@@ -13,12 +13,8 @@ class Rdt(VoiceoverScene):
         self.utilization()
 
     def card(self):
-        card = chapter_card(2, r"Reliability from scratch", r"How do you make a lossy channel lose nothing?",
-                            lit=(1969, 1969), extra=((1969, r"Bartlett, Scantlebury \\ and Wilkinson: \\ the "
-                                                            r"alternating bit"),), part=PART)
-        with self.voiceover("Chapter two. Reliability from scratch."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(2, r"Reliability from scratch", r"How do you make a lossy channel lose nothing?", lit=(1969, 1969), extra=((1969, r"Bartlett, Scantlebury \\ and Wilkinson: \\ the "
+                                                            r"alternating bit"),), part=PART, said="Chapter two. Reliability from scratch.")
 
     def stop_and_wait(self):
         head = label(r"Stop and wait", font_size=36).to_edge(UP, buff=0.3)
@@ -157,6 +153,10 @@ class Rdt(VoiceoverScene):
         self.clear_scene()
 
     def utilization(self):
+        self.ask(r"Stop-and-wait on a 1 Gbit/s link across an ocean. \\ Utilization:", [r"$50\%$", r"$1\%$",
+                 r"$0.01\%$"], 2,
+                 say="Stop-and-wait over a gigabit link across an ocean. What fraction of the link does it use?",
+                 reveal="About a hundredth of a percent. It spends its life waiting.")
         r = load("rdt")
         head = label(r"The price of waiting", font_size=36).to_edge(UP, buff=0.3)
         bar = VGroup()

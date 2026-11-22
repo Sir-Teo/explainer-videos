@@ -5,21 +5,30 @@ import numpy as np
 from videos.stats.stats47.common import *  # noqa: F403
 
 
-class Hajek(VoiceoverScene):
+class Hajek(StatsScene):
     def construct(self):
         self.card()
+        self.ask(r"H\'ajek's convolution theorem: a regular estimator's limit is the efficient one plus...",
+                 ["independent noise", "nothing"], 0,
+                 say="Hájek's convolution theorem, 1970. For any regular estimator, what is its limiting error "
+                     "distribution?",
+                 reveal="The efficient estimator's normal limit, plus independent noise. That's the sense in which "
+                        "the MLE is best: nothing regular can be more concentrated.")
         self.regular()
         self.hodges()
         self.lam()
         self.chart()
         self.table()
         self.meaning()
+        self.answer()
+        self.checkpoint([("LAN: a regular model up close is?", "one Gaussian observation"),
+                         ("Le Cam's third lemma shifts the limit by?", "the covariance with the log-likelihood ratio")],
+                        narration="Checkpoint. Local asymptotics.",
+                        answers_narration="One Gaussian observation. And the covariance with the log-likelihood "
+                                          "ratio.")
 
     def card(self):
-        card = chapter_card(9, r"The convolution and LAM theorems", r"In what sense the MLE is best", lit=(1970, 1972), part=PART)
-        with self.voiceover("Chapter nine. Hájek's convolution and local asymptotic minimax theorems: in what sense the MLE is best."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(9, r"The convolution and LAM theorems", r"In what sense the MLE is best", lit=(1970, 1972), part=PART, said="Chapter nine. Hájek's convolution and local asymptotic minimax theorems: in what sense the MLE is best.")
 
     def regular(self):
         rows = [

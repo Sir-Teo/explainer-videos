@@ -12,7 +12,7 @@ def box(w, h, text, color=CTRL, font_size=26):
     return VGroup(b, MathTex(text, font_size=font_size, color=color).move_to(b))
 
 
-class Timing(VoiceoverScene):
+class Timing(WatchScene):
     def construct(self):
         self.card()
         self.windows()
@@ -20,10 +20,7 @@ class Timing(VoiceoverScene):
         self.skew()
 
     def card(self):
-        card = chapter_card(4, r"How fast can the clock go?", r"What sets the length of a clock cycle?", part=PART)
-        with self.voiceover("Chapter four. How fast can the clock go?"):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(4, r"How fast can the clock go?", r"What sets the length of a clock cycle?", part=PART, said="Chapter four. How fast can the clock go?")
 
     # ------------------------------------------------------------------
     def windows(self):
@@ -70,6 +67,11 @@ class Timing(VoiceoverScene):
 
     # ------------------------------------------------------------------
     def fmax(self):
+        self.ask(r"From register to register, the slowest path takes 360 ps. \\ The fastest clock?",
+                 [r"about 280 MHz", r"about 2.8 GHz", r"about 28 GHz"], 1,
+                 say="The slowest path from one register to the next takes three hundred and sixty picoseconds. How fast can the "
+                     "clock go?",
+                 reveal="About two point eight gigahertz: one over three hundred and sixty picoseconds.")
         head = label(r"The cycle has to hold the slowest path", font_size=36).to_edge(UP, buff=0.35)
         r1 = box(1.4, 1.0, r"\text{reg}", YES).move_to(LEFT * 4.6 + UP * 1.6)
         lg = box(3.2, 1.0, r"\text{logic}", CTRL).move_to(LEFT * 0.6 + UP * 1.6)
@@ -104,7 +106,7 @@ class Timing(VoiceoverScene):
             "slowest path through the logic, and the setup time. The fastest clock the circuit can take is one "
             "over their sum. <bookmark mark='c'/> For a toy budget, assume a worst-case logic delay of two "
             "hundred and ninety picoseconds, forty picoseconds clock-to-Q and thirty for setup. The total is "
-            "three hundred and sixty picoseconds, or about two point eight gigahertz in that assumed model. Part "
+            "three hundred and sixty picoseconds, or about two point eight gigahertz. Part "
             "4 observed twenty-nine gate delays on tested ALU inputs; that measurement does not certify a "
             "worst-case delay or a silicon clock rate. Every gate delay saved in Part 4 shows up here, and Part 7 "
             "will cut the path into pieces to go faster still."
@@ -168,3 +170,9 @@ class Timing(VoiceoverScene):
             self.play(LaggedStart(*[FadeIn(p) for p in pts], lag_ratio=0.4), run_time=2.4)
         self.wait(0.3)
         self.clear_scene()
+        self.checkpoint(
+            [(r"What sets a clocked circuit's maximum frequency?", r"The slowest register-to-register path, with setup and clock-to-Q"),
+             (r"What is metastability?", r"A latch balanced on its saddle, taking unboundedly long to decide")],
+            narration="Checkpoint. What sets how fast a clocked circuit can run? And what is metastability?",
+            answers_narration="The slowest path between registers, plus the flip-flop's own delays. And metastability is a "
+                              "latch caught on its saddle, taking arbitrarily long to fall either way.")

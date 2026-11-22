@@ -17,7 +17,8 @@ A sixty-one-part course on computer science in English and Chinese, made to the 
   learning theory, semantics, distributed-computing theory, domain-specific hardware) and a part on how research is
   done.
 
-Each part is a 50–60 minute lecture that derives its mathematics on screen and tells its history. It also builds
+Each part is a 30–60 minute film that opens on something running, asks you to predict before it shows, derives
+its mathematics on screen and tells its history. It also builds
 something that runs, and says where the idea lives in industry. Every number on screen comes from one of three
 sources: a real computation run by the part's `compute.py`, a measurement on the machine that renders the video, or
 a published source, which is cited. Schematics carry the label `schematic`, and made-up examples the label
@@ -26,9 +27,11 @@ a published source, which is cited. Schematics carry the label `schematic`, and 
 The chapter-by-chapter plan, the production standard, and the maps onto a CS degree (CS2023) and onto industry roles
 are in [`SYLLABUS.md`](SYLLABUS.md).
 
-**Status:** plan of record, draft 3 (2026-11-04: the research tier added); Parts 1–61 are built or in progress (480p previews
-reviewed for Parts 1–42, narrated masters pending; instruments and computations exist for every part; see
-[`SYLLABUS.md`](SYLLABUS.md) §8).
+**Status:** plan of record, draft 4 (2026-11-18: the watch standard, [`SYLLABUS.md`](SYLLABUS.md) §1.2, with Part 7
+as its pilot); Parts 1–61 are built or in progress, and all sixty-one are retrofitted to the watch standard's
+structure (cold opens, a prediction in every chapter, checkpoints, a refuted misconception, 44–60 minutes each, about
+57 hours in all, with Chinese for every new line); fade-in chapters are still being rebuilt as motion; narrated
+masters pending; instruments and computations exist for every part; see §8.
 
 **Course site.** `python tools/series_site.py --series cs` builds this course's GitHub Pages site into `_site/cs/`: a course
 map and a page per part with its chapters, notes, problems and sources, generated from this README's table of parts,
@@ -134,6 +137,10 @@ The series draws in the manner of 3Blue1Brown, with the instruments of `explaine
   invariants, the adversary.
 * **Real numbers.** Everything plotted comes from the part's `compute.py` or from a measurement on the rendering
   machine (the latency staircase of its caches, the speed of its branch predictor), and the scene asserts it.
+* **Predict, then watch.** Each chapter asks you a question and counts down three seconds before the run that
+  answers it. About every ten minutes a checkpoint asks two more.
+* **Sound.** A computed score: a theme under the title, a sting at each chapter card, and a quiet bed only where
+  nobody is talking. Music never plays under an explanation.
 
 ## The parts
 

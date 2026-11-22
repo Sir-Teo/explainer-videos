@@ -5,21 +5,25 @@ import numpy as np
 from videos.stats.stats46.common import *  # noqa: F403
 
 
-class NPLemma(VoiceoverScene):
+class NPLemma(StatsScene):
     def construct(self):
         self.card()
+        self.ask(r"Discrete data. An exact-size 5\% most powerful test may need...",
+                 ["to randomize at the boundary", "more data", "nothing special"], 0,
+                 say="The Neyman-Pearson lemma in general. With discrete data, what may a most powerful test of "
+                     "exactly five percent size need?",
+                 reveal="To randomize at the boundary: reject with some probability at the borderline outcome. "
+                        "Practice rounds down instead, and accepts a conservative size.")
         self.lemma()
         self.proof()
         self.bars()
         self.power()
         self.general()
         self.randomization()
+        self.answer()
 
     def card(self):
-        card = chapter_card(1, r"The Neyman--Pearson lemma in general", r"The most powerful test, \ and why it exists", lit=(1933,), part=PART)
-        with self.voiceover("Chapter one. The Neyman–Pearson lemma in general: the most powerful test, and why it exists."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(1, r"The Neyman--Pearson lemma in general", r"The most powerful test, \ and why it exists", lit=(1933,), part=PART, said="Chapter one. The Neyman–Pearson lemma in general: the most powerful test, and why it exists.")
 
     def lemma(self):
         rows = [

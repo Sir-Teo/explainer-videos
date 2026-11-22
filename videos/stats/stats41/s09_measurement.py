@@ -5,9 +5,15 @@ import numpy as np
 from videos.stats.stats41.common import *  # noqa: F403
 
 
-class Measurement(VoiceoverScene):
+class Measurement(StatsScene):
     def construct(self):
         self.card()
+        self.ask("Classical error in an exposure with reliability 0.5. The slope is attenuated to...",
+                 ["half", "a quarter", "nothing: it's unbiased"], 0,
+                 say="Classical measurement error: what we record is the truth plus independent noise, with "
+                     "reliability one half. What happens to the regression slope on the recorded exposure?",
+                 reveal="It's halved: attenuated by the reliability. Replicates or validation data let regression "
+                        "calibration or SIMEX undo it.")
         self.spearman()
         self.attenuation()
         self.picture()
@@ -20,12 +26,10 @@ class Measurement(VoiceoverScene):
         self.seeded()
         self.other()
         self.board()
+        self.answer()
 
     def card(self):
-        card = chapter_card(8, r"Measurement error", r"Values we see, \ but wrongly", lit=(1904, 1994), part=PART)
-        with self.voiceover("Chapter eight. Measurement error."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(8, r"Measurement error", r"Values we see, \ but wrongly", lit=(1904, 1994), part=PART, said="Chapter eight. Measurement error.")
 
     def spearman(self):
         rows = [

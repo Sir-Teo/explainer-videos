@@ -5,9 +5,15 @@ import numpy as np
 from videos.stats.stats57.common import *  # noqa: F403
 
 
-class Beyond(VoiceoverScene):
+class Beyond(StatsScene):
     def construct(self):
         self.card()
+        self.ask("Without exchangeability, weighted conformal's coverage loss is bounded by...",
+                 ["total-variation distances from exchangeability", "nothing"], 0,
+                 say="When the future doesn't look like the past. Barber, Candès, Ramdas and Tibshirani bound "
+                     "weighted conformal's coverage loss by what?",
+                 reveal="A weighted sum of total-variation distances between the data and their swapped versions. "
+                        "Loose, but honest: if the drift is small, so is the loss.")
         self.weighted()
         self.estimated()
         self.nonexch()
@@ -15,12 +21,10 @@ class Beyond(VoiceoverScene):
         self.chart()
         self.tv_worked()
         self.board()
+        self.answer()
 
     def card(self):
-        card = chapter_card(5, r"Beyond exchangeability", r"When the future does not look like the past", lit=(2019, 2023), part=PART)
-        with self.voiceover("Chapter five. Beyond exchangeability: when the future does not look like the past."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(5, r"Beyond exchangeability", r"When the future does not look like the past", lit=(2019, 2023), part=PART, said="Chapter five. Beyond exchangeability: when the future does not look like the past.")
 
     def weighted(self):
         rows = [

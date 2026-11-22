@@ -11,7 +11,7 @@ def mod3_diagram():
                         edge_font=22)
 
 
-class Regex(VoiceoverScene):
+class Regex(WatchScene):
     def construct(self):
         self.card()
         self.operations()
@@ -19,12 +19,8 @@ class Regex(VoiceoverScene):
         self.plan()
 
     def card(self):
-        card = chapter_card(2, r"Regular expressions and automata", r"Which patterns can a finite machine match?",
-                            lit=(1951, 1959), extra=((1951, r"Kleene: \ regular events"),
-                                                     (1959, r"Rabin and Scott: \ finite automata")), part=PART)
-        with self.voiceover("Chapter two. Regular expressions and automata."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(2, r"Regular expressions and automata", r"Which patterns can a finite machine match?", lit=(1951, 1959), extra=((1951, r"Kleene: \ regular events"),
+                                                     (1959, r"Rabin and Scott: \ finite automata")), part=PART, said="Chapter two. Regular expressions and automata.")
 
     def operations(self):
         head = label(r"Three operations \ (Kleene, \ 1951)", font_size=36).to_edge(UP, buff=0.35)
@@ -104,6 +100,10 @@ class Regex(VoiceoverScene):
         self.clear_scene()
 
     def plan(self):
+        self.ask(r"Regular expressions, or finite automata: \\ which can describe more languages?",
+                 [r"automata", r"exactly the same languages", r"regular expressions"], 1,
+                 say="Regular expressions, or finite automata. Which can describe more languages?",
+                 reveal="Neither. They describe exactly the same languages: Kleene's theorem.")
         head = label(r"The same languages, \ three ways", font_size=36).to_edge(UP, buff=0.35)
         rx = region(3.4, 1.0, r"regular expression", HEAD, font_size=22)
         nfa = region(3.4, 1.0, r"NFA", DATA, font_size=24)

@@ -5,7 +5,7 @@ from videos.cs.cs26.common import (BG, CTRL, DATA, HEAD, LAM, NO, PART, YES, fit
                                    words)
 
 
-class Space(VoiceoverScene):
+class Space(WatchScene):
     def construct(self):
         self.card()
         self.tqbf()
@@ -14,13 +14,12 @@ class Space(VoiceoverScene):
         self.logspace()
 
     def card(self):
-        card = chapter_card(10, r"Space: \ games and alternation", r"What can you do with polynomial memory?",
-                            lit=(1973, 1988), extra=((1973, r"Stockmeyer--Meyer"), (1988, r"NL = coNL")), part=PART)
-        with self.voiceover("Chapter ten. Space: games and alternation."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(10, r"Space: \ games and alternation", r"What can you do with polynomial memory?", lit=(1973, 1988), extra=((1973, r"Stockmeyer--Meyer"), (1988, r"NL = coNL")), part=PART, said="Chapter ten. Space: games and alternation.")
 
     def tqbf(self):
+        self.ask(r"True quantified Boolean formulas. \\ They are complete for...", [r"NP", r"PSPACE"], 1,
+                 say="Formulas with for-all and there-exists alternating in front. Which class are they complete for?",
+                 reveal="PSPACE: polynomial space, and every two-player game of polynomial length.")
         g = load("games")
         head = label(r"TQBF: \ is a fully quantified formula true?", font_size=32).to_edge(UP, buff=0.35)
         ex = MathTex(r"\exists x_1\, \forall x_2\, \exists x_3\, \forall x_4 \cdots \;\; \varphi(x_1, \ldots, x_n)",

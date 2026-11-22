@@ -5,9 +5,15 @@ import numpy as np
 from videos.stats.stats13.common import *  # noqa: F403
 
 
-class Blocking(VoiceoverScene):
+class Blocking(StatsScene):
     def construct(self):
         self.card()
+        self.ask("Fertility rises west to east. Block by strips. The error variance...",
+                 ["rises", "falls", "stays the same"], 1,
+                 say="The field's fertility rises steadily from west to east. Put every treatment in each "
+                     "north-south strip, and compare within strips. What happens to the error variance?",
+                 reveal="It falls. The strips soak up the slope, so only the variation within strips is left to "
+                        "blur the comparison.")
         self.field()
         self.two_tables()
         self.power()
@@ -15,12 +21,14 @@ class Blocking(VoiceoverScene):
         self.darwin()
         self.fisher_zea()
         self.when()
+        self.answer()
+        self.checkpoint([("Many pairwise comparisons: what controls the family-wise error?", "Tukey's HSD, or Bonferroni"),
+                         ("Blocking removes what from the error?", "the variation between blocks")],
+                        narration="Checkpoint. Comparisons and blocks.",
+                        answers_narration="Tukey's method. And the variation between blocks.")
 
     def card(self):
-        card = chapter_card(5, r"Blocking", r"Compare like with like, \ and take the soil out of the error", lit=(1935,), part=PART)
-        with self.voiceover("Chapter five. Blocking."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(5, r"Blocking", r"Compare like with like, \ and take the soil out of the error", lit=(1935,), part=PART, said="Chapter five. Blocking.")
 
     def field(self):
         d = load("blocking")

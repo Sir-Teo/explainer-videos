@@ -3,20 +3,24 @@ from __future__ import annotations
 from videos.stats.stats36.common import *  # noqa: F403
 
 
-class Propensity(VoiceoverScene):
+class Propensity(StatsScene):
     def construct(self):
         self.card()
+        self.ask("Treated and untreated patients with the same propensity score are...",
+                 ["balanced on the score's covariates", "identical"], 0,
+                 say="The propensity score is each patient's chance of being treated, given their covariates. "
+                     "Treated and untreated patients with the same score: how do they compare?",
+                 reveal="Balanced: their covariates have the same distribution. One number balances many, Rosenbaum "
+                        "and Rubin's 1983 result.")
         self.balancing()
         self.matching()
         self.subclass()
         self.numbers()
         self.design()
+        self.answer()
 
     def card(self):
-        card = chapter_card(7, r"Propensity scores", r"One number that balances many", lit=(1983, 1968), part=PART)
-        with self.voiceover("Chapter seven. Propensity scores."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(7, r"Propensity scores", r"One number that balances many", lit=(1983, 1968), part=PART, said="Chapter seven. Propensity scores.")
 
     def balancing(self):
         rows = [

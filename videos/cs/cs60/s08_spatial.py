@@ -48,7 +48,7 @@ def pe_value(node, c):
         return pe_value("add", c - 1)
 
 
-class Spatial(VoiceoverScene):
+class Spatial(WatchScene):
     def construct(self):
         self.card()
         self.time_space()
@@ -56,16 +56,10 @@ class Spatial(VoiceoverScene):
         self.mapping()
         self.pipeline()
         self.fpga()
-        self.spectrum()
 
     def card(self):
-        card = chapter_card(7, r"Spatial machines: \ dataflow, \ CGRAs and FPGAs",
-                            r"What if the program were laid out in space, \ not in time?", lit=(1975, 1985, 2014),
-                            extra=((1975, r"Dennis and Misunas: \ a dataflow processor"),
-                                   (1985, r"the first FPGA"), (2014, r"Catapult: \ FPGAs in Bing")), part=PART)
-        with self.voiceover("Chapter seven. Spatial machines: dataflow, coarse-grained arrays, and FPGAs."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(7, r"Spatial machines: \ dataflow, \ CGRAs and FPGAs", r"What if the program were laid out in space, \ not in time?", lit=(1975, 1985, 2014), extra=((1975, r"Dennis and Misunas: \ a dataflow processor"),
+                                   (1985, r"the first FPGA"), (2014, r"Catapult: \ FPGAs in Bing")), part=PART, said="Chapter seven. Spatial machines: dataflow, coarse-grained arrays, and FPGAs.")
 
     def _graph(self):
         """The loop's dataflow graph, drawn as nodes and arrows."""
@@ -118,6 +112,10 @@ class Spatial(VoiceoverScene):
         self.clear_scene()
 
     def tokens(self):
+        self.ask(r"In a dataflow machine, \\ a node fires when...", [r"the clock ticks",
+                 r"all its inputs have arrived"], 1,
+                 say="In a dataflow machine there is no program counter. When does a node compute?",
+                 reveal="As soon as all its inputs have arrived.")
         head = label(r"Dataflow: \ fire when the inputs arrive", font_size=36).to_edge(UP, buff=0.3)
         ops = {"plus": [-4.0, 0.4], "minus": [-1.0, 0.4], "times": [-2.5, -1.4]}
         circ = {k: Circle(radius=0.42, color=GREY_B, stroke_width=2.5).move_to([*p, 0]) for k, p in ops.items()}
@@ -398,56 +396,6 @@ class Spatial(VoiceoverScene):
         self.wait(0.4)
         self.clear_scene()
 
-    def spectrum(self):
-        head = label(r"Flexibility against efficiency", font_size=36).to_edge(UP, buff=0.3)
-        axis = Arrow([-6.0, 1.3, 0], [6.0, 1.3, 0], buff=0, color=GREY_B, stroke_width=3,
-                     max_tip_length_to_length_ratio=0.02)
-        ends = VGroup(label(r"any program", font_size=19, color=GREY_A).next_to(axis.get_start(), DOWN, buff=0.15)
-                      .align_to(axis, LEFT),
-                      label(r"one job, \ least energy", font_size=19, color=GREY_A).next_to(axis.get_end(), DOWN,
-                                                                                         buff=0.15)
-                      .align_to(axis, RIGHT))
-        kinds = [(r"CPU", GREY_B), (r"GPU", LAM), (r"FPGA", DATA), (r"CGRA", HEAD), (r"ASIC \ (the TPU)", KERN)]
-        xs = [-4.8, -2.4, 0.0, 2.2, 4.6]
-        marks = VGroup(*[VGroup(Dot([x, 1.3, 0], radius=0.09, color=c),
-                                label(n, font_size=22, color=c).move_to([x, 1.85, 0])) for x, (n, c) in zip(xs, kinds)])
-        ill = note(r"the order is the usual one; \ the spacing is illustrative", font_size=16).next_to(ends, DOWN,
-                                                                                                   buff=0.15)
-        ill.set_x(0)
-
-        def card(title, body, col):
-            t = label(title, font_size=21, color=col)
-            b = wrapped_label(body, 3.7, font_size=18, color=GREY_A)
-            g = VGroup(t, b).arrange(DOWN, aligned_edge=LEFT, buff=0.15)
-            frame = RoundedRectangle(width=4.0, height=2.0, corner_radius=0.12, stroke_color=col, stroke_width=1.8)
-            g.move_to(frame)
-            return VGroup(frame, g)
-        cards = VGroup(
-            card(r"Catapult \ (Microsoft, \ 2014)", r"an FPGA in each of Bing's ranking servers: \ nearly double the "
-                 r"throughput of a ranking stage", DATA),
-            card(r"FPGAs to rent \ (AWS, \ 2017)", r"FPGA instances in the cloud of Part 45: \ hardware you "
-                 r"reconfigure like software", LAM),
-            card(r"Plasticine \ (Stanford, \ 2017)", r"a research CGRA: \ patterns such as map and reduce compiled "
-                 r"straight onto the array", HEAD),
-        ).arrange(RIGHT, buff=0.3).next_to(ill, DOWN, buff=0.9).set_x(0)
-        with self.voiceover(
-            "So spatial machines fill a spectrum. <bookmark mark='a'/> At one end the CPU runs any program, paying "
-            "for every instruction; at the other, a fixed chip such as the TPU does one job for the least energy. "
-            "GPUs, FPGAs and CGRAs sit between. <bookmark mark='b'/> In 2014 Microsoft put an FPGA in each of the "
-            "servers that rank Bing's search results, and nearly doubled the throughput of a ranking stage. "
-            "<bookmark mark='c'/> Since 2017 anyone can rent FPGAs in Amazon's cloud. <bookmark mark='d'/> And "
-            "research CGRAs such as Stanford's Plasticine compile parallel patterns straight onto the array. In each "
-            "case the hard part is the compiler, which chapter ten returns to."
-        ) as vo:
-            self.play(FadeIn(head), GrowArrow(axis), FadeIn(ends))
-            vo.wait_until("a")
-            self.play(LaggedStart(*[FadeIn(mk, shift=DOWN * 0.15) for mk in marks], lag_ratio=0.3), FadeIn(ill),
-                      run_time=2)
-            for mk, cd in zip("bcd", cards):
-                vo.wait_until(mk)
-                self.play(FadeIn(cd, shift=UP * 0.15))
-        self.wait(0.4)
-        self.clear_scene()
 
 
 _ = (BG, KERN, LAM, NO, PART)

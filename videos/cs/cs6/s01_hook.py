@@ -9,12 +9,12 @@ from videos.cs.cs6.common import (BG, CODE, COST, CTRL, DATA, FUNC, HEAD, NO, PA
                                   say, sci)
 
 
-class Hook(VoiceoverScene):
+class Hook(WatchScene):
     def construct(self):
         self.pieces()
         self.stored()
         self.preview()
-        self.plan()
+        self.title(PART)
 
     # ------------------------------------------------------------------
     def pieces(self):
@@ -147,28 +147,3 @@ class Hook(VoiceoverScene):
         self.wait(0.3)
         self.clear_scene()
 
-    # ------------------------------------------------------------------
-    def plan(self):
-        title = label(rf"Part {PART}: \ The Stored-Program Computer", font_size=44).to_edge(UP, buff=0.4)
-        smap = series_map(current=PART, done=PART - 1).scale(0.92).next_to(title, DOWN, buff=0.35)
-        obj = objectives_card([
-            r"ENIAC's cables, \ von Neumann's report, \ and the first stored programs",
-            r"an instruction set designed: \ Pebble-32, \ bit by bit, \ beside RISC-V",
-            r"the datapath and the control unit, \ built from Parts 3--5 \ and verified",
-            r"the assembler, \ first programs, \ memory-mapped devices",
-            r"the Job, version 0, \ and the first row of the ledger",
-            "bounded simulation, \\ code as data, \\ interrupts, \\ and the machine counted",
-        ], font_size=26).move_to(DOWN * 0.2)
-        with self.voiceover(
-            "This is Part 6 of Computer Science, Built, the last part of the first act. <bookmark mark='a'/> In this "
-            "part: how ENIAC was programmed with cables, and the report that put the program in memory. An "
-            "instruction set designed from scratch, bit by bit, and compared with RISC-V. The datapath and the "
-            "control unit, built from the circuits of Parts 3 to 5 and verified. The assembler, the first programs, "
-            "and devices that live at memory addresses. The Job, version zero, and the first row of the ledger. Then "
-            "Pebble and the Turing machine, code that rewrites itself, interrupts, and the whole machine counted."
-        ) as vo:
-            self.play(FadeIn(title), FadeIn(smap))
-            vo.wait_until("a")
-            self.play(FadeOut(smap), FadeIn(obj))
-        self.wait(0.4)
-        self.clear_scene()

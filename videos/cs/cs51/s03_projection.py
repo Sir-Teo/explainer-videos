@@ -19,25 +19,23 @@ def sci(x: float) -> str:
     return rf"${m} \times 10^{{{e}}}$"
 
 
-class Projection(VoiceoverScene):
+class Projection(WatchScene):
     def construct(self):
         self.card()
         self.similar()
         self.matrix()
         self.frustum()
         self.depth()
-        self.precision()
         self.fighting()
 
     def card(self):
-        card = chapter_card(2, r"Perspective projection", r"Why do far things look small, \ and what does it cost?",
-                            lit=(1974, 1992), extra=((1974, r"Sutherland and Hodgman: \ clipping"),
-                                                     (1992, r"OpenGL 1.0")), part=PART)
-        with self.voiceover("Chapter two. Perspective projection."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(2, r"Perspective projection", r"Why do far things look small, \ and what does it cost?", lit=(1974, 1992), extra=((1974, r"Sutherland and Hodgman: \ clipping"),
+                                                     (1992, r"OpenGL 1.0")), part=PART, said="Chapter two. Perspective projection.")
 
     def similar(self):
+        self.ask(r"An object twice as far away \\ looks...", [r"half as tall", r"a quarter as tall"], 0,
+                 say="Move an object twice as far from the eye. How tall does it look?",
+                 reveal="Half as tall: similar triangles. Size divides by distance.")
         head = label(r"Similar triangles", font_size=36).to_edge(UP, buff=0.3)
         E = np.array([-6.0, -0.9, 0])
         n = 1.6
@@ -309,48 +307,6 @@ class Projection(VoiceoverScene):
         self.wait(0.4)
         self.clear_scene()
 
-    def precision(self):
-        tab_rows = load("depth")["table"]
-        head = label(r"The smallest gap a 24-bit buffer can see", font_size=36).to_edge(UP, buff=0.3)
-        nears = sorted({r["near"] for r in tab_rows})
-        dists = sorted({r["distance"] for r in tab_rows})
-        cell = {(r["near"], r["distance"]): r for r in tab_rows}
-        rows = [[f"{nv:g}"] + [sci(cell[(nv, dv)]["resolvable"]) for dv in dists] for nv in nears]
-        tab = grid_table([r"near plane"] + [rf"at {dv:g}" for dv in dists], rows, widths=[2.0, 2.1, 2.1, 2.1, 2.1],
-                         row_h=0.55, font_size=21, mono_cols=())
-        tab.next_to(head, DOWN, buff=0.55).set_x(0)
-        for i in range(1, len(rows) + 1):
-            tab.cells[i][0].set_color(DATA)
-        for c in range(1, len(dists) + 1):
-            tab.cells[1][c].set_color(NO)
-            tab.cells[len(rows)][c].set_color(YES)
-        sub = note(rf"far plane {tab_rows[0]['far']:g}; \ found by bisection on the depth mapping, \ and checked "
-                   r"against the closed form", font_size=17).next_to(tab, DOWN, buff=0.2)
-        form = MathTex(r"\Delta", r"\approx", r"\frac{d^2\,(f-n)}{f\,n\,(2^{b}-1)}", r"\approx",
-                       r"\frac{d^2}{n\,2^{b}}", font_size=40).next_to(sub, DOWN, buff=0.4)
-        form[4].set_color(HEAD)
-        fn = note(r"for $f \gg n$: \ grows with distance squared; \ the near plane matters, \ the far plane hardly "
-                  r"at all", font_size=19, color=HEAD).next_to(form, DOWN, buff=0.2)
-        with self.voiceover(
-            "How close can two surfaces be before the buffer cannot tell them apart? <bookmark mark='a'/> Our "
-            "transform module finds the smallest resolvable gap for a twenty-four-bit buffer by bisection, "
-            "and checks it against a closed form. <bookmark mark='b'/> With the near plane at a "
-            "hundredth of a unit, two surfaces at distance a thousand must be about six units apart. With it at one, "
-            "six hundredths will do. <bookmark mark='c'/> The closed form says why: the gap grows with the square "
-            "of the distance and shrinks in proportion to the near distance, while the far plane hardly matters. "
-            "So the cheapest fix is not more bits: it is pushing the near plane out."
-        ) as vo:
-            self.play(FadeIn(head))
-            vo.wait_until("a")
-            self.play(FadeIn(tab), FadeIn(sub))
-            vo.wait_until("b")
-            self.play(Indicate(tab.cells[1][len(dists)], color=NO), Indicate(tab.cells[len(rows)][len(dists)],
-                                                                             color=YES))
-            vo.wait_until("c")
-            self.play(Write(form))
-            self.play(FadeIn(fn))
-        self.wait(0.4)
-        self.clear_scene()
 
     def fighting(self):
         zf = load("depth")["fighting"]

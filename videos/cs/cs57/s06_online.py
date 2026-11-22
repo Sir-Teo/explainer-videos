@@ -41,7 +41,7 @@ def fit_x(g, lo=-6.85, hi=6.85):
     return g
 
 
-class Online(VoiceoverScene):
+class Online(WatchScene):
     def construct(self):
         self.card()
         self.halving()
@@ -52,12 +52,8 @@ class Online(VoiceoverScene):
         self.ogd()
 
     def card(self):
-        card = chapter_card(5, r"Learning online", r"What if an adversary picks the examples?",
-                            lit=(1988, 1997), extra=((1988, r"Littlestone: \ mistake bounds"),
-                                                     (1997, r"Freund and Schapire: \ Hedge")), part=PART)
-        with self.voiceover("Chapter five. Learning online."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(5, r"Learning online", r"What if an adversary picks the examples?", lit=(1988, 1997), extra=((1988, r"Littlestone: \ mistake bounds"),
+                                                     (1997, r"Freund and Schapire: \ Hedge")), part=PART, said="Chapter five. Learning online.")
 
     # ------------------------------------------------------------------ the halving algorithm
     def halving(self):
@@ -383,6 +379,10 @@ class Online(VoiceoverScene):
 
     # ------------------------------------------------------------------ the lower bound
     def lower(self):
+        self.ask(r"Predicting with expert advice for $T$ rounds. \\ The best possible regret grows like...",
+                 [r"a constant", r"$\sqrt{T}$", r"$T$"], 1,
+                 say="Learning from expert advice against an adversary, for T rounds. How must the best possible regret grow?",
+                 reveal="Like the square root of T. Hedge achieves it, and no algorithm does better.")
         head = label(r"Nobody beats $\sqrt{T}$", font_size=36).to_edge(UP, buff=0.3)
         T, K = 400, 10
         rng = np.random.default_rng(11)

@@ -4,11 +4,11 @@ from explainer.cs import *  # noqa: F403
 from videos.cs.cs56.common import BG, DATA, HEAD, KERN, LAM, NO, PART, YES, grid_table, load
 
 
-class Hook(VoiceoverScene):
+class Hook(WatchScene):
     def construct(self):
         self.drawings()
         self.three()
-        self.plan()
+        self.title(PART)
 
     def drawings(self):
         head = label(r"Two graphs, \ one number apart", font_size=36).to_edge(UP, buff=0.3)
@@ -99,29 +99,6 @@ class Hook(VoiceoverScene):
         self.wait(0.4)
         self.clear_scene()
 
-    def plan(self):
-        title = label(rf"Part {PART}: \ Spectral Graphs and Expanders", font_size=36).to_edge(UP, buff=0.3)
-        smap = series_map(current=PART, done=PART - 1).scale(0.92).next_to(title, DOWN, buff=0.35)
-        obj = objectives_card([
-            r"the Laplacian, \ its energy and its eigenvalues",
-            r"the Fiedler vector, \ and Cheeger's inequality proved",
-            r"random walks and their mixing time",
-            r"expanders: \ random, \ Ramanujan and zig-zag",
-            r"graphs as circuits, \ and fast Laplacian solvers",
-            r"electrical flows to almost-linear max-flow",
-        ], font_size=25).move_to(DOWN * 0.2)
-        with self.voiceover(
-            "This is Part 56 of Computer Science, Built, and the first part of Act Eleven, the research frontier. "
-            "<bookmark mark='a'/> We will build the Laplacian of a graph and read its eigenvalues; use the Fiedler "
-            "vector to cut graphs, and prove Cheeger's inequality; measure how random walks mix; construct expanders, "
-            "graphs that are sparse but impossible to cut; treat graphs as electrical circuits; and follow those "
-            "circuits to a maximum-flow algorithm that runs in almost linear time."
-        ) as vo:
-            self.play(FadeIn(title), FadeIn(smap))
-            vo.wait_until("a")
-            self.play(FadeOut(smap), FadeIn(obj))
-        self.wait(0.5)
-        self.clear_scene()
 
 
 _ = (BG, DATA, KERN, LAM, NO, YES)

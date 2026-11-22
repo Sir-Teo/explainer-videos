@@ -5,20 +5,24 @@ import numpy as np
 from videos.stats.stats45.common import *  # noqa: F403
 
 
-class RiskSets(VoiceoverScene):
+class RiskSets(StatsScene):
     def construct(self):
         self.card()
+        self.ask("The minimax estimator of a binomial $p$, under squared error, has risk that is...",
+                 ["constant in $p$", "largest at $p = 1/2$"], 0,
+                 say="The minimax estimator of a binomial proportion under squared error. What does its risk curve "
+                     "look like?",
+                 reveal="Flat: constant in p. It's the Bayes rule for a particular beta prior, and a Bayes rule "
+                        "with constant risk is minimax.")
         self.problem()
         self.points()
         self.bayes()
         self.minimax()
         self.theorem()
+        self.answer()
 
     def card(self):
-        card = chapter_card(2, r"Risk sets", r"A whole decision problem in one picture", part=PART)
-        with self.voiceover("Chapter two. Risk sets: a whole decision problem in one picture."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(2, r"Risk sets", r"A whole decision problem in one picture", part=PART, said="Chapter two. Risk sets: a whole decision problem in one picture.")
 
     def problem(self):
         d = load("decision")

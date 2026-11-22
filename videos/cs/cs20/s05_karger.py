@@ -17,23 +17,16 @@ def positions():
     return pos
 
 
-class Karger(VoiceoverScene):
+class Karger(WatchScene):
     def construct(self):
         self.card()
         self.contract("trace", "groups", True)
         self.contract("fail_trace", "fail_groups", False)
         self.proof()
         self.measured()
-        self.faster()
 
     def card(self):
-        card = chapter_card(4, r"A minimum cut by contraction", r"Can random choices find the weakest link?",
-                            lit=(1993,), extra=((1993, r"Karger's contraction"),), part=PART)
-        with self.voiceover((
-            'Chapter four. A minimum cut by contraction.'
-        )):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(4, r"A minimum cut by contraction", r"Can random choices find the weakest link?", lit=(1993,), extra=((1993, r"Karger's contraction"),), part=PART, said='Chapter four. A minimum cut by contraction.')
 
     def contract(self, key, gkey, good):
         d = load("karger")
@@ -147,6 +140,10 @@ class Karger(VoiceoverScene):
         self.clear_scene()
 
     def measured(self):
+        self.ask(r"Karger's random contraction finds a minimum cut \\ with probability at least...",
+                 [r"$\tfrac12$", r"$2 / \bigl(n(n-1)\bigr)$"], 1,
+                 say="Contract random edges until two vertices remain. How likely is it that the cut left is a minimum cut?",
+                 reveal="At least two over n times n minus one. Small, but repeat it enough and it's almost certain.")
         d = load("karger")
         head = label(rf"Measured: \ {d['trials']:,} runs".replace(",", "{,}"), font_size=34).to_edge(UP, buff=0.35)
         cuts = {int(k): v for k, v in d["cuts"].items()}
@@ -210,39 +207,3 @@ class Karger(VoiceoverScene):
         self.wait(0.3)
         self.clear_scene()
 
-    def faster(self):
-        d = load("karger")
-        head = label(r"Karger--Stein: \ repeat only where it is risky", font_size=34).to_edge(UP, buff=0.35)
-        pts = VGroup(
-            label(r"early contractions are safe: \ $1 - 2/n$ is close to 1", font_size=22, color=WHITE),
-            label(r"the risk is at the end, \ with few vertices left", font_size=22, color=WHITE),
-            label(r"contract to $n/\sqrt{2}$ vertices: \ the cut survives with probability $\ge \tfrac12$",
-                  font_size=22, color=LAM),
-            label(r"then recurse \textbf{twice}, \ independently, \ and keep the better cut", font_size=22,
-                  color=LAM),
-            MathTex(r"T(n) = 2\,T(n/\sqrt{2}) + O(n^2) = O(n^2 \log n), \qquad \Pr[\text{success}] = "
-                    r"\Omega(1/\log n)", font_size=32, color=YES),
-            label(r"$O(n^2 \log^3 n)$ in all, \ for a high-confidence answer",
-                  font_size=20, color=GREY_A),
-        ).arrange(DOWN, buff=0.32).next_to(head, DOWN, buff=0.5)
-        with self.voiceover(
-            (
-            f"Where is the waste? <bookmark mark='a'/> Early contractions have a small individual risk of hitting a "
-            f"fixed minimum cut, <bookmark mark='b'/> while the risk increases near the end. <bookmark mark='c'/> "
-            f'Karger and Clifford Stein contract to roughly n over root two vertices, with rounding chosen to retain '
-            f"a survival probability at least one half. <bookmark mark='d'/> Then two independent recursive branches "
-            f"compete and we keep the smaller cut. <bookmark mark='e'/> The standard implementation has order n "
-            f'squared log n running time per recursive trial and success at least order one over log n. <bookmark '
-            f"mark='f'/> Our forty-eight-vertex graph has an independently certified minimum cut. Plain contraction "
-            f'succeeded in '
-            f"{d['karger_success']:.0%}"
-            f' of two hundred trials; Karger–Stein succeeded in all forty observed trials. These fractions describe '
-            f'this graph and seed, not a universal success guarantee.'
-        )
-        ) as vo:
-            self.play(FadeIn(head))
-            for mk, p in zip("abcdef", pts):
-                vo.wait_until(mk)
-                self.play(FadeIn(p, shift=UP * 0.1))
-        self.wait(0.3)
-        self.clear_scene()

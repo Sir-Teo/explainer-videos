@@ -6,9 +6,14 @@ from explainer.stats.kit import robust as R
 from videos.stats.stats30.common import *  # noqa: F403
 
 
-class Influence(VoiceoverScene):
+class Influence(StatsScene):
     def construct(self):
         self.card()
+        self.ask("The sample mean's influence function is...",
+                 ["bounded", "unbounded"], 1,
+                 say="Hampel's influence function: how much a tiny mass at x moves an estimator. For the sample "
+                     "mean, is it bounded?",
+                 reveal="Unbounded: it grows linearly in x. One point far enough out can move the mean anywhere.")
         self.gross()
         self.rail()
         self.rail_middle()
@@ -18,12 +23,14 @@ class Influence(VoiceoverScene):
         self.theory()
         self.properties()
         self.hampel_opt()
+        self.answer()
+        self.checkpoint([("At the Laplace, the median against the mean?", "twice as efficient"),
+                         ("The sample mean's influence function?", "unbounded")],
+                        narration="Checkpoint. Efficiency and influence.",
+                        answers_narration="Twice as efficient. And unbounded.")
 
     def card(self):
-        card = chapter_card(3, r"Gross errors and influence", r"What one bad point can do", lit=(1974,), part=PART)
-        with self.voiceover("Chapter three. Gross errors and influence functions."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(3, r"Gross errors and influence", r"What one bad point can do", lit=(1974,), part=PART, said="Chapter three. Gross errors and influence functions.")
 
     def gross(self):
         rows = [

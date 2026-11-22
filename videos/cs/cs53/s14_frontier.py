@@ -13,24 +13,22 @@ def tile(title, body, col, w=4.2, h=3.0):
     return VGroup(frame, t, b)
 
 
-class Frontier(VoiceoverScene):
+class Frontier(WatchScene):
     def construct(self):
         self.card()
         self.keys()
         self.rsa()
         self.uses()
-        self.open()
 
     def card(self):
-        card = chapter_card(13, r"Frontier: \ keys, \ chemistry and the hardware",
-                            r"What will quantum computers actually change, \ and when?", lit=(1984, 2024),
-                            extra=((1984, r"Bennett and Brassard: \ BB84"),
-                                   (2024, r"NIST's post-quantum standards")), part=PART)
-        with self.voiceover("Chapter thirteen, the frontier. What will quantum computers actually change, and when?"):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(13, r"Frontier: \ keys, \ chemistry and the hardware", r"What will quantum computers actually change, \ and when?", lit=(1984, 2024), extra=((1984, r"Bennett and Brassard: \ BB84"),
+                                   (2024, r"NIST's post-quantum standards")), part=PART, said="Chapter thirteen, the frontier. What will quantum computers actually change, and when?")
 
     def keys(self):
+        self.ask(r"An eavesdropper measures BB84 qubits in random bases. \\ Errors in the checked bits:",
+                 [r"none", r"about a quarter"], 1,
+                 say="An eavesdropper measures the key's qubits in randomly chosen bases. What fraction of checked bits come out wrong?",
+                 reveal="About a quarter, and Alice and Bob see her.")
         b = load("bb84")
         head = label(r"Quantum mechanics against eavesdroppers", font_size=36).to_edge(UP, buff=0.3)
         n = 16
@@ -160,39 +158,6 @@ class Frontier(VoiceoverScene):
         self.wait(0.4)
         self.clear_scene()
 
-    def open(self):
-        head = label(r"Open", font_size=36).to_edge(UP, buff=0.3)
-        items = VGroup(
-            wrapped_label(r"1. \ \textbf{BQP against NP}: \ no quantum algorithm is known to solve NP-complete "
-                          r"problems fast, \ and none is expected.", 12.4, font_size=24, color=WHITE),
-            wrapped_label(r"2. \ \textbf{Useful advantage}: \ a practical problem with a proven, \ verifiable "
-                          r"exponential speedup.", 12.4, font_size=24, color=YES),
-            wrapped_label(r"3. \ \textbf{Is factoring classically hard?} \ Unproved, \ like every lower bound of Part "
-                          r"26.", 12.4, font_size=24, color=HEAD),
-            wrapped_label(r"4. \ \textbf{Better codes}: \ fewer physical qubits per logical qubit than the surface "
-                          r"code.", 12.4, font_size=24, color=KERN),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.35).next_to(head, DOWN, buff=0.45)
-        star = wrapped_label(r"$\bigstar$ \ this part's research problem: \ the least space-time volume of "
-                             r"physical qubits needed to factor a 2048-bit number at a physical error rate of "
-                             r"$10^{-3}$, \ and a lower bound to match", 12.4, font_size=23,
-                             color=LAM).to_edge(DOWN, buff=0.35)
-        with self.voiceover(
-            "Open problems. <bookmark mark='a'/> Whether quantum computers can solve NP-complete problems quickly: "
-            "no algorithm is known, and most researchers expect none. <bookmark mark='b'/> A practical problem with "
-            "a proven, verifiable exponential speedup. <bookmark mark='c'/> Whether factoring is hard for classical "
-            "computers at all, which, like every lower bound in Part 26, nobody can prove. <bookmark mark='d'/> And "
-            "codes that need fewer physical qubits per logical one. <bookmark mark='e'/> This part's research problem "
-            "asks how small the machine that factors a 2048-bit number can be: the least space-time volume of "
-            "physical qubits at an error rate of one in a thousand, with a lower bound to match."
-        ) as vo:
-            self.play(FadeIn(head))
-            for mk, it in zip("abcd", items):
-                vo.wait_until(mk)
-                self.play(FadeIn(it))
-            vo.wait_until("e")
-            self.play(FadeIn(star))
-        self.wait(0.6)
-        self.clear_scene()
 
 
 _ = (DATA, KERN, LAM, NO, YES)

@@ -3,20 +3,24 @@ from __future__ import annotations
 from videos.stats.stats35.common import *  # noqa: F403
 
 
-class Estimands(VoiceoverScene):
+class Estimands(StatsScene):
     def construct(self):
         self.card()
+        self.ask("Salk's trial: a risk ratio of 0.39. The vaccine prevented about what share of paralytic cases?",
+                 [r"39\%", r"about 60\%", "all"], 1,
+                 say="The 1954 Salk vaccine trial: paralytic polio among the vaccinated was point three nine times "
+                     "the rate among those given placebo. About what share of cases did the vaccine prevent?",
+                 reveal="About sixty percent: one minus point three nine. An estimand stated, and estimated, by a "
+                        "randomized trial of four hundred thousand children.")
         self.ladder_()
         self.numbers()
         self.sutva()
         self.versions()
         self.risk()
+        self.answer()
 
     def card(self):
-        card = chapter_card(2, r"Estimands and SUTVA", r"What exactly are we estimating?", lit=(1974,), part=PART)
-        with self.voiceover("Chapter two. Estimands, and the stable unit treatment value assumption."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(2, r"Estimands and SUTVA", r"What exactly are we estimating?", lit=(1974,), part=PART, said="Chapter two. Estimands, and the stable unit treatment value assumption.")
 
     def ladder_(self):
         rows = [

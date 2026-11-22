@@ -46,21 +46,15 @@ def bundle_grid(starts, ops, width, cycles, cw=2.4, ch=0.55, trips=1, ii=None, f
     return g
 
 
-class Vliw(VoiceoverScene):
+class Vliw(WatchScene):
     def construct(self):
         self.card()
         self.idea()
         self.bundles()
-        self.pipelined()
         self.why()
 
     def card(self):
-        card = chapter_card(10, r"The compiler's alternative: \ VLIW", r"What if the compiler did the scheduling?",
-                            lit=(1981, 2001), extra=((1981, r"Fisher: \ trace scheduling"), (2001, r"Itanium")),
-                            part=PART)
-        with self.voiceover("Chapter ten. The compiler's alternative."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(10, r"The compiler's alternative: \ VLIW", r"What if the compiler did the scheduling?", lit=(1981, 2001), extra=((1981, r"Fisher: \ trace scheduling"), (2001, r"Itanium")), part=PART, said="Chapter ten. The compiler's alternative.")
 
     # ------------------------------------------------------------------
     def idea(self):
@@ -103,6 +97,10 @@ class Vliw(VoiceoverScene):
 
     # ------------------------------------------------------------------
     def bundles(self):
+        self.ask(r"In a VLIW machine, \\ who finds the operations that can run together?", [r"the hardware",
+                 r"the compiler"], 1,
+                 say="In a very long instruction word machine, who finds the operations that can run together?",
+                 reveal="The compiler, ahead of time. The hardware just does what each bundle says.")
         d = load("vliw")
         head = label("Fixed-path scheduling illustration: \\ four start slots", font_size=32).to_edge(UP, buff=0.3)
         ops = [o.split("#")[0].strip() for o in d["ops"]]
@@ -142,41 +140,6 @@ class Vliw(VoiceoverScene):
         self.wait(0.3)
         self.clear_scene()
 
-    # ------------------------------------------------------------------
-    def pipelined(self):
-        d = load("vliw")
-        head = label(r"Software pipelining: \ start the next trip before this one ends", font_size=32).to_edge(
-            UP, buff=0.3)
-        ops = [o.split("#")[0].strip().split()[0] for o in d["ops"]]
-        ii = d["ii"]
-        g = bundle_grid(d["mstart"], ops, d["width"], 9, cw=1.3, ch=0.55, trips=4, ii=ii, font_size=15).move_to(
-            UP * 0.4)
-        heads = VGroup(*[label(str(c), font_size=18, color=GREY_B).next_to(g.frame[c * d['width']], UP, buff=0.12)
-                         for c in range(9)])
-        leg = VGroup(*[label(rf"trip {k + 1}", font_size=20, color=c) for k, c in enumerate((YES, DATA, CTRL, INF))]
-                     ).arrange(RIGHT, buff=0.5).next_to(g, DOWN, buff=0.35)
-        bound = MathTex(r"\text{II} \ge \max\!\Big(\Big\lceil \tfrac{6 \text{ ops}}{4 \text{ slots}} \Big\rceil, "
-                        r"\ \underbrace{1}_{\texttt{t0} \,\to\, \texttt{t0}}\Big) = 2", font_size=34,
-                        color=HEAD).to_edge(DOWN, buff=0.45)
-        with self.voiceover(
-            "Software pipelining overlaps operations from successive loop trips. The colors distinguish trips in "
-            "this fixed-path scheduling illustration. <bookmark mark='a'/> Address increments permit some work for "
-            "the next trip to begin before the previous trip's load-dependent comparison finishes. Here the modulo "
-            "placement satisfies the displayed data and start-slot constraints. <bookmark mark='b'/> Six operations "
-            "and four slots give a resource initiation-interval lower bound of two cycles; the one-cycle address "
-            "recurrence gives another lower bound of one. Their maximum is two. A complete loop implementation must "
-            "also preserve live versions, define control within bundles, handle startup and drain, guard "
-            "speculative loads, and recover on exits. The picture does not verify those full-program requirements "
-            "or establish an achieved hardware throughput."
-        ) as vo:
-            self.play(FadeIn(head), FadeIn(g.frame), FadeIn(heads))
-            self.play(LaggedStart(*[FadeIn(c) for c in g.cells], lag_ratio=0.06), FadeIn(leg), run_time=3.0)
-            vo.wait_until("a")
-            self.play(FadeIn(g.nops))
-            vo.wait_until("b")
-            self.play(Write(bound))
-        self.wait(1.0)
-        self.clear_scene()
 
     # ------------------------------------------------------------------
     def why(self):
@@ -200,8 +163,7 @@ class Vliw(VoiceoverScene):
             "interlocks or other mechanisms preserve correctness, sometimes by stalling. <bookmark mark='b'/> "
             "Data-dependent branches require control flow, predication, speculation or guarded schedules; a "
             "compiler need not know every runtime outcome in advance. <bookmark mark='c'/> A schedule tuned for one "
-            "implementation can perform poorly on another. Compatible hardware can preserve the program's meaning "
-            "without recompilation; a changed width does not automatically make old code wrong. <bookmark "
+            "implementation can perform poorly on another. <bookmark "
             "mark='d'/> Itanium's EPIC approach included features such as predication and advanced loads and faced "
             "several commercial and technical challenges. One simple bundle chart cannot explain its whole history. "
             "<bookmark mark='e'/> VLIW remains useful in some DSPs and accelerators, where workload knowledge and "

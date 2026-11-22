@@ -11,22 +11,17 @@ ROWS = ["whale", "sea", "captain", "ahab", "love", "darci", "holm", "moor"]
 SHARD_COLORS = [DATA, LAM, YES, KERN]
 
 
-class Serving(VoiceoverScene):
+class Serving(WatchScene):
     def construct(self):
         self.card()
         self.cuts()
         self.query()
         self.tail()
-        self.replicas()
         self.caches()
 
     def card(self):
-        card = chapter_card(10, r"Serving at scale", r"How do a thousand machines answer one query?",
-                            lit=(2003, 2013), extra=((2003, r"Barroso, \ Dean and H\"olzle: \ a cluster for search"),
-                                                     (2013, r"Dean and Barroso: \ the tail at scale")), part=PART)
-        with self.voiceover("Chapter ten. Serving at scale."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(10, r"Serving at scale", r"How do a thousand machines answer one query?", lit=(2003, 2013), extra=((2003, r"Barroso, \ Dean and H\"olzle: \ a cluster for search"),
+                                                     (2013, r"Dean and Barroso: \ the tail at scale")), part=PART, said="Chapter ten. Serving at scale.")
 
     def cuts(self):
         ix = load("index")
@@ -85,6 +80,9 @@ class Serving(VoiceoverScene):
         self.clear_scene()
 
     def query(self):
+        self.ask(r"An index partitioned by term. \\ A two-word query visits...", [r"every shard", r"two shards"], 1,
+                 say="The index is cut by term, each shard holding some words' lists. Which shards does a two-word query visit?",
+                 reveal="Two: one for each word. Cut by document, it would visit them all.")
         row = next(r for r in load("intersect")["rows"] if r["terms"] == ["whale", "sea"])
         n_whale, n_sea = row["sizes"]
         head = label(r"One query, \ two layouts", font_size=36).to_edge(UP, buff=0.3)
@@ -195,57 +193,6 @@ class Serving(VoiceoverScene):
         self.wait(0.4)
         self.clear_scene()
 
-    def replicas(self):
-        head = label(r"Shards and replicas", font_size=36).to_edge(UP, buff=0.3)
-        w, h, gx, gy = 1.45, 0.55, 0.22, 0.3
-        x0, y0 = -5.6, 0.9
-
-        def box(r, c, color=None):
-            return module_box(rf"{c + 1}.{r + 1}", color or SHARD_COLORS[c % 4], w=w, h=h, font=17).move_to(
-                [x0 + c * (w + gx), y0 - r * (h + gy), 0])
-        grid = VGroup(*[box(r, c) for r in range(3) for c in range(4)])
-        cols = VGroup(*[label(rf"shard {c + 1}", font_size=17, color=SHARD_COLORS[c]).move_to(
-            [x0 + c * (w + gx), y0 + 0.55, 0]) for c in range(4)])
-        broker = module_box(r"broker", HEAD, w=2.4, h=0.5).move_to([x0 + 1.5 * (w + gx), 2.35, 0])
-        pick = [0, 2, 1, 0]
-        rings = VGroup(*[SurroundingRectangle(grid[pick[c] * 4 + c], color=HEAD, buff=0.05, stroke_width=3)
-                         for c in range(4)])
-        dead = grid[2 * 4 + 1]
-        cross = Cross(dead, stroke_color=NO, stroke_width=4)
-        new_ring = SurroundingRectangle(grid[0 * 4 + 1], color=HEAD, buff=0.05, stroke_width=3)
-        extra_row = VGroup(*[box(3, c) for c in range(4)])
-        extra_col = VGroup(*[box(r, 4, color=GREY_B) for r in range(4)])
-        extra_col_l = label(r"shard 5", font_size=17, color=GREY_B).move_to([x0 + 4 * (w + gx), y0 + 0.55, 0])
-        notes = VGroup(
-            wrapped_label(r"a query visits one replica of each shard", 4.4, font_size=19, color=HEAD),
-            wrapped_label(r"a machine fails: \ the broker uses another copy of the same shard", 4.4, font_size=19,
-                          color=NO),
-            wrapped_label(r"more queries per second: \ add a row of replicas", 4.4, font_size=19, color=YES),
-            wrapped_label(r"a bigger index: \ add a column of shards, \ each smaller and faster", 4.4,
-                          font_size=19, color=GREY_A),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.35).move_to([4.6, -0.2, 0])
-        with self.voiceover(
-            "A real deployment is a grid. <bookmark mark='a'/> The columns are shards, each holding a slice of the "
-            "index; the rows are replicas, identical copies. A query visits one replica of every shard, chosen by "
-            "load. <bookmark mark='b'/> When a machine fails, as one in a big cluster always is, the broker sends "
-            "that shard's work to another copy, and the user notices nothing. <bookmark mark='c'/> The grid grows "
-            "in two directions. More queries per second? Add a row of replicas. <bookmark mark='d'/> A bigger "
-            "index? Add a column of shards, each smaller, so each answers faster. Capacity and size are separate "
-            "dials."
-        ) as vo:
-            self.play(FadeIn(head), FadeIn(broker), FadeIn(grid), FadeIn(cols))
-            vo.wait_until("a")
-            self.play(Indicate(broker, color=HEAD))
-            self.play(Create(rings), FadeIn(notes[0]))
-            vo.wait_until("b")
-            self.play(Create(cross), FadeIn(notes[1]))
-            self.play(ReplacementTransform(rings[1], new_ring))
-            vo.wait_until("c")
-            self.play(FadeIn(extra_row, shift=DOWN * 0.2), FadeIn(notes[2]))
-            vo.wait_until("d")
-            self.play(FadeIn(extra_col, shift=RIGHT * 0.2), FadeIn(extra_col_l), FadeIn(notes[3]))
-        self.wait(0.4)
-        self.clear_scene()
 
     def caches(self):
         z = load("zipf")

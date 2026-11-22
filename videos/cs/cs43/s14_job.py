@@ -12,7 +12,7 @@ def service(name, color, w=2.6, h=1.0):
     return VGroup(r, label(name, font_size=24, color=color).move_to(r))
 
 
-class Job(VoiceoverScene):
+class Job(WatchScene):
     def construct(self):
         self.card()
         self.flow()
@@ -21,12 +21,8 @@ class Job(VoiceoverScene):
         self.end_to_end()
 
     def card(self):
-        card = chapter_card(13, r"The Job as three services", r"Can counts stay exact on a network that lies?",
-                            lit=(1981, 1984), extra=((1981, r"TCP's sequence numbers"),
-                                                     (1984, r"the end-to-end argument")), part=PART)
-        with self.voiceover("Chapter thirteen. The Job as three services."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(13, r"The Job as three services", r"Can counts stay exact on a network that lies?", lit=(1981, 1984), extra=((1981, r"TCP's sequence numbers"),
+                                                     (1984, r"the end-to-end argument")), part=PART, said="Chapter thirteen. The Job as three services.")
 
     def flow(self):
         w = load("job")["with_keys"]
@@ -80,6 +76,10 @@ class Job(VoiceoverScene):
         self.clear_scene()
 
     def drift(self):
+        self.ask(r"The Job's services, with idempotency keys, \\ on a lossy network. The counts are...",
+                 [r"slightly off", r"exact"], 1,
+                 say="Our three services run the Job over a network that loses and duplicates messages, with idempotency keys. How accurate are the counts?",
+                 reveal="Exact, at every loss rate.")
         sw = load("job")["sweep"]
         head = label(r"Without keys, \ counts drift", font_size=36).to_edge(UP, buff=0.3)
         x0, y0, xw, yh = -5.2, -2.4, 7.0, 4.4

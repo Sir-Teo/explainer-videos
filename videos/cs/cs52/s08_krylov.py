@@ -37,23 +37,18 @@ def bowl_paths(A, e0, steps=12):
     return sd, cg
 
 
-class Krylov(VoiceoverScene):
+class Krylov(WatchScene):
     def construct(self):
         self.card()
         self.downhill()
         self.krylov()
         self.rate()
         self.precondition()
-        self.gmres()
 
     def card(self):
-        card = chapter_card(7, r"Conjugate gradients", r"How do we solve a million equations without factoring?",
-                            lit=(1950, 1952, 1986), extra=((1950, r"Lanczos"),
+        self.chapter(7, r"Conjugate gradients", r"How do we solve a million equations without factoring?", lit=(1950, 1952, 1986), extra=((1950, r"Lanczos"),
                                                            (1952, r"Hestenes and Stiefel: \ CG"),
-                                                           (1986, r"Saad and Schultz: \ GMRES")), part=PART)
-        with self.voiceover("Chapter seven. Conjugate gradients."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+                                                           (1986, r"Saad and Schultz: \ GMRES")), part=PART, said="Chapter seven. Conjugate gradients.")
 
     def downhill(self):
         head = label(r"Solving as going downhill", font_size=36).to_edge(UP, buff=0.3)
@@ -174,6 +169,9 @@ class Krylov(VoiceoverScene):
         self.clear_scene()
 
     def rate(self):
+        self.ask(r"Conjugate gradients: iterations grow like...", [r"$\kappa$", r"$\sqrt{\kappa}$"], 1,
+                 say="How do the iterations of conjugate gradients grow with the condition number kappa?",
+                 reveal="Like the square root of kappa. Steepest descent needs kappa.")
         rows_ = load("krylov")["rows"]
         head = label(r"How fast: \ the square root of $\kappa$", font_size=36).to_edge(UP, buff=0.3)
         cols = {r"\frac{\sqrt\kappa - 1}{\sqrt\kappa + 1}": YES, r"\frac{\sqrt\kappa}{2}": YES,
@@ -308,66 +306,6 @@ class Krylov(VoiceoverScene):
         self.wait(0.4)
         self.clear_scene()
 
-    def gmres(self):
-        g = load("gmres")
-        res = g["residuals"]
-        head = label(r"Without symmetry: \ GMRES", font_size=36).to_edge(UP, buff=0.3)
-        cols = {r"\tilde H_k": KERN, r"Q_k": DATA, r"Q_{k+1}": DATA}
-        rows = VGroup(
-            cmath(r"A", r"Q_k", r"=", r"Q_{k+1}", r"\tilde H_k", colors=cols, font_size=34),
-            cmath(r"x_k", r"=", r"Q_k", r"y", colors=cols, font_size=34),
-            cmath(r"\|b - A x_k\|", r"=", r"\|\beta e_1 - ", r"\tilde H_k", r"y\|", colors=cols, font_size=34),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.75).move_to([-3.6, 0.4, 0])
-        whys = VGroup(
-            wrapped_label(r"Arnoldi \ (1951): \ an orthonormal basis of $\mathcal{K}_k$ by modified Gram--Schmidt "
-                          r"\ (Chapter 4); \ $\tilde H_k$ is Hessenberg \ (Chapter 6)", 5.8, font_size=18,
-                          color=GREY_B),
-            label(r"look for $x$ in that space", font_size=18, color=GREY_B),
-            wrapped_label(r"$Q_{k+1}$ keeps lengths: \ a small $(k+1) \times k$ least-squares problem, \ solved with "
-                          r"Givens rotations", 5.8, font_size=18, color=GREY_B),
-        )
-        for wy, r in zip(whys, rows):
-            wy.next_to(r, DOWN, buff=0.12).align_to(r, LEFT)
-        ax = CornerAxes(x_range=[0, 90, 10], y_range=[-8, 0, 2], x_length=4.8, y_length=3.6, tips=False,
-                        axis_config={"stroke_color": GREY_C})
-        ax.move_to([3.9, 0.2, 0])
-        yt = log_ticks(ax, 0, (-8, -6, -4, -2, 0))
-        xt = VGroup(*[label(rf"{v}", font_size=16, color=GREY_B).next_to(ax.c2p(v, -8), DOWN, buff=0.1)
-                      for v in (0, 30, 60, 90)])
-        xl = label(r"steps", font_size=17, color=GREY_A).next_to(xt, DOWN, buff=0.08)
-        yl = label(r"relative residual, \ computed", font_size=17, color=GREY_A).next_to(ax, UP, buff=0.12).align_to(
-            ax, LEFT)
-        curve = VMobject(color=KERN, stroke_width=3).set_points_as_corners(
-            [ax.c2p(i + 1, max(-8.2, math.log10(v))) for i, v in enumerate(res)])
-        cl = wrapped_label(rf"convection--diffusion, \ 1{{,}}024 unknowns, \ not symmetric: \ $10^{{-8}}$ in "
-                           rf"{g['iterations']} steps", 4.6, font_size=18, color=KERN).next_to(xl, DOWN, buff=0.25)
-        foot = wrapped_label(r"the price is memory: \ every basis vector is kept, \ so long runs are restarted every "
-                             r"$m$ steps, \ GMRES($m$)", 12.4, font_size=20, color=WHITE).to_edge(DOWN, buff=0.3)
-        with self.voiceover(
-            "Conjugate gradients needs a symmetric matrix. Add a flow, convection as well as diffusion, and "
-            "symmetry is lost. <bookmark mark='a'/> GMRES, by Yousef Saad and Martin Schultz in 1986, builds an "
-            "orthonormal basis of the Krylov space with Arnoldi's process, which is chapter four's modified "
-            "Gram–Schmidt. A times the basis is the next basis times a small Hessenberg matrix, chapter six's "
-            "shape. <bookmark mark='b'/> It looks for x in that space, <bookmark mark='c'/> and minimizes the "
-            "residual through a small least-squares problem, solved with Givens rotations. <bookmark mark='d'/> "
-            "On our nonsymmetric problem of a thousand and twenty-four unknowns, it reaches ten to the minus "
-            f"eight in {g['iterations']} steps. <bookmark mark='e'/> The price is memory: every basis vector is "
-            "kept, so long runs are restarted."
-        ) as vo:
-            self.play(FadeIn(head))
-            vo.wait_until("a")
-            self.play(Write(rows[0]), FadeIn(whys[0]))
-            vo.wait_until("b")
-            self.play(FadeIn(rows[1]), FadeIn(whys[1]))
-            vo.wait_until("c")
-            self.play(FadeIn(rows[2]), FadeIn(whys[2]))
-            vo.wait_until("d")
-            self.play(Create(ax), FadeIn(yt), FadeIn(xt), FadeIn(xl), FadeIn(yl))
-            self.play(Create(curve), FadeIn(cl), run_time=2)
-            vo.wait_until("e")
-            self.play(FadeIn(foot))
-        self.wait(0.4)
-        self.clear_scene()
 
 
 _ = (BG, HEAD, LAM)

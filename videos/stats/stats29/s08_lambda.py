@@ -5,9 +5,14 @@ import numpy as np
 from videos.stats.stats29.common import *  # noqa: F403
 
 
-class Lambda(VoiceoverScene):
+class Lambda(StatsScene):
     def construct(self):
         self.card()
+        self.ask(r"A smoothing spline's $\lambda$ can be chosen by...",
+                 ["treating it as a mixed model, with REML", "nothing principled"], 0,
+                 say="How can a smoothing spline's penalty be chosen from the data?",
+                 reveal="By generalized cross-validation, or by writing the spline as a mixed model whose "
+                        "random-effect variance sets lambda, and estimating it by REML.")
         self.gcv()
         self.mixed()
         self.bayes_band()
@@ -15,12 +20,10 @@ class Lambda(VoiceoverScene):
         self.fits()
         self.race()
         self.which()
+        self.answer()
 
     def card(self):
-        card = chapter_card(7, r"Choosing $\lambda$", r"GCV, \ REML, \ and splines as mixed models", lit=(1979,), part=PART)
-        with self.voiceover("Chapter seven. Choosing lambda."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(7, r"Choosing $\lambda$", r"GCV, \ REML, \ and splines as mixed models", lit=(1979,), part=PART, said="Chapter seven. Choosing lambda.")
 
     def gcv(self):
         rows = [

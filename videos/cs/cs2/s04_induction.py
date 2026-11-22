@@ -12,20 +12,16 @@ def domino(h=1.1, w=0.32, color=GREY_B) -> Rectangle:
     return Rectangle(width=w, height=h, stroke_color=color, stroke_width=2, fill_color="#1B2130", fill_opacity=1)
 
 
-class Induction(VoiceoverScene):
+class Induction(WatchScene):
     def construct(self):
         self.card()
         self.dominoes()
         self.gauss()
-        self.strong()
         self.horses()
         self.tromino()
 
     def card(self):
-        card = chapter_card(3, r"Induction", r"How do you prove infinitely many things at once?", part=PART)
-        with self.voiceover("Chapter three. Induction."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(3, r"Induction", r"How do you prove infinitely many things at once?", part=PART, said="Chapter three. Induction.")
 
     # ------------------------------------------------------------------
     def dominoes(self):
@@ -104,58 +100,13 @@ class Induction(VoiceoverScene):
         self.wait(0.3)
         self.clear_scene()
 
-    # ------------------------------------------------------------------
-    def strong(self):
-        head = label(r"Strong induction, \ and the smallest counterexample", font_size=38).to_edge(UP, buff=0.4)
-        claim = label(r"every $n \ge 2$ is a product of primes", font_size=32, color=DATA).next_to(head, DOWN, buff=0.4)
-        tree = VGroup()
-        # 60 = 6 * 10 = (2 * 3) * (2 * 5)
-        nodes = {"60": UP * 0.4, "6": LEFT * 1.6 + DOWN * 0.7, "10": RIGHT * 1.6 + DOWN * 0.7,
-                 "2a": LEFT * 2.4 + DOWN * 1.8, "3": LEFT * 0.8 + DOWN * 1.8, "2b": RIGHT * 0.8 + DOWN * 1.8,
-                 "5": RIGHT * 2.4 + DOWN * 1.8}
-        mobs = {}
-        for k, p in nodes.items():
-            t = k.rstrip("ab")
-            prime = t in ("2", "3", "5")
-            mobs[k] = MathTex(t, font_size=40, color=YES if prime else WHITE).move_to(p + LEFT * 3.2)
-        edges = VGroup(*[Line(mobs[a].get_bottom(), mobs[b].get_top(), buff=0.1, color=GREY_C) for a, b in (
-            ("60", "6"), ("60", "10"), ("6", "2a"), ("6", "3"), ("10", "2b"), ("10", "5"))])
-        tree = VGroup(edges, *mobs.values())
-        txt = VGroup(*[label(t, font_size=27, color=c) for t, c in (
-            (r"if $n$ is prime: \ done", YES),
-            (r"if not, \ $n = a \cdot b$ \ with $2 \le a, b < n$", CTRL),
-            (r"assume the claim for \textit{every} smaller number", GREY_A),
-            (r"then $a$ and $b$ are products of primes, \ so is $n$", HEAD),
-        )]).arrange(DOWN, aligned_edge=LEFT, buff=0.3).move_to(RIGHT * 3.0 + DOWN * 0.7)
-        wo = label(r"well-ordering: \ a smallest counterexample would split \\ into smaller numbers that are not "
-                   r"counterexamples", font_size=24, color=GREY_B).to_edge(DOWN, buff=0.35)
-        with self.voiceover(
-            "Sometimes knowing the claim for n alone is not enough to prove it for n plus one. "
-            "<bookmark mark='a'/> Claim: every number from two up is a product of primes. Sixty is six times ten, which "
-            "is two times three, times two times five. <bookmark mark='b'/> If n is prime, it is its own product. If not, "
-            "it splits into two smaller factors, and we need the claim for those, which can be anywhere below n. "
-            "<bookmark mark='c'/> Strong induction allows exactly that: assume the claim for every number smaller than "
-            "n. <bookmark mark='d'/> The same proof can be told backwards. Suppose some number is not a product of "
-            "primes. Then there is a smallest such number. It is not prime, so it splits into smaller numbers, and "
-            "those are products of primes, because it was the smallest failure. Contradiction. That every non-empty set "
-            "of natural numbers has a smallest element is called the well-ordering principle. Ordinary induction, "
-            "strong induction and well-ordering can each be proved from the others: they are one idea, wearing three "
-            "coats."
-        ) as vo:
-            self.play(FadeIn(head))
-            vo.wait_until("a")
-            self.play(FadeIn(claim), FadeIn(tree, lag_ratio=0.1), run_time=1.8)
-            vo.wait_until("b")
-            self.play(FadeIn(txt[0]), FadeIn(txt[1]))
-            vo.wait_until("c")
-            self.play(FadeIn(txt[2]), FadeIn(txt[3]))
-            vo.wait_until("d")
-            self.play(FadeIn(wo))
-        self.wait(0.3)
-        self.clear_scene()
 
     # ------------------------------------------------------------------
     def horses(self):
+        self.ask(r"A proof by induction that all horses are one colour. \\ Where does it break?",
+                 [r"the base case", r"the step from one horse to two", r"the step for large $n$"], 1,
+                 say="Here is a proof that every horse is the same colour. It must be wrong. Where does it break?",
+                 reveal="At the step from one horse to two, where the two groups don't overlap.")
         head = label(r"A false proof: \ ``all horses are the same colour''", font_size=38).to_edge(UP, buff=0.4)
         cols = [DATA, DATA, DATA, DATA, DATA]
         horses = VGroup(*[Circle(0.32, stroke_color=WHITE, stroke_width=2, fill_color=c, fill_opacity=0.7)

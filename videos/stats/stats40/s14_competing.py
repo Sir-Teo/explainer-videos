@@ -5,21 +5,25 @@ import numpy as np
 from videos.stats.stats40.common import *  # noqa: F403
 
 
-class Competing(VoiceoverScene):
+class Competing(StatsScene):
     def construct(self):
         self.card()
+        self.ask("Competing deaths treated as censoring. One minus Kaplan--Meier for progression...",
+                 ["estimates the cumulative incidence", "overestimates it"], 1,
+                 say="MGUS can progress to cancer, but many patients die of other causes first. Treat those deaths "
+                     "as censoring, and compute one minus Kaplan-Meier for progression. What does it estimate?",
+                 reveal="It overestimates the chance of progression, as if the dead could still progress. The "
+                        "Aalen-Johansen cumulative incidence counts what really happens.")
         self.problem()
         self.cif()
         self.mgus()
         self.world()
         self.two_models()
         self.mgus_models()
+        self.answer()
 
     def card(self):
-        card = chapter_card(13, r"Competing risks", r"When another event gets there first", lit=(1999,), part=PART)
-        with self.voiceover("Chapter thirteen. Competing risks."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(13, r"Competing risks", r"When another event gets there first", lit=(1999,), part=PART, said="Chapter thirteen. Competing risks.")
 
     def problem(self):
         rows = fit_rows(VGroup(

@@ -3,20 +3,28 @@ from __future__ import annotations
 from videos.stats.stats49.common import *  # noqa: F403
 
 
-class WorldTest(VoiceoverScene):
+class WorldTest(StatsScene):
     def construct(self):
         self.card()
+        self.ask("Poor overlap: propensities near 0 or 1. The ATE's efficiency bound...",
+                 ["is small", "blows up, for every estimator"], 1,
+                 say="The World test: doctors who almost never treat some kinds of patient. What happens to the "
+                     "efficiency bound for the average treatment effect?",
+                 reveal="It blows up: the bound has one over the propensity in it. No estimator, however clever, "
+                        "escapes it. Check overlap first.")
         self.setup_world()
         self.table()
         self.board()
         self.why()
         self.practice()
+        self.answer()
+        self.checkpoint([("DML: each nuisance may converge as slowly as?", "$n^{-1/4}$"),
+                         ("Poor overlap does what to the ATE's bound?", "blows it up, for every estimator")],
+                        narration="Checkpoint. Efficiency in practice.",
+                        answers_narration="N to the minus a quarter. And it blows up.")
 
     def card(self):
-        card = chapter_card(11, r"The World test", r"Plug-in, \ one-step and TMLE, \ on the World", part=PART)
-        with self.voiceover("Chapter eleven. The World test: plug-in, one-step and targeted estimators, on the World."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(11, r"The World test", r"Plug-in, \ one-step and TMLE, \ on the World", part=PART, said="Chapter eleven. The World test: plug-in, one-step and targeted estimators, on the World.")
 
     def setup_world(self):
         rows = fit_rows(VGroup(

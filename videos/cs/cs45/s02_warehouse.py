@@ -6,7 +6,7 @@ from explainer.cs import *  # noqa: F403
 from videos.cs.cs45.common import BG, DATA, HEAD, KERN, LAM, NO, PART, YES, axes, module_box, trace
 
 
-class Warehouse(VoiceoverScene):
+class Warehouse(WatchScene):
     def construct(self):
         self.card()
         self.building()
@@ -16,12 +16,8 @@ class Warehouse(VoiceoverScene):
         self.failure()
 
     def card(self):
-        card = chapter_card(1, r"The warehouse-scale computer", r"What is a computer, when the computer is a building?",
-                            lit=(2007, 2009), extra=((2007, r"The Green Grid: \ PUE"),
-                                                     (2009, r"Barroso and H\"olzle")), part=PART)
-        with self.voiceover("Chapter one. The warehouse-scale computer."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(1, r"The warehouse-scale computer", r"What is a computer, when the computer is a building?", lit=(2007, 2009), extra=((2007, r"The Green Grid: \ PUE"),
+                                                     (2009, r"Barroso and H\"olzle")), part=PART, said="Chapter one. The warehouse-scale computer.")
 
     def building(self):
         head = label(r"The building is the computer", font_size=36).to_edge(UP, buff=0.3)
@@ -148,6 +144,10 @@ class Warehouse(VoiceoverScene):
         self.clear_scene()
 
     def proportional(self):
+        self.ask(r"A server that is $10\%$ busy \\ draws what share of its peak power?", [r"about $10\%$",
+                 r"about half"], 1,
+                 say="A typical server is ten percent busy. What share of its peak power does it draw?",
+                 reveal="About half. Servers were not energy proportional.")
         head = label(r"Idle is expensive", font_size=36).to_edge(UP, buff=0.3)
         g = axes([0, 100, 10], [0, 100, 10], x_length=6.0, y_length=4.0, x_label=r"utilization \ (\%)",
                  y_label=r"power \ (\% of peak)", xticks=[0, 25, 50, 75, 100], yticks=[0, 50, 100])
@@ -301,8 +301,7 @@ class Warehouse(VoiceoverScene):
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.3).move_to([3.75, -0.25, 0])
         with self.voiceover(
             "At this scale, failure stops being an event and becomes a rate. <bookmark mark='a'/> Here are two "
-            "thousand servers in fifty racks, each failing on average once in three years, an assumption for the "
-            "picture: nearly two failures a day. Watch a month go by; the software around each red server has "
+            "thousand servers in fifty racks, each failing on average once in three years: nearly two failures a day. Watch a month go by; the software around each red server has "
             "already moved on. <bookmark mark='b'/> Failures also come in groups. When a rack's switch or power "
             "feed fails, all forty servers vanish at once, and likewise for a power unit, a cooling zone, a "
             "building. <bookmark mark='c'/> These nested failure domains decide where copies may live. "

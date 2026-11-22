@@ -5,9 +5,15 @@ import numpy as np
 from videos.stats.stats23.common import *  # noqa: F403
 
 
-class GLH(VoiceoverScene):
+class GLH(StatsScene):
     def construct(self):
         self.card()
+        self.ask(r"A test of $C\beta = d$ with $q$ restrictions: the $F$'s numerator degrees of freedom?",
+                 ["$q$", "$p$", "$n - p$"], 0,
+                 say="Almost every question of a linear model is a set of q linear restrictions. What are the "
+                     "numerator degrees of freedom of the F-test?",
+                 reveal="Q, one per restriction. The general linear hypothesis gives one test for every linear "
+                        "question.")
         self.hypothesis()
         self.derive()
         self.cochran()
@@ -16,12 +22,10 @@ class GLH(VoiceoverScene):
         self.null_hist()
         self.ellipse()
         self.scheffe()
+        self.answer()
 
     def card(self):
-        card = chapter_card(2, r"The general linear hypothesis", r"One test for every linear question", part=PART)
-        with self.voiceover("Chapter two. The general linear hypothesis."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(2, r"The general linear hypothesis", r"One test for every linear question", part=PART, said="Chapter two. The general linear hypothesis.")
 
     def hypothesis(self):
         rows = [

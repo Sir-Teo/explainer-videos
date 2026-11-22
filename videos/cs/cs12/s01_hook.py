@@ -4,12 +4,12 @@ from explainer.cs import *  # noqa: F403
 from videos.cs.cs12.common import (BG, CODE, CTRL, DATA, FUNC, HEAD, NO, PART, YES, chips, code, load, region)
 
 
-class Hook(VoiceoverScene):
+class Hook(WatchScene):
     def construct(self):
         self.outage()
         self.reading()
         self.preview()
-        self.plan()
+        self.title(PART)
 
     # ------------------------------------------------------------------
     def outage(self):
@@ -131,28 +131,3 @@ class Hook(VoiceoverScene):
         self.wait(0.3)
         self.clear_scene()
 
-    # ------------------------------------------------------------------
-    def plan(self):
-        title = label(rf"Part {PART}: \ Languages and Automata", font_size=46).to_edge(UP, buff=0.4)
-        smap = series_map(current=PART, done=PART - 1).scale(0.92).next_to(title, DOWN, buff=0.35)
-        obj = objectives_card([
-            r"languages as sets of strings; \ recognition and parsing",
-            r"regular expressions, \ NFAs, \ DFAs: \ Thompson, \ subsets, \ minimization, \ Kleene",
-            r"the pumping lemma; \ backtracking engines and their blow-up",
-            r"lexing; \ context-free grammars, \ ambiguity, \ pushdown automata",
-            r"CYK, \ Earley, \ LL(1), \ Pratt, \ LR(0), \ SLR, \ LALR, \ LR(1)",
-            r"the Pebble language parsed; \ how fast parsing can be",
-        ], font_size=26).move_to(DOWN * 0.2)
-        with self.voiceover(
-            "This is Part 12 of Computer Science, Built, in Act Three, Speaking to the Machine. <bookmark "
-            "mark='a'/> In this part: languages as sets of strings, and the difference between recognizing and "
-            "parsing. Regular expressions and finite automata, with Thompson's construction, the subset "
-            "construction, minimization and Kleene's theorem. The pumping lemma, and backtracking engines with their "
-            "blow-up. Lexing, context-free grammars, ambiguity and pushdown automata. Seven parsing algorithms. "
-            "And the Pebble language, parsed, with the open question of how fast parsing can ever be."
-        ) as vo:
-            self.play(FadeIn(title), FadeIn(smap))
-            vo.wait_until("a")
-            self.play(FadeOut(smap), FadeIn(obj))
-        self.wait(0.4)
-        self.clear_scene()

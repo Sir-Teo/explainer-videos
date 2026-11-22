@@ -5,20 +5,27 @@ import numpy as np
 from videos.stats.stats3.common import *  # noqa: F403
 
 
-class ExpFam(VoiceoverScene):
+class ExpFam(StatsScene):
     def construct(self):
         self.card()
+        self.ask(r"Which is \emph{not} an exponential family?",
+                 ["the binomial, $n$ fixed", "the normal", r"the uniform on $(0, \theta)$"], 2,
+                 say="One formula sits behind most of the family. Which of these doesn't fit it: the binomial, the "
+                     "normal, or the uniform from zero to theta?",
+                 reveal="The uniform on zero to theta: its support moves with the parameter. Exponential families "
+                        "have a fixed support.")
         self.form()
         self.members()
         self.mean()
         self.ahead()
+        self.answer()
+        self.checkpoint([("Poisson counts with a gamma rate: which law?", "negative binomial"),
+                         (r"Why isn't Uniform$(0, \theta)$ an exponential family?", r"its support depends on $\theta$")],
+                        narration="Checkpoint. Mixtures and the exponential family.",
+                        answers_narration="The negative binomial. And the uniform's support moves with theta.")
 
     def card(self):
-        card = chapter_card(13, r"Exponential families", r"One formula behind most of the family", lit=(),
-                            part=PART)
-        with self.voiceover("Chapter thirteen. Exponential families, a first look."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(13, r"Exponential families", r"One formula behind most of the family", lit=(), part=PART, said="Chapter thirteen. Exponential families, a first look.")
 
     def form(self):
         f = cmath(r"f(x \mid \eta)", r"=", r"h(x)", r"\,\exp\!\big(", r"\eta", r"\, T(x)", r"-", r"A(\eta)", r"\big)",

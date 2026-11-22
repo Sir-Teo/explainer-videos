@@ -5,9 +5,15 @@ import numpy as np
 from videos.stats.stats31.common import *  # noqa: F403
 
 
-class Wishart(VoiceoverScene):
+class Wishart(StatsScene):
     def construct(self):
         self.card()
+        self.ask("$n = 50$, 20 independent variables of variance 1. The largest sample eigenvalue is about...",
+                 ["1", "2.7", "20"], 1,
+                 say="Fifty observations of twenty independent variables, every variance one. The true covariance "
+                     "has every eigenvalue equal to one. What's the largest sample eigenvalue?",
+                 reveal="About two point seven, nearly three times the average. With many variables, a large sample "
+                        "eigenvalue is not evidence of structure: it's the spread Marchenko and Pastur described.")
         self.definition()
         self.bartlett()
         self.check()
@@ -15,12 +21,10 @@ class Wishart(VoiceoverScene):
         self.conjugate()
         self.spread()
         self.mp()
+        self.answer()
 
     def card(self):
-        card = chapter_card(2, r"Wishart", r"The distribution of a covariance matrix", lit=(1928,), part=PART)
-        with self.voiceover("Chapter two. The Wishart distribution."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(2, r"Wishart", r"The distribution of a covariance matrix", lit=(1928,), part=PART, said="Chapter two. The Wishart distribution.")
 
     def definition(self):
         rows = [

@@ -5,9 +5,15 @@ import numpy as np
 from videos.stats.stats40.common import *  # noqa: F403
 
 
-class Prediction(VoiceoverScene):
+class Prediction(StatsScene):
     def construct(self):
         self.card()
+        self.ask("Harrell's $C$ index of 0.5 means...",
+                 ["perfect ranking", "no better than chance", "worse than chance"], 1,
+                 say="Harrell's concordance index: among comparable pairs, how often does the model give higher "
+                     "risk to the one who failed first? What does C equal to one half mean?",
+                 reveal="No better than a coin. One means perfect ranking. And concordance says nothing about "
+                        "calibration.")
         self.concordance()
         self.brier()
         self.compare()
@@ -15,12 +21,14 @@ class Prediction(VoiceoverScene):
         self.forest()
         self.conformal()
         self.board()
+        self.answer()
+        self.checkpoint([("One minus KM with competing deaths censored?", "overestimates the cumulative incidence"),
+                         ("$C = 0.5$?", "no better than chance")],
+                        narration="Checkpoint. Competing risks and prediction.",
+                        answers_narration="It overestimates. And chance.")
 
     def card(self):
-        card = chapter_card(15, r"Prediction", r"Who will have the event, \ and when?", lit=(1999, 2008, 2023), part=PART)
-        with self.voiceover("Chapter fifteen. Prediction."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(15, r"Prediction", r"Who will have the event, \ and when?", lit=(1999, 2008, 2023), part=PART, said="Chapter fifteen. Prediction.")
 
     def concordance(self):
         rows = [

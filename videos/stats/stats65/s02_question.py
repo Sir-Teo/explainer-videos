@@ -5,15 +5,21 @@ import numpy as np
 from videos.stats.stats65.common import *  # noqa: F403
 
 
-class Question(LectureMixin, VoiceoverScene):
+class Question(LectureMixin, StatsScene):
     def construct(self):
         self.card_voiceover("Chapter one. Choosing a question.", 1, r"Choosing a question", r"Important, \ open, \ and small enough")
+        self.ask("A good dissertation question is...",
+                 ["important, open, and small enough to answer", "as broad as possible"], 0,
+                 say="Choosing a question. What makes a good dissertation question?",
+                 reveal="It matters to someone's decisions, it's open, and it's small enough to answer in the time "
+                        "there is, with a way to check the answer.")
         self.criteria()
         self.finding()
         self.candidates()
         self.chosen()
         self.why()
         self.scope()
+        self.answer()
         self.answer()
 
     def criteria(self):

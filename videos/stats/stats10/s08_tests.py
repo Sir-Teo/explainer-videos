@@ -6,20 +6,24 @@ from explainer.stats.kit import tests as T
 from videos.stats.stats10.common import *  # noqa: F403
 
 
-class Tests(VoiceoverScene):
+class Tests(StatsScene):
     def construct(self):
         self.card()
+        self.ask("Two groups with very different variances and sizes. Which $t$-test?",
+                 ["the pooled test", "Welch's test", "the paired test"], 1,
+                 say="Two independent groups of different sizes with very different spreads. Which t-test should "
+                     "you use?",
+                 reveal="Welch's. The pooled test assumes equal variances, and when the smaller group has the "
+                        "bigger spread its size breaks badly.")
         self.catalogue()
         self.paired()
         self.behrens()
         self.sizes()
         self.advice()
+        self.answer()
 
     def card(self):
-        card = chapter_card(7, r"The everyday tests", r"$z$, \ $t$, \ paired, \ pooled, \ Welch", part=PART)
-        with self.voiceover("Chapter seven. The everyday tests."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(7, r"The everyday tests", r"$z$, \ $t$, \ paired, \ pooled, \ Welch", part=PART, said="Chapter seven. The everyday tests.")
 
     def catalogue(self):
         items = [

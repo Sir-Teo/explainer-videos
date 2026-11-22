@@ -5,9 +5,14 @@ import numpy as np
 from videos.stats.stats39.common import *  # noqa: F403
 
 
-class GPML(VoiceoverScene):
+class GPML(StatsScene):
     def construct(self):
         self.card()
+        self.ask("Gaussian process regression in machine learning is...",
+                 ["kriging, renamed", "a different method"], 0,
+                 say="Machine learning rediscovered a method in the 1990s: Gaussian process regression. What is it?",
+                 reveal="Kriging, renamed: the covariance is the kernel, and the predictions and variances are "
+                        "identical. Smoothing splines are the same object too.")
         self.same()
         self.occam()
         self.emulators()
@@ -15,12 +20,10 @@ class GPML(VoiceoverScene):
         self.run()
         self.result()
         self.wider()
+        self.answer()
 
     def card(self):
-        card = chapter_card(13, r"Gaussian processes in machine learning", r"Kriging, \ renamed", lit=(1989, 1998), part=PART)
-        with self.voiceover("Chapter thirteen. Gaussian processes in machine learning."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(13, r"Gaussian processes in machine learning", r"Kriging, \ renamed", lit=(1989, 1998), part=PART, said="Chapter thirteen. Gaussian processes in machine learning.")
 
     def same(self):
         rows = [[r"geostatistics", r"machine learning"],

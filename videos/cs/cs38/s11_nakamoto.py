@@ -6,7 +6,7 @@ from explainer.cs import *  # noqa: F403
 from videos.cs.cs38.common import (DATA, HEAD, KERN, LAM, NO, PART, YES, axes, grid_table, load, trace)
 
 
-class Nakamoto(VoiceoverScene):
+class Nakamoto(WatchScene):
     def construct(self):
         self.card()
         self.chain()
@@ -15,12 +15,7 @@ class Nakamoto(VoiceoverScene):
         self.stake()
 
     def card(self):
-        card = chapter_card(10, r"Nakamoto consensus", r"Can strangers agree, if anyone can join?", lit=(2008, 2014),
-                            extra=((2008, r"Nakamoto: \ Bitcoin"), (2014, r"Eyal and Sirer: \ selfish mining")),
-                            part=PART)
-        with self.voiceover("Chapter ten. Nakamoto consensus."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(10, r"Nakamoto consensus", r"Can strangers agree, if anyone can join?", lit=(2008, 2014), extra=((2008, r"Nakamoto: \ Bitcoin"), (2014, r"Eyal and Sirer: \ selfish mining")), part=PART, said="Chapter ten. Nakamoto consensus.")
 
     def chain(self):
         head = label(r"Votes by computation", font_size=36).to_edge(UP, buff=0.3)
@@ -64,6 +59,10 @@ class Nakamoto(VoiceoverScene):
         self.clear_scene()
 
     def double_spend(self):
+        self.ask(r"An attacker with $10\%$ of the mining power, \\ six confirmations. Chance to reverse a payment:",
+                 [r"about $10\%$", r"under a tenth of a percent"], 1,
+                 say="An attacker has a tenth of the mining power. You wait for six confirmations. What's the chance it reverses your payment?",
+                 reveal="Under a tenth of a percent, falling exponentially with each block.")
         n = load("nakamoto")
         head = label(r"How many confirmations?", font_size=36).to_edge(UP, buff=0.3)
         rows = [[f"{r['q']:g}", f"{r['z']}", f"{r['nakamoto'] * 100:.4g}\\%", f"{r['exact'] * 100:.4g}\\%",

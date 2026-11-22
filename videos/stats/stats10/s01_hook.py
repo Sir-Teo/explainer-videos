@@ -16,12 +16,12 @@ def cup(milk_first: bool | None, r=0.32):
     return g
 
 
-class Hook(VoiceoverScene):
+class Hook(StatsScene):
     def construct(self):
         self.arbuthnot()
         self.years()
         self.tea()
-        self.objectives()
+        self.title(PART)
 
     def arbuthnot(self):
         tl = timeline(lit=(1710,)).to_edge(UP, buff=0.35)
@@ -126,30 +126,4 @@ class Hook(VoiceoverScene):
             self.play(FadeIn(rows[1]))
             vo.wait_until("d")
             self.play(FadeIn(rows[2]))
-        self.clear_scene()
-
-    def objectives(self):
-        head = VGroup(label(r"Part 10", font_size=34, color=GREY_B), label(r"Significance", font_size=60)).arrange(DOWN, buff=0.25)
-        obj = objectives_card([
-            r"Fisher's logic: \ a null, \ a statistic, \ a tail probability; \ exact tests that come from the design",
-            r"the $p$-value: \ null calibration, \ and behavior under alternatives",
-            r"Neyman and Pearson: \ two errors, \ size and power, \ the most powerful test, \ the likelihood ratio",
-            r"the everyday tests: \ $z$, \ $t$, \ Welch, \ permutation, \ Pearson's $\chi^2$",
-            r"power and sample size; \ peeking; \ what $p$-values are not; \ many tests at once",
-        ], color=OBS, font_size=26)
-        prereq = note(r"prerequisites: \ Parts 8 and 9").to_corner(DL, buff=0.3)
-        built = note(r"built: \ the permutation machine; \ \texttt{statkit.tests}").to_corner(DR, buff=0.3)
-        with self.voiceover(
-            "<bookmark mark='a'/> Part ten: significance. <bookmark mark='b'/> We'll build Fisher's logic of the "
-            "significance test and the exact tests that come from randomization; the p-value and its distribution; "
-            "Jerzy Neyman and Egon Pearson's rival theory of two kinds of error, with its most powerful tests and the "
-            "likelihood ratio; the everyday tests, from z and t to Welch and Pearson's chi-squared; and then the ways it "
-            "all goes wrong: too little power, peeking at the data, misreading the p-value, and testing many things at "
-            "once. Along the way we build a permutation machine, and a module of tests you can read line by line."
-        ) as vo:
-            vo.wait_until("a")
-            self.play(FadeIn(head, shift=UP * 0.2))
-            vo.wait_until("b")
-            self.play(FadeOut(head), FadeIn(obj, shift=UP * 0.2), FadeIn(prereq), FadeIn(built))
-        self.wait(1.0)
         self.clear_scene()

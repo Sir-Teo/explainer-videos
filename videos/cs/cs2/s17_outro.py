@@ -19,11 +19,10 @@ def tile(content, caption, color, TW=3.6, TH=2.3):
     return Group(box, content, cap)
 
 
-class Outro(VoiceoverScene):
+class Outro(WatchScene):
     def construct(self):
         self.recap()
         self.payoffs()
-        self.practice()
         self.problems()
         self.next_time()
         self.references()
@@ -55,6 +54,13 @@ class Outro(VoiceoverScene):
             self.play(LaggedStart(*[FadeIn(t, shift=UP * 0.15) for t in tiles], lag_ratio=0.25), run_time=4.0)
         self.wait(0.5)
         self.clear_scene()
+        self.checkpoint(
+            [(r"How does the proof that $\sqrt2$ is irrational go?", r"By contradiction: $p$ and $q$ would both be even"),
+             (r"Why can't the 14--15 puzzle be solved?", r"Every move keeps an invariant the swap breaks")],
+            narration="Last checkpoint. How do you prove the square root of two is irrational? And why couldn't anyone "
+                      "win Sam Loyd's prize?",
+            answers_narration="By contradiction: p and q would both have to be even. And every move keeps the parity sum even, "
+                              "while the swap makes it odd.")
 
     def payoffs(self):
         card = payoff_card([
@@ -78,26 +84,6 @@ class Outro(VoiceoverScene):
         self.wait(0.5)
         self.clear_scene()
 
-    def practice(self):
-        card = practice_card([
-            (r"assertions and tests", r"an \texttt{assert} is an invariant you check; \ property-based tests try it "
-                                      r"on thousands of random inputs"),
-            (r"code review", r"``what is true at the top of this loop?'' \ is the question that finds off-by-one bugs"),
-            (r"capacity planning", r"counting users, \ requests and bytes, \ and the pigeonholes they must fit into"),
-            (r"incidents", r"probability of failure, \ union bounds over many machines, \ and base rates in alerts"),
-            (r"interviews", r"counting, \ induction and probability puzzles \ are the first round's staple"),
-        ])
-        with self.voiceover(
-            "In practice, this mathematics is everywhere in engineering, usually without its name. An assertion is an "
-            "invariant you check while the program runs, and property-based testing tries it on thousands of random "
-            "inputs. The best question in a code review is: what is true at the top of this loop? Capacity planning is "
-            "counting. Incident analysis is probability, with base rates that make most alarms false. And these are the "
-            "puzzles of the first round of technical interviews."
-        ):
-            self.play(FadeIn(card.head), LaggedStart(*[FadeIn(r, shift=RIGHT * 0.15) for r in card.rows],
-                                                     lag_ratio=0.35), run_time=3.0)
-        self.wait(0.3)
-        self.clear_scene()
 
     def problems(self):
         ps = problem_set([

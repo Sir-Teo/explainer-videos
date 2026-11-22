@@ -20,7 +20,7 @@ ACTS = [(r"I", r"The Machine", r"gates, \ arithmetic, \ memory, \ a computer"),
         (r"X", r"Horizons and Trust", r"pixels, \ numerics, \ quantum, \ proof, \ trust")]
 
 
-class Outro(VoiceoverScene):
+class Outro(WatchScene):
     def construct(self):
         self.pebbles()
         self.acts()
@@ -29,6 +29,10 @@ class Outro(VoiceoverScene):
         self.goodbye()
 
     def pebbles(self):
+        self.ask(r"Part 1's rule: take the smaller pile from the bigger, \\ until they match. It computes...",
+                 [r"the sum", r"the greatest common divisor"], 1,
+                 say="Part 1 began with two piles of pebbles: take the smaller from the bigger until they match. What does the rule compute?",
+                 reveal="The greatest common divisor: Euclid's algorithm.")
         d = load1("pebbles")
         steps = d["steps"]
         L, R = np.array([-3.4, -1.9, 0]), np.array([3.4, -1.9, 0])
@@ -91,6 +95,12 @@ class Outro(VoiceoverScene):
             self.play(*[r[0].animate.set_fill(cols[i], opacity=0.12) for i, r in enumerate(rows)])
         self.wait(0.4)
         self.clear_scene()
+        self.checkpoint(
+            [(r"How does Thompson's trojan survive clean source?", r"It reinserts itself when compiling a compiler"),
+             (r"How does diverse double-compiling catch it?", r"An independent compiler and a bit-for-bit comparison")],
+            narration="Last checkpoint. How does Thompson's trojan survive a clean source? And how does diverse double-compiling catch it?",
+            answers_narration="It recognizes a compiler being compiled and inserts itself again. And an independent compiler "
+                              "rebuilds the compiler from source, and the results are compared bit for bit.")
 
     def ledger(self):
         j = load("job")

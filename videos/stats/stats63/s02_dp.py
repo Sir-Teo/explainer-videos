@@ -5,10 +5,25 @@ import numpy as np
 from videos.stats.stats63.common import *  # noqa: F403
 
 
-class Definition(LectureMixin, VoiceoverScene):
+class Definition(LectureMixin, StatsScene):
     def construct(self):
         self.card_voiceover("Chapter one. Differential privacy: a promise about any one person, against any attacker.", 1,
                             r"Differential privacy", r"A promise about the process", lit=(2006,))
+        self.wrong_idea("Removing names and IDs makes data anonymous",
+                        "Most Americans are unique by ZIP code, sex and birth date",
+                        narration="The traditional protection: strip names and ID numbers, and the data are "
+                                  "anonymous.",
+                        right_narration="In 1997 Latanya Sweeney found the governor of Massachusetts's medical "
+                                        "record in an anonymized release, and showed most Americans are unique by "
+                                        "ZIP code, sex and birth date. Anonymity has to be a property of the "
+                                        "process.")
+        self.ask(r"$\varepsilon$-differential privacy promises that...",
+                 [r"changing one person's data changes any output's probability by at most $e^\varepsilon$", "no one can ever be re-identified"], 0,
+                 say="Differential privacy: a promise about the process. What exactly does epsilon-differential "
+                     "privacy promise?",
+                 reveal="That changing one person's data changes the probability of any output by at most a factor "
+                        "e to the epsilon. It limits what anyone can learn about one person, whatever they already "
+                        "know.")
         self.definition()
         self.meaning()
         self.response()
@@ -17,6 +32,7 @@ class Definition(LectureMixin, VoiceoverScene):
         self.chart()
         self.properties()
         self.limits()
+        self.answer()
 
     def definition(self):
         self.lad_voiceover(

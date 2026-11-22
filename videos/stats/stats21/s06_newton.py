@@ -5,21 +5,25 @@ import numpy as np
 from videos.stats.stats21.common import *  # noqa: F403
 
 
-class Newton(VoiceoverScene):
+class Newton(StatsScene):
     def construct(self):
         self.card()
+        self.ask("Near the optimum, Newton's method's error at each step is...",
+                 ["halved", "squared", "unchanged"], 1,
+                 say="Newton's method climbs by the curvature. Near the optimum, what happens to its error at each "
+                     "step?",
+                 reveal="It's squared: the number of correct digits roughly doubles each step. Its limit is cost, p "
+                        "cubed per step, not speed.")
         self.idea()
         self.landscape()
         self.digits()
         self.failure()
         self.gauss_newton()
         self.remedies()
+        self.answer()
 
     def card(self):
-        card = chapter_card(5, r"Newton and Fisher scoring", r"Climb by the curvature", part=PART)
-        with self.voiceover("Chapter five. Newton's method, and Fisher scoring."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(5, r"Newton and Fisher scoring", r"Climb by the curvature", part=PART, said="Chapter five. Newton's method, and Fisher scoring.")
 
     def idea(self):
         rows = [

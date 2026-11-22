@@ -17,7 +17,7 @@ def tile(content, caption, color, TW=3.6, TH=2.3):
     return Group(frame, content, cap)
 
 
-class Outro(VoiceoverScene):
+class Outro(WatchScene):
     def construct(self):
         self.recap()
         self.payoffs()
@@ -49,6 +49,12 @@ class Outro(VoiceoverScene):
             self.play(LaggedStart(*[FadeIn(t, shift=UP * 0.15) for t in tiles], lag_ratio=0.25), run_time=4.0)
         self.wait(0.5)
         self.clear_scene()
+        self.checkpoint(
+            [(r"What does a sample ratio mismatch mean?", r"The split is broken; distrust the metrics"),
+             (r"What is Goodhart's law?", r"A measure made a target stops measuring")],
+            narration="Last checkpoint. What does a sample ratio mismatch tell you? And what is Goodhart's law?",
+            answers_narration="The assignment is broken, so every metric is suspect. And when a measure becomes a target, it "
+                              "ceases to be a good measure.")
 
     def payoffs(self):
         card = payoff_card([

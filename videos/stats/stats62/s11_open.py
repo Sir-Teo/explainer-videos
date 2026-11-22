@@ -3,10 +3,15 @@ from __future__ import annotations
 from videos.stats.stats62.common import *  # noqa: F403
 
 
-class OpenProblems(LectureMixin, VoiceoverScene):
+class OpenProblems(LectureMixin, StatsScene):
     def construct(self):
         self.card_voiceover("Chapter ten. Open problems at the frontiers of causal inference.", 10, r"Open problems",
                             r"Where identification stops")
+        self.ask("An effect is not identified. The honest report is...",
+                 ["a point estimate under a convenient assumption", "bounds, or a sensitivity analysis"], 1,
+                 say="Where identification stops. When an effect isn't identified, what's the honest report?",
+                 reveal="Bounds, or a sensitivity analysis showing how the answer moves with the untestable "
+                        "assumption. A point estimate under a convenient assumption hides the assumption.")
         self.map_()
         self.op_unstructured()
         self.op_equilibrium()
@@ -14,6 +19,11 @@ class OpenProblems(LectureMixin, VoiceoverScene):
         self.op_discovery()
         self.op_representation()
         self.problems()
+        self.answer()
+        self.checkpoint([("The PC algorithm recovers a graph up to?", "its Markov equivalence class"),
+                         ("Transport a trial by reweighting on?", "the effect modifiers that differ")],
+                        narration="Checkpoint. Discovery and fusion.",
+                        answers_narration="The equivalence class. And the effect modifiers.")
 
     def map_(self):
         hdr = [r"when this fails", r"replace it with", r"and get"]

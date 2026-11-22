@@ -17,7 +17,7 @@ def tile(content, caption, color, TW=3.6, TH=2.3):
     return Group(frame, content, cap)
 
 
-class Outro(VoiceoverScene):
+class Outro(WatchScene):
     def construct(self):
         self.recap()
         self.payoffs()
@@ -50,6 +50,12 @@ class Outro(VoiceoverScene):
             self.play(LaggedStart(*[FadeIn(t, shift=UP * 0.15) for t in tiles], lag_ratio=0.25), run_time=4.0)
         self.wait(0.5)
         self.clear_scene()
+        self.checkpoint(
+            [(r"Why hedge requests?", r"A second copy cuts the tail"),
+             (r"What is a metastable failure?", r"Overload that sustains itself after the trigger")],
+            narration="Last checkpoint. Why hedge a request? And what is a metastable failure?",
+            answers_narration="A second copy after the ninety-fifth percentile cuts the tail for a few percent more load. And "
+                              "an overload, such as retries, that keeps itself going after its trigger is gone.")
 
     def payoffs(self):
         card = payoff_card([

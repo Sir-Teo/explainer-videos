@@ -5,20 +5,24 @@ import numpy as np
 from videos.stats.stats49.common import *  # noqa: F403
 
 
-class EfficientScore(VoiceoverScene):
+class EfficientScore(StatsScene):
     def construct(self):
         self.card()
+        self.ask(r"The efficient score is the score for $\theta$...",
+                 ["projected onto the nuisance tangent space", "minus its projection onto the nuisance tangent space"], 1,
+                 say="A parameter of interest theta and an infinite-dimensional nuisance. What is the efficient "
+                     "score?",
+                 reveal="The score for theta minus its projection onto the nuisance tangent space: the part of "
+                        "theta's information the nuisance can't mimic.")
         self.definition()
         self.picture()
         self.adaptation()
         self.hetero()
         self.cases()
+        self.answer()
 
     def card(self):
-        card = chapter_card(5, r"The nuisance tangent space and the efficient score", r"Project the nuisance away", lit=(1982,), part=PART)
-        with self.voiceover("Chapter five. The nuisance tangent space and the efficient score: project the nuisance away."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(5, r"The nuisance tangent space and the efficient score", r"Project the nuisance away", lit=(1982,), part=PART, said="Chapter five. The nuisance tangent space and the efficient score: project the nuisance away.")
 
     def definition(self):
         rows = [

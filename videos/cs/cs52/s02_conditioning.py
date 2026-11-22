@@ -13,7 +13,7 @@ def sci(v: float, digits: int = 1) -> str:
     return rf"{m:.{digits}f} \times 10^{{{e}}}"
 
 
-class Conditioning(VoiceoverScene):
+class Conditioning(WatchScene):
     def construct(self):
         self.card()
         self.scalar()
@@ -23,11 +23,7 @@ class Conditioning(VoiceoverScene):
         self.stability()
 
     def card(self):
-        card = chapter_card(1, r"Conditioning and stability", r"How far can the answer move when the data moves?",
-                            lit=(1948,), extra=((1948, r"Turing: \ the condition number"),), part=PART)
-        with self.voiceover("Chapter one. Conditioning and stability."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(1, r"Conditioning and stability", r"How far can the answer move when the data moves?", lit=(1948,), extra=((1948, r"Turing: \ the condition number"),), part=PART, said="Chapter one. Conditioning and stability.")
 
     def scalar(self):
         head = label(r"How sensitive is a problem?", font_size=36).to_edge(UP, buff=0.3)
@@ -93,6 +89,10 @@ class Conditioning(VoiceoverScene):
         self.clear_scene()
 
     def examples(self):
+        self.ask(r"Compute $x - 1$ for $x = 1.000001$. \\ Its relative condition number:", [r"$1$", r"$1000$",
+                 r"a million"], 2,
+                 say="Subtract one from one point zero zero zero zero zero one. How sensitive is the answer to a tiny relative change in x?",
+                 reveal="About a million times: x over x minus one. Six digits are lost before any algorithm runs.")
         sc = load("cond")["scalar"]
         head = label(r"Four problems, \ four condition numbers", font_size=36).to_edge(UP, buff=0.3)
         names = [r"$x - 1$ \ at $x = 1.000001$", r"$\sqrt{x}$", r"$e^{x}$ \ at $x = 100$",

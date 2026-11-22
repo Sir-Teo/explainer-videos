@@ -5,7 +5,7 @@ from videos.cs.cs16.common import (CODE, COST, CTRL, DATA, FUNC, HEAD, LAM, NO, 
                                    words)
 
 
-class Practice(VoiceoverScene):
+class Practice(WatchScene):
     def construct(self):
         self.card()
         self.timsort()
@@ -13,13 +13,12 @@ class Practice(VoiceoverScene):
         self.external()
 
     def card(self):
-        card = chapter_card(14, r"Sorting in practice", r"What do real libraries do?", lit=(2002,),
-                            extra=((2002, r"Peters: \ Timsort"),), part=PART)
-        with self.voiceover("Chapter fourteen. Sorting in practice."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(14, r"Sorting in practice", r"What do real libraries do?", lit=(2002,), extra=((2002, r"Peters: \ Timsort"),), part=PART, said="Chapter fourteen. Sorting in practice.")
 
     def timsort(self):
+        self.ask(r"Python's sort, on data that's already sorted. \\ Comparisons?", [r"about $n \log n$", r"about $n$"], 1,
+                 say="Python's sort on a list that's already sorted. How many comparisons?",
+                 reveal="About n: Timsort finds the existing run and stops.")
         d = load("practice")
         head = label(r"Timsort: \ use the order that is already there", font_size=34).to_edge(UP, buff=0.3)
         rows = [[r["input"].replace("%", r"\%"), words(r["timsort"]), words(r["merge"])] for r in d["rows"]]

@@ -6,19 +6,14 @@ from explainer.cs import *  # noqa: F403
 from videos.cs.cs4.common import BG, CODE, COST, CTRL, DATA, FUNC, HEAD, NO, PART, YES, bit_cells
 
 
-class Positional(VoiceoverScene):
+class Positional(WatchScene):
     def construct(self):
         self.card()
         self.places()
-        self.why_binary()
         self.convert()
-        self.hexa()
 
     def card(self):
-        card = chapter_card(1, r"Bits as numbers", r"Why do computers count in twos?", lit=(1679,), part=PART)
-        with self.voiceover("Chapter one. Bits as numbers."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(1, r"Bits as numbers", r"Why do computers count in twos?", lit=(1679,), part=PART, said="Chapter one. Bits as numbers.")
 
     # ------------------------------------------------------------------
     def places(self):
@@ -61,53 +56,12 @@ class Positional(VoiceoverScene):
         self.wait(0.3)
         self.clear_scene()
 
-    # ------------------------------------------------------------------
-    def why_binary(self):
-        head = label(r"Why two? \ Noise", font_size=38).to_edge(UP, buff=0.4)
-        rng = np.random.default_rng(2)
-
-        def bar(levels, x, color):
-            h = 4.4
-            base = np.array([x, -2.3, 0])
-            g = VGroup(Rectangle(width=1.0, height=h, stroke_color=GREY_C, stroke_width=1.5).move_to(base + UP * h / 2))
-            for k in range(levels):
-                y0 = base[1] + h * k / levels
-                band = Rectangle(width=1.0, height=h / levels, stroke_width=0, fill_color=color,
-                                 fill_opacity=0.12 + 0.5 * (k % 2)).move_to([x, y0 + h / levels / 2, 0])
-                g.add(band)
-            # noisy samples of each level
-            pts = VGroup()
-            for k in range(levels):
-                mid = base[1] + h * (k + 0.5) / levels
-                for _ in range(14):
-                    pts.add(Dot([x + rng.uniform(-0.4, 0.4), mid + rng.normal(0, 0.16), 0], radius=0.03, color=WHITE))
-            return g, pts
-
-        b2, p2 = bar(2, -4.6, YES)
-        b10, p10 = bar(10, 1.0, NO)
-        l2 = label(r"2 levels: \ each band is $\tfrac12 V_{DD}$ wide", font_size=26, color=YES).next_to(b2, RIGHT, buff=0.3)
-        l10 = label(r"10 levels: \ each band $\tfrac1{10} V_{DD}$", font_size=26, color=NO).next_to(b10, RIGHT, buff=0.3)
-        foot = note(r"the same noise \ ($\sigma = 0.04\,V_{DD}$) \ on both: \ with ten levels, \ neighbours blur together",
-                    font_size=22).to_edge(DOWN, buff=0.25)
-        with self.voiceover(
-            "Why two, and not ten? Because of noise. <bookmark mark='a'/> A wire's voltage is never exactly what it "
-            "should be: neighbouring wires, heat and the supply all jiggle it. With two levels, a zero and a one, "
-            "our drawing gives each a band half the supply range wide. Part 3's inverter restores a noisy level. "
-            "<bookmark mark='b'/> With ten levels, each band is only a tenth of the range, and the same noise can "
-            "carry a three into a four. Distinguishing ten levels needs nine decision boundaries. Multilevel "
-            "circuits can restore signals too, but their smaller noise margins make the job harder. Binary buys "
-            "robustness by using more wires."
-        ) as vo:
-            self.play(FadeIn(head), FadeIn(VGroup(b2, p2)))
-            vo.wait_until("a")
-            self.play(Indicate(b2, scale_factor=1.03), FadeIn(l2))
-            vo.wait_until("b")
-            self.play(FadeIn(b10), FadeIn(p10, lag_ratio=0.01), FadeIn(l10), FadeIn(foot))
-        self.wait(0.3)
-        self.clear_scene()
 
     # ------------------------------------------------------------------
     def convert(self):
+        self.ask(r"2026 in binary: \\ how many bits?", [r"10", r"11", r"12"], 1,
+                 say="How many bits does two thousand and twenty-six need?",
+                 reveal="Eleven. It's less than two to the eleven, two thousand and forty-eight.")
         head = label(r"Decimal to binary: \ halve, \ and keep the remainders", font_size=36).to_edge(UP, buff=0.35)
         x = 2026
         rows = VGroup()
@@ -146,36 +100,3 @@ class Positional(VoiceoverScene):
         self.wait(0.3)
         self.clear_scene()
 
-    # ------------------------------------------------------------------
-    def hexa(self):
-        head = label(r"Hexadecimal: \ four bits per digit", font_size=38).to_edge(UP, buff=0.4)
-        bits = "011111101010"
-        cells = bit_cells(bits, cell=0.56, font_size=32).move_to(UP * 1.4)
-        groups = VGroup(*[SurroundingRectangle(VGroup(*cells[4 * k:4 * k + 4]), buff=0.06, color=CTRL, corner_radius=0.05)
-                          for k in range(3)])
-        hexd = VGroup(*[MathTex(h, font_size=48, color=CTRL).next_to(groups[k], DOWN, buff=0.35)
-                        for k, h in enumerate("7EA")])
-        res = MathTex(r"2026 = \texttt{0x7EA} = 7 \cdot 16^2 + 14 \cdot 16 + 10", font_size=38, color=GREY_A).move_to(
-            DOWN * 0.9)
-        table = VGroup(*[VGroup(MathTex(format(v, "04b"), font_size=22, color=GREY_B),
-                                MathTex(format(v, "X"), font_size=26, color=CTRL)).arrange(DOWN, buff=0.08)
-                         for v in range(16)]).arrange(RIGHT, buff=0.22).to_edge(DOWN, buff=1.0)
-        uses = note(r"memory addresses, \ colours (\texttt{\#E5484D}), \ machine code: \ hex is binary, \ "
-                    r"made readable", font_size=22).to_edge(DOWN, buff=0.3)
-        with self.voiceover(
-            "Long strings of bits are hard for people to read, so we write them in base sixteen. <bookmark mark='a'/> "
-            "Sixteen is two to the fourth, so every group of four bits, counted from the right, is exactly one "
-            "hexadecimal digit, from zero to nine and then a to f for ten to fifteen. <bookmark mark='b'/> Two "
-            "thousand and twenty-six is seven, e, a in hexadecimal. <bookmark mark='c'/> Converting is just regrouping "
-            "the bits: no arithmetic at all. That is why memory addresses, colours on a web page and machine code are "
-            "written in hex. Pebble's instructions in Part 6 will be too."
-        ) as vo:
-            self.play(FadeIn(head), FadeIn(cells))
-            vo.wait_until("a")
-            self.play(Create(groups), FadeIn(table))
-            vo.wait_until("b")
-            self.play(LaggedStart(*[FadeIn(h, shift=DOWN * 0.1) for h in hexd], lag_ratio=0.3), Write(res))
-            vo.wait_until("c")
-            self.play(FadeIn(uses))
-        self.wait(0.3)
-        self.clear_scene()

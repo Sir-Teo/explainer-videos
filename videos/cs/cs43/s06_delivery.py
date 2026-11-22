@@ -30,7 +30,7 @@ def seq(events, font=17, **kw):
     return sd
 
 
-class Delivery(VoiceoverScene):
+class Delivery(WatchScene):
     def construct(self):
         self.card()
         self.promises()
@@ -41,14 +41,16 @@ class Delivery(VoiceoverScene):
         self.keys()
 
     def card(self):
-        card = chapter_card(5, r"At most, \ at least, \ exactly once", r"How many times did that message happen?",
-                            lit=(1978, 2017), extra=((1978, r"Gray: \ the two generals"),
-                                                     (2017, r"Kafka: \ exactly-once semantics")), part=PART)
-        with self.voiceover("Chapter five. At most, at least, exactly once."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(5, r"At most, \ at least, \ exactly once", r"How many times did that message happen?", lit=(1978, 2017), extra=((1978, r"Gray: \ the two generals"),
+                                                     (2017, r"Kafka: \ exactly-once semantics")), part=PART, said="Chapter five. At most, at least, exactly once.")
 
     def promises(self):
+        self.wrong_idea(r"exactly-once delivery is a network feature",
+                        r"exactly-once \emph{effect} = \\ at-least-once delivery + idempotence",
+                        narration="Many systems advertise exactly-once delivery, as if the network could provide it.",
+                        right_narration="No network can. What you can build is an exactly-once effect: resend until "
+                                        "acknowledged, and make the receiver ignore duplicates.")
+        self.clear_scene()
         head = label(r"Three promises", font_size=36).to_edge(UP, buff=0.3)
         retry = [(0.2, 1.0, r"inc 1", True, DATA), (1.3, None, r"ack", False, YES),
                  (2.4, 3.2, r"inc 1 again", True, HEAD), (3.4, 4.2, r"ack", False, YES)]
@@ -100,6 +102,10 @@ class Delivery(VoiceoverScene):
         self.clear_scene()
 
     def counts(self):
+        self.ask(r"10,000 increments, $5\%$ lost, $2\%$ duplicated, \\ retried until acknowledged. The count:",
+                 [r"under 10,000", r"exactly 10,000", r"over 10,000"], 2,
+                 say="Ten thousand increments over a network that loses and duplicates messages, each resent until acknowledged. What count do we get?",
+                 reveal="Over ten thousand: every lost acknowledgement causes a second increment.")
         s = load("semantics")
         P = s["policies"]
         head = label(rf"{s['n']:,} increments", font_size=36).to_edge(UP, buff=0.3)

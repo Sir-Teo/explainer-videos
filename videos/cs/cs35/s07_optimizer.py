@@ -12,7 +12,7 @@ def big(v: int) -> str:
     return num(v)
 
 
-class Optimizer(VoiceoverScene):
+class Optimizer(WatchScene):
     def construct(self):
         self.card()
         self.space()
@@ -20,11 +20,7 @@ class Optimizer(VoiceoverScene):
         self.dp()
 
     def card(self):
-        card = chapter_card(6, r"The optimizer", r"How do you find the cheapest plan without trying them all?",
-                            lit=(1979,), extra=((1979, r"Selinger et al.: \ System R's optimizer"),), part=PART)
-        with self.voiceover("Chapter six. The optimizer."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(6, r"The optimizer", r"How do you find the cheapest plan without trying them all?", lit=(1979,), extra=((1979, r"Selinger et al.: \ System R's optimizer"),), part=PART, said="Chapter six. The optimizer.")
 
     def space(self):
         o = load("optimizer")
@@ -72,6 +68,10 @@ class Optimizer(VoiceoverScene):
         self.clear_scene()
 
     def orders(self):
+        self.ask(r"All 120 orders of joining five tables. \\ Worst cost over best:", [r"$2\times$",
+                 r"$100\times$", r"$10{,}000\times$"], 2,
+                 say="Cost all hundred and twenty orders of joining our five tables. How much worse is the worst than the best?",
+                 reveal="About ten thousand times.")
         o = load("optimizer")
         od = o["orders"]
         head = label(r"Order matters: \ the 120 orders, \ with hash joins", font_size=34).to_edge(UP, buff=0.3)

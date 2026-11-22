@@ -5,7 +5,7 @@ import numpy as np
 from videos.stats.stats38.common import *  # noqa: F403
 
 
-class Hook(VoiceoverScene):
+class Hook(StatsScene):
     def construct(self):
         self.story()
         self.series()
@@ -13,7 +13,7 @@ class Hook(VoiceoverScene):
         self.rs()
         self.joseph()
         self.question()
-        self.objectives()
+        self.title(PART)
 
     def story(self):
         tl = timeline(lit=(1951,)).to_edge(UP, buff=0.35)
@@ -171,29 +171,4 @@ class Hook(VoiceoverScene):
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
                 self.play(FadeIn(rows[k], shift=RIGHT * 0.2))
-        self.clear_scene()
-
-    def objectives(self):
-        head = VGroup(label(r"Part 38", font_size=34, color=GREY_B), label(r"Time Series in Depth", font_size=56)).arrange(DOWN, buff=0.25)
-        obj = objectives_card([
-            r"spectra: \ the periodogram, \ Welch, \ multitaper; \ the sunspot cycle",
-            r"unit roots and Dickey--Fuller; \ spurious regression and cointegration",
-            r"volatility: \ ARCH and GARCH; \ long memory and ARFIMA",
-            r"state space: \ the Kalman filter, \ smoother, \ EM; \ nonlinear filters; \ regimes",
-            r"VARs and Granger causality; \ the block bootstrap; \ the forecasting frontier",
-        ], color=TAUC, font_size=26)
-        prereq = note(r"prerequisites: \ Parts 17 and 22").to_corner(DL, buff=0.3)
-        built = note(r"built: \ \texttt{statkit.ts} (II); \ the Kalman ellipses; \ data: \ the Nile, \ sunspots, \ DAX").to_corner(DR, buff=0.3)
-        with self.voiceover(
-            "<bookmark mark='a'/> Part thirty-eight: time series in depth. <bookmark mark='b'/> We'll decompose series into "
-            "frequencies and find the sunspot cycle; test for unit roots, and see why regressions of one wandering series on "
-            "another lie; model volatility that clusters, and memory that lasts centuries; filter, smooth and learn hidden "
-            "states with Kalman's filter and its nonlinear successors; ask which series help forecast which; bootstrap "
-            "dependent data; and end at the forecasting frontier."
-        ) as vo:
-            vo.wait_until("a")
-            self.play(FadeIn(head, shift=UP * 0.2))
-            vo.wait_until("b")
-            self.play(FadeOut(head), FadeIn(obj, shift=UP * 0.2), FadeIn(prereq), FadeIn(built))
-        self.wait(1.0)
         self.clear_scene()

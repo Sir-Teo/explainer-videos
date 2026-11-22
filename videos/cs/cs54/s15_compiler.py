@@ -25,7 +25,7 @@ def hex_row(h: str, n: int, ref: str | None = None, size=18):
                     for b, r in zip(bs, rs)]).arrange(RIGHT, buff=0.06)
 
 
-class Compiler(VoiceoverScene):
+class Compiler(WatchScene):
     def construct(self):
         self.card()
         self.differential()
@@ -33,15 +33,9 @@ class Compiler(VoiceoverScene):
         self.shrink()
         self.job()
         self.validation()
-        self.pcc()
 
     def card(self):
-        card = chapter_card(14, r"Fuzzing and validating our compiler",
-                            r"Does our compiler mean what our programs say?", lit=(1997, 2011),
-                            extra=((1997, r"Necula: \ proof-carrying code"), (2011, r"Csmith")), part=PART)
-        with self.voiceover("Chapter fourteen. Fuzzing and validating our compiler."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(14, r"Fuzzing and validating our compiler", r"Does our compiler mean what our programs say?", lit=(1997, 2011), extra=((1997, r"Necula: \ proof-carrying code"), (2011, r"Csmith")), part=PART, said="Chapter fourteen. Fuzzing and validating our compiler.")
 
     def differential(self):
         fz = load("fuzz")["hunt"]
@@ -163,6 +157,10 @@ class Compiler(VoiceoverScene):
         self.clear_scene()
 
     def shrink(self):
+        self.ask(r"Delta debugging on a failing random program. \\ It ends with...", [r"the same program",
+                 r"a few lines that still fail"], 1,
+                 say="Delta debugging shrinks a random program that triggers a compiler bug. What is left?",
+                 reveal="A few lines that still trigger it.")
         fz = load("fuzz")
         f, s = fz["hunt"]["found"], fz["shrunk"]
         src = f["src"].splitlines()
@@ -355,61 +353,6 @@ class Compiler(VoiceoverScene):
         self.wait(0.4)
         self.clear_scene()
 
-    def pcc(self):
-        head = label(r"Proof-carrying code", font_size=36).to_edge(UP, buff=0.3)
-        prod = RoundedRectangle(width=3.4, height=3.6, corner_radius=0.15, stroke_color=GREY_C, stroke_width=2,
-                                fill_color=GREY_E, fill_opacity=0.3).move_to([-4.9, 0.2, 0])
-        pl = label(r"producer \ (untrusted)", font_size=20, color=GREY_A).next_to(prod.get_top(), DOWN, buff=0.2)
-        comp = module_box(r"compiler", DATA, w=2.4, h=0.55, font=18)
-        prover = module_box(r"prover", LAM, w=2.4, h=0.55, font=18)
-        VGroup(comp, prover).arrange(DOWN, buff=0.5).move_to(prod).shift(DOWN * 0.2)
-        cons = RoundedRectangle(width=4.6, height=3.6, corner_radius=0.15, stroke_color=KERN, stroke_width=2,
-                                fill_color=KERN, fill_opacity=0.08).move_to([4.2, 0.2, 0])
-        cl = label(r"consumer \ (the kernel)", font_size=20, color=KERN).next_to(cons.get_top(), DOWN, buff=0.2)
-        vcg = module_box(r"VC generator \ (wp, \ ch. 4)", HEAD, w=3.6, h=0.55, font=18)
-        chk = module_box(r"proof checker \ (ch. 10)", KERN, w=3.6, h=0.55, font=18)
-        run = module_box(r"run, \ no run-time checks", YES, w=3.6, h=0.55, font=18)
-        VGroup(vcg, chk, run).arrange(DOWN, buff=0.35).move_to(cons).shift(DOWN * 0.25)
-        pkg_code = tag_box("code", color=DATA, size=18, w=1.2, h=0.5)
-        pkg_proof = tag_box("proof", color=LAM, size=18, w=1.2, h=0.5)
-        pkg = VGroup(pkg_code, pkg_proof).arrange(DOWN, buff=0.08).move_to([-0.5, 0.2, 0])
-        a1 = Arrow(prod.get_right(), pkg.get_left(), buff=0.1, color=GREY_B, stroke_width=2)
-        a2 = Arrow(pkg.get_right(), cons.get_left(), buff=0.1, color=GREY_B, stroke_width=2)
-        i1 = Arrow(vcg.get_bottom(), chk.get_top(), buff=0.04, color=GREY_B, stroke_width=2,
-                   max_tip_length_to_length_ratio=0.3)
-        i2 = Arrow(chk.get_bottom(), run.get_top(), buff=0.04, color=GREY_B, stroke_width=2,
-                   max_tip_length_to_length_ratio=0.3)
-        tam = wrapped_label(r"tamper with the code, \ and its condition changes: \ the old proof no longer fits", 9.0,
-                            font_size=19, color=NO).move_to([0, -2.3, 0])
-        heirs = wrapped_label(r"descendants: \ typed assembly language \ (Morrisett et al., \ 1998); \ WebAssembly's "
-                              r"validator \ (Part 15); \ the eBPF verifier \ (Part 31), \ which checks the code itself "
-                              r"instead of a shipped proof", 12.6, font_size=19, color=GREY_A).to_edge(DOWN, buff=0.3)
-        with self.voiceover(
-            "Now let the code carry its own proof. <bookmark mark='a'/> In George Necula's proof-carrying code, from "
-            "1997, an untrusted producer ships machine code with a proof that it obeys a safety policy. <bookmark "
-            "mark='b'/> The consumer computes the verification condition from the code, by weakest preconditions as "
-            "in chapter four, <bookmark mark='c'/> and checks the proof with a small checker, as in chapter ten; then"
-            " the code runs with no run-time checks. <bookmark mark='d'/> Tamper with the code and its condition "
-            "changes, so the proof no longer fits. <bookmark mark='e'/> Descendants include typed assembly language, "
-            "WebAssembly's validator from Part 15, and Part 31's eBPF verifier, which checks the code itself instead "
-            "of a shipped proof."
-        ) as vo:
-            self.play(FadeIn(head))
-            vo.wait_until("a")
-            self.play(FadeIn(prod), FadeIn(pl), FadeIn(comp), FadeIn(prover))
-            self.play(GrowArrow(a1), FadeIn(pkg))
-            vo.wait_until("b")
-            self.play(GrowArrow(a2), FadeIn(cons), FadeIn(cl), FadeIn(vcg))
-            vo.wait_until("c")
-            self.play(GrowArrow(i1), FadeIn(chk))
-            self.play(GrowArrow(i2), FadeIn(run))
-            vo.wait_until("d")
-            self.play(pkg_code[0].animate.set_stroke(NO), pkg_code[1].animate.set_color(NO), FadeIn(tam))
-            self.play(Indicate(chk, color=NO))
-            vo.wait_until("e")
-            self.play(FadeIn(heirs))
-        self.wait(0.4)
-        self.clear_scene()
 
 
 _ = (BG, DATA, HEAD, KERN, LAM, NO, YES, mono)

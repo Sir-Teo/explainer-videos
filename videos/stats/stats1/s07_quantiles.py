@@ -6,20 +6,23 @@ from videos.stats.stats1.common import *  # noqa: F403
 from videos.stats.stats1.compute import inverse_quantiles
 
 
-class Quantiles(VoiceoverScene):
+class Quantiles(StatsScene):
     def construct(self):
         self.card()
+        self.ask("The richest of forty people doubles their income. Which summary moves?",
+                 ["the median", "the mean", "both"], 1,
+                 say="Forty incomes. The richest person's income doubles overnight. Which summary moves: the "
+                     "median, the mean, or both?",
+                 reveal="The mean. The median doesn't notice: quantiles depend on order, not on how far out the "
+                        "extremes are.")
         self.ecdf()
         self.inverse()
         self.boxplot()
         self.regions()
+        self.answer()
 
     def card(self):
-        card = chapter_card(6, r"Quantiles and the box plot", r"Where does each person stand?",
-                            lit={1977: r"Tukey's \emph{Exploratory Data Analysis}"}, part=PART)
-        with self.voiceover("Chapter six. Quantiles and the box plot."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(6, r"Quantiles and the box plot", r"Where does each person stand?", lit={1977: r"Tukey's \emph{Exploratory Data Analysis}"}, part=PART, said="Chapter six. Quantiles and the box plot.")
 
     def ecdf(self):
         d = load("quantiles")

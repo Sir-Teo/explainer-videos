@@ -5,11 +5,17 @@ import numpy as np
 from videos.stats.stats59.common import *  # noqa: F403
 
 
-class AMP(LectureMixin, VoiceoverScene):
+class AMP(LectureMixin, StatsScene):
     def construct(self):
         self.card_voiceover("Chapter five. Approximate message passing and its state evolution: an algorithm whose every "
                             "step can be predicted exactly.", 5, r"AMP and state evolution", r"An algorithm you can predict",
                             lit=(2009, 2011))
+        self.ask("AMP's state evolution predicts...",
+                 ["each iteration's error, exactly in the limit", "only the final error, roughly"], 0,
+                 say="Approximate message passing: an algorithm you can predict. What does its state evolution "
+                     "predict?",
+                 reveal="Each iteration's error, exactly, in the large-system limit: a one-dimensional recursion "
+                        "tracks a high-dimensional algorithm, step by step.")
         self.algorithm()
         self.onsager()
         self.se()
@@ -19,6 +25,7 @@ class AMP(LectureMixin, VoiceoverScene):
         self.dt()
         self.dt_chart()
         self.proof()
+        self.answer()
 
     def algorithm(self):
         heading = label('AMP with a correctly scaled Gaussian matrix', font_size=30, color=PROPC).move_to([0, 3.35, 0])

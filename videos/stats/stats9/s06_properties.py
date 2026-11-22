@@ -6,9 +6,15 @@ from scipy import stats
 from videos.stats.stats9.common import *  # noqa: F403
 
 
-class Properties(VoiceoverScene):
+class Properties(StatsScene):
     def construct(self):
         self.card()
+        self.ask("The MLE's standard error comes from...",
+                 ["the likelihood's curvature at its peak", "the likelihood's height", "the sample's range"], 0,
+                 say="Maximum likelihood gives an estimate. Where does its standard error come from: the curvature "
+                     "of the log-likelihood at its peak, the height of the peak, or the sample's range?",
+                 reveal="The curvature. A sharp peak pins the parameter down; a flat one doesn't. One over the "
+                        "curvature is the variance.")
         self.consistency()
         self.kl()
         self.normality()
@@ -16,12 +22,10 @@ class Properties(VoiceoverScene):
         self.check()
         self.shapes()
         self.failures()
+        self.answer()
 
     def card(self):
-        card = chapter_card(5, r"How good is the MLE?", r"Consistency, \ normality, \ and a standard error from curvature", part=PART)
-        with self.voiceover("Chapter five. How good is the maximum likelihood estimator?"):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(5, r"How good is the MLE?", r"Consistency, \ normality, \ and a standard error from curvature", part=PART, said="Chapter five. How good is the maximum likelihood estimator?")
 
     def consistency(self):
         g = np.random.Generator(np.random.PCG64(1949))

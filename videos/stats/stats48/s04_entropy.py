@@ -5,19 +5,23 @@ import numpy as np
 from videos.stats.stats48.common import *  # noqa: F403
 
 
-class Entropy(VoiceoverScene):
+class Entropy(StatsScene):
     def construct(self):
         self.card()
+        self.ask("Monotone functions into $[0, 1]$: their bracketing entropy grows like...",
+                 [r"$\log(1/\varepsilon)$", r"$1/\varepsilon$", r"$e^{1/\varepsilon}$"], 1,
+                 say="Measure a class by how many brackets of size epsilon it takes to cover it. For monotone "
+                     "functions into the unit interval, how does that log-count grow?",
+                 reveal="Like one over epsilon: bigger than any VC class's log one over epsilon, small enough for a "
+                        "uniform central limit theorem.")
         self.definitions()
         self.brackets()
         self.chart()
         self.examples()
+        self.answer()
 
     def card(self):
-        card = chapter_card(3, r"Entropy and bracketing", r"Measuring a class by how many balls it takes to cover it", part=PART)
-        with self.voiceover("Chapter three. Entropy and bracketing: measuring a class by how many balls it takes to cover it."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(3, r"Entropy and bracketing", r"Measuring a class by how many balls it takes to cover it", part=PART, said="Chapter three. Entropy and bracketing: measuring a class by how many balls it takes to cover it.")
 
     def definitions(self):
         rows = [

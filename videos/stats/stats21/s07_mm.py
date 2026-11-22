@@ -5,21 +5,25 @@ import numpy as np
 from videos.stats.stats21.common import *  # noqa: F403
 
 
-class MM(VoiceoverScene):
+class MM(StatsScene):
     def construct(self):
         self.card()
+        self.ask("An MM algorithm's objective, step after step...",
+                 ["never gets worse", "can get worse"], 0,
+                 say="Majorize, then minimize: build a simple surrogate above the function, touching it at the "
+                     "current point, and minimize that. Can the objective ever get worse?",
+                 reveal="Never. The surrogate's minimum is no higher than the current value, and the function sits "
+                        "below the surrogate. Each step goes down, though sometimes slowly.")
         self.idea()
         self.median()
         self.family()
         self.engel()
         self.bradley_terry()
         self.verdict()
+        self.answer()
 
     def card(self):
-        card = chapter_card(6, r"MM algorithms", r"Minimize a simpler function, \ again and again", part=PART)
-        with self.voiceover("Chapter six. MM algorithms."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(6, r"MM algorithms", r"Minimize a simpler function, \ again and again", part=PART, said="Chapter six. MM algorithms.")
 
     def idea(self):
         rows = [

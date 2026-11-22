@@ -5,7 +5,7 @@ from videos.cs.cs17.common import (BG, CODE, COST, CTRL, DATA, FUNC, HEAD, LAM, 
                                    load, mono, words)
 
 
-class Chaining(VoiceoverScene):
+class Chaining(WatchScene):
     def construct(self):
         self.card()
         self.chains()
@@ -14,11 +14,7 @@ class Chaining(VoiceoverScene):
         self.flooding()
 
     def card(self):
-        card = chapter_card(2, r"Chaining and universal hashing", r"What if an adversary picks the keys?",
-                            lit=(1979,), extra=((1979, r"Carter and Wegman: \ universal hashing"),), part=PART)
-        with self.voiceover("Chapter two. Chaining, and universal hashing."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(2, r"Chaining and universal hashing", r"What if an adversary picks the keys?", lit=(1979,), extra=((1979, r"Carter and Wegman: \ universal hashing"),), part=PART, said="Chapter two. Chaining, and universal hashing.")
 
     def chains(self):
         head = label(r"Chaining: \ each slot holds a list", font_size=34).to_edge(UP, buff=0.3)
@@ -94,8 +90,7 @@ class Chaining(VoiceoverScene):
             "dots are a Poisson reference from independent balls into bins. This universal family "
             "guarantees pairwise collision control, not full independence, so agreement with that curve "
             "is an observation rather than its theorem. <bookmark mark='c'/> The displayed maximum is "
-            "measured in this table. The familiar logarithm over log-log maximum-load scale needs "
-            "stronger random-binning assumptions; universality alone does not establish it."
+            "measured in this table."
         ) as vo:
             self.play(FadeIn(head), FadeIn(ch[0]), FadeIn(ch.names), FadeIn(xl))
             vo.wait_until("a")
@@ -164,6 +159,17 @@ class Chaining(VoiceoverScene):
         self.clear_scene()
 
     def flooding(self):
+        self.wrong_idea(r"Hash tables take constant time",
+                        r"On average, with a hash the attacker can't predict. \\ Otherwise every lookup can be linear",
+                        narration="Ask any programmer how fast a hash table is, and you'll hear: constant time.",
+                        right_narration="Only on average, and only if the hash function is one an adversary can't predict. "
+                                        "Otherwise every lookup can become linear.")
+        self.clear_scene()
+        self.ask(r"The hash is $x \bmod m$. \\ An attacker sends 2000 multiples of $m$. The chains...",
+                 [r"spread evenly", r"all pile into one slot"], 1,
+                 say="The hash function is x mod m, and an attacker sends two thousand multiples of m. What happens to the "
+                     "chains?",
+                 reveal="Every key lands in slot zero: one chain two thousand long, and every lookup walks it.")
         d = load("chaining")
         head = label(r"Hash flooding", font_size=34).to_edge(UP, buff=0.3)
         tab = grid_table([rf"{words(d['attack_n'])} keys, \ all multiples of $m$", r"longest chain",

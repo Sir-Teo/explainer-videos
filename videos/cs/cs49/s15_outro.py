@@ -17,7 +17,7 @@ def tile(content, caption, color, TW=3.6, TH=2.3):
     return Group(frame, content, cap)
 
 
-class Outro(VoiceoverScene):
+class Outro(WatchScene):
     def construct(self):
         self.recap()
         self.payoffs()
@@ -49,6 +49,12 @@ class Outro(VoiceoverScene):
             self.play(LaggedStart(*[FadeIn(t, shift=UP * 0.15) for t in tiles], lag_ratio=0.25), run_time=4.0)
         self.wait(0.5)
         self.clear_scene()
+        self.checkpoint(
+            [(r"OT or CRDT for an editor?", r"Transform positions, or give characters identities"),
+             (r"What is hinted handoff?", r"A stand-in stores writes for a down node")],
+            narration="Last checkpoint. How do operational transformation and CRDTs differ? And what is hinted handoff?",
+            answers_narration="One repairs positions as operations arrive; the other gives every character an identity. And a "
+                              "stand-in node keeps writes for one that is down, and hands them over when it returns.")
 
     def payoffs(self):
         card = payoff_card([

@@ -10,20 +10,28 @@ def height_axes(center, x_length=8.4, y_length=3.8, ymax=0.05, font_size=20, xla
                 xticks=[150, 165, 180, 195], yticks=[0, 0.02, 0.04], center=list(center), font_size=font_size)
 
 
-class Density(VoiceoverScene):
+class Density(StatsScene):
     def construct(self):
         self.card()
+        self.ask("A kernel density estimate with a bandwidth shrinking to zero becomes...",
+                 ["smoother", "a spike at every data point", "a normal curve"], 1,
+                 say="A histogram without bins: a little bump at every point. Shrink the bandwidth toward zero. "
+                     "What does the estimate become?",
+                 reveal="A spike at every data point: no bias, enormous variance. The bandwidth trades one for the "
+                        "other, like a histogram's bin width.")
         self.histograms()
         self.bumps()
         self.bandwidth()
         self.tradeoff()
         self.choosing()
+        self.answer()
+        self.checkpoint([("Clustered data: cross-validate by?", "holding out whole clusters"),
+                         ("A kernel density with a tiny bandwidth?", "a spike at every point")],
+                        narration="Checkpoint. Prediction and shape.",
+                        answers_narration="Whole clusters. And spikes.")
 
     def card(self):
-        card = chapter_card(11, r"Density estimates, \ a first look", r"A histogram without the bins", part=PART)
-        with self.voiceover("Chapter eleven. Density estimates, a first look."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(11, r"Density estimates, \ a first look", r"A histogram without the bins", part=PART, said="Chapter eleven. Density estimates, a first look.")
 
     def histograms(self):
         d = load("kde")

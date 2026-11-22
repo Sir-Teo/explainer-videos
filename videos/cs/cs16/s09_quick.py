@@ -7,7 +7,7 @@ from videos.cs.cs16.common import (CODE, COST, CTRL, DATA, FUNC, HEAD, LAM, NO, 
                                    mono, value_bars, words)
 
 
-class Quick(VoiceoverScene):
+class Quick(WatchScene):
     def construct(self):
         self.card()
         self.partition()
@@ -17,11 +17,7 @@ class Quick(VoiceoverScene):
         self.pivots()
 
     def card(self):
-        card = chapter_card(8, r"Quicksort, \ and $2n \ln n$", r"How can a random choice give a sure answer?",
-                            lit=(1961,), extra=((1961, r"Hoare: \ Quicksort"),), part=PART)
-        with self.voiceover("Chapter eight. Quicksort, and two n natural log n."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(8, r"Quicksort, \ and $2n \ln n$", r"How can a random choice give a sure answer?", lit=(1961,), extra=((1961, r"Hoare: \ Quicksort"),), part=PART, said="Chapter eight. Quicksort, and two n natural log n.")
 
     def partition(self):
         head = label(r"Partition around a pivot \ (Hoare, \ 1961)", font_size=32).to_edge(UP, buff=0.3)
@@ -135,6 +131,10 @@ class Quick(VoiceoverScene):
         self.clear_scene()
 
     def analysis(self):
+        self.ask(r"Quicksort with random pivots. \\ Expected comparisons, about...",
+                 [r"$n \log_2 n$", r"$2n \ln n \approx 1.39\, n \log_2 n$", r"$n^2/2$"], 1,
+                 say="Quicksort with random pivots. About how many comparisons, on average?",
+                 reveal="Two n natural log n, about thirty-nine percent above n log base two n.")
         head = label(r"The average, \ in one idea", font_size=34).to_edge(UP, buff=0.3)
         steps = VGroup(
             label(r"name the elements by rank: \ $z_1 < z_2 < \cdots < z_n$; \ pivots chosen uniformly at random",

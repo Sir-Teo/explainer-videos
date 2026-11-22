@@ -6,21 +6,25 @@ from explainer.stats.board import coverage_board, load_all
 from videos.stats.stats24.common import *  # noqa: F403
 
 
-class Quasi(VoiceoverScene):
+class Quasi(StatsScene):
     def construct(self):
         self.card()
+        self.ask("Doctor visits: mean 2.13, variance 10.3. Quasi-Poisson inflates the Poisson SEs by about...",
+                 ["1", "about 2", "about 5"], 1,
+                 say="The World's doctor visits: mean two point one three, variance ten point three. Quasi-Poisson "
+                     "rescales the Poisson standard errors. By about how much?",
+                 reveal="About two: the square root of a dispersion near five. Poisson's standard errors were "
+                        "claiming twice the precision the data have.")
         self.overdispersion()
         self.quasi()
         self.estimates()
         self.shape()
         self.binomial_od()
         self.board()
+        self.answer()
 
     def card(self):
-        card = chapter_card(7, r"Quasi-likelihood", r"Only a mean and a variance", lit=(1974,), part=PART)
-        with self.voiceover("Chapter seven. Quasi-likelihood and overdispersion."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(7, r"Quasi-likelihood", r"Only a mean and a variance", lit=(1974,), part=PART, said="Chapter seven. Quasi-likelihood and overdispersion.")
 
     def overdispersion(self):
         d = load("visits")

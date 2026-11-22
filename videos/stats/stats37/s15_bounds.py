@@ -5,22 +5,29 @@ import numpy as np
 from videos.stats.stats37.common import *  # noqa: F403
 
 
-class Bounds(VoiceoverScene):
+class Bounds(StatsScene):
     def construct(self):
         self.card()
+        self.ask(r"Outcome in $[0, 1]$, missing for 30\%. With no assumptions, the bounds on the mean are how wide?",
+                 ["0", "0.3", "1"], 1,
+                 say="An outcome between zero and one, missing for thirty percent of people. With no assumptions at "
+                     "all, how wide are Manski's bounds on its mean?",
+                 reveal="Point three: the missing share could all be zeros or all be ones. Bounds draw the line "
+                        "between what the data show and what assumptions add.")
         self.manski_idea()
         self.manski_numbers()
         self.lee_problem()
         self.lee_math()
         self.lee_numbers()
         self.law()
+        self.answer()
+        self.checkpoint([("Unit fixed effects remove?", "time-invariant confounding only"),
+                         (r"Outcome in $[0, 1]$, 30\% missing: the bounds' width?", "0.3")],
+                        narration="Checkpoint. Panels and bounds.",
+                        answers_narration="Only time-invariant confounding. And point three.")
 
     def card(self):
-        card = chapter_card(14, r"Bounds", r"When no design identifies the answer, \ say what the data rule out",
-                            lit=(1990, 2009), part=PART)
-        with self.voiceover("Chapter fourteen. Bounds."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(14, r"Bounds", r"When no design identifies the answer, \ say what the data rule out", lit=(1990, 2009), part=PART, said="Chapter fourteen. Bounds.")
 
     def manski_idea(self):
         rows = [

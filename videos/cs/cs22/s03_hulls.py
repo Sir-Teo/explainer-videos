@@ -4,7 +4,7 @@ from explainer.cs import *  # noqa: F403
 from videos.cs.cs22.common import (CTRL, DATA, HEAD, LAM, NO, PART, YES, dots, fit, grid_table, load, mono, words)
 
 
-class Hulls(VoiceoverScene):
+class Hulls(WatchScene):
     def construct(self):
         self.card()
         self.graham()
@@ -13,11 +13,7 @@ class Hulls(VoiceoverScene):
         self.chan()
 
     def card(self):
-        card = chapter_card(2, r"Convex hulls", r"What is the tightest fence around a set of points?",
-                            lit=(1972, 1996), extra=((1972, r"Graham's scan"), (1996, r"Chan's algorithm")), part=PART)
-        with self.voiceover("Chapter two. Convex hulls."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(2, r"Convex hulls", r"What is the tightest fence around a set of points?", lit=(1972, 1996), extra=((1972, r"Graham's scan"), (1996, r"Chan's algorithm")), part=PART, said="Chapter two. Convex hulls.")
 
     def graham(self):
         d = load("hulls")
@@ -119,6 +115,10 @@ class Hulls(VoiceoverScene):
         self.clear_scene()
 
     def lower_bound(self):
+        self.ask(r"Can any algorithm find the convex hull \\ faster than $n \log n$, in general?",
+                 [r"yes", r"no: sorting reduces to it"], 1,
+                 say="Could a cleverer algorithm find every convex hull in less than n log n time?",
+                 reveal="No. Put numbers on a parabola, take the hull, and you've sorted them.")
         d = load("hulls")
         xs = d["sort_xs"]
         head = label(r"Why $n \log n$ is unavoidable", font_size=34).to_edge(UP, buff=0.35)

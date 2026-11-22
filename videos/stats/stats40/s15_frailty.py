@@ -6,20 +6,24 @@ from scipy import stats as st
 from videos.stats.stats40.common import *  # noqa: F403
 
 
-class Frailty(VoiceoverScene):
+class Frailty(StatsScene):
     def construct(self):
         self.card()
+        self.ask("With unmeasured frailty, the population's hazard declines over time because...",
+                 ["everyone's risk falls", "the frail die first"], 1,
+                 say="Each person's hazard is constant, but frailty varies between people. The population's hazard "
+                     "declines over time. Why?",
+                 reveal="The frail die first, and the survivors are the robust. Population hazards can fall while "
+                        "no individual's does.")
         self.vaupel()
         self.deceleration()
         self.shared()
         self.kidney()
         self.recurrent()
+        self.answer()
 
     def card(self):
-        card = chapter_card(14, r"Frailty", r"Unmeasured differences in risk", lit=(1979,), part=PART)
-        with self.voiceover("Chapter fourteen. Frailty."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(14, r"Frailty", r"Unmeasured differences in risk", lit=(1979,), part=PART, said="Chapter fourteen. Frailty.")
 
     def vaupel(self):
         rows = [

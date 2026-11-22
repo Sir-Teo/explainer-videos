@@ -6,7 +6,7 @@ from explainer.cs import *  # noqa: F403
 from videos.cs.cs11.common import (BG, CODE, CTRL, DATA, FUNC, HEAD, NO, PART, YES, bar_chart, code, load, region)
 
 
-class Heap(VoiceoverScene):
+class Heap(WatchScene):
     def construct(self):
         self.card()
         self.why()
@@ -14,13 +14,8 @@ class Heap(VoiceoverScene):
         self.trace()
 
     def card(self):
-        card = chapter_card(6, r"The heap", r"Where does memory come from when you don't know how much you need?",
-                            lit=(1965, 1968), extra=((1965, r"Knowlton: \ the buddy system"), (1968, r"Knuth: \ "
-                                                                                                      r"boundary tags")),
-                            part=PART)
-        with self.voiceover("Chapter six. The heap."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(6, r"The heap", r"Where does memory come from when you don't know how much you need?", lit=(1965, 1968), extra=((1965, r"Knowlton: \ the buddy system"), (1968, r"Knuth: \ "
+                                                                                                      r"boundary tags")), part=PART, said="Chapter six. The heap.")
 
     def why(self):
         head = label(r"\texttt{malloc} and \texttt{free}", font_size=34).to_edge(UP, buff=0.35)
@@ -79,6 +74,10 @@ class Heap(VoiceoverScene):
         self.clear_scene()
 
     def freelist(self):
+        self.ask(r"\texttt{free(p)} takes only the pointer. \\ Who remembers the block's size?",
+                 [r"the caller", r"a header just before \texttt{p}", r"the operating system"], 1,
+                 say="Free is given only a pointer. How does it know how big the block is?",
+                 reveal="A small header, just before the address it handed out.")
         head = label(r"A free list, \ boundary tags, \ coalescing", font_size=34).to_edge(UP, buff=0.3)
         W = 11.0
         blocks = [("A", 2, True), ("", 1.5, False), ("B", 1.0, True), ("C", 2.0, True), ("", 2.5, False),
@@ -162,3 +161,10 @@ class Heap(VoiceoverScene):
             self.play(FadeIn(tot))
         self.wait(0.3)
         self.clear_scene()
+        self.checkpoint(
+            [(r"Where do a function's local variables live?", r"In its stack frame, gone when it returns"),
+             (r"Why do 4-byte integers sit at addresses divisible by 4?", r"Alignment: simpler, often faster access")],
+            narration="Checkpoint. Where do a function's local variables live, and for how long? And why does an int sit at "
+                      "an address divisible by four?",
+            answers_narration="In its stack frame, which disappears when it returns. And alignment makes the access simpler, "
+                              "and usually faster.")

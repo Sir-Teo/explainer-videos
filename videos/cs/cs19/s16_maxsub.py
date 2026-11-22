@@ -11,7 +11,7 @@ def t(s):
     return f"{s * 1e6:.0f} µs" if s < 1e-3 else (f"{s * 1000:.1f} ms" if s < 1 else f"{s:.2f} s")
 
 
-class MaxSub(VoiceoverScene):
+class MaxSub(WatchScene):
     def construct(self):
         self.card()
         self.problem()
@@ -19,12 +19,7 @@ class MaxSub(VoiceoverScene):
         self.measured()
 
     def card(self):
-        card = chapter_card(15, r"One problem, \ four paradigms", r"How fast can the best stretch be found?",
-                            lit=(1984,), extra=((1977, r"Grenander's question"), (1984, r"Bentley's column")),
-                            part=PART)
-        with self.voiceover("Chapter fifteen. One problem, four paradigms."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(15, r"One problem, \ four paradigms", r"How fast can the best stretch be found?", lit=(1984,), extra=((1977, r"Grenander's question"), (1984, r"Bentley's column")), part=PART, said="Chapter fifteen. One problem, four paradigms.")
 
     def problem(self):
         d = load("maxsub")
@@ -63,6 +58,9 @@ class MaxSub(VoiceoverScene):
         self.clear_scene()
 
     def four(self):
+        self.ask(r"Maximum-sum subarray. \\ The fastest method?", [r"$n^3$", r"$n \log n$", r"$n$"], 2,
+                 say="The maximum-sum contiguous subarray. How fast can it be found?",
+                 reveal="In linear time, one pass, by dynamic programming.")
         head = label(r"Four algorithms", font_size=34).to_edge(UP, buff=0.3)
         algs = VGroup(*[VGroup(label(a, font_size=23, color=c), label(b, font_size=20, color=GREY_A)).arrange(
             DOWN, aligned_edge=LEFT, buff=0.1) for a, b, c in (

@@ -5,21 +5,35 @@ import numpy as np
 from videos.stats.stats10.common import *  # noqa: F403
 
 
-class Power(VoiceoverScene):
+class Power(StatsScene):
     def construct(self):
         self.card()
+        self.wrong_idea("Not significant means there is no effect",
+                        "Absence of evidence is not evidence of absence: a low-power test misses real effects",
+                        narration="A tempting conclusion: the test wasn't significant, so there's no effect.",
+                        right_narration="No. A test with low power misses real effects most of the time. Not "
+                                        "significant means the data couldn't tell; an interval shows what effects "
+                                        "remain plausible.")
+        self.ask(r"A study with 20\% power finds a significant effect. Its estimate is likely...",
+                 ["about right", "exaggerated", "too small"], 1,
+                 say="A study with only twenty percent power gets lucky and finds a significant effect. Is its "
+                     "estimate likely about right, exaggerated, or too small?",
+                 reveal="Exaggerated. With low power, only the estimates that happened to come out large cross the "
+                        "line. Significance filters for exaggeration.")
         self.curves()
         self.planning()
         self.cohen()
         self.type_sm()
         self.sm_table()
         self.lesson()
+        self.answer()
+        self.checkpoint([("Unequal variances and sizes: which $t$-test?", "Welch's"),
+                         ("A significant result from a low-power study tends to?", "exaggerate the effect")],
+                        narration="Checkpoint. Tests in practice.",
+                        answers_narration="Welch's. And exaggerate.")
 
     def card(self):
-        card = chapter_card(9, r"Power and sample size", r"Could the study have found it?", part=PART)
-        with self.voiceover("Chapter nine. Power and sample size."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(9, r"Power and sample size", r"Could the study have found it?", part=PART, said="Chapter nine. Power and sample size.")
 
     def curves(self):
         d = load("power")

@@ -47,25 +47,18 @@ def fmt_factor(v):
     return f"{v:,.0f}" if v >= 100 and v == int(v) else (f"{v:,.1f}" if v != int(v) else f"{v:,.0f}")
 
 
-class Networks(VoiceoverScene):
+class Networks(WatchScene):
     def construct(self):
         self.card()
         self.spoof()
         self.amplify()
-        self.factors()
         self.bgp()
-        self.dns()
         self.lesson()
 
     def card(self):
-        card = chapter_card(9, r"Networks under attack", r"What does the network believe, \ and who can lie to it?",
-                            lit=(2000, 2008, 2018), extra=((2000, r"BCP 38: \ ingress filtering"),
+        self.chapter(9, r"Networks under attack", r"What does the network believe, \ and who can lie to it?", lit=(2000, 2008, 2018), extra=((2000, r"BCP 38: \ ingress filtering"),
                                                            (2008, r"Kaminsky; \ YouTube's hijack"),
-                                                           (2018, r"memcached amplification")),
-                            part=PART, layers=("net", "dist"))
-        with self.voiceover("Chapter nine. Networks under attack."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+                                                           (2018, r"memcached amplification")), part=PART, layers=("net", "dist"), said="Chapter nine. Networks under attack.")
 
     def spoof(self):
         head = label(r"Nobody checks the return address", font_size=36).to_edge(UP, buff=0.3)
@@ -120,6 +113,10 @@ class Networks(VoiceoverScene):
         self.clear_scene()
 
     def amplify(self):
+        self.ask(r"A 60-byte request draws a 3000-byte reply, \\ sent to a forged source. The attack multiplies by...",
+                 [r"$1$", r"$50$"], 1,
+                 say="A sixty-byte request with a forged source draws a three-thousand-byte reply to the victim. By how much does the attacker's bandwidth multiply?",
+                 reveal="Fifty times. Amplification needs only spoofing and a chatty protocol.")
         head = label(r"Amplification", font_size=36).to_edge(UP, buff=0.3)
         att = cbox(r"attacker", NO, w=1.7, h=0.6).move_to([-5.7, 0.0, 0])
         refl = VGroup(*[cbox(r"reflector", LAM, w=1.7, h=0.55).move_to([-3.3, y, 0]) for y in (1.4, 0.0, -1.4)])
@@ -177,64 +174,6 @@ class Networks(VoiceoverScene):
         self.wait(0.4)
         self.clear_scene()
 
-    def factors(self):
-        head = label(r"How big a lever?", font_size=36).to_edge(UP, buff=0.3)
-        x0, per = -3.4, 1.55          # x of a factor of 1, and scene units per decade
-
-        def X(v):
-            return x0 + per * np.log10(v)
-        rows = VGroup()
-        for k, (name, lo, hi) in enumerate(FACTORS):
-            y = 2.0 - k * 0.56
-            nm = label(name, font_size=20, color=WHITE).move_to([-4.5, y, 0]).align_to([-6.5, 0, 0], LEFT)
-            solid = Rectangle(width=X(lo) - x0, height=0.38, stroke_width=0, fill_color=NO, fill_opacity=0.8)
-            solid.move_to([x0, y, 0], aligned_edge=LEFT)
-            bar = VGroup(solid)
-            if hi > lo:
-                ext = Rectangle(width=X(hi) - X(lo), height=0.38, stroke_width=0, fill_color=NO, fill_opacity=0.35)
-                ext.move_to([X(lo), y, 0], aligned_edge=LEFT)
-                bar.add(ext)
-            txt = fmt_factor(lo) if hi == lo else rf"{fmt_factor(lo)} \ to \ {fmt_factor(hi)}"
-            val = label(txt, font_size=18, color=HEAD).next_to(bar, RIGHT, buff=0.15)
-            rows.add(VGroup(nm, bar, val))
-        base_y = 2.0 - len(FACTORS) * 0.56 + 0.2
-        axis = Line([x0, base_y, 0], [X(1e5), base_y, 0], color=GREY_C, stroke_width=1.5)
-        ticks = VGroup()
-        for d in range(6):
-            ticks.add(Line([X(10 ** d), base_y - 0.06, 0], [X(10 ** d), base_y + 0.06, 0], color=GREY_C))
-            ticks.add(label(f"{10 ** d:,}", font_size=16, color=GREY_B).next_to([X(10 ** d), base_y, 0], DOWN,
-                                                                               buff=0.12))
-        src = label(r"bandwidth amplification factor, \ log scale \ (US-CERT alert TA14-017A)", font_size=17,
-                    color=GREY_B).next_to(ticks, DOWN, buff=0.15).set_x(X(10 ** 2.5))
-        gh = wrapped_label(r"28 February 2018: \ GitHub absorbed about 1.35 terabits per second, \ reflected off "
-                           r"memcached servers left open to the internet", 12.4, font_size=20,
-                           color=NO).next_to(src, DOWN, buff=0.3).set_x(0)
-        ex = MathTex(r"1\ \text{Mb/s}", r"\times", r"51{,}000", r"\approx", r"51\ \text{Gb/s}", font_size=34,
-                     color=HEAD).next_to(gh, DOWN, buff=0.25)
-        exn = label(r"illustrative", font_size=16, color=GREY_B).next_to(ex, RIGHT, buff=0.3)
-        with self.voiceover(
-            "How big is A? <bookmark mark='a'/> America's computer emergency team published measured factors in "
-            "2014: about six for a management protocol, tens for device discovery and for DNS; <bookmark mark='b'/> "
-            "hundreds for an old diagnostic service and for NTP, the time protocol. <bookmark mark='c'/> In 2018 came "
-            "memcached, a cache server some had left open to the internet: up to fifty-one thousand. That February "
-            "GitHub absorbed about one point three five terabits a second of it. <bookmark mark='d'/> One megabit "
-            "of forged questions becomes fifty-one gigabits of answers. The defences: filter sources, close open "
-            "reflectors, and absorb the rest at Part 37's anycast edge."
-        ) as vo:
-            self.play(FadeIn(head), Create(axis), FadeIn(ticks), FadeIn(src))
-            vo.wait_until("a")
-            self.play(LaggedStart(*[AnimationGroup(FadeIn(r[0]), GrowFromEdge(r[1], LEFT), FadeIn(r[2]))
-                                    for r in rows[:3]], lag_ratio=0.4), run_time=2.5)
-            vo.wait_until("b")
-            self.play(LaggedStart(*[AnimationGroup(FadeIn(r[0]), GrowFromEdge(r[1], LEFT), FadeIn(r[2]))
-                                    for r in rows[3:5]], lag_ratio=0.4), run_time=2)
-            vo.wait_until("c")
-            self.play(FadeIn(rows[5][0]), GrowFromEdge(rows[5][1], LEFT), FadeIn(rows[5][2]))
-            self.play(FadeIn(gh))
-            vo.wait_until("d")
-            self.play(Write(ex), FadeIn(exn))
-        self.wait(0.4)
-        self.clear_scene()
 
     def bgp(self):
         b = load36("bgp")
@@ -292,70 +231,6 @@ class Networks(VoiceoverScene):
         self.wait(0.4)
         self.clear_scene()
 
-    def dns(self):
-        d = load37("dns")
-        ex, sec = d["expected_races"], d["expected_seconds"]
-        k = 100
-        head = label(r"Resolvers believe the first good-looking answer \ (Part 37)", font_size=36).to_edge(UP,
-                                                                                                         buff=0.3)
-        e1 = MathTex(r"p", r"\approx", r"\frac{k}{2^{H}}", font_size=40)
-        e2 = MathTex(r"\mathbb{E}[\text{races}]", r"=", r"\frac{1}{p}", r"\approx", r"\frac{2^{H}}{k}",
-                     font_size=40)
-        for e in (e1, e2):
-            e.move_to([0, 2.05, 0])
-        whys = [label(r"$k$ forged replies per race, \ each guessing an $H$-bit number", font_size=19, color=GREY_A),
-                label(r"each race is a fresh, \ independent try: \ a geometric wait", font_size=19, color=GREY_A)]
-        for w in whys:
-            w.move_to([0, 1.25, 0])
-        cell = 0.3
-
-        def strip(n, color, name):
-            sq = VGroup(*[Square(cell, stroke_color=color, stroke_width=1.4, fill_color=color, fill_opacity=0.25)
-                          for _ in range(n)]).arrange(RIGHT, buff=0.03)
-            t = label(name, font_size=18, color=color).next_to(sq, DOWN, buff=0.12)
-            return VGroup(sq, t)
-        idb = strip(16, HEAD, r"query ID: \ 16 bits")
-        port = strip(16, YES, r"source port: \ 16 more")
-        VGroup(idb, port).arrange(RIGHT, buff=0.25).move_to([0, 0.25, 0])
-        idb_alone = idb.copy().move_to([0, 0.25, 0])
-        r1 = VGroup(MathTex(r"H = 16:", r"\quad", rf"\frac{{2^{{16}}}}{{{k}}} \approx {ex['fixed port']:.0f}\ \text{{races}}",
-                            font_size=34, color=NO),
-                    label(rf"about {sec['fixed port']:.0f} s at ten races a second", font_size=19, color=NO)
-                    ).arrange(RIGHT, buff=0.4)
-        mil = ex["random port"] / 1e6
-        r2 = VGroup(MathTex(r"H = 32:", r"\quad", rf"\frac{{2^{{32}}}}{{{k}}} \approx {mil:.0f}\ \text{{million}}",
-                            font_size=34, color=YES),
-                    label(rf"about {sec['random port'] / 86400:.0f} days", font_size=19, color=YES)).arrange(RIGHT,
-                                                                                                       buff=0.4)
-        VGroup(r1, r2).arrange(DOWN, aligned_edge=LEFT, buff=0.25).move_to([0, -1.45, 0])
-        foot = wrapped_label(r"randomness only raises the price; \ \textbf{DNSSEC} removes the guess: \ answers signed "
-                             r"from the root down, \ with Part 30's public keys", 12.4, font_size=20,
-                             color=WHITE).to_edge(DOWN, buff=0.3)
-        with self.voiceover(
-            "Part 37 met Kaminsky's attack on DNS. Here is its arithmetic. "
-            "<bookmark mark='a'/> In each race the attacker sends k forged answers, each guessing the resolver's "
-            "H-bit number. <bookmark mark='b'/> A fresh random name makes every race a new try, so the "
-            "expected number of races is one over p: two to the H over k. <bookmark mark='c'/> With only "
-            f"the sixteen-bit query identifier and a hundred forgeries a race, that is about {say(ex['fixed port'])} "
-            "races, about a minute. <bookmark mark='d'/> The 2008 fix randomised the source port as well: sixteen "
-            f"more bits, about {say(mil)} million races, some {say(sec['random port'] / 86400)} days. "
-            "<bookmark mark='e'/> Randomness only raises the price. Signing the answers, with DNSSEC, removes the "
-            "guess."
-        ) as vo:
-            self.play(FadeIn(head))
-            vo.wait_until("a")
-            self.play(Write(e1), FadeIn(whys[0]), FadeIn(idb_alone))
-            vo.wait_until("b")
-            self.play(TransformMatchingTex(e1, e2), FadeTransform(whys[0], whys[1]))
-            vo.wait_until("c")
-            self.play(FadeIn(r1))
-            vo.wait_until("d")
-            self.play(ReplacementTransform(idb_alone, idb), FadeIn(port, shift=LEFT * 0.2))
-            self.play(FadeIn(r2))
-            vo.wait_until("e")
-            self.play(FadeIn(foot))
-        self.wait(0.4)
-        self.clear_scene()
 
     def lesson(self):
         head = label(r"Assume the path is hostile", font_size=36).to_edge(UP, buff=0.3)
@@ -397,6 +272,12 @@ class Networks(VoiceoverScene):
             self.play(FadeIn(bad))
         self.wait(0.4)
         self.clear_scene()
+        self.checkpoint(
+            [(r"What is a confused deputy?", r"A program misusing its authority for a caller"),
+             (r"Why is safety undecidable in HRU?", r"Protection commands can simulate a Turing machine")],
+            narration="Checkpoint. What is a confused deputy? And why is it undecidable whether a right can leak?",
+            answers_narration="A program that uses its own authority on a caller's behalf. And because protection commands can "
+                              "simulate a Turing machine, so leaking is halting.")
 
 
 _ = (BG, DATA, HEAD, KERN, LAM, NO, YES)

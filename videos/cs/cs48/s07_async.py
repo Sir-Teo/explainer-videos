@@ -6,22 +6,16 @@ from videos.cs.cs48.common import (BG, DATA, HEAD, KERN, LAM, NO, PART, YES, axe
                                    tag_box)
 
 
-class Async(VoiceoverScene):
+class Async(WatchScene):
     def construct(self):
         self.card()
         self.absorb()
         self.explode()
-        self.priorities()
-        self.delayed()
         self.pools()
 
     def card(self):
-        card = chapter_card(6, r"Queues and asynchrony", r"What does a queue buy, \ and what does it cost?",
-                            lit=(1909, 1961), extra=((1909, r"Erlang: \ telephone traffic"),
-                                                     (1961, r"Little's law")), part=PART)
-        with self.voiceover("Chapter six. Queues and asynchrony."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(6, r"Queues and asynchrony", r"What does a queue buy, \ and what does it cost?", lit=(1909, 1961), extra=((1909, r"Erlang: \ telephone traffic"),
+                                                     (1961, r"Little's law")), part=PART, said="Chapter six. Queues and asynchrony.")
 
     def absorb(self):
         head = label(r"A queue absorbs a burst", font_size=36).to_edge(UP, buff=0.3)
@@ -84,6 +78,10 @@ class Async(VoiceoverScene):
         self.clear_scene()
 
     def explode(self):
+        self.ask(r"A queue's load rises from $80\%$ to $95\%$. \\ The delay...", [r"rises a little",
+                 r"roughly quadruples"], 1,
+                 say="A worker queue runs at eighty percent load, then ninety-five. What happens to the delay?",
+                 reveal="It roughly quadruples: one over one minus rho.")
         q = load31("queue")
         head = label(r"Why latency explodes near full load", font_size=36).to_edge(UP, buff=0.3)
         ymax = 50
@@ -142,122 +140,7 @@ class Async(VoiceoverScene):
         self.wait(0.4)
         self.clear_scene()
 
-    def priorities(self):
-        q = load31("queue")
-        head = label(r"Priorities", font_size=36).to_edge(UP, buff=0.3)
-        hi = VGroup(*[Square(side_length=0.36, stroke_color=HEAD, stroke_width=1.5, fill_color=HEAD,
-                             fill_opacity=0.5 if k < 2 else 0) for k in range(6)]).arrange(LEFT, buff=0)
-        lo = VGroup(*[Square(side_length=0.36, stroke_color=DATA, stroke_width=1.5, fill_color=DATA,
-                             fill_opacity=0.5 if k < 6 else 0) for k in range(6)]).arrange(LEFT, buff=0)
-        qs = VGroup(hi, lo).arrange(DOWN, buff=0.6).move_to([-3.6, 1.2, 0])
-        hl = label(r"interactive", font_size=18, color=HEAD).next_to(hi, LEFT, buff=0.2)
-        ll = label(r"batch", font_size=18, color=DATA).next_to(lo, LEFT, buff=0.2)
-        pool = module_box(r"workers", KERN, w=1.5, h=1.4, font=18).next_to(qs, RIGHT, buff=1.0)
-        ah = Arrow(hi.get_right(), pool.get_left() + UP * 0.3, buff=0.08, stroke_width=3, color=HEAD)
-        al = Arrow(lo.get_right(), pool.get_left() + DOWN * 0.3, buff=0.08, stroke_width=1.5, color=DATA)
-        wl = label(r"weights, \ e.g.\ 4 : 1", font_size=16, color=GREY_B).next_to(pool, DOWN, buff=0.15)
-        d = next(r for r in q["disc"] if r["name"] == "heavy-tailed")
-        bars = bar_chart([d["fcfs"], d["ps"], d["srpt"]], [r"FCFS", r"sharing", r"SRPT"], [NO, LAM, YES],
-                         height=2.6, bar_w=0.8, gap=0.6, fmt_=lambda v: f"{v:.1f}", font_size=18)
-        bars.move_to([3.9, 1.0, 0])
-        bt = label(r"heavy-tailed jobs at load 0.8: \ mean time", font_size=17, color=GREY_A).next_to(bars, UP,
-                                                                                                   buff=0.2)
-        notes = VGroup(
-            wrapped_label(r"separate queues by urgency, \ so a flood of batch work cannot delay a user who is "
-                          r"waiting", 12.4, font_size=20, color=WHITE),
-            wrapped_label(r"strict priority can starve the low queue: \ serve by weights, \ or age a job's priority "
-                          r"while it waits", 12.4, font_size=20, color=HEAD),
-            wrapped_label(rf"order is worth as much as speed: \ shortest jobs first cut the mean from "
-                          rf"{d['fcfs']:.1f} to {d['srpt']:.1f} service times \ (Part 31's simulation)", 12.4,
-                          font_size=20, color=YES),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.25).next_to(bars, DOWN, buff=0.7)
-        notes.to_edge(LEFT, buff=0.5)
-        with self.voiceover(
-            "Not all jobs are equally urgent. <bookmark mark='a'/> Keep separate queues: an interactive one, for "
-            "work someone is waiting on, and a batch one, so that a flood of batch "
-            "work cannot delay a waiting user. <bookmark mark='b'/> Strict priority, though, can starve the low "
-            "queue for ever. So workers serve the queues by weight, four from one for each from the other, say, or "
-            "a job's priority rises the longer it waits. <bookmark mark='c'/> The order matters as much as the "
-            "speed. Part 31 simulated heavy-tailed jobs at eighty percent load: first come, first served took "
-            "twenty-six service times on average; serving the shortest remaining job first, two."
-        ) as vo:
-            self.play(FadeIn(head), FadeIn(qs), FadeIn(hl), FadeIn(ll), FadeIn(pool), GrowArrow(ah), GrowArrow(al))
-            vo.wait_until("a")
-            self.play(FadeIn(notes[0]))
-            vo.wait_until("b")
-            self.play(FadeIn(wl), FadeIn(notes[1]), Indicate(lo, color=NO))
-            vo.wait_until("c")
-            self.play(FadeIn(bt), FadeIn(bars), FadeIn(notes[2]))
-        self.wait(0.4)
-        self.clear_scene()
 
-    def delayed(self):
-        head = label(r"Later, \ and again", font_size=36).to_edge(UP, buff=0.3)
-        x0, x1, y = -6.0, 6.0, 1.9
-        line = Arrow([x0, y, 0], [x1 + 0.4, y, 0], buff=0, stroke_width=2, color=GREY_C,
-                     max_tip_length_to_length_ratio=0.02)
-        tl = label(r"a sorted set, \ scored by due time", font_size=17, color=GREY_B).next_to(line, UP,
-                                                                                            buff=1.0).align_to(
-            line, LEFT)
-        due = [(-4.6, "reminder"), (-2.9, "retry 2"), (-0.8, "digest"), (1.6, "retry 3"), (4.2, "expire")]
-        tags = VGroup(*[tag_box(t, color=LAM, size=16).move_to([x, y + 0.45, 0]) for x, t in due])
-        ticks = VGroup(*[Line([x, y - 0.1, 0], [x, y + 0.1, 0], color=LAM, stroke_width=2) for x, _ in due])
-        now = VGroup(Line([x0 + 0.2, y - 0.35, 0], [x0 + 0.2, y + 0.2, 0], color=HEAD, stroke_width=4),
-                     label(r"now", font_size=17, color=HEAD).move_to([x0 + 0.2, y - 0.55, 0]))
-        ready = VGroup(*[Rectangle(width=1.3, height=0.5, stroke_color=GREY_C, stroke_width=1.5)
-                         for _ in range(5)]).arrange(RIGHT, buff=0).move_to([0.0, 0.25, 0])
-        rl = label(r"ready queue", font_size=17, color=GREY_A).next_to(ready, LEFT, buff=0.2)
-        # retries: delays doubling, with jitter, then the dead-letter queue
-        base = [1, 2, 4, 8]
-        jit = [0.7, 1.6, 4.5, 6.9]                         # illustrative jittered draws
-        bars = VGroup()
-        for k, (b, j) in enumerate(zip(base, jit)):
-            full = Rectangle(width=b * 0.42, height=0.26, stroke_color=GREY_C, stroke_width=1.2)
-            fill = Rectangle(width=j * 0.42, height=0.26, stroke_width=0, fill_color=KERN, fill_opacity=0.8)
-            row = VGroup(label(rf"try {k + 2}", font_size=16, color=GREY_A), VGroup(full, fill))
-            fill.align_to(full, LEFT)
-            row.arrange(RIGHT, buff=0.2)
-            bars.add(row)
-        bars.arrange(DOWN, aligned_edge=LEFT, buff=0.15).move_to([-3.9, -1.25, 0])
-        for row in bars:
-            row[1].align_to(bars[0][1], LEFT)
-        dlq = module_box(r"dead letters", NO, w=1.9, h=0.5, font=17).next_to(bars, RIGHT, buff=0.4).align_to(
-            bars, DOWN)
-        lines = VGroup(
-            wrapped_label(r"a delayed job is stored by its due time; \ a poller moves whatever is due onto the ready "
-                          r"queue \ (Redis sorted sets; \ SQS delay; \ a timing wheel)", 5.6, font_size=19,
-                          color=WHITE),
-            wrapped_label(r"a failed job waits $2^k$ times a base delay, \ drawn at random below that \ "
-                          r"(``full jitter''), \ so retries do not arrive together", 5.6, font_size=19, color=KERN),
-            wrapped_label(r"after the last try it goes to a dead-letter queue for a person; \ and since it may run "
-                          r"twice, \ the job must be idempotent \ (Part 43)", 5.6, font_size=19, color=NO),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.25).move_to([3.6, -1.35, 0])
-        foot = note(r"illustrative schedule and delays", font_size=16).to_edge(DOWN, buff=0.2).set_x(-3.9)
-        with self.voiceover(
-            "Queues also carry work for later. <bookmark mark='a'/> A delayed job, a reminder tomorrow or a digest "
-            "at six, is stored by its due time, in a sorted set or a timing wheel, and a poller moves whatever has "
-            "come due onto the ready queue. <bookmark mark='b'/> Retries are delayed jobs too. After each failure a "
-            "job waits twice as long as before, one second, two, four, eight, and the actual delay is drawn at "
-            "random below that, so that jobs which failed together do not retry together. "
-            "<bookmark mark='c'/> After the last attempt, the job goes to a dead-letter queue for a person to look "
-            "at. And because a job may run twice, every job must be "
-            "idempotent, as Part 43 insisted."
-        ) as vo:
-            self.play(FadeIn(head), GrowArrow(line), FadeIn(tl), FadeIn(ticks), FadeIn(tags), FadeIn(now),
-                      FadeIn(ready), FadeIn(rl), FadeIn(foot))
-            vo.wait_until("a")
-            self.play(FadeIn(lines[0]))
-            slot = 0
-            for (x, _), t in zip(due[:3], tags[:3]):
-                self.play(now.animate.set_x(x + 0.05), run_time=0.8, rate_func=linear)
-                self.play(t.animate.scale(0.9).move_to(ready[slot]), run_time=0.6)
-                slot += 1
-            vo.wait_until("b")
-            self.play(LaggedStart(*[FadeIn(b) for b in bars], lag_ratio=0.3), FadeIn(lines[1]), run_time=1.6)
-            vo.wait_until("c")
-            self.play(FadeIn(dlq), FadeIn(lines[2]))
-        self.wait(0.4)
-        self.clear_scene()
 
     def pools(self):
         n = load("napkin")

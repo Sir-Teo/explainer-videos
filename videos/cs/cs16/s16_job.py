@@ -5,7 +5,7 @@ from videos.cs.cs16.common import (CODE, COST, CTRL, DATA, FUNC, HEAD, LAM, NO, 
                                    load, mono, words)
 
 
-class Job(VoiceoverScene):
+class Job(WatchScene):
     def construct(self):
         self.card()
         self.program()
@@ -14,11 +14,7 @@ class Job(VoiceoverScene):
         self.ledger()
 
     def card(self):
-        card = chapter_card(15, r"The Job, \ sorted", r"How much is one idea worth?", lit=(1957,),
-                            extra=((1957, r"FORTRAN"),), part=PART)
-        with self.voiceover("Chapter fifteen. The Job, sorted."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(15, r"The Job, \ sorted", r"How much is one idea worth?", lit=(1957,), extra=((1957, r"FORTRAN"),), part=PART, said="Chapter fifteen. The Job, sorted.")
 
     def program(self):
         d = load("job")
@@ -64,6 +60,10 @@ class Job(VoiceoverScene):
         self.clear_scene()
 
     def model(self):
+        self.ask(r"The Job, version 1: sort, then count runs. \\ Against version 0's list search?", [r"about the same",
+                 r"far faster"], 1,
+                 say="Version one sorts the words, then counts runs. Against version zero's list search?",
+                 reveal="Far faster: n log n instead of a search through the whole vocabulary for every word.")
         d = load("job")
         f = d["features"]
         v0 = d["v0"]
@@ -159,8 +159,7 @@ class Job(VoiceoverScene):
             "coefficient times corpus event count, not traced instruction categories. Correlated features can "
             "admit different coefficient allocations with similar total predictions. <bookmark mark='b'/> The "
             "copy-back term motivates a concrete experiment: alternate the two arrays instead of copying a full "
-            "pass back. But removing a fitted term does not establish the same percentage reduction in "
-            "instructions or seconds. That needs a changed program, checked output and a new measurement. "
+            "pass back. That needs a changed program, checked output and a new measurement. "
             "<bookmark mark='c'/> Use the model to propose and test an optimization, while keeping attribution "
             "uncertainty visible."
         )

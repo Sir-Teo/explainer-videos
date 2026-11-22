@@ -5,21 +5,25 @@ import numpy as np
 from videos.stats.stats12.common import *  # noqa: F403
 
 
-class Geometry(VoiceoverScene):
+class Geometry(StatsScene):
     def construct(self):
         self.card()
+        self.ask("The residuals of a least-squares fit are, to every column of $X$...",
+                 ["parallel", "orthogonal", "proportional"], 1,
+                 say="Least squares is a projection. How do the residuals sit relative to every column of the "
+                     "design: parallel, orthogonal, or proportional?",
+                 reveal="Orthogonal. The fit is the closest point in the column space, so what's left over is "
+                        "perpendicular to all of it.")
         self.space()
         self.check()
         self.hat()
         self.qr()
         self.pythagoras()
         self.many_x()
+        self.answer()
 
     def card(self):
-        card = chapter_card(2, r"Geometry", r"Least squares is a projection", part=PART)
-        with self.voiceover("Chapter two. Geometry."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(2, r"Geometry", r"Least squares is a projection", part=PART, said="Chapter two. Geometry.")
 
     def space(self):
         x = np.array([1.0, 2.0, 4.0])

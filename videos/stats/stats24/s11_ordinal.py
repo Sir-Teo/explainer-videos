@@ -8,21 +8,25 @@ CATS = [r"under", r"normal", r"over", r"obese"]
 CCOL = [TEAL, BLUE, PATH, RED]
 
 
-class Ordinal(VoiceoverScene):
+class Ordinal(StatsScene):
     def construct(self):
         self.card()
+        self.ask("The proportional-odds model gives a predictor's effect at each cut point that is...",
+                 ["the same", "different"], 0,
+                 say="An ordered outcome, like a pain score from one to five. In the proportional-odds model, is a "
+                     "predictor's effect on the log odds the same at every cut point?",
+                 reveal="The same: one coefficient shifts every cumulative log odds equally, as if a latent "
+                        "continuous variable were cut into categories.")
         self.multinomial()
         self.po()
         self.fit()
         self.stack()
         self.check()
         self.others()
+        self.answer()
 
     def card(self):
-        card = chapter_card(10, r"Multinomial and ordinal", r"More than two outcomes", lit=(1980,), part=PART)
-        with self.voiceover("Chapter ten. Multinomial and ordinal models."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(10, r"Multinomial and ordinal", r"More than two outcomes", lit=(1980,), part=PART, said="Chapter ten. Multinomial and ordinal models.")
 
     def multinomial(self):
         rows = [

@@ -8,9 +8,15 @@ COH = {2004.0: Y1C, 2009.0: TAUC, 2014.0: IVC}
 KIND = {"vs never": BANDC, "early vs later": Y0C, "later vs earlier": MISSC}
 
 
-class Staggered(VoiceoverScene):
+class Staggered(StatsScene):
     def construct(self):
         self.card()
+        self.ask("Two-way fixed effects, staggered adoption, effects growing over time. The estimate can...",
+                 ["get the sign wrong", "only be too small"], 0,
+                 say="Towns adopt a programme in different years, and its effect grows over time. Fit the usual "
+                     "two-way fixed effects regression. How wrong can it be?",
+                 reveal="It can get the sign wrong: already-treated towns serve as controls, and their growing "
+                        "effects are subtracted. Goodman-Bacon's decomposition shows the forbidden comparisons.")
         self.staircase()
         self.verdict()
         self.bacon()
@@ -18,12 +24,10 @@ class Staggered(VoiceoverScene):
         self.fixes()
         self.event()
         self.board()
+        self.answer()
 
     def card(self):
-        card = chapter_card(9, r"Staggered adoption", r"When two-way fixed effects get the sign wrong", lit=(2021,), part=PART)
-        with self.voiceover("Chapter nine. Staggered adoption."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(9, r"Staggered adoption", r"When two-way fixed effects get the sign wrong", lit=(2021,), part=PART, said="Chapter nine. Staggered adoption.")
 
     def staircase(self):
         d = load("staggered")

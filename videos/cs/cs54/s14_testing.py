@@ -32,7 +32,7 @@ def py(v) -> str:
     return str(v).replace("'", "")
 
 
-class Testing(VoiceoverScene):
+class Testing(WatchScene):
     def construct(self):
         self.card()
         self.coverage()
@@ -40,15 +40,10 @@ class Testing(VoiceoverScene):
         self.mutation()
         self.properties()
         self.fuzzing()
-        self.symbolic()
 
     def card(self):
-        card = chapter_card(13, r"Testing as science", r"What does a passing test tell us?", lit=(1990, 2000),
-                            extra=((1990, r"Miller: \ random input to Unix utilities"),
-                                   (2000, r"QuickCheck")), part=PART)
-        with self.voiceover("Chapter thirteen. Testing as science."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(13, r"Testing as science", r"What does a passing test tell us?", lit=(1990, 2000), extra=((1990, r"Miller: \ random input to Unix utilities"),
+                                   (2000, r"QuickCheck")), part=PART, said="Chapter thirteen. Testing as science.")
 
     def coverage(self):
         tri = load("coverage")["triangle_random"]
@@ -265,6 +260,10 @@ class Testing(VoiceoverScene):
         self.clear_scene()
 
     def fuzzing(self):
+        self.ask(r"1990: random characters fed to Unix utilities. \\ Crashed or hung:", [r"almost none",
+                 r"a quarter to a third"], 1,
+                 say="In 1990, students fed random characters to standard Unix utilities. How many crashed or hung?",
+                 reveal="A quarter to a third of them.")
         head = label(r"Coverage-guided fuzzing", font_size=36).to_edge(UP, buff=0.3)
         code = code_block(["if buf[0] == 'F':", "    if buf[1] == 'U':", "        if buf[2] == 'Z':",
                            "            crash()"], size=20)
@@ -318,72 +317,6 @@ class Testing(VoiceoverScene):
         self.wait(0.4)
         self.clear_scene()
 
-    def symbolic(self):
-        head = label(r"Symbolic and concolic execution", font_size=36).to_edge(UP, buff=0.3)
-        conds = ["a<=0 or b<=0 or c<=0", "a+b<=c or a+c<=b or b+c<=a", "a==b and b==c", "a==b or b==c or a==c"]
-        leaves = ["invalid", "invalid", "equilateral", "isosceles"]
-        ds = VGroup(*[tag_box(c, color=GREY_B, size=16, h=0.5) for c in conds]).arrange(DOWN, buff=0.45)
-        ds.next_to(head, DOWN, buff=0.45).to_edge(LEFT, buff=0.5)
-        for d in ds:
-            d.align_to(ds, LEFT)
-        lv = VGroup(*[tag_box(t, color=NO if t == "invalid" else (YES if t == "equilateral" else LAM), size=16,
-                              h=0.45) for t in leaves])
-        for leaf, d in zip(lv, ds):
-            leaf.next_to(d, RIGHT, buff=0.7).set_x(ds.get_right()[0] + 0.8, direction=LEFT)
-        last = tag_box("scalene", color=LAM, size=16, h=0.45).next_to(ds[-1], DOWN, buff=0.45).align_to(ds, LEFT)
-        t_arr = VGroup(*[Arrow(d.get_right(), leaf.get_left(), buff=0.06, color=GREY_B, stroke_width=1.8,
-                               max_tip_length_to_length_ratio=0.2) for d, leaf in zip(ds, lv)])
-        xl = ds.get_left()[0] + 0.45
-        f_arr = VGroup(*[Arrow([xl, ds[k].get_bottom()[1], 0], [xl, (ds[k + 1] if k < 3 else last).get_top()[1], 0],
-                               buff=0.05, color=GREY_B, stroke_width=1.8, max_tip_length_to_length_ratio=0.3)
-                         for k in range(4)])
-        tf = VGroup(label(r"true $\rightarrow$", font_size=16, color=GREY_B).next_to(t_arr[0], UP, buff=0.05),
-                    label(r"false $\downarrow$", font_size=16, color=GREY_B).next_to(f_arr[0], RIGHT, buff=0.1))
-        pcs = VGroup(MathTex(r"\neg(a \le 0 \vee b \le 0 \vee c \le 0)", font_size=28),
-                     MathTex(r"\wedge\ \neg(a + b \le c \vee a + c \le b \vee b + c \le a)", font_size=28),
-                     MathTex(r"\wedge\ a = b \wedge b = c", font_size=28)).arrange(DOWN, buff=0.15, aligned_edge=LEFT)
-        pcl = label(r"the path condition for \texttt{equilateral}", font_size=19, color=HEAD)
-        pg = VGroup(pcl, pcs).arrange(DOWN, buff=0.25, aligned_edge=LEFT).move_to([3.4, 1.4, 0])
-        if pg.get_right()[0] > 6.85:
-            pg.shift(LEFT * (pg.get_right()[0] - 6.85))
-        simp = MathTex(r"a = b = c", r"\;\wedge\;", r"a > 0", font_size=32, color=YES)
-        model = MathTex(r"\text{solver: } a = b = c = 1", font_size=32, color=YES)
-        sg = VGroup(simp, model).arrange(DOWN, buff=0.25).next_to(pg, DOWN, buff=0.4)
-        sl = label(r"the test that 300 random ones missed", font_size=18, color=YES).next_to(sg, DOWN, buff=0.1)
-        notes = wrapped_label(r"KLEE \ (Cadar, \ Dunbar and Engler, \ 2008): \ symbolic execution of real C "
-                              r"programs; \ DART \ (2005): \ \textbf{concolic}, \ run concretely, \ then solve for the "
-                              r"branch not taken. \ The limit: \ paths multiply with every branch and loop", 5.6,
-                              font_size=19, color=GREY_A).next_to(sl, DOWN, buff=0.35)
-        notes.align_to(pg, LEFT)
-        if notes.get_right()[0] > 6.85:
-            notes.shift(LEFT * (notes.get_right()[0] - 6.85))
-        with self.voiceover(
-            "Symbolic execution runs the program on symbols instead of numbers. <bookmark mark='a'/> At each branch "
-            "the path splits, and each path collects a condition. <bookmark mark='b'/> To reach equilateral, no side "
-            "may be zero or negative, <bookmark mark='c'/> the sides must make a real triangle, <bookmark mark='d'/> "
-            "and they must be equal. <bookmark mark='e'/> Simplified: three equal, positive sides. A solver returns "
-            "one, one, one, the test that three hundred random ones missed. <bookmark mark='f'/> KLEE, in 2008, did "
-            "this for real C programs. Concolic testing, from DART in 2005, runs concretely, then solves for the "
-            "branch not taken. The limit is the number of paths, which multiplies with every branch and loop."
-        ) as vo:
-            self.play(FadeIn(head))
-            vo.wait_until("a")
-            self.play(LaggedStart(*[FadeIn(d) for d in ds], lag_ratio=0.2), Create(f_arr), Create(t_arr),
-                      FadeIn(lv), FadeIn(last), FadeIn(tf), run_time=2)
-            vo.wait_until("b")
-            self.play(FadeIn(pcl), FadeIn(pcs[0]), f_arr[0].animate.set_color(HEAD), ds[0][0].animate.set_stroke(HEAD))
-            vo.wait_until("c")
-            self.play(FadeIn(pcs[1]), f_arr[1].animate.set_color(HEAD), ds[1][0].animate.set_stroke(HEAD))
-            vo.wait_until("d")
-            self.play(FadeIn(pcs[2]), t_arr[2].animate.set_color(YES), ds[2][0].animate.set_stroke(HEAD),
-                      Indicate(lv[2], color=YES))
-            vo.wait_until("e")
-            self.play(ReplacementTransform(pcs.copy(), simp))
-            self.play(FadeIn(model), FadeIn(sl))
-            vo.wait_until("f")
-            self.play(FadeIn(notes))
-        self.wait(0.4)
-        self.clear_scene()
 
 
 def buggy_insert(xs, x):

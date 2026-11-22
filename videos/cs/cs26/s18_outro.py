@@ -17,7 +17,7 @@ def tile(content, caption, color, TW=3.6, TH=2.3):
     return Group(frame, content, cap)
 
 
-class Outro(VoiceoverScene):
+class Outro(WatchScene):
     def construct(self):
         self.recap()
         self.payoffs()
@@ -44,6 +44,12 @@ class Outro(VoiceoverScene):
             self.play(LaggedStart(*[FadeIn(t, shift=UP * 0.15) for t in tiles], lag_ratio=0.25), run_time=4.0)
         self.wait(0.5)
         self.clear_scene()
+        self.checkpoint(
+            [(r"What does Ladner's theorem say?", r"If $P \ne NP$, problems lie strictly in between"),
+             (r"Name one barrier to proving $P \ne NP$.", r"Relativization, natural proofs, or algebrization")],
+            narration="Last checkpoint. What does Ladner's theorem say? And name one barrier to proving P is not NP.",
+            answers_narration="If P is not NP, some problems are neither easy nor complete. And relativization, natural "
+                              "proofs and algebrization each rule out whole families of proofs.")
 
     def payoffs(self):
         card = payoff_card([
@@ -99,7 +105,7 @@ class Outro(VoiceoverScene):
             r"threshold.",
         ], font_size=22)
         with self.voiceover(
-            'Six exercises, with worked guidance in the notes. Pause on any of them. The Sudoku build exercise retains the full formula, solver model and independently checked grid. The starred exercise estimates finite-size crossings and widths with uncertainty; it does not establish an asymptotic threshold or scaling exponent.'
+            'Six exercises, with worked guidance in the notes. Pause on any of them. The Sudoku build exercise retains the full formula, solver model and independently checked grid. The starred exercise estimates finite-size crossings and widths with uncertainty.'
         ):
             self.play(FadeIn(ps.head), LaggedStart(*[FadeIn(r) for r in ps.rows], lag_ratio=0.3), run_time=3.0)
         self.wait(6.0)
@@ -115,7 +121,7 @@ class Outro(VoiceoverScene):
         items.move_to(UP * 0.0)
         q = label(r"Act V: \ limits and secrets", font_size=26, color=GREY_A).to_edge(DOWN, buff=0.8)
         with self.voiceover(
-            'Next, proofs that use randomness. Zero-knowledge protocols can convince a verifier while revealing no additional knowledge under their precise definition and assumptions. Interaction gives the class IP, equal to PSPACE; that equality does not prove a strict separation from NP. The PCP theorem uses logarithmically many random bits and a constant number of proof queries: true statements have an accepting proof, while false statements are rejected with bounded probability for every purported proof. It is not a guarantee to detect every changed bit in a proof. Part 27 develops those definitions and their consequences for approximation.'
+            'Next, proofs that use randomness. Zero-knowledge protocols can convince a verifier while revealing no additional knowledge under their precise definition and assumptions. Interaction gives the class IP, equal to PSPACE. The PCP theorem uses logarithmically many random bits and a constant number of proof queries: true statements have an accepting proof, while false statements are rejected with bounded probability for every purported proof. Part 27 develops those definitions and their consequences for approximation.'
         ):
             self.play(FadeIn(nxt), LaggedStart(*[FadeIn(i) for i in items], lag_ratio=0.3))
             self.play(FadeIn(q))

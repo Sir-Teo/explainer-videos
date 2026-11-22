@@ -5,21 +5,25 @@ import numpy as np
 from videos.stats.stats29.common import *  # noqa: F403
 
 
-class GAM(VoiceoverScene):
+class GAM(StatsScene):
     def construct(self):
         self.card()
+        self.ask("An additive model in $d$ variables converges at the rate of...",
+                 ["a $d$-dimensional smoother", "a one-dimensional smoother"], 1,
+                 say="Assume the regression is a sum of smooth curves, one per variable. At what rate does it "
+                     "converge?",
+                 reveal="At the one-dimensional rate, whatever d is. Additivity buys back what the dimensions took, "
+                        "at the price of an assumption to check.")
         self.model()
         self.backfitting()
         self.concurvity()
         self.ozone()
         self.verdict()
         self.extensions()
+        self.answer()
 
     def card(self):
-        card = chapter_card(10, r"Additive models", r"Many variables, \ one dimension at a time", lit=(1990,), part=PART)
-        with self.voiceover("Chapter ten. Additive models."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(10, r"Additive models", r"Many variables, \ one dimension at a time", lit=(1990,), part=PART, said="Chapter ten. Additive models.")
 
     def model(self):
         rows = [

@@ -6,7 +6,7 @@ from explainer.cs import *  # noqa: F403
 from videos.cs.cs5.common import BG, CLOCK, CODE, COST, CTRL, DATA, FUNC, HEAD, INF, NO, PART, WIRE, YES, load
 
 
-class Rowhammer(VoiceoverScene):
+class Rowhammer(WatchScene):
     def construct(self):
         self.card()
         self.hammer()
@@ -14,13 +14,20 @@ class Rowhammer(VoiceoverScene):
         self.exploit()
 
     def card(self):
-        card = chapter_card(12, r"When memory leaks", r"Can reading memory change it?", lit=(2014, 2015), part=PART)
-        with self.voiceover("Chapter twelve. When memory leaks."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(12, r"When memory leaks", r"Can reading memory change it?", lit=(2014, 2015), part=PART, said="Chapter twelve. When memory leaks.")
 
     # ------------------------------------------------------------------
     def hammer(self):
+        self.wrong_idea(r"Memory holds exactly what you wrote, \\ until you write again",
+                        r"Physics leaks through: \\ reading one row can flip bits in another",
+                        narration="Every layer of a computer promises something simple. Memory promises to hold what you wrote "
+                                  "until you write again.",
+                        right_narration="It doesn't always. Underneath the abstraction is physics, and in 2014 the physics leaked "
+                                        "through.")
+        self.clear_scene()
+        self.ask(r"Read one row of memory, over and over. \\ Can that change a \textit{different} row?", [r"no", r"yes"], 1,
+                 say="Read one row of memory again and again. Can that change the data in a different row?",
+                 reveal="Yes. The neighbours leak charge, and the weakest cells flip.")
         head = label(r"Rowhammer \ (Kim et al., 2014)", font_size=38).to_edge(UP, buff=0.3)
         rng = np.random.default_rng(7)
         nrows, ncols = 7, 16

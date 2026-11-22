@@ -6,9 +6,14 @@ from explainer.stats.kit import robust as R
 from videos.stats.stats30.common import *  # noqa: F403
 
 
-class Huber(VoiceoverScene):
+class Huber(StatsScene):
     def construct(self):
         self.card()
+        self.ask("Huber's estimator treats residuals as...",
+                 ["squares near zero, absolute values far out", "squares everywhere", "absolute values everywhere"], 0,
+                 say="Huber's 1964 minimax estimator for a contaminated normal. How does it treat residuals?",
+                 reveal="As squares near zero and absolute values far out: least squares for the good data, a "
+                        "bounded pull for the bad. The best worst case.")
         self.problem()
         self.least_favourable()
         self.solution()
@@ -19,12 +24,10 @@ class Huber(VoiceoverScene):
         self.irls()
         self.weights()
         self.proposal2()
+        self.answer()
 
     def card(self):
-        card = chapter_card(5, r"Huber's minimax estimator", r"The best worst case", lit=(1964,), part=PART)
-        with self.voiceover("Chapter five. Huber's minimax estimator."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(5, r"Huber's minimax estimator", r"The best worst case", lit=(1964,), part=PART, said="Chapter five. Huber's minimax estimator.")
 
     def problem(self):
         rows = [

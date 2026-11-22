@@ -19,7 +19,7 @@ def cells(s, color=GREY_B, y=0.0, x0=None, font=22):
     return g
 
 
-class Naive(VoiceoverScene):
+class Naive(WatchScene):
     def construct(self):
         self.card()
         self.slide()
@@ -27,10 +27,7 @@ class Naive(VoiceoverScene):
         self.worst()
 
     def card(self):
-        card = chapter_card(1, r"Matching, \ the obvious way", r"How much work is it to find a word?", part=PART)
-        with self.voiceover("Chapter one. Matching, the obvious way."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(1, r"Matching, \ the obvious way", r"How much work is it to find a word?", part=PART, said="Chapter one. Matching, the obvious way.")
 
     def slide(self):
         d = load("naive")
@@ -113,6 +110,11 @@ class Naive(VoiceoverScene):
         self.clear_scene()
 
     def worst(self):
+        self.ask(r"Search for \texttt{aaaa\ldots ab} in a text of nothing but a's. \\ The naive comparisons?",
+                 [r"about $n$", r"about $n \cdot m$"], 1,
+                 say="Search for a run of a's ending in b, in a text of nothing but a's. How many comparisons for the naive "
+                     "method?",
+                 reveal="About n times m: every position matches almost the whole pattern before failing.")
         d = load("naive")
         head = label(r"But not every text is English", font_size=34).to_edge(UP, buff=0.35)
         T = cells("aaaaaaaaaaaaaa", GREY_B, y=1.4)

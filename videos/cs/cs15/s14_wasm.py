@@ -7,7 +7,7 @@ from videos.cs.cs15.common import (BG, CODE, COST, CTRL, DATA, FUNC, HEAD, LAM, 
                                    load, mono, words)
 
 
-class Machines(VoiceoverScene):
+class Machines(WatchScene):
     def construct(self):
         self.card()
         self.wasm()
@@ -16,11 +16,7 @@ class Machines(VoiceoverScene):
         self.others()
 
     def card(self):
-        card = chapter_card(13, r"WebAssembly, \ and other machines", r"What else can a runtime be?", lit=(2017,),
-                            extra=((2017, r"WebAssembly"),), part=PART)
-        with self.voiceover("Chapter thirteen. WebAssembly, and other machines."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(13, r"WebAssembly, \ and other machines", r"What else can a runtime be?", lit=(2017,), extra=((2017, r"WebAssembly"),), part=PART, said="Chapter thirteen. WebAssembly, and other machines.")
 
     def wasm(self):
         d = load("wasm")
@@ -72,6 +68,10 @@ class Machines(VoiceoverScene):
         self.clear_scene()
 
     def validate(self):
+        self.ask(r"WebAssembly that would pop an empty stack. \\ When is it caught?", [r"at run time",
+                 r"before it runs, by validation"], 1,
+                 say="A WebAssembly function that would multiply with only one value on the stack. When is it caught?",
+                 reveal="Before it ever runs: validation type-checks the stack.")
         d = load("wasm")
         head = label(r"Validation is type checking", font_size=34).to_edge(UP, buff=0.3)
         bad = code(d["bad_wat"], size=18, color=CODE).next_to(head, DOWN, buff=0.5)
@@ -100,7 +100,7 @@ class Machines(VoiceoverScene):
                   color=YES),
             label('Watt (2018): mechanized specification/checker/interpreter; not all browser engines', font_size=20, color=HEAD),
         ).arrange(DOWN, buff=0.13).to_edge(DOWN, buff=0.35)
-        with self.voiceover("Validation rejects malformed typed code before execution. <bookmark mark='a'/> The broken factorial reaches i64.mul with only one operand. <bookmark mark='b'/> Node's validator rejects it; the diagnostic shown here is the actual output of this installed version. <bookmark mark='c'/> The validator tracks operand types and control contexts, checking branch signatures and each instruction's stack effect. Structured code supports a linear pass under the validation model. <bookmark mark='d'/> Conrad Watt's 2018 work mechanized a specification, checker and interpreter in Isabelle, finding and correcting specification issues. That is a specification-level soundness result, not a proof of every browser's optimizing engine. Validation, runtime memory checks and host policy each contribute to isolation.") as vo:
+        with self.voiceover("Validation rejects malformed typed code before execution. <bookmark mark='a'/> The broken factorial reaches i64.mul with only one operand. <bookmark mark='b'/> Node's validator rejects it; the diagnostic shown here is the actual output of this installed version. <bookmark mark='c'/> The validator tracks operand types and control contexts, checking branch signatures and each instruction's stack effect. Structured code supports a linear pass under the validation model. <bookmark mark='d'/> Conrad Watt's 2018 work mechanized a specification, checker and interpreter in Isabelle, finding and correcting specification issues. Validation, runtime memory checks and host policy each contribute to isolation.") as vo:
             self.play(FadeIn(head), run_time=0.5)
             self.play(FadeIn(bad), run_time=0.6)
             vo.wait_until('a')

@@ -5,7 +5,7 @@ from videos.cs.cs13.common import (CODE, CTRL, DATA, DEMO_POS, DEMO_POS_SMALL, F
                                    code, load, mono)
 
 
-class SSA(VoiceoverScene):
+class SSA(WatchScene):
     def construct(self):
         self.card()
         self.problem()
@@ -15,13 +15,13 @@ class SSA(VoiceoverScene):
         self.payoff()
 
     def card(self):
-        card = chapter_card(5, r"Static single assignment", r"What if every name were assigned exactly once?",
-                            lit=(1991,), extra=((1991, r"SSA form; \ the Web; \ Linux"),), part=PART)
-        with self.voiceover("Chapter five. Static single assignment."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(5, r"Static single assignment", r"What if every name were assigned exactly once?", lit=(1991,), extra=((1991, r"SSA form; \ the Web; \ Linux"),), part=PART, said="Chapter five. Static single assignment.")
 
     def problem(self):
+        self.ask(r"In static single assignment form, \\ each name is assigned...", [r"at least once", r"exactly once",
+                 r"any number of times"], 1,
+                 say="In static single assignment form, how many times is each name assigned?",
+                 reveal="Exactly once, in the program text. Joins get phi functions.")
         head = label(r"Which $s$ is this?", font_size=36).to_edge(UP, buff=0.3)
         before = code(["s = 0", "s = s + 3", "t = s * 2", "s = t - 1", "u = s + t"], size=22, color=CODE)
         after = code(["s1 = 0", "s2 = s1 + 3", "t1 = s2 * 2", "s3 = t1 - 1", "u1 = s3 + t1"], size=22, color=YES)

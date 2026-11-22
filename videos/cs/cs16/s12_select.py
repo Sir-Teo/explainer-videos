@@ -5,7 +5,7 @@ from videos.cs.cs16.common import (BG, CODE, COST, CTRL, DATA, FUNC, HEAD, LAM, 
                                    words)
 
 
-class Select(VoiceoverScene):
+class Select(WatchScene):
     def construct(self):
         self.card()
         self.quickselect()
@@ -13,13 +13,12 @@ class Select(VoiceoverScene):
         self.five()
 
     def card(self):
-        card = chapter_card(11, r"Selection and the median of medians", r"Can we find the median without sorting?",
-                            lit=(1973,), extra=((1973, r"Blum, Floyd, Pratt, Rivest and Tarjan"),), part=PART)
-        with self.voiceover("Chapter eleven. Selection and the median of medians."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(11, r"Selection and the median of medians", r"Can we find the median without sorting?", lit=(1973,), extra=((1973, r"Blum, Floyd, Pratt, Rivest and Tarjan"),), part=PART, said="Chapter eleven. Selection and the median of medians.")
 
     def quickselect(self):
+        self.ask(r"Find the median of $n$ numbers. \\ Must you sort them?", [r"yes", r"no: linear time is enough"], 1,
+                 say="Do you have to sort n numbers to find their median?",
+                 reveal="No. Selection runs in linear time, even in the worst case.")
         d = load("select")
         head = label(r"Quickselect: \ recurse on one side only", font_size=34).to_edge(UP, buff=0.3)
         pts = VGroup(
@@ -80,8 +79,7 @@ class Select(VoiceoverScene):
             (
             "The group size changes what this proof can establish. <bookmark mark='a'/> With groups of three, the "
             "elementary upper-bound recurrence has fractions one third and two thirds. Their sum is one, giving "
-            "an O of n log n bound by this argument. An upper-bound recurrence does not prove a matching lower "
-            "bound for the algorithm. <bookmark mark='b'/> With five, one fifth plus seven tenths is less than "
+            "an O of n log n bound by this argument. <bookmark mark='b'/> With five, one fifth plus seven tenths is less than "
             "one, so a linear toll gives a linear upper bound after accounting for rounding. <bookmark mark='c'/> "
             "Seven also gives a sum below one, with a different small-group cost. <bookmark mark='d'/> This "
             "shrinking-sum test applies to these linear-toll recurrences. It is not a universal characterization "
@@ -143,3 +141,9 @@ class Select(VoiceoverScene):
             vo.wait_until("e")
             self.play(FadeIn(steps[4]),FadeIn(measured))
         self.wait(0.3);self.clear_scene()
+        self.checkpoint(
+            [(r"Why is quicksort's average cost $2n\ln n$?", r"Keys $i$, $j$ meet with probability $2/(j-i+1)$"),
+             (r"How does radix sort dodge the lower bound?", r"It reads digits instead of comparing")],
+            narration="Checkpoint. Where does quicksort's two n log n come from? And how does radix sort dodge the lower bound?",
+            answers_narration="Two keys are compared only if one is the first pivot chosen between them. And radix sort reads "
+                              "digits instead of comparing keys.")

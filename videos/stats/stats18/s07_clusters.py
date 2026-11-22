@@ -7,9 +7,22 @@ from explainer.stats.world import World
 from videos.stats.stats18.common import *  # noqa: F403
 
 
-class Clusters(VoiceoverScene):
+class Clusters(StatsScene):
     def construct(self):
         self.card()
+        self.wrong_idea("Survey records can be analysed as independent observations",
+                        "Analyse as designed: clustering makes naive standard errors much too small",
+                        narration="A common shortcut: load the survey file and analyse its records as if they were "
+                                  "independent observations.",
+                        right_narration="Analyse as designed. People in the same town answer alike, so the naive "
+                                        "standard errors are much too small, and ignoring the weights biases the "
+                                        "estimates too.")
+        self.ask("20 interviews in each of 50 towns; intra-town correlation 0.05. The design effect?",
+                 ["1", "about 2", "about 20"], 1,
+                 say="Twenty interviews in each of fifty towns, and answers within a town correlate at point zero "
+                     "five. By what factor does clustering inflate the variance?",
+                 reveal="About two: one plus nineteen times point zero five. Cheaper interviews, but each town's "
+                        "twenty people say only about as much as ten independent ones.")
         self.why_clusters()
         self.icc_deff()
         self.one_sample()
@@ -17,12 +30,10 @@ class Clusters(VoiceoverScene):
         self.pps()
         self.pps_result()
         self.multistage()
+        self.answer()
 
     def card(self):
-        card = chapter_card(6, r"Clusters and stages", r"Cheaper interviews, \ correlated answers", part=PART)
-        with self.voiceover("Chapter six. Clusters and stages."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(6, r"Clusters and stages", r"Cheaper interviews, \ correlated answers", part=PART, said="Chapter six. Clusters and stages.")
 
     def multistage(self):
         rows = fit_rows(VGroup(

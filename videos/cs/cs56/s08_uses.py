@@ -73,7 +73,7 @@ def block(w, txt, col, h=0.42, size=17):
     return g
 
 
-class Uses(VoiceoverScene):
+class Uses(WatchScene):
     def construct(self):
         self.card()
         self.walk()
@@ -81,17 +81,11 @@ class Uses(VoiceoverScene):
         self.savings()
         self.codes()
         self.decoding()
-        self.dinur()
-        self.practice()
 
     def card(self):
-        card = chapter_card(7, r"Expanders at work", r"What can a graph that is impossible to cut do for us?",
-                            lit=(1981, 1996), extra=((1981, r"Tanner: \ codes on graphs"),
-                                                     (1996, r"Sipser and Spielman: \ expander codes")), part=PART)
-        with self.voiceover("Chapter seven. Expanders at work: saving random bits, correcting errors, and proving "
-                            "theorems."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(7, r"Expanders at work", r"What can a graph that is impossible to cut do for us?", lit=(1981, 1996), extra=((1981, r"Tanner: \ codes on graphs"),
+                                                     (1996, r"Sipser and Spielman: \ expander codes")), part=PART, said="Chapter seven. Expanders at work: saving random bits, correcting errors, and proving "
+                            "theorems.")
 
     # ------------------------------------------------------------------ a walk instead of fresh coins
     def walk(self):
@@ -149,6 +143,10 @@ class Uses(VoiceoverScene):
 
     # ------------------------------------------------------------------ the hitting bound
     def hitting(self):
+        self.ask(r"Amplify with an expander walk instead of fresh runs. \\ Random bits per extra run:", [r"$r$, as before",
+                 r"$\log_2 d$"], 1,
+                 say="Amplify a randomized algorithm by walking on an expander instead of drawing fresh random bits. How many new bits does each extra run cost?",
+                 reveal="Only log of the degree: ten bits a step, instead of two hundred and fifty-six.")
         head = label(r"The hitting bound", font_size=36).to_edge(UP, buff=0.3)
         fs = 32
         steps = VGroup(
@@ -245,7 +243,7 @@ class Uses(VoiceoverScene):
                           font_size=20, color=HEAD),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.35).move_to(RIGHT * 3.6 + DOWN * 0.1)
         with self.voiceover(
-            "What does it buy? <bookmark mark='a'/> Take an illustrative algorithm with two hundred and fifty-six "
+            "What does it buy? <bookmark mark='a'/> Take an algorithm with two hundred and fifty-six "
             "random bits and a bad half, and an expander with lambda a quarter and degree two to the ten: ten bits a "
             "step. <bookmark mark='b'/> Each step multiplies the failure bound by three quarters. <bookmark "
             "mark='c'/> For an error of two to the minus twenty, independent runs need five thousand one hundred and "
@@ -411,136 +409,14 @@ class Uses(VoiceoverScene):
             self.play(FadeIn(thm))
         self.wait(0.4)
         self.clear_scene()
+        self.checkpoint(
+            [(r"What sets a walk's mixing time?", r"The spectral gap"),
+             (r"What does the expander mixing lemma say?", r"Edge counts between sets are near random")],
+            narration="Checkpoint. What sets how fast a random walk mixes? And what does the expander mixing lemma say?",
+            answers_narration="The spectral gap. And the number of edges between any two sets is close to what a random graph "
+                              "would give, within lambda times root of their sizes.")
 
-    # ------------------------------------------------------------------ Dinur's gap amplification
-    def dinur(self):
-        head = label(r"The PCP theorem by gap amplification", font_size=36).to_edge(UP, buff=0.3)
-        n = 8
-        pos = ring(n, 1.45)
-        edges = [(k, (k + 1) % n) for k in range(n)] + [(0, 4), (1, 5), (2, 6), (3, 7)]
-        center = LEFT * 4.8 + UP * 0.55
-        g = draw(pos, edges, center=center, r=0.15, sw=2)
-        colours = [DATA, KERN, LAM, DATA, KERN, LAM, KERN, DATA]
-        for dt, col in zip(g[1], colours):
-            dt.set_color(col)
-        bad = [k for k, (a, b) in enumerate(edges) if colours[a] == colours[b]]
-        cap = label(rf"{len(bad)} of {len(edges)} constraints violated", font_size=19, color=NO).next_to(
-            g, DOWN, buff=0.3)
-        ill = note(r"illustrative: \ a 3-colouring as constraints", font_size=16).next_to(cap, DOWN, buff=0.1)
-        names = [(r"make it an expander", r"gap $\div$ a constant", KERN),
-                 (r"walks of length $t$", r"gap $\times$ a factor growing with $t$", YES),
-                 (r"shrink the alphabet", r"gap $\div$ a constant", LAM)]
-        boxes = VGroup()
-        for nm, eff, col in names:
-            b = RoundedRectangle(width=2.35, height=0.75, corner_radius=0.1, stroke_color=col, stroke_width=2,
-                                 fill_color=BG, fill_opacity=1)
-            t = label(nm, font_size=18, color=col).move_to(b)
-            e = label(eff, font_size=17, color=GREY_A).next_to(b, DOWN, buff=0.1)
-            boxes.add(VGroup(b, t, e))
-        boxes.arrange(RIGHT, buff=0.35).move_to(RIGHT * 2.75 + UP * 2.2)
-        arrows = VGroup(*[Arrow(boxes[k][0].get_right(), boxes[k + 1][0].get_left(), buff=0.05, color=GREY_B,
-                                stroke_width=2, max_tip_length_to_length_ratio=0.3) for k in range(2)])
-        fs = 30
-        steps = VGroup(
-            cmath(r"\mathrm{gap}_0", r"\ge", r"\tfrac{1}{m}", font_size=fs),
-            cmath(r"\mathrm{gap}_{i+1}", r"\ge", r"\min(2\,\mathrm{gap}_i,\ \varepsilon_0)", font_size=fs),
-            cmath(r"\mathrm{size}_{i+1}", r"\le", r"C \cdot \mathrm{size}_i", font_size=fs),
-            cmath(r"\text{after } \log_2 m \text{ rounds:}", r"\quad", r"\mathrm{gap} \ge \varepsilon_0,",
-                  r"\quad", r"\mathrm{size} \le m^{1 + \log_2 C}", font_size=fs),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.3).next_to(boxes, DOWN, buff=0.6).align_to(boxes, LEFT)
-        steps[3].set_color(YES)
-        whys = VGroup(
-            label(r"unsatisfiable: \ at least one of $m$ constraints fails", font_size=18, color=GREY_B),
-            label(r"one round of the three steps", font_size=18, color=GREY_B),
-            label(r"each round grows the graph by a constant factor", font_size=18, color=GREY_B),
-        )
-        for w, s in zip(whys, steps[:3]):
-            w.next_to(s, RIGHT, buff=0.4)
-        why_exp = wrapped_label(r"on an expander a walk meets a set of bad edges nearly as often as independent "
-                                r"samples would: \ the same fact as the hitting bound", 12.4, font_size=20,
-                                color=HEAD).to_edge(DOWN, buff=0.3)
-        with self.voiceover(
-            "Expanders also drive Irit Dinur's proof of the PCP theorem, from Part 27. <bookmark mark='a'/> Write a "
-            "problem as constraints on a graph's edges, like a colouring. If it is unsatisfiable, at least one of the"
-            " m constraints fails: a gap of one over m. <bookmark mark='b'/> Each round does three things: make the "
-            "graph an expander, losing a constant factor; replace constraints by walks of length t, so the gap grows "
-            "with t; and shrink the alphabet back, losing another constant. <bookmark mark='c'/> With t a large "
-            "constant, each round at least doubles the gap, up to a ceiling, and grows the graph by a constant "
-            "factor. <bookmark mark='d'/> After logarithmically many rounds the gap is constant and the size "
-            "polynomial. <bookmark mark='e'/> Walks work because, on an expander, they meet bad edges about as often "
-            "as independent samples."
-        ) as vo:
-            self.play(FadeIn(head), Create(g[0]), FadeIn(g[1]))
-            vo.wait_until("a")
-            self.play(*[g[0][k].animate.set_stroke(NO, width=5) for k in bad], FadeIn(cap), FadeIn(ill),
-                      Write(steps[0]), FadeIn(whys[0]))
-            vo.wait_until("b")
-            self.play(LaggedStart(*[FadeIn(b) for b in boxes], lag_ratio=0.5), FadeIn(arrows), run_time=2.5)
-            vo.wait_until("c")
-            self.play(FadeIn(steps[1], shift=DOWN * 0.1), FadeIn(whys[1]))
-            self.play(FadeIn(steps[2], shift=DOWN * 0.1), FadeIn(whys[2]))
-            vo.wait_until("d")
-            self.play(FadeIn(steps[3], shift=DOWN * 0.1))
-            vo.wait_until("e")
-            self.play(FadeIn(why_exp))
-        self.wait(0.4)
-        self.clear_scene()
 
-    # ------------------------------------------------------------------ in practice
-    def practice(self):
-        head = label(r"In practice: \ random wiring", font_size=36).to_edge(UP, buff=0.3)
-        n = 12
-        center = LEFT * 3.4 + DOWN * 0.2
-        pos = ring(n, 2.2)
-        edges = random_regular_edges(n, 3, seed=11)
-        pts = [center + np.array([x, y, 0.0]) for x, y in pos]
-        links = VGroup(*[Line(pts[a], pts[b], color=GREY_C, stroke_width=1.8) for a, b in edges])
-
-        def switch(p, col=KERN):
-            return RoundedRectangle(width=0.42, height=0.3, corner_radius=0.05, stroke_color=col, stroke_width=2,
-                                    fill_color=BG, fill_opacity=1).move_to(p)
-        sw = VGroup(*[switch(p) for p in pts])
-        # Jellyfish's incremental growth: remove one link (a, b), wire both ends to the new switch
-        a, b = edges[0]
-        new_p = center + 0.45 * (pts[a] + pts[b] - 2 * center) / 2 + RIGHT * 0.0
-        new_sw = switch(new_p, col=YES)
-        old = links[0]
-        l1 = Line(pts[a], new_p, color=YES, stroke_width=2.5)
-        l2 = Line(pts[b], new_p, color=YES, stroke_width=2.5)
-        reg = load("regular")["rows"][0]
-        ill = note(r"illustrative: \ 12 switches, \ each with 3 links to others", font_size=16).to_corner(DL,
-                                                                                                   buff=0.25)
-        notes = VGroup(
-            wrapped_label(r"Jellyfish \ (Singla, \ Hong, \ Popa and Godfrey, \ 2012): \ wire a data centre's "
-                          r"top-of-rack switches as a random regular graph", 5.6, font_size=20, color=KERN),
-            wrapped_label(rf"nearly Ramanujan: \ chapter 5's random 3-regular graph had "
-                          rf"$\lambda = {reg['lambda']:.3f}$ against ${reg['ramanujan']:.3f}$; \ short paths, \ "
-                          r"no bottleneck cut", 5.6, font_size=20, color=YES),
-            wrapped_label(r"to grow, \ cut one link and wire both ends to the new switch", 5.6, font_size=20,
-                          color=GREY_A),
-            wrapped_label(r"Xpander \ (Valadarsky, \ Shahaf, \ Dinitz and Schapira, \ 2016): \ data-centre "
-                          r"networks designed as expanders", 5.6, font_size=20, color=LAM),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.35).move_to(RIGHT * 3.7 + DOWN * 0.1)
-        with self.voiceover(
-            "<bookmark mark='a'/> In 2012 Ankit Singla, Chi-Yao Hong, Lucian Popa and Brighten Godfrey proposed "
-            "Jellyfish: wire a data centre's switches together at random. <bookmark mark='b'/> A random regular graph"
-            " is nearly Ramanujan, as chapter five measured, so paths stay short and no cut is a bottleneck. "
-            "<bookmark mark='c'/> And it grows gracefully: cut one link and wire both its ends to the new switch. "
-            "<bookmark mark='d'/> Xpander, in 2016, designed such networks as expanders on purpose. Next, the "
-            "Laplacian as a circuit."
-        ) as vo:
-            self.play(FadeIn(head), Create(links), FadeIn(sw), FadeIn(ill))
-            vo.wait_until("a")
-            self.play(FadeIn(notes[0]))
-            vo.wait_until("b")
-            self.play(FadeIn(notes[1]), Indicate(links, color=YES))
-            vo.wait_until("c")
-            self.play(FadeIn(notes[2]), old.animate.set_stroke(NO, width=4))
-            self.play(FadeOut(old), FadeIn(new_sw), Create(l1), Create(l2))
-            vo.wait_until("d")
-            self.play(FadeIn(notes[3]))
-        self.wait(0.4)
-        self.clear_scene()
 
 
 _ = (BG, DATA, LAM)

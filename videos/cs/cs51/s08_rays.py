@@ -119,7 +119,7 @@ def segs_mob(segs):
     return g
 
 
-class Rays(VoiceoverScene):
+class Rays(WatchScene):
     def construct(self):
         self.card()
         self.primary()
@@ -127,15 +127,10 @@ class Rays(VoiceoverScene):
         self.triangle()
         self.tree()
         self.snell()
-        self.fresnel()
 
     def card(self):
-        card = chapter_card(7, r"Ray tracing", r"What does the eye see along one line?", lit=(1968, 1980, 1997),
-                            extra=((1968, r"Appel: \ ray casting"), (1980, r"Whitted: \ recursive rays"),
-                                   (1997, r"M\"oller and Trumbore")), part=PART)
-        with self.voiceover("Chapter seven. Ray tracing."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(7, r"Ray tracing", r"What does the eye see along one line?", lit=(1968, 1980, 1997), extra=((1968, r"Appel: \ ray casting"), (1980, r"Whitted: \ recursive rays"),
+                                   (1997, r"M\"oller and Trumbore")), part=PART, said="Chapter seven. Ray tracing.")
 
     def primary(self):
         w = load("whitted")
@@ -190,6 +185,9 @@ class Rays(VoiceoverScene):
         self.clear_scene()
 
     def sphere(self):
+        self.ask(r"Where does a ray meet a sphere? \\ Solve...", [r"a linear equation", r"a quadratic"], 1,
+                 say="Where does a ray meet a sphere? What kind of equation do we solve?",
+                 reveal="A quadratic in the distance along the ray: two roots, one root, or none.")
         head = label(r"Ray meets sphere: \ a quadratic", font_size=36).to_edge(UP, buff=0.3)
         C = np.array([-3.8, 0.3, 0])
         R = 1.5
@@ -460,65 +458,6 @@ class Rays(VoiceoverScene):
         self.wait(0.4)
         self.clear_scene()
 
-    def fresnel(self):
-        w = load("whitted")
-        head = label(r"How much reflects? \ Fresnel and Schlick", font_size=36).to_edge(UP, buff=0.3)
-        ax = Axes(x_range=[0, 90, 15], y_range=[0, 1, 0.25], x_length=5.6, y_length=3.0,
-                  axis_config={"color": GREY_D, "include_ticks": True}).move_to([-3.4, 0.4, 0])
-        xt = VGroup(*[label(rf"{v}$^\circ$", font_size=16, color=GREY_B).next_to(ax.c2p(v, 0), DOWN, buff=0.1)
-                      for v in (0, 30, 60, 90)])
-        yt = VGroup(*[label(rf"{v:g}", font_size=16, color=GREY_B).next_to(ax.c2p(0, v), LEFT, buff=0.1)
-                      for v in (0, 0.5, 1)])
-        xl = label(r"angle of incidence, \ air into glass", font_size=17, color=GREY_A).next_to(xt, DOWN, buff=0.1)
-        yl = label(r"reflected fraction $R$", font_size=17, color=GREY_A).next_to(ax, UP, buff=0.1).align_to(ax,
-                                                                                                         LEFT)
-        n1, n2 = 1.0, IOR
-        r0 = ((n1 - n2) / (n1 + n2)) ** 2
-
-        def exact(deg):
-            ci = math.cos(math.radians(deg))
-            st = n1 / n2 * math.sqrt(max(0.0, 1 - ci * ci))
-            ct = math.sqrt(max(0.0, 1 - st * st))
-            rs = ((n1 * ci - n2 * ct) / (n1 * ci + n2 * ct)) ** 2
-            rp = ((n1 * ct - n2 * ci) / (n1 * ct + n2 * ci)) ** 2
-            return (rs + rp) / 2
-
-        def schlick(deg):
-            return r0 + (1 - r0) * (1 - math.cos(math.radians(deg))) ** 5
-        ce = ax.plot(exact, x_range=[0, 89.9, 0.5], color=GREY_A, stroke_width=3)
-        cs = DashedVMobject(ax.plot(schlick, x_range=[0, 90, 0.5], color=YES, stroke_width=3), num_dashes=40)
-        leg = VGroup(label(r"exact Fresnel", font_size=17, color=GREY_A),
-                     label(r"Schlick", font_size=17, color=YES)).arrange(DOWN, aligned_edge=LEFT, buff=0.1)
-        leg.move_to(ax.c2p(22, 0.72))
-        rows = VGroup(
-            MathTex(r"R(\theta) = R_0 + (1 - R_0)(1 - \cos\theta)^5", font_size=32),
-            MathTex(r"R_0 = \Big(\frac{n_1 - n_2}{n_1 + n_2}\Big)^2", r"= \Big(\frac{1 - 1.5}{1 + 1.5}\Big)^2",
-                    rf"= {r0:.2f}", font_size=30),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.35).move_to([3.4, 2.0, 0])
-        rows[1][2].set_color(HEAD)
-        img = image(w["image"], height=2.55).next_to(rows, DOWN, buff=0.35).set_x(3.4)
-        cap = wrapped_label(r"our glass ball: \ reflected rays weighted $R$, \ refracted rays $1 - R$; \ its rim "
-                            r"is a mirror", 5.4, font_size=18, color=GREY_A).next_to(img, DOWN, buff=0.12)
-        with self.voiceover(
-            "How much light reflects, and how much goes through? <bookmark mark='a'/> Fresnel's equations answer "
-            "exactly: head on, glass reflects four per cent, climbing to all of it at grazing angles. "
-            "<bookmark mark='b'/> In 1994 Christophe Schlick fitted this with one fifth power, <bookmark mark='c'/> "
-            "anchored at the head-on value, four hundredths for glass. <bookmark mark='d'/> Our tracer gives each "
-            "glass hit a reflected ray weighted by R and a refracted ray weighted by one minus R, and drops branches "
-            "whose weight is negligible. So the rim of our glass ball mirrors the floor and the sky, while its middle "
-            "shows the scene behind it, bent by refraction."
-        ) as vo:
-            self.play(FadeIn(head), Create(ax), FadeIn(xt), FadeIn(yt), FadeIn(xl), FadeIn(yl))
-            vo.wait_until("a")
-            self.play(Create(ce), FadeIn(leg[0]), run_time=2)
-            vo.wait_until("b")
-            self.play(Write(rows[0]), Create(cs), FadeIn(leg[1]), run_time=2)
-            vo.wait_until("c")
-            self.play(Write(rows[1]))
-            vo.wait_until("d")
-            self.play(FadeIn(img), FadeIn(cap))
-        self.wait(0.4)
-        self.clear_scene()
 
 
 _ = (BG, DATA, HEAD, KERN, LAM, NO, YES)

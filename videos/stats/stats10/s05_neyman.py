@@ -6,20 +6,24 @@ from scipy import stats
 from videos.stats.stats10.common import *  # noqa: F403
 
 
-class Neyman(VoiceoverScene):
+class Neyman(StatsScene):
     def construct(self):
         self.card()
+        self.ask(r"Lower $\alpha$ from 5\% to 1\%, same sample size. The power...",
+                 ["rises", "falls", "stays the same"], 1,
+                 say="Neyman and Pearson's two kinds of error. Make the test stricter, alpha from five percent to "
+                     "one, with the same sample size. What happens to the power?",
+                 reveal="It falls. Fewer false alarms means more misses: with the data fixed, the two errors trade "
+                        "against each other.")
         self.history()
         self.table()
         self.curves()
         self.power_n()
         self.philosophies()
+        self.answer()
 
     def card(self):
-        card = chapter_card(4, r"Two kinds of error", r"Neyman and Pearson's theory of tests", lit=(1933,), part=PART)
-        with self.voiceover("Chapter four. Two kinds of error."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(4, r"Two kinds of error", r"Neyman and Pearson's theory of tests", lit=(1933,), part=PART, said="Chapter four. Two kinds of error.")
 
     def history(self):
         h1 = history_card(1928, r"Jerzy Neyman \& Egon Pearson", r"``On the use and interpretation of certain test criteria'': \ a test "

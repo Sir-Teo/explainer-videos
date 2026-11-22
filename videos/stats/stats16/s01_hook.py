@@ -5,13 +5,13 @@ import numpy as np
 from videos.stats.stats16.common import *  # noqa: F403
 
 
-class Hook(VoiceoverScene):
+class Hook(StatsScene):
     def construct(self):
         self.efron()
         self.scatter()
         self.formula()
         self.name()
-        self.objectives()
+        self.title(PART)
 
     def efron(self):
         tl = timeline(lit=(1979,)).to_edge(UP, buff=0.35)
@@ -110,28 +110,4 @@ class Hook(VoiceoverScene):
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
                 self.play(FadeIn(rows[k], shift=RIGHT * 0.2))
-        self.clear_scene()
-
-    def objectives(self):
-        head = VGroup(label(r"Part 16", font_size=34, color=GREY_B), label(r"Without Assumptions", font_size=60)).arrange(DOWN, buff=0.25)
-        obj = objectives_card([
-            r"permutation tests: \ exact $p$-values from exchangeability",
-            r"ranks: \ the sign test, \ Wilcoxon, \ Mann--Whitney, \ Kruskal--Wallis, \ Spearman, \ Kendall; \ their efficiency",
-            r"the jackknife, \ and the bootstrap principle",
-            r"bootstrap intervals: \ percentile, \ basic, \ $t$, \ BCa; \ and where the bootstrap fails",
-            r"cross-validation, \ and kernel density estimates, \ a first look",
-        ], color=BOOT, font_size=26)
-        prereq = note(r"prerequisites: \ Parts 8, \ 10 and 11").to_corner(DL, buff=0.3)
-        built = note(r"built: \ \texttt{statkit.bootstrap}, \ \texttt{statkit.ranks}; \ the resampler").to_corner(DR, buff=0.3)
-        with self.voiceover(
-            "<bookmark mark='a'/> Part sixteen: without assumptions is the title, but weaker assumptions is the promise. <bookmark mark='b'/> We'll build permutation tests from "
-            "exchangeability; the rank tests, from the sign test to Kendall's tau, and see how little they cost; the jackknife "
-            "and the bootstrap principle; four kinds of bootstrap interval, tested on the Coverage Board, and a case where the "
-            "bootstrap fails; and two methods we'll meet again: cross-validation and kernel density estimation."
-        ) as vo:
-            vo.wait_until("a")
-            self.play(FadeIn(head, shift=UP * 0.2))
-            vo.wait_until("b")
-            self.play(FadeOut(head), FadeIn(obj, shift=UP * 0.2), FadeIn(prereq), FadeIn(built))
-        self.wait(1.0)
         self.clear_scene()

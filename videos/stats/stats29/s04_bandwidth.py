@@ -5,9 +5,15 @@ import numpy as np
 from videos.stats.stats29.common import *  # noqa: F403
 
 
-class Bandwidth(VoiceoverScene):
+class Bandwidth(StatsScene):
     def construct(self):
         self.card()
+        self.ask("Silverman's rule-of-thumb bandwidth assumes the density is...",
+                 ["normal", "uniform", "bimodal"], 0,
+                 say="The best bandwidth depends on the unknown curvature of the density. Silverman's rule of thumb "
+                     "escapes by assuming what?",
+                 reveal="That the density is normal. For a bimodal density that oversmooths, and the bumps blur "
+                        "together; Sheather and Jones estimate the curvature instead.")
         self.reference()
         self.lscv_idea()
         self.lscv_curve()
@@ -15,12 +21,10 @@ class Bandwidth(VoiceoverScene):
         self.faithful_four()
         self.race()
         self.advice()
+        self.answer()
 
     def card(self):
-        card = chapter_card(3, r"Choosing the bandwidth", r"From the data, \ without knowing $f''$", lit=(1991,), part=PART)
-        with self.voiceover("Chapter three. Choosing the bandwidth."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(3, r"Choosing the bandwidth", r"From the data, \ without knowing $f''$", lit=(1991,), part=PART, said="Chapter three. Choosing the bandwidth.")
 
     def reference(self):
         rows = [

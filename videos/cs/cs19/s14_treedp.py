@@ -6,7 +6,7 @@ from videos.cs.cs19.common import (BG, CODE, COST, CTRL, DATA, FUNC, HEAD, LAM, 
                                    mono, words)
 
 
-class TreeDp(VoiceoverScene):
+class TreeDp(WatchScene):
     def construct(self):
         self.card()
         self.tree()
@@ -14,14 +14,13 @@ class TreeDp(VoiceoverScene):
         self.sequences()
 
     def card(self):
-        card = chapter_card(13, r"Dynamic programming on trees, \ graphs and sequences",
-                            r"What are the subproblems of a tree?", lit=(1967,),
-                            extra=((1962, r"Held and Karp"), (1967, r"Viterbi")), part=PART)
-        with self.voiceover("Chapter thirteen. Dynamic programming on trees, graphs and sequences."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(13, r"Dynamic programming on trees, \ graphs and sequences", r"What are the subproblems of a tree?", lit=(1967,), extra=((1962, r"Held and Karp"), (1967, r"Viterbi")), part=PART, said="Chapter thirteen. Dynamic programming on trees, graphs and sequences.")
 
     def tree(self):
+        self.ask(r"A party on a company tree: no one with their direct boss. \\ The best guest list takes...",
+                 [r"trying every subset", r"linear time, bottom-up"], 1,
+                 say="Invite employees to a party, but never anyone together with their direct boss. How hard is the best list?",
+                 reveal="Linear time: two numbers per employee, computed from the leaves up.")
         d = load("tree")
         head = label(r"Guests who must not meet their boss", font_size=34).to_edge(UP, buff=0.3)
         parent = {int(k): v for k, v in d["parent"].items()}

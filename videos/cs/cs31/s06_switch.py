@@ -17,18 +17,14 @@ def regfile(color, title, vals=None, cw=0.66, ch=0.46):
     return VGroup(t, cells)
 
 
-class Switch(VoiceoverScene):
+class Switch(WatchScene):
     def construct(self):
         self.card()
         self.mechanics()
         self.measured()
 
     def card(self):
-        card = chapter_card(5, r"The context switch", r"What does it cost to change programs?",
-                            lit=(1961,), extra=((1961, r"CTSS: \ swap to the drum"),), part=PART)
-        with self.voiceover("Chapter five. The context switch."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(5, r"The context switch", r"What does it cost to change programs?", lit=(1961,), extra=((1961, r"CTSS: \ swap to the drum"),), part=PART, said="Chapter five. The context switch.")
 
     def mechanics(self):
         d = load("switch")
@@ -78,6 +74,10 @@ class Switch(VoiceoverScene):
         self.clear_scene()
 
     def measured(self):
+        self.ask(r"Two processes bounce a byte through pipes. \\ One context switch costs about...", [r"nanoseconds",
+                 r"a few microseconds", r"a millisecond"], 1,
+                 say="Two processes bounce one byte back and forth through pipes. How long does each switch take?",
+                 reveal="A few microseconds: thousands of instructions' worth.")
         d = load("switch")
         head = label(r"Measured: \ a byte bounced between two processes", font_size=34).to_edge(UP, buff=0.3)
         A = RoundedRectangle(width=2.2, height=1.1, corner_radius=0.12, stroke_color=DATA, fill_color=BG,

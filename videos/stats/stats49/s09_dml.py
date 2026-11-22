@@ -5,20 +5,24 @@ import numpy as np
 from videos.stats.stats49.common import *  # noqa: F403
 
 
-class DMLTheory(VoiceoverScene):
+class DMLTheory(StatsScene):
     def construct(self):
         self.card()
+        self.ask("Root-$n$ inference after DML lets each nuisance converge as slowly as...",
+                 ["$n^{-1/2}$", "$n^{-1/4}$", "any rate"], 1,
+                 say="Double machine learning: orthogonal scores and cross-fitting. For root-n inference, how "
+                     "slowly may each nuisance estimate converge?",
+                 reveal="As slowly as n to the minus one quarter, since only the product of the two errors must "
+                        "vanish faster than one over root n. Machine learners can manage that.")
         self.orthogonality()
         self.conditions()
         self.chart()
         self.crossfit()
         self.practice()
+        self.answer()
 
     def card(self):
-        card = chapter_card(8, r"DML theory", r"Orthogonality, \ cross-fitting, \ and the product rate", lit=(2018,), part=PART)
-        with self.voiceover("Chapter eight. The theory of double machine learning: orthogonality, cross-fitting, and the product rate."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(8, r"DML theory", r"Orthogonality, \ cross-fitting, \ and the product rate", lit=(2018,), part=PART, said="Chapter eight. The theory of double machine learning: orthogonality, cross-fitting, and the product rate.")
 
     def orthogonality(self):
         rows = [

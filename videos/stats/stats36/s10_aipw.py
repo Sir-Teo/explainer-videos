@@ -3,9 +3,14 @@ from __future__ import annotations
 from videos.stats.stats36.common import *  # noqa: F403
 
 
-class AIPW(VoiceoverScene):
+class AIPW(StatsScene):
     def construct(self):
         self.card()
+        self.ask("AIPW is consistent if...",
+                 ["both models are right", "either model is right"], 1,
+                 say="Augmented inverse probability weighting combines an outcome model and a propensity model. "
+                     "When is it consistent?",
+                 reveal="If either model is right: two chances to be right. That's double robustness.")
         self.formula()
         self.why_()
         self.world()
@@ -13,12 +18,10 @@ class AIPW(VoiceoverScene):
         self.table()
         self.board()
         self.lesson()
+        self.answer()
 
     def card(self):
-        card = chapter_card(9, r"Double robustness", r"Two chances to be right", lit=(1994, 2007), part=PART)
-        with self.voiceover("Chapter nine. Double robustness."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(9, r"Double robustness", r"Two chances to be right", lit=(1994, 2007), part=PART, said="Chapter nine. Double robustness.")
 
     def formula(self):
         rows = [

@@ -9,20 +9,21 @@ XY = 1.45
 KZ = 0.42
 
 
-class Lifting(VoiceoverScene):
+class Lifting(WatchScene):
     def construct(self):
         self.card()
         self.tour()
         self.determinant()
 
     def card(self):
-        card = chapter_card(7, r"The lifting map", r"Why is Delaunay the shadow of a hull?", lit=(1979, 1986),
-                            extra=((1979, r"Brown"), (1986, r"Edelsbrunner--Seidel")), part=PART)
-        with self.voiceover("Chapter seven. The lifting map."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(7, r"The lifting map", r"Why is Delaunay the shadow of a hull?", lit=(1979, 1986), extra=((1979, r"Brown"), (1986, r"Edelsbrunner--Seidel")), part=PART, said="Chapter seven. The lifting map.")
 
     def tour(self):
+        self.ask(r"Lift the points onto $z = x^2 + y^2$. \\ The Delaunay triangulation appears as...",
+                 [r"the upper hull", r"the lower convex hull"], 1,
+                 say="Lift every point up onto the paraboloid z equals x squared plus y squared. Where does the Delaunay "
+                     "triangulation appear?",
+                 reveal="As the lower convex hull, seen from below.")
         d = load("lifting")
         P = [tuple(p) for p in d["P"]]
         lower = [tuple(int(i) for i in t) for t in d["lower"]]

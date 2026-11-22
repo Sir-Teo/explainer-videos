@@ -61,7 +61,7 @@ PEB = load1("pebbles")
 COLS = (NO, HEAD, YES, DATA, LAM, KERN)
 
 
-class Pebble(VoiceoverScene):
+class Pebble(WatchScene):
     def construct(self):
         self.card()
         self.piles()
@@ -72,11 +72,7 @@ class Pebble(VoiceoverScene):
         self.stone()
 
     def card(self):
-        card = chapter_card(11, r"The pebble, \ the last time", r"What did one rule become?",
-                            lit=(1928, 1936), part=PART)
-        with self.voiceover("Chapter eleven. The pebble, the last time."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(11, r"The pebble, \ the last time", r"What did one rule become?", lit=(1928, 1936), part=PART, said="Chapter eleven. The pebble, the last time.")
 
     # ------------------------------------------------------------------
     def piles(self):
@@ -133,6 +129,9 @@ class Pebble(VoiceoverScene):
 
     # ------------------------------------------------------------------
     def climb(self):
+        self.ask(r"Every gate in this series was built from...", [r"AND and OR", r"NAND alone"], 1,
+                 say="Part 3 built every logic gate this series used. From what?",
+                 reveal="NAND alone.")
         head = label(r"The tower the series built", font_size=36).to_edge(UP, buff=0.3)
         keys = [k for k, _ in LAYERS]
         dim = tower(lit=(), labels="all", height=5.6, width=3.0, font_size=17)

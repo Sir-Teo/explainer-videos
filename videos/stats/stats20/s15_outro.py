@@ -3,7 +3,7 @@ from __future__ import annotations
 from videos.stats.stats20.common import *  # noqa: F403
 
 
-class Outro(VoiceoverScene):
+class Outro(StatsScene):
     def construct(self):
         self.recap()
         self.payoffs()

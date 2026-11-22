@@ -5,20 +5,24 @@ import numpy as np
 from videos.stats.stats52.common import *  # noqa: F403
 
 
-class Laws(VoiceoverScene):
+class Laws(StatsScene):
     def construct(self):
         self.card()
+        self.ask("A large symmetric matrix of i.i.d. noise. Its scaled eigenvalues follow...",
+                 ["the semicircle", "a normal", "a uniform"], 0,
+                 say="A large symmetric matrix with independent noise entries, suitably scaled. What's the "
+                     "histogram of its eigenvalues?",
+                 reveal="Wigner's semicircle. For sample covariances, Marchenko and Pastur's law. Both come from "
+                        "the Stieltjes transform.")
         self.stieltjes()
         self.equation()
         self.inversion()
         self.wigner()
         self.universality()
+        self.answer()
 
     def card(self):
-        card = chapter_card(7, r"Random-matrix laws", r"The Stieltjes transform, \ Marchenko--Pastur and the semicircle", lit=(1967,), part=PART)
-        with self.voiceover("Chapter seven. Random-matrix laws: the Stieltjes transform, Marchenko–Pastur and the semicircle."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(7, r"Random-matrix laws", r"The Stieltjes transform, \ Marchenko--Pastur and the semicircle", lit=(1967,), part=PART, said="Chapter seven. Random-matrix laws: the Stieltjes transform, Marchenko–Pastur and the semicircle.")
 
     def stieltjes(self):
         rows = [

@@ -3,19 +3,23 @@ from __future__ import annotations
 from videos.stats.stats32.common import *  # noqa: F403
 
 
-class Upgrade(VoiceoverScene):
+class Upgrade(StatsScene):
     def construct(self):
         self.card()
+        self.ask("Best subset selection over 50 candidate variables means fitting...",
+                 ["50 models", "2,500 models", "about $10^{15}$ models"], 2,
+                 say="The most natural sparse method: try every subset of the variables. With fifty candidates, how "
+                     "many models is that?",
+                 reveal="Two to the fiftieth, about ten to the fifteen. Counting nonzeros is the right idea and an "
+                        "intractable search.")
         self.upgrade()
         self.problem()
         self.counting()
         self.plan()
+        self.answer()
 
     def card(self):
-        card = chapter_card(1, r"Upgrade: \ what Part 19 shrank", r"From a first look to the whole theory", lit=(1996,), part=PART)
-        with self.voiceover("Chapter one. An upgrade of Part 19."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(1, r"Upgrade: \ what Part 19 shrank", r"From a first look to the whole theory", lit=(1996,), part=PART, said="Chapter one. An upgrade of Part 19.")
 
     def upgrade(self):
         u = upgrade_card(19, r"ridge shrinks every coefficient; \ the lasso sets some to zero by soft thresholding; \ CV picks $\lambda$",

@@ -15,7 +15,7 @@ def unit(w, h, title, sub, color):
     return VGroup(b, t.move_to(b))
 
 
-class Alu(VoiceoverScene):
+class Alu(WatchScene):
     def construct(self):
         self.card()
         self.diagram()
@@ -23,10 +23,7 @@ class Alu(VoiceoverScene):
         self.verified()
 
     def card(self):
-        card = chapter_card(8, r"Pebble's ALU", r"What does one arithmetic unit need to do?", part=PART)
-        with self.voiceover("Chapter eight. Pebble's ALU."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(8, r"Pebble's ALU", r"What does one arithmetic unit need to do?", part=PART, said="Chapter eight. Pebble's ALU.")
 
     # ------------------------------------------------------------------
     def diagram(self):
@@ -78,6 +75,10 @@ class Alu(VoiceoverScene):
 
     # ------------------------------------------------------------------
     def compare_ops(self):
+        self.ask(r"Unsigned numbers: is $a < b$? \\ Which signal of $a - b$ tells you?",
+                 [r"its top bit", r"the carry out", r"the zero flag"], 1,
+                 say="For unsigned numbers, which signal of the subtraction a minus b tells you whether a is less than b?",
+                 reveal="The carry out. A borrow shows up as a missing carry.")
         head = label(r"Comparison is subtraction", font_size=38).to_edge(UP, buff=0.35)
         rows = VGroup(
             MathTex(r"\texttt{sltu}: \ a < b \text{ (unsigned)} \iff a - b \text{ borrows} \iff c_{out} = 0",

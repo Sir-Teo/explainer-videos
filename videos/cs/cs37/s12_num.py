@@ -4,7 +4,7 @@ from explainer.cs import *  # noqa: F403
 from videos.cs.cs37.common import (DATA, HEAD, KERN, LAM, NO, PART, WIN, YES, axes, box, grid_table, load, trace)
 
 
-class Num(VoiceoverScene):
+class Num(WatchScene):
     def construct(self):
         self.card()
         self.problem()
@@ -13,13 +13,9 @@ class Num(VoiceoverScene):
         self.meaning()
 
     def card(self):
-        card = chapter_card(11, r"TCP as optimization", r"What is congestion control maximizing?",
-                            lit=(1997, 1999), extra=((1997, r"Kelly: \ charging and rate control"),
+        self.chapter(11, r"TCP as optimization", r"What is congestion control maximizing?", lit=(1997, 1999), extra=((1997, r"Kelly: \ charging and rate control"),
                                                      (1998, r"Kelly, Maulloo and Tan"),
-                                                     (1999, r"Low and Lapsley")), part=PART)
-        with self.voiceover("Chapter eleven. TCP as an optimization algorithm."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+                                                     (1999, r"Low and Lapsley")), part=PART, said="Chapter eleven. TCP as an optimization algorithm.")
 
     def network(self, center):
         n = load("num")
@@ -43,6 +39,9 @@ class Num(VoiceoverScene):
         return g
 
     def problem(self):
+        self.ask(r"Kelly: congestion control maximizes the sum of...", [r"rates", r"logarithms of rates"], 1,
+                 say="Frank Kelly asked what congestion control optimizes. The sum of what?",
+                 reveal="Utilities of the rates, such as their logarithms: proportional fairness.")
         head = label(r"Kelly's question", font_size=36).to_edge(UP, buff=0.3)
         net = self.network([0, 1.3, 0]).scale(1.5)
         eqs = VGroup(

@@ -5,20 +5,28 @@ import numpy as np
 from videos.stats.stats44.common import *  # noqa: F403
 
 
-class Counting(VoiceoverScene):
+class Counting(StatsScene):
     def construct(self):
         self.card()
+        self.ask("The Nelson--Aalen estimator's variance comes from...",
+                 ["a martingale's predictable variation", "the bootstrap, necessarily"], 0,
+                 say="Counting processes in survival analysis. Where does the Nelson-Aalen estimator's variance "
+                     "come from?",
+                 reveal="From the predictable variation of a martingale: events minus their compensator. Every "
+                        "standard error in Part 40 was, underneath, a martingale calculation.")
         self.compensator()
         self.picture()
         self.aalen()
         self.logrank()
         self.rebolledo()
+        self.answer()
+        self.checkpoint([("Donsker: a rescaled random walk tends to?", "Brownian motion"),
+                         (r"The LIL's $\limsup S_n/\sqrt{2n \log\log n}$?", "1")],
+                        narration="Checkpoint. Random walks, far away.",
+                        answers_narration="Brownian motion. And one.")
 
     def card(self):
-        card = chapter_card(13, r"Counting processes", r"The martingales inside survival analysis", lit=(1978,), part=PART)
-        with self.voiceover("Chapter thirteen. Counting processes: the martingales inside survival analysis."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(13, r"Counting processes", r"The martingales inside survival analysis", lit=(1978,), part=PART, said="Chapter thirteen. Counting processes: the martingales inside survival analysis.")
 
     def compensator(self):
         rows = [

@@ -5,14 +5,14 @@ import numpy as np
 from videos.stats.stats37.common import *  # noqa: F403
 
 
-class Hook(VoiceoverScene):
+class Hook(StatsScene):
     def construct(self):
         self.story()
         self.streets()
         self.table()
         self.grand()
         self.question()
-        self.objectives()
+        self.title(PART)
 
     def story(self):
         tl = timeline(lit=(1855,)).to_edge(UP, buff=0.35)
@@ -167,30 +167,4 @@ class Hook(VoiceoverScene):
             for k, m_ in enumerate("abcde"):
                 vo.wait_until(m_)
                 self.play(FadeIn(rows[k], shift=RIGHT * 0.2))
-        self.clear_scene()
-
-    def objectives(self):
-        head = VGroup(label(r"Part 37", font_size=34, color=GREY_B), label(r"Natural Experiments", font_size=56)).arrange(DOWN, buff=0.25)
-        obj = objectives_card([
-            r"the credibility revolution; \ instruments, \ 2SLS, \ weak and many instruments",
-            r"Mendelian randomization; \ regression discontinuity and its validity",
-            r"differences-in-differences, \ its inference, \ staggered adoption",
-            r"honest parallel trends; \ synthetic control; \ synthetic DiD",
-            r"panel data and fixed effects; \ partial identification and bounds",
-        ], color=TAUC, font_size=26)
-        prereq = note(r"prerequisites: \ Parts 35 and 36").to_corner(DL, buff=0.3)
-        built = note(r"built: \ \texttt{statkit.quasi}; \ the cutoff lens; \ data: \ Snow, \ Card--Krueger, \ Prop 99").to_corner(DR, buff=0.3)
-        with self.voiceover(
-            "<bookmark mark='a'/> Part thirty-seven: natural experiments. <bookmark mark='b'/> We'll follow the credibility "
-            "revolution in economics; estimate effects with instruments, and see how weak or numerous instruments mislead; "
-            "use genes as instruments; read regression discontinuities and check them; estimate "
-            "differences-in-differences, with honest standard errors, with treatments that start at different times, and "
-            "with pre-trends we cannot rule out; build synthetic controls; handle panels with fixed effects; and, when no "
-            "design identifies the answer, bound it."
-        ) as vo:
-            vo.wait_until("a")
-            self.play(FadeIn(head, shift=UP * 0.2))
-            vo.wait_until("b")
-            self.play(FadeOut(head), FadeIn(obj, shift=UP * 0.2), FadeIn(prereq), FadeIn(built))
-        self.wait(1.0)
         self.clear_scene()

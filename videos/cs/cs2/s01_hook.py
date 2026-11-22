@@ -9,13 +9,13 @@ from videos.cs.cs2.common import (COST, CTRL, DATA, HEAD, HIST, NO, PART, YES, c
                                   tile_board)
 
 
-class Hook(VoiceoverScene):
+class Hook(WatchScene):
     def construct(self):
         self.craze()
         self.slide()
         self.argument()
         self.computed()
-        self.plan()
+        self.title(PART)
 
     # ------------------------------------------------------------------
     def craze(self):
@@ -195,29 +195,3 @@ class Hook(VoiceoverScene):
         self.wait(0.3)
         self.clear_scene()
 
-    # ------------------------------------------------------------------
-    def plan(self):
-        title = label(rf"Part {PART}: \ Proof and Counting", font_size=46).to_edge(UP, buff=0.4)
-        smap = series_map(current=PART).scale(0.92).next_to(title, DOWN, buff=0.35)
-        obj = objectives_card([
-            r"logic: \ propositions, \ connectives, \ quantifiers, \ and how to negate them",
-            r"proof: \ direct, \ contrapositive, \ contradiction, \ cases; \ induction, \ on numbers and on structures",
-            r"invariants and decreasing measures: \ the method that proves programs correct",
-            r"sets, \ relations, \ functions, \ orders; \ countable and uncountable",
-            r"counting: \ choices, \ Pascal's triangle, \ pigeonholes, \ inclusion--exclusion, \ Catalan numbers",
-            r"numbers: \ Bezout, \ congruences, \ the Chinese remainder theorem; \ chance, \ expectation, \ graphs",
-        ], font_size=26).move_to(DOWN * 0.2)
-        with self.voiceover(
-            "Part 1 used proofs without saying what a proof is. This is Part 2: proof and counting, the mathematics "
-            "the rest of the series stands on. <bookmark mark='a'/> Logic, the grammar of precise statements. The "
-            "standard ways to prove one, and induction, the proof that climbs. Invariants, like the one we just used, "
-            "which is how we will prove circuits, algorithms and distributed systems correct. Sets, relations, "
-            "functions and orders, and the sizes of infinite sets. Then counting: choices, Pascal's triangle, "
-            "pigeonholes, inclusion and exclusion, and the Catalan numbers. And finally numbers, chance and graphs, "
-            "which carry the cryptography, the algorithms and the networks of later acts."
-        ) as vo:
-            self.play(FadeIn(title), FadeIn(smap))
-            vo.wait_until("a")
-            self.play(FadeOut(smap), FadeIn(obj))
-        self.wait(0.4)
-        self.clear_scene()

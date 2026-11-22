@@ -4,23 +4,22 @@ from explainer.cs import *  # noqa: F403
 from videos.cs.cs30.common import (BG, CTRL, DATA, HEAD, LAM, NO, PART, YES, grid_table)
 
 
-class Frontier(VoiceoverScene):
+class Frontier(WatchScene):
     def construct(self):
         self.card()
         self.breaks()
         self.lattice_doubt()
-        self.open_()
 
     def card(self):
-        card = chapter_card(16, r"Frontier: \ post-quantum and beyond", r"What is still unknown about public keys?",
-                            lit=(2022, 2024, 2025), extra=((2022, r"SIKE and Rainbow broken"),
+        self.chapter(16, r"Frontier: \ post-quantum and beyond", r"What is still unknown about public keys?", lit=(2022, 2024, 2025), extra=((2022, r"SIKE and Rainbow broken"),
                                                            (2024, r"a quantum LWE claim, \ withdrawn"),
-                                                           (2025, r"HQC chosen")), part=PART)
-        with self.voiceover("Chapter sixteen. The frontier: post-quantum, and beyond."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+                                                           (2025, r"HQC chosen")), part=PART, said="Chapter sixteen. The frontier: post-quantum, and beyond.")
 
     def breaks(self):
+        self.ask(r"SIKE, a post-quantum finalist, fell in 2022. \\ Broken by...", [r"a quantum computer",
+                 r"a laptop, in about an hour"], 1,
+                 say="SIKE was a finalist in the post-quantum contest. In 2022 it was broken. By what?",
+                 reveal="By a classical computer, in about an hour.")
         head = label(r"New assumptions, \ new breaks", font_size=34).to_edge(UP, buff=0.3)
         tab = grid_table([r"family", r"example", r"status"], [
             [r"lattices", r"ML-KEM, \ ML-DSA", r"standardised, \ 2024"],
@@ -90,39 +89,3 @@ class Frontier(VoiceoverScene):
         self.wait(0.3)
         self.clear_scene()
 
-    def open_(self):
-        head = label(r"Open problems", font_size=34).to_edge(UP, buff=0.35)
-        items = VGroup(
-            label(r"1. \ Can factoring or discrete logarithms be solved in classical polynomial time?", font_size=22,
-                  color=WHITE),
-            label(r"2. \ Public-key encryption from one-way functions alone? \ (black-box methods cannot do it)",
-                  font_size=22, color=WHITE),
-            label(r"3. \ Is there a quantum algorithm for the lattice problems under ML-KEM?", font_size=22,
-                  color=WHITE),
-            label(r"4. \ Are there attacks on prime-order elliptic curves better than rho?", font_size=22,
-                  color=WHITE),
-            label(r"5. \ How fast does the concrete hardness of LWE grow with dimension?", font_size=22, color=WHITE),
-            label(r"6. \ Can computing on encrypted data become nearly as cheap as computing in the clear?",
-                  font_size=22, color=WHITE),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.32).next_to(head, DOWN, buff=0.5)
-        star = label(r"$\bigstar$ \ the part's research problem takes a small case of the fifth", font_size=22,
-                     color=GREY_A).to_edge(DOWN, buff=0.5)
-        with self.voiceover(
-            "Six open problems. <bookmark mark='a'/> Whether factoring or discrete logarithms can be solved in "
-            "polynomial time by an ordinary computer. <bookmark mark='b'/> Whether public-key encryption can be built "
-            "from any one-way function, as everything in Part 29 was; Impagliazzo and Rudich showed in 1989 that the "
-            "standard black-box techniques cannot. <bookmark mark='c'/> Whether a quantum algorithm breaks the lattice "
-            "problems under the new standards. <bookmark mark='d'/> Whether well-chosen elliptic curves have any attack "
-            "better than the generic square root. <bookmark mark='e'/> How quickly the concrete difficulty of learning "
-            "with errors grows as the dimension does, which is what sets every post-quantum key size. <bookmark "
-            "mark='f'/> And whether computing on encrypted data can ever be nearly as cheap as computing in the clear. "
-            "<bookmark mark='g'/> This part's research problem takes a small, computable case of the fifth."
-        ) as vo:
-            self.play(FadeIn(head))
-            for mk, it in zip("abcdef", items):
-                vo.wait_until(mk)
-                self.play(FadeIn(it, shift=RIGHT * 0.1))
-            vo.wait_until("g")
-            self.play(FadeIn(star))
-        self.wait(0.3)
-        self.clear_scene()

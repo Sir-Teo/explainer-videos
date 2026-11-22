@@ -263,6 +263,7 @@ class ExamMixin:
     def pose_voiceover(self, text, card, pause: float = 6.0):
         with self.voiceover(text):
             self.play(FadeIn(card, shift=UP * 0.2))
+        self.mark(f"countdown:{int(round(pause))}")  # the score clicks the exam clock down
         self.play(card.sweep(pause))
         self.play(card.shrink())
 

@@ -5,20 +5,29 @@ import numpy as np
 from videos.stats.stats6.common import *  # noqa: F403
 
 
-class Thirty(VoiceoverScene):
+class Thirty(StatsScene):
     def construct(self):
         self.card()
+        self.wrong_idea("Thirty observations make a sample mean normal",
+                        "How fast the bell arrives depends on the skew and the tails: heavy tails can need thousands",
+                        narration="Every introductory course has this rule. Once a sample has thirty observations, "
+                                  "its mean is normal.",
+                        right_narration="Thirty is folklore. How fast the bell arrives depends on the skew and the "
+                                        "tails, and a heavy-tailed income distribution can need thousands.")
+        self.ask("The skewness of a mean of $n$ draws shrinks like...",
+                 ["$1/n$", r"$1/\sqrt n$", "it doesn't"], 1,
+                 say="How fast does a mean lose its skew? Like one over n, one over root n, or not at all?",
+                 reveal="Like one over root n. A sample of thirty keeps about a fifth of the original skew, so a "
+                        "strongly skewed law still shows through.")
         self.folklore()
         self.incomes()
         self.coverage()
         self.berry_esseen()
         self.lesson()
+        self.answer()
 
     def card(self):
-        card = chapter_card(7, r"Is thirty enough?", r"How fast the bell arrives", part=PART)
-        with self.voiceover("Chapter seven. Is thirty enough?"):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(7, r"Is thirty enough?", r"How fast the bell arrives", part=PART, said="Chapter seven. Is thirty enough?")
 
     def panel(self, d, key, n, cx, color, title):
         ed = np.asarray(d["edges"])

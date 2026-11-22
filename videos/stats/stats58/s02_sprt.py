@@ -5,10 +5,16 @@ import numpy as np
 from videos.stats.stats58.common import *  # noqa: F403
 
 
-class SPRT(LectureMixin, VoiceoverScene):
+class SPRT(LectureMixin, StatsScene):
     def construct(self):
         self.card_voiceover("Chapter one. The sequential probability ratio test: how it works, what it costs, and why "
                        "nothing does better.", 1, r"The SPRT", r"Stop when the evidence suffices", lit=(1945, 1948))
+        self.ask("For the same two error rates, Wald's SPRT needs on average...",
+                 ["fewer observations than any fixed-sample test", "more observations"], 0,
+                 say="Wald's sequential probability ratio test: sample until the likelihood ratio leaves a band. "
+                     "For the same two error rates, how many observations does it need on average?",
+                 reveal="Fewer than any fixed-sample test, often about half, under both hypotheses. Wald and "
+                        "Wolfowitz proved nothing does better.")
         self.walk()
         self.paths()
         self.errors()
@@ -17,6 +23,7 @@ class SPRT(LectureMixin, VoiceoverScene):
         self.tail()
         self.optimal()
         self.overshoot()
+        self.answer()
 
     def walk(self):
         d = load("hook")

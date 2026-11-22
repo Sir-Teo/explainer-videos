@@ -21,9 +21,15 @@ def law_hist(d, center=(-1.6, 0.6, 0), x_length=8.0, y_length=3.6):
     return A, ax, bars, one, obs
 
 
-class BootIntervals(VoiceoverScene):
+class BootIntervals(StatsScene):
     def construct(self):
         self.card()
+        self.ask("Which bootstrap interval corrects for both bias and skewness?",
+                 ["the percentile interval", "BCa", "the normal interval"], 1,
+                 say="Two thousand bootstrap correlations. Which interval built from them corrects for both bias "
+                     "and skewness?",
+                 reveal="Efron's BCa: bias-corrected and accelerated. But no interval can see what the sample "
+                        "didn't contain.")
         self.percentile()
         self.basic()
         self.boot_t()
@@ -31,12 +37,10 @@ class BootIntervals(VoiceoverScene):
         self.compare()
         self.board()
         self.lessons()
+        self.answer()
 
     def card(self):
-        card = chapter_card(8, r"Bootstrap intervals", r"From a histogram of replicates to a 95\% interval", part=PART)
-        with self.voiceover("Chapter eight. Bootstrap intervals."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(8, r"Bootstrap intervals", r"From a histogram of replicates to a 95\% interval", part=PART, said="Chapter eight. Bootstrap intervals.")
 
     def percentile(self):
         d = load("law")

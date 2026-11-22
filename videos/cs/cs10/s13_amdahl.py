@@ -18,7 +18,7 @@ def log_axes(xmax_pow=10, ymax_pow=10, x_length=7.0, y_length=4.2, ylabel=r"spee
     return ax, VGroup(xt, yt, xl, yl)
 
 
-class Amdahl(VoiceoverScene):
+class Amdahl(WatchScene):
     def construct(self):
         self.card()
         self.amdahl()
@@ -26,14 +26,20 @@ class Amdahl(VoiceoverScene):
         self.job()
 
     def card(self):
-        card = chapter_card(12, r"Amdahl and Gustafson", r"How much can more processors help?", lit=(1967, 1988),
-                            extra=((1967, r"Amdahl"), (1988, r"Gustafson")), part=PART)
-        with self.voiceover("Chapter twelve. Amdahl and Gustafson."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(12, r"Amdahl and Gustafson", r"How much can more processors help?", lit=(1967, 1988), extra=((1967, r"Amdahl"), (1988, r"Gustafson")), part=PART, said="Chapter twelve. Amdahl and Gustafson.")
 
     # ------------------------------------------------------------------
     def amdahl(self):
+        self.wrong_idea(r"Four cores make a program four times faster",
+                        r"Only the parallel part speeds up: \\ the serial part and the communication don't",
+                        narration="Here's the promise on the box: four cores, four times faster.",
+                        right_narration="Only the part that runs in parallel speeds up. The serial part, and the time spent "
+                                        "communicating, set the limit.")
+        self.clear_scene()
+        self.ask(r"5\% of a program is serial. \\ With unlimited processors, the best speedup?",
+                 [r"$5\times$", r"$20\times$", r"$100\times$"], 1,
+                 say="Five percent of a program must run serially. With unlimited processors, what's the best speedup?",
+                 reveal="Twenty times. The serial five percent never shrinks.")
         head = label(r"Amdahl's law \ (1967)", font_size=36).to_edge(UP, buff=0.3)
         eq = MathTex(r"S(p) = \frac{1}{s + \frac{1 - s}{p}} \;\longrightarrow\; \frac{1}{s}", font_size=42,
                      color=HEAD).to_edge(RIGHT, buff=0.6).shift(UP * 1.6)

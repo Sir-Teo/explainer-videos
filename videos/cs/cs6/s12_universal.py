@@ -12,22 +12,21 @@ def mono(s, size=19, color=CODE):
     return Text(s, font="DejaVu Sans Mono", font_size=size, color=color)
 
 
-class Universal(VoiceoverScene):
+class Universal(WatchScene):
     def construct(self):
         self.card()
         self.interp()
-        self.converse()
         self.emulators()
 
     def card(self):
-        card = chapter_card(11, r"Pebble and the Turing machine", r"Is Pebble more powerful than a Turing machine?",
-                            lit=(1936,), part=PART)
-        with self.voiceover("Chapter eleven. Pebble and the Turing machine."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(11, r"Pebble and the Turing machine", r"Is Pebble more powerful than a Turing machine?", lit=(1936,), part=PART, said="Chapter eleven. Pebble and the Turing machine.")
 
     # ------------------------------------------------------------------
     def interp(self):
+        self.ask(r"Pebble has finite memory. \\ Is it a universal Turing machine?",
+                 [r"yes", r"no: a finite-state machine that can simulate small Turing machines"], 1,
+                 say="Pebble has a finite memory. Is it a universal Turing machine?",
+                 reveal="Strictly, no: it's a very large finite-state machine. It runs any Turing machine that fits.")
         d = load("tm")
         b3 = d["3"]
         head = label(r"A Turing machine, \ running on Pebble", font_size=36).to_edge(UP, buff=0.35)
@@ -94,51 +93,6 @@ class Universal(VoiceoverScene):
         self.wait(0.3)
         self.clear_scene()
 
-    # ------------------------------------------------------------------
-    def converse(self):
-        head = label(r"And a Turing machine can run Pebble", font_size=36).to_edge(UP, buff=0.35)
-        tape = VGroup()
-        parts = [("pc", YES, 1.0), ("r_1 \\ldots r_{15}", DATA, 2.6), ("\\text{memory}", INF, 5.2)]
-        for t, c, w in parts:
-            r = Rectangle(width=w, height=0.6, stroke_color=c, stroke_width=2, fill_color=c, fill_opacity=0.12)
-            tape.add(VGroup(r, MathTex(t, font_size=26, color=c).move_to(r)))
-        tape.arrange(RIGHT, buff=0.05).move_to(UP * 1.4)
-        tl = label(r"Pebble's whole state, \ written out in binary on a tape", font_size=22, color=GREY_B).next_to(
-            tape, DOWN, buff=0.2)
-        steps = VGroup(
-            label(r"find the word at \texttt{pc}: \ walk the tape, \ compare addresses bit by bit", font_size=24,
-                  color=GREY_A),
-            label(r"decode it: \ a finite table, \ so finitely many states", font_size=24, color=GREY_A),
-            label(r"add, \ compare, \ copy: \ Part 1's binary adder machine, \ and friends", font_size=24,
-                  color=GREY_A),
-            label(r"each Pebble instruction: \ a finite, \ if long, \ sequence of Turing-machine steps", font_size=24,
-                  color=HEAD),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.28).move_to(DOWN * 0.9)
-        concl = label("fixed Pebble: \\ finite state; \\ a Turing machine can simulate it", font_size=26, color=YES).to_edge(DOWN, buff=0.35)
-        diff = label("universality needs unbounded effective storage and addressing; \\ examples do not prove the thesis",
-                     font_size=20, color=GREY_B).next_to(concl, UP, buff=0.15)
-        with self.voiceover(
-            "The other direction is an argument rather than a demonstration, but it is short. <bookmark mark='a'/> "
-            "Write Pebble's entire state on a Turing machine's tape: the program counter, the fifteen registers and "
-            "all of memory, in binary. <bookmark mark='b'/> To run one Pebble instruction, the Turing machine walks "
-            "the tape to find the word the program counter points to, comparing addresses bit by bit. Decoding it is a"
-            " finite table, which a finite set of states can hold. Adding, comparing and copying words are the kind of"
-            " machines Part 1 built, like the binary adder. So each Pebble instruction becomes a long but finite run "
-            "of Turing-machine steps. <bookmark mark='c'/> A Turing machine can therefore simulate fixed Pebble. The "
-            "reverse claim needs an ideal machine family with unbounded effective storage and addressing, not merely "
-            "more RAM behind fixed thirty-two-bit addresses. Such an ideal interpreter can simulate any finite prefix "
-            "of a Turing-machine run. The examples illustrate the connection; they do not prove the Church–Turing "
-            "thesis."
-        ) as vo:
-            self.play(FadeIn(head))
-            self.play(LaggedStart(*[FadeIn(t) for t in tape], lag_ratio=0.3), FadeIn(tl))
-            vo.wait_until("a")
-            vo.wait_until("b")
-            self.play(LaggedStart(*[FadeIn(s_) for s_ in steps], lag_ratio=0.5), run_time=4.0)
-            vo.wait_until("c")
-            self.play(FadeIn(concl), FadeIn(diff))
-        self.wait(0.3)
-        self.clear_scene()
 
 
     # ------------------------------------------------------------------

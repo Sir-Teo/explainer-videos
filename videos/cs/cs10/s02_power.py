@@ -6,21 +6,16 @@ from explainer.cs import *  # noqa: F403
 from videos.cs.cs10.common import (BG, CTRL, DATA, FUNC, HEAD, NO, PART, YES, bar_chart, grid_table, load)
 
 
-class Power(VoiceoverScene):
+class Power(WatchScene):
     def construct(self):
         self.card()
         self.formula()
         self.dennard()
         self.end()
         self.cores()
-        self.dark()
 
     def card(self):
-        card = chapter_card(1, r"The power wall", r"Why did the clock stop getting faster?", lit=(1974, 2005),
-                            extra=((1974, r"Dennard scaling"), (2005, r"the first dual cores")), part=PART)
-        with self.voiceover("Chapter one. The power wall."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(1, r"The power wall", r"Why did the clock stop getting faster?", lit=(1974, 2005), extra=((1974, r"Dennard scaling"), (2005, r"the first dual cores")), part=PART, said="Chapter one. The power wall.")
 
     # ------------------------------------------------------------------
     def formula(self):
@@ -104,6 +99,11 @@ class Power(VoiceoverScene):
 
     # ------------------------------------------------------------------
     def end(self):
+        self.ask(r"Why did clock speeds stop rising, \\ around 2005?",
+                 [r"transistors stopped shrinking", r"voltage stopped falling, so power soared",
+                  r"software couldn't use the speed"], 1,
+                 say="Around 2005 clock speeds stopped rising. Why?",
+                 reveal="Voltage stopped falling. Every extra hertz now cost power the chip couldn't shed.")
         head = label(r"Why it ended", font_size=36).to_edge(UP, buff=0.35)
         ax = Axes(x_range=[0, 1.0, 0.25], y_range=[0, 9, 3], x_length=5.0, y_length=3.2, tips=False,
                   axis_config={"color": GREY_C, "font_size": 16}).to_edge(LEFT, buff=1.0).shift(DOWN * 0.4)
@@ -189,53 +189,3 @@ class Power(VoiceoverScene):
         self.wait(0.3)
         self.clear_scene()
 
-    # ------------------------------------------------------------------
-    def dark(self):
-        fr = load("frontier")["dark"]
-        head = label(r"Dark silicon", font_size=36).to_edge(UP, buff=0.35)
-        gens = fr["generations"]
-        grids = VGroup()
-        for g in (0, 2, 4, 6):
-            n = 2 ** (g // 2 + 2)  # cells per side grows: transistors double each generation
-            lit = fr["lit"][g]
-            cells = VGroup()
-            side = 2.0 / n
-            on = int(round(lit * n * n))
-            for k in range(n * n):
-                cells.add(Square(side_length=side * 0.9, stroke_width=0,
-                                 fill_color=YES if k < on else GREY_E, fill_opacity=0.9 if k < on else 0.6).move_to(
-                    [(k % n) * side, -(k // n) * side, 0]))
-            cap = label(rf"generation {g}: \ {100 * lit:.0f}\% lit", font_size=18, color=YES if lit > 0.4 else NO)
-            grids.add(VGroup(cells, cap.next_to(cells, DOWN, buff=0.15)))
-        grids.arrange(RIGHT, buff=0.5).move_to(UP * 0.2)
-        model = note(r"a toy model: \ twice the transistors each generation, \ energy per switch down only "
-                     r"$1.4\times$, \ a fixed power budget", font_size=18).next_to(grids, DOWN, buff=0.35)
-        cite = wrapped_label(r"Esmaeilzadeh et al., \ 2011 forecast: \ over half dark at 8 nm under their assumptions; "
-                             r"not a universal product measurement", 11.8, font_size=21, color=HEAD).next_to(model, DOWN, buff=0.35)
-        ans = label(r"the answer since: \ specialized circuits that are dark until needed \ (Part 60)", font_size=22,
-                    color=DATA).next_to(cite, DOWN, buff=0.25)
-        with self.voiceover(
-            (
-            "And even more cores only postpone the problem. <bookmark mark='a'/> In this toy extrapolation, "
-            "transistor density doubles each generation while energy per switch falls by a factor of one point "
-            "four, about twenty-nine percent. With a fixed power budget, the fraction of the chip that can switch "
-            "at full speed shrinks every generation: half after two generations, a quarter after four, an eighth "
-            "after six. The rest cannot all switch at that assumed rate; dark does not necessarily mean literally "
-            "powered off. <bookmark mark='b'/> In 2011 Hadi Esmaeilzadeh and his colleagues projected, under "
-            "their scaling and architecture assumptions, that at eight nanometres, more than half of a chip could "
-            "not be active simultaneously within the modeled power budget. This was a forecast, not a measurement "
-            "of every eight-nanometre product. <bookmark mark='c'/> The response has been specialization: chips "
-            "full of circuits for one job each, video, encryption, matrix multiplication, which sit dark until "
-            "their job comes. That is the story of Part 60. This part is about the general-purpose answer: many "
-            "cores, and how to use them."
-        )
-        ) as vo:
-            self.play(FadeIn(head), run_time=0.5)
-            self.play(LaggedStart(*[FadeIn(g) for g in grids], lag_ratio=0.5), FadeIn(model), run_time=0.6)
-            vo.wait_until('a')
-            vo.wait_until("b")
-            self.play(FadeIn(cite))
-            vo.wait_until("c")
-            self.play(FadeIn(ans))
-        self.wait(0.3)
-        self.clear_scene()

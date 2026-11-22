@@ -15,19 +15,23 @@ def island_outline(scale, center):
     return Polygon(*pts, stroke_color=S.WORLD, stroke_width=2, fill_color="#14261C", fill_opacity=0.9)
 
 
-class TheWorld(VoiceoverScene):
+class TheWorld(StatsScene):
     def construct(self):
         self.card()
+        self.ask("Why build a simulated population for a statistics course?",
+                 ["real data are too small", "to check every method against a known truth", "simulation replaces real data"], 1,
+                 say="Why would a statistics course build a population of its own? Because real data are too small, "
+                     "to check methods against a known truth, or because simulation can replace real data?",
+                 reveal="To check methods against a known truth. In the World we can see the gold, so we can see "
+                        "when a method misses it. And it never replaces real data: that's the Museum's job.")
         self.island()
         self.people()
         self.truth()
         self.seeds()
+        self.answer()
 
     def card(self):
-        card = chapter_card(2, r"Building the World", r"A population whose truth we know", lit=(), part=PART)
-        with self.voiceover("Chapter two. Building the World."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(2, r"Building the World", r"A population whose truth we know", lit=(), part=PART, said="Chapter two. Building the World.")
 
     def island(self):
         d = load("world")

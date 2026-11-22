@@ -6,7 +6,7 @@ from explainer.cs import *  # noqa: F403
 from videos.cs.cs30.common import (BG, CTRL, DATA, HEAD, LAM, NO, PART, YES, fit_right, load, mono)
 
 
-class Factoring(VoiceoverScene):
+class Factoring(WatchScene):
     def construct(self):
         self.card()
         self.rho()
@@ -15,12 +15,8 @@ class Factoring(VoiceoverScene):
         self.records()
 
     def card(self):
-        card = chapter_card(7, r"Factoring", r"How hard is it to split $n$ into $p$ and $q$?", lit=(1975, 1981, 1990),
-                            extra=((1975, r"Pollard's rho"), (1981, r"Pomerance: \ quadratic sieve"),
-                                   (1990, r"the number field sieve")), part=PART)
-        with self.voiceover("Chapter seven. Factoring."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(7, r"Factoring", r"How hard is it to split $n$ into $p$ and $q$?", lit=(1975, 1981, 1990), extra=((1975, r"Pollard's rho"), (1981, r"Pomerance: \ quadratic sieve"),
+                                   (1990, r"the number field sieve")), part=PART, said="Chapter seven. Factoring.")
 
     def rho(self):
         w = load("rhowalk")
@@ -84,6 +80,10 @@ class Factoring(VoiceoverScene):
         self.clear_scene()
 
     def race(self):
+        self.ask(r"Pollard's rho finds a prime factor $p$ \\ in about how many steps?", [r"$p$", r"$\sqrt{p}$",
+                 r"$\log p$"], 1,
+                 say="Pollard's rho method hunts for a prime factor p. About how many steps does it take?",
+                 reveal="About the square root of p, the birthday bound again.")
         f = load("factoring")
         head = label(r"Rho against the sieve, \ measured", font_size=34).to_edge(UP, buff=0.3)
         rows = f["rows"]

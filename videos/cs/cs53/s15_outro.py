@@ -17,7 +17,7 @@ def tile(content, caption, color, TW=3.6, TH=2.3):
     return Group(frame, content, cap)
 
 
-class Outro(VoiceoverScene):
+class Outro(WatchScene):
     def construct(self):
         self.recap()
         self.payoffs()
@@ -50,6 +50,12 @@ class Outro(VoiceoverScene):
             self.play(LaggedStart(*[FadeIn(t, shift=UP * 0.15) for t in tiles], lag_ratio=0.25), run_time=4.0)
         self.wait(0.5)
         self.clear_scene()
+        self.checkpoint(
+            [(r"Why is Grover optimal?", r"Any algorithm needs about $\sqrt{N}$ queries"),
+             (r"Why does error correction have a threshold?", r"Below it, bigger codes fail less")],
+            narration="Last checkpoint. Why can't search beat Grover? And why does quantum error correction have a threshold?",
+            answers_narration="Every algorithm needs about root N queries, by the hybrid argument. And below a physical error "
+                              "rate, each increase in code distance lowers the logical error.")
 
     def payoffs(self):
         card = payoff_card([

@@ -4,20 +4,22 @@ from explainer.cs import *  # noqa: F403
 from videos.cs.cs30.common import (BG, CTRL, DATA, HEAD, LAM, NO, PART, YES, load, mono)
 
 
-class Signatures(VoiceoverScene):
+class Signatures(WatchScene):
     def construct(self):
         self.card()
         self.ecdsa()
         self.reuse()
 
     def card(self):
-        card = chapter_card(10, r"Signatures", r"How do you prove a message came from you?", lit=(1991, 2010),
-                            extra=((1991, r"DSA"), (2010, r"the PS3 key")), part=PART)
-        with self.voiceover("Chapter ten. Signatures."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(10, r"Signatures", r"How do you prove a message came from you?", lit=(1991, 2010), extra=((1991, r"DSA"), (2010, r"the PS3 key")), part=PART, said="Chapter ten. Signatures.")
 
     def ecdsa(self):
+        self.wrong_idea(r"signing is encrypting with the private key",
+                        r"a signature is its own scheme, \\ with padding, hashing and fresh randomness",
+                        narration="A common picture: to sign, you encrypt with your private key.",
+                        right_narration="Textbook RSA signing that way is forgeable. Real signatures hash and pad, and ECDSA "
+                                        "encrypts nothing at all: it is a proof built with a fresh nonce.")
+        self.clear_scene()
         e = load("ecdsa")
         head = label(r"ECDSA", font_size=34).to_edge(UP, buff=0.3)
         sign = VGroup(
@@ -64,6 +66,10 @@ class Signatures(VoiceoverScene):
         self.clear_scene()
 
     def reuse(self):
+        self.ask(r"Two ECDSA signatures with the same nonce $k$. \\ The attacker learns...", [r"nothing",
+                 r"the private key"], 1,
+                 say="Two ECDSA signatures on different messages, made with the same nonce. What can an attacker learn?",
+                 reveal="The private key, with a few lines of algebra.")
         e = load("ecdsa")
         head = label(r"One repeated nonce", font_size=34).to_edge(UP, buff=0.3)
         sigs = VGroup(

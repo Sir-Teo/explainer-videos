@@ -15,21 +15,16 @@ def density_rgb(a: np.ndarray) -> np.ndarray:
     return lo * (1 - t) + hi * t
 
 
-class Beavers(VoiceoverScene, MovingCameraScene):
+class Beavers(WatchScene):
     def construct(self):
         self.card()
         self.game()
         self.two_states()
-        self.champions()
         self.five()
         self.uncomputable()
 
     def card(self):
-        card = chapter_card(13, r"Busy beavers", r"How long can a small machine run, and still stop?",
-                            lit=(1962, 2024), part=PART)
-        with self.voiceover("Chapter thirteen. Busy beavers."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(13, r"Busy beavers", r"How long can a small machine run, and still stop?", lit=(1962, 2024), part=PART, said="Chapter thirteen. Busy beavers.")
 
     # ------------------------------------------------------------------
     def game(self):
@@ -60,6 +55,11 @@ class Beavers(VoiceoverScene, MovingCameraScene):
 
     # ------------------------------------------------------------------
     def two_states(self):
+        self.ask(r"All 20,736 two-state machines. \\ The longest any of them runs before halting?",
+                 [r"6 steps", r"107 steps", r"about 20{,}000 steps"], 0,
+                 say="Twenty thousand seven hundred and thirty-six machines with two states. The longest any of them runs "
+                     "and still halts?",
+                 reveal="Six steps. The champion writes four ones and stops.")
         d = load("beavers2")
         hist = d["hist"]
         head = label(rf"Every two-state machine: \ ${fmt(d['total'])}$ of them", font_size=38).to_edge(UP, buff=0.35)
@@ -111,36 +111,6 @@ class Beavers(VoiceoverScene, MovingCameraScene):
         self.wait(0.3)
         self.clear_scene()
 
-    # ------------------------------------------------------------------
-    def champions(self):
-        b = load("beavers")
-        i3, i4 = b["info3"], b["info4"]
-        im3 = spacetime_mob(np.asarray(b["st3"]), width=1.6, height=3.6)
-        im4 = spacetime_mob(np.asarray(b["st4"]), width=3.2, height=5.4)
-        g = Group(im3, im4).arrange(RIGHT, buff=1.4, aligned_edge=UP).move_to(DOWN * 0.35 + LEFT * 1.6)
-        f3 = SurroundingRectangle(im3, buff=0, color=GREY_C, stroke_width=1)
-        f4 = SurroundingRectangle(im4, buff=0, color=GREY_C, stroke_width=1)
-        l3 = label(rf"3 states: \ {i3['steps']} steps \\ {i3['who']}, {i3['year']}", font_size=24).next_to(im3, UP,
-                                                                                                         buff=0.2)
-        l4 = label(rf"4 states: \ {i4['steps']} steps \\ {i4['who']}, {i4['year']}", font_size=24).next_to(im4, UP,
-                                                                                                         buff=0.2)
-        tbl = VGroup(*[label(t, font_size=26, color=c) for t, c in (
-            (r"$S(1) = 1$", GREY_A), (r"$S(2) = 6$", GREY_A), (rf"$S(3) = {i3['steps']}$", GREY_A),
-            (rf"$S(4) = {i4['steps']}$", GREY_A), (r"$S(5) = \ ?$", COST))]).arrange(DOWN, aligned_edge=LEFT, buff=0.22)
-        tbl.move_to(RIGHT * 4.9 + DOWN * 0.2)
-        with self.voiceover(
-            "With more states, the champions get stranger. <bookmark mark='a'/> For three states the record is twenty-one "
-            "steps, proved by Shen Lin and Radó in 1965. <bookmark mark='b'/> For four, a hundred and seven steps, found by "
-            "Allen Brady in 1983, who also proved nothing does better. <bookmark mark='c'/> One, six, twenty-one, one "
-            "hundred and seven. And for five states, for decades, nobody knew."
-        ) as vo:
-            self.play(FadeIn(im3), Create(f3), FadeIn(l3))
-            vo.wait_until("b")
-            self.play(FadeIn(im4), Create(f4), FadeIn(l4))
-            vo.wait_until("c")
-            self.play(LaggedStart(*[FadeIn(t) for t in tbl], lag_ratio=0.25))
-        self.wait(0.3)
-        self.clear_scene()
 
     # ------------------------------------------------------------------
     def five(self):

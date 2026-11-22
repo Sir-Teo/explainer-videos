@@ -4,7 +4,7 @@ from explainer.cs import *  # noqa: F403
 from videos.cs.cs30.common import (BG, CTRL, DATA, HEAD, LAM, NO, PART, YES, grid_table, load, mono)
 
 
-class Rsa(VoiceoverScene):
+class Rsa(WatchScene):
     def construct(self):
         self.card()
         self.toy()
@@ -13,13 +13,13 @@ class Rsa(VoiceoverScene):
         self.textbook()
 
     def card(self):
-        card = chapter_card(5, r"RSA", r"Can a key be public and still lock a secret?", lit=(1977,),
-                            extra=((1977, r"Rivest, \ Shamir, \ Adleman"),), part=PART)
-        with self.voiceover("Chapter five. RSA."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(5, r"RSA", r"Can a key be public and still lock a secret?", lit=(1977,), extra=((1977, r"Rivest, \ Shamir, \ Adleman"),), part=PART, said="Chapter five. RSA.")
 
     def toy(self):
+        self.ask(r"RSA publishes $n$ and $e$. \\ Computing the private $d$ needs...", [r"$n$ alone",
+                 r"the primes $p$ and $q$"], 1,
+                 say="RSA publishes n and e. What does it take to compute the private exponent d?",
+                 reveal="The primes p and q. Factor n, and RSA falls.")
         s = load("rsa")["small"]
         head = label(r"RSA with small numbers", font_size=34).to_edge(UP, buff=0.3)
         rows = [(r"pick two primes", rf"$p = {s['p']}$, \ $q = {s['q']}$", WHITE),
@@ -176,11 +176,9 @@ class Rsa(VoiceoverScene):
             "to exactly twice the number. <bookmark mark='d'/> The standard fix is optimal asymmetric encryption "
             "padding, OAEP, from Mihir Bellare and Phillip Rogaway: mix the message with fresh randomness through two "
             "hash-based masks before encrypting. <bookmark mark='e'/> Now two encryptions of the same message differ, "
-            "and the round trip checks our encoding. RSA-OAEP's security theorem also needs the RSA assumption "
-            "and its random-oracle model. <bookmark mark='f'/> The same trapdoor signs: raise "
+            "and the round trip checks our encoding. <bookmark mark='f'/> The same trapdoor signs: raise "
             "a hash of the message to the private exponent, and anyone can check it with the public one. Hashing first "
-            "matters, because raw signatures multiply too. <bookmark mark='g'/> Our custom expanded hash is a "
-            "teaching encoding, not standardized RSA-PSS. Use a standard signature encoding in practice; the "
+            "matters, because raw signatures multiply too. <bookmark mark='g'/> Use a standard signature encoding in practice; the "
             "arithmetic alone does not define a secure scheme."
         ) as vo:
             self.play(FadeIn(head))

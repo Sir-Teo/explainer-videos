@@ -5,10 +5,16 @@ import numpy as np
 from videos.stats.stats61.common import *  # noqa: F403
 
 
-class Duality(LectureMixin, VoiceoverScene):
+class Duality(LectureMixin, StatsScene):
     def construct(self):
         self.card_voiceover("Chapter one. Kantorovich duality: the transport problem, its prices, and its solution on a line.", 1,
                             r"Kantorovich duality", r"Plans and prices", lit=(1942,))
+        self.ask("On the line, with a convex cost, the optimal transport plan...",
+                 ["matches sorted points in order", "can be anything"], 0,
+                 say="Plans and prices. Transport one set of points on a line to another, with a convex cost. "
+                     "What's the optimal plan?",
+                 reveal="Match them in sorted order, smallest to smallest: monotone rearrangement. On a line, "
+                        "transport is quantile functions.")
         self.couplings()
         self.plan_chart()
         self.dual()
@@ -16,6 +22,7 @@ class Duality(LectureMixin, VoiceoverScene):
         self.algorithms()
         self.line()
         self.brenier()
+        self.answer()
 
     def couplings(self):
         head = label(r"A transport plan preserves the source and target masses", font_size=36).move_to([0, 3.3, 0])

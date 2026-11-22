@@ -5,21 +5,29 @@ import numpy as np
 from videos.stats.stats21.common import *  # noqa: F403
 
 
-class OptimAndInference(VoiceoverScene):
+class OptimAndInference(StatsScene):
     def construct(self):
         self.card()
+        self.ask("How precisely should the optimizer locate the MLE?",
+                 ["to machine precision", "to a small fraction of its standard error", "to within one SE"], 1,
+                 say="How precisely does the optimizer need to locate the maximum likelihood estimate?",
+                 reveal="To a small fraction of its standard error. Accuracy beyond the statistical uncertainty "
+                        "buys nothing, and the peak's curvature gives that uncertainty.")
         self.curvature()
         self.picture()
         self.error_budget()
         self.sandwich()
         self.warnings()
         self.summary()
+        self.answer()
+        self.checkpoint([("The fused lasso's fit is?", "piecewise constant"),
+                         ("Standard errors from the optimizer?", "the inverse of the negative Hessian")],
+                        narration="Checkpoint. From optimization to inference.",
+                        answers_narration="Piecewise constant. And the inverse negative Hessian, the observed "
+                                          "information.")
 
     def card(self):
-        card = chapter_card(11, r"Optimization and inference", r"The shape of the peak is the uncertainty", part=PART)
-        with self.voiceover("Chapter eleven. Optimization, and inference."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(11, r"Optimization and inference", r"The shape of the peak is the uncertainty", part=PART, said="Chapter eleven. Optimization, and inference.")
 
     def curvature(self):
         d = load("inference")

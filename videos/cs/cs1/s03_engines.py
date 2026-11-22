@@ -13,64 +13,24 @@ def cell(text, color=WHITE, w=1.25, h=0.5, font_size=28, fill=None):
     return VGroup(r, t.move_to(r))
 
 
-class Engines(VoiceoverScene):
+class Engines(WatchScene):
     def construct(self):
         self.card()
-        self.tables()
         self.differences()
         self.analytical()
         self.lovelace()
 
     def card(self):
-        card = chapter_card(2, r"The engines", r"Can a machine do what the clerk does?", lit=(1822, 1837, 1843),
-                            part=PART)
-        with self.voiceover("Chapter two. The engines."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(2, r"The engines", r"Can a machine do what the clerk does?", lit=(1822, 1837, 1843), part=PART, said="Chapter two. The engines.")
 
-    # ------------------------------------------------------------------
-    def tables(self):
-        hc = history_card(1821, r"Charles Babbage and John Herschel",
-                          r"checking two clerks' hand-computed astronomical tables against each other, and finding error "
-                          r"after error", width=6.0).to_corner(UL, buff=0.4)
-        quote = label(r"``I wish to God these calculations \\ had been executed by steam.''", font_size=36)
-        quote.move_to([2.4, 1.6, 0])
-        who = note(r"Babbage's recollection, \textit{Passages from the Life of a Philosopher} (1864)", font_size=22)
-        who.next_to(quote, DOWN, buff=0.25)
-        rows = VGroup()
-        rng = np.random.default_rng(3)
-        for i in range(6):
-            x = 12 + i
-            v = np.log10(x)
-            txt = f"{v:.7f}"
-            bad = i in (2, 4)
-            if bad:
-                k = rng.integers(3, 8)
-                txt = txt[:k] + str((int(txt[k]) + 3) % 10) + txt[k + 1:]
-            row = VGroup(MathTex(rf"\log {x}", font_size=28, color=GREY_A),
-                         MathTex(txt, font_size=28, color=NO if bad else WHITE)).arrange(RIGHT, buff=0.6)
-            rows.add(row)
-        rows.arrange(DOWN, aligned_edge=LEFT, buff=0.18).move_to([-3.6, -1.6, 0])
-        tag = note(r"illustrative: two digits miscopied", font_size=20).next_to(rows, DOWN, buff=0.2)
-        why_ = label(r"tables of logarithms, tides and stars \\ were computed by hand, \ by people called \\ "
-                     r"\textit{computers}", font_size=30, color=GREY_A).move_to([3.0, -1.6, 0])
-        with self.voiceover(
-            "For centuries, anyone who navigated a ship or aimed a cannon used printed tables: logarithms, tides, the "
-            "positions of the stars. <bookmark mark='a'/> They were computed by hand, by people whose job title was "
-            "computer, and they were full of mistakes. <bookmark mark='b'/> In 1821 Charles Babbage and John Herschel "
-            "spent a day checking two clerks' calculations against each other and kept finding errors. Babbage later "
-            "remembered saying: I wish to God these calculations had been executed by steam."
-        ) as vo:
-            self.play(FadeIn(rows), FadeIn(why_))
-            vo.wait_until("a")
-            self.play(FadeIn(tag), *[Indicate(rows[i][1], color=NO) for i in (2, 4)])
-            vo.wait_until("b")
-            self.play(FadeIn(hc, shift=RIGHT * 0.2), FadeIn(quote), FadeIn(who))
-        self.wait(0.3)
-        self.clear_scene()
 
     # ------------------------------------------------------------------
     def differences(self):
+        self.ask(r"Tabulate $x^2 + x + 41$ for $x = 0, 1, 2, \ldots$ \\ How many multiplications per row?",
+                 [r"two", r"one", r"none"], 2,
+                 say="Babbage's engine tabulates x squared plus x plus forty-one. How many multiplications does each new row "
+                     "cost it?",
+                 reveal="None. Differences turn a polynomial into additions alone.")
         d = load("difference")
         p, d1, d2 = d["values"], d["d1"], d["d2"]
         head = cmath(r"p(x)", r"=", r"x^2", r"+", r"x", r"+", r"41", font_size=44,

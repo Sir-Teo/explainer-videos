@@ -55,7 +55,7 @@ def stacked(rows, whys, buff=0.22):
     return pairs
 
 
-class Communication(VoiceoverScene):
+class Communication(WatchScene):
     def construct(self):
         self.card()
         self.count()
@@ -66,13 +66,8 @@ class Communication(VoiceoverScene):
         self.randomness()
 
     def card(self):
-        card = chapter_card(9, r"The cost of agreement", r"How many messages must agreement cost?",
-                            lit=(1985, 1999, 2019),
-                            extra=((1985, r"Dolev and Reischuk: \ $\Omega(n^2)$"), (1999, r"PBFT"),
-                                   (2019, r"HotStuff")), part=PART)
-        with self.voiceover("Chapter nine. The cost of agreement."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(9, r"The cost of agreement", r"How many messages must agreement cost?", lit=(1985, 1999, 2019), extra=((1985, r"Dolev and Reischuk: \ $\Omega(n^2)$"), (1999, r"PBFT"),
+                                   (2019, r"HotStuff")), part=PART, said="Chapter nine. The cost of agreement.")
 
     # ------------------------------------------------------------------ counting
     def count(self):
@@ -134,6 +129,10 @@ class Communication(VoiceoverScene):
 
     # ------------------------------------------------------------------ the bound
     def bound(self):
+        self.ask(r"Deterministic Byzantine agreement, $f$ faults. \\ Messages in the worst case:", [r"about $f$",
+                 r"about $f^2$"], 1,
+                 say="Deterministic Byzantine agreement tolerating f faults. How many messages must some runs send?",
+                 reveal="On the order of f squared: Dolev and Reischuk.")
         head = label(r"Dolev and Reischuk's lower bound", font_size=36).to_edge(UP, buff=0.3)
         n, s = 25, 0.15
         cells = VGroup()

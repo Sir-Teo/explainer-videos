@@ -13,24 +13,20 @@ def role(title, body, col, w=3.6, h=1.3):
     return VGroup(r, t, b)
 
 
-class Incidents(VoiceoverScene):
+class Incidents(WatchScene):
     def construct(self):
         self.card()
         self.timeline()
-        self.command()
         self.blameless()
         self.cheese()
         self.cook()
 
     def card(self):
-        card = chapter_card(12, r"Incidents and post-mortems", r"When it breaks, \ who does what, \ and what do we "
+        self.chapter(12, r"Incidents and post-mortems", r"When it breaks, \ who does what, \ and what do we "
                             r"learn?", lit=(1998, 2016), extra=((1998, r"Cook: \ How Complex Systems Fail"),
                                                                (2016, r"Beyer et al.: \ Site Reliability "
-                                                                      r"Engineering")), part=PART)
-        with self.voiceover("Chapter twelve. Incidents: what people do while a system is broken, and what they "
-                            "learn afterwards."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+                                                                      r"Engineering")), part=PART, said="Chapter twelve. Incidents: what people do while a system is broken, and what they "
+                            "learn afterwards.")
 
     def timeline(self):
         head = label(r"An incident, \ minute by minute", font_size=36).to_edge(UP, buff=0.3)
@@ -101,46 +97,12 @@ class Incidents(VoiceoverScene):
         self.wait(0.4)
         self.clear_scene()
 
-    def command(self):
-        head = label(r"Incident command", font_size=36).to_edge(UP, buff=0.3)
-        ic = role(r"incident commander", r"holds the whole picture; \ decides; \ assigns; \ does not debug", HEAD,
-                  w=4.0, h=1.45).move_to([0, 0.35, 0])
-        ops = role(r"operations", r"the only hands changing the system", KERN).move_to([-4.5, 1.55, 0])
-        com = role(r"communication", r"status page and stakeholders, \ on a fixed schedule", LAM).move_to(
-            [4.5, 1.55, 0])
-        plan = role(r"planning", r"the log of what was tried; \ hand-offs; \ follow-up bugs", DATA).move_to(
-            [-4.5, -1.0, 0])
-        resp = role(r"responders", r"work through the operations lead, \ not around it", GREY_B).move_to(
-            [4.5, -1.0, 0])
-        links = VGroup(*[Line(ic[0].get_center(), b[0].get_center(), color=GREY_C, stroke_width=2).set_z_index(-1)
-                         for b in (ops, com, plan, resp)])
-        foot = wrapped_label(r"borrowed from the Incident Command System of American firefighters \ (1970s); \ "
-                             r"the roles are hats, \ not ranks: \ in a small incident one person wears several",
-                             12.4, font_size=20, color=WHITE).to_edge(DOWN, buff=0.4)
-        with self.voiceover(
-            "The roles come from firefighting: Google's book adapts the Incident Command System, developed by "
-            "American wildfire crews in the 1970s. <bookmark mark='a'/> At the centre, the incident commander holds "
-            "the whole picture, decides and assigns work, and deliberately does not debug. <bookmark mark='b'/> The "
-            "operations lead is the only one changing the system, so that two people never fight over it. <bookmark "
-            "mark='c'/> The communication lead updates the status page and stakeholders on a fixed schedule, so "
-            "that nobody interrupts the operators to ask. Planning keeps the log of what was tried, and arranges "
-            "hand-offs. <bookmark mark='d'/> The roles are hats, not ranks: in a small incident one person wears "
-            "several."
-        ) as vo:
-            self.play(FadeIn(head))
-            vo.wait_until("a")
-            self.play(FadeIn(ic))
-            vo.wait_until("b")
-            self.play(Create(links[0]), FadeIn(ops))
-            vo.wait_until("c")
-            self.play(Create(links[1]), FadeIn(com))
-            self.play(Create(links[2]), FadeIn(plan), Create(links[3]), FadeIn(resp))
-            vo.wait_until("d")
-            self.play(FadeIn(foot))
-        self.wait(0.4)
-        self.clear_scene()
 
     def blameless(self):
+        self.ask(r"After an incident, the most useful question is...", [r"who made the mistake",
+                 r"what made the mistake easy"], 1,
+                 say="After an incident, what is the most useful question to ask?",
+                 reveal="What made the mistake easy to make, and hard to catch.")
         head = label(r"The blameless post-mortem", font_size=36).to_edge(UP, buff=0.3)
         doc = code_block(["Summary", "Impact      users, minutes, budget spent", "Timeline    from the log, UTC",
                           "Contributing factors", "What went well", "What went wrong", "Where we got lucky",

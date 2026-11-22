@@ -32,7 +32,7 @@ def arc_path(w, a, steps, color=HEAD):
                arc_center=c).add_tip(tip_length=0.2)
 
 
-class Clock(VoiceoverScene):
+class Clock(WatchScene):
     def construct(self):
         self.card()
         self.unsigned()
@@ -41,11 +41,7 @@ class Clock(VoiceoverScene):
         self.overflow()
 
     def card(self):
-        card = chapter_card(2, r"Integers on a clock", r"How does a fixed number of bits hold negative numbers?",
-                            part=PART)
-        with self.voiceover("Chapter two. Integers on a clock."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(2, r"Integers on a clock", r"How does a fixed number of bits hold negative numbers?", part=PART, said="Chapter two. Integers on a clock.")
 
     # ------------------------------------------------------------------
     def unsigned(self):
@@ -165,6 +161,9 @@ class Clock(VoiceoverScene):
 
     # ------------------------------------------------------------------
     def overflow(self):
+        self.ask(r"Signed 4-bit arithmetic: \\ $5 + 4 = \;?$", [r"$9$", r"$-7$", r"an error"], 1,
+                 say="In signed four-bit arithmetic, what is five plus four?",
+                 reveal="Minus seven. It ran off the clock's edge and wrapped round.")
         head = label(r"Overflow", font_size=38).to_edge(UP, buff=0.35)
         w = wheel(LEFT * 3.6 + DOWN * 0.4, signed=True, show_bits=False)
         p = arc_path(w, 5, 4, color=NO)

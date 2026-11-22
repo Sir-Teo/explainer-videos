@@ -7,7 +7,7 @@ from videos.cs.cs31.common import (BG, COST, DATA, HEAD, KERN, LAM, NO, PART, YE
                                    grid_table, load, time_axis)
 
 
-class Mlfq(VoiceoverScene):
+class Mlfq(WatchScene):
     def construct(self):
         self.card()
         self.rr()
@@ -16,12 +16,7 @@ class Mlfq(VoiceoverScene):
         self.gaming()
 
     def card(self):
-        card = chapter_card(8, r"Round robin and the multi-level feedback queue",
-                            r"How can a scheduler favour jobs it knows nothing about?",
-                            lit=(1962,), extra=((1962, r"Corbat\'o: \ MLFQ"),), part=PART)
-        with self.voiceover("Chapter eight. Round robin, and the multi-level feedback queue."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(8, r"Round robin and the multi-level feedback queue", r"How can a scheduler favour jobs it knows nothing about?", lit=(1962,), extra=((1962, r"Corbat\'o: \ MLFQ"),), part=PART, said="Chapter eight. Round robin, and the multi-level feedback queue.")
 
     def rr(self):
         d = load("sched")
@@ -71,6 +66,10 @@ class Mlfq(VoiceoverScene):
         self.clear_scene()
 
     def quantum(self):
+        self.ask(r"Round robin with a very long quantum \\ turns into...", [r"shortest first",
+                 r"first come, first served"], 1,
+                 say="Make round robin's quantum longer and longer. What does it turn into?",
+                 reveal="First come, first served.")
         d = load("sched")
         head = label(r"How long a quantum?", font_size=36).to_edge(UP, buff=0.3)
         sw = d["sweep"]

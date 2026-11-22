@@ -10,7 +10,7 @@ GROUPS = (("Load", 3, INF, r"load unit"), ("Add", 3, FUNC, r"adder"), ("Mult", 2
 REGS = ["a0", "a1", "a2", "a3", "a4", "a5"]
 
 
-class Tomasulo(VoiceoverScene):
+class Tomasulo(WatchScene):
     def construct(self):
         self.card()
         self.idea()
@@ -19,11 +19,7 @@ class Tomasulo(VoiceoverScene):
         self.catch()
 
     def card(self):
-        card = chapter_card(4, r"Tomasulo's algorithm", r"What if every value had a name of its own?", lit=(1967,),
-                            extra=((1967, r"IBM 360/91: \ Tomasulo"),), part=PART)
-        with self.voiceover("Chapter four. Tomasulo's algorithm."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(4, r"Tomasulo's algorithm", r"What if every value had a name of its own?", lit=(1967,), extra=((1967, r"IBM 360/91: \ Tomasulo"),), part=PART, said="Chapter four. Tomasulo's algorithm.")
 
     # ------------------------------------------------------------------
     def idea(self):
@@ -207,6 +203,10 @@ class Tomasulo(VoiceoverScene):
 
     # ------------------------------------------------------------------
     def compare(self):
+        self.ask(r"Tomasulo's machine on the same example. \\ Against the scoreboard's 62 cycles?",
+                 [r"the same", r"fewer", r"more"], 1,
+                 say="Same program on Tomasulo's machine. Faster or slower than the scoreboard's sixty-two cycles?",
+                 reveal="Faster: fifty-six. The bus hands each result straight to the stations waiting for it.")
         d = load("scoreboard")
         head = label(r"Scoreboard against Tomasulo", font_size=36).to_edge(UP, buff=0.35)
         rows = []
@@ -262,7 +262,7 @@ class Tomasulo(VoiceoverScene):
         others = note(r"(grey: \ the other four)", font_size=18).next_to(line.n2p(4), DOWN, buff=0.55)
         marks[0].add(others)
         q = VGroup(
-            label("illustrative divide-zero fault in cycle 55; \\ Pebble policy", font_size=26, color=NO),
+            label(" divide-zero fault in cycle 55; \\ Pebble policy", font_size=26, color=NO),
             label(r"by then the add, \ a later instruction, \ has already overwritten \texttt{a1}", font_size=26,
                   color=HEAD),
             label(r"the machine cannot stop \textit{between} two instructions: \ the exception is imprecise",
@@ -290,3 +290,9 @@ class Tomasulo(VoiceoverScene):
             self.play(FadeIn(q[2]))
         self.wait(0.3)
         self.clear_scene()
+        self.checkpoint(
+            [(r"Which dependences does renaming remove?", r"Write-after-read and write-after-write: names, not values"),
+             (r"What does Tomasulo's common data bus do?", r"Hands each result straight to every station waiting for it")],
+            narration="Checkpoint. Which dependences does renaming remove? And what does Tomasulo's common data bus do?",
+            answers_narration="The false ones, write after read and write after write, which are about names, not values. And "
+                              "the bus hands each result straight to every reservation station waiting for it.")

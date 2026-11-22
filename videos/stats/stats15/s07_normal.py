@@ -6,21 +6,25 @@ from scipy import stats
 from videos.stats.stats15.common import *  # noqa: F403
 
 
-class NormalModel(VoiceoverScene):
+class NormalModel(StatsScene):
     def construct(self):
         self.card()
+        self.ask(r"Normal data, flat prior on $\mu$ and $\log\sigma$. The posterior of $\mu$ is...",
+                 ["normal", "Student's $t$", "chi-squared"], 1,
+                 say="Eight heights, normal with unknown mean and standard deviation, and flat priors. What's the "
+                     "marginal posterior of the mean?",
+                 reveal="Student's t, centred at x bar with scale s over root n: the frequentist interval, reached "
+                        "by a different road.")
         self.model_setup()
         self.derivation()
         self.picture()
         self.sigma()
         self.widths()
         self.agreement()
+        self.answer()
 
     def card(self):
-        card = chapter_card(6, r"The normal model", r"Unknown mean and variance: \ Student's $t$, \ again", lit=(1908,), part=PART)
-        with self.voiceover("Chapter six. The normal model."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(6, r"The normal model", r"Unknown mean and variance: \ Student's $t$, \ again", lit=(1908,), part=PART, said="Chapter six. The normal model.")
 
     def model_setup(self):
         d = load("normalt")

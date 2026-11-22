@@ -4,22 +4,15 @@ from explainer.cs import *  # noqa: F403
 from videos.cs.cs20.common import (CTRL, DATA, HEAD, LAM, NO, PART, YES, grid_table, load, mono)
 
 
-class Primes(VoiceoverScene):
+class Primes(WatchScene):
     def construct(self):
         self.card()
         self.fermat()
         self.carmichael()
         self.miller_rabin()
-        self.measured()
 
     def card(self):
-        card = chapter_card(5, r"Probable primes and primality tests", r"Is a 300-digit number prime?", lit=(1976, 2002),
-                            extra=((1976, r"Miller's test"), (2002, r"PRIMES is in P")), part=PART)
-        with self.voiceover((
-            'Chapter five. Probable primes and primality tests.'
-        )):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(5, r"Probable primes and primality tests", r"Is a 300-digit number prime?", lit=(1976, 2002), extra=((1976, r"Miller's test"), (2002, r"PRIMES is in P")), part=PART, said='Chapter five. Probable primes and primality tests.')
 
     def fermat(self):
         head = label(r"Fermat's little theorem as a test", font_size=34).to_edge(UP, buff=0.35)
@@ -64,6 +57,11 @@ class Primes(VoiceoverScene):
         self.clear_scene()
 
     def carmichael(self):
+        self.ask(r"$561 = 3 \cdot 11 \cdot 17$. \\ Fermat's test, with every base coprime to it, says...",
+                 [r"composite", r"probably prime"], 1,
+                 say="Five hundred and sixty-one is three times eleven times seventeen. What does Fermat's test say, with every "
+                     "base that shares no factor?",
+                 reveal="Probably prime, every time. It's a Carmichael number, and Miller and Rabin fixed the test.")
         d = load("primes")
         head = label('Composites that fool every coprime base', font_size=34).to_edge(UP, buff=0.35)
         n = d["n"]
@@ -154,48 +152,11 @@ class Primes(VoiceoverScene):
                 self.play(FadeIn(ln, shift=UP * 0.1))
         self.wait(0.3)
         self.clear_scene()
+        self.checkpoint(
+            [(r"Las Vegas or Monte Carlo: which is always right?", r"Las Vegas"),
+             (r"Why does Freivalds' test catch a wrong product?", r"$D r = 0$ for a random $r$ has probability at most $\tfrac12$")],
+            narration="Checkpoint. Which kind of randomized algorithm is always right? And why does Freivalds' test catch a "
+                      "wrong product?",
+            answers_narration="Las Vegas. And if C is wrong, a random vector exposes the difference with probability at least "
+                              "a half.")
 
-    def measured(self):
-        d = load("primes")
-        head = label(r"Generating probable primes, \ in Python", font_size=34).to_edge(UP, buff=0.35)
-        rows = [[f"{t['bits']}", f"{round(t['bits'] * 0.30103)}", f"{t['candidates']}",
-                 (f"{t['seconds'] * 1000:.0f} ms" if t["seconds"] < 1 else f"{t['seconds']:.1f} s")]
-                for t in d["times"]]
-        tab = grid_table([r"bits", r"digits", r"odd candidates \ (asymptotic expectation)", r"time"], rows,
-                         widths=[1.4, 1.6, 5.0, 2.0], row_h=0.48, font_size=21, mono_cols=(),
-                         colors=[[DATA, DATA, GREY_A, YES]] * len(rows)).next_to(head, DOWN, buff=0.5)
-        notes = VGroup(
-            label(r"prime number theorem: \ about one in $\ln n$ numbers near $n$ is prime; \ half that among odd "
-                  r"ones", font_size=21, color=WHITE),
-            label(rf"most candidates fail the first round; \ one round at 1024 bits: \ "
-                  rf"{d['round_1024'] * 1000:.1f} ms", font_size=21, color=GREY_A),
-            label(r"AKS (2002): \ deterministic polynomial-time primality; \ this table benchmarks randomized screening", font_size=21, color=HEAD),
-            label(r"40-round screening + 64-round rescreen; \ no primality certificate is produced", font_size=21, color=LAM),
-        ).arrange(DOWN, buff=0.25).next_to(tab, DOWN, buff=0.5)
-        with self.voiceover(
-            (
-            'Now generate probable primes: choose random odd candidates of the requested bit length and keep one '
-            "that passes forty Miller–Rabin rounds. Passing is not a primality certificate. <bookmark mark='a'/> The"
-            ' prime number theorem suggests roughly three hundred and fifty odd candidates for a 1024-bit search; it'
-            " is an asymptotic expectation, not a fixed search budget. <bookmark mark='b'/> The table reports "
-            'complete generation times: the minimum of three for the smaller sizes and one observed run for 2048 '
-            'bits. Every resulting candidate gets sixty-four additional independent screening rounds outside the '
-            'timer, still without becoming a certified prime. Modular-power benchmarks are separate and exclude '
-            "choosing their base. <bookmark mark='c'/> Agrawal, Kayal and Saxena proved deterministic polynomial-"
-            "time primality testing in 2002. <bookmark mark='d'/> Practical prime generation often uses randomized "
-            'screening or other tests and certificates. Cryptography also uses elliptic curves; not every secure '
-            'connection generates random primes.'
-        )
-        ) as vo:
-            self.play(FadeIn(head), FadeIn(VGroup(*tab.cells[0])), FadeIn(tab.rule))
-            self.play(LaggedStart(*[FadeIn(VGroup(*r)) for r in tab.cells[1:]], lag_ratio=0.3))
-            vo.wait_until("a")
-            self.play(FadeIn(notes[0]))
-            vo.wait_until("b")
-            self.play(FadeIn(notes[1]))
-            vo.wait_until("c")
-            self.play(FadeIn(notes[2]))
-            vo.wait_until("d")
-            self.play(FadeIn(notes[3]))
-        self.wait(0.3)
-        self.clear_scene()

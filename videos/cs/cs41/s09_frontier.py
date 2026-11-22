@@ -4,7 +4,7 @@ from explainer.cs import *  # noqa: F403
 from videos.cs.cs41.common import (DATA, HEAD, KERN, LAM, NO, PART, YES, code_block)
 
 
-class Frontier(VoiceoverScene):
+class Frontier(WatchScene):
     def construct(self):
         self.card()
         self.structured()
@@ -13,14 +13,11 @@ class Frontier(VoiceoverScene):
         self.open()
 
     def card(self):
-        card = chapter_card(8, r"Frontier: \ merging and building, \ correctly", r"Can tools understand what they "
+        self.chapter(8, r"Frontier: \ merging and building, \ correctly", r"Can tools understand what they "
                             r"merge and build?", lit=(2011, 2022), extra=((2011, r"Apel et al.: \ semistructured "
                                                                           r"merge"),
                                                                          (2020, r"Mokhov et al.: \ build correctness"),
-                                                                         (2022, r"Larsén et al.: \ Spork")), part=PART)
-        with self.voiceover("Chapter eight. Frontier: merging and building, correctly."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+                                                                         (2022, r"Larsén et al.: \ Spork")), part=PART, said="Chapter eight. Frontier: merging and building, correctly.")
 
     def structured(self):
         head = label(r"Merging syntax, \ not lines", font_size=36).to_edge(UP, buff=0.3)
@@ -68,6 +65,10 @@ class Frontier(VoiceoverScene):
         self.clear_scene()
 
     def correct(self):
+        self.ask(r"An incremental build is \emph{correct} when...", [r"it is fast",
+                 r"its outputs equal a clean build's"], 1,
+                 say="What does it mean for an incremental build to be correct?",
+                 reveal="Its outputs are exactly what a clean build would produce.")
         head = label(r"Builds you can trust", font_size=36).to_edge(UP, buff=0.3)
         lines = VGroup(
             wrapped_label(r"\textbf{correctness}: \ after an incremental build, \ the outputs equal those of a clean "

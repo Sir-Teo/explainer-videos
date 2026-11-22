@@ -3,9 +3,15 @@ from __future__ import annotations
 from videos.stats.stats54.common import *  # noqa: F403
 
 
-class VC(VoiceoverScene):
+class VC(StatsScene):
     def construct(self):
         self.card()
+        self.ask(r"Linear classifiers in $\mathbb R^d$, with an intercept, have VC dimension...",
+                 ["$d$", "$d + 1$", "$2^d$"], 1,
+                 say="Half-planes, and their higher-dimensional cousins: linear classifiers in d dimensions with an "
+                     "intercept. What's their VC dimension?",
+                 reveal="D plus one: they shatter d plus one points in general position, and no set of d plus two. "
+                        "Counting labellings gives the guarantee.")
         self.symmetrization()
         self.bound()
         self.lower()
@@ -14,12 +20,10 @@ class VC(VoiceoverScene):
         self.realvalued()
         self.board()
         self.lesson()
+        self.answer()
 
     def card(self):
-        card = chapter_card(2, r"VC bounds", r"From counting labellings to a guarantee", lit=(1971,), part=PART)
-        with self.voiceover("Chapter two. VC bounds: from counting labellings to a guarantee."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(2, r"VC bounds", r"From counting labellings to a guarantee", lit=(1971,), part=PART, said="Chapter two. VC bounds: from counting labellings to a guarantee.")
 
     def symmetrization(self):
         rows = [

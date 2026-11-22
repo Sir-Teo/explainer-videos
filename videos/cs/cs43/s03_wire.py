@@ -45,7 +45,7 @@ def bitrow(bits: str, color, size=26, first=None):
     return g
 
 
-class Wire(VoiceoverScene):
+class Wire(WatchScene):
     def construct(self):
         self.card()
         self.doubles()
@@ -55,12 +55,8 @@ class Wire(VoiceoverScene):
         self.compare()
 
     def card(self):
-        card = chapter_card(2, r"Bytes on the wire", r"What does a message look like as bytes?",
-                            lit=(2006, 2008), extra=((2006, r"JSON: \ RFC 4627"),
-                                                     (2008, r"Protocol Buffers open-sourced")), part=PART)
-        with self.voiceover("Chapter two. Bytes on the wire."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(2, r"Bytes on the wire", r"What does a message look like as bytes?", lit=(2006, 2008), extra=((2006, r"JSON: \ RFC 4627"),
+                                                     (2008, r"Protocol Buffers open-sourced")), part=PART, said="Chapter two. Bytes on the wire.")
 
     def doubles(self):
         d = load("doubles")
@@ -135,6 +131,9 @@ class Wire(VoiceoverScene):
         self.clear_scene()
 
     def varint(self):
+        self.ask(r"The number $150$ as a protobuf varint. \\ Bytes:", [r"$1$", r"$2$", r"$8$"], 1,
+                 say="Protocol Buffers writes the number a hundred and fifty as a varint. How many bytes?",
+                 reveal="Two: seven bits in each byte, and a high bit that says another follows.")
         p = {k: v for k, v, _, _ in load("published")["encodings"]}
         ok = {k: m for k, _, _, m in load("published")["encodings"]}
         g = {k: w for k, _, w, _ in load("published")["encodings"]}

@@ -5,9 +5,22 @@ import numpy as np
 from videos.stats.stats56.common import *  # noqa: F403
 
 
-class Problem(VoiceoverScene):
+class Problem(StatsScene):
     def construct(self):
         self.card()
+        self.wrong_idea("Choose the hypothesis after looking, then test it as usual",
+                        "The data chose the question: the test must account for the choice",
+                        narration="A very common practice: look at the data, pick the most interesting comparison, "
+                                  "then test it in the usual way.",
+                        right_narration="The usual test assumes the question was fixed in advance. When the data "
+                                        "chose the question, the test must account for the choice: by covering "
+                                        "every choice, conditioning on it, or splitting the data.")
+        self.ask(r"100 effects; a 95\% interval reported only for the largest estimate. Its coverage...",
+                 [r"is 95\%", r"is far below 95\%"], 1,
+                 say="A hundred effects estimated, and a ninety-five percent interval reported only for the one "
+                     "whose estimate came out largest. How often does that interval cover its effect?",
+                 reveal="Far less than ninety-five percent: the largest estimate is usually large partly by luck. A "
+                        "fixed-question interval fails a chosen question.")
         self.setup_rows()
         self.curse()
         self.shrink_link()
@@ -16,12 +29,10 @@ class Problem(VoiceoverScene):
         self.snooping()
         self.fcr()
         self.board()
+        self.answer()
 
     def card(self):
-        card = chapter_card(1, r"The selective-inference problem", r"Why a fixed-question interval fails a chosen question", lit=(2005,), part=PART)
-        with self.voiceover("Chapter one. The selective-inference problem: why an interval built for a fixed question fails a chosen one."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(1, r"The selective-inference problem", r"Why a fixed-question interval fails a chosen question", lit=(2005,), part=PART, said="Chapter one. The selective-inference problem: why an interval built for a fixed question fails a chosen one.")
 
     def setup_rows(self):
         rows = [

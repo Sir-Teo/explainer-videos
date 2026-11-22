@@ -11,7 +11,7 @@ def bits_row(bits, highlight=(), color=WHITE, hl=NO, size=22):
     return g
 
 
-class Link(VoiceoverScene):
+class Link(WatchScene):
     def construct(self):
         self.card()
         self.framing()
@@ -20,14 +20,13 @@ class Link(VoiceoverScene):
         self.ethernet()
 
     def card(self):
-        card = chapter_card(4, r"Frames", r"Where does a frame begin, \ and is it intact?", lit=(1961, 1973),
-                            extra=((1961, r"Peterson: \ cyclic codes for error detection"), (1973, r"Metcalfe: \ Ethernet")),
-                            part=PART)
-        with self.voiceover("Chapter four. Frames."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(4, r"Frames", r"Where does a frame begin, \ and is it intact?", lit=(1961, 1973), extra=((1961, r"Peterson: \ cyclic codes for error detection"), (1973, r"Metcalfe: \ Ethernet")), part=PART, said="Chapter four. Frames.")
 
     def framing(self):
+        self.ask(r"Frames are marked by \texttt{01111110}. \\ What if the data contains it?", [r"the frame breaks",
+                 r"the sender stuffs a 0 after five 1s"], 1,
+                 say="Frames begin and end with the flag zero, six ones, zero. What if the data contains that pattern?",
+                 reveal="After five ones in a row the sender inserts a zero, and the receiver removes it.")
         lk = load("link")
         head = label(r"Finding the edges: \ bit stuffing", font_size=36).to_edge(UP, buff=0.3)
         flag = bits_row([0, 1, 1, 1, 1, 1, 1, 0], color=KERN)

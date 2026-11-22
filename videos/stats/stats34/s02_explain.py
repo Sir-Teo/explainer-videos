@@ -9,9 +9,15 @@ def short(name: str) -> str:
     return name.replace("_", " ")
 
 
-class Explain(VoiceoverScene):
+class Explain(StatsScene):
     def construct(self):
         self.card()
+        self.ask("Many different models fit the data almost equally well. Their explanations...",
+                 ["agree", "can disagree completely"], 1,
+                 say="Breiman's Rashomon effect: many different models fit the same data almost equally well. Do "
+                     "their explanations of the data agree?",
+                 reveal="They can disagree completely: different variables, different shapes, the same accuracy. "
+                        "Good prediction doesn't single out one explanation.")
         self.shmueli()
         self.epe()
         self.wrong_wins()
@@ -20,12 +26,10 @@ class Explain(VoiceoverScene):
         self.pairs()
         self.rashomon_set()
         self.lesson()
+        self.answer()
 
     def card(self):
-        card = chapter_card(1, r"Explain or predict?", r"The Rashomon effect", lit=(2010,), part=PART)
-        with self.voiceover("Chapter one. Explain, or predict?"):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(1, r"Explain or predict?", r"The Rashomon effect", lit=(2010,), part=PART, said="Chapter one. Explain, or predict?")
 
     def shmueli(self):
         left = VGroup(label(r"\textbf{explanatory}", font_size=28, color=TRUEC),

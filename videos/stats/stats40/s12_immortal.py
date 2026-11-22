@@ -5,9 +5,15 @@ import numpy as np
 from videos.stats.stats40.common import *  # noqa: F403
 
 
-class Immortal(VoiceoverScene):
+class Immortal(StatsScene):
     def construct(self):
         self.card()
+        self.ask("Oscar winners lived 4 years longer than nominees. Counted correctly, the gain...",
+                 ["grew", "shrank to about a year, within noise"], 1,
+                 say="In 2001 Redelmeier and Singh reported that Oscar winners lived almost four years longer than "
+                     "other nominees. Count the time correctly, and what happens to the gain?",
+                 reveal="It shrinks to about a year, within the noise. A winner had to survive until winning; that "
+                        "time, in which death couldn't happen, was credited to winning. Immortal time.")
         self.oscars()
         self.mechanism()
         self.stanford_curves()
@@ -15,12 +21,10 @@ class Immortal(VoiceoverScene):
         self.statins()
         self.board()
         self.target()
+        self.answer()
 
     def card(self):
-        card = chapter_card(11, r"Immortal time", r"Time in which the outcome could not happen", lit=(1977, 2001, 2008), part=PART)
-        with self.voiceover("Chapter eleven. Immortal time."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(11, r"Immortal time", r"Time in which the outcome could not happen", lit=(1977, 2001, 2008), part=PART, said="Chapter eleven. Immortal time.")
 
     def oscars(self):
         rows = fit_rows(VGroup(

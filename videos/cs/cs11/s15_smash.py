@@ -4,7 +4,7 @@ from explainer.cs import *  # noqa: F403
 from videos.cs.cs11.common import (BG, CODE, CTRL, DATA, FUNC, HEAD, NO, PART, YES, code, load, region)
 
 
-class Smash(VoiceoverScene):
+class Smash(WatchScene):
     def construct(self):
         self.card()
         self.frame()
@@ -12,12 +12,7 @@ class Smash(VoiceoverScene):
         self.defences()
 
     def card(self):
-        card = chapter_card(14, r"Smashing the stack", r"How does an input become code?", lit=(1988, 1996),
-                            extra=((1988, r"the Morris worm"), (1996, r"Aleph One: \ ``Smashing the stack''")),
-                            part=PART)
-        with self.voiceover("Chapter fourteen. Smashing the stack."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(14, r"Smashing the stack", r"How does an input become code?", lit=(1988, 1996), extra=((1988, r"the Morris worm"), (1996, r"Aleph One: \ ``Smashing the stack''")), part=PART, said="Chapter fourteen. Smashing the stack.")
 
     def frame(self):
         sm = load("smash")
@@ -56,6 +51,10 @@ class Smash(VoiceoverScene):
         self.clear_scene()
 
     def attack(self):
+        self.ask(r"The name runs past the 64-byte buffer. \\ What does it overwrite that matters?",
+                 [r"nothing important", r"the saved return address"], 1,
+                 say="A name longer than the buffer keeps being copied upward. What does it reach that matters?",
+                 reveal="The saved return address: control the bytes there, and you choose where the function returns.")
         from explainer.cs.pebble import assemble
 
         sm = load("smash")

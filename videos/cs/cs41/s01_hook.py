@@ -4,11 +4,11 @@ from explainer.cs import *  # noqa: F403
 from videos.cs.cs41.common import (DATA, HEAD, KERN, LAM, NO, PART, YES, load, mono)
 
 
-class Hook(VoiceoverScene):
+class Hook(WatchScene):
     def construct(self):
         self.history()
         self.same()
-        self.plan()
+        self.title(PART)
 
     def history(self):
         head = label(r"April 2005", font_size=38).to_edge(UP, buff=0.35)
@@ -82,32 +82,6 @@ class Hook(VoiceoverScene):
         self.wait(0.5)
         self.clear_scene()
 
-    def plan(self):
-        title = label(rf"Part {PART}: \ Version Control, \ Builds and Dependencies", font_size=36).to_edge(UP,
-                                                                                                    buff=0.3)
-        smap = series_map(current=PART, done=PART - 1).scale(0.92).next_to(title, DOWN, buff=0.35)
-        obj = objectives_card([
-            r"git as a content-addressed Merkle graph",
-            r"merge bases, \ three-way merge, \ bisect",
-            r"packfiles and deltas; \ monorepos",
-            r"build systems as incremental computation",
-            r"version resolution is NP-complete",
-            r"merge queues and canaries: \ shipping safely",
-        ], font_size=25).move_to(DOWN * 0.2)
-        with self.voiceover(
-            "This is Part 41 of Computer Science, Built. <bookmark mark='a'/> We will see that git is secretly a "
-            "Merkle graph of hashes; that merging is a three-way comparison and bisecting is binary search; that a "
-            "build system is an incremental computation over a graph, and that choosing package versions is as hard "
-            "as satisfiability. And we will follow a change through a merge queue and a canary release to the "
-            "people who use it. Along the way we will measure this repository's own history, its forty versions of "
-            "one file, its seventeen thousand objects and the tests each of its modules can reach, because the "
-            "tools that built this series are themselves the best specimen of what this part is about."
-        ) as vo:
-            self.play(FadeIn(title), FadeIn(smap))
-            vo.wait_until("a")
-            self.play(FadeOut(smap), FadeIn(obj))
-        self.wait(0.5)
-        self.clear_scene()
 
 
 _ = (DATA, KERN, LAM)

@@ -4,7 +4,7 @@ from explainer.cs import *  # noqa: F403
 from videos.cs.cs41.common import (DATA, HEAD, KERN, LAM, NO, PART, YES, axes, code_block, grid_table, load, mono, trace)
 
 
-class Builds(VoiceoverScene):
+class Builds(WatchScene):
     def construct(self):
         self.card()
         self.make()
@@ -18,13 +18,8 @@ class Builds(VoiceoverScene):
         self.nix()
 
     def card(self):
-        card = chapter_card(4, r"Build systems", r"What is the least work that brings everything up to date?",
-                            lit=(1976, 2018), extra=((1976, r"Feldman: \ Make"), (2006, r"Dolstra: \ Nix"),
-                                                     (2018, r"Mokhov, Mitchell and Peyton Jones: \ à la carte")),
-                            part=PART)
-        with self.voiceover("Chapter four. Build systems."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(4, r"Build systems", r"What is the least work that brings everything up to date?", lit=(1976, 2018), extra=((1976, r"Feldman: \ Make"), (2006, r"Dolstra: \ Nix"),
+                                                     (2018, r"Mokhov, Mitchell and Peyton Jones: \ à la carte")), part=PART, said="Chapter four. Build systems.")
 
     def make(self):
         head = label(r"Make", font_size=36).to_edge(UP, buff=0.3)
@@ -66,6 +61,10 @@ class Builds(VoiceoverScene):
         self.clear_scene()
 
     def lies(self):
+        self.ask(r"Restore an older version of a source file. \\ Its timestamp goes back. Make...", [r"rebuilds it",
+                 r"may skip it, wrongly"], 1,
+                 say="You restore an older version of a source file, so its modification time goes back. What does Make do?",
+                 reveal="It may skip the rebuild: the output looks newer. Hashing the content doesn't make that mistake.")
         b = load("builds")
         head = label(r"Timestamps lie", font_size=36).to_edge(UP, buff=0.3)
         rows = [[r["edit"], f"{r['make']}", f"{r['traces']}"] for r in b["rows"]]

@@ -6,11 +6,11 @@ from explainer.cs import *  # noqa: F403
 from videos.cs.cs60.common import BG, DATA, HEAD, KERN, LAM, NO, PART, YES, SystolicView, load
 
 
-class Hook(VoiceoverScene):
+class Hook(WatchScene):
     def construct(self):
         self.energy()
         self.wave()
-        self.plan()
+        self.title(PART)
 
     def energy(self):
         e = load("energy")
@@ -104,31 +104,6 @@ class Hook(VoiceoverScene):
         self.wait(0.4)
         self.clear_scene()
 
-    def plan(self):
-        job = load("job")
-        row = job["row"]
-        title = label(rf"Part {PART}: \ Domain-Specific Hardware", font_size=36).to_edge(UP, buff=0.3)
-        smap = series_map(current=PART, done=PART - 1).scale(0.92).next_to(title, DOWN, buff=0.35)
-        obj = objectives_card([
-            r"why general-purpose speedups ended, \ in energy",
-            r"the roofline of this machine, \ measured",
-            r"a systolic array built from Part 4's multipliers",
-            r"the TPU, \ and why eight bits are enough",
-            r"GPUs, \ spatial machines, \ memory, \ sparsity",
-            r"the Job as a circuit: \ ledger row 21",
-        ], font_size=25).move_to(DOWN * 0.2)
-        with self.voiceover(
-            "This is Part 60 of Computer Science, Built. <bookmark mark='a'/> We will see why the free speedups of "
-            "Act II ended, and why the answer was specialization; measure this machine's roofline; build a systolic "
-            "array out of Part 4's multipliers and simulate it gate by gate; read the numbers in Google's TPU paper; "
-            "revisit GPUs, spatial machines, computing near memory and sparsity; and finally turn the Job itself "
-            f"into a circuit, which counts the thirty novels in about {1000 * row['seconds']:.0f} milliseconds."
-        ) as vo:
-            self.play(FadeIn(title), FadeIn(smap))
-            vo.wait_until("a")
-            self.play(FadeOut(smap), FadeIn(obj))
-        self.wait(0.5)
-        self.clear_scene()
 
 
 _ = (BG, KERN, LAM)

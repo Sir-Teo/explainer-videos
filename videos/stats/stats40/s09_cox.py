@@ -5,9 +5,15 @@ import numpy as np
 from videos.stats.stats40.common import *  # noqa: F403
 
 
-class Cox(VoiceoverScene):
+class Cox(StatsScene):
     def construct(self):
         self.card()
+        self.ask(r"Cox's partial likelihood estimates $\beta$ without...",
+                 ["the baseline hazard", "the covariates", "the event times"], 0,
+                 say="Cox's model: each hazard is a baseline times e to the linear predictor. His partial "
+                     "likelihood estimates beta without what?",
+                 reveal="Without the baseline hazard: it cancels from the chance that the person who failed was the "
+                        "one who failed. Regression with the nuisance never estimated.")
         self.model()
         self.partial()
         self.ties()
@@ -15,12 +21,14 @@ class Cox(VoiceoverScene):
         self.mayo()
         self.curves()
         self.trial()
+        self.answer()
+        self.checkpoint([("Nelson--Aalen sums?", "$d/n$ at each event"),
+                         ("Cox's partial likelihood avoids?", "the baseline hazard")],
+                        narration="Checkpoint. Hazards.",
+                        answers_narration="D over n. And the baseline hazard.")
 
     def card(self):
-        card = chapter_card(8, r"Cox's partial likelihood", r"Regression without the baseline hazard", lit=(1972,), part=PART)
-        with self.voiceover("Chapter eight. Cox's partial likelihood."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(8, r"Cox's partial likelihood", r"Regression without the baseline hazard", lit=(1972,), part=PART, said="Chapter eight. Cox's partial likelihood.")
 
     def model(self):
         rows = [

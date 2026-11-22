@@ -5,9 +5,15 @@ import numpy as np
 from videos.stats.stats33.common import *  # noqa: F403
 
 
-class Knockoffs(VoiceoverScene):
+class Knockoffs(StatsScene):
     def construct(self):
         self.card()
+        self.ask("A knockoff variable is built to...",
+                 ["mimic the real one's correlations, with no signal", "be pure independent noise"], 0,
+                 say="Barber and Candès's knockoffs catch false variables in a regression. How is a knockoff built?",
+                 reveal="To mimic the real variable's correlations with every other variable, while carrying no "
+                        "signal about the outcome. Real and knockoff compete; a variable that can't beat its "
+                        "knockoff isn't selected.")
         self.problem()
         self.construct_()
         self.gaussian()
@@ -17,12 +23,10 @@ class Knockoffs(VoiceoverScene):
         self.bars()
         self.results()
         self.reach()
+        self.answer()
 
     def card(self):
-        card = chapter_card(7, r"Knockoffs", r"Fake variables that catch false ones", lit=(2015,), part=PART)
-        with self.voiceover("Chapter seven. Knockoffs."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(7, r"Knockoffs", r"Fake variables that catch false ones", lit=(2015,), part=PART, said="Chapter seven. Knockoffs.")
 
     def problem(self):
         rows = [

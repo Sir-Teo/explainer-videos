@@ -13,23 +13,17 @@ def h64(s: str) -> int:
     return int.from_bytes(hashlib.blake2b(s.encode(), digest_size=8).digest(), "big")
 
 
-class Crawl(VoiceoverScene):
+class Crawl(WatchScene):
     def construct(self):
         self.card()
         self.loop()
         self.frontier()
-        self.freshness()
         self.simhash()
         self.scale()
 
     def card(self):
-        card = chapter_card(9, r"Crawling the web", r"How do you keep a copy of the web, \ and keep it fresh?",
-                            lit=(1994, 2002),
-                            extra=((1994, r"Koster: \ robots.txt"), (1999, r"Heydon and Najork: \ Mercator"),
-                                   (2002, r"Charikar: \ SimHash")), part=PART)
-        with self.voiceover("Chapter nine. Crawling the web."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(9, r"Crawling the web", r"How do you keep a copy of the web, \ and keep it fresh?", lit=(1994, 2002), extra=((1994, r"Koster: \ robots.txt"), (1999, r"Heydon and Najork: \ Mercator"),
+                                   (2002, r"Charikar: \ SimHash")), part=PART, said="Chapter nine. Crawling the web.")
 
     def loop(self):
         head = label(r"The crawl loop", font_size=36).to_edge(UP, buff=0.3)
@@ -154,67 +148,12 @@ class Crawl(VoiceoverScene):
         self.wait(0.4)
         self.clear_scene()
 
-    def freshness(self):
-        head = label(r"Freshness", font_size=36).to_edge(UP, buff=0.3)
-        T, x0, sc = 12.0, -5.0, 0.9                  # time 0..12 drawn from x = -5 to 5.8
-        visits = [0, 2, 4, 6, 8, 10, 12]
-        pages = [(r"changes often", [0.6, 1.5, 2.4, 3.3, 3.9, 4.8, 5.7, 6.5, 7.6, 8.3, 9.2, 10.4, 11.1], 1.8),
-                 (r"changes rarely", [3.1, 9.4], 0.75)]
-        rows = VGroup()
-        segs_all = []
-        for name, changes, y in pages:
-            nm = label(name, font_size=17, color=GREY_A).next_to([x0, y, 0], LEFT, buff=0.2)
-            axis = Line([x0, y, 0], [x0 + T * sc, y, 0], color=GREY_D, stroke_width=1)
-            ticks = VGroup(*[Line([x0 + t * sc, y - 0.3, 0], [x0 + t * sc, y + 0.3, 0], color=NO, stroke_width=2.5)
-                             for t in changes])
-            vis = VGroup(*[Triangle(color=HEAD, fill_opacity=1).scale(0.09).move_to([x0 + t * sc, y - 0.42, 0])
-                           for t in visits])
-            segs = VGroup()
-            for a, b in zip(visits, visits[1:]):
-                ch = [c for c in changes if a < c < b]
-                s = ch[0] if ch else b
-                segs.add(timeline_bar(x0 + a * sc, x0 + s * sc, y, YES, h=0.22))
-                if ch:
-                    segs.add(timeline_bar(x0 + s * sc, x0 + b * sc, y, NO, h=0.22))
-            segs_all.append(segs)
-            rows.add(VGroup(nm, axis, ticks, vis))
-        key = VGroup(label(r"red tick: \ the page changes", font_size=16, color=NO),
-                     label(r"triangle: \ we revisit", font_size=16, color=HEAD),
-                     label(r"bar: \ our copy fresh or stale", font_size=16, color=GREY_A),
-                     label(r"illustrative", font_size=16, color=GREY_B)).arrange(RIGHT, buff=0.5).next_to(
-            rows, DOWN, buff=0.35)
-        eq = label(r"changes at random at rate $\lambda$, \ revisited every $I$: \ fresh for a fraction "
-                   r"$\dfrac{1 - e^{-\lambda I}}{\lambda I}$ of the time", font_size=22, color=WHITE).next_to(
-            key, DOWN, buff=0.35)
-        lines = VGroup(
-            wrapped_label(r"Cho and Garcia-Molina \ (2000): \ with a fixed budget of visits, \ revisiting every page "
-                          r"equally often beats revisiting in proportion to its rate of change; \ the best policy "
-                          r"visits the fastest-changing pages \textit{less}", 12.4, font_size=19, color=YES),
-            wrapped_label(r"conditional requests \ (\texttt{If-Modified-Since}) \ and sitemaps let servers say what "
-                          r"has changed", 12.4, font_size=19, color=GREY_A),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.18).to_edge(DOWN, buff=0.3)
-        with self.voiceover(
-            "The web changes after it is crawled, so a crawler must come back. <bookmark mark='a'/> Here are two "
-            "pages, one changing often and one rarely, revisited at the same rate. Between a change and the next "
-            "visit, our copy is stale. <bookmark mark='b'/> If a page changes at random at a rate lambda, and we "
-            "revisit every interval I, our copy is fresh for a fraction one minus e to the minus lambda I, over "
-            "lambda I, of the time. <bookmark mark='c'/> Junghoo Cho and Hector Garcia-Molina found a surprise in "
-            "2000. With a fixed budget, revisiting every page equally often beats revisiting in proportion to change,"
-            " and the best policy visits the fastest-changing pages less, since their copies go stale almost at once."
-        ) as vo:
-            self.play(FadeIn(head), FadeIn(rows), FadeIn(key))
-            vo.wait_until("a")
-            for segs in segs_all:
-                self.play(LaggedStart(*[FadeIn(s) for s in segs], lag_ratio=0.15), run_time=2)
-            vo.wait_until("b")
-            self.play(FadeIn(eq))
-            vo.wait_until("c")
-            self.play(FadeIn(lines[0]))
-            self.play(FadeIn(lines[1]))
-        self.wait(0.4)
-        self.clear_scene()
 
     def simhash(self):
+        self.ask(r"Change a few words of a passage. \\ Its SimHash fingerprint changes...", [r"completely",
+                 r"in a few bits"], 1,
+                 say="Change a few words of a passage. How much does its SimHash fingerprint change?",
+                 reveal="In a few bits. Near-duplicates have nearby fingerprints.")
         head = label(r"SimHash: \ a fingerprint that bends", font_size=36).to_edge(UP, buff=0.3)
         words = "call me ishmael some years ago never".split()
         sh = [" ".join(words[i:i + 3]) for i in range(len(words) - 2)]

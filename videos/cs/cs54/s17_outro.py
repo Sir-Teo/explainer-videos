@@ -17,7 +17,7 @@ def tile(content, caption, color, TW=3.6, TH=2.3):
     return Group(frame, content, cap)
 
 
-class Outro(VoiceoverScene):
+class Outro(WatchScene):
     def construct(self):
         self.recap()
         self.payoffs()
@@ -49,6 +49,12 @@ class Outro(VoiceoverScene):
             self.play(LaggedStart(*[FadeIn(t, shift=UP * 0.15) for t in tiles], lag_ratio=0.25), run_time=4.0)
         self.wait(0.5)
         self.clear_scene()
+        self.checkpoint(
+            [(r"What does a simulation proof show?", r"Every concrete step matches an abstract one"),
+             (r"Why trust an LCF kernel?", r"Only a small kernel builds theorems")],
+            narration="Last checkpoint. What does a simulation proof show? And why can an LCF-style system be trusted?",
+            answers_narration="That every concrete step is matched by an abstract one, so behaviours refine the specification. "
+                              "And because only its small kernel can make theorems.")
 
     def payoffs(self):
         card = payoff_card([

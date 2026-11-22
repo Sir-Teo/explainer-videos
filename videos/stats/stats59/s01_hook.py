@@ -5,7 +5,7 @@ import numpy as np
 from videos.stats.stats59.common import *  # noqa: F403
 
 
-class Hook(LectureMixin, VoiceoverScene):
+class Hook(LectureMixin, StatsScene):
     def construct(self):
         self.story()
         self.claims()
@@ -14,7 +14,7 @@ class Hook(LectureMixin, VoiceoverScene):
         self.board()
         self.why_now()
         self.upgrade()
-        self.objectives()
+        self.title(PART)
 
     def story(self):
         tl = timeline(lit=(2019,)).to_edge(UP, buff=0.35)
@@ -187,31 +187,5 @@ class Hook(LectureMixin, VoiceoverScene):
             self.play(FadeIn(cards[0], shift=UP * 0.2))
             vo.wait_until("b")
             self.play(FadeIn(cards[1], shift=UP * 0.2))
-        self.wait(1.0)
-        self.clear_scene()
-
-    def objectives(self):
-        head = VGroup(label(r"Part 59", font_size=34, color=GREY_B), label(r"High-Dimensional Asymptotics", font_size=56)).arrange(DOWN, buff=0.25)
-        obj = objectives_card([
-            r"the proportional regime; \ Sur--Cand\`es's logistic MLE and LRT, \ solved exactly",
-            r"random matrices: \ Stieltjes transforms, \ free convolution; \ exact ridge and ridgeless risk",
-            r"robust regression in high dimensions; \ AMP and state evolution; \ Gordon's comparison",
-            r"the replica method; \ random features; \ corrected inference; \ open problems",
-        ], color=S.ACCENT, font_size=26)
-        prereq = note(r"prerequisites: \ Parts 32, \ 51, \ 52").to_corner(DL, buff=0.3)
-        built = note(r"built: \ \texttt{statkit.amp}, \ the state-evolution cobweb").to_corner(DR, buff=0.3)
-        with self.voiceover(
-            (
-            "<bookmark mark='a'/> Part fifty-nine: high-dimensional asymptotics. <bookmark mark='b'/> The "
-            'proportional regime, and the logistic MLE and likelihood-ratio test solved exactly; random matrix '
-            'tools, Stieltjes transforms and free convolution; exact risks for ridge and ridgeless regression; '
-            "robust regression in high dimensions; approximate message passing and its state evolution; Gordon's "
-            'comparison inequality; the replica method; random features; corrected inference; and open problems.'
-        )
-        ) as vo:
-            vo.wait_until("a")
-            self.play(FadeIn(head, shift=UP * 0.2))
-            vo.wait_until("b")
-            self.play(FadeOut(head), FadeIn(obj, shift=UP * 0.2), FadeIn(prereq), FadeIn(built))
         self.wait(1.0)
         self.clear_scene()

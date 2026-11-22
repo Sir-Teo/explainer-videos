@@ -9,7 +9,7 @@ from videos.cs.cs15.common import (BG, CODE, COST, CTRL, DATA, FUNC, HEAD, LAM, 
                                    load, mono, words)
 
 
-class JIT(VoiceoverScene):
+class JIT(WatchScene):
     def construct(self):
         self.card()
         self.tiers()
@@ -18,11 +18,7 @@ class JIT(VoiceoverScene):
         self.deopt()
 
     def card(self):
-        card = chapter_card(11, r"Just-in-time compilers", r"Can a program be compiled while it runs?", lit=(1991,),
-                            extra=((1991, r"Self: \ polymorphic inline caches"),), part=PART)
-        with self.voiceover("Chapter eleven. Just-in-time compilers."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(11, r"Just-in-time compilers", r"Can a program be compiled while it runs?", lit=(1991,), extra=((1991, r"Self: \ polymorphic inline caches"),), part=PART, said="Chapter eleven. Just-in-time compilers.")
 
     def tiers(self):
         d = load("jit")
@@ -63,8 +59,7 @@ class JIT(VoiceoverScene):
             "stated tiers enabled, using the best of three runs. Enabling an extra tier need not make this short "
             "benchmark faster. <bookmark mark='c'/> The trace shows what this V8 actually compiled during a "
             "separate diagnostic run. <bookmark mark='d'/> Hotness predicts where compilation may pay off, but "
-            "compilation, warmup, scheduling and speculation also cost time. A single best run does not establish "
-            "stable long-term performance."
+            "compilation, warmup, scheduling and speculation also cost time."
         )
         ) as vo:
             self.play(FadeIn(head), FadeIn(cap))
@@ -123,8 +118,7 @@ class JIT(VoiceoverScene):
             "lookup mechanisms depend on the engine. <bookmark mark='d'/> Our curve times twenty million four "
             "hundred and eighty thousand getX calls with one through thirty-two constructed shapes. The "
             "horizontal positions use a base-two logarithmic scale. The measured ratio is shown beside the graph. "
-            "This construction changes object layouts too, so the curve does not isolate one instruction or prove "
-            "a universal shape penalty."
+            ""
         )
         ) as vo:
             self.play(FadeIn(head), FadeIn(src))
@@ -177,6 +171,10 @@ class JIT(VoiceoverScene):
         self.clear_scene()
 
     def deopt(self):
+        self.ask(r"A JIT compiled \texttt{add} for numbers. \\ Then it receives strings.", [r"it computes a wrong answer",
+                 r"it deoptimizes and falls back"], 1,
+                 say="A JIT compiled add assuming numbers. Then it's called with strings. What happens?",
+                 reveal="A guard fails, the optimized code is thrown away, and the slower general path runs.")
         d = load("jit")
         head = label(r"Speculate, \ and take it back", font_size=34).to_edge(UP, buff=0.3)
         src = code(["function add(a, b) { return a + b; }",

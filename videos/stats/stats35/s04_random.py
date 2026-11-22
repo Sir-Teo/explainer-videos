@@ -5,9 +5,15 @@ import numpy as np
 from videos.stats.stats35.common import *  # noqa: F403
 
 
-class Randomization(VoiceoverScene):
+class Randomization(StatsScene):
     def construct(self):
         self.card()
+        self.ask("Treated minus untreated averages equals the effect plus...",
+                 ["selection bias, zero on average under randomization", "only noise"], 0,
+                 say="The difference in average outcomes between treated and untreated. In general, it equals the "
+                     "effect plus what?",
+                 reveal="Selection bias: how the treated would have differed anyway. Randomization makes it zero on "
+                        "average; that's the whole argument.")
         self.decompose()
         self.doctor()
         self.numbers()
@@ -15,12 +21,10 @@ class Randomization(VoiceoverScene):
         self.why_()
         self.board()
         self.balance()
+        self.answer()
 
     def card(self):
-        card = chapter_card(3, r"Why randomization works", r"Selection bias, measured", lit=(1935,), part=PART)
-        with self.voiceover("Chapter three. Why randomization works."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(3, r"Why randomization works", r"Selection bias, measured", lit=(1935,), part=PART, said="Chapter three. Why randomization works.")
 
     def decompose(self):
         rows = [

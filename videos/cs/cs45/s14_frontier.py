@@ -15,23 +15,20 @@ def tile(title, body, col, w=4.2, h=3.0):
     return VGroup(frame, t, b)
 
 
-class Frontier(VoiceoverScene):
+class Frontier(WatchScene):
     def construct(self):
         self.card()
         self.nines()
-        self.predictions()
         self.isolation()
-        self.open()
 
     def card(self):
-        card = chapter_card(13, r"Frontier: \ scheduling, \ isolation and energy",
-                            r"How close to optimal can a cloud run?", lit=(2015, 2020),
-                            extra=((2015, r"Borg described"), (2020, r"Firecracker")), part=PART)
-        with self.voiceover("Chapter thirteen, the frontier. How close to optimal can a cloud run?"):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(13, r"Frontier: \ scheduling, \ isolation and energy", r"How close to optimal can a cloud run?", lit=(2015, 2020), extra=((2015, r"Borg described"), (2020, r"Firecracker")), part=PART, said="Chapter thirteen, the frontier. How close to optimal can a cloud run?")
 
     def nines(self):
+        self.ask(r"Eleven nines, computed from independent failures. \\ Real durability is set by...",
+                 [r"the same independent failures", r"correlated failures"], 1,
+                 say="Eleven nines of durability, computed from independent disk failures. What really decides durability?",
+                 reveal="Correlated failures: a bad batch of disks, a power event, a software bug.")
         d = load("durability")
         c = load("correlated")
         rs = next(r for r in d["schemes"] if r["name"] == "RS(10, 4)")
@@ -74,54 +71,6 @@ class Frontier(VoiceoverScene):
         self.wait(0.4)
         self.clear_scene()
 
-    def predictions(self):
-        p = load("packing")["uniform"]["mean_ratio"]
-        head = label(r"Scheduling with predictions", font_size=36).to_edge(UP, buff=0.3)
-        names = [(r"next fit", "next fit", NO), (r"first fit", "first fit", HEAD), (r"best fit", "best fit", LAM),
-                 (r"first fit decreasing", "first fit decreasing", YES)]
-        bars = VGroup()
-        for k, (t, key, col) in enumerate(names):
-            v = p[key]
-            w = (v - 1) / 0.3 * 5.0 + 0.05
-            b = Rectangle(width=w, height=0.45, stroke_width=0, fill_color=col, fill_opacity=0.85)
-            b.move_to([-3.0 + w / 2, 1.7 - 0.65 * k, 0])
-            bars.add(VGroup(b, label(rf"{100 * (v - 1):.0f}\% above optimal", font_size=17, color=col).next_to(
-                b, RIGHT, buff=0.15), label(t, font_size=18, color=GREY_A).move_to([-4.6, b.get_y(), 0])))
-        cap = label(r"chapter 5: \ mean bins above the exact optimum, \ random instances", font_size=17,
-                    color=GREY_B).next_to(bars, UP, buff=0.25)
-        lines = VGroup(
-            wrapped_label(r"first fit decreasing is close to optimal because it knows the sizes in advance; \ an "
-                          r"online scheduler does not, \ and a VM's lifetime is unknown too", 12.4, font_size=20,
-                          color=WHITE),
-            wrapped_label(r"\textbf{learning-augmented algorithms} \ (Lykouris and Vassilvitskii, \ 2018, \ and "
-                          r"after): \ use a model's predictions of size and lifetime, \ and prove the result is near "
-                          r"optimal when they are right and never much worse than the classical bound when wrong",
-                          12.4, font_size=20, color=YES),
-            wrapped_label(r"in production: \ schedulers that predict how long each VM will live, \ to pack machines "
-                          r"that empty together", 12.4, font_size=20, color=HEAD),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.25).to_edge(DOWN, buff=0.4)
-        with self.voiceover(
-            "Chapter five's heuristics show how much knowing the future is worth. <bookmark mark='a'/> First fit "
-            f"decreasing, which sorts every item before packing, came within {100 * (p['first fit decreasing'] - 1):.0f} "
-            f"percent of the optimum on our instances; next fit, which never looks back, {100 * (p['next fit'] - 1):.0f} "
-            "percent. But a real scheduler is online: requests arrive one at a time, and nobody says how long a "
-            "virtual machine will live. <bookmark mark='b'/> A new line of theory, learning-augmented algorithms, "
-            "starting with Thodoris Lykouris and Sergei Vassilvitskii in 2018, gives an algorithm a model's "
-            "predictions and proves two things: that it is near optimal when the predictions are right, and never "
-            "much worse than the classical guarantee when they are wrong. <bookmark mark='c'/> In practice, "
-            "schedulers now predict how long each virtual machine will run, so that machines can be packed with "
-            "work that finishes together, and be emptied, repaired or switched off."
-        ) as vo:
-            self.play(FadeIn(head), FadeIn(cap))
-            vo.wait_until("a")
-            self.play(LaggedStart(*[GrowFromEdge(b[0], LEFT) for b in bars], lag_ratio=0.3),
-                      LaggedStart(*[FadeIn(VGroup(b[1], b[2])) for b in bars], lag_ratio=0.3), FadeIn(lines[0]))
-            vo.wait_until("b")
-            self.play(FadeIn(lines[1]))
-            vo.wait_until("c")
-            self.play(FadeIn(lines[2]))
-        self.wait(0.4)
-        self.clear_scene()
 
     def isolation(self):
         head = label(r"Isolation, \ and trusting the machine", font_size=36).to_edge(UP, buff=0.3)
@@ -157,40 +106,6 @@ class Frontier(VoiceoverScene):
         self.wait(0.4)
         self.clear_scene()
 
-    def open(self):
-        head = label(r"Open", font_size=36).to_edge(UP, buff=0.3)
-        items = VGroup(
-            wrapped_label(r"1. \ \textbf{Correlated failure}: \ durability models calibrated on real correlated "
-                          r"failures, \ and placements that provably bound them.", 12.4, font_size=24, color=WHITE),
-            wrapped_label(r"2. \ \textbf{Online packing with lifetimes}: \ competitive ratios for vector bin packing "
-                          r"when items leave, \ with and without predictions.", 12.4, font_size=24, color=YES),
-            wrapped_label(r"3. \ \textbf{Stable autoscaling}: \ controllers for delayed, \ noisy, \ coupled services "
-                          r"with guarantees.", 12.4, font_size=24, color=HEAD),
-            wrapped_label(r"4. \ \textbf{Carbon-optimal scheduling}: \ placing work in time and space to minimize "
-                          r"emissions under deadlines.", 12.4, font_size=24, color=KERN),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.35).next_to(head, DOWN, buff=0.45)
-        star = wrapped_label(r"$\bigstar$ \ this part's research problem: \ an online algorithm for vector bin packing "
-                             r"of jobs with unknown lifetimes, \ given predictions, \ that is near optimal when they "
-                             r"are accurate and robust when they are not", 12.4, font_size=23,
-                             color=LAM).to_edge(DOWN, buff=0.35)
-        with self.voiceover(
-            "Open problems. <bookmark mark='a'/> Durability models calibrated on real correlated failures, and data "
-            "placements that provably limit them. <bookmark mark='b'/> Online packing in several dimensions when "
-            "jobs also leave, with and without predictions. <bookmark mark='c'/> Autoscaling controllers for "
-            "services that are delayed, noisy and coupled to one another, with guarantees of stability. "
-            "<bookmark mark='d'/> And carbon-optimal scheduling: placing work in time and space to minimize "
-            "emissions while meeting deadlines. <bookmark mark='e'/> This part's research problem asks for an "
-            "online algorithm that packs jobs of unknown lifetime into machines with several resources, using "
-            "predictions, near optimal when they are accurate and robust when they are not."
-        ) as vo:
-            self.play(FadeIn(head))
-            for mk, it in zip("abcd", items):
-                vo.wait_until(mk)
-                self.play(FadeIn(it))
-            vo.wait_until("e")
-            self.play(FadeIn(star))
-        self.wait(0.6)
-        self.clear_scene()
 
 
 _ = (DATA, KERN, LAM, NO, YES)

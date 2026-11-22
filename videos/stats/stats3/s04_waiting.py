@@ -5,9 +5,15 @@ import numpy as np
 from videos.stats.stats3.common import *  # noqa: F403
 
 
-class Waiting(VoiceoverScene, TreeMixin):
+class Waiting(StatsScene, TreeMixin):
     def construct(self):
         self.card()
+        self.ask("Throw a die until it shows a six. Average number of throws?",
+                 ["3", "6", "36"], 1,
+                 say="Throw a die until it shows a six. On average, how many throws does it take: three, six, or "
+                     "thirty-six?",
+                 reveal="Six: one over the chance of success. The wait is geometric, and its long right tail is why "
+                        "some waits feel endless.")
         self.geometric()
         self.memoryless()
         self.first_step()
@@ -15,12 +21,10 @@ class Waiting(VoiceoverScene, TreeMixin):
         self.tree_voiceover("Two more arrows: <bookmark mark='t'/> waiting for the first success turns Bernoulli "
                             "trials into a geometric, and adding r independent geometric waits gives a negative "
                             "binomial.", 3)
+        self.answer()
 
     def card(self):
-        card = chapter_card(3, r"Waiting", r"How long until the first six?", lit=(1654,), part=PART)
-        with self.voiceover("Chapter three. Waiting."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(3, r"Waiting", r"How long until the first six?", lit=(1654,), part=PART, said="Chapter three. Waiting.")
 
     def geometric(self):
         d = load("waiting")

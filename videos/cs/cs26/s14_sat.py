@@ -7,7 +7,7 @@ from videos.cs.cs26.common import (BG, CTRL, DATA, HEAD, LAM, NO, PART, YES, fit
 COLS = [DATA, HEAD, YES, NO]
 
 
-class Sat(VoiceoverScene):
+class Sat(WatchScene):
     def construct(self):
         self.card()
         self.cdcl()
@@ -15,12 +15,7 @@ class Sat(VoiceoverScene):
         self.famous()
 
     def card(self):
-        card = chapter_card(13, r"SAT in practice", r"Why do solvers for an NP-complete problem work so well?",
-                            lit=(1962, 2016), extra=((1962, r"DPLL"), (1996, r"CDCL"), (2016, r"Pythagorean triples")),
-                            part=PART)
-        with self.voiceover("Chapter thirteen. SAT in practice."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(13, r"SAT in practice", r"Why do solvers for an NP-complete problem work so well?", lit=(1962, 2016), extra=((1962, r"DPLL"), (1996, r"CDCL"), (2016, r"Pythagorean triples")), part=PART, said="Chapter thirteen. SAT in practice.")
 
     def cdcl(self):
         s = load("solvers")
@@ -59,6 +54,9 @@ class Sat(VoiceoverScene):
         self.clear_scene()
 
     def phase(self):
+        self.ask(r"Random 3-SAT is hardest \\ at clauses per variable about...", [r"1", r"4.27", r"10"], 1,
+                 say="Random three-SAT formulas are hardest at a particular ratio of clauses to variables. Which?",
+                 reveal="Near four point two seven, where they switch from almost always satisfiable to almost never.")
         d = load("phase")
         head = label(r"The phase transition of random 3-SAT", font_size=32).to_edge(UP, buff=0.3)
         ax = Axes(x_range=[3.0, 6.0, 0.5], y_range=[0, 1.05, 0.25], x_length=5.6, y_length=3.4,

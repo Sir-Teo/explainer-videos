@@ -34,22 +34,17 @@ def mini_call(kind, w=2.0, h=1.9):
     return g
 
 
-class Styles(VoiceoverScene):
+class Styles(WatchScene):
     def construct(self):
         self.card()
         self.rest()
         self.methods()
         self.paging()
-        self.grpc()
         self.graphql()
 
     def card(self):
-        card = chapter_card(4, r"API styles", r"What shape should a remote interface take?",
-                            lit=(2000, 2015, 2022), extra=((2000, r"Fielding: \ REST"), (2015, r"gRPC, \ GraphQL"),
-                                                           (2022, r"RFC 9110")), part=PART)
-        with self.voiceover("Chapter four. API styles."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(4, r"API styles", r"What shape should a remote interface take?", lit=(2000, 2015, 2022), extra=((2000, r"Fielding: \ REST"), (2015, r"gRPC, \ GraphQL"),
+                                                           (2022, r"RFC 9110")), part=PART, said="Chapter four. API styles.")
 
     def rest(self):
         head = label(r"REST: \ resources and representations", font_size=36).to_edge(UP, buff=0.3)
@@ -158,6 +153,10 @@ class Styles(VoiceoverScene):
         self.clear_scene()
 
     def paging(self):
+        self.ask(r"Page by offset while new rows arrive at the front. \\ The next page...", [r"is exact",
+                 r"repeats a row"], 1,
+                 say="A client pages through a list by offset, while new rows are added at the front. What does the next page return?",
+                 reveal="A row it has already seen. A cursor remembers where you were instead.")
         rows = load("pagination")["rows"]
         r0, r3, r10 = rows[0], rows[2], rows[3]
         head = label(r"Offsets against cursors", font_size=36).to_edge(UP, buff=0.3)
@@ -233,46 +232,6 @@ class Styles(VoiceoverScene):
         self.wait(0.4)
         self.clear_scene()
 
-    def grpc(self):
-        head = label(r"gRPC: \ typed calls and streams", font_size=36).to_edge(UP, buff=0.3)
-        proto = code_block(["service Library {", "  rpc Get(BookId) returns (Book);",
-                            "  rpc List(Query) returns (stream Book);", "  rpc Upload(stream Chunk) returns (Receipt);",
-                            "  rpc Chat(stream Note) returns (stream Note);", "}"], size=18)
-        proto.next_to(head, DOWN, buff=0.7).to_edge(LEFT, buff=0.5)
-        pl = label(r"a \texttt{.proto} service \ (illustrative)", font_size=17, color=GREY_B).next_to(
-            proto, UP, buff=0.15).align_to(proto, LEFT)
-        shapes = VGroup()
-        for kind, name in (("unary", r"unary"), ("server", r"server streaming"), ("client", r"client streaming"),
-                           ("bidi", r"bidirectional")):
-            d = mini_call(kind)
-            shapes.add(VGroup(d, label(name, font_size=20, color=WHITE).next_to(d, DOWN, buff=0.15)))
-        shapes.arrange_in_grid(rows=2, cols=2, buff=(0.7, 0.45)).next_to(head, DOWN, buff=0.5).to_edge(RIGHT,
-                                                                                                       buff=0.5)
-        notes = VGroup(
-            wrapped_label(r"messages in protocol buffers \ (chapter 2), \ stubs generated for each language \ "
-                          r"(chapter 1)", 6.2, font_size=21, color=DATA),
-            wrapped_label(r"carried by HTTP/2: \ many calls at once on one connection \ (Part 37), \ each with a "
-                          r"deadline", 6.2, font_size=21, color=KERN),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.3).next_to(proto, DOWN, buff=0.6).align_to(proto, LEFT)
-        with self.voiceover(
-            "Google's gRPC, open-sourced in 2015 from its internal system Stubby, sees an API as a set of typed "
-            "procedures. <bookmark mark='a'/> Services are declared in a protocol buffers file, so messages travel "
-            "in chapter two's compact binary, and stubs are generated for every language. <bookmark mark='b'/> "
-            "Calls ride on HTTP/2, many at once on one connection, each with a deadline. <bookmark mark='c'/> And a "
-            "call need not be one request and one reply: a server can stream replies, a client can stream "
-            "requests, and both can stream at once."
-        ) as vo:
-            self.play(FadeIn(head))
-            vo.wait_until("a")
-            self.play(FadeIn(pl), LaggedStart(*[FadeIn(ln) for ln in proto], lag_ratio=0.2), FadeIn(notes[0]))
-            vo.wait_until("b")
-            self.play(FadeIn(notes[1]))
-            vo.wait_until("c")
-            for k, s in enumerate(shapes):
-                self.play(FadeIn(s[0][:4]), FadeIn(s[1]), Indicate(proto[k + 1], color=HEAD), run_time=0.5)
-                self.play(LaggedStart(*[GrowArrow(a) for a in s[0].arrows], lag_ratio=0.3), run_time=1.0)
-        self.wait(0.4)
-        self.clear_scene()
 
     def graphql(self):
         n = load("nplus1")

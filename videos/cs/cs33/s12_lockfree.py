@@ -23,7 +23,7 @@ def stack_pic(nodes, x, y_top=1.4, owned=None, color=DATA):
     return g
 
 
-class LockFree(VoiceoverScene):
+class LockFree(WatchScene):
     def construct(self):
         self.card()
         self.treiber()
@@ -31,12 +31,8 @@ class LockFree(VoiceoverScene):
         self.fixes()
 
     def card(self):
-        card = chapter_card(11, r"Lock-free data structures", r"Can threads share a stack without a lock?",
-                            lit=(1986, 1996, 2001), extra=((1986, r"Treiber stack"), (1996, r"Michael--Scott queue"),
-                                                           (2001, r"RCU in Linux")), part=PART)
-        with self.voiceover("Chapter eleven. Lock-free data structures."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(11, r"Lock-free data structures", r"Can threads share a stack without a lock?", lit=(1986, 1996, 2001), extra=((1986, r"Treiber stack"), (1996, r"Michael--Scott queue"),
+                                                           (2001, r"RCU in Linux")), part=PART, said="Chapter eleven. Lock-free data structures.")
 
     def treiber(self):
         head = label(r"Treiber's stack, \ 1986", font_size=36).to_edge(UP, buff=0.3)
@@ -78,6 +74,9 @@ class LockFree(VoiceoverScene):
         self.clear_scene()
 
     def aba(self):
+        self.ask(r"A pop's CAS sees the same top pointer as before. \\ Is the stack unchanged?", [r"yes", r"not necessarily"], 1,
+                 say="A pop reads the top, gets delayed, then its compare-and-swap sees the same pointer. Has the stack stayed the same?",
+                 reveal="Not necessarily: it may have gone A, then B, then A again.")
         d = load("aba")
         head = label(r"The ABA problem, \ found by the checker", font_size=34).to_edge(UP, buff=0.3)
         s0 = stack_pic(["A", "B", "C"], -4.6)
@@ -168,3 +167,9 @@ class LockFree(VoiceoverScene):
             self.play(FadeIn(lines[1]))
         self.wait(0.3)
         self.clear_scene()
+        self.checkpoint(
+            [(r"Name the four deadlock conditions.", r"Exclusion, hold and wait, no preemption, a cycle"),
+             (r"What does linearizable mean?", r"Each operation takes effect at one instant in its interval")],
+            narration="Checkpoint. Name the four conditions for deadlock. And what does linearizable mean?",
+            answers_narration="Mutual exclusion, hold and wait, no preemption, and a cycle of waiting. And every operation "
+                              "appears to take effect at one instant between its start and its end.")

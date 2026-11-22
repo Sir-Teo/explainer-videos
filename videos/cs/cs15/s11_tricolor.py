@@ -4,7 +4,7 @@ from explainer.cs import *  # noqa: F403
 from videos.cs.cs15.common import (BG, BLACK_OBJ, CODE, COST, CTRL, DATA, FUNC, GRAY_OBJ, HEAD, LAM, NO, PART,
                                    WHITE_OBJ, YES, grid_table, load, mono, words)
 
-from .measurements import barrier_color_witness
+from videos.cs.cs15.measurements import barrier_color_witness
 
 POS = {"R": (-4.5, 0.6), "A": (-2.0, 0.6), "B": (0.5, 1.6), "C": (3.0, 0.6)}
 FILL = {0: WHITE_OBJ, 1: GRAY_OBJ, 2: BLACK_OBJ}
@@ -16,7 +16,7 @@ def obj(name, color):
     return VGroup(c, t)
 
 
-class Concurrent(VoiceoverScene):
+class Concurrent(WatchScene):
     def construct(self):
         self.card()
         self.colors()
@@ -25,12 +25,8 @@ class Concurrent(VoiceoverScene):
         self.pauses()
 
     def card(self):
-        card = chapter_card(10, r"Collecting while the program runs", r"Can the collector and the program share the "
-                            r"heap?", lit=(1978,), extra=((1978, r"Dijkstra et al.: \ on-the-fly collection"),),
-                            part=PART)
-        with self.voiceover("Chapter ten. Collecting while the program runs."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(10, r"Collecting while the program runs", r"Can the collector and the program share the "
+                            r"heap?", lit=(1978,), extra=((1978, r"Dijkstra et al.: \ on-the-fly collection"),), part=PART, said="Chapter ten. Collecting while the program runs.")
 
     def colors(self):
         head = label(r"Three colours", font_size=34).to_edge(UP, buff=0.3)
@@ -68,6 +64,10 @@ class Concurrent(VoiceoverScene):
         return VGroup(*nodes.values(), ar), nodes
 
     def loss(self):
+        self.ask(r"The collector marks while the program keeps running. \\ Can a live object be freed?", [r"no",
+                 r"yes, without a barrier"], 1,
+                 say="The collector marks while the program keeps changing pointers. Could it free a live object?",
+                 reveal="Yes, unless a barrier tells the collector about the changed pointers.")
         d = load("tricolor")
         head = label(r"How a live object gets lost", font_size=34).to_edge(UP, buff=0.3)
         frames = d["frames"]
@@ -193,3 +193,9 @@ class Concurrent(VoiceoverScene):
             self.play(FadeIn(pts[2]))
         self.wait(0.3)
         self.clear_scene()
+        self.checkpoint(
+            [(r"Why can't reference counting free cycles?", r"Their counts never reach zero"),
+             (r"Why do generational collectors work?", r"Most objects die young")],
+            narration="Checkpoint. Why can't reference counting free a cycle? And why do generational collectors work?",
+            answers_narration="The counts in a cycle never fall to zero. And most objects die young, so collecting the young "
+                              "space often finds mostly garbage.")

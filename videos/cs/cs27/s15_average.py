@@ -6,7 +6,7 @@ from explainer.cs import *  # noqa: F403
 from videos.cs.cs27.common import (BG, CTRL, DATA, HEAD, LAM, NO, PART, YES, fit_right, load, words)
 
 
-class Average(VoiceoverScene):
+class Average(WatchScene):
     def construct(self):
         self.card()
         self.planted()
@@ -14,14 +14,13 @@ class Average(VoiceoverScene):
         self.bridge()
 
     def card(self):
-        card = chapter_card(14, r"Average case and one-way functions", r"Can hardness be put to work?",
-                            lit=(1986, 2005), extra=((1986, r"Levin"), (1996, r"Ajtai"), (2005, r"Regev: \ LWE")),
-                            part=PART)
-        with self.voiceover("Chapter fourteen. Average case, and one-way functions."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(14, r"Average case and one-way functions", r"Can hardness be put to work?", lit=(1986, 2005), extra=((1986, r"Levin"), (1996, r"Ajtai"), (2005, r"Regev: \ LWE")), part=PART, said="Chapter fourteen. Average case, and one-way functions.")
 
     def planted(self):
+        self.ask(r"A random graph's largest clique is about $2\log_2 n$. \\ Polynomial algorithms find a planted clique of size about...",
+                 [r"$2\log_2 n$", r"$\sqrt{n}$", r"$n/2$"], 1,
+                 say="In a random graph the biggest clique has about two log n vertices. How big must a planted clique be for known fast algorithms to find it?",
+                 reveal="About the square root of n. Between two log n and root n, no polynomial algorithm is known.")
         d = load("planted")
         n = d["n"]
         head = label(r"A hidden clique", font_size=34).to_edge(UP, buff=0.3)
@@ -59,7 +58,7 @@ class Average(VoiceoverScene):
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.24).next_to(ax, RIGHT, buff=0.7).align_to(ax, UP).shift(UP * 0.3)
         fit_right(notes)
         with self.voiceover(
-            "Worst-case NP-hardness does not establish average-case cryptographic hardness. Planted clique gives a specific distributional example. <bookmark mark='a'/> Generate a thousand-vertex random graph with independent fair edges, then plant a clique on a uniformly chosen vertex subset. Every actual graph and planted subset is retained. <bookmark mark='b'/> Twice the base-two logarithm of n is a rough asymptotic reference for the largest background clique. It is not a deterministic finite threshold proving uniqueness of the planted set. <bookmark mark='c'/> The degree heuristic selects high-degree vertices and applies the stated score-based cleanup. Each plotted recovery rate uses twenty actual trials, so sampling uncertainty matters. <bookmark mark='d'/> Spectral algorithms reach different size regimes under their own assumptions and success guarantees. The finite degree experiment does not establish an optimal recovery threshold. <bookmark mark='e'/> Planted-clique hardness conjectures specify the clique-size regime, distribution, recovery or detection task and computational model. <bookmark mark='f'/> Information-theoretic identifiability and efficient recoverability are different questions. We do not infer either general theorem merely from this plotted curve."
+            "Worst-case NP-hardness does not establish average-case cryptographic hardness. Planted clique gives a specific distributional example. <bookmark mark='a'/> Generate a thousand-vertex random graph with independent fair edges, then plant a clique on a uniformly chosen vertex subset. <bookmark mark='b'/> Twice the base-two logarithm of n is a rough asymptotic reference for the largest background clique. It is not a deterministic finite threshold proving uniqueness of the planted set. <bookmark mark='c'/> The degree heuristic selects high-degree vertices and applies the stated score-based cleanup. Each plotted recovery rate uses twenty actual trials, so sampling uncertainty matters. <bookmark mark='d'/> Spectral algorithms reach different size regimes under their own assumptions and success guarantees. <bookmark mark='e'/> Planted-clique hardness conjectures specify the clique-size regime, distribution, recovery or detection task and computational model. <bookmark mark='f'/> Information-theoretic identifiability and efficient recoverability are different questions."
         ) as vo:
             self.play(FadeIn(head), Create(ax), FadeIn(xt), FadeIn(yt), FadeIn(xl), FadeIn(yl))
             vo.wait_until("a")
@@ -114,7 +113,7 @@ class Average(VoiceoverScene):
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.28).next_to(ax, RIGHT, buff=0.6).align_to(ax, UP)
         fit_right(notes)
         with self.voiceover(
-            "A one-way function must be efficiently computable yet hard for every probabilistic polynomial-time inverter on its specified random-input distribution. <bookmark mark='a'/> Success means finding any valid preimage, and the allowed success probability must be negligible as the security parameter grows. A finite timing difference is not that definition. <bookmark mark='b'/> The experiment multiplies sampled balanced primes and factors their products with bounded Brent-style rho. We retain every prime, actual product bit length, factor, raw timing and count of all modular orbit updates. <bookmark mark='c'/> The familiar fourth-root-of-the-product rho estimate assumes balanced factors and random-map heuristic behaviour. Actual trials can vary, and budget exhaustion returns no factor without a primality or hardness conclusion. <bookmark mark='d'/> More powerful factoring methods exist; dated record factorizations and this small rho implementation should not be conflated. <bookmark mark='e'/> Factoring-based one-way-function candidates require an appropriate input and preimage domain and an average-case hardness assumption. Their existence does not follow from P differing from NP alone."
+            "A one-way function must be efficiently computable yet hard for every probabilistic polynomial-time inverter on its specified random-input distribution. <bookmark mark='a'/> Success means finding any valid preimage, and the allowed success probability must be negligible as the security parameter grows. A finite timing difference is not that definition. <bookmark mark='b'/> The experiment multiplies sampled balanced primes and factors their products with bounded Brent-style rho. <bookmark mark='c'/> The familiar fourth-root-of-the-product rho estimate assumes balanced factors and random-map heuristic behaviour. Actual trials can vary, and budget exhaustion returns no factor without a primality or hardness conclusion. <bookmark mark='d'/> More powerful factoring methods exist; dated record factorizations and this small rho implementation should not be conflated. <bookmark mark='e'/> Factoring-based one-way-function candidates require an appropriate input and preimage domain and an average-case hardness assumption. Their existence does not follow from P differing from NP alone."
         ) as vo:
             self.play(FadeIn(head), Create(ax), FadeIn(xt), FadeIn(yt), FadeIn(xl))
             vo.wait_until("a")
@@ -144,7 +143,7 @@ class Average(VoiceoverScene):
                   r"Bogdanov and Trevisan)", font_size=22, color=NO),
         ).arrange(DOWN, buff=0.32).next_to(head, DOWN, buff=0.5)
         with self.voiceover(
-            "Average-case complexity provides the bridge from algorithms to cryptographic assumptions. <bookmark mark='a'/> Levin’s distributional problems specify both a language and an efficiently samplable input distribution; the reduction must preserve the relevant average-case guarantees. <bookmark mark='b'/> Håstad, Impagliazzo, Levin and Luby showed that one-way functions imply pseudorandom generators, with the necessary quantitative reductions. <bookmark mark='c'/> Further constructions give fundamental private-key primitives. Public-key encryption requires additional capabilities and does not follow from an arbitrary one-way function by this theorem. <bookmark mark='d'/> Ajtai’s lattice results relate particular average-case problems to specified worst-case approximate lattice problems, with dimension and approximation parameters. <bookmark mark='e'/> Regev’s original LWE result uses a quantum reduction from appropriate worst-case lattice problems under its modulus and noise conditions. This is not a proof that every lattice problem or every encryption system is secure. <bookmark mark='f'/> Worst-case-to-average-case reductions from unrestricted NP-complete problems face known barriers in particular reduction models. Those barriers do not establish that cryptography is impossible."
+            "Average-case complexity provides the bridge from algorithms to cryptographic assumptions. <bookmark mark='a'/> Levin’s distributional problems specify both a language and an efficiently samplable input distribution; the reduction must preserve the relevant average-case guarantees. <bookmark mark='b'/> Håstad, Impagliazzo, Levin and Luby showed that one-way functions imply pseudorandom generators, with the necessary quantitative reductions. <bookmark mark='c'/> Further constructions give fundamental private-key primitives. Public-key encryption requires additional capabilities and does not follow from an arbitrary one-way function by this theorem. <bookmark mark='d'/> Ajtai’s lattice results relate particular average-case problems to specified worst-case approximate lattice problems, with dimension and approximation parameters. <bookmark mark='e'/> Regev’s original LWE result uses a quantum reduction from appropriate worst-case lattice problems under its modulus and noise conditions. <bookmark mark='f'/> Worst-case-to-average-case reductions from unrestricted NP-complete problems face known barriers in particular reduction models. Those barriers do not establish that cryptography is impossible."
         ) as vo:
             self.play(FadeIn(head))
             for mk, ln in zip("abcdef", lines):

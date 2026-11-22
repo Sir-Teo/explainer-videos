@@ -6,20 +6,15 @@ from explainer.cs import *  # noqa: F403
 from videos.cs.cs10.common import (BG, CODE, CORE_COLORS, CTRL, DATA, FUNC, HEAD, NO, PART, YES, load, mono)
 
 
-class Gpu(VoiceoverScene):
+class Gpu(WatchScene):
     def construct(self):
         self.card()
         self.shape()
         self.simt()
-        self.divergence()
         self.job()
 
     def card(self):
-        card = chapter_card(8, r"GPUs in one chapter", r"What if you had ten thousand simple cores?",
-                            lit=(1999, 2006), extra=((1999, r"GeForce 256"), (2006, r"CUDA")), part=PART)
-        with self.voiceover("Chapter eight. GPUs in one chapter."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(8, r"GPUs in one chapter", r"What if you had ten thousand simple cores?", lit=(1999, 2006), extra=((1999, r"GeForce 256"), (2006, r"CUDA")), part=PART, said="Chapter eight. GPUs in one chapter.")
 
     # ------------------------------------------------------------------
     def shape(self):
@@ -72,6 +67,10 @@ class Gpu(VoiceoverScene):
 
     # ------------------------------------------------------------------
     def simt(self):
+        self.ask(r"A warp of 32 threads reaches an \texttt{if}. \\ Half go each way. The time taken?",
+                 [r"half", r"the same as one path", r"both paths, one after the other"], 2,
+                 say="Thirty-two threads in a warp reach an if, and half go each way. How long does it take?",
+                 reveal="Both paths, one after the other, with half the lanes idle each time.")
         head = label(r"SIMT: \ 32 threads, \ one instruction", font_size=34).to_edge(UP, buff=0.3)
         code = VGroup(mono("i = thread index;", 19), mono("if (x[i] > 0)", 19), mono("    y[i] = sqrt(x[i]);", 19),
                       mono("else", 19), mono("    y[i] = 0;", 19)).arrange(DOWN, aligned_edge=LEFT, buff=0.1)
@@ -117,45 +116,6 @@ class Gpu(VoiceoverScene):
         self.wait(0.3)
         self.clear_scene()
 
-    # ------------------------------------------------------------------
-    def divergence(self):
-        g = load("gpu")
-        ex = g["example"]
-        head = label(r"The Job's lookups, \ 32 to a warp", font_size=34).to_edge(UP, buff=0.3)
-        mx = max(ex)
-        W, H = 0.26, 3.4
-        bars = VGroup(*[Rectangle(width=W * 0.8, height=max(0.02, H * v / mx), stroke_width=0, fill_color=DATA,
-                                  fill_opacity=0.85) for v in ex])
-        for k, b in enumerate(bars):
-            b.move_to([-6.0 + k * W, -2.2 + b.height / 2, 0])
-        full = Rectangle(width=W * 32, height=H, stroke_color=NO, stroke_width=2).move_to(
-            [-6.0 + 15.5 * W, -2.2 + H / 2, 0])
-        fl = label(r"the warp runs until its longest scan ends", font_size=19, color=NO).next_to(full, UP, buff=0.1)
-        lab = label(r"recorded scan lengths in a 32-lane proxy; \ no GPU execution", font_size=18, color=GREY_B).next_to(
-            full, DOWN, buff=0.15)
-        eff = float(np.mean(ex) / mx)
-        side = VGroup(
-            label(rf"this warp: \ {100 * eff:.0f}\% of the \\ lanes' time is useful", font_size=22, color=NO),
-            label(rf"all {g['lookups'] / 1e6:.1f} million \\ lookups: \ {100 * g['efficiency']:.0f}\%", font_size=22,
-                  color=NO),
-            label(rf"oracle grouping by length: \\ {100 * g['efficiency_sorted']:.2f}\% \ (cost excluded)", font_size=21, color=YES),
-            label(r"GPU code keeps a warp's \\ lanes alike: \ sort the work, \\ avoid branches", font_size=20,
-                  color=GREY_A),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.3).next_to(full, RIGHT, buff=0.45)
-        with self.voiceover(
-            f"Imagine running the Job's lookups on a GPU, one word per lane, thirty-two to a warp. <bookmark mark='a'/> Here is one group from the recorded scan-length sequence, not an executed GPU warp: for each of its thirty-two words, how many table entries the lookup must scan. A common word is found near the front; a rare one, near the end of a table of tens of thousands. <bookmark mark='b'/> The warp cannot finish until its longest scan does, and meanwhile the lanes that finished early sit idle. Only {100 * eff:.0f} percent of this warp's lane time does useful work. <bookmark mark='c'/> Over all four and a half million lookups, {100 * g['efficiency']:.0f} percent. <bookmark mark='d'/> If an oracle first grouped the lookups by their already-known scan lengths, nearly all of this lane-count proxy would be useful. That excludes finding those lengths, regrouping, memory traffic and maintaining correct shared counts; it is not an achievable speedup claim. That is the craft of GPU programming: arrange the work so that the thirty-two lanes of a warp do the same thing."
-        ) as vo:
-            self.play(FadeIn(head), run_time=0.5)
-            self.play(LaggedStart(*[GrowFromEdge(b, DOWN) for b in bars], lag_ratio=0.03), FadeIn(lab), run_time=0.6)
-            vo.wait_until('a')
-            vo.wait_until("b")
-            self.play(Create(full), FadeIn(fl), FadeIn(side[0]))
-            vo.wait_until("c")
-            self.play(FadeIn(side[1]))
-            vo.wait_until("d")
-            self.play(FadeIn(side[2]), FadeIn(side[3]))
-        self.wait(0.3)
-        self.clear_scene()
 
     # ------------------------------------------------------------------
     def job(self):

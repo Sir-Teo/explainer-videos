@@ -10,18 +10,14 @@ def f(x, y):
     return math.log(sum(math.exp(a[0] * x + a[1] * y - 0.1) for a in AA))
 
 
-class Convex(VoiceoverScene):
+class Convex(WatchScene):
     def construct(self):
         self.card()
         self.descent()
         self.page()
 
     def card(self):
-        card = chapter_card(13, r"Convex optimization in a page", r"Why is convexity the dividing line?",
-                            lit=(1939, 1951), extra=((1939, r"Karush"), (1951, r"Kuhn--Tucker")), part=PART)
-        with self.voiceover("Chapter thirteen. Convex optimization in a page."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(13, r"Convex optimization in a page", r"Why is convexity the dividing line?", lit=(1939, 1951), extra=((1939, r"Karush"), (1951, r"Kuhn--Tucker")), part=PART, said="Chapter thirteen. Convex optimization in a page.")
 
     def descent(self):
         c = load("convex")
@@ -104,6 +100,9 @@ class Convex(VoiceoverScene):
         self.clear_scene()
 
     def page(self):
+        self.ask(r"A convex function's local minimum is...", [r"maybe not the global one", r"the global minimum"], 1,
+                 say="A convex function has a local minimum. Is it the global one?",
+                 reveal="Always: convexity leaves no other valleys to get stuck in.")
         head = label(r"The page", font_size=36).to_edge(UP, buff=0.35)
         lines = VGroup(
             label('convex objective and domain: \\ local minima are global; \\\\ dual attainment needs suitable regularity',

@@ -5,9 +5,15 @@ import numpy as np
 from videos.stats.stats31.common import *  # noqa: F403
 
 
-class CCA(VoiceoverScene):
+class CCA(StatsScene):
     def construct(self):
         self.card()
+        self.ask("The first canonical correlation between two blocks is at least...",
+                 ["the largest single cross-correlation", "zero, and nothing more is guaranteed"], 0,
+                 say="Two blocks of variables: demography and economy. The first canonical correlation finds the "
+                     "most correlated pair of combinations. What must it be at least?",
+                 reveal="The largest single correlation between a variable in one block and a variable in the "
+                        "other: combinations can only do better than single variables.")
         self.question()
         self.solution()
         self.data()
@@ -16,12 +22,10 @@ class CCA(VoiceoverScene):
         self.angles()
         self.overfit()
         self.family()
+        self.answer()
 
     def card(self):
-        card = chapter_card(6, r"Canonical correlation", r"Two sets of variables, \ one relationship", lit=(1936,), part=PART)
-        with self.voiceover("Chapter six. Canonical correlation."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(6, r"Canonical correlation", r"Two sets of variables, \ one relationship", lit=(1936,), part=PART, said="Chapter six. Canonical correlation.")
 
     def question(self):
         rows = [

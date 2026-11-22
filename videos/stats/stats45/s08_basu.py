@@ -5,21 +5,25 @@ import numpy as np
 from videos.stats.stats45.common import *  # noqa: F403
 
 
-class Ancillarity(VoiceoverScene):
+class Ancillarity(StatsScene):
     def construct(self):
         self.card()
+        self.ask(r"Normal data, $\sigma$ known: $\bar x$ is complete sufficient, $s^2$ is ancillary. So they are...",
+                 ["independent", "dependent"], 0,
+                 say="Normal data with known variance. The sample mean is complete sufficient for mu, and the "
+                     "sample variance's distribution doesn't depend on mu. How are they related?",
+                 reveal="Independent: Basu's theorem. A complete sufficient statistic is independent of every "
+                        "ancillary one, which proves Part 8's result in two lines.")
         self.basu()
         self.scatter()
         self.cox()
         self.uniform()
         self.principle()
         self.board()
+        self.answer()
 
     def card(self):
-        card = chapter_card(7, r"Ancillarity and Basu", r"Statistics that say nothing about $\theta$, \ yet matter", lit=(1955, 1958), part=PART)
-        with self.voiceover("Chapter seven. Ancillarity and Basu's theorem: statistics that say nothing about theta, yet matter."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(7, r"Ancillarity and Basu", r"Statistics that say nothing about $\theta$, \ yet matter", lit=(1955, 1958), part=PART, said="Chapter seven. Ancillarity and Basu's theorem: statistics that say nothing about theta, yet matter.")
 
     def basu(self):
         rows = [

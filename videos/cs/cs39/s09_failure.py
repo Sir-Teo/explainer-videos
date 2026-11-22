@@ -8,7 +8,7 @@ from videos.cs.cs39.common import (DATA, HEAD, KERN, LAM, NO, PART, YES, axes, g
 MC = {"no retries": DATA, "retries": NO, "retries, backoff": KERN, "retries, drop expired": YES}
 
 
-class Failure(VoiceoverScene):
+class Failure(WatchScene):
     def construct(self):
         self.card()
         self.kinds()
@@ -19,13 +19,9 @@ class Failure(VoiceoverScene):
         self.practice()
 
     def card(self):
-        card = chapter_card(8, r"Failure at scale", r"What breaks when there are a hundred thousand machines?",
-                            lit=(2011, 2022), extra=((2011, r"Netflix: \ Chaos Monkey"),
+        self.chapter(8, r"Failure at scale", r"What breaks when there are a hundred thousand machines?", lit=(2011, 2022), extra=((2011, r"Netflix: \ Chaos Monkey"),
                                                      (2017, r"Huang et al.: \ gray failure"),
-                                                     (2022, r"Huang et al.: \ metastable failures")), part=PART)
-        with self.voiceover("Chapter eight. Failure at scale."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+                                                     (2022, r"Huang et al.: \ metastable failures")), part=PART, said="Chapter eight. Failure at scale.")
 
     def kinds(self):
         head = label(r"Failures are not independent", font_size=36).to_edge(UP, buff=0.3)
@@ -137,6 +133,10 @@ class Failure(VoiceoverScene):
         self.clear_scene()
 
     def nines(self):
+        self.ask(r"Three nines, $99.9\%$ availability, \\ allows downtime per year of about...", [r"9 minutes",
+                 r"9 hours", r"9 days"], 1,
+                 say="Three nines, ninety-nine point nine percent availability. How much downtime is that per year?",
+                 reveal="About nine hours.")
         a = load("nines")
         head = label(r"Counting nines", font_size=36).to_edge(UP, buff=0.3)
 

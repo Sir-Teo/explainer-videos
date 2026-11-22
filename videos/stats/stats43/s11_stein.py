@@ -5,21 +5,29 @@ import numpy as np
 from videos.stats.stats43.common import *  # noqa: F403
 
 
-class Stein(VoiceoverScene):
+class Stein(StatsScene):
     def construct(self):
         self.card()
+        self.ask("Berry--Esseen: the CLT's Kolmogorov-distance error shrinks like...",
+                 ["$1/n$", r"$1/\sqrt n$", r"$1/\log n$"], 1,
+                 say="How fast does the central limit theorem kick in? Berry and Esseen's bound, with an explicit "
+                     "constant, shrinks like what?",
+                 reveal="Like one over root n, times the third absolute moment over sigma cubed. Stein's method "
+                        "proves it, with constants you can compute.")
         self.identity()
         self.equation()
         self.bound()
         self.rates()
         self.n30()
         self.board()
+        self.answer()
+        self.checkpoint([("Point masses at $1/n$ in total variation?", "no convergence: only weak"),
+                         ("The Berry--Esseen rate?", r"$1/\sqrt n$")],
+                        narration="Checkpoint. Convergence of laws.",
+                        answers_narration="Only weak. And one over root n.")
 
     def card(self):
-        card = chapter_card(10, r"Stein's method and the rates", r"How fast, \ with explicit constants?", lit=(1972,), part=PART)
-        with self.voiceover("Chapter ten. Stein's method, and how fast the central limit theorem works, with constants."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(10, r"Stein's method and the rates", r"How fast, \ with explicit constants?", lit=(1972,), part=PART, said="Chapter ten. Stein's method, and how fast the central limit theorem works, with constants.")
 
     def identity(self):
         rows = [

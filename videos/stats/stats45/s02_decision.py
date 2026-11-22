@@ -5,21 +5,25 @@ import numpy as np
 from videos.stats.stats45.common import *  # noqa: F403
 
 
-class Decision(VoiceoverScene):
+class Decision(StatsScene):
     def construct(self):
         self.card()
+        self.ask("Two estimators' risk curves cross. Which is better?",
+                 ["the one with lower average risk", "neither dominates the other"], 1,
+                 say="Estimation as a game against nature: each rule has a risk curve over theta. Two rules' risk "
+                     "curves cross. Which is better?",
+                 reveal="Neither dominates: each wins somewhere. To choose, restrict the class, or summarize each "
+                        "curve by its maximum, minimax, or its average under a prior, Bayes.")
         self.wald()
         self.language()
         self.binomial()
         self.criteria()
         self.region()
         self.uniform()
+        self.answer()
 
     def card(self):
-        card = chapter_card(1, r"Decision theory", r"Estimation as a game against nature", lit=(1950,), part=PART)
-        with self.voiceover("Chapter one. Decision theory: estimation as a game against nature."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(1, r"Decision theory", r"Estimation as a game against nature", lit=(1950,), part=PART, said="Chapter one. Decision theory: estimation as a game against nature.")
 
     def wald(self):
         rows = fit_rows(VGroup(

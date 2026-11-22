@@ -5,21 +5,29 @@ import numpy as np
 from videos.stats.stats49.common import *  # noqa: F403
 
 
-class Bounds(VoiceoverScene):
+class Bounds(StatsScene):
     def construct(self):
         self.card()
+        self.ask(r"The semiparametric efficiency bound is the supremum of Cram\'er--Rao bounds over...",
+                 ["one-dimensional parametric submodels", "the nuisance parameters"], 0,
+                 say="How hard is a semiparametric problem? Its efficiency bound is the supremum of Cramér-Rao "
+                     "bounds over what?",
+                 reveal="Over all one-dimensional parametric submodels through the truth. The hardest "
+                        "one-dimensional submodel sets the bound for the whole model.")
         self.convolution()
         self.leastfav()
         self.lam()
         self.chart()
         self.models()
         self.ate()
+        self.answer()
+        self.checkpoint([("The efficiency bound is the supremum over?", "one-dimensional parametric submodels"),
+                         ("The mean's efficient influence function?", r"$x - \mu$")],
+                        narration="Checkpoint. Tangents and bounds.",
+                        answers_narration="Submodels. And x minus mu.")
 
     def card(self):
-        card = chapter_card(3, r"Efficiency bounds", r"The hardest one-dimensional submodel", part=PART)
-        with self.voiceover("Chapter three. Efficiency bounds: the hardest one-dimensional submodel."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(3, r"Efficiency bounds", r"The hardest one-dimensional submodel", part=PART, said="Chapter three. Efficiency bounds: the hardest one-dimensional submodel.")
 
     def convolution(self):
         rows = [

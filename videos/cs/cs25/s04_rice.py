@@ -4,20 +4,19 @@ from explainer.cs import *  # noqa: F403
 from videos.cs.cs25.common import (CTRL, DATA, HEAD, LAM, NO, PART, YES, mono)
 
 
-class Rice(VoiceoverScene):
+class Rice(WatchScene):
     def construct(self):
         self.card()
         self.theorem()
         self.consequences()
 
     def card(self):
-        card = chapter_card(3, r"Rice's theorem", r"Which questions about programs can be answered?", lit=(1953,),
-                            extra=((1953, r"Rice"),), part=PART)
-        with self.voiceover("Chapter three. Rice's theorem."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(3, r"Rice's theorem", r"Which questions about programs can be answered?", lit=(1953,), extra=((1953, r"Rice"),), part=PART, said="Chapter three. Rice's theorem.")
 
     def theorem(self):
+        self.ask(r"Can a program decide, for any program, \\ whether it ever prints ``hello''?", [r"yes", r"no"], 1,
+                 say="Could a program decide, for any program at all, whether it ever prints hello?",
+                 reveal="No. That's a property of what the program does, and Rice's theorem rules out every such decider.")
         head = label('Rice: nontrivial extensional properties of partial computable functions', font_size=32).to_edge(UP, buff=0.35)
         lines = VGroup(
             label('\\textbf{extensional}: equal partial input-output functions agree; faults and divergence are undefined', font_size=22, color=WHITE),

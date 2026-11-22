@@ -4,7 +4,7 @@ from explainer.cs import *  # noqa: F403
 from videos.cs.cs20.common import (CTRL, DATA, HEAD, LAM, NO, PART, YES, code, grid_table, load, mono, words)
 
 
-class Stream(VoiceoverScene):
+class Stream(WatchScene):
     def construct(self):
         self.card()
         self.model()
@@ -14,14 +14,9 @@ class Stream(VoiceoverScene):
         self.guarantee()
 
     def card(self):
-        card = chapter_card(9, r"Streams: \ one pass, \ little memory", r"What can you remember about data you "
+        self.chapter(9, r"Streams: \ one pass, \ little memory", r"What can you remember about data you "
                             r"can't keep?", lit=(1985, 2005), extra=((1985, r"reservoir sampling"),
-                                                                     (2005, r"the Count-Min sketch")), part=PART)
-        with self.voiceover((
-            'Chapter nine. Streams: one pass, little memory.'
-        )):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+                                                                     (2005, r"the Count-Min sketch")), part=PART, said='Chapter nine. Streams: one pass, little memory.')
 
     def model(self):
         d = load("stream")
@@ -58,6 +53,10 @@ class Stream(VoiceoverScene):
         self.clear_scene()
 
     def reservoir(self):
+        self.ask(r"Keep a uniform sample of $k$ items \\ from a stream of unknown length, in one pass. Possible?",
+                 [r"no", r"yes"], 1,
+                 say="Keep a uniformly random sample of k items from a stream whose length you don't know. In one pass?",
+                 reveal="Yes: keep item n with probability k over n, replacing a random survivor.")
         d = load("stream")
         head = label(r"A uniform sample, \ without knowing the length", font_size=34).to_edge(UP, buff=0.35)
         prog = code([

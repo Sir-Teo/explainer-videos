@@ -5,20 +5,24 @@ import numpy as np
 from videos.stats.stats46.common import *  # noqa: F403
 
 
-class Conditional(VoiceoverScene):
+class Conditional(StatsScene):
     def construct(self):
         self.card()
+        self.ask(r"Two uniforms of width 1 centred at $\theta$, 0.9 apart. The interval between them covers $\theta$...",
+                 [r"with chance 50\%, as advertised", "certainly"], 1,
+                 say="Welch's example. Two observations from a uniform of width one centred at theta; the interval "
+                     "between them covers theta half the time. If the two land point nine apart, how sure are you?",
+                 reveal="Certain: two points that far apart must straddle the centre. Coverage averages over data "
+                        "sets; this one is recognizably better. Conditional inference asks for both.")
         self.welch()
         self.buehler()
         self.table()
         self.betting()
         self.resolution()
+        self.answer()
 
     def card(self):
-        card = chapter_card(10, r"Conditional inference", r"Does 95\% hold for \emph{this} data set?", lit=(1959,), part=PART)
-        with self.voiceover("Chapter ten. Conditional inference: does ninety-five percent hold for this data set?"):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(10, r"Conditional inference", r"Does 95\% hold for \emph{this} data set?", lit=(1959,), part=PART, said="Chapter ten. Conditional inference: does ninety-five percent hold for this data set?")
 
     def welch(self):
         rows = [

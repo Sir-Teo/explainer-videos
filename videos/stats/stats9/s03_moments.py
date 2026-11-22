@@ -5,21 +5,25 @@ import numpy as np
 from videos.stats.stats9.common import *  # noqa: F403
 
 
-class Moments(VoiceoverScene):
+class Moments(StatsScene):
     def construct(self):
         self.card()
+        self.ask("A mixture of two normals: how many unknowns must the moments match?",
+                 ["2", "5", "9"], 1,
+                 say="Weldon's crabs looked like a mixture of two normal curves. How many unknowns did Pearson have "
+                     "to match with moments: two, five, or nine?",
+                 reveal="Five: two means, two variances and a mixing weight. Five moments, and a polynomial of "
+                        "degree nine, solved by hand.")
         self.pearson()
         self.recipe()
         self.gamma_fit()
         self.tanks()
         self.sampling()
         self.delta()
+        self.answer()
 
     def card(self):
-        card = chapter_card(2, r"The method of moments", r"Match the model's averages to the sample's", lit=(1894,), part=PART)
-        with self.voiceover("Chapter two. The method of moments."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(2, r"The method of moments", r"Match the model's averages to the sample's", lit=(1894,), part=PART, said="Chapter two. The method of moments.")
 
     def pearson(self):
         hc = history_card(1894, r"Karl Pearson, \ ``Contributions to the mathematical theory of evolution''",

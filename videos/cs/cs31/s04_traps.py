@@ -9,22 +9,23 @@ from videos.cs.cs31.common import (BG, DATA, HEAD, KERN, LAM, NO, PART, YES, cur
 PH = {"save": DATA, "dispatch": HEAD, "handle": YES, "restore": LAM}
 
 
-class Traps(VoiceoverScene):
+class Traps(WatchScene):
     def construct(self):
         self.card()
         self.sequence()
         self.dive()
         self.costs()
-        self.buffers()
 
     def card(self):
-        card = chapter_card(3, r"Traps and the system call", r"How does a program ask the kernel for anything?",
-                            lit=(1961, 1974), extra=((1961, r"CTSS"), (1974, r"Unix's system calls")), part=PART)
-        with self.voiceover("Chapter three. Traps, and the system call."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(3, r"Traps and the system call", r"How does a program ask the kernel for anything?", lit=(1961, 1974), extra=((1961, r"CTSS"), (1974, r"Unix's system calls")), part=PART, said="Chapter three. Traps, and the system call.")
 
     def sequence(self):
+        self.wrong_idea(r"the kernel runs in the background, \\ watching every program",
+                        r"the kernel runs only when a trap, \\ an interrupt or a system call brings it in",
+                        narration="A common picture: the operating system is always running in the background, watching.",
+                        right_narration="In fact the kernel runs only when something brings it in: a system call, a fault, or "
+                                        "an interrupt such as the timer. The rest of the time, your program owns the processor.")
+        self.clear_scene()
         head = label(r"A trap, \ in one step", font_size=36).to_edge(UP, buff=0.3)
         user = VGroup(*[mono(s, 20, c) for s, c in (("li   a5, 3", GREY_A), ("ecall", HEAD), ("mv   s0, a0", GREY_A))]
                       ).arrange(DOWN, aligned_edge=LEFT, buff=0.12)
@@ -136,6 +137,10 @@ class Traps(VoiceoverScene):
         self.clear_scene()
 
     def costs(self):
+        self.ask(r"A function call: $1.5$ ns. \\ A system call costs...", [r"about the same",
+                 r"tens to hundreds of times more", r"a million times more"], 1,
+                 say="An ordinary function call takes a nanosecond and a half. What does a system call cost?",
+                 reveal="Tens to hundreds of times more: the trap, the checks, and the way back.")
         d = load("trap")
         head = label(r"What a system call costs, \ on this machine", font_size=34).to_edge(UP, buff=0.3)
         vals = [("function call", d["call_ns"], DATA), ("vDSO \\texttt{clock\\_gettime}", d["vdso_ns"], YES),
@@ -176,42 +181,3 @@ class Traps(VoiceoverScene):
         self.wait(0.3)
         self.clear_scene()
 
-    def buffers(self):
-        d = load("trap")
-        head = label(r"So programs buffer", font_size=36).to_edge(UP, buff=0.3)
-        reads = d["reads"]
-        g = log_axes([0, 6, 1], [-2, 3, 1], x_length=5.6, y_length=3.8, x_label=r"bytes per \texttt{read} call",
-                     y_label=r"nanoseconds per byte").to_edge(LEFT, buff=1.0).shift(DOWN * 0.3)
-        ax = g.ax
-        cv = curve(ax, [math.log10(b) for b, _, _ in reads], [math.log10(ns) for _, ns, _ in reads], DATA)
-        sc = d["strace"]
-        rd = next((x["calls"] for x in sc if x["name"] == "read"), 0)
-        notes = VGroup(
-            label(rf"one byte per call: \ {reads[0][1]:.0f} ns a byte", font_size=21, color=NO),
-            label(rf"4 KiB per call: \ {reads[6][1]:.2f} ns a byte", font_size=21, color=YES),
-            label(r"the cost per call is fixed; \\ spread it over more bytes", font_size=21, color=WHITE),
-            label(rf"\texttt{{wc}} on 8 MiB: \ {rd} \texttt{{read}} calls \ (16 KiB each); \\ "
-                  rf"{d['strace_total']} system calls in all \ (\texttt{{strace -c}})", font_size=21, color=HEAD),
-            label(r"C's \texttt{getc} is a macro over a buffer; \\ so is our PebbleOS library: \ 4 KiB per "
-                  r"\texttt{read}", font_size=21, color=GREY_A),
-        ).arrange(DOWN, buff=0.25, aligned_edge=LEFT).next_to(ax, RIGHT, buff=0.7).align_to(ax, UP)
-        fit_right(notes)
-        with self.voiceover(
-            "Because each call has a fixed cost, programs ask for as much as they can at once. <bookmark mark='a'/> "
-            "Here we read a file that is already in memory, with buffers from one byte to a mebibyte. <bookmark "
-            "mark='b'/> One byte per call costs two hundred and eighteen nanoseconds per byte. <bookmark mark='c'/> "
-            "Four kibibytes per call costs a tenth of a nanosecond per byte, two thousand times less. <bookmark "
-            "mark='d'/> The line has slope minus one until the copying itself dominates: a fixed price per call, "
-            "spread over more bytes. <bookmark mark='e'/> Watch a real program with strace, the tool that prints "
-            "every system call: the word counter wc reads eight mebibytes in five hundred and seventeen calls, of "
-            "sixteen kibibytes each. <bookmark mark='f'/> This is why C's getc was traditionally a macro over a "
-            "buffer, and why our PebbleOS programs link a small library that reads four kibibytes at a time."
-        ) as vo:
-            self.play(FadeIn(head), FadeIn(g))
-            vo.wait_until("a")
-            self.play(Create(cv), run_time=2.0)
-            for mk, n_ in zip("bcdef", notes):
-                vo.wait_until(mk)
-                self.play(FadeIn(n_))
-        self.wait(0.3)
-        self.clear_scene()

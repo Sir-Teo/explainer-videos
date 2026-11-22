@@ -10,7 +10,7 @@ def core_box(name, color, pos):
     return VGroup(r, label(name, font_size=20, color=color).move_to(r))
 
 
-class Tso(VoiceoverScene):
+class Tso(WatchScene):
     def construct(self):
         self.card()
         self.buffer()
@@ -18,14 +18,14 @@ class Tso(VoiceoverScene):
         self.table()
 
     def card(self):
-        card = chapter_card(4, r"Peterson meets the store buffer", r"Does the hardware keep your program's order?",
-                            lit=(1979, 2010), extra=((1979, r"Lamport: \ sequential consistency"),
-                                                     (2010, r"Sewell et al.: \ x86-TSO")), part=PART)
-        with self.voiceover("Chapter four. Peterson meets the store buffer."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(4, r"Peterson meets the store buffer", r"Does the hardware keep your program's order?", lit=(1979, 2010), extra=((1979, r"Lamport: \ sequential consistency"),
+                                                     (2010, r"Sewell et al.: \ x86-TSO")), part=PART, said="Chapter four. Peterson meets the store buffer.")
 
     def buffer(self):
+        self.ask(r"T1: \texttt{x = 1; r1 = y}. \\ T2: \texttt{y = 1; r2 = x}. \\ Can both read $0$ on x86?",
+                 [r"never", r"yes"], 1,
+                 say="Thread one writes x then reads y. Thread two writes y then reads x. On an x86 processor, can both read zero?",
+                 reveal="Yes. Each store waits in a store buffer while the load runs ahead.")
         d = load("litmus")
         mach = d["machine"]
         head = label(r"Every core has a store buffer \ (Part 10)", font_size=34).to_edge(UP, buff=0.3)
@@ -166,3 +166,9 @@ class Tso(VoiceoverScene):
             self.play(FadeIn(notes[3]))
         self.wait(0.3)
         self.clear_scene()
+        self.checkpoint(
+            [(r"Why is Peterson's lock correct?", r"Turn breaks the tie when both flags are up"),
+             (r"Why does it fail on x86?", r"A store waits in the buffer while a later load runs")],
+            narration="Checkpoint. Why is Peterson's lock correct? And why does it fail on an x86?",
+            answers_narration="When both flags are up, turn breaks the tie. And a store waits in the buffer while the later "
+                              "load runs ahead; a fence fixes it.")

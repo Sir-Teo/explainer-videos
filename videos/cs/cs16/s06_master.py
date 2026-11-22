@@ -17,7 +17,7 @@ def level_bars(levels, color, W=3.2, H=0.24, gap=0.06, maxv=None):
     return g
 
 
-class Master(VoiceoverScene):
+class Master(WatchScene):
     def construct(self):
         self.card()
         self.theorem()
@@ -26,13 +26,12 @@ class Master(VoiceoverScene):
         self.examples()
 
     def card(self):
-        card = chapter_card(5, r"The master theorem", r"Can one rule solve every divide-and-conquer?", lit=(1980,),
-                            extra=((1980, r"Bentley, Haken and Saxe"),), part=PART)
-        with self.voiceover("Chapter five. The master theorem."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(5, r"The master theorem", r"Can one rule solve every divide-and-conquer?", lit=(1980,), extra=((1980, r"Bentley, Haken and Saxe"),), part=PART, said="Chapter five. The master theorem.")
 
     def theorem(self):
+        self.ask(r"$T(n) = 8\,T(n/2) + n^2$. \\ It grows like...", [r"$n^2$", r"$n^2 \log n$", r"$n^3$"], 2,
+                 say="Eight subproblems of half the size, plus n squared work. How does it grow?",
+                 reveal="Like n cubed: the leaves dominate, the first case of the master theorem.")
         head = label(r"$T(n) = a\,T(n/b) + f(n)$", font_size=36).to_edge(UP, buff=0.3)
         crit = MathTex(r"\text{compare } f(n) \text{ with } n^{\log_b a} \text{, the number of leaves}",
                        font_size=30, color=GREY_A).next_to(head, DOWN, buff=0.45)

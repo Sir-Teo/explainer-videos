@@ -5,7 +5,7 @@ from videos.cs.cs12.common import (BG, CODE, CTRL, DATA, FUNC, HEAD, NO, PART, Y
                                    region, tree)
 
 
-class TopDown(VoiceoverScene):
+class TopDown(WatchScene):
     def construct(self):
         self.card()
         self.descent()
@@ -14,12 +14,8 @@ class TopDown(VoiceoverScene):
         self.pratt()
 
     def card(self):
-        card = chapter_card(12, r"Top-down parsing", r"Can the parser predict which rule comes next?",
-                            lit=(1968, 1973), extra=((1968, r"Lewis and Stearns: \ LL($k$)"),
-                                                     (1973, r"Pratt: \ operator precedence")), part=PART)
-        with self.voiceover("Chapter twelve. Top-down parsing."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(12, r"Top-down parsing", r"Can the parser predict which rule comes next?", lit=(1968, 1973), extra=((1968, r"Lewis and Stearns: \ LL($k$)"),
+                                                     (1973, r"Pratt: \ operator precedence")), part=PART, said="Chapter twelve. Top-down parsing.")
 
     def descent(self):
         l = load("ll1")
@@ -48,6 +44,10 @@ class TopDown(VoiceoverScene):
         self.clear_scene()
 
     def table(self):
+        self.ask(r"Recursive descent on $E \to E + T$. \\ What happens?", [r"it works",
+                 r"it loops forever: left recursion"], 1,
+                 say="A recursive-descent parser meets the rule E goes to E plus T. What happens?",
+                 reveal="It loops forever: to parse E it first calls itself to parse E. Rewrite the rule first.")
         l = load("ll1")
         head = label(r"FIRST, \ FOLLOW, \ and the LL(1) table", font_size=34).to_edge(UP, buff=0.3)
         nts = list(l["first"])

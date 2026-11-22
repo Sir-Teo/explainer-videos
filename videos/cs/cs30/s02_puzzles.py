@@ -6,7 +6,7 @@ from explainer.cs import *  # noqa: F403
 from videos.cs.cs30.common import (BG, CTRL, DATA, HEAD, LAM, NO, PART, YES, grid_table, load)
 
 
-class Puzzles(VoiceoverScene):
+class Puzzles(WatchScene):
     def construct(self):
         self.card()
         self.keys()
@@ -14,13 +14,13 @@ class Puzzles(VoiceoverScene):
         self.secret_history()
 
     def card(self):
-        card = chapter_card(1, r"Key distribution and Merkle's puzzles", r"Can two strangers ever share a secret?",
-                            lit=(1974, 1976), extra=((1974, r"Merkle's puzzles"),), part=PART)
-        with self.voiceover("Chapter one. Key distribution, and Merkle's puzzles."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(1, r"Key distribution and Merkle's puzzles", r"Can two strangers ever share a secret?", lit=(1974, 1976), extra=((1974, r"Merkle's puzzles"),), part=PART, said="Chapter one. Key distribution, and Merkle's puzzles.")
 
     def keys(self):
+        self.ask(r"Every pair of a thousand people \\ needs its own shared key. How many keys?",
+                 [r"$1000$", r"about $500{,}000$", r"$1{,}000{,}000$"], 1,
+                 say="A thousand people, and every pair needs its own secret key. How many keys is that?",
+                 reveal="About half a million: n times n minus one, over two.")
         head = label(r"Every pair needs its own key", font_size=34).to_edge(UP, buff=0.3)
         n = 8
         pts = [np.array([-3.0 + 1.9 * math.cos(2 * math.pi * i / n + 0.3), 0.6 + 1.9 * math.sin(2 * math.pi * i / n +

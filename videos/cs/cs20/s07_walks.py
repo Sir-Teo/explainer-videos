@@ -8,24 +8,21 @@ from videos.cs.cs20.common import (CTRL, DATA, HEAD, LAM, NO, PART, YES, code, g
                                    words)
 
 
-class Walks(VoiceoverScene):
+class Walks(WatchScene):
     def construct(self):
         self.card()
         self.two_sat()
         self.ruin()
-        self.schoening()
 
     def card(self):
-        card = chapter_card(6, r"Random walks that solve SAT", r"Can a drunkard find a satisfying assignment?",
-                            lit=(1991, 1999), extra=((1991, r"Papadimitriou's walk"), (1999, r"Sch\"oning's walk")),
-                            part=PART)
-        with self.voiceover((
-            'Chapter six. Random walks that solve SAT.'
-        )):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(6, r"Random walks that solve SAT", r"Can a drunkard find a satisfying assignment?", lit=(1991, 1999), extra=((1991, r"Papadimitriou's walk"), (1999, r"Sch\"oning's walk")), part=PART, said='Chapter six. Random walks that solve SAT.')
 
     def two_sat(self):
+        self.ask(r"A random walk for 2-SAT: \\ flip a variable of a failing clause. Expected steps?",
+                 [r"about $n$", r"$O(n^2)$", r"$2^n$"], 1,
+                 say="For two-SAT, flip a random variable of any failing clause. How many flips, on average, to find a "
+                     "solution?",
+                 reveal="Order n squared: a gambler's walk towards the answer.")
         head = label(r"A walk for 2-SAT", font_size=34).to_edge(UP, buff=0.35)
         cl = MathTex(r"(x_1 \lor \lnot x_2)", r"\land", r"(x_2 \lor x_3)", r"\land", r"(\lnot x_1 \lor \lnot x_3)",
                      r"\land", r"(x_2 \lor \lnot x_4)", r"\land \cdots", font_size=32).next_to(head, DOWN, buff=0.45)
@@ -123,78 +120,3 @@ class Walks(VoiceoverScene):
         self.wait(0.3)
         self.clear_scene()
 
-    def schoening(self):
-        d = load("walks")
-        head = label(r"Sch\"oning's walk for 3-SAT", font_size=34).to_edge(UP, buff=0.35)
-        pts = VGroup(
-            label(r"a failing 3-clause: \ the right flip is one of three, \ $\Pr[D \to D - 1] \ge \tfrac13$",
-                  font_size=21, color=WHITE),
-            label(r"the walk can drift \textbf{away}: \ restart from a fresh random point every $3n$ flips",
-                  font_size=21, color=WHITE),
-            MathTex(r"\Pr[\text{one restart succeeds}] \ge \frac{1}{\mathrm{poly}(n)} \left(\frac34\right)^n "
-                    r"\quad\Longrightarrow\quad \mathrm{poly}(n)\left(\frac43\right)^n \text{ expected restarts}", font_size=32, color=YES),
-        ).arrange(DOWN, buff=0.25).next_to(head, DOWN, buff=0.35)
-        if pts[2].width > 13.0:
-            pts[2].scale_to_fit_width(13.0)
-        rows = d["three"]
-        ax = Axes(x_range=[7, 21, 2], y_range=[0, 6.5, 1], x_length=6.4, y_length=3.0,
-                  axis_config={"color": GREY_D, "include_numbers": False}).to_edge(LEFT, buff=0.9).shift(DOWN * 1.6)
-        xl = VGroup(*[label(str(x), font_size=16, color=GREY_B).next_to(ax.c2p(x, 0), DOWN, buff=0.1)
-                      for x in range(8, 21, 4)])
-        yl = VGroup(*[label(rf"$10^{y}$", font_size=16, color=GREY_B).next_to(ax.c2p(7, y), LEFT, buff=0.1)
-                      for y in range(0, 7, 2)])
-
-        def series(key, color):
-            pts_ = [ax.c2p(r["n"], math.log10(r[key])) for r in rows]
-            return VGroup(VMobject(color=color, stroke_width=3).set_points_as_corners(pts_),
-                          *[Dot(p, radius=0.05, color=color) for p in pts_])
-        s_brute = series("brute", NO)
-        s_bound = series("schoening", HEAD)
-        s_meas = series("mean_restarts", YES)
-        leg = VGroup(label(r"$2^n$: \ every assignment", font_size=19, color=NO),
-                     label(r"$(4/3)^n$: \ exponential scale only", font_size=19, color=HEAD),
-                     label(r"measured restarts", font_size=19, color=YES),
-                     label(r"random 3-SAT at 4.26 clauses per variable, \\ with exactly one solution", font_size=17,
-                           color=GREY_A),
-                     label(r"selected later SAT algorithms: \ base around $1.3$; \ not a record survey", font_size=19, color=LAM),
-                     ).arrange(DOWN, aligned_edge=LEFT, buff=0.2).next_to(ax, RIGHT, buff=0.6)
-        last = rows[-1]
-        with self.voiceover(
-            (
-            (
-            f"For 3-SAT the same walk works, but worse. <bookmark mark='a'/> A failing clause now has three "
-            f'variables, and only one of them might be the right one to flip, so the chance that D falls can be as '
-            f"low as one third. <bookmark mark='b'/> The walk can drift away from the solution, so Uwe Schöning, in "
-            f"1999, restarts it from a fresh random assignment every three n flips. <bookmark mark='c'/> A careful "
-            f'count shows each restart succeeds with probability at least three quarters to the n divided by a '
-            f'polynomial factor, giving expected restarts of order four thirds to the n up to polynomial factors: '
-            f"exponential, but far fewer than the two to the n assignments. <bookmark mark='d'/> We tested small "
-            f'random formulas near the threshold, retaining those with exactly one satisfying assignment, checked by '
-            f'brute force. This is a selected fixture family, not a proof of worst-case difficulty. <bookmark '
-            f"mark='e'/> With "
-            f"{last['n']}"
-            f' variables, the walk needed about '
-            f"{last['mean_restarts']:.0f}"
-            f' restarts on average, compared with the displayed exponential scale; the omitted polynomial factors '
-            f'mean that curve is not a finite upper bound. Brute force has about a million assignments to try here. '
-            f"Selected later descendants of Paturi, Pudlák, Saks and Zane's algorithm achieve exponential bases "
-            f'around one point three; this is not a current-record survey. Whether something much better exists is '
-            f'the question behind the exponential time hypothesis of Part 27.'
-        )
-        )
-        ) as vo:
-            self.play(FadeIn(head))
-            vo.wait_until("a")
-            self.play(FadeIn(pts[0]))
-            vo.wait_until("b")
-            self.play(FadeIn(pts[1]))
-            vo.wait_until("c")
-            self.play(FadeIn(pts[2]))
-            vo.wait_until("d")
-            self.play(Create(ax), FadeIn(xl), FadeIn(yl), Create(s_brute), FadeIn(leg[0]))
-            self.play(Create(s_bound), FadeIn(leg[1]))
-            vo.wait_until("e")
-            self.play(Create(s_meas), FadeIn(leg[2]), FadeIn(leg[3]))
-            self.play(FadeIn(leg[4]))
-        self.wait(0.3)
-        self.clear_scene()

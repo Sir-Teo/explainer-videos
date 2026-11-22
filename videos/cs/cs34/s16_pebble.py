@@ -4,20 +4,15 @@ from explainer.cs import *  # noqa: F403
 from videos.cs.cs34.common import (FILEC, HEAD, KERN, NO, PART, YES, blk, code, grid_table, load, mono, num)
 
 
-class PebbleDisk(VoiceoverScene):
+class PebbleDisk(WatchScene):
     def construct(self):
         self.card()
         self.device()
         self.novels()
-        self.kv()
         self.ledger()
 
     def card(self):
-        card = chapter_card(15, r"PebbleOS gets a disk", r"Can our machine read the novels from its own file system?",
-                            part=PART)
-        with self.voiceover("Chapter fifteen. PebbleOS gets a disk."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(15, r"PebbleOS gets a disk", r"Can our machine read the novels from its own file system?", part=PART, said="Chapter fifteen. PebbleOS gets a disk.")
 
     def device(self):
         d = load("fs")
@@ -117,47 +112,12 @@ class PebbleDisk(VoiceoverScene):
         self.wait(0.3)
         self.clear_scene()
 
-    def kv(self):
-        k = load("kv")
-        head = label(r"A key-value store on top", font_size=36).to_edge(UP, buff=0.3)
-        files = VGroup(*[VGroup(mono(f["name"], 18, FILEC), label(rf"{num(f['entries'])} entries, \ {num(f['bytes'])} bytes",
-                                                         font_size=17, color=GREY_A)).arrange(RIGHT, buff=0.4)
-                         for f in k["files"]]).arrange(DOWN, aligned_edge=LEFT, buff=0.15)
-        files.next_to(head, DOWN, buff=0.6).to_edge(LEFT, buff=1.2)
-        rows = [[t["word"], num(t["count"]), num(t["read"])] for t in k["top"]]
-        tab = grid_table([r"word", r"counted", r"read back"], rows, widths=[1.8, 1.8, 1.8], row_h=0.42, font_size=19,
-                         mono_cols=(0,))
-        tab.next_to(files, RIGHT, buff=1.2).align_to(files, UP)
-        lines = VGroup(
-            label(rf"\textit{{{k['book']}}}: \ {num(k['words'])} words, \ {num(k['distinct'])} distinct, \ counted "
-                  rf"into chapter 14's LSM tree", font_size=20, color=WHITE),
-            label(r"each run of the tree is a file: \ sorted 8-byte entries, \ written once, \ never changed",
-                  font_size=20, color=FILEC),
-            label(r"lookups read the files back, \ newest first: \ every count correct; \ fsck: \ clean", font_size=20,
-                  color=YES),
-            label(r"a database is a layer like this one: \ Part 35", font_size=20, color=HEAD),
-        ).arrange(DOWN, buff=0.15).to_edge(DOWN, buff=0.45)
-        with self.voiceover(
-            "And one layer more. <bookmark mark='a'/> We count the words of Pride and Prejudice into chapter 14's LSM "
-            "tree. <bookmark mark='b'/> Each of its runs becomes a file on PebbleFS: sorted eight-byte entries, written "
-            "once and never changed, which is exactly the kind of file a file system handles best. <bookmark "
-            "mark='c'/> Looking words up reads those files back, newest first, and every count comes back right. "
-            "<bookmark mark='d'/> That is what a storage engine is: a structure built from files, as files are built "
-            "from blocks. Part 35 builds a database on that idea."
-        ) as vo:
-            self.play(FadeIn(head))
-            vo.wait_until("a")
-            self.play(FadeIn(lines[0]))
-            vo.wait_until("b")
-            self.play(FadeIn(files), FadeIn(lines[1]))
-            vo.wait_until("c")
-            self.play(FadeIn(tab), FadeIn(lines[2]))
-            vo.wait_until("d")
-            self.play(FadeIn(lines[3]))
-        self.wait(0.3)
-        self.clear_scene()
 
     def ledger(self):
+        self.ask(r"The tokenizer reads the novels from PebbleFS. \\ On flash, the disk's share of the time...",
+                 [r"dominates", r"all but vanishes"], 1,
+                 say="The tokenizer now reads the novels from the file system. On flash, how much of the time is disk time?",
+                 reveal="Almost none: it all but vanishes.")
         p = load("pebble")
         led = p["ledger"]
         row = led[-1]

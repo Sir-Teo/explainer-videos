@@ -5,21 +5,25 @@ import numpy as np
 from videos.stats.stats8.common import *  # noqa: F403
 
 
-class Machine(VoiceoverScene):
+class Machine(StatsScene):
     def construct(self):
         self.card()
+        self.ask("Average 4 heights, then 64. The spread of the averages shrinks by a factor of...",
+                 ["2", "4", "16"], 1,
+                 say="The sampling machine averages four men's heights, again and again. Now it averages "
+                     "sixty-four. By what factor does the spread of the averages shrink: two, four, or sixteen?",
+                 reveal="Four: the square root of sixteen times the sample size. The standard error goes like one "
+                        "over root n.")
         self.machine()
         self.three_n()
         self.se()
         self.proportion()
         self.median()
         self.median_se()
+        self.answer()
 
     def card(self):
-        card = chapter_card(1, r"Sampling distributions", r"What would happen if we sampled again?", part=PART)
-        with self.voiceover("Chapter one. Sampling distributions."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(1, r"Sampling distributions", r"What would happen if we sampled again?", part=PART, said="Chapter one. Sampling distributions.")
 
     def machine(self):
         d = load("machine")

@@ -8,9 +8,21 @@ NAMES = {"naive": r"naive: \ the last value", "drift": r"drift: \ the average st
          "ar": r"AR, \ order by AIC", "combo": r"the average of drift, \ smoothing and AR"}
 
 
-class Competition(VoiceoverScene):
+class Competition(StatsScene):
     def construct(self):
         self.card()
+        self.wrong_idea("The model that fits the past best forecasts best",
+                        "Fit is not forecasting: simple methods often won the competitions",
+                        narration="A natural belief: the more sophisticated the model, and the better it fits the "
+                                  "past, the better it forecasts.",
+                        right_narration="The M-competitions said otherwise. Statistically sophisticated methods did "
+                                        "not reliably beat simple ones on held-out data, and fit to the past was a "
+                                        "poor guide.")
+        self.ask("Combining forecasts from several methods, on average...",
+                 ["beats the typical single method", "is worse than any of them", "always equals the best"], 0,
+                 say="Makridakis's competitions pitted forecasting methods against each other on real series. What "
+                     "did combining several methods' forecasts do?",
+                 reveal="It beat the typical single method, often by a lot. When unsure, combine.")
         self.history()
         self.results()
         self.mini()
@@ -18,12 +30,14 @@ class Competition(VoiceoverScene):
         self.why_combine()
         self.rolling()
         self.lessons()
+        self.answer()
+        self.checkpoint([(r"Exponential smoothing with $\alpha = 1$?", "the last value: the naive forecast"),
+                         ("Independent random walks regressed: significant how often?", "most of the time")],
+                        narration="Checkpoint. Practice and traps.",
+                        answers_narration="The last value. And most of the time.")
 
     def card(self):
-        card = chapter_card(10, r"The M-competitions", r"What actually forecasts well?", lit=(1982,), part=PART)
-        with self.voiceover("Chapter ten. The M-competitions."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(10, r"The M-competitions", r"What actually forecasts well?", lit=(1982,), part=PART, said="Chapter ten. The M-competitions.")
 
     def history(self):
         hc = history_card(1979, r"S. Makridakis \& M. Hibon, \ \emph{JRSS A}",

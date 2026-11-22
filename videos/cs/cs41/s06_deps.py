@@ -4,7 +4,7 @@ from explainer.cs import *  # noqa: F403
 from videos.cs.cs41.common import (DATA, HEAD, KERN, LAM, NO, PART, YES, grid_table, load, module_box)
 
 
-class Deps(VoiceoverScene):
+class Deps(WatchScene):
     def construct(self):
         self.card()
         self.diamond()
@@ -17,12 +17,8 @@ class Deps(VoiceoverScene):
         self.supply()
 
     def card(self):
-        card = chapter_card(5, r"Dependencies", r"Which versions of everything can be installed together?",
-                            lit=(2006, 2018), extra=((2006, r"Di Cosmo et al.: \ EDOS, \ NP-complete"),
-                                                     (2018, r"Weizenbaum: \ PubGrub")), part=PART)
-        with self.voiceover("Chapter five. Dependencies."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(5, r"Dependencies", r"Which versions of everything can be installed together?", lit=(2006, 2018), extra=((2006, r"Di Cosmo et al.: \ EDOS, \ NP-complete"),
+                                                     (2018, r"Weizenbaum: \ PubGrub")), part=PART, said="Chapter five. Dependencies.")
 
     def diamond(self):
         d = load("deps")["diamond"]["chosen"]
@@ -74,6 +70,10 @@ class Deps(VoiceoverScene):
         self.clear_scene()
 
     def reduction(self):
+        self.ask(r"Can this set of version constraints be installed? \\ In general, deciding is...", [r"easy",
+                 r"NP-complete"], 1,
+                 say="Packages with version constraints on each other. Is deciding whether they can be installed together easy?",
+                 reveal="No: it is NP-complete. Any SAT formula can be written as packages.")
         d = load("deps")
         g = d["gadget"]
         head = label(r"Choosing versions is NP-complete", font_size=36).to_edge(UP, buff=0.3)
@@ -349,6 +349,12 @@ class Deps(VoiceoverScene):
             self.play(FadeIn(note))
         self.wait(0.4)
         self.clear_scene()
+        self.checkpoint(
+            [(r"Make versus hash-based builds?", r"Timestamps guess; hashes know"),
+             (r"What makes a build hermetic?", r"Tasks see only declared inputs")],
+            narration="Checkpoint. How does a hash-based build differ from Make? And what makes a build hermetic?",
+            answers_narration="Make guesses from timestamps; a hash-based build knows from content. And each task runs in a "
+                              "sandbox that sees only its declared inputs.")
 
 
 _ = (KERN,)

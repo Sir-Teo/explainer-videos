@@ -9,21 +9,25 @@ AXIS_NAMES = {"meds": r"BP medicine users in", "energy": r"energy adjusted", "we
 ON = {"meds": "keep", "energy": True, "weights": True, "age_spline": True, "readings": "all", "exposure": "mean2"}
 
 
-class Sensitivity(VoiceoverScene):
+class Sensitivity(StatsScene):
     def construct(self):
         self.card()
+        self.ask("A plan promised 64 analyses. Report...",
+                 ["the best one", "all 64", "the median one"], 1,
+                 say="The plan promised sixty-four analyses, every reasonable combination of choices. What do you "
+                     "report?",
+                 reveal="All sixty-four, as a specification curve. The reader sees how much the answer depends on "
+                        "the choices.")
         self.curve()
         self.which()
         self.two_days()
         self.attenuation()
         self.calibration()
         self.verdict()
+        self.answer()
 
     def card(self):
-        card = chapter_card(8, r"Sensitivity", r"What changes the answer?", part=PART)
-        with self.voiceover("Chapter eight. Sensitivity."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(8, r"Sensitivity", r"What changes the answer?", part=PART, said="Chapter eight. Sensitivity.")
 
     def curve(self):
         d = load("spec")

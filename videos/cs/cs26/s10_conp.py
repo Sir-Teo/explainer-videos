@@ -4,7 +4,7 @@ from explainer.cs import *  # noqa: F403
 from videos.cs.cs26.common import (CTRL, DATA, HEAD, LAM, NO, PART, YES, fit_right, load, mono)
 
 
-class CoNp(VoiceoverScene):
+class CoNp(WatchScene):
     def construct(self):
         self.card()
         self.conp()
@@ -12,11 +12,7 @@ class CoNp(VoiceoverScene):
         self.ph()
 
     def card(self):
-        card = chapter_card(9, r"coNP and the polynomial hierarchy", r"Can a no-answer have a short proof?",
-                            lit=(1975, 2002), extra=((1975, r"Pratt"), (2002, r"AKS")), part=PART)
-        with self.voiceover("Chapter nine. coNP and the polynomial hierarchy."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(9, r"coNP and the polynomial hierarchy", r"Can a no-answer have a short proof?", lit=(1975, 2002), extra=((1975, r"Pratt"), (2002, r"AKS")), part=PART, said="Chapter nine. coNP and the polynomial hierarchy.")
 
     def conp(self):
         head = label(r"coNP: \ problems whose \textbf{no}-answers have short proofs", font_size=32).to_edge(UP,
@@ -41,7 +37,7 @@ class CoNp(VoiceoverScene):
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.3).move_to(RIGHT * 3.5 + DOWN * 0.2)
         fit_right(lines)
         with self.voiceover(
-            "NP requires short certificates for yes-instances. <bookmark mark='a'/> CoNP consists of languages whose complements are in NP, so their no-instances have short efficiently checkable certificates. <bookmark mark='b'/> Tautology for general Boolean formulas is a coNP-complete example: a falsifying assignment certifies a no-answer. Enumerating every assignment is one decision method, not a necessity for every yes-instance. CNF tautology has a different, easy structure. <bookmark mark='c'/> Whether NP equals coNP is open; equality would follow from P equals NP, but the converse is not known. <bookmark mark='d'/> Bounded nontrivial-factor decision lies in both classes. If an NP-complete language were also in coNP, then NP would equal coNP. The overlapping circles are a schematic, not a proof of strict separation."
+            "NP requires short certificates for yes-instances. <bookmark mark='a'/> CoNP consists of languages whose complements are in NP, so their no-instances have short efficiently checkable certificates. <bookmark mark='b'/> Tautology for general Boolean formulas is a coNP-complete example: a falsifying assignment certifies a no-answer. Enumerating every assignment is one decision method, not a necessity for every yes-instance. CNF tautology has a different, easy structure. <bookmark mark='c'/> Whether NP equals coNP is open; equality would follow from P equals NP, but the converse is not known. <bookmark mark='d'/> Bounded nontrivial-factor decision lies in both classes. If an NP-complete language were also in coNP, then NP would equal coNP."
         ) as vo:
             self.play(FadeIn(head), FadeIn(np_), FadeIn(co), FadeIn(p_), FadeIn(labs), FadeIn(ex[:2]))
             vo.wait_until("a")
@@ -56,6 +52,9 @@ class CoNp(VoiceoverScene):
         self.clear_scene()
 
     def pratt(self):
+        self.ask(r"Is there a short, checkable proof \\ that a number is prime?", [r"no", r"yes"], 1,
+                 say="A factor is a short proof that a number is composite. Is there a short proof that a number is prime?",
+                 reveal="Yes: Pratt's certificate, from 1975. Primality is in NP and in coNP.")
         d = load("pratt")
         head = label(r"Why factoring is in NP $\cap$ coNP", font_size=32).to_edge(UP, buff=0.35)
         N = d["N"]

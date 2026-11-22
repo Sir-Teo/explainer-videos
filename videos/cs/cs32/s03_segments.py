@@ -4,19 +4,14 @@ from explainer.cs import *  # noqa: F403
 from videos.cs.cs32.common import (BG, COST, DATA, HEAD, LAM, NO, PART, YES, load, mono)
 
 
-class Segments(VoiceoverScene):
+class Segments(WatchScene):
     def construct(self):
         self.card()
         self.base_bounds()
         self.fragmentation()
 
     def card(self):
-        card = chapter_card(2, r"Base and bounds, \ and segments", r"What is the simplest translation that works?",
-                            lit=(1961, 1978), extra=((1961, r"B5000: \ segments"), (1978, r"8086: \ segment registers")),
-                            part=PART)
-        with self.voiceover("Chapter two. Base and bounds, and segments."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(2, r"Base and bounds, \ and segments", r"What is the simplest translation that works?", lit=(1961, 1978), extra=((1961, r"B5000: \ segments"), (1978, r"8086: \ segment registers")), part=PART, said="Chapter two. Base and bounds, and segments.")
 
     def base_bounds(self):
         head = label(r"The simplest translation: \ add a base", font_size=34).to_edge(UP, buff=0.3)
@@ -74,6 +69,10 @@ class Segments(VoiceoverScene):
         self.clear_scene()
 
     def fragmentation(self):
+        self.ask(r"Segments of random sizes come and go, first fit. \\ After a while, free memory is...",
+                 [r"one big hole", r"many small holes"], 1,
+                 say="Segments of random sizes arrive and leave, each placed in the first hole that fits. What does free memory look like after a while?",
+                 reveal="Many small holes, often too small for the next segment.")
         d = load("segments")
         head = label(r"External fragmentation", font_size=36).to_edge(UP, buff=0.3)
         M = d["M"]

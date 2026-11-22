@@ -5,21 +5,24 @@ import numpy as np
 from videos.stats.stats30.common import *  # noqa: F403
 
 
-class HodgesLehmann(VoiceoverScene):
+class HodgesLehmann(StatsScene):
     def construct(self):
         self.card()
+        self.ask("The Hodges--Lehmann estimate is the median of...",
+                 ["the data", "the Walsh averages, all pairwise means", "the pairwise differences"], 1,
+                 say="Hodges and Lehmann turned the signed-rank test into an estimate. It's the median of what?",
+                 reveal="Of the Walsh averages: the means of all pairs of observations, each with itself included. "
+                        "An estimate as good as the test it inverts.")
         self.walsh()
         self.picture()
         self.interval()
         self.newcomb()
         self.darwin()
         self.properties()
+        self.answer()
 
     def card(self):
-        card = chapter_card(2, r"Hodges--Lehmann", r"An estimate from a test", lit=(1963,), part=PART)
-        with self.voiceover("Chapter two. The Hodges–Lehmann estimator."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(2, r"Hodges--Lehmann", r"An estimate from a test", lit=(1963,), part=PART, said="Chapter two. The Hodges–Lehmann estimator.")
 
     def walsh(self):
         rows = [

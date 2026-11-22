@@ -5,20 +5,24 @@ import numpy as np
 from videos.stats.stats6.common import *  # noqa: F403
 
 
-class Concentration(VoiceoverScene):
+class Concentration(StatsScene):
     def construct(self):
         self.card()
+        self.ask("1,000 values in $[0, 1]$. Hoeffding: chance the mean strays over 0.05 is at most...",
+                 [r"about 1.3\%", r"about 25\%", r"about 0.0001\%"], 0,
+                 say="A thousand independent values between zero and one. Hoeffding's inequality: at most what "
+                     "chance that their mean strays more than zero point zero five from its expectation?",
+                 reveal="About one point three percent: two e to the minus five, at this sample size and every "
+                        "other. Chebyshev only promises ten percent.")
         self.statement()
         self.proof()
         self.compare()
         self.union()
         self.large_dev()
+        self.answer()
 
     def card(self):
-        card = chapter_card(11, r"Concentration", r"Guarantees for every $n$, \ not just in the limit", part=PART)
-        with self.voiceover("Chapter eleven. Concentration."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(11, r"Concentration", r"Guarantees for every $n$, \ not just in the limit", part=PART, said="Chapter eleven. Concentration.")
 
     def statement(self):
         thm = theorem_card(r"Hoeffding's inequality", r"if $X_1, \dots, X_n$ are independent with common mean $\mu$ and $a \le X_i \le b$, $a<b$: \ "

@@ -6,9 +6,14 @@ from videos.stats.stats14.common import *  # noqa: F403
 from videos.stats.stats14.s02_lpm import flights
 
 
-class Logistic(VoiceoverScene):
+class Logistic(StatsScene):
     def construct(self):
         self.card()
+        self.ask("A probability of 0.8 is odds of...",
+                 ["0.8 to 1", "4 to 1", "1 to 4"], 1,
+                 say="Logistic regression works on the odds. A probability of point eight is odds of what?",
+                 reveal="Four to one: point eight over point two. Odds run from zero to infinity, and their "
+                        "logarithm runs over the whole line, where a linear model is at home.")
         self.odds()
         self.odds_table()
         self.fit_curve()
@@ -16,12 +21,10 @@ class Logistic(VoiceoverScene):
         self.latent()
         self.probit()
         self.canonical()
+        self.answer()
 
     def card(self):
-        card = chapter_card(2, r"Logistic regression", r"Linear in the log-odds", part=PART)
-        with self.voiceover("Chapter two. Logistic regression."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(2, r"Logistic regression", r"Linear in the log-odds", part=PART, said="Chapter two. Logistic regression.")
 
     def odds(self):
         rows = [

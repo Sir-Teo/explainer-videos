@@ -8,9 +8,15 @@ METH = {"naive": (r"in-sample residuals", MISSC), "jack": (r"jackknife", CALC), 
         "split": (r"split", PREDC)}
 
 
-class Jackknife(VoiceoverScene):
+class Jackknife(StatsScene):
     def construct(self):
         self.card()
+        self.ask("Conformalized quantile regression's bands are...",
+                 ["the same width everywhere", "wider where the data are noisier"], 1,
+                 say="Conformalized quantile regression starts from estimated quantiles, then calibrates them. What "
+                     "do its bands look like?",
+                 reveal="Wider where the data are noisier: the band breathes with the spread. The marginal ninety "
+                        "percent stays guaranteed.")
         self.waste()
         self.naive()
         self.jplus()
@@ -22,12 +28,10 @@ class Jackknife(VoiceoverScene):
         self.cqr_band()
         self.cqr_age()
         self.board()
+        self.answer()
 
     def card(self):
-        card = chapter_card(7, r"Jackknife+ and CQR", r"Using all the data; \ bands that breathe", lit=(2021,), part=PART)
-        with self.voiceover("Chapter seven. The jackknife plus, and conformalized quantile regression."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(7, r"Jackknife+ and CQR", r"Using all the data; \ bands that breathe", lit=(2021,), part=PART, said="Chapter seven. The jackknife plus, and conformalized quantile regression.")
 
     def waste(self):
         rows = fit_rows(VGroup(

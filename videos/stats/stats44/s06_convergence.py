@@ -5,20 +5,23 @@ import numpy as np
 from videos.stats.stats44.common import *  # noqa: F403
 
 
-class Convergence(VoiceoverScene):
+class Convergence(StatsScene):
     def construct(self):
         self.card()
+        self.ask("A nonnegative martingale...",
+                 ["may oscillate forever", "converges almost surely"], 1,
+                 say="A nonnegative martingale: can it oscillate forever, or must it settle down?",
+                 reveal="It converges almost surely. Count its upcrossings of any band: Doob showed they're finite, "
+                        "so the path can't keep swinging.")
         self.upcrossings()
         self.theorem()
         self.two_cases()
         self.levy()
         self.reverse()
+        self.answer()
 
     def card(self):
-        card = chapter_card(5, r"Martingale convergence", r"Why a fair game must settle down", lit=(1953,), part=PART)
-        with self.voiceover("Chapter five. Martingale convergence: why a bounded fair game must settle down."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(5, r"Martingale convergence", r"Why a fair game must settle down", lit=(1953,), part=PART, said="Chapter five. Martingale convergence: why a bounded fair game must settle down.")
 
     def upcrossings(self):
         g = np.random.default_rng(9)

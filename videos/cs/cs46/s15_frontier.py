@@ -10,21 +10,14 @@ def node(name, color, w=2.2, h=0.6, size=18):
     return VGroup(r, label(name, font_size=size, color=color).move_to(r))
 
 
-class Frontier(VoiceoverScene):
+class Frontier(WatchScene):
     def construct(self):
         self.card()
         self.incremental()
-        self.small()
         self.time_()
-        self.open()
 
     def card(self):
-        card = chapter_card(14, r"Frontier: \ streams, \ tables and their limits",
-                            r"Can every query be kept up to date cheaply?", lit=(2013, 2023),
-                            extra=((2013, r"differential dataflow"), (2023, r"DBSP")), part=PART)
-        with self.voiceover("Chapter fourteen, the frontier. Can every query be kept up to date, cheaply?"):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(14, r"Frontier: \ streams, \ tables and their limits", r"Can every query be kept up to date cheaply?", lit=(2013, 2023), extra=((2013, r"differential dataflow"), (2023, r"DBSP")), part=PART, said="Chapter fourteen, the frontier. Can every query be kept up to date, cheaply?")
 
     def incremental(self):
         head = label(r"Queries that update themselves", font_size=36).to_edge(UP, buff=0.3)
@@ -68,47 +61,11 @@ class Frontier(VoiceoverScene):
         self.wait(0.4)
         self.clear_scene()
 
-    def small(self):
-        q = load("quantiles")
-        head = label(r"How small can a summary be?", font_size=36).to_edge(UP, buff=0.3)
-        rows = [[f"{r['k']}", f"{r['stored']:,}", f"{100 * r['rank_error']['0.5']:.2f}\\%",
-                 f"{100 * r['rank_error']['0.99']:.2f}\\%", f"{100 * r['rank_error']['0.999']:.2f}\\%"]
-                for r in q["rows"]]
-        tab = grid_table([r"$k$", r"items kept", r"p50 error", r"p99 error", r"p99.9 error"], rows,
-                         widths=[1.2, 2.2, 2.2, 2.2, 2.4], row_h=0.5, font_size=19, mono_cols=())
-        tab.next_to(head, DOWN, buff=0.6)
-        top = label(rf"{q['n']:,} latencies summarized by a KLL sketch \ (chapter 6); \ error in rank", font_size=19,
-                    color=GREY_B).next_to(tab, UP, buff=0.2)
-        lines = VGroup(
-            wrapped_label(r"KLL \ (Karnin, \ Lang and Liberty, \ 2016) \ is optimal up to constants for rank error: "
-                          r"no summary of a stream can do much better in the worst case", 12.4, font_size=20,
-                          color=YES),
-            wrapped_label(r"lower bounds of this kind \ (Alon, \ Matias and Szegedy, \ 1996, \ and after) \ tell a "
-                          r"designer what is impossible before anything is built", 12.4, font_size=20, color=WHITE),
-            wrapped_label(r"open: \ relative error at the tails with tight space, \ mergeable and private sketches, \ "
-                          r"and summaries for joins", 12.4, font_size=20, color=NO),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.25).to_edge(DOWN, buff=0.45)
-        with self.voiceover(
-            "How small can a summary of a stream be? <bookmark mark='a'/> Here is a KLL sketch of two hundred "
-            f"thousand latencies. Keeping {q['rows'][0]['stored']} of them, it puts the median within about one "
-            f"percent of the true rank; keeping {q['rows'][-1]['stored']:,}, within a few hundredths of a percent. "
-            "<bookmark mark='b'/> KLL, by Zohar Karnin, Kevin Lang and Edo Liberty in 2016, is optimal up to "
-            "constant factors: no summary can do much better in the worst case. <bookmark mark='c'/> Lower bounds "
-            "like this, starting with Noga Alon, Yossi Matias and Mario Szegedy in 1996, tell a designer what is "
-            "impossible before anything is built. <bookmark mark='d'/> Open questions remain at the tails, where "
-            "relative accuracy matters most, for sketches that can be merged and kept private, and for summaries "
-            "that answer joins."
-        ) as vo:
-            self.play(FadeIn(head), FadeIn(top))
-            vo.wait_until("a")
-            self.play(FadeIn(tab))
-            for mk, ln in zip("bcd", lines):
-                vo.wait_until(mk)
-                self.play(FadeIn(ln))
-        self.wait(0.4)
-        self.clear_scene()
 
     def time_(self):
+        self.ask(r"Can a stream processor ever \emph{know} \\ that no older event will arrive?", [r"yes", r"no"], 1,
+                 say="Can a stream processor ever know for certain that no older event is still on its way?",
+                 reveal="No. A watermark is a guess, trading completeness against latency.")
         w = load("watermark")
         head = label(r"Time is a guess", font_size=36).to_edge(UP, buff=0.3)
         rows = w["rows"]
@@ -160,38 +117,6 @@ class Frontier(VoiceoverScene):
         self.wait(0.4)
         self.clear_scene()
 
-    def open(self):
-        head = label(r"Open", font_size=36).to_edge(UP, buff=0.3)
-        items = VGroup(
-            wrapped_label(r"1. \ \textbf{Incremental queries}: \ which can be maintained in time proportional to the "
-                          r"change, \ and with how much state.", 12.4, font_size=24, color=WHITE),
-            wrapped_label(r"2. \ \textbf{Principled watermarks}: \ lateness bounds with guarantees from measured "
-                          r"delay distributions.", 12.4, font_size=24, color=YES),
-            wrapped_label(r"3. \ \textbf{Sketches for joins}: \ small summaries that answer join and group-by "
-                          r"queries with bounded error.", 12.4, font_size=24, color=HEAD),
-            wrapped_label(r"4. \ \textbf{Learned layouts}: \ choosing sort orders, \ partitions and encodings from "
-                          r"the query workload.", 12.4, font_size=24, color=KERN),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.35).next_to(head, DOWN, buff=0.45)
-        star = wrapped_label(r"$\bigstar$ \ this part's research problem: \ a characterization of the windowed "
-                             r"stream joins that can be maintained exactly in space sublinear in the window", 12.4,
-                             font_size=23, color=LAM).to_edge(DOWN, buff=0.35)
-        with self.voiceover(
-            "Open problems. <bookmark mark='a'/> Which queries can be maintained incrementally, in time proportional "
-            "to each change, and with how much state. <bookmark mark='b'/> Watermarks with guarantees, derived from "
-            "measured delays rather than guessed. <bookmark mark='c'/> Small summaries that answer joins and "
-            "group-bys with bounded error. <bookmark mark='d'/> And layouts learned from the workload: which sort "
-            "order, partitioning and encoding a table should have. <bookmark mark='e'/> This part's research "
-            "problem asks which windowed stream joins can be maintained exactly using space that grows more slowly "
-            "than the window itself."
-        ) as vo:
-            self.play(FadeIn(head))
-            for mk, it in zip("abcd", items):
-                vo.wait_until(mk)
-                self.play(FadeIn(it))
-            vo.wait_until("e")
-            self.play(FadeIn(star))
-        self.wait(0.6)
-        self.clear_scene()
 
 
 _ = (DATA, KERN, LAM, NO, YES)

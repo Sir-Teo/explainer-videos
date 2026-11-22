@@ -14,13 +14,13 @@ def battery(p, h=0.7):
                   Line(p + LEFT * 0.16 + DOWN * 0.08, p + RIGHT * 0.16 + DOWN * 0.08, color=GREY_A, stroke_width=4))
 
 
-class Hook(VoiceoverScene):
+class Hook(WatchScene):
     def construct(self):
         self.thesis()
         self.series()
         self.parallel()
         self.relay()
-        self.plan()
+        self.title(PART)
 
     # ------------------------------------------------------------------
     def thesis(self):
@@ -180,29 +180,3 @@ class Hook(VoiceoverScene):
         self.wait(0.3)
         self.clear_scene()
 
-    # ------------------------------------------------------------------
-    def plan(self):
-        title = label(rf"Part {PART}: \ Logic from Switches", font_size=46).to_edge(UP, buff=0.4)
-        smap = series_map(current=PART).scale(0.92).next_to(title, DOWN, buff=0.35)
-        obj = objectives_card([
-            r"Boole's algebra, \ and Shannon's switches: \ circuits are expressions",
-            r"the transistor as a switch, \ the CMOS inverter, \ NAND and NOR in silicon",
-            r"one gate is enough: \ NAND, \ and Post's test for which gate sets are complete",
-            r"normal forms, \ the Boolean cube and Karnaugh maps, \ multiplexers and decision diagrams",
-            r"how many gates a function needs: \ Shannon's counting argument, \ and what nobody can prove",
-            r"delay and glitches, \ the blocks Pebble needs, \ our simulator, \ and reversible gates",
-        ], font_size=26).move_to(DOWN * 0.2)
-        with self.voiceover(
-            "This is Part 3 of Computer Science, Built, the first step of act one: building a computer from switches. "
-            "<bookmark mark='a'/> In this part: Boole's algebra, and Shannon's switches. The transistor, the CMOS "
-            "inverter, and NAND and NOR gates in silicon. A proof that one kind of gate is enough, and Emil Post's test "
-            "for exactly which sets of gates are. Normal forms, the Boolean cube and Karnaugh maps, multiplexers and "
-            "decision diagrams. How many gates a function needs, which Shannon answered with a counting argument, and "
-            "the embarrassing question nobody can answer. Then delay and glitches, the building blocks Pebble needs, the "
-            "simulator that will run every circuit in this series, and gates that never forget."
-        ) as vo:
-            self.play(FadeIn(title), FadeIn(smap))
-            vo.wait_until("a")
-            self.play(FadeOut(smap), FadeIn(obj))
-        self.wait(0.4)
-        self.clear_scene()

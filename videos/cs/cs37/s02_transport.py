@@ -4,20 +4,15 @@ from explainer.cs import *  # noqa: F403
 from videos.cs.cs37.common import (ACKC, DATA, HEAD, KERN, LAM, NO, PART, SEG, YES, box, grid_table, load, mono)
 
 
-class Transport(VoiceoverScene):
+class Transport(WatchScene):
     def construct(self):
         self.card()
         self.what_ip_does()
-        self.ports()
         self.udp_tcp()
 
     def card(self):
-        card = chapter_card(1, r"The transport problem", r"What does a program need that IP does not give?",
-                            lit=(1974, 1981), extra=((1974, r"Cerf and Kahn: \ TCP"), (1980, r"Postel: \ UDP"),
-                                                     (1981, r"RFC 793")), part=PART)
-        with self.voiceover("Chapter one. The transport problem."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(1, r"The transport problem", r"What does a program need that IP does not give?", lit=(1974, 1981), extra=((1974, r"Cerf and Kahn: \ TCP"), (1980, r"Postel: \ UDP"),
+                                                     (1981, r"RFC 793")), part=PART, said="Chapter one. The transport problem.")
 
     def what_ip_does(self):
         u = load("udp")
@@ -71,47 +66,11 @@ class Transport(VoiceoverScene):
         self.wait(0.4)
         self.clear_scene()
 
-    def ports(self):
-        head = label(r"Ports: \ which program?", font_size=36).to_edge(UP, buff=0.3)
-        host = RoundedRectangle(width=5.6, height=4.2, corner_radius=0.2, stroke_color=GREY_C, stroke_width=1.5)
-        host.move_to([3.4, -0.5, 0])
-        hl = label(r"Pebble 2 \ (10.4.0.2)", font_size=20, color=GREY_A).next_to(host, UP, buff=0.1)
-        progs = VGroup(box(2.2, 0.6, r"web server \ :443", DATA, font_size=18),
-                       box(2.2, 0.6, r"DNS \ :53", LAM, font_size=18),
-                       box(2.2, 0.6, r"ssh \ :22", KERN, font_size=18)).arrange(DOWN, buff=0.35)
-        progs.move_to(host.get_center() + RIGHT * 1.2)
-        nic = box(1.2, 2.6, r"IP", HEAD, font_size=20).move_to(host.get_center() + LEFT * 1.8)
-        arrows = VGroup(*[Arrow(nic.get_right(), p.get_left(), buff=0.1, color=GREY_B, stroke_width=2) for p in progs])
-        four = mono("(203.0.113.7, 51544, 10.4.0.2, 443)", 18, YES).move_to([-3.4, 1.2, 0])
-        fl = wrapped_label(r"a connection is named by four numbers: \ source address and port, \ destination "
-                           r"address and port", 5.4, font_size=20, color=WHITE).next_to(four, DOWN, buff=0.3)
-        udp = VGroup(
-            label(r"UDP's whole header: \ 8 bytes", font_size=22, color=LAM),
-            mono("src port | dst port | length | checksum", 16, LAM),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.15).move_to([-3.4, -1.4, 0])
-        with self.voiceover(
-            "First, the simplest thing a transport adds. An IP address names a machine, but a machine runs many "
-            "programs. <bookmark mark='a'/> A port number, sixteen bits, names the program: four four three for a "
-            "web server, fifty-three for names, twenty-two for remote logins. The operating system reads the port "
-            "and hands the data to whichever program is listening. <bookmark mark='b'/> A conversation is then "
-            "named by four numbers: both addresses and both ports. Your browser picks a fresh source port for each "
-            "connection, so many tabs can talk to the same server without confusion. <bookmark mark='c'/> UDP, "
-            "David Reed and Jon Postel's user datagram protocol of 1980, adds exactly this and a checksum: eight "
-            "bytes of header and no promises. It is what DNS, video calls and games use, and, as we will see at the "
-            "end, what the newest web protocol is built on."
-        ) as vo:
-            self.play(FadeIn(head), Create(host), FadeIn(hl), FadeIn(nic))
-            vo.wait_until("a")
-            self.play(LaggedStart(*[AnimationGroup(GrowArrow(a), FadeIn(p)) for a, p in zip(arrows, progs)],
-                                  lag_ratio=0.3))
-            vo.wait_until("b")
-            self.play(FadeIn(four), FadeIn(fl))
-            vo.wait_until("c")
-            self.play(FadeIn(udp))
-        self.wait(0.4)
-        self.clear_scene()
 
     def udp_tcp(self):
+        self.ask(r"UDP adds to IP...", [r"reliability and order", r"port numbers and a checksum"], 1,
+                 say="UDP sits on top of IP. What does it add?",
+                 reveal="Almost nothing: port numbers, so packets reach the right program, and a checksum.")
         head = label(r"Two contracts", font_size=36).to_edge(UP, buff=0.3)
         rows = [
             [r"delivery", r"maybe", r"every byte, \ or an error"],

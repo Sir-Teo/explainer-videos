@@ -5,10 +5,16 @@ import numpy as np
 from videos.stats.stats63.common import *  # noqa: F403
 
 
-class Census(LectureMixin, VoiceoverScene):
+class Census(LectureMixin, StatsScene):
     def construct(self):
         self.card_voiceover("Chapter six. The 2020 United States census, the largest use of differential privacy.", 6,
                             r"The 2020 Census", r"Privacy at the scale of a nation", lit=(2022,))
+        self.ask("The 2020 Census's TopDown algorithm held which counts exact?",
+                 ["the state population totals", "every block's population"], 0,
+                 say="The 2020 US census, the largest use of differential privacy. Its TopDown algorithm held which "
+                     "counts exact, as invariants?",
+                 reveal="The state population totals, among a few others: everything below was noised, then "
+                        "post-processed to be consistent and non-negative.")
         self.why_()
         self.topdown()
         self.projection()
@@ -16,6 +22,11 @@ class Census(LectureMixin, VoiceoverScene):
         self.why_bias()
         self.debate()
         self.choice()
+        self.answer()
+        self.checkpoint([("Local or central DP: which costs more?", "local, by far"),
+                         ("TopDown held exact?", "the state population totals")],
+                        narration="Checkpoint. Cost and the census.",
+                        answers_narration="Local. And the state totals.")
 
     def why_(self):
         self.lad_voiceover(

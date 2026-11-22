@@ -13,7 +13,7 @@ def bar(iv, y, color, h=0.26, op=0.75):
                      fill_opacity=op).move_to([X0 + (s + f) / 2 * UNIT, y, 0])
 
 
-class Greedy(VoiceoverScene):
+class Greedy(WatchScene):
     def construct(self):
         self.card()
         self.schedule()
@@ -22,11 +22,7 @@ class Greedy(VoiceoverScene):
         self.huffman()
 
     def card(self):
-        card = chapter_card(1, r"Greedy, \ and the exchange argument", r"When is the best-looking step safe?",
-                            lit=(1952,), extra=((1952, r"Huffman codes"),), part=PART)
-        with self.voiceover("Chapter one. Greedy, and the exchange argument."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(1, r"Greedy, \ and the exchange argument", r"When is the best-looking step safe?", lit=(1952,), extra=((1952, r"Huffman codes"),), part=PART, said="Chapter one. Greedy, and the exchange argument.")
 
     def schedule(self):
         d = load("greedy")
@@ -113,6 +109,17 @@ class Greedy(VoiceoverScene):
         self.clear_scene()
 
     def rules(self):
+        self.wrong_idea(r"If every step is the best available, \\ the result is the best possible",
+                        r"Only with special structure: \\ greedy needs a proof",
+                        narration="Here's an appealing rule: at every step, take the best-looking choice.",
+                        right_narration="Sometimes it's optimal. Often it isn't. Greedy needs a proof, and the structure "
+                                        "behind the proofs has a name.")
+        self.clear_scene()
+        self.ask(r"Fit in the most meetings. \\ Pick next the one that...", [r"ends first", r"is shortest",
+                 r"starts first"], 0,
+                 say="To fit in the most meetings, which should you pick next: the one that ends first, the shortest one, or "
+                     "the one that starts first?",
+                 reveal="The one that ends first. Shortest-first and earliest-start both fail on some inputs.")
         d = load("greedy")
         head = label(r"Plausible rules that fail", font_size=34).to_edge(UP, buff=0.3)
         st = d["stats"]

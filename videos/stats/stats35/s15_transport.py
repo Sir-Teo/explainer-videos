@@ -5,21 +5,29 @@ import numpy as np
 from videos.stats.stats35.common import *  # noqa: F403
 
 
-class Transport(VoiceoverScene):
+class Transport(StatsScene):
     def construct(self):
         self.card()
+        self.ask("A trial's average effect carries over to a target population when...",
+                 ["always", "the distribution of effect modifiers is accounted for"], 1,
+                 say="Trial patients are volunteers, usually younger and healthier. When does a trial's average "
+                     "effect carry over to the patients a doctor actually sees?",
+                 reveal="When the distribution of effect modifiers is accounted for, by reweighting the trial to "
+                        "the target. External validity needs assumptions the coin can't provide.")
         self.who()
         self.ages()
         self.ladder_()
         self.result()
         self.positivity()
         self.lesson()
+        self.answer()
+        self.checkpoint([(r"Five looks at 5\% each: the overall error?", r"about 14\%"),
+                         ("CAST's lesson?", "fixing a surrogate can kill")],
+                        narration="Checkpoint. Trials over time.",
+                        answers_narration="About fourteen percent. And surrogates can mislead fatally.")
 
     def card(self):
-        card = chapter_card(14, r"External validity", r"Transporting a trial", lit=(2011, 2019), part=PART)
-        with self.voiceover("Chapter fourteen. External validity."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(14, r"External validity", r"Transporting a trial", lit=(2011, 2019), part=PART, said="Chapter fourteen. External validity.")
 
     def who(self):
         rows = fit_rows(VGroup(

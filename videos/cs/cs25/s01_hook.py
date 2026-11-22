@@ -4,10 +4,10 @@ from explainer.cs import *  # noqa: F403
 from videos.cs.cs25.common import (CTRL, DATA, HEAD, LAM, NO, PART, YES, load, mono, wang, wang_grid, words)
 
 
-class Hook(VoiceoverScene):
+class Hook(WatchScene):
     def construct(self):
         self.three()
-        self.plan()
+        self.title(PART)
 
     def three(self):
         t = load("tiles")
@@ -57,22 +57,3 @@ class Hook(VoiceoverScene):
         self.wait(0.3)
         self.clear_scene()
 
-    def plan(self):
-        title = label(rf"Part {PART}: \ Undecidable", font_size=46).to_edge(UP, buff=0.4)
-        smap = series_map(current=PART, done=PART - 1).scale(0.92).next_to(title, DOWN, buff=0.35)
-        obj = objectives_card([
-            r"decidable, \ recognizable, \ and reductions between undecidable problems",
-            r"Rice's theorem; \ the recursion theorem and programs that print themselves",
-            r"dominoes, \ tiles and Diophantine equations: \ halting in disguise",
-            r"G\"odel's incompleteness, \ proved from halting; \ oracles and the arithmetic hierarchy",
-            r"Kolmogorov complexity, \ Chaitin's $\Omega$, \ and busy beavers again",
-            r"where decidability ends, \ undecidability in the wild, \ and the frontier",
-        ], font_size=26).move_to(DOWN * 0.2)
-        with self.voiceover(
-            "Part 25 of Computer Science, Built: Undecidable. Act Five begins: limits and secrets. <bookmark mark='a'/> We study decidability, recognition and reductions; Rice's theorem for nontrivial extensional program properties; constructive self-reference; dominoes, tiles and integer equations; effective arithmetic theories and incompleteness; oracles and the arithmetic hierarchy; plain program complexity, prefix-free Omega, and busy beavers. Each result has a model and assumptions, and our finite experiments will keep their limits explicit."
-        ) as vo:
-            self.play(FadeIn(title), FadeIn(smap))
-            vo.wait_until("a")
-            self.play(FadeOut(smap), FadeIn(obj))
-        self.wait(0.5)
-        self.clear_scene()

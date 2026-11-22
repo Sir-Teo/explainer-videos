@@ -6,16 +6,23 @@ from scipy import stats as st
 from videos.stats.stats63.common import *  # noqa: F403
 
 
-class Testing(LectureMixin, VoiceoverScene):
+class Testing(LectureMixin, StatsScene):
     def construct(self):
         self.card_voiceover("Chapter two. Differential privacy is a statement about hypothesis tests.", 2,
                             r"DP as hypothesis testing", r"The attacker's power", lit=(2022,))
+        self.ask(r"$\varepsilon$-DP bounds an attacker's test of ``is Alice in the data?'' so that its power is at most...",
+                 [r"$e^\varepsilon$ times its size", "its size"], 0,
+                 say="Differential privacy as hypothesis testing. An attacker tests whether Alice is in the data. "
+                     "Under epsilon-differential privacy, how powerful can the test be?",
+                 reveal="At most e to the epsilon times its size, plus delta: Wasserman and Zhou's observation. "
+                        "Gaussian differential privacy states the whole trade-off curve.")
         self.attacker()
         self.region_()
         self.chart()
         self.gdp()
         self.meaning()
         self.clt()
+        self.answer()
 
     def attacker(self):
         self.lad_voiceover(

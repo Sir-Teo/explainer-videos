@@ -9,10 +9,16 @@ def fpr_of(p, ppv, fnr):
     return p / (1 - p) * (1 - ppv) / ppv * (1 - fnr)
 
 
-class Impossibility(LectureMixin, VoiceoverScene):
+class Impossibility(LectureMixin, StatsScene):
     def construct(self):
         self.card_voiceover("Chapter nine. Impossibility results: which fairness requirements conflict, under which conditions.", 9,
                             r"Impossibility", r"One line of algebra", lit=(2016, 2017))
+        self.ask("Different base rates. A score with equal PPV and equal false positive and negative rates is...",
+                 ["possible", "impossible, short of perfect prediction"], 1,
+                 say="Two groups with different base rates. Can a binary prediction have equal positive predictive "
+                     "values and equal false positive and false negative rates across them?",
+                 reveal="No, unless prediction is perfect: Chouldechova's identity ties the three together through "
+                        "the base rate. That's the COMPAS dispute, in one line of algebra.")
         self.identity()
         self.plug()
         self.chart()
@@ -20,6 +26,11 @@ class Impossibility(LectureMixin, VoiceoverScene):
         self.thresholds()
         self.label_()
         self.choice()
+        self.answer()
+        self.checkpoint([("Calibration within groups is?", "sufficiency"),
+                         ("Different base rates: equal PPV and equal error rates?", "impossible, short of perfect prediction")],
+                        narration="Checkpoint. Fairness criteria.",
+                        answers_narration="Sufficiency. And impossible.")
 
     def identity(self):
         self.lad_voiceover(

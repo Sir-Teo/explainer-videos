@@ -5,7 +5,7 @@ import numpy as np
 from videos.stats.stats52.common import *  # noqa: F403
 
 
-class Hook(VoiceoverScene):
+class Hook(StatsScene):
     def construct(self):
         self.story()
         self.spectrum()
@@ -13,7 +13,7 @@ class Hook(VoiceoverScene):
         self.loadings()
         self.question()
         self.upgrades()
-        self.objectives()
+        self.title(PART)
 
     def story(self):
         tl = timeline(lit=(1967,)).to_edge(UP, buff=0.35)
@@ -169,29 +169,4 @@ class Hook(VoiceoverScene):
             for k, m_ in enumerate("abc"):
                 vo.wait_until(m_)
                 self.play(FadeIn(stack[k], shift=UP * 0.2))
-        self.clear_scene()
-
-    def objectives(self):
-        head = VGroup(label(r"Part 52", font_size=34, color=GREY_B), label(r"High-Dimensional Statistics", font_size=48)).arrange(DOWN, buff=0.25)
-        obj = objectives_card([
-            r"the lasso's oracle inequality; \ restricted eigenvalues; \ support recovery and the primal--dual witness",
-            r"decomposable regularizers; \ low-rank recovery and matrix completion; \ covariance estimation",
-            r"Davis--Kahan; \ the Stieltjes transform and the semicircle; \ spikes, \ BBP, \ Tracy--Widom",
-            r"sparse PCA and graphs; \ the debiased lasso, \ on real data",
-        ], color=SPIKEC, font_size=26)
-        prereq = note(r"prerequisites: \ Parts 31, \ 32, \ 51").to_corner(DL, buff=0.3)
-        built = note(r"built: \ \texttt{statkit.hdstat}, \ the random-matrix lab").to_corner(DR, buff=0.3)
-        with self.voiceover(
-            "<bookmark mark='a'/> Part fifty-two: high-dimensional statistics. <bookmark mark='b'/> We'll prove the lasso's "
-            "oracle inequality under restricted eigenvalues, and find when it recovers the right variables; unify sparse, "
-            "group and low-rank problems with decomposable regularizers; complete matrices and estimate covariances; bound "
-            "eigenvector errors with Davis and Kahan; derive random-matrix laws from the Stieltjes transform; find the BBP "
-            "transition for spikes and the Tracy–Widom law for the largest eigenvalue; meet sparse PCA and graphical models; "
-            "and end with confidence intervals from the debiased lasso, on real data."
-        ) as vo:
-            vo.wait_until("a")
-            self.play(FadeIn(head, shift=UP * 0.2))
-            vo.wait_until("b")
-            self.play(FadeOut(head), FadeIn(obj, shift=UP * 0.2), FadeIn(prereq), FadeIn(built))
-        self.wait(1.0)
         self.clear_scene()

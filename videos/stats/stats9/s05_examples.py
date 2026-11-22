@@ -6,21 +6,24 @@ from scipy import special, stats
 from videos.stats.stats9.common import *  # noqa: F403
 
 
-class Examples(VoiceoverScene):
+class Examples(StatsScene):
     def construct(self):
         self.card()
+        self.ask(r"Data uniform on $(0, \theta)$. The MLE of $\theta$ is...",
+                 ["twice the mean", "the largest observation", "the mean"], 1,
+                 say="Data uniform between zero and theta. What's the maximum likelihood estimate of theta?",
+                 reveal="The largest observation. The likelihood is zero below it and falls away above it, so it "
+                        "peaks right at the maximum: a corner, not a smooth top.")
         self.normal()
         self.surface()
         self.exponential()
         self.uniform()
         self.newton()
         self.digits()
+        self.answer()
 
     def card(self):
-        card = chapter_card(4, r"Likelihoods in practice", r"Normal, \ exponential, \ uniform, \ gamma", part=PART)
-        with self.voiceover("Chapter four. Likelihoods in practice."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(4, r"Likelihoods in practice", r"Normal, \ exponential, \ uniform, \ gamma", part=PART, said="Chapter four. Likelihoods in practice.")
 
     def normal(self):
         rows = [

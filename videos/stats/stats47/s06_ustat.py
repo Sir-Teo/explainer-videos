@@ -5,21 +5,25 @@ import numpy as np
 from videos.stats.stats47.common import *  # noqa: F403
 
 
-class UStatistics(VoiceoverScene):
+class UStatistics(StatsScene):
     def construct(self):
         self.card()
+        self.ask("A U-statistic's variance is dominated by...",
+                 [r"its H\'ajek projection, the first Hoeffding term", "its highest-order term"], 0,
+                 say="A U-statistic averages a kernel over all pairs of observations. Hoeffding decomposed it into "
+                     "pieces. Which dominates the variance?",
+                 reveal="The first piece, its projection onto sums of single observations: Hájek's projection. The "
+                        "rest is smaller by a factor of n, unless the first piece vanishes.")
         self.definition()
         self.hoeffding()
         self.table()
         self.degenerate()
         self.chart()
         self.projection()
+        self.answer()
 
     def card(self):
-        card = chapter_card(5, r"U-statistics", r"Averages over pairs", lit=(1948,), part=PART)
-        with self.voiceover("Chapter five. U-statistics: averages over pairs."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(5, r"U-statistics", r"Averages over pairs", lit=(1948,), part=PART, said="Chapter five. U-statistics: averages over pairs.")
 
     def definition(self):
         rows = [

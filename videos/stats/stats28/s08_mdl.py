@@ -5,20 +5,24 @@ import numpy as np
 from videos.stats.stats28.common import *  # noqa: F403
 
 
-class MDL(VoiceoverScene):
+class MDL(StatsScene):
     def construct(self):
         self.card()
+        self.ask("An outcome of probability $1/8$ needs an ideal code of...",
+                 ["1 bit", "3 bits", "8 bits"], 1,
+                 say="Every probability distribution defines a code. An outcome of probability one eighth needs an "
+                     "ideal code of how many bits?",
+                 reveal="Three: minus log two of one eighth. The best model is the one that compresses the data "
+                        "most.")
         self.codes()
         self.twopart()
         self.nml()
         self.regret()
         self.prequential()
+        self.answer()
 
     def card(self):
-        card = chapter_card(7, r"Minimum description length", r"The best model compresses the data most", lit=(1978,), part=PART)
-        with self.voiceover("Chapter seven. Minimum description length."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(7, r"Minimum description length", r"The best model compresses the data most", lit=(1978,), part=PART, said="Chapter seven. Minimum description length.")
 
     def codes(self):
         rows = [

@@ -6,14 +6,14 @@ from scipy import stats
 from videos.stats.stats15.common import *  # noqa: F403
 
 
-class Hook(VoiceoverScene):
+class Hook(StatsScene):
     def construct(self):
         self.essay()
         self.table()
         self.posterior()
         self.laplace()
         self.sunrise()
-        self.objectives()
+        self.title(PART)
 
     def essay(self):
         tl = timeline(lit=(1763,)).to_edge(UP, buff=0.35)
@@ -179,29 +179,4 @@ class Hook(VoiceoverScene):
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
                 step(k, transform=False)
-        self.clear_scene()
-
-    def objectives(self):
-        head = VGroup(label(r"Part 15", font_size=34, color=GREY_B), label(r"First Bayes", font_size=60)).arrange(DOWN, buff=0.25)
-        obj = objectives_card([
-            r"prior $\times$ likelihood $\propto$ posterior; \ updating one observation at a time",
-            r"conjugate families: \ beta--binomial, \ gamma--Poisson, \ normal--normal",
-            r"summaries, \ credible and HPD intervals, \ predictive distributions",
-            r"choosing priors, \ and checking how much they matter; \ the normal model and Student's $t$",
-            r"grids and a Metropolis walk; \ credible intervals on the Coverage Board; \ Bayes factors",
-        ], color=POST, font_size=26)
-        prereq = note(r"prerequisites: \ Parts 9 and 11").to_corner(DL, buff=0.3)
-        built = note(r"built: \ the billiard table; \ \texttt{statkit.bayes}").to_corner(DR, buff=0.3)
-        with self.voiceover(
-            "<bookmark mark='a'/> Part fifteen: first Bayes. <bookmark mark='b'/> We'll build the machinery, prior times "
-            "likelihood proportional to posterior; meet the conjugate families that make it algebra; summarize posteriors "
-            "with credible intervals, and predict new data; face the choice of prior honestly; recover Student's t as a "
-            "posterior; compute posteriors on grids, and with a Metropolis walk when grids fail; test credible intervals on "
-            "the Coverage Board; and take a first look at Bayesian hypothesis testing."
-        ) as vo:
-            vo.wait_until("a")
-            self.play(FadeIn(head, shift=UP * 0.2))
-            vo.wait_until("b")
-            self.play(FadeOut(head), FadeIn(obj, shift=UP * 0.2), FadeIn(prereq), FadeIn(built))
-        self.wait(1.0)
         self.clear_scene()

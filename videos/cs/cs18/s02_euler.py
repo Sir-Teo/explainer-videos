@@ -7,7 +7,7 @@ from videos.cs.cs18.common import (BG, CODE, COST, CTRL, DATA, FUNC, HEAD, LAM, 
                                    load, mono, words)
 
 
-class Euler(VoiceoverScene):
+class Euler(WatchScene):
     def construct(self):
         self.card()
         self.theorem()
@@ -15,14 +15,14 @@ class Euler(VoiceoverScene):
         self.representation()
 
     def card(self):
-        card = chapter_card(1, r"Euler's bridges, \ and how to store a graph", r"When can you use every edge once?",
-                            lit=(1736,), extra=((1736, r"Euler: \ the seven bridges"),
-                                                (1873, r"Hierholzer: \ the construction")), part=PART)
-        with self.voiceover("Chapter one. Euler's bridges, and how to store a graph."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(1, r"Euler's bridges, \ and how to store a graph", r"When can you use every edge once?", lit=(1736,), extra=((1736, r"Euler: \ the seven bridges"),
+                                                (1873, r"Hierholzer: \ the construction")), part=PART, said="Chapter one. Euler's bridges, and how to store a graph.")
 
     def theorem(self):
+        self.ask(r"A connected graph has an Euler circuit exactly when...", [r"every vertex has even degree",
+                 r"at most two vertices have odd degree", r"no vertex has degree one"], 0,
+                 say="When does a connected graph have a circuit that uses every edge exactly once and returns home?",
+                 reveal="Exactly when every vertex has even degree: every visit needs a way in and a way out.")
         d = load("euler")
         head = label(r"Euler's theorem", font_size=34).to_edge(UP, buff=0.3)
         g, nodes, es = draw_graph({"N": (-3.6, 1.6), "K": (-5.2, 0.0), "E": (-2.0, 0.0), "S": (-3.6, -1.6)},
@@ -138,7 +138,7 @@ class Euler(VoiceoverScene):
                          font_size=20,color=YES).next_to(times,DOWN,buff=.2)
         scope = label(r"different execution paths; packed-bit scan and cache-level causes are unmeasured",
                       font_size=20,color=GREY_A).to_edge(DOWN,buff=.35)
-        with self.voiceover("Storage models and measured programs are different things. <bookmark mark='a'/> Adjacency lists need order V plus E entries. The first table estimates eight-byte neighbour entries and row references; it excludes Python object overhead. <bookmark mark='b'/> An ideal packed matrix uses one bit per ordered vertex pair. Our measured NumPy boolean matrix instead uses one byte per cell; its actual data allocation is shown separately. <bookmark mark='c'/> The timing table scans the complete graph three times and reports the minimum: Python visits every list entry, while NumPy counts each complete boolean row. Both must count exactly twice the undirected edges. <bookmark mark='d'/> The dense case favours this vectorized matrix scan on this host. It is not a measured packed-bit implementation, and these timings alone do not identify a cache-level cause.") as vo:
+        with self.voiceover("Storage models and measured programs are different things. <bookmark mark='a'/> Adjacency lists need order V plus E entries. The first table estimates eight-byte neighbour entries and row references; it excludes Python object overhead. <bookmark mark='b'/> An ideal packed matrix uses one bit per ordered vertex pair. Our measured NumPy boolean matrix instead uses one byte per cell; its actual data allocation is shown separately. <bookmark mark='c'/> The timing table scans the complete graph three times and reports the minimum: Python visits every list entry, while NumPy counts each complete boolean row. Both must count exactly twice the undirected edges. <bookmark mark='d'/> The dense case favours this vectorized matrix scan on this host.") as vo:
             self.play(FadeIn(head),FadeIn(tab),FadeIn(memory))
             vo.wait_until('a')
             self.play(Indicate(VGroup(*[row[2] for row in tab.cells]),color=YES),run_time=.7)

@@ -6,25 +6,22 @@ from explainer.cs import *  # noqa: F403
 from videos.cs.cs31.common import (BG, DATA, HEAD, KERN, LAM, NO, PART, YES, curve, fit_right, grid_table, load)
 
 
-class Frontier(VoiceoverScene):
+class Frontier(WatchScene):
     def construct(self):
         self.card()
         self.verified()
         self.tail()
-        self.quantum()
         self.ebpf()
-        self.open_()
 
     def card(self):
-        card = chapter_card(15, r"Frontier: \ verified kernels and microsecond scheduling",
-                            r"What is still unsolved inside the kernel?", lit=(2009, 2019, 2020),
-                            extra=((2009, r"seL4 verified"), (2019, r"Shinjuku; \ Shenango"),
-                                   (2020, r"Caladan; \ Jitterbug")), part=PART)
-        with self.voiceover("Chapter fifteen. The frontier: verified kernels, and scheduling in microseconds."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(15, r"Frontier: \ verified kernels and microsecond scheduling", r"What is still unsolved inside the kernel?", lit=(2009, 2019, 2020), extra=((2009, r"seL4 verified"), (2019, r"Shinjuku; \ Shenango"),
+                                   (2020, r"Caladan; \ Jitterbug")), part=PART, said="Chapter fifteen. The frontier: verified kernels, and scheduling in microseconds.")
 
     def verified(self):
+        self.ask(r"seL4: $8{,}700$ lines of C, proved correct. \\ The proof is...", [r"about as long",
+                 r"about $200{,}000$ lines"], 1,
+                 say="seL4 is eight thousand seven hundred lines of C, proved correct. How long is the proof?",
+                 reveal="About two hundred thousand lines, and many person-years.")
         head = label(r"Kernels with proofs", font_size=36).to_edge(UP, buff=0.3)
         tab = grid_table([r"system", r"year", r"what was proved"], [
             [r"seL4", r"2009", r"8{,}700 lines of C implement their specification: \ no crashes, \ no overflows"],
@@ -120,48 +117,6 @@ class Frontier(VoiceoverScene):
         self.wait(0.3)
         self.clear_scene()
 
-    def quantum(self):
-        d = load("frontier")
-        head = label(r"But how short a quantum?", font_size=36).to_edge(UP, buff=0.3)
-        qs = d["quanta"]
-        ax = Axes(x_range=[0, 2.8, 0.5], y_range=[0, 3.0, 1], x_length=6.2, y_length=3.6,
-                  axis_config={"color": GREY_D, "include_numbers": False}).to_edge(LEFT, buff=1.1).shift(DOWN * 0.3)
-        xt = VGroup(*[label(str(x), font_size=15, color=GREY_A).next_to(ax.c2p(math.log10(x), 0), DOWN, buff=0.08)
-                      for x in (1, 5, 20, 100, 500)])
-        yt = VGroup(*[MathTex(rf"10^{{{k}}}", font_size=18, color=GREY_B).next_to(ax.c2p(0, k), LEFT, buff=0.08)
-                      for k in range(0, 4)])
-        xl = label(r"quantum, \ $\mu$s \ (load 0.6, \ 1 $\mu$s per preemption)", font_size=17, color=GREY_A).next_to(
-            xt, DOWN, buff=0.1)
-        cv = curve(ax, [math.log10(q["q"]) for q in qs], [math.log10(q["p999"]) for q in qs], YES)
-        lc = curve(ax, [math.log10(q["q"]) for q in qs], [math.log10(q["long_mean"] / 10) for q in qs], NO)
-        k1 = label(r"shorts' p99.9", font_size=17, color=YES).move_to(ax.c2p(2.2, 2.4))
-        k2 = label(r"scans' mean $\div$ 10", font_size=17, color=NO).move_to(ax.c2p(0.9, 2.75))
-        best = min(qs, key=lambda q: q["p999"])
-        notes = VGroup(
-            label(r"too long: \ shorts wait behind scans", font_size=20, color=WHITE),
-            label(rf"too short: \ the overhead eats the cores; \\ at 1 $\mu$s the scans take "
-                  rf"{qs[0]['long_mean'] / 1000:.1f} ms", font_size=20, color=NO),
-            label(rf"best here: \ about {best['q']} $\mu$s", font_size=20, color=HEAD),
-            label(r"no formula gives it: \\ even the mean of M/G/$k$ has no exact closed form", font_size=20,
-                  color=GREY_A),
-        ).arrange(DOWN, buff=0.22, aligned_edge=LEFT).next_to(ax, RIGHT, buff=0.5).align_to(ax, UP)
-        fit_right(notes)
-        with self.voiceover(
-            "How short should the quantum be? <bookmark mark='a'/> Too long, and short requests wait behind scans. "
-            "<bookmark mark='b'/> Too short, and the cost of preempting eats the cores. At one microsecond, the scans "
-            "spend as long being preempted as running, the machine is overloaded, and a scan takes seven and a half "
-            "milliseconds. <bookmark mark='c'/> "
-            "Here the best quantum is about two microseconds. <bookmark mark='d'/> But no formula tells us that. "
-            "Even the mean response time of a queue with several servers and general job sizes has no exact closed "
-            "form, so these choices are made by simulation and by trial."
-        ) as vo:
-            self.play(FadeIn(head), Create(ax), FadeIn(xt), FadeIn(yt), FadeIn(xl))
-            self.play(Create(cv), Create(lc), FadeIn(k1), FadeIn(k2), run_time=1.5)
-            for mk, n_ in zip("abcd", notes):
-                vo.wait_until(mk)
-                self.play(FadeIn(n_))
-        self.wait(0.3)
-        self.clear_scene()
 
     def ebpf(self):
         head = label(r"Programs inside the kernel: \ eBPF", font_size=36).to_edge(UP, buff=0.3)
@@ -195,39 +150,3 @@ class Frontier(VoiceoverScene):
         self.wait(0.3)
         self.clear_scene()
 
-    def open_(self):
-        head = label(r"Open problems", font_size=36).to_edge(UP, buff=0.35)
-        items = VGroup(
-            label(r"1. \ Can a formally verified kernel match Linux's performance and breadth?", font_size=22,
-                  color=WHITE),
-            label(r"2. \ Exact response times for M/G/$k$: \ several servers, \ general job sizes", font_size=22,
-                  color=WHITE),
-            label(r"3. \ Optimal scheduling for tail latency, \ on many cores, \ when preemption costs time",
-                  font_size=22, color=WHITE),
-            label(r"4. \ Worst-case timing on multicore chips, \ where caches and memory are shared", font_size=22,
-                  color=WHITE),
-            label(r"5. \ How expressive can a sound eBPF verifier be, \ and still be fast?", font_size=22,
-                  color=WHITE),
-            label(r"6. \ Scheduling without knowing job sizes: \ how close to SRPT?", font_size=22, color=WHITE),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.32).next_to(head, DOWN, buff=0.5)
-        star = label(r"$\bigstar$ \ the part's research problem takes a small case of the third", font_size=22,
-                     color=GREY_A).to_edge(DOWN, buff=0.5)
-        with self.voiceover(
-            "Six open problems. <bookmark mark='a'/> Whether a verified kernel can have the performance and breadth "
-            "of Linux. <bookmark mark='b'/> Exact response times for a queue with several servers and general job "
-            "sizes, which queueing theory still lacks. <bookmark mark='c'/> The best schedule for tail latency on "
-            "many cores, when every preemption costs time. <bookmark mark='d'/> Worst-case timing on multicore "
-            "chips, where one core's memory traffic slows another, which is what blocks multicore processors in "
-            "safety-critical systems. <bookmark mark='e'/> How much an eBPF verifier can accept while staying sound "
-            "and fast. <bookmark mark='f'/> And how close a scheduler that does not know job sizes can come to "
-            "shortest remaining time first; Mor Harchol-Balter's group has made progress with the Gittins index. "
-            "<bookmark mark='g'/> This part's research problem takes a small, computable case of the third."
-        ) as vo:
-            self.play(FadeIn(head))
-            for mk, it in zip("abcdef", items):
-                vo.wait_until(mk)
-                self.play(FadeIn(it, shift=RIGHT * 0.1))
-            vo.wait_until("g")
-            self.play(FadeIn(star))
-        self.wait(0.3)
-        self.clear_scene()

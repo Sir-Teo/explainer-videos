@@ -48,7 +48,7 @@ def _cheney():
     return VGroup(top, bot, ars)
 
 
-class Outro(VoiceoverScene):
+class Outro(WatchScene):
     def construct(self):
         self.recap()
         self.payoffs()
@@ -85,6 +85,12 @@ class Outro(VoiceoverScene):
             self.play(LaggedStart(*[FadeIn(t, shift=UP * 0.15) for t in tiles], lag_ratio=0.25), run_time=4.0)
         self.wait(0.5)
         self.clear_scene()
+        self.checkpoint(
+            [(r"Why does a JIT need deoptimization?", r"Its assumptions can stop holding"),
+             (r"Copying collection costs grow with...?", r"The live data, not the heap")],
+            narration="Last checkpoint. Why does a JIT need to deoptimize? And what does copying collection's cost grow with?",
+            answers_narration="Because the assumptions it optimized for can stop holding. And with the live data, not the "
+                              "size of the heap.")
 
     def payoffs(self):
         card = payoff_card([

@@ -5,20 +5,24 @@ import numpy as np
 from videos.stats.stats49.common import *  # noqa: F403
 
 
-class Pathwise(VoiceoverScene):
+class Pathwise(StatsScene):
     def construct(self):
         self.card()
+        self.ask("In a nonparametric model, asymptotically linear estimators of a functional share...",
+                 ["one influence function", "many different influence functions"], 0,
+                 say="A pathwise differentiable functional in a nonparametric model. How many influence functions "
+                     "can its asymptotically linear estimators have?",
+                 reveal="Just one: in the nonparametric model the tangent space is everything, so the influence "
+                        "function is unique, and so is the asymptotic variance.")
         self.definition()
         self.projection()
         self.check()
         self.numbers()
         self.lesson()
+        self.answer()
 
     def card(self):
-        card = chapter_card(2, r"Pathwise differentiability", r"The efficient influence function as a projection", part=PART)
-        with self.voiceover("Chapter two. Pathwise differentiability: the efficient influence function as a projection."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(2, r"Pathwise differentiability", r"The efficient influence function as a projection", part=PART, said="Chapter two. Pathwise differentiability: the efficient influence function as a projection.")
 
     def definition(self):
         rows = [

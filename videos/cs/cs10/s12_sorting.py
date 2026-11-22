@@ -8,22 +8,17 @@ from videos.cs.cs10.common import (BG, CODE, CTRL, DATA, FUNC, HEAD, NO, PART, Y
                                    wire_diagram)
 
 
-class Sorting(VoiceoverScene):
+class Sorting(WatchScene):
     def construct(self):
         self.card()
         self.comparator()
         self.bitonic()
         self.principle()
         self.checked()
-        self.limits()
 
     def card(self):
-        card = chapter_card(11, r"Sorting networks", r"Can a fixed wiring of comparisons sort anything?",
-                            lit=(1968, 1983), extra=((1968, r"Batcher"), (1983, r"Ajtai, \ Koml\'os, \ "
-                                                                                r"Szemer\'edi")), part=PART)
-        with self.voiceover("Chapter eleven. Sorting networks."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(11, r"Sorting networks", r"Can a fixed wiring of comparisons sort anything?", lit=(1968, 1983), extra=((1968, r"Batcher"), (1983, r"Ajtai, \ Koml\'os, \ "
+                                                                                r"Szemer\'edi")), part=PART, said="Chapter eleven. Sorting networks.")
 
     # ------------------------------------------------------------------
     def comparator(self):
@@ -112,6 +107,10 @@ class Sorting(VoiceoverScene):
 
     # ------------------------------------------------------------------
     def principle(self):
+        self.ask(r"To check a sorting network on 10 wires, \\ how many inputs must you try?",
+                 [r"$10! = 3{,}628{,}800$", r"$2^{10} = 1024$"], 1,
+                 say="How many inputs must you try to be sure a ten-wire sorting network sorts everything?",
+                 reveal="One thousand and twenty-four: just the zeros and ones, by the zero-one principle.")
         head = label(r"The 0--1 principle", font_size=36).to_edge(UP, buff=0.3)
         thm = label(r"if a network sorts every input of 0s and 1s, \ it sorts every input", font_size=28,
                     color=HEAD).next_to(head, DOWN, buff=0.35)
@@ -196,44 +195,3 @@ class Sorting(VoiceoverScene):
         self.wait(0.3)
         self.clear_scene()
 
-    # ------------------------------------------------------------------
-    def limits(self):
-        big = load("sortnet")["big"]
-        head = label(r"How shallow can a sorting network be?", font_size=34).to_edge(UP, buff=0.35)
-        pts = VGroup(
-            wrapped_label(rf"1024 wires: \ bitonic {big['1024']['bitonic_size']:,}, \ odd-even merge "
-                          rf"{big['1024']['oem_size']:,} comparators; \ both depth {big['1024']['oem_depth']}",
-                          12.0, font_size=22, color=DATA),
-            label(r"Ajtai, \ Koml\'os and Szemer\'edi \ (1983): \ depth $O(\log n)$ \ is possible", font_size=22,
-                  color=HEAD),
-            label(r"asymptotic optimality does not make AKS the practical default", font_size=22,
-                  color=NO),
-            label(r"in practice: \ bitonic networks in GPU sorts and in SIMD registers, \ merge sort around them",
-                  font_size=22, color=YES),
-            label(r"17 wires: \ depth 10 proved optimal \ (Ehlers and M\"uller, \ 2015)",
-                  font_size=22, color=FUNC),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.32).move_to(DOWN * 0.1)
-        with self.voiceover(
-            (
-            "How fast can a network sort? <bookmark mark='a'/> Batcher's networks have depth on the order of log "
-            "n squared: for a thousand and twenty-four wires, fifty-five layers; the bitonic construction here "
-            "has exactly twenty-eight thousand one hundred and sixty comparators. <bookmark mark='b'/> In 1983 "
-            "Miklós Ajtai, János Komlós and Endre Szemerédi proved that depth on the order of log n is possible, "
-            "which is optimal. <bookmark mark='c'/> But the constant in their construction is so large that the "
-            "asymptotic construction is not the practical default for ordinary problem sizes. <bookmark "
-            "mark='d'/> So in practice, GPU sorting libraries and SIMD sorting routines use bitonic networks for "
-            "small blocks, inside a merge sort. <bookmark mark='e'/> And the smallest exact questions are still "
-            "open: even small optimality questions require substantial search. Seventeen-wire depth ten is proved "
-            "optimal in the cited Ehlers and Mueller work; our exhaustive checks cover only the small networks "
-            "listed in this chapter."
-        )
-        ) as vo:
-            self.play(FadeIn(head), run_time=0.5)
-            for mk, p in zip('abcde', pts):
-                if mk != 'a':
-                    vo.wait_until(mk)
-                self.play(FadeIn(p, shift=RIGHT * 0.1), run_time=0.6 if mk == 'a' else 1.0)
-                if mk == 'a':
-                    vo.wait_until(mk)
-        self.wait(0.3)
-        self.clear_scene()

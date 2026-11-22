@@ -7,21 +7,32 @@ from videos.stats.stats38.common import *  # noqa: F403
 COLS = [MISSC, Y0C, TAUC]
 
 
-class VAR(VoiceoverScene):
+class VAR(StatsScene):
     def construct(self):
         self.card()
+        self.wrong_idea("Granger causality is causation",
+                        "It's predictive precedence: a common driver can create it",
+                        narration="A tempting reading: inflation Granger-causes unemployment, so inflation causes "
+                                  "unemployment.",
+                        right_narration="Granger causality means only that past inflation improves forecasts of "
+                                        "unemployment. A common driver, or expectations, can create it. Prediction "
+                                        "is not intervention.")
+        self.ask("A VAR in three series with four lags. How many slope coefficients?",
+                 ["12", "36", "144"], 1,
+                 say="A vector autoregression in inflation, unemployment and the interest rate, with four lags. How "
+                     "many slope coefficients does it have?",
+                 reveal="Thirty-six: three equations, each with twelve lagged regressors. Vector autoregressions "
+                        "get big fast, which is why Sims's small ones were a revolution.")
         self.data()
         self.model()
         self.granger()
         self.irf_()
         self.fevd()
         self.lesson()
+        self.answer()
 
     def card(self):
-        card = chapter_card(10, r"VARs and Granger causality", r"Several series, \ each forecasting the others", lit=(1969, 1980), part=PART)
-        with self.voiceover("Chapter ten. Vector autoregressions, and Granger causality."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(10, r"VARs and Granger causality", r"Several series, \ each forecasting the others", lit=(1969, 1980), part=PART, said="Chapter ten. Vector autoregressions, and Granger causality.")
 
     def data(self):
         d = load("var")

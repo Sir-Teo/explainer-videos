@@ -6,19 +6,23 @@ from videos.stats.stats36.common import *  # noqa: F403
 from videos.stats.stats36.compute import obs_sample, rng, ols_fit, ols_pred
 
 
-class GComp(VoiceoverScene):
+class GComp(StatsScene):
     def construct(self):
         self.card()
+        self.ask("g-computation predicts each patient's outcome under...",
+                 ["their observed treatment only", "both treatments, then averages"], 1,
+                 say="g-computation models the outcome, then intervenes in the model. For each patient, what does "
+                     "it predict?",
+                 reveal="The outcome under both treatments, from the fitted model, and averages the difference. "
+                        "Robins' formula, computed by regression.")
         self.idea()
         self.picture()
         self.numbers()
         self.extrapolate()
+        self.answer()
 
     def card(self):
-        card = chapter_card(6, r"g-computation", r"Model the outcome, \ then intervene in the model", lit=(1986,), part=PART)
-        with self.voiceover("Chapter six. g-computation."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(6, r"g-computation", r"Model the outcome, \ then intervene in the model", lit=(1986,), part=PART, said="Chapter six. g-computation.")
 
     def idea(self):
         rows = [

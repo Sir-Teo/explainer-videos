@@ -4,7 +4,7 @@ from explainer.cs import *  # noqa: F403
 from videos.cs.cs24.common import (CTRL, DATA, HEAD, LAM, NO, PART, YES, grid_table, load, mono)
 
 
-class Fenwick(VoiceoverScene):
+class Fenwick(WatchScene):
     def construct(self):
         self.card()
         self.ranges()
@@ -12,13 +12,12 @@ class Fenwick(VoiceoverScene):
         self.timing()
 
     def card(self):
-        card = chapter_card(2, r"Fenwick trees", r"Can a running total survive updates?", lit=(1994,),
-                            extra=((1994, r"Fenwick's binary indexed tree"),), part=PART)
-        with self.voiceover("Chapter two. Fenwick trees."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(2, r"Fenwick trees", r"Can a running total survive updates?", lit=(1994,), extra=((1994, r"Fenwick's binary indexed tree"),), part=PART, said="Chapter two. Fenwick trees.")
 
     def ranges(self):
+        self.ask(r"A Fenwick tree. \\ Update, and prefix query, each cost...", [r"$1$ and $n$", r"$\log n$ each"], 1,
+                 say="A Fenwick tree balances updates against queries. What does each cost?",
+                 reveal="Log n each: one step per set bit of the index.")
         d = load("fenwick")
         n = d["n"]
         head = label(r"Each cell is responsible for a power-of-two range", font_size=30).to_edge(UP, buff=0.3)
@@ -65,11 +64,36 @@ class Fenwick(VoiceoverScene):
             vo.wait_until("b")
             self.play(FadeIn(notes[0]))
             vo.wait_until("c")
-            self.play(Create(qhl), FadeIn(notes[1]))
+            self.walk(q, qhl, YES, idx, d, x0, w, strips=True)
+            self.play(FadeIn(notes[1]))
             vo.wait_until("d")
-            self.play(FadeOut(qhl), Create(uhl), FadeIn(notes[2]))
+            self.play(FadeOut(qhl), FadeOut(self._cover), run_time=0.5)
+            self.walk(u, uhl, NO, idx, d, x0, w, strips=False)
+            self.play(FadeIn(notes[2]))
         self.wait(0.3)
         self.clear_scene()
+
+    def walk(self, path, boxes, color, idx, d, x0, w, strips):
+        """A pointer hops along ``path``; the index's bits morph as the lowest one is stripped (or added), each cell
+        is boxed, and for a query each cell's range slides into a strip that ends up covering the prefix."""
+        ptr = Triangle(color=color).set_fill(color, 1).scale(0.13).next_to(idx[path[0] - 1], DOWN, buff=0.42)
+        read = mono(f"i = {path[0]:05b}  ({path[0]})", 22, color).move_to([x0 + 1.4, -2.05, 0])
+        self.play(GrowFromCenter(ptr), Write(read), run_time=0.6)
+        self._cover = VGroup()
+        for k, i in enumerate(path):
+            anims = [Create(boxes[k])]
+            if k:
+                nxt = mono(f"i = {i:05b}  ({i})", 22, color).move_to(read)
+                anims += [ptr.animate.next_to(idx[i - 1], DOWN, buff=0.42), TransformMatchingShapes(read, nxt)]
+                read = nxt
+            if strips:
+                lo, hi = d["resp"][str(i)]
+                s = Rectangle(width=(hi - lo + 1) * w - 0.04, height=0.14, stroke_width=0).set_fill(color, 0.8)
+                s.move_to([x0 + (lo - 1) * w + (hi - lo + 1) * w / 2, -0.98, 0])
+                anims.append(GrowFromEdge(s, RIGHT))
+                self._cover.add(s)
+            self.play(*anims, run_time=0.8)
+        self.play(FadeOut(ptr), FadeOut(read), run_time=0.4)
 
     def proof(self):
         d = load("fenwick")

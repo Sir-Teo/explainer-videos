@@ -34,7 +34,7 @@ def derive(self, rows, whys, marks, vo, run_time=1.3):
         self.play(TransformMatchingTex(rows[k - 1].copy(), rows[k]), FadeIn(whys[k]), run_time=run_time)
 
 
-class Parametricity(VoiceoverScene):
+class Parametricity(WatchScene):
     def construct(self):
         self.card()
         self.abstraction()
@@ -45,14 +45,9 @@ class Parametricity(VoiceoverScene):
         self.limits()
 
     def card(self):
-        card = chapter_card(6, r"Theorems for free", r"What does a type promise about every program of that type?",
-                            lit=(1983, 1989),
-                            extra=((1983, r"Reynolds: \ types, \ abstraction and parametric polymorphism"),
-                                   (1989, r"Wadler: \ Theorems for free!")), part=PART)
-        with self.voiceover("Chapter six. Theorems for free. What does a type promise about every program of that "
-                            "type?"):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(6, r"Theorems for free", r"What does a type promise about every program of that type?", lit=(1983, 1989), extra=((1983, r"Reynolds: \ types, \ abstraction and parametric polymorphism"),
+                                   (1989, r"Wadler: \ Theorems for free!")), part=PART, said="Chapter six. Theorems for free. What does a type promise about every program of that "
+                            "type?")
 
     # ------------------------------------------------------------------ Reynolds: abstraction as a relation
     def abstraction(self):
@@ -178,6 +173,10 @@ class Parametricity(VoiceoverScene):
 
     # ------------------------------------------------------------------ the free theorem for r, derived
     def free_r(self):
+        self.ask(r"A polymorphic $r : [a] \to [a]$. \\ Then $r\,(\text{map } f\, xs)$ equals...", [r"unknown",
+                 r"$\text{map } f\,(r\, xs)$"], 1,
+                 say="A function r takes a list of any type a to a list of a. What can we say about r of map f of xs?",
+                 reveal="It equals map f of r of xs, from the type alone.")
         head = label(r"Deriving the free theorem for \ $r : \forall a.\ [a] \to [a]$", font_size=36).to_edge(
             UP, buff=0.3)
         fs = 36

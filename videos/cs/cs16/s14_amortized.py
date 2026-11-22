@@ -5,7 +5,7 @@ from videos.cs.cs16.common import (CODE, COST, CTRL, DATA, FUNC, HEAD, LAM, NO, 
                                    words)
 
 
-class Amortized(VoiceoverScene):
+class Amortized(WatchScene):
     def construct(self):
         self.card()
         self.costs()
@@ -14,13 +14,13 @@ class Amortized(VoiceoverScene):
         self.factor()
 
     def card(self):
-        card = chapter_card(13, r"Amortized analysis", r"Can an expensive step be cheap on average?", lit=(1985,),
-                            extra=((1985, r"Tarjan: \ amortized complexity"),), part=PART)
-        with self.voiceover("Chapter thirteen. Amortized analysis."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(13, r"Amortized analysis", r"Can an expensive step be cheap on average?", lit=(1985,), extra=((1985, r"Tarjan: \ amortized complexity"),), part=PART, said="Chapter thirteen. Amortized analysis.")
 
     def costs(self):
+        self.ask(r"An array that doubles when full. \\ Total copying for $n$ appends?", [r"about $n \log n$",
+                 r"less than $2n$"], 1,
+                 say="An array doubles whenever it's full. How much copying for n appends, in total?",
+                 reveal="Less than two n: constant amortized cost per append.")
         d = load("amortized")
         head = label(r"A growable array, \ doubling when full", font_size=34).to_edge(UP, buff=0.3)
         seq = d["seq"][:40]
@@ -174,8 +174,7 @@ class Amortized(VoiceoverScene):
             "Our million-append examples compare factors two and one point five, including integer rounding. The "
             "smaller factor copies more often. <bookmark mark='b'/> The last row only tests aggregate freed size. "
             "For doubling, all previously freed blocks together are too small for the next request. Below the "
-            "golden ratio, their total can eventually be large enough. This does not guarantee that a real "
-            "allocator can reuse them: adjacency, fragmentation and other live allocations still matter. "
+            "golden ratio, their total can eventually be large enough. "
             "<bookmark mark='c'/> Libraries choose growth policies under these competing costs, and the exact "
             "policy depends on implementation and version."
         )

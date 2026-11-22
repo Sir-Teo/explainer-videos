@@ -14,19 +14,14 @@ MEMS = [
 ]
 
 
-class History(VoiceoverScene):
+class History(WatchScene):
     def construct(self):
         self.card()
         self.timeline_()
-        self.delay()
         self.core()
 
     def card(self):
-        card = chapter_card(14, r"Remembering, before chips", r"How did the first computers store their bits?",
-                            lit=(1947, 1949, 1953, 1970), part=PART)
-        with self.voiceover("Chapter fourteen. Remembering, before chips."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(14, r"Remembering, before chips", r"How did the first computers store their bits?", lit=(1947, 1949, 1953, 1970), part=PART, said="Chapter fourteen. Remembering, before chips.")
 
     # ------------------------------------------------------------------
     def timeline_(self):
@@ -58,53 +53,12 @@ class History(VoiceoverScene):
         self.wait(0.3)
         self.clear_scene()
 
-    # ------------------------------------------------------------------
-    def delay(self):
-        head = label(r"Memory that moves: \ the delay line", font_size=38).to_edge(UP, buff=0.35)
-        tube = RoundedRectangle(width=9.0, height=0.8, corner_radius=0.4, stroke_color=GREY_B, stroke_width=2.5,
-                                fill_color=BG, fill_opacity=1).move_to(UP * 1.0)
-        pulses = VGroup(*[Rectangle(width=0.12, height=0.5, stroke_width=0, fill_color=YES if b else BG,
-                                    fill_opacity=0.9).move_to([-4.2 + 0.28 * i, 1.0, 0])
-                          for i, b in enumerate([1, 0, 1, 1, 0, 0, 1, 0, 1, 1, 1, 0, 1, 0, 0, 1, 0, 1, 1, 0, 1, 0, 0, 1,
-                                                 1, 0, 1, 1, 0, 1, 0])])
-        tl = label(r"mercury", font_size=22, color=GREY_B).next_to(tube, UP, buff=0.1)
-        ends = VGroup(label(r"crystal: \ sound out", font_size=20, color=DATA).next_to(tube, LEFT, buff=0.15),
-                      label(r"crystal: \ sound in", font_size=20, color=DATA).next_to(tube, RIGHT, buff=0.15))
-        loop = CurvedArrow(tube.get_right() + DOWN * 0.45, tube.get_left() + DOWN * 0.45, angle=-0.5, color=WIRE,
-                           stroke_width=2.5)
-        ll = label(r"amplified, \ reshaped \ and sent back in: \ the bits circulate", font_size=22,
-                   color=GREY_A).next_to(loop, DOWN, buff=0.1)
-        pts = VGroup(
-            label(r"a word can be read only as it passes the end", font_size=24, color=HEAD),
-            label(r"so programmers placed each instruction where it would arrive \ just as the previous one finished: "
-                  r"\ ``optimum programming''", font_size=24, color=GREY_A),
-            label(r"the first memory hierarchy problem: \ where your data is \ decides how fast you run \ (Part 9)",
-                  font_size=24, color=YES),
-        ).arrange(DOWN, buff=0.2).to_edge(DOWN, buff=0.35)
-        with self.voiceover(
-            "The delay line deserves a closer look too, because it made programmers think about memory in a way they "
-            "still do. <bookmark mark='a'/> A tube of mercury, about a metre and a half long, with a quartz crystal at "
-            "each end. One crystal turns electrical pulses into sound; the sound crawls down the mercury; the other "
-            "crystal turns it back into pulses, which are amplified, cleaned up and fed back in. The bits circulate "
-            "for as long as the machine runs. <bookmark mark='b'/> But a word can be read only at the moment it passes "
-            "the end of the tube. So programmers placed each instruction and each piece of data where it would "
-            "arrive just as the previous step finished, a craft called optimum programming. "
-            "<bookmark mark='c'/> It was the first case of a lesson that Part 9 builds a whole hierarchy around: "
-            "where your data is, and when, decides how fast your program runs."
-        ) as vo:
-            self.play(FadeIn(head), FadeIn(tube), FadeIn(tl), FadeIn(ends))
-            vo.wait_until("a")
-            self.play(FadeIn(pulses, lag_ratio=0.03), Create(loop), FadeIn(ll), run_time=1.6)
-            self.play(pulses.animate.shift(RIGHT * 0.56), run_time=1.6, rate_func=linear)
-            vo.wait_until("b")
-            self.play(FadeIn(pts[0]), FadeIn(pts[1]))
-            vo.wait_until("c")
-            self.play(FadeIn(pts[2]))
-        self.wait(0.3)
-        self.clear_scene()
 
     # ------------------------------------------------------------------
     def core(self):
+        self.ask(r"Core memory: \\ switch the power off. \\ The bits?", [r"are lost", r"are kept"], 1,
+                 say="Core memory stored bits as magnetized rings. Switch the power off: what happens to the bits?",
+                 reveal="They're kept: magnetism needs no power.")
         head = label(r"Core memory", font_size=38).to_edge(UP, buff=0.35)
         n = 5
         grid = VGroup()

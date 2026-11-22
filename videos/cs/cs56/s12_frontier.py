@@ -15,23 +15,17 @@ def tile(title, body, col, w=4.2, h=3.0):
     return VGroup(frame, t, b)
 
 
-class Frontier(VoiceoverScene):
+class Frontier(WatchScene):
     def construct(self):
         self.card()
         self.hdx()
         self.results()
         self.ramanujan()
-        self.open()
 
     def card(self):
-        card = chapter_card(11, r"Frontier: \ high-dimensional expanders",
-                            r"What happens when triangles, \ not just edges, \ must expand?", lit=(2015, 2022),
-                            extra=((2015, r"Marcus, \ Spielman and Srivastava"),
-                                   (2022, r"good quantum codes; \ c$^3$ testable codes")), part=PART)
-        with self.voiceover("Chapter eleven, the frontier. What happens when triangles, and not just edges, have to "
-                            "expand?"):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(11, r"Frontier: \ high-dimensional expanders", r"What happens when triangles, \ not just edges, \ must expand?", lit=(2015, 2022), extra=((2015, r"Marcus, \ Spielman and Srivastava"),
+                                   (2022, r"good quantum codes; \ c$^3$ testable codes")), part=PART, said="Chapter eleven, the frontier. What happens when triangles, and not just edges, have to "
+                            "expand?")
 
     def hdx(self):
         head = label(r"Expansion in every dimension", font_size=36).to_edge(UP, buff=0.3)
@@ -114,6 +108,9 @@ class Frontier(VoiceoverScene):
         self.clear_scene()
 
     def ramanujan(self):
+        self.ask(r"Random regular graphs: \\ are they nearly Ramanujan?", [r"rarely", r"almost always"], 1,
+                 say="Are random regular graphs close to the best possible expanders?",
+                 reveal="Almost always, within any margin: Friedman's theorem.")
         rows = load("regular")["rows"]
         head = label(r"How good can an expander be?", font_size=36).to_edge(UP, buff=0.3)
         ax = Axes(x_range=[2, 13, 1], y_range=[0, 7.5, 1], x_length=7.5, y_length=4.4,
@@ -152,40 +149,6 @@ class Frontier(VoiceoverScene):
         self.wait(0.4)
         self.clear_scene()
 
-    def open(self):
-        head = label(r"Open", font_size=36).to_edge(UP, buff=0.3)
-        items = VGroup(
-            wrapped_label(r"1. \ \textbf{Explicit Ramanujan graphs}: \ simple constructions for every degree, \ not "
-                          r"just bipartite or prime-power ones.", 12.4, font_size=24, color=WHITE),
-            wrapped_label(r"2. \ \textbf{Lossless expanders}: \ explicit graphs whose small sets expand by almost the "
-                          r"full degree.", 12.4, font_size=24, color=YES),
-            wrapped_label(r"3. \ \textbf{Faster flows in practice}: \ almost-linear max-flow is a theorem; \ "
-                          r"practical solvers still use older methods.", 12.4, font_size=24, color=HEAD),
-            wrapped_label(r"4. \ \textbf{Sparsest cut}: \ the best approximation ratio in polynomial time \ "
-                          r"(Arora, \ Rao and Vazirani: \ $O(\sqrt{\log n})$).", 12.4, font_size=24, color=KERN),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.35).next_to(head, DOWN, buff=0.45)
-        star = wrapped_label(r"$\bigstar$ \ this part's research problem: \ prove or refute the small-set expansion "
-                             r"hypothesis \ (Raghavendra and Steurer, \ 2010): \ that telling whether small sets "
-                             r"expand is hard, \ which would imply the unique games conjecture", 12.4,
-                             font_size=23, color=LAM).to_edge(DOWN, buff=0.35)
-        with self.voiceover(
-            "Open problems. <bookmark mark='a'/> Simple explicit Ramanujan graphs for every degree. "
-            "<bookmark mark='b'/> Explicit expanders in which small sets grow by almost the full degree. "
-            "<bookmark mark='c'/> Turning almost-linear maximum flow from a theorem into practical software. "
-            "<bookmark mark='d'/> And the best approximation for the sparsest cut, where the square-root-log bound of "
-            "Arora, Rao and Vazirani still stands. <bookmark mark='e'/> This part's research problem is the "
-            "small-set expansion hypothesis of Raghavendra and Steurer: that telling whether small sets in a graph "
-            "expand is computationally hard. It would imply the unique games conjecture of Part 27, and nobody knows "
-            "whether it is true."
-        ) as vo:
-            self.play(FadeIn(head))
-            for mk, it in zip("abcd", items):
-                vo.wait_until(mk)
-                self.play(FadeIn(it))
-            vo.wait_until("e")
-            self.play(FadeIn(star))
-        self.wait(0.6)
-        self.clear_scene()
 
 
 _ = (DATA, KERN, LAM, NO, YES)

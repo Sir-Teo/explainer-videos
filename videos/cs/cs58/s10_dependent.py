@@ -39,7 +39,7 @@ def box(body, col, pad=0.3, w=None, h=None):
 VEC = r"\mathsf{Vec}"
 
 
-class Dependent(VoiceoverScene):
+class Dependent(WatchScene):
     def construct(self):
         self.card()
         self.pi_sigma()
@@ -50,14 +50,9 @@ class Dependent(VoiceoverScene):
         self.kernel()
 
     def card(self):
-        card = chapter_card(9, r"Dependent types", r"What if types could mention values, \ and proofs were programs?",
-                            lit=(1972, 1988), extra=((1972, r"Martin-L\"of: \ intuitionistic type theory"),
-                                                     (1988, r"Coquand and Huet: \ the calculus of constructions")),
-                            part=PART)
-        with self.voiceover("Chapter nine. Dependent types. What if types could mention values, and proofs were "
-                            "programs?"):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(9, r"Dependent types", r"What if types could mention values, \ and proofs were programs?", lit=(1972, 1988), extra=((1972, r"Martin-L\"of: \ intuitionistic type theory"),
+                                                     (1988, r"Coquand and Huet: \ the calculus of constructions")), part=PART, said="Chapter nine. Dependent types. What if types could mention values, and proofs were "
+                            "programs?")
 
     # ------------------------------------------------------------------ Pi and Sigma
     def pi_sigma(self):
@@ -335,6 +330,10 @@ class Dependent(VoiceoverScene):
 
     # ------------------------------------------------------------------ why checking must terminate
     def termination(self):
+        self.ask(r"Can a dependently typed language \\ allow unrestricted recursion?", [r"yes",
+                 r"no: type checking could loop"], 1,
+                 say="Can a dependently typed language let programs recurse without restriction?",
+                 reveal="Not safely: type checking runs programs, so it could loop, and every type would have a proof.")
         head = label(r"Why every program must terminate", font_size=36).to_edge(UP, buff=0.3)
         fs = 28
         exp = MathTex(VEC + r"\,\N\,", r"3", font_size=fs, color=DATA)

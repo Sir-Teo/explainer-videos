@@ -13,7 +13,7 @@ SHELF = [(r"the machine", r"Harris and Harris; \ Patterson and Hennessy; \ Bryan
          (r"research", r"Hamming, \ ``You and Your Research''; \ P\'olya, \ \textit{How to Solve It}", WHITE)]
 
 
-class Outro(VoiceoverScene):
+class Outro(WatchScene):
     def construct(self):
         self.act11()
         self.map_()
@@ -44,6 +44,12 @@ class Outro(VoiceoverScene):
             self.play(LaggedStart(*[FadeIn(r, shift=RIGHT * 0.15) for r in rows], lag_ratio=0.35), run_time=4)
         self.wait(0.5)
         self.clear_scene()
+        self.checkpoint(
+            [(r"What makes a claim credible?", r"Evidence matched to it, and others able to check"),
+             (r"What labels does every number here wear?", r"Computed, measured, published, illustrative")],
+            narration="The last checkpoint of the series. What makes a claim credible? And what labels does every number in this series carry?",
+            answers_narration="Evidence of the right kind for that claim, and the means for others to check it. And whether it "
+                              "was computed, measured, published, or only an illustration.")
 
     def map_(self):
         title = label(r"Computer Science, \ Built: \ sixty-one parts", font_size=36).to_edge(UP, buff=0.3)

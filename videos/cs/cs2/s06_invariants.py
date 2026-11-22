@@ -25,22 +25,17 @@ class Jug(VGroup):
         self.add(self.water, self.glass, self.ticks, self.num, self.cap_label)
 
 
-class Invariants(VoiceoverScene):
+class Invariants(WatchScene):
     def construct(self):
         self.card()
         self.method()
         self.jugs()
         self.gcd()
-        self.robot()
         self.termination()
         self.hoare()
 
     def card(self):
-        card = chapter_card(5, r"Invariants", r"How do you prove that a process can never do the wrong thing?",
-                            part=PART)
-        with self.voiceover("Chapter five. Invariants."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(5, r"Invariants", r"How do you prove that a process can never do the wrong thing?", part=PART, said="Chapter five. Invariants.")
 
     # ------------------------------------------------------------------
     def method(self):
@@ -121,6 +116,10 @@ class Invariants(VoiceoverScene):
 
     # ------------------------------------------------------------------
     def gcd(self):
+        self.ask(r"Jugs of 4 and 6 gallons, and a fountain. \\ Can you measure exactly 3?",
+                 [r"yes", r"no", r"only with a third jug"], 1,
+                 say="Change the jugs: four gallons and six. Can you measure exactly three?",
+                 reveal="Never. Every amount stays a multiple of two, the greatest common divisor.")
         d = load("jugs")
         head = label(r"Which amounts can ever appear?", font_size=38).to_edge(UP, buff=0.4)
         inv = label(r"invariant: \ every amount in either jug is a multiple of $\gcd(A, B)$", font_size=30,
@@ -168,50 +167,6 @@ class Invariants(VoiceoverScene):
         self.wait(0.3)
         self.clear_scene()
 
-    # ------------------------------------------------------------------
-    def robot(self):
-        head = label(r"A robot that moves diagonally", font_size=38).to_edge(UP, buff=0.4)
-        N, s = 9, 0.58
-        o = np.array([-3.0, -0.4, 0])
-        dots = VGroup()
-        for x in range(-4, 5):
-            for y in range(-4, 5):
-                ok = (x + y) % 2 == 0
-                dots.add(Dot(o + np.array([x * s, y * s, 0]), radius=0.07, color=YES if ok else GREY_D))
-        robot = Square(0.3, stroke_width=0, fill_color=HEAD, fill_opacity=1).move_to(o)
-        target = Circle(0.17, color=NO, stroke_width=3).move_to(o + np.array([s, 0, 0]))
-        tl = label(r"$(1, 0)$?", font_size=26, color=NO).next_to(target, UP, buff=0.12)
-        tl.add_background_rectangle(color=BACKGROUND, opacity=1, buff=0.04)
-        rng = np.random.default_rng(4)
-        path = [np.zeros(2, int)]
-        for _ in range(14):
-            step = np.array([rng.choice([-1, 1]), rng.choice([-1, 1])])
-            nxt = path[-1] + step
-            if np.abs(nxt).max() <= 4:
-                path.append(nxt)
-        txt = VGroup(*[label(t, font_size=28, color=c) for t, c in (
-            (r"moves: \ $(x, y) \to (x \pm 1, \ y \pm 1)$", GREY_A),
-            (r"invariant: \ $x + y$ is even", YES),
-            (r"each move changes $x + y$ by $-2$, $0$ or $+2$", CTRL),
-            (r"$(1, 0)$: \ $1 + 0$ is odd. \ Never.", NO),
-        )]).arrange(DOWN, aligned_edge=LEFT, buff=0.35).move_to(RIGHT * 3.4)
-        with self.voiceover(
-            "One more, to see how little an invariant needs. A robot on a grid moves one step diagonally at a time. "
-            "Can it reach the square just to its right? <bookmark mark='a'/> Watch it wander. <bookmark mark='b'/> "
-            "The invariant: x plus y is even. Each move changes x and y by one each, so their sum changes by minus two, "
-            "zero or two. Every square it can ever visit is green. <bookmark mark='c'/> The target has x plus y equal to "
-            "one, odd. The robot can wander for ever and it will never get there."
-        ) as vo:
-            self.play(FadeIn(head), FadeIn(dots), FadeIn(robot), Create(target), FadeIn(tl), FadeIn(txt[0]))
-            vo.wait_until("a")
-            for p in path[1:]:
-                self.play(robot.animate.move_to(o + np.array([p[0] * s, p[1] * s, 0])), run_time=0.35)
-            vo.wait_until("b")
-            self.play(FadeIn(txt[1]), FadeIn(txt[2]))
-            vo.wait_until("c")
-            self.play(FadeIn(txt[3]), Indicate(target, color=NO))
-        self.wait(0.3)
-        self.clear_scene()
 
     # ------------------------------------------------------------------
     def termination(self):
@@ -311,3 +266,9 @@ class Invariants(VoiceoverScene):
             self.play(FadeIn(hc))
         self.wait(0.3)
         self.clear_scene()
+        self.checkpoint(
+            [(r"What does an invariant let you skip?", r"Exploring the states: you check one move"),
+             (r"How do you prove a process stops?", r"Find a quantity that shrinks every step and can't go below zero")],
+            narration="Checkpoint. What does an invariant let you avoid? And how do you prove that a process stops?",
+            answers_narration="Exploring the states: you only check that one move preserves it. And you find a quantity that "
+                              "shrinks with every step but can never go below zero.")

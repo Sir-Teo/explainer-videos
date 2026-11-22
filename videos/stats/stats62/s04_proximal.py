@@ -5,10 +5,16 @@ import numpy as np
 from videos.stats.stats62.common import *  # noqa: F403
 
 
-class Proximal(LectureMixin, VoiceoverScene):
+class Proximal(LectureMixin, StatsScene):
     def construct(self):
         self.card_voiceover("Chapter three. Proximal causal inference: two imperfect proxies for one hidden confounder.", 3,
                             r"Proximal causal inference", r"Proxies, \ not measurements", lit=(2018,))
+        self.ask("Proximal causal inference identifies the effect through...",
+                 ["a bridge function of two proxies", "the hidden confounder itself"], 0,
+                 say="Two imperfect proxies for one hidden confounder: one tied to the treatment, one to the "
+                     "outcome. How does proximal causal inference identify the effect?",
+                 reveal="Through a bridge function solving an integral equation, like a nonparametric instrumental "
+                        "variable. Proxies, not measurements: rates are slower, and the proxies must be strong.")
         self.setup_()
         self.bridge()
         self.linear()
@@ -17,6 +23,11 @@ class Proximal(LectureMixin, VoiceoverScene):
         self.board()
         self.weak()
         self.beyond()
+        self.answer()
+        self.checkpoint([("If do-calculus can't identify an effect from a graph?", "no method can, from that graph"),
+                         ("Proximal inference identifies through?", "a bridge function of two proxies")],
+                        narration="Checkpoint. Identification.",
+                        answers_narration="No method can. And a bridge function.")
 
     def setup_(self):
         self.lad_voiceover(

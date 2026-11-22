@@ -5,21 +5,25 @@ import numpy as np
 from videos.stats.stats8.common import *  # noqa: F403
 
 
-class MSE(VoiceoverScene):
+class MSE(StatsScene):
     def construct(self):
         self.card()
+        self.ask("Normal samples: the median's variance compared with the mean's?",
+                 ["the same", "about 1.57 times larger", "smaller"], 1,
+                 say="For normal samples, both the mean and the median estimate the centre. How does the median's "
+                     "variance compare with the mean's?",
+                 reveal="About one point five seven times larger: pi over two. The mean squeezes more from normal "
+                        "data; the median pays that price to resist outliers.")
         self.darts()
         self.decompose()
         self.divisor()
         self.shrinkp()
         self.lesson()
         self.bound()
+        self.answer()
 
     def card(self):
-        card = chapter_card(7, r"Bias, variance, MSE", r"What makes an estimator good?", part=PART)
-        with self.voiceover("Chapter seven. Bias, variance, and mean squared error."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(7, r"Bias, variance, MSE", r"What makes an estimator good?", part=PART, said="Chapter seven. Bias, variance, and mean squared error.")
 
     def darts(self):
         g = np.random.Generator(np.random.PCG64(87))

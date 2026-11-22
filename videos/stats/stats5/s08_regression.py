@@ -5,20 +5,31 @@ import numpy as np
 from videos.stats.stats5.common import *  # noqa: F403
 
 
-class RegressionToMean(VoiceoverScene):
+class RegressionToMean(StatsScene):
     def construct(self):
         self.card()
+        self.wrong_idea("Regression to the mean is a force pulling people toward the average",
+                        "It's a fact about imperfect correlation: it runs backwards in time too",
+                        narration="A natural idea: tall fathers have shorter sons because something pulls families "
+                                  "back toward the average.",
+                        right_narration="No force is needed. With correlation below one, the predicted value is "
+                                        "always nearer the mean. Tall sons have shorter fathers too: it runs "
+                                        "backwards in time.")
+        self.ask("Sons of the tallest tenth of fathers are, on average...",
+                 ["as far above average as their fathers", "less far above average", "even taller"], 1,
+                 say="Take the tallest tenth of fathers. Are their sons, on average, as far above average as the "
+                     "fathers, less far, or even further?",
+                 reveal="Less far. The correlation is less than one, so the predicted son sits closer to the mean. "
+                        "No force is needed.")
         self.world()
         self.both_ways()
         self.stable()
         self.slump()
         self.flight()
+        self.answer()
 
     def card(self):
-        card = chapter_card(7, r"Regression to the mean", r"Not a force: \ a fact about imperfect correlation", lit=(1886,), part=PART)
-        with self.voiceover("Chapter seven. Regression to the mean."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(7, r"Regression to the mean", r"Not a force: \ a fact about imperfect correlation", lit=(1886,), part=PART, said="Chapter seven. Regression to the mean.")
 
     def world(self):
         d = load("regression")

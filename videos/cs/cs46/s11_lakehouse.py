@@ -11,23 +11,17 @@ def link(a, b, color=GREY_B, width=2.0):
                  max_tip_length_to_length_ratio=0.2)
 
 
-class Lakehouse(VoiceoverScene):
+class Lakehouse(WatchScene):
     def construct(self):
         self.card()
         self.lake()
         self.snapshots()
-        self.deltalog()
         self.optimistic()
-        self.contention()
         self.timetravel()
 
     def card(self):
-        card = chapter_card(10, r"Tables on object storage", r"Can a pile of files behave like a database table?",
-                            lit=(2018, 2020), extra=((2018, r"Apache Iceberg"),
-                                                     (2020, r"Armbrust et al.: \ Delta Lake")), part=PART)
-        with self.voiceover("Chapter ten. Tables on object storage."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(10, r"Tables on object storage", r"Can a pile of files behave like a database table?", lit=(2018, 2020), extra=((2018, r"Apache Iceberg"),
+                                                     (2020, r"Armbrust et al.: \ Delta Lake")), part=PART, said="Chapter ten. Tables on object storage.")
 
     def lake(self):
         head = label(r"A folder is not a table", font_size=36).to_edge(UP, buff=0.3)
@@ -136,89 +130,12 @@ class Lakehouse(VoiceoverScene):
         self.wait(0.4)
         self.clear_scene()
 
-    def deltalog(self):
-        head = label(r"The table as a log", font_size=36).to_edge(UP, buff=0.3)
-        log = [("00000.json", ["add a", "add b"]), ("00001.json", ["add c"]),
-               ("00002.json", ["remove a", "remove b", "add ab"]), ("00003.json", ["add d"])]
-        title = mono("_delta_log/", size=18, color=GREY_A).move_to([-4.6, 2.45, 0]).align_to([-6.6, 0, 0], LEFT)
-        rows = VGroup()
-        for k, (name, acts) in enumerate(log):
-            t = tag_box(name, KERN, size=16)
-            a = mono("   ".join(acts), size=16, color=WHITE)
-            rows.add(VGroup(t, a).arrange(RIGHT, buff=0.3))
-        rows.arrange(DOWN, aligned_edge=LEFT, buff=0.22).next_to(title, DOWN, buff=0.25).align_to(title, LEFT)
-        ghost_box = DashedVMobject(RoundedRectangle(width=rows[0][0].width, height=0.5, corner_radius=0.08,
-                                                    stroke_color=HEAD, stroke_width=1.6), num_dashes=30)
-        ghost = VGroup(ghost_box, mono("00004.json", size=16, color=HEAD).move_to(ghost_box))
-        ghost.next_to(rows, DOWN, buff=0.22).align_to(rows, LEFT)
-        ghost_l = label(r"the next commit: \ create it only if nobody has", font_size=18, color=HEAD).next_to(
-            ghost, RIGHT, buff=0.3)
-        illus = note(r"illustrative \ (real names have twenty digits)", font_size=16).next_to(
-            title, RIGHT, buff=0.4)
-        sx, sy = 3.6, 1.0
-        frame = RoundedRectangle(width=5.6, height=1.9, corner_radius=0.12, stroke_color=GREY_C,
-                                 stroke_width=1.5).move_to([sx, sy + 0.25, 0])
-        lines = VGroup(
-            wrapped_label(r"the table is a fold over its log: \ Chapter 3's event sourcing, \ Part 35's write-ahead "
-                          r"log, \ kept in the object store itself", 12.4, font_size=20, color=YES),
-            wrapped_label(r"every ten commits a checkpoint, \ in Parquet, \ holds the folded state: \ a reader "
-                          r"replays only the commits after it", 12.4, font_size=20, color=WHITE),
-            wrapped_label(r"a commit is a conditional write \ (put if absent), \ which S3 has offered since 2024; "
-                          r"\ before that, \ a separate service arbitrated", 12.4, font_size=20, color=HEAD),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.2).to_edge(DOWN, buff=0.35)
-
-        def version_label(k):
-            return label(rf"the table at version {k}", font_size=20, color=GREY_A).move_to([sx, sy + 0.75, 0])
-        with self.voiceover(
-            "Delta Lake keeps the same information as a log. <bookmark mark='a'/> A folder beside the data holds "
-            "numbered commits, each listing files added and removed. <bookmark mark='b'/> Replayed in order, they "
-            "give the table: two files, then a third, then the first two compacted into one, then another. The table "
-            "is a fold over its log, chapter three's event sourcing, kept in the object store itself. <bookmark "
-            "mark='c'/> Every ten commits a Parquet checkpoint records the folded state, so readers replay only what "
-            "follows. <bookmark mark='d'/> And committing means creating the next number only if nobody has: a "
-            "conditional write, which S3 has offered since 2024."
-        ) as vo:
-            self.play(FadeIn(head), FadeIn(title), FadeIn(illus), Create(frame))
-            vo.wait_until("a")
-            self.play(LaggedStart(*[FadeIn(r, shift=RIGHT * 0.15) for r in rows], lag_ratio=0.25), run_time=2)
-            vo.wait_until("b")
-            state, tags = [], {}
-            vl = None
-            for k, (name, acts) in enumerate(log):
-                for a in acts:
-                    op, f = a.split()
-                    if op == "add":
-                        state.append(f)
-                    else:
-                        state.remove(f)
-                new = {f: tags[f] if f in tags else tag_box(f"{f}.parquet", DATA, size=16) for f in state}
-                slots = VGroup(*[new[f].copy() for f in state]).arrange(RIGHT, buff=0.15).move_to([sx, sy, 0])
-                anims = [Indicate(rows[k][0], color=HEAD, scale_factor=1.08)]
-                for f, slot in zip(state, slots):
-                    if f in tags:
-                        anims.append(tags[f].animate.move_to(slot))
-                    else:
-                        new[f].move_to(slot)
-                        anims.append(FadeIn(new[f], shift=DOWN * 0.15))
-                anims += [FadeOut(t) for f, t in tags.items() if f not in new]
-                v = version_label(k)
-                if vl is None:
-                    vl = v
-                    anims.append(FadeIn(vl))
-                else:
-                    anims.append(Transform(vl, v))
-                tags = new
-                self.play(*anims, run_time=0.9)
-            self.play(FadeIn(lines[0]))
-            vo.wait_until("c")
-            self.play(FadeIn(lines[1]))
-            vo.wait_until("d")
-            self.play(Create(ghost_box), FadeIn(ghost[1]), FadeIn(ghost_l))
-            self.play(FadeIn(lines[2]))
-        self.wait(0.4)
-        self.clear_scene()
 
     def optimistic(self):
+        self.ask(r"Two jobs both read version 41 \\ and commit at once. Both succeed?", [r"yes",
+                 r"one wins, one retries"], 1,
+                 say="Two jobs read version forty-one of a table and try to commit at the same moment. Do both succeed?",
+                 reveal="One wins version forty-two. The other checks for conflicts and retries.")
         head = label(r"Optimistic commits", font_size=36).to_edge(UP, buff=0.3)
         ya, yb = 1.7, 0.3
         lanes = VGroup(Line([-5.6, ya, 0], [6.6, ya, 0], color=GREY_D), Line([-5.6, yb, 0], [6.6, yb, 0],
@@ -274,67 +191,6 @@ class Lakehouse(VoiceoverScene):
         self.wait(0.4)
         self.clear_scene()
 
-    def contention(self):
-        c = load("commits")
-        conf, disj = c["conflicting"], c["disjoint_appends"]
-        head = label(r"Contention, \ measured", font_size=36).to_edge(UP, buff=0.3)
-        ws = [r["writers"] for r in conf]
-        top = 12
-        ch = axes([0, len(ws) - 1, 1], [0, top, 4], x_length=6.2, y_length=3.7, x_label=r"concurrent writers",
-                  y_label=r"commits per unit of work", xticks=list(range(len(ws))), yticks=[0, 4, 8, 12],
-                  fx=lambda v: f"{ws[int(v)]}")
-        ch.move_to([-2.8, 0.15, 0])
-        ax = ch.ax
-
-        def curve(rows, color):
-            pts = [(k, r["throughput"]) for k, r in enumerate(rows)]
-            ln = trace(ax, pts, color, width=3)
-            dots = VGroup(*[Dot(ax.c2p(x, y), radius=0.06, color=color) for x, y in pts])
-            end = label(f"{rows[-1]['throughput']:.1f}", font_size=18, color=color).next_to(dots[-1], RIGHT,
-                                                                                           buff=0.12)
-            return VGroup(ln, dots, end)
-        g_d = curve(disj, YES)
-        g_c = curve(conf, NO)
-        k_d = VGroup(Line(ORIGIN, RIGHT * 0.4, color=YES, stroke_width=3),
-                     label(r"appends only: \ the loser renumbers", font_size=18, color=YES)).arrange(RIGHT, buff=0.12)
-        k_c = VGroup(Line(ORIGIN, RIGHT * 0.4, color=NO, stroke_width=3),
-                     label(r"every commit conflicts: \ the loser redoes", font_size=18, color=NO)).arrange(
-            RIGHT, buff=0.12)
-        VGroup(k_d, k_c).arrange(DOWN, aligned_edge=LEFT, buff=0.12).next_to(ax.c2p(0, top), RIGHT, buff=0.3).shift(
-            DOWN * 0.35)
-        rows = [[f"{r['writers']}", f"{r['retry_per_commit']:.2f}"] for r in conf]
-        tab = grid_table([r"writers", r"retries per commit"], rows, widths=[1.5, 2.6], row_h=0.42, font_size=19,
-                         mono_cols=())
-        tab.move_to([4.3, 1.0, 0])
-        for i in range(1, len(rows) + 1):
-            tab.cells[i][1].set_color(NO)
-        tab_t = label(r"when every commit conflicts", font_size=18, color=NO).next_to(tab, UP, buff=0.15)
-        n1, n16 = disj[0]["throughput"], disj[-1]["throughput"]
-        side = wrapped_label(rf"sixteen writers: \ {conf[-1]['throughput'] / n1:.1f}$\times$ one writer's rate "
-                             rf"when they conflict, \ {n16 / n1:.1f}$\times$ when they only append", 4.6,
-                             font_size=19, color=WHITE).next_to(tab, DOWN, buff=0.4)
-        foot = note(rf"simulated by our instrument: \ each writer commits {conf[0]['commits']} times, \ each commit "
-                    r"after a random amount of work \ (one unit on average), \ by compare-and-swap",
-                    font_size=17).to_edge(DOWN, buff=0.3)
-        with self.voiceover(
-            "How much does contention cost? <bookmark mark='a'/> Our instrument simulates writers committing fifty "
-            "times each, after a random amount of work, one unit on average. <bookmark mark='b'/> When every commit "
-            "conflicts, losers redo their work. At sixteen writers each commit is retried almost four times, and "
-            "sixteen writers manage under three times the rate of one. <bookmark mark='c'/> When writers only "
-            "append, losers merely renumber, and sixteen commit eleven times as fast as one. So let concurrent "
-            "writers append, or touch different partitions."
-        ) as vo:
-            self.play(FadeIn(head), FadeIn(ch))
-            vo.wait_until("a")
-            self.play(FadeIn(foot))
-            vo.wait_until("b")
-            self.play(Create(g_c[0]), FadeIn(g_c[1]), run_time=1.5)
-            self.play(FadeIn(g_c[2]), FadeIn(k_c), FadeIn(tab_t), FadeIn(tab))
-            vo.wait_until("c")
-            self.play(Create(g_d[0]), FadeIn(g_d[1]), run_time=1.5)
-            self.play(FadeIn(g_d[2]), FadeIn(k_d), FadeIn(side))
-        self.wait(0.4)
-        self.clear_scene()
 
     def timetravel(self):
         head = label(r"Time travel", font_size=36).to_edge(UP, buff=0.3)

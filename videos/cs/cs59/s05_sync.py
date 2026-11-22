@@ -27,7 +27,7 @@ def setlab(vals):
     return MathTex(r"\{" + ", ".join(str(v) for v in sorted(vals)) + r"\}", font_size=26, color=DATA)
 
 
-class Sync(VoiceoverScene):
+class Sync(WatchScene):
     def construct(self):
         self.card()
         self.floodset()
@@ -37,14 +37,10 @@ class Sync(VoiceoverScene):
         self.signatures()
 
     def card(self):
-        card = chapter_card(4, r"Synchronous agreement and its bounds", r"How many rounds, \ and how many honest "
-                            r"processes?", lit=(1980, 1983, 1986),
-                            extra=((1980, r"Pease, \ Shostak and Lamport: \ $n > 3f$"),
+        self.chapter(4, r"Synchronous agreement and its bounds", r"How many rounds, \ and how many honest "
+                            r"processes?", lit=(1980, 1983, 1986), extra=((1980, r"Pease, \ Shostak and Lamport: \ $n > 3f$"),
                                    (1983, r"Dolev and Strong: \ signatures"),
-                                   (1986, r"Fischer, \ Lynch and Merritt: \ the hexagon")), part=PART)
-        with self.voiceover("Chapter four. Synchronous agreement and its bounds."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+                                   (1986, r"Fischer, \ Lynch and Merritt: \ the hexagon")), part=PART, said="Chapter four. Synchronous agreement and its bounds.")
 
     def floodset(self):
         head = label(r"FloodSet: \ tell everyone everything", font_size=36).to_edge(UP, buff=0.3)
@@ -111,6 +107,10 @@ class Sync(VoiceoverScene):
         self.clear_scene()
 
     def hidden(self):
+        self.ask(r"FloodSet against $f$ crashes, \\ stopped after only $f$ rounds. Agreement...", [r"still holds",
+                 r"can fail"], 1,
+                 say="FloodSet tolerates f crashes in f plus one rounds. Stop it after f. Does agreement still hold?",
+                 reveal="It can fail: one crash per round can hide a value until the very last round.")
         fl = load("floodset")["rows"]
         head = label(r"Why $f$ rounds are not enough", font_size=36).to_edge(UP, buff=0.3)
         ys = [1.7, 0.8, -0.1, -1.0]

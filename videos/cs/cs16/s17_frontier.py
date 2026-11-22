@@ -7,7 +7,7 @@ from videos.cs.cs16.common import (CODE, COST, CTRL, DATA, FUNC, HEAD, LAM, NO, 
                                    words)
 
 
-class Frontier(VoiceoverScene):
+class Frontier(WatchScene):
     def construct(self):
         self.card()
         self.smoothed()
@@ -16,13 +16,14 @@ class Frontier(VoiceoverScene):
         self.open()
 
     def card(self):
-        card = chapter_card(16, r"Frontier: \ beyond the worst case", r"What does an algorithm really cost?",
-                            lit=(2001,), extra=((2001, r"Spielman and Teng: \ smoothed analysis"),), part=PART)
-        with self.voiceover("Chapter sixteen. Frontier: beyond the worst case."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(16, r"Frontier: \ beyond the worst case", r"What does an algorithm really cost?", lit=(2001,), extra=((2001, r"Spielman and Teng: \ smoothed analysis"),), part=PART, said="Chapter sixteen. Frontier: beyond the worst case.")
 
     def smoothed(self):
+        self.ask(r"Add a little random noise to a worst-case input. \\ Does the worst case survive?", [r"yes",
+                 r"usually not"], 1,
+                 say="Take a worst-case input and add a little random noise. Does it stay a worst case?",
+                 reveal="Usually not. That's smoothed analysis, and it explains why some exponential-worst-case algorithms "
+                        "work in practice.")
         d = load("frontier")
         head = label(r"Smoothed analysis: \ a little noise", font_size=34).to_edge(UP, buff=0.3)
         rows = [r for r in d["rows"] if r["sigma"] > 0]

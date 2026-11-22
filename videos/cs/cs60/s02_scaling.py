@@ -20,7 +20,7 @@ def tile(title, body, col, chapter, w=6.3, h=2.45):
     return VGroup(frame, t, b, c)
 
 
-class Scaling(VoiceoverScene):
+class Scaling(WatchScene):
     def construct(self):
         self.card()
         self.trends()
@@ -30,13 +30,8 @@ class Scaling(VoiceoverScene):
         self.amdahl()
 
     def card(self):
-        card = chapter_card(1, r"The end of general-purpose scaling", r"Where did the free speedups go?",
-                            lit=(1974, 2018), extra=((1974, r"Dennard scaling"),
-                                                     (2018, r"Hennessy and Patterson: \ a new golden age")),
-                            part=PART)
-        with self.voiceover("Chapter one. The end of general-purpose scaling."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(1, r"The end of general-purpose scaling", r"Where did the free speedups go?", lit=(1974, 2018), extra=((1974, r"Dennard scaling"),
+                                                     (2018, r"Hennessy and Patterson: \ a new golden age")), part=PART, said="Chapter one. The end of general-purpose scaling.")
 
     def trends(self):
         tr = load10("trends")
@@ -79,6 +74,10 @@ class Scaling(VoiceoverScene):
         self.clear_scene()
 
     def instruction(self):
+        self.ask(r"A processor adds two numbers. \\ Fetching and decoding the instruction costs...", [r"about the same",
+                 r"tens to hundreds of times more"], 1,
+                 say="A general-purpose processor adds two small numbers. How does the energy of handling the instruction compare with the add itself?",
+                 reveal="Tens to hundreds of times more. The arithmetic is almost free; the overhead is not.")
         E = {r["op"]: r["pj"] for r in load("energy")["horowitz"]["table"]}
         fetch, add = E["8 KB SRAM read (64 bits)"], E["int32 add"]
         head = label(r"The energy of an instruction, \ and of its operation", font_size=36).to_edge(UP, buff=0.3)

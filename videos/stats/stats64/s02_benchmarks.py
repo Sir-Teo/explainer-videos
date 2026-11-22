@@ -5,10 +5,24 @@ import numpy as np
 from videos.stats.stats64.common import *  # noqa: F403
 
 
-class Benchmarks(LectureMixin, VoiceoverScene):
+class Benchmarks(LectureMixin, StatsScene):
     def construct(self):
         self.card_voiceover("Chapter one. Benchmarks are samples, and their questions come in clusters.", 1,
                             r"Benchmarks are samples", r"Error bars for evaluations")
+        self.wrong_idea("A benchmark score is a fixed property of a model",
+                        "It's an estimate from a sample of questions, with an error bar",
+                        narration="The way leaderboards read: a model's benchmark score is a fixed property, like "
+                                  "its size.",
+                        right_narration="It's an estimate from a sample of questions that could have been "
+                                        "different, with an error bar. And questions that come in clusters, like "
+                                        "passages with several questions each, widen it.")
+        self.ask(r"A model scores 80\% on 1,000 benchmark questions. Its standard error is about...",
+                 ["0.1 points", "1.3 points", "10 points"], 1,
+                 say="Benchmarks are samples of questions. A model scores eighty percent on a thousand. About how "
+                     "big is the standard error?",
+                 reveal="About one point three percentage points: the root of point eight times point two over a "
+                        "thousand. Two models a point apart may not differ at all. And clustered questions widen "
+                        "it.")
         self.population()
         self.clt()
         self.clusters()
@@ -16,6 +30,7 @@ class Benchmarks(LectureMixin, VoiceoverScene):
         self.board()
         self.deff()
         self.practice()
+        self.answer()
 
     def population(self):
         self.lad_voiceover(

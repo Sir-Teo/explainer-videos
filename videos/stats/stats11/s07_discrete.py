@@ -7,21 +7,25 @@ from explainer.stats.kit import intervals as I
 from videos.stats.stats11.common import *  # noqa: F403
 
 
-class Discrete(VoiceoverScene):
+class Discrete(StatsScene):
     def construct(self):
         self.card()
+        self.ask(r"Can a non-randomized interval for a binomial cover exactly 95\% at every $p$?",
+                 ["yes", "no"], 1,
+                 say="A count can only take whole values. Can any ordinary interval for a binomial proportion cover "
+                     "exactly ninety-five percent for every true p?",
+                 reveal="No. As p moves, whole counts jump in and out of the interval, so coverage sawtooths. The "
+                        "best intervals stay close to ninety-five on average.")
         self.why_teeth()
         self.impossible()
         self.midp()
         self.poisson()
         self.median()
         self.choice()
+        self.answer()
 
     def card(self):
-        card = chapter_card(6, r"Discreteness", r"Why no interval for a count covers exactly 95\%", part=PART)
-        with self.voiceover("Chapter six. Discreteness."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(6, r"Discreteness", r"Why no interval for a count covers exactly 95\%", part=PART, said="Chapter six. Discreteness.")
 
     def why_teeth(self):
         n = 20

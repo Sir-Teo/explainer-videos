@@ -5,20 +5,24 @@ import numpy as np
 from videos.stats.stats4.common import *  # noqa: F403
 
 
-class Vectors(VoiceoverScene):
+class Vectors(StatsScene):
     def construct(self):
         self.card()
+        self.ask("Centre $n$ numbers. Their sample variance is the squared length of the centred vector divided by...",
+                 ["$n$", "$n - 1$", "$n + 1$"], 1,
+                 say="A sample of n numbers is one point in n-dimensional space. Centre it. Its sample variance is "
+                     "the squared length of the centred vector divided by what: n, n minus one, or n plus one?",
+                 reveal="N minus one. Centring puts the vector in a subspace with one dimension fewer, and that "
+                        "lost dimension is the lost degree of freedom.")
         self.point()
         self.centring()
         self.upgrade()
         self.dof()
         self.data_matrix()
+        self.answer()
 
     def card(self):
-        card = chapter_card(1, r"Vectors as data", r"A sample of $n$ is one point in $\mathbb R^n$", lit=(1805,), part=PART)
-        with self.voiceover("Chapter one. Vectors as data."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(1, r"Vectors as data", r"A sample of $n$ is one point in $\mathbb R^n$", lit=(1805,), part=PART, said="Chapter one. Vectors as data.")
 
     def point(self):
         d = load("vectors")

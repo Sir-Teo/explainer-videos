@@ -10,7 +10,7 @@ def fmt_n(v):
     return f"{v:,}".replace(",", "{,}")
 
 
-class Faults(VoiceoverScene):
+class Faults(WatchScene):
     def construct(self):
         self.card()
         self.flow()
@@ -18,11 +18,7 @@ class Faults(VoiceoverScene):
         self.costs()
 
     def card(self):
-        card = chapter_card(6, r"Page faults", r"What happens when the page is not there?", lit=(1962,),
-                            extra=((1962, r"Atlas: \ demand paging"),), part=PART)
-        with self.voiceover("Chapter six. Page faults."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(6, r"Page faults", r"What happens when the page is not there?", lit=(1962,), extra=((1962, r"Atlas: \ demand paging"),), part=PART, said="Chapter six. Page faults.")
 
     def flow(self):
         p = load("protect")
@@ -141,6 +137,10 @@ class Faults(VoiceoverScene):
         self.clear_scene()
 
     def costs(self):
+        self.ask(r"Touching a mapped page: 25 ns. \\ A fault served from disk:", [r"about a microsecond",
+                 r"milliseconds"], 1,
+                 say="Touching a mapped page takes twenty-five nanoseconds. What does a fault served from disk cost?",
+                 reveal="Milliseconds: about a hundred thousand times more.")
         st = load("staircase")
         e = load("eat")
         head = label(r"What a fault costs", font_size=36).to_edge(UP, buff=0.3)

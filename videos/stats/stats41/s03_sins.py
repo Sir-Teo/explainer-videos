@@ -5,9 +5,21 @@ import numpy as np
 from videos.stats.stats41.common import *  # noqa: F403
 
 
-class Sins(VoiceoverScene):
+class Sins(StatsScene):
     def construct(self):
         self.card()
+        self.wrong_idea("Carrying the last observation forward is conservative",
+                        "LOCF's bias can go either way, depending on how dropout and disease interact",
+                        narration="A widespread belief in clinical trials: carrying a patient's last observation "
+                                  "forward is conservative.",
+                        right_narration="It isn't safe. If patients who drop out would have improved, or worsened, "
+                                        "the bias can go either way. LOCF assumes time stopped for them.")
+        self.ask("Fill every hole with the observed mean. The variance becomes...",
+                 ["too small", "right", "too large"], 0,
+                 say="Fill every missing value with the mean of the observed ones. What happens to the variable's "
+                     "variance?",
+                 reveal="It becomes too small: every filled value sits at the centre. Correlations shrink too, and "
+                        "standard errors pretend the guesses were data.")
         self.complete_cases()
         self.cc_numbers()
         self.when_ok()
@@ -19,12 +31,10 @@ class Sins(VoiceoverScene):
         self.locf_plot()
         self.locf_table()
         self.board()
+        self.answer()
 
     def card(self):
-        card = chapter_card(2, r"The easy methods' sins", r"Complete cases, \ the mean, \ the last value", lit=(1976,), part=PART)
-        with self.voiceover("Chapter two. The easy methods' sins."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(2, r"The easy methods' sins", r"Complete cases, \ the mean, \ the last value", lit=(1976,), part=PART, said="Chapter two. The easy methods' sins.")
 
     def complete_cases(self):
         rows = [

@@ -2,7 +2,7 @@
 """How long a video runs: estimated from its narration before rendering, measured after.
 
     python tools/lecture_length.py ai26                 # per chapter and total; exit 1 if under the floor
-    python tools/lecture_length.py ai26 --floor 30      # the floor in minutes (default 30; 50 for Computer Science, Built)
+    python tools/lecture_length.py ai26 --floor 30      # the floor in minutes (default 30)
     python tools/lecture_length.py music1               # Music, Built: listening counted, and a ceiling of 60
     python tools/lecture_length.py --series ai          # every part of a series, one line each
 
@@ -36,8 +36,8 @@ from explainer.paths import VIDEOS, video_dir, video_package  # noqa: E402
 
 WPM = 140
 SERIES_WPM = {"quant": 168, "music": 172}  # music: measured on Part 1's narrated build (listening counted apart)
-FLOORS = {"cs": 50.0}  # minutes; other series: 30
-CEILINGS = {"music": 60.0}  # minutes; other series: none
+FLOORS = {"cs": 30.0}  # minutes; other series: 30 (Computer Science, Built's watch standard, SYLLABUS 1.2)
+CEILINGS = {"music": 60.0, "cs": 60.0}  # minutes; other series: none
 CLIP_NAME = re.compile(r'clip\(f?"([a-z_0-9]+\.[a-z_0-9]+)"\)')
 
 
@@ -45,6 +45,11 @@ def wpm(video: str) -> float:
     return SERIES_WPM.get(video_dir(video).parent.name, WPM)
 
 BOOKMARK = re.compile(r"<bookmark[^>]*/>")
+# the watch kit's calls that speak (their keywords) and the silent seconds each adds, as words at 140 a minute
+KIT_SPEECH = {"ask": ("say", "reveal"), "predict": ("narration",), "reveal": ("narration",),
+              "checkpoint": ("narration", "answers_narration"), "wrong_idea": ("narration", "right_narration"),
+              "chapter": ("said",)}
+KIT_PAUSE = {"ask": 12, "predict": 10, "checkpoint": 16, "wrong_idea": 5, "chapter": 6, "title": 16}
 NARRATING = {"rows_scene": 3}  # scene helpers that speak a script passed as this positional argument
 
 
@@ -55,6 +60,17 @@ def narration_words(path: Path, cls: str) -> int:
             continue
         for call in ast.walk(node):
             if not isinstance(call, ast.Call):
+                continue
+            if isinstance(call.func, ast.Attribute) and call.func.attr in KIT_SPEECH:
+                # the watch kit (explainer/cs/watch.py): its narration is in keywords, and countdowns are silent time
+                for k in call.keywords:
+                    if k.arg in KIT_SPEECH[call.func.attr]:
+                        for sub in ast.walk(k.value):
+                            if isinstance(sub, ast.Constant) and isinstance(sub.value, str):
+                                words += len(BOOKMARK.sub(" ", sub.value).split())
+                            elif isinstance(sub, ast.FormattedValue):
+                                words += 3
+                words += KIT_PAUSE.get(call.func.attr, 0)
                 continue
             if isinstance(call.func, ast.Attribute) and (call.func.attr == "voiceover" or call.func.attr.endswith("_voiceover")) and call.args:
                 arg = call.args[0]

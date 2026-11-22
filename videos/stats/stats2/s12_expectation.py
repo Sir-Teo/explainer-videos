@@ -5,22 +5,25 @@ import numpy as np
 from videos.stats.stats2.common import *  # noqa: F403
 
 
-class Expectation(VoiceoverScene):
+class Expectation(StatsScene):
     def construct(self):
         self.card()
+        self.ask("Fifty stickers, one in each pack. About how many packs fill the album?",
+                 ["about 50", "about 100", "about 225"], 2,
+                 say="An album of fifty stickers, one random sticker in each pack. About how many packs does it "
+                     "take to fill it: fifty, a hundred, or two hundred and twenty-five?",
+                 reveal="About two hundred and twenty-five: n times the harmonic number. Linearity of expectation "
+                        "does it in one line, and the last few stickers cost the most.")
         self.balance()
         self.layers()
         self.linearity()
         self.matches()
         self.birthdays()
         self.coupons()
+        self.answer()
 
     def card(self):
-        card = chapter_card(11, r"Expectation", r"Pascal's averages, and the most useful trick in probability",
-                            lit=(1654,), part=PART)
-        with self.voiceover("Chapter eleven. Expectation."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(11, r"Expectation", r"Pascal's averages, and the most useful trick in probability", lit=(1654,), part=PART, said="Chapter eleven. Expectation.")
 
     def balance(self):
         d = load("variables")

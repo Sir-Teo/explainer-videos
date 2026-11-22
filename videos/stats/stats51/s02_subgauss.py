@@ -19,20 +19,24 @@ def say_sci(v: float) -> str:
     return f"{_NUM[int(a)]} point {_NUM[int(b)]} times ten to the minus {_NUM[-int(e)] if -int(e) < 10 else -int(e)}"
 
 
-class SubGaussian(VoiceoverScene):
+class SubGaussian(StatsScene):
     def construct(self):
         self.card()
+        self.ask("A bounded random variable is...",
+                 ["sub-Gaussian", "possibly heavy-tailed"], 0,
+                 say="Tails you can count on at every n: the psi-two norm. Is a bounded random variable "
+                     "sub-Gaussian?",
+                 reveal="Yes: Hoeffding's lemma, with a norm of the order of its range. But when the variance is "
+                        "much smaller than the range, Bernstein-type bounds that see the variance do better.")
         self.definitions()
         self.norms()
         self.hoeffding()
         self.chart()
         self.rare()
+        self.answer()
 
     def card(self):
-        card = chapter_card(1, r"Sub-Gaussian and sub-exponential variables", r"Tails you can count on, \ at every $n$", part=PART)
-        with self.voiceover("Chapter one. Sub-Gaussian and sub-exponential variables: tails you can count on, at every n."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(1, r"Sub-Gaussian and sub-exponential variables", r"Tails you can count on, \ at every $n$", part=PART, said="Chapter one. Sub-Gaussian and sub-exponential variables: tails you can count on, at every n.")
 
     def definitions(self):
         rows = [

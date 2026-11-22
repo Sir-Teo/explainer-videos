@@ -6,9 +6,15 @@ from explainer.stats.board import coverage_board, load_all
 from videos.stats.stats13.common import *  # noqa: F403
 
 
-class Online(VoiceoverScene):
+class Online(StatsScene):
     def construct(self):
         self.card()
+        self.ask("Bing moved ad text into the headline. The A/B test's revenue effect?",
+                 ["negligible", r"about $+12\%$", "negative"], 1,
+                 say="At Bing, a small change moved some of each ad's text into its headline. It sat on the backlog "
+                     "for months. When it was finally tested, what did revenue do?",
+                 reveal="It rose about twelve percent, one of the most valuable changes in Bing's history. "
+                        "Intuition is a poor judge of small changes; experiments aren't.")
         self.bing()
         self.anatomy()
         self.cuped_scatter()
@@ -17,12 +23,14 @@ class Online(VoiceoverScene):
         self.srm()
         self.pitfalls()
         self.board()
+        self.answer()
+        self.checkpoint([("Halve the detectable effect: the sample size?", "quadruples"),
+                         ("Observed power after a null result?", "a transformation of the p-value: nothing new")],
+                        narration="Checkpoint. How big, and what it tells you.",
+                        answers_narration="It quadruples. And observed power tells you nothing the p-value didn't.")
 
     def card(self):
-        card = chapter_card(13, r"Online experiments", r"Fisher's field, \ a billion plots at a time", lit=(2013,), part=PART)
-        with self.voiceover("Chapter thirteen. Online experiments."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(13, r"Online experiments", r"Fisher's field, \ a billion plots at a time", lit=(2013,), part=PART, said="Chapter thirteen. Online experiments.")
 
     def bing(self):
         hc = history_card(2012, r"Bing, \ Microsoft's search engine", r"an engineer's idea, \ shelved for months as low priority: \ "

@@ -15,20 +15,23 @@ def image_mob(M, width=5.0, lo=0.0, hi=1.0) -> ImageMobject:
             .scale_to_fit_width(width))
 
 
-class SVD(VoiceoverScene):
+class SVD(StatsScene):
     def construct(self):
         self.card()
+        self.ask("The best rank-one approximation of a matrix comes from...",
+                 ["its largest entry", "its top singular vectors", "its first row and column"], 1,
+                 say="Approximate a whole matrix by one of rank one. Where does the best approximation come from: "
+                     "the largest entry, the top singular vectors, or the first row and column?",
+                 reveal="The top singular vectors, scaled by the top singular value. Eckart and Young proved no "
+                        "rank-one matrix does better.")
         self.geometry()
         self.decomposition()
         self.lowrank()
         self.pca()
+        self.answer()
 
     def card(self):
-        card = chapter_card(6, r"The singular value decomposition", r"Two orthogonal maps and a stretch", lit=(),
-                            part=PART)
-        with self.voiceover("Chapter six. The singular value decomposition."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(6, r"The singular value decomposition", r"Two orthogonal maps and a stretch", lit=(), part=PART, said="Chapter six. The singular value decomposition.")
 
     def geometry(self):
         M = np.array([[1.6, 0.9], [0.3, 1.1]])

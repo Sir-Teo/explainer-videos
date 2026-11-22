@@ -8,18 +8,14 @@ def T(d, color=DATA, font=17):
     return rel_table(d["cols"], d["rows"], font=font, color=color)
 
 
-class Algebra(VoiceoverScene):
+class Algebra(WatchScene):
     def construct(self):
         self.card()
         self.operators()
         self.compose()
 
     def card(self):
-        card = chapter_card(2, r"Relational algebra", r"What can you compute with tables alone?", lit=(1970, 1974),
-                            extra=((1974, r"Chamberlin and Boyce: \ SEQUEL"),), part=PART)
-        with self.voiceover("Chapter two. Relational algebra."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(2, r"Relational algebra", r"What can you compute with tables alone?", lit=(1970, 1974), extra=((1974, r"Chamberlin and Boyce: \ SEQUEL"),), part=PART, said="Chapter two. Relational algebra.")
 
     def operators(self):
         a = load("algebra")
@@ -66,6 +62,10 @@ class Algebra(VoiceoverScene):
         self.clear_scene()
 
     def compose(self):
+        self.ask(r"Move a selection below a join in the tree. \\ The answer...", [r"may change",
+                 r"stays the same, more cheaply"], 1,
+                 say="Move a selection below a join, so it filters before joining. Does the answer change?",
+                 reveal="No. The laws of the algebra guarantee the same table, from far fewer rows.")
         a = load("algebra")
         head = label(r"Composing them: \ a query is a tree", font_size=36).to_edge(UP, buff=0.3)
         expr = MathTex(r"\pi_{\text{book}}\big(\sigma_{\text{year} - \text{born} < 45}(\text{books} \bowtie "

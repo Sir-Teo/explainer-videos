@@ -452,3 +452,10 @@ PHRASES = {"one": "一", "two": "两", "three": "三", "four": "四", "five": "�
            "eight": "八", "nine": "九", "ten": "十"}
 PHRASES.update({"one, the ideal order": "1，也就是理想的顺序", "fifth": "五分之一", "sixth": "六分之一",
                 "seventh": "七分之一", "eighth": "八分之一", "fraction": "一小部分"})
+
+import json as _json  # noqa: E402
+from pathlib import Path as _Path  # noqa: E402
+
+_watch = _Path(__file__).with_name("zh_watch.json")
+if _watch.exists():  # the watch retrofit's lines (tools/zh_watch.py)
+    ZH.update(_json.loads(_watch.read_text()))

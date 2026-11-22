@@ -5,10 +5,17 @@ import numpy as np
 from videos.stats.stats59.common import *  # noqa: F403
 
 
-class RandomMatrices(LectureMixin, VoiceoverScene):
+class RandomMatrices(LectureMixin, StatsScene):
     def construct(self):
         self.card_voiceover("Chapter two. Random matrix tools: the Stieltjes transform, and free convolution.", 2,
                             r"Random matrix tools", r"Spectra in closed form")
+        self.ask("$p = n/2$ independent unit-variance variables. The sample covariance's eigenvalues spread over...",
+                 ["a narrow band around 1", "about 0.09 to 2.9", "0 to 1"], 1,
+                 say="Spectra in closed form. Independent variables, all with variance one, and half as many "
+                     "variables as observations. Where do the sample covariance's eigenvalues lie?",
+                 reveal="From about point zero nine to about two point nine: Marchenko and Pastur's law, one minus "
+                        "root a half squared to one plus root a half squared. The truth, all ones, is nowhere to be "
+                        "seen.")
         self.stieltjes()
         self.inversion()
         self.mp_eq()
@@ -17,6 +24,7 @@ class RandomMatrices(LectureMixin, VoiceoverScene):
         self.free_chart()
         self.subordination()
         self.uses()
+        self.answer()
 
     def stieltjes(self):
         heading = label('The Stieltjes transform', font_size=30, color=PROPC).move_to([0, 3.35, 0])

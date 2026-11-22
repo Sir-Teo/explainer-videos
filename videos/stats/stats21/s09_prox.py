@@ -5,21 +5,29 @@ import numpy as np
 from videos.stats.stats21.common import *  # noqa: F403
 
 
-class Proximal(VoiceoverScene):
+class Proximal(StatsScene):
     def construct(self):
         self.card()
+        self.ask("With momentum, FISTA's error falls like...",
+                 ["$1/k$", "$1/k^2$", "$e^{-k}$"], 1,
+                 say="A gradient step, then a proximal cleanup: ISTA's error falls like one over k. Add Nesterov's "
+                     "momentum, FISTA. How fast does its error fall?",
+                 reveal="Like one over k squared, the best possible rate for first-order methods on this problem "
+                        "class.")
         self.operator()
         self.thresholds()
         self.ista()
         self.rates()
         self.momentum()
         self.zoo()
+        self.answer()
+        self.checkpoint([("Newton near the optimum?", "quadratic: the digits double"),
+                         ("The lasso's one-coordinate update?", "soft-thresholding")],
+                        narration="Checkpoint. Algorithms.",
+                        answers_narration="Quadratic convergence. And soft-thresholding.")
 
     def card(self):
-        card = chapter_card(8, r"Proximal methods", r"A gradient step, \ then a cleanup", lit=(2009,), part=PART)
-        with self.voiceover("Chapter eight. Proximal methods."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(8, r"Proximal methods", r"A gradient step, \ then a cleanup", lit=(2009,), part=PART, said="Chapter eight. Proximal methods.")
 
     def operator(self):
         rows = [

@@ -5,20 +5,28 @@ import numpy as np
 from videos.stats.stats10.common import *  # noqa: F403
 
 
-class Many(VoiceoverScene):
+class Many(StatsScene):
     def construct(self):
         self.card()
+        self.ask(r"20 independent tests, every null true, each at 5\%. Chance at least one is significant?",
+                 [r"5\%", r"about 64\%", r"100\%"], 1,
+                 say="Twenty independent tests, every null true, each at five percent. What's the chance at least "
+                     "one comes out significant?",
+                 reveal="About sixty-four percent: one minus point nine five to the twentieth. Test enough things "
+                        "and something will be significant.")
         self.any_curve()
         self.hundred()
         self.bonferroni()
         self.salmon()
         self.forking()
+        self.answer()
+        self.checkpoint([("$p = 0.03$: the chance the null is true?", "not given by the p-value"),
+                         (r"20 true nulls at 5\%: chance of at least one significant?", r"about 64\%")],
+                        narration="Checkpoint. Reading p-values.",
+                        answers_narration="The p-value can't say. And about sixty-four percent.")
 
     def card(self):
-        card = chapter_card(12, r"Many tests", r"Test enough things, \ and something will be significant", lit=(1995,), part=PART)
-        with self.voiceover("Chapter twelve. Many tests."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(12, r"Many tests", r"Test enough things, \ and something will be significant", lit=(1995,), part=PART, said="Chapter twelve. Many tests.")
 
     def any_curve(self):
         d = load("many")

@@ -12,21 +12,16 @@ def _spread(ax, x, ys, color):
                   Line(b + LEFT * 0.1, b + RIGHT * 0.1, color=color))
 
 
-class Cuped(VoiceoverScene):
+class Cuped(WatchScene):
     def construct(self):
         self.card()
         self.idea()
         self.derive()
         self.measured()
         self.interval()
-        self.strata()
 
     def card(self):
-        card = chapter_card(10, r"Less noise, \ same truth", r"Can a user's past make an experiment more precise?",
-                            lit=(2013,), extra=((2013, r"Deng, \ Xu, \ Kohavi and Walker: \ CUPED"),), part=PART)
-        with self.voiceover("Chapter ten. Less noise, same truth."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(10, r"Less noise, \ same truth", r"Can a user's past make an experiment more precise?", lit=(2013,), extra=((2013, r"Deng, \ Xu, \ Kohavi and Walker: \ CUPED"),), part=PART, said="Chapter ten. Less noise, same truth.")
 
     def idea(self):
         head = label(r"What the past already explains", font_size=36).to_edge(UP, buff=0.3)
@@ -78,6 +73,10 @@ class Cuped(VoiceoverScene):
         self.clear_scene()
 
     def derive(self):
+        self.ask(r"Last month's metric correlates $0.7$ with this month's. \\ CUPED cuts the variance by...",
+                 [r"$30\%$", r"about half", r"$70\%$"], 1,
+                 say="A user's spending last month correlates point seven with this month's. How much variance does CUPED remove?",
+                 reveal="About half: it multiplies the variance by one minus rho squared.")
         head = label(r"Why $1 - \rho^2$", font_size=36).to_edge(UP, buff=0.3)
         steps = VGroup(
             MathTex(r"\operatorname{Var}(Y - \theta X)", r"=", r"\operatorname{Var}Y - 2\theta\,"
@@ -244,62 +243,6 @@ class Cuped(VoiceoverScene):
         self.wait(0.4)
         self.clear_scene()
 
-    def strata(self):
-        head = label(r"Stratification, \ and regression in general", font_size=36).to_edge(UP, buff=0.3)
-        rng = np.random.default_rng(10)
-        groups = [(-1.4, 0.45, LAM, r"light users"), (1.2, 0.5, KERN, r"heavy users")]
-        col = VGroup()
-        for k, (m, s, c, _) in enumerate(groups):
-            ys = m + s * rng.normal(0, 1, 26)
-            col.add(VGroup(*[Dot([-4.5 + 1.5 * k + rng.uniform(-0.25, 0.25), y * 0.95, 0], radius=0.05, color=c)
-                             for y in ys]))
-        allg = VGroup(*[Dot(d.get_center(), radius=0.05, color=DATA) for grp in col for d in grp])
-        total = DoubleArrow([-5.7, -2.6, 0], [-5.7, 2.5, 0], buff=0, color=DATA, stroke_width=3,
-                            max_tip_length_to_length_ratio=0.05)
-        tl = label(r"total spread", font_size=17, color=DATA).next_to(total, LEFT, buff=0.1).rotate(PI / 2)
-        tl.next_to(total, LEFT, buff=0.1)
-        within = VGroup(*[DoubleArrow([-4.5 + 1.5 * k + 0.5, (m - 2 * s) * 0.95, 0],
-                                      [-4.5 + 1.5 * k + 0.5, (m + 2 * s) * 0.95, 0], buff=0, color=c,
-                                      stroke_width=3, max_tip_length_to_length_ratio=0.15)
-                          for k, (m, s, c, _) in enumerate(groups)])
-        gl = VGroup(*[label(t, font_size=17, color=c).next_to(col[k], DOWN, buff=0.2)
-                      for k, (_, _, c, t) in enumerate(groups)])
-        ill = note(r"illustrative", font_size=17).move_to([-3.9, -3.5, 0])
-        eqs = VGroup(
-            MathTex(r"\operatorname{Var}Y = \underbrace{\mathbb{E}\,\operatorname{Var}(Y \mid S)}_{\text{within}} + "
-                    r"\underbrace{\operatorname{Var}\,\mathbb{E}(Y \mid S)}_{\text{between strata}}", font_size=30),
-            wrapped_label(r"\textbf{stratify}: \ compare versions within each stratum \ (platform, \ country, \ "
-                          r"heavy or light), \ then weight the strata; \ the between-strata part drops out", 7.6,
-                          font_size=20, color=WHITE),
-            MathTex(r"Y = \alpha + \tau\, T + \beta_1 X_1 + \beta_2 X_2 + \dots + \varepsilon", font_size=30,
-                    color=YES),
-            wrapped_label(r"\textbf{regression adjustment}: \ CUPED with one covariate is the simplest case; \ "
-                          r"with many, \ or with a model's prediction of $Y$ from the past, \ the same rule holds: \ "
-                          r"pre-treatment covariates only", 7.6, font_size=20, color=YES),
-            wrapped_label(r"with treatment-by-covariate terms, \ adjustment cannot hurt precision in large samples \ "
-                          r"(Lin, \ 2013)", 7.6, font_size=20, color=GREY_A),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.28).move_to([2.6, -0.3, 0])
-        with self.voiceover(
-            "CUPED belongs to an old family. <bookmark mark='a'/> When users fall into groups that behave "
-            "differently, light and heavy users say, part of the spread lies between the groups. "
-            "<bookmark mark='b'/> Stratification compares the versions within each group and then weights the "
-            "groups, so the between-group part drops out of the noise. <bookmark mark='c'/> In general, regress "
-            "the metric on the treatment and on covariates measured before it; the treatment's coefficient is the "
-            "effect. CUPED is the one-covariate case, and the covariate can be a model's prediction from the past. "
-            "<bookmark mark='d'/> Winston Lin showed in 2013 that, with interaction terms, this cannot hurt "
-            "precision in large samples."
-        ) as vo:
-            self.play(FadeIn(head), FadeIn(allg), Create(total), FadeIn(tl), FadeIn(ill))
-            vo.wait_until("a")
-            self.play(Transform(allg, VGroup(*[d.copy() for grp in col for d in grp])), FadeIn(gl), FadeIn(eqs[0]))
-            vo.wait_until("b")
-            self.play(Create(within), FadeIn(eqs[1]))
-            vo.wait_until("c")
-            self.play(Write(eqs[2]), FadeIn(eqs[3]))
-            vo.wait_until("d")
-            self.play(FadeIn(eqs[4]))
-        self.wait(0.4)
-        self.clear_scene()
 
 
 _ = (BG, NO, LAM)

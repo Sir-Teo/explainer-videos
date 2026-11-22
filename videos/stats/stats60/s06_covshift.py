@@ -9,10 +9,23 @@ def normal_pdf(x, m, s):
     return np.exp(-0.5 * ((x - m) / s) ** 2) / (s * np.sqrt(2 * np.pi))
 
 
-class CovariateShift(LectureMixin, VoiceoverScene):
+class CovariateShift(LectureMixin, StatsScene):
     def construct(self):
         self.card_voiceover("Chapter five. Covariate shift: when the people change, but the relationship does not.", 5,
                             r"Covariate shift", r"Reweight the sample to the target", lit=(2000,))
+        self.wrong_idea("Reweighting by $x$ fixes any distribution shift",
+                        "Only if $y$ given $x$ is unchanged: if the mechanism moved, no weights on $x$ help",
+                        narration="A natural fix for any shift: reweight the training data so its features look "
+                                  "like the target's.",
+                        right_narration="That fixes covariate shift only, when the relationship of y to x is "
+                                        "unchanged. If the mechanism itself moved, no reweighting by x can help: "
+                                        "the target's labels are needed.")
+        self.ask("Covariate shift with poor overlap. After importance weighting, the effective sample size...",
+                 ["stays near $n$", "collapses"], 1,
+                 say="Covariate shift: reweight the sample to the target by the density ratio. If the two "
+                     "populations overlap poorly, what happens to Kish's effective sample size?",
+                 reveal="It collapses: a few points with huge weights carry the estimate. The method is valid, and "
+                        "the variance is the bill.")
         self.definition()
         self.identity()
         self.classifier()
@@ -21,6 +34,7 @@ class CovariateShift(LectureMixin, VoiceoverScene):
         self.price()
         self.board()
         self.variants()
+        self.answer()
 
     def definition(self):
         self.lad_voiceover(

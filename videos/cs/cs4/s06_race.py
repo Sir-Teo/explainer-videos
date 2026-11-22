@@ -16,124 +16,22 @@ def block(w, h, text, color=CTRL, font_size=22):
     return VGroup(b, MathTex(text, font_size=font_size, color=color).move_to(b))
 
 
-class Race(VoiceoverScene):
+class Race(WatchScene):
     def construct(self):
         self.card()
-        self.select()
-        self.skip()
         self.race()
         self.table()
 
     def card(self):
-        card = chapter_card(5, r"The adders, raced", r"Which adder is fastest, and what does it cost?", lit=(1962,),
-                            part=PART)
-        with self.voiceover("Chapter five. The adders, raced."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(5, r"The adders, raced", r"Which adder is fastest, and what does it cost?", lit=(1962,), part=PART, said="Chapter five. The adders, raced.")
 
-    # ------------------------------------------------------------------
-    def select(self):
-        head = label(r"Carry-select: \ compute both answers, \ pick one later", font_size=36).to_edge(UP, buff=0.35)
-        sizes = [1, 2, 3, 4, 5]
-        blocks, muxes, links = VGroup(), VGroup(), VGroup()
-        x = 5.6
-        for k, w in enumerate(sizes):
-            width = 0.45 * w + 0.5
-            x -= width / 2
-            if k == 0:
-                b = block(width, 0.8, rf"{w}\text{{ bit}}", color=DATA).move_to([x, 0.6, 0])
-                blocks.add(VGroup(b))
-            else:
-                b0 = block(width, 0.6, r"c = 0", color=GREY_B, font_size=20).move_to([x, 1.1, 0])
-                b1 = block(width, 0.6, r"c = 1", color=GREY_B, font_size=20).move_to([x, 0.3, 0])
-                m = block(width, 0.5, r"\text{mux}", color=HEAD, font_size=20).move_to([x, -0.7, 0])
-                blocks.add(VGroup(b0, b1))
-                muxes.add(m)
-            x -= width / 2 + 0.35
-        for k in range(1, len(sizes)):
-            src = blocks[0][0].get_bottom() if k == 1 else muxes[k - 2].get_left()
-            dst = muxes[k - 1].get_right()
-            links.add(Line(src + (DOWN * 0.0), dst, color=HEAD, stroke_width=3))
-        labs = VGroup(*[MathTex(rf"{w}", font_size=22, color=GREY_B).next_to(blocks[k], UP, buff=0.15)
-                        for k, w in enumerate(sizes)])
-        why = VGroup(
-            label(r"each block adds its bits twice, \ for carry-in 0 and for carry-in 1, \ in parallel", font_size=26,
-                  color=GREY_A),
-            label(r"the real carry arrives \ and only chooses: \ one multiplexer per block", font_size=26, color=HEAD),
-            label(r"blocks of 1, 2, 3, ... bits: \ ripple inside a block and the chain of choices \ finish together",
-                  font_size=26, color=GREY_A),
-            MathTex(r"1 + 2 + \cdots + k = n \ \Rightarrow \ k \approx \sqrt{2n}: \quad \text{delay } O(\sqrt n)",
-                    font_size=32, color=CODE),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.22).to_edge(DOWN, buff=0.35)
-        with self.voiceover(
-            "Before the prefix trees, engineers found cheaper ways to stop waiting. <bookmark mark='a'/> Split the "
-            "adder into blocks. Every block except the first adds its bits twice, once assuming the carry coming in is "
-            "zero and once assuming it is one, both at the same time. <bookmark mark='b'/> When the real carry finally "
-            "arrives, there is nothing left to add: it just chooses between two finished answers, with one "
-            "multiplexer per block. <bookmark mark='c'/> Make the blocks grow, one bit, two, three, so that each "
-            "block's internal ripple finishes just as the choosing chain reaches it. With k blocks covering n bits, k "
-            "is about the square root of two n, and the delay grows like the square root of n. This is the "
-            "carry-select adder, from 1962, at the cost of doing most of the work twice."
-        ) as vo:
-            self.play(FadeIn(head), FadeIn(VGroup(blocks, labs)))
-            vo.wait_until("a")
-            self.play(Indicate(blocks, scale_factor=1.02), FadeIn(why[0]))
-            vo.wait_until("b")
-            self.play(FadeIn(muxes), Create(links), FadeIn(why[1]))
-            vo.wait_until("c")
-            self.play(FadeIn(why[2]), FadeIn(why[3]))
-        self.wait(0.3)
-        self.clear_scene()
 
-    # ------------------------------------------------------------------
-    def skip(self):
-        d = load("adders")
-        r32 = {r["kind"]: r for r in d["rows"] if r["n"] == 32}
-        head = label(r"Carry-skip, \ and a path that is never taken", font_size=36).to_edge(UP, buff=0.35)
-        blocks = VGroup(*[block(1.9, 0.8, r"4\text{-bit ripple}", color=DATA, font_size=22) for _ in range(4)]).arrange(
-            LEFT, buff=0.9).move_to(UP * 1.2)
-        byp = VGroup()
-        for b in blocks:
-            p = block(0.9, 0.5, r"P = \textstyle\prod p_i", color=HEAD, font_size=18).next_to(b, DOWN, buff=0.45)
-            byp.add(p)
-        chain = VGroup(*[Arrow(blocks[i].get_left(), blocks[i + 1].get_right(), buff=0.05, color=WIRE, stroke_width=3,
-                               max_tip_length_to_length_ratio=0.25) for i in range(3)])
-        skips = VGroup(*[CurvedArrow(byp[i].get_left() + DOWN * 0.1, byp[i + 1].get_right() + DOWN * 0.1, angle=-0.6,
-                                     color=HEAD, stroke_width=3) for i in range(3)])
-        t1 = label(r"if every bit of a block propagates, \ its carry-in skips straight out", font_size=26,
-                   color=HEAD).next_to(byp, DOWN, buff=0.55)
-        cmp = VGroup(
-            label(rf"32 bits: \ the longest path through the gates is \ {r32['carry-skip']['depth']} deep", font_size=28,
-                  color=NO),
-            label(rf"that path is false: \ largest observed delay \ {r32['carry-skip']['settle']}", font_size=28,
-                  color=YES),
-            note(r"a long carry skips the middle blocks; \ a block that ripples did not need its carry-in: \ a "
-                 r"\textit{false path}", font_size=22),
-        ).arrange(DOWN, buff=0.2).to_edge(DOWN, buff=0.4)
-        with self.voiceover(
-            "A second trick is cheaper still. <bookmark mark='a'/> Keep ripple blocks of four bits, but give each one a "
-            "bypass. If every bit in a block propagates, which one and gate detects straight from the inputs, a "
-            "multiplexer passes the block's carry-in straight to its carry-out, skipping the ripple inside. "
-            "<bookmark mark='b'/> This adder holds a lesson about timing. Count the longest path through its gates, "
-            "and at thirty-two bits it is eighty-one deep, worse than the ripple adder. But simulate it, with every "
-            "gate taking one unit of time, on chosen carry patterns and random inputs: the largest delay observed is "
-            "twenty-nine. Sampling is not a proof of the maximum. <bookmark mark='c'/> The long path is false: whenever a carry would ripple through a block, "
-            "that block was generating or killing its own carry anyway. Timing tools that only count gates "
-            "overestimate such circuits, and a whole subfield, false-path analysis, exists to find them."
-        ) as vo:
-            self.play(FadeIn(head), FadeIn(blocks), Create(chain))
-            vo.wait_until("a")
-            self.play(FadeIn(byp), Create(skips), FadeIn(t1))
-            vo.wait_until("b")
-            self.play(FadeIn(cmp[0]))
-            self.play(FadeIn(cmp[1]))
-            vo.wait_until("c")
-            self.play(FadeIn(cmp[2]))
-        self.wait(0.3)
-        self.clear_scene()
 
     # ------------------------------------------------------------------
     def race(self):
+        self.ask(r"Which adder do real 64-bit processors use?", [r"ripple carry", r"a prefix tree", r"carry select"], 1,
+                 say="Which of these adders is inside the processor you're watching on?",
+                 reveal="A prefix tree, tuned to the length of its wires.")
         d = load("adders")
         rows = d["rows"]
         head = label(r"Measured: \ gate delays and gates, \ 4 to 64 bits", font_size=36).to_edge(UP, buff=0.3)

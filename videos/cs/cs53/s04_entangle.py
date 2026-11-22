@@ -77,7 +77,7 @@ def amp_bars(amps, names, scale=1.9, width=0.62, gap=0.38, font_size=24, values=
     return VGroup(base, g)
 
 
-class Entangle(VoiceoverScene):
+class Entangle(WatchScene):
     def construct(self):
         self.card()
         self.rotations()
@@ -88,14 +88,9 @@ class Entangle(VoiceoverScene):
         self.cloning()
 
     def card(self):
-        card = chapter_card(3, r"Gates, \ tensor products and entanglement",
-                            r"What can two qubits do that two bits cannot?", lit=(1935, 1964, 1982),
-                            extra=((1935, r"Einstein, \ Podolsky, \ Rosen"), (1964, r"Bell's inequality"),
-                                   (1982, r"no-cloning: \ Wootters and Zurek; \ Dieks")), part=PART)
-        with self.voiceover("Chapter three. Gates, tensor products and entanglement. What can two qubits do that "
-                            "two bits cannot?"):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(3, r"Gates, \ tensor products and entanglement", r"What can two qubits do that two bits cannot?", lit=(1935, 1964, 1982), extra=((1935, r"Einstein, \ Podolsky, \ Rosen"), (1964, r"Bell's inequality"),
+                                   (1982, r"no-cloning: \ Wootters and Zurek; \ Dieks")), part=PART, said="Chapter three. Gates, tensor products and entanglement. What can two qubits do that "
+                            "two bits cannot?")
 
     def rotations(self):
         paths = load("bloch")
@@ -369,6 +364,10 @@ class Entangle(VoiceoverScene):
         self.clear_scene()
 
     def quantum(self):
+        self.ask(r"The CHSH game: classical strategies win at most $75\%$. \\ With a Bell pair:", [r"$75\%$",
+                 r"about $85\%$", r"$100\%$"], 1,
+                 say="In the CHSH game no classical strategy wins more than seventy-five percent. What can a shared Bell pair do?",
+                 reveal="About eighty-five percent: cosine squared of pi over eight.")
         c = load("chsh")
         head = label(r"Sharing a Bell pair wins more often", font_size=36).to_edge(UP, buff=0.3)
         rows = VGroup(

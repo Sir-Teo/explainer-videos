@@ -8,19 +8,23 @@ DIAG = {s: interpolate_color(ManimColor("#5DADEC"), ManimColor("#F28FB8"), (s - 
 FACTOR_COLS = {"s": GREY_A, "a": "#7BD88F", "b": "#B48EF0", "c": "#FF9F5A"}
 
 
-class Generating(VoiceoverScene):
+class Generating(StatsScene):
     def construct(self):
         self.card()
+        self.ask("Can two differently numbered dice give the same sum chances as ordinary dice?",
+                 ["no", "yes"], 1,
+                 say="Can two dice numbered differently from ordinary dice give exactly the same chances for every "
+                     "total?",
+                 reveal="Yes: Sicherman's dice, one numbered one, two, two, three, three, four, the other one, "
+                        "three, four, five, six, eight. Factor the generating polynomial and the answer falls out.")
         self.definition()
         self.product()
         self.moments()
         self.sicherman()
+        self.answer()
 
     def card(self):
-        card = chapter_card(13, r"Generating functions", r"A distribution as a polynomial", lit=(1738,), part=PART)
-        with self.voiceover("Chapter thirteen. Generating functions."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(13, r"Generating functions", r"A distribution as a polynomial", lit=(1738,), part=PART, said="Chapter thirteen. Generating functions.")
 
     def definition(self):
         dfn = definition_card(r"Probability generating function", r"for $X$ with values $0, 1, 2, \dots$: \quad "

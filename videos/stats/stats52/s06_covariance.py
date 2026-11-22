@@ -5,20 +5,23 @@ import numpy as np
 from videos.stats.stats52.common import *  # noqa: F403
 
 
-class Covariance(VoiceoverScene):
+class Covariance(StatsScene):
     def construct(self):
         self.card()
+        self.ask("$p = 1{,}000$ variables, $n = 500$ observations. The sample covariance is...",
+                 ["invertible", "singular"], 1,
+                 say="A thousand variables, five hundred observations. Is the sample covariance matrix invertible?",
+                 reveal="No: its rank is at most n minus one. Banding, thresholding or Ledoit-Wolf shrinkage give "
+                        "usable estimates.")
         self.problem()
         self.methods()
         self.chart()
         self.table()
         self.shrinkage()
+        self.answer()
 
     def card(self):
-        card = chapter_card(5, r"Covariance estimation", r"When the sample covariance is the wrong answer", lit=(2008,), part=PART)
-        with self.voiceover("Chapter five. Covariance estimation: when the sample covariance is the wrong answer."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(5, r"Covariance estimation", r"When the sample covariance is the wrong answer", lit=(2008,), part=PART, said="Chapter five. Covariance estimation: when the sample covariance is the wrong answer.")
 
     def problem(self):
         rows = [

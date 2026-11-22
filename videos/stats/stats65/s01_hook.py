@@ -3,7 +3,7 @@ from __future__ import annotations
 from videos.stats.stats65.common import *  # noqa: F403
 
 
-class Hook(LectureMixin, VoiceoverScene):
+class Hook(LectureMixin, StatsScene):
     def construct(self):
         self.graunt()
         self.who()
@@ -11,7 +11,7 @@ class Hook(LectureMixin, VoiceoverScene):
         self.dissertation()
         self.plan()
         self.upgrade()
-        self.objectives()
+        self.title(PART)
 
     def graunt(self):
         tl = timeline(lit=(1662,)).to_edge(UP, buff=0.35)
@@ -104,25 +104,6 @@ class Hook(LectureMixin, VoiceoverScene):
         self.wait(1.0)
         self.clear_scene()
 
-    def objectives(self):
-        head = VGroup(label(r"Part 65", font_size=34, color=GREY_B), label(r"The Dissertation", font_size=56)).arrange(DOWN, buff=0.25)
-        obj = objectives_card([
-            r"choosing a question; \ reading a paper; \ a precise conjecture",
-            r"a theorem with its proof; \ a protocol-guided simulation study, \ reported whatever it shows",
-            r"a real application with known selection; \ writing, \ review and reproducibility",
-            r"the full Coverage Board; \ the completed transcript; \ where to go next",
-        ], color=S.ACCENT, font_size=26)
-        prereq = note(r"prerequisites: \ everything").to_corner(DL, buff=0.3)
-        built = note(r"built: \ the thesis, \ \texttt{statkit.thesis}, \ the board mosaic").to_corner(DR, buff=0.3)
-        with self.voiceover(
-            "<bookmark mark='a'/> Part sixty-five: the dissertation. <bookmark mark='b'/> Choosing a question; reading the papers; stating a conjecture precisely; proving a theorem; a simulation study whose original protocol is preserved alongside a transparent post hoc QA amendment; an application to real data; writing and review; and then the whole degree, every promise on the Coverage Board, the completed transcript, and the road beyond the series."
-        ) as vo:
-            vo.wait_until("a")
-            self.play(FadeIn(head, shift=UP * 0.2))
-            vo.wait_until("b")
-            self.play(FadeOut(head), FadeIn(obj, shift=UP * 0.2), FadeIn(prereq), FadeIn(built))
-        self.wait(1.0)
-        self.clear_scene()
 
     def doctorate(self):
         self.lad_voiceover(

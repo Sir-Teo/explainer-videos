@@ -5,19 +5,23 @@ import numpy as np
 from videos.stats.stats22.common import *  # noqa: F403
 
 
-class Consistency(VoiceoverScene):
+class Consistency(StatsScene):
     def construct(self):
         self.card()
+        self.ask("As $n$ grows, the average log-likelihood is maximized at...",
+                 [r"the true $\theta$", "zero", "the sample mean"], 0,
+                 say="Divide the log-likelihood by n: an average of independent terms. As n grows, where is the "
+                     "curve maximized?",
+                 reveal="At the true theta: the expected log-likelihood is largest there, by the Kullback-Leibler "
+                        "inequality. The argmax of the random curve follows the argmax of its limit.")
         self.kl()
         self.curves()
         self.wald()
         self.limits()
+        self.answer()
 
     def card(self):
-        card = chapter_card(2, r"Consistency", r"The argmax of a random curve", lit=(1949,), part=PART)
-        with self.voiceover("Chapter two. Consistency."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(2, r"Consistency", r"The argmax of a random curve", lit=(1949,), part=PART, said="Chapter two. Consistency.")
 
     def kl(self):
         rows = [

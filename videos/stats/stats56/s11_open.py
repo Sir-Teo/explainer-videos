@@ -3,18 +3,26 @@ from __future__ import annotations
 from videos.stats.stats56.common import *  # noqa: F403
 
 
-class OpenProblems(VoiceoverScene):
+class OpenProblems(StatsScene):
     def construct(self):
         self.card()
+        self.ask("Which approach needs no model of how the selection was made?",
+                 ["PoSI", "conditional selective inference"], 0,
+                 say="Where the frontier is. Of the approaches in this part, which needs nothing at all about the "
+                     "rule that made the selection?",
+                 reveal="PoSI: it covers every model at once. Conditioning needs the rule; randomization and "
+                        "splitting need to be planned. Each pays a different price.")
         self.prices()
         self.referee()
         self.problems()
+        self.answer()
+        self.checkpoint([("The winner's naive estimate?", "biased upward"),
+                         ("A $t$-test between clusters you found?", "tiny $p$-values even with one group")],
+                        narration="Checkpoint. Winners and clusters.",
+                        answers_narration="Biased upward. And tiny p-values.")
 
     def card(self):
-        card = chapter_card(10, r"Open problems", r"Where the frontier is", part=PART)
-        with self.voiceover("Chapter ten. Open problems: where the frontier of selective inference is."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(10, r"Open problems", r"Where the frontier is", part=PART, said="Chapter ten. Open problems: where the frontier of selective inference is.")
 
     def prices(self):
         hdr = [r"approach", r"what it needs", r"what it costs"]

@@ -5,9 +5,15 @@ import numpy as np
 from videos.stats.stats41.common import *  # noqa: F403
 
 
-class Misclassification(VoiceoverScene):
+class Misclassification(StatsScene):
     def construct(self):
         self.card()
+        self.ask("Nondifferential misclassification of a binary exposure biases an odds ratio...",
+                 ["usually toward 1", "away from 1"], 0,
+                 say="A binary exposure misclassified the same way in cases and controls. Which way does it usually "
+                     "bias the odds ratio?",
+                 reveal="Toward one: errors blur the two groups together. Usually, not always, and differential "
+                        "errors can push either way.")
         self.setup_study()
         self.matrix()
         self.curve()
@@ -16,12 +22,14 @@ class Misclassification(VoiceoverScene):
         self.outcomes()
         self.validation()
         self.lessons()
+        self.answer()
+        self.checkpoint([("Reliability 0.5: the slope?", "halved"),
+                         ("Nondifferential misclassification usually biases an OR?", "toward 1")],
+                        narration="Checkpoint. Errors in what we see.",
+                        answers_narration="Halved. And toward one.")
 
     def card(self):
-        card = chapter_card(9, r"Misclassification", r"When the category itself is wrong", lit=(1904,), part=PART)
-        with self.voiceover("Chapter nine. Misclassification."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(9, r"Misclassification", r"When the category itself is wrong", lit=(1904,), part=PART, said="Chapter nine. Misclassification.")
 
     def setup_study(self):
         rows = fit_rows(VGroup(

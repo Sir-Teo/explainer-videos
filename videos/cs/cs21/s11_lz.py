@@ -6,7 +6,7 @@ from explainer.cs import *  # noqa: F403
 from videos.cs.cs21.common import (CTRL, DATA, HEAD, LAM, NO, PART, YES, grid_table, load, mono, words)
 
 
-class Lz(VoiceoverScene):
+class Lz(WatchScene):
     def construct(self):
         self.card()
         self.arcs()
@@ -15,13 +15,13 @@ class Lz(VoiceoverScene):
         self.measured()
 
     def card(self):
-        card = chapter_card(10, r"Compression, \ I: \ Lempel and Ziv", r"How do you say it again, shorter?",
-                            lit=(1977, 1978), extra=((1977, r"LZ77"), (1978, r"LZ78")), part=PART)
-        with self.voiceover("Chapter ten. Compression, part one: Lempel and Ziv."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(10, r"Compression, \ I: \ Lempel and Ziv", r"How do you say it again, shorter?", lit=(1977, 1978), extra=((1977, r"LZ77"), (1978, r"LZ78")), part=PART, said="Chapter ten. Compression, part one: Lempel and Ziv.")
 
     def arcs(self):
+        self.ask(r"An LZ77 back-reference points to...", [r"a dictionary of English words",
+                 r"earlier text, inside a sliding window"], 1,
+                 say="What does a Lempel-Ziv back-reference point to?",
+                 reveal="Earlier text, within a sliding window: copy so many bytes from so far back.")
         d = load("lz")
         head = label(r"LZ77: \ point back to where you said it before", font_size=32).to_edge(UP, buff=0.3)
         txt = d["passage"][:150]
@@ -139,7 +139,7 @@ class Lz(VoiceoverScene):
         cap = label(r"above: \ the phrase's number; \ below: \ what is written, \ (earlier phrase, next character)",
                     font_size=18, color=GREY_A).next_to(chips, DOWN, buff=0.3)
         with self.voiceover(
-            "A year later Ziv and Lempel gave a second scheme. <bookmark mark='a'/> Keep a dictionary of phrases. Read the longest phrase already in it, write down its number, and add that phrase plus the next character as a new entry. <bookmark mark='b'/> The phrases grow one character at a time, so common stretches of text soon have a number of their own. <bookmark mark='c'/> Terry Welch's variant, LZW, starts with every single byte in the dictionary. It ran Unix's compress command and GIF images. <bookmark mark='d'/> Ziv and Lempel proved something remarkable: for any stationary ergodic source, the number of bits per character tends to the source's entropy rate, the best possible. <bookmark mark='e'/> That asymptotic result concerns classic universal LZ schemes. It is not a guarantee for our fixed thirty-two-kilobyte window and bounded match search."
+            "A year later Ziv and Lempel gave a second scheme. <bookmark mark='a'/> Keep a dictionary of phrases. Read the longest phrase already in it, write down its number, and add that phrase plus the next character as a new entry. <bookmark mark='b'/> The phrases grow one character at a time, so common stretches of text soon have a number of their own. <bookmark mark='c'/> Terry Welch's variant, LZW, starts with every single byte in the dictionary. It ran Unix's compress command and GIF images. <bookmark mark='d'/> Ziv and Lempel proved something remarkable: for any stationary ergodic source, the number of bits per character tends to the source's entropy rate, the best possible. <bookmark mark='e'/> That asymptotic result concerns classic universal LZ schemes."
         ) as vo:
             self.play(FadeIn(head))
             vo.wait_until("a")

@@ -6,7 +6,7 @@ from explainer.cs import *  # noqa: F403
 from videos.cs.cs40.common import (DATA, HEAD, KERN, LAM, NO, PART, YES, grid_table, load)
 
 
-class Process(VoiceoverScene):
+class Process(WatchScene):
     def construct(self):
         self.card()
         self.review()
@@ -16,14 +16,10 @@ class Process(VoiceoverScene):
         self.dora()
 
     def card(self):
-        card = chapter_card(8, r"Review and process", r"How does a team turn work into shipped software?",
-                            lit=(1970, 2018), extra=((1970, r"Royce: \ the waterfall, \ criticized"),
+        self.chapter(8, r"Review and process", r"How does a team turn work into shipped software?", lit=(1970, 2018), extra=((1970, r"Royce: \ the waterfall, \ criticized"),
                                                      (2001, r"the Agile Manifesto"),
                                                      (2013, r"Bacchelli and Bird: \ code review"),
-                                                     (2018, r"Forsgren, Humble and Kim: \ Accelerate")), part=PART)
-        with self.voiceover("Chapter eight. Review and process."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+                                                     (2018, r"Forsgren, Humble and Kim: \ Accelerate")), part=PART, said="Chapter eight. Review and process.")
 
     def review(self):
         head = label(r"Code review", font_size=36).to_edge(UP, buff=0.3)
@@ -100,6 +96,9 @@ class Process(VoiceoverScene):
         self.clear_scene()
 
     def wip(self):
+        self.ask(r"Lower the limit on work in progress. \\ Time to finish each item...", [r"rises", r"falls"], 1,
+                 say="A team lowers its limit on work in progress. What happens to the time each item takes to finish?",
+                 reveal="It falls: by Little's law, fewer items in the system at the same throughput.")
         k = load("kanban")
         head = label(r"Work in progress is a queue", font_size=36).to_edge(UP, buff=0.3)
         rows = []
@@ -234,6 +233,12 @@ class Process(VoiceoverScene):
             self.play(FadeIn(lines[1]))
         self.wait(0.4)
         self.clear_scene()
+        self.checkpoint(
+            [(r"What does a surviving mutant tell you?", r"A wrong program the tests can't tell from right"),
+             (r"Why integrate often?", r"Small merges conflict less")],
+            narration="Checkpoint. What does a surviving mutant tell you? And why integrate changes often?",
+            answers_narration="That the suite cannot tell a wrong program from the right one. And small, frequent merges "
+                              "conflict far less than big, late ones.")
 
 
 _ = (DATA, KERN)

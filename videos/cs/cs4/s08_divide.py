@@ -8,21 +8,16 @@ from videos.cs.cs4.common import BG, CODE, COST, CTRL, DATA, FUNC, HEAD, INF, NO
 QCOL = {-2: "#4C6EF5", -1: "#74C0FC", 0: "#5C677D", 1: "#FFD43B", 2: "#FF922B"}
 
 
-class Divide(VoiceoverScene):
+class Divide(WatchScene):
     def construct(self):
         self.card()
         self.restoring()
         self.srt()
         self.table_plot()
         self.fdiv()
-        self.newton()
 
     def card(self):
-        card = chapter_card(7, r"Division, \ and a famous bug", r"Why is dividing the hardest of the four?",
-                            lit=(1958, 1994), part=PART)
-        with self.voiceover("Chapter seven. Division, and a famous bug."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(7, r"Division, \ and a famous bug", r"Why is dividing the hardest of the four?", lit=(1958, 1994), part=PART, said="Chapter seven. Division, and a famous bug.")
 
     # ------------------------------------------------------------------
     def restoring(self):
@@ -176,6 +171,10 @@ class Divide(VoiceoverScene):
 
     # ------------------------------------------------------------------
     def fdiv(self):
+        self.ask(r"The Pentium's division bug (1994). \\ How many entries of its lookup table were wrong?",
+                 [r"1", r"5", r"about a thousand"], 1,
+                 say="In 1994 the Pentium divided some numbers wrongly. How many entries of its table were wrong?",
+                 reveal="Five, out of a thousand and sixty-six. It cost Intel four hundred and seventy-five million dollars.")
         d = load("divide")
         p = d["pentium"]
         head = label(r"1994: \ five missing entries", font_size=38).to_edge(UP, buff=0.3)
@@ -226,53 +225,3 @@ class Divide(VoiceoverScene):
         self.wait(0.3)
         self.clear_scene()
 
-    # ------------------------------------------------------------------
-    def newton(self):
-        d = load("divide")
-        nr = d["newton"]
-        head = label(r"Or divide by multiplying: \ Newton--Raphson", font_size=36).to_edge(UP, buff=0.35)
-        it = MathTex(r"y_{k+1} = y_k\,(2 - d\, y_k)", font_size=42, color=CODE).move_to(LEFT * 3.0 + UP * 1.8)
-        why = MathTex(r"e_{k+1} = d\, e_k^2 \quad \text{where } e_k = \tfrac1d - y_k", font_size=32,
-                      color=HEAD).next_to(it, DOWN, buff=0.35)
-        der = note(r"Newton's method on $f(y) = \tfrac1y - d$: \ the error squares at every step", font_size=22).next_to(
-            why, DOWN, buff=0.2)
-        rows = VGroup()
-        for r in nr:
-            err = r["err"]
-            rows.add(VGroup(MathTex(rf"k = {r['k']}", font_size=28, color=GREY_B),
-                            MathTex(rf"{r['y']:.16f}"[:18], font_size=28, color=DATA),
-                            MathTex(sci(err) if err else r"0 \ (\text{exact in float64})", font_size=28,
-                                    color=YES if err < 1e-6 else GREY_A)))
-        for i, r in enumerate(rows):
-            for j, m in enumerate(r):
-                m.move_to([[-5.6, -2.8, 1.6][j], -0.4 - 0.48 * i, 0], aligned_edge=LEFT)
-        tl = note(rf"$d = {d['nr_d']}$, \ first guess $0.75$ \ (from a small table)", font_size=22).next_to(rows, UP,
-                                                                                                         buff=0.2).align_to(rows, LEFT)
-        side = VGroup(label(r"correct digits double each step", font_size=26, color=YES),
-                      label(r"each step: two multiplications, \ on the fast tree multiplier", font_size=24, color=GREY_A),
-                      label(r"Goldschmidt's variant multiplies \\ numerator and denominator in parallel", font_size=24,
-                            color=GREY_A),
-                      note(r"used for division and square roots \ in many floating-point units", font_size=22)).arrange(
-            DOWN, aligned_edge=LEFT, buff=0.22).move_to(RIGHT * 3.6 + UP * 1.1)
-        with self.voiceover(
-            "There is a completely different way to divide: do not. Compute the reciprocal of d, and multiply. "
-            "<bookmark mark='a'/> To find one over d, apply Newton's method to the function one over y minus d. The "
-            "iteration needs only multiplications: y times two minus d y. <bookmark mark='b'/> And its error squares "
-            "at every step. If the error is a hundredth, the next is about a ten-thousandth. "
-            "<bookmark mark='c'/> Start from a rough guess read from a small table, and watch the correct digits "
-            "roughly double at every step. Five steps give one over one point seven to full double "
-            "precision. <bookmark mark='d'/> Each step costs two multiplications on the fast multiplier we just built. "
-            "Robert Goldschmidt's variant multiplies the numerator and the denominator by the same factors in "
-            "parallel, and floating-point units use these methods for division and square roots."
-        ) as vo:
-            self.play(FadeIn(head), FadeIn(it))
-            vo.wait_until("a")
-            self.play(Indicate(it, scale_factor=1.03))
-            vo.wait_until("b")
-            self.play(FadeIn(why), FadeIn(der))
-            vo.wait_until("c")
-            self.play(FadeIn(tl), LaggedStart(*[FadeIn(r) for r in rows], lag_ratio=0.4), run_time=3.0)
-            vo.wait_until("d")
-            self.play(LaggedStart(*[FadeIn(s) for s in side], lag_ratio=0.3))
-        self.wait(0.3)
-        self.clear_scene()

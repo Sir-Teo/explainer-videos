@@ -13,10 +13,10 @@ def proc_box(name, color, pos, lines):
     return VGroup(r, t, body)
 
 
-class Hook(VoiceoverScene):
+class Hook(WatchScene):
     def construct(self):
         self.same()
-        self.plan()
+        self.title(PART)
 
     def same(self):
         d = load("sameva")
@@ -67,27 +67,3 @@ class Hook(VoiceoverScene):
         self.wait(0.3)
         self.clear_scene()
 
-    def plan(self):
-        title = label(rf"Part {PART}: \ Virtual Memory", font_size=46).to_edge(UP, buff=0.4)
-        smap = series_map(current=PART, done=PART - 1).scale(0.92).next_to(title, DOWN, buff=0.35)
-        obj = objectives_card([
-            r"relocation and protection: \ from base and bounds to pages",
-            r"page tables as a tree walked by hardware, \ and the TLB that caches it, \ measured here",
-            r"page faults and demand paging: \ what a miss to disk costs",
-            r"which page to evict: \ Belady's optimum, \ his anomaly, \ LRU, \ CLOCK, \ ARC, \ LIRS",
-            r"copy-on-write, \ the kernel's mapping and Meltdown, \ buddy and slab allocators",
-            r"virtual machines and containers: \ PebbleOS on our own hypervisor",
-        ], font_size=26).move_to(DOWN * 0.2)
-        with self.voiceover(
-            "Part 32 of Computer Science, Built: Virtual Memory. <bookmark mark='a'/> In this part: why programs need "
-            "relocation and protection, and why pages won; page tables, the tree the hardware walks on every access, "
-            "and the cache that makes it fast, measured on this machine; page faults, and what a trip to the disk "
-            "costs; which page to throw out when memory is full, with the optimum, a famous anomaly, and the policies "
-            "in real systems; copy-on-write, the kernel's own mapping and Meltdown, and the kernel's allocators; and "
-            "virtual machines and containers, with our own operating system running on a hypervisor we write."
-        ) as vo:
-            self.play(FadeIn(title), FadeIn(smap))
-            vo.wait_until("a")
-            self.play(FadeOut(smap), FadeIn(obj))
-        self.wait(0.5)
-        self.clear_scene()

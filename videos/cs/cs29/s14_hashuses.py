@@ -4,22 +4,21 @@ from explainer.cs import *  # noqa: F403
 from videos.cs.cs29.common import (BG, DATA, HEAD, NO, PART, YES, grid_table, load, mono)
 
 
-class HashUses(VoiceoverScene):
+class HashUses(WatchScene):
     def construct(self):
         self.card()
         self.merkle()
-        self.commit()
         self.passwords()
 
     def card(self):
-        card = chapter_card(13, r"Hashes at work", r"What can a fingerprint prove?", lit=(1979, 2005, 2013),
-                            extra=((1979, r"Merkle's trees"), (2005, r"git"), (2013, r"Certificate Transparency"),
-                                   (2015, r"Argon2")), part=PART)
-        with self.voiceover("Chapter thirteen. Hashes at work."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(13, r"Hashes at work", r"What can a fingerprint prove?", lit=(1979, 2005, 2013), extra=((1979, r"Merkle's trees"), (2005, r"git"), (2013, r"Certificate Transparency"),
+                                   (2015, r"Argon2")), part=PART, said="Chapter thirteen. Hashes at work.")
 
     def merkle(self):
+        self.ask(r"A Merkle tree over a million items. \\ Proving one item is included takes...", [r"$20$ hashes",
+                 r"$1000$ hashes", r"a million"], 0,
+                 say="A Merkle tree over a million items. How many hashes prove that one item is in it?",
+                 reveal="Twenty: one sibling per level.")
         m = load("merkle")
         head = label(r"A Merkle tree over eight commits", font_size=34).to_edge(UP, buff=0.3)
         levels = m["levels"]
@@ -94,51 +93,6 @@ class HashUses(VoiceoverScene):
         self.wait(0.3)
         self.clear_scene()
 
-    def commit(self):
-        head = label(r"Commit now, \ reveal later", font_size=34).to_edge(UP, buff=0.3)
-        A = label(r"Alice", font_size=24, color=DATA).move_to([-4.2, 2.0, 0])
-        B = label(r"Bob", font_size=24, color=HEAD).move_to([4.2, 2.0, 0])
-        steps = [(1.2, r"$c = H(r \,\|\, \textrm{heads})$", "R", DATA),
-                 (0.4, r"Bob's call: \ \textrm{tails}", "L", HEAD),
-                 (-0.4, r"$r$, \ \textrm{heads}", "R", DATA)]
-        arrows = VGroup()
-        for y, t, d, c in steps:
-            a, b = ([-3.6, y, 0], [3.6, y, 0]) if d == "R" else ([3.6, y, 0], [-3.6, y, 0])
-            ar = Arrow(a, b, buff=0, stroke_width=2.5, color=c, max_tip_length_to_length_ratio=0.03)
-            arrows.add(VGroup(ar, label(t, font_size=21, color=WHITE).next_to(ar, UP, buff=0.06)))
-        check = label(r"Bob checks $H(r \,\|\, \textrm{heads}) = c$: \ Alice won, \ fairly", font_size=21,
-                      color=YES).move_to([0, -1.1, 0])
-        lines = VGroup(
-            label(r"\textbf{hiding}: \ $c$ reveals nothing about the choice \ (the random $r$ makes guessing useless)",
-                  font_size=21, color=WHITE),
-            label(r"\textbf{binding}: \ Alice cannot open $c$ as tails \ (that would be a collision)", font_size=21,
-                  color=HEAD),
-            label(r"coin flipping by telephone \ (Blum, 1981); \ sealed bids; \ zero-knowledge proofs \ (Part 27)",
-                  font_size=21, color=DATA),
-        ).arrange(DOWN, buff=0.18).to_edge(DOWN, buff=0.4)
-        with self.voiceover(
-            "The same binding works for a single secret. <bookmark mark='a'/> Alice and Bob want to flip a coin by "
-            "telephone. Alice chooses heads, and sends the hash of a long random string followed by her choice. "
-            "<bookmark mark='b'/> Bob calls tails. <bookmark mark='c'/> Alice reveals the random string and her "
-            "choice; Bob hashes them and checks. <bookmark mark='d'/> The commitment is hiding: the random string "
-            "keeps Bob from simply hashing both possible choices. <bookmark mark='e'/> And it is binding: to claim "
-            "tails afterwards, Alice would need a collision. <bookmark mark='f'/> Manuel Blum described coin "
-            "flipping by telephone in 1981. Commitments run through sealed-bid auctions and the zero-knowledge proofs "
-            "of Part 27."
-        ) as vo:
-            self.play(FadeIn(head), FadeIn(A), FadeIn(B))
-            vo.wait_until("a")
-            self.play(FadeIn(arrows[0]))
-            vo.wait_until("b")
-            self.play(FadeIn(arrows[1]))
-            vo.wait_until("c")
-            self.play(FadeIn(arrows[2]))
-            self.play(FadeIn(check))
-            for mk, ln in zip("def", lines):
-                vo.wait_until(mk)
-                self.play(FadeIn(ln))
-        self.wait(0.3)
-        self.clear_scene()
 
     def passwords(self):
         p = load("passwords")

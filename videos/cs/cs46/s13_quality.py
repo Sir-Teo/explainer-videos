@@ -9,23 +9,22 @@ def tick(ok: bool, size=20):
     return label(r"\checkmark" if ok else r"$\times$", font_size=size, color=YES if ok else NO)
 
 
-class Quality(VoiceoverScene):
+class Quality(WatchScene):
     def construct(self):
         self.card()
         self.evolution()
         self.contracts()
         self.tests()
-        self.lineage()
         self.publish()
 
     def card(self):
-        card = chapter_card(12, r"Data you can trust", r"How do you know the numbers on the dashboard are right?",
-                            lit=(2009, 2016), extra=((2009, r"Apache Avro"), (2016, r"dbt")), part=PART)
-        with self.voiceover("Chapter twelve. Data you can trust."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(12, r"Data you can trust", r"How do you know the numbers on the dashboard are right?", lit=(2009, 2016), extra=((2009, r"Apache Avro"), (2016, r"dbt")), part=PART, said="Chapter twelve. Data you can trust.")
 
     def evolution(self):
+        self.ask(r"Add an optional field with a default. \\ Last year's records...", [r"break readers",
+                 r"read with the default"], 1,
+                 say="An order record gains an optional field with a default. What happens to last year's records?",
+                 reveal="They read with the default. Compatible changes only.")
         head = label(r"Schema evolution", font_size=36).to_edge(UP, buff=0.3)
         v1 = code_block(["record Order {", "  long   order_id;", "  long   amount;", "  string city;", "}"], size=16)
         v2 = code_block(["record Order {", "  long   order_id;", "  long   amount;", "  string city;",
@@ -213,82 +212,6 @@ class Quality(VoiceoverScene):
         self.wait(0.4)
         self.clear_scene()
 
-    def lineage(self):
-        head = label(r"Lineage", font_size=36).to_edge(UP, buff=0.3)
-        layers = [
-            (r"sources", KERN, [("orders", r"orders database"), ("pay", r"payments API"), ("clicks", r"clickstream")]),
-            (r"staging", LAM, [("s_orders", r"\texttt{stg\_orders}"), ("s_pay", r"\texttt{stg\_payments}"),
-                               ("s_clicks", r"\texttt{stg\_clicks}")]),
-            (r"marts", DATA, [("rev", r"\texttt{revenue}"), ("ltv", r"\texttt{customer\_ltv}"),
-                              ("funnel", r"\texttt{funnel}")]),
-            (r"consumers", YES, [("fin", r"finance dashboard"), ("churn", r"churn model"),
-                                 ("email", r"weekly email")]),
-        ]
-        edges = [("orders", "s_orders"), ("pay", "s_pay"), ("clicks", "s_clicks"), ("s_orders", "rev"),
-                 ("s_pay", "rev"), ("s_orders", "ltv"), ("s_pay", "ltv"), ("s_orders", "funnel"),
-                 ("s_clicks", "funnel"), ("rev", "fin"), ("ltv", "churn"), ("rev", "email"), ("funnel", "email")]
-        xs = [-5.3, -1.85, 1.6, 5.05]
-        ys = [1.75, 0.65, -0.45]
-        node, titles = {}, VGroup()
-        for (title, color, items), x in zip(layers, xs):
-            titles.add(label(title, font_size=18, color=GREY_B).move_to([x, 2.6, 0]))
-            for (key, text), y in zip(items, ys):
-                node[key] = module_box(text, color, w=2.6, h=0.55, font=17).move_to([x, y, 0])
-        arrows = {(a, b): Arrow(node[a].get_right(), node[b].get_left(), buff=0.06, stroke_width=1.8, color=GREY_C,
-                                max_tip_length_to_length_ratio=0.1) for a, b in edges}
-        bad = "s_pay"
-
-        def reach(start, forward=True):
-            seen, todo = set(), [start]
-            while todo:
-                v = todo.pop()
-                for a, b in edges:
-                    nxt = b if forward else a
-                    if (a if forward else b) == v and nxt not in seen:
-                        seen.add(nxt)
-                        todo.append(nxt)
-            return seen
-        down, up = reach(bad), reach(bad, forward=False)
-        cross = label(r"test fails", font_size=17, color=NO).next_to(node[bad], DOWN, buff=0.12)
-        lines = VGroup(
-            wrapped_label(r"dbt reads the graph from each model's \texttt{ref()} calls and builds in topological "
-                          r"order: \ Part 41's build system, \ with tables for files", 12.4, font_size=20,
-                          color=WHITE),
-            wrapped_label(r"forward from a failure: \ everything now suspect, \ to stop and to warn; \ backward: \ "
-                          r"the way to the cause", 12.4, font_size=20, color=NO),
-            wrapped_label(r"lineage by column narrows it further; \ OpenLineage is an open format in which "
-                          r"schedulers and engines report these edges as they run", 12.4, font_size=20, color=HEAD),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.2).to_edge(DOWN, buff=0.35)
-        with self.voiceover(
-            "Tables are built from tables, and their dependencies form a graph. <bookmark mark='a'/> Sources feed "
-            "staging tables, which feed the marts analysts query, which feed dashboards, models and reports. dbt "
-            "reads this graph from the references in each model's SQL and builds it in topological order: Part 41's "
-            "build system, with tables for files. <bookmark mark='b'/> Now a test on the staging payments table "
-            "fails. Following edges forward, the graph names everything now suspect; those builds stop, and their "
-            "owners are told. <bookmark mark='c'/> Following edges backward leads towards the cause, the payments "
-            "interface. <bookmark mark='d'/> Column-level lineage narrows it further, and the OpenLineage standard "
-            "lets engines report these edges as they run."
-        ) as vo:
-            self.play(FadeIn(head), FadeIn(titles))
-            vo.wait_until("a")
-            for k in range(4):
-                keys = [key for key, _ in layers[k][2]]
-                into = [arrows[e] for e in edges if e[1] in keys]
-                self.play(*[GrowArrow(a) for a in into], *[FadeIn(node[key]) for key in keys], run_time=0.8)
-            self.play(FadeIn(lines[0]))
-            vo.wait_until("b")
-            self.play(node[bad][0].animate.set_stroke(NO, width=4).set_fill(NO, opacity=0.3), FadeIn(cross))
-            self.play(*[node[k][0].animate.set_stroke(NO, width=3).set_fill(NO, opacity=0.15) for k in down],
-                      *[a.animate.set_color(NO) for (s, t), a in arrows.items() if s == bad or s in down],
-                      run_time=1.5)
-            self.play(FadeIn(lines[1]))
-            vo.wait_until("c")
-            self.play(*[node[k][0].animate.set_stroke(HEAD, width=4) for k in up],
-                      *[a.animate.set_color(HEAD) for (s, t), a in arrows.items() if t == bad or t in up])
-            vo.wait_until("d")
-            self.play(FadeIn(lines[2]))
-        self.wait(0.4)
-        self.clear_scene()
 
     def publish(self):
         head = label(r"Write, \ audit, \ publish", font_size=36).to_edge(UP, buff=0.3)

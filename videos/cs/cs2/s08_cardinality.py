@@ -6,23 +6,21 @@ from explainer.cs import *  # noqa: F403
 from videos.cs.cs2.common import ADV, CTRL, DATA, FUNC, HEAD, INF, LIMIT, NO, PART, YES, load
 
 
-class Cardinality(VoiceoverScene):
+class Cardinality(WatchScene):
     def construct(self):
         self.card()
         self.rationals()
-        self.pairing()
-        self.bernstein()
         self.cantor()
 
     def card(self):
-        card = chapter_card(7, r"Sizes of infinity", r"When are two infinite sets the same size?", lit=(1874, 1891),
-                            part=PART)
-        with self.voiceover("Chapter seven. Sizes of infinity."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(7, r"Sizes of infinity", r"When are two infinite sets the same size?", lit=(1874, 1891), part=PART, said="Chapter seven. Sizes of infinity.")
 
     # ------------------------------------------------------------------
     def rationals(self):
+        self.ask(r"Fractions, \\ or whole numbers: \\ which are there more of?",
+                 [r"fractions", r"whole numbers", r"exactly as many"], 2,
+                 say="Between any two whole numbers lie infinitely many fractions. So which are there more of?",
+                 reveal="Exactly as many. The listing pairs every fraction with one whole number.")
         d = load("rationals")
         cw = d["calkin_wilf"]
         head = label(r"Every positive fraction, \ exactly once", font_size=38).to_edge(UP, buff=0.3)
@@ -67,94 +65,7 @@ class Cardinality(VoiceoverScene):
         self.wait(0.3)
         self.clear_scene()
 
-    # ------------------------------------------------------------------
-    def pairing(self):
-        d = load("rationals")
-        P = d["pairing"]
-        head = label(r"Pairs of numbers, \ numbered by a formula", font_size=38).to_edge(UP, buff=0.35)
-        n = 6
-        cells = VGroup()
-        for x in range(n):
-            for y in range(n):
-                v = P[x][y]
-                diag = x + y
-                cells.add(VGroup(Square(0.66, stroke_color=GREY_D, stroke_width=1,
-                                        fill_color=interpolate_color(ManimColor(DATA), ManimColor(INF), diag / 10),
-                                        fill_opacity=0.25),
-                                 MathTex(str(v), font_size=28)).move_to([y * 0.66, -x * 0.66, 0]))
-        cells.move_to(LEFT * 3.0 + DOWN * 0.5)
-        xl = MathTex("x", font_size=32, color=DATA).next_to(cells, LEFT, buff=0.3)
-        yl = MathTex("y", font_size=32, color=DATA).next_to(cells, UP, buff=0.2)
-        f = MathTex(r"\pi(x, y) = \frac{(x + y)(x + y + 1)}{2} + y", font_size=42, color=FUNC).move_to(
-            RIGHT * 3.2 + UP * 0.9)
-        txt = VGroup(note(r"pairs on diagonal $s = x + y$ \ come after the $\tfrac{s(s+1)}{2}$ \ on earlier diagonals",
-                          font_size=22),
-                     note(r"a bijection $\mathbb{N} \times \mathbb{N} \to \mathbb{N}$, \ with an inverse you can compute",
-                          font_size=22)).arrange(DOWN, aligned_edge=LEFT, buff=0.15).next_to(f, DOWN, buff=0.4)
-        use = label(r"so a program can encode any pair, \ list, \\ or program \ as one number", font_size=26,
-                    color=HEAD).next_to(txt, DOWN, buff=0.5)
-        with self.voiceover(
-            "Part 1 walked the grid of pairs along its diagonals. That walk has a formula. <bookmark mark='a'/> Number "
-            "the pair x, y by where it falls in the walk. <bookmark mark='b'/> The pairs on diagonal s come after all "
-            "the earlier diagonals, which hold one plus two up to s pairs, the sum from chapter three. Add y, the "
-            "position along the diagonal, and you have Cantor's pairing function. <bookmark mark='c'/> It is a bijection "
-            "from pairs of numbers to numbers, and both directions are computable. Apply it again and again, and a "
-            "single number can encode a list, a tree, or a whole program. That is how Gödel encoded statements as "
-            "numbers, and how Part 25 will let programs talk about programs."
-        ) as vo:
-            self.play(FadeIn(head))
-            vo.wait_until("a")
-            self.play(FadeIn(xl), FadeIn(yl),
-                      LaggedStart(*[FadeIn(c) for c in sorted(cells, key=lambda m: int(m[1].tex_string))],
-                                  lag_ratio=0.03), run_time=2.6)
-            vo.wait_until("b")
-            self.play(Write(f), FadeIn(txt[0]))
-            vo.wait_until("c")
-            self.play(FadeIn(txt[1]), FadeIn(use))
-        self.wait(0.3)
-        self.clear_scene()
 
-    # ------------------------------------------------------------------
-    def bernstein(self):
-        head = label(r"Injections both ways are enough", font_size=38).to_edge(UP, buff=0.35)
-        thm = theorem_card(r"Cantor--Schr\"oder--Bernstein", r"If $A$ injects into $B$ and $B$ injects into $A$, then "
-                           r"there is a bijection between them.", width=8.0, font_size=26).next_to(head, DOWN, buff=0.4)
-        a = NumberLine(x_range=[0, 1, 0.25], length=5.0, color=DATA, include_numbers=True, font_size=22).move_to(
-            UP * -0.9 + LEFT * 3.2)
-        b = NumberLine(x_range=[0, 1, 0.25], length=5.0, color=CTRL, include_numbers=True, font_size=22).move_to(
-            UP * -0.9 + RIGHT * 3.2)
-        la = MathTex(r"(0, 1)", font_size=32, color=DATA).next_to(a, UP, buff=0.3)
-        lb = MathTex(r"[0, 1]", font_size=32, color=CTRL).next_to(b, UP, buff=0.3)
-        open_ends = VGroup(Circle(0.08, color=DATA, stroke_width=3).move_to(a.n2p(0)),
-                           Circle(0.08, color=DATA, stroke_width=3).move_to(a.n2p(1)))
-        closed = VGroup(Dot(b.n2p(0), color=CTRL, radius=0.08), Dot(b.n2p(1), color=CTRL, radius=0.08))
-        f = MathTex(r"f(x) = x", font_size=32, color=FUNC)
-        g = MathTex(r"g(y) = \tfrac{y}{2} + \tfrac14", font_size=32, color=FUNC)
-        VGroup(f, g).arrange(RIGHT, buff=2.0).to_edge(DOWN, buff=1.2)
-        fn = note(r"$(0,1)$ into $[0,1]$", font_size=22).next_to(f, DOWN, buff=0.12)
-        gn = note(r"$[0,1]$ into $[\tfrac14, \tfrac34] \subset (0,1)$", font_size=22).next_to(g, DOWN, buff=0.12)
-        concl = label(r"so they are the same size, \ without first finding a bijection", font_size=26,
-                      color=YES).to_edge(DOWN, buff=0.25)
-        with self.voiceover(
-            "Finding an exact bijection can be hard. A theorem makes it unnecessary. <bookmark mark='a'/> If A fits "
-            "one-to-one inside B, and B fits one-to-one inside A, then there is a bijection between them. "
-            "<bookmark mark='b'/> Example: the open interval from zero to one, and the closed one, which also contains "
-            "its two endpoints. <bookmark mark='c'/> The open one sits inside the closed one, unchanged. The closed one "
-            "shrinks into the middle half of the open one. So they are the same size, without our first having "
-            "to write a bijection between them. The proof follows each element back and forth through the two "
-            "maps and builds the pairing from those chains."
-        ) as vo:
-            self.play(FadeIn(head))
-            vo.wait_until("a")
-            self.play(FadeIn(thm))
-            vo.wait_until("b")
-            self.play(Create(a), Create(b), FadeIn(la), FadeIn(lb), FadeIn(open_ends), FadeIn(closed))
-            vo.wait_until("c")
-            self.play(FadeIn(f), FadeIn(fn))
-            self.play(FadeIn(g), FadeIn(gn))
-            self.play(FadeIn(concl))
-        self.wait(0.3)
-        self.clear_scene()
 
     # ------------------------------------------------------------------
     def cantor(self):

@@ -7,9 +7,15 @@ from videos.stats.stats23.common import *  # noqa: F403
 QCOL = [BLUE, TEAL, PATH, GLS_C, RED]
 
 
-class Quantile(VoiceoverScene):
+class Quantile(StatsScene):
     def construct(self):
         self.card()
+        self.ask(r"Quantile regression at $\tau = 0.9$ penalizes positive residuals...",
+                 ["9 times as much as negative ones", "equally", "0.9 times as much"], 0,
+                 say="Quantile regression's check loss tilts the absolute value. At the ninetieth percentile, how "
+                     "much more does it charge a positive residual than a negative one?",
+                 reveal="Nine times: point nine against point one. The line settles where ninety percent of the "
+                        "points lie below it.")
         self.idea()
         self.fan()
         self.asymptotics()
@@ -17,12 +23,14 @@ class Quantile(VoiceoverScene):
         self.qte()
         self.engel()
         self.properties()
+        self.answer()
+        self.checkpoint([("Treatment by school, 40 schools: the effective $n$ is near?", "40"),
+                         ("Reliability 0.8: the OLS slope tends to?", r"$0.8\,\beta$")],
+                        narration="Checkpoint. Clusters and noise.",
+                        answers_narration="About forty. And point eight beta.")
 
     def card(self):
-        card = chapter_card(8, r"Quantile regression", r"Not just the mean", lit=(1978,), part=PART)
-        with self.voiceover("Chapter eight. Quantile regression."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(8, r"Quantile regression", r"Not just the mean", lit=(1978,), part=PART, said="Chapter eight. Quantile regression.")
 
     def idea(self):
         rows = [

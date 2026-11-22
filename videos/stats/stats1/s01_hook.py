@@ -5,13 +5,13 @@ import numpy as np
 from videos.stats.stats1.common import *  # noqa: F403
 
 
-class Hook(VoiceoverScene):
+class Hook(StatsScene):
     def construct(self):
         self.bills()
         self.reasoning()
         self.life_table()
         self.question()
-        self.objectives()
+        self.title(PART)
 
     # ------------------------------------------------------------------
     def bill_card(self):
@@ -193,29 +193,4 @@ class Hook(VoiceoverScene):
                 self.play(*[Indicate(smap.cols[c].head, color=S.ACCENT, scale_factor=1.15) for c in cols])
             vo.wait_until("g")
             self.play(Indicate(smap.part[1], color=S.ACCENT, scale_factor=1.4))
-        self.clear_scene()
-
-    def objectives(self):
-        head = VGroup(label(r"Part 1", font_size=34, color=GREY_B), label(r"The Shape of Data", font_size=64))
-        head.arrange(DOWN, buff=0.25)
-        obj = objectives_card([
-            r"populations and samples; \ the World, a population whose truth we know",
-            r"histograms, \ and the centre and spread of data as answers to optimization problems",
-            r"quantiles and box plots; \ skew, heavy tails and power laws; \ QQ plots and transformations",
-            r"correlation as the cosine of an angle",
-            r"how the same summaries hide different pictures, \ and how aggregation reverses conclusions",
-            r"honest graphics; \ and the discovery that every summary is itself random",
-        ], color=S.ACCENT, font_size=26)
-        with self.voiceover(
-            "Part one: the shape of data. <bookmark mark='a'/> In this part: what a population and a sample are, "
-            "and a world we'll build so that we always know the truth. Histograms, and the centre and spread of "
-            "data, which turn out to be answers to optimization problems. Quantiles and box plots; skew, heavy "
-            "tails and power laws; QQ plots and transformations. Correlation, seen as an angle. How the same "
-            "summary statistics can hide completely different pictures, and how combining groups can reverse a "
-            "conclusion. Honest graphics. And at the end, the discovery that makes the rest of the series "
-            "necessary: every summary we compute is itself random."
-        ) as vo:
-            self.play(FadeIn(head, shift=UP * 0.2))
-            vo.wait_until("a")
-            self.play(FadeOut(head), FadeIn(obj, shift=UP * 0.2))
         self.clear_scene()

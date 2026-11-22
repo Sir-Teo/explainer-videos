@@ -4,20 +4,19 @@ from explainer.cs import *  # noqa: F403
 from videos.cs.cs25.common import (CTRL, DATA, HEAD, LAM, NO, PART, YES, load, mono, words)
 
 
-class Recursion(VoiceoverScene):
+class Recursion(WatchScene):
     def construct(self):
         self.card()
         self.quines()
         self.theorem()
 
     def card(self):
-        card = chapter_card(4, r"Programs that know their own code", r"Can a program print itself?", lit=(1938,),
-                            extra=((1938, r"Kleene's recursion theorem"),), part=PART)
-        with self.voiceover("Chapter four. Programs that know their own code."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(4, r"Programs that know their own code", r"Can a program print itself?", lit=(1938,), extra=((1938, r"Kleene's recursion theorem"),), part=PART, said="Chapter four. Programs that know their own code.")
 
     def quines(self):
+        self.ask(r"Can a program print exactly its own source code?", [r"no", r"yes"], 1,
+                 say="Can a program print exactly its own source code, without reading its file?",
+                 reveal="Yes. It's called a quine, and the recursion theorem says every language has them.")
         q = load("quines")
         head = label(r"Quines", font_size=34).to_edge(UP, buff=0.3)
         py = VGroup(*[mono(ln, 20, LAM) for ln in q["python"].strip().splitlines()]).arrange(DOWN, aligned_edge=LEFT,
@@ -87,3 +86,9 @@ class Recursion(VoiceoverScene):
                 self.play(FadeIn(ln, shift=UP * 0.1))
         self.wait(0.3)
         self.clear_scene()
+        self.checkpoint(
+            [(r"What does Rice's theorem forbid?", r"Deciding any nontrivial property of a program's behaviour"),
+             (r"How do you prove $B$ undecidable?", r"Reduce a known undecidable problem to it")],
+            narration="Checkpoint. What does Rice's theorem forbid? And how do you prove a new problem undecidable?",
+            answers_narration="Deciding any nontrivial property of what programs compute. And by reducing a known "
+                              "undecidable problem to it.")

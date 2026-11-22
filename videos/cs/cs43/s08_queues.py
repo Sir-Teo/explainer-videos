@@ -8,7 +8,7 @@ def msg_square(color=DATA, side=0.38):
     return Square(side_length=side, stroke_color=color, stroke_width=1.5, fill_color=color, fill_opacity=0.6)
 
 
-class Queues(VoiceoverScene):
+class Queues(WatchScene):
     def construct(self):
         self.card()
         self.decouple()
@@ -18,12 +18,8 @@ class Queues(VoiceoverScene):
         self.partitions()
 
     def card(self):
-        card = chapter_card(7, r"Queues and pub/sub", r"How do services talk without waiting for each other?",
-                            lit=(2003, 2011), extra=((2003, r"Hohpe and Woolf: \ integration patterns"),
-                                                     (2011, r"Kafka \ (LinkedIn)")), part=PART)
-        with self.voiceover("Chapter seven. Queues, and publish and subscribe."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(7, r"Queues and pub/sub", r"How do services talk without waiting for each other?", lit=(2003, 2011), extra=((2003, r"Hohpe and Woolf: \ integration patterns"),
+                                                     (2011, r"Kafka \ (LinkedIn)")), part=PART, said="Chapter seven. Queues, and publish and subscribe.")
 
     def decouple(self):
         head = label(r"A buffer between two services", font_size=36).to_edge(UP, buff=0.3)
@@ -74,6 +70,10 @@ class Queues(VoiceoverScene):
         self.clear_scene()
 
     def visibility(self):
+        self.ask(r"A consumer crashes halfway through a message. \\ The message...", [r"is lost",
+                 r"reappears after a timeout"], 1,
+                 say="A consumer takes a message from the queue and crashes halfway through. What happens to the message?",
+                 reveal="It becomes visible again after a timeout, and another consumer takes it.")
         v = load("visibility")
         T = v["timeout"]
         head = label(r"Receive, \ hide, \ delete", font_size=36).to_edge(UP, buff=0.3)

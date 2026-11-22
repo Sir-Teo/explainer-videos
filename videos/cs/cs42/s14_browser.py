@@ -28,23 +28,22 @@ def _tt(s: str) -> str:
     return "".join(out)
 
 
-class Browser(VoiceoverScene):
+class Browser(WatchScene):
     def construct(self):
         self.card()
         self.stages()
         self.boxes()
         self.timing()
-        self.missing()
 
     def card(self):
-        card = chapter_card(13, r"Our toy browser", r"What does it take to turn text into a page?",
-                            lit=(1990, 2004), extra=((1990, r"WorldWideWeb, \ the first browser"),
-                                                     (2004, r"WHATWG founded")), part=PART)
-        with self.voiceover("Chapter thirteen. Our toy browser."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(13, r"Our toy browser", r"What does it take to turn text into a page?", lit=(1990, 2004), extra=((1990, r"WorldWideWeb, \ the first browser"),
+                                                     (2004, r"WHATWG founded")), part=PART, said="Chapter thirteen. Our toy browser.")
 
     def stages(self):
+        self.ask(r"Our toy browser shows the README. \\ Its stages, in order:", [r"layout, parse, style, paint",
+                 r"parse, style, layout, paint"], 1,
+                 say="Our toy browser displays the series README. In what order do its stages run?",
+                 reveal="Parse, style, layout, paint: the same pipeline as every real engine.")
         p = load("pipeline")
         head = label(r"Five stages, \ one page", font_size=36).to_edge(UP, buff=0.3)
 
@@ -191,42 +190,6 @@ class Browser(VoiceoverScene):
         self.wait(0.4)
         self.clear_scene()
 
-    def missing(self):
-        head = label(r"What a real browser adds", font_size=36).to_edge(UP, buff=0.3)
-        rows = [
-            [r"parsing", r"a dozen states, \ one repair rule", r"about 80 states, \ insertion modes, \ full recovery"],
-            [r"CSS", r"tags, \ classes, \ ids, \ descendants", r"hundreds of properties, \ selectors, \ at-rules"],
-            [r"layout", r"blocks and greedy lines", r"floats, \ tables, \ flex, \ grid, \ bidi text, \ hyphens"],
-            [r"painting", r"one pass into a PNG", r"display lists, \ layers, \ GPU tiles"],
-            [r"scripts", r"none", r"an engine with three or four compiler tiers"],
-            [r"networking", r"none", r"HTTP/1.1--3, \ caches, \ TLS, \ service workers"],
-            [r"security", r"none", r"origins, \ sandboxed processes, \ site isolation"],
-        ]
-        tab = grid_table([r"", r"ours", r"a real engine"], rows, widths=[2.2, 4.4, 6.4], row_h=0.5, font_size=18,
-                         mono_cols=())
-        tab.next_to(head, DOWN, buff=0.35)
-        foot = wrapped_label(r"Chromium is tens of millions of lines; \ the open book \textit{Web Browser "
-                             r"Engineering} \ (Panchekha and Harrelson) \ builds a far fuller browser than ours, \ "
-                             r"in a few thousand lines of Python", 12.4, font_size=20, color=HEAD).to_edge(DOWN,
-                                                                                                    buff=0.4)
-        with self.voiceover(
-            "And what it leaves out. <bookmark mark='a'/> Our parser has a dozen states and one repair rule for "
-            "misnested formatting; the standard's tokenizer has about eighty states, and the tree builder has "
-            "insertion modes for tables, forms and scripts. Our CSS knows tags, classes, identifiers and "
-            "descendants. Our layout knows blocks and greedy lines, not floats, tables, flexbox, grid, "
-            "bidirectional text or hyphenation. And it runs no scripts, fetches nothing and needs no security, "
-            "because it trusts its only input. <bookmark mark='b'/> A real engine is tens of millions of lines. "
-            "If you want to go further, the open book Web Browser Engineering, by Pavel Panchekha and Chris "
-            "Harrelson, builds a much fuller browser in a few thousand lines of Python."
-        ) as vo:
-            self.play(FadeIn(head))
-            vo.wait_until("a")
-            self.play(FadeIn(tab.rule), FadeIn(VGroup(*tab.cells[0])))
-            self.play(LaggedStart(*[FadeIn(VGroup(*r)) for r in tab.cells[1:]], lag_ratio=0.3), run_time=4)
-            vo.wait_until("b")
-            self.play(FadeIn(foot))
-        self.wait(0.4)
-        self.clear_scene()
 
 
 _ = (DATA, LAM, NO, YES, bar_chart, _tt)

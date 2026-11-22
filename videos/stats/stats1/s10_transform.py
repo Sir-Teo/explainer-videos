@@ -10,20 +10,24 @@ def boxcox(y, lam):
     return np.log(y) if abs(lam) < 1e-9 else (y ** lam - 1) / lam
 
 
-class Transform(VoiceoverScene):
+class Transform(StatsScene):
     def construct(self):
         self.card()
+        self.ask(r"Counts with mean $\mu$ have variance $\mu$. Which transform steadies the variance?",
+                 ["the logarithm", "the square root", "squaring"], 1,
+                 say="Counts whose variance equals their mean: the bigger the count, the noisier. Which "
+                     "transformation makes the variance roughly constant: the logarithm, the square root, or "
+                     "squaring?",
+                 reveal="The square root. Its variance is about one quarter whatever the mean, by the delta method "
+                        "at the end of this chapter.")
         self.family()
         self.live()
         self.likelihood()
         self.stabilize()
+        self.answer()
 
     def card(self):
-        card = chapter_card(9, r"Transformations", r"Change the ruler, and the shape changes with it", lit=(),
-                            part=PART)
-        with self.voiceover("Chapter nine. Transformations."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(9, r"Transformations", r"Change the ruler, and the shape changes with it", lit=(), part=PART, said="Chapter nine. Transformations.")
 
     def family(self):
         A = axes([0, 3], [-2.5, 3], x_length=6.0, y_length=4.8, xlabel=r"$y$", ylabel=r"$y^{(\lambda)}$",

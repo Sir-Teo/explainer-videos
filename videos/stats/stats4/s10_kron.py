@@ -7,20 +7,23 @@ from videos.stats.stats4.common import *  # noqa: F403
 from videos.stats.stats4.s01_hook import heatmap
 
 
-class Kron(VoiceoverScene):
+class Kron(StatsScene):
     def construct(self):
         self.card()
+        self.ask(r"A $2 \times 2$ matrix Kronecker a $60 \times 60$ matrix has size...",
+                 [r"$62 \times 62$", r"$120 \times 120$", r"$3600 \times 3600$"], 1,
+                 say="Two sites, sixty time steps. The Kronecker product of a two by two matrix with a sixty by "
+                     "sixty one: how big is it?",
+                 reveal="A hundred and twenty by a hundred and twenty: each entry of the small matrix becomes a "
+                        "block of the big one.")
         self.definition()
         self.vec()
         self.eig()
         self.field()
+        self.answer()
 
     def card(self):
-        card = chapter_card(9, r"Kronecker products and vec", r"Structured covariances for space and time", lit=(),
-                            part=PART)
-        with self.voiceover("Chapter nine. Kronecker products and vec."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(9, r"Kronecker products and vec", r"Structured covariances for space and time", lit=(), part=PART, said="Chapter nine. Kronecker products and vec.")
 
     def definition(self):
         d = load("kron")

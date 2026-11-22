@@ -4,12 +4,12 @@ from explainer.cs import *  # noqa: F403
 from videos.cs.cs17.common import (CODE, COST, CTRL, DATA, FUNC, HEAD, LAM, NO, PART, YES, big, load, mono, words)
 
 
-class Hook(VoiceoverScene):
+class Hook(WatchScene):
     def construct(self):
         self.ledger()
         self.dictionary()
         self.preview()
-        self.plan()
+        self.title(PART)
 
     def ledger(self):
         d = load("hook")
@@ -100,26 +100,3 @@ class Hook(VoiceoverScene):
         self.wait(0.3)
         self.clear_scene()
 
-    def plan(self):
-        title = label(rf"Part {PART}: \ Data Structures", font_size=46).to_edge(UP, buff=0.4)
-        smap = series_map(current=PART, done=PART - 1).scale(0.92).next_to(title, DOWN, buff=0.35)
-        obj = objectives_card([
-            r"the dictionary; \ the birthday bound",
-            r"chaining, \ universal hashing, \ open addressing, \ cuckoo and perfect hashing",
-            r"binary search trees; \ AVL, \ red--black, \ treaps, \ skip lists, \ splay trees",
-            r"B-trees; \ priority queues; \ union--find",
-            r"tries and succinct structures; \ persistence; \ cache-friendly layouts",
-            r"hash tables in practice; \ the Job, \ hashed",
-        ], font_size=26).move_to(DOWN * 0.2)
-        with self.voiceover(
-            "Part 17 of Computer Science, Built: Data Structures. <bookmark mark='a'/> In this part: the "
-            "dictionary and the birthday bound; chaining, universal hashing, open addressing, cuckoo and "
-            "perfect hashing; binary search trees and the ways to keep them balanced; B-trees, priority "
-            "queues and union–find; tries, persistence and the memory hierarchy; and hash tables as real "
-            "systems build them."
-        ) as vo:
-            self.play(FadeIn(title), FadeIn(smap))
-            vo.wait_until("a")
-            self.play(FadeOut(smap), FadeIn(obj))
-        self.wait(0.5)
-        self.clear_scene()

@@ -3,19 +3,23 @@ from __future__ import annotations
 from videos.stats.stats23.common import *  # noqa: F403
 
 
-class Upgrade(VoiceoverScene):
+class Upgrade(StatsScene):
     def construct(self):
         self.card()
+        self.ask("Errors with unequal variances. Ordinary least squares is still...",
+                 ["unbiased, but not best, and its SEs are wrong", "biased", "best"], 0,
+                 say="Part 12's fine print: equal, uncorrelated errors. Drop the equal variances. What is ordinary "
+                     "least squares still?",
+                 reveal="Still unbiased, but no longer best, and its classical standard errors are wrong. The fine "
+                        "print matters most for the uncertainty.")
         self.upgrade()
         self.assumptions()
         self.gauss_markov()
         self.map_()
+        self.answer()
 
     def card(self):
-        card = chapter_card(1, r"Upgrade: \ what Part 12 assumed", r"Least squares without the fine print", part=PART)
-        with self.voiceover("Chapter one. An upgrade of Part 12."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(1, r"Upgrade: \ what Part 12 assumed", r"Least squares without the fine print", part=PART, said="Chapter one. An upgrade of Part 12.")
 
     def upgrade(self):
         u = upgrade_card(12, r"$\hat\beta = (X^\top X)^{-1}X^\top y$ is BLUE, \ with $\mathrm{Var}\,\hat\beta = \sigma^2 (X^\top X)^{-1}$",

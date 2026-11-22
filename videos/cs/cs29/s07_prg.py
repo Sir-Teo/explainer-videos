@@ -4,7 +4,7 @@ from explainer.cs import *  # noqa: F403
 from videos.cs.cs29.common import (BG, DATA, HEAD, NO, PART, YES, code, flow_box, load, mono)
 
 
-class Prg(VoiceoverScene):
+class Prg(WatchScene):
     def construct(self):
         self.card()
         self.definition()
@@ -12,12 +12,8 @@ class Prg(VoiceoverScene):
         self.chacha()
 
     def card(self):
-        card = chapter_card(6, r"Pseudorandom generators", r"Can a short key look like a long one?",
-                            lit=(1982, 1984, 2008), extra=((1982, r"Yao: \ the next-bit test"),
-                                                           (1984, r"Blum--Micali"), (2008, r"ChaCha20")), part=PART)
-        with self.voiceover("Chapter six. Pseudorandom generators."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(6, r"Pseudorandom generators", r"Can a short key look like a long one?", lit=(1982, 1984, 2008), extra=((1982, r"Yao: \ the next-bit test"),
+                                                           (1984, r"Blum--Micali"), (2008, r"ChaCha20")), part=PART, said="Chapter six. Pseudorandom generators.")
 
     def definition(self):
         head = label(r"Stretching a key", font_size=34).to_edge(UP, buff=0.3)
@@ -72,6 +68,10 @@ class Prg(VoiceoverScene):
         self.clear_scene()
 
     def lfsr(self):
+        self.ask(r"A 17-bit LFSR, period $131{,}071$. \\ Bits needed to predict it forever:", [r"$34$", r"$17{,}000$",
+                 r"$131{,}071$"], 0,
+                 say="A seventeen-bit shift register with a period of a hundred and thirty-one thousand. How many output bits do you need to predict all the rest?",
+                 reveal="Thirty-four: twice its length, by Berlekamp and Massey.")
         f = load("lfsr")
         head = label(r"Random-looking is not pseudorandom", font_size=34).to_edge(UP, buff=0.3)
         bits = f["first"]

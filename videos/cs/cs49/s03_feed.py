@@ -24,7 +24,7 @@ def stat(value, text, color, w=2.9, h=1.05):
     return VGroup(frame, g)
 
 
-class Feed(VoiceoverScene):
+class Feed(WatchScene):
     def construct(self):
         self.card()
         self.graph()
@@ -33,12 +33,8 @@ class Feed(VoiceoverScene):
         self.hybrid()
 
     def card(self):
-        card = chapter_card(2, r"A news feed: \ fan-out", r"Should a post travel to its readers, \ or readers to it?",
-                            lit=(2006, 2010), extra=((2006, r"Facebook's News Feed"),
-                                                     (2010, r"Silberstein et al.: \ feeds")), part=PART)
-        with self.voiceover("Chapter two. A news feed, and the question of fan-out."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(2, r"A news feed: \ fan-out", r"Should a post travel to its readers, \ or readers to it?", lit=(2006, 2010), extra=((2006, r"Facebook's News Feed"),
+                                                     (2010, r"Silberstein et al.: \ feeds")), part=PART, said="Chapter two. A news feed, and the question of fan-out.")
 
     def graph(self):
         f = load("feed")
@@ -158,6 +154,10 @@ class Feed(VoiceoverScene):
         self.clear_scene()
 
     def celebrity(self):
+        self.ask(r"Fan-out on write. The largest account posts. \\ Writes:", [r"one",
+                 r"one per follower"], 1,
+                 say="With fan-out on write, the largest account on the network posts once. How many writes does that cost?",
+                 reveal="One for every follower: millions, for a single post.")
         f = load("feed")
         top = f["hybrid"][2]                           # accounts with at least 10,000 followers
         share = top["pull_reads"] / f["pull_reads"]    # their share of all follow edges

@@ -6,9 +6,15 @@ from scipy import stats
 from videos.stats.stats24.common import *  # noqa: F403
 
 
-class Asymptotics(VoiceoverScene):
+class Asymptotics(StatsScene):
     def construct(self):
         self.card()
+        self.ask("Small samples: which is usually more reliable?",
+                 ["the Wald test", "the likelihood-ratio test"], 1,
+                 say="Testing a coefficient in a small sample. Which is usually more reliable, the Wald test or the "
+                     "likelihood-ratio test?",
+                 reveal="The likelihood-ratio test. Wald leans on a quadratic approximation at the estimate, and it "
+                        "fails first, spectacularly so under separation.")
         self.trinity()
         self.dispersion()
         self.ld50_ci()
@@ -16,12 +22,10 @@ class Asymptotics(VoiceoverScene):
         self.binary()
         self.od_test()
         self.advice()
+        self.answer()
 
     def card(self):
-        card = chapter_card(5, r"Asymptotics for GLMs", r"Which approximations hold, \ and when", part=PART)
-        with self.voiceover("Chapter five. Asymptotics for generalized linear models."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(5, r"Asymptotics for GLMs", r"Which approximations hold, \ and when", part=PART, said="Chapter five. Asymptotics for generalized linear models.")
 
     def trinity(self):
         d = load("bliss")

@@ -25,20 +25,22 @@ def staircase(ax, xs, F, color, stroke_width=3, x_lo=None, x_hi=None):
     return segs
 
 
-class Variables(VoiceoverScene):
+class Variables(StatsScene):
     def construct(self):
         self.card()
+        self.ask("Two dice. Which sum is most likely?",
+                 ["6", "7", "12"], 1,
+                 say="Write the sum of two dice in each of the thirty-six cells. Which sum is most likely: six, "
+                     "seven, or twelve?",
+                 reveal="Seven: six of the thirty-six cells. That table of chances is the sum's distribution.")
         self.function()
         self.cdf()
         self.kinds()
         self.cantor()
+        self.answer()
 
     def card(self):
-        card = chapter_card(10, r"Random variables", r"Numbers that depend on chance, and their distributions",
-                            lit={1933: "Kolmogorov: probability foundations"}, part=PART)
-        with self.voiceover("Chapter ten. Random variables."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(10, r"Random variables", r"Numbers that depend on chance, and their distributions", lit={1933: "Kolmogorov: probability foundations"}, part=PART, said="Chapter ten. Random variables.")
 
     def function(self):
         d = load("variables")

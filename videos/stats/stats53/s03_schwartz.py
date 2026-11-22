@@ -5,20 +5,24 @@ import numpy as np
 from videos.stats.stats53.common import *  # noqa: F403
 
 
-class Schwartz(VoiceoverScene):
+class Schwartz(StatsScene):
     def construct(self):
         self.card()
+        self.ask("Schwartz's theorem needs the prior to put positive mass on...",
+                 ["every Kullback--Leibler neighbourhood of the truth", "the exact truth"], 0,
+                 say="Which truths can a prior learn? Lorraine Schwartz's theorem of 1965 needs the prior to put "
+                     "positive mass on what?",
+                 reveal="Every Kullback-Leibler neighbourhood of the truth, plus tests that separate the truth from "
+                        "far-away alternatives. Mass near the truth, and a way to rule out the rest.")
         self.theorem()
         self.kl()
         self.chart()
         self.sieves()
         self.tests()
+        self.answer()
 
     def card(self):
-        card = chapter_card(2, r"Schwartz's theorem", r"Which truths can a prior learn?", lit=(1965,), part=PART)
-        with self.voiceover("Chapter two. Schwartz's theorem: which truths can a prior learn?"):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(2, r"Schwartz's theorem", r"Which truths can a prior learn?", lit=(1965,), part=PART, said="Chapter two. Schwartz's theorem: which truths can a prior learn?")
 
     def theorem(self):
         rows = [

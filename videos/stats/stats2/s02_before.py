@@ -5,21 +5,24 @@ import numpy as np
 from videos.stats.stats2.common import *  # noqa: F403
 
 
-class BeforeAxioms(VoiceoverScene):
+class BeforeAxioms(StatsScene):
     def construct(self):
         self.card()
+        self.ask("Throw three dice. Which total comes up more often?",
+                 ["9", "10", "equally often"], 1,
+                 say="Galileo was asked this. Throw three dice. Which total comes up more often: nine, ten, or are "
+                     "they equally likely?",
+                 reveal="Ten, but only just: twenty-seven of the two hundred and sixteen equally likely throws "
+                        "against twenty-five. Count throws, not partitions of the total.")
         self.cardano()
         self.galileo()
         self.histogram()
         self.mere()
         self.huygens()
+        self.answer()
 
     def card(self):
-        card = chapter_card(1, r"Before the axioms", r"Equally likely cases, and the art of counting them",
-                            lit=(1654,), part=PART)
-        with self.voiceover("Chapter one. Before the axioms."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(1, r"Before the axioms", r"Equally likely cases, and the art of counting them", lit=(1654,), part=PART, said="Chapter one. Before the axioms.")
 
     def cardano(self):
         ring = VGroup(*[die_face(v, 0.8) for v in range(1, 7)])

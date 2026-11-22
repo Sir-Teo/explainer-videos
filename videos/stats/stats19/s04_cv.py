@@ -6,21 +6,29 @@ from explainer.stats.board import coverage_board, load_all
 from videos.stats.stats19.common import *  # noqa: F403
 
 
-class CrossValidation(VoiceoverScene):
+class CrossValidation(StatsScene):
     def construct(self):
         self.card()
+        self.ask("Cross-validation's one-standard-error rule picks...",
+                 ["the lowest CV error", "the simplest model within one SE of the lowest", "the most complex model"], 1,
+                 say="Cross-validation draws a U-shaped curve of estimated error. The one-standard-error rule picks "
+                     "which model?",
+                 reveal="The simplest model whose error is within one standard error of the lowest. The curve is "
+                        "noisy; when it can't tell, prefer simple.")
         self.recap()
         self.curve()
         self.one_se()
         self.honest()
         self.board()
         self.loo()
+        self.answer()
+        self.checkpoint([("More data, same flexibility: which falls?", "the variance"),
+                         ("The one-SE rule picks?", "the simplest model within one SE of the best")],
+                        narration="Checkpoint. Error and its estimate.",
+                        answers_narration="The variance. And the simplest model within one standard error.")
 
     def card(self):
-        card = chapter_card(3, r"Cross-validation", r"Estimating the U from one training set", part=PART)
-        with self.voiceover("Chapter three. Cross-validation."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(3, r"Cross-validation", r"Estimating the U from one training set", part=PART, said="Chapter three. Cross-validation.")
 
     def recap(self):
         rows = [

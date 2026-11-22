@@ -5,21 +5,25 @@ import numpy as np
 from videos.stats.stats50.common import *  # noqa: F403
 
 
-class Pinsker(VoiceoverScene):
+class Pinsker(StatsScene):
     def construct(self):
         self.card()
+        self.ask("Pinsker's linear estimator over a Sobolev ellipsoid is asymptotically minimax among...",
+                 ["linear estimators only", "all estimators"], 1,
+                 say="Pinsker's theorem: the best linear estimator over an ellipsoid of smooth functions. Among "
+                     "which estimators is it asymptotically minimax?",
+                 reveal="All estimators, with the exact constant: in infinite dimensions, over a round class, "
+                        "nothing nonlinear does better. An exact minimax constant is rare.")
         self.linear()
         self.weights()
         self.table()
         self.projection()
         self.meaning()
         self.prior()
+        self.answer()
 
     def card(self):
-        card = chapter_card(2, r"Linear estimators and Pinsker's theorem", r"An exact minimax constant, \ in infinite dimensions", lit=(1980,), part=PART)
-        with self.voiceover("Chapter two. Linear estimators and Pinsker's theorem: an exact minimax constant, in infinite dimensions."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(2, r"Linear estimators and Pinsker's theorem", r"An exact minimax constant, \ in infinite dimensions", lit=(1980,), part=PART, said="Chapter two. Linear estimators and Pinsker's theorem: an exact minimax constant, in infinite dimensions.")
 
     def linear(self):
         rows = [

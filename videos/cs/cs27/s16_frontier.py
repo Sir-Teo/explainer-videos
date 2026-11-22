@@ -4,7 +4,7 @@ from explainer.cs import *  # noqa: F403
 from videos.cs.cs27.common import (BG, CTRL, DATA, HEAD, LAM, NO, PART, YES, fit_right, grid_table)
 
 
-class Frontier(VoiceoverScene):
+class Frontier(WatchScene):
     def construct(self):
         self.card()
         self.ladder()
@@ -13,12 +13,7 @@ class Frontier(VoiceoverScene):
         self.open_()
 
     def card(self):
-        card = chapter_card(15, r"Frontier: \ MIP* = RE \ and proofs in practice",
-                            r"What can a verifier check, \ and how cheaply?", lit=(1988, 2020),
-                            extra=((1991, r"MIP = NEXP"), (2016, r"Groth16"), (2020, r"MIP* = RE")), part=PART)
-        with self.voiceover("Chapter fifteen. The frontier: MIP star equals RE, and proofs in practice."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(15, r"Frontier: \ MIP* = RE \ and proofs in practice", r"What can a verifier check, \ and how cheaply?", lit=(1988, 2020), extra=((1991, r"MIP = NEXP"), (2016, r"Groth16"), (2020, r"MIP* = RE")), part=PART, said="Chapter fifteen. The frontier: MIP star equals RE, and proofs in practice.")
 
     def ladder(self):
         head = label(r"More provers, \ more power", font_size=34).to_edge(UP, buff=0.3)
@@ -65,6 +60,10 @@ class Frontier(VoiceoverScene):
         self.clear_scene()
 
     def mipstar(self):
+        self.ask(r"Two provers share entanglement and can't talk. \\ A verifier can check...", [r"NP",
+                 r"NEXP", r"the halting problem"], 2,
+                 say="Two provers who share quantum entanglement but can't communicate. How much can a verifier check?",
+                 reveal="Everything recursively enumerable, the halting problem included: MIP star equals RE.")
         head = label(r"Why MIP* = RE matters beyond computer science", font_size=32).to_edge(UP, buff=0.35)
         lines = VGroup(
             label(r"the verifier checks the provers' answers for \textbf{non-local} correlations, \ like a Bell "
@@ -81,7 +80,7 @@ class Frontier(VoiceoverScene):
                   font_size=22, color=YES),
         ).arrange(DOWN, buff=0.32).next_to(head, DOWN, buff=0.5)
         with self.voiceover(
-            "The result has consequences for mathematical models of quantum correlations. <bookmark mark='a'/> The verifier asks separated provers questions and tests their answer correlations. The permitted entanglement helps honest strategies but also enlarges the cheating strategies covered by soundness. <bookmark mark='b'/> The tensor-product model allows finite-dimensional entangled resources without a computable uniform dimension bound sufficient for all instances. <bookmark mark='c'/> Recursive compression links games checking games to computations of unbounded duration. We describe this architecture without reproducing the full proof. <bookmark mark='d'/> The theorem separates the closure of finite-dimensional tensor-product correlations from the commuting-operator correlation model, yielding a negative answer to the relevant Tsirelson problem. <bookmark mark='e'/> Through known equivalences it also refutes Connes’ embedding conjecture. <bookmark mark='f'/> Our source reading includes the abstract and stated consequences of the October 2026 arXiv revision. The theorem is cited from that literature, not established by this episode’s small classical simulations."
+            "The result has consequences for mathematical models of quantum correlations. <bookmark mark='a'/> The verifier asks separated provers questions and tests their answer correlations. The permitted entanglement helps honest strategies but also enlarges the cheating strategies covered by soundness. <bookmark mark='b'/> The tensor-product model allows finite-dimensional entangled resources without a computable uniform dimension bound sufficient for all instances. <bookmark mark='c'/> Recursive compression links games checking games to computations of unbounded duration. We describe this architecture without reproducing the full proof. <bookmark mark='d'/> The theorem separates the closure of finite-dimensional tensor-product correlations from the commuting-operator correlation model, yielding a negative answer to the relevant Tsirelson problem. <bookmark mark='e'/> Through known equivalences it also refutes Connes’ embedding conjecture. <bookmark mark='f'/>"
         ) as vo:
             self.play(FadeIn(head))
             for mk, ln in zip("abcdef", lines):
@@ -119,7 +118,7 @@ class Frontier(VoiceoverScene):
                   color=NO),
         ).arrange(DOWN, buff=0.2).next_to(boxes, DOWN, buff=0.45)
         with self.voiceover(
-            "Practical proof systems combine several ingredients with distinct security assumptions. <bookmark mark='a'/> Arithmetize a specified bounded computation into field constraints. Some systems use sum-check or related interactive oracle proofs to reduce verification work. <bookmark mark='b'/> Commitments bind the prover to the relevant polynomials or oracles; the commitment scheme determines important assumptions and costs. <bookmark mark='c'/> Fiat–Shamir removes interaction only for suitable protocols under an appropriate analysis, often in a random-oracle model. A fixed real hash is an instantiation rather than an unconditional theorem. <bookmark mark='d'/> Groth16 has constant-size proofs in group elements under its algebraic assumptions and structured setup. Transparent systems use different assumptions and typically different proof-size trade-offs. <bookmark mark='e'/> Validity rollups can aggregate transaction verification into such arguments; optimistic rollups follow a different dispute-based mechanism. <bookmark mark='f'/> A zkVM proves a bounded execution according to an encoded machine and constraints. Zero knowledge is an additional property and must not be inferred from succinctness alone. <bookmark mark='g'/> Proof size and verifier work depend on the system, security parameters and public input. Prover overhead can be substantial. None of our small teaching protocols is presented as a deployed secure proof system."
+            "Practical proof systems combine several ingredients with distinct security assumptions. <bookmark mark='a'/> Arithmetize a specified bounded computation into field constraints. Some systems use sum-check or related interactive oracle proofs to reduce verification work. <bookmark mark='b'/> Commitments bind the prover to the relevant polynomials or oracles; the commitment scheme determines important assumptions and costs. <bookmark mark='c'/> Fiat–Shamir removes interaction only for suitable protocols under an appropriate analysis, often in a random-oracle model. A fixed real hash is an instantiation rather than an unconditional theorem. <bookmark mark='d'/> Groth16 has constant-size proofs in group elements under its algebraic assumptions and structured setup. Transparent systems use different assumptions and typically different proof-size trade-offs. <bookmark mark='e'/> Validity rollups can aggregate transaction verification into such arguments; optimistic rollups follow a different dispute-based mechanism. <bookmark mark='f'/> A zkVM proves a bounded execution according to an encoded machine and constraints. Zero knowledge is an additional property and must not be inferred from succinctness alone. <bookmark mark='g'/> Proof size and verifier work depend on the system, security parameters and public input. Prover overhead can be substantial."
         ) as vo:
             self.play(FadeIn(head))
             vo.wait_until("a")

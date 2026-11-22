@@ -6,12 +6,12 @@ from explainer.cs import *  # noqa: F403
 from videos.cs.cs16.common import (CODE, COST, CTRL, DATA, FUNC, HEAD, LAM, NO, PART, YES, big, load, mono, words)
 
 
-class Hook(VoiceoverScene):
+class Hook(WatchScene):
     def construct(self):
         self.ledger()
         self.quadratic()
         self.preview()
-        self.plan()
+        self.title(PART)
 
     def ledger(self):
         d = load("hook")
@@ -75,8 +75,7 @@ class Hook(VoiceoverScene):
             "Here is the search algorithm's growing cost. <bookmark mark='a'/> Version zero keeps distinct words "
             "in a list and searches it for each occurrence. <bookmark mark='b'/> The modeled cycles per byte rise "
             "across these corpus prefixes. The work depends on both the number of occurrences and the vocabulary: "
-            "with many distinct words, repeated full scans can take quadratic work. This corpus plot illustrates "
-            "growth; it is not a proof that every text has quadratic cost. <bookmark mark='c'/> Faster hardware "
+            "with many distinct words, repeated full scans can take quadratic work. <bookmark mark='c'/> Faster hardware "
             "changes the constant. A different data structure or algorithm can change how the work grows."
         )
         ) as vo:
@@ -116,26 +115,3 @@ class Hook(VoiceoverScene):
         self.wait(0.3)
         self.clear_scene()
 
-    def plan(self):
-        title = label(rf"Part {PART}: \ Counting Steps", font_size=46).to_edge(UP, buff=0.4)
-        smap = series_map(current=PART, done=PART - 1).scale(0.92).next_to(title, DOWN, buff=0.35)
-        obj = objectives_card([
-            r"models of computation; \ asymptotic notation",
-            r"insertion, \ merge and heap sort; \ recursion trees; \ the master theorem",
-            r"the comparison lower bound; \ merge insertion",
-            r"quicksort's expected cost and its concentration",
-            r"linear-time sorting; \ selection in linear time",
-            r"generating functions; \ amortized analysis; \ sorting in practice",
-        ], font_size=26).move_to(DOWN * 0.2)
-        with self.voiceover(
-            "Part 16 of Computer Science, Built: Counting Steps, the first part of Act Four, Algorithms. <bookmark "
-            "mark='a'/> In this part: models of computation and asymptotic notation; insertion, merge and heap "
-            "sort, recursion trees and the master theorem; the comparison lower bound; quicksort, its average and "
-            "its concentration; sorting in linear time and selecting in linear time; generating functions, "
-            "amortized analysis, and how sorting is really done."
-        ) as vo:
-            self.play(FadeIn(title), FadeIn(smap))
-            vo.wait_until("a")
-            self.play(FadeOut(smap), FadeIn(obj))
-        self.wait(0.5)
-        self.clear_scene()

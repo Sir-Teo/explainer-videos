@@ -3,166 +3,150 @@ from __future__ import annotations
 import numpy as np
 
 from explainer.cs import *  # noqa: F403
-from videos.cs.cs7.common import (BG, CLOCK, CODE, COST, CTRL, DATA, FUNC, HEAD, HIST, INF, NO, PART, YES, box, fmt,
-                                  load, mono)
+from videos.cs.cs7.common import HEAD, NO, PART, YES, chapter, fmt, load, mono
 
 
-class Sorted(VoiceoverScene):
+def two_bit(outcomes):
+    """A 2-bit saturating counter's guesses for a branch's outcomes (state 0-3, taken if >= 2), starting weakly
+    not taken."""
+    s, guesses = 1, []
+    for t in outcomes:
+        guesses.append(s >= 2)
+        s = min(3, s + 1) if t else max(0, s - 1)
+    return guesses
+
+
+class Sorted(WatchScene):
     def construct(self):
-        self.card()
-        self.puzzle()
-        self.host()
+        chapter(self, 14, r"The puzzle, solved", r"Why does sorting the data make a loop faster?", lit=(2012,),
+                extra=((2012, r"the sorted-array question"),))
+        self.replay()
+        self.stream()
         self.pebble()
         self.branchless()
 
-    def card(self):
-        card = chapter_card(14, r"The sorted-array puzzle", r"Why does sorting the data make a loop faster?",
-                            lit=(2012,), extra=((2012, r"the sorted-array question"),), part=PART)
-        with self.voiceover("Chapter fourteen. The sorted-array puzzle."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
-
     # ------------------------------------------------------------------
-    def puzzle(self):
-        head = label(r"The same loop, \ the same data, \ in a different order", font_size=34).to_edge(UP, buff=0.35)
-        code = VGroup(*[mono(t, 22) for t in ("for (i = 0; i < n; i++)", "    if (data[i] >= 128)",
-                                              "        sum += data[i];")]).arrange(DOWN, aligned_edge=LEFT, buff=0.12)
-        code.move_to(UP * 2.0)
-        rng = np.random.default_rng(2)
-        vals = rng.integers(0, 256, 40)
-        def strip(v, y):
-            return VGroup(*[Rectangle(width=0.2, height=0.05 + 1.0 * x / 255, stroke_width=0,
-                                      fill_color=YES if x >= 128 else GREY_C, fill_opacity=0.8).move_to(
-                [-4.3 + 0.22 * k, y + (0.05 + 1.0 * x / 255) / 2, 0]) for k, x in enumerate(v)])
-        a = strip(vals, -0.55)
-        b = strip(np.sort(vals), -2.55)
-        la = label('fixed-seed irregular order: difficult for these predictors', font_size=22, color=NO).next_to(a, DOWN, buff=0.15)
-        lb = label(r"sorted: \ not taken, \ then taken, \ for good", font_size=22, color=YES).next_to(b, DOWN,
-                                                                                                buff=0.15)
-        so = label('Stack Overflow, 2012: a widely discussed performance question', font_size=20, color=HIST).next_to(
-            code, DOWN, buff=0.35)
+    def replay(self):
+        h = load("sorted")["host"]
+        race = Race([(r"sorted", h["sorted"], YES), (r"shuffled", h["random"], NO)], unit="ms", scale=1e3,
+                    fmt="{:.1f}", width=7.6, lane_h=0.6, gap=0.55, font_size=30).move_to(UP * 0.3)
+        q = label(r"the same additions, \ in a different order", font_size=30, color=GREY_A).next_to(race, UP,
+                                                                                                  buff=0.7)
         with self.voiceover(
-            "A widely discussed 2012 Stack Overflow question asked why sorting an array sped up this loop. <bookmark "
-            "mark='a'/> The loop adds values at least a hundred and twenty-eight. Reordering the same values preserves "
-            "the sum and the number of additions; sorting itself has a cost, excluded from these repeated-loop "
-            "timings. <bookmark mark='b'/> Fixed-seed pseudorandom data makes the threshold outcomes irregular for "
-            "these predictors. That is an empirical difficulty, not an absolute information bound for a known repeated "
-            "array. <bookmark mark='c'/> Sorted data groups outcomes into long runs, which even a two-bit counter "
-            "predicts well. Compiler transformations and the target processor determine the actual speedup."
-        ) as vo:
-            self.play(FadeIn(head), FadeIn(code), FadeIn(so))
-            vo.wait_until("b")
-            self.play(LaggedStart(*[FadeIn(r) for r in a], lag_ratio=0.02), FadeIn(la), run_time=1.5)
-            vo.wait_until("c")
-            self.play(LaggedStart(*[FadeIn(r) for r in b], lag_ratio=0.02), FadeIn(lb), run_time=1.5)
-        self.wait(0.3)
+            f"Back to where we started. The same loop, {h['ratio']:.0f} times slower on shuffled data. You now "
+            "have everything you need to explain it."
+        ):
+            self.play(FadeIn(q), FadeIn(race.lanes), *[FadeIn(c) for c in race.clocks])
+            self.add(*race.bars)
+            race.go(self, seconds=3.0)
+        race.freeze()
         self.clear_scene()
 
     # ------------------------------------------------------------------
-    def host(self):
-        h = load("sorted")["host"]
-        head = label(r"Measured on the machine that made this video", font_size=34).to_edge(UP, buff=0.35)
-        cpu = label(rf"{h['cpu']}; \ C; \ {h['n']:,} values $\times$ {h['reps']} passes".replace(",", "{,}"),
-                    font_size=20, color=GREY_B).next_to(head, DOWN, buff=0.2)
-        items = [("random", h["random"], NO), ("sorted", h["sorted"], YES)]
-        scale = 7.0 / max(v for _, v, _ in items)
-        bars = VGroup()
-        for k, (n, v, c) in enumerate(items):
-            y = 0.7 - 1.1 * k
-            r = Rectangle(width=v * scale, height=0.6, stroke_width=0, fill_color=c, fill_opacity=0.65).move_to(
-                [-3.2 + v * scale / 2, y, 0])
-            nl = label(n, font_size=24, color=c).next_to(r, LEFT, buff=0.2).align_to([-3.4, 0, 0], RIGHT)
-            vl = label(rf"{v * 1e3:.1f} ms", font_size=22, color=GREY_A).next_to(r, RIGHT, buff=0.15)
-            bars.add(VGroup(nl, r, vl))
-        res = VGroup(
-            label(rf"{h['ratio']:.1f} times faster, \ sorted", font_size=32, color=HEAD),
-            label('five-run medians; generation and sorting excluded; \\\\ timing alone does not isolate branch-prediction effects', font_size=22, color=GREY_A),
-        ).arrange(DOWN, buff=0.25).to_edge(DOWN, buff=0.5)
+    def stream(self):
+        rng = np.random.default_rng(3)
+        data = rng.integers(0, 256, 3000)  # the values compute_sorted scans
+        n = 56
+        rows = []
+        srt = np.sort(data)
+        cross = int(np.searchsorted(srt, 128))  # where the sorted outcomes switch from not taken to taken
+        for vals in (data, srt[cross - 30:]):
+            out = [bool(v >= 128) for v in vals[:n]]
+            g = two_bit(out)
+            rows.append(([(YES if t else GREY_C, None) for t in out],
+                         [((NO, "x") if a != t else (GREY_E, None)) for a, t in zip(g, out)], sum(a != t for a, t in
+                                                                                             zip(g, out))))
+        strips = VGroup()
+        for k, (o, m, _) in enumerate(rows):
+            st = EventStrip([o, m], names=[r"\texttt{if} taken?", r"2-bit miss"], window=24, cell=0.32)
+            strips.add(st)
+        strips.arrange(DOWN, buff=1.1).move_to(LEFT * 0.2 + DOWN * 0.1)
+        heads = VGroup(label(r"shuffled", font_size=30, color=NO).next_to(strips[0], UP, buff=0.2),
+                       label(r"sorted", font_size=30, color=YES).next_to(strips[1], UP, buff=0.2))
+        t = strips[0].t
+        strips[1].t = t
+        miss = [np.cumsum([1 if c[1] else 0 for c in r[1]]) for r in rows]
+        meters = VGroup(*[Meter(r"misses", t, values=np.concatenate([[0], m_]), fmt="{:.0f}", color=c, font_size=26)
+                          .next_to(s_, RIGHT, buff=0.35) for m_, c, s_ in zip(miss, (NO, YES), strips)])
+        src = tag("illustrative", rf"the first {n} values; a 2-bit counter").to_corner(DR, buff=0.3)
         with self.voiceover(
-            "These bars are measurements from this host, not the original question's machine. <bookmark mark='a'/> The "
-            "program scans thirty-two thousand seven hundred and sixty-eight values three hundred times, reusing the "
-            "same array. We report medians of five runs, check matching sums, and exclude generation and sorting. C "
-            "compiler flags disable vectorization and automatic if-conversion. <bookmark mark='b'/> Read the measured "
-            "times and ratio from the bars. The sorted loop is faster here, consistent with easier branch prediction, "
-            "but timing alone does not isolate its cause. Hardware performance counters and controlled compiler output "
-            "would strengthen that explanation. Other processors and builds can give different results."
+            "Watch the branch inside the loop, one value at a time. <bookmark mark='a'/> On shuffled data, taken or "
+            "not is a coin flip. A predictor learns nothing, and misses about half the time. <bookmark mark='b'/> On "
+            "sorted data it's one long run of not taken, then one long run of taken. The predictor misses once at the "
+            "switch, and that's it."
         ) as vo:
-            self.play(FadeIn(head), FadeIn(cpu))
+            self.play(FadeIn(heads), FadeIn(strips[0].labels), FadeIn(strips[1].labels), FadeIn(src))
+            self.add(strips, meters)
             vo.wait_until("a")
-            for b in bars:
-                self.play(FadeIn(b[0]), GrowFromEdge(b[1], LEFT), FadeIn(b[2]))
+            strips[0].advance(self, 30, per_step=0.16)
             vo.wait_until("b")
-            self.play(FadeIn(res[0]))
-            self.play(FadeIn(res[1]))
-        self.wait(0.3)
+            strips[0].advance(self, n - 30, per_step=0.12)
+        for m in meters:
+            m.num.clear_updaters()
         self.clear_scene()
 
     # ------------------------------------------------------------------
     def pebble(self):
         p = load("sorted")["pebble"]
-        head = label(r"And on Pebble's pipeline", font_size=36).to_edge(UP, buff=0.35)
-        rows = VGroup()
-        for k, n in enumerate(("random", "sorted")):
-            v = p[n]
-            rows.add(label(rf"{n}: \ {fmt(v['cycles'])} cycles, \ CPI {v['cpi']:.2f}, \ {fmt(v['mispredicts'])} "
-                           rf"mispredictions", font_size=26, color=NO if k == 0 else YES))
-        rows.arrange(DOWN, buff=0.35).move_to(UP * 0.8)
+        h = load("sorted")["host"]
         ratio = p["random"]["cycles"] / p["sorted"]["cycles"]
-        res = VGroup(
-            label(rf"only {ratio:.2f} times faster: \ a mistake costs Pebble 2 cycles, \ not 20", font_size=26,
-                  color=HEAD),
-            label(r"the deeper and wider the machine, \ the more a predictable branch is worth", font_size=24,
-                  color=GREY_A),
-        ).arrange(DOWN, buff=0.25).move_to(DOWN * 1.3)
-        with self.voiceover(
-            "Now use Pebble's cycle model with three thousand values scanned twice. <bookmark mark='a'/> The irregular "
-            "order has about three thousand mispredictions; the sorted order has fourteen. Both produce the same sum. "
-            "<bookmark mark='b'/> Each modeled branch miss costs two cycles. The displayed cycle counts therefore "
-            "differ by only about thirteen percent. This compares two input orders within Pebble, not an identical "
-            "prediction stream across different processors. Deeper or wider machines can lose more useful work on a "
-            "redirect, but their predictors, caches and generated code also differ."
-        ) as vo:
-            self.play(FadeIn(head))
-            self.play(FadeIn(rows[0]), FadeIn(rows[1]))
-            vo.wait_until("b")
-            self.play(FadeIn(res[0]))
-            self.play(FadeIn(res[1]))
-        self.wait(0.3)
+        race = Race([(r"sorted", p["sorted"]["cycles"], YES), (r"shuffled", p["random"]["cycles"], NO)],
+                    unit="cycles", fmt="{:,.0f}", width=5.8, lane_h=0.55, gap=0.5, font_size=28).move_to(
+            LEFT * 0.9 + DOWN * 0.4)
+        src = tag("simulated", r"Pebble's pipeline: 3,000 values, scanned twice").to_corner(DR, buff=0.3)
+        mis = label(rf"misses: \ {fmt(p['random']['mispredicts'])} \ against \ {p['sorted']['mispredicts']}",
+                    font_size=30, color=HEAD).next_to(race, UP, buff=0.7)
+        self.play(FadeIn(mis), FadeIn(src))
+        card = self.predict(rf"Pebble misses {fmt(p['random']['mispredicts'])} times against "
+                            rf"{p['sorted']['mispredicts']}. \\ How much slower is the shuffled run?",
+                            [r"about $1.1\times$", r"about $2\times$", rf"about ${h['ratio']:.0f}\times$, like this "
+                                                                        r"computer"],
+                            narration="Same experiment on Pebble's pipeline. Three thousand misses against fourteen. "
+                                      "How much slower is the shuffled run? Barely? Twice? Or "
+                                      f"{h['ratio']:.0f} times, like the real computer?", room=mis)
+        self.park(card)
+        self.play(FadeIn(race.lanes), *[FadeIn(c) for c in race.clocks])
+        self.add(*race.bars)
+        race.go(self, seconds=3.5)
+        race.freeze()
+        self.reveal(card, 0 if ratio < 1.5 else 1, narration=(
+            f"Only {ratio:.2f} times. A wrong guess costs Pebble two cycles: it's a short pipe, and it does one thing "
+            "at a time. A modern core is deep and wide. On each wrong guess it throws away many cycles of work for "
+            "several instructions at once, and the rest of this loop is nearly free. So the misses are almost all "
+            "of the time."))
         self.clear_scene()
 
     # ------------------------------------------------------------------
     def branchless(self):
         h = load("sorted")["host"]
-        p = load("sorted")["pebble"]
-        head = label(r"No branch, \ no misprediction", font_size=36).to_edge(UP, buff=0.35)
-        code = VGroup(mono("sltiu t3, t2, 128     # 1 if small", 20), mono("addi  t3, t3, -1      # all ones if big",
-                                                                            20),
-                      mono("and   t3, t3, t2", 20), mono("add   a0, a0, t3      # adds x, or 0", 20)).arrange(
-            DOWN, aligned_edge=LEFT, buff=0.1).move_to(UP * 1.5)
-        res = VGroup(
-            label(rf"this machine: \ {h['random_branchless'] * 1e3:.1f} ms random, \ {h['sorted_branchless'] * 1e3:.1f} ms "
-                  r"sorted: \ little order difference in this run", font_size=24, color=YES),
-            label(rf"Pebble: \ {fmt(p['random, branchless']['cycles'])} cycles either way: \ more instructions, \ and "
-                  r"its cheap mistakes were worth less", font_size=24, color=GREY_A),
-            label(r"compilers emit conditional moves \ (\texttt{cmov}); \ databases, \ video codecs \ and trading "
-                  r"systems \\ write branch-free inner loops on purpose", font_size=22, color=HEAD),
-        ).arrange(DOWN, buff=0.28).move_to(DOWN * 1.2)
+        code = VGroup(mono("sltiu t3, t2, 128     # 1 if small", 24), mono("addi  t3, t3, -1      # all ones if big", 24),
+                      mono("and   t3, t3, t2", 24), mono("add   a0, a0, t3      # adds x, or 0", 24)).arrange(
+            DOWN, aligned_edge=LEFT, buff=0.12).move_to(UP * 0.4)
         with self.voiceover(
-            "A data-dependent branch can sometimes be replaced by arithmetic. <bookmark mark='a'/> Here the comparison "
-            "is x less than a hundred and twenty-eight. Subtract one from its zero-or-one result: small values get a "
-            "zero mask; large ones get all ones in the machine word. Masking x selects zero or x before adding. "
-            "<bookmark mark='b'/> The displayed host and Pebble timings show the trade-off. The host's order "
-            "sensitivity is much smaller; Pebble executes more instructions and is slower than its branched versions. "
-            "These are measured cases, not a rule that branchless code wins. <bookmark mark='c'/> Compilers may use "
-            "conditional moves or vectorization when semantics permit. Extra work, dependencies and safely evaluating "
-            "both paths still matter."
-        ) as vo:
-            self.play(FadeIn(head))
-            self.play(LaggedStart(*[FadeIn(c) for c in code], lag_ratio=0.3), run_time=2.0)
-            vo.wait_until("b")
-            self.play(FadeIn(res[0]))
-            self.play(FadeIn(res[1]))
-            vo.wait_until("c")
-            self.play(FadeIn(res[2]))
-        self.wait(0.3)
+            "Or remove the branch altogether. Compare, and turn the answer into a mask: all ones "
+            "for a big value, zeros for a small one. AND it with x, and add. Nothing to guess."
+        ):
+            self.play(LaggedStart(*[Write(c) for c in code], lag_ratio=0.35), run_time=2.4)
+        card = self.predict(r"Without the branch, \ the shuffled loop takes...",
+                            [rf"still about {h['random'] * 1e3:.0f} ms", rf"about {h['random_branchless'] * 1e3:.0f} ms",
+                             r"under 1 ms"],
+                            narration="On this computer, the shuffled loop took "
+                                      f"{h['random'] * 1e3:.0f} milliseconds. Without the branch, how long?",
+                            room=code)
+        self.park(card)
+        self.play(FadeOut(code))
+        race = Race([(r"sorted", h["sorted"], YES), (r"branchless, \ sorted", h["sorted_branchless"], HEAD),
+                     (r"branchless, \ shuffled", h["random_branchless"], HEAD), (r"shuffled", h["random"], NO)],
+                    unit="ms", scale=1e3, fmt="{:.1f}", width=6.8, lane_h=0.45, gap=0.38, font_size=24,
+                    name_width=3.2).move_to(DOWN * 0.5 + RIGHT * 0.4)
+        src = tag("measured", rf"{h['reps']} passes, median of five").to_corner(DL, buff=0.3)
+        self.play(FadeIn(race.lanes), *[FadeIn(c) for c in race.clocks], FadeIn(src))
+        self.add(*race.bars)
+        race.go(self, seconds=6.0)
+        race.freeze()
+        self.reveal(card, 1, narration=(
+            f"About {h['random_branchless'] * 1e3:.0f} milliseconds, and the order no longer matters. It's a little "
+            "slower than the lucky sorted run, because it always does both halves of the work. Compilers make this "
+            "trade with conditional moves, and databases, codecs and trading systems write branch-free inner loops "
+            "on purpose."))
         self.clear_scene()

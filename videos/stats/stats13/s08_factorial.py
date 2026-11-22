@@ -26,9 +26,15 @@ def bakery_map(center, width=6.0, height=4.4, n=40, t_range=(160, 240), m_range=
     return A, ax, cells
 
 
-class Factorial(VoiceoverScene):
+class Factorial(StatsScene):
     def construct(self):
         self.card()
+        self.ask("Two oven knobs that interact. One factor at a time finds the best bread?",
+                 ["always", "it can miss the peak"], 1,
+                 say="The bakery has two knobs, oven temperature and time, and they interact. Will adjusting one "
+                     "knob at a time, then the other, find the best bread?",
+                 reveal="It can miss the peak. With a diagonal ridge, one-at-a-time stops at the wrong place. A "
+                        "factorial varies both at once and sees the interaction.")
         self.ofat()
         self.factorial_square()
         self.cube()
@@ -37,12 +43,10 @@ class Factorial(VoiceoverScene):
         self.interaction()
         self.halfnormal()
         self.hidden_replication()
+        self.answer()
 
     def card(self):
-        card = chapter_card(7, r"Factorials", r"Ask Nature several questions at once", lit=(1935,), part=PART)
-        with self.voiceover("Chapter seven. Factorial experiments."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(7, r"Factorials", r"Ask Nature several questions at once", lit=(1935,), part=PART, said="Chapter seven. Factorial experiments.")
 
     def ofat(self):
         d = load("factorial")["ofat"]

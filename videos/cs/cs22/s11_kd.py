@@ -13,7 +13,7 @@ def S(p):
     return ORG + np.array([(p[0] - 0.5) * SIDE, (p[1] - 0.5) * SIDE, 0])
 
 
-class KdTree(VoiceoverScene):
+class KdTree(WatchScene):
     def construct(self):
         self.card()
         self.build()
@@ -22,11 +22,7 @@ class KdTree(VoiceoverScene):
         self.others()
 
     def card(self):
-        card = chapter_card(10, r"Range searching", r"Which points lie in this rectangle?", lit=(1975, 1978),
-                            extra=((1975, r"Bentley's kd-tree"), (1978, r"range trees")), part=PART)
-        with self.voiceover("Chapter ten. Range searching."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(10, r"Range searching", r"Which points lie in this rectangle?", lit=(1975, 1978), extra=((1975, r"Bentley's kd-tree"), (1978, r"range trees")), part=PART, said="Chapter ten. Range searching.")
 
     def build(self):
         d = load("kd")
@@ -88,6 +84,10 @@ class KdTree(VoiceoverScene):
         self.clear_scene()
 
     def measured(self):
+        self.ask(r"A 2-D kd-tree, a rectangle query. \\ Worst case, reporting $k$ points?",
+                 [r"$\log n$", r"$\sqrt{n} + k$", r"$n$"], 1,
+                 say="A two-dimensional kd-tree answers a rectangle query. What's the worst case?",
+                 reveal="Square root of n, plus the points it reports.")
         d = load("kd")
         head = label(r"Square queries of side 0.02 in the unit square", font_size=32).to_edge(UP, buff=0.35)
         rows = [[words(r["n"]), f"{r['k']:.1f}", f"{r['visited']:.0f}", f"{r['sqrt_n']:.0f}",

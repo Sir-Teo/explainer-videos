@@ -5,20 +5,24 @@ import numpy as np
 from videos.stats.stats47.common import *  # noqa: F403
 
 
-class Saddlepoint(VoiceoverScene):
+class Saddlepoint(StatsScene):
     def construct(self):
         self.card()
+        self.ask("Far into the tails, the saddlepoint approximation's relative error...",
+                 ["stays small", "grows without bound"], 0,
+                 say="Daniels's saddlepoint approximation, from the cumulant generating function. Far into the "
+                     "tails, how does its relative error behave?",
+                 reveal="It stays small: the approximation is accurate in relative terms, exactly where the normal "
+                        "approximation fails worst.")
         self.idea()
         self.density()
         self.tails()
         self.lr()
         self.uses()
+        self.answer()
 
     def card(self):
-        card = chapter_card(12, r"Saddlepoint approximations", r"Accuracy far into the tails", lit=(1954,), part=PART)
-        with self.voiceover("Chapter twelve. Saddlepoint approximations: accuracy far into the tails."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(12, r"Saddlepoint approximations", r"Accuracy far into the tails", lit=(1954,), part=PART, said="Chapter twelve. Saddlepoint approximations: accuracy far into the tails.")
 
     def idea(self):
         rows = [

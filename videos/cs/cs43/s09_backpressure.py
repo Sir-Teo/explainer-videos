@@ -11,7 +11,7 @@ def fmt_t(x):
     return f"{x:,.0f}" if x >= 100 else f"{x:.1f}"
 
 
-class Backpressure(VoiceoverScene):
+class Backpressure(WatchScene):
     def construct(self):
         self.card()
         self.hockey()
@@ -21,12 +21,8 @@ class Backpressure(VoiceoverScene):
         self.defences()
 
     def card(self):
-        card = chapter_card(8, r"Backpressure", r"What should a service do with more work than it can do?",
-                            lit=(2007, 2021), extra=((2007, r"Nygard: \ the circuit breaker"),
-                                                     (2021, r"Bronson et al.: \ metastable failures")), part=PART)
-        with self.voiceover("Chapter eight. Backpressure."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(8, r"Backpressure", r"What should a service do with more work than it can do?", lit=(2007, 2021), extra=((2007, r"Nygard: \ the circuit breaker"),
+                                                     (2021, r"Bronson et al.: \ metastable failures")), part=PART, said="Chapter eight. Backpressure.")
 
     def hockey(self):
         rows = load("queue")["unbounded"]["rows"]
@@ -136,6 +132,10 @@ class Backpressure(VoiceoverScene):
         self.clear_scene()
 
     def storm(self):
+        self.ask(r"A service handles 100 a second and gets 90. \\ A brief blip, and clients retry at once. Afterwards...",
+                 [r"it recovers", r"it stays overloaded"], 1,
+                 say="A service can answer a hundred requests a second and receives ninety. After a short blip, every client retries immediately. What happens?",
+                 reveal="It stays overloaded. The retries alone keep it above capacity.")
         s = load("storm")
         pol = [("immediate", r"retry every second", NO), ("backoff", r"exponential backoff, \ jitter", HEAD),
                ("budget", r"backoff + retry budget", YES)]
@@ -305,6 +305,12 @@ class Backpressure(VoiceoverScene):
             self.play(FadeIn(moral))
         self.wait(0.4)
         self.clear_scene()
+        self.checkpoint(
+            [(r"Why bound a queue?", r"So overload is refused, not hidden as waiting"),
+             (r"Why add jitter to backoff?", r"So retries don't arrive together")],
+            narration="Checkpoint. Why should a queue have a bound? And why add jitter to exponential backoff?",
+            answers_narration="So overload is refused and visible, instead of turned into endless waiting. And so retries "
+                              "don't all arrive at once.")
 
 
 _ = (DATA, LAM)

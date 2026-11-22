@@ -5,7 +5,7 @@ import numpy as np
 from videos.stats.stats64.common import *  # noqa: F403
 
 
-class Hook(LectureMixin, VoiceoverScene):
+class Hook(LectureMixin, StatsScene):
     def construct(self):
         self.story()
         self.intervals()
@@ -14,7 +14,7 @@ class Hook(LectureMixin, VoiceoverScene):
         self.lesson()
         self.taxonomy()
         self.upgrade()
-        self.objectives()
+        self.title(PART)
 
     def story(self):
         d = load("leaderboard")
@@ -142,29 +142,5 @@ class Hook(LectureMixin, VoiceoverScene):
             self.play(FadeIn(cards[0], shift=UP * 0.2))
             vo.wait_until("b")
             self.play(FadeIn(cards[1], shift=UP * 0.2))
-        self.wait(1.0)
-        self.clear_scene()
-
-    def objectives(self):
-        head = VGroup(label(r"Part 64", font_size=34, color=GREY_B), label(r"Statistics in the Age of AI", font_size=56)).arrange(DOWN, buff=0.25)
-        obj = objectives_card([
-            r"error bars for benchmarks; \ paired comparisons; \ arenas; \ IRT; \ reusable holdouts",
-            r"model-judged labels with PPI; \ model collapse, \ derived; \ conformal factuality",
-            r"watermarks as tests; \ calibration of simulators; \ diffusion's memorization",
-            r"interference in deployments; \ four Board rows; \ open problems",
-        ], color=S.ACCENT, font_size=26)
-        prereq = note(r"prerequisites: \ Parts 34, \ 57, \ 58").to_corner(DL, buff=0.3)
-        built = note(r"built: \ \texttt{statkit.evals}, \ the leaderboard").to_corner(DR, buff=0.3)
-        with self.voiceover(
-            "<bookmark mark='a'/> Part sixty-four: statistics in the age of AI. <bookmark mark='b'/> Honest error bars for "
-            "benchmarks; paired comparisons and the leaderboard's winner's curse; arenas as Bradley-Terry models; item "
-            "response theory; reusable holdouts; model-judged labels; model collapse, derived and computed; conformal "
-            "factuality; watermarks as hypothesis tests; calibrating simulators; memorization in diffusion models; "
-            "experiments on deployed systems; and open problems."
-        ) as vo:
-            vo.wait_until("a")
-            self.play(FadeIn(head, shift=UP * 0.2))
-            vo.wait_until("b")
-            self.play(FadeOut(head), FadeIn(obj, shift=UP * 0.2), FadeIn(prereq), FadeIn(built))
         self.wait(1.0)
         self.clear_scene()

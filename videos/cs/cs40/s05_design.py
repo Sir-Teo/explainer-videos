@@ -4,7 +4,7 @@ from explainer.cs import *  # noqa: F403
 from videos.cs.cs40.common import (DATA, HEAD, KERN, LAM, NO, PART, YES, code_block, grid_table)
 
 
-class Design(VoiceoverScene):
+class Design(WatchScene):
     def construct(self):
         self.card()
         self.solid()
@@ -13,13 +13,9 @@ class Design(VoiceoverScene):
         self.functional()
 
     def card(self):
-        card = chapter_card(4, r"Design, \ in the large and the small", r"What shapes keep code changeable?",
-                            lit=(1994, 2000), extra=((1994, r"Gamma, Helm, Johnson and Vlissides: \ Design Patterns"),
+        self.chapter(4, r"Design, \ in the large and the small", r"What shapes keep code changeable?", lit=(1994, 2000), extra=((1994, r"Gamma, Helm, Johnson and Vlissides: \ Design Patterns"),
                                                      (1998, r"Wadler: \ the expression problem"),
-                                                     (2000, r"Martin: \ SOLID")), part=PART)
-        with self.voiceover("Chapter four. Design, in the large and the small."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+                                                     (2000, r"Martin: \ SOLID")), part=PART, said="Chapter four. Design, in the large and the small.")
 
     def solid(self):
         head = label(r"SOLID, \ each with the mistake it prevents", font_size=34).to_edge(UP, buff=0.3)
@@ -97,6 +93,9 @@ class Design(VoiceoverScene):
         self.clear_scene()
 
     def expression(self):
+        self.ask(r"In object-oriented code, which is easy to add?", [r"a new kind of data", r"a new operation"], 0,
+                 say="In object-oriented code, which is easy to add: a new kind of data, or a new operation on all of them?",
+                 reveal="A new kind of data: one new class. A new operation touches every class. Functional code is the reverse.")
         head = label(r"The expression problem", font_size=36).to_edge(UP, buff=0.3)
         ops = [r"evaluate", r"print", r"simplify"]
         kinds = [r"Number", r"Add", r"Multiply"]
@@ -189,6 +188,12 @@ class Design(VoiceoverScene):
                 self.play(FadeIn(l))
         self.wait(0.4)
         self.clear_scene()
+        self.checkpoint(
+            [(r"What does Parnas' rule say?", r"Each module hides one decision likely to change"),
+             (r"What is Hyrum's law?", r"Every observable behaviour will be depended on")],
+            narration="Checkpoint. What does Parnas' rule say? And what is Hyrum's law?",
+            answers_narration="Design each module to hide one decision likely to change. And with enough users, every "
+                              "observable behaviour of an interface will be depended on.")
 
 
 _ = (KERN,)

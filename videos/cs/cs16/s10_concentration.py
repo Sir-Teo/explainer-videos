@@ -6,7 +6,7 @@ from explainer.cs import *  # noqa: F403
 from videos.cs.cs16.common import (CODE, COST, CTRL, DATA, FUNC, HEAD, LAM, NO, PART, YES, load, mono, words)
 
 
-class Concentration(VoiceoverScene):
+class Concentration(WatchScene):
     def construct(self):
         self.card()
         self.recurrence()
@@ -14,11 +14,7 @@ class Concentration(VoiceoverScene):
         self.tails()
 
     def card(self):
-        card = chapter_card(9, r"How lucky can quicksort get?", r"Is the average what you will see?", lit=(1952,),
-                            extra=((1952, r"Chernoff's bound"),), part=PART)
-        with self.voiceover("Chapter nine. How lucky can quicksort get?"):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(9, r"How lucky can quicksort get?", r"Is the average what you will see?", lit=(1952,), extra=((1952, r"Chernoff's bound"),), part=PART, said="Chapter nine. How lucky can quicksort get?")
 
     def recurrence(self):
         head = label(r"The same answer, \ from the recurrence", font_size=34).to_edge(UP, buff=0.3)
@@ -55,6 +51,11 @@ class Concentration(VoiceoverScene):
         self.clear_scene()
 
     def histogram(self):
+        self.ask(r"Ten thousand runs of random quicksort on 1000 keys. \\ A typical run lands...",
+                 [r"within a few percent of the mean", r"often twice the mean"], 0,
+                 say="Run randomized quicksort ten thousand times on the same keys. How far from the average does a typical "
+                     "run land?",
+                 reveal="Within a few percent. The cost is tightly concentrated.")
         d = load("concentration")
         head = label(rf"{words(d['runs'])} runs of quicksort, \ $n = {words(d['n'])}$", font_size=34).to_edge(
             UP, buff=0.3)

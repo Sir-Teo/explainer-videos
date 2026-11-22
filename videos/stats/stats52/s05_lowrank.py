@@ -5,20 +5,28 @@ import numpy as np
 from videos.stats.stats52.common import *  # noqa: F403
 
 
-class LowRank(VoiceoverScene):
+class LowRank(StatsScene):
     def construct(self):
         self.card()
+        self.ask(r"An $n \times n$ matrix of rank $r$. Entries needed to complete it, roughly...",
+                 ["$n^2$", r"$n r \log n$", "$r^2$"], 1,
+                 say="A table of ratings, n by n, of rank r, with entries observed at random. Roughly how many "
+                     "entries does nuclear-norm completion need?",
+                 reveal="About n r log n, under incoherence: far fewer than n squared. A matrix with one big entry "
+                        "can't be completed unless that entry is seen.")
         self.problem()
         self.incoherence()
         self.chart()
         self.picture()
         self.noisy()
+        self.answer()
+        self.checkpoint([("The lasso's prediction error rate?", r"$\sigma^2 s \log p / n$"),
+                         ("Exact support recovery needs?", "irrepresentability and beta-min")],
+                        narration="Checkpoint. The lasso, theoretically.",
+                        answers_narration="S log p over n. And irrepresentability with beta-min.")
 
     def card(self):
-        card = chapter_card(4, r"Low-rank recovery and matrix completion", r"Filling in a table from a few of its entries", lit=(2009,), part=PART)
-        with self.voiceover("Chapter four. Low-rank recovery and matrix completion: filling in a table from a few of its entries."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(4, r"Low-rank recovery and matrix completion", r"Filling in a table from a few of its entries", lit=(2009,), part=PART, said="Chapter four. Low-rank recovery and matrix completion: filling in a table from a few of its entries.")
 
     def problem(self):
         rows = [

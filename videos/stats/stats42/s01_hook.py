@@ -3,13 +3,13 @@ from __future__ import annotations
 from videos.stats.stats42.common import *  # noqa: F403
 
 
-class Hook(VoiceoverScene):
+class Hook(StatsScene):
     def construct(self):
         self.letter()
         self.questions()
         self.fisher()
         self.format()
-        self.objectives()
+        self.title(PART)
 
     def letter(self):
         tl = timeline(lit=(1919, 1978)).to_edge(UP, buff=0.35)
@@ -116,27 +116,4 @@ class Hook(VoiceoverScene):
             self.play(card.sweep(4.0))
             vo.wait_until("c")
             self.play(LaggedStart(*[FadeIn(r, shift=RIGHT * 0.2) for r in rows], lag_ratio=0.6), run_time=6.0)
-        self.clear_scene()
-
-    def objectives(self):
-        head = VGroup(label(r"Part 42", font_size=34, color=GREY_B), label(r"The Comprehensive Exam", font_size=56)).arrange(DOWN, buff=0.25)
-        obj = objectives_card([
-            r"design a cluster-randomized trial: \ the unit, \ the ICC, \ the sample size, \ the analysis plan",
-            r"analyse an observational survey: \ the graph, \ bad controls, \ imputation, \ AIPW, \ sensitivity",
-            r"write the report a minister can act on",
-            r"twelve exam problems, \ from the sandwich to Greenwood's formula",
-        ], color=S.ACCENT, font_size=26)
-        prereq = note(r"prerequisites: \ Parts 21--41").to_corner(DL, buff=0.3)
-        built = note(r"built: \ the MSc problem bank; \ the exam card").to_corner(DR, buff=0.3)
-        with self.voiceover(
-            "<bookmark mark='a'/> Part forty-two: the comprehensive exam. <bookmark mark='b'/> We'll design a cluster-randomized "
-            "trial, from the choice of unit to the analysis plan; analyse an observational survey with a causal graph, "
-            "imputation, a doubly robust estimator and a sensitivity analysis; write the report a minister can act on; and "
-            "then sit twelve exam problems, from the sandwich variance to Greenwood's formula."
-        ) as vo:
-            vo.wait_until("a")
-            self.play(FadeIn(head, shift=UP * 0.2))
-            vo.wait_until("b")
-            self.play(FadeOut(head), FadeIn(obj, shift=UP * 0.2), FadeIn(prereq), FadeIn(built))
-        self.wait(1.0)
         self.clear_scene()

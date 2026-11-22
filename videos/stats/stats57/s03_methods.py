@@ -3,9 +3,15 @@ from __future__ import annotations
 from videos.stats.stats57.common import *  # noqa: F403
 
 
-class Methods(VoiceoverScene):
+class Methods(StatsScene):
     def construct(self):
         self.card()
+        self.ask("Jackknife+ guarantees coverage of at least...",
+                 [r"$1 - \alpha$", r"$1 - 2\alpha$", "nothing"], 1,
+                 say="Jackknife plus uses every observation twice, honestly, with leave-one-out fits. What's its "
+                     "worst-case coverage guarantee?",
+                 reveal="One minus two alpha, for any algorithm; in practice, close to one minus alpha. Barber, "
+                        "Candès, Ramdas and Tibshirani proved the factor of two can't be removed in general.")
         self.full()
         self.compare()
         self.homotopy()
@@ -14,12 +20,10 @@ class Methods(VoiceoverScene):
         self.stable()
         self.cvplus()
         self.cost()
+        self.answer()
 
     def card(self):
-        card = chapter_card(2, r"Full, \ split and jackknife$+$", r"Using every observation twice, \ honestly", lit=(2021,), part=PART)
-        with self.voiceover("Chapter two. Full, split and jackknife plus conformal: using every observation twice, honestly."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(2, r"Full, \ split and jackknife$+$", r"Using every observation twice, \ honestly", lit=(2021,), part=PART, said="Chapter two. Full, split and jackknife plus conformal: using every observation twice, honestly.")
 
     def full(self):
         rows = [

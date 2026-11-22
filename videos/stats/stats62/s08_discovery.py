@@ -5,10 +5,23 @@ import numpy as np
 from videos.stats.stats62.common import *  # noqa: F403
 
 
-class Discovery(LectureMixin, VoiceoverScene):
+class Discovery(LectureMixin, StatsScene):
     def construct(self):
         self.card_voiceover("Chapter seven. Causal discovery: can the graph itself be learned from data?", 7,
                             r"Causal discovery", r"What data can say about arrows", lit=(2018,))
+        self.wrong_idea("A discovery method that wins on simulated benchmarks will work on real data",
+                        "Simulated linear SEMs often let variance order reveal the causal order",
+                        narration="A natural reading of a leaderboard: the causal discovery method that wins on "
+                                  "simulated benchmarks will work on real data.",
+                        right_narration="Reisach and colleagues found that in common simulated linear models, "
+                                        "variance grows along the causal order, so sorting by variance nearly "
+                                        "recovers it: varsortability. The benchmarks were easier than reality.")
+        self.ask("From observational data alone, the PC algorithm recovers a graph up to...",
+                 ["the exact DAG", "its Markov equivalence class"], 1,
+                 say="Causal discovery: can the graph itself be learned? From observational data alone, what does "
+                     "the PC algorithm recover?",
+                 reveal="The Markov equivalence class: graphs with the same conditional independences can't be told "
+                        "apart. Some arrows stay undirected.")
         self.pc()
         self.equivalence()
         self.faithfulness()
@@ -17,6 +30,7 @@ class Discovery(LectureMixin, VoiceoverScene):
         self.interventions()
         self.chart()
         self.lessons()
+        self.answer()
 
     def pc(self):
         self.lad_voiceover(

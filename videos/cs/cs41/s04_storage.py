@@ -4,7 +4,7 @@ from explainer.cs import *  # noqa: F403
 from videos.cs.cs41.common import (DATA, HEAD, KERN, LAM, NO, PART, YES, axes, grid_table, load, trace)
 
 
-class Storage(VoiceoverScene):
+class Storage(WatchScene):
     def construct(self):
         self.card()
         self.packs()
@@ -14,14 +14,13 @@ class Storage(VoiceoverScene):
         self.patches()
 
     def card(self):
-        card = chapter_card(3, r"Storing history", r"How can every version of everything fit?", lit=(2005, 2016),
-                            extra=((2005, r"packfiles"), (2016, r"Potvin and Levenberg: \ Google's monorepo")),
-                            part=PART)
-        with self.voiceover("Chapter three. Storing history."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(3, r"Storing history", r"How can every version of everything fit?", lit=(2005, 2016), extra=((2005, r"packfiles"), (2016, r"Potvin and Levenberg: \ Google's monorepo")), part=PART, said="Chapter three. Storing history.")
 
     def packs(self):
+        self.ask(r"The syllabus, committed 40 times. \\ Packed with deltas, history takes...",
+                 [r"forty copies' worth", r"little more than one copy"], 1,
+                 say="The syllabus has been committed forty times. Packed by git, how much space does its whole history take?",
+                 reveal="Not much more than one copy: each version is stored as a small delta against a similar one.")
         d = load("delta")
         rows = d["rows"]
         head = label(r"Deltas", font_size=36).to_edge(UP, buff=0.3)

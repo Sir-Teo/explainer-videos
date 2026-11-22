@@ -4,7 +4,7 @@ from explainer.cs import *  # noqa: F403
 from videos.cs.cs24.common import (CTRL, DATA, HEAD, LAM, NO, PART, YES, grid_table, load, mono, words)
 
 
-class Bits(VoiceoverScene):
+class Bits(WatchScene):
     def construct(self):
         self.card()
         self.tricks()
@@ -12,11 +12,7 @@ class Bits(VoiceoverScene):
         self.russians()
 
     def card(self):
-        card = chapter_card(7, r"Bits and the Four Russians", r"How many operations does one machine word do?",
-                            lit=(1970,), extra=((1970, r"Arlazarov, Dinic, Kronrod, Faradzev"),), part=PART)
-        with self.voiceover("Chapter seven. Bits, and the Four Russians."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(7, r"Bits and the Four Russians", r"How many operations does one machine word do?", lit=(1970,), extra=((1970, r"Arlazarov, Dinic, Kronrod, Faradzev"),), part=PART, said="Chapter seven. Bits, and the Four Russians.")
 
     def tricks(self):
         d = load("bits")
@@ -60,6 +56,9 @@ class Bits(VoiceoverScene):
         self.clear_scene()
 
     def submasks(self):
+        self.ask(r"Visit every submask of every mask of $n$ bits. \\ Total steps?", [r"$4^n$", r"$3^n$", r"$2^n$"], 1,
+                 say="Visit every subset of every subset of n bits. How many steps in total?",
+                 reveal="Three to the n: each bit is outside, inside the mask only, or in both.")
         d = load("bits")
         head = label(r"Enumerating submasks: \ $3^n$, \ not $4^n$", font_size=32).to_edge(UP, buff=0.35)
         code_ = VGroup(*[mono(t, 22, c) for t, c in (("for (s = m; ; s = (s - 1) & m) {", DATA),

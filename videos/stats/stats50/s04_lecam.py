@@ -5,9 +5,15 @@ import numpy as np
 from videos.stats.stats50.common import *  # noqa: F403
 
 
-class LeCam(VoiceoverScene):
+class LeCam(StatsScene):
     def construct(self):
         self.card()
+        self.ask("Two hypotheses whose data distributions are close in total variation. The sum of a test's two error probabilities...",
+                 ["can be small", "can't be small"], 1,
+                 say="Le Cam's two-point method. Two parameter values whose data distributions are close in total "
+                     "variation. Can any test have small error probabilities under both?",
+                 reveal="No: the sum of its two errors is at least one minus the total variation distance. If two "
+                        "answers look alike in the data, no one can tell them apart, and the rate follows.")
         self.reduction()
         self.proof()
         self.picture()
@@ -15,12 +21,14 @@ class LeCam(VoiceoverScene):
         self.density()
         self.functional()
         self.chart()
+        self.answer()
+        self.checkpoint([("Nonparametric regression is asymptotically?", "a Gaussian sequence model"),
+                         ("Close in total variation: the two errors' sum?", "can't be small")],
+                        narration="Checkpoint. The model and two points.",
+                        answers_narration="A Gaussian sequence model. And it can't be small.")
 
     def card(self):
-        card = chapter_card(3, r"Le Cam's two-point method", r"If two answers look alike, \ no one can tell them apart", part=PART)
-        with self.voiceover("Chapter three. Le Cam's two-point method: if two answers look alike, no one can tell them apart."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(3, r"Le Cam's two-point method", r"If two answers look alike, \ no one can tell them apart", part=PART, said="Chapter three. Le Cam's two-point method: if two answers look alike, no one can tell them apart.")
 
     def reduction(self):
         rows = [

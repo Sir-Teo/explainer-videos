@@ -9,7 +9,7 @@ LEFT_TREE = ("E", [("E", [("E", ["id"]), "+", ("E", ["id"])]), "*", ("E", ["id"]
 RIGHT_TREE = ("E", [("E", ["id"]), "+", ("E", [("E", ["id"]), "*", ("E", ["id"])])])
 
 
-class Grammars(VoiceoverScene):
+class Grammars(WatchScene):
     def construct(self):
         self.card()
         self.rules()
@@ -18,12 +18,8 @@ class Grammars(VoiceoverScene):
         self.dangling()
 
     def card(self):
-        card = chapter_card(9, r"Context-free grammars", r"How do you describe a language with nesting?",
-                            lit=(1956, 1960), extra=((1956, r"Chomsky: \ phrase-structure grammars"),
-                                                     (1960, r"Backus and Naur: \ ALGOL 60")), part=PART)
-        with self.voiceover("Chapter nine. Context-free grammars."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(9, r"Context-free grammars", r"How do you describe a language with nesting?", lit=(1956, 1960), extra=((1956, r"Chomsky: \ phrase-structure grammars"),
+                                                     (1960, r"Backus and Naur: \ ALGOL 60")), part=PART, said="Chapter nine. Context-free grammars.")
 
     def rules(self):
         head = label(r"A grammar: \ rules for rewriting", font_size=36).to_edge(UP, buff=0.3)
@@ -86,6 +82,10 @@ class Grammars(VoiceoverScene):
         self.clear_scene()
 
     def ambiguity(self):
+        self.ask(r"$E \to E + E \mid E * E \mid \mathit{id}$. \\ Parse trees for $\mathit{id} + \mathit{id} * \mathit{id}$?",
+                 [r"1", r"2", r"3"], 1,
+                 say="With this grammar, how many parse trees does id plus id times id have?",
+                 reveal="Two: one adds first, one multiplies first. The grammar is ambiguous.")
         c = load("cfg")
         head = label(r"Ambiguity: \ more than one tree", font_size=36).to_edge(UP, buff=0.3)
         gram = Text("E → E + E | E * E | id", font="DejaVu Sans Mono", font_size=24, color=CODE).next_to(head, DOWN,

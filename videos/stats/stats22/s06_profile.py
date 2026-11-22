@@ -5,19 +5,23 @@ import numpy as np
 from videos.stats.stats22.common import *  # noqa: F403
 
 
-class Profile(VoiceoverScene):
+class Profile(StatsScene):
     def construct(self):
         self.card()
+        self.ask("Many nuisance parameters. The plain profile likelihood...",
+                 ["is always fine", "can be badly biased"], 1,
+                 say="Profile out the nuisance parameters by maximizing over them. When there are many of them, is "
+                     "the plain profile likelihood still trustworthy?",
+                 reveal="Not always: it can be badly biased, because it treats the estimated nuisances as known. "
+                        "Chapter seven shows how badly.")
         self.matrix()
         self.landscape()
         self.profile_curve()
         self.nuisance()
+        self.answer()
 
     def card(self):
-        card = chapter_card(5, r"Many parameters", r"The information matrix and the profile", part=PART)
-        with self.voiceover("Chapter five. Many parameters."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(5, r"Many parameters", r"The information matrix and the profile", part=PART, said="Chapter five. Many parameters.")
 
     def matrix(self):
         d = load("gamma")

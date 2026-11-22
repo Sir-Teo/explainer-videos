@@ -13,9 +13,15 @@ def town_map(d, values, center, width, lo, hi):
     return F, dots
 
 
-class Areal(VoiceoverScene):
+class Areal(StatsScene):
     def construct(self):
         self.card()
+        self.ask("Smoothing a disease map, the highest raw rates are...",
+                 ["unchanged", "pulled down"], 1,
+                 say="Disease rates for small regions, then smoothed with neighbours' information. What happens to "
+                     "the highest raw rates?",
+                 reveal="They're pulled down: in small regions the extremes are mostly noise. The bias buys a large "
+                        "reduction in variance, as with James and Stein.")
         self.moran()
         self.test()
         self.smr()
@@ -23,12 +29,10 @@ class Areal(VoiceoverScene):
         self.carsar()
         self.maps()
         self.scatter_plot()
+        self.answer()
 
     def card(self):
-        card = chapter_card(9, r"Areal data", r"Disease maps without the noise", lit=(1974, 1991), part=PART)
-        with self.voiceover("Chapter nine. Areal data."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(9, r"Areal data", r"Disease maps without the noise", lit=(1974, 1991), part=PART, said="Chapter nine. Areal data.")
 
     def moran(self):
         rows = [

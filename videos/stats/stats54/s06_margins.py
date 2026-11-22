@@ -5,9 +5,15 @@ import numpy as np
 from videos.stats.stats54.common import *  # noqa: F403
 
 
-class Margins(VoiceoverScene):
+class Margins(StatsScene):
     def construct(self):
         self.card()
+        self.ask("AdaBoost's test error kept falling after its training error hit zero because...",
+                 ["its margins kept growing", "by luck"], 0,
+                 say="AdaBoost's test error kept improving long after it stopped making mistakes on the training "
+                     "data. Why?",
+                 reveal="Its margins kept growing: it became more confident on the training points, and margin "
+                        "bounds depend on confidence, not on the number of rules combined.")
         self.puzzle()
         self.chart()
         self.margin_chart()
@@ -15,12 +21,10 @@ class Margins(VoiceoverScene):
         self.gradient()
         self.svm()
         self.compression()
+        self.answer()
 
     def card(self):
-        card = chapter_card(5, r"Margins", r"Why boosting kept improving after it stopped making mistakes", lit=(1998,), part=PART)
-        with self.voiceover("Chapter five. Margins: why boosting kept improving after it stopped making mistakes."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(5, r"Margins", r"Why boosting kept improving after it stopped making mistakes", lit=(1998,), part=PART, said="Chapter five. Margins: why boosting kept improving after it stopped making mistakes.")
 
     def puzzle(self):
         rows = [

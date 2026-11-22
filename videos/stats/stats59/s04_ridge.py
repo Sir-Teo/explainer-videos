@@ -5,10 +5,16 @@ import numpy as np
 from videos.stats.stats59.common import *  # noqa: F403
 
 
-class Ridge(LectureMixin, VoiceoverScene):
+class Ridge(LectureMixin, StatsScene):
     def construct(self):
         self.card_voiceover("Chapter three. Exact ridge and ridgeless risk, and double descent derived.", 3,
                             r"Exact ridge and ridgeless risk", r"Double descent, \ derived", lit=(2018, 2022))
+        self.ask("Minimum-norm least squares at $p = n$. Its risk...",
+                 ["is at its minimum", "peaks, without bound"], 1,
+                 say="Exact ridge and ridgeless risk. Minimum-norm least squares, as the number of parameters "
+                     "reaches the number of observations. What does its risk do?",
+                 reveal="It peaks, without bound, as the design becomes square and nearly singular. Past it, the "
+                        "risk falls again: double descent, derived exactly.")
         self.formula()
         self.risk_chart()
         self.optimal()
@@ -17,6 +23,11 @@ class Ridge(LectureMixin, VoiceoverScene):
         self.dd_chart()
         self.why_peak()
         self.benign()
+        self.answer()
+        self.checkpoint([("The logistic MLE at $p/n = 0.2$?", "inflated"),
+                         ("Minimum-norm least squares at $p = n$?", "its risk peaks: double descent")],
+                        narration="Checkpoint. The proportional regime.",
+                        answers_narration="Inflated. And a peak.")
 
     def formula(self):
         heading = label('The limiting risk and its normalization', font_size=30, color=PROPC).move_to([0, 3.35, 0])

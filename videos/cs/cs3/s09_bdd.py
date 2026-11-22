@@ -43,7 +43,7 @@ def draw_bdd(nodes, order, root, width=5.0, height=4.6, origin=ORIGIN, names=Non
     return g
 
 
-class Bdd(VoiceoverScene):
+class Bdd(WatchScene):
     def construct(self):
         self.card()
         self.reduce()
@@ -51,10 +51,7 @@ class Bdd(VoiceoverScene):
         self.uses()
 
     def card(self):
-        card = chapter_card(8, r"Decision diagrams", r"Is there a canonical form that is usually small?", part=PART)
-        with self.voiceover("Chapter eight. Decision diagrams."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(8, r"Decision diagrams", r"Is there a canonical form that is usually small?", part=PART, said="Chapter eight. Decision diagrams.")
 
     # ------------------------------------------------------------------
     def reduce(self):
@@ -113,6 +110,10 @@ class Bdd(VoiceoverScene):
 
     # ------------------------------------------------------------------
     def order(self):
+        self.ask(r"$x_1x_2 + x_3x_4 + x_5x_6$. \\ Does the variable order change the diagram's size?",
+                 [r"no: the diagram is unique", r"a little", r"exponentially"], 2,
+                 say="Does the order you test the variables in change the size of the diagram?",
+                 reveal="Exponentially. Interleave the pairs badly and the diagram explodes.")
         d = load("bdd")
         k3 = d["k3"]
         head = label(r"The order of the variables matters, \ exponentially", font_size=36).to_edge(UP, buff=0.3)

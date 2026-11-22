@@ -6,20 +6,24 @@ from scipy import stats
 from videos.stats.stats11.common import *  # noqa: F403
 
 
-class Belt(VoiceoverScene):
+class Belt(StatsScene):
     def construct(self):
         self.card()
+        self.ask(r"A 95\% confidence set contains every $\theta_0$ that...",
+                 [r"a 5\% test would reject", r"a 5\% test would not reject", "maximizes the likelihood"], 1,
+                 say="There's a second way to build an interval. Run a five percent test of every candidate value. "
+                     "Which values go in the confidence set?",
+                 reveal="Every value the test would not reject. Invert a test and you get an interval exactly as "
+                        "good as the test.")
         self.duality()
         self.belt()
         self.wald_belt()
         self.curve()
         self.family()
+        self.answer()
 
     def card(self):
-        card = chapter_card(3, r"Inverting tests", r"A confidence set contains every value a test would not reject", part=PART)
-        with self.voiceover("Chapter three. Inverting tests."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(3, r"Inverting tests", r"A confidence set contains every value a test would not reject", part=PART, said="Chapter three. Inverting tests.")
 
     def duality(self):
         tc = theorem_card(r"Tests and intervals are the same thing", r"For each $\theta_0$ let $A(\theta_0)$ be the acceptance region of a "

@@ -5,21 +5,25 @@ import numpy as np
 from videos.stats.stats56.common import *  # noqa: F403
 
 
-class PoSI(VoiceoverScene):
+class PoSI(StatsScene):
     def construct(self):
         self.card()
+        self.ask("PoSI's intervals are valid for...",
+                 ["every model you might have chosen", "only the model chosen, by conditioning"], 0,
+                 say="Berk, Brown, Buja, Zhang and Zhao's PoSI: post-selection inference. For which models are its "
+                     "intervals valid?",
+                 reveal="For every model you might have chosen, simultaneously: they need nothing about the "
+                        "selection rule. The price is width, which grows with the number of candidate models.")
         self.target()
         self.constant()
         self.chart()
         self.bounds()
         self.practice()
         self.verdict()
+        self.answer()
 
     def card(self):
-        card = chapter_card(2, r"PoSI", r"Cover every model you might have chosen", lit=(2013,), part=PART)
-        with self.voiceover("Chapter two. Post-selection inference, PoSI: cover every model you might have chosen."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(2, r"PoSI", r"Cover every model you might have chosen", lit=(2013,), part=PART, said="Chapter two. Post-selection inference, PoSI: cover every model you might have chosen.")
 
     def target(self):
         rows = [

@@ -18,7 +18,7 @@ def bit_array(y=0.6, w=0.36):
     return cells, idx
 
 
-class Bloom(VoiceoverScene):
+class Bloom(WatchScene):
     def construct(self):
         self.card()
         self.tiny()
@@ -26,13 +26,7 @@ class Bloom(VoiceoverScene):
         self.measured()
 
     def card(self):
-        card = chapter_card(8, r"Bloom filters", r"Can a set forget its members and still answer?", lit=(1970,),
-                            extra=((1970, r"Bloom's filter"),), part=PART)
-        with self.voiceover((
-            'Chapter eight. Bloom filters.'
-        )):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(8, r"Bloom filters", r"Can a set forget its members and still answer?", lit=(1970,), extra=((1970, r"Bloom's filter"),), part=PART, said='Chapter eight. Bloom filters.')
 
     def tiny(self):
         d = load("bloom")
@@ -104,6 +98,10 @@ class Bloom(VoiceoverScene):
         self.clear_scene()
 
     def derive(self):
+        self.ask(r"A Bloom filter with 10 bits per word, \\ the best number of hashes. False positives?",
+                 [r"about 10\%", r"about 1\%", r"about 0.1\%"], 1,
+                 say="Ten bits per word, and the best number of hash functions. How often does a Bloom filter say yes wrongly?",
+                 reveal="About one percent.")
         head = label(r"The false-positive rate", font_size=34).to_edge(UP, buff=0.35)
         lines = VGroup(
             label(r"$n$ words, \ $m$ bits, \ $k$ hashes \ (ideal independent uniform hash placements)", font_size=22,

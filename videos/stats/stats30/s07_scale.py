@@ -5,9 +5,15 @@ import numpy as np
 from videos.stats.stats30.common import *  # noqa: F403
 
 
-class Scale(VoiceoverScene):
+class Scale(StatsScene):
     def construct(self):
         self.card()
+        self.ask("Twenty-four copper readings, one wildly high. Which scale barely moves?",
+                 ["the standard deviation", "the MAD"], 1,
+                 say="Twenty-four measurements of copper in flour, one of them wildly high. Which measure of scale "
+                     "barely notices it: the standard deviation, or the median absolute deviation?",
+                 reveal="The MAD. The standard deviation inflates, and an inflated scale hides the very outlier it "
+                        "should flag: masking.")
         self.copper()
         self.mad_def()
         self.masking1d()
@@ -15,12 +21,14 @@ class Scale(VoiceoverScene):
         self.mscale()
         self.table()
         self.why_scale()
+        self.answer()
+        self.checkpoint([("The median's breakdown point?", r"50\%"),
+                         ("One wild copper reading: which scale holds?", "the MAD")],
+                        narration="Checkpoint. Breakdown and scale.",
+                        answers_narration="Fifty percent. And the MAD.")
 
     def card(self):
-        card = chapter_card(6, r"Robust scale", r"MAD, \ $Q_n$, \ $S_n$", lit=(1993,), part=PART)
-        with self.voiceover("Chapter six. Robust measures of scale."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(6, r"Robust scale", r"MAD, \ $Q_n$, \ $S_n$", lit=(1993,), part=PART, said="Chapter six. Robust measures of scale.")
 
     def copper(self):
         d = load("scale")

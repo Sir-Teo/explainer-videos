@@ -14,7 +14,7 @@ def edge(a, b, color=GREY_B):
     return Arrow(a[0].get_center(), b[0].get_center(), buff=0.34, color=color, stroke_width=2, tip_length=0.13)
 
 
-class Counting(VoiceoverScene):
+class Counting(WatchScene):
     def construct(self):
         self.card()
         self.reach()
@@ -23,14 +23,15 @@ class Counting(VoiceoverScene):
         self.traffic()
 
     def card(self):
-        card = chapter_card(6, r"Why collect, \ and counting references", r"Who frees the memory?", lit=(1960,),
-                            extra=((1960, r"McCarthy: \ garbage collection; \ Collins: \ reference counts"),),
-                            part=PART)
-        with self.voiceover("Chapter six. Why collect, and counting references."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(6, r"Why collect, \ and counting references", r"Who frees the memory?", lit=(1960,), extra=((1960, r"McCarthy: \ garbage collection; \ Collins: \ reference counts"),), part=PART, said="Chapter six. Why collect, and counting references.")
 
     def reach(self):
+        self.wrong_idea(r"Garbage collection makes memory management free",
+                        r"Every collector trades throughput, \\ pause time and memory",
+                        narration="With a garbage collector, it seems, memory management stops being anyone's problem.",
+                        right_narration="It moves the problem. Every collector trades throughput against pause time and "
+                                        "memory, and the choice shows up in latency.")
+        self.clear_scene()
         head = label('Reachable, not necessarily used again', font_size=34).to_edge(UP, buff=0.3)
         roots = VGroup(*[VGroup(Rectangle(width=1.0, height=0.5, color=CTRL, stroke_width=2),
                                 mono(n, 16, CTRL)) for n in ("stack", "globals")])
@@ -103,8 +104,7 @@ class Counting(VoiceoverScene):
             "reference increments the count; overwriting or dropping one decrements it. <bookmark mark='c'/> When "
             "the root is removed, a reaches zero and is reclaimed. Releasing its outgoing reference can make b "
             "reach zero, and then c. Watch that cascade through the graph. <bookmark mark='d'/> This is prompt "
-            "reclamation, but a large graph can cause a large synchronous cascade. The model therefore does not "
-            "establish pause-free execution, and cycles need additional treatment."
+            "reclamation, but a large graph can cause a large synchronous cascade."
         )
         ) as vo:
             self.play(FadeIn(head), FadeIn(root), *[FadeIn(n) for n in ns], Create(e0), Create(e1), Create(e2))
@@ -127,6 +127,10 @@ class Counting(VoiceoverScene):
         self.clear_scene()
 
     def cycles(self):
+        self.ask(r"Two objects point at each other; \\ nothing else points at either. \\ Does reference counting free them?",
+                 [r"yes", r"no"], 1,
+                 say="Two objects point at each other, and nothing else can reach them. Does reference counting free them?",
+                 reveal="No. Each still has a count of one, forever. CPython adds a cycle collector for exactly this.")
         d = load("rc")["cpython"]
         head = label(r"The weakness: \ cycles", font_size=34).to_edge(UP, buff=0.3)
         f, g = node("f", r=0.4), node("g", r=0.4)
@@ -211,8 +215,7 @@ class Counting(VoiceoverScene):
         with self.voiceover(
             (
             "Reference counting makes pointer updates part of memory management. <bookmark mark='a'/> Our "
-            "instrumentation counts increments and decrements for the Job; it measures traffic in this model, not "
-            "the elapsed time of a complete reference-counting collector. <bookmark mark='b'/> A count reaching "
+            "instrumentation counts increments and decrements for the Job. <bookmark mark='b'/> A count reaching "
             "zero can trigger a cascade through a large object graph. Prompt reclamation therefore does not imply "
             "a small worst-case pause. <bookmark mark='c'/> Rust's Rc uses non-atomic counts; Arc supports "
             "sharing with atomic operations. Other runtimes have their own thread and ownership optimizations. "

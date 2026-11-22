@@ -5,12 +5,12 @@ import numpy as np
 from videos.stats.stats6.common import *  # noqa: F403
 
 
-class Hook(VoiceoverScene):
+class Hook(StatsScene):
     def construct(self):
         self.fair()
         self.ogive()
         self.crowd()
-        self.objectives()
+        self.title(PART)
 
     def fair(self):
         tl = timeline(lit=(1907,)).to_edge(UP, buff=0.35)
@@ -127,34 +127,4 @@ class Hook(VoiceoverScene):
             self.play(Create(shr), Create(floor), FadeIn(leg[1]), run_time=2.0)
             vo.wait_until("c")
             self.play(LaggedStart(*[FadeIn(q, shift=RIGHT * 0.2) for q in qs], lag_ratio=0.5))
-        self.clear_scene()
-
-    def objectives(self):
-        head = VGroup(label(r"Part 6", font_size=34, color=GREY_B), label(r"The Laws of Averages", font_size=60))
-        head.arrange(DOWN, buff=0.25)
-        obj = objectives_card([
-            r"Markov's, Chebyshev's and Jensen's inequalities; \ the weak law of large numbers",
-            r"convergence in probability and in distribution; \ the central limit theorem, seen and proved",
-            r"the normal approximation; \ how fast it arrives, \ and how slowly for incomes",
-            r"the delta method; \ Slutsky's theorem; \ when averages fail (Cauchy)",
-            r"concentration (Hoeffding); \ the law of maxima; \ floods and return levels",
-        ], color=S.ACCENT, font_size=26)
-        prereq = note(r"prerequisites: \ Parts 2, 3 and 5").to_corner(DL, buff=0.3)
-        built = label(r"Built in this part: \ a Galton board", font_size=28, color=S.ACCENT).to_edge(DOWN, buff=0.8)
-        with self.voiceover(
-            "<bookmark mark='a'/> Part six: the laws of averages. <bookmark mark='b'/> We'll prove the inequalities "
-            "that make averaging work, and the weak law of large numbers; meet the kinds of convergence; see the "
-            "central limit theorem and prove it; measure how fast it arrives, which for the World's incomes is "
-            "alarmingly slowly; learn the delta method and Slutsky's theorem, the tools that let every later part "
-            "use the normal approximation; watch averages fail; bound them with Hoeffding's inequality; and turn "
-            "from averages to maxima, and to the floods they predict. <bookmark mark='c'/> And we'll build a Galton "
-            "board."
-        ) as vo:
-            vo.wait_until("a")
-            self.play(FadeIn(head, shift=UP * 0.2))
-            vo.wait_until("b")
-            self.play(FadeOut(head), FadeIn(obj, shift=UP * 0.2), FadeIn(prereq))
-            vo.wait_until("c")
-            self.play(obj.animate.shift(UP * 0.4), FadeIn(built))
-        self.wait(1.0)
         self.clear_scene()

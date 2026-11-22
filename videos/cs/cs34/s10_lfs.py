@@ -4,21 +4,20 @@ from explainer.cs import *  # noqa: F403
 from videos.cs.cs34.common import (FILEC, HEAD, JRN, KERN, LAM, META, NO, PART, YES, blk, curve, load)
 
 
-class Lfs(VoiceoverScene):
+class Lfs(WatchScene):
     def construct(self):
         self.card()
         self.idea()
         self.cost()
-        self.bimodal()
 
     def card(self):
-        card = chapter_card(9, r"The log-structured file system", r"What if the disk were only ever written in order?",
-                            lit=(1992,), extra=((1992, r"Rosenblum and Ousterhout: \ Sprite LFS"),), part=PART)
-        with self.voiceover("Chapter nine. The log-structured file system."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(9, r"The log-structured file system", r"What if the disk were only ever written in order?", lit=(1992,), extra=((1992, r"Rosenblum and Ousterhout: \ Sprite LFS"),), part=PART, said="Chapter nine. The log-structured file system.")
 
     def idea(self):
+        self.ask(r"1992: most reads are served by the cache. \\ So what does the disk mostly do?", [r"reads",
+                 r"writes"], 1,
+                 say="By 1992, most reads were served from the memory cache. So what was the disk mostly doing?",
+                 reveal="Writing. So write everything as one long sequential log.")
         head = label(r"Make every write sequential", font_size=36).to_edge(UP, buff=0.3)
         seq = [("D", FILEC), ("D", FILEC), ("I", META), ("D", FILEC), ("I", META), ("map", JRN), ("D", FILEC),
                ("D", FILEC), ("I", META), ("map", JRN)]
@@ -114,61 +113,3 @@ class Lfs(VoiceoverScene):
         self.wait(0.3)
         self.clear_scene()
 
-    def bimodal(self):
-        d = load("lfs")
-        head = label(r"Which segments to clean", font_size=36).to_edge(UP, buff=0.3)
-        W, H = 5.2, 2.2
-
-        def hist(bins, color):
-            mx = max(bins)
-            g = VGroup()
-            w = W / len(bins)
-            for k, v in enumerate(bins):
-                h = max(0.005, H * v / mx)
-                g.add(Rectangle(width=w * 0.9, height=h, stroke_width=0, fill_color=color,
-                                fill_opacity=0.85).move_to([k * w, h / 2, 0]))
-            base = Line([-w / 2, 0, 0], [W - w / 2, 0, 0], color=GREY_D)
-            ticks = VGroup(*[label(t, font_size=15, color=GREY_B).move_to([W * x - w / 2, -0.25, 0]) for x, t in
-                             ((0, "0"), (0.5, "0.5"), (1, "1"))])
-            return VGroup(g, base, ticks)
-        hg = hist(d["hist"]["greedy"]["bins"], NO)
-        hc = hist(d["hist"]["cost-benefit"]["bins"], YES)
-        tg = label(rf"greedy: \ the emptiest; \ mean {d['hist']['greedy']['mean']:.2f}", font_size=19,
-                   color=NO).next_to(hg, UP, buff=0.15)
-        tc = label(rf"cost-benefit; \ mean {d['hist']['cost-benefit']['mean']:.2f}", font_size=19,
-                   color=YES).next_to(hc, UP, buff=0.15)
-        VGroup(VGroup(hg, tg), VGroup(hc, tc)).arrange(RIGHT, buff=1.2).next_to(head, DOWN, buff=0.6)
-        cap = label(r"utilization of each segment when it was cleaned \ (disk 75\% full, \ hot and cold)",
-                    font_size=17, color=GREY_B).next_to(VGroup(hg, hc), DOWN, buff=0.2)
-        lines = VGroup(
-            label(r"greedy waits for cold segments to become the emptiest, \ which takes a long time: \ cold "
-                  r"data hoards free space", font_size=20, color=NO),
-            label(r"cost-benefit: \ clean when $\dfrac{(1 - u) \times \text{age}}{1 + u}$ is largest: \ old, \ "
-                  r"stable free space is worth more", font_size=20, color=YES),
-            label(r"so cold segments are cleaned while still quite full, \ hot ones once nearly empty: \ "
-                  r"\textbf{two peaks}, \ as the paper found", font_size=20, color=HEAD),
-            label(r"the same cleaner lives on: \ in every flash drive \ (chapter 3), \ in F2FS, \ and in LSM trees "
-                  r"\ (chapter 14)", font_size=20, color=LAM),
-        ).arrange(DOWN, buff=0.15).to_edge(DOWN, buff=0.35)
-        with self.voiceover(
-            "Here is when each segment was cleaned, and how full it was. <bookmark mark='a'/> The greedy cleaner "
-            "always takes the emptiest segment. Hot segments empty quickly and are cleaned again and again. Cold "
-            "segments, full of data that rarely changes, empty only slowly, are seldom the emptiest, and hold on to "
-            "their scraps of free space for a long time. <bookmark mark='b'/> Rosenblum's cost-benefit rule weighs the free space "
-            "gained by how long it is likely to stay free: one minus u, times the age of the data, over the cost, one "
-            "plus u. <bookmark mark='c'/> Now cold segments are worth cleaning while still quite full, because once "
-            "compacted they stay compact, and hot segments are left alone until they are nearly empty. Two peaks, "
-            "exactly the shape the paper reported. <bookmark mark='d'/> The idea outlived its file system: every flash "
-            "drive runs a cleaner like this one, and so does every LSM tree."
-        ) as vo:
-            self.play(FadeIn(head), FadeIn(cap))
-            vo.wait_until("a")
-            self.play(FadeIn(hg), FadeIn(tg), FadeIn(lines[0]))
-            vo.wait_until("b")
-            self.play(FadeIn(lines[1]))
-            vo.wait_until("c")
-            self.play(FadeIn(hc), FadeIn(tc), FadeIn(lines[2]))
-            vo.wait_until("d")
-            self.play(FadeIn(lines[3]))
-        self.wait(0.3)
-        self.clear_scene()

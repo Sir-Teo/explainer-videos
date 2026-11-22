@@ -3,21 +3,29 @@ from __future__ import annotations
 from videos.stats.stats26.common import *  # noqa: F403
 
 
-class Conjugate(VoiceoverScene):
+class Conjugate(StatsScene):
     def construct(self):
         self.card()
+        self.ask("A Beta$(a, b)$ prior on a probability is worth how many observations?",
+                 ["$a + b$", "none", "infinitely many"], 0,
+                 say="Conjugate priors act like pseudo-data. A Beta a, b prior on a probability is worth how many "
+                     "observations?",
+                 reveal="A plus b: a successes and b failures, seen before the data. That's a handy way to judge "
+                        "whether a prior is strong.")
         self.family()
         self.dy()
         self.table()
         self.visits()
         self.predictive()
         self.beyond()
+        self.answer()
+        self.checkpoint([("Eight schools: no pooling, complete pooling, or?", "partial pooling, learned by the hierarchy"),
+                         ("A Beta$(a, b)$ prior is worth?", "$a + b$ pseudo-observations")],
+                        narration="Checkpoint. Hierarchies and priors.",
+                        answers_narration="Partial pooling. And a plus b observations.")
 
     def card(self):
-        card = chapter_card(4, r"Conjugate families", r"Priors as pseudo-data", lit=(1979,), part=PART)
-        with self.voiceover("Chapter four. Conjugate and exponential families."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(4, r"Conjugate families", r"Priors as pseudo-data", lit=(1979,), part=PART, said="Chapter four. Conjugate and exponential families.")
 
     def family(self):
         rows = [

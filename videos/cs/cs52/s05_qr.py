@@ -25,26 +25,24 @@ def pattern(rows, size=26, color=WHITE):
     return m
 
 
-class Qr(VoiceoverScene):
+class Qr(WatchScene):
     def construct(self):
         self.card()
         self.normal()
         self.viaqr()
         self.mirrors()
-        self.givens()
         self.gramschmidt()
 
     def card(self):
-        card = chapter_card(4, r"Least squares and QR",
-                            r"How do we fit more equations than unknowns, \ without squaring the trouble?",
-                            lit=(1805, 1958, 1965), extra=((1805, r"Legendre: \ least squares"),
+        self.chapter(4, r"Least squares and QR", r"How do we fit more equations than unknowns, \ without squaring the trouble?", lit=(1805, 1958, 1965), extra=((1805, r"Legendre: \ least squares"),
                                                            (1958, r"Householder: \ mirrors"),
-                                                           (1965, r"Golub: \ least squares by QR")), part=PART)
-        with self.voiceover("Chapter four. Least squares and QR."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+                                                           (1965, r"Golub: \ least squares by QR")), part=PART, said="Chapter four. Least squares and QR.")
 
     def normal(self):
+        self.ask(r"Solve least squares through $A^T A$. \\ The condition number becomes...", [r"the same",
+                 r"its square"], 1,
+                 say="Solve a least squares problem through the normal equations, A transposed A. What happens to the condition number?",
+                 reveal="It is squared, and half the digits can go.")
         head = label(r"Least squares, \ and the normal equations", font_size=36).to_edge(UP, buff=0.3)
         plane = Polygon([-6.5, -2.2, 0], [-2.4, -2.2, 0], [-0.9, -0.3, 0], [-5.0, -0.3, 0], stroke_color=GREY_C,
                         stroke_width=1.5, fill_color=DATA, fill_opacity=0.12)
@@ -251,71 +249,6 @@ class Qr(VoiceoverScene):
         self.wait(0.4)
         self.clear_scene()
 
-    def givens(self):
-        m = load("mirrors")
-        A = m["A"]
-        nrot = m["givens_rotations"]
-        head = label(r"Givens rotations: \ one zero at a time", font_size=36).to_edge(UP, buff=0.3)
-        O = np.array([-5.4, -1.3, 0])
-        s = 0.62
-        a, b = A[0][0], A[1][0]
-        r = math.hypot(a, b)
-        axes_ = VGroup(Line(O + LEFT * 1.2, O + RIGHT * 4.0, color=GREY_D, stroke_width=1.5),
-                       Line(O + DOWN * 0.8, O + UP * 3.4, color=GREY_D, stroke_width=1.5))
-        vec = Arrow(O, O + s * np.array([a, b, 0]), buff=0, color=DATA, stroke_width=4,
-                    max_tip_length_to_length_ratio=0.1)
-        vl = MathTex(rf"({a:g}, {b:g})", font_size=26, color=DATA).next_to(vec.get_end(), UP, buff=0.1)
-        ang = math.atan2(b, a)
-        arc = Arc(radius=s * r * 0.55, start_angle=0, angle=ang, arc_center=O, color=HEAD, stroke_width=2.5)
-        th = MathTex(r"\theta", font_size=26, color=HEAD).move_to(O + 0.42 * s * r * np.array(
-            [math.cos(ang / 2), math.sin(ang / 2), 0]))
-        rl = MathTex(rf"({r:g}, 0)", font_size=26, color=YES).next_to(O + s * np.array([r, 0, 0]), DOWN, buff=0.15)
-        cols = {r"\begin{bmatrix} r \\ 0 \end{bmatrix}": YES}
-        rows = VGroup(
-            cmath(r"G = \begin{bmatrix} c & s \\ -s & c \end{bmatrix}", r",\quad",
-                  r"c = \frac{a}{r},\;\; s = \frac{b}{r},\;\; r = \sqrt{a^2 + b^2}", font_size=30),
-            cmath(r"G\begin{bmatrix} a \\ b \end{bmatrix}", r"=",
-                  r"\frac{1}{r}\begin{bmatrix} a^2 + b^2 \\ -ab + ab \end{bmatrix}", r"=",
-                  r"\begin{bmatrix} r \\ 0 \end{bmatrix}", colors=cols, font_size=30),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.5).move_to([2.8, 1.5, 0])
-        Am = Matrix([[f"{v:g}" for v in row] for row in A], element_to_mobject_config={"font_size": 26},
-                    h_buff=0.6, v_buff=0.45)
-        st = VGroup(Am, MathTex(r"\xrightarrow{G_{12}}", font_size=28), pattern(["xxx", "0xx", "0xx"]),
-                    MathTex(r"\xrightarrow{G_{23}}", font_size=28), pattern(["xxx", "0xx", "00x"]))
-        st.arrange(RIGHT, buff=0.15).scale_to_fit_width(6.2).next_to(rows, DOWN, buff=0.55)
-        st.align_to([6.7, 0, 0], RIGHT)
-        Am.get_entries()[6].set_color(YES)
-        sl = wrapped_label(rf"our $3 \times 3$ example needs {nrot} rotations, \ not 3: \ its $(3, 1)$ entry is "
-                           r"already zero", 6.2, font_size=18, color=GREY_A).next_to(st, DOWN, buff=0.25)
-        foot = wrapped_label(r"a rotation touches two rows: \ cheap when most entries are already zero, \ as in the "
-                             r"nearly triangular matrices of Chapter 6", 12.4, font_size=20,
-                             color=WHITE).to_edge(DOWN, buff=0.35)
-        with self.voiceover(
-            "Wallace Givens used rotations instead of mirrors. <bookmark mark='a'/> Rotate the pair a, b, here "
-            "three and four, by the angle that lays it on the axis. <bookmark mark='b'/> The cosine is a over r "
-            "and the sine b over r, where r is the length. <bookmark mark='c'/> Check: the second entry becomes "
-            "minus a b plus a b, which is zero, and the first becomes r, here five. <bookmark mark='d'/> Each "
-            "rotation touches only two rows and zeroes one entry. Our three by three example needs only two, "
-            "because one entry starts at zero. <bookmark mark='e'/> That economy is why the eigenvalue algorithm "
-            "of chapter six applies rotations to its nearly triangular matrices."
-        ) as vo:
-            self.play(FadeIn(head), Create(axes_))
-            vo.wait_until("a")
-            self.play(GrowArrow(vec), FadeIn(vl))
-            self.play(Create(arc), FadeIn(th))
-            vo.wait_until("b")
-            self.play(Write(rows[0]))
-            vo.wait_until("c")
-            self.play(Rotate(vec, angle=-ang, about_point=O), FadeOut(vl), run_time=1.5)
-            self.play(FadeIn(rl), FadeIn(rows[1]))
-            vo.wait_until("d")
-            self.play(FadeIn(st[0]))
-            self.play(FadeIn(st[1]), FadeIn(st[2]))
-            self.play(FadeIn(st[3]), FadeIn(st[4]), FadeIn(sl))
-            vo.wait_until("e")
-            self.play(FadeIn(foot))
-        self.wait(0.4)
-        self.clear_scene()
 
     def gramschmidt(self):
         rows_ = load("ortho")["rows"]
@@ -383,6 +316,12 @@ class Qr(VoiceoverScene):
             self.play(Create(sh), FadeIn(keys[2]), run_time=1.5)
         self.wait(0.4)
         self.clear_scene()
+        self.checkpoint(
+            [(r"Conditioning or stability?", r"The problem's sensitivity, or the algorithm's"),
+             (r"Why partial pivoting?", r"Multipliers stay at most one")],
+            narration="Checkpoint. What is the difference between conditioning and stability? And why pivot?",
+            answers_narration="Conditioning belongs to the problem, stability to the algorithm. And partial pivoting keeps "
+                              "every multiplier at most one in size.")
 
 
 _ = (BG, KERN)

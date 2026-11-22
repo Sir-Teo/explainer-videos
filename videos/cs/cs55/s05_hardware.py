@@ -6,7 +6,7 @@ from explainer.cs import *  # noqa: F403
 from videos.cs.cs55.common import BG, DATA, HEAD, KERN, LAM, NO, PART, YES, mono
 
 
-class Hardware(VoiceoverScene):
+class Hardware(WatchScene):
     def construct(self):
         self.card()
         self.rowhammer()
@@ -15,14 +15,13 @@ class Hardware(VoiceoverScene):
         self.lesson()
 
     def card(self):
-        card = chapter_card(4, r"When the hardware leaks", r"Can a layer below you betray you?", lit=(2014, 2018),
-                            extra=((1996, r"Kocher: \ timing"), (2014, r"Rowhammer"), (2018, r"Spectre, Meltdown")),
-                            part=PART)
-        with self.voiceover("Chapter four. When the hardware leaks."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(4, r"When the hardware leaks", r"Can a layer below you betray you?", lit=(2014, 2018), extra=((1996, r"Kocher: \ timing"), (2014, r"Rowhammer"), (2018, r"Spectre, Meltdown")), part=PART, said="Chapter four. When the hardware leaks.")
 
     def rowhammer(self):
+        self.ask(r"Open two DRAM rows again and again. \\ Bits can flip in...", [r"those two rows",
+                 r"the row between them"], 1,
+                 say="Open two rows of DRAM alternately, millions of times. Where can bits flip?",
+                 reveal="In the row between them, which the program never touched.")
         head = label(r"Rowhammer \ (Kim et al., 2014) \ --- \ Part 5", font_size=36).to_edge(UP, buff=0.3)
         nrows, ncols = 5, 14
         cells = []
@@ -202,6 +201,12 @@ class Hardware(VoiceoverScene):
             self.play(FadeIn(foot[1]))
         self.wait(0.4)
         self.clear_scene()
+        self.checkpoint(
+            [(r"What does return-oriented programming defeat?", r"W xor X: it reuses existing code"),
+             (r"What does Rust's borrow checker forbid?", r"Aliasing together with mutation")],
+            narration="Checkpoint. What defence does return-oriented programming defeat? And what does Rust's borrow checker forbid?",
+            answers_narration="W xor X: it chains fragments of code already there. And a value being both shared and mutable "
+                              "at the same time.")
 
 
 _ = (BG, DATA, HEAD, KERN, LAM, NO, YES, PART, mono)

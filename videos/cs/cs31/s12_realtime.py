@@ -13,7 +13,7 @@ def tagged(segs):
     return [(a, b, f"T{k + 1}") for a, b, k in segs]
 
 
-class RealTime(VoiceoverScene):
+class RealTime(WatchScene):
     def construct(self):
         self.card()
         self.two_tasks()
@@ -21,11 +21,7 @@ class RealTime(VoiceoverScene):
         self.pathfinder()
 
     def card(self):
-        card = chapter_card(11, r"Real time", r"How do you promise a deadline?", lit=(1973, 1997),
-                            extra=((1973, r"Liu and Layland"), (1997, r"Mars Pathfinder")), part=PART)
-        with self.voiceover("Chapter eleven. Real time."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(11, r"Real time", r"How do you promise a deadline?", lit=(1973, 1997), extra=((1973, r"Liu and Layland"), (1997, r"Mars Pathfinder")), part=PART, said="Chapter eleven. Real time.")
 
     def two_tasks(self):
         d = load("realtime")
@@ -91,6 +87,10 @@ class RealTime(VoiceoverScene):
         self.clear_scene()
 
     def bound(self):
+        self.ask(r"Rate monotonic, many tasks. \\ Utilisation that is always safe:", [r"$100\%$", r"about $69\%$",
+                 r"$50\%$"], 1,
+                 say="Rate-monotonic scheduling with many tasks. Up to what utilisation are deadlines guaranteed?",
+                 reveal="About sixty-nine percent: the natural log of two.")
         d = load("realtime")
         head = label(r"How busy can rate monotonic be?", font_size=36).to_edge(UP, buff=0.3)
         ax = Axes(x_range=[0.5, 1.0, 0.1], y_range=[0, 1.0, 0.25], x_length=6.2, y_length=3.6,
@@ -137,7 +137,7 @@ class RealTime(VoiceoverScene):
             "test is only sufficient. We generated random sets of four tasks at each target utilisation and "
             "rounded their work to whole ticks, changing the realized load. <bookmark "
             "mark='d'/> The sufficient utilization bound admits fewer samples than response-time analysis, which "
-            "computes each task's worst response time. These are finite sampled task sets, not universal acceptance rates. "
+            "computes each task's worst response time. "
             "<bookmark mark='e'/> Earliest deadline first accepts exactly the generated sets with realized load "
             "at most one. Rounding can make that fraction less than one near a target of one hundred percent. "
             "<bookmark mark='f'/> And "
@@ -216,3 +216,9 @@ class RealTime(VoiceoverScene):
             self.play(FadeIn(lines[2]))
         self.wait(0.3)
         self.clear_scene()
+        self.checkpoint(
+            [(r"Why is shortest-first optimal for turnaround?", r"Swapping a long job before a short one helps"),
+             (r"What went wrong on Mars Pathfinder?", r"Priority inversion; fixed by inheritance")],
+            narration="Checkpoint. Why is shortest first optimal for turnaround? And what went wrong on Mars Pathfinder?",
+            answers_narration="Any long job ahead of a short one can be swapped to lower the total. And priority inversion: a "
+                              "low task held a lock the high one needed, until priority inheritance fixed it.")

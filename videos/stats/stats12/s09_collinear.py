@@ -6,19 +6,28 @@ from scipy import stats
 from videos.stats.stats12.common import *  # noqa: F403
 
 
-class Collinear(VoiceoverScene):
+class Collinear(StatsScene):
     def construct(self):
         self.card()
+        self.ask("Two predictors correlated at 0.95. Each coefficient's variance is inflated by about...",
+                 ["2", "10", "100"], 1,
+                 say="Two predictors that move together, correlation point nine five. By how much is each "
+                     "coefficient's variance inflated?",
+                 reveal="About ten: one over one minus point nine five squared. Each coefficient is estimated only "
+                        "from what the other predictor can't explain.")
         self.vif()
         self.ellipses()
         self.condition()
         self.remedies()
+        self.answer()
+        self.checkpoint([("FWL: a multiple-regression coefficient is?", "the slope on residualized $x$"),
+                         (r"The VIF for two predictors correlated at $\rho$?", r"$1/(1 - \rho^2)$")],
+                        narration="Checkpoint. Meaning and collinearity.",
+                        answers_narration="The slope after removing the other predictors. And one over one minus "
+                                          "rho squared.")
 
     def card(self):
-        card = chapter_card(8, r"Collinearity", r"When the predictors move together", part=PART)
-        with self.voiceover("Chapter eight. Collinearity."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(8, r"Collinearity", r"When the predictors move together", part=PART, said="Chapter eight. Collinearity.")
 
     def vif(self):
         rows = [

@@ -4,7 +4,7 @@ from explainer.cs import *  # noqa: F403
 from videos.cs.cs33.common import (HEAD, NO, PART, T0C, T1C, YES, grid_table, load, mono)
 
 
-class Models(VoiceoverScene):
+class Models(WatchScene):
     def construct(self):
         self.card()
         self.compiler()
@@ -13,14 +13,13 @@ class Models(VoiceoverScene):
         self.langs()
 
     def card(self):
-        card = chapter_card(9, r"Memory models", r"What may a load return?", lit=(1979, 1990, 2011),
-                            extra=((1979, r"Lamport: \ SC"), (1990, r"Adve and Hill: \ DRF"), (2011, r"C11, \ C++11")),
-                            part=PART)
-        with self.voiceover("Chapter nine. Memory models."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(9, r"Memory models", r"What may a load return?", lit=(1979, 1990, 2011), extra=((1979, r"Lamport: \ SC"), (1990, r"Adve and Hill: \ DRF"), (2011, r"C11, \ C++11")), part=PART, said="Chapter nine. Memory models.")
 
     def compiler(self):
+        self.ask(r"Spin on a plain \texttt{int} flag another thread sets. \\ An optimizing compiler may...",
+                 [r"leave the loop alone", r"load it once and loop forever"], 1,
+                 say="A thread spins on an ordinary int until another thread sets it. What may an optimizing compiler do?",
+                 reveal="Load it once, and loop forever. A data race has no defined meaning.")
         d = load("hoist")
         head = label(r"The compiler reorders too", font_size=36).to_edge(UP, buff=0.3)
         src = VGroup(*[mono(t, 17, WHITE) for t in d["plain"]["src"][2:6]]).arrange(DOWN, aligned_edge=LEFT, buff=0.06)

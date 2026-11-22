@@ -6,19 +6,22 @@ from scipy import stats
 from videos.stats.stats22.common import *  # noqa: F403
 
 
-class Normality(VoiceoverScene):
+class Normality(StatsScene):
     def construct(self):
         self.card()
+        self.ask("The MLE's asymptotic variance is...",
+                 [r"$1/(nI(\theta))$", r"$I(\theta)/n$", r"$\sigma^2/n$, always"], 0,
+                 say="Expand the score around the truth. What's the maximum likelihood estimator's asymptotic "
+                     "variance?",
+                 reveal="One over n times the Fisher information: the Cramér-Rao bound, attained in the limit.")
         self.expand()
         self.limit()
         self.cauchy()
         self.efficiency()
+        self.answer()
 
     def card(self):
-        card = chapter_card(3, r"Asymptotic normality", r"Expand the score", part=PART)
-        with self.voiceover("Chapter three. Asymptotic normality."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(3, r"Asymptotic normality", r"Expand the score", part=PART, said="Chapter three. Asymptotic normality.")
 
     def expand(self):
         rows = [

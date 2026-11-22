@@ -10,7 +10,7 @@ from videos.cs.cs60.common import commas, say_int
 N_ITEMS, ITEM_BYTES, BANKS, PARTIAL_BYTES = 2 ** 28, 4, 16, 8
 
 
-class Memory(VoiceoverScene):
+class Memory(WatchScene):
     def construct(self):
         self.card()
         self.byte()
@@ -20,15 +20,15 @@ class Memory(VoiceoverScene):
         self.crossbar()
 
     def card(self):
-        card = chapter_card(8, r"Computing near memory", r"If moving data costs most, \ why not move the work?",
-                            lit=(2013, 2014, 2021), extra=((2013, r"HBM standardized"),
+        self.chapter(8, r"Computing near memory", r"If moving data costs most, \ why not move the work?", lit=(2013, 2014, 2021), extra=((2013, r"HBM standardized"),
                                                            (2014, r"Horowitz: \ the cost of moving data"),
-                                                           (2021, r"Samsung: \ HBM-PIM")), part=PART)
-        with self.voiceover("Chapter eight. Computing near memory."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+                                                           (2021, r"Samsung: \ HBM-PIM")), part=PART, said="Chapter eight. Computing near memory.")
 
     def byte(self):
+        self.ask(r"Read one byte from DRAM, \\ or add two bytes. The read costs...", [r"about the same",
+                 r"thousands of times more"], 1,
+                 say="Read one byte from off-chip DRAM, or add two bytes. How do the energies compare?",
+                 reveal="The read costs thousands of times more. Distance is energy.")
         E = {r["op"]: r["pj"] for r in load("energy")["horowitz"]["table"]}
         head = label(r"The energy of one byte", font_size=36).to_edge(UP, buff=0.3)
         lo_d, hi_d = E["DRAM read (64 bits), low"] / 8, E["DRAM read (64 bits), high"] / 8
@@ -388,6 +388,12 @@ class Memory(VoiceoverScene):
             self.play(FadeIn(cav))
         self.wait(0.4)
         self.clear_scene()
+        self.checkpoint(
+            [(r"Weight-stationary or output-stationary?", r"Which operand stays in each cell"),
+             (r"Why do int8 products need 32-bit accumulators?", r"Sums of many products overflow 8 or 16 bits")],
+            narration="Checkpoint. What distinguishes weight-stationary from output-stationary grids? And why do eight-bit products need thirty-two-bit accumulators?",
+            answers_narration="Which number stays put in each cell while the others flow. And because a sum of many eight-bit "
+                              "products overflows anything smaller.")
 
 
 _ = (BG, KERN, PART)

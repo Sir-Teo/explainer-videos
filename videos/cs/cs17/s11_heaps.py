@@ -5,7 +5,7 @@ from videos.cs.cs17.common import (BG, CODE, COST, CTRL, DATA, FUNC, HEAD, LAM, 
                                    mono, words)
 
 
-class Heaps(VoiceoverScene):
+class Heaps(WatchScene):
     def construct(self):
         self.card()
         self.interface()
@@ -13,11 +13,7 @@ class Heaps(VoiceoverScene):
         self.measured()
 
     def card(self):
-        card = chapter_card(10, r"Priority queues", r"How cheap can ``decrease a key'' be?", lit=(1987,),
-                            extra=((1987, r"Fredman and Tarjan: \ Fibonacci heaps"),), part=PART)
-        with self.voiceover("Chapter ten. Priority queues."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(10, r"Priority queues", r"How cheap can ``decrease a key'' be?", lit=(1987,), extra=((1987, r"Fredman and Tarjan: \ Fibonacci heaps"),), part=PART, said="Chapter ten. Priority queues.")
 
     def interface(self):
         head = label(r"Insert, \ delete-min, \ decrease-key", font_size=34).to_edge(UP, buff=0.3)
@@ -60,6 +56,9 @@ class Heaps(VoiceoverScene):
         self.clear_scene()
 
     def fibonacci(self):
+        self.ask(r"Fibonacci heap: decrease-key. \\ Amortized cost?", [r"$\log n$", r"constant"], 1,
+                 say="In a Fibonacci heap, what does decrease-key cost, amortized?",
+                 reveal="Constant. That's what makes it the theoretical choice for Dijkstra.")
         head = label(r"Fibonacci heaps: \ a marked parent loses its second child", font_size=32).to_edge(UP, buff=0.3)
         def forest(after=False):
             pos = {1: [0, 1.7], 4: [-0.8, 0.7], 7: [-1.4, -0.3], 8: [-0.2, -0.3]}
@@ -129,8 +128,7 @@ class Heaps(VoiceoverScene):
             "What do these three graphs show? <bookmark mark='a'/> We count key comparisons inside each "
             "educational heap and verify all shortest-path distances independently with a heapq "
             "implementation. The displayed comparison savings depend on the graph. <bookmark mark='b'/> "
-            "Comparisons are not time. Python list removal and bookkeeping do not implement the "
-            "constant-time pointer operations assumed by Fibonacci-heap theory. Published native heap "
+            "Comparisons are not time. Published native heap "
             "studies also report workload-dependent outcomes; no universal fastest heap follows. "
             "<bookmark mark='c'/> Use theoretical bounds to understand scaling, then measure complete "
             "equivalent tasks on the workload and implementation that matter."
@@ -145,3 +143,9 @@ class Heaps(VoiceoverScene):
             self.play(FadeIn(pts[2]))
         self.wait(0.3)
         self.clear_scene()
+        self.checkpoint(
+            [(r"What does a rotation preserve?", r"The in-order sequence of keys"),
+             (r"Why do B-trees suit disks?", r"Wide nodes, so few levels and few reads")],
+            narration="Checkpoint. What does a rotation preserve? And why do databases keep B-trees on disk?",
+            answers_narration="The in-order sequence of keys. And because wide nodes make the tree shallow, so a lookup reads "
+                              "only a few blocks.")

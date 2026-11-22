@@ -5,9 +5,22 @@ import numpy as np
 from videos.stats.stats57.common import *  # noqa: F403
 
 
-class Impossible(VoiceoverScene):
+class Impossible(StatsScene):
     def construct(self):
         self.card()
+        self.wrong_idea(r"With enough data, a 90\% conformal interval covers 90\% at every $x$",
+                        "Distribution-free, only marginal coverage is possible",
+                        narration="A tempting belief: with enough data and a good model, a ninety percent conformal "
+                                  "interval covers ninety percent at every feature value.",
+                        right_narration="Distribution-free, it can't. Exact conditional coverage is impossible "
+                                        "without assumptions; what you get is the average over feature values. A "
+                                        "good score helps, but proves nothing for each x.")
+        self.ask("Distribution-free conditional coverage at every $x$ forces intervals to be...",
+                 ["exact", "infinitely long, with positive probability"], 1,
+                 say="What no distribution-free method can do. Demand ninety percent coverage conditional on every "
+                     "feature value, for every distribution. What must the intervals be?",
+                 reveal="Infinitely long, with positive probability, at non-atomic points: Vovk, and Lei and "
+                        "Wasserman. Marginal coverage is the most a distribution-free method can promise.")
         self.conditional()
         self.local_chart()
         self.theorem()
@@ -15,12 +28,14 @@ class Impossible(VoiceoverScene):
         self.bins_worked()
         self.relaxed()
         self.functionals()
+        self.answer()
+        self.checkpoint([("Split conformal over-covers by at most?", "$1/(n + 1)$"),
+                         ("Jackknife+'s worst-case coverage?", r"$1 - 2\alpha$")],
+                        narration="Checkpoint. The lemma and its methods.",
+                        answers_narration="One over n plus one. And one minus two alpha.")
 
     def card(self):
-        card = chapter_card(3, r"Impossibility", r"What no distribution-free method can do", lit=(2014,), part=PART)
-        with self.voiceover("Chapter three. Impossibility: what no distribution-free method can do."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(3, r"Impossibility", r"What no distribution-free method can do", lit=(2014,), part=PART, said="Chapter three. Impossibility: what no distribution-free method can do.")
 
     def conditional(self):
         rows = [

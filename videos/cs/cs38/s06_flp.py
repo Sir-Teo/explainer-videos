@@ -4,7 +4,7 @@ from explainer.cs import *  # noqa: F403
 from videos.cs.cs38.common import (DATA, HEAD, KERN, LAM, NO, PART, YES, axes, grid_table, load)
 
 
-class Flp(VoiceoverScene):
+class Flp(WatchScene):
     def construct(self):
         self.card()
         self.valency()
@@ -14,14 +14,14 @@ class Flp(VoiceoverScene):
         self.benor()
 
     def card(self):
-        card = chapter_card(5, r"FLP", r"Why can't asynchronous machines guarantee agreement?", lit=(1983, 1985),
-                            extra=((1983, r"Ben-Or: \ randomized consensus"),
-                                   (1985, r"Fischer, Lynch and Paterson")), part=PART)
-        with self.voiceover("Chapter five. FLP."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(5, r"FLP", r"Why can't asynchronous machines guarantee agreement?", lit=(1983, 1985), extra=((1983, r"Ben-Or: \ randomized consensus"),
+                                   (1985, r"Fischer, Lynch and Paterson")), part=PART, said="Chapter five. FLP.")
 
     def valency(self):
+        self.ask(r"Asynchronous messages, deterministic processes, \\ one may crash. Can consensus always finish?",
+                 [r"yes", r"no"], 1,
+                 say="Messages take any time, processes are deterministic, and one of them may crash. Can a consensus protocol always finish?",
+                 reveal="No. That's the theorem of Fischer, Lynch and Paterson.")
         head = label(r"Valency", font_size=36).to_edge(UP, buff=0.3)
         defs = VGroup(
             wrapped_label(r"a \textbf{configuration}: \ every process's state, \ and every message in flight", 12.4,

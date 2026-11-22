@@ -13,28 +13,27 @@ def ring(n, r=1.6):
             for k in range(n)]
 
 
-class Frontier(VoiceoverScene):
+class Frontier(WatchScene):
     """The research tier (videos/cs/SYLLABUS.md 1.1): Ramsey numbers, from the pigeonhole principle to the 2023
     exponential improvement, and the open problem of building what the probabilistic method proves exists."""
 
     def construct(self):
         self.card()
         self.party()
-        self.paley()
         self.bounds()
         self.breakthrough()
         self.explicit()
 
     def card(self):
-        card = chapter_card(15, r"Frontier: \ order in chaos", r"How big must a party be?", lit=(1930, 1947, 2023),
-                            part=PART, extra=((1930, r"Ramsey's theorem"), (1947, r"Erd\H{o}s: the probabilistic method"),
-                                              (2023, r"$R(k) < (4 - \varepsilon)^k$")))
-        with self.voiceover("Chapter fifteen. Frontier: order in chaos."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(15, r"Frontier: \ order in chaos", r"How big must a party be?", lit=(1930, 1947, 2023), part=PART, extra=((1930, r"Ramsey's theorem"), (1947, r"Erd\H{o}s: the probabilistic method"),
+                                              (2023, r"$R(k) < (4 - \varepsilon)^k$")), said="Chapter fifteen. Frontier: order in chaos.")
 
     # ------------------------------------------------------------------
     def party(self):
+        self.ask(r"The smallest party that guarantees \\ three mutual friends or three mutual strangers?",
+                 [r"5", r"6", r"9"], 1,
+                 say="How big must a party be to guarantee three mutual friends or three mutual strangers?",
+                 reveal="Six. Five people can avoid both.")
         r = load("ramsey")
         head = label(r"Three friends or three strangers", font_size=36).to_edge(UP, buff=0.3)
         p5 = ring(5)
@@ -83,44 +82,6 @@ class Frontier(VoiceoverScene):
         self.wait(0.3)
         self.clear_scene()
 
-    # ------------------------------------------------------------------
-    def paley(self):
-        r = load("ramsey")
-        head = label(r"Seventeen people, \ and no four", font_size=36).to_edge(UP, buff=0.3)
-        pts = ring(17, 2.4)
-        red = {tuple(e) for e in r["paley17_edges"]}
-        lines = VGroup(*[Line(pts[a], pts[b], color=RED if (a, b) in red else BLUE, stroke_width=1.4,
-                              stroke_opacity=0.75) for a in range(17) for b in range(a + 1, 17)])
-        dots = VGroup(*[Dot(p, radius=0.07, color=WHITE) for p in pts])
-        g = VGroup(lines, dots).move_to(LEFT * 2.6 + DOWN * 0.3)
-        side = VGroup(
-            label(r"the Paley graph: \ $i$ and $j$ are friends \\ when $i - j$ is a square modulo 17", font_size=22,
-                  color=GREY_A),
-            label(rf"largest group of friends: \ {r['paley17_omega']}; \\ of strangers: \ {r['paley17_alpha']} \ "
-                  r"(checked)", font_size=22, color=YES),
-            MathTex(r"R(4,4) > 17", font_size=40, color=HEAD),
-            label(r"and every colouring of 18 people has four: \\ $R(4,4) = 18$ \ (Greenwood and Gleason, \ 1955)",
-                  font_size=22, color=GREY_A),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.35).move_to(RIGHT * 3.8 + DOWN * 0.2)
-        with self.voiceover(
-            "For four, the answer is eighteen. <bookmark mark='a'/> The colouring that shows seventeen is not enough "
-            "comes from number theory: seat seventeen people in a circle and make two of them friends when the "
-            "difference of their seats is a perfect square modulo seventeen. <bookmark mark='b'/> The largest group of "
-            "mutual friends has three people, and so has the largest group of strangers: our program checked every "
-            "group of four. <bookmark mark='c'/> And in 1955 Greenwood and Gleason proved that eighteen people always "
-            "contain four. After that the exact values stop. For five, the answer is known only to lie between "
-            "forty-three and forty-six."
-        ) as vo:
-            self.play(FadeIn(head))
-            vo.wait_until("a")
-            self.play(FadeIn(dots), Create(lines), FadeIn(side[0]), run_time=2.5)
-            vo.wait_until("b")
-            self.play(FadeIn(side[1]))
-            self.play(Write(side[2]))
-            vo.wait_until("c")
-            self.play(FadeIn(side[3]))
-        self.wait(0.3)
-        self.clear_scene()
 
     # ------------------------------------------------------------------
     def bounds(self):

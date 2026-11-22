@@ -12,23 +12,18 @@ from videos.cs.cs48.common import (BG, DATA, HEAD, KERN, LAM, NO, PART, YES, axe
 SP = {k: v.default for k, v in inspect.signature(B.stampede).parameters.items()}
 
 
-class Invalidation(VoiceoverScene):
+class Invalidation(WatchScene):
     def construct(self):
         self.card()
         self.race()
         self.ttl()
         self.herd()
         self.leases()
-        self.xfetch()
 
     def card(self):
-        card = chapter_card(4, r"Caching: \ staleness and stampedes", r"How does a copy stay honest, \ and survive "
-                            r"its own expiry?", lit=(2013, 2015),
-                            extra=((2013, r"Nishtala et al.: \ memcache leases"),
-                                   (2015, r"Vattani et al.: \ XFetch")), part=PART)
-        with self.voiceover("Chapter four. Caching: staleness and stampedes."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(4, r"Caching: \ staleness and stampedes", r"How does a copy stay honest, \ and survive "
+                            r"its own expiry?", lit=(2013, 2015), extra=((2013, r"Nishtala et al.: \ memcache leases"),
+                                   (2015, r"Vattani et al.: \ XFetch")), part=PART, said="Chapter four. Caching: staleness and stampedes.")
 
     def race(self):
         head = label(r"The race that keeps a stale value", font_size=36).to_edge(UP, buff=0.3)
@@ -141,6 +136,10 @@ class Invalidation(VoiceoverScene):
         self.clear_scene()
 
     def herd(self):
+        self.ask(r"A hot key expires: 200 requests a second, \\ rebuild takes a second. Rebuilds started:",
+                 [r"one", r"about two hundred"], 1,
+                 say="A key requested two hundred times a second expires, and rebuilding it takes a second. How many rebuilds start?",
+                 reveal="About two hundred: every miss rebuilds. That's a stampede.")
         st = load("stampede")["plain"]
         head = label(r"A stampede at expiry", font_size=36).to_edge(UP, buff=0.3)
         rate, ttl, rec, hz = SP["rate"], SP["ttl"], SP["recompute"], SP["horizon"]
@@ -249,74 +248,13 @@ class Invalidation(VoiceoverScene):
                 self.play(FadeIn(ln))
         self.wait(0.4)
         self.clear_scene()
+        self.checkpoint(
+            [(r"Why does LRU size follow Che's formula?", r"Hit chances sum to the cache size"),
+             (r"How do you stop a cache stampede?", r"Coalesce misses, or use leases")],
+            narration="Checkpoint. What does Che's approximation say? And how do you stop a cache stampede?",
+            answers_narration="An item is cached if it's requested again within one characteristic time, whose chances add up "
+                              "to the cache size. And let only the first miss rebuild: coalescing, or leases.")
 
-    def xfetch(self):
-        st = load("stampede")
-        p, e = st["plain"], st["early"]
-        head = label(r"Expire early, \ at random", font_size=36).to_edge(UP, buff=0.3)
-        rate, rec, beta = SP["rate"], SP["recompute"], SP["beta"]
-        lead = beta * rec * math.log(rate * beta * rec)       # where the expected count of early triggers is one
-        steps = VGroup(
-            MathTex(r"\text{refresh if }\; t - \Delta\beta\ln U \;\ge\; \text{expiry}", font_size=32),
-            MathTex(r"-\ln U \sim \text{Exp}(1)", font_size=28, color=DATA),
-            MathTex(r"P(\text{a request } r \text{ s before expiry triggers}) = e^{-r/\beta\Delta}", font_size=28,
-                    color=DATA),
-            MathTex(r"\text{expected triggers by then} = \lambda\beta\Delta\, e^{-r/\beta\Delta} = 1", font_size=28,
-                    color=YES),
-            MathTex(r"r^\ast = \beta\Delta \ln(\lambda\beta\Delta) \approx " + f"{lead:.0f}" + r"\text{ s}",
-                    font_size=30, color=HEAD),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.32)
-        legend = label(rf"$U$ uniform on $(0,1)$; \ $\Delta = {rec:.0f}$ s to rebuild, \ $\beta = {beta:g}$, \ "
-                       rf"$\lambda = {rate:.0f}$ requests a second", font_size=18, color=GREY_B)
-        left = VGroup(steps, legend).arrange(DOWN, aligned_edge=LEFT, buff=0.3).to_edge(LEFT, buff=0.4)
-        left.shift(UP * 0.75)
-        g = axes([0, 20, 5], [0, 4, 1], x_length=5.4, y_length=3.0, x_label=r"seconds to expiry",
-                 y_label=r"expected early refreshes", xticks=[0, 5, 10, 15, 20], yticks=[0, 1, 2, 3, 4],
-                 fx=lambda v: f"{20 - v:g}", font=16)
-        g.to_edge(RIGHT, buff=0.45).align_to(left, UP).shift(DOWN * 0.1)
-        g[-1].shift(UP * 0.12)                                  # the y label, clear of the top tick
-        ax = g.ax
-        # x is time since 20 s before expiry; r = 20 - x seconds remain
-        pts = [(x, rate * beta * rec * math.exp(-(20 - x) / (beta * rec))) for x in [0.1 * i for i in range(201)]]
-        curve = VMobject(color=YES, stroke_width=3).set_points_as_corners(
-            [ax.c2p(x, n) for x, n in pts if n <= 4.0])
-        mark = DashedLine(ax.c2p(20 - lead, 0), ax.c2p(20 - lead, 1), color=HEAD, stroke_width=2)
-        dot = Dot(ax.c2p(20 - lead, 1), radius=0.07, color=HEAD)
-        rows = [[r"rebuilds", f"{p['recomputations']:,}", f"{e['recomputations']}"],
-                [r"misses", f"{p['misses']:,}", f"{e['misses']}"],
-                [r"most in one second", f"{p['peak_per_second']}", f"{e['peak_per_second']}"]]
-        tab = grid_table([r"in 300 s", r"expire at TTL", r"early, \ at random"], rows, widths=[3.0, 2.1, 2.4],
-                         row_h=0.42, font_size=19, mono_cols=())
-        for i in range(1, 4):
-            tab.cells[i][1].set_color(NO)
-            tab.cells[i][2].set_color(YES)
-        tab.next_to(left, DOWN, buff=0.45).align_to(left, LEFT)
-        foot = wrapped_label(r"Vattani, \ Chierichetti and Lowenstein \ (2015), \ ``XFetch''; \ one request refreshes "
-                             r"while the rest still hit the old value; \ the price: \ refreshing a little more often",
-                             12.4, font_size=18, color=GREY_B).to_edge(DOWN, buff=0.25)
-        with self.voiceover(
-            "The second remedy avoids the miss altogether: refresh a little before expiry, at random. "
-            "<bookmark mark='a'/> In the rule of Andrea Vattani, Flavio Chierichetti and Keegan Lowenstein, each "
-            "request draws a uniform random number, and recomputes early if the time now, minus the rebuild time "
-            "times beta times the log of that number, has passed the expiry. <bookmark mark='b'/> Minus the log of "
-            "a uniform number is exponential, so a request r seconds before expiry triggers with a probability that "
-            "rises steeply as expiry nears. <bookmark mark='c'/> With two hundred requests a second, the expected "
-            "number of triggers reaches one about twelve seconds before expiry. <bookmark mark='d'/> One request "
-            "refreshes while everyone else keeps hitting the old value. In the same experiment: six rebuilds instead "
-            "of sixteen hundred, no misses, and never more than one in a second."
-        ) as vo:
-            self.play(FadeIn(head), Create(g))
-            vo.wait_until("a")
-            self.play(FadeIn(steps[0]), FadeIn(legend))
-            vo.wait_until("b")
-            self.play(FadeIn(steps[1]), FadeIn(steps[2]))
-            vo.wait_until("c")
-            self.play(FadeIn(steps[3]), Create(curve), run_time=1.5)
-            self.play(FadeIn(steps[4]), Create(mark), FadeIn(dot))
-            vo.wait_until("d")
-            self.play(FadeIn(tab), FadeIn(foot))
-        self.wait(0.4)
-        self.clear_scene()
 
 
 _ = (BG, HEAD, YES, LAM)

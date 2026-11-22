@@ -5,21 +5,25 @@ import numpy as np
 from videos.stats.stats56.common import *  # noqa: F403
 
 
-class Carving(VoiceoverScene):
+class Carving(StatsScene):
     def construct(self):
         self.card()
+        self.ask("Add a little random noise to the selection step. Conditional intervals become...",
+                 ["much shorter", "longer"], 0,
+                 say="Why are conditional intervals so long near the edge of the selection window? What happens if "
+                     "we add a little random noise to the selection step?",
+                 reveal="They become much shorter: the selection leaks less information, so more is left for "
+                        "inference. Trading a little noise for a lot of power.")
         self.idea()
         self.likelihood()
         self.chart()
         self.table()
         self.multivariate()
         self.carving()
+        self.answer()
 
     def card(self):
-        card = chapter_card(4, r"Randomization and carving", r"Trading a little noise for a lot of power", lit=(2018,), part=PART)
-        with self.voiceover("Chapter four. Randomization and carving: trading a little noise for a lot of power."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(4, r"Randomization and carving", r"Trading a little noise for a lot of power", lit=(2018,), part=PART, said="Chapter four. Randomization and carving: trading a little noise for a lot of power.")
 
     def idea(self):
         rows = [

@@ -5,19 +5,27 @@ import numpy as np
 from videos.stats.stats6.common import *  # noqa: F403
 
 
-class Slutsky(VoiceoverScene):
+class Slutsky(StatsScene):
     def construct(self):
         self.card()
+        self.ask(r"Replace $\sigma$ by $s$ in the standardized mean. The limit becomes...",
+                 ["Student's $t$", "still the standard normal", "undefined"], 1,
+                 say="The central limit theorem standardizes with the true sigma. Replace it with the sample's s. "
+                     "As n grows, what's the limit?",
+                 reveal="Still the standard normal. S converges to sigma, and Slutsky's theorem lets a constant "
+                        "limit ride along.")
         self.theorems()
         self.tstat()
         self.seen()
         self.trap()
+        self.answer()
+        self.checkpoint([(r"$\mathrm{SE}(\log \bar x)$ by the delta method?", r"$\mathrm{SE}(\bar x)/\bar x$"),
+                         (r"Slutsky lets you replace $\sigma$ with?", "any consistent estimate, such as $s$")],
+                        narration="Checkpoint. Delta and Slutsky.",
+                        answers_narration="The standard error over x bar. And any consistent estimate of sigma.")
 
     def card(self):
-        card = chapter_card(9, r"Slutsky and continuous mapping", r"Rules for combining limits", part=PART)
-        with self.voiceover("Chapter nine. Slutsky's theorem and the continuous mapping theorem."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(9, r"Slutsky and continuous mapping", r"Rules for combining limits", part=PART, said="Chapter nine. Slutsky's theorem and the continuous mapping theorem.")
 
     def theorems(self):
         cmt = theorem_card(r"Continuous mapping", r"if $X_n \xrightarrow{d} X$ \ (or $\xrightarrow{P}$) \ and $g$ is continuous, \ then "

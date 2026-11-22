@@ -79,23 +79,18 @@ def bars(values, names, colors, width=0.7, scale=2.0, gap=0.5, font_size=24):
     return g
 
 
-class Qubit(VoiceoverScene):
+class Qubit(WatchScene):
     def construct(self):
         self.card()
         self.amplitudes()
         self.phases()
         self.sphere()
         self.measure()
-        self.holevo()
 
     def card(self):
-        card = chapter_card(2, r"The qubit", r"What does one quantum bit hold?", lit=(1926, 1973, 1995),
-                            extra=((1926, r"Born: \ the probability rule"),
+        self.chapter(2, r"The qubit", r"What does one quantum bit hold?", lit=(1926, 1973, 1995), extra=((1926, r"Born: \ the probability rule"),
                                    (1973, r"Holevo: \ $n$ qubits carry $n$ bits"),
-                                   (1995, r"Schumacher names the qubit")), part=PART)
-        with self.voiceover("Chapter two. The qubit. What does one quantum bit actually hold?"):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+                                   (1995, r"Schumacher names the qubit")), part=PART, said="Chapter two. The qubit. What does one quantum bit actually hold?")
 
     def amplitudes(self):
         head = label(r"Two amplitudes, \ and the Born rule", font_size=36).to_edge(UP, buff=0.3)
@@ -279,6 +274,10 @@ class Qubit(VoiceoverScene):
         self.clear_scene()
 
     def measure(self):
+        self.ask(r"A qubit on the Bloch sphere's equator. \\ Measured, the chance of $0$:", [r"$0$", r"$1/2$",
+                 r"$1$"], 1,
+                 say="A qubit sits on the equator of the Bloch sphere. Measure it. What's the chance of zero?",
+                 reveal="One half: cosine squared of forty-five degrees.")
         head = label(r"Measuring: \ the arrow's height", font_size=36).to_edge(UP, buff=0.3)
         B = Bloch(center=[-4.0, -0.4, 0], radius=2.2, labels=("0", "1", "+", "+i"))
         th = ValueTracker(math.pi / 3)
@@ -348,65 +347,6 @@ class Qubit(VoiceoverScene):
         self.wait(0.4)
         self.clear_scene()
 
-    def holevo(self):
-        head = label(r"A continuum of states, \ one bit out", font_size=36).to_edge(UP, buff=0.3)
-        B = Bloch(center=[-4.3, 0.75, 0], radius=1.55, labels=("0", "1"), font_size=22)
-        import random
-        rng = random.Random(7)
-        dots = VGroup()
-        for _ in range(60):
-            z = rng.uniform(-1, 1)
-            p = rng.uniform(0, 2 * math.pi)
-            s = math.sqrt(1 - z * z)
-            v = (s * math.cos(p), s * math.sin(p), z)
-            dots.add(Dot(B.p(v), radius=0.045, color=DATA if B.front(v) else GREY_D))
-        meter = RoundedRectangle(width=1.8, height=0.9, corner_radius=0.12, stroke_color=KERN, stroke_width=2,
-                                 fill_color=BG, fill_opacity=1).move_to([-0.6, 0.75, 0])
-        mt = label(r"measure", font_size=20, color=KERN).move_to(meter)
-        out = VGroup(tag_box_local("0", YES), tag_box_local("1", NO)).arrange(DOWN, buff=0.3).move_to([2.0, 0.75, 0])
-        a1 = Arrow(B.get_right() + RIGHT * 0.1, meter.get_left(), buff=0.1, color=GREY_B, stroke_width=2.5)
-        a2 = Arrow(meter.get_right(), out.get_left(), buff=0.1, color=GREY_B, stroke_width=2.5)
-        hol = wrapped_label(r"Holevo, \ 1973: \ $n$ qubits sent on their own carry at most $n$ classical bits: "
-                            r"\ the continuum is not storage", 3.5, font_size=19, color=HEAD).move_to([4.9, 0.75, 0])
-
-        def tile(title, body, col):
-            fr = RoundedRectangle(width=3.05, height=1.75, corner_radius=0.12, stroke_color=col, stroke_width=2,
-                                  fill_color=BG, fill_opacity=1)
-            g = VGroup(label(title, font_size=20, color=col), wrapped_label(body, 2.8, font_size=17, color=GREY_A))
-            g.arrange(DOWN, buff=0.12).move_to(fr)
-            return VGroup(fr, g)
-        tiles = VGroup(
-            tile(r"superconducting circuits", r"the two lowest energy levels of a circuit cooled near absolute "
-                 r"zero", DATA),
-            tile(r"trapped ions", r"two levels of a single charged atom held by electric fields", YES),
-            tile(r"neutral atoms", r"atoms held in a grid of laser tweezers", LAM),
-            tile(r"photons", r"polarisation, \ or which of two paths a photon takes", KERN),
-        ).arrange(RIGHT, buff=0.22).to_edge(DOWN, buff=0.45)
-        cap = label(r"any two-level quantum system will do:", font_size=21, color=WHITE).next_to(tiles, UP, buff=0.25)
-        with self.voiceover(
-            "So a qubit's state takes a continuum of values. <bookmark mark='a'/> Can we store a whole real number "
-            "in it? <bookmark mark='b'/> No. A measurement returns one bit, and destroys the rest. Alexander Holevo "
-            "proved in 1973 that n qubits sent on their own can carry at most n bits of classical information. "
-            "<bookmark mark='c'/> The power of quantum computers is not storage. It comes from what happens to many "
-            "qubits together, before anyone looks: their amplitudes multiply in number and interfere. <bookmark "
-            "mark='d'/> Physically, a qubit is any well-controlled two-level system: two energy levels of a "
-            "superconducting circuit, or of a trapped ion; atoms held by laser tweezers; or a photon's polarisation. "
-            "The mathematics is the same for all of them."
-        ) as vo:
-            self.play(FadeIn(head), Create(B))
-            vo.wait_until("a")
-            self.play(LaggedStart(*[FadeIn(d) for d in dots], lag_ratio=0.03), run_time=1.5)
-            vo.wait_until("b")
-            self.play(GrowArrow(a1), FadeIn(meter), FadeIn(mt))
-            self.play(GrowArrow(a2), FadeIn(out))
-            self.play(FadeIn(hol))
-            vo.wait_until("c")
-            self.play(Indicate(hol, color=HEAD))
-            vo.wait_until("d")
-            self.play(FadeIn(cap), LaggedStart(*[FadeIn(t, shift=UP * 0.15) for t in tiles], lag_ratio=0.3),
-                      run_time=2.5)
-        self.wait(0.4)
-        self.clear_scene()
 
 
 def tag_box_local(text, color):

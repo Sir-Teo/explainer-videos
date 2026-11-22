@@ -4,23 +4,16 @@ from explainer.cs import *  # noqa: F403
 from videos.cs.cs44.common import BG, DATA, HEAD, KERN, LAM, NO, PART, YES, grid_table, load
 
 
-class Frontier(VoiceoverScene):
+class Frontier(WatchScene):
     def construct(self):
         self.card()
         self.interference()
         self.longterm()
         self.privacy()
-        self.models()
-        self.open()
 
     def card(self):
-        card = chapter_card(13, r"Frontier: \ measuring people, \ carefully",
-                            r"What can an experiment not see?", lit=(2013, 2019),
-                            extra=((2013, r"Ugander et al.: \ graph cluster randomization"),
-                                   (2019, r"Athey et al.: \ surrogate indices")), part=PART)
-        with self.voiceover("Chapter thirteen, the frontier. What can an experiment not see?"):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(13, r"Frontier: \ measuring people, \ carefully", r"What can an experiment not see?", lit=(2013, 2019), extra=((2013, r"Ugander et al.: \ graph cluster randomization"),
+                                   (2019, r"Athey et al.: \ surrogate indices")), part=PART, said="Chapter thirteen, the frontier. What can an experiment not see?")
 
     def interference(self):
         r = load("interference")
@@ -116,6 +109,10 @@ class Frontier(VoiceoverScene):
         self.clear_scene()
 
     def privacy(self):
+        self.ask(r"Each answer is randomized: no single one can be trusted. \\ The overall rate is...", [r"unknowable",
+                 r"still estimable"], 1,
+                 say="Each person flips a coin before answering, so no single answer can be trusted. Can we still learn the overall rate?",
+                 reveal="Yes: the noise is known, so it can be subtracted on average.")
         pr = load("privacy")
         head = label(r"Measuring without looking", font_size=36).to_edge(UP, buff=0.3)
         steps = VGroup(*[label(t, font_size=21, color=c) for t, c in (
@@ -161,79 +158,7 @@ class Frontier(VoiceoverScene):
         self.wait(0.4)
         self.clear_scene()
 
-    def models(self):
-        head = label(r"Models of the user", font_size=36).to_edge(UP, buff=0.3)
-        tiles = []
-        for title, body, col in (
-                (r"computational rationality", r"model a person as an agent maximizing reward under the limits of "
-                 r"perception and memory; \ predict pointing, \ typing, \ search", YES),
-                (r"simulated users", r"test a design against learned models of people before showing it to "
-                 r"anyone; \ language models as synthetic participants, \ with caution", HEAD),
-                (r"interfaces that adapt", r"menus, \ keyboards and layouts that change for each person: \ helpful, "
-                 r"\ or unpredictable?", LAM)):
-            frame = RoundedRectangle(width=4.2, height=3.0, corner_radius=0.15, stroke_color=col, stroke_width=2,
-                                     fill_color=BG, fill_opacity=1)
-            t = label(title, font_size=22, color=col)
-            b = wrapped_label(body, 3.8, font_size=18, color=GREY_A)
-            VGroup(t, b).arrange(DOWN, buff=0.3).move_to(frame)
-            tiles.append(VGroup(frame, t, b))
-        VGroup(*tiles).arrange(RIGHT, buff=0.3).next_to(head, DOWN, buff=0.6)
-        foot = wrapped_label(r"Fitts's and Hick's laws were the first such models; \ the question is how far "
-                             r"prediction can replace measurement", 12.4, font_size=21, color=WHITE).to_edge(DOWN,
-                                                                                                   buff=0.6)
-        with self.voiceover(
-            "Finally, models. Fitts's and Hick's laws were the first models of people at computers, and research "
-            "is building richer ones. <bookmark mark='a'/> Computational rationality treats a person as an agent "
-            "making the best decisions it can under the limits of its perception and memory, and predicts "
-            "pointing, typing and visual search from first principles. <bookmark mark='b'/> Simulated users let "
-            "designers test an interface before anyone sees it, and language models are now tried as synthetic "
-            "participants, with good reason for caution. <bookmark mark='c'/> And interfaces that adapt to each "
-            "person raise their own question: when does adapting help, and when does it make a product "
-            "unpredictable? <bookmark mark='d'/> Underneath all of them is one question: how far can prediction "
-            "replace measurement?"
-        ) as vo:
-            self.play(FadeIn(head))
-            for mk, t in zip("abc", tiles):
-                vo.wait_until(mk)
-                self.play(FadeIn(t, shift=UP * 0.15))
-            vo.wait_until("d")
-            self.play(FadeIn(foot))
-        self.wait(0.4)
-        self.clear_scene()
 
-    def open(self):
-        head = label(r"Open", font_size=36).to_edge(UP, buff=0.3)
-        items = VGroup(
-            wrapped_label(r"1. \ \textbf{Interference}: \ designs and estimators for marketplaces and networks that "
-                          r"are unbiased and still have power.", 12.4, font_size=24, color=WHITE),
-            wrapped_label(r"2. \ \textbf{Long-term effects}: \ when short-term surrogates can be trusted, \ with "
-                          r"bounds on how wrong they are.", 12.4, font_size=24, color=YES),
-            wrapped_label(r"3. \ \textbf{Private experimentation}: \ A/B tests with differential privacy at the "
-                          r"smallest cost in power.", 12.4, font_size=24, color=HEAD),
-            wrapped_label(r"4. \ \textbf{Predictive user models}: \ models accurate enough to replace a first round "
-                          r"of user testing.", 12.4, font_size=24, color=KERN),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.35).next_to(head, DOWN, buff=0.45)
-        star = wrapped_label(r"$\bigstar$ \ this part's research problem: \ an always-valid sequential test for "
-                             r"experiments with interference, \ whose error rate holds however often it is "
-                             r"checked", 12.4, font_size=23, color=LAM).to_edge(DOWN, buff=0.35)
-        with self.voiceover(
-            "Open problems. <bookmark mark='a'/> Interference: experimental designs for marketplaces and social "
-            "networks that are unbiased and still have the power to detect small effects. "
-            "<bookmark mark='b'/> Long-term effects: knowing when short-term surrogates can be trusted, with bounds "
-            "on how wrong they can be. <bookmark mark='c'/> Private experimentation: A/B tests under differential "
-            "privacy at the smallest cost in power. <bookmark mark='d'/> And user models accurate enough to replace "
-            "a first round of testing with people. <bookmark mark='e'/> This part's research problem joins two of "
-            "this part's ideas: an always-valid sequential test for experiments with interference, whose error "
-            "rate holds however often you look."
-        ) as vo:
-            self.play(FadeIn(head))
-            for mk, it in zip("abcd", items):
-                vo.wait_until(mk)
-                self.play(FadeIn(it))
-            vo.wait_until("e")
-            self.play(FadeIn(star))
-        self.wait(0.6)
-        self.clear_scene()
 
 
 _ = (DATA, KERN, LAM, NO, YES)

@@ -5,10 +5,15 @@ import numpy as np
 from videos.stats.stats63.common import *  # noqa: F403
 
 
-class DPSGD(LectureMixin, VoiceoverScene):
+class DPSGD(LectureMixin, StatsScene):
     def construct(self):
         self.card_voiceover("Chapter seven. Private learning, and the attacks that audit it.", 7,
                             r"DP-SGD and membership inference", r"Learning without memorizing", lit=(2016,))
+        self.ask("DP-SGD clips each example's gradient so that...",
+                 ["each person's influence on an update is bounded", "training runs faster"], 0,
+                 say="Private stochastic gradient descent clips each example's gradient, then adds noise. Why clip?",
+                 reveal="To bound each person's influence on an update, the sensitivity, so the noise can be "
+                        "calibrated. Membership-inference attacks then audit what the accounting promised.")
         self.algorithm()
         self.toy()
         self.chart()
@@ -16,6 +21,7 @@ class DPSGD(LectureMixin, VoiceoverScene):
         self.membership()
         self.audit()
         self.disparate()
+        self.answer()
 
     def algorithm(self):
         self.lad_voiceover(

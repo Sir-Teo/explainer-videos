@@ -7,7 +7,7 @@ from videos.cs.cs8.common import (BG, CODE, COST, CTRL, DATA, FUNC, HEAD, HIST, 
                                   load, mono)
 
 
-class Frontier(VoiceoverScene):
+class Frontier(WatchScene):
     """The research tier (videos/cs/SYLLABUS.md 1.1): can a machine beat the dataflow limit by predicting values,
     and can speculation be made safe, and at what cost?"""
 
@@ -19,16 +19,15 @@ class Frontier(VoiceoverScene):
         self.now()
 
     def card(self):
-        card = chapter_card(15, r"Frontier: \ past the dataflow limit, \ safely",
-                            r"Can a machine guess values, \ and can guessing be made safe?", lit=(1996, 2014, 2019),
-                            extra=((1996, r"Lipasti: \ value prediction"), (2014, r"Perais and Seznec"),
-                                   (2019, r"STT, \ NDA")), part=PART)
-        with self.voiceover("Chapter fifteen. Frontier: past the dataflow limit, safely."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(15, r"Frontier: \ past the dataflow limit, \ safely", r"Can a machine guess values, \ and can guessing be made safe?", lit=(1996, 2014, 2019), extra=((1996, r"Lipasti: \ value prediction"), (2014, r"Perais and Seznec"),
+                                   (2019, r"STT, \ NDA")), part=PART, said="Chapter fifteen. Frontier: past the dataflow limit, safely.")
 
     # ------------------------------------------------------------------
     def values(self):
+        self.ask(r"Guess a load's value before memory answers, \\ and run ahead on the guess. Allowed?", [r"no",
+                 r"yes, if it's checked and undone when wrong"], 1,
+                 say="Could a core guess the value a load will return, and run ahead on the guess?",
+                 reveal="Yes, as long as every guess is checked, and undone when wrong. That's value prediction.")
         d = load("frontier")
         head = label(r"Value prediction: \ guess what a load will return", font_size=34).to_edge(UP, buff=0.3)
         idea = VGroup(
@@ -139,10 +138,9 @@ class Frontier(VoiceoverScene):
         with self.voiceover(
             "Our optional rule delays broadcasting a completed load's value while an older branch or indirect jump "
             "remains unresolved. <bookmark mark='a'/> That prevents dependent operations from using that value "
-            "during the unresolved control speculation in this model. It is inspired by information-flow defenses, "
+            "during the unresolved control speculation. It is inspired by information-flow defenses, "
             "but does not implement complete STT or NDA algorithms. <bookmark mark='b'/> In the supplied Spectre "
-            "experiment, the tested nonzero probe lines no longer reveal PEBBLE. This is a finite gadget result, "
-            "not a proof of noninterference for every program or channel. <bookmark mark='c'/> On the Job chapter, "
+            "experiment, the tested nonzero probe lines no longer reveal PEBBLE. <bookmark mark='c'/> On the Job chapter, "
             "model cycles increase from four hundred thirty-seven thousand five hundred eighty to four hundred "
             "fifty-three thousand one hundred twelve, about three point five percent. That cost is specific to this "
             "trace and implementation. <bookmark mark='d'/> Fault speculation, memory-alias speculation, "
@@ -172,8 +170,7 @@ class Frontier(VoiceoverScene):
         with self.voiceover(
             "Secure speculation is an active research area with formal results under explicit models. <bookmark "
             "mark='a'/> ProSpeCT, published in 2023, gives a formal processor model and a constant-time-policy "
-            "security proof, plus a RISC-V hardware prototype. Its theorem has specified program and observation "
-            "assumptions; it is not a proof that arbitrary physical systems have no side channels. <bookmark "
+            "security proof, plus a RISC-V hardware prototype. <bookmark "
             "mark='b'/> Dolma's 2021 transient-non-observability design examines broader data sources and "
             "store-related attacks, with overheads measured on its chosen workloads and threat models. Such papers "
             "show why a successful gadget test is weaker than a stated security theorem. <bookmark mark='c'/> "

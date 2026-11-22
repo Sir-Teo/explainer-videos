@@ -5,19 +5,23 @@ import numpy as np
 from videos.stats.stats1.common import *  # noqa: F403
 
 
-class Spread(VoiceoverScene):
+class Spread(StatsScene):
     def construct(self):
         self.card()
+        self.ask("Of any data, at most what share can lie more than two SDs from the mean?",
+                 [r"5\%", r"25\%", r"50\%"], 1,
+                 say="Here's a promise that holds for every dataset there is. At most what share of the data can "
+                     "lie more than two standard deviations from the mean: five percent, a quarter, or a half?",
+                 reveal="A quarter: one over k squared, with k equal to two, for any data whatsoever. For a bell "
+                        "curve the real share is about five percent. Chebyshev's bound never fails, but it's loose.")
         self.squares()
         self.pythagoras()
         self.robust()
         self.chebyshev()
+        self.answer()
 
     def card(self):
-        card = chapter_card(5, r"Spread, and why squares", r"How far from the centre is typical?", lit=(), part=PART)
-        with self.voiceover("Chapter five. Spread, and why squares."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(5, r"Spread, and why squares", r"How far from the centre is typical?", lit=(), part=PART, said="Chapter five. Spread, and why squares.")
 
     def squares(self):
         d = load("heights")

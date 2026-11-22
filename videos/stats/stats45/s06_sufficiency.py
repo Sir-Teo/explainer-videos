@@ -5,21 +5,25 @@ import numpy as np
 from videos.stats.stats45.common import *  # noqa: F403
 
 
-class Sufficiency(VoiceoverScene):
+class Sufficiency(StatsScene):
     def construct(self):
         self.card()
+        self.ask(r"A sample from Uniform$(\theta, \theta + 1)$. A minimal sufficient statistic is...",
+                 ["the mean", "the minimum and maximum"], 1,
+                 say="A sample from the uniform between theta and theta plus one. What's a minimal sufficient "
+                     "statistic?",
+                 reveal="The minimum and the maximum, two numbers for one parameter. And their range is ancillary, "
+                        "which the next chapters make use of.")
         self.definition()
         self.minimal()
         self.table()
         self.completeness()
         self.range_law()
         self.fullrank()
+        self.answer()
 
     def card(self):
-        card = chapter_card(5, r"Sufficiency in general", r"When can data be thrown away without loss?", lit=(1949,), part=PART)
-        with self.voiceover("Chapter five. Sufficiency in general: when can data be thrown away without loss?"):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(5, r"Sufficiency in general", r"When can data be thrown away without loss?", lit=(1949,), part=PART, said="Chapter five. Sufficiency in general: when can data be thrown away without loss?")
 
     def definition(self):
         rows = [

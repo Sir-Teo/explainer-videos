@@ -28,7 +28,7 @@ def len_words():
     return sum(n for _, n, _ in HEAP)
 
 
-class Tracing(VoiceoverScene):
+class Tracing(WatchScene):
     def construct(self):
         self.card()
         self.marksweep()
@@ -36,11 +36,7 @@ class Tracing(VoiceoverScene):
         self.compare()
 
     def card(self):
-        card = chapter_card(7, r"Tracing: \ mark--sweep and mark--compact", r"Can we find the live objects instead?",
-                            lit=(1960,), extra=((1960, r"McCarthy: \ mark and sweep"),), part=PART)
-        with self.voiceover("Chapter seven. Tracing: mark–sweep and mark–compact."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(7, r"Tracing: \ mark--sweep and mark--compact", r"Can we find the live objects instead?", lit=(1960,), extra=((1960, r"McCarthy: \ mark and sweep"),), part=PART, said="Chapter seven. Tracing: mark–sweep and mark–compact.")
 
     def marksweep(self):
         head = label(r"Mark, \ then sweep", font_size=34).to_edge(UP, buff=0.3)
@@ -96,6 +92,9 @@ class Tracing(VoiceoverScene):
         self.clear_scene()
 
     def compact(self):
+        self.ask(r"After a mark--sweep collection, \\ the free memory is...", [r"one big block", r"scattered holes"], 1,
+                 say="After a mark and sweep collection, what does the free memory look like?",
+                 reveal="Scattered holes between the survivors. Compaction slides them together.")
         head = label(r"Fragmentation, \ and compaction", font_size=34).to_edge(UP, buff=0.3)
         objs = heap_row(y=1.3)
         for name, n, live in HEAP:
@@ -184,11 +183,10 @@ class Tracing(VoiceoverScene):
             (
             "Run the same Job under four collectors with equal reserved heap capacity. <bookmark mark='a'/> The "
             "table counts words of marking, scanning or copying using each toy collector's stated work model. "
-            "These operations do not necessarily have equal native time. <bookmark mark='b'/> Mark-sweep leaves "
+            " <bookmark mark='b'/> Mark-sweep leaves "
             "objects in place and can fragment free space. Compacting and copying move reachable objects and must "
             "update references. <bookmark mark='c'/> The generational layout reserves its nursery plus two old "
-            "semispaces; Cheney reserves two equal semispaces. The longest work event is a model pause, not a "
-            "measured millisecond bound. This comparison explains mechanisms on one workload, rather than "
+            "semispaces; Cheney reserves two equal semispaces. This comparison explains mechanisms on one workload, rather than "
             "crowning a universally best collector."
         )
         ) as vo:

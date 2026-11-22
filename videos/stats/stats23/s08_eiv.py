@@ -6,9 +6,14 @@ from explainer.stats.board import coverage_board, load_all
 from videos.stats.stats23.common import *  # noqa: F403
 
 
-class EIV(VoiceoverScene):
+class EIV(StatsScene):
     def construct(self):
         self.card()
+        self.ask("$x$ measured with reliability 0.8. The OLS slope tends to...",
+                 [r"$\beta$", r"$0.8\,\beta$", r"$\beta / 0.8$"], 1,
+                 say="We see x plus independent measurement error, with reliability point eight. What does the "
+                     "least squares slope converge to?",
+                 reveal="Point eight times beta: a noisy x flattens the slope by the reliability ratio.")
         self.attenuation()
         self.fathers()
         self.board()
@@ -17,12 +22,10 @@ class EIV(VoiceoverScene):
         self.simex()
         self.in_y()
         self.fixes()
+        self.answer()
 
     def card(self):
-        card = chapter_card(7, r"Errors in variables", r"A noisy $x$ flattens the slope", lit=(1929,), part=PART)
-        with self.voiceover("Chapter seven. Errors in variables."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(7, r"Errors in variables", r"A noisy $x$ flattens the slope", lit=(1929,), part=PART, said="Chapter seven. Errors in variables.")
 
     def attenuation(self):
         rows = [

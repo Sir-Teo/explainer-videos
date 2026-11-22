@@ -56,7 +56,7 @@ G = load("goldbach")
 M = load("means")
 
 
-class Writing(VoiceoverScene):
+class Writing(WatchScene):
     def construct(self):
         self.card()
         self.argument()
@@ -66,12 +66,8 @@ class Writing(VoiceoverScene):
         self.labels()
 
     def card(self):
-        card = chapter_card(8, r"Writing", r"How do you make a reader believe you, \ for the right reasons?",
-                            lit=(1958, 1983), extra=((1958, r"Toulmin: \ \textit{The Uses of Argument}"),
-                                                     (1983, r"Tufte: \ honest graphics")), part=PART)
-        with self.voiceover("Chapter eight. Writing."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(8, r"Writing", r"How do you make a reader believe you, \ for the right reasons?", lit=(1958, 1983), extra=((1958, r"Toulmin: \ \textit{The Uses of Argument}"),
+                                                     (1983, r"Tufte: \ honest graphics")), part=PART, said="Chapter eight. Writing.")
 
     # ------------------------------------------------------------------
     def argument(self):
@@ -192,6 +188,10 @@ class Writing(VoiceoverScene):
 
     # ------------------------------------------------------------------
     def figures(self):
+        self.ask(r"The same three measurements. Can one figure \\ make the difference look huge or tiny?",
+                 [r"no", r"yes"], 1,
+                 say="Three measurements of link order. Can the same data be drawn to make the difference look huge, or tiny?",
+                 reveal="Yes, by the axis alone. A figure should carry the honest claim.")
         head = label(r"Figures that carry the claim", font_size=36).to_edge(UP, buff=0.3)
         names = [r["order"].replace("+", " ") for r in LINK]
         cols = (DATA, KERN, LAM)

@@ -5,7 +5,7 @@ from videos.cs.cs49.common import (BG, DATA, HEAD, KERN, LAM, NO, PART, YES, axe
                                    module_box, mono)
 
 
-class Metrics(VoiceoverScene):
+class Metrics(WatchScene):
     def construct(self):
         self.card()
         self.pipeline()
@@ -15,12 +15,9 @@ class Metrics(VoiceoverScene):
         self.tiers()
 
     def card(self):
-        card = chapter_card(11, r"A metrics pipeline", r"How do you keep a number about everything, \ every ten "
+        self.chapter(11, r"A metrics pipeline", r"How do you keep a number about everything, \ every ten "
                             r"seconds?", lit=(2012, 2015), extra=((2012, r"Prometheus begun at SoundCloud"),
-                                                                 (2015, r"Pelkonen et al.: \ Gorilla")), part=PART)
-        with self.voiceover("Chapter eleven. A metrics pipeline."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+                                                                 (2015, r"Pelkonen et al.: \ Gorilla")), part=PART, said="Chapter eleven. A metrics pipeline.")
 
     def pipeline(self):
         head = label(r"Requirements, \ and the pipeline", font_size=36).to_edge(UP, buff=0.3)
@@ -76,6 +73,10 @@ class Metrics(VoiceoverScene):
         self.clear_scene()
 
     def cardinality(self):
+        self.ask(r"Add a \texttt{user\_id} label with a million values. \\ The number of series...",
+                 [r"grows by one", r"is multiplied by a million"], 1,
+                 say="Add a user id label, with a million possible values, to one metric. What happens to the number of series?",
+                 reveal="It multiplies by a million. Cardinality, not sample rate, sinks metrics systems.")
         c = load("cardinality")
         rows = c["rows"]
         head = label(r"Cardinality: \ every label multiplies", font_size=36).to_edge(UP, buff=0.3)

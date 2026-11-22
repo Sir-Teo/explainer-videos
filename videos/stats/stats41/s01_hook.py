@@ -45,7 +45,7 @@ def hits_in(region: str, k: int, P, g):
     return pts
 
 
-class Hook(VoiceoverScene):
+class Hook(StatsScene):
     def construct(self):
         self.story()
         self.holes()
@@ -53,7 +53,7 @@ class Hook(VoiceoverScene):
         self.table()
         self.legend()
         self.lesson()
-        self.objectives()
+        self.title(PART)
 
     def story(self):
         tl = timeline(lit=(1943,)).to_edge(UP, buff=0.35)
@@ -182,29 +182,6 @@ class Hook(VoiceoverScene):
                 self.play(FadeIn(rows[k], shift=RIGHT * 0.2))
         self.clear_scene()
 
-    def objectives(self):
-        head = VGroup(label(r"Part 41", font_size=34, color=GREY_B), label(r"What You Didn't See", font_size=56)).arrange(DOWN, buff=0.25)
-        obj = objectives_card([
-            r"Rubin's mechanisms: \ MCAR, \ MAR, \ MNAR; \ when missingness can be ignored",
-            r"the easy methods' sins; \ EM and likelihood under MAR",
-            r"multiple imputation and Rubin's rules; \ weighting as causal inference",
-            r"MNAR: \ Heckman, \ pattern mixtures, \ tipping points; \ MRP",
-            r"measurement error: \ attenuation, \ regression calibration, \ SIMEX, \ misclassification",
-        ], color=TAUC, font_size=26)
-        prereq = note(r"prerequisites: \ Parts 18, \ 22 and 36").to_corner(DL, buff=0.3)
-        built = note(r"built: \ \texttt{statkit.mi}; \ the mask grid; \ data: \ air quality, \ NHANES, \ Mroz").to_corner(DR, buff=0.3)
-        with self.voiceover(
-            "<bookmark mark='a'/> Part forty-one: what you didn't see. <bookmark mark='b'/> We'll classify why data go "
-            "missing and prove when the reason can be ignored; expose the easy fixes; use likelihood and EM; build multiple "
-            "imputation and its rules; see weighting as causal inference; face data missing for reasons that matter, with "
-            "Heckman's model and tipping points; repair a self-selected poll; and correct for measurement error."
-        ) as vo:
-            vo.wait_until("a")
-            self.play(FadeIn(head, shift=UP * 0.2))
-            vo.wait_until("b")
-            self.play(FadeOut(head), FadeIn(obj, shift=UP * 0.2), FadeIn(prereq), FadeIn(built))
-        self.wait(1.0)
-        self.clear_scene()
 
     def legend(self):
         rows = fit_rows(VGroup(
@@ -225,4 +202,3 @@ class Hook(VoiceoverScene):
                 vo.wait_until(m_)
                 self.play(FadeIn(rows[k], shift=RIGHT * 0.2))
         self.clear_scene()
-

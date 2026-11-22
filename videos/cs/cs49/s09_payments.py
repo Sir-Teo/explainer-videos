@@ -12,7 +12,7 @@ def dollars(cents: int, sign=False) -> str:
     return (r"$+$\$" if sign else r"\$") + s
 
 
-class Payments(VoiceoverScene):
+class Payments(WatchScene):
     def construct(self):
         self.card()
         self.entries()
@@ -22,14 +22,16 @@ class Payments(VoiceoverScene):
         self.reconcile()
 
     def card(self):
-        card = chapter_card(8, r"A payment ledger", r"How is money never lost, \ and never taken twice?",
-                            lit=(1981, 2012), extra=((1981, r"Gray: \ the transaction concept"),
-                                                     (2012, r"Helland: \ idempotence")), part=PART)
-        with self.voiceover("Chapter eight. A payment ledger."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(8, r"A payment ledger", r"How is money never lost, \ and never taken twice?", lit=(1981, 2012), extra=((1981, r"Gray: \ the transaction concept"),
+                                                     (2012, r"Helland: \ idempotence")), part=PART, said="Chapter eight. A payment ledger.")
 
     def entries(self):
+        self.wrong_idea(r"every system should be strongly consistent",
+                        r"choose per data: a feed can lag a second; \\ a ledger cannot",
+                        narration="It is tempting to ask every system for the strongest consistency there is.",
+                        right_narration="Consistency costs latency and availability. A feed can show a post a second late; a "
+                                        "ledger cannot lose a cent. The design decides per kind of data.")
+        self.clear_scene()
         head = label(r"Double entry: \ every entry sums to zero", font_size=36).to_edge(UP, buff=0.3)
         names = [r"customer", r"merchant", r"fees"]
         cols = [DATA, YES, KERN]
@@ -164,6 +166,10 @@ class Payments(VoiceoverScene):
         self.clear_scene()
 
     def retries(self):
+        self.ask(r"A charge times out; the client retries \\ without an idempotency key. The risk:", [r"none",
+                 r"charging twice"], 1,
+                 say="A request to charge fifty dollars times out, and the client retries without an idempotency key. What's the risk?",
+                 reveal="Charging twice: the first attempt may have succeeded.")
         led = load("payments")
         nv, idm = led["naive"], led["idempotent"]
         head = label(r"Five thousand payments, \ with retries", font_size=36).to_edge(UP, buff=0.3)
@@ -316,6 +322,12 @@ class Payments(VoiceoverScene):
             self.play(FadeIn(notes[2]))
         self.wait(0.4)
         self.clear_scene()
+        self.checkpoint(
+            [(r"Why double-entry?", r"Every entry balances, so errors show"),
+             (r"How does a crawler stay polite?", r"One queue per host, with delays")],
+            narration="Checkpoint. Why keep a ledger by double entry? And how does a crawler stay polite?",
+            answers_narration="Every transaction's debits equal its credits, so a mistake shows up as an imbalance. And it "
+                              "keeps a queue per host and waits between fetches to each.")
 
 
 _ = (BG, DATA, HEAD, KERN, LAM, NO, YES)

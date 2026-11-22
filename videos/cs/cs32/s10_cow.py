@@ -13,7 +13,7 @@ def ptable(title, color, entries, pos):
     return VGroup(label(title, font_size=19, color=color).next_to(rows, UP, buff=0.1), rows)
 
 
-class Cow(VoiceoverScene):
+class Cow(WatchScene):
     def construct(self):
         self.card()
         self.cow()
@@ -21,13 +21,13 @@ class Cow(VoiceoverScene):
         self.mmap()
 
     def card(self):
-        card = chapter_card(9, r"Copy-on-write, \ zero pages and mmap", r"How can fork copy nothing?",
-                            lit=(1987,), extra=((1987, r"Mach: \ copy-on-write"),), part=PART)
-        with self.voiceover("Chapter nine. Copy-on-write, zero pages, and memory-mapped files."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(9, r"Copy-on-write, \ zero pages and mmap", r"How can fork copy nothing?", lit=(1987,), extra=((1987, r"Mach: \ copy-on-write"),), part=PART, said="Chapter nine. Copy-on-write, zero pages, and memory-mapped files.")
 
     def cow(self):
+        self.ask(r"Fork a 256 MiB process with copy-on-write. \\ Copied at the fork:", [r"256 MiB",
+                 r"only the page tables"], 1,
+                 say="Fork a process using two hundred and fifty-six mebibytes, with copy-on-write. What is copied at the fork?",
+                 reveal="Only the page tables. A page is copied when one side first writes it.")
         head = label(r"fork without copying", font_size=36).to_edge(UP, buff=0.3)
         par = ptable(r"parent's table", DATA, ["page 0 -> A  RO", "page 1 -> B  RO", "page 2 -> C  RO"], [-4.9, 1.0, 0])
         chi = ptable(r"child's table", HEAD, ["page 0 -> A  RO", "page 1 -> B  RO", "page 2 -> C  RO"], [4.9, 1.0, 0])

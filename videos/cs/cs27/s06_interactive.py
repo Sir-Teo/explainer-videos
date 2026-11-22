@@ -12,20 +12,20 @@ def pentagraph(edges, center, r=0.8, color=DATA):
     return VGroup(es, ds)
 
 
-class Interactive(VoiceoverScene):
+class Interactive(WatchScene):
     def construct(self):
         self.card()
         self.gni()
         self.classes()
 
     def card(self):
-        card = chapter_card(5, r"Interactive proofs", r"Can a conversation prove more than a document?",
-                            lit=(1985,), extra=((1985, r"Goldwasser--Micali--Rackoff; \ Babai"),), part=PART)
-        with self.voiceover("Chapter five. Interactive proofs."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(5, r"Interactive proofs", r"Can a conversation prove more than a document?", lit=(1985,), extra=((1985, r"Goldwasser--Micali--Rackoff; \ Babai"),), part=PART, said="Chapter five. Interactive proofs.")
 
     def gni(self):
+        self.ask(r"No short certificate is known that two graphs are \\ \emph{not} isomorphic. Can a verifier still be convinced?",
+                 [r"no", r"yes, by interaction"], 1,
+                 say="Nobody knows a short certificate that two graphs are different. Can a prover still convince you?",
+                 reveal="Yes. Secretly scramble one graph and ask which one it came from. Only a real difference lets the prover answer every time.")
         g = load("gni")
         head = label(r"Proving two graphs are \textbf{not} the same", font_size=32).to_edge(UP, buff=0.3)
         G0 = pentagraph(g["G0"], LEFT * 4.6 + UP * 1.0, color=DATA)

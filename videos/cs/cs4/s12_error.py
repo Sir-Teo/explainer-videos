@@ -6,20 +6,16 @@ from explainer.cs import *  # noqa: F403
 from videos.cs.cs4.common import BG, CODE, COST, CTRL, DATA, FUNC, HEAD, INF, NO, PART, YES, axis_plot, load, sci
 
 
-class Error(VoiceoverScene):
+class Error(WatchScene):
     def construct(self):
         self.card()
         self.model()
         self.cancel()
         self.summation()
         self.patriot()
-        self.ariane()
 
     def card(self):
-        card = chapter_card(11, r"Rounding error", r"How do tiny errors become big ones?", lit=(1991, 1996), part=PART)
-        with self.voiceover("Chapter eleven. Rounding error."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(11, r"Rounding error", r"How do tiny errors become big ones?", lit=(1991, 1996), part=PART, said="Chapter eleven. Rounding error.")
 
     # ------------------------------------------------------------------
     def model(self):
@@ -53,6 +49,11 @@ class Error(VoiceoverScene):
 
     # ------------------------------------------------------------------
     def cancel(self):
+        self.ask(r"$(1 - \cos x) / x^2$ at $x = 10^{-8}$, \\ in double precision. \\ The true answer is $\tfrac12$. "
+                 r"The computer says...", [r"$0.5$", r"$0$", r"a huge number"], 1,
+                 say="One minus cos x, over x squared, at x equal to ten to the minus eight. The true answer is about one half. "
+                     "What does double precision say?",
+                 reveal="Zero. Cos x rounds to exactly one, and every digit cancels.")
         d = load("error")["cancel"]
         head = label(r"Catastrophic cancellation", font_size=38).to_edge(UP, buff=0.3)
         f1 = MathTex(r"f(x) = \frac{1 - \cos x}{x^2} \ \xrightarrow{\ x \to 0\ } \ \frac12", font_size=36,
@@ -191,35 +192,3 @@ class Error(VoiceoverScene):
         self.wait(0.3)
         self.clear_scene()
 
-    # ------------------------------------------------------------------
-    def ariane(self):
-        head = label(r"Kourou, \ 4 June 1996", font_size=38).to_edge(UP, buff=0.35)
-        conv = VGroup(
-            MathTex(r"\text{horizontal bias: a 64-bit float}", font_size=32, color=FUNC),
-            MathTex(r"\downarrow \ \text{converted to a 16-bit signed integer}", font_size=32, color=GREY_A),
-            MathTex(r"\text{largest: } 32{,}767", font_size=32, color=NO),
-        ).arrange(DOWN, buff=0.3).move_to(UP * 1.1)
-        story = VGroup(
-            label(r"the code came from Ariane 4, \ whose trajectory never produced so large a value", font_size=26,
-                  color=GREY_A),
-            label(r"Ariane 5 was faster: \ the conversion overflowed, \ the guidance computer shut down, \\ and its "
-                  r"backup, \ running the same code, \ had failed the same way", font_size=26, color=NO),
-            label(r"37 seconds after launch, \ the rocket broke up", font_size=28, color=HEAD),
-        ).arrange(DOWN, buff=0.3).move_to(DOWN * 1.5)
-        with self.voiceover(
-            "Five years later, on the first flight of the European Ariane 5 rocket, a number simply did not fit. "
-            "<bookmark mark='a'/> The inertial guidance software converted a sixty-four-bit floating-point value, the "
-            "horizontal bias, into a sixteen-bit signed integer, whose largest value is thirty-two thousand, seven "
-            "hundred and sixty-seven. <bookmark mark='b'/> The code had been reused from Ariane 4, whose slower "
-            "trajectory never produced a value that large, so the check had been left out. Ariane 5 was faster. The "
-            "conversion overflowed, the guidance computer shut itself down, and its backup, running the identical "
-            "code, had already failed in the same way. Thirty-seven seconds after launch the rocket veered and broke "
-            "up. The fix would have been one range check, the lesson of chapter two."
-        ) as vo:
-            self.play(FadeIn(head), FadeIn(conv[:2]))
-            vo.wait_until("a")
-            self.play(FadeIn(conv[2]))
-            vo.wait_until("b")
-            self.play(LaggedStart(*[FadeIn(s) for s in story], lag_ratio=0.5), run_time=3.0)
-        self.wait(0.3)
-        self.clear_scene()

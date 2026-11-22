@@ -4,7 +4,7 @@ from explainer.cs import *  # noqa: F403
 from videos.cs.cs39.common import (DATA, HEAD, KERN, LAM, NO, PART, YES, grid_table, load)
 
 
-class Frontier(VoiceoverScene):
+class Frontier(WatchScene):
     def construct(self):
         self.card()
         self.calm()
@@ -13,16 +13,15 @@ class Frontier(VoiceoverScene):
         self.open()
 
     def card(self):
-        card = chapter_card(9, r"Frontier: \ how little coordination?", r"Which guarantees need machines to wait for "
-                            r"each other?", lit=(2010, 2019),
-                            extra=((2011, r"Mahajan, Alvisi and Dahlin: \ CAC"),
+        self.chapter(9, r"Frontier: \ how little coordination?", r"Which guarantees need machines to wait for "
+                            r"each other?", lit=(2010, 2019), extra=((2011, r"Mahajan, Alvisi and Dahlin: \ CAC"),
                                    (2014, r"Bailis et al.: \ invariant confluence"),
-                                   (2019, r"Hellerstein and Alvaro: \ CALM")), part=PART)
-        with self.voiceover("Chapter nine. Frontier: how little coordination can we get away with?"):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+                                   (2019, r"Hellerstein and Alvaro: \ CALM")), part=PART, said="Chapter nine. Frontier: how little coordination can we get away with?")
 
     def calm(self):
+        self.ask(r"Which programs can run with no coordination at all?", [r"none", r"monotonic ones"], 1,
+                 say="Which distributed programs can run consistently without any coordination at all?",
+                 reveal="Exactly the monotonic ones, whose outputs only grow: the CALM theorem.")
         c = {r["kind"]: r for r in load("crdt")["rows"]}
         head = label(r"The CALM theorem", font_size=36).to_edge(UP, buff=0.3)
         thm = wrapped_label(r"a problem has a consistent, \ coordination-free distributed implementation \ "

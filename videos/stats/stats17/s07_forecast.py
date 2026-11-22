@@ -5,9 +5,14 @@ import numpy as np
 from videos.stats.stats17.common import *  # noqa: F403
 
 
-class Forecast(VoiceoverScene):
+class Forecast(StatsScene):
     def construct(self):
         self.card()
+        self.ask("Forecast a stationary AR(1) far ahead. The forecast tends to...",
+                 ["the last value", "the series mean", "infinity"], 1,
+                 say="Forecast a stationary autoregression further and further ahead. Where does the forecast go?",
+                 reveal="To the series mean, and the interval widens to the series' own spread. Memory sees only so "
+                        "far.")
         self.best_linear()
         self.widening()
         self.random_walk()
@@ -15,12 +20,14 @@ class Forecast(VoiceoverScene):
         self.sunspot_ar8()
         self.scoring()
         self.cautions()
+        self.answer()
+        self.checkpoint([("Cuts off after lag $q$: whose ACF?", "the MA($q$)'s; for an AR($p$) the PACF cuts off"),
+                         ("A stationary AR's forecast far ahead tends to?", "the series mean")],
+                        narration="Checkpoint. Models and forecasts.",
+                        answers_narration="The moving average's. And the mean.")
 
     def card(self):
-        card = chapter_card(6, r"Forecasting", r"How far ahead can memory see?", part=PART)
-        with self.voiceover("Chapter six. Forecasting."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(6, r"Forecasting", r"How far ahead can memory see?", part=PART, said="Chapter six. Forecasting.")
 
     def best_linear(self):
         rows = [

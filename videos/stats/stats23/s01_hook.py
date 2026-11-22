@@ -7,13 +7,13 @@ from videos.stats.stats23.common import *  # noqa: F403
 SHORT = [r"intercept", r"GNP deflator", r"GNP", r"unemployed", r"armed forces", r"population", r"year"]
 
 
-class Hook(VoiceoverScene):
+class Hook(StatsScene):
     def construct(self):
         self.longley()
         self.data()
         self.digits()
         self.why_digits()
-        self.objectives()
+        self.title(PART)
 
     def longley(self):
         tl = timeline(lit=(1967,)).to_edge(UP, buff=0.35)
@@ -139,29 +139,4 @@ class Hook(VoiceoverScene):
             for k, m_ in enumerate("abcd"):
                 vo.wait_until(m_)
                 step(k, transform=False)
-        self.clear_scene()
-
-    def objectives(self):
-        head = VGroup(label(r"Part 23", font_size=34, color=GREY_B), label(r"The Linear Model in Depth", font_size=60)).arrange(DOWN, buff=0.25)
-        obj = objectives_card([
-            r"the general linear hypothesis and its $F$-test, \ derived",
-            r"GLS; \ standard errors that survive heteroskedasticity and clustering",
-            r"what a wrong linear model estimates; \ noisy regressors",
-            r"quantile regression and splines",
-            r"the numerics of least squares; \ influence",
-        ], color=OLS_C, font_size=26)
-        prereq = note(r"prerequisites: \ Parts 12, \ 21 and 22").to_corner(DL, buff=0.3)
-        built = note(r"built: \ \texttt{statkit.ols} II; \ the digits board").to_corner(DR, buff=0.3)
-        with self.voiceover(
-            "<bookmark mark='a'/> Part twenty-three: the linear model in depth. <bookmark mark='b'/> We'll derive the"
-            " general linear hypothesis and its F-test; meet generalized least squares; build standard errors for "
-            "uneven noise and clustered data, and assess a wild bootstrap with few clusters; ask what a linear model "
-            "estimates when the truth isn't linear, and what noisy regressors do; fit quantiles and splines; and "
-            "finish with the numerics of least squares and the influence of single points."
-        ) as vo:
-            vo.wait_until("a")
-            self.play(FadeIn(head, shift=UP * 0.2))
-            vo.wait_until("b")
-            self.play(FadeOut(head), FadeIn(obj, shift=UP * 0.2), FadeIn(prereq), FadeIn(built))
-        self.wait(1.0)
         self.clear_scene()

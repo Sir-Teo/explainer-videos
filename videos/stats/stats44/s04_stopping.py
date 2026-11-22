@@ -5,20 +5,30 @@ import numpy as np
 from videos.stats.stats44.common import *  # noqa: F403
 
 
-class OptionalStopping(VoiceoverScene):
+class OptionalStopping(StatsScene):
     def construct(self):
         self.card()
+        self.wrong_idea("Quitting at the right moment can beat a fair game",
+                        "With bounded time or bounded losses, optional stopping keeps a fair game fair",
+                        narration="Every gambler's hope: you can beat a fair game by quitting at the right moment.",
+                        right_narration="Not with bounded time, or bounded losses. Doob's optional stopping theorem "
+                                        "keeps a fair game fair under any stopping rule that uses only the past. "
+                                        "The exceptions need unlimited time and unlimited credit.")
+        self.ask("A simple random walk from 0, stopped when it first hits $+1$. Then $E[S_T]$ is...",
+                 ["0", "1"], 1,
+                 say="A fair random walk starts at zero, and we stop it the first time it reaches plus one. It "
+                     "always gets there eventually. What's the expected value where it stops?",
+                 reveal="One, not zero: optional stopping fails here. The stopping time has infinite mean, and the "
+                        "walk can sink arbitrarily far before it rises.")
         self.theorem()
         self.ruin()
         self.table()
         self.doubling()
         self.wald()
+        self.answer()
 
     def card(self):
-        card = chapter_card(3, r"Optional stopping", r"Can you beat a fair game by quitting at the right time?", part=PART)
-        with self.voiceover("Chapter three. Optional stopping: can you beat a fair game by choosing when to quit?"):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
-        self.play(FadeOut(card))
+        self.chapter(3, r"Optional stopping", r"Can you beat a fair game by quitting at the right time?", part=PART, said="Chapter three. Optional stopping: can you beat a fair game by choosing when to quit?")
 
     def theorem(self):
         rows = [

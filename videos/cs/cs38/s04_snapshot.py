@@ -6,7 +6,7 @@ from explainer.cs import *  # noqa: F403
 from videos.cs.cs38.common import (DATA, HEAD, KERN, LAM, NO, PART, PROCC, YES, grid_table, load)
 
 
-class Snapshot(VoiceoverScene):
+class Snapshot(WatchScene):
     def construct(self):
         self.card()
         self.cuts()
@@ -14,11 +14,7 @@ class Snapshot(VoiceoverScene):
         self.result()
 
     def card(self):
-        card = chapter_card(3, r"Snapshots", r"How do you photograph a system that never stops?", lit=(1985, 1985),
-                            extra=((1985, r"Chandy and Lamport: \ distributed snapshots"),), part=PART)
-        with self.voiceover("Chapter three. Snapshots."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(3, r"Snapshots", r"How do you photograph a system that never stops?", lit=(1985, 1985), extra=((1985, r"Chandy and Lamport: \ distributed snapshots"),), part=PART, said="Chapter three. Snapshots.")
 
     def cuts(self):
         head = label(r"Consistent and inconsistent cuts", font_size=36).to_edge(UP, buff=0.3)
@@ -104,6 +100,10 @@ class Snapshot(VoiceoverScene):
         self.clear_scene()
 
     def result(self):
+        self.ask(r"A snapshot while money keeps moving between processes. \\ The recorded total is...",
+                 [r"off by the money in flight", r"exactly the true total"], 1,
+                 say="We snapshot four processes while money keeps moving between them. Does the recorded total come out right?",
+                 reveal="Exactly, because the snapshot records the money in the channels too.")
         s = load("snapshot")
         d = s["demo"]
         head = label(r"A bank of four, \ photographed", font_size=36).to_edge(UP, buff=0.3)
@@ -146,6 +146,12 @@ class Snapshot(VoiceoverScene):
             self.play(FadeIn(side))
         self.wait(0.4)
         self.clear_scene()
+        self.checkpoint(
+            [(r"What do vector clocks capture that Lamport clocks don't?", r"Concurrency: exactly when events are unordered"),
+             (r"What makes a cut consistent?", r"Every message received was also sent")],
+            narration="Checkpoint. What do vector clocks capture that Lamport clocks miss? And what makes a cut consistent?",
+            answers_narration="Exactly which events are concurrent. And every message the cut shows as received, it also "
+                              "shows as sent.")
 
 
 _ = (DATA, HEAD)

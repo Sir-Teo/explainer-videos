@@ -7,10 +7,16 @@ import numpy as np
 from videos.stats.stats64.common import *  # noqa: F403
 
 
-class Collapse(LectureMixin, VoiceoverScene):
+class Collapse(LectureMixin, StatsScene):
     def construct(self):
         self.card_voiceover("Chapter seven. Synthetic data, and the collapse of a model trained on itself.", 7,
                             r"Model collapse", r"A Gaussian fitted to its own samples")
+        self.ask("Fit a Gaussian, sample from it, refit, and repeat. Over generations, the variance...",
+                 ["stays the same", "shrinks toward zero", "grows"], 1,
+                 say="Model collapse in miniature. Fit a Gaussian to data, sample from the fit, refit to the "
+                     "samples, and repeat. What happens to the variance over generations?",
+                 reveal="It shrinks toward zero: each fit loses a little spread, and the losses compound. The tails "
+                        "go first. Shumailov and colleagues saw the same in language models.")
         self.story()
         self.setup_()
         self.mean_()
@@ -18,6 +24,7 @@ class Collapse(LectureMixin, VoiceoverScene):
         self.chart()
         self.tails()
         self.accumulate()
+        self.answer()
 
     def story(self):
         self.lad_voiceover(

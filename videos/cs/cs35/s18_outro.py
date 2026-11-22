@@ -17,7 +17,7 @@ def tile(content, caption, color, TW=3.6, TH=2.3):
     return Group(frame, content, cap)
 
 
-class Outro(VoiceoverScene):
+class Outro(WatchScene):
     def construct(self):
         self.recap()
         self.payoffs()
@@ -48,6 +48,12 @@ class Outro(VoiceoverScene):
             self.play(LaggedStart(*[FadeIn(t, shift=UP * 0.15) for t in tiles], lag_ratio=0.25), run_time=4.0)
         self.wait(0.5)
         self.clear_scene()
+        self.checkpoint(
+            [(r"What is write skew?", r"Two snapshots each keep an invariant; together they break it"),
+             (r"ARIES's three passes?", r"Analysis, redo, undo")],
+            narration="Last checkpoint. What is write skew? And what are ARIES's three passes?",
+            answers_narration="Two transactions, each correct in its own snapshot, together break an invariant. And analysis, "
+                              "redo, undo.")
 
     def payoffs(self):
         card = payoff_card([

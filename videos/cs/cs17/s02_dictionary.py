@@ -7,7 +7,7 @@ from videos.cs.cs17.common import (BG, CODE, COST, CTRL, DATA, FUNC, HEAD, LAM, 
                                    mono, slots, words)
 
 
-class Dictionary(VoiceoverScene):
+class Dictionary(WatchScene):
     def construct(self):
         self.card()
         self.adt()
@@ -16,12 +16,7 @@ class Dictionary(VoiceoverScene):
         self.corpus()
 
     def card(self):
-        card = chapter_card(1, r"The dictionary, \ and the birthday bound",
-                            r"How soon do random choices collide?", lit=(1953,),
-                            extra=((1953, r"Luhn: \ hashing, \ at IBM"),), part=PART)
-        with self.voiceover("Chapter one. The dictionary, and the birthday bound."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(1, r"The dictionary, \ and the birthday bound", r"How soon do random choices collide?", lit=(1953,), extra=((1953, r"Luhn: \ hashing, \ at IBM"),), part=PART, said="Chapter one. The dictionary, and the birthday bound.")
 
     def adt(self):
         head = label(r"One interface, \ many implementations", font_size=34).to_edge(UP, buff=0.3)
@@ -98,6 +93,10 @@ class Dictionary(VoiceoverScene):
         self.clear_scene()
 
     def birthday(self):
+        self.ask(r"23 people in a room. \\ The chance two share a birthday?", [r"about 6\%", r"about 50\%",
+                 r"about 94\%"], 1,
+                 say="Twenty-three people. What's the chance that two of them share a birthday?",
+                 reveal="About fifty percent. Collisions come much sooner than intuition says, and hash tables live with that.")
         d = load("birthday")
         head = label(r"The birthday bound", font_size=34).to_edge(UP, buff=0.3)
         ax = Axes(x_range=[0, 80, 10], y_range=[0, 1, 0.25], x_length=6.2, y_length=3.6,
