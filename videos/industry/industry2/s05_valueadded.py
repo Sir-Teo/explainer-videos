@@ -33,8 +33,13 @@ class ValueAdded(VoiceoverScene):
             "think of an economy are small: farming adds less than one percent, mining one percent, utilities under "
             "two."
         ) as vo:
-            self.play(FadeIn(head), FadeIn(src), FadeIn(stamp))
-            self.play(LaggedStart(*[FadeIn(tm[i], scale=0.96) for i in order], lag_ratio=0.08), run_time=3)
+            # a pile of coins, one for each industry, poured out and gathered into the map
+            pile = VGroup(*[draw.coin(0.16) for _ in order])
+            for k, c in enumerate(pile):
+                c.move_to([-0.6 + 0.28 * (k % 6), -0.3 + 0.12 * (k // 6), 0])
+            self.play(FadeIn(head), FadeIn(src), FadeIn(stamp),
+                      LaggedStart(*[FadeIn(c, shift=DOWN * 0.4) for c in pile], lag_ratio=0.04), run_time=1.6)
+            self.play(*[ReplacementTransform(pile[k], tm[i]) for k, i in enumerate(order)], run_time=2.4)
             vo.wait_until("a")
             self.play(hl("Real estate"))
             vo.wait_until("b")
