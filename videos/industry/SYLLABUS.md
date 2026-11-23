@@ -2532,7 +2532,8 @@ scored in Part 64 and at each refresh.
 
 | Part | Sweep | Works module | Scenes | QA | Course material | Chinese |
 |---|---|---|---|---|---|---|
-| 1 · Where the Money Goes | done 2026-11-23 (75 Register rows) | `works/chain.py` | 15 scenes | silent and narrated previews reviewed | entry, lab, interactive | not started |
+| 1 · Where the Money Goes | done 2026-11-23 (118 Register rows) | `works/chain.py` | 18 scenes | silent and narrated previews reviewed | entry, lab, interactive | not started |
+| 2 · The Economy on One Page | done 2026-11-23 (31 Register rows; BEA, BLS and World Bank extracts) | — (the BEA table itself) | 17 scenes | silent and narrated previews reviewed | entry, lab, interactive | not started |
 
 Phase 0 is done in the form Part 1 needed: the palette and kit (`style.py`, `kit.py`), the instruments (`viz.py`: the
 phone and its exploded view, the region map, the Dollar column, the margin ladder, the treemap, plain axes), the
@@ -2546,3 +2547,12 @@ were added. Its sweep corrected three things the draft had from memory: the mobi
 (no primary source was found), Qualcomm's own 10-K attributes its 2026 fall in handset revenue to memory, not to
 Apple's modem, and Apple's 85% share of the industry's operating profit is Counterpoint's figure for Q2 2023, not a
 current one.
+
+Part 2 departs from its draft entry in three places. It uses BEA's 2023 sector table itself rather than a model
+economy (`works/world.py` waits for the model companies it is meant to hold, Part 57). Its *Called it?* is Leontief's
+own 1983 forecast about people and horses, scored against payroll employment, with the series' call on health care
+against manufacturing and retail in 2030; Clark's and Fourastié's forecasts are left for Act X. The "500,000 numbers on
+cards" in the draft story was not found in a primary source and is not used; the 1936 table's 44 sectors (41
+producing) are from the paper and Bjerkholt (2016). The Filing Room's first extracts (`data/fetch.py`) serve it: BEA's
+value added and use tables, the BLS's payroll series and the World Bank's shares, each committed as a small CSV with
+its URL and retrieval date.

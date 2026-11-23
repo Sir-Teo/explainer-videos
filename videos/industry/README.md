@@ -1,7 +1,7 @@
 # Industry, Built (产业，从零搭建)
 
-**Status (2026-11-23): Part 1, [*Where the Money Goes*](industry1/README.md), is built, in English, with its lab
-and interactive; Parts 2-64 are planned.** This file is the plan. The standard every part meets, the
+**Status (2026-11-23): Parts 1 and 2, [*Where the Money Goes*](industry1/README.md) and [*The Economy on One
+Page*](industry2/README.md), are built, in English, with their labs and interactives; Parts 3-64 are planned.** This file is the plan. The standard every part meets, the
 devices, the data plan and all sixty-four parts chapter by chapter are in [`SYLLABUS.md`](SYLLABUS.md), with
 progress in its §9. The decisions the plan rests on, and the ones still open, are at the end of this file.
 

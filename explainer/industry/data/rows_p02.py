@@ -89,6 +89,18 @@ add(
        "$281.7bn)", "Microsoft Form 10-K FY2025 (SEC frames)", FR.format("OperatingIncomeLoss"), "FY2025"),
     co("emp.microsoft.fy2026", 223_000, "people", "Microsoft full-time employees, 30 June 2026", "Microsoft Form 10-K "
        "FY2026", "https://www.sec.gov/cgi-bin/browse-edgar?action=getcompany&CIK=0000789019&type=10-K", "2026-06-30"),
+    co("rev.alphabet.2025", 402.836, "USD bn", "Alphabet revenues, 2025", "Alphabet Form 10-K 2025 (SEC company "
+       "facts, accession 0001652044-26-000018)", FR.format("Revenues"), "2025"),
+    co("rev.microsoft.fy2025", 281.724, "USD bn", "Microsoft revenue, fiscal year to 30 June 2025", "Microsoft Form "
+       "10-K FY2025 (SEC company facts)", "https://data.sec.gov/api/xbrl/companyfacts/CIK0000789019.json", "FY2025"),
+    co("rev.meta.2025", 200.966, "USD bn", "Meta Platforms revenue, 2025", "Meta Form 10-K 2025 (SEC company facts, "
+       "accession 0001628280-26-003942)", "https://data.sec.gov/api/xbrl/companyfacts/CIK0001326801.json", "2025"),
+    co("oi.unitedhealth.2025", 18.964, "USD bn", "UnitedHealth Group earnings from operations, 2025 (2024: $32.3bn)",
+       "UnitedHealth Form 10-K 2025 (SEC company facts, accession 0000731766-26-000062)",
+       "https://data.sec.gov/api/xbrl/companyfacts/CIK0000731766.json", "2025"),
+    co("oi.mckesson.fy2026", 6.212, "USD bn", "McKesson operating income, fiscal year to 31 March 2026", "McKesson "
+       "Form 10-K FY2026 (SEC company facts, accession 0000927653-26-000069)",
+       "https://data.sec.gov/api/xbrl/companyfacts/CIK0000927653.json", "FY2026"),
     co("oi.meta.2025", 83.3, "USD bn", "Meta Platforms operating income, 2025 (revenue $201.0bn)", "Meta Form 10-K "
        "2025 (SEC frames)", FR.format("OperatingIncomeLoss"), "2025"),
 
@@ -99,4 +111,14 @@ add(
        "Statistics via FRED", "https://fred.stlouisfed.org/series/PAYEMS", "2025", "official"),
     co("jobs.1983", 90.3, "million", "US nonfarm payroll employment, 1983 average (PAYEMS)", "BLS Current Employment "
        "Statistics via FRED", "https://fred.stlouisfed.org/series/PAYEMS", "1983", "official"),
+)
+
+add(
+    co("rev.aws.2025", 128.725, "USD bn", "AWS net sales, 2025 (18% of Amazon's)", "Amazon Form 10-K 2025, segment "
+       "information", "https://www.sec.gov/cgi-bin/browse-edgar?action=getcompany&CIK=0001018724&type=10-K", "2025"),
+)
+
+add(
+    co("gp.apple.fy2025", 195.201, "USD bn", "Apple gross margin (gross profit), FY2025", "Apple Form 10-K FY2025",
+       "https://www.sec.gov/Archives/edgar/data/320193/000032019325000079/aapl-20250927.htm", "FY2025"),
 )

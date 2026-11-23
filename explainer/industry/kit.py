@@ -22,7 +22,7 @@ config.background_color = BACKGROUND
 
 __all__ = ["T", "TB", "money", "money_short", "say_money", "say_bn", "pct", "say_pct", "part_title", "chapter",
            "source", "as_of", "estimate_tag", "pill", "I", "REGION", "REGION_NAME", "FONT", "question_strip",
-           "big_number", "caption", "PARTS"]
+           "big_number", "caption", "PARTS", "BACKGROUND"]
 
 
 def T(text: str, size: float = 28, color: str = I.TEXT, weight=NORMAL, font: str = FONT, **kw) -> Text:

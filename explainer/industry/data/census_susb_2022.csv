@@ -1,0 +1,89 @@
+# source: https://www2.census.gov/programs-surveys/susb/tables/2022/us_state_naics_detailedsizes_2022.xlsx and us_naicssector_large_emplsize_2022.xlsx (Statistics of US Businesses, 2022, released 2025-04-10; receipts in $1,000)
+# retrieved: 2026-11-23
+naics,sector,size,firms,establishments,employment,receipts_k
+--,Total,01: Total,6395635,8298562,135748407,50848996830
+--,Total,02: <5 employees,4029041,4035233,6295615,2084288587
+--,Total,03: 5-9 employees,1034135,1047874,6810300,1632588564
+--,Total,04:10-14 employees,428589,447481,5015443,1154533541
+--,Total,05: 15-19 employees,228328,246879,3828826,872265686
+--,Total,06: <20 employees,5720093,5777467,21950184,5743676378
+--,Total,07: 20-24 employees,142888,162097,3114197,738146154
+--,Total,08: 25-29 employees,95073,111767,2549379,601213021
+--,Total,09: 30-34 employees,68222,84583,2171535,520757378
+--,Total,10: 35-39 employees,50819,65392,1872661,479242455
+--,Total,11: 40-49 employees,70770,98116,3118666,818032956
+--,Total,12: 50-74 employees,89207,142638,5366080,1534375218
+--,Total,13: 75-99 employees,44181,87533,3784183,1121565320
+--,Total,14: 100-149 employees,40744,107445,4922865,1533865161
+--,Total,15: 150-199 employees,19444,69493,3340620,1073697618
+--,Total,16: 200-299 employees,18798,94905,4561498,1579987886
+--,Total,17: 300-399 employees,8904,61462,3068601,1202168131
+--,Total,18: 400-499 employees,5451,49564,2430087,832443720
+--,Total,19: <500 employees,6374594,6912462,62250556,17779171396
+--,Total,20: 500-749 employees,6974,85574,4237717,1501071521
+--,Total,21: 750-999 employees,3426,58890,2963606,1072172242
+--,Total,"22: 1,000-1,499 employees",3412,83203,4151589,1565015935
+--,Total,"23: 1,500-1,999 employees",1777,59680,3069744,1290049114
+--,Total,"24: 2,000-2,499 employees",1091,47693,2443736,1018573212
+--,Total,"25: 2,500-4,999 employees",2099,137331,7321331,3468793545
+--,Total,"26: 5,000+ employees",2262,913729,49310128,23154149865
+--,Total,"11: 20,000+ employees",546,595702,33384317,14044857811
+11,"Agriculture, Forestry, Fishing and Hunting",01: Total,22599,23332,168634,50498772
+11,"Agriculture, Forestry, Fishing and Hunting",02: <500 employees,22498,22967,140234,41683415
+11,"Agriculture, Forestry, Fishing and Hunting","11: 20,000+ employees",7,25,323,144897
+21,"Mining, Quarrying, and Oil and Gas Extraction",01: Total,17341,23180,508023,718948420
+21,"Mining, Quarrying, and Oil and Gas Extraction",02: <500 employees,17003,18813,240609,169146840
+21,"Mining, Quarrying, and Oil and Gas Extraction","11: 20,000+ employees",19,318,28497,93899264
+22,Utilities,01: Total,6772,20425,645214,733463209
+22,Utilities,02: <500 employees,6566,8426,121595,146323783
+22,Utilities,"11: 20,000+ employees",15,3083,142738,143215795
+23,Construction,01: Total,782487,800651,7361847,2918247676
+23,Construction,02: <500 employees,781192,788395,5942593,2141825204
+23,Construction,"11: 20,000+ employees",49,1327,207497,68771823
+31-33,Manufacturing,01: Total,239265,285500,12188330,7072148824
+31-33,Manufacturing,02: <500 employees,235088,250133,4984670,1677120227
+31-33,Manufacturing,"11: 20,000+ employees",153,5595,1987800,1689110439
+42,Wholesale Trade,01: Total,277932,388706,6143230,11637328473
+42,Wholesale Trade,02: <500 employees,274629,312167,3213593,3902185860
+42,Wholesale Trade,"11: 20,000+ employees",167,16236,870459,2697627494
+44-45,Retail Trade,01: Total,645404,1045890,15922438,6850896411
+44-45,Retail Trade,02: <500 employees,643115,718945,5452297,2523596753
+44-45,Retail Trade,"11: 20,000+ employees",194,191944,7892566,3235510784
+48-49,Transportation and Warehousing,01: Total,237527,294354,6108121,1354011174
+48-49,Transportation and Warehousing,02: <500 employees,235163,246772,2027829,507307167
+48-49,Transportation and Warehousing,"11: 20,000+ employees",216,20991,2612791,409683596
+51,Information,01: Total,89332,160946,3634012,2139449301
+51,Information,02: <500 employees,87987,96323,973434,304019324
+51,Information,"11: 20,000+ employees",138,33998,1325646,1132016818
+52,Finance and Insurance,01: Total,244536,480546,6831897,5753290858
+52,Finance and Insurance,02: <500 employees,242710,294136,1881621,797155692
+52,Finance and Insurance,"11: 20,000+ employees",158,85169,2334047,2255554723
+53,Real Estate and Rental and Leasing,01: Total,366557,466656,2333125,930977535
+53,Real Estate and Rental and Leasing,02: <500 employees,365322,397563,1552396,548944858
+53,Real Estate and Rental and Leasing,"11: 20,000+ employees",111,17863,196439,92454305
+54,"Professional, Scientific, and Technical Services",01: Total,872305,974303,10152104,2718840975
+54,"Professional, Scientific, and Technical Services",02: <500 employees,868529,902276,5622799,1400151168
+54,"Professional, Scientific, and Technical Services","11: 20,000+ employees",294,28464,1715620,440591544
+55,Management of Companies and Enterprises,01: Total,25413,51218,3661977,231466043
+55,Management of Companies and Enterprises,02: <500 employees,18040,19060,376887,42594358
+55,Management of Companies and Enterprises,"11: 20,000+ employees",443,16473,1442203,79226753
+56,Administrative and Support and Waste Management and Remediation Services,01: Total,376192,450481,13578709,1385420918
+56,Administrative and Support and Waste Management and Remediation Services,02: <500 employees,371990,383064,3891512,541348590
+56,Administrative and Support and Waste Management and Remediation Services,"11: 20,000+ employees",279,31750,4990812,368439150
+61,Educational Services,01: Total,103287,114806,3743840,541276105
+61,Educational Services,02: <500 employees,102016,107441,1772483,187498953
+61,Educational Services,"11: 20,000+ employees",75,633,498617,135825536
+62,Health Care and Social Assistance,01: Total,693801,976418,21171232,3328957116
+62,Health Care and Social Assistance,02: <500 employees,689442,790644,9260938,1153451413
+62,Health Care and Social Assistance,"11: 20,000+ employees",153,79963,4617162,948381926
+71,"Arts, Entertainment, and Recreation",01: Total,148290,162960,2318357,347071394
+71,"Arts, Entertainment, and Recreation",02: <500 employees,147542,153216,1476416,204921131
+71,"Arts, Entertainment, and Recreation","11: 20,000+ employees",47,1687,252246,26655794
+72,Accommodation and Food Services,01: Total,574723,771856,13793478,1200765893
+72,Accommodation and Food Services,02: <500 employees,572464,633139,8657489,719019921
+72,Accommodation and Food Services,"11: 20,000+ employees",58,53989,2137842,198248790
+81,Other Services (except Public Administration),01: Total,729236,797836,5471987,932389150
+81,Other Services (except Public Administration),02: <500 employees,727836,760484,4649309,767328156
+81,Other Services (except Public Administration),"11: 20,000+ employees",119,6194,131012,29498380
+99,Industries not classified,01: Total,8498,8498,11852,3548583
+99,Industries not classified,02: <500 employees,8498,8498,11852,3548583

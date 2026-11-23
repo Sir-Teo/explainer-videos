@@ -5,6 +5,12 @@
     python -m explainer.industry.data.fetch bea_io       # BEA 2023 sector use table and direct requirements
     python -m explainer.industry.data.fetch fred_jobs    # FRED payroll employment by industry, annual
     python -m explainer.industry.data.fetch wb_shares    # World Bank: industry shares of GDP by country
+    python -m explainer.industry.data.fetch wb_mfg_usd   # World Bank: manufacturing value added in dollars
+    python -m explainer.industry.data.fetch census_susb  # Census: employer firms and jobs by firm size, 2022
+    python -m explainer.industry.data.fetch fred_prices  # BLS: price indexes for services and goods, hourly pay
+    python -m explainer.industry.data.fetch sec_annual   # SEC: annual 10-K figures of the companies in SEC_COMPANIES
+    python -m explainer.industry.data.fetch bea_real     # BEA real value added and prices by industry
+    python -m explainer.industry.data.fetch fred_pay     # BLS: average hourly earnings by industry
     python -m explainer.industry.data.fetch --all
 
 Each extract is a small CSV in this folder, committed, with the source URL and the retrieval date in its first
@@ -24,7 +30,7 @@ import zipfile
 from pathlib import Path
 
 HERE = Path(__file__).resolve().parent
-UA = {"User-Agent": "Mozilla/5.0 (explainer-videos research)"}
+UA = {"User-Agent": "explainer-videos research bot (education)"}
 BEA = "https://apps.bea.gov/industry/"
 TODAY = dt.date.today().isoformat()
 
@@ -172,18 +178,19 @@ def bea_io():
     hdr = list(rows[5])
     idx = [hdr.index(c) for c in IO_CODES]
     num = lambda v: float(v) if isinstance(v, (int, float)) else 0.0  # noqa: E731  ("..." = suppressed: 0)
-    cols = {k: hdr.index(k) for k in ("F010", "F030", "F040", "F050")}
+    finals = ("F010", "F030", "F040", "F050", "F020", "F100")  # PCE, inventories, exports, imports, investment, govt
+    cols = {k: hdr.index(k) for k in finals}
     out = []
     for r in rows[7:]:
-        if r[0] in IO_CODES:
-            out.append([r[0], r[1]] + [num(r[i]) for i in idx] + [num(r[cols[k]]) for k in ("F010", "F030", "F040",
-                                                                                          "F050")] + [num(r[-1])])
-    # value added and total industry output rows
+        if r[0] in IO_CODES + ["Used", "Other"]:
+            out.append([r[0], r[1]] + [num(r[i]) for i in idx] + [num(r[cols[k]]) for k in finals[:4]] + [num(r[-1])]
+                       + [num(r[cols[k]]) for k in finals[4:]])
+    # value added rows: an industry's output is its column's sum
     for r in rows[7:]:
-        if r[0] in ("Used", "Other", "V001", "V002", "V003"):  # an industry's output is its column's sum
-            out.append([r[0], r[1]] + [num(r[i]) for i in idx] + [0, 0, 0, 0, 0])
+        if r[0] in ("V001", "V002", "V003"):
+            out.append([r[0], r[1]] + [num(r[i]) for i in idx] + [0] * 7)
     return _write("bea_io_2023", ["code", "name"] + IO_CODES + ["pce", "inventories", "exports", "imports",
-                                                                "commodity_output"], out,
+                                                                "commodity_output", "investment", "government"], out,
                   [BEA + "iTables%20Static%20Files/AllTablesIO.zip (IOUse_After_Redefinitions_PRO_1997-2023_Sector, "
                          "2023, producers' prices, $ millions)"])
 
@@ -225,7 +232,154 @@ def wb_shares():
                    "NV.SRV.TOTL.ZS, % of GDP)"])
 
 
-JOBS = {"bea_va": bea_va, "bea_hist": bea_hist, "bea_io": bea_io, "fred_jobs": fred_jobs, "wb_shares": wb_shares}
+def wb_mfg_usd():
+    """Manufacturing value added in current US dollars: each country's share of the world's."""
+    url = ("https://api.worldbank.org/v2/country/WLD;CHN;USA;JPN;DEU;KOR;IND;MEX;GBR;FRA;ITA;VNM/indicator/"
+           "NV.IND.MANF.CD?format=json&date=2020:2025&per_page=500")
+    rows = [[x["country"]["value"], int(x["date"]), x["value"]] for x in json.loads(_get(url))[1]
+            if x["value"] is not None]
+    return _write("wb_mfg_usd", ["country", "year", "mfg_usd"], sorted(rows),
+                  ["https://api.worldbank.org (World Development Indicators: NV.IND.MANF.CD, current US$)"])
+
+
+def bea_real():
+    """Real value added (chain-type quantity index, 2017 = 100) and its price index by industry, every BEA line,
+    1997-2025 (TVA103-A, TVA104-A)."""
+    import openpyxl
+
+    wb = openpyxl.load_workbook(io.BytesIO(_get(BEA + "Release/XLS/GDPxInd/ValueAdded.xlsx")), read_only=True)
+    out, years = [], None
+    for sheet, measure in (("TVA103-A", "quantity"), ("TVA104-A", "price")):
+        for r in wb[sheet].iter_rows(values_only=True):
+            if r and r[0] == "Line":
+                years = [int(y) for y in r[3:] if y]
+            elif r and r[0] and str(r[0]).isdigit() and r[1]:
+                name = str(r[1])
+                depth = (len(name) - len(name.lstrip())) // 2
+                out.append([measure, int(r[0]), depth, name.strip()] + [x if isinstance(x, (int, float)) else None
+                                                                       for x in r[3:3 + len(years)]])
+    return _write("bea_real", ["measure", "line", "depth", "industry"] + [str(y) for y in years], out,
+                  [BEA + "Release/XLS/GDPxInd/ValueAdded.xlsx (TVA103-A quantity and TVA104-A price indexes, "
+                         "2017=100; published 2026-09-30)"])
+
+
+# Companies and XBRL tags for the annual SEC extract: (CIK, ticker, [tags]); the first tag present wins for each item
+SEC_ITEMS = {"revenue": ["RevenueFromContractWithCustomerExcludingAssessedTax", "Revenues", "SalesRevenueNet",
+                         "RegulatedAndUnregulatedOperatingRevenue"],
+             "operating_income": ["OperatingIncomeLoss"], "net_income": ["NetIncomeLoss"],
+             "operating_cash": ["NetCashProvidedByUsedInOperatingActivities"],
+             "capex": ["PaymentsToAcquirePropertyPlantAndEquipment", "PaymentsToAcquireProductiveAssets"],
+             "assets": ["Assets"], "equity": ["StockholdersEquity"]}
+SEC_COMPANIES = [(789019, "MSFT"), (909832, "COST"), (19617, "JPM"), (753308, "NEE"), (27904, "DAL"), (59478, "LLY")]
+
+
+def sec_annual():
+    """Annual figures from each company's Forms 10-K (SEC company facts): the latest filing's value for every fiscal
+    year, for the items in SEC_ITEMS.  Duration items need a year-long period; balance items are taken at year end."""
+    import time
+
+    out = []
+    for cik, tic in SEC_COMPANIES:
+        facts = json.loads(_get(f"https://data.sec.gov/api/xbrl/companyfacts/CIK{cik:010d}.json"))["facts"]["us-gaap"]
+        time.sleep(0.5)
+        years: dict = {}
+        for item, tags in SEC_ITEMS.items():
+            for tag in tags:
+                best: dict = {}
+                for v in facts.get(tag, {}).get("units", {}).get("USD", []):
+                    if v.get("form") not in ("10-K", "10-K/A"):
+                        continue
+                    if "start" in v:
+                        d = (dt.date.fromisoformat(v["end"]) - dt.date.fromisoformat(v["start"])).days
+                        if not 350 <= d <= 380:
+                            continue
+                    if v["end"] not in best or v["filed"] > best[v["end"]]["filed"]:
+                        best[v["end"]] = v
+                for end, v in best.items():
+                    years.setdefault(end, {}).setdefault(item, v["val"] / 1e9)
+        for end in sorted(years):
+            if end >= "2009":
+                out.append([tic, end] + [years[end].get(k) for k in SEC_ITEMS])
+    return _write("sec_annual", ["ticker", "year_end"] + list(SEC_ITEMS), out,
+                  ["https://data.sec.gov/api/xbrl/companyfacts/ (Forms 10-K, US$ billions; tags: " +
+                   "; ".join(f"{k}: {'/'.join(v)}" for k, v in SEC_ITEMS.items()) + ")"])
+
+
+FRED_PAY = {"CES0500000003": "Total private", "CES1000000003": "Mining", "CES2000000003": "Construction",
+            "CES3000000003": "Manufacturing", "CES4142000003": "Wholesale trade", "CES4200000003": "Retail trade",
+            "CES4300000003": "Transportation", "CES4422000003": "Utilities", "CES5000000003": "Information",
+            "CES5500000003": "Finance, insurance, real estate", "CES6000000003": "Professional and business services",
+            "CES6500000003": "Education and health care", "CES7000000003": "Leisure and hospitality",
+            "CES8000000003": "Other services"}
+
+
+def fred_pay():
+    """Average hourly earnings of all employees by industry, annual averages since 2006 (BLS CES via FRED)."""
+    data = {}
+    for sid in FRED_PAY:
+        txt = _get(f"https://fred.stlouisfed.org/graph/fredgraph.csv?id={sid}&fq=Annual&fam=avg").decode()
+        for line in txt.splitlines()[1:]:
+            d, v = line.split(",")
+            if v not in (".", ""):
+                data.setdefault(int(d[:4]), {})[sid] = float(v)
+    years = sorted(y for y in data if y <= dt.date.today().year - 1)
+    return _write("fred_pay", ["year"] + list(FRED_PAY), [[y] + [data[y].get(k) for k in FRED_PAY] for y in years],
+                  ["https://fred.stlouisfed.org (BLS Current Employment Statistics, average hourly earnings of all "
+                   "employees, dollars, annual averages: " + "; ".join(f"{k} {v}" for k, v in FRED_PAY.items()) + ")"])
+
+
+FRED_PRICES = {"CPIAUCSL": "All items", "CUSR0000SAS": "Services", "CUSR0000SAD": "Durable goods",
+               "CUSR0000SAM2": "Medical care services", "CUSR0000SEEB": "Tuition, school fees and childcare",
+               "CUSR0000SEFV": "Food away from home", "CUSR0000SEHA": "Rent of primary residence",
+               "CUSR0000SETA01": "New vehicles", "CPIAPPSL": "Apparel", "CUSR0000SERE01": "Toys",
+               "CUUR0000SEEE01": "Computers, peripherals and smart home assistants",
+               "AHETPI": "Average hourly earnings of production and nonsupervisory employees"}
+
+
+def fred_prices():
+    """Consumer price indexes for services and goods, and production workers' hourly pay, annual averages since 2000
+    (BLS via FRED)."""
+    data = {}
+    for sid in FRED_PRICES:
+        txt = _get(f"https://fred.stlouisfed.org/graph/fredgraph.csv?id={sid}&fq=Annual&fam=avg").decode()
+        for line in txt.splitlines()[1:]:
+            d, v = line.split(",")
+            if v not in (".", "") and int(d[:4]) >= 2000:
+                data.setdefault(int(d[:4]), {})[sid] = float(v)
+    years = sorted(y for y in data if y <= dt.date.today().year - 1)
+    return _write("fred_prices", ["year"] + list(FRED_PRICES), [[y] + [data[y].get(k) for k in FRED_PRICES]
+                                                               for y in years],
+                  ["https://fred.stlouisfed.org (BLS consumer price indexes, US city average, and average hourly "
+                   "earnings; annual averages: " + "; ".join(f"{k} {v}" for k, v in FRED_PRICES.items()) + ")"])
+
+
+SUSB = "https://www2.census.gov/programs-surveys/susb/tables/2022/"
+
+
+def census_susb():
+    """Employer firms, establishments, jobs and receipts by enterprise size, 2022: the US by detailed size class and
+    every sector's total, under-500 and 20,000+ rows (Statistics of US Businesses)."""
+    import openpyxl
+
+    out = []
+    wb = openpyxl.load_workbook(io.BytesIO(_get(SUSB + "us_state_naics_detailedsizes_2022.xlsx")), read_only=True)
+    for r in wb.worksheets[0].iter_rows(values_only=True):
+        if r and r[0] == "00" and r[2] == "--":
+            out.append(["--", "Total", r[4], r[5], r[6], r[7], r[11]])
+        elif r and r[0] not in ("00", "State", None) and len(out) > 5:
+            break
+    wb = openpyxl.load_workbook(io.BytesIO(_get(SUSB + "us_naicssector_large_emplsize_2022.xlsx")), read_only=True)
+    for r in wb.worksheets[0].iter_rows(values_only=True):
+        if r and r[0] not in ("NAICS", None) and (r[2] in ("01: Total", "02: <500 employees", "11: 20,000+ employees")
+                                                  and (r[0] != "--" or r[2].startswith("11"))):
+            out.append([r[0], r[1], r[2], r[3], r[4], r[5], r[9]])
+    return _write("census_susb_2022", ["naics", "sector", "size", "firms", "establishments", "employment",
+                                       "receipts_k"], out,
+                  [SUSB + "us_state_naics_detailedsizes_2022.xlsx and us_naicssector_large_emplsize_2022.xlsx "
+                          "(Statistics of US Businesses, 2022, released 2025-04-10; receipts in $1,000)"])
+
+
+JOBS = {"fred_pay": fred_pay, "bea_real": bea_real, "sec_annual": sec_annual, "fred_prices": fred_prices, "census_susb": census_susb, "bea_va": bea_va, "wb_mfg_usd": wb_mfg_usd, "bea_hist": bea_hist, "bea_io": bea_io, "fred_jobs": fred_jobs, "wb_shares": wb_shares}
 
 if __name__ == "__main__":
     names = list(JOBS) if "--all" in sys.argv else sys.argv[1:]

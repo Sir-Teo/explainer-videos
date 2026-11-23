@@ -21,3 +21,15 @@ industryN` checks a part's rows.
 | *United States v. Google LLC*, memorandum opinion, D.D.C., 2024-08-05 (Google's payment to Apple), as reported by NPR | official | public court record | Part 1 |
 | FRED: DEXCHUS, DEXKOUS (daily exchange rates, averaged by year) | official | public domain (Federal Reserve Board H.10) | Part 1 |
 | Apple list prices as reported by MacRumors (2026-09-09, 2026-09-12) | press | as reported | Part 1 |
+| Forms 10-K of Amazon, Walmart, UnitedHealth Group, McKesson, NVIDIA, Alphabet, Microsoft and Meta (revenue, operating income, employees, segments; SEC frames and filings) | filing | public domain | Part 2 |
+| BEA, GDP by industry: value added, its components and shares of GDP, 2025 (`ValueAdded.xlsx`: TVA105, TVA110, TVA112, released 2026-09-30) and 1947-1997 (`AllTablesHist.zip`) → `bea_va_2025.csv`, `bea_va_history.csv` | official | US government work, public domain | Part 2 |
+| BEA, input-output use table after redefinitions, sector level, 2023, producers' prices, with its final uses (`AllTablesIO.zip`) → `bea_io_2023.csv` | official | public domain | Part 2 |
+| BLS Current Employment Statistics, annual averages by industry, and the Federal Reserve's manufacturing output index (OUTMS), via FRED → `fred_jobs.csv` | official | public domain | Part 2 |
+| World Bank, World Development Indicators: NV.IND.MANF.ZS, NV.AGR.TOTL.ZS, NV.SRV.TOTL.ZS, NV.IND.MANF.CD → `wb_shares.csv`, `wb_mfg_usd.csv` | official | CC BY 4.0 | Part 2 |
+| US Census Bureau, NAICS 2022 | official | public domain | Part 2 |
+| US Census Bureau, Statistics of US Businesses, 2022 (released 2025-04-10): firms, establishments, employment and receipts by enterprise size, US and by sector → `census_susb_2022.csv` | official | public domain | Part 2 |
+| BEA, real value added and value-added prices by industry, chain-type indexes, 1997-2025 (`ValueAdded.xlsx`: TVA103-A, TVA104-A) → `bea_real.csv` | official | public domain | Part 2 |
+| SEC EDGAR company facts: annual 10-K revenue, operating income, net income, operating cash flow, capital spending, assets and equity for the companies in `SEC_COMPANIES` → `sec_annual.csv` | filing | public domain | Part 3 |
+| BLS consumer price indexes (US city average) and average hourly earnings of production and nonsupervisory employees, annual averages since 2000, via FRED → `fred_prices.csv` | official | public domain | Part 2 |
+| Leontief (1936), *Review of Economics and Statistics* 18(3); Leontief (1983), National Academy of Engineering; the Nobel Foundation (1973) | study | quoted | Part 2 |
+| Antràs, Chor, Fally and Hillberry (2012), *AER Papers and Proceedings* 102(3) (upstreamness: the method, not data) | study | method | Part 2 |
