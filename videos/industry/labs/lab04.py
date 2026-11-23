@@ -97,17 +97,24 @@ def run(seed=0):
     ax1.set_ylabel("module price ($ per watt, 2025 dollars)")
     ax1.set_title("Solar's learning curve")
     ax1.legend(fontsize=8)
-    left = 0.0
-    for b in B:
-        ax2.bar(left, min(b["mc"], 80), width=b["gw"], align="edge", alpha=0.85, label=b["name"])
-        left += b["gw"]
-    for h, ls in ((4.0, ":"), (18.0, "--")):
-        ax2.axvline(demand(h), color=labs.GREY, ls=ls, lw=1.2)
-        ax2.text(demand(h), 70, f"{h:.0f}h", fontsize=7)
-    ax2.set_xlabel("installed capacity, cheapest to run first (GW)")
+    for h, col in ((4.0, labs.BLUE), (18.0, labs.RED)):
+        xs, ys, left = [0.0], [0.0], 0.0
+        for b in B:
+            w = avail(b["key"], b["gw"], h)
+            xs += [left, left + w]
+            ys += [min(b["mc"], 80), min(b["mc"], 80)]
+            left += w
+        ax2.plot(xs, ys, color=col, lw=1.8, label=f"what can run at {h:.0f}h")
+        blocks = [st.Block(b["key"], avail(b["key"], b["gw"], h), b["mc"]) for b in B]
+        p = st.clear(blocks, demand(h))["price"]
+        ax2.axvline(demand(h), color=col, ls=":", lw=1.2)
+        ax2.scatter([demand(h)], [p], color=col, s=30, zorder=3)
+        ax2.annotate(f"demand {demand(h):.0f} GW: ${p:.0f}", (demand(h), p), fontsize=7, xytext=(-110, 8),
+                     textcoords="offset points", color=col)
+    ax2.set_xlabel("capacity available, cheapest to run first (GW)")
     ax2.set_ylabel("cost of one more MWh ($)")
-    ax2.set_title("The US Stack, 2025 (oil cut at $80)")
-    ax2.legend(fontsize=6, ncol=2)
+    ax2.set_title("The US Stack at 4 am and 6 pm")
+    ax2.legend(fontsize=7, loc="upper left")
     lab.fig = fig
     lab.note = ("Decisions turn on the cost of one more unit; a plant's cost per unit falls with utilization, scale "
                 "and experience; and in a market the last unit needed sets the price for everyone, which is how "

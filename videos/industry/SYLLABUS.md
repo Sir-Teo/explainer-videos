@@ -2535,6 +2535,7 @@ scored in Part 64 and at each refresh.
 | 1 · Where the Money Goes | done 2026-11-23 (118 Register rows) | `works/chain.py` | 18 scenes | silent and narrated previews reviewed | entry, lab, interactive | not started |
 | 2 · The Economy on One Page | done 2026-11-23 (37 Register rows; BEA, BLS, Census and World Bank extracts) | — (the BEA table itself) | 21 scenes | silent and narrated previews reviewed | entry, lab, interactive | not started |
 | 3 · The Accounts | done 2026-11-23 (119 Register rows; the SEC extract) | `works/firm.py` | 17 scenes | silent and narrated previews reviewed | entry, lab, interactive | not started |
+| 4 · The Cost Curve | done 2026-11-23 (83 Register rows; EIA's Electric Power Annual and AEO2026 assumptions) | `works/stack.py` | 15 scenes, illustrated and animated (`draw.py`) | silent and narrated previews reviewed | entry, lab, interactive | not started |
 
 Phase 0 is done in the form Part 1 needed: the palette and kit (`style.py`, `kit.py`), the instruments (`viz.py`: the
 phone and its exploded view, the region map, the Dollar column, the margin ladder, the treemap, plain axes), the
@@ -2565,3 +2566,15 @@ Eli Lilly; its *Called it?* is Bethany McLean's 2001 Fortune article on Enron, s
 restatement and its bankruptcy, with the series' call on Microsoft's fiscal 2027 free cash flow. The generic firm
 (`works/firm.py`) is built: a double-entry ledger and a firm whose three statements are tested to reconcile for any
 operations.
+
+Part 4 changes the series' look. The user found the first three parts short of pictures and motion, so Part 4 adds a
+drawing library (`explainer/industry/draw.py`: power plants, factories, conveyors, planes, cabins, wafers, skylines,
+coins, live numbers built from cached digits) and sets all on-screen text through LaTeX, as the rest of the repository
+does; every chapter is built around a moving picture (a day on the grid, a seat map filling, a chart morphing from a
+linear scale to Wright's law). It departs from its draft entry in three places. Scope and density are one chapter, with
+Delta's cargo and American Express miles for scope and an illustrative delivery street for density; the price-war
+chapter uses Micron's margins and the DOJ's DRAM fines rather than railways; *Called it?* is the IEA's 2010 solar
+roadmap, scored against IRENA's capacity, with the series' call on solar against coal in 2027 (BCG's 1968
+*Perspectives on Experience* is not used: no primary copy was consulted). The Run it game is the course site's price
+war against a rival with the same plant.
+
