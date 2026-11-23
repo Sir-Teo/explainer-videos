@@ -45,8 +45,9 @@ class DuPont(VoiceoverScene):
             f"{say_pct(r['roe'])} on the owner's money. There are three ways to a good return, and each industry "
             "takes a different one."
         ) as vo:
+            self.play(FadeIn(row[0], shift=UP * 0.1))
             vo.wait_until("a")
-            self.play(FadeIn(row[0]))
+            self.play(Indicate(row[0], color=I.ACCENT, scale_factor=1.05))
             vo.wait_until("b")
             self.play(FadeIn(row[1]), FadeIn(row[2]))
             vo.wait_until("c")

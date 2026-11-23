@@ -127,8 +127,9 @@ class Called(VoiceoverScene):
             "make us wrong: a slowdown in the building, or cash from customers arriving faster than expected. We "
             "put it at sixty-five percent, and we will score it on the annual report next summer."
         ) as vo:
+            self.play(FadeIn(box), FadeIn(body[0]))
             vo.wait_until("a")
-            self.play(FadeIn(box), FadeIn(body[:4]))
+            self.play(FadeIn(body[1:4]))
             vo.wait_until("b")
             self.play(FadeIn(q))
             vo.wait_until("c")

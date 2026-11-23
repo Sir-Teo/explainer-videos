@@ -39,7 +39,8 @@ class Reveal(VoiceoverScene):
             f"dollar into research, is Eli Lilly. <bookmark mark='e'/> Company {say['msft']}, with the fattest "
             "margin and thirty-five cents of every dollar now going into data centres, is Microsoft. <bookmark "
             f"mark='f'/> And company {say['dal']}, thin margin, heavy equipment and plenty of borrowing, is Delta. "
-            "If you got most of them, you can already read the shape of a business from its accounts."
+            "If you got most of them, you can already read the shape of a business from its accounts. If you "
+            "did not, look again at the two numbers that gave most of them away: the speed and the borrowing."
         ) as vo:
             self.play(FadeIn(head), FadeIn(t0))
             order = ["cost", "jpm", "nee", "lly", "msft", "dal"]

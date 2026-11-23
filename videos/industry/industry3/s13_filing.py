@@ -50,7 +50,9 @@ class Filing(VoiceoverScene):
             "Item eight, the statements themselves, with the auditor's opinion. <bookmark mark='e'/> Then the notes, "
             "which is where the business underneath is described in numbers: sales by segment, product and country, "
             "leases, debt and when it falls due. <bookmark mark='f'/> And the exhibits, down to the list of "
-            "subsidiaries."
+            "subsidiaries. Between annual reports, companies file a shorter quarterly report, the 10-Q, and a "
+            "brief 8-K whenever something important happens, as Enron did when it restated its profits in November "
+            "2001."
         ) as vo:
             self.play(FadeIn(doc), FadeIn(title), FadeIn(src))
             for i, m in enumerate("abcdef"):

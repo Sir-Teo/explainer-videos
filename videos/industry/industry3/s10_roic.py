@@ -37,8 +37,9 @@ class Roic(VoiceoverScene):
             "destroys more value the faster it grows, because every new dollar it invests shrinks too. Growth only "
             "helps when the return on capital is above its cost."
         ) as vo:
+            self.play(FadeIn(f))
             vo.wait_until("a")
-            self.play(FadeIn(rule), FadeIn(f))
+            self.play(FadeIn(rule))
             vo.wait_until("b")
             self.play(LaggedStart(*[FadeIn(c) for c in put[0]], lag_ratio=0.05), FadeIn(put[1]))
             vo.wait_until("c")

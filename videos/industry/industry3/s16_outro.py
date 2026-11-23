@@ -43,7 +43,9 @@ class Outro(VoiceoverScene):
         with self.voiceover(
             "This part read the accounts. The next one looks at the costs behind them. In 1936 an aircraft engineer, "
             "T. P. Wright, measured how the work needed to build an aeroplane fell each time the number built "
-            "doubled. Part four: the cost curve, and why what one more costs decides almost everything."
+            "doubled. Part four: the cost curve. Why power stations, airlines and memory makers price the way they "
+            "do, why some industries fight price wars to the death, and why what one more costs decides almost "
+            "everything."
         ):
             self.play(FadeIn(nxt, shift=UP * 0.15), run_time=1.5)
         self.wait(1)
