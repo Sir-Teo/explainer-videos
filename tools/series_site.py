@@ -206,6 +206,22 @@ COURSES = [
              "carries its source and the date it was retrieved.",
     ),
     Course(
+        key="industry", prefix="industry", name="Industry, Built", zh="产业，从零搭建", mark="$",
+        colors=("#f2c14e", "#7ec8f5"),
+        kicker="A sixty-four-part series on how each industry works, from the phone in your pocket to the giants",
+        tagline="Where does the money go? Each industry taken apart: what it sells, how it is made, where the "
+                "customer's dollar goes, who keeps it and why, with every figure sourced and dated.",
+        lede="In 2007 three researchers took apart a $299 music player and found that the factory the label named "
+             "kept about 11 cents of it. The series asks that question of every industry: what is sold, how it is "
+             "made and what one more costs, where the customer's dollar goes, why the profit stays where it does, "
+             "and what moves it. Each part builds a model company in code, lays it beside the filings of real "
+             "companies, and draws the landscape as of a stated date. The parts are being built in order.",
+        story=("The story", "The devices that hold it together", "How the market research is done",
+               "Four ways through it", "The acts"),
+        note="Every market figure carries its source and the date it describes; estimates are labelled as estimates, "
+             "with their ranges. Nothing here is investment advice.",
+    ),
+    Course(
         key="analysis", prefix="analysis", name="Analysis, Built", zh="数学分析，从零搭建", mark="∫",
         colors=("#fb923c", "#f7d154"),
         kicker="A ten-part course in real, complex and functional analysis",

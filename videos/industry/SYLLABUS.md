@@ -2532,6 +2532,17 @@ scored in Part 64 and at each refresh.
 
 | Part | Sweep | Works module | Scenes | QA | Course material | Chinese |
 |---|---|---|---|---|---|---|
-| (none started) | | | | | | |
+| 1 · Where the Money Goes | done 2026-11-23 (75 Register rows) | `works/chain.py` | 15 scenes | silent and narrated previews reviewed | entry, lab, interactive | not started |
 
-Phase 0 has not begun. This file and the README are the whole of the series so far.
+Phase 0 is done in the form Part 1 needed: the palette and kit (`style.py`, `kit.py`), the instruments (`viz.py`: the
+phone and its exploded view, the region map, the Dollar column, the margin ladder, the treemap, plain axes), the
+Register (`register.py`, `data/rows_p01.py`, `tools/check_register.py`), Called it? (`calls.py`) and the course
+scaffolding. Still to build: the generic firm (`works/firm.py`, with Part 3), the filings reader, the score, and the
+durable/dated split in the manifest.
+
+Part 1 departs from its draft entry where the sweep found more than the plan knew: the 2026 memory shock became two
+chapters (9 and 10), the iPhone 17 Pro replaced a generic phone, and the guess, the intermission and the landscape
+were added. Its sweep corrected three things the draft had from memory: the mobile-phone forecast story is not used
+(no primary source was found), Qualcomm's own 10-K attributes its 2026 fall in handset revenue to memory, not to
+Apple's modem, and Apple's 85% share of the industry's operating profit is Counterpoint's figure for Q2 2023, not a
+current one.

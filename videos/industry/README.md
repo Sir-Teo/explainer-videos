@@ -1,6 +1,7 @@
 # Industry, Built (产业，从零搭建)
 
-**Status (2026-11-23): planned; nothing is built.** This file is the plan. The standard every part meets, the
+**Status (2026-11-23): Part 1, [*Where the Money Goes*](industry1/README.md), is built, in English, with its lab
+and interactive; Parts 2-64 are planned.** This file is the plan. The standard every part meets, the
 devices, the data plan and all sixty-four parts chapter by chapter are in [`SYLLABUS.md`](SYLLABUS.md), with
 progress in its §9. The decisions the plan rests on, and the ones still open, are at the end of this file.
 
@@ -242,7 +243,9 @@ Agora's `io`, `pricing`, `revenue`, `merger`, `platform`, `network`, `bank`, `au
 ## Decisions taken
 
 1. **Sixty-four parts in eleven acts,** the full series (the user's choice, 2026-11-23), built act by act.
-2. **Audience:** someone entering an industry or analysing it, kept watchable for a curious general viewer.
+2. **Audience:** the general public (the user's choice, 2026-11-23), with a deep dive into each industry and a heavy
+   use of visuals: every chapter is drawn, not read. The arithmetic and the sources stay in, for viewers who want
+   them, in the labs and the Register.
 3. **Primary sources only,** with a Register row and an as-of date behind every figure.
 4. **A global landscape,** anchored on American data where regulators publish the most, with China, Europe,
    Japan and Korea, and India in every part's map.
