@@ -25,12 +25,14 @@ __all__ = ["T", "TB", "money", "money_short", "say_money", "say_bn", "pct", "say
            "big_number", "caption", "PARTS", "BACKGROUND"]
 
 
-def T(text: str, size: float = 28, color: str = I.TEXT, weight=NORMAL, font: str = FONT, **kw) -> Text:
-    """On-screen text in the series' face.  ``size`` is a font size in manim's units (body text 24-32)."""
-    return Text(text, font=font, font_size=size, color=color, weight=weight, **kw)
+def T(text: str, size: float = 28, color: str = I.TEXT, weight=NORMAL, font: str = FONT, **kw):
+    """On-screen text in the repo's LaTeX face (escaped, so plain strings with $ and % are safe).  ``size`` is a font
+    size in manim's units (body text 24-32); ``slant="ITALIC"`` sets it in italics."""
+    from explainer.industry.draw import tx
+    return tx(text, size, color, bold=(weight == BOLD), italic=(kw.get("slant") == "ITALIC"))
 
 
-def TB(text: str, size: float = 28, color: str = I.TEXT, **kw) -> Text:
+def TB(text: str, size: float = 28, color: str = I.TEXT, **kw):
     return T(text, size, color, weight=BOLD, **kw)
 
 
@@ -76,8 +78,8 @@ def caption(text: str, size: float = 22, color: str = I.DIM) -> Text:
     return T(text, size, color)
 
 
-def big_number(text: str, size: float = 96, color: str = I.MONEY) -> Text:
-    return Text(text, font=FONT_DISPLAY, font_size=size, color=color, weight=BOLD)
+def big_number(text: str, size: float = 96, color: str = I.MONEY):
+    return T(text, size, color, weight=BOLD)
 
 
 def pill(text: str, color: str = I.TEXT, region: str | None = None, size: float = 20, fill: str = I.PANEL,
@@ -117,7 +119,7 @@ def part_title(part: int, question: str, subtitle: str = "") -> VGroup:
     actl = T(f"Act {act[0]} · {act[1]}", 22, I.DIM)
     top = VGroup(series, actl).arrange(RIGHT, buff=0.5)
     num = T(f"Part {part}", 34, I.ACCENT, weight=BOLD)
-    name = Text(PARTS[part], font=FONT_DISPLAY, font_size=86, color=I.TEXT, weight=BOLD)
+    name = T(PARTS[part], 86, I.TEXT, weight=BOLD)
     if name.width > 12.5:
         name.scale_to_fit_width(12.5)
     rule = Line(LEFT * 3.2, RIGHT * 3.2, color=I.ACCENT, stroke_width=2)
@@ -134,7 +136,7 @@ def chapter(scene, part: int, n: int, title: str, question: str, say: str, lit=(
     """The narrated chapter card: number, title, the chapter's own question, the five questions with ``lit`` lit."""
     corner = T(f"Part {part} · {PARTS[part]}", 18, I.FAINT).to_corner(UL, buff=0.35)
     num = T(f"Chapter {n}" if isinstance(n, int) else str(n), 28, I.ACCENT, weight=BOLD)
-    ttl = Text(title, font=FONT_DISPLAY, font_size=66, color=I.TEXT, weight=BOLD)
+    ttl = T(title, 66, I.TEXT, weight=BOLD)
     if ttl.width > 12.4:
         ttl.scale_to_fit_width(12.4)
     q = T(question, 28, I.DIM, slant="ITALIC")

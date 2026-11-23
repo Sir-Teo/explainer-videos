@@ -1,4 +1,4 @@
-# source: https://www.eia.gov/electricity/annual/ (Electric Power Annual 2025): epa_04_03 capacity by energy source, 2025 (MW); epa_03_01_a net generation by energy source (thousand MWh); epa_07_04 average cost of fossil fuels ($/MMBtu); epa_08_01 average operating heat rate (Btu/kWh); epa_08_02 average tested heat rates by prime mover (Btu/kWh); epa_08_04 operating expenses of major investor-owned utilities (mills/kWh); epa_02_04 average retail price of electricity (cents/kWh)
+# source: https://www.eia.gov/electricity/annual/ (Electric Power Annual 2025): epa_04_03 capacity by energy source, 2025 (MW); epa_03_01_a net generation by energy source (thousand MWh); epa_07_04 average cost of fossil fuels ($/MMBtu); epa_08_01 average operating heat rate (Btu/kWh); epa_08_02 average tested heat rates by prime mover (Btu/kWh); epa_08_04 operating expenses of major investor-owned utilities (mills/kWh); epa_02_04 average retail price of electricity (cents/kWh); epa_04_08_a capacity factors of fossil-fuelled generators by technology; epa_04_08_b capacity factors of generators not primarily using fossil fuels
 # retrieved: 2026-11-23
 table,block,row,column,value
 epa_04_03,"Table 4.3. Existing Capacity by Energy Source, 2025 (Megawatts)",Coal,Number of Generators,448
@@ -1517,3 +1517,1601 @@ epa_02_04,Delivery-Only Providers,2025,Commercial,7.91
 epa_02_04,Delivery-Only Providers,2025,Industrial,3.08
 epa_02_04,Delivery-Only Providers,2025,Transportation,4.63
 epa_02_04,Delivery-Only Providers,2025,Total,7.48
+epa_04_08_a,Annual Data,2015,Time Adjusted Capacity (MW),286082.7
+epa_04_08_a,Annual Data,2015,Capacity Factor,0.543
+epa_04_08_a,Annual Data,2015,Time Adjusted Capacity (MW),231467.5
+epa_04_08_a,Annual Data,2015,Capacity Factor,0.558
+epa_04_08_a,Annual Data,2015,Time Adjusted Capacity (MW),123444.3
+epa_04_08_a,Annual Data,2015,Capacity Factor,0.098
+epa_04_08_a,Annual Data,2015,Time Adjusted Capacity (MW),80348
+epa_04_08_a,Annual Data,2015,Capacity Factor,0.113
+epa_04_08_a,Annual Data,2015,Time Adjusted Capacity (MW),3507.8
+epa_04_08_a,Annual Data,2015,Capacity Factor,0.119
+epa_04_08_a,Annual Data,2015,Time Adjusted Capacity (MW),14965.4
+epa_04_08_a,Annual Data,2015,Capacity Factor,0.14
+epa_04_08_a,Annual Data,2015,Time Adjusted Capacity (MW),16122.8
+epa_04_08_a,Annual Data,2015,Capacity Factor,0.013
+epa_04_08_a,Annual Data,2015,Time Adjusted Capacity (MW),5075.2
+epa_04_08_a,Annual Data,2015,Capacity Factor,0.021
+epa_04_08_a,Annual Data,2016,Time Adjusted Capacity (MW),269477.1
+epa_04_08_a,Annual Data,2016,Capacity Factor,0.528
+epa_04_08_a,Annual Data,2016,Time Adjusted Capacity (MW),236442.8
+epa_04_08_a,Annual Data,2016,Capacity Factor,0.554
+epa_04_08_a,Annual Data,2016,Time Adjusted Capacity (MW),125148.4
+epa_04_08_a,Annual Data,2016,Capacity Factor,0.11
+epa_04_08_a,Annual Data,2016,Time Adjusted Capacity (MW),81225.1
+epa_04_08_a,Annual Data,2016,Capacity Factor,0.123
+epa_04_08_a,Annual Data,2016,Time Adjusted Capacity (MW),3684.3
+epa_04_08_a,Annual Data,2016,Capacity Factor,0.115
+epa_04_08_a,Annual Data,2016,Time Adjusted Capacity (MW),13993.7
+epa_04_08_a,Annual Data,2016,Capacity Factor,0.122
+epa_04_08_a,Annual Data,2016,Time Adjusted Capacity (MW),15114
+epa_04_08_a,Annual Data,2016,Capacity Factor,0.013
+epa_04_08_a,Annual Data,2016,Time Adjusted Capacity (MW),5082.8
+epa_04_08_a,Annual Data,2016,Capacity Factor,0.023
+epa_04_08_a,Annual Data,2017,Time Adjusted Capacity (MW),259930.2
+epa_04_08_a,Annual Data,2017,Capacity Factor,0.531
+epa_04_08_a,Annual Data,2017,Time Adjusted Capacity (MW),242839.1
+epa_04_08_a,Annual Data,2017,Capacity Factor,0.512
+epa_04_08_a,Annual Data,2017,Time Adjusted Capacity (MW),125806.6
+epa_04_08_a,Annual Data,2017,Capacity Factor,0.096
+epa_04_08_a,Annual Data,2017,Time Adjusted Capacity (MW),79149.4
+epa_04_08_a,Annual Data,2017,Capacity Factor,0.107
+epa_04_08_a,Annual Data,2017,Time Adjusted Capacity (MW),4225.5
+epa_04_08_a,Annual Data,2017,Capacity Factor,0.116
+epa_04_08_a,Annual Data,2017,Time Adjusted Capacity (MW),13290.9
+epa_04_08_a,Annual Data,2017,Capacity Factor,0.137
+epa_04_08_a,Annual Data,2017,Time Adjusted Capacity (MW),14275.3
+epa_04_08_a,Annual Data,2017,Capacity Factor,0.01
+epa_04_08_a,Annual Data,2017,Time Adjusted Capacity (MW),5153.3
+epa_04_08_a,Annual Data,2017,Capacity Factor,0.021
+epa_04_08_a,Annual Data,2018,Time Adjusted Capacity (MW),246866.8
+epa_04_08_a,Annual Data,2018,Capacity Factor,0.536
+epa_04_08_a,Annual Data,2018,Time Adjusted Capacity (MW),254403.3
+epa_04_08_a,Annual Data,2018,Capacity Factor,0.551
+epa_04_08_a,Annual Data,2018,Time Adjusted Capacity (MW),126763.4
+epa_04_08_a,Annual Data,2018,Capacity Factor,0.119
+epa_04_08_a,Annual Data,2018,Time Adjusted Capacity (MW),76177.8
+epa_04_08_a,Annual Data,2018,Capacity Factor,0.126
+epa_04_08_a,Annual Data,2018,Time Adjusted Capacity (MW),4446.6
+epa_04_08_a,Annual Data,2018,Capacity Factor,0.13
+epa_04_08_a,Annual Data,2018,Time Adjusted Capacity (MW),13300.1
+epa_04_08_a,Annual Data,2018,Capacity Factor,0.142
+epa_04_08_a,Annual Data,2018,Time Adjusted Capacity (MW),14234.9
+epa_04_08_a,Annual Data,2018,Capacity Factor,0.013
+epa_04_08_a,Annual Data,2018,Time Adjusted Capacity (MW),5289.7
+epa_04_08_a,Annual Data,2018,Capacity Factor,0.019
+epa_04_08_a,Annual Data,2019,Time Adjusted Capacity (MW),235089.3
+epa_04_08_a,Annual Data,2019,Capacity Factor,0.475
+epa_04_08_a,Annual Data,2019,Time Adjusted Capacity (MW),266846.5
+epa_04_08_a,Annual Data,2019,Capacity Factor,0.574
+epa_04_08_a,Annual Data,2019,Time Adjusted Capacity (MW),128832.5
+epa_04_08_a,Annual Data,2019,Capacity Factor,0.114
+epa_04_08_a,Annual Data,2019,Time Adjusted Capacity (MW),72797.3
+epa_04_08_a,Annual Data,2019,Capacity Factor,0.141
+epa_04_08_a,Annual Data,2019,Time Adjusted Capacity (MW),4848.3
+epa_04_08_a,Annual Data,2019,Capacity Factor,0.153
+epa_04_08_a,Annual Data,2019,Time Adjusted Capacity (MW),11214.7
+epa_04_08_a,Annual Data,2019,Capacity Factor,0.128
+epa_04_08_a,Annual Data,2019,Time Adjusted Capacity (MW),14009.7
+epa_04_08_a,Annual Data,2019,Capacity Factor,0.01
+epa_04_08_a,Annual Data,2019,Time Adjusted Capacity (MW),5287.8
+epa_04_08_a,Annual Data,2019,Capacity Factor,0.02
+epa_04_08_a,Annual Data,2020,Time Adjusted Capacity (MW),220623.2
+epa_04_08_a,Annual Data,2020,Capacity Factor,0.405
+epa_04_08_a,Annual Data,2020,Time Adjusted Capacity (MW),274300.4
+epa_04_08_a,Annual Data,2020,Capacity Factor,0.571
+epa_04_08_a,Annual Data,2020,Time Adjusted Capacity (MW),129085.6
+epa_04_08_a,Annual Data,2020,Capacity Factor,0.116
+epa_04_08_a,Annual Data,2020,Time Adjusted Capacity (MW),75462.3
+epa_04_08_a,Annual Data,2020,Capacity Factor,0.142
+epa_04_08_a,Annual Data,2020,Time Adjusted Capacity (MW),5123
+epa_04_08_a,Annual Data,2020,Capacity Factor,0.151
+epa_04_08_a,Annual Data,2020,Time Adjusted Capacity (MW),8443.3
+epa_04_08_a,Annual Data,2020,Capacity Factor,0.139
+epa_04_08_a,Annual Data,2020,Time Adjusted Capacity (MW),13875.8
+epa_04_08_a,Annual Data,2020,Capacity Factor,0.012
+epa_04_08_a,Annual Data,2020,Time Adjusted Capacity (MW),5300.7
+epa_04_08_a,Annual Data,2020,Capacity Factor,0.018
+epa_04_08_a,Annual Data,2021,Time Adjusted Capacity (MW),212587
+epa_04_08_a,Annual Data,2021,Capacity Factor,0.491
+epa_04_08_a,Annual Data,2021,Time Adjusted Capacity (MW),277618.5
+epa_04_08_a,Annual Data,2021,Capacity Factor,0.55
+epa_04_08_a,Annual Data,2021,Time Adjusted Capacity (MW),130103.4
+epa_04_08_a,Annual Data,2021,Capacity Factor,0.117
+epa_04_08_a,Annual Data,2021,Time Adjusted Capacity (MW),74003.4
+epa_04_08_a,Annual Data,2021,Capacity Factor,0.125
+epa_04_08_a,Annual Data,2021,Time Adjusted Capacity (MW),5171.8
+epa_04_08_a,Annual Data,2021,Capacity Factor,0.182
+epa_04_08_a,Annual Data,2021,Time Adjusted Capacity (MW),8385.5
+epa_04_08_a,Annual Data,2021,Capacity Factor,0.142
+epa_04_08_a,Annual Data,2021,Time Adjusted Capacity (MW),13729.8
+epa_04_08_a,Annual Data,2021,Capacity Factor,0.016
+epa_04_08_a,Annual Data,2021,Time Adjusted Capacity (MW),5522.7
+epa_04_08_a,Annual Data,2021,Capacity Factor,0.018
+epa_04_08_a,Annual Data,2022,Time Adjusted Capacity (MW),196396.3
+epa_04_08_a,Annual Data,2022,Capacity Factor,0.484
+epa_04_08_a,Annual Data,2022,Time Adjusted Capacity (MW),286467.1
+epa_04_08_a,Annual Data,2022,Capacity Factor,0.566
+epa_04_08_a,Annual Data,2022,Time Adjusted Capacity (MW),130170.6
+epa_04_08_a,Annual Data,2022,Capacity Factor,0.129
+epa_04_08_a,Annual Data,2022,Time Adjusted Capacity (MW),77518.8
+epa_04_08_a,Annual Data,2022,Capacity Factor,0.156
+epa_04_08_a,Annual Data,2022,Time Adjusted Capacity (MW),5526.9
+epa_04_08_a,Annual Data,2022,Capacity Factor,0.181
+epa_04_08_a,Annual Data,2022,Time Adjusted Capacity (MW),9839
+epa_04_08_a,Annual Data,2022,Capacity Factor,0.132
+epa_04_08_a,Annual Data,2022,Time Adjusted Capacity (MW),15005.7
+epa_04_08_a,Annual Data,2022,Capacity Factor,0.016
+epa_04_08_a,Annual Data,2022,Time Adjusted Capacity (MW),5407
+epa_04_08_a,Annual Data,2022,Capacity Factor,0.018
+epa_04_08_a,Annual Data,2023,Time Adjusted Capacity (MW),182767.5
+epa_04_08_a,Annual Data,2023,Capacity Factor,0.424
+epa_04_08_a,Annual Data,2023,Time Adjusted Capacity (MW),291134.7
+epa_04_08_a,Annual Data,2023,Capacity Factor,0.597
+epa_04_08_a,Annual Data,2023,Time Adjusted Capacity (MW),130736.5
+epa_04_08_a,Annual Data,2023,Capacity Factor,0.129
+epa_04_08_a,Annual Data,2023,Time Adjusted Capacity (MW),76908.1
+epa_04_08_a,Annual Data,2023,Capacity Factor,0.174
+epa_04_08_a,Annual Data,2023,Time Adjusted Capacity (MW),5802.9
+epa_04_08_a,Annual Data,2023,Capacity Factor,0.201
+epa_04_08_a,Annual Data,2023,Time Adjusted Capacity (MW),8743.2
+epa_04_08_a,Annual Data,2023,Capacity Factor,0.101
+epa_04_08_a,Annual Data,2023,Time Adjusted Capacity (MW),14386.8
+epa_04_08_a,Annual Data,2023,Capacity Factor,0.013
+epa_04_08_a,Annual Data,2023,Time Adjusted Capacity (MW),5418.9
+epa_04_08_a,Annual Data,2023,Capacity Factor,0.018
+epa_04_08_a,Annual Data,2024,Time Adjusted Capacity (MW),176028.6
+epa_04_08_a,Annual Data,2024,Capacity Factor,0.426
+epa_04_08_a,Annual Data,2024,Time Adjusted Capacity (MW),292189.2
+epa_04_08_a,Annual Data,2024,Capacity Factor,0.605
+epa_04_08_a,Annual Data,2024,Time Adjusted Capacity (MW),132099.1
+epa_04_08_a,Annual Data,2024,Capacity Factor,0.139
+epa_04_08_a,Annual Data,2024,Time Adjusted Capacity (MW),75196.7
+epa_04_08_a,Annual Data,2024,Capacity Factor,0.199
+epa_04_08_a,Annual Data,2024,Time Adjusted Capacity (MW),6044.6
+epa_04_08_a,Annual Data,2024,Capacity Factor,0.18
+epa_04_08_a,Annual Data,2024,Time Adjusted Capacity (MW),8122.7
+epa_04_08_a,Annual Data,2024,Capacity Factor,0.089
+epa_04_08_a,Annual Data,2024,Time Adjusted Capacity (MW),14167.2
+epa_04_08_a,Annual Data,2024,Capacity Factor,0.019
+epa_04_08_a,Annual Data,2024,Time Adjusted Capacity (MW),5461.8
+epa_04_08_a,Annual Data,2024,Capacity Factor,0.018
+epa_04_08_a,Annual Data,2025,Time Adjusted Capacity (MW),169851.7
+epa_04_08_a,Annual Data,2025,Capacity Factor,0.488
+epa_04_08_a,Annual Data,2025,Time Adjusted Capacity (MW),292281.3
+epa_04_08_a,Annual Data,2025,Capacity Factor,0.587
+epa_04_08_a,Annual Data,2025,Time Adjusted Capacity (MW),134388.3
+epa_04_08_a,Annual Data,2025,Capacity Factor,0.136
+epa_04_08_a,Annual Data,2025,Time Adjusted Capacity (MW),76503.5
+epa_04_08_a,Annual Data,2025,Capacity Factor,0.196
+epa_04_08_a,Annual Data,2025,Time Adjusted Capacity (MW),6595.2
+epa_04_08_a,Annual Data,2025,Capacity Factor,0.18
+epa_04_08_a,Annual Data,2025,Time Adjusted Capacity (MW),8381.1
+epa_04_08_a,Annual Data,2025,Capacity Factor,0.105
+epa_04_08_a,Annual Data,2025,Time Adjusted Capacity (MW),13300.6
+epa_04_08_a,Annual Data,2025,Capacity Factor,0.017
+epa_04_08_a,Annual Data,2025,Time Adjusted Capacity (MW),5411.1
+epa_04_08_a,Annual Data,2025,Capacity Factor,0.019
+epa_04_08_a,Year 2023,January,Time Adjusted Capacity (MW),186822.6
+epa_04_08_a,Year 2023,January,Capacity Factor,0.446
+epa_04_08_a,Year 2023,January,Time Adjusted Capacity (MW),287456.6
+epa_04_08_a,Year 2023,January,Capacity Factor,0.574
+epa_04_08_a,Year 2023,January,Time Adjusted Capacity (MW),130416.1
+epa_04_08_a,Year 2023,January,Capacity Factor,0.093
+epa_04_08_a,Year 2023,January,Time Adjusted Capacity (MW),78868.8
+epa_04_08_a,Year 2023,January,Capacity Factor,0.096
+epa_04_08_a,Year 2023,January,Time Adjusted Capacity (MW),5738.6
+epa_04_08_a,Year 2023,January,Capacity Factor,0.187
+epa_04_08_a,Year 2023,January,Time Adjusted Capacity (MW),8743.2
+epa_04_08_a,Year 2023,January,Capacity Factor,0.091
+epa_04_08_a,Year 2023,January,Time Adjusted Capacity (MW),14494.8
+epa_04_08_a,Year 2023,January,Capacity Factor,0.01
+epa_04_08_a,Year 2023,January,Time Adjusted Capacity (MW),5428.8
+epa_04_08_a,Year 2023,January,Capacity Factor,0.019
+epa_04_08_a,Year 2023,February,Time Adjusted Capacity (MW),186812
+epa_04_08_a,Year 2023,February,Capacity Factor,0.373
+epa_04_08_a,Year 2023,February,Time Adjusted Capacity (MW),287688.6
+epa_04_08_a,Year 2023,February,Capacity Factor,0.571
+epa_04_08_a,Year 2023,February,Time Adjusted Capacity (MW),130416.1
+epa_04_08_a,Year 2023,February,Capacity Factor,0.092
+epa_04_08_a,Year 2023,February,Time Adjusted Capacity (MW),78868.8
+epa_04_08_a,Year 2023,February,Capacity Factor,0.103
+epa_04_08_a,Year 2023,February,Time Adjusted Capacity (MW),5742.7
+epa_04_08_a,Year 2023,February,Capacity Factor,0.18
+epa_04_08_a,Year 2023,February,Time Adjusted Capacity (MW),8743.2
+epa_04_08_a,Year 2023,February,Capacity Factor,0.117
+epa_04_08_a,Year 2023,February,Time Adjusted Capacity (MW),14494.8
+epa_04_08_a,Year 2023,February,Capacity Factor,0.014
+epa_04_08_a,Year 2023,February,Time Adjusted Capacity (MW),5426.8
+epa_04_08_a,Year 2023,February,Capacity Factor,0.018
+epa_04_08_a,Year 2023,March,Time Adjusted Capacity (MW),186007.1
+epa_04_08_a,Year 2023,March,Capacity Factor,0.362
+epa_04_08_a,Year 2023,March,Time Adjusted Capacity (MW),288941.6
+epa_04_08_a,Year 2023,March,Capacity Factor,0.536
+epa_04_08_a,Year 2023,March,Time Adjusted Capacity (MW),130356.1
+epa_04_08_a,Year 2023,March,Capacity Factor,0.105
+epa_04_08_a,Year 2023,March,Time Adjusted Capacity (MW),78303.3
+epa_04_08_a,Year 2023,March,Capacity Factor,0.115
+epa_04_08_a,Year 2023,March,Time Adjusted Capacity (MW),5744.2
+epa_04_08_a,Year 2023,March,Capacity Factor,0.195
+epa_04_08_a,Year 2023,March,Time Adjusted Capacity (MW),8743.2
+epa_04_08_a,Year 2023,March,Capacity Factor,0.089
+epa_04_08_a,Year 2023,March,Time Adjusted Capacity (MW),14494.8
+epa_04_08_a,Year 2023,March,Capacity Factor,0.011
+epa_04_08_a,Year 2023,March,Time Adjusted Capacity (MW),5422.2
+epa_04_08_a,Year 2023,March,Capacity Factor,0.018
+epa_04_08_a,Year 2023,April,Time Adjusted Capacity (MW),186007.1
+epa_04_08_a,Year 2023,April,Capacity Factor,0.306
+epa_04_08_a,Year 2023,April,Time Adjusted Capacity (MW),289463.1
+epa_04_08_a,Year 2023,April,Capacity Factor,0.479
+epa_04_08_a,Year 2023,April,Time Adjusted Capacity (MW),130356.1
+epa_04_08_a,Year 2023,April,Capacity Factor,0.112
+epa_04_08_a,Year 2023,April,Time Adjusted Capacity (MW),77868.3
+epa_04_08_a,Year 2023,April,Capacity Factor,0.134
+epa_04_08_a,Year 2023,April,Time Adjusted Capacity (MW),5746.9
+epa_04_08_a,Year 2023,April,Capacity Factor,0.162
+epa_04_08_a,Year 2023,April,Time Adjusted Capacity (MW),8743.2
+epa_04_08_a,Year 2023,April,Capacity Factor,0.084
+epa_04_08_a,Year 2023,April,Time Adjusted Capacity (MW),14494.8
+epa_04_08_a,Year 2023,April,Capacity Factor,0.012
+epa_04_08_a,Year 2023,April,Time Adjusted Capacity (MW),5422.2
+epa_04_08_a,Year 2023,April,Capacity Factor,0.02
+epa_04_08_a,Year 2023,May,Time Adjusted Capacity (MW),184515.1
+epa_04_08_a,Year 2023,May,Capacity Factor,0.326
+epa_04_08_a,Year 2023,May,Time Adjusted Capacity (MW),291190.1
+epa_04_08_a,Year 2023,May,Capacity Factor,0.53
+epa_04_08_a,Year 2023,May,Time Adjusted Capacity (MW),130248.2
+epa_04_08_a,Year 2023,May,Capacity Factor,0.124
+epa_04_08_a,Year 2023,May,Time Adjusted Capacity (MW),77038.3
+epa_04_08_a,Year 2023,May,Capacity Factor,0.154
+epa_04_08_a,Year 2023,May,Time Adjusted Capacity (MW),5745
+epa_04_08_a,Year 2023,May,Capacity Factor,0.16
+epa_04_08_a,Year 2023,May,Time Adjusted Capacity (MW),8743.2
+epa_04_08_a,Year 2023,May,Capacity Factor,0.079
+epa_04_08_a,Year 2023,May,Time Adjusted Capacity (MW),14463.5
+epa_04_08_a,Year 2023,May,Capacity Factor,0.012
+epa_04_08_a,Year 2023,May,Time Adjusted Capacity (MW),5413.4
+epa_04_08_a,Year 2023,May,Capacity Factor,0.018
+epa_04_08_a,Year 2023,June,Time Adjusted Capacity (MW),182361.9
+epa_04_08_a,Year 2023,June,Capacity Factor,0.445
+epa_04_08_a,Year 2023,June,Time Adjusted Capacity (MW),291270.1
+epa_04_08_a,Year 2023,June,Capacity Factor,0.637
+epa_04_08_a,Year 2023,June,Time Adjusted Capacity (MW),130403.5
+epa_04_08_a,Year 2023,June,Capacity Factor,0.15
+epa_04_08_a,Year 2023,June,Time Adjusted Capacity (MW),76724.3
+epa_04_08_a,Year 2023,June,Capacity Factor,0.221
+epa_04_08_a,Year 2023,June,Time Adjusted Capacity (MW),5752.6
+epa_04_08_a,Year 2023,June,Capacity Factor,0.214
+epa_04_08_a,Year 2023,June,Time Adjusted Capacity (MW),8743.2
+epa_04_08_a,Year 2023,June,Capacity Factor,0.102
+epa_04_08_a,Year 2023,June,Time Adjusted Capacity (MW),14315.1
+epa_04_08_a,Year 2023,June,Capacity Factor,0.013
+epa_04_08_a,Year 2023,June,Time Adjusted Capacity (MW),5399.1
+epa_04_08_a,Year 2023,June,Capacity Factor,0.018
+epa_04_08_a,Year 2023,July,Time Adjusted Capacity (MW),181713
+epa_04_08_a,Year 2023,July,Capacity Factor,0.583
+epa_04_08_a,Year 2023,July,Time Adjusted Capacity (MW),292441.8
+epa_04_08_a,Year 2023,July,Capacity Factor,0.74
+epa_04_08_a,Year 2023,July,Time Adjusted Capacity (MW),130558.5
+epa_04_08_a,Year 2023,July,Capacity Factor,0.194
+epa_04_08_a,Year 2023,July,Time Adjusted Capacity (MW),76724.3
+epa_04_08_a,Year 2023,July,Capacity Factor,0.317
+epa_04_08_a,Year 2023,July,Time Adjusted Capacity (MW),5752.6
+epa_04_08_a,Year 2023,July,Capacity Factor,0.26
+epa_04_08_a,Year 2023,July,Time Adjusted Capacity (MW),8743.2
+epa_04_08_a,Year 2023,July,Capacity Factor,0.143
+epa_04_08_a,Year 2023,July,Time Adjusted Capacity (MW),14315.1
+epa_04_08_a,Year 2023,July,Capacity Factor,0.016
+epa_04_08_a,Year 2023,July,Time Adjusted Capacity (MW),5414.9
+epa_04_08_a,Year 2023,July,Capacity Factor,0.016
+epa_04_08_a,Year 2023,August,Time Adjusted Capacity (MW),181099.7
+epa_04_08_a,Year 2023,August,Capacity Factor,0.58
+epa_04_08_a,Year 2023,August,Time Adjusted Capacity (MW),292441.8
+epa_04_08_a,Year 2023,August,Capacity Factor,0.741
+epa_04_08_a,Year 2023,August,Time Adjusted Capacity (MW),131221.5
+epa_04_08_a,Year 2023,August,Capacity Factor,0.19
+epa_04_08_a,Year 2023,August,Time Adjusted Capacity (MW),76724.3
+epa_04_08_a,Year 2023,August,Capacity Factor,0.31
+epa_04_08_a,Year 2023,August,Time Adjusted Capacity (MW),5884.2
+epa_04_08_a,Year 2023,August,Capacity Factor,0.267
+epa_04_08_a,Year 2023,August,Time Adjusted Capacity (MW),8743.2
+epa_04_08_a,Year 2023,August,Capacity Factor,0.133
+epa_04_08_a,Year 2023,August,Time Adjusted Capacity (MW),14315.1
+epa_04_08_a,Year 2023,August,Capacity Factor,0.019
+epa_04_08_a,Year 2023,August,Time Adjusted Capacity (MW),5416.6
+epa_04_08_a,Year 2023,August,Capacity Factor,0.016
+epa_04_08_a,Year 2023,September,Time Adjusted Capacity (MW),180234.7
+epa_04_08_a,Year 2023,September,Capacity Factor,0.464
+epa_04_08_a,Year 2023,September,Time Adjusted Capacity (MW),292441.8
+epa_04_08_a,Year 2023,September,Capacity Factor,0.662
+epa_04_08_a,Year 2023,September,Time Adjusted Capacity (MW),131221.5
+epa_04_08_a,Year 2023,September,Capacity Factor,0.136
+epa_04_08_a,Year 2023,September,Time Adjusted Capacity (MW),75688.3
+epa_04_08_a,Year 2023,September,Capacity Factor,0.224
+epa_04_08_a,Year 2023,September,Time Adjusted Capacity (MW),5878.3
+epa_04_08_a,Year 2023,September,Capacity Factor,0.22
+epa_04_08_a,Year 2023,September,Time Adjusted Capacity (MW),8743.2
+epa_04_08_a,Year 2023,September,Capacity Factor,0.145
+epa_04_08_a,Year 2023,September,Time Adjusted Capacity (MW),14315.1
+epa_04_08_a,Year 2023,September,Capacity Factor,0.013
+epa_04_08_a,Year 2023,September,Time Adjusted Capacity (MW),5425.7
+epa_04_08_a,Year 2023,September,Capacity Factor,0.015
+epa_04_08_a,Year 2023,October,Time Adjusted Capacity (MW),179749.7
+epa_04_08_a,Year 2023,October,Capacity Factor,0.386
+epa_04_08_a,Year 2023,October,Time Adjusted Capacity (MW),293100.7
+epa_04_08_a,Year 2023,October,Capacity Factor,0.538
+epa_04_08_a,Year 2023,October,Time Adjusted Capacity (MW),131221.5
+epa_04_08_a,Year 2023,October,Capacity Factor,0.126
+epa_04_08_a,Year 2023,October,Time Adjusted Capacity (MW),75687.9
+epa_04_08_a,Year 2023,October,Capacity Factor,0.163
+epa_04_08_a,Year 2023,October,Time Adjusted Capacity (MW),5879.5
+epa_04_08_a,Year 2023,October,Capacity Factor,0.189
+epa_04_08_a,Year 2023,October,Time Adjusted Capacity (MW),8743.2
+epa_04_08_a,Year 2023,October,Capacity Factor,0.087
+epa_04_08_a,Year 2023,October,Time Adjusted Capacity (MW),14315.1
+epa_04_08_a,Year 2023,October,Capacity Factor,0.013
+epa_04_08_a,Year 2023,October,Time Adjusted Capacity (MW),5429.6
+epa_04_08_a,Year 2023,October,Capacity Factor,0.017
+epa_04_08_a,Year 2023,November,Time Adjusted Capacity (MW),179749.7
+epa_04_08_a,Year 2023,November,Capacity Factor,0.397
+epa_04_08_a,Year 2023,November,Time Adjusted Capacity (MW),293100.7
+epa_04_08_a,Year 2023,November,Capacity Factor,0.548
+epa_04_08_a,Year 2023,November,Time Adjusted Capacity (MW),131217.5
+epa_04_08_a,Year 2023,November,Capacity Factor,0.115
+epa_04_08_a,Year 2023,November,Time Adjusted Capacity (MW),75681.6
+epa_04_08_a,Year 2023,November,Capacity Factor,0.141
+epa_04_08_a,Year 2023,November,Time Adjusted Capacity (MW),5880.7
+epa_04_08_a,Year 2023,November,Capacity Factor,0.188
+epa_04_08_a,Year 2023,November,Time Adjusted Capacity (MW),8743.2
+epa_04_08_a,Year 2023,November,Capacity Factor,0.068
+epa_04_08_a,Year 2023,November,Time Adjusted Capacity (MW),14315.1
+epa_04_08_a,Year 2023,November,Capacity Factor,0.01
+epa_04_08_a,Year 2023,November,Time Adjusted Capacity (MW),5414.6
+epa_04_08_a,Year 2023,November,Capacity Factor,0.021
+epa_04_08_a,Year 2023,December,Time Adjusted Capacity (MW),178441.7
+epa_04_08_a,Year 2023,December,Capacity Factor,0.423
+epa_04_08_a,Year 2023,December,Time Adjusted Capacity (MW),293802.5
+epa_04_08_a,Year 2023,December,Capacity Factor,0.6
+epa_04_08_a,Year 2023,December,Time Adjusted Capacity (MW),131178.5
+epa_04_08_a,Year 2023,December,Capacity Factor,0.101
+epa_04_08_a,Year 2023,December,Time Adjusted Capacity (MW),74854.6
+epa_04_08_a,Year 2023,December,Capacity Factor,0.108
+epa_04_08_a,Year 2023,December,Time Adjusted Capacity (MW),5885.5
+epa_04_08_a,Year 2023,December,Capacity Factor,0.186
+epa_04_08_a,Year 2023,December,Time Adjusted Capacity (MW),8743.2
+epa_04_08_a,Year 2023,December,Capacity Factor,0.077
+epa_04_08_a,Year 2023,December,Time Adjusted Capacity (MW),14315.1
+epa_04_08_a,Year 2023,December,Capacity Factor,0.012
+epa_04_08_a,Year 2023,December,Time Adjusted Capacity (MW),5413.5
+epa_04_08_a,Year 2023,December,Capacity Factor,0.018
+epa_04_08_a,Year 2024,January,Time Adjusted Capacity (MW),177497.2
+epa_04_08_a,Year 2024,January,Capacity Factor,0.568
+epa_04_08_a,Year 2024,January,Time Adjusted Capacity (MW),293471.8
+epa_04_08_a,Year 2024,January,Capacity Factor,0.641
+epa_04_08_a,Year 2024,January,Time Adjusted Capacity (MW),131958.7
+epa_04_08_a,Year 2024,January,Capacity Factor,0.129
+epa_04_08_a,Year 2024,January,Time Adjusted Capacity (MW),75752.5
+epa_04_08_a,Year 2024,January,Capacity Factor,0.159
+epa_04_08_a,Year 2024,January,Time Adjusted Capacity (MW),5899.4
+epa_04_08_a,Year 2024,January,Capacity Factor,0.185
+epa_04_08_a,Year 2024,January,Time Adjusted Capacity (MW),8122.7
+epa_04_08_a,Year 2024,January,Capacity Factor,0.108
+epa_04_08_a,Year 2024,January,Time Adjusted Capacity (MW),14230.3
+epa_04_08_a,Year 2024,January,Capacity Factor,0.02
+epa_04_08_a,Year 2024,January,Time Adjusted Capacity (MW),5471.1
+epa_04_08_a,Year 2024,January,Capacity Factor,0.018
+epa_04_08_a,Year 2024,February,Time Adjusted Capacity (MW),177497.2
+epa_04_08_a,Year 2024,February,Capacity Factor,0.362
+epa_04_08_a,Year 2024,February,Time Adjusted Capacity (MW),293471.8
+epa_04_08_a,Year 2024,February,Capacity Factor,0.566
+epa_04_08_a,Year 2024,February,Time Adjusted Capacity (MW),131611.5
+epa_04_08_a,Year 2024,February,Capacity Factor,0.1
+epa_04_08_a,Year 2024,February,Time Adjusted Capacity (MW),75745.5
+epa_04_08_a,Year 2024,February,Capacity Factor,0.104
+epa_04_08_a,Year 2024,February,Time Adjusted Capacity (MW),5901.6
+epa_04_08_a,Year 2024,February,Capacity Factor,0.164
+epa_04_08_a,Year 2024,February,Time Adjusted Capacity (MW),8122.7
+epa_04_08_a,Year 2024,February,Capacity Factor,0.082
+epa_04_08_a,Year 2024,February,Time Adjusted Capacity (MW),14230.3
+epa_04_08_a,Year 2024,February,Capacity Factor,0.013
+epa_04_08_a,Year 2024,February,Time Adjusted Capacity (MW),5471.3
+epa_04_08_a,Year 2024,February,Capacity Factor,0.016
+epa_04_08_a,Year 2024,March,Time Adjusted Capacity (MW),177323.7
+epa_04_08_a,Year 2024,March,Capacity Factor,0.298
+epa_04_08_a,Year 2024,March,Time Adjusted Capacity (MW),293471.8
+epa_04_08_a,Year 2024,March,Capacity Factor,0.511
+epa_04_08_a,Year 2024,March,Time Adjusted Capacity (MW),131662.7
+epa_04_08_a,Year 2024,March,Capacity Factor,0.106
+epa_04_08_a,Year 2024,March,Time Adjusted Capacity (MW),75334.8
+epa_04_08_a,Year 2024,March,Capacity Factor,0.13
+epa_04_08_a,Year 2024,March,Time Adjusted Capacity (MW),5898.6
+epa_04_08_a,Year 2024,March,Capacity Factor,0.161
+epa_04_08_a,Year 2024,March,Time Adjusted Capacity (MW),8122.7
+epa_04_08_a,Year 2024,March,Capacity Factor,0.08
+epa_04_08_a,Year 2024,March,Time Adjusted Capacity (MW),14230.3
+epa_04_08_a,Year 2024,March,Capacity Factor,0.013
+epa_04_08_a,Year 2024,March,Time Adjusted Capacity (MW),5472.2
+epa_04_08_a,Year 2024,March,Capacity Factor,0.018
+epa_04_08_a,Year 2024,April,Time Adjusted Capacity (MW),176697.6
+epa_04_08_a,Year 2024,April,Capacity Factor,0.299
+epa_04_08_a,Year 2024,April,Time Adjusted Capacity (MW),292884.3
+epa_04_08_a,Year 2024,April,Capacity Factor,0.469
+epa_04_08_a,Year 2024,April,Time Adjusted Capacity (MW),131662.7
+epa_04_08_a,Year 2024,April,Capacity Factor,0.131
+epa_04_08_a,Year 2024,April,Time Adjusted Capacity (MW),75334.8
+epa_04_08_a,Year 2024,April,Capacity Factor,0.159
+epa_04_08_a,Year 2024,April,Time Adjusted Capacity (MW),5901.7
+epa_04_08_a,Year 2024,April,Capacity Factor,0.148
+epa_04_08_a,Year 2024,April,Time Adjusted Capacity (MW),8122.7
+epa_04_08_a,Year 2024,April,Capacity Factor,0.08
+epa_04_08_a,Year 2024,April,Time Adjusted Capacity (MW),14230.3
+epa_04_08_a,Year 2024,April,Capacity Factor,0.016
+epa_04_08_a,Year 2024,April,Time Adjusted Capacity (MW),5474.9
+epa_04_08_a,Year 2024,April,Capacity Factor,0.022
+epa_04_08_a,Year 2024,May,Time Adjusted Capacity (MW),176201.6
+epa_04_08_a,Year 2024,May,Capacity Factor,0.356
+epa_04_08_a,Year 2024,May,Time Adjusted Capacity (MW),292984.3
+epa_04_08_a,Year 2024,May,Capacity Factor,0.539
+epa_04_08_a,Year 2024,May,Time Adjusted Capacity (MW),131655.7
+epa_04_08_a,Year 2024,May,Capacity Factor,0.134
+epa_04_08_a,Year 2024,May,Time Adjusted Capacity (MW),75334.8
+epa_04_08_a,Year 2024,May,Capacity Factor,0.204
+epa_04_08_a,Year 2024,May,Time Adjusted Capacity (MW),5951.9
+epa_04_08_a,Year 2024,May,Capacity Factor,0.16
+epa_04_08_a,Year 2024,May,Time Adjusted Capacity (MW),8122.7
+epa_04_08_a,Year 2024,May,Capacity Factor,0.085
+epa_04_08_a,Year 2024,May,Time Adjusted Capacity (MW),14230.3
+epa_04_08_a,Year 2024,May,Capacity Factor,0.018
+epa_04_08_a,Year 2024,May,Time Adjusted Capacity (MW),5466.3
+epa_04_08_a,Year 2024,May,Capacity Factor,0.017
+epa_04_08_a,Year 2024,June,Time Adjusted Capacity (MW),176021.6
+epa_04_08_a,Year 2024,June,Capacity Factor,0.49
+epa_04_08_a,Year 2024,June,Time Adjusted Capacity (MW),291603
+epa_04_08_a,Year 2024,June,Capacity Factor,0.657
+epa_04_08_a,Year 2024,June,Time Adjusted Capacity (MW),131565.2
+epa_04_08_a,Year 2024,June,Capacity Factor,0.151
+epa_04_08_a,Year 2024,June,Time Adjusted Capacity (MW),75084.8
+epa_04_08_a,Year 2024,June,Capacity Factor,0.263
+epa_04_08_a,Year 2024,June,Time Adjusted Capacity (MW),6000.8
+epa_04_08_a,Year 2024,June,Capacity Factor,0.195
+epa_04_08_a,Year 2024,June,Time Adjusted Capacity (MW),8122.7
+epa_04_08_a,Year 2024,June,Capacity Factor,0.086
+epa_04_08_a,Year 2024,June,Time Adjusted Capacity (MW),14122.3
+epa_04_08_a,Year 2024,June,Capacity Factor,0.02
+epa_04_08_a,Year 2024,June,Time Adjusted Capacity (MW),5457.1
+epa_04_08_a,Year 2024,June,Capacity Factor,0.019
+epa_04_08_a,Year 2024,July,Time Adjusted Capacity (MW),176021.6
+epa_04_08_a,Year 2024,July,Capacity Factor,0.55
+epa_04_08_a,Year 2024,July,Time Adjusted Capacity (MW),291603
+epa_04_08_a,Year 2024,July,Capacity Factor,0.758
+epa_04_08_a,Year 2024,July,Time Adjusted Capacity (MW),131960.2
+epa_04_08_a,Year 2024,July,Capacity Factor,0.209
+epa_04_08_a,Year 2024,July,Time Adjusted Capacity (MW),75084.8
+epa_04_08_a,Year 2024,July,Capacity Factor,0.32
+epa_04_08_a,Year 2024,July,Time Adjusted Capacity (MW),6007.2
+epa_04_08_a,Year 2024,July,Capacity Factor,0.225
+epa_04_08_a,Year 2024,July,Time Adjusted Capacity (MW),8122.7
+epa_04_08_a,Year 2024,July,Capacity Factor,0.102
+epa_04_08_a,Year 2024,July,Time Adjusted Capacity (MW),14122.3
+epa_04_08_a,Year 2024,July,Capacity Factor,0.033
+epa_04_08_a,Year 2024,July,Time Adjusted Capacity (MW),5470.8
+epa_04_08_a,Year 2024,July,Capacity Factor,0.017
+epa_04_08_a,Year 2024,August,Time Adjusted Capacity (MW),176021.6
+epa_04_08_a,Year 2024,August,Capacity Factor,0.532
+epa_04_08_a,Year 2024,August,Time Adjusted Capacity (MW),291064.9
+epa_04_08_a,Year 2024,August,Capacity Factor,0.753
+epa_04_08_a,Year 2024,August,Time Adjusted Capacity (MW),132555.6
+epa_04_08_a,Year 2024,August,Capacity Factor,0.192
+epa_04_08_a,Year 2024,August,Time Adjusted Capacity (MW),75084.8
+epa_04_08_a,Year 2024,August,Capacity Factor,0.324
+epa_04_08_a,Year 2024,August,Time Adjusted Capacity (MW),6181.5
+epa_04_08_a,Year 2024,August,Capacity Factor,0.223
+epa_04_08_a,Year 2024,August,Time Adjusted Capacity (MW),8122.7
+epa_04_08_a,Year 2024,August,Capacity Factor,0.095
+epa_04_08_a,Year 2024,August,Time Adjusted Capacity (MW),14122.3
+epa_04_08_a,Year 2024,August,Capacity Factor,0.027
+epa_04_08_a,Year 2024,August,Time Adjusted Capacity (MW),5465.5
+epa_04_08_a,Year 2024,August,Capacity Factor,0.019
+epa_04_08_a,Year 2024,September,Time Adjusted Capacity (MW),175762.6
+epa_04_08_a,Year 2024,September,Capacity Factor,0.437
+epa_04_08_a,Year 2024,September,Time Adjusted Capacity (MW),291601.2
+epa_04_08_a,Year 2024,September,Capacity Factor,0.676
+epa_04_08_a,Year 2024,September,Time Adjusted Capacity (MW),132555.6
+epa_04_08_a,Year 2024,September,Capacity Factor,0.147
+epa_04_08_a,Year 2024,September,Time Adjusted Capacity (MW),75084.8
+epa_04_08_a,Year 2024,September,Capacity Factor,0.216
+epa_04_08_a,Year 2024,September,Time Adjusted Capacity (MW),6182
+epa_04_08_a,Year 2024,September,Capacity Factor,0.19
+epa_04_08_a,Year 2024,September,Time Adjusted Capacity (MW),8122.7
+epa_04_08_a,Year 2024,September,Capacity Factor,0.078
+epa_04_08_a,Year 2024,September,Time Adjusted Capacity (MW),14122.3
+epa_04_08_a,Year 2024,September,Capacity Factor,0.017
+epa_04_08_a,Year 2024,September,Time Adjusted Capacity (MW),5454.9
+epa_04_08_a,Year 2024,September,Capacity Factor,0.016
+epa_04_08_a,Year 2024,October,Time Adjusted Capacity (MW),174584.6
+epa_04_08_a,Year 2024,October,Capacity Factor,0.37
+epa_04_08_a,Year 2024,October,Time Adjusted Capacity (MW),291454.9
+epa_04_08_a,Year 2024,October,Capacity Factor,0.556
+epa_04_08_a,Year 2024,October,Time Adjusted Capacity (MW),132524.6
+epa_04_08_a,Year 2024,October,Capacity Factor,0.131
+epa_04_08_a,Year 2024,October,Time Adjusted Capacity (MW),74879
+epa_04_08_a,Year 2024,October,Capacity Factor,0.195
+epa_04_08_a,Year 2024,October,Time Adjusted Capacity (MW),6183.8
+epa_04_08_a,Year 2024,October,Capacity Factor,0.163
+epa_04_08_a,Year 2024,October,Time Adjusted Capacity (MW),8122.7
+epa_04_08_a,Year 2024,October,Capacity Factor,0.082
+epa_04_08_a,Year 2024,October,Time Adjusted Capacity (MW),14122.3
+epa_04_08_a,Year 2024,October,Capacity Factor,0.018
+epa_04_08_a,Year 2024,October,Time Adjusted Capacity (MW),5455.3
+epa_04_08_a,Year 2024,October,Capacity Factor,0.018
+epa_04_08_a,Year 2024,November,Time Adjusted Capacity (MW),174597.6
+epa_04_08_a,Year 2024,November,Capacity Factor,0.359
+epa_04_08_a,Year 2024,November,Time Adjusted Capacity (MW),291464.9
+epa_04_08_a,Year 2024,November,Capacity Factor,0.549
+epa_04_08_a,Year 2024,November,Time Adjusted Capacity (MW),132706.8
+epa_04_08_a,Year 2024,November,Capacity Factor,0.123
+epa_04_08_a,Year 2024,November,Time Adjusted Capacity (MW),74875.6
+epa_04_08_a,Year 2024,November,Capacity Factor,0.164
+epa_04_08_a,Year 2024,November,Time Adjusted Capacity (MW),6183.8
+epa_04_08_a,Year 2024,November,Capacity Factor,0.18
+epa_04_08_a,Year 2024,November,Time Adjusted Capacity (MW),8122.7
+epa_04_08_a,Year 2024,November,Capacity Factor,0.083
+epa_04_08_a,Year 2024,November,Time Adjusted Capacity (MW),14122.3
+epa_04_08_a,Year 2024,November,Capacity Factor,0.017
+epa_04_08_a,Year 2024,November,Time Adjusted Capacity (MW),5448.1
+epa_04_08_a,Year 2024,November,Capacity Factor,0.017
+epa_04_08_a,Year 2024,December,Time Adjusted Capacity (MW),174177.6
+epa_04_08_a,Year 2024,December,Capacity Factor,0.487
+epa_04_08_a,Year 2024,December,Time Adjusted Capacity (MW),291238.9
+epa_04_08_a,Year 2024,December,Capacity Factor,0.585
+epa_04_08_a,Year 2024,December,Time Adjusted Capacity (MW),132741.8
+epa_04_08_a,Year 2024,December,Capacity Factor,0.11
+epa_04_08_a,Year 2024,December,Time Adjusted Capacity (MW),74786.7
+epa_04_08_a,Year 2024,December,Capacity Factor,0.142
+epa_04_08_a,Year 2024,December,Time Adjusted Capacity (MW),6236.6
+epa_04_08_a,Year 2024,December,Capacity Factor,0.167
+epa_04_08_a,Year 2024,December,Time Adjusted Capacity (MW),8122.7
+epa_04_08_a,Year 2024,December,Capacity Factor,0.105
+epa_04_08_a,Year 2024,December,Time Adjusted Capacity (MW),14122.3
+epa_04_08_a,Year 2024,December,Capacity Factor,0.015
+epa_04_08_a,Year 2024,December,Time Adjusted Capacity (MW),5434.3
+epa_04_08_a,Year 2024,December,Capacity Factor,0.019
+epa_04_08_a,Year 2025,January,Time Adjusted Capacity (MW),170935.6
+epa_04_08_a,Year 2025,January,Capacity Factor,0.628
+epa_04_08_a,Year 2025,January,Time Adjusted Capacity (MW),292167.6
+epa_04_08_a,Year 2025,January,Capacity Factor,0.622
+epa_04_08_a,Year 2025,January,Time Adjusted Capacity (MW),133745.4
+epa_04_08_a,Year 2025,January,Capacity Factor,0.136
+epa_04_08_a,Year 2025,January,Time Adjusted Capacity (MW),76569.1
+epa_04_08_a,Year 2025,January,Capacity Factor,0.189
+epa_04_08_a,Year 2025,January,Time Adjusted Capacity (MW),6356.5
+epa_04_08_a,Year 2025,January,Capacity Factor,0.185
+epa_04_08_a,Year 2025,January,Time Adjusted Capacity (MW),8455
+epa_04_08_a,Year 2025,January,Capacity Factor,0.145
+epa_04_08_a,Year 2025,January,Time Adjusted Capacity (MW),13643.6
+epa_04_08_a,Year 2025,January,Capacity Factor,0.02
+epa_04_08_a,Year 2025,January,Time Adjusted Capacity (MW),5440
+epa_04_08_a,Year 2025,January,Capacity Factor,0.021
+epa_04_08_a,Year 2025,February,Time Adjusted Capacity (MW),170525.6
+epa_04_08_a,Year 2025,February,Capacity Factor,0.531
+epa_04_08_a,Year 2025,February,Time Adjusted Capacity (MW),292167.6
+epa_04_08_a,Year 2025,February,Capacity Factor,0.584
+epa_04_08_a,Year 2025,February,Time Adjusted Capacity (MW),133746.8
+epa_04_08_a,Year 2025,February,Capacity Factor,0.114
+epa_04_08_a,Year 2025,February,Time Adjusted Capacity (MW),76569.1
+epa_04_08_a,Year 2025,February,Capacity Factor,0.153
+epa_04_08_a,Year 2025,February,Time Adjusted Capacity (MW),6415.1
+epa_04_08_a,Year 2025,February,Capacity Factor,0.17
+epa_04_08_a,Year 2025,February,Time Adjusted Capacity (MW),8455
+epa_04_08_a,Year 2025,February,Capacity Factor,0.099
+epa_04_08_a,Year 2025,February,Time Adjusted Capacity (MW),13643.6
+epa_04_08_a,Year 2025,February,Capacity Factor,0.013
+epa_04_08_a,Year 2025,February,Time Adjusted Capacity (MW),5415
+epa_04_08_a,Year 2025,February,Capacity Factor,0.018
+epa_04_08_a,Year 2025,March,Time Adjusted Capacity (MW),170142.6
+epa_04_08_a,Year 2025,March,Capacity Factor,0.384
+epa_04_08_a,Year 2025,March,Time Adjusted Capacity (MW),292096.1
+epa_04_08_a,Year 2025,March,Capacity Factor,0.469
+epa_04_08_a,Year 2025,March,Time Adjusted Capacity (MW),133439.7
+epa_04_08_a,Year 2025,March,Capacity Factor,0.095
+epa_04_08_a,Year 2025,March,Time Adjusted Capacity (MW),76567.1
+epa_04_08_a,Year 2025,March,Capacity Factor,0.104
+epa_04_08_a,Year 2025,March,Time Adjusted Capacity (MW),6451.5
+epa_04_08_a,Year 2025,March,Capacity Factor,0.147
+epa_04_08_a,Year 2025,March,Time Adjusted Capacity (MW),8455
+epa_04_08_a,Year 2025,March,Capacity Factor,0.074
+epa_04_08_a,Year 2025,March,Time Adjusted Capacity (MW),13643.6
+epa_04_08_a,Year 2025,March,Capacity Factor,0.009
+epa_04_08_a,Year 2025,March,Time Adjusted Capacity (MW),5410.9
+epa_04_08_a,Year 2025,March,Capacity Factor,0.017
+epa_04_08_a,Year 2025,April,Time Adjusted Capacity (MW),170151.6
+epa_04_08_a,Year 2025,April,Capacity Factor,0.368
+epa_04_08_a,Year 2025,April,Time Adjusted Capacity (MW),292109.6
+epa_04_08_a,Year 2025,April,Capacity Factor,0.441
+epa_04_08_a,Year 2025,April,Time Adjusted Capacity (MW),133439.7
+epa_04_08_a,Year 2025,April,Capacity Factor,0.116
+epa_04_08_a,Year 2025,April,Time Adjusted Capacity (MW),76510.1
+epa_04_08_a,Year 2025,April,Capacity Factor,0.16
+epa_04_08_a,Year 2025,April,Time Adjusted Capacity (MW),6451.5
+epa_04_08_a,Year 2025,April,Capacity Factor,0.138
+epa_04_08_a,Year 2025,April,Time Adjusted Capacity (MW),8455
+epa_04_08_a,Year 2025,April,Capacity Factor,0.078
+epa_04_08_a,Year 2025,April,Time Adjusted Capacity (MW),13643.6
+epa_04_08_a,Year 2025,April,Capacity Factor,0.013
+epa_04_08_a,Year 2025,April,Time Adjusted Capacity (MW),5412.8
+epa_04_08_a,Year 2025,April,Capacity Factor,0.018
+epa_04_08_a,Year 2025,May,Time Adjusted Capacity (MW),170151.6
+epa_04_08_a,Year 2025,May,Capacity Factor,0.379
+epa_04_08_a,Year 2025,May,Time Adjusted Capacity (MW),292169.7
+epa_04_08_a,Year 2025,May,Capacity Factor,0.519
+epa_04_08_a,Year 2025,May,Time Adjusted Capacity (MW),133289.7
+epa_04_08_a,Year 2025,May,Capacity Factor,0.105
+epa_04_08_a,Year 2025,May,Time Adjusted Capacity (MW),76508
+epa_04_08_a,Year 2025,May,Capacity Factor,0.177
+epa_04_08_a,Year 2025,May,Time Adjusted Capacity (MW),6562.2
+epa_04_08_a,Year 2025,May,Capacity Factor,0.156
+epa_04_08_a,Year 2025,May,Time Adjusted Capacity (MW),8455
+epa_04_08_a,Year 2025,May,Capacity Factor,0.092
+epa_04_08_a,Year 2025,May,Time Adjusted Capacity (MW),13162.2
+epa_04_08_a,Year 2025,May,Capacity Factor,0.011
+epa_04_08_a,Year 2025,May,Time Adjusted Capacity (MW),5398.8
+epa_04_08_a,Year 2025,May,Capacity Factor,0.014
+epa_04_08_a,Year 2025,June,Time Adjusted Capacity (MW),170151.6
+epa_04_08_a,Year 2025,June,Capacity Factor,0.518
+epa_04_08_a,Year 2025,June,Time Adjusted Capacity (MW),292222.7
+epa_04_08_a,Year 2025,June,Capacity Factor,0.639
+epa_04_08_a,Year 2025,June,Time Adjusted Capacity (MW),133985.3
+epa_04_08_a,Year 2025,June,Capacity Factor,0.161
+epa_04_08_a,Year 2025,June,Time Adjusted Capacity (MW),76508
+epa_04_08_a,Year 2025,June,Capacity Factor,0.249
+epa_04_08_a,Year 2025,June,Time Adjusted Capacity (MW),6561.3
+epa_04_08_a,Year 2025,June,Capacity Factor,0.186
+epa_04_08_a,Year 2025,June,Time Adjusted Capacity (MW),8329
+epa_04_08_a,Year 2025,June,Capacity Factor,0.112
+epa_04_08_a,Year 2025,June,Time Adjusted Capacity (MW),13109.3
+epa_04_08_a,Year 2025,June,Capacity Factor,0.02
+epa_04_08_a,Year 2025,June,Time Adjusted Capacity (MW),5402
+epa_04_08_a,Year 2025,June,Capacity Factor,0.02
+epa_04_08_a,Year 2025,July,Time Adjusted Capacity (MW),170165.3
+epa_04_08_a,Year 2025,July,Capacity Factor,0.623
+epa_04_08_a,Year 2025,July,Time Adjusted Capacity (MW),292222.7
+epa_04_08_a,Year 2025,July,Capacity Factor,0.724
+epa_04_08_a,Year 2025,July,Time Adjusted Capacity (MW),134802.5
+epa_04_08_a,Year 2025,July,Capacity Factor,0.225
+epa_04_08_a,Year 2025,July,Time Adjusted Capacity (MW),76505.8
+epa_04_08_a,Year 2025,July,Capacity Factor,0.333
+epa_04_08_a,Year 2025,July,Time Adjusted Capacity (MW),6561.3
+epa_04_08_a,Year 2025,July,Capacity Factor,0.22
+epa_04_08_a,Year 2025,July,Time Adjusted Capacity (MW),8329
+epa_04_08_a,Year 2025,July,Capacity Factor,0.147
+epa_04_08_a,Year 2025,July,Time Adjusted Capacity (MW),13109.3
+epa_04_08_a,Year 2025,July,Capacity Factor,0.026
+epa_04_08_a,Year 2025,July,Time Adjusted Capacity (MW),5400.8
+epa_04_08_a,Year 2025,July,Capacity Factor,0.019
+epa_04_08_a,Year 2025,August,Time Adjusted Capacity (MW),170165.3
+epa_04_08_a,Year 2025,August,Capacity Factor,0.545
+epa_04_08_a,Year 2025,August,Time Adjusted Capacity (MW),292222.7
+epa_04_08_a,Year 2025,August,Capacity Factor,0.727
+epa_04_08_a,Year 2025,August,Time Adjusted Capacity (MW),134850.1
+epa_04_08_a,Year 2025,August,Capacity Factor,0.175
+epa_04_08_a,Year 2025,August,Time Adjusted Capacity (MW),76505.8
+epa_04_08_a,Year 2025,August,Capacity Factor,0.275
+epa_04_08_a,Year 2025,August,Time Adjusted Capacity (MW),6561.3
+epa_04_08_a,Year 2025,August,Capacity Factor,0.223
+epa_04_08_a,Year 2025,August,Time Adjusted Capacity (MW),8329
+epa_04_08_a,Year 2025,August,Capacity Factor,0.099
+epa_04_08_a,Year 2025,August,Time Adjusted Capacity (MW),13109.3
+epa_04_08_a,Year 2025,August,Capacity Factor,0.021
+epa_04_08_a,Year 2025,August,Time Adjusted Capacity (MW),5404.8
+epa_04_08_a,Year 2025,August,Capacity Factor,0.019
+epa_04_08_a,Year 2025,September,Time Adjusted Capacity (MW),170165.3
+epa_04_08_a,Year 2025,September,Capacity Factor,0.479
+epa_04_08_a,Year 2025,September,Time Adjusted Capacity (MW),292222.7
+epa_04_08_a,Year 2025,September,Capacity Factor,0.666
+epa_04_08_a,Year 2025,September,Time Adjusted Capacity (MW),135280.8
+epa_04_08_a,Year 2025,September,Capacity Factor,0.148
+epa_04_08_a,Year 2025,September,Time Adjusted Capacity (MW),76462.8
+epa_04_08_a,Year 2025,September,Capacity Factor,0.205
+epa_04_08_a,Year 2025,September,Time Adjusted Capacity (MW),6745.6
+epa_04_08_a,Year 2025,September,Capacity Factor,0.214
+epa_04_08_a,Year 2025,September,Time Adjusted Capacity (MW),8329
+epa_04_08_a,Year 2025,September,Capacity Factor,0.095
+epa_04_08_a,Year 2025,September,Time Adjusted Capacity (MW),13149.3
+epa_04_08_a,Year 2025,September,Capacity Factor,0.015
+epa_04_08_a,Year 2025,September,Time Adjusted Capacity (MW),5410
+epa_04_08_a,Year 2025,September,Capacity Factor,0.018
+epa_04_08_a,Year 2025,October,Time Adjusted Capacity (MW),169169.9
+epa_04_08_a,Year 2025,October,Capacity Factor,0.424
+epa_04_08_a,Year 2025,October,Time Adjusted Capacity (MW),292222.7
+epa_04_08_a,Year 2025,October,Capacity Factor,0.539
+epa_04_08_a,Year 2025,October,Time Adjusted Capacity (MW),135325.7
+epa_04_08_a,Year 2025,October,Capacity Factor,0.125
+epa_04_08_a,Year 2025,October,Time Adjusted Capacity (MW),76464.8
+epa_04_08_a,Year 2025,October,Capacity Factor,0.195
+epa_04_08_a,Year 2025,October,Time Adjusted Capacity (MW),6739.2
+epa_04_08_a,Year 2025,October,Capacity Factor,0.18
+epa_04_08_a,Year 2025,October,Time Adjusted Capacity (MW),8329
+epa_04_08_a,Year 2025,October,Capacity Factor,0.114
+epa_04_08_a,Year 2025,October,Time Adjusted Capacity (MW),13149.3
+epa_04_08_a,Year 2025,October,Capacity Factor,0.014
+epa_04_08_a,Year 2025,October,Time Adjusted Capacity (MW),5418.3
+epa_04_08_a,Year 2025,October,Capacity Factor,0.02
+epa_04_08_a,Year 2025,November,Time Adjusted Capacity (MW),168269.9
+epa_04_08_a,Year 2025,November,Capacity Factor,0.45
+epa_04_08_a,Year 2025,November,Time Adjusted Capacity (MW),292706.2
+epa_04_08_a,Year 2025,November,Capacity Factor,0.524
+epa_04_08_a,Year 2025,November,Time Adjusted Capacity (MW),135325.2
+epa_04_08_a,Year 2025,November,Capacity Factor,0.112
+epa_04_08_a,Year 2025,November,Time Adjusted Capacity (MW),76464.8
+epa_04_08_a,Year 2025,November,Capacity Factor,0.144
+epa_04_08_a,Year 2025,November,Time Adjusted Capacity (MW),6786.2
+epa_04_08_a,Year 2025,November,Capacity Factor,0.18
+epa_04_08_a,Year 2025,November,Time Adjusted Capacity (MW),8329
+epa_04_08_a,Year 2025,November,Capacity Factor,0.082
+epa_04_08_a,Year 2025,November,Time Adjusted Capacity (MW),13149.3
+epa_04_08_a,Year 2025,November,Capacity Factor,0.019
+epa_04_08_a,Year 2025,November,Time Adjusted Capacity (MW),5414.5
+epa_04_08_a,Year 2025,November,Capacity Factor,0.02
+epa_04_08_a,Year 2025,December,Time Adjusted Capacity (MW),168269.9
+epa_04_08_a,Year 2025,December,Capacity Factor,0.523
+epa_04_08_a,Year 2025,December,Time Adjusted Capacity (MW),292838.2
+epa_04_08_a,Year 2025,December,Capacity Factor,0.586
+epa_04_08_a,Year 2025,December,Time Adjusted Capacity (MW),135382.2
+epa_04_08_a,Year 2025,December,Capacity Factor,0.113
+epa_04_08_a,Year 2025,December,Time Adjusted Capacity (MW),76410.8
+epa_04_08_a,Year 2025,December,Capacity Factor,0.161
+epa_04_08_a,Year 2025,December,Time Adjusted Capacity (MW),6938.3
+epa_04_08_a,Year 2025,December,Capacity Factor,0.164
+epa_04_08_a,Year 2025,December,Time Adjusted Capacity (MW),8329
+epa_04_08_a,Year 2025,December,Capacity Factor,0.124
+epa_04_08_a,Year 2025,December,Time Adjusted Capacity (MW),13123.3
+epa_04_08_a,Year 2025,December,Capacity Factor,0.019
+epa_04_08_a,Year 2025,December,Time Adjusted Capacity (MW),5406
+epa_04_08_a,Year 2025,December,Capacity Factor,0.02
+epa_04_08_b,Annual Data,2015,Time Adjusted Capacity (MW),2523
+epa_04_08_b,Annual Data,2015,Capacity Factor,0.719
+epa_04_08_b,Annual Data,2015,Time Adjusted Capacity (MW),79650.8
+epa_04_08_b,Annual Data,2015,Capacity Factor,0.357
+epa_04_08_b,Annual Data,2015,Time Adjusted Capacity (MW),98614.6
+epa_04_08_b,Annual Data,2015,Capacity Factor,0.923
+epa_04_08_b,Annual Data,2015,Time Adjusted Capacity (MW),5104.5
+epa_04_08_b,Annual Data,2015,Capacity Factor,0.626
+epa_04_08_b,Annual Data,2015,Time Adjusted Capacity (MW),2527.7
+epa_04_08_b,Annual Data,2015,Capacity Factor,0.608
+epa_04_08_b,Annual Data,2015,Time Adjusted Capacity (MW),9521.6
+epa_04_08_b,Annual Data,2015,Capacity Factor,0.255
+epa_04_08_b,Annual Data,2015,Time Adjusted Capacity (MW),1697.3
+epa_04_08_b,Annual Data,2015,Capacity Factor,0.217
+epa_04_08_b,Annual Data,2015,Time Adjusted Capacity (MW),67106.2
+epa_04_08_b,Annual Data,2015,Capacity Factor,0.322
+epa_04_08_b,Annual Data,2015,Time Adjusted Capacity (MW),9024.5
+epa_04_08_b,Annual Data,2015,Capacity Factor,0.593
+epa_04_08_b,Annual Data,2016,Time Adjusted Capacity (MW),2516.6
+epa_04_08_b,Annual Data,2016,Capacity Factor,0.716
+epa_04_08_b,Annual Data,2016,Time Adjusted Capacity (MW),79806
+epa_04_08_b,Annual Data,2016,Capacity Factor,0.382
+epa_04_08_b,Annual Data,2016,Time Adjusted Capacity (MW),99364.8
+epa_04_08_b,Annual Data,2016,Capacity Factor,0.923
+epa_04_08_b,Annual Data,2016,Time Adjusted Capacity (MW),5099.5
+epa_04_08_b,Annual Data,2016,Capacity Factor,0.627
+epa_04_08_b,Annual Data,2016,Time Adjusted Capacity (MW),2458.8
+epa_04_08_b,Annual Data,2016,Capacity Factor,0.648
+epa_04_08_b,Annual Data,2016,Time Adjusted Capacity (MW),14161.4
+epa_04_08_b,Annual Data,2016,Capacity Factor,0.25
+epa_04_08_b,Annual Data,2016,Time Adjusted Capacity (MW),1757.9
+epa_04_08_b,Annual Data,2016,Capacity Factor,0.221
+epa_04_08_b,Annual Data,2016,Time Adjusted Capacity (MW),74162.7
+epa_04_08_b,Annual Data,2016,Capacity Factor,0.345
+epa_04_08_b,Annual Data,2016,Time Adjusted Capacity (MW),8979.8
+epa_04_08_b,Annual Data,2016,Capacity Factor,0.583
+epa_04_08_b,Annual Data,2017,Time Adjusted Capacity (MW),2460.4
+epa_04_08_b,Annual Data,2017,Capacity Factor,0.732
+epa_04_08_b,Annual Data,2017,Time Adjusted Capacity (MW),79698.8
+epa_04_08_b,Annual Data,2017,Capacity Factor,0.43
+epa_04_08_b,Annual Data,2017,Time Adjusted Capacity (MW),99619.5
+epa_04_08_b,Annual Data,2017,Capacity Factor,0.923
+epa_04_08_b,Annual Data,2017,Time Adjusted Capacity (MW),5125.6
+epa_04_08_b,Annual Data,2017,Capacity Factor,0.618
+epa_04_08_b,Annual Data,2017,Time Adjusted Capacity (MW),2375.8
+epa_04_08_b,Annual Data,2017,Capacity Factor,0.628
+epa_04_08_b,Annual Data,2017,Time Adjusted Capacity (MW),21940.9
+epa_04_08_b,Annual Data,2017,Capacity Factor,0.256
+epa_04_08_b,Annual Data,2017,Time Adjusted Capacity (MW),1757.9
+epa_04_08_b,Annual Data,2017,Capacity Factor,0.218
+epa_04_08_b,Annual Data,2017,Time Adjusted Capacity (MW),83355.6
+epa_04_08_b,Annual Data,2017,Capacity Factor,0.346
+epa_04_08_b,Annual Data,2017,Time Adjusted Capacity (MW),8807.5
+epa_04_08_b,Annual Data,2017,Capacity Factor,0.602
+epa_04_08_b,Annual Data,2018,Time Adjusted Capacity (MW),2391.5
+epa_04_08_b,Annual Data,2018,Capacity Factor,0.76
+epa_04_08_b,Annual Data,2018,Time Adjusted Capacity (MW),79771.9
+epa_04_08_b,Annual Data,2018,Capacity Factor,0.419
+epa_04_08_b,Annual Data,2018,Time Adjusted Capacity (MW),99605.2
+epa_04_08_b,Annual Data,2018,Capacity Factor,0.925
+epa_04_08_b,Annual Data,2018,Time Adjusted Capacity (MW),5059
+epa_04_08_b,Annual Data,2018,Capacity Factor,0.618
+epa_04_08_b,Annual Data,2018,Time Adjusted Capacity (MW),2543.9
+epa_04_08_b,Annual Data,2018,Capacity Factor,0.654
+epa_04_08_b,Annual Data,2018,Time Adjusted Capacity (MW),27143.3
+epa_04_08_b,Annual Data,2018,Capacity Factor,0.251
+epa_04_08_b,Annual Data,2018,Time Adjusted Capacity (MW),1757.9
+epa_04_08_b,Annual Data,2018,Capacity Factor,0.236
+epa_04_08_b,Annual Data,2018,Time Adjusted Capacity (MW),89228.5
+epa_04_08_b,Annual Data,2018,Capacity Factor,0.346
+epa_04_08_b,Annual Data,2018,Time Adjusted Capacity (MW),8760.2
+epa_04_08_b,Annual Data,2018,Capacity Factor,0.606
+epa_04_08_b,Annual Data,2019,Time Adjusted Capacity (MW),2535.2
+epa_04_08_b,Annual Data,2019,Capacity Factor,0.696
+epa_04_08_b,Annual Data,2019,Time Adjusted Capacity (MW),79838
+epa_04_08_b,Annual Data,2019,Capacity Factor,0.412
+epa_04_08_b,Annual Data,2019,Time Adjusted Capacity (MW),98836.7
+epa_04_08_b,Annual Data,2019,Capacity Factor,0.934
+epa_04_08_b,Annual Data,2019,Time Adjusted Capacity (MW),4786.5
+epa_04_08_b,Annual Data,2019,Capacity Factor,0.625
+epa_04_08_b,Annual Data,2019,Time Adjusted Capacity (MW),2504.1
+epa_04_08_b,Annual Data,2019,Capacity Factor,0.674
+epa_04_08_b,Annual Data,2019,Time Adjusted Capacity (MW),31840.8
+epa_04_08_b,Annual Data,2019,Capacity Factor,0.243
+epa_04_08_b,Annual Data,2019,Time Adjusted Capacity (MW),1758.1
+epa_04_08_b,Annual Data,2019,Capacity Factor,0.212
+epa_04_08_b,Annual Data,2019,Time Adjusted Capacity (MW),97564.8
+epa_04_08_b,Annual Data,2019,Capacity Factor,0.344
+epa_04_08_b,Annual Data,2019,Time Adjusted Capacity (MW),8485
+epa_04_08_b,Annual Data,2019,Capacity Factor,0.59
+epa_04_08_b,Annual Data,2020,Time Adjusted Capacity (MW),2561.5
+epa_04_08_b,Annual Data,2020,Capacity Factor,0.691
+epa_04_08_b,Annual Data,2020,Time Adjusted Capacity (MW),79810.4
+epa_04_08_b,Annual Data,2020,Capacity Factor,0.407
+epa_04_08_b,Annual Data,2020,Time Adjusted Capacity (MW),97238.3
+epa_04_08_b,Annual Data,2020,Capacity Factor,0.924
+epa_04_08_b,Annual Data,2020,Time Adjusted Capacity (MW),4653.8
+epa_04_08_b,Annual Data,2020,Capacity Factor,0.625
+epa_04_08_b,Annual Data,2020,Time Adjusted Capacity (MW),2275.2
+epa_04_08_b,Annual Data,2020,Capacity Factor,0.646
+epa_04_08_b,Annual Data,2020,Time Adjusted Capacity (MW),39458.1
+epa_04_08_b,Annual Data,2020,Capacity Factor,0.242
+epa_04_08_b,Annual Data,2020,Time Adjusted Capacity (MW),1747.9
+epa_04_08_b,Annual Data,2020,Capacity Factor,0.206
+epa_04_08_b,Annual Data,2020,Time Adjusted Capacity (MW),107387.7
+epa_04_08_b,Annual Data,2020,Capacity Factor,0.353
+epa_04_08_b,Annual Data,2020,Time Adjusted Capacity (MW),8327.2
+epa_04_08_b,Annual Data,2020,Capacity Factor,0.578
+epa_04_08_b,Annual Data,2021,Time Adjusted Capacity (MW),2588.5
+epa_04_08_b,Annual Data,2021,Capacity Factor,0.698
+epa_04_08_b,Annual Data,2021,Time Adjusted Capacity (MW),79878.4
+epa_04_08_b,Annual Data,2021,Capacity Factor,0.36
+epa_04_08_b,Annual Data,2021,Time Adjusted Capacity (MW),95802.7
+epa_04_08_b,Annual Data,2021,Capacity Factor,0.928
+epa_04_08_b,Annual Data,2021,Time Adjusted Capacity (MW),4490.4
+epa_04_08_b,Annual Data,2021,Capacity Factor,0.632
+epa_04_08_b,Annual Data,2021,Time Adjusted Capacity (MW),1902.5
+epa_04_08_b,Annual Data,2021,Capacity Factor,0.609
+epa_04_08_b,Annual Data,2021,Time Adjusted Capacity (MW),51219.7
+epa_04_08_b,Annual Data,2021,Capacity Factor,0.244
+epa_04_08_b,Annual Data,2021,Time Adjusted Capacity (MW),1629
+epa_04_08_b,Annual Data,2021,Capacity Factor,0.205
+epa_04_08_b,Annual Data,2021,Time Adjusted Capacity (MW),123757.1
+epa_04_08_b,Annual Data,2021,Capacity Factor,0.344
+epa_04_08_b,Annual Data,2021,Time Adjusted Capacity (MW),7959
+epa_04_08_b,Annual Data,2021,Capacity Factor,0.599
+epa_04_08_b,Annual Data,2022,Time Adjusted Capacity (MW),2616
+epa_04_08_b,Annual Data,2022,Capacity Factor,0.69
+epa_04_08_b,Annual Data,2022,Time Adjusted Capacity (MW),80054.5
+epa_04_08_b,Annual Data,2022,Capacity Factor,0.363
+epa_04_08_b,Annual Data,2022,Time Adjusted Capacity (MW),94969.9
+epa_04_08_b,Annual Data,2022,Capacity Factor,0.927
+epa_04_08_b,Annual Data,2022,Time Adjusted Capacity (MW),4402.5
+epa_04_08_b,Annual Data,2022,Capacity Factor,0.602
+epa_04_08_b,Annual Data,2022,Time Adjusted Capacity (MW),1716
+epa_04_08_b,Annual Data,2022,Capacity Factor,0.616
+epa_04_08_b,Annual Data,2022,Time Adjusted Capacity (MW),64501
+epa_04_08_b,Annual Data,2022,Capacity Factor,0.244
+epa_04_08_b,Annual Data,2022,Time Adjusted Capacity (MW),1480
+epa_04_08_b,Annual Data,2022,Capacity Factor,0.231
+epa_04_08_b,Annual Data,2022,Time Adjusted Capacity (MW),136669.4
+epa_04_08_b,Annual Data,2022,Capacity Factor,0.359
+epa_04_08_b,Annual Data,2022,Time Adjusted Capacity (MW),7817.6
+epa_04_08_b,Annual Data,2022,Capacity Factor,0.579
+epa_04_08_b,Annual Data,2023,Time Adjusted Capacity (MW),2670.6
+epa_04_08_b,Annual Data,2023,Capacity Factor,0.694
+epa_04_08_b,Annual Data,2023,Time Adjusted Capacity (MW),79982.5
+epa_04_08_b,Annual Data,2023,Capacity Factor,0.35
+epa_04_08_b,Annual Data,2023,Time Adjusted Capacity (MW),95065.2
+epa_04_08_b,Annual Data,2023,Capacity Factor,0.93
+epa_04_08_b,Annual Data,2023,Time Adjusted Capacity (MW),4162.6
+epa_04_08_b,Annual Data,2023,Capacity Factor,0.604
+epa_04_08_b,Annual Data,2023,Time Adjusted Capacity (MW),1871.6
+epa_04_08_b,Annual Data,2023,Capacity Factor,0.538
+epa_04_08_b,Annual Data,2023,Time Adjusted Capacity (MW),77130.8
+epa_04_08_b,Annual Data,2023,Capacity Factor,0.232
+epa_04_08_b,Annual Data,2023,Time Adjusted Capacity (MW),1480
+epa_04_08_b,Annual Data,2023,Capacity Factor,0.221
+epa_04_08_b,Annual Data,2023,Time Adjusted Capacity (MW),143443.5
+epa_04_08_b,Annual Data,2023,Capacity Factor,0.332
+epa_04_08_b,Annual Data,2023,Time Adjusted Capacity (MW),7830.2
+epa_04_08_b,Annual Data,2023,Capacity Factor,0.535
+epa_04_08_b,Annual Data,2024,Time Adjusted Capacity (MW),2690.2
+epa_04_08_b,Annual Data,2024,Capacity Factor,0.646
+epa_04_08_b,Annual Data,2024,Time Adjusted Capacity (MW),79883.9
+epa_04_08_b,Annual Data,2024,Capacity Factor,0.346
+epa_04_08_b,Annual Data,2024,Time Adjusted Capacity (MW),98022.9
+epa_04_08_b,Annual Data,2024,Capacity Factor,0.908
+epa_04_08_b,Annual Data,2024,Time Adjusted Capacity (MW),4054.5
+epa_04_08_b,Annual Data,2024,Capacity Factor,0.595
+epa_04_08_b,Annual Data,2024,Time Adjusted Capacity (MW),1685.1
+epa_04_08_b,Annual Data,2024,Capacity Factor,0.49
+epa_04_08_b,Annual Data,2024,Time Adjusted Capacity (MW),102319.5
+epa_04_08_b,Annual Data,2024,Capacity Factor,0.232
+epa_04_08_b,Annual Data,2024,Time Adjusted Capacity (MW),1392
+epa_04_08_b,Annual Data,2024,Capacity Factor,0.25
+epa_04_08_b,Annual Data,2024,Time Adjusted Capacity (MW),149299
+epa_04_08_b,Annual Data,2024,Capacity Factor,0.343
+epa_04_08_b,Annual Data,2024,Time Adjusted Capacity (MW),7476
+epa_04_08_b,Annual Data,2024,Capacity Factor,0.558
+epa_04_08_b,Annual Data,2025,Time Adjusted Capacity (MW),2681.2
+epa_04_08_b,Annual Data,2025,Capacity Factor,0.659
+epa_04_08_b,Annual Data,2025,Time Adjusted Capacity (MW),79984
+epa_04_08_b,Annual Data,2025,Capacity Factor,0.344
+epa_04_08_b,Annual Data,2025,Time Adjusted Capacity (MW),98408.2
+epa_04_08_b,Annual Data,2025,Capacity Factor,0.911
+epa_04_08_b,Annual Data,2025,Time Adjusted Capacity (MW),3974.4
+epa_04_08_b,Annual Data,2025,Capacity Factor,0.584
+epa_04_08_b,Annual Data,2025,Time Adjusted Capacity (MW),1811.9
+epa_04_08_b,Annual Data,2025,Capacity Factor,0.542
+epa_04_08_b,Annual Data,2025,Time Adjusted Capacity (MW),134526.3
+epa_04_08_b,Annual Data,2025,Capacity Factor,0.24
+epa_04_08_b,Annual Data,2025,Time Adjusted Capacity (MW),1392
+epa_04_08_b,Annual Data,2025,Capacity Factor,0.236
+epa_04_08_b,Annual Data,2025,Time Adjusted Capacity (MW),155344.4
+epa_04_08_b,Annual Data,2025,Capacity Factor,0.338
+epa_04_08_b,Annual Data,2025,Time Adjusted Capacity (MW),7289.1
+epa_04_08_b,Annual Data,2025,Capacity Factor,0.558
+epa_04_08_b,Year 2023,January,Time Adjusted Capacity (MW),2657.6
+epa_04_08_b,Year 2023,January,Capacity Factor,0.712
+epa_04_08_b,Year 2023,January,Time Adjusted Capacity (MW),79971.6
+epa_04_08_b,Year 2023,January,Capacity Factor,0.382
+epa_04_08_b,Year 2023,January,Time Adjusted Capacity (MW),94598.2
+epa_04_08_b,Year 2023,January,Capacity Factor,1.007
+epa_04_08_b,Year 2023,January,Time Adjusted Capacity (MW),4259.7
+epa_04_08_b,Year 2023,January,Capacity Factor,0.606
+epa_04_08_b,Year 2023,January,Time Adjusted Capacity (MW),1896.8
+epa_04_08_b,Year 2023,January,Capacity Factor,0.484
+epa_04_08_b,Year 2023,January,Time Adjusted Capacity (MW),71639.2
+epa_04_08_b,Year 2023,January,Capacity Factor,0.142
+epa_04_08_b,Year 2023,January,Time Adjusted Capacity (MW),1480
+epa_04_08_b,Year 2023,January,Capacity Factor,0.077
+epa_04_08_b,Year 2023,January,Time Adjusted Capacity (MW),140883.2
+epa_04_08_b,Year 2023,January,Capacity Factor,0.363
+epa_04_08_b,Year 2023,January,Time Adjusted Capacity (MW),7933.1
+epa_04_08_b,Year 2023,January,Capacity Factor,0.575
+epa_04_08_b,Year 2023,February,Time Adjusted Capacity (MW),2657.6
+epa_04_08_b,Year 2023,February,Capacity Factor,0.724
+epa_04_08_b,Year 2023,February,Time Adjusted Capacity (MW),79989.6
+epa_04_08_b,Year 2023,February,Capacity Factor,0.371
+epa_04_08_b,Year 2023,February,Time Adjusted Capacity (MW),94598.2
+epa_04_08_b,Year 2023,February,Capacity Factor,0.957
+epa_04_08_b,Year 2023,February,Time Adjusted Capacity (MW),4158.1
+epa_04_08_b,Year 2023,February,Capacity Factor,0.597
+epa_04_08_b,Year 2023,February,Time Adjusted Capacity (MW),1896.8
+epa_04_08_b,Year 2023,February,Capacity Factor,0.543
+epa_04_08_b,Year 2023,February,Time Adjusted Capacity (MW),72849.9
+epa_04_08_b,Year 2023,February,Capacity Factor,0.186
+epa_04_08_b,Year 2023,February,Time Adjusted Capacity (MW),1480
+epa_04_08_b,Year 2023,February,Capacity Factor,0.109
+epa_04_08_b,Year 2023,February,Time Adjusted Capacity (MW),141532.3
+epa_04_08_b,Year 2023,February,Capacity Factor,0.431
+epa_04_08_b,Year 2023,February,Time Adjusted Capacity (MW),7933.1
+epa_04_08_b,Year 2023,February,Capacity Factor,0.562
+epa_04_08_b,Year 2023,March,Time Adjusted Capacity (MW),2623.3
+epa_04_08_b,Year 2023,March,Capacity Factor,0.732
+epa_04_08_b,Year 2023,March,Time Adjusted Capacity (MW),79989.6
+epa_04_08_b,Year 2023,March,Capacity Factor,0.359
+epa_04_08_b,Year 2023,March,Time Adjusted Capacity (MW),94598.2
+epa_04_08_b,Year 2023,March,Capacity Factor,0.893
+epa_04_08_b,Year 2023,March,Time Adjusted Capacity (MW),4158.1
+epa_04_08_b,Year 2023,March,Capacity Factor,0.583
+epa_04_08_b,Year 2023,March,Time Adjusted Capacity (MW),1866.8
+epa_04_08_b,Year 2023,March,Capacity Factor,0.547
+epa_04_08_b,Year 2023,March,Time Adjusted Capacity (MW),73402.2
+epa_04_08_b,Year 2023,March,Capacity Factor,0.215
+epa_04_08_b,Year 2023,March,Time Adjusted Capacity (MW),1480
+epa_04_08_b,Year 2023,March,Capacity Factor,0.14
+epa_04_08_b,Year 2023,March,Time Adjusted Capacity (MW),142245.7
+epa_04_08_b,Year 2023,March,Capacity Factor,0.406
+epa_04_08_b,Year 2023,March,Time Adjusted Capacity (MW),7933.1
+epa_04_08_b,Year 2023,March,Capacity Factor,0.535
+epa_04_08_b,Year 2023,April,Time Adjusted Capacity (MW),2623.3
+epa_04_08_b,Year 2023,April,Capacity Factor,0.706
+epa_04_08_b,Year 2023,April,Time Adjusted Capacity (MW),80007.4
+epa_04_08_b,Year 2023,April,Capacity Factor,0.344
+epa_04_08_b,Year 2023,April,Time Adjusted Capacity (MW),94598.2
+epa_04_08_b,Year 2023,April,Capacity Factor,0.832
+epa_04_08_b,Year 2023,April,Time Adjusted Capacity (MW),4158.1
+epa_04_08_b,Year 2023,April,Capacity Factor,0.556
+epa_04_08_b,Year 2023,April,Time Adjusted Capacity (MW),1866.8
+epa_04_08_b,Year 2023,April,Capacity Factor,0.547
+epa_04_08_b,Year 2023,April,Time Adjusted Capacity (MW),73948.2
+epa_04_08_b,Year 2023,April,Capacity Factor,0.268
+epa_04_08_b,Year 2023,April,Time Adjusted Capacity (MW),1480
+epa_04_08_b,Year 2023,April,Capacity Factor,0.278
+epa_04_08_b,Year 2023,April,Time Adjusted Capacity (MW),142659.5
+epa_04_08_b,Year 2023,April,Capacity Factor,0.412
+epa_04_08_b,Year 2023,April,Time Adjusted Capacity (MW),7933.1
+epa_04_08_b,Year 2023,April,Capacity Factor,0.486
+epa_04_08_b,Year 2023,May,Time Adjusted Capacity (MW),2684.3
+epa_04_08_b,Year 2023,May,Capacity Factor,0.669
+epa_04_08_b,Year 2023,May,Time Adjusted Capacity (MW),79978.4
+epa_04_08_b,Year 2023,May,Capacity Factor,0.465
+epa_04_08_b,Year 2023,May,Time Adjusted Capacity (MW),94598.2
+epa_04_08_b,Year 2023,May,Capacity Factor,0.869
+epa_04_08_b,Year 2023,May,Time Adjusted Capacity (MW),4158.1
+epa_04_08_b,Year 2023,May,Capacity Factor,0.611
+epa_04_08_b,Year 2023,May,Time Adjusted Capacity (MW),1866.8
+epa_04_08_b,Year 2023,May,Capacity Factor,0.511
+epa_04_08_b,Year 2023,May,Time Adjusted Capacity (MW),74880.6
+epa_04_08_b,Year 2023,May,Capacity Factor,0.295
+epa_04_08_b,Year 2023,May,Time Adjusted Capacity (MW),1480
+epa_04_08_b,Year 2023,May,Capacity Factor,0.274
+epa_04_08_b,Year 2023,May,Time Adjusted Capacity (MW),142976.1
+epa_04_08_b,Year 2023,May,Capacity Factor,0.3
+epa_04_08_b,Year 2023,May,Time Adjusted Capacity (MW),7888.1
+epa_04_08_b,Year 2023,May,Capacity Factor,0.519
+epa_04_08_b,Year 2023,June,Time Adjusted Capacity (MW),2684.3
+epa_04_08_b,Year 2023,June,Capacity Factor,0.665
+epa_04_08_b,Year 2023,June,Time Adjusted Capacity (MW),79979.8
+epa_04_08_b,Year 2023,June,Capacity Factor,0.375
+epa_04_08_b,Year 2023,June,Time Adjusted Capacity (MW),94598.2
+epa_04_08_b,Year 2023,June,Capacity Factor,0.952
+epa_04_08_b,Year 2023,June,Time Adjusted Capacity (MW),4158.1
+epa_04_08_b,Year 2023,June,Capacity Factor,0.624
+epa_04_08_b,Year 2023,June,Time Adjusted Capacity (MW),1866.8
+epa_04_08_b,Year 2023,June,Capacity Factor,0.541
+epa_04_08_b,Year 2023,June,Time Adjusted Capacity (MW),75981.9
+epa_04_08_b,Year 2023,June,Capacity Factor,0.309
+epa_04_08_b,Year 2023,June,Time Adjusted Capacity (MW),1480
+epa_04_08_b,Year 2023,June,Capacity Factor,0.346
+epa_04_08_b,Year 2023,June,Time Adjusted Capacity (MW),143730.8
+epa_04_08_b,Year 2023,June,Capacity Factor,0.264
+epa_04_08_b,Year 2023,June,Time Adjusted Capacity (MW),7873.5
+epa_04_08_b,Year 2023,June,Capacity Factor,0.522
+epa_04_08_b,Year 2023,July,Time Adjusted Capacity (MW),2684.3
+epa_04_08_b,Year 2023,July,Capacity Factor,0.646
+epa_04_08_b,Year 2023,July,Time Adjusted Capacity (MW),79979.8
+epa_04_08_b,Year 2023,July,Capacity Factor,0.369
+epa_04_08_b,Year 2023,July,Time Adjusted Capacity (MW),94598.2
+epa_04_08_b,Year 2023,July,Capacity Factor,0.991
+epa_04_08_b,Year 2023,July,Time Adjusted Capacity (MW),4159.4
+epa_04_08_b,Year 2023,July,Capacity Factor,0.619
+epa_04_08_b,Year 2023,July,Time Adjusted Capacity (MW),1866.8
+epa_04_08_b,Year 2023,July,Capacity Factor,0.57
+epa_04_08_b,Year 2023,July,Time Adjusted Capacity (MW),77601.9
+epa_04_08_b,Year 2023,July,Capacity Factor,0.309
+epa_04_08_b,Year 2023,July,Time Adjusted Capacity (MW),1480
+epa_04_08_b,Year 2023,July,Capacity Factor,0.35
+epa_04_08_b,Year 2023,July,Time Adjusted Capacity (MW),143730.8
+epa_04_08_b,Year 2023,July,Capacity Factor,0.259
+epa_04_08_b,Year 2023,July,Time Adjusted Capacity (MW),7788.5
+epa_04_08_b,Year 2023,July,Capacity Factor,0.54
+epa_04_08_b,Year 2023,August,Time Adjusted Capacity (MW),2671.8
+epa_04_08_b,Year 2023,August,Capacity Factor,0.631
+epa_04_08_b,Year 2023,August,Time Adjusted Capacity (MW),79979.8
+epa_04_08_b,Year 2023,August,Capacity Factor,0.358
+epa_04_08_b,Year 2023,August,Time Adjusted Capacity (MW),95712.2
+epa_04_08_b,Year 2023,August,Capacity Factor,0.979
+epa_04_08_b,Year 2023,August,Time Adjusted Capacity (MW),4155.4
+epa_04_08_b,Year 2023,August,Capacity Factor,0.614
+epa_04_08_b,Year 2023,August,Time Adjusted Capacity (MW),1866.8
+epa_04_08_b,Year 2023,August,Capacity Factor,0.564
+epa_04_08_b,Year 2023,August,Time Adjusted Capacity (MW),78928.8
+epa_04_08_b,Year 2023,August,Capacity Factor,0.287
+epa_04_08_b,Year 2023,August,Time Adjusted Capacity (MW),1480
+epa_04_08_b,Year 2023,August,Capacity Factor,0.283
+epa_04_08_b,Year 2023,August,Time Adjusted Capacity (MW),144230.3
+epa_04_08_b,Year 2023,August,Capacity Factor,0.262
+epa_04_08_b,Year 2023,August,Time Adjusted Capacity (MW),7788.5
+epa_04_08_b,Year 2023,August,Capacity Factor,0.563
+epa_04_08_b,Year 2023,September,Time Adjusted Capacity (MW),2671.8
+epa_04_08_b,Year 2023,September,Capacity Factor,0.674
+epa_04_08_b,Year 2023,September,Time Adjusted Capacity (MW),79977
+epa_04_08_b,Year 2023,September,Capacity Factor,0.294
+epa_04_08_b,Year 2023,September,Time Adjusted Capacity (MW),95712.2
+epa_04_08_b,Year 2023,September,Capacity Factor,0.951
+epa_04_08_b,Year 2023,September,Time Adjusted Capacity (MW),4155.4
+epa_04_08_b,Year 2023,September,Capacity Factor,0.581
+epa_04_08_b,Year 2023,September,Time Adjusted Capacity (MW),1866.8
+epa_04_08_b,Year 2023,September,Capacity Factor,0.529
+epa_04_08_b,Year 2023,September,Time Adjusted Capacity (MW),79648
+epa_04_08_b,Year 2023,September,Capacity Factor,0.256
+epa_04_08_b,Year 2023,September,Time Adjusted Capacity (MW),1480
+epa_04_08_b,Year 2023,September,Capacity Factor,0.277
+epa_04_08_b,Year 2023,September,Time Adjusted Capacity (MW),144334.3
+epa_04_08_b,Year 2023,September,Capacity Factor,0.271
+epa_04_08_b,Year 2023,September,Time Adjusted Capacity (MW),7756.3
+epa_04_08_b,Year 2023,September,Capacity Factor,0.526
+epa_04_08_b,Year 2023,October,Time Adjusted Capacity (MW),2695.8
+epa_04_08_b,Year 2023,October,Capacity Factor,0.704
+epa_04_08_b,Year 2023,October,Time Adjusted Capacity (MW),79974.9
+epa_04_08_b,Year 2023,October,Capacity Factor,0.263
+epa_04_08_b,Year 2023,October,Time Adjusted Capacity (MW),95712.2
+epa_04_08_b,Year 2023,October,Capacity Factor,0.863
+epa_04_08_b,Year 2023,October,Time Adjusted Capacity (MW),4147.2
+epa_04_08_b,Year 2023,October,Capacity Factor,0.594
+epa_04_08_b,Year 2023,October,Time Adjusted Capacity (MW),1866.8
+epa_04_08_b,Year 2023,October,Capacity Factor,0.512
+epa_04_08_b,Year 2023,October,Time Adjusted Capacity (MW),80606
+epa_04_08_b,Year 2023,October,Capacity Factor,0.22
+epa_04_08_b,Year 2023,October,Time Adjusted Capacity (MW),1480
+epa_04_08_b,Year 2023,October,Capacity Factor,0.261
+epa_04_08_b,Year 2023,October,Time Adjusted Capacity (MW),144417.5
+epa_04_08_b,Year 2023,October,Capacity Factor,0.331
+epa_04_08_b,Year 2023,October,Time Adjusted Capacity (MW),7756.3
+epa_04_08_b,Year 2023,October,Capacity Factor,0.474
+epa_04_08_b,Year 2023,November,Time Adjusted Capacity (MW),2695.8
+epa_04_08_b,Year 2023,November,Capacity Factor,0.737
+epa_04_08_b,Year 2023,November,Time Adjusted Capacity (MW),79979.5
+epa_04_08_b,Year 2023,November,Capacity Factor,0.296
+epa_04_08_b,Year 2023,November,Time Adjusted Capacity (MW),95712.2
+epa_04_08_b,Year 2023,November,Capacity Factor,0.903
+epa_04_08_b,Year 2023,November,Time Adjusted Capacity (MW),4148.8
+epa_04_08_b,Year 2023,November,Capacity Factor,0.618
+epa_04_08_b,Year 2023,November,Time Adjusted Capacity (MW),1866.8
+epa_04_08_b,Year 2023,November,Capacity Factor,0.54
+epa_04_08_b,Year 2023,November,Time Adjusted Capacity (MW),82386.8
+epa_04_08_b,Year 2023,November,Capacity Factor,0.167
+epa_04_08_b,Year 2023,November,Time Adjusted Capacity (MW),1480
+epa_04_08_b,Year 2023,November,Capacity Factor,0.157
+epa_04_08_b,Year 2023,November,Time Adjusted Capacity (MW),145235
+epa_04_08_b,Year 2023,November,Capacity Factor,0.346
+epa_04_08_b,Year 2023,November,Time Adjusted Capacity (MW),7693.1
+epa_04_08_b,Year 2023,November,Capacity Factor,0.545
+epa_04_08_b,Year 2023,December,Time Adjusted Capacity (MW),2695.8
+epa_04_08_b,Year 2023,December,Capacity Factor,0.729
+epa_04_08_b,Year 2023,December,Time Adjusted Capacity (MW),79983.6
+epa_04_08_b,Year 2023,December,Capacity Factor,0.321
+epa_04_08_b,Year 2023,December,Time Adjusted Capacity (MW),95712.2
+epa_04_08_b,Year 2023,December,Capacity Factor,0.967
+epa_04_08_b,Year 2023,December,Time Adjusted Capacity (MW),4133.2
+epa_04_08_b,Year 2023,December,Capacity Factor,0.638
+epa_04_08_b,Year 2023,December,Time Adjusted Capacity (MW),1866.8
+epa_04_08_b,Year 2023,December,Capacity Factor,0.564
+epa_04_08_b,Year 2023,December,Time Adjusted Capacity (MW),83392.8
+epa_04_08_b,Year 2023,December,Capacity Factor,0.135
+epa_04_08_b,Year 2023,December,Time Adjusted Capacity (MW),1480
+epa_04_08_b,Year 2023,December,Capacity Factor,0.099
+epa_04_08_b,Year 2023,December,Time Adjusted Capacity (MW),145232
+epa_04_08_b,Year 2023,December,Capacity Factor,0.346
+epa_04_08_b,Year 2023,December,Time Adjusted Capacity (MW),7693.1
+epa_04_08_b,Year 2023,December,Capacity Factor,0.567
+epa_04_08_b,Year 2024,January,Time Adjusted Capacity (MW),2689.6
+epa_04_08_b,Year 2024,January,Capacity Factor,0.693
+epa_04_08_b,Year 2024,January,Time Adjusted Capacity (MW),79886.6
+epa_04_08_b,Year 2024,January,Capacity Factor,0.363
+epa_04_08_b,Year 2024,January,Time Adjusted Capacity (MW),97277.2
+epa_04_08_b,Year 2024,January,Capacity Factor,0.956
+epa_04_08_b,Year 2024,January,Time Adjusted Capacity (MW),4097.7
+epa_04_08_b,Year 2024,January,Capacity Factor,0.608
+epa_04_08_b,Year 2024,January,Time Adjusted Capacity (MW),1706.1
+epa_04_08_b,Year 2024,January,Capacity Factor,0.537
+epa_04_08_b,Year 2024,January,Time Adjusted Capacity (MW),91150.6
+epa_04_08_b,Year 2024,January,Capacity Factor,0.134
+epa_04_08_b,Year 2024,January,Time Adjusted Capacity (MW),1392
+epa_04_08_b,Year 2024,January,Capacity Factor,0.075
+epa_04_08_b,Year 2024,January,Time Adjusted Capacity (MW),146957
+epa_04_08_b,Year 2024,January,Capacity Factor,0.316
+epa_04_08_b,Year 2024,January,Time Adjusted Capacity (MW),7540.4
+epa_04_08_b,Year 2024,January,Capacity Factor,0.602
+epa_04_08_b,Year 2024,February,Time Adjusted Capacity (MW),2689.6
+epa_04_08_b,Year 2024,February,Capacity Factor,0.69
+epa_04_08_b,Year 2024,February,Time Adjusted Capacity (MW),79886.6
+epa_04_08_b,Year 2024,February,Capacity Factor,0.374
+epa_04_08_b,Year 2024,February,Time Adjusted Capacity (MW),97277.2
+epa_04_08_b,Year 2024,February,Capacity Factor,0.954
+epa_04_08_b,Year 2024,February,Time Adjusted Capacity (MW),4099.2
+epa_04_08_b,Year 2024,February,Capacity Factor,0.592
+epa_04_08_b,Year 2024,February,Time Adjusted Capacity (MW),1706.1
+epa_04_08_b,Year 2024,February,Capacity Factor,0.502
+epa_04_08_b,Year 2024,February,Time Adjusted Capacity (MW),93683.5
+epa_04_08_b,Year 2024,February,Capacity Factor,0.186
+epa_04_08_b,Year 2024,February,Time Adjusted Capacity (MW),1392
+epa_04_08_b,Year 2024,February,Capacity Factor,0.124
+epa_04_08_b,Year 2024,February,Time Adjusted Capacity (MW),147815.2
+epa_04_08_b,Year 2024,February,Capacity Factor,0.396
+epa_04_08_b,Year 2024,February,Time Adjusted Capacity (MW),7540.4
+epa_04_08_b,Year 2024,February,Capacity Factor,0.583
+epa_04_08_b,Year 2024,March,Time Adjusted Capacity (MW),2689.6
+epa_04_08_b,Year 2024,March,Capacity Factor,0.674
+epa_04_08_b,Year 2024,March,Time Adjusted Capacity (MW),79887.1
+epa_04_08_b,Year 2024,March,Capacity Factor,0.393
+epa_04_08_b,Year 2024,March,Time Adjusted Capacity (MW),97277.2
+epa_04_08_b,Year 2024,March,Capacity Factor,0.875
+epa_04_08_b,Year 2024,March,Time Adjusted Capacity (MW),4098.2
+epa_04_08_b,Year 2024,March,Capacity Factor,0.565
+epa_04_08_b,Year 2024,March,Time Adjusted Capacity (MW),1706.1
+epa_04_08_b,Year 2024,March,Capacity Factor,0.467
+epa_04_08_b,Year 2024,March,Time Adjusted Capacity (MW),94296.2
+epa_04_08_b,Year 2024,March,Capacity Factor,0.218
+epa_04_08_b,Year 2024,March,Time Adjusted Capacity (MW),1392
+epa_04_08_b,Year 2024,March,Capacity Factor,0.21
+epa_04_08_b,Year 2024,March,Time Adjusted Capacity (MW),148016.7
+epa_04_08_b,Year 2024,March,Capacity Factor,0.407
+epa_04_08_b,Year 2024,March,Time Adjusted Capacity (MW),7540.4
+epa_04_08_b,Year 2024,March,Capacity Factor,0.556
+epa_04_08_b,Year 2024,April,Time Adjusted Capacity (MW),2689.6
+epa_04_08_b,Year 2024,April,Capacity Factor,0.655
+epa_04_08_b,Year 2024,April,Time Adjusted Capacity (MW),79887.1
+epa_04_08_b,Year 2024,April,Capacity Factor,0.364
+epa_04_08_b,Year 2024,April,Time Adjusted Capacity (MW),97277.2
+epa_04_08_b,Year 2024,April,Capacity Factor,0.818
+epa_04_08_b,Year 2024,April,Time Adjusted Capacity (MW),4073.4
+epa_04_08_b,Year 2024,April,Capacity Factor,0.558
+epa_04_08_b,Year 2024,April,Time Adjusted Capacity (MW),1678.1
+epa_04_08_b,Year 2024,April,Capacity Factor,0.482
+epa_04_08_b,Year 2024,April,Time Adjusted Capacity (MW),97257
+epa_04_08_b,Year 2024,April,Capacity Factor,0.263
+epa_04_08_b,Year 2024,April,Time Adjusted Capacity (MW),1392
+epa_04_08_b,Year 2024,April,Capacity Factor,0.322
+epa_04_08_b,Year 2024,April,Time Adjusted Capacity (MW),148176.7
+epa_04_08_b,Year 2024,April,Capacity Factor,0.437
+epa_04_08_b,Year 2024,April,Time Adjusted Capacity (MW),7493.4
+epa_04_08_b,Year 2024,April,Capacity Factor,0.525
+epa_04_08_b,Year 2024,May,Time Adjusted Capacity (MW),2675.5
+epa_04_08_b,Year 2024,May,Capacity Factor,0.619
+epa_04_08_b,Year 2024,May,Time Adjusted Capacity (MW),79887.1
+epa_04_08_b,Year 2024,May,Capacity Factor,0.412
+epa_04_08_b,Year 2024,May,Time Adjusted Capacity (MW),98391.2
+epa_04_08_b,Year 2024,May,Capacity Factor,0.888
+epa_04_08_b,Year 2024,May,Time Adjusted Capacity (MW),4056.4
+epa_04_08_b,Year 2024,May,Capacity Factor,0.608
+epa_04_08_b,Year 2024,May,Time Adjusted Capacity (MW),1678.1
+epa_04_08_b,Year 2024,May,Capacity Factor,0.493
+epa_04_08_b,Year 2024,May,Time Adjusted Capacity (MW),98677.7
+epa_04_08_b,Year 2024,May,Capacity Factor,0.29
+epa_04_08_b,Year 2024,May,Time Adjusted Capacity (MW),1392
+epa_04_08_b,Year 2024,May,Capacity Factor,0.388
+epa_04_08_b,Year 2024,May,Time Adjusted Capacity (MW),149305.6
+epa_04_08_b,Year 2024,May,Capacity Factor,0.352
+epa_04_08_b,Year 2024,May,Time Adjusted Capacity (MW),7493.4
+epa_04_08_b,Year 2024,May,Capacity Factor,0.536
+epa_04_08_b,Year 2024,June,Time Adjusted Capacity (MW),2675.5
+epa_04_08_b,Year 2024,June,Capacity Factor,0.615
+epa_04_08_b,Year 2024,June,Time Adjusted Capacity (MW),79878.6
+epa_04_08_b,Year 2024,June,Capacity Factor,0.389
+epa_04_08_b,Year 2024,June,Time Adjusted Capacity (MW),98391.2
+epa_04_08_b,Year 2024,June,Capacity Factor,0.963
+epa_04_08_b,Year 2024,June,Time Adjusted Capacity (MW),4052.8
+epa_04_08_b,Year 2024,June,Capacity Factor,0.596
+epa_04_08_b,Year 2024,June,Time Adjusted Capacity (MW),1678.1
+epa_04_08_b,Year 2024,June,Capacity Factor,0.481
+epa_04_08_b,Year 2024,June,Time Adjusted Capacity (MW),101220.5
+epa_04_08_b,Year 2024,June,Capacity Factor,0.316
+epa_04_08_b,Year 2024,June,Time Adjusted Capacity (MW),1392
+epa_04_08_b,Year 2024,June,Capacity Factor,0.401
+epa_04_08_b,Year 2024,June,Time Adjusted Capacity (MW),149391.1
+epa_04_08_b,Year 2024,June,Capacity Factor,0.357
+epa_04_08_b,Year 2024,June,Time Adjusted Capacity (MW),7493.4
+epa_04_08_b,Year 2024,June,Capacity Factor,0.564
+epa_04_08_b,Year 2024,July,Time Adjusted Capacity (MW),2695.5
+epa_04_08_b,Year 2024,July,Capacity Factor,0.604
+epa_04_08_b,Year 2024,July,Time Adjusted Capacity (MW),79878.6
+epa_04_08_b,Year 2024,July,Capacity Factor,0.36
+epa_04_08_b,Year 2024,July,Time Adjusted Capacity (MW),98391.2
+epa_04_08_b,Year 2024,July,Capacity Factor,0.954
+epa_04_08_b,Year 2024,July,Time Adjusted Capacity (MW),4034.3
+epa_04_08_b,Year 2024,July,Capacity Factor,0.609
+epa_04_08_b,Year 2024,July,Time Adjusted Capacity (MW),1678.1
+epa_04_08_b,Year 2024,July,Capacity Factor,0.485
+epa_04_08_b,Year 2024,July,Time Adjusted Capacity (MW),103886.6
+epa_04_08_b,Year 2024,July,Capacity Factor,0.303
+epa_04_08_b,Year 2024,July,Time Adjusted Capacity (MW),1392
+epa_04_08_b,Year 2024,July,Capacity Factor,0.337
+epa_04_08_b,Year 2024,July,Time Adjusted Capacity (MW),149419.7
+epa_04_08_b,Year 2024,July,Capacity Factor,0.252
+epa_04_08_b,Year 2024,July,Time Adjusted Capacity (MW),7481.9
+epa_04_08_b,Year 2024,July,Capacity Factor,0.574
+epa_04_08_b,Year 2024,August,Time Adjusted Capacity (MW),2695.5
+epa_04_08_b,Year 2024,August,Capacity Factor,0.608
+epa_04_08_b,Year 2024,August,Time Adjusted Capacity (MW),79884.2
+epa_04_08_b,Year 2024,August,Capacity Factor,0.345
+epa_04_08_b,Year 2024,August,Time Adjusted Capacity (MW),98391.2
+epa_04_08_b,Year 2024,August,Capacity Factor,0.953
+epa_04_08_b,Year 2024,August,Time Adjusted Capacity (MW),4034.3
+epa_04_08_b,Year 2024,August,Capacity Factor,0.621
+epa_04_08_b,Year 2024,August,Time Adjusted Capacity (MW),1678.1
+epa_04_08_b,Year 2024,August,Capacity Factor,0.499
+epa_04_08_b,Year 2024,August,Time Adjusted Capacity (MW),104868.2
+epa_04_08_b,Year 2024,August,Capacity Factor,0.297
+epa_04_08_b,Year 2024,August,Time Adjusted Capacity (MW),1392
+epa_04_08_b,Year 2024,August,Capacity Factor,0.331
+epa_04_08_b,Year 2024,August,Time Adjusted Capacity (MW),150120.2
+epa_04_08_b,Year 2024,August,Capacity Factor,0.261
+epa_04_08_b,Year 2024,August,Time Adjusted Capacity (MW),7481.9
+epa_04_08_b,Year 2024,August,Capacity Factor,0.582
+epa_04_08_b,Year 2024,September,Time Adjusted Capacity (MW),2695.5
+epa_04_08_b,Year 2024,September,Capacity Factor,0.615
+epa_04_08_b,Year 2024,September,Time Adjusted Capacity (MW),79884.2
+epa_04_08_b,Year 2024,September,Capacity Factor,0.277
+epa_04_08_b,Year 2024,September,Time Adjusted Capacity (MW),98391.2
+epa_04_08_b,Year 2024,September,Capacity Factor,0.885
+epa_04_08_b,Year 2024,September,Time Adjusted Capacity (MW),4037.5
+epa_04_08_b,Year 2024,September,Capacity Factor,0.599
+epa_04_08_b,Year 2024,September,Time Adjusted Capacity (MW),1678.1
+epa_04_08_b,Year 2024,September,Capacity Factor,0.494
+epa_04_08_b,Year 2024,September,Time Adjusted Capacity (MW),106071.6
+epa_04_08_b,Year 2024,September,Capacity Factor,0.254
+epa_04_08_b,Year 2024,September,Time Adjusted Capacity (MW),1392
+epa_04_08_b,Year 2024,September,Capacity Factor,0.327
+epa_04_08_b,Year 2024,September,Time Adjusted Capacity (MW),150470.4
+epa_04_08_b,Year 2024,September,Capacity Factor,0.269
+epa_04_08_b,Year 2024,September,Time Adjusted Capacity (MW),7481.9
+epa_04_08_b,Year 2024,September,Capacity Factor,0.545
+epa_04_08_b,Year 2024,October,Time Adjusted Capacity (MW),2695.5
+epa_04_08_b,Year 2024,October,Capacity Factor,0.624
+epa_04_08_b,Year 2024,October,Time Adjusted Capacity (MW),79874.9
+epa_04_08_b,Year 2024,October,Capacity Factor,0.258
+epa_04_08_b,Year 2024,October,Time Adjusted Capacity (MW),98391.2
+epa_04_08_b,Year 2024,October,Capacity Factor,0.803
+epa_04_08_b,Year 2024,October,Time Adjusted Capacity (MW),4037.5
+epa_04_08_b,Year 2024,October,Capacity Factor,0.587
+epa_04_08_b,Year 2024,October,Time Adjusted Capacity (MW),1678.1
+epa_04_08_b,Year 2024,October,Capacity Factor,0.457
+epa_04_08_b,Year 2024,October,Time Adjusted Capacity (MW),108568.7
+epa_04_08_b,Year 2024,October,Capacity Factor,0.231
+epa_04_08_b,Year 2024,October,Time Adjusted Capacity (MW),1392
+epa_04_08_b,Year 2024,October,Capacity Factor,0.228
+epa_04_08_b,Year 2024,October,Time Adjusted Capacity (MW),150623.5
+epa_04_08_b,Year 2024,October,Capacity Factor,0.353
+epa_04_08_b,Year 2024,October,Time Adjusted Capacity (MW),7417.2
+epa_04_08_b,Year 2024,October,Capacity Factor,0.478
+epa_04_08_b,Year 2024,November,Time Adjusted Capacity (MW),2695.5
+epa_04_08_b,Year 2024,November,Capacity Factor,0.673
+epa_04_08_b,Year 2024,November,Time Adjusted Capacity (MW),79874.9
+epa_04_08_b,Year 2024,November,Capacity Factor,0.291
+epa_04_08_b,Year 2024,November,Time Adjusted Capacity (MW),98391.2
+epa_04_08_b,Year 2024,November,Capacity Factor,0.874
+epa_04_08_b,Year 2024,November,Time Adjusted Capacity (MW),4037.5
+epa_04_08_b,Year 2024,November,Capacity Factor,0.604
+epa_04_08_b,Year 2024,November,Time Adjusted Capacity (MW),1678.1
+epa_04_08_b,Year 2024,November,Capacity Factor,0.487
+epa_04_08_b,Year 2024,November,Time Adjusted Capacity (MW),111404.8
+epa_04_08_b,Year 2024,November,Capacity Factor,0.162
+epa_04_08_b,Year 2024,November,Time Adjusted Capacity (MW),1392
+epa_04_08_b,Year 2024,November,Capacity Factor,0.138
+epa_04_08_b,Year 2024,November,Time Adjusted Capacity (MW),150623.5
+epa_04_08_b,Year 2024,November,Capacity Factor,0.369
+epa_04_08_b,Year 2024,November,Time Adjusted Capacity (MW),7374.8
+epa_04_08_b,Year 2024,November,Capacity Factor,0.559
+epa_04_08_b,Year 2024,December,Time Adjusted Capacity (MW),2695.5
+epa_04_08_b,Year 2024,December,Capacity Factor,0.688
+epa_04_08_b,Year 2024,December,Time Adjusted Capacity (MW),79897
+epa_04_08_b,Year 2024,December,Capacity Factor,0.329
+epa_04_08_b,Year 2024,December,Time Adjusted Capacity (MW),98391.2
+epa_04_08_b,Year 2024,December,Capacity Factor,0.973
+epa_04_08_b,Year 2024,December,Time Adjusted Capacity (MW),3997
+epa_04_08_b,Year 2024,December,Capacity Factor,0.6
+epa_04_08_b,Year 2024,December,Time Adjusted Capacity (MW),1678.1
+epa_04_08_b,Year 2024,December,Capacity Factor,0.496
+epa_04_08_b,Year 2024,December,Time Adjusted Capacity (MW),116407.3
+epa_04_08_b,Year 2024,December,Capacity Factor,0.138
+epa_04_08_b,Year 2024,December,Time Adjusted Capacity (MW),1392
+epa_04_08_b,Year 2024,December,Capacity Factor,0.117
+epa_04_08_b,Year 2024,December,Time Adjusted Capacity (MW),150620
+epa_04_08_b,Year 2024,December,Capacity Factor,0.35
+epa_04_08_b,Year 2024,December,Time Adjusted Capacity (MW),7374.8
+epa_04_08_b,Year 2024,December,Capacity Factor,0.587
+epa_04_08_b,Year 2025,January,Time Adjusted Capacity (MW),2678.5
+epa_04_08_b,Year 2025,January,Capacity Factor,0.699
+epa_04_08_b,Year 2025,January,Time Adjusted Capacity (MW),79985.3
+epa_04_08_b,Year 2025,January,Capacity Factor,0.347
+epa_04_08_b,Year 2025,January,Time Adjusted Capacity (MW),98377.3
+epa_04_08_b,Year 2025,January,Capacity Factor,0.983
+epa_04_08_b,Year 2025,January,Time Adjusted Capacity (MW),3981.7
+epa_04_08_b,Year 2025,January,Capacity Factor,0.588
+epa_04_08_b,Year 2025,January,Time Adjusted Capacity (MW),1832.5
+epa_04_08_b,Year 2025,January,Capacity Factor,0.567
+epa_04_08_b,Year 2025,January,Time Adjusted Capacity (MW),122494.7
+epa_04_08_b,Year 2025,January,Capacity Factor,0.162
+epa_04_08_b,Year 2025,January,Time Adjusted Capacity (MW),1392
+epa_04_08_b,Year 2025,January,Capacity Factor,0.086
+epa_04_08_b,Year 2025,January,Time Adjusted Capacity (MW),152951.6
+epa_04_08_b,Year 2025,January,Capacity Factor,0.374
+epa_04_08_b,Year 2025,January,Time Adjusted Capacity (MW),7393.7
+epa_04_08_b,Year 2025,January,Capacity Factor,0.594
+epa_04_08_b,Year 2025,February,Time Adjusted Capacity (MW),2678.5
+epa_04_08_b,Year 2025,February,Capacity Factor,0.678
+epa_04_08_b,Year 2025,February,Time Adjusted Capacity (MW),79985.3
+epa_04_08_b,Year 2025,February,Capacity Factor,0.351
+epa_04_08_b,Year 2025,February,Time Adjusted Capacity (MW),98377.3
+epa_04_08_b,Year 2025,February,Capacity Factor,0.936
+epa_04_08_b,Year 2025,February,Time Adjusted Capacity (MW),3978.5
+epa_04_08_b,Year 2025,February,Capacity Factor,0.607
+epa_04_08_b,Year 2025,February,Time Adjusted Capacity (MW),1832.5
+epa_04_08_b,Year 2025,February,Capacity Factor,0.552
+epa_04_08_b,Year 2025,February,Time Adjusted Capacity (MW),125781.4
+epa_04_08_b,Year 2025,February,Capacity Factor,0.187
+epa_04_08_b,Year 2025,February,Time Adjusted Capacity (MW),1392
+epa_04_08_b,Year 2025,February,Capacity Factor,0.15
+epa_04_08_b,Year 2025,February,Time Adjusted Capacity (MW),154271.5
+epa_04_08_b,Year 2025,February,Capacity Factor,0.372
+epa_04_08_b,Year 2025,February,Time Adjusted Capacity (MW),7393.7
+epa_04_08_b,Year 2025,February,Capacity Factor,0.605
+epa_04_08_b,Year 2025,March,Time Adjusted Capacity (MW),2673.2
+epa_04_08_b,Year 2025,March,Capacity Factor,0.645
+epa_04_08_b,Year 2025,March,Time Adjusted Capacity (MW),79985.3
+epa_04_08_b,Year 2025,March,Capacity Factor,0.382
+epa_04_08_b,Year 2025,March,Time Adjusted Capacity (MW),98377.3
+epa_04_08_b,Year 2025,March,Capacity Factor,0.854
+epa_04_08_b,Year 2025,March,Time Adjusted Capacity (MW),3978.5
+epa_04_08_b,Year 2025,March,Capacity Factor,0.57
+epa_04_08_b,Year 2025,March,Time Adjusted Capacity (MW),1832.5
+epa_04_08_b,Year 2025,March,Capacity Factor,0.511
+epa_04_08_b,Year 2025,March,Time Adjusted Capacity (MW),126946.8
+epa_04_08_b,Year 2025,March,Capacity Factor,0.236
+epa_04_08_b,Year 2025,March,Time Adjusted Capacity (MW),1392
+epa_04_08_b,Year 2025,March,Capacity Factor,0.165
+epa_04_08_b,Year 2025,March,Time Adjusted Capacity (MW),154625.9
+epa_04_08_b,Year 2025,March,Capacity Factor,0.431
+epa_04_08_b,Year 2025,March,Time Adjusted Capacity (MW),7393.7
+epa_04_08_b,Year 2025,March,Capacity Factor,0.551
+epa_04_08_b,Year 2025,April,Time Adjusted Capacity (MW),2673.2
+epa_04_08_b,Year 2025,April,Capacity Factor,0.681
+epa_04_08_b,Year 2025,April,Time Adjusted Capacity (MW),79989.4
+epa_04_08_b,Year 2025,April,Capacity Factor,0.408
+epa_04_08_b,Year 2025,April,Time Adjusted Capacity (MW),98377.3
+epa_04_08_b,Year 2025,April,Capacity Factor,0.818
+epa_04_08_b,Year 2025,April,Time Adjusted Capacity (MW),3978.5
+epa_04_08_b,Year 2025,April,Capacity Factor,0.569
+epa_04_08_b,Year 2025,April,Time Adjusted Capacity (MW),1832.5
+epa_04_08_b,Year 2025,April,Capacity Factor,0.477
+epa_04_08_b,Year 2025,April,Time Adjusted Capacity (MW),129560.4
+epa_04_08_b,Year 2025,April,Capacity Factor,0.275
+epa_04_08_b,Year 2025,April,Time Adjusted Capacity (MW),1392
+epa_04_08_b,Year 2025,April,Capacity Factor,0.3
+epa_04_08_b,Year 2025,April,Time Adjusted Capacity (MW),154652.9
+epa_04_08_b,Year 2025,April,Capacity Factor,0.407
+epa_04_08_b,Year 2025,April,Time Adjusted Capacity (MW),7375.7
+epa_04_08_b,Year 2025,April,Capacity Factor,0.496
+epa_04_08_b,Year 2025,May,Time Adjusted Capacity (MW),2683.9
+epa_04_08_b,Year 2025,May,Capacity Factor,0.638
+epa_04_08_b,Year 2025,May,Time Adjusted Capacity (MW),79989.4
+epa_04_08_b,Year 2025,May,Capacity Factor,0.428
+epa_04_08_b,Year 2025,May,Time Adjusted Capacity (MW),98423.3
+epa_04_08_b,Year 2025,May,Capacity Factor,0.849
+epa_04_08_b,Year 2025,May,Time Adjusted Capacity (MW),3978.5
+epa_04_08_b,Year 2025,May,Capacity Factor,0.572
+epa_04_08_b,Year 2025,May,Time Adjusted Capacity (MW),1832.5
+epa_04_08_b,Year 2025,May,Capacity Factor,0.49
+epa_04_08_b,Year 2025,May,Time Adjusted Capacity (MW),131687.2
+epa_04_08_b,Year 2025,May,Capacity Factor,0.293
+epa_04_08_b,Year 2025,May,Time Adjusted Capacity (MW),1392
+epa_04_08_b,Year 2025,May,Capacity Factor,0.321
+epa_04_08_b,Year 2025,May,Time Adjusted Capacity (MW),154895.9
+epa_04_08_b,Year 2025,May,Capacity Factor,0.321
+epa_04_08_b,Year 2025,May,Time Adjusted Capacity (MW),7375.7
+epa_04_08_b,Year 2025,May,Capacity Factor,0.5
+epa_04_08_b,Year 2025,June,Time Adjusted Capacity (MW),2683.9
+epa_04_08_b,Year 2025,June,Capacity Factor,0.651
+epa_04_08_b,Year 2025,June,Time Adjusted Capacity (MW),79989.4
+epa_04_08_b,Year 2025,June,Capacity Factor,0.398
+epa_04_08_b,Year 2025,June,Time Adjusted Capacity (MW),98423.3
+epa_04_08_b,Year 2025,June,Capacity Factor,0.934
+epa_04_08_b,Year 2025,June,Time Adjusted Capacity (MW),3973.7
+epa_04_08_b,Year 2025,June,Capacity Factor,0.582
+epa_04_08_b,Year 2025,June,Time Adjusted Capacity (MW),1807.1
+epa_04_08_b,Year 2025,June,Capacity Factor,0.576
+epa_04_08_b,Year 2025,June,Time Adjusted Capacity (MW),133077.6
+epa_04_08_b,Year 2025,June,Capacity Factor,0.319
+epa_04_08_b,Year 2025,June,Time Adjusted Capacity (MW),1392
+epa_04_08_b,Year 2025,June,Capacity Factor,0.392
+epa_04_08_b,Year 2025,June,Time Adjusted Capacity (MW),155113.3
+epa_04_08_b,Year 2025,June,Capacity Factor,0.322
+epa_04_08_b,Year 2025,June,Time Adjusted Capacity (MW),7375.7
+epa_04_08_b,Year 2025,June,Capacity Factor,0.557
+epa_04_08_b,Year 2025,July,Time Adjusted Capacity (MW),2683.9
+epa_04_08_b,Year 2025,July,Capacity Factor,0.635
+epa_04_08_b,Year 2025,July,Time Adjusted Capacity (MW),79984.1
+epa_04_08_b,Year 2025,July,Capacity Factor,0.342
+epa_04_08_b,Year 2025,July,Time Adjusted Capacity (MW),98423.3
+epa_04_08_b,Year 2025,July,Capacity Factor,0.967
+epa_04_08_b,Year 2025,July,Time Adjusted Capacity (MW),3973.7
+epa_04_08_b,Year 2025,July,Capacity Factor,0.596
+epa_04_08_b,Year 2025,July,Time Adjusted Capacity (MW),1807.1
+epa_04_08_b,Year 2025,July,Capacity Factor,0.622
+epa_04_08_b,Year 2025,July,Time Adjusted Capacity (MW),135620.1
+epa_04_08_b,Year 2025,July,Capacity Factor,0.319
+epa_04_08_b,Year 2025,July,Time Adjusted Capacity (MW),1392
+epa_04_08_b,Year 2025,July,Capacity Factor,0.361
+epa_04_08_b,Year 2025,July,Time Adjusted Capacity (MW),155653.7
+epa_04_08_b,Year 2025,July,Capacity Factor,0.275
+epa_04_08_b,Year 2025,July,Time Adjusted Capacity (MW),7288.7
+epa_04_08_b,Year 2025,July,Capacity Factor,0.587
+epa_04_08_b,Year 2025,August,Time Adjusted Capacity (MW),2683.9
+epa_04_08_b,Year 2025,August,Capacity Factor,0.633
+epa_04_08_b,Year 2025,August,Time Adjusted Capacity (MW),79982.4
+epa_04_08_b,Year 2025,August,Capacity Factor,0.323
+epa_04_08_b,Year 2025,August,Time Adjusted Capacity (MW),98423.3
+epa_04_08_b,Year 2025,August,Capacity Factor,0.966
+epa_04_08_b,Year 2025,August,Time Adjusted Capacity (MW),3973.7
+epa_04_08_b,Year 2025,August,Capacity Factor,0.596
+epa_04_08_b,Year 2025,August,Time Adjusted Capacity (MW),1807.1
+epa_04_08_b,Year 2025,August,Capacity Factor,0.59
+epa_04_08_b,Year 2025,August,Time Adjusted Capacity (MW),137041.3
+epa_04_08_b,Year 2025,August,Capacity Factor,0.297
+epa_04_08_b,Year 2025,August,Time Adjusted Capacity (MW),1392
+epa_04_08_b,Year 2025,August,Capacity Factor,0.328
+epa_04_08_b,Year 2025,August,Time Adjusted Capacity (MW),155831.3
+epa_04_08_b,Year 2025,August,Capacity Factor,0.238
+epa_04_08_b,Year 2025,August,Time Adjusted Capacity (MW),7288.7
+epa_04_08_b,Year 2025,August,Capacity Factor,0.58
+epa_04_08_b,Year 2025,September,Time Adjusted Capacity (MW),2683.9
+epa_04_08_b,Year 2025,September,Capacity Factor,0.639
+epa_04_08_b,Year 2025,September,Time Adjusted Capacity (MW),79982.4
+epa_04_08_b,Year 2025,September,Capacity Factor,0.261
+epa_04_08_b,Year 2025,September,Time Adjusted Capacity (MW),98423.3
+epa_04_08_b,Year 2025,September,Capacity Factor,0.924
+epa_04_08_b,Year 2025,September,Time Adjusted Capacity (MW),3976.9
+epa_04_08_b,Year 2025,September,Capacity Factor,0.568
+epa_04_08_b,Year 2025,September,Time Adjusted Capacity (MW),1807.1
+epa_04_08_b,Year 2025,September,Capacity Factor,0.572
+epa_04_08_b,Year 2025,September,Time Adjusted Capacity (MW),139544.1
+epa_04_08_b,Year 2025,September,Capacity Factor,0.267
+epa_04_08_b,Year 2025,September,Time Adjusted Capacity (MW),1392
+epa_04_08_b,Year 2025,September,Capacity Factor,0.257
+epa_04_08_b,Year 2025,September,Time Adjusted Capacity (MW),156051.5
+epa_04_08_b,Year 2025,September,Capacity Factor,0.231
+epa_04_08_b,Year 2025,September,Time Adjusted Capacity (MW),7191.5
+epa_04_08_b,Year 2025,September,Capacity Factor,0.545
+epa_04_08_b,Year 2025,October,Time Adjusted Capacity (MW),2683.9
+epa_04_08_b,Year 2025,October,Capacity Factor,0.661
+epa_04_08_b,Year 2025,October,Time Adjusted Capacity (MW),79981.9
+epa_04_08_b,Year 2025,October,Capacity Factor,0.249
+epa_04_08_b,Year 2025,October,Time Adjusted Capacity (MW),98423.3
+epa_04_08_b,Year 2025,October,Capacity Factor,0.81
+epa_04_08_b,Year 2025,October,Time Adjusted Capacity (MW),3969.8
+epa_04_08_b,Year 2025,October,Capacity Factor,0.564
+epa_04_08_b,Year 2025,October,Time Adjusted Capacity (MW),1807.1
+epa_04_08_b,Year 2025,October,Capacity Factor,0.551
+epa_04_08_b,Year 2025,October,Time Adjusted Capacity (MW),142022.9
+epa_04_08_b,Year 2025,October,Capacity Factor,0.224
+epa_04_08_b,Year 2025,October,Time Adjusted Capacity (MW),1392
+epa_04_08_b,Year 2025,October,Capacity Factor,0.227
+epa_04_08_b,Year 2025,October,Time Adjusted Capacity (MW),156241.5
+epa_04_08_b,Year 2025,October,Capacity Factor,0.338
+epa_04_08_b,Year 2025,October,Time Adjusted Capacity (MW),7148.4
+epa_04_08_b,Year 2025,October,Capacity Factor,0.51
+epa_04_08_b,Year 2025,November,Time Adjusted Capacity (MW),2683.9
+epa_04_08_b,Year 2025,November,Capacity Factor,0.667
+epa_04_08_b,Year 2025,November,Time Adjusted Capacity (MW),79981.9
+epa_04_08_b,Year 2025,November,Capacity Factor,0.285
+epa_04_08_b,Year 2025,November,Time Adjusted Capacity (MW),98423.3
+epa_04_08_b,Year 2025,November,Capacity Factor,0.902
+epa_04_08_b,Year 2025,November,Time Adjusted Capacity (MW),3969.4
+epa_04_08_b,Year 2025,November,Capacity Factor,0.601
+epa_04_08_b,Year 2025,November,Time Adjusted Capacity (MW),1773.1
+epa_04_08_b,Year 2025,November,Capacity Factor,0.51
+epa_04_08_b,Year 2025,November,Time Adjusted Capacity (MW),143657.7
+epa_04_08_b,Year 2025,November,Capacity Factor,0.169
+epa_04_08_b,Year 2025,November,Time Adjusted Capacity (MW),1392
+epa_04_08_b,Year 2025,November,Capacity Factor,0.131
+epa_04_08_b,Year 2025,November,Time Adjusted Capacity (MW),156679.6
+epa_04_08_b,Year 2025,November,Capacity Factor,0.354
+epa_04_08_b,Year 2025,November,Time Adjusted Capacity (MW),7148.4
+epa_04_08_b,Year 2025,November,Capacity Factor,0.567
+epa_04_08_b,Year 2025,December,Time Adjusted Capacity (MW),2683.9
+epa_04_08_b,Year 2025,December,Capacity Factor,0.687
+epa_04_08_b,Year 2025,December,Time Adjusted Capacity (MW),79971.1
+epa_04_08_b,Year 2025,December,Capacity Factor,0.361
+epa_04_08_b,Year 2025,December,Time Adjusted Capacity (MW),98423.3
+epa_04_08_b,Year 2025,December,Capacity Factor,0.992
+epa_04_08_b,Year 2025,December,Time Adjusted Capacity (MW),3960.6
+epa_04_08_b,Year 2025,December,Capacity Factor,0.595
+epa_04_08_b,Year 2025,December,Time Adjusted Capacity (MW),1773.1
+epa_04_08_b,Year 2025,December,Capacity Factor,0.483
+epa_04_08_b,Year 2025,December,Time Adjusted Capacity (MW),146284.8
+epa_04_08_b,Year 2025,December,Capacity Factor,0.131
+epa_04_08_b,Year 2025,December,Time Adjusted Capacity (MW),1392
+epa_04_08_b,Year 2025,December,Capacity Factor,0.115
+epa_04_08_b,Year 2025,December,Time Adjusted Capacity (MW),157096.3
+epa_04_08_b,Year 2025,December,Capacity Factor,0.392
+epa_04_08_b,Year 2025,December,Time Adjusted Capacity (MW),7103.9
+epa_04_08_b,Year 2025,December,Capacity Factor,0.61

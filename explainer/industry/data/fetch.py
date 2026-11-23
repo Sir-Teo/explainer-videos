@@ -268,7 +268,9 @@ EIA_TABLES = {"epa_04_03": "capacity by energy source, 2025 (MW)", "epa_03_01_a"
               "(thousand MWh)", "epa_07_04": "average cost of fossil fuels ($/MMBtu)", "epa_08_01": "average operating "
               "heat rate (Btu/kWh)", "epa_08_02": "average tested heat rates by prime mover (Btu/kWh)",
               "epa_08_04": "operating expenses of major investor-owned utilities (mills/kWh)",
-              "epa_02_04": "average retail price of electricity (cents/kWh)"}
+              "epa_02_04": "average retail price of electricity (cents/kWh)",
+              "epa_04_08_a": "capacity factors of fossil-fuelled generators by technology",
+              "epa_04_08_b": "capacity factors of generators not primarily using fossil fuels"}
 
 
 def eia_power():
