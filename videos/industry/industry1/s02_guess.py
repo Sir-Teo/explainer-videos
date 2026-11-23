@@ -46,13 +46,13 @@ class Guess(VoiceoverScene):
             vo.wait_until("g")
             self.play(FadeIn(total), FadeIn(pause))
         self.wait(3.5)
-        nxt = VGroup(T("a year later its successor costs $1,199:", 22, I.MEMORY), T("chapter 9 says why", 22,
+        nxt = VGroup(T("a year later its successor costs $1,199:", 22, I.MEMORY), T("chapter 12 says why", 22,
                      I.MEMORY)).arrange(DOWN, aligned_edge=LEFT, buff=0.06).next_to(total, RIGHT, buff=0.6)
         with self.voiceover(
             "Most people guess that either the factory or Apple gets most of it. Hold on to your numbers: we will "
             "check them in chapter five. <bookmark mark='a'/> And notice the date. A year later, the same phone's "
             "successor went on sale for 1,199 dollars. Why it cost a hundred dollars more is the story of chapter "
-            "nine, and it changes who gets the money."
+            "twelve, and it changes who gets the money."
         ) as vo:
             self.play(*[Indicate(r[0], color=I.MONEY, scale_factor=1.05) for r in rows], run_time=1.5)
             vo.wait_until("a")

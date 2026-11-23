@@ -27,8 +27,8 @@ MAP = [
 
 class Map(VoiceoverScene):
     def construct(self):
-        card(self, 11, "The landscape", "Who are the companies, and where are they?",
-             "Chapter eleven. The landscape.", lit=("moat",))
+        card(self, 14, "The landscape", "Who are the companies, and where are they?",
+             "Chapter fourteen. The landscape.", lit=("moat",))
         self.grid()
 
     def grid(self):
@@ -65,7 +65,7 @@ class Map(VoiceoverScene):
             "<bookmark mark='g'/> Modems and radio parts: mostly American and Japanese companies. <bookmark mark='h'/> "
             "And assembly: Taiwanese, Chinese and now Indian contract manufacturers. <bookmark mark='i'/> Two things "
             "stand out. The rows where very few names appear, making the chips and making memory, are the rows where "
-            "the margins were highest in chapter six and chapter nine. And Chinese companies appear in almost every "
+            "the margins were highest in chapter seven and chapter twelve. And Chinese companies appear in almost every "
             "row; what China lacks is the most advanced chip making. Since American export rules cut Huawei off "
             "from TSMC in 2020, its phones have run on processors made by SMIC on an older process."
         ) as vo:

@@ -16,5 +16,8 @@ industryN` checks a part's rows.
 | Omdia: Africa smartphone shipments, 2025 (as reported by TelecomLead) | tracker | as reported | Part 1 |
 | Linden, Kraemer and Dedrick (2007), *Who Captures Value in a Global Innovation System? The case of Apple's iPod*, eScholarship (UC Irvine) | study | open access | Part 1 |
 | Xing and Detert (2010), *How the iPhone Widens the United States Trade Deficit with the People's Republic of China*, ADBI Working Paper 257 | study | open access | Part 1 |
+| T-Mobile US and AT&T Forms 10-K, 2025 (equipment and service revenues and costs) | filing | public domain | Part 1 |
+| Apple Newsroom, results release of 2026-01-29 (installed base of 2.5 billion active devices) | filing | the company's public release | Part 1 |
+| *United States v. Google LLC*, memorandum opinion, D.D.C., 2024-08-05 (Google's payment to Apple), as reported by NPR | official | public court record | Part 1 |
 | FRED: DEXCHUS, DEXKOUS (daily exchange rates, averaged by year) | official | public domain (Federal Reserve Board H.10) | Part 1 |
 | Apple list prices as reported by MacRumors (2026-09-09, 2026-09-12) | press | as reported | Part 1 |

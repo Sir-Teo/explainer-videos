@@ -340,3 +340,42 @@ add(
         "Counterpoint Research, via 9to5Mac 2026-07-31", "https://9to5mac.com/2026/07/31/report-apple-hit-a-record-49-"
         "share-of-global-smartphone-revenue-for-q2/", "2026-Q2", C, "tracker"),
 )
+
+TMUS_10K = "https://www.sec.gov/Archives/edgar/data/1283699/000128369926000010/tmus-20251231.htm"
+ATT_10K = "https://www.sec.gov/Archives/edgar/data/732717/000073271726000120/t-20251231.htm"
+add(
+    # --- the carriers (chapter 6) -----------------------------------------------------------------------------------
+    Row("tmus.equipment_rev.2025", 15.972, "USD bn", "T-Mobile US equipment revenues, 2025", "T-Mobile US Form 10-K "
+        "2025, consolidated statement of operations", TMUS_10K, "2025", C),
+    Row("tmus.equipment_cost.2025", 21.277, "USD bn", "T-Mobile US cost of equipment sales, 2025", "T-Mobile US Form "
+        "10-K 2025", TMUS_10K, "2025", C),
+    Row("tmus.service_rev.2025", 71.306, "USD bn", "T-Mobile US total service revenues, 2025", "T-Mobile US Form 10-K "
+        "2025", TMUS_10K, "2025", C),
+    Row("tmus.service_cost.2025", 11.497, "USD bn", "T-Mobile US cost of services (excluding depreciation), 2025",
+        "T-Mobile US Form 10-K 2025", TMUS_10K, "2025", C),
+    Row("att.equipment_rev.2025", 24.490, "USD bn", "AT&T equipment revenues, 2025 (service revenues $101.158bn)",
+        "AT&T Form 10-K 2025", ATT_10K, "2025", C),
+    # --- after the sale (chapter 8) ----------------------------------------------------------------------------------
+    Row("apple.installed_base.2026", 2.5, "billion devices", "Apple's installed base of active devices, \"more than "
+        "2.5 billion\", announced with its results for the quarter to December 2025", "Apple Newsroom, Apple reports "
+        "first quarter results, 2026-01-29", "https://www.apple.com/newsroom/2026/01/apple-reports-first-quarter-"
+        "results/", "2026-01", C),
+    Row("google.pays_apple.2022", 20, "USD bn", "Google's estimated payment to Apple in 2022 to be Safari's default "
+        "search engine (about double 2020's)", "United States v. Google LLC, memorandum opinion, D.D.C., 2024-08-05, "
+        "as reported by NPR", "https://www.npr.org/2024/08/05/nx-s1-5064624/google-justice-department-antitrust-"
+        "search", "2022", C, "official"),
+    Row("apple.app_store_commission", 0.30, "share", "Apple's standard App Store commission on digital goods (15% for "
+        "small developers and for subscriptions after their first year)", "Apple, App Store Review Guidelines and "
+        "Small Business Program", "https://developer.apple.com/app-store/small-business-program/", "2026", C),
+    # --- memory's boom and bust (chapter 11) --------------------------------------------------------------------------
+    Row("micron.gm.history", 0, "share", "Micron gross margin by fiscal year (to late August or early September): "
+        "2016 20.2%, 2017 41.5%, 2018 58.9%, 2019 45.7%, 2020 30.6%, 2021 37.6%, 2022 45.2%, 2023 -9.1%, 2024 22.4%, "
+        "2025 39.8%, 2026 80.7%; revenue $12.4bn, 20.3, 30.4, 23.4, 21.4, 27.7, 30.8, 15.5, 25.1, 37.4, 133.2",
+        "Micron Forms 10-K, FY2016-FY2026 (XBRL company facts: revenue, gross profit or cost of goods sold)",
+        EDGAR + "0000723125&type=10-K", "FY2016-FY2026", C),
+)
+
+add(
+    Row("apple.gross_profit.fy2026", 233.602, "USD bn", "Apple total gross margin (gross profit), FY2026; services "
+        "$93.943bn of it", "Apple Form 10-K FY2026", APPLE_10K_26, "FY2026", C),
+)

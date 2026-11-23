@@ -9,8 +9,8 @@ BRAND_COL = {"Apple": I.BRAND, "Samsung": "#4FC3A1", "Xiaomi": I.CHANNEL, "vivo"
 
 class TwoPhones(VoiceoverScene):
     def construct(self):
-        card(self, 7, "Three phones, three businesses", "Does every phone maker earn like Apple?",
-             "Chapter seven. Three phones, three businesses.", lit=("unit", "moat"))
+        card(self, 9, "Three phones, three businesses", "Does every phone maker earn like Apple?",
+             "Chapter nine. Three phones, three businesses.", lit=("unit", "moat"))
         self.shares()
         self.perphone()
 

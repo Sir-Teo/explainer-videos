@@ -6,8 +6,8 @@ from videos.industry.industry1.common import *  # noqa: F403
 
 class Scarce(VoiceoverScene):
     def construct(self):
-        card(self, 6, "Why the profit sits where it does", "Why does Apple keep 244 dollars and the factory 30?",
-             "Chapter six. Why the profit sits where it does.", lit=("moat",))
+        card(self, 7, "Why the profit sits where it does", "Why does Apple keep 244 dollars and the factory 30?",
+             "Chapter seven. Why the profit sits where it does.", lit=("moat",))
         self.margin()
         self.ladder()
         self.groups()
@@ -34,7 +34,6 @@ class Scarce(VoiceoverScene):
             "product; operating margin is what is left after research, selling and overheads as well. Every company "
             "in the phone's chain publishes one or the other, and the numbers tell a story."
         ) as vo:
-            vo.wait_until("a")
             self.play(FadeIn(bar), FadeIn(l0))
             vo.wait_until("b")
             self.play(GrowFromEdge(cost, LEFT), FadeIn(l1))
@@ -111,6 +110,8 @@ class Scarce(VoiceoverScene):
             blocks.scale_to_fit_width(13.0)
         blocks.move_to(UP * 0.2)
         rule = T("The link that is hardest to replace keeps the most.", 28, I.ACCENT).to_edge(DOWN, buff=0.55)
+        ask = T("If this company stopped selling to Apple, how many others could take its place?", 24, I.DIM
+                ).to_edge(UP, buff=0.45)
         with self.voiceover(
             "Sort the links by a different question: if this company stopped selling to Apple tomorrow, how many "
             "others could take its place? <bookmark mark='a'/> For Apple's main processor, on the newest "
@@ -124,6 +125,7 @@ class Scarce(VoiceoverScene):
             "the most. Economists call this bargaining power; the business literature calls it a moat. Part five of "
             "this series is about moats."
         ) as vo:
+            self.play(FadeIn(ask, shift=DOWN * 0.1))
             vo.wait_until("a")
             self.play(FadeIn(blocks[0], shift=UP * 0.1))
             vo.wait_until("b")
@@ -146,7 +148,7 @@ class Scarce(VoiceoverScene):
                      I.TEXT), T("customers vertically integrating (i.e., developing their own integrated circuit "
                      "products).”", 20, I.TEXT), T("Qualcomm, Form 10-K, fiscal 2026, risk factors", 17, I.DIM)
                    ).arrange(DOWN, aligned_edge=LEFT, buff=0.08).move_to(DOWN * 1.2)
-        tail = T("A scarce link can be designed away, and a plentiful one can become scarce: chapter 9.", 22,
+        tail = T("A scarce link can be designed away, and a plentiful one can become scarce: chapter 12.", 22,
                  I.ACCENT).to_edge(DOWN, buff=0.5)
         src = source("Apple Newsroom (2010, 2025); Qualcomm Form 10-K FY2026", corner=UR)
         with self.voiceover(
@@ -154,7 +156,7 @@ class Scarce(VoiceoverScene):
             "its own processor in the iPhone, the A4. In 2025 it began replacing Qualcomm's modem with its own, "
             "called C1, and its suppliers' wireless chip with its own, called N1. <bookmark mark='b'/> Qualcomm "
             "lists this as a risk in its annual report: its business may suffer if customers develop their own "
-            "chips. <bookmark mark='c'/> A scarce link can be designed away. And, as we will see in chapter nine, "
+            "chips. <bookmark mark='c'/> A scarce link can be designed away. And, as we will see in chapter twelve, "
             "a plentiful link can suddenly become scarce."
         ) as vo:
             self.play(FadeIn(src), FadeIn(head))

@@ -23,14 +23,20 @@ whole factory value as a Chinese export. From there it covers:
 - the Dollar of one phone: about $66 to the shop or carrier, $520 to the parts, $30 to assembly, $40 to shipping,
   warranty and licences, $154 to Apple's research and selling, $45 to tax, and about $244 of profit to Apple (range
   $148 to $357), checked against Apple's company-wide 28 cents of profit per dollar of sales;
+- the carrier's side: in 2025 T-Mobile sold phones for $16.0bn that cost it $21.3bn, and earned $71.3bn on its
+  plans; for a carrier the phone is the bait and the monthly bill the business;
 - why the profit sits where it does: the margins each link reports, from Foxconn's 6% gross to Apple's services'
   76%; the links that are hardest to replace keep the most; and the customer fights back by making its own chips;
+- after the sale: Apple's services were a quarter of its fiscal 2026 sales and 40% of its gross profit ($94bn),
+  about $38 of gross profit per active device a year, Google's estimated $20bn in 2022 among it;
 - three phones, three businesses: about $859 of revenue and $316 of gross profit per iPhone, against $157 and $17 per
   Xiaomi phone and $72 and $14 per Transsion phone;
 - an intermission: iPhone sales by fiscal year, 2008 to 2026;
 - made where?: the iPhone 3G's $178.96 booked as a Chinese import, of which $6.50 was Chinese value added; the move of
   assembly to India and the 2025 tariffs; what moves in the statistics (about $590 a phone) against what moves in
   value added (about $30);
+- memory's boom and bust: Micron's gross margin from 20% (2016) to 59% (2018) to -9% (2023) to 81% (2026), and
+  why a commodity made in a few huge factories cycles;
 - the 2026 memory shock: memory prices up five- to sevenfold; memory from a tenth of an iPhone Pro's parts to a third;
   Micron's gross margin from 40% to 81%; the memory makers' gross profit per Pro phone from about $21 to about $197;
   Samsung's chip division earning 106.5 trillion won in a quarter while its phone division lost money; shipments down
@@ -63,14 +69,17 @@ date it describes and the date it was checked; `compute.py` does arithmetic on t
 | 3 | What the parts cost | The bill of materials; one more phone against the next design; what a teardown misses |
 | 4 | Counting the money once | Sales double-count; value added sums to the price |
 | 5 | Follow the dollar | The Dollar of one phone; the guess checked |
-| 6 | Why the profit sits where it does | Margins from filings; the hard-to-replace links; designing a link away |
-| 7 | Three phones, three businesses | 2025 shares; revenue and gross profit per phone: Apple, Xiaomi, Transsion |
+| 6 | The carrier's side of the deal | T-Mobile sells phones below cost and earns on the plan; what that means for the shop's slice |
+| 7 | Why the profit sits where it does | Margins from filings; the hard-to-replace links; designing a link away |
+| 8 | After the sale | Apple's services: a quarter of its sales, 40% of its gross profit; the App Store, Google's payment |
+| 9 | Three phones, three businesses | 2025 shares; revenue and gross profit per phone: Apple, Xiaomi, Transsion |
 | — | Intermission | iPhone sales by fiscal year, 2008-2026; the story so far |
-| 8 | Made where? | Gross trade against value added; India and the tariffs |
-| 9 | 2026: the memory shock | AI memory; the bill of a Pro; the memory makers' margins; Samsung's two halves; the market |
-| 10 | Who pays for the memory? | Price rises against memory-cost rises by storage size; Apple's margin |
-| 11 | The landscape, November 2026 | The companies in each link, by region |
-| 12 | Called it? | Ballmer, 2007; this series' call for 2026 |
+| 10 | Made where? | Gross trade against value added; India and the tariffs |
+| 11 | Memory's boom and bust | Micron's gross margin, fiscal 2016-2026; why commodity memory cycles |
+| 12 | 2026: the memory shock | AI memory; the bill of a Pro; the memory makers' margins; Samsung's two halves; the market |
+| 13 | Who pays for the memory? | Price rises against memory-cost rises by storage size; Apple's margin |
+| 14 | The landscape, November 2026 | The companies in each link, by region |
+| 15 | Called it? | Ballmer, 2007; this series' call for 2026 |
 | — | The five questions, answered | The answers for the phone; next, Part 2 |
 
 ## What is computed, and from what
@@ -137,6 +146,14 @@ Apple's revenue per phone (about $859) is several times the industry's average, 
 times its share of units, and its share of profit (85% of operating profit in Q2 2023, by Counterpoint's estimate) is
 higher still, because its margin per phone is higher too.
 
+**7.** *In 2025 T-Mobile's equipment revenues were $15.972bn and its cost of equipment sales $21.277bn; its service
+revenues were $71.306bn and its cost of services $11.497bn. What did it lose on equipment, and what share of service
+revenue was left after the direct cost of the network? Why does a carrier accept the first to get the second?*
+
+*Solution.* Equipment lost $21.277bn - $15.972bn = $5.305bn. Service kept ($71.306bn - $11.497bn) / $71.306bn, about
+84% before depreciation, selling and overheads. A discounted phone wins or keeps a customer who pays every month for
+years; the carrier treats the discount as the cost of acquiring that stream, as a razor maker treats a cheap razor.
+
 ## Glossary
 
 - **Bill of materials (BOM):** the cost of all the parts in a product, as estimated by a teardown.
@@ -162,7 +179,8 @@ Every figure is in the Register (`explainer/industry/data/rows_p01.py`) with its
 
 - Apple Form 10-K, fiscal 2010 to 2026 (net sales by category, units to fiscal 2018, margins, operating expenses, tax,
   channels, manufacturing locations, tariffs, supply constraints); Qualcomm, Micron, Skyworks, Broadcom and Corning
-  Forms 10-K; TSMC Form 6-K (Q3 2026) and Q4 2025 release.
+  Forms 10-K; TSMC Form 6-K (Q3 2026) and Q4 2025 release; T-Mobile US and AT&T Forms 10-K (2025); Apple's
+  results release of 29 January 2026 (installed base).
 - Samsung Electronics results (FY2025, Q3 2026); SK hynix 3Q26 results; Xiaomi 2025 annual results (HKEX); Hon Hai,
   Sony and Transsion results as reported.
 - IDC Worldwide Quarterly Mobile Phone Tracker releases (13 January 2026; 28 August 2026); Counterpoint Research
@@ -171,5 +189,7 @@ Every figure is in the Register (`explainer/industry/data/rows_p01.py`) with its
 - Linden, Kraemer and Dedrick (2007), *Who Captures Value in a Global Innovation System? The case of Apple's iPod*;
   Xing and Detert (2010), ADBI Working Paper 257.
 - FRED: average exchange rates (DEXCHUS, DEXKOUS).
+- *United States v. Google LLC*, memorandum opinion (D.D.C., 5 August 2024), as reported by NPR; Apple's App Store
+  guidelines and Small Business Program.
 - *Called it?*: Steve Ballmer at the USA Today CEO Forum, April 2007; this series' own call is in
   `explainer/industry/calls.py`.

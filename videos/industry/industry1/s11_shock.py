@@ -6,8 +6,8 @@ from videos.industry.industry1.common import *  # noqa: F403
 
 class Shock(VoiceoverScene):
     def construct(self):
-        card(self, 9, "2026: the memory shock", "What happens when one link suddenly becomes scarce?",
-             "Chapter nine. Twenty twenty-six: the memory shock.", lit=("change", "moat"))
+        card(self, 12, "2026: the memory shock", "What happens when one link suddenly becomes scarce?",
+             "Chapter twelve. Twenty twenty-six: the memory shock.", lit=("change", "moat"))
         self.why()
         self.bill()
         self.makers()
@@ -116,12 +116,13 @@ class Shock(VoiceoverScene):
             xl = T(yr, 16, I.DIM).next_to(pa.ax.c2p(i + 0.5, -0.2), DOWN, buff=0.1)
             bars.add(VGroup(r, lab, xl))
         M = R["memory"]
-        per = VGroup(T("What the memory makers keep from one iPhone Pro", 20, I.TEXT),
-                     VGroup(TB(money(M["kept17"]), 40, I.MEMORY), T("2025", 18, I.DIM)).arrange(DOWN, buff=0.04),
-                     VGroup(TB(money(M["kept18"]), 56, I.MEMORY), T("2026", 18, I.DIM)).arrange(DOWN, buff=0.04))
-        per[1:].arrange(RIGHT, buff=0.9)
-        per.arrange(DOWN, buff=0.3).move_to(RIGHT * 3.4 + UP * 0.6)
-        arr = Arrow(per[1].get_right(), per[2].get_left(), color=I.MEMORY, buff=0.15)
+        a17 = VGroup(TB(money(M["kept17"]), 40, I.MEMORY), T("2025", 18, I.DIM)).arrange(DOWN, buff=0.04)
+        a18 = VGroup(TB(money(M["kept18"]), 56, I.MEMORY), T("2026", 18, I.DIM)).arrange(DOWN, buff=0.04)
+        pair = VGroup(a17, a18).arrange(RIGHT, buff=1.1, aligned_edge=DOWN)
+        head = T("What the memory makers keep from one iPhone Pro", 20, I.TEXT)
+        VGroup(head, pair).arrange(DOWN, buff=0.3).move_to(RIGHT * 3.4 + UP * 0.6)
+        per = VGroup(head, a17, a18)
+        arr = Arrow(a17.get_right(), a18.get_left(), color=I.MEMORY, buff=0.15)
         hy = VGroup(T("SK hynix, Q3 2026:", 20, I.DIM), TB(f"{pct(get('skhynix.opm.q3_2026'))} operating margin", 22,
                     I.MEMORY)).arrange(RIGHT, buff=0.15).next_to(per, DOWN, buff=0.5)
         how = T("memory cost per phone × the makers' gross margin (Micron's)", 15, I.DIM).next_to(hy, DOWN, buff=0.3)

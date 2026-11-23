@@ -6,8 +6,8 @@ from videos.industry.industry1.common import *  # noqa: F403
 
 class Tiers(VoiceoverScene):
     def construct(self):
-        card(self, 10, "Who pays for the memory?", "How did Apple pass the bill on, and to whom?",
-             "Chapter ten. Who pays for the memory?", lit=("change", "dollar"))
+        card(self, 13, "Who pays for the memory?", "How did Apple pass the bill on, and to whom?",
+             "Chapter thirteen. Who pays for the memory?", lit=("change", "dollar"))
         self.tiers()
         self.margin()
 
@@ -87,9 +87,9 @@ class Tiers(VoiceoverScene):
             "offset by higher costs, including memory. <bookmark mark='c'/> But the iPhone 18 went on sale in the "
             "last two weeks of that fiscal year. The test of who pays for the memory is the year that has just begun."
         ) as vo:
-            self.play(FadeIn(src))
+            self.play(FadeIn(src), FadeIn(q[0]))
             vo.wait_until("a")
-            self.play(FadeIn(q))
+            self.play(FadeIn(q[1]))
             vo.wait_until("b")
             self.play(FadeIn(why, shift=UP * 0.1))
             vo.wait_until("c")

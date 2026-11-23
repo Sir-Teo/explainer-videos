@@ -25,6 +25,7 @@ class Outro(VoiceoverScene):
                 r.scale_to_fit_width(12.6)
             rows.add(r)
         rows.arrange(DOWN, aligned_edge=LEFT, buff=0.3).move_to(UP * 0.3).align_to(LEFT * 6.3, LEFT)
+        head = TB("The five questions, answered for the phone", 26, I.DIM).to_edge(UP, buff=0.35)
         verdict = VGroup(T("When you pay for a phone, the money goes to whoever is hardest to replace,", 25, I.MONEY),
                          T("and that can change in a single year.", 25, I.MONEY)).arrange(DOWN, buff=0.08
                                                                                          ).to_edge(DOWN, buff=0.4)
@@ -40,6 +41,7 @@ class Outro(VoiceoverScene):
             "<bookmark mark='f'/> So, to the question we started with: when you pay for a phone, the money goes to "
             "whoever is hardest to replace, and that can change in a single year."
         ) as vo:
+            self.play(FadeIn(head))
             for i, m in enumerate("abcde"):
                 vo.wait_until(m)
                 self.play(FadeIn(rows[i], shift=RIGHT * 0.15), run_time=0.8)

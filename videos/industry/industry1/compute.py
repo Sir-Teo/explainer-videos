@@ -16,6 +16,9 @@ Items:
     margins     the margin ladder: what each link keeps of what it is paid (latest filings)
     history     iPhone net sales and units by fiscal year (Apple's 10-Ks)
     market      2025 shipments by brand (IDC)
+    carrier     T-Mobile's phones against its service: what a carrier earns on the device itself (2025 10-K)
+    services    Apple's services after the sale: gross profit, its share of Apple's, per active device (FY2026)
+    cycle       Micron's revenue and gross margin by fiscal year, 2016-2026 (10-Ks)
 """
 
 from __future__ import annotations
@@ -162,6 +165,26 @@ def results() -> dict:
         ("Apple", get("share.apple.units.2025")), ("Samsung", get("share.samsung.units.2025")),
         ("Xiaomi", get("share.xiaomi.units.2025")), ("vivo", get("share.vivo.units.2025")),
         ("OPPO", get("share.oppo.units.2025")), ("Others", get("share.others.units.2025"))])
+    # --- the carrier's side: T-Mobile, 2025 --------------------------------------------------------------------
+    eq_rev, eq_cost = get("tmus.equipment_rev.2025"), get("tmus.equipment_cost.2025")
+    sv_rev, sv_cost = get("tmus.service_rev.2025"), get("tmus.service_cost.2025")
+    R["carrier"] = dict(eq_rev=eq_rev, eq_cost=eq_cost, eq_loss=eq_rev - eq_cost, sv_rev=sv_rev, sv_cost=sv_cost,
+                        sv_margin=(sv_rev - sv_cost) / sv_rev, att_eq=get("att.equipment_rev.2025"))
+
+    # --- after the sale: Apple's services, FY2026 -------------------------------------------------------------
+    sv = get("apple.services_sales.fy2026")
+    sv_gp = sv * get("apple.gm_services.fy2026")
+    base = get("apple.installed_base.2026")
+    R["services"] = dict(sales=sv, gp=sv_gp, share_gp=sv_gp / get("apple.gross_profit.fy2026"), share_sales=sv / get("apple.revenue.fy2026"),
+                         per_device=sv / base, gp_per_device=sv_gp / base, base=base,
+                         google=get("google.pays_apple.2022"))
+
+    # --- memory's boom and bust: Micron's fiscal years (the Register row micron.gm.history) ------------------------
+    R["cycle"] = dict(years=list(range(2016, 2027)),
+                      gm=[0.202, 0.415, 0.589, 0.457, 0.306, 0.376, 0.452, -0.091, 0.224, 0.398, 0.807],
+                      revenue=[12.40, 20.32, 30.39, 23.41, 21.43, 27.70, 30.76, 15.54, 25.11, 37.38, 133.19])
+    assert abs(R["cycle"]["gm"][-1] - get("micron.gm.fy2026")) < 1e-9 and abs(R["cycle"]["gm"][-2]
+                                                                                - get("micron.gm.fy2025")) < 1e-9
     return R
 
 

@@ -118,8 +118,9 @@ class Bom(VoiceoverScene):
             "charge, which is not the same as what its part is worth. That difference, between what a link "
             "contributes and what it can charge, is where this whole part is heading."
         ) as vo:
+            self.play(FadeIn(seen[0]))
             vo.wait_until("a")
-            self.play(FadeIn(seen, shift=RIGHT * 0.1))
+            self.play(FadeIn(seen[1:], shift=RIGHT * 0.1))
             vo.wait_until("b")
             self.play(LaggedStart(*[FadeIn(x, shift=RIGHT * 0.1) for x in unseen], lag_ratio=0.25), run_time=2.4)
             vo.wait_until("c")

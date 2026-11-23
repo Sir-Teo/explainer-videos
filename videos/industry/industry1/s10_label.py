@@ -6,8 +6,8 @@ from videos.industry.industry1.common import *  # noqa: F403
 
 class Label(VoiceoverScene):
     def construct(self):
-        card(self, 8, "Made where?", "What does ‘Made in China’ measure?",
-             "Chapter eight. Made where?", lit=("dollar", "change"))
+        card(self, 10, "Made where?", "What does ‘Made in China’ measure?",
+             "Chapter ten. Made where?", lit=("dollar", "change"))
         self.gross_trade()
         self.india()
 

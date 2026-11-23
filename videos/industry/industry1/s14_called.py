@@ -7,8 +7,8 @@ from videos.industry.industry1.common import *  # noqa: F403
 
 class Called(VoiceoverScene):
     def construct(self):
-        card(self, 12, "Called it?", "Who forecast this industry, and how did they do?",
-             "Chapter twelve. Called it?", lit=("change",))
+        card(self, 15, "Called it?", "Who forecast this industry, and how did they do?",
+             "Chapter fifteen. Called it?", lit=("change",))
         self.ballmer()
         self.ours()
 
@@ -70,8 +70,9 @@ class Called(VoiceoverScene):
             "about a fifth in the third, and the memory makers do not expect the shortage to end soon. It will be "
             "scored on IDC's first count for the year, due in January 2027."
         ) as vo:
+            self.play(FadeIn(box), FadeIn(body[0]))
             vo.wait_until("a")
-            self.play(FadeIn(box), FadeIn(body, shift=UP * 0.1), run_time=1.4)
+            self.play(FadeIn(body[1:], shift=UP * 0.1), run_time=1.4)
             vo.wait_until("b")
             self.play(FadeIn(why))
         self.clear_scene()

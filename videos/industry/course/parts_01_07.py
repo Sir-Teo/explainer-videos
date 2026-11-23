@@ -14,10 +14,11 @@ PARTS = [
               "dollar again at every link. The Dollar of one phone gives about $66 to the shop or carrier, $520 to the "
               "parts, $30 to assembly and about $244 of profit to Apple, checked against Apple's own 28 cents of profit "
               "per dollar of sales. Margins from filings, from Foxconn's 6% to Apple's services' 76%, show that the "
-              "links hardest to replace keep the most; an iPhone leaves about eighteen times the gross profit of a "
-              "Xiaomi phone. After an intermission of iPhone sales since 2008, the label is set against value added "
-              "(the iPhone 3G's $178.96 import with $6.50 of Chinese work), and then the turn: in 2026 memory became "
-              "the scarce link, memory prices rose five- to sevenfold, Micron's gross margin went from 40% to 81% and "
+              "links hardest to replace keep the most. T-Mobile's accounts show a carrier selling phones below cost to win "
+              "the monthly bill, and Apple's show services bringing 40% of its gross profit after the sale; an iPhone "
+              "leaves about eighteen times the gross profit of a Xiaomi phone. After an intermission of iPhone sales since 2008, the label is set against value added "
+              "(the iPhone 3G's $178.96 import with $6.50 of Chinese work), Micron's margins show memory's cycle from 2016 "
+              "to 2025, and then the turn: in 2026 memory became the scarce link, memory prices rose five- to sevenfold, Micron's gross margin went from 40% to 81% and "
               "Samsung's chip division earned 106.5 trillion won in a quarter while its phones lost money. The part "
               "ends on the landscape as of November 2026, Ballmer's 2007 forecast, and the series' first call.",
         handoff="Part 2 measures every industry three ways with Leontief's input-output table; Part 3 reads the "
@@ -49,7 +50,7 @@ PARTS = [
             ("Who keeps the money", r"\text{margin rises as the number of substitutes falls}"),
             ("Pass-through by tier", r"\Delta p_k \;\text{vs}\; \Delta\text{DRAM} + G_k\,\Delta(\text{flash per GB})"),
         ],
-        U=(0, 1, 2, 3, 4, 5, 7, "s09_intermission", 9), I=(6, 8, 11), D=(10, 12),
+        U=(0, 1, 2, 3, 4, 5, 8, 9, "s09_intermission", 12), I=(6, 7, 10, 14), D=(13, 15),
         also=(("The Register's rows for Part 1", "explainer/industry/data/rows_p01.py"),
               ("The chain arithmetic", "explainer/industry/works/chain.py")),
     ),
