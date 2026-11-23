@@ -45,10 +45,9 @@ class Shock(VoiceoverScene):
             "is experiencing supply constraints and rising costs for memory and storage, and expects the trend to "
             "intensify."
         ) as vo:
-            self.play(FadeIn(src))
+            self.play(FadeIn(src), FadeIn(acc), FadeIn(acc_l))
             vo.wait_until("a")
-            self.play(FadeIn(acc), FadeIn(acc_l), LaggedStart(*[FadeIn(h, shift=DOWN * 0.1) for h in hbm],
-                                                              lag_ratio=0.2), FadeIn(hb))
+            self.play(LaggedStart(*[FadeIn(h, shift=DOWN * 0.1) for h in hbm], lag_ratio=0.2), FadeIn(hb))
             vo.wait_until("b")
             fab = draw.factory(1.25, color=I.MEMORY).move_to([-0.9, 2.55, 0])
             fab_t = T("memory makers", 16, I.MEMORY).next_to(fab, RIGHT, buff=0.12)

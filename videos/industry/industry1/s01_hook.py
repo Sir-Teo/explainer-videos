@@ -31,10 +31,9 @@ class Hook(VoiceoverScene):
             "counted as an import from China. So who made it? <bookmark mark='d'/> The researchers, Greg Linden, "
             "Kenneth Kraemer and Jason Dedrick, did something different. They followed the money."
         ) as vo:
-            self.play(FadeIn(place), FadeIn(src))
+            self.play(FadeIn(place), FadeIn(src), FadeIn(dev, shift=UP * 0.2), run_time=1.2)
             vo.wait_until("a")
-            self.play(FadeIn(dev, shift=UP * 0.2), run_time=1.2)
-            self.play(FadeIn(tag, shift=UP * 0.1))
+            self.play(FadeIn(tag, shift=UP * 0.1), Indicate(dev, scale_factor=1.04))
             vo.wait_until("b")
             self.play(FadeIn(back), Write(engrave), run_time=1.6)
             vo.wait_until("c")
