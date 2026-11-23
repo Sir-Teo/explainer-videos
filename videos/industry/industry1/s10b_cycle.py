@@ -74,9 +74,9 @@ class Cycle(VoiceoverScene):
         fab_t = T("billions of dollars, years to build", 18, I.DIM).next_to(fab, UP, buff=0.1)
         # (c) prices high, everyone builds
         tag_hi = VGroup(RoundedRectangle(corner_radius=0.08, width=1.2, height=0.55, stroke_width=0, fill_color=I.PROFIT,
-                                         fill_opacity=1), TB("price", 18, "#0E1117")).move_to(pos["right"] + RIGHT * 0.9)
+                                         fill_opacity=1), TB("price", 18, "#0E1117")).move_to(pos["right"] + RIGHT * 1.6 + UP * 1.0)
         up = Arrow(tag_hi.get_bottom() + DOWN * 0.45, tag_hi.get_bottom(), buff=0.02, color=I.PROFIT, stroke_width=5)
-        fabs = VGroup(*[draw.factory(0.85) for _ in range(3)]).arrange(RIGHT, buff=0.12).move_to(pos["right"] + LEFT * 0.75 + DOWN * 0.1)
+        fabs = VGroup(*[draw.factory(0.85) for _ in range(3)]).arrange(RIGHT, buff=0.12).move_to(pos["right"] + RIGHT * 1.75 + DOWN * 0.1)
         build_t = T("so everyone builds", 18, I.DIM).next_to(fabs, DOWN, buff=0.1)
         # (d) supply overshoots: wafers pile up; the price falls; a maker leaves
         pile = VGroup(*[draw.wafer(0.22, die=0.05) for _ in range(9)])
