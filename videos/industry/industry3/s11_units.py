@@ -69,11 +69,20 @@ class Units(VoiceoverScene):
             vo.wait_until("a")
             self.play(FadeIn(rates[0]), FadeIn(rates[1]))
             vo.wait_until("b")
-            self.play(FadeIn(route), FadeIn(top))
+            ny, la = np.array([-3.5, 2.35, 0]), np.array([-6.5, 2.35, 0])
+            path = ArcBetweenPoints(ny, la, angle=0.9)
+            ends = VGroup(Dot(ny, radius=0.06, color=I.TEXT), Dot(la, radius=0.06, color=I.TEXT),
+                          T("New York", 14, I.DIM).next_to(ny, DOWN, buff=0.08),
+                          T("Los Angeles", 14, I.DIM).next_to(la, DOWN, buff=0.08))
+            trail = DashedVMobject(path.copy().set_stroke(I.DIM, 1.5), num_dashes=24)
+            jet = draw.plane(0.9, windows=False).flip().move_to(ny)  # nose west
+            self.play(FadeIn(route), FadeIn(top), FadeIn(ends), Create(trail))
+            self.play(MoveAlongPath(jet, path), run_time=2.4, rate_func=smooth)
             vo.wait_until("c")
-            self.play(LaggedStart(*[FadeIn(b, shift=RIGHT * 0.1) for b in bar[:3]], lag_ratio=0.3), run_time=1.6)
+            self.play(LaggedStart(*[AnimationGroup(GrowFromEdge(b[0], LEFT), FadeIn(b[1])) for b in bar[:3]],
+                                  lag_ratio=0.3), run_time=1.6)
             vo.wait_until("d")
-            self.play(FadeIn(bar[3], shift=RIGHT * 0.1))
+            self.play(GrowFromEdge(bar[3][0], LEFT), FadeIn(bar[3][1]))
             vo.wait_until("e")
             self.play(FadeIn(rates[2]), FadeIn(rates[3]))
         self.clear_scene()
