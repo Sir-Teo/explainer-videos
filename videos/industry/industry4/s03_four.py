@@ -231,7 +231,7 @@ class Four(VoiceoverScene):
                        fill_color="#B9C2CF", fill_opacity=1)
         fin = Polygon([-0.36 * L, 0.02 * L, 0], [-0.5 * L, 0.13 * L, 0], [-0.5 * L, 0.02 * L, 0], stroke_width=0,
                       fill_color="#E8EAED", fill_opacity=1)
-        concorde = VGroup(wing, body, fin).move_to([-8, 1.4, 0])
+        concorde = VGroup(wing, body, fin).move_to([-4.2, 1.4, 0]).scale(0.6)
         name = tx("the Concorde fallacy", 40, PRICE, bold=True).move_to([0, -0.6, 0])
         who = tx("Richard Dawkins and Tamsin Carlisle, Nature, 1976", 22, GREY_B).next_to(name, DOWN, buff=0.2)
         rule = tx("Decide on what a choice changes from here on: the money to come, not the money gone.", 24,
@@ -243,8 +243,10 @@ class Four(VoiceoverScene):
             "been spent. <bookmark mark='b'/> The rule it breaks is the one this part keeps using: decide on what a "
             "choice changes from here on, the money to come, not the money gone."
         ) as vo:
+            self.play(FadeIn(concorde, shift=RIGHT * 0.6), run_time=1.0)
             vo.wait_until("a")
-            self.play(concorde.animate.move_to([1.0, 1.6, 0]), run_time=2.0, rate_func=rate_functions.ease_out_cubic)
+            self.play(concorde.animate.scale(1 / 0.6).move_to([1.0, 1.6, 0]), run_time=2.0,
+                      rate_func=rate_functions.ease_out_cubic)
             self.play(FadeIn(name, shift=UP * 0.1), FadeIn(who))
             vo.wait_until("b")
             self.play(FadeIn(rule, shift=UP * 0.1), concorde.animate.shift(RIGHT * 9), run_time=2.0,

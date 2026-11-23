@@ -89,10 +89,10 @@ class Scale(VoiceoverScene):
             "<bookmark mark='c'/> It is a rule of thumb, not a law: real exponents run from about a half to nearly "
             "one, and that is exactly where things get interesting."
         ) as vo:
-            self.play(*[FadeOut(m) for m in (cube, small, rows, law, law2, lab)])
+            self.play(*[FadeOut(m) for m in (cube, small, rows, law, law2, lab)], Write(rule))
             self.remove(cube)
             vo.wait_until("a")
-            self.play(Write(rule), FadeIn(tag))
+            self.play(FadeIn(tag), Indicate(rule, scale_factor=1.05))
             vo.wait_until("b")
             self.play(Create(ax), FadeIn(xl), FadeIn(yl))
             self.play(LaggedStart(*[GrowFromEdge(b, DOWN) for b in bars], lag_ratio=0.3), run_time=3.0)

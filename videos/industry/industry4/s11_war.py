@@ -46,8 +46,7 @@ class War(VoiceoverScene):
             "far below what the factories cost. Both are now losing money on every chip, and both keep making them, "
             "because stopping would lose even more."
         ) as vo:
-            self.play(FadeIn(tag))
-            self.play(LaggedStart(*[FadeIn(f, shift=UP * 0.2) for f in fabs], lag_ratio=0.3))
+            self.play(FadeIn(tag), LaggedStart(*[FadeIn(f, shift=UP * 0.2) for f in fabs], lag_ratio=0.3))
             vo.wait_until("a")
             self.play(Create(ax), FadeIn(yl), FadeIn(xl), Create(ac), FadeIn(ac_t), Create(mc), FadeIn(mc_t))
             vo.wait_until("b")

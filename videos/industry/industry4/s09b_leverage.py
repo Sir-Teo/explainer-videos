@@ -78,9 +78,9 @@ class Leverage(VoiceoverScene):
             "which owns almost nothing: it pays its workers eighty cents of every dollar it bills, and has ten "
             "million of fixed costs. <bookmark mark='d'/> Same sales, same profit."
         ) as vo:
-            vo.wait_until("a")
             self.play(FadeIn(tower, shift=UP * 0.2), FadeIn(hotel_n), FadeIn(crowd, shift=UP * 0.2), FadeIn(agency_n),
                       FadeIn(tag))
+            vo.wait_until("a")
             vo.wait_until("b")
             self.play(FadeIn(hotel_c), Indicate(tower, color=FIXED, scale_factor=1.03))
             vo.wait_until("c")

@@ -116,9 +116,9 @@ class Called(VoiceoverScene):
             "May, could tip. We put it at fifty-five percent, a little better than a coin toss, and it will be "
             "scored on the final 2027 figures."
         ) as vo:
-            self.play(FadeIn(head))
+            self.play(FadeIn(head), FadeIn(claim, shift=UP * 0.1))
             vo.wait_until("a")
-            self.play(FadeIn(claim), FadeIn(prob))
+            self.play(FadeIn(prob), Indicate(claim, color=PRICE, scale_factor=1.03))
             vo.wait_until("b")
             self.play(GrowFromEdge(a[0][0], DOWN), GrowFromEdge(a[1][0], DOWN), FadeIn(a[0][1:]), FadeIn(a[1][1:]),
                       FadeIn(a[2]), FadeIn(src))
