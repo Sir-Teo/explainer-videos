@@ -2,6 +2,8 @@ from __future__ import annotations
 
 from videos.industry.industry3.common import *  # noqa: F403
 from videos.industry.industry3.s02_match import table
+from videos.industry.industry3.s03_ledger import _bank
+from videos.industry.industry3.s04_income import _glyph
 
 WHY = {"nee": "new equipment worth 88 cents per dollar of sales: plants built ahead of decades of bills",
        "cost": "three dollars of sales for every dollar it owns, on a margin of under four cents",
@@ -47,5 +49,7 @@ class Reveal(VoiceoverScene):
             for m, k in zip("abcdef", order):
                 vo.wait_until(m)
                 i = [c["key"] for c in C].index(k)
-                self.play(Transform(t0[0][i], heads1[i]), FadeIn(why[i], shift=UP * 0.05))
+                g_ = (_bank() if k == "jpm" else _glyph(k))
+                g_.scale_to_fit_height(min(g_.height, 0.42)).next_to(heads1[i], UP, buff=0.12)
+                self.play(Transform(t0[0][i], heads1[i]), FadeIn(why[i], shift=UP * 0.05), FadeIn(g_, scale=1.4))
         self.clear_scene()
