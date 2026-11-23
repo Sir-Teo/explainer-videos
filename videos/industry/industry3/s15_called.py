@@ -72,8 +72,8 @@ class Called(VoiceoverScene):
                      "2002", corner=UR, size=12)
         with self.voiceover(
             "Here are the accounts she was reading, as Enron filed them for 2000, a few weeks after her article. "
-            "<bookmark mark='a'/> Revenue more than doubled, to over a hundred billion dollars, much of it trading, "
-            "booked at the full value of what was traded. <bookmark mark='b'/> Net income crept up, to just under a "
+            "<bookmark mark='a'/> Revenue more than doubled, to over a hundred billion dollars, almost all of it "
+            "from its wholesale energy business. <bookmark mark='b'/> Net income crept up, to just under a "
             "billion. <bookmark mark='c'/> And cash from operations, after the weak first nine months, leapt to 4.8 "
             "billion dollars for the full year. <bookmark mark='d'/> A Senate investigation later found how: "
             "deals the banks called prepays, loans dressed up as energy trades so that borrowed money arrived as "

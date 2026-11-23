@@ -49,8 +49,8 @@ class Costco(VoiceoverScene):
         src = source("Costco Form 10-K FY2026; days computed from merchandise costs, inventories and payables",
                      size=13)
         with self.voiceover(
-            "Costco keeps less than four cents of each dollar of sales. Yet it is one of the most valuable "
-            "retailers in the world. Two things explain it, and both are in the accounts. <bookmark mark='a'/> The "
+            f"Costco keeps less than four cents of each dollar of sales. Yet it earned {say_bn(get('cost.ni'))} "
+            "in its last fiscal year. Two things explain it, and both are in the accounts. <bookmark mark='a'/> The "
             "first is time. A pallet of goods arrives at a Costco warehouse. <bookmark mark='b'/> On average it is "
             f"sold within about {C['inventory_days']:.0f} days, and members pay at the till, on the spot. "
             f"<bookmark mark='c'/> Costco pays its supplier after about {C['payable_days']:.0f} days. <bookmark "
@@ -100,8 +100,9 @@ class Costco(VoiceoverScene):
             f"about {say_usd(pm['spend'])} there in the year. <bookmark mark='b'/> On those purchases Costco made "
             f"about {say_usd(merch)} of operating profit. <bookmark mark='c'/> And each member also paid about "
             f"{say_usd(pm['fee'])} for the card itself. <bookmark mark='d'/> Membership fees were "
-            f"{say_bn(C['fees'])}, {say_pct(C['fee_share'])} of Costco's operating income. Costco sells the goods at "
-            "barely above cost, and earns half its profit selling the right to shop there. The low prices keep the "
+            f"{say_bn(C['fees'])}, {say_pct(C['fee_share'])} of Costco's operating income. Costco sells the goods "
+            "with less than two cents of operating profit on each dollar, and earns half its profit selling the right "
+            "to shop there. The low prices keep the "
             "members renewing, and the renewals pay for the low prices."
         ) as vo:
             self.play(FadeIn(head), FadeIn(src))

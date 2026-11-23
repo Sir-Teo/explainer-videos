@@ -2533,7 +2533,8 @@ scored in Part 64 and at each refresh.
 | Part | Sweep | Works module | Scenes | QA | Course material | Chinese |
 |---|---|---|---|---|---|---|
 | 1 · Where the Money Goes | done 2026-11-23 (118 Register rows) | `works/chain.py` | 18 scenes | silent and narrated previews reviewed | entry, lab, interactive | not started |
-| 2 · The Economy on One Page | done 2026-11-23 (31 Register rows; BEA, BLS and World Bank extracts) | — (the BEA table itself) | 17 scenes | silent and narrated previews reviewed | entry, lab, interactive | not started |
+| 2 · The Economy on One Page | done 2026-11-23 (37 Register rows; BEA, BLS, Census and World Bank extracts) | — (the BEA table itself) | 21 scenes | silent and narrated previews reviewed | entry, lab, interactive | not started |
+| 3 · The Accounts | done 2026-11-23 (111 Register rows; the SEC extract) | `works/firm.py` | 16 scenes | silent preview reviewed | entry, lab, interactive | not started |
 
 Phase 0 is done in the form Part 1 needed: the palette and kit (`style.py`, `kit.py`), the instruments (`viz.py`: the
 phone and its exploded view, the region map, the Dollar column, the margin ladder, the treemap, plain axes), the
@@ -2555,4 +2556,12 @@ against manufacturing and retail in 2030; Clark's and Fourastié's forecasts are
 cards" in the draft story was not found in a primary source and is not used; the 1936 table's 44 sectors (41
 producing) are from the paper and Bjerkholt (2016). The Filing Room's first extracts (`data/fetch.py`) serve it: BEA's
 value added and use tables, the BLS's payroll series and the World Bank's shares, each committed as a small CSV with
-its URL and retrieval date.
+its URL and retrieval date. The narrated cut came in under thirty minutes, so four chapters were added beyond the
+draft: firms by size (Census), who buys and a household's dollar followed back through the table (BEA's final uses),
+and who is growing (BEA's real value added), with prices since 2000 and hourly pay by industry inside two others.
+
+Part 3 follows its draft closely. Its six companies are Costco, Microsoft, JPMorgan Chase, NextEra Energy, Delta and
+Eli Lilly; its *Called it?* is Bethany McLean's 2001 Fortune article on Enron, scored against Enron's own 10-K, its
+restatement and its bankruptcy, with the series' call on Microsoft's fiscal 2027 free cash flow. The generic firm
+(`works/firm.py`) is built: a double-entry ledger and a firm whose three statements are tested to reconcile for any
+operations.

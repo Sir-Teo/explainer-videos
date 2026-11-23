@@ -11,6 +11,7 @@
     python -m explainer.industry.data.fetch sec_annual   # SEC: annual 10-K figures of the companies in SEC_COMPANIES
     python -m explainer.industry.data.fetch bea_real     # BEA real value added and prices by industry
     python -m explainer.industry.data.fetch fred_pay     # BLS: average hourly earnings by industry
+    python -m explainer.industry.data.fetch eia_power    # EIA: capacity, generation, fuel costs, heat rates
     python -m explainer.industry.data.fetch --all
 
 Each extract is a small CSV in this folder, committed, with the source URL and the retrieval date in its first
@@ -263,6 +264,43 @@ def bea_real():
                          "2017=100; published 2026-09-30)"])
 
 
+EIA_TABLES = {"epa_04_03": "capacity by energy source, 2025 (MW)", "epa_03_01_a": "net generation by energy source "
+              "(thousand MWh)", "epa_07_04": "average cost of fossil fuels ($/MMBtu)", "epa_08_01": "average operating "
+              "heat rate (Btu/kWh)", "epa_08_02": "average tested heat rates by prime mover (Btu/kWh)",
+              "epa_08_04": "operating expenses of major investor-owned utilities (mills/kWh)",
+              "epa_02_04": "average retail price of electricity (cents/kWh)"}
+
+
+def eia_power():
+    """EIA Electric Power Annual tables, flattened: one row per (table, row label, column label, value)."""
+    import openpyxl
+
+    out = []
+    for t, what in EIA_TABLES.items():
+        ws = openpyxl.load_workbook(io.BytesIO(_get(f"https://www.eia.gov/electricity/annual/xls/{t}.xlsx")),
+                                    read_only=True).worksheets[0]
+        header, block = None, ""
+        for r in ws.iter_rows(values_only=True):
+            cells = list(r)
+            if not any(c is not None for c in cells):
+                continue
+            first = cells[0]
+            nums = [c for c in cells[1:] if isinstance(c, (int, float))]
+            if not nums and any(isinstance(c, str) and c.strip() for c in cells[1:]):
+                header = [str(c).strip().replace("\n", " ") if c is not None else "" for c in cells]
+                continue
+            if not nums and isinstance(first, (str, int)) and str(first).strip():
+                block = str(first).strip()
+                continue
+            if header and nums:
+                for j, c in enumerate(cells[1:], start=1):
+                    if isinstance(c, (int, float)) and j < len(header):
+                        out.append([t, block, str(first).strip(), header[j], c])
+    return _write("eia_power", ["table", "block", "row", "column", "value"], out,
+                  ["https://www.eia.gov/electricity/annual/ (Electric Power Annual 2025): " +
+                   "; ".join(f"{k} {v}" for k, v in EIA_TABLES.items())])
+
+
 # Companies and XBRL tags for the annual SEC extract: (CIK, ticker, [tags]); the first tag present wins for each item
 SEC_ITEMS = {"revenue": ["RevenueFromContractWithCustomerExcludingAssessedTax", "Revenues", "SalesRevenueNet",
                          "RegulatedAndUnregulatedOperatingRevenue"],
@@ -379,7 +417,7 @@ def census_susb():
                           "(Statistics of US Businesses, 2022, released 2025-04-10; receipts in $1,000)"])
 
 
-JOBS = {"fred_pay": fred_pay, "bea_real": bea_real, "sec_annual": sec_annual, "fred_prices": fred_prices, "census_susb": census_susb, "bea_va": bea_va, "wb_mfg_usd": wb_mfg_usd, "bea_hist": bea_hist, "bea_io": bea_io, "fred_jobs": fred_jobs, "wb_shares": wb_shares}
+JOBS = {"eia_power": eia_power, "fred_pay": fred_pay, "bea_real": bea_real, "sec_annual": sec_annual, "fred_prices": fred_prices, "census_susb": census_susb, "bea_va": bea_va, "wb_mfg_usd": wb_mfg_usd, "bea_hist": bea_hist, "bea_io": bea_io, "fred_jobs": fred_jobs, "wb_shares": wb_shares}
 
 if __name__ == "__main__":
     names = list(JOBS) if "--all" in sys.argv else sys.argv[1:]

@@ -96,8 +96,7 @@ PARTS = [
             "M": ["Read an input-output table down a column (an industry's recipe) and along a row (its customers).",
                   "Follow a buyer's dollar back through the table to each industry's value added and to imports.",
                   "Compute a sector's total requirement as the sum of rounds of buying and as the Leontief inverse, "
-                  "and say why the rounds converge.",
-                  "Compute upstreamness for a simple chain and place an industry on the scale."],
+                  "and its upstreamness for a simple chain."],
             "D": ["Say what an input-output multiplier assumes and when an impact study that uses one misleads.",
                   "State the evidence for each of the four forces behind the shift from goods to services and where "
                   "economists disagree about their weights."],

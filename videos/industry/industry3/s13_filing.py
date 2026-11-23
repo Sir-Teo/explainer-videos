@@ -70,7 +70,7 @@ class Filing(VoiceoverScene):
                      ).arrange(DOWN, buff=0.08).to_edge(DOWN, buff=0.7)
         head = T("Where this part found its numbers", 24, I.TEXT).to_edge(UP, buff=0.4)
         with self.voiceover(
-            "Every figure in this part came from those pages. <bookmark mark='a'/> Costco's members and "
+            "Every company figure in this part came from those pages. <bookmark mark='a'/> Costco's members and "
             "warehouses are in its business section and its discussion. Delta's seat miles and its American "
             "Express payments, in its operating statistics. Microsoft's paper gains on OpenAI, in a note on other "
             "income. JPMorgan's deposits and capital, in its selected financial data. <bookmark mark='b'/> And "

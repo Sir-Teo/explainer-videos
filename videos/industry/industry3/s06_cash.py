@@ -92,8 +92,8 @@ class Cash(VoiceoverScene):
             f"<bookmark mark='b'/> Its profit rises every year, from {say_usd(G[0]['profit'])} to "
             f"{say_usd(G[-1]['profit'])}. <bookmark mark='c'/> And its cash runs out in the second year. Every "
             "extra sale ties up more money in what the cafes owe and in stock, and every new shop needs an oven "
-            "paid for up front. <bookmark mark='d'/> More small businesses fail this way, profitable and out of "
-            "cash, than by losing money. The cure is not more profit; it is more patient money, from the owner, "
+            "paid for up front. <bookmark mark='d'/> Many small businesses fail this way: profitable on paper "
+            "and out of cash. The cure is not more profit; it is more patient money, from the owner, "
             "the bank or investors, or slower growth."
         ) as vo:
             self.play(FadeIn(head), FadeIn(src), FadeIn(pa), Create(zero))

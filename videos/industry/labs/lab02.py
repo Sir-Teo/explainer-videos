@@ -14,8 +14,6 @@ GOAL = ("Take BEA's 2023 use table for fifteen sectors and rebuild what the film
 TASKS = [
     "Stop the rounds of buying after one, two and three rounds. How much of the total requirement for a dollar of "
     "manufactured goods (about $2.25) does each truncation capture, and why does the series converge?",
-    "Scale every entry of A by 1.1, as if every industry bought 10% more from the others. What happens to "
-    "manufacturing's total requirement, and what does that say about multipliers in a more specialised economy?",
     "Follow a dollar of exports instead of a household's dollar (use the exports column of bea_io_2023.csv). Which "
     "industries earn most of it, and how much of it is imported content?",
     "Using fred_jobs.csv, project health care (CES6562000001) and manufacturing plus retail (MANEMP + USTRADE) to 2030 "

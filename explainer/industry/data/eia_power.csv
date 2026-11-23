@@ -1,0 +1,1519 @@
+# source: https://www.eia.gov/electricity/annual/ (Electric Power Annual 2025): epa_04_03 capacity by energy source, 2025 (MW); epa_03_01_a net generation by energy source (thousand MWh); epa_07_04 average cost of fossil fuels ($/MMBtu); epa_08_01 average operating heat rate (Btu/kWh); epa_08_02 average tested heat rates by prime mover (Btu/kWh); epa_08_04 operating expenses of major investor-owned utilities (mills/kWh); epa_02_04 average retail price of electricity (cents/kWh)
+# retrieved: 2026-11-23
+table,block,row,column,value
+epa_04_03,"Table 4.3. Existing Capacity by Energy Source, 2025 (Megawatts)",Coal,Number of Generators,448
+epa_04_03,"Table 4.3. Existing Capacity by Energy Source, 2025 (Megawatts)",Coal,Generator Nameplate Capacity,182490.1
+epa_04_03,"Table 4.3. Existing Capacity by Energy Source, 2025 (Megawatts)",Coal,Net Summer Capacity,168598.5
+epa_04_03,"Table 4.3. Existing Capacity by Energy Source, 2025 (Megawatts)",Coal,Net Winter Capacity,169643.1
+epa_04_03,"Table 4.3. Existing Capacity by Energy Source, 2025 (Megawatts)",Petroleum,Number of Generators,3826
+epa_04_03,"Table 4.3. Existing Capacity by Energy Source, 2025 (Megawatts)",Petroleum,Generator Nameplate Capacity,31993.7
+epa_04_03,"Table 4.3. Existing Capacity by Energy Source, 2025 (Megawatts)",Petroleum,Net Summer Capacity,27616.4
+epa_04_03,"Table 4.3. Existing Capacity by Energy Source, 2025 (Megawatts)",Petroleum,Net Winter Capacity,30520
+epa_04_03,"Table 4.3. Existing Capacity by Energy Source, 2025 (Megawatts)",Natural Gas,Number of Generators,6758
+epa_04_03,"Table 4.3. Existing Capacity by Energy Source, 2025 (Megawatts)",Natural Gas,Generator Nameplate Capacity,578378.8
+epa_04_03,"Table 4.3. Existing Capacity by Energy Source, 2025 (Megawatts)",Natural Gas,Net Summer Capacity,513400.6
+epa_04_03,"Table 4.3. Existing Capacity by Energy Source, 2025 (Megawatts)",Natural Gas,Net Winter Capacity,549882.8
+epa_04_03,"Table 4.3. Existing Capacity by Energy Source, 2025 (Megawatts)",Other Fossil Gas,Number of Generators,67
+epa_04_03,"Table 4.3. Existing Capacity by Energy Source, 2025 (Megawatts)",Other Fossil Gas,Generator Nameplate Capacity,1947.1
+epa_04_03,"Table 4.3. Existing Capacity by Energy Source, 2025 (Megawatts)",Other Fossil Gas,Net Summer Capacity,1773.1
+epa_04_03,"Table 4.3. Existing Capacity by Energy Source, 2025 (Megawatts)",Other Fossil Gas,Net Winter Capacity,1777.3
+epa_04_03,"Table 4.3. Existing Capacity by Energy Source, 2025 (Megawatts)",Nuclear,Number of Generators,96
+epa_04_03,"Table 4.3. Existing Capacity by Energy Source, 2025 (Megawatts)",Nuclear,Generator Nameplate Capacity,103698.4
+epa_04_03,"Table 4.3. Existing Capacity by Energy Source, 2025 (Megawatts)",Nuclear,Net Summer Capacity,98423.3
+epa_04_03,"Table 4.3. Existing Capacity by Energy Source, 2025 (Megawatts)",Nuclear,Net Winter Capacity,100885.7
+epa_04_03,"Table 4.3. Existing Capacity by Energy Source, 2025 (Megawatts)",Hydroelectric Conventional,Number of Generators,3981
+epa_04_03,"Table 4.3. Existing Capacity by Energy Source, 2025 (Megawatts)",Hydroelectric Conventional,Generator Nameplate Capacity,80060.9
+epa_04_03,"Table 4.3. Existing Capacity by Energy Source, 2025 (Megawatts)",Hydroelectric Conventional,Net Summer Capacity,79970.5
+epa_04_03,"Table 4.3. Existing Capacity by Energy Source, 2025 (Megawatts)",Hydroelectric Conventional,Net Winter Capacity,79495.9
+epa_04_03,"Table 4.3. Existing Capacity by Energy Source, 2025 (Megawatts)",Wind,Number of Generators,1573
+epa_04_03,"Table 4.3. Existing Capacity by Energy Source, 2025 (Megawatts)",Wind,Generator Nameplate Capacity,159732.2
+epa_04_03,"Table 4.3. Existing Capacity by Energy Source, 2025 (Megawatts)",Wind,Net Summer Capacity,159032
+epa_04_03,"Table 4.3. Existing Capacity by Energy Source, 2025 (Megawatts)",Wind,Net Winter Capacity,159082.7
+epa_04_03,"Table 4.3. Existing Capacity by Energy Source, 2025 (Megawatts)",Solar Photovoltaic,Number of Generators,7999
+epa_04_03,"Table 4.3. Existing Capacity by Energy Source, 2025 (Megawatts)",Solar Photovoltaic,Generator Nameplate Capacity,152894.7
+epa_04_03,"Table 4.3. Existing Capacity by Energy Source, 2025 (Megawatts)",Solar Photovoltaic,Net Summer Capacity,151956.9
+epa_04_03,"Table 4.3. Existing Capacity by Energy Source, 2025 (Megawatts)",Solar Photovoltaic,Net Winter Capacity,151206
+epa_04_03,"Table 4.3. Existing Capacity by Energy Source, 2025 (Megawatts)",Solar Thermal,Number of Generators,12
+epa_04_03,"Table 4.3. Existing Capacity by Energy Source, 2025 (Megawatts)",Solar Thermal,Generator Nameplate Capacity,1405
+epa_04_03,"Table 4.3. Existing Capacity by Energy Source, 2025 (Megawatts)",Solar Thermal,Net Summer Capacity,1392
+epa_04_03,"Table 4.3. Existing Capacity by Energy Source, 2025 (Megawatts)",Solar Thermal,Net Winter Capacity,1288.5
+epa_04_03,"Table 4.3. Existing Capacity by Energy Source, 2025 (Megawatts)",Wood and Wood-Derived Fuels,Number of Generators,271
+epa_04_03,"Table 4.3. Existing Capacity by Energy Source, 2025 (Megawatts)",Wood and Wood-Derived Fuels,Generator Nameplate Capacity,8011.1
+epa_04_03,"Table 4.3. Existing Capacity by Energy Source, 2025 (Megawatts)",Wood and Wood-Derived Fuels,Net Summer Capacity,7103.9
+epa_04_03,"Table 4.3. Existing Capacity by Energy Source, 2025 (Megawatts)",Wood and Wood-Derived Fuels,Net Winter Capacity,7210.1
+epa_04_03,"Table 4.3. Existing Capacity by Energy Source, 2025 (Megawatts)",Geothermal,Number of Generators,163
+epa_04_03,"Table 4.3. Existing Capacity by Energy Source, 2025 (Megawatts)",Geothermal,Generator Nameplate Capacity,4049.2
+epa_04_03,"Table 4.3. Existing Capacity by Energy Source, 2025 (Megawatts)",Geothermal,Net Summer Capacity,2683.9
+epa_04_03,"Table 4.3. Existing Capacity by Energy Source, 2025 (Megawatts)",Geothermal,Net Winter Capacity,3163.1
+epa_04_03,"Table 4.3. Existing Capacity by Energy Source, 2025 (Megawatts)",Other Biomass,Number of Generators,1483
+epa_04_03,"Table 4.3. Existing Capacity by Energy Source, 2025 (Megawatts)",Other Biomass,Generator Nameplate Capacity,4511.8
+epa_04_03,"Table 4.3. Existing Capacity by Energy Source, 2025 (Megawatts)",Other Biomass,Net Summer Capacity,3962.6
+epa_04_03,"Table 4.3. Existing Capacity by Energy Source, 2025 (Megawatts)",Other Biomass,Net Winter Capacity,4014.3
+epa_04_03,"Table 4.3. Existing Capacity by Energy Source, 2025 (Megawatts)",Hydroelectric Pumped Storage,Number of Generators,150
+epa_04_03,"Table 4.3. Existing Capacity by Energy Source, 2025 (Megawatts)",Hydroelectric Pumped Storage,Generator Nameplate Capacity,22224.1
+epa_04_03,"Table 4.3. Existing Capacity by Energy Source, 2025 (Megawatts)",Hydroelectric Pumped Storage,Net Summer Capacity,23035.1
+epa_04_03,"Table 4.3. Existing Capacity by Energy Source, 2025 (Megawatts)",Hydroelectric Pumped Storage,Net Winter Capacity,23055.7
+epa_04_03,"Table 4.3. Existing Capacity by Energy Source, 2025 (Megawatts)",Other Energy Sources,Number of Generators,1091
+epa_04_03,"Table 4.3. Existing Capacity by Energy Source, 2025 (Megawatts)",Other Energy Sources,Generator Nameplate Capacity,45344.9
+epa_04_03,"Table 4.3. Existing Capacity by Energy Source, 2025 (Megawatts)",Other Energy Sources,Net Summer Capacity,44854.9
+epa_04_03,"Table 4.3. Existing Capacity by Energy Source, 2025 (Megawatts)",Other Energy Sources,Net Winter Capacity,44890.9
+epa_04_03,"Table 4.3. Existing Capacity by Energy Source, 2025 (Megawatts)",Total,Number of Generators,27918
+epa_04_03,"Table 4.3. Existing Capacity by Energy Source, 2025 (Megawatts)",Total,Generator Nameplate Capacity,1376742
+epa_04_03,"Table 4.3. Existing Capacity by Energy Source, 2025 (Megawatts)",Total,Net Summer Capacity,1283803.8
+epa_04_03,"Table 4.3. Existing Capacity by Energy Source, 2025 (Megawatts)",Total,Net Winter Capacity,1326115.9
+epa_04_03,"Table 4.3. Existing Capacity by Energy Source, 2025 (Megawatts)",Small Scale Photovoltaic,Net Summer Capacity,59088.5
+epa_04_03,"Table 4.3. Existing Capacity by Energy Source, 2025 (Megawatts)",Estimated Total Photovoltaic,Net Summer Capacity,211045.5
+epa_04_03,"Table 4.3. Existing Capacity by Energy Source, 2025 (Megawatts)",Estimated Total Solar,Net Summer Capacity,212437.5
+epa_03_01_a,Annual Totals,2015,Coal,1352398
+epa_03_01_a,Annual Totals,2015,Petroleum Liquids,17372
+epa_03_01_a,Annual Totals,2015,Petroleum Coke,10877
+epa_03_01_a,Annual Totals,2015,Natural Gas,1334668
+epa_03_01_a,Annual Totals,2015,Other Fossil Gas,13117
+epa_03_01_a,Annual Totals,2015,Nuclear,797178
+epa_03_01_a,Annual Totals,2015,Hydroelectric Conventional,249080
+epa_03_01_a,Annual Totals,2015,Solar,24893
+epa_03_01_a,Annual Totals,2015,Renewable Sources Excluding Hydroelectric and Solar,270268
+epa_03_01_a,Annual Totals,2015,Hydroelectric Pumped Storage,-5091
+epa_03_01_a,Annual Totals,2015,Other,13955
+epa_03_01_a,Annual Totals,2015,Total Generation at Utility Scale Facilities,4078714
+epa_03_01_a,Annual Totals,2015,Estimated Solar Photovoltaic,14139
+epa_03_01_a,Annual Totals,2015,Estimated Total Solar Photovoltaic,35805
+epa_03_01_a,Annual Totals,2015,Estimated Total Solar,39032
+epa_03_01_a,Annual Totals,2016,Coal,1239149
+epa_03_01_a,Annual Totals,2016,Petroleum Liquids,13008
+epa_03_01_a,Annual Totals,2016,Petroleum Coke,11197
+epa_03_01_a,Annual Totals,2016,Natural Gas,1379271
+epa_03_01_a,Annual Totals,2016,Other Fossil Gas,12807
+epa_03_01_a,Annual Totals,2016,Nuclear,805694
+epa_03_01_a,Annual Totals,2016,Hydroelectric Conventional,267812
+epa_03_01_a,Annual Totals,2016,Solar,36054
+epa_03_01_a,Annual Totals,2016,Renewable Sources Excluding Hydroelectric and Solar,305579
+epa_03_01_a,Annual Totals,2016,Hydroelectric Pumped Storage,-6686
+epa_03_01_a,Annual Totals,2016,Other,13689
+epa_03_01_a,Annual Totals,2016,Total Generation at Utility Scale Facilities,4077574
+epa_03_01_a,Annual Totals,2016,Estimated Solar Photovoltaic,18812
+epa_03_01_a,Annual Totals,2016,Estimated Total Solar Photovoltaic,51483
+epa_03_01_a,Annual Totals,2016,Estimated Total Solar,54866
+epa_03_01_a,Annual Totals,2017,Coal,1205835
+epa_03_01_a,Annual Totals,2017,Petroleum Liquids,12414
+epa_03_01_a,Annual Totals,2017,Petroleum Coke,8976
+epa_03_01_a,Annual Totals,2017,Natural Gas,1297703
+epa_03_01_a,Annual Totals,2017,Other Fossil Gas,12469
+epa_03_01_a,Annual Totals,2017,Nuclear,804950
+epa_03_01_a,Annual Totals,2017,Hydroelectric Conventional,300333
+epa_03_01_a,Annual Totals,2017,Solar,53287
+epa_03_01_a,Annual Totals,2017,Renewable Sources Excluding Hydroelectric and Solar,332963
+epa_03_01_a,Annual Totals,2017,Hydroelectric Pumped Storage,-6495
+epa_03_01_a,Annual Totals,2017,Other,13008
+epa_03_01_a,Annual Totals,2017,Total Generation at Utility Scale Facilities,4035443
+epa_03_01_a,Annual Totals,2017,Estimated Solar Photovoltaic,23990
+epa_03_01_a,Annual Totals,2017,Estimated Total Solar Photovoltaic,74008
+epa_03_01_a,Annual Totals,2017,Estimated Total Solar,77277
+epa_03_01_a,Annual Totals,2018,Coal,1149487
+epa_03_01_a,Annual Totals,2018,Petroleum Liquids,16245
+epa_03_01_a,Annual Totals,2018,Petroleum Coke,8981
+epa_03_01_a,Annual Totals,2018,Natural Gas,1471843
+epa_03_01_a,Annual Totals,2018,Other Fossil Gas,13463
+epa_03_01_a,Annual Totals,2018,Nuclear,807084
+epa_03_01_a,Annual Totals,2018,Hydroelectric Conventional,292524
+epa_03_01_a,Annual Totals,2018,Solar,63825
+epa_03_01_a,Annual Totals,2018,Renewable Sources Excluding Hydroelectric and Solar,350467
+epa_03_01_a,Annual Totals,2018,Hydroelectric Pumped Storage,-5905
+epa_03_01_a,Annual Totals,2018,Other,12973
+epa_03_01_a,Annual Totals,2018,Total Generation at Utility Scale Facilities,4180988
+epa_03_01_a,Annual Totals,2018,Estimated Solar Photovoltaic,29539
+epa_03_01_a,Annual Totals,2018,Estimated Total Solar Photovoltaic,89773
+epa_03_01_a,Annual Totals,2018,Estimated Total Solar,93365
+epa_03_01_a,Annual Totals,2019,Coal,964957
+epa_03_01_a,Annual Totals,2019,Petroleum Liquids,11522
+epa_03_01_a,Annual Totals,2019,Petroleum Coke,6819
+epa_03_01_a,Annual Totals,2019,Natural Gas,1588533
+epa_03_01_a,Annual Totals,2019,Other Fossil Gas,12591
+epa_03_01_a,Annual Totals,2019,Nuclear,809409
+epa_03_01_a,Annual Totals,2019,Hydroelectric Conventional,287874
+epa_03_01_a,Annual Totals,2019,Solar,71937
+epa_03_01_a,Annual Totals,2019,Renewable Sources Excluding Hydroelectric and Solar,368862
+epa_03_01_a,Annual Totals,2019,Hydroelectric Pumped Storage,-5261
+epa_03_01_a,Annual Totals,2019,Other,13331
+epa_03_01_a,Annual Totals,2019,Total Generation at Utility Scale Facilities,4130574
+epa_03_01_a,Annual Totals,2019,Estimated Solar Photovoltaic,34957
+epa_03_01_a,Annual Totals,2019,Estimated Total Solar Photovoltaic,103676
+epa_03_01_a,Annual Totals,2019,Estimated Total Solar,106894
+epa_03_01_a,Annual Totals,2020,Coal,773393
+epa_03_01_a,Annual Totals,2020,Petroleum Liquids,9662
+epa_03_01_a,Annual Totals,2020,Petroleum Coke,7679
+epa_03_01_a,Annual Totals,2020,Natural Gas,1626790
+epa_03_01_a,Annual Totals,2020,Other Fossil Gas,11818
+epa_03_01_a,Annual Totals,2020,Nuclear,789879
+epa_03_01_a,Annual Totals,2020,Hydroelectric Conventional,285274
+epa_03_01_a,Annual Totals,2020,Solar,89199
+epa_03_01_a,Annual Totals,2020,Renewable Sources Excluding Hydroelectric and Solar,408539
+epa_03_01_a,Annual Totals,2020,Hydroelectric Pumped Storage,-5321
+epa_03_01_a,Annual Totals,2020,Other,12855
+epa_03_01_a,Annual Totals,2020,Total Generation at Utility Scale Facilities,4009767
+epa_03_01_a,Annual Totals,2020,Estimated Solar Photovoltaic,41522
+epa_03_01_a,Annual Totals,2020,Estimated Total Solar Photovoltaic,127588
+epa_03_01_a,Annual Totals,2020,Estimated Total Solar,130721
+epa_03_01_a,Annual Totals,2021,Coal,897999
+epa_03_01_a,Annual Totals,2021,Petroleum Liquids,11663
+epa_03_01_a,Annual Totals,2021,Petroleum Coke,7511
+epa_03_01_a,Annual Totals,2021,Natural Gas,1579190
+epa_03_01_a,Annual Totals,2021,Other Fossil Gas,11397
+epa_03_01_a,Annual Totals,2021,Nuclear,779645
+epa_03_01_a,Annual Totals,2021,Hydroelectric Conventional,251585
+epa_03_01_a,Annual Totals,2021,Solar,115258
+epa_03_01_a,Annual Totals,2021,Renewable Sources Excluding Hydroelectric and Solar,448424
+epa_03_01_a,Annual Totals,2021,Hydroelectric Pumped Storage,-5112
+epa_03_01_a,Annual Totals,2021,Other,12140
+epa_03_01_a,Annual Totals,2021,Total Generation at Utility Scale Facilities,4109699
+epa_03_01_a,Annual Totals,2021,Estimated Solar Photovoltaic,49164
+epa_03_01_a,Annual Totals,2021,Estimated Total Solar Photovoltaic,161499
+epa_03_01_a,Annual Totals,2021,Estimated Total Solar,164422
+epa_03_01_a,Annual Totals,2022,Coal,831512
+epa_03_01_a,Annual Totals,2022,Petroleum Liquids,15805
+epa_03_01_a,Annual Totals,2022,Petroleum Coke,7126
+epa_03_01_a,Annual Totals,2022,Natural Gas,1687065
+epa_03_01_a,Annual Totals,2022,Other Fossil Gas,11722
+epa_03_01_a,Annual Totals,2022,Nuclear,771537
+epa_03_01_a,Annual Totals,2022,Hydroelectric Conventional,254789
+epa_03_01_a,Annual Totals,2022,Solar,143792
+epa_03_01_a,Annual Totals,2022,Renewable Sources Excluding Hydroelectric and Solar,502234
+epa_03_01_a,Annual Totals,2022,Hydroelectric Pumped Storage,-6028
+epa_03_01_a,Annual Totals,2022,Other,11114
+epa_03_01_a,Annual Totals,2022,Total Generation at Utility Scale Facilities,4230668
+epa_03_01_a,Annual Totals,2022,Estimated Solar Photovoltaic,61282
+epa_03_01_a,Annual Totals,2022,Estimated Total Solar Photovoltaic,202075
+epa_03_01_a,Annual Totals,2022,Estimated Total Solar,205074
+epa_03_01_a,Annual Totals,2023,Coal,675115
+epa_03_01_a,Annual Totals,2023,Petroleum Liquids,11397
+epa_03_01_a,Annual Totals,2023,Petroleum Coke,4836
+epa_03_01_a,Annual Totals,2023,Natural Gas,1806063
+epa_03_01_a,Annual Totals,2023,Other Fossil Gas,11778
+epa_03_01_a,Annual Totals,2023,Nuclear,774873
+epa_03_01_a,Annual Totals,2023,Hydroelectric Conventional,245002
+epa_03_01_a,Annual Totals,2023,Solar,165530
+epa_03_01_a,Annual Totals,2023,Renewable Sources Excluding Hydroelectric and Solar,484708
+epa_03_01_a,Annual Totals,2023,Hydroelectric Pumped Storage,-5990
+epa_03_01_a,Annual Totals,2023,Other,9957
+epa_03_01_a,Annual Totals,2023,Total Generation at Utility Scale Facilities,4183270
+epa_03_01_a,Annual Totals,2023,Estimated Solar Photovoltaic,73406
+epa_03_01_a,Annual Totals,2023,Estimated Total Solar Photovoltaic,236090
+epa_03_01_a,Annual Totals,2023,Estimated Total Solar,238937
+epa_03_01_a,Annual Totals,2024,Coal,652156
+epa_03_01_a,Annual Totals,2024,Petroleum Liquids,11456
+epa_03_01_a,Annual Totals,2024,Petroleum Coke,3629
+epa_03_01_a,Annual Totals,2024,Natural Gas,1869902
+epa_03_01_a,Annual Totals,2024,Other Fossil Gas,10845
+epa_03_01_a,Annual Totals,2024,Nuclear,781865
+epa_03_01_a,Annual Totals,2024,Hydroelectric Conventional,242896
+epa_03_01_a,Annual Totals,2024,Solar,219834
+epa_03_01_a,Annual Totals,2024,Renewable Sources Excluding Hydroelectric and Solar,513733
+epa_03_01_a,Annual Totals,2024,Hydroelectric Pumped Storage,-5852
+epa_03_01_a,Annual Totals,2024,Other,8170
+epa_03_01_a,Annual Totals,2024,Total Generation at Utility Scale Facilities,4308634
+epa_03_01_a,Annual Totals,2024,Estimated Solar Photovoltaic,83918
+epa_03_01_a,Annual Totals,2024,Estimated Total Solar Photovoltaic,300634
+epa_03_01_a,Annual Totals,2024,Estimated Total Solar,303752
+epa_03_01_a,Annual Totals,2025,Coal,734928
+epa_03_01_a,Annual Totals,2025,Petroleum Liquids,14551
+epa_03_01_a,Annual Totals,2025,Petroleum Coke,4694
+epa_03_01_a,Annual Totals,2025,Natural Gas,1811004
+epa_03_01_a,Annual Totals,2025,Other Fossil Gas,9528
+epa_03_01_a,Annual Totals,2025,Nuclear,785304
+epa_03_01_a,Annual Totals,2025,Hydroelectric Conventional,241303
+epa_03_01_a,Annual Totals,2025,Solar,300303
+epa_03_01_a,Annual Totals,2025,Renewable Sources Excluding Hydroelectric and Solar,522497
+epa_03_01_a,Annual Totals,2025,Hydroelectric Pumped Storage,-5362
+epa_03_01_a,Annual Totals,2025,Other,6279
+epa_03_01_a,Annual Totals,2025,Total Generation at Utility Scale Facilities,4425029
+epa_03_01_a,Annual Totals,2025,Estimated Solar Photovoltaic,93041
+epa_03_01_a,Annual Totals,2025,Estimated Total Solar Photovoltaic,390489
+epa_03_01_a,Annual Totals,2025,Estimated Total Solar,393343
+epa_03_01_a,Year 2023,January,Coal,61357
+epa_03_01_a,Year 2023,January,Petroleum Liquids,983
+epa_03_01_a,Year 2023,January,Petroleum Coke,421
+epa_03_01_a,Year 2023,January,Natural Gas,138503
+epa_03_01_a,Year 2023,January,Other Fossil Gas,945
+epa_03_01_a,Year 2023,January,Nuclear,70870
+epa_03_01_a,Year 2023,January,Hydroelectric Conventional,22754
+epa_03_01_a,Year 2023,January,Solar,7806
+epa_03_01_a,Year 2023,January,Renewable Sources Excluding Hydroelectric and Solar,44043
+epa_03_01_a,Year 2023,January,Hydroelectric Pumped Storage,-620
+epa_03_01_a,Year 2023,January,Other,889
+epa_03_01_a,Year 2023,January,Total Generation at Utility Scale Facilities,347950
+epa_03_01_a,Year 2023,January,Estimated Solar Photovoltaic,3989
+epa_03_01_a,Year 2023,January,Estimated Total Solar Photovoltaic,11711
+epa_03_01_a,Year 2023,January,Estimated Total Solar,11795
+epa_03_01_a,Year 2023,February,Coal,46374
+epa_03_01_a,Year 2023,February,Petroleum Liquids,1233
+epa_03_01_a,Year 2023,February,Petroleum Coke,395
+epa_03_01_a,Year 2023,February,Natural Gas,125036
+epa_03_01_a,Year 2023,February,Other Fossil Gas,891
+epa_03_01_a,Year 2023,February,Nuclear,60807
+epa_03_01_a,Year 2023,February,Hydroelectric Conventional,19961
+epa_03_01_a,Year 2023,February,Solar,9435
+epa_03_01_a,Year 2023,February,Renewable Sources Excluding Hydroelectric and Solar,46467
+epa_03_01_a,Year 2023,February,Hydroelectric Pumped Storage,-456
+epa_03_01_a,Year 2023,February,Other,778
+epa_03_01_a,Year 2023,February,Total Generation at Utility Scale Facilities,310922
+epa_03_01_a,Year 2023,February,Estimated Solar Photovoltaic,4387
+epa_03_01_a,Year 2023,February,Estimated Total Solar Photovoltaic,13713
+epa_03_01_a,Year 2023,February,Estimated Total Solar,13822
+epa_03_01_a,Year 2023,March,Coal,50096
+epa_03_01_a,Year 2023,March,Petroleum Liquids,924
+epa_03_01_a,Year 2023,March,Petroleum Coke,314
+epa_03_01_a,Year 2023,March,Natural Gas,133699
+epa_03_01_a,Year 2023,March,Other Fossil Gas,1028
+epa_03_01_a,Year 2023,March,Nuclear,62820
+epa_03_01_a,Year 2023,March,Hydroelectric Conventional,21331
+epa_03_01_a,Year 2023,March,Solar,12213
+epa_03_01_a,Year 2023,March,Renewable Sources Excluding Hydroelectric and Solar,49007
+epa_03_01_a,Year 2023,March,Hydroelectric Pumped Storage,-519
+epa_03_01_a,Year 2023,March,Other,790
+epa_03_01_a,Year 2023,March,Total Generation at Utility Scale Facilities,331704
+epa_03_01_a,Year 2023,March,Estimated Solar Photovoltaic,6005
+epa_03_01_a,Year 2023,March,Estimated Total Solar Photovoltaic,18064
+epa_03_01_a,Year 2023,March,Estimated Total Solar,18218
+epa_03_01_a,Year 2023,April,Coal,40233
+epa_03_01_a,Year 2023,April,Petroleum Liquids,868
+epa_03_01_a,Year 2023,April,Petroleum Coke,301
+epa_03_01_a,Year 2023,April,Natural Gas,120012
+epa_03_01_a,Year 2023,April,Other Fossil Gas,866
+epa_03_01_a,Year 2023,April,Nuclear,56662
+epa_03_01_a,Year 2023,April,Hydroelectric Conventional,19820
+epa_03_01_a,Year 2023,April,Solar,15062
+epa_03_01_a,Year 2023,April,Renewable Sources Excluding Hydroelectric and Solar,47626
+epa_03_01_a,Year 2023,April,Hydroelectric Pumped Storage,-290
+epa_03_01_a,Year 2023,April,Other,744
+epa_03_01_a,Year 2023,April,Total Generation at Utility Scale Facilities,301903
+epa_03_01_a,Year 2023,April,Estimated Solar Photovoltaic,6742
+epa_03_01_a,Year 2023,April,Estimated Total Solar Photovoltaic,21509
+epa_03_01_a,Year 2023,April,Estimated Total Solar,21803
+epa_03_01_a,Year 2023,May,Coal,43804
+epa_03_01_a,Year 2023,May,Petroleum Liquids,880
+epa_03_01_a,Year 2023,May,Petroleum Coke,330
+epa_03_01_a,Year 2023,May,Natural Gas,137394
+epa_03_01_a,Year 2023,May,Other Fossil Gas,1011
+epa_03_01_a,Year 2023,May,Nuclear,61155
+epa_03_01_a,Year 2023,May,Hydroelectric Conventional,27651
+epa_03_01_a,Year 2023,May,Solar,17281
+epa_03_01_a,Year 2023,May,Renewable Sources Excluding Hydroelectric and Solar,37570
+epa_03_01_a,Year 2023,May,Hydroelectric Pumped Storage,-459
+epa_03_01_a,Year 2023,May,Other,857
+epa_03_01_a,Year 2023,May,Total Generation at Utility Scale Facilities,327474
+epa_03_01_a,Year 2023,May,Estimated Solar Photovoltaic,7543
+epa_03_01_a,Year 2023,May,Estimated Total Solar Photovoltaic,24525
+epa_03_01_a,Year 2023,May,Estimated Total Solar,24824
+epa_03_01_a,Year 2023,June,Coal,57772
+epa_03_01_a,Year 2023,June,Petroleum Liquids,878
+epa_03_01_a,Year 2023,June,Petroleum Coke,389
+epa_03_01_a,Year 2023,June,Natural Gas,161981
+epa_03_01_a,Year 2023,June,Other Fossil Gas,974
+epa_03_01_a,Year 2023,June,Nuclear,64819
+epa_03_01_a,Year 2023,June,Hydroelectric Conventional,21572
+epa_03_01_a,Year 2023,June,Solar,17834
+epa_03_01_a,Year 2023,June,Renewable Sources Excluding Hydroelectric and Solar,32728
+epa_03_01_a,Year 2023,June,Hydroelectric Pumped Storage,-551
+epa_03_01_a,Year 2023,June,Other,838
+epa_03_01_a,Year 2023,June,Total Generation at Utility Scale Facilities,359234
+epa_03_01_a,Year 2023,June,Estimated Solar Photovoltaic,7405
+epa_03_01_a,Year 2023,June,Estimated Total Solar Photovoltaic,24874
+epa_03_01_a,Year 2023,June,Estimated Total Solar,25239
+epa_03_01_a,Year 2023,July,Coal,78903
+epa_03_01_a,Year 2023,July,Petroleum Liquids,964
+epa_03_01_a,Year 2023,July,Petroleum Coke,651
+epa_03_01_a,Year 2023,July,Natural Gas,199522
+epa_03_01_a,Year 2023,July,Other Fossil Gas,1046
+epa_03_01_a,Year 2023,July,Nuclear,69888
+epa_03_01_a,Year 2023,July,Hydroelectric Conventional,21978
+epa_03_01_a,Year 2023,July,Solar,18894
+epa_03_01_a,Year 2023,July,Renewable Sources Excluding Hydroelectric and Solar,33394
+epa_03_01_a,Year 2023,July,Hydroelectric Pumped Storage,-656
+epa_03_01_a,Year 2023,July,Other,872
+epa_03_01_a,Year 2023,July,Total Generation at Utility Scale Facilities,425455
+epa_03_01_a,Year 2023,July,Estimated Solar Photovoltaic,7720
+epa_03_01_a,Year 2023,July,Estimated Total Solar Photovoltaic,26234
+epa_03_01_a,Year 2023,July,Estimated Total Solar,26614
+epa_03_01_a,Year 2023,August,Coal,78112
+epa_03_01_a,Year 2023,August,Petroleum Liquids,958
+epa_03_01_a,Year 2023,August,Petroleum Coke,651
+epa_03_01_a,Year 2023,August,Natural Gas,199221
+epa_03_01_a,Year 2023,August,Other Fossil Gas,1088
+epa_03_01_a,Year 2023,August,Nuclear,69744
+epa_03_01_a,Year 2023,August,Hydroelectric Conventional,21293
+epa_03_01_a,Year 2023,August,Solar,17744
+epa_03_01_a,Year 2023,August,Renewable Sources Excluding Hydroelectric and Solar,33882
+epa_03_01_a,Year 2023,August,Hydroelectric Pumped Storage,-653
+epa_03_01_a,Year 2023,August,Other,865
+epa_03_01_a,Year 2023,August,Total Generation at Utility Scale Facilities,422905
+epa_03_01_a,Year 2023,August,Estimated Solar Photovoltaic,7504
+epa_03_01_a,Year 2023,August,Estimated Total Solar Photovoltaic,24938
+epa_03_01_a,Year 2023,August,Estimated Total Solar,25248
+epa_03_01_a,Year 2023,September,Coal,59959
+epa_03_01_a,Year 2023,September,Petroleum Liquids,894
+epa_03_01_a,Year 2023,September,Petroleum Coke,592
+epa_03_01_a,Year 2023,September,Natural Gas,166311
+epa_03_01_a,Year 2023,September,Other Fossil Gas,983
+epa_03_01_a,Year 2023,September,Nuclear,65560
+epa_03_01_a,Year 2023,September,Hydroelectric Conventional,16916
+epa_03_01_a,Year 2023,September,Solar,15583
+epa_03_01_a,Year 2023,September,Renewable Sources Excluding Hydroelectric and Solar,33470
+epa_03_01_a,Year 2023,September,Hydroelectric Pumped Storage,-553
+epa_03_01_a,Year 2023,September,Other,775
+epa_03_01_a,Year 2023,September,Total Generation at Utility Scale Facilities,360490
+epa_03_01_a,Year 2023,September,Estimated Solar Photovoltaic,6604
+epa_03_01_a,Year 2023,September,Estimated Total Solar Photovoltaic,21894
+epa_03_01_a,Year 2023,September,Estimated Total Solar,22187
+epa_03_01_a,Year 2023,October,Coal,50933
+epa_03_01_a,Year 2023,October,Petroleum Liquids,990
+epa_03_01_a,Year 2023,October,Petroleum Coke,293
+epa_03_01_a,Year 2023,October,Natural Gas,140825
+epa_03_01_a,Year 2023,October,Other Fossil Gas,924
+epa_03_01_a,Year 2023,October,Nuclear,61436
+epa_03_01_a,Year 2023,October,Hydroelectric Conventional,15673
+epa_03_01_a,Year 2023,October,Solar,14121
+epa_03_01_a,Year 2023,October,Renewable Sources Excluding Hydroelectric and Solar,41060
+epa_03_01_a,Year 2023,October,Hydroelectric Pumped Storage,-372
+epa_03_01_a,Year 2023,October,Other,837
+epa_03_01_a,Year 2023,October,Total Generation at Utility Scale Facilities,326718
+epa_03_01_a,Year 2023,October,Estimated Solar Photovoltaic,6076
+epa_03_01_a,Year 2023,October,Estimated Total Solar Photovoltaic,19910
+epa_03_01_a,Year 2023,October,Estimated Total Solar,20196
+epa_03_01_a,Year 2023,November,Coal,51209
+epa_03_01_a,Year 2023,November,Petroleum Liquids,906
+epa_03_01_a,Year 2023,November,Petroleum Coke,179
+epa_03_01_a,Year 2023,November,Natural Gas,135531
+epa_03_01_a,Year 2023,November,Other Fossil Gas,959
+epa_03_01_a,Year 2023,November,Nuclear,62258
+epa_03_01_a,Year 2023,November,Hydroelectric Conventional,17026
+epa_03_01_a,Year 2023,November,Solar,10446
+epa_03_01_a,Year 2023,November,Renewable Sources Excluding Hydroelectric and Solar,41774
+epa_03_01_a,Year 2023,November,Hydroelectric Pumped Storage,-347
+epa_03_01_a,Year 2023,November,Other,844
+epa_03_01_a,Year 2023,November,Total Generation at Utility Scale Facilities,320785
+epa_03_01_a,Year 2023,November,Estimated Solar Photovoltaic,4938
+epa_03_01_a,Year 2023,November,Estimated Total Solar Photovoltaic,15218
+epa_03_01_a,Year 2023,November,Estimated Total Solar,15384
+epa_03_01_a,Year 2023,December,Coal,56365
+epa_03_01_a,Year 2023,December,Petroleum Liquids,920
+epa_03_01_a,Year 2023,December,Petroleum Coke,318
+epa_03_01_a,Year 2023,December,Natural Gas,148029
+epa_03_01_a,Year 2023,December,Other Fossil Gas,1062
+epa_03_01_a,Year 2023,December,Nuclear,68854
+epa_03_01_a,Year 2023,December,Hydroelectric Conventional,19028
+epa_03_01_a,Year 2023,December,Solar,9113
+epa_03_01_a,Year 2023,December,Renewable Sources Excluding Hydroelectric and Solar,43688
+epa_03_01_a,Year 2023,December,Hydroelectric Pumped Storage,-514
+epa_03_01_a,Year 2023,December,Other,869
+epa_03_01_a,Year 2023,December,Total Generation at Utility Scale Facilities,347732
+epa_03_01_a,Year 2023,December,Estimated Solar Photovoltaic,4494
+epa_03_01_a,Year 2023,December,Estimated Total Solar Photovoltaic,13500
+epa_03_01_a,Year 2023,December,Estimated Total Solar,13606
+epa_03_01_a,Year 2024,January,Coal,75618
+epa_03_01_a,Year 2024,January,Petroleum Liquids,1469
+epa_03_01_a,Year 2024,January,Petroleum Coke,360
+epa_03_01_a,Year 2024,January,Natural Gas,161667
+epa_03_01_a,Year 2024,January,Other Fossil Gas,1074
+epa_03_01_a,Year 2024,January,Nuclear,69080
+epa_03_01_a,Year 2024,January,Hydroelectric Conventional,21554
+epa_03_01_a,Year 2024,January,Solar,9583
+epa_03_01_a,Year 2024,January,Renewable Sources Excluding Hydroelectric and Solar,40334
+epa_03_01_a,Year 2024,January,Hydroelectric Pumped Storage,-414
+epa_03_01_a,Year 2024,January,Other,799
+epa_03_01_a,Year 2024,January,Total Generation at Utility Scale Facilities,381122
+epa_03_01_a,Year 2024,January,Estimated Solar Photovoltaic,4726
+epa_03_01_a,Year 2024,January,Estimated Total Solar Photovoltaic,14230
+epa_03_01_a,Year 2024,January,Estimated Total Solar,14309
+epa_03_01_a,Year 2024,February,Coal,44137
+epa_03_01_a,Year 2024,February,Petroleum Liquids,740
+epa_03_01_a,Year 2024,February,Petroleum Coke,217
+epa_03_01_a,Year 2024,February,Natural Gas,131845
+epa_03_01_a,Year 2024,February,Other Fossil Gas,931
+epa_03_01_a,Year 2024,February,Nuclear,64584
+epa_03_01_a,Year 2024,February,Hydroelectric Conventional,20795
+epa_03_01_a,Year 2024,February,Solar,12540
+epa_03_01_a,Year 2024,February,Renewable Sources Excluding Hydroelectric and Solar,46108
+epa_03_01_a,Year 2024,February,Hydroelectric Pumped Storage,-404
+epa_03_01_a,Year 2024,February,Other,720
+epa_03_01_a,Year 2024,February,Total Generation at Utility Scale Facilities,322214
+epa_03_01_a,Year 2024,February,Estimated Solar Photovoltaic,5342
+epa_03_01_a,Year 2024,February,Estimated Total Solar Photovoltaic,17763
+epa_03_01_a,Year 2024,February,Estimated Total Solar,17882
+epa_03_01_a,Year 2024,March,Coal,38505
+epa_03_01_a,Year 2024,March,Petroleum Liquids,784
+epa_03_01_a,Year 2024,March,Petroleum Coke,207
+epa_03_01_a,Year 2024,March,Natural Gas,131137
+epa_03_01_a,Year 2024,March,Other Fossil Gas,882
+epa_03_01_a,Year 2024,March,Nuclear,63346
+epa_03_01_a,Year 2024,March,Hydroelectric Conventional,23363
+epa_03_01_a,Year 2024,March,Solar,16019
+epa_03_01_a,Year 2024,March,Renewable Sources Excluding Hydroelectric and Solar,50354
+epa_03_01_a,Year 2024,March,Hydroelectric Pumped Storage,-349
+epa_03_01_a,Year 2024,March,Other,689
+epa_03_01_a,Year 2024,March,Total Generation at Utility Scale Facilities,324938
+epa_03_01_a,Year 2024,March,Estimated Solar Photovoltaic,7113
+epa_03_01_a,Year 2024,March,Estimated Total Solar Photovoltaic,22911
+epa_03_01_a,Year 2024,March,Estimated Total Solar,23132
+epa_03_01_a,Year 2024,April,Coal,37246
+epa_03_01_a,Year 2024,April,Petroleum Liquids,866
+epa_03_01_a,Year 2024,April,Petroleum Coke,278
+epa_03_01_a,Year 2024,April,Natural Gas,121532
+epa_03_01_a,Year 2024,April,Other Fossil Gas,913
+epa_03_01_a,Year 2024,April,Nuclear,57542
+epa_03_01_a,Year 2024,April,Hydroelectric Conventional,20916
+epa_03_01_a,Year 2024,April,Solar,19241
+epa_03_01_a,Year 2024,April,Renewable Sources Excluding Hydroelectric and Solar,51940
+epa_03_01_a,Year 2024,April,Hydroelectric Pumped Storage,-338
+epa_03_01_a,Year 2024,April,Other,644
+epa_03_01_a,Year 2024,April,Total Generation at Utility Scale Facilities,310780
+epa_03_01_a,Year 2024,April,Estimated Solar Photovoltaic,7832
+epa_03_01_a,Year 2024,April,Estimated Total Solar Photovoltaic,26741
+epa_03_01_a,Year 2024,April,Estimated Total Solar,27073
+epa_03_01_a,Year 2024,May,Coal,45812
+epa_03_01_a,Year 2024,May,Petroleum Liquids,850
+epa_03_01_a,Year 2024,May,Petroleum Coke,304
+epa_03_01_a,Year 2024,May,Natural Gas,143993
+epa_03_01_a,Year 2024,May,Other Fossil Gas,889
+epa_03_01_a,Year 2024,May,Nuclear,64973
+epa_03_01_a,Year 2024,May,Hydroelectric Conventional,24477
+epa_03_01_a,Year 2024,May,Solar,22371
+epa_03_01_a,Year 2024,May,Renewable Sources Excluding Hydroelectric and Solar,44360
+epa_03_01_a,Year 2024,May,Hydroelectric Pumped Storage,-284
+epa_03_01_a,Year 2024,May,Other,738
+epa_03_01_a,Year 2024,May,Total Generation at Utility Scale Facilities,348485
+epa_03_01_a,Year 2024,May,Estimated Solar Photovoltaic,8539
+epa_03_01_a,Year 2024,May,Estimated Total Solar Photovoltaic,30496
+epa_03_01_a,Year 2024,May,Estimated Total Solar,30910
+epa_03_01_a,Year 2024,June,Coal,61339
+epa_03_01_a,Year 2024,June,Petroleum Liquids,890
+epa_03_01_a,Year 2024,June,Petroleum Coke,389
+epa_03_01_a,Year 2024,June,Natural Gas,169156
+epa_03_01_a,Year 2024,June,Other Fossil Gas,941
+epa_03_01_a,Year 2024,June,Nuclear,68192
+epa_03_01_a,Year 2024,June,Hydroelectric Conventional,22397
+epa_03_01_a,Year 2024,June,Solar,24459
+epa_03_01_a,Year 2024,June,Renewable Sources Excluding Hydroelectric and Solar,43755
+epa_03_01_a,Year 2024,June,Hydroelectric Pumped Storage,-579
+epa_03_01_a,Year 2024,June,Other,694
+epa_03_01_a,Year 2024,June,Total Generation at Utility Scale Facilities,391632
+epa_03_01_a,Year 2024,June,Estimated Solar Photovoltaic,8553
+epa_03_01_a,Year 2024,June,Estimated Total Solar Photovoltaic,32598
+epa_03_01_a,Year 2024,June,Estimated Total Solar,33012
+epa_03_01_a,Year 2024,July,Coal,71565
+epa_03_01_a,Year 2024,July,Petroleum Liquids,997
+epa_03_01_a,Year 2024,July,Petroleum Coke,451
+epa_03_01_a,Year 2024,July,Natural Gas,205959
+epa_03_01_a,Year 2024,July,Other Fossil Gas,949
+epa_03_01_a,Year 2024,July,Nuclear,69851
+epa_03_01_a,Year 2024,July,Hydroelectric Conventional,21384
+epa_03_01_a,Year 2024,July,Solar,24484
+epa_03_01_a,Year 2024,July,Renewable Sources Excluding Hydroelectric and Solar,33593
+epa_03_01_a,Year 2024,July,Hydroelectric Pumped Storage,-639
+epa_03_01_a,Year 2024,July,Other,723
+epa_03_01_a,Year 2024,July,Total Generation at Utility Scale Facilities,429317
+epa_03_01_a,Year 2024,July,Estimated Solar Photovoltaic,8778
+epa_03_01_a,Year 2024,July,Estimated Total Solar Photovoltaic,32901
+epa_03_01_a,Year 2024,July,Estimated Total Solar,33262
+epa_03_01_a,Year 2024,August,Coal,68760
+epa_03_01_a,Year 2024,August,Petroleum Liquids,993
+epa_03_01_a,Year 2024,August,Petroleum Coke,432
+epa_03_01_a,Year 2024,August,Natural Gas,202915
+epa_03_01_a,Year 2024,August,Other Fossil Gas,911
+epa_03_01_a,Year 2024,August,Nuclear,69760
+epa_03_01_a,Year 2024,August,Hydroelectric Conventional,20491
+epa_03_01_a,Year 2024,August,Solar,24328
+epa_03_01_a,Year 2024,August,Renewable Sources Excluding Hydroelectric and Solar,34653
+epa_03_01_a,Year 2024,August,Hydroelectric Pumped Storage,-798
+epa_03_01_a,Year 2024,August,Other,682
+epa_03_01_a,Year 2024,August,Total Generation at Utility Scale Facilities,423127
+epa_03_01_a,Year 2024,August,Estimated Solar Photovoltaic,8412
+epa_03_01_a,Year 2024,August,Estimated Total Solar Photovoltaic,32387
+epa_03_01_a,Year 2024,August,Estimated Total Solar,32741
+epa_03_01_a,Year 2024,September,Coal,54559
+epa_03_01_a,Year 2024,September,Petroleum Liquids,839
+epa_03_01_a,Year 2024,September,Petroleum Coke,236
+epa_03_01_a,Year 2024,September,Natural Gas,169671
+epa_03_01_a,Year 2024,September,Other Fossil Gas,836
+epa_03_01_a,Year 2024,September,Nuclear,62660
+epa_03_01_a,Year 2024,September,Hydroelectric Conventional,15911
+epa_03_01_a,Year 2024,September,Solar,20538
+epa_03_01_a,Year 2024,September,Renewable Sources Excluding Hydroelectric and Solar,34165
+epa_03_01_a,Year 2024,September,Hydroelectric Pumped Storage,-637
+epa_03_01_a,Year 2024,September,Other,619
+epa_03_01_a,Year 2024,September,Total Generation at Utility Scale Facilities,359397
+epa_03_01_a,Year 2024,September,Estimated Solar Photovoltaic,7511
+epa_03_01_a,Year 2024,September,Estimated Total Solar Photovoltaic,27714
+epa_03_01_a,Year 2024,September,Estimated Total Solar,28049
+epa_03_01_a,Year 2024,October,Coal,46890
+epa_03_01_a,Year 2024,October,Petroleum Liquids,929
+epa_03_01_a,Year 2024,October,Petroleum Coke,232
+epa_03_01_a,Year 2024,October,Natural Gas,146711
+epa_03_01_a,Year 2024,October,Other Fossil Gas,801
+epa_03_01_a,Year 2024,October,Nuclear,58773
+epa_03_01_a,Year 2024,October,Hydroelectric Conventional,15352
+epa_03_01_a,Year 2024,October,Solar,19828
+epa_03_01_a,Year 2024,October,Renewable Sources Excluding Hydroelectric and Solar,44334
+epa_03_01_a,Year 2024,October,Hydroelectric Pumped Storage,-439
+epa_03_01_a,Year 2024,October,Other,570
+epa_03_01_a,Year 2024,October,Total Generation at Utility Scale Facilities,333980
+epa_03_01_a,Year 2024,October,Estimated Solar Photovoltaic,6736
+epa_03_01_a,Year 2024,October,Estimated Total Solar Photovoltaic,26331
+epa_03_01_a,Year 2024,October,Estimated Total Solar,26564
+epa_03_01_a,Year 2024,November,Coal,44924
+epa_03_01_a,Year 2024,November,Petroleum Liquids,875
+epa_03_01_a,Year 2024,November,Petroleum Coke,220
+epa_03_01_a,Year 2024,November,Natural Gas,137687
+epa_03_01_a,Year 2024,November,Other Fossil Gas,800
+epa_03_01_a,Year 2024,November,Nuclear,61904
+epa_03_01_a,Year 2024,November,Hydroelectric Conventional,16723
+epa_03_01_a,Year 2024,November,Solar,13841
+epa_03_01_a,Year 2024,November,Renewable Sources Excluding Hydroelectric and Solar,45214
+epa_03_01_a,Year 2024,November,Hydroelectric Pumped Storage,-490
+epa_03_01_a,Year 2024,November,Other,652
+epa_03_01_a,Year 2024,November,Total Generation at Utility Scale Facilities,322351
+epa_03_01_a,Year 2024,November,Estimated Solar Photovoltaic,5393
+epa_03_01_a,Year 2024,November,Estimated Total Solar Photovoltaic,19098
+epa_03_01_a,Year 2024,November,Estimated Total Solar,19234
+epa_03_01_a,Year 2024,December,Coal,62800
+epa_03_01_a,Year 2024,December,Petroleum Liquids,1224
+epa_03_01_a,Year 2024,December,Petroleum Coke,304
+epa_03_01_a,Year 2024,December,Natural Gas,147630
+epa_03_01_a,Year 2024,December,Other Fossil Gas,919
+epa_03_01_a,Year 2024,December,Nuclear,71200
+epa_03_01_a,Year 2024,December,Hydroelectric Conventional,19533
+epa_03_01_a,Year 2024,December,Solar,12601
+epa_03_01_a,Year 2024,December,Renewable Sources Excluding Hydroelectric and Solar,44923
+epa_03_01_a,Year 2024,December,Hydroelectric Pumped Storage,-481
+epa_03_01_a,Year 2024,December,Other,639
+epa_03_01_a,Year 2024,December,Total Generation at Utility Scale Facilities,361292
+epa_03_01_a,Year 2024,December,Estimated Solar Photovoltaic,4984
+epa_03_01_a,Year 2024,December,Estimated Total Solar Photovoltaic,17465
+epa_03_01_a,Year 2024,December,Estimated Total Solar,17585
+epa_03_01_a,Year 2025,January,Coal,82937
+epa_03_01_a,Year 2025,January,Petroleum Liquids,2751
+epa_03_01_a,Year 2025,January,Petroleum Coke,533
+epa_03_01_a,Year 2025,January,Natural Gas,158383
+epa_03_01_a,Year 2025,January,Other Fossil Gas,865
+epa_03_01_a,Year 2025,January,Nuclear,71945
+epa_03_01_a,Year 2025,January,Hydroelectric Conventional,20624
+epa_03_01_a,Year 2025,January,Solar,15710
+epa_03_01_a,Year 2025,January,Renewable Sources Excluding Hydroelectric and Solar,48127
+epa_03_01_a,Year 2025,January,Hydroelectric Pumped Storage,-467
+epa_03_01_a,Year 2025,January,Other,604
+epa_03_01_a,Year 2025,January,Total Generation at Utility Scale Facilities,402013
+epa_03_01_a,Year 2025,January,Estimated Solar Photovoltaic,5414
+epa_03_01_a,Year 2025,January,Estimated Total Solar Photovoltaic,21036
+epa_03_01_a,Year 2025,January,Estimated Total Solar,21123
+epa_03_01_a,Year 2025,February,Coal,62128
+epa_03_01_a,Year 2025,February,Petroleum Liquids,1270
+epa_03_01_a,Year 2025,February,Petroleum Coke,318
+epa_03_01_a,Year 2025,February,Natural Gas,132928
+epa_03_01_a,Year 2025,February,Other Fossil Gas,887
+epa_03_01_a,Year 2025,February,Nuclear,61829
+epa_03_01_a,Year 2025,February,Hydroelectric Conventional,18852
+epa_03_01_a,Year 2025,February,Solar,16670
+epa_03_01_a,Year 2025,February,Renewable Sources Excluding Hydroelectric and Solar,43672
+epa_03_01_a,Year 2025,February,Hydroelectric Pumped Storage,-417
+epa_03_01_a,Year 2025,February,Other,555
+epa_03_01_a,Year 2025,February,Total Generation at Utility Scale Facilities,338692
+epa_03_01_a,Year 2025,February,Estimated Solar Photovoltaic,5826
+epa_03_01_a,Year 2025,February,Estimated Total Solar Photovoltaic,22357
+epa_03_01_a,Year 2025,February,Estimated Total Solar,22496
+epa_03_01_a,Year 2025,March,Coal,49121
+epa_03_01_a,Year 2025,March,Petroleum Liquids,871
+epa_03_01_a,Year 2025,March,Petroleum Coke,312
+epa_03_01_a,Year 2025,March,Natural Gas,118430
+epa_03_01_a,Year 2025,March,Other Fossil Gas,863
+epa_03_01_a,Year 2025,March,Nuclear,62457
+epa_03_01_a,Year 2025,March,Hydroelectric Conventional,22700
+epa_03_01_a,Year 2025,March,Solar,23725
+epa_03_01_a,Year 2025,March,Renewable Sources Excluding Hydroelectric and Solar,54783
+epa_03_01_a,Year 2025,March,Hydroelectric Pumped Storage,-428
+epa_03_01_a,Year 2025,March,Other,564
+epa_03_01_a,Year 2025,March,Total Generation at Utility Scale Facilities,333397
+epa_03_01_a,Year 2025,March,Estimated Solar Photovoltaic,7988
+epa_03_01_a,Year 2025,March,Estimated Total Solar Photovoltaic,31544
+epa_03_01_a,Year 2025,March,Estimated Total Solar,31714
+epa_03_01_a,Year 2025,April,Coal,45545
+epa_03_01_a,Year 2025,April,Petroleum Liquids,872
+epa_03_01_a,Year 2025,April,Petroleum Coke,308
+epa_03_01_a,Year 2025,April,Natural Gas,114251
+epa_03_01_a,Year 2025,April,Other Fossil Gas,725
+epa_03_01_a,Year 2025,April,Nuclear,57893
+epa_03_01_a,Year 2025,April,Hydroelectric Conventional,23473
+epa_03_01_a,Year 2025,April,Solar,27225
+epa_03_01_a,Year 2025,April,Renewable Sources Excluding Hydroelectric and Solar,50209
+epa_03_01_a,Year 2025,April,Hydroelectric Pumped Storage,-259
+epa_03_01_a,Year 2025,April,Other,532
+epa_03_01_a,Year 2025,April,Total Generation at Utility Scale Facilities,320773
+epa_03_01_a,Year 2025,April,Estimated Solar Photovoltaic,8768
+epa_03_01_a,Year 2025,April,Estimated Total Solar Photovoltaic,35694
+epa_03_01_a,Year 2025,April,Estimated Total Solar,35993
+epa_03_01_a,Year 2025,May,Coal,48566
+epa_03_01_a,Year 2025,May,Petroleum Liquids,797
+epa_03_01_a,Year 2025,May,Petroleum Coke,325
+epa_03_01_a,Year 2025,May,Natural Gas,135058
+epa_03_01_a,Year 2025,May,Other Fossil Gas,710
+epa_03_01_a,Year 2025,May,Nuclear,62145
+epa_03_01_a,Year 2025,May,Hydroelectric Conventional,25471
+epa_03_01_a,Year 2025,May,Solar,30261
+epa_03_01_a,Year 2025,May,Renewable Sources Excluding Hydroelectric and Solar,41983
+epa_03_01_a,Year 2025,May,Hydroelectric Pumped Storage,-271
+epa_03_01_a,Year 2025,May,Other,524
+epa_03_01_a,Year 2025,May,Total Generation at Utility Scale Facilities,345569
+epa_03_01_a,Year 2025,May,Estimated Solar Photovoltaic,9306
+epa_03_01_a,Year 2025,May,Estimated Total Solar Photovoltaic,39236
+epa_03_01_a,Year 2025,May,Estimated Total Solar,39566
+epa_03_01_a,Year 2025,June,Coal,64294
+epa_03_01_a,Year 2025,June,Petroleum Liquids,1115
+epa_03_01_a,Year 2025,June,Petroleum Coke,411
+epa_03_01_a,Year 2025,June,Natural Gas,165497
+epa_03_01_a,Year 2025,June,Other Fossil Gas,832
+epa_03_01_a,Year 2025,June,Nuclear,66222
+epa_03_01_a,Year 2025,June,Hydroelectric Conventional,22909
+epa_03_01_a,Year 2025,June,Solar,32586
+epa_03_01_a,Year 2025,June,Renewable Sources Excluding Hydroelectric and Solar,41154
+epa_03_01_a,Year 2025,June,Hydroelectric Pumped Storage,-420
+epa_03_01_a,Year 2025,June,Other,507
+epa_03_01_a,Year 2025,June,Total Generation at Utility Scale Facilities,395109
+epa_03_01_a,Year 2025,June,Estimated Solar Photovoltaic,9416
+epa_03_01_a,Year 2025,June,Estimated Total Solar Photovoltaic,41615
+epa_03_01_a,Year 2025,June,Estimated Total Solar,42002
+epa_03_01_a,Year 2025,July,Coal,80015
+epa_03_01_a,Year 2025,July,Petroleum Liquids,1183
+epa_03_01_a,Year 2025,July,Petroleum Coke,592
+epa_03_01_a,Year 2025,July,Natural Gas,201051
+epa_03_01_a,Year 2025,July,Other Fossil Gas,884
+epa_03_01_a,Year 2025,July,Nuclear,70784
+epa_03_01_a,Year 2025,July,Hydroelectric Conventional,20370
+epa_03_01_a,Year 2025,July,Solar,34082
+epa_03_01_a,Year 2025,July,Renewable Sources Excluding Hydroelectric and Solar,37239
+epa_03_01_a,Year 2025,July,Hydroelectric Pumped Storage,-486
+epa_03_01_a,Year 2025,July,Other,529
+epa_03_01_a,Year 2025,July,Total Generation at Utility Scale Facilities,446244
+epa_03_01_a,Year 2025,July,Estimated Solar Photovoltaic,9847
+epa_03_01_a,Year 2025,July,Estimated Total Solar Photovoltaic,43560
+epa_03_01_a,Year 2025,July,Estimated Total Solar,43929
+epa_03_01_a,Year 2025,August,Coal,69563
+epa_03_01_a,Year 2025,August,Petroleum Liquids,1040
+epa_03_01_a,Year 2025,August,Petroleum Coke,455
+epa_03_01_a,Year 2025,August,Natural Gas,193570
+epa_03_01_a,Year 2025,August,Other Fossil Gas,755
+epa_03_01_a,Year 2025,August,Nuclear,70705
+epa_03_01_a,Year 2025,August,Hydroelectric Conventional,19216
+epa_03_01_a,Year 2025,August,Solar,32466
+epa_03_01_a,Year 2025,August,Renewable Sources Excluding Hydroelectric and Solar,32938
+epa_03_01_a,Year 2025,August,Hydroelectric Pumped Storage,-560
+epa_03_01_a,Year 2025,August,Other,503
+epa_03_01_a,Year 2025,August,Total Generation at Utility Scale Facilities,420651
+epa_03_01_a,Year 2025,August,Estimated Solar Photovoltaic,9312
+epa_03_01_a,Year 2025,August,Estimated Total Solar Photovoltaic,41440
+epa_03_01_a,Year 2025,August,Estimated Total Solar,41778
+epa_03_01_a,Year 2025,September,Coal,58161
+epa_03_01_a,Year 2025,September,Petroleum Liquids,918
+epa_03_01_a,Year 2025,September,Petroleum Coke,369
+epa_03_01_a,Year 2025,September,Natural Gas,168278
+epa_03_01_a,Year 2025,September,Other Fossil Gas,762
+epa_03_01_a,Year 2025,September,Nuclear,65458
+epa_03_01_a,Year 2025,September,Hydroelectric Conventional,15000
+epa_03_01_a,Year 2025,September,Solar,28592
+epa_03_01_a,Year 2025,September,Renewable Sources Excluding Hydroelectric and Solar,30928
+epa_03_01_a,Year 2025,September,Hydroelectric Pumped Storage,-470
+epa_03_01_a,Year 2025,September,Other,437
+epa_03_01_a,Year 2025,September,Total Generation at Utility Scale Facilities,368432
+epa_03_01_a,Year 2025,September,Estimated Solar Photovoltaic,8126
+epa_03_01_a,Year 2025,September,Estimated Total Solar Photovoltaic,36461
+epa_03_01_a,Year 2025,September,Estimated Total Solar,36718
+epa_03_01_a,Year 2025,October,Coal,53735
+epa_03_01_a,Year 2025,October,Petroleum Liquids,952
+epa_03_01_a,Year 2025,October,Petroleum Coke,454
+epa_03_01_a,Year 2025,October,Natural Gas,142948
+epa_03_01_a,Year 2025,October,Other Fossil Gas,815
+epa_03_01_a,Year 2025,October,Nuclear,59329
+epa_03_01_a,Year 2025,October,Hydroelectric Conventional,14815
+epa_03_01_a,Year 2025,October,Solar,25101
+epa_03_01_a,Year 2025,October,Renewable Sources Excluding Hydroelectric and Solar,44390
+epa_03_01_a,Year 2025,October,Hydroelectric Pumped Storage,-513
+epa_03_01_a,Year 2025,October,Other,464
+epa_03_01_a,Year 2025,October,Total Generation at Utility Scale Facilities,342490
+epa_03_01_a,Year 2025,October,Estimated Solar Photovoltaic,7544
+epa_03_01_a,Year 2025,October,Estimated Total Solar Photovoltaic,32411
+epa_03_01_a,Year 2025,October,Estimated Total Solar,32645
+epa_03_01_a,Year 2025,November,Coal,54248
+epa_03_01_a,Year 2025,November,Petroleum Liquids,960
+epa_03_01_a,Year 2025,November,Petroleum Coke,325
+epa_03_01_a,Year 2025,November,Natural Gas,131366
+epa_03_01_a,Year 2025,November,Other Fossil Gas,745
+epa_03_01_a,Year 2025,November,Nuclear,63911
+epa_03_01_a,Year 2025,November,Hydroelectric Conventional,16392
+epa_03_01_a,Year 2025,November,Solar,18587
+epa_03_01_a,Year 2025,November,Renewable Sources Excluding Hydroelectric and Solar,45188
+epa_03_01_a,Year 2025,November,Hydroelectric Pumped Storage,-610
+epa_03_01_a,Year 2025,November,Other,526
+epa_03_01_a,Year 2025,November,Total Generation at Utility Scale Facilities,331637
+epa_03_01_a,Year 2025,November,Estimated Solar Photovoltaic,5955
+epa_03_01_a,Year 2025,November,Estimated Total Solar Photovoltaic,24412
+epa_03_01_a,Year 2025,November,Estimated Total Solar,24542
+epa_03_01_a,Year 2025,December,Coal,66615
+epa_03_01_a,Year 2025,December,Petroleum Liquids,1823
+epa_03_01_a,Year 2025,December,Petroleum Coke,292
+epa_03_01_a,Year 2025,December,Natural Gas,149242
+epa_03_01_a,Year 2025,December,Other Fossil Gas,685
+epa_03_01_a,Year 2025,December,Nuclear,72627
+epa_03_01_a,Year 2025,December,Hydroelectric Conventional,21480
+epa_03_01_a,Year 2025,December,Solar,15299
+epa_03_01_a,Year 2025,December,Renewable Sources Excluding Hydroelectric and Solar,51886
+epa_03_01_a,Year 2025,December,Hydroelectric Pumped Storage,-462
+epa_03_01_a,Year 2025,December,Other,534
+epa_03_01_a,Year 2025,December,Total Generation at Utility Scale Facilities,380022
+epa_03_01_a,Year 2025,December,Estimated Solar Photovoltaic,5538
+epa_03_01_a,Year 2025,December,Estimated Total Solar Photovoltaic,20721
+epa_03_01_a,Year 2025,December,Estimated Total Solar,20838
+epa_07_04,"Table 7.4. Weighted Average Cost of Fossil Fuels for the Electric Power Industry, 2015 through 2025",2015,Receipts (Trillion Btu),6797
+epa_07_04,"Table 7.4. Weighted Average Cost of Fossil Fuels for the Electric Power Industry, 2015 through 2025",2015,Average Cost (Dollars per MMBtu),2.58
+epa_07_04,"Table 7.4. Weighted Average Cost of Fossil Fuels for the Electric Power Industry, 2015 through 2025",2015,Receipts (Trillion Btu),7353
+epa_07_04,"Table 7.4. Weighted Average Cost of Fossil Fuels for the Electric Power Industry, 2015 through 2025",2015,Average Cost (Dollars per MMBtu),1.94
+epa_07_04,"Table 7.4. Weighted Average Cost of Fossil Fuels for the Electric Power Industry, 2015 through 2025",2015,Receipts (Trillion Btu),855
+epa_07_04,"Table 7.4. Weighted Average Cost of Fossil Fuels for the Electric Power Industry, 2015 through 2025",2015,Average Cost (Dollars per MMBtu),1.92
+epa_07_04,"Table 7.4. Weighted Average Cost of Fossil Fuels for the Electric Power Industry, 2015 through 2025",2015,Receipts (Trillion Btu),15086
+epa_07_04,"Table 7.4. Weighted Average Cost of Fossil Fuels for the Electric Power Industry, 2015 through 2025",2015,Average Cost (Dollars per MMBtu),2.22
+epa_07_04,"Table 7.4. Weighted Average Cost of Fossil Fuels for the Electric Power Industry, 2015 through 2025",2015,Receipts (Trillion Btu),286
+epa_07_04,"Table 7.4. Weighted Average Cost of Fossil Fuels for the Electric Power Industry, 2015 through 2025",2015,Average Cost (Dollars per MMBtu),6.74
+epa_07_04,"Table 7.4. Weighted Average Cost of Fossil Fuels for the Electric Power Industry, 2015 through 2025",2015,Receipts (Trillion Btu),10174
+epa_07_04,"Table 7.4. Weighted Average Cost of Fossil Fuels for the Electric Power Industry, 2015 through 2025",2015,Average Cost (Dollars per MMBtu),3.23
+epa_07_04,"Table 7.4. Weighted Average Cost of Fossil Fuels for the Electric Power Industry, 2015 through 2025",2015,Receipts (Trillion Btu),25546
+epa_07_04,"Table 7.4. Weighted Average Cost of Fossil Fuels for the Electric Power Industry, 2015 through 2025",2015,Average Cost (Dollars per MMBtu),2.65
+epa_07_04,"Table 7.4. Weighted Average Cost of Fossil Fuels for the Electric Power Industry, 2015 through 2025",2016,Receipts (Trillion Btu),5770
+epa_07_04,"Table 7.4. Weighted Average Cost of Fossil Fuels for the Electric Power Industry, 2015 through 2025",2016,Average Cost (Dollars per MMBtu),2.4
+epa_07_04,"Table 7.4. Weighted Average Cost of Fossil Fuels for the Electric Power Industry, 2015 through 2025",2016,Receipts (Trillion Btu),5818
+epa_07_04,"Table 7.4. Weighted Average Cost of Fossil Fuels for the Electric Power Industry, 2015 through 2025",2016,Average Cost (Dollars per MMBtu),1.89
+epa_07_04,"Table 7.4. Weighted Average Cost of Fossil Fuels for the Electric Power Industry, 2015 through 2025",2016,Receipts (Trillion Btu),840
+epa_07_04,"Table 7.4. Weighted Average Cost of Fossil Fuels for the Electric Power Industry, 2015 through 2025",2016,Average Cost (Dollars per MMBtu),1.74
+epa_07_04,"Table 7.4. Weighted Average Cost of Fossil Fuels for the Electric Power Industry, 2015 through 2025",2016,Receipts (Trillion Btu),12516
+epa_07_04,"Table 7.4. Weighted Average Cost of Fossil Fuels for the Electric Power Industry, 2015 through 2025",2016,Average Cost (Dollars per MMBtu),2.11
+epa_07_04,"Table 7.4. Weighted Average Cost of Fossil Fuels for the Electric Power Industry, 2015 through 2025",2016,Receipts (Trillion Btu),219
+epa_07_04,"Table 7.4. Weighted Average Cost of Fossil Fuels for the Electric Power Industry, 2015 through 2025",2016,Average Cost (Dollars per MMBtu),5.24
+epa_07_04,"Table 7.4. Weighted Average Cost of Fossil Fuels for the Electric Power Industry, 2015 through 2025",2016,Receipts (Trillion Btu),10619
+epa_07_04,"Table 7.4. Weighted Average Cost of Fossil Fuels for the Electric Power Industry, 2015 through 2025",2016,Average Cost (Dollars per MMBtu),2.87
+epa_07_04,"Table 7.4. Weighted Average Cost of Fossil Fuels for the Electric Power Industry, 2015 through 2025",2016,Receipts (Trillion Btu),23354
+epa_07_04,"Table 7.4. Weighted Average Cost of Fossil Fuels for the Electric Power Industry, 2015 through 2025",2016,Average Cost (Dollars per MMBtu),2.47
+epa_07_04,"Table 7.4. Weighted Average Cost of Fossil Fuels for the Electric Power Industry, 2015 through 2025",2017,Receipts (Trillion Btu),5279
+epa_07_04,"Table 7.4. Weighted Average Cost of Fossil Fuels for the Electric Power Industry, 2015 through 2025",2017,Average Cost (Dollars per MMBtu),2.31
+epa_07_04,"Table 7.4. Weighted Average Cost of Fossil Fuels for the Electric Power Industry, 2015 through 2025",2017,Receipts (Trillion Btu),6123
+epa_07_04,"Table 7.4. Weighted Average Cost of Fossil Fuels for the Electric Power Industry, 2015 through 2025",2017,Average Cost (Dollars per MMBtu),1.9
+epa_07_04,"Table 7.4. Weighted Average Cost of Fossil Fuels for the Electric Power Industry, 2015 through 2025",2017,Receipts (Trillion Btu),773
+epa_07_04,"Table 7.4. Weighted Average Cost of Fossil Fuels for the Electric Power Industry, 2015 through 2025",2017,Average Cost (Dollars per MMBtu),1.66
+epa_07_04,"Table 7.4. Weighted Average Cost of Fossil Fuels for the Electric Power Industry, 2015 through 2025",2017,Receipts (Trillion Btu),12261
+epa_07_04,"Table 7.4. Weighted Average Cost of Fossil Fuels for the Electric Power Industry, 2015 through 2025",2017,Average Cost (Dollars per MMBtu),2.06
+epa_07_04,"Table 7.4. Weighted Average Cost of Fossil Fuels for the Electric Power Industry, 2015 through 2025",2017,Receipts (Trillion Btu),190
+epa_07_04,"Table 7.4. Weighted Average Cost of Fossil Fuels for the Electric Power Industry, 2015 through 2025",2017,Average Cost (Dollars per MMBtu),7.1
+epa_07_04,"Table 7.4. Weighted Average Cost of Fossil Fuels for the Electric Power Industry, 2015 through 2025",2017,Receipts (Trillion Btu),9952
+epa_07_04,"Table 7.4. Weighted Average Cost of Fossil Fuels for the Electric Power Industry, 2015 through 2025",2017,Average Cost (Dollars per MMBtu),3.37
+epa_07_04,"Table 7.4. Weighted Average Cost of Fossil Fuels for the Electric Power Industry, 2015 through 2025",2017,Receipts (Trillion Btu),22403
+epa_07_04,"Table 7.4. Weighted Average Cost of Fossil Fuels for the Electric Power Industry, 2015 through 2025",2017,Average Cost (Dollars per MMBtu),2.65
+epa_07_04,"Table 7.4. Weighted Average Cost of Fossil Fuels for the Electric Power Industry, 2015 through 2025",2018,Receipts (Trillion Btu),4838
+epa_07_04,"Table 7.4. Weighted Average Cost of Fossil Fuels for the Electric Power Industry, 2015 through 2025",2018,Average Cost (Dollars per MMBtu),2.31
+epa_07_04,"Table 7.4. Weighted Average Cost of Fossil Fuels for the Electric Power Industry, 2015 through 2025",2018,Receipts (Trillion Btu),5765
+epa_07_04,"Table 7.4. Weighted Average Cost of Fossil Fuels for the Electric Power Industry, 2015 through 2025",2018,Average Cost (Dollars per MMBtu),1.9
+epa_07_04,"Table 7.4. Weighted Average Cost of Fossil Fuels for the Electric Power Industry, 2015 through 2025",2018,Receipts (Trillion Btu),677
+epa_07_04,"Table 7.4. Weighted Average Cost of Fossil Fuels for the Electric Power Industry, 2015 through 2025",2018,Average Cost (Dollars per MMBtu),1.71
+epa_07_04,"Table 7.4. Weighted Average Cost of Fossil Fuels for the Electric Power Industry, 2015 through 2025",2018,Receipts (Trillion Btu),11371
+epa_07_04,"Table 7.4. Weighted Average Cost of Fossil Fuels for the Electric Power Industry, 2015 through 2025",2018,Average Cost (Dollars per MMBtu),2.06
+epa_07_04,"Table 7.4. Weighted Average Cost of Fossil Fuels for the Electric Power Industry, 2015 through 2025",2018,Receipts (Trillion Btu),219
+epa_07_04,"Table 7.4. Weighted Average Cost of Fossil Fuels for the Electric Power Industry, 2015 through 2025",2018,Average Cost (Dollars per MMBtu),9.68
+epa_07_04,"Table 7.4. Weighted Average Cost of Fossil Fuels for the Electric Power Industry, 2015 through 2025",2018,Receipts (Trillion Btu),11254
+epa_07_04,"Table 7.4. Weighted Average Cost of Fossil Fuels for the Electric Power Industry, 2015 through 2025",2018,Average Cost (Dollars per MMBtu),3.55
+epa_07_04,"Table 7.4. Weighted Average Cost of Fossil Fuels for the Electric Power Industry, 2015 through 2025",2018,Receipts (Trillion Btu),22844
+epa_07_04,"Table 7.4. Weighted Average Cost of Fossil Fuels for the Electric Power Industry, 2015 through 2025",2018,Average Cost (Dollars per MMBtu),2.83
+epa_07_04,"Table 7.4. Weighted Average Cost of Fossil Fuels for the Electric Power Industry, 2015 through 2025",2019,Receipts (Trillion Btu),4670
+epa_07_04,"Table 7.4. Weighted Average Cost of Fossil Fuels for the Electric Power Industry, 2015 through 2025",2019,Average Cost (Dollars per MMBtu),2.26
+epa_07_04,"Table 7.4. Weighted Average Cost of Fossil Fuels for the Electric Power Industry, 2015 through 2025",2019,Receipts (Trillion Btu),5401
+epa_07_04,"Table 7.4. Weighted Average Cost of Fossil Fuels for the Electric Power Industry, 2015 through 2025",2019,Average Cost (Dollars per MMBtu),1.86
+epa_07_04,"Table 7.4. Weighted Average Cost of Fossil Fuels for the Electric Power Industry, 2015 through 2025",2019,Receipts (Trillion Btu),601
+epa_07_04,"Table 7.4. Weighted Average Cost of Fossil Fuels for the Electric Power Industry, 2015 through 2025",2019,Average Cost (Dollars per MMBtu),1.68
+epa_07_04,"Table 7.4. Weighted Average Cost of Fossil Fuels for the Electric Power Industry, 2015 through 2025",2019,Receipts (Trillion Btu),10746
+epa_07_04,"Table 7.4. Weighted Average Cost of Fossil Fuels for the Electric Power Industry, 2015 through 2025",2019,Average Cost (Dollars per MMBtu),2.02
+epa_07_04,"Table 7.4. Weighted Average Cost of Fossil Fuels for the Electric Power Industry, 2015 through 2025",2019,Receipts (Trillion Btu),145
+epa_07_04,"Table 7.4. Weighted Average Cost of Fossil Fuels for the Electric Power Industry, 2015 through 2025",2019,Average Cost (Dollars per MMBtu),9.07
+epa_07_04,"Table 7.4. Weighted Average Cost of Fossil Fuels for the Electric Power Industry, 2015 through 2025",2019,Receipts (Trillion Btu),12105
+epa_07_04,"Table 7.4. Weighted Average Cost of Fossil Fuels for the Electric Power Industry, 2015 through 2025",2019,Average Cost (Dollars per MMBtu),2.89
+epa_07_04,"Table 7.4. Weighted Average Cost of Fossil Fuels for the Electric Power Industry, 2015 through 2025",2019,Receipts (Trillion Btu),22996
+epa_07_04,"Table 7.4. Weighted Average Cost of Fossil Fuels for the Electric Power Industry, 2015 through 2025",2019,Average Cost (Dollars per MMBtu),2.5
+epa_07_04,"Table 7.4. Weighted Average Cost of Fossil Fuels for the Electric Power Industry, 2015 through 2025",2020,Receipts (Trillion Btu),3399
+epa_07_04,"Table 7.4. Weighted Average Cost of Fossil Fuels for the Electric Power Industry, 2015 through 2025",2020,Average Cost (Dollars per MMBtu),2.11
+epa_07_04,"Table 7.4. Weighted Average Cost of Fossil Fuels for the Electric Power Industry, 2015 through 2025",2020,Receipts (Trillion Btu),4300
+epa_07_04,"Table 7.4. Weighted Average Cost of Fossil Fuels for the Electric Power Industry, 2015 through 2025",2020,Average Cost (Dollars per MMBtu),1.78
+epa_07_04,"Table 7.4. Weighted Average Cost of Fossil Fuels for the Electric Power Industry, 2015 through 2025",2020,Receipts (Trillion Btu),566
+epa_07_04,"Table 7.4. Weighted Average Cost of Fossil Fuels for the Electric Power Industry, 2015 through 2025",2020,Average Cost (Dollars per MMBtu),1.9
+epa_07_04,"Table 7.4. Weighted Average Cost of Fossil Fuels for the Electric Power Industry, 2015 through 2025",2020,Receipts (Trillion Btu),8329
+epa_07_04,"Table 7.4. Weighted Average Cost of Fossil Fuels for the Electric Power Industry, 2015 through 2025",2020,Average Cost (Dollars per MMBtu),1.92
+epa_07_04,"Table 7.4. Weighted Average Cost of Fossil Fuels for the Electric Power Industry, 2015 through 2025",2020,Receipts (Trillion Btu),145
+epa_07_04,"Table 7.4. Weighted Average Cost of Fossil Fuels for the Electric Power Industry, 2015 through 2025",2020,Average Cost (Dollars per MMBtu),5.98
+epa_07_04,"Table 7.4. Weighted Average Cost of Fossil Fuels for the Electric Power Industry, 2015 through 2025",2020,Receipts (Trillion Btu),12381
+epa_07_04,"Table 7.4. Weighted Average Cost of Fossil Fuels for the Electric Power Industry, 2015 through 2025",2020,Average Cost (Dollars per MMBtu),2.4
+epa_07_04,"Table 7.4. Weighted Average Cost of Fossil Fuels for the Electric Power Industry, 2015 through 2025",2020,Receipts (Trillion Btu),20855
+epa_07_04,"Table 7.4. Weighted Average Cost of Fossil Fuels for the Electric Power Industry, 2015 through 2025",2020,Average Cost (Dollars per MMBtu),2.22
+epa_07_04,"Table 7.4. Weighted Average Cost of Fossil Fuels for the Electric Power Industry, 2015 through 2025",2021,Receipts (Trillion Btu),3513
+epa_07_04,"Table 7.4. Weighted Average Cost of Fossil Fuels for the Electric Power Industry, 2015 through 2025",2021,Average Cost (Dollars per MMBtu),2.13
+epa_07_04,"Table 7.4. Weighted Average Cost of Fossil Fuels for the Electric Power Industry, 2015 through 2025",2021,Receipts (Trillion Btu),4610
+epa_07_04,"Table 7.4. Weighted Average Cost of Fossil Fuels for the Electric Power Industry, 2015 through 2025",2021,Average Cost (Dollars per MMBtu),1.85
+epa_07_04,"Table 7.4. Weighted Average Cost of Fossil Fuels for the Electric Power Industry, 2015 through 2025",2021,Receipts (Trillion Btu),553
+epa_07_04,"Table 7.4. Weighted Average Cost of Fossil Fuels for the Electric Power Industry, 2015 through 2025",2021,Average Cost (Dollars per MMBtu),2.09
+epa_07_04,"Table 7.4. Weighted Average Cost of Fossil Fuels for the Electric Power Industry, 2015 through 2025",2021,Receipts (Trillion Btu),8754
+epa_07_04,"Table 7.4. Weighted Average Cost of Fossil Fuels for the Electric Power Industry, 2015 through 2025",2021,Average Cost (Dollars per MMBtu),1.98
+epa_07_04,"Table 7.4. Weighted Average Cost of Fossil Fuels for the Electric Power Industry, 2015 through 2025",2021,Receipts (Trillion Btu),162
+epa_07_04,"Table 7.4. Weighted Average Cost of Fossil Fuels for the Electric Power Industry, 2015 through 2025",2021,Average Cost (Dollars per MMBtu),10.08
+epa_07_04,"Table 7.4. Weighted Average Cost of Fossil Fuels for the Electric Power Industry, 2015 through 2025",2021,Receipts (Trillion Btu),11967
+epa_07_04,"Table 7.4. Weighted Average Cost of Fossil Fuels for the Electric Power Industry, 2015 through 2025",2021,Average Cost (Dollars per MMBtu),5.2
+epa_07_04,"Table 7.4. Weighted Average Cost of Fossil Fuels for the Electric Power Industry, 2015 through 2025",2021,Receipts (Trillion Btu),20883
+epa_07_04,"Table 7.4. Weighted Average Cost of Fossil Fuels for the Electric Power Industry, 2015 through 2025",2021,Average Cost (Dollars per MMBtu),3.82
+epa_07_04,"Table 7.4. Weighted Average Cost of Fossil Fuels for the Electric Power Industry, 2015 through 2025",2022,Receipts (Trillion Btu),3499
+epa_07_04,"Table 7.4. Weighted Average Cost of Fossil Fuels for the Electric Power Industry, 2015 through 2025",2022,Average Cost (Dollars per MMBtu),2.74
+epa_07_04,"Table 7.4. Weighted Average Cost of Fossil Fuels for the Electric Power Industry, 2015 through 2025",2022,Receipts (Trillion Btu),4748
+epa_07_04,"Table 7.4. Weighted Average Cost of Fossil Fuels for the Electric Power Industry, 2015 through 2025",2022,Average Cost (Dollars per MMBtu),2.17
+epa_07_04,"Table 7.4. Weighted Average Cost of Fossil Fuels for the Electric Power Industry, 2015 through 2025",2022,Receipts (Trillion Btu),538
+epa_07_04,"Table 7.4. Weighted Average Cost of Fossil Fuels for the Electric Power Industry, 2015 through 2025",2022,Average Cost (Dollars per MMBtu),1.78
+epa_07_04,"Table 7.4. Weighted Average Cost of Fossil Fuels for the Electric Power Industry, 2015 through 2025",2022,Receipts (Trillion Btu),8876
+epa_07_04,"Table 7.4. Weighted Average Cost of Fossil Fuels for the Electric Power Industry, 2015 through 2025",2022,Average Cost (Dollars per MMBtu),2.36
+epa_07_04,"Table 7.4. Weighted Average Cost of Fossil Fuels for the Electric Power Industry, 2015 through 2025",2022,Receipts (Trillion Btu),182
+epa_07_04,"Table 7.4. Weighted Average Cost of Fossil Fuels for the Electric Power Industry, 2015 through 2025",2022,Average Cost (Dollars per MMBtu),16.53
+epa_07_04,"Table 7.4. Weighted Average Cost of Fossil Fuels for the Electric Power Industry, 2015 through 2025",2022,Receipts (Trillion Btu),12840
+epa_07_04,"Table 7.4. Weighted Average Cost of Fossil Fuels for the Electric Power Industry, 2015 through 2025",2022,Average Cost (Dollars per MMBtu),7.21
+epa_07_04,"Table 7.4. Weighted Average Cost of Fossil Fuels for the Electric Power Industry, 2015 through 2025",2022,Receipts (Trillion Btu),21898
+epa_07_04,"Table 7.4. Weighted Average Cost of Fossil Fuels for the Electric Power Industry, 2015 through 2025",2022,Average Cost (Dollars per MMBtu),5.22
+epa_07_04,"Table 7.4. Weighted Average Cost of Fossil Fuels for the Electric Power Industry, 2015 through 2025",2023,Receipts (Trillion Btu),3130
+epa_07_04,"Table 7.4. Weighted Average Cost of Fossil Fuels for the Electric Power Industry, 2015 through 2025",2023,Average Cost (Dollars per MMBtu),3.15
+epa_07_04,"Table 7.4. Weighted Average Cost of Fossil Fuels for the Electric Power Industry, 2015 through 2025",2023,Receipts (Trillion Btu),4428
+epa_07_04,"Table 7.4. Weighted Average Cost of Fossil Fuels for the Electric Power Industry, 2015 through 2025",2023,Average Cost (Dollars per MMBtu),2.15
+epa_07_04,"Table 7.4. Weighted Average Cost of Fossil Fuels for the Electric Power Industry, 2015 through 2025",2023,Receipts (Trillion Btu),481
+epa_07_04,"Table 7.4. Weighted Average Cost of Fossil Fuels for the Electric Power Industry, 2015 through 2025",2023,Average Cost (Dollars per MMBtu),1.79
+epa_07_04,"Table 7.4. Weighted Average Cost of Fossil Fuels for the Electric Power Industry, 2015 through 2025",2023,Receipts (Trillion Btu),8112
+epa_07_04,"Table 7.4. Weighted Average Cost of Fossil Fuels for the Electric Power Industry, 2015 through 2025",2023,Average Cost (Dollars per MMBtu),2.51
+epa_07_04,"Table 7.4. Weighted Average Cost of Fossil Fuels for the Electric Power Industry, 2015 through 2025",2023,Receipts (Trillion Btu),152
+epa_07_04,"Table 7.4. Weighted Average Cost of Fossil Fuels for the Electric Power Industry, 2015 through 2025",2023,Average Cost (Dollars per MMBtu),15.98
+epa_07_04,"Table 7.4. Weighted Average Cost of Fossil Fuels for the Electric Power Industry, 2015 through 2025",2023,Receipts (Trillion Btu),13669
+epa_07_04,"Table 7.4. Weighted Average Cost of Fossil Fuels for the Electric Power Industry, 2015 through 2025",2023,Average Cost (Dollars per MMBtu),3.36
+epa_07_04,"Table 7.4. Weighted Average Cost of Fossil Fuels for the Electric Power Industry, 2015 through 2025",2023,Receipts (Trillion Btu),21934
+epa_07_04,"Table 7.4. Weighted Average Cost of Fossil Fuels for the Electric Power Industry, 2015 through 2025",2023,Average Cost (Dollars per MMBtu),3.12
+epa_07_04,"Table 7.4. Weighted Average Cost of Fossil Fuels for the Electric Power Industry, 2015 through 2025",2024,Receipts (Trillion Btu),2813
+epa_07_04,"Table 7.4. Weighted Average Cost of Fossil Fuels for the Electric Power Industry, 2015 through 2025",2024,Average Cost (Dollars per MMBtu),3.08
+epa_07_04,"Table 7.4. Weighted Average Cost of Fossil Fuels for the Electric Power Industry, 2015 through 2025",2024,Receipts (Trillion Btu),3628
+epa_07_04,"Table 7.4. Weighted Average Cost of Fossil Fuels for the Electric Power Industry, 2015 through 2025",2024,Average Cost (Dollars per MMBtu),2.08
+epa_07_04,"Table 7.4. Weighted Average Cost of Fossil Fuels for the Electric Power Industry, 2015 through 2025",2024,Receipts (Trillion Btu),451
+epa_07_04,"Table 7.4. Weighted Average Cost of Fossil Fuels for the Electric Power Industry, 2015 through 2025",2024,Average Cost (Dollars per MMBtu),1.94
+epa_07_04,"Table 7.4. Weighted Average Cost of Fossil Fuels for the Electric Power Industry, 2015 through 2025",2024,Receipts (Trillion Btu),6965
+epa_07_04,"Table 7.4. Weighted Average Cost of Fossil Fuels for the Electric Power Industry, 2015 through 2025",2024,Average Cost (Dollars per MMBtu),2.47
+epa_07_04,"Table 7.4. Weighted Average Cost of Fossil Fuels for the Electric Power Industry, 2015 through 2025",2024,Receipts (Trillion Btu),115
+epa_07_04,"Table 7.4. Weighted Average Cost of Fossil Fuels for the Electric Power Industry, 2015 through 2025",2024,Average Cost (Dollars per MMBtu),14.7
+epa_07_04,"Table 7.4. Weighted Average Cost of Fossil Fuels for the Electric Power Industry, 2015 through 2025",2024,Receipts (Trillion Btu),14206
+epa_07_04,"Table 7.4. Weighted Average Cost of Fossil Fuels for the Electric Power Industry, 2015 through 2025",2024,Average Cost (Dollars per MMBtu),2.76
+epa_07_04,"Table 7.4. Weighted Average Cost of Fossil Fuels for the Electric Power Industry, 2015 through 2025",2024,Receipts (Trillion Btu),21286
+epa_07_04,"Table 7.4. Weighted Average Cost of Fossil Fuels for the Electric Power Industry, 2015 through 2025",2024,Average Cost (Dollars per MMBtu),2.73
+epa_07_04,"Table 7.4. Weighted Average Cost of Fossil Fuels for the Electric Power Industry, 2015 through 2025",2025,Receipts (Trillion Btu),3039
+epa_07_04,"Table 7.4. Weighted Average Cost of Fossil Fuels for the Electric Power Industry, 2015 through 2025",2025,Average Cost (Dollars per MMBtu),2.98
+epa_07_04,"Table 7.4. Weighted Average Cost of Fossil Fuels for the Electric Power Industry, 2015 through 2025",2025,Receipts (Trillion Btu),3905
+epa_07_04,"Table 7.4. Weighted Average Cost of Fossil Fuels for the Electric Power Industry, 2015 through 2025",2025,Average Cost (Dollars per MMBtu),2.05
+epa_07_04,"Table 7.4. Weighted Average Cost of Fossil Fuels for the Electric Power Industry, 2015 through 2025",2025,Receipts (Trillion Btu),452
+epa_07_04,"Table 7.4. Weighted Average Cost of Fossil Fuels for the Electric Power Industry, 2015 through 2025",2025,Average Cost (Dollars per MMBtu),1.94
+epa_07_04,"Table 7.4. Weighted Average Cost of Fossil Fuels for the Electric Power Industry, 2015 through 2025",2025,Receipts (Trillion Btu),7493
+epa_07_04,"Table 7.4. Weighted Average Cost of Fossil Fuels for the Electric Power Industry, 2015 through 2025",2025,Average Cost (Dollars per MMBtu),2.42
+epa_07_04,"Table 7.4. Weighted Average Cost of Fossil Fuels for the Electric Power Industry, 2015 through 2025",2025,Receipts (Trillion Btu),147
+epa_07_04,"Table 7.4. Weighted Average Cost of Fossil Fuels for the Electric Power Industry, 2015 through 2025",2025,Average Cost (Dollars per MMBtu),14.12
+epa_07_04,"Table 7.4. Weighted Average Cost of Fossil Fuels for the Electric Power Industry, 2015 through 2025",2025,Receipts (Trillion Btu),13808
+epa_07_04,"Table 7.4. Weighted Average Cost of Fossil Fuels for the Electric Power Industry, 2015 through 2025",2025,Average Cost (Dollars per MMBtu),3.85
+epa_07_04,"Table 7.4. Weighted Average Cost of Fossil Fuels for the Electric Power Industry, 2015 through 2025",2025,Receipts (Trillion Btu),21448
+epa_07_04,"Table 7.4. Weighted Average Cost of Fossil Fuels for the Electric Power Industry, 2015 through 2025",2025,Average Cost (Dollars per MMBtu),3.4
+epa_08_01,2015 through 2025   (Btu per Kilowatthour),2015,Coal,10495
+epa_08_01,2015 through 2025   (Btu per Kilowatthour),2015,Petroleum,10687
+epa_08_01,2015 through 2025   (Btu per Kilowatthour),2015,Natural Gas,7869
+epa_08_01,2015 through 2025   (Btu per Kilowatthour),2015,Nuclear,10458
+epa_08_01,2015 through 2025   (Btu per Kilowatthour),2016,Coal,10493
+epa_08_01,2015 through 2025   (Btu per Kilowatthour),2016,Petroleum,10811
+epa_08_01,2015 through 2025   (Btu per Kilowatthour),2016,Natural Gas,7863
+epa_08_01,2015 through 2025   (Btu per Kilowatthour),2016,Nuclear,10459
+epa_08_01,2015 through 2025   (Btu per Kilowatthour),2017,Coal,10465
+epa_08_01,2015 through 2025   (Btu per Kilowatthour),2017,Petroleum,10834
+epa_08_01,2015 through 2025   (Btu per Kilowatthour),2017,Natural Gas,7803
+epa_08_01,2015 through 2025   (Btu per Kilowatthour),2017,Nuclear,10459
+epa_08_01,2015 through 2025   (Btu per Kilowatthour),2018,Coal,10481
+epa_08_01,2015 through 2025   (Btu per Kilowatthour),2018,Petroleum,11095
+epa_08_01,2015 through 2025   (Btu per Kilowatthour),2018,Natural Gas,7811
+epa_08_01,2015 through 2025   (Btu per Kilowatthour),2018,Nuclear,10455
+epa_08_01,2015 through 2025   (Btu per Kilowatthour),2019,Coal,10551
+epa_08_01,2015 through 2025   (Btu per Kilowatthour),2019,Petroleum,11205
+epa_08_01,2015 through 2025   (Btu per Kilowatthour),2019,Natural Gas,7725
+epa_08_01,2015 through 2025   (Btu per Kilowatthour),2019,Nuclear,10442
+epa_08_01,2015 through 2025   (Btu per Kilowatthour),2020,Coal,10655
+epa_08_01,2015 through 2025   (Btu per Kilowatthour),2020,Petroleum,11259
+epa_08_01,2015 through 2025   (Btu per Kilowatthour),2020,Natural Gas,7725
+epa_08_01,2015 through 2025   (Btu per Kilowatthour),2020,Nuclear,10446
+epa_08_01,2015 through 2025   (Btu per Kilowatthour),2021,Coal,10583
+epa_08_01,2015 through 2025   (Btu per Kilowatthour),2021,Petroleum,11224
+epa_08_01,2015 through 2025   (Btu per Kilowatthour),2021,Natural Gas,7689
+epa_08_01,2015 through 2025   (Btu per Kilowatthour),2021,Nuclear,10429
+epa_08_01,2015 through 2025   (Btu per Kilowatthour),2022,Coal,10689
+epa_08_01,2015 through 2025   (Btu per Kilowatthour),2022,Petroleum,11166
+epa_08_01,2015 through 2025   (Btu per Kilowatthour),2022,Natural Gas,7740
+epa_08_01,2015 through 2025   (Btu per Kilowatthour),2022,Nuclear,10448
+epa_08_01,2015 through 2025   (Btu per Kilowatthour),2023,Coal,10745
+epa_08_01,2015 through 2025   (Btu per Kilowatthour),2023,Petroleum,11465
+epa_08_01,2015 through 2025   (Btu per Kilowatthour),2023,Natural Gas,7721
+epa_08_01,2015 through 2025   (Btu per Kilowatthour),2023,Nuclear,10452
+epa_08_01,2015 through 2025   (Btu per Kilowatthour),2024,Coal,10777
+epa_08_01,2015 through 2025   (Btu per Kilowatthour),2024,Petroleum,11200
+epa_08_01,2015 through 2025   (Btu per Kilowatthour),2024,Natural Gas,7754
+epa_08_01,2015 through 2025   (Btu per Kilowatthour),2024,Nuclear,10443
+epa_08_01,2015 through 2025   (Btu per Kilowatthour),2025,Coal,10647
+epa_08_01,2015 through 2025   (Btu per Kilowatthour),2025,Petroleum,10969
+epa_08_01,2015 through 2025   (Btu per Kilowatthour),2025,Natural Gas,7781
+epa_08_01,2015 through 2025   (Btu per Kilowatthour),2025,Nuclear,10443
+epa_08_02,2015,Steam Generator,Coal,10059
+epa_08_02,2015,Steam Generator,Petroleum,10197
+epa_08_02,2015,Steam Generator,Natural Gas,10372
+epa_08_02,2015,Steam Generator,Nuclear,10458
+epa_08_02,2015,Gas Turbine,Petroleum,13550
+epa_08_02,2015,Gas Turbine,Natural Gas,11302
+epa_08_02,2015,Internal Combustion,Petroleum,10379
+epa_08_02,2015,Internal Combustion,Natural Gas,9322
+epa_08_02,2015,Combined Cycle,Petroleum,9676
+epa_08_02,2015,Combined Cycle,Natural Gas,7655
+epa_08_02,2016,Steam Generator,Coal,10045
+epa_08_02,2016,Steam Generator,Petroleum,10189
+epa_08_02,2016,Steam Generator,Natural Gas,10382
+epa_08_02,2016,Steam Generator,Nuclear,10459
+epa_08_02,2016,Gas Turbine,Petroleum,13535
+epa_08_02,2016,Gas Turbine,Natural Gas,11214
+epa_08_02,2016,Internal Combustion,Petroleum,10331
+epa_08_02,2016,Internal Combustion,Natural Gas,9179
+epa_08_02,2016,Combined Cycle,Petroleum,9860
+epa_08_02,2016,Combined Cycle,Natural Gas,7652
+epa_08_02,2017,Steam Generator,Coal,10043
+epa_08_02,2017,Steam Generator,Petroleum,10199
+epa_08_02,2017,Steam Generator,Natural Gas,10353
+epa_08_02,2017,Steam Generator,Nuclear,10459
+epa_08_02,2017,Gas Turbine,Petroleum,13491
+epa_08_02,2017,Gas Turbine,Natural Gas,11176
+epa_08_02,2017,Internal Combustion,Petroleum,10301
+epa_08_02,2017,Internal Combustion,Natural Gas,9120
+epa_08_02,2017,Combined Cycle,Petroleum,9811
+epa_08_02,2017,Combined Cycle,Natural Gas,7649
+epa_08_02,2018,Steam Generator,Coal,10015
+epa_08_02,2018,Steam Generator,Petroleum,10270
+epa_08_02,2018,Steam Generator,Natural Gas,10334
+epa_08_02,2018,Steam Generator,Nuclear,10455
+epa_08_02,2018,Gas Turbine,Petroleum,13352
+epa_08_02,2018,Gas Turbine,Natural Gas,11138
+epa_08_02,2018,Internal Combustion,Petroleum,10326
+epa_08_02,2018,Internal Combustion,Natural Gas,9009
+epa_08_02,2018,Combined Cycle,Petroleum,9663
+epa_08_02,2018,Combined Cycle,Natural Gas,7627
+epa_08_02,2019,Steam Generator,Coal,10002
+epa_08_02,2019,Steam Generator,Petroleum,10236
+epa_08_02,2019,Steam Generator,Natural Gas,10347
+epa_08_02,2019,Steam Generator,Nuclear,10442
+epa_08_02,2019,Gas Turbine,Petroleum,13315
+epa_08_02,2019,Gas Turbine,Natural Gas,11098
+epa_08_02,2019,Internal Combustion,Petroleum,10325
+epa_08_02,2019,Internal Combustion,Natural Gas,8899
+epa_08_02,2019,Combined Cycle,Petroleum,9662
+epa_08_02,2019,Combined Cycle,Natural Gas,7633
+epa_08_02,2020,Steam Generator,Coal,9997
+epa_08_02,2020,Steam Generator,Petroleum,10339
+epa_08_02,2020,Steam Generator,Natural Gas,10368
+epa_08_02,2020,Steam Generator,Nuclear,10446
+epa_08_02,2020,Gas Turbine,Petroleum,13223
+epa_08_02,2020,Gas Turbine,Natural Gas,11069
+epa_08_02,2020,Internal Combustion,Petroleum,10334
+epa_08_02,2020,Internal Combustion,Natural Gas,8832
+epa_08_02,2020,Combined Cycle,Petroleum,9208
+epa_08_02,2020,Combined Cycle,Natural Gas,7604
+epa_08_02,2021,Steam Generator,Coal,10002
+epa_08_02,2021,Steam Generator,Petroleum,10347
+epa_08_02,2021,Steam Generator,Natural Gas,10365
+epa_08_02,2021,Steam Generator,Nuclear,10429
+epa_08_02,2021,Gas Turbine,Petroleum,13227
+epa_08_02,2021,Gas Turbine,Natural Gas,11068
+epa_08_02,2021,Internal Combustion,Petroleum,10461
+epa_08_02,2021,Internal Combustion,Natural Gas,8821
+epa_08_02,2021,Combined Cycle,Petroleum,9208
+epa_08_02,2021,Combined Cycle,Natural Gas,7580
+epa_08_02,2022,Steam Generator,Coal,10026
+epa_08_02,2022,Steam Generator,Petroleum,10263
+epa_08_02,2022,Steam Generator,Natural Gas,10295
+epa_08_02,2022,Steam Generator,Nuclear,10448
+epa_08_02,2022,Gas Turbine,Petroleum,13217
+epa_08_02,2022,Gas Turbine,Natural Gas,11030
+epa_08_02,2022,Internal Combustion,Petroleum,10475
+epa_08_02,2022,Internal Combustion,Natural Gas,8894
+epa_08_02,2022,Combined Cycle,Petroleum,9204
+epa_08_02,2022,Combined Cycle,Natural Gas,7596
+epa_08_02,2023,Steam Generator,Coal,10020
+epa_08_02,2023,Steam Generator,Petroleum,10314
+epa_08_02,2023,Steam Generator,Natural Gas,10285
+epa_08_02,2023,Steam Generator,Nuclear,10452
+epa_08_02,2023,Gas Turbine,Petroleum,13088
+epa_08_02,2023,Gas Turbine,Natural Gas,11010
+epa_08_02,2023,Internal Combustion,Petroleum,10506
+epa_08_02,2023,Internal Combustion,Natural Gas,8900
+epa_08_02,2023,Combined Cycle,Petroleum,9696
+epa_08_02,2023,Combined Cycle,Natural Gas,7549
+epa_08_02,2024,Steam Generator,Coal,10018
+epa_08_02,2024,Steam Generator,Petroleum,10331
+epa_08_02,2024,Steam Generator,Natural Gas,10337
+epa_08_02,2024,Steam Generator,Nuclear,10443
+epa_08_02,2024,Gas Turbine,Petroleum,13083
+epa_08_02,2024,Gas Turbine,Natural Gas,10999
+epa_08_02,2024,Internal Combustion,Petroleum,10512
+epa_08_02,2024,Internal Combustion,Natural Gas,8924
+epa_08_02,2024,Combined Cycle,Petroleum,9702
+epa_08_02,2024,Combined Cycle,Natural Gas,7548
+epa_08_02,2025,Steam Generator,Coal,10040
+epa_08_02,2025,Steam Generator,Petroleum,10319
+epa_08_02,2025,Steam Generator,Natural Gas,10293
+epa_08_02,2025,Steam Generator,Nuclear,10443
+epa_08_02,2025,Gas Turbine,Petroleum,13145
+epa_08_02,2025,Gas Turbine,Natural Gas,10975
+epa_08_02,2025,Internal Combustion,Petroleum,10484
+epa_08_02,2025,Internal Combustion,Natural Gas,8853
+epa_08_02,2025,Combined Cycle,Petroleum,9218
+epa_08_02,2025,Combined Cycle,Natural Gas,7535
+epa_08_04,"Electric Utilities, 2015 through 2025   (Mills per Kilowatthour)",2015,Nuclear,11.54
+epa_08_04,"Electric Utilities, 2015 through 2025   (Mills per Kilowatthour)",2015,Fossil Steam,5.13
+epa_08_04,"Electric Utilities, 2015 through 2025   (Mills per Kilowatthour)",2015,Hydro-electric,8.66
+epa_08_04,"Electric Utilities, 2015 through 2025   (Mills per Kilowatthour)",2015,Gas Turbine and Small Scale,2.34
+epa_08_04,"Electric Utilities, 2015 through 2025   (Mills per Kilowatthour)",2015,Nuclear,7.3
+epa_08_04,"Electric Utilities, 2015 through 2025   (Mills per Kilowatthour)",2015,Fossil Steam,5.36
+epa_08_04,"Electric Utilities, 2015 through 2025   (Mills per Kilowatthour)",2015,Hydro-electric,5.24
+epa_08_04,"Electric Utilities, 2015 through 2025   (Mills per Kilowatthour)",2015,Gas Turbine and Small Scale,2.7
+epa_08_04,"Electric Utilities, 2015 through 2025   (Mills per Kilowatthour)",2016,Nuclear,10.85
+epa_08_04,"Electric Utilities, 2015 through 2025   (Mills per Kilowatthour)",2016,Fossil Steam,5.05
+epa_08_04,"Electric Utilities, 2015 through 2025   (Mills per Kilowatthour)",2016,Hydro-electric,7.27
+epa_08_04,"Electric Utilities, 2015 through 2025   (Mills per Kilowatthour)",2016,Gas Turbine and Small Scale,2.48
+epa_08_04,"Electric Utilities, 2015 through 2025   (Mills per Kilowatthour)",2016,Nuclear,6.98
+epa_08_04,"Electric Utilities, 2015 through 2025   (Mills per Kilowatthour)",2016,Fossil Steam,5.51
+epa_08_04,"Electric Utilities, 2015 through 2025   (Mills per Kilowatthour)",2016,Hydro-electric,4.74
+epa_08_04,"Electric Utilities, 2015 through 2025   (Mills per Kilowatthour)",2016,Gas Turbine and Small Scale,2.74
+epa_08_04,"Electric Utilities, 2015 through 2025   (Mills per Kilowatthour)",2017,Nuclear,10.32
+epa_08_04,"Electric Utilities, 2015 through 2025   (Mills per Kilowatthour)",2017,Fossil Steam,5.02
+epa_08_04,"Electric Utilities, 2015 through 2025   (Mills per Kilowatthour)",2017,Hydro-electric,6.49
+epa_08_04,"Electric Utilities, 2015 through 2025   (Mills per Kilowatthour)",2017,Gas Turbine and Small Scale,2.44
+epa_08_04,"Electric Utilities, 2015 through 2025   (Mills per Kilowatthour)",2017,Nuclear,6.66
+epa_08_04,"Electric Utilities, 2015 through 2025   (Mills per Kilowatthour)",2017,Fossil Steam,5.11
+epa_08_04,"Electric Utilities, 2015 through 2025   (Mills per Kilowatthour)",2017,Hydro-electric,4.06
+epa_08_04,"Electric Utilities, 2015 through 2025   (Mills per Kilowatthour)",2017,Gas Turbine and Small Scale,2.83
+epa_08_04,"Electric Utilities, 2015 through 2025   (Mills per Kilowatthour)",2018,Nuclear,10.79
+epa_08_04,"Electric Utilities, 2015 through 2025   (Mills per Kilowatthour)",2018,Fossil Steam,5.2
+epa_08_04,"Electric Utilities, 2015 through 2025   (Mills per Kilowatthour)",2018,Hydro-electric,6.8
+epa_08_04,"Electric Utilities, 2015 through 2025   (Mills per Kilowatthour)",2018,Gas Turbine and Small Scale,2.37
+epa_08_04,"Electric Utilities, 2015 through 2025   (Mills per Kilowatthour)",2018,Nuclear,5.94
+epa_08_04,"Electric Utilities, 2015 through 2025   (Mills per Kilowatthour)",2018,Fossil Steam,5.25
+epa_08_04,"Electric Utilities, 2015 through 2025   (Mills per Kilowatthour)",2018,Hydro-electric,4.02
+epa_08_04,"Electric Utilities, 2015 through 2025   (Mills per Kilowatthour)",2018,Gas Turbine and Small Scale,2.71
+epa_08_04,"Electric Utilities, 2015 through 2025   (Mills per Kilowatthour)",2019,Nuclear,11.11
+epa_08_04,"Electric Utilities, 2015 through 2025   (Mills per Kilowatthour)",2019,Fossil Steam,5.55
+epa_08_04,"Electric Utilities, 2015 through 2025   (Mills per Kilowatthour)",2019,Hydro-electric,6.82
+epa_08_04,"Electric Utilities, 2015 through 2025   (Mills per Kilowatthour)",2019,Gas Turbine and Small Scale,2.63
+epa_08_04,"Electric Utilities, 2015 through 2025   (Mills per Kilowatthour)",2019,Nuclear,6.57
+epa_08_04,"Electric Utilities, 2015 through 2025   (Mills per Kilowatthour)",2019,Fossil Steam,6.86
+epa_08_04,"Electric Utilities, 2015 through 2025   (Mills per Kilowatthour)",2019,Hydro-electric,3.92
+epa_08_04,"Electric Utilities, 2015 through 2025   (Mills per Kilowatthour)",2019,Gas Turbine and Small Scale,2.66
+epa_08_04,"Electric Utilities, 2015 through 2025   (Mills per Kilowatthour)",2020,Nuclear,10.44
+epa_08_04,"Electric Utilities, 2015 through 2025   (Mills per Kilowatthour)",2020,Fossil Steam,6.41
+epa_08_04,"Electric Utilities, 2015 through 2025   (Mills per Kilowatthour)",2020,Hydro-electric,7.36
+epa_08_04,"Electric Utilities, 2015 through 2025   (Mills per Kilowatthour)",2020,Gas Turbine and Small Scale,2.38
+epa_08_04,"Electric Utilities, 2015 through 2025   (Mills per Kilowatthour)",2020,Nuclear,6
+epa_08_04,"Electric Utilities, 2015 through 2025   (Mills per Kilowatthour)",2020,Fossil Steam,5.57
+epa_08_04,"Electric Utilities, 2015 through 2025   (Mills per Kilowatthour)",2020,Hydro-electric,4.77
+epa_08_04,"Electric Utilities, 2015 through 2025   (Mills per Kilowatthour)",2020,Gas Turbine and Small Scale,2.52
+epa_08_04,"Electric Utilities, 2015 through 2025   (Mills per Kilowatthour)",2021,Nuclear,10.57
+epa_08_04,"Electric Utilities, 2015 through 2025   (Mills per Kilowatthour)",2021,Fossil Steam,5.72
+epa_08_04,"Electric Utilities, 2015 through 2025   (Mills per Kilowatthour)",2021,Hydro-electric,9.74
+epa_08_04,"Electric Utilities, 2015 through 2025   (Mills per Kilowatthour)",2021,Gas Turbine and Small Scale,2.1
+epa_08_04,"Electric Utilities, 2015 through 2025   (Mills per Kilowatthour)",2021,Nuclear,5.88
+epa_08_04,"Electric Utilities, 2015 through 2025   (Mills per Kilowatthour)",2021,Fossil Steam,5.35
+epa_08_04,"Electric Utilities, 2015 through 2025   (Mills per Kilowatthour)",2021,Hydro-electric,5.29
+epa_08_04,"Electric Utilities, 2015 through 2025   (Mills per Kilowatthour)",2021,Gas Turbine and Small Scale,2.24
+epa_08_04,"Electric Utilities, 2015 through 2025   (Mills per Kilowatthour)",2022,Nuclear,10.47
+epa_08_04,"Electric Utilities, 2015 through 2025   (Mills per Kilowatthour)",2022,Fossil Steam,6.75
+epa_08_04,"Electric Utilities, 2015 through 2025   (Mills per Kilowatthour)",2022,Hydro-electric,9.86
+epa_08_04,"Electric Utilities, 2015 through 2025   (Mills per Kilowatthour)",2022,Gas Turbine and Small Scale,2.21
+epa_08_04,"Electric Utilities, 2015 through 2025   (Mills per Kilowatthour)",2022,Nuclear,6.08
+epa_08_04,"Electric Utilities, 2015 through 2025   (Mills per Kilowatthour)",2022,Fossil Steam,5.09
+epa_08_04,"Electric Utilities, 2015 through 2025   (Mills per Kilowatthour)",2022,Hydro-electric,6.11
+epa_08_04,"Electric Utilities, 2015 through 2025   (Mills per Kilowatthour)",2022,Gas Turbine and Small Scale,2.35
+epa_08_04,"Electric Utilities, 2015 through 2025   (Mills per Kilowatthour)",2023,Nuclear,9.97
+epa_08_04,"Electric Utilities, 2015 through 2025   (Mills per Kilowatthour)",2023,Fossil Steam,6.48
+epa_08_04,"Electric Utilities, 2015 through 2025   (Mills per Kilowatthour)",2023,Hydro-electric,8.97
+epa_08_04,"Electric Utilities, 2015 through 2025   (Mills per Kilowatthour)",2023,Gas Turbine and Small Scale,2.16
+epa_08_04,"Electric Utilities, 2015 through 2025   (Mills per Kilowatthour)",2023,Nuclear,6.65
+epa_08_04,"Electric Utilities, 2015 through 2025   (Mills per Kilowatthour)",2023,Fossil Steam,5.61
+epa_08_04,"Electric Utilities, 2015 through 2025   (Mills per Kilowatthour)",2023,Hydro-electric,5.41
+epa_08_04,"Electric Utilities, 2015 through 2025   (Mills per Kilowatthour)",2023,Gas Turbine and Small Scale,2.11
+epa_08_04,"Electric Utilities, 2015 through 2025   (Mills per Kilowatthour)",2024,Nuclear,9.76
+epa_08_04,"Electric Utilities, 2015 through 2025   (Mills per Kilowatthour)",2024,Fossil Steam,6.98
+epa_08_04,"Electric Utilities, 2015 through 2025   (Mills per Kilowatthour)",2024,Hydro-electric,9.19
+epa_08_04,"Electric Utilities, 2015 through 2025   (Mills per Kilowatthour)",2024,Gas Turbine and Small Scale,2.25
+epa_08_04,"Electric Utilities, 2015 through 2025   (Mills per Kilowatthour)",2024,Nuclear,6.76
+epa_08_04,"Electric Utilities, 2015 through 2025   (Mills per Kilowatthour)",2024,Fossil Steam,5.81
+epa_08_04,"Electric Utilities, 2015 through 2025   (Mills per Kilowatthour)",2024,Hydro-electric,6.24
+epa_08_04,"Electric Utilities, 2015 through 2025   (Mills per Kilowatthour)",2024,Gas Turbine and Small Scale,2.11
+epa_08_04,"Electric Utilities, 2015 through 2025   (Mills per Kilowatthour)",2025,Nuclear,10.14
+epa_08_04,"Electric Utilities, 2015 through 2025   (Mills per Kilowatthour)",2025,Fossil Steam,6.08
+epa_08_04,"Electric Utilities, 2015 through 2025   (Mills per Kilowatthour)",2025,Hydro-electric,9.62
+epa_08_04,"Electric Utilities, 2015 through 2025   (Mills per Kilowatthour)",2025,Gas Turbine and Small Scale,1.77
+epa_08_04,"Electric Utilities, 2015 through 2025   (Mills per Kilowatthour)",2025,Nuclear,7.1
+epa_08_04,"Electric Utilities, 2015 through 2025   (Mills per Kilowatthour)",2025,Fossil Steam,5.42
+epa_08_04,"Electric Utilities, 2015 through 2025   (Mills per Kilowatthour)",2025,Hydro-electric,6.81
+epa_08_04,"Electric Utilities, 2015 through 2025   (Mills per Kilowatthour)",2025,Gas Turbine and Small Scale,1.83
+epa_08_04,"Electric Utilities, 2015 through 2025   (Mills per Kilowatthour)",2015,Nuclear,7.7
+epa_08_04,"Electric Utilities, 2015 through 2025   (Mills per Kilowatthour)",2015,Fossil Steam,26.67
+epa_08_04,"Electric Utilities, 2015 through 2025   (Mills per Kilowatthour)",2015,Gas Turbine and Small Scale,28.29
+epa_08_04,"Electric Utilities, 2015 through 2025   (Mills per Kilowatthour)",2015,Nuclear,26.54
+epa_08_04,"Electric Utilities, 2015 through 2025   (Mills per Kilowatthour)",2015,Fossil Steam,37.17
+epa_08_04,"Electric Utilities, 2015 through 2025   (Mills per Kilowatthour)",2015,Hydro-electric,13.9
+epa_08_04,"Electric Utilities, 2015 through 2025   (Mills per Kilowatthour)",2015,Gas Turbine and Small Scale,33.33
+epa_08_04,"Electric Utilities, 2015 through 2025   (Mills per Kilowatthour)",2016,Nuclear,7.41
+epa_08_04,"Electric Utilities, 2015 through 2025   (Mills per Kilowatthour)",2016,Fossil Steam,25.49
+epa_08_04,"Electric Utilities, 2015 through 2025   (Mills per Kilowatthour)",2016,Gas Turbine and Small Scale,24.96
+epa_08_04,"Electric Utilities, 2015 through 2025   (Mills per Kilowatthour)",2016,Nuclear,25.23
+epa_08_04,"Electric Utilities, 2015 through 2025   (Mills per Kilowatthour)",2016,Fossil Steam,36.06
+epa_08_04,"Electric Utilities, 2015 through 2025   (Mills per Kilowatthour)",2016,Hydro-electric,12.01
+epa_08_04,"Electric Utilities, 2015 through 2025   (Mills per Kilowatthour)",2016,Gas Turbine and Small Scale,30.18
+epa_08_04,"Electric Utilities, 2015 through 2025   (Mills per Kilowatthour)",2017,Nuclear,7.5
+epa_08_04,"Electric Utilities, 2015 through 2025   (Mills per Kilowatthour)",2017,Fossil Steam,25.27
+epa_08_04,"Electric Utilities, 2015 through 2025   (Mills per Kilowatthour)",2017,Gas Turbine and Small Scale,26.47
+epa_08_04,"Electric Utilities, 2015 through 2025   (Mills per Kilowatthour)",2017,Nuclear,24.47
+epa_08_04,"Electric Utilities, 2015 through 2025   (Mills per Kilowatthour)",2017,Fossil Steam,35.4
+epa_08_04,"Electric Utilities, 2015 through 2025   (Mills per Kilowatthour)",2017,Hydro-electric,10.55
+epa_08_04,"Electric Utilities, 2015 through 2025   (Mills per Kilowatthour)",2017,Gas Turbine and Small Scale,31.75
+epa_08_04,"Electric Utilities, 2015 through 2025   (Mills per Kilowatthour)",2018,Nuclear,7.15
+epa_08_04,"Electric Utilities, 2015 through 2025   (Mills per Kilowatthour)",2018,Fossil Steam,25.42
+epa_08_04,"Electric Utilities, 2015 through 2025   (Mills per Kilowatthour)",2018,Gas Turbine and Small Scale,27.34
+epa_08_04,"Electric Utilities, 2015 through 2025   (Mills per Kilowatthour)",2018,Nuclear,23.87
+epa_08_04,"Electric Utilities, 2015 through 2025   (Mills per Kilowatthour)",2018,Fossil Steam,35.88
+epa_08_04,"Electric Utilities, 2015 through 2025   (Mills per Kilowatthour)",2018,Hydro-electric,10.82
+epa_08_04,"Electric Utilities, 2015 through 2025   (Mills per Kilowatthour)",2018,Gas Turbine and Small Scale,32.41
+epa_08_04,"Electric Utilities, 2015 through 2025   (Mills per Kilowatthour)",2019,Nuclear,7.12
+epa_08_04,"Electric Utilities, 2015 through 2025   (Mills per Kilowatthour)",2019,Fossil Steam,23.87
+epa_08_04,"Electric Utilities, 2015 through 2025   (Mills per Kilowatthour)",2019,Gas Turbine and Small Scale,23.09
+epa_08_04,"Electric Utilities, 2015 through 2025   (Mills per Kilowatthour)",2019,Nuclear,24.81
+epa_08_04,"Electric Utilities, 2015 through 2025   (Mills per Kilowatthour)",2019,Fossil Steam,36.29
+epa_08_04,"Electric Utilities, 2015 through 2025   (Mills per Kilowatthour)",2019,Hydro-electric,10.74
+epa_08_04,"Electric Utilities, 2015 through 2025   (Mills per Kilowatthour)",2019,Gas Turbine and Small Scale,28.37
+epa_08_04,"Electric Utilities, 2015 through 2025   (Mills per Kilowatthour)",2020,Nuclear,6.33
+epa_08_04,"Electric Utilities, 2015 through 2025   (Mills per Kilowatthour)",2020,Fossil Steam,22.85
+epa_08_04,"Electric Utilities, 2015 through 2025   (Mills per Kilowatthour)",2020,Gas Turbine and Small Scale,19.64
+epa_08_04,"Electric Utilities, 2015 through 2025   (Mills per Kilowatthour)",2020,Nuclear,22.77
+epa_08_04,"Electric Utilities, 2015 through 2025   (Mills per Kilowatthour)",2020,Fossil Steam,34.83
+epa_08_04,"Electric Utilities, 2015 through 2025   (Mills per Kilowatthour)",2020,Hydro-electric,12.13
+epa_08_04,"Electric Utilities, 2015 through 2025   (Mills per Kilowatthour)",2020,Gas Turbine and Small Scale,24.54
+epa_08_04,"Electric Utilities, 2015 through 2025   (Mills per Kilowatthour)",2021,Nuclear,6.32
+epa_08_04,"Electric Utilities, 2015 through 2025   (Mills per Kilowatthour)",2021,Fossil Steam,24.76
+epa_08_04,"Electric Utilities, 2015 through 2025   (Mills per Kilowatthour)",2021,Gas Turbine and Small Scale,25.84
+epa_08_04,"Electric Utilities, 2015 through 2025   (Mills per Kilowatthour)",2021,Nuclear,22.77
+epa_08_04,"Electric Utilities, 2015 through 2025   (Mills per Kilowatthour)",2021,Fossil Steam,35.84
+epa_08_04,"Electric Utilities, 2015 through 2025   (Mills per Kilowatthour)",2021,Hydro-electric,15.03
+epa_08_04,"Electric Utilities, 2015 through 2025   (Mills per Kilowatthour)",2021,Gas Turbine and Small Scale,30.19
+epa_08_04,"Electric Utilities, 2015 through 2025   (Mills per Kilowatthour)",2022,Nuclear,6.1
+epa_08_04,"Electric Utilities, 2015 through 2025   (Mills per Kilowatthour)",2022,Fossil Steam,32.04
+epa_08_04,"Electric Utilities, 2015 through 2025   (Mills per Kilowatthour)",2022,Gas Turbine and Small Scale,38.74
+epa_08_04,"Electric Utilities, 2015 through 2025   (Mills per Kilowatthour)",2022,Nuclear,22.64
+epa_08_04,"Electric Utilities, 2015 through 2025   (Mills per Kilowatthour)",2022,Fossil Steam,43.88
+epa_08_04,"Electric Utilities, 2015 through 2025   (Mills per Kilowatthour)",2022,Hydro-electric,15.97
+epa_08_04,"Electric Utilities, 2015 through 2025   (Mills per Kilowatthour)",2022,Gas Turbine and Small Scale,43.3
+epa_08_04,"Electric Utilities, 2015 through 2025   (Mills per Kilowatthour)",2023,Nuclear,6.4
+epa_08_04,"Electric Utilities, 2015 through 2025   (Mills per Kilowatthour)",2023,Fossil Steam,30.58
+epa_08_04,"Electric Utilities, 2015 through 2025   (Mills per Kilowatthour)",2023,Gas Turbine and Small Scale,22.19
+epa_08_04,"Electric Utilities, 2015 through 2025   (Mills per Kilowatthour)",2023,Nuclear,23.02
+epa_08_04,"Electric Utilities, 2015 through 2025   (Mills per Kilowatthour)",2023,Fossil Steam,42.67
+epa_08_04,"Electric Utilities, 2015 through 2025   (Mills per Kilowatthour)",2023,Hydro-electric,14.38
+epa_08_04,"Electric Utilities, 2015 through 2025   (Mills per Kilowatthour)",2023,Gas Turbine and Small Scale,26.46
+epa_08_04,"Electric Utilities, 2015 through 2025   (Mills per Kilowatthour)",2024,Nuclear,6.3
+epa_08_04,"Electric Utilities, 2015 through 2025   (Mills per Kilowatthour)",2024,Fossil Steam,28.52
+epa_08_04,"Electric Utilities, 2015 through 2025   (Mills per Kilowatthour)",2024,Gas Turbine and Small Scale,18.59
+epa_08_04,"Electric Utilities, 2015 through 2025   (Mills per Kilowatthour)",2024,Nuclear,22.83
+epa_08_04,"Electric Utilities, 2015 through 2025   (Mills per Kilowatthour)",2024,Fossil Steam,41.32
+epa_08_04,"Electric Utilities, 2015 through 2025   (Mills per Kilowatthour)",2024,Hydro-electric,15.43
+epa_08_04,"Electric Utilities, 2015 through 2025   (Mills per Kilowatthour)",2024,Gas Turbine and Small Scale,22.94
+epa_08_04,"Electric Utilities, 2015 through 2025   (Mills per Kilowatthour)",2025,Nuclear,6.64
+epa_08_04,"Electric Utilities, 2015 through 2025   (Mills per Kilowatthour)",2025,Fossil Steam,30.62
+epa_08_04,"Electric Utilities, 2015 through 2025   (Mills per Kilowatthour)",2025,Gas Turbine and Small Scale,24.61
+epa_08_04,"Electric Utilities, 2015 through 2025   (Mills per Kilowatthour)",2025,Nuclear,23.89
+epa_08_04,"Electric Utilities, 2015 through 2025   (Mills per Kilowatthour)",2025,Fossil Steam,42.12
+epa_08_04,"Electric Utilities, 2015 through 2025   (Mills per Kilowatthour)",2025,Hydro-electric,16.43
+epa_08_04,"Electric Utilities, 2015 through 2025   (Mills per Kilowatthour)",2025,Gas Turbine and Small Scale,28.22
+epa_02_04,Total Electric Industry,2015,Residential,12.65
+epa_02_04,Total Electric Industry,2015,Commercial,10.64
+epa_02_04,Total Electric Industry,2015,Industrial,6.91
+epa_02_04,Total Electric Industry,2015,Transportation,10.09
+epa_02_04,Total Electric Industry,2015,Total,10.41
+epa_02_04,Total Electric Industry,2016,Residential,12.55
+epa_02_04,Total Electric Industry,2016,Commercial,10.43
+epa_02_04,Total Electric Industry,2016,Industrial,6.76
+epa_02_04,Total Electric Industry,2016,Transportation,9.63
+epa_02_04,Total Electric Industry,2016,Total,10.27
+epa_02_04,Total Electric Industry,2017,Residential,12.89
+epa_02_04,Total Electric Industry,2017,Commercial,10.66
+epa_02_04,Total Electric Industry,2017,Industrial,6.88
+epa_02_04,Total Electric Industry,2017,Transportation,9.68
+epa_02_04,Total Electric Industry,2017,Total,10.48
+epa_02_04,Total Electric Industry,2018,Residential,12.87
+epa_02_04,Total Electric Industry,2018,Commercial,10.67
+epa_02_04,Total Electric Industry,2018,Industrial,6.92
+epa_02_04,Total Electric Industry,2018,Transportation,9.7
+epa_02_04,Total Electric Industry,2018,Total,10.53
+epa_02_04,Total Electric Industry,2019,Residential,13.01
+epa_02_04,Total Electric Industry,2019,Commercial,10.68
+epa_02_04,Total Electric Industry,2019,Industrial,6.81
+epa_02_04,Total Electric Industry,2019,Transportation,9.66
+epa_02_04,Total Electric Industry,2019,Total,10.54
+epa_02_04,Total Electric Industry,2020,Residential,13.15
+epa_02_04,Total Electric Industry,2020,Commercial,10.59
+epa_02_04,Total Electric Industry,2020,Industrial,6.67
+epa_02_04,Total Electric Industry,2020,Transportation,9.9
+epa_02_04,Total Electric Industry,2020,Total,10.59
+epa_02_04,Total Electric Industry,2021,Residential,13.66
+epa_02_04,Total Electric Industry,2021,Commercial,11.22
+epa_02_04,Total Electric Industry,2021,Industrial,7.18
+epa_02_04,Total Electric Industry,2021,Transportation,10.2
+epa_02_04,Total Electric Industry,2021,Total,11.1
+epa_02_04,Total Electric Industry,2022,Residential,15.04
+epa_02_04,Total Electric Industry,2022,Commercial,12.41
+epa_02_04,Total Electric Industry,2022,Industrial,8.32
+epa_02_04,Total Electric Industry,2022,Transportation,11.59
+epa_02_04,Total Electric Industry,2022,Total,12.36
+epa_02_04,Total Electric Industry,2023,Residential,16
+epa_02_04,Total Electric Industry,2023,Commercial,12.59
+epa_02_04,Total Electric Industry,2023,Industrial,8.04
+epa_02_04,Total Electric Industry,2023,Transportation,12.77
+epa_02_04,Total Electric Industry,2023,Total,12.68
+epa_02_04,Total Electric Industry,2024,Residential,16.48
+epa_02_04,Total Electric Industry,2024,Commercial,12.75
+epa_02_04,Total Electric Industry,2024,Industrial,8.13
+epa_02_04,Total Electric Industry,2024,Transportation,12.75
+epa_02_04,Total Electric Industry,2024,Total,12.94
+epa_02_04,Total Electric Industry,2025,Residential,17.23
+epa_02_04,Total Electric Industry,2025,Commercial,13.37
+epa_02_04,Total Electric Industry,2025,Industrial,8.51
+epa_02_04,Total Electric Industry,2025,Transportation,13.87
+epa_02_04,Total Electric Industry,2025,Total,13.56
+epa_02_04,Full-Service Providers,2015,Residential,12.45
+epa_02_04,Full-Service Providers,2015,Commercial,10.39
+epa_02_04,Full-Service Providers,2015,Industrial,6.8
+epa_02_04,Full-Service Providers,2015,Transportation,9.71
+epa_02_04,Full-Service Providers,2015,Total,10.33
+epa_02_04,Full-Service Providers,2016,Residential,12.34
+epa_02_04,Full-Service Providers,2016,Commercial,10.19
+epa_02_04,Full-Service Providers,2016,Industrial,6.68
+epa_02_04,Full-Service Providers,2016,Transportation,9.87
+epa_02_04,Full-Service Providers,2016,Total,10.2
+epa_02_04,Full-Service Providers,2017,Residential,12.66
+epa_02_04,Full-Service Providers,2017,Commercial,10.44
+epa_02_04,Full-Service Providers,2017,Industrial,6.82
+epa_02_04,Full-Service Providers,2017,Transportation,10.32
+epa_02_04,Full-Service Providers,2017,Total,10.43
+epa_02_04,Full-Service Providers,2018,Residential,12.61
+epa_02_04,Full-Service Providers,2018,Commercial,10.39
+epa_02_04,Full-Service Providers,2018,Industrial,6.81
+epa_02_04,Full-Service Providers,2018,Transportation,10.44
+epa_02_04,Full-Service Providers,2018,Total,10.44
+epa_02_04,Full-Service Providers,2019,Residential,12.72
+epa_02_04,Full-Service Providers,2019,Commercial,10.39
+epa_02_04,Full-Service Providers,2019,Industrial,6.75
+epa_02_04,Full-Service Providers,2019,Transportation,10.2
+epa_02_04,Full-Service Providers,2019,Total,10.44
+epa_02_04,Full-Service Providers,2020,Residential,12.81
+epa_02_04,Full-Service Providers,2020,Commercial,10.27
+epa_02_04,Full-Service Providers,2020,Industrial,6.6
+epa_02_04,Full-Service Providers,2020,Transportation,10.53
+epa_02_04,Full-Service Providers,2020,Total,10.46
+epa_02_04,Full-Service Providers,2021,Residential,13.3
+epa_02_04,Full-Service Providers,2021,Commercial,10.81
+epa_02_04,Full-Service Providers,2021,Industrial,7.1
+epa_02_04,Full-Service Providers,2021,Transportation,10.92
+epa_02_04,Full-Service Providers,2021,Total,10.93
+epa_02_04,Full-Service Providers,2022,Residential,14.6
+epa_02_04,Full-Service Providers,2022,Commercial,11.84
+epa_02_04,Full-Service Providers,2022,Industrial,8.13
+epa_02_04,Full-Service Providers,2022,Transportation,13.02
+epa_02_04,Full-Service Providers,2022,Total,12.07
+epa_02_04,Full-Service Providers,2023,Residential,15.41
+epa_02_04,Full-Service Providers,2023,Commercial,11.9
+epa_02_04,Full-Service Providers,2023,Industrial,7.83
+epa_02_04,Full-Service Providers,2023,Transportation,13.75
+epa_02_04,Full-Service Providers,2023,Total,12.32
+epa_02_04,Full-Service Providers,2024,Residential,15.79
+epa_02_04,Full-Service Providers,2024,Commercial,11.9
+epa_02_04,Full-Service Providers,2024,Industrial,7.74
+epa_02_04,Full-Service Providers,2024,Transportation,12.72
+epa_02_04,Full-Service Providers,2024,Total,12.44
+epa_02_04,Full-Service Providers,2025,Residential,16.55
+epa_02_04,Full-Service Providers,2025,Commercial,12.34
+epa_02_04,Full-Service Providers,2025,Industrial,8.02
+epa_02_04,Full-Service Providers,2025,Transportation,13.98
+epa_02_04,Full-Service Providers,2025,Total,12.98
+epa_02_04,Competitive Service Providers,2015,Residential,15.35
+epa_02_04,Competitive Service Providers,2015,Commercial,11.62
+epa_02_04,Competitive Service Providers,2015,Industrial,7.38
+epa_02_04,Competitive Service Providers,2015,Transportation,10.2
+epa_02_04,Competitive Service Providers,2015,Total,10.87
+epa_02_04,Competitive Service Providers,2016,Residential,15.46
+epa_02_04,Competitive Service Providers,2016,Commercial,11.42
+epa_02_04,Competitive Service Providers,2016,Industrial,7.12
+epa_02_04,Competitive Service Providers,2016,Transportation,9.56
+epa_02_04,Competitive Service Providers,2016,Total,10.67
+epa_02_04,Competitive Service Providers,2017,Residential,16.04
+epa_02_04,Competitive Service Providers,2017,Commercial,11.55
+epa_02_04,Competitive Service Providers,2017,Industrial,7.11
+epa_02_04,Competitive Service Providers,2017,Transportation,9.5
+epa_02_04,Competitive Service Providers,2017,Total,10.79
+epa_02_04,Competitive Service Providers,2018,Residential,16.3
+epa_02_04,Competitive Service Providers,2018,Commercial,11.73
+epa_02_04,Competitive Service Providers,2018,Industrial,7.37
+epa_02_04,Competitive Service Providers,2018,Transportation,9.49
+epa_02_04,Competitive Service Providers,2018,Total,11.06
+epa_02_04,Competitive Service Providers,2019,Residential,16.84
+epa_02_04,Competitive Service Providers,2019,Commercial,11.75
+epa_02_04,Competitive Service Providers,2019,Industrial,7.09
+epa_02_04,Competitive Service Providers,2019,Transportation,9.49
+epa_02_04,Competitive Service Providers,2019,Total,11.12
+epa_02_04,Competitive Service Providers,2020,Residential,17.39
+epa_02_04,Competitive Service Providers,2020,Commercial,11.84
+epa_02_04,Competitive Service Providers,2020,Industrial,6.98
+epa_02_04,Competitive Service Providers,2020,Transportation,9.68
+epa_02_04,Competitive Service Providers,2020,Total,11.33
+epa_02_04,Competitive Service Providers,2021,Residential,18.3
+epa_02_04,Competitive Service Providers,2021,Commercial,12.76
+epa_02_04,Competitive Service Providers,2021,Industrial,7.53
+epa_02_04,Competitive Service Providers,2021,Transportation,9.94
+epa_02_04,Competitive Service Providers,2021,Total,12.06
+epa_02_04,Competitive Service Providers,2022,Residential,21.29
+epa_02_04,Competitive Service Providers,2022,Commercial,14.68
+epa_02_04,Competitive Service Providers,2022,Industrial,9.19
+epa_02_04,Competitive Service Providers,2022,Transportation,11.1
+epa_02_04,Competitive Service Providers,2022,Total,14.04
+epa_02_04,Competitive Service Providers,2023,Residential,24.35
+epa_02_04,Competitive Service Providers,2023,Commercial,15.4
+epa_02_04,Competitive Service Providers,2023,Industrial,8.99
+epa_02_04,Competitive Service Providers,2023,Transportation,12.39
+epa_02_04,Competitive Service Providers,2023,Total,14.81
+epa_02_04,Competitive Service Providers,2024,Residential,25.21
+epa_02_04,Competitive Service Providers,2024,Commercial,16.18
+epa_02_04,Competitive Service Providers,2024,Industrial,9.84
+epa_02_04,Competitive Service Providers,2024,Transportation,12.76
+epa_02_04,Competitive Service Providers,2024,Total,15.76
+epa_02_04,Competitive Service Providers,2025,Residential,26.34
+epa_02_04,Competitive Service Providers,2025,Commercial,17.46
+epa_02_04,Competitive Service Providers,2025,Industrial,10.79
+epa_02_04,Competitive Service Providers,2025,Transportation,13.84
+epa_02_04,Competitive Service Providers,2025,Total,16.94
+epa_02_04,Energy-Only Providers,2015,Residential,8.76
+epa_02_04,Energy-Only Providers,2015,Commercial,7.24
+epa_02_04,Energy-Only Providers,2015,Industrial,5.68
+epa_02_04,Energy-Only Providers,2015,Transportation,6.92
+epa_02_04,Energy-Only Providers,2015,Total,6.99
+epa_02_04,Energy-Only Providers,2016,Residential,8.37
+epa_02_04,Energy-Only Providers,2016,Commercial,6.85
+epa_02_04,Energy-Only Providers,2016,Industrial,5.38
+epa_02_04,Energy-Only Providers,2016,Transportation,6.17
+epa_02_04,Energy-Only Providers,2016,Total,6.62
+epa_02_04,Energy-Only Providers,2017,Residential,8.26
+epa_02_04,Energy-Only Providers,2017,Commercial,6.7
+epa_02_04,Energy-Only Providers,2017,Industrial,5.26
+epa_02_04,Energy-Only Providers,2017,Transportation,6.19
+epa_02_04,Energy-Only Providers,2017,Total,6.47
+epa_02_04,Energy-Only Providers,2018,Residential,8.35
+epa_02_04,Energy-Only Providers,2018,Commercial,6.77
+epa_02_04,Energy-Only Providers,2018,Industrial,5.43
+epa_02_04,Energy-Only Providers,2018,Transportation,6.32
+epa_02_04,Energy-Only Providers,2018,Total,6.59
+epa_02_04,Energy-Only Providers,2019,Residential,8.35
+epa_02_04,Energy-Only Providers,2019,Commercial,6.52
+epa_02_04,Energy-Only Providers,2019,Industrial,5.11
+epa_02_04,Energy-Only Providers,2019,Transportation,6.25
+epa_02_04,Energy-Only Providers,2019,Total,6.39
+epa_02_04,Energy-Only Providers,2020,Residential,8.29
+epa_02_04,Energy-Only Providers,2020,Commercial,6.23
+epa_02_04,Energy-Only Providers,2020,Industrial,4.89
+epa_02_04,Energy-Only Providers,2020,Transportation,6.29
+epa_02_04,Energy-Only Providers,2020,Total,6.2
+epa_02_04,Energy-Only Providers,2021,Residential,8.23
+epa_02_04,Energy-Only Providers,2021,Commercial,6.57
+epa_02_04,Energy-Only Providers,2021,Industrial,5.35
+epa_02_04,Energy-Only Providers,2021,Transportation,6.33
+epa_02_04,Energy-Only Providers,2021,Total,6.48
+epa_02_04,Energy-Only Providers,2022,Residential,10.26
+epa_02_04,Energy-Only Providers,2022,Commercial,8.12
+epa_02_04,Energy-Only Providers,2022,Industrial,6.88
+epa_02_04,Energy-Only Providers,2022,Transportation,7.33
+epa_02_04,Energy-Only Providers,2022,Total,8.09
+epa_02_04,Energy-Only Providers,2023,Residential,12.25
+epa_02_04,Energy-Only Providers,2023,Commercial,8.71
+epa_02_04,Energy-Only Providers,2023,Industrial,6.55
+epa_02_04,Energy-Only Providers,2023,Transportation,8.33
+epa_02_04,Energy-Only Providers,2023,Total,8.6
+epa_02_04,Energy-Only Providers,2024,Residential,11.84
+epa_02_04,Energy-Only Providers,2024,Commercial,8.74
+epa_02_04,Energy-Only Providers,2024,Industrial,6.74
+epa_02_04,Energy-Only Providers,2024,Transportation,8.33
+epa_02_04,Energy-Only Providers,2024,Total,8.66
+epa_02_04,Energy-Only Providers,2025,Residential,12.27
+epa_02_04,Energy-Only Providers,2025,Commercial,9.55
+epa_02_04,Energy-Only Providers,2025,Industrial,7.71
+epa_02_04,Energy-Only Providers,2025,Transportation,9.21
+epa_02_04,Energy-Only Providers,2025,Total,9.46
+epa_02_04,Delivery-Only Providers,2015,Residential,6.59
+epa_02_04,Delivery-Only Providers,2015,Commercial,4.38
+epa_02_04,Delivery-Only Providers,2015,Industrial,1.7
+epa_02_04,Delivery-Only Providers,2015,Transportation,3.28
+epa_02_04,Delivery-Only Providers,2015,Total,3.88
+epa_02_04,Delivery-Only Providers,2016,Residential,7.09
+epa_02_04,Delivery-Only Providers,2016,Commercial,4.57
+epa_02_04,Delivery-Only Providers,2016,Industrial,1.75
+epa_02_04,Delivery-Only Providers,2016,Transportation,3.38
+epa_02_04,Delivery-Only Providers,2016,Total,4.06
+epa_02_04,Delivery-Only Providers,2017,Residential,7.79
+epa_02_04,Delivery-Only Providers,2017,Commercial,4.85
+epa_02_04,Delivery-Only Providers,2017,Industrial,1.85
+epa_02_04,Delivery-Only Providers,2017,Transportation,3.31
+epa_02_04,Delivery-Only Providers,2017,Total,4.32
+epa_02_04,Delivery-Only Providers,2018,Residential,7.95
+epa_02_04,Delivery-Only Providers,2018,Commercial,4.96
+epa_02_04,Delivery-Only Providers,2018,Industrial,1.95
+epa_02_04,Delivery-Only Providers,2018,Transportation,3.17
+epa_02_04,Delivery-Only Providers,2018,Total,4.47
+epa_02_04,Delivery-Only Providers,2019,Residential,8.48
+epa_02_04,Delivery-Only Providers,2019,Commercial,5.24
+epa_02_04,Delivery-Only Providers,2019,Industrial,1.98
+epa_02_04,Delivery-Only Providers,2019,Transportation,3.24
+epa_02_04,Delivery-Only Providers,2019,Total,4.73
+epa_02_04,Delivery-Only Providers,2020,Residential,9.1
+epa_02_04,Delivery-Only Providers,2020,Commercial,5.61
+epa_02_04,Delivery-Only Providers,2020,Industrial,2.09
+epa_02_04,Delivery-Only Providers,2020,Transportation,3.4
+epa_02_04,Delivery-Only Providers,2020,Total,5.13
+epa_02_04,Delivery-Only Providers,2021,Residential,10.07
+epa_02_04,Delivery-Only Providers,2021,Commercial,6.19
+epa_02_04,Delivery-Only Providers,2021,Industrial,2.19
+epa_02_04,Delivery-Only Providers,2021,Transportation,3.61
+epa_02_04,Delivery-Only Providers,2021,Total,5.58
+epa_02_04,Delivery-Only Providers,2022,Residential,11.03
+epa_02_04,Delivery-Only Providers,2022,Commercial,6.56
+epa_02_04,Delivery-Only Providers,2022,Industrial,2.31
+epa_02_04,Delivery-Only Providers,2022,Transportation,3.77
+epa_02_04,Delivery-Only Providers,2022,Total,5.95
+epa_02_04,Delivery-Only Providers,2023,Residential,12.1
+epa_02_04,Delivery-Only Providers,2023,Commercial,6.7
+epa_02_04,Delivery-Only Providers,2023,Industrial,2.43
+epa_02_04,Delivery-Only Providers,2023,Transportation,4.06
+epa_02_04,Delivery-Only Providers,2023,Total,6.2
+epa_02_04,Delivery-Only Providers,2024,Residential,13.37
+epa_02_04,Delivery-Only Providers,2024,Commercial,7.44
+epa_02_04,Delivery-Only Providers,2024,Industrial,3.1
+epa_02_04,Delivery-Only Providers,2024,Transportation,4.43
+epa_02_04,Delivery-Only Providers,2024,Total,7.1
+epa_02_04,Delivery-Only Providers,2025,Residential,14.07
+epa_02_04,Delivery-Only Providers,2025,Commercial,7.91
+epa_02_04,Delivery-Only Providers,2025,Industrial,3.08
+epa_02_04,Delivery-Only Providers,2025,Transportation,4.63
+epa_02_04,Delivery-Only Providers,2025,Total,7.48

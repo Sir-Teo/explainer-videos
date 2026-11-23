@@ -76,8 +76,8 @@ class Hook(VoiceoverScene):
         place = T(f"Wilmington, Delaware · DuPont · {get('brown.1914'):.0f}", 24, I.DIM).to_edge(UP, buff=0.4)
         src = source("Hagley Museum and Library, The Father of ROI: Donaldson Brown")
         with self.voiceover(
-            "Four centuries later, in 1914, an engineer turned financial man at the DuPont company, Donaldson "
-            "Brown, asked what all those entries add up to. <bookmark mark='a'/> His answer was one number, the "
+            "In 1914, four centuries after Pacioli, an engineer turned financial man at the DuPont company, "
+            "Donaldson Brown, asked what all those entries add up to. <bookmark mark='a'/> His answer was one number, the "
             "return on investment: how much profit each dollar put into the business earns in a year. <bookmark "
             "mark='b'/> And he split it in two. Profit per dollar of sales, which depends on prices and costs, "
             "<bookmark mark='c'/> times sales per dollar invested, which depends on how hard the plant, the stock "
