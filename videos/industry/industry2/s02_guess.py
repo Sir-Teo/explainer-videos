@@ -43,16 +43,34 @@ class Guess(VoiceoverScene):
             "three answers. The same is true of whole industries, and the rest of this part is about which measure "
             "tells you what."
         ) as vo:
+            icons = VGroup(draw.coin_stack(5, 0.14), draw.coin_stack(3, 0.14, color=I.PROFIT),
+                           draw.crowd(3, 0.3, cols=3))
+            for ic, col_ in zip(icons, (a, b, c)):
+                ic.next_to(col_[0], RIGHT, buff=0.2)
+
+            def show(col_, ic):
+                return AnimationGroup(FadeIn(col_[0]), FadeIn(ic, shift=DOWN * 0.1), LaggedStart(*[
+                    AnimationGroup(FadeIn(r[0], shift=RIGHT * 0.1), GrowFromEdge(r[1], LEFT)) for r in col_[1]],
+                    lag_ratio=0.25))
             self.play(FadeIn(ask), FadeIn(src))
             vo.wait_until("a")
-            self.play(FadeIn(a[0]), LaggedStart(*[FadeIn(r, shift=RIGHT * 0.1) for r in a[1]], lag_ratio=0.25),
-                      run_time=2)
+            self.play(show(a, icons[0]), run_time=2)
             vo.wait_until("b")
-            self.play(FadeIn(b[0]), LaggedStart(*[FadeIn(r, shift=RIGHT * 0.1) for r in b[1]], lag_ratio=0.25),
-                      run_time=2)
+            self.play(show(b, icons[1]), run_time=2)
             vo.wait_until("c")
-            self.play(FadeIn(c[0]), LaggedStart(*[FadeIn(r, shift=RIGHT * 0.1) for r in c[1]], lag_ratio=0.2),
-                      run_time=2)
+            self.play(show(c, icons[2]), run_time=2)
             vo.wait_until("d")
-            self.play(Indicate(VGroup(a[0], b[0], c[0]), color=I.ACCENT, scale_factor=1.06))
+            # the same company, three places
+            names = [[n for n, _ in C[k]] for k in ("by_sales", "by_profit", "by_jobs")]
+            links = VGroup()
+            for nm in ("Amazon", "Apple", "Walmart"):
+                rows_ = [col_[1][lst.index(nm)] if nm in lst else None for col_, lst in zip((a, b, c), names)]
+                for r0, r1 in zip(rows_, rows_[1:]):
+                    if r0 is None or r1 is None:  # only between neighbouring columns
+                        continue
+                    p0, p1 = r0.get_right() + RIGHT * 0.08, r1.get_left() + LEFT * 0.08
+                    links.add(CubicBezier(p0, p0 + RIGHT * 0.4, p1 + LEFT * 0.4, p1, stroke_color=COLS[nm],
+                                          stroke_width=3, stroke_opacity=0.85))
+            self.play(Indicate(VGroup(a[0], b[0], c[0]), color=I.ACCENT, scale_factor=1.06),
+                      LaggedStart(*[Create(l_) for l_ in links], lag_ratio=0.3), run_time=2.0)
         self.clear_scene()
