@@ -11,7 +11,7 @@ It opens in Venice in November 1494, where Luca Pacioli printed the merchants' m
 twice, and at DuPont in 1914, where Donaldson Brown turned the books into one number, the return on investment, and
 split it into profit per dollar of sales times sales per dollar invested. From there it covers:
 
-- six companies with their names removed, five ratios each, to match (answered in chapter 12);
+- six companies with their names removed, five ratios each, to match (answered in chapter 13);
 - a model bakery's books, entry by entry: savings, a loan, an oven, flour on credit, sales for cash and on credit,
   wages; the two sides of the book always agree, which is why a balance sheet balances;
 - the income statement: the bakery's year ($216,000 of sales, $13,509 of net profit, depreciation explained), then a
@@ -34,6 +34,9 @@ split it into profit per dollar of sales times sales per dollar invested. From t
 - one seat, one member: a Delta seat from New York to Los Angeles brings in about $526 and keeps about $48; the
   seat-mile margin times 298 billion seat miles rebuilds Delta's operating income; American Express paid Delta $8.2bn,
   about $68 a seat;
+- the businesses inside: Microsoft's Office and LinkedIn earn a 60% margin, its cloud 41% while growing 30% (its costs
+  up 44% on AI infrastructure), Windows and Xbox 27% and shrinking; Mounjaro and Zepbound, one molecule, bring Lilly
+  56% of its revenue;
 - where the accounts mislead: expensed research, pay in shares, paper gains, goodwill, the company's own measures,
   estimates, each with a figure from the six;
 - reading a 10-K, item by item, and where this part found its numbers;
@@ -72,10 +75,11 @@ for any operations.
 | 7 | Margin, speed and borrowing | The Du Pont identity; the six on a map; leverage |
 | 8 | The return on capital | Value created and destroyed; five companies against an assumed cost of capital; Enron |
 | 9 | One seat, one member | Delta's seat mile and a New York to Los Angeles seat; American Express |
-| 10 | Where the accounts mislead | Six traps, each with a real figure |
-| 11 | Reading a 10-K | The items of the annual report; where this part's numbers were found |
-| 12 | The six, revealed | The answers to chapter 1, with the reasons |
-| 13 | Called it? | McLean and Enron, 2001; this series' call on Microsoft's free cash flow |
+| 10 | The businesses inside | Microsoft's three segments; Lilly's two names |
+| 11 | Where the accounts mislead | Six traps, each with a real figure |
+| 12 | Reading a 10-K | The items of the annual report; where this part's numbers were found |
+| 13 | The six, revealed | The answers to chapter 1, with the reasons |
+| 14 | Called it? | McLean and Enron, 2001; this series' call on Microsoft's free cash flow |
 | — | What the accounts say, and what comes next | The five answers; Part 4, the cost curve |
 
 ## What is computed, and from what

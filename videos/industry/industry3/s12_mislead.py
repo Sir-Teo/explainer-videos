@@ -17,8 +17,8 @@ def trap(title, figure, line1, line2, color, who):
 
 class Mislead(VoiceoverScene):
     def construct(self):
-        card(self, 10, "Where the accounts mislead", "What do the statements leave out, or flatter?",
-             "Chapter ten. Where the accounts mislead.", lit=("moat", "change"))
+        card(self, 11, "Where the accounts mislead", "What do the statements leave out, or flatter?",
+             "Chapter eleven. Where the accounts mislead.", lit=("moat", "change"))
         cards = VGroup(
             trap("Research is a cost", bn(get("lly.rd")), "Lilly's spending on the next medicines,",
                  "expensed at once: no asset on the books", CO["lly"], "Eli Lilly, 2025"),

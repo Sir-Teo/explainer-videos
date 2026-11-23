@@ -135,7 +135,8 @@ PARTS = [
               "members before it pays its suppliers and to earn half its operating income from membership fees; "
               "the Du Pont identity places the six on a map of margin against speed and multiplies by borrowing; "
               "the return on capital is set against its cost; Delta's seat mile rebuilds its operating income and "
-              "American Express pays it more per seat than it keeps; six traps in the accounts are named; the 10-K "
+              "American Express pays it more per seat than it keeps; Microsoft's segments show the profit in Office "
+              "and the growth in the cloud, and two names bring Lilly 56% of its revenue; six traps in the accounts are named; the 10-K "
               "is mapped; the six are revealed. It ends with Bethany McLean's 2001 question about Enron, Enron's "
               "own figures, the restatement and the bankruptcy, and the series' call on Microsoft's free cash flow "
               "in fiscal 2027.",
@@ -168,7 +169,7 @@ PARTS = [
             ("Return on invested capital", r"ROIC = \frac{EBIT\,(1-t)}{E + D}"),
             ("Value of a stream", r"V = \frac{\text{earnings}}{r}: \; V > I \iff ROIC > r"),
         ],
-        U=(0, 1, 2, 3, 4, 5, "s07_intermission", 6, 9, 12), I=(10, 11), D=(7, 8, 13),
+        U=(0, 1, 2, 3, 4, 5, "s07_intermission", 6, 9, 10, 13), I=(11, 12), D=(7, 8, 14),
         also=(("The Register's rows for Part 3", "explainer/industry/data/rows_p03.py"),
               ("The generic firm", "explainer/industry/works/firm.py")),
     ),

@@ -74,7 +74,8 @@ class Profit(VoiceoverScene):
         m = {n: oi / rev for n, (oi, rev) in fig.items()}
         items = [(n, m[n], "#B58CFF" if m[n] > 0.25 else (I.CHANNEL if m[n] > 0.08 else "#7EC8F5"),
                  f"on ${rev:.0f}bn of sales") for n, (oi, rev) in fig.items()]
-        rows = viz.margin_ladder(items, max_value=0.65, bar_len=6.4, row_h=0.5, size=20, name_w=2.6)
+        rows = viz.margin_ladder(items, max_value=0.65, bar_len=6.4, row_h=0.5, size=20, name_w=2.6,
+                                 fmt=lambda v: f"{100 * v:.1f}%" if v < 0.05 else f"{100 * v:.0f}%")
         rows.move_to(LEFT * 0.4 + DOWN * 0.3)
         head = T("Operating profit per dollar of sales (operating margin)", 24, I.TEXT).to_edge(UP, buff=0.4)
         note = T("A thin margin turned over many times can still pay well: Part 3", 19, I.DIM).to_edge(DOWN, buff=0.75)

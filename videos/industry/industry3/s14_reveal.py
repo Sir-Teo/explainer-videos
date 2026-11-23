@@ -13,8 +13,8 @@ WHY = {"nee": "new equipment worth 88 cents per dollar of sales: plants built ah
 
 class Reveal(VoiceoverScene):
     def construct(self):
-        card(self, 12, "The six, revealed", "Which company was which, and how could you tell?",
-             "Chapter twelve. The six, revealed.", lit=("dollar", "moat"))
+        card(self, 13, "The six, revealed", "Which company was which, and how could you tell?",
+             "Chapter thirteen. The six, revealed.", lit=("dollar", "moat"))
         t0 = table(False).scale(0.84, about_point=ORIGIN).shift(UP * 0.55)
         t1 = table(True).scale(0.84, about_point=ORIGIN).shift(UP * 0.55)
         heads1 = t1[0]

@@ -65,6 +65,16 @@ add(
         sbc=(12.405, "stock-based compensation expense"), openai=(6.5, "net gains from investments in OpenAI in other "
         "income, mostly the dilution gain from OpenAI's October 2025 recapitalization (fiscal 2025: $4.8bn of net "
         "losses)"), cloud=(214.0, "Microsoft Cloud revenue, fiscal 2026, up 27% (the 10-K gives $214 billion)")),
+    *co("msft", "Microsoft Form 10-K FY2026, segment results of operations", MSFT, "FY2026",
+        pbp_rev=(139.996, "Productivity and Business Processes revenue (Microsoft 365, LinkedIn, Dynamics); "
+                 "fiscal 2025: $120.810bn"), pbp_oi=(83.879, "Productivity and Business Processes operating income"),
+        ic_rev=(137.791, "Intelligent Cloud revenue (Azure, server products); fiscal 2025: $106.265bn"),
+        ic_oi=(56.972, "Intelligent Cloud operating income"),
+        ic_cogs_growth=(0.44, ("Intelligent Cloud cost of revenue growth, fiscal 2026, 'driven by investments in AI "
+                               "infrastructure'", "share")),
+        azure_growth=(0.41, ("Azure and other cloud services revenue growth, fiscal 2026", "share")),
+        mpc_rev=(54.052, "More Personal Computing revenue (Windows, devices, Xbox, search advertising); fiscal 2025: "
+                 "$54.649bn"), mpc_oi=(14.386, "More Personal Computing operating income")),
     *co("msft", "Microsoft Form 10-K FY2025 (SEC company facts)", CF.format(789019), "FY2025",
         ocf25=(136.162, "net cash from operations, fiscal 2025"), capex25=(64.551, "additions to property and "
         "equipment, fiscal 2025"), oi25=(128.528, "operating income, fiscal 2025")),

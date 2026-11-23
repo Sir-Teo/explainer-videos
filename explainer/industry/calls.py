@@ -58,7 +58,7 @@ CALLS = [
          "Microsoft's free cash flow in fiscal 2027 (operating cash flow less additions to property and equipment) "
          "will be below fiscal 2026's $67.0bn, while its operating income rises above fiscal 2026's $155.2bn. "
          "Probability: 65%.",
-         "This series, Part 3, chapter 13; Q1 FY2027 free cash $18.6bn against $25.7bn a year earlier; capex "
+         "This series, Part 3, chapter 14; Q1 FY2027 free cash $18.6bn against $25.7bn a year earlier; capex "
          "guidance about $170bn including finance leases",
          rule="Microsoft Form 10-K FY2027, cash-flow statement and income statement: both conditions must hold",
          due="2027-08", ours=True),
