@@ -43,9 +43,13 @@ class Roic(VoiceoverScene):
             vo.wait_until("b")
             self.play(LaggedStart(*[FadeIn(c) for c in put[0]], lag_ratio=0.05), FadeIn(put[1]))
             vo.wait_until("c")
-            self.play(LaggedStart(*[FadeIn(c) for c in good[0]], lag_ratio=0.04), FadeIn(good[1]))
+            biz = draw.factory(1.1, color=I.PROFIT).move_to([-2.3, 1.0, 0])
+            self.play(FadeIn(biz, shift=DOWN * 0.2))
+            self.play(ReplacementTransform(put[0].copy(), good[0], path_arc=-0.8), FadeIn(good[1]), run_time=1.8)
             vo.wait_until("d")
-            self.play(LaggedStart(*[FadeIn(c) for c in bad[0]], lag_ratio=0.05), FadeIn(bad[1]))
+            biz2 = draw.factory(1.1, color=I.COST).move_to([2.3, 1.0, 0])
+            self.play(FadeIn(biz2, shift=DOWN * 0.2))
+            self.play(ReplacementTransform(put[0].copy(), bad[0], path_arc=-0.6), FadeIn(bad[1]), run_time=1.8)
         self.clear_scene()
 
     def six(self):

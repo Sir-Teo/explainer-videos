@@ -46,9 +46,23 @@ class Split(VoiceoverScene):
             "almost all of it does, 85 cents, because the value added of a building is mostly its rent. Who gets "
             "the money in an industry depends on whether its product is made by people or by things."
         ) as vo:
-            self.play(FadeIn(legend), FadeIn(src))
+            for item, g_ in zip(legend, (draw.person(0.3, color=I.PROFIT), draw.coin(0.12, color=I.TAX),
+                                         draw.factory(0.45, color=I.MONEY))):
+                g_.next_to(item, LEFT, buff=0.1)
+                item.add(g_)
+            legend.arrange(RIGHT, buff=0.4).to_edge(DOWN, buff=0.75)
+            if legend.width > 13.0:
+                legend.scale_to_fit_width(13.0)
+            big = draw.coin(0.32).move_to([-6.3, 2.55, 0])
+            self.play(FadeIn(legend), FadeIn(src), FadeIn(big, scale=1.4))
             vo.wait_until("a")
-            self.play(FadeIn(rows[0][0]), GrowFromEdge(rows[0][1], LEFT), FadeIn(rows[0][2]))
+            flows = [draw.coin_flow(big.get_center(), seg.get_center(), n=n, r=0.1, arc=-0.5, run_time=1.3)
+                     for seg, n in zip(rows[0][1], (5, 1, 4))]
+            self.add(*[c for c, _ in flows])
+            self.play(*[a_ for _, a_ in flows], FadeIn(rows[0][0]), GrowFromEdge(rows[0][1], LEFT),
+                      FadeOut(big, scale=0.4), run_time=1.6)
+            self.remove(*[c for c, _ in flows])
+            self.play(FadeIn(rows[0][2]))
             vo.wait_until("b")
             self.play(LaggedStart(*[AnimationGroup(FadeIn(r[0]), GrowFromEdge(r[1], LEFT), FadeIn(r[2]))
                                     for r in rows[1:5]], lag_ratio=0.3), run_time=2)
