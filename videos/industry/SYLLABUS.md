@@ -2534,7 +2534,7 @@ scored in Part 64 and at each refresh.
 |---|---|---|---|---|---|---|
 | 1 · Where the Money Goes | done 2026-11-23 (118 Register rows) | `works/chain.py` | 18 scenes | silent and narrated previews reviewed | entry, lab, interactive | not started |
 | 2 · The Economy on One Page | done 2026-11-23 (37 Register rows; BEA, BLS, Census and World Bank extracts) | — (the BEA table itself) | 21 scenes | silent and narrated previews reviewed | entry, lab, interactive | not started |
-| 3 · The Accounts | done 2026-11-23 (111 Register rows; the SEC extract) | `works/firm.py` | 16 scenes | silent preview reviewed | entry, lab, interactive | not started |
+| 3 · The Accounts | done 2026-11-23 (119 Register rows; the SEC extract) | `works/firm.py` | 17 scenes | silent and narrated previews reviewed | entry, lab, interactive | not started |
 
 Phase 0 is done in the form Part 1 needed: the palette and kit (`style.py`, `kit.py`), the instruments (`viz.py`: the
 phone and its exploded view, the region map, the Dollar column, the margin ladder, the treemap, plain axes), the
