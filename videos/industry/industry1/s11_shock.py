@@ -50,10 +50,20 @@ class Shock(VoiceoverScene):
             self.play(FadeIn(acc), FadeIn(acc_l), LaggedStart(*[FadeIn(h, shift=DOWN * 0.1) for h in hbm],
                                                               lag_ratio=0.2), FadeIn(hb))
             vo.wait_until("b")
-            self.play(FadeIn(phone_mem), FadeIn(pm))
-            self.play(phone_mem[1].animate.set_opacity(0.25))
+            fab = draw.factory(1.25, color=I.MEMORY).move_to([-0.9, 2.55, 0])
+            fab_t = T("memory makers", 16, I.MEMORY).next_to(fab, RIGHT, buff=0.12)
+            self.play(FadeIn(phone_mem), FadeIn(pm), FadeIn(fab, shift=DOWN * 0.2), FadeIn(fab_t))
+            sticks = VGroup(*[Rectangle(width=0.34, height=0.1, fill_color=I.MEMORY, fill_opacity=0.95, stroke_width=0)
+                              .move_to(fab.get_bottom()) for _ in range(8)])
+            self.add(sticks)
+            dests = [h.get_center() for h in hbm] * 2
+            self.play(LaggedStart(*[s_.animate.move_to(d) for s_, d in zip(sticks, dests)], lag_ratio=0.12),
+                      phone_mem[1].animate.set_opacity(0.25), run_time=2.4)
+            self.remove(sticks)
             vo.wait_until("c")
-            self.play(FadeIn(mult, scale=0.9))
+            ptag = price_tag("memory", 24).move_to([4.6, 2.4, 0]).scale(0.6)
+            self.play(FadeIn(ptag), FadeIn(mult, scale=0.9))
+            self.play(ptag.animate.scale(2.2), run_time=2.0, rate_func=rate_functions.ease_in_quad)
             vo.wait_until("d")
             self.play(FadeIn(quote, shift=UP * 0.1))
         self.clear_scene()

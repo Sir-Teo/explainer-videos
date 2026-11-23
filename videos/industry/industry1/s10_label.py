@@ -48,13 +48,29 @@ class Label(VoiceoverScene):
             "<bookmark mark='e'/> Counted by value added, almost all of that deficit was really with the countries "
             "that made the parts. Statisticians now publish trade in value added for exactly this reason."
         ) as vo:
-            self.play(FadeIn(src))
+            ship = draw.ship(5.6, boxes=0).move_to(box.get_bottom(), aligned_edge=DOWN).shift(
+                DOWN * (0.135 * 5.6 + 0.02) + RIGHT * 0.4)
+            sea = VGroup(*[Line([x, ship.get_bottom()[1] + 0.05, 0], [x + 0.5, ship.get_bottom()[1] + 0.05, 0],
+                                stroke_color="#3B7DD8", stroke_width=2.5) for x in np.arange(-7.0, 0.0, 0.8)])
+            cargo = VGroup(ship, box, ribs, stencil)
+            cargo.shift(LEFT * 9)
+            self.play(FadeIn(src), FadeIn(sea))
             vo.wait_until("a")
-            self.play(FadeIn(box), Create(ribs), FadeIn(stencil), FadeIn(when), run_time=1.4)
+            self.play(cargo.animate.shift(RIGHT * 9), run_time=2.2, rate_func=rate_functions.ease_out_cubic)
+            self.play(FadeIn(when))
             vo.wait_until("b")
             self.play(FadeIn(full), GrowFromEdge(cn, LEFT), FadeIn(l1))
             vo.wait_until("c")
-            self.play(FadeIn(l2))
+            origins = [("Japan", REGION["Japan"]), ("Germany", "#C9D3E0"), ("Korea", REGION["Korea"]),
+                       ("US", REGION["US"])]
+            parts = VGroup()
+            for k, (nm, col) in enumerate(origins):
+                c = draw.chip(0.3, color=col)
+                t = T(nm, 15, col).next_to(c, DOWN, buff=0.05)
+                parts.add(VGroup(c, t).move_to([2.0 + 1.25 * k, 2.95, 0]))
+            self.play(LaggedStart(*[FadeIn(p_, shift=DOWN * 0.2) for p_ in parts], lag_ratio=0.15), FadeIn(l2))
+            self.play(LaggedStart(*[p_[0].animate.move_to(full.get_center() + RIGHT * (0.6 * k - 0.4)).scale(0.6)
+                                    for k, p_ in enumerate(parts)], lag_ratio=0.15), run_time=1.4)
             vo.wait_until("d")
             self.play(FadeIn(deficit, shift=UP * 0.1))
             vo.wait_until("e")

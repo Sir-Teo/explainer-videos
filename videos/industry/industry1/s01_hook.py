@@ -78,18 +78,33 @@ class Hook(VoiceoverScene):
             "3 dollars 70. <bookmark mark='e'/> Of that, the assembler, a Taiwanese company called Inventec, kept, "
             "by the authors' estimate, about 11 cents."
         ) as vo:
-            self.play(FadeIn(top))
+            pile = draw.coin_stack(12, 0.16).next_to(top, LEFT, buff=0.4)
+            self.play(FadeIn(top), FadeIn(pile, shift=DOWN * 0.2))
+
+            def pay(idx, n):
+                flows = [draw.coin_flow(pile.get_top(), bar[i].get_center(), n=n, r=0.09, arc=0.6) for i in idx]
+                self.add(*[c for c, _ in flows])
+                self.play(*[a for _, a in flows], *[GrowFromEdge(bar[i], LEFT) for i in idx],
+                          *[FadeIn(labs[i]) for i in idx], run_time=1.6)
+                self.remove(*[c for c, _ in flows])
             vo.wait_until("a")
-            self.play(GrowFromEdge(bar[0], LEFT), GrowFromEdge(bar[1], LEFT), FadeIn(labs[0]), FadeIn(labs[1]))
+            pay((0, 1), 5)
             vo.wait_until("b")
-            self.play(GrowFromEdge(bar[2], LEFT), FadeIn(labs[2]))
+            pay((2,), 6)
             vo.wait_until("c")
-            self.play(*[GrowFromEdge(b, LEFT) for b in bar[3:7]], *[FadeIn(l) for l in labs[3:7]], run_time=1.6)
+            pay((3, 4, 5, 6), 3)
             vo.wait_until("d")
-            self.play(GrowFromEdge(asm, LEFT), Create(link), FadeIn(zoom, shift=DOWN * 0.1))
+            fac = draw.factory(1.3, color=REGION["China"]).next_to(zoom, RIGHT, buff=0.35)
+            c_asm, a_asm = draw.coin_flow(pile.get_top(), asm.get_center(), n=1, r=0.07, arc=0.6)
+            self.add(c_asm)
+            self.play(a_asm, GrowFromEdge(asm, LEFT))
+            self.remove(c_asm)
+            self.play(Create(link), FadeIn(zoom, shift=DOWN * 0.1), FadeIn(fac, shift=UP * 0.1))
             self.play(Indicate(asm, scale_factor=1.6, color=REGION["China"]))
             vo.wait_until("e")
-            self.play(FadeIn(kept, shift=UP * 0.1))
+            dot = draw.coin(0.035).move_to(fac.get_center())
+            self.play(FadeIn(kept, shift=UP * 0.1), FadeIn(dot, scale=4))
+            self.play(dot.animate.move_to(kept[1].get_right() + RIGHT * 0.25), run_time=1.2)
         with self.voiceover(
             "The label, the trade statistics and the money gave three different answers to the question of who "
             "makes the thing. This series is about the third answer."

@@ -11,7 +11,8 @@ Every glyph is a ``VGroup`` with its moving parts named, so a scene can animate 
   :func:`ship`, :func:`server_rack`;
 * the city and its people: :func:`skyline` (``.windows`` light up), :func:`house`, :func:`shop`, :func:`person`,
   :func:`crowd`; :func:`sun`, :func:`moon`, :func:`sky` (a background whose colour follows the hour);
-* money: :func:`coin`, :func:`coin_stack`, :func:`note_bill`;
+* money: :func:`coin`, :func:`coin_stack`, :func:`note_bill`, :func:`coin_flow` (coins flying from one place to
+  another);
 * readouts: :func:`number` (a live number from cached digits), :func:`counter` (a live string, slow), :func:`memo_redraw` (a label
   from a few strings, each typeset once), :func:`gauge` (a dial whose needle follows a tracker).
 
@@ -500,6 +501,19 @@ def coin_stack(n: int, r: float = 0.14, color: str = "#F6C453") -> VGroup:
                     fill_opacity=1).move_to([0, k * 0.22 * r, 0])
         g.add(e)
     return g
+
+
+def coin_flow(src, dst, n: int = 6, r: float = 0.1, arc: float = -0.7, lag: float = 0.12, run_time: float = 1.6,
+              color: str = "#F6C453"):
+    """Coins flying from ``src`` to ``dst`` along an arc: returns ``(coins, animation)``; add the coins, play the
+    animation, then remove them (or leave them where they landed)."""
+    from manim import ArcBetweenPoints, LaggedStart, MoveAlongPath, smooth
+    src, dst = np.array(src, dtype=float), np.array(dst, dtype=float)
+    coins = VGroup(*[coin(r, color) for _ in range(n)])
+    for c in coins:
+        c.move_to(src)
+    anims = [MoveAlongPath(c, ArcBetweenPoints(src, dst, angle=arc), rate_func=smooth) for c in coins]
+    return coins, LaggedStart(*anims, lag_ratio=lag, run_time=run_time)
 
 
 def note_bill(w: float = 1.0, color: str = "#7BD88F") -> VGroup:

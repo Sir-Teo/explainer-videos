@@ -39,10 +39,26 @@ class Map(VoiceoverScene):
             if ps.width > 10.5:
                 ps.scale_to_fit_width(10.5)
             rows.add(VGroup(name, ps))
+        lens = VGroup(RoundedRectangle(corner_radius=0.06, width=0.5, height=0.36, stroke_width=0, fill_color="#5B6372",
+                                       fill_opacity=1), Circle(radius=0.12, stroke_color=I.CAMERA, stroke_width=3,
+                                                               fill_color="#101722", fill_opacity=1))
+        screen = VGroup(RoundedRectangle(corner_radius=0.05, width=0.5, height=0.34, stroke_color="#C9D3E0",
+                                         stroke_width=2, fill_color=I.DISPLAY, fill_opacity=0.8))
+        mast = VGroup(Line(DOWN * 0.2, UP * 0.2, stroke_color=I.RF, stroke_width=3),
+                      *[Arc(radius=r_, start_angle=-0.6, angle=1.2, stroke_color=I.RF, stroke_width=2).move_arc_center_to(
+                          UP * 0.2) for r_ in (0.12, 0.22)],
+                      *[Arc(radius=r_, start_angle=PI - 0.6, angle=1.2, stroke_color=I.RF, stroke_width=2).move_arc_center_to(
+                          UP * 0.2) for r_ in (0.12, 0.22)])
+        glyphs = [viz.phone(0.5, back=True, body=BODY_17), draw.chip(0.42, color=I.CHIP), draw.wafer(0.21, die=0.05),
+                  draw.chip(0.42, color=I.MEMORY), screen, lens, mast, draw.factory(0.55, color=I.ASSEMBLY)]
         for i, r in enumerate(rows):
             y = 2.55 - 0.66 * i
             r[0].move_to(np.array([-4.15, y, 0]), aligned_edge=RIGHT)
             r[1].move_to(np.array([-3.9, y, 0]), aligned_edge=LEFT)
+            g_ = glyphs[i]
+            g_.scale_to_fit_height(min(g_.height, 0.46))
+            g_.move_to(np.array([r[0].get_left()[0] - 0.4, y, 0]))
+            r[0].add(g_)
         legend = VGroup(*[VGroup(Dot(radius=0.07, color=REGION[k]), T(REGION_NAME[k] if k != "China" else "China", 16,
                                                                           I.DIM)).arrange(RIGHT, buff=0.08)
                           for k in ("US", "China", "Taiwan", "Korea", "Japan", "India", "Europe")]

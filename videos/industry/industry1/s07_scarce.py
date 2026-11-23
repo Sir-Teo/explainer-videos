@@ -34,7 +34,10 @@ class Scarce(VoiceoverScene):
             "product; operating margin is what is left after research, selling and overheads as well. Every company "
             "in the phone's chain publishes one or the other, and the numbers tell a story."
         ) as vo:
-            self.play(FadeIn(bar), FadeIn(l0))
+            bill = draw.note_bill(2.6).move_to(bar.get_center() + UP * 0.1)
+            self.play(FadeIn(bill, shift=UP * 0.3))
+            vo.wait_until("a")
+            self.play(ReplacementTransform(bill, bar), FadeIn(l0))
             vo.wait_until("b")
             self.play(GrowFromEdge(cost, LEFT), FadeIn(l1))
             vo.wait_until("c")

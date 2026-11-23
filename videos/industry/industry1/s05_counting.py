@@ -22,7 +22,12 @@ class Counting(VoiceoverScene):
             boxes.add(VGroup(box, body))
         boxes.arrange(RIGHT, buff=0.55).shift(UP * 1.6)
         arrows = VGroup(*[viz.arrow_line(boxes[i].get_right(), boxes[i + 1].get_left()) for i in range(3)])
-        goods = T("goods flow this way  →", 18, I.DIM).next_to(arrows, UP, buff=1.05)
+        goods = T("goods flow this way  →", 18, I.DIM).next_to(arrows, UP, buff=1.85)
+        glyphs = VGroup(draw.wafer(0.32, die=0.06), draw.chip(0.55, color=I.CHIP),
+                        viz.phone(0.75, back=True, body=BODY_17), draw.shop(0.8, color=I.CHANNEL))
+        for g_, b in zip(glyphs, boxes):
+            g_.next_to(b, UP, buff=0.18)
+        token = draw.wafer(0.2, die=0.05).move_to(boxes[0].get_top() + UP * 0.05)
         cust = VGroup(T("You pay", 20, I.DIM), TB(money(R["dollar17"]["price"]), 26, I.MONEY)).arrange(
             DOWN, buff=0.05).next_to(boxes[-1], DOWN, buff=0.3)
         coins = VGroup(*[viz.coin(0.12) for _ in range(4)])
@@ -55,8 +60,15 @@ class Counting(VoiceoverScene):
             self.play(FadeIn(tag))
             vo.wait_until("a")
             self.play(LaggedStart(*[FadeIn(b, shift=RIGHT * 0.1) for b in boxes], lag_ratio=0.35),
+                      LaggedStart(*[FadeIn(g_, shift=DOWN * 0.15) for g_ in glyphs], lag_ratio=0.35),
                       LaggedStart(*[GrowArrow(a) for a in arrows], lag_ratio=0.35), run_time=2.6)
-            self.play(FadeIn(goods), FadeIn(cust))
+            self.play(FadeIn(goods), FadeIn(cust), FadeIn(token, scale=0.5))
+            # the thing being made travels down the chain, changing as it goes
+            for i in range(3):
+                nxt = glyphs[i + 1].copy().scale_to_fit_height(0.45)
+                self.play(token.animate.move_to(arrows[i].get_center() + UP * 0.35), run_time=0.6)
+                self.play(Transform(token, nxt.move_to(arrows[i].get_center() + UP * 0.35)), run_time=0.4)
+            self.play(token.animate.move_to(cust.get_bottom() + DOWN * 0.35), run_time=0.7)
             vo.wait_until("b")
             for i, c in enumerate(coins):
                 c.move_to(cust)
@@ -65,14 +77,14 @@ class Counting(VoiceoverScene):
                       run_time=1.2)
             self.play(LaggedStart(*[c.animate.move_to(boxes[max(2 - i, 0)].get_center()) for i, c in enumerate(coins)],
                                   lag_ratio=0.2), run_time=1.6)
-            self.play(FadeOut(coins))
+            self.play(FadeOut(coins), FadeOut(token))
             vo.wait_until("c")
             self.play(LaggedStart(*[GrowFromEdge(s, LEFT) for s in stack], lag_ratio=0.25), FadeIn(lab_s),
                       run_time=1.8)
             self.play(Create(price), FadeIn(lab_p))
             vo.wait_until("d")
             self.play(Indicate(stack[1], color=I.CHIP, scale_factor=1.3))
-        self.keep = VGroup(boxes, arrows, goods, cust, tag)
+        self.keep = VGroup(boxes, arrows, goods, cust, tag, glyphs)
         self.play(FadeOut(VGroup(stack, price, lab_s, lab_p)))
 
     def added(self):

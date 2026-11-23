@@ -33,7 +33,20 @@ class Dollar(VoiceoverScene):
         rng.next_to(col.labels[-1], DOWN, buff=0.1).align_to(col.labels[-1], LEFT)
         tag = estimate_tag("estimate: our model; ranges in the Register", corner=UR)
         src = source("Apple 10-K FY2025-26; TrendForce; WSJ; our assumptions", corner=DL)
-        k = lambda i: AnimationGroup(GrowFromEdge(col.slices[i], DOWN), Create(col.leaders[i]), FadeIn(col.labels[i]))
+        hand = draw.coin_stack(14, 0.17).move_to([-6.0, 3.15, 0])
+        hand_t = T("what you pay", 18, I.DIM).next_to(hand, DOWN, buff=0.12)
+
+        flying = []
+
+        def land():
+            self.remove(*flying)
+            flying.clear()
+
+        def k(i, n=4):
+            coins, fly = draw.coin_flow(hand.get_top(), col.slices[i].get_center(), n=n, r=0.09, arc=-0.5)
+            self.add(coins)
+            flying.append(coins)
+            return AnimationGroup(fly, GrowFromEdge(col.slices[i], DOWN), Create(col.leaders[i]), FadeIn(col.labels[i]))
         with self.voiceover(
             "Now follow the 1,099 dollars, starting where you hand it over. <bookmark mark='a'/> Six in every ten "
             "iPhones, by value, are sold through carriers and other resellers, Apple's annual report says; the rest "
@@ -50,19 +63,24 @@ class Dollar(VoiceoverScene):
             "mark='h'/> And Apple's profit, after everything, is about 244 dollars. Because several steps are "
             "estimates, the true figure could be anywhere from about 150 to about 360."
         ) as vo:
-            self.play(FadeIn(top), FadeIn(src), FadeIn(tag))
+            self.play(FadeIn(top), FadeIn(src), FadeIn(tag), FadeIn(hand, shift=DOWN * 0.2), FadeIn(hand_t))
             vo.wait_until("a")
             self.play(k(0))
+            land()
             vo.wait_until("b")
             self.play(k(1), run_time=1.4)
+            land()
             vo.wait_until("c")
             self.play(k(2))
+            land()
             vo.wait_until("d")
             self.play(k(3))
+            land()
             vo.wait_until("e")
             for i in range(4, 7):
                 col.slices[i].set_opacity(0.25)
-            self.play(*[k(i) for i in range(4, 7)], FadeIn(apple_cut), FadeIn(gl), run_time=1.4)
+            self.play(*[k(i, 2) for i in range(4, 7)], FadeIn(apple_cut), FadeIn(gl), run_time=1.4)
+            land()
             for i in range(4, 7):
                 self.remove(col.labels[i], col.leaders[i])
             vo.wait_until("f")
