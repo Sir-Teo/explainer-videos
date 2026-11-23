@@ -26,8 +26,8 @@ def clock(h: float) -> str:
 
 class Stack(VoiceoverScene):
     def construct(self):
-        card(self, 8, "The Stack", "Who sets the price of electricity, hour by hour?",
-             "Chapter eight. The Stack: a day on America's power grid.", lit=("make", "dollar"))
+        card(self, 9, "The Stack", "Who sets the price of electricity, hour by hour?",
+             "Chapter nine. The Stack: a day on America's power grid.", lit=("make", "dollar"))
         self.build()
 
     def build(self):
@@ -42,12 +42,13 @@ class Stack(VoiceoverScene):
                       for p in (0, 20, 40, 60)])
         xt = VGroup(*[tx(f"{g:,}", 16, GREY_B).next_to([gx(g), Y0, 0], DOWN, buff=0.08) for g in (0, 400, 800, 1200)])
         xl = tx("gigawatts available", 17, GREY_B).next_to([gx(600), Y0, 0], DOWN, buff=0.38)
-        yl = tx("cost of one more MWh", 17, GREY_B).rotate(PI / 2).next_to([X0, gy(30), 0], LEFT, buff=0.55)
+        yl = tx("cost of one more MWh", 17, GREY_B).next_to([X0, Y0 + YL + 0.2, 0], UP, buff=0.1).align_to(
+            [X0 - 0.3, 0, 0], LEFT)
         axes = VGroup(xa, ya, yt, xt, xl, yl)
 
         # --- phase 1: the whole fleet, installed capacity ---------------------------------------------------------
         def rect(b, width_gw, left_gw):
-            hgt = max(gy(b["mc"]) - Y0, 0.07)
+            hgt = max(gy(b["mc"]) - Y0, 0.16)
             return Rectangle(width=max(XL * width_gw / GW_MAX, 0.004), height=hgt, stroke_width=0,
                              fill_color=TECH[b["key"]], fill_opacity=0.9).move_to(
                 [gx(left_gw) + XL * width_gw / GW_MAX / 2, Y0 + hgt / 2, 0])
@@ -59,7 +60,22 @@ class Stack(VoiceoverScene):
             left += b["gw"]
         icons = VGroup(*[icon(b["key"], 0.5) for b in B])
         for ic, r in zip(icons, installed):
+            if ic.width > 0.92 * r.width:
+                ic.scale_to_fit_width(max(0.92 * r.width, 0.18))
             ic.next_to(r, UP, buff=0.08)
+        icon_w = [ic.width for ic in icons]
+
+        # the legend: one row per kind of plant, appearing with its block
+        legend = VGroup()
+        hdr = VGroup(tx("capacity", 15, GREY_C).move_to([-2.75, 2.75, 0], aligned_edge=RIGHT),
+                     tx("one more MWh", 15, GREY_C).move_to([-1.15, 2.75, 0], aligned_edge=RIGHT))
+        for i, b in enumerate(B):
+            y = 2.25 - 0.56 * i
+            ic = icon(b["key"], 0.34).move_to([-6.55, y, 0])
+            nm = tx(b["name"], 18, TECH[b["key"]]).move_to([-6.2, y, 0], aligned_edge=LEFT)
+            gw = tx(f"{b['gw']:.0f} GW", 18, GREY_B).move_to([-2.75, y, 0], aligned_edge=RIGHT)
+            mc = tx(f"${b['mc']:.0f}", 18, WHITE, bold=True).move_to([-1.15, y, 0], aligned_edge=RIGHT)
+            legend.add(VGroup(ic, nm, gw, mc))
         oil_tag = tx(f"${B[-1]['mc']:.0f}", 16, TECH["oil"]).next_to(installed[-1], UP, buff=0.62)
         names = VGroup(*[tx(f"{b['name']}\n${b['mc']:.0f}", 14, TECH[b["key"]]) for b in B])
         head = tx("Every US power plant, cheapest to run on the left", 24).to_edge(UP, buff=0.25)
@@ -77,21 +93,26 @@ class Stack(VoiceoverScene):
             "off the top of the chart. <bookmark mark='f'/> This staircase is the industry's supply curve. "
             "Economists call it the merit order; this series calls it the Stack."
         ) as vo:
-            self.play(FadeIn(head), FadeIn(src), Create(axes), run_time=1.5)
+            self.play(FadeIn(head), FadeIn(src), Create(axes), FadeIn(hdr), run_time=1.5)
             vo.wait_until("a")
+            ghost = VGroup(*[r_.copy().set_fill(opacity=0.0).set_stroke(GREY_C, 1.5, opacity=0.8) for r_ in installed])
+            self.play(LaggedStart(*[Create(g_) for g_ in ghost], lag_ratio=0.12), run_time=2.0)
             vo.wait_until("b")
             self.play(*[AnimationGroup(GrowFromEdge(installed[i], DOWN), FadeIn(icons[i], shift=DOWN * 0.1))
-                        for i in (0, 1)], run_time=1.2)
+                        for i in (0, 1)], *[FadeIn(legend[i], shift=RIGHT * 0.2) for i in (0, 1)], run_time=1.2)
             vo.wait_until("c")
             self.play(*[AnimationGroup(GrowFromEdge(installed[i], DOWN), FadeIn(icons[i], shift=DOWN * 0.1))
-                        for i in (2, 3)], run_time=1.2)
+                        for i in (2, 3)], *[FadeIn(legend[i], shift=RIGHT * 0.2) for i in (2, 3)], run_time=1.2)
             vo.wait_until("d")
             self.play(*[AnimationGroup(GrowFromEdge(installed[i], DOWN), FadeIn(icons[i], shift=DOWN * 0.1))
-                        for i in (4, 5, 6)], run_time=1.4)
+                        for i in (4, 5, 6)], *[FadeIn(legend[i], shift=RIGHT * 0.2) for i in (4, 5, 6)],
+                      run_time=1.4)
             vo.wait_until("e")
             self.play(*[AnimationGroup(GrowFromEdge(installed[i], DOWN), FadeIn(icons[i], shift=DOWN * 0.1))
-                        for i in (7, 8)], FadeIn(oil_tag), run_time=1.2)
+                        for i in (7, 8)], *[FadeIn(legend[i], shift=RIGHT * 0.2) for i in (7, 8)], FadeIn(oil_tag),
+                      run_time=1.2)
             vo.wait_until("f")
+            self.remove(ghost)
             stair = VMobject(stroke_color=WHITE, stroke_width=3).set_points_as_corners(
                 [[X0, Y0, 0]] + [p for r in installed for p in (r.get_corner(UL), r.get_corner(UR))])
             self.play(Create(stair), run_time=1.8)
@@ -104,9 +125,11 @@ class Stack(VoiceoverScene):
         city.move_to(sky.get_bottom(), aligned_edge=DOWN)
         sun_g = draw.sun(0.3)
         moon_g = draw.moon(0.24).move_to([-1.6, 2.9, 0])
-        clock_t = always_redraw(lambda: tx(clock(hour.get_value()), 26, bold=True).move_to([-6.15, 3.1, 0]))
-        dem_t = always_redraw(lambda: tx(f"demand {5 * round(demand(hour.get_value()) / 5):,.0f} GW", 20, "#E8EAED").move_to(
-            [-6.0, 2.62, 0], aligned_edge=LEFT).shift(LEFT * 0.75))
+        clock_t = draw.memo_redraw(lambda: clock(hour.get_value()), lambda k: tx(k, 26, bold=True).move_to(
+            [-6.15, 3.1, 0]))
+        dem_t = draw.memo_redraw(lambda: 5 * round(demand(hour.get_value()) / 5),
+                                 lambda k: tx(f"demand {k:,.0f} GW", 20, "#E8EAED").move_to([-6.75, 2.62, 0],
+                                                                                          aligned_edge=LEFT))
 
         def avail_widths(h):
             return [avail(b["key"], b["gw"], h) for b in B]
@@ -125,7 +148,7 @@ class Stack(VoiceoverScene):
             w, d, marg = state(hour.get_value())
             left_ = 0.0
             for i, (r, b) in enumerate(zip(g, B)):
-                hgt = max(gy(b["mc"]) - Y0, 0.07)
+                hgt = max(gy(b["mc"]) - Y0, 0.16)
                 r.become(rect(b, w[i], left_))
                 running = left_ < d
                 r.set_fill(opacity=0.95 if running else 0.25)
@@ -139,7 +162,7 @@ class Stack(VoiceoverScene):
             w, d, marg = state(hour.get_value())
             for i, (ic, r) in enumerate(zip(g, blocks)):
                 ic.next_to(r, UP, buff=0.08)
-                op = 1.0 if w[i] > 8 else 0.0
+                op = 1.0 if r.width > 0.75 * icon_w[i] else 0.0
                 ic.set_opacity(op)
             icons_marg[0] = marg
 
@@ -147,8 +170,9 @@ class Stack(VoiceoverScene):
         dline = always_redraw(lambda: DashedLine([gx(demand(hour.get_value())), Y0, 0],
                                                  [gx(demand(hour.get_value())), Y0 + YL + 0.1, 0],
                                                  stroke_color=WHITE, stroke_width=2.5))
-        dlab = always_redraw(lambda: tx("demand", 16).next_to([gx(demand(hour.get_value())), Y0 + YL + 0.1, 0], UP,
-                                                               buff=0.04))
+        dlab_ = tx("demand", 16)
+        dlab = always_redraw(lambda: dlab_.copy().next_to([gx(demand(hour.get_value())), Y0 + YL + 0.1, 0], UP,
+                                                          buff=0.04))
 
         def price_now():
             w, d, marg = state(hour.get_value())
@@ -156,10 +180,10 @@ class Stack(VoiceoverScene):
         pline = always_redraw(lambda: DashedLine([X0, gy(price_now()[0]), 0],
                                                  [gx(demand(hour.get_value())), gy(price_now()[0]), 0],
                                                  stroke_color=PRICE, stroke_width=2.5))
-        price_t = always_redraw(lambda: VGroup(
+        price_t = draw.memo_redraw(lambda: price_now()[1], lambda m: VGroup(
             tx("price for everyone", 18, GREY_B),
-            tx(f"${price_now()[0]:.0f} per MWh", 34, PRICE, bold=True),
-            tx(f"set by: {B[price_now()[1]]['name'].lower()}", 18, TECH[B[price_now()[1]]['key']]),
+            tx(f"${B[m]['mc']:.0f} per MWh", 34, PRICE, bold=True),
+            tx(f"set by: {B[m]['name'].lower()}", 18, TECH[B[m]['key']]),
         ).arrange(DOWN, buff=0.06).move_to([-3.95, -1.55, 0]))
 
         def upd_sky(m):
@@ -187,7 +211,8 @@ class Stack(VoiceoverScene):
             "stack, at zero cost, and pushes every other block to the right. Demand rises through the morning, "
             "but the sun keeps pace, and gas still sets the price."
         ) as vo:
-            self.play(FadeOut(oil_tag), FadeOut(head), ReplacementTransform(installed, blocks),
+            self.play(FadeOut(oil_tag), FadeOut(head), FadeOut(legend), FadeOut(hdr),
+                      ReplacementTransform(installed, blocks),
                       FadeIn(sky), FadeIn(city), FadeIn(moon_g), FadeIn(sun_g.set_opacity(0)), run_time=1.6)
             self.add(blocks, icons)
             show_day()
@@ -216,7 +241,7 @@ class Stack(VoiceoverScene):
         rents = Rectangle(width=gx(demand(24)) - X0, height=gy(B[5]["mc"]) - Y0, stroke_width=0, fill_color=PROFIT,
                           fill_opacity=0.18).move_to([X0, Y0, 0], aligned_edge=DL)
         rent_t = tx("the gap between the price and each plant's own cost:\nwhat the cheaper plants keep", 18,
-                    PROFIT).move_to([gx(300), gy(52), 0])
+                    PROFIT).move_to([gx(400), gy(53), 0])
         tag = estimate_tag("the day is illustrative; the plants and their costs are the 2025 fleet", corner=DR)
         with self.voiceover(
             "Two lessons. <bookmark mark='a'/> First, the price is set by the cost of one more unit from the last "

@@ -111,7 +111,7 @@ def results() -> dict:
          "Contracted services": 4.617, "Landing fees and rents": 3.564, "Regional partners": 2.553,
          "Commissions and selling": 2.485, "Depreciation": 2.443, "Maintenance": 2.432, "Passenger service": 1.855,
          "Profit sharing": 1.337, "Aircraft rent": 0.542, "Other": 2.388}
-    assert abs(sum(D.values()) - 57.542) < 0.01
+    assert abs(sum(D.values()) - get("dal.opex")) < 0.01 and get("dal.horizon") == 0
     HORIZON = {"Fuel": 0, "Landing fees and rents": 0, "Passenger service": 0, "Commissions and selling": 0,
                "Regional partners": 1, "Contracted services": 1, "Maintenance": 1, "Refinery and other businesses": 1,
                "Salaries and benefits": 1, "Profit sharing": 1, "Other": 1, "Aircraft rent": 2, "Depreciation": 2}
@@ -138,7 +138,8 @@ def results() -> dict:
                 get("plant.cc2.overnight")),
                ("Nuclear", get("plant.smr.size"), get("plant.smr.overnight"), get("plant.nuclear.size"),
                 get("plant.nuclear.overnight"))],
-        six_tenths=[(c, st.scale_cost(100, 1, c)) for c in (0.5, 1, 2, 4, 8)])
+        six_tenths=[(c, st.scale_cost(100, 1, c, get("scale.six_tenths"))) for c in (0.5, 1, 2, 4, 8)])
+    R["scope"] = dict(cargo=get("dal.cargo"), amex=get("dal.amex"), oi=get("dal.oi"), rev=get("dal.rev"))
 
     # --- solar: prices since 1975, capacity since 2000, Wright's law ---------------------------------------------------
     from explainer.economics import data as econ
@@ -146,6 +147,10 @@ def results() -> dict:
     price = dict(zip(s["price_year"], s["price"]))
     capacity = dict(zip(s["cap_year"], s["capacity"]))
     yrs = [y for y in range(2000, 2026) if y in price and y in capacity]
+    for y, k in ((1975, "solar.price.1975"), (2025, "solar.price.2025")):
+        assert abs(price[y] - get(k)) < 1e-3, (y, price[y])
+    for y in (2000, 2020, 2025):
+        assert abs(capacity[y] - get(f"solar.cap.{y}")) < 0.05, (y, capacity[y])
     fit = st.wright([capacity[y] for y in yrs], [price[y] for y in yrs])
     doublings = math.log2(capacity[2025] / capacity[2000])
     R["solar"] = dict(price=price, capacity=capacity, fit=fit, years=yrs, doublings=doublings,
@@ -158,6 +163,16 @@ def results() -> dict:
     R["seats"] = dict(trasm=trasm, casm=casm, load=lf, per_rpm=per_rpm, break_even=casm / per_rpm,
                       per_point=asm * 0.01 * per_rpm / 100 / 1e9,  # $bn of revenue per point of load factor
                       oi=get("dal.oi"), leverage=(trasm * asm / 100 / 1e9) / get("dal.oi"))
+
+    # --- operating leverage: two model firms, and Delta in 2020 ------------------------------------------------------
+    firms = dict(hotel=dict(fixed=70.0, var_share=0.20), agency=dict(fixed=10.0, var_share=0.80))  # $m on $100m sales
+    for f in firms.values():
+        f["profit"] = {d: 100 * (1 + d) * (1 - f["var_share"]) - f["fixed"] for d in (-0.2, 0.0, 0.2)}
+        f["dol"] = 100 * (1 - f["var_share"]) / f["profit"][0.0]
+    covid = dict(rev=(get("dal.rev.2019"), get("dal.rev.2020")), cost=(get("dal.cost.2019"), get("dal.cost.2020")))
+    covid["oi"] = tuple(r_ - c_ for r_, c_ in zip(covid["rev"], covid["cost"]))
+    assert get("dal.covid") == 0
+    R["leverage"] = dict(firms=firms, covid=covid)
 
     # --- the US fleet in 2025 and its merit order --------------------------------------------------------------------
     E = _eia()
@@ -181,6 +196,14 @@ def results() -> dict:
     R["fleet"] = dict(blocks=[dict(key=k, name=n, gw=g, mc=m, cf=c) for k, n, g, m, c in blocks], fuel=fuel,
                       price=E["price"], nuclear_mc=nuclear_mc)
 
+    # where each new plant would sit at the 2025 fleet's average capacity factor
+    fleet_cf = {b["key"]: b["cf"] for b in R["fleet"]["blocks"]}
+    as_run = dict(nuclear="nuclear", cc2="gas_cc", ct_frame="gas_ct", solar="solar", wind="wind")
+    for key, t in techs.items():
+        u = fleet_cf[as_run[key]]
+        t["actual_cf"] = u
+        t["actual"] = t["fixed_kw_yr"] * 1000 / (HOURS * u) + t["variable"]
+
     # --- an illustrative hot summer day on that fleet ---------------------------------------------------------------
     def dispatch(h: float) -> dict:
         bl = [st.Block(b["key"], avail(b["key"], b["gw"], h), b["mc"]) for b in R["fleet"]["blocks"]]
@@ -194,9 +217,15 @@ def results() -> dict:
     R["day"].update(low=min(prices), high=max(prices), peak_hour=max(R["day"]["path"], key=lambda p: p["price"])["hour"])
 
     # --- memory's price war and software's zero marginal cost ----------------------------------------------------
-    R["memory"] = dict(gm={2023: get("micron.gm.fy2023"), 2025: get("micron.gm.fy2025"), 2026: get("micron.gm.fy2026")},
-                       rev={2023: get("micron.revenue.fy2023"), 2025: get("micron.revenue.fy2025"),
-                            2026: get("micron.revenue.fy2026")})
+    # Micron's gross margin by fiscal year: the series is written out in Part 1's row micron.gm.history
+    from explainer.industry.register import row
+    hist = row("micron.gm.history").definition
+    gm = dict(zip(range(2016, 2027), [0.202, 0.415, 0.589, 0.457, 0.306, 0.376, 0.452, -0.091, 0.224, 0.398, 0.807]))
+    rev = dict(zip(range(2016, 2027), [12.4, 20.3, 30.4, 23.4, 21.4, 27.7, 30.8, 15.5, 25.1, 37.4, 133.2]))
+    for y, v in gm.items():
+        assert f"{y} {100 * v:.1f}%" in hist, (y, v)
+    assert gm[2023] == get("micron.gm.fy2023") and gm[2026] == get("micron.gm.fy2026")
+    R["memory"] = dict(gm=gm, rev=rev, fines=get("dram.fines"), elpida=get("micron.elpida"))
     R["software"] = dict(margin=get("msft.pbp_oi") / get("msft.pbp_rev"), rev=get("msft.pbp_rev"))
 
     # --- Called it? ---------------------------------------------------------------------------------------------
@@ -216,7 +245,8 @@ def main():
           f"with the order")
     for k, t in R["lcoe"]["techs"].items():
         print(f"  {t['name']:<24} fixed ${t['fixed_kw_yr']:6.0f}/kW-yr  variable ${t['variable']:5.1f}/MWh  "
-              + "  ".join(f"{int(100 * u)}%: ${v:5.0f}" for u, v in t["per_mwh"].items()))
+              + "  ".join(f"{int(100 * u)}%: ${v:5.0f}" for u, v in t["per_mwh"].items())
+              + f"  at its fleet's {100 * t['actual_cf']:.0f}%: ${t['actual']:.0f}")
     s = R["solar"]
     print(f"solar: learning rate {100 * s['fit']['learning_rate']:.0f}% (R2 {s['fit']['r2']:.2f}), {s['doublings']:.1f} "
           f"doublings 2000-2025, price fell {s['fall']:.0f}x since 1975")

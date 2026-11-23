@@ -12,7 +12,8 @@ Every glyph is a ``VGroup`` with its moving parts named, so a scene can animate 
 * the city and its people: :func:`skyline` (``.windows`` light up), :func:`house`, :func:`shop`, :func:`person`,
   :func:`crowd`; :func:`sun`, :func:`moon`, :func:`sky` (a background whose colour follows the hour);
 * money: :func:`coin`, :func:`coin_stack`, :func:`note_bill`;
-* readouts: :func:`counter` (a live number), :func:`gauge` (a dial whose needle follows a tracker).
+* readouts: :func:`number` (a live number from cached digits), :func:`counter` (a live string, slow), :func:`memo_redraw` (a label
+  from a few strings, each typeset once), :func:`gauge` (a dial whose needle follows a tracker).
 
 Text goes through :func:`tx`, the repo's LaTeX ``label`` with the characters TeX treats specially escaped, so plain
 strings such as "$1,099 (43%)" can be passed as they are.
@@ -23,7 +24,8 @@ from __future__ import annotations
 import math
 
 import numpy as np
-from manim import (DOWN, LEFT, ORIGIN, PI, RIGHT, TAU, UP, Arc, Circle, DecimalNumber, Dot, Ellipse, Line, Polygon,
+from manim import (DOWN, LEFT, ORIGIN, PI, RIGHT, TAU, UP, Arc, Circle, DecimalNumber, Dot, Ellipse, Line, MathTex,
+                   Polygon,
                    Rectangle, RoundedRectangle, Square, Triangle, ValueTracker, VGroup, VMobject, always_redraw,
                    interpolate_color, ManimColor)
 
@@ -521,6 +523,51 @@ def counter(tracker: ValueTracker, fmt=lambda v: f"{v:,.0f}", size: float = 36, 
     return always_redraw(make)
 
 
+def number(fn, decimals: int = 0, prefix: str = "", suffix: str = "", size: float = 36, color="#E8EAED",
+           commas: bool = True, sign: bool = False) -> VGroup:
+    """A live number, ``fn()`` each frame, built from cached digit glyphs (fast: no new TeX per frame).
+
+    ``prefix`` and ``suffix`` are TeX-escaped text such as "$" or "%" or " GW"."""
+    n = DecimalNumber(fn(), num_decimal_places=decimals, group_with_commas=commas, include_sign=sign,
+                      font_size=size, color=color)
+    g = VGroup()
+    pre = tx(prefix, size, color) if prefix else None
+    suf = tx(suffix, size, color) if suffix else None
+    if pre is not None:
+        g.add(pre)
+        n.next_to(pre, RIGHT, buff=0.04)
+    g.add(n)
+    if suf is not None:
+        suf.next_to(n, RIGHT, buff=0.06)
+        g.add(suf)
+
+    def upd(_m):
+        n.set_value(fn())
+        if pre is not None:
+            n.next_to(pre, RIGHT, buff=0.04)
+        if suf is not None:
+            suf.next_to(n, RIGHT, buff=0.06)
+    g.add_updater(upd)
+    g.number = n
+    return g
+
+
+def memo_redraw(key_fn, make, place=None):
+    """Like ``always_redraw``, but builds each distinct ``key_fn()`` once with ``make(key)`` and reuses copies, so
+    labels that cycle through a few strings are typeset once each.  ``place(m)`` positions the copy each frame."""
+    cache = {}
+
+    def f():
+        k = key_fn()
+        if k not in cache:
+            cache[k] = make(k)
+        m = cache[k].copy()
+        if place is not None:
+            place(m)
+        return m
+    return always_redraw(f)
+
+
 def gauge(tracker: ValueTracker, lo: float, hi: float, r: float = 1.0, color: str = "#F6C453",
           bands=(("#7BD88F", 0.6), ("#F2C14E", 0.85), ("#E8554E", 1.0))) -> VGroup:
     """A half-dial from ``lo`` to ``hi`` whose needle follows ``tracker``."""
@@ -531,11 +578,13 @@ def gauge(tracker: ValueTracker, lo: float, hi: float, r: float = 1.0, color: st
                      stroke_width=10))
         start = end
 
+    hub = Dot(ORIGIN, radius=0.06, color=color)
+
     def needle():
         f = (min(max(tracker.get_value(), lo), hi) - lo) / (hi - lo)
         ang = PI - f * PI
-        return Line(ORIGIN, [0.85 * r * math.cos(ang), 0.85 * r * math.sin(ang), 0], stroke_color=color,
+        c = hub.get_center()
+        return Line(c, c + np.array([0.85 * r * math.cos(ang), 0.85 * r * math.sin(ang), 0]), stroke_color=color,
                     stroke_width=5)
-    hub = Dot(ORIGIN, radius=0.06, color=color)
     g = VGroup(arcs, always_redraw(needle), hub)
     return g

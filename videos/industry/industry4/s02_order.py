@@ -16,15 +16,16 @@ class Order(VoiceoverScene):
         for k, it in enumerate(belt.items):
             if k % 2:
                 it.set_opacity(0)
-        cap = tx("half the plant is idle: 200,000 of 400,000 a year", 20, GREY_B).next_to(belt, DOWN, buff=0.3)
+        cap = tx("half the plant is idle: 200,000 of 400,000 a year", 20, GREY_B).next_to(belt, UP, buff=0.12).shift(
+            RIGHT * 0.9)
 
         # the average-cost curve
         ax = CornerAxes(x_range=[0, 420, 100], y_range=[0, 140, 20], x_length=5.6, y_length=4.2,
                         axis_config=dict(color=GREY_B, include_ticks=False)).move_to([3.5, 0.15, 0])
         xl = tx("units a year (thousands)", 17, GREY_B).next_to(ax, DOWN, buff=0.15)
         yl = tx("$ per unit", 17, GREY_B).rotate(PI / 2).next_to(ax, LEFT, buff=0.15)
-        ticks = VGroup(*[tx(f"{v}", 14, GREY_B).next_to(ax.c2p(v, 0), DOWN, buff=0.05) for v in (100, 200, 300, 400)],
-                       *[tx(f"${v}", 14, GREY_B).next_to(ax.c2p(0, v), LEFT, buff=0.05) for v in (40, 80, 120)])
+        ticks = VGroup(*[tx(f"{v}", 17, GREY_B).next_to(ax.c2p(v, 0), DOWN, buff=0.08) for v in (100, 200, 300, 400)],
+                       *[tx(f"${v}", 17, GREY_B).next_to(ax.c2p(0, v), LEFT, buff=0.08) for v in (40, 80, 120)])
         ac = ax.plot(lambda q: P["variable"] + P["fixed"] / (q * 1000), x_range=[80, 400], color=FIXED, stroke_width=4)
         vc = ax.plot(lambda q: P["variable"], x_range=[0, 400], color=VAR, stroke_width=3)
         ac_t = tx("average cost", 18, FIXED).next_to(ax.c2p(110, 131), RIGHT, buff=0.1)
@@ -37,11 +38,15 @@ class Order(VoiceoverScene):
         eq = MathTex(r"\text{average cost} = \$40 + \frac{\$10{,}000{,}000}{\text{units}}", font_size=32).move_to(
             [3.5, 3.0, 0])
         profit = ValueTracker(P["profit"] / 1e6)
-        pr = always_redraw(lambda: VGroup(
-            tx("profit this year", 18, GREY_B),
-            tx(f"${profit.get_value():+.1f}m".replace("+", "+ ").replace("-", "- "), 36,
-               PROFIT if profit.get_value() >= -0.05 else LOSS, bold=True)).arrange(DOWN, buff=0.05).move_to(
-            [-4.6, -2.75, 0]))
+        def money_m(v):
+            if abs(v) < 0.05:
+                return "$0: break-even"
+            return ("-" if v < 0 else "+") + f"${abs(v):.1f}m"
+        pr_t = tx("profit this year", 18, GREY_B).move_to([-4.6, -2.45, 0])
+        pr_n = draw.memo_redraw(lambda: round(profit.get_value(), 1),
+                                lambda v: tx(money_m(v), 36, PROFIT if v >= -0.05 else LOSS, bold=True).next_to(
+                                    pr_t, DOWN, buff=0.08))
+        pr = VGroup(pr_t, pr_n)
         tag = estimate_tag("illustrative: a model plant", corner=DR)
         with self.voiceover(
             "Start with a decision, and make it yourself. <bookmark mark='a'/> You run a factory. Its rent, its "
@@ -63,9 +68,9 @@ class Order(VoiceoverScene):
             self.play(Create(ac), FadeIn(ac_t), run_time=1.5)
             self.play(FadeIn(dot), FadeIn(pr))
 
-        truck = draw.truck(1.8).move_to([-9, -1.6, 0])
+        truck = draw.truck(1.6).move_to([-9, -1.45, 0])
         offer = VGroup(tx("an offer", 18, GREY_B), tx("100,000 more units", 24, bold=True),
-                       tx("at $60 each", 28, PRICE, bold=True)).arrange(DOWN, buff=0.06).move_to([0.2, 2.6, 0])
+                       tx("at $60 each", 28, PRICE, bold=True)).arrange(DOWN, buff=0.06).move_to([-1.5, -1.45, 0])
         box = SurroundingRectangle(offer, color=PRICE, buff=0.2, corner_radius=0.12)
         ask = tx("$60 is below your $90 average cost. Take it?", 30, bold=True).to_edge(DOWN, buff=0.35)
         with self.voiceover(
@@ -74,7 +79,8 @@ class Order(VoiceoverScene):
             "cost. Do you take it? Pause and decide."
         ) as vo:
             vo.wait_until("a")
-            self.play(truck.animate.move_to([-1.6, -1.6, 0]), FadeIn(offer), Create(box), run_time=1.6)
+            self.play(truck.animate.move_to([-4.6, -1.45, 0]), run_time=1.4, rate_func=rate_functions.ease_out_cubic)
+            self.play(FadeIn(offer, shift=LEFT * 0.2), Create(box))
             vo.wait_until("b")
             self.play(FadeIn(ask, shift=UP * 0.1))
         self.wait(2.0)

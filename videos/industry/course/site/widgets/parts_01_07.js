@@ -196,4 +196,76 @@
       note: "A model bakery, not a real company: the same arithmetic as the film (explainer/industry/works/firm.py). A negative cash balance is money the bakery would have to borrow or raise from its owner.",
     });
   };
+
+  // ---- Part 4: the price war -----------------------------------------------------------------------------------------
+  // Two identical plants (100 units a period each, $20 of cost per unit, a fixed cost per period). Buyers each want
+  // one unit at up to $80 and buy from the cheaper plant first, then the other; at equal prices they split. The rival
+  // cuts 5% below the lowest price whenever it has sold less than 90% of its plant, and edges its price up 5% when
+  // it is nearly full. You choose your opening price and how you answer when it undercuts you.
+  W.pricewar = function (el) {
+    var K = 100, MC = 20, TOP = 80, ROUNDS = 10;
+    var RESP = ["hold your price", "match the rival", "undercut by 5%"];
+    var play = function (v) {
+      var pa = v.open, pb = 70, out = [], cumA = 0, cumB = 0, k;
+      for (k = 0; k < ROUNDS; k++) {
+        var qa = 0, qb = 0, Q = v.demand;
+        if (pa < pb) { qa = Math.min(K, Q); qb = Math.min(K, Q - qa); }
+        else if (pb < pa) { qb = Math.min(K, Q); qa = Math.min(K, Q - qb); }
+        else { qa = Math.min(K, Q / 2); qb = Math.min(K, Q - qa); qa = Math.min(K, Q - qb); }
+        var prA = (pa - MC) * qa - v.fixed, prB = (pb - MC) * qb - v.fixed;
+        cumA += prA; cumB += prB;
+        out.push({ t: k + 1, pa: pa, pb: pb, qa: qa, qb: qb, prA: prA, prB: prB, cumA: cumA, cumB: cumB });
+        var low = Math.min(pa, pb), nb, na = pa;
+        nb = qb < 0.9 * K ? Math.max(MC, low * 0.95) : Math.min(TOP, pb * 1.05);
+        if (nb < pa) {
+          if (v.resp === 1) na = nb;
+          else if (v.resp === 2) na = Math.max(MC, nb * 0.95);
+        }
+        pa = na; pb = nb;
+      }
+      return out;
+    };
+    QB.widget(el, {
+      title: "The price war: ten rounds against a rival with the same plant",
+      sub: "You and a rival each run a plant that can make 100 units a period, at $20 a unit plus a fixed cost. Buyers go to the cheaper plant first. The rival undercuts you whenever its plant is less than 90% full. Set your opening price and your answer to its cuts, then lower demand below what the two plants can make and watch what happens to the price.",
+      panels: 2, height: 300,
+      controls: [
+        { k: "open", label: "Your opening price", min: 30, max: 80, step: 1, value: 70, fmt: function (x) { return "$" + x; } },
+        { k: "resp", label: "When the rival undercuts you", min: 0, max: 2, step: 1, value: 1, fmt: function (x) { return RESP[x]; } },
+        { k: "demand", label: "Buyers each period (the plants make 200)", min: 100, max: 200, step: 5, value: 150, fmt: function (x) { return x + " units"; } },
+        { k: "fixed", label: "Each plant's fixed cost a period", min: 0, max: 4000, step: 100, value: 2500, fmt: function (x) { return "$" + x.toLocaleString(); } },
+      ],
+      draw: function (g, v, s) {
+        var o = play(v), ts = o.map(function (r) { return r.t; });
+        var a = g[0].axes({ x: [0.5, 10.5], y: [0, 90], title: "Prices, round by round", xticks: [1, 4, 7, 10],
+                            yfmt: function (y) { return "$" + y; } });
+        a.hline(MC, { color: C.cash });
+        a.hline(MC + v.fixed / K, { color: C.implied });
+        a.line(ts, o.map(function (r) { return r.pa; }), { color: C.gain, width: 2.5 });
+        a.dots(ts, o.map(function (r) { return r.pa; }), { color: C.gain, r: 3.5 });
+        a.line(ts, o.map(function (r) { return r.pb; }), { color: C.loss, width: 2 });
+        a.dots(ts, o.map(function (r) { return r.pb; }), { color: C.loss, r: 3 });
+        a.legend([["your price", C.gain], ["rival's price", C.loss], ["cost of one more unit", C.cash], ["full cost at a full plant", C.implied]], { pos: "tr" });
+        var all = o.map(function (r) { return r.cumA; }).concat(o.map(function (r) { return r.cumB; }));
+        var lo = Math.min(0, Math.min.apply(null, all)) * 1.1 - 100, hi = Math.max(1000, Math.max.apply(null, all)) * 1.1;
+        var b = g[1].axes({ x: [0.5, 10.5], y: [lo, hi], title: "Profit so far", xticks: [1, 4, 7, 10],
+                            yfmt: function (y) { return "$" + Math.round(y / 1000) + "k"; } });
+        b.hline(0, { color: C.muted });
+        b.line(ts, o.map(function (r) { return r.cumA; }), { color: C.gain, width: 2.5 });
+        b.line(ts, o.map(function (r) { return r.cumB; }), { color: C.loss, width: 2 });
+        b.legend([["you", C.gain], ["rival", C.loss]], { pos: "tl" });
+        s.o = o;
+        s.ac = MC + v.fixed / K;
+      },
+      readout: function (v, s) {
+        var o = s.o, L = o[o.length - 1];
+        var below = o.filter(function (r) { return r.pa < s.ac; }).length;
+        return [["your profit over ten rounds", "$" + Math.round(L.cumA).toLocaleString()],
+                ["the rival's", "$" + Math.round(L.cumB).toLocaleString()],
+                ["your price in round 10", "$" + L.pa.toFixed(2)],
+                ["rounds you sold below full cost", below + " of 10"]];
+      },
+      note: "A model market, not real firms: the arithmetic of chapters 1, 8 and 10 of the film. With 200 buyers both plants are full and nobody needs to cut; below that, the plant with idle capacity always gains by undercutting while the price is above $20, the cost of one more unit, so the price falls towards it whatever you do. Holding your price keeps your margin and loses your customers.",
+    });
+  };
 })();

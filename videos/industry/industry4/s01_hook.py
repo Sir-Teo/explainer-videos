@@ -21,10 +21,10 @@ class Hook(VoiceoverScene):
             p.move_to([-2.5 - 1.6 * k, -0.15, 0])
         count = ValueTracker(1)
         hours = ValueTracker(W["hours"][0])
-        ctr = always_redraw(lambda: VGroup(
-            tx("aircraft built so far", 18, GREY_B),
-            tx(f"{int(round(count.get_value())):,}", 40, "#9FB8F2", bold=True)).arrange(DOWN, buff=0.06).move_to(
-            [-4.6, -2.35, 0]))
+        ctr_t = tx("aircraft built so far", 18, GREY_B).move_to([-4.6, -2.05, 0])
+        ctr_n = draw.number(lambda: round(count.get_value()), 0, size=44, color="#9FB8F2")
+        ctr_n.add_updater(lambda m: m.next_to(ctr_t, DOWN, buff=0.1), call_updater=True)
+        ctr = VGroup(ctr_t, ctr_n)
         bar_bg = Rectangle(width=0.7, height=3.2, stroke_color=GREY_D, stroke_width=1.5, fill_opacity=0).move_to(
             [5.4, 0.85, 0], aligned_edge=DOWN).shift(DOWN * 1.6)
 
@@ -33,10 +33,10 @@ class Hook(VoiceoverScene):
             return Rectangle(width=0.7, height=max(h, 0.02), stroke_width=0, fill_color=VAR, fill_opacity=0.9).move_to(
                 bar_bg.get_bottom(), aligned_edge=DOWN)
         hbar = always_redraw(bar)
-        hlab = always_redraw(lambda: VGroup(
-            tx("hours of work in the next one", 17, GREY_B),
-            tx(f"{100 * round(hours.get_value() / 100):,.0f}", 32, VAR, bold=True)).arrange(DOWN, buff=0.05).next_to(
-            bar_bg, DOWN, buff=0.15))
+        hl_t = tx("hours of work in the next one", 17, GREY_B).next_to(bar_bg, DOWN, buff=0.15)
+        hl_n = draw.number(lambda: 100 * round(hours.get_value() / 100), 0, size=34, color=VAR)
+        hl_n.add_updater(lambda m: m.next_to(hl_t, DOWN, buff=0.08), call_updater=True)
+        hlab = VGroup(hl_t, hl_n)
         tag = estimate_tag("illustrative: an 80% curve from 100,000 hours", corner=DR)
         with self.voiceover(
             "In 1936 an engineer at the Curtiss-Wright aircraft company in Buffalo, Theodore Wright, published a "
@@ -67,7 +67,7 @@ class Hook(VoiceoverScene):
         W = R["wright"]
         ax = CornerAxes(x_range=[0, 7.4, 1], y_range=[0, 110, 20], x_length=8.0, y_length=4.6,
                         axis_config=dict(color=GREY_B, include_ticks=False)).move_to([0.2, -0.3, 0])
-        xl = tx("doublings of the number built", 20, GREY_B).next_to(ax, DOWN, buff=0.3)
+        xl = tx("aircraft built so far (each step a doubling)", 20, GREY_B).next_to(ax, DOWN, buff=0.3)
         yl = tx("hours in the next aircraft (thousands)", 20, GREY_B).rotate(PI / 2).next_to(ax, LEFT, buff=0.3)
         xs = np.linspace(0, 7, 120)
         b = W["b"]
@@ -77,8 +77,11 @@ class Hook(VoiceoverScene):
             ax.c2p(k + 0.5, W["hours"][k] / 1000 * 0.92 + 6)) for k in range(4)])
         eq = MathTex(r"\text{cost}_n \;=\; \text{cost}_1 \times n^{-b},\qquad 2^{-b} = 0.8", font_size=40,
                      color=WHITE).to_edge(UP, buff=0.5)
-        punch = tx("Costs are not fixed facts. They fall with experience,\nand they fall fastest for whoever has made the most.",
-                   26, PRICE).to_edge(DOWN, buff=0.25)
+        xt = VGroup(*[tx(f"{2 ** k}", 17, GREY_B).next_to(ax.c2p(k, 0), DOWN, buff=0.1) for k in range(8)])
+        yt = VGroup(*[tx(f"{v}", 17, GREY_B).next_to(ax.c2p(0, v), LEFT, buff=0.1) for v in (25, 50, 75, 100)])
+        xl.next_to(xt, DOWN, buff=0.15)
+        punch = tx("Costs are not fixed facts.\nThey fall with experience, and fastest\nfor whoever has made the most.",
+                   26, PRICE).move_to([2.7, 1.25, 0])
         with self.voiceover(
             "Draw it, and you get one of the most useful curves in all of industry. <bookmark mark='a'/> Each step "
             "to the right is a doubling; each step down, the same twenty percent. <bookmark mark='b'/> Wright wrote "
@@ -88,7 +91,7 @@ class Hook(VoiceoverScene):
             "fixed facts about a product. They fall with experience, and they fall fastest for whoever has made the "
             "most."
         ) as vo:
-            self.play(Create(ax), FadeIn(xl), FadeIn(yl))
+            self.play(Create(ax), FadeIn(xl), FadeIn(yl), FadeIn(xt), FadeIn(yt))
             vo.wait_until("a")
             self.play(Create(curve), LaggedStart(*[FadeIn(d, scale=1.6) for d in dots], lag_ratio=0.15), run_time=2.4)
             self.play(LaggedStart(*[FadeIn(s_) for s_ in steps], lag_ratio=0.2))

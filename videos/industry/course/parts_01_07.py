@@ -173,4 +173,56 @@ PARTS = [
         also=(("The Register's rows for Part 3", "explainer/industry/data/rows_p03.py"),
               ("The generic firm", "explainer/industry/works/firm.py")),
     ),
+    Part(
+        n=4, level="U", widget="pricewar", prereq=(1, 3),
+        question="What does one more cost, and why does that decide almost everything?",
+        story="The part opens in Buffalo in 1936, where Theodore Wright of Curtiss-Wright found that the labour in an "
+              "aeroplane fell by about a fifth each time the number built doubled. The viewer runs a half-empty "
+              "factory and is offered an order below its average cost, and takes it, because only the cost of one "
+              "more counts. Delta's $57.5bn of 2025 costs are sorted by how soon cancelling flying avoids them; "
+              "fixed, variable, avoidable and sunk become a two-by-two, and the Concorde fallacy is named. EIA's "
+              "costs for new plants show a megawatt-hour's cost rising as a plant runs less, from $109 to nearly "
+              "$1,000 for a reactor; a tank, the six-tenths rule and three pairs of real machines show economies of "
+              "scale, and a market of efficient plants shows how many firms an industry has room for. Delta's belly "
+              "cargo and its $8.2bn from American Express show scope; a delivery street shows density. Solar module "
+              "prices fall more than a thousandfold since 1975 and, plotted against capacity built, follow Wright's "
+              "law at about 30% per doubling. After an intermission of America's plants squeezed from capacity to "
+              "output, Delta's seat map breaks even at 76% full against 84% flown; a hotel and a temp agency show "
+              "operating leverage and Delta's 2020 shows it in fact. The Stack lines up every US power plant by "
+              "the cost of one more megawatt-hour and runs a summer day on it; memory chips show the price war and "
+              "the four ways out; Microsoft's segments show zero marginal cost and its limit. It ends with the IEA's "
+              "2010 solar roadmap, passed fifteen years early, and the series' call on solar against coal in 2027.",
+        handoff="Part 5 asks how any firm keeps a return above its cost of capital when costs fall for everyone; "
+                "Part 6 is the cycle that high fixed costs and long lead times produce; the power, airline, chip and "
+                "software parts return to the Stack, the seat mile, the memory cycle and zero marginal cost.",
+        outside="Percentages and arithmetic; a logarithmic scale is explained in the film.",
+        objectives={
+            "U": ["Explain why a firm with idle capacity can profit from an order priced below its average cost.",
+                  "Sort a company's costs into fixed and variable for a given horizon, and say which are sunk.",
+                  "Explain why the last plant needed sets the price of electricity, and who keeps the gap."],
+            "M": ["Compute a plant's cost per unit at any utilization from its capital cost, fixed and variable "
+                  "costs and a cost of capital.",
+                  "Fit Wright's law to prices and cumulative output and report the learning rate.",
+                  "Build a merit order from capacities and marginal costs and clear it against demand."],
+            "D": ["Say what an experience curve can and cannot identify, separating learning from scale, subsidy "
+                  "and the feedback from price to demand.",
+                  "State a dated forecast about an industry's costs or output with a scoring rule."],
+            "I": ["Compute an airline's break-even load factor and the value of a point of load factor from its "
+                  "10-K's seat-mile statistics.",
+                  "Measure operating leverage from two years of a company's revenue and costs.",
+                  "Recognize the conditions for a price war and the four ways industries escape one."],
+        },
+        results=[
+            ("Average cost", r"AC(q) = \frac{F}{q} + c"),
+            ("Cost per unit of a plant", r"\frac{\text{capital charge} + \text{fixed O\&M}}{8760\,u} + c"),
+            ("Wright's law", r"c_n = c_1\, n^{-b},\qquad 2^{-b} = 1 - \text{learning rate}"),
+            ("Break-even load factor", r"LF^{*} = \frac{\text{cost per seat mile}}"
+                                       r"{\text{revenue per filled seat mile}}"),
+            ("Operating leverage", r"DOL = \frac{(p - c)\,q}{(p - c)\,q - F}"),
+            ("The marginal plant sets the price", r"p = c_{m},\quad \text{rent}_i = (p - c_i)\,q_i"),
+        ],
+        U=(0, 1, 2, 3, 4, 5, 6, "s08_intermission", 9), I=(7, 8, 10), D=(12,),
+        also=(("The Register's rows for Part 4", "explainer/industry/data/rows_p04.py"),
+              ("The cost functions and the Stack", "explainer/industry/works/stack.py")),
+    ),
 ]

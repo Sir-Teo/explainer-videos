@@ -62,6 +62,19 @@ CALLS = [
          "guidance about $170bn including finance leases",
          rule="Microsoft Form 10-K FY2027, cash-flow statement and income statement: both conditions must hold",
          due="2027-08", ours=True),
+    Call(4, "International Energy Agency", "2010-05-11",
+         "World solar photovoltaic capacity \"could reach\" 200 GW in 2020, 900 GW in 2030 and 2,000 GW in 2040.",
+         "IEA, Technology Roadmap: Solar Photovoltaic Energy (2010), foldout",
+         outcome="721 GW were installed by 2020 and 2,397 GW by 2025 (IRENA, via Our World in Data): the roadmap's "
+                 "2040 figure was passed fifteen years early"),
+    Call(4, "Industry, Built", "2026-11-23",
+         "In at least one calendar month of 2027, US utility-scale solar plants will generate more electricity than "
+         "US coal plants (electric power sector). Probability: 55%.",
+         "This series, Part 4, chapter 12; EIA's November 2026 outlook puts April-June 2027 at 126.0 TWh of solar "
+         "against 135.0 TWh of coal, and solar's spring peak meets coal's spring maintenance",
+         rule="EIA Electric Power Monthly, net generation by source, electric power sector, final 2027 data: true if "
+              "utility-scale solar exceeds coal in any month of 2027",
+         due="2028-03", ours=True),
 ]
 
 
