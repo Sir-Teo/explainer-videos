@@ -42,7 +42,11 @@ class Guess(VoiceoverScene):
             self.play(FadeIn(tag, shift=DOWN * 0.1))
             for k, m in enumerate("bcdef"):
                 vo.wait_until(m)
-                self.play(FadeIn(rows[k], shift=RIGHT * 0.2), run_time=0.6)
+                coins, fly = draw.coin_flow(tag.get_right(), rows[k][0].get_center(), n=3, r=0.09, arc=-0.4,
+                                            run_time=0.9)
+                self.add(coins)
+                self.play(fly, FadeIn(rows[k], shift=RIGHT * 0.2), run_time=0.9)
+                self.remove(coins)
             vo.wait_until("g")
             self.play(FadeIn(total), FadeIn(pause))
         self.wait(3.5)
