@@ -117,28 +117,51 @@ class Shift(VoiceoverScene):
         self.clear_scene()
 
     def why(self):
-        reasons = [
-            ("Machines", ("Factories and farms raised output per worker faster than almost any",
-                          "other industry: the same goods need fewer people.")),
-            ("Wants", ("As people get richer they spend more of each extra dollar on health,",
-                       "education, travel and advice than on more things.")),
-            ("Prices", ("An hour of a nurse or a teacher cannot be sped up like a production line,",
-                        "so services grow dearer relative to goods: Baumol's cost disease.")),
-            ("Trade", ("From 2000, competition from imports, much of it from China,",
-                       "closed factories that would otherwise have stayed open.")),
-        ]
-        rows = VGroup()
-        for name, (l1, l2) in reasons:
-            body = VGroup(T(l1, 22, I.TEXT), T(l2, 22, I.TEXT)).arrange(DOWN, aligned_edge=LEFT, buff=0.08)
-            name_t = TB(name, 26, I.ACCENT)
-            name_t.set_width(name_t.width)
-            r = VGroup(name_t, body).arrange(RIGHT, buff=0.4, aligned_edge=UP)
-            body.shift(RIGHT * (1.9 - name_t.width))
-            if r.width > 12.6:
-                r.scale_to_fit_width(12.6)
-            rows.add(r)
-        rows.arrange(DOWN, aligned_edge=LEFT, buff=0.5).move_to(DOWN * 0.1).align_to(LEFT * 6.2, LEFT)
-        head = TB("Why the economy moved from goods to services", 28, I.TEXT).to_edge(UP, buff=0.5)
+        centers = [np.array([-3.25, 1.15, 0]), np.array([3.25, 1.15, 0]), np.array([-3.25, -2.0, 0]),
+                   np.array([3.25, -2.0, 0])]
+        titles = ["Machines", "Wants", "Prices", "Trade"]
+        caps = ["the same goods need fewer people", "richer people buy more services than things",
+                "goods get cheaper; an hour of a person does not", "imports replace some factories"]
+        panels = VGroup()
+        for c, t, cap in zip(centers, titles, caps):
+            box = RoundedRectangle(corner_radius=0.14, width=6.1, height=2.85, stroke_color=I.EDGE, stroke_width=1.5,
+                                   fill_color=I.PANEL, fill_opacity=1).move_to(c)
+            panels.add(VGroup(box, TB(t, 24, I.ACCENT).move_to(box.get_corner(UL) + np.array([0.25, -0.3, 0]),
+                                                                  aligned_edge=LEFT),
+                              T(cap, 17, I.DIM).move_to(box.get_bottom() + UP * 0.28)))
+        # 1 machines: a faster belt, fewer hands
+        c0 = centers[0]
+        belt = draw.conveyor(3.4, 6, item_color=I.ACCENT, item=0.2).move_to(c0 + DOWN * 0.45 + RIGHT * 0.3)
+        hands = draw.crowd(6, 0.38, cols=6).next_to(belt, UP, buff=0.12)
+        # 2 wants: a dollar spent on services
+        c1 = centers[1]
+        shopper = draw.person(0.7).move_to(c1 + LEFT * 2.2 + DOWN * 0.15)
+        cross = VGroup(Rectangle(width=0.14, height=0.44, stroke_width=0, fill_color=I.COST, fill_opacity=1),
+                       Rectangle(width=0.44, height=0.14, stroke_width=0, fill_color=I.COST, fill_opacity=1))
+        book = VGroup(Rectangle(width=0.36, height=0.46, stroke_width=0, fill_color="#7EC8F5", fill_opacity=1),
+                      Line([-0.12, 0.12, 0], [0.12, 0.12, 0], stroke_color="#0E1117", stroke_width=2))
+        trip = draw.plane(0.8, windows=False)
+        thing = Square(0.38, stroke_width=0, fill_color="#8C929B", fill_opacity=1)
+        wants = VGroup(cross, book, trip, thing).arrange(RIGHT, buff=0.42).move_to(c1 + RIGHT * 0.7 + DOWN * 0.1)
+        # 3 prices: a television's tag shrinks, an hour of care's tag grows
+        c2 = centers[2]
+        tv = VGroup(RoundedRectangle(corner_radius=0.04, width=0.8, height=0.52, stroke_color="#C9D3E0", stroke_width=2,
+                                     fill_color="#1B2B3F", fill_opacity=1),
+                    Line([-0.12, -0.3, 0], [0.12, -0.3, 0], stroke_color="#C9D3E0", stroke_width=3)).move_to(
+            c2 + LEFT * 1.7 + DOWN * 0.1)
+        nurse = draw.person(0.7, color="#7BD88F").move_to(c2 + RIGHT * 1.1 + DOWN * 0.15)
+
+        def tag(txt, col):
+            t_ = TB(txt, 18, "#0E1117")
+            return VGroup(RoundedRectangle(corner_radius=0.08, width=t_.width + 0.3, height=t_.height + 0.2,
+                                           stroke_width=0, fill_color=col, fill_opacity=1), t_)
+        tv_tag = tag("TV", I.PROFIT).next_to(tv, RIGHT, buff=0.2)
+        care_tag = tag("an hour", I.COST).next_to(nurse, RIGHT, buff=0.2)
+        # 4 trade: a ship comes in, a factory goes dark
+        c3 = centers[3]
+        ship = draw.ship(1.8).move_to(c3 + LEFT * 2.0 + DOWN * 0.2)
+        mill = draw.factory(1.2).move_to(c3 + RIGHT * 1.9 + DOWN * 0.05)
+        head = TB("Why the economy moved from goods to services", 28, I.TEXT).to_edge(UP, buff=0.3)
         with self.voiceover(
             "Four forces did this. <bookmark mark='a'/> Machines: factories and farms raised output per worker "
             "faster than almost any other industry, so the same goods need fewer people. <bookmark mark='b'/> Wants: "
@@ -150,7 +173,24 @@ class Shift(VoiceoverScene):
             "still argue about how much each force counts; they agree all four are real."
         ) as vo:
             self.play(FadeIn(head))
-            for i, m in enumerate("abcd"):
-                vo.wait_until(m)
-                self.play(FadeIn(rows[i], shift=RIGHT * 0.15), run_time=0.9)
+            vo.wait_until("a")
+            self.play(FadeIn(panels[0]), FadeIn(belt), FadeIn(hands))
+            draw.run_belt(belt, 0.5)
+            self.wait(0.8)
+            belt.items.clear_updaters()
+            draw.run_belt(belt, 1.6)
+            self.play(*[h.animate.set_opacity(0.15) for h in hands[2:]], run_time=1.2)
+            vo.wait_until("b")
+            self.play(FadeIn(panels[1]), FadeIn(shopper), FadeIn(wants))
+            flows = [draw.coin_flow(shopper.get_right(), w.get_top() + UP * 0.1, n=n, r=0.08, arc=-0.7, run_time=1.4)
+                     for w, n in zip(wants, (3, 2, 2, 1))]
+            self.add(*[c_ for c_, _ in flows])
+            self.play(*[a_ for _, a_ in flows])
+            vo.wait_until("c")
+            self.play(FadeIn(panels[2]), FadeIn(tv), FadeIn(nurse), FadeIn(tv_tag), FadeIn(care_tag))
+            self.play(tv_tag.animate.scale(0.55), care_tag.animate.scale(1.5), run_time=2.0)
+            vo.wait_until("d")
+            self.play(FadeIn(panels[3]), FadeIn(mill), FadeIn(ship, shift=RIGHT * 0.3))
+            self.play(ship.animate.move_to(c3 + LEFT * 0.4 + DOWN * 0.2), mill.animate.set_opacity(0.25), run_time=2.0)
+        belt.items.clear_updaters()
         self.clear_scene()
