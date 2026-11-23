@@ -77,9 +77,9 @@ class Profit(VoiceoverScene):
         rows = viz.margin_ladder(items, max_value=0.65, bar_len=6.4, row_h=0.5, size=20, name_w=2.6)
         rows.move_to(LEFT * 0.4 + DOWN * 0.3)
         head = T("Operating profit per dollar of sales (operating margin)", 24, I.TEXT).to_edge(UP, buff=0.4)
-        note = T("A thin margin turned over many times can still pay well: Part 3", 19, I.DIM).to_edge(DOWN, buff=0.45)
-        src = source("Companies' 10-Ks, fiscal years ending June 2025 to March 2026; SEC structured data", corner=UR,
-                     size=13).shift(DOWN * 0.45)
+        note = T("A thin margin turned over many times can still pay well: Part 3", 19, I.DIM).to_edge(DOWN, buff=0.75)
+        src = source("Companies' 10-Ks, fiscal years ending June 2025 to March 2026; SEC structured data", corner=DR,
+                     size=13)
         with self.voiceover(
             "Divide each company's profit by its sales and you get its margin: how many cents of each dollar of "
             f"sales it keeps as operating profit. <bookmark mark='a'/> NVIDIA kept {100 * m['NVIDIA']:.0f} cents. "
