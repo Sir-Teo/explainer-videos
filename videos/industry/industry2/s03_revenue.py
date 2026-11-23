@@ -40,15 +40,38 @@ class Revenue(VoiceoverScene):
             "Measured by sales, the two companies are the same size. Measured by what each adds, Apple is thirteen "
             "times bigger."
         ) as vo:
-            self.play(FadeIn(src))
+            buyers = VGroup(draw.crowd(6, 0.38, cols=3), T("customers", 16, I.DIM)).arrange(DOWN, buff=0.08).move_to(
+                [-6.2, 2.6, 0])
+            makers = VGroup(draw.factory(1.0, color="#B58CFF"), T("drug makers", 16, I.DIM)).arrange(DOWN, buff=0.06
+                                                                                                    ).move_to([-1.0, 2.75, 0])
+            parts = VGroup(draw.factory(1.0, color="#8FA3BF"), T("parts makers", 16, I.DIM)).arrange(DOWN, buff=0.06
+                                                                                                   ).move_to([4.7, 2.75, 0])
+
+            def pour(col_, n):
+                coins, a = draw.coin_flow(buyers.get_right(), col_[0].get_center() + UP * 0.6, n=n, r=0.1, arc=-0.6)
+                self.add(coins)
+                return coins, a
+
+            def pay_out(coins, k, dst):
+                go = coins[:k]
+                return [MoveAlongPath(c, ArcBetweenPoints(c.get_center(), dst, angle=-0.6)) for c in go]
+            self.play(FadeIn(src), FadeIn(buyers))
             vo.wait_until("a")
-            self.play(GrowFromEdge(mck[0], DOWN), FadeIn(mck[2]), FadeIn(mck[4]))
+            cm, am = pour(mck, 10)
+            self.play(am, GrowFromEdge(mck[0], DOWN), FadeIn(mck[2]), FadeIn(mck[4]), FadeIn(makers), run_time=1.8)
             vo.wait_until("b")
-            self.play(GrowFromEdge(mck[1], DOWN), FadeIn(mck[3]))
+            self.play(LaggedStart(*pay_out(cm, 9, makers.get_bottom()), lag_ratio=0.1), run_time=1.6)
+            self.remove(*cm[:9])
+            self.play(GrowFromEdge(mck[1], DOWN), FadeIn(mck[3]), cm[9].animate.move_to(mck[1].get_top() + UP * 0.2))
             vo.wait_until("c")
-            self.play(GrowFromEdge(apl[0], DOWN), FadeIn(apl[2]), FadeIn(apl[4]))
+            ca, aa = pour(apl, 10)
+            self.play(aa, GrowFromEdge(apl[0], DOWN), FadeIn(apl[2]), FadeIn(apl[4]), FadeIn(parts), run_time=1.8)
             vo.wait_until("d")
-            self.play(GrowFromEdge(apl[1], DOWN), FadeIn(apl[3]))
+            self.play(LaggedStart(*pay_out(ca, 5, parts.get_bottom()), lag_ratio=0.1), run_time=1.4)
+            self.remove(*ca[:5])
+            self.play(GrowFromEdge(apl[1], DOWN), FadeIn(apl[3]),
+                      *[c.animate.move_to(apl[1].get_top() + UP * 0.2 + RIGHT * (0.22 * k - 0.44))
+                        for k, c in enumerate(ca[5:])])
         self.clear_scene()
 
     def chain(self):

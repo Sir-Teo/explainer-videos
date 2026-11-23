@@ -37,13 +37,26 @@ class Jobs(VoiceoverScene):
             "finance are a fifth of the value added and six percent of the jobs; restaurants and hotels are four "
             "percent of the value added and more than ten percent of the jobs."
         ) as vo:
+            # one person for each million jobs, coloured by industry, then gathered into the map's blocks
+            counts, acc, done = [], 0.0, 0
+            for i in order:
+                acc += J[i]["jobs"]
+                counts.append(int(round(acc)) - done)
+                done += counts[-1]
+            people, groups = VGroup(), []
+            for i, n in zip(order, counts):
+                g_ = VGroup(*[draw.person(0.3, color=GROUP[JOB_GROUP[J[i]["sector"]]]) for _ in range(n)])
+                groups.append(g_)
+                people.add(*g_)
+            people.arrange_in_grid(cols=22, buff=(0.14, 0.14)).move_to(DOWN * 0.35)
             self.play(FadeIn(src))
             vo.wait_until("a")
-            self.play(FadeIn(head))
+            self.play(FadeIn(head), LaggedStart(*[FadeIn(p_, scale=0.5) for p_ in people], lag_ratio=0.01),
+                      run_time=2.5)
             vo.wait_until("b")
-            self.play(LaggedStart(*[FadeIn(tm[i], scale=0.96) for i in order[:5]], lag_ratio=0.2), run_time=2)
+            self.play(*[ReplacementTransform(groups[k], tm[i]) for k, i in enumerate(order[:5])], run_time=2.2)
             vo.wait_until("c")
-            self.play(LaggedStart(*[FadeIn(tm[i], scale=0.96) for i in order[5:]], lag_ratio=0.1), run_time=2)
+            self.play(*[ReplacementTransform(groups[k + 5], tm[i]) for k, i in enumerate(order[5:])], run_time=2.2)
             vo.wait_until("d")
             fi = [d["sector"] for d in J].index("Finance, insurance, real estate")
             le = [d["sector"] for d in J].index("Leisure and hospitality")

@@ -96,12 +96,23 @@ class Cash(VoiceoverScene):
             "and out of cash. The cure is not more profit; it is more patient money, from the owner, "
             "the bank or investors, or slower growth."
         ) as vo:
+            shops = VGroup(*[draw.shop(0.75, color="#F2A65A") for _ in range(5)]).arrange_in_grid(rows=2, cols=3,
+                                                                                               buff=(0.25, 0.3))
+            shops.move_to([4.9, 0.35, 0])
+            pile = draw.coin_stack(14, 0.2).move_to([4.9, -2.0, 0])
+            pile_t = T("cash in the bank", 16, I.DIM).next_to(pile, DOWN, buff=0.12)
             self.play(FadeIn(head), FadeIn(src), FadeIn(pa), Create(zero))
             vo.wait_until("a")
-            self.play(FadeIn(side, shift=LEFT * 0.1))
+            self.play(FadeIn(side, shift=LEFT * 0.1), FadeIn(pile), FadeIn(pile_t))
+            self.play(LaggedStart(*[FadeIn(sh, shift=UP * 0.2) for sh in shops], lag_ratio=0.3), run_time=2.0)
             vo.wait_until("b")
             self.play(Create(prof), FadeIn(pdots), FadeIn(lp), run_time=2)
             vo.wait_until("c")
+            flows = [draw.coin_flow(pile.get_top(), sh.get_bottom(), n=3, r=0.1, arc=0.6, run_time=1.6) for sh in shops]
+            self.add(*[c for c, _ in flows])
+            empty = draw.coin_stack(1, 0.2).set_color(I.COST).move_to(pile.get_bottom(), aligned_edge=DOWN)
+            self.play(*[a_ for _, a_ in flows], Transform(pile, empty), run_time=1.8)
+            self.remove(*[c for c, _ in flows])
             self.play(Create(cash), FadeIn(cdots), FadeIn(lc), run_time=2)
             vo.wait_until("d")
             self.play(Indicate(cdots[1], color=I.COST, scale_factor=1.6))

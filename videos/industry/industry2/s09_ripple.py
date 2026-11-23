@@ -60,11 +60,24 @@ class Ripple(VoiceoverScene):
             vo.wait_until("a")
             self.play(FadeIn(b), FadeIn(rnd), FadeIn(tot))
             vo.wait_until("b")
-            self.play(Transform(b, bars(cum[1])), Transform(rnd, T("round 1: the factory's inputs", 22, I.ACCENT
+            nb = bars(cum[1])
+            flows = [draw.coin_flow(b[0].get_top(), nb[i].get_top() + UP * 0.12, n=2, r=0.07, arc=-0.8, run_time=1.4)
+                     for i in range(1, len(show))]
+            self.add(*[c for c, _ in flows])
+            self.play(*[a_ for _, a_ in flows])
+            self.remove(*[c for c, _ in flows])
+            self.play(Transform(b, nb), Transform(rnd, T("round 1: the factory's inputs", 22, I.ACCENT
                                                                    ).move_to(rnd)),
                       Transform(tot, TB(f"total output: ${cum[1].sum():.2f}", 26, I.MONEY).move_to(tot)))
             vo.wait_until("c")
             for k in range(2, 8):
+                if k < 4:  # the suppliers' own purchases ripple on
+                    nb = bars(cum[k])
+                    flows = [draw.coin_flow(b[i].get_top(), nb[j].get_top() + UP * 0.1, n=1, r=0.06, arc=-0.8,
+                                            run_time=0.8) for i, j in ((1, 3), (2, 6), (3, 7), (5, 1), (6, 4))]
+                    self.add(*[c for c, _ in flows])
+                    self.play(*[a_ for _, a_ in flows])
+                    self.remove(*[c for c, _ in flows])
                 self.play(Transform(b, bars(cum[k])), Transform(rnd, T(f"round {k}: their suppliers' inputs", 22,
                                                                       I.ACCENT).move_to(rnd)),
                           Transform(tot, TB(f"total output: ${cum[k].sum():.2f}", 26, I.MONEY).move_to(tot)),

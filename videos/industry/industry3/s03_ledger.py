@@ -23,11 +23,16 @@ class Ledger(VoiceoverScene):
         heads = VGroup(TB("What the bakery has", 24, OWN).next_to(panels[0], UP, buff=0.12),
                        TB("Where the money came from", 24, OWE).next_to(panels[1], UP, buff=0.12))
         rows, vals = {}, {}
+        glyph = {"Cash": draw.coin(0.16), "Oven": _oven(), "Flour": _sack(), "Owed by the cafe": _cup(),
+                 "Bank loan": _bank(), "Owed to the miller": draw.factory(0.5, color="#C9A26B"),
+                 "Owner's money": draw.person(0.4), "Profit so far": draw.coin_stack(4, 0.13)}
         for side, accts in ((0, LEFT_ACCTS), (1, RIGHT_ACCTS)):
             for k, a in enumerate(accts):
                 y = 1.05 - k * 0.62
                 x = -3.25 if side == 0 else 3.25
-                rows[a] = T(a, 22, I.TEXT).move_to(np.array([x - 2.6, y, 0]), aligned_edge=LEFT)
+                g_ = glyph[a]
+                g_.scale_to_fit_height(min(g_.height, 0.36)).move_to(np.array([x - 2.45, y, 0]))
+                rows[a] = VGroup(g_, T(a, 22, I.TEXT).move_to(np.array([x - 2.1, y, 0]), aligned_edge=LEFT))
                 vals[a] = TB("0", 22, I.TEXT).move_to(np.array([x + 2.6, y, 0]), aligned_edge=RIGHT)
         tl = VGroup(T("Total", 22, I.DIM).move_to(np.array([-5.85, -1.85, 0]), aligned_edge=LEFT),
                     T("Total", 22, I.DIM).move_to(np.array([0.65, -1.85, 0]), aligned_edge=LEFT))
@@ -98,3 +103,37 @@ class Ledger(VoiceoverScene):
             self.play(Transform(heads[0], TB("Assets", 26, OWN).move_to(heads[0])),
                       Transform(heads[1], TB("Liabilities and equity", 26, OWE).move_to(heads[1])))
         self.clear_scene()
+
+
+def _oven() -> VGroup:
+    body = RoundedRectangle(corner_radius=0.05, width=0.5, height=0.4, stroke_width=0, fill_color="#8C929B",
+                            fill_opacity=1)
+    door = RoundedRectangle(corner_radius=0.03, width=0.34, height=0.18, stroke_width=0, fill_color="#F2A65A",
+                            fill_opacity=0.9).move_to(body).shift(DOWN * 0.04)
+    pipe = Rectangle(width=0.08, height=0.14, stroke_width=0, fill_color="#8C929B", fill_opacity=1).next_to(
+        body, UP, buff=0).shift(RIGHT * 0.15)
+    return VGroup(body, door, pipe)
+
+
+def _sack() -> VGroup:
+    bag = Polygon([-0.2, -0.22, 0], [0.2, -0.22, 0], [0.24, 0.1, 0], [0.12, 0.2, 0], [-0.12, 0.2, 0], [-0.24, 0.1, 0],
+                  stroke_width=0, fill_color="#E8DCC2", fill_opacity=1)
+    tie = Line([-0.1, 0.18, 0], [0.1, 0.18, 0], stroke_color="#A0855B", stroke_width=3)
+    return VGroup(bag, tie)
+
+
+def _cup() -> VGroup:
+    cup = Polygon([-0.16, 0.16, 0], [0.16, 0.16, 0], [0.12, -0.18, 0], [-0.12, -0.18, 0], stroke_width=0,
+                  fill_color="#C9D3E0", fill_opacity=1)
+    handle = Arc(radius=0.08, start_angle=-PI / 2, angle=PI, stroke_color="#C9D3E0", stroke_width=3).move_to(
+        [0.19, 0.0, 0])
+    steam = VGroup(*[Line([x, 0.2, 0], [x + 0.03, 0.32, 0], stroke_color="#8C929B", stroke_width=2) for x in (-0.06, 0.05)])
+    return VGroup(cup, handle, steam)
+
+
+def _bank() -> VGroup:
+    roof = Polygon([-0.28, 0.12, 0], [0.28, 0.12, 0], [0, 0.28, 0], stroke_width=0, fill_color="#C9D3E0", fill_opacity=1)
+    cols = VGroup(*[Rectangle(width=0.06, height=0.24, stroke_width=0, fill_color="#C9D3E0", fill_opacity=1).move_to(
+        [x, -0.02, 0]) for x in (-0.18, -0.06, 0.06, 0.18)])
+    base = Rectangle(width=0.56, height=0.06, stroke_width=0, fill_color="#C9D3E0", fill_opacity=1).move_to([0, -0.17, 0])
+    return VGroup(roof, cols, base)

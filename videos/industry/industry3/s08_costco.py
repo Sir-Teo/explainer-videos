@@ -59,13 +59,34 @@ class Costco(VoiceoverScene):
             "in effect, finance its shelves, and the faster it grows, the more of their money it holds. The bakery "
             "that gave cafes sixty days ran out of cash; Costco gets the opposite deal."
         ) as vo:
+            # a pallet rides the timeline: stock until it sells, then members' cash until the supplier is paid
+            row_y = -2.25
+            pallet = VGroup(*[RoundedRectangle(corner_radius=0.03, width=0.26, height=0.22, stroke_color="#0E1117",
+                                               stroke_width=1, fill_color="#7EC8F5", fill_opacity=0.95)
+                              for _ in range(6)]).arrange_in_grid(rows=2, cols=3, buff=0.02)
+            pallet.add(Rectangle(width=0.86, height=0.06, stroke_width=0, fill_color="#A0855B", fill_opacity=1).next_to(
+                pallet, DOWN, buff=0))
+            truck = draw.truck(1.2).move_to([x0 - 3.0, row_y + 0.1, 0])
+            pallet.move_to([x0, row_y, 0])
+            cash = draw.coin_stack(6, 0.16)
+            buyers = draw.crowd(4, 0.36, cols=4).move_to([x0 + C["inventory_days"] * s - 1.7, row_y - 0.95, 0])
+            supplier = VGroup(draw.factory(0.9, color="#7EC8F5"), T("supplier", 15, I.DIM)).arrange(DOWN, buff=0.04)
+            supplier.move_to([6.35, row_y - 0.85, 0])
             self.play(FadeIn(head), FadeIn(src), Create(axis), FadeIn(ticks))
             vo.wait_until("a")
-            self.play(FadeIn(e0))
+            self.play(FadeIn(e0), truck.animate.move_to([x0 - 0.6, row_y + 0.1, 0]), run_time=1.2)
+            self.play(FadeIn(pallet, shift=RIGHT * 0.3), FadeOut(truck, shift=LEFT * 0.5))
             vo.wait_until("b")
-            self.play(FadeIn(e1))
+            self.play(pallet.animate.move_to([x0 + C["inventory_days"] * s, row_y, 0]), FadeIn(e1),
+                      FadeIn(buyers), run_time=2.0, rate_func=linear)
+            cash.move_to(pallet)
+            self.play(ReplacementTransform(pallet, cash), run_time=0.8)
             vo.wait_until("c")
-            self.play(FadeIn(e2))
+            self.play(FadeIn(supplier))
+            self.play(cash.animate.move_to([x0 + C["payable_days"] * s, row_y, 0]), FadeIn(e2), run_time=1.0,
+                      rate_func=linear)
+            self.play(cash.animate.move_to(supplier.get_left()).scale(0.6), run_time=0.9)
+            self.play(FadeOut(cash))
             vo.wait_until("d")
             self.play(GrowFromCenter(gap), FadeIn(gap_t), FadeIn(side))
         self.clear_scene()

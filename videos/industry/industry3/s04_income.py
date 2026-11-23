@@ -104,7 +104,9 @@ class Income(VoiceoverScene):
                 g.add(VGroup(rr, txt))
                 y -= h
             nm = TB(name(k), 19, CO[k]).next_to(np.array([x, 2.35, 0]), UP, buff=0.15)
-            cols.add(VGroup(nm, g))
+            gl = _glyph(k)
+            gl.scale_to_fit_height(min(gl.height, 0.5)).next_to(nm, UP, buff=0.12)
+            cols.add(VGroup(VGroup(nm, gl), g))
         head = T("Where each dollar of sales goes", 22, I.TEXT).to_corner(UL, buff=0.3)
         src = source("Forms 10-K: Costco and Microsoft fiscal 2026, Delta, Lilly and NextEra 2025", size=13)
         J = dict(D["jpm"])
@@ -126,7 +128,32 @@ class Income(VoiceoverScene):
             for i, m in enumerate("abcde"):
                 vo.wait_until(m)
                 c = cols[i]
-                self.play(FadeIn(c[0]), LaggedStart(*[FadeIn(s, shift=DOWN * 0.05) for s in c[1]], lag_ratio=0.15),
-                          run_time=1.3)
+                dollar = draw.coin(0.16).move_to(c[1].get_top() + UP * 0.05)
+                self.play(FadeIn(c[0], shift=DOWN * 0.1), FadeIn(dollar, scale=1.5), run_time=0.6)
+                self.play(LaggedStart(*[FadeIn(s, shift=DOWN * 0.05) for s in c[1]], lag_ratio=0.15),
+                          dollar.animate.move_to(c[1].get_bottom() + DOWN * 0.15), run_time=1.3, rate_func=linear)
+                self.play(FadeOut(dollar, scale=0.3), run_time=0.3)
             self.play(Indicate(VGroup(*[c[1][-1] for c in cols]), color=KC["profit"], scale_factor=1.04))
         self.clear_scene()
+
+
+def _glyph(k: str) -> VGroup:
+    """A small picture of each of the five businesses."""
+    if k == "cost":  # a shopping cart
+        basket = Polygon([-0.3, 0.15, 0], [0.3, 0.15, 0], [0.22, -0.12, 0], [-0.22, -0.12, 0], stroke_color="#C9D3E0",
+                         stroke_width=3, fill_color="#C9D3E0", fill_opacity=0.25)
+        handle = Line([-0.3, 0.15, 0], [-0.42, 0.28, 0], stroke_color="#C9D3E0", stroke_width=3)
+        wheels = VGroup(*[Circle(radius=0.05, stroke_width=0, fill_color="#C9D3E0", fill_opacity=1).move_to([x, -0.2, 0])
+                          for x in (-0.16, 0.16)])
+        return VGroup(basket, handle, wheels)
+    if k == "msft":
+        return draw.server_rack(0.6)
+    if k == "dal":
+        return draw.plane(1.1, windows=False)
+    if k == "lly":  # a capsule
+        a = RoundedRectangle(corner_radius=0.12, width=0.3, height=0.24, stroke_width=0, fill_color="#E8554E",
+                             fill_opacity=1).shift(LEFT * 0.12)
+        b = RoundedRectangle(corner_radius=0.12, width=0.3, height=0.24, stroke_width=0, fill_color="#E8EAED",
+                             fill_opacity=1).shift(RIGHT * 0.12)
+        return VGroup(a, b).rotate(0.5)
+    return draw.wind_turbine(0.6)
