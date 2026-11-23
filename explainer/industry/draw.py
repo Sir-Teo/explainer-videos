@@ -513,7 +513,7 @@ def coin_flow(src, dst, n: int = 6, r: float = 0.1, arc: float = -0.7, lag: floa
     for c in coins:
         c.move_to(src)
     anims = [MoveAlongPath(c, ArcBetweenPoints(src, dst, angle=arc), rate_func=smooth) for c in coins]
-    return coins, LaggedStart(*anims, lag_ratio=lag, run_time=run_time)
+    return coins, LaggedStart(*anims, group=coins, lag_ratio=lag, run_time=run_time)
 
 
 def note_bill(w: float = 1.0, color: str = "#7BD88F") -> VGroup:

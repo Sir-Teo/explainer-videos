@@ -44,16 +44,37 @@ class Bom(VoiceoverScene):
             "the frame and glass, the battery, and a long tail of small parts: speakers, the vibration motor, "
             "sensors, the circuit board itself."
         ) as vo:
-            self.play(FadeIn(src), FadeIn(tag))
+            ph = viz.phone(3.6, back=True, body=BODY_17).move_to(ORIGIN + UP * 0.2)
+            tools = VGroup(Line(LEFT * 0.5, RIGHT * 0.5, stroke_color="#C9D3E0", stroke_width=5),
+                           RoundedRectangle(corner_radius=0.05, width=0.35, height=0.16, stroke_width=0,
+                                            fill_color="#E8554E", fill_opacity=1).shift(LEFT * 0.6)).rotate(-0.6)
+            tools.next_to(ph, RIGHT, buff=0.3)
+            self.play(FadeIn(src), FadeIn(tag), FadeIn(ph, shift=UP * 0.2), FadeIn(tools, shift=LEFT * 0.2))
+            self.play(tools.animate.shift(LEFT * 0.25 + DOWN * 0.15), rate_func=there_and_back, run_time=0.8)
+
+            def pull(i):
+                chip_ = draw.chip(0.45, color=COL[parts[i]["key"]]).move_to(ph.get_center())
+                return chip_, AnimationGroup(chip_.animate.move_to(tiles[i].get_center()).scale(0.4).set_opacity(0),
+                                             FadeIn(tiles[i], shift=UP * 0.1))
             vo.wait_until("a")
-            self.play(FadeIn(total[0]), FadeIn(total[1]), FadeIn(total[2]))
+            self.play(ph.animate.scale(0.33).move_to(UP * 2.95), FadeOut(tools),
+                      FadeIn(total[0]), FadeIn(total[1]), FadeIn(total[2]))
             vo.wait_until("b")
-            self.play(LaggedStart(*[FadeIn(t, shift=UP * 0.1) for t in tiles[:4]], lag_ratio=0.3), run_time=2)
+            pulls = [pull(i) for i in range(4)]
+            self.add(*[c for c, _ in pulls])
+            self.play(LaggedStart(*[a_ for _, a_ in pulls], lag_ratio=0.3), run_time=2.2)
+            self.remove(*[c for c, _ in pulls])
             vo.wait_until("c")
-            self.play(FadeIn(tiles[4], shift=UP * 0.1))
+            c4, a4 = pull(4)
+            self.add(c4)
+            self.play(a4)
+            self.remove(c4)
             self.play(Indicate(tiles[4], color=I.MEMORY, scale_factor=1.08))
             vo.wait_until("d")
-            self.play(LaggedStart(*[FadeIn(t, shift=UP * 0.1) for t in tiles[5:]], lag_ratio=0.3), run_time=1.6)
+            pulls = [pull(i) for i in range(5, len(tiles))]
+            self.add(*[c for c, _ in pulls])
+            self.play(LaggedStart(*[a_ for _, a_ in pulls], lag_ratio=0.3), run_time=1.8)
+            self.remove(*[c for c, _ in pulls])
         self.clear_scene()
 
     def gap(self):

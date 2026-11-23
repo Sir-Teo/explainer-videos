@@ -89,7 +89,7 @@ class Scope(VoiceoverScene):
                 c.move_to(card_.get_left())
             self.play(LaggedStart(*[MoveAlongPath(c, Line(card_.get_left(), jet.get_right()), rate_func=smooth)
                                     for c in coins], lag_ratio=0.15), run_time=2.0)
-            self.remove(coins)
+            self.remove(*coins)
             vo.wait_until("b")
             self.play(GrowFromEdge(amex[0], DOWN), FadeIn(amex[1:]))
             vo.wait_until("c")
