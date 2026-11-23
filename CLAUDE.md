@@ -100,6 +100,14 @@ Manim videos with local neural narration. See README.md for layout and build com
   that plan them (the syllabus) and cite them (the built parts); it is written by `python -m videos.economics.reading`,
   and `tests/economics/test_reading.py` fails when it is stale, so rerun it after adding a part. Chinese terms:
   `videos/economics/ECONOMICS_ZH_GUIDE.md`.
+- *Industry, Built* (`videos/industry/`): sixty-four parts planned in eleven acts (`industry1` … `industry64`), none
+  built; how each industry works, from its unit and process to its dated landscape. The plan and the open decisions
+  are `videos/industry/README.md`; the standard (the coverage checklist, the sweep, durable against dated chapters),
+  the devices (the Works' model companies, the Unit, the Dollar, the Stack, the Map, the Board, the Register, the
+  Filing Room, Run it, Called it?), the data plan and every part chapter by chapter are `videos/industry/SYLLABUS.md`.
+  Primary sources only; every figure a film shows will need a Register row with a source and an as-of date; no
+  investment advice. Dates, names and numbers in the syllabus are from memory until each part's sweep. Shared code
+  will live in `explainer/industry/`; it calls Agora (`explainer/economics/agora/`) for theory already built there.
 - *Psychology, Built* (`videos/psychology/`): sixty-two parts in thirteen acts (`psych1` … `psych62`: a degree,
   the graduate methods sequence, industry practice and a research tier); all sixty-two are built (Acts I to XIII and the capstone). The folders are `psychN` while
   the series key is `psychology` (`videos/coursekit.PREFIX`, and `prefix="psych"` in `tools/series_site.py`). The series
