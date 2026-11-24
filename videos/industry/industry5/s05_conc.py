@@ -71,14 +71,14 @@ class Conc(VoiceoverScene):
                                    fill_opacity=0.9) for s_, c in zip(shares, colors)]).arrange(RIGHT, buff=0)
             g.add(*[tx(f"{s_}%", 17, "#0E1117", bold=True).move_to(r_) for s_, r_ in zip(shares, g)])
             return g
-        b0 = bar(before, cols).move_to([-1.2, 1.4, 0])
-        b1 = bar(after, [cols[0], cols[1], "#9AD0A8"]).move_to([-1.2, -0.9, 0])
+        b0 = bar(before, cols).move_to([-2.6, 1.4, 0])
+        b1 = bar(after, [cols[0], cols[1], "#9AD0A8"]).move_to([-2.6, -0.9, 0])
         h0 = VGroup(tx("before", 20, GREY_A), tx("four-firm ratio 100%", 18, WHITE),
-                    tx(f"HHI = {sum(x * x for x in before):,}", 26, WHITE, bold=True)).arrange(DOWN, aligned_edge=LEFT,
+                    tx(f"HHI = {sum(x * x for x in before):,}", 24, WHITE, bold=True)).arrange(DOWN, aligned_edge=LEFT,
                                                                                         buff=0.06).next_to(b0, RIGHT, buff=0.5)
         h1 = VGroup(tx("after the two smallest merge", 20, GREY_A), tx("four-firm ratio still 100%", 18, WHITE),
                     tx(f"HHI = {sum(x * x for x in after):,}: up {sum(x * x for x in after) - sum(x * x for x in before)}",
-                       26, COST_, bold=True)).arrange(DOWN, aligned_edge=LEFT, buff=0.06).next_to(b1, RIGHT, buff=0.5)
+                       24, COST_, bold=True)).arrange(DOWN, aligned_edge=LEFT, buff=0.06).next_to(b1, RIGHT, buff=0.5)
         rule = tx(f"2023 guidelines: above {int(get('hhi.2023')):,} and up more than 100 points: presumed to lessen "
                   "competition", 18, GOLD).to_edge(DOWN, buff=0.5)
         tag = estimate_tag("an illustrative market", corner=UR)
@@ -90,10 +90,10 @@ class Conc(VoiceoverScene):
             "Under the 2023 guidelines, a merger that leaves a market above eighteen hundred and adds more than a "
             "hundred points is presumed to lessen competition, and the companies have to show why it would not."
         ) as vo:
-            self.play(FadeIn(tag))
+            self.play(FadeIn(tag), LaggedStart(*[GrowFromEdge(r_, LEFT) for r_ in b0[:4]], lag_ratio=0.2),
+                      FadeIn(b0[4:]), run_time=1.6)
             vo.wait_until("a")
-            self.play(LaggedStart(*[GrowFromEdge(r_, LEFT) for r_ in b0[:4]], lag_ratio=0.2), FadeIn(b0[4:]),
-                      FadeIn(h0), run_time=1.6)
+            self.play(FadeIn(h0))
             vo.wait_until("b")
             self.play(TransformFromCopy(VGroup(*b0[:2], b0[4], b0[5]), VGroup(*b1[:2], b1[3], b1[4])),
                       TransformFromCopy(VGroup(b0[2], b0[3], b0[6], b0[7]), VGroup(b1[2], b1[5])), run_time=1.8)

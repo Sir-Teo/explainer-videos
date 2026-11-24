@@ -69,8 +69,8 @@ class Good(VoiceoverScene):
                  VGroup(draw.factory(0.7, color=GREY_B), draw.coin(0.14)).arrange(RIGHT, buff=0.1))]
         cards = VGroup()
         for head, sub, pic in rows:
-            pic.scale_to_fit_height(min(pic.height, 0.7))
-            t_ = VGroup(tx(head, 23, WHITE, bold=True), tx(sub, 17, GREY_B)).arrange(DOWN, aligned_edge=LEFT, buff=0.08)
+            pic.scale_to_fit_height(min(pic.height, 0.8))
+            t_ = VGroup(tx(head, 26, WHITE, bold=True), tx(sub, 19, GREY_B)).arrange(DOWN, aligned_edge=LEFT, buff=0.08)
             cards.add(VGroup(pic, t_).arrange(RIGHT, buff=0.4))
         cards.arrange(DOWN, aligned_edge=LEFT, buff=0.45).move_to([0, -0.3, 0])
         for c_ in cards:
@@ -87,7 +87,8 @@ class Good(VoiceoverScene):
             "<bookmark mark='d'/> And where does the money go: into new products and lower costs, or into lawyers, "
             "lobbying and buying up rivals before they grow?"
         ) as vo:
-            self.play(FadeIn(head))
+            self.play(FadeIn(head), LaggedStart(*[FadeIn(c_[0].copy().set_opacity(0.25), scale=0.8) for c_ in cards],
+                                                lag_ratio=0.2), run_time=1.4)
             for c_, m in zip(cards, "abcd"):
                 vo.wait_until(m)
                 self.play(FadeIn(c_[0], scale=0.8), FadeIn(c_[1], shift=RIGHT * 0.15))

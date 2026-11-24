@@ -323,6 +323,12 @@ SEC_COMPANIES = [(789019, "MSFT"), (909832, "COST"), (19617, "JPM"), (753308, "N
                  (1141391, "MA"), (104169, "WMT")]
 
 
+# where a company's first-choice tag means something else: Mastercard tagged its gross revenue, before rebates and
+# incentives to customers, as revenue from contracts in 2018-2021; its net revenue is "Revenues"
+SEC_OVERRIDES = {"MA": {"revenue": ["Revenues", "SalesRevenueNet",
+                                  "RevenueFromContractWithCustomerExcludingAssessedTax"]}}
+
+
 def sec_annual():
     """Annual figures from each company's Forms 10-K (SEC company facts): the latest filing's value for every fiscal
     year, for the items in SEC_ITEMS.  Duration items need a year-long period; balance items are taken at year end."""
@@ -334,6 +340,7 @@ def sec_annual():
         time.sleep(0.5)
         years: dict = {}
         for item, tags in SEC_ITEMS.items():
+            tags = SEC_OVERRIDES.get(tic, {}).get(item, tags)
             for tag in tags:
                 best: dict = {}
                 for v in facts.get(tag, {}).get("units", {}).get("USD", []):

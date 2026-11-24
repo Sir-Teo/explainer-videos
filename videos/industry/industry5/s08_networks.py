@@ -17,21 +17,21 @@ class Networks(VoiceoverScene):
         pa = viz.plot_axes([2008.5, 2026.5], [0, 0.75], x_length=8.0, y_length=3.4, xticks=[2010, 2014, 2018, 2022, 2026],
                            yticks=[0.25, 0.5, 0.75], xfmt=lambda v: f"{int(v)}", yfmt=lambda v: f"{100 * v:.0f}%",
                            size=15)
-        pa.move_to([1.6, -1.0, 0])
+        pa.move_to([2.5, -1.0, 0])
         lv = VMobject(stroke_color=GOLD, stroke_width=4).set_points_as_corners([pa.ax.c2p(y, v) for y, v in M])
-        lm = VMobject(stroke_color=ENTRANT, stroke_width=4).set_points_as_corners([pa.ax.c2p(y, v) for y, v in MA])
+        lm = VMobject(stroke_color="#7EC8F5", stroke_width=4).set_points_as_corners([pa.ax.c2p(y, v) for y, v in MA])
         tv = tx("Visa", 20, GOLD, bold=True).next_to(pa.ax.c2p(*M[-1]), RIGHT, buff=0.12)
-        tm = tx("Mastercard", 20, ENTRANT, bold=True).next_to(pa.ax.c2p(*MA[-1]), RIGHT, buff=0.12)
+        tm = tx("Mastercard", 20, "#7EC8F5", bold=True).next_to(pa.ax.c2p(*MA[-1]), RIGHT, buff=0.12)
         head = tx("operating profit per dollar of sales, each year", 17, GREY_A).next_to(pa, UP, buff=0.12).align_to(
             pa, LEFT)
-        keeps = VGroup(draw.castle(1.3, moat=0.45, color="#F6C453"), draw.castle(1.3, moat=0.45, color=ENTRANT)).arrange(
-            RIGHT, buff=0.6).move_to([-4.6, 1.6, 0])
-        names = VGroup(tx("Visa", 18, GOLD), tx("Mastercard", 18, ENTRANT))
+        keeps = VGroup(draw.castle(1.0, moat=0.35, color="#F6C453"), draw.castle(1.0, moat=0.35, color="#7EC8F5")
+                       ).arrange(RIGHT, buff=0.5).move_to([-4.7, 1.6, 0])
+        names = VGroup(tx("Visa", 18, GOLD), tx("Mastercard", 18, "#7EC8F5"))
         for n_, k_ in zip(names, keeps):
             n_.next_to(k_, DOWN, buff=0.12)
         cards = VGroup(*[RoundedRectangle(corner_radius=0.05, width=0.5, height=0.32, stroke_width=0,
                                           fill_color=c, fill_opacity=0.95) for c in ("#2B4C9B", "#C0392B") * 4])
-        cards.arrange_in_grid(rows=2, cols=4, buff=0.08).move_to([-4.6, -1.4, 0])
+        cards.arrange_in_grid(rows=2, cols=4, buff=0.08).move_to([-4.7, -1.4, 0])
         ct = tx("the same shops, the same shoppers", 15, GREY_B).next_to(cards, DOWN, buff=0.15)
         src = source("Forms 10-K of Visa and Mastercard, fiscal 2009-2026 (SEC company facts)", size=13)
         last = R["mastercard"]["last"]
