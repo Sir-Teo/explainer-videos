@@ -74,10 +74,10 @@ class Called(VoiceoverScene):
             st = draw.coin_stack(max(1, int(round(v * 9))), 0.3).move_to([1.6 + 1.6 * k, -3.0, 0], aligned_edge=DOWN)
             cash.add(VGroup(st, T(f"${v:.1f}bn", 16, I.MONEY).next_to(st, UP, buff=0.06),
                             T(lab, 14, I.DIM).next_to([1.6 + 1.6 * k, -3.0, 0], DOWN, buff=0.08)))
-        cash_t = T("cash from operations", 17, I.MONEY).move_to([3.2, -0.75, 0])
-        prof = Arrow([1.0, -1.45, 0], [5.6, -0.95, 0], buff=0, stroke_width=5, color=I.PROFIT,
+        cash_t = T("cash from operations", 17, I.MONEY).move_to([3.2, -1.25, 0])
+        prof = Arrow([1.0, -0.75, 0], [6.0, -0.2, 0], buff=0, stroke_width=5, color=I.PROFIT,
                      max_tip_length_to_length_ratio=0.06)
-        prof_t = T("reported earnings: rising", 16, I.PROFIT).next_to(prof.get_end(), DOWN, buff=0.12).shift(LEFT * 0.6)
+        prof_t = T("reported earnings: rising", 16, I.PROFIT).next_to(prof.get_end(), UP, buff=0.12).shift(LEFT * 1.0)
         src = source("Fortune, 5 March 2001 (republished 2015); figures as the article gives them", size=13)
         with self.voiceover(
             "Every part ends with a forecast. This one was made by a journalist. <bookmark mark='a'/> In March "
@@ -187,23 +187,38 @@ class Called(VoiceoverScene):
     def ours(self):
         c = calls(3, ours=True)[0]
         M = R["cash"]["msft"]
-        box = RoundedRectangle(corner_radius=0.15, width=12.2, height=4.6, fill_color=I.PANEL, fill_opacity=1,
-                               stroke_color=I.ACCENT, stroke_width=2).move_to(DOWN * 0.2)
-        body = VGroup(TB("This series' call, made 23 November 2026", 24, I.ACCENT),
-                      T("In fiscal 2027 (to June 2027), Microsoft's free cash flow, its cash from operations", 21,
+        box = RoundedRectangle(corner_radius=0.15, width=12.2, height=3.1, fill_color=I.PANEL, fill_opacity=1,
+                               stroke_color=I.ACCENT, stroke_width=2).move_to(UP * 1.75)
+        body = VGroup(TB("This series' call, made 23 November 2026", 23, I.ACCENT),
+                      T("In fiscal 2027 (to June 2027), Microsoft's free cash flow, its cash from operations", 19,
                         I.TEXT),
                       T(f"less its additions to property and equipment, will be below fiscal 2026's {bn(M['fcf'])},",
-                        21, I.TEXT),
-                      T(f"even though its operating income rises above fiscal 2026's {bn(get('msft.oi'))}.", 21,
+                        19, I.TEXT),
+                      T(f"even though its operating income rises above fiscal 2026's {bn(get('msft.oi'))}.", 19,
                         I.TEXT),
-                      TB("Probability: 65%", 24, I.ACCENT),
-                      T("Scored on Microsoft's fiscal 2027 Form 10-K, due about August 2027", 17, I.DIM)).arrange(
-            DOWN, buff=0.18).move_to(box)
-        q = VGroup(T(f"First quarter of fiscal 2027: free cash {bn(M['q1']['fcf'])} (a year before "
-                     f"{bn(M['q1_prev']['fcf'])}); spending on equipment {bn(M['q1']['capex'])}", 16, I.DIM),
-                   T(f"guidance for the year's capital spending, including finance leases: about "
-                     f"${get('msft.capex_guide.fy2027'):.0f}bn", 16, I.DIM)).arrange(DOWN, buff=0.05).to_edge(
-            DOWN, buff=0.35)
+                      TB("Probability: 65%", 23, I.ACCENT),
+                      T("Scored on Microsoft's fiscal 2027 Form 10-K, due about August 2027", 15, I.DIM)).arrange(
+            DOWN, buff=0.12).move_to(box)
+        # the picture: cash coming in, most of it poured into data centres
+        q1, q0 = M["q1"], M["q1_prev"]
+        pile = draw.coin_stack(int(round(q1["ocf"] / 3)), 0.32).move_to([-5.3, -3.1, 0], aligned_edge=DOWN)
+        pile_t = VGroup(T("cash from operations", 15, I.MONEY), T(f"{bn(q1['ocf'])}", 18, I.MONEY, weight=BOLD)).arrange(
+            DOWN, buff=0.04).next_to(pile, UP, buff=0.1)
+        racks = VGroup(*[draw.server_rack(1.15) for _ in range(6)]).arrange(RIGHT, buff=0.12).move_to(
+            [-1.1, -2.5, 0])
+        racks_t = VGroup(T("spent on equipment", 15, GREY_B), T(f"{bn(q0['capex'])} → {bn(q1['capex'])}", 18, WHITE,
+                                                                  weight=BOLD)).arrange(DOWN, buff=0.04).next_to(
+            racks, UP, buff=0.12)
+        u = 0.075
+        fb = VGroup()
+        for k, (lab, v) in enumerate((("a year before", q0["fcf"]), ("Q1 fiscal 2027", q1["fcf"]))):
+            r_ = Rectangle(width=0.8, height=v * u, stroke_width=0, fill_color=I.MONEY if k else GREY_B,
+                           fill_opacity=0.9).move_to([3.6 + 1.3 * k, -3.1, 0], aligned_edge=DOWN)
+            fb.add(VGroup(r_, T(bn(v), 16, WHITE).next_to(r_, UP, buff=0.06),
+                          T(lab, 14, I.DIM).next_to(r_, DOWN, buff=0.06)))
+        fb_t = T("free cash, first quarter", 16, I.MONEY).next_to(fb, UP, buff=0.35)
+        guide = T(f"guidance for the year's capital spending, with finance leases: about "
+                  f"${get('msft.capex_guide.fy2027'):.0f}bn", 15, I.DIM).to_edge(DOWN, buff=0.12)
         with self.voiceover(
             "And this series' own call, logged today. <bookmark mark='a'/> In its fiscal year to June 2027, "
             "Microsoft's free cash flow, the cash from its operations less what it spends on equipment, will be "
@@ -214,11 +229,18 @@ class Called(VoiceoverScene):
             "make us wrong: a slowdown in the building, or cash from customers arriving faster than expected. We "
             "put it at sixty-five percent, and we will score it on the annual report next summer."
         ) as vo:
-            self.play(FadeIn(box), FadeIn(body[0]))
+            self.play(FadeIn(box), FadeIn(body[0]), FadeIn(pile, shift=UP * 0.2), FadeIn(pile_t))
             vo.wait_until("a")
             self.play(FadeIn(body[1:4]))
             vo.wait_until("b")
-            self.play(FadeIn(q))
+            self.play(LaggedStart(*[FadeIn(r_, shift=UP * 0.2) for r_ in racks[:3]], lag_ratio=0.2))
+            coins, fly = draw.coin_flow(pile.get_top(), racks[1].get_top(), n=8, r=0.09, arc=-0.6)
+            self.add(coins)
+            self.play(fly, LaggedStart(*[FadeIn(r_, shift=UP * 0.2) for r_ in racks[3:]], lag_ratio=0.3),
+                      FadeIn(racks_t), pile.animate.stretch(0.55, 1, about_edge=DOWN), run_time=2.0)
+            self.remove(coins)
+            self.play(FadeIn(fb_t), GrowFromEdge(fb[0][0], DOWN), FadeIn(fb[0][1:]))
+            self.play(GrowFromEdge(fb[1][0], DOWN), FadeIn(fb[1][1:]), FadeIn(guide))
             vo.wait_until("c")
             self.play(FadeIn(body[4:]))
         self.clear_scene()
