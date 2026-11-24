@@ -322,4 +322,53 @@ PARTS = [
               ("The cycle machines", "explainer/industry/works/cycle.py"),
               ("Hogs, housing, oil and orders; Maersk; Micron by quarter", "explainer/industry/data/SOURCES.md")),
     ),
+    Part(
+        n=7, level="U", widget="sizer", prereq=(2, 5),
+        question="How big is a market, and how would anyone know?",
+        story="The part opens on Uber's 2019 prospectus: a $12.3tn market, of which its 2018 revenue was 0.08% and "
+              "its 2025 revenue 0.42%, and WeWork's $3.0tn 'total opportunity' four years before its Chapter 11. The "
+              "viewer sizes American bottled water from the shelf (about $28bn), then meets two published figures "
+              "for 2023: the Census Bureau's $7.2bn at the plant door and Primo Brands' $25bn at the till. Each "
+              "market size answers four questions (level, plants, products, buyers and year). Top-down, the census "
+              "counts plants filed by what they mainly make; bottom-up, gallons times a price you choose. Home Depot "
+              "and Lowe's add up to within 1.4% of the census's home centers, while 33,066 nail salons cannot be "
+              "added up at all. A sensitivity chart shows the pack price is the range. Surveys and panels each see "
+              "through one window, and e-commerce moved the windows from 0.9% of retail in 2000 to 17% in 2025. "
+              "Computers' quality-adjusted prices fell 92% since 2000 while new cars rose 25%, and bottled water's "
+              "30% growth in dollars from 2012 to 2024 was 20% price and 8% water. Uber's TAM is read ring by ring, "
+              "with Uber Eats' $2.8tn including every meal eaten at a restaurant table. After an intermission of a "
+              "century of S-curves, Bass's model (1969) fits microwaves, the internet and smartphones; fitted on the "
+              "first quarter of adoption it misses by a median of 12 points, because curves with ceilings of 40% "
+              "and 100% fit colour TV's first years equally well; and once everyone has one, a market is what wears "
+              "out. The Register shows its holdings, and the series calls the Census's next figures.",
+        handoff="Act II opens with oil and gas, where every part from here sizes its market with these tools; the "
+                "consumer, platform and technology parts return to addressable markets and S-curves.",
+        outside="Percentages and arithmetic; Part 2's census categories; Part 5's concentration ratios.",
+        objectives={
+            "U": ["Explain why two published sizes of the same market can differ by a factor of three, from their "
+                  "definitions.",
+                  "Size a market top-down from official statistics and bottom-up from units and prices, and choose "
+                  "between them by the market's structure.",
+                  "Read a total addressable market as a statement of ambition, ring by ring."],
+            "M": ["Split growth in dollars into growth in price and in quantity with a price index.",
+                  "Fit the Bass model and compute the year of peak adoption, ln(q/p)/(p+q).",
+                  "Size a saturated market as the number in use divided by its life."],
+            "D": ["Show, by fitting curves with fixed ceilings, that the early years of an S-curve cannot identify "
+                  "its ceiling.",
+                  "Report a market size as a range and find the input that decides its edges."],
+            "I": ["Judge which window a commercial market estimate looks through and when it was last moved.",
+                  "Check a market figure in a prospectus against the company's own revenue and its years."],
+        },
+        results=[
+            ("Dollars", r"\text{dollars} = \text{units} \times \text{price};\quad 1 + g_{\text{dollars}} = (1 + g_p)(1 + g_q)"),
+            ("Bass", r"\frac{dF}{dt} = (1 - F)(p + qF)"),
+            ("The peak", r"t^{*} = \frac{\ln(q/p)}{p + q}"),
+            ("A full market", r"\text{sold a year} \approx \frac{\text{number in use}}{\text{life}} + \Delta\text{users}"),
+            ("A share of a TAM", r"\frac{\text{revenue}}{\text{TAM}}"),
+        ],
+        U=(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, "s09_intermission", 10, 12, 14), I=(13,), D=(11,),
+        also=(("The Register's rows for Part 7", "explainer/industry/data/rows_p07.py"),
+              ("The Bass model and its fits", "explainer/industry/works/diffusion.py"),
+              ("Bottled water, households, e-commerce and prices; the adoption curves", "explainer/industry/data/SOURCES.md")),
+    ),
 ]

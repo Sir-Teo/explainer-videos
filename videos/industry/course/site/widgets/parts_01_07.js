@@ -376,4 +376,67 @@
       note: "This is the Works' fleet model from chapter 1 of the film: a ship lasts 25 years; the rate clears the market given the ships afloat; owners order a share of the fleet that grows with the rate's excess over cost. The longer the wait, the more owners order before the first new ship shows them their mistake.",
     });
   };
+  // ---- Part 7: size a market from the bottom up ---------------------------------------------------------------
+  // The film's sum (videos/industry/industry7/s02_guess.py): US population in 2023 times gallons a person, part in
+  // single-serve packs of 24 half-litre bottles and the rest at a jug price. The Census Bureau's factory-gate figure
+  // and Primo Brands' retail figure are the Register's water.census.2023 and water.primo.2023.
+  W.sizer = function (el) {
+    var POP = 337.087, CENSUS = 7.24, PRIMO = 25.0, L_PER_GAL = 3.785;
+    function total(v) {
+      var gal = POP * v.percap / 1000, perPack = v.pack / (24 * 0.5 / L_PER_GAL);
+      return gal * (v.single * perPack + (1 - v.single) * v.jug);
+    }
+    var RANGE = { percap: [0.9, 1.1], single: [0.85, 1.1], pack: [0.75, 1.33], jug: [0.67, 1.33] };
+    var NAMES = { percap: "gallons a person", single: "single-serve share", pack: "pack price", jug: "jug price" };
+    QB.widget(el, {
+      title: "Size a market: American bottled water, 2023",
+      sub: "Build the retail market from the bottom up: people, gallons each, and a price for each kind of bottle. Compare your sum with the Census Bureau's factory-gate figure and Primo Brands' retail figure, and see which of your inputs decides the answer.",
+      panels: 2, height: 280,
+      controls: [
+        { k: "percap", label: "Gallons a person, a year", min: 30, max: 60, step: 0.5, value: 46.4, fmt: function (x) { return x.toFixed(1) + " gal"; } },
+        { k: "single", label: "Share sold in single-serve bottles", min: 0.4, max: 0.95, step: 0.01, value: 0.71, fmt: function (x) { return Math.round(100 * x) + "%"; } },
+        { k: "pack", label: "Price of a 24-pack of half-litre bottles", min: 3, max: 12, step: 0.25, value: 6, fmt: function (x) { return "$" + x.toFixed(2); } },
+        { k: "jug", label: "Price of a gallon of everything else", min: 0.5, max: 3, step: 0.05, value: 1.5, fmt: function (x) { return "$" + x.toFixed(2); } },
+      ],
+      draw: function (g, v, s) {
+        var t = total(v), top = Math.max(40, t * 1.15);
+        var labels = ["", "Census: plant door", "Primo: retail", "your sum: retail"];
+        var a = g[0].axes({ x: [0.4, 3.6], y: [0, top], title: "Three answers for 2023, $bn", xticks: [1, 2, 3],
+                            xfmt: function (x) { return labels[Math.round(x)] || ""; },
+                            yfmt: function (y) { return "$" + Math.round(y) + "bn"; } });
+        a.bars([1], [CENSUS], 0.55, { color: C.p });
+        a.bars([2], [PRIMO], 0.55, { color: C.gain });
+        a.bars([3], [t], 0.55, { color: C.spot });
+        a.text(1, CENSUS, "$" + CENSUS.toFixed(1) + "bn", { align: "center", dy: -10, bold: true });
+        a.text(2, PRIMO, "$" + PRIMO.toFixed(0) + "bn", { align: "center", dy: -10, bold: true });
+        a.text(3, t, "$" + t.toFixed(1) + "bn", { align: "center", dy: -10, bold: true });
+        var keys = ["pack", "single", "jug", "percap"], lo = [], hi = [], xs = [];
+        keys.forEach(function (k, i) {
+          var r = RANGE[k], vl = Object.assign({}, v), vh = Object.assign({}, v);
+          vl[k] = v[k] * r[0]; vh[k] = Math.min(v[k] * r[1], k === "single" ? 1 : 1e9);
+          var a1 = total(vl), a2 = total(vh);
+          lo.push(Math.min(a1, a2) - t); hi.push(Math.max(a1, a2) - t); xs.push(i + 1);
+        });
+        var span = Math.max(1, Math.max.apply(null, hi.map(Math.abs).concat(lo.map(Math.abs)))) * 1.2;
+        var b = g[1].axes({ x: [0.4, 4.6], y: [-span, span], title: "How far each input moves your sum, $bn",
+                            xticks: [1, 2, 3, 4], xfmt: function (x) { return NAMES[keys[Math.round(x) - 1]] || ""; },
+                            yfmt: function (y) { return (y > 0 ? "+" : "") + Math.round(y); } });
+        b.hline(0, { color: C.ink, dash: [] });
+        b.bars(xs, hi, 0.55, { color: C.loss });
+        b.bars(xs, lo, 0.55, { color: C.idea });
+        var widest = 0, wi = 0;
+        for (var i = 0; i < keys.length; i++) if (hi[i] - lo[i] > widest) { widest = hi[i] - lo[i]; wi = i; }
+        s.r = { t: t, ratio: t / CENSUS, gap: t / PRIMO - 1, perGal: t / (POP * v.percap / 1000), key: NAMES[keys[wi]] };
+      },
+      readout: function (v, s) {
+        var r = s.r;
+        return [["your retail market", "$" + r.t.toFixed(1) + "bn"],
+                ["a gallon at the till, on average", "$" + r.perGal.toFixed(2)],
+                ["against Primo's $" + PRIMO.toFixed(0) + "bn", (r.gap >= 0 ? "+" : "") + Math.round(100 * r.gap) + "%"],
+                ["times the Census's plant-door figure", r.ratio.toFixed(1) + "×"],
+                ["the input that matters most", r.key]];
+      },
+      note: "The right panel moves each input on its own across a fair range (pack price from three quarters to four thirds of your choice; the others by smaller amounts) and shows how far your sum moves. The widest bar is the number to go and check. The Census figure is lower because it counts what American plants were paid at their door, not what shoppers paid at the till.",
+    });
+  };
 })();

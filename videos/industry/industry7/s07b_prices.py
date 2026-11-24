@@ -20,9 +20,9 @@ class Prices(VoiceoverScene):
             return Rectangle(width=u.get_value(), height=p.get_value(), stroke_color=WHITE, stroke_width=2,
                              fill_color=GOLD, fill_opacity=0.35).move_to(corner, aligned_edge=DL)
         box = always_redraw(rect)
-        w_lab = memo_redraw(lambda: "units sold", lambda s: tx(s, 20, UNITS, bold=True),
+        w_lab = draw.memo_redraw(lambda: "units sold", lambda s: tx(s, 20, UNITS, bold=True),
                             lambda m: m.next_to(corner + [u.get_value() / 2, 0, 0], DOWN, buff=0.2))
-        h_lab = memo_redraw(lambda: "price", lambda s: tx(s, 20, GUESS, bold=True).rotate(PI / 2),
+        h_lab = draw.memo_redraw(lambda: "price", lambda s: tx(s, 20, GUESS, bold=True).rotate(PI / 2),
                             lambda m: m.next_to(corner + [0, p.get_value() / 2, 0], LEFT, buff=0.2))
         area = draw.number(lambda: 100 * u.get_value() * p.get_value() / 6.0, decimals=0, prefix="dollars: ", size=28,
                            color=GOLD)
