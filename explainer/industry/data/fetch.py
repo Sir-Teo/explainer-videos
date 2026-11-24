@@ -315,7 +315,9 @@ SEC_ITEMS = {"revenue": ["RevenueFromContractWithCustomerExcludingAssessedTax", 
                          "RegulatedAndUnregulatedOperatingRevenue"],
              "operating_income": ["OperatingIncomeLoss"], "net_income": ["NetIncomeLoss"],
              "operating_cash": ["NetCashProvidedByUsedInOperatingActivities"],
-             "capex": ["PaymentsToAcquirePropertyPlantAndEquipment", "PaymentsToAcquireProductiveAssets"],
+             "capex": ["PaymentsToAcquirePropertyPlantAndEquipment", "PaymentsToAcquireProductiveAssets",
+                       "PaymentsToAcquireOilAndGasPropertyAndEquipment", "PaymentsToExploreAndDevelopOilAndGasProperties",
+                       "PaymentsToAcquireOilAndGasProperty"],
              "assets": ["Assets"], "equity": ["StockholdersEquity"],
              "depreciation": ["DepreciationDepletionAndAmortization", "DepreciationAmortizationAndAccretionNet",
                               "DepreciationAndAmortization", "Depreciation"],
@@ -323,13 +325,21 @@ SEC_ITEMS = {"revenue": ["RevenueFromContractWithCustomerExcludingAssessedTax", 
 SEC_COMPANIES = [(789019, "MSFT"), (909832, "COST"), (19617, "JPM"), (753308, "NEE"), (27904, "DAL"), (59478, "LLY"),
                  (1403161, "V"), (723125, "MU"), (34088, "XOM"), (882184, "DHI"), (50863, "INTC"),
                  (1141391, "MA"), (104169, "WMT"), (1652044, "GOOGL"), (1018724, "AMZN"), (1326801, "META"),
-                 (1543151, "UBER"), (2042694, "PRMB"), (354950, "HD"), (60667, "LOW")]
+                 (1543151, "UBER"), (2042694, "PRMB"), (354950, "HD"), (60667, "LOW"),
+                 (93410, "CVX"), (1163165, "COP"), (821189, "EOG"), (797468, "OXY"), (1090012, "DVN"),
+                 (1035002, "VLO"), (1510295, "MPC"), (87347, "SLB"), (45012, "HAL"), (3570, "LNG")]
 
 
 # where a company's first-choice tag means something else: Mastercard tagged its gross revenue, before rebates and
 # incentives to customers, as revenue from contracts in 2018-2021; its net revenue is "Revenues"
 SEC_OVERRIDES = {"MA": {"revenue": ["Revenues", "SalesRevenueNet",
-                                  "RevenueFromContractWithCustomerExcludingAssessedTax"]}}
+                                  "RevenueFromContractWithCustomerExcludingAssessedTax"]},
+                 # Valero and Halliburton tag revenue including excise taxes they collect; Occidental reports profit
+                 # including its non-controlling interests as ProfitLoss when it has no NetIncomeLoss for the year
+                 "VLO": {"revenue": ["RevenueFromContractWithCustomerIncludingAssessedTax", "Revenues", "SalesRevenueNet"]},
+                 "HAL": {"revenue": ["RevenueFromContractWithCustomerIncludingAssessedTax", "Revenues", "SalesRevenueNet",
+                                     "RevenueFromContractWithCustomerExcludingAssessedTax"]},
+                 "OXY": {"net_income": ["NetIncomeLoss", "ProfitLoss"]}}
 
 
 def sec_annual():
@@ -649,7 +659,123 @@ def esef_maersk():
                    "US$ billions; " + "; ".join(f"{k}: {v}" for k, v in MAERSK_ITEMS.items()) + ")"])
 
 
-JOBS = {"fred_market": fred_market, "owid_tech": owid_tech, "sec_quarterly": sec_quarterly, "fred_cycle": fred_cycle, "esef_maersk": esef_maersk, "damodaran_roc": damodaran_roc, "census_conc": census_conc, "eia_power": eia_power, "fred_pay": fred_pay, "bea_real": bea_real, "sec_annual": sec_annual, "fred_prices": fred_prices, "census_susb": census_susb, "bea_va": bea_va, "wb_mfg_usd": wb_mfg_usd, "bea_hist": bea_hist, "bea_io": bea_io, "fred_jobs": fred_jobs, "wb_shares": wb_shares}
+
+# --- Part 8, oil and gas: EIA's bulk files (no key needed), its gasoline price components, FRED's energy prices ----
+EIA_PET = {"PET.MCRFPUS1.A": "US field production of crude oil (thousand barrels, annual)",
+           "PET.MCRFPUS2.M": "US field production of crude oil (thousand barrels a day, monthly)",
+           "PET.MCRFPTX2.M": "Texas field production of crude oil (thousand barrels a day)",
+           "PET.MCRFPND2.M": "North Dakota field production of crude oil (thousand barrels a day)",
+           "PET.MCRFP3FM2.M": "Federal offshore Gulf of Mexico (Gulf of America) production of crude oil (thousand b/d)",
+           "PET.E_ERTRRO_XR0_NUS_C.M": "US crude oil rotary rigs in operation (Baker Hughes, monthly average)",
+           "PET.MCRSTUS1.M": "US ending stocks of crude oil, SPR included (thousand barrels)",
+           "PET.RWTC.M": "WTI spot price, Cushing (dollars a barrel)",
+           "PET.RBRTE.M": "Brent spot price, Europe (dollars a barrel)",
+           "PET.EER_EPMRU_PF4_Y35NY_DPG.M": "New York Harbor conventional gasoline, regular, spot (dollars a gallon)",
+           "PET.EER_EPD2F_PF4_Y35NY_DPG.M": "New York Harbor No. 2 heating oil, spot (dollars a gallon)",
+           "PET.EMM_EPMR_PTE_NUS_DPG.M": "US regular gasoline, retail, all formulations (dollars a gallon)",
+           "PET.MCREXUS2.A": "US exports of crude oil (thousand barrels a day)",
+           "PET.MTTNTUS2.A": "US net imports of crude oil and petroleum products (thousand barrels a day)"}
+EIA_INTL_AREAS = ["WORL", "OPEC", "OPNO", "USA", "SAU", "RUS", "IRQ", "IRN", "ARE", "KWT", "CAN", "CHN", "BRA", "NOR",
+                  "GBR", "VEN", "MEX", "NGA", "KAZ", "QAT", "LBY", "AGO", "DZA", "GUY"]
+
+
+def _eia_bulk(name: str, keep):
+    """Series from one of EIA's bulk files (https://api.eia.gov/bulk/NAME.zip): JSON lines, one series each."""
+    import io
+    import zipfile
+
+    z = zipfile.ZipFile(io.BytesIO(_get(f"https://api.eia.gov/bulk/{name}.zip")))
+    out = {}
+    with z.open(z.namelist()[0]) as f:
+        for line in f:
+            d = json.loads(line)
+            if keep(d.get("series_id", "")):
+                out[d["series_id"]] = d
+    return out
+
+
+def eia_petroleum():
+    """US crude production (annual since 1859, monthly since 1920; Texas, North Dakota, the Gulf), oil rigs, crude
+    stocks, crude and product spot prices, retail gasoline and trade, from EIA's petroleum bulk file."""
+    got = _eia_bulk("PET", lambda sid: sid in EIA_PET)
+    rows = []
+    for sid in EIA_PET:
+        for per, v in sorted(got[sid]["data"]):
+            if v is not None:
+                rows.append([sid.split(".")[1], per[:4] + ("-" + per[4:6] if len(per) >= 6 else ""), v])
+    return _write("eia_petroleum", ["series", "period", "value"], rows,
+                  ["https://api.eia.gov/bulk/PET.zip (US Energy Information Administration; " +
+                   "; ".join(f"{k.split('.')[1]} {v}" for k, v in EIA_PET.items()) + ")"])
+
+
+def eia_intl():
+    """Crude oil (with lease condensate) production by country and group, 1973-2025, and world consumption of
+    petroleum and other liquids, thousand barrels a day, from EIA's international bulk file."""
+    want = {f"INTL.57-1-{a}-TBPD.A" for a in EIA_INTL_AREAS} | {"INTL.5-2-WORL-TBPD.A"}
+    got = _eia_bulk("INTL", lambda sid: sid in want)
+    rows = []
+    for sid in sorted(got):
+        what = "consumption" if sid.startswith("INTL.5-2") else "crude_production"
+        area = sid.split("-")[2]
+        for per, v in sorted(got[sid]["data"]):
+            if v not in (None, "NA", "--"):
+                try:
+                    rows.append([area, what, int(per), round(float(v), 1)])
+                except ValueError:
+                    continue
+    return _write("eia_intl", ["area", "series", "year", "kbd"], rows,
+                  ["https://api.eia.gov/bulk/INTL.zip (US Energy Information Administration, International Energy "
+                   "Statistics; crude oil including lease condensate production, and petroleum and other liquids "
+                   "consumption, thousand barrels a day)"])
+
+
+def eia_pump():
+    """What a gallon of US regular gasoline paid for, month by month: the retail price and the shares of crude oil,
+    refining, distribution and marketing, and taxes (EIA, Gasoline Pump Components History)."""
+    import html as _html
+    import re
+
+    t = _get("https://www.eia.gov/petroleum/gasdiesel/gaspump_hist.php").decode("utf-8", "ignore")
+    cells = [_html.unescape(re.sub(r"<[^>]+>", "", c)).strip() for c in re.findall(r"<td[^>]*>(.*?)</td>", t, re.S)]
+    rows = []
+    mon = {m: k + 1 for k, m in enumerate(["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov",
+                                           "Dec"])}
+    for k in range(len(cells) - 5):
+        m = re.fullmatch(r"([A-Za-z]{3})[a-z]*-(\d\d)", cells[k])
+        if m and m.group(1) in mon:
+            try:
+                vals = [float(c) for c in cells[k + 1:k + 6]]
+            except ValueError:
+                continue
+            rows.append([f"20{m.group(2)}-{mon[m.group(1)]:02d}"] + vals)
+    rows.sort()
+    return _write("eia_pump", ["month", "retail", "refining_pct", "distribution_pct", "taxes_pct", "crude_pct"], rows,
+                  ["https://www.eia.gov/petroleum/gasdiesel/gaspump_hist.php (EIA, Gasoline Pump Components History: "
+                   "US regular gasoline, dollars a gallon, and each component's percentage)"])
+
+
+FRED_ENERGY = {"WTISPLC": "Spot crude oil price: West Texas Intermediate (dollars a barrel, monthly, since 1946)",
+               "MHHNGSP": "Henry Hub natural gas spot price (dollars per million Btu)",
+               "PNGASEUUSDM": "Global price of natural gas, EU (IMF; dollars per million Btu)",
+               "PNGASJPUSDM": "Global price of LNG, Asia (IMF; dollars per million Btu)",
+               "CPIAUCSL": "Consumer price index, all urban consumers (index 1982-84 = 100, SA)"}
+
+
+def fred_energy():
+    """Monthly energy prices for Part 8: WTI since 1946, Henry Hub, European gas and Asian LNG (IMF), and the CPI to
+    put old prices in today's dollars (FRED)."""
+    out = []
+    for sid in FRED_ENERGY:
+        txt = _get(f"https://fred.stlouisfed.org/graph/fredgraph.csv?id={sid}&fq=Monthly&fam=avg").decode()
+        for line in txt.splitlines()[1:]:
+            d, v = line.split(",")
+            if v not in (".", ""):
+                out.append([sid, d[:7], float(v)])
+    return _write("fred_energy", ["series", "month", "value"], out,
+                  ["https://fred.stlouisfed.org (monthly; " + "; ".join(f"{k} {v}" for k, v in FRED_ENERGY.items()) + ")"])
+
+
+JOBS = {"eia_petroleum": eia_petroleum, "eia_intl": eia_intl, "eia_pump": eia_pump, "fred_energy": fred_energy, "fred_market": fred_market, "owid_tech": owid_tech, "sec_quarterly": sec_quarterly, "fred_cycle": fred_cycle, "esef_maersk": esef_maersk, "damodaran_roc": damodaran_roc, "census_conc": census_conc, "eia_power": eia_power, "fred_pay": fred_pay, "bea_real": bea_real, "sec_annual": sec_annual, "fred_prices": fred_prices, "census_susb": census_susb, "bea_va": bea_va, "wb_mfg_usd": wb_mfg_usd, "bea_hist": bea_hist, "bea_io": bea_io, "fred_jobs": fred_jobs, "wb_shares": wb_shares}
 
 if __name__ == "__main__":
     names = list(JOBS) if "--all" in sys.argv else sys.argv[1:]
