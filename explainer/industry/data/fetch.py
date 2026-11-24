@@ -17,6 +17,7 @@
     python -m explainer.industry.data.fetch fred_cycle   # FRED: hogs since 1858, housing, oil, sales and orders
     python -m explainer.industry.data.fetch esef_maersk  # Maersk's annual results from its ESEF filings, 2019-2025
     python -m explainer.industry.data.fetch sec_quarterly  # SEC: quarterly revenue and operating income (Micron, Intel)
+    python -m explainer.industry.data.fetch owid_tech    # Our World in Data: US households adopting 40 technologies
     python -m explainer.industry.data.fetch --all
 
 Each extract is a small CSV in this folder, committed, with the source URL and the retrieval date in its first
@@ -504,6 +505,23 @@ def census_conc():
                          "released 2025-04-24; shares in percent of sales, value of shipments or revenue)"])
 
 
+def owid_tech():
+    """The share of US households (or people) using each of some forty technologies, year by year, as compiled by
+    Our World in Data from Comin and Hobijn (2004) and later sources (CC BY 4.0)."""
+    txt = _get("https://ourworldindata.org/grapher/technology-adoption-by-households-in-the-united-states.csv"
+               "?v=1&csvType=full&useColumnShortNames=true").decode()
+    rows = []
+    for k, line in enumerate(txt.splitlines()):
+        if k == 0:
+            continue
+        name, year, val = line.rsplit(",", 2)
+        if val not in ("", "."):
+            rows.append([name.strip('"'), int(year), float(val)])
+    return _write("owid_tech", ["name", "year", "share"], rows,
+                  ["https://ourworldindata.org/grapher/technology-adoption-by-households-in-the-united-states "
+                   "(Comin and Hobijn (2004) and others, via Our World in Data; CC BY 4.0; percent of households)"])
+
+
 SEC_QUARTERLY = [(723125, "MU"), (50863, "INTC")]
 
 
@@ -604,7 +622,7 @@ def esef_maersk():
                    "US$ billions; " + "; ".join(f"{k}: {v}" for k, v in MAERSK_ITEMS.items()) + ")"])
 
 
-JOBS = {"sec_quarterly": sec_quarterly, "fred_cycle": fred_cycle, "esef_maersk": esef_maersk, "damodaran_roc": damodaran_roc, "census_conc": census_conc, "eia_power": eia_power, "fred_pay": fred_pay, "bea_real": bea_real, "sec_annual": sec_annual, "fred_prices": fred_prices, "census_susb": census_susb, "bea_va": bea_va, "wb_mfg_usd": wb_mfg_usd, "bea_hist": bea_hist, "bea_io": bea_io, "fred_jobs": fred_jobs, "wb_shares": wb_shares}
+JOBS = {"owid_tech": owid_tech, "sec_quarterly": sec_quarterly, "fred_cycle": fred_cycle, "esef_maersk": esef_maersk, "damodaran_roc": damodaran_roc, "census_conc": census_conc, "eia_power": eia_power, "fred_pay": fred_pay, "bea_real": bea_real, "sec_annual": sec_annual, "fred_prices": fred_prices, "census_susb": census_susb, "bea_va": bea_va, "wb_mfg_usd": wb_mfg_usd, "bea_hist": bea_hist, "bea_io": bea_io, "fred_jobs": fred_jobs, "wb_shares": wb_shares}
 
 if __name__ == "__main__":
     names = list(JOBS) if "--all" in sys.argv else sys.argv[1:]
