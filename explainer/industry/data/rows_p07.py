@@ -12,6 +12,7 @@ P = (7,)
 UBER = "https://www.sec.gov/Archives/edgar/data/1543151/000119312519103850/d647752ds1.htm"
 PRMB = "https://www.sec.gov/Archives/edgar/data/2042694/000204269425000003/prmb-20241231.htm"
 BMC = "https://www.beveragemarketing.com/news-detail.asp?id=825"
+WE = "https://www.sec.gov/Archives/edgar/data/1533523/000119312519220499/d781982ds1.htm"
 
 
 def r(key, value, unit, definition, source, url, fact, kind="filing", note="", **kw):
@@ -25,8 +26,12 @@ def uber(key, value, unit, definition, fact="2017"):
 
 add(
     # --- Uber's addressable market (S-1, April 2019) -------------------------------------------------------------------
-    uber("uber.tam.mobility", 5.7, "USD tn", "Personal Mobility TAM: 11.9 trillion miles a year in 175 countries (7.5 "
-         "trillion vehicle miles and 4.4 trillion public transport miles) at an estimated 23 cents a mile"),
+    uber("uber.tam.mobility", 5.7, "USD tn", "Personal Mobility TAM: 11.9 trillion miles a year in 175 countries: 7.5 "
+         "trillion vehicle miles valued at $4.7tn (about 63 cents a mile) and 4.4 trillion public transport miles at "
+         "an estimated 23 cents a mile ($1.0tn)"),
+    uber("uber.tam.vehicle", 4.7, "USD tn", "the vehicle-mile part of the Personal Mobility TAM (7.5 trillion miles)"),
+    uber("uber.tam.public", 1.0, "USD tn", "the public-transport part of the Personal Mobility TAM (4.4 trillion miles "
+         "at about 23 cents)"),
     uber("uber.tam.miles", 11.9, "tn miles", "miles in the Personal Mobility TAM: every passenger-vehicle and public "
          "transport mile in 175 countries"),
     uber("uber.tam.eats", 2.8, "USD tn", "Uber Eats TAM: all consumer spending at restaurants (of which $795bn was home "
@@ -37,6 +42,21 @@ add(
          "under 30 miles)", "2018"),
     uber("uber.miles.2018", 26, "bn miles", "miles travelled on Uber's platform in 2018: less than 1% of the vehicle "
          "miles in trips under 30 miles in its 63 countries", "2018"),
+    # --- WeWork's total opportunity (S-1, August 2019) -------------------------------------------------------------
+    r("wework.cost", 11700, "USD", "weighted average occupancy cost per employee a year in 155 cities (CBRE and "
+      "Cushman & Wakefield data)", "The We Company, Form S-1, 14 August 2019", WE, "2019"),
+    r("wework.members", 255, "m people", "potential members in WeWork's 280 target cities", "The We Company, Form S-1, "
+      "14 August 2019", WE, "2019"),
+    r("wework.total", 3.0, "USD tn", "'total opportunity' in the 280 target cities (addressable market opportunity "
+      "$1.6tn; in its existing 111 cities, $1.7tn and $945bn)", "The We Company, Form S-1, 14 August 2019", WE, "2019"),
+    r("wework.addressable", 1.6, "USD tn", "'addressable market opportunity' in the 280 target cities", "The We "
+      "Company, Form S-1, 14 August 2019", WE, "2019"),
+    r("wework.rw", 2019, "year", "The We Company asked the SEC to withdraw its registration statement on 30 September "
+      "2019", "The We Company, Form RW, 30 September 2019",
+      "https://www.sec.gov/Archives/edgar/data/1533523/000119312519258913/d808793drw.htm", "2019-09-30"),
+    r("wework.ch11", 2023, "year", "WeWork Inc. and some subsidiaries filed for Chapter 11 on 6 November 2023",
+      "WeWork Inc., Form 8-K, 7 November 2023",
+      "https://www.sec.gov/Archives/edgar/data/1813756/000119312523271902/d522028d8k.htm", "2023-11-06"),
     # --- three sizes of one market: US bottled water ---------------------------------------------------------------
     r("water.census.2023", 7.24, "USD bn", "shipments of US bottled water manufacturers (NAICS 312112), 2023: factory "
       "gate, US plants classified to bottled water only (2022: $8.69bn; 2024: $7.46bn)", "US Census Bureau, Annual "
@@ -47,6 +67,8 @@ add(
       "February 2025), Business", PRMB, "2023", note="the company does not name its source"),
     r("water.bmc.percap.2024", 47.3, "gallons", "US bottled water consumption per person, 2024 (2023: 46.4; carbonated "
       "soft drinks 2024: 34.8)", "Beverage Marketing Corporation, news release, May 2025", BMC, "2024", kind="tracker"),
+    r("water.bmc.percap.2023", 46.4, "gallons", "US bottled water consumption per person, 2023", "Beverage Marketing "
+      "Corporation, news release, May 2025", BMC, "2023", kind="tracker"),
     r("water.bmc.single.2024", 11.6, "bn gallons", "US single-serve bottled water volume, 2024: nearly 71% of the "
       "category's volume", "Beverage Marketing Corporation, news release, May 2025", BMC, "2024", kind="tracker"),
 )
