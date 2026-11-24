@@ -327,7 +327,8 @@ SEC_COMPANIES = [(789019, "MSFT"), (909832, "COST"), (19617, "JPM"), (753308, "N
                  (1141391, "MA"), (104169, "WMT"), (1652044, "GOOGL"), (1018724, "AMZN"), (1326801, "META"),
                  (1543151, "UBER"), (2042694, "PRMB"), (354950, "HD"), (60667, "LOW"),
                  (93410, "CVX"), (1163165, "COP"), (821189, "EOG"), (797468, "OXY"), (1090012, "DVN"),
-                 (1035002, "VLO"), (1510295, "MPC"), (87347, "SLB"), (45012, "HAL"), (3570, "LNG")]
+                 (1035002, "VLO"), (1510295, "MPC"), (87347, "SLB"), (45012, "HAL"), (3570, "LNG"),
+                 (831259, "FCX"), (1164727, "NEM"), (1001838, "SCCO"), (915913, "ALB")]
 
 
 # where a company's first-choice tag means something else: Mastercard tagged its gross revenue, before rebates and
@@ -339,7 +340,10 @@ SEC_OVERRIDES = {"MA": {"revenue": ["Revenues", "SalesRevenueNet",
                  "VLO": {"revenue": ["RevenueFromContractWithCustomerIncludingAssessedTax", "Revenues", "SalesRevenueNet"]},
                  "HAL": {"revenue": ["RevenueFromContractWithCustomerIncludingAssessedTax", "Revenues", "SalesRevenueNet",
                                      "RevenueFromContractWithCustomerExcludingAssessedTax"]},
-                 "OXY": {"net_income": ["NetIncomeLoss", "ProfitLoss"]}}
+                 "OXY": {"net_income": ["NetIncomeLoss", "ProfitLoss"]},
+                 # Freeport and Southern Copper tag profit to common shareholders, not NetIncomeLoss, in most years
+                 "FCX": {"net_income": ["NetIncomeLoss", "NetIncomeLossAvailableToCommonStockholdersBasic"]},
+                 "SCCO": {"net_income": ["NetIncomeLoss", "NetIncomeLossAvailableToCommonStockholdersBasic"]}}
 
 
 def sec_annual():
@@ -796,7 +800,104 @@ def fred_energy():
                   ["https://fred.stlouisfed.org (monthly; " + "; ".join(f"{k} {v}" for k, v in FRED_ENERGY.items()) + ")"])
 
 
-JOBS = {"eia_gas": eia_gas, "eia_petroleum": eia_petroleum, "eia_intl": eia_intl, "eia_pump": eia_pump, "fred_energy": fred_energy, "fred_market": fred_market, "owid_tech": owid_tech, "sec_quarterly": sec_quarterly, "fred_cycle": fred_cycle, "esef_maersk": esef_maersk, "damodaran_roc": damodaran_roc, "census_conc": census_conc, "eia_power": eia_power, "fred_pay": fred_pay, "bea_real": bea_real, "sec_annual": sec_annual, "fred_prices": fred_prices, "census_susb": census_susb, "bea_va": bea_va, "wb_mfg_usd": wb_mfg_usd, "bea_hist": bea_hist, "bea_io": bea_io, "fred_jobs": fred_jobs, "wb_shares": wb_shares}
+
+# --- Part 9, mining and metals: USGS's historical statistics, the IMF's metal prices, miners' 20-F filings ----------
+DS140 = {"chromium": "ds140-chromium-2022", "copper": "ds140-copper-2020", "nickel": "ds140-nickel-2019",
+         "tin": "ds140-tin-2021", "tungsten": "ds140-tungsten-2019"}
+DS140_BASE = "https://d9-wret.s3.us-west-2.amazonaws.com/assets/palladium/production/s3fs-public/media/files/"
+
+
+def usgs_ds140():
+    """US Geological Survey, Data Series 140 (historical statistics for mineral commodities in the United States): the
+    unit value of each of the five metals of Simon and Ehrlich's 1980 wager, in dollars of the year and of 1998, and
+    world production, every year since 1900."""
+    import io
+
+    import openpyxl
+
+    rows = []
+    for metal, f in DS140.items():
+        wb = openpyxl.load_workbook(io.BytesIO(_get(DS140_BASE + f + ".xlsx")), data_only=True, read_only=True)
+        ws = wb[wb.sheetnames[0]]
+        data = list(ws.iter_rows(values_only=True))
+        hi = next(i for i, r in enumerate(data) if any(isinstance(c, str) and "Unit value" in c for c in r if c))
+        hdr = [str(c or "").replace("\n", " ") for c in data[hi]]
+        cn = next(i for i, h in enumerate(hdr) if "Unit value" in h and "98" not in h)
+        cr = next(i for i, h in enumerate(hdr) if "Unit value" in h and "98" in h)
+        cw = next(i for i, h in enumerate(hdr) if "World production" in h)
+
+        def num(v):
+            return float(v) if isinstance(v, (int, float)) else None
+        for r in data[hi + 1:]:
+            if isinstance(r[0], (int, float)) and 1800 < r[0] < 2100:
+                rows.append([metal, int(r[0]), num(r[cn]), num(r[cr]), num(r[cw])])
+    return _write("usgs_ds140", ["metal", "year", "unit_value", "unit_value_98", "world_production"], rows,
+                  ["https://www.usgs.gov/centers/national-minerals-information-center/historical-statistics-mineral-and-"
+                   "material-commodities (USGS Data Series 140; " + ", ".join(f + ".xlsx" for f in DS140.values()) +
+                   "; unit value in dollars a metric ton of apparent consumption, and in 1998 dollars by the CPI; world "
+                   "production in metric tons)"])
+
+
+FRED_METALS = {"PCOPPUSDM": "Copper, grade A cathode, LME (IMF; dollars a metric ton)",
+               "PIORECRUSDM": "Iron ore, China import, 62% Fe (IMF; dollars a dry metric ton)",
+               "PNICKUSDM": "Nickel, LME (IMF; dollars a metric ton)",
+               "PALUMUSDM": "Aluminum, LME (IMF; dollars a metric ton)",
+               "PZINCUSDM": "Zinc, LME (IMF; dollars a metric ton)",
+               "PTINUSDM": "Tin, LME (IMF; dollars a metric ton)"}
+
+
+def fred_metals():
+    """The IMF's monthly metal prices since 1992 (via FRED): copper, iron ore, nickel, aluminium, zinc and tin."""
+    out = []
+    for sid in FRED_METALS:
+        txt = _get(f"https://fred.stlouisfed.org/graph/fredgraph.csv?id={sid}&fq=Monthly&fam=avg").decode()
+        for line in txt.splitlines()[1:]:
+            d, v = line.split(",")
+            if v not in (".", ""):
+                out.append([sid, d[:7], float(v)])
+    return _write("fred_metals", ["series", "month", "value"], out,
+                  ["https://fred.stlouisfed.org (IMF Primary Commodity Prices, monthly; " +
+                   "; ".join(f"{k} {v}" for k, v in FRED_METALS.items()) + ")"])
+
+
+IFRS_COMPANIES = [(811809, "BHP"), (863064, "RIO"), (917851, "VALE")]
+IFRS_ITEMS = {"revenue": ["Revenue"], "profit": ["ProfitLossAttributableToOwnersOfParent", "ProfitLoss"],
+              "operating_cash": ["CashFlowsFromUsedInOperatingActivities"],
+              "capex": ["PurchaseOfPropertyPlantAndEquipmentClassifiedAsInvestingActivities"]}
+
+
+def sec_ifrs():
+    """Annual figures of the three big diversified miners from their Forms 20-F (SEC company facts, IFRS tags): BHP's
+    fiscal years end in June, Rio Tinto's and Vale's in December."""
+    import time
+
+    out = []
+    for cik, tic in IFRS_COMPANIES:
+        facts = json.loads(_get(f"https://data.sec.gov/api/xbrl/companyfacts/CIK{cik:010d}.json"))["facts"]
+        ifrs = facts.get("ifrs-full", {})
+        time.sleep(0.5)
+        years: dict = {}
+        for item, tags in IFRS_ITEMS.items():
+            for tag in tags:
+                best: dict = {}
+                for v in ifrs.get(tag, {}).get("units", {}).get("USD", []):
+                    if v.get("form") not in ("20-F", "20-F/A") or "start" not in v:
+                        continue
+                    d = (dt.date.fromisoformat(v["end"]) - dt.date.fromisoformat(v["start"])).days
+                    if not 350 <= d <= 380:
+                        continue
+                    if v["end"] not in best or v["filed"] > best[v["end"]]["filed"]:
+                        best[v["end"]] = v
+                for end, v in best.items():
+                    years.setdefault(end, {}).setdefault(item, v["val"] / 1e9)
+        for end in sorted(years):
+            out.append([tic, end] + [years[end].get(k) for k in IFRS_ITEMS])
+    return _write("sec_ifrs", ["ticker", "year_end"] + list(IFRS_ITEMS), out,
+                  ["https://data.sec.gov/api/xbrl/companyfacts/ (Forms 20-F, IFRS; US$ billions; tags: " +
+                   "; ".join(f"{k}: {'/'.join(v)}" for k, v in IFRS_ITEMS.items()) + ")"])
+
+
+JOBS = {"usgs_ds140": usgs_ds140, "fred_metals": fred_metals, "sec_ifrs": sec_ifrs, "eia_gas": eia_gas, "eia_petroleum": eia_petroleum, "eia_intl": eia_intl, "eia_pump": eia_pump, "fred_energy": fred_energy, "fred_market": fred_market, "owid_tech": owid_tech, "sec_quarterly": sec_quarterly, "fred_cycle": fred_cycle, "esef_maersk": esef_maersk, "damodaran_roc": damodaran_roc, "census_conc": census_conc, "eia_power": eia_power, "fred_pay": fred_pay, "bea_real": bea_real, "sec_annual": sec_annual, "fred_prices": fred_prices, "census_susb": census_susb, "bea_va": bea_va, "wb_mfg_usd": wb_mfg_usd, "bea_hist": bea_hist, "bea_io": bea_io, "fred_jobs": fred_jobs, "wb_shares": wb_shares}
 
 if __name__ == "__main__":
     names = list(JOBS) if "--all" in sys.argv else sys.argv[1:]
