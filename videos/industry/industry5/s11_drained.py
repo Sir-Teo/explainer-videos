@@ -5,8 +5,8 @@ from videos.industry.industry5.common import *  # noqa: F403
 
 class Drained(VoiceoverScene):
     def construct(self):
-        card(self, 13, "Moats that drained", "How do the strongest walls come down?",
-             "Chapter thirteen. Moats that drained.", lit=("change", "moat"))
+        card(self, 15, "Moats that drained", "How do the strongest walls come down?",
+             "Chapter fifteen. Moats that drained.", lit=("change", "moat"))
         self.papers()
         self.kodak()
 
@@ -44,7 +44,8 @@ class Drained(VoiceoverScene):
             "century a city's daily paper was one of the best businesses in America. It owned the printing press "
             "and the delivery vans, and it was the only place a shop could reach the whole town, or a family could "
             "sell a car or find a flat. <bookmark mark='b'/> In 2005 American newspapers took in an estimated "
-            f"{ads05:.0f} billion dollars from advertising, and about eleven billion from readers. "
+            f"{ads05:.0f} billion dollars from advertising, and about eleven billion from readers. By 2008, "
+            "advertising was down to thirty-eight billion; by 2010, twenty-six. "
             "<bookmark mark='c'/> Then the classified ads moved to free websites, the shoppers' ads moved to search "
             "and social media, and the paper's moat, being the only way to reach the town, was simply walked "
             f"round. <bookmark mark='d'/> By 2020, by Pew's estimate, advertising had fallen to about "

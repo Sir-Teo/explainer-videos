@@ -18,7 +18,9 @@ class Outro(VoiceoverScene):
             "industry a business is in explains about a fifth of the differences in profit; the business itself "
             "explains more. A few firms earn high returns only if newcomers are kept out and the few do not fight. "
             "The walls are made of cost, habit, networks and law, and five forces can drain what they protect. And "
-            "no wall survives the day customers stop wanting what is inside it."
+            "no wall survives the day customers stop wanting what is inside it. When you look at an industry, ask "
+            "what its castles are made of, who could walk round the walls, and what the customers would do if "
+            "they could leave."
         ):
             self.play(LaggedStart(*[FadeIn(x, shift=UP * 0.1) for x in lines], lag_ratio=0.6), run_time=6)
         self.clear_scene()

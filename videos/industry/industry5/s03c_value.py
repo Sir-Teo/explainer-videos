@@ -42,7 +42,10 @@ class Value(VoiceoverScene):
             "<bookmark mark='c'/> And it is not spread evenly. Each block is an industry's share. "
             f"<bookmark mark='d'/> Five industries, {names[0].lower()}, {names[1].lower()}, computers, chips and "
             f"health care support, earn {100 * E['top5_share']:.0f} percent of it. The castles with the deepest "
-            "moats in the American economy are, overwhelmingly, the ones built from software and silicon."
+            "moats in the American economy are, overwhelmingly, the ones built from software and silicon. Notice "
+            "what they share with Part 4: software costs almost nothing to copy once written, and the leading chip "
+            "and computer makers sit furthest down their learning curves. The cost curve and the moat are "
+            "often the same thing seen from two sides."
         ) as vo:
             self.play(FadeIn(src))
             vo.wait_until("a")

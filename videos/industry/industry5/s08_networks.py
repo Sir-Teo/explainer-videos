@@ -5,8 +5,8 @@ from videos.industry.industry5.common import *  # noqa: F403
 
 class Networks(VoiceoverScene):
     def construct(self):
-        card(self, 9, "Walls of networks and law", "When does each new customer make the castle stronger?",
-             "Chapter nine. Walls of networks and law.", lit=("moat",))
+        card(self, 10, "Walls of networks and law", "When does each new customer make the castle stronger?",
+             "Chapter ten. Walls of networks and law.", lit=("moat",))
         self.network()
         self.law()
 
@@ -54,7 +54,9 @@ class Networks(VoiceoverScene):
             f"network between banks, shops and shoppers. In fiscal 2026 it turned {V['rev']:.0f} billion dollars "
             f"of revenue into {V['oi']:.0f} billion of operating profit: {100 * V['margin']:.0f} cents of every "
             "dollar. A rival with a better card would still have to sign up millions of shops and shoppers, each of "
-            "whom wants the other to come first."
+            "whom wants the other to come first. Markets like this tend to tip: once one network is ahead, the gap "
+            "feeds itself, and the second network shrinks rather than catches up. That is why so many of them end "
+            "with one or two winners, and why their owners will spend heavily to be first."
         ) as vo:
             self.add(web, shown)
             self.play(FadeIn(cnt), FadeIn(cnt_t), FadeIn(lk), FadeIn(lk_t), FadeIn(src))

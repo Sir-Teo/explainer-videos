@@ -88,7 +88,9 @@ class Entrant(VoiceoverScene):
             "million more to win shoppers. It stays out. <bookmark mark='d'/> Fourth: lock your customers in with "
             "contracts and loyalty schemes, so the rival can win only half as many. It stays out. "
             "<bookmark mark='e'/> Three of the four moves work, and they share one thing: each is a cost you pay "
-            "now, which changes what the rival can expect later. That is what a moat is made of. You can play this "
+            "now, which changes what the rival can expect later. And each is worth paying for. The bigger plant "
+            "costs you twenty a year, the advertising fifteen, the loyalty scheme ten; with the rival kept out you "
+            "keep eighty, eighty-five or ninety, against forty if it comes in. That is what a moat is made of. You can play this "
             "game, with your own numbers, on the course site."
         ) as vo:
             self.play(*[FadeOut(m) for m in self.statics])

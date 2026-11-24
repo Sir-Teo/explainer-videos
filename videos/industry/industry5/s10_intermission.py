@@ -43,7 +43,9 @@ class Intermission(VoiceoverScene):
             "An intermission: the same eight industries, every year from 2015 to 2025, ranked by their return on "
             "capital. <bookmark mark='a'/> Watch the order rather than the numbers. Oil and gas swing with the "
             "price of oil; airlines fall off the bottom in the pandemic and climb back; software and soft drinks "
-            "barely move. <bookmark mark='b'/> And tobacco stays at the top the whole way through."
+            "barely move. Carmakers sit near the bottom in good years and bad. <bookmark mark='b'/> And tobacco stays "
+            "at the top the whole way through. The ranking changes much less than the numbers do: that is the "
+            "persistence of chapter two, seen year by year."
         ) as vo:
             self.play(FadeIn(head), FadeIn(src), FadeIn(cur), FadeIn(yr))
             vo.wait_until("a")

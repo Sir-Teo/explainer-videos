@@ -53,7 +53,10 @@ class Facts(VoiceoverScene):
                      "(published January 2026)")
         top, bot = inds[0], inds[-1]
         with self.voiceover(
-            "Before any theory, the facts. Each January the finance professor Aswath Damodaran publishes, for every "
+            "Before any theory, the facts. Part 3 defined the measure that matters: the return on capital, a "
+            "business's operating profit after tax, divided by all the money its owners and lenders have put in. "
+            "If that return is above what the same money could earn elsewhere, the business is creating value. "
+            "Now the facts. Each January the finance professor Aswath Damodaran publishes, for every "
             "American industry, the return its companies earned the year before on the capital invested in them, and "
             "what that "
             f"capital costs. <bookmark mark='a'/> Here are {n} industries from the table he published in January "

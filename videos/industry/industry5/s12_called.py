@@ -5,8 +5,8 @@ from videos.industry.industry5.common import *  # noqa: F403
 
 class Called(VoiceoverScene):
     def construct(self):
-        card(self, 14, "Called it?", "Was Buffett right about airlines, and what will last?",
-             "Chapter fourteen. Called it?", lit=("change",))
+        card(self, 16, "Called it?", "Was Buffett right about airlines, and what will last?",
+             "Chapter sixteen. Called it?", lit=("change",))
         self.airlines()
         self.ours()
 
@@ -90,8 +90,10 @@ class Called(VoiceoverScene):
             "the twenty highest in 2028. <bookmark mark='b'/> Here is the top ten: tobacco, computers, general "
             "insurance, home centers, household products and the rest. <bookmark mark='c'/> In Damodaran's tables "
             "since 2015, seven or more of a year's top ten were still in the top twenty three years later in seven "
-            "of eight cases. We put it at seventy-five percent, a little below that record, because the record is "
-            "short. It will be scored on his table for 2028, published in January 2029."
+            "of eight cases. The one miss started in 2022, when a commodity boom briefly lifted steel, paper, coal "
+            "and oil into the top ten; none of them had a moat, and all four fell back. We put it "
+            "at seventy-five percent, a little below that record, because the record is short and the next shock "
+            "is never the last one. It will be scored on his table for 2028, published in January 2029."
         ) as vo:
             self.play(FadeIn(head), FadeIn(src))
             vo.wait_until("a")

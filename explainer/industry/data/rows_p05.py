@@ -72,6 +72,12 @@ add(
       "(the 2010 guidelines used 2,500)", "US Department of Justice and Federal Trade Commission, Merger Guidelines "
       "(18 December 2023), Guideline 1", "https://www.justice.gov/atr/merger-guidelines/applying-merger-guidelines/"
       "guideline-1", "2023-12", kind="official"),
+    r("smoke.1965", 0.42, "share", "share of US adults who smoked cigarettes in 1965 (the first year of the national "
+      "series)", "CDC press release, 'U.S. Adult Tobacco Product Use Decreased from 2019 to 2020', 18 March 2022",
+      "https://archive.cdc.gov/www_cdc_gov/media/releases/2022/p0318-US-tobacco-use.html", "1965", kind="official"),
+    r("smoke.2022", 0.116, "share", "share of US adults who currently smoked cigarettes in 2022 (about 28.8 million "
+      "people; National Health Interview Survey)", "CDC, MMWR 73(29), 'Adult Smoking Cessation - United States, "
+      "2022' (2024)", "https://www.cdc.gov/mmwr/volumes/73/wr/mm7329a1.htm", "2022", kind="official"),
     # --- Visa, fiscal year to 30 September 2026 ----------------------------------------------------------------------
     r("visa.rev", 45.90, "USD bn", "Visa net revenue, fiscal 2026 (2025: $40.00bn)", "Visa Form 10-K FY2026 (SEC "
       "company facts: RevenueFromContractWithCustomerExcludingAssessedTax)", CF.format(1403161), "FY2026"),

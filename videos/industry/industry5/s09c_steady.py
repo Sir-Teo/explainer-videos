@@ -7,8 +7,8 @@ LINES = (("V", "Visa", "#F6C453"), ("COST", "Costco", "#7EC8F5"), ("DAL", "Delta
 
 class Steady(VoiceoverScene):
     def construct(self):
-        card(self, 12, "A moat in the accounts", "What does a moat look like in a company's figures?",
-             "Chapter twelve. A moat in the accounts.", lit=("moat", "dollar"))
+        card(self, 13, "A moat in the accounts", "What does a moat look like in a company's figures?",
+             "Chapter thirteen. A moat in the accounts.", lit=("moat", "dollar"))
         M = R["margins"]
         ax = CornerAxes(x_range=[2008.5, 2026.5, 1], y_range=[-0.3, 0.7, 0.1], x_length=10.0, y_length=5.0,
                         axis_config=dict(color=GREY_B, include_ticks=False)).move_to([-0.4, -0.35, 0])

@@ -17,8 +17,8 @@ TOB = ["a few firms that rarely fight on price", "advertising limits and brands 
 
 class Forces(VoiceoverScene):
     def construct(self):
-        card(self, 10, "Five forces", "Who else takes a share of an industry's profit?",
-             "Chapter ten. Five forces.", lit=("moat", "who"))
+        card(self, 11, "Five forces", "Who else takes a share of an industry's profit?",
+             "Chapter eleven. Five forces.", lit=("moat", "who"))
         keep = draw.castle(1.7, moat=0.3).move_to([0, -0.35, 0])
         pos = {"New entrants": np.array([4.3, -0.2, 0]), "Substitutes": np.array([0, -2.75, 0]),
                "Buyers": np.array([-4.3, -0.2, 0]), "Suppliers": np.array([0, 2.55, 0])}

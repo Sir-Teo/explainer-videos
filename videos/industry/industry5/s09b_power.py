@@ -6,8 +6,8 @@ from videos.industry.industry5.common import *  # noqa: F403
 
 class Power(VoiceoverScene):
     def construct(self):
-        card(self, 11, "Buyers and suppliers", "Who wins when one firm's customer is another firm?",
-             "Chapter eleven. Buyers and suppliers.", lit=("moat", "who"))
+        card(self, 12, "Buyers and suppliers", "Who wins when one firm's customer is another firm?",
+             "Chapter twelve. Buyers and suppliers.", lit=("moat", "who"))
         tsmc, fox, apple, qcom = (get("tsmc.gm.q4_2025"), get("foxconn.gm.2025"), get("apple.gm_products.fy2025"),
                                   get("qcom.qtl_ebt.fy2026"))
         xs = (-4.8, -1.6, 1.6, 4.8)
