@@ -20,6 +20,7 @@ class Drained(VoiceoverScene):
                        *[Line([-0.32, y, 0], [0.32, y, 0], stroke_color="#8C929B", stroke_width=2)
                          for y in np.linspace(0.35, -0.4, 7)]).move_to([-4.4, -1.6, 0])
         name = tx("the local newspaper", 20, WHITE, bold=True).next_to(press, UP, buff=0.2)
+        van = draw.truck(1.1).move_to([-7.8, -1.75, 0])
         base = -2.6
         u = 0.085
 
@@ -52,15 +53,17 @@ class Drained(VoiceoverScene):
             f"{ads20:.1f} billion, and readers were paying more than advertisers. No rival built a "
             "better newspaper. The thing the moat protected stopped being needed."
         ) as vo:
-            self.play(FadeIn(src))
+            self.play(FadeIn(src), FadeIn(press, shift=UP * 0.2), FadeIn(name))
             vo.wait_until("a")
-            self.play(FadeIn(press, shift=UP * 0.2), FadeIn(name), FadeIn(sheet, shift=UP * 0.2))
+            self.play(FadeIn(sheet, shift=UP * 0.2))
+            self.add(van)
+            self.play(van.animate.move_to([-1.9, -1.75, 0]), run_time=1.6, rate_func=rate_functions.ease_out_quad)
             vo.wait_until("b")
             self.play(FadeIn(a05[3]), GrowFromEdge(a05[0], DOWN), FadeIn(a05[1:3]), GrowFromEdge(c05[0], DOWN),
                       FadeIn(c05[1:3]))
             vo.wait_until("c")
             self.play(LaggedStart(*[FadeIn(a_, shift=DOWN * 0.3) for a_ in apps], lag_ratio=0.2),
-                      press.moat.animate.set_opacity(0.1), run_time=2.0)
+                      press.moat.animate.set_opacity(0.1), van.animate.set_opacity(0.25), run_time=2.0)
             vo.wait_until("d")
             self.play(FadeIn(a20[3]), GrowFromEdge(a20[0], DOWN), FadeIn(a20[1:3]), GrowFromEdge(c20[0], DOWN),
                       FadeIn(c20[1:3]))
