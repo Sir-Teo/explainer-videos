@@ -33,3 +33,5 @@ industryN` checks a part's rows.
 | BLS consumer price indexes (US city average) and average hourly earnings of production and nonsupervisory employees, annual averages since 2000, via FRED → `fred_prices.csv` | official | public domain | Part 2 |
 | Leontief (1936), *Review of Economics and Statistics* 18(3); Leontief (1983), National Academy of Engineering; the Nobel Foundation (1973) | study | quoted | Part 2 |
 | Antràs, Chor, Fally and Hillberry (2012), *AER Papers and Proceedings* 102(3) (upstreamness: the method, not data) | study | method | Part 2 |
+| US Census Bureau, 2022 Economic Census, Concentration of Largest Firms for the U.S. (`ECNSIZE2022.zip`, released 2025-04-24): the share of sales of the 4, 8, 20 and 50 largest firms, firms and sales for every six-digit industry with a published figure → `census_conc_2022.csv` | official | public domain | Part 5 |
+| Aswath Damodaran, NYU Stern, "Excess Returns (EVA) by industry, US companies", the January files for 2015-2024 (archive) and 2026: firms, return on capital, cost of capital, book capital → `damodaran_roc.csv` | study | freely published for teaching; cited | Part 5 |

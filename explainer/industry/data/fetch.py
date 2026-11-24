@@ -12,6 +12,8 @@
     python -m explainer.industry.data.fetch bea_real     # BEA real value added and prices by industry
     python -m explainer.industry.data.fetch fred_pay     # BLS: average hourly earnings by industry
     python -m explainer.industry.data.fetch eia_power    # EIA: capacity, generation, fuel costs, heat rates
+    python -m explainer.industry.data.fetch damodaran_roc  # Damodaran: return on capital by US industry, 2015-2026
+    python -m explainer.industry.data.fetch census_conc  # Census: the four largest firms' share by industry, 2022
     python -m explainer.industry.data.fetch --all
 
 Each extract is a small CSV in this folder, committed, with the source URL and the retrieval date in its first
@@ -419,7 +421,73 @@ def census_susb():
                           "(Statistics of US Businesses, 2022, released 2025-04-10; receipts in $1,000)"])
 
 
-JOBS = {"eia_power": eia_power, "fred_pay": fred_pay, "bea_real": bea_real, "sec_annual": sec_annual, "fred_prices": fred_prices, "census_susb": census_susb, "bea_va": bea_va, "wb_mfg_usd": wb_mfg_usd, "bea_hist": bea_hist, "bea_io": bea_io, "fred_jobs": fred_jobs, "wb_shares": wb_shares}
+DAMODARAN = "https://pages.stern.nyu.edu/~adamodar/pc/"
+
+
+def damodaran_roc():
+    """Aswath Damodaran's 'EVA' tables for US industries, one per January: number of firms, return on capital, cost of
+    capital and book capital, 2015-2024 from his archive and January 2026 from the current file (the January 2025
+    file is not in the archive).  Industries are his; their names are stable from 2015."""
+    import xlrd
+
+    files = {y: DAMODARAN + f"archives/EVA{y % 100:02d}.xls" for y in range(2015, 2025)}
+    files[2026] = DAMODARAN + "datasets/EVA.xls"
+    out = []
+    for year, url in files.items():
+        book = xlrd.open_workbook(file_contents=_get(url))
+        sheet = book.sheet_by_index(book.nsheets - 1)
+        cols = None
+        for r in range(sheet.nrows):
+            row = [str(sheet.cell_value(r, c)).strip() for c in range(sheet.ncols)]
+            if cols is None:
+                if row and row[0].lower().startswith("industry"):
+                    cols = {k: row.index(k) for k in row if k}
+                continue
+            if not row[0] or row[0].lower().startswith(("total market", "total")):
+                continue
+            def val(name):
+                key = next((k for k in cols if k.startswith(name)), None)
+                v = sheet.cell_value(r, cols[key]) if key else ""
+                return v if isinstance(v, float) else ""
+            out.append([year, row[0], val("Number of Firms"), val("ROC"), val("Cost of Capital"), val("BV of Capital")])
+    return _write("damodaran_roc", ["year", "name", "firms", "roc", "wacc", "capital_musd"], out,
+                  [DAMODARAN + "archives/EVA15.xls ... EVA24.xls and datasets/EVA.xls (January 2026): Aswath "
+                   "Damodaran, NYU Stern, 'Excess Returns (EVA) by industry, US companies'"])
+
+
+ECN = "https://www2.census.gov/programs-surveys/economic-census/data/2022/API_Datasets/ECNSIZE2022.zip"
+
+
+def census_conc():
+    """2022 Economic Census, concentration of the largest firms: for every six-digit NAICS industry with a published
+    figure, the share of sales of its 4, 8, 20 and 50 largest firms, the number of firms and total sales ($1,000)."""
+    z = zipfile.ZipFile(io.BytesIO(_get(ECN)))
+    name = next(n for n in z.namelist() if n.endswith(".dat"))
+    rows = {}
+    with z.open(name) as f:
+        reader = csv.reader(io.TextIOWrapper(f, encoding="latin-1"), delimiter="|")
+        hdr = next(reader)
+        hdr[0] = hdr[0].lstrip("#")
+        for x in reader:
+            d = dict(zip(hdr, x))
+            code = d["NAICS2022"]
+            if d["GEOTYPE"] != "01" or len(code) != 6 or not code.isdigit() or d["TYPOP"] != "00":
+                continue
+            if any(d[k] != "001" for k in ("EMPSZFE", "EMPSZFF", "LFO", "RCPSZFE", "RCPSZFF", "SUMUFI")):
+                continue  # only the all-firms, all-sizes row of each industry
+            r = rows.setdefault(code, {"label": d["NAICS2022_LABEL"]})
+            if d["CONCENFI"] == "001":
+                r["firms"], r["sales_k"] = d["FIRM"], d["RCPTOT"]
+            elif d["CONCENFI"] in ("604", "608", "620", "650") and d["VAL_PCT"] not in ("", "0"):
+                r[d["CONCENFI"]] = d["VAL_PCT"]
+    out = [[c, r["label"], r.get("firms", ""), r.get("sales_k", ""), r["604"], r.get("608", ""), r.get("620", ""),
+            r.get("650", "")] for c, r in sorted(rows.items()) if "604" in r]
+    return _write("census_conc_2022", ["code", "name", "firms", "sales_k", "cr4", "cr8", "cr20", "cr50"], out,
+                  [ECN + " (2022 Economic Census, Selected Sectors: Concentration of Largest Firms for the U.S., "
+                         "released 2025-04-24; shares in percent of sales, value of shipments or revenue)"])
+
+
+JOBS = {"damodaran_roc": damodaran_roc, "census_conc": census_conc, "eia_power": eia_power, "fred_pay": fred_pay, "bea_real": bea_real, "sec_annual": sec_annual, "fred_prices": fred_prices, "census_susb": census_susb, "bea_va": bea_va, "wb_mfg_usd": wb_mfg_usd, "bea_hist": bea_hist, "bea_io": bea_io, "fred_jobs": fred_jobs, "wb_shares": wb_shares}
 
 if __name__ == "__main__":
     names = list(JOBS) if "--all" in sys.argv else sys.argv[1:]
