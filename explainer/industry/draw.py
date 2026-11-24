@@ -12,6 +12,8 @@ Every glyph is a ``VGroup`` with its moving parts named, so a scene can animate 
   :func:`ship`, :func:`server_rack`;
 * oil and gas: :func:`barrel`, :func:`pumpjack` (``.beam`` rocks with :func:`nod`), :func:`derrick`, :func:`platform`,
   :func:`tank` (``.oil`` at a level), :func:`column` (a distillation tower with its ``.cuts``), :func:`tanker`;
+* mining and metals: :func:`open_pit` (benches, ``.ore`` below), :func:`haul_truck`, :func:`mill_drum` (``.drum``
+  turns), :func:`flotation_cell` (``.froth``), :func:`cathode`, :func:`gold_bar`, :func:`battery` (``.charge``);
 * the city and its people: :func:`skyline` (``.windows`` light up), :func:`house`, :func:`shop`, :func:`person`,
   :func:`crowd`; :func:`sun`, :func:`moon`, :func:`sky` (a background whose colour follows the hour);
 * money: :func:`coin`, :func:`coin_stack`, :func:`note_bill`, :func:`coin_flow` (coins flying from one place to
@@ -673,6 +675,111 @@ def tanker(w: float = 3.0, color: str = "#4A5A70") -> VGroup:
     funnel = Rectangle(width=0.03 * w, height=0.06 * w, stroke_width=0, fill_color="#C0392B", fill_opacity=1).move_to(
         [0.43 * w, 0.25 * w, 0])
     return VGroup(hull, stripe, deck, bridge, funnel)
+
+
+# ---------------------------------------------------------------------------------------------------------------
+# Mining and metals (Part 9)
+# ---------------------------------------------------------------------------------------------------------------
+COPPER = "#D9824B"
+
+
+def open_pit(w: float = 5.0, depth: float = 1.8, benches: int = 5, color: str = "#8A6E52") -> VGroup:
+    """An open pit seen in section: stepped benches down to a floor; ``g.ore`` is the ore body below the floor."""
+    pts = [[-w / 2, 0, 0]]
+    step_w = (w * 0.38) / benches
+    for k in range(benches):
+        x = -w / 2 + (k + 1) * step_w
+        pts += [[x - step_w * 0.4, -depth * k / benches, 0], [x, -depth * (k + 1) / benches, 0]]
+    floor_l = pts[-1][0]
+    pts += [[-floor_l, -depth, 0]]
+    for k in range(benches, 0, -1):
+        x = w / 2 - k * step_w
+        pts += [[x, -depth * (k - 1) / benches - depth / benches, 0], [x + step_w * 0.6, -depth * (k - 1) / benches, 0]]
+    pts += [[w / 2, 0, 0]]
+    rock = Polygon([-w / 2 - 0.3, 0, 0], *pts, [w / 2 + 0.3, 0, 0], [w / 2 + 0.3, -depth - 1.0, 0],
+                   [-w / 2 - 0.3, -depth - 1.0, 0], stroke_width=0, fill_color=color, fill_opacity=0.0)
+    ground = Polygon([-w / 2 - 0.3, 0, 0], *pts, [w / 2 + 0.3, 0, 0], [w / 2 + 0.3, -depth - 1.0, 0],
+                     [-w / 2 - 0.3, -depth - 1.0, 0], stroke_width=0, fill_color=color, fill_opacity=1)
+    edge = VMobject(stroke_color="#C9A98A", stroke_width=2).set_points_as_corners(pts)
+    ore = Ellipse(width=w * 0.35, height=0.55, stroke_width=0, fill_color=COPPER, fill_opacity=0.85).move_to(
+        [0, -depth - 0.45, 0])
+    g = VGroup(ground, ore, edge)
+    del rock
+    g.ore, g.floor = ore, -depth
+    return g
+
+
+def haul_truck(w: float = 1.6, color: str = "#F2C14E") -> VGroup:
+    """A giant mine haul truck: tipping body (``g.body``), cab, and two big wheels."""
+    body = Polygon([-0.5 * w, 0.18 * w, 0], [0.2 * w, 0.18 * w, 0], [0.24 * w, 0.42 * w, 0], [-0.52 * w, 0.46 * w, 0],
+                   stroke_width=0, fill_color=color, fill_opacity=1)
+    cab = Rectangle(width=0.18 * w, height=0.16 * w, stroke_width=0, fill_color="#E8EAED", fill_opacity=1).move_to(
+        [0.36 * w, 0.32 * w, 0])
+    frame = Rectangle(width=0.95 * w, height=0.06 * w, stroke_width=0, fill_color="#3E4553", fill_opacity=1).move_to(
+        [0, 0.16 * w, 0])
+    wheels = VGroup(*[Circle(radius=0.13 * w, stroke_color="#8C929B", stroke_width=2, fill_color="#20242C",
+                             fill_opacity=1).move_to([x * w, 0.13 * w, 0]) for x in (-0.3, 0.3)])
+    g = VGroup(frame, body, cab, wheels)
+    g.body = body
+    return g
+
+
+def mill_drum(r: float = 0.7, color: str = "#8B95A7") -> VGroup:
+    """A grinding mill seen end-on: a drum (``g.drum``) with lifter bars and balls inside; rotate ``g.drum`` to turn it."""
+    shell = Circle(radius=r, stroke_color=color, stroke_width=4, fill_color="#20262F", fill_opacity=1)
+    lifters = VGroup(*[Line(ORIGIN, RIGHT * 0.18 * r, stroke_color=color, stroke_width=3).rotate(
+        a, about_point=ORIGIN).shift(r * 0.82 * np.array([math.cos(a), math.sin(a), 0])) for a in np.linspace(0, TAU, 9)[:-1]])
+    balls = VGroup(*[Circle(radius=0.1 * r, stroke_width=0, fill_color="#C9D3E0", fill_opacity=0.9).move_to(
+        [(k % 4 - 1.5) * 0.22 * r, -0.55 * r + (k // 4) * 0.18 * r, 0]) for k in range(8)])
+    drum = VGroup(shell, lifters)
+    g = VGroup(drum, balls)
+    g.drum = drum
+    return g
+
+
+def flotation_cell(w: float = 1.4, color: str = "#5DA9E9") -> VGroup:
+    """A flotation tank: slurry, an impeller shaft, and a froth layer on top (``g.froth``) where copper-bearing
+    bubbles collect."""
+    tank = Rectangle(width=w, height=0.8 * w, stroke_color="#C9D3E0", stroke_width=2, fill_color=color,
+                     fill_opacity=0.35).move_to([0, 0.4 * w, 0])
+    shaft = Line([0, 0.95 * w, 0], [0, 0.15 * w, 0], stroke_color="#8C929B", stroke_width=3)
+    froth = VGroup(*[Circle(radius=0.05 * w, stroke_width=0, fill_color=COPPER, fill_opacity=0.9).move_to(
+        [(k - 4.5) * 0.1 * w, 0.82 * w + (k % 2) * 0.04 * w, 0]) for k in range(10)])
+    g = VGroup(tank, shaft, froth)
+    g.froth, g.tank = froth, tank
+    return g
+
+
+def cathode(h: float = 1.0, color: str = COPPER) -> VGroup:
+    """A copper cathode plate hanging from its bar."""
+    plate = Rectangle(width=0.8 * h, height=h, stroke_width=0, fill_color=color, fill_opacity=1)
+    sheen = Rectangle(width=0.08 * h, height=0.9 * h, stroke_width=0, fill_color="#FFFFFF", fill_opacity=0.15).shift(
+        LEFT * 0.25 * h)
+    bar = Rectangle(width=1.0 * h, height=0.06 * h, stroke_width=0, fill_color="#8C929B", fill_opacity=1).shift(
+        UP * 0.55 * h)
+    return VGroup(plate, sheen, bar)
+
+
+def gold_bar(w: float = 1.0) -> VGroup:
+    """A gold bar in perspective: top face and front face."""
+    front = Polygon([-0.5 * w, 0, 0], [0.5 * w, 0, 0], [0.42 * w, 0.22 * w, 0], [-0.42 * w, 0.22 * w, 0], stroke_width=0,
+                    fill_color="#D4A017", fill_opacity=1)
+    top = Polygon([-0.42 * w, 0.22 * w, 0], [0.42 * w, 0.22 * w, 0], [0.32 * w, 0.32 * w, 0], [-0.32 * w, 0.32 * w, 0],
+                  stroke_width=0, fill_color="#F6C453", fill_opacity=1)
+    return VGroup(front, top)
+
+
+def battery(h: float = 1.0, color: str = "#7BD88F", charge: float = 0.7) -> VGroup:
+    """A battery cell: case, terminal and charge bar (``g.charge``)."""
+    case = RoundedRectangle(corner_radius=0.06 * h, width=0.5 * h, height=h, stroke_color="#C9D3E0", stroke_width=2,
+                            fill_opacity=0)
+    term = Rectangle(width=0.2 * h, height=0.08 * h, stroke_width=0, fill_color="#C9D3E0", fill_opacity=1).next_to(
+        case, UP, buff=0)
+    ch = Rectangle(width=0.4 * h, height=0.9 * h * charge, stroke_width=0, fill_color=color, fill_opacity=0.85).align_to(
+        case, DOWN).shift(UP * 0.05 * h)
+    g = VGroup(case, term, ch)
+    g.charge = ch
+    return g
 
 
 def person(h: float = 0.6, color: str = "#C9D3E0") -> VGroup:

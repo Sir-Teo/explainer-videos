@@ -132,6 +132,22 @@ CALLS = [
          rule="EIA's annual average Europe Brent spot price FOB for 2027 (series RBRTE), as first published; true if "
               "below $90.00",
          due="2028-01", ours=True),
+    Call(9, "Paul Ehrlich (with John Harte and John Holdren)", "1980-09-29",
+         "A basket of $200 each of chromium, copper, nickel, tin and tungsten, bought in 1980, would be worth more, after "
+         "inflation, in 1990: the metals would grow scarcer.",
+         "Paul Sabin, The Bet (Yale, 2013); the wager with Julian Simon was formalized on 29 September 1980",
+         outcome="All five real prices fell; in October 1990 Ehrlich mailed Simon a cheque for $576.07. On USGS's yearly "
+                 "unit values the basket fell to about $625 in 1980 dollars; over every ten-year window from 1900-1910 to "
+                 "2009-2019, Ehrlich would have won 61% of the time."),
+    Call(9, "Industry, Built", "2026-11-24",
+         "Escondida will produce less than 1,100 thousand tonnes of copper in BHP's fiscal year to June 2027 (FY2025: "
+         "1,305 kt; FY2026 guidance 1,150-1,250 kt). Probability: 75%.",
+         "This series, Part 9, chapter 14; reasoning: the feed grade falls from 1.02% to about 0.85% in FY2026 and BHP's "
+         "medium-term outlook is 900-1,000 kt a year for FY2027-FY2031; against: leaching and higher throughput beat "
+         "expectations in FY2025",
+         rule="BHP's operational review or annual report for the year to 30 June 2027: Escondida copper production, 100% "
+              "basis; true if below 1,100 kt",
+         due="2027-08", ours=True),
 ]
 
 
