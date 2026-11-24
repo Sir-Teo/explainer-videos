@@ -90,6 +90,8 @@ add(
     steo("eia.steo.brent.2026", 97, "USD/bbl", "Brent spot price, 2026 average (2024: $81; 2025: $69)"),
     steo("eia.steo.brent.2027", 86, "USD/bbl", "EIA's forecast of the Brent spot price, 2027 average; $77 in the fourth "
          "quarter", "2027"),
+    steo("eia.steo.brent.2025", 69, "USD/bbl", "Brent spot price, 2025 average", "2025"),
+    steo("eia.steo.consumption.2025", 104.4, "mb/d", "global liquid fuels consumption, 2025 (2026: 102.4)", "2025"),
     steo("eia.steo.supply.2025", 106.3, "mb/d", "global liquid fuels production, 2025", "2025"),
     steo("eia.steo.supply.2026", 101.7, "mb/d", "global liquid fuels production, 2026 (estimate)"),
     r("eia.hormuz.2024", 20, "mb/d", "oil flow through the Strait of Hormuz, 2024 average: about 20% of world "
@@ -112,6 +114,10 @@ add(
     aramco("aramco.royalties", 40.4, "USD bn", "royalties and other taxes, 2025 (2024: $53.5bn)"),
     aramco("aramco.tax", 94.0, "USD bn", "income taxes and zakat, 2025"),
     aramco("aramco.net", 93.4, "USD bn", "net income, 2025 (adjusted: $104.7bn)"),
+    aramco("aramco.gov", 81.48, "%", "the Saudi Government's direct shareholding in Aramco at the end of 2025 (the "
+           "Public Investment Fund, the state's fund, holds another 16%)"),
+    aramco("aramco.dividends", 85.5, "USD bn", "dividends declared and paid in 2025: SAR 320,447m at the pegged 3.75 "
+           "riyals to the dollar (2024: SAR 465,918m)"),
     dallas("dallas.new", 66, "USD/bbl", "WTI price firms said they need to profitably drill a new well, average of all "
            "firms (Q1 2025: $65); $62-$70 by region"),
     dallas("dallas.new.permian", 67, "USD/bbl", "the same, Permian Basin average"),

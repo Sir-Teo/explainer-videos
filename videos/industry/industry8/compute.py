@@ -88,7 +88,8 @@ def results() -> dict:
                       spread=get("eia.2026.spread"), brent_oct=get("eia.steo.brent.oct"),
                       shutin_peak=get("eia.steo.shutin.peak"), shutin_oct=get("eia.steo.shutin.oct"),
                       demand=get("eia.steo.demand.2026"), hormuz=get("eia.hormuz.2024"),
-                      brent_2025=69.0, brent_2026=get("eia.steo.brent.2026"), brent_2027=get("eia.steo.brent.2027"),
+                      brent_2025=get("eia.steo.brent.2025"), brent_2026=get("eia.steo.brent.2026"),
+                      consumption_2025=get("eia.steo.consumption.2025"), brent_2027=get("eia.steo.brent.2027"),
                       supply_2025=get("eia.steo.supply.2025"), supply_2026=get("eia.steo.supply.2026"),
                       gasoline=pet["EMM_EPMR_PTE_NUS_DPG"].get("2026-10"))
 
