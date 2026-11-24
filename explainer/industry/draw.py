@@ -483,6 +483,34 @@ def shop(w: float = 1.2, color: str = "#7BD88F") -> VGroup:
     return VGroup(body, awning, window, door)
 
 
+def pig(w: float = 1.0, color: str = "#F2A7B5") -> VGroup:
+    """A hog, facing right: body, head, snout, ear, legs and a curled tail."""
+    body = Ellipse(width=w, height=0.6 * w, stroke_width=0, fill_color=color, fill_opacity=1).move_to([0, 0.42 * w, 0])
+    head = Circle(radius=0.2 * w, stroke_width=0, fill_color=color, fill_opacity=1).move_to([0.45 * w, 0.52 * w, 0])
+    snout = Ellipse(width=0.14 * w, height=0.12 * w, stroke_width=0, fill_color="#E58A9C", fill_opacity=1).move_to(
+        [0.64 * w, 0.48 * w, 0])
+    ear = Polygon([0.36 * w, 0.68 * w, 0], [0.46 * w, 0.84 * w, 0], [0.5 * w, 0.66 * w, 0], stroke_width=0,
+                  fill_color="#E58A9C", fill_opacity=1)
+    eye = Dot([0.5 * w, 0.58 * w, 0], radius=0.022 * w, color=DARK)
+    legs = VGroup(*[Rectangle(width=0.09 * w, height=0.2 * w, stroke_width=0, fill_color=color, fill_opacity=1).move_to(
+        [x * w, 0.1 * w, 0]) for x in (-0.3, -0.14, 0.14, 0.3)])
+    tail = Arc(radius=0.06 * w, start_angle=0, angle=1.6 * PI, stroke_color=color, stroke_width=3).move_to(
+        [-0.53 * w, 0.55 * w, 0])
+    return VGroup(legs, body, tail, head, ear, snout, eye)
+
+
+def crane(h: float = 2.0, color: str = "#F2C14E") -> VGroup:
+    """A shipyard's gantry crane: two legs, a beam and a hanging hook."""
+    legs = VGroup(*[Rectangle(width=0.06 * h, height=h, stroke_width=0, fill_color=color, fill_opacity=1).move_to(
+        [x * h, 0.5 * h, 0]) for x in (-0.35, 0.35)])
+    beam = Rectangle(width=0.95 * h, height=0.08 * h, stroke_width=0, fill_color=color, fill_opacity=1).move_to(
+        [0, h, 0])
+    cable = Line([0.1 * h, h, 0], [0.1 * h, 0.62 * h, 0], stroke_color="#C9D3E0", stroke_width=1.5)
+    hook = Arc(radius=0.04 * h, start_angle=PI, angle=PI, stroke_color="#C9D3E0", stroke_width=2).move_to(
+        [0.1 * h, 0.6 * h, 0])
+    return VGroup(legs, beam, cable, hook)
+
+
 def person(h: float = 0.6, color: str = "#C9D3E0") -> VGroup:
     r = h * 0.22
     head = Circle(radius=r, stroke_width=0, fill_color=color, fill_opacity=1).move_to([0, h - r, 0])

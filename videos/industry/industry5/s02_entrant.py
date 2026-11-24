@@ -44,10 +44,9 @@ class Entrant(VoiceoverScene):
             "share the market and earn forty million each. Forty is more than thirty, so it will come in, and your "
             "hundred becomes forty. You have four moves. Which one stops it?"
         ) as vo:
-            self.play(FadeIn(tag))
+            self.play(FadeIn(tag), FadeIn(keep, shift=UP * 0.2))
             vo.wait_until("a")
-            self.play(FadeIn(keep, shift=UP * 0.2), FadeIn(you), FadeIn(mono),
-                      LaggedStart(*[FadeIn(c, scale=1.4) for c in coins], lag_ratio=0.05))
+            self.play(FadeIn(you), FadeIn(mono), LaggedStart(*[FadeIn(c, scale=1.4) for c in coins], lag_ratio=0.05))
             vo.wait_until("b")
             self.play(FadeIn(camp, shift=LEFT * 0.3), FadeIn(them), FadeIn(cost))
             vo.wait_until("c")

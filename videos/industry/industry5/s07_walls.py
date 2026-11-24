@@ -35,6 +35,8 @@ class Walls(VoiceoverScene):
                       tx("if it fails; the incumbent spent it long ago", 17, GREY_B)).arrange(
             DOWN, aligned_edge=LEFT, buff=0.08).move_to([3.4, -1.3, 0])
         tag = estimate_tag("the curve is illustrative", corner=DR)
+        works = VGroup(draw.factory(0.55, color=ENTRANT).next_to(ax.c2p(1.2, 0), DOWN, buff=0.55),
+                       draw.factory(1.3, color=RET).next_to(ax.c2p(8.5, 0), DOWN, buff=0.45))
         src = source("US Census Bureau, 2022 Economic Census: concentration of largest firms", corner=DL)
         with self.voiceover(
             "The first walls are made of cost. <bookmark mark='a'/> Part 4 showed that cost per unit falls with "
@@ -47,9 +49,10 @@ class Walls(VoiceoverScene):
             "it fails, while the incumbent spent the same money years ago, as Part 4's chapter on sunk costs "
             "showed."
         ) as vo:
-            self.play(FadeIn(tag), FadeIn(src))
+            self.play(FadeIn(tag), FadeIn(src), Create(ax), FadeIn(xl), FadeIn(yl))
+            self.play(FadeIn(works[0], shift=UP * 0.2), FadeIn(works[1], shift=UP * 0.2))
             vo.wait_until("a")
-            self.play(Create(ax), FadeIn(xl), FadeIn(yl), Create(curve), run_time=1.6)
+            self.play(Create(curve), run_time=1.6)
             vo.wait_until("b")
             self.play(FadeIn(big, scale=1.5), FadeIn(big_t))
             vo.wait_until("c")

@@ -27,12 +27,12 @@ class Tobacco(VoiceoverScene):
 
         rows = [r for r in read("damodaran_roc") if r["name"] == "Tobacco" and isinstance(r["roc"], float)]
         rows.sort(key=lambda r: r["year"])
-        ax = CornerAxes(x_range=[2014.5, 2025.5, 1], y_range=[0, 1.0, 0.2], x_length=8.0, y_length=2.6,
-                        axis_config=dict(color=GREY_B, include_ticks=False)).move_to([-0.6, -2.15, 0])
+        ax = CornerAxes(x_range=[2014.5, 2025.5, 1], y_range=[0, 1.0, 0.2], x_length=6.4, y_length=2.6,
+                        axis_config=dict(color=GREY_B, include_ticks=False)).move_to([-2.6, -2.15, 0])
         bars = VGroup()
         for r in rows:
             y, v = int(r["year"]), r["roc"]
-            bars.add(Rectangle(width=0.5, height=ax.c2p(0, v)[1] - ax.c2p(0, 0)[1], stroke_width=0, fill_color=RET,
+            bars.add(Rectangle(width=0.4, height=ax.c2p(0, v)[1] - ax.c2p(0, 0)[1], stroke_width=0, fill_color=RET,
                                fill_opacity=0.85).move_to(ax.c2p(y, 0), aligned_edge=DOWN))
         xt = VGroup(*[tx(f"{y}", 14, GREY_B).next_to(ax.c2p(y, 0), DOWN, buff=0.06) for y in (2015, 2020, 2025)])
         yt = VGroup(*[tx(f"{int(100 * v)}%", 14, GREY_B).next_to(ax.c2p(2014.5, v), LEFT, buff=0.06) for v in (0.4, 0.8)])
@@ -42,7 +42,7 @@ class Tobacco(VoiceoverScene):
                      tx("brands smokers stay loyal to", 17, WHITE),
                      tx("advertising limits that freeze the leaders in place", 17, WHITE),
                      tx("and a product that is itself a habit", 17, WHITE)).arrange(DOWN, aligned_edge=LEFT,
-                                                                                     buff=0.08).move_to([4.6, -2.0, 0])
+                                                                                     buff=0.08).move_to([4.5, -2.25, 0])
         src = source("CDC (1965, 2022); Damodaran, Excess Returns by industry (Tobacco), 2015-2025", corner=UL, size=13)
         with self.voiceover(
             "Habit can hold a moat in place even while the market shrinks under it. <bookmark mark='a'/> In 1965, "

@@ -25,10 +25,21 @@ class Steady(VoiceoverScene):
         for tic, name, col in LINES:
             pts = [ax.c2p(y, clip(v)) for y, v in M[tic]["points"]]
             paths[tic] = VMobject(stroke_color=col, stroke_width=4).set_points_as_corners(pts)
-            labels[tic] = tx(name, 19, col, bold=True).next_to(pts[-1], RIGHT, buff=0.12)
+            labels[tic] = tx(name, 19, col, bold=True).next_to(pts[-1], RIGHT, buff=0.12).shift(
+                {"COST": DOWN * 0.14, "DAL": UP * 0.14}.get(tic, ORIGIN))
         crash = tx("2020: -73%", 16, ENTRANT).next_to(ax.c2p(2020, -0.29), RIGHT, buff=0.1)
         legal = tx("2012: a one-time legal charge", 15, "#F6C453").next_to(ax.c2p(2012, 0.2), DOWN, buff=0.12)
         src = source("SEC company facts: Forms 10-K of Visa, Costco and Delta, fiscal 2009-2026", size=13)
+        cardg = VGroup(RoundedRectangle(corner_radius=0.1, width=1.5, height=0.95, stroke_width=0, fill_color="#2B4C9B",
+                                        fill_opacity=1),
+                       Rectangle(width=1.5, height=0.16, stroke_width=0, fill_color="#0E1117", fill_opacity=1).shift(
+                           UP * 0.18),
+                       Rectangle(width=0.3, height=0.22, stroke_width=0, fill_color="#F6C453", fill_opacity=1).shift(
+                           LEFT * 0.45 + DOWN * 0.15))
+        icons = VGroup(VGroup(cardg, tx("Visa", 20, "#F6C453", bold=True)).arrange(DOWN, buff=0.15),
+                       VGroup(draw.shop(1.3, color="#7EC8F5"), tx("Costco", 20, "#7EC8F5", bold=True)).arrange(DOWN, buff=0.15),
+                       VGroup(draw.plane(1.8), tx("Delta", 20, ENTRANT, bold=True)).arrange(DOWN, buff=0.15)
+                       ).arrange(RIGHT, buff=1.2, aligned_edge=DOWN).move_to([0.2, 0.6, 0])
         sd = {k: M[k]["sd"] for k in M}
         with self.voiceover(
             "What does a moat look like in a company's own accounts? Not, as you might think, a high margin. "
@@ -43,8 +54,10 @@ class Steady(VoiceoverScene):
             f"a year, Visa's by about {100 * sd['V']:.0f}, Delta's by {100 * sd['DAL']:.0f}. A moat shows up as a "
             "margin that rivals and recessions cannot push around, whatever its height."
         ) as vo:
-            self.play(Create(ax), FadeIn(xt), FadeIn(yt), FadeIn(yl), Create(zero), FadeIn(src))
+            self.play(Create(ax), FadeIn(xt), FadeIn(yt), FadeIn(yl), Create(zero), FadeIn(src),
+                      LaggedStart(*[FadeIn(i_, shift=UP * 0.2) for i_ in icons], lag_ratio=0.3), run_time=1.8)
             vo.wait_until("a")
+            self.play(FadeOut(icons), run_time=0.6)
             self.play(Create(paths["V"]), run_time=2.4)
             self.play(FadeIn(labels["V"]), FadeIn(legal))
             vo.wait_until("b")

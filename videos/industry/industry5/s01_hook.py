@@ -65,8 +65,8 @@ class Hook(VoiceoverScene):
         for t_, x in zip(subs, xs):
             t_.move_to([x, 0.0, 0])
 
-        base = -2.75
-        u = 0.017  # inches per $m
+        base = -3.05
+        u = 0.014  # inches per $m
 
         def bars(x, cap, pre, cap_t, pre_t):
             b1 = Rectangle(width=0.8, height=max(cap * u, 0.03), stroke_width=0, fill_color=MOAT, fill_opacity=0.85)
@@ -80,7 +80,7 @@ class Hook(VoiceoverScene):
         fsi1 = bars(xs[1], 570 + 509, f["pre1"], "+$509m", "$270m")
         fsi0 = bars(xs[1], 570, f["pre0"], "$570m", "$111m")
         for b in (fsi0, fsi1):
-            b[0].stretch_to_fit_height(min(b[0].height, 2.6), about_edge=DOWN)
+            b[0].stretch_to_fit_height(min(b[0].height, 1.6), about_edge=DOWN)
             b[2].next_to(b[0], UP, buff=0.06)
         key = VGroup(VGroup(Square(0.2, stroke_width=0, fill_color=MOAT, fill_opacity=1),
                             tx("capital tied up", 16, MOAT)).arrange(RIGHT, buff=0.1),
@@ -116,18 +116,23 @@ class Hook(VoiceoverScene):
             "one number: what each extra dollar put into the business brought back every year. See's, about two "
             "dollars forty. FlightSafety, about thirty cents. Airlines, little or nothing."
         ) as vo:
-            self.play(FadeIn(src), FadeIn(key))
+            ghosts = VGroup(candy.copy(), flight.copy(), jet.copy()).set_opacity(0.18)
+            self.play(FadeIn(src), FadeIn(key), LaggedStart(*[FadeIn(g_, shift=UP * 0.2) for g_ in ghosts],
+                                                            lag_ratio=0.3), run_time=1.6)
             vo.wait_until("a")
+            self.remove(ghosts[0])
             self.play(FadeIn(candy, shift=UP * 0.2), FadeIn(names[0]), FadeIn(subs[0]), FadeIn(yr0))
             self.play(*[GrowFromEdge(b, DOWN) for b in sees0[:2]], FadeIn(sees0[2:]))
             vo.wait_until("b")
             self.play(Transform(sees0, sees1), Transform(yr0, yr1), run_time=2.0)
             vo.wait_until("c")
+            self.remove(ghosts[1])
             self.play(FadeIn(flight, shift=UP * 0.2), FadeIn(names[1]), FadeIn(subs[1]), FadeIn(fy0))
             self.play(*[GrowFromEdge(b, DOWN) for b in fsi0[:2]], FadeIn(fsi0[2:]))
             self.play(Transform(fsi0, fsi1), Transform(fy0, fy1),
                       LaggedStart(*[Indicate(x_, color=WHITE) for x_ in sims], lag_ratio=0.1), run_time=2.0)
             vo.wait_until("d")
+            self.remove(ghosts[2])
             self.play(FadeIn(jet, shift=RIGHT * 0.4), FadeIn(names[2]), FadeIn(subs[2]))
             for c in sink:
                 c.move_to([xs[2] + 2.0, -1.4, 0])

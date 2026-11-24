@@ -29,7 +29,13 @@ class Match(VoiceoverScene):
         good = [nm.index(k) for k in ("Tobacco", "Retail (Building Supply)")]
         bad = [nm.index(k) for k in ("Air Transport", "Auto & Truck")]
         rest = [i for i in range(len(M)) if i not in good + bad]
-        labs[nm.index("Auto & Truck")].next_to(pts[nm.index("Auto & Truck")], DR, buff=0.04)
+        labs[nm.index("Auto & Truck")].next_to(pts[nm.index("Auto & Truck")], LEFT, buff=0.1)
+        # along the bottom: many small firms at the left end, four big ones at the right
+        ends = VGroup(VGroup(*[draw.castle(0.16, color=GREY_B) for _ in range(12)]).arrange_in_grid(rows=2, cols=6,
+                                                                                                  buff=0.04),
+                      VGroup(*[draw.castle(0.42, color=GREY_B) for _ in range(4)]).arrange(RIGHT, buff=0.06))
+        ends[0].next_to(ax.c2p(8, 0), UP, buff=0.12)
+        ends[1].next_to(ax.c2p(88, 0), UP, buff=0.12)
         side = VGroup(tx("Few firms help only if", 22, GOLD, bold=True),
                       tx("1. something stops new ones coming in", 19, WHITE),
                       tx("2. the few do not fight each other", 19, WHITE),
@@ -53,7 +59,10 @@ class Match(VoiceoverScene):
             "rest of this part is about what that something is."
         ) as vo:
             self.play(Create(ax), FadeIn(xt), FadeIn(yt), FadeIn(xl), FadeIn(yl), FadeIn(src), FadeIn(note))
+            self.play(LaggedStart(*[FadeIn(c_, shift=UP * 0.1) for c_ in ends[0]], lag_ratio=0.05),
+                      LaggedStart(*[FadeIn(c_, shift=UP * 0.1) for c_ in ends[1]], lag_ratio=0.2), run_time=1.6)
             vo.wait_until("a")
+            self.play(FadeOut(ends), run_time=0.6)
             self.play(LaggedStart(*[FadeIn(pts[i], scale=2) for i in rest], lag_ratio=0.2),
                       LaggedStart(*[FadeIn(labs[i]) for i in rest], lag_ratio=0.2), run_time=1.6)
             vo.wait_until("b")

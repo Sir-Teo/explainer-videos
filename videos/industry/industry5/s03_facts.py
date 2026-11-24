@@ -36,13 +36,43 @@ class Facts(VoiceoverScene):
         ticks = VGroup(*[VGroup(DashedLine([x0, y(v), 0], [x0 + 12.6, y(v), 0], stroke_color="#2A3140", stroke_width=1),
                                 tx(f"{int(100 * v)}%", 15, GREY_B).next_to([x0, y(v), 0], LEFT, buff=0.08))
                          for v in (0.2, 0.4, 0.6)])
+        # names, level and readable, each with a thin line to its bar: high earners in a column to the right of the
+        # tall bars, low earners stacked above the short bars at the right
+        NICE = {"Tobacco": "Tobacco", "Retail (Building Supply)": "Home-improvement chains",
+                "Beverage (Soft)": "Soft drinks", "Software (System & Application)": "Software",
+                "Air Transport": "Airlines", "Auto & Truck": "Carmakers", "Coal & Related Energy": "Coal",
+                "Electronics (Consumer & Office)": "Consumer electronics"}
+        hi_i = [i for i, d in enumerate(inds) if d["name"] in SHOW and d["roc"] > 0.15]
+        lo_i = [i for i, d in enumerate(inds) if d["name"] in SHOW and d["roc"] <= 0.15]
         labs = VGroup()
-        for i, d in enumerate(inds):
-            if d["name"] in SHOW:
-                t_ = tx(d["name"].replace(" (System & Application)", "").replace(" (Consumer & Office)", ""), 14,
-                        RET if d["roc"] > d["wacc"] else COST_)
-                t_.rotate(PI / 2).next_to(bars[i], UP if d["roc"] > 0 else DOWN, buff=0.08)
-                labs.add(t_)
+        for k, i in enumerate(hi_i):
+            d = inds[i]
+            t_ = tx(NICE[d["name"]], 16, RET).move_to([-3.9, 2.55 - 0.42 * k, 0], aligned_edge=LEFT)
+            tip = bars[i].get_top()
+            labs.add(VGroup(Line(tip + UP * 0.04, t_.get_left() + LEFT * 0.08, stroke_color=GREY_C, stroke_width=1),
+                            t_))
+        for k, i in enumerate(lo_i):
+            d = inds[i]
+            t_ = tx(NICE[d["name"]], 16, RET if d["roc"] > d["wacc"] else COST_).move_to(
+                [3.6, 1.7 - 0.42 * k, 0], aligned_edge=RIGHT)
+            tip = bars[i].get_top() if d["roc"] >= 0 else bars[i].get_top()
+            labs.add(VGroup(Line(tip + UP * 0.04, t_.get_right() + RIGHT * 0.08, stroke_color=GREY_C, stroke_width=1),
+                            t_))
+        # before the chart: the measure, as a fraction of coins, and Damodaran's table
+        num_ = VGroup(*[draw.coin(0.13) for _ in range(3)]).arrange(RIGHT, buff=0.05)
+        den_ = VGroup(*[draw.coin(0.13, color="#C9D3E0") for _ in range(20)]).arrange_in_grid(rows=2, cols=10, buff=0.05)
+        bar_ = Line(LEFT * 1.6, RIGHT * 1.6, stroke_color=WHITE, stroke_width=3)
+        frac = VGroup(num_, bar_, den_).arrange(DOWN, buff=0.18).move_to([-1.5, 0.3, 0])
+        frac_t = VGroup(tx("operating profit, after tax", 18, GOLD).next_to(num_, UP, buff=0.15),
+                        tx("all the money owners and lenders put in", 18, "#C9D3E0").next_to(den_, DOWN, buff=0.15))
+        eq_ = tx("= 15%", 40, RET, bold=True).next_to(bar_, RIGHT, buff=0.5)
+        bank_ = VGroup(draw.factory(0.9, color=GREY_C), tx("elsewhere: about 7%", 18, GREY_B)).arrange(
+            DOWN, buff=0.12).move_to([4.4, 0.3, 0])
+        table = VGroup(*[Line([-1.4, 0, 0], [1.4, 0, 0], stroke_color=GREY_C, stroke_width=1.2) for _ in range(30)]
+                       ).arrange(DOWN, buff=0.08).move_to([0, 0.2, 0])
+        sheet = VGroup(RoundedRectangle(corner_radius=0.06, width=3.3, height=3.4, stroke_width=0, fill_color="#1B2230",
+                                        fill_opacity=1).move_to(table), table,
+                       tx("Damodaran, January 2026", 18, GREY_A).next_to(table, UP, buff=0.3))
         head = tx("Return on capital, 90 US industries, 2025", 26, bold=True).to_edge(UP, buff=0.3)
         key = VGroup(VGroup(Dot(radius=0.06, color=WHITE), tx("each industry's cost of capital", 16, GREY_B)).arrange(
             RIGHT, buff=0.1)).to_corner(UR, buff=0.45).shift(DOWN * 0.45)
@@ -55,8 +85,8 @@ class Facts(VoiceoverScene):
         with self.voiceover(
             "Before any theory, the facts. Part 3 defined the measure that matters: the return on capital, a "
             "business's operating profit after tax, divided by all the money its owners and lenders have put in. "
-            "If that return is above what the same money could earn elsewhere, the business is creating value. "
-            "Now the facts. Each January the finance professor Aswath Damodaran publishes, for every "
+            "<bookmark mark='p'/> If that return is above what the same money could earn elsewhere, the business is "
+            "creating value. <bookmark mark='q'/> Now the facts. Each January the finance professor Aswath Damodaran publishes, for every "
             "American industry, the return its companies earned the year before on the capital invested in them, and "
             "what that "
             f"capital costs. <bookmark mark='a'/> Here are {n} industries from the table he published in January "
@@ -70,9 +100,23 @@ class Facts(VoiceoverScene):
             "market where anyone can build a factory, why doesn't money flood into tobacco until it earns seven "
             "percent like everything else?"
         ) as vo:
-            self.play(FadeIn(head), FadeIn(src), Create(zero), FadeIn(ticks))
+            self.play(FadeIn(src), FadeIn(num_, shift=DOWN * 0.2), FadeIn(frac_t[0]))
+            self.play(Create(bar_), LaggedStart(*[FadeIn(c_, shift=UP * 0.2) for c_ in den_], lag_ratio=0.04),
+                      FadeIn(frac_t[1]), run_time=1.6)
+            self.play(FadeIn(eq_, shift=LEFT * 0.2))
+            vo.wait_until("p")
+            self.play(FadeIn(bank_, shift=LEFT * 0.2))
+            self.play(Indicate(eq_, color=RET))
+            vo.wait_until("q")
+            self.play(FadeOut(VGroup(frac, frac_t, eq_, bank_)), FadeIn(sheet, shift=UP * 0.2))
+            self.play(LaggedStart(*[Indicate(l_, color=GOLD, scale_factor=1.0) for l_ in table], lag_ratio=0.05),
+                      run_time=2.0)
             vo.wait_until("a")
-            self.play(LaggedStart(*[GrowFromEdge(b, DOWN) for b in bars], lag_ratio=0.02), run_time=3.0)
+            self.play(FadeOut(sheet[0]), FadeOut(sheet[2]), FadeIn(head), Create(zero), FadeIn(ticks),
+                      LaggedStart(*[ReplacementTransform(table[k], bars[3 * k]) for k in range(30)], lag_ratio=0.02),
+                      run_time=2.0)
+            self.play(LaggedStart(*[GrowFromEdge(b, DOWN) for j, b in enumerate(bars) if j % 3], lag_ratio=0.02),
+                      run_time=2.0)
             vo.wait_until("b")
             self.play(LaggedStart(*[FadeIn(d_, scale=2) for d_ in dots], lag_ratio=0.01), FadeIn(key), run_time=1.6)
             vo.wait_until("c")
@@ -107,6 +151,14 @@ class Facts(VoiceoverScene):
                        tx(f"{q['still_top']} of the top {q['quartile']} are still in the top quarter", 18, WHITE)
                        ).arrange(DOWN, aligned_edge=LEFT, buff=0.22).move_to([3.9, 0.2, 0])
         src = source("Damodaran, Excess Returns by industry, 2015-2025; this film's averages")
+        pages = VGroup()
+        for k, yy in enumerate(range(2015, 2026)):
+            pg = VGroup(RoundedRectangle(corner_radius=0.04, width=0.9, height=1.2, stroke_color=GREY_B, stroke_width=1,
+                                         fill_color="#1B2230", fill_opacity=1),
+                        *[Line([-0.3, 0, 0], [0.3, 0, 0], stroke_color=GREY_C, stroke_width=1).shift(UP * (0.3 - 0.12 * j))
+                          for j in range(5)],
+                        tx(str(yy), 15, GOLD if yy in (2015, 2025) else GREY_A).shift(DOWN * 0.42))
+            pages.add(pg.move_to([-5.0 + 1.0 * k, 0.3 + 0.08 * (k % 2), 0]))
         with self.voiceover(
             "Does it last? Damodaran has published the same table every year. "
             "<bookmark mark='a'/> Put each industry's average return from 2015 to 2019 along the bottom, and its "
@@ -118,8 +170,10 @@ class Facts(VoiceoverScene):
             f"{q['quartile']} industries that were in the top quarter are still there. High returns fade, slowly, "
             "and some barely fade at all. Something is stopping the money from flooding in."
         ) as vo:
-            self.play(Create(ax), FadeIn(xt), FadeIn(yt), FadeIn(xl), FadeIn(yl), FadeIn(src))
+            self.play(FadeIn(src), LaggedStart(*[FadeIn(pg, shift=UP * 0.2) for pg in pages], lag_ratio=0.12),
+                      run_time=2.2)
             vo.wait_until("a")
+            self.play(FadeOut(pages, shift=DOWN * 0.3), Create(ax), FadeIn(xt), FadeIn(yt), FadeIn(xl), FadeIn(yl))
             self.play(Create(diag), FadeIn(diag_t))
             self.play(LaggedStart(*[FadeIn(p_, scale=1.8) for p_ in pts], lag_ratio=0.02), run_time=2.4)
             vo.wait_until("b")

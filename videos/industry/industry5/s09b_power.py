@@ -52,9 +52,11 @@ class Power(VoiceoverScene):
             "money, and the ones that can be replaced work for a sliver. Buyer power is a moat drained by your own "
             "customer."
         ) as vo:
-            self.play(FadeIn(src), FadeIn(what))
+            big = glyphs[2].copy().scale(2.2).move_to([0, 0.6, 0])
+            self.play(FadeIn(src), FadeIn(what), FadeIn(big, shift=UP * 0.3))
+            self.play(Rotate(big, 0.15, rate_func=there_and_back), run_time=1.2)
             vo.wait_until("a")
-            self.play(FadeIn(glyphs[2], shift=UP * 0.2), FadeIn(names[2]), FadeIn(roles[2]),
+            self.play(ReplacementTransform(big, glyphs[2]), FadeIn(names[2]), FadeIn(roles[2]),
                       FadeIn(glyphs[0]), FadeIn(names[0]), FadeIn(glyphs[1]), FadeIn(names[1]))
             self.play(*[GrowArrow(a) for a in arrows])
             vo.wait_until("b")
