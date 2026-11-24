@@ -76,8 +76,9 @@ class Pump(VoiceoverScene):
         key_ = VGroup(*[VGroup(Square(0.2, stroke_width=0, fill_color=c, fill_opacity=1), tx(n, 14, c)).arrange(RIGHT, buff=0.08)
                         for _, n, c in PARTS_]).arrange(RIGHT, buff=0.35).next_to(pa, UP, buff=0.15)
         t0, t1 = P["shares"]["taxes_pct"][0], P["shares"]["taxes_pct"][-1]
-        tx0 = tx(f"2000: taxes {t0:.0f}% of the price", 17, STATE, bold=True).move_to([-2.6, -1.7, 0])
-        tx1 = tx(f"2026: {t1:.0f}%", 17, STATE, bold=True).move_to([4.6, -1.8, 0])
+        tx0 = tx(f"taxes: {t0:.0f}% of the price in 2000,", 19, "#F28B82", bold=True)
+        tx1 = tx(f"{t1:.0f}% in 2026", 19, "#F28B82", bold=True)
+        VGroup(tx0, tx1).arrange(DOWN, aligned_edge=LEFT, buff=0.06).move_to(pa.ax.c2p(2001, 4.2), aligned_edge=LEFT)
         k22 = ms.index("2022-06")
         peak = tx(f"June 2022: ${retail[k22]:.2f}", 17, WHITE, bold=True).next_to(pa.ax.c2p(xs[k22], retail[k22]), UP, buff=0.1)
         src = source("US Energy Information Administration, Gasoline Pump Components History, monthly since 2000", size=13)

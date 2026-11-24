@@ -120,7 +120,9 @@ class Owners(VoiceoverScene):
             "barrels to one government in one year. That is why oil is as much about states as about companies, "
             "and why the chapters on OPEC and on war are in a film about an industry."
         ) as vo:
-            self.play(FadeIn(src), FadeIn(cmp_))
+            frame = Rectangle(width=11.2, height=0.8, stroke_color=GREY_C, stroke_width=2, fill_opacity=0).move_to(
+                [-5.6 + 5.6, 0.6, 0])
+            self.play(FadeIn(src), FadeIn(cmp_), Create(frame))
             for k, m in enumerate("abcd"):
                 vo.wait_until(m)
                 self.play(GrowFromEdge(bars[k][0], LEFT), FadeIn(bars[k][1]), run_time=1.0)

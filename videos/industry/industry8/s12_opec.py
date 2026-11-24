@@ -20,7 +20,7 @@ class Opec(VoiceoverScene):
         pa.move_to([0.4, -0.6, 0])
         ln = VMobject(stroke_color=OPEC, stroke_width=4).set_points_as_corners(
             [pa.ax.c2p(y, 100 * W["opec_share"][y]) for y in ys])
-        a = tx(f"1973: {100 * W['opec_share'][1973]:.0f}%", 18, OPEC, bold=True).next_to(pa.ax.c2p(1973, 100 * W["opec_share"][1973]), UP, buff=0.1)
+        a = tx(f"1973: {100 * W['opec_share'][1973]:.0f}%", 18, OPEC, bold=True).next_to(pa.ax.c2p(1975, 100 * W["opec_share"][1973]), UP + RIGHT, buff=0.1)
         b = tx(f"1985: {100 * W['opec_share'][1985]:.0f}%", 18, OPEC, bold=True).next_to(pa.ax.c2p(1985, 100 * W["opec_share"][1985]), DOWN, buff=0.15)
         c = tx(f"2025: {100 * W['opec_share'][2025]:.0f}%", 18, OPEC, bold=True).next_to(pa.ax.c2p(2025, 100 * W["opec_share"][2025]), UP, buff=0.15)
         head = tx("OPEC's share of the world's crude oil", 20, GREY_A).next_to(pa, UP, buff=0.2).align_to(pa, LEFT)

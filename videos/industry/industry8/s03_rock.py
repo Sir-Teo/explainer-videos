@@ -37,9 +37,11 @@ class Rock(VoiceoverScene):
             [x, y + arch(x), 0]) for x, y in zip(rng.uniform(X0 + 0.2, X1 - 0.2, 160), rng.uniform(-2.3, -1.3, 160))])
         plankton = VGroup(*[Dot([x, y + arch(x), 0], radius=0.03, color="#7BD88F") for x, y in
                             zip(rng.uniform(X0 + 0.2, X1 - 0.2, 70), rng.uniform(-3.1, -2.5, 70))])
-        labels = VGroup(tx("source rock: shale, rich in old plankton", 17, "#A9C59A").move_to([-3.8, -2.95, 0]),
-                        tx("reservoir: sandstone, full of tiny pores", 17, "#2A2520").move_to([-3.8, -2.05, 0]),
-                        tx("cap rock: tight, nothing passes", 17, WHITE).move_to([-4.2, -1.2, 0]))
+        labels = VGroup(tx("source rock: shale, rich in old plankton", 19, WHITE).move_to([4.2, -2.85, 0]),
+                        tx("reservoir: sandstone, full of tiny pores", 19, WHITE).move_to([4.2, -1.85, 0]),
+                        tx("cap rock: tight, nothing passes", 19, WHITE).move_to([4.2, -0.9, 0]))
+        for l_ in labels:
+            l_.add_to_back(BackgroundRectangle(l_, fill_color="#0E1117", fill_opacity=0.7, buff=0.08))
         # oil droplets: start in the source rock, rise to the top of the reservoir under the dome
         n = 46
         starts = [[x, y + arch(x), 0] for x, y in zip(rng.uniform(-5.5, 5.5, n), rng.uniform(-3.0, -2.6, n))]
@@ -48,7 +50,7 @@ class Rock(VoiceoverScene):
             x = rng.normal(0, 0.9)
             y = -1.25 + arch(x) - abs(rng.normal(0, 0.18))
             ends.append([x, y, 0])
-        drops = VGroup(*[Dot(p, radius=0.06, color=CRUDE) for p in starts])
+        drops = VGroup(*[Dot(p, radius=0.075, color="#F2A65A") for p in starts])
         trap = tx("trap: the oil collects under the dome", 20, CRUDE, bold=True).move_to([3.6, 1.6, 0])
         arrow = Arrow([3.6, 1.35, 0], [1.0, -0.6, 0], buff=0.1, stroke_width=3, color=CRUDE,
                       max_tip_length_to_length_ratio=0.1)

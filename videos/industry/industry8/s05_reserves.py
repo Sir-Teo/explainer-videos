@@ -41,10 +41,13 @@ class Reserves(VoiceoverScene):
             "Securities and Exchange Commission sets the price to use: the average of the last twelve months. So a "
             "company's reserves can shrink, or grow, without a single barrel moving."
         ) as vo:
-            self.play(FadeIn(src))
+            self.play(FadeIn(src), FadeIn(boxes[0], scale=0.95))
             for k, m in enumerate("abc"):
                 vo.wait_until(m)
-                self.play(FadeIn(boxes[k], scale=0.95), run_time=1.0)
+                if k:
+                    self.play(FadeIn(boxes[k], scale=0.95), run_time=1.0)
+                else:
+                    self.play(Indicate(boxes[0][1], color=WHITE))
                 if k == 1:
                     self.play(FadeIn(hub, shift=LEFT * 0.2))
             vo.wait_until("d")
@@ -97,10 +100,11 @@ class Reserves(VoiceoverScene):
             f"recovered and reserves were back to {r21:.1f}; at the end of 2025, {r25:.1f}. Reserves are not a "
             "quantity of rock. They are a forecast, at a price."
         ) as vo:
-            self.play(FadeIn(src))
+            self.add(yl)
+            self.play(FadeIn(src), LaggedStart(*[FadeIn(d_, scale=0.5) for d_ in dots], lag_ratio=0.004), run_time=2.0)
             vo.wait_until("a")
-            self.add(yl, vl)
-            self.play(LaggedStart(*[FadeIn(d_, scale=0.5) for d_ in dots], lag_ratio=0.004), run_time=2.0)
+            self.add(vl)
+            self.play(Indicate(dots, color=WHITE, scale_factor=1.02))
             vo.wait_until("b")
             self.play(FadeIn(prices[:2]))
             vo.wait_until("c")

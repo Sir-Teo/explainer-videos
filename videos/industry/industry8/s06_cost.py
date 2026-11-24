@@ -61,12 +61,15 @@ class Cost(VoiceoverScene):
             "<bookmark mark='e'/> Brent averaged sixty-nine dollars in 2025. At that price, Saudi Arabia's barrels "
             "earned fortunes, and an American driller was close to the line on a new well."
         ) as vo:
-            self.play(FadeIn(src), Create(axis))
+            chead = tx("What a barrel costs, dollars", 24, WHITE, bold=True).to_edge(UP, buff=0.35)
+            self.play(FadeIn(src), Create(axis), FadeIn(chead), FadeIn(bars[0][0]), FadeIn(bars[0][1]))
             for k, m in enumerate("abcd"):
                 vo.wait_until(m)
                 g = bars[k]
-                self.play(FadeIn(g[0]), FadeIn(g[1]), *[GrowFromEdge(b, LEFT) for b in g[2]], FadeIn(g[3]),
-                          run_time=1.1)
+                anims = [GrowFromEdge(b, LEFT) for b in g[2]] + [FadeIn(g[3])]
+                if k:
+                    anims += [FadeIn(g[0]), FadeIn(g[1])]
+                self.play(*anims, run_time=1.1)
             vo.wait_until("e")
             self.play(Create(price_lines[0][0]), FadeIn(price_lines[0][1]))
             self.play(FadeIn(note))

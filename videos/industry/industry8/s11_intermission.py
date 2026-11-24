@@ -26,6 +26,7 @@ class Intermission(VoiceoverScene):
         ln = always_redraw(line)
         yr = draw.number(lambda: t.get_value(), 0, commas=False, size=36, color=GREY_A)
         yr.add_updater(lambda m: m.to_corner(UR, buff=0.5))
+        yr.update()
         head = tx(f"A barrel of WTI in dollars of {mlabel(L['cpi_month'])}, month by month", 22, WHITE, bold=True).to_edge(
             UP, buff=0.35)
         d = {round(a, 3): b for a, b in pts}
@@ -36,7 +37,7 @@ class Intermission(VoiceoverScene):
         marks = VGroup()
         for k, (x, y, name) in enumerate(eps):
             p = pa.ax.c2p(x, y)
-            lab = tx(name, 14, WHITE).next_to(p, UP, buff=0.12 + 0.28 * (k % 2))
+            lab = tx(name, 14, WHITE).next_to(p, UP, buff=0.12 + 0.3 * (k % 3))
             marks.add(VGroup(Dot(p, radius=0.05, color=WHITE), lab))
         del d
         src = source("WTI (FRED, WTISPLC; EIA since 1986) deflated by the US consumer price index (BLS)", size=13)

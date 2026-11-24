@@ -79,9 +79,10 @@ class Hook(VoiceoverScene):
         names = VGroup(tx("Iran", 18, GREY_A).move_to([-3.5, 2.4, 0]), tx("Oman", 18, GREY_A).move_to([1.6, -1.25, 0]),
                        tx("the Gulf", 16, BRENT).move_to([-4.6, 0.2, 0]), tx("to Asia and Europe", 16, BRENT).move_to(
                            [4.8, 0.1, 0]))
-        ships = VGroup(*[draw.tanker(1.1) for _ in range(4)]).arrange(RIGHT, buff=0.45).move_to([-4.6, -0.45, 0])
-        flow = tx(f"about {S['hormuz']:.0f} million barrels a day in 2024: a fifth of the world's oil", 18, WHITE).move_to(
-            [0, -2.15, 0])
+        ships = VGroup(*[draw.tanker(1.1) for _ in range(4)]).arrange(RIGHT, buff=0.45).move_to([-4.6, 0.25, 0])
+        flow = VGroup(tx(f"about {S['hormuz']:.0f} million barrels a day in 2024:", 17, WHITE),
+                      tx("a fifth of the world's oil", 17, WHITE)).arrange(DOWN, aligned_edge=LEFT, buff=0.04).move_to(
+            [-4.4, -0.55, 0])
         map_ = VGroup(sea, north, south, names, ships, flow)
         map_.shift(UP * 0.9)
         # Brent month by month, 2025-26, beneath

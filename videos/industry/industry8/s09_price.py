@@ -29,7 +29,7 @@ class Price(VoiceoverScene):
         lw = VMobject(stroke_color=WTI, stroke_width=4).set_points_as_corners(
             [pa.ax.c2p(mx(m), v) for m, v in zip(ms, wt) if v])
         gap = tx(f"31 March 2026: Brent ${S['spread']:.0f} above WTI", 17, WHITE, bold=True).next_to(
-            pa.ax.c2p(2026.25, 120), RIGHT, buff=0.1)
+            pa, UP, buff=0.08).align_to(pa, LEFT)
         src = source("EIA spot prices (Brent, WTI), monthly; EIA, Today in Energy, 7 April 2026", size=13)
         with self.voiceover(
             "There is no single price of oil. There are prices of particular crudes, at particular places, and a few "
@@ -41,10 +41,16 @@ class Price(VoiceoverScene):
             "unable to leave the Gulf, Brent rose much faster than American crude, which was not stuck behind the "
             f"strait. By the end of the month Brent was {S['spread']:.0f} dollars a barrel above WTI."
         ) as vo:
-            self.play(FadeIn(src))
+            bhead = tx("Benchmarks: the yardsticks for every barrel", 24, WHITE, bold=True).to_edge(UP, buff=0.45)
+            brls = VGroup(*[draw.barrel(0.5, color=c) for c in (WTI, BRENT, OPEC, STONE, GREY_B, WTI, BRENT)]).arrange(
+                RIGHT, buff=0.35).move_to([0, -1.6, 0])
+            self.play(FadeIn(src), FadeIn(bhead), LaggedStart(*[FadeIn(b_, shift=UP * 0.2) for b_ in brls],
+                                                             lag_ratio=0.15), *[FadeIn(w_[0]) for w_ in world], run_time=2.0)
             for k, m in enumerate("abc"):
                 vo.wait_until(m)
-                self.play(FadeIn(world[k], shift=UP * 0.2))
+                self.play(FadeIn(world[k][1:], shift=UP * 0.2), Indicate(world[k][0], color=WHITE))
+                if k == 2:
+                    self.play(FadeOut(brls))
             vo.wait_until("d")
             self.play(FadeIn(pa), Create(lw), Create(lb), run_time=2.5)
             self.play(FadeIn(gap))
