@@ -6,7 +6,8 @@ Every glyph is a ``VGroup`` with its moving parts named, so a scene can animate 
 * power: :func:`wind_turbine` (``.rotor`` turns with :func:`spin`), :func:`solar_panel`, :func:`solar_farm`,
   :func:`cooling_tower` (nuclear; ``.steam`` rises with :func:`puff`), :func:`gas_plant`, :func:`coal_plant`,
   :func:`dam`, :func:`pylon`;
-* making and moving: :func:`factory` (``.smoke``), :func:`conveyor` (items ride it with :func:`run_belt`),
+* making and moving: :func:`castle` (a business behind its moat), :func:`factory` (``.smoke``),
+  :func:`conveyor` (items ride it with :func:`run_belt`),
   :func:`plane` (side view), :func:`cabin` (a seat map whose seats fill), :func:`wafer`, :func:`chip`, :func:`truck`,
   :func:`ship`, :func:`server_rack`;
 * the city and its people: :func:`skyline` (``.windows`` light up), :func:`house`, :func:`shop`, :func:`person`,
@@ -218,6 +219,42 @@ def pylon(h: float = 1.6, color: str = STEEL) -> VGroup:
 # ---------------------------------------------------------------------------------------------------------------
 # Making and moving
 # ---------------------------------------------------------------------------------------------------------------
+def castle(w: float = 2.0, color: str = "#C9D3E0", moat: float = 0.0, water: str = "#3B7DD8") -> VGroup:
+    """A castle (wall, towers, gate) on its ``g.ground``; ``moat`` > 0 rings it with water (``g.moat``) that wide."""
+    h = 0.42 * w
+    wall = Rectangle(width=0.8 * w, height=h, stroke_width=0, fill_color=color, fill_opacity=1).move_to([0, h / 2, 0])
+    towers = VGroup()
+    for x in (-0.42 * w, 0.42 * w):
+        t = Rectangle(width=0.18 * w, height=1.45 * h, stroke_width=0, fill_color=color, fill_opacity=1).move_to(
+            [x, 0.725 * h, 0])
+        cren = VGroup(*[Square(0.05 * w, stroke_width=0, fill_color=color, fill_opacity=1).move_to(
+            [x + dx * 0.06 * w, 1.45 * h + 0.025 * w, 0]) for dx in (-1, 0, 1)])
+        towers.add(VGroup(t, cren))
+    keep = Rectangle(width=0.26 * w, height=1.75 * h, stroke_width=0, fill_color=color, fill_opacity=1).move_to(
+        [0, 0.875 * h, 0])
+    flag = VGroup(Line([0, 1.75 * h, 0], [0, 2.05 * h, 0], stroke_color=color, stroke_width=2),
+                  Polygon([0, 2.05 * h, 0], [0.12 * w, 1.98 * h, 0], [0, 1.91 * h, 0], stroke_width=0,
+                          fill_color="#E8554E", fill_opacity=1))
+    merl = VGroup(*[Square(0.045 * w, stroke_width=0, fill_color=color, fill_opacity=1).move_to(
+        [x, h + 0.0225 * w, 0]) for x in np.linspace(-0.3 * w, 0.3 * w, 6)])
+    gate = Arc(radius=0.08 * w, start_angle=0, angle=PI, stroke_width=0, fill_color=DARK, fill_opacity=1).move_to(
+        [0, 0.12 * w, 0])
+    door = Rectangle(width=0.16 * w, height=0.12 * w, stroke_width=0, fill_color=DARK, fill_opacity=1).move_to(
+        [0, 0.06 * w, 0])
+    shade = Rectangle(width=0.8 * w, height=h, stroke_width=0, fill_color=DARK, fill_opacity=0.12).move_to(
+        [0.2 * w, h / 2, 0]).stretch(0.5, 0)
+    g = VGroup(wall, shade, merl, towers, keep, flag, door, gate)
+    g.ground = Line([-0.6 * w, 0, 0], [0.6 * w, 0, 0])
+    if moat > 0:
+        ring = Ellipse(width=1.25 * w + 2 * moat, height=0.25 * w + 0.5 * moat, stroke_width=0, fill_color=water,
+                       fill_opacity=0.85).move_to([0, 0.0, 0])
+        inner = Ellipse(width=1.2 * w, height=0.22 * w, stroke_width=0, fill_color="#3E4A3A", fill_opacity=1).move_to(
+            [0, 0.0, 0])
+        g.moat = VGroup(ring, inner)
+        g.add_to_back(g.moat)
+    return g
+
+
 def factory(w: float = 2.4, color: str = STEEL) -> VGroup:
     """A works with a saw-tooth roof, a chimney (``g.smoke``) and lit windows (``g.windows``)."""
     h = 0.42 * w
