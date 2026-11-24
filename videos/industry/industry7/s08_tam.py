@@ -6,8 +6,8 @@ from videos.industry.industry7.common import *  # noqa: F403
 
 class Tam(VoiceoverScene):
     def construct(self):
-        card(self, 7, "Addressable markets", "What is a 'total addressable market' actually counting?",
-             "Chapter seven. Addressable markets.", lit=("unit",))
+        card(self, 9, "Addressable markets", "What is a 'total addressable market' actually counting?",
+             "Chapter nine. Addressable markets.", lit=("unit",))
         self.uber()
         self.rings()
 

@@ -6,8 +6,8 @@ from videos.industry.industry7.common import *  # noqa: F403
 
 class Early(VoiceoverScene):
     def construct(self):
-        card(self, 9, "Calling the curve early", "Could you have seen the ceiling from the first years?",
-             "Chapter nine. Calling the curve early.", lit=("change",))
+        card(self, 11, "Calling the curve early", "Could you have seen the ceiling from the first years?",
+             "Chapter eleven. Calling the curve early.", lit=("change",))
         self.colour_tv()
         self.all_of_them()
 

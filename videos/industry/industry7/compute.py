@@ -112,6 +112,19 @@ def results() -> dict:
     R["early"] = dict(rows=early, n=len(early), median=float(np.median(miss)), within10=int((miss <= 10).sum()),
                       over30=int((miss > 30).sum()))
 
+    # --- adding up companies where a few hold nearly everything: home centers, 2022 ---------------------------------
+    hc = next(r for r in read("census_conc_2022") if r["code"] == "444110")
+    fy22 = {t: next(r["revenue"] for r in sec if r["ticker"] == t and r["year_end"][:4] == "2023") for t in ("HD", "LOW")}
+    R["homes"] = dict(census=hc["sales_k"] / 1e6, firms=int(hc["firms"]), cr4=hc["cr4"], hd=fy22["HD"], low=fy22["LOW"],
+                      both=fy22["HD"] + fy22["LOW"], gap=(fy22["HD"] + fy22["LOW"]) / (hc["sales_k"] / 1e6) - 1)
+
+    # --- price and quantity: what a dollar of computers or cars buys over time ------------------------------------------
+    pr = {int(r["year"]): r for r in read("fred_prices")}
+    R["prices"] = dict(years=sorted(pr), computers=[pr[y]["CUUR0000SEEE01"] for y in sorted(pr)],
+                       cars=[pr[y]["CUSR0000SETA01"] for y in sorted(pr)],
+                       comp_fall=pr[2025]["CUUR0000SEEE01"] / pr[2000]["CUUR0000SEEE01"] - 1,
+                       car_rise=pr[2025]["CUSR0000SETA01"] / pr[2000]["CUSR0000SETA01"] - 1)
+
     # --- this series' call -------------------------------------------------------------------------------------------
     R["call"] = dict(last=ship[max(yrs)], last_year=max(yrs), threshold=7.5)
     return R

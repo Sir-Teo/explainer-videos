@@ -5,8 +5,8 @@ from videos.industry.industry7.common import *  # noqa: F403
 
 class Three(VoiceoverScene):
     def construct(self):
-        card(self, 5, "Three answers, one market", "When the methods disagree, which one is wrong?",
-             "Chapter five. Three answers, one market.", lit=("unit", "dollar"))
+        card(self, 6, "Three answers, one market", "When the methods disagree, which one is wrong?",
+             "Chapter six. Three answers, one market.", lit=("unit", "dollar"))
         W = R["water"]
         line = NumberLine(x_range=[0, 32, 4], length=11.0, include_numbers=False, color=GREY_B).move_to([0, -0.4, 0])
         ticks = VGroup(*[tx(f"${v}bn", 15, GREY_B).next_to(line.n2p(v), DOWN, buff=0.15) for v in (0, 8, 16, 24, 32)])

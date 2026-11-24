@@ -9,8 +9,8 @@ P_, Q_ = 0.03, 0.38  # an illustrative product for the grid of households
 
 class Bass(VoiceoverScene):
     def construct(self):
-        card(self, 8, "How new things spread", "Why does adoption trace an S?",
-             "Chapter eight. How new things spread.", lit=("change",))
+        card(self, 10, "How new things spread", "Why does adoption trace an S?",
+             "Chapter ten. How new things spread.", lit=("change",))
         self.grid()
         self.fits()
 

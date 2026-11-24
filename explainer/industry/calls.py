@@ -113,7 +113,7 @@ CALLS = [
     Call(7, "Industry, Built", "2026-11-24",
          "The Census Bureau's shipments of US bottled water manufacturers for 2026 will be above $7.5bn (2024: $7.46bn). "
          "Probability: 65%.",
-         "This series, Part 7, chapter 11; reasoning: volume growing about 2% a year (Beverage Marketing), producer "
+         "This series, Part 7, chapter 13; reasoning: volume growing about 2% a year (Beverage Marketing), producer "
          "prices flat since 2023, against a series that fell from $8.7bn to $7.2bn in 2023",
          rule="the Annual Integrated Economic Survey's first published figure for 2026 (FRED AIES312112RCTUS); true if "
               "above 7,500,000 thousand dollars",

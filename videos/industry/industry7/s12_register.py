@@ -6,8 +6,8 @@ from videos.industry.industry7.common import *  # noqa: F403
 
 class Register(VoiceoverScene):
     def construct(self):
-        card(self, 10, "The Register", "How does this series keep its own numbers honest?",
-             "Chapter ten. The Register.", lit=("unit",))
+        card(self, 12, "The Register", "How does this series keep its own numbers honest?",
+             "Chapter twelve. The Register.", lit=("unit",))
         rw = row("water.primo.2023")
         box = RoundedRectangle(corner_radius=0.12, width=11.0, height=4.6, stroke_color=GOLD, stroke_width=2,
                                fill_color="#141A24", fill_opacity=1).move_to([0, -0.2, 0])

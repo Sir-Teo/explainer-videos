@@ -5,8 +5,8 @@ from videos.industry.industry7.common import *  # noqa: F403
 
 class Panels(VoiceoverScene):
     def construct(self):
-        card(self, 6, "Surveys and panels", "Where do the commercial numbers come from, and what can they not see?",
-             "Chapter six. Surveys and panels.", lit=("unit",))
+        card(self, 7, "Surveys and panels", "Where do the commercial numbers come from, and what can they not see?",
+             "Chapter seven. Surveys and panels.", lit=("unit",))
         till = VGroup(RoundedRectangle(corner_radius=0.08, width=1.4, height=0.9, stroke_width=0, fill_color="#2E3645",
                                        fill_opacity=1),
                       Rectangle(width=1.0, height=0.3, stroke_width=0, fill_color="#7BD88F", fill_opacity=0.8).shift(UP * 0.15),
