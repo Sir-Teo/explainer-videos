@@ -59,9 +59,9 @@ class Table(VoiceoverScene):
             "output, and you get 48 trillion dollars for 2023, against a GDP of 28 trillion: the gap is all the "
             "buying and selling between businesses, counted once in this table and never in GDP."
         ) as vo:
-            self.play(FadeIn(src))
+            self.play(FadeIn(src), FadeIn(rl, shift=RIGHT * 0.2), FadeIn(cl, shift=DOWN * 0.2), run_time=1.5)
             vo.wait_until("a")
-            self.play(LaggedStart(*[FadeIn(c) for c in cells], lag_ratio=0.004), FadeIn(rl), FadeIn(cl), run_time=2.5)
+            self.play(LaggedStart(*[FadeIn(c) for c in cells], lag_ratio=0.004), run_time=2.5)
             vo.wait_until("b")
             self.play(Create(col), FadeIn(cnote))
             vo.wait_until("c")

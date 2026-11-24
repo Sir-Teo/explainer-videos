@@ -34,11 +34,15 @@ class Called(VoiceoverScene):
             "horses: the work moved, from factories to offices, hospitals and shops, as this part has shown. "
             "Whether artificial intelligence changes that is a question Part 42 takes up."
         ) as vo:
-            self.play(FadeIn(src))
+            people = VGroup(*[draw.person(0.42) for _ in range(16)]).arrange(RIGHT, buff=0.12).move_to(DOWN * 2.05)
+            key = T("each figure: 10 million payroll jobs", 15, I.DIM).next_to(people, DOWN, buff=0.1)
+            self.play(FadeIn(src), LaggedStart(*[FadeIn(p_, shift=UP * 0.2) for p_ in people[:9]], lag_ratio=0.1),
+                      FadeIn(key), run_time=1.6)
             vo.wait_until("a")
             self.play(FadeIn(q, shift=DOWN * 0.1), run_time=1.6)
             vo.wait_until("b")
-            self.play(FadeIn(after, shift=UP * 0.1))
+            self.play(FadeIn(after, shift=UP * 0.1),
+                      LaggedStart(*[FadeIn(p_, shift=UP * 0.2) for p_ in people[9:]], lag_ratio=0.15), run_time=1.6)
             vo.wait_until("c")
             self.play(FadeIn(tail))
         self.clear_scene()
