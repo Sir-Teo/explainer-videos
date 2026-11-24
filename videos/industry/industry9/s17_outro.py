@@ -6,8 +6,8 @@ from videos.industry.industry9.common import *  # noqa: F403
 class Outro(VoiceoverScene):
     def construct(self):
         head = tx("Mining and metals", 40, GOLD, bold=True).to_edge(UP, buff=0.45)
-        pit = draw.open_pit(4.6, 2.2, benches=6).move_to([-4.4, -0.4, 0])
-        pit.scale_to_fit_width(4.4)
+        pit = draw.open_pit(4.6, 2.2, benches=6)
+        pit.scale_to_fit_width(3.3).move_to([-5.3, -0.4, 0])
         lines = VGroup(
             tx("A mine is billions spent up front, repaid over decades", 22),
             tx("at prices nobody can know; waiting has value, so mines are built in booms.", 22, GREY_A),
@@ -16,7 +16,8 @@ class Outro(VoiceoverScene):
             tx("The state owns the minerals, takes its share, and sometimes the market.", 22),
             tx("A critical mineral is critical to its buyers; to its sellers it is a cycle.", 22),
             tx("Over a century, the price swings around a level that barely moves.", 22)).arrange(
-            DOWN, aligned_edge=LEFT, buff=0.17).move_to([1.6, -0.4, 0])
+            DOWN, aligned_edge=LEFT, buff=0.17)
+        lines.scale_to_fit_width(min(lines.width, 9.2)).move_to([1.85, -0.4, 0])
         groups = [VGroup(lines[0], lines[1]), VGroup(lines[2]), VGroup(lines[3]), VGroup(lines[4]), VGroup(lines[5]),
                   VGroup(lines[6])]
         with self.voiceover(

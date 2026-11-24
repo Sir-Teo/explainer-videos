@@ -58,7 +58,7 @@ class Called(VoiceoverScene):
             "hundred dollars each of chromium, copper, nickel, tin and tungsten, chosen by Ehrlich and his colleagues. "
             "If the basket was worth more after inflation in 1990, Simon would pay the difference; if less, Ehrlich "
             "would. <bookmark mark='c'/> All five fell. Tin and tungsten lost more than two-thirds of their real value. "
-            f"<bookmark mark='d'/> In October 1990 Ehrlich mailed Simon a cheque for {B['cheque']:.2f} dollars. Using "
+            f"<bookmark mark='d'/> In October 1990 Ehrlich mailed Simon a cheque for {say_money(B['cheque'])}. Using "
             "the Geological Survey's yearly average prices, we get the same verdict: the thousand-dollar basket fell to "
             f"about {B['basket_real']:,.0f} dollars."
         ) as vo:
@@ -144,11 +144,11 @@ class Called(VoiceoverScene):
                          height=pa.ax.c2p(0, mhi)[1] - pa.ax.c2p(0, mlo)[1], stroke_color=GREY_A, stroke_width=1.5,
                          fill_color=GREY_A, fill_opacity=0.15).move_to(
             [(pa.ax.c2p(2026.6, 0)[0] + pa.ax.c2p(2028.4, 0)[0]) / 2, (pa.ax.c2p(0, mlo)[1] + pa.ax.c2p(0, mhi)[1]) / 2, 0])
-        rml = tx("BHP's outlook, FY27-31", 13, GREY_A).next_to(rngm, UP, buff=0.06)
+        rml = tx("BHP's outlook, FY27-31", 13, GREY_A).next_to(rngm, DOWN, buff=0.08)
         thr = DashedLine(pa.ax.c2p(2023.4, C["threshold"]), pa.ax.c2p(2028.6, C["threshold"]), stroke_color=PRICE,
                          stroke_width=2.5)
         thl = tx(f"{C['threshold']:,} kt", 15, PRICE, bold=True).next_to(thr, RIGHT, buff=0.1)
-        q = pa.ax.c2p(2027, 1000)
+        q = pa.ax.c2p(2027, 1300)
         qm = tx("?", 40, PRICE, bold=True).move_to(q)
         card_ = VGroup(
             tx("Our call", 26, PRICE, bold=True),

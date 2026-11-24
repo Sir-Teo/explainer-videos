@@ -53,11 +53,12 @@ class State(VoiceoverScene):
         grass = Rectangle(width=14.4, height=0.25, stroke_width=0, fill_color="#5E7A3A", fill_opacity=1).move_to(
             [0, -0.9, 0])
         farm = VGroup(draw.house(1.0), draw.house(0.7).shift(RIGHT * 0.9 + DOWN * 0.08)).move_to([-2.5, -0.35, 0])
-        ore_ = Ellipse(width=4.0, height=1.0, stroke_width=0, fill_color=COPPER, fill_opacity=0.85).move_to([1.5, -2.6, 0])
+        ore_ = Ellipse(width=4.0, height=1.0, stroke_width=0, fill_color=COPPER, fill_opacity=0.85).move_to([0.6, -2.7, 0])
         l_land = VGroup(tx("the land:", 20, GREY_A), tx("whoever owns it", 20, WHITE, bold=True)).arrange(
             DOWN, buff=0.05).move_to([-2.4, 1.2, 0])
         l_min = VGroup(tx("the minerals beneath:", 20, GREY_A), tx("in most countries, the state", 20, STATE, bold=True)
-                       ).arrange(DOWN, buff=0.05).move_to([3.8, -2.6, 0])
+                       ).arrange(DOWN, buff=0.05).move_to([4.7, -1.75, 0])
+        l_min = VGroup(BackgroundRectangle(l_min, color=BACKGROUND, fill_opacity=0.85, buff=0.12), l_min)
         intro = VGroup(ground, grass, farm, ore_, l_land, l_min)
         tag = estimate_tag(f"the Works' model mine (mine.py): {100 * T['royalty_rate']:.0f}% royalty, "
                            f"{100 * T['tax_rate']:.0f}% income tax; undiscounted", corner=DR, size=14)

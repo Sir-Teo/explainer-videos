@@ -50,7 +50,7 @@ class Plan(VoiceoverScene):
             "now is worth more than money later, the plan takes the richest, cheapest rock first. "
             "<bookmark mark='c'/> So in our model mine, output is highest in the first year, "
             f"{out[0]:.0f} thousand tonnes, and falls every year after, to {out[-1]:.0f}. <bookmark mark='d'/> And the "
-            f"cost of a pound climbs, from {costs[0]:.2f} dollars to {costs[-1]:.2f}. A mine's best years are its first. "
+            f"cost of a pound climbs, from {say_money(costs[0])} to {say_money(costs[-1])}. A mine's best years are its first. "
             "Every mine is a declining asset, and the plan makes it decline on purpose."
         ) as vo:
             self.play(FadeIn(ground), Create(surface), FadeIn(tag))
@@ -117,14 +117,14 @@ class Plan(VoiceoverScene):
         with self.voiceover(
             "Now the hardest decision: when to build at all. Take the model deposit again, and ask what it is worth at "
             "different copper prices. <bookmark mark='a'/> The orange line is the value of building it now. It crosses "
-            f"zero at the break-even price, {be:.2f} dollars a pound. Above that, building adds value; below it, "
+            f"zero at the break-even price, {say_money(be)} a pound. Above that, building adds value; below it, "
             "building destroys it. <bookmark mark='b'/> The blue line is the value of something else: owning the "
             "deposit and keeping the right to build it next year, once you have seen the price. <bookmark mark='c'/> "
             f"At break-even, building now is worth nothing, but the right to wait is worth about {wait_at_be:,.0f} "
             "million dollars. If the price rises, you build and keep the gain; if it falls, you leave the copper in the "
             "ground and lose nothing. The moment you build, that choice is gone, and so is its value. "
             f"<bookmark mark='d'/> So the rule is not to build at break-even. Build when the price is well above it: "
-            f"here, at about {cross:.2f} dollars, {100 * (W['cross_ratio'] - 1):.0f} percent higher, where building now "
+            f"here, at about {say_money(cross)}, {100 * (W['cross_ratio'] - 1):.0f} percent higher, where building now "
             "finally beats waiting. Economists Avinash Dixit and Robert Pindyck made this idea the heart of a famous "
             "book on investment. <bookmark mark='e'/> It explains a pattern you will see again in this film. Miners "
             "approve new mines only in booms, when the price is far above their costs, and the mines arrive years "

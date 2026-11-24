@@ -202,7 +202,7 @@ class Grade(VoiceoverScene):
             "changed, the copper would fall with the grade, by about a sixth. <bookmark mark='c'/> BHP's own guidance "
             f"says the same: between {lo:,.0f} and {hi:,.0f} thousand tonnes this year, and nine hundred thousand to a "
             "million a year after that. And because the mine still moves and grinds all that rock, the cost of each "
-            f"pound rises, from {E['unit_cost']:.2f} dollars last year to between a dollar fifty and a dollar eighty. "
+            f"pound rises, from {say_money(E['unit_cost'])} last year to between a dollar fifty and a dollar eighty. "
             "<bookmark mark='d'/> This is the treadmill every miner runs on. The best rock goes first, the grade falls "
             "every year, and the company must find new ore, or new ways to process old ore, just to stand still."
         ) as vo:

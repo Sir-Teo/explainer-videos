@@ -76,8 +76,8 @@ class Process(VoiceoverScene):
         for a, b in zip(row1[:-1], row1[1:]):
             arrows.add(Arrow(a.get_right(), b.get_left(), buff=0.1, stroke_width=2.5, color=GREY_B,
                              max_tip_length_to_length_ratio=0.3, tip_length=0.14))
-        turn = CurvedArrow(conc.get_bottom() + DOWN * 0.75, ship.get_top() + UP * 0.2 + RIGHT * 0.1, angle=-1.2,
-                           stroke_width=2.5, color=GREY_B, tip_length=0.14)
+        turn = Arrow(conc.get_bottom() + DOWN * 0.75 + LEFT * 0.3, ship.get_top() + UP * 0.25 + RIGHT * 0.5, buff=0.05,
+                     stroke_width=2.5, color=GREY_B, tip_length=0.16, max_tip_length_to_length_ratio=0.05)
         arrows2 = VGroup(*[Arrow(a.get_right(), b.get_left(), buff=0.1, stroke_width=2.5, color=GREY_B,
                                  max_tip_length_to_length_ratio=0.3, tip_length=0.14) for a, b in zip(row2[:-1], row2[1:])])
         zone1 = tx("at the mine", 18, GREY_A).to_corner(UL, buff=0.4)

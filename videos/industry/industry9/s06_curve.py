@@ -88,9 +88,9 @@ class Curve(VoiceoverScene):
             "world's great gold mines, and Freeport subtracts the gold and silver it sells, at an average of "
             "three thousand four hundred dollars an ounce last year, from the cost of its copper. That is a "
             "by-product credit, and it can be worth more than the main product's costs. <bookmark mark='e'/> Copper "
-            f"averaged {lme:.2f} dollars a pound on the London Metal Exchange in 2025. Every mine here made money, "
+            f"averaged {say_money(lme)} a pound on the London Metal Exchange in 2025. Every mine here made money, "
             "and the green shows how much per pound. <bookmark mark='f'/> In September 2026 the price reached "
-            f"{today:.2f}, and the margins doubled. <bookmark mark='g'/> But drop the price to two fifty, and the "
+            f"{say_money(today)}, and the margins doubled. <bookmark mark='g'/> But drop the price to two fifty, and the "
             "American mines lose money on every pound, while Grasberg barely notices. The low-cost mine is the one "
             "that survives the bad years, and that, not size, is a miner's moat."
         ) as vo:

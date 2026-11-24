@@ -102,7 +102,7 @@ class Iron(VoiceoverScene):
             "That daily, delivered-to-China price is new. <bookmark mark='a'/> For about forty years, until the late "
             "2000s, iron ore had one price a year. The big miners and the big steelmakers negotiated a benchmark "
             "each year, and everyone else followed it. Look at 2003: the same price in every month, "
-            f"{y03[0]:.2f} dollars a tonne. <bookmark mark='b'/> Then China's steel industry grew so fast that much of "
+            f"{say_money(y03[0])} a tonne. <bookmark mark='b'/> Then China's steel industry grew so fast that much of "
             "its ore was bought on the spot market, at prices far above the benchmark, and the miners wanted those "
             "prices too. On the first of April 2010, Vale announced that almost all its customers, ninety-seven percent "
             "of them, had agreed to prices tied to the spot market and changed every quarter. The annual benchmark was "
