@@ -754,6 +754,27 @@ def eia_pump():
                    "US regular gasoline, dollars a gallon, and each component's percentage)"])
 
 
+EIA_GAS = {"N9133US2": "Liquefied US natural gas exports (million cubic feet, annual)",
+           "N9070US2": "US dry natural gas production (million cubic feet, annual)"}
+
+
+def eia_gas():
+    """US LNG exports and dry gas production by year, from EIA's natural gas history workbooks (dnav)."""
+    import xlrd
+
+    rows = []
+    for sid in EIA_GAS:
+        b = xlrd.open_workbook(file_contents=_get(f"https://www.eia.gov/dnav/ng/hist_xls/{sid}a.xls"))
+        sh = b.sheet_by_name("Data 1")
+        for i in range(3, sh.nrows):
+            d, v = sh.cell_value(i, 0), sh.cell_value(i, 1)
+            if v not in ("", None):
+                rows.append([sid, xlrd.xldate_as_tuple(d, b.datemode)[0], float(v)])
+    return _write("eia_gas", ["series", "year", "mmcf"], rows,
+                  ["https://www.eia.gov/dnav/ng/hist_xls/ (US Energy Information Administration; " +
+                   "; ".join(f"{k} {v}" for k, v in EIA_GAS.items()) + ")"])
+
+
 FRED_ENERGY = {"WTISPLC": "Spot crude oil price: West Texas Intermediate (dollars a barrel, monthly, since 1946)",
                "MHHNGSP": "Henry Hub natural gas spot price (dollars per million Btu)",
                "PNGASEUUSDM": "Global price of natural gas, EU (IMF; dollars per million Btu)",
@@ -775,7 +796,7 @@ def fred_energy():
                   ["https://fred.stlouisfed.org (monthly; " + "; ".join(f"{k} {v}" for k, v in FRED_ENERGY.items()) + ")"])
 
 
-JOBS = {"eia_petroleum": eia_petroleum, "eia_intl": eia_intl, "eia_pump": eia_pump, "fred_energy": fred_energy, "fred_market": fred_market, "owid_tech": owid_tech, "sec_quarterly": sec_quarterly, "fred_cycle": fred_cycle, "esef_maersk": esef_maersk, "damodaran_roc": damodaran_roc, "census_conc": census_conc, "eia_power": eia_power, "fred_pay": fred_pay, "bea_real": bea_real, "sec_annual": sec_annual, "fred_prices": fred_prices, "census_susb": census_susb, "bea_va": bea_va, "wb_mfg_usd": wb_mfg_usd, "bea_hist": bea_hist, "bea_io": bea_io, "fred_jobs": fred_jobs, "wb_shares": wb_shares}
+JOBS = {"eia_gas": eia_gas, "eia_petroleum": eia_petroleum, "eia_intl": eia_intl, "eia_pump": eia_pump, "fred_energy": fred_energy, "fred_market": fred_market, "owid_tech": owid_tech, "sec_quarterly": sec_quarterly, "fred_cycle": fred_cycle, "esef_maersk": esef_maersk, "damodaran_roc": damodaran_roc, "census_conc": census_conc, "eia_power": eia_power, "fred_pay": fred_pay, "bea_real": bea_real, "sec_annual": sec_annual, "fred_prices": fred_prices, "census_susb": census_susb, "bea_va": bea_va, "wb_mfg_usd": wb_mfg_usd, "bea_hist": bea_hist, "bea_io": bea_io, "fred_jobs": fred_jobs, "wb_shares": wb_shares}
 
 if __name__ == "__main__":
     names = list(JOBS) if "--all" in sys.argv else sys.argv[1:]
