@@ -56,3 +56,51 @@ class Top(VoiceoverScene):
             vo.wait_until("d")
             self.play(FadeIn(lag, shift=UP * 0.1))
         self.clear_scene()
+        self.primary()
+
+    def primary(self):
+        """The census files plants, not products: each plant under what it mainly makes."""
+        def plant(x, col, mix, name, filed):
+            f = draw.factory(2.2, color=col).move_to([x, 1.3, 0])
+            pie = VGroup()
+            a0 = PI / 2
+            for share, c_ in mix:
+                pie.add(AnnularSector(inner_radius=0, outer_radius=0.62, angle=-TAU * share, start_angle=a0,
+                                      fill_color=c_, fill_opacity=0.95, stroke_color="#0E1117", stroke_width=2))
+                a0 -= TAU * share
+            pie.move_to([x, -0.6, 0])
+            lab = tx(name, 18, WHITE, bold=True).next_to(f, UP, buff=0.12)
+            fl = VGroup(tx("filed as:", 15, GREY_B), tx(filed, 18, GOLD, bold=True)).arrange(DOWN, buff=0.04).next_to(
+                pie, DOWN, buff=0.25)
+            return VGroup(f, lab, pie, fl)
+        BEER, H2O, TEA = "#E0A43A", WATER, "#9C6B3F"
+        a_ = plant(-3.3, "#C9A26B", [(0.7, BEER), (0.3, H2O)], "a brewery", "brewery: all of it")
+        b_ = plant(3.3, "#8FB8DE", [(0.8, H2O), (0.2, TEA)], "a water plant", "bottled water: all of it")
+        key = VGroup(*[VGroup(Square(0.2, stroke_width=0, fill_color=c_, fill_opacity=1), tx(n_, 15, GREY_A)).arrange(
+            RIGHT, buff=0.08) for n_, c_ in (("beer", BEER), ("water", H2O), ("iced tea", TEA))]).arrange(
+            RIGHT, buff=0.4).to_edge(DOWN, buff=0.85)
+        miss = tx("its water is not in bottled water's total", 16, "#E8554E").next_to(a_, DOWN, buff=0.15)
+        extra = tx("its tea is", 16, "#E8554E").next_to(b_, DOWN, buff=0.15)
+        tag = estimate_tag("illustrative plants and shares", corner=DR, size=14)
+        src = source("US Census Bureau, NAICS classification of establishments by primary activity", size=13)
+        with self.voiceover(
+            "Chapter 2 said the census files each plant under what it mainly makes. Here is what that does. "
+            "<bookmark mark='a'/> The census counts plants, not products. A brewery that also bottles some water is a brewery, and all of its water is counted as "
+            "brewery shipments. <bookmark mark='b'/> A water plant that also makes some iced tea is a water plant, "
+            "and its tea is counted as water. <bookmark mark='c'/> So an industry's total is the output of the plants "
+            "filed under it, not the market for the product in its name. The two errors partly cancel, by an amount "
+            "nobody can see in the totals. Every five years, the Economic Census also reports shipments product by "
+            "product, which is closer to a market; in the years between, you have the plants."
+        ) as vo:
+            self.play(FadeIn(src), FadeIn(tag), FadeIn(key))
+            vo.wait_until("a")
+            self.play(FadeIn(a_[0], shift=UP * 0.2), FadeIn(a_[1]))
+            self.play(*[DrawBorderThenFill(w) for w in a_[2]], FadeIn(a_[3]))
+            self.play(FadeIn(miss), Indicate(a_[2][1], color=WHITE))
+            vo.wait_until("b")
+            self.play(FadeIn(b_[0], shift=UP * 0.2), FadeIn(b_[1]))
+            self.play(*[DrawBorderThenFill(w) for w in b_[2]], FadeIn(b_[3]))
+            self.play(FadeIn(extra), Indicate(b_[2][1], color=WHITE))
+            vo.wait_until("c")
+            self.play(Circumscribe(VGroup(a_[2], b_[2]), color=GOLD, time_width=0.8))
+        self.clear_scene()

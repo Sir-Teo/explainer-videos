@@ -55,3 +55,71 @@ class Three(VoiceoverScene):
             vo.wait_until("e")
             self.play(LaggedStart(*[FadeIn(r_, shift=UP * 0.1) for r_ in rules], lag_ratio=0.4), run_time=2.4)
         self.clear_scene()
+        self.gate()
+
+    def gate(self):
+        """Rule 3 as a picture: which input moves the bottom-up answer most? A tornado of the game's sum."""
+        from videos.industry.industry7.s02_guess import BOTTLE_L, JUG_PRICE, L_PER_GAL, PACK_BOTTLES, PACK_PRICE
+        W = R["water"]
+        base = dict(percap=W["percap"], single=0.71, pack=PACK_PRICE, jug=JUG_PRICE)
+
+        def total(x):
+            gal = W["pop"] * x["percap"] / 1000  # bn gallons
+            per_pack = x["pack"] / (PACK_BOTTLES * BOTTLE_L / L_PER_GAL)
+            return gal * (x["single"] * per_pack + (1 - x["single"]) * x["jug"])
+        mid = total(base)
+        ranges = [("pack price", "pack", 4.50, 8.00, "$4.50 to $8.00 for 24"),
+                  ("single-serve share", "single", 0.65, 0.77, "65% to 77% of gallons"),
+                  ("jug price", "jug", 1.00, 2.00, "$1.00 to $2.00 a gallon"),
+                  ("gallons per person", "percap", W["percap"] * 0.95, W["percap"] * 1.05, "plus or minus 5%")]
+        res = []
+        for name, k, lo, hi, how in ranges:
+            a, b = total({**base, k: lo}), total({**base, k: hi})
+            res.append((name, how, min(a, b), max(a, b)))
+        res.sort(key=lambda r_: r_[2] - r_[3])
+        u = 0.42
+        x0 = 0.8
+        axis = Line([x0, 2.1, 0], [x0, -2.3, 0], stroke_color=WHITE, stroke_width=2)
+        mt = tx(f"${mid:.0f}bn", 22, GUESS, bold=True).next_to(axis, UP, buff=0.12)
+        bars = VGroup()
+        for k, (name, how, lo, hi) in enumerate(res):
+            y = 1.5 - 1.05 * k
+            left = Rectangle(width=max((mid - lo) * u, 0.02), height=0.6, stroke_width=0, fill_color=UNITS,
+                             fill_opacity=0.9).move_to([x0, y, 0], aligned_edge=RIGHT)
+            right = Rectangle(width=max((hi - mid) * u, 0.02), height=0.6, stroke_width=0, fill_color=GUESS,
+                              fill_opacity=0.9).move_to([x0, y, 0], aligned_edge=LEFT)
+            lab = VGroup(tx(name, 19, WHITE, bold=True), tx(how, 14, GREY_B)).arrange(DOWN, aligned_edge=RIGHT,
+                                                                                       buff=0.03)
+            lab.move_to([x0 - 3.6, y, 0], aligned_edge=RIGHT)
+            lv = tx(f"${lo:.0f}bn", 15, UNITS).next_to(left, LEFT, buff=0.1)
+            hv = tx(f"${hi:.0f}bn", 15, GUESS).next_to(right, RIGHT, buff=0.1)
+            bars.add(VGroup(lab, left, right, lv, hv))
+        lo_all = total({**base, "pack": 4.5, "single": 0.65, "jug": 1.0, "percap": W["percap"] * 0.95})
+        hi_all = total({**base, "pack": 8.0, "single": 0.77, "jug": 2.0, "percap": W["percap"] * 1.05})
+        verdict = tx(f"every input at its edge: ${lo_all:.0f}bn to ${hi_all:.0f}bn. The pack price is the range.", 19,
+                     GOLD, bold=True).to_edge(DOWN, buff=0.6)
+        head = tx("Your sum, if each input could be different", 24, WHITE, bold=True).to_edge(UP, buff=0.45)
+        tag = estimate_tag("illustrative ranges for each input", corner=DR, size=14)
+        with self.voiceover(
+            "The third rule deserves a picture. Go back to your own sum. <bookmark mark='a'/> It came to about "
+            f"{mid:.0f} billion dollars, from four inputs. Now let each input be different, one at a time, across a "
+            "range that seems fair. <bookmark mark='b'/> The pack price, from four fifty to eight dollars for "
+            f"twenty-four bottles, moves the answer from {res[0][2]:.0f} to {res[0][3]:.0f} billion. "
+            "<bookmark mark='c'/> The share in single-serve bottles, the jug price and the gallons per person matter "
+            "much less. <bookmark mark='d'/> Set every input at its edge at once and the range runs from about "
+            f"{lo_all:.0f} to {hi_all:.0f} billion. That is what a range is for: it tells you which number to go "
+            "and check. Here, it is the price of a pack: the one number in your sum that you chose yourself."
+        ) as vo:
+            self.play(FadeIn(tag), FadeIn(head))
+            vo.wait_until("a")
+            self.play(Create(axis), FadeIn(mt))
+            vo.wait_until("b")
+            g = bars[0]
+            self.play(FadeIn(g[0]), GrowFromEdge(g[1], RIGHT), GrowFromEdge(g[2], LEFT), FadeIn(g[3]), FadeIn(g[4]))
+            vo.wait_until("c")
+            self.play(LaggedStart(*[AnimationGroup(FadeIn(g[0]), GrowFromEdge(g[1], RIGHT), GrowFromEdge(g[2], LEFT),
+                                                   FadeIn(g[3]), FadeIn(g[4])) for g in bars[1:]], lag_ratio=0.35),
+                      run_time=2.4)
+            vo.wait_until("d")
+            self.play(FadeIn(verdict, shift=UP * 0.1))
+        self.clear_scene()

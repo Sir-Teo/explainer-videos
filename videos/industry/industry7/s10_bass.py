@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from explainer.industry.register import get
-from explainer.industry.works.diffusion import bass, predict
+from explainer.industry.works.diffusion import bass, peak_year, predict
 from videos.industry.industry7.common import *  # noqa: F403
 
 P_, Q_ = 0.03, 0.38  # an illustrative product for the grid of households
@@ -59,7 +59,10 @@ class Bass(VoiceoverScene):
             "more likely. Bass called that pull q. <bookmark mark='d'/> At first almost nobody has it, so there is "
             "nobody to copy, and growth is slow. Then copying takes over, and the curve goes steep. "
             "<bookmark mark='e'/> And at the end there is nobody left to convince, so it flattens. Two numbers, p "
-            "and q, and a ceiling: that is the whole model."
+            "and q, and a ceiling: that is the whole model. <bookmark mark='f'/> It even says when the rush comes. "
+            "New adopters peak at the log of q over p, divided by p plus q, years after launch: here, about "
+            f"{peak_year(P_, Q_):.0f} years. The more people copy rather than choose on their own, the later and the "
+            "sharper the peak."
         ) as vo:
             self.play(FadeIn(src), FadeIn(tag), LaggedStart(*[FadeIn(h_) for h_ in homes], lag_ratio=0.005), run_time=1.6)
             vo.wait_until("a")
@@ -86,6 +89,12 @@ class Bass(VoiceoverScene):
                          if tt == t]
                 self.play(*anims, year.animate.set_value(t), run_time=0.4)
             self.play(Write(eq))
+            vo.wait_until("f")
+            pk = peak_year(P_, Q_)
+            pl = DashedLine(pa.ax.c2p(pk, 0), pa.ax.c2p(pk, 100), stroke_color=GOLD, stroke_width=2)
+            pf = MathTex(r"t^{*} = \frac{\ln(q/p)}{p + q}" + rf" \approx {pk:.1f}\text{{ years}}", font_size=30,
+                         color=GOLD).next_to(eq, DOWN, buff=0.3)
+            self.play(Create(pl), Write(pf))
         line.clear_updaters()
         self.clear_scene()
 

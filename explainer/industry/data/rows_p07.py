@@ -34,8 +34,16 @@ add(
          "at about 23 cents)"),
     uber("uber.tam.miles", 11.9, "tn miles", "miles in the Personal Mobility TAM: every passenger-vehicle and public "
          "transport mile in 175 countries"),
-    uber("uber.tam.eats", 2.8, "USD tn", "Uber Eats TAM: all consumer spending at restaurants (of which $795bn was home "
-         "delivery, where Uber Eats' 2018 gross bookings of $7.9bn were 1.0%)"),
+    uber("uber.tam.eats", 2.8, "USD tn", "Uber Eats TAM: the entire global consumer spend on food services in 2017 "
+         "(Euromonitor), eat-in included ($2,838bn in the S-1's table)"),
+    uber("uber.eats.sam", 795, "USD bn", "Uber Eats SAM: consumer spending in 2017 on meals from home delivery ($161bn), "
+         "takeaway ($472bn) and drive-through ($162bn), worldwide (Euromonitor)"),
+    uber("uber.eats.delivery", 161, "USD bn", "home delivery's part of Uber Eats' SAM, 2017 (Euromonitor)"),
+    uber("uber.eats.takeaway", 472, "USD bn", "takeaway's part of Uber Eats' SAM, 2017 (Euromonitor)"),
+    uber("uber.eats.drive", 162, "USD bn", "drive-through's part of Uber Eats' SAM, 2017 (Euromonitor)"),
+    uber("uber.eats.eatin", 2043, "USD bn", "eat-in restaurant spend, 2017, inside the Eats TAM (Euromonitor)"),
+    uber("uber.eats.bookings", 7.9, "USD bn", "Uber Eats gross bookings in 2018 (what customers paid, food included), "
+         "which the S-1 called 1.0% of the $795bn SAM", "2018"),
     uber("uber.tam.freight", 3.8, "USD tn", "Uber Freight TAM: the global market for freight trucking in 2017 "
          "(Armstrong & Associates)"),
     uber("uber.sam.mobility", 2.5, "USD tn", "Personal Mobility current SAM: 3.9 trillion miles in 57 countries (trips "
@@ -57,6 +65,9 @@ add(
     r("wework.ch11", 2023, "year", "WeWork Inc. and some subsidiaries filed for Chapter 11 on 6 November 2023",
       "WeWork Inc., Form 8-K, 7 November 2023",
       "https://www.sec.gov/Archives/edgar/data/1813756/000119312523271902/d522028d8k.htm", "2023-11-06"),
+    r("model.microwave.life", 10, "years", "how long a microwave oven stays in use before it is replaced, on average, "
+      "in this film's model of first purchases and replacements", "This series' assumption, for a model; the film "
+      "shows what changes if it is 8 or 12", "", "2025", kind="assumption", lo=8, hi=12),
     r("bass.1969", 1969, "year", "Frank M. Bass, 'A New Product Growth for Model Consumer Durables', Management "
       "Science 15(5), January 1969, pp. 215-227: adoption by innovators (p) and imitators (q)", "Management Science",
       "https://doi.org/10.1287/mnsc.15.5.215", "1969", kind="study"),

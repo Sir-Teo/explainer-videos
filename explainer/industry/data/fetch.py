@@ -510,12 +510,16 @@ def census_conc():
 FRED_MARKET = {"AIES312112RCTUS": "Bottled water manufacturing: shipments (thousands of dollars; Census AIES)",
                "AIES312112EMPUS": "Bottled water manufacturing: employees (Census AIES)",
                "PCU312112312112": "Producer price index: bottled water manufacturing (index)",
-               "POPTHM": "US population (thousands, monthly average)"}
+               "POPTHM": "US population (thousands, monthly average)",
+               "ECOMPCTSA": "E-commerce retail sales as a percent of total retail sales (Census, quarterly, seasonally "
+                            "adjusted)",
+               "TTLHH": "US households (thousands; Census Bureau, Current Population Survey)"}
 
 
 def fred_market():
     """Annual series for sizing a market (Part 7): the Census Bureau's shipments and employment of US bottled water
-    manufacturers, the producer price index of bottled water, and the US population (FRED)."""
+    manufacturers, the producer price index of bottled water, the US population, e-commerce's share of retail sales and
+    the number of US households (FRED)."""
     out = []
     for sid in FRED_MARKET:
         txt = _get(f"https://fred.stlouisfed.org/graph/fredgraph.csv?id={sid}&fq=Annual&fam=avg").decode()

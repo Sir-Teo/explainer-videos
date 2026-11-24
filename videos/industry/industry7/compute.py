@@ -23,7 +23,7 @@ import numpy as np
 
 from explainer.industry.data.fetch import read
 from explainer.industry.register import get
-from explainer.industry.works.diffusion import early_forecast, fit_bass, peak_year, predict
+from explainer.industry.works.diffusion import early_forecast, fit_bass, fit_bass_fixed_m, peak_year, predict
 
 OUT = Path(__file__).resolve().parents[3] / ".cache" / "industry7"
 SHOW = ["Radio", "Household refrigerator", "Colour TV", "Microwave", "Cellular phone", "Internet",
@@ -112,11 +112,35 @@ def results() -> dict:
     R["early"] = dict(rows=early, n=len(early), median=float(np.median(miss)), within10=int((miss <= 10).sum()),
                       over30=int((miss > 30).sum()))
 
+    # --- the fan: curves with very different ceilings fit colour TV's early years almost equally well ---------------
+    tv = next(d for d in early if d["name"] == "Colour TV")
+    yv, sv = np.array(tv["years"]), np.array(tv["shares"])
+    ke = yv <= tv["cut"]
+    R["fan"] = dict(cut=tv["cut"], fits=[fit_bass_fixed_m(yv[ke], sv[ke], m) for m in (40, 60, 80, 100)])
+
     # --- adding up companies where a few hold nearly everything: home centers, 2022 ---------------------------------
     hc = next(r for r in read("census_conc_2022") if r["code"] == "444110")
     fy22 = {t: next(r["revenue"] for r in sec if r["ticker"] == t and r["year_end"][:4] == "2023") for t in ("HD", "LOW")}
     R["homes"] = dict(census=hc["sales_k"] / 1e6, firms=int(hc["firms"]), cr4=hc["cr4"], hd=fy22["HD"], low=fy22["LOW"],
                       both=fy22["HD"] + fy22["LOW"], gap=(fy22["HD"] + fy22["LOW"]) / (hc["sales_k"] / 1e6) - 1)
+
+    # --- e-commerce's share of retail: a window that moved (Census via FRED) -----------------------------------------
+    ec = {y: v for y, v in S["ECOMPCTSA"].items() if y >= 2000}
+    R["ecom"] = dict(years=sorted(ec), share=[ec[y] for y in sorted(ec)], first=ec[min(ec)], last=ec[max(ec)],
+                     last_year=max(ec))
+
+    # --- when everyone has one: first purchases and replacements, from the microwave's Bass fit and US households -----
+    life = get("model.microwave.life")
+    hh = {y: v / 1e3 for y, v in S["TTLHH"].items()}  # millions
+    fm = R["diffusion"]["Microwave"]
+    yy = list(range(1970, 2026))
+    stock = [hh[y] * float(predict(fm, [y])[0]) / 100 for y in yy]  # millions in use (one per household)
+    first = [0.0] + [max(stock[k] - stock[k - 1], 0.0) for k in range(1, len(yy))]
+    repl = [0.0] + [stock[k - 1] / life for k in range(1, len(yy))]
+    R["replace"] = dict(years=yy, stock=stock, first=first, repl=repl, life=life,
+                        peak_first=yy[int(np.argmax(first))], peak_first_m=max(first),
+                        hh=hh[2025], share=float(predict(fm, [2025])[0]), sales=first[-1] + repl[-1],
+                        repl_share=repl[-1] / (first[-1] + repl[-1]))
 
     # --- price and quantity: what a dollar of computers or cars buys over time ------------------------------------------
     pr = {int(r["year"]): r for r in read("fred_prices")}

@@ -9,6 +9,7 @@ class Tam(VoiceoverScene):
         card(self, 9, "Addressable markets", "What is a 'total addressable market' actually counting?",
              "Chapter nine. Addressable markets.", lit=("unit",))
         self.uber()
+        self.eats()
         self.rings()
 
     def uber(self):
@@ -55,6 +56,76 @@ class Tam(VoiceoverScene):
             self.play(Write(eqs[2]), FadeIn(inc))
             vo.wait_until("d")
             self.play(FadeIn(on, shift=UP * 0.1))
+        self.clear_scene()
+
+    def eats(self):
+        """Uber Eats' $2.8 trillion: every restaurant meal on Earth, the ones eaten at the table included."""
+        parts = [("eat-in", get("uber.eats.eatin"), "#4A5468"), ("takeaway", get("uber.eats.takeaway"), GUESS),
+                 ("drive-through", get("uber.eats.drive"), UNITS), ("home delivery", get("uber.eats.delivery"), RETAIL)]
+        tot = sum(v for _, v, _ in parts)
+        L = 12.0
+        segs, labs = VGroup(), VGroup()
+        x = -L / 2
+        for k, (name, v, col) in enumerate(parts):
+            w = L * v / tot
+            seg = Rectangle(width=w, height=1.1, stroke_color="#0E1117", stroke_width=2, fill_color=col,
+                            fill_opacity=0.9).move_to([x + w / 2, 0.2, 0])
+            lab = VGroup(tx(name, 17, col if k else GREY_A, bold=True), tx(f"${v:,.0f}bn", 16, GREY_B)).arrange(
+                DOWN, buff=0.03)
+            lab.next_to(seg, UP if k % 2 == 0 else DOWN, buff=0.18)
+            segs.add(seg)
+            labs.add(lab)
+            x += w
+        sam = BraceBetweenPoints(segs[1].get_corner(DL) + DOWN * 0.95, segs[3].get_corner(DR) + DOWN * 0.95, DOWN,
+                                 color=GOLD)
+        samt = tx(f"Uber Eats' SAM: ${get('uber.eats.sam'):.0f}bn", 19, GOLD, bold=True).next_to(sam, DOWN, buff=0.1)
+        tam = BraceBetweenPoints(segs[0].get_corner(UL) + UP * 0.95, segs[3].get_corner(UR) + UP * 0.95, UP, color=TAM)
+        tamt = tx(f"TAM: all of it, ${get('uber.tam.eats'):.1f}tn", 19, TAM, bold=True).next_to(tam, UP, buff=0.1)
+        bk = get("uber.eats.bookings")
+        zoom = VGroup(*[sg.copy() for sg in segs[1:]])
+        zt = zoom.copy().stretch_to_fit_width(L).move_to([0, -2.15, 0])
+        guides = VGroup(DashedLine(segs[1].get_corner(DL), zt.get_corner(UL), stroke_color=GREY_C, stroke_width=1.5),
+                        DashedLine(segs[3].get_corner(DR), zt.get_corner(UR), stroke_color=GREY_C, stroke_width=1.5))
+        sliver = Rectangle(width=L * bk / get("uber.eats.sam"), height=1.1, stroke_width=0, fill_color=WHITE,
+                           fill_opacity=1).move_to(zt.get_right(), aligned_edge=RIGHT)
+        bt = VGroup(tx(f"Uber Eats, 2018: ${bk:.1f}bn of orders", 17, WHITE, bold=True),
+                    tx(f"{100 * bk / get('uber.eats.sam'):.0f}% of the SAM, {100 * bk / tot:.1f}% of the TAM", 15, GREY_B)
+                    ).arrange(DOWN, buff=0.03).next_to(zt, DOWN, buff=0.15).align_to(zt, RIGHT)
+        zl = tx("the SAM, stretched to full width", 15, GREY_B).next_to(zt, DOWN, buff=0.15).align_to(zt, LEFT)
+        plates = VGroup(*[VGroup(Circle(radius=0.22, stroke_color=GREY_B, stroke_width=2, fill_color="#E8E4DA",
+                                        fill_opacity=0.9), Circle(radius=0.12, stroke_width=0, fill_color=GUESS,
+                                                                  fill_opacity=0.8)) for _ in range(6)]
+                        ).arrange(RIGHT, buff=0.15).to_edge(UP, buff=0.35).to_edge(LEFT, buff=0.6)
+        src = source("Uber Technologies, Form S-1, 2019, citing Euromonitor International (Consumer Foodservice, 2019 "
+                     "edition); spend in 2017, Uber Eats' gross bookings in 2018", size=13)
+        with self.voiceover(
+            "The restaurant part was built the same way. <bookmark mark='a'/> The prospectus took a commercial "
+            "tracker's estimate of everything the world's consumers spent in restaurants, cafés and bars in 2017, "
+            f"{get('uber.tam.eats'):.1f} trillion dollars, and split it by how the meal was eaten. "
+            f"<bookmark mark='b'/> Home delivery: {get('uber.eats.delivery'):.0f} billion. Takeaway and drive-through: "
+            f"{get('uber.eats.takeaway') + get('uber.eats.drive'):.0f} billion more. Together, the "
+            f"{get('uber.eats.sam'):.0f} billion that Uber called the market it could serve. <bookmark mark='c'/> And "
+            f"then the TAM: all of it, the {get('uber.eats.eatin') / 1000:.1f} trillion dollars of meals eaten at a "
+            "restaurant table included, on the argument that some of those dinners might one day be delivered. "
+            "<bookmark mark='d'/> Against that, Uber Eats took orders worth "
+            f"{bk:.1f} billion dollars in 2018. Notice that this is what customers paid, food and all; Uber's own "
+            "revenue was the cut it kept. And notice the years: a spend from 2017 set against orders from 2018. "
+            "A good TAM reader checks both."
+        ) as vo:
+            self.play(FadeIn(src), LaggedStart(*[FadeIn(p_, scale=0.6) for p_ in plates], lag_ratio=0.1))
+            vo.wait_until("a")
+            self.play(GrowFromEdge(segs[0], LEFT), FadeIn(labs[0]))
+            vo.wait_until("b")
+            self.play(LaggedStart(*[AnimationGroup(GrowFromEdge(segs[k], LEFT), FadeIn(labs[k])) for k in (3, 1, 2)],
+                                  lag_ratio=0.4), run_time=2.0)
+            self.play(GrowFromCenter(sam), FadeIn(samt))
+            vo.wait_until("c")
+            self.play(GrowFromCenter(tam), FadeIn(tamt))
+            vo.wait_until("d")
+            self.play(FadeOut(sam), FadeOut(samt), FadeOut(labs[1]), FadeOut(labs[3]))
+            self.play(Create(guides), Transform(zoom, zt), FadeIn(zl), run_time=1.6)
+            self.play(GrowFromEdge(sliver, RIGHT), FadeIn(bt))
+            self.play(Flash(sliver.get_center(), color=WHITE, line_length=0.25))
         self.clear_scene()
 
     def rings(self):

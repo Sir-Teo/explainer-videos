@@ -16,7 +16,8 @@ SCENES = [
     ("s09_intermission", "Intermission", "Intermission: a century of S-curves"),
     ("s10_bass", "Bass", "10. How new things spread"),
     ("s11_early", "Early", "11. Calling the curve early"),
-    ("s12_register", "Register", "12. The Register"),
-    ("s13_called", "Called", "13. Called it?"),
+    ("s11b_replace", "Replace", "12. When everyone has one"),
+    ("s12_register", "Register", "13. The Register"),
+    ("s13_called", "Called", "14. Called it?"),
     ("s14_outro", "Outro", "The market, and what comes next"),
 ]

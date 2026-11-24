@@ -50,6 +50,29 @@ def fit_bass(years, shares, m_max: float = 100.0) -> dict:
     return dict(p=float(p), q=float(q), m=float(m), t0=float(t0), rmse=rmse)
 
 
+def fit_bass_fixed_m(years, shares, m: float) -> dict:
+    """Fit p, q and the launch year t0 with the ceiling ``m`` held fixed: how well a curve with that ceiling can
+    pass through the points.  Comparing the fits across ceilings shows how little early years say about ``m``."""
+    years = np.asarray(years, dtype=float)
+    shares = np.asarray(shares, dtype=float)
+    y0 = years.min()
+
+    def resid(th):
+        p, q, t0 = th
+        return bass(years - t0, p, q, m) - shares
+    best = None
+    for p0, q0 in ((0.01, 0.3), (0.03, 0.4), (0.005, 0.6), (0.05, 0.2)):
+        try:
+            r = least_squares(resid, (p0, q0, y0 - 1), bounds=([1e-5, 1e-4, y0 - 60], [1.0, 3.0, y0 + 5]))
+        except ValueError:
+            continue
+        if best is None or r.cost < best.cost:
+            best = r
+    p, q, t0 = best.x
+    return dict(p=float(p), q=float(q), m=float(m), t0=float(t0),
+                rmse=float(np.sqrt(np.mean(resid(best.x) ** 2))))
+
+
 def predict(fit: dict, years):
     return bass(np.asarray(years, dtype=float) - fit["t0"], fit["p"], fit["q"], fit["m"])
 

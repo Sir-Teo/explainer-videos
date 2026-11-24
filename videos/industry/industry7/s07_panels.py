@@ -56,3 +56,66 @@ class Panels(VoiceoverScene):
                 vo.wait_until(m)
                 self.play(FadeIn(r_[0], scale=0.8), FadeIn(r_[1], shift=RIGHT * 0.15))
         self.clear_scene()
+        self.moved()
+
+    def moved(self):
+        """Windows also move: the share of US retail sold online, which a panel of shop tills never sees."""
+        E = R["ecom"]
+        yrs, sh = E["years"], E["share"]
+        pa = viz.plot_axes([yrs[0] - 0.5, yrs[-1] + 0.5], [0, 20], x_length=7.4, y_length=3.8,
+                           xticks=[2000, 2005, 2010, 2015, 2020, 2025], yticks=[5, 10, 15, 20], xfmt=lambda v: f"{int(v)}",
+                           yfmt=lambda v: f"{v:g}%", size=15)
+        pa.move_to([2.2, -0.6, 0])
+        t = ValueTracker(yrs[0])
+
+        def at():
+            x = t.get_value()
+            k = min(max(int(np.floor(x)) - yrs[0], 0), len(yrs) - 2)
+            f = x - yrs[k]
+            return sh[k] * (1 - f) + sh[k + 1] * f
+
+        def line():
+            x = t.get_value()
+            pts = [pa.ax.c2p(y, v) for y, v in zip(yrs, sh) if y <= x] + [pa.ax.c2p(x, at())]
+            return VMobject(stroke_color=UNITS, stroke_width=4).set_points_as_corners(pts)
+        ln = always_redraw(line)
+        dot = always_redraw(lambda: glow_dot(pa.ax.c2p(t.get_value(), at()), color=UNITS, radius=0.09))
+        # a shop with tills (seen) and a parcel van (unseen), whose sizes follow the share
+        shop = draw.shop(1.6, color=RETAIL).move_to([-4.8, 1.2, 0])
+        van = VGroup(RoundedRectangle(corner_radius=0.08, width=1.5, height=0.7, stroke_width=0, fill_color="#B58CFF",
+                                      fill_opacity=0.9),
+                     *[Circle(radius=0.12, stroke_width=0, fill_color="#20242C", fill_opacity=1).shift(DOWN * 0.38 + RIGHT * x)
+                       for x in (-0.45, 0.45)]).move_to([-4.8, -1.4, 0])
+        sl = tx("seen at the tills", 16, RETAIL).next_to(shop, DOWN, buff=0.15)
+        vl = tx("sold online: no till", 16, UNITS).next_to(van, DOWN, buff=0.22)
+        pct = draw.number(at, decimals=1, suffix="% online", size=30, color=UNITS)
+        pct.add_updater(lambda m: m.next_to(van, UP, buff=0.25))
+        yr = draw.number(lambda: t.get_value(), decimals=0, commas=False, size=26, color=GREY_A)
+        yr.add_updater(lambda m: m.next_to(pa, UP, buff=0.1).align_to(pa, RIGHT))
+        head = tx("share of US retail sales made online", 18, GREY_A).next_to(pa, UP, buff=0.12).align_to(pa, LEFT)
+        src = source("US Census Bureau, Quarterly Retail E-Commerce Sales (via FRED, ECOMPCTSA; annual averages, "
+                     "seasonally adjusted)", size=13)
+        with self.voiceover(
+            "And the windows move. <bookmark mark='a'/> In 2000, a panel built on the tills of shops saw nearly "
+            f"everything Americans bought at retail: less than {E['first'] + 0.1:.0f} percent was sold online. "
+            "<bookmark mark='b'/> Every year since, a larger share has gone where no till beeps. "
+            "<bookmark mark='c'/> It jumped in 2020, when the shops closed, and it never fell back. "
+            f"<bookmark mark='d'/> By {E['last_year']}, it was about {E['last']:.0f} percent of all retail sales, "
+            "about one dollar in six. A tracker that never moved its window would have seen many markets "
+            "shrinking, when what had changed was where people bought. So when you read a market size, ask what "
+            "its window was, and when the window was last moved."
+        ) as vo:
+            self.play(FadeIn(src), FadeIn(pa), FadeIn(head), FadeIn(shop), FadeIn(sl))
+            self.add(ln, dot)
+            vo.wait_until("a")
+            self.play(FadeIn(van, shift=RIGHT * 0.3), FadeIn(vl), FadeIn(pct), FadeIn(yr))
+            vo.wait_until("b")
+            self.play(t.animate.set_value(2019), run_time=4.5, rate_func=linear)
+            vo.wait_until("c")
+            self.play(t.animate.set_value(2021), run_time=1.6, rate_func=linear)
+            self.play(Flash(dot.get_center(), color=UNITS))
+            vo.wait_until("d")
+            self.play(t.animate.set_value(yrs[-1]), run_time=2.0, rate_func=linear)
+        for m in (ln, dot, pct, yr):
+            m.clear_updaters()
+        self.clear_scene()

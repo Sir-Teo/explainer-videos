@@ -27,3 +27,15 @@ def test_early_forecast_needs_enough_points():
     e = early_forecast(t + 1980, s, 25)
     assert e is not None and e["cut"] < 1980 + 30
     assert early_forecast(t[:3] + 1980, s[:3], 25) is None
+
+
+def test_fixed_ceiling_fit_recovers_the_truth_and_shows_the_early_fan():
+    from explainer.industry.works.diffusion import bass, fit_bass_fixed_m
+    yrs = np.arange(1960, 1990, dtype=float)
+    s = bass(yrs - 1958, 0.02, 0.45, 80.0)
+    f = fit_bass_fixed_m(yrs, s, 80.0)
+    assert abs(f["p"] - 0.02) < 2e-3 and abs(f["q"] - 0.45) < 2e-2 and f["rmse"] < 1e-3
+    # on the first few years only, a wrong ceiling still fits closely: the early points cannot pin m down
+    early = yrs < 1964
+    wrong = fit_bass_fixed_m(yrs[early], s[early], 40.0)
+    assert wrong["rmse"] < 0.5

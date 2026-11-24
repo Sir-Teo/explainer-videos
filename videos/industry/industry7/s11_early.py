@@ -9,6 +9,7 @@ class Early(VoiceoverScene):
         card(self, 11, "Calling the curve early", "Could you have seen the ceiling from the first years?",
              "Chapter eleven. Calling the curve early.", lit=("change",))
         self.colour_tv()
+        self.fan()
         self.all_of_them()
 
     def colour_tv(self):
@@ -57,6 +58,58 @@ class Early(VoiceoverScene):
             vo.wait_until("c")
             self.play(LaggedStart(*[FadeIn(d_, scale=2) for d_ in later_d], lag_ratio=0.05), run_time=2.6)
             self.play(FadeIn(al))
+        self.clear_scene()
+
+    def fan(self):
+        """Four ceilings, one set of early points: each curve passes within a fraction of a point of every dot."""
+        F = R["fan"]
+        row = next(d for d in R["early"]["rows"] if d["name"] == "Colour TV")
+        ys, ss, cut = row["years"], row["shares"], F["cut"]
+        pa = viz.plot_axes([1964, 1990], [0, 100], x_length=8.0, y_length=4.4, xticks=[1965, 1970, 1975, 1980, 1985, 1990],
+                           yticks=[25, 50, 75, 100], xfmt=lambda v: f"{int(v)}", yfmt=lambda v: f"{v:g}%", size=15)
+        pa.move_to([-0.6, -0.5, 0])
+        dots = VGroup(*[Dot(pa.ax.c2p(y, s_), radius=0.065, color=WHITE) for y, s_ in zip(ys, ss) if y <= cut])
+        cols = [GUESS, UNITS, RETAIL, TAM]
+        xs = np.linspace(1964, 1990, 80)
+        curves, labs = VGroup(), VGroup()
+        for f, col in zip(F["fits"], cols):
+            c_ = VMobject(stroke_color=col, stroke_width=3.5).set_points_smoothly(
+                [pa.ax.c2p(x, float(predict(f, [x])[0])) for x in xs])
+            curves.add(c_)
+            labs.add(VGroup(tx(f"ceiling {f['m']:.0f}%", 18, col, bold=True),
+                            tx(f"misses the dots by {f['rmse']:.2f} points", 15, GREY_B)).arrange(DOWN, aligned_edge=LEFT,
+                                                                                                buff=0.03))
+        labs.arrange(DOWN, aligned_edge=LEFT, buff=0.25).move_to([5.0, -0.3, 0])
+        zoom = Rectangle(width=pa.ax.c2p(cut + 0.6, 0)[0] - pa.ax.c2p(1965.4, 0)[0],
+                         height=pa.ax.c2p(0, 30)[1] - pa.ax.c2p(0, 4)[1], stroke_color=WHITE,
+                         stroke_width=1.5).move_to(pa.ax.c2p((1965.4 + cut + 0.6) / 2, 17))
+        cutl = DashedLine(pa.ax.c2p(cut, 0), pa.ax.c2p(cut, 100), stroke_color=GREY_C, stroke_width=1.5)
+        head = tx(f"Colour TV, the years up to {cut:.0f}: four ceilings, one set of dots", 22, WHITE, bold=True).to_edge(
+            UP, buff=0.5)
+        src = source("Our World in Data (Comin and Hobijn); this film's Bass fits with the ceiling held fixed", size=13)
+        with self.voiceover(
+            "Why does it miss so badly? Look closely at what the first years contain. <bookmark mark='a'/> Here are "
+            f"colour television's four dots, up to {cut:.0f}: none above a quarter of households. "
+            "<bookmark mark='b'/> Now force the curve to stop at forty percent, and fit it. "
+            "<bookmark mark='c'/> At sixty. At eighty. At a hundred. <bookmark mark='d'/> Every one of the four passes "
+            f"within about a third of a percentage point of every dot. The early years cannot tell these curves "
+            "apart, because in the early years every S-curve looks the same: a slow start bending upward. The "
+            "ceiling is simply not in the data yet. <bookmark mark='e'/> So a forecast of the ceiling has to come "
+            "from somewhere else: from who could possibly buy, at what price, and from products that came before. "
+            "The curve can tell you the shape. It cannot tell you the size."
+        ) as vo:
+            self.play(FadeIn(src), FadeIn(pa), FadeIn(head), Create(cutl))
+            vo.wait_until("a")
+            self.play(LaggedStart(*[FadeIn(d_, scale=2) for d_ in dots], lag_ratio=0.12), Create(zoom))
+            vo.wait_until("b")
+            self.play(Create(curves[0]), FadeIn(labs[0]), run_time=1.4)
+            vo.wait_until("c")
+            for k in (1, 2, 3):
+                self.play(Create(curves[k]), FadeIn(labs[k]), run_time=1.0)
+            vo.wait_until("d")
+            self.play(Indicate(zoom, color=WHITE), *[Indicate(l_[1], color=WHITE) for l_ in labs])
+            vo.wait_until("e")
+            self.play(*[c_.animate.set_stroke(opacity=0.4) for c_ in curves], dots.animate.set_color(GOLD))
         self.clear_scene()
 
     def all_of_them(self):

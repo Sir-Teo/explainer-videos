@@ -42,7 +42,7 @@ class Bottom(VoiceoverScene):
             f"Census's dollars by those gallons and a gallon leaving the factory is worth about "
             f"{100 * W['factory_per_gal']:.0f} cents. <bookmark mark='c'/> Divide Primo's retail figure by the same "
             f"gallons and a gallon at the till is worth about {W['retail_per_gal']:.2f}. <bookmark mark='d'/> That "
-            f"is the gap between the two published numbers: roughly {W['ratio']:.1f} times. Some of it is the lorry "
+            f"is the gap between the two published numbers: roughly {W['ratio']:.1f} times. Some of it is the truck "
             "and the shop. Some is water the Census files elsewhere, from soft-drink plants and from abroad. The "
             "bottom-up method makes you choose the price, and the price you choose decides which market you have "
             "measured."

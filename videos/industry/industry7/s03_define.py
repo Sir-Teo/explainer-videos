@@ -51,7 +51,7 @@ class Define(VoiceoverScene):
 
     def levers(self):
         rows = [("Which level of the chain?", "the price at the factory gate, or the price at the till: the "
-                 "wholesaler, the lorry and the shop all add their share", VGroup(draw.factory(0.6, color=FACTORY),
+                 "wholesaler, the truck and the shop all add their share", VGroup(draw.factory(0.6, color=FACTORY),
                                                                                  Text("→", font_size=28, color=GREY_A),
                                                                                  draw.truck(0.7, color=GREY_B),
                                                                                  Text("→", font_size=28, color=GREY_A),
@@ -83,7 +83,7 @@ class Define(VoiceoverScene):
         with self.voiceover(
             "Every market size answers four questions, whether it says so or not. <bookmark mark='a'/> First, at which "
             "level of the chain? The Census counts what water is worth leaving the factory. By the time it reaches a "
-            "shop till, a wholesaler, a lorry and the shop itself have each added their share. <bookmark mark='b'/> "
+            "shop till, a wholesaler, a truck and the shop itself have each added their share. <bookmark mark='b'/> "
             "Second, which plants? The Census files each plant under what it mainly makes. Water bottled in a plant "
             "that mostly makes soft drinks is counted with the soft drinks, not with the water. "
             "<bookmark mark='c'/> Third, which products? Still or sparkling, plain or flavoured, delivered in "
