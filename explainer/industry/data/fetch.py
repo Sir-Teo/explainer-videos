@@ -320,7 +320,7 @@ SEC_ITEMS = {"revenue": ["RevenueFromContractWithCustomerExcludingAssessedTax", 
              "inventory": ["InventoryNet"]}
 SEC_COMPANIES = [(789019, "MSFT"), (909832, "COST"), (19617, "JPM"), (753308, "NEE"), (27904, "DAL"), (59478, "LLY"),
                  (1403161, "V"), (723125, "MU"), (34088, "XOM"), (882184, "DHI"), (50863, "INTC"),
-                 (1141391, "MA"), (104169, "WMT")]
+                 (1141391, "MA"), (104169, "WMT"), (1652044, "GOOGL"), (1018724, "AMZN"), (1326801, "META")]
 
 
 # where a company's first-choice tag means something else: Mastercard tagged its gross revenue, before rebates and

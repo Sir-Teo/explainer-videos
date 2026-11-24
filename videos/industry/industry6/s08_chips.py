@@ -54,6 +54,20 @@ class Chips(VoiceoverScene):
                      tx(f"in one quarter, {100 * last['margin']:.0f}% of it operating profit", 17, GREY_A)).arrange(
             DOWN, buff=0.06).move_to([1.6, 1.9, 0])
         wafer = draw.wafer(0.6).move_to([-4.6, 1.7, 0])
+        # why memory cycles: chips that are alike, plants that take years, demand that comes in surges
+        same = VGroup(draw.chip(0.6), tx("=", 36, WHITE), draw.chip(0.6)).arrange(RIGHT, buff=0.2)
+        same_t = tx("one maker's chip does the same job as another's", 17, GREY_A)
+        fab = VGroup(draw.factory(1.2, color="#8C929B"), tx("billions of dollars, years to build", 17, GREY_A)).arrange(
+            DOWN, buff=0.15)
+        monitor = VGroup(RoundedRectangle(corner_radius=0.05, width=0.9, height=0.6, stroke_color=STONE, stroke_width=3,
+                                          fill_color="#1B2230", fill_opacity=1),
+                         Line(DOWN * 0.3, DOWN * 0.45, stroke_color=STONE, stroke_width=3))
+        surges = VGroup(VGroup(monitor, viz.phone(0.7), draw.server_rack(0.8)).arrange(RIGHT, buff=0.35),
+                        tx("demand in surges: computers, phones, data centres", 17, GREY_A)).arrange(DOWN, buff=0.15)
+        why = VGroup(VGroup(same, same_t).arrange(DOWN, buff=0.15), fab, surges).arrange(RIGHT, buff=0.8).move_to(
+            [0.4, -0.3, 0])
+        if why.width > 13:
+            why.scale_to_fit_width(13)
         src = source("Micron Technology, Forms 10-Q and 10-K (SEC company facts); fourth quarters are the year less "
                      "three quarters", size=13)
         i_last_peak = qs.index(m["peaks"][-2]["end"])
@@ -73,9 +87,11 @@ class Chips(VoiceoverScene):
             self.play(FadeIn(src), FadeIn(wafer, scale=0.8), FadeIn(head))
             self.play(Rotate(wafer, PI / 2), run_time=1.2)
             vo.wait_until("a")
-            self.play(Indicate(wafer.dies, color=WHITE))
+            self.play(Indicate(wafer.dies, color=WHITE), FadeIn(why[0], shift=UP * 0.2))
+            self.play(FadeIn(why[1], shift=UP * 0.2))
+            self.play(FadeIn(why[2], shift=UP * 0.2))
             vo.wait_until("b")
-            self.play(Create(floor), FadeIn(yrs), FadeIn(tick_lab), FadeOut(wafer))
+            self.play(FadeOut(why), Create(floor), FadeIn(yrs), FadeIn(tick_lab), FadeOut(wafer))
             self.add(bars)
             self.play(shown.animate.set_value(i_last_peak + 4), run_time=4.0, rate_func=linear)
             vo.wait_until("c")
@@ -121,9 +137,10 @@ class Chips(VoiceoverScene):
             "this boom will arrive over the next few years. Whether demand is still there to meet them is the "
             "question every cycle asks."
         ) as vo:
-            self.play(FadeIn(src), FadeIn(pa), FadeIn(key))
+            self.play(FadeIn(src), FadeIn(pa), FadeIn(key[0]),
+                      LaggedStart(*[GrowFromEdge(b_, DOWN) for b_ in bars], lag_ratio=0.08), run_time=2.2)
             vo.wait_until("a")
-            self.play(LaggedStart(*[GrowFromEdge(b_, DOWN) for b_ in bars], lag_ratio=0.08), run_time=2.2)
+            self.play(FadeIn(key[1]), Indicate(bars, color=WHITE, scale_factor=1.0))
             vo.wait_until("b")
             self.play(Create(dl), run_time=2.0)
             vo.wait_until("c")

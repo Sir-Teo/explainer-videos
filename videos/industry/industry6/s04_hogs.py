@@ -28,6 +28,18 @@ class Hogs(VoiceoverScene):
         tb = tx("hogs slaughtered in the United States, millions a month", 16, HOG).next_to(pb, UP, buff=0.1).align_to(
             pb, LEFT)
         pig = draw.pig(1.3, color=HOG).move_to([-5.6, 1.4, 0])
+        # the yards: pens of hogs, and a board where the day's price was chalked
+        pens = VGroup()
+        for j in range(3):
+            pen = VGroup(Rectangle(width=2.6, height=1.1, stroke_color="#8C6B4A", stroke_width=3, fill_opacity=0),
+                         VGroup(*[draw.pig(0.5, color=HOG) for _ in range(4)]).arrange(RIGHT, buff=0.08))
+            pens.add(pen)
+        pens.arrange(RIGHT, buff=0.25).move_to([1.2, 1.2, 0])
+        board = VGroup(RoundedRectangle(corner_radius=0.06, width=3.4, height=1.4, stroke_color="#8C6B4A",
+                                        stroke_width=3, fill_color="#1F2A22", fill_opacity=1),
+                       tx("hogs, today", 18, "#E8E4DA").shift(UP * 0.35),
+                       tx("$5.25 per 100 lb", 26, "#E8E4DA", bold=True).shift(DOWN * 0.15)).move_to([1.2, -1.4, 0])
+        board_t = tx("illustrative board", 13, GREY_C).next_to(board, DOWN, buff=0.08)
         yards = VGroup(tx("Union Stock Yards", 18, GREY_A, bold=True), tx("Chicago", 15, GREY_B)).arrange(
             DOWN, buff=0.05).next_to(pig, DOWN, buff=0.2)
         src = source("NBER Macrohistory Database via FRED: wholesale price of hogs, Chicago; hogs slaughtered, US "
@@ -41,11 +53,13 @@ class Hogs(VoiceoverScene):
             "country growing. <bookmark mark='d'/> But look closely, and both lines are also shaking, with a rhythm "
             "of a few years. That shaking is what we are after."
         ) as vo:
-            self.play(FadeIn(src), FadeIn(pig, shift=RIGHT * 0.3), FadeIn(yards))
+            self.play(FadeIn(src), FadeIn(pig, shift=RIGHT * 0.3), FadeIn(yards),
+                      LaggedStart(*[Create(pn[0]) for pn in pens], lag_ratio=0.2), run_time=1.4)
+            self.play(LaggedStart(*[FadeIn(pn[1], shift=RIGHT * 0.2) for pn in pens], lag_ratio=0.2), run_time=1.4)
             vo.wait_until("a")
-            self.play(pig.animate.shift(RIGHT * 0.25), rate_func=there_and_back, run_time=0.8)
+            self.play(FadeIn(board, shift=UP * 0.2), FadeIn(board_t))
             vo.wait_until("b")
-            self.play(FadeIn(pa), FadeIn(ta))
+            self.play(FadeOut(pens), FadeOut(board), FadeOut(board_t), FadeIn(pa), FadeIn(ta))
             self.play(Create(la), run_time=2.6, rate_func=linear)
             vo.wait_until("c")
             self.play(FadeIn(pb), FadeIn(tb))
@@ -108,9 +122,7 @@ class Hogs(VoiceoverScene):
             self.play(FadeIn(cards[0], shift=UP * 0.1))
             vo.wait_until("d")
             self.play(FadeIn(cards[1], shift=UP * 0.1))
-            shifted = lq.copy().shift(LEFT * (pa.ax.c2p(1885 + lag / 12, 0)[0] - pa.ax.c2p(1885, 0)[0])).set_stroke(
-                opacity=0.6)
-            self.play(Transform(lq.copy(), shifted), run_time=1.6)
+            self.play(Indicate(cards[1][1], color=BOOM), run_time=1.2)
             vo.wait_until("e")
             self.play(FadeIn(cards[2], shift=UP * 0.1))
             self.play(Indicate(cards[2][1], color=ORDER))

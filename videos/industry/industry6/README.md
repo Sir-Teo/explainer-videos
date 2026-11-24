@@ -40,6 +40,8 @@ From there it covers:
   day (2010-2015), Exxon Mobil's spending from $34bn (2012) to $12bn (2021) and back to $28bn (2025);
 - reading where you are: ships on order, spending against wear, unsold stock (Micron: 6.5 months of sales in 2023,
   0.9 in 2026) and houses for sale;
+- a boom you can watch: Microsoft, Alphabet, Amazon and Meta spent $23bn on buildings and equipment in 2015 and
+  $357bn in 2025, 2.8 times their depreciation and 64% of their operating cash;
 - who wins a cycle: the low-cost producer on the supply curve, the buyer at the bottom, the company that owes
   little, the supplier paid in advance;
 - *Called it?*: Intel's 2021 plan for two Arizona fabs against its loss of $11.7bn in 2024; and this series' call that
@@ -78,8 +80,9 @@ monthly series (`fred_cycle.csv`).
 | 11 | Leverage | Operating and financial leverage; Micron and Maersk in 2023 |
 | 12 | Oil | West Texas crude, US output and Exxon's spending |
 | 13 | Reading where you are | Four gauges |
-| 14 | Who wins a cycle | The supply curve in a trough; four other ways to come out ahead |
-| 15 | Called it? | Intel's 2021 plan; this series' call on Micron |
+| 14 | A boom you can watch | Microsoft, Alphabet, Amazon and Meta's capital spending against wear and cash |
+| 15 | Who wins a cycle | The supply curve in a trough; four other ways to come out ahead |
+| 16 | Called it? | Intel's 2021 plan; this series' call on Micron |
 | — | The cycle, and what comes next | The answers; Part 7, sizing a market |
 
 ## What is computed, and from what

@@ -8,8 +8,8 @@ STACK = [(12, 30), (10, 34), (8, 38), (9, 41), (7, 45), (8, 49), (6, 54), (7, 60
 
 class Who(VoiceoverScene):
     def construct(self):
-        card(self, 14, "Who wins a cycle", "If the cycle cannot be stopped, who comes out ahead?",
-             "Chapter fourteen. Who wins a cycle.", lit=("change", "moat"))
+        card(self, 15, "Who wins a cycle", "If the cycle cannot be stopped, who comes out ahead?",
+             "Chapter fifteen. Who wins a cycle.", lit=("change", "moat"))
         self.stack()
         self.others()
 
@@ -36,10 +36,10 @@ class Who(VoiceoverScene):
         pnum = draw.number(lambda: price.get_value(), 0, prefix="price $", size=24, color=WHITE)
         pnum.add_updater(lambda g: g.next_to([x + 0.25, base + price.get_value() * v, 0], RIGHT, buff=0.1))
         xl = tx("producers, from lowest cost to highest; width = capacity", 16, GREY_B).next_to(floor, DOWN, buff=0.15)
-        yl = tx("cost of one more unit", 16, GREY_B).move_to([x0 + 1.4, base + 4.6, 0])
+        yl = tx("cost of one more unit", 16, GREY_B).move_to([x0 + 1.4, base + 4.3, 0]).shift(RIGHT * 3.6)
         key = VGroup(tx("profitable", 16, BOOM, bold=True), tx("barely covering costs", 16, ORDER, bold=True),
                      tx("losing money on every unit", 16, BUST, bold=True)).arrange(DOWN, aligned_edge=LEFT,
-                                                                                     buff=0.1).move_to([4.8, 2.4, 0])
+                                                                                     buff=0.1).move_to([-4.0, 2.9, 0])
         tag = estimate_tag("an illustrative industry of ten producers (Part 4's supply curve)", corner=DR, size=13)
         with self.voiceover(
             "Who wins a cycle? Go back to Part 4's supply curve: every producer in an industry, lined up from the "
@@ -54,7 +54,7 @@ class Who(VoiceoverScene):
             self.play(FadeIn(tag), Create(floor), FadeIn(xl), FadeIn(yl),
                       LaggedStart(*[GrowFromEdge(b_, DOWN) for b_ in blocks], lag_ratio=0.1), run_time=2.0)
             vo.wait_until("a")
-            self.add(pline, pnum)
+            self.add(blocks, pline, pnum)
             self.play(FadeIn(key))
             vo.wait_until("b")
             self.play(price.animate.set_value(47.0), run_time=3.0)
@@ -79,7 +79,7 @@ class Who(VoiceoverScene):
                   "building in a trough can pay best: costs are low, and so is the competition for workers")]
         for g, head, sub in specs:
             g.scale_to_fit_height(min(g.height, 0.8))
-            txt = VGroup(tx(head, 24, WHITE, bold=True), tx(sub, 17, GREY_B)).arrange(DOWN, aligned_edge=LEFT, buff=0.08)
+            txt = VGroup(tx(head, 26, WHITE, bold=True), tx(sub, 19, GREY_B)).arrange(DOWN, aligned_edge=LEFT, buff=0.08)
             cards.add(VGroup(g, txt).arrange(RIGHT, buff=0.4))
         cards.arrange(DOWN, aligned_edge=LEFT, buff=0.5).move_to([0, -0.2, 0])
         head = tx("Other ways to come out ahead", 26, GOLD, bold=True).to_edge(UP, buff=0.5)

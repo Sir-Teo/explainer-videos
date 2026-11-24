@@ -6,17 +6,17 @@ from videos.industry.industry6.common import *  # noqa: F403
 
 class Called(VoiceoverScene):
     def construct(self):
-        card(self, 15, "Called it?", "Can you see a peak while you are standing on it?",
-             "Chapter fifteen. Called it?", lit=("change",))
+        card(self, 16, "Called it?", "Can you see a peak while you are standing on it?",
+             "Chapter sixteen. Called it?", lit=("change",))
         self.intel()
         self.ours()
 
     def intel(self):
         I_ = R["intel"]
         yrs = I_["years"]
-        pa = viz.plot_axes([2018.4, 2025.6], [-15, 30], x_length=8.4, y_length=4.2, xticks=yrs, yticks=[-10, 0, 10, 20],
+        pa = viz.plot_axes([2018.4, 2025.6], [-15, 30], x_length=7.6, y_length=4.2, xticks=yrs, yticks=[-10, 0, 10, 20],
                            xfmt=lambda v: f"{int(v)}", yfmt=lambda v: f"${v:g}bn", size=15)
-        pa.move_to([0.8, -0.7, 0])
+        pa.move_to([2.0, -0.7, 0])
         zero = DashedLine(pa.ax.c2p(2018.4, 0), pa.ax.c2p(2025.6, 0), stroke_color=GREY_C, stroke_width=1.5)
         bars = VGroup()
         for y, v in zip(yrs, I_["capex"]):
@@ -39,7 +39,7 @@ class Called(VoiceoverScene):
                      tx("23 March 2021", 15, "#4A4F5A").shift(UP * 0.62),
                      tx("IDM 2.0", 28, "#1B1F27", bold=True).shift(UP * 0.18),
                      tx(f"about ${R['intel']['announced']:.0f} billion for", 17, "#1B1F27").shift(DOWN * 0.3),
-                     tx("two new factories in Arizona", 17, "#1B1F27").shift(DOWN * 0.62)).move_to([-4.8, 2.0, 0])
+                     tx("two new factories in Arizona", 17, "#1B1F27").shift(DOWN * 0.62)).move_to([-5.0, 2.2, 0])
         fabs = VGroup(draw.factory(1.0, color="#7EC8F5"), draw.factory(1.0, color="#7EC8F5")).arrange(RIGHT, buff=0.15)
         fabs.next_to(rel, DOWN, buff=0.35)
         i21, i24 = yrs.index(2021), yrs.index(2024)

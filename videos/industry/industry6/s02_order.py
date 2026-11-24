@@ -88,7 +88,7 @@ class Order(VoiceoverScene):
             return g
         line = always_redraw(rate_line)
         bars = always_redraw(book_bars)
-        dem = tx("demand for ships: up 3% every year, never down", 17, BOOM).to_edge(DOWN, buff=0.35)
+        dem = tx("demand for ships: up 3% every year, never down", 17, BOOM).to_corner(DL, buff=0.35)
         # moments to point at: the first big peak of orders and the trough that follows its deliveries
         ob = F["orderbook"]
         i_pk = int(np.argmax(ob[:30]))
@@ -110,7 +110,7 @@ class Order(VoiceoverScene):
             self.play(FadeIn(tag), FadeIn(pa), FadeIn(pb), FadeIn(ta), FadeIn(tb), Create(cost))
             self.add(line, bars)
             vo.wait_until("a")
-            self.play(FadeIn(dem, shift=UP * 0.1))
+            self.play(FadeIn(dem, shift=UP * 0.1), t.animate.set_value(3), run_time=1.6, rate_func=linear)
             vo.wait_until("b")
             self.play(t.animate.set_value(i_pk), run_time=5.0, rate_func=linear)
             vo.wait_until("c")

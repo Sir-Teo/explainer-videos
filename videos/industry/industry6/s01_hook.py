@@ -37,9 +37,10 @@ class Hook(VoiceoverScene):
         ob = bar(oi, 3.6, BOOM, BUST)
         zero = Line([-0.2, base, 0], [4.8, base, 0], stroke_color=GREY_B, stroke_width=1.5)
         rn = draw.number(rev, 1, prefix="$", suffix="bn", size=30, color=CAP)
-        on = draw.number(oi, 1, prefix="$", suffix="bn", size=30, color=WHITE, sign=True)
+        on = draw.memo_redraw(lambda: round(oi(), 1),
+                              lambda v: tx(("-" if v < 0 else "") + f"${abs(v):.1f}bn", 30, WHITE),
+                              lambda g: g.next_to([3.6, base + max(oi(), 0) * u, 0], UP, buff=0.12))
         rn.add_updater(lambda g: g.next_to([1.0, base + max(rev(), 0) * u, 0], UP, buff=0.12))
-        on.add_updater(lambda g: g.next_to([3.6, base + max(oi(), 0) * u, 0], UP, buff=0.12))
         labs = VGroup(tx("sales", 18, CAP).move_to([1.0, base - 0.45, 0]),
                       tx("operating profit", 18, GREY_A).move_to([3.6, base - 0.45, 0]))
         yr = draw.memo_redraw(lambda: "fiscal 2023" if t.get_value() < 0.5 else "fiscal 2026",

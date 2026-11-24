@@ -18,7 +18,8 @@ SCENES = [
     ("s12_leverage", "Leverage", "11. Leverage"),
     ("s13_oil", "Oil", "12. Oil"),
     ("s14_reading", "Reading", "13. Reading where you are"),
-    ("s15_who", "Who", "14. Who wins a cycle"),
-    ("s16_called", "Called", "15. Called it?"),
+    ("s14b_ai", "Ai", "14. A boom you can watch"),
+    ("s15_who", "Who", "15. Who wins a cycle"),
+    ("s16_called", "Called", "16. Called it?"),
     ("s17_outro", "Outro", "The cycle, and what comes next"),
 ]

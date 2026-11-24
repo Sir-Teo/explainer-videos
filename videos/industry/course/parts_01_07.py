@@ -317,7 +317,7 @@ PARTS = [
             ("Capital spending against wear", r"\frac{\text{capital spending}}{\text{depreciation}}"),
             ("Ships on order", r"\frac{\text{orderbook}}{\text{fleet}}"),
         ],
-        U=(0, 1, 2, 4, 5, 6, 7, 8, "s10_intermission", 9, 11, 14), I=(12, 13), D=(3, 10, 15),
+        U=(0, 1, 2, 4, 5, 6, 7, 8, "s10_intermission", 9, 11, 14, 15), I=(12, 13), D=(3, 10, 16),
         also=(("The Register's rows for Part 6", "explainer/industry/data/rows_p06.py"),
               ("The cycle machines", "explainer/industry/works/cycle.py"),
               ("Hogs, housing, oil and orders; Maersk; Micron by quarter", "explainer/industry/data/SOURCES.md")),

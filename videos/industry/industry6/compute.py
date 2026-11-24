@@ -213,6 +213,20 @@ def results() -> dict:
                     latest=(R["housing"]["series"]["MSACSR"]["months"][-1],
                             R["housing"]["series"]["MSACSR"]["values"][-1])))
 
+    # --- a boom you can watch: the four largest builders of data centres ------------------------------------------
+    HS = {"MSFT": "Microsoft", "GOOGL": "Alphabet", "AMZN": "Amazon", "META": "Meta"}
+    hs = {t: {k: _fy(sec, t, k) for k in ("capex", "depreciation", "operating_cash")} for t in HS}
+    hy = list(range(2015, 2026))
+    cap = {t: [hs[t]["capex"].get(y) for y in hy] for t in HS}
+    both = [y for y in range(2021, 2026) if all(hs[t]["depreciation"].get(y) for t in HS)]
+    tot_cap = {y: sum(hs[t]["capex"][y] for t in HS) for y in hy}
+    tot_dep = {y: sum(hs[t]["depreciation"][y] for t in HS) for y in both}
+    tot_ocf = {y: sum(hs[t]["operating_cash"][y] for t in HS) for y in both}
+    R["hyperscale"] = dict(names=HS, years=hy, capex=cap, total=tot_cap, dep=tot_dep, ocf=tot_ocf,
+                           ratio={y: tot_cap[y] / tot_dep[y] for y in both},
+                           share_of_cash={y: tot_cap[y] / tot_ocf[y] for y in both},
+                           msft26=dict(capex=hs["MSFT"]["capex"].get(2026), ocf=hs["MSFT"]["operating_cash"].get(2026)))
+
     # --- the dated call of a peak: Intel ---------------------------------------------------------------------------
     R["intel"] = dict(announced=get("intel.az.2021"),
                       years=list(range(2019, 2026)), capex=[intc["capex"][y] for y in range(2019, 2026)],

@@ -31,15 +31,15 @@ class Loop(VoiceoverScene):
     def construct(self):
         card(self, 4, "The capital cycle", "Is the hog cycle just about hogs?",
              "Chapter four. The capital cycle.", lit=("change", "moat"))
-        r = 2.5
-        centre = np.array([-1.6, -0.2, 0])
+        r = 2.75
+        centre = np.array([-1.7, -0.25, 0])
         angles = [PI / 2 - k * TAU / 6 for k in range(6)]
         nodes = VGroup()
         for k, ((name, col), a) in enumerate(zip(STAGES, angles)):
             pos = centre + r * np.array([np.cos(a), np.sin(a), 0])
             pic = _pic(k)
-            pic.scale_to_fit_height(min(pic.height, 0.7)).move_to(pos)
-            lab = tx(name, 18, col, bold=True)
+            pic.scale_to_fit_height(min(pic.height, 0.85)).move_to(pos)
+            lab = tx(name, 20, col, bold=True)
             out = np.array([np.cos(a), np.sin(a), 0])
             lab.next_to(pic, out if abs(out[1]) > 0.5 else (RIGHT if out[0] > 0 else LEFT), buff=0.15)
             nodes.add(VGroup(pic, lab))
@@ -67,8 +67,12 @@ class Loop(VoiceoverScene):
             "<bookmark mark='h'/> The same loop turns in ships, memory chips, mines, houses, office towers and oil "
             "wells. The next chapters measure it in four of them."
         ) as vo:
+            ghost = VGroup(nodes.copy(), arcs.copy()).set_opacity(0.15)
+            self.play(FadeIn(ghost), run_time=1.2)
             self.add(dot)
             self.play(FadeIn(nodes[0]), FadeIn(dot))
+            self.play(trackr.animate.set_value(TAU), run_time=4.0, rate_func=linear)
+            trackr.set_value(0)
             for k, m in enumerate("abcdef"):
                 vo.wait_until(m)
                 if k > 0:
@@ -78,6 +82,7 @@ class Loop(VoiceoverScene):
                     self.play(Indicate(nodes[0], color=BOOM))
             vo.wait_until("g")
             self.play(Create(arcs[5]), trackr.animate.set_value(TAU), run_time=1.2)
+            self.remove(ghost)
             self.play(trackr.animate.set_value(2 * TAU), run_time=3.0, rate_func=linear)
             vo.wait_until("h")
             self.play(FadeIn(where_t), LaggedStart(*[FadeIn(w_, shift=LEFT * 0.2) for w_ in where], lag_ratio=0.25),

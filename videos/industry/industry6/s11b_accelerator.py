@@ -22,10 +22,10 @@ class Accelerator(VoiceoverScene):
              "Chapter ten. The accelerator.", lit=("change", "make"))
         od = orders(DEMAND)
         n = len(DEMAND)
-        bake = VGroup(*[draw.shop(0.55, color=PRICE) for _ in range(6)]).arrange(RIGHT, buff=0.12).move_to([-4.0, 2.6, 0])
+        bake = VGroup(*[draw.shop(0.75, color=PRICE) for _ in range(6)]).arrange(RIGHT, buff=0.12).move_to([-3.8, 2.5, 0])
         bl = tx("a chain of bakeries", 17, PRICE).next_to(bake, DOWN, buff=0.1)
-        ovens = VGroup(*[draw.factory(0.7, color="#8C929B") for _ in range(3)]).arrange(RIGHT, buff=0.15).move_to(
-            [3.6, 2.6, 0])
+        ovens = VGroup(*[draw.factory(0.9, color="#8C929B") for _ in range(3)]).arrange(RIGHT, buff=0.15).move_to(
+            [3.8, 2.5, 0])
         ol = tx("the company that makes its ovens", 17, GREY_A).next_to(ovens, DOWN, buff=0.1)
         arrow = Arrow(bake.get_right(), ovens.get_left(), buff=0.3, color=GREY_B, stroke_width=3)
         pa = viz.plot_axes([-0.5, n - 0.5], [0, 130], x_length=5.4, y_length=2.6, yticks=[50, 100], size=14)

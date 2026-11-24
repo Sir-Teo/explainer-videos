@@ -57,7 +57,9 @@ class Bullwhip(VoiceoverScene):
             "three researchers, Hau Lee, V. Padmanabhan and Seungjin Whang, named it the bullwhip effect: "
             "a small flick of the wrist, and a crack at the far end."
         ) as vo:
-            self.play(FadeIn(tag))
+            ghosts = VGroup(*[pn[2].copy().set_opacity(0.3) for pn in panels], arrows.copy().set_opacity(0.3))
+            self.play(FadeIn(tag), LaggedStart(*[FadeIn(g_, shift=DOWN * 0.15) for g_ in ghosts], lag_ratio=0.2),
+                      run_time=1.6)
             for k, m in enumerate("abcd"):
                 vo.wait_until(m)
                 self.play(FadeIn(panels[k]), *([GrowArrow(arrows[k - 1])] if k else []), run_time=0.8)
@@ -68,6 +70,7 @@ class Bullwhip(VoiceoverScene):
                     self.play(Indicate(lines[k], color=WHITE), run_time=0.8)
                 self.play(FadeIn(sds[k], shift=LEFT * 0.1), run_time=0.5)
             vo.wait_until("e")
+            self.remove(ghosts)
             self.play(Indicate(sds[3], color=BUST, scale_factor=1.3))
         for ln in lines:
             ln.clear_updaters()

@@ -14,8 +14,8 @@ class Ships(VoiceoverScene):
         S = R["ships"]
         book = S["book"]
         yrs = sorted(book)
-        fleet = VGroup(*[draw.ship(0.75) for _ in range(10)]).arrange_in_grid(rows=2, cols=5, buff=(0.12, 0.25))
-        fleet.move_to([-3.6, 1.6, 0])
+        fleet = VGroup(*[draw.ship(1.05) for _ in range(10)]).arrange_in_grid(rows=2, cols=5, buff=(0.15, 0.3))
+        fleet.move_to([-3.7, 2.2, 0])
         fl = tx("the world's fleet", 18, GREY_A).next_to(fleet, DOWN, buff=0.15)
         # the orderbook as ghost ships: the share of the fleet already ordered and not yet delivered
         pa = viz.plot_axes([2007.5, 2025.8], [0, 0.6], x_length=7.2, y_length=3.0, yticks=[0.25, 0.5],
@@ -30,8 +30,8 @@ class Ships(VoiceoverScene):
                             tx(str(y), 15, GREY_B).next_to(b, DOWN, buff=0.08)))
         pt = tx("ships on order, as a share of the ships already sailing", 17, ORDER).next_to(pa, UP, buff=0.12).align_to(
             pa, LEFT)
-        ghosts = VGroup(*[draw.ship(0.75).set_opacity(0.35) for _ in range(5)]).arrange(RIGHT, buff=0.12).next_to(
-            fleet, RIGHT, buff=0.4).align_to(fleet, UP)
+        ghosts = VGroup(*[draw.ship(1.05).set_opacity(0.35) for _ in range(5)]).arrange(RIGHT, buff=0.15).next_to(
+            fleet, RIGHT, buff=0.5).align_to(fleet, UP)
         bulk = VGroup(tx("bulk carriers, 2009:", 18, GREY_A), tx(f"{100 * S['bulk2009']:.0f}% of their fleet on order",
                                                                   24, BUST, bold=True)).arrange(DOWN, buff=0.06)
         bulk.move_to([-4.0, -1.6, 0])

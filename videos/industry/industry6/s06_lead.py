@@ -15,18 +15,20 @@ class Lead(VoiceoverScene):
         panels = VGroup()
         for k, L in enumerate((1, 2, 3, 4)):
             rates = F["rates"][L]
-            pa = viz.plot_axes([0, len(rates) - 1], [0.4, 1.9], x_length=5.4, y_length=1.9, yticks=[1.0],
+            pa = viz.plot_axes([0, len(rates) - 1], [0.4, 1.9], x_length=4.3, y_length=1.8, yticks=[1.0],
                                yfmt=lambda v: "cost", size=13, grid=True)
             line = VMobject(stroke_color=PRICE, stroke_width=3).set_points_as_corners(
                 [pa.ax.c2p(i, v) for i, v in enumerate(rates)])
             sw = F["swing"][L]
             head = VGroup(tx(f"ships take {L} year{'s' if L > 1 else ''} to build", 18, WHITE, bold=True),
-                          tx(f"swing: {100 * sw:.0f}% of the average rate", 16, BUST if sw > 0.5 else GREY_B)).arrange(
-                RIGHT, buff=0.4)
+                          tx(f"swing: {100 * sw:.0f}%", 17, BUST if sw > 0.5 else GREY_B)).arrange(RIGHT, buff=0.3)
             head.next_to(pa, UP, buff=0.08).align_to(pa, LEFT)
-            yard = VGroup(*[draw.crane(0.35) for _ in range(L)]).arrange(RIGHT, buff=0.05).next_to(pa, LEFT, buff=0.35)
+            yard = VGroup(*[draw.crane(0.3) for _ in range(L)]).arrange_in_grid(rows=2, cols=2, buff=0.05).next_to(
+                pa, LEFT, buff=0.25)
             panels.add(VGroup(pa, line, head, yard))
-        panels.arrange_in_grid(rows=2, cols=2, buff=(1.2, 0.7)).move_to([0.2, -0.3, 0])
+        panels.arrange_in_grid(rows=2, cols=2, buff=(0.9, 0.8)).move_to([0.1, -0.3, 0])
+        if panels.width > 13.4:
+            panels.scale_to_fit_width(13.4)
         tag = estimate_tag("the Works' fleet model; demand grows 3% a year in every panel", corner=DR, size=13)
         with self.voiceover(
             "Why does the wait matter so much? Run the same market four times, changing only how long a ship takes "
@@ -39,13 +41,11 @@ class Lead(VoiceoverScene):
             "a high rate before the first new ship shows them their mistake, and the bigger the wave that lands at "
             "the end."
         ) as vo:
-            self.play(FadeIn(tag))
+            self.play(FadeIn(tag), LaggedStart(*[AnimationGroup(FadeIn(pn[0]), FadeIn(pn[2]), FadeIn(pn[3]))
+                                                 for pn in panels], lag_ratio=0.2), run_time=2.0)
             for k, m in enumerate("abcd"):
                 vo.wait_until(m)
-                pa, line, head, yard = panels[k]
-                self.play(FadeIn(pa), FadeIn(head), LaggedStart(*[FadeIn(c_, shift=DOWN * 0.2) for c_ in yard],
-                                                                lag_ratio=0.2), run_time=0.9)
-                self.play(Create(line), run_time=1.6, rate_func=linear)
+                self.play(Create(panels[k][1]), Indicate(panels[k][3], color=ORDER), run_time=1.6, rate_func=linear)
             vo.wait_until("e")
             self.play(Indicate(panels[3][1], color=BUST), Indicate(panels[3][2][1], color=BUST))
         self.clear_scene()
@@ -73,7 +73,7 @@ class Lead(VoiceoverScene):
         rows = VGroup()
         for pic, head, sub in items:
             pic.scale_to_fit_height(min(pic.height, 1.0))
-            txt = VGroup(tx(head, 22, WHITE, bold=True), tx(sub, 17, GREY_B)).arrange(DOWN, aligned_edge=LEFT,
+            txt = VGroup(tx(head, 25, WHITE, bold=True), tx(sub, 18, GREY_B)).arrange(DOWN, aligned_edge=LEFT,
                                                                                   buff=0.08)
             rows.add(VGroup(pic, txt))
         for r_ in rows:

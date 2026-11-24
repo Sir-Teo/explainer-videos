@@ -52,7 +52,8 @@ class Reading(VoiceoverScene):
             "September 2026. <bookmark mark='e'/> None of these says when a cycle will turn. Together, they say "
             "how much is coming, and how little room there is if demand stops growing."
         ) as vo:
-            self.play(FadeIn(src))
+            self.play(FadeIn(src), LaggedStart(*[FadeIn(g[0].copy().set_opacity(0.25)) for g in grid], lag_ratio=0.2),
+                      run_time=1.4)
             for g, m in zip(grid, "abcd"):
                 vo.wait_until(m)
                 self.play(FadeIn(g), run_time=0.8)

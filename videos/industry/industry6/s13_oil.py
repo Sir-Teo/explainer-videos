@@ -37,7 +37,7 @@ class Oil(VoiceoverScene):
         bars = viz.year_bars(pb, [y + 0.5 for y in O["xom_years"]], O["xom_capex"], ORDER, width=0.42)
         bt = tx("Exxon Mobil's spending on new wells, plants and equipment, each year", 16, ORDER).next_to(
             pb, UP, buff=0.08).align_to(pb, LEFT)
-        rigs = VGroup(*[derrick(0.7) for _ in range(5)]).arrange(RIGHT, buff=0.25).move_to([-4.6, 3.1, 0])
+        rigs = VGroup(*[derrick(0.6) for _ in range(5)]).arrange(RIGHT, buff=0.22).move_to([4.6, 3.3, 0])
         hi = glow_dot(pa.ax.c2p(_x("2014-06"), O["wti_2014_06"]), color=PRICE, radius=0.09)
         lo = glow_dot(pa.ax.c2p(_x("2016-02"), O["wti_2016_02"]), color=BUST, radius=0.09)
         hl = tx(f"${O['wti_2014_06']:.0f}, June 2014", 15, PRICE).next_to(hi, UP, buff=0.08)

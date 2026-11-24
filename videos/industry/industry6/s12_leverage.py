@@ -3,6 +3,10 @@ from __future__ import annotations
 from videos.industry.industry6.common import *  # noqa: F403
 
 
+def money(v):
+    return ("-" if v < 0 else "") + f"${abs(v):.1f}bn"
+
+
 class Leverage(VoiceoverScene):
     def construct(self):
         card(self, 11, "Leverage", "Why does a small fall in sales become a big fall in profit?",
@@ -92,7 +96,7 @@ class Leverage(VoiceoverScene):
             rows = VGroup(
                 VGroup(tx("sales", 18, GREY_A), tx(f"${rev[0]:.1f}bn → ${rev[1]:.1f}bn", 22, WHITE),
                        tx(f"{100 * d_rev:+.0f}%", 22, ORDER, bold=True)).arrange(RIGHT, buff=0.25),
-                VGroup(tx("operating profit", 18, GREY_A), tx(f"${prof[0]:.1f}bn → ${prof[1]:+.1f}bn", 22, WHITE),
+                VGroup(tx("operating profit", 18, GREY_A), tx(f"${prof[0]:.1f}bn → {money(prof[1])}", 22, WHITE),
                        tx(f"{100 * (prof[1] / prof[0] - 1):+.0f}%", 22, BUST, bold=True)).arrange(RIGHT, buff=0.25),
                 VGroup(tx("depreciation", 18, GREY_A), tx(f"${dep[0]:.1f}bn → ${dep[1]:.1f}bn", 22, WHITE),
                        tx("up", 22, CAP, bold=True)).arrange(RIGHT, buff=0.25)).arrange(DOWN, aligned_edge=LEFT, buff=0.22)
