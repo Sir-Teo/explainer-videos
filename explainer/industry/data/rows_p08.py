@@ -106,6 +106,17 @@ add(
       "States, among others, and cut production; the embargo was lifted in March 1974", "US Department of State, "
       "Office of the Historian, 'Oil Embargo, 1973-1974'", "https://history.state.gov/milestones/1969-1976/oil-embargo",
       "1973-10", "official"),
+    r("eia.record", 2018, "year", "since 2018 the United States has produced more crude oil than any nation at any time "
+      "(12.9 mb/d in 2023, breaking its own world record of 12.3 mb/d set in 2019)", "US Energy Information "
+      "Administration, Today in Energy, 'United States produces more crude oil than any country, ever', 11 March 2024",
+      "https://www.eia.gov/todayinenergy/detail.php?id=61545", "2023", "official"),
+    r("eia.lng.volume", 600, "x", "natural gas as a liquid takes about 600 times less space than in a pipeline; it is "
+      "cooled to about -260 degrees Fahrenheit (about -162 Celsius)", "US Energy Information Administration, Energy "
+      "Explained, 'Liquefied natural gas'", "https://www.eia.gov/energyexplained/natural-gas/liquefied-natural-gas.php",
+      "2025", "official"),
+    r("eia.lng.largest", 2023, "year", "the United States was the world's largest LNG exporter in 2023 (11.9 Bcf/d), "
+      "ahead of Australia and Qatar (10.1-10.5 Bcf/d each)", "US Energy Information Administration, Today in Energy, "
+      "1 April 2024", "https://www.eia.gov/todayinenergy/detail.php?id=61683", "2023", "official"),
     # --- OPEC+ in 2020 --------------------------------------------------------------------------------------------------
     r("eia.opec.cut.2020", 9.7, "mb/d", "the initial cut agreed by OPEC+ in April 2020, from May 2020, tapering through "
       "April 2022; OPEC's crude output fell 6.0 mb/d from April to May", "US Energy Information Administration, Today "
