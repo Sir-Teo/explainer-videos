@@ -53,6 +53,7 @@ add(
     ortiz("esc.opened", 1991, "year", "the mine was inaugurated on 14 March 1991 with an initial capacity of 320,000 tonnes "
           "of copper a year", "1991-03-14"),
     bhp("esc.output.2025", 1305, "kt", "Escondida's copper production, year to June 2025 (100%; 1,125 kt a year earlier)"),
+    bhp("esc.output.2024", 1125, "kt", "Escondida's copper production, year to June 2024 (100%)", "2024"),
     bhp("esc.cost.2025", 1.19, "USD/lb", "Escondida's unit cost, year to June 2025 (US$1.45 a year earlier)"),
     bhp("esc.ebitda.2025", 8.6, "USD bn", "Escondida's underlying EBITDA, year to June 2025 (US$5.8bn a year earlier)"),
     bhp("esc.grade.2025", 1.02, "%", "Escondida's concentrator feed grade, year to June 2025"),
@@ -84,6 +85,7 @@ add(
         "restart of the block cave is planned from the second quarter of 2026", "2025-09-08"),
     fcx("fcx.ptfi.state", 51.24, "%", "share of PT Freeport Indonesia held by Indonesian state-owned and regional interests "
         "since December 2018 (MIND ID 26.24%, PTI 25.00%); Freeport holds 48.76%", "2018-12-21"),
+    fcx("fcx.ptfi.prod.2024", 1800, "Mlb", "copper production of PT Freeport Indonesia, 2024", "2024"),
     fcx("fcx.us.prod", 1304, "Mlb", "copper production of Freeport's US mines, 2025 (million recoverable pounds)"),
     fcx("fcx.sa.prod", 1064, "Mlb", "copper production of Freeport's South America operations, 2025"),
     fcx("fcx.ptfi.prod", 1015, "Mlb", "copper production of PT Freeport Indonesia, 2025 (1,800 in 2024, before the mud rush)"),
@@ -127,6 +129,30 @@ add(
         "temporarily banned cobalt exports from February 2025", "cobalt"),
     mcs("usgs.ree.china", 270, "kt", "China's rare-earth mine production, 2025 (world about 390 kt); China tightened export "
         "controls in April and October 2025", "rare-earths"),
+    mcs("usgs.li.world", 290000, "t", "world lithium mine production excluding the United States, 2025 (estimate; up 31% "
+        "from 222,000 t in 2024), in response to the high prices of 2021 to early 2023", "lithium"),
+    mcs("usgs.li.world.2024", 222000, "t", "world lithium mine production excluding the United States, 2024", "lithium",
+        "2024"),
+    mcs("usgs.li.consumption", 263000, "t", "world lithium consumption, 2025 (estimate; 220,000 t in 2024)", "lithium"),
+    mcs("usgs.li.australia", 92000, "t", "Australia's lithium mine production, 2025 (estimate)", "lithium"),
+    mcs("usgs.li.chile", 56000, "t", "Chile's lithium mine production, 2025 (estimate)", "lithium"),
+    mcs("usgs.li.china", 62000, "t", "China's lithium mine production, 2025 (estimate)", "lithium"),
+    mcs("usgs.ree.world", 390, "kt", "world rare-earth mine production, rare-earth-oxide equivalent, 2025 (estimate)",
+        "rare-earths"),
+    mcs("usgs.ree.usa", 51, "kt", "US rare-earth mine production, 2025 (estimate; 45.5 kt in 2024)", "rare-earths"),
+    mcs("usgs.ree.import.china", 71, "%", "China's share of US imports of rare-earth compounds and metals, 2021-24",
+        "rare-earths", "2021-2024"),
+    mcs("usgs.co.congo.mine", 230000, "t", "Congo (Kinshasa)'s cobalt mine production, 2025 (estimate; 226,000 t in 2024; "
+        "world 310,000 t)", "cobalt"),
+    mcs("usgs.co.quota", 96600, "t", "Congo (Kinshasa)'s cobalt export quota a year for 2026 and 2027, contained cobalt, "
+        "including 9,600 t for national strategic reserves; it replaced the export ban of February 2025 in October "
+        "(18,125 t for the rest of 2025)", "cobalt", "2026-2027"),
+    mcs("usgs.co.price.2024", 11.84, "USD/lb", "cobalt, LME cash, 2024 average", "cobalt", "2024"),
+    mcs("usgs.co.price.2025", 15, "USD/lb", "cobalt, LME cash, 2025 average (estimate); the uncertainty after the export "
+        "ban likely contributed to the rise", "cobalt"),
+    mcs("usgs.ni.australia", 45, "kt", "Australia's nickel mine production, 2025 (estimate; 98 kt in 2024, down 54% after "
+        "several companies put mines on care and maintenance because of low prices)", "nickel"),
+    mcs("usgs.ni.indonesia.2024", 2310, "kt", "Indonesia's nickel mine production, 2024", "nickel", "2024"),
     mcs("usgs.ni.indonesia", 2600, "kt", "Indonesia's nickel mine production, 2025 (estimate; world 3,900 kt)", "nickel"),
     mcs("usgs.fe.price", 99.07, "USD/t", "spot price of imported iron ore fines, 62% iron, cost, insurance and freight, at "
         "Tianjin Port, China, average of the first nine months of 2025 ($112.07 a year earlier)", "iron-ore", "2025-01/09"),
@@ -140,6 +166,12 @@ add(
     mcs("usgs.au.price", 3300, "USD/oz", "gold, 2025 average (a record, 38% above 2024)", "gold"),
     mcs("usgs.au.mine", 3300, "t", "world gold mine production, 2025 (China, Russia, Australia, Canada and the United "
         "States the largest)", "gold"),
+    mcs("usgs.au.jewellery", 40, "%", "jewellery's share of gold consumption, excluding ETFs, 2025", "gold"),
+    mcs("usgs.au.bars", 24, "%", "physical bars' share of gold consumption, excluding ETFs, 2025", "gold"),
+    mcs("usgs.au.coins", 7, "%", "official coins, medals and imitation coins' share of gold consumption, excluding ETFs, "
+        "2025", "gold"),
+    mcs("usgs.au.electronics", 7, "%", "electrical and electronics' share of gold consumption, excluding ETFs, 2025 "
+        "(other uses 1%)", "gold"),
     mcs("usgs.au.cb", 21, "%", "central banks' and other institutions' share of gold consumption, excluding ETFs, 2025 "
         "(jewellery 40%, bars 24%, coins 7%)", "gold"),
     # --- iron ore: the end of the benchmark ---------------------------------------------------------------------------

@@ -39,9 +39,9 @@ class Where(VoiceoverScene):
             c = Circle(r_of(v), stroke_color=CHINA, stroke_width=2.5, fill_color=CHINA, fill_opacity=0.25).move_to(
                 wm.p(lo, la))
             refs.add(c)
-            if v >= 1400:
-                rlabs.add(VGroup(tx(name, 14, WHITE, bold=True), tx(f"{v:,.0f} kt refined", 13, CHINA)).arrange(
-                    DOWN, buff=0.02).next_to(c, RIGHT if lo > 100 else UP, buff=0.06))
+            if v >= 1500:
+                rlabs.add(VGroup(tx(name, 15, WHITE, bold=True), tx(f"{v:,.0f} kt refined", 14, CHINA)).arrange(
+                    DOWN, buff=0.02).next_to(c, UP, buff=0.06))
         key = VGroup(VGroup(Dot(color=COPPER, radius=0.1), tx("copper mined, 2025", 16, COPPER)).arrange(RIGHT, buff=0.1),
                      VGroup(Circle(0.1, stroke_color=CHINA, stroke_width=2.5), tx("copper refined, 2025", 16, CHINA)
                             ).arrange(RIGHT, buff=0.1)).arrange(RIGHT, buff=0.6).to_edge(UP, buff=0.35)
@@ -103,7 +103,29 @@ class Where(VoiceoverScene):
         W = R["where"]
         res = get("usgs.cu.reserves")
         years = res / (W["world_mine"] / 1000)
-        hour = draw.mill_drum(0.9).move_to([-4.3, 0.3, 0])
+        glass = VGroup(Polygon([-0.9, 1.3, 0], [0.9, 1.3, 0], [0.08, 0, 0], [-0.08, 0, 0], stroke_color=STONE,
+                               stroke_width=3, fill_opacity=0),
+                       Polygon([-0.9, -1.3, 0], [0.9, -1.3, 0], [0.08, 0, 0], [-0.08, 0, 0], stroke_color=STONE,
+                               stroke_width=3, fill_opacity=0),
+                       Line([-1.1, 1.3, 0], [1.1, 1.3, 0], stroke_color=STONE, stroke_width=6),
+                       Line([-1.1, -1.3, 0], [1.1, -1.3, 0], stroke_color=STONE, stroke_width=6))
+        sand = ValueTracker(0.85)
+        C = np.array([-4.3, 0.3, 0])
+
+        def top_sand():
+            f = sand.get_value()
+            y = 1.25 * f
+            return Polygon(*[C + q for q in ([-0.08 - 0.82 * f, y, 0], [0.08 + 0.82 * f, y, 0], [0.06, 0.02, 0],
+                                             [-0.06, 0.02, 0])], stroke_width=0, fill_color=COPPER, fill_opacity=0.9)
+
+        def bottom_sand():
+            f = 1 - sand.get_value()
+            y = -1.28 + 1.0 * f
+            return Polygon(*[C + q for q in ([-0.9 + 0.62 * f, y, 0], [0.9 - 0.62 * f, y, 0], [0.9, -1.28, 0],
+                                             [-0.9, -1.28, 0])], stroke_width=0, fill_color=COPPER, fill_opacity=0.9)
+        glass.shift(C)
+        stream = Line(C + [0, 0.02, 0], C + [0, -1.2, 0], stroke_color=COPPER, stroke_width=2)
+        hour = VGroup(always_redraw(top_sand), always_redraw(bottom_sand), stream, glass)
         big = VGroup(tx(f"{res:,.0f} million tonnes", 40, COPPER, bold=True), tx("of copper in known reserves", 20, WHITE),
                      tx(f"about {years:.0f} years of today's mining", 24, PRICE, bold=True)).arrange(DOWN, buff=0.15
                                                                                                     ).move_to([1.6, 1.3, 0])
@@ -112,7 +134,6 @@ class Where(VoiceoverScene):
                        tx("Raise the price, or improve the process, and it grows.", 19, WHITE, bold=True)).arrange(
             DOWN, aligned_edge=LEFT, buff=0.08).move_to([1.6, -1.4, 0])
         src = source("US Geological Survey, Mineral Commodity Summaries 2026, 'copper'", size=13)
-        hour.drum.add_updater(lambda m, dt: m.rotate(-1.0 * dt))
         with self.voiceover(
             "How long can this last? <bookmark mark='a'/> The Geological Survey counts about "
             f"{res:,.0f} million tonnes of copper in the world's known reserves: about {years:.0f} years at today's "
@@ -124,8 +145,8 @@ class Where(VoiceoverScene):
         ) as vo:
             self.play(FadeIn(hour), FadeIn(src))
             vo.wait_until("a")
-            self.play(FadeIn(big, shift=UP * 0.1))
+            self.play(FadeIn(big, shift=UP * 0.1), sand.animate.set_value(0.6), run_time=3.0)
             vo.wait_until("b")
             self.play(LaggedStart(*[FadeIn(n) for n in notes], lag_ratio=0.4), run_time=2.0)
-        hour.drum.clear_updaters()
+            self.play(sand.animate.set_value(0.95), run_time=3.0)
         self.clear_scene()

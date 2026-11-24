@@ -177,6 +177,32 @@ def results() -> dict:
                     wait_all=sorted(later.tolist()), cash=M.cashflows(p0).tolist(), grades=M.grades().tolist(),
                     output=M.copper_kt().tolist(), costs=M.unit_cost().tolist())
 
+    # --- the landscape: the miners that file with the SEC, latest year ----------------------------------------------------
+    last = {}
+    for r in sec:
+        if r["ticker"] in ("FCX", "SCCO", "NEM", "ALB") and r["year_end"][:4] == "2025":
+            last[r["ticker"]] = (r["revenue"], r["net_income"], r["year_end"])
+    for r in read("sec_ifrs"):
+        if r["year_end"][:4] == "2025":
+            last[r["ticker"]] = (r["revenue"], r["profit"], r["year_end"])
+    meta = {"BHP": ("BHP", "iron ore, copper", "iron"), "RIO": ("Rio Tinto", "iron ore, aluminium, copper", "iron"),
+            "VALE": ("Vale", "iron ore, nickel", "iron"), "FCX": ("Freeport-McMoRan", "copper, gold", "copper"),
+            "SCCO": ("Southern Copper", "copper", "copper"), "NEM": ("Newmont", "gold", "gold"),
+            "ALB": ("Albemarle", "lithium", "lithium")}
+    R["landscape"] = [dict(ticker=t, name=meta[t][0], metals=meta[t][1], kind=meta[t][2], revenue=v[0], net=v[1],
+                           margin=v[1] / v[0], year_end=v[2]) for t, v in sorted(last.items(), key=lambda q: -q[1][0])]
+
+    # --- who gets the cash: the model mine at today's price, undiscounted -----------------------------------------------------
+    lbs = M.copper_kt() * 1e3 * mine.LB_PER_T / 1e6
+    rev = float((p0 * lbs).sum())
+    cost = float((M.unit_cost() * lbs).sum())
+    roy = M.royalty * rev
+    tax = float(sum(M.tax * max(p0 * q - c * q - M.royalty * p0 * q - M.capex / M.life, 0.0)
+                    for q, c in zip(lbs, M.unit_cost())))
+    R["take"] = dict(price=p0, revenue=rev, cost=cost, royalty=roy, tax=tax, capex=M.capex, closure=M.closure,
+                     owners=rev - cost - roy - tax - M.capex - M.closure, royalty_rate=M.royalty, tax_rate=M.tax)
+    R["take"]["state_share"] = (roy + tax) / (rev - cost - M.capex - M.closure)
+
     # --- the option to wait -------------------------------------------------------------------------------------------------
     be = M.breakeven()
     R["wait"] = dict(breakeven=be, rows=[dict(price=p, **mine.wait_value(M, p, 0.25, n=800, seed=3))
