@@ -28,10 +28,9 @@ class Services(VoiceoverScene):
             "Hughes. Their customers' spending is their revenue, and their customers' spending is the first thing to "
             "be cut when the price falls."
         ) as vo:
-            self.play(FadeIn(src))
+            self.play(FadeIn(src), LaggedStart(*[FadeIn(c_, shift=UP * 0.2) for c_ in crew], lag_ratio=0.3), run_time=2.0)
             vo.wait_until("a")
-            self.play(LaggedStart(*[AnimationGroup(FadeIn(c_, shift=UP * 0.2), FadeIn(l_)) for c_, l_ in zip(crew, labs)],
-                                  lag_ratio=0.3), run_time=2.4)
+            self.play(LaggedStart(*[FadeIn(l_) for l_ in labs], lag_ratio=0.3), run_time=1.6)
             vo.wait_until("b")
             self.play(LaggedStart(*[FadeIn(n_, scale=0.9) for n_ in names], lag_ratio=0.2))
         self.clear_scene()

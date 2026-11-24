@@ -116,9 +116,10 @@ class Swing(VoiceoverScene):
             "percent less oil used. It is a rough calculation, since other things changed too, but it is close to "
             "the steep demand curve we just drew."
         ) as vo:
-            self.play(FadeIn(src))
+            yhead = tx("2026: the arithmetic, tested", 26, WHITE, bold=True).to_edge(UP, buff=0.45)
+            self.play(FadeIn(src), FadeIn(yhead), FadeIn(bars[0][0]))
             vo.wait_until("a")
-            self.play(FadeIn(bars[0][0]), GrowFromEdge(bars[0][1], LEFT), FadeIn(bars[0][2]))
+            self.play(GrowFromEdge(bars[0][1], LEFT), FadeIn(bars[0][2]))
             vo.wait_until("b")
             self.play(FadeIn(cush, shift=LEFT * 0.2))
             self.play(FadeIn(bars[1][0]), GrowFromEdge(bars[1][1], LEFT), FadeIn(bars[1][2]))

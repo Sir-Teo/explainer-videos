@@ -79,11 +79,11 @@ class Owners(VoiceoverScene):
             "of 2025. The two numbers are not measured under the same rules, but the difference in scale is not in "
             "doubt: the biggest oil companies in the world are mostly owned by states."
         ) as vo:
-            self.play(FadeIn(src), FadeIn(key))
+            self.play(FadeIn(src), FadeIn(key), FadeIn(al[0]), FadeIn(xl[0]))
             vo.wait_until("a")
-            self.play(FadeIn(al), LaggedStart(*[FadeIn(b_, shift=UP * 0.1) for b_ in ab], lag_ratio=0.01), run_time=2.4)
+            self.play(FadeIn(al[1:]), LaggedStart(*[FadeIn(b_, shift=UP * 0.1) for b_ in ab], lag_ratio=0.01), run_time=2.4)
             vo.wait_until("b")
-            self.play(FadeIn(xl), LaggedStart(*[FadeIn(b_, shift=UP * 0.1) for b_ in xb], lag_ratio=0.05), run_time=1.2)
+            self.play(FadeIn(xl[1:]), LaggedStart(*[FadeIn(b_, shift=UP * 0.1) for b_ in xb], lag_ratio=0.05), run_time=1.2)
         self.clear_scene()
 
     def take(self):
