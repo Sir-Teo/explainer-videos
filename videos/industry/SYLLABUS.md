@@ -2539,6 +2539,7 @@ scored in Part 64 and at each refresh.
 | 5 · The Moat | done 2026-11-24 (31 Register rows; Damodaran's returns 2015-2025, the Census's concentration ratios, the SEC extract) | — (the game in chapter 1 and the course site) | 19 scenes | silent preview reviewed; narrated cut extended to thirty minutes | entry, lab, interactive | not started |
 | 6 · The Cycle | done 2026-11-24 (18 Register rows; FRED's hogs, housing, oil and orders; Maersk's ESEF filings; Micron's quarters) | `works/cycle.py` | 19 scenes | silent previews reviewed; narrated cut extended to thirty minutes | entry, lab, interactive | not started |
 | 7 · Sizing a Market | done 2026-11-24 (28 Register rows; Uber's and WeWork's prospectuses, Primo's 10-K, the Census's bottled water, home centers, nail salons, e-commerce and households, BLS price indexes, Our World in Data's adoption curves) | `works/diffusion.py` | 17 scenes | silent previews reviewed | entry, lab, interactive | not started |
+| 8 · Oil and Gas | done 2026-11-24 (56 Register rows; EIA's bulk files, gasoline components and gas data; the CFTC on April 2020; EIA on 2026; Aramco's Annual Report 2025; the Dallas Fed survey; ExxonMobil's 10-Ks; Hubbert 1956) | `works/oil.py` | 19 scenes | silent preview reviewed | entry, lab, interactive | not started |
 
 Phase 0 is done in the form Part 1 needed: the palette and kit (`style.py`, `kit.py`), the instruments (`viz.py`: the
 phone and its exploded view, the region map, the Dollar column, the margin ladder, the treemap, plain axes), the
@@ -2610,4 +2611,15 @@ salons as the opposite case), a price-and-quantity chapter, a replacement chapte
 labelled), e-commerce's share of retail as a moving window, a sensitivity chart and a fan of S-curves with fixed
 ceilings. Its *Called it?* is WeWork's opportunity against its bankruptcy, with the series' call on the Census's
 bottled-water shipments for 2026.
+
+Part 8 opens Act II. Its sweep found the year's defining event, which the draft could not know: the war of 28 February
+2026 and the closing of the Strait of Hormuz (Brent from $61 to $118 in a quarter, $124 in October; up to 10.9m b/d
+shut in), so the price, inelasticity, OPEC and landscape chapters are built on EIA's own accounts of it. The cost of a
+barrel is Aramco's reported lifting cost against the Dallas Fed's break-evens (Rystad's cost curve, a tracker, is not
+used; the world cost curve is drawn as labelled illustrative blocks around those two figures). Reserves are taught with
+ExxonMobil's 2020 de-booking. Spindletop's 'oil at three cents' was not found in a primary source and is not used; the
+Handbook of Texas's flow and decline figures are. Hubbert is scored with his own 150bn and 200bn totals redrawn as
+logistic curves through EIA's cumulative output to 1955; the peak-oil calls of 2005-08 are left out for want of a
+primary source, and his 1956 world peak (about 2000) stands in for them. The Works' `oil.py` (Arps decline, field cash
+flows and break-evens, the shale treadmill, clearing multiples, the crack spread) is tested.
 

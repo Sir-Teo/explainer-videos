@@ -156,17 +156,21 @@ class Tam(VoiceoverScene):
         verdict = tx("A TAM answers: how big would this be if everyone did it our way?", 20, GOLD, bold=True).to_edge(
             DOWN, buff=0.5)
         src = source("Uber Technologies, Form S-1 (2019) and Form 10-K for 2018", size=13)
+        rhead = tx("Three rings", 26, WHITE, bold=True).to_edge(UP, buff=0.5)
         with self.voiceover(
             "Prospectuses draw this as three rings. <bookmark mark='a'/> The outer one, the total addressable market: "
             "everything that could be done the company's way, if the whole world switched. <bookmark mark='b'/> "
             "Inside it, the serviceable market: the part where the company actually operates, and for the kind of "
             f"trip it serves. For Uber, {U['sam']:.1f} trillion dollars. <bookmark mark='c'/> And at the centre, too "
-            "small to see at this scale, what the company actually sells. <bookmark mark='d'/> The outer ring "
+            "small to see at this scale, what the company actually sells. Analysts sometimes add a third name for a ring "
+            "between them, the serviceable obtainable market: the share the company could realistically win in the "
+            "next few years. It is the one most worth arguing about, and the one prospectuses least often print. "
+            "<bookmark mark='d'/> The outer ring "
             "answers a question about ambition: how big would this be if everyone did it our way? It is not a "
             "forecast, and it is not a market in the sense this series uses the word: buyers who are paying, now, "
             "for something, at a price. Read it as the company's dream, and look for the inner rings."
         ) as vo:
-            self.play(FadeIn(src))
+            self.play(FadeIn(src), FadeIn(rhead), Create(tam.copy().set_fill(opacity=0).set_stroke(opacity=0.35)))
             vo.wait_until("a")
             self.play(DrawBorderThenFill(tam), FadeIn(labels[0]), Create(lines[0]))
             vo.wait_until("b")
