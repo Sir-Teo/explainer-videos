@@ -60,6 +60,9 @@ add(
       TIE20, "2020-04-17", "official"),
     r("eia.wti.low.2020", -40.32, "USD/bbl", "the front-month WTI futures price's low, about 2:30 pm ET on 20 April 2020",
       "US Energy Information Administration, Today in Energy, 27 April 2020", TIE20, "2020-04-20", "official"),
+    r("eia.brent.2020", 19.33, "USD/bbl", "Brent futures for June 2020 delivery at the close on 21 April 2020, while the "
+      "expiring WTI contract was below zero", "US Energy Information Administration, Today in Energy, 27 April 2020",
+      TIE20, "2020-04-21", "official"),
     r("eia.runs.2020", 12.8, "mb/d", "US refinery runs in the week ending 17 April 2020, 4.1 mb/d (24%) below a year "
       "earlier", "US Energy Information Administration, Today in Energy, 27 April 2020", TIE20, "2020-04-17",
       "official"),
@@ -123,6 +126,9 @@ add(
       XOM20, "2020"),
     r("xom.reserves.2021", 18.5, "bn boe", "ExxonMobil's proved reserves at the end of 2021", "Exxon Mobil "
       "Corporation, Form 10-K for 2021", XOM21, "2021"),
+    r("xom.reserves.2025", 19.3, "bn boe", "ExxonMobil's proved reserves at the end of 2025 (36% undeveloped)",
+      "Exxon Mobil Corporation, Form 10-K for 2025",
+      "https://www.sec.gov/Archives/edgar/data/34088/000003408826000045/xom-20251231.htm", "2025"),
     r("xom.kearl", 3.1, "bn bbl", "bitumen at Kearl (Canadian oil sands) that no longer qualified as proved reserves "
       "at the end of 2020; also 0.6bn at Cold Lake and 0.5bn boe in the US, and 1.5bn boe from lower capital spending",
       "Exxon Mobil Corporation, Form 10-K for 2020", XOM20, "2020"),
@@ -134,6 +140,9 @@ add(
       "Handbook of Texas Online, 'Spindletop Oilfield'", TSHA, "1901-01", "study"),
     r("spindletop.1902", 17.5, "m bbl", "Spindletop's output in 1902; by February 1904 its wells were down to 10,000 "
       "barrels a day", "Handbook of Texas Online, 'Spindletop Oilfield'", TSHA, "1902", "study"),
+    r("arps.1945", 1945, "year", "J. J. Arps, 'Analysis of Decline Curves', Transactions of the AIME 160 (1945): the "
+      "exponential, hyperbolic and harmonic declines petroleum engineers still fit", "J. J. Arps, Transactions of the "
+      "AIME 160(1), 228-247 (1945)", "https://doi.org/10.2118/945228-G", "1945", "study"),
     # --- Hubbert, 1956 -------------------------------------------------------------------------------------------------
     r("hubbert.us.150", 150, "bn bbl", "Hubbert's estimate of the ultimate US crude oil production (land and offshore), "
       "with which US output 'must culminate at about 1965'; 52.5bn barrels had been produced by 1 January 1956",

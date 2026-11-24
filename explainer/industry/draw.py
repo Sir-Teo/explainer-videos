@@ -10,6 +10,8 @@ Every glyph is a ``VGroup`` with its moving parts named, so a scene can animate 
   :func:`conveyor` (items ride it with :func:`run_belt`),
   :func:`plane` (side view), :func:`cabin` (a seat map whose seats fill), :func:`wafer`, :func:`chip`, :func:`truck`,
   :func:`ship`, :func:`server_rack`;
+* oil and gas: :func:`barrel`, :func:`pumpjack` (``.beam`` rocks with :func:`nod`), :func:`derrick`, :func:`platform`,
+  :func:`tank` (``.oil`` at a level), :func:`column` (a distillation tower with its ``.cuts``), :func:`tanker`;
 * the city and its people: :func:`skyline` (``.windows`` light up), :func:`house`, :func:`shop`, :func:`person`,
   :func:`crowd`; :func:`sun`, :func:`moon`, :func:`sky` (a background whose colour follows the hour);
 * money: :func:`coin`, :func:`coin_stack`, :func:`note_bill`, :func:`coin_flow` (coins flying from one place to
@@ -525,6 +527,152 @@ def crane(h: float = 2.0, color: str = "#F2C14E") -> VGroup:
     hook = Arc(radius=0.04 * h, start_angle=PI, angle=PI, stroke_color="#C9D3E0", stroke_width=2).move_to(
         [0.1 * h, 0.6 * h, 0])
     return VGroup(legs, beam, cable, hook)
+
+
+# ---------------------------------------------------------------------------------------------------------------
+# Oil and gas (Part 8)
+# ---------------------------------------------------------------------------------------------------------------
+OIL = "#2B2118"
+CRUDE = "#4A3426"
+
+
+def barrel(h: float = 1.0, color: str = "#2F6FA8", label: str = "") -> VGroup:
+    """A 42-gallon oil barrel standing up: body, hoops, top ellipse (``g.top``), optional text on it."""
+    w = 0.66 * h
+    body = RoundedRectangle(corner_radius=0.06 * h, width=w, height=h, stroke_width=0, fill_color=color,
+                            fill_opacity=1).move_to([0, h / 2, 0])
+    hoops = VGroup(*[Rectangle(width=w * 1.02, height=0.035 * h, stroke_width=0, fill_color="#1B2230",
+                               fill_opacity=0.8).move_to([0, y * h, 0]) for y in (0.18, 0.5, 0.82)])
+    top = Ellipse(width=w, height=0.14 * h, stroke_width=0, fill_color="#5A8FC2", fill_opacity=1).move_to([0, h, 0])
+    shine = Rectangle(width=0.06 * w, height=0.8 * h, stroke_width=0, fill_color="#FFFFFF", fill_opacity=0.14).move_to(
+        [-0.28 * w, 0.5 * h, 0])
+    g = VGroup(body, hoops, shine, top)
+    if label:
+        t = tx(label, 22 * h, "#E8EAED", bold=True).move_to([0, 0.66 * h, 0])
+        if t.width > 0.9 * w:
+            t.scale_to_fit_width(0.9 * w)
+        g.add(t)
+    g.top = top
+    return g
+
+
+def pumpjack(w: float = 2.0, color: str = "#E8554E") -> VGroup:
+    """A nodding donkey: base, samson post, walking beam (``g.beam``) with its horse head, crank and polished rod.
+    :func:`nod` sets the beam rocking."""
+    base = Rectangle(width=w, height=0.06 * w, stroke_width=0, fill_color=STEEL, fill_opacity=1).move_to([0, 0.03 * w, 0])
+    post = Polygon([-0.12 * w, 0.06 * w, 0], [0.12 * w, 0.06 * w, 0], [0, 0.55 * w, 0], stroke_width=0,
+                   fill_color="#5B6372", fill_opacity=1)
+    beam = VGroup(
+        Rectangle(width=0.9 * w, height=0.05 * w, stroke_width=0, fill_color=color, fill_opacity=1),
+        Polygon([0.45 * w, 0.06 * w, 0], [0.55 * w, 0.02 * w, 0], [0.55 * w, -0.14 * w, 0], [0.45 * w, -0.06 * w, 0],
+                stroke_width=0, fill_color=color, fill_opacity=1),
+        Rectangle(width=0.1 * w, height=0.1 * w, stroke_width=0, fill_color="#3E4553", fill_opacity=1).move_to(
+            [-0.43 * w, -0.05 * w, 0])).move_to([0.03 * w, 0.56 * w, 0])
+    crank = Circle(radius=0.08 * w, stroke_width=3, stroke_color="#5B6372", fill_color="#3E4553",
+                   fill_opacity=1).move_to([-0.38 * w, 0.18 * w, 0])
+    rod = Line([0.53 * w, 0.48 * w, 0], [0.53 * w, 0.06 * w, 0], stroke_color="#C9D3E0", stroke_width=2)
+    arm = Line([-0.38 * w, 0.18 * w, 0], [-0.4 * w, 0.52 * w, 0], stroke_color="#8C929B", stroke_width=3)
+    pivot = Dot([0, 0.56 * w, 0], radius=0.001, fill_opacity=0)
+    g = VGroup(base, arm, crank, post, rod, beam, pivot)
+    g.beam, g.pivot, g.rod = beam, pivot, rod
+    return g
+
+
+def nod(jack: VGroup, speed: float = 0.7, amp: float = 0.16) -> VGroup:
+    """Rock a :func:`pumpjack`'s beam about its pivot, ``speed`` strokes a second (remove with ``clear_updaters``)."""
+    state = {"t": 0.0, "a": 0.0}
+
+    def upd(m, dt):
+        state["t"] += dt
+        a = amp * math.sin(TAU * speed * state["t"])
+        m.beam.rotate(a - state["a"], about_point=m.pivot.get_center())
+        state["a"] = a
+    jack.add_updater(upd)
+    return jack
+
+
+def derrick(h: float = 2.0, color: str = "#C9D3E0") -> VGroup:
+    """A drilling rig's derrick: a tapering lattice tower on a floor, with a drill string (``g.pipe``)."""
+    w0, w1 = 0.5 * h, 0.12 * h
+    legs = VGroup(Line([-w0 / 2, 0, 0], [-w1 / 2, h, 0]), Line([w0 / 2, 0, 0], [w1 / 2, h, 0])).set_stroke(color, 3)
+    rungs = VGroup()
+    for k in range(1, 7):
+        y = h * k / 7
+        x = (w0 + (w1 - w0) * k / 7) / 2
+        xn = (w0 + (w1 - w0) * (k - 1) / 7) / 2
+        rungs.add(Line([-x, y, 0], [x, y, 0]), Line([-xn, y - h / 7, 0], [x, y, 0]))
+    rungs.set_stroke(color, 1.5)
+    floor = Rectangle(width=0.8 * h, height=0.05 * h, stroke_width=0, fill_color=STEEL, fill_opacity=1).move_to(
+        [0, 0.025 * h, 0])
+    pipe = Line([0, h, 0], [0, -0.6 * h, 0], stroke_color="#8C929B", stroke_width=3)
+    g = VGroup(pipe, legs, rungs, floor)
+    g.pipe = pipe
+    return g
+
+
+def platform(w: float = 3.0, color: str = "#F2C14E") -> VGroup:
+    """An offshore production platform on legs above a waterline (``g.sea``), with a flare stack."""
+    deck_y = 0.55 * w
+    legs = VGroup(*[Rectangle(width=0.05 * w, height=deck_y + 0.25 * w, stroke_width=0, fill_color="#8C929B",
+                              fill_opacity=1).move_to([x * w, (deck_y - 0.25 * w) / 2, 0]) for x in (-0.3, -0.1, 0.1, 0.3)])
+    deck = Rectangle(width=0.8 * w, height=0.06 * w, stroke_width=0, fill_color=STEEL, fill_opacity=1).move_to(
+        [0, deck_y, 0])
+    mods = VGroup(Rectangle(width=0.3 * w, height=0.14 * w, stroke_width=0, fill_color=color, fill_opacity=1).move_to(
+        [-0.2 * w, deck_y + 0.1 * w, 0]), Rectangle(width=0.2 * w, height=0.22 * w, stroke_width=0, fill_color="#E8EAED",
+                                                     fill_opacity=1).move_to([0.12 * w, deck_y + 0.14 * w, 0]))
+    tower = derrick(0.35 * w).move_to([0.12 * w, deck_y + 0.42 * w, 0])
+    flare = VGroup(Line([0.38 * w, deck_y, 0], [0.48 * w, deck_y + 0.35 * w, 0], stroke_color="#8C929B", stroke_width=3),
+                   Circle(radius=0.035 * w, stroke_width=0, fill_color="#F2A65A", fill_opacity=0.9).move_to(
+                       [0.49 * w, deck_y + 0.38 * w, 0]))
+    sea = Rectangle(width=1.4 * w, height=0.25 * w, stroke_width=0, fill_color="#1F4E79", fill_opacity=0.85).move_to(
+        [0, 0.08 * w, 0])
+    g = VGroup(legs, sea, deck, mods, tower[1:], flare)
+    g.sea, g.flare = sea, flare
+    return g
+
+
+def tank(w: float = 1.4, level: float = 0.5, color: str = "#C9D3E0") -> VGroup:
+    """A round storage tank seen from the side, cut open: shell, roof and the oil inside (``g.oil``) at ``level``."""
+    h = 0.7 * w
+    shell = Rectangle(width=w, height=h, stroke_color=color, stroke_width=2, fill_color="#20262F",
+                      fill_opacity=1).move_to([0, h / 2, 0])
+    roof = Arc(radius=w * 0.9, start_angle=PI / 2 - 0.58, angle=1.16, stroke_color=color, stroke_width=2).move_to(
+        [0, h + 0.07 * w, 0])
+    oil_ = Rectangle(width=w * 0.96, height=max(h * level * 0.96, 0.001), stroke_width=0, fill_color=CRUDE,
+                     fill_opacity=1).move_to([0, 0.02 * h + h * level * 0.48, 0])
+    g = VGroup(shell, oil_, roof)
+    g.oil, g.h, g.w = oil_, h, w
+    return g
+
+
+def column(h: float = 3.0, color: str = "#C9D3E0") -> VGroup:
+    """A refinery's distillation column with draw-off pipes (``g.cuts``, bottom to top) and a furnace below."""
+    w = 0.22 * h
+    tower = RoundedRectangle(corner_radius=0.1 * w, width=w, height=h, stroke_color=color, stroke_width=2,
+                             fill_color="#20262F", fill_opacity=1).move_to([0, h / 2, 0])
+    trays = VGroup(*[Line([-w / 2, h * k / 7, 0], [w / 2, h * k / 7, 0], stroke_color="#3E4553", stroke_width=1.5)
+                     for k in range(1, 7)])
+    cuts = VGroup(*[Line([w / 2, h * (k + 0.5) / 7, 0], [w / 2 + 0.35 * h, h * (k + 0.5) / 7, 0],
+                         stroke_color=color, stroke_width=2) for k in range(6)])
+    furnace = Rectangle(width=0.9 * w, height=0.18 * h, stroke_width=0, fill_color="#5B6372", fill_opacity=1).move_to(
+        [-0.9 * w, 0.09 * h, 0])
+    g = VGroup(furnace, tower, trays, cuts)
+    g.cuts, g.tower = cuts, tower
+    return g
+
+
+def tanker(w: float = 3.0, color: str = "#4A5A70") -> VGroup:
+    """A crude tanker: long low hull, deck pipes and a bridge at the stern."""
+    hull = Polygon([-0.5 * w, 0.1 * w, 0], [0.5 * w, 0.1 * w, 0], [0.44 * w, 0, 0], [-0.46 * w, 0, 0],
+                   stroke_width=0, fill_color=color, fill_opacity=1)
+    stripe = Rectangle(width=0.96 * w, height=0.02 * w, stroke_width=0, fill_color="#C0392B", fill_opacity=1).move_to(
+        [0, 0.02 * w, 0])
+    deck = Line([-0.45 * w, 0.115 * w, 0], [0.32 * w, 0.115 * w, 0], stroke_color="#8C929B", stroke_width=2)
+    bridge = Rectangle(width=0.1 * w, height=0.12 * w, stroke_width=0, fill_color="#E8EAED", fill_opacity=1).move_to(
+        [0.4 * w, 0.16 * w, 0])
+    funnel = Rectangle(width=0.03 * w, height=0.06 * w, stroke_width=0, fill_color="#C0392B", fill_opacity=1).move_to(
+        [0.43 * w, 0.25 * w, 0])
+    return VGroup(hull, stripe, deck, bridge, funnel)
 
 
 def person(h: float = 0.6, color: str = "#C9D3E0") -> VGroup:
