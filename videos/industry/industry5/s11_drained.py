@@ -104,9 +104,9 @@ class Drained(VoiceoverScene):
             "nothing when the world stops wanting it. Part 6 is about how industries move through booms and "
             "busts; this series comes back to disruption in its later acts."
         ) as vo:
-            self.play(FadeIn(src), FadeIn(head))
+            self.play(FadeIn(src), FadeIn(head), FadeIn(reel, shift=RIGHT * 0.3))
             vo.wait_until("a")
-            self.play(FadeIn(reel, shift=RIGHT * 0.3))
+            self.play(reel.animate.shift(RIGHT * 0.4), rate_func=there_and_back, run_time=1.2)
             vo.wait_until("b")
             self.play(FadeIn(phone, shift=LEFT * 0.3), reel.animate.set_opacity(0.4))
             self.play(GrowFromEdge(k08, DOWN), FadeIn(labs[0]), FadeIn(labs[2]))

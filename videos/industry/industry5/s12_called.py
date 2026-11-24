@@ -46,9 +46,9 @@ class Called(VoiceoverScene):
             f"{100 * A['avg_wacc']:.1f}: hardly more than the capital could have earned anywhere else. Fewer, bigger "
             "airlines helped for a while; the five forces did the rest. Buffett called it."
         ) as vo:
-            self.play(FadeIn(src), FadeIn(jet))
+            self.play(FadeIn(src), FadeIn(jet), FadeIn(quote, shift=DOWN * 0.1))
             vo.wait_until("a")
-            self.play(FadeIn(quote, shift=DOWN * 0.1), Create(ax), FadeIn(xt), FadeIn(yt), Create(zero))
+            self.play(Create(ax), FadeIn(xt), FadeIn(yt), Create(zero))
             self.play(Create(cost), FadeIn(cost_t))
             vo.wait_until("b")
             self.play(LaggedStart(*[GrowFromEdge(b, DOWN) for b in bars[:5]], lag_ratio=0.2),

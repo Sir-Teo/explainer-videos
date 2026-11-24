@@ -319,7 +319,8 @@ SEC_ITEMS = {"revenue": ["RevenueFromContractWithCustomerExcludingAssessedTax", 
                               "DepreciationAndAmortization", "Depreciation"],
              "inventory": ["InventoryNet"]}
 SEC_COMPANIES = [(789019, "MSFT"), (909832, "COST"), (19617, "JPM"), (753308, "NEE"), (27904, "DAL"), (59478, "LLY"),
-                 (1403161, "V"), (723125, "MU"), (34088, "XOM"), (882184, "DHI"), (50863, "INTC")]
+                 (1403161, "V"), (723125, "MU"), (34088, "XOM"), (882184, "DHI"), (50863, "INTC"),
+                 (1141391, "MA"), (104169, "WMT")]
 
 
 def sec_annual():

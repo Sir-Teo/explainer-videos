@@ -55,3 +55,40 @@ class Good(VoiceoverScene):
             vo.wait_until("c")
             self.play(FadeIn(q, shift=DOWN * 0.1))
         self.clear_scene()
+        self.tests()
+
+    def tests(self):
+        rows = [("Could a newcomer get in?", "a reward survives a rival's attempt; a toll needs the door kept shut",
+                 VGroup(draw.castle(0.6, color=STONE), draw.person(0.45, color=ENTRANT)).arrange(RIGHT, buff=0.1)),
+                ("Are prices falling, or quality rising?", "a reward is usually shared with customers over time",
+                 VGroup(Arrow(UP * 0.3, DOWN * 0.3, color=RET, buff=0, stroke_width=5), draw.coin(0.16)).arrange(
+                     RIGHT, buff=0.1)),
+                ("Would customers leave if they could?", "a reward keeps them by choice; a toll by lock-in",
+                 VGroup(draw.crowd(4, 0.35, color=STONE, cols=4))),
+                ("Where does the money go?", "into new products and lower costs, or into keeping rivals out",
+                 VGroup(draw.factory(0.7, color=GREY_B), draw.coin(0.14)).arrange(RIGHT, buff=0.1))]
+        cards = VGroup()
+        for head, sub, pic in rows:
+            pic.scale_to_fit_height(min(pic.height, 0.7))
+            t_ = VGroup(tx(head, 23, WHITE, bold=True), tx(sub, 17, GREY_B)).arrange(DOWN, aligned_edge=LEFT, buff=0.08)
+            cards.add(VGroup(pic, t_).arrange(RIGHT, buff=0.4))
+        cards.arrange(DOWN, aligned_edge=LEFT, buff=0.45).move_to([0, -0.3, 0])
+        for c_ in cards:
+            c_[0].move_to([cards.get_left()[0] + 0.5, c_.get_y(), 0])
+            c_[1].next_to(c_[0], RIGHT, buff=0.4).align_to(cards[0][1], LEFT)
+        head = tx("Four questions that tell a reward from a toll", 26, GOLD, bold=True).to_edge(UP, buff=0.5)
+        with self.voiceover(
+            "So how do you tell them apart? Four questions help, and they are the ones competition authorities ask. "
+            "<bookmark mark='a'/> Could a newcomer get in? A business that earns a reward can usually survive a "
+            "rival's attempt to copy it; a toll depends on keeping the door shut. <bookmark mark='b'/> Are prices "
+            "falling, or quality rising? A reward tends to be shared with customers over time, as costs fall. "
+            "<bookmark mark='c'/> Would customers leave if they could? A business that keeps its customers by "
+            "choice is earning a reward; one that keeps them by locking them in is charging a toll. "
+            "<bookmark mark='d'/> And where does the money go: into new products and lower costs, or into lawyers, "
+            "lobbying and buying up rivals before they grow?"
+        ) as vo:
+            self.play(FadeIn(head))
+            for c_, m in zip(cards, "abcd"):
+                vo.wait_until(m)
+                self.play(FadeIn(c_[0], scale=0.8), FadeIn(c_[1], shift=RIGHT * 0.15))
+        self.clear_scene()

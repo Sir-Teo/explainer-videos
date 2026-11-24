@@ -69,3 +69,47 @@ class Steady(VoiceoverScene):
             vo.wait_until("d")
             self.play(Indicate(paths["COST"], color=WHITE), Indicate(labels["COST"], color=WHITE))
         self.clear_scene()
+        self.map()
+
+    def map(self):
+        Mm = R["margin_map"]
+        pa = viz.plot_axes([0, 0.65], [0, 0.28], x_length=9.0, y_length=4.6, xticks=[0.1, 0.2, 0.3, 0.4, 0.5, 0.6],
+                           yticks=[0.1, 0.2], xfmt=lambda v: f"{100 * v:.0f}%", yfmt=lambda v: f"{100 * v:.0f} pts",
+                           xlabel="average operating margin, fiscal 2009 to the latest year",
+                           ylabel="how far it wanders from year to year (standard deviation)", size=15)
+        pa.move_to([0.3, -0.2, 0])
+        steady = Rectangle(width=pa.ax.c2p(0.65, 0)[0] - pa.ax.c2p(0, 0)[0],
+                           height=pa.ax.c2p(0, 0.12)[1] - pa.ax.c2p(0, 0)[1], stroke_width=0, fill_color=RET,
+                           fill_opacity=0.10).move_to(pa.ax.c2p(0, 0), aligned_edge=DL)
+        st = tx("steady", 17, RET).next_to(steady, LEFT, buff=0.1).shift(UP * 0.05)
+        dots, labs = VGroup(), VGroup()
+        for d in Mm:
+            p_ = pa.ax.c2p(d["mean"], d["sd"])
+            col = RET if d["sd"] < 0.12 else COST_
+            dots.add(glow_dot(p_, color=col, radius=0.09))
+            labs.add(tx(d["name"], 16, WHITE).next_to(p_, UR if d["tic"] not in ("WMT",) else DR, buff=0.05))
+        src = source("SEC company facts: Forms 10-K, fiscal 2009 to 2025 or 2026", size=13)
+        with self.voiceover(
+            "Put every company in this series' filings on one chart. <bookmark mark='a'/> Along the bottom, each "
+            "company's average operating margin since 2009. Up the side, how far that margin wanders from year to "
+            "year. <bookmark mark='b'/> The steady ones sit along the bottom, at every height: Costco and Walmart "
+            "with thin margins, NextEra and Microsoft in the middle, Mastercard and Visa at the top; Visa sits a "
+            "little higher only because of its one-time legal charge in 2012. "
+            "<bookmark mark='c'/> The wanderers sit above: Delta, Intel and Micron, whose margins swing with fuel, "
+            "with chip prices and with the cycle that Part 6 is about. <bookmark mark='d'/> The height of a margin "
+            "and its steadiness are different things. A moat shows up in the second."
+        ) as vo:
+            self.play(FadeIn(src), FadeIn(pa))
+            vo.wait_until("a")
+            self.play(FadeIn(steady), FadeIn(st))
+            vo.wait_until("b")
+            low = [i for i, d in enumerate(Mm) if d["sd"] < 0.12]
+            self.play(LaggedStart(*[AnimationGroup(FadeIn(dots[i], scale=2), FadeIn(labs[i])) for i in low],
+                                  lag_ratio=0.25), run_time=2.4)
+            vo.wait_until("c")
+            high = [i for i, d in enumerate(Mm) if d["sd"] >= 0.12]
+            self.play(LaggedStart(*[AnimationGroup(FadeIn(dots[i], scale=2), FadeIn(labs[i])) for i in high],
+                                  lag_ratio=0.3), run_time=1.8)
+            vo.wait_until("d")
+            self.play(Indicate(steady, color=RET, scale_factor=1.0))
+        self.clear_scene()

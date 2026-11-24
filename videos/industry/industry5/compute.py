@@ -151,6 +151,28 @@ def results() -> dict:
         m = [v for _, v in pts]
         R["margins"][tic] = dict(points=pts, lo=min(m), hi=max(m), sd=float(np.std(m)))
 
+    # every company in the SEC extract with operating income: average margin against its steadiness
+    NAMES = {"V": "Visa", "MA": "Mastercard", "MSFT": "Microsoft", "COST": "Costco",
+             "WMT": "Walmart", "NEE": "NextEra Energy", "DAL": "Delta", "MU": "Micron", "INTC": "Intel"}
+    R["margin_map"] = []
+    for tic, name in NAMES.items():
+        m = [r["operating_income"] / r["revenue"] for r in sec if r["ticker"] == tic
+             and isinstance(r["revenue"], float) and isinstance(r["operating_income"], float)]
+        R["margin_map"].append(dict(tic=tic, name=name, mean=float(np.mean(m)), sd=float(np.std(m)), n=len(m)))
+    ma = [(int(str(r["year_end"])[:4]), r["operating_income"] / r["revenue"]) for r in sec
+          if r["ticker"] == "MA" and isinstance(r["revenue"], float) and isinstance(r["operating_income"], float)]
+    R["mastercard"] = dict(points=ma, last=ma[-1], rev=[r["revenue"] for r in sec if r["ticker"] == "MA"][-1])
+
+    # --- the fade, measured: industries sorted by their 2015 return into fifths, followed to 2025 -----------------------
+    yrs = list(range(2015, 2026))
+    full = {n: {y: d[y]["roc"] for y in yrs} for n, d in by.items() if all(y in d for y in yrs)}
+    order = sorted(full, key=lambda n: -full[n][2015])
+    k = len(order) // 5
+    groups = [order[i * k:(i + 1) * k] if i < 4 else order[4 * k:] for i in range(5)]
+    R["fade"] = dict(years=yrs, n=len(order),
+                     paths=[[float(np.mean([full[n][y] for n in g])) for y in yrs] for g in groups],
+                     sizes=[len(g) for g in groups])
+
     # --- Visa, networks, drained moats ------------------------------------------------------------------------------------
     R["visa"] = dict(rev=get("visa.rev"), oi=get("visa.oi"), margin=get("visa.oi") / get("visa.rev"))
     R["network"] = [(n, n * (n - 1) // 2) for n in (2, 3, 5, 10, 20)]

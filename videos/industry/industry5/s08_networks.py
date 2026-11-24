@@ -8,7 +8,58 @@ class Networks(VoiceoverScene):
         card(self, 10, "Walls of networks and law", "When does each new customer make the castle stronger?",
              "Chapter ten. Walls of networks and law.", lit=("moat",))
         self.network()
+        self.two()
         self.law()
+
+    def two(self):
+        M = R["margins"]["V"]["points"]
+        MA = R["mastercard"]["points"]
+        pa = viz.plot_axes([2008.5, 2026.5], [0, 0.75], x_length=8.0, y_length=3.4, xticks=[2010, 2014, 2018, 2022, 2026],
+                           yticks=[0.25, 0.5, 0.75], xfmt=lambda v: f"{int(v)}", yfmt=lambda v: f"{100 * v:.0f}%",
+                           size=15)
+        pa.move_to([1.6, -1.0, 0])
+        lv = VMobject(stroke_color=GOLD, stroke_width=4).set_points_as_corners([pa.ax.c2p(y, v) for y, v in M])
+        lm = VMobject(stroke_color=ENTRANT, stroke_width=4).set_points_as_corners([pa.ax.c2p(y, v) for y, v in MA])
+        tv = tx("Visa", 20, GOLD, bold=True).next_to(pa.ax.c2p(*M[-1]), RIGHT, buff=0.12)
+        tm = tx("Mastercard", 20, ENTRANT, bold=True).next_to(pa.ax.c2p(*MA[-1]), RIGHT, buff=0.12)
+        head = tx("operating profit per dollar of sales, each year", 17, GREY_A).next_to(pa, UP, buff=0.12).align_to(
+            pa, LEFT)
+        keeps = VGroup(draw.castle(1.3, moat=0.45, color="#F6C453"), draw.castle(1.3, moat=0.45, color=ENTRANT)).arrange(
+            RIGHT, buff=0.6).move_to([-4.6, 1.6, 0])
+        names = VGroup(tx("Visa", 18, GOLD), tx("Mastercard", 18, ENTRANT))
+        for n_, k_ in zip(names, keeps):
+            n_.next_to(k_, DOWN, buff=0.12)
+        cards = VGroup(*[RoundedRectangle(corner_radius=0.05, width=0.5, height=0.32, stroke_width=0,
+                                          fill_color=c, fill_opacity=0.95) for c in ("#2B4C9B", "#C0392B") * 4])
+        cards.arrange_in_grid(rows=2, cols=4, buff=0.08).move_to([-4.6, -1.4, 0])
+        ct = tx("the same shops, the same shoppers", 15, GREY_B).next_to(cards, DOWN, buff=0.15)
+        src = source("Forms 10-K of Visa and Mastercard, fiscal 2009-2026 (SEC company facts)", size=13)
+        last = R["mastercard"]["last"]
+        with self.voiceover(
+            "A network can hold more than one castle. <bookmark mark='a'/> Visa has a rival with the same kind of "
+            "network: Mastercard. The two compete for the same shops and the same shoppers. You might expect them to "
+            "fight each other down to thin margins. <bookmark mark='b'/> They have not. Here is the share of each "
+            "dollar of sales that Visa keeps as operating profit, every year since 2009, <bookmark mark='c'/> and "
+            f"here is Mastercard's: {100 * last[1]:.0f} cents in {last[0]}. Two firms, side by side, both earning "
+            "more than half of what they take in. <bookmark mark='d'/> Remember the two conditions from chapter "
+            "seven: something keeps newcomers out, and the few do not fight. Here the network keeps newcomers out, "
+            "since a new card is useless until shops take it, and shops will not take it until shoppers carry it. "
+            "And the fees land mostly on shops, which cannot easily refuse the cards their customers carry, so the "
+            "two have little reason to fight over them."
+        ) as vo:
+            self.play(FadeIn(src), FadeIn(keeps[0], shift=UP * 0.2), FadeIn(names[0]))
+            vo.wait_until("a")
+            self.play(FadeIn(keeps[1], shift=UP * 0.2), FadeIn(names[1]),
+                      LaggedStart(*[FadeIn(c_, shift=UP * 0.1) for c_ in cards], lag_ratio=0.1), FadeIn(ct))
+            vo.wait_until("b")
+            self.play(FadeIn(pa), FadeIn(head), Create(lv), run_time=2.0)
+            self.play(FadeIn(tv))
+            vo.wait_until("c")
+            self.play(Create(lm), run_time=2.0)
+            self.play(FadeIn(tm))
+            vo.wait_until("d")
+            self.play(Indicate(keeps, color=WHITE, scale_factor=1.04))
+        self.clear_scene()
 
     def network(self):
         V = R["visa"]
