@@ -66,6 +66,12 @@ add(
       "57(2), March-April 1979: rivalry, the threat of new entrants, the threat of substitutes, and the bargaining "
       "power of buyers and of suppliers", "Harvard Business Review, March 1979", "https://hbr.org/1979/03/how-"
       "competitive-forces-shape-strategy", "1979-03", kind="study"),
+    r("hhi.2023", 1800, "HHI", "US merger guidelines (2023), Guideline 1: markets with an HHI greater than 1,800 are "
+      "highly concentrated, and a change of more than 100 points is a significant increase; a merger that creates "
+      "or further consolidates a highly concentrated market with such an increase is presumed to lessen competition "
+      "(the 2010 guidelines used 2,500)", "US Department of Justice and Federal Trade Commission, Merger Guidelines "
+      "(18 December 2023), Guideline 1", "https://www.justice.gov/atr/merger-guidelines/applying-merger-guidelines/"
+      "guideline-1", "2023-12", kind="official"),
     # --- Visa, fiscal year to 30 September 2026 ----------------------------------------------------------------------
     r("visa.rev", 45.90, "USD bn", "Visa net revenue, fiscal 2026 (2025: $40.00bn)", "Visa Form 10-K FY2026 (SEC "
       "company facts: RevenueFromContractWithCustomerExcludingAssessedTax)", CF.format(1403161), "FY2026"),

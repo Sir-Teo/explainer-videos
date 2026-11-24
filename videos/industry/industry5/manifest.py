@@ -15,8 +15,9 @@ SCENES = [
     ("s08_networks", "Networks", "9. Walls of networks and law"),
     ("s09_forces", "Forces", "10. Five forces"),
     ("s09b_power", "Power", "11. Buyers and suppliers"),
+    ("s09c_steady", "Steady", "12. A moat in the accounts"),
     ("s10_intermission", "Intermission", "Intermission: eleven years of returns"),
-    ("s11_drained", "Drained", "12. Moats that drained"),
-    ("s12_called", "Called", "13. Called it?"),
+    ("s11_drained", "Drained", "13. Moats that drained"),
+    ("s12_called", "Called", "14. Called it?"),
     ("s13_outro", "Outro", "The moat, and what comes next"),
 ]

@@ -312,7 +312,8 @@ SEC_ITEMS = {"revenue": ["RevenueFromContractWithCustomerExcludingAssessedTax", 
              "operating_cash": ["NetCashProvidedByUsedInOperatingActivities"],
              "capex": ["PaymentsToAcquirePropertyPlantAndEquipment", "PaymentsToAcquireProductiveAssets"],
              "assets": ["Assets"], "equity": ["StockholdersEquity"]}
-SEC_COMPANIES = [(789019, "MSFT"), (909832, "COST"), (19617, "JPM"), (753308, "NEE"), (27904, "DAL"), (59478, "LLY")]
+SEC_COMPANIES = [(789019, "MSFT"), (909832, "COST"), (19617, "JPM"), (753308, "NEE"), (27904, "DAL"), (59478, "LLY"),
+                 (1403161, "V")]
 
 
 def sec_annual():

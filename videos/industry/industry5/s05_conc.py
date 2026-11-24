@@ -9,6 +9,47 @@ class Conc(VoiceoverScene):
              "Chapter six. Counting the castles.", lit=("moat", "who"))
         self.two_markets()
         self.histogram()
+        self.hhi()
+
+    def hhi(self):
+        from explainer.industry.register import get
+        markets = [("four equal firms", [25] * 4), ("one big firm and three small ones", [55, 15, 15, 15]),
+                   ("twenty equal firms", [5] * 20)]
+        groups = VGroup()
+        for name, shares in markets:
+            # each firm is a square as wide as its share, so its area is its share squared
+            sq = VGroup(*[Square(0.042 * s + 0.03, stroke_width=1, stroke_color="#0E1117", fill_color=ENTRANT,
+                                 fill_opacity=0.85) for s in shares])
+            sq.arrange_in_grid(cols=min(len(shares), 5), buff=0.06, aligned_edge=DOWN)
+            val = sum(s * s for s in shares)
+            label = VGroup(tx(name, 18, GREY_A), tx(f"HHI = {val:,}", 26, WHITE, bold=True)).arrange(DOWN, buff=0.08)
+            groups.add(VGroup(sq, label.next_to(sq, DOWN, buff=0.25)))
+        groups.arrange(RIGHT, buff=1.0, aligned_edge=DOWN).move_to([0, -0.2, 0])
+        eq = MathTex(r"\text{HHI} = s_1^2 + s_2^2 + \dots + s_n^2", font_size=40).to_edge(UP, buff=0.5)
+        line = tx(f"the US merger guidelines (2023): above {int(get('hhi.2023')):,}, a market is 'highly "
+                  "concentrated'", 20, GOLD).to_edge(DOWN, buff=0.45)
+        src = source("US Department of Justice and FTC, Merger Guidelines (2023), Guideline 1", corner=DR)
+        with self.voiceover(
+            "The four-firm ratio ignores how the share is split. Regulators use a second measure, named after "
+            "the economists Orris Herfindahl and Albert Hirschman. <bookmark mark='a'/> Square each firm's share of "
+            "the market, in percent, and add them up. <bookmark mark='b'/> Four equal firms with a quarter each give "
+            "two thousand five hundred. <bookmark mark='c'/> If one of them has fifty-five percent and the others "
+            "fifteen each, the total jumps to nearly four thousand, because squaring makes the big firm count for "
+            "much more. <bookmark mark='d'/> Twenty equal firms give five hundred. <bookmark mark='e'/> American "
+            "competition authorities treat a market above one thousand eight hundred as highly concentrated, and "
+            "look hard at any merger that pushes it there, or adds more than a hundred points to a market already "
+            "above it."
+        ) as vo:
+            self.play(FadeIn(src))
+            vo.wait_until("a")
+            self.play(Write(eq))
+            for k, m in enumerate("bcd"):
+                vo.wait_until(m)
+                self.play(LaggedStart(*[GrowFromCenter(s_) for s_ in groups[k][0]], lag_ratio=0.03),
+                          FadeIn(groups[k][1]), run_time=1.4)
+            vo.wait_until("e")
+            self.play(FadeIn(line, shift=UP * 0.1))
+        self.clear_scene()
 
     def two_markets(self):
         C = R["conc"]

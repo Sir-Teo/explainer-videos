@@ -141,6 +141,15 @@ def results() -> dict:
                        wacc=by[d][2025]["wacc"]) for d, c, lab in MATCH if c in named and d in by and 2025 in by[d]]
     R["match_rho"] = spearman([m["cr4"] for m in R["match"]], [m["roc"] for m in R["match"]])
 
+    # --- margins over time from the SEC extract: Visa, Costco, Delta ------------------------------------------------
+    sec = read("sec_annual")
+    R["margins"] = {}
+    for tic in ("V", "COST", "DAL"):
+        pts = [(int(str(r["year_end"])[:4]), r["operating_income"] / r["revenue"]) for r in sec
+               if r["ticker"] == tic and isinstance(r["revenue"], float) and isinstance(r["operating_income"], float)]
+        m = [v for _, v in pts]
+        R["margins"][tic] = dict(points=pts, lo=min(m), hi=max(m), sd=float(np.std(m)))
+
     # --- Visa, networks, drained moats ------------------------------------------------------------------------------------
     R["visa"] = dict(rev=get("visa.rev"), oi=get("visa.oi"), margin=get("visa.oi") / get("visa.rev"))
     R["network"] = [(n, n * (n - 1) // 2) for n in (2, 3, 5, 10, 20)]
@@ -175,6 +184,8 @@ def main():
         print(f"   {m['industry']:<26} CR4 {m['cr4']:5.1f}%  ROC {100 * m['roc']:5.1f}%   ({m['census']})")
     print(f"   rank correlation across the matched eight: {R['match_rho']:.2f}")
     print(f"Visa margin {100 * R['visa']['margin']:.0f}%; network links {R['network']}")
+    for k, d in R["margins"].items():
+        print(f"   {k}: operating margin {100 * d['lo']:.1f}% to {100 * d['hi']:.1f}%, sd {100 * d['sd']:.1f} points")
     a = R["air"]
     print(f"airlines 2015-2025: average ROC {100 * a['avg_roc']:.1f}% against cost {100 * a['avg_wacc']:.1f}%")
     b = R["base_rate"]

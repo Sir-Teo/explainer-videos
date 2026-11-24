@@ -5,8 +5,8 @@ from videos.industry.industry5.common import *  # noqa: F403
 
 class Called(VoiceoverScene):
     def construct(self):
-        card(self, 13, "Called it?", "Was Buffett right about airlines, and what will last?",
-             "Chapter thirteen. Called it?", lit=("change",))
+        card(self, 14, "Called it?", "Was Buffett right about airlines, and what will last?",
+             "Chapter fourteen. Called it?", lit=("change",))
         self.airlines()
         self.ours()
 
