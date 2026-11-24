@@ -19,10 +19,10 @@ class Entrant(VoiceoverScene):
     def construct(self):
         card(self, 1, "Run it: the entrant", "A rival wants your castle. What actually stops it?",
              "Chapter one. Run it: the entrant.", lit=("moat",))
-        self.setup()
+        self.opening()
         self.levers()
 
-    def setup(self):
+    def opening(self):
         keep = draw.castle(2.2, moat=0.25).move_to([-4.6, 0.2, 0])
         coins = VGroup(*[draw.coin(0.12) for _ in range(10)]).arrange_in_grid(rows=2, cols=5, buff=0.05).next_to(
             keep, UP, buff=0.2)
