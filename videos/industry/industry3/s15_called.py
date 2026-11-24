@@ -237,7 +237,8 @@ class Called(VoiceoverScene):
             coins, fly = draw.coin_flow(pile.get_top(), racks[1].get_top(), n=8, r=0.09, arc=-0.6)
             self.add(coins)
             self.play(fly, LaggedStart(*[FadeIn(r_, shift=UP * 0.2) for r_ in racks[3:]], lag_ratio=0.3),
-                      FadeIn(racks_t), pile.animate.stretch(0.55, 1, about_edge=DOWN), run_time=2.0)
+                      FadeIn(racks_t), pile.animate.stretch(0.55, 1, about_edge=DOWN),
+                      pile_t.animate.shift(DOWN * 0.45 * pile.height), run_time=2.0)
             self.remove(coins)
             self.play(FadeIn(fb_t), GrowFromEdge(fb[0][0], DOWN), FadeIn(fb[0][1:]))
             self.play(GrowFromEdge(fb[1][0], DOWN), FadeIn(fb[1][1:]), FadeIn(guide))

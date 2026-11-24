@@ -33,6 +33,11 @@ class Value(VoiceoverScene):
         src = source("Damodaran, Excess Returns (EVA) by industry, US companies, 2025: this film's arithmetic, $bn",
                      size=13)
         names = [SHORT.get(n, n) for n, _ in top[:5]]
+        # a percentage alone: of how much?
+        pct = VGroup(tx("15%", 72, RET, bold=True), tx("... of how much?", 22, GREY_B)).arrange(DOWN, buff=0.15).move_to(
+            [-3.2, 0.3, 0])
+        pile = VGroup(*[draw.coin(0.16) for _ in range(30)]).arrange_in_grid(rows=3, cols=10, buff=0.06).move_to(
+            [2.4, 0.3, 0])
         with self.voiceover(
             "A percentage hides how much money is at stake. <bookmark mark='a'/> Multiply each industry's return "
             "above its cost of capital by the capital it uses, and you get its profit above what that capital "
@@ -47,9 +52,10 @@ class Value(VoiceoverScene):
             "and computer makers sit furthest down their learning curves. The cost curve and the moat are "
             "often the same thing seen from two sides."
         ) as vo:
-            self.play(FadeIn(src))
+            self.play(FadeIn(src), FadeIn(pct[0], scale=1.3))
+            self.play(FadeIn(pct[1]), LaggedStart(*[FadeIn(c_, shift=DOWN * 0.3) for c_ in pile], lag_ratio=0.05))
             vo.wait_until("a")
-            self.play(Write(eq), FadeIn(eq_t))
+            self.play(FadeOut(pct), FadeOut(pile), Write(eq), FadeIn(eq_t))
             vo.wait_until("b")
             self.play(FadeIn(tot, shift=UP * 0.1))
             vo.wait_until("c")

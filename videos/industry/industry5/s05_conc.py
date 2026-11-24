@@ -29,6 +29,14 @@ class Conc(VoiceoverScene):
         line = tx(f"the US merger guidelines (2023): above {int(get('hhi.2023')):,}, a market is 'highly "
                   "concentrated'", 20, GOLD).to_edge(DOWN, buff=0.45)
         src = source("US Department of Justice and FTC, Merger Guidelines (2023), Guideline 1", corner=DR)
+        # the four-firm ratio cannot tell these two markets apart
+        splits = VGroup()
+        for shares in ([25] * 4, [55, 15, 15, 15]):
+            bar = VGroup(*[Rectangle(width=0.08 * s_, height=0.55, stroke_color="#0E1117", stroke_width=3,
+                                     fill_color=ENTRANT, fill_opacity=0.85) for s_ in shares]).arrange(RIGHT, buff=0)
+            lab = VGroup(*[tx(f"{s_}%", 16, WHITE).move_to(b_) for s_, b_ in zip(shares, bar)])
+            splits.add(VGroup(bar, lab, tx("four largest: 100%", 18, GREY_A).next_to(bar, RIGHT, buff=0.3)))
+        splits.arrange(DOWN, buff=0.6, aligned_edge=LEFT).move_to([0, 0.2, 0])
         with self.voiceover(
             "The four-firm ratio ignores how the share is split. Regulators use a second measure, named after "
             "the economists Orris Herfindahl and Albert Hirschman. <bookmark mark='a'/> Square each firm's share of "
@@ -40,9 +48,10 @@ class Conc(VoiceoverScene):
             "look hard at any merger that pushes it there, or adds more than a hundred points to a market already "
             "above it."
         ) as vo:
-            self.play(FadeIn(src))
+            self.play(FadeIn(src), LaggedStart(*[FadeIn(sp_, shift=RIGHT * 0.2) for sp_ in splits], lag_ratio=0.5),
+                      run_time=1.6)
             vo.wait_until("a")
-            self.play(Write(eq))
+            self.play(FadeOut(splits), Write(eq))
             for k, m in enumerate("bcd"):
                 vo.wait_until(m)
                 self.play(LaggedStart(*[GrowFromCenter(s_) for s_ in groups[k][0]], lag_ratio=0.03),
@@ -83,14 +92,19 @@ class Conc(VoiceoverScene):
             "That share, the four largest firms' slice of an industry's sales, is called the four-firm concentration "
             "ratio."
         ) as vo:
-            self.play(FadeIn(src))
+            for m_ in (tiny, big, rest):
+                m_.set_opacity(0.22)
+            self.play(FadeIn(src), LaggedStart(*[FadeIn(s_, scale=0.6) for s_ in tiny], lag_ratio=0.005),
+                      LaggedStart(*[FadeIn(s_, shift=UP * 0.2) for s_ in big], lag_ratio=0.2), FadeIn(rest),
+                      run_time=2.4)
             vo.wait_until("a")
-            self.play(FadeIn(t1), LaggedStart(*[FadeIn(s_, scale=0.6) for s_ in tiny], lag_ratio=0.01), run_time=2.0)
+            self.play(FadeIn(t1), LaggedStart(*[s_.animate.set_opacity(1) for s_ in tiny], lag_ratio=0.01),
+                      run_time=2.0)
             vo.wait_until("b")
             self.play(*[s_.animate.set_color(WHITE) for s_ in tiny[:4]], FadeIn(cr1))
             vo.wait_until("c")
-            self.play(FadeIn(t2), LaggedStart(*[FadeIn(s_, shift=UP * 0.2) for s_ in big], lag_ratio=0.2),
-                      FadeIn(rest), run_time=1.8)
+            self.play(FadeIn(t2), LaggedStart(*[s_.animate.set_opacity(1) for s_ in big], lag_ratio=0.2),
+                      rest.animate.set_opacity(1), run_time=1.8)
             vo.wait_until("d")
             self.play(FadeIn(cr2), Indicate(big, color=WHITE, scale_factor=1.04))
         del top1

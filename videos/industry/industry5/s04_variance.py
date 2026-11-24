@@ -44,9 +44,10 @@ class Variance(VoiceoverScene):
             "of this part is about both: the barriers that protect a whole industry, and the advantages that "
             "protect one company from its neighbours."
         ) as vo:
-            self.play(FadeIn(src))
+            self.play(FadeIn(src), LaggedStart(*[FadeIn(l_, shift=UP * 0.2) for l_ in lands], lag_ratio=0.4))
             vo.wait_until("a")
-            self.play(LaggedStart(*[FadeIn(l_, shift=UP * 0.2) for l_ in lands], lag_ratio=0.4), FadeIn(lt))
+            self.play(FadeIn(lt), Indicate(VGroup(lands[0][0], lands[1][0]), color=WHITE, scale_factor=1.03))
+            self.play(Indicate(VGroup(lands[0][1][1], lands[1][1][2]), color=WHITE))
             vo.wait_until("b")
             self.play(FadeIn(whole), FadeIn(whole_t))
             order = {"c": (3, 2), "d": (1,), "e": (0, 4)}

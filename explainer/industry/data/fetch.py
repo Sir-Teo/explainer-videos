@@ -54,7 +54,7 @@ def _get(url: str, tries: int = 4) -> bytes:
             if k == tries - 1:
                 import subprocess
 
-                return subprocess.run(["curl", "-sL", "--max-time", "120", url], check=True,
+                return subprocess.run(["curl", "-sL", "--max-time", "120", "-A", UA["User-Agent"], url], check=True,
                                       capture_output=True).stdout
             time.sleep(3 * (k + 1))
 
@@ -311,9 +311,12 @@ SEC_ITEMS = {"revenue": ["RevenueFromContractWithCustomerExcludingAssessedTax", 
              "operating_income": ["OperatingIncomeLoss"], "net_income": ["NetIncomeLoss"],
              "operating_cash": ["NetCashProvidedByUsedInOperatingActivities"],
              "capex": ["PaymentsToAcquirePropertyPlantAndEquipment", "PaymentsToAcquireProductiveAssets"],
-             "assets": ["Assets"], "equity": ["StockholdersEquity"]}
+             "assets": ["Assets"], "equity": ["StockholdersEquity"],
+             "depreciation": ["DepreciationDepletionAndAmortization", "DepreciationAmortizationAndAccretionNet",
+                              "DepreciationAndAmortization", "Depreciation"],
+             "inventory": ["InventoryNet"]}
 SEC_COMPANIES = [(789019, "MSFT"), (909832, "COST"), (19617, "JPM"), (753308, "NEE"), (27904, "DAL"), (59478, "LLY"),
-                 (1403161, "V")]
+                 (1403161, "V"), (723125, "MU"), (34088, "XOM"), (882184, "DHI"), (50863, "INTC")]
 
 
 def sec_annual():

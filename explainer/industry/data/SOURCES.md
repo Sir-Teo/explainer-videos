@@ -29,7 +29,7 @@ industryN` checks a part's rows.
 | US Census Bureau, NAICS 2022 | official | public domain | Part 2 |
 | US Census Bureau, Statistics of US Businesses, 2022 (released 2025-04-10): firms, establishments, employment and receipts by enterprise size, US and by sector → `census_susb_2022.csv` | official | public domain | Part 2 |
 | BEA, real value added and value-added prices by industry, chain-type indexes, 1997-2025 (`ValueAdded.xlsx`: TVA103-A, TVA104-A) → `bea_real.csv` | official | public domain | Part 2 |
-| SEC EDGAR company facts: annual 10-K revenue, operating income, net income, operating cash flow, capital spending, assets and equity for the companies in `SEC_COMPANIES` → `sec_annual.csv` | filing | public domain | Part 3 |
+| SEC EDGAR company facts: annual 10-K revenue, operating income, net income, operating cash flow, capital spending, assets, equity, depreciation and inventories for the companies in `SEC_COMPANIES` → `sec_annual.csv` | filing | public domain | Parts 3, 5, 6 |
 | BLS consumer price indexes (US city average) and average hourly earnings of production and nonsupervisory employees, annual averages since 2000, via FRED → `fred_prices.csv` | official | public domain | Part 2 |
 | Leontief (1936), *Review of Economics and Statistics* 18(3); Leontief (1983), National Academy of Engineering; the Nobel Foundation (1973) | study | quoted | Part 2 |
 | Antràs, Chor, Fally and Hillberry (2012), *AER Papers and Proceedings* 102(3) (upstreamness: the method, not data) | study | method | Part 2 |
