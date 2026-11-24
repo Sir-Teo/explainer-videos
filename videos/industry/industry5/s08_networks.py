@@ -5,8 +5,8 @@ from videos.industry.industry5.common import *  # noqa: F403
 
 class Networks(VoiceoverScene):
     def construct(self):
-        card(self, 7, "Walls of networks and law", "When does each new customer make the castle stronger?",
-             "Chapter seven. Walls of networks and law.", lit=("moat",))
+        card(self, 9, "Walls of networks and law", "When does each new customer make the castle stronger?",
+             "Chapter nine. Walls of networks and law.", lit=("moat",))
         self.network()
         self.law()
 

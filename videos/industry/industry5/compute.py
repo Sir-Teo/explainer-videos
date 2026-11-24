@@ -80,6 +80,12 @@ def results() -> dict:
                     median=float(np.median([a for _, a, _, _ in now])),
                     wacc_median=float(np.median([w for _, _, w, _ in now])))
 
+    # --- economic profit: (return - cost of capital) x capital, $bn --------------------------------------------------
+    eva = sorted(((n, (a - w) * c / 1000) for n, a, w, c in now), key=lambda t: -t[1])
+    pos = sum(v for _, v in eva if v > 0)
+    R["eva"] = dict(rows=eva, positive=pos, negative=sum(v for _, v in eva if v < 0),
+                    top5_share=sum(v for _, v in eva[:5]) / pos)
+
     # --- persistence --------------------------------------------------------------------------------------------------
     pairs = []
     for n, d in by.items():
@@ -96,6 +102,21 @@ def results() -> dict:
                         top_early=float(np.mean([p[1] for p in top])), top_late=float(np.mean([p[2] for p in top])),
                         bottom_early=float(np.mean([p[1] for p in bottom])),
                         bottom_late=float(np.mean([p[2] for p in bottom])), quartile=len(top), still_top=still)
+
+    # --- Called it?: the airlines since Buffett's letter, and how often a top ten stays in the top twenty ---------------
+    air = {y: d for y, d in by.get("Air Transport", {}).items()}
+    R["air"] = dict(years=sorted(air), roc=[air[y]["roc"] for y in sorted(air)], wacc=[air[y]["wacc"] for y in sorted(air)])
+    R["air"]["avg_roc"] = float(np.mean(R["air"]["roc"]))
+    R["air"]["avg_wacc"] = float(np.mean(R["air"]["wacc"]))
+    base = []
+    for y in range(2015, 2023):
+        a = {n: d[y]["roc"] for n, d in by.items() if y in d and y + 3 in d}
+        b = {n: by[n][y + 3]["roc"] for n in a}
+        top10 = sorted(a, key=lambda n: -a[n])[:10]
+        top20 = set(sorted(b, key=lambda n: -b[n])[:20])
+        base.append((y, y + 3, sum(n in top20 for n in top10)))
+    R["base_rate"] = dict(windows=base, hits=sum(k >= 7 for _, _, k in base), n=len(base),
+                          top10_2025=[d["name"] for d in R["roc"]["industries"][:10]])
 
     # --- how much is the industry ---------------------------------------------------------------------------------------
     v = dict(industry=get("mp.industry"), business=get("mp.business"), parent=get("mp.parent"), year=get("mp.year"))
@@ -140,6 +161,9 @@ def main():
           f"{100 * r['wacc_median']:.1f}%; {100 * r['above']:.0f}% above their cost")
     for d in r["industries"][:5] + r["industries"][-5:]:
         print(f"   {d['name']:<34} {100 * d['roc']:6.1f}%  cost {100 * d['wacc']:.1f}%")
+    e = R["eva"]
+    print(f"economic profit 2025: +${e['positive']:.0f}bn, -${-e['negative']:.0f}bn; top five {100 * e['top5_share']:.0f}%: "
+          + ", ".join(f"{n} {v:.0f}" for n, v in e["rows"][:5]))
     p = R["persist"]
     print(f"persistence ({p['n']} industries): Spearman {p['rho']:.2f}; top quartile {100 * p['top_early']:.1f}% -> "
           f"{100 * p['top_late']:.1f}%, bottom {100 * p['bottom_early']:.1f}% -> {100 * p['bottom_late']:.1f}%; "
@@ -151,6 +175,10 @@ def main():
         print(f"   {m['industry']:<26} CR4 {m['cr4']:5.1f}%  ROC {100 * m['roc']:5.1f}%   ({m['census']})")
     print(f"   rank correlation across the matched eight: {R['match_rho']:.2f}")
     print(f"Visa margin {100 * R['visa']['margin']:.0f}%; network links {R['network']}")
+    a = R["air"]
+    print(f"airlines 2015-2025: average ROC {100 * a['avg_roc']:.1f}% against cost {100 * a['avg_wacc']:.1f}%")
+    b = R["base_rate"]
+    print(f"top ten still in the top twenty three years on: {b['windows']}; >=7 in {b['hits']} of {b['n']}")
 
 
 if __name__ == "__main__":

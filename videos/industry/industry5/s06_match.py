@@ -9,8 +9,8 @@ SHORT = {"Retail (Building Supply)": "Home centers", "Beverage (Soft)": "Soft dr
 
 class Match(VoiceoverScene):
     def construct(self):
-        card(self, 5, "Few castles, high walls?", "Do concentrated industries earn more?",
-             "Chapter five. Few castles, high walls?", lit=("moat",))
+        card(self, 7, "Few castles, high walls?", "Do concentrated industries earn more?",
+             "Chapter seven. Few castles, high walls?", lit=("moat",))
         M = R["match"]
         ax = CornerAxes(x_range=[0, 100, 25], y_range=[0, 0.7, 0.1], x_length=7.2, y_length=5.0,
                         axis_config=dict(color=GREY_B, include_ticks=False)).move_to([-1.3, -0.3, 0])

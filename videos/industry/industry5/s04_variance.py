@@ -5,8 +5,8 @@ from videos.industry.industry5.common import *  # noqa: F403
 
 class Variance(VoiceoverScene):
     def construct(self):
-        card(self, 3, "Industry or company?", "How much of a firm's profit is just the industry it is in?",
-             "Chapter three. Industry or company?", lit=("moat",))
+        card(self, 5, "Industry or company?", "How much of a firm's profit is just the industry it is in?",
+             "Chapter five. Industry or company?", lit=("moat",))
         V = R["variance"]
         items = [("the business itself", V["business"], RET, f"{100 * V['business']:.0f}%"),
                  ("its industry", V["industry"], MOAT, f"{100 * V['industry']:.0f}%"),

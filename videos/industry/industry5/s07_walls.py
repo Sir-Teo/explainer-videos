@@ -5,8 +5,8 @@ from videos.industry.industry5.common import *  # noqa: F403
 
 class Walls(VoiceoverScene):
     def construct(self):
-        card(self, 6, "Walls of cost and habit", "What stops a rival from simply copying you?",
-             "Chapter six. Walls of cost and habit.", lit=("moat", "make"))
+        card(self, 8, "Walls of cost and habit", "What stops a rival from simply copying you?",
+             "Chapter eight. Walls of cost and habit.", lit=("moat", "make"))
         self.cost()
         self.habit()
 

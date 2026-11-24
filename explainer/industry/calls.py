@@ -75,6 +75,22 @@ CALLS = [
          rule="EIA Electric Power Monthly, net generation by source, electric power sector, final 2027 data: true if "
               "utility-scale solar exceeds coal in any month of 2027",
          due="2028-03", ours=True),
+    Call(5, "Warren Buffett, Berkshire Hathaway", "2008-02",
+         "Airlines are \"the worst sort of business\": they grow fast, need capital to grow, \"and then earn little or "
+         "no money\"; \"a durable competitive advantage has proven elusive ever since the days of the Wright "
+         "Brothers.\"", "Berkshire Hathaway, letter to shareholders for 2007, p. 8",
+         outcome="Damodaran's figures for US airlines, 2015-2025: return on capital averaged 6.5% a year against an "
+                 "average cost of capital of 6.0%: high after consolidation (14-19% in 2015-2019), losses in 2020 "
+                 "and 2021, about 8% since"),
+    Call(5, "Industry, Built", "2026-11-24",
+         "At least seven of the ten US industries with the highest return on capital in Aswath Damodaran's table "
+         "for 2025 will be among the twenty highest in his table for 2028. Probability: 75%.",
+         "This series, Part 5, chapter 10; in his tables for 2015-2025, seven or more of a year's top ten were in the "
+         "top twenty three years later in 7 of 8 windows",
+         rule="Damodaran's 'Excess Returns (EVA) by industry, US companies' for 2028, published January 2029: count "
+              "the 2025 top ten (by return on capital) among the 2028 top twenty; a renamed or dropped industry "
+              "counts as a miss",
+         due="2029-01", ours=True),
 ]
 
 

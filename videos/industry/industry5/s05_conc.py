@@ -5,8 +5,8 @@ from videos.industry.industry5.common import *  # noqa: F403
 
 class Conc(VoiceoverScene):
     def construct(self):
-        card(self, 4, "Counting the castles", "How many firms share each market?",
-             "Chapter four. Counting the castles.", lit=("moat", "who"))
+        card(self, 6, "Counting the castles", "How many firms share each market?",
+             "Chapter six. Counting the castles.", lit=("moat", "who"))
         self.two_markets()
         self.histogram()
 
