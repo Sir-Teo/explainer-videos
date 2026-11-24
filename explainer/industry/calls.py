@@ -118,6 +118,20 @@ CALLS = [
          rule="the Annual Integrated Economic Survey's first published figure for 2026 (FRED AIES312112RCTUS); true if "
               "above 7,500,000 thousand dollars",
          due="2028-06", ours=True),
+    Call(8, "M. King Hubbert, Shell Development Company", "1956-03",
+         "US crude oil production 'must culminate at about 1965' if the ultimate is 150 billion barrels, or 'about "
+         "1970' if it is 200 billion; world production would peak 'at about the year 2000'.",
+         "Hubbert, 'Nuclear Energy and the Fossil Fuels', American Petroleum Institute, San Antonio, March 1956",
+         outcome="US production peaked in 1970 at 9.64m b/d and fell to 5.0m b/d in 2008; shale then took it to 13.66m "
+                 "b/d in 2025, and cumulative output passed 258bn barrels. World crude output reached 84.5m b/d in "
+                 "2025 (EIA). Right on the date of the US peak, wrong on the ultimate and on the world."),
+    Call(8, "Industry, Built", "2026-11-24",
+         "Brent crude will average less than $90 a barrel in 2027 (EIA's November 2026 forecast: $86). Probability: 60%.",
+         "This series, Part 8, chapter 16; reasoning: shut-ins down from 10.9m b/d (May) to 2.5m (October), demand "
+         "recovering, stocks to be rebuilt; against: the strait's flows remain at risk, and stocks are low",
+         rule="EIA's annual average Europe Brent spot price FOB for 2027 (series RBRTE), as first published; true if "
+              "below $90.00",
+         due="2028-01", ours=True),
 ]
 
 
