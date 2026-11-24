@@ -69,6 +69,8 @@ class Intermission(VoiceoverScene):
         rows = VGroup()
         for k, (pic, ln) in enumerate(zip(pics, lines)):
             pic.scale_to_fit_height(min(max(pic.height, 0.4), 0.65))
+            if pic.width > 0.9:
+                pic.scale_to_fit_width(0.9)
             rows.add(VGroup(pic, tx(ln, 22 if k < 5 else 21, WHITE if k < 5 else GREY_B)))
         rows.arrange(DOWN, aligned_edge=LEFT, buff=0.42).next_to(head, DOWN, buff=0.6)
         for r_ in rows:
