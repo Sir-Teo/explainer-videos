@@ -41,8 +41,9 @@ It opens on Uber's prospectus of April 2019, which put its market at $12.3 trill
 - calling the curve early: colour TV fitted on its first quarter tops out at 31% (it reached 96%); curves with
   ceilings of 40%, 60%, 80% and 100% all fit its first four years within a third of a point; across 25 technologies
   the median miss is 12 points;
-- when everyone has one: a model of microwave ovens in American homes, first purchases peaking in the mid-1980s and
-  replacements 84% of sales by the 2020s, and the rule that a full market sells its number in use divided by its life;
+- when everyone has one: a model of microwave ovens in American homes, first purchases peaking in 1983 at about 8
+  million and replacements nearly all of the sales by the 2020s, and the rule that a full market sells about its
+  number in use divided by its life;
 - the Register: what every entry records, and what the Register holds after seven parts;
 - *Called it?*: WeWork's $3.0tn and its Chapter 11; the Beverage Marketing Corporation's forecast; and this series'
   call that the Census will report more than $7.5bn of bottled-water shipments for 2026 (65%).
@@ -93,7 +94,7 @@ It adds Home Depot's and Lowe's revenue for the fiscal years ending early in 202
 Economic Census's home centers. Bass curves are fitted by least squares to each technology in Our World in Data's
 table, with the ceiling free, then on the years up to the first at 25% only (the early forecasts), then with the
 ceiling held at 40%, 60%, 80% and 100% for colour TV's first years (the fan). The replacement model multiplies the
-microwave's fitted curve by the Census's count of US households, counts first purchases as the growth of that stock
+microwave's fitted curve by the Census's count of US households (a five-year centred mean), counts first purchases as the growth of that stock
 and replacements as last year's stock divided by an assumed life of ten years. The sensitivity chart moves each input
 of the viewer's sum across the range shown on screen. The models, the life and the ranges are labelled as such.
 

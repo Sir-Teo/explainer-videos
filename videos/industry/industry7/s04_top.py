@@ -92,9 +92,8 @@ class Top(VoiceoverScene):
             "nobody can see in the totals. Every five years, the Economic Census also reports shipments product by "
             "product, which is closer to a market; in the years between, you have the plants."
         ) as vo:
-            self.play(FadeIn(src), FadeIn(tag), FadeIn(key))
+            self.play(FadeIn(src), FadeIn(tag), FadeIn(key), FadeIn(a_[0], shift=UP * 0.2), FadeIn(a_[1]))
             vo.wait_until("a")
-            self.play(FadeIn(a_[0], shift=UP * 0.2), FadeIn(a_[1]))
             self.play(*[DrawBorderThenFill(w) for w in a_[2]], FadeIn(a_[3]))
             self.play(FadeIn(miss), Indicate(a_[2][1], color=WHITE))
             vo.wait_until("b")

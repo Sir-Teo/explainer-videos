@@ -110,9 +110,9 @@ class Three(VoiceoverScene):
             f"{lo_all:.0f} to {hi_all:.0f} billion. That is what a range is for: it tells you which number to go "
             "and check. Here, it is the price of a pack: the one number in your sum that you chose yourself."
         ) as vo:
-            self.play(FadeIn(tag), FadeIn(head))
+            self.play(FadeIn(tag), FadeIn(head), Create(axis))
             vo.wait_until("a")
-            self.play(Create(axis), FadeIn(mt))
+            self.play(FadeIn(mt, scale=1.3))
             vo.wait_until("b")
             g = bars[0]
             self.play(FadeIn(g[0]), GrowFromEdge(g[1], RIGHT), GrowFromEdge(g[2], LEFT), FadeIn(g[3]), FadeIn(g[4]))

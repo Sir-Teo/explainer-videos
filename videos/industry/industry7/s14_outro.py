@@ -22,15 +22,15 @@ class Outro(VoiceoverScene):
         bottle.add_updater(lambda b: b[0].stretch_to_fit_height(max(0.01, 2.6 * 0.7 * level.get_value()),
                                                                 about_edge=DOWN))
         lines = VGroup(
-            tx("First the definition: which level, plants, products, buyers, year.", 22),
-            tx("Then two ways to count: top-down from the census,", 22),
-            tx("bottom-up from units times a price you must choose.", 22, GREY_A),
-            tx("Few firms? Add up their accounts. Many? Count from the top.", 22),
-            tx("Compare only on one definition; report a range, and its edges.", 22),
-            tx("Split growth in dollars into price and quantity.", 22),
-            tx("An addressable market is a dream, not a forecast;", 22),
-            tx("an S-curve's ceiling cannot be read from its first years,", 22, GREY_A),
-            tx("and a full market is sized by what wears out.", 22, GREY_A)).arrange(
+            tx("First the definition: which level, plants, products, buyers, year.", 24),
+            tx("Then two ways to count: top-down from the census,", 24),
+            tx("bottom-up from units times a price you must choose.", 24, GREY_A),
+            tx("Few firms? Add up their accounts. Many? Count from the top.", 24),
+            tx("Compare only on one definition; report a range, and its edges.", 24),
+            tx("Split growth in dollars into price and quantity.", 24),
+            tx("An addressable market is a dream, not a forecast;", 24),
+            tx("an S-curve's ceiling cannot be read from its first years,", 24, GREY_A),
+            tx("and a full market is sized by what wears out.", 24, GREY_A)).arrange(
             DOWN, aligned_edge=LEFT, buff=0.15).move_to([1.8, -0.35, 0])
         groups = [VGroup(lines[0]), VGroup(lines[1], lines[2]), VGroup(lines[3]), VGroup(lines[4]), VGroup(lines[5]),
                   VGroup(lines[6], lines[7], lines[8])]

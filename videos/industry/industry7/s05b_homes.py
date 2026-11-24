@@ -99,9 +99,8 @@ class Homes(VoiceoverScene):
             "Part 5's concentration tables come first. Few firms: add up their accounts. Many firms: count from the "
             "top, with a census, or from the bottom, with units and prices."
         ) as vo:
-            self.play(FadeIn(src))
+            self.play(FadeIn(src), FadeIn(hc[0]), GrowFromCenter(hc[1][0]), GrowFromCenter(hc[1][1]), FadeIn(hc[2]))
             vo.wait_until("a")
-            self.play(FadeIn(hc[0]), GrowFromCenter(hc[1][0]), GrowFromCenter(hc[1][1]), FadeIn(hc[2]))
             self.play(FadeIn(hb[0]), GrowFromEdge(hb[1], LEFT), FadeIn(hb[2]))
             vo.wait_until("b")
             self.play(FadeIn(sl[0]), LaggedStart(*[FadeIn(q_, scale=0.5) for q_ in small], lag_ratio=0.01),

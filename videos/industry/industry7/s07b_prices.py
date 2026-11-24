@@ -24,7 +24,7 @@ class Prices(VoiceoverScene):
                             lambda m: m.next_to(corner + [u.get_value() / 2, 0, 0], DOWN, buff=0.2))
         h_lab = draw.memo_redraw(lambda: "price", lambda s: tx(s, 20, GUESS, bold=True).rotate(PI / 2),
                             lambda m: m.next_to(corner + [0, p.get_value() / 2, 0], LEFT, buff=0.2))
-        area = draw.number(lambda: 100 * u.get_value() * p.get_value() / 6.0, decimals=0, prefix="dollars: ", size=28,
+        area = draw.number(lambda: 100 * u.get_value() * p.get_value() / 6.0, decimals=0, prefix="$", size=30,
                            color=GOLD)
         area.add_updater(lambda m: m.move_to(corner + [u.get_value() / 2, p.get_value() / 2, 0]))
         eq = MathTex(r"\text{dollars} = \text{units} \times \text{price}", font_size=40).move_to([3.2, 2.2, 0])

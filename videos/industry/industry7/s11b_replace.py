@@ -80,11 +80,11 @@ class Replace(VoiceoverScene):
             "bottom, the old ovens thrown away. <bookmark mark='b'/> Run the model from 1975, with the adoption curve "
             "of Chapter 10, the real count of American households, and an assumed life of ten years for each oven. "
             "<bookmark mark='c'/> In the early years nearly every sale is a first purchase. First purchases peak in "
-            f"the mid-1980s, at about {M['peak_first_m']:.0f} million a year. <bookmark mark='d'/> Then they fade, "
+            f"{M['peak_first']}, at about {M['peak_first_m']:.0f} million a year. <bookmark mark='d'/> Then they fade, "
             "because almost every home has one. But the tub is now full, and full tubs drain: the ovens bought in "
             "the boom start to wear out, and replacements take over. <bookmark mark='e'/> By the 2020s, in this "
             f"model, about {100 * M['repl_share']:.0f} percent of the ovens sold each year replace an old one, and "
-            "most of the rest go to households that did not exist before. The S-curve flattened; the market did "
+            "the rest go to households that did not exist before. The S-curve flattened; the market did "
             "not."
         ) as vo:
             self.play(FadeIn(src), Create(tub), FadeIn(pa), FadeIn(tag))
@@ -136,9 +136,9 @@ class Replace(VoiceoverScene):
             "how long people keep it matters as much as how many people there are. The life is our assumption here; "
             "a real sizing would have to measure it, and the measuring is hard."
         ) as vo:
-            self.play(FadeIn(tag))
+            self.play(FadeIn(tag), Write(eq), run_time=1.6)
             vo.wait_until("a")
-            self.play(Write(eq), run_time=1.6)
+            self.play(Indicate(eq, color=GOLD, scale_factor=1.05))
             vo.wait_until("b")
             self.play(FadeIn(inu))
             self.play(FadeIn(cases[1][0]), GrowFromEdge(cases[1][1], LEFT), FadeIn(cases[1][2]))

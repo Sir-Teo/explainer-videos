@@ -69,7 +69,7 @@ class Early(VoiceoverScene):
                            yticks=[25, 50, 75, 100], xfmt=lambda v: f"{int(v)}", yfmt=lambda v: f"{v:g}%", size=15)
         pa.move_to([-0.6, -0.5, 0])
         dots = VGroup(*[Dot(pa.ax.c2p(y, s_), radius=0.065, color=WHITE) for y, s_ in zip(ys, ss) if y <= cut])
-        cols = [GUESS, UNITS, RETAIL, TAM]
+        cols = [GUESS, UNITS, RETAIL, FACTORY]
         xs = np.linspace(1964, 1990, 80)
         curves, labs = VGroup(), VGroup()
         for f, col in zip(F["fits"], cols):
@@ -79,7 +79,7 @@ class Early(VoiceoverScene):
             labs.add(VGroup(tx(f"ceiling {f['m']:.0f}%", 18, col, bold=True),
                             tx(f"misses the dots by {f['rmse']:.2f} points", 15, GREY_B)).arrange(DOWN, aligned_edge=LEFT,
                                                                                                 buff=0.03))
-        labs.arrange(DOWN, aligned_edge=LEFT, buff=0.25).move_to([5.0, -0.3, 0])
+        VGroup(*reversed(labs)).arrange(DOWN, aligned_edge=LEFT, buff=0.25).move_to([5.0, -0.3, 0])
         zoom = Rectangle(width=pa.ax.c2p(cut + 0.6, 0)[0] - pa.ax.c2p(1965.4, 0)[0],
                          height=pa.ax.c2p(0, 30)[1] - pa.ax.c2p(0, 4)[1], stroke_color=WHITE,
                          stroke_width=1.5).move_to(pa.ax.c2p((1965.4 + cut + 0.6) / 2, 17))

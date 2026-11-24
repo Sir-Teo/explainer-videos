@@ -131,7 +131,9 @@ def results() -> dict:
 
     # --- when everyone has one: first purchases and replacements, from the microwave's Bass fit and US households -----
     life = get("model.microwave.life")
-    hh = {y: v / 1e3 for y, v in S["TTLHH"].items()}  # millions
+    hh_raw = {y: v / 1e3 for y, v in S["TTLHH"].items()}  # millions
+    ys_ = sorted(hh_raw)
+    hh = {y: float(np.mean([hh_raw[z] for z in ys_ if abs(z - y) <= 2])) for y in ys_}  # 5-year centred mean
     fm = R["diffusion"]["Microwave"]
     yy = list(range(1970, 2026))
     stock = [hh[y] * float(predict(fm, [y])[0]) / 100 for y in yy]  # millions in use (one per household)
