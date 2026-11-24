@@ -72,8 +72,20 @@ add(
       "$10.7bn)", "Pew Research Center, 'Estimated advertising and circulation revenue of the newspaper industry' "
       "(News Media Alliance through 2012)", "https://www.pewresearch.org/journalism/chart/sotnm-newspapers-newspaper-"
       "industry-estimated-advertising-and-circulation-revenue/", "2005", kind="tracker"),
+    r("news.ads.2020", 9.60, "USD bn", "US newspaper industry's estimated advertising revenue, 2020 ($9,601m; "
+      "circulation $11,054m, now the larger; 2008: advertising $37.8bn; 2010: $25.8bn)", "Pew Research Center, "
+      "'Estimated advertising and circulation revenue of the newspaper industry', 29 June 2021 (Pew's estimates from "
+      "SEC filings for 2013-2020)", "https://www.pewresearch.org/journalism/chart/sotnm-newspapers-newspaper-industry-"
+      "estimated-advertising-and-circulation-revenue/", "2020", kind="tracker", note="Pew's estimate from the filings "
+      "of publicly traded newspaper companies"),
+    r("news.circ.2020", 11.05, "USD bn", "US newspaper industry's estimated circulation revenue, 2020 (2005: $10.7bn)",
+      "Pew Research Center, 29 June 2021", "https://www.pewresearch.org/journalism/chart/sotnm-newspapers-newspaper-"
+      "industry-estimated-advertising-and-circulation-revenue/", "2020", kind="tracker", note="Pew's estimate"),
     r("kodak.sales.2008", 9.42, "USD bn", "Eastman Kodak net sales, 2008 (2011: $6.02bn; 2017: $1.53bn)", "Eastman "
       "Kodak Forms 10-K (SEC company facts: SalesRevenueNet)", CF.format(31235), "2008"),
+    r("kodak.ch11", 2012, "year", "Eastman Kodak and its US subsidiaries filed for chapter 11 on 19 January 2012 "
+      "(Southern District of New York, case 12-10202)", "Eastman Kodak Form 8-K, 19 January 2012, Item 1.03",
+      "https://www.sec.gov/Archives/edgar/data/31235/000119312512016443/d285282d8k.htm", "2012-01-19"),
     r("kodak.sales.2017", 1.53, "USD bn", "Eastman Kodak net sales, 2017, after its chapter 11 reorganization",
       "Eastman Kodak Form 10-K 2017 (SEC company facts)", CF.format(31235), "2017"),
 )
