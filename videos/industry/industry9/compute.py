@@ -173,12 +173,23 @@ def results() -> dict:
                     copper=float(M.copper_kt()[0]), cost0=float(M.unit_cost()[0]), cost_end=float(M.unit_cost()[-1]),
                     breakeven=M.breakeven(), p0=p0, now_mean=float(now.mean()), now_loss=float((now < 0).mean()),
                     wait_mean=float(later.mean()), wait_loss=float((later < 0).mean()), sell=float(sell),
-                    paths=paths[:40, :years].tolist(), years=years)
+                    paths=paths[:40, :years].tolist(), years=years, now_all=sorted(now.tolist()),
+                    wait_all=sorted(later.tolist()), cash=M.cashflows(p0).tolist(), grades=M.grades().tolist(),
+                    output=M.copper_kt().tolist(), costs=M.unit_cost().tolist())
 
     # --- the option to wait -------------------------------------------------------------------------------------------------
     be = M.breakeven()
     R["wait"] = dict(breakeven=be, rows=[dict(price=p, **mine.wait_value(M, p, 0.25, n=800, seed=3))
                                          for p in (be * 0.8, be, be * 1.25, be * 1.6)])
+    curve = [dict(price=p, **mine.wait_value(M, p, 0.25, n=400, seed=3)) for p in np.linspace(0.6 * be, 1.9 * be, 27)]
+    cross = next(c["price"] for c in curve if c["price"] > be and c["now"] >= c["wait"])
+    R["wait"].update(curve=curve, cross=cross, cross_ratio=cross / be)
+
+    # --- grade and cost: the same mine at other grades ------------------------------------------------------------------
+    gs = np.linspace(0.25, 2.0, 36)
+    R["gradecost"] = dict(grades=gs.tolist(), cost=[float(mine.Mine("g", 600, g, 40, capex=3000).unit_cost()[0])
+                                                    for g in gs],
+                          breakeven=[float(mine.Mine("g", 600, g, 40, capex=3000).breakeven()) for g in gs])
 
     # --- copper after earlier real highs (for the call) ----------------------------------------------------------------------
     rc = real["PCOPPUSDM"]

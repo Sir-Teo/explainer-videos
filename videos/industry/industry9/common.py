@@ -11,6 +11,7 @@ from explainer.industry import viz  # noqa: F401
 from explainer.industry.draw import tx  # noqa: F401
 from explainer.industry.kit import *  # noqa: F403
 from explainer.industry.kit import chapter
+from explainer.industry.register import get, span  # noqa: F401
 from explainer.voiceover import VoiceoverScene  # noqa: F401
 
 from .compute import results

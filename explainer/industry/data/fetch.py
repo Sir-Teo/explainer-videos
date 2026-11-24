@@ -897,7 +897,34 @@ def sec_ifrs():
                    "; ".join(f"{k}: {'/'.join(v)}" for k, v in IFRS_ITEMS.items()) + ")"])
 
 
-JOBS = {"usgs_ds140": usgs_ds140, "fred_metals": fred_metals, "sec_ifrs": sec_ifrs, "eia_gas": eia_gas, "eia_petroleum": eia_petroleum, "eia_intl": eia_intl, "eia_pump": eia_pump, "fred_energy": fred_energy, "fred_market": fred_market, "owid_tech": owid_tech, "sec_quarterly": sec_quarterly, "fred_cycle": fred_cycle, "esef_maersk": esef_maersk, "damodaran_roc": damodaran_roc, "census_conc": census_conc, "eia_power": eia_power, "fred_pay": fred_pay, "bea_real": bea_real, "sec_annual": sec_annual, "fred_prices": fred_prices, "census_susb": census_susb, "bea_va": bea_va, "wb_mfg_usd": wb_mfg_usd, "bea_hist": bea_hist, "bea_io": bea_io, "fred_jobs": fred_jobs, "wb_shares": wb_shares}
+
+NE_LAND = "https://raw.githubusercontent.com/nvkelso/natural-earth-vector/master/geojson/ne_110m_land.geojson"
+
+
+def ne_land():
+    """Natural Earth's 1:110m land outlines (public domain) for the series' schematic world map (``draw.world_map``):
+    Antarctica and polygons smaller than two square degrees dropped, coordinates rounded to a tenth of a degree."""
+    g = json.loads(_get(NE_LAND))
+    polys = []
+    for f in g["features"]:
+        geom = f["geometry"]
+        for poly in ([geom["coordinates"]] if geom["type"] == "Polygon" else geom["coordinates"]):
+            ring = poly[0]
+            xs, ys = [q[0] for q in ring], [q[1] for q in ring]
+            if max(ys) < -60:
+                continue
+            if 0.5 * abs(sum(xs[i] * ys[i + 1] - xs[i + 1] * ys[i] for i in range(len(ring) - 1))) < 2.0:
+                continue
+            pts = [[round(q[0], 1), round(q[1], 1)] for q in ring]
+            polys.append([pts[0]] + [q for a, q in zip(pts, pts[1:]) if q != a])
+    path = HERE / "world_land.json"
+    path.write_text(json.dumps({"source": "Natural Earth, 1:110m land (public domain), naturalearthdata.com, via " +
+                                NE_LAND + "; polygons smaller than 2 square degrees and Antarctica dropped, coordinates "
+                                "rounded to 0.1 degree", "retrieved": TODAY, "polygons": polys}, separators=(",", ":")))
+    return path
+
+
+JOBS = {"ne_land": ne_land, "usgs_ds140": usgs_ds140, "fred_metals": fred_metals, "sec_ifrs": sec_ifrs, "eia_gas": eia_gas, "eia_petroleum": eia_petroleum, "eia_intl": eia_intl, "eia_pump": eia_pump, "fred_energy": fred_energy, "fred_market": fred_market, "owid_tech": owid_tech, "sec_quarterly": sec_quarterly, "fred_cycle": fred_cycle, "esef_maersk": esef_maersk, "damodaran_roc": damodaran_roc, "census_conc": census_conc, "eia_power": eia_power, "fred_pay": fred_pay, "bea_real": bea_real, "sec_annual": sec_annual, "fred_prices": fred_prices, "census_susb": census_susb, "bea_va": bea_va, "wb_mfg_usd": wb_mfg_usd, "bea_hist": bea_hist, "bea_io": bea_io, "fred_jobs": fred_jobs, "wb_shares": wb_shares}
 
 if __name__ == "__main__":
     names = list(JOBS) if "--all" in sys.argv else sys.argv[1:]

@@ -938,3 +938,44 @@ def gauge(tracker: ValueTracker, lo: float, hi: float, r: float = 1.0, color: st
                     stroke_width=5)
     g = VGroup(arcs, always_redraw(needle), hub)
     return g
+
+
+# ---------------------------------------------------------------------------------------------------------------
+# Maps
+
+
+_LAND = None
+
+
+def world_map(width: float = 12.0, lon=(-170.0, 180.0), lat=(-56.0, 78.0), color: str = "#243044",
+              stroke: str = "#34425A") -> VGroup:
+    """A schematic world map (Natural Earth's 1:110m land, equirectangular) cropped to ``lon`` and ``lat`` and
+    ``width`` wide, centred on the origin.  ``g.p(lon, lat)`` gives a point on it (follows the map if it moves)."""
+    global _LAND
+    if _LAND is None:
+        import json
+        from pathlib import Path
+
+        _LAND = json.loads((Path(__file__).resolve().parent / "data" / "world_land.json").read_text())["polygons"]
+    k = width / (lon[1] - lon[0])
+    h = k * (lat[1] - lat[0])
+    g = VGroup()
+
+    def xy(lo, la):
+        return np.array([(min(max(lo, lon[0]), lon[1]) - lon[0]) * k - width / 2,
+                         (min(max(la, lat[0]), lat[1]) - lat[0]) * k - h / 2, 0.0])
+    for ring in _LAND:
+        xs = [q[0] for q in ring]
+        ys = [q[1] for q in ring]
+        if max(xs) < lon[0] or min(xs) > lon[1] or max(ys) < lat[0] or min(ys) > lat[1]:
+            continue
+        g.add(Polygon(*[xy(a, b) for a, b in ring], stroke_color=stroke, stroke_width=1, fill_color=color,
+                      fill_opacity=1))
+    frame = Rectangle(width=width, height=h, stroke_width=0, fill_opacity=0)
+    g.add(frame)
+
+    def p(lo, la):
+        return frame.get_center() + (xy(lo, la) - np.array([0.0, 0.0, 0.0])) * (frame.width / width)
+    g.p = p
+    g.frame = frame
+    return g

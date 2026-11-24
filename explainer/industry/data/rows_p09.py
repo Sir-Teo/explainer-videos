@@ -26,9 +26,9 @@ def ortiz(key, value, unit, definition, fact="1981-03"):
              "December 2024), the account of the project's chief geologist", ORTIZ, fact, "study")
 
 
-def bhp(key, value, unit, definition, fact="2025"):
+def bhp(key, value, unit, definition, fact="2025", **kw):
     return r(key, value, unit, definition, "BHP, results for the year ended 30 June 2025 (ASX release, 19 August 2025), "
-             "Escondida", BHP25, fact)
+             "Escondida", BHP25, fact, **kw)
 
 
 def fcx(key, value, unit, definition, fact="2025"):
@@ -58,8 +58,14 @@ add(
     bhp("esc.grade.2025", 1.02, "%", "Escondida's concentrator feed grade, year to June 2025"),
     bhp("esc.grade.2026", 0.85, "%", "the feed grade BHP expects for the year to June 2026, with output of 1,150-1,250 kt",
         "2026"),
+    bhp("esc.output.2026", 1200, "kt", "Escondida's copper production BHP expects for the year to June 2026: 1,150-1,250 kt",
+        "2026", lo=1150, hi=1250),
+    bhp("esc.cost.2026", 1.35, "USD/lb", "Escondida's unit cost BHP expects for the year to June 2026: US$1.20-1.50 a pound",
+        "2026", lo=1.20, hi=1.50),
+    bhp("esc.cost.medium", 1.65, "USD/lb", "Escondida's medium-term unit cost outlook, FY2027-FY2031: US$1.50-1.80 a pound",
+        "FY2027-FY2031", lo=1.50, hi=1.80),
     bhp("esc.medium", 950, "kt", "BHP's medium-term outlook for Escondida, the average for FY2027-FY2031: 900-1,000 kt a "
-        "year at a unit cost of US$1.50-1.80/lb", "2027-2031"),
+        "year at a unit cost of US$1.50-1.80/lb", "2027-2031", lo=900, hi=1000),
     # --- Freeport-McMoRan: grades, costs, Grasberg --------------------------------------------------------------------
     fcx("fcx.grasberg.grade", 1.10, "%", "copper grade of ore milled at PT Freeport Indonesia's Grasberg district, 2025 "
         "(1.27% in 2024); gold 0.77 grams a tonne"),
@@ -122,6 +128,13 @@ add(
     mcs("usgs.ree.china", 270, "kt", "China's rare-earth mine production, 2025 (world about 390 kt); China tightened export "
         "controls in April and October 2025", "rare-earths"),
     mcs("usgs.ni.indonesia", 2600, "kt", "Indonesia's nickel mine production, 2025 (estimate; world 3,900 kt)", "nickel"),
+    mcs("usgs.fe.price", 99.07, "USD/t", "spot price of imported iron ore fines, 62% iron, cost, insurance and freight, at "
+        "Tianjin Port, China, average of the first nine months of 2025 ($112.07 a year earlier)", "iron-ore", "2025-01/09"),
+    mcs("usgs.fe.world", 2600, "Mt", "world usable iron ore production, 2025 (estimate)", "iron-ore"),
+    mcs("usgs.fe.brazil", 420, "Mt", "Brazil's usable iron ore production, 2025 (estimate)", "iron-ore"),
+    mcs("usgs.fe.india", 310, "Mt", "India's usable iron ore production, 2025 (estimate)", "iron-ore"),
+    mcs("usgs.fe.china", 290, "Mt", "China's usable iron ore production, 2025 (estimate)", "iron-ore"),
+    mcs("usgs.cu.comex.2024", 4.22, "USD/lb", "COMEX copper, 2024 average", "copper", "2024"),
     mcs("usgs.fe.australia", 980, "Mt", "Australia's usable iron ore production, 2025 (Brazil 420, India 310, China 290; "
         "world 2,600)", "iron-ore"),
     mcs("usgs.au.price", 3300, "USD/oz", "gold, 2025 average (a record, 38% above 2024)", "gold"),
