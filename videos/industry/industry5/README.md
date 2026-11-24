@@ -20,26 +20,28 @@ protects excellent returns on invested capital." From there it covers:
 - the facts: return on capital for 90 US industries in 2025, from tobacco's 63% to consumer electronics' loss; 83%
   above their cost of capital; a rank correlation of 0.57 between 2015-2019 and 2022-2025; the top quarter from 30% to
   27%, the bottom from 5% to 10%;
-- why high returns fade when money can flow in, and how a moat bends the curve (a model);
+- why high returns fade when money can flow in, and how a moat bends the curve (a model); then the fade measured:
+  88 industries sorted by their 2015 return into fifths, the top fifth from 33% to 27% by 2025 and the bottom from 4% to 11%;
 - where the excess profit is: $1.47 trillion above the cost of capital in 2025, 39% of it in five industries
   (two kinds of software, computers, chips and health care support);
 - industry or company: McGahan and Porter (1997) find the industry explains 19% of the variance in business units'
   profitability and the business itself 32%;
 - counting the castles: 33,066 firms run nail salons and the four largest have 0.4% of sales; under 800 run home
   centers and the four largest have 98%; the distribution across 897 industries (median 31%); the HHI and the 2023
-  merger guidelines' threshold of 1,800;
+  merger guidelines' threshold of 1,800, with a worked merger the four-firm ratio cannot see (HHI 3,000 to 3,400);
 - concentration against returns for eight matched industries: tobacco and home centers high on both, airlines (73%)
   and carmakers (58%) concentrated but earning less than 10%;
 - walls of cost (warehouse clubs, 96% for the four largest) and of habit (switching costs, brands);
 - a moat that held: smokers fell from about 42 in 100 adults (1965) to under 12 (2022), and tobacco had the
   highest return on capital in seven of eleven years and the second highest in the other four, 45% to 96%;
-- walls of networks (n users, n(n-1)/2 links; Visa keeping 61 cents of each dollar in fiscal 2026) and of law
-  (a patent's 20 years; licences and scarce rights);
+- walls of networks (n users, n(n-1)/2 links; Visa keeping 61 cents of each dollar in fiscal 2026; Visa and
+  Mastercard, two castles that do not fight, both above half since 2009) and of law (a patent's 20 years; licences
+  and scarce rights);
 - Porter's five forces (1979), applied to airlines and to tobacco;
 - buyers and suppliers: in the phone's chain from Part 1, TSMC keeps 62% and Qualcomm's licensing 72%, Foxconn 6%;
 - a moat in the accounts: operating margins since fiscal 2009, Visa about 50-66% (apart from a legal charge in 2012), Costco 2.5-3.9% with a standard
-  deviation of 0.4 points, Delta from 19% to -73%;
-- good for whom? a high return as a reward or as a toll;
+  deviation of 0.4 points, Delta from 19% to -73%; and nine companies' average margins against their steadiness;
+- good for whom? a high return as a reward or as a toll, and four questions that tell them apart;
 - an intermission: eight industries' returns, 2015 to 2025, ranked year by year;
 - moats that drained: newspapers' advertising from $49.4bn (2005) to $9.6bn (2020, Pew's estimate), below
   circulation; Kodak's sales from $9.4bn (2008) to $1.5bn (2017) and its chapter 11 in January 2012;

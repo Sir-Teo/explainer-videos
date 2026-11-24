@@ -100,7 +100,7 @@ Manim videos with local neural narration. See README.md for layout and build com
   that plan them (the syllabus) and cite them (the built parts); it is written by `python -m videos.economics.reading`,
   and `tests/economics/test_reading.py` fails when it is stale, so rerun it after adding a part. Chinese terms:
   `videos/economics/ECONOMICS_ZH_GUIDE.md`.
-- *Industry, Built* (`videos/industry/`): sixty-four parts planned in eleven acts (`industry1` … `industry64`), Parts 1–4
+- *Industry, Built* (`videos/industry/`): sixty-four parts planned in eleven acts (`industry1` … `industry64`), Parts 1–5
   built (English); how each industry works, for a general audience, visual first, from its unit and process to its dated landscape. The plan and the open decisions
   are `videos/industry/README.md`; the standard (the coverage checklist, the sweep, durable against dated chapters),
   the devices (the Works' model companies, the Unit, the Dollar, the Stack, the Map, the Board, the Register, the

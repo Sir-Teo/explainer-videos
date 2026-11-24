@@ -2536,6 +2536,8 @@ scored in Part 64 and at each refresh.
 | 2 · The Economy on One Page | done 2026-11-23 (37 Register rows; BEA, BLS, Census and World Bank extracts) | — (the BEA table itself) | 21 scenes | silent and narrated previews reviewed | entry, lab, interactive | not started |
 | 3 · The Accounts | done 2026-11-23 (119 Register rows; the SEC extract) | `works/firm.py` | 17 scenes | silent and narrated previews reviewed | entry, lab, interactive | not started |
 | 4 · The Cost Curve | done 2026-11-23 (83 Register rows; EIA's Electric Power Annual and AEO2026 assumptions) | `works/stack.py` | 15 scenes, illustrated and animated (`draw.py`) | silent and narrated previews reviewed | entry, lab, interactive | not started |
+| 5 · The Moat | done 2026-11-24 (31 Register rows; Damodaran's returns 2015-2025, the Census's concentration ratios, the SEC extract) | — (the game in chapter 1 and the course site) | 19 scenes | silent preview reviewed; narrated cut extended to thirty minutes | entry, lab, interactive | not started |
+| 6 · The Cycle | done 2026-11-24 (15 Register rows; FRED's hogs, housing, oil and orders; Maersk's ESEF filings; Micron's quarters) | `works/cycle.py` | 18 scenes | in production | entry, lab, interactive | not started |
 
 Phase 0 is done in the form Part 1 needed: the palette and kit (`style.py`, `kit.py`), the instruments (`viz.py`: the
 phone and its exploded view, the region map, the Dollar column, the margin ladder, the treemap, plain axes), the
@@ -2577,4 +2579,22 @@ chapter uses Micron's margins and the DOJ's DRAM fines rather than railways; *Ca
 roadmap, scored against IRENA's capacity, with the series' call on solar against coal in 2027 (BCG's 1968
 *Perspectives on Experience* is not used: no primary copy was consulted). The Run it game is the course site's price
 war against a rival with the same plant.
+
+Parts 1-3 were then redrawn in Part 4's style: every chapter of the three now opens on a picture and moves (Pacioli's
+book above Venice's water, the bakery's ledger in glyphs, the iPhone's parts flying out of the phone, the economy's
+jobs as a crowd), and `tools/dead_air.py` finds no blank or sparse stretch in any of them.
+
+Part 5 follows its draft with three changes. Its industry evidence is Aswath Damodaran's published returns on capital
+(2015-2025) and the Census Bureau's 2022 concentration ratios, matched by hand for eight industries; its walls are
+shown with real companies (See's and FlightSafety from Berkshire's 2007 letter, Costco, Visa and Mastercard, tobacco,
+newspapers and Kodak); and its *Called it?* is Buffett's 2008 view of airlines, scored against Damodaran's airline
+returns, with the series' call on the persistence of the 2025 top ten. The first narrated cut ran 26.5 minutes, so
+the fade was measured in fifths, Visa and Mastercard, a margin map of nine companies, a worked merger and four tests
+of reward against toll were added.
+
+Part 6 departs from its draft in its evidence: the 1973 tankers are replaced by UNCTAD's orderbook (52% of the fleet in
+2009) and Maersk's own filings; the hog cycle is tested on the NBER's Chicago data, 1880-1940 (a swing of about 3.6
+years, not the cobweb's two); memory chips are Micron's quarters since 2009; and the Works' `cycle.py` (a fleet with
+lead times, the cobweb, a bullwhip chain, leverage) is tested. Clark's accelerator was added as its own chapter. Its
+*Called it?* is Intel's 2021 plan against its later losses, with the series' call on Micron's next fall.
 
