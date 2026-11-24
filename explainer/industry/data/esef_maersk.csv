@@ -1,0 +1,10 @@
+# source: https://filings.xbrl.org/ (A.P. Moller - Maersk A/S annual reports 2020, 2022, 2024, 2025, ESEF; US$ billions; revenue: ifrs-full:Revenue; ebit: ifrs-full:ProfitLossFromOperatingActivities; depreciation: ifrs-full:DepreciationAmortisationAndImpairmentLossReversalOfImpairmentLossRecognisedInProfitOrLoss)
+# retrieved: 2026-11-24
+year,revenue,ebit,depreciation
+2019,38.89,1.725,4.287
+2020,39.74,4.186,4.541
+2021,61.787,19.674,4.944
+2022,81.529,30.86,6.186
+2023,51.065,3.934,6.615
+2024,55.482,6.499,6.22
+2025,53.988,3.5,6.671

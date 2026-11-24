@@ -14,6 +14,8 @@
     python -m explainer.industry.data.fetch eia_power    # EIA: capacity, generation, fuel costs, heat rates
     python -m explainer.industry.data.fetch damodaran_roc  # Damodaran: return on capital by US industry, 2015-2025
     python -m explainer.industry.data.fetch census_conc  # Census: the four largest firms' share by industry, 2022
+    python -m explainer.industry.data.fetch fred_cycle   # FRED: hogs since 1858, housing, oil, sales and orders
+    python -m explainer.industry.data.fetch esef_maersk  # Maersk's annual results from its ESEF filings, 2019-2025
     python -m explainer.industry.data.fetch --all
 
 Each extract is a small CSV in this folder, committed, with the source URL and the retrieval date in its first
@@ -493,7 +495,64 @@ def census_conc():
                          "released 2025-04-24; shares in percent of sales, value of shipments or revenue)"])
 
 
-JOBS = {"damodaran_roc": damodaran_roc, "census_conc": census_conc, "eia_power": eia_power, "fred_pay": fred_pay, "bea_real": bea_real, "sec_annual": sec_annual, "fred_prices": fred_prices, "census_susb": census_susb, "bea_va": bea_va, "wb_mfg_usd": wb_mfg_usd, "bea_hist": bea_hist, "bea_io": bea_io, "fred_jobs": fred_jobs, "wb_shares": wb_shares}
+FRED_CYCLE = {"M04008US16980M275NNBR": "Wholesale price of hogs, Chicago (dollars per 100 lb, NBER)",
+              "M01038US16980M562NNBR": "Live hog receipts, Chicago (thousands, NBER)",
+              "M01039USM566NNBR": "Hogs slaughtered, United States (thousands, NBER)",
+              "HOUST": "Housing starts, total (thousands, annual rate, SA)",
+              "UNDCONTSA": "New privately owned housing units under construction (thousands, SA)",
+              "COMPUTSA": "Housing units completed (thousands, annual rate, SA)",
+              "MSACSR": "Monthly supply of new houses (months, SA)",
+              "DCOILWTICO": "Crude oil, West Texas Intermediate (dollars a barrel, monthly average)",
+              "RSXFS": "Retail sales excluding food services (millions of dollars, SA)",
+              "AMTMNO": "Manufacturers' new orders, total manufacturing (millions of dollars, SA)",
+              "IPG3344S": "Industrial production: semiconductors and related components (index, SA)"}
+
+
+def fred_cycle():
+    """Monthly series for the cycle (Part 6): the NBER's hog prices and numbers from 1858, housing starts and the
+    houses under construction, completed and for sale, oil, retail sales and factory orders (FRED)."""
+    out = []
+    for sid in FRED_CYCLE:
+        txt = _get(f"https://fred.stlouisfed.org/graph/fredgraph.csv?id={sid}&fq=Monthly&fam=avg").decode()
+        for line in txt.splitlines()[1:]:
+            d, v = line.split(",")
+            if v not in (".", ""):
+                out.append([sid, d[:7], float(v)])
+    return _write("fred_cycle", ["series", "month", "value"], out,
+                  ["https://fred.stlouisfed.org (monthly; " + "; ".join(f"{k} {v}" for k, v in FRED_CYCLE.items()) +
+                   ")"])
+
+
+MAERSK_LEI = "549300D2K6PKKKXVNN73"
+MAERSK_FILINGS = ["2020-12-31/ESEF/DK/0/549300D2K6PKKKXVNN73-2020-12-31_en", "2022-12-31/ESEF/DK/0/APMM-2022-12-31-en",
+                  "2024-12-31/ESEF/DK/0/APMM-2024-12-31-en", "2025-12-31/ESEF/DK/0/APMM-2025-12-31-en"]
+MAERSK_ITEMS = {"revenue": "ifrs-full:Revenue", "ebit": "ifrs-full:ProfitLossFromOperatingActivities",
+                "depreciation": "ifrs-full:DepreciationAmortisationAndImpairmentLossReversalOfImpairmentLossRecognised"
+                                "InProfitOrLoss"}
+
+
+def esef_maersk():
+    """A.P. Moller - Maersk's group revenue, operating profit (EBIT) and depreciation for each calendar year, 2019-2025,
+    from its annual reports' ESEF (inline XBRL) filings as converted to xBRL-JSON by filings.xbrl.org."""
+    vals: dict = {}
+    for f in MAERSK_FILINGS:
+        facts = json.loads(_get(f"https://filings.xbrl.org/{MAERSK_LEI}/{f}.json"))["facts"]
+        for fact in facts.values():
+            dim = fact.get("dimensions", {})
+            item = next((k for k, c in MAERSK_ITEMS.items() if dim.get("concept") == c), None)
+            per = dim.get("period", "")
+            if item is None or len(dim) > 4 or "/" not in per:
+                continue
+            a, b = per.split("/")
+            if a[5:10] == "01-01" and b[5:10] == "01-01" and int(b[:4]) - int(a[:4]) == 1:
+                vals.setdefault(int(a[:4]), {})[item] = float(fact["value"]) / 1e9
+    rows = [[y] + [vals[y].get(k) for k in MAERSK_ITEMS] for y in sorted(vals)]
+    return _write("esef_maersk", ["year"] + list(MAERSK_ITEMS), rows,
+                  ["https://filings.xbrl.org/ (A.P. Moller - Maersk A/S annual reports 2020, 2022, 2024, 2025, ESEF; "
+                   "US$ billions; " + "; ".join(f"{k}: {v}" for k, v in MAERSK_ITEMS.items()) + ")"])
+
+
+JOBS = {"fred_cycle": fred_cycle, "esef_maersk": esef_maersk, "damodaran_roc": damodaran_roc, "census_conc": census_conc, "eia_power": eia_power, "fred_pay": fred_pay, "bea_real": bea_real, "sec_annual": sec_annual, "fred_prices": fred_prices, "census_susb": census_susb, "bea_va": bea_va, "wb_mfg_usd": wb_mfg_usd, "bea_hist": bea_hist, "bea_io": bea_io, "fred_jobs": fred_jobs, "wb_shares": wb_shares}
 
 if __name__ == "__main__":
     names = list(JOBS) if "--all" in sys.argv else sys.argv[1:]
