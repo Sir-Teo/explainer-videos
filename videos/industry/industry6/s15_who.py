@@ -92,7 +92,9 @@ class Who(VoiceoverScene):
             "comes, but later, and with a cushion. <bookmark mark='d'/> And spend against the crowd. The plant "
             "ordered in a trough is built cheaply, by contractors hungry for work, and arrives when the next "
             "shortage begins. It is the hardest of all, because in a trough every number on the page argues "
-            "against it."
+            "against it. Micron came close. In fiscal 2023, while it lost money, it still spent about as much on new "
+            "plant as its old plant was wearing out, and three years later it had that plant to sell from when memory "
+            "prices hit records."
         ) as vo:
             self.play(FadeIn(head))
             for c_, m in zip(cards, "abcd"):

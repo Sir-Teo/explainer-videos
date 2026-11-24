@@ -105,7 +105,11 @@ class Called(VoiceoverScene):
             f"more within two years, and in three of the four by more than a quarter. And it is spending "
             f"{rd[2026]:.1f} times its depreciation. <bookmark mark='c'/> The case against: the demand from data "
             "centres for artificial intelligence may keep growing faster than the new factories can be built. We "
-            "put it at fifty-five percent, and will score it from Micron's own reports in January 2029."
+            "put it at fifty-five percent, and will score it from Micron's own reports in January 2029. The early "
+            "signs will come before that, every quarter: Micron's stock of unsold chips, its forecast for the next "
+            "quarter, and what the data-centre builders of chapter fourteen say they will spend. If those turn, "
+            "the call is on its way to coming true. If they do not, this boom is the exception, and the rest of "
+            "this series will have to explain why."
         ) as vo:
             self.play(FadeIn(box), FadeIn(body[0]))
             vo.wait_until("a")

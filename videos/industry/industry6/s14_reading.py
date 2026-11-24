@@ -50,7 +50,10 @@ class Reading(VoiceoverScene):
             "<bookmark mark='d'/> Fourth, for houses, the months it would take to sell every new home for sale: "
             f"{rd['houses']['worst'][1]:.1f} at the worst, in January 2009; {rd['houses']['latest'][1]:.1f} in "
             "September 2026. <bookmark mark='e'/> None of these says when a cycle will turn. Together, they say "
-            "how much is coming, and how little room there is if demand stops growing."
+            "how much is coming, and how little room there is if demand stops growing. For memory chips, the one to "
+            "watch is the third: when Micron's stock of unsold chips climbs back from under one month of sales "
+            "toward the two or three months it held in calmer years, buyers will have stopped scrambling, and prices will "
+            "follow."
         ) as vo:
             self.play(FadeIn(src), LaggedStart(*[FadeIn(g[0].copy().set_opacity(0.25)) for g in grid], lag_ratio=0.2),
                       run_time=1.4)
