@@ -105,6 +105,19 @@ CALLS = [
          rule="Micron's Forms 10-Q and 10-K: for every fiscal quarter ending on or before 31 December 2028, compare "
               "its three-month revenue with the highest of all earlier quarters; true if any is 25% or more below",
          due="2029-01", ours=True),
+    Call(7, "Beverage Marketing Corporation", "2025-05",
+         "US bottled water consumption per person (47.3 gallons in 2024) will reach about 50 gallons 'by the end of "
+         "this decade or the start of the next'.",
+         "Beverage Marketing Corporation, news release, May 2025",
+         outcome="pending: 46.4 gallons in 2023, 47.3 in 2024 (the same release)"),
+    Call(7, "Industry, Built", "2026-11-24",
+         "The Census Bureau's shipments of US bottled water manufacturers for 2026 will be above $7.5bn (2024: $7.46bn). "
+         "Probability: 65%.",
+         "This series, Part 7, chapter 11; reasoning: volume growing about 2% a year (Beverage Marketing), producer "
+         "prices flat since 2023, against a series that fell from $8.7bn to $7.2bn in 2023",
+         rule="the Annual Integrated Economic Survey's first published figure for 2026 (FRED AIES312112RCTUS); true if "
+              "above 7,500,000 thousand dollars",
+         due="2028-06", ours=True),
 ]
 
 

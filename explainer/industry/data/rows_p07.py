@@ -57,6 +57,9 @@ add(
     r("wework.ch11", 2023, "year", "WeWork Inc. and some subsidiaries filed for Chapter 11 on 6 November 2023",
       "WeWork Inc., Form 8-K, 7 November 2023",
       "https://www.sec.gov/Archives/edgar/data/1813756/000119312523271902/d522028d8k.htm", "2023-11-06"),
+    r("bass.1969", 1969, "year", "Frank M. Bass, 'A New Product Growth for Model Consumer Durables', Management "
+      "Science 15(5), January 1969, pp. 215-227: adoption by innovators (p) and imitators (q)", "Management Science",
+      "https://doi.org/10.1287/mnsc.15.5.215", "1969", kind="study"),
     # --- three sizes of one market: US bottled water ---------------------------------------------------------------
     r("water.census.2023", 7.24, "USD bn", "shipments of US bottled water manufacturers (NAICS 312112), 2023: factory "
       "gate, US plants classified to bottled water only (2022: $8.69bn; 2024: $7.46bn)", "US Census Bureau, Annual "
@@ -69,6 +72,9 @@ add(
       "soft drinks 2024: 34.8)", "Beverage Marketing Corporation, news release, May 2025", BMC, "2024", kind="tracker"),
     r("water.bmc.percap.2023", 46.4, "gallons", "US bottled water consumption per person, 2023", "Beverage Marketing "
       "Corporation, news release, May 2025", BMC, "2023", kind="tracker"),
+    r("water.bmc.forecast", 50, "gallons", "Beverage Marketing's expectation: per capita bottled water consumption to "
+      "reach about 50 gallons, the level soft drinks regularly exceeded around 2000, 'by the end of this decade or the "
+      "start of the next'", "Beverage Marketing Corporation, news release, May 2025", BMC, "2025-05", kind="tracker"),
     r("water.bmc.single.2024", 11.6, "bn gallons", "US single-serve bottled water volume, 2024: nearly 71% of the "
       "category's volume", "Beverage Marketing Corporation, news release, May 2025", BMC, "2024", kind="tracker"),
 )
