@@ -25,18 +25,22 @@ From there it covers:
 - why the wait makes it worse: the same market with lead times of one to four years swings by 3%, 11%, 81% and 130%;
   and why knowing about the cycle does not stop it (lumpy plants, hidden orders, lenders at the top, career risk);
 - ships: the world's orderbook at 52% of the fleet in 2009 (bulk carriers 78%), 19% in 2014, 11% in 2023 and 15% in
-  early 2025, with container ships at a quarter of their fleet and 41% of 2024's deliveries; Maersk, 2019-2025;
+  early 2025, with container ships at a quarter of their fleet and 41% of 2024's deliveries, and LNG carriers at
+  half; Maersk, 2019-2025;
 - memory chips: Micron's quarterly sales fell 21%, 37%, 43% and 57% after its peaks of 2010, 2014, 2018 and 2022;
   $54.2bn in the quarter to September 2026 at an 81% operating margin; spending 3.2 times depreciation;
 - houses: starts at a pace of 2.27 million a year in January 2006, down 79% by April 2009; completions kept coming
-  for a year; unsold new homes peaked at 12.2 months' supply in January 2009;
+  for a year; unsold new homes peaked at 12.2 months' supply in January 2009; D.R. Horton, a builder that came
+  through the bust ($3.7bn of sales and a loss in fiscal 2009, $36.8bn and a $4.8bn profit in fiscal 2024);
 - an intermission: four cycles, a century apart;
 - the bullwhip (Lee, Padmanabhan and Whang, 1997): a chain of three tiers, and America's factory orders 1.6 times
-  as volatile as its retail sales, 1993-2026;
+  as volatile as its retail sales, 1993-2026; its cures; and the 2021 car-chip shortage (car output to a fifth of
+  February's in April 2020, down a sixth again in 2021; buyers' median chip stock from 40 days to under 5; used-car
+  prices up 53%);
 - the accelerator (Clark, 1917): a bakery chain's ovens, where bread up 10% doubles the oven maker's orders;
 - leverage: a model business, then Micron's fiscal 2023 (sales -49%, an operating loss) and Maersk's 2023 (sales
   -37%, operating profit -87%);
-- oil: West Texas crude from about $100 to $30 between 2014 and 2016, US output from 5.5 to 9.4 million barrels a
+- oil: West Texas crude from about $100 to $30 between 2014 and 2016 and $17 in April 2020, US output from 5.5 to 9.4 million barrels a
   day (2010-2015), Exxon Mobil's spending from $34bn (2012) to $12bn (2021) and back to $28bn (2025);
 - reading where you are: ships on order, spending against wear, unsold stock (Micron: 6.5 months of sales in 2023,
   0.9 in 2026) and houses for sale;
@@ -73,9 +77,9 @@ monthly series (`fred_cycle.csv`).
 | 5 | Why the wait makes it worse | Lead times of one to four years; four reasons the cycle survives |
 | 6 | Ships | UNCTAD's orderbook; container ships and Maersk |
 | 7 | Memory chips | Micron's quarters since 2009; spending against depreciation |
-| 8 | Houses | Starts, completions and months' supply, 2000-2026 |
+| 8 | Houses | Starts, completions and months' supply, 2000-2026; D.R. Horton through the bust |
 | — | Intermission | Four cycles; the story so far |
-| 9 | The bullwhip | A chain of tiers; retail sales against factory orders |
+| 9 | The bullwhip | A chain of tiers; retail sales against factory orders; the cures; cars in 2021 |
 | 10 | The accelerator | Ovens and bread: orders follow growth, not level |
 | 11 | Leverage | Operating and financial leverage; Micron and Maersk in 2023 |
 | 12 | Oil | West Texas crude, US output and Exxon's spending |
