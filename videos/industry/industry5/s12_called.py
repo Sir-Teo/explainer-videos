@@ -29,9 +29,9 @@ class Called(VoiceoverScene):
         quote = VGroup(tx("“Think airlines. Here a durable competitive advantage has proven elusive", 21, WHITE),
                        tx("ever since the days of the Wright Brothers.”   Buffett, 2008", 21, WHITE)).arrange(
             DOWN, buff=0.06).to_edge(UP, buff=0.3)
-        avg = VGroup(tx(f"average, 2015-2025: {100 * A['avg_roc']:.1f}% earned", 20, GOLD, bold=True),
-                     tx(f"against {100 * A['avg_wacc']:.1f}% for the capital", 20, GOLD)).arrange(DOWN, buff=0.06).move_to(
-            ax.c2p(2022.6, -0.17))
+        avg = VGroup(tx(f"average, 2015-2025: {100 * A['avg_roc']:.1f}% earned", 17, GOLD, bold=True),
+                     tx(f"against {100 * A['avg_wacc']:.1f}% for the capital", 17, GOLD)).arrange(DOWN, buff=0.06).move_to(
+            ax.c2p(2023.9, -0.15))
         jet = draw.plane(0.8, windows=False).move_to(ax.c2p(2014.5, 0.2))
         src = source("Berkshire Hathaway letter for 2007; Damodaran, Excess Returns by industry (Air Transport), "
                      "2015-2025", size=13)
@@ -58,7 +58,7 @@ class Called(VoiceoverScene):
                       jet.animate.move_to(ax.c2p(2021, -0.23)).rotate(-0.5), run_time=1.6)
             vo.wait_until("d")
             self.play(LaggedStart(*[GrowFromEdge(b, DOWN) for b in bars[7:]], lag_ratio=0.2),
-                      jet.animate.rotate(0.5).move_to(ax.c2p(2025.3, 0.12)), run_time=1.8)
+                      jet.animate.rotate(0.5).move_to(ax.c2p(2024.6, 0.21)), run_time=1.8)
             vo.wait_until("e")
             self.play(FadeIn(avg, shift=UP * 0.1))
         self.clear_scene()

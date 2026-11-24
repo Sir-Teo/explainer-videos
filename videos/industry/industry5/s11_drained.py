@@ -91,7 +91,7 @@ class Drained(VoiceoverScene):
                       tx(f"${D['kodak2017']:.1f}bn", 22, GOLD, bold=True).next_to(k17, UP, buff=0.08),
                       tx("2008", 18, GREY_B).next_to(k08, DOWN, buff=0.1), tx("2017", 18, GREY_B).next_to(k17, DOWN,
                                                                                                     buff=0.1))
-        ch11 = tx(f"chapter 11: 19 January {int(get('kodak.ch11'))}", 22, COST_, bold=True).move_to([0, 0.6, 0])
+        ch11 = tx(f"chapter 11: 19 January {int(get('kodak.ch11'))}", 22, COST_, bold=True).move_to([4.2, -1.1, 0])
         head = tx("Eastman Kodak's sales", 22, WHITE).move_to([0, 2.9, 0])
         src = source("Eastman Kodak Forms 10-K (SEC company facts) and Form 8-K of 19 January 2012", size=13)
         with self.voiceover(

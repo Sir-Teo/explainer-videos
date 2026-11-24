@@ -60,18 +60,50 @@ class Intermission(VoiceoverScene):
         self.story()
 
     def story(self):
-        so = VGroup(tx("The story so far", 36, GOLD, bold=True),
-                    tx("Some industries earn far more than their capital costs, and keep doing so for years.", 23),
-                    tx("About a fifth of the differences in profit come from the industry, more from the company.", 23),
-                    tx("A few firms earn high returns only if newcomers are kept out and the few do not fight.", 23),
-                    tx("The walls: cost and scale, habit and brands, networks, and the law.", 23),
-                    tx("Next: how even the strongest walls come down.", 21, GREY_B)).arrange(DOWN, buff=0.3)
+        head = tx("The story so far", 36, GOLD, bold=True).to_edge(UP, buff=0.6)
+        lines = ["Some industries earn far more than their capital costs, and keep doing so for years.",
+                 "About a fifth of the differences in profit come from the industry, more from the company.",
+                 "A few firms earn high returns only if newcomers are kept out and the few do not fight.",
+                 "The walls: cost and scale, habit and brands, networks, and the law.",
+                 "Next: how even the strongest walls come down."]
+        # a small picture for each line
+        hill = VGroup(Rectangle(width=0.9, height=0.25, stroke_width=0, fill_color=MOAT, fill_opacity=0.6),
+                      draw.castle(0.45, color=STONE))
+        hill[1].next_to(hill[0], UP, buff=0)
+        net = VGroup(*[Dot(0.28 * np.array([np.cos(a_), np.sin(a_), 0]), radius=0.05, color=GOLD)
+                       for a_ in np.linspace(0, TAU, 6, endpoint=False)])
+        net.add(*[Line(net[i].get_center(), net[j].get_center(), stroke_width=1, stroke_color="#7EC8F5")
+                  for i in range(6) for j in range(i + 1, 6)])
+        walls = VGroup(VGroup(*[draw.coin(0.07) for _ in range(3)]).arrange(UP, buff=-0.04), net,
+                       RoundedRectangle(corner_radius=0.04, width=0.3, height=0.4, stroke_width=0, fill_color="#E8E4DA",
+                                        fill_opacity=1)).arrange(RIGHT, buff=0.12)
+        drain = VGroup(draw.castle(0.5, moat=0.25, color=STONE), Arrow(UP * 0.2, DOWN * 0.3, color=COST_, buff=0,
+                                                                       stroke_width=4).next_to(ORIGIN, RIGHT, buff=0.35))
+        pics = [VGroup(draw.castle(0.5, moat=0.25, color=STONE), VGroup(*[draw.coin(0.07) for _ in range(4)]).arrange(
+                    RIGHT, buff=0.02)).arrange(UP, buff=0.04),
+                hill,
+                VGroup(*[draw.castle(0.28, color=STONE) for _ in range(3)]).arrange(RIGHT, buff=0.05),
+                walls, drain]
+        rows = VGroup()
+        for k, (pic, ln) in enumerate(zip(pics, lines)):
+            pic.scale_to_fit_height(min(pic.height, 0.6))
+            t_ = tx(ln, 22 if k < 4 else 21, WHITE if k < 4 else GREY_B)
+            rows.add(VGroup(pic, t_).arrange(RIGHT, buff=0.4))
+        rows.arrange(DOWN, aligned_edge=LEFT, buff=0.42).next_to(head, DOWN, buff=0.6)
+        for r_ in rows:
+            r_[0].move_to([rows.get_left()[0] + 0.45, r_.get_y(), 0])
+            r_[1].next_to(r_[0], RIGHT, buff=0.4)
+            r_[1].align_to(rows[0][1], LEFT)
         with self.voiceover(
-            "The story so far. Some industries earn far more than their capital costs, and keep doing so for "
-            "years. About a fifth of the differences in profit come from the industry a business is in, more from "
-            "the business itself. A few firms earn high returns only if newcomers are kept out and the few do not "
-            "fight. And the walls that keep newcomers out are made of cost and scale, of habit and brands, of "
-            "networks, and of the law. Next: how even the strongest walls come down."
-        ):
-            self.play(LaggedStart(*[FadeIn(x_, shift=UP * 0.1) for x_ in so], lag_ratio=0.5), run_time=5)
+            "The story so far. <bookmark mark='a'/> Some industries earn far more than their capital costs, and keep "
+            "doing so for years. <bookmark mark='b'/> About a fifth of the differences in profit come from the "
+            "industry a business is in, more from the business itself. <bookmark mark='c'/> A few firms earn high "
+            "returns only if newcomers are kept out and the few do not fight. <bookmark mark='d'/> And the walls that "
+            "keep newcomers out are made of cost and scale, of habit and brands, of networks, and of the law. "
+            "<bookmark mark='e'/> Next: how even the strongest walls come down."
+        ) as vo:
+            self.play(FadeIn(head))
+            for k, m in enumerate("abcde"):
+                vo.wait_until(m)
+                self.play(FadeIn(rows[k][0], scale=0.6), FadeIn(rows[k][1], shift=RIGHT * 0.15), run_time=0.9)
         self.clear_scene()

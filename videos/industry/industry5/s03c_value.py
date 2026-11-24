@@ -33,6 +33,19 @@ class Value(VoiceoverScene):
         src = source("Damodaran, Excess Returns (EVA) by industry, US companies, 2025: this film's arithmetic, $bn",
                      size=13)
         names = [SHORT.get(n, n) for n, _ in top[:5]]
+        # (return - cost) x capital as an area: a block as wide as the capital, the strip above the cost is the profit
+        W, H = 4.6, 2.6
+        blk = Rectangle(width=W, height=H, stroke_width=0, fill_color="#3A4560", fill_opacity=0.9).move_to([2.6, 0.0, 0])
+        cost_y = blk.get_bottom()[1] + H * 0.47
+        cline = DashedLine([blk.get_left()[0] - 0.2, cost_y, 0], [blk.get_right()[0] + 0.2, cost_y, 0],
+                           stroke_color=WHITE, stroke_width=2)
+        strip = Rectangle(width=W, height=blk.get_top()[1] - cost_y, stroke_width=0, fill_color=RET,
+                          fill_opacity=0.85).move_to([2.6, (cost_y + blk.get_top()[1]) / 2, 0])
+        slab = VGroup(blk, cline, strip,
+                      tx("capital", 18, GREY_A).next_to(blk, DOWN, buff=0.15),
+                      tx("return", 18, GREY_A).next_to(blk, LEFT, buff=0.15),
+                      tx("cost of capital", 16, WHITE).next_to(cline, RIGHT, buff=0.1),
+                      tx("economic profit", 18, "#0E1117", bold=True).move_to(strip))
         # a percentage alone: of how much?
         pct = VGroup(tx("15%", 72, RET, bold=True), tx("... of how much?", 22, GREY_B)).arrange(DOWN, buff=0.15).move_to(
             [-3.2, 0.3, 0])
@@ -56,9 +69,12 @@ class Value(VoiceoverScene):
             self.play(FadeIn(pct[1]), LaggedStart(*[FadeIn(c_, shift=DOWN * 0.3) for c_ in pile], lag_ratio=0.05))
             vo.wait_until("a")
             self.play(FadeOut(pct), FadeOut(pile), Write(eq), FadeIn(eq_t))
+            self.play(FadeIn(slab[0]), Create(slab[1]), FadeIn(slab[3]), FadeIn(slab[4]), FadeIn(slab[5]))
+            self.play(FadeIn(slab[2], shift=UP * 0.1), FadeIn(slab[6]))
             vo.wait_until("b")
-            self.play(FadeIn(tot, shift=UP * 0.1))
+            self.play(FadeIn(tot, shift=UP * 0.1), Indicate(slab[2], color=WHITE))
             vo.wait_until("c")
+            self.play(FadeOut(slab), run_time=0.6)
             self.play(LaggedStart(*[FadeIn(b, scale=0.9) for b in tm], lag_ratio=0.08), run_time=2.6)
             vo.wait_until("d")
             self.play(FadeIn(five), *[Indicate(tm[i], color=WHITE, scale_factor=1.04) for i in range(5)])
