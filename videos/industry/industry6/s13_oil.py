@@ -53,8 +53,9 @@ class Oil(VoiceoverScene):
             f"{get('eia.crude.2010'):.1f} million barrels a day in 2010 to {get('eia.crude.2015'):.1f} million in "
             "2015. <bookmark mark='c'/> The new oil arrived. In June 2014 a barrel cost "
             f"{O['wti_2014_06']:.0f} dollars; by February 2016, {O['wti_2016_02']:.0f}. <bookmark mark='d'/> Exxon "
-            f"cut its spending to {cap[2016]:.0f} billion, less than half, and after the pandemic crash of 2020 to "
-            f"{cap[2021]:.0f}. <bookmark mark='e'/> Spending stayed low, and when Russia invaded Ukraine in 2022, "
+            f"cut its spending to {cap[2016]:.0f} billion, less than half. Then came the pandemic: in April 2020, "
+            f"with the world's roads emptied, a barrel averaged {O['wti_2020_04']:.0f} dollars for the month, and "
+            f"Exxon's spending fell to {cap[2021]:.0f} billion the year after. <bookmark mark='e'/> Spending stayed low, and when Russia invaded Ukraine in 2022, "
             "the price shot back above a hundred dollars. The spending has been climbing ever since. Each turn of "
             "the wheel is set up by the one before."
         ) as vo:
@@ -70,6 +71,9 @@ class Oil(VoiceoverScene):
             self.play(FadeIn(lo, scale=2), FadeIn(ll), rigs[2:].animate.set_opacity(0.25))
             vo.wait_until("d")
             self.play(LaggedStart(*[GrowFromEdge(b_, DOWN) for b_ in bars[6:13]], lag_ratio=0.15), run_time=1.8)
+            c19 = glow_dot(pa.ax.c2p(_x("2020-04"), O["wti_2020_04"]), color=BUST, radius=0.09)
+            self.play(FadeIn(c19, scale=2), FadeIn(tx(f"${O['wti_2020_04']:.0f}, April 2020", 15, BUST).next_to(
+                c19, DOWN, buff=0.08)))
             vo.wait_until("e")
             self.play(LaggedStart(*[GrowFromEdge(b_, DOWN) for b_ in bars[13:]], lag_ratio=0.2),
                       rigs.animate.set_opacity(1), run_time=1.8)

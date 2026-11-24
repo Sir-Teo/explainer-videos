@@ -62,7 +62,8 @@ class Cobweb(VoiceoverScene):
             "fall, down to the demand line. <bookmark mark='f'/> Now the price is low, so farmers raise few pigs. "
             "<bookmark mark='g'/> The next year pork is scarce, and the price jumps. <bookmark mark='h'/> Round "
             "and round, the path draws a cobweb. Here it spirals in, toward the price where the two lines cross, "
-            "because farmers respond to price less strongly than buyers do."
+            "because farmers respond to price less strongly than buyers do: each year's surprise is a little smaller "
+            "than the last, and the market settles."
         ) as vo:
             self.play(FadeIn(src), FadeIn(paper, shift=UP * 0.2),
                       LaggedStart(*[FadeIn(s_, shift=UP * 0.1) for s_ in sty], lag_ratio=0.08), run_time=1.8)

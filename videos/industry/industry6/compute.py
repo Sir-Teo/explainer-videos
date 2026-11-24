@@ -164,6 +164,9 @@ def results() -> dict:
     pk_h = max((k for k in hs if k < "2008"), key=hs.get)
     tr_h = min((k for k in hs if pk_h < k < "2012"), key=hs.get)
     pk_m = max((k for k in ms if "2005" < k < "2012"), key=ms.get)
+    dhi = {k: _fy(sec, "DHI", k) for k in ("revenue", "net_income")}
+    R["builder"] = dict(years=sorted(dhi["revenue"]), revenue=[dhi["revenue"][y] for y in sorted(dhi["revenue"])],
+                        ni={y: v for y, v in dhi["net_income"].items()})
     R["housing"] = dict(series=H, starts_peak=(pk_h, hs[pk_h]), starts_trough=(tr_h, hs[tr_h]),
                         fall=hs[tr_h] / hs[pk_h] - 1, supply_peak=(pk_m, ms[pk_m]), latest=(max(hs), hs[max(hs)]))
 
@@ -173,7 +176,8 @@ def results() -> dict:
     xom = _fy(sec, "XOM", "capex")
     R["oil"] = dict(months=[k for k, o in zip(ks, ok) if o], wti=w[ok].tolist(),
                     xom_years=sorted(xom), xom_capex=[xom[y] for y in sorted(xom)],
-                    wti_2014_06=S["DCOILWTICO"]["2014-06"], wti_2016_02=S["DCOILWTICO"]["2016-02"])
+                    wti_2014_06=S["DCOILWTICO"]["2014-06"], wti_2016_02=S["DCOILWTICO"]["2016-02"],
+                    wti_2020_04=S["DCOILWTICO"]["2020-04"])
 
     # --- the bullwhip ------------------------------------------------------------------------------------------------
     ks, rs = _monthly(S, "RSXFS", 1993, 2026)
@@ -184,6 +188,15 @@ def results() -> dict:
     rng = np.random.default_rng(6)
     sales = 100 + rng.normal(0, 4, 160)
     chain = cycle.bullwhip(sales, tiers=3)
+    cars = {}
+    for sid in ("IPG3361T3S", "CUSR0000SETA02"):
+        ks2, v2 = _monthly(S, sid, 2019, 2023)
+        cars[sid] = dict(months=ks2, values=v2.tolist())
+    mv, uc = dict(zip(cars["IPG3361T3S"]["months"], cars["IPG3361T3S"]["values"])), \
+        dict(zip(cars["CUSR0000SETA02"]["months"], cars["CUSR0000SETA02"]["values"]))
+    R["cars2021"] = dict(series=cars, feb20=mv["2020-02"], apr20=mv["2020-04"], jan21=mv["2021-01"], sep21=mv["2021-09"],
+                         used_feb20=uc["2020-02"], used_jan22=uc["2022-01"],
+                         inv19=get("chips.inventory.2019"), inv21=get("chips.inventory.2021"))
     R["bullwhip"] = dict(sd_retail=float(np.std(g_rs)), sd_orders=float(np.std(g_no)),
                          ratio=float(np.std(g_no) / np.std(g_rs)), months=int(ok.sum()),
                          chain=chain[:, 20:100].tolist(), chain_sd=[float(np.std(chain[i, 20:])) for i in range(4)])

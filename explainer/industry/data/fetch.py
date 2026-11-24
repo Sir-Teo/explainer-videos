@@ -555,7 +555,9 @@ FRED_CYCLE = {"M04008US16980M275NNBR": "Wholesale price of hogs, Chicago (dollar
               "DCOILWTICO": "Crude oil, West Texas Intermediate (dollars a barrel, monthly average)",
               "RSXFS": "Retail sales excluding food services (millions of dollars, SA)",
               "AMTMNO": "Manufacturers' new orders, total manufacturing (millions of dollars, SA)",
-              "IPG3344S": "Industrial production: semiconductors and related components (index, SA)"}
+              "IPG3344S": "Industrial production: semiconductors and related components (index, SA)",
+              "IPG3361T3S": "Industrial production: motor vehicles and parts (index, SA)",
+              "CUSR0000SETA02": "Consumer price index: used cars and trucks (index, SA)"}
 
 
 def fred_cycle():

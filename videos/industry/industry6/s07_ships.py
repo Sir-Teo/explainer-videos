@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+from explainer.industry.register import get
 from videos.industry.industry6.common import *  # noqa: F403
 
 
@@ -36,6 +37,9 @@ class Ships(VoiceoverScene):
                                                                   24, BUST, bold=True)).arrange(DOWN, buff=0.06)
         bulk.move_to([-4.0, -1.6, 0])
         src = source("UNCTAD, Review of Maritime Transport 2024 and 2025 (from Clarksons Research)", size=13)
+        lng = VGroup(tx("LNG carriers, early 2025:", 18, GREY_A),
+                     tx(f"{100 * get('ships.book.lng.2025'):.0f}% of their fleet on order", 24, ORDER, bold=True)
+                     ).arrange(DOWN, buff=0.06).move_to([-4.0, -2.8, 0])
         with self.voiceover(
             "Shipping keeps the best record of the wave. <bookmark mark='a'/> Every ship in the world is "
             "registered, and so is every ship on order. So you can ask: for every ship sailing today, how many more "
@@ -46,7 +50,10 @@ class Ships(VoiceoverScene):
             "rates were at records, in 2007 and 2008. They were delivered into the slump of 2009, when world trade "
             "shrank. <bookmark mark='d'/> By 2014 the ratio was down to nineteen percent; by the start of 2023, "
             f"{100 * book[2023]:.0f}. <bookmark mark='e'/> The industry had been burned, and ordered less. "
-            f"By early 2025, it was climbing again: {100 * book[2025]:.0f} percent."
+            f"By early 2025, it was climbing again: {100 * book[2025]:.0f} percent. <bookmark mark='f'/> And the "
+            "average hides the hot spots. For the tankers that carry liquefied natural gas, "
+            f"the ships on order equalled {100 * get('ships.book.lng.2025'):.0f} "
+            "percent of the fleet: one new ship for every two already sailing."
         ) as vo:
             self.play(FadeIn(src), LaggedStart(*[FadeIn(s_, shift=RIGHT * 0.2) for s_ in fleet], lag_ratio=0.06),
                       FadeIn(fl), run_time=1.8)
@@ -63,6 +70,8 @@ class Ships(VoiceoverScene):
             vo.wait_until("e")
             self.play(LaggedStart(*[AnimationGroup(GrowFromEdge(b[0], DOWN), FadeIn(b[1:])) for b in bars[3:]],
                                   lag_ratio=0.4), FadeIn(ghosts[1]), run_time=1.6)
+            vo.wait_until("f")
+            self.play(FadeIn(lng, shift=UP * 0.1))
         self.clear_scene()
 
     def boxes(self):

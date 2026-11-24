@@ -100,7 +100,8 @@ class Hogs(VoiceoverScene):
         src = source("NBER via FRED; this film's arithmetic: 12-month averages, against a 61-month moving average, "
                      "correlations of the two", size=13)
         with self.voiceover(
-            "Take away the slow wandering, and keep only the swings around it. <bookmark mark='a'/> In orange, the "
+            "Take away the slow wandering, the wars, the depressions and the growth of the country, by comparing each "
+            "month with the average of the five years around it, and keep only the swings around it. <bookmark mark='a'/> In orange, the "
             "hog price above or below its own trend. <bookmark mark='b'/> In pink, the number of hogs slaughtered. "
             "<bookmark mark='c'/> When one is up, the other is usually down: the correlation between them in the "
             f"same month is {same:.2f}. More hogs, lower price, exactly as the demand line says. "

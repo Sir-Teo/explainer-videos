@@ -9,6 +9,66 @@ class Bullwhip(VoiceoverScene):
              "Chapter nine. The bullwhip.", lit=("change", "dollar"))
         self.chain()
         self.real()
+        self.cars()
+
+    def cars(self):
+        C = R["cars2021"]
+        S = C["series"]
+
+        def xm(m):
+            return int(m[:4]) + (int(m[5:7]) - 0.5) / 12
+        pa = viz.plot_axes([2019, 2024], [0, 120], x_length=5.6, y_length=2.6, xticks=[2019, 2020, 2021, 2022, 2023],
+                           yticks=[50, 100], xfmt=lambda v: f"{int(v)}", size=14)
+        pb = viz.plot_axes([2019, 2024], [120, 230], x_length=5.6, y_length=2.6, xticks=[2019, 2020, 2021, 2022, 2023],
+                           yticks=[150, 200], xfmt=lambda v: f"{int(v)}", size=14)
+        pa.move_to([-3.4, -0.9, 0])
+        pb.move_to([3.6, -0.9, 0])
+        la = VMobject(stroke_color=CAP, stroke_width=3).set_points_as_corners(
+            [pa.ax.c2p(xm(m), v) for m, v in zip(S["IPG3361T3S"]["months"], S["IPG3361T3S"]["values"])])
+        lb = VMobject(stroke_color=PRICE, stroke_width=3).set_points_as_corners(
+            [pb.ax.c2p(xm(m), v) for m, v in zip(S["CUSR0000SETA02"]["months"], S["CUSR0000SETA02"]["values"])])
+        ta = tx("American output of cars and parts (index)", 16, CAP).next_to(pa, UP, buff=0.1).align_to(pa, LEFT)
+        tb = tx("price of used cars and trucks (index)", 16, PRICE).next_to(pb, UP, buff=0.1).align_to(pb, LEFT)
+        car = VGroup(RoundedRectangle(corner_radius=0.12, width=1.6, height=0.45, stroke_width=0, fill_color="#7EC8F5",
+                                      fill_opacity=0.95),
+                     RoundedRectangle(corner_radius=0.1, width=0.9, height=0.35, stroke_width=0, fill_color="#5DA9E9",
+                                      fill_opacity=0.95).shift(UP * 0.32 + LEFT * 0.1),
+                     *[Circle(radius=0.16, stroke_width=0, fill_color="#20242C", fill_opacity=1).shift(
+                         DOWN * 0.24 + RIGHT * x) for x in (-0.5, 0.5)]).move_to([-4.6, 2.4, 0])
+        inv = VGroup(draw.chip(0.55), VGroup(tx(f"{C['inv19']:.0f} days", 22, BOOM, bold=True), tx("of chips in stock, 2019", 15,
+                                                                                               GREY_B)).arrange(DOWN, buff=0.04),
+                     Text("→", font_size=32, color=GREY_A),
+                     VGroup(tx(f"under {C['inv21']:.0f}", 22, BUST, bold=True), tx("in 2021", 15, GREY_B)).arrange(
+                         DOWN, buff=0.04)).arrange(RIGHT, buff=0.3).move_to([2.2, 2.4, 0])
+        drop = glow_dot(pa.ax.c2p(xm("2020-04"), C["apr20"]), color=BUST, radius=0.08)
+        dip = glow_dot(pa.ax.c2p(xm("2021-09"), C["sep21"]), color=BUST, radius=0.08)
+        top = glow_dot(pb.ax.c2p(xm("2022-01"), C["used_jan22"]), color=PRICE, radius=0.08)
+        rise = C["used_jan22"] / C["used_feb20"] - 1
+        src = source("Federal Reserve industrial production and BLS consumer prices via FRED; US Department of Commerce, "
+                     "25 January 2022", size=13)
+        with self.voiceover(
+            "The whip cracked across the car industry in 2021. <bookmark mark='a'/> When the pandemic began, "
+            f"American car plants shut: in April 2020 output was about a fifth of February's. <bookmark mark='b'/> "
+            "Buyers came back, and by early 2021 output had recovered. Then it fell "
+            "again, through the autumn, by about a sixth. Not for lack of buyers, but for lack of chips. "
+            "<bookmark mark='c'/> Companies that buy chips told the Commerce Department that their median stock had "
+            f"fallen from {C['inv19']:.0f} days' worth in 2019 to less than {C['inv21']:.0f} in 2021. "
+            "<bookmark mark='d'/> With few new cars to be had, the price of used cars rose by "
+            f"{100 * rise:.0f} percent between February 2020 and January 2022. A brief fall in demand at one end of "
+            "a long chain had become a long shortage at the other."
+        ) as vo:
+            self.play(FadeIn(src), FadeIn(car, shift=RIGHT * 0.3), FadeIn(pa), FadeIn(ta))
+            vo.wait_until("a")
+            self.play(Create(la), run_time=2.0, rate_func=linear)
+            self.play(FadeIn(drop, scale=2))
+            vo.wait_until("b")
+            self.play(FadeIn(dip, scale=2), car.animate.shift(RIGHT * 0.6), rate_func=there_and_back, run_time=1.2)
+            vo.wait_until("c")
+            self.play(LaggedStart(*[FadeIn(i_, shift=UP * 0.1) for i_ in inv], lag_ratio=0.3), run_time=1.6)
+            vo.wait_until("d")
+            self.play(FadeIn(pb), FadeIn(tb), Create(lb), run_time=2.0)
+            self.play(FadeIn(top, scale=2))
+        self.clear_scene()
 
     def chain(self):
         B = R["bullwhip"]
@@ -55,7 +115,10 @@ class Bullwhip(VoiceoverScene):
             "chain the swings grow, until the company at the top is lurching between rush orders and none at all, "
             "while the shoppers at the bottom were buying about the same as always. <bookmark mark='e'/> In 1997 "
             "three researchers, Hau Lee, V. Padmanabhan and Seungjin Whang, named it the bullwhip effect: "
-            "a small flick of the wrist, and a crack at the far end."
+            "a small flick of the wrist, and a crack at the far end. <bookmark mark='f'/> They also described the "
+            "cures, and the best-run supply chains use them. Share the shop's actual sales with every step up the "
+            "chain, so each one sees real demand, not just the orders in front of it. Order smaller amounts, more "
+            "often. And stop the price promotions that make shops buy in lumps."
         ) as vo:
             ghosts = VGroup(*[pn[2].copy().set_opacity(0.3) for pn in panels], arrows.copy().set_opacity(0.3))
             self.play(FadeIn(tag), LaggedStart(*[FadeIn(g_, shift=DOWN * 0.15) for g_ in ghosts], lag_ratio=0.2),
@@ -72,6 +135,10 @@ class Bullwhip(VoiceoverScene):
             vo.wait_until("e")
             self.remove(ghosts)
             self.play(Indicate(sds[3], color=BUST, scale_factor=1.3))
+            vo.wait_until("f")
+            share = VGroup(*[CurvedArrow(panels[0][2].get_left() + LEFT * 0.05, panels[k][2].get_left() + LEFT * 0.05,
+                                         angle=1.2, color=BOOM, stroke_width=2.5) for k in (1, 2, 3)])
+            self.play(LaggedStart(*[Create(a_) for a_ in share], lag_ratio=0.3), run_time=1.8)
         for ln in lines:
             ln.clear_updaters()
         self.clear_scene()

@@ -31,6 +31,8 @@ add(
     unctad25("ships.book.2023", 0.111, "world ships on order as a share of the active fleet, start of 2023", "2023"),
     unctad25("ships.book.2024", 0.123, "world ships on order as a share of the active fleet, start of 2024", "2024"),
     unctad25("ships.book.2025", 0.15, "world ships on order as a share of the active fleet, early 2025", "2025"),
+    unctad25("ships.book.lng.2025", 0.513, "LNG carriers on order as a share of the LNG fleet (cubic metres), early 2025",
+             "2025"),
     unctad25("ships.book.box.2025", 0.246, "container ships on order as a share of the container fleet (TEU), "
              "early 2025 (LNG carriers: 51.3%)", "2025"),
     r("ships.book.bulk.2009", 0.78, "share", "dry bulk carriers on order as a share of the bulk fleet's deadweight "
@@ -58,6 +60,14 @@ add(
     r("eia.crude.2015", 9.433, "million barrels a day", "US field production of crude oil, 2015 (2016: 8.86)",
       "US Energy Information Administration, U.S. Field Production of Crude Oil (MCRFPUS2), annual",
       "https://www.eia.gov/dnav/pet/hist/LeafHandler.ashx?n=PET&s=MCRFPUS2&f=A", "2015"),
+    r("chips.inventory.2019", 40, "days", "median inventory of semiconductor products held by buyers, 2019 (2021: "
+      "less than 5 days, and smaller in key industries)", "US Department of Commerce, 'Results from Semiconductor "
+      "Supply Chain Request for Information', 25 January 2022",
+      "https://www.commerce.gov/news/blog/2022/01/results-semiconductor-supply-chain-request-information", "2019"),
+    r("chips.inventory.2021", 5, "days", "median inventory of semiconductor products held by buyers, 2021: 'less "
+      "than 5 days' (the value is the bound)", "US Department of Commerce, 'Results from Semiconductor Supply Chain "
+      "Request for Information', 25 January 2022",
+      "https://www.commerce.gov/news/blog/2022/01/results-semiconductor-supply-chain-request-information", "2021"),
     r("clark.1917", 1917, "year", "J. Maurice Clark, 'Business Acceleration and the Law of Demand: A Technical "
       "Factor in Economic Cycles', Journal of Political Economy 25(3), March 1917, pp. 217-235: demand for capital goods follows "
       "the growth of demand for the goods they make", "Journal of Political Economy",
