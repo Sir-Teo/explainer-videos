@@ -62,6 +62,10 @@ add(
     r("mp.year", 0.02, "share", "McGahan and Porter (1997): share explained by the year",
       "McGahan and Porter (1997), abstract", "https://ideas.repec.org/a/bla/stratm/v18y1997is1p15-30.html",
       "1981-1994", kind="study"),
+    r("porter.1979", 1979, "year", "Michael E. Porter, 'How Competitive Forces Shape Strategy', Harvard Business Review "
+      "57(2), March-April 1979: rivalry, the threat of new entrants, the threat of substitutes, and the bargaining "
+      "power of buyers and of suppliers", "Harvard Business Review, March 1979", "https://hbr.org/1979/03/how-"
+      "competitive-forces-shape-strategy", "1979-03", kind="study"),
     # --- Visa, fiscal year to 30 September 2026 ----------------------------------------------------------------------
     r("visa.rev", 45.90, "USD bn", "Visa net revenue, fiscal 2026 (2025: $40.00bn)", "Visa Form 10-K FY2026 (SEC "
       "company facts: RevenueFromContractWithCustomerExcludingAssessedTax)", CF.format(1403161), "FY2026"),
