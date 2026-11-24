@@ -52,6 +52,12 @@ add(
     r("coase.1935", 1935, "year", "R. H. Coase and R. F. Fowler, 'Bacon Production and the Pig-Cycle in Great "
       "Britain', Economica 2 (1935), p. 142: a critique of the cobweb account of the pig cycle", "Economica",
       "https://chicagounbound.uchicago.edu/journal_articles/3070", "1935", kind="study"),
+    r("eia.crude.2010", 5.484, "million barrels a day", "US field production of crude oil, 2010 (2008: 5.0; 2025: 13.66)",
+      "US Energy Information Administration, U.S. Field Production of Crude Oil (MCRFPUS2), annual",
+      "https://www.eia.gov/dnav/pet/hist/LeafHandler.ashx?n=PET&s=MCRFPUS2&f=A", "2010"),
+    r("eia.crude.2015", 9.433, "million barrels a day", "US field production of crude oil, 2015 (2016: 8.86)",
+      "US Energy Information Administration, U.S. Field Production of Crude Oil (MCRFPUS2), annual",
+      "https://www.eia.gov/dnav/pet/hist/LeafHandler.ashx?n=PET&s=MCRFPUS2&f=A", "2015"),
     r("lee.1997", 1997, "year", "H. L. Lee, V. Padmanabhan and S. Whang, 'The Bullwhip Effect in Supply Chains', "
       "Sloan Management Review 38(3), Spring 1997: orders swing more than sales, and more at each step up the chain",
       "MIT Sloan Management Review", "https://sloanreview.mit.edu/article/the-bullwhip-effect-in-supply-chains/",

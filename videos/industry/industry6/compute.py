@@ -207,7 +207,11 @@ def results() -> dict:
     R["reading"] = dict(
         micron=[(y, m["capex"][k] / m["depreciation"][k]) for k, y in enumerate(m["years"])],
         intel={y: intc["capex"][y] / intc["depreciation"][y] for y in (2021, 2022, 2023, 2024, 2025)},
-        exxon={y: xom[y] / xd[y] for y in (2013, 2014, 2016, 2021, 2025) if y in xd})
+        exxon={y: xom[y] / xd[y] for y in (2013, 2014, 2016, 2021, 2025) if y in xd},
+        inventory=[(y, 12 * mu["inventory"][y] / mu["revenue"][y]) for y in years if y in mu["inventory"]],
+        houses=dict(worst=R["housing"]["supply_peak"],
+                    latest=(R["housing"]["series"]["MSACSR"]["months"][-1],
+                            R["housing"]["series"]["MSACSR"]["values"][-1])))
 
     # --- the dated call of a peak: Intel ---------------------------------------------------------------------------
     R["intel"] = dict(announced=get("intel.az.2021"),
