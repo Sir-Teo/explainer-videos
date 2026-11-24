@@ -268,4 +268,53 @@
       note: "A model market, not real firms: the arithmetic of chapters 1, 8 and 10 of the film. With 200 buyers both plants are full and nobody needs to cut; below that, the plant with idle capacity always gains by undercutting while the price is above $20, the cost of one more unit, so the price falls towards it whatever you do. Holding your price keeps your margin and loses your customers.",
     });
   };
+
+  // ---- Part 5: the entrant -------------------------------------------------------------------------------------------
+  // The film's model market ($m a year): the incumbent alone earns a monopoly profit; a rival that comes in pays a
+  // set-up cost and, if it does, the two share a duopoly profit.  The incumbent may first pay for a move (a bigger
+  // plant, advertising, a loyalty scheme) that cuts what the rival could earn after entry.  The rival comes in only
+  // if what it would earn beats its set-up cost.
+  W.entrant = function (el) {
+    QB.widget(el, {
+      title: "The entrant: what actually keeps a rival out?",
+      sub: "You earn a monopoly profit; a rival is deciding whether to come in. Choose how much to spend first, and how much that spending cuts what the rival could earn once inside. The rival comes in if its share beats its set-up cost. Find the cheapest move that keeps it out, and check that it is worth paying for.",
+      panels: 2, height: 300,
+      controls: [
+        { k: "mono", label: "Your profit alone ($m a year)", min: 40, max: 200, step: 5, value: 100, fmt: function (x) { return "$" + x + "m"; } },
+        { k: "entry", label: "The rival's set-up cost", min: 5, max: 80, step: 5, value: 30, fmt: function (x) { return "$" + x + "m"; } },
+        { k: "duo", label: "Each firm's profit if both are in", min: 10, max: 80, step: 5, value: 40, fmt: function (x) { return "$" + x + "m"; } },
+        { k: "spend", label: "Your move: what you spend first", min: 0, max: 40, step: 5, value: 20, fmt: function (x) { return "$" + x + "m"; } },
+        { k: "bite", label: "How much it cuts the rival's profit", min: 0, max: 40, step: 5, value: 15, fmt: function (x) { return "$" + x + "m"; } },
+      ],
+      draw: function (g, v, s) {
+        var rivalNo = v.duo - v.entry, rivalMove = v.duo - v.bite - v.entry;
+        var inNo = rivalNo > 0, inMove = rivalMove > 0;
+        var youNo = inNo ? v.duo : v.mono;
+        var youMove = (inMove ? Math.max(0, v.duo - v.bite / 2) : v.mono) - v.spend;
+        var hi = Math.max(v.mono, v.duo, 40) * 1.15, lo = Math.min(0, rivalNo, rivalMove, youMove) * 1.2 - 5;
+        var a = g[0].axes({ x: [-0.6, 1.6], y: [lo, hi], title: "Your profit a year", xticks: [0, 1],
+                            xfmt: function (x) { return x < 0.5 ? "do nothing" : "make the move"; },
+                            yfmt: function (y) { return "$" + Math.round(y) + "m"; } });
+        a.hline(0, { color: C.muted });
+        a.bars([0], [youNo], 0.55, { color: inNo ? C.loss : C.gain });
+        a.bars([1], [youMove], 0.55, { color: inMove ? C.loss : C.gain });
+        a.legend([["rival stays out", C.gain], ["rival comes in", C.loss]], { pos: "tr" });
+        var b = g[1].axes({ x: [-0.6, 1.6], y: [lo, hi], title: "The rival's profit if it comes in", xticks: [0, 1],
+                            xfmt: function (x) { return x < 0.5 ? "you do nothing" : "after your move"; },
+                            yfmt: function (y) { return "$" + Math.round(y) + "m"; } });
+        b.hline(0, { color: C.muted });
+        b.bars([0], [rivalNo], 0.55, { color: rivalNo > 0 ? C.loss : C.gain });
+        b.bars([1], [rivalMove], 0.55, { color: rivalMove > 0 ? C.loss : C.gain });
+        s.r = { inNo: inNo, inMove: inMove, youNo: youNo, youMove: youMove, rivalMove: rivalMove };
+      },
+      readout: function (v, s) {
+        var r = s.r;
+        return [["if you do nothing", r.inNo ? "the rival comes in" : "the rival stays out"],
+                ["after your move", r.inMove ? "the rival comes in" : "the rival stays out"],
+                ["your profit: nothing / the move", "$" + Math.round(r.youNo) + "m / $" + Math.round(r.youMove) + "m"],
+                ["is the move worth it?", r.youMove > r.youNo ? "yes" : "no"]];
+      },
+      note: "A model market, as in chapter 1 of the film: the numbers are illustrative. A move only deters if it is paid for before the rival decides and cannot be taken back; a threat that costs nothing to make changes nothing. If the rival comes in anyway, the move is assumed to soften the fight by half its bite.",
+    });
+  };
 })();

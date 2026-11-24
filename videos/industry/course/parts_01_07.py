@@ -225,4 +225,52 @@ PARTS = [
         also=(("The Register's rows for Part 4", "explainer/industry/data/rows_p04.py"),
               ("The cost functions and the Stack", "explainer/industry/works/stack.py")),
     ),
+    Part(
+        n=5, level="U", widget="entrant", prereq=(3, 4),
+        question="Why do some industries earn high returns for decades while others never do?",
+        story="The part opens with Warren Buffett's letter for 2007: a great business needs an enduring moat, and "
+              "See's Candies earned $82m before tax on $40m of capital, FlightSafety thirty cents a year on each extra "
+              "dollar, and airlines little or nothing. The viewer plays an incumbent facing an entrant and finds that "
+              "only moves paid for in advance keep it out. Damodaran's returns on capital for 90 US industries show "
+              "tobacco at 63% and carmakers at 2%, a rank correlation of 0.57 between 2015-2019 and 2022-2025, and "
+              "$1.47 trillion of profit above the cost of capital, 39% of it in five industries. McGahan and Porter's "
+              "split gives the industry about a fifth of the differences in profit and the business more. The "
+              "Census's 2022 concentration ratios run from 0.4% in nail salons to 98% in home centers; the HHI and "
+              "the 2023 merger guidelines are explained; airlines and carmakers show that few firms are not a moat "
+              "by themselves. The walls are drawn one by one: cost and scale, habit and brands (tobacco topping the "
+              "table of returns while smokers fell from 42 in 100 adults to under 12), networks (Visa's 61% margin) "
+              "and law; Porter's five forces are applied to airlines and tobacco, and the phone's suppliers from "
+              "Part 1 to buyer power. Visa, Costco and Delta's margins since 2009 show a moat as a steady margin. "
+              "After an intermission of eight industries' returns year by year, newspapers and Kodak show moats that "
+              "drained; Buffett's airline forecast is scored, and the series calls the persistence of the 2025 top "
+              "ten.",
+        handoff="Part 6 is the cycle that high returns set off when everyone builds at once; the platform parts "
+                "return to networks and tipping, the medicines parts to patents, the airline and retail parts to "
+                "these companies' margins.",
+        outside="Percentages and arithmetic; Parts 3 and 4 for the return on capital and the cost curve.",
+        objectives={
+            "U": ["Explain why high returns attract entry and fade unless something keeps newcomers out.",
+                  "Name the four kinds of wall (cost, habit, networks, law) with a real example of each.",
+                  "Explain why a concentrated industry can still earn low returns."],
+            "M": ["Compute an industry's profit above its cost of capital from its return, cost and capital.",
+                  "Compute a four-firm ratio and an HHI from market shares and say what each misses.",
+                  "Measure the persistence of returns with a rank correlation and quartile averages."],
+            "D": ["Say what a variance decomposition of profitability can and cannot show about industry effects.",
+                  "State a dated forecast about the persistence of returns with a scoring rule."],
+            "I": ["Read a company's moat in its filings: the level and the steadiness of its margins over a decade.",
+                  "Apply the five forces to an industry and say which force drains the most profit.",
+                  "Use the merger guidelines' HHI thresholds to judge whether a merger would be presumed harmful."],
+        },
+        results=[
+            ("Return on capital", r"ROC = \frac{\text{operating profit} \times (1 - t)}{\text{capital}}"),
+            ("Profit above the cost of capital", r"(ROC - r) \times \text{capital}"),
+            ("Four-firm concentration ratio", r"CR_4 = s_1 + s_2 + s_3 + s_4"),
+            ("Herfindahl-Hirschman index", r"HHI = \textstyle\sum_i s_i^2,\quad \text{highly concentrated above } 1{,}800"),
+            ("Possible links among n users", r"\frac{n(n-1)}{2}"),
+            ("Deterrence", r"\text{enter} \iff \pi_{\text{after entry}} > \text{set-up cost}"),
+        ],
+        U=(0, 1, 2, 3, 6, 8, 9, 10, 11, "s10_intermission", 15), I=(12, 13), D=(5, 7, 16),
+        also=(("The Register's rows for Part 5", "explainer/industry/data/rows_p05.py"),
+              ("Damodaran's returns and the Census's concentration ratios", "explainer/industry/data/SOURCES.md")),
+    ),
 ]
