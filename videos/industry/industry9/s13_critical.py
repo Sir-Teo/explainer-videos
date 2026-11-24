@@ -63,8 +63,8 @@ class Critical(VoiceoverScene):
             "the United States' official list of critical minerals. The metal of wires is now treated as a matter of "
             "national security."
         ) as vo:
-            self.play(FadeIn(src))
-            self.play(LaggedStart(*[FadeIn(c_, shift=UP * 0.2) for c_ in conds], lag_ratio=0.6), run_time=3.5)
+            self.play(FadeIn(src), FadeIn(conds), run_time=0.6)
+            self.play(LaggedStart(*[Indicate(c_[1][0], scale_factor=1.15) for c_ in conds], lag_ratio=0.5), run_time=2.0)
             vo.wait_until("a")
             self.play(FadeOut(conds), FadeIn(head))
             self.play(Create(half), FadeIn(hl))

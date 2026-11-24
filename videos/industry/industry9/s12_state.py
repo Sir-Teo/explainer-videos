@@ -128,9 +128,9 @@ class State(VoiceoverScene):
             "and a phased restart is planned from 2026. A mine is not only a bet on the price; it is a bet on the rock, "
             "and the people inside it bear that risk first."
         ) as vo:
-            self.play(FadeIn(src))
+            self.play(FadeIn(src), LaggedStart(*[FadeIn(s_, scale=0.9) for s_ in ring], lag_ratio=0.3), FadeIn(mid),
+                      run_time=1.5)
             vo.wait_until("a")
-            self.play(LaggedStart(*[FadeIn(s_, scale=0.9) for s_ in ring], lag_ratio=0.3), FadeIn(mid), run_time=2.0)
             self.play(LaggedStart(*[FadeIn(k_) for k_ in key], lag_ratio=0.3), run_time=1.5)
             vo.wait_until("b")
             self.play(FadeIn(pa), FadeIn(ttl), GrowFromEdge(b24, DOWN), FadeIn(bl[0]), FadeIn(bl[2]))

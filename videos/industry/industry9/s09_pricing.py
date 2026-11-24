@@ -38,6 +38,10 @@ class Pricing(VoiceoverScene):
         f2 = VGroup(tx("the buyer pays:", 15, GREY_A), tx("exchange price", 16, WHITE),
                     tx("plus a premium for delivery", 16, GREEN_C)).arrange(DOWN, buff=0.04).move_to([4.3, -2.6, 0])
         src = source("how copper is sold: the standard terms, simplified", size=13)
+        q_stack = VGroup(*[draw.cathode(0.9) for _ in range(4)]).arrange(RIGHT, buff=-0.55)
+        q_tag = VGroup(tx("a tonne of copper:", 24, WHITE), tx("who sets its price?", 30, PRICE, bold=True)).arrange(
+            DOWN, buff=0.1)
+        q = VGroup(q_stack, q_tag).arrange(DOWN, buff=0.4).move_to([0, 0.2, 0])
         with self.voiceover(
             "Who decides what copper costs? Not the miner, and not the buyer. <bookmark mark='a'/> Follow the metal. "
             "The mine sells concentrate to a smelter, and the smelter and refinery sell cathode to the companies that "
@@ -50,8 +54,9 @@ class Pricing(VoiceoverScene):
             "A miner cannot charge more because its copper is better: a tonne of cathode is a tonne of cathode. All it "
             "can choose is its cost."
         ) as vo:
-            self.play(FadeIn(src))
+            self.play(FadeIn(src), FadeIn(q_stack, shift=UP * 0.2), FadeIn(q_tag))
             vo.wait_until("a")
+            self.play(FadeOut(q), run_time=0.5)
             self.play(FadeIn(mine_), run_time=0.8)
             self.play(GrowArrow(a1), FadeIn(l1), FadeIn(smelt))
             self.play(GrowArrow(a2), FadeIn(l2), FadeIn(buyer))

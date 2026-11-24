@@ -62,10 +62,10 @@ class Called(VoiceoverScene):
             "the Geological Survey's yearly average prices, we get the same verdict: the thousand-dollar basket fell to "
             f"about {B['basket_real']:,.0f} dollars."
         ) as vo:
-            self.play(FadeIn(src))
+            self.play(FadeIn(src), FadeIn(people[0], shift=UP * 0.1), FadeIn(people[1], shift=UP * 0.1))
             vo.wait_until("a")
-            self.play(FadeIn(people[0], shift=UP * 0.1))
-            self.play(FadeIn(people[1], shift=UP * 0.1))
+            self.play(Indicate(people[0], color=EHRLICH, scale_factor=1.05))
+            self.play(Indicate(people[1], color=SIMON, scale_factor=1.05))
             vo.wait_until("b")
             self.play(FadeIn(t1), LaggedStart(*[GrowFromEdge(s_, DOWN) for s_ in stacks], lag_ratio=0.15),
                       FadeIn(VGroup(*[l_[0] for l_ in labs])), run_time=1.8)
