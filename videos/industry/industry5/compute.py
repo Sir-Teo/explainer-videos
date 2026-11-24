@@ -64,7 +64,8 @@ def results() -> dict:
     sees["incr"] = (sees["pre1"] - sees["pre0"]) / (sees["cap1"] - sees["cap0"])  # extra profit per extra $ of capital
     fsi = dict(pre0=get("fsi.pretax.1996"), capex=get("fsi.capex"), pre1=get("fsi.pretax.2007"))
     fsi["gain"] = fsi["pre1"] - fsi["pre0"]
-    fsi["incr"] = fsi["gain"] / 509.0  # the letter's $509m of incremental investment
+    fsi["cap0"], fsi["extra"] = get("fsi.assets.1996"), get("fsi.extra")
+    fsi["incr"] = fsi["gain"] / fsi["extra"]  # the letter's $509m of incremental investment
     assert get("brk.moat") == 0 and get("brk.airlines") == 0
     R["three"] = dict(sees=sees, fsi=fsi)
 

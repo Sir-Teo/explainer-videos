@@ -68,7 +68,7 @@ class Hook(VoiceoverScene):
         base = -3.05
         u = 0.014  # inches per $m
 
-        def bars(x, cap, pre, cap_t, pre_t):
+        def bars(x, cap, pre, cap_t, pre_t, u=u):
             b1 = Rectangle(width=0.8, height=max(cap * u, 0.03), stroke_width=0, fill_color=MOAT, fill_opacity=0.85)
             b2 = Rectangle(width=0.8, height=max(pre * u, 0.03), stroke_width=0, fill_color=RET, fill_opacity=0.9)
             b1.move_to([x - 0.5, base, 0], aligned_edge=DOWN)
@@ -77,11 +77,10 @@ class Hook(VoiceoverScene):
                           tx(pre_t, 15, RET).next_to(b2, UP, buff=0.06))
         sees0 = bars(xs[0], s["cap0"], s["pre0"], "$8m", "$5m")
         sees1 = bars(xs[0], s["cap1"], s["pre1"], "$40m", "$82m")
-        fsi1 = bars(xs[1], 570 + 509, f["pre1"], "+$509m", "$270m")
-        fsi0 = bars(xs[1], 570, f["pre0"], "$570m", "$111m")
-        for b in (fsi0, fsi1):
-            b[0].stretch_to_fit_height(min(b[0].height, 1.6), about_edge=DOWN)
-            b[2].next_to(b[0], UP, buff=0.06)
+        uf = 1.6 / (f["cap0"] + f["extra"])  # FlightSafety is drawn to its own, smaller scale
+        fsi1 = bars(xs[1], f["cap0"] + f["extra"], f["pre1"], f"${f['cap0'] + f['extra']:,.0f}m", "$270m", u=uf)
+        fsi0 = bars(xs[1], f["cap0"], f["pre0"], f"${f['cap0']:.0f}m", "$111m", u=uf)
+        scale_note = tx("each company drawn to its own scale", 13, GREY_C).to_corner(DL, buff=0.28).shift(UP * 0.3)
         key = VGroup(VGroup(Square(0.2, stroke_width=0, fill_color=MOAT, fill_opacity=1),
                             tx("capital tied up", 16, MOAT)).arrange(RIGHT, buff=0.1),
                      VGroup(Square(0.2, stroke_width=0, fill_color=RET, fill_opacity=1),
@@ -109,7 +108,7 @@ class Hook(VoiceoverScene):
             "leave the shop within weeks, so almost nothing is tied up in debts or stock. "
             "<bookmark mark='c'/> FlightSafety, which trains pilots: a fine business, with an advantage Buffett "
             "thought durable. But every new aircraft needs new simulators, at over twelve million dollars each. From "
-            "1996 to 2007 it put in 509 million dollars more, and its profit rose by 159 million. "
+            f"1996 to 2007 it put in {f['extra']:.0f} million dollars more, and its profit rose by {f['gain']:.0f} million. "
             "<bookmark mark='d'/> And airlines, which he called the worst sort of business: growing fast, hungry for "
             "capital, earning little or nothing. If a farsighted capitalist had been present at Kitty Hawk, he wrote, "
             "he would have done his successors a huge favour by shooting Orville down. <bookmark mark='e'/> Put it as "
@@ -127,7 +126,8 @@ class Hook(VoiceoverScene):
             self.play(Transform(sees0, sees1), Transform(yr0, yr1), run_time=2.0)
             vo.wait_until("c")
             self.remove(ghosts[1])
-            self.play(FadeIn(flight, shift=UP * 0.2), FadeIn(names[1]), FadeIn(subs[1]), FadeIn(fy0))
+            self.play(FadeIn(flight, shift=UP * 0.2), FadeIn(names[1]), FadeIn(subs[1]), FadeIn(fy0),
+                      FadeIn(scale_note))
             self.play(*[GrowFromEdge(b, DOWN) for b in fsi0[:2]], FadeIn(fsi0[2:]))
             self.play(Transform(fsi0, fsi1), Transform(fy0, fy1),
                       LaggedStart(*[Indicate(x_, color=WHITE) for x_ in sims], lag_ratio=0.1), run_time=2.0)

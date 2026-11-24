@@ -49,4 +49,7 @@ add(
     r("ezekiel.1938", 1938, "year", "Mordecai Ezekiel, 'The Cobweb Theorem', Quarterly Journal of Economics 52(2), "
       "February 1938, pp. 255-280: output planned from the last price, delivered a period later",
       "Quarterly Journal of Economics", "https://www.jstor.org/stable/1881734", "1938", kind="study"),
+    r("coase.1935", 1935, "year", "R. H. Coase and R. F. Fowler, 'Bacon Production and the Pig-Cycle in Great "
+      "Britain', Economica 2 (1935), p. 142: a critique of the cobweb account of the pig cycle", "Economica",
+      "https://chicagounbound.uchicago.edu/journal_articles/3070", "1935", kind="study"),
 )

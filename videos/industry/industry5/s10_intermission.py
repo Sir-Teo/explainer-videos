@@ -86,10 +86,13 @@ class Intermission(VoiceoverScene):
                 walls, drain]
         rows = VGroup()
         for k, (pic, ln) in enumerate(zip(pics, lines)):
-            pic.scale_to_fit_height(min(pic.height, 0.6))
-            t_ = tx(ln, 22 if k < 4 else 21, WHITE if k < 4 else GREY_B)
+            pic.scale_to_fit_height(0.75)
+            t_ = tx(ln, 25 if k < 4 else 23, WHITE if k < 4 else GREY_B)
             rows.add(VGroup(pic, t_).arrange(RIGHT, buff=0.4))
-        rows.arrange(DOWN, aligned_edge=LEFT, buff=0.42).next_to(head, DOWN, buff=0.6)
+        rows.arrange(DOWN, aligned_edge=LEFT, buff=0.55).next_to(head, DOWN, buff=0.7)
+        if rows.width > 13.0:
+            rows.scale_to_fit_width(13.0)
+        rows.set_x(0)
         for r_ in rows:
             r_[0].move_to([rows.get_left()[0] + 0.45, r_.get_y(), 0])
             r_[1].next_to(r_[0], RIGHT, buff=0.4)

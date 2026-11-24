@@ -150,7 +150,8 @@ def results() -> dict:
     runs = {L: cycle.fleet(years=60, lead=L, k=0.35) for L in (1, 2, 3, 4)}
     R["fleet"] = dict(swing={L: cycle.swing(f["rate"], 15) for L, f in runs.items()},
                       run={k: v[10:50].tolist() for k, v in runs[3].items()},
-                      book_max={L: float(f["orderbook"][15:].max()) for L, f in runs.items()})
+                      book_max={L: float(f["orderbook"][15:].max()) for L, f in runs.items()},
+                      rates={L: f["rate"][10:50].tolist() for L, f in runs.items()})
 
     # --- housing ---------------------------------------------------------------------------------------------------
     H = {}

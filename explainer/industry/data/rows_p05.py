@@ -39,6 +39,10 @@ add(
         "1972-2007"),
     brk("fsi.pretax.1996", 111, "USD m", "FlightSafety's pre-tax operating earnings when Berkshire bought it in 1996 "
         "(net fixed assets $570m)", "1996"),
+    brk("fsi.assets.1996", 570, "USD m", "FlightSafety's net investment in fixed assets in 1996, when Berkshire bought "
+        "it", "1996"),
+    brk("fsi.extra", 509, "USD m", "FlightSafety's extra net investment in fixed assets, 1996-2007 (to $1,079m)",
+        "1996-2007"),
     brk("fsi.capex", 1635, "USD m", "FlightSafety's capital spending, 1996-2007, mostly flight simulators (each can "
         "cost more than $12m; 273 of them); depreciation $923m", "1996-2007"),
     brk("fsi.pretax.2007", 270, "USD m", "FlightSafety's pre-tax operating earnings in 2007: $159m more than in 1996 on "

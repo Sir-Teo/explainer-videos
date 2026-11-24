@@ -11,19 +11,19 @@ class Outro(VoiceoverScene):
             keep, UP, buff=0.15)
         head = tx("The moat", 40, GOLD, bold=True).to_edge(UP, buff=0.45)
         lines = VGroup(
-            tx("Some industries earn far more than their capital costs,", 21),
-            tx("and the gap fades only slowly.", 21, GREY_A),
-            tx("The industry explains about a fifth of the differences", 21),
-            tx("in profit; the company more.", 21, GREY_A),
-            tx("A few firms earn high returns only if newcomers", 21),
-            tx("are kept out and the few do not fight.", 21, GREY_A),
-            tx("The walls: cost, habit, networks and law.", 21),
-            tx("Five forces can drain what they protect.", 21, GREY_A),
-            tx("No wall survives the day customers stop wanting", 21),
-            tx("what is inside.", 21, GREY_A)).arrange(DOWN, aligned_edge=LEFT, buff=0.12).move_to([2.6, -0.2, 0])
+            tx("Some industries earn far more than their capital costs,", 24),
+            tx("and the gap fades only slowly.", 24, GREY_A),
+            tx("The industry explains about a fifth of the differences", 24),
+            tx("in profit; the company more.", 24, GREY_A),
+            tx("A few firms earn high returns only if newcomers", 24),
+            tx("are kept out and the few do not fight.", 24, GREY_A),
+            tx("The walls: cost, habit, networks and law.", 24),
+            tx("Five forces can drain what they protect.", 24, GREY_A),
+            tx("No wall survives the day customers stop wanting", 24),
+            tx("what is inside.", 21, GREY_A)).arrange(DOWN, aligned_edge=LEFT, buff=0.14).move_to([2.9, -0.2, 0])
         pairs = [VGroup(lines[2 * k], lines[2 * k + 1]) for k in range(5)]
         raiders = VGroup(*[draw.person(0.4, color=ENTRANT) for _ in range(4)]).arrange(RIGHT, buff=0.15).move_to(
-            [-0.6, -1.5, 0])
+            [-1.4, -2.75, 0])
         with self.voiceover(
             "The moat. <bookmark mark='a'/> Some industries earn far more than their capital costs, and the gap "
             "fades only slowly. <bookmark mark='b'/> The industry a business is in explains about a fifth of the "
