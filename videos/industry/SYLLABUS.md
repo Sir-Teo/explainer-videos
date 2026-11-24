@@ -2537,7 +2537,7 @@ scored in Part 64 and at each refresh.
 | 3 · The Accounts | done 2026-11-23 (119 Register rows; the SEC extract) | `works/firm.py` | 17 scenes | silent and narrated previews reviewed | entry, lab, interactive | not started |
 | 4 · The Cost Curve | done 2026-11-23 (83 Register rows; EIA's Electric Power Annual and AEO2026 assumptions) | `works/stack.py` | 15 scenes, illustrated and animated (`draw.py`) | silent and narrated previews reviewed | entry, lab, interactive | not started |
 | 5 · The Moat | done 2026-11-24 (31 Register rows; Damodaran's returns 2015-2025, the Census's concentration ratios, the SEC extract) | — (the game in chapter 1 and the course site) | 19 scenes | silent preview reviewed; narrated cut extended to thirty minutes | entry, lab, interactive | not started |
-| 6 · The Cycle | done 2026-11-24 (15 Register rows; FRED's hogs, housing, oil and orders; Maersk's ESEF filings; Micron's quarters) | `works/cycle.py` | 18 scenes | in production | entry, lab, interactive | not started |
+| 6 · The Cycle | done 2026-11-24 (18 Register rows; FRED's hogs, housing, oil and orders; Maersk's ESEF filings; Micron's quarters) | `works/cycle.py` | 19 scenes | silent previews reviewed; narrated cut extended to thirty minutes | entry, lab, interactive | not started |
 
 Phase 0 is done in the form Part 1 needed: the palette and kit (`style.py`, `kit.py`), the instruments (`viz.py`: the
 phone and its exploded view, the region map, the Dollar column, the margin ladder, the treemap, plain axes), the
@@ -2595,6 +2595,7 @@ of reward against toll were added.
 Part 6 departs from its draft in its evidence: the 1973 tankers are replaced by UNCTAD's orderbook (52% of the fleet in
 2009) and Maersk's own filings; the hog cycle is tested on the NBER's Chicago data, 1880-1940 (a swing of about 3.6
 years, not the cobweb's two); memory chips are Micron's quarters since 2009; and the Works' `cycle.py` (a fleet with
-lead times, the cobweb, a bullwhip chain, leverage) is tested. Clark's accelerator was added as its own chapter. Its
-*Called it?* is Intel's 2021 plan against its later losses, with the series' call on Micron's next fall.
+lead times, the cobweb, a bullwhip chain, leverage) is tested. Clark's accelerator and a chapter on the data-centre build-out (Microsoft, Alphabet, Amazon and Meta's spending
+against depreciation and cash) were added, with the 2021 car-chip shortage in the bullwhip chapter, to reach thirty
+minutes. Its *Called it?* is Intel's 2021 plan against its later losses, with the series' call on Micron's next fall.
 
