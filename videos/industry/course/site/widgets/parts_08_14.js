@@ -58,4 +58,76 @@
       note: "This is the film's chapter 9 model, with constant elasticities. Over 2026 as a whole, EIA's figures imply buyers cut use by about 0.05% for each 1% rise in price; stocks, rerouted pipelines and ships, and lower demand in China cushioned the shock, which is why the price rose less than this model says for a 10% loss.",
     });
   };
+  // ---- Part 9: a mine's grade --------------------------------------------------------------------------------------
+  // The film's model mine (explainer/industry/works/mine.py): it mills 40 Mt of ore a year for 15 years, the grade
+  // falling 2% a year; $2.20 a tonne of rock moved, $7.00 a tonne milled, 55 cents a pound for smelting, freight and
+  // overheads; $3bn to build over three years, $300m to close; a 4% royalty and 27% income tax; discounted at 8%.
+  W.minegrade = function (el) {
+    var LB = 2204.62;
+    function cash(grade, strip, rec, price) {
+      var ore = 40e6, life = 15, build = 3, capex = 3000, n = build + life + 1, cf = [], k, t;
+      for (t = 0; t < n; t++) cf.push(0);
+      for (t = 0; t < build; t++) cf[t] -= capex / build;
+      var site = ore * (1 + strip) * 2.2 + ore * 7.0, first = null;
+      for (k = 0; k < life; k++) {
+        var g = grade * Math.pow(0.98, k), cu = ore * g / 100 * rec, lbs = cu * LB / 1e6;
+        var unit = site / (cu * LB) + 0.55, rev = price * lbs, cost = unit * lbs, roy = 0.04 * rev;
+        var tax = 0.27 * Math.max(rev - cost - roy - capex / life, 0);
+        cf[build + k] += rev - cost - roy - tax;
+        if (k === 0) first = { cu: cu / 1e3, unit: unit };
+      }
+      cf[n - 1] -= 300;
+      var npv = 0;
+      for (t = 0; t < n; t++) npv += cf[t] / Math.pow(1.08, t);
+      return { npv: npv, first: first };
+    }
+    function breakeven(grade, strip, rec) {
+      var lo = 0.05, hi = 30, i;
+      for (i = 0; i < 60; i++) { var m = (lo + hi) / 2; if (cash(grade, strip, rec, m).npv > 0) hi = m; else lo = m; }
+      return (lo + hi) / 2;
+    }
+    QB.widget(el, {
+      title: "A copper mine: how much does grade matter?",
+      sub: "Set the share of copper in the ore, the waste rock stripped for each tonne of ore, the share of the copper the mill recovers, and the price of copper. See how much rock a tonne of copper takes, what a pound costs, and what the mine is worth today.",
+      panels: 2, height: 300,
+      controls: [
+        { k: "grade", label: "Copper in the ore (grade)", min: 0.2, max: 2.0, step: 0.01, value: 0.5, fmt: function (x) { return x.toFixed(2) + "%"; } },
+        { k: "strip", label: "Waste rock per tonne of ore (strip ratio)", min: 0, max: 4, step: 0.1, value: 2, fmt: function (x) { return x.toFixed(1) + " : 1"; } },
+        { k: "rec", label: "Share of the copper recovered", min: 0.6, max: 0.95, step: 0.01, value: 0.87, fmt: function (x) { return Math.round(100 * x) + "%"; } },
+        { k: "price", label: "Copper price, $ a pound", min: 1.5, max: 8, step: 0.05, value: 4.5, fmt: function (x) { return "$" + x.toFixed(2); } },
+      ],
+      draw: function (g, v, s) {
+        var gs = [], rock = [], i;
+        for (i = 0; i <= 60; i++) { var gg = 0.2 + 1.8 * i / 60; gs.push(gg); rock.push((1 + v.strip) / (gg / 100 * v.rec)); }
+        var here = (1 + v.strip) / (v.grade / 100 * v.rec);
+        var a = g[0].axes({ x: [0.2, 2.0], y: [10, 3000], logy: true, title: "Tonnes of rock moved for a tonne of copper",
+                            xticks: [0.25, 0.5, 1, 1.5, 2], xfmt: function (x) { return x + "%"; },
+                            yticks: [10, 30, 100, 300, 1000, 3000], yfmt: function (y) { return Math.round(y).toLocaleString(); } });
+        a.line(gs, rock, { color: C.house, width: 2.2 });
+        a.dots([v.grade], [here], { color: C.spot, r: 5 });
+        a.vline(1.02, { color: C.muted });
+        a.text(1.05, 2000, "Escondida 2025", { size: 10.5, color: C.muted });
+        var be = breakeven(v.grade, v.strip, v.rec), ps = [], vs = [], top = 8, j;
+        for (j = 0; j <= 50; j++) { var p = 1.5 + (top - 1.5) * j / 50; ps.push(p); vs.push(cash(v.grade, v.strip, v.rec, p).npv / 1000); }
+        var now = cash(v.grade, v.strip, v.rec, v.price);
+        var lo = Math.min(-4, vs[0] * 1.05), hi = Math.max(4, vs[vs.length - 1] * 1.05);
+        var b = g[1].axes({ x: [1.5, top], y: [lo, hi], title: "What the mine is worth today, $bn, against the copper price",
+                            xticks: [2, 3, 4, 5, 6, 7, 8], xfmt: function (x) { return "$" + x; }, yfmt: function (y) { return y.toFixed(0); } });
+        b.hline(0, { color: C.muted });
+        b.line(ps, vs, { color: C.p, width: 2.2 });
+        if (be < top) { b.vline(be, { color: C.loss }); b.text(be + 0.08, hi * 0.85, "break-even", { size: 10.5, color: C.loss }); }
+        b.dots([v.price], [now.npv / 1000], { color: C.spot, r: 5 });
+        s.r = { rock: here, cu: now.first.cu, unit: now.first.unit, be: be, npv: now.npv };
+      },
+      readout: function (v, s) {
+        var r = s.r;
+        return [["rock for a tonne of copper", Math.round(r.rock).toLocaleString() + " t"],
+                ["copper in year one", Math.round(r.cu) + " kt"],
+                ["cash cost a pound, year one", "$" + r.unit.toFixed(2)],
+                ["break-even price", r.be < 29 ? "$" + r.be.toFixed(2) : "none below $30"],
+                ["worth today", (r.npv >= 0 ? "$" : "-$") + Math.abs(r.npv / 1000).toFixed(2) + "bn"]];
+      },
+      note: "This is the film's model mine. At its default grade of 0.5% it needs $3.61 a pound to pay its way; Escondida milled ore at 1.02% in 2025 and expects about 0.85% in 2026. Real mines differ in size, depth, power, water and by-products, and gold or molybdenum in the ore can pay much of the cost.",
+    });
+  };
 })();

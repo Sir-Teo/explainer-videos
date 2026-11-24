@@ -50,4 +50,57 @@ PARTS = [
               ("Wells, fields, the shale treadmill, clearing prices and the crack spread", "explainer/industry/works/oil.py"),
               ("EIA's petroleum, international, pump-price and gas extracts; energy prices", "explainer/industry/data/SOURCES.md")),
     ),
+    Part(
+        n=9, level="U", widget="minegrade", prereq=(4, 6, 8),
+        question="Why is a mine worth a fortune in one decade and nothing in the next?",
+        story="The part opens in the Atacama in March 1981: nine holes paid for, five drilled dry, and the sixth finding "
+              "Escondida, about 300 million tonnes of ore at 1.3-1.5% copper, for a $3m search. In the year to June "
+              "2025 it produced 1,305 kt and $8.6bn of operating profit, but its feed grade falls from 1.02% to about "
+              "0.85%. The viewer owns the Works' model deposit (600 Mt at 0.5%, $3bn to build, break-even $3.61 a "
+              "pound) and chooses to build, wait or sell across 400 price paths. Copper is followed from pit to "
+              "cathode, with about 350 tonnes of rock moved for a tonne of copper at 1%, and by leaching at Freeport's "
+              "0.21% ore. Grade sets the rock, the cost and the break-even; a mine plan takes the richest rock first, "
+              "and the option to wait says build only about 35% above break-even (Dixit and Pindyck). Four real "
+              "operations make a cost curve (Grasberg's gold puts it below zero), Escondida's block moves as its grade "
+              "falls, and the US Geological Survey shows Chile digging the most copper while China refines 48% of it. "
+              "Iron ore moves from one negotiated price a year to a market quoted in China (Vale, April 2010). The "
+              "exchanges set every miner's price; 2025's tariff fear split New York from London and nearly doubled US "
+              "imports. After a century of copper in constant dollars, the supercycle (copper x5.7 and iron ore x13.2, "
+              "2002-2011) and the bust (Vale -$12.1bn in 2015), the state's share (36% of the model mine's profit; "
+              "Indonesia's 51% of Grasberg; Congo's cobalt quotas; Indonesia's nickel), critical minerals (lithium's "
+              "boom and bust, China's rare-earth controls) and gold (a 5.5-metre cube worth about $350bn; Newmont's "
+              "record) lead to the landscape of November 2026. Simon and Ehrlich's 1980 wager is re-run for every "
+              "decade since 1900 (Ehrlich would have won 61%), and the series calls Escondida below 1,100 kt in the "
+              "year to June 2027.",
+        handoff="Part 10 turns from rock to soil; Part 11 follows the metals into steel, cement and aluminium; the "
+                "energy-transition and geopolitics parts return to critical minerals and the state.",
+        outside="Percentages and arithmetic; Part 4's cost curve; Part 6's cycle; Part 8's break-even and reserves.",
+        objectives={
+            "U": ["Explain why grade decides how much rock a mine moves and what its copper costs.",
+                  "Explain why every miner takes the exchange's price, and why the low-cost mine survives the bust.",
+                  "Explain where copper is mined and where it is refined, and what makes a mineral critical."],
+            "M": ["Compute rock per tonne of metal from grade, recovery and strip ratio.",
+                  "Compute a mine's break-even price from its cash flows, and the value of waiting a year to build.",
+                  "Compute the state's share of a mine's profit from a royalty and an income tax."],
+            "D": ["Test a famous resource wager (Simon and Ehrlich, 1980) over every window of the record, and say what "
+                  "the result does and does not show.",
+                  "State a falsifiable forecast for a mine's output with a probability, and the evidence for and "
+                  "against it."],
+            "I": ["Read a miner's results for production, grade, unit cost and guidance, and a by-product credit.",
+                  "Place a company on the map: diversified majors, copper and gold miners, lithium producers, state "
+                  "miners."],
+        },
+        results=[
+            ("Rock per tonne of metal", r"\frac{1 + s}{g \, \rho}"),
+            ("Break-even", r"\sum_t \frac{\text{cash}_t(p^{*})}{(1+r)^t} = 0"),
+            ("The option to wait", r"V_{\text{wait}} = \frac{\mathbb{E}\,[\max(\text{NPV}(p_1), 0)]}{1+r}"),
+            ("The state's share", r"\frac{\text{royalty} + \text{tax}}{\text{revenue} - \text{costs}}"),
+            ("The wager", r"\frac{1}{5}\sum_m \frac{p_m(t+10)}{p_m(t)} \gtrless 1"),
+        ],
+        U=(0, 1, 2, 3, 5, 6, 7, 8, "s10_intermission", 9, 10, 12, 13), I=(11,), D=(14,),
+        also=(("The Register's rows for Part 9", "explainer/industry/data/rows_p09.py"),
+              ("Grade, the model mine, the option to wait, the cost curve and the wager", "explainer/industry/works/mine.py"),
+              ("The USGS's historical prices, the IMF's metal prices and the miners' 20-F accounts",
+               "explainer/industry/data/SOURCES.md")),
+    ),
 ]
