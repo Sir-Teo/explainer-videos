@@ -67,6 +67,9 @@ add(
       "company facts: RevenueFromContractWithCustomerExcludingAssessedTax)", CF.format(1403161), "FY2026"),
     r("visa.oi", 28.11, "USD bn", "Visa operating income, fiscal 2026 (2025: $23.99bn)", "Visa Form 10-K FY2026 (SEC "
       "company facts: OperatingIncomeLoss)", CF.format(1403161), "FY2026"),
+    r("law.patent", 20, "years", "term of a US utility patent: 20 years from the date the application was filed "
+      "(35 U.S.C. 154(a)(2))", "United States Code, title 35, section 154", "https://www.law.cornell.edu/uscode/text/"
+      "35/154", "current", kind="official"),
     # --- moats that drained ---------------------------------------------------------------------------------------------
     r("news.ads.2005", 49.4, "USD bn", "US newspaper industry's estimated advertising revenue, 2005 (circulation "
       "$10.7bn)", "Pew Research Center, 'Estimated advertising and circulation revenue of the newspaper industry' "
