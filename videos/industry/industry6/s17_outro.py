@@ -27,9 +27,11 @@ class Outro(VoiceoverScene):
             "today's price, it arrives together, and prices swing. <bookmark mark='b'/> The longer the wait, the "
             "bigger the swing, even when demand grows smoothly: hog farmers in the 1880s and memory makers in the "
             "2020s draw the same shape. <bookmark mark='c'/> Fixed costs and debt turn a modest fall in sales into "
-            "a collapse in profit. <bookmark mark='d'/> No one can say when the turn will come. But you can read "
+            "a collapse in profit, and the makers of machines, at the far end of the whip, feel it hardest. "
+            "<bookmark mark='d'/> No one can say when the turn will come. But you can read "
             "how much is on its way, how fast it is being built, and how empty the shelves are; and the plant "
-            "with the lowest cost and the least debt is the one still standing at the bottom."
+            "with the lowest cost and the least debt is the one still standing at the bottom. The data centres being "
+            "built today will be the next test."
         ) as vo:
             self.add(boat)
             self.play(FadeIn(head), Create(wave), t.animate.set_value(-5.0), run_time=1.6)

@@ -103,6 +103,8 @@ class Leverage(VoiceoverScene):
             return VGroup(g, rows.next_to(g, DOWN, buff=0.35)).move_to([x, 0.2, 0])
         a = pair("Micron, fiscal 2022 → 2023", draw.wafer(0.6), mu["rev"], mu["oi"], mu["dep"], "#B58CFF", -3.5)
         b = pair("Maersk, 2022 → 2023", draw.ship(1.6), mk["rev"], mk["ebit"], mk["dep"], CAP, 3.5)
+        a.shift(UP * 0.7)
+        b.shift(UP * 0.7)
         src = source("Micron Forms 10-K; Maersk annual reports (ESEF)", size=13)
         with self.voiceover(
             "Here is what that looks like in real accounts. <bookmark mark='a'/> In Micron's fiscal 2023, its sales "
@@ -111,11 +113,24 @@ class Leverage(VoiceoverScene):
             "depreciation, the cost of the plants it had already built, went up. <bookmark mark='b'/> Maersk, the "
             f"same year: sales down {-100 * (mk['rev'][1] / mk['rev'][0] - 1):.0f} percent, operating profit down "
             f"{-100 * (mk['ebit'][1] / mk['ebit'][0] - 1):.0f} percent, and depreciation up. A business that is "
-            "mostly plant cannot shrink its costs as fast as its customers shrink their orders."
+            "mostly plant cannot shrink its costs as fast as its customers shrink their orders. <bookmark mark='c'/> "
+            "There is one comfort in a business made of plant. Depreciation is a cost in the accounts, but no cash "
+            "leaves the bank for it: the cash went out years before, when the plant was built. So in fiscal 2023, "
+            f"while Micron lost {-mu['oi'][1]:.1f} billion dollars on its operations, those operations still brought in "
+            f"{mu['ocf23']:.1f} billion of cash, and it kept spending {mu['capex23']:.1f} billion on new plant through "
+            "the trough. That is Part 3's cash statement at work: the companies that survive a bust are the ones "
+            "whose cash keeps coming when their profits do not."
         ) as vo:
             self.play(FadeIn(src), FadeIn(a[0]), FadeIn(b[0]))
             vo.wait_until("a")
             self.play(LaggedStart(*[FadeIn(r_, shift=RIGHT * 0.15) for r_ in a[1]], lag_ratio=0.5), run_time=2.4)
             vo.wait_until("b")
             self.play(LaggedStart(*[FadeIn(r_, shift=RIGHT * 0.15) for r_ in b[1]], lag_ratio=0.5), run_time=2.4)
+            vo.wait_until("c")
+            cash = VGroup(tx("Micron, fiscal 2023", 20, "#B58CFF", bold=True),
+                          tx(f"operating result: {money(mu['oi'][1])}", 19, BUST),
+                          tx(f"cash from operations: +${mu['ocf23']:.1f}bn", 19, BOOM),
+                          tx(f"still spent on new plant: ${mu['capex23']:.1f}bn", 19, ORDER)).arrange(
+                DOWN, aligned_edge=LEFT, buff=0.1).to_edge(DOWN, buff=0.6)
+            self.play(FadeIn(cash, shift=UP * 0.15))
         self.clear_scene()

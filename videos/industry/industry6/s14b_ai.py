@@ -96,10 +96,11 @@ class Ai(VoiceoverScene):
             "as the plant being built for it. And that, unlike the spending, is not yet in anyone's accounts. The "
             "memory chips of chapter seven are the same boom, seen from a supplier's side."
         ) as vo:
-            self.play(FadeIn(src), FadeIn(g1), FadeIn(g2), FadeIn(n1), FadeIn(n2))
+            self.play(FadeIn(src), FadeIn(g1), FadeIn(n1), FadeIn(g2.copy().set_opacity(0.25)))
             vo.wait_until("a")
             self.play(FadeIn(l1), t1.animate.set_value(r25), run_time=1.8)
             vo.wait_until("b")
+            self.play(FadeIn(g2), FadeIn(n2))
             self.play(FadeIn(l2), t2.animate.set_value(s25), run_time=1.8)
             vo.wait_until("c")
             self.play(FadeIn(q, shift=UP * 0.1))

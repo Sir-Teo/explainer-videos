@@ -103,7 +103,8 @@ class Ships(VoiceoverScene):
             "whole container fleet were on order. <bookmark mark='c'/> In 2024, container ships made up "
             f"{100 * S['box_delivered2024']:.0f} percent of all the new ship tonnage delivered in the world. "
             "<bookmark mark='d'/> Profits fell anyway. For a while, attacks on ships in the Red Sea, which sent "
-            "them the long way round Africa, used up some of the new capacity. Take that away, and the wave of new "
+            "them the long way round Africa, used up some of the new capacity. Even so, Maersk's operating profit in "
+            f"2025 was {K['ebit'][-1]:.1f} billion dollars, below 2023's. Take the detour away, and the wave of new "
             "ships is still out there."
         ) as vo:
             self.play(FadeIn(src), FadeIn(pa), FadeIn(head))

@@ -39,7 +39,9 @@ class Lead(VoiceoverScene):
             f"years, and the rate swings by more than its own average: {100 * R['fleet']['swing'][4]:.0f} percent. "
             "<bookmark mark='e'/> Nothing else changed. The longer the wait, the longer owners keep ordering against "
             "a high rate before the first new ship shows them their mistake, and the bigger the wave that lands at "
-            "the end."
+            "the end. In the real world the waits differ: months for a house, about a year for a pig, years for a "
+            "ship, a chip plant or an oil field. The model says the industries with the longest waits should have "
+            "the wildest swings, and the rest of this part is a tour of them."
         ) as vo:
             self.play(FadeIn(tag), LaggedStart(*[AnimationGroup(FadeIn(pn[0]), FadeIn(pn[2]), FadeIn(pn[3]))
                                                  for pn in panels], lag_ratio=0.2), run_time=2.0)

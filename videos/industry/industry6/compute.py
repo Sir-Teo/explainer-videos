@@ -208,7 +208,8 @@ def results() -> dict:
     a, b = mk_i.index(2022), mk_i.index(2023)
     R["leverage"] = dict(
         micron=dict(rev=(m["revenue"][i22], m["revenue"][i23]), oi=(m["operating_income"][i22],
-                    m["operating_income"][i23]), dep=(m["depreciation"][i22], m["depreciation"][i23])),
+                    m["operating_income"][i23]), dep=(m["depreciation"][i22], m["depreciation"][i23]),
+                    ocf23=_fy(sec, "MU", "operating_cash")[2023], capex23=m["capex"][i23]),
         maersk=dict(rev=(R["maersk"]["revenue"][a], R["maersk"]["revenue"][b]),
                     ebit=(R["maersk"]["ebit"][a], R["maersk"]["ebit"][b]),
                     dep=(R["maersk"]["depreciation"][a], R["maersk"]["depreciation"][b])),

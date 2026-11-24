@@ -133,7 +133,9 @@ class Chips(VoiceoverScene):
             "move together, with spending somewhat above depreciation as the company grows. <bookmark mark='c'/> "
             "In fiscal "
             f"2026 Micron spent {m['fy26']['capex']:.1f} billion dollars, {rd[2026]:.1f} times its depreciation: the "
-            "biggest gap since at least 2010. The factories ordered in "
+            "biggest gap since at least 2010. <bookmark mark='d'/> Notice too what happened after the peak of 2018: "
+            f"in fiscal 2019, with sales down by almost a quarter, Micron spent more on plant than in its record "
+            "year, because the plant ordered at the top was still being paid for at the bottom. The factories ordered in "
             "this boom will arrive over the next few years. Whether demand is still there to meet them is the "
             "question every cycle asks."
         ) as vo:
@@ -145,4 +147,7 @@ class Chips(VoiceoverScene):
             self.play(Create(dl), run_time=2.0)
             vo.wait_until("c")
             self.play(Indicate(bars[-1], color=BUST, scale_factor=1.1), FadeIn(ratio, shift=LEFT * 0.2))
+            vo.wait_until("d")
+            i19 = yrs.index(2019)
+            self.play(Indicate(bars[i19], color=ORDER, scale_factor=1.2), Indicate(bars[i19 - 1], color=WHITE))
         self.clear_scene()

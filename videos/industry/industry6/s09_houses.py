@@ -88,8 +88,8 @@ class Houses(VoiceoverScene):
         yrs, rev, ni = B["years"], B["revenue"], B["ni"]
         pa = viz.plot_axes([2008.4, 2026.6], [0, 40], x_length=8.6, y_length=4.0, xticks=[2009, 2014, 2019, 2024],
                            yticks=[10, 20, 30, 40], xfmt=lambda v: f"{int(v)}", yfmt=lambda v: f"${v:g}bn", size=15)
-        pa.move_to([1.2, -0.6, 0])
-        bars = viz.year_bars(pa, yrs, rev, CAP, width=0.5)
+        pa.move_to([1.6, -0.6, 0])
+        bars = viz.year_bars(pa, yrs, rev, CAP, width=0.4)
         head = tx("D.R. Horton: homes sold each fiscal year", 18, GREY_A).next_to(pa, UP, buff=0.15).align_to(pa, LEFT)
         y0, y1 = 2009, 2024
         l0 = tx(f"${rev[yrs.index(y0)]:.1f}bn, a loss of ${-ni[y0]:.2f}bn", 16, BUST).next_to(bars[yrs.index(y0)], UP,
@@ -97,7 +97,7 @@ class Houses(VoiceoverScene):
         l1 = tx(f"${rev[yrs.index(y1)]:.1f}bn, a profit of ${ni[y1]:.1f}bn", 16, BOOM).next_to(bars[yrs.index(y1)], UP,
                                                                                           buff=0.1).shift(LEFT * 0.6)
         crew = VGroup(draw.crane(1.2), draw.house(0.9, color=STONE), draw.house(0.9, color=STONE)).arrange(
-            RIGHT, buff=0.2, aligned_edge=DOWN).move_to([-5.0, 1.6, 0])
+            RIGHT, buff=0.15, aligned_edge=DOWN).scale(0.8).move_to([-5.4, -1.6, 0])
         src = source("D.R. Horton, Forms 10-K, fiscal years to September 2009-2026 (SEC company facts)", size=13)
         with self.voiceover(
             "Who came out ahead? The builders that cut back hard in the bust, and could still pay their bills. "
