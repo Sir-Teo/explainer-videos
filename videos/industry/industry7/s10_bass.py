@@ -128,11 +128,11 @@ class Bass(VoiceoverScene):
             "included. The question a market sizer faces is different: how high will the curve go, and how fast, "
             "when you can only see its first few years?"
         ) as vo:
-            self.play(FadeIn(src))
+            self.play(FadeIn(src), *[FadeIn(p_[0]) for p_ in panels])
             for k, m in enumerate("abc"):
                 vo.wait_until(m)
                 pa, dots, fit, head = panels[k]
-                self.play(FadeIn(pa), FadeIn(head), LaggedStart(*[FadeIn(d_, scale=2) for d_ in dots], lag_ratio=0.05),
+                self.play(FadeIn(head), LaggedStart(*[FadeIn(d_, scale=2) for d_ in dots], lag_ratio=0.05),
                           run_time=1.2)
                 self.play(Create(fit), run_time=1.2)
             vo.wait_until("d")

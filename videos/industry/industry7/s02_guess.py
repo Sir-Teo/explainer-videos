@@ -41,7 +41,7 @@ class Guess(VoiceoverScene):
             "home delivery, sparkling water and imports. <bookmark mark='g'/> Pause, and make your estimate. Write it "
             "down. Then we will see what three published sources say, and why they disagree with each other."
         ) as vo:
-            self.play(FadeIn(tag))
+            self.play(FadeIn(tag), FadeIn(q, shift=UP * 0.1))
             for k, m in enumerate("abcdef"):
                 vo.wait_until(m)
                 self.play(FadeIn(cards[k][0], scale=0.8), FadeIn(cards[k][1], shift=RIGHT * 0.1), run_time=0.8)

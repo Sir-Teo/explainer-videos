@@ -83,9 +83,9 @@ class Outro(VoiceoverScene):
             "industry. The second act goes out of the ground, starting with the industry the modern economy runs "
             "on: oil and gas."
         ) as vo:
-            self.play(FadeIn(act))
+            self.play(FadeIn(act), LaggedStart(*[FadeIn(c_[0]) for c_ in cards], lag_ratio=0.1), run_time=1.2)
             vo.wait_until("a")
-            self.play(LaggedStart(*[FadeIn(c_, shift=UP * 0.2) for c_ in cards], lag_ratio=0.25), run_time=3.0)
+            self.play(LaggedStart(*[FadeIn(c_[1], shift=UP * 0.2) for c_ in cards], lag_ratio=0.25), run_time=3.0)
             vo.wait_until("b")
             self.play(FadeIn(nxt[0]), FadeIn(nxt[1], scale=1.1), run_time=1.6)
         self.wait(1.0)

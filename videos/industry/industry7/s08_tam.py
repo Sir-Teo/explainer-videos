@@ -11,6 +11,7 @@ class Tam(VoiceoverScene):
         self.uber()
         self.eats()
         self.rings()
+        self.funnel()
 
     def uber(self):
         U = R["uber"]
@@ -112,7 +113,10 @@ class Tam(VoiceoverScene):
             "revenue was the cut it kept. And notice the years: a spend from 2017 set against orders from 2018. "
             "A good TAM reader checks both."
         ) as vo:
-            self.play(FadeIn(src), LaggedStart(*[FadeIn(p_, scale=0.6) for p_ in plates], lag_ratio=0.1))
+            frame = Rectangle(width=L, height=1.1, stroke_color=GREY_C, stroke_width=2, fill_opacity=0).move_to([0, 0.2, 0])
+            ehead = tx("Uber Eats: what is the market for a meal?", 24, WHITE, bold=True).to_edge(UP, buff=1.1)
+            self.play(FadeIn(src), Create(frame), FadeIn(ehead), LaggedStart(*[FadeIn(p_, scale=0.6) for p_ in plates],
+                                                                             lag_ratio=0.1))
             vo.wait_until("a")
             self.play(GrowFromEdge(segs[0], LEFT), FadeIn(labs[0]))
             vo.wait_until("b")
@@ -172,4 +176,50 @@ class Tam(VoiceoverScene):
             self.play(Flash(c, color=WHITE, line_length=0.2))
             vo.wait_until("d")
             self.play(FadeIn(verdict, shift=UP * 0.1))
+        self.clear_scene()
+
+    def funnel(self):
+        """The inner ring, built bottom-up from Uber's own prospectus: people x trips x fare x take."""
+        users, trips, book, net = (get(k) for k in ("uber.mapcs.2018", "uber.trips.2018", "uber.bookings.2018",
+                                                    "uber.netrev.2018"))
+        per_user = trips / users
+        fare = book * 1000 / trips
+        take = net / book
+        steps = [(draw.crowd(8, h=0.32, color=STONE, cols=4), f"{users:.0f}m", "people using it each month"),
+                 (VGroup(*[RoundedRectangle(corner_radius=0.05, width=0.55, height=0.2, stroke_width=0,
+                                            fill_color="#7EC8F5", fill_opacity=0.9) for _ in range(3)]).arrange(DOWN, buff=0.08),
+                  f"x {per_user:.0f}", "trips each in the year"),
+                 (draw.coin_stack(4, r=0.18), f"x ${fare:.2f}", "paid per trip, on average"),
+                 (VGroup(draw.coin(0.2), tx("20%", 16, GOLD, bold=True)).arrange(RIGHT, buff=0.08), f"x {100 * take:.0f}%",
+                  "kept by Uber")]
+        cells = VGroup()
+        for pic, num, lab in steps:
+            pic.scale_to_fit_height(min(pic.height, 0.9))
+            cells.add(VGroup(pic, tx(num, 30, WHITE, bold=True), tx(lab, 15, GREY_A)).arrange(DOWN, buff=0.15))
+        cells.arrange(RIGHT, buff=0.7).move_to([0, 0.8, 0])
+        res = VGroup(tx(f"= {trips / 1000:.2f}bn trips", 22, "#7EC8F5", bold=True),
+                     tx(f"= ${book:.1f}bn of gross bookings", 22, WHITE, bold=True),
+                     tx(f"= ${net:.1f}bn of revenue", 26, GOLD, bold=True)).arrange(DOWN, buff=0.18).move_to([0, -1.6, 0])
+        cmp_ = tx(f"against a 'market' of ${R['uber']['tam']:.1f} trillion", 18, TAM).next_to(res, DOWN, buff=0.25)
+        src = source("Uber Technologies, Form S-1, 2019 (2018: monthly active platform consumers, trips, gross bookings, "
+                     "core platform adjusted net revenue); this film's division", size=13)
+        with self.voiceover(
+            "Now size the inner ring the other way, bottom-up, from the same prospectus. <bookmark mark='a'/> In late "
+            f"2018 about {users:.0f} million people used Uber in a month. <bookmark mark='b'/> Over the year there were "
+            f"{trips / 1000:.1f} billion trips, rides and meals together: about {per_user:.0f} for each of those "
+            f"people. <bookmark mark='c'/> They paid, on average, about {fare:.2f} dollars a trip: "
+            f"{book:.1f} billion dollars in all, which Uber calls gross bookings. <bookmark mark='d'/> Most of that went "
+            f"to drivers and restaurants. Uber kept about a fifth: {net:.0f} billion dollars. <bookmark mark='e'/> "
+            "People, times trips, times fare, times the share kept: that is a market you can check, line by line, "
+            "against the company's own accounts. Twelve trillion dollars is not."
+        ) as vo:
+            self.play(FadeIn(src), FadeIn(cells[0][0]))
+            for k, m in enumerate("abcd"):
+                vo.wait_until(m)
+                anims = [FadeIn(cells[k][0]), FadeIn(cells[k][1:], shift=UP * 0.1)]
+                if k:
+                    anims.append(FadeIn(res[k - 1], shift=UP * 0.1))
+                self.play(*anims, run_time=1.0)
+            vo.wait_until("e")
+            self.play(FadeIn(cmp_), Indicate(res[2], color=WHITE))
         self.clear_scene()

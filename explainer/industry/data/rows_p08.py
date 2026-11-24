@@ -97,6 +97,15 @@ add(
     r("eia.hormuz.2024", 20, "mb/d", "oil flow through the Strait of Hormuz, 2024 average: about 20% of world "
       "petroleum liquids consumption", "US Energy Information Administration, Today in Energy, 'Amid regional "
       "conflict, the Strait of Hormuz remains critical oil chokepoint', June 2025", HORMUZ, "2024", "official"),
+    steo("eia.steo.opec.2025", 29.3, "mb/d", "OPEC liquid fuels production, 2025", "2025"),
+    steo("eia.steo.opec.2026", 24.5, "mb/d", "OPEC liquid fuels production, 2026 (estimate)"),
+    r("opec.founded", 1960, "year", "OPEC was founded at the Baghdad Conference of 10-14 September 1960 by Iran, Iraq, "
+      "Kuwait, Saudi Arabia and Venezuela", "Organization of the Petroleum Exporting Countries, 'Brief History'",
+      "https://www.opec.org/opec_web/en/about_us/24.htm", "1960-09", "official"),
+    r("embargo.1973", 1973, "year", "in October 1973 the Arab members of OPEC proclaimed an oil embargo on the United "
+      "States, among others, and cut production; the embargo was lifted in March 1974", "US Department of State, "
+      "Office of the Historian, 'Oil Embargo, 1973-1974'", "https://history.state.gov/milestones/1969-1976/oil-embargo",
+      "1973-10", "official"),
     # --- OPEC+ in 2020 --------------------------------------------------------------------------------------------------
     r("eia.opec.cut.2020", 9.7, "mb/d", "the initial cut agreed by OPEC+ in April 2020, from May 2020, tapering through "
       "April 2022; OPEC's crude output fell 6.0 mb/d from April to May", "US Energy Information Administration, Today "

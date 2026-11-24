@@ -40,13 +40,13 @@ class Define(VoiceoverScene):
             f"The second number is {W['ratio']:.1f} times the first. Nobody made a mistake. They measured different "
             "things."
         ) as vo:
-            self.play(FadeIn(src))
+            self.play(FadeIn(src), FadeIn(plant, shift=UP * 0.2), FadeIn(shop, shift=UP * 0.2), Create(g))
             vo.wait_until("a")
-            self.play(FadeIn(plant, shift=UP * 0.2), GrowFromEdge(b1, DOWN), FadeIn(labs[0]))
+            self.play(GrowFromEdge(b1, DOWN), FadeIn(labs[0]))
             vo.wait_until("b")
-            self.play(FadeIn(shop, shift=UP * 0.2), GrowFromEdge(b2, DOWN), FadeIn(labs[1]))
+            self.play(GrowFromEdge(b2, DOWN), FadeIn(labs[1]))
             vo.wait_until("c")
-            self.play(Create(g), FadeIn(labs[2]))
+            self.play(g.animate.set_stroke(width=5), FadeIn(labs[2]))
         self.clear_scene()
 
     def levers(self):

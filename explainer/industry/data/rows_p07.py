@@ -50,6 +50,13 @@ add(
          "under 30 miles)", "2018"),
     uber("uber.miles.2018", 26, "bn miles", "miles travelled on Uber's platform in 2018: less than 1% of the vehicle "
          "miles in trips under 30 miles in its 63 countries", "2018"),
+    uber("uber.mapcs.2018", 91, "m people", "monthly active platform consumers, average of 2018's fourth quarter",
+         "2018"),
+    uber("uber.trips.2018", 5220, "m trips", "trips on Uber's platform in 2018 (rides and meal deliveries)", "2018"),
+    uber("uber.bookings.2018", 49.8, "USD bn", "gross bookings in 2018: what consumers paid for rides and meals, before "
+         "drivers' and restaurants' shares ($49,799m)", "2018"),
+    uber("uber.netrev.2018", 10.0, "USD bn", "core platform adjusted net revenue in 2018 ($10,025m): what Uber kept",
+         "2018"),
     # --- WeWork's total opportunity (S-1, August 2019) -------------------------------------------------------------
     r("wework.cost", 11700, "USD", "weighted average occupancy cost per employee a year in 155 cities (CBRE and "
       "Cushman & Wakefield data)", "The We Company, Form S-1, 14 August 2019", WE, "2019"),

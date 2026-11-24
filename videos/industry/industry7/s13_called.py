@@ -11,6 +11,7 @@ class Called(VoiceoverScene):
              "Chapter fourteen. Called it?", lit=("change",))
         self.theirs()
         self.ours()
+        self.scoreboard()
 
     def theirs(self):
         W = R["wework"]
@@ -45,10 +46,11 @@ class Called(VoiceoverScene):
             "arrive on time; at the pace of the year before, it would not. <bookmark mark='c'/> A market size is "
             "only as good as its definition, and as the business that is built on it."
         ) as vo:
-            self.play(FadeIn(src))
+            chead = tx("Market sizes that someone built on", 26, GOLD, bold=True).to_edge(UP, buff=0.6)
+            self.play(FadeIn(src), FadeIn(chead), *[FadeIn(c_[0], scale=0.8) for c_ in cards])
             for c_, m in zip(cards, "ab"):
                 vo.wait_until(m)
-                self.play(FadeIn(c_[0], scale=0.8), FadeIn(c_[1], shift=RIGHT * 0.15))
+                self.play(FadeIn(c_[1], shift=RIGHT * 0.15))
             vo.wait_until("c")
             self.play(FadeIn(lesson, shift=UP * 0.1))
         self.clear_scene()
@@ -91,3 +93,48 @@ class Called(VoiceoverScene):
             self.play(Indicate(bars[-2], color="#E8554E"), FadeIn(body[3]))
         self.clear_scene()
         assert "bottled water" in c.claim
+
+    def scoreboard(self):
+        """The series' open calls so far, one per part, with the month each can be scored."""
+        short = {1: "smartphone shipments in 2026 below 1.15 billion",
+                 2: "health care to outnumber factories and shops by 2030 (40%)",
+                 3: "Microsoft's free cash flow falls in fiscal 2027 as profit rises (65%)",
+                 4: "solar to beat coal in some month of 2027 (55%)",
+                 5: "seven of ten top-return industries still near the top in 2028 (75%)",
+                 6: "Micron to report a quarter 25% below its peak by 2028 (55%)",
+                 7: "bottled-water shipments for 2026 above $7.5bn (65%)"}
+        mine = sorted(calls(ours=True), key=lambda c: c.due)
+        rows = VGroup()
+        for c in mine:
+            due = c.due
+            row = VGroup(tx(f"Part {c.part}", 18, GOLD, bold=True), tx(short.get(int(c.part), c.claim[:60]), 18, WHITE),
+                         tx(f"due {due}", 17, GREY_B))
+            row[1].next_to(row[0], RIGHT, buff=0.35)
+            row[2].next_to(row[1], RIGHT, buff=0.35)
+            rows.add(row)
+        rows.arrange(DOWN, aligned_edge=LEFT, buff=0.22).move_to([0, -0.2, 0])
+        for r_ in rows:
+            r_[1].align_to(rows[0][1], LEFT)
+            r_[2].align_to([5.2, 0, 0], LEFT)
+        if rows.width > 13.2:
+            rows.scale_to_fit_width(13.2)
+        head = tx("The scoreboard: this series' open calls", 26, GOLD, bold=True).to_edge(UP, buff=0.5)
+        first = mine[0]
+        src = source("this series' calls: explainer/industry/calls.py, each with its scoring rule and source", size=13)
+        with self.voiceover(
+            "Every part of this series has made a call like that, with a date and a rule for scoring it. "
+            "<bookmark mark='a'/> Here they are, ordered by when they come due. <bookmark mark='b'/> The first, on "
+            f"smartphone shipments, can be scored in {first.due[:4]}, when the year's first full count of phones "
+            "shipped is published; the last, on jobs in health care, not until 2031. <bookmark mark='c'/> "
+            "When a call comes due, the series will show the result in the part it belongs to, right or wrong, and "
+            "keep the record. A forecaster who never writes down a number, a date and a probability can never be "
+            "shown to be wrong, and so can never be shown to be any good."
+        ) as vo:
+            self.play(FadeIn(src), FadeIn(head))
+            vo.wait_until("a")
+            self.play(LaggedStart(*[FadeIn(r_, shift=RIGHT * 0.15) for r_ in rows], lag_ratio=0.2), run_time=3.0)
+            vo.wait_until("b")
+            self.play(Indicate(rows[0], color=WHITE, scale_factor=1.03))
+            vo.wait_until("c")
+            self.play(Indicate(rows[-1], color=WHITE, scale_factor=1.03))
+        self.clear_scene()
