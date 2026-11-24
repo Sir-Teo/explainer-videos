@@ -18,6 +18,7 @@
     python -m explainer.industry.data.fetch esef_maersk  # Maersk's annual results from its ESEF filings, 2019-2025
     python -m explainer.industry.data.fetch sec_quarterly  # SEC: quarterly revenue and operating income (Micron, Intel)
     python -m explainer.industry.data.fetch owid_tech    # Our World in Data: US households adopting 40 technologies
+    python -m explainer.industry.data.fetch fred_market  # FRED: bottled water shipments and prices; US population
     python -m explainer.industry.data.fetch --all
 
 Each extract is a small CSV in this folder, committed, with the source URL and the retrieval date in its first
@@ -321,7 +322,8 @@ SEC_ITEMS = {"revenue": ["RevenueFromContractWithCustomerExcludingAssessedTax", 
              "inventory": ["InventoryNet"]}
 SEC_COMPANIES = [(789019, "MSFT"), (909832, "COST"), (19617, "JPM"), (753308, "NEE"), (27904, "DAL"), (59478, "LLY"),
                  (1403161, "V"), (723125, "MU"), (34088, "XOM"), (882184, "DHI"), (50863, "INTC"),
-                 (1141391, "MA"), (104169, "WMT"), (1652044, "GOOGL"), (1018724, "AMZN"), (1326801, "META")]
+                 (1141391, "MA"), (104169, "WMT"), (1652044, "GOOGL"), (1018724, "AMZN"), (1326801, "META"),
+                 (1543151, "UBER"), (2042694, "PRMB")]
 
 
 # where a company's first-choice tag means something else: Mastercard tagged its gross revenue, before rebates and
@@ -505,6 +507,27 @@ def census_conc():
                          "released 2025-04-24; shares in percent of sales, value of shipments or revenue)"])
 
 
+FRED_MARKET = {"AIES312112RCTUS": "Bottled water manufacturing: shipments (thousands of dollars; Census AIES)",
+               "AIES312112EMPUS": "Bottled water manufacturing: employees (Census AIES)",
+               "PCU312112312112": "Producer price index: bottled water manufacturing (index)",
+               "POPTHM": "US population (thousands, monthly average)"}
+
+
+def fred_market():
+    """Annual series for sizing a market (Part 7): the Census Bureau's shipments and employment of US bottled water
+    manufacturers, the producer price index of bottled water, and the US population (FRED)."""
+    out = []
+    for sid in FRED_MARKET:
+        txt = _get(f"https://fred.stlouisfed.org/graph/fredgraph.csv?id={sid}&fq=Annual&fam=avg").decode()
+        for line in txt.splitlines()[1:]:
+            d, v = line.split(",")
+            if v not in (".", ""):
+                out.append([sid, int(d[:4]), float(v)])
+    return _write("fred_market", ["series", "year", "value"], out,
+                  ["https://fred.stlouisfed.org (annual averages; " + "; ".join(f"{k} {v}" for k, v in FRED_MARKET.items())
+                   + ")"])
+
+
 def owid_tech():
     """The share of US households (or people) using each of some forty technologies, year by year, as compiled by
     Our World in Data from Comin and Hobijn (2004) and later sources (CC BY 4.0)."""
@@ -622,7 +645,7 @@ def esef_maersk():
                    "US$ billions; " + "; ".join(f"{k}: {v}" for k, v in MAERSK_ITEMS.items()) + ")"])
 
 
-JOBS = {"owid_tech": owid_tech, "sec_quarterly": sec_quarterly, "fred_cycle": fred_cycle, "esef_maersk": esef_maersk, "damodaran_roc": damodaran_roc, "census_conc": census_conc, "eia_power": eia_power, "fred_pay": fred_pay, "bea_real": bea_real, "sec_annual": sec_annual, "fred_prices": fred_prices, "census_susb": census_susb, "bea_va": bea_va, "wb_mfg_usd": wb_mfg_usd, "bea_hist": bea_hist, "bea_io": bea_io, "fred_jobs": fred_jobs, "wb_shares": wb_shares}
+JOBS = {"fred_market": fred_market, "owid_tech": owid_tech, "sec_quarterly": sec_quarterly, "fred_cycle": fred_cycle, "esef_maersk": esef_maersk, "damodaran_roc": damodaran_roc, "census_conc": census_conc, "eia_power": eia_power, "fred_pay": fred_pay, "bea_real": bea_real, "sec_annual": sec_annual, "fred_prices": fred_prices, "census_susb": census_susb, "bea_va": bea_va, "wb_mfg_usd": wb_mfg_usd, "bea_hist": bea_hist, "bea_io": bea_io, "fred_jobs": fred_jobs, "wb_shares": wb_shares}
 
 if __name__ == "__main__":
     names = list(JOBS) if "--all" in sys.argv else sys.argv[1:]
