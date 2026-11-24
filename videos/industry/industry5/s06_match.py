@@ -17,7 +17,7 @@ class Match(VoiceoverScene):
         xt = VGroup(*[tx(f"{v}%", 15, GREY_B).next_to(ax.c2p(v, 0), DOWN, buff=0.08) for v in (25, 50, 75, 100)])
         yt = VGroup(*[tx(f"{int(100 * v)}%", 15, GREY_B).next_to(ax.c2p(0, v), LEFT, buff=0.08) for v in (0.2, 0.4, 0.6)])
         xl = tx("share of sales of the four largest firms (Census, 2022)", 17, GREY_B).next_to(ax, DOWN, buff=0.4)
-        yl = tx("return on capital (Damodaran, January 2026)", 17, GREY_B).next_to(ax, UP, buff=0.12).align_to(ax, LEFT)
+        yl = tx("return on capital, 2025 (Damodaran)", 17, GREY_B).next_to(ax, UP, buff=0.12).align_to(ax, LEFT)
         pts, labs = VGroup(), VGroup()
         for m in M:
             good = m["roc"] > 0.2
@@ -37,7 +37,7 @@ class Match(VoiceoverScene):
         side.move_to([4.6, 1.2, 0])
         note = tx("eight industries matched by hand between two sources: this film's pairing", 15, GREY_C).to_corner(
             DR, buff=0.28)
-        src = source("Census 2022 Economic Census; Damodaran, Excess Returns by industry, January 2026", corner=DL)
+        src = source("Census 2022 Economic Census; Damodaran, Excess Returns by industry, 2025", corner=DL)
         with self.voiceover(
             "If an industry has only a few castles, do they earn more? Put the two measures side by side. "
             "<bookmark mark='a'/> Along the bottom, the share of sales held by an industry's four largest firms, from "

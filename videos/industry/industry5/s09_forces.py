@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from videos.industry.industry5.common import *  # noqa: F403
 
-# Porter's five forces, and how each bears on two industries (this film's reading; Damodaran's returns, January 2026)
+# Porter's five forces, and how each bears on two industries (this film's reading; Damodaran's returns, 2025)
 FORCES = [("Rivals inside", "how hard the firms already there compete", UP * 0.0),
           ("New entrants", "how easily others can come in", RIGHT),
           ("Substitutes", "other ways to meet the same need", DOWN),
@@ -81,7 +81,7 @@ class Forces(VoiceoverScene):
             right.add(r_)
         res = VGroup(tx(f"return on capital: {100 * air['roc']:.0f}%", 20, COST_, bold=True).move_to([2.2, -2.15, 0]),
                      tx(f"return on capital: {100 * tob['roc']:.0f}%", 20, RET, bold=True).move_to([5.3, -2.15, 0]))
-        note = tx("the forces are this film's reading; the returns are Damodaran's, January 2026", 15, GREY_C).to_edge(
+        note = tx("the forces are this film's reading; the returns are Damodaran's, for 2025", 15, GREY_C).to_edge(
             DOWN, buff=0.3)
         with self.voiceover(
             "Hold two industries up to it. <bookmark mark='a'/> Airlines face all five at full strength. Their rivals "
@@ -91,7 +91,7 @@ class Forces(VoiceoverScene):
             "<bookmark mark='b'/> Tobacco faces almost none of them. A few firms that rarely fight on price; brands "
             "and advertising limits that lock the leaders in; few substitutes; loyal customers; and a leaf bought "
             f"from many farmers. <bookmark mark='c'/> Airlines earned {100 * air['roc']:.0f} percent on their "
-            f"capital in Damodaran's latest table; tobacco {100 * tob['roc']:.0f}. Buffett's Kitty Hawk joke and "
+            f"capital in 2025, by Damodaran's count; tobacco {100 * tob['roc']:.0f}. Buffett's Kitty Hawk joke and "
             "Porter's diagram are saying the same thing."
         ) as vo:
             self.play(FadeIn(head))

@@ -43,18 +43,21 @@ class Facts(VoiceoverScene):
                         RET if d["roc"] > d["wacc"] else COST_)
                 t_.rotate(PI / 2).next_to(bars[i], UP if d["roc"] > 0 else DOWN, buff=0.08)
                 labs.add(t_)
-        head = tx("Return on capital, 90 US industries, January 2026", 26, bold=True).to_edge(UP, buff=0.3)
+        head = tx("Return on capital, 90 US industries, 2025", 26, bold=True).to_edge(UP, buff=0.3)
         key = VGroup(VGroup(Dot(radius=0.06, color=WHITE), tx("each industry's cost of capital", 16, GREY_B)).arrange(
             RIGHT, buff=0.1)).to_corner(UR, buff=0.45).shift(DOWN * 0.45)
         above = tx(f"{100 * D['above']:.0f}% earn more than their cost of capital; the median earns "
                    f"{100 * D['median']:.0f}% against a cost of {100 * D['wacc_median']:.0f}%", 19, GREY_A).to_edge(
             DOWN, buff=0.55)
-        src = source("Aswath Damodaran, NYU Stern: Excess Returns (EVA) by industry, US companies, January 2026")
+        src = source("Aswath Damodaran, NYU Stern: Excess Returns (EVA) by industry, US companies, 2025 "
+                     "(published January 2026)")
         top, bot = inds[0], inds[-1]
         with self.voiceover(
             "Before any theory, the facts. Each January the finance professor Aswath Damodaran publishes, for every "
-            "American industry, the return its companies earn on the capital invested in them, and what that "
-            f"capital costs. <bookmark mark='a'/> Here are {n} industries from his January 2026 file, highest on the "
+            "American industry, the return its companies earned the year before on the capital invested in them, and "
+            "what that "
+            f"capital costs. <bookmark mark='a'/> Here are {n} industries from the table he published in January "
+            "2026, for 2025, highest on the "
             "left. <bookmark mark='b'/> The white dots are each industry's cost of capital: what investors could "
             f"expect elsewhere at the same risk, around {100 * D['wacc_median']:.0f} percent. "
             f"<bookmark mark='c'/> Tobacco earns {100 * top['roc']:.0f} percent on its capital. Home-improvement "
@@ -86,7 +89,7 @@ class Facts(VoiceoverScene):
         xt = VGroup(*[tx(f"{int(100 * v)}%", 15, GREY_B).next_to(ax.c2p(v, 0), DOWN, buff=0.08) for v in (0.2, 0.4, 0.6)])
         yt = VGroup(*[tx(f"{int(100 * v)}%", 15, GREY_B).next_to(ax.c2p(0, v), LEFT, buff=0.08) for v in (0.2, 0.4, 0.6)])
         xl = tx("return on capital, 2015-2019 average", 17, GREY_B).next_to(ax, DOWN, buff=0.4)
-        yl = tx("2022-2026 average", 17, GREY_B).next_to(ax, UP, buff=0.12).align_to(ax, LEFT)
+        yl = tx("2022-2025 average", 17, GREY_B).next_to(ax, UP, buff=0.12).align_to(ax, LEFT)
         diag = DashedLine(ax.c2p(0, 0), ax.c2p(0.7, 0.7), stroke_color=GREY_C, stroke_width=1.5)
         diag_t = tx("no change", 15, GREY_C).rotate(PI / 4).move_to(ax.c2p(0.6, 0.63))
 
@@ -100,11 +103,11 @@ class Facts(VoiceoverScene):
                        tx(f"bottom quarter: {100 * q['bottom_early']:.0f}% then {100 * q['bottom_late']:.0f}%", 20, COST_),
                        tx(f"{q['still_top']} of the top {q['quartile']} are still in the top quarter", 18, WHITE)
                        ).arrange(DOWN, aligned_edge=LEFT, buff=0.22).move_to([3.9, 0.2, 0])
-        src = source("Damodaran, Excess Returns by industry, January files 2015-2024 and 2026; this film's averages")
+        src = source("Damodaran, Excess Returns by industry, 2015-2025; this film's averages")
         with self.voiceover(
-            "Does it last? Damodaran has published the same table every January for years. "
+            "Does it last? Damodaran has published the same table every year. "
             "<bookmark mark='a'/> Put each industry's average return from 2015 to 2019 along the bottom, and its "
-            "average from 2022 to 2026 up the side. If returns were pure luck, the cloud would be round. If they "
+            "average from 2022 to 2025 up the side. If returns were pure luck, the cloud would be round. If they "
             "never changed, every point would sit on the dashed line. <bookmark mark='b'/> It is neither. The rank "
             f"correlation is {q['rho']:.2f}: industries that earned a lot then mostly earn a lot now. "
             "<bookmark mark='c'/> The top quarter averaged thirty percent and still averages twenty-seven. "

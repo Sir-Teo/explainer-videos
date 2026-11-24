@@ -4,8 +4,8 @@
 
 Items:
     three       Berkshire's three businesses (2007 letter): See's, FlightSafety, airlines; return on extra capital
-    roc         Damodaran's return on capital against the cost of capital by US industry, January 2026
-    persist     the same industries' returns, 2015-2019 against 2022-2026: rank correlation, quartiles, survivors
+    roc         Damodaran's return on capital against the cost of capital by US industry, 2025 (published January 2026)
+    persist     the same industries' returns, 2015-2019 against 2022-2025: rank correlation, quartiles, survivors
     variance    McGahan and Porter's split of the variance in profitability
     conc        the Census's four-firm concentration ratios for 897 industries, 2022: the spread and the extremes
     match       a few industries matched by hand between the two sources (Damodaran's names, Census codes)
@@ -27,7 +27,7 @@ from explainer.industry.data.fetch import read
 from explainer.industry.register import get
 
 OUT = Path(__file__).resolve().parents[3] / ".cache" / "industry5"
-EARLY, LATE = (2015, 2016, 2017, 2018, 2019), (2022, 2023, 2024, 2026)
+EARLY, LATE = (2015, 2016, 2017, 2018, 2019), (2022, 2023, 2024, 2025)
 
 # Damodaran's industry -> the Census six-digit industry closest to it (by hand; this film's match, shown as such)
 MATCH = [("Tobacco", "312230", "Tobacco manufacturing"),
@@ -73,7 +73,7 @@ def results() -> dict:
     by = {}
     for r in rows:
         by.setdefault(r["name"], {})[int(r["year"])] = r
-    now = sorted(((n, d[2026]["roc"], d[2026]["wacc"], d[2026]["capital_musd"]) for n, d in by.items() if 2026 in d),
+    now = sorted(((n, d[2025]["roc"], d[2025]["wacc"], d[2025]["capital_musd"]) for n, d in by.items() if 2025 in d),
                  key=lambda t: -t[1])
     R["roc"] = dict(industries=[dict(name=n, roc=a, wacc=w, capital=c) for n, a, w, c in now],
                     above=float(np.mean([a > w for _, a, w, _ in now])),
@@ -116,8 +116,8 @@ def results() -> dict:
                      tobacco=named["312230"])
 
     # --- the two sources side by side (this film's match) ----------------------------------------------------------------
-    R["match"] = [dict(industry=d, code=c, census=lab, cr4=named[c]["cr4"], roc=by[d][2026]["roc"],
-                       wacc=by[d][2026]["wacc"]) for d, c, lab in MATCH if c in named and d in by and 2026 in by[d]]
+    R["match"] = [dict(industry=d, code=c, census=lab, cr4=named[c]["cr4"], roc=by[d][2025]["roc"],
+                       wacc=by[d][2025]["wacc"]) for d, c, lab in MATCH if c in named and d in by and 2025 in by[d]]
     R["match_rho"] = spearman([m["cr4"] for m in R["match"]], [m["roc"] for m in R["match"]])
 
     # --- Visa, networks, drained moats ------------------------------------------------------------------------------------
@@ -136,7 +136,7 @@ def main():
     print(f"See's: {100 * s['roc0']:.0f}% pre-tax on capital in 1972, {100 * s['roc1']:.0f}% in 2007; each extra $ of "
           f"capital earned ${s['incr']:.2f} more a year; FlightSafety ${f['incr']:.2f}")
     r = R["roc"]
-    print(f"Damodaran Jan 2026: {len(r['industries'])} industries, median ROC {100 * r['median']:.1f}% vs median cost "
+    print(f"Damodaran 2025 (January 2026): {len(r['industries'])} industries, median ROC {100 * r['median']:.1f}% vs median cost "
           f"{100 * r['wacc_median']:.1f}%; {100 * r['above']:.0f}% above their cost")
     for d in r["industries"][:5] + r["industries"][-5:]:
         print(f"   {d['name']:<34} {100 * d['roc']:6.1f}%  cost {100 * d['wacc']:.1f}%")

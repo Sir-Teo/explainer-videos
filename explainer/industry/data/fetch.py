@@ -12,7 +12,7 @@
     python -m explainer.industry.data.fetch bea_real     # BEA real value added and prices by industry
     python -m explainer.industry.data.fetch fred_pay     # BLS: average hourly earnings by industry
     python -m explainer.industry.data.fetch eia_power    # EIA: capacity, generation, fuel costs, heat rates
-    python -m explainer.industry.data.fetch damodaran_roc  # Damodaran: return on capital by US industry, 2015-2026
+    python -m explainer.industry.data.fetch damodaran_roc  # Damodaran: return on capital by US industry, 2015-2025
     python -m explainer.industry.data.fetch census_conc  # Census: the four largest firms' share by industry, 2022
     python -m explainer.industry.data.fetch --all
 
@@ -425,13 +425,14 @@ DAMODARAN = "https://pages.stern.nyu.edu/~adamodar/pc/"
 
 
 def damodaran_roc():
-    """Aswath Damodaran's 'EVA' tables for US industries, one per January: number of firms, return on capital, cost of
-    capital and book capital, 2015-2024 from his archive and January 2026 from the current file (the January 2025
-    file is not in the archive).  Industries are his; their names are stable from 2015."""
+    """Aswath Damodaran's 'EVA' tables for US industries: number of firms, return on capital, cost of capital and book
+    capital.  Each table is published in January for the year before: the archive's EVA15.xls (updated 5 January 2016)
+    holds 2015, and so on to EVA24.xls; the current file (updated 7 January 2026) holds 2025.  ``year`` is the year
+    the figures describe.  Industries are his; their names are stable from 2015."""
     import xlrd
 
     files = {y: DAMODARAN + f"archives/EVA{y % 100:02d}.xls" for y in range(2015, 2025)}
-    files[2026] = DAMODARAN + "datasets/EVA.xls"
+    files[2025] = DAMODARAN + "datasets/EVA.xls"
     out = []
     for year, url in files.items():
         book = xlrd.open_workbook(file_contents=_get(url))
@@ -451,8 +452,9 @@ def damodaran_roc():
                 return v if isinstance(v, float) else ""
             out.append([year, row[0], val("Number of Firms"), val("ROC"), val("Cost of Capital"), val("BV of Capital")])
     return _write("damodaran_roc", ["year", "name", "firms", "roc", "wacc", "capital_musd"], out,
-                  [DAMODARAN + "archives/EVA15.xls ... EVA24.xls and datasets/EVA.xls (January 2026): Aswath "
-                   "Damodaran, NYU Stern, 'Excess Returns (EVA) by industry, US companies'"])
+                  [DAMODARAN + "archives/EVA15.xls ... EVA24.xls (years 2015-2024) and datasets/EVA.xls (2025, "
+                   "published January 2026): Aswath Damodaran, NYU Stern, 'Excess Returns (EVA) by industry, US "
+                   "companies'"])
 
 
 ECN = "https://www2.census.gov/programs-surveys/economic-census/data/2022/API_Datasets/ECNSIZE2022.zip"

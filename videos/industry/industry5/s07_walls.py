@@ -78,13 +78,13 @@ class Walls(VoiceoverScene):
         brands = VGroup(*[tx(f"{n}: {100 * D[k]['roc']:.0f}%", 20, RET) for n, k in
                           (("soft drinks", "Beverage (Soft)"), ("household products", "Household Products"),
                            ("tobacco", "Tobacco"))]).arrange(DOWN, aligned_edge=LEFT, buff=0.1)
-        brands_t = tx("returns on capital of brand industries, January 2026", 17, GREY_A).next_to(brands, UP, buff=0.15)
+        brands_t = tx("returns on capital of brand industries, 2025", 17, GREY_A).next_to(brands, UP, buff=0.15)
         bgroup = VGroup(brands_t, brands).move_to([4.6, -2.3, 0])
         sees = tx("See's, said Buffett, had a 'durable competitive advantage, built by the See's family over a "
                   "50-year period'", 17, "#E9C9A6").to_edge(UP, buff=0.35)
         if sees.width > 13:
             sees.scale_to_fit_width(13)
-        src = source("Damodaran, January 2026; Berkshire Hathaway letter for 2007", corner=DL)
+        src = source("Damodaran, 2025; Berkshire Hathaway letter for 2007", corner=DL)
         with self.voiceover(
             "The second walls are made of habit. <bookmark mark='a'/> A customer can walk across to a rival "
             "whenever she likes. <bookmark mark='b'/> But walking across costs something. Moving a bank account "
