@@ -317,4 +317,63 @@
       note: "A model market, as in chapter 1 of the film: the numbers are illustrative. A move only deters if it is paid for before the rival decides and cannot be taken back; a threat that costs nothing to make changes nothing. If the rival comes in anyway, the move is assumed to soften the fight by half its bite.",
     });
   };
+
+  // Part 6: the shipowners' market, the Works' fleet model in the browser
+  function fleet(years, lead, life, growth, k, elasticity) {
+    var dem = [], flt = [], rate = [], orders = [], deliv = [], book = [];
+    var fleet0 = 100, d = fleet0, f = fleet0, scrapOld = fleet0 / life, cap = 0.4;
+    for (var t = 0; t < years; t++) {
+      d = d * (1 + growth);
+      deliv[t] = t >= lead ? orders[t - lead] : fleet0 * growth;
+      var retire = t - lead - life >= 0 ? orders[t - lead - life] : scrapOld;
+      f = f + deliv[t] - retire;
+      dem[t] = d; flt[t] = f;
+      rate[t] = Math.pow(d / f, 1 / elasticity);
+      orders[t] = f * Math.min(Math.max(k * (rate[t] - 1) + growth, 0), cap);
+      var pend = 0;
+      for (var j = Math.max(0, t - lead + 1); j <= t; j++) pend += orders[j];
+      book[t] = pend / f;
+    }
+    return { rate: rate, book: book };
+  }
+
+  W.shipowner = function (el) {
+    QB.widget(el, {
+      title: "The shipowners: build a cycle from a wait",
+      sub: "Owners order ships when the freight rate is above the cost of running one, looking only at today's rate; the ships arrive after the lead time. Demand grows steadily and never falls. Change how long a ship takes to build and how eagerly owners order, and watch the swings.",
+      panels: 2, height: 300,
+      controls: [
+        { k: "lead", label: "Years from order to delivery", min: 1, max: 5, step: 1, value: 3, fmt: function (x) { return x + (x > 1 ? " years" : " year"); } },
+        { k: "k", label: "How eagerly owners order", min: 0.05, max: 0.6, step: 0.05, value: 0.35, fmt: function (x) { return x.toFixed(2); } },
+        { k: "growth", label: "Growth of demand, a year", min: 0, max: 0.06, step: 0.005, value: 0.03, fmt: function (x) { return (100 * x).toFixed(1) + "%"; } },
+        { k: "el", label: "How far the rate moves when ships are short (lower = more)", min: 0.3, max: 1.0, step: 0.1, value: 0.5, fmt: function (x) { return x.toFixed(1); } },
+      ],
+      draw: function (g, v, s) {
+        var sim = fleet(60, v.lead, 25, v.growth, v.k, v.el);
+        var r = sim.rate.slice(10, 50), b = sim.book.slice(10, 50), xs = [];
+        for (var i = 0; i < r.length; i++) xs.push(i + 1);
+        var hi = Math.min(Math.max.apply(null, r) * 1.1, 4), lo = Math.max(Math.min.apply(null, r) * 0.9, 0);
+        var a = g[0].axes({ x: [0, 41], y: [lo, hi], title: "Freight rate, as a multiple of the cost of running a ship",
+                            xticks: [10, 20, 30, 40], xfmt: function (x) { return "year " + x; },
+                            yfmt: function (y) { return y.toFixed(1) + "×"; } });
+        a.hline(1, { color: C.muted });
+        a.line(xs, r, { color: C.implied, width: 2.2 });
+        var bh = Math.max(Math.max.apply(null, b) * 1.15, 0.1);
+        var c = g[1].axes({ x: [0, 41], y: [0, bh], title: "Ships on order, as a share of the fleet",
+                            xticks: [10, 20, 30, 40], xfmt: function (x) { return "year " + x; },
+                            yfmt: function (y) { return Math.round(100 * y) + "%"; } });
+        c.bars(xs, b, 0.7, { color: C.p });
+        var mean = r.reduce(function (p, q) { return p + q; }, 0) / r.length;
+        s.r = { swing: (Math.max.apply(null, r) - Math.min.apply(null, r)) / mean, book: Math.max.apply(null, b),
+                below: r.filter(function (x) { return x < 1; }).length };
+      },
+      readout: function (v, s) {
+        var r = s.r;
+        return [["swing of the rate, top to bottom", Math.round(100 * r.swing) + "% of its average"],
+                ["most ships ever on order", Math.round(100 * r.book) + "% of the fleet"],
+                ["years in forty with the rate below cost", r.below + ""]];
+      },
+      note: "This is the Works' fleet model from chapter 1 of the film: a ship lasts 25 years; the rate clears the market given the ships afloat; owners order a share of the fleet that grows with the rate's excess over cost. The longer the wait, the more owners order before the first new ship shows them their mistake.",
+    });
+  };
 })();

@@ -273,4 +273,53 @@ PARTS = [
         also=(("The Register's rows for Part 5", "explainer/industry/data/rows_p05.py"),
               ("Damodaran's returns and the Census's concentration ratios", "explainer/industry/data/SOURCES.md")),
     ),
+    Part(
+        n=6, level="U", widget="shipowner", prereq=(4, 5),
+        question="Why do industries keep building too much at the top?",
+        story="The part opens three years apart: Micron lost $5.7bn on $15.5bn of sales in fiscal 2023 and made "
+              "$99.3bn on $133.2bn in fiscal 2026; Maersk's operating profit went from $1.7bn (2019) to $30.9bn (2022) "
+              "and back to $3.9bn (2023). The viewer plays a shipowner offered a ship in three years at a record rate, "
+              "then watches the Works' market of such owners make a cycle out of steady demand. Ezekiel's cobweb "
+              "(1938) is drawn with hogs, then tested on the NBER's Chicago hog prices and US slaughter, 1880-1940: "
+              "more hogs, lower price (-0.61), a high price followed by more hogs about two and a half years later, "
+              "and a swing of about 3.6 years rather than the cobweb's two. The capital cycle is drawn as a loop; "
+              "the model shows swings growing from 3% to 130% as the lead time goes from one year to four. Ships "
+              "(UNCTAD's orderbook at 52% of the fleet in 2009, 78% for bulk carriers, 15% in early 2025 with "
+              "container ships at a quarter), memory chips (four falls of 21-57% after Micron's peaks, then a boom "
+              "with an 81% margin) and houses (starts down 79% from January 2006, unsold homes peaking three years "
+              "later) show the loop. After an intermission, the bullwhip (factory orders 1.6 times as volatile as "
+              "retail sales) and Clark's accelerator explain why the makers of machines feel it most; operating and "
+              "financial leverage turn falls in sales into collapses in profit; oil and Exxon's spending show the "
+              "loop from 2011 to 2025; four gauges read where an industry is; the low-cost producer with little "
+              "debt wins. Intel's 2021 plan is scored and the series calls Micron's next fall.",
+        handoff="Part 7 asks where the market sizes used so far come from; the commodity, shipping, chip and housing "
+                "parts return to their own cycles, and the finance parts to lending at the top.",
+        outside="Percentages and arithmetic; Part 4's supply curve; Part 3's depreciation.",
+        objectives={
+            "U": ["Explain how a lead time and orders based on today's price produce a cycle even when demand grows "
+                  "steadily.",
+                  "Read the capital cycle in ships, memory chips and houses from their public data.",
+                  "Explain why the makers of machines and the top of a supply chain feel the cycle most."],
+            "M": ["Trace a cobweb and state when it converges, cycles or explodes.",
+                  "Compute operating leverage: the change in profit for a change in sales, given fixed costs.",
+                  "Compute a capital goods maker's orders from replacement and growth (the accelerator)."],
+            "D": ["Measure a cycle in historical data: detrending, lagged correlations and a spectral peak.",
+                  "State a dated forecast about a cyclical company with a base rate and a scoring rule."],
+            "I": ["Read where an industry is in its cycle from its order book, spending against depreciation, "
+                  "stock and unsold supply.",
+                  "Judge a capacity plan made at a peak against the cycle's base rates."],
+        },
+        results=[
+            ("The cobweb", r"q_t = c + d\,p_{t-1},\quad p_t = a - b\,q_t;\quad \text{converges iff } bd < 1"),
+            ("Operating leverage", r"\frac{\%\Delta \text{profit}}{\%\Delta \text{sales}} = "
+                                   r"\frac{\text{sales} - \text{variable costs}}{\text{profit}}"),
+            ("The accelerator", r"\text{orders}_t = \frac{K_{t-1}}{L} + (K_t - K_{t-1})"),
+            ("Capital spending against wear", r"\frac{\text{capital spending}}{\text{depreciation}}"),
+            ("Ships on order", r"\frac{\text{orderbook}}{\text{fleet}}"),
+        ],
+        U=(0, 1, 2, 4, 5, 6, 7, 8, "s10_intermission", 9, 11, 14), I=(12, 13), D=(3, 10, 15),
+        also=(("The Register's rows for Part 6", "explainer/industry/data/rows_p06.py"),
+              ("The cycle machines", "explainer/industry/works/cycle.py"),
+              ("Hogs, housing, oil and orders; Maersk; Micron by quarter", "explainer/industry/data/SOURCES.md")),
+    ),
 ]
