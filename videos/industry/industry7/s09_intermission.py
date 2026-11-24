@@ -52,20 +52,25 @@ class Intermission(VoiceoverScene):
         head = tx("The story so far", 36, GOLD, bold=True).to_edge(UP, buff=0.6)
         lines = ["A market size answers four questions: which level, which plants, which products, which buyers.",
                  "Top-down counts what governments count; bottom-up multiplies units by a price you must choose.",
+                 "Few firms: add up their accounts. And every growth rate is part price, part quantity.",
                  "Put estimates on one definition before comparing them, and report a range.",
                  "An addressable market is a company's dream, not a forecast.",
                  "Next: how new markets grow, and how well anyone can see it coming."]
         pics = [VGroup(draw.factory(0.5, color=FACTORY), draw.shop(0.5, color=RETAIL)).arrange(RIGHT, buff=0.1),
                 VGroup(RoundedRectangle(corner_radius=0.04, width=0.4, height=0.5, stroke_width=0, fill_color="#E8E4DA",
                                         fill_opacity=1), draw.bottle(0.5, color=WATER)).arrange(RIGHT, buff=0.1),
+                VGroup(Rectangle(width=0.22, height=0.55, stroke_width=0, fill_color=FACTORY, fill_opacity=1),
+                       VGroup(Rectangle(width=0.22, height=0.2, stroke_width=0, fill_color=UNITS, fill_opacity=1),
+                              Rectangle(width=0.22, height=0.33, stroke_width=0, fill_color=GUESS, fill_opacity=1)
+                              ).arrange(DOWN, buff=0)).arrange(RIGHT, buff=0.1, aligned_edge=DOWN),
                 VGroup(*[Dot(radius=0.07, color=c) for c in (FACTORY, RETAIL, GUESS)]).arrange(RIGHT, buff=0.12),
                 VGroup(Circle(radius=0.3, stroke_color=TAM, stroke_width=3), Dot(radius=0.04, color=WHITE)),
                 FunctionGraph(lambda x: 0.3 / (1 + np.exp(-4 * x)), x_range=[-1, 1], color=GUESS, stroke_width=3)]
         rows = VGroup()
         for k, (pic, ln) in enumerate(zip(pics, lines)):
             pic.scale_to_fit_height(min(max(pic.height, 0.4), 0.65))
-            rows.add(VGroup(pic, tx(ln, 22 if k < 4 else 21, WHITE if k < 4 else GREY_B)))
-        rows.arrange(DOWN, aligned_edge=LEFT, buff=0.55).next_to(head, DOWN, buff=0.6)
+            rows.add(VGroup(pic, tx(ln, 22 if k < 5 else 21, WHITE if k < 5 else GREY_B)))
+        rows.arrange(DOWN, aligned_edge=LEFT, buff=0.42).next_to(head, DOWN, buff=0.6)
         for r_ in rows:
             r_[0].move_to([rows.get_left()[0] + 0.6, r_.get_y(), 0])
             r_[1].next_to(r_[0], RIGHT, buff=0.4).align_to(rows[0][1], LEFT)
@@ -75,13 +80,15 @@ class Intermission(VoiceoverScene):
         with self.voiceover(
             "The story so far. <bookmark mark='a'/> A market size answers four questions: which level of the chain, "
             "which plants, which products, which buyers. <bookmark mark='b'/> Top-down counts what governments "
-            "count; bottom-up multiplies units by a price you have to choose. <bookmark mark='c'/> Put estimates on "
+            "count; bottom-up multiplies units by a price you have to choose. <bookmark mark='f'/> When a few firms "
+            "hold the market, their own accounts add up to it. And every growth rate is part price and part "
+            "quantity. <bookmark mark='c'/> Put estimates on "
             "one definition before you compare them, and report a range. <bookmark mark='d'/> An addressable market "
             "is a company's dream, not a forecast. <bookmark mark='e'/> Next: how new markets grow, and how well "
             "anyone can see it coming."
         ) as vo:
             self.play(FadeIn(head))
-            for k, m in enumerate("abcde"):
+            for k, m in enumerate("abfcde"):
                 vo.wait_until(m)
                 self.play(FadeIn(rows[k][0], scale=0.6), FadeIn(rows[k][1], shift=RIGHT * 0.15), run_time=0.9)
         self.clear_scene()
