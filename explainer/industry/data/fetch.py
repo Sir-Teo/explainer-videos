@@ -16,6 +16,7 @@
     python -m explainer.industry.data.fetch census_conc  # Census: the four largest firms' share by industry, 2022
     python -m explainer.industry.data.fetch fred_cycle   # FRED: hogs since 1858, housing, oil, sales and orders
     python -m explainer.industry.data.fetch esef_maersk  # Maersk's annual results from its ESEF filings, 2019-2025
+    python -m explainer.industry.data.fetch sec_quarterly  # SEC: quarterly revenue and operating income (Micron, Intel)
     python -m explainer.industry.data.fetch --all
 
 Each extract is a small CSV in this folder, committed, with the source URL and the retrieval date in its first
@@ -495,6 +496,47 @@ def census_conc():
                          "released 2025-04-24; shares in percent of sales, value of shipments or revenue)"])
 
 
+SEC_QUARTERLY = [(723125, "MU"), (50863, "INTC")]
+
+
+def sec_quarterly():
+    """Quarterly revenue and operating income from Forms 10-Q and 10-K (SEC company facts): three-month values as
+    filed (the latest filing wins), and each fiscal year's fourth quarter as the year less its first three quarters."""
+    import time
+
+    out = []
+    for cik, tic in SEC_QUARTERLY:
+        facts = json.loads(_get(f"https://data.sec.gov/api/xbrl/companyfacts/CIK{cik:010d}.json"))["facts"]["us-gaap"]
+        time.sleep(0.5)
+        rows: dict = {}
+        for item, tags in (("revenue", SEC_ITEMS["revenue"]), ("operating_income", ["OperatingIncomeLoss"])):
+            q: dict = {}
+            ann: dict = {}
+            for tag in tags:
+                for v in facts.get(tag, {}).get("units", {}).get("USD", []):
+                    if "start" not in v or v.get("form") not in ("10-Q", "10-K", "10-Q/A", "10-K/A"):
+                        continue
+                    d = (dt.date.fromisoformat(v["end"]) - dt.date.fromisoformat(v["start"])).days
+                    if 80 <= d <= 100 and (v["end"] not in q or v["filed"] > q[v["end"]][1]):
+                        q[v["end"]] = (v["val"] / 1e9, v["filed"])
+                    elif 350 <= d <= 380 and (v["end"] not in ann or v["filed"] > ann[v["end"]][2]):
+                        ann[v["end"]] = (v["val"] / 1e9, v["start"], v["filed"])
+            for end, (val, start, _) in ann.items():
+                inside = [x[0] for e, x in q.items() if start < e < end]
+                if end not in q and len(inside) == 3:
+                    q[end] = (val - sum(inside), "derived")
+            for end, (val, how) in q.items():
+                rows.setdefault(end, {})[item] = (val, how == "derived")
+        for end in sorted(rows):
+            r = rows[end]
+            rv, oi = r.get("revenue", (None,))[0], r.get("operating_income", (None,))[0]
+            out.append([tic, end, None if rv is None else round(rv, 4), None if oi is None else round(oi, 4),
+                        int(any(x[1] for x in r.values() if len(x) > 1))])
+    return _write("sec_quarterly", ["ticker", "quarter_end", "revenue", "operating_income", "q4_derived"], out,
+                  ["https://data.sec.gov/api/xbrl/companyfacts/ (Forms 10-Q and 10-K; US$ billions; three-month "
+                   "values; a fiscal fourth quarter is the year less its first three, marked q4_derived)"])
+
+
 FRED_CYCLE = {"M04008US16980M275NNBR": "Wholesale price of hogs, Chicago (dollars per 100 lb, NBER)",
               "M01038US16980M562NNBR": "Live hog receipts, Chicago (thousands, NBER)",
               "M01039USM566NNBR": "Hogs slaughtered, United States (thousands, NBER)",
@@ -552,7 +594,7 @@ def esef_maersk():
                    "US$ billions; " + "; ".join(f"{k}: {v}" for k, v in MAERSK_ITEMS.items()) + ")"])
 
 
-JOBS = {"fred_cycle": fred_cycle, "esef_maersk": esef_maersk, "damodaran_roc": damodaran_roc, "census_conc": census_conc, "eia_power": eia_power, "fred_pay": fred_pay, "bea_real": bea_real, "sec_annual": sec_annual, "fred_prices": fred_prices, "census_susb": census_susb, "bea_va": bea_va, "wb_mfg_usd": wb_mfg_usd, "bea_hist": bea_hist, "bea_io": bea_io, "fred_jobs": fred_jobs, "wb_shares": wb_shares}
+JOBS = {"sec_quarterly": sec_quarterly, "fred_cycle": fred_cycle, "esef_maersk": esef_maersk, "damodaran_roc": damodaran_roc, "census_conc": census_conc, "eia_power": eia_power, "fred_pay": fred_pay, "bea_real": bea_real, "sec_annual": sec_annual, "fred_prices": fred_prices, "census_susb": census_susb, "bea_va": bea_va, "wb_mfg_usd": wb_mfg_usd, "bea_hist": bea_hist, "bea_io": bea_io, "fred_jobs": fred_jobs, "wb_shares": wb_shares}
 
 if __name__ == "__main__":
     names = list(JOBS) if "--all" in sys.argv else sys.argv[1:]
