@@ -12,9 +12,9 @@ class Services(VoiceoverScene):
 
     def who(self):
         crew = VGroup(draw.derrick(1.6, color=STONE), draw.truck(1.4, color="#E8554E"), draw.truck(1.4, color="#7EC8F5"),
-                      draw.platform(1.8)).arrange(RIGHT, buff=0.7).move_to([0, 0.9, 0])
-        labs = VGroup(tx("drilling rigs and crews", 16, GREY_A), tx("fracking fleets: pumps, sand, water", 16, GREY_A),
-                      tx("logging and cementing", 16, GREY_A), tx("offshore equipment", 16, GREY_A))
+                      draw.platform(1.8)).arrange(RIGHT, buff=1.2).move_to([0, 0.9, 0])
+        labs = VGroup(tx("rigs and crews", 17, GREY_A), tx("fracking fleets", 17, GREY_A),
+                      tx("logging, cementing", 17, GREY_A), tx("offshore equipment", 17, GREY_A))
         for l_, c_ in zip(labs, crew):
             l_.next_to(c_, DOWN, buff=0.2)
         names = VGroup(*[pill(n, color=WHITE, size=20) for n in ("SLB (formerly Schlumberger)", "Halliburton", "Baker Hughes")]

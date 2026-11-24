@@ -83,7 +83,7 @@ class Called(VoiceoverScene):
         ln = VMobject(stroke_color=BRENT, stroke_width=4).set_points_as_corners([pa.ax.c2p(y, v / 1000) for y, v in zip(ys, w)])
         y2k = DashedLine(pa.ax.c2p(2000, 0), pa.ax.c2p(2000, 95), stroke_color=PRICE, stroke_width=2)
         l2k = tx("Hubbert's world peak: 'about the year 2000'", 16, PRICE).next_to(pa.ax.c2p(2000, 95), UP, buff=0.05)
-        end = tx(f"2025: {w[-1] / 1000:.1f}m barrels a day", 17, WHITE, bold=True).next_to(pa.ax.c2p(2025, w[-1] / 1000), DOWN, buff=0.2).shift(LEFT * 1.0)
+        end = tx(f"2025: {w[-1] / 1000:.1f}m barrels a day", 17, WHITE, bold=True).next_to(pa.ax.c2p(2025, w[-1] / 1000), DOWN, buff=0.6).shift(LEFT * 1.2)
         head = tx("World crude oil production", 18, GREY_A).next_to(pa, UP, buff=0.15).align_to(pa, LEFT)
         src = source("Hubbert (1956); EIA, International Energy Statistics", size=13)
         with self.voiceover(

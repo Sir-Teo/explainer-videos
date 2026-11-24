@@ -30,7 +30,7 @@ class Gas(VoiceoverScene):
         unit = tx("dollars per million British thermal units", 14, GREY_B).next_to(pa, DOWN, buff=0.1).align_to(pa, LEFT)
         pk = G["eu_peak"]
         lab = tx(f"{mlabel(pk)}: Europe ${G['eu_peak_val']:.0f}, Louisiana ${G['hh_at_peak']:.1f}", 18, WHITE, bold=True).next_to(
-            pa.ax.c2p(mx(pk), G["eu_peak_val"]), RIGHT, buff=0.15)
+            pa.ax.c2p(mx(pk), G["eu_peak_val"]), LEFT, buff=0.2)
         src = source("FRED: Henry Hub spot (EIA); the IMF's global prices of natural gas, Europe, and of LNG, Asia; monthly",
                      size=13)
         with self.voiceover(
