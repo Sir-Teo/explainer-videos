@@ -5,8 +5,8 @@ from videos.industry.industry6.common import *  # noqa: F403
 
 class Leverage(VoiceoverScene):
     def construct(self):
-        card(self, 10, "Leverage", "Why does a small fall in sales become a big fall in profit?",
-             "Chapter ten. Leverage.", lit=("change", "make"))
+        card(self, 11, "Leverage", "Why does a small fall in sales become a big fall in profit?",
+             "Chapter eleven. Leverage.", lit=("change", "make"))
         self.model()
         self.real()
 

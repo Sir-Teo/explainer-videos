@@ -100,7 +100,7 @@ CALLS = [
     Call(6, "Industry, Built", "2026-11-24",
          "Before the end of 2028, Micron will report a quarter whose revenue is at least 25% below its highest "
          "earlier quarter (so far $54.2bn, the quarter to 3 September 2026). Probability: 55%.",
-         "This series, Part 6, chapter 14; after each of Micron's four earlier peaks since 2010, quarterly revenue "
+         "This series, Part 6, chapter 15; after each of Micron's four earlier peaks since 2010, quarterly revenue "
          "fell by 21%, 37%, 43% and 57% within two years; spending was 3.2 times depreciation in fiscal 2026",
          rule="Micron's Forms 10-Q and 10-K: for every fiscal quarter ending on or before 31 December 2028, compare "
               "its three-month revenue with the highest of all earlier quarters; true if any is 25% or more below",

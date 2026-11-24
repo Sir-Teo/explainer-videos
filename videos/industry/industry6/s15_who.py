@@ -8,8 +8,8 @@ STACK = [(12, 30), (10, 34), (8, 38), (9, 41), (7, 45), (8, 49), (6, 54), (7, 60
 
 class Who(VoiceoverScene):
     def construct(self):
-        card(self, 13, "Who wins a cycle", "If the cycle cannot be stopped, who comes out ahead?",
-             "Chapter thirteen. Who wins a cycle.", lit=("change", "moat"))
+        card(self, 14, "Who wins a cycle", "If the cycle cannot be stopped, who comes out ahead?",
+             "Chapter fourteen. Who wins a cycle.", lit=("change", "moat"))
         self.stack()
         self.others()
 

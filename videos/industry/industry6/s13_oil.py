@@ -21,8 +21,8 @@ def _x(month: str) -> float:
 
 class Oil(VoiceoverScene):
     def construct(self):
-        card(self, 11, "Oil", "What does a company do when the price halves?",
-             "Chapter eleven. Oil.", lit=("change", "make"))
+        card(self, 12, "Oil", "What does a company do when the price halves?",
+             "Chapter twelve. Oil.", lit=("change", "make"))
         O = R["oil"]
         pa = viz.plot_axes([2005, 2026.9], [0, 150], x_length=10.2, y_length=2.6, yticks=[50, 100],
                            yfmt=lambda v: f"${v:g}", size=15)

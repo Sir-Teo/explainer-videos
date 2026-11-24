@@ -58,6 +58,10 @@ add(
     r("eia.crude.2015", 9.433, "million barrels a day", "US field production of crude oil, 2015 (2016: 8.86)",
       "US Energy Information Administration, U.S. Field Production of Crude Oil (MCRFPUS2), annual",
       "https://www.eia.gov/dnav/pet/hist/LeafHandler.ashx?n=PET&s=MCRFPUS2&f=A", "2015"),
+    r("clark.1917", 1917, "year", "J. Maurice Clark, 'Business Acceleration and the Law of Demand: A Technical "
+      "Factor in Economic Cycles', Journal of Political Economy 25(3), March 1917, pp. 217-235: demand for capital goods follows "
+      "the growth of demand for the goods they make", "Journal of Political Economy",
+      "https://doi.org/10.1086/252958", "1917", kind="study"),
     r("lee.1997", 1997, "year", "H. L. Lee, V. Padmanabhan and S. Whang, 'The Bullwhip Effect in Supply Chains', "
       "Sloan Management Review 38(3), Spring 1997: orders swing more than sales, and more at each step up the chain",
       "MIT Sloan Management Review", "https://sloanreview.mit.edu/article/the-bullwhip-effect-in-supply-chains/",

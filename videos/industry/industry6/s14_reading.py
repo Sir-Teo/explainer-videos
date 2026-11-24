@@ -5,8 +5,8 @@ from videos.industry.industry6.common import *  # noqa: F403
 
 class Reading(VoiceoverScene):
     def construct(self):
-        card(self, 12, "Reading where you are", "How can you tell where an industry is in its cycle?",
-             "Chapter twelve. Reading where you are.", lit=("change",))
+        card(self, 13, "Reading where you are", "How can you tell where an industry is in its cycle?",
+             "Chapter thirteen. Reading where you are.", lit=("change",))
         rd, S = R["reading"], R["ships"]
         inv = dict(rd["inventory"])
         mur = dict(rd["micron"])
