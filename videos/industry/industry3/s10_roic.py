@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from videos.industry.industry3.common import *  # noqa: F403
+from videos.industry.industry3.s03_ledger import _bank
 
 COST_OF_CAPITAL = 0.08  # illustrative: what investors could expect elsewhere at similar risk
 
@@ -26,6 +27,12 @@ class Roic(VoiceoverScene):
         rule = T(f"Investors could earn {100 * COST_OF_CAPITAL:.0f}% elsewhere at the same risk (an assumption)", 20,
                  I.ACCENT).to_edge(UP, buff=0.4)
         f = T("value = yearly earnings ÷ the return investors require", 19, I.DIM).next_to(rule, DOWN, buff=0.2)
+        # the owners' alternative: somewhere else at the same risk
+        alt = VGroup(_bank().scale(2.6), draw.factory(0.9, color=I.DIM)).arrange(RIGHT, buff=0.4).move_to([2.6, 0.2, 0])
+        go = CurvedArrow(np.array([-4.0, -1.0, 0]), alt.get_left() + LEFT * 0.15, angle=-0.8, color=I.DIM,
+                         stroke_width=3)
+        alt_q = T("somewhere else: ?", 20, I.DIM).next_to(alt, DOWN, buff=0.25)
+        alt_r = T("somewhere else: 8% a year", 20, I.ACCENT).next_to(alt, DOWN, buff=0.25)
         with self.voiceover(
             "Profit is not the same as a good business, because the owners' money is not free. They could have put "
             "it somewhere else. <bookmark mark='a'/> Suppose that elsewhere, at the same risk, they could expect "
@@ -37,11 +44,12 @@ class Roic(VoiceoverScene):
             "destroys more value the faster it grows, because every new dollar it invests shrinks too. Growth only "
             "helps when the return on capital is above its cost."
         ) as vo:
-            self.play(FadeIn(f))
-            vo.wait_until("a")
-            self.play(FadeIn(rule))
-            vo.wait_until("b")
             self.play(LaggedStart(*[FadeIn(c) for c in put[0]], lag_ratio=0.05), FadeIn(put[1]))
+            self.play(FadeIn(alt, shift=LEFT * 0.2), Create(go), FadeIn(alt_q))
+            vo.wait_until("a")
+            self.play(FadeIn(rule), FadeIn(f), Transform(alt_q, alt_r))
+            vo.wait_until("b")
+            self.play(FadeOut(VGroup(alt, go, alt_q)), Indicate(put[0], color=WHITE, scale_factor=1.05))
             vo.wait_until("c")
             biz = draw.factory(1.1, color=I.PROFIT).move_to([-2.3, 1.0, 0])
             self.play(FadeIn(biz, shift=DOWN * 0.2))

@@ -60,6 +60,17 @@ class Balance(VoiceoverScene):
             DOWN, aligned_edge=LEFT, buff=0.12).to_edge(RIGHT, buff=0.5)
         tot = TB(f"Both sides: ${total:,.0f}", 24, I.ACCENT).next_to(side, DOWN, buff=0.35, aligned_edge=LEFT)
         src = estimate_tag("illustrative: the model bakery at the end of its first year", corner=DR)
+        # a snapshot: the bakery on one day
+        shop = draw.shop(2.2, color="#F2A65A").move_to([0, 0.2, 0])
+        frame = VGroup(RoundedRectangle(corner_radius=0.1, width=4.4, height=3.6, stroke_color=WHITE, stroke_width=3,
+                                        fill_opacity=0).move_to(shop))
+        corners = VGroup()
+        for k_, c_ in enumerate((DL, DR, UR, UL)):
+            L_ = VGroup(Line(ORIGIN, RIGHT * 0.4), Line(ORIGIN, UP * 0.4)).set_stroke(I.ACCENT, 5).rotate(
+                k_ * PI / 2, about_point=ORIGIN)
+            corners.add(L_.shift(frame[0].get_corner(c_) + (-c_) * 0.1))
+        stamp = TB("31 December", 22, I.ACCENT).next_to(frame[0], DOWN, buff=0.2)
+        flash = frame[0].copy().set_fill(WHITE, 0.6).set_stroke(width=0)
         with self.voiceover(
             "At the end of the year the accountant draws the two sides of the book as a picture of the business on "
             "one day: the balance sheet. <bookmark mark='a'/> On the left, what the bakery has: "
@@ -70,8 +81,12 @@ class Balance(VoiceoverScene):
             f"{say_usd(inc['net'])} was kept in the business. <bookmark mark='c'/> Every company's balance sheet is "
             "this picture, and the right-hand side is the interesting one: whose money is the business running on?"
         ) as vo:
-            self.play(FadeIn(src))
+            self.play(FadeIn(src), FadeIn(shop, shift=UP * 0.2))
+            self.play(Create(frame[0]), FadeIn(corners), FadeIn(stamp, shift=UP * 0.1))
+            self.play(FadeIn(flash, run_time=0.15))
+            self.play(FadeOut(flash, run_time=0.5))
             vo.wait_until("a")
+            self.play(FadeOut(VGroup(shop, frame, corners, stamp), scale=0.6), run_time=0.6)
             self.play(FadeIn(lab[0]), LaggedStart(*[FadeIn(s) for s in g[0]], lag_ratio=0.2), FadeIn(side[:4]))
             vo.wait_until("b")
             self.play(FadeIn(lab[1]), LaggedStart(*[FadeIn(s) for s in g[1]], lag_ratio=0.2), FadeIn(side[4:]))

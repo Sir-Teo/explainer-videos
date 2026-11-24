@@ -31,6 +31,19 @@ class Hook(VoiceoverScene):
         tot = VGroup(TB("550 ducats", 24, I.ACCENT).move_to(np.array([-2.5, -2.3, 0])),
                      TB("550 ducats", 24, I.ACCENT).move_to(np.array([2.5, -2.3, 0])))
         place = T(f"Venice · {get('pacioli.1494'):.0f}", 26, I.DIM).to_edge(UP, buff=0.4)
+        # the printed book, closed, above the water of Venice
+        cover = VGroup(RoundedRectangle(corner_radius=0.08, width=3.1, height=4.1, fill_color="#4A2E1C", fill_opacity=1,
+                                        stroke_color="#C9A26B", stroke_width=3),
+                       RoundedRectangle(corner_radius=0.05, width=2.6, height=3.6, fill_opacity=0,
+                                        stroke_color="#C9A26B", stroke_width=1.5),
+                       TB("Summa de", 26, "#E8D7A8").shift(UP * 0.75), TB("arithmetica", 26, "#E8D7A8").shift(UP * 0.3),
+                       T("geometria, proportioni", 15, "#C9A26B").shift(DOWN * 0.2),
+                       T("et proportionalita", 15, "#C9A26B").shift(DOWN * 0.48),
+                       T("Luca Pacioli", 18, "#E8D7A8").shift(DOWN * 1.1),
+                       T("Venice, 1494", 16, "#C9A26B").shift(DOWN * 1.45)).shift(DOWN * 0.1)
+        waves = VGroup(*[FunctionGraph(lambda x, k=k: 0.06 * np.sin(3 * x + k), x_range=[-6.5, 6.5],
+                                       color="#3B7DD8", stroke_width=2, stroke_opacity=0.6).shift(DOWN * (2.75 + 0.22 * k))
+                         for k in range(4)])
         note = T("entries illustrative", 14, I.FAINT).to_corner(DR, buff=0.28)
         src = source("Pacioli, Summa de arithmetica (Venice, 1494): the first printed account of double entry")
         with self.voiceover(
@@ -43,9 +56,10 @@ class Hook(VoiceoverScene):
             "the two sides always add up to the same total, and a mistake shows up as a gap. Five hundred years "
             "later, every company on earth still keeps its books this way."
         ) as vo:
-            self.play(FadeIn(place), FadeIn(src))
+            self.play(FadeIn(place), FadeIn(src), FadeIn(cover, shift=UP * 0.3), run_time=1.4)
+            self.play(LaggedStart(*[Create(w_) for w_ in waves], lag_ratio=0.2), run_time=1.6)
             vo.wait_until("a")
-            self.play(FadeIn(book), Create(spine), FadeIn(note))
+            self.play(ReplacementTransform(cover, book), FadeOut(waves), Create(spine), FadeIn(note), run_time=1.4)
             vo.wait_until("b")
             self.play(FadeIn(heads[0]))
             self.play(LaggedStart(*[FadeIn(r) for r in rows_l], lag_ratio=0.3), run_time=1.6)
