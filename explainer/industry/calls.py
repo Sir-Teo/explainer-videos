@@ -85,11 +85,25 @@ CALLS = [
     Call(5, "Industry, Built", "2026-11-24",
          "At least seven of the ten US industries with the highest return on capital in Aswath Damodaran's table "
          "for 2025 will be among the twenty highest in his table for 2028. Probability: 75%.",
-         "This series, Part 5, chapter 10; in his tables for 2015-2025, seven or more of a year's top ten were in the "
+         "This series, Part 5, chapter 16; in his tables for 2015-2025, seven or more of a year's top ten were in the "
          "top twenty three years later in 7 of 8 windows",
          rule="Damodaran's 'Excess Returns (EVA) by industry, US companies' for 2028, published January 2029: count "
               "the 2025 top ten (by return on capital) among the 2028 top twenty; a renamed or dropped industry "
               "counts as a miss",
+         due="2029-01", ours=True),
+    Call(6, "Intel (Pat Gelsinger, chief executive)", "2021-03-23",
+         "\"IDM 2.0\": Intel would build its way back to leadership, starting with an estimated $20 billion for two "
+         "new chip factories in Arizona, announced in the middle of the 2021 chip shortage.",
+         "Intel press release, 23 March 2021",
+         outcome="Intel's capital spending rose from $14.3bn (2020) to $25.8bn (2023); its operating income fell from "
+                 "$19.5bn (2021) to a loss of $11.7bn (2024), and it cut spending to $14.6bn in 2025 (Forms 10-K)"),
+    Call(6, "Industry, Built", "2026-11-24",
+         "Before the end of 2028, Micron will report a quarter whose revenue is at least 25% below its highest "
+         "earlier quarter (so far $54.2bn, the quarter to 3 September 2026). Probability: 55%.",
+         "This series, Part 6, chapter 14; after each of Micron's four earlier peaks since 2010, quarterly revenue "
+         "fell by 21%, 37%, 43% and 57% within two years; spending was 3.2 times depreciation in fiscal 2026",
+         rule="Micron's Forms 10-Q and 10-K: for every fiscal quarter ending on or before 31 December 2028, compare "
+              "its three-month revenue with the highest of all earlier quarters; true if any is 25% or more below",
          due="2029-01", ours=True),
 ]
 
