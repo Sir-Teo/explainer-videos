@@ -499,6 +499,22 @@ def pig(w: float = 1.0, color: str = "#F2A7B5") -> VGroup:
     return VGroup(legs, body, tail, head, ear, snout, eye)
 
 
+def bottle(h: float = 1.0, color: str = "#7EC8F5", water: float = 0.8) -> VGroup:
+    """A plastic water bottle: body, shoulder, cap and a label; ``water`` is how full it is (0-1)."""
+    w = 0.36 * h
+    body = RoundedRectangle(corner_radius=0.08 * h, width=w, height=0.72 * h, stroke_color=color, stroke_width=2,
+                            fill_color=color, fill_opacity=0.15).move_to([0, 0.36 * h, 0])
+    fill = RoundedRectangle(corner_radius=0.06 * h, width=w * 0.92, height=0.7 * h * water, stroke_width=0,
+                            fill_color=color, fill_opacity=0.55).align_to(body, DOWN).shift(UP * 0.01 * h)
+    shoulder = Polygon([-w / 2, 0.72 * h, 0], [w / 2, 0.72 * h, 0], [0.09 * h, 0.86 * h, 0], [-0.09 * h, 0.86 * h, 0],
+                       stroke_color=color, stroke_width=2, fill_color=color, fill_opacity=0.15)
+    cap = Rectangle(width=0.2 * h, height=0.08 * h, stroke_width=0, fill_color="#3B7DD8", fill_opacity=1).move_to(
+        [0, 0.9 * h, 0])
+    label = Rectangle(width=w, height=0.18 * h, stroke_width=0, fill_color="#E8EAED", fill_opacity=0.9).move_to(
+        [0, 0.42 * h, 0])
+    return VGroup(fill, body, shoulder, cap, label)
+
+
 def crane(h: float = 2.0, color: str = "#F2C14E") -> VGroup:
     """A shipyard's gantry crane: two legs, a beam and a hanging hook."""
     legs = VGroup(*[Rectangle(width=0.06 * h, height=h, stroke_width=0, fill_color=color, fill_opacity=1).move_to(
