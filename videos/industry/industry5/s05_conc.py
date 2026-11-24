@@ -38,9 +38,9 @@ class Conc(VoiceoverScene):
             "<bookmark mark='a'/> In 2022 it counted thirty-three thousand companies running nail salons. "
             "<bookmark mark='b'/> The four largest together took less than half of one percent of the sales. "
             "<bookmark mark='c'/> It counted under eight hundred companies running home centers, the giant "
-            "hardware and building-supply stores. <bookmark mark='d'/> The four largest took ninety-eight percent: "
-            "in practice, two names most Americans know. That share, the four largest firms' slice of an industry's "
-            "sales, is called the four-firm concentration ratio."
+            "hardware and building-supply stores. <bookmark mark='d'/> The four largest took ninety-eight percent. "
+            "That share, the four largest firms' slice of an industry's sales, is called the four-firm concentration "
+            "ratio."
         ) as vo:
             self.play(FadeIn(src))
             vo.wait_until("a")
