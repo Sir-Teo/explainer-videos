@@ -14,6 +14,7 @@ float WAV and a JSON sidecar.  A clip is cached exactly when its ``.json`` exist
 from __future__ import annotations
 
 import json
+import struct
 import wave
 from dataclasses import dataclass, field
 from pathlib import Path
@@ -25,6 +26,13 @@ SR = 48_000  # the series' sample rate
 # integrated, whose loudest moments read about -12.
 EXAMPLE_LEVEL = -15.0  # an example in a listening window
 QUIET_LEVEL = -21.0    # an example meant to sit back, or to run under narration
+
+
+def float_wav_header(frames: int, channels: int, sr: int) -> bytes:
+    size = frames * channels * 4
+    fmt = struct.pack("<HHIIHH", 3, channels, sr, sr * channels * 4, channels * 4, 32)
+    return (b"RIFF" + struct.pack("<I", 48 + size) + b"WAVEfmt " + struct.pack("<I", len(fmt)) + fmt
+            + b"fact" + struct.pack("<II", 4, frames) + b"data" + struct.pack("<I", size))
 
 
 @dataclass
@@ -154,16 +162,9 @@ class Clip:
         path = Path(path)
         path.parent.mkdir(parents=True, exist_ok=True)
         data = memoryview(np.ascontiguousarray(self.y, dtype="<f4").reshape(-1)).cast("B")
-        ch = self.channels
-        import struct
-
-        fmt = struct.pack("<HHIIHH", 3, ch, self.sr, self.sr * ch * 4, ch * 4, 32)
-        fact = struct.pack("<I", self.n)
-        header = (b"WAVE" + b"fmt " + struct.pack("<I", len(fmt)) + fmt + b"fact" + struct.pack("<I", 4) + fact
-                  + b"data" + struct.pack("<I", len(data)))
         tmp = path.with_suffix(".tmp.wav")
         with tmp.open("wb") as stream:
-            stream.write(b"RIFF" + struct.pack("<I", len(header) + len(data)) + header)
+            stream.write(float_wav_header(self.n, self.channels, self.sr))
             stream.write(data)
         tmp.replace(path)
 
@@ -184,8 +185,6 @@ class Clip:
     @staticmethod
     def read(path: Path) -> "Clip":
         """Read a WAV written by :meth:`write` (float32) or a 16-bit PCM one."""
-        import struct
-
         raw = Path(path).read_bytes()
         if raw[:4] != b"RIFF" or raw[8:12] != b"WAVE":
             raise ValueError(f"{path} is not a WAV file")

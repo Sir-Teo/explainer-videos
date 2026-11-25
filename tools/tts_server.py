@@ -135,6 +135,40 @@ def trim(audio: np.ndarray, sr: int, keep: float = 0.04) -> np.ndarray:
 # ---------------------------------------------------------------------------
 # Engines
 # ---------------------------------------------------------------------------
+def optimize_qwen_codebooks(model):
+    """Optimize the fixed-length residual decoder in mlx-audio 0.6.5."""
+    from functools import lru_cache
+    import mlx.core as mx
+
+    predictor = model.talker.code_predictor
+    make_cache = predictor.make_cache
+    groups = model.config.talker_config.num_code_groups
+
+    def make_codebook_cache():
+        caches = make_cache()
+        # Two prefix tokens plus one for each remaining prediction fit in
+        # num_code_groups slots. The model resets all layers on the next audio frame.
+        for cache in caches:
+            cache.step = groups
+        return caches
+
+    predictor.make_cache = make_codebook_cache
+    original = model._predict_code_tokens
+
+    @lru_cache(maxsize=8)
+    def compiled(temperature, top_k, top_p):
+        def predict(token, hidden):
+            return original(token, hidden, temperature=temperature, top_k=top_k, top_p=top_p)
+        return mx.compile(predict, inputs=mx.random.state, outputs=mx.random.state)
+
+    def predict_code_tokens(first_token, hidden, *, temperature, top_k, top_p, code_cache=None):
+        # Only the last hidden state conditions this frame. Slicing before compilation
+        # lets prefill and decode share the same graph for a given batch size.
+        return compiled(temperature, top_k, top_p)(first_token, hidden[:, -1:, :])
+
+    model._predict_code_tokens = predict_code_tokens
+
+
 class Engine:
     """Qwen3-TTS Base, cloning the profile's reference voice (a short, calm recording and its transcript)."""
 
@@ -148,28 +182,62 @@ class Engine:
         if batch_size > 1 and not callable(getattr(self.model, "batch_generate", None)):
             raise RuntimeError("The installed mlx-audio model does not support batched voice cloning")
 
+        # mlx-audio 0.6.5 accepts an already-loaded reference in both inference paths.
+        # Its Qwen model otherwise reruns the speaker encoder once per sentence and retry.
+        from importlib.metadata import version
+
+        self.references = {}
+        self.load_reference = None
+        if version("mlx-audio") == "0.6.5" and getattr(self.model, "model_type", None) == "qwen3_tts":
+            from mlx_audio.utils import load_audio
+
+            optimize_qwen_codebooks(self.model)
+            extract = self.model.extract_speaker_embedding
+            embeddings = {}
+            self.load_reference = load_audio
+
+            def extract_reference(audio, sr=24000):
+                for lang, reference in self.references.items():
+                    if audio is reference and sr == self.sr:
+                        if lang not in embeddings:
+                            embeddings[lang] = extract(audio, sr)
+                        return embeddings[lang]
+                return extract(audio, sr)
+
+            self.model.extract_speaker_embedding = extract_reference
+
     def takes(self, texts: list[str], lang: str, attempt: int) -> list[np.ndarray]:
         """One take of each text."""
         if self.batch_size == 1 or attempt or len(texts) < 2:
             return [self.take(text, lang, attempt) for text in texts]
-        output = []
-        for start in range(0, len(texts), self.batch_size):
-            group = texts[start:start + self.batch_size]
-            if len(group) == 1:
-                output.append(self.take(group[0], lang, attempt))
+        # Generation runs until the longest sentence in each batch finishes.
+        # Group similar lengths and leave the shortest sentences in the partial batch.
+        order = list(range(len(texts)))
+        if len(texts) > self.batch_size:
+            order.sort(key=lambda i: len(texts[i]), reverse=True)
+        output = [None] * len(texts)
+        for start in range(0, len(order), self.batch_size):
+            indices = order[start:start + self.batch_size]
+            if len(indices) == 1:
+                i = indices[0]
+                output[i] = self.take(texts[i], lang, attempt)
                 continue
-            takes = {}
+            group = [texts[i] for i in indices]
             for result in self.model.batch_generate(texts=group, **self.voice_options(lang)):
                 audio = np.asarray(result.audio, dtype=np.float32).reshape(-1)
                 if audio.size:
-                    takes[result.sequence_idx] = audio
-            for index, text in enumerate(group):
-                output.append(takes[index] if index in takes else self.take(text, lang, attempt))
-        return output
+                    output[indices[result.sequence_idx]] = audio
+        return [audio if audio is not None else self.take(text, lang, attempt)
+                for text, audio in zip(texts, output, strict=True)]
 
     def voice_options(self, lang: str) -> dict:
         p = self.profile["voices"][lang]
-        return dict(p.get("params", {}), ref_audio=str(ROOT / p["ref_audio"]),
+        reference = str(ROOT / p["ref_audio"])
+        if self.load_reference is not None:
+            if lang not in self.references:
+                self.references[lang] = self.load_reference(reference, sample_rate=self.sr)
+            reference = self.references[lang]
+        return dict(p.get("params", {}), ref_audio=reference,
                     ref_text=p["ref_text"], lang_code=LANG_NAME[lang].lower())
 
     def take(self, text: str, lang: str, attempt: int) -> np.ndarray:

@@ -104,13 +104,15 @@ def check_scene(mp4: Path, report: list) -> int:
             fail(f"{name} at {a:.1f} s: a listening window with no picture on the clip's clock")
         if not c["label"]:
             fail(f"{name}: no label (physical model, synthesized, illustrative, ...)")
-        level = momentary_max(clip) + c["gain_db"]
+        clip_level = momentary_max(clip)
+        level = clip_level + c["gain_db"]
         if level > MAX_LEVEL:
             fail(f"{name}: loudest 400 ms at {level:.1f} LUFS, above {MAX_LEVEL}")
         if not np.isfinite(level) or level < MIN_LEVEL:
             fail(f"{name}: silent ({level:.1f} LUFS)")
         small = phone(clip)
-        loss = momentary_max(clip) - momentary_max(small) if np.isfinite(momentary_max(small)) else 99.0
+        phone_level = momentary_max(small)
+        loss = clip_level - phone_level if np.isfinite(phone_level) else 99.0
         needs = label.get("needs", "")
         wide = False
         if clip.channels == 2:

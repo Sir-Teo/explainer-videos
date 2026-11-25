@@ -26,6 +26,7 @@ import time
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from fractions import Fraction
 from pathlib import Path
+from tempfile import NamedTemporaryFile
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
@@ -84,40 +85,78 @@ PEAK_CEILING_DBTP = -1.0
 
 def music_stem(cues: list[dict], seconds: float, out: Path) -> None:
     """The film's music stem: every cue's clip at its start time and gain, as a float WAV."""
-    from explainer.music.monochord.audio import Clip, mix
+    import numpy as np
 
-    placed = []
-    for c in cues:
-        clip = Clip.read(Path(c["path"]))
-        placed.append((Clip(clip.stereo, clip.sr), c["start"], c["gain_db"]))
-    mix(placed, duration=seconds).write(out)
+    from explainer.music.monochord.audio import Clip, SR, float_wav_header
+
+    frames = round(seconds * SR)
+    channels = 2 if cues else 1
+    header = float_wav_header(frames, channels, SR)
+    pending = sorted((round(c["start"] * SR), i, c) for i, c in enumerate(cues))
+    active = []
+    index = position = 0
+    out.parent.mkdir(parents=True, exist_ok=True)
+    stream = NamedTemporaryFile(dir=out.parent, delete=False)
+    temporary = Path(stream.name)
+    try:
+        with stream:
+            stream.write(header)
+            stream.truncate(len(header) + frames * channels * 4)
+            while position < frames and (active or index < len(pending)):
+                if not active:
+                    position = max(position, pending[index][0])
+                end = min(frames, position + SR)
+                while index < len(pending) and pending[index][0] < end:
+                    start, order, cue = pending[index]
+                    index += 1
+                    clip = Clip.read(Path(cue["path"]))
+                    if clip.sr != SR:
+                        raise ValueError("clips of different sample rates")
+                    if start + clip.n > position:
+                        active.append((order, start, clip.stereo, 10 ** (cue["gain_db"] / 20)))
+                if position < end and active:
+                    # Preserve addition order even for out-of-order, overlapping cues.
+                    block = np.zeros((end - position, 2), dtype=np.float64)
+                    for _, start, samples, gain in sorted(active):
+                        a, b = max(position, start), min(end, start + len(samples))
+                        window = samples[a - start:b - start].astype(np.float64)
+                        block[a - position:b - position] += window * gain
+                    data = block.astype("<f4")
+                    if not np.isfinite(data).all():
+                        raise ValueError("a clip must be finite")
+                    stream.seek(len(header) + position * 8)
+                    stream.write(memoryview(data).cast("B"))
+                    active = [item for item in active if item[1] + len(item[2]) > end]
+                position = end
+        temporary.replace(out)
+    finally:
+        temporary.unlink(missing_ok=True)
 
 
-def sound_master(concat_list: Path, music: Path, voice_input: int = 0, music_input: int = 3) -> str:
-    """Measure the mix and return its filter graph for the final mux."""
-    err = subprocess.run(["ffmpeg", "-v", "info", "-f", "concat", "-safe", "0", "-i", str(concat_list), "-vn",
-                          "-af", f"{HIGHPASS},{LOUDNORM}:print_format=json", "-f", "null", "-"],
-                         text=True, capture_output=True, check=True).stderr
-    m = json.loads(err[err.rindex("{"): err.rindex("}") + 1])
-    gain = 0.0 if m["input_i"] == "-inf" else max(-20.0, min(20.0, NARRATION_LUFS - float(m["input_i"])))
+def sound_master(concat_list: Path, voice_input: int, music_input: int) -> str:
+    """Measure post-highpass narration loudness and split the final mix for encoding and metering."""
+    cmd = ["ffmpeg", "-nostats", "-f", "concat", "-safe", "0", "-i", str(concat_list), "-vn",
+           "-af", f"{HIGHPASS},ebur128=framelog=verbose", "-f", "null", "-"]
+    levels = run(cmd).stderr.rsplit("Summary:", 1)[-1]
+    loudness = float(re.search(r"I:\s+(-?[\d.]+|-inf) LUFS", levels)[1])
+    # EBU R128 has an absolute gate at -70 LUFS. A silent narration needs no gain.
+    gain = max(-20.0, min(20.0, NARRATION_LUFS - loudness)) if loudness > -70 else 0.0
+    print(f"narration gain: {gain:+.1f} dB")
     limiter = f"alimiter=level_in=1:level_out=1:limit={NARRATION_LIMIT}:attack=5:release=80:level=disabled"
-    def graph(voice, stem):
-        return (f"[{voice}:a]{HIGHPASS},volume={gain:.2f}dB,{limiter},aresample=48000[n];"
-                f"[{stem}:a]volume={MUSIC_GAIN_DB:.2f}dB[m];[n][m]amix=inputs=2:duration=longest:normalize=0")
+    return (f"[{voice_input}:a]{HIGHPASS},volume={gain:.2f}dB,{limiter},aresample=48000[n];"
+            f"[{music_input}:a]volume={MUSIC_GAIN_DB:.2f}dB[m];"
+            "[n][m]amix=inputs=2:duration=longest:normalize=0,asplit[a][meter];"
+            "[meter]ebur128=peak=true:framelog=verbose[levels]")
 
-    err = subprocess.run(["ffmpeg", "-nostats", "-f", "concat", "-safe", "0", "-i", str(concat_list), "-i", str(music),
-                          "-filter_complex", graph(0, 1) + ",ebur128=peak=true[a]", "-map", "[a]",
-                          "-f", "null", "-"], text=True, capture_output=True).stderr
-    if "Summary:" not in err:
-        sys.exit("could not measure the mixed soundtrack:\n" + err[-2000:])
-    summary = err[err.rindex("Summary:"):]
-    peak = float(re.search(r"Peak:\s+(-?[\d.]+|-inf) dBFS", summary).group(1).replace("-inf", "-200"))
-    loud = re.search(r"I:\s+(-?[\d.]+) LUFS", summary).group(1)
-    print(f"soundtrack: narration {gain:+.1f} dB, mix {loud} LUFS integrated, true peak {peak:.1f} dBTP")
+
+def check_mix_levels(log: str) -> None:
+    summary = log.rsplit("Summary:", 1)[-1]
+    peak = float(re.search(r"Peak:\s+(-?[\d.]+|-inf) dBFS", summary)[1])
+    loud = re.search(r"I:\s+(-?[\d.]+) LUFS", summary)[1]
+    print(f"soundtrack: mix {loud} LUFS integrated, true peak {peak:.1f} dBTP")
     if peak > PEAK_CEILING_DBTP:
         sys.exit(f"the mixed soundtrack peaks at {peak:.1f} dBTP, above the ceiling of {PEAK_CEILING_DBTP} dBTP: "
                  "lower the clip at its source (python tools/qa_sound.py <video> names it)")
-    return graph(voice_input, music_input) + "[a]"
 
 
 def series_score(video: str):
@@ -216,9 +255,9 @@ def normalize(src: Path, dst: Path, lossless: bool = False) -> None:
 def picture_duration(src: Path) -> Fraction:
     """Read the picture clock independently of the scene AAC stream and MP4 rounding."""
     result = run(["ffprobe", "-v", "error", "-select_streams", "v:0", "-show_entries",
-                  "stream=duration_ts,time_base", "-of", "json", str(src)])
+                  "stream=nb_frames,r_frame_rate", "-of", "json", str(src)])
     video, = json.loads(result.stdout)["streams"]
-    return video["duration_ts"] * Fraction(video["time_base"])
+    return int(video["nb_frames"]) / Fraction(video["r_frame_rate"])
 
 
 def normalize_master_audio(src: Path, dst: Path, duration: Fraction) -> None:
@@ -254,7 +293,9 @@ def main():
                          "intermediates and a 384 kb/s AAC soundtrack")
     ap.add_argument("-j", "--jobs", type=int, default=max(1, (os.cpu_count() or 2) // 2))
     ap.add_argument("--only", nargs="*", help="render only these scene classes (still stitches all)")
-    ap.add_argument("--stitch-only", action="store_true")
+    stages = ap.add_mutually_exclusive_group()
+    stages.add_argument("--stitch-only", action="store_true")
+    stages.add_argument("--scenes-only", action="store_true", help="render the scenes and defer mastering")
     ap.add_argument("--lang", default="en", help="narration language (en, or zh from narration_zh.json)")
     ap.add_argument("--no-score", action="store_true",
                     help="leave out the series' computed score (explainer/<series>/score.py), if it has one")
@@ -297,6 +338,9 @@ def main():
                     print(err)
         if failed:
             sys.exit(f"Failed scenes: {failed}")
+
+    if args.scenes_only:
+        return
 
     # ---- stitch -----------------------------------------------------------
     out_dir = ROOT / "renders"
@@ -360,7 +404,9 @@ def main():
     inputs = audio_in
     if split_tracks:
         picture_list = concat_file(work / "picture.txt", pictures)
-        inputs = ["-f", "concat", "-safe", "0", "-i", str(picture_list), *audio_in]
+        # Ignore AAC priming in the unused scene audio track. FFmpeg would
+        # otherwise shift the picture input forward to offset a negative audio timestamp.
+        inputs = ["-copyts", "-f", "concat", "-safe", "0", "-i", str(picture_list), *audio_in]
     voice_input = int(split_tracks)
     subtitles, chapters_input, music_input = range(voice_input + 1, voice_input + 4)
     srt = out_dir / f"{name}.srt"
@@ -379,15 +425,23 @@ def main():
             "-c:s", "mov_text", "-metadata:s:s:0", f"language={ {'en': 'eng', 'zh': 'chi'}[args.lang] }",
             "-metadata:s:a:0", f"language={ {'en': 'eng', 'zh': 'chi'}[args.lang] }", "-movflags", "+faststart",
             str(temporary)]
-    tracks = ["-map", f"{subtitles}:s:0", "-map_metadata", str(chapters_input),
+    # Manim scene edit lists can end a fraction of a frame early. Rescale copied
+    # packet timestamps onto the frame grid, including B-frame decode timestamps.
+    video_clock = ["-video_track_timescale", str(args.fps), "-movie_timescale", "1000"] if split_tracks else []
+    tracks = [*video_clock, "-map", f"{subtitles}:s:0", "-map_metadata", str(chapters_input),
               "-map_chapters", str(chapters_input), "-c:v", "copy", *tail]
     if sound_cues:  # Music, Built (or a series' score): narration and music stem are mastered apart, then joined
         music = work / "music.wav"
         music_stem(sound_cues, offset, music)
-        graph = sound_master(concat_list, music, voice_input, music_input)
-        run(["ffmpeg", "-y", "-v", "error", *inputs,
-             "-i", str(srt), "-i", str(ffmeta), "-i", str(music), "-filter_complex", graph,
-             "-map", "0:v:0", "-map", "[a]", *tracks])
+        graph = sound_master(concat_list, voice_input, music_input)
+        try:
+            result = run(["ffmpeg", "-y", "-nostats", *inputs, "-i", str(srt), "-i", str(ffmeta), "-i", str(music),
+                          "-filter_complex", graph, "-map", "0:v:0", "-map", "[a]", *tracks,
+                          "-map", "[levels]", "-f", "null", "-"])
+            check_mix_levels(result.stderr)
+        except BaseException:
+            temporary.unlink(missing_ok=True)
+            raise
     else:
         audio_filter = master_filter([
             "ffmpeg", "-v", "info", "-f", "concat", "-safe", "0", "-i", str(concat_list), "-vn",
