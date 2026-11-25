@@ -64,9 +64,39 @@ def phone(clip):
     return Clip(sosfilt(sos, clip.mono.astype(np.float64)), clip.sr)
 
 
+def scene_music_peak(placed):
+    """Measure every cue and its filter tail, skipping long stretches of digital silence."""
+    from explainer.music.monochord.audio import SR, mix
+    from explainer.music.monochord.loudness import true_peak_db
+
+    length = round(max((start + clip.duration for clip, start, _ in placed), default=0.0) * SR)
+    # A one-second margin includes the full interpolation filter response.
+    # Keep offsets in original samples and addition in original cue order.
+    regions = []
+    for order, (clip, start, gain) in sorted(enumerate(placed), key=lambda entry: entry[1][1]):
+        if clip.sr != SR:
+            raise ValueError("clips of different sample rates")
+        first = round(start * SR)
+        a = max(0, first - SR)
+        b = min(length, first + clip.n + SR)
+        if a >= b:
+            continue
+        if regions and a <= regions[-1][1]:
+            regions[-1][1] = max(b, regions[-1][1])
+        else:
+            regions.append([a, b, []])
+        regions[-1][2].append((order, clip, first, gain))
+
+    peak = -np.inf
+    for a, b, cues in regions:
+        local = [(clip, (first - a) / SR, gain) for _, clip, first, gain in sorted(cues)]
+        peak = max(peak, true_peak_db(mix(local, duration=(b - a) / SR)))
+    return peak
+
+
 def check_scene(mp4: Path, report: list) -> int:
-    from explainer.music.monochord.audio import Clip, mix
-    from explainer.music.monochord.loudness import momentary_max, true_peak_db
+    from explainer.music.monochord.audio import Clip
+    from explainer.music.monochord.loudness import momentary_max
 
     sheet = mp4.with_suffix(".cues.json")
     if not sheet.exists():
@@ -126,8 +156,7 @@ def check_scene(mp4: Path, report: list) -> int:
         report.append(f"  {scene:<14s} {name:<26s} {a:7.1f}s {c['duration']:5.1f}s  {level:6.1f} LUFS  "
                       f"{true_peak_db(clip) + c['gain_db']:6.1f} dBTP  phone {-loss:+5.1f} dB  {verdict}")
     if placed:
-        stem = mix(placed)
-        peak = true_peak_db(stem)
+        peak = scene_music_peak(placed)
         if peak > CEILING_DBTP:
             fail(f"the scene's music peaks at {peak:.1f} dBTP, above {CEILING_DBTP}")
     return fails

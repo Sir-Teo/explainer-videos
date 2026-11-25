@@ -108,3 +108,16 @@ def test_queue_renders_next_part_during_mastering_and_reports_failure(tmp_path, 
     monkeypatch.setattr(sys, "argv", ["music_render.py", "--clean"])
     assert queue.main() == 1
     assert finished == ["music1", "music2"]
+
+
+def test_sparse_true_peak_includes_ringing_overlaps_and_ends():
+    import numpy as np
+    from explainer.music.monochord.audio import Clip, SR, mix
+    from explainer.music.monochord.loudness import true_peak_db
+    from tools.qa_sound import scene_music_peak
+
+    # Near-Nyquist tones and hard edges create peaks between source samples.
+    tone = np.sin(np.arange(15001) * 1.7 + .31)
+    clip = Clip(np.column_stack((tone, -tone)))
+    placed = [(clip, 5.0013, -.3), (clip, -.01, 0), (clip, 5.02, -2), (clip, 10 / SR, -.5)]
+    assert scene_music_peak(placed) == true_peak_db(mix(placed))
