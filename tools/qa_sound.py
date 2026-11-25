@@ -96,7 +96,7 @@ def scene_music_peak(placed):
 
 def check_scene(mp4: Path, report: list) -> int:
     from explainer.music.monochord.audio import Clip
-    from explainer.music.monochord.loudness import momentary_max
+    from explainer.music.monochord.loudness import momentary_max, true_peak_db
 
     sheet = mp4.with_suffix(".cues.json")
     if not sheet.exists():

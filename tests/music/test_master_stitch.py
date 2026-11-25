@@ -121,3 +121,21 @@ def test_sparse_true_peak_includes_ringing_overlaps_and_ends():
     clip = Clip(np.column_stack((tone, -tone)))
     placed = [(clip, 5.0013, -.3), (clip, -.01, 0), (clip, 5.02, -2), (clip, 10 / SR, -.5)]
     assert scene_music_peak(placed) == true_peak_db(mix(placed))
+
+
+def test_scene_sound_report_checks_clip_and_mix(tmp_path):
+    import numpy as np
+    from explainer.music.monochord.audio import Clip, SR
+    from tools.qa_sound import check_scene
+
+    clip = Clip(.2 * np.sin(2 * np.pi * 440 / SR * np.arange(SR)))
+    src = tmp_path / "tone.wav"
+    clip.write(src)
+    src.with_suffix(".json").write_text('{"meta": {}}')
+    scene = tmp_path / "Tone.mp4"
+    cue = {"path": str(src), "clip": "A440", "start": 2.0, "duration": 1.0, "gain_db": 0,
+           "window": True, "underscore": False, "driven": True, "label": "synthesized"}
+    scene.with_suffix(".cues.json").write_text(json.dumps({"cues": [cue]}))
+    report = []
+    assert check_scene(scene, report) == 0
+    assert "dBTP" in report[0] and "A440" in report[0]
