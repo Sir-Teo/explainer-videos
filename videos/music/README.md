@@ -38,6 +38,32 @@ plan's defaults hold (the Tune is *Ah! vous dirai-je, maman*; the rights rule as
 part is made is [`LECTURE_GUIDE.md`](LECTURE_GUIDE.md). Previews are built at 480p as each part lands; the narrated
 1080p masters are Phase 6. The running record, part by part, is [`SYLLABUS.md`](SYLLABUS.md) §8.
 
+## 4K production renders
+
+Install the repository's [render dependencies](../../README.md#setup) and the Music extra with
+`python -m pip install -e '.[music-render]'`. Run the Qwen narration server in its separate environment.
+On an Apple Silicon host with an MLX Audio release that supports batched voice cloning, pass
+`--mlx-batch-size 4` to generate first takes together. Recognition, retakes and word alignment still run for
+each sentence.
+
+```bash
+.venv-tts/bin/python tools/tts_server.py --voice qwen3-calm-a --mlx-batch-size 4
+# In the render environment, at the repository root:
+export EXPLAINER_TTS=server EXPLAINER_VOICE=qwen3-calm-a
+python tools/music_render.py --parts 1        # pilot
+python tools/music_render.py --clean          # all 68 English parts in order
+```
+
+The queue writes H.264 CRF 16 masters at 3840×2160 and 60 fps with 48 kHz stereo AAC, embedded chapters and
+captions, and separate chapter and subtitle files. The picture is copied into the final MP4. Narration is
+padded to the picture's sample count in lossless audio-only intermediates before joining the float music stem.
+
+The queue logs under `.cache/music-render/logs/` and saves verification receipts under
+`renders/qa/music-master/`. Each receipt records track metadata and measured loudness and true peak after
+AAC encoding. Rerunning the queue skips completed masters with matching files and continues past failed parts
+so they can be retried individually. Use `--force` to rebuild after editing the source or changing the voice.
+`--clean` saves cue and narration sheets and removes each part's scene intermediates after verification.
+
 ## The story
 
 **A string.** The oldest experiment in science is a musical one. Stop a stretched string at half its length and it

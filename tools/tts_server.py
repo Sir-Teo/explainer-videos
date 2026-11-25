@@ -138,24 +138,45 @@ def trim(audio: np.ndarray, sr: int, keep: float = 0.04) -> np.ndarray:
 class Engine:
     """Qwen3-TTS Base, cloning the profile's reference voice (a short, calm recording and its transcript)."""
 
-    def __init__(self, profile: dict):
+    def __init__(self, profile: dict, batch_size: int = 1):
         from mlx_audio.tts.utils import load_model
 
         self.profile = profile
         self.model = load_model(model_path(profile["model"]))
         self.sr = self.model.sample_rate
+        self.batch_size = batch_size
+        if batch_size > 1 and not callable(getattr(self.model, "batch_generate", None)):
+            raise RuntimeError("The installed mlx-audio model does not support batched voice cloning")
 
     def takes(self, texts: list[str], lang: str, attempt: int) -> list[np.ndarray]:
         """One take of each text."""
-        return [self.take(t_, lang, attempt) for t_ in texts]
+        if self.batch_size == 1 or attempt or len(texts) < 2:
+            return [self.take(text, lang, attempt) for text in texts]
+        output = []
+        for start in range(0, len(texts), self.batch_size):
+            group = texts[start:start + self.batch_size]
+            if len(group) == 1:
+                output.append(self.take(group[0], lang, attempt))
+                continue
+            takes = {}
+            for result in self.model.batch_generate(texts=group, **self.voice_options(lang)):
+                audio = np.asarray(result.audio, dtype=np.float32).reshape(-1)
+                if audio.size:
+                    takes[result.sequence_idx] = audio
+            for index, text in enumerate(group):
+                output.append(takes[index] if index in takes else self.take(text, lang, attempt))
+        return output
+
+    def voice_options(self, lang: str) -> dict:
+        p = self.profile["voices"][lang]
+        return dict(p.get("params", {}), ref_audio=str(ROOT / p["ref_audio"]),
+                    ref_text=p["ref_text"], lang_code=LANG_NAME[lang].lower())
 
     def take(self, text: str, lang: str, attempt: int) -> np.ndarray:
-        p = self.profile["voices"][lang]
-        kw = dict(p.get("params", {}))
+        kw = self.voice_options(lang)
         if attempt:  # resample on retries; a slightly cooler temperature steadies a hard sentence
             kw["temperature"] = max(0.5, kw.get("temperature", 0.9) - 0.1 * attempt)
-        gen = self.model.generate(text=text, ref_audio=str(ROOT / p["ref_audio"]), ref_text=p["ref_text"],
-                                  lang_code=LANG_NAME[lang].lower(), **kw)
+        gen = self.model.generate(text=text, **kw)
         return np.concatenate([np.asarray(r.audio, dtype=np.float32).reshape(-1) for r in gen])
 
 
@@ -314,19 +335,26 @@ def narrate(engine: Engine, checker: Checker, text: str, lang: str, max_tries: i
 # Server
 # ---------------------------------------------------------------------------
 def main():
+    global MODELS
     ap = argparse.ArgumentParser()
     ap.add_argument("--voice", required=True, help="profile name in tools/voices.json")
     ap.add_argument("--port", type=int, default=8765)
+    ap.add_argument("--models-dir", type=Path, default=MODELS, help="directory containing local model copies")
+    ap.add_argument("--mlx-batch-size", type=int, default=1,
+                    help="maximum sentences per first take on MLX (retries remain sequential)")
     ap.add_argument("--engine", choices=["mlx", "torch"], default=default_engine(),
                     help="mlx (Apple Silicon) or torch (Linux: CUDA, or CPU); default: by platform")
     args = ap.parse_args()
+    if args.mlx_batch_size < 1 or (args.engine != "mlx" and args.mlx_batch_size != 1):
+        ap.error("--mlx-batch-size must be positive and requires the MLX engine")
+    MODELS = args.models_dir
     profiles = json.loads((ROOT / "tools" / "voices.json").read_text())
     profile = dict(profiles[args.voice], name=args.voice)
     if args.engine == "mlx":
         import mlx.core as mx
 
         mx.set_cache_limit(512 * 1024 ** 2)  # freed GPU buffers kept for reuse: shares the machine with the renders
-        engine, checker = Engine(profile), Checker()
+        engine, checker = Engine(profile, args.mlx_batch_size), Checker()
         release = mx.clear_cache
     else:
         engine = TorchEngine(profile)  # first: its load peaks at 11 GB in float32 on a CPU

@@ -37,6 +37,7 @@ dependencies = [
 ]
 
 [project.optional-dependencies]
+music-render = ["matplotlib>=3.9"]
 statistics-qa = ["pytest>=8", "pytest-subtests>=0.14", "statsmodels>=0.14", "pandas>=2.2", "scikit-learn>=1.5"]
 
 [build-system]

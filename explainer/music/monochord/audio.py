@@ -153,16 +153,18 @@ class Clip:
         """A 32-bit float WAV (format 3), written with the standard library so nothing else is needed."""
         path = Path(path)
         path.parent.mkdir(parents=True, exist_ok=True)
-        data = np.ascontiguousarray(self.y, dtype="<f4").tobytes()
+        data = memoryview(np.ascontiguousarray(self.y, dtype="<f4").reshape(-1)).cast("B")
         ch = self.channels
         import struct
 
         fmt = struct.pack("<HHIIHH", 3, ch, self.sr, self.sr * ch * 4, ch * 4, 32)
         fact = struct.pack("<I", self.n)
-        body = (b"WAVE" + b"fmt " + struct.pack("<I", len(fmt)) + fmt + b"fact" + struct.pack("<I", 4) + fact
-                + b"data" + struct.pack("<I", len(data)) + data)
+        header = (b"WAVE" + b"fmt " + struct.pack("<I", len(fmt)) + fmt + b"fact" + struct.pack("<I", 4) + fact
+                  + b"data" + struct.pack("<I", len(data)))
         tmp = path.with_suffix(".tmp.wav")
-        tmp.write_bytes(b"RIFF" + struct.pack("<I", len(body)) + body)
+        with tmp.open("wb") as stream:
+            stream.write(b"RIFF" + struct.pack("<I", len(header) + len(data)) + header)
+            stream.write(data)
         tmp.replace(path)
 
     def write_pcm16(self, path: Path) -> None:

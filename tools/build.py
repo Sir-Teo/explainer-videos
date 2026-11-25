@@ -23,7 +23,8 @@ import os
 import subprocess
 import sys
 import time
-from concurrent.futures import ThreadPoolExecutor
+from concurrent.futures import ThreadPoolExecutor, as_completed
+from fractions import Fraction
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -92,20 +93,20 @@ def music_stem(cues: list[dict], seconds: float, out: Path) -> None:
     mix(placed, duration=seconds).write(out)
 
 
-def sound_master(concat_list: Path, music: Path) -> str:
-    """The filter graph that joins the narration (input 0) and the music stem (input 3); stops if the mix peaks
-    above the ceiling."""
+def sound_master(concat_list: Path, music: Path, voice_input: int = 0, music_input: int = 3) -> str:
+    """Measure the mix and return its filter graph for the final mux."""
     err = subprocess.run(["ffmpeg", "-v", "info", "-f", "concat", "-safe", "0", "-i", str(concat_list), "-vn",
                           "-af", f"{HIGHPASS},{LOUDNORM}:print_format=json", "-f", "null", "-"],
                          text=True, capture_output=True, check=True).stderr
     m = json.loads(err[err.rindex("{"): err.rindex("}") + 1])
     gain = 0.0 if m["input_i"] == "-inf" else max(-20.0, min(20.0, NARRATION_LUFS - float(m["input_i"])))
     limiter = f"alimiter=level_in=1:level_out=1:limit={NARRATION_LIMIT}:attack=5:release=80:level=disabled"
-    graph = (f"[0:a]{HIGHPASS},volume={gain:.2f}dB,{limiter},aresample=48000[n];"
-             f"[3:a]volume={MUSIC_GAIN_DB:.2f}dB[m];[n][m]amix=inputs=2:duration=longest:normalize=0")
-    err = subprocess.run(["ffmpeg", "-nostats", "-f", "concat", "-safe", "0", "-i", str(concat_list), "-f", "lavfi",
-                          "-i", "anullsrc", "-f", "lavfi", "-i", "anullsrc", "-i", str(music),
-                          "-filter_complex", graph + ",ebur128=peak=true[a]", "-map", "[a]", "-t", "36000",
+    def graph(voice, stem):
+        return (f"[{voice}:a]{HIGHPASS},volume={gain:.2f}dB,{limiter},aresample=48000[n];"
+                f"[{stem}:a]volume={MUSIC_GAIN_DB:.2f}dB[m];[n][m]amix=inputs=2:duration=longest:normalize=0")
+
+    err = subprocess.run(["ffmpeg", "-nostats", "-f", "concat", "-safe", "0", "-i", str(concat_list), "-i", str(music),
+                          "-filter_complex", graph(0, 1) + ",ebur128=peak=true[a]", "-map", "[a]",
                           "-f", "null", "-"], text=True, capture_output=True).stderr
     if "Summary:" not in err:
         sys.exit("could not measure the mixed soundtrack:\n" + err[-2000:])
@@ -116,7 +117,7 @@ def sound_master(concat_list: Path, music: Path) -> str:
     if peak > PEAK_CEILING_DBTP:
         sys.exit(f"the mixed soundtrack peaks at {peak:.1f} dBTP, above the ceiling of {PEAK_CEILING_DBTP} dBTP: "
                  "lower the clip at its source (python tools/qa_sound.py <video> names it)")
-    return graph + "[a]"
+    return graph(voice_input, music_input) + "[a]"
 
 
 def series_score(video: str):
@@ -133,9 +134,25 @@ def scene_output(media: Path, module: str, cls: str, quality: str, fps: int) -> 
     return media / "videos" / module / f"{QUALITY[quality]}{fps}" / f"{cls}.mp4"
 
 
+def repair_segment_cache(scene: Path) -> None:
+    """Quarantine incomplete MP4s left by a stopped render before Manim reuses them."""
+    import av
+
+    for segment in (scene.parent / "partial_movie_files" / scene.stem).glob("*.mp4"):
+        try:
+            with av.open(str(segment)) as container:
+                if not container.streams.video[0].frames:
+                    raise ValueError("Empty segment")
+        except (av.error.FFmpegError, IndexError, ValueError):
+            segment.replace(segment.with_suffix(".incomplete"))
+            print(f"Quarantined incomplete animation {segment.name}", flush=True)
+
+
 def render_scene(video: str, module: str, cls: str, quality: str, fps: int, media: Path,
                  crf: int | None = None) -> tuple[str, float, str]:
     src = video_dir(video) / f"{module}.py"
+    if crf is not None and src.parent.parent.name == "music":
+        repair_segment_cache(scene_output(media, module, cls, quality, fps))
     # Each scene gets its own LaTeX and Text caches: parallel manim processes sharing one
     # Tex dir race on the .dvi files (one cleans up what another converts), and sharing one
     # texts dir race on the .svg files of identical Text strings (one unlinks what another reads).
@@ -147,8 +164,9 @@ def render_scene(video: str, module: str, cls: str, quality: str, fps: int, medi
     (cache / "Tex").mkdir(parents=True, exist_ok=True)  # manim creates tex_dir without parents=True
     (cache / "texts").mkdir(exist_ok=True)
     cfg.write_text(f"[CLI]\ntex_dir = {cache / 'Tex' / cls}\ntext_dir = {cache / 'texts' / cls}\n")
+    launcher = "manim" if os.environ.get("EXPLAINER_LOCAL_RENDER") == "0" else "tools.manim_local"
     cmd = [
-        sys.executable, "-m", "manim", "render", f"-q{quality}", "--fps", str(fps), "-c", str(cfg),
+        sys.executable, "-m", launcher, "render", f"-q{quality}", "--fps", str(fps), "-c", str(cfg),
         "--media_dir", str(media), "--progress_bar", "none", str(src), cls,
     ]
     if crf is not None:  # part of manim's segment-cache fingerprint, so masters never reuse preview segments
@@ -195,6 +213,37 @@ def normalize(src: Path, dst: Path, lossless: bool = False) -> None:
     run(cmd)
 
 
+def picture_duration(src: Path) -> Fraction:
+    """Read the picture clock independently of the scene AAC stream and MP4 rounding."""
+    result = run(["ffprobe", "-v", "error", "-select_streams", "v:0", "-show_entries",
+                  "stream=duration_ts,time_base", "-of", "json", str(src)])
+    video, = json.loads(result.stdout)["streams"]
+    return video["duration_ts"] * Fraction(video["time_base"])
+
+
+def normalize_master_audio(src: Path, dst: Path, duration: Fraction) -> None:
+    """Pad the narration to the picture's duration using exactly counted 48 kHz samples."""
+    wav = src.with_suffix(".wav")
+    if wav.exists() or has_audio(src):
+        audio_in = ["-i", str(wav if wav.exists() else src)]
+    else:
+        audio_in = ["-f", "lavfi", "-i", "anullsrc=r=48000:cl=stereo"]
+    run(["ffmpeg", "-y", "-v", "error", *audio_in, "-map", "0:a:0",
+         "-af", f"aresample=48000,aformat=channel_layouts=stereo,apad,atrim=end_sample={round(duration * 48000)}",
+         "-c:a", "alac", str(dst)])
+
+
+def concat_file(path: Path, entries) -> Path:
+    """Write explicit picture durations when concatenating scene MP4s that also contain AAC."""
+    with path.open("w") as stream:
+        for media, duration in entries:
+            escaped = str(media).replace("'", "'\\''")
+            stream.write(f"file '{escaped}'\n")
+            if duration is not None:
+                stream.write(f"duration {float(duration):.9f}\n")
+    return path
+
+
 def main():
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("video")
@@ -226,14 +275,21 @@ def main():
         def est(s):
             done = [p for d in (args.video, f"{args.video}_*")
                     for p in (ROOT / "media").glob(f"{d}/**/videos/{s[0]}/*/{s[1]}.mp4")]
-            return max((ffprobe_duration(p) for p in done), default=0.0)
+            durations = []
+            for old in done:
+                try:
+                    durations.append(ffprobe_duration(old))
+                except (subprocess.CalledProcessError, ValueError):
+                    continue
+            fallback = (video_dir(args.video) / f"{s[0]}.py").stat().st_size / 100
+            return max(durations, default=fallback)
         todo.sort(key=est, reverse=True)
         print(f"Rendering {len(todo)} scene(s) at {QUALITY[args.quality]}{args.fps} with {args.jobs} job(s)...")
         failed = []
         with ThreadPoolExecutor(args.jobs) as pool:
             futs = [pool.submit(render_scene, args.video, m, c, args.quality, args.fps, media, args.crf)
                     for m, c, _ in todo]
-            for f in futs:
+            for f in as_completed(futs):
                 cls, dt, err = f.result()
                 print(f"  {'FAIL' if err else 'ok  '} {cls:<28} {dt:6.0f}s", flush=True)
                 if err:
@@ -251,18 +307,27 @@ def main():
     suffix += "" if args.lang == "en" else f"_{args.lang}"
     name = f"{args.video}{suffix}"
 
+    split_tracks = args.crf is not None and video_dir(args.video).parent.name == "music"
+    pictures = []
     parts, cues, chapters, offset, sound_cues, timeline = [], [], [], 0.0, [], []
     for module, cls, chapter in scenes:
         mp4 = scene_output(media, module, cls, args.quality, args.fps)
         if not mp4.exists():
             sys.exit(f"Missing render for {cls}: {mp4}")
-        norm = work / f"{cls}.{'mov' if args.crf is not None else 'mp4'}"
         meta = mp4.with_suffix(".narration.json")
         meta_json = json.loads(meta.read_text()) if meta.exists() else {}
         lines = meta_json.get("lines", [])
         check_narration_audio(mp4, lines)
-        normalize(mp4, norm, lossless=args.crf is not None)
-        dur = ffprobe_duration(norm)
+        if split_tracks:
+            duration = picture_duration(mp4)
+            norm = work / f"{cls}.m4a"
+            normalize_master_audio(mp4, norm, duration)
+            pictures.append((mp4, duration))
+            dur = float(duration)
+        else:
+            norm = work / f"{cls}.{'mov' if args.crf is not None else 'mp4'}"
+            normalize(mp4, norm, lossless=args.crf is not None)
+            dur = ffprobe_duration(norm)
         sheet = mp4.with_suffix(".cues.json")
         if sheet.exists():
             heard = json.loads(sheet.read_text())["cues"]
@@ -289,8 +354,15 @@ def main():
         print(f"score: {len(scored)} cue(s) from {score.__name__}")
         sound_cues += scored
 
-    concat_list = work / "concat.txt"
-    concat_list.write_text("".join(f"file '{p}'\n" for p in parts))
+    durations = (duration for _, duration in pictures) if split_tracks else (None for _ in parts)
+    concat_list = concat_file(work / "concat.txt", zip(parts, durations, strict=True))
+    audio_in = ["-f", "concat", "-safe", "0", "-i", str(concat_list)]
+    inputs = audio_in
+    if split_tracks:
+        picture_list = concat_file(work / "picture.txt", pictures)
+        inputs = ["-f", "concat", "-safe", "0", "-i", str(picture_list), *audio_in]
+    voice_input = int(split_tracks)
+    subtitles, chapters_input, music_input = range(voice_input + 1, voice_input + 4)
     srt = out_dir / f"{name}.srt"
     srt.write_text(to_srt(sorted(cues, key=lambda c: c[0])))
 
@@ -302,27 +374,30 @@ def main():
     ffmeta.write_text("\n".join(lines) + "\n")
 
     final = out_dir / f"{name}.mp4"
+    temporary = out_dir / f".{name}.{os.getpid()}.tmp.mp4"
     tail = ["-ar", "48000", "-c:a", "aac", "-b:a", "384k" if args.crf is not None else "192k",
             "-c:s", "mov_text", "-metadata:s:s:0", f"language={ {'en': 'eng', 'zh': 'chi'}[args.lang] }",
             "-metadata:s:a:0", f"language={ {'en': 'eng', 'zh': 'chi'}[args.lang] }", "-movflags", "+faststart",
-            str(final)]
+            str(temporary)]
+    tracks = ["-map", f"{subtitles}:s:0", "-map_metadata", str(chapters_input),
+              "-map_chapters", str(chapters_input), "-c:v", "copy", *tail]
     if sound_cues:  # Music, Built (or a series' score): narration and music stem are mastered apart, then joined
         music = work / "music.wav"
         music_stem(sound_cues, offset, music)
-        graph = sound_master(concat_list, music)
-        run(["ffmpeg", "-y", "-v", "error", "-f", "concat", "-safe", "0", "-i", str(concat_list),
+        graph = sound_master(concat_list, music, voice_input, music_input)
+        run(["ffmpeg", "-y", "-v", "error", *inputs,
              "-i", str(srt), "-i", str(ffmeta), "-i", str(music), "-filter_complex", graph,
-             "-map", "0:v", "-map", "[a]", "-map", "1", "-map_metadata", "2", "-c:v", "copy", *tail])
+             "-map", "0:v:0", "-map", "[a]", *tracks])
     else:
         audio_filter = master_filter([
             "ffmpeg", "-v", "info", "-f", "concat", "-safe", "0", "-i", str(concat_list), "-vn",
             "-af", f"{HIGHPASS},{LOUDNORM}:print_format=json", "-f", "null", "-",
         ])
         run([
-            "ffmpeg", "-y", "-v", "error", "-f", "concat", "-safe", "0", "-i", str(concat_list),
-            "-i", str(srt), "-i", str(ffmeta), "-map", "0", "-map", "1", "-map_metadata", "2",
-            "-c:v", "copy", "-af", audio_filter, *tail,
+            "ffmpeg", "-y", "-v", "error", *inputs, "-i", str(srt), "-i", str(ffmeta),
+            "-map", "0:v:0", "-map", f"{voice_input}:a:0", "-af", audio_filter, *tracks,
         ])
+    temporary.replace(final)
     yt = "\n".join(f"{int(s // 60)}:{int(s % 60):02d} {t}" for s, t in chapters)
     (out_dir / f"{name}.chapters.txt").write_text(yt + "\n")
     print(f"\nWrote {final.relative_to(ROOT)}  ({offset / 60:.1f} min)")
