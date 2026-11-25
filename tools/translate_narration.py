@@ -35,8 +35,11 @@ def english_lines(video: str) -> list[tuple[str, str]]:
     manifest = importlib.import_module(f"{video_package(video)}.manifest")
     out = []
     for module, cls, _ in manifest.SCENES:
-        metas = sorted((ROOT / "media" / video / "videos" / module).glob(f"*/{cls}.narration.json"),
-                       key=lambda p: p.stat().st_mtime)
+        live = ROOT / "media" / video
+        archive = ROOT / "renders" / "qa" / "music-master" / video / module
+        filename = f"{cls}.narration.json"
+        sources = (*live.glob(f"**/videos/{module}/*/{filename}"), *archive.glob(f"*/{filename}"))
+        metas = sorted(sources, key=lambda path: path.stat().st_mtime_ns)
         if not metas:
             sys.exit(f"no render of {cls} yet: build {video} first (any quality)")
         for line in json.loads(metas[-1].read_text())["lines"]:

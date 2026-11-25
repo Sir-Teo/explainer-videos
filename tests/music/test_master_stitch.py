@@ -91,7 +91,7 @@ def test_queue_renders_next_part_during_mastering_and_reports_failure(tmp_path, 
             assert first_master.wait(5)
             next_scenes.set()
 
-    def finish(video, build, clean):
+    def finish(video, build, clean, lang):
         if video == "music1":
             first_master.set()
             assert next_scenes.wait(5)
@@ -139,3 +139,20 @@ def test_scene_sound_report_checks_clip_and_mix(tmp_path):
     report = []
     assert check_scene(scene, report) == 0
     assert "dBTP" in report[0] and "A440" in report[0]
+
+
+def test_music_zh_uses_separate_master_and_archived_english_source(tmp_path, monkeypatch):
+    from tools import music_render as queue, translate_narration
+
+    monkeypatch.setattr(translate_narration, "ROOT", tmp_path)
+    manifest = __import__("videos.music.music1.manifest", fromlist=["SCENES"])
+    for module, scene, _ in manifest.SCENES:
+        archive = tmp_path / "renders" / "qa" / "music-master" / "music1" / module / "2160p60"
+        archive.mkdir(parents=True)
+        (archive / f"{scene}.narration.json").write_text(json.dumps({"lines": [{"raw": scene}]}))
+
+    assert translate_narration.english_lines("music1") == [(scene, scene) for _, scene, _ in manifest.SCENES]
+    name, master, receipt, log = queue.master_paths("music1", "zh")
+    assert (name, master.name, receipt.name, log.name) == (
+        "music1_zh", "music1_2160p_zh.mp4", "music1_zh.json", "music1_zh.log",
+    )

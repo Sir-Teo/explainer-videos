@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-"""Render Music, Built in order and verify each English 4K60 master."""
+"""Render Music, Built in order and verify each 4K60 master."""
 from __future__ import annotations
 
 import argparse
@@ -60,7 +60,7 @@ def check_picture_clock(master, stream, log):
         raise ValueError("A video presentation timestamp is missing")
 
 
-def verify_master(master, scenes, log):
+def verify_master(master, scenes, log, lang="en"):
     probe = json.loads(run_step(log, "ffprobe", "-v", "error", "-show_streams", "-show_chapters",
                                 "-show_format", "-of", "json", master, capture="stdout"))
     streams = {stream["codec_type"]: stream for stream in probe["streams"]}
@@ -71,8 +71,9 @@ def verify_master(master, scenes, log):
     check_picture_clock(master, picture, log)
     if (audio["codec_name"], audio["sample_rate"], audio["channels"]) != ("aac", "48000", 2):
         raise ValueError("Expected 48 kHz stereo AAC")
-    if any(stream.get("tags", {}).get("language") != "eng" for stream in (audio, subtitles)):
-        raise ValueError("Expected English audio and subtitles")
+    code = {"en": "eng", "zh": "chi"}[lang]
+    if any(stream.get("tags", {}).get("language") != code for stream in (audio, subtitles)):
+        raise ValueError(f"Expected {lang} audio and subtitles")
     if abs(float(audio["duration"]) - float(picture["duration"])) > 0.05:
         raise ValueError("Master audio and picture durations differ by more than 50 ms")
     chapter_count = sum(bool(title) for _, _, title in scenes)
@@ -115,8 +116,8 @@ def save_receipt(receipt, master, report):
     temporary.replace(receipt)
 
 
-def clear_intermediates(video, receipt):
-    media = ROOT / "media" / video / "crf16"
+def clear_intermediates(name, receipt):
+    media = ROOT / "media" / name / "crf16"
     for source in media.glob("videos/*/2160p60/*.json"):
         destination = receipt.with_suffix("") / source.relative_to(media / "videos")
         destination.parent.mkdir(parents=True, exist_ok=True)
@@ -125,23 +126,30 @@ def clear_intermediates(video, receipt):
         shutil.rmtree(media)
 
 
-def finish_part(video, build, clean):
-    log = STATE / "logs" / f"{video}.log"
-    master = OUTPUT / f"{video}_2160p.mp4"
-    receipt = OUTPUT / "qa" / "music-master" / f"{video}.json"
-    print(f"{video}: mastering and verifying", flush=True)
+def master_paths(video, lang):
+    name = video if lang == "en" else f"{video}_{lang}"
+    suffix = "" if lang == "en" else f"_{lang}"
+    master = OUTPUT / f"{video}_2160p{suffix}.mp4"
+    receipt = OUTPUT / "qa" / "music-master" / f"{name}.json"
+    log = STATE / "logs" / f"{name}.log"
+    return name, master, receipt, log
+
+
+def finish_part(video, build, clean, lang="en"):
+    name, master, receipt, log = master_paths(video, lang)
+    print(f"{name}: mastering and verifying", flush=True)
     try:
         run_step(log, *build, "--stitch-only")
-        run_step(log, sys.executable, "tools/qa_sound.py", video)
+        run_step(log, sys.executable, "tools/qa_sound.py", video, "--lang", lang)
         manifest = importlib.import_module(f"videos.music.{video}.manifest")
-        report = verify_master(master, manifest.SCENES, log)
+        report = verify_master(master, manifest.SCENES, log, lang)
         save_receipt(receipt, master, report)
         if clean:
-            clear_intermediates(video, receipt)
-        print(f"{video}: verified at {report['loudness_lufs']:.1f} LUFS, "
+            clear_intermediates(name, receipt)
+        print(f"{name}: verified at {report['loudness_lufs']:.1f} LUFS, "
               f"{report['true_peak_dbtp']:.1f} dBTP", flush=True)
     except (subprocess.CalledProcessError, OSError, ValueError, KeyError, TypeError) as error:
-        print(f"{video}: deferred ({error}); see {log}", flush=True)
+        print(f"{name}: deferred ({error}); see {log}", flush=True)
         return False
     return True
 
@@ -155,6 +163,7 @@ def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--parts", type=int, choices=parts, nargs="+", metavar="PART",
                         help="part numbers to render (default: every numbered part)")
+    parser.add_argument("--lang", choices=("en", "zh"), default="en")
     parser.add_argument("-j", "--jobs", type=int, default=3, help="parallel scene renders per part")
     parser.add_argument("--min-free-gib", type=float, default=6, help="free space needed to start a part")
     parser.add_argument("--clean", action="store_true", help="keep cue sheets and discard verified scene intermediates")
@@ -167,11 +176,12 @@ def main() -> int:
 
     os.environ.setdefault("EXPLAINER_VOICE", "qwen3-calm-a")
     (STATE / "logs").mkdir(parents=True, exist_ok=True)
-    with (STATE / "run.lock").open("a") as lock:
+    lock_name = "run.lock" if args.lang == "en" else f"run.{args.lang}.lock"
+    with (STATE / lock_name).open("a") as lock:
         try:
             fcntl.flock(lock, fcntl.LOCK_EX | fcntl.LOCK_NB)
         except BlockingIOError:
-            parser.error("another Music render queue is already running in this checkout")
+            parser.error("another Music render queue is already running for this language in this checkout")
         failed = []
         # The next part can use the narration GPU while the previous part's
         # picture is stream-copied and its soundtrack encoded and measured.
@@ -188,29 +198,29 @@ def main() -> int:
 
             for part in sorted(set(args.parts or parts)):
                 video = f"music{part}"
-                master = OUTPUT / f"{video}_2160p.mp4"
-                receipt = OUTPUT / "qa" / "music-master" / f"{video}.json"
-                log = STATE / "logs" / f"{video}.log"
+                name, master, receipt, log = master_paths(video, args.lang)
                 if not args.force and complete(master, receipt):
-                    print(f"{video}: verified master already exists", flush=True)
+                    print(f"{name}: verified master already exists", flush=True)
                     continue
                 if free_space() < args.min_free_gib * 1024**3:
                     wait_for_master()
                     if free_space() < args.min_free_gib * 1024**3:
-                        print(f"{video}: paused for space (needs {args.min_free_gib:g} GiB free)", flush=True)
+                        print(f"{name}: paused for space (needs {args.min_free_gib:g} GiB free)", flush=True)
                         return 1
-                print(f"{video}: rendering with {args.jobs} scene workers ({log})", flush=True)
-                build = [sys.executable, "tools/build.py", video, "--lang", "en", "-q", "k", "--fps", "60",
+                print(f"{name}: rendering with {args.jobs} scene workers ({log})", flush=True)
+                build = [sys.executable, "tools/build.py", video, "--lang", args.lang, "-q", "k", "--fps", "60",
                          "--crf", "16", "-j", str(args.jobs)]
                 try:
                     run_step(log, sys.executable, "tools/make.py", video, "--steps", "compute")
+                    if args.lang == "zh":
+                        run_step(log, sys.executable, "tools/zh_lines.py", video, "--verify", "--lang", args.lang)
                     run_step(log, *build, "--scenes-only")
                 except (subprocess.CalledProcessError, OSError) as error:
-                    failed.append(video)
-                    print(f"{video}: deferred ({error}); see {log}", flush=True)
+                    failed.append(name)
+                    print(f"{name}: deferred ({error}); see {log}", flush=True)
                     continue
                 wait_for_master()
-                pending = video, pool.submit(finish_part, video, build, args.clean)
+                pending = name, pool.submit(finish_part, video, build, args.clean, args.lang)
             wait_for_master()
         if failed:
             print(f"Deferred parts: {', '.join(failed)}", flush=True)

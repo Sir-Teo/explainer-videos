@@ -33,7 +33,7 @@ sys.path.insert(0, str(ROOT))
 
 from explainer.paths import video_dir, video_package  # noqa: E402
 
-from explainer import lang as narration_lang  # noqa: E402
+from explainer import lang as narration_lang, zh_text  # noqa: E402
 from explainer.voiceover import subtitle_cues, to_srt  # noqa: E402
 
 QUALITY = {"l": "480p", "m": "720p", "h": "1080p", "p": "1440p", "k": "2160p"}
@@ -301,6 +301,7 @@ def main():
                     help="leave out the series' computed score (explainer/<series>/score.py), if it has one")
     args = ap.parse_args()
     os.environ["EXPLAINER_LANG"] = args.lang  # the scene renders inherit it
+    narration_lang.LANG = args.lang
     os.environ["EXPLAINER_VIDEO"] = args.video  # and the video's name (explainer/zh_text.py finds its series' table)
     os.environ["EXPLAINER_SOUND_STEMS"] = "1"  # scenes with computed sound leave it to the cue sheet (music_stem)
 
@@ -379,9 +380,14 @@ def main():
             # a viewer with the sound off reads what each example is: "[sound: lower, upper, both (physical model)]"
             for c in heard:
                 if c.get("window") and not c.get("underscore"):
-                    what = ", ".join(x for x in (c.get("caption"), c.get("label")) if x) or "an example"
-                    cues.append((offset + c["start"], offset + c["start"] + min(c["duration"], 6.0),
-                                 f"[{'声音' if args.lang == 'zh' else 'sound'}: {what}]"))
+                    labels = [x for x in (c.get("caption"), c.get("label")) if x]
+                    if args.lang == "zh":
+                        what = "，".join(zh_text.translate(label) for label in labels) or "声音示例"
+                        caption = f"［声音：{what}］"
+                    else:
+                        what = ", ".join(labels) or "an example"
+                        caption = f"[sound: {what}]"
+                    cues.append((offset + c["start"], offset + c["start"] + min(c["duration"], 6.0), caption))
         cues += subtitle_cues(lines, offset, args.lang,
                               preserve_terms=getattr(manifest, "SUBTITLE_TERM_BOUNDARIES", False) is True)
         if chapter:
