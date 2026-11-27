@@ -220,9 +220,32 @@ def results() -> dict:
     R["storage"] = dict(day=[dict(hour=int(r["hour"]), other=r["other"], solar=r["solar"], demand=r["demand"], gas=r["gas"])
                              for r in day15],
                         min_other=min(r["other"] for r in day15), max_other=max(r["other"] for r in day15))
-    shape = [30, 28, 27, 27, 28, 32, 38, 35, 20, 8, 2, -3, -5, -4, 0, 10, 30, 70, 140, 120, 80, 55, 42, 35]
-    bat = power.battery(shape, mw=100, hours=4, efficiency=0.85)
-    R["storage"]["works"] = dict(prices=shape, profit=bat["profit"], charge=bat["charge"], discharge=bat["discharge"])
+    # the Works' solar day (chapters 7 and 8): chapter 4's fleet with 10 GW of wind, a day's demand, little or much solar
+    fleet_w = [power.Unit("wind", 10000, 0.0)] + [power.Unit(n, mw_, c) for n, mw_, c in R["dispatch"]["fleet"] if n != "wind and solar"]
+    hours_ = list(range(24))
+    demand_ = [1000 * g for g in (50, 48, 47, 47, 48, 52, 57, 60, 62, 63, 64, 65, 65, 65, 65, 66, 68, 71, 72, 72, 69, 64, 58, 53)]
+    shape_ = [max(0.0, float(np.sin((h - 6) / 12 * np.pi))) if 6 <= h <= 18 else 0.0 for h in hours_]
+
+    def day_prices(gw):
+        return [power.dispatch(fleet_w + [power.Unit("solar", gw * 1000 * shape_[h] + 1e-6, 0.0)], demand_[h])["price"]
+                for h in hours_]
+    p_lo, p_hi = day_prices(2), day_prices(60)
+    R["sun"]["works"] = dict(hours=hours_, demand=demand_, shape=shape_, p_lo=p_lo, p_hi=p_hi,
+                             cap_lo=sum(p * w for p, w in zip(p_lo, shape_)) / sum(shape_),
+                             cap_hi=sum(p * w for p, w in zip(p_hi, shape_)) / sum(shape_))
+    bat = power.battery(p_hi, mw=100, hours=4, efficiency=0.85)
+    capex = get("plant.battery.overnight") * 100 * 1000 / 1e6          # $ million for 100 MW
+    fixed = capex * power.annuity(0.07, 15) + get("plant.battery.fom") * 100 * 1000 / 1e6
+    year = bat["profit"] * 365 / 1e6
+    spike_days = 20
+    spike = power.battery([p if not (17 <= h <= 21) else 1000.0 for h, p in enumerate(p_hi)], mw=100, hours=4, efficiency=0.85)
+    year_spiky = (bat["profit"] * (365 - spike_days) + spike["profit"] * spike_days) / 1e6
+    days_even = (fixed - year) / ((spike["profit"] - bat["profit"]) / 1e6)
+    R["storage"]["works"] = dict(prices=p_hi, profit=bat["profit"], charge=bat["charge"], discharge=bat["discharge"], capex=capex,
+                                 fixed=fixed, year=year, spike_days=spike_days, year_spiky=year_spiky,
+                                 days_even=float(days_even), spike_profit=spike["profit"],
+                                 pumped=[r["value"] for r in rows if r["table"] == "epa_04_03" and r["row"] == "Hydroelectric Pumped Storage"
+                                         and r["column"] == "Net Summer Capacity"][0] / 1000)
 
     # --- retail: Britain --------------------------------------------------------------------------------------------------
     eu_gas = {m: v for m, v in F["PNGASEUUSDM"].items() if "2020-07" <= m <= "2022-12"}

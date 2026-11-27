@@ -98,27 +98,13 @@ class Sun(VoiceoverScene):
         self.clear_scene()
 
     def price(self):
-        from explainer.industry.works import power
-        D = R["dispatch"]
-        fleet = [power.Unit(n, mw_, c) for n, mw_, c in D["fleet"] if n != "wind and solar"]
-        base = [power.Unit("wind", 10000, 0.0)] + fleet
-        hours = list(range(24))
-        demand = [1000 * g for g in (50, 48, 47, 47, 48, 52, 57, 60, 62, 63, 64, 65, 65, 65, 65, 66, 68, 71, 72, 72, 69, 64, 58, 53)]
-        solar_shape = [max(0.0, np.sin((h - 6) / 12 * np.pi)) if 6 <= h <= 18 else 0.0 for h in hours]
-
-        def prices(solar_gw):
-            out = []
-            for h in hours:
-                units = base + [power.Unit("solar", solar_gw * 1000 * solar_shape[h] + 1e-6, 0.0)]
-                out.append(power.dispatch(units, demand[h])["price"])
-            return out
-        p0, p1 = prices(2), prices(60)
+        W = R["sun"]["works"]
+        hours, p0, p1 = W["hours"], W["p_lo"], W["p_hi"]
+        cap0, cap1 = W["cap_lo"], W["cap_hi"]
         pa = viz.plot_axes([0, 23], [0, 70], x_length=8.4, y_length=4.2, xticks=[0, 6, 12, 18, 23], yticks=[20, 40, 60],
                            xfmt=lambda v: f"{int(v)}:00", yfmt=lambda v: f"${v:.0f}", ylabel="price, $ a MWh", size=14).move_to([-1.8, -0.4, 0])
         l0 = poly(pa, list(zip(hours, p0)), GREY_B, 3)
         l1 = poly(pa, list(zip(hours, p1)), SUN, 4)
-        cap0 = sum(p * s for p, s in zip(p0, solar_shape)) / sum(solar_shape)
-        cap1 = sum(p * s for p, s in zip(p1, solar_shape)) / sum(solar_shape)
         notes = VGroup(tx("what a MWh of solar earns:", 16, GREY_A), tx(f"few solar plants: ${cap0:.0f}", 18, GREY_B, bold=True),
                        tx(f"many solar plants: ${cap1:.0f}", 18, SUN, bold=True), tx("solar's success lowers", 15, GREY_A),
                        tx("the price solar is paid", 15, GREY_A)).arrange(DOWN, aligned_edge=LEFT, buff=0.06).move_to([4.6, 0.4, 0])
