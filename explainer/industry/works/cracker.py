@@ -86,17 +86,23 @@ def world_price(costs: list[float], markup: float = 50.0) -> float:
     return max(costs) + markup
 
 
-def play(years: list[int], gas: dict, brent: dict, site_gas: dict, markup: float = 50.0) -> dict:
-    """Run a Texas ethane cracker and a European naphtha cracker through history.  ``site_gas`` maps a site name to its
-    gas price series; the price each year is set by the dearest of the sites (with ``markup``).  Returns each site's
-    cost and margin a tonne, and the price, by year."""
+def markup_from_utilization(cu: float, floor: float = 70.0, per_point: float = 25.0) -> float:
+    """How far the price runs above the dearest plant's cash cost: nothing when the industry runs at ``floor``% of
+    capacity or less, ``per_point`` dollars a tonne for each point above it (this series' assumption)."""
+    return max(0.0, (cu - floor) * per_point)
+
+
+def play(years: list[int], gas: dict, brent: dict, site_gas: dict, markup: float | dict = 50.0) -> dict:
+    """Run a Texas ethane cracker and naphtha crackers in Europe and Asia through history.  ``site_gas`` maps a
+    market to its gas price series; the price each year is set by the dearest of the sites plus ``markup`` (a number, or
+    a number for each year).  Returns each site's cost and margin a tonne, and the price, by year."""
     sites = {"Texas, ethane": Cracker("ethane"), "Europe, naphtha": Cracker("naphtha"), "Asia, naphtha": Cracker("naphtha")}
     gas_of = {"Texas, ethane": "US", "Europe, naphtha": "EU", "Asia, naphtha": "Asia"}
     out = {s: {"cost": {}, "margin": {}} for s in sites}
     out["price"] = {}
     for y in years:
         costs = {s: c.cost(site_gas[gas_of[s]][y], brent[y]) for s, c in sites.items()}
-        p = world_price(list(costs.values()), markup)
+        p = world_price(list(costs.values()), markup[y] if isinstance(markup, dict) else markup)
         out["price"][y] = p
         for s in sites:
             out[s]["cost"][y] = costs[s]

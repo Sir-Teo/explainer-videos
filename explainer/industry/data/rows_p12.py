@@ -21,6 +21,7 @@ AEO05 = "https://www.eia.gov/outlooks/archive/aeo05/pdf/0383(2005).pdf"
 LIN = "https://www.sec.gov/Archives/edgar/data/1707925/000162828026011430/lin-20251231.htm"
 APD = "https://www.sec.gov/Archives/edgar/data/2969/000000296926000050/apd-20260930.htm"
 CF = "https://www.sec.gov/Archives/edgar/data/1324404/000132440426000007/cf-20251231.htm"
+DOW = "https://www.sec.gov/Archives/edgar/data/1751788/000175178826000018/dow-20251231.htm"
 CF23 = "https://www.sec.gov/Archives/edgar/data/1324404/000132440424000008/cf-20231231.htm"
 MMM = "https://www.sec.gov/Archives/edgar/data/66740/000006674023000048/mmm-20230622.htm"
 CC = "https://www.sec.gov/Archives/edgar/data/1627223/000095017023025888/cc-20230601.htm"
@@ -104,6 +105,8 @@ add(
     filing("cf.uk", 2022, "year", "CF closed its Ince plant in 2022 and in 2023 ceased ammonia production at Billingham, "
            "'due to the substantial increase in the cost of natural gas in the United Kingdom'", "CF Industries", CF23,
            "2022-2023"),
+    filing("dow.bohlen", 2027, "year", "Dow plans to shut down its ethylene cracker in Böhlen, Germany, by the end of 2027 "
+           "(a 2025 strategic review of its European assets)", "Dow Inc.", DOW, "2025"),
     r("mmm.pfas", 12.5, "$ billion", "3M's settlement with US public water suppliers over PFAS: $10.5-12.5 billion "
       "(nominal), a $10.3 billion charge", "3M, Form 8-K, 22 June 2023", MMM, "2023-06-22", "filing", lo=10.5, hi=12.5),
     r("cc.pfas", 1.185, "$ billion", "Chemours, DuPont and Corteva's water-district settlement fund over PFAS",
