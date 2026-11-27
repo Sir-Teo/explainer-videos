@@ -381,6 +381,18 @@ CALLS = [
          rule="The Procter & Gamble Company, Form 8-K with its fiscal 2027 results or Form 10-K for fiscal 2027: organic "
               "sales growth for the year as reported; true if 3% or more",
          due="2027-08", ours=True),
+    Call(23, "Industria de Diseño Textil (Inditex)", "2026-03",
+         "\"For 2026, Inditex expects a stable gross margin (+/-50 bps)\", against 58.3% in FY2025",
+         "Inditex, FY2025 results (to 31 January 2026)",
+         outcome="Pending; gross margin of 58.7% in 1H2026, 40 basis points above 1H2025, guidance repeated (interim 1H2026 "
+                 "results)"),
+    Call(23, "Industry, Built", "2026-11-27",
+         "Inditex's gross margin for FY2026, the year to January 2027, will be 58.5% or more. Probability: 55%.",
+         "This series, Part 23, chapter 11; reasoning: the first half ran at 58.7%, up 40 basis points, and the second half "
+         "needs about 58.3% if its sales grow as the first half's did, about last year's 58.2%; but the second half holds "
+         "the winter sale, whose quarter ran at 54.8% last year, and 58.5% sits near the top of the guidance",
+         rule="Inditex, FY2026 results (March 2027): gross margin for the year as reported; true if 58.5% or more",
+         due="2027-03", ours=True),
 ]
 
 

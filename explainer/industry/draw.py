@@ -39,6 +39,9 @@ Every glyph is a ``VGroup`` with its moving parts named, so a scene can animate 
   (``.windows``);
 * consumer goods: :func:`soap` (``.bubbles``), :func:`detergent` (``.label``), :func:`cereal_box`, :func:`can`,
   :func:`shelf` (``.packs``, ``.store``), :func:`cart`;
+* fashion: :func:`tshirt` (``.print``), :func:`handbag` (``.clasp``), :func:`sneaker` (``.sole``, ``.stripe``),
+  :func:`hanger`, :func:`rail` (``.items`` on a ``.bar``), :func:`sewing_machine` (``.needle``), :func:`price_tag`
+  (``.label``, ``.strike`` for a markdown);
 * the city and its people: :func:`skyline` (``.windows`` light up), :func:`house`, :func:`shop`, :func:`person`,
   :func:`crowd`; :func:`sun`, :func:`moon`, :func:`sky` (a background whose colour follows the hour);
 * money: :func:`coin`, :func:`coin_stack`, :func:`note_bill`, :func:`coin_flow` (coins flying from one place to
@@ -55,7 +58,7 @@ from __future__ import annotations
 import math
 
 import numpy as np
-from manim import (DOWN, LEFT, ORIGIN, PI, RIGHT, TAU, UL, UP, UR, Arc, Circle, CubicBezier, DecimalNumber, Dot, Ellipse, Line, MathTex,
+from manim import (DOWN, LEFT, ORIGIN, PI, RIGHT, TAU, UL, UP, UR, Arc, Circle, CubicBezier, DashedLine, DecimalNumber, Dot, Ellipse, Line, MathTex,
                    Polygon,
                    Rectangle, RoundedRectangle, Square, Triangle, ValueTracker, VGroup, VMobject, always_redraw,
                    interpolate_color, ManimColor)
@@ -2425,3 +2428,106 @@ def cart(w: float = 1.2, color: str = "#C9D3E0") -> VGroup:
     wheels = VGroup(*[Circle(radius=0.05 * w, stroke_color=color, stroke_width=3).move_to([x * w, 0.04 * w, 0]) for x in (-0.35, 0.3)])
     base = Line([-0.4 * w, 0.08 * w, 0], [0.33 * w, 0.08 * w, 0], stroke_color=color, stroke_width=3)
     return VGroup(basket, grid, handle, frame, base, wheels)
+
+
+def tshirt(w: float = 1.0, color: str = "#7EC8F5", accent: str = "#FFFFFF") -> VGroup:
+    """A T-shirt laid flat, front on, with a neckline and a small chest print (``g.print``)."""
+    pts = [(-0.18, 0.5), (-0.5, 0.36), (-0.62, 0.08), (-0.4, -0.02), (-0.34, 0.12), (-0.34, -0.5), (0.34, -0.5), (0.34, 0.12),
+           (0.4, -0.02), (0.62, 0.08), (0.5, 0.36), (0.18, 0.5)]
+    body = Polygon(*[[x * w, y * w, 0] for x, y in pts], stroke_width=0, fill_color=color, fill_opacity=1)
+    neck = Arc(radius=0.18 * w, start_angle=PI, angle=PI, stroke_color="#0E1117", stroke_width=3).move_to([0, 0.44 * w, 0])
+    pr = Circle(radius=0.08 * w, stroke_width=0, fill_color=accent, fill_opacity=0.85).move_to([0.14 * w, 0.18 * w, 0])
+    g = VGroup(body, neck, pr)
+    g.print = pr
+    return g
+
+
+def handbag(w: float = 1.0, color: str = "#C8752E", hardware: str = "#F6C453") -> VGroup:
+    """A structured leather handbag with a top handle, a flap and a clasp (``g.clasp``)."""
+    body = Polygon([-0.5 * w, -0.35 * w, 0], [0.5 * w, -0.35 * w, 0], [0.42 * w, 0.25 * w, 0], [-0.42 * w, 0.25 * w, 0],
+                   stroke_width=0, fill_color=color, fill_opacity=1)
+    flap = Polygon([-0.42 * w, 0.25 * w, 0], [0.42 * w, 0.25 * w, 0], [0.36 * w, -0.02 * w, 0], [-0.36 * w, -0.02 * w, 0],
+                   stroke_color="#0E1117", stroke_width=1.5, stroke_opacity=0.5, fill_color=color, fill_opacity=1)
+    handle = Arc(radius=0.26 * w, start_angle=0, angle=PI, stroke_color=color, stroke_width=7 * w).move_to([0, 0.38 * w, 0])
+    clasp = RoundedRectangle(corner_radius=0.02 * w, width=0.14 * w, height=0.09 * w, stroke_width=0, fill_color=hardware,
+                             fill_opacity=1).move_to([0, -0.02 * w, 0])
+    stitch = DashedLine([-0.45 * w, -0.3 * w, 0], [0.45 * w, -0.3 * w, 0], stroke_color="#F3E2C7", stroke_width=1.2, dash_length=0.03 * w)
+    g = VGroup(handle, body, flap, clasp, stitch)
+    g.clasp = clasp
+    return g
+
+
+def sneaker(w: float = 1.0, color: str = "#FFFFFF", sole: str = "#C9D3E0", accent: str = "#E8554E") -> VGroup:
+    """A running shoe in profile, toe to the right, with a sole (``g.sole``) and a swoosh-free stripe (``g.stripe``)."""
+    upper = Polygon([-0.5 * w, -0.1 * w, 0], [-0.48 * w, 0.28 * w, 0], [-0.28 * w, 0.3 * w, 0], [-0.05 * w, 0.12 * w, 0],
+                    [0.32 * w, 0.05 * w, 0], [0.52 * w, -0.02 * w, 0], [0.55 * w, -0.1 * w, 0], stroke_width=0, fill_color=color,
+                    fill_opacity=1)
+    so = RoundedRectangle(corner_radius=0.05 * w, width=1.1 * w, height=0.12 * w, stroke_width=0, fill_color=sole,
+                          fill_opacity=1).move_to([0.02 * w, -0.15 * w, 0])
+    stripe = CubicBezier([-0.36 * w, 0.0, 0], [-0.1 * w, -0.05 * w, 0], [0.1 * w, 0.02 * w, 0], [0.3 * w, 0.06 * w, 0],
+                         stroke_color=accent, stroke_width=5 * w)
+    laces = VGroup(*[Line([x * w, (0.2 - 0.6 * (x + 0.3)) * w, 0], [(x + 0.06) * w, (0.25 - 0.6 * (x + 0.3)) * w, 0],
+                          stroke_color="#5C6472", stroke_width=2) for x in (-0.25, -0.17, -0.09)])
+    g = VGroup(so, upper, stripe, laces)
+    g.sole, g.stripe = so, stripe
+    return g
+
+
+def hanger(w: float = 1.0, color: str = "#C9D3E0") -> VGroup:
+    """A coat hanger."""
+    hook = Arc(radius=0.08 * w, start_angle=-PI / 2, angle=1.5 * PI, stroke_color=color, stroke_width=3).move_to([0, 0.38 * w, 0])
+    stem = Line([0, 0.3 * w, 0], [0, 0.22 * w, 0], stroke_color=color, stroke_width=3)
+    tri = Polygon([0, 0.22 * w, 0], [0.5 * w, -0.05 * w, 0], [-0.5 * w, -0.05 * w, 0], stroke_color=color, stroke_width=3,
+                  fill_opacity=0)
+    return VGroup(hook, stem, tri)
+
+
+def rail(w: float = 5.0, n: int = 7, colors=("#7EC8F5", "#E8554E", "#F6C453", "#7BD88F", "#B58CFF", "#F2A65A"),
+         gap: float | None = None) -> VGroup:
+    """A clothes rail with ``n`` T-shirts on hangers (``g.items``; each item is VGroup(hanger, shirt)) and a ``g.bar``."""
+    bar = Line([-w / 2, 0, 0], [w / 2, 0, 0], stroke_color="#9AA3B2", stroke_width=5)
+    legs = VGroup(Line([-w / 2, 0, 0], [-w / 2 - 0.2, -2.2, 0], stroke_color="#9AA3B2", stroke_width=4),
+                  Line([w / 2, 0, 0], [w / 2 + 0.2, -2.2, 0], stroke_color="#9AA3B2", stroke_width=4))
+    step = gap if gap is not None else w / (n + 0.5)
+    items = VGroup()
+    for i in range(n):
+        x = -w / 2 + step * (i + 0.75)
+        h = hanger(0.7).move_to([x, -0.15, 0])
+        s = tshirt(0.75, color=colors[i % len(colors)]).move_to([x, -0.7, 0])
+        items.add(VGroup(h, s))
+    g = VGroup(legs, bar, items)
+    g.items, g.bar = items, bar
+    return g
+
+
+def sewing_machine(w: float = 1.4, color: str = "#E8E2D4", needle: str = "#C9D3E0") -> VGroup:
+    """An industrial sewing machine in profile: arm, head, needle (``g.needle`` moves up and down) and table."""
+    table = Rectangle(width=1.4 * w, height=0.06 * w, stroke_width=0, fill_color="#5C6472", fill_opacity=1).move_to([0, 0, 0])
+    base = RoundedRectangle(corner_radius=0.04 * w, width=1.0 * w, height=0.14 * w, stroke_width=0, fill_color=color,
+                            fill_opacity=1).move_to([0, 0.1 * w, 0])
+    pillar = RoundedRectangle(corner_radius=0.04 * w, width=0.2 * w, height=0.5 * w, stroke_width=0, fill_color=color,
+                              fill_opacity=1).move_to([0.36 * w, 0.4 * w, 0])
+    arm = RoundedRectangle(corner_radius=0.05 * w, width=0.9 * w, height=0.16 * w, stroke_width=0, fill_color=color,
+                           fill_opacity=1).move_to([0.0, 0.62 * w, 0])
+    head = RoundedRectangle(corner_radius=0.03 * w, width=0.16 * w, height=0.26 * w, stroke_width=0, fill_color=color,
+                            fill_opacity=1).move_to([-0.38 * w, 0.5 * w, 0])
+    nd = Line([-0.38 * w, 0.37 * w, 0], [-0.38 * w, 0.2 * w, 0], stroke_color=needle, stroke_width=2.5)
+    wheel = Circle(radius=0.1 * w, stroke_color="#9AA3B2", stroke_width=3).move_to([0.5 * w, 0.62 * w, 0])
+    cloth = Rectangle(width=0.5 * w, height=0.03 * w, stroke_width=0, fill_color="#7EC8F5", fill_opacity=1).move_to([-0.38 * w, 0.185 * w, 0])
+    g = VGroup(table, base, pillar, arm, head, wheel, cloth, nd)
+    g.needle = nd
+    return g
+
+
+def price_tag(text: str = "$40", w: float = 0.9, color: str = "#F6C453", cut: bool = False) -> VGroup:
+    """A swing tag with a price (``g.label``); ``cut`` strikes the price through, for a markdown (``g.strike``)."""
+    body = Polygon([-0.5 * w, 0.22 * w, 0], [0.3 * w, 0.22 * w, 0], [0.5 * w, 0, 0], [0.3 * w, -0.22 * w, 0], [-0.5 * w, -0.22 * w, 0],
+                   stroke_width=0, fill_color=color, fill_opacity=1)
+    hole = Circle(radius=0.04 * w, stroke_width=0, fill_color="#0E1117", fill_opacity=1).move_to([0.32 * w, 0, 0])
+    lab = tx(text, 22 * w, "#0E1117", bold=True).move_to([-0.1 * w, 0, 0])
+    g = VGroup(body, hole, lab)
+    g.label = lab
+    g.strike = Line(lab.get_corner(DOWN + LEFT), lab.get_corner(UP + RIGHT), stroke_color="#E8554E", stroke_width=4)
+    if cut:
+        g.add(g.strike)
+    return g

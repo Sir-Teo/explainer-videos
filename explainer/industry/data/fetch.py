@@ -2173,6 +2173,68 @@ CONSUMER_ITEMS = dict(AUTO_ITEMS, advertising=[("us-gaap", "AdvertisingExpense")
                                                ("us-gaap", "SellingAndMarketingExpense")])
 
 
+FASHION_COMPANIES = [(320187, "NKE", "USD"), (1397187, "LULU", "USD"), (103379, "VFC", "USD"), (78239, "PVH", "USD"),
+                     (1037038, "RL", "USD"), (1116132, "TPR", "USD"), (1530721, "CPRI", "USD"), (94845, "LEVI", "USD"),
+                     (39911, "GAP", "USD"), (109198, "TJX", "USD"), (745732, "ROST", "USD"), (1579298, "BURL", "USD"),
+                     (1336917, "UAA", "USD"), (910521, "DECK", "USD"), (1050797, "COLM", "USD"), (1018840, "ANF", "USD"),
+                     (919012, "AEO", "USD"), (912615, "URBN", "USD"), (832988, "SIG", "USD"), (1858985, "ONON", "CHF"),
+                     (1977102, "BIRK", "EUR"), (794367, "M", "USD"), (885639, "KSS", "USD")]
+
+
+FASHION_ITEMS = dict(AUTO_ITEMS,
+                     revenue=AUTO_ITEMS["revenue"] + [("ifrs-full", "RevenueFromContractsWithCustomers"),
+                                                      ("us-gaap", "RevenueFromContractWithCustomerIncludingAssessedTax")],
+                     cost=AUTO_ITEMS["cost"] + [("us-gaap", "CostOfGoodsAndServiceExcludingDepreciationDepletionAndAmortization")])
+
+
+def sec_fashion():
+    """Annual figures of apparel, footwear, luxury and off-price companies from their Forms 10-K and 20-F (SEC company
+    facts), in their reporting currency (billions; On in Swiss francs, Birkenstock in euros), with ``sec_auto``'s items and three
+    more tags (On and Birkenstock tag revenue from contracts; TJX tags its sales including assessed taxes; Capri and
+    Abercrombie tag the cost of goods excluding depreciation).
+    Most of these companies' fiscal years end around the end of January or early February of the next calendar year."""
+    return _write("sec_fashion", ["ticker", "year_end", "currency"] + list(FASHION_ITEMS),
+                  _sec_table(FASHION_COMPANIES, FASHION_ITEMS), [_sec_source(FASHION_ITEMS)])
+
+
+FRED_FASHION = {"CPIAPPNS": "CPI-U: apparel (1982-84 = 100, NSA; BLS)",
+                "CES3231500001": "All employees: apparel manufacturing (thousands, SA; BLS)",
+                "IPG315S": "Industrial production: apparel and leather goods (2017 = 100, SA; Federal Reserve G.17)",
+                "CPIAUCNS": "CPI-U: all items (1982-84 = 100, NSA; BLS)",
+                "EXUSEU": "US dollars to one euro (monthly average of noon buying rates in New York; Federal Reserve H.10)",
+                "EXSZUS": "Swiss francs to one US dollar (monthly average of noon buying rates in New York; Federal Reserve H.10)"}
+
+
+def fred_fashion():
+    return _fred_write("fred_fashion", FRED_FASHION)
+
+
+COMTRADE_APPAREL_REPORTERS = {156: "China", 50: "Bangladesh", 704: "Vietnam", 699: "India", 792: "Turkey", 380: "Italy",
+                              116: "Cambodia"}
+COMTRADE_APPAREL_HS = {"61": "articles of apparel, knitted or crocheted", "62": "articles of apparel, not knitted or crocheted"}
+
+
+def comtrade_apparel(years=range(2010, 2026)):
+    """Exports of clothing (HS chapters 61 and 62) to the world by seven large exporters, as each reported them to UN
+    Comtrade (annual; US dollars; UN Comtrade's public preview API).  Bangladesh reports late and with gaps."""
+    import time
+
+    out = []
+    for y in years:
+        url = ("https://comtradeapi.un.org/public/v1/preview/C/A/HS?reporterCode={}&period={}&partnerCode=0&cmdCode={}"
+               "&flowCode=X").format(",".join(str(k) for k in COMTRADE_APPAREL_REPORTERS), y, ",".join(COMTRADE_APPAREL_HS))
+        j = json.loads(_get(url))
+        for r in j.get("data", []):
+            if r.get("customsCode") != "C00" or r.get("motCode") != 0 or r.get("partner2Code") != 0:
+                continue
+            out.append([y, r["cmdCode"], COMTRADE_APPAREL_REPORTERS[r["reporterCode"]], round(r["primaryValue"] / 1e9, 4)])
+        time.sleep(1.5)
+    out.sort(key=lambda r: (r[0], r[1], r[2]))
+    return _write("comtrade_apparel", ["year", "hs", "reporter", "exports_usd_bn"], out,
+                  ["https://comtradeapi.un.org/public/v1/preview/C/A/HS (UN Comtrade; exports to the world as reported "
+                   "by each country, annual; " + "; ".join(f"HS {k}: {v}" for k, v in COMTRADE_APPAREL_HS.items()) + ")"])
+
+
 FRED_CONSUMER = {"CUUR0000SAG1": "CPI-U: personal care (1982-84 = 100, NSA; BLS)",
                  "CUUR0000SEGA": "CPI-U: tobacco and smoking products (1982-84 = 100, NSA; BLS)",
                  "CUUR0000SAF11": "CPI-U: food at home (1982-84 = 100, NSA; BLS)",
@@ -2249,7 +2311,8 @@ def sipri_milex():
                    "estimates included as published)"])
 
 
-JOBS = {"fred_consumer": fred_consumer, "sec_consumer": sec_consumer, "sec_medtech": sec_medtech, "fred_medtech": fred_medtech, "fda_devices": fda_devices, "fda_510k_panels": fda_510k_panels,
+JOBS = {"sec_fashion": sec_fashion, "fred_fashion": fred_fashion, "comtrade_apparel": comtrade_apparel,
+        "fred_consumer": fred_consumer, "sec_consumer": sec_consumer, "sec_medtech": sec_medtech, "fred_medtech": fred_medtech, "fda_devices": fda_devices, "fda_510k_panels": fda_510k_panels,
         "sec_aero": sec_aero, "fred_aero": fred_aero, "sipri_milex": sipri_milex, "census_auto": census_auto, "sec_auto": sec_auto, "fred_auto": fred_auto, "owid_ev": owid_ev, "comtrade_cars": comtrade_cars,
         "sec_pharma": sec_pharma, "fred_pharma": fred_pharma, "sec_mach": sec_mach, "fred_mach": fred_mach, "owid_robots": owid_robots, "comtrade_mach": comtrade_mach,
         "eia_aeo17": eia_aeo17, "comtrade_us_m": comtrade_us_m, "bls_elec": bls_elec, "fred_elec": fred_elec, "comtrade_us": comtrade_us, "fred_chips": fred_chips, "owid_chips": owid_chips, "sec_foreign": sec_foreign, "wb_water": wb_water, "bls_water": bls_water, "fred_waste": fred_waste, "epa_msw": epa_msw, "eia_930": eia_930, "eia_mer": eia_mer, "fred_power": fred_power, "owid_elec": owid_elec, "owid_chem": owid_chem, "fred_chem": fred_chem, "eia_ngl": eia_ngl, "eurostat_chem": eurostat_chem, "usgs_heavy": usgs_heavy, "fred_heavy": fred_heavy, "owid_co2": owid_co2, "ers_food_dollar": ers_food_dollar, "ers_costs": ers_costs, "ers_farm_income": ers_farm_income, "owid_ag": owid_ag, "fred_food": fred_food, "ne_land": ne_land, "usgs_ds140": usgs_ds140, "fred_metals": fred_metals, "sec_ifrs": sec_ifrs, "eia_gas": eia_gas, "eia_petroleum": eia_petroleum, "eia_intl": eia_intl, "eia_pump": eia_pump, "fred_energy": fred_energy, "fred_market": fred_market, "owid_tech": owid_tech, "sec_quarterly": sec_quarterly, "fred_cycle": fred_cycle, "esef_maersk": esef_maersk, "damodaran_roc": damodaran_roc, "census_conc": census_conc, "eia_power": eia_power, "fred_pay": fred_pay, "bea_real": bea_real, "sec_annual": sec_annual, "fred_prices": fred_prices, "census_susb": census_susb, "bea_va": bea_va, "wb_mfg_usd": wb_mfg_usd, "bea_hist": bea_hist, "bea_io": bea_io, "fred_jobs": fred_jobs, "wb_shares": wb_shares}

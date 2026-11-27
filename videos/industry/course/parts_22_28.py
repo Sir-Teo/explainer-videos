@@ -47,4 +47,49 @@ PARTS = [
               ("The brand against a store label", "explainer/industry/works/brand.py"),
               ("The SEC and FRED extracts", "explainer/industry/data/SOURCES.md")),
     ),
+    Part(
+        n=23, level="U", widget="seasonbuy", prereq=(4, 5, 6, 22),
+        question="How do two industries that sell clothes run on opposite rules?",
+        story="The part opens on Inditex, EUR 39.9bn of sales from 5,460 shops, and Hermès, EUR 16.0bn with 41% kept as "
+              "operating profit, and on Inditex's gross margin quarter by quarter: 60.6%, 56.4%, 62.2%, 54.8%, the "
+              "saw-tooth of clearing what did not sell. The viewer buys a season of a new T-shirt: $40, 100,000 customers on "
+              "average, a 60% forecast error months ahead; $12 a shirt from far away, $16 from nearby once the season shows, "
+              "$8 in the sale. The newsvendor's rule orders 162,000 shirts early and earns $2.32m, clearing 70,000; ordering "
+              "late earns $2.19m; a base of 111,000 early with the hits chased late earns $2.49m at a 59.4% gross margin. "
+              "NIKE's goods come from 416 contract factories it does not own, its shoes 52% from Vietnam; China exported "
+              "$152bn of clothes in 2023 and quotas ended in 2005; American jobs making clothes fell from 903,000 to 79,000, "
+              "and clothes got 57% cheaper against other prices. Stock sits 58 days at Ross, 71 at Inditex, 103 at NIKE and "
+              "170 at Tapestry. Inditex sources within the season close to home and owes EUR 4.2bn more than it holds in "
+              "stock and receivables. TJX buys from 21,000 vendors at 20-60% below full price and has doubled its sales "
+              "since 2015 while Macy's and Kohl's shrank. A dollar of NIKE's sales is 57 cents of product and 10 of demand "
+              "creation; it turned back to wholesale. A euro of Hermès's revenue is 29 cents of making and 41 of operating "
+              "profit, from 24 leather workshops; LVMH's leather goods keep 35%, its perfumes 9%. Gucci fell from EUR 10.5bn "
+              "to EUR 6.0bn while Hermès rose to EUR 16.0bn. Rana Plaza killed at least 1,132 people in 2013. The series gives "
+              "Inditex's FY2026 gross margin of 58.5% or more 55%.",
+        handoff="Part 24, construction, opens Act IV, Building: how the buildings and roads around us get built.",
+        outside="Probability and expected value; Part 4's costs; Part 5's moats; Part 6's cycles; Part 22's brands; "
+                "Economics, Built's newsvendor and reference prices.",
+        objectives={
+            "U": ["Explain why clothes must be ordered before demand is known and how markdowns record a wrong guess.",
+                  "Explain the three answers: speed (fast fashion), buying others' mistakes (off-price), scarcity (luxury).",
+                  "Explain why brands use contract factories, and what that means for the people who work in them."],
+            "M": ["Solve the newsvendor problem with the critical ratio, and value a base order with a later top-up.",
+                  "Compute days of stock and operating working capital from a balance sheet.",
+                  "Split a company's dollar or euro of sales into making, selling and profit."],
+            "D": ["Score a fashion company's gross margin guidance against its half-year results.",
+                  "Make and state a dated, scorable forecast with the arithmetic of what the rest of the year needs."],
+            "I": ["Read a brand's manufacturing disclosure: factories, countries, contractors and concentration.",
+                  "Read a luxury group's results by business group and a fashion retailer's quarterly income statement."],
+        },
+        results=[
+            ("The critical ratio", r"P(D \le Q^*) = \frac{p - c}{p - s}"),
+            ("Expected sales, lognormal demand", r"E[\min(D,Q)] = m\,\Phi\!\left(\frac{\ln Q-\mu-\sigma^2}{\sigma}\right) + Q\left(1-\Phi\!\left(\frac{\ln Q-\mu}{\sigma}\right)\right)"),
+            ("Days of stock", r"\text{days} = 365 \times \frac{\text{inventory}}{\text{cost of sales}}"),
+            ("Operating working capital", r"\text{OWC} = \text{inventory} + \text{receivables} - \text{payables}"),
+        ],
+        U=(0, 1, 2, 3, 4, 5, "s07_intermission", 6, 7, 8, 9), I=(10,), D=(11,),
+        also=(("The Register's rows for Part 23", "explainer/industry/data/rows_p23.py"),
+              ("The season bought early, late or chased", "explainer/industry/works/fashion.py"),
+              ("The SEC, FRED and UN Comtrade extracts", "explainer/industry/data/SOURCES.md")),
+    ),
 ]

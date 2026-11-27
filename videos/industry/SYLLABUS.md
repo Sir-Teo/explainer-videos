@@ -2554,6 +2554,7 @@ scored in Part 64 and at each refresh.
 | 20 · Pharmaceuticals | done 2026-11-27 (about 60 Register rows; Pfizer's 10-K 2012 (Exhibit 13), the 10-Ks of Eli Lilly and Merck (2025) and Lilly's 8-Ks of February 2025, February 2026 and October 2026; BIO, Informa and QLS's success rates 2011-2020; the FDA's study of generic prices, its generic approvals and novel drug lists; CMS's fact sheet on the first negotiated prices; the SEC extract of sixteen drug, biotech and generics companies; FRED's drug producer prices and medicine output) | `works/pharma.py` | 15 scenes, with capsules, tablets, flasks and vials, a hundred candidates through the funnel and a drug's life to its cliff | code only: every beat snapshot-checked, not rendered | entry, lab, interactive | not started |
 | 21 · Medical Technology | done 2026-11-27 (about 100 Register rows; the 10-Ks 2025 of Intuitive Surgical, Abbott, Boston Scientific, Stryker, Quest, GE HealthCare and Edwards, Medtronic's for fiscal 2026 and Abbott's for 2022, Intuitive's 10-Q and 8-Ks of 2025-2026; the SEC extract of twenty-three companies; openFDA's 510(k), De Novo, PMA and recall counts; FRED's instrument prices and output) | `works/medtech.py` | 14 scenes, with a surgical robot whose arms move, a scanner, a pacemaker, test tubes on a belt, glucose sensors and a hospital | code only: every beat snapshot-checked, not rendered | entry, lab, interactive | not started |
 | 22 · Consumer Goods | done 2026-11-27 (about 120 Register rows; P&G's 10-Ks for fiscal 2020-2026 and its 8-Ks of 2024-2026, the 10-Ks 2025 of Coca-Cola, Altria, PMI, Colgate, Church & Dwight, Kimberly-Clark and Hershey and those for fiscal 2026 of Clorox, General Mills and Costco; the SEC extract of twenty-five makers; FRED's CPI for personal care, food at home and tobacco) | `works/brand.py` | 13 scenes, with soap, detergent, cereal, cans, a shelf with a store label and a trolley | code only: every beat snapshot-checked, not rendered | entry, lab, interactive | not started |
+| 23 · Fashion and Luxury | done 2026-11-27 (about 160 Register rows; Inditex's FY2025 and 1H2026 results; Hermès's full-year results 2023-2025; LVMH's 2025 results; Kering's 2023 and 2025 results; the 10-Ks of NIKE, TJX, Tapestry, Capri, Lululemon and Levi Strauss; the SEC extract of twenty-three companies; UN Comtrade's clothing exports; FRED's apparel prices and jobs; the WTO on the end of quotas; the ILO on Rana Plaza) | `works/fashion.py` | 14 scenes, with T-shirts on rails, handbags, trainers, sewing machines and price tags | code only: every beat snapshot-checked, not rendered | entry, lab, interactive | not started |
 
 Phase 0 is done in the form Part 1 needed: the palette and kit (`style.py`, `kit.py`), the instruments (`viz.py`: the
 phone and its exploded view, the region map, the Dollar column, the margin ladder, the treemap, plain axes), the
@@ -2827,3 +2828,18 @@ fiscal 2027. Added: Hershey's cocoa year, PMI's smoke-free revenue, Monster's gr
 picture. Unilever, L'Oreal, Kao, Hindustan Unilever, Nestle, Danone, Kraft Heinz, Mengniu, Nongfu Spring, Diageo, Kweichow
 Moutai, BAT, China National Tobacco, ITC and the retailers appear on the map by name only. Written as code only and
 checked from snapshots; not rendered.
+
+Part 23 departs from its draft's story: the design that is "in shops on three continents fifteen days later" was not
+found in Inditex's own reports, so the film uses what they do say, 'within-season proximity sourcing', and shows the
+result in Inditex's quarterly margins and its negative working capital. Hermès's waiting lists are not used (no primary
+source); the house's own figures carry the point (41% operating margin, 24 leather workshops, leather goods growing with
+'production capacities'). Run it is the draft's season, bought all early, all late, or as a base and a chase, on the
+Works' season (`works/fashion.py`, a newsvendor with a forecast that improves once the season starts). The ultra-fast
+model (Shein) and resale, rental and counterfeits are left for Part 32; wages from the ILO were not read, so the factory
+chapter uses Rana Plaza (ILO), NIKE's code of conduct, Tapestry's audits and its own words on pricing pressure. The end of
+quotas is the WTO's own page. *Called it?* uses Inditex's 2026 gross margin guidance, with the series' call on FY2026,
+instead of the forecasts of Chinese luxury demand (no dated primary forecasts were read). Added: off-price against the
+department stores (TJX, Ross, Burlington, Macy's, Kohl's), Gucci against Hermès, Coach against Kate Spade and Michael
+Kors, Versace's sale to Prada, and the challengers to NIKE (Lululemon, Deckers, On). H&M, Fast Retailing, Shein, Primark,
+Chanel, Richemont, Prada, adidas, Anta, Puma, Nordstrom, Selfridges and the makers appear on the map by name only.
+Written as code only and checked from snapshots; not rendered.

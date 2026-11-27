@@ -59,4 +59,101 @@
     });
   };
 
+  // ---- Part 23: buy the season (the Works' Season in explainer/industry/works/fashion.py) -----------------------------
+  // Demand is lognormal with a mean of 100,000; its forecast error is cv months ahead and 20% once the first weeks of the
+  // season have shown how the style sells.  A shirt sells for $40; made far away and ordered early it costs $12, made
+  // nearby and ordered late it costs the "late" price; leftovers go in the sale.  The buyer orders a base early and, after
+  // the first weeks, tops up to the best late order for what they showed.  Expectations over what the first weeks reveal
+  // are taken on a grid of 161 points.
+  W.seasonbuy = function (el) {
+    var P = 40, MEAN = 100000, CVN = 0.2, CF = 12, Z = [], WZ = [], i;
+    for (i = 0; i <= 160; i++) { var z = -8 + 0.1 * i; Z.push(z); WZ.push(Math.exp(-z * z / 2)); }
+    var wsum = WZ.reduce(function (a, b) { return a + b; }, 0);
+    WZ = WZ.map(function (w) { return w / wsum; });
+    function ncdf(x) {
+      var t = 1 / (1 + 0.2316419 * Math.abs(x)), d = 0.3989422804 * Math.exp(-x * x / 2);
+      var p = d * t * (0.31938153 + t * (-0.356563782 + t * (1.781477937 + t * (-1.821255978 + t * 1.330274429))));
+      return x >= 0 ? 1 - p : p;
+    }
+    function nppf(p) {  // Acklam's rational approximation
+      var a = [-39.69683028665376, 220.9460984245205, -275.9285104469687, 138.357751867269, -30.66479806614716, 2.506628277459239];
+      var b = [-54.47609879822406, 161.5858368580409, -155.6989798598866, 66.80131188771972, -13.28068155288572];
+      var c = [-0.007784894002430293, -0.3223964580411365, -2.400758277161838, -2.549732539343734, 4.374664141464968, 2.938163982698783];
+      var d = [0.007784695709041462, 0.3224671290700398, 2.445134137142996, 3.754408661907416];
+      var q, r;
+      if (p < 0.02425) { q = Math.sqrt(-2 * Math.log(p)); return (((((c[0] * q + c[1]) * q + c[2]) * q + c[3]) * q + c[4]) * q + c[5]) / ((((d[0] * q + d[1]) * q + d[2]) * q + d[3]) * q + 1); }
+      if (p > 0.97575) { q = Math.sqrt(-2 * Math.log(1 - p)); return -(((((c[0] * q + c[1]) * q + c[2]) * q + c[3]) * q + c[4]) * q + c[5]) / ((((d[0] * q + d[1]) * q + d[2]) * q + d[3]) * q + 1); }
+      q = p - 0.5; r = q * q;
+      return (((((a[0] * r + a[1]) * r + a[2]) * r + a[3]) * r + a[4]) * r + a[5]) * q / (((((b[0] * r + b[1]) * r + b[2]) * r + b[3]) * r + b[4]) * r + 1);
+    }
+    function sold(q, mu, s) {
+      var lq = Math.log(Math.max(q, 1e-9)), m = Math.exp(mu + s * s / 2);
+      return m * ncdf((lq - mu - s * s) / s) + q * (1 - ncdf((lq - mu) / s));
+    }
+    function sig(cvf) {
+      var sf = Math.sqrt(Math.log(1 + cvf * cvf)), sn = Math.sqrt(Math.log(1 + CVN * CVN));
+      return { sf: sf, sn: sn, s1: Math.sqrt(Math.max(sf * sf - sn * sn, 1e-9)), mu0: Math.log(MEAN) - sf * sf / 2 };
+    }
+    function summary(q, sd, cost, cl) {
+      var left = q - sd, rev = P * sd + cl * left;
+      return { ordered: q, sold: sd, cleared: left, lost: MEAN - sd, profit: rev - cost, gm: (rev - cost) / rev };
+    }
+    function far(cvf, cl) {
+      var g = sig(cvf), q = Math.exp(g.mu0 + g.sf * nppf((P - CF) / (P - cl)));
+      return summary(q, sold(q, g.mu0, g.sf), CF * q, cl);
+    }
+    function chase(base, cvf, cn, cl) {
+      var g = sig(cvf), z = nppf((P - cn) / (P - cl)), q = 0, sd = 0, top = 0, k;
+      for (k = 0; k < Z.length; k++) {
+        var mu = g.mu0 + g.s1 * Z[k], tgt = Math.exp(mu + g.sn * z), qq = Math.max(base, tgt);
+        q += WZ[k] * qq; sd += WZ[k] * sold(qq, mu, g.sn); top += WZ[k] * (qq - base);
+      }
+      return summary(q, sd, CF * base + cn * top, cl);
+    }
+    QB.widget(el, {
+      title: "Buy the season",
+      sub: "A new T-shirt sells for $40, and on average 100,000 people will want one, but months ahead nobody knows how many. Order a base early from a factory far away at $12 a shirt; after the first weeks of the season, top up from a factory nearby at the late price. Whatever is left at the end goes in the sale. Choose the early base, how good the forecast is months ahead, the late price and the sale price.",
+      panels: 2, height: 300, weights: [1, 1],
+      controls: [
+        { k: "base", label: "Early base order, thousand shirts", min: 0, max: 200, step: 5, value: 110, fmt: function (x) { return x + "k"; } },
+        { k: "cv", label: "Forecast error months ahead (share of average demand)", min: 0.25, max: 1.0, step: 0.05, value: 0.6, fmt: function (x) { return Math.round(100 * x) + "%"; } },
+        { k: "cn", label: "Late price a shirt, from nearby, $", min: 12, max: 30, step: 1, value: 16, fmt: function (x) { return "$" + x; } },
+        { k: "cl", label: "Sale price for leftovers, $", min: 0, max: 11, step: 1, value: 8, fmt: function (x) { return "$" + x; } },
+      ],
+      draw: function (g, v, s) {
+        var bases = [], prof = [], b, best = { b: 0, p: -1e18 };
+        for (b = 0; b <= 200; b += 5) {
+          var r = chase(b * 1000, v.cv, v.cn, v.cl);
+          bases.push(b); prof.push(r.profit / 1e6);
+          if (r.profit > best.p) best = { b: b, p: r.profit };
+        }
+        var f = far(v.cv, v.cl), mine = chase(v.base * 1000, v.cv, v.cn, v.cl);
+        var lo = Math.min.apply(null, prof.concat([f.profit / 1e6])), hi = Math.max.apply(null, prof.concat([f.profit / 1e6]));
+        var pad = Math.max(0.05, (hi - lo) * 0.15);
+        var ax = g[0].axes({ x: [0, 200], y: [lo - pad, hi + pad], title: "Expected profit of the season, $m",
+                             xticks: [0, 50, 100, 150, 200], xfmt: function (x) { return x + "k"; }, yfmt: function (y) { return y.toFixed(2); } });
+        ax.line(bases, prof, { color: C.p, width: 2.4 });
+        ax.hline(f.profit / 1e6, { color: C.muted, dash: [4, 4] });
+        ax.vline(v.base, { color: C.spot, dash: [5, 4], width: 1.4 });
+        ax.legend([["a base early, the hits chased late", C.p], ["everything early, the best amount", C.muted]], { pos: "bl" });
+        var keys = ["sold at full price", "left for the sale", "customers who found none"];
+        var mv = [mine.sold / 1000, mine.cleared / 1000, mine.lost / 1000], fv = [f.sold / 1000, f.cleared / 1000, f.lost / 1000];
+        var top = Math.max.apply(null, mv.concat(fv)) * 1.15;
+        var bx = g[1].axes({ x: [-0.5, 2.5], y: [0, top], title: "Shirts, thousand: your buy (colour) and everything early (grey)",
+                             xticks: [0, 1, 2], xfmt: function (x) { return keys[Math.round(x)] || ""; }, yfmt: function (y) { return Math.round(y); } });
+        bx.bars([-0.18, 0.82, 1.82], fv, 0.32, { color: C.muted, alpha: 0.9 });
+        bx.bars([0.18, 1.18, 2.18], mv, 0.32, { color: C.spot, alpha: 0.9 });
+        s.r = { mine: mine, far: f, best: best };
+      },
+      readout: function (v, s) {
+        var m = s.r.mine, f = s.r.far, b = s.r.best;
+        return [["your expected profit / everything early", "$" + (m.profit / 1e6).toFixed(2) + "m / $" + (f.profit / 1e6).toFixed(2) + "m"],
+                ["the best early base here", b.b + "k shirts, $" + (b.p / 1e6).toFixed(2) + "m"],
+                ["your gross margin / everything early", (100 * m.gm).toFixed(1) + "% / " + (100 * f.gm).toFixed(1) + "%"],
+                ["shirts ordered in all, on average", Math.round(m.ordered / 1000) + "k"]];
+      },
+      note: "The Works' season, as in the film: everything ordered early (162,000 shirts) earns $2.32m and leaves 70,000 for the sale; everything ordered late earns $2.19m; a base of about 111,000 early with the hits chased late earns $2.49m at a 59.4% gross margin. Inditex's gross margin in the year to January 2026 was 58.3%. The numbers here are illustrations.",
+    });
+  };
+
 })();
