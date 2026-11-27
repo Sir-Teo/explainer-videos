@@ -1,13 +1,13 @@
 # Industry, Built (产业，从零搭建)
 
-**Status (2026-11-27): Parts 1-16, [*Where the Money Goes*](industry1/README.md), [*The Economy on One
+**Status (2026-11-27): Parts 1-17, [*Where the Money Goes*](industry1/README.md), [*The Economy on One
 Page*](industry2/README.md), [*The Accounts*](industry3/README.md), [*The Cost Curve*](industry4/README.md), [*The
 Moat*](industry5/README.md), [*The Cycle*](industry6/README.md), [*Sizing a Market*](industry7/README.md), [*Oil and
 Gas*](industry8/README.md), [*Mining and Metals*](industry9/README.md), [*Farming and Food*](industry10/README.md),
 [*Heavy Materials*](industry11/README.md), [*Chemicals*](industry12/README.md), [*Electricity*](industry13/README.md), [*Water and
-Waste*](industry14/README.md), [*Semiconductors*](industry15/README.md) and [*Electronics*](industry16/README.md), are
-built, in English, with their labs and interactives: Acts I and II are complete and Act III has begun. Parts 17-64 are
-planned.** This file is the plan. The standard every part meets, the
+Waste*](industry14/README.md), [*Semiconductors*](industry15/README.md), [*Electronics*](industry16/README.md) and
+[*Automobiles*](industry17/README.md), are built, in English, with their labs and interactives: Acts I and II are complete
+and Act III has begun. Parts 18-64 are planned.** This file is the plan. The standard every part meets, the
 devices, the data plan and all sixty-four parts chapter by chapter are in [`SYLLABUS.md`](SYLLABUS.md), with
 progress in its §9. The decisions the plan rests on, and the ones still open, are at the end of this file.
 

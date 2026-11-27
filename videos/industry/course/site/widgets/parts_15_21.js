@@ -144,4 +144,71 @@
     });
   };
 
+  W.carmaker = function (el) {
+    var LIST = 45000, VAR = 36000, CAP = 125000, SHIFT = 288e6, FIXED = 900e6, PLAN = 220000;
+    function demand(v, mine, theirs) {
+      return PLAN * v.state * Math.pow(mine / LIST, -v.own) * Math.pow(theirs / LIST, v.cross);
+    }
+    function profit(v, me, them, shifts) {
+      var pm = LIST - (me === "discount" ? v.disc : 0), pt = LIST - (them === "discount" ? v.disc : 0);
+      var cars = Math.min(demand(v, pm, pt), (shifts || 2) * CAP);
+      return (cars * (pm - VAR) - (shifts || 2) * SHIFT - FIXED) / 1e6;
+    }
+    function table(v) {
+      var t = {};
+      ["hold", "discount"].forEach(function (a) { ["hold", "discount"].forEach(function (b) { t[a + "|" + b] = profit(v, a, b); }); });
+      return t;
+    }
+    QB.widget(el, {
+      title: "The showroom duel",
+      sub: "Your plant and a rival's are identical: two shifts, 250,000 cars a year, a $45,000 list price and $36,000 of parts and materials in each car. The orders have come in below plan. Each of you either holds the price or pays a discount. Set the discount, how willing buyers are to switch between the two models, and how weak demand is.",
+      panels: 2, height: 300, weights: [3, 2],
+      controls: [
+        { k: "disc", label: "Discount per car, $", min: 500, max: 6000, step: 250, value: 3000, fmt: function (x) { return "$" + x.toLocaleString(); } },
+        { k: "own", label: "Own-price elasticity (how much a price cut wins)", min: 3, max: 10, step: 0.5, value: 7, fmt: function (x) { return x.toFixed(1); } },
+        { k: "cross", label: "Cross-price elasticity (how much comes from the rival)", min: 1, max: 9, step: 0.5, value: 6, fmt: function (x) { return x.toFixed(1); } },
+        { k: "state", label: "Demand against plan", min: 0.5, max: 1.3, step: 0.05, value: 0.7, fmt: function (x) { return Math.round(100 * x) + "%"; } },
+      ],
+      draw: function (g, v, s) {
+        if (v.cross >= v.own) v.cross = v.own - 0.5;
+        var xs = [], hold = [], disc = [], i;
+        for (i = 0; i <= 24; i++) {
+          var d = 250 * i; xs.push(d);
+          var w = { disc: d, own: v.own, cross: v.cross, state: v.state };
+          hold.push(profit(w, "discount", "hold") - profit(w, "hold", "hold"));
+          disc.push(profit(w, "discount", "discount") - profit(w, "hold", "discount"));
+        }
+        var lo = Math.min(Math.min.apply(null, hold), Math.min.apply(null, disc), 0), hi = Math.max(Math.max.apply(null, hold), Math.max.apply(null, disc), 10);
+        var ax = g[0].axes({ x: [0, 6000], y: [lo * 1.1, hi * 1.15], title: "What discounting adds to your profit, $m, by size of discount",
+                             xticks: [0, 2000, 4000, 6000], xfmt: function (x) { return "$" + x / 1000 + "k"; }, yfmt: function (y) { return Math.round(y); } });
+        ax.line([0, 6000], [0, 0], { color: C.muted, width: 1.2, dash: [4, 4] });
+        ax.line(xs, hold, { color: C.p, width: 2.4 });
+        ax.line(xs, disc, { color: "#f2a65a", width: 2.4 });
+        ax.vline(v.disc, { color: C.spot, dash: [5, 4], width: 1.4 });
+        ax.legend([["if the rival holds", C.p], ["if the rival discounts", "#f2a65a"]], { pos: "tl" });
+        var t = table(v);
+        var keys = ["hold|hold", "discount|hold", "hold|discount", "discount|discount"], vals = keys.map(function (k) { return t[k]; });
+        var top = Math.max.apply(null, vals.map(Math.abs)) * 1.2;
+        var bx = g[1].axes({ x: [-0.7, 3.7], y: [-top, top], title: "Your profit, $m: you / rival",
+                             xticks: [0, 1, 2, 3], xfmt: function (x) { return ["H/H", "D/H", "H/D", "D/D"][x]; }, yfmt: function (y) { return Math.round(y); } });
+        for (i = 0; i < 4; i++) bx.bars([i], [vals[i]], 0.6, { color: vals[i] < 0 ? C.loss : C.p });
+        var eq = [];
+        ["hold", "discount"].forEach(function (a) { ["hold", "discount"].forEach(function (b) {
+          var other = a === "hold" ? "discount" : "hold", otherb = b === "hold" ? "discount" : "hold";
+          if (t[a + "|" + b] >= t[other + "|" + b] && t[b + "|" + a] >= t[otherb + "|" + a]) eq.push(a + "/" + b);
+        }); });
+        s.r = { t: t, eq: eq, cut: (Math.min(PLAN * v.state, CAP) * (LIST - VAR) - SHIFT - FIXED) / 1e6 };
+      },
+      readout: function (v, s) {
+        var r = s.r, t = r.t;
+        var pd = t["discount|hold"] > t["hold|hold"] && t["discount|discount"] > t["hold|discount"] && t["hold|hold"] > t["discount|discount"];
+        return [["equilibrium (you/rival)", r.eq.length ? r.eq.join(", ") : "none in pure moves"],
+                ["both hold / both discount", "$" + Math.round(t["hold|hold"]) + "m / $" + Math.round(t["discount|discount"]) + "m each"],
+                ["a prisoner's dilemma?", pd ? "yes: each discounts, both lose" : "no"],
+                ["both cut a shift and hold", "$" + Math.round(r.cut) + "m each"]];
+      },
+      note: "The Works' plant, as in the film: each shift costs $288m a year whether busy or not, and tooling, engineering and overhead another $900m. A car's demand is the plan times the demand you set, times (your price / $45,000) to the minus own elasticity, times (the rival's price / $45,000) to the cross elasticity: when own is much bigger than cross, a discount mostly takes buyers from the rival. With the film's numbers, discounting is the better reply whatever the rival does, and both end far worse off than if both had held. Make buyers less willing to switch, or the discount bigger, and the dilemma goes away.",
+    });
+  };
+
 })();

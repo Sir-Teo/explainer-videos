@@ -97,4 +97,59 @@ PARTS = [
               ("The device, the assembler and Run it", "explainer/industry/works/device.py"),
               ("UN Comtrade, BLS, FRED, the SEC extracts and Hon Hai's statements", "explainer/industry/data/SOURCES.md")),
     ),
+    Part(
+        n=17, level="U", widget="carmaker", prereq=(4, 5, 6, 16),
+        question="Why is it so hard to make money making the most desired product of the century?",
+        story="The part opens on 2025, a year in which Ford lost 4.4 cents on every dollar of revenue, Stellantis 14.5 and "
+              "Honda 1.9, Volkswagen kept 2.1 and Toyota 7.6 (in its year to March 2026). Then three arrivals: Ford's moving "
+              "line at Highland Park, which cut the time to assemble a chassis from 12 hours 28 minutes to 1 hour 33 minutes "
+              "in 1913-14; Toyota's production system (jidoka and just-in-time, in Toyota's words); and the electric car "
+              "and China, whose car exports rose from $4bn (2015) to $110bn (2025). The viewer runs a plant whose orders come "
+              "in 30% below plan while a rival's identical plant sells just as slowly: discounting $3,000 is the better reply "
+              "to either move, so both discount and both lose $486m instead of $90m; cutting a shift each loses $63m. A car "
+              "plant follows Toyota's five steps; America's 2022 census counts 213,363 people in 210 assembly plants and "
+              "roughly 44 hours of work per vehicle. Of a dollar shipped by the assembly plants, 76 cents paid other "
+              "companies for parts and materials and 4.7 paid the plants' payroll; the dealer kept 4.9 cents of the price "
+              "of a new car. R&D per vehicle runs from $971 at Toyota to $76,472 at Lucid; profit per vehicle from Ferrari's "
+              "$132,366 to Lucid's -$170,321. The Works' plant breaks even at 66% of capacity; America's plants have "
+              "averaged 77% since 1948 and ran at 65% in 2025; Rivian built 42,284 cars in a plant for 215,000. Lean "
+              "production cut stock until the chip shortage of 2021 emptied the dealers' lots (0.42 months of sales in "
+              "January 2022), though chips were 1.1% of what the assemblers bought. Suppliers kept no more than their "
+              "customers. A dealer earns almost half its gross profit from parts and service and almost a third from "
+              "finance and insurance; GM Financial earned $2.8bn and Ford Credit $2.6bn. Ford Pro earned $4,599 a "
+              "vehicle, Ford Blue $1,109 and Model e lost $27,000; Honda's motorcycles earned ¥732bn while its cars lost "
+              "¥1.41tn. Battery packs fell 90% in cost (DOE); electric cars reached 25% of world sales and 53% of China's; "
+              "the old makers wrote off about $40bn of electric plans in 2025. China sold 34.4 million vehicles, 47.9% "
+              "new energy; America and Europe raised tariffs against its electric cars. The 2023 UAW contract raised wages "
+              "27% by 2027, about 1.3 cents of a plant's dollar of shipments; the strike cost GM $1.1bn. Tesla's 2016 plan "
+              "of 500,000 cars by 2018 was met in 2020; the EIA's 2017 outlook was close for 2025; China's 2017 plan "
+              "undershot 2025 by more than half. The series calls the world's electric share for 2026 below 32% (65%).",
+        handoff="Part 18, aerospace, turns to an industry with only two makers of large airliners, and why the engine "
+                "maker sells at a loss.",
+        outside="Percentages, break-even and present value; Part 4's fixed and variable costs; Part 5's moats; Part 6's "
+                "cycle; Part 16's assemblers; Economics, Built Part 43 on car demand.",
+        objectives={
+            "U": ["Explain why a car plant's profit depends so strongly on volume, and why the upside is capped.",
+                  "Explain how a car's price divides between suppliers, the maker and the dealer.",
+                  "Explain what lean production changed and what it bet on."],
+            "M": ["Find a plant's break-even volume from its contribution margin and fixed costs.",
+                  "Solve a two-firm pricing game and show it is a prisoner's dilemma.",
+                  "Compute R&D and profit per vehicle from a carmaker's accounts and units."],
+            "D": ["Score forecasts of the electric car (Tesla 2016, EIA 2017, China 2017 and 2020) against outcomes.",
+                  "Make and state a dated, scorable forecast from a fitted logistic curve."],
+            "I": ["Read a carmaker's segment results (Ford's three businesses, GM's finance arm) and a dealer's gross "
+                  "profit by line.",
+                  "Read the Economic Census for an industry's materials, payroll and employment."],
+        },
+        results=[
+            ("Break-even volume", r"q^* = \frac{F + s\,C_{\text{shift}}}{p - c}"),
+            ("Contribution margin", r"m = p - c"),
+            ("Own- and cross-price demand", r"q_i = A\,(p_i/\bar p)^{-\varepsilon_o}(p_j/\bar p)^{\varepsilon_c}"),
+            ("Logistic share", r"s(t) = \frac{100}{1 + e^{-(a + b t)}}"),
+        ],
+        U=(0, 1, 2, 3, 4, 5, 6, 7, "s09_intermission", 8, 9, 10, 11, 12, 13), I=(14,), D=(15,),
+        also=(("The Register's rows for Part 17", "explainer/industry/data/rows_p17.py"),
+              ("The plant, the platform, the duel and the loan", "explainer/industry/works/auto.py"),
+              ("The SEC, FRED, Census, UN Comtrade, EIA and IEA extracts", "explainer/industry/data/SOURCES.md")),
+    ),
 ]

@@ -1,0 +1,530 @@
+# source: https://ourworldindata.org/grapher/electric-car-sales-share
+# source: https://ourworldindata.org/grapher/electric-car-sales
+# source: https://ourworldindata.org/grapher/electric-car-stocks
+# source: IEA, Global EV Outlook 2026, via Our World in Data (CC BY 4.0); electric = battery electric and plug-in hybrid cars
+# retrieved: 2026-11-27
+series,entity,year,value
+ev_sales,Brazil,2010,10.0
+ev_sales,Brazil,2011,8.0
+ev_sales,Brazil,2012,40.0
+ev_sales,Brazil,2013,72.0
+ev_sales,Brazil,2014,61.0
+ev_sales,Brazil,2015,89.0
+ev_sales,Brazil,2016,177.0
+ev_sales,Brazil,2017,430.0
+ev_sales,Brazil,2018,410.0
+ev_sales,Brazil,2019,1940.0
+ev_sales,Brazil,2020,2600.0
+ev_sales,Brazil,2021,13900.0
+ev_sales,Brazil,2022,18500.0
+ev_sales,Brazil,2023,52000.0
+ev_sales,Brazil,2024,126000.0
+ev_sales,Brazil,2025,178000.0
+ev_sales,China,2010,1440.0
+ev_sales,China,2011,5120.0
+ev_sales,China,2012,9860.0
+ev_sales,China,2013,15730.0
+ev_sales,China,2014,74000.0
+ev_sales,China,2015,211000.0
+ev_sales,China,2016,339000.0
+ev_sales,China,2017,580000.0
+ev_sales,China,2018,1090000.0
+ev_sales,China,2019,1070000.0
+ev_sales,China,2020,1150000.0
+ev_sales,China,2021,3250000.0
+ev_sales,China,2022,6000000.0
+ev_sales,China,2023,8200000.0
+ev_sales,China,2024,11300000.0
+ev_sales,China,2025,13300000.0
+ev_sales,Europe,2010,1810.0
+ev_sales,Europe,2011,11410.0
+ev_sales,Europe,2012,28200.0
+ev_sales,Europe,2013,59000.0
+ev_sales,Europe,2014,96000.0
+ev_sales,Europe,2015,162000.0
+ev_sales,Europe,2016,233000.0
+ev_sales,Europe,2017,320000.0
+ev_sales,Europe,2018,390000.0
+ev_sales,Europe,2019,570000.0
+ev_sales,Europe,2020,1380000.0
+ev_sales,Europe,2021,2300000.0
+ev_sales,Europe,2022,2600000.0
+ev_sales,Europe,2023,3200000.0
+ev_sales,Europe,2024,3190000.0
+ev_sales,Europe,2025,4300000.0
+ev_sales,France,2010,272.0
+ev_sales,France,2011,2656.0
+ev_sales,France,2012,6360.0
+ev_sales,France,2013,9750.0
+ev_sales,France,2014,13100.0
+ev_sales,France,2015,23800.0
+ev_sales,France,2016,30600.0
+ev_sales,France,2017,38000.0
+ev_sales,France,2018,48000.0
+ev_sales,France,2019,64000.0
+ev_sales,France,2020,185000.0
+ev_sales,France,2021,310000.0
+ev_sales,France,2022,340000.0
+ev_sales,France,2023,470000.0
+ev_sales,France,2024,450000.0
+ev_sales,France,2025,450000.0
+ev_sales,Germany,2010,140.0
+ev_sales,Germany,2011,1640.0
+ev_sales,Germany,2012,3400.0
+ev_sales,Germany,2013,6800.0
+ev_sales,Germany,2014,13500.0
+ev_sales,Germany,2015,23000.0
+ev_sales,Germany,2016,24000.0
+ev_sales,Germany,2017,54000.0
+ev_sales,Germany,2018,67000.0
+ev_sales,Germany,2019,108000.0
+ev_sales,Germany,2020,390000.0
+ev_sales,Germany,2021,690000.0
+ev_sales,Germany,2022,830000.0
+ev_sales,Germany,2023,700000.0
+ev_sales,Germany,2024,570000.0
+ev_sales,Germany,2025,860000.0
+ev_sales,India,2010,450.0
+ev_sales,India,2011,1400.0
+ev_sales,India,2012,190.0
+ev_sales,India,2013,410.0
+ev_sales,India,2014,1000.0
+ev_sales,India,2015,450.0
+ev_sales,India,2016,730.0
+ev_sales,India,2017,920.0
+ev_sales,India,2018,920.0
+ev_sales,India,2019,687.0
+ev_sales,India,2020,3143.0
+ev_sales,India,2021,12050.0
+ev_sales,India,2022,48023.0
+ev_sales,India,2023,82270.0
+ev_sales,India,2024,92095.0
+ev_sales,India,2025,170100.0
+ev_sales,Japan,2010,2400.0
+ev_sales,Japan,2011,13015.0
+ev_sales,Japan,2012,24000.0
+ev_sales,Japan,2013,29000.0
+ev_sales,Japan,2014,32000.0
+ev_sales,Japan,2015,24000.0
+ev_sales,Japan,2016,24400.0
+ev_sales,Japan,2017,54000.0
+ev_sales,Japan,2018,50000.0
+ev_sales,Japan,2019,39000.0
+ev_sales,Japan,2020,30000.0
+ev_sales,Japan,2021,45000.0
+ev_sales,Japan,2022,97000.0
+ev_sales,Japan,2023,140000.0
+ev_sales,Japan,2024,103000.0
+ev_sales,Japan,2025,102000.0
+ev_sales,Norway,2010,360.0
+ev_sales,Norway,2011,2000.0
+ev_sales,Norway,2012,4220.0
+ev_sales,Norway,2013,8240.0
+ev_sales,Norway,2014,21700.0
+ev_sales,Norway,2015,33900.0
+ev_sales,Norway,2016,45000.0
+ev_sales,Norway,2017,62000.0
+ev_sales,Norway,2018,73000.0
+ev_sales,Norway,2019,79000.0
+ev_sales,Norway,2020,106000.0
+ev_sales,Norway,2021,148000.0
+ev_sales,Norway,2022,156000.0
+ev_sales,Norway,2023,110000.0
+ev_sales,Norway,2024,113500.0
+ev_sales,Norway,2025,172800.0
+ev_sales,United Kingdom,2010,261.0
+ev_sales,United Kingdom,2011,1207.0
+ev_sales,United Kingdom,2012,2570.0
+ev_sales,United Kingdom,2013,3700.0
+ev_sales,United Kingdom,2014,14500.0
+ev_sales,United Kingdom,2015,29000.0
+ev_sales,United Kingdom,2016,39000.0
+ev_sales,United Kingdom,2017,49000.0
+ev_sales,United Kingdom,2018,62000.0
+ev_sales,United Kingdom,2019,75000.0
+ev_sales,United Kingdom,2020,178000.0
+ev_sales,United Kingdom,2021,310000.0
+ev_sales,United Kingdom,2022,370000.0
+ev_sales,United Kingdom,2023,450000.0
+ev_sales,United Kingdom,2024,550000.0
+ev_sales,United Kingdom,2025,700000.0
+ev_sales,United States,2010,1200.0
+ev_sales,United States,2011,17800.0
+ev_sales,United States,2012,54000.0
+ev_sales,United States,2013,97000.0
+ev_sales,United States,2014,118000.0
+ev_sales,United States,2015,114000.0
+ev_sales,United States,2016,160000.0
+ev_sales,United States,2017,194000.0
+ev_sales,United States,2018,360000.0
+ev_sales,United States,2019,325000.0
+ev_sales,United States,2020,294000.0
+ev_sales,United States,2021,630000.0
+ev_sales,United States,2022,990000.0
+ev_sales,United States,2023,1390000.0
+ev_sales,United States,2024,1520000.0
+ev_sales,United States,2025,1530000.0
+ev_sales,World,2010,7450.0
+ev_sales,World,2011,49000.0
+ev_sales,World,2012,119000.0
+ev_sales,World,2013,201000.0
+ev_sales,World,2014,330000.0
+ev_sales,World,2015,520000.0
+ev_sales,World,2016,780000.0
+ev_sales,World,2017,1200000.0
+ev_sales,World,2018,2050000.0
+ev_sales,World,2019,2080000.0
+ev_sales,World,2020,2980000.0
+ev_sales,World,2021,6600000.0
+ev_sales,World,2022,10200000.0
+ev_sales,World,2023,13700000.0
+ev_sales,World,2024,17500000.0
+ev_sales,World,2025,21200000.0
+ev_sales_share,Brazil,2010,0.00035
+ev_sales_share,Brazil,2011,0.00028
+ev_sales_share,Brazil,2012,0.0013
+ev_sales_share,Brazil,2013,0.0024
+ev_sales_share,Brazil,2014,0.0022
+ev_sales_share,Brazil,2015,0.0042
+ev_sales_share,Brazil,2016,0.011
+ev_sales_share,Brazil,2017,0.023
+ev_sales_share,Brazil,2018,0.02
+ev_sales_share,Brazil,2019,0.084
+ev_sales_share,Brazil,2020,0.16
+ev_sales_share,Brazil,2021,0.92
+ev_sales_share,Brazil,2022,1.2
+ev_sales_share,Brazil,2023,3.0
+ev_sales_share,Brazil,2024,6.4
+ev_sales_share,Brazil,2025,9.0
+ev_sales_share,China,2010,0.01
+ev_sales_share,China,2011,0.034
+ev_sales_share,China,2012,0.073
+ev_sales_share,China,2013,0.096
+ev_sales_share,China,2014,0.41
+ev_sales_share,China,2015,1.1
+ev_sales_share,China,2016,1.5
+ev_sales_share,China,2017,2.4
+ev_sales_share,China,2018,4.7
+ev_sales_share,China,2019,5.0
+ev_sales_share,China,2020,5.7
+ev_sales_share,China,2021,16.0
+ev_sales_share,China,2022,29.0
+ev_sales_share,China,2023,38.0
+ev_sales_share,China,2024,48.0
+ev_sales_share,China,2025,53.0
+ev_sales_share,Europe,2010,0.012
+ev_sales_share,Europe,2011,0.074
+ev_sales_share,Europe,2012,0.2
+ev_sales_share,Europe,2013,0.43
+ev_sales_share,Europe,2014,0.68
+ev_sales_share,Europe,2015,1.0
+ev_sales_share,Europe,2016,1.4
+ev_sales_share,Europe,2017,1.8
+ev_sales_share,Europe,2018,2.3
+ev_sales_share,Europe,2019,3.4
+ev_sales_share,Europe,2020,10.0
+ev_sales_share,Europe,2021,17.0
+ev_sales_share,Europe,2022,21.0
+ev_sales_share,Europe,2023,22.0
+ev_sales_share,Europe,2024,21.0
+ev_sales_share,Europe,2025,28.0
+ev_sales_share,France,2010,0.012
+ev_sales_share,France,2011,0.12
+ev_sales_share,France,2012,0.33
+ev_sales_share,France,2013,0.53
+ev_sales_share,France,2014,0.69
+ev_sales_share,France,2015,1.2
+ev_sales_share,France,2016,1.4
+ev_sales_share,France,2017,1.7
+ev_sales_share,France,2018,2.0
+ev_sales_share,France,2019,2.7
+ev_sales_share,France,2020,11.0
+ev_sales_share,France,2021,17.0
+ev_sales_share,France,2022,20.0
+ev_sales_share,France,2023,25.0
+ev_sales_share,France,2024,24.0
+ev_sales_share,France,2025,26.0
+ev_sales_share,Germany,2010,0.0049
+ev_sales_share,Germany,2011,0.052
+ev_sales_share,Germany,2012,0.11
+ev_sales_share,Germany,2013,0.23
+ev_sales_share,Germany,2014,0.45
+ev_sales_share,Germany,2015,0.73
+ev_sales_share,Germany,2016,0.74
+ev_sales_share,Germany,2017,1.6
+ev_sales_share,Germany,2018,2.0
+ev_sales_share,Germany,2019,3.0
+ev_sales_share,Germany,2020,14.0
+ev_sales_share,Germany,2021,26.0
+ev_sales_share,Germany,2022,31.0
+ev_sales_share,Germany,2023,24.0
+ev_sales_share,Germany,2024,20.0
+ev_sales_share,Germany,2025,30.0
+ev_sales_share,India,2010,0.021
+ev_sales_share,India,2011,0.057
+ev_sales_share,India,2012,0.0073
+ev_sales_share,India,2013,0.016
+ev_sales_share,India,2014,0.038
+ev_sales_share,India,2015,0.017
+ev_sales_share,India,2016,0.026
+ev_sales_share,India,2017,0.031
+ev_sales_share,India,2018,0.03
+ev_sales_share,India,2019,0.024
+ev_sales_share,India,2020,0.12
+ev_sales_share,India,2021,0.41
+ev_sales_share,India,2022,1.4
+ev_sales_share,India,2023,2.1
+ev_sales_share,India,2024,2.1
+ev_sales_share,India,2025,4.0
+ev_sales_share,Japan,2010,0.058
+ev_sales_share,Japan,2011,0.31
+ev_sales_share,Japan,2012,0.53
+ev_sales_share,Japan,2013,0.63
+ev_sales_share,Japan,2014,0.69
+ev_sales_share,Japan,2015,0.58
+ev_sales_share,Japan,2016,0.6
+ev_sales_share,Japan,2017,1.2
+ev_sales_share,Japan,2018,1.1
+ev_sales_share,Japan,2019,0.9
+ev_sales_share,Japan,2020,0.77
+ev_sales_share,Japan,2021,1.2
+ev_sales_share,Japan,2022,2.8
+ev_sales_share,Japan,2023,3.5
+ev_sales_share,Japan,2024,2.8
+ev_sales_share,Japan,2025,3.0
+ev_sales_share,Norway,2010,0.28
+ev_sales_share,Norway,2011,1.4
+ev_sales_share,Norway,2012,3.1
+ev_sales_share,Norway,2013,5.8
+ev_sales_share,Norway,2014,15.0
+ev_sales_share,Norway,2015,22.0
+ev_sales_share,Norway,2016,29.0
+ev_sales_share,Norway,2017,39.0
+ev_sales_share,Norway,2018,49.0
+ev_sales_share,Norway,2019,56.0
+ev_sales_share,Norway,2020,75.0
+ev_sales_share,Norway,2021,86.0
+ev_sales_share,Norway,2022,89.0
+ev_sales_share,Norway,2023,90.0
+ev_sales_share,Norway,2024,92.0
+ev_sales_share,Norway,2025,97.0
+ev_sales_share,United Kingdom,2010,0.013
+ev_sales_share,United Kingdom,2011,0.062
+ev_sales_share,United Kingdom,2012,0.13
+ev_sales_share,United Kingdom,2013,0.16
+ev_sales_share,United Kingdom,2014,0.59
+ev_sales_share,United Kingdom,2015,1.1
+ev_sales_share,United Kingdom,2016,1.4
+ev_sales_share,United Kingdom,2017,1.9
+ev_sales_share,United Kingdom,2018,2.6
+ev_sales_share,United Kingdom,2019,3.2
+ev_sales_share,United Kingdom,2020,11.0
+ev_sales_share,United Kingdom,2021,18.0
+ev_sales_share,United Kingdom,2022,22.0
+ev_sales_share,United Kingdom,2023,23.0
+ev_sales_share,United Kingdom,2024,27.0
+ev_sales_share,United Kingdom,2025,35.0
+ev_sales_share,United States,2010,0.012
+ev_sales_share,United States,2011,0.15
+ev_sales_share,United States,2012,0.42
+ev_sales_share,United States,2013,0.71
+ev_sales_share,United States,2014,0.77
+ev_sales_share,United States,2015,0.7
+ev_sales_share,United States,2016,0.99
+ev_sales_share,United States,2017,1.3
+ev_sales_share,United States,2018,2.3
+ev_sales_share,United States,2019,2.1
+ev_sales_share,United States,2020,2.3
+ev_sales_share,United States,2021,4.7
+ev_sales_share,United States,2022,7.7
+ev_sales_share,United States,2023,9.7
+ev_sales_share,United States,2024,10.0
+ev_sales_share,United States,2025,10.0
+ev_sales_share,World,2010,0.012
+ev_sales_share,World,2011,0.072
+ev_sales_share,World,2012,0.17
+ev_sales_share,World,2013,0.29
+ev_sales_share,World,2014,0.44
+ev_sales_share,World,2015,0.68
+ev_sales_share,World,2016,0.95
+ev_sales_share,World,2017,1.4
+ev_sales_share,World,2018,2.4
+ev_sales_share,World,2019,2.7
+ev_sales_share,World,2020,4.4
+ev_sales_share,World,2021,9.3
+ev_sales_share,World,2022,15.0
+ev_sales_share,World,2023,18.0
+ev_sales_share,World,2024,21.0
+ev_sales_share,World,2025,25.0
+ev_stock,Brazil,2014,61.0
+ev_stock,Brazil,2015,148.0
+ev_stock,Brazil,2016,325.0
+ev_stock,Brazil,2017,680.0
+ev_stock,Brazil,2018,1050.0
+ev_stock,Brazil,2019,2990.0
+ev_stock,Brazil,2020,5400.0
+ev_stock,Brazil,2021,19400.0
+ev_stock,Brazil,2022,39000.0
+ev_stock,Brazil,2023,92000.0
+ev_stock,Brazil,2024,214000.0
+ev_stock,Brazil,2025,390000.0
+ev_stock,China,2010,1940.0
+ev_stock,China,2011,6960.0
+ev_stock,China,2012,16920.0
+ev_stock,China,2013,32600.0
+ev_stock,China,2014,86000.0
+ev_stock,China,2015,297000.0
+ev_stock,China,2016,640000.0
+ev_stock,China,2017,1220000.0
+ev_stock,China,2018,2240000.0
+ev_stock,China,2019,3360000.0
+ev_stock,China,2020,4470000.0
+ev_stock,China,2021,7700000.0
+ev_stock,China,2022,13000000.0
+ev_stock,China,2023,21500000.0
+ev_stock,China,2024,32000000.0
+ev_stock,China,2025,44000000.0
+ev_stock,Europe,2010,29000.0
+ev_stock,Europe,2011,48000.0
+ev_stock,Europe,2012,76000.0
+ev_stock,Europe,2013,131000.0
+ev_stock,Europe,2014,218000.0
+ev_stock,Europe,2015,410000.0
+ev_stock,Europe,2016,600000.0
+ev_stock,Europe,2017,870000.0
+ev_stock,Europe,2018,1240000.0
+ev_stock,Europe,2019,1750000.0
+ev_stock,Europe,2020,3100000.0
+ev_stock,Europe,2021,5400000.0
+ev_stock,Europe,2022,7800000.0
+ev_stock,Europe,2023,11200000.0
+ev_stock,Europe,2024,13500000.0
+ev_stock,Europe,2025,17100000.0
+ev_stock,France,2010,19460.0
+ev_stock,France,2011,30100.0
+ev_stock,France,2012,38500.0
+ev_stock,France,2013,46000.0
+ev_stock,France,2014,56000.0
+ev_stock,France,2015,77000.0
+ev_stock,France,2016,104000.0
+ev_stock,France,2017,137000.0
+ev_stock,France,2018,177000.0
+ev_stock,France,2019,225000.0
+ev_stock,France,2020,410000.0
+ev_stock,France,2021,710000.0
+ev_stock,France,2022,1040000.0
+ev_stock,France,2023,1470000.0
+ev_stock,France,2024,1910000.0
+ev_stock,France,2025,2210000.0
+ev_stock,Germany,2010,250.0
+ev_stock,Germany,2011,1840.0
+ev_stock,Germany,2012,5300.0
+ev_stock,Germany,2013,12200.0
+ev_stock,Germany,2014,25400.0
+ev_stock,Germany,2015,45000.0
+ev_stock,Germany,2016,66000.0
+ev_stock,Germany,2017,104000.0
+ev_stock,Germany,2018,165000.0
+ev_stock,Germany,2019,240000.0
+ev_stock,Germany,2020,610000.0
+ev_stock,Germany,2021,1250000.0
+ev_stock,Germany,2022,1860000.0
+ev_stock,Germany,2023,2500000.0
+ev_stock,Germany,2024,2670000.0
+ev_stock,Germany,2025,3100000.0
+ev_stock,India,2010,880.0
+ev_stock,India,2011,1300.0
+ev_stock,India,2012,2800.0
+ev_stock,India,2013,2900.0
+ev_stock,India,2014,3400.0
+ev_stock,India,2015,4400.0
+ev_stock,India,2016,4800.0
+ev_stock,India,2017,7000.0
+ev_stock,India,2018,7900.0
+ev_stock,India,2019,8607.0
+ev_stock,India,2020,12050.0
+ev_stock,India,2021,23100.0
+ev_stock,India,2022,72120.0
+ev_stock,India,2023,150390.0
+ev_stock,India,2024,240480.0
+ev_stock,India,2025,410000.0
+ev_stock,Japan,2010,3500.0
+ev_stock,Japan,2011,16015.0
+ev_stock,Japan,2012,41000.0
+ev_stock,Japan,2013,69000.0
+ev_stock,Japan,2014,111000.0
+ev_stock,Japan,2015,134000.0
+ev_stock,Japan,2016,153000.0
+ev_stock,Japan,2017,200000.0
+ev_stock,Japan,2018,230000.0
+ev_stock,Japan,2019,260000.0
+ev_stock,Japan,2020,300000.0
+ev_stock,Japan,2021,340000.0
+ev_stock,Japan,2022,410000.0
+ev_stock,Japan,2023,540000.0
+ev_stock,Japan,2024,620000.0
+ev_stock,Japan,2025,720000.0
+ev_stock,Norway,2010,2702.0
+ev_stock,Norway,2011,3903.0
+ev_stock,Norway,2012,8340.0
+ev_stock,Norway,2013,15660.0
+ev_stock,Norway,2014,35300.0
+ev_stock,Norway,2015,69000.0
+ev_stock,Norway,2016,114000.0
+ev_stock,Norway,2017,180000.0
+ev_stock,Norway,2018,247000.0
+ev_stock,Norway,2019,330000.0
+ev_stock,Norway,2020,490000.0
+ev_stock,Norway,2021,630000.0
+ev_stock,Norway,2022,790000.0
+ev_stock,Norway,2023,900000.0
+ev_stock,Norway,2024,1000000.0
+ev_stock,Norway,2025,1060000.0
+ev_stock,United Kingdom,2010,1521.0
+ev_stock,United Kingdom,2011,2628.0
+ev_stock,United Kingdom,2012,5090.0
+ev_stock,United Kingdom,2013,8200.0
+ev_stock,United Kingdom,2014,21700.0
+ev_stock,United Kingdom,2015,48000.0
+ev_stock,United Kingdom,2016,85000.0
+ev_stock,United Kingdom,2017,129000.0
+ev_stock,United Kingdom,2018,186000.0
+ev_stock,United Kingdom,2019,251000.0
+ev_stock,United Kingdom,2020,410000.0
+ev_stock,United Kingdom,2021,710000.0
+ev_stock,United Kingdom,2022,950000.0
+ev_stock,United Kingdom,2023,1580000.0
+ev_stock,United Kingdom,2024,1990000.0
+ev_stock,United Kingdom,2025,2460000.0
+ev_stock,United States,2010,3800.0
+ev_stock,United States,2011,22000.0
+ev_stock,United States,2012,75000.0
+ev_stock,United States,2013,172000.0
+ev_stock,United States,2014,290000.0
+ev_stock,United States,2015,400000.0
+ev_stock,United States,2016,570000.0
+ev_stock,United States,2017,760000.0
+ev_stock,United States,2018,1120000.0
+ev_stock,United States,2019,1450000.0
+ev_stock,United States,2020,1740000.0
+ev_stock,United States,2021,2220000.0
+ev_stock,United States,2022,3010000.0
+ev_stock,United States,2023,4800000.0
+ev_stock,United States,2024,6300000.0
+ev_stock,United States,2025,7800000.0
+ev_stock,World,2010,39000.0
+ev_stock,World,2011,95000.0
+ev_stock,World,2012,219000.0
+ev_stock,World,2013,420000.0
+ev_stock,World,2014,730000.0
+ev_stock,World,2015,1270000.0
+ev_stock,World,2016,2030000.0
+ev_stock,World,2017,3100000.0
+ev_stock,World,2018,5100000.0
+ev_stock,World,2019,7100000.0
+ev_stock,World,2020,10200000.0
+ev_stock,World,2021,16200000.0
+ev_stock,World,2022,25800000.0
+ev_stock,World,2023,40000000.0
+ev_stock,World,2024,56000000.0
+ev_stock,World,2025,76000000.0

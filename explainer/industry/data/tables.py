@@ -170,3 +170,22 @@ add(
           {2: 6, 3: 8, 5: 8, 6: 8, 8: 8, 10: 8, 11: 8, 12: 12, 14: 12, 15: 12, 16: 12, 18: 12, 20: 12, 21: 12, 22: 12,
            23: 12}, parts=P15),
 )
+
+
+# ---------------------------------------------------------------------------------------------------------- Part 17
+P17 = (17,)
+DOE_FOTW = "https://www.energy.gov/cmei/vehicles/articles/fotw-1354-august-5-2024-electric-vehicle-battery-pack-costs-light-duty"
+DOE_SRC = ("US Department of Energy, Vehicle Technologies Office, Fact of the Week #1354 (5 August 2024) and its dataset "
+           "(2018-2023 from Argonne's BatPaC model; 2016-2017 DOE merit reviews; 2008-2015 National Academies 2017)")
+
+add(
+    Table("doe.pack.2023usd", "2023 dollars per kWh", "Estimated cost of an electric vehicle lithium-ion battery pack "
+          "for a light-duty vehicle, per kWh of usable energy, for production at scale of at least 100,000 units a year, "
+          "in 2023 dollars", DOE_SRC, DOE_FOTW, C,
+          {2008: 1415.2, 2009: 1324.4, 2010: 1052.6, 2011: 785.4, 2012: 588.7, 2013: 423.8, 2014: 372.0, 2015: 339.8,
+           2016: 311.0, 2017: 272.2, 2018: 239.0, 2019: 220.5, 2020: 199.0, 2021: 176.5, 2022: 159.3, 2023: 139.0},
+          note="Modelled estimates, not prices paid; cost refers to usable, not rated, energy.", parts=P17),
+    Table("doe.pack.current", "dollars per kWh", "The same estimates in current dollars", DOE_SRC, DOE_FOTW, C,
+          {2008: 1000, 2009: 932.5, 2010: 753.25, 2011: 579.8, 2012: 443.6, 2013: 324, 2014: 289, 2015: 264.3,
+           2016: 245, 2017: 219, 2018: 197, 2019: 185, 2020: 169, 2021: 157, 2022: 153, 2023: 139}, parts=P17),
+)

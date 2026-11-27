@@ -2548,6 +2548,7 @@ scored in Part 64 and at each refresh.
 | 14 · Water and Waste | done 2026-11-27 (114 Register rows; Hansard for 1858 and 2026; the EPA's 1989 report, its 2009 Facts and Figures, the 1960-2018 series, tipping fees and its water needs surveys; 40 CFR Part 258; the BLS's price indexes; the 10-Ks of Waste Management, Republic, Clean Harbors, American Water and six more, Sabesp's 20-F and Veolia's ESEF report; the Independent Water Commission and the CMA's PR24 redeterminations; WHO/UNICEF via the World Bank) | `works/route.py`, `works/utility.py` | 16 scenes, with bin, lorry, water tower, tap, bale and landfill glyphs | silent and narrated previews reviewed | entry, lab, interactive | not started |
 | 15 · Semiconductors | done 2026-11-27 (124 Register rows; Moore's articles of 1965 and 1975; TSMC's 20-F 2025, its fab table and its third quarter 2026 results; ASML's 20-F; the 10-Ks of Nvidia, Intel, Micron and fifteen more chip companies and three foreign filers' accounts; GM's 2021 10-K; the Federal Reserve's chip output and the BLS's chip prices; Rupp's transistor counts; WSTS's forecasts and SIA's monthly sales; six BIS rules in the Federal Register) | `works/fab.py` | 16 scenes, with car, phone, chip-fab and government-building glyphs and a map of TSMC's fabs | silent and narrated previews reviewed | entry, lab, interactive | not started |
 | 16 · Electronics | done 2026-11-27 (78 Register rows; Stan Shih's oral history; Hon Hai's audited 2025 statements; the 10-Ks of Apple, Intel, HP, Dell, Jabil and Flex and the SEC extract of nine more assemblers, brands and component makers, with Sony's, LG Display's and ASE's 20-Fs; UN Comtrade's US imports by partner; the BLS's price indexes and electronics jobs; the Section 301 notices; CBS's transcript of the Commerce Secretary) | `works/device.py` | 16 scenes, with a surface-mount line, circuit boards and a map of Hon Hai's assets | silent and narrated previews reviewed | entry, lab, interactive | not started |
+| 17 · Automobiles | done 2026-11-27 (about 150 Register rows; Ford's *My Life and Work*; Toyota's plant and TPS pages; the 10-Ks of GM, Ford, Tesla, Rivian, Lucid and AutoNation, the 20-Fs of Toyota, Honda, Stellantis and Ferrari, Tesla's 2016 and Lucid's 2026 8-Ks; Volkswagen's Annual Report 2025 and BYD's 2025 results; the 2022 Economic Census of assembly, parts and dealers; FRED's sales, capacity use, months of supply, prices, jobs and loan rates; UN Comtrade's car exports; the DOE's battery costs, the IEA's EV shares and the EIA's 2017 outlook; China's 2017 and 2020 plans and CAAM's results; the USTR and EU duties) | `works/auto.py` | 18 scenes, with Ford's line, a press, welding robots, a paint booth, pickups, battery packs, showrooms and car carriers | silent and narrated previews reviewed | entry, lab, interactive | not started |
 
 Phase 0 is done in the form Part 1 needed: the palette and kit (`style.py`, `kit.py`), the instruments (`viz.py`: the
 phone and its exploded view, the region map, the Dollar column, the margin ladder, the treemap, plain axes), the
@@ -2733,3 +2734,16 @@ the 2025 tariffs, the January 2026 Section 232 result and the Supreme Court's ru
 the Commerce Secretary's forecast of 6 April 2025, from CBS's transcript, with the series' call on India's share of US
 smartphone imports in 2026. Servers, absent from the draft, became a chapter: US imports of processing units rose seven-fold
 from 2017 to 2025.
+
+Part 17 keeps its draft's story, checked: Ford's own figures from *My Life and Work* (a chassis in 12 hours 28 minutes
+standing still, 5 hours 50 minutes drawn by a rope, 1 hour 33 minutes on the moving line of 1914), so 'from twelve to
+about one and a half' holds. Ohno's story is told in Toyota's own words (Sakichi Toyoda's self-stopping loom of 1896,
+Kiichiro's 'mountain of parts', Ohno backed by Eiji Toyoda); the claim that Toyota had no money for Ford's inventory is not
+used (no primary source read), nor are the IMVP's plant comparisons (Krafcik's 1988 figures were not read). Run it became a
+showroom duel between two identical plants, a prisoner's dilemma, since a lone maker's discount rarely pays at a model's
+own-price elasticity; the plant's shifts and break-even carry the launch. *Called it?* has three outside forecasts with
+primary sources (Tesla's 2016 update, the EIA's 2017 outlook, China's 2017 and 2020 plans) and the series' call on the
+world's electric share in 2026. Hyundai-Kia, BMW, Mercedes-Benz, Renault-Nissan, Bosch, Denso, ZF and CATL appear on the
+map by name only, since they report outside the SEC and were not read for this part; Volkswagen and BYD were read from
+their annual reports. The 2023 strike is measured from GM's 10-K; Ford's own estimate of its cost was not found in its
+10-K.

@@ -1726,7 +1726,233 @@ def comtrade_us_m(start="2025-01", end=None):
                    "imports, monthly; 851713 smartphones, 847130 laptops)"])
 
 
-JOBS = {"comtrade_us_m": comtrade_us_m, "bls_elec": bls_elec, "fred_elec": fred_elec, "comtrade_us": comtrade_us, "fred_chips": fred_chips, "owid_chips": owid_chips, "sec_foreign": sec_foreign, "wb_water": wb_water, "bls_water": bls_water, "fred_waste": fred_waste, "epa_msw": epa_msw, "eia_930": eia_930, "eia_mer": eia_mer, "fred_power": fred_power, "owid_elec": owid_elec, "owid_chem": owid_chem, "fred_chem": fred_chem, "eia_ngl": eia_ngl, "eurostat_chem": eurostat_chem, "usgs_heavy": usgs_heavy, "fred_heavy": fred_heavy, "owid_co2": owid_co2, "ers_food_dollar": ers_food_dollar, "ers_costs": ers_costs, "ers_farm_income": ers_farm_income, "owid_ag": owid_ag, "fred_food": fred_food, "ne_land": ne_land, "usgs_ds140": usgs_ds140, "fred_metals": fred_metals, "sec_ifrs": sec_ifrs, "eia_gas": eia_gas, "eia_petroleum": eia_petroleum, "eia_intl": eia_intl, "eia_pump": eia_pump, "fred_energy": fred_energy, "fred_market": fred_market, "owid_tech": owid_tech, "sec_quarterly": sec_quarterly, "fred_cycle": fred_cycle, "esef_maersk": esef_maersk, "damodaran_roc": damodaran_roc, "census_conc": census_conc, "eia_power": eia_power, "fred_pay": fred_pay, "bea_real": bea_real, "sec_annual": sec_annual, "fred_prices": fred_prices, "census_susb": census_susb, "bea_va": bea_va, "wb_mfg_usd": wb_mfg_usd, "bea_hist": bea_hist, "bea_io": bea_io, "fred_jobs": fred_jobs, "wb_shares": wb_shares}
+# Part 17: automobiles
+AUTO_COMPANIES = [(1467858, "GM", "USD"), (37996, "F", "USD"), (1318605, "TSLA", "USD"), (1874178, "RIVN", "USD"),
+                  (1811210, "LCID", "USD"), (1094517, "TM", "JPY"), (715153, "HMC", "JPY"), (1605484, "STLA", "EUR"),
+                  (1648416, "RACE", "EUR"), (75362, "PCAR", "USD"), (1736541, "NIO", "CNY"), (1791706, "LI", "CNY"),
+                  (1810997, "XPEV", "CNY"),
+                  (908255, "BWA", "USD"), (1521332, "APTV", "USD"), (842162, "LEA", "USD"), (1034670, "ALV", "USD"),
+                  (42582, "GT", "USD"), (749098, "MGA", "USD"),
+                  (350698, "AN", "USD"), (1023128, "LAD", "USD"), (1019849, "PAG", "USD"), (1170010, "KMX", "USD"),
+                  (1690820, "CVNA", "USD")]
+AUTO_ITEMS = {"revenue": [("ifrs-full", "Revenue"), ("us-gaap", "Revenues"),
+                          ("us-gaap", "RevenueFromContractWithCustomerExcludingAssessedTax"), ("us-gaap", "SalesRevenueNet"),
+                          ("us-gaap", "SalesRevenueGoodsNet")],
+              "cost": [("ifrs-full", "CostOfSales"), ("us-gaap", "CostOfRevenue"), ("us-gaap", "CostOfGoodsAndServicesSold"),
+                       ("us-gaap", "CostOfGoodsSold")],
+              "operating_income": [("ifrs-full", "ProfitLossFromOperatingActivities"), ("us-gaap", "OperatingIncomeLoss")],
+              "profit": [("ifrs-full", "ProfitLossAttributableToOwnersOfParent"), ("ifrs-full", "ProfitLoss"),
+                         ("us-gaap", "NetIncomeLoss"), ("us-gaap", "ProfitLoss")],
+              "rnd": [("ifrs-full", "ResearchAndDevelopmentExpense"), ("us-gaap", "ResearchAndDevelopmentExpense"),
+                      ("us-gaap", "ResearchAndDevelopmentExpenseExcludingAcquiredInProcessCost")],
+              "capex": [("ifrs-full", "PurchaseOfPropertyPlantAndEquipmentClassifiedAsInvestingActivities"),
+                        ("us-gaap", "PaymentsToAcquirePropertyPlantAndEquipment"),
+                        ("us-gaap", "PaymentsToAcquireProductiveAssets")],
+              "inventory": [("ifrs-full", "Inventories"), ("us-gaap", "InventoryNet")],
+              "assets": [("ifrs-full", "Assets"), ("us-gaap", "Assets")]}
+
+
+def sec_auto():
+    """Annual figures of carmakers, suppliers and dealers from their Forms 10-K, 20-F and 40-F (SEC company facts), in
+    their reporting currency (billions): for each item the first tag present in a year wins, IFRS before US GAAP (Toyota
+    and Honda moved from US GAAP to IFRS).  Duration items need a year-long period; balance items are taken at year end.
+    Profit is attributable to the parent where tagged (Stellantis tags only profit including non-controlling interests;
+    Ford tags only that in 2016-2020 and 2025)."""
+    import time
+
+    out = []
+    for cik, tic, cur in AUTO_COMPANIES:
+        facts = json.loads(_get(f"https://data.sec.gov/api/xbrl/companyfacts/CIK{cik:010d}.json"))["facts"]
+        time.sleep(0.5)
+        years: dict = {}
+        for item, tags in AUTO_ITEMS.items():
+            for tax, tag in tags:
+                best: dict = {}
+                for v in facts.get(tax, {}).get(tag, {}).get("units", {}).get(cur, []):
+                    if v.get("form") not in ("10-K", "10-K/A", "20-F", "20-F/A", "40-F", "40-F/A"):
+                        continue
+                    if "start" in v:
+                        d = (dt.date.fromisoformat(v["end"]) - dt.date.fromisoformat(v["start"])).days
+                        if not 350 <= d <= 380:
+                            continue
+                    if v["end"] not in best or v["filed"] > best[v["end"]]["filed"]:
+                        best[v["end"]] = v
+                for end, v in best.items():
+                    years.setdefault(end, {}).setdefault(item, v["val"] / 1e9)
+        for end in sorted(years):
+            if end >= "2009":
+                out.append([tic, end, cur] + [years[end].get(k) for k in AUTO_ITEMS])
+    return _write("sec_auto", ["ticker", "year_end", "currency"] + list(AUTO_ITEMS), out,
+                  ["https://data.sec.gov/api/xbrl/companyfacts/ (Forms 10-K, 20-F and 40-F; billions of the reporting "
+                   "currency; tags in order of preference: " + "; ".join(f"{k}: {'/'.join(t for _, t in v)}"
+                                                                         for k, v in AUTO_ITEMS.items()) + ")"])
+
+
+FRED_AUTO = {"TOTALSA": "Total vehicle sales (millions, seasonally adjusted annual rate; BEA)",
+             "LAUTOSA": "Light weight vehicle sales: autos (millions, SAAR; BEA)",
+             "LTRUCKSA": "Light weight vehicle sales: light trucks (millions, SAAR; BEA)",
+             "MVAAUTLTTS": "Motor vehicle assemblies: autos and light trucks (millions of units, SAAR; Federal Reserve G.17)",
+             "CAPUTLG3361T3S": "Capacity utilization: motor vehicles and parts (percent of capacity; Federal Reserve G.17)",
+             "IPG3361S": "Industrial production: motor vehicles (2017 = 100; Federal Reserve G.17)",
+             "AISRSA": "Auto inventory/sales ratio (months of supply, seasonally adjusted; BEA)",
+             "CES3133600101": "All employees, motor vehicles and parts manufacturing (thousands, SA; BLS)",
+             "CUUR0000SETA01": "CPI-U: new vehicles (1982-84 = 100, NSA; BLS)",
+             "CUUR0000SETA02": "CPI-U: used cars and trucks (1982-84 = 100, NSA; BLS)",
+             "CUUR0000SETD": "CPI-U: motor vehicle maintenance and repair (1982-84 = 100, NSA; BLS)",
+             "CPIAUCNS": "CPI-U: all items (1982-84 = 100, NSA; BLS)",
+             "TERMCBAUTO48NS": "Finance rate on consumer installment loans at commercial banks, new autos, 48 months "
+                               "(percent; Federal Reserve G.19)",
+             "AEXUSEU": "US dollars to one euro, annual average (Federal Reserve H.10)",
+             "AEXJPUS": "Japanese yen to one US dollar, annual average (Federal Reserve H.10)",
+             "AEXCHUS": "Chinese yuan to one US dollar, annual average (Federal Reserve H.10)"}
+
+
+def fred_auto():
+    """Monthly and quarterly series for Part 17 (via FRED): US light vehicle sales since 1976 and assemblies since 1977,
+    the industry's capacity utilization since 1948, dealers' months of supply, employment, the consumer prices of new
+    and used cars and of repairs against all items, the rate on a new-car loan, and the dollar's annual rates against the
+    euro, yen and yuan."""
+    out = []
+    for sid in FRED_AUTO:
+        txt = _get(f"https://fred.stlouisfed.org/graph/fredgraph.csv?id={sid}").decode()
+        for line in txt.splitlines()[1:]:
+            d, v = line.split(",")
+            if v not in (".", ""):
+                out.append([sid, d[:7], float(v)])
+    return _write("fred_auto", ["series", "month", "value"], out,
+                  ["https://fred.stlouisfed.org (" + "; ".join(f"{k} {v}" for k, v in FRED_AUTO.items()) + ")"])
+
+
+OWID_EV = {"electric-car-sales-share": "ev_sales_share", "electric-car-sales": "ev_sales", "electric-car-stocks": "ev_stock"}
+OWID_EV_ENTITIES = ("World", "China", "Europe", "United States", "Norway", "Germany", "France", "United Kingdom", "India",
+                    "Japan", "Korea", "Brazil", "Rest of the world")
+
+
+def owid_ev():
+    """Electric cars (battery electric and plug-in hybrid): share of new car sales (percent), sales and stock, by
+    country and region, from the IEA's Global EV Outlook via Our World in Data."""
+    out = []
+    for slug, col in OWID_EV.items():
+        txt = _get(f"https://ourworldindata.org/grapher/{slug}.csv?v=1&csvType=full&useColumnShortNames=true").decode()
+        rows = list(csv.DictReader(io.StringIO(txt)))
+        for r in rows:
+            if r["entity"] in OWID_EV_ENTITIES and r.get(col) not in (None, ""):
+                out.append([col, r["entity"], int(r["year"]), float(r[col])])
+    out.sort()
+    return _write("owid_ev", ["series", "entity", "year", "value"], out,
+                  ["https://ourworldindata.org/grapher/" + s for s in OWID_EV] +
+                  ["IEA, Global EV Outlook 2026, via Our World in Data (CC BY 4.0); electric = battery electric and "
+                   "plug-in hybrid cars"])
+
+
+COMTRADE_CAR_REPORTERS = {156: "China", 392: "Japan", 276: "Germany", 410: "South Korea", 484: "Mexico", 842: "United States"}
+COMTRADE_CAR_HS = {"8703": "motor cars and other passenger vehicles", "870380": "passenger cars with only an electric motor "
+                   "(from HS 2017)"}
+
+
+def comtrade_cars(years=range(2015, 2026)):
+    """Exports of passenger cars (HS 8703) and battery electric cars (870380) to the world by six large exporters, as each
+    reported them to UN Comtrade (annual; US dollars and units; UN Comtrade's public preview API)."""
+    import time
+
+    out = []
+    for y in years:
+        url = ("https://comtradeapi.un.org/public/v1/preview/C/A/HS?reporterCode={}&period={}&partnerCode=0&cmdCode={}"
+               "&flowCode=X").format(",".join(str(k) for k in COMTRADE_CAR_REPORTERS), y, ",".join(COMTRADE_CAR_HS))
+        j = json.loads(_get(url))
+        for r in j.get("data", []):
+            if r.get("customsCode") != "C00" or r.get("motCode") != 0 or r.get("partner2Code") != 0:
+                continue
+            out.append([y, r["cmdCode"], COMTRADE_CAR_REPORTERS[r["reporterCode"]], round(r["primaryValue"] / 1e9, 4),
+                        r.get("qty")])
+        time.sleep(1.5)
+    out.sort(key=lambda r: (r[0], r[1], r[2]))
+    return _write("comtrade_cars", ["year", "hs", "reporter", "exports_usd_bn", "qty"], out,
+                  ["https://comtradeapi.un.org/public/v1/preview/C/A/HS (UN Comtrade; exports to the world as reported "
+                   "by each country, annual; " + "; ".join(f"{k} {v}" for k, v in COMTRADE_CAR_HS.items()) + ")"])
+
+
+AEO17 = "https://www.eia.gov/outlooks/archive/aeo17/supplement/excel/suptab_39.xlsx"
+
+
+def eia_aeo17():
+    """The EIA's Annual Energy Outlook 2017 (Reference case, released January 2017), supplement table 39: projected US
+    sales of new light-duty vehicles by technology, 2015-2050 (thousands)."""
+    import openpyxl
+
+    wb = openpyxl.load_workbook(io.BytesIO(_get(AEO17)), read_only=True, data_only=True)
+    ws = wb.worksheets[0]
+    rows = list(ws.iter_rows(values_only=True))
+    head = next(r for r in rows if r[1] and str(r[1]).strip() == "Technology Type")
+    keep = {"Total New Car Sales": "cars", "Total New Light Truck Sales": "light_trucks", "   Electric": "electric",
+            "   Plug-in Electric Hybrid": "plugin_hybrid", "   Conventional Gasoline": "gasoline"}
+    out, section = [], ""
+    for r in rows:
+        if r[1] and str(r[1]).strip() == "Total Sales, Cars and Light Trucks":
+            section = "total"
+        lab = str(r[1]) if r[1] else ""
+        name = keep.get(lab.rstrip()) if lab.rstrip() in keep else None
+        if name in ("electric", "plugin_hybrid", "gasoline") and section != "total":
+            continue
+        if name:
+            for y, v in zip(head[2:], r[2:]):
+                if isinstance(y, int) and isinstance(v, (int, float)):
+                    out.append([name, y, round(float(v), 3)])
+    return _write("eia_aeo17", ["series", "year", "thousands"], out,
+                  [AEO17 + " (EIA, Annual Energy Outlook 2017, Reference case, 'Light-Duty Vehicle Sales by Technology "
+                   "Type'; electric = 100- and 200-mile battery electric; plug-in electric hybrid = PHEV10 and PHEV40)"])
+
+
+ECN22 = "https://www2.census.gov/programs-surveys/economic-census/data/2022/API_Datasets/"
+CENSUS_AUTO_NAICS = ("31-33", "336", "3361", "336110", "3362", "3363", "33631", "33632", "33633", "33634", "33635",
+                     "33636", "33637", "33639", "4411", "441110", "441120")
+# Census materials codes are the NAICS product codes of what is bought, plus two digits; names are read from them
+AUTO_MATERIALS = {"00772000": "total materials, parts, containers and supplies", "33637000": "metal stampings",
+                  "33635000": "transmissions and power-train parts", "33631000": "engines and engine parts",
+                  "33639000": "other motor vehicle parts", "33636000": "seats and interior trim",
+                  "33632000": "electrical and electronic equipment", "32721000": "glass",
+                  "32610001": "plastics products", "33200091": "fabricated metal products",
+                  "33633000": "steering and suspension parts", "33431000": "audio and video equipment",
+                  "33441310": "semiconductors and related devices", "33451400": "instruments and gauges",
+                  "32620100": "tyres", "33341500": "air-conditioning and refrigeration equipment",
+                  "33211000": "forgings", "00970099": "all other materials and components"}
+
+
+def census_auto():
+    """The 2022 Economic Census for the car industry: firms, establishments, shipments or sales, payroll, employees,
+    cost of materials and inventories for car and light-vehicle assembly (NAICS 336110), bodies, parts (3363 and its
+    branches) and dealers (4411); and the materials car assemblers consumed, by kind (US totals, $ thousands)."""
+    z = zipfile.ZipFile(io.BytesIO(_get(ECN22 + "ECNBASIC2022.zip")))
+    out = []
+    with z.open("ECNBASIC2022.dat") as f:
+        head = f.readline().decode("latin-1").lstrip("#").strip().split("|")
+        ix = {k: head.index(k) for k in ("NAICS2022", "NAICS2022_LABEL", "TAXSTAT", "TYPOP", "FIRM", "ESTAB",
+                                         "RCPTOT", "PAYANN", "EMP", "CSTMTOT", "INVTOTE")}
+        for b in f:
+            if not b.startswith(b"0100000US|"):
+                continue
+            p = b.decode("latin-1").rstrip("\n").split("|")
+            if p[ix["NAICS2022"]] in CENSUS_AUTO_NAICS and p[ix["TAXSTAT"]] == "00" and p[ix["TYPOP"]] == "00":
+                out.append(["basic", p[ix["NAICS2022"]], p[ix["NAICS2022_LABEL"]]] +
+                           [p[ix[k]] for k in ("FIRM", "ESTAB", "RCPTOT", "PAYANN", "EMP", "CSTMTOT", "INVTOTE")])
+    z = zipfile.ZipFile(io.BytesIO(_get(ECN22 + "ECNMATFUEL2022.zip")))
+    lines = z.read("ECNMATFUEL2022.dat").decode("latin-1").splitlines()
+    head = lines[0].lstrip("#").split("|")
+    for ln in lines[1:]:
+        d = dict(zip(head, ln.split("|")))
+        if d["GEOTYPE"] == "01" and d["NAICS2022"] == "336110" and d["MATFUEL"] in AUTO_MATERIALS:
+            out.append(["materials", d["MATFUEL"], AUTO_MATERIALS[d["MATFUEL"]], "", "",
+                        d["MATFUELCOST"] if d["MATFUELCOST_F"] != "D" else "", "", "", "", ""])
+    return _write("census_auto", ["table", "code", "name", "firms", "establishments", "receipts", "payroll",
+                                  "employees", "materials", "inventories"], out,
+                  [ECN22 + "ECNBASIC2022.zip (2022 Economic Census, core statistics, United States, all firms; "
+                   "$ thousands)", ECN22 + "ECNMATFUEL2022.zip (materials consumed by kind, NAICS 336110; delivered "
+                   "cost in the 'receipts' column, $ thousands; names read from the materials codes, which are NAICS "
+                   "product codes; withheld cells blank)"])
+
+
+JOBS = {"census_auto": census_auto, "sec_auto": sec_auto, "fred_auto": fred_auto, "owid_ev": owid_ev, "comtrade_cars": comtrade_cars,
+        "eia_aeo17": eia_aeo17, "comtrade_us_m": comtrade_us_m, "bls_elec": bls_elec, "fred_elec": fred_elec, "comtrade_us": comtrade_us, "fred_chips": fred_chips, "owid_chips": owid_chips, "sec_foreign": sec_foreign, "wb_water": wb_water, "bls_water": bls_water, "fred_waste": fred_waste, "epa_msw": epa_msw, "eia_930": eia_930, "eia_mer": eia_mer, "fred_power": fred_power, "owid_elec": owid_elec, "owid_chem": owid_chem, "fred_chem": fred_chem, "eia_ngl": eia_ngl, "eurostat_chem": eurostat_chem, "usgs_heavy": usgs_heavy, "fred_heavy": fred_heavy, "owid_co2": owid_co2, "ers_food_dollar": ers_food_dollar, "ers_costs": ers_costs, "ers_farm_income": ers_farm_income, "owid_ag": owid_ag, "fred_food": fred_food, "ne_land": ne_land, "usgs_ds140": usgs_ds140, "fred_metals": fred_metals, "sec_ifrs": sec_ifrs, "eia_gas": eia_gas, "eia_petroleum": eia_petroleum, "eia_intl": eia_intl, "eia_pump": eia_pump, "fred_energy": fred_energy, "fred_market": fred_market, "owid_tech": owid_tech, "sec_quarterly": sec_quarterly, "fred_cycle": fred_cycle, "esef_maersk": esef_maersk, "damodaran_roc": damodaran_roc, "census_conc": census_conc, "eia_power": eia_power, "fred_pay": fred_pay, "bea_real": bea_real, "sec_annual": sec_annual, "fred_prices": fred_prices, "census_susb": census_susb, "bea_va": bea_va, "wb_mfg_usd": wb_mfg_usd, "bea_hist": bea_hist, "bea_io": bea_io, "fred_jobs": fred_jobs, "wb_shares": wb_shares}
 
 if __name__ == "__main__":
     names = list(JOBS) if "--all" in sys.argv else sys.argv[1:]

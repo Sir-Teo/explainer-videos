@@ -271,6 +271,31 @@ CALLS = [
          rule="UN Comtrade, reporter United States, imports, HS 851713, annual 2026: partner India over partner World, as "
               "first published; true if above 50%",
          due="2027-06", ours=True),
+    Call(17, "Tesla Motors", "2016-05-04",
+         "\"we have decided to advance our 500,000 total unit build plan (combined for Model S, Model X, and Model 3) to "
+         "2018, two years earlier than previously planned\"",
+         "Tesla Motors, First Quarter 2016 Update (Form 8-K, Exhibit 99.1, filed 4 May 2016)",
+         outcome="Tesla produced 254,530 vehicles in 2018 and 509,737 in 2020 (Forms 10-K): the plan was met on its "
+                 "original date, two years after the accelerated one"),
+    Call(17, "US Energy Information Administration", "2017-01",
+         "Battery electric and plug-in hybrid vehicles would be 3.7% of new US light-vehicle sales in 2020 and 8.4% in "
+         "2025 (Annual Energy Outlook 2017, Reference case)",
+         "EIA, Annual Energy Outlook 2017, supplement table 39",
+         outcome="2.3% in 2020 and 10% in 2025 (IEA, Global EV Outlook 2026): too high early, too low late, close in the end"),
+    Call(17, "China's Ministry of Industry and Information Technology, NDRC and MOST", "2017-04-06",
+         "New energy vehicle production and sales of 2 million a year by 2020; above 20% of vehicle production and sales by "
+         "2025 (restated by the State Council in October 2020 as 'about 20%' of new vehicle sales)",
+         "汽车产业中长期发展规划 (工信部联装〔2017〕53号); 新能源汽车产业发展规划（2021—2035年） (国办发〔2020〕39号)",
+         outcome="1.37 million in 2020 and 47.9% of sales in 2025 (CAAM, via the China Securities Journal and Xinhua): short "
+                 "at first, then more than twice the target"),
+    Call(17, "Industry, Built", "2026-11-27",
+         "The electric share of new cars sold worldwide in 2026, as the IEA counts it, will be below 32%, the figure a "
+         "logistic curve fitted to 2021-2025 points to (2025: 25%). Probability: 65%.",
+         "This series, Part 17, chapter 15; reasoning: China is already above half of sales, the US repealed its tax "
+         "credits in 2025, and the fitted curve ran ahead of the actual figure for 2025",
+         rule="IEA, Global EV Outlook 2027 (or its data explorer), world electric car sales share for 2026 as first "
+              "published; true if below 32%",
+         due="2027-06", ours=True),
 ]
 
 

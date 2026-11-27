@@ -25,6 +25,10 @@ Every glyph is a ``VGroup`` with its moving parts named, so a scene can animate 
 * chemicals: :func:`molecule` (ball and stick: H2, N2, NH3, CH4, C2H6, C2H4; ``.atoms``, ``.bonds``), :func:`chain`
   (polyethylene), :func:`cracker_unit` (``.flames``, ``.towers``), :func:`cylinder`, :func:`paint_can`,
   :func:`pellet_bag`;
+* cars: :func:`model_t` (``.wheels``), :func:`chassis` (Ford's line, ``.added`` stage by stage), :func:`pickup`, :func:`suv`,
+  :func:`press` (``.ram`` comes down ``.stroke`` on the ``.blank``), :func:`robot_arm` (``.lower``/``.upper`` about
+  ``.shoulder``/``.elbow``), :func:`paint_booth` (``.mist``), :func:`engine` (``.pistons``), :func:`battery_pack`
+  (``.modules``), :func:`showroom` (``.car``, ``.bay``), :func:`car_carrier`, :func:`wrench`, :func:`kanban`;
 * the city and its people: :func:`skyline` (``.windows`` light up), :func:`house`, :func:`shop`, :func:`person`,
   :func:`crowd`; :func:`sun`, :func:`moon`, :func:`sky` (a background whose colour follows the hour);
 * money: :func:`coin`, :func:`coin_stack`, :func:`note_bill`, :func:`coin_flow` (coins flying from one place to
@@ -1816,4 +1820,229 @@ def landfill_section(w: float = 8.0, h: float = 3.0, fill: float = 1.0) -> VGrou
     g = VGroup(soil, pit, clay, liner, drain, pipes, cells, cap, wells, ground)
     g.soil, g.pit, g.clay, g.liner, g.drain, g.pipes, g.cells, g.cap, g.wells, g.ground = (soil, pit, clay, liner, drain,
                                                                                          pipes, cells, cap, wells, ground)
+    return g
+
+
+# ---------------------------------------------------------------------------------------------------------------
+# Cars (Part 17)
+# ---------------------------------------------------------------------------------------------------------------
+def _wheel(r: float, spokes: int = 0, tyre: str = "#20242C", hub: str = "#9AA3B2") -> VGroup:
+    g = VGroup(Circle(radius=r, stroke_width=0, fill_color=tyre, fill_opacity=1),
+               Circle(radius=0.5 * r, stroke_width=0, fill_color=hub, fill_opacity=1))
+    if spokes:
+        g.add(*[Line([0, 0, 0], [0.85 * r * math.cos(TAU * k / spokes), 0.85 * r * math.sin(TAU * k / spokes), 0],
+                     stroke_color=hub, stroke_width=1.6) for k in range(spokes)])
+        g[1].set_fill(tyre).scale(0.5)
+    return g
+
+
+def model_t(w: float = 2.4, color: str = "#2B2B2B") -> VGroup:
+    """A car of 1913 in side view, facing right: a tall open body, an upright windscreen, a folded roof, wooden-spoked
+    wheels (``g.wheels``)."""
+    s = w
+    hood = Polygon([0.12 * s, 0.2 * s, 0], [0.47 * s, 0.2 * s, 0], [0.47 * s, 0.31 * s, 0], [0.12 * s, 0.33 * s, 0],
+                   stroke_width=0, fill_color=color, fill_opacity=1)
+    radiator = Rectangle(width=0.04 * s, height=0.15 * s, stroke_width=0, fill_color="#C9A227", fill_opacity=1).move_to(
+        [0.49 * s, 0.26 * s, 0])
+    tub = Polygon([-0.45 * s, 0.2 * s, 0], [0.12 * s, 0.2 * s, 0], [0.12 * s, 0.37 * s, 0], [-0.08 * s, 0.37 * s, 0],
+                  [-0.12 * s, 0.42 * s, 0], [-0.42 * s, 0.42 * s, 0], stroke_width=0, fill_color=color, fill_opacity=1)
+    screen = Line([0.12 * s, 0.37 * s, 0], [0.1 * s, 0.6 * s, 0], stroke_color="#9AA3B2", stroke_width=2.5)
+    roof = VMobject(stroke_color="#4A4A4A", stroke_width=4).set_points_smoothly(
+        [[0.1 * s, 0.6 * s, 0], [-0.15 * s, 0.63 * s, 0], [-0.4 * s, 0.6 * s, 0], [-0.44 * s, 0.42 * s, 0]])
+    fender = VGroup(*[Arc(radius=0.14 * s, start_angle=0, angle=PI, stroke_color=color, stroke_width=5).move_to(
+        [x * s, 0.2 * s, 0]) for x in (-0.3, 0.33)])
+    wheels = VGroup(*[_wheel(0.12 * s, spokes=10).move_to([x * s, 0.12 * s, 0]) for x in (-0.3, 0.33)])
+    lamp = Circle(radius=0.025 * s, stroke_width=0, fill_color="#F6E27A", fill_opacity=1).move_to([0.45 * s, 0.36 * s, 0])
+    g = VGroup(roof, tub, hood, radiator, screen, fender, wheels, lamp)
+    g.wheels = wheels
+    return g
+
+
+def chassis(w: float = 2.4, color: str = "#8B95A7", parts: int = 0) -> VGroup:
+    """A bare chassis on its wheels, as it moved down Ford's line: two rails, cross members, and up to five stages of
+    parts added (``parts``: axles, engine, radiator, steering, body)."""
+    rails = VGroup(*[Rectangle(width=0.9 * w, height=0.03 * w, stroke_width=0, fill_color=color, fill_opacity=1).move_to(
+        [0, y * w, 0]) for y in (0.2, 0.235)])
+    cross = VGroup(*[Rectangle(width=0.02 * w, height=0.06 * w, stroke_width=0, fill_color=color, fill_opacity=1).move_to(
+        [x * w, 0.217 * w, 0]) for x in (-0.42, -0.15, 0.12, 0.42)])
+    wheels = VGroup(*[_wheel(0.11 * w, spokes=10).move_to([x * w, 0.11 * w, 0]) for x in (-0.3, 0.33)])
+    added = VGroup(
+        VGroup(*[Rectangle(width=0.015 * w, height=0.1 * w, stroke_width=0, fill_color="#C9D3E0", fill_opacity=1).move_to(
+            [x * w, 0.16 * w, 0]) for x in (-0.3, 0.33)]),
+        Rectangle(width=0.18 * w, height=0.1 * w, stroke_width=0, fill_color="#5C6472", fill_opacity=1).move_to([0.28 * w, 0.3 * w, 0]),
+        Rectangle(width=0.04 * w, height=0.14 * w, stroke_width=0, fill_color="#C9A227", fill_opacity=1).move_to([0.43 * w, 0.32 * w, 0]),
+        Line([0.08 * w, 0.25 * w, 0], [-0.02 * w, 0.44 * w, 0], stroke_color="#C9D3E0", stroke_width=3),
+        Polygon([-0.45 * w, 0.25 * w, 0], [0.12 * w, 0.25 * w, 0], [0.12 * w, 0.39 * w, 0], [-0.42 * w, 0.44 * w, 0],
+                stroke_width=0, fill_color="#2B2B2B", fill_opacity=1))
+    for k, m in enumerate(added):
+        if k >= parts:
+            m.set_opacity(0)
+    g = VGroup(added[4], rails, cross, wheels, added[0], added[1], added[2], added[3])
+    g.wheels, g.added = wheels, added
+    return g
+
+
+def pickup(w: float = 2.6, color: str = "#E8554E") -> VGroup:
+    """A full-size pickup truck in side view, facing right (``g.wheels``, ``g.bed``)."""
+    cab = Polygon([-0.08 * w, 0.14 * w, 0], [0.5 * w, 0.14 * w, 0], [0.5 * w, 0.27 * w, 0], [0.3 * w, 0.29 * w, 0],
+                  [0.18 * w, 0.42 * w, 0], [-0.08 * w, 0.42 * w, 0], stroke_width=0, fill_color=color, fill_opacity=0.95)
+    bed = Polygon([-0.5 * w, 0.14 * w, 0], [-0.08 * w, 0.14 * w, 0], [-0.08 * w, 0.3 * w, 0], [-0.5 * w, 0.3 * w, 0],
+                  stroke_width=0, fill_color=interpolate_color(ManimColor(color), ManimColor("#000000"), 0.2), fill_opacity=0.95)
+    glass = VGroup(Polygon([0.16 * w, 0.4 * w, 0], [0.27 * w, 0.29 * w, 0], [0.06 * w, 0.29 * w, 0], [0.06 * w, 0.4 * w, 0],
+                           stroke_width=0, fill_color=GLASS, fill_opacity=1),
+                   Rectangle(width=0.1 * w, height=0.1 * w, stroke_width=0, fill_color=GLASS, fill_opacity=1).move_to(
+                       [-0.01 * w, 0.345 * w, 0]))
+    grille = Rectangle(width=0.03 * w, height=0.1 * w, stroke_width=0, fill_color="#C9D3E0", fill_opacity=1).move_to(
+        [0.49 * w, 0.21 * w, 0])
+    wheels = VGroup(*[_wheel(0.1 * w).move_to([x * w, 0.1 * w, 0]) for x in (-0.32, 0.32)])
+    g = VGroup(bed, cab, glass, grille, wheels)
+    g.wheels, g.bed = wheels, bed
+    return g
+
+
+def suv(w: float = 2.4, color: str = "#7BD88F") -> VGroup:
+    """A crossover or SUV in side view, facing right (``g.wheels``)."""
+    body = Polygon([-0.5 * w, 0.1 * w, 0], [0.5 * w, 0.1 * w, 0], [0.5 * w, 0.23 * w, 0], [0.4 * w, 0.27 * w, 0],
+                   [0.22 * w, 0.29 * w, 0], [0.08 * w, 0.42 * w, 0], [-0.46 * w, 0.42 * w, 0], [-0.5 * w, 0.32 * w, 0],
+                   stroke_width=0, fill_color=color, fill_opacity=0.95)
+    glass = VGroup(Polygon([0.06 * w, 0.4 * w, 0], [0.19 * w, 0.29 * w, 0], [-0.08 * w, 0.29 * w, 0], [-0.08 * w, 0.4 * w, 0],
+                           stroke_width=0, fill_color=GLASS, fill_opacity=1),
+                   Polygon([-0.11 * w, 0.4 * w, 0], [-0.11 * w, 0.29 * w, 0], [-0.44 * w, 0.29 * w, 0], [-0.44 * w, 0.4 * w, 0],
+                           stroke_width=0, fill_color=GLASS, fill_opacity=1))
+    wheels = VGroup(*[_wheel(0.1 * w).move_to([x * w, 0.1 * w, 0]) for x in (-0.31, 0.31)])
+    g = VGroup(body, glass, wheels)
+    g.wheels = wheels
+    return g
+
+
+def press(h: float = 2.0, color: str = "#5C6472") -> VGroup:
+    """A stamping press: a frame, a ram that comes down (``g.ram``; move it by ``g.stroke``) on a die, and a steel blank
+    (``g.blank``)."""
+    frame = VGroup(Rectangle(width=0.12 * h, height=h, stroke_width=0, fill_color=color, fill_opacity=1).move_to([-0.4 * h, 0.5 * h, 0]),
+                   Rectangle(width=0.12 * h, height=h, stroke_width=0, fill_color=color, fill_opacity=1).move_to([0.4 * h, 0.5 * h, 0]),
+                   Rectangle(width=0.92 * h, height=0.16 * h, stroke_width=0, fill_color=color, fill_opacity=1).move_to([0, h, 0]),
+                   Rectangle(width=0.92 * h, height=0.1 * h, stroke_width=0, fill_color=color, fill_opacity=1).move_to([0, 0.05 * h, 0]))
+    die = Polygon([-0.3 * h, 0.1 * h, 0], [0.3 * h, 0.1 * h, 0], [0.22 * h, 0.2 * h, 0], [-0.22 * h, 0.2 * h, 0],
+                  stroke_width=0, fill_color="#3A4152", fill_opacity=1)
+    ram = Rectangle(width=0.6 * h, height=0.22 * h, stroke_width=0, fill_color="#8B95A7", fill_opacity=1).move_to([0, 0.78 * h, 0])
+    blank = Rectangle(width=0.62 * h, height=0.02 * h, stroke_width=0, fill_color="#C9D3E0", fill_opacity=1).move_to([0, 0.215 * h, 0])
+    g = VGroup(frame, die, blank, ram)
+    g.ram, g.blank, g.die, g.stroke = ram, blank, die, 0.45 * h
+    return g
+
+
+def robot_arm(h: float = 1.6, color: str = "#F2A65A") -> VGroup:
+    """A six-axis welding robot, simplified: base, a lower and an upper link and a torch (``g.lower``, ``g.upper``,
+    ``g.tip``; ``g.shoulder`` and ``g.elbow`` are the points to rotate them about)."""
+    base = Polygon([-0.2 * h, 0, 0], [0.2 * h, 0, 0], [0.12 * h, 0.15 * h, 0], [-0.12 * h, 0.15 * h, 0],
+                   stroke_width=0, fill_color="#3A4152", fill_opacity=1)
+    shoulder = np.array([0, 0.18 * h, 0])
+    elbow = shoulder + np.array([0.18 * h, 0.5 * h, 0])
+    wrist = elbow + np.array([0.42 * h, -0.12 * h, 0])
+    lower = VGroup(Line(shoulder, elbow, stroke_color=color, stroke_width=14 * h / 1.6),
+                   Circle(radius=0.06 * h, stroke_width=0, fill_color="#C9D3E0", fill_opacity=1).move_to(shoulder))
+    upper = VGroup(Line(elbow, wrist, stroke_color=color, stroke_width=10 * h / 1.6),
+                   Circle(radius=0.05 * h, stroke_width=0, fill_color="#C9D3E0", fill_opacity=1).move_to(elbow),
+                   Line(wrist, wrist + np.array([0.04 * h, -0.14 * h, 0]), stroke_color="#C9D3E0", stroke_width=4))
+    tip = Dot(wrist + np.array([0.04 * h, -0.15 * h, 0]), radius=0.03 * h, color="#F6E27A")
+    upper.add(tip)
+    g = VGroup(base, lower, upper)
+    g.lower, g.upper, g.tip, g.shoulder, g.elbow = lower, upper, tip, shoulder, elbow
+    return g
+
+
+def paint_booth(w: float = 2.4, color: str = "#2E3645") -> VGroup:
+    """A paint booth with spray nozzles in its roof (``g.nozzles``) and a mist (``g.mist``)."""
+    box = RoundedRectangle(corner_radius=0.05 * w, width=w, height=0.5 * w, stroke_color="#5C6472", stroke_width=2,
+                           fill_color=color, fill_opacity=0.6).move_to([0, 0.25 * w, 0])
+    nozzles = VGroup(*[Triangle(stroke_width=0, fill_color="#C9D3E0", fill_opacity=1).scale(0.03 * w).rotate(PI).move_to(
+        [x * w, 0.46 * w, 0]) for x in np.linspace(-0.35, 0.35, 5)])
+    mist = VGroup(*[Polygon([x * w, 0.44 * w, 0], [(x - 0.06) * w, 0.2 * w, 0], [(x + 0.06) * w, 0.2 * w, 0],
+                            stroke_width=0, fill_color="#7EC8F5", fill_opacity=0.18) for x in np.linspace(-0.35, 0.35, 5)])
+    g = VGroup(box, mist, nozzles)
+    g.nozzles, g.mist = nozzles, mist
+    return g
+
+
+def engine(w: float = 1.4, color: str = "#8B95A7") -> VGroup:
+    """A petrol engine block with four cylinders (``g.pistons``), a head and a sump."""
+    block = Rectangle(width=w, height=0.5 * w, stroke_width=0, fill_color=color, fill_opacity=1).move_to([0, 0.35 * w, 0])
+    head = Rectangle(width=1.04 * w, height=0.14 * w, stroke_width=0, fill_color="#5C6472", fill_opacity=1).move_to([0, 0.67 * w, 0])
+    sump = Polygon([-0.45 * w, 0.1 * w, 0], [0.45 * w, 0.1 * w, 0], [0.35 * w, 0, 0], [-0.35 * w, 0, 0], stroke_width=0,
+                   fill_color="#3A4152", fill_opacity=1)
+    pistons = VGroup(*[Rectangle(width=0.16 * w, height=0.18 * w, stroke_width=0, fill_color="#C9D3E0", fill_opacity=1).move_to(
+        [x * w, 0.45 * w, 0]) for x in (-0.33, -0.11, 0.11, 0.33)])
+    g = VGroup(sump, block, head, pistons)
+    g.pistons = pistons
+    return g
+
+
+def battery_pack(w: float = 2.4, rows: int = 2, cols: int = 6, color: str = "#7BD88F") -> VGroup:
+    """An electric car's battery pack seen from above: a tray of modules (``g.modules``)."""
+    tray = RoundedRectangle(corner_radius=0.04 * w, width=w, height=0.38 * w, stroke_color="#C9D3E0", stroke_width=2,
+                            fill_color="#1A202B", fill_opacity=1)
+    mw, mh = 0.9 * w / cols, 0.3 * w / rows
+    modules = VGroup(*[RoundedRectangle(corner_radius=0.01 * w, width=mw * 0.88, height=mh * 0.84, stroke_width=0,
+                                        fill_color=color, fill_opacity=0.85).move_to(
+        [-0.45 * w + mw * (c + 0.5), -0.15 * w + mh * (r + 0.5), 0]) for r in range(rows) for c in range(cols)])
+    g = VGroup(tray, modules)
+    g.modules = modules
+    return g
+
+
+def showroom(w: float = 2.8, color: str = "#C9D3E0", sign: str = "") -> VGroup:
+    """A car dealer's showroom: a glass front, a car inside (``g.car``), a sign (``g.sign``) and a service bay
+    (``g.bay``) to one side."""
+    glass = Rectangle(width=0.68 * w, height=0.36 * w, stroke_color=color, stroke_width=2, fill_color=GLASS,
+                      fill_opacity=0.5).move_to([-0.16 * w, 0.18 * w, 0])
+    roof = Rectangle(width=1.02 * w, height=0.04 * w, stroke_width=0, fill_color=color, fill_opacity=1).move_to([0, 0.38 * w, 0])
+    bay = Rectangle(width=0.3 * w, height=0.36 * w, stroke_width=0, fill_color="#3A4152", fill_opacity=1).move_to([0.35 * w, 0.18 * w, 0])
+    door = VGroup(*[Line([0.22 * w, y * w, 0], [0.48 * w, y * w, 0], stroke_color="#5C6472", stroke_width=1.5)
+                    for y in np.linspace(0.04, 0.32, 7)])
+    inside = car(0.42 * w, "#F6C453").move_to([-0.16 * w, 0.1 * w, 0])
+    g = VGroup(glass, inside, bay, door, roof)
+    if sign:
+        lab = tx(sign, 14, "#0E1117", bold=True)
+        plate = RoundedRectangle(corner_radius=0.02 * w, width=lab.width + 0.2, height=lab.height + 0.1, stroke_width=0,
+                                 fill_color="#F6C453", fill_opacity=1).move_to([-0.16 * w, 0.45 * w, 0])
+        lab.move_to(plate)
+        g.sign = VGroup(plate, lab)
+        g.add(g.sign)
+    g.car, g.bay = inside, VGroup(bay, door)
+    return g
+
+
+def car_carrier(w: float = 3.2, color: str = "#E8EAED") -> VGroup:
+    """A roll-on roll-off car carrier: a tall boxy hull with decks (``g.decks``) and a stern ramp (``g.ramp``)."""
+    hull = Polygon([-0.5 * w, 0.06 * w, 0], [0.46 * w, 0.06 * w, 0], [0.5 * w, 0.14 * w, 0], [0.5 * w, 0.3 * w, 0],
+                   [-0.5 * w, 0.3 * w, 0], stroke_width=0, fill_color=color, fill_opacity=0.95)
+    keel = Polygon([-0.5 * w, 0.06 * w, 0], [0.46 * w, 0.06 * w, 0], [0.42 * w, 0, 0], [-0.46 * w, 0, 0], stroke_width=0,
+                   fill_color="#C0392B", fill_opacity=1)
+    decks = VGroup(*[Line([-0.48 * w, y * w, 0], [0.46 * w, y * w, 0], stroke_color="#9AA3B2", stroke_width=1.2)
+                     for y in (0.12, 0.18, 0.24)])
+    bridge = Rectangle(width=0.08 * w, height=0.05 * w, stroke_width=0, fill_color="#2E3645", fill_opacity=1).move_to(
+        [0.4 * w, 0.325 * w, 0])
+    ramp = Line([-0.5 * w, 0.08 * w, 0], [-0.62 * w, -0.02 * w, 0], stroke_color="#9AA3B2", stroke_width=4)
+    g = VGroup(keel, hull, decks, bridge, ramp)
+    g.decks, g.ramp = decks, ramp
+    return g
+
+
+def wrench(h: float = 0.8, color: str = "#C9D3E0") -> VGroup:
+    handle = RoundedRectangle(corner_radius=0.04 * h, width=0.14 * h, height=0.8 * h, stroke_width=0, fill_color=color,
+                              fill_opacity=1)
+    jaw = VGroup(Circle(radius=0.16 * h, stroke_width=0, fill_color=color, fill_opacity=1).move_to([0, 0.45 * h, 0]),
+                 Rectangle(width=0.1 * h, height=0.14 * h, stroke_width=0, fill_color="#0E1117", fill_opacity=1).move_to([0, 0.56 * h, 0]))
+    return VGroup(handle, jaw).rotate(-PI / 5)
+
+
+def kanban(w: float = 0.9, color: str = "#F6C453", text: str = "") -> VGroup:
+    """A kanban card: the slip that tells the process before it what to make, and how many."""
+    card_ = RoundedRectangle(corner_radius=0.05 * w, width=w, height=0.6 * w, stroke_width=0, fill_color=color, fill_opacity=1)
+    lines = VGroup(*[Line([-0.38 * w, y * w, 0], [0.38 * w, y * w, 0], stroke_color="#5A4300", stroke_width=1.5)
+                     for y in (0.12, 0.0, -0.12)])
+    g = VGroup(card_, lines)
+    if text:
+        g.add(tx(text, 12, "#0E1117", bold=True).move_to([0, 0.2 * w, 0]))
+        lines.shift(DOWN * 0.05 * w)
     return g

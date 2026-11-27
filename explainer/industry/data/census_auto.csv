@@ -1,0 +1,39 @@
+# source: https://www2.census.gov/programs-surveys/economic-census/data/2022/API_Datasets/ECNBASIC2022.zip (2022 Economic Census, core statistics, United States, all firms; $ thousands)
+# source: https://www2.census.gov/programs-surveys/economic-census/data/2022/API_Datasets/ECNMATFUEL2022.zip (materials consumed by kind, NAICS 336110; delivered cost in the 'receipts' column, $ thousands; names read from the materials codes, which are NAICS product codes; withheld cells blank)
+# retrieved: 2026-11-27
+table,code,name,firms,establishments,receipts,payroll,employees,materials,inventories
+basic,31-33,Manufacturing,240644,286626,7048663670,812731156,12171365,4075986813,916172437
+basic,336,Transportation equipment manufacturing,9473,11878,1023728929,119472757,1636080,680702782,171379393
+basic,3361,Motor vehicle manufacturing,252,315,390234668,19302327,252000,296821646,21295760
+basic,336110,Automobile and light duty motor vehicle manufacturing,170,210,357155770,16800961,213363,272152098,18281777
+basic,3362,Motor vehicle body and trailer manufacturing,1880,2315,72312940,10349148,177036,46572974,10773580
+basic,3363,Motor vehicle parts manufacturing,3814,4846,278236415,33203686,575338,188827368,30579558
+basic,33631,Motor vehicle gasoline engine and engine parts manufacturing,610,674,38967381,3881387,59754,25880733,5020785
+basic,33632,Motor vehicle electrical and electronic equipment manufacturing,519,571,28038554,3425537,59943,18664450,4433679
+basic,33633,Motor vehicle steering and suspension components (except spring) manufacturing,248,297,16979065,2069146,35440,12157333,2091262
+basic,33634,Motor vehicle brake system manufacturing,137,169,10217537,1079536,19809,6687662,1093196
+basic,33635,Motor vehicle transmission and power train parts manufacturing,383,486,47186478,5350816,83333,32461014,5290173
+basic,33636,Motor vehicle seating and interior trim manufacturing,328,457,29884925,3624488,72280,21225013,1771699
+basic,33637,Motor vehicle metal stamping,556,736,40483468,6084081,103323,26297085,3301647
+basic,33639,Other motor vehicle parts manufacturing,1227,1456,66479007,7688695,141456,45454078,7577117
+basic,4411,Automobile dealers,40014,47427,1345924794,98454120,1332645,0,0
+basic,441110,New car dealers,17242,22483,1186395950,89470648,1150441,0,0
+basic,441120,Used car dealers,23015,24944,159528844,8983472,182204,0,0
+materials,00772000,"total materials, parts, containers and supplies",,,271169491,,,,
+materials,00970099,all other materials and components,,,123230354,,,,
+materials,32610001,plastics products,,,7061633,,,,
+materials,32620100,tyres,,,1993891,,,,
+materials,32721000,glass,,,7186634,,,,
+materials,33200091,fabricated metal products,,,5492433,,,,
+materials,33211000,forgings,,,813239,,,,
+materials,33341500,air-conditioning and refrigeration equipment,,,1624453,,,,
+materials,33431000,audio and video equipment,,,3160385,,,,
+materials,33441310,semiconductors and related devices,,,2925828,,,,
+materials,33451400,instruments and gauges,,,2180448,,,,
+materials,33631000,engines and engine parts,,,15019469,,,,
+materials,33632000,electrical and electronic equipment,,,10156754,,,,
+materials,33633000,steering and suspension parts,,,4220447,,,,
+materials,33635000,transmissions and power-train parts,,,17147979,,,,
+materials,33636000,seats and interior trim,,,10901827,,,,
+materials,33637000,metal stampings,,,43710819,,,,
+materials,33639000,other motor vehicle parts,,,10995184,,,,
