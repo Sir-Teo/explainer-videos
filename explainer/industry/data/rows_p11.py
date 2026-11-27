@@ -25,6 +25,9 @@ VMC = "https://www.sec.gov/Archives/edgar/data/1396009/000162828026009546/vmc-20
 MLM = "https://www.sec.gov/Archives/edgar/data/916076/000119312526059193/mlm-20251231.htm"
 AA = "https://www.sec.gov/Archives/edgar/data/1675149/000119312526077167/aa-20251231.htm"
 AMRZ = "https://www.sec.gov/Archives/edgar/data/2035989/000203598926000017/holcim-20251231.htm"
+SW = "https://www.sec.gov/Archives/edgar/data/2005951/000162828026012555/smur-20251231.htm"
+IP = "https://www.sec.gov/Archives/edgar/data/51434/000005143426000055/ip-20251231.htm"
+PKG = "https://www.sec.gov/Archives/edgar/data/75677/000119312526074129/pkg-20251231.htm"
 SRO26 = "https://worldsteel.org/media/press-releases/2026/worldsteel-short-range-outlook-october-2026/"
 WSPROD = "https://worldsteel.org/media/press-releases/2026/october-2026-crude-steel-production/"
 BESSEMER = "https://archive.org/details/sirhenrybessemer00bessuoft"
@@ -251,6 +254,12 @@ add(
     r("mlm.quikrete", 1, "transaction", "Martin Marietta's pending exchange with QUIKRETE: its Midlothian cement plant, "
       "terminals and Texas ready-mix for aggregates operations", "Martin Marietta Materials, Form 10-K for 2025", MLM,
       "2025", "filing"),
+    r("sw.combination", 2024, "year", "Smurfit Kappa and WestRock close their combination, 5 July 2024", "Smurfit "
+      "Westrock plc, Form 10-K for 2025", SW, "2024-07-05", "filing"),
+    r("ip.dssmith", 2025, "year", "International Paper acquires DS Smith, 31 January 2025", "International Paper, Form "
+      "10-K for 2025", IP, "2025-01-31", "filing"),
+    r("pkg.rank", 3, "rank", "Packaging Corporation of America: 'the third largest producer of containerboard products ... "
+      "in North America'", "Packaging Corporation of America, Form 10-K for 2025", PKG, "2025", "filing"),
     filing("alcoa.power_share", 24, "% of costs", "Electric power's share of Alcoa's primary aluminium production costs, "
            "2025", "Alcoa", AA),
     # --- history and ideas ----------------------------------------------------------------------------------------------------
