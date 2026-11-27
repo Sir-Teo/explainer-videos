@@ -92,4 +92,48 @@ PARTS = [
               ("The season bought early, late or chased", "explainer/industry/works/fashion.py"),
               ("The SEC, FRED and UN Comtrade extracts", "explainer/industry/data/SOURCES.md")),
     ),
+    Part(
+        n=24, level="U", widget="sealedbid", prereq=(3, 4, 5, 6),
+        question="Why has almost everything become cheaper to make, except a building?",
+        story="The part opens on the Empire State Building, opened 410 days after ground was broken in 1930, and on "
+              "California's high-speed railway, about $33bn in its 2008 plan and $126.1bn by a cheaper route, or $231.3bn as "
+              "first designed, in its 2026 plan; and on real output per worker since 1970, 5.66 times in manufacturing and "
+              "0.63 in construction. The viewer bids for five tenders against four rivals who add 8% to estimates that are "
+              "5% off either way: the lowest bid usually comes from the lowest estimate, so adding 8% keeps 1.7% on work "
+              "won, adding 2% loses money, and the best markup is about 8%. Real general contractors keep about 3 cents of "
+              "each dollar; quarries, equipment renters and concession owners keep far more. Fluor now takes 81% of its "
+              "backlog on reimbursable terms after charges on fixed-price work; Tutor Perini lost money in four of seven "
+              "years. A contractor is paid before it pays, so a growing order book floods it with cash and a shrinking one "
+              "drains it: Carillion made provisions of £845m and then £1.05bn in 2017, lost £655m of cash from operations "
+              "and collapsed in January 2018. Construction's prices rose 19 times from 1970 to 2025 against 6.4 for the "
+              "economy. Nine in ten megaprojects run over budget; rail projects average 44.7% over with 51.4% fewer "
+              "passengers. Ferrovial keeps 4.7% building and 52% owning toll roads. Quanta's backlog reached $63.7bn on the "
+              "power and data-centre boom. The series gives 70% that California's trains will not carry fare-paying "
+              "passengers between Merced and Bakersfield before 2034.",
+        handoff="Part 25, homes, turns to the largest thing most people ever buy.",
+        outside="Probability, expected value and the normal distribution; Part 3's accounts and working capital; Part 4's "
+                "costs; Part 5's moats; Economics, Built's auctions (the winner's curse) and reference classes.",
+        objectives={
+            "U": ["Explain why sealed-bid contracting leaves builders thin margins: the winner's curse.",
+                  "Explain how contract form (fixed price or cost plus) decides who carries the risk of a wrong estimate.",
+                  "Explain why construction's output per worker has not grown and its prices have."],
+            "M": ["Compute the chance of winning and the expected margin of a sealed bid against rivals with noisy estimates.",
+                  "Model a contractor's cash from billing, payment lags and retention, and show cash and profit diverging.",
+                  "Compute real output per worker and relative prices from value-added indexes and employment."],
+            "D": ["Read a project's own cost and schedule forecasts against the reference class of similar projects.",
+                  "Make and state a dated, scorable forecast about a megaproject's schedule."],
+            "I": ["Read a contractor's backlog by contract type, its charges and its segment margins.",
+                  "Read an audit office's account of a contractor's collapse."],
+        },
+        results=[
+            ("Winning a sealed bid", r"P(\text{win} \mid b) = \prod_{j} P(b_j > b)"),
+            ("The winner's margin", r"E[\,b - C \mid \text{win}\,] < m\,C"),
+            ("Real output per worker", r"\frac{Q_t / L_t}{Q_0 / L_0}"),
+            ("A concession's implied value", r"V = \frac{\text{price paid}}{\text{share bought}}"),
+        ],
+        U=(0, 1, 2, 3, 4, 5, "s07_intermission", 6, 7, 8), I=(9,), D=(10,),
+        also=(("The Register's rows for Part 24", "explainer/industry/data/rows_p24.py"),
+              ("The tender and the contractor's cash", "explainer/industry/works/contractor.py"),
+              ("The SEC, FRED and BEA extracts", "explainer/industry/data/SOURCES.md")),
+    ),
 ]

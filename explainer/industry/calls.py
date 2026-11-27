@@ -393,6 +393,25 @@ CALLS = [
          "the winter sale, whose quarter ran at 54.8% last year, and 58.5% sits near the top of the guidance",
          rule="Inditex, FY2026 results (March 2027): gross margin for the year as reported; true if 58.5% or more",
          due="2027-03", ours=True),
+    Call(24, "California High-Speed Rail Authority", "2008-11",
+         "The backbone from Los Angeles and Anaheim to San Francisco 'is expected to cost about $33 billion, in 2008 dollars'",
+         "California High-Speed Rail Authority, Business Plan, November 2008",
+         outcome="The 2026 Business Plan puts Phase 1 at $126.1 billion by a cheaper route, finished in 2039 with full service "
+                 "in 2040, and the full buildout as first designed at about $231.3 billion in today's dollars; the first "
+                 "stretch, Merced to Bakersfield, at $35.7 billion, finished in 2032"),
+    Call(24, "California High-Speed Rail Authority", "2026-06",
+         "Merced to Bakersfield: completion in 2032, 2033 the first full year of service",
+         "California High-Speed Rail Authority, 2026 Business Plan",
+         outcome="Pending; the 2026 plan moved completion back a year; 81 of 119 Central Valley miles built and ready for rail"),
+    Call(24, "Industry, Built", "2026-11-27",
+         "California's high-speed trains will not carry fare-paying passengers between Merced and Bakersfield before 1 "
+         "January 2034. Probability: 70%.",
+         "This series, Part 24, chapter 10; reasoning: about one large project in ten is on schedule (Flyvbjerg); the "
+         "segment was moved back a year in 2026; track, electrification and trains were still to be procured; against: 81 "
+         "of 119 miles of guideway built",
+         rule="The California High-Speed Rail Authority's own reports at the end of 2033: true if no fare-paying passenger "
+              "service between Merced and Bakersfield has begun before 1 January 2034",
+         due="2034-01", ours=True),
 ]
 
 

@@ -2555,6 +2555,7 @@ scored in Part 64 and at each refresh.
 | 21 · Medical Technology | done 2026-11-27 (about 100 Register rows; the 10-Ks 2025 of Intuitive Surgical, Abbott, Boston Scientific, Stryker, Quest, GE HealthCare and Edwards, Medtronic's for fiscal 2026 and Abbott's for 2022, Intuitive's 10-Q and 8-Ks of 2025-2026; the SEC extract of twenty-three companies; openFDA's 510(k), De Novo, PMA and recall counts; FRED's instrument prices and output) | `works/medtech.py` | 14 scenes, with a surgical robot whose arms move, a scanner, a pacemaker, test tubes on a belt, glucose sensors and a hospital | code only: every beat snapshot-checked, not rendered | entry, lab, interactive | not started |
 | 22 · Consumer Goods | done 2026-11-27 (about 120 Register rows; P&G's 10-Ks for fiscal 2020-2026 and its 8-Ks of 2024-2026, the 10-Ks 2025 of Coca-Cola, Altria, PMI, Colgate, Church & Dwight, Kimberly-Clark and Hershey and those for fiscal 2026 of Clorox, General Mills and Costco; the SEC extract of twenty-five makers; FRED's CPI for personal care, food at home and tobacco) | `works/brand.py` | 13 scenes, with soap, detergent, cereal, cans, a shelf with a store label and a trolley | code only: every beat snapshot-checked, not rendered | entry, lab, interactive | not started |
 | 23 · Fashion and Luxury | done 2026-11-27 (about 160 Register rows; Inditex's FY2025 and 1H2026 results; Hermès's full-year results 2023-2025; LVMH's 2025 results; Kering's 2023 and 2025 results; the 10-Ks of NIKE, TJX, Tapestry, Capri, Lululemon and Levi Strauss; the SEC extract of twenty-three companies; UN Comtrade's clothing exports; FRED's apparel prices and jobs; the WTO on the end of quotas; the ILO on Rana Plaza) | `works/fashion.py` | 14 scenes, with T-shirts on rails, handbags, trainers, sewing machines and price tags | code only: every beat snapshot-checked, not rendered | entry, lab, interactive | not started |
+| 24 · Construction | done 2026-11-27 (about 70 Register rows; the Empire State Building's fact sheet; California's high-speed rail business plans of 2008 and 2026; the NAO on Carillion; Flyvbjerg (2014); Ferrovial's 20-F; the 10-Ks of Fluor, Quanta and Martin Marietta; the SEC extract of twenty-five companies; the Census's construction spending and the BLS's jobs and prices via FRED; BEA's real value added and prices since 1947) | `works/contractor.py` | 13 scenes, with a building frame rising floor by floor, tower cranes, bridges, toll roads, hard hats and blueprints | code only: every beat snapshot-checked, not rendered | entry, lab, interactive | not started |
 
 Phase 0 is done in the form Part 1 needed: the palette and kit (`style.py`, `kit.py`), the instruments (`viz.py`: the
 phone and its exploded view, the region map, the Dollar column, the margin ladder, the treemap, plain axes), the
@@ -2843,3 +2844,17 @@ department stores (TJX, Ross, Burlington, Macy's, Kohl's), Gucci against Hermès
 Kors, Versace's sale to Prada, and the challengers to NIKE (Lululemon, Deckers, On). H&M, Fast Retailing, Shein, Primark,
 Chanel, Richemont, Prada, adidas, Anta, Puma, Nordstrom, Selfridges and the makers appear on the map by name only.
 Written as code only and checked from snapshots; not rendered.
+
+Part 24 follows its draft's question. The Empire State Building's "ahead of schedule and under budget" was not found in a
+primary source, so the hook uses the building's own fact sheet (410 days, 4.5 storeys a week) and adds California's
+high-speed railway, whose 2008 and 2026 plans give the cost story the draft wanted from the reference class. Run it is the
+draft's five tenders against four rivals on the Works' contractor (`works/contractor.py`: sealed bids with noisy
+estimates, the winner's curse computed exactly, and a cash model with payment lags and retention). Carillion is told from
+the National Audit Office's report (Parliament's own report could not be read). Productivity is measured directly, from
+BEA's real value added since 1947 over the BLS's employment, rather than taken from Goolsbee and Syverson, which was not
+read; the four explanations are given as unsettled. Prefabrication (Operation Breakthrough, Katerra), engineering firms'
+hours (Part 53), labour and migrants, and China's builders and the Belt and Road are left out or to the map; Vinci's
+results could not be fetched, so Ferrovial's 20-F carries the concession chapter. Added: the money along the chain
+(quarries, rental), Fluor's move to reimbursable contracts, the power and factory boom (Quanta), and *Called it?* on
+California's railway in place of the Channel Tunnel and the Big Dig, which appear in Flyvbjerg's table. Written as code
+only and checked from snapshots; not rendered.

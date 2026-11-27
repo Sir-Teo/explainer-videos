@@ -156,4 +156,65 @@
     });
   };
 
+  // ---- Part 24: bid for five tenders (the Works' Tender in explainer/industry/works/contractor.py) --------------------
+  // A job really costs $100m.  Each bidder's estimate is off by a normal error (sd as a share of the cost); the rivals add
+  // their markup to their estimates; the lowest bid wins and is paid its bid.  Your chance of winning at your estimate is
+  // the chance every rival bids higher; expectations integrate over your own error on a grid of 801 points.
+  W.sealedbid = function (el) {
+    var COST = 100;
+    function ncdf(x) {
+      var t = 1 / (1 + 0.2316419 * Math.abs(x)), d = 0.3989422804 * Math.exp(-x * x / 2);
+      var p = d * t * (0.31938153 + t * (-0.356563782 + t * (1.781477937 + t * (-1.821255978 + t * 1.330274429))));
+      return x >= 0 ? 1 - p : p;
+    }
+    function bid(m, sd, mr, n) {
+      var N = 801, i, win = 0, prof = 0, rev = 0, est = 0, wsum = 0;
+      for (i = 0; i < N; i++) {
+        var e = -7 * sd + 14 * sd * i / (N - 1), w = Math.exp(-0.5 * (e / sd) * (e / sd));
+        var b = (1 + m) * (1 + e) * COST, re = b / (COST * (1 + mr)) - 1;
+        var pw = Math.pow(1 - ncdf(re / sd), n);
+        wsum += w; win += w * pw; prof += w * pw * (b - COST); rev += w * pw * b; est += w * pw * e;
+      }
+      return { win: win / wsum, profit: prof / wsum, margin: rev > 0 ? prof / rev : 0, est: win > 0 ? est / win : 0 };
+    }
+    QB.widget(el, {
+      title: "Bid for five tenders",
+      sub: "A job really costs $100m, but every bidder's estimate is off a little, sometimes high and sometimes low. You and your rivals each add a markup to your own estimate and hand in a sealed price; the lowest price wins and is paid what it bid. Choose your markup, how far off estimates are, what the rivals add and how many of them there are.",
+      panels: 2, height: 300, weights: [1, 1],
+      controls: [
+        { k: "m", label: "Your markup on your estimate", min: 0, max: 0.25, step: 0.01, value: 0.08, fmt: function (x) { return Math.round(100 * x) + "%"; } },
+        { k: "sd", label: "How far off estimates are (standard deviation)", min: 0.01, max: 0.12, step: 0.01, value: 0.05, fmt: function (x) { return Math.round(100 * x) + "%"; } },
+        { k: "mr", label: "What the rivals add", min: 0, max: 0.2, step: 0.01, value: 0.08, fmt: function (x) { return Math.round(100 * x) + "%"; } },
+        { k: "n", label: "Number of rivals", min: 1, max: 9, step: 1, value: 4, fmt: function (x) { return x; } },
+      ],
+      draw: function (g, v, s) {
+        var ms = [], prof = [], win = [], k, best = { m: 0, p: -1e18 };
+        for (k = 0; k <= 25; k++) {
+          var r = bid(k / 100, v.sd, v.mr, v.n);
+          ms.push(k); prof.push(5 * r.profit); win.push(100 * r.win);
+          if (r.profit > best.p) best = { m: k, p: r.profit };
+        }
+        var lo = Math.min.apply(null, prof), hi = Math.max.apply(null, prof), pad = Math.max(0.3, (hi - lo) * 0.12);
+        var ax = g[0].axes({ x: [0, 25], y: [lo - pad, hi + pad], title: "Expected profit over five tenders, $m",
+                             xticks: [0, 5, 10, 15, 20, 25], xfmt: function (x) { return x + "%"; }, yfmt: function (y) { return y.toFixed(1); } });
+        ax.hline(0, { color: C.muted });
+        ax.line(ms, prof, { color: C.p, width: 2.4 });
+        ax.vline(100 * v.m, { color: C.spot, dash: [5, 4], width: 1.4 });
+        var bx = g[1].axes({ x: [0, 25], y: [0, 100], title: "Your chance of winning each tender, %",
+                             xticks: [0, 5, 10, 15, 20, 25], xfmt: function (x) { return x + "%"; }, yfmt: function (y) { return Math.round(y) + "%"; } });
+        bx.line(ms, win, { color: C.q, width: 2.4 });
+        bx.vline(100 * v.m, { color: C.spot, dash: [5, 4], width: 1.4 });
+        s.r = { mine: bid(v.m, v.sd, v.mr, v.n), best: best };
+      },
+      readout: function (v, s) {
+        var r = s.r.mine, b = s.r.best;
+        return [["jobs won of five, on average", (5 * r.win).toFixed(2)],
+                ["margin on the work you win (you added " + Math.round(100 * v.m) + "%)", (100 * r.margin).toFixed(1) + "%"],
+                ["your estimate when you win, against the true cost", (100 * r.est).toFixed(1) + "%"],
+                ["best markup here; its profit over five tenders", b.m + "%; $" + (5 * b.p).toFixed(2) + "m"]];
+      },
+      note: "The Works' tender, as in the film: with estimates 5% off and four rivals adding 8%, adding 8% yourself wins one tender in five and keeps a 1.7% margin on the work won; adding 2% wins 2.7 of five and loses $2.8m; the best markup is about 8%. Real American general contractors have kept about 3 cents of each dollar of revenue. The numbers here are illustrations.",
+    });
+  };
+
 })();

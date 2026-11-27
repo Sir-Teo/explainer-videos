@@ -42,6 +42,8 @@ Every glyph is a ``VGroup`` with its moving parts named, so a scene can animate 
 * fashion: :func:`tshirt` (``.print``), :func:`handbag` (``.clasp``), :func:`sneaker` (``.sole``, ``.stripe``),
   :func:`hanger`, :func:`rail` (``.items`` on a ``.bar``), :func:`sewing_machine` (``.needle``), :func:`price_tag`
   (``.label``, ``.strike`` for a markdown);
+* construction: :func:`tower_crane` (``.hook``), :func:`skyscraper_frame` (``.floors`` rise one by one), :func:`bridge`
+  (``.deck``), :func:`toll_road` (``.gantry``, ``.cars``), :func:`hardhat`, :func:`blueprint` (``.plan``);
 * the city and its people: :func:`skyline` (``.windows`` light up), :func:`house`, :func:`shop`, :func:`person`,
   :func:`crowd`; :func:`sun`, :func:`moon`, :func:`sky` (a background whose colour follows the hour);
 * money: :func:`coin`, :func:`coin_stack`, :func:`note_bill`, :func:`coin_flow` (coins flying from one place to
@@ -2530,4 +2532,94 @@ def price_tag(text: str = "$40", w: float = 0.9, color: str = "#F6C453", cut: bo
     g.strike = Line(lab.get_corner(DOWN + LEFT), lab.get_corner(UP + RIGHT), stroke_color="#E8554E", stroke_width=4)
     if cut:
         g.add(g.strike)
+    return g
+
+
+def tower_crane(h: float = 3.0, color: str = "#F6C453") -> VGroup:
+    """A tower crane: a lattice mast, a jib to the right with its trolley and hook (``g.hook``), a counter-jib with its
+    weight to the left, and the operator's cab."""
+    mast = VGroup(Line([-0.08 * h, 0, 0], [-0.08 * h, h, 0], stroke_color=color, stroke_width=3),
+                  Line([0.08 * h, 0, 0], [0.08 * h, h, 0], stroke_color=color, stroke_width=3),
+                  *[Line([-0.08 * h, y, 0], [0.08 * h, y + 0.1 * h, 0], stroke_color=color, stroke_width=1.5)
+                    for y in np.arange(0, h - 0.1 * h, 0.1 * h)])
+    jib = Line([-0.4 * h, h, 0], [0.9 * h, h, 0], stroke_color=color, stroke_width=4)
+    apex = VGroup(Line([0, h, 0], [0, 1.18 * h, 0], stroke_color=color, stroke_width=3),
+                  Line([0, 1.18 * h, 0], [0.9 * h, h, 0], stroke_color=color, stroke_width=1.5),
+                  Line([0, 1.18 * h, 0], [-0.4 * h, h, 0], stroke_color=color, stroke_width=1.5))
+    weight = Rectangle(width=0.16 * h, height=0.1 * h, stroke_width=0, fill_color="#5C6472", fill_opacity=1).move_to([-0.32 * h, 0.94 * h, 0])
+    cab = Rectangle(width=0.12 * h, height=0.08 * h, stroke_width=0, fill_color="#7EC8F5", fill_opacity=1).move_to([0.12 * h, 0.95 * h, 0])
+    cable = Line([0.6 * h, h, 0], [0.6 * h, 0.7 * h, 0], stroke_color="#C9D3E0", stroke_width=1.5)
+    hook = VGroup(cable, Rectangle(width=0.06 * h, height=0.04 * h, stroke_width=0, fill_color="#9AA3B2", fill_opacity=1).move_to([0.6 * h, 0.69 * h, 0]))
+    g = VGroup(mast, jib, apex, weight, cab, hook)
+    g.hook = hook
+    return g
+
+
+def skyscraper_frame(floors: int = 20, w: float = 1.6, floor_h: float = 0.16, color: str = "#9AA3B2",
+                     glass: str = "#2A3A52") -> VGroup:
+    """A building's steel frame drawn floor by floor from the ground: ``g.floors[k]`` is the k-th storey (its slab, its
+    columns and a glazed panel), so a scene can raise the building a floor at a time."""
+    fl = VGroup()
+    cols = 5
+    for k in range(floors):
+        y0 = k * floor_h
+        slab = Line([-w / 2, y0 + floor_h, 0], [w / 2, y0 + floor_h, 0], stroke_color=color, stroke_width=2.5)
+        posts = VGroup(*[Line([-w / 2 + i * w / (cols - 1), y0, 0], [-w / 2 + i * w / (cols - 1), y0 + floor_h, 0],
+                              stroke_color=color, stroke_width=1.5) for i in range(cols)])
+        pane = Rectangle(width=w, height=floor_h, stroke_width=0, fill_color=glass, fill_opacity=0.8).move_to([0, y0 + floor_h / 2, 0])
+        fl.add(VGroup(pane, posts, slab))
+    base = Line([-w / 2 - 0.3, 0, 0], [w / 2 + 0.3, 0, 0], stroke_color="#5C6472", stroke_width=3)
+    g = VGroup(base, fl)
+    g.floors = fl
+    return g
+
+
+def bridge(w: float = 5.0, color: str = "#C9D3E0") -> VGroup:
+    """A cable-stayed bridge in elevation: deck (``g.deck``), two towers and fans of stays, over water."""
+    deck = Line([-w / 2, 0, 0], [w / 2, 0, 0], stroke_color=color, stroke_width=5)
+    towers, stays = VGroup(), VGroup()
+    for x in (-w / 4, w / 4):
+        towers.add(Line([x, -0.6, 0], [x, 1.1, 0], stroke_color=color, stroke_width=5))
+        for d in (0.25, 0.5, 0.75, 1.0):
+            stays.add(Line([x, 1.05, 0], [x - d * w / 4.4, 0, 0], stroke_color=color, stroke_width=1.2))
+            stays.add(Line([x, 1.05, 0], [x + d * w / 4.4, 0, 0], stroke_color=color, stroke_width=1.2))
+    water = Rectangle(width=w * 1.05, height=0.5, stroke_width=0, fill_color="#1E4E79", fill_opacity=0.8).move_to([0, -0.6, 0])
+    g = VGroup(water, towers, stays, deck)
+    g.deck = deck
+    return g
+
+
+def toll_road(w: float = 5.0, color: str = "#5C6472") -> VGroup:
+    """A motorway seen from the side with a toll gantry (``g.gantry``) and cars (``g.cars``) that can drive along it."""
+    road = Rectangle(width=w, height=0.35, stroke_width=0, fill_color=color, fill_opacity=1)
+    lines = VGroup(*[Line([x, 0, 0], [x + 0.3, 0, 0], stroke_color="#F6C453", stroke_width=2) for x in np.arange(-w / 2 + 0.2, w / 2 - 0.3, 0.6)])
+    k = w / 5.0
+    gantry = VGroup(Line([0.6 * k, 0.15, 0], [0.6 * k, 1.1, 0], stroke_color="#C9D3E0", stroke_width=3),
+                    Line([0.6 * k, 1.1, 0], [0.6 * k + 1.0, 1.1, 0], stroke_color="#C9D3E0", stroke_width=3),
+                    Rectangle(width=0.5, height=0.22, stroke_width=0, fill_color="#7BD88F", fill_opacity=1).move_to([0.6 * k + 0.6, 0.98, 0]))
+    cars = VGroup(*[car(0.7, color=c).move_to([x * k, 0.35, 0]) for x, c in ((-1.8, "#7EC8F5"), (-0.4, "#E8554E"), (1.9, "#F6C453"))])
+    g = VGroup(road, lines, gantry, cars)
+    g.gantry, g.cars = gantry, cars
+    return g
+
+
+def hardhat(w: float = 0.8, color: str = "#F6C453") -> VGroup:
+    """A builder's hard hat."""
+    dome = Arc(radius=0.35 * w, start_angle=0, angle=PI, stroke_width=0, fill_color=color, fill_opacity=1)
+    brim = RoundedRectangle(corner_radius=0.03 * w, width=0.95 * w, height=0.08 * w, stroke_width=0, fill_color=color,
+                            fill_opacity=1).move_to([0.05 * w, -0.02 * w, 0])
+    ridge = Line([0, 0.02 * w, 0], [0, 0.34 * w, 0], stroke_color="#0E1117", stroke_width=2, stroke_opacity=0.4)
+    return VGroup(dome, brim, ridge)
+
+
+def blueprint(w: float = 1.4, color: str = "#2F6FB5") -> VGroup:
+    """An architect's drawing: a blue sheet with a plan of rooms in white lines (``g.plan``)."""
+    sheet = Rectangle(width=w, height=0.72 * w, stroke_width=0, fill_color=color, fill_opacity=1)
+    s = w * 0.36
+    plan = VGroup(Rectangle(width=2 * s, height=1.2 * s, stroke_color="#FFFFFF", stroke_width=2),
+                  Line([-0.2 * s, 0.6 * s, 0], [-0.2 * s, -0.6 * s, 0], stroke_color="#FFFFFF", stroke_width=1.5),
+                  Line([-s, 0.0, 0], [-0.2 * s, 0.0, 0], stroke_color="#FFFFFF", stroke_width=1.5),
+                  Line([0.4 * s, 0.6 * s, 0], [0.4 * s, -0.1 * s, 0], stroke_color="#FFFFFF", stroke_width=1.5))
+    g = VGroup(sheet, plan)
+    g.plan = plan
     return g

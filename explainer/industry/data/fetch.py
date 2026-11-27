@@ -2173,6 +2173,82 @@ CONSUMER_ITEMS = dict(AUTO_ITEMS, advertising=[("us-gaap", "AdvertisingExpense")
                                                ("us-gaap", "SellingAndMarketingExpense")])
 
 
+CONSTRUCTION_COMPANIES = [(1124198, "FLR", "USD"), (52988, "J", "USD"), (868857, "ACM", "USD"), (1050915, "PWR", "USD"),
+                          (105634, "EME", "USD"), (15615, "MTZ", "USD"), (861459, "GVA", "USD"), (77543, "TPC", "USD"),
+                          (67215, "DY", "USD"), (1035983, "FIX", "USD"), (874238, "STRL", "USD"), (1357615, "KBR", "USD"),
+                          (1361538, "PRIM", "USD"), (700923, "MYRG", "USD"), (100591, "AGX", "USD"),
+                          (1796209, "APG", "USD"), (831641, "TTEK", "USD"), (1718227, "ROAD", "USD"),
+                          (1396009, "VMC", "USD"), (916076, "MLM", "USD"), (849395, "CRH", "USD"), (918646, "EXP", "USD"),
+                          (1364479, "HRI", "USD"), (1468522, "FER", "EUR")]
+
+
+def sec_construction():
+    """Annual figures of contractors, engineering firms, building-materials companies, an equipment renter and a
+    concession owner (Ferrovial, in euros) from their Forms 10-K and 20-F (SEC company facts), with ``sec_fashion``'s
+    items and tags."""
+    return _write("sec_construction", ["ticker", "year_end", "currency"] + list(FASHION_ITEMS),
+                  _sec_table(CONSTRUCTION_COMPANIES, FASHION_ITEMS), [_sec_source(FASHION_ITEMS)])
+
+
+FRED_CONSTRUCTION = {"TTLCONS": "Total construction spending ($ million, SAAR; Census, value put in place)",
+                     "TLRESCONS": "Construction spending: residential ($ million, SAAR; Census)",
+                     "TLNRESCONS": "Construction spending: nonresidential ($ million, SAAR; Census)",
+                     "TLPBLCONS": "Construction spending: public ($ million, SAAR; Census)",
+                     "PRMFGCONS": "Construction spending: private manufacturing ($ million, SAAR; Census)",
+                     "TLHWYCONS": "Construction spending: highway and street ($ million, SAAR; Census)",
+                     "TLPWRCONS": "Construction spending: power ($ million, SAAR; Census)",
+                     "TLCOMCONS": "Construction spending: commercial ($ million, SAAR; Census)",
+                     "TLOFCONS": "Construction spending: office ($ million, SAAR; Census)",
+                     "USCONS": "All employees: construction (thousands, SA; BLS)",
+                     "MANEMP": "All employees: manufacturing (thousands, SA; BLS)",
+                     "PAYEMS": "All employees: total nonfarm (thousands, SA; BLS)",
+                     "AWHAECON": "Average weekly hours of all employees: construction (SA; BLS)",
+                     "WPUSI012011": "PPI: inputs to construction industries, materials and components (1982 = 100, NSA; BLS)",
+                     "PCU236221236221": "PPI: new warehouse building construction (Dec 2004 = 100, NSA; BLS)",
+                     "WPU081": "PPI: lumber (1982 = 100, NSA; BLS)",
+                     "CPIAUCNS": "CPI-U: all items (1982-84 = 100, NSA; BLS)"}
+
+
+def fred_construction():
+    return _fred_write("fred_construction", FRED_CONSTRUCTION)
+
+
+def bea_long():
+    """Real value added (chain-type quantity index) and its price index for construction, manufacturing and all
+    industries, 1947-2025: BEA's historical tables (1947-1997) linked at 1997 to its current release (1997-2025, 2017 =
+    100)."""
+    import openpyxl
+
+    z = zipfile.ZipFile(io.BytesIO(_get(BEA + "iTables%20Static%20Files/AllTablesHist.zip")))
+    old = openpyxl.load_workbook(io.BytesIO(z.read("GDPbyInd_VA_1947-1997.xlsx")), read_only=True)
+    new = openpyxl.load_workbook(io.BytesIO(_get(BEA + "Release/XLS/GDPxInd/ValueAdded.xlsx")), read_only=True)
+    names = {"construction": "Construction", "manufacturing": "Manufacturing", "all": "Gross domestic product"}
+    out = []
+    for measure, osheet, nsheet in (("quantity", "ChainQtyIndexes", "TVA103-A"), ("price", "ChainPriceIndexes", "TVA104-A")):
+        def series(ws, first_col):
+            rows = list(ws.iter_rows(values_only=True))
+            hdr = [r for r in rows if r and r[0] == "Line"][0]
+            years = [int(y) for y in hdr[first_col:] if y]
+            got = {}
+            for r in rows:
+                if r and r[1]:
+                    nm = str(r[1]).strip()
+                    for k, target in names.items():
+                        if nm.startswith(target) and k not in got:
+                            got[k] = {y: v for y, v in zip(years, r[first_col:first_col + len(years)])
+                                      if isinstance(v, (int, float))}
+            return got
+        o, n = series(old[osheet], 2), series(new[nsheet], 3)
+        for k in names:
+            link = n[k][1997] / o[k][1997]
+            for y in range(1947, 2026):
+                v = n[k].get(y) if y >= 1997 else (o[k][y] * link if y in o[k] else None)
+                out.append([measure, k, y, round(v, 4) if v is not None else None])
+    return _write("bea_long", ["measure", "industry", "year", "index_2017"], out,
+                  [BEA + "iTables%20Static%20Files/AllTablesHist.zip (GDPbyInd_VA_1947-1997: ChainQtyIndexes, "
+                         "ChainPriceIndexes)", BEA + "Release/XLS/GDPxInd/ValueAdded.xlsx (TVA103-A, TVA104-A, 2017=100)"])
+
+
 FASHION_COMPANIES = [(320187, "NKE", "USD"), (1397187, "LULU", "USD"), (103379, "VFC", "USD"), (78239, "PVH", "USD"),
                      (1037038, "RL", "USD"), (1116132, "TPR", "USD"), (1530721, "CPRI", "USD"), (94845, "LEVI", "USD"),
                      (39911, "GAP", "USD"), (109198, "TJX", "USD"), (745732, "ROST", "USD"), (1579298, "BURL", "USD"),
@@ -2311,7 +2387,8 @@ def sipri_milex():
                    "estimates included as published)"])
 
 
-JOBS = {"sec_fashion": sec_fashion, "fred_fashion": fred_fashion, "comtrade_apparel": comtrade_apparel,
+JOBS = {"sec_construction": sec_construction, "fred_construction": fred_construction, "bea_long": bea_long,
+        "sec_fashion": sec_fashion, "fred_fashion": fred_fashion, "comtrade_apparel": comtrade_apparel,
         "fred_consumer": fred_consumer, "sec_consumer": sec_consumer, "sec_medtech": sec_medtech, "fred_medtech": fred_medtech, "fda_devices": fda_devices, "fda_510k_panels": fda_510k_panels,
         "sec_aero": sec_aero, "fred_aero": fred_aero, "sipri_milex": sipri_milex, "census_auto": census_auto, "sec_auto": sec_auto, "fred_auto": fred_auto, "owid_ev": owid_ev, "comtrade_cars": comtrade_cars,
         "sec_pharma": sec_pharma, "fred_pharma": fred_pharma, "sec_mach": sec_mach, "fred_mach": fred_mach, "owid_robots": owid_robots, "comtrade_mach": comtrade_mach,
