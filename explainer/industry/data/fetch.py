@@ -2212,6 +2212,36 @@ def fred_homes():
     return _fred_write("fred_homes", FRED_HOMES)
 
 
+AIR_COMPANIES = [(6201, "AAL", "USD"), (27904, "DAL", "USD"), (100517, "UAL", "USD"), (92380, "LUV", "USD"),
+                 (1158463, "JBLU", "USD"), (766421, "ALK", "USD"), (1670076, "ULCC", "USD"), (1498710, "SAVE", "USD"),
+                 (1362468, "ALGT", "USD"), (793733, "SKYW", "USD"), (1345105, "CPA", "USD"), (1038683, "RYAAY", "EUR"),
+                 (1047716, "LTM", "USD"), (1378789, "AER", "USD"), (1487712, "AL", "USD"), (1597033, "SABR", "USD"),
+                 (1172222, "HA", "USD")]
+
+
+def sec_air():
+    """Annual figures of American and other airlines, an aircraft lessor pair and a reservation system, from their Forms
+    10-K and 20-F (SEC company facts), in their reporting currency (billions; Ryanair in euros, its fiscal year ending in
+    March), with ``sec_fashion``'s items and tags.  Spirit's last filings are under Spirit Aviation Holdings from 2025."""
+    return _write("sec_air", ["ticker", "year_end", "currency"] + list(FASHION_ITEMS),
+                  _sec_table(AIR_COMPANIES, FASHION_ITEMS), [_sec_source(FASHION_ITEMS)])
+
+
+FRED_AIR = {"ASM": "Available seat-miles, US air carriers, domestic and international, scheduled passenger flights (thousands, monthly, SA; BTS)",
+            "RPM": "Revenue passenger-miles, US air carriers, domestic and international (thousands, monthly, SA; BTS)",
+            "LOADFACTOR": "Load factor, US air carriers, domestic and international (percent, monthly, SA; BTS)",
+            "ENPLANE": "Enplanements, US air carriers, domestic and international (thousands, monthly, SA; BTS)",
+            "MJFUELUSGULF": "Kerosene-type jet fuel, US Gulf Coast ($ a gallon, monthly; EIA)",
+            "CUUR0000SETG01": "CPI-U: airline fares (1982-84 = 100, NSA; BLS)",
+            "CPIAUCNS": "CPI-U: all items (1982-84 = 100, NSA; BLS)",
+            "CES4348100001": "All employees: air transportation (thousands, SA; BLS)",
+            "PCU481111481111": "PPI by industry: scheduled passenger air transportation (Dec 1989 = 100, NSA; BLS)"}
+
+
+def fred_air():
+    return _fred_write("fred_air", FRED_AIR)
+
+
 SHIP_COMPANIES = [(1654126, "ZIM", "USD"), (3453, "MATX", "USD"), (56047, "KEX", "USD"), (913290, "FRO", "USD"),
                   (1386716, "SBLK", "USD"), (1369241, "DAC", "USD"), (1430725, "GSL", "USD"), (1503584, "CMRE", "USD"),
                   (1483934, "STNG", "USD"), (1679049, "INSW", "USD"), (1326200, "GNK", "USD"), (1419945, "TNK", "USD"),
@@ -2555,7 +2585,7 @@ def sipri_milex():
                    "estimates included as published)"])
 
 
-JOBS = {"sec_ship": sec_ship, "fred_ship": fred_ship, "imf_portwatch": imf_portwatch, "wb_ports": wb_ports, "sec_property": sec_property, "fred_property": fred_property, "sec_homes": sec_homes, "fred_homes": fred_homes,
+JOBS = {"sec_air": sec_air, "fred_air": fred_air, "sec_ship": sec_ship, "fred_ship": fred_ship, "imf_portwatch": imf_portwatch, "wb_ports": wb_ports, "sec_property": sec_property, "fred_property": fred_property, "sec_homes": sec_homes, "fred_homes": fred_homes,
         "sec_construction": sec_construction, "fred_construction": fred_construction, "bea_long": bea_long,
         "sec_fashion": sec_fashion, "fred_fashion": fred_fashion, "comtrade_apparel": comtrade_apparel,
         "fred_consumer": fred_consumer, "sec_consumer": sec_consumer, "sec_medtech": sec_medtech, "fred_medtech": fred_medtech, "fda_devices": fda_devices, "fda_510k_panels": fda_510k_panels,

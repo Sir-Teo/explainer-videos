@@ -389,4 +389,94 @@
     });
   };
 
+  W.fareclass = function (el) {
+    var SEATS = 180, COST = 28800, NOSHOW = 0.08;
+    function pois(m, hi) {
+      var out = [], lp = -m, k;
+      for (k = 0; k <= hi; k++) { if (k > 0) lp += Math.log(m) - Math.log(k); out.push(Math.exp(lp)); }
+      return out;
+    }
+    function lw(pb, ratio) {
+      var cdf = 0, y;
+      for (y = 0; y < pb.length; y++) { cdf += pb[y]; if (1 - cdf <= ratio) return Math.min(y + 1, SEATS); }
+      return SEATS;
+    }
+    var bumpCache = {};
+    function bumpedGiven(n) {
+      if (n <= SEATS) return 0;
+      if (bumpCache[n] !== undefined) return bumpCache[n];
+      var p = 1 - NOSHOW, lp = n * Math.log(1 - p), e = 0, x;
+      for (x = 0; x <= n; x++) {
+        if (x > 0) lp += Math.log(n - x + 1) - Math.log(x) + Math.log(p) - Math.log(1 - p);
+        if (x > SEATS) e += (x - SEATS) * Math.exp(lp);
+      }
+      bumpCache[n] = e;
+      return e;
+    }
+    function sell(v, pl, pb, protect, over) {
+      var cap = SEATS + over, lim = Math.max(0, cap - protect), rev = 0, sL = 0, sB = 0, bumped = 0, l, b;
+      for (l = 0; l < pl.length; l++) {
+        if (pl[l] < 1e-12) continue;
+        var sl = Math.min(l, lim), rem = cap - sl;
+        for (b = 0; b < pb.length; b++) {
+          var w = pl[l] * pb[b];
+          if (w < 1e-14) continue;
+          var sb = Math.min(b, rem);
+          rev += w * (sl * v.low + sb * v.high); sL += w * sl; sB += w * sb;
+          if (sl + sb > SEATS) bumped += w * bumpedGiven(sl + sb);
+        }
+      }
+      var net = rev - bumped * v.bump;
+      return { rev: rev, sL: sL, sB: sB, bumped: bumped, profit: net - COST, fare: (sL + sB) ? rev / (sL + sB) : 0 };
+    }
+    QB.widget(el, {
+      title: "Sell a flight",
+      sub: "The Works' flight from the film: 180 seats, 1,000 miles, $28,800 to fly full or empty. Holidaymakers book first and pay the low fare; business travellers book last and pay the high one; 8% of those booked do not show. Choose the fares, the demand, how many seats to hold back for the late bookers and how many to sell beyond 180, and see the expected result, computed exactly.",
+      panels: 2, height: 300, weights: [1, 1],
+      controls: [
+        { k: "low", label: "Low fare", min: 59, max: 299, step: 10, value: 129, fmt: function (x) { return "$" + x; } },
+        { k: "high", label: "High fare", min: 199, max: 999, step: 10, value: 429, fmt: function (x) { return "$" + x; } },
+        { k: "ml", label: "Holidaymakers who want the flight, on average", min: 100, max: 300, step: 10, value: 190, fmt: function (x) { return x; } },
+        { k: "mb", label: "Business travellers, on average", min: 10, max: 80, step: 1, value: 40, fmt: function (x) { return x; } },
+        { k: "protect", label: "Seats held back for business", min: 0, max: 80, step: 1, value: 44, fmt: function (x) { return x; } },
+        { k: "over", label: "Seats sold beyond 180", min: 0, max: 30, step: 1, value: 14, fmt: function (x) { return x; } },
+        { k: "bump", label: "Paid to each bumped traveller", min: 0, max: 3000, step: 100, value: 900, fmt: function (x) { return "$" + x; } },
+      ],
+      draw: function (g, v, s) {
+        var pl = pois(v.ml, Math.ceil(v.ml + 8 * Math.sqrt(v.ml) + 10)), pb = pois(v.mb, Math.ceil(v.mb + 8 * Math.sqrt(v.mb) + 10));
+        var L = lw(pb, v.low / v.high), ys = [], pr = [], k, best = { y: 0, p: -1e18 };
+        for (k = 0; k <= 80; k += 2) {
+          var r = sell(v, pl, pb, k, v.over);
+          ys.push(k); pr.push(r.profit / 1e3);
+          if (r.profit > best.p) best = { y: k, p: r.profit };
+        }
+        var lo = Math.min.apply(null, pr), hi = Math.max.apply(null, pr);
+        var ax = g[0].axes({ x: [0, 80], y: [Math.min(lo, 0) - 2, Math.max(hi, 0) + 2], title: "Expected profit, $k, by seats held back",
+                             xticks: [0, 20, 40, 60, 80], yfmt: function (y) { return "$" + Math.round(y) + "k"; } });
+        ax.hline(0, { color: C.muted, dash: [4, 4], width: 1 });
+        ax.line(ys, pr, { color: C.p, width: 2.6 });
+        ax.vline(v.protect, { color: C.spot, dash: [5, 4], width: 1.4 });
+        ax.vline(L, { color: C.gain, width: 1.2 });
+        ax.legend([["profit", C.p], ["your choice", C.spot], ["Littlewood's level", C.gain]], { pos: "br" });
+        var os = [], op = [];
+        for (k = 0; k <= 30; k++) { os.push(k); op.push(sell(v, pl, pb, v.protect, k).profit / 1e3); }
+        var lo2 = Math.min.apply(null, op), hi2 = Math.max.apply(null, op);
+        var bx = g[1].axes({ x: [0, 30], y: [lo2 - 0.5, hi2 + 0.5], title: "Expected profit, $k, by seats sold beyond 180",
+                             xticks: [0, 5, 10, 15, 20, 25, 30], yfmt: function (y) { return "$" + y.toFixed(1) + "k"; } });
+        bx.line(os, op, { color: C.cash, width: 2.4 });
+        bx.vline(v.over, { color: C.spot, dash: [5, 4], width: 1.4 });
+        s.r = { mine: sell(v, pl, pb, v.protect, v.over), first: sell(v, pl, pb, 0, 0), L: L, best: best };
+      },
+      readout: function (v, s) {
+        var r = s.r.mine, f = s.r.first;
+        function usd(x) { return (x < 0 ? "-$" : "+$") + Math.abs(Math.round(x)).toLocaleString(); }
+        return [["holidaymakers and business travellers booked", r.sL.toFixed(0) + " + " + r.sB.toFixed(0)],
+                ["average fare; travellers bumped", "$" + Math.round(r.fare) + "; " + r.bumped.toFixed(2)],
+                ["profit (first come, first served, no overbooking)", usd(r.profit) + " (" + usd(f.profit) + ")"],
+                ["Littlewood's level; the best hold-back here", s.r.L + "; " + s.r.best.y]];
+      },
+      note: "As in the film: selling to whoever comes first loses about $5,000 a flight; holding 44 seats back makes about $5,500, and selling 14 extra seats about $7,000. Littlewood's rule (1972): hold a seat while the chance a business traveller still wants it exceeds the low fare over the high. Demand is Poisson; the flight is an illustration.",
+    });
+  };
+
 })();

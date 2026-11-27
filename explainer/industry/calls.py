@@ -472,6 +472,28 @@ CALLS = [
          "Special State Share, the termination of the original application and the need to file a new one",
          rule="Hapag-Lloyd's or ZIM's announcements: true if the acquisition is completed on or before 30 June 2027",
          due="2027-07", ours=True),
+    Call(28, "The United States Congress", "1978-10-24",
+         "The Airline Deregulation Act: 'to encourage, develop, and attain an air transportation system which relies on "
+         "competitive market forces to determine the quality, variety, and price of air services'",
+         "Public Law 95-504, 92 Stat. 1705",
+         outcome="On price, delivered: American airline fares fell 43% after inflation from 2000 to 2025 (BLS CPI) and "
+                 "boardings reached 983 million in 2024 (BTS). The airlines kept about three cents of each dollar of revenue "
+                 "over 2009-2025, and four carriers took 87% of the revenue of eight listed American airlines in 2025 "
+                 "(Forms 10-K)"),
+    Call(28, "Delta Air Lines", "2026-01-13",
+         "Full-year 2026 earnings per share of $6.50 to $7.50, about 20% more than in 2025 (repeated in July)",
+         "Delta Air Lines, results release of 13 January 2026 (Form 8-K)",
+         outcome="Cut to $5.10-5.60 on 9 October 2026, 'absorbing a $6 billion increase in fuel costs' after the Strait of "
+                 "Hormuz closed; the year's outcome comes with Delta's results in January 2027"),
+    Call(28, "Industry, Built", "2026-11-27",
+         "The price of kerosene-type jet fuel on the US Gulf Coast will average more than $3.00 a gallon over 2027. "
+         "Probability: 40%.",
+         "This series, Part 28, chapter 9; reasoning: it averaged $3.25 in the first eight months of 2026 with the Strait of "
+         "Hormuz all but shut, and $3.72 in August; against: it averaged $2.12 in 2025, disruptions end, high prices bring out "
+         "supply, and Frontline expects the Middle East's production to be restored",
+         rule="The EIA's monthly Gulf Coast kerosene-type jet fuel price (FRED: MJFUELUSGULF), the mean of January to December "
+              "2027 as first published; true if above $3.00",
+         due="2028-02", ours=True),
 ]
 
 

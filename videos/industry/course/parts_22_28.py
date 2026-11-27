@@ -264,4 +264,46 @@ PARTS = [
               ("The shipping market and the voyage", "explainer/industry/works/ship.py"),
               ("The SEC, IMF PortWatch, World Bank and FRED extracts", "explainer/industry/data/SOURCES.md")),
     ),
+    Part(
+        n=28, level="U", widget="fareclass", prereq=(3, 4, 5),
+        question="Why has an industry that changed the world lost money over most of its history?",
+        story="The part opens on Warren Buffett's wish that a capitalist at Kitty Hawk had shot Orville down, on American "
+              "fares that fell 43% after inflation from 2000 to 2025, and on nine listed airlines that kept about three "
+              "cents of each dollar over seventeen years and lost $35bn in 2020. The viewer sells one flight: 180 seats, "
+              "$28,800 to fly, holidaymakers who book early at $129 and business travellers who book late at $429. Selling "
+              "to whoever comes first fills the plane and loses $5,028; holding 44 seats back by Littlewood's rule makes "
+              "$5,457, and overbooking makes $6,975. Delta earned 21.26 cents a seat-mile and spent 19.31; Spirit earned "
+              "9.51 and spent 11.43 and would have needed its planes 94% full. Delta's $57.5bn of costs were 30% people and "
+              "17% fuel; in April 2020 American planes were 14% full and Congress set aside $25bn for airline payrolls. In "
+              "2026 the Strait of Hormuz closed, jet fuel went from $2.26 a gallon to $3.94, Delta absorbed a $6bn rise in "
+              "fuel costs and fares rose a quarter. American Express paid Delta $8.2bn in 2025, more than its $5.0bn profit. "
+              "Spirit went bankrupt twice; Southwest began charging for bags; the lessors kept 21-26 cents of each dollar "
+              "against Delta's 5.6. Delta cut its 2026 forecast from $6.50-7.50 a share to $5.10-5.60, and the series gives "
+              "40% that Gulf Coast jet fuel averages more than $3.00 a gallon over 2027.",
+        handoff="Part 29, rail, trucks and parcels, follows goods on land, from the freight train to the van at the door.",
+        outside="Probability and expected value (the Poisson distribution); Part 3's accounts; Part 4's fixed costs; Part 5's "
+                "moats; Part 8's oil; Part 18's aircraft makers; Economics, Built's pricing (Littlewood's rule, overbooking "
+                "and dynamic prices) and its revenue-management part.",
+        objectives={
+            "U": ["Explain why a perishable seat and a fixed cost tempt every airline to fill the last seat at any price.",
+                  "Explain why an airline's profit depends on which travellers get which seats, not only on how full it is.",
+                  "Explain why the banks that buy miles and the lessors that own planes earn steadier money than airlines."],
+            "M": ["Apply Littlewood's rule to find how many seats to protect for a higher fare.",
+                  "Compute the expected cost and benefit of overbooking from a no-show rate and a bump payment.",
+                  "Compute an airline's break-even load factor from its revenue and cost per seat-mile."],
+            "D": ["Read an airline's changing forecast of its own year, and make and state a dated, scorable forecast."],
+            "I": ["Read an airline's operating statistics: ASMs, RPMs, load factor, yield, PRASM, TRASM, CASM and CASM-ex.",
+                  "Read the BTS's traffic data and the EIA's jet fuel prices to follow the industry month by month."],
+        },
+        results=[
+            ("Littlewood's rule", r"\text{protect } y \text{ while } P(D_{\text{high}} \ge y) > \frac{p_{\text{low}}}{p_{\text{high}}}"),
+            ("Load factor", r"\text{LF} = \frac{\text{RPM}}{\text{ASM}}, \quad \text{PRASM} = \text{yield} \times \text{LF}"),
+            ("Break-even load", r"\text{LF}^{*} = \frac{\text{CASM}}{\text{TRASM} / \text{LF}}"),
+            ("Overbooking", r"\max_{k}\ E[\text{revenue}(k)] - c_{\text{bump}}\,E[\max(0, \text{Bin}(n_k, 1 - q) - S)]"),
+        ],
+        U=(0, 1, 2, 3, 4, 5, "s07_intermission", 6, 7), I=(8,), D=(9,),
+        also=(("The Register's rows for Part 28", "explainer/industry/data/rows_p28.py"),
+              ("The flight", "explainer/industry/works/airline.py"),
+              ("The SEC and FRED extracts", "explainer/industry/data/SOURCES.md")),
+    ),
 ]

@@ -2559,6 +2559,7 @@ scored in Part 64 and at each refresh.
 | 25 · Homes | done 2026-11-27 (about 55 Register rows; D.R. Horton's Forms 8-K of October 2025 and 2026 and its 10-K for fiscal 2026; the 10-Ks of Lennar, NVR, Fannie Mae, Compass and Invitation Homes; the SEC extract of twenty-five builders, factory builders, suppliers, lenders, brokers and landlords; Case-Shiller, the Census's starts, sales, prices and homeownership, Freddie Mac's rates, the BLS's rents and materials prices and the Federal Reserve's mortgage debt via FRED) | `works/builder.py` | 12 scenes, with lots, house frames rising into houses, sale signs and keys | code only: every beat snapshot-checked, not rendered | entry, lab, interactive | not started |
 | 26 · Property | done 2026-11-27 (about 80 Register rows; the 10-Ks for 2025 of Prologis, BXP, Simon, Realty Income, SL Green, Hudson Pacific, American Tower, Equinix, Blackstone and CBRE; BXP's 10-Ks since 2017 and Realty Income's since 2015; WeWork's S-1 and Chapter 11 8-K; the Fed's Financial Stability Reports of 2023 and 2026; Gupta, Mittal and Van Nieuwerburgh (2022); the SEC extract of thirty-four companies; the Fed's price index, bank loans and delinquencies, Treasury yields, construction spending, e-commerce and rents via FRED) | `works/building.py` | 13 scenes, with office towers whose windows go dark, warehouses, malls, masts and leases | code only: every beat snapshot-checked, not rendered | entry, lab, interactive | not started |
 | 27 · Shipping and Ports | done 2026-11-27 (about 70 Register rows; ZIM's 20-Fs for 2020, 2021, 2023 and 2025 and its 2026 releases, with Alphaliner's statistics as quoted; Frontline's 20-F and third-quarter 2026 report; Matson's 10-K; E2open's 10-K on the Ever Given; Greenwood and Hanson; the SEC extract of twenty-two companies and Maersk's ESEF filings; IMF PortWatch's chokepoint transits; the World Bank's port traffic; FRED's freight, oil and imports) | `works/ship.py` | 13 scenes, with containers, quay cranes, ships, tankers, a shoebox and a world map of chokepoints | code only: every beat snapshot-checked, not rendered | entry, lab, interactive | not started |
+| 28 · Airlines | done 2026-11-27 (about 50 Register rows; Delta's 10-K for 2025 and its four 2026 results releases; the 10-Ks for 2025 of Southwest, American, Spirit Aviation Holdings and Alaska; the Airline Deregulation Act and the CARES Act; Littlewood (1972); Berkshire's letter for 2007; the SEC extract of seventeen airlines, lessors and Sabre; FRED's BTS traffic, EIA jet fuel, BLS fares and jobs) | `works/airline.py` | 12 scenes, with aircraft, cabins whose seats fill by fare, and the flight's revenue curves | code only: every beat snapshot-checked, not rendered | entry, lab, interactive | not started |
 
 Phase 0 is done in the form Part 1 needed: the palette and kit (`style.py`, `kit.py`), the instruments (`viz.py`: the
 phone and its exploded view, the region map, the Dollar column, the margin ladder, the treemap, plain axes), the
@@ -2903,3 +2904,14 @@ own forecasts and on that deal in place of the 2021-22 orders, which appear as t
 Ports and terminal operators (PSA, Hutchison, DP World, APM) do not file with the SEC and appear by name only; flags,
 Greek and Chinese owners, yards and fuel rules are left to the map and later parts. Written as code only and checked from
 snapshots; not rendered.
+
+Part 28 follows its draft's question. Robert Crandall's system at American is not told, since no primary source was
+read for it; Run it is one flight of 180 seats sold to two kinds of traveller (`works/airline.py`: Poisson demand,
+leisure first and business last, Littlewood's protection level, overbooking with binomial no-shows), not a booking curve
+set as it fills. The Form 41 data were not read; the unit is taken from Delta's, Southwest's and Spirit's own operating
+statistics, and the industry from the BTS's series on FRED. Networks and hubs, airports and slots, distribution and
+alliances are left to the map and a sentence; added are 2020 (the load factor, the four carriers' losses and the CARES
+Act's payroll support), 2026's fuel shock and fares, Southwest's bag fees and assigned seats, Spirit's two bankruptcies,
+the SkyMiles liability and the lessors' scale. *Called it?* reads the Deregulation Act's own purpose and Delta's 2026
+forecasts in place of the deregulators' predictions and IATA's 2020 forecasts, which were not found in primary sources.
+Written as code only and checked from snapshots; not rendered.
