@@ -175,4 +175,74 @@
       note: "This is the film's chapter 4 model. Food has inelastic demand (people do not eat much more when it is cheap), so a better seed lowers the price a long way and the gain passes to the people who eat. Try a high elasticity, like a product people buy more of when it is cheaper: the price falls less and the adopters keep more.",
     });
   };
+  // ---- Part 11: a mill in a glut --------------------------------------------------------------------------------
+  // The film's model (explainer/industry/works/mill.py, glut and industry_glut): an integrated mill of 3 Mt a year,
+  // $520 a tonne variable, $750m a year fixed, a 75% minimum rate, half the fixed costs while banked, and a restart
+  // cost.  Tonnes beyond the order book sell 15% below the market.  If other mills run full, their extra supply
+  // pushes the market price down by a third of a per cent for each per cent of extra supply.
+  W.millglut = function (el) {
+    QB.widget(el, {
+      title: "A mill in a glut: run full, cut output, or bank the furnace?",
+      sub: "You run a blast furnace. The price falls and orders dry up for a while, then recover. Choose how deep and how long the glut is, how many rival mills keep running full, and what a restart costs, and see what each strategy loses.",
+      panels: 2, height: 300,
+      controls: [
+        { k: "bottom", label: "Lowest market price, $ a tonne", min: 450, max: 800, step: 10, value: 620, fmt: function (x) { return "$" + x; } },
+        { k: "len", label: "Quarters at the bottom", min: 1, max: 10, step: 1, value: 2, fmt: function (x) { return x + (x === 1 ? " quarter" : " quarters"); } },
+        { k: "push", label: "Share of rival mills that run full", min: 0, max: 1, step: 0.05, value: 0, fmt: function (x) { return Math.round(100 * x) + "%"; } },
+        { k: "restart", label: "Cost to restart a banked furnace, $m", min: 0, max: 200, step: 5, value: 60, fmt: function (x) { return "$" + x + "m"; } },
+      ],
+      draw: function (g, v, s) {
+        var top = 880, path = [top, 800], i;
+        var fall = [top - (top - v.bottom) * 0.45, top - (top - v.bottom) * 0.85];
+        path = [top, 800, fall[0], fall[1]];
+        for (i = 0; i < v.len; i++) path.push(v.bottom);
+        path.push(v.bottom + (860 - v.bottom) * 0.25, v.bottom + (860 - v.bottom) * 0.6, 860);
+        var n = path.length, orders = [], prices = [];
+        for (i = 0; i < n; i++) {
+          var o = Math.min(1, Math.max(0.55, 0.55 + 0.45 * (path[i] - v.bottom) / Math.max(1, top - v.bottom)));
+          orders.push(o);
+          prices.push(path[i] * Math.max(0.3, 1 - v.push * (1 - o) / o / 3));
+        }
+        var cap = 3.0 / 4, fixed = 750 / 4, vc = 520, minr = 0.75, idle = 0.5, disc = 0.15;
+        function play(strat) {
+          var out = [], cum = 0, banked = false;
+          for (var q = 0; q < n; q++) {
+            var p = prices[q], o = orders[q], rate = strat === "price" ? 1 : Math.max(o, minr), prof;
+            if (strat === "bank" && o < minr) { prof = -fixed * idle; banked = true; }
+            else {
+              var rs = banked ? v.restart : 0; banked = false;
+              var full = Math.min(o, rate) * cap, spot = Math.max(rate - o, 0) * cap;
+              prof = full * p + spot * p * (1 - disc) - rate * cap * vc - fixed - rs;
+            }
+            cum += prof; out.push(cum);
+          }
+          return out;
+        }
+        var A = play("price"), B = play("output"), Cc = play("bank"), qs = [];
+        for (i = 0; i < n; i++) qs.push(i + 1);
+        var a = g[0].axes({ x: [1, n], y: [300, 950], title: "Market price, $ a tonne, and orders",
+                            xticks: [1, Math.round(n / 2), n], xfmt: function (x) { return "Q" + x; }, yfmt: function (y) { return "$" + y; } });
+        a.line(qs, prices, { color: C.p, width: 2.2 });
+        a.line(qs, orders.map(function (o) { return 300 + 650 * o; }), { color: C.muted, width: 1.4, dash: [4, 4] });
+        a.hline(770, { color: C.loss });
+        a.legend([["price", C.p], ["orders (scaled)", C.muted], ["break-even at full output", C.loss]], { pos: "bl" });
+        var all = A.concat(B, Cc), lo = Math.min.apply(null, all), hi = Math.max.apply(null, all);
+        var b = g[1].axes({ x: [1, n], y: [Math.min(lo * 1.1, -50), Math.max(hi * 1.1, 50)], title: "Running total of profit, $ million",
+                            xticks: [1, Math.round(n / 2), n], xfmt: function (x) { return "Q" + x; }, yfmt: function (y) { return Math.round(y); } });
+        b.hline(0, { color: C.muted });
+        b.line(qs, A, { color: C.gain, width: 2.2 });
+        b.line(qs, B, { color: C.p, width: 2.2 });
+        b.line(qs, Cc, { color: C.spot, width: 2.2, dash: [6, 3] });
+        b.legend([["run full", C.gain], ["cut output", C.p], ["bank", C.spot]], { pos: "bl" });
+        s.r = { a: A[n - 1], b: B[n - 1], c: Cc[n - 1], low: Math.min.apply(null, prices) };
+      },
+      readout: function (v, s) {
+        var r = s.r, best = r.a >= r.b && r.a >= r.c ? "run full" : (r.c >= r.b ? "bank the furnace" : "cut output");
+        function m(x) { return (x < 0 ? "-$" : "+$") + Math.abs(Math.round(x)) + "m"; }
+        return [["lowest price after rivals' tonnes", "$" + Math.round(r.low)], ["run full", m(r.a)], ["cut output", m(r.b)],
+                ["bank the furnace", m(r.c)], ["least bad", best]];
+      },
+      note: "This is the film's chapter 1 game. With a short, shallow glut, running full loses least: every tonne still sells for more than its ore and coke. Make the glut longer, or let your rivals run full so the price sinks further, and banking the furnace starts to win, unless restarting is very expensive. What is best for one mill makes the glut worse for all of them.",
+    });
+  };
 })();

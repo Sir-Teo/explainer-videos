@@ -2542,6 +2542,7 @@ scored in Part 64 and at each refresh.
 | 8 · Oil and Gas | done 2026-11-24 (56 Register rows; EIA's bulk files, gasoline components and gas data; the CFTC on April 2020; EIA on 2026; Aramco's Annual Report 2025; the Dallas Fed survey; ExxonMobil's 10-Ks; Hubbert 1956) | `works/oil.py` | 19 scenes | silent and narrated previews reviewed | entry, lab, interactive | not started |
 | 9 · Mining and Metals | done 2026-11-24 (93 Register rows; Ortiz on Escondida's discovery; BHP's FY2025 results; Freeport's 10-K; the USGS's Mineral Commodity Summaries 2026 and Data Series 140; the IMF's metal prices; Vale's 2010 pricing release; the miners' 20-F and 10-K accounts; Sabin on the wager) | `works/mine.py` | 17 scenes, with a world map from Natural Earth (`draw.world_map`) | silent and narrated previews reviewed | entry, lab, interactive | not started |
 | 10 · Farming and Food | done 2026-11-27 (26 Register rows; USDA's food dollar, costs and returns and farm income; FAO yields and food supply; IMF and BLS food prices; NASS farm numbers; ERS on beef packers; the ICCO; Cargill; 15 companies' 10-Ks) | `works/farm.py` | 17 scenes, with farm and animal glyphs | silent and narrated previews reviewed | entry, lab, interactive | not started |
+| 11 · Heavy Materials | done 2026-11-27 (about 150 Register rows; worldsteel's yearbooks, outlooks and climate paper; the USGS's Mineral Commodity Summaries 2026 and Data Series 140; the International Aluminium Institute; BLS producer prices and Federal Reserve output; the 1994 cement cartel decision and the EU's carbon border regulation; Bessemer's autobiography; 18 companies' 10-Ks and two 20-Fs; transcribed tables in `data/tables.py`) | `works/mill.py` | 17 scenes, with furnace, converter, kiln, potline and packaging glyphs | silent and narrated previews reviewed | entry, lab, interactive | not started |
 
 Phase 0 is done in the form Part 1 needed: the palette and kit (`style.py`, `kit.py`), the instruments (`viz.py`: the
 phone and its exploded view, the region map, the Dollar column, the margin ladder, the treemap, plain axes), the
@@ -2647,3 +2648,17 @@ ratios and India's share of rice exports were left out for want of a primary fig
 *Population Bomb* (quoted only in its first sentence, which every edition shares) against FAO's food supply per person,
 with the series' call on the 2026 farm share; USDA's baseline projections were not scored. The Works' `farm.py` (the
 acre, the forward sale, the treadmill, the margin ladder) is tested.
+
+Part 11 keeps its draft's question and story, with Bessemer's Cheltenham paper told from his own autobiography (13
+August 1856, and the ironmaster's laugh at "iron without fuel"). Nucor's history page heads the Crawfordsville entry
+1992 but says that by 1992 it had made sheet from thin slabs for three years, so the film says "at the end of the
+1980s". Run it is a model mill (the Works' `mill.py`) through an eight-quarter glut, set beside what Cleveland-Cliffs and
+US Steel did in 2025; the Dollar is Nucor's 2025 ton and its metal spread, with Nucor's 10-Ks read year by year for
+utilization since 2003. Chapters on packaging and the quarry replace the draft's single line each, and the quarry
+answers the part's question (the real price of crushed stone since 1900; Vulcan's ton and reserves). Holcim, Heidelberg
+Materials, CNBM, Anhui Conch, UltraTech, Chalco, Hongqiao and Rio Tinto are named but not charted (no US filing read);
+the cement chapter uses the 1994 European decision rather than later national cases. *Called it?* is worldsteel's own
+October forecasts of China's demand (2022-2025) against World Steel in Figures 2026; forecasts of China's peak made
+from 2010 were not used, as the archived outlooks could not be read. The Gulf's 2026 aluminium shock comes from the
+IAI's monthly statistics and refers to Part 8 for the war. The Works' `mill.py` (two mills, the glut game, kilns and
+their markets, calcination and hydrogen) is tested.

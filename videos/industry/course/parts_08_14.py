@@ -150,4 +150,56 @@ PARTS = [
               ("The acre, the forward sale, the treadmill and the margin ladder", "explainer/industry/works/farm.py"),
               ("USDA's food dollar, costs and returns and farm income; FAO yields; food prices", "explainer/industry/data/SOURCES.md")),
     ),
+    Part(
+        n=11, level="U", widget="millglut", prereq=(4, 5, 6),
+        question="Why do the things everything is made of earn so little?",
+        story="The part opens in Cheltenham on 13 August 1856, where a Welsh ironmaster laughed at 'a fellow come down from "
+              "London to read a paper on the manufacture of malleable iron without fuel': Henry Bessemer, who burned the "
+              "carbon out of pig iron with a blast of air. The world now makes 1,849 Mt of steel, about 3.8 billion "
+              "tonnes of cement and 74 Mt of aluminium, and a kilogram of steel sheet (94 cents) costs less than one of "
+              "bananas. The viewer runs a blast furnace through a glut: running full loses least ($308m) for one mill, "
+              "but if every mill runs full the price sinks to $482 and banking the furnace wins. Steel is made from ore "
+              "and coal (2.34 t of CO2 a tonne) or scrap and electricity (0.69); Nucor's $1,008 ton holds $385 of scrap "
+              "and a $623 spread, and its profit swung from $0.7bn (2020) to $7.6bn (2022) while Cleveland-Cliffs lost "
+              "money at the same price. Fixed costs keep mills running (US capacity utilization 50% in 1982, 51% in "
+              "2009); minimills climbed from rebar to sheet (38% to 71% of US steel, 1992-2025) and Nucor out-earned US "
+              "Steel $30bn to $3bn over 2010-2024. China went from 13% to 52% of world steel and doubled its exports "
+              "as home demand fell. Cement travels badly, so every plant owns a circle; Europe's makers kept a 'home "
+              "market' rule from 1983 and were fined about EUR 250m in 1994. Aluminium is electricity in solid form "
+              "(13,880 kWh a tonne): China makes 60%, the Gulf's output halved in April 2026 and the price hit $3,658. "
+              "Packaging consolidates; stone, the cheapest of all, has the steadiest prices (the real price from $10.52 "
+              "in 2000 to $19.39) because quarries near cities cannot be copied, and Vulcan makes $8.66 a ton. Cement "
+              "and steel are among the largest emitters; hydrogen would cost $108-271 a tonne of iron; the EU's border "
+              "charge began in 2026. worldsteel's China forecasts were too high three years running, and the series "
+              "calls 2026's fall above 2.0%.",
+        handoff="Part 12 turns oil, gas and salt into chemicals; Part 14 follows construction and housing, where cement, "
+                "steel and stone are used; the energy parts return to the power that smelters and furnaces buy.",
+        outside="Percentages and arithmetic; Part 4's cost curve; Part 5's moats; Part 6's cycle.",
+        objectives={
+            "U": ["Explain the two ways of making steel and why scrap-rich countries use electric furnaces.",
+                  "Explain why heavy plants keep running in a glut, and why that makes gluts last and profits swing.",
+                  "Explain why cement and stone markets are local, and why quarries near cities earn steady profits."],
+            "M": ["Compute a mill's break-even price at full and partial output, and compare running, cutting and banking.",
+                  "Compute a minimill's metal spread from its price, scrap cost and yield, in short and gross tons.",
+                  "Compute a plant's market area and the price it can charge near home from gate costs and haulage."],
+            "D": ["Score a forecaster's year-ahead forecasts (worldsteel on China) against the outcomes and look for a bias.",
+                  "Work out the CO2 of calcination and of carbon reduction, and the hydrogen and electricity a tonne of "
+                  "iron would need instead, and say what the arithmetic leaves out."],
+            "I": ["Read worldsteel's and USGS's tables and a steelmaker's 10-K for price, scrap cost and utilization.",
+                  "Place a company on the map: integrated steel, minimill, cement, aggregates, aluminium, packaging."],
+        },
+        results=[
+            ("Break-even at a rate", r"p^{*}(r) = c + \frac{F}{r\,K}"),
+            ("Metal spread", r"p - 1.1\,s\,\tfrac{2000}{2240}"),
+            ("A plant's reach", r"d^{*} = \frac{p - c}{t}"),
+            ("Calcination", r"\text{CO}_2 = x_{\text{CaO}}\,\frac{44.01}{56.08}"),
+            ("Hydrogen for iron", r"\frac{3 \times 2.016}{2 \times 55.85} \approx 0.054\ \text{t per t of Fe}"),
+        ],
+        U=(0, 1, 2, 3, 4, 5, 6, 7, 8, "s10_intermission", 9, 10, 11, 13), I=(12,), D=(14,),
+        also=(("The Register's rows for Part 11", "explainer/industry/data/rows_p11.py"),
+              ("Transcribed tables: worldsteel, Nucor, the International Aluminium Institute", "explainer/industry/data/tables.py"),
+              ("The mills, the glut game, kilns and the chemistry", "explainer/industry/works/mill.py"),
+              ("USGS history, producer prices, the Global Carbon Budget, the companies' accounts",
+               "explainer/industry/data/SOURCES.md")),
+    ),
 ]
