@@ -202,7 +202,11 @@ def results() -> dict:
     fate = {k: O[("plastic-fate", k)].get(2019) for k in ("value_recycled", "value_incinerated", "littered_mismanaged_combined",
                                                          "value_landfilled")}
     tot = sum(fate.values())
+    fy = sorted(O[("plastic-fate", "value_recycled")])
+    fate_years = {k: {y: O[("plastic-fate", k)][y] / 1e6 for y in fy} for k in ("value_recycled", "value_incinerated",
+                                                                               "littered_mismanaged_combined", "value_landfilled")}
     R["plastics"] = dict(production={y: v / 1e6 for y, v in pp.items()}, p1950=pp[1950] / 1e6, p_last=pp[max(pp)] / 1e6,
+                         fate_years=fate_years, per_person=pp[max(pp)] / pop[max(pp)] if max(pp) in pop else None,
                          p_year=max(pp), fate={k: v / 1e6 for k, v in fate.items()}, recycled_share=fate["value_recycled"] / tot,
                          total_waste=tot / 1e6)
 
