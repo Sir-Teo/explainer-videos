@@ -24,6 +24,7 @@ CLF = "https://www.sec.gov/Archives/edgar/data/764065/000076406526000025/clf-202
 VMC = "https://www.sec.gov/Archives/edgar/data/1396009/000162828026009546/vmc-20251231.htm"
 MLM = "https://www.sec.gov/Archives/edgar/data/916076/000119312526059193/mlm-20251231.htm"
 AA = "https://www.sec.gov/Archives/edgar/data/1675149/000119312526077167/aa-20251231.htm"
+AMRZ = "https://www.sec.gov/Archives/edgar/data/2035989/000203598926000017/holcim-20251231.htm"
 SRO26 = "https://worldsteel.org/media/press-releases/2026/worldsteel-short-range-outlook-october-2026/"
 WSPROD = "https://worldsteel.org/media/press-releases/2026/october-2026-crude-steel-production/"
 BESSEMER = "https://archive.org/details/sirhenrybessemer00bessuoft"
@@ -188,6 +189,9 @@ add(
       "ECU 0.06 and 0.08)", "European Commission, Decision 94/815/EC, recital 10", EU94, "1989", lo=0.06, hi=0.08),
     r("eu.cement.price.uk", 70, "ECU a tonne", "The British cement price around 1981 (Cembureau figures cited in the "
       "decision)", "European Commission, Decision 94/815/EC, recital 9", EU94, "1981"),
+    r("eu.cement.note", 1, "quotation", "A handwritten note of an industry meeting in the Commission's file: '(1) Home "
+      "market principle OK. But is it easily complied with - In Belgium?'", "European Commission, Decision 94/815/EC",
+      EU94, "1980s"),
     r("eu.cbam.start", 2026, "year", "Regulation (EU) 2023/956, the carbon border adjustment mechanism: importers' "
       "obligations (Articles 4, 6-9) apply from 1 January 2026, after a transitional period from 1 October 2023; it "
       "covers cement, iron and steel, aluminium, fertilisers, electricity and hydrogen", "Regulation (EU) 2023/956 of "
@@ -240,6 +244,13 @@ add(
     r("x.founded", 1901, "year", "United States Steel Corporation: 'a Delaware corporation established in 1901'",
       "United States Steel Corporation, Form 10-K for 2024", "https://www.sec.gov/Archives/edgar/data/1163302/"
       "000116330225000018/x-20241231.htm", "1901", "filing"),
+    r("amrz.spinoff", 2025, "year", "Holcim completes the spin-off of its North American business, Amrize, on 23 June "
+      "2025", "Amrize Ltd, Form 10-K for 2025", AMRZ, "2025-06-23", "filing"),
+    r("amrz.cement_plants", 18, "cement plants", "Amrize's cement plants (with 143 terminals, 273 ready-mix plants and "
+      "467 aggregates operations)", "Amrize Ltd, Form 10-K for 2025", AMRZ, "2025", "filing"),
+    r("mlm.quikrete", 1, "transaction", "Martin Marietta's pending exchange with QUIKRETE: its Midlothian cement plant, "
+      "terminals and Texas ready-mix for aggregates operations", "Martin Marietta Materials, Form 10-K for 2025", MLM,
+      "2025", "filing"),
     filing("alcoa.power_share", 24, "% of costs", "Electric power's share of Alcoa's primary aluminium production costs, "
            "2025", "Alcoa", AA),
     # --- history and ideas ----------------------------------------------------------------------------------------------------
