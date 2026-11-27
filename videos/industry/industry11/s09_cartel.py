@@ -91,9 +91,8 @@ class Cartel(VoiceoverScene):
             "Cement is prone to it, for the reasons this chapter and the last describe: a few plants in each region, a "
             "product that is the same whoever makes it, heavy fixed costs, and prices that everyone can see."
         ) as vo:
-            self.play(FadeIn(src))
+            self.play(FadeIn(src), FadeIn(stamp, scale=1.4), run_time=0.8)
             vo.wait_until("a")
-            self.play(FadeIn(stamp, scale=1.4), run_time=0.8)
             vo.wait_until("b")
             self.play(FadeIn(names, shift=LEFT * 0.2))
             vo.wait_until("c")

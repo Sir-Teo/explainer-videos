@@ -90,9 +90,9 @@ class Carbon(VoiceoverScene):
             f"done fast, {Cb['blended']:.0f} per cent of their shipments are now blended cements, and to capture what is "
             "left."
         ) as vo:
-            self.play(FadeIn(src), FadeIn(tag))
+            self.play(FadeIn(src), FadeIn(tag), Write(top[0]), run_time=1.2)
             vo.wait_until("a")
-            self.play(Write(top[0]), FadeIn(top[1]), run_time=1.5)
+            self.play(FadeIn(top[1]), run_time=1.0)
             vo.wait_until("b")
             self.play(Write(bot[0]), FadeIn(bot[1]), run_time=1.5)
             vo.wait_until("c")

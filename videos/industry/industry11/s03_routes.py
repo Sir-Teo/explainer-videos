@@ -55,7 +55,7 @@ class Routes(VoiceoverScene):
             self.play(LaggedStart(FadeIn(pel), FadeIn(coal), FadeIn(scr), lag_ratio=0.3), FadeIn(labs), run_time=1.5)
             self.play(LaggedStart(*[GrowArrow(a_) for a_ in arrows], lag_ratio=0.2), run_time=1.0)
             vo.wait_until("b")
-            self.play(*[p.animate.shift(RIGHT * 1.5).set_opacity(0) for p in (pel, coal, scr)], FadeOut(arrows), FadeOut(labs),
+            self.play(*[FadeOut(p, shift=RIGHT * 1.5) for p in (pel, coal, scr)], FadeOut(arrows), FadeOut(labs),
                       run_time=1.5)
             self.play(Flash(bf.tap[0], color=HOT, flash_radius=0.5), bf.tap.animate.scale(1.3), run_time=0.8)
             vo.wait_until("c")
