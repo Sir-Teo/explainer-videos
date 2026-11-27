@@ -1,0 +1,550 @@
+# source: https://download.bls.gov/pub/time.series/cu/cu.data.1.AllItems
+# source: https://download.bls.gov/pub/time.series/cu/cu.data.12.USHousing
+# source: CPI-U, US city average, not seasonally adjusted, annual average (period M13)
+# retrieved: 2026-11-27
+item,name,year,value
+SA0,All items,1913,9.9
+SA0,All items,1914,10.0
+SA0,All items,1915,10.1
+SA0,All items,1916,10.9
+SA0,All items,1917,12.8
+SA0,All items,1918,15.1
+SA0,All items,1919,17.3
+SA0,All items,1920,20.0
+SA0,All items,1921,17.9
+SA0,All items,1922,16.8
+SA0,All items,1923,17.1
+SA0,All items,1924,17.1
+SA0,All items,1925,17.5
+SA0,All items,1926,17.7
+SA0,All items,1927,17.4
+SA0,All items,1928,17.1
+SA0,All items,1929,17.1
+SA0,All items,1930,16.7
+SA0,All items,1931,15.2
+SA0,All items,1932,13.7
+SA0,All items,1933,13.0
+SA0,All items,1934,13.4
+SA0,All items,1935,13.7
+SA0,All items,1936,13.9
+SA0,All items,1937,14.4
+SA0,All items,1938,14.1
+SA0,All items,1939,13.9
+SA0,All items,1940,14.0
+SA0,All items,1941,14.7
+SA0,All items,1942,16.3
+SA0,All items,1943,17.3
+SA0,All items,1944,17.6
+SA0,All items,1945,18.0
+SA0,All items,1946,19.5
+SA0,All items,1947,22.3
+SA0,All items,1948,24.1
+SA0,All items,1949,23.8
+SA0,All items,1950,24.1
+SA0,All items,1951,26.0
+SA0,All items,1952,26.5
+SA0,All items,1953,26.7
+SA0,All items,1954,26.9
+SA0,All items,1955,26.8
+SA0,All items,1956,27.2
+SA0,All items,1957,28.1
+SA0,All items,1958,28.9
+SA0,All items,1959,29.1
+SA0,All items,1960,29.6
+SA0,All items,1961,29.9
+SA0,All items,1962,30.2
+SA0,All items,1963,30.6
+SA0,All items,1964,31.0
+SA0,All items,1965,31.5
+SA0,All items,1966,32.4
+SA0,All items,1967,33.4
+SA0,All items,1968,34.8
+SA0,All items,1969,36.7
+SA0,All items,1970,38.8
+SA0,All items,1971,40.5
+SA0,All items,1972,41.8
+SA0,All items,1973,44.4
+SA0,All items,1974,49.3
+SA0,All items,1975,53.8
+SA0,All items,1976,56.9
+SA0,All items,1977,60.6
+SA0,All items,1978,65.2
+SA0,All items,1979,72.6
+SA0,All items,1980,82.4
+SA0,All items,1981,90.9
+SA0,All items,1982,96.5
+SA0,All items,1983,99.6
+SA0,All items,1984,103.9
+SA0,All items,1985,107.6
+SA0,All items,1986,109.6
+SA0,All items,1987,113.6
+SA0,All items,1988,118.3
+SA0,All items,1989,124.0
+SA0,All items,1990,130.7
+SA0,All items,1991,136.2
+SA0,All items,1992,140.3
+SA0,All items,1993,144.5
+SA0,All items,1994,148.2
+SA0,All items,1995,152.4
+SA0,All items,1996,156.9
+SA0,All items,1997,160.5
+SA0,All items,1998,163.0
+SA0,All items,1999,166.6
+SA0,All items,2000,172.2
+SA0,All items,2001,177.1
+SA0,All items,2002,179.9
+SA0,All items,2003,184.0
+SA0,All items,2004,188.9
+SA0,All items,2005,195.3
+SA0,All items,2006,201.6
+SA0,All items,2007,207.342
+SA0,All items,2008,215.303
+SA0,All items,2009,214.537
+SA0,All items,2010,218.056
+SA0,All items,2011,224.939
+SA0,All items,2012,229.594
+SA0,All items,2013,232.957
+SA0,All items,2014,236.736
+SA0,All items,2015,237.017
+SA0,All items,2016,240.007
+SA0,All items,2017,245.12
+SA0,All items,2018,251.107
+SA0,All items,2019,255.657
+SA0,All items,2020,258.811
+SA0,All items,2021,270.97
+SA0,All items,2022,292.655
+SA0,All items,2023,304.702
+SA0,All items,2024,313.689
+SA0,All items,2025,321.943
+SEHA,Rent of primary residence,1913,21.0
+SEHA,Rent of primary residence,1914,21.0
+SEHA,Rent of primary residence,1915,21.1
+SEHA,Rent of primary residence,1916,21.3
+SEHA,Rent of primary residence,1917,21.2
+SEHA,Rent of primary residence,1918,21.5
+SEHA,Rent of primary residence,1919,23.3
+SEHA,Rent of primary residence,1920,27.4
+SEHA,Rent of primary residence,1921,31.5
+SEHA,Rent of primary residence,1922,32.4
+SEHA,Rent of primary residence,1923,33.2
+SEHA,Rent of primary residence,1924,34.4
+SEHA,Rent of primary residence,1925,34.6
+SEHA,Rent of primary residence,1926,34.2
+SEHA,Rent of primary residence,1927,33.7
+SEHA,Rent of primary residence,1928,32.9
+SEHA,Rent of primary residence,1929,32.1
+SEHA,Rent of primary residence,1930,31.2
+SEHA,Rent of primary residence,1931,29.6
+SEHA,Rent of primary residence,1932,26.5
+SEHA,Rent of primary residence,1933,22.9
+SEHA,Rent of primary residence,1934,21.4
+SEHA,Rent of primary residence,1935,21.4
+SEHA,Rent of primary residence,1936,21.9
+SEHA,Rent of primary residence,1937,22.9
+SEHA,Rent of primary residence,1938,23.7
+SEHA,Rent of primary residence,1939,23.7
+SEHA,Rent of primary residence,1940,23.7
+SEHA,Rent of primary residence,1941,24.2
+SEHA,Rent of primary residence,1942,24.7
+SEHA,Rent of primary residence,1943,24.7
+SEHA,Rent of primary residence,1944,24.8
+SEHA,Rent of primary residence,1945,24.8
+SEHA,Rent of primary residence,1946,25.0
+SEHA,Rent of primary residence,1947,25.8
+SEHA,Rent of primary residence,1948,27.5
+SEHA,Rent of primary residence,1949,28.7
+SEHA,Rent of primary residence,1950,29.7
+SEHA,Rent of primary residence,1951,30.9
+SEHA,Rent of primary residence,1952,32.2
+SEHA,Rent of primary residence,1953,33.9
+SEHA,Rent of primary residence,1954,35.1
+SEHA,Rent of primary residence,1955,35.6
+SEHA,Rent of primary residence,1956,36.3
+SEHA,Rent of primary residence,1957,37.0
+SEHA,Rent of primary residence,1958,37.6
+SEHA,Rent of primary residence,1959,38.2
+SEHA,Rent of primary residence,1960,38.7
+SEHA,Rent of primary residence,1961,39.2
+SEHA,Rent of primary residence,1962,39.7
+SEHA,Rent of primary residence,1963,40.1
+SEHA,Rent of primary residence,1964,40.5
+SEHA,Rent of primary residence,1965,40.9
+SEHA,Rent of primary residence,1966,41.5
+SEHA,Rent of primary residence,1967,42.2
+SEHA,Rent of primary residence,1968,43.3
+SEHA,Rent of primary residence,1969,44.7
+SEHA,Rent of primary residence,1970,46.5
+SEHA,Rent of primary residence,1971,48.7
+SEHA,Rent of primary residence,1972,50.4
+SEHA,Rent of primary residence,1973,52.5
+SEHA,Rent of primary residence,1974,55.2
+SEHA,Rent of primary residence,1975,58.0
+SEHA,Rent of primary residence,1976,61.1
+SEHA,Rent of primary residence,1977,64.8
+SEHA,Rent of primary residence,1978,69.3
+SEHA,Rent of primary residence,1979,74.3
+SEHA,Rent of primary residence,1980,80.9
+SEHA,Rent of primary residence,1981,87.9
+SEHA,Rent of primary residence,1982,94.6
+SEHA,Rent of primary residence,1983,100.1
+SEHA,Rent of primary residence,1984,105.3
+SEHA,Rent of primary residence,1985,111.8
+SEHA,Rent of primary residence,1986,118.3
+SEHA,Rent of primary residence,1987,123.1
+SEHA,Rent of primary residence,1988,127.8
+SEHA,Rent of primary residence,1989,132.8
+SEHA,Rent of primary residence,1990,138.4
+SEHA,Rent of primary residence,1991,143.3
+SEHA,Rent of primary residence,1992,146.9
+SEHA,Rent of primary residence,1993,150.3
+SEHA,Rent of primary residence,1994,154.0
+SEHA,Rent of primary residence,1995,157.8
+SEHA,Rent of primary residence,1996,162.0
+SEHA,Rent of primary residence,1997,166.7
+SEHA,Rent of primary residence,1998,172.1
+SEHA,Rent of primary residence,1999,177.5
+SEHA,Rent of primary residence,2000,183.9
+SEHA,Rent of primary residence,2001,192.1
+SEHA,Rent of primary residence,2002,199.7
+SEHA,Rent of primary residence,2003,205.5
+SEHA,Rent of primary residence,2004,211.0
+SEHA,Rent of primary residence,2005,217.3
+SEHA,Rent of primary residence,2006,225.1
+SEHA,Rent of primary residence,2007,234.679
+SEHA,Rent of primary residence,2008,243.271
+SEHA,Rent of primary residence,2009,248.812
+SEHA,Rent of primary residence,2010,249.385
+SEHA,Rent of primary residence,2011,253.638
+SEHA,Rent of primary residence,2012,260.367
+SEHA,Rent of primary residence,2013,267.725
+SEHA,Rent of primary residence,2014,276.162
+SEHA,Rent of primary residence,2015,286.032
+SEHA,Rent of primary residence,2016,296.82
+SEHA,Rent of primary residence,2017,308.143
+SEHA,Rent of primary residence,2018,319.289
+SEHA,Rent of primary residence,2019,331.124
+SEHA,Rent of primary residence,2020,341.468
+SEHA,Rent of primary residence,2021,349.135
+SEHA,Rent of primary residence,2022,370.199
+SEHA,Rent of primary residence,2023,399.643
+SEHA,Rent of primary residence,2024,420.06
+SEHA,Rent of primary residence,2025,434.889
+SEHF01,Electricity,1913,45.5
+SEHF01,Electricity,1914,44.6
+SEHF01,Electricity,1915,43.2
+SEHF01,Electricity,1916,42.1
+SEHF01,Electricity,1917,41.0
+SEHF01,Electricity,1918,41.1
+SEHF01,Electricity,1919,42.6
+SEHF01,Electricity,1920,42.5
+SEHF01,Electricity,1921,43.3
+SEHF01,Electricity,1922,42.8
+SEHF01,Electricity,1923,41.9
+SEHF01,Electricity,1924,41.6
+SEHF01,Electricity,1925,41.2
+SEHF01,Electricity,1926,40.6
+SEHF01,Electricity,1927,40.0
+SEHF01,Electricity,1928,39.3
+SEHF01,Electricity,1929,37.9
+SEHF01,Electricity,1930,37.2
+SEHF01,Electricity,1931,36.6
+SEHF01,Electricity,1932,36.3
+SEHF01,Electricity,1933,35.9
+SEHF01,Electricity,1934,33.2
+SEHF01,Electricity,1935,31.5
+SEHF01,Electricity,1936,30.5
+SEHF01,Electricity,1937,29.9
+SEHF01,Electricity,1938,29.4
+SEHF01,Electricity,1939,28.9
+SEHF01,Electricity,1940,28.6
+SEHF01,Electricity,1941,28.4
+SEHF01,Electricity,1942,28.3
+SEHF01,Electricity,1943,28.2
+SEHF01,Electricity,1944,28.2
+SEHF01,Electricity,1945,28.0
+SEHF01,Electricity,1946,26.9
+SEHF01,Electricity,1947,26.6
+SEHF01,Electricity,1948,26.8
+SEHF01,Electricity,1949,27.1
+SEHF01,Electricity,1950,27.2
+SEHF01,Electricity,1951,27.4
+SEHF01,Electricity,1952,27.6
+SEHF01,Electricity,1953,28.0
+SEHF01,Electricity,1954,28.1
+SEHF01,Electricity,1955,28.5
+SEHF01,Electricity,1956,28.6
+SEHF01,Electricity,1957,28.7
+SEHF01,Electricity,1958,29.1
+SEHF01,Electricity,1959,29.5
+SEHF01,Electricity,1960,29.9
+SEHF01,Electricity,1961,29.9
+SEHF01,Electricity,1962,29.9
+SEHF01,Electricity,1963,29.9
+SEHF01,Electricity,1964,29.8
+SEHF01,Electricity,1965,29.7
+SEHF01,Electricity,1966,29.7
+SEHF01,Electricity,1967,29.9
+SEHF01,Electricity,1968,30.2
+SEHF01,Electricity,1969,30.8
+SEHF01,Electricity,1970,31.8
+SEHF01,Electricity,1971,33.9
+SEHF01,Electricity,1972,35.6
+SEHF01,Electricity,1973,37.4
+SEHF01,Electricity,1974,44.1
+SEHF01,Electricity,1975,50.0
+SEHF01,Electricity,1976,53.1
+SEHF01,Electricity,1977,56.6
+SEHF01,Electricity,1978,60.9
+SEHF01,Electricity,1979,65.6
+SEHF01,Electricity,1980,75.8
+SEHF01,Electricity,1981,87.2
+SEHF01,Electricity,1982,95.8
+SEHF01,Electricity,1983,98.9
+SEHF01,Electricity,1984,105.3
+SEHF01,Electricity,1985,108.9
+SEHF01,Electricity,1986,110.4
+SEHF01,Electricity,1987,110.0
+SEHF01,Electricity,1988,111.5
+SEHF01,Electricity,1989,114.7
+SEHF01,Electricity,1990,117.4
+SEHF01,Electricity,1991,121.8
+SEHF01,Electricity,1992,124.2
+SEHF01,Electricity,1993,126.7
+SEHF01,Electricity,1994,126.7
+SEHF01,Electricity,1995,129.6
+SEHF01,Electricity,1996,131.8
+SEHF01,Electricity,1997,132.5
+SEHF01,Electricity,1998,127.4
+SEHF01,Electricity,1999,126.5
+SEHF01,Electricity,2000,128.5
+SEHF01,Electricity,2001,137.8
+SEHF01,Electricity,2002,136.2
+SEHF01,Electricity,2003,139.5
+SEHF01,Electricity,2004,142.1
+SEHF01,Electricity,2005,150.8
+SEHF01,Electricity,2006,169.2
+SEHF01,Electricity,2007,175.825
+SEHF01,Electricity,2008,187.146
+SEHF01,Electricity,2009,192.712
+SEHF01,Electricity,2010,193.095
+SEHF01,Electricity,2011,196.737
+SEHF01,Electricity,2012,196.63
+SEHF01,Electricity,2013,200.75
+SEHF01,Electricity,2014,208.02
+SEHF01,Electricity,2015,209.191
+SEHF01,Electricity,2016,206.983
+SEHF01,Electricity,2017,211.437
+SEHF01,Electricity,2018,212.932
+SEHF01,Electricity,2019,213.362
+SEHF01,Electricity,2020,214.615
+SEHF01,Electricity,2021,223.892
+SEHF01,Electricity,2022,253.127
+SEHF01,Electricity,2023,267.804
+SEHF01,Electricity,2024,279.087
+SEHF01,Electricity,2025,292.027
+SEHF02,Utility (piped) gas service,1935,12.8
+SEHF02,Utility (piped) gas service,1936,12.7
+SEHF02,Utility (piped) gas service,1937,12.6
+SEHF02,Utility (piped) gas service,1938,12.7
+SEHF02,Utility (piped) gas service,1939,12.9
+SEHF02,Utility (piped) gas service,1940,12.8
+SEHF02,Utility (piped) gas service,1941,12.7
+SEHF02,Utility (piped) gas service,1942,12.6
+SEHF02,Utility (piped) gas service,1943,12.5
+SEHF02,Utility (piped) gas service,1944,12.4
+SEHF02,Utility (piped) gas service,1945,12.3
+SEHF02,Utility (piped) gas service,1946,12.1
+SEHF02,Utility (piped) gas service,1947,12.2
+SEHF02,Utility (piped) gas service,1948,12.6
+SEHF02,Utility (piped) gas service,1949,13.1
+SEHF02,Utility (piped) gas service,1950,13.2
+SEHF02,Utility (piped) gas service,1951,13.1
+SEHF02,Utility (piped) gas service,1952,13.4
+SEHF02,Utility (piped) gas service,1953,13.8
+SEHF02,Utility (piped) gas service,1954,14.1
+SEHF02,Utility (piped) gas service,1955,14.6
+SEHF02,Utility (piped) gas service,1956,14.9
+SEHF02,Utility (piped) gas service,1957,15.1
+SEHF02,Utility (piped) gas service,1958,16.0
+SEHF02,Utility (piped) gas service,1959,16.5
+SEHF02,Utility (piped) gas service,1960,17.6
+SEHF02,Utility (piped) gas service,1961,17.9
+SEHF02,Utility (piped) gas service,1962,17.9
+SEHF02,Utility (piped) gas service,1963,17.9
+SEHF02,Utility (piped) gas service,1964,17.9
+SEHF02,Utility (piped) gas service,1965,18.0
+SEHF02,Utility (piped) gas service,1966,18.1
+SEHF02,Utility (piped) gas service,1967,18.1
+SEHF02,Utility (piped) gas service,1968,18.2
+SEHF02,Utility (piped) gas service,1969,18.6
+SEHF02,Utility (piped) gas service,1970,19.6
+SEHF02,Utility (piped) gas service,1971,21.0
+SEHF02,Utility (piped) gas service,1972,22.1
+SEHF02,Utility (piped) gas service,1973,23.1
+SEHF02,Utility (piped) gas service,1974,26.0
+SEHF02,Utility (piped) gas service,1975,31.1
+SEHF02,Utility (piped) gas service,1976,36.3
+SEHF02,Utility (piped) gas service,1977,43.2
+SEHF02,Utility (piped) gas service,1978,47.5
+SEHF02,Utility (piped) gas service,1979,55.1
+SEHF02,Utility (piped) gas service,1980,65.7
+SEHF02,Utility (piped) gas service,1981,74.9
+SEHF02,Utility (piped) gas service,1982,89.8
+SEHF02,Utility (piped) gas service,1983,104.7
+SEHF02,Utility (piped) gas service,1984,105.5
+SEHF02,Utility (piped) gas service,1985,104.8
+SEHF02,Utility (piped) gas service,1986,99.7
+SEHF02,Utility (piped) gas service,1987,95.1
+SEHF02,Utility (piped) gas service,1988,94.5
+SEHF02,Utility (piped) gas service,1989,97.1
+SEHF02,Utility (piped) gas service,1990,97.3
+SEHF02,Utility (piped) gas service,1991,98.5
+SEHF02,Utility (piped) gas service,1992,100.3
+SEHF02,Utility (piped) gas service,1993,106.5
+SEHF02,Utility (piped) gas service,1994,108.5
+SEHF02,Utility (piped) gas service,1995,102.9
+SEHF02,Utility (piped) gas service,1996,107.2
+SEHF02,Utility (piped) gas service,1997,114.6
+SEHF02,Utility (piped) gas service,1998,112.4
+SEHF02,Utility (piped) gas service,1999,113.0
+SEHF02,Utility (piped) gas service,2000,132.0
+SEHF02,Utility (piped) gas service,2001,158.3
+SEHF02,Utility (piped) gas service,2002,135.3
+SEHF02,Utility (piped) gas service,2003,166.3
+SEHF02,Utility (piped) gas service,2004,180.1
+SEHF02,Utility (piped) gas service,2005,215.4
+SEHF02,Utility (piped) gas service,2006,220.8
+SEHF02,Utility (piped) gas service,2007,217.688
+SEHF02,Utility (piped) gas service,2008,247.803
+SEHF02,Utility (piped) gas service,2009,193.717
+SEHF02,Utility (piped) gas service,2010,189.678
+SEHF02,Utility (piped) gas service,2011,184.334
+SEHF02,Utility (piped) gas service,2012,166.585
+SEHF02,Utility (piped) gas service,2013,174.451
+SEHF02,Utility (piped) gas service,2014,186.754
+SEHF02,Utility (piped) gas service,2015,164.597
+SEHF02,Utility (piped) gas service,2016,160.628
+SEHF02,Utility (piped) gas service,2017,173.433
+SEHF02,Utility (piped) gas service,2018,173.609
+SEHF02,Utility (piped) gas service,2019,171.038
+SEHF02,Utility (piped) gas service,2020,171.387
+SEHF02,Utility (piped) gas service,2021,200.084
+SEHF02,Utility (piped) gas service,2022,251.763
+SEHF02,Utility (piped) gas service,2023,233.671
+SEHF02,Utility (piped) gas service,2024,229.554
+SEHF02,Utility (piped) gas service,2025,255.63
+SEHG01,Water and sewerage maintenance,1953,16.3
+SEHG01,Water and sewerage maintenance,1954,17.2
+SEHG01,Water and sewerage maintenance,1955,18.8
+SEHG01,Water and sewerage maintenance,1956,19.4
+SEHG01,Water and sewerage maintenance,1957,20.9
+SEHG01,Water and sewerage maintenance,1958,22.2
+SEHG01,Water and sewerage maintenance,1959,23.0
+SEHG01,Water and sewerage maintenance,1960,23.8
+SEHG01,Water and sewerage maintenance,1961,24.4
+SEHG01,Water and sewerage maintenance,1962,25.0
+SEHG01,Water and sewerage maintenance,1963,25.9
+SEHG01,Water and sewerage maintenance,1964,26.2
+SEHG01,Water and sewerage maintenance,1965,26.9
+SEHG01,Water and sewerage maintenance,1966,27.8
+SEHG01,Water and sewerage maintenance,1967,28.5
+SEHG01,Water and sewerage maintenance,1968,29.8
+SEHG01,Water and sewerage maintenance,1969,31.8
+SEHG01,Water and sewerage maintenance,1970,34.3
+SEHG01,Water and sewerage maintenance,1971,38.0
+SEHG01,Water and sewerage maintenance,1972,39.4
+SEHG01,Water and sewerage maintenance,1973,41.6
+SEHG01,Water and sewerage maintenance,1974,44.1
+SEHG01,Water and sewerage maintenance,1975,48.4
+SEHG01,Water and sewerage maintenance,1976,53.7
+SEHG01,Water and sewerage maintenance,1977,59.5
+SEHG01,Water and sewerage maintenance,1978,66.2
+SEHG01,Water and sewerage maintenance,1979,69.3
+SEHG01,Water and sewerage maintenance,1980,74.0
+SEHG01,Water and sewerage maintenance,1981,82.8
+SEHG01,Water and sewerage maintenance,1982,92.7
+SEHG01,Water and sewerage maintenance,1983,100.4
+SEHG01,Water and sewerage maintenance,1984,107.0
+SEHG01,Water and sewerage maintenance,1985,113.4
+SEHG01,Water and sewerage maintenance,1986,119.4
+SEHG01,Water and sewerage maintenance,1987,125.8
+SEHG01,Water and sewerage maintenance,1988,132.7
+SEHG01,Water and sewerage maintenance,1989,140.8
+SEHG01,Water and sewerage maintenance,1990,150.2
+SEHG01,Water and sewerage maintenance,1991,161.1
+SEHG01,Water and sewerage maintenance,1992,172.1
+SEHG01,Water and sewerage maintenance,1993,181.4
+SEHG01,Water and sewerage maintenance,1994,190.6
+SEHG01,Water and sewerage maintenance,1995,196.5
+SEHG01,Water and sewerage maintenance,1996,204.5
+SEHG01,Water and sewerage maintenance,1997,210.0
+SEHG01,Water and sewerage maintenance,1998,217.3
+SEHG01,Water and sewerage maintenance,1999,222.0
+SEHG01,Water and sewerage maintenance,2000,227.5
+SEHG01,Water and sewerage maintenance,2001,234.6
+SEHG01,Water and sewerage maintenance,2002,242.5
+SEHG01,Water and sewerage maintenance,2003,251.7
+SEHG01,Water and sewerage maintenance,2004,268.1
+SEHG01,Water and sewerage maintenance,2005,283.4
+SEHG01,Water and sewerage maintenance,2006,297.2
+SEHG01,Water and sewerage maintenance,2007,312.635
+SEHG01,Water and sewerage maintenance,2008,331.326
+SEHG01,Water and sewerage maintenance,2009,354.434
+SEHG01,Water and sewerage maintenance,2010,380.729
+SEHG01,Water and sewerage maintenance,2011,402.868
+SEHG01,Water and sewerage maintenance,2012,428.627
+SEHG01,Water and sewerage maintenance,2013,449.73
+SEHG01,Water and sewerage maintenance,2014,468.074
+SEHG01,Water and sewerage maintenance,2015,492.945
+SEHG01,Water and sewerage maintenance,2016,513.652
+SEHG01,Water and sewerage maintenance,2017,532.844
+SEHG01,Water and sewerage maintenance,2018,550.738
+SEHG01,Water and sewerage maintenance,2019,568.12
+SEHG01,Water and sewerage maintenance,2020,585.581
+SEHG01,Water and sewerage maintenance,2021,604.002
+SEHG01,Water and sewerage maintenance,2022,629.556
+SEHG01,Water and sewerage maintenance,2023,659.238
+SEHG01,Water and sewerage maintenance,2024,693.714
+SEHG01,Water and sewerage maintenance,2025,725.575
+SEHG02,Garbage and trash collection,1984,103.2
+SEHG02,Garbage and trash collection,1985,109.9
+SEHG02,Garbage and trash collection,1986,118.7
+SEHG02,Garbage and trash collection,1987,130.3
+SEHG02,Garbage and trash collection,1988,142.5
+SEHG02,Garbage and trash collection,1989,155.6
+SEHG02,Garbage and trash collection,1990,171.2
+SEHG02,Garbage and trash collection,1991,189.2
+SEHG02,Garbage and trash collection,1992,207.3
+SEHG02,Garbage and trash collection,1993,220.5
+SEHG02,Garbage and trash collection,1994,231.4
+SEHG02,Garbage and trash collection,1995,241.2
+SEHG02,Garbage and trash collection,1996,246.0
+SEHG02,Garbage and trash collection,1997,250.5
+SEHG02,Garbage and trash collection,1998,256.7
+SEHG02,Garbage and trash collection,1999,263.8
+SEHG02,Garbage and trash collection,2000,269.8
+SEHG02,Garbage and trash collection,2001,275.5
+SEHG02,Garbage and trash collection,2002,283.0
+SEHG02,Garbage and trash collection,2003,291.9
+SEHG02,Garbage and trash collection,2004,303.3
+SEHG02,Garbage and trash collection,2005,314.0
+SEHG02,Garbage and trash collection,2006,330.1
+SEHG02,Garbage and trash collection,2007,345.566
+SEHG02,Garbage and trash collection,2008,364.695
+SEHG02,Garbage and trash collection,2009,376.402
+SEHG02,Garbage and trash collection,2010,384.369
+SEHG02,Garbage and trash collection,2011,395.091
+SEHG02,Garbage and trash collection,2012,404.704
+SEHG02,Garbage and trash collection,2013,416.183
+SEHG02,Garbage and trash collection,2014,425.796
+SEHG02,Garbage and trash collection,2015,432.03
+SEHG02,Garbage and trash collection,2016,439.427
+SEHG02,Garbage and trash collection,2017,449.089
+SEHG02,Garbage and trash collection,2018,466.861
+SEHG02,Garbage and trash collection,2019,481.902
+SEHG02,Garbage and trash collection,2020,498.705
+SEHG02,Garbage and trash collection,2021,522.329
+SEHG02,Garbage and trash collection,2022,549.334
+SEHG02,Garbage and trash collection,2023,589.344
+SEHG02,Garbage and trash collection,2024,615.506
+SEHG02,Garbage and trash collection,2025,647.943

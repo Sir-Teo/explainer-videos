@@ -1572,3 +1572,153 @@ def pellet_bag(h: float = 0.8, color: str = "#E8EAED") -> VGroup:
         [(-0.2 + 0.1 * (k % 5)) * h, (-0.15 + 0.08 * (k // 5)) * h, 0]) for k in range(15)])
     tag = tx("PE", 18 * h, "#0E1117", bold=True).move_to([0, 0.3 * h, 0])
     return VGroup(bag, dots, tag)
+
+
+# ---------------------------------------------------------------------------------------------------------------
+# Water and waste (Part 14)
+# ---------------------------------------------------------------------------------------------------------------
+WATER = "#5DA9E9"
+
+
+def drop(h: float = 0.5, color: str = WATER) -> VGroup:
+    """A drop of water, point up."""
+    body = Circle(radius=0.32 * h, stroke_width=0, fill_color=color, fill_opacity=0.95).move_to([0, -0.18 * h, 0])
+    tip = Polygon([-0.27 * h, -0.02 * h, 0], [0.27 * h, -0.02 * h, 0], [0, 0.5 * h, 0], stroke_width=0, fill_color=color,
+                  fill_opacity=0.95)
+    shine = Arc(radius=0.2 * h, start_angle=PI * 0.6, angle=PI * 0.45, stroke_color="#FFFFFF", stroke_width=2,
+                stroke_opacity=0.6).move_to([-0.1 * h, -0.12 * h, 0])
+    return VGroup(tip, body, shine)
+
+
+def tap(h: float = 1.0, color: str = "#C9D3E0") -> VGroup:
+    """A kitchen tap; ``g.spout`` is the point the water leaves."""
+    post = Rectangle(width=0.12 * h, height=0.5 * h, stroke_width=0, fill_color=color, fill_opacity=1).move_to(
+        [-0.3 * h, 0.25 * h, 0])
+    arm = Rectangle(width=0.55 * h, height=0.1 * h, stroke_width=0, fill_color=color, fill_opacity=1).move_to(
+        [-0.05 * h, 0.5 * h, 0])
+    nose = Rectangle(width=0.1 * h, height=0.16 * h, stroke_width=0, fill_color=color, fill_opacity=1).move_to(
+        [0.2 * h, 0.42 * h, 0])
+    handle = RoundedRectangle(corner_radius=0.03 * h, width=0.3 * h, height=0.07 * h, stroke_width=0,
+                              fill_color="#E8554E", fill_opacity=1).move_to([-0.3 * h, 0.62 * h, 0])
+    base = Rectangle(width=0.3 * h, height=0.05 * h, stroke_width=0, fill_color=STEEL, fill_opacity=1).move_to(
+        [-0.3 * h, 0.0, 0])
+    g = VGroup(post, arm, nose, handle, base)
+    g.spout = np.array([0.2 * h, 0.33 * h, 0])
+    return g
+
+
+def water_tower(h: float = 2.0, color: str = "#C9D3E0") -> VGroup:
+    """A water tower: a tank on four legs."""
+    tank = RoundedRectangle(corner_radius=0.12 * h, width=0.6 * h, height=0.32 * h, stroke_width=0, fill_color=color,
+                            fill_opacity=1).move_to([0, 0.78 * h, 0])
+    cap = Polygon([-0.32 * h, 0.93 * h, 0], [0.32 * h, 0.93 * h, 0], [0, 1.03 * h, 0], stroke_width=0, fill_color=color,
+                  fill_opacity=1)
+    band = Rectangle(width=0.6 * h, height=0.05 * h, stroke_width=0, fill_color=WATER, fill_opacity=0.9).move_to(
+        [0, 0.74 * h, 0])
+    legs = VGroup(*[Line([x * h, 0, 0], [0.7 * x * h, 0.62 * h, 0], stroke_color=STEEL, stroke_width=3)
+                    for x in (-0.26, -0.09, 0.09, 0.26)])
+    braces = VGroup(*[Line([-0.24 * h + 0.05 * k * h, y * h, 0], [0.24 * h - 0.05 * k * h, y * h, 0], stroke_color=STEEL,
+                           stroke_width=2) for k, y in enumerate((0.2, 0.42))])
+    return VGroup(legs, braces, tank, band, cap)
+
+
+def wheelie_bin(h: float = 0.8, color: str = "#4F6D4F", lid: str = "#3D4F3D") -> VGroup:
+    """A wheeled kerbside bin."""
+    body = Polygon([-0.27 * h, 0.9 * h, 0], [0.27 * h, 0.9 * h, 0], [0.22 * h, 0.06 * h, 0], [-0.22 * h, 0.06 * h, 0],
+                   stroke_width=0, fill_color=color, fill_opacity=1)
+    top = RoundedRectangle(corner_radius=0.02 * h, width=0.6 * h, height=0.08 * h, stroke_width=0, fill_color=lid,
+                           fill_opacity=1).move_to([0, 0.94 * h, 0])
+    handle = Rectangle(width=0.06 * h, height=0.1 * h, stroke_width=0, fill_color=lid, fill_opacity=1).move_to(
+        [0.3 * h, 0.9 * h, 0])
+    wheel = Circle(radius=0.08 * h, stroke_width=0, fill_color="#20242C", fill_opacity=1).move_to([0.2 * h, 0.06 * h, 0])
+    ribs = VGroup(*[Line([-0.18 * h + 0.12 * k * h, 0.2 * h, 0], [-0.2 * h + 0.13 * k * h, 0.8 * h, 0], stroke_color=lid,
+                         stroke_width=1.5, stroke_opacity=0.7) for k in range(4)])
+    return VGroup(body, ribs, top, handle, wheel)
+
+
+def bin_lorry(w: float = 2.0, color: str = "#7BD88F") -> VGroup:
+    """A rear-loading refuse lorry: cab at the right, body, hopper at the back (left).  ``g.hopper`` is the loading
+    point."""
+    body = RoundedRectangle(corner_radius=0.06 * w, width=0.62 * w, height=0.36 * w, stroke_width=0, fill_color=color,
+                            fill_opacity=1).move_to([-0.06 * w, 0.29 * w, 0])
+    hopper = Polygon([-0.37 * w, 0.47 * w, 0], [-0.46 * w, 0.4 * w, 0], [-0.46 * w, 0.12 * w, 0], [-0.37 * w, 0.12 * w, 0],
+                     stroke_width=0, fill_color="#5E6B78", fill_opacity=1)
+    mouth = Rectangle(width=0.05 * w, height=0.12 * w, stroke_width=0, fill_color=DARK, fill_opacity=1).move_to(
+        [-0.44 * w, 0.2 * w, 0])
+    stripe = Rectangle(width=0.62 * w, height=0.03 * w, stroke_width=0, fill_color="#F6C453", fill_opacity=1).move_to(
+        [-0.06 * w, 0.2 * w, 0])
+    cab = Polygon([0.26 * w, 0.4 * w, 0], [0.4 * w, 0.4 * w, 0], [0.46 * w, 0.28 * w, 0], [0.46 * w, 0.1 * w, 0],
+                  [0.26 * w, 0.1 * w, 0], stroke_width=0, fill_color="#E8EAED", fill_opacity=1)
+    win = Polygon([0.33 * w, 0.37 * w, 0], [0.39 * w, 0.37 * w, 0], [0.44 * w, 0.28 * w, 0], [0.33 * w, 0.28 * w, 0],
+                  stroke_width=0, fill_color=GLASS, fill_opacity=1)
+    chassis = Rectangle(width=0.9 * w, height=0.04 * w, stroke_width=0, fill_color="#2E3645", fill_opacity=1).move_to(
+        [0, 0.1 * w, 0])
+    wheels = VGroup(*[VGroup(Circle(radius=0.07 * w, stroke_width=0, fill_color="#20242C", fill_opacity=1),
+                             Circle(radius=0.03 * w, stroke_width=0, fill_color=STEEL, fill_opacity=1)).move_to([x * w, 0.07 * w, 0])
+                      for x in (-0.28, -0.14, 0.34)])
+    g = VGroup(body, stripe, hopper, mouth, chassis, cab, win, wheels)
+    g.hopper = np.array([-0.46 * w, 0.2 * w, 0])
+    return g
+
+
+def bale(s: float = 0.6, color: str = "#B58E5A") -> VGroup:
+    """A strapped bale of sorted recyclables (cardboard by default)."""
+    face = Square(s, stroke_width=0, fill_color=color, fill_opacity=1)
+    top = Polygon([-s / 2, s / 2, 0], [s / 2, s / 2, 0], [0.72 * s, 0.68 * s, 0], [-0.28 * s, 0.68 * s, 0], stroke_width=0,
+                  fill_color=interpolate_color(ManimColor(color), ManimColor("#FFFFFF"), 0.2), fill_opacity=1)
+    side = Polygon([s / 2, s / 2, 0], [0.72 * s, 0.68 * s, 0], [0.72 * s, -0.32 * s, 0], [s / 2, -s / 2, 0], stroke_width=0,
+                   fill_color=interpolate_color(ManimColor(color), ManimColor("#000000"), 0.25), fill_opacity=1)
+    layers = VGroup(*[Line([-s / 2, y * s, 0], [s / 2, y * s, 0], stroke_color="#000000", stroke_width=1, stroke_opacity=0.25)
+                      for y in np.linspace(-0.4, 0.4, 7)])
+    straps = VGroup(*[Line([x * s, -s / 2, 0], [x * s, s / 2, 0], stroke_color="#2E3645", stroke_width=2) for x in (-0.2, 0.2)])
+    return VGroup(face, side, top, layers, straps)
+
+
+def landfill_section(w: float = 8.0, h: float = 3.0, fill: float = 1.0) -> VGroup:
+    """A modern landfill in cross-section: a lined pit (membrane over compacted clay, a leachate collection layer with
+    pipes), cells of waste each covered daily with soil, a final cap and gas wells.  ``fill`` (0-1) is how much of the
+    airspace above the liner is used.  Parts: ``g.clay``, ``g.liner``, ``g.drain``, ``g.pipes``, ``g.cells`` (bottom up),
+    ``g.cap``, ``g.wells``, ``g.ground`` (a Line at grade)."""
+    depth = 0.45 * h
+    floor_w = 0.55 * w
+    rim = [(-w / 2, 0), (-floor_w / 2, -depth), (floor_w / 2, -depth), (w / 2, 0)]
+    soil = Polygon([-w / 2 - 0.3, 0.02, 0], [w / 2 + 0.3, 0.02, 0], [w / 2 + 0.3, -depth - 0.35 * h, 0],
+                   [-w / 2 - 0.3, -depth - 0.35 * h, 0], stroke_width=0, fill_color="#3B3026", fill_opacity=1)
+    pit = Polygon(*[[x, y, 0] for x, y in rim], stroke_width=0, fill_color="#0E1117", fill_opacity=1)
+    clay = VMobject(stroke_color="#8A6A45", stroke_width=12).set_points_as_corners(
+        [[x, y - 0.09, 0] for x, y in rim])
+    liner = VMobject(stroke_color="#1F1F1F", stroke_width=5).set_points_as_corners([[x, y - 0.01, 0] for x, y in rim])
+    drain = Rectangle(width=floor_w, height=0.1, stroke_width=0, fill_color="#9AA3B2", fill_opacity=0.9).move_to(
+        [0, -depth + 0.05, 0])
+    pipes = VGroup(*[Circle(radius=0.04, stroke_width=0, fill_color="#F2A65A", fill_opacity=1).move_to([x, -depth + 0.05, 0])
+                     for x in np.linspace(-floor_w / 2 + 0.3, floor_w / 2 - 0.3, 6)])
+    # cells: horizontal lifts, each a band of waste with a thin daily cover; they rise above grade into a mound
+    n = 7
+    lift = (depth + 0.55 * h) / n
+    cells = VGroup()
+    for k in range(n):
+        y0 = -depth + 0.1 + k * lift
+        y1 = y0 + lift
+        def half(y):
+            if y <= 0:     # inside the pit: the side slope
+                return floor_w / 2 + (w / 2 - floor_w / 2) * (y + depth) / depth
+            return w / 2 - (y / (0.55 * h)) * 0.32 * w     # above grade: the mound narrows
+        a0, a1 = half(y0) - 0.05, half(y1) - 0.05
+        band = Polygon([-a0, y0, 0], [a0, y0, 0], [a1, y1, 0], [-a1, y1, 0], stroke_width=0,
+                       fill_color=["#6B6F7A", "#5E6370", "#727786"][k % 3], fill_opacity=1)
+        cover = Line([-a1, y1, 0], [a1, y1, 0], stroke_color="#8A6A45", stroke_width=3)
+        cells.add(VGroup(band, cover))
+    used = max(1, int(round(fill * n)))
+    for k in range(used, n):
+        cells[k].set_opacity(0)
+    top_y = -depth + 0.1 + n * lift
+    a_top = w / 2 - 0.32 * w - 0.05
+    cap = VMobject(stroke_color="#7BD88F", stroke_width=8).set_points_as_corners(
+        [[-w / 2, 0, 0], [-a_top, top_y, 0], [a_top, top_y, 0], [w / 2, 0, 0]])
+    wells = VGroup(*[Line([x, top_y + 0.25, 0], [x, -depth + 0.4, 0], stroke_color="#F6C453", stroke_width=3)
+                     for x in (-0.18 * w, 0.0, 0.18 * w)])
+    ground = Line([-w / 2 - 0.3, 0, 0], [w / 2 + 0.3, 0, 0], stroke_color="#7BD88F", stroke_width=2)
+    g = VGroup(soil, pit, clay, liner, drain, pipes, cells, cap, wells, ground)
+    g.soil, g.pit, g.clay, g.liner, g.drain, g.pipes, g.cells, g.cap, g.wells, g.ground = (soil, pit, clay, liner, drain,
+                                                                                         pipes, cells, cap, wells, ground)
+    return g

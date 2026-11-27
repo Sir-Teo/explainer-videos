@@ -341,14 +341,24 @@ SEC_COMPANIES = [(789019, "MSFT"), (909832, "COST"), (19617, "JPM"), (753308, "N
                  (74303, "OLN"), (51253, "IFF"), (1627223, "CC"),
                  (1326160, "DUK"), (92122, "SO"), (4904, "AEP"), (715957, "D"), (1109357, "EXC"), (72903, "XEL"),
                  (1047862, "ED"), (1004980, "PCG"), (1032208, "SRE"), (65984, "ETR"), (1692819, "VST"), (1868275, "CEG"),
-                 (1013871, "NRG"), (874761, "AES"), (1996810, "GEV")]
+                 (1013871, "NRG"), (874761, "AES"), (1996810, "GEV"),
+                 (823768, "WM"), (1060391, "RSG"), (1318220, "WCN"), (911177, "CWST"), (822818, "CLH"),
+                 (1410636, "AWK"), (78128, "WTRG"), (1056903, "AWR"), (1035201, "CWT"), (766829, "HTO")]
 
 
 # where a company's first-choice tag means something else: Mastercard tagged its gross revenue, before rebates and
 # incentives to customers, as revenue from contracts in 2018-2021; its net revenue is "Revenues"
 _UTIL = {"revenue": ["Revenues", "RevenueFromContractWithCustomerExcludingAssessedTax", "RegulatedAndUnregulatedOperatingRevenue"],
          "net_income": ["NetIncomeLoss", "NetIncomeLossAvailableToCommonStockholdersBasic"]}
-SEC_OVERRIDES = {**{t: _UTIL for t in ("DUK", "SO", "AEP", "D", "EXC", "XEL", "ED", "PCG", "SRE", "ETR")},
+SEC_OVERRIDES = {**{t: _UTIL for t in ("DUK", "SO", "AEP", "D", "EXC", "XEL", "ED", "PCG", "SRE", "ETR",
+                                      "WTRG", "AWR", "HTO")},
+                 # American Water tags its total operating revenue (with alternative revenue programmes) as
+                 # RegulatedAndUnregulatedOperatingRevenue; California Water tags equity with its small
+                 # non-controlling interests after 2020
+                 "AWK": {"revenue": ["RegulatedAndUnregulatedOperatingRevenue",
+                                     "RevenueFromContractWithCustomerExcludingAssessedTax"]},
+                 "CWT": {"equity": ["StockholdersEquity",
+                                    "StockholdersEquityIncludingPortionAttributableToNoncontrollingInterest"]},
                  # utilities: total revenue (Revenues) includes alternative revenue programmes; several tag profit to
                  # common shareholders rather than NetIncomeLoss in recent years
                  "MA": {"revenue": ["Revenues", "SalesRevenueNet",
@@ -1430,7 +1440,95 @@ def owid_elec():
                   ["Ember (2026); Energy Institute, Statistical Review of World Energy (2025)"])
 
 
-JOBS = {"eia_930": eia_930, "eia_mer": eia_mer, "fred_power": fred_power, "owid_elec": owid_elec, "owid_chem": owid_chem, "fred_chem": fred_chem, "eia_ngl": eia_ngl, "eurostat_chem": eurostat_chem, "usgs_heavy": usgs_heavy, "fred_heavy": fred_heavy, "owid_co2": owid_co2, "ers_food_dollar": ers_food_dollar, "ers_costs": ers_costs, "ers_farm_income": ers_farm_income, "owid_ag": owid_ag, "fred_food": fred_food, "ne_land": ne_land, "usgs_ds140": usgs_ds140, "fred_metals": fred_metals, "sec_ifrs": sec_ifrs, "eia_gas": eia_gas, "eia_petroleum": eia_petroleum, "eia_intl": eia_intl, "eia_pump": eia_pump, "fred_energy": fred_energy, "fred_market": fred_market, "owid_tech": owid_tech, "sec_quarterly": sec_quarterly, "fred_cycle": fred_cycle, "esef_maersk": esef_maersk, "damodaran_roc": damodaran_roc, "census_conc": census_conc, "eia_power": eia_power, "fred_pay": fred_pay, "bea_real": bea_real, "sec_annual": sec_annual, "fred_prices": fred_prices, "census_susb": census_susb, "bea_va": bea_va, "wb_mfg_usd": wb_mfg_usd, "bea_hist": bea_hist, "bea_io": bea_io, "fred_jobs": fred_jobs, "wb_shares": wb_shares}
+BLS_CPI = {"SA0": "All items", "SEHG01": "Water and sewerage maintenance", "SEHG02": "Garbage and trash collection",
+           "SEHF01": "Electricity", "SEHF02": "Utility (piped) gas service", "SEHA": "Rent of primary residence"}
+BLS_CU = "https://download.bls.gov/pub/time.series/cu/"
+
+
+def bls_water():
+    """Consumer price indexes, US city average, all urban consumers, not seasonally adjusted: annual averages of all
+    items, water and sewerage maintenance (since 1953), garbage and trash collection (since 1984), electricity, piped
+    gas and rent (BLS CPI flat files)."""
+    want = {f"CUUR0000{k}": v for k, v in BLS_CPI.items()}
+    out = []
+    for f in ("cu.data.1.AllItems", "cu.data.12.USHousing"):
+        for line in _get(BLS_CU + f).decode().splitlines()[1:]:
+            p = [x.strip() for x in line.split("\t")]
+            if len(p) >= 4 and p[0] in want and p[2] == "M13":
+                out.append([p[0][8:], want[p[0]], int(p[1]), float(p[3])])
+    out.sort()
+    return _write("bls_water", ["item", "name", "year", "value"], out,
+                  [BLS_CU + "cu.data.1.AllItems", BLS_CU + "cu.data.12.USHousing",
+                   "CPI-U, US city average, not seasonally adjusted, annual average (period M13)"])
+
+
+FRED_WASTE = {"PCU562111562111": "PPI solid waste collection (Dec 2003 = 100)",
+              "WPU0912": "PPI recyclable paper (1982 = 100)",
+              "WPU091201": "PPI news and other low grade recyclable paper",
+              "WPU1012": "PPI iron and steel scrap (1982 = 100)",
+              "CUSR0000SEHG": "CPI water and sewer and trash collection services (Dec 1997 = 100)",
+              "CPIAUCSL": "CPI, all items"}
+
+
+def fred_waste():
+    """Monthly series for Part 14 (via FRED): the PPI for solid waste collection, recyclable paper, low-grade
+    recyclable paper and iron and steel scrap, and the CPI for water, sewer and trash services and all items."""
+    out = []
+    for sid in FRED_WASTE:
+        txt = _get(f"https://fred.stlouisfed.org/graph/fredgraph.csv?id={sid}").decode()
+        for line in txt.splitlines()[1:]:
+            d, v = line.split(",")
+            if v not in (".", ""):
+                out.append([sid, d[:7], float(v)])
+    return _write("fred_waste", ["series", "month", "value"], out,
+                  ["https://fred.stlouisfed.org (" + "; ".join(f"{k} {v}" for k, v in FRED_WASTE.items()) + ")"])
+
+
+EPA_MSW = "https://www.epa.gov/sites/default/files/2021-01/historical_ff_data_1960-2018_12312020.xlsx"
+
+
+def epa_msw():
+    """EPA, Advancing Sustainable Materials Management: Facts and Figures, municipal solid waste 1960-2018 (thousand
+    short tons): landfilled, combusted with energy recovery, composted, other food management, recycled, generated,
+    and pounds per person per day.  EPA's national series ends in 2018."""
+    import openpyxl
+
+    wb = openpyxl.load_workbook(io.BytesIO(_get(EPA_MSW)), read_only=True, data_only=True)
+    out = []
+    for r in wb.worksheets[0].iter_rows(values_only=True):
+        if isinstance(r[0], int) and 1960 <= r[0] <= 2030 and r[8] is not None:
+            out.append([r[0], r[1], r[3], r[4], r[5], r[6], r[7], r[8], None if r[9] is None else round(r[9], 3)])
+        if r[0] and isinstance(r[0], str) and r[0].startswith("Population"):
+            break
+    return _write("epa_msw", ["year", "landfill", "combustion_er", "combustion_total", "food_other", "composting",
+                              "recycling", "generation", "lb_per_person_day"], out,
+                  [EPA_MSW, "thousand US short tons; landfill includes combustion without energy recovery in "
+                   "1960, 1970, 1980 and 1990; combustion series incomplete before 2000"])
+
+
+WB_WATER = {"SH.H2O.SMDW.ZS": "safely managed drinking water", "SH.STA.SMSS.ZS": "safely managed sanitation",
+            "SH.H2O.BASW.ZS": "at least basic drinking water", "SH.STA.BASS.ZS": "at least basic sanitation"}
+WB_WATER_COUNTRIES = "WLD;USA;GBR;FRA;DEU;JPN;BRA;MEX;CHN;IND;IDN;PAK;BGD;NGA;ETH;ZAF;EGY;SSF;SAS"
+
+
+def wb_water():
+    """The share of people using safely managed (and at least basic) drinking water and sanitation, 2000-2024, for
+    the world, its regions and a set of countries (WHO/UNICEF Joint Monitoring Programme via the World Bank's World
+    Development Indicators)."""
+    out = []
+    for code, name in WB_WATER.items():
+        url = (f"https://api.worldbank.org/v2/country/{WB_WATER_COUNTRIES}/indicator/{code}?format=json"
+               "&date=2000:2025&per_page=2000")
+        for x in json.loads(_get(url))[1]:
+            if x["value"] is not None:
+                out.append([code, name, x["country"]["value"], int(x["date"]), round(x["value"], 2)])
+    out.sort()
+    return _write("wb_water", ["indicator", "name", "country", "year", "value"], out,
+                  ["https://api.worldbank.org (World Development Indicators: " + ", ".join(WB_WATER) +
+                   "; WHO/UNICEF Joint Monitoring Programme, % of population)"])
+
+
+JOBS = {"wb_water": wb_water, "bls_water": bls_water, "fred_waste": fred_waste, "epa_msw": epa_msw, "eia_930": eia_930, "eia_mer": eia_mer, "fred_power": fred_power, "owid_elec": owid_elec, "owid_chem": owid_chem, "fred_chem": fred_chem, "eia_ngl": eia_ngl, "eurostat_chem": eurostat_chem, "usgs_heavy": usgs_heavy, "fred_heavy": fred_heavy, "owid_co2": owid_co2, "ers_food_dollar": ers_food_dollar, "ers_costs": ers_costs, "ers_farm_income": ers_farm_income, "owid_ag": owid_ag, "fred_food": fred_food, "ne_land": ne_land, "usgs_ds140": usgs_ds140, "fred_metals": fred_metals, "sec_ifrs": sec_ifrs, "eia_gas": eia_gas, "eia_petroleum": eia_petroleum, "eia_intl": eia_intl, "eia_pump": eia_pump, "fred_energy": fred_energy, "fred_market": fred_market, "owid_tech": owid_tech, "sec_quarterly": sec_quarterly, "fred_cycle": fred_cycle, "esef_maersk": esef_maersk, "damodaran_roc": damodaran_roc, "census_conc": census_conc, "eia_power": eia_power, "fred_pay": fred_pay, "bea_real": bea_real, "sec_annual": sec_annual, "fred_prices": fred_prices, "census_susb": census_susb, "bea_va": bea_va, "wb_mfg_usd": wb_mfg_usd, "bea_hist": bea_hist, "bea_io": bea_io, "fred_jobs": fred_jobs, "wb_shares": wb_shares}
 
 if __name__ == "__main__":
     names = list(JOBS) if "--all" in sys.argv else sys.argv[1:]

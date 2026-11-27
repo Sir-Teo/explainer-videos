@@ -14,6 +14,7 @@ class World(VoiceoverScene):
         self.growth()
         self.per_person()
         self.mix()
+        self.climb()
 
     def growth(self):
         W = R["world"]["gen"]
@@ -110,4 +111,41 @@ class World(VoiceoverScene):
             self.play(LaggedStart(*[AnimationGroup(GrowFromEdge(r_[1], RIGHT), FadeIn(r_[2])) for r_ in rows[2:]], lag_ratio=0.2), run_time=1.5)
             vo.wait_until("c")
             self.play(LaggedStart(*[AnimationGroup(GrowFromEdge(r_[3], LEFT), FadeIn(r_[4])) for r_ in rows], lag_ratio=0.15), run_time=2.0)
+        self.clear_scene()
+
+    def climb(self):
+        Wd = R["world"]
+        keys = ["European Union (27)", "China", "United States", "World", "India"]
+        ys = list(range(2000, 2026))
+        pa = viz.plot_axes([2000, 2025], [0, 0.34], x_length=9.0, y_length=4.6, xticks=[2000, 2005, 2010, 2015, 2020, 2025],
+                           yticks=[0.1, 0.2, 0.3], xfmt=lambda v: f"{int(v)}", yfmt=lambda v: f"{100 * v:.0f}%",
+                           ylabel="share of electricity from wind and solar", size=14).move_to([-1.6, -0.4, 0])
+        lines, labs = VGroup(), VGroup()
+        ws = {}
+        for k in keys:
+            n, col = NAMES[k]
+            ws[k] = {y: (Wd["solar"][k].get(y, 0) + Wd["wind"][k].get(y, 0)) / 100 for y in ys if y in Wd["wind"][k]}
+            lines.add(poly(pa, sorted(ws[k].items()), col, 4 if k != "World" else 6))
+            labs.add(tx(f"{n}: {100 * ws[k][2025]:.0f}%", 15, col, bold=True).next_to(pa.ax.c2p(2025, ws[k][2025]), RIGHT, buff=0.12))
+        labs[1].shift(UP * 0.14)
+        labs[2].shift(DOWN * 0.1)
+        labs[3].shift(DOWN * 0.12)
+        head = tx("Wind and sun, 2000-2025", 22, WHITE, bold=True).to_edge(UP, buff=0.3)
+        src = source("Ember and the Energy Institute, via Our World in Data (shares of electricity from solar and wind)", size=13)
+        w = ws["World"]
+        with self.voiceover(
+            "And how recent that is. <bookmark mark='a'/> In 2010, wind and sun made about "
+            f"{100 * w[2010]:.0f} per cent of the world's electricity. In 2015, about {100 * w[2015]:.0f}. By 2025, about "
+            f"{100 * w[2025]:.0f}. <bookmark mark='b'/> Europe got there first, and is at about {100 * ws['European Union (27)'][2025]:.0f}. "
+            f"<bookmark mark='c'/> China and America are both near a fifth, and India, at about "
+            f"{100 * ws['India'][2025]:.0f}, has doubled its share since 2020. Every one of these lines is still "
+            "bending upwards."
+        ) as vo:
+            self.play(FadeIn(pa), FadeIn(head), FadeIn(src))
+            vo.wait_until("a")
+            self.play(Create(lines[3]), FadeIn(labs[3]), run_time=2.5)
+            vo.wait_until("b")
+            self.play(Create(lines[0]), FadeIn(labs[0]), run_time=2.0)
+            vo.wait_until("c")
+            self.play(LaggedStart(*[AnimationGroup(Create(lines[i]), FadeIn(labs[i])) for i in (1, 2, 4)], lag_ratio=0.3), run_time=3.0)
         self.clear_scene()

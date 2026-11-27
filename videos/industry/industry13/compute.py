@@ -304,7 +304,10 @@ def results() -> dict:
             if c:
                 c["group"] = g
                 land.append(c)
-    R["landscape"] = dict(companies=land)
+    R["landscape"] = dict(companies=land, years={tk: {y: sec[tk][y]["net_income"] / sec[tk][y]["revenue"]
+                                                      for y in range(2015, 2026) if y in sec[tk] and sec[tk][y]["revenue"]
+                                                      and sec[tk][y]["net_income"] is not None}
+                                                  for tk in ("DUK", "SO", "AEP", "VST", "NRG", "CEG")})
     yrs = range(2018, 2026)
     utils = [tk for tk in groups["regulated utilities"] if all(sec.get(tk, {}).get(y, {}).get("capex") for y in yrs)]
     capex = {y: float(sum(sec[tk][y]["capex"] for tk in utils)) for y in yrs}

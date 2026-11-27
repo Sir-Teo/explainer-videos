@@ -1,0 +1,1818 @@
+# source: https://api.worldbank.org (World Development Indicators: SH.H2O.SMDW.ZS, SH.STA.SMSS.ZS, SH.H2O.BASW.ZS, SH.STA.BASS.ZS; WHO/UNICEF Joint Monitoring Programme, % of population)
+# retrieved: 2026-11-27
+indicator,name,country,year,value
+SH.H2O.BASW.ZS,at least basic drinking water,Bangladesh,2000,94.56
+SH.H2O.BASW.ZS,at least basic drinking water,Bangladesh,2001,94.73
+SH.H2O.BASW.ZS,at least basic drinking water,Bangladesh,2002,94.91
+SH.H2O.BASW.ZS,at least basic drinking water,Bangladesh,2003,95.08
+SH.H2O.BASW.ZS,at least basic drinking water,Bangladesh,2004,95.25
+SH.H2O.BASW.ZS,at least basic drinking water,Bangladesh,2005,95.46
+SH.H2O.BASW.ZS,at least basic drinking water,Bangladesh,2006,95.67
+SH.H2O.BASW.ZS,at least basic drinking water,Bangladesh,2007,95.87
+SH.H2O.BASW.ZS,at least basic drinking water,Bangladesh,2008,96.07
+SH.H2O.BASW.ZS,at least basic drinking water,Bangladesh,2009,96.27
+SH.H2O.BASW.ZS,at least basic drinking water,Bangladesh,2010,96.46
+SH.H2O.BASW.ZS,at least basic drinking water,Bangladesh,2011,96.66
+SH.H2O.BASW.ZS,at least basic drinking water,Bangladesh,2012,96.85
+SH.H2O.BASW.ZS,at least basic drinking water,Bangladesh,2013,97.04
+SH.H2O.BASW.ZS,at least basic drinking water,Bangladesh,2014,97.22
+SH.H2O.BASW.ZS,at least basic drinking water,Bangladesh,2015,97.4
+SH.H2O.BASW.ZS,at least basic drinking water,Bangladesh,2016,97.58
+SH.H2O.BASW.ZS,at least basic drinking water,Bangladesh,2017,97.76
+SH.H2O.BASW.ZS,at least basic drinking water,Bangladesh,2018,97.93
+SH.H2O.BASW.ZS,at least basic drinking water,Bangladesh,2019,98.1
+SH.H2O.BASW.ZS,at least basic drinking water,Bangladesh,2020,98.27
+SH.H2O.BASW.ZS,at least basic drinking water,Bangladesh,2021,98.44
+SH.H2O.BASW.ZS,at least basic drinking water,Bangladesh,2022,98.58
+SH.H2O.BASW.ZS,at least basic drinking water,Bangladesh,2023,98.68
+SH.H2O.BASW.ZS,at least basic drinking water,Bangladesh,2024,98.78
+SH.H2O.BASW.ZS,at least basic drinking water,Brazil,2000,93.54
+SH.H2O.BASW.ZS,at least basic drinking water,Brazil,2001,93.87
+SH.H2O.BASW.ZS,at least basic drinking water,Brazil,2002,94.19
+SH.H2O.BASW.ZS,at least basic drinking water,Brazil,2003,94.49
+SH.H2O.BASW.ZS,at least basic drinking water,Brazil,2004,94.8
+SH.H2O.BASW.ZS,at least basic drinking water,Brazil,2005,95.09
+SH.H2O.BASW.ZS,at least basic drinking water,Brazil,2006,95.38
+SH.H2O.BASW.ZS,at least basic drinking water,Brazil,2007,95.66
+SH.H2O.BASW.ZS,at least basic drinking water,Brazil,2008,95.94
+SH.H2O.BASW.ZS,at least basic drinking water,Brazil,2009,96.21
+SH.H2O.BASW.ZS,at least basic drinking water,Brazil,2010,96.47
+SH.H2O.BASW.ZS,at least basic drinking water,Brazil,2011,96.73
+SH.H2O.BASW.ZS,at least basic drinking water,Brazil,2012,96.98
+SH.H2O.BASW.ZS,at least basic drinking water,Brazil,2013,97.23
+SH.H2O.BASW.ZS,at least basic drinking water,Brazil,2014,97.47
+SH.H2O.BASW.ZS,at least basic drinking water,Brazil,2015,97.71
+SH.H2O.BASW.ZS,at least basic drinking water,Brazil,2016,97.92
+SH.H2O.BASW.ZS,at least basic drinking water,Brazil,2017,98.2
+SH.H2O.BASW.ZS,at least basic drinking water,Brazil,2018,98.56
+SH.H2O.BASW.ZS,at least basic drinking water,Brazil,2019,98.77
+SH.H2O.BASW.ZS,at least basic drinking water,Brazil,2020,99.07
+SH.H2O.BASW.ZS,at least basic drinking water,Brazil,2021,99.43
+SH.H2O.BASW.ZS,at least basic drinking water,Brazil,2022,99.61
+SH.H2O.BASW.ZS,at least basic drinking water,Brazil,2023,99.9
+SH.H2O.BASW.ZS,at least basic drinking water,Brazil,2024,100.0
+SH.H2O.BASW.ZS,at least basic drinking water,China,2000,80.59
+SH.H2O.BASW.ZS,at least basic drinking water,China,2001,80.93
+SH.H2O.BASW.ZS,at least basic drinking water,China,2002,81.87
+SH.H2O.BASW.ZS,at least basic drinking water,China,2003,82.78
+SH.H2O.BASW.ZS,at least basic drinking water,China,2004,83.67
+SH.H2O.BASW.ZS,at least basic drinking water,China,2005,84.53
+SH.H2O.BASW.ZS,at least basic drinking water,China,2006,85.36
+SH.H2O.BASW.ZS,at least basic drinking water,China,2007,86.16
+SH.H2O.BASW.ZS,at least basic drinking water,China,2008,86.93
+SH.H2O.BASW.ZS,at least basic drinking water,China,2009,87.68
+SH.H2O.BASW.ZS,at least basic drinking water,China,2010,88.39
+SH.H2O.BASW.ZS,at least basic drinking water,China,2011,89.07
+SH.H2O.BASW.ZS,at least basic drinking water,China,2012,89.72
+SH.H2O.BASW.ZS,at least basic drinking water,China,2013,90.34
+SH.H2O.BASW.ZS,at least basic drinking water,China,2014,90.94
+SH.H2O.BASW.ZS,at least basic drinking water,China,2015,91.51
+SH.H2O.BASW.ZS,at least basic drinking water,China,2016,92.06
+SH.H2O.BASW.ZS,at least basic drinking water,China,2017,92.58
+SH.H2O.BASW.ZS,at least basic drinking water,China,2018,93.07
+SH.H2O.BASW.ZS,at least basic drinking water,China,2019,93.53
+SH.H2O.BASW.ZS,at least basic drinking water,China,2020,93.97
+SH.H2O.BASW.ZS,at least basic drinking water,China,2021,94.63
+SH.H2O.BASW.ZS,at least basic drinking water,China,2022,95.44
+SH.H2O.BASW.ZS,at least basic drinking water,China,2023,96.09
+SH.H2O.BASW.ZS,at least basic drinking water,China,2024,96.12
+SH.H2O.BASW.ZS,at least basic drinking water,"Egypt, Arab Rep.",2000,98.99
+SH.H2O.BASW.ZS,at least basic drinking water,"Egypt, Arab Rep.",2001,98.92
+SH.H2O.BASW.ZS,at least basic drinking water,"Egypt, Arab Rep.",2002,98.85
+SH.H2O.BASW.ZS,at least basic drinking water,"Egypt, Arab Rep.",2003,98.78
+SH.H2O.BASW.ZS,at least basic drinking water,"Egypt, Arab Rep.",2004,98.71
+SH.H2O.BASW.ZS,at least basic drinking water,"Egypt, Arab Rep.",2005,98.64
+SH.H2O.BASW.ZS,at least basic drinking water,"Egypt, Arab Rep.",2006,98.57
+SH.H2O.BASW.ZS,at least basic drinking water,"Egypt, Arab Rep.",2007,98.5
+SH.H2O.BASW.ZS,at least basic drinking water,"Egypt, Arab Rep.",2008,98.43
+SH.H2O.BASW.ZS,at least basic drinking water,"Egypt, Arab Rep.",2009,98.36
+SH.H2O.BASW.ZS,at least basic drinking water,"Egypt, Arab Rep.",2010,98.28
+SH.H2O.BASW.ZS,at least basic drinking water,"Egypt, Arab Rep.",2011,98.21
+SH.H2O.BASW.ZS,at least basic drinking water,"Egypt, Arab Rep.",2012,98.14
+SH.H2O.BASW.ZS,at least basic drinking water,"Egypt, Arab Rep.",2013,98.07
+SH.H2O.BASW.ZS,at least basic drinking water,"Egypt, Arab Rep.",2014,98.0
+SH.H2O.BASW.ZS,at least basic drinking water,"Egypt, Arab Rep.",2015,97.93
+SH.H2O.BASW.ZS,at least basic drinking water,"Egypt, Arab Rep.",2016,97.85
+SH.H2O.BASW.ZS,at least basic drinking water,"Egypt, Arab Rep.",2017,97.78
+SH.H2O.BASW.ZS,at least basic drinking water,"Egypt, Arab Rep.",2018,97.71
+SH.H2O.BASW.ZS,at least basic drinking water,"Egypt, Arab Rep.",2019,97.64
+SH.H2O.BASW.ZS,at least basic drinking water,"Egypt, Arab Rep.",2020,97.57
+SH.H2O.BASW.ZS,at least basic drinking water,"Egypt, Arab Rep.",2021,97.5
+SH.H2O.BASW.ZS,at least basic drinking water,"Egypt, Arab Rep.",2022,97.43
+SH.H2O.BASW.ZS,at least basic drinking water,"Egypt, Arab Rep.",2023,97.37
+SH.H2O.BASW.ZS,at least basic drinking water,"Egypt, Arab Rep.",2024,97.3
+SH.H2O.BASW.ZS,at least basic drinking water,Ethiopia,2000,18.76
+SH.H2O.BASW.ZS,at least basic drinking water,Ethiopia,2001,20.29
+SH.H2O.BASW.ZS,at least basic drinking water,Ethiopia,2002,21.81
+SH.H2O.BASW.ZS,at least basic drinking water,Ethiopia,2003,23.33
+SH.H2O.BASW.ZS,at least basic drinking water,Ethiopia,2004,24.85
+SH.H2O.BASW.ZS,at least basic drinking water,Ethiopia,2005,26.36
+SH.H2O.BASW.ZS,at least basic drinking water,Ethiopia,2006,27.87
+SH.H2O.BASW.ZS,at least basic drinking water,Ethiopia,2007,29.38
+SH.H2O.BASW.ZS,at least basic drinking water,Ethiopia,2008,30.99
+SH.H2O.BASW.ZS,at least basic drinking water,Ethiopia,2009,32.59
+SH.H2O.BASW.ZS,at least basic drinking water,Ethiopia,2010,34.18
+SH.H2O.BASW.ZS,at least basic drinking water,Ethiopia,2011,35.77
+SH.H2O.BASW.ZS,at least basic drinking water,Ethiopia,2012,37.35
+SH.H2O.BASW.ZS,at least basic drinking water,Ethiopia,2013,38.92
+SH.H2O.BASW.ZS,at least basic drinking water,Ethiopia,2014,40.48
+SH.H2O.BASW.ZS,at least basic drinking water,Ethiopia,2015,42.03
+SH.H2O.BASW.ZS,at least basic drinking water,Ethiopia,2016,43.57
+SH.H2O.BASW.ZS,at least basic drinking water,Ethiopia,2017,45.1
+SH.H2O.BASW.ZS,at least basic drinking water,Ethiopia,2018,46.63
+SH.H2O.BASW.ZS,at least basic drinking water,Ethiopia,2019,48.15
+SH.H2O.BASW.ZS,at least basic drinking water,Ethiopia,2020,49.66
+SH.H2O.BASW.ZS,at least basic drinking water,Ethiopia,2021,51.15
+SH.H2O.BASW.ZS,at least basic drinking water,Ethiopia,2022,52.64
+SH.H2O.BASW.ZS,at least basic drinking water,Ethiopia,2023,54.13
+SH.H2O.BASW.ZS,at least basic drinking water,Ethiopia,2024,55.6
+SH.H2O.BASW.ZS,at least basic drinking water,France,2000,100.0
+SH.H2O.BASW.ZS,at least basic drinking water,France,2001,100
+SH.H2O.BASW.ZS,at least basic drinking water,France,2002,100
+SH.H2O.BASW.ZS,at least basic drinking water,France,2003,100
+SH.H2O.BASW.ZS,at least basic drinking water,France,2004,100.0
+SH.H2O.BASW.ZS,at least basic drinking water,France,2005,100.0
+SH.H2O.BASW.ZS,at least basic drinking water,France,2006,100.0
+SH.H2O.BASW.ZS,at least basic drinking water,France,2007,100.0
+SH.H2O.BASW.ZS,at least basic drinking water,France,2008,100.0
+SH.H2O.BASW.ZS,at least basic drinking water,France,2009,100.0
+SH.H2O.BASW.ZS,at least basic drinking water,France,2010,100.0
+SH.H2O.BASW.ZS,at least basic drinking water,France,2011,100.0
+SH.H2O.BASW.ZS,at least basic drinking water,France,2012,100
+SH.H2O.BASW.ZS,at least basic drinking water,France,2013,100
+SH.H2O.BASW.ZS,at least basic drinking water,France,2014,100.0
+SH.H2O.BASW.ZS,at least basic drinking water,France,2015,100.0
+SH.H2O.BASW.ZS,at least basic drinking water,France,2016,100
+SH.H2O.BASW.ZS,at least basic drinking water,France,2017,100
+SH.H2O.BASW.ZS,at least basic drinking water,France,2018,100.0
+SH.H2O.BASW.ZS,at least basic drinking water,France,2019,100
+SH.H2O.BASW.ZS,at least basic drinking water,France,2020,100
+SH.H2O.BASW.ZS,at least basic drinking water,France,2021,100
+SH.H2O.BASW.ZS,at least basic drinking water,France,2022,100
+SH.H2O.BASW.ZS,at least basic drinking water,France,2023,100
+SH.H2O.BASW.ZS,at least basic drinking water,France,2024,100.0
+SH.H2O.BASW.ZS,at least basic drinking water,Germany,2000,100
+SH.H2O.BASW.ZS,at least basic drinking water,Germany,2001,100.0
+SH.H2O.BASW.ZS,at least basic drinking water,Germany,2002,100.0
+SH.H2O.BASW.ZS,at least basic drinking water,Germany,2003,100.0
+SH.H2O.BASW.ZS,at least basic drinking water,Germany,2004,100.0
+SH.H2O.BASW.ZS,at least basic drinking water,Germany,2005,100
+SH.H2O.BASW.ZS,at least basic drinking water,Germany,2006,100.0
+SH.H2O.BASW.ZS,at least basic drinking water,Germany,2007,100.0
+SH.H2O.BASW.ZS,at least basic drinking water,Germany,2008,100
+SH.H2O.BASW.ZS,at least basic drinking water,Germany,2009,100
+SH.H2O.BASW.ZS,at least basic drinking water,Germany,2010,100.0
+SH.H2O.BASW.ZS,at least basic drinking water,Germany,2011,100
+SH.H2O.BASW.ZS,at least basic drinking water,Germany,2012,100.0
+SH.H2O.BASW.ZS,at least basic drinking water,Germany,2013,100
+SH.H2O.BASW.ZS,at least basic drinking water,Germany,2014,100
+SH.H2O.BASW.ZS,at least basic drinking water,Germany,2015,100
+SH.H2O.BASW.ZS,at least basic drinking water,Germany,2016,100.0
+SH.H2O.BASW.ZS,at least basic drinking water,Germany,2017,100
+SH.H2O.BASW.ZS,at least basic drinking water,Germany,2018,100
+SH.H2O.BASW.ZS,at least basic drinking water,Germany,2019,100.0
+SH.H2O.BASW.ZS,at least basic drinking water,Germany,2020,100.0
+SH.H2O.BASW.ZS,at least basic drinking water,Germany,2021,100.0
+SH.H2O.BASW.ZS,at least basic drinking water,Germany,2022,100.0
+SH.H2O.BASW.ZS,at least basic drinking water,Germany,2023,100.0
+SH.H2O.BASW.ZS,at least basic drinking water,Germany,2024,100
+SH.H2O.BASW.ZS,at least basic drinking water,India,2000,79.49
+SH.H2O.BASW.ZS,at least basic drinking water,India,2001,80.07
+SH.H2O.BASW.ZS,at least basic drinking water,India,2002,80.77
+SH.H2O.BASW.ZS,at least basic drinking water,India,2003,81.47
+SH.H2O.BASW.ZS,at least basic drinking water,India,2004,82.17
+SH.H2O.BASW.ZS,at least basic drinking water,India,2005,82.87
+SH.H2O.BASW.ZS,at least basic drinking water,India,2006,83.56
+SH.H2O.BASW.ZS,at least basic drinking water,India,2007,84.26
+SH.H2O.BASW.ZS,at least basic drinking water,India,2008,84.95
+SH.H2O.BASW.ZS,at least basic drinking water,India,2009,85.64
+SH.H2O.BASW.ZS,at least basic drinking water,India,2010,86.32
+SH.H2O.BASW.ZS,at least basic drinking water,India,2011,87.01
+SH.H2O.BASW.ZS,at least basic drinking water,India,2012,87.7
+SH.H2O.BASW.ZS,at least basic drinking water,India,2013,88.38
+SH.H2O.BASW.ZS,at least basic drinking water,India,2014,89.06
+SH.H2O.BASW.ZS,at least basic drinking water,India,2015,89.74
+SH.H2O.BASW.ZS,at least basic drinking water,India,2016,90.42
+SH.H2O.BASW.ZS,at least basic drinking water,India,2017,91.09
+SH.H2O.BASW.ZS,at least basic drinking water,India,2018,91.76
+SH.H2O.BASW.ZS,at least basic drinking water,India,2019,92.43
+SH.H2O.BASW.ZS,at least basic drinking water,India,2020,93.1
+SH.H2O.BASW.ZS,at least basic drinking water,India,2021,93.76
+SH.H2O.BASW.ZS,at least basic drinking water,India,2022,94.42
+SH.H2O.BASW.ZS,at least basic drinking water,India,2023,95.07
+SH.H2O.BASW.ZS,at least basic drinking water,India,2024,95.72
+SH.H2O.BASW.ZS,at least basic drinking water,Indonesia,2000,75.78
+SH.H2O.BASW.ZS,at least basic drinking water,Indonesia,2001,76.78
+SH.H2O.BASW.ZS,at least basic drinking water,Indonesia,2002,77.76
+SH.H2O.BASW.ZS,at least basic drinking water,Indonesia,2003,78.74
+SH.H2O.BASW.ZS,at least basic drinking water,Indonesia,2004,79.71
+SH.H2O.BASW.ZS,at least basic drinking water,Indonesia,2005,80.67
+SH.H2O.BASW.ZS,at least basic drinking water,Indonesia,2006,81.62
+SH.H2O.BASW.ZS,at least basic drinking water,Indonesia,2007,82.56
+SH.H2O.BASW.ZS,at least basic drinking water,Indonesia,2008,83.49
+SH.H2O.BASW.ZS,at least basic drinking water,Indonesia,2009,84.39
+SH.H2O.BASW.ZS,at least basic drinking water,Indonesia,2010,85.17
+SH.H2O.BASW.ZS,at least basic drinking water,Indonesia,2011,85.64
+SH.H2O.BASW.ZS,at least basic drinking water,Indonesia,2012,86.07
+SH.H2O.BASW.ZS,at least basic drinking water,Indonesia,2013,86.5
+SH.H2O.BASW.ZS,at least basic drinking water,Indonesia,2014,86.91
+SH.H2O.BASW.ZS,at least basic drinking water,Indonesia,2015,87.3
+SH.H2O.BASW.ZS,at least basic drinking water,Indonesia,2016,87.68
+SH.H2O.BASW.ZS,at least basic drinking water,Indonesia,2017,88.05
+SH.H2O.BASW.ZS,at least basic drinking water,Indonesia,2018,88.41
+SH.H2O.BASW.ZS,at least basic drinking water,Indonesia,2019,88.75
+SH.H2O.BASW.ZS,at least basic drinking water,Indonesia,2020,89.09
+SH.H2O.BASW.ZS,at least basic drinking water,Indonesia,2021,89.4
+SH.H2O.BASW.ZS,at least basic drinking water,Indonesia,2022,89.71
+SH.H2O.BASW.ZS,at least basic drinking water,Indonesia,2023,89.36
+SH.H2O.BASW.ZS,at least basic drinking water,Indonesia,2024,89.01
+SH.H2O.BASW.ZS,at least basic drinking water,Japan,2000,98.52
+SH.H2O.BASW.ZS,at least basic drinking water,Japan,2001,98.52
+SH.H2O.BASW.ZS,at least basic drinking water,Japan,2002,98.52
+SH.H2O.BASW.ZS,at least basic drinking water,Japan,2003,98.52
+SH.H2O.BASW.ZS,at least basic drinking water,Japan,2004,98.52
+SH.H2O.BASW.ZS,at least basic drinking water,Japan,2005,98.55
+SH.H2O.BASW.ZS,at least basic drinking water,Japan,2006,98.59
+SH.H2O.BASW.ZS,at least basic drinking water,Japan,2007,98.62
+SH.H2O.BASW.ZS,at least basic drinking water,Japan,2008,98.66
+SH.H2O.BASW.ZS,at least basic drinking water,Japan,2009,98.69
+SH.H2O.BASW.ZS,at least basic drinking water,Japan,2010,98.73
+SH.H2O.BASW.ZS,at least basic drinking water,Japan,2011,98.76
+SH.H2O.BASW.ZS,at least basic drinking water,Japan,2012,98.8
+SH.H2O.BASW.ZS,at least basic drinking water,Japan,2013,98.83
+SH.H2O.BASW.ZS,at least basic drinking water,Japan,2014,98.87
+SH.H2O.BASW.ZS,at least basic drinking water,Japan,2015,98.9
+SH.H2O.BASW.ZS,at least basic drinking water,Japan,2016,98.94
+SH.H2O.BASW.ZS,at least basic drinking water,Japan,2017,98.97
+SH.H2O.BASW.ZS,at least basic drinking water,Japan,2018,99.01
+SH.H2O.BASW.ZS,at least basic drinking water,Japan,2019,99.04
+SH.H2O.BASW.ZS,at least basic drinking water,Japan,2020,99.08
+SH.H2O.BASW.ZS,at least basic drinking water,Japan,2021,99.11
+SH.H2O.BASW.ZS,at least basic drinking water,Japan,2022,99.15
+SH.H2O.BASW.ZS,at least basic drinking water,Japan,2023,99.18
+SH.H2O.BASW.ZS,at least basic drinking water,Japan,2024,99.18
+SH.H2O.BASW.ZS,at least basic drinking water,Mexico,2000,91.56
+SH.H2O.BASW.ZS,at least basic drinking water,Mexico,2001,92.04
+SH.H2O.BASW.ZS,at least basic drinking water,Mexico,2002,92.52
+SH.H2O.BASW.ZS,at least basic drinking water,Mexico,2003,93.0
+SH.H2O.BASW.ZS,at least basic drinking water,Mexico,2004,93.47
+SH.H2O.BASW.ZS,at least basic drinking water,Mexico,2005,93.93
+SH.H2O.BASW.ZS,at least basic drinking water,Mexico,2006,94.39
+SH.H2O.BASW.ZS,at least basic drinking water,Mexico,2007,94.84
+SH.H2O.BASW.ZS,at least basic drinking water,Mexico,2008,95.28
+SH.H2O.BASW.ZS,at least basic drinking water,Mexico,2009,95.59
+SH.H2O.BASW.ZS,at least basic drinking water,Mexico,2010,95.89
+SH.H2O.BASW.ZS,at least basic drinking water,Mexico,2011,96.19
+SH.H2O.BASW.ZS,at least basic drinking water,Mexico,2012,96.48
+SH.H2O.BASW.ZS,at least basic drinking water,Mexico,2013,96.78
+SH.H2O.BASW.ZS,at least basic drinking water,Mexico,2014,97.07
+SH.H2O.BASW.ZS,at least basic drinking water,Mexico,2015,97.35
+SH.H2O.BASW.ZS,at least basic drinking water,Mexico,2016,97.64
+SH.H2O.BASW.ZS,at least basic drinking water,Mexico,2017,97.92
+SH.H2O.BASW.ZS,at least basic drinking water,Mexico,2018,98.2
+SH.H2O.BASW.ZS,at least basic drinking water,Mexico,2019,98.47
+SH.H2O.BASW.ZS,at least basic drinking water,Mexico,2020,98.74
+SH.H2O.BASW.ZS,at least basic drinking water,Mexico,2021,99.01
+SH.H2O.BASW.ZS,at least basic drinking water,Mexico,2022,99.27
+SH.H2O.BASW.ZS,at least basic drinking water,Mexico,2023,99.41
+SH.H2O.BASW.ZS,at least basic drinking water,Mexico,2024,99.54
+SH.H2O.BASW.ZS,at least basic drinking water,Nigeria,2000,44.48
+SH.H2O.BASW.ZS,at least basic drinking water,Nigeria,2001,45.77
+SH.H2O.BASW.ZS,at least basic drinking water,Nigeria,2002,47.32
+SH.H2O.BASW.ZS,at least basic drinking water,Nigeria,2003,48.89
+SH.H2O.BASW.ZS,at least basic drinking water,Nigeria,2004,50.46
+SH.H2O.BASW.ZS,at least basic drinking water,Nigeria,2005,52.04
+SH.H2O.BASW.ZS,at least basic drinking water,Nigeria,2006,53.63
+SH.H2O.BASW.ZS,at least basic drinking water,Nigeria,2007,55.22
+SH.H2O.BASW.ZS,at least basic drinking water,Nigeria,2008,56.83
+SH.H2O.BASW.ZS,at least basic drinking water,Nigeria,2009,58.43
+SH.H2O.BASW.ZS,at least basic drinking water,Nigeria,2010,60.04
+SH.H2O.BASW.ZS,at least basic drinking water,Nigeria,2011,61.66
+SH.H2O.BASW.ZS,at least basic drinking water,Nigeria,2012,63.27
+SH.H2O.BASW.ZS,at least basic drinking water,Nigeria,2013,64.89
+SH.H2O.BASW.ZS,at least basic drinking water,Nigeria,2014,66.5
+SH.H2O.BASW.ZS,at least basic drinking water,Nigeria,2015,68.12
+SH.H2O.BASW.ZS,at least basic drinking water,Nigeria,2016,69.74
+SH.H2O.BASW.ZS,at least basic drinking water,Nigeria,2017,71.36
+SH.H2O.BASW.ZS,at least basic drinking water,Nigeria,2018,72.98
+SH.H2O.BASW.ZS,at least basic drinking water,Nigeria,2019,74.6
+SH.H2O.BASW.ZS,at least basic drinking water,Nigeria,2020,76.22
+SH.H2O.BASW.ZS,at least basic drinking water,Nigeria,2021,77.84
+SH.H2O.BASW.ZS,at least basic drinking water,Nigeria,2022,79.46
+SH.H2O.BASW.ZS,at least basic drinking water,Nigeria,2023,81.08
+SH.H2O.BASW.ZS,at least basic drinking water,Nigeria,2024,82.25
+SH.H2O.BASW.ZS,at least basic drinking water,Pakistan,2000,87.34
+SH.H2O.BASW.ZS,at least basic drinking water,Pakistan,2001,87.59
+SH.H2O.BASW.ZS,at least basic drinking water,Pakistan,2002,87.82
+SH.H2O.BASW.ZS,at least basic drinking water,Pakistan,2003,88.06
+SH.H2O.BASW.ZS,at least basic drinking water,Pakistan,2004,88.3
+SH.H2O.BASW.ZS,at least basic drinking water,Pakistan,2005,87.99
+SH.H2O.BASW.ZS,at least basic drinking water,Pakistan,2006,88.14
+SH.H2O.BASW.ZS,at least basic drinking water,Pakistan,2007,88.31
+SH.H2O.BASW.ZS,at least basic drinking water,Pakistan,2008,88.48
+SH.H2O.BASW.ZS,at least basic drinking water,Pakistan,2009,88.65
+SH.H2O.BASW.ZS,at least basic drinking water,Pakistan,2010,88.81
+SH.H2O.BASW.ZS,at least basic drinking water,Pakistan,2011,88.98
+SH.H2O.BASW.ZS,at least basic drinking water,Pakistan,2012,89.14
+SH.H2O.BASW.ZS,at least basic drinking water,Pakistan,2013,89.3
+SH.H2O.BASW.ZS,at least basic drinking water,Pakistan,2014,89.46
+SH.H2O.BASW.ZS,at least basic drinking water,Pakistan,2015,89.62
+SH.H2O.BASW.ZS,at least basic drinking water,Pakistan,2016,89.77
+SH.H2O.BASW.ZS,at least basic drinking water,Pakistan,2017,89.92
+SH.H2O.BASW.ZS,at least basic drinking water,Pakistan,2018,90.08
+SH.H2O.BASW.ZS,at least basic drinking water,Pakistan,2019,90.23
+SH.H2O.BASW.ZS,at least basic drinking water,Pakistan,2020,90.38
+SH.H2O.BASW.ZS,at least basic drinking water,Pakistan,2021,90.52
+SH.H2O.BASW.ZS,at least basic drinking water,Pakistan,2022,90.67
+SH.H2O.BASW.ZS,at least basic drinking water,Pakistan,2023,90.68
+SH.H2O.BASW.ZS,at least basic drinking water,Pakistan,2024,90.69
+SH.H2O.BASW.ZS,at least basic drinking water,South Africa,2000,85.96
+SH.H2O.BASW.ZS,at least basic drinking water,South Africa,2001,86.46
+SH.H2O.BASW.ZS,at least basic drinking water,South Africa,2002,86.98
+SH.H2O.BASW.ZS,at least basic drinking water,South Africa,2003,87.49
+SH.H2O.BASW.ZS,at least basic drinking water,South Africa,2004,87.99
+SH.H2O.BASW.ZS,at least basic drinking water,South Africa,2005,88.48
+SH.H2O.BASW.ZS,at least basic drinking water,South Africa,2006,88.96
+SH.H2O.BASW.ZS,at least basic drinking water,South Africa,2007,89.43
+SH.H2O.BASW.ZS,at least basic drinking water,South Africa,2008,89.9
+SH.H2O.BASW.ZS,at least basic drinking water,South Africa,2009,90.35
+SH.H2O.BASW.ZS,at least basic drinking water,South Africa,2010,90.79
+SH.H2O.BASW.ZS,at least basic drinking water,South Africa,2011,91.23
+SH.H2O.BASW.ZS,at least basic drinking water,South Africa,2012,91.66
+SH.H2O.BASW.ZS,at least basic drinking water,South Africa,2013,92.08
+SH.H2O.BASW.ZS,at least basic drinking water,South Africa,2014,92.48
+SH.H2O.BASW.ZS,at least basic drinking water,South Africa,2015,92.28
+SH.H2O.BASW.ZS,at least basic drinking water,South Africa,2016,92.06
+SH.H2O.BASW.ZS,at least basic drinking water,South Africa,2017,91.84
+SH.H2O.BASW.ZS,at least basic drinking water,South Africa,2018,91.62
+SH.H2O.BASW.ZS,at least basic drinking water,South Africa,2019,91.39
+SH.H2O.BASW.ZS,at least basic drinking water,South Africa,2020,91.16
+SH.H2O.BASW.ZS,at least basic drinking water,South Africa,2021,90.92
+SH.H2O.BASW.ZS,at least basic drinking water,South Africa,2022,90.68
+SH.H2O.BASW.ZS,at least basic drinking water,South Africa,2023,90.44
+SH.H2O.BASW.ZS,at least basic drinking water,South Africa,2024,90.19
+SH.H2O.BASW.ZS,at least basic drinking water,South Asia,2000,81.2
+SH.H2O.BASW.ZS,at least basic drinking water,South Asia,2001,81.73
+SH.H2O.BASW.ZS,at least basic drinking water,South Asia,2002,82.36
+SH.H2O.BASW.ZS,at least basic drinking water,South Asia,2003,82.99
+SH.H2O.BASW.ZS,at least basic drinking water,South Asia,2004,83.62
+SH.H2O.BASW.ZS,at least basic drinking water,South Asia,2005,84.25
+SH.H2O.BASW.ZS,at least basic drinking water,South Asia,2006,84.88
+SH.H2O.BASW.ZS,at least basic drinking water,South Asia,2007,85.51
+SH.H2O.BASW.ZS,at least basic drinking water,South Asia,2008,86.14
+SH.H2O.BASW.ZS,at least basic drinking water,South Asia,2009,86.77
+SH.H2O.BASW.ZS,at least basic drinking water,South Asia,2010,87.39
+SH.H2O.BASW.ZS,at least basic drinking water,South Asia,2011,88.01
+SH.H2O.BASW.ZS,at least basic drinking water,South Asia,2012,88.63
+SH.H2O.BASW.ZS,at least basic drinking water,South Asia,2013,89.26
+SH.H2O.BASW.ZS,at least basic drinking water,South Asia,2014,89.88
+SH.H2O.BASW.ZS,at least basic drinking water,South Asia,2015,90.49
+SH.H2O.BASW.ZS,at least basic drinking water,South Asia,2016,91.11
+SH.H2O.BASW.ZS,at least basic drinking water,South Asia,2017,91.73
+SH.H2O.BASW.ZS,at least basic drinking water,South Asia,2018,92.34
+SH.H2O.BASW.ZS,at least basic drinking water,South Asia,2019,92.95
+SH.H2O.BASW.ZS,at least basic drinking water,South Asia,2020,93.55
+SH.H2O.BASW.ZS,at least basic drinking water,South Asia,2021,94.16
+SH.H2O.BASW.ZS,at least basic drinking water,South Asia,2022,94.76
+SH.H2O.BASW.ZS,at least basic drinking water,South Asia,2023,95.35
+SH.H2O.BASW.ZS,at least basic drinking water,South Asia,2024,95.94
+SH.H2O.BASW.ZS,at least basic drinking water,Sub-Saharan Africa,2000,45.26
+SH.H2O.BASW.ZS,at least basic drinking water,Sub-Saharan Africa,2001,46.03
+SH.H2O.BASW.ZS,at least basic drinking water,Sub-Saharan Africa,2002,46.88
+SH.H2O.BASW.ZS,at least basic drinking water,Sub-Saharan Africa,2003,47.76
+SH.H2O.BASW.ZS,at least basic drinking water,Sub-Saharan Africa,2004,48.66
+SH.H2O.BASW.ZS,at least basic drinking water,Sub-Saharan Africa,2005,49.6
+SH.H2O.BASW.ZS,at least basic drinking water,Sub-Saharan Africa,2006,50.56
+SH.H2O.BASW.ZS,at least basic drinking water,Sub-Saharan Africa,2007,51.49
+SH.H2O.BASW.ZS,at least basic drinking water,Sub-Saharan Africa,2008,52.48
+SH.H2O.BASW.ZS,at least basic drinking water,Sub-Saharan Africa,2009,53.47
+SH.H2O.BASW.ZS,at least basic drinking water,Sub-Saharan Africa,2010,54.47
+SH.H2O.BASW.ZS,at least basic drinking water,Sub-Saharan Africa,2011,55.3
+SH.H2O.BASW.ZS,at least basic drinking water,Sub-Saharan Africa,2012,56.28
+SH.H2O.BASW.ZS,at least basic drinking water,Sub-Saharan Africa,2013,57.26
+SH.H2O.BASW.ZS,at least basic drinking water,Sub-Saharan Africa,2014,58.25
+SH.H2O.BASW.ZS,at least basic drinking water,Sub-Saharan Africa,2015,59.22
+SH.H2O.BASW.ZS,at least basic drinking water,Sub-Saharan Africa,2016,60.16
+SH.H2O.BASW.ZS,at least basic drinking water,Sub-Saharan Africa,2017,61.13
+SH.H2O.BASW.ZS,at least basic drinking water,Sub-Saharan Africa,2018,62.08
+SH.H2O.BASW.ZS,at least basic drinking water,Sub-Saharan Africa,2019,63.01
+SH.H2O.BASW.ZS,at least basic drinking water,Sub-Saharan Africa,2020,63.93
+SH.H2O.BASW.ZS,at least basic drinking water,Sub-Saharan Africa,2021,64.84
+SH.H2O.BASW.ZS,at least basic drinking water,Sub-Saharan Africa,2022,65.72
+SH.H2O.BASW.ZS,at least basic drinking water,Sub-Saharan Africa,2023,66.67
+SH.H2O.BASW.ZS,at least basic drinking water,Sub-Saharan Africa,2024,67.54
+SH.H2O.BASW.ZS,at least basic drinking water,United Kingdom,2000,100
+SH.H2O.BASW.ZS,at least basic drinking water,United Kingdom,2001,100.0
+SH.H2O.BASW.ZS,at least basic drinking water,United Kingdom,2002,100
+SH.H2O.BASW.ZS,at least basic drinking water,United Kingdom,2003,100
+SH.H2O.BASW.ZS,at least basic drinking water,United Kingdom,2004,100
+SH.H2O.BASW.ZS,at least basic drinking water,United Kingdom,2005,100.0
+SH.H2O.BASW.ZS,at least basic drinking water,United Kingdom,2006,100.0
+SH.H2O.BASW.ZS,at least basic drinking water,United Kingdom,2007,100.0
+SH.H2O.BASW.ZS,at least basic drinking water,United Kingdom,2008,100
+SH.H2O.BASW.ZS,at least basic drinking water,United Kingdom,2009,100
+SH.H2O.BASW.ZS,at least basic drinking water,United Kingdom,2010,100
+SH.H2O.BASW.ZS,at least basic drinking water,United Kingdom,2011,100
+SH.H2O.BASW.ZS,at least basic drinking water,United Kingdom,2012,100.0
+SH.H2O.BASW.ZS,at least basic drinking water,United Kingdom,2013,100
+SH.H2O.BASW.ZS,at least basic drinking water,United Kingdom,2014,100
+SH.H2O.BASW.ZS,at least basic drinking water,United Kingdom,2015,100
+SH.H2O.BASW.ZS,at least basic drinking water,United Kingdom,2016,100.0
+SH.H2O.BASW.ZS,at least basic drinking water,United Kingdom,2017,100.0
+SH.H2O.BASW.ZS,at least basic drinking water,United Kingdom,2018,100.0
+SH.H2O.BASW.ZS,at least basic drinking water,United Kingdom,2019,100
+SH.H2O.BASW.ZS,at least basic drinking water,United Kingdom,2020,100
+SH.H2O.BASW.ZS,at least basic drinking water,United Kingdom,2021,100
+SH.H2O.BASW.ZS,at least basic drinking water,United Kingdom,2022,100
+SH.H2O.BASW.ZS,at least basic drinking water,United Kingdom,2023,100
+SH.H2O.BASW.ZS,at least basic drinking water,United Kingdom,2024,100.0
+SH.H2O.BASW.ZS,at least basic drinking water,United States,2005,98.9
+SH.H2O.BASW.ZS,at least basic drinking water,United States,2006,98.9
+SH.H2O.BASW.ZS,at least basic drinking water,United States,2007,98.91
+SH.H2O.BASW.ZS,at least basic drinking water,United States,2008,98.92
+SH.H2O.BASW.ZS,at least basic drinking water,United States,2009,98.92
+SH.H2O.BASW.ZS,at least basic drinking water,United States,2010,99.01
+SH.H2O.BASW.ZS,at least basic drinking water,United States,2011,99.1
+SH.H2O.BASW.ZS,at least basic drinking water,United States,2012,99.18
+SH.H2O.BASW.ZS,at least basic drinking water,United States,2013,99.26
+SH.H2O.BASW.ZS,at least basic drinking water,United States,2014,99.35
+SH.H2O.BASW.ZS,at least basic drinking water,United States,2015,99.43
+SH.H2O.BASW.ZS,at least basic drinking water,United States,2016,99.51
+SH.H2O.BASW.ZS,at least basic drinking water,United States,2017,99.59
+SH.H2O.BASW.ZS,at least basic drinking water,United States,2018,99.67
+SH.H2O.BASW.ZS,at least basic drinking water,United States,2019,99.74
+SH.H2O.BASW.ZS,at least basic drinking water,United States,2020,99.82
+SH.H2O.BASW.ZS,at least basic drinking water,United States,2021,99.89
+SH.H2O.BASW.ZS,at least basic drinking water,United States,2022,99.96
+SH.H2O.BASW.ZS,at least basic drinking water,United States,2023,99.98
+SH.H2O.BASW.ZS,at least basic drinking water,United States,2024,99.98
+SH.H2O.BASW.ZS,at least basic drinking water,World,2000,80.61
+SH.H2O.BASW.ZS,at least basic drinking water,World,2001,80.95
+SH.H2O.BASW.ZS,at least basic drinking water,World,2002,81.58
+SH.H2O.BASW.ZS,at least basic drinking water,World,2003,82.08
+SH.H2O.BASW.ZS,at least basic drinking water,World,2004,82.58
+SH.H2O.BASW.ZS,at least basic drinking water,World,2005,83.87
+SH.H2O.BASW.ZS,at least basic drinking water,World,2006,84.33
+SH.H2O.BASW.ZS,at least basic drinking water,World,2007,84.79
+SH.H2O.BASW.ZS,at least basic drinking water,World,2008,85.25
+SH.H2O.BASW.ZS,at least basic drinking water,World,2009,85.69
+SH.H2O.BASW.ZS,at least basic drinking water,World,2010,86.13
+SH.H2O.BASW.ZS,at least basic drinking water,World,2011,86.48
+SH.H2O.BASW.ZS,at least basic drinking water,World,2012,86.89
+SH.H2O.BASW.ZS,at least basic drinking water,World,2013,87.31
+SH.H2O.BASW.ZS,at least basic drinking water,World,2014,87.71
+SH.H2O.BASW.ZS,at least basic drinking water,World,2015,88.12
+SH.H2O.BASW.ZS,at least basic drinking water,World,2016,88.52
+SH.H2O.BASW.ZS,at least basic drinking water,World,2017,88.87
+SH.H2O.BASW.ZS,at least basic drinking water,World,2018,89.26
+SH.H2O.BASW.ZS,at least basic drinking water,World,2019,89.65
+SH.H2O.BASW.ZS,at least basic drinking water,World,2020,90.02
+SH.H2O.BASW.ZS,at least basic drinking water,World,2021,90.42
+SH.H2O.BASW.ZS,at least basic drinking water,World,2022,90.86
+SH.H2O.BASW.ZS,at least basic drinking water,World,2023,91.22
+SH.H2O.BASW.ZS,at least basic drinking water,World,2024,91.45
+SH.H2O.SMDW.ZS,safely managed drinking water,Bangladesh,2000,55.31
+SH.H2O.SMDW.ZS,safely managed drinking water,Bangladesh,2001,55.32
+SH.H2O.SMDW.ZS,safely managed drinking water,Bangladesh,2002,55.29
+SH.H2O.SMDW.ZS,safely managed drinking water,Bangladesh,2003,55.27
+SH.H2O.SMDW.ZS,safely managed drinking water,Bangladesh,2004,55.24
+SH.H2O.SMDW.ZS,safely managed drinking water,Bangladesh,2005,55.21
+SH.H2O.SMDW.ZS,safely managed drinking water,Bangladesh,2006,55.17
+SH.H2O.SMDW.ZS,safely managed drinking water,Bangladesh,2007,55.14
+SH.H2O.SMDW.ZS,safely managed drinking water,Bangladesh,2008,55.09
+SH.H2O.SMDW.ZS,safely managed drinking water,Bangladesh,2009,55.05
+SH.H2O.SMDW.ZS,safely managed drinking water,Bangladesh,2010,55.0
+SH.H2O.SMDW.ZS,safely managed drinking water,Bangladesh,2011,54.95
+SH.H2O.SMDW.ZS,safely managed drinking water,Bangladesh,2012,55.3
+SH.H2O.SMDW.ZS,safely managed drinking water,Bangladesh,2013,55.66
+SH.H2O.SMDW.ZS,safely managed drinking water,Bangladesh,2014,56.04
+SH.H2O.SMDW.ZS,safely managed drinking water,Bangladesh,2015,56.44
+SH.H2O.SMDW.ZS,safely managed drinking water,Bangladesh,2016,56.85
+SH.H2O.SMDW.ZS,safely managed drinking water,Bangladesh,2017,57.28
+SH.H2O.SMDW.ZS,safely managed drinking water,Bangladesh,2018,57.72
+SH.H2O.SMDW.ZS,safely managed drinking water,Bangladesh,2019,58.18
+SH.H2O.SMDW.ZS,safely managed drinking water,Bangladesh,2020,58.66
+SH.H2O.SMDW.ZS,safely managed drinking water,Bangladesh,2021,59.15
+SH.H2O.SMDW.ZS,safely managed drinking water,Bangladesh,2022,59.16
+SH.H2O.SMDW.ZS,safely managed drinking water,Bangladesh,2023,59.14
+SH.H2O.SMDW.ZS,safely managed drinking water,Bangladesh,2024,59.13
+SH.H2O.SMDW.ZS,safely managed drinking water,Brazil,2000,75.78
+SH.H2O.SMDW.ZS,safely managed drinking water,Brazil,2001,76.33
+SH.H2O.SMDW.ZS,safely managed drinking water,Brazil,2002,76.85
+SH.H2O.SMDW.ZS,safely managed drinking water,Brazil,2003,77.37
+SH.H2O.SMDW.ZS,safely managed drinking water,Brazil,2004,77.79
+SH.H2O.SMDW.ZS,safely managed drinking water,Brazil,2005,78.04
+SH.H2O.SMDW.ZS,safely managed drinking water,Brazil,2006,78.29
+SH.H2O.SMDW.ZS,safely managed drinking water,Brazil,2007,78.54
+SH.H2O.SMDW.ZS,safely managed drinking water,Brazil,2008,78.78
+SH.H2O.SMDW.ZS,safely managed drinking water,Brazil,2009,79.02
+SH.H2O.SMDW.ZS,safely managed drinking water,Brazil,2010,79.25
+SH.H2O.SMDW.ZS,safely managed drinking water,Brazil,2011,79.48
+SH.H2O.SMDW.ZS,safely managed drinking water,Brazil,2012,79.7
+SH.H2O.SMDW.ZS,safely managed drinking water,Brazil,2013,80.47
+SH.H2O.SMDW.ZS,safely managed drinking water,Brazil,2014,81.23
+SH.H2O.SMDW.ZS,safely managed drinking water,Brazil,2015,81.99
+SH.H2O.SMDW.ZS,safely managed drinking water,Brazil,2016,82.73
+SH.H2O.SMDW.ZS,safely managed drinking water,Brazil,2017,83.5
+SH.H2O.SMDW.ZS,safely managed drinking water,Brazil,2018,84.26
+SH.H2O.SMDW.ZS,safely managed drinking water,Brazil,2019,85.01
+SH.H2O.SMDW.ZS,safely managed drinking water,Brazil,2020,85.74
+SH.H2O.SMDW.ZS,safely managed drinking water,Brazil,2021,86.43
+SH.H2O.SMDW.ZS,safely managed drinking water,Brazil,2022,87.12
+SH.H2O.SMDW.ZS,safely managed drinking water,Brazil,2023,87.95
+SH.H2O.SMDW.ZS,safely managed drinking water,Brazil,2024,88.62
+SH.H2O.SMDW.ZS,safely managed drinking water,"Egypt, Arab Rep.",2000,65.3
+SH.H2O.SMDW.ZS,safely managed drinking water,"Egypt, Arab Rep.",2001,65.27
+SH.H2O.SMDW.ZS,safely managed drinking water,"Egypt, Arab Rep.",2002,65.87
+SH.H2O.SMDW.ZS,safely managed drinking water,"Egypt, Arab Rep.",2003,66.47
+SH.H2O.SMDW.ZS,safely managed drinking water,"Egypt, Arab Rep.",2004,67.07
+SH.H2O.SMDW.ZS,safely managed drinking water,"Egypt, Arab Rep.",2005,67.68
+SH.H2O.SMDW.ZS,safely managed drinking water,"Egypt, Arab Rep.",2006,68.28
+SH.H2O.SMDW.ZS,safely managed drinking water,"Egypt, Arab Rep.",2007,68.87
+SH.H2O.SMDW.ZS,safely managed drinking water,"Egypt, Arab Rep.",2008,69.47
+SH.H2O.SMDW.ZS,safely managed drinking water,"Egypt, Arab Rep.",2009,70.07
+SH.H2O.SMDW.ZS,safely managed drinking water,"Egypt, Arab Rep.",2010,70.66
+SH.H2O.SMDW.ZS,safely managed drinking water,"Egypt, Arab Rep.",2011,71.25
+SH.H2O.SMDW.ZS,safely managed drinking water,"Egypt, Arab Rep.",2012,71.85
+SH.H2O.SMDW.ZS,safely managed drinking water,"Egypt, Arab Rep.",2013,72.44
+SH.H2O.SMDW.ZS,safely managed drinking water,"Egypt, Arab Rep.",2014,73.03
+SH.H2O.SMDW.ZS,safely managed drinking water,"Egypt, Arab Rep.",2015,73.61
+SH.H2O.SMDW.ZS,safely managed drinking water,"Egypt, Arab Rep.",2016,74.2
+SH.H2O.SMDW.ZS,safely managed drinking water,"Egypt, Arab Rep.",2017,74.79
+SH.H2O.SMDW.ZS,safely managed drinking water,"Egypt, Arab Rep.",2018,75.38
+SH.H2O.SMDW.ZS,safely managed drinking water,"Egypt, Arab Rep.",2019,75.97
+SH.H2O.SMDW.ZS,safely managed drinking water,"Egypt, Arab Rep.",2020,76.56
+SH.H2O.SMDW.ZS,safely managed drinking water,"Egypt, Arab Rep.",2021,77.15
+SH.H2O.SMDW.ZS,safely managed drinking water,"Egypt, Arab Rep.",2022,77.75
+SH.H2O.SMDW.ZS,safely managed drinking water,"Egypt, Arab Rep.",2023,78.34
+SH.H2O.SMDW.ZS,safely managed drinking water,"Egypt, Arab Rep.",2024,78.94
+SH.H2O.SMDW.ZS,safely managed drinking water,Ethiopia,2000,5.36
+SH.H2O.SMDW.ZS,safely managed drinking water,Ethiopia,2001,5.5
+SH.H2O.SMDW.ZS,safely managed drinking water,Ethiopia,2002,5.66
+SH.H2O.SMDW.ZS,safely managed drinking water,Ethiopia,2003,5.84
+SH.H2O.SMDW.ZS,safely managed drinking water,Ethiopia,2004,6.03
+SH.H2O.SMDW.ZS,safely managed drinking water,Ethiopia,2005,6.24
+SH.H2O.SMDW.ZS,safely managed drinking water,Ethiopia,2006,6.46
+SH.H2O.SMDW.ZS,safely managed drinking water,Ethiopia,2007,6.7
+SH.H2O.SMDW.ZS,safely managed drinking water,Ethiopia,2008,7.02
+SH.H2O.SMDW.ZS,safely managed drinking water,Ethiopia,2009,7.36
+SH.H2O.SMDW.ZS,safely managed drinking water,Ethiopia,2010,7.71
+SH.H2O.SMDW.ZS,safely managed drinking water,Ethiopia,2011,8.08
+SH.H2O.SMDW.ZS,safely managed drinking water,Ethiopia,2012,8.46
+SH.H2O.SMDW.ZS,safely managed drinking water,Ethiopia,2013,8.86
+SH.H2O.SMDW.ZS,safely managed drinking water,Ethiopia,2014,9.27
+SH.H2O.SMDW.ZS,safely managed drinking water,Ethiopia,2015,9.69
+SH.H2O.SMDW.ZS,safely managed drinking water,Ethiopia,2016,10.13
+SH.H2O.SMDW.ZS,safely managed drinking water,Ethiopia,2017,10.58
+SH.H2O.SMDW.ZS,safely managed drinking water,Ethiopia,2018,11.05
+SH.H2O.SMDW.ZS,safely managed drinking water,Ethiopia,2019,11.53
+SH.H2O.SMDW.ZS,safely managed drinking water,Ethiopia,2020,12.02
+SH.H2O.SMDW.ZS,safely managed drinking water,Ethiopia,2021,12.53
+SH.H2O.SMDW.ZS,safely managed drinking water,Ethiopia,2022,12.87
+SH.H2O.SMDW.ZS,safely managed drinking water,Ethiopia,2023,13.21
+SH.H2O.SMDW.ZS,safely managed drinking water,Ethiopia,2024,13.55
+SH.H2O.SMDW.ZS,safely managed drinking water,France,2000,97.36
+SH.H2O.SMDW.ZS,safely managed drinking water,France,2001,97.35
+SH.H2O.SMDW.ZS,safely managed drinking water,France,2002,97.35
+SH.H2O.SMDW.ZS,safely managed drinking water,France,2003,97.35
+SH.H2O.SMDW.ZS,safely managed drinking water,France,2004,97.47
+SH.H2O.SMDW.ZS,safely managed drinking water,France,2005,97.59
+SH.H2O.SMDW.ZS,safely managed drinking water,France,2006,97.71
+SH.H2O.SMDW.ZS,safely managed drinking water,France,2007,97.83
+SH.H2O.SMDW.ZS,safely managed drinking water,France,2008,97.96
+SH.H2O.SMDW.ZS,safely managed drinking water,France,2009,98.08
+SH.H2O.SMDW.ZS,safely managed drinking water,France,2010,98.21
+SH.H2O.SMDW.ZS,safely managed drinking water,France,2011,98.33
+SH.H2O.SMDW.ZS,safely managed drinking water,France,2012,98.46
+SH.H2O.SMDW.ZS,safely managed drinking water,France,2013,98.59
+SH.H2O.SMDW.ZS,safely managed drinking water,France,2014,98.72
+SH.H2O.SMDW.ZS,safely managed drinking water,France,2015,98.85
+SH.H2O.SMDW.ZS,safely managed drinking water,France,2016,98.98
+SH.H2O.SMDW.ZS,safely managed drinking water,France,2017,99.11
+SH.H2O.SMDW.ZS,safely managed drinking water,France,2018,99.24
+SH.H2O.SMDW.ZS,safely managed drinking water,France,2019,99.38
+SH.H2O.SMDW.ZS,safely managed drinking water,France,2020,99.51
+SH.H2O.SMDW.ZS,safely managed drinking water,France,2021,99.64
+SH.H2O.SMDW.ZS,safely managed drinking water,France,2022,99.7
+SH.H2O.SMDW.ZS,safely managed drinking water,France,2023,99.71
+SH.H2O.SMDW.ZS,safely managed drinking water,France,2024,99.71
+SH.H2O.SMDW.ZS,safely managed drinking water,Germany,2000,99.84
+SH.H2O.SMDW.ZS,safely managed drinking water,Germany,2001,99.84
+SH.H2O.SMDW.ZS,safely managed drinking water,Germany,2002,99.84
+SH.H2O.SMDW.ZS,safely managed drinking water,Germany,2003,99.84
+SH.H2O.SMDW.ZS,safely managed drinking water,Germany,2004,99.85
+SH.H2O.SMDW.ZS,safely managed drinking water,Germany,2005,99.86
+SH.H2O.SMDW.ZS,safely managed drinking water,Germany,2006,99.86
+SH.H2O.SMDW.ZS,safely managed drinking water,Germany,2007,99.87
+SH.H2O.SMDW.ZS,safely managed drinking water,Germany,2008,99.88
+SH.H2O.SMDW.ZS,safely managed drinking water,Germany,2009,99.88
+SH.H2O.SMDW.ZS,safely managed drinking water,Germany,2010,99.88
+SH.H2O.SMDW.ZS,safely managed drinking water,Germany,2011,99.88
+SH.H2O.SMDW.ZS,safely managed drinking water,Germany,2012,99.89
+SH.H2O.SMDW.ZS,safely managed drinking water,Germany,2013,99.89
+SH.H2O.SMDW.ZS,safely managed drinking water,Germany,2014,99.89
+SH.H2O.SMDW.ZS,safely managed drinking water,Germany,2015,99.9
+SH.H2O.SMDW.ZS,safely managed drinking water,Germany,2016,99.9
+SH.H2O.SMDW.ZS,safely managed drinking water,Germany,2017,99.9
+SH.H2O.SMDW.ZS,safely managed drinking water,Germany,2018,99.91
+SH.H2O.SMDW.ZS,safely managed drinking water,Germany,2019,99.91
+SH.H2O.SMDW.ZS,safely managed drinking water,Germany,2020,99.91
+SH.H2O.SMDW.ZS,safely managed drinking water,Germany,2021,99.92
+SH.H2O.SMDW.ZS,safely managed drinking water,Germany,2022,99.92
+SH.H2O.SMDW.ZS,safely managed drinking water,Germany,2023,99.92
+SH.H2O.SMDW.ZS,safely managed drinking water,Germany,2024,99.92
+SH.H2O.SMDW.ZS,safely managed drinking water,India,2000,37.64
+SH.H2O.SMDW.ZS,safely managed drinking water,India,2001,39.1
+SH.H2O.SMDW.ZS,safely managed drinking water,India,2002,40.61
+SH.H2O.SMDW.ZS,safely managed drinking water,India,2003,42.13
+SH.H2O.SMDW.ZS,safely managed drinking water,India,2004,43.66
+SH.H2O.SMDW.ZS,safely managed drinking water,India,2005,45.2
+SH.H2O.SMDW.ZS,safely managed drinking water,India,2006,46.75
+SH.H2O.SMDW.ZS,safely managed drinking water,India,2007,48.32
+SH.H2O.SMDW.ZS,safely managed drinking water,India,2008,49.9
+SH.H2O.SMDW.ZS,safely managed drinking water,India,2009,51.48
+SH.H2O.SMDW.ZS,safely managed drinking water,India,2010,53.08
+SH.H2O.SMDW.ZS,safely managed drinking water,India,2011,54.69
+SH.H2O.SMDW.ZS,safely managed drinking water,India,2012,56.31
+SH.H2O.SMDW.ZS,safely managed drinking water,India,2013,57.94
+SH.H2O.SMDW.ZS,safely managed drinking water,India,2014,59.58
+SH.H2O.SMDW.ZS,safely managed drinking water,India,2015,61.23
+SH.H2O.SMDW.ZS,safely managed drinking water,India,2016,62.9
+SH.H2O.SMDW.ZS,safely managed drinking water,India,2017,64.57
+SH.H2O.SMDW.ZS,safely managed drinking water,India,2018,66.25
+SH.H2O.SMDW.ZS,safely managed drinking water,India,2019,67.93
+SH.H2O.SMDW.ZS,safely managed drinking water,India,2020,69.63
+SH.H2O.SMDW.ZS,safely managed drinking water,India,2021,71.32
+SH.H2O.SMDW.ZS,safely managed drinking water,India,2022,73.03
+SH.H2O.SMDW.ZS,safely managed drinking water,India,2023,74.73
+SH.H2O.SMDW.ZS,safely managed drinking water,India,2024,76.44
+SH.H2O.SMDW.ZS,safely managed drinking water,Indonesia,2000,23.51
+SH.H2O.SMDW.ZS,safely managed drinking water,Indonesia,2001,23.85
+SH.H2O.SMDW.ZS,safely managed drinking water,Indonesia,2002,24.19
+SH.H2O.SMDW.ZS,safely managed drinking water,Indonesia,2003,24.53
+SH.H2O.SMDW.ZS,safely managed drinking water,Indonesia,2004,24.86
+SH.H2O.SMDW.ZS,safely managed drinking water,Indonesia,2005,25.2
+SH.H2O.SMDW.ZS,safely managed drinking water,Indonesia,2006,25.53
+SH.H2O.SMDW.ZS,safely managed drinking water,Indonesia,2007,25.86
+SH.H2O.SMDW.ZS,safely managed drinking water,Indonesia,2008,26.18
+SH.H2O.SMDW.ZS,safely managed drinking water,Indonesia,2009,26.51
+SH.H2O.SMDW.ZS,safely managed drinking water,Indonesia,2010,26.82
+SH.H2O.SMDW.ZS,safely managed drinking water,Indonesia,2011,27.13
+SH.H2O.SMDW.ZS,safely managed drinking water,Indonesia,2012,27.43
+SH.H2O.SMDW.ZS,safely managed drinking water,Indonesia,2013,27.73
+SH.H2O.SMDW.ZS,safely managed drinking water,Indonesia,2014,28.03
+SH.H2O.SMDW.ZS,safely managed drinking water,Indonesia,2015,28.33
+SH.H2O.SMDW.ZS,safely managed drinking water,Indonesia,2016,28.62
+SH.H2O.SMDW.ZS,safely managed drinking water,Indonesia,2017,28.91
+SH.H2O.SMDW.ZS,safely managed drinking water,Indonesia,2018,29.2
+SH.H2O.SMDW.ZS,safely managed drinking water,Indonesia,2019,29.49
+SH.H2O.SMDW.ZS,safely managed drinking water,Indonesia,2020,29.77
+SH.H2O.SMDW.ZS,safely managed drinking water,Indonesia,2021,30.05
+SH.H2O.SMDW.ZS,safely managed drinking water,Indonesia,2022,30.33
+SH.H2O.SMDW.ZS,safely managed drinking water,Indonesia,2023,30.4
+SH.H2O.SMDW.ZS,safely managed drinking water,Indonesia,2024,30.46
+SH.H2O.SMDW.ZS,safely managed drinking water,Japan,2000,97.87
+SH.H2O.SMDW.ZS,safely managed drinking water,Japan,2001,97.87
+SH.H2O.SMDW.ZS,safely managed drinking water,Japan,2002,97.87
+SH.H2O.SMDW.ZS,safely managed drinking water,Japan,2003,97.87
+SH.H2O.SMDW.ZS,safely managed drinking water,Japan,2004,97.87
+SH.H2O.SMDW.ZS,safely managed drinking water,Japan,2005,97.91
+SH.H2O.SMDW.ZS,safely managed drinking water,Japan,2006,97.96
+SH.H2O.SMDW.ZS,safely managed drinking water,Japan,2007,98.0
+SH.H2O.SMDW.ZS,safely managed drinking water,Japan,2008,98.05
+SH.H2O.SMDW.ZS,safely managed drinking water,Japan,2009,98.09
+SH.H2O.SMDW.ZS,safely managed drinking water,Japan,2010,98.14
+SH.H2O.SMDW.ZS,safely managed drinking water,Japan,2011,98.18
+SH.H2O.SMDW.ZS,safely managed drinking water,Japan,2012,98.23
+SH.H2O.SMDW.ZS,safely managed drinking water,Japan,2013,98.27
+SH.H2O.SMDW.ZS,safely managed drinking water,Japan,2014,98.32
+SH.H2O.SMDW.ZS,safely managed drinking water,Japan,2015,98.37
+SH.H2O.SMDW.ZS,safely managed drinking water,Japan,2016,98.41
+SH.H2O.SMDW.ZS,safely managed drinking water,Japan,2017,98.46
+SH.H2O.SMDW.ZS,safely managed drinking water,Japan,2018,98.5
+SH.H2O.SMDW.ZS,safely managed drinking water,Japan,2019,98.55
+SH.H2O.SMDW.ZS,safely managed drinking water,Japan,2020,98.59
+SH.H2O.SMDW.ZS,safely managed drinking water,Japan,2021,98.64
+SH.H2O.SMDW.ZS,safely managed drinking water,Japan,2022,98.68
+SH.H2O.SMDW.ZS,safely managed drinking water,Japan,2023,98.73
+SH.H2O.SMDW.ZS,safely managed drinking water,Japan,2024,98.73
+SH.H2O.SMDW.ZS,safely managed drinking water,Mexico,2000,40.01
+SH.H2O.SMDW.ZS,safely managed drinking water,Mexico,2001,40.16
+SH.H2O.SMDW.ZS,safely managed drinking water,Mexico,2002,40.3
+SH.H2O.SMDW.ZS,safely managed drinking water,Mexico,2003,40.44
+SH.H2O.SMDW.ZS,safely managed drinking water,Mexico,2004,40.58
+SH.H2O.SMDW.ZS,safely managed drinking water,Mexico,2005,40.72
+SH.H2O.SMDW.ZS,safely managed drinking water,Mexico,2006,40.86
+SH.H2O.SMDW.ZS,safely managed drinking water,Mexico,2007,40.99
+SH.H2O.SMDW.ZS,safely managed drinking water,Mexico,2008,41.13
+SH.H2O.SMDW.ZS,safely managed drinking water,Mexico,2009,41.26
+SH.H2O.SMDW.ZS,safely managed drinking water,Mexico,2010,41.39
+SH.H2O.SMDW.ZS,safely managed drinking water,Mexico,2011,41.52
+SH.H2O.SMDW.ZS,safely managed drinking water,Mexico,2012,41.65
+SH.H2O.SMDW.ZS,safely managed drinking water,Mexico,2013,41.77
+SH.H2O.SMDW.ZS,safely managed drinking water,Mexico,2014,41.9
+SH.H2O.SMDW.ZS,safely managed drinking water,Mexico,2015,42.02
+SH.H2O.SMDW.ZS,safely managed drinking water,Mexico,2016,42.14
+SH.H2O.SMDW.ZS,safely managed drinking water,Mexico,2017,42.27
+SH.H2O.SMDW.ZS,safely managed drinking water,Mexico,2018,42.39
+SH.H2O.SMDW.ZS,safely managed drinking water,Mexico,2019,42.5
+SH.H2O.SMDW.ZS,safely managed drinking water,Mexico,2020,42.62
+SH.H2O.SMDW.ZS,safely managed drinking water,Mexico,2021,42.74
+SH.H2O.SMDW.ZS,safely managed drinking water,Mexico,2022,42.85
+SH.H2O.SMDW.ZS,safely managed drinking water,Mexico,2023,42.91
+SH.H2O.SMDW.ZS,safely managed drinking water,Mexico,2024,42.97
+SH.H2O.SMDW.ZS,safely managed drinking water,Nigeria,2000,12.61
+SH.H2O.SMDW.ZS,safely managed drinking water,Nigeria,2001,12.98
+SH.H2O.SMDW.ZS,safely managed drinking water,Nigeria,2002,13.79
+SH.H2O.SMDW.ZS,safely managed drinking water,Nigeria,2003,14.63
+SH.H2O.SMDW.ZS,safely managed drinking water,Nigeria,2004,15.49
+SH.H2O.SMDW.ZS,safely managed drinking water,Nigeria,2005,16.37
+SH.H2O.SMDW.ZS,safely managed drinking water,Nigeria,2006,17.28
+SH.H2O.SMDW.ZS,safely managed drinking water,Nigeria,2007,18.22
+SH.H2O.SMDW.ZS,safely managed drinking water,Nigeria,2008,19.18
+SH.H2O.SMDW.ZS,safely managed drinking water,Nigeria,2009,20.17
+SH.H2O.SMDW.ZS,safely managed drinking water,Nigeria,2010,21.18
+SH.H2O.SMDW.ZS,safely managed drinking water,Nigeria,2011,22.22
+SH.H2O.SMDW.ZS,safely managed drinking water,Nigeria,2012,23.19
+SH.H2O.SMDW.ZS,safely managed drinking water,Nigeria,2013,23.77
+SH.H2O.SMDW.ZS,safely managed drinking water,Nigeria,2014,24.36
+SH.H2O.SMDW.ZS,safely managed drinking water,Nigeria,2015,24.94
+SH.H2O.SMDW.ZS,safely managed drinking water,Nigeria,2016,25.52
+SH.H2O.SMDW.ZS,safely managed drinking water,Nigeria,2017,26.09
+SH.H2O.SMDW.ZS,safely managed drinking water,Nigeria,2018,26.66
+SH.H2O.SMDW.ZS,safely managed drinking water,Nigeria,2019,27.23
+SH.H2O.SMDW.ZS,safely managed drinking water,Nigeria,2020,27.79
+SH.H2O.SMDW.ZS,safely managed drinking water,Nigeria,2021,28.36
+SH.H2O.SMDW.ZS,safely managed drinking water,Nigeria,2022,28.91
+SH.H2O.SMDW.ZS,safely managed drinking water,Nigeria,2023,29.47
+SH.H2O.SMDW.ZS,safely managed drinking water,Nigeria,2024,29.9
+SH.H2O.SMDW.ZS,safely managed drinking water,Pakistan,2000,42.58
+SH.H2O.SMDW.ZS,safely managed drinking water,Pakistan,2001,42.69
+SH.H2O.SMDW.ZS,safely managed drinking water,Pakistan,2002,42.81
+SH.H2O.SMDW.ZS,safely managed drinking water,Pakistan,2003,42.92
+SH.H2O.SMDW.ZS,safely managed drinking water,Pakistan,2004,43.03
+SH.H2O.SMDW.ZS,safely managed drinking water,Pakistan,2005,43.14
+SH.H2O.SMDW.ZS,safely managed drinking water,Pakistan,2006,43.25
+SH.H2O.SMDW.ZS,safely managed drinking water,Pakistan,2007,43.37
+SH.H2O.SMDW.ZS,safely managed drinking water,Pakistan,2008,43.48
+SH.H2O.SMDW.ZS,safely managed drinking water,Pakistan,2009,43.59
+SH.H2O.SMDW.ZS,safely managed drinking water,Pakistan,2010,43.7
+SH.H2O.SMDW.ZS,safely managed drinking water,Pakistan,2011,43.8
+SH.H2O.SMDW.ZS,safely managed drinking water,Pakistan,2012,43.91
+SH.H2O.SMDW.ZS,safely managed drinking water,Pakistan,2013,44.02
+SH.H2O.SMDW.ZS,safely managed drinking water,Pakistan,2014,44.13
+SH.H2O.SMDW.ZS,safely managed drinking water,Pakistan,2015,44.23
+SH.H2O.SMDW.ZS,safely managed drinking water,Pakistan,2016,44.34
+SH.H2O.SMDW.ZS,safely managed drinking water,Pakistan,2017,44.45
+SH.H2O.SMDW.ZS,safely managed drinking water,Pakistan,2018,44.55
+SH.H2O.SMDW.ZS,safely managed drinking water,Pakistan,2019,44.66
+SH.H2O.SMDW.ZS,safely managed drinking water,Pakistan,2020,44.76
+SH.H2O.SMDW.ZS,safely managed drinking water,Pakistan,2021,44.87
+SH.H2O.SMDW.ZS,safely managed drinking water,Pakistan,2022,44.97
+SH.H2O.SMDW.ZS,safely managed drinking water,Pakistan,2023,44.97
+SH.H2O.SMDW.ZS,safely managed drinking water,Pakistan,2024,44.97
+SH.H2O.SMDW.ZS,safely managed drinking water,South Africa,2000,63.25
+SH.H2O.SMDW.ZS,safely managed drinking water,South Africa,2001,63.7
+SH.H2O.SMDW.ZS,safely managed drinking water,South Africa,2002,64.51
+SH.H2O.SMDW.ZS,safely managed drinking water,South Africa,2003,65.33
+SH.H2O.SMDW.ZS,safely managed drinking water,South Africa,2004,66.14
+SH.H2O.SMDW.ZS,safely managed drinking water,South Africa,2005,66.94
+SH.H2O.SMDW.ZS,safely managed drinking water,South Africa,2006,67.39
+SH.H2O.SMDW.ZS,safely managed drinking water,South Africa,2007,67.66
+SH.H2O.SMDW.ZS,safely managed drinking water,South Africa,2008,67.93
+SH.H2O.SMDW.ZS,safely managed drinking water,South Africa,2009,68.17
+SH.H2O.SMDW.ZS,safely managed drinking water,South Africa,2010,68.4
+SH.H2O.SMDW.ZS,safely managed drinking water,South Africa,2011,68.62
+SH.H2O.SMDW.ZS,safely managed drinking water,South Africa,2012,68.82
+SH.H2O.SMDW.ZS,safely managed drinking water,South Africa,2013,69.0
+SH.H2O.SMDW.ZS,safely managed drinking water,South Africa,2014,69.16
+SH.H2O.SMDW.ZS,safely managed drinking water,South Africa,2015,69.31
+SH.H2O.SMDW.ZS,safely managed drinking water,South Africa,2016,69.44
+SH.H2O.SMDW.ZS,safely managed drinking water,South Africa,2017,69.55
+SH.H2O.SMDW.ZS,safely managed drinking water,South Africa,2018,69.65
+SH.H2O.SMDW.ZS,safely managed drinking water,South Africa,2019,69.73
+SH.H2O.SMDW.ZS,safely managed drinking water,South Africa,2020,69.79
+SH.H2O.SMDW.ZS,safely managed drinking water,South Africa,2021,69.61
+SH.H2O.SMDW.ZS,safely managed drinking water,South Africa,2022,69.09
+SH.H2O.SMDW.ZS,safely managed drinking water,South Africa,2023,68.55
+SH.H2O.SMDW.ZS,safely managed drinking water,South Africa,2024,68.01
+SH.H2O.SMDW.ZS,safely managed drinking water,South Asia,2000,41.04
+SH.H2O.SMDW.ZS,safely managed drinking water,South Asia,2001,42.34
+SH.H2O.SMDW.ZS,safely managed drinking water,South Asia,2002,43.67
+SH.H2O.SMDW.ZS,safely managed drinking water,South Asia,2003,45.01
+SH.H2O.SMDW.ZS,safely managed drinking water,South Asia,2004,46.37
+SH.H2O.SMDW.ZS,safely managed drinking water,South Asia,2005,47.83
+SH.H2O.SMDW.ZS,safely managed drinking water,South Asia,2006,49.32
+SH.H2O.SMDW.ZS,safely managed drinking water,South Asia,2007,50.81
+SH.H2O.SMDW.ZS,safely managed drinking water,South Asia,2008,52.31
+SH.H2O.SMDW.ZS,safely managed drinking water,South Asia,2009,53.82
+SH.H2O.SMDW.ZS,safely managed drinking water,South Asia,2010,55.34
+SH.H2O.SMDW.ZS,safely managed drinking water,South Asia,2011,56.87
+SH.H2O.SMDW.ZS,safely managed drinking water,South Asia,2012,58.42
+SH.H2O.SMDW.ZS,safely managed drinking water,South Asia,2013,59.97
+SH.H2O.SMDW.ZS,safely managed drinking water,South Asia,2014,61.53
+SH.H2O.SMDW.ZS,safely managed drinking water,South Asia,2015,63.11
+SH.H2O.SMDW.ZS,safely managed drinking water,South Asia,2016,64.69
+SH.H2O.SMDW.ZS,safely managed drinking water,South Asia,2017,66.28
+SH.H2O.SMDW.ZS,safely managed drinking water,South Asia,2018,67.88
+SH.H2O.SMDW.ZS,safely managed drinking water,South Asia,2019,69.48
+SH.H2O.SMDW.ZS,safely managed drinking water,South Asia,2020,71.09
+SH.H2O.SMDW.ZS,safely managed drinking water,South Asia,2021,72.71
+SH.H2O.SMDW.ZS,safely managed drinking water,South Asia,2022,74.33
+SH.H2O.SMDW.ZS,safely managed drinking water,South Asia,2023,75.94
+SH.H2O.SMDW.ZS,safely managed drinking water,South Asia,2024,77.55
+SH.H2O.SMDW.ZS,safely managed drinking water,Sub-Saharan Africa,2000,17.86
+SH.H2O.SMDW.ZS,safely managed drinking water,Sub-Saharan Africa,2001,18.11
+SH.H2O.SMDW.ZS,safely managed drinking water,Sub-Saharan Africa,2002,18.52
+SH.H2O.SMDW.ZS,safely managed drinking water,Sub-Saharan Africa,2003,18.94
+SH.H2O.SMDW.ZS,safely managed drinking water,Sub-Saharan Africa,2004,19.41
+SH.H2O.SMDW.ZS,safely managed drinking water,Sub-Saharan Africa,2005,19.92
+SH.H2O.SMDW.ZS,safely managed drinking water,Sub-Saharan Africa,2006,20.46
+SH.H2O.SMDW.ZS,safely managed drinking water,Sub-Saharan Africa,2007,21.02
+SH.H2O.SMDW.ZS,safely managed drinking water,Sub-Saharan Africa,2008,21.63
+SH.H2O.SMDW.ZS,safely managed drinking water,Sub-Saharan Africa,2009,22.27
+SH.H2O.SMDW.ZS,safely managed drinking water,Sub-Saharan Africa,2010,22.94
+SH.H2O.SMDW.ZS,safely managed drinking water,Sub-Saharan Africa,2011,23.37
+SH.H2O.SMDW.ZS,safely managed drinking water,Sub-Saharan Africa,2012,24.07
+SH.H2O.SMDW.ZS,safely managed drinking water,Sub-Saharan Africa,2013,24.8
+SH.H2O.SMDW.ZS,safely managed drinking water,Sub-Saharan Africa,2014,25.57
+SH.H2O.SMDW.ZS,safely managed drinking water,Sub-Saharan Africa,2015,26.37
+SH.H2O.SMDW.ZS,safely managed drinking water,Sub-Saharan Africa,2016,27.16
+SH.H2O.SMDW.ZS,safely managed drinking water,Sub-Saharan Africa,2017,27.95
+SH.H2O.SMDW.ZS,safely managed drinking water,Sub-Saharan Africa,2018,28.81
+SH.H2O.SMDW.ZS,safely managed drinking water,Sub-Saharan Africa,2019,29.66
+SH.H2O.SMDW.ZS,safely managed drinking water,Sub-Saharan Africa,2020,30.37
+SH.H2O.SMDW.ZS,safely managed drinking water,Sub-Saharan Africa,2021,30.92
+SH.H2O.SMDW.ZS,safely managed drinking water,Sub-Saharan Africa,2022,31.44
+SH.H2O.SMDW.ZS,safely managed drinking water,Sub-Saharan Africa,2023,31.93
+SH.H2O.SMDW.ZS,safely managed drinking water,Sub-Saharan Africa,2024,32.42
+SH.H2O.SMDW.ZS,safely managed drinking water,United Kingdom,2000,100
+SH.H2O.SMDW.ZS,safely managed drinking water,United Kingdom,2001,100.0
+SH.H2O.SMDW.ZS,safely managed drinking water,United Kingdom,2002,100
+SH.H2O.SMDW.ZS,safely managed drinking water,United Kingdom,2003,100
+SH.H2O.SMDW.ZS,safely managed drinking water,United Kingdom,2004,100
+SH.H2O.SMDW.ZS,safely managed drinking water,United Kingdom,2005,99.99
+SH.H2O.SMDW.ZS,safely managed drinking water,United Kingdom,2006,99.99
+SH.H2O.SMDW.ZS,safely managed drinking water,United Kingdom,2007,99.98
+SH.H2O.SMDW.ZS,safely managed drinking water,United Kingdom,2008,99.97
+SH.H2O.SMDW.ZS,safely managed drinking water,United Kingdom,2009,99.96
+SH.H2O.SMDW.ZS,safely managed drinking water,United Kingdom,2010,99.95
+SH.H2O.SMDW.ZS,safely managed drinking water,United Kingdom,2011,99.94
+SH.H2O.SMDW.ZS,safely managed drinking water,United Kingdom,2012,99.93
+SH.H2O.SMDW.ZS,safely managed drinking water,United Kingdom,2013,99.92
+SH.H2O.SMDW.ZS,safely managed drinking water,United Kingdom,2014,99.91
+SH.H2O.SMDW.ZS,safely managed drinking water,United Kingdom,2015,99.9
+SH.H2O.SMDW.ZS,safely managed drinking water,United Kingdom,2016,99.9
+SH.H2O.SMDW.ZS,safely managed drinking water,United Kingdom,2017,99.89
+SH.H2O.SMDW.ZS,safely managed drinking water,United Kingdom,2018,99.88
+SH.H2O.SMDW.ZS,safely managed drinking water,United Kingdom,2019,99.87
+SH.H2O.SMDW.ZS,safely managed drinking water,United Kingdom,2020,99.86
+SH.H2O.SMDW.ZS,safely managed drinking water,United Kingdom,2021,99.85
+SH.H2O.SMDW.ZS,safely managed drinking water,United Kingdom,2022,99.84
+SH.H2O.SMDW.ZS,safely managed drinking water,United Kingdom,2023,99.83
+SH.H2O.SMDW.ZS,safely managed drinking water,United Kingdom,2024,99.82
+SH.H2O.SMDW.ZS,safely managed drinking water,United States,2005,95.36
+SH.H2O.SMDW.ZS,safely managed drinking water,United States,2006,95.36
+SH.H2O.SMDW.ZS,safely managed drinking water,United States,2007,95.37
+SH.H2O.SMDW.ZS,safely managed drinking water,United States,2008,95.38
+SH.H2O.SMDW.ZS,safely managed drinking water,United States,2009,95.39
+SH.H2O.SMDW.ZS,safely managed drinking water,United States,2010,95.56
+SH.H2O.SMDW.ZS,safely managed drinking water,United States,2011,95.72
+SH.H2O.SMDW.ZS,safely managed drinking water,United States,2012,95.89
+SH.H2O.SMDW.ZS,safely managed drinking water,United States,2013,96.05
+SH.H2O.SMDW.ZS,safely managed drinking water,United States,2014,96.21
+SH.H2O.SMDW.ZS,safely managed drinking water,United States,2015,96.37
+SH.H2O.SMDW.ZS,safely managed drinking water,United States,2016,96.54
+SH.H2O.SMDW.ZS,safely managed drinking water,United States,2017,96.69
+SH.H2O.SMDW.ZS,safely managed drinking water,United States,2018,96.85
+SH.H2O.SMDW.ZS,safely managed drinking water,United States,2019,97.01
+SH.H2O.SMDW.ZS,safely managed drinking water,United States,2020,97.16
+SH.H2O.SMDW.ZS,safely managed drinking water,United States,2021,97.32
+SH.H2O.SMDW.ZS,safely managed drinking water,United States,2022,97.47
+SH.H2O.SMDW.ZS,safely managed drinking water,United States,2023,97.57
+SH.H2O.SMDW.ZS,safely managed drinking water,United States,2024,97.57
+SH.H2O.SMDW.ZS,safely managed drinking water,World,2000,61.25
+SH.H2O.SMDW.ZS,safely managed drinking water,World,2001,61.48
+SH.H2O.SMDW.ZS,safely managed drinking water,World,2002,61.8
+SH.H2O.SMDW.ZS,safely managed drinking water,World,2003,62.13
+SH.H2O.SMDW.ZS,safely managed drinking water,World,2004,62.46
+SH.H2O.SMDW.ZS,safely managed drinking water,World,2005,62.81
+SH.H2O.SMDW.ZS,safely managed drinking water,World,2006,63.13
+SH.H2O.SMDW.ZS,safely managed drinking water,World,2007,63.45
+SH.H2O.SMDW.ZS,safely managed drinking water,World,2008,63.76
+SH.H2O.SMDW.ZS,safely managed drinking water,World,2009,64.29
+SH.H2O.SMDW.ZS,safely managed drinking water,World,2010,64.82
+SH.H2O.SMDW.ZS,safely managed drinking water,World,2011,65.32
+SH.H2O.SMDW.ZS,safely managed drinking water,World,2012,65.89
+SH.H2O.SMDW.ZS,safely managed drinking water,World,2013,66.47
+SH.H2O.SMDW.ZS,safely managed drinking water,World,2014,67.06
+SH.H2O.SMDW.ZS,safely managed drinking water,World,2015,67.65
+SH.H2O.SMDW.ZS,safely managed drinking water,World,2016,68.24
+SH.H2O.SMDW.ZS,safely managed drinking water,World,2017,68.82
+SH.H2O.SMDW.ZS,safely managed drinking water,World,2018,69.39
+SH.H2O.SMDW.ZS,safely managed drinking water,World,2019,69.95
+SH.H2O.SMDW.ZS,safely managed drinking water,World,2020,70.48
+SH.H2O.SMDW.ZS,safely managed drinking water,World,2021,71.0
+SH.H2O.SMDW.ZS,safely managed drinking water,World,2022,71.51
+SH.H2O.SMDW.ZS,safely managed drinking water,World,2023,71.99
+SH.H2O.SMDW.ZS,safely managed drinking water,World,2024,73.67
+SH.STA.BASS.ZS,at least basic sanitation,Bangladesh,2000,23.69
+SH.STA.BASS.ZS,at least basic sanitation,Bangladesh,2001,25.18
+SH.STA.BASS.ZS,at least basic sanitation,Bangladesh,2002,26.68
+SH.STA.BASS.ZS,at least basic sanitation,Bangladesh,2003,28.18
+SH.STA.BASS.ZS,at least basic sanitation,Bangladesh,2004,29.66
+SH.STA.BASS.ZS,at least basic sanitation,Bangladesh,2005,31.44
+SH.STA.BASS.ZS,at least basic sanitation,Bangladesh,2006,33.23
+SH.STA.BASS.ZS,at least basic sanitation,Bangladesh,2007,35.03
+SH.STA.BASS.ZS,at least basic sanitation,Bangladesh,2008,36.86
+SH.STA.BASS.ZS,at least basic sanitation,Bangladesh,2009,38.7
+SH.STA.BASS.ZS,at least basic sanitation,Bangladesh,2010,40.55
+SH.STA.BASS.ZS,at least basic sanitation,Bangladesh,2011,42.42
+SH.STA.BASS.ZS,at least basic sanitation,Bangladesh,2012,44.3
+SH.STA.BASS.ZS,at least basic sanitation,Bangladesh,2013,46.19
+SH.STA.BASS.ZS,at least basic sanitation,Bangladesh,2014,48.09
+SH.STA.BASS.ZS,at least basic sanitation,Bangladesh,2015,50.01
+SH.STA.BASS.ZS,at least basic sanitation,Bangladesh,2016,51.93
+SH.STA.BASS.ZS,at least basic sanitation,Bangladesh,2017,53.86
+SH.STA.BASS.ZS,at least basic sanitation,Bangladesh,2018,55.8
+SH.STA.BASS.ZS,at least basic sanitation,Bangladesh,2019,57.75
+SH.STA.BASS.ZS,at least basic sanitation,Bangladesh,2020,59.71
+SH.STA.BASS.ZS,at least basic sanitation,Bangladesh,2021,61.68
+SH.STA.BASS.ZS,at least basic sanitation,Bangladesh,2022,63.65
+SH.STA.BASS.ZS,at least basic sanitation,Bangladesh,2023,65.63
+SH.STA.BASS.ZS,at least basic sanitation,Bangladesh,2024,67.62
+SH.STA.BASS.ZS,at least basic sanitation,Brazil,2000,73.37
+SH.STA.BASS.ZS,at least basic sanitation,Brazil,2001,74.24
+SH.STA.BASS.ZS,at least basic sanitation,Brazil,2002,75.09
+SH.STA.BASS.ZS,at least basic sanitation,Brazil,2003,75.93
+SH.STA.BASS.ZS,at least basic sanitation,Brazil,2004,76.77
+SH.STA.BASS.ZS,at least basic sanitation,Brazil,2005,77.61
+SH.STA.BASS.ZS,at least basic sanitation,Brazil,2006,78.44
+SH.STA.BASS.ZS,at least basic sanitation,Brazil,2007,79.26
+SH.STA.BASS.ZS,at least basic sanitation,Brazil,2008,80.08
+SH.STA.BASS.ZS,at least basic sanitation,Brazil,2009,80.89
+SH.STA.BASS.ZS,at least basic sanitation,Brazil,2010,81.7
+SH.STA.BASS.ZS,at least basic sanitation,Brazil,2011,82.51
+SH.STA.BASS.ZS,at least basic sanitation,Brazil,2012,83.31
+SH.STA.BASS.ZS,at least basic sanitation,Brazil,2013,84.11
+SH.STA.BASS.ZS,at least basic sanitation,Brazil,2014,84.9
+SH.STA.BASS.ZS,at least basic sanitation,Brazil,2015,85.69
+SH.STA.BASS.ZS,at least basic sanitation,Brazil,2016,86.47
+SH.STA.BASS.ZS,at least basic sanitation,Brazil,2017,87.25
+SH.STA.BASS.ZS,at least basic sanitation,Brazil,2018,88.03
+SH.STA.BASS.ZS,at least basic sanitation,Brazil,2019,88.79
+SH.STA.BASS.ZS,at least basic sanitation,Brazil,2020,89.56
+SH.STA.BASS.ZS,at least basic sanitation,Brazil,2021,90.32
+SH.STA.BASS.ZS,at least basic sanitation,Brazil,2022,91.02
+SH.STA.BASS.ZS,at least basic sanitation,Brazil,2023,91.71
+SH.STA.BASS.ZS,at least basic sanitation,Brazil,2024,92.4
+SH.STA.BASS.ZS,at least basic sanitation,China,2000,56.82
+SH.STA.BASS.ZS,at least basic sanitation,China,2001,57.57
+SH.STA.BASS.ZS,at least basic sanitation,China,2002,59.72
+SH.STA.BASS.ZS,at least basic sanitation,China,2003,61.84
+SH.STA.BASS.ZS,at least basic sanitation,China,2004,63.94
+SH.STA.BASS.ZS,at least basic sanitation,China,2005,66.01
+SH.STA.BASS.ZS,at least basic sanitation,China,2006,68.03
+SH.STA.BASS.ZS,at least basic sanitation,China,2007,70.02
+SH.STA.BASS.ZS,at least basic sanitation,China,2008,71.98
+SH.STA.BASS.ZS,at least basic sanitation,China,2009,73.91
+SH.STA.BASS.ZS,at least basic sanitation,China,2010,75.8
+SH.STA.BASS.ZS,at least basic sanitation,China,2011,77.65
+SH.STA.BASS.ZS,at least basic sanitation,China,2012,79.46
+SH.STA.BASS.ZS,at least basic sanitation,China,2013,81.25
+SH.STA.BASS.ZS,at least basic sanitation,China,2014,83.0
+SH.STA.BASS.ZS,at least basic sanitation,China,2015,84.72
+SH.STA.BASS.ZS,at least basic sanitation,China,2016,86.41
+SH.STA.BASS.ZS,at least basic sanitation,China,2017,88.07
+SH.STA.BASS.ZS,at least basic sanitation,China,2018,89.69
+SH.STA.BASS.ZS,at least basic sanitation,China,2019,91.29
+SH.STA.BASS.ZS,at least basic sanitation,China,2020,92.85
+SH.STA.BASS.ZS,at least basic sanitation,China,2021,94.39
+SH.STA.BASS.ZS,at least basic sanitation,China,2022,95.89
+SH.STA.BASS.ZS,at least basic sanitation,China,2023,97.24
+SH.STA.BASS.ZS,at least basic sanitation,China,2024,97.27
+SH.STA.BASS.ZS,at least basic sanitation,"Egypt, Arab Rep.",2000,91.97
+SH.STA.BASS.ZS,at least basic sanitation,"Egypt, Arab Rep.",2001,92.19
+SH.STA.BASS.ZS,at least basic sanitation,"Egypt, Arab Rep.",2002,92.4
+SH.STA.BASS.ZS,at least basic sanitation,"Egypt, Arab Rep.",2003,92.62
+SH.STA.BASS.ZS,at least basic sanitation,"Egypt, Arab Rep.",2004,92.83
+SH.STA.BASS.ZS,at least basic sanitation,"Egypt, Arab Rep.",2005,93.05
+SH.STA.BASS.ZS,at least basic sanitation,"Egypt, Arab Rep.",2006,93.26
+SH.STA.BASS.ZS,at least basic sanitation,"Egypt, Arab Rep.",2007,93.47
+SH.STA.BASS.ZS,at least basic sanitation,"Egypt, Arab Rep.",2008,93.68
+SH.STA.BASS.ZS,at least basic sanitation,"Egypt, Arab Rep.",2009,93.89
+SH.STA.BASS.ZS,at least basic sanitation,"Egypt, Arab Rep.",2010,94.1
+SH.STA.BASS.ZS,at least basic sanitation,"Egypt, Arab Rep.",2011,94.31
+SH.STA.BASS.ZS,at least basic sanitation,"Egypt, Arab Rep.",2012,94.52
+SH.STA.BASS.ZS,at least basic sanitation,"Egypt, Arab Rep.",2013,94.73
+SH.STA.BASS.ZS,at least basic sanitation,"Egypt, Arab Rep.",2014,94.94
+SH.STA.BASS.ZS,at least basic sanitation,"Egypt, Arab Rep.",2015,95.15
+SH.STA.BASS.ZS,at least basic sanitation,"Egypt, Arab Rep.",2016,95.36
+SH.STA.BASS.ZS,at least basic sanitation,"Egypt, Arab Rep.",2017,95.57
+SH.STA.BASS.ZS,at least basic sanitation,"Egypt, Arab Rep.",2018,95.78
+SH.STA.BASS.ZS,at least basic sanitation,"Egypt, Arab Rep.",2019,96.0
+SH.STA.BASS.ZS,at least basic sanitation,"Egypt, Arab Rep.",2020,96.21
+SH.STA.BASS.ZS,at least basic sanitation,"Egypt, Arab Rep.",2021,96.43
+SH.STA.BASS.ZS,at least basic sanitation,"Egypt, Arab Rep.",2022,96.65
+SH.STA.BASS.ZS,at least basic sanitation,"Egypt, Arab Rep.",2023,96.87
+SH.STA.BASS.ZS,at least basic sanitation,"Egypt, Arab Rep.",2024,97.09
+SH.STA.BASS.ZS,at least basic sanitation,Ethiopia,2000,2.97
+SH.STA.BASS.ZS,at least basic sanitation,Ethiopia,2001,3.23
+SH.STA.BASS.ZS,at least basic sanitation,Ethiopia,2002,3.49
+SH.STA.BASS.ZS,at least basic sanitation,Ethiopia,2003,3.75
+SH.STA.BASS.ZS,at least basic sanitation,Ethiopia,2004,4.03
+SH.STA.BASS.ZS,at least basic sanitation,Ethiopia,2005,4.32
+SH.STA.BASS.ZS,at least basic sanitation,Ethiopia,2006,4.6
+SH.STA.BASS.ZS,at least basic sanitation,Ethiopia,2007,4.89
+SH.STA.BASS.ZS,at least basic sanitation,Ethiopia,2008,5.2
+SH.STA.BASS.ZS,at least basic sanitation,Ethiopia,2009,5.51
+SH.STA.BASS.ZS,at least basic sanitation,Ethiopia,2010,5.82
+SH.STA.BASS.ZS,at least basic sanitation,Ethiopia,2011,6.13
+SH.STA.BASS.ZS,at least basic sanitation,Ethiopia,2012,6.45
+SH.STA.BASS.ZS,at least basic sanitation,Ethiopia,2013,6.76
+SH.STA.BASS.ZS,at least basic sanitation,Ethiopia,2014,7.08
+SH.STA.BASS.ZS,at least basic sanitation,Ethiopia,2015,7.4
+SH.STA.BASS.ZS,at least basic sanitation,Ethiopia,2016,7.71
+SH.STA.BASS.ZS,at least basic sanitation,Ethiopia,2017,8.04
+SH.STA.BASS.ZS,at least basic sanitation,Ethiopia,2018,8.36
+SH.STA.BASS.ZS,at least basic sanitation,Ethiopia,2019,8.68
+SH.STA.BASS.ZS,at least basic sanitation,Ethiopia,2020,9.01
+SH.STA.BASS.ZS,at least basic sanitation,Ethiopia,2021,9.34
+SH.STA.BASS.ZS,at least basic sanitation,Ethiopia,2022,9.68
+SH.STA.BASS.ZS,at least basic sanitation,Ethiopia,2023,10.02
+SH.STA.BASS.ZS,at least basic sanitation,Ethiopia,2024,10.36
+SH.STA.BASS.ZS,at least basic sanitation,France,2000,98.66
+SH.STA.BASS.ZS,at least basic sanitation,France,2001,98.66
+SH.STA.BASS.ZS,at least basic sanitation,France,2002,98.66
+SH.STA.BASS.ZS,at least basic sanitation,France,2003,98.66
+SH.STA.BASS.ZS,at least basic sanitation,France,2004,98.66
+SH.STA.BASS.ZS,at least basic sanitation,France,2005,98.66
+SH.STA.BASS.ZS,at least basic sanitation,France,2006,98.66
+SH.STA.BASS.ZS,at least basic sanitation,France,2007,98.66
+SH.STA.BASS.ZS,at least basic sanitation,France,2008,98.66
+SH.STA.BASS.ZS,at least basic sanitation,France,2009,98.66
+SH.STA.BASS.ZS,at least basic sanitation,France,2010,98.66
+SH.STA.BASS.ZS,at least basic sanitation,France,2011,98.65
+SH.STA.BASS.ZS,at least basic sanitation,France,2012,98.65
+SH.STA.BASS.ZS,at least basic sanitation,France,2013,98.65
+SH.STA.BASS.ZS,at least basic sanitation,France,2014,98.65
+SH.STA.BASS.ZS,at least basic sanitation,France,2015,98.65
+SH.STA.BASS.ZS,at least basic sanitation,France,2016,98.65
+SH.STA.BASS.ZS,at least basic sanitation,France,2017,98.65
+SH.STA.BASS.ZS,at least basic sanitation,France,2018,98.65
+SH.STA.BASS.ZS,at least basic sanitation,France,2019,98.65
+SH.STA.BASS.ZS,at least basic sanitation,France,2020,98.65
+SH.STA.BASS.ZS,at least basic sanitation,France,2021,98.65
+SH.STA.BASS.ZS,at least basic sanitation,France,2022,98.65
+SH.STA.BASS.ZS,at least basic sanitation,France,2023,98.65
+SH.STA.BASS.ZS,at least basic sanitation,France,2024,98.64
+SH.STA.BASS.ZS,at least basic sanitation,Germany,2000,99.22
+SH.STA.BASS.ZS,at least basic sanitation,Germany,2001,99.22
+SH.STA.BASS.ZS,at least basic sanitation,Germany,2002,99.22
+SH.STA.BASS.ZS,at least basic sanitation,Germany,2003,99.22
+SH.STA.BASS.ZS,at least basic sanitation,Germany,2004,99.22
+SH.STA.BASS.ZS,at least basic sanitation,Germany,2005,99.22
+SH.STA.BASS.ZS,at least basic sanitation,Germany,2006,99.22
+SH.STA.BASS.ZS,at least basic sanitation,Germany,2007,99.22
+SH.STA.BASS.ZS,at least basic sanitation,Germany,2008,99.22
+SH.STA.BASS.ZS,at least basic sanitation,Germany,2009,99.22
+SH.STA.BASS.ZS,at least basic sanitation,Germany,2010,99.22
+SH.STA.BASS.ZS,at least basic sanitation,Germany,2011,99.22
+SH.STA.BASS.ZS,at least basic sanitation,Germany,2012,99.22
+SH.STA.BASS.ZS,at least basic sanitation,Germany,2013,99.22
+SH.STA.BASS.ZS,at least basic sanitation,Germany,2014,99.22
+SH.STA.BASS.ZS,at least basic sanitation,Germany,2015,99.22
+SH.STA.BASS.ZS,at least basic sanitation,Germany,2016,99.22
+SH.STA.BASS.ZS,at least basic sanitation,Germany,2017,99.23
+SH.STA.BASS.ZS,at least basic sanitation,Germany,2018,99.23
+SH.STA.BASS.ZS,at least basic sanitation,Germany,2019,99.23
+SH.STA.BASS.ZS,at least basic sanitation,Germany,2020,99.23
+SH.STA.BASS.ZS,at least basic sanitation,Germany,2021,99.23
+SH.STA.BASS.ZS,at least basic sanitation,Germany,2022,99.23
+SH.STA.BASS.ZS,at least basic sanitation,Germany,2023,99.23
+SH.STA.BASS.ZS,at least basic sanitation,Germany,2024,99.23
+SH.STA.BASS.ZS,at least basic sanitation,India,2000,14.66
+SH.STA.BASS.ZS,at least basic sanitation,India,2001,17.22
+SH.STA.BASS.ZS,at least basic sanitation,India,2002,19.96
+SH.STA.BASS.ZS,at least basic sanitation,India,2003,22.73
+SH.STA.BASS.ZS,at least basic sanitation,India,2004,25.5
+SH.STA.BASS.ZS,at least basic sanitation,India,2005,28.3
+SH.STA.BASS.ZS,at least basic sanitation,India,2006,31.11
+SH.STA.BASS.ZS,at least basic sanitation,India,2007,33.94
+SH.STA.BASS.ZS,at least basic sanitation,India,2008,36.78
+SH.STA.BASS.ZS,at least basic sanitation,India,2009,39.64
+SH.STA.BASS.ZS,at least basic sanitation,India,2010,42.52
+SH.STA.BASS.ZS,at least basic sanitation,India,2011,45.41
+SH.STA.BASS.ZS,at least basic sanitation,India,2012,48.32
+SH.STA.BASS.ZS,at least basic sanitation,India,2013,51.25
+SH.STA.BASS.ZS,at least basic sanitation,India,2014,54.19
+SH.STA.BASS.ZS,at least basic sanitation,India,2015,57.15
+SH.STA.BASS.ZS,at least basic sanitation,India,2016,60.12
+SH.STA.BASS.ZS,at least basic sanitation,India,2017,63.11
+SH.STA.BASS.ZS,at least basic sanitation,India,2018,66.11
+SH.STA.BASS.ZS,at least basic sanitation,India,2019,69.13
+SH.STA.BASS.ZS,at least basic sanitation,India,2020,72.05
+SH.STA.BASS.ZS,at least basic sanitation,India,2021,74.93
+SH.STA.BASS.ZS,at least basic sanitation,India,2022,77.82
+SH.STA.BASS.ZS,at least basic sanitation,India,2023,80.7
+SH.STA.BASS.ZS,at least basic sanitation,India,2024,83.38
+SH.STA.BASS.ZS,at least basic sanitation,Indonesia,2000,41.58
+SH.STA.BASS.ZS,at least basic sanitation,Indonesia,2001,43.53
+SH.STA.BASS.ZS,at least basic sanitation,Indonesia,2002,45.5
+SH.STA.BASS.ZS,at least basic sanitation,Indonesia,2003,47.48
+SH.STA.BASS.ZS,at least basic sanitation,Indonesia,2004,49.48
+SH.STA.BASS.ZS,at least basic sanitation,Indonesia,2005,51.48
+SH.STA.BASS.ZS,at least basic sanitation,Indonesia,2006,53.5
+SH.STA.BASS.ZS,at least basic sanitation,Indonesia,2007,55.53
+SH.STA.BASS.ZS,at least basic sanitation,Indonesia,2008,57.57
+SH.STA.BASS.ZS,at least basic sanitation,Indonesia,2009,59.61
+SH.STA.BASS.ZS,at least basic sanitation,Indonesia,2010,61.66
+SH.STA.BASS.ZS,at least basic sanitation,Indonesia,2011,63.69
+SH.STA.BASS.ZS,at least basic sanitation,Indonesia,2012,65.73
+SH.STA.BASS.ZS,at least basic sanitation,Indonesia,2013,67.78
+SH.STA.BASS.ZS,at least basic sanitation,Indonesia,2014,69.83
+SH.STA.BASS.ZS,at least basic sanitation,Indonesia,2015,71.89
+SH.STA.BASS.ZS,at least basic sanitation,Indonesia,2016,73.96
+SH.STA.BASS.ZS,at least basic sanitation,Indonesia,2017,76.03
+SH.STA.BASS.ZS,at least basic sanitation,Indonesia,2018,78.1
+SH.STA.BASS.ZS,at least basic sanitation,Indonesia,2019,80.18
+SH.STA.BASS.ZS,at least basic sanitation,Indonesia,2020,82.26
+SH.STA.BASS.ZS,at least basic sanitation,Indonesia,2021,84.34
+SH.STA.BASS.ZS,at least basic sanitation,Indonesia,2022,85.65
+SH.STA.BASS.ZS,at least basic sanitation,Indonesia,2023,86.94
+SH.STA.BASS.ZS,at least basic sanitation,Indonesia,2024,88.2
+SH.STA.BASS.ZS,at least basic sanitation,Japan,2000,100.0
+SH.STA.BASS.ZS,at least basic sanitation,Japan,2001,100.0
+SH.STA.BASS.ZS,at least basic sanitation,Japan,2002,99.99
+SH.STA.BASS.ZS,at least basic sanitation,Japan,2003,99.99
+SH.STA.BASS.ZS,at least basic sanitation,Japan,2004,99.99
+SH.STA.BASS.ZS,at least basic sanitation,Japan,2005,99.99
+SH.STA.BASS.ZS,at least basic sanitation,Japan,2006,99.98
+SH.STA.BASS.ZS,at least basic sanitation,Japan,2007,99.98
+SH.STA.BASS.ZS,at least basic sanitation,Japan,2008,99.98
+SH.STA.BASS.ZS,at least basic sanitation,Japan,2009,99.98
+SH.STA.BASS.ZS,at least basic sanitation,Japan,2010,99.98
+SH.STA.BASS.ZS,at least basic sanitation,Japan,2011,99.97
+SH.STA.BASS.ZS,at least basic sanitation,Japan,2012,99.97
+SH.STA.BASS.ZS,at least basic sanitation,Japan,2013,99.97
+SH.STA.BASS.ZS,at least basic sanitation,Japan,2014,99.97
+SH.STA.BASS.ZS,at least basic sanitation,Japan,2015,99.96
+SH.STA.BASS.ZS,at least basic sanitation,Japan,2016,99.96
+SH.STA.BASS.ZS,at least basic sanitation,Japan,2017,99.96
+SH.STA.BASS.ZS,at least basic sanitation,Japan,2018,99.96
+SH.STA.BASS.ZS,at least basic sanitation,Japan,2019,99.95
+SH.STA.BASS.ZS,at least basic sanitation,Japan,2020,99.95
+SH.STA.BASS.ZS,at least basic sanitation,Japan,2021,99.95
+SH.STA.BASS.ZS,at least basic sanitation,Japan,2022,99.95
+SH.STA.BASS.ZS,at least basic sanitation,Japan,2023,99.95
+SH.STA.BASS.ZS,at least basic sanitation,Japan,2024,99.94
+SH.STA.BASS.ZS,at least basic sanitation,Mexico,2000,79.21
+SH.STA.BASS.ZS,at least basic sanitation,Mexico,2001,79.91
+SH.STA.BASS.ZS,at least basic sanitation,Mexico,2002,80.61
+SH.STA.BASS.ZS,at least basic sanitation,Mexico,2003,81.29
+SH.STA.BASS.ZS,at least basic sanitation,Mexico,2004,81.97
+SH.STA.BASS.ZS,at least basic sanitation,Mexico,2005,82.63
+SH.STA.BASS.ZS,at least basic sanitation,Mexico,2006,83.29
+SH.STA.BASS.ZS,at least basic sanitation,Mexico,2007,83.94
+SH.STA.BASS.ZS,at least basic sanitation,Mexico,2008,84.58
+SH.STA.BASS.ZS,at least basic sanitation,Mexico,2009,85.21
+SH.STA.BASS.ZS,at least basic sanitation,Mexico,2010,85.83
+SH.STA.BASS.ZS,at least basic sanitation,Mexico,2011,86.44
+SH.STA.BASS.ZS,at least basic sanitation,Mexico,2012,87.05
+SH.STA.BASS.ZS,at least basic sanitation,Mexico,2013,87.65
+SH.STA.BASS.ZS,at least basic sanitation,Mexico,2014,88.24
+SH.STA.BASS.ZS,at least basic sanitation,Mexico,2015,88.82
+SH.STA.BASS.ZS,at least basic sanitation,Mexico,2016,89.39
+SH.STA.BASS.ZS,at least basic sanitation,Mexico,2017,89.96
+SH.STA.BASS.ZS,at least basic sanitation,Mexico,2018,90.52
+SH.STA.BASS.ZS,at least basic sanitation,Mexico,2019,91.07
+SH.STA.BASS.ZS,at least basic sanitation,Mexico,2020,91.62
+SH.STA.BASS.ZS,at least basic sanitation,Mexico,2021,92.15
+SH.STA.BASS.ZS,at least basic sanitation,Mexico,2022,92.66
+SH.STA.BASS.ZS,at least basic sanitation,Mexico,2023,92.98
+SH.STA.BASS.ZS,at least basic sanitation,Mexico,2024,92.99
+SH.STA.BASS.ZS,at least basic sanitation,Nigeria,2000,27.99
+SH.STA.BASS.ZS,at least basic sanitation,Nigeria,2001,28.03
+SH.STA.BASS.ZS,at least basic sanitation,Nigeria,2002,28.69
+SH.STA.BASS.ZS,at least basic sanitation,Nigeria,2003,29.36
+SH.STA.BASS.ZS,at least basic sanitation,Nigeria,2004,30.05
+SH.STA.BASS.ZS,at least basic sanitation,Nigeria,2005,30.77
+SH.STA.BASS.ZS,at least basic sanitation,Nigeria,2006,31.51
+SH.STA.BASS.ZS,at least basic sanitation,Nigeria,2007,32.27
+SH.STA.BASS.ZS,at least basic sanitation,Nigeria,2008,33.05
+SH.STA.BASS.ZS,at least basic sanitation,Nigeria,2009,33.86
+SH.STA.BASS.ZS,at least basic sanitation,Nigeria,2010,34.69
+SH.STA.BASS.ZS,at least basic sanitation,Nigeria,2011,35.55
+SH.STA.BASS.ZS,at least basic sanitation,Nigeria,2012,36.43
+SH.STA.BASS.ZS,at least basic sanitation,Nigeria,2013,37.34
+SH.STA.BASS.ZS,at least basic sanitation,Nigeria,2014,38.27
+SH.STA.BASS.ZS,at least basic sanitation,Nigeria,2015,39.22
+SH.STA.BASS.ZS,at least basic sanitation,Nigeria,2016,40.2
+SH.STA.BASS.ZS,at least basic sanitation,Nigeria,2017,41.2
+SH.STA.BASS.ZS,at least basic sanitation,Nigeria,2018,42.23
+SH.STA.BASS.ZS,at least basic sanitation,Nigeria,2019,43.28
+SH.STA.BASS.ZS,at least basic sanitation,Nigeria,2020,44.35
+SH.STA.BASS.ZS,at least basic sanitation,Nigeria,2021,45.45
+SH.STA.BASS.ZS,at least basic sanitation,Nigeria,2022,46.57
+SH.STA.BASS.ZS,at least basic sanitation,Nigeria,2023,47.72
+SH.STA.BASS.ZS,at least basic sanitation,Nigeria,2024,47.9
+SH.STA.BASS.ZS,at least basic sanitation,Pakistan,2000,36.38
+SH.STA.BASS.ZS,at least basic sanitation,Pakistan,2001,36.47
+SH.STA.BASS.ZS,at least basic sanitation,Pakistan,2002,36.56
+SH.STA.BASS.ZS,at least basic sanitation,Pakistan,2003,36.65
+SH.STA.BASS.ZS,at least basic sanitation,Pakistan,2004,38.35
+SH.STA.BASS.ZS,at least basic sanitation,Pakistan,2005,40.05
+SH.STA.BASS.ZS,at least basic sanitation,Pakistan,2006,41.87
+SH.STA.BASS.ZS,at least basic sanitation,Pakistan,2007,43.7
+SH.STA.BASS.ZS,at least basic sanitation,Pakistan,2008,45.53
+SH.STA.BASS.ZS,at least basic sanitation,Pakistan,2009,47.36
+SH.STA.BASS.ZS,at least basic sanitation,Pakistan,2010,49.21
+SH.STA.BASS.ZS,at least basic sanitation,Pakistan,2011,51.05
+SH.STA.BASS.ZS,at least basic sanitation,Pakistan,2012,52.91
+SH.STA.BASS.ZS,at least basic sanitation,Pakistan,2013,54.77
+SH.STA.BASS.ZS,at least basic sanitation,Pakistan,2014,56.63
+SH.STA.BASS.ZS,at least basic sanitation,Pakistan,2015,58.5
+SH.STA.BASS.ZS,at least basic sanitation,Pakistan,2016,60.38
+SH.STA.BASS.ZS,at least basic sanitation,Pakistan,2017,62.26
+SH.STA.BASS.ZS,at least basic sanitation,Pakistan,2018,64.14
+SH.STA.BASS.ZS,at least basic sanitation,Pakistan,2019,66.04
+SH.STA.BASS.ZS,at least basic sanitation,Pakistan,2020,67.94
+SH.STA.BASS.ZS,at least basic sanitation,Pakistan,2021,69.85
+SH.STA.BASS.ZS,at least basic sanitation,Pakistan,2022,71.77
+SH.STA.BASS.ZS,at least basic sanitation,Pakistan,2023,71.82
+SH.STA.BASS.ZS,at least basic sanitation,Pakistan,2024,71.88
+SH.STA.BASS.ZS,at least basic sanitation,South Africa,2000,60.5
+SH.STA.BASS.ZS,at least basic sanitation,South Africa,2001,61.28
+SH.STA.BASS.ZS,at least basic sanitation,South Africa,2002,62.06
+SH.STA.BASS.ZS,at least basic sanitation,South Africa,2003,62.85
+SH.STA.BASS.ZS,at least basic sanitation,South Africa,2004,63.62
+SH.STA.BASS.ZS,at least basic sanitation,South Africa,2005,64.39
+SH.STA.BASS.ZS,at least basic sanitation,South Africa,2006,65.15
+SH.STA.BASS.ZS,at least basic sanitation,South Africa,2007,65.91
+SH.STA.BASS.ZS,at least basic sanitation,South Africa,2008,66.65
+SH.STA.BASS.ZS,at least basic sanitation,South Africa,2009,67.39
+SH.STA.BASS.ZS,at least basic sanitation,South Africa,2010,68.12
+SH.STA.BASS.ZS,at least basic sanitation,South Africa,2011,68.84
+SH.STA.BASS.ZS,at least basic sanitation,South Africa,2012,69.55
+SH.STA.BASS.ZS,at least basic sanitation,South Africa,2013,70.25
+SH.STA.BASS.ZS,at least basic sanitation,South Africa,2014,70.94
+SH.STA.BASS.ZS,at least basic sanitation,South Africa,2015,71.63
+SH.STA.BASS.ZS,at least basic sanitation,South Africa,2016,72.3
+SH.STA.BASS.ZS,at least basic sanitation,South Africa,2017,72.97
+SH.STA.BASS.ZS,at least basic sanitation,South Africa,2018,73.63
+SH.STA.BASS.ZS,at least basic sanitation,South Africa,2019,74.28
+SH.STA.BASS.ZS,at least basic sanitation,South Africa,2020,74.92
+SH.STA.BASS.ZS,at least basic sanitation,South Africa,2021,75.55
+SH.STA.BASS.ZS,at least basic sanitation,South Africa,2022,76.17
+SH.STA.BASS.ZS,at least basic sanitation,South Africa,2023,76.78
+SH.STA.BASS.ZS,at least basic sanitation,South Africa,2024,77.38
+SH.STA.BASS.ZS,at least basic sanitation,South Asia,2000,16.65
+SH.STA.BASS.ZS,at least basic sanitation,South Asia,2001,19.05
+SH.STA.BASS.ZS,at least basic sanitation,South Asia,2002,21.62
+SH.STA.BASS.ZS,at least basic sanitation,South Asia,2003,24.2
+SH.STA.BASS.ZS,at least basic sanitation,South Asia,2004,26.79
+SH.STA.BASS.ZS,at least basic sanitation,South Asia,2005,29.44
+SH.STA.BASS.ZS,at least basic sanitation,South Asia,2006,32.1
+SH.STA.BASS.ZS,at least basic sanitation,South Asia,2007,34.78
+SH.STA.BASS.ZS,at least basic sanitation,South Asia,2008,37.48
+SH.STA.BASS.ZS,at least basic sanitation,South Asia,2009,40.19
+SH.STA.BASS.ZS,at least basic sanitation,South Asia,2010,42.93
+SH.STA.BASS.ZS,at least basic sanitation,South Asia,2011,45.68
+SH.STA.BASS.ZS,at least basic sanitation,South Asia,2012,48.45
+SH.STA.BASS.ZS,at least basic sanitation,South Asia,2013,51.22
+SH.STA.BASS.ZS,at least basic sanitation,South Asia,2014,54.03
+SH.STA.BASS.ZS,at least basic sanitation,South Asia,2015,56.85
+SH.STA.BASS.ZS,at least basic sanitation,South Asia,2016,59.69
+SH.STA.BASS.ZS,at least basic sanitation,South Asia,2017,62.54
+SH.STA.BASS.ZS,at least basic sanitation,South Asia,2018,65.41
+SH.STA.BASS.ZS,at least basic sanitation,South Asia,2019,68.29
+SH.STA.BASS.ZS,at least basic sanitation,South Asia,2020,71.09
+SH.STA.BASS.ZS,at least basic sanitation,South Asia,2021,73.86
+SH.STA.BASS.ZS,at least basic sanitation,South Asia,2022,76.62
+SH.STA.BASS.ZS,at least basic sanitation,South Asia,2023,79.38
+SH.STA.BASS.ZS,at least basic sanitation,South Asia,2024,81.96
+SH.STA.BASS.ZS,at least basic sanitation,Sub-Saharan Africa,2000,21.88
+SH.STA.BASS.ZS,at least basic sanitation,Sub-Saharan Africa,2001,22.17
+SH.STA.BASS.ZS,at least basic sanitation,Sub-Saharan Africa,2002,22.63
+SH.STA.BASS.ZS,at least basic sanitation,Sub-Saharan Africa,2003,23.11
+SH.STA.BASS.ZS,at least basic sanitation,Sub-Saharan Africa,2004,23.61
+SH.STA.BASS.ZS,at least basic sanitation,Sub-Saharan Africa,2005,24.23
+SH.STA.BASS.ZS,at least basic sanitation,Sub-Saharan Africa,2006,24.84
+SH.STA.BASS.ZS,at least basic sanitation,Sub-Saharan Africa,2007,25.47
+SH.STA.BASS.ZS,at least basic sanitation,Sub-Saharan Africa,2008,26.13
+SH.STA.BASS.ZS,at least basic sanitation,Sub-Saharan Africa,2009,26.8
+SH.STA.BASS.ZS,at least basic sanitation,Sub-Saharan Africa,2010,27.49
+SH.STA.BASS.ZS,at least basic sanitation,Sub-Saharan Africa,2011,27.94
+SH.STA.BASS.ZS,at least basic sanitation,Sub-Saharan Africa,2012,28.64
+SH.STA.BASS.ZS,at least basic sanitation,Sub-Saharan Africa,2013,29.35
+SH.STA.BASS.ZS,at least basic sanitation,Sub-Saharan Africa,2014,30.08
+SH.STA.BASS.ZS,at least basic sanitation,Sub-Saharan Africa,2015,30.83
+SH.STA.BASS.ZS,at least basic sanitation,Sub-Saharan Africa,2016,31.56
+SH.STA.BASS.ZS,at least basic sanitation,Sub-Saharan Africa,2017,32.36
+SH.STA.BASS.ZS,at least basic sanitation,Sub-Saharan Africa,2018,33.08
+SH.STA.BASS.ZS,at least basic sanitation,Sub-Saharan Africa,2019,33.83
+SH.STA.BASS.ZS,at least basic sanitation,Sub-Saharan Africa,2020,34.59
+SH.STA.BASS.ZS,at least basic sanitation,Sub-Saharan Africa,2021,35.38
+SH.STA.BASS.ZS,at least basic sanitation,Sub-Saharan Africa,2022,36.26
+SH.STA.BASS.ZS,at least basic sanitation,Sub-Saharan Africa,2023,36.6
+SH.STA.BASS.ZS,at least basic sanitation,Sub-Saharan Africa,2024,37.11
+SH.STA.BASS.ZS,at least basic sanitation,United Kingdom,2000,99.13
+SH.STA.BASS.ZS,at least basic sanitation,United Kingdom,2001,99.13
+SH.STA.BASS.ZS,at least basic sanitation,United Kingdom,2002,99.13
+SH.STA.BASS.ZS,at least basic sanitation,United Kingdom,2003,99.13
+SH.STA.BASS.ZS,at least basic sanitation,United Kingdom,2004,99.13
+SH.STA.BASS.ZS,at least basic sanitation,United Kingdom,2005,99.12
+SH.STA.BASS.ZS,at least basic sanitation,United Kingdom,2006,99.12
+SH.STA.BASS.ZS,at least basic sanitation,United Kingdom,2007,99.12
+SH.STA.BASS.ZS,at least basic sanitation,United Kingdom,2008,99.12
+SH.STA.BASS.ZS,at least basic sanitation,United Kingdom,2009,99.12
+SH.STA.BASS.ZS,at least basic sanitation,United Kingdom,2010,99.12
+SH.STA.BASS.ZS,at least basic sanitation,United Kingdom,2011,99.12
+SH.STA.BASS.ZS,at least basic sanitation,United Kingdom,2012,99.12
+SH.STA.BASS.ZS,at least basic sanitation,United Kingdom,2013,99.11
+SH.STA.BASS.ZS,at least basic sanitation,United Kingdom,2014,99.11
+SH.STA.BASS.ZS,at least basic sanitation,United Kingdom,2015,99.11
+SH.STA.BASS.ZS,at least basic sanitation,United Kingdom,2016,99.11
+SH.STA.BASS.ZS,at least basic sanitation,United Kingdom,2017,99.11
+SH.STA.BASS.ZS,at least basic sanitation,United Kingdom,2018,99.11
+SH.STA.BASS.ZS,at least basic sanitation,United Kingdom,2019,99.11
+SH.STA.BASS.ZS,at least basic sanitation,United Kingdom,2020,99.11
+SH.STA.BASS.ZS,at least basic sanitation,United Kingdom,2021,99.11
+SH.STA.BASS.ZS,at least basic sanitation,United Kingdom,2022,99.1
+SH.STA.BASS.ZS,at least basic sanitation,United Kingdom,2023,99.1
+SH.STA.BASS.ZS,at least basic sanitation,United Kingdom,2024,99.1
+SH.STA.BASS.ZS,at least basic sanitation,United States,2000,99.87
+SH.STA.BASS.ZS,at least basic sanitation,United States,2001,99.87
+SH.STA.BASS.ZS,at least basic sanitation,United States,2002,99.87
+SH.STA.BASS.ZS,at least basic sanitation,United States,2003,99.87
+SH.STA.BASS.ZS,at least basic sanitation,United States,2004,99.87
+SH.STA.BASS.ZS,at least basic sanitation,United States,2005,99.87
+SH.STA.BASS.ZS,at least basic sanitation,United States,2006,99.87
+SH.STA.BASS.ZS,at least basic sanitation,United States,2007,99.87
+SH.STA.BASS.ZS,at least basic sanitation,United States,2008,99.87
+SH.STA.BASS.ZS,at least basic sanitation,United States,2009,99.87
+SH.STA.BASS.ZS,at least basic sanitation,United States,2010,99.87
+SH.STA.BASS.ZS,at least basic sanitation,United States,2011,99.85
+SH.STA.BASS.ZS,at least basic sanitation,United States,2012,99.83
+SH.STA.BASS.ZS,at least basic sanitation,United States,2013,99.8
+SH.STA.BASS.ZS,at least basic sanitation,United States,2014,99.78
+SH.STA.BASS.ZS,at least basic sanitation,United States,2015,99.76
+SH.STA.BASS.ZS,at least basic sanitation,United States,2016,99.74
+SH.STA.BASS.ZS,at least basic sanitation,United States,2017,99.72
+SH.STA.BASS.ZS,at least basic sanitation,United States,2018,99.7
+SH.STA.BASS.ZS,at least basic sanitation,United States,2019,99.68
+SH.STA.BASS.ZS,at least basic sanitation,United States,2020,99.67
+SH.STA.BASS.ZS,at least basic sanitation,United States,2021,99.65
+SH.STA.BASS.ZS,at least basic sanitation,United States,2022,99.63
+SH.STA.BASS.ZS,at least basic sanitation,United States,2023,99.62
+SH.STA.BASS.ZS,at least basic sanitation,United States,2024,99.62
+SH.STA.BASS.ZS,at least basic sanitation,World,2000,54.77
+SH.STA.BASS.ZS,at least basic sanitation,World,2001,55.59
+SH.STA.BASS.ZS,at least basic sanitation,World,2002,57.34
+SH.STA.BASS.ZS,at least basic sanitation,World,2003,58.42
+SH.STA.BASS.ZS,at least basic sanitation,World,2004,59.56
+SH.STA.BASS.ZS,at least basic sanitation,World,2005,60.72
+SH.STA.BASS.ZS,at least basic sanitation,World,2006,61.9
+SH.STA.BASS.ZS,at least basic sanitation,World,2007,63.09
+SH.STA.BASS.ZS,at least basic sanitation,World,2008,64.3
+SH.STA.BASS.ZS,at least basic sanitation,World,2009,65.49
+SH.STA.BASS.ZS,at least basic sanitation,World,2010,66.68
+SH.STA.BASS.ZS,at least basic sanitation,World,2011,67.77
+SH.STA.BASS.ZS,at least basic sanitation,World,2012,68.95
+SH.STA.BASS.ZS,at least basic sanitation,World,2013,70.24
+SH.STA.BASS.ZS,at least basic sanitation,World,2014,71.42
+SH.STA.BASS.ZS,at least basic sanitation,World,2015,72.61
+SH.STA.BASS.ZS,at least basic sanitation,World,2016,73.79
+SH.STA.BASS.ZS,at least basic sanitation,World,2017,74.87
+SH.STA.BASS.ZS,at least basic sanitation,World,2018,76.03
+SH.STA.BASS.ZS,at least basic sanitation,World,2019,77.17
+SH.STA.BASS.ZS,at least basic sanitation,World,2020,78.28
+SH.STA.BASS.ZS,at least basic sanitation,World,2021,79.35
+SH.STA.BASS.ZS,at least basic sanitation,World,2022,80.45
+SH.STA.BASS.ZS,at least basic sanitation,World,2023,81.55
+SH.STA.BASS.ZS,at least basic sanitation,World,2024,82.16
+SH.STA.SMSS.ZS,safely managed sanitation,Bangladesh,2000,11.47
+SH.STA.SMSS.ZS,safely managed sanitation,Bangladesh,2001,12.24
+SH.STA.SMSS.ZS,safely managed sanitation,Bangladesh,2002,13.01
+SH.STA.SMSS.ZS,safely managed sanitation,Bangladesh,2003,13.78
+SH.STA.SMSS.ZS,safely managed sanitation,Bangladesh,2004,14.54
+SH.STA.SMSS.ZS,safely managed sanitation,Bangladesh,2005,15.42
+SH.STA.SMSS.ZS,safely managed sanitation,Bangladesh,2006,16.3
+SH.STA.SMSS.ZS,safely managed sanitation,Bangladesh,2007,17.19
+SH.STA.SMSS.ZS,safely managed sanitation,Bangladesh,2008,18.09
+SH.STA.SMSS.ZS,safely managed sanitation,Bangladesh,2009,19.0
+SH.STA.SMSS.ZS,safely managed sanitation,Bangladesh,2010,19.91
+SH.STA.SMSS.ZS,safely managed sanitation,Bangladesh,2011,20.82
+SH.STA.SMSS.ZS,safely managed sanitation,Bangladesh,2012,21.74
+SH.STA.SMSS.ZS,safely managed sanitation,Bangladesh,2013,22.67
+SH.STA.SMSS.ZS,safely managed sanitation,Bangladesh,2014,23.91
+SH.STA.SMSS.ZS,safely managed sanitation,Bangladesh,2015,25.18
+SH.STA.SMSS.ZS,safely managed sanitation,Bangladesh,2016,26.48
+SH.STA.SMSS.ZS,safely managed sanitation,Bangladesh,2017,27.8
+SH.STA.SMSS.ZS,safely managed sanitation,Bangladesh,2018,29.15
+SH.STA.SMSS.ZS,safely managed sanitation,Bangladesh,2019,30.52
+SH.STA.SMSS.ZS,safely managed sanitation,Bangladesh,2020,31.91
+SH.STA.SMSS.ZS,safely managed sanitation,Bangladesh,2021,33.32
+SH.STA.SMSS.ZS,safely managed sanitation,Bangladesh,2022,34.76
+SH.STA.SMSS.ZS,safely managed sanitation,Bangladesh,2023,36.2
+SH.STA.SMSS.ZS,safely managed sanitation,Bangladesh,2024,37.32
+SH.STA.SMSS.ZS,safely managed sanitation,Brazil,2000,33.68
+SH.STA.SMSS.ZS,safely managed sanitation,Brazil,2001,33.98
+SH.STA.SMSS.ZS,safely managed sanitation,Brazil,2002,34.26
+SH.STA.SMSS.ZS,safely managed sanitation,Brazil,2003,34.55
+SH.STA.SMSS.ZS,safely managed sanitation,Brazil,2004,34.83
+SH.STA.SMSS.ZS,safely managed sanitation,Brazil,2005,35.11
+SH.STA.SMSS.ZS,safely managed sanitation,Brazil,2006,35.38
+SH.STA.SMSS.ZS,safely managed sanitation,Brazil,2007,36.29
+SH.STA.SMSS.ZS,safely managed sanitation,Brazil,2008,37.22
+SH.STA.SMSS.ZS,safely managed sanitation,Brazil,2009,38.16
+SH.STA.SMSS.ZS,safely managed sanitation,Brazil,2010,39.12
+SH.STA.SMSS.ZS,safely managed sanitation,Brazil,2011,40.54
+SH.STA.SMSS.ZS,safely managed sanitation,Brazil,2012,42.02
+SH.STA.SMSS.ZS,safely managed sanitation,Brazil,2013,43.55
+SH.STA.SMSS.ZS,safely managed sanitation,Brazil,2014,45.15
+SH.STA.SMSS.ZS,safely managed sanitation,Brazil,2015,46.81
+SH.STA.SMSS.ZS,safely managed sanitation,Brazil,2016,47.74
+SH.STA.SMSS.ZS,safely managed sanitation,Brazil,2017,48.69
+SH.STA.SMSS.ZS,safely managed sanitation,Brazil,2018,49.66
+SH.STA.SMSS.ZS,safely managed sanitation,Brazil,2019,50.65
+SH.STA.SMSS.ZS,safely managed sanitation,Brazil,2020,51.5
+SH.STA.SMSS.ZS,safely managed sanitation,Brazil,2021,52.36
+SH.STA.SMSS.ZS,safely managed sanitation,Brazil,2022,53.21
+SH.STA.SMSS.ZS,safely managed sanitation,Brazil,2023,54.07
+SH.STA.SMSS.ZS,safely managed sanitation,Brazil,2024,54.96
+SH.STA.SMSS.ZS,safely managed sanitation,China,2000,13.39
+SH.STA.SMSS.ZS,safely managed sanitation,China,2001,13.75
+SH.STA.SMSS.ZS,safely managed sanitation,China,2002,14.49
+SH.STA.SMSS.ZS,safely managed sanitation,China,2003,16.54
+SH.STA.SMSS.ZS,safely managed sanitation,China,2004,18.71
+SH.STA.SMSS.ZS,safely managed sanitation,China,2005,20.99
+SH.STA.SMSS.ZS,safely managed sanitation,China,2006,23.39
+SH.STA.SMSS.ZS,safely managed sanitation,China,2007,25.89
+SH.STA.SMSS.ZS,safely managed sanitation,China,2008,28.5
+SH.STA.SMSS.ZS,safely managed sanitation,China,2009,31.22
+SH.STA.SMSS.ZS,safely managed sanitation,China,2010,34.05
+SH.STA.SMSS.ZS,safely managed sanitation,China,2011,36.95
+SH.STA.SMSS.ZS,safely managed sanitation,China,2012,39.94
+SH.STA.SMSS.ZS,safely managed sanitation,China,2013,43.02
+SH.STA.SMSS.ZS,safely managed sanitation,China,2014,46.19
+SH.STA.SMSS.ZS,safely managed sanitation,China,2015,49.45
+SH.STA.SMSS.ZS,safely managed sanitation,China,2016,52.79
+SH.STA.SMSS.ZS,safely managed sanitation,China,2017,56.21
+SH.STA.SMSS.ZS,safely managed sanitation,China,2018,59.7
+SH.STA.SMSS.ZS,safely managed sanitation,China,2019,63.25
+SH.STA.SMSS.ZS,safely managed sanitation,China,2020,64.61
+SH.STA.SMSS.ZS,safely managed sanitation,China,2021,65.93
+SH.STA.SMSS.ZS,safely managed sanitation,China,2022,67.22
+SH.STA.SMSS.ZS,safely managed sanitation,China,2023,68.41
+SH.STA.SMSS.ZS,safely managed sanitation,China,2024,68.87
+SH.STA.SMSS.ZS,safely managed sanitation,"Egypt, Arab Rep.",2000,26.81
+SH.STA.SMSS.ZS,safely managed sanitation,"Egypt, Arab Rep.",2001,26.9
+SH.STA.SMSS.ZS,safely managed sanitation,"Egypt, Arab Rep.",2002,26.99
+SH.STA.SMSS.ZS,safely managed sanitation,"Egypt, Arab Rep.",2003,27.08
+SH.STA.SMSS.ZS,safely managed sanitation,"Egypt, Arab Rep.",2004,27.47
+SH.STA.SMSS.ZS,safely managed sanitation,"Egypt, Arab Rep.",2005,27.86
+SH.STA.SMSS.ZS,safely managed sanitation,"Egypt, Arab Rep.",2006,28.26
+SH.STA.SMSS.ZS,safely managed sanitation,"Egypt, Arab Rep.",2007,28.64
+SH.STA.SMSS.ZS,safely managed sanitation,"Egypt, Arab Rep.",2008,29.03
+SH.STA.SMSS.ZS,safely managed sanitation,"Egypt, Arab Rep.",2009,29.42
+SH.STA.SMSS.ZS,safely managed sanitation,"Egypt, Arab Rep.",2010,29.81
+SH.STA.SMSS.ZS,safely managed sanitation,"Egypt, Arab Rep.",2011,30.2
+SH.STA.SMSS.ZS,safely managed sanitation,"Egypt, Arab Rep.",2012,30.59
+SH.STA.SMSS.ZS,safely managed sanitation,"Egypt, Arab Rep.",2013,30.98
+SH.STA.SMSS.ZS,safely managed sanitation,"Egypt, Arab Rep.",2014,31.37
+SH.STA.SMSS.ZS,safely managed sanitation,"Egypt, Arab Rep.",2015,31.77
+SH.STA.SMSS.ZS,safely managed sanitation,"Egypt, Arab Rep.",2016,34.09
+SH.STA.SMSS.ZS,safely managed sanitation,"Egypt, Arab Rep.",2017,36.54
+SH.STA.SMSS.ZS,safely managed sanitation,"Egypt, Arab Rep.",2018,39.17
+SH.STA.SMSS.ZS,safely managed sanitation,"Egypt, Arab Rep.",2019,41.93
+SH.STA.SMSS.ZS,safely managed sanitation,"Egypt, Arab Rep.",2020,44.81
+SH.STA.SMSS.ZS,safely managed sanitation,"Egypt, Arab Rep.",2021,47.82
+SH.STA.SMSS.ZS,safely managed sanitation,"Egypt, Arab Rep.",2022,50.95
+SH.STA.SMSS.ZS,safely managed sanitation,"Egypt, Arab Rep.",2023,54.22
+SH.STA.SMSS.ZS,safely managed sanitation,"Egypt, Arab Rep.",2024,57.34
+SH.STA.SMSS.ZS,safely managed sanitation,Ethiopia,2000,2.27
+SH.STA.SMSS.ZS,safely managed sanitation,Ethiopia,2001,2.48
+SH.STA.SMSS.ZS,safely managed sanitation,Ethiopia,2002,2.68
+SH.STA.SMSS.ZS,safely managed sanitation,Ethiopia,2003,2.88
+SH.STA.SMSS.ZS,safely managed sanitation,Ethiopia,2004,3.11
+SH.STA.SMSS.ZS,safely managed sanitation,Ethiopia,2005,3.33
+SH.STA.SMSS.ZS,safely managed sanitation,Ethiopia,2006,3.55
+SH.STA.SMSS.ZS,safely managed sanitation,Ethiopia,2007,3.78
+SH.STA.SMSS.ZS,safely managed sanitation,Ethiopia,2008,4.02
+SH.STA.SMSS.ZS,safely managed sanitation,Ethiopia,2009,4.27
+SH.STA.SMSS.ZS,safely managed sanitation,Ethiopia,2010,4.51
+SH.STA.SMSS.ZS,safely managed sanitation,Ethiopia,2011,4.76
+SH.STA.SMSS.ZS,safely managed sanitation,Ethiopia,2012,5.0
+SH.STA.SMSS.ZS,safely managed sanitation,Ethiopia,2013,5.25
+SH.STA.SMSS.ZS,safely managed sanitation,Ethiopia,2014,5.5
+SH.STA.SMSS.ZS,safely managed sanitation,Ethiopia,2015,5.74
+SH.STA.SMSS.ZS,safely managed sanitation,Ethiopia,2016,5.99
+SH.STA.SMSS.ZS,safely managed sanitation,Ethiopia,2017,6.24
+SH.STA.SMSS.ZS,safely managed sanitation,Ethiopia,2018,6.5
+SH.STA.SMSS.ZS,safely managed sanitation,Ethiopia,2019,6.75
+SH.STA.SMSS.ZS,safely managed sanitation,Ethiopia,2020,7.0
+SH.STA.SMSS.ZS,safely managed sanitation,Ethiopia,2021,7.26
+SH.STA.SMSS.ZS,safely managed sanitation,Ethiopia,2022,7.52
+SH.STA.SMSS.ZS,safely managed sanitation,Ethiopia,2023,7.79
+SH.STA.SMSS.ZS,safely managed sanitation,Ethiopia,2024,8.05
+SH.STA.SMSS.ZS,safely managed sanitation,France,2000,88.76
+SH.STA.SMSS.ZS,safely managed sanitation,France,2001,88.78
+SH.STA.SMSS.ZS,safely managed sanitation,France,2002,88.79
+SH.STA.SMSS.ZS,safely managed sanitation,France,2003,88.78
+SH.STA.SMSS.ZS,safely managed sanitation,France,2004,88.77
+SH.STA.SMSS.ZS,safely managed sanitation,France,2005,88.76
+SH.STA.SMSS.ZS,safely managed sanitation,France,2006,88.75
+SH.STA.SMSS.ZS,safely managed sanitation,France,2007,88.74
+SH.STA.SMSS.ZS,safely managed sanitation,France,2008,88.73
+SH.STA.SMSS.ZS,safely managed sanitation,France,2009,88.71
+SH.STA.SMSS.ZS,safely managed sanitation,France,2010,88.7
+SH.STA.SMSS.ZS,safely managed sanitation,France,2011,88.69
+SH.STA.SMSS.ZS,safely managed sanitation,France,2012,88.79
+SH.STA.SMSS.ZS,safely managed sanitation,France,2013,88.9
+SH.STA.SMSS.ZS,safely managed sanitation,France,2014,89.0
+SH.STA.SMSS.ZS,safely managed sanitation,France,2015,89.1
+SH.STA.SMSS.ZS,safely managed sanitation,France,2016,89.2
+SH.STA.SMSS.ZS,safely managed sanitation,France,2017,89.3
+SH.STA.SMSS.ZS,safely managed sanitation,France,2018,89.4
+SH.STA.SMSS.ZS,safely managed sanitation,France,2019,89.5
+SH.STA.SMSS.ZS,safely managed sanitation,France,2020,89.6
+SH.STA.SMSS.ZS,safely managed sanitation,France,2021,89.7
+SH.STA.SMSS.ZS,safely managed sanitation,France,2022,89.8
+SH.STA.SMSS.ZS,safely managed sanitation,France,2023,89.9
+SH.STA.SMSS.ZS,safely managed sanitation,France,2024,89.99
+SH.STA.SMSS.ZS,safely managed sanitation,Germany,2000,96.06
+SH.STA.SMSS.ZS,safely managed sanitation,Germany,2001,96.07
+SH.STA.SMSS.ZS,safely managed sanitation,Germany,2002,96.08
+SH.STA.SMSS.ZS,safely managed sanitation,Germany,2003,96.1
+SH.STA.SMSS.ZS,safely managed sanitation,Germany,2004,96.14
+SH.STA.SMSS.ZS,safely managed sanitation,Germany,2005,96.18
+SH.STA.SMSS.ZS,safely managed sanitation,Germany,2006,96.22
+SH.STA.SMSS.ZS,safely managed sanitation,Germany,2007,96.27
+SH.STA.SMSS.ZS,safely managed sanitation,Germany,2008,96.31
+SH.STA.SMSS.ZS,safely managed sanitation,Germany,2009,96.35
+SH.STA.SMSS.ZS,safely managed sanitation,Germany,2010,96.39
+SH.STA.SMSS.ZS,safely managed sanitation,Germany,2011,96.43
+SH.STA.SMSS.ZS,safely managed sanitation,Germany,2012,96.46
+SH.STA.SMSS.ZS,safely managed sanitation,Germany,2013,96.49
+SH.STA.SMSS.ZS,safely managed sanitation,Germany,2014,96.52
+SH.STA.SMSS.ZS,safely managed sanitation,Germany,2015,96.55
+SH.STA.SMSS.ZS,safely managed sanitation,Germany,2016,96.58
+SH.STA.SMSS.ZS,safely managed sanitation,Germany,2017,96.61
+SH.STA.SMSS.ZS,safely managed sanitation,Germany,2018,96.64
+SH.STA.SMSS.ZS,safely managed sanitation,Germany,2019,96.67
+SH.STA.SMSS.ZS,safely managed sanitation,Germany,2020,96.71
+SH.STA.SMSS.ZS,safely managed sanitation,Germany,2021,96.74
+SH.STA.SMSS.ZS,safely managed sanitation,Germany,2022,96.75
+SH.STA.SMSS.ZS,safely managed sanitation,Germany,2023,96.76
+SH.STA.SMSS.ZS,safely managed sanitation,Germany,2024,96.77
+SH.STA.SMSS.ZS,safely managed sanitation,India,2000,9.01
+SH.STA.SMSS.ZS,safely managed sanitation,India,2001,10.75
+SH.STA.SMSS.ZS,safely managed sanitation,India,2002,12.6
+SH.STA.SMSS.ZS,safely managed sanitation,India,2003,14.94
+SH.STA.SMSS.ZS,safely managed sanitation,India,2004,17.29
+SH.STA.SMSS.ZS,safely managed sanitation,India,2005,19.48
+SH.STA.SMSS.ZS,safely managed sanitation,India,2006,21.68
+SH.STA.SMSS.ZS,safely managed sanitation,India,2007,23.93
+SH.STA.SMSS.ZS,safely managed sanitation,India,2008,26.2
+SH.STA.SMSS.ZS,safely managed sanitation,India,2009,28.48
+SH.STA.SMSS.ZS,safely managed sanitation,India,2010,30.78
+SH.STA.SMSS.ZS,safely managed sanitation,India,2011,33.09
+SH.STA.SMSS.ZS,safely managed sanitation,India,2012,35.41
+SH.STA.SMSS.ZS,safely managed sanitation,India,2013,37.75
+SH.STA.SMSS.ZS,safely managed sanitation,India,2014,40.11
+SH.STA.SMSS.ZS,safely managed sanitation,India,2015,42.48
+SH.STA.SMSS.ZS,safely managed sanitation,India,2016,44.86
+SH.STA.SMSS.ZS,safely managed sanitation,India,2017,47.24
+SH.STA.SMSS.ZS,safely managed sanitation,India,2018,49.58
+SH.STA.SMSS.ZS,safely managed sanitation,India,2019,51.92
+SH.STA.SMSS.ZS,safely managed sanitation,India,2020,54.17
+SH.STA.SMSS.ZS,safely managed sanitation,India,2021,56.38
+SH.STA.SMSS.ZS,safely managed sanitation,India,2022,58.58
+SH.STA.SMSS.ZS,safely managed sanitation,India,2023,60.78
+SH.STA.SMSS.ZS,safely managed sanitation,India,2024,62.79
+SH.STA.SMSS.ZS,safely managed sanitation,Japan,2000,96.49
+SH.STA.SMSS.ZS,safely managed sanitation,Japan,2001,96.63
+SH.STA.SMSS.ZS,safely managed sanitation,Japan,2002,96.76
+SH.STA.SMSS.ZS,safely managed sanitation,Japan,2003,96.89
+SH.STA.SMSS.ZS,safely managed sanitation,Japan,2004,97.02
+SH.STA.SMSS.ZS,safely managed sanitation,Japan,2005,97.15
+SH.STA.SMSS.ZS,safely managed sanitation,Japan,2006,97.27
+SH.STA.SMSS.ZS,safely managed sanitation,Japan,2007,97.43
+SH.STA.SMSS.ZS,safely managed sanitation,Japan,2008,97.59
+SH.STA.SMSS.ZS,safely managed sanitation,Japan,2009,97.74
+SH.STA.SMSS.ZS,safely managed sanitation,Japan,2010,97.89
+SH.STA.SMSS.ZS,safely managed sanitation,Japan,2011,98.04
+SH.STA.SMSS.ZS,safely managed sanitation,Japan,2012,98.18
+SH.STA.SMSS.ZS,safely managed sanitation,Japan,2013,98.31
+SH.STA.SMSS.ZS,safely managed sanitation,Japan,2014,98.44
+SH.STA.SMSS.ZS,safely managed sanitation,Japan,2015,98.57
+SH.STA.SMSS.ZS,safely managed sanitation,Japan,2016,98.69
+SH.STA.SMSS.ZS,safely managed sanitation,Japan,2017,98.81
+SH.STA.SMSS.ZS,safely managed sanitation,Japan,2018,98.91
+SH.STA.SMSS.ZS,safely managed sanitation,Japan,2019,98.97
+SH.STA.SMSS.ZS,safely managed sanitation,Japan,2020,99.02
+SH.STA.SMSS.ZS,safely managed sanitation,Japan,2021,99.07
+SH.STA.SMSS.ZS,safely managed sanitation,Japan,2022,99.12
+SH.STA.SMSS.ZS,safely managed sanitation,Japan,2023,99.17
+SH.STA.SMSS.ZS,safely managed sanitation,Japan,2024,99.19
+SH.STA.SMSS.ZS,safely managed sanitation,Mexico,2000,17.74
+SH.STA.SMSS.ZS,safely managed sanitation,Mexico,2001,17.84
+SH.STA.SMSS.ZS,safely managed sanitation,Mexico,2002,17.93
+SH.STA.SMSS.ZS,safely managed sanitation,Mexico,2003,19.88
+SH.STA.SMSS.ZS,safely managed sanitation,Mexico,2004,21.87
+SH.STA.SMSS.ZS,safely managed sanitation,Mexico,2005,23.88
+SH.STA.SMSS.ZS,safely managed sanitation,Mexico,2006,25.93
+SH.STA.SMSS.ZS,safely managed sanitation,Mexico,2007,28.0
+SH.STA.SMSS.ZS,safely managed sanitation,Mexico,2008,30.11
+SH.STA.SMSS.ZS,safely managed sanitation,Mexico,2009,32.24
+SH.STA.SMSS.ZS,safely managed sanitation,Mexico,2010,34.4
+SH.STA.SMSS.ZS,safely managed sanitation,Mexico,2011,36.59
+SH.STA.SMSS.ZS,safely managed sanitation,Mexico,2012,38.82
+SH.STA.SMSS.ZS,safely managed sanitation,Mexico,2013,41.06
+SH.STA.SMSS.ZS,safely managed sanitation,Mexico,2014,43.34
+SH.STA.SMSS.ZS,safely managed sanitation,Mexico,2015,45.65
+SH.STA.SMSS.ZS,safely managed sanitation,Mexico,2016,47.98
+SH.STA.SMSS.ZS,safely managed sanitation,Mexico,2017,50.34
+SH.STA.SMSS.ZS,safely managed sanitation,Mexico,2018,52.73
+SH.STA.SMSS.ZS,safely managed sanitation,Mexico,2019,55.14
+SH.STA.SMSS.ZS,safely managed sanitation,Mexico,2020,57.58
+SH.STA.SMSS.ZS,safely managed sanitation,Mexico,2021,60.05
+SH.STA.SMSS.ZS,safely managed sanitation,Mexico,2022,62.52
+SH.STA.SMSS.ZS,safely managed sanitation,Mexico,2023,62.71
+SH.STA.SMSS.ZS,safely managed sanitation,Mexico,2024,62.75
+SH.STA.SMSS.ZS,safely managed sanitation,Nigeria,2000,20.5
+SH.STA.SMSS.ZS,safely managed sanitation,Nigeria,2001,20.47
+SH.STA.SMSS.ZS,safely managed sanitation,Nigeria,2002,20.86
+SH.STA.SMSS.ZS,safely managed sanitation,Nigeria,2003,21.26
+SH.STA.SMSS.ZS,safely managed sanitation,Nigeria,2004,21.68
+SH.STA.SMSS.ZS,safely managed sanitation,Nigeria,2005,22.11
+SH.STA.SMSS.ZS,safely managed sanitation,Nigeria,2006,22.55
+SH.STA.SMSS.ZS,safely managed sanitation,Nigeria,2007,23.0
+SH.STA.SMSS.ZS,safely managed sanitation,Nigeria,2008,23.47
+SH.STA.SMSS.ZS,safely managed sanitation,Nigeria,2009,23.95
+SH.STA.SMSS.ZS,safely managed sanitation,Nigeria,2010,24.44
+SH.STA.SMSS.ZS,safely managed sanitation,Nigeria,2011,24.95
+SH.STA.SMSS.ZS,safely managed sanitation,Nigeria,2012,25.47
+SH.STA.SMSS.ZS,safely managed sanitation,Nigeria,2013,26.0
+SH.STA.SMSS.ZS,safely managed sanitation,Nigeria,2014,26.55
+SH.STA.SMSS.ZS,safely managed sanitation,Nigeria,2015,27.12
+SH.STA.SMSS.ZS,safely managed sanitation,Nigeria,2016,27.69
+SH.STA.SMSS.ZS,safely managed sanitation,Nigeria,2017,28.28
+SH.STA.SMSS.ZS,safely managed sanitation,Nigeria,2018,28.89
+SH.STA.SMSS.ZS,safely managed sanitation,Nigeria,2019,29.51
+SH.STA.SMSS.ZS,safely managed sanitation,Nigeria,2020,30.14
+SH.STA.SMSS.ZS,safely managed sanitation,Nigeria,2021,30.79
+SH.STA.SMSS.ZS,safely managed sanitation,Nigeria,2022,31.46
+SH.STA.SMSS.ZS,safely managed sanitation,Nigeria,2023,32.13
+SH.STA.SMSS.ZS,safely managed sanitation,Nigeria,2024,32.21
+SH.STA.SMSS.ZS,safely managed sanitation,South Africa,2000,47.39
+SH.STA.SMSS.ZS,safely managed sanitation,South Africa,2001,47.99
+SH.STA.SMSS.ZS,safely managed sanitation,South Africa,2002,48.61
+SH.STA.SMSS.ZS,safely managed sanitation,South Africa,2003,49.22
+SH.STA.SMSS.ZS,safely managed sanitation,South Africa,2004,49.82
+SH.STA.SMSS.ZS,safely managed sanitation,South Africa,2005,50.41
+SH.STA.SMSS.ZS,safely managed sanitation,South Africa,2006,51.0
+SH.STA.SMSS.ZS,safely managed sanitation,South Africa,2007,51.58
+SH.STA.SMSS.ZS,safely managed sanitation,South Africa,2008,52.16
+SH.STA.SMSS.ZS,safely managed sanitation,South Africa,2009,52.72
+SH.STA.SMSS.ZS,safely managed sanitation,South Africa,2010,53.28
+SH.STA.SMSS.ZS,safely managed sanitation,South Africa,2011,53.84
+SH.STA.SMSS.ZS,safely managed sanitation,South Africa,2012,54.38
+SH.STA.SMSS.ZS,safely managed sanitation,South Africa,2013,54.92
+SH.STA.SMSS.ZS,safely managed sanitation,South Africa,2014,55.44
+SH.STA.SMSS.ZS,safely managed sanitation,South Africa,2015,57.33
+SH.STA.SMSS.ZS,safely managed sanitation,South Africa,2016,59.25
+SH.STA.SMSS.ZS,safely managed sanitation,South Africa,2017,61.22
+SH.STA.SMSS.ZS,safely managed sanitation,South Africa,2018,63.23
+SH.STA.SMSS.ZS,safely managed sanitation,South Africa,2019,65.28
+SH.STA.SMSS.ZS,safely managed sanitation,South Africa,2020,67.38
+SH.STA.SMSS.ZS,safely managed sanitation,South Africa,2021,69.52
+SH.STA.SMSS.ZS,safely managed sanitation,South Africa,2022,71.7
+SH.STA.SMSS.ZS,safely managed sanitation,South Africa,2023,73.17
+SH.STA.SMSS.ZS,safely managed sanitation,South Africa,2024,73.78
+SH.STA.SMSS.ZS,safely managed sanitation,South Asia,2000,9.68
+SH.STA.SMSS.ZS,safely managed sanitation,South Asia,2001,11.35
+SH.STA.SMSS.ZS,safely managed sanitation,South Asia,2002,13.08
+SH.STA.SMSS.ZS,safely managed sanitation,South Asia,2003,15.25
+SH.STA.SMSS.ZS,safely managed sanitation,South Asia,2004,17.42
+SH.STA.SMSS.ZS,safely managed sanitation,South Asia,2005,19.44
+SH.STA.SMSS.ZS,safely managed sanitation,South Asia,2006,21.47
+SH.STA.SMSS.ZS,safely managed sanitation,South Asia,2007,23.56
+SH.STA.SMSS.ZS,safely managed sanitation,South Asia,2008,25.66
+SH.STA.SMSS.ZS,safely managed sanitation,South Asia,2009,27.77
+SH.STA.SMSS.ZS,safely managed sanitation,South Asia,2010,29.9
+SH.STA.SMSS.ZS,safely managed sanitation,South Asia,2011,32.04
+SH.STA.SMSS.ZS,safely managed sanitation,South Asia,2012,34.19
+SH.STA.SMSS.ZS,safely managed sanitation,South Asia,2013,36.36
+SH.STA.SMSS.ZS,safely managed sanitation,South Asia,2014,38.58
+SH.STA.SMSS.ZS,safely managed sanitation,South Asia,2015,40.81
+SH.STA.SMSS.ZS,safely managed sanitation,South Asia,2016,43.06
+SH.STA.SMSS.ZS,safely managed sanitation,South Asia,2017,45.31
+SH.STA.SMSS.ZS,safely managed sanitation,South Asia,2018,47.53
+SH.STA.SMSS.ZS,safely managed sanitation,South Asia,2019,49.75
+SH.STA.SMSS.ZS,safely managed sanitation,South Asia,2020,51.88
+SH.STA.SMSS.ZS,safely managed sanitation,South Asia,2021,53.99
+SH.STA.SMSS.ZS,safely managed sanitation,South Asia,2022,56.08
+SH.STA.SMSS.ZS,safely managed sanitation,South Asia,2023,58.17
+SH.STA.SMSS.ZS,safely managed sanitation,South Asia,2024,60.06
+SH.STA.SMSS.ZS,safely managed sanitation,Sub-Saharan Africa,2000,15.8
+SH.STA.SMSS.ZS,safely managed sanitation,Sub-Saharan Africa,2001,16.0
+SH.STA.SMSS.ZS,safely managed sanitation,Sub-Saharan Africa,2002,16.32
+SH.STA.SMSS.ZS,safely managed sanitation,Sub-Saharan Africa,2003,16.67
+SH.STA.SMSS.ZS,safely managed sanitation,Sub-Saharan Africa,2004,17.02
+SH.STA.SMSS.ZS,safely managed sanitation,Sub-Saharan Africa,2005,17.43
+SH.STA.SMSS.ZS,safely managed sanitation,Sub-Saharan Africa,2006,17.85
+SH.STA.SMSS.ZS,safely managed sanitation,Sub-Saharan Africa,2007,18.26
+SH.STA.SMSS.ZS,safely managed sanitation,Sub-Saharan Africa,2008,18.7
+SH.STA.SMSS.ZS,safely managed sanitation,Sub-Saharan Africa,2009,19.12
+SH.STA.SMSS.ZS,safely managed sanitation,Sub-Saharan Africa,2010,19.55
+SH.STA.SMSS.ZS,safely managed sanitation,Sub-Saharan Africa,2011,19.83
+SH.STA.SMSS.ZS,safely managed sanitation,Sub-Saharan Africa,2012,20.25
+SH.STA.SMSS.ZS,safely managed sanitation,Sub-Saharan Africa,2013,20.67
+SH.STA.SMSS.ZS,safely managed sanitation,Sub-Saharan Africa,2014,21.09
+SH.STA.SMSS.ZS,safely managed sanitation,Sub-Saharan Africa,2015,21.6
+SH.STA.SMSS.ZS,safely managed sanitation,Sub-Saharan Africa,2016,22.09
+SH.STA.SMSS.ZS,safely managed sanitation,Sub-Saharan Africa,2017,22.62
+SH.STA.SMSS.ZS,safely managed sanitation,Sub-Saharan Africa,2018,23.13
+SH.STA.SMSS.ZS,safely managed sanitation,Sub-Saharan Africa,2019,23.64
+SH.STA.SMSS.ZS,safely managed sanitation,Sub-Saharan Africa,2020,24.16
+SH.STA.SMSS.ZS,safely managed sanitation,Sub-Saharan Africa,2021,24.74
+SH.STA.SMSS.ZS,safely managed sanitation,Sub-Saharan Africa,2022,25.34
+SH.STA.SMSS.ZS,safely managed sanitation,Sub-Saharan Africa,2023,25.62
+SH.STA.SMSS.ZS,safely managed sanitation,Sub-Saharan Africa,2024,25.91
+SH.STA.SMSS.ZS,safely managed sanitation,United Kingdom,2000,97.31
+SH.STA.SMSS.ZS,safely managed sanitation,United Kingdom,2001,97.32
+SH.STA.SMSS.ZS,safely managed sanitation,United Kingdom,2002,97.34
+SH.STA.SMSS.ZS,safely managed sanitation,United Kingdom,2003,97.36
+SH.STA.SMSS.ZS,safely managed sanitation,United Kingdom,2004,97.38
+SH.STA.SMSS.ZS,safely managed sanitation,United Kingdom,2005,97.41
+SH.STA.SMSS.ZS,safely managed sanitation,United Kingdom,2006,97.43
+SH.STA.SMSS.ZS,safely managed sanitation,United Kingdom,2007,97.46
+SH.STA.SMSS.ZS,safely managed sanitation,United Kingdom,2008,97.49
+SH.STA.SMSS.ZS,safely managed sanitation,United Kingdom,2009,97.52
+SH.STA.SMSS.ZS,safely managed sanitation,United Kingdom,2010,97.55
+SH.STA.SMSS.ZS,safely managed sanitation,United Kingdom,2011,97.58
+SH.STA.SMSS.ZS,safely managed sanitation,United Kingdom,2012,97.61
+SH.STA.SMSS.ZS,safely managed sanitation,United Kingdom,2013,97.64
+SH.STA.SMSS.ZS,safely managed sanitation,United Kingdom,2014,97.66
+SH.STA.SMSS.ZS,safely managed sanitation,United Kingdom,2015,97.68
+SH.STA.SMSS.ZS,safely managed sanitation,United Kingdom,2016,97.7
+SH.STA.SMSS.ZS,safely managed sanitation,United Kingdom,2017,97.71
+SH.STA.SMSS.ZS,safely managed sanitation,United Kingdom,2018,97.73
+SH.STA.SMSS.ZS,safely managed sanitation,United Kingdom,2019,97.75
+SH.STA.SMSS.ZS,safely managed sanitation,United Kingdom,2020,97.77
+SH.STA.SMSS.ZS,safely managed sanitation,United Kingdom,2021,97.79
+SH.STA.SMSS.ZS,safely managed sanitation,United Kingdom,2022,97.81
+SH.STA.SMSS.ZS,safely managed sanitation,United Kingdom,2023,97.82
+SH.STA.SMSS.ZS,safely managed sanitation,United Kingdom,2024,97.84
+SH.STA.SMSS.ZS,safely managed sanitation,United States,2000,96.67
+SH.STA.SMSS.ZS,safely managed sanitation,United States,2001,96.69
+SH.STA.SMSS.ZS,safely managed sanitation,United States,2002,96.72
+SH.STA.SMSS.ZS,safely managed sanitation,United States,2003,96.75
+SH.STA.SMSS.ZS,safely managed sanitation,United States,2004,96.78
+SH.STA.SMSS.ZS,safely managed sanitation,United States,2005,96.8
+SH.STA.SMSS.ZS,safely managed sanitation,United States,2006,96.83
+SH.STA.SMSS.ZS,safely managed sanitation,United States,2007,96.86
+SH.STA.SMSS.ZS,safely managed sanitation,United States,2008,96.89
+SH.STA.SMSS.ZS,safely managed sanitation,United States,2009,96.92
+SH.STA.SMSS.ZS,safely managed sanitation,United States,2010,96.94
+SH.STA.SMSS.ZS,safely managed sanitation,United States,2011,96.93
+SH.STA.SMSS.ZS,safely managed sanitation,United States,2012,96.93
+SH.STA.SMSS.ZS,safely managed sanitation,United States,2013,96.93
+SH.STA.SMSS.ZS,safely managed sanitation,United States,2014,96.93
+SH.STA.SMSS.ZS,safely managed sanitation,United States,2015,96.94
+SH.STA.SMSS.ZS,safely managed sanitation,United States,2016,96.94
+SH.STA.SMSS.ZS,safely managed sanitation,United States,2017,96.94
+SH.STA.SMSS.ZS,safely managed sanitation,United States,2018,96.95
+SH.STA.SMSS.ZS,safely managed sanitation,United States,2019,96.95
+SH.STA.SMSS.ZS,safely managed sanitation,United States,2020,96.96
+SH.STA.SMSS.ZS,safely managed sanitation,United States,2021,96.96
+SH.STA.SMSS.ZS,safely managed sanitation,United States,2022,96.97
+SH.STA.SMSS.ZS,safely managed sanitation,United States,2023,96.98
+SH.STA.SMSS.ZS,safely managed sanitation,United States,2024,97.01
+SH.STA.SMSS.ZS,safely managed sanitation,World,2000,31.29
+SH.STA.SMSS.ZS,safely managed sanitation,World,2001,31.71
+SH.STA.SMSS.ZS,safely managed sanitation,World,2002,31.74
+SH.STA.SMSS.ZS,safely managed sanitation,World,2003,32.82
+SH.STA.SMSS.ZS,safely managed sanitation,World,2004,33.97
+SH.STA.SMSS.ZS,safely managed sanitation,World,2005,35.12
+SH.STA.SMSS.ZS,safely managed sanitation,World,2006,36.31
+SH.STA.SMSS.ZS,safely managed sanitation,World,2007,37.58
+SH.STA.SMSS.ZS,safely managed sanitation,World,2008,38.86
+SH.STA.SMSS.ZS,safely managed sanitation,World,2009,40.16
+SH.STA.SMSS.ZS,safely managed sanitation,World,2010,41.48
+SH.STA.SMSS.ZS,safely managed sanitation,World,2011,42.77
+SH.STA.SMSS.ZS,safely managed sanitation,World,2012,44.13
+SH.STA.SMSS.ZS,safely managed sanitation,World,2013,45.53
+SH.STA.SMSS.ZS,safely managed sanitation,World,2014,46.94
+SH.STA.SMSS.ZS,safely managed sanitation,World,2015,48.39
+SH.STA.SMSS.ZS,safely managed sanitation,World,2016,49.85
+SH.STA.SMSS.ZS,safely managed sanitation,World,2017,51.32
+SH.STA.SMSS.ZS,safely managed sanitation,World,2018,52.78
+SH.STA.SMSS.ZS,safely managed sanitation,World,2019,54.24
+SH.STA.SMSS.ZS,safely managed sanitation,World,2020,55.19
+SH.STA.SMSS.ZS,safely managed sanitation,World,2021,56.11
+SH.STA.SMSS.ZS,safely managed sanitation,World,2022,57.03
+SH.STA.SMSS.ZS,safely managed sanitation,World,2023,57.8
+SH.STA.SMSS.ZS,safely managed sanitation,World,2024,58.5

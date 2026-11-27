@@ -15,6 +15,7 @@ class Landscape(VoiceoverScene):
         card(self, 12, "The landscape, November 2026", "Who owns the plants and the wires, and who earns what?",
              "Chapter twelve. The landscape, November 2026.", lit=("unit", "moat", "change"))
         self.bubbles()
+        self.steadiness()
         self.watch()
 
     def bubbles(self):
@@ -57,6 +58,55 @@ class Landscape(VoiceoverScene):
             for g, m in zip(order, "abc"):
                 vo.wait_until(m)
                 self.play(LaggedStart(*[GrowFromCenter(b) for b in groups.get(g, VGroup())], lag_ratio=0.12), run_time=1.5)
+        self.clear_scene()
+
+    def steadiness(self):
+        Y = R["landscape"]["years"]
+        pa = viz.plot_axes([2015, 2025], [-0.6, 0.6], x_length=9.4, y_length=4.8, xticks=list(range(2015, 2026, 2)),
+                           yticks=[-0.5, -0.25, 0, 0.25, 0.5], xfmt=lambda v: f"{int(v)}", yfmt=lambda v: f"{100 * v:+.0f}%",
+                           ylabel="net income per dollar of revenue, each year", size=13).move_to([-1.0, -0.45, 0])
+        zero = DashedLine(pa.ax.c2p(2015, 0), pa.ax.c2p(2025, 0), color=GREY_B, stroke_width=1.5, dash_length=0.08)
+        spec = [("DUK", "Duke", STORE), ("SO", "Southern", "#5BC0BE"), ("VST", "Vistra", GAS), ("NRG", "NRG", "#F28C38")]
+        lines, labs = VGroup(), VGroup()
+        for tk, nm, col in spec:
+            pts = sorted(Y[tk].items())
+            lines.add(poly(pa, pts, col, 4))
+            y_last, v_last = pts[-1]
+            labs.add(tx(nm, 15, col, bold=True).next_to(pa.ax.c2p(y_last, v_last), RIGHT, buff=0.12))
+        labs[0].shift(UP * 0.16)
+        labs[1].shift(DOWN * 0.02)
+        labs[2].next_to(pa.ax.c2p(2024, Y["VST"][2024]), UP, buff=0.12)
+        labs[3].next_to(pa.ax.c2p(2019, Y["NRG"][2019]), RIGHT, buff=0.15)
+        n15, n19 = Y["NRG"][2015], Y["NRG"][2019]
+        v21, v24 = Y["VST"][2021], Y["VST"][2024]
+        lo_d = min(min(Y["DUK"].values()), min(Y["SO"].values()))
+        hi_d = max(max(Y["DUK"].values()), max(Y["SO"].values()))
+        band = Rectangle(width=pa.ax.c2p(2025, 0)[0] - pa.ax.c2p(2015, 0)[0], height=pa.ax.c2p(0, hi_d)[1] - pa.ax.c2p(0, lo_d)[1],
+                         stroke_width=0, fill_color=STORE, fill_opacity=0.12).move_to(
+            [(pa.ax.c2p(2015, 0)[0] + pa.ax.c2p(2025, 0)[0]) / 2, (pa.ax.c2p(0, hi_d)[1] + pa.ax.c2p(0, lo_d)[1]) / 2, 0])
+        head = tx("The same years, two kinds of company", 22, WHITE, bold=True).to_edge(UP, buff=0.3)
+        src = source("SEC EDGAR: Forms 10-K (net income, total revenues), fiscal years 2015-2025; Vistra from 2017", size=13)
+        with self.voiceover(
+            "Averages hide the difference, so here are the same years one at a time. <bookmark mark='a'/> Duke and "
+            f"Southern, two of the regulated monopolies: a profit every year, between {100 * lo_d:.0f} and "
+            f"{100 * hi_d:.0f} cents in each dollar of revenue, storms, pandemic and all. <bookmark mark='b'/> Now two generators. "
+            f"NRG: a loss of about {abs(100 * n15):.0f} cents in the dollar in 2015, a profit of about {100 * n19:.0f} cents "
+            f"in 2019. <bookmark mark='c'/> Vistra: a loss in 2021, the year of the Texas freeze, and about "
+            f"{100 * v24:.0f} cents of profit in 2024. <bookmark mark='d'/> The regulated company sells the same service "
+            "at a price someone else sets, so its profit stays inside that band. The generator sells power at whatever the market "
+            "pays, so its profit moves with the weather, the price of gas and the price of power."
+        ) as vo:
+            self.play(FadeIn(pa), FadeIn(zero), FadeIn(head), FadeIn(src))
+            vo.wait_until("a")
+            self.play(Create(lines[0]), Create(lines[1]), FadeIn(labs[0]), FadeIn(labs[1]), run_time=2.5)
+            self.play(FadeIn(band))
+            vo.wait_until("b")
+            self.play(Create(lines[3]), FadeIn(labs[3]), run_time=2.5)
+            vo.wait_until("c")
+            self.play(Create(lines[2]), FadeIn(labs[2]), run_time=2.0)
+            vo.wait_until("d")
+            self.play(Indicate(band, color=STORE, scale_factor=1.0), lines[2].animate.set_stroke(opacity=0.5),
+                      lines[3].animate.set_stroke(opacity=0.5), run_time=1.5)
         self.clear_scene()
 
     def watch(self):
