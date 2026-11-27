@@ -372,4 +372,59 @@
       note: "This is the merit order of the film's chapter 4, with an illustrative fleet. Every plant left of the demand line runs and is paid the running cost of the last one needed; the difference is what pays back its building cost. Raise the price of gas and the price of power follows, because gas is so often on the margin. Add solar and the midday price can fall to nothing. Push demand past the whole fleet and no plant sets the price: it goes to the cap (here $5,000), and some customers go without.",
     });
   };
+  W.landfill = function (el) {
+    function play(plan, rivalYear, ceiling, airspace) {
+      var cost = 25, region = 1.5, nb = 1.0, rivalFee = 45, rate = 0.07, exp = 15, expCost = 15, expYear = 8;
+      var left = airspace, pv = plan === "expand" ? -expCost : 0, lefts = [airspace], full = null;
+      for (var t = 1; t <= 60; t++) {
+        if (plan === "expand" && t === expYear) left += exp;
+        var fee, tons;
+        if (left <= 1e-9) { lefts.push(0); continue; }
+        if (t > rivalYear) { fee = rivalFee; tons = (region + nb) / 2; }
+        else if (plan === "fill") { fee = rivalFee; tons = region + nb; }
+        else { fee = ceiling; tons = region; }
+        tons = Math.min(tons, left); left -= tons;
+        pv += (fee - cost) * tons / Math.pow(1 + rate, t);
+        lefts.push(left);
+        if (left <= 1e-9 && full === null) full = t;
+      }
+      return { pv: pv, lefts: lefts, full: full, perTon: pv / (airspace + (plan === "expand" ? exp : 0)) };
+    }
+    var PLANS = [["fill", "Fill it fast", C.q], ["ceiling", "Charge the ceiling", C.p], ["expand", "Ceiling, and expand", "#b58cff"]];
+    QB.widget(el, {
+      title: "The last landfill in the valley: what is a hole in the ground worth?",
+      sub: "The Works' valley landfill from the film's Run it chapter. Charge the rivals' fee and take everyone's rubbish, charge what the valley will bear, or charge that and apply to expand. Set how long a rival needs for its permit, what hauling rubbish out of the valley would cost, and how much room is left.",
+      panels: 2, height: 300, weights: [3, 2],
+      controls: [
+        { k: "rival", label: "Years until the rival's permit", min: 0, max: 25, step: 1, value: 15, fmt: function (x) { return x + " years"; } },
+        { k: "ceil", label: "The valley's ceiling: next landfill plus the haul, $ a ton", min: 45, max: 90, step: 1, value: 65, fmt: function (x) { return "$" + x; } },
+        { k: "air", label: "Airspace left, million tons", min: 10, max: 60, step: 1, value: 30, fmt: function (x) { return x + "m tons"; } },
+      ],
+      draw: function (g, v, s) {
+        var res = PLANS.map(function (p) { return play(p[0], v.rival, v.ceil, v.air); });
+        var yrs = []; for (var t = 0; t <= 45; t++) yrs.push(t);
+        var a = g[0].axes({ x: [0, 45], y: [0, v.air + 16], title: "Airspace left, million tons",
+                            xticks: [0, 10, 20, 30, 40], xfmt: function (x) { return "yr " + x; }, yfmt: function (y) { return Math.round(y) + "m"; } });
+        res.forEach(function (r, i) { a.line(yrs, yrs.map(function (t) { return r.lefts[t]; }), { color: PLANS[i][2], width: 2.4 }); });
+        a.vline(v.rival, { color: C.loss, dash: [5, 4], width: 1.6 });
+        a.text(v.rival, v.air + 12, "rival opens", { align: "left", dx: 5, color: C.loss, bg: true });
+        var top = Math.max.apply(null, res.map(function (r) { return r.pv; })) * 1.2;
+        var b = g[1].axes({ x: [0, 4], y: [0, top], title: "Value today, $m (7% a year)", xticks: [], yfmt: function (y) { return "$" + Math.round(y); } });
+        res.forEach(function (r, i) {
+          b.bars([i + 1], [Math.max(r.pv, 0.5)], 0.7, { color: PLANS[i][2] });
+          b.text(i + 1, Math.max(r.pv, 0.5), "$" + Math.round(r.pv) + "m", { dy: -9, align: "center", size: 10.5 });
+        });
+        var best = 0; res.forEach(function (r, i) { if (r.pv > res[best].pv) best = i; });
+        s.r = { res: res, best: best };
+      },
+      readout: function (v, s) {
+        var r = s.r, b = r.res[r.best];
+        return [["worth most", PLANS[r.best][1] + ": $" + Math.round(b.pv) + "m"],
+                ["a ton of airspace", "$" + b.perTon.toFixed(2)],
+                ["full in", b.full === null ? "not within 60 years" : "year " + b.full]];
+      },
+      note: "This is the film's Run it, with the Works' numbers: $25 a ton to run, 1.5 million tons a year from the valley, 1 million more from the neighbours at the rivals' $45, and an expansion that costs $15m now and adds 15 million tons in year 8. Once the rival opens, both charge $45 and split the rubbish. With a long permit, patience pays: every ton you fill cheaply now is a ton you cannot sell at the ceiling later. Shorten the permit and the ceiling is worth little. The asset is not the hole; it is the time it takes anyone else to get permission to dig one.",
+    });
+  };
+
 })();

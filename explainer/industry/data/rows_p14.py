@@ -250,4 +250,15 @@ add(
       "landfills", "Clean Harbors, Inc., Form 10-K 2025", CLH, "2025-12-31", "filing"),
     r("clh.facilities", 100, "facilities", "waste disposal facilities in its network ('over 100')", "Clean Harbors, "
       "Inc., Form 10-K 2025", CLH, "2025", "filing"),
+    iwc("iwc.rcv", 103, "£ billion (nominal)", "the regulatory capital value of the water companies of England and "
+        "Wales, 2024/25 (from Ofwat's RCV updates)", fact="2024/25"),
+    r("bls.water.ytd2026", 4.91, "%", "CPI-U water and sewerage maintenance, US city average, not seasonally adjusted: "
+      "January-September 2026 average over January-September 2025 (October 2025 was not collected)", "BLS, CPI flat "
+      "file cu.data.12.USHousing (series CUUR0000SEHG01)", "https://download.bls.gov/pub/time.series/cu/cu.data.12.USHousing",
+      "2026-01 to 2026-09"),
+    awk("awk.quality5", 4.1, "$ billion", "capital expenditure over the next five years to address water quality "
+        "issues, most of it for compliance with environmental laws and regulations"),
+    awk("awk.quality26", 0.788, "$ billion", "the same, in 2026", fact="2026 plan"),
+    awk("awk.pfas_deadline", 2029, "year", "under the current rule, utilities must comply with the PFAS maximum contaminant "
+        "levels by April 2029; the EPA has indicated its intent to extend the deadline to 2031", fact="2025"),
 )

@@ -212,6 +212,24 @@ CALLS = [
          rule="EIA, Monthly Energy Review, Table 7.6, total retail sales (ESTCPUS), the first annual figures for 2027 and "
               "2026 as published together; true if 2027 exceeds 2026 by more than 1.5%",
          due="2028-03", ours=True),
+    Call(14, "US Environmental Protection Agency", "1989-02",
+         "\"One-third of the nation's landfills will be full by 1991\"; \"we're running out of space to bury it in "
+         "existing landfills\".", "EPA, The Solid Waste Dilemma: An Agenda for Action (EPA/530-SW-89-019, February 1989)",
+         outcome="Small landfills did close: 7,924 in 1988, 1,908 in 2009 (EPA, 2009 Facts and Figures, which found that "
+                 "'at the national level, capacity does not appear to be a problem'). But the tonnage landfilled stayed "
+                 "near 140 million tons a year to 2018 (EPA), in fewer, larger, lined landfills; in 2025 Waste "
+                 "Management reported about 38 years of permitted life and Republic as much airspace at the end of the "
+                 "year as at the start (Forms 10-K)"),
+    Call(14, "Industry, Built", "2026-11-27",
+         "The US consumer price index for water and sewerage maintenance will average more than 4.0% higher in 2027 "
+         "than in 2026. Probability: 70%.",
+         "This series, Part 14, chapter 13; reasoning: the index has never fallen since 1953, rose 4.2-5.2% a year in "
+         "2022-2025 and 4.9% in January-September 2026 over a year earlier (BLS), with $625bn of drinking water and "
+         "$630bn of clean water needs (EPA) to be paid through bills; against: lower general inflation, as in "
+         "2017-2021 when it rose 3.1-3.7% a year",
+         rule="BLS, CPI-U, US city average, not seasonally adjusted, CUUR0000SEHG01: the annual average for 2027 against "
+              "2026's as first published together; true if more than 4.0% higher",
+         due="2028-01", ours=True),
 ]
 
 

@@ -343,7 +343,10 @@ SEC_COMPANIES = [(789019, "MSFT"), (909832, "COST"), (19617, "JPM"), (753308, "N
                  (1047862, "ED"), (1004980, "PCG"), (1032208, "SRE"), (65984, "ETR"), (1692819, "VST"), (1868275, "CEG"),
                  (1013871, "NRG"), (874761, "AES"), (1996810, "GEV"),
                  (823768, "WM"), (1060391, "RSG"), (1318220, "WCN"), (911177, "CWST"), (822818, "CLH"),
-                 (1410636, "AWK"), (78128, "WTRG"), (1056903, "AWR"), (1035201, "CWT"), (766829, "HTO")]
+                 (1410636, "AWK"), (78128, "WTRG"), (1056903, "AWR"), (1035201, "CWT"), (766829, "HTO"),
+                 (1045810, "NVDA"), (1730168, "AVGO"), (2488, "AMD"), (804328, "QCOM"), (97476, "TXN"), (6951, "AMAT"),
+                 (707549, "LRCX"), (6281, "ADI"), (319201, "KLAC"), (1835632, "MRVL"), (813672, "CDNS"), (883241, "SNPS"),
+                 (1413447, "NXPI"), (827054, "MCHP"), (1097864, "ON"), (1047127, "AMKR")]
 
 
 # where a company's first-choice tag means something else: Mastercard tagged its gross revenue, before rebates and
@@ -397,7 +400,9 @@ SEC_OVERRIDES = {**{t: _UTIL for t in ("DUK", "SO", "AEP", "D", "EXC", "XEL", "E
                  "DOW": {"net_income": ["NetIncomeLoss", "NetIncomeLossAvailableToCommonStockholdersBasic"]},
                  "ECL": {"net_income": ["NetIncomeLoss", "NetIncomeLossAvailableToCommonStockholdersBasic"]},
                  "IFF": {"net_income": ["NetIncomeLoss", "NetIncomeLossAvailableToCommonStockholdersBasic"]},
-                 "LYB": {"net_income": ["NetIncomeLoss", "ProfitLoss"]}}
+                 "LYB": {"net_income": ["NetIncomeLoss", "ProfitLoss"]},
+                 # Broadcom tags its fiscal 2025 profit only as ProfitLoss
+                 "AVGO": {"net_income": ["NetIncomeLoss", "ProfitLoss"]}}
 
 
 def sec_annual():
@@ -1506,6 +1511,86 @@ def epa_msw():
                    "1960, 1970, 1980 and 1990; combustion series incomplete before 2000"])
 
 
+
+FRED_CHIPS = {"IPG3344S": "Industrial production: semiconductors and other electronic components (2017 = 100)",
+              "CAPUTLG3344S": "Capacity utilization: semiconductors and other electronic components (%)",
+              "PCU334413334413": "PPI: semiconductor and related device manufacturing (Dec 1998 = 100)",
+              "PCU33443344": "PPI: semiconductor and other electronic component manufacturing (Dec 1984 = 100)",
+              "CPIAUCSL": "CPI, all items"}
+
+
+def fred_chips():
+    """Monthly series for Part 15 (via FRED): the Federal Reserve's output and capacity utilization of semiconductors
+    and other electronic components since 1972, the BLS's producer price indexes for semiconductors, and the CPI."""
+    out = []
+    for sid in FRED_CHIPS:
+        txt = _get(f"https://fred.stlouisfed.org/graph/fredgraph.csv?id={sid}").decode()
+        for line in txt.splitlines()[1:]:
+            d, v = line.split(",")
+            if v not in (".", ""):
+                out.append([sid, d[:7], float(v)])
+    return _write("fred_chips", ["series", "month", "value"], out,
+                  ["https://fred.stlouisfed.org (" + "; ".join(f"{k} {v}" for k, v in FRED_CHIPS.items()) + ")"])
+
+
+def owid_chips():
+    """Transistors per microprocessor, 1971-2021 (Karl Rupp's compilation via Our World in Data, CC BY 4.0)."""
+    txt = _get("https://ourworldindata.org/grapher/transistors-per-microprocessor.csv?v=1&csvType=full"
+               "&useColumnShortNames=true").decode()
+    rows = list(csv.reader(io.StringIO(txt)))
+    out = [[int(r[2]), float(r[3])] for r in rows[1:] if r[0] == "World" and r[3]]
+    return _write("owid_chips", ["year", "transistors"], out,
+                  ["https://ourworldindata.org/grapher/transistors-per-microprocessor (Karl Rupp, 'Microprocessor "
+                   "Trend Data' (2022), via Our World in Data, CC BY 4.0)"])
+
+
+FOREIGN_CHIPS = [(1046179, "TSM", "ifrs-full", "TWD"), (1033767, "UMC", "ifrs-full", "TWD"), (1709048, "GFS", "ifrs-full", "USD"),
+                 (937966, "ASML", "us-gaap", "EUR"), (932787, "STM", "us-gaap", "USD")]
+FOREIGN_ITEMS = {"ifrs-full": {"revenue": ["Revenue", "RevenueFromContractsWithCustomers"],
+                               "operating_income": ["ProfitLossFromOperatingActivities"],
+                               "profit": ["ProfitLossAttributableToOwnersOfParent", "ProfitLoss"],
+                               "capex": ["PurchaseOfPropertyPlantAndEquipmentClassifiedAsInvestingActivities"],
+                               "depreciation": ["DepreciationExpense", "DepreciationAndAmortisationExpense"]},
+                 "us-gaap": {"revenue": ["Revenues", "RevenueFromContractWithCustomerExcludingAssessedTax", "SalesRevenueNet"],
+                             "operating_income": ["OperatingIncomeLoss"],
+                             "profit": ["NetIncomeLoss", "NetIncomeLossAvailableToCommonStockholdersBasic"],
+                             "capex": ["PaymentsToAcquirePropertyPlantAndEquipment", "PaymentsToAcquireProductiveAssets"],
+                             "depreciation": ["DepreciationDepletionAndAmortization", "DepreciationAndAmortization",
+                                              "Depreciation"]}}
+
+
+def sec_foreign():
+    """Annual figures of the foreign chip makers that file Forms 20-F with the SEC (Part 15), in their reporting
+    currency (billions): TSMC and UMC (IFRS, NT dollars), GlobalFoundries (IFRS, US dollars), ASML (US GAAP, euros) and
+    STMicroelectronics (US GAAP, US dollars)."""
+    import time
+
+    out = []
+    for cik, tic, tax, cur in FOREIGN_CHIPS:
+        facts = json.loads(_get(f"https://data.sec.gov/api/xbrl/companyfacts/CIK{cik:010d}.json"))["facts"].get(tax, {})
+        time.sleep(0.5)
+        years: dict = {}
+        for item, tags in FOREIGN_ITEMS[tax].items():
+            for tag in tags:
+                best: dict = {}
+                for v in facts.get(tag, {}).get("units", {}).get(cur, []):
+                    if v.get("form") not in ("20-F", "20-F/A", "10-K", "10-K/A") or "start" not in v:
+                        continue
+                    d = (dt.date.fromisoformat(v["end"]) - dt.date.fromisoformat(v["start"])).days
+                    if not 350 <= d <= 380:
+                        continue
+                    if v["end"] not in best or v["filed"] > best[v["end"]]["filed"]:
+                        best[v["end"]] = v
+                for end, v in best.items():
+                    years.setdefault(end, {}).setdefault(item, v["val"] / 1e9)
+        for end in sorted(years):
+            out.append([tic, end, cur] + [years[end].get(k) for k in FOREIGN_ITEMS["ifrs-full"]])
+    return _write("sec_foreign", ["ticker", "year_end", "currency"] + list(FOREIGN_ITEMS["ifrs-full"]), out,
+                  ["https://data.sec.gov/api/xbrl/companyfacts/ (Forms 20-F and 10-K of foreign issuers; billions of the "
+                   "reporting currency; IFRS tags: " + "; ".join(f"{k}: {'/'.join(v)}" for k, v in FOREIGN_ITEMS["ifrs-full"].items())
+                   + "; US GAAP tags: " + "; ".join(f"{k}: {'/'.join(v)}" for k, v in FOREIGN_ITEMS["us-gaap"].items()) + ")"])
+
+
 WB_WATER = {"SH.H2O.SMDW.ZS": "safely managed drinking water", "SH.STA.SMSS.ZS": "safely managed sanitation",
             "SH.H2O.BASW.ZS": "at least basic drinking water", "SH.STA.BASS.ZS": "at least basic sanitation"}
 WB_WATER_COUNTRIES = "WLD;USA;GBR;FRA;DEU;JPN;BRA;MEX;CHN;IND;IDN;PAK;BGD;NGA;ETH;ZAF;EGY;SSF;SAS"
@@ -1528,7 +1613,7 @@ def wb_water():
                    "; WHO/UNICEF Joint Monitoring Programme, % of population)"])
 
 
-JOBS = {"wb_water": wb_water, "bls_water": bls_water, "fred_waste": fred_waste, "epa_msw": epa_msw, "eia_930": eia_930, "eia_mer": eia_mer, "fred_power": fred_power, "owid_elec": owid_elec, "owid_chem": owid_chem, "fred_chem": fred_chem, "eia_ngl": eia_ngl, "eurostat_chem": eurostat_chem, "usgs_heavy": usgs_heavy, "fred_heavy": fred_heavy, "owid_co2": owid_co2, "ers_food_dollar": ers_food_dollar, "ers_costs": ers_costs, "ers_farm_income": ers_farm_income, "owid_ag": owid_ag, "fred_food": fred_food, "ne_land": ne_land, "usgs_ds140": usgs_ds140, "fred_metals": fred_metals, "sec_ifrs": sec_ifrs, "eia_gas": eia_gas, "eia_petroleum": eia_petroleum, "eia_intl": eia_intl, "eia_pump": eia_pump, "fred_energy": fred_energy, "fred_market": fred_market, "owid_tech": owid_tech, "sec_quarterly": sec_quarterly, "fred_cycle": fred_cycle, "esef_maersk": esef_maersk, "damodaran_roc": damodaran_roc, "census_conc": census_conc, "eia_power": eia_power, "fred_pay": fred_pay, "bea_real": bea_real, "sec_annual": sec_annual, "fred_prices": fred_prices, "census_susb": census_susb, "bea_va": bea_va, "wb_mfg_usd": wb_mfg_usd, "bea_hist": bea_hist, "bea_io": bea_io, "fred_jobs": fred_jobs, "wb_shares": wb_shares}
+JOBS = {"fred_chips": fred_chips, "owid_chips": owid_chips, "sec_foreign": sec_foreign, "wb_water": wb_water, "bls_water": bls_water, "fred_waste": fred_waste, "epa_msw": epa_msw, "eia_930": eia_930, "eia_mer": eia_mer, "fred_power": fred_power, "owid_elec": owid_elec, "owid_chem": owid_chem, "fred_chem": fred_chem, "eia_ngl": eia_ngl, "eurostat_chem": eurostat_chem, "usgs_heavy": usgs_heavy, "fred_heavy": fred_heavy, "owid_co2": owid_co2, "ers_food_dollar": ers_food_dollar, "ers_costs": ers_costs, "ers_farm_income": ers_farm_income, "owid_ag": owid_ag, "fred_food": fred_food, "ne_land": ne_land, "usgs_ds140": usgs_ds140, "fred_metals": fred_metals, "sec_ifrs": sec_ifrs, "eia_gas": eia_gas, "eia_petroleum": eia_petroleum, "eia_intl": eia_intl, "eia_pump": eia_pump, "fred_energy": fred_energy, "fred_market": fred_market, "owid_tech": owid_tech, "sec_quarterly": sec_quarterly, "fred_cycle": fred_cycle, "esef_maersk": esef_maersk, "damodaran_roc": damodaran_roc, "census_conc": census_conc, "eia_power": eia_power, "fred_pay": fred_pay, "bea_real": bea_real, "sec_annual": sec_annual, "fred_prices": fred_prices, "census_susb": census_susb, "bea_va": bea_va, "wb_mfg_usd": wb_mfg_usd, "bea_hist": bea_hist, "bea_io": bea_io, "fred_jobs": fred_jobs, "wb_shares": wb_shares}
 
 if __name__ == "__main__":
     names = list(JOBS) if "--all" in sys.argv else sys.argv[1:]

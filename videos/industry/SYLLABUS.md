@@ -2545,6 +2545,7 @@ scored in Part 64 and at each refresh.
 | 11 · Heavy Materials | done 2026-11-27 (about 150 Register rows; worldsteel's yearbooks, outlooks and climate paper; the USGS's Mineral Commodity Summaries 2026 and Data Series 140; the International Aluminium Institute; BLS producer prices and Federal Reserve output; the 1994 cement cartel decision and the EU's carbon border regulation; Bessemer's autobiography; 18 companies' 10-Ks and two 20-Fs; transcribed tables in `data/tables.py`) | `works/mill.py` | 17 scenes, with furnace, converter, kiln, potline and packaging glyphs | silent and narrated previews reviewed | entry, lab, interactive | not started |
 | 12 · Chemicals | done 2026-11-27 (55 Register rows; the Nobel Foundation on Haber and Bosch; the USGS's Mineral Commodity Summaries 2026 (nitrogen, potash) and Data Series 140; EIA's cracker yields, NGL series, Today in Energy and AEO2005; IMF, BLS and Federal Reserve series; Eurostat's chemical output; OECD plastics via Our World in Data; 17 companies' 10-Ks and ICL's 20-F; 3M's and Chemours' 8-Ks; the EPA's PFAS rule; the Supreme Court of India on Bhopal) | `works/cracker.py` | 16 scenes, with molecule, cracker, cylinder, paint-can and pellet glyphs | silent and narrated previews reviewed | entry, lab, interactive | not started |
 | 13 · Electricity | done 2026-11-27 (108 Register rows; Insull's 1910 address; EIA-930, the Electric Power Annual, the Monthly Energy Review, AEO2005 and AEO2021, Today in Energy; the FERC-NERC February 2021 report; the ERCOT market monitor's 2021 and 2024 reports; Vistra's and Duke's 10-Ks and 15 more; the NAO on Britain's suppliers; DOE on LBNL's data centre report; Ember via Our World in Data) | `works/power.py` | 16 scenes | silent and narrated previews reviewed | entry, lab, interactive | not started |
+| 14 · Water and Waste | done 2026-11-27 (114 Register rows; Hansard for 1858 and 2026; the EPA's 1989 report, its 2009 Facts and Figures, the 1960-2018 series, tipping fees and its water needs surveys; 40 CFR Part 258; the BLS's price indexes; the 10-Ks of Waste Management, Republic, Clean Harbors, American Water and six more, Sabesp's 20-F and Veolia's ESEF report; the Independent Water Commission and the CMA's PR24 redeterminations; WHO/UNICEF via the World Bank) | `works/route.py`, `works/utility.py` | 16 scenes, with bin, lorry, water tower, tap, bale and landfill glyphs | silent and narrated previews reviewed | entry, lab, interactive | not started |
 
 Phase 0 is done in the form Part 1 needed: the palette and kit (`style.py`, `kit.py`), the instruments (`viz.py`: the
 phone and its exploded view, the region map, the Dollar column, the margin ladder, the treemap, plain axes), the
@@ -2690,3 +2691,17 @@ rest are named but not charted. California's batteries appear as the operator's 
 and discharges at night; the EIA's Today in Energy of 16 June 2026 gives their capacity. *Called it?* is the EIA's 2005
 outlook for 2025 electricity use rather than the 1970s forecasts (no primary copy was read), with the series' call on
 2027 sales.
+
+Part 14 keeps its draft's story, the Great Stink, from Hansard: Disraeli's 'Stygian pool' of 15 July 1858 and the Lords
+Commissioners' speech of 2 August announcing royal assent (eighteen days), with the cost and the rate from his speech;
+the Chicago hauler of the draft is dropped for want of a primary source. The hook's second beat, that America's price
+indexes for water and sewerage (since 1953) and for rubbish collection (since 1984) have never fallen in a year, is the
+BLS's own annual averages; rent shares the record and is shown. Run it is the Works' valley landfill (`route.py`), priced
+three ways with a rival's permit fifteen or five years away. England is told from the Independent Water Commission and the
+CMA's PR24 redeterminations; Thames Water's rescue is left where Hansard leaves it (the Environment Secretary's statement
+of 16 June 2026), with no later decision found in the government's or Parliament's records. France's concessions are
+not told (no primary source read); Veolia appears from its ESEF report and Sabesp from its 20-F. The landfill count is
+the EPA's 2009 Facts and Figures (its later reports stop counting), and the tipping fees are read from the EPA's 2015
+chart by position. China's 2018 ban is taken from Waste Management's 2018 10-K (the WTO notification could not be read).
+*Called it?* is the EPA's 1989 forecast that a third of landfills would be full by 1991, with the series' call on the
+2027 water price index.

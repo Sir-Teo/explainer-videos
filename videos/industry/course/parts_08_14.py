@@ -295,4 +295,50 @@ PARTS = [
               ("EIA-930, the Monthly Energy Review, FRED, Our World in Data and the companies' accounts",
                "explainer/industry/data/SOURCES.md")),
     ),
+    Part(
+        n=14, level="U", widget="landfill", prereq=(4, 5, 13),
+        question="Why are the businesses nobody thinks about among the steadiest there are?",
+        story="The part opens in London in July 1858: Disraeli told the Commons the Thames had become 'a Stygian pool', "
+              "and the Act for its purification passed eighteen days later, to cost about £3 million paid by a rate over "
+              "forty years. Since 1953 America's price index for water and sewerage has not fallen once; electricity's "
+              "fell in eight years. The viewer prices the only landfill in a valley as a rival waits for a permit: "
+              "charging what the valley will bear is worth about $590m against $397m for filling fast, and ten years of "
+              "the rival's permitting are worth $164m. Water is a fixed-cost network: America's systems need $625bn for "
+              "drinking water, two-thirds of it pipes, and $630bn for sewers. A regulated company earns a return on its "
+              "asset base, so the bill grows as the base does; borrowing turns a 4% return into 6.4% with cheap debt and "
+              "into 2.8% with dear. England's companies went from 4% to 72% gearing; for 2025-30 Ofwat allowed £104bn of "
+              "spending, the average bill reached £603 and Thames Water, £16.8bn in debt, waited on a rescue. Sabesp "
+              "doubled its investment after privatization. A refuse route pays only with density: one truck makes $275 "
+              "a day where three lose money. America's landfills fell from 7,924 to 1,908 while tonnage held near 140 "
+              "million, and Republic ended 2025 with more permitted airspace than it began. Recyclable paper fell 69% "
+              "after China's 2018 ban. Hazardous and medical waste exist as markets because the law makes them; and the "
+              "EPA's 1989 forecast that a third of landfills would be full by 1991 was half right. The series calls a "
+              "rise of more than 4% in 2027's water price index (70%).",
+        handoff="Act III begins with Part 15, semiconductors; the infrastructure-finance part returns to regulated assets "
+                "and the funds that own them.",
+        outside="Percentages and discounting; Part 4's fixed and variable costs; Part 5's moats; Part 13's regulated utility.",
+        objectives={
+            "U": ["Explain why water and waste are local monopolies, and why almost all of their cost is fixed.",
+                  "Explain how a regulator sets a water bill from an asset base, an allowed return, run-off and costs.",
+                  "Explain why a landfill permit is valuable, and why route density decides who collects."],
+            "M": ["Compute a regulated bill from its building blocks, and how investment moves it.",
+                  "Compute the shareholders' return at a given gearing and cost of debt.",
+                  "Value a landfill's airspace by discounting its margin, with and without a rival."],
+            "D": ["Score a forecast (the EPA's 1989 landfill warning) against outcomes and say which assumption failed.",
+                  "Judge when borrowing against a steady business makes it fragile, using Thames Water."],
+            "I": ["Read a landfill company's airspace table and an English price review's headline numbers.",
+                  "Place a company on the map: regulated water utility, waste hauler, hazardous waste specialist."],
+        },
+        results=[
+            ("Regulated revenue", r"R = r_{\text{wacc}} \cdot RCV + d \cdot RCV + \text{opex}"),
+            ("Gearing", r"r_E = r_A + (r_A - r_D)\,\frac{D}{E}"),
+            ("Airspace value", r"V = \sum_t \frac{(p_t - c)\,q_t}{(1+r)^t}"),
+            ("Cost per stop", r"c = \frac{F}{H / (s + 1/(n v))}"),
+        ],
+        U=(0, 1, 2, 3, 4, 5, 6, 7, "s09_intermission", 8, 9, 10, 12), I=(11,), D=(13,),
+        also=(("The Register's rows for Part 14", "explainer/industry/data/rows_p14.py"),
+              ("The route and the landfill game", "explainer/industry/works/route.py"),
+              ("The regulated water company and gearing", "explainer/industry/works/utility.py"),
+              ("BLS, FRED, EPA, the World Bank and the companies' accounts", "explainer/industry/data/SOURCES.md")),
+    ),
 ]
