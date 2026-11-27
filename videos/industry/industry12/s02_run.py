@@ -137,7 +137,7 @@ class Run(VoiceoverScene):
                   f"early 2013, almost {G['cap20']:.0f} million by 2020 (EIA)"),
                  (draw.factory(1.0), "Europe is closing", f"Dow will shut its ethylene cracker at Böhlen, Germany, by the end "
                   f"of {G['bohlen']:.0f} (10-K)"),
-                 (draw.ship(1.3), "or importing the feedstock", f"INEOS's new cracker in Antwerp, Europe's largest, runs on "
+                 (draw.ship(1.3), "or importing the feedstock", f"INEOS's new cracker in Antwerp, Europe's largest, is built to run on "
                   f"about {G['ineos']:.0f},000 barrels a day of American ethane, shipped across the Atlantic (EIA)")]
         for ic, h, d in items:
             ic.scale_to_fit_height(0.8)
