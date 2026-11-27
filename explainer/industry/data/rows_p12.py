@@ -27,6 +27,8 @@ MMM = "https://www.sec.gov/Archives/edgar/data/66740/000006674023000048/mmm-2023
 CC = "https://www.sec.gov/Archives/edgar/data/1627223/000095017023025888/cc-20230601.htm"
 EPA = "https://www.federalregister.gov/documents/2024/04/26/2024-07773/pfas-national-primary-drinking-water-regulation"
 SCI = "https://hcraj.nic.in/sci/1988/3-3187-1988_1989-05-04.pdf"
+SHW = "https://www.sec.gov/Archives/edgar/data/89800/000008980026000008/shw-20251231.htm"
+IFF = "https://data.sec.gov/api/xbrl/companyconcept/CIK0000051253/us-gaap/GoodwillImpairmentLoss.json"
 
 
 def r(key, value, unit, definition, source, url, fact, kind="official", note="", **kw):
@@ -111,6 +113,18 @@ add(
            "Air Products and Chemicals", APD, "fiscal 2026"),
     filing("apd.adj_oi.2026", 3.2, "$ billion", "Air Products' adjusted operating income, fiscal 2026 (up 11%; a non-GAAP "
            "measure that leaves out the charges)", "Air Products and Chemicals", APD, "fiscal 2026"),
+    filing("shw.stores.2025", 4853, "stores", "Sherwin-Williams' company-operated paint stores in the US, Canada and the "
+           "Caribbean, 31 December 2025 (Paint Stores Group)", "Sherwin-Williams", SHW),
+    filing("shw.gross.2025", 48.8, "% of net sales", "Sherwin-Williams' consolidated gross profit as a percent of net sales, 2025",
+           "Sherwin-Williams", SHW),
+    filing("dow.sales.2025", 39968, "$ million", "Dow Inc.'s net sales, 2025", "Dow Inc.", DOW),
+    filing("dow.cogs.2025", 37435, "$ million", "Dow Inc.'s cost of sales, 2025", "Dow Inc.", DOW),
+    r("iff.goodwill.2022", 2.25, "$ billion", "IFF's goodwill impairment, 2022", "IFF, Forms 10-K (XBRL: "
+      "GoodwillImpairmentLoss)", IFF, "2022", "filing"),
+    r("iff.goodwill.2023", 2.623, "$ billion", "IFF's goodwill impairment, 2023", "IFF, Forms 10-K (XBRL: "
+      "GoodwillImpairmentLoss)", IFF, "2023", "filing"),
+    r("iff.goodwill.2025", 1.153, "$ billion", "IFF's goodwill impairment, 2025", "IFF, Form 10-K 2025 (XBRL: "
+      "GoodwillImpairmentLoss)", IFF, "2025", "filing"),
     filing("cf.gas.2025", 350, "million MMBtu", "Natural gas consumed by CF Industries' plants, 2025", "CF Industries",
            CF),
     filing("cf.ammonia.2025", 10120, "thousand short tons", "CF Industries' gross ammonia production, 2025",
