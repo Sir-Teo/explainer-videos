@@ -103,6 +103,9 @@ add(
          "controlled firm load shed in US history"),
     nerc("nerc.minutes", 9, "minutes", "How long ERCOT's operators had to prevent about 17,000 MW of generating units "
          "tripping on underfrequency, early on 15 February 2021"),
+    nerc("nerc.not_adopted", 40, "%", "Share of generator owners and operators in ERCOT and MISO South, where freezing was "
+         "the main cause of outages, who said they had not incorporated specific generator recommendations of the 2011 "
+         "report ('over 40 percent'); those recommendations were voluntary"),
     nerc("nerc.freezing", 44.2, "%", "Share of outages, derates and failures to start caused by freezing issues"),
     nerc("nerc.fuel", 31.4, "%", "Share caused by fuel issues (natural gas supply 87% of these)"),
     nerc("nerc.gas_share", 58, "%", "Natural gas-fired units' share of the 1,045 units affected (wind 27%, coal 6%, "
