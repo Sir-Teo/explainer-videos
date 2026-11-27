@@ -2557,6 +2557,7 @@ scored in Part 64 and at each refresh.
 | 23 · Fashion and Luxury | done 2026-11-27 (about 160 Register rows; Inditex's FY2025 and 1H2026 results; Hermès's full-year results 2023-2025; LVMH's 2025 results; Kering's 2023 and 2025 results; the 10-Ks of NIKE, TJX, Tapestry, Capri, Lululemon and Levi Strauss; the SEC extract of twenty-three companies; UN Comtrade's clothing exports; FRED's apparel prices and jobs; the WTO on the end of quotas; the ILO on Rana Plaza) | `works/fashion.py` | 14 scenes, with T-shirts on rails, handbags, trainers, sewing machines and price tags | code only: every beat snapshot-checked, not rendered | entry, lab, interactive | not started |
 | 24 · Construction | done 2026-11-27 (about 70 Register rows; the Empire State Building's fact sheet; California's high-speed rail business plans of 2008 and 2026; the NAO on Carillion; Flyvbjerg (2014); Ferrovial's 20-F; the 10-Ks of Fluor, Quanta and Martin Marietta; the SEC extract of twenty-five companies; the Census's construction spending and the BLS's jobs and prices via FRED; BEA's real value added and prices since 1947) | `works/contractor.py` | 13 scenes, with a building frame rising floor by floor, tower cranes, bridges, toll roads, hard hats and blueprints | code only: every beat snapshot-checked, not rendered | entry, lab, interactive | not started |
 | 25 · Homes | done 2026-11-27 (about 55 Register rows; D.R. Horton's Forms 8-K of October 2025 and 2026 and its 10-K for fiscal 2026; the 10-Ks of Lennar, NVR, Fannie Mae, Compass and Invitation Homes; the SEC extract of twenty-five builders, factory builders, suppliers, lenders, brokers and landlords; Case-Shiller, the Census's starts, sales, prices and homeownership, Freddie Mac's rates, the BLS's rents and materials prices and the Federal Reserve's mortgage debt via FRED) | `works/builder.py` | 12 scenes, with lots, house frames rising into houses, sale signs and keys | code only: every beat snapshot-checked, not rendered | entry, lab, interactive | not started |
+| 26 · Property | done 2026-11-27 (about 80 Register rows; the 10-Ks for 2025 of Prologis, BXP, Simon, Realty Income, SL Green, Hudson Pacific, American Tower, Equinix, Blackstone and CBRE; BXP's 10-Ks since 2017 and Realty Income's since 2015; WeWork's S-1 and Chapter 11 8-K; the Fed's Financial Stability Reports of 2023 and 2026; Gupta, Mittal and Van Nieuwerburgh (2022); the SEC extract of thirty-four companies; the Fed's price index, bank loans and delinquencies, Treasury yields, construction spending, e-commerce and rents via FRED) | `works/building.py` | 13 scenes, with office towers whose windows go dark, warehouses, malls, masts and leases | code only: every beat snapshot-checked, not rendered | entry, lab, interactive | not started |
 
 Phase 0 is done in the form Part 1 needed: the palette and kit (`style.py`, `kit.py`), the instruments (`viz.py`: the
 phone and its exploded view, the region map, the Dollar column, the margin ladder, the treemap, plain axes), the
@@ -2874,3 +2875,15 @@ Fannie Mae's 10-K and a lender's margins (UWM) rather than chapter by chapter; t
 Rightmove, KE Holdings and Vonovia are left to later parts and the map; *Called it?* uses D.R. Horton's own guidance and
 Fannie Mae's 2026 forecast in place of the 2005-06 housing forecasts, which were not read. Written as code only and
 checked from snapshots; not rendered.
+
+Part 26 follows its draft's question. Zeckendorf's sliced building was not checked against a primary source, so the hook
+is the Federal Reserve's commercial property price index and the 2022 study of offices after the pandemic. Run it is the
+draft's loan that matures as rates rise and a third of the building empties, on the Works' building (`works/building.py`:
+income over a rate with fixed costs, a lender's three tests, the three choices at maturity, and a development's margin);
+a warehouse bought the same year is the twin. The cap rate is read from Realty Income's yields on what it bought each
+year rather than from a cap-rate survey, which was not read; the eighteen-year cycle and Wheaton's office cycles are left
+out; services firms, owners and lenders are read from Blackstone's, CBRE's and the Fed's reports. Hotels (Part 35), data
+halls (Part 37) and towers (Part 30) are touched only as kinds of building. Hong Kong, Singapore, Japan's 1989, China's
+commercial property and India's office parks are left to the map and later parts; *Called it?* uses WeWork's 2019
+filing and BXP's own occupancy promise in place of the office and mall forecasts of 2010 and 2020-21, which were not found
+in primary sources. Written as code only and checked from snapshots; not rendered.

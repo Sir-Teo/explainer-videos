@@ -288,4 +288,55 @@
     });
   };
 
+  W.refinance = function (el) {
+    var SQFT = 400000, OLD = 130;
+    function deal(v) {
+      var roll = SQFT * v.rent * v.occ / 1e6, noi = roll - v.costs, val = noi / v.cap;
+      var t = [Math.max(0, 0.6 * val), Math.max(0, noi / (1.25 * v.rate)), Math.max(0, noi / 0.10)];
+      var k = 0;
+      for (var i = 1; i < 3; i++) { if (t[i] < t[k]) k = i; }
+      return { roll: roll, noi: noi, val: val, tests: t, bind: k, loan: t[k], gap: Math.max(0, OLD - t[k]), cover: noi / (OLD * 0.04) };
+    }
+    var NAMES = ["60% of value", "income covers interest 1.25x", "income is 10% of the loan"];
+    QB.widget(el, {
+      title: "Refinance a building",
+      sub: "The Works' office: 400,000 square feet, bought in 2019 for $200m with a $130m loan at 4% that now falls due. Set how much of it is let, the rent, the running costs (paid whether a floor is let or not), the yield buyers now demand and the rate on a new loan, and see what the building is worth and what a lender will lend against it.",
+      panels: 2, height: 300, weights: [1, 1],
+      controls: [
+        { k: "occ", label: "Share of the building let", min: 0.4, max: 1, step: 0.01, value: 0.65, fmt: function (x) { return Math.round(100 * x) + "%"; } },
+        { k: "rent", label: "Rent, $ a square foot a year", min: 30, max: 70, step: 1, value: 48, fmt: function (x) { return "$" + x; } },
+        { k: "costs", label: "Running costs, $m a year", min: 4, max: 14, step: 0.5, value: 9.5, fmt: function (x) { return "$" + x.toFixed(1) + "m"; } },
+        { k: "cap", label: "Yield buyers demand (cap rate)", min: 0.04, max: 0.1, step: 0.0025, value: 0.075, fmt: function (x) { return (100 * x).toFixed(2) + "%"; } },
+        { k: "rate", label: "Interest rate on a new loan", min: 0.03, max: 0.1, step: 0.0025, value: 0.07, fmt: function (x) { return (100 * x).toFixed(2) + "%"; } },
+      ],
+      draw: function (g, v, s) {
+        var d = deal(v), caps = [], vals = [], k;
+        for (k = 0; k <= 24; k++) { var c = 0.04 + 0.0025 * k; caps.push(100 * c); vals.push(Math.max(0, d.noi) / c); }
+        var hi = Math.max(220, Math.max.apply(null, vals) * 1.05);
+        var ax = g[0].axes({ x: [4, 10], y: [0, hi], title: "Value of the building, $m, by the yield buyers demand",
+                             xticks: [4, 5, 6, 7, 8, 9, 10], xfmt: function (x) { return x + "%"; }, yfmt: function (y) { return "$" + Math.round(y); } });
+        ax.line(caps, vals, { color: C.p, width: 2.4 });
+        ax.hline(OLD, { color: C.spot, dash: [5, 4], width: 1.4 });
+        ax.vline(100 * v.cap, { color: C.q, dash: [5, 4], width: 1.4 });
+        ax.legend([["value", C.p], ["the old loan, $130m", C.spot]], { pos: "tr" });
+        var top = Math.max(OLD, Math.max.apply(null, d.tests)) * 1.15;
+        var bx = g[1].axes({ x: [0.4, 3.6], y: [0, top], title: "What a lender will lend, $m, by each test",
+                             xticks: [1, 2, 3], xfmt: function (x) { return ["", "60% of value", "cover 1.25x", "10% yield"][Math.round(x)] || ""; },
+                             yfmt: function (y) { return "$" + Math.round(y); } });
+        bx.bars([1, 2, 3], d.tests, 0.55, { color: C.q, alpha: 0.85 });
+        bx.hline(OLD, { color: C.spot, dash: [5, 4], width: 1.4 });
+        s.r = d;
+      },
+      readout: function (v, s) {
+        var d = s.r;
+        return [["rent collected; net operating income", "$" + d.roll.toFixed(1) + "m; $" + d.noi.toFixed(1) + "m a year"],
+                ["value at your yield", "$" + d.val.toFixed(1) + "m (paid $200m in 2019)"],
+                ["the most a lender will lend (" + NAMES[d.bind] + ")", "$" + d.loan.toFixed(1) + "m"],
+                ["cash the owner must find to repay $130m", d.gap > 0 ? "$" + d.gap.toFixed(1) + "m" : "none: $" + (d.loan - OLD).toFixed(1) + "m to spare"],
+                ["income over the old 4% interest", (100 * d.cover).toFixed(0) + "%"]];
+      },
+      note: "The Works' office, as in the film: 65% let at $48 with $9.5m of costs it earns $3.0m, worth $39.7m at 7.5%; a lender at 7% offers $23.8m (60% of value), leaving a gap of $106.2m, and its income covers 57% of the old interest. In 2019, 95% let at $50 with $9.0m of costs and a 5% yield, it earned $10m and was worth $200m. BXP's offices were 86.7% let at the end of 2025 and 89.4% in September 2026. The building is an illustration.",
+    });
+  };
+
 })();

@@ -2212,6 +2212,54 @@ def fred_homes():
     return _fred_write("fred_homes", FRED_HOMES)
 
 
+PROPERTY_COMPANIES = [(1045609, "PLD", "USD"), (1571283, "REXR", "USD"), (49600, "EGP", "USD"), (1053507, "AMT", "USD"),
+                      (1051470, "CCI", "USD"), (1034054, "SBAC", "USD"), (1101239, "EQIX", "USD"), (1297996, "DLR", "USD"),
+                      (1063761, "SPG", "USD"), (726728, "O", "USD"), (879101, "KIM", "USD"), (910606, "REG", "USD"),
+                      (912242, "MAC", "USD"), (34903, "FRT", "USD"), (1037540, "BXP", "USD"), (899689, "VNO", "USD"),
+                      (1040971, "SLG", "USD"), (1025996, "KRC", "USD"), (1482512, "HPP", "USD"), (1364250, "DEI", "USD"),
+                      (1035443, "ARE", "USD"), (915912, "AVB", "USD"), (906107, "EQR", "USD"), (912595, "MAA", "USD"),
+                      (1393311, "PSA", "USD"), (1289490, "EXR", "USD"), (766704, "WELL", "USD"), (740260, "VTR", "USD"),
+                      (1393818, "BX", "USD"), (1138118, "CBRE", "USD"), (1037976, "JLL", "USD"), (1628369, "CWK", "USD"),
+                      (1465128, "STWD", "USD"), (1813756, "WE", "USD")]
+PROPERTY_ITEMS = {"revenue": [("us-gaap", "Revenues"), ("us-gaap", "RevenueFromContractWithCustomerExcludingAssessedTax"),
+                              ("us-gaap", "RealEstateRevenueNet"), ("us-gaap", "OperatingLeaseLeaseIncome")],
+                  "operating_income": [("us-gaap", "OperatingIncomeLoss")],
+                  "profit": [("us-gaap", "NetIncomeLoss"), ("us-gaap", "ProfitLoss")],
+                  "interest": [("us-gaap", "InterestExpense"), ("us-gaap", "InterestExpenseNonoperating"),
+                               ("us-gaap", "InterestExpenseDebt"), ("us-gaap", "InterestExpenseOperating")],
+                  "depreciation": [("us-gaap", "DepreciationDepletionAndAmortization"), ("us-gaap", "DepreciationAndAmortization"),
+                                   ("us-gaap", "DepreciationAmortizationAndAccretionNet")],
+                  "impairment": [("us-gaap", "ImpairmentOfRealEstate"), ("us-gaap", "AssetImpairmentCharges")],
+                  "real_estate": [("us-gaap", "RealEstateInvestmentPropertyNet")],
+                  "assets": [("us-gaap", "Assets")]}
+
+
+def sec_property():
+    """Annual figures of property companies (logistics, towers, data centres, malls and shopping centres, net lease,
+    offices, life-science campuses, flats, self-storage, senior housing), an alternative-asset manager, the services firms,
+    a property lender and WeWork, from their Forms 10-K (SEC company facts), in US dollars (billions): revenue, operating
+    income, net income, interest expense, depreciation, impairments, net real estate and assets.  REITs' revenue is
+    mostly rent; interest and depreciation are tagged differently by different companies, so the first tag present wins."""
+    return _write("sec_property", ["ticker", "year_end", "currency"] + list(PROPERTY_ITEMS),
+                  _sec_table(PROPERTY_COMPANIES, PROPERTY_ITEMS), [_sec_source(PROPERTY_ITEMS)])
+
+
+FRED_PROPERTY = {"BOGZ1FL075035503Q": "Commercial real estate price index, level (quarterly; Federal Reserve Z.1, Financial Accounts of the United States)",
+                 "CREACBM027NBOG": "Commercial real estate loans, all commercial banks ($ billion, monthly, NSA; Federal Reserve H.8)",
+                 "DRCRELEXFACBS": "Delinquency rate on commercial real estate loans excluding farmland, all commercial banks (percent, quarterly, SA; Federal Reserve)",
+                 "GS10": "10-year Treasury constant maturity rate (percent, monthly average; Federal Reserve H.15)",
+                 "BAA": "Moody's seasoned Baa corporate bond yield (percent, monthly average; via FRED)",
+                 "TLOFCONS": "Construction spending: office, including data centres ($ million, SAAR; Census Bureau)",
+                 "TLCOMCONS": "Construction spending: commercial, including warehouses and shops ($ million, SAAR; Census Bureau)",
+                 "ECOMPCTSA": "E-commerce retail sales as a percent of total retail sales (quarterly, SA; Census Bureau)",
+                 "PCU531120531120": "PPI by industry: lessors of nonresidential buildings (Dec 1995 = 100, NSA; BLS)",
+                 "CPIAUCNS": "CPI-U: all items (1982-84 = 100, NSA; BLS)"}
+
+
+def fred_property():
+    return _fred_write("fred_property", FRED_PROPERTY)
+
+
 CONSTRUCTION_COMPANIES = [(1124198, "FLR", "USD"), (52988, "J", "USD"), (868857, "ACM", "USD"), (1050915, "PWR", "USD"),
                           (105634, "EME", "USD"), (15615, "MTZ", "USD"), (861459, "GVA", "USD"), (77543, "TPC", "USD"),
                           (67215, "DY", "USD"), (1035983, "FIX", "USD"), (874238, "STRL", "USD"), (1357615, "KBR", "USD"),
@@ -2426,7 +2474,7 @@ def sipri_milex():
                    "estimates included as published)"])
 
 
-JOBS = {"sec_homes": sec_homes, "fred_homes": fred_homes,
+JOBS = {"sec_property": sec_property, "fred_property": fred_property, "sec_homes": sec_homes, "fred_homes": fred_homes,
         "sec_construction": sec_construction, "fred_construction": fred_construction, "bea_long": bea_long,
         "sec_fashion": sec_fashion, "fred_fashion": fred_fashion, "comtrade_apparel": comtrade_apparel,
         "fred_consumer": fred_consumer, "sec_consumer": sec_consumer, "sec_medtech": sec_medtech, "fred_medtech": fred_medtech, "fda_devices": fda_devices, "fda_510k_panels": fda_510k_panels,

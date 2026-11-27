@@ -46,6 +46,9 @@ Every glyph is a ``VGroup`` with its moving parts named, so a scene can animate 
   (``.deck``), :func:`toll_road` (``.gantry``, ``.cars``), :func:`hardhat`, :func:`blueprint` (``.plan``);
 * homes: :func:`house_frame` (``.studs``, ``.trusses``), :func:`plot_lot` (``.stakes``), :func:`sale_sign` (``.board``),
   :func:`house_key`;
+* property: :func:`office_tower` (``.windows`` in random order, lit with :func:`light` to show occupancy),
+  :func:`warehouse` (``.docks``, ``.trucks``), :func:`mall` (``.stores``, which can go dark), :func:`cell_tower`
+  (``.antennas``), :func:`lease` (``.lines``, ``.signature``);
 * the city and its people: :func:`skyline` (``.windows`` light up), :func:`house`, :func:`shop`, :func:`person`,
   :func:`crowd`; :func:`sun`, :func:`moon`, :func:`sky` (a background whose colour follows the hour);
 * money: :func:`coin`, :func:`coin_stack`, :func:`note_bill`, :func:`coin_flow` (coins flying from one place to
@@ -2672,3 +2675,103 @@ def house_key(w: float = 0.9, color: str = "#F6C453") -> VGroup:
     blade = Line([-0.12 * w, 0, 0], [0.45 * w, 0, 0], stroke_color=color, stroke_width=6)
     teeth = VGroup(*[Line([x * w, 0, 0], [x * w, -0.1 * w, 0], stroke_color=color, stroke_width=5) for x in (0.25, 0.35, 0.43)])
     return VGroup(bow, blade, teeth)
+
+
+# ---------------------------------------------------------------------------------------------------------------
+# Property (Part 26)
+# ---------------------------------------------------------------------------------------------------------------
+def office_tower(w: float = 1.4, floors: int = 14, cols: int = 5, seed: int = 7) -> VGroup:
+    """A glass office tower with a crown; ``g.windows`` is every window in random order, so ``light(g.windows, 0.87)``
+    shows a building 87% occupied."""
+    h = w * floors / cols * 0.8
+    body = Rectangle(width=w, height=h, stroke_color="#5B6B84", stroke_width=1.5, fill_color="#1E2633",
+                     fill_opacity=1).move_to([0, h / 2, 0])
+    crown = Polygon([-0.42 * w, h, 0], [0.42 * w, h, 0], [0.25 * w, h + 0.12 * w, 0], [-0.25 * w, h + 0.12 * w, 0],
+                    stroke_width=0, fill_color="#5B6B84", fill_opacity=1)
+    mast = Line([0, h + 0.12 * w, 0], [0, h + 0.32 * w, 0], stroke_color="#8B95A7", stroke_width=2)
+    cw, ch = w / cols, h / floors
+    wins = [Rectangle(width=0.62 * cw, height=0.55 * ch, stroke_width=0, fill_color="#2A3446", fill_opacity=1).move_to(
+        [-w / 2 + (j + 0.5) * cw, (i + 0.55) * ch, 0]) for i in range(floors) for j in range(cols)]
+    order = np.random.default_rng(seed).permutation(len(wins))
+    windows = VGroup(*[wins[k] for k in order])
+    door = Rectangle(width=0.22 * w, height=0.5 * ch, stroke_width=0, fill_color=LIT, fill_opacity=0.8).move_to([0, 0.25 * ch, 0])
+    g = VGroup(body, crown, mast, windows, door)
+    g.windows = windows
+    return g
+
+
+def warehouse(w: float = 2.4, docks: int = 6, trucks: int = 2) -> VGroup:
+    """A logistics shed: a long low box with a shallow roof, dock doors along the front (``g.docks``) and lorries backed
+    up to some of them (``g.trucks``)."""
+    h = 0.32 * w
+    body = Rectangle(width=w, height=h, stroke_width=0, fill_color="#C9D3E0", fill_opacity=1).move_to([0, h / 2, 0])
+    roof = Polygon([-0.52 * w, h, 0], [0.52 * w, h, 0], [0.5 * w, h + 0.05 * w, 0], [-0.5 * w, h + 0.05 * w, 0],
+                   stroke_width=0, fill_color="#8B95A7", fill_opacity=1)
+    band = Rectangle(width=w, height=0.04 * w, stroke_width=0, fill_color="#4F8FE6", fill_opacity=1).move_to([0, 0.8 * h, 0])
+    dw = w / (docks + 1)
+    dock = VGroup(*[Rectangle(width=0.55 * dw, height=0.5 * h, stroke_width=0, fill_color="#5B6B84", fill_opacity=1).move_to(
+        [-w / 2 + (k + 1) * dw, 0.25 * h, 0]) for k in range(docks)])
+    lorries = VGroup()
+    for k in range(min(trucks, docks)):
+        x = -w / 2 + (2 * k + 1) * dw
+        box = Rectangle(width=0.62 * dw, height=0.4 * h, stroke_color="#5B6B84", stroke_width=1.5, fill_color="#E8EAED",
+                        fill_opacity=1).move_to([x, 0.2 * h, 0])
+        lorries.add(box)
+    g = VGroup(body, roof, band, dock, lorries)
+    g.docks, g.trucks = dock, lorries
+    return g
+
+
+def mall(w: float = 2.6, stores: int = 7, colors=("#E8554E", "#F6C453", "#4F8FE6", "#7BD88F", "#B48EF0")) -> VGroup:
+    """A shopping mall: a long front with an entrance arch and a row of shop windows (``g.stores``) whose awnings can
+    be greyed to show empty units."""
+    h = 0.36 * w
+    body = Rectangle(width=w, height=h, stroke_width=0, fill_color="#D7DDE6", fill_opacity=1).move_to([0, h / 2, 0])
+    arch = Arc(radius=0.14 * w, start_angle=0, angle=PI, stroke_color="#5B6B84", stroke_width=4).move_to([0, h + 0.04 * w, 0])
+    entrance = Rectangle(width=0.22 * w, height=0.6 * h, stroke_width=0, fill_color=GLASS, fill_opacity=1).move_to([0, 0.3 * h, 0])
+    sw = (w - 0.3 * w) / stores
+    units = VGroup()
+    for k in range(stores):
+        x = -w / 2 + 0.02 * w + (k + 0.5) * sw + (0.28 * w if k >= stores // 2 else 0)
+        win = Rectangle(width=0.8 * sw, height=0.45 * h, stroke_width=0, fill_color=GLASS, fill_opacity=1).move_to([x, 0.3 * h, 0])
+        aw = Rectangle(width=0.86 * sw, height=0.1 * h, stroke_width=0, fill_color=colors[k % len(colors)], fill_opacity=1).move_to([x, 0.6 * h, 0])
+        units.add(VGroup(win, aw))
+    g = VGroup(body, arch, entrance, units)
+    g.stores = units
+    return g
+
+
+def cell_tower(h: float = 2.0, color: str = "#8B95A7") -> VGroup:
+    """A lattice mobile-phone mast with antenna panels (``g.antennas``), each panel a tenant."""
+    legs = VGroup(Line([-0.18 * h, 0, 0], [-0.03 * h, h, 0], stroke_color=color, stroke_width=3),
+                  Line([0.18 * h, 0, 0], [0.03 * h, h, 0], stroke_color=color, stroke_width=3))
+    braces = VGroup()
+    for k in range(6):
+        y0, y1 = k * h / 6, (k + 1) * h / 6
+        x0, x1 = 0.18 * h - 0.15 * h * y0 / h, 0.18 * h - 0.15 * h * y1 / h
+        braces.add(Line([-x0, y0, 0], [x1, y1, 0], stroke_color=color, stroke_width=1.2),
+                   Line([x0, y0, 0], [-x1, y1, 0], stroke_color=color, stroke_width=1.2))
+    ant = VGroup()
+    for k, (y, c) in enumerate(((0.92, "#E8554E"), (0.78, "#4F8FE6"), (0.64, "#F6C453"))):
+        for sgn in (-1, 1):
+            ant.add(Rectangle(width=0.035 * h, height=0.1 * h, stroke_width=0, fill_color=c, fill_opacity=1).move_to(
+                [sgn * 0.09 * h, y * h, 0]))
+    g = VGroup(legs, braces, ant)
+    g.antennas = ant
+    return g
+
+
+def lease(w: float = 1.2, color: str = "#E8EAED") -> VGroup:
+    """A signed lease: a page with ruled lines (``g.lines``), a heading and a signature (``g.signature``)."""
+    page = Polygon([-w / 2, -0.65 * w, 0], [w / 2, -0.65 * w, 0], [w / 2, 0.5 * w, 0], [0.32 * w, 0.65 * w, 0],
+                   [-w / 2, 0.65 * w, 0], stroke_width=0, fill_color=color, fill_opacity=1)
+    head = Rectangle(width=0.5 * w, height=0.07 * w, stroke_width=0, fill_color="#5B6B84", fill_opacity=1).move_to([-0.1 * w, 0.48 * w, 0])
+    lines = VGroup(*[Line([-0.38 * w, y * w, 0], [(0.38 if k % 3 else 0.2) * w, y * w, 0], stroke_color="#9AA3B2", stroke_width=1.5)
+                     for k, y in enumerate(np.linspace(0.32, -0.3, 8))])
+    sig = VGroup(CubicBezier([-0.32 * w, -0.48 * w, 0], [-0.2 * w, -0.32 * w, 0], [-0.1 * w, -0.62 * w, 0], [0.02 * w, -0.46 * w, 0],
+                             stroke_color="#4F8FE6", stroke_width=2.5),
+                 CubicBezier([0.02 * w, -0.46 * w, 0], [0.12 * w, -0.36 * w, 0], [0.2 * w, -0.56 * w, 0], [0.34 * w, -0.44 * w, 0],
+                             stroke_color="#4F8FE6", stroke_width=2.5))
+    g = VGroup(page, head, lines, sig)
+    g.lines, g.signature = lines, sig
+    return g

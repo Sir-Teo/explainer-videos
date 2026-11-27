@@ -179,4 +179,47 @@ PARTS = [
               ("The land deal and the mortgage", "explainer/industry/works/builder.py"),
               ("The SEC and FRED extracts", "explainer/industry/data/SOURCES.md")),
     ),
+    Part(
+        n=26, level="U", widget="refinance", prereq=(3, 4, 6, 25),
+        question="What is a building worth, and why does that number move so much when the building does not?",
+        story="The part opens on the Federal Reserve's commercial property price index, down 39% from 2007 to 2009 and 13% "
+              "from 2023 to 2025 while the buildings stood still, and on a 2022 study's estimate that New York's offices lost "
+              "45% of their value in 2020. The viewer owns an office bought in 2019 for $200m with a $130m loan: by 2026 it is "
+              "65% let, its income has fallen from $10m to $3m because its costs are fixed, buyers want 7.5% instead of 5%, and "
+              "it is worth $40m; a lender will lend $24m, leaving a $106m gap, so the owner pays in, hands back the keys or "
+              "asks for time. A warehouse bought the same year, its rents up by half, refinances with money to spare. A point "
+              "of rate takes 20% off a building at 4%; Realty Income paid prices yielding 5.5% in 2021 and 7.4% in 2024. The "
+              "lease is the asset: WeWork owed $47bn of rent over 14 years against members committed for 15 months, lost "
+              "$13bn in four years and filed for bankruptcy in 2023. Banks hold $3.2tn of commercial property loans; "
+              "delinquencies have doubled since 2019 but are far from 1991's 12%. Storage, malls and warehouses keep over 45 "
+              "cents of each dollar, offices and senior housing under ten; BXP's offices fell from 93% let to 87% and San "
+              "Francisco to 77%, while Prologis re-let warehouses at rents about 50% higher. CBRE, the largest services firm, "
+              "runs other people's buildings for 3 cents on the dollar. The series gives 55% that BXP's occupancy will be 91% "
+              "or more at the end of 2027.",
+        handoff="Part 27, shipping and ports, opens Act V, Moving, with how moving a tonne across an ocean became nearly free.",
+        outside="Present values and yields; leverage and loan-to-value; Part 3's accounts and depreciation; Part 4's fixed "
+                "costs; Part 6's cycle; Part 25's homes and mortgages; Economics, Built's assets (the user cost and the "
+                "option to wait), city and bank chapters.",
+        objectives={
+            "U": ["Explain why a building's value is its income divided by a capitalization rate, and why rates move it.",
+                  "Explain why a building's income moves more than its rent: fixed running costs.",
+                  "Explain why the lease, its tenant and its length, is what a landlord really owns."],
+            "M": ["Compute value, the effect of a one-point change in the cap rate and a building's break-even occupancy.",
+                  "Compute the largest new loan by loan-to-value, interest-cover and debt-yield tests, and the refinancing gap.",
+                  "Compute a development's margin and the cap rate implied by its stabilized yield."],
+            "D": ["Read a landlord's own occupancy promise against outcomes, and make and state a dated, scorable forecast."],
+            "I": ["Read a REIT's occupancy, rent changes on renewal, impairments and acquisition yields in its filings.",
+                  "Read the Federal Reserve's financial stability reports on commercial property and its lenders."],
+        },
+        results=[
+            ("Value as income over a rate", r"V = \frac{\text{NOI}}{r}, \quad \frac{V_{r + 0.01}}{V_r} = \frac{r}{r + 0.01}"),
+            ("Net operating income", r"\text{NOI} = A \cdot p \cdot s - F"),
+            ("The new loan", r"L = \min\left(0.6\,V,\ \frac{\text{NOI}}{1.25\,i},\ \frac{\text{NOI}}{0.10}\right)"),
+            ("A development's margin", r"m = \frac{y}{r} - 1"),
+        ],
+        U=(0, 1, 2, 3, 4, 5, "s07_intermission", 6, 7, 8), I=(9,), D=(10,),
+        also=(("The Register's rows for Part 26", "explainer/industry/data/rows_p26.py"),
+              ("The building, the loan and the development", "explainer/industry/works/building.py"),
+              ("The SEC and FRED extracts", "explainer/industry/data/SOURCES.md")),
+    ),
 ]

@@ -431,6 +431,26 @@ CALLS = [
          "already cut, and it held its volume in a year it called challenging",
          rule="D.R. Horton's fiscal 2027 results (Form 8-K, October 2027): homes closed as reported; true if fewer than 81,500",
          due="2027-10", ours=True),
+    Call(26, "The We Company (WeWork)", "2019-08-14",
+         "'Among the approximately 255 million potential members across our 280 target cities globally, we estimate a total "
+         "opportunity of $3.0 trillion'",
+         "The We Company, Form S-1 of 14 August 2019",
+         outcome="Its revenue was $2.6-3.5 billion a year from 2019 to 2022, with a net loss every year; WeWork Inc. filed for "
+                 "Chapter 11 on 6 November 2023 (Forms 10-K via SEC company facts; Form 8-K of 7 November 2023)"),
+    Call(26, "BXP", "2026-02",
+         "'we remain on track to achieve occupancy improvements by year-end 2026, consistent with the targets outlined at our "
+         "September 2025 Investor Day' (86.7% occupied at the end of 2025)",
+         "BXP, Inc., Form 10-K for 2025",
+         outcome="Pending; 89.4% occupied and 91.9% leased at 30 September 2026, the fourth quarterly gain in a row (Form 8-K of "
+                 "27 October 2026)"),
+    Call(26, "Industry, Built", "2026-11-27",
+         "BXP's total portfolio occupancy will be 91.0% or more at 31 December 2027. Probability: 55%.",
+         "This series, Part 26, chapter 10; reasoning: 91.9% was already leased in September 2026, occupancy had risen four "
+         "quarters running and new office construction had 'effectively halted'; against: occupancy fell every year from 2019 "
+         "to 2025, San Francisco was 77% let, and tenants leaving at the end of their leases or a weaker economy could undo it",
+         rule="BXP's results for 2027 (Form 8-K or 10-K, early 2028): total (in-service) portfolio occupancy at 31 December "
+              "2027 as reported; true if 91.0% or more",
+         due="2028-01", ours=True),
 ]
 
 
