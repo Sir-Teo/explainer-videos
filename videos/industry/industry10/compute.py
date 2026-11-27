@@ -287,11 +287,19 @@ def results() -> dict:
     R["calories"] = {e: {y: v for y, v in sorted(cal[e].items()) if y >= 1961}
                      for e in ("World", "India", "China", "Africa", "United States") if e in cal}
 
-    # --- the call ---------------------------------------------------------------------------------------------------
+    # --- the call: the farm share of 2026's food dollar against 2025's, from the same release ------------------------
     fs = R["dollar"]["series"]["All"]
-    R["call"] = dict(threshold=13.0, prob=0.70, last=fs[last], since2016=(min(v for y, v in fs.items() if y >= 2016),
-                                                                         max(v for y, v in fs.items() if y >= 2016)),
-                     due="2027-12")
+    chg = {}
+    for sid, name in (("PMAIZMTUSDM", "maize"), ("PWHEAMTUSDM", "wheat"), ("PSOYBUSDM", "soybeans"), ("PBEEFUSDM", "beef")):
+        a25 = np.mean([v for m, v in F[sid].items() if m.startswith("2025-") and m <= "2025-09"])
+        a26 = np.mean([v for m, v in F[sid].items() if m.startswith("2026-") and m <= "2026-09"])
+        chg[name] = a26 / a25 - 1
+    R["call"] = dict(prob=0.70, last=fs[last], year=last, since2016=(min(v for y, v in fs.items() if y >= 2016),
+                                                                    max(v for y, v in fs.items() if y >= 2016)),
+                     price_change=chg, due="2027-12",
+                     corr=float(np.corrcoef([fs[y] for y in range(2008, last + 1)],
+                                            [np.mean([v for m, v in F["PMAIZMTUSDM"].items() if m.startswith(str(y))])
+                                             for y in range(2008, last + 1)])[0, 1]))
     return R
 
 

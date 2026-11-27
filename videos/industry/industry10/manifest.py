@@ -16,7 +16,7 @@ SCENES = [
     ("s11_brands", "Brands", "9. From a bushel to a box"),
     ("s12_state", "State", "10. The state on the farm"),
     ("s13_land", "Land", "11. Land: who keeps the gain"),
-    ("s14_tropics", "Tropics", "12. Cocoa, rice and the world's kitchens"),
+    ("s14_tropics", "Tropics", "12. Cocoa, and the world's plate"),
     ("s15_landscape", "Landscape", "13. The landscape, November 2026"),
     ("s16_called", "Called", "14. Called it?"),
     ("s17_outro", "Outro", "The harvest, and what comes next"),

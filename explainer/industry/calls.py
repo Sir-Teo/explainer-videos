@@ -148,6 +148,23 @@ CALLS = [
          rule="BHP's operational review or annual report for the year to 30 June 2027: Escondida copper production, 100% "
               "basis; true if below 1,100 kt",
          due="2027-08", ours=True),
+    Call(10, "Paul Ehrlich", "1968",
+         "\"The battle to feed all of humanity is over.\" The Population Bomb predicted that hundreds of millions of "
+         "people would starve to death in the coming decades, whatever crash programmes were started.",
+         "Paul R. Ehrlich, The Population Bomb (Ballantine, 1968); Smithsonian Magazine (January 2018)",
+         outcome="Food supply per person rose: the world's from about 2,180 kilocalories a day in 1961 to about 3,010 in "
+                 "2024, India's from about 2,060 to 2,720 and China's from about 1,430 to 3,500 (FAO via Our World in "
+                 "Data), while the world's population more than doubled. Famines still struck, but nothing on the "
+                 "predicted scale."),
+    Call(10, "Industry, Built", "2026-11-27",
+         "In USDA's next food dollar release (covering 2026), the farm share of the US food dollar for 2026 will be "
+         "higher than for 2025 in the same release (12.6 cents in the November 2026 release). Probability: 70%.",
+         "This series, Part 10, chapter 14; reasoning: the world prices of maize, wheat, soybeans and beef averaged 5-18% "
+         "more in January-September 2026 than a year earlier, and the farm share has moved with farm prices; against: "
+         "the shift of spending to restaurants, and revisions",
+         rule="USDA ERS Food Dollar Series, release covering 2026 (expected late 2027): all-food farm share, 2026 against "
+              "2025 in that same release; true if 2026 is higher",
+         due="2027-12", ours=True),
 ]
 
 

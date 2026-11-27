@@ -71,8 +71,8 @@ class Traders(VoiceoverScene):
         pa = viz.plot_axes([2011.4, 2025.6], [0, 110], x_length=6.0, y_length=3.8, xticks=[2012, 2016, 2020, 2025],
                            yticks=[25, 50, 75, 100], xfmt=lambda v: f"{int(v)}", yfmt=lambda v: f"${v:g}bn", size=13).move_to(
             [-3.2, -0.5, 0])
-        rev = viz.year_bars(pa, ys, [adm[y][0] for y in ys], TRADE, width=0.45)
-        prof = viz.year_bars(pa, ys, [adm[y][1] for y in ys], GREEN_C, width=0.45)
+        rev = viz.year_bars(pa, ys, [adm[y][0] for y in ys], TRADE, width=0.3)
+        prof = viz.year_bars(pa, ys, [adm[y][1] for y in ys], GREEN_C, width=0.3)
         pk = VGroup(tx("ADM: revenue (blue) and profit (green)", 16, WHITE, bold=True),
                     tx(f"profit was {100 * T['adm_margin']:.1f} cents per dollar of sales, on average, 2016-2025", 14, GREY_A)
                     ).arrange(DOWN, buff=0.04).next_to(pa, UP, buff=0.12)

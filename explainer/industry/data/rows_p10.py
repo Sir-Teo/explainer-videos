@@ -86,6 +86,9 @@ add(
     r("kswheat.loaves", 70, "loaves", "one-pound loaves of white bread from one bushel of wheat", "Kansas Wheat, 'What does "
       "a bushel of wheat mean to me?'", KSWHEAT, "2024", "press",
       note="Kansas Wheat's (the state's wheat commission) rule of thumb, not a measured average"),
+    # --- futures --------------------------------------------------------------------------------------------------------
+    r("cme.corn.contract", 5000, "bushels", "the size of one CBOT corn futures contract", "CME Group, Corn futures contract "
+      "specifications", "https://www.cmegroup.com/markets/agriculture/grains/corn.contractSpecs.html", "2026"),
     # --- the soybean crush ---------------------------------------------------------------------------------------------
     r("cme.crush.oil", 11, "lb", "soybean oil from one 60-pound bushel of soybeans in the exchange's standard 'board crush' "
       "(with 44 lb of 48%-protein meal)", "CME Group, Soybean Crush Reference Guide",
