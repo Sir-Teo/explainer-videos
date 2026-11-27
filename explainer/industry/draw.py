@@ -37,6 +37,8 @@ Every glyph is a ``VGroup`` with its moving parts named, so a scene can animate 
 * medical technology: :func:`surgical_robot` (``.arms``, ``.table``), :func:`scanner` (``.ring``, ``.bed``),
   :func:`pacemaker` (``.lead``), :func:`test_tubes` (``.tubes``), :func:`glucose_sensor` (``.ring``), :func:`hospital`
   (``.windows``);
+* consumer goods: :func:`soap` (``.bubbles``), :func:`detergent` (``.label``), :func:`cereal_box`, :func:`can`,
+  :func:`shelf` (``.packs``, ``.store``), :func:`cart`;
 * the city and its people: :func:`skyline` (``.windows`` light up), :func:`house`, :func:`shop`, :func:`person`,
   :func:`crowd`; :func:`sun`, :func:`moon`, :func:`sky` (a background whose colour follows the hour);
 * money: :func:`coin`, :func:`coin_stack`, :func:`note_bill`, :func:`coin_flow` (coins flying from one place to
@@ -2343,3 +2345,83 @@ def hospital(w: float = 1.8, color: str = "#C9D3E0", cross: str = "#E8554E") -> 
     g = VGroup(wing, body, windows, door, cr)
     g.windows = windows
     return g
+
+
+# ----------------------------------------------------------------------------------------------------------------------
+# Consumer goods (Part 22)
+# ----------------------------------------------------------------------------------------------------------------------
+
+def soap(w: float = 1.0, color: str = "#F2A7B5") -> VGroup:
+    """A bar of soap with a stamped oval and a few bubbles (``g.bubbles``)."""
+    bar = RoundedRectangle(corner_radius=0.18 * w, width=w, height=0.55 * w, stroke_width=0, fill_color=color, fill_opacity=1)
+    stamp = Ellipse(width=0.6 * w, height=0.28 * w, stroke_color="#FFFFFF", stroke_width=2, stroke_opacity=0.6)
+    bubbles = VGroup(*[Circle(radius=r * w, stroke_color="#DDE6F0", stroke_width=1.5).move_to([x * w, y * w, 0])
+                       for x, y, r in ((0.45, 0.4, 0.07), (0.3, 0.52, 0.05), (0.55, 0.6, 0.04))])
+    g = VGroup(bar, stamp, bubbles)
+    g.bubbles = bubbles
+    return g
+
+
+def detergent(h: float = 1.2, color: str = "#F2A65A", label: str = "#FFFFFF") -> VGroup:
+    """A detergent jug with a handle, a cap and a label (``g.label``)."""
+    body = RoundedRectangle(corner_radius=0.08 * h, width=0.7 * h, height=0.85 * h, stroke_width=0, fill_color=color,
+                            fill_opacity=1).move_to([0, 0.425 * h, 0])
+    handle = Rectangle(width=0.12 * h, height=0.3 * h, stroke_width=0, fill_color=color, fill_opacity=1).move_to([0.26 * h, 0.95 * h, 0])
+    hole = Rectangle(width=0.1 * h, height=0.18 * h, stroke_width=0, fill_color="#0E1117", fill_opacity=1).move_to([0.17 * h, 0.95 * h, 0])
+    cap = Rectangle(width=0.2 * h, height=0.12 * h, stroke_width=0, fill_color="#3A4152", fill_opacity=1).move_to([-0.18 * h, 0.9 * h, 0])
+    lab = Circle(radius=0.2 * h, stroke_width=0, fill_color=label, fill_opacity=0.9).move_to([0, 0.4 * h, 0])
+    g = VGroup(body, handle, hole, cap, lab)
+    g.label = lab
+    return g
+
+
+def cereal_box(h: float = 1.4, color: str = "#E8554E", accent: str = "#F6C453") -> VGroup:
+    """A cereal box seen front on, with a bowl on it."""
+    box = Rectangle(width=0.7 * h, height=h, stroke_width=0, fill_color=color, fill_opacity=1).move_to([0, 0.5 * h, 0])
+    band = Rectangle(width=0.7 * h, height=0.18 * h, stroke_width=0, fill_color=accent, fill_opacity=1).move_to([0, 0.85 * h, 0])
+    bowl = VGroup(Arc(radius=0.2 * h, start_angle=PI, angle=PI, stroke_color="#FFFFFF", stroke_width=3),
+                  *[Dot([x * h, 0.4 * h, 0], radius=0.025 * h, color=accent) for x in (-0.1, -0.03, 0.05, 0.12)]).move_to([0, 0.36 * h, 0])
+    return VGroup(box, band, bowl)
+
+
+def can(h: float = 1.0, color: str = "#E8554E", band: str = "#FFFFFF") -> VGroup:
+    """A drinks can with a white wave across it."""
+    body = RoundedRectangle(corner_radius=0.06 * h, width=0.55 * h, height=h, stroke_width=0, fill_color=color,
+                            fill_opacity=1).move_to([0, 0.5 * h, 0])
+    top = Rectangle(width=0.5 * h, height=0.06 * h, stroke_width=0, fill_color="#C9D3E0", fill_opacity=1).move_to([0, 1.0 * h, 0])
+    wave = CubicBezier([-0.27 * h, 0.45 * h, 0], [-0.1 * h, 0.6 * h, 0], [0.1 * h, 0.35 * h, 0], [0.27 * h, 0.52 * h, 0],
+                       stroke_color=band, stroke_width=4)
+    return VGroup(body, top, wave)
+
+
+def shelf(w: float = 6.0, rows: int = 3, n: int = 8, colors=("#F2A65A", "#7EC8F5", "#E8554E", "#7BD88F", "#B58CFF"),
+          store: str = "#C9D3E0", store_share: float = 0.3) -> VGroup:
+    """A supermarket shelf of ``rows`` boards, each with ``n`` packs (``g.packs``); the store label's packs, the right-hand
+    ``store_share`` of each row, are plain grey (``g.store``)."""
+    boards, packs, storeg = VGroup(), VGroup(), VGroup()
+    pw = w / n
+    for j in range(rows):
+        y = j * 0.9
+        boards.add(Rectangle(width=w, height=0.06, stroke_width=0, fill_color="#5C6472", fill_opacity=1).move_to([0, y, 0]))
+        for i in range(n):
+            own = i >= n * (1 - store_share)
+            p = RoundedRectangle(corner_radius=0.04, width=pw * 0.8, height=0.7, stroke_width=0,
+                                 fill_color=store if own else colors[(i + j) % len(colors)], fill_opacity=0.95).move_to(
+                [-w / 2 + pw * (i + 0.5), y + 0.4, 0])
+            (storeg if own else packs).add(p)
+    g = VGroup(boards, packs, storeg)
+    g.packs, g.store = packs, storeg
+    return g
+
+
+def cart(w: float = 1.2, color: str = "#C9D3E0") -> VGroup:
+    """A shopping trolley."""
+    basket = Polygon([-0.5 * w, 0.6 * w, 0], [0.45 * w, 0.6 * w, 0], [0.35 * w, 0.2 * w, 0], [-0.38 * w, 0.2 * w, 0],
+                     stroke_color=color, stroke_width=3, fill_opacity=0)
+    grid = VGroup(*[Line([x * w, 0.58 * w, 0], [x * w * 0.85, 0.22 * w, 0], stroke_color=color, stroke_width=1.5)
+                    for x in (-0.25, 0, 0.25)])
+    handle = Line([-0.5 * w, 0.6 * w, 0], [-0.62 * w, 0.75 * w, 0], stroke_color=color, stroke_width=3)
+    frame = Line([-0.38 * w, 0.2 * w, 0], [-0.4 * w, 0.08 * w, 0], stroke_color=color, stroke_width=3)
+    wheels = VGroup(*[Circle(radius=0.05 * w, stroke_color=color, stroke_width=3).move_to([x * w, 0.04 * w, 0]) for x in (-0.35, 0.3)])
+    base = Line([-0.4 * w, 0.08 * w, 0], [0.33 * w, 0.08 * w, 0], stroke_color=color, stroke_width=3)
+    return VGroup(basket, grid, handle, frame, base, wheels)

@@ -1,15 +1,15 @@
 # Industry, Built (产业，从零搭建)
 
-**Status (2026-11-27): Parts 1-21, [*Where the Money Goes*](industry1/README.md), [*The Economy on One
+**Status (2026-11-27): Parts 1-22, [*Where the Money Goes*](industry1/README.md), [*The Economy on One
 Page*](industry2/README.md), [*The Accounts*](industry3/README.md), [*The Cost Curve*](industry4/README.md), [*The
 Moat*](industry5/README.md), [*The Cycle*](industry6/README.md), [*Sizing a Market*](industry7/README.md), [*Oil and
 Gas*](industry8/README.md), [*Mining and Metals*](industry9/README.md), [*Farming and Food*](industry10/README.md),
 [*Heavy Materials*](industry11/README.md), [*Chemicals*](industry12/README.md), [*Electricity*](industry13/README.md), [*Water and
 Waste*](industry14/README.md), [*Semiconductors*](industry15/README.md), [*Electronics*](industry16/README.md),
 [*Automobiles*](industry17/README.md), [*Aerospace and Defence*](industry18/README.md),
-[*Machinery*](industry19/README.md), [*Pharmaceuticals*](industry20/README.md) and [*Medical
-Technology*](industry21/README.md), are built, in English, with their labs and interactives: Acts I and II are complete
-and Act III has begun. Parts 22-64 are planned.** This file is the plan. The standard every part meets, the
+[*Machinery*](industry19/README.md), [*Pharmaceuticals*](industry20/README.md), [*Medical
+Technology*](industry21/README.md) and [*Consumer Goods*](industry22/README.md), are built, in English, with their labs and interactives: Acts I and II are complete
+and Act III has begun. Parts 23-64 are planned.** This file is the plan. The standard every part meets, the
 devices, the data plan and all sixty-four parts chapter by chapter are in [`SYLLABUS.md`](SYLLABUS.md), with
 progress in its §9. The decisions the plan rests on, and the ones still open, are at the end of this file.
 

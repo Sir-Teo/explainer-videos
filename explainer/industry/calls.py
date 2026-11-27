@@ -362,6 +362,25 @@ CALLS = [
          rule="Intuitive Surgical, Form 8-K with its fourth-quarter 2026 results (January 2027): worldwide da Vinci procedure "
               "growth for 2026 as it reports it; true if 15% or more",
          due="2027-01", ours=True),
+    Call(22, "The Procter & Gamble Company", "2024-07-30",
+         "\"The Company expects organic sales growth in the range of three to five percent\" for fiscal 2025",
+         "The Procter & Gamble Company, Form 8-K of 30 July 2024 (Exhibit 99.1)",
+         outcome="Organic sales up 2% in fiscal 2025 (Form 10-K for fiscal 2025): below the bottom of the range"),
+    Call(22, "The Procter & Gamble Company", "2025-07-29",
+         "\"The Company expects organic sales growth in the range of flat to up four percent\" for fiscal 2026",
+         "The Procter & Gamble Company, Form 8-K of 29 July 2025 (Exhibit 99.1)",
+         outcome="Organic sales up 1% in fiscal 2026 (Form 10-K for fiscal 2026): inside the range, in its lower half"),
+    Call(22, "The Procter & Gamble Company", "2026-07-29",
+         "\"The Company also expects organic sales growth in the range of one to three percent\" for fiscal 2027",
+         "The Procter & Gamble Company, Form 8-K of 29 July 2026 (Exhibit 99.1)",
+         outcome="Pending; first quarter of fiscal 2027 up 4% organically, guidance maintained (Form 8-K of 22 October 2026)"),
+    Call(22, "Industry, Built", "2026-11-27",
+         "P&G's organic sales growth for fiscal 2027 will be 3% or more, the top of its range. Probability: 40%.",
+         "This series, Part 22, chapter 10; reasoning: a 4% first quarter with volume back, but about $1 billion after tax "
+         "of higher costs, a forecast left unchanged, and two years at or below the lower part of its range",
+         rule="The Procter & Gamble Company, Form 8-K with its fiscal 2027 results or Form 10-K for fiscal 2027: organic "
+              "sales growth for the year as reported; true if 3% or more",
+         due="2027-08", ours=True),
 ]
 
 

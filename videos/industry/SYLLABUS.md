@@ -2553,6 +2553,7 @@ scored in Part 64 and at each refresh.
 | 19 · Machinery | done 2026-11-27 (about 90 Register rows; the 10-Ks of Otis, Caterpillar, United Rentals, Honeywell and 3M (2025) and Deere (fiscal 2025), the third-quarter 2026 10-Qs of Caterpillar and Honeywell; the SEC extract of twenty-three machinery companies; FRED's machinery orders, shipments, output, capacity, jobs and prices and the BEA's equipment investment; the IFR's press releases of 2022, 2024 and 2026 and its installations via the AI Index and Our World in Data; UN Comtrade's excavator and robot exports) | `works/machine.py` | 14 scenes, with an excavator whose arm digs, an elevator whose car rides, gears and robot arms | code only: every beat snapshot-checked, not rendered | entry, lab, interactive | not started |
 | 20 · Pharmaceuticals | done 2026-11-27 (about 60 Register rows; Pfizer's 10-K 2012 (Exhibit 13), the 10-Ks of Eli Lilly and Merck (2025) and Lilly's 8-Ks of February 2025, February 2026 and October 2026; BIO, Informa and QLS's success rates 2011-2020; the FDA's study of generic prices, its generic approvals and novel drug lists; CMS's fact sheet on the first negotiated prices; the SEC extract of sixteen drug, biotech and generics companies; FRED's drug producer prices and medicine output) | `works/pharma.py` | 15 scenes, with capsules, tablets, flasks and vials, a hundred candidates through the funnel and a drug's life to its cliff | code only: every beat snapshot-checked, not rendered | entry, lab, interactive | not started |
 | 21 · Medical Technology | done 2026-11-27 (about 100 Register rows; the 10-Ks 2025 of Intuitive Surgical, Abbott, Boston Scientific, Stryker, Quest, GE HealthCare and Edwards, Medtronic's for fiscal 2026 and Abbott's for 2022, Intuitive's 10-Q and 8-Ks of 2025-2026; the SEC extract of twenty-three companies; openFDA's 510(k), De Novo, PMA and recall counts; FRED's instrument prices and output) | `works/medtech.py` | 14 scenes, with a surgical robot whose arms move, a scanner, a pacemaker, test tubes on a belt, glucose sensors and a hospital | code only: every beat snapshot-checked, not rendered | entry, lab, interactive | not started |
+| 22 · Consumer Goods | done 2026-11-27 (about 120 Register rows; P&G's 10-Ks for fiscal 2020-2026 and its 8-Ks of 2024-2026, the 10-Ks 2025 of Coca-Cola, Altria, PMI, Colgate, Church & Dwight, Kimberly-Clark and Hershey and those for fiscal 2026 of Clorox, General Mills and Costco; the SEC extract of twenty-five makers; FRED's CPI for personal care, food at home and tobacco) | `works/brand.py` | 13 scenes, with soap, detergent, cereal, cans, a shelf with a store label and a trolley | code only: every beat snapshot-checked, not rendered | entry, lab, interactive | not started |
 
 Phase 0 is done in the form Part 1 needed: the palette and kit (`style.py`, `kit.py`), the instruments (`viz.py`: the
 phone and its exploded view, the region map, the Dollar column, the margin ladder, the treemap, plain axes), the
@@ -2810,4 +2811,19 @@ HealthCare's reports and Intuitive's robot quota. The drug-eluting stent forecas
 scores Intuitive's procedure guidance, with the series' call on 2026. Added: pulsed field ablation as the new procedure,
 Abbott's COVID-19 tests, and the device dollar beside Part 20's drug dollar. J&J MedTech, Siemens Healthineers, Philips,
 United Imaging, Roche Diagnostics, Olympus, Terumo and Mindray appear on the map by name only. Written as code only and
+checked from snapshots; not rendered.
+
+Part 22 departs from its draft's story: Neil McElroy's memo of 1931 is not used, since no primary copy was read; the hook is
+P&G's own accounts instead (sales 2.01 times the cost of products sold, $10.2bn of advertising, Walmart 16% of sales). Run
+it is the draft's year as a brand manager, made one decision, whether to cut the advertising or the price against a store
+label, on the Works' brand (`works/brand.py`), with the retailer's share shown beside it. Slotting fees and category
+captains (the FTC's study was not read) give way to the makers' own disclosures: Walmart's share of each maker's sales,
+trade promotion netted from General Mills' revenue, Costco's words on Kirkland Signature. Three-tier alcohol distribution
+and zero-based budgets are left out; the bottler chapter uses Coca-Cola's concentrate and finished-product split and
+Coca-Cola Consolidated's margins. The Master Settlement Agreement is told through Altria's own description of the State
+Settlement Agreements and the FDA's marketing rule. The "death of brands" after Marlboro Friday was not read in a primary
+source, so *Called it?* scores P&G's organic sales guidance for fiscal 2025, 2026 and 2027, with the series' call on
+fiscal 2027. Added: Hershey's cocoa year, PMI's smoke-free revenue, Monster's growth and the advertising-against-margin
+picture. Unilever, L'Oreal, Kao, Hindustan Unilever, Nestle, Danone, Kraft Heinz, Mengniu, Nongfu Spring, Diageo, Kweichow
+Moutai, BAT, China National Tobacco, ITC and the retailers appear on the map by name only. Written as code only and
 checked from snapshots; not rendered.

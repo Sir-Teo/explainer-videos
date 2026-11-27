@@ -2162,6 +2162,38 @@ def fda_510k_panels(year: int = 2025):
                   [f"{OPENFDA}510k.json (510(k) clearances decided in {year}, by advisory committee)"])
 
 
+CONSUMER_COMPANIES = [(80424, "PG", "USD"), (217410, "UL", "EUR"), (21665, "CL", "USD"), (55785, "KMB", "USD"),
+                      (21076, "CLX", "USD"), (313927, "CHD", "USD"), (1001250, "EL", "USD"), (21344, "KO", "USD"),
+                      (77476, "PEP", "USD"), (1103982, "MDLZ", "USD"), (1637459, "KHC", "USD"), (40704, "GIS", "USD"),
+                      (47111, "HSY", "USD"), (764180, "MO", "USD"), (1413329, "PM", "USD"), (16918, "STZ", "USD"),
+                      (14693, "BF-B", "USD"), (835403, "DEO", "USD"), (1668717, "BUD", "USD"), (1418135, "KDP", "USD"),
+                      (23217, "CAG", "USD"), (91419, "SJM", "USD"), (16732, "CPB", "USD"), (865752, "MNST", "USD"),
+                      (317540, "COKE", "USD")]
+CONSUMER_ITEMS = dict(AUTO_ITEMS, advertising=[("us-gaap", "AdvertisingExpense"), ("us-gaap", "MarketingAndAdvertisingExpense"),
+                                               ("us-gaap", "SellingAndMarketingExpense")])
+
+
+FRED_CONSUMER = {"CUUR0000SAG1": "CPI-U: personal care (1982-84 = 100, NSA; BLS)",
+                 "CUUR0000SEGA": "CPI-U: tobacco and smoking products (1982-84 = 100, NSA; BLS)",
+                 "CUUR0000SAF11": "CPI-U: food at home (1982-84 = 100, NSA; BLS)",
+                 "PCU32563256": "PPI: soap, cleaning compound and toilet preparation manufacturing (Dec 1984 = 100; BLS)",
+                 "CPIAUCNS": "CPI-U: all items (1982-84 = 100, NSA; BLS)"}
+
+
+def fred_consumer():
+    return _fred_write("fred_consumer", FRED_CONSUMER)
+
+
+def sec_consumer():
+    """Annual figures of household, personal-care, food, drink and tobacco makers from their Forms 10-K and 20-F (SEC
+    company facts), in their reporting currency (billions; Unilever in euros), with ``sec_auto``'s items and tag
+    preferences and advertising (AdvertisingExpense, else MarketingAndAdvertisingExpense, else SellingAndMarketingExpense).
+    Procter & Gamble's fiscal year ends in June, Clorox's in June, General Mills' in May, Constellation's in February,
+    Brown-Forman's in April, Diageo's in June, Conagra's in May, Smucker's in April, Campbell's in July or August."""
+    return _write("sec_consumer", ["ticker", "year_end", "currency"] + list(CONSUMER_ITEMS),
+                  _sec_table(CONSUMER_COMPANIES, CONSUMER_ITEMS), [_sec_source(CONSUMER_ITEMS)])
+
+
 FRED_AERO = {"ANAPNO": "New orders: nondefense aircraft and parts ($ million a month, SA; Census M3)",
              "ANAPVS": "Shipments: nondefense aircraft and parts ($ million a month, SA; Census M3)",
              "ADAPNO": "New orders: defense aircraft and parts ($ million a month, SA; Census M3)",
@@ -2217,7 +2249,7 @@ def sipri_milex():
                    "estimates included as published)"])
 
 
-JOBS = {"sec_medtech": sec_medtech, "fred_medtech": fred_medtech, "fda_devices": fda_devices, "fda_510k_panels": fda_510k_panels,
+JOBS = {"fred_consumer": fred_consumer, "sec_consumer": sec_consumer, "sec_medtech": sec_medtech, "fred_medtech": fred_medtech, "fda_devices": fda_devices, "fda_510k_panels": fda_510k_panels,
         "sec_aero": sec_aero, "fred_aero": fred_aero, "sipri_milex": sipri_milex, "census_auto": census_auto, "sec_auto": sec_auto, "fred_auto": fred_auto, "owid_ev": owid_ev, "comtrade_cars": comtrade_cars,
         "sec_pharma": sec_pharma, "fred_pharma": fred_pharma, "sec_mach": sec_mach, "fred_mach": fred_mach, "owid_robots": owid_robots, "comtrade_mach": comtrade_mach,
         "eia_aeo17": eia_aeo17, "comtrade_us_m": comtrade_us_m, "bls_elec": bls_elec, "fred_elec": fred_elec, "comtrade_us": comtrade_us, "fred_chips": fred_chips, "owid_chips": owid_chips, "sec_foreign": sec_foreign, "wb_water": wb_water, "bls_water": bls_water, "fred_waste": fred_waste, "epa_msw": epa_msw, "eia_930": eia_930, "eia_mer": eia_mer, "fred_power": fred_power, "owid_elec": owid_elec, "owid_chem": owid_chem, "fred_chem": fred_chem, "eia_ngl": eia_ngl, "eurostat_chem": eurostat_chem, "usgs_heavy": usgs_heavy, "fred_heavy": fred_heavy, "owid_co2": owid_co2, "ers_food_dollar": ers_food_dollar, "ers_costs": ers_costs, "ers_farm_income": ers_farm_income, "owid_ag": owid_ag, "fred_food": fred_food, "ne_land": ne_land, "usgs_ds140": usgs_ds140, "fred_metals": fred_metals, "sec_ifrs": sec_ifrs, "eia_gas": eia_gas, "eia_petroleum": eia_petroleum, "eia_intl": eia_intl, "eia_pump": eia_pump, "fred_energy": fred_energy, "fred_market": fred_market, "owid_tech": owid_tech, "sec_quarterly": sec_quarterly, "fred_cycle": fred_cycle, "esef_maersk": esef_maersk, "damodaran_roc": damodaran_roc, "census_conc": census_conc, "eia_power": eia_power, "fred_pay": fred_pay, "bea_real": bea_real, "sec_annual": sec_annual, "fred_prices": fred_prices, "census_susb": census_susb, "bea_va": bea_va, "wb_mfg_usd": wb_mfg_usd, "bea_hist": bea_hist, "bea_io": bea_io, "fred_jobs": fred_jobs, "wb_shares": wb_shares}
