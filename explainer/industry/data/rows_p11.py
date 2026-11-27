@@ -237,6 +237,9 @@ add(
            "quarry", "Vulcan Materials", VMC),
     filing("mlm.crh.2024", 2.1, "$ billion", "Martin Marietta's sale of its South Texas cement business to CRH, "
            "completed 9 February 2024", "Martin Marietta Materials", MLM, "2024-02-09"),
+    r("x.founded", 1901, "year", "United States Steel Corporation: 'a Delaware corporation established in 1901'",
+      "United States Steel Corporation, Form 10-K for 2024", "https://www.sec.gov/Archives/edgar/data/1163302/"
+      "000116330225000018/x-20241231.htm", "1901", "filing"),
     filing("alcoa.power_share", 24, "% of costs", "Electric power's share of Alcoa's primary aluminium production costs, "
            "2025", "Alcoa", AA),
     # --- history and ideas ----------------------------------------------------------------------------------------------------
