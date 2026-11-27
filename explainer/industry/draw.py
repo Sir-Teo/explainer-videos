@@ -44,6 +44,8 @@ Every glyph is a ``VGroup`` with its moving parts named, so a scene can animate 
   (``.label``, ``.strike`` for a markdown);
 * construction: :func:`tower_crane` (``.hook``), :func:`skyscraper_frame` (``.floors`` rise one by one), :func:`bridge`
   (``.deck``), :func:`toll_road` (``.gantry``, ``.cars``), :func:`hardhat`, :func:`blueprint` (``.plan``);
+* homes: :func:`house_frame` (``.studs``, ``.trusses``), :func:`plot_lot` (``.stakes``), :func:`sale_sign` (``.board``),
+  :func:`house_key`;
 * the city and its people: :func:`skyline` (``.windows`` light up), :func:`house`, :func:`shop`, :func:`person`,
   :func:`crowd`; :func:`sun`, :func:`moon`, :func:`sky` (a background whose colour follows the hour);
 * money: :func:`coin`, :func:`coin_stack`, :func:`note_bill`, :func:`coin_flow` (coins flying from one place to
@@ -2623,3 +2625,50 @@ def blueprint(w: float = 1.4, color: str = "#2F6FB5") -> VGroup:
     g = VGroup(sheet, plan)
     g.plan = plan
     return g
+
+
+def house_frame(w: float = 1.6, color: str = "#D9B382") -> VGroup:
+    """A house under construction: timber studs, a top plate and roof trusses (``g.studs``, ``g.trusses``) on a slab."""
+    slab = Rectangle(width=w * 1.05, height=0.06 * w, stroke_width=0, fill_color="#9AA3B2", fill_opacity=1).move_to([0, -0.03 * w, 0])
+    studs = VGroup(*[Line([x, 0, 0], [x, 0.55 * w, 0], stroke_color=color, stroke_width=2.5) for x in np.linspace(-w / 2, w / 2, 9)])
+    plate = Line([-w / 2, 0.55 * w, 0], [w / 2, 0.55 * w, 0], stroke_color=color, stroke_width=3)
+    trusses = VGroup(Line([-0.58 * w, 0.55 * w, 0], [0, 0.9 * w, 0], stroke_color=color, stroke_width=3),
+                     Line([0.58 * w, 0.55 * w, 0], [0, 0.9 * w, 0], stroke_color=color, stroke_width=3),
+                     *[Line([x, 0.55 * w, 0], [x, 0.55 * w + 0.35 * w * (1 - abs(x) / (0.58 * w)), 0], stroke_color=color,
+                            stroke_width=1.5) for x in np.linspace(-0.4 * w, 0.4 * w, 5)])
+    g = VGroup(slab, studs, plate, trusses)
+    g.studs, g.trusses = studs, trusses
+    return g
+
+
+def plot_lot(w: float = 1.6, color: str = "#7BD88F") -> VGroup:
+    """An empty building lot: a patch of ground marked out by four corner stakes and a string line (``g.stakes``)."""
+    ground = Polygon([-w / 2, 0, 0], [w / 2, 0, 0], [0.38 * w, 0.3 * w, 0], [-0.38 * w, 0.3 * w, 0], stroke_width=0,
+                     fill_color=color, fill_opacity=0.35)
+    corners = [[-w / 2, 0, 0], [w / 2, 0, 0], [0.38 * w, 0.3 * w, 0], [-0.38 * w, 0.3 * w, 0]]
+    stakes = VGroup(*[Line(c, [c[0], c[1] + 0.14 * w, 0], stroke_color="#F2A65A", stroke_width=3) for c in corners])
+    string = Polygon(*[[c[0], c[1] + 0.1 * w, 0] for c in corners], stroke_color="#F6C453", stroke_width=1.2, fill_opacity=0)
+    g = VGroup(ground, string, stakes)
+    g.stakes = stakes
+    return g
+
+
+def sale_sign(w: float = 0.9, text: str = "FOR SALE", color: str = "#E8554E") -> VGroup:
+    """A for-sale sign on a post (``g.board``)."""
+    post = Line([0, 0, 0], [0, 1.0 * w, 0], stroke_color="#C9D3E0", stroke_width=4)
+    arm = Line([0, 0.95 * w, 0], [0.75 * w, 0.95 * w, 0], stroke_color="#C9D3E0", stroke_width=3)
+    board = Rectangle(width=0.7 * w, height=0.4 * w, stroke_width=0, fill_color=color, fill_opacity=1).move_to([0.4 * w, 0.68 * w, 0])
+    lab = tx(text, 13 * w, "#FFFFFF", bold=True).move_to(board)
+    if lab.width > board.width * 0.9:
+        lab.scale_to_fit_width(board.width * 0.9)
+    g = VGroup(post, arm, board, lab)
+    g.board = board
+    return g
+
+
+def house_key(w: float = 0.9, color: str = "#F6C453") -> VGroup:
+    """A door key."""
+    bow = Circle(radius=0.18 * w, stroke_color=color, stroke_width=5).move_to([-0.3 * w, 0, 0])
+    blade = Line([-0.12 * w, 0, 0], [0.45 * w, 0, 0], stroke_color=color, stroke_width=6)
+    teeth = VGroup(*[Line([x * w, 0, 0], [x * w, -0.1 * w, 0], stroke_color=color, stroke_width=5) for x in (0.25, 0.35, 0.43)])
+    return VGroup(bow, blade, teeth)

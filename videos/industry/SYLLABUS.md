@@ -2556,6 +2556,7 @@ scored in Part 64 and at each refresh.
 | 22 · Consumer Goods | done 2026-11-27 (about 120 Register rows; P&G's 10-Ks for fiscal 2020-2026 and its 8-Ks of 2024-2026, the 10-Ks 2025 of Coca-Cola, Altria, PMI, Colgate, Church & Dwight, Kimberly-Clark and Hershey and those for fiscal 2026 of Clorox, General Mills and Costco; the SEC extract of twenty-five makers; FRED's CPI for personal care, food at home and tobacco) | `works/brand.py` | 13 scenes, with soap, detergent, cereal, cans, a shelf with a store label and a trolley | code only: every beat snapshot-checked, not rendered | entry, lab, interactive | not started |
 | 23 · Fashion and Luxury | done 2026-11-27 (about 160 Register rows; Inditex's FY2025 and 1H2026 results; Hermès's full-year results 2023-2025; LVMH's 2025 results; Kering's 2023 and 2025 results; the 10-Ks of NIKE, TJX, Tapestry, Capri, Lululemon and Levi Strauss; the SEC extract of twenty-three companies; UN Comtrade's clothing exports; FRED's apparel prices and jobs; the WTO on the end of quotas; the ILO on Rana Plaza) | `works/fashion.py` | 14 scenes, with T-shirts on rails, handbags, trainers, sewing machines and price tags | code only: every beat snapshot-checked, not rendered | entry, lab, interactive | not started |
 | 24 · Construction | done 2026-11-27 (about 70 Register rows; the Empire State Building's fact sheet; California's high-speed rail business plans of 2008 and 2026; the NAO on Carillion; Flyvbjerg (2014); Ferrovial's 20-F; the 10-Ks of Fluor, Quanta and Martin Marietta; the SEC extract of twenty-five companies; the Census's construction spending and the BLS's jobs and prices via FRED; BEA's real value added and prices since 1947) | `works/contractor.py` | 13 scenes, with a building frame rising floor by floor, tower cranes, bridges, toll roads, hard hats and blueprints | code only: every beat snapshot-checked, not rendered | entry, lab, interactive | not started |
+| 25 · Homes | done 2026-11-27 (about 55 Register rows; D.R. Horton's Forms 8-K of October 2025 and 2026 and its 10-K for fiscal 2026; the 10-Ks of Lennar, NVR, Fannie Mae, Compass and Invitation Homes; the SEC extract of twenty-five builders, factory builders, suppliers, lenders, brokers and landlords; Case-Shiller, the Census's starts, sales, prices and homeownership, Freddie Mac's rates, the BLS's rents and materials prices and the Federal Reserve's mortgage debt via FRED) | `works/builder.py` | 12 scenes, with lots, house frames rising into houses, sale signs and keys | code only: every beat snapshot-checked, not rendered | entry, lab, interactive | not started |
 
 Phase 0 is done in the form Part 1 needed: the palette and kit (`style.py`, `kit.py`), the instruments (`viz.py`: the
 phone and its exploded view, the region map, the Dollar column, the margin ladder, the treemap, plain axes), the
@@ -2858,3 +2859,18 @@ results could not be fetched, so Ferrovial's 20-F carries the concession chapter
 (quarries, rental), Fluor's move to reimbursable contracts, the power and factory boom (Quanta), and *Called it?* on
 California's railway in place of the Channel Tunnel and the Big Dig, which appear in Flyvbjerg's table. Written as code
 only and checked from snapshots; not rendered.
+
+Part 25 follows its draft's question. Levittown's "a house every sixteen minutes" was not checked against a primary
+source, so the hook is one house instead: the median new house's price and the thirty-year rate in January 2021 and
+October 2026, from the Census Bureau and Freddie Mac. Run it is the draft's land bought for delivery in three years, as a
+choice between owning the lot and optioning it through a boom and a bust, on the Works' builder (`works/builder.py`: a
+land deal with carry, a land banker's escalator and a forfeitable deposit, its crossing point, and the level-payment
+mortgage); prepayment and the build cycle are left out. The real builders' land is read from their filings: D.R.
+Horton's lots owned and controlled and Forestar, Lennar's options and the homesites it walked away from, NVR's lot
+purchase agreements. Supply is measured nationally (starts, sales, months' supply, prices against materials and incomes)
+rather than by city; the land and zoning explanation is given as this series' summary. The mortgage chain is told from
+Fannie Mae's 10-K and a lender's margins (UWM) rather than chapter by chapter; the broker from Compass's account of the
+2024 settlement. China, India, Japan, Germany and Singapore, Barratt, Sekisui House, Vanke, Country Garden, DLF,
+Rightmove, KE Holdings and Vonovia are left to later parts and the map; *Called it?* uses D.R. Horton's own guidance and
+Fannie Mae's 2026 forecast in place of the 2005-06 housing forecasts, which were not read. Written as code only and
+checked from snapshots; not rendered.

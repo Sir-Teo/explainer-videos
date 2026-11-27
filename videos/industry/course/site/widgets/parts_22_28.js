@@ -217,4 +217,75 @@
     });
   };
 
+  W.landbet = function (el) {
+    var PRICE = 400, LOT = 100, BUILD = 220, OH = 0.08, YRS = 3, CARRY = 0.07, BOOM = 0.08;
+    function deal(v, pb) {
+      var out = {}, st, s, own, opt;
+      var lotOwn = LOT * Math.pow(1 + CARRY, YRS), lotOpt = LOT * Math.pow(1 + v.esc, YRS);
+      out.own = {}; out.opt = {};
+      [["boom", BOOM], ["bust", v.bust]].forEach(function (x) {
+        s = PRICE * (1 + x[1]);
+        own = s - lotOwn - BUILD - OH * s;
+        opt = s - lotOpt - BUILD - OH * s;
+        out.own[x[0]] = own;
+        out.opt[x[0]] = x[0] === "boom" ? opt : Math.max(opt, -v.dep);
+      });
+      out.own.e = (1 - pb) * out.own.boom + pb * out.own.bust;
+      out.opt.e = (1 - pb) * out.opt.boom + pb * out.opt.bust;
+      return out;
+    }
+    function pay(principal, rate) {
+      var r = rate / 12, n = 360;
+      return r ? principal * r / (1 - Math.pow(1 + r, -n)) : principal / n;
+    }
+    QB.widget(el, {
+      title: "Bet on land",
+      sub: "A home sells for $400k today: $100k for the finished lot, $220k to build it, 8% to sell it and run the company. You will sell it in three years, 8% higher if rates hold or lower if they rise. Own the lot now and carry it at 7% a year, or option it: put down a deposit and buy it later at a price that rises each year by what the land banker asks, or walk away and lose the deposit. Then set a price and a mortgage rate and see the monthly payment.",
+      panels: 2, height: 300, weights: [1, 1],
+      controls: [
+        { k: "pb", label: "Chance that prices fall", min: 0, max: 1, step: 0.05, value: 0.4, fmt: function (x) { return Math.round(100 * x) + "%"; } },
+        { k: "bust", label: "How far prices fall if they do", min: -0.3, max: 0, step: 0.01, value: -0.15, fmt: function (x) { return Math.round(100 * x) + "%"; } },
+        { k: "esc", label: "What the land banker asks, a year", min: 0.04, max: 0.2, step: 0.01, value: 0.12, fmt: function (x) { return Math.round(100 * x) + "%"; } },
+        { k: "dep", label: "The option deposit", min: 2, max: 30, step: 1, value: 10, fmt: function (x) { return "$" + x + "k"; } },
+        { k: "hp", label: "House price (for the payment)", min: 200, max: 800, step: 10, value: 390, fmt: function (x) { return "$" + x + "k"; } },
+        { k: "rate", label: "Thirty-year mortgage rate", min: 0.02, max: 0.1, step: 0.0025, value: 0.0725, fmt: function (x) { return (100 * x).toFixed(2) + "%"; } },
+      ],
+      draw: function (g, v, s) {
+        var ps = [], own = [], opt = [], k, lo = 1e9, hi = -1e9, cross = null, prev = null;
+        for (k = 0; k <= 20; k++) {
+          var pb = k / 20, d = deal(v, pb);
+          ps.push(100 * pb); own.push(d.own.e); opt.push(d.opt.e);
+          lo = Math.min(lo, d.own.e, d.opt.e); hi = Math.max(hi, d.own.e, d.opt.e);
+          var diff = d.own.e - d.opt.e;
+          if (prev !== null && cross === null && prev[1] > 0 && diff <= 0) cross = 100 * (prev[0] + (k / 20 - prev[0]) * prev[1] / (prev[1] - diff));
+          prev = [pb, diff];
+        }
+        var pad = Math.max(3, (hi - lo) * 0.1);
+        var ax = g[0].axes({ x: [0, 100], y: [Math.min(lo - pad, -pad), hi + pad], title: "Expected profit per home, $k",
+                             xticks: [0, 25, 50, 75, 100], xfmt: function (x) { return x + "%"; }, yfmt: function (y) { return Math.round(y); } });
+        ax.hline(0, { color: C.muted });
+        ax.line(ps, own, { color: C.p, width: 2.4 });
+        ax.line(ps, opt, { color: C.q, width: 2.4 });
+        ax.vline(100 * v.pb, { color: C.spot, dash: [5, 4], width: 1.4 });
+        ax.legend([["own the lot", C.p], ["option the lot", C.q]], { pos: "tr" });
+        var rs = [], pays = [], loan = 0.9 * v.hp * 1000;
+        for (k = 0; k <= 32; k++) { var r = 0.02 + 0.0025 * k; rs.push(100 * r); pays.push(pay(loan, r)); }
+        var bx = g[1].axes({ x: [2, 10], y: [0, Math.max.apply(null, pays) * 1.1], title: "Monthly payment with 10% down, $",
+                             xticks: [2, 4, 6, 8, 10], xfmt: function (x) { return x + "%"; }, yfmt: function (y) { return Math.round(y).toLocaleString(); } });
+        bx.line(rs, pays, { color: C.p, width: 2.4 });
+        bx.vline(100 * v.rate, { color: C.spot, dash: [5, 4], width: 1.4 });
+        s.r = { d: deal(v, v.pb), cross: cross, pay: pay(loan, v.rate), pay3: pay(loan, 0.03) };
+      },
+      readout: function (v, s) {
+        var d = s.r.d;
+        return [["own: profit if prices rise / fall / on average, $k", d.own.boom.toFixed(1) + " / " + d.own.bust.toFixed(1) + " / " + d.own.e.toFixed(1)],
+                ["option: profit if prices rise / fall / on average, $k", d.opt.boom.toFixed(1) + " / " + d.opt.bust.toFixed(1) + " / " + d.opt.e.toFixed(1)],
+                ["per dollar tied up (own $100k, option the deposit)", Math.round(100 * d.own.e / LOT) + "% against " + Math.round(100 * d.opt.e / v.dep) + "%"],
+                ["chance of a fall at which the option earns more per home", s.r.cross === null ? "none in range" : Math.round(s.r.cross) + "%"],
+                ["monthly payment at your rate; at 3%", "$" + Math.round(s.r.pay).toLocaleString() + "; $" + Math.round(s.r.pay3).toLocaleString()]];
+      },
+      note: "The Works' builder, as in the film: with a 40% chance of a 15% fall and a land banker asking 12% a year, owning earns $21.1k a home on average and optioning $18.2k, but the option ties up $10k instead of $100k; above about a 48% chance of a fall the option earns more even per home. D.R. Horton controlled 77% of its lots through purchase contracts in 2026, Lennar 98% of its homesites through options. The median new house cost $391.3k in October 2026, when the rate was 7.33%: $2,421 a month with 10% down. The land numbers are illustrations.",
+    });
+  };
+
 })();

@@ -136,4 +136,47 @@ PARTS = [
               ("The tender and the contractor's cash", "explainer/industry/works/contractor.py"),
               ("The SEC, FRED and BEA extracts", "explainer/industry/data/SOURCES.md")),
     ),
+    Part(
+        n=25, level="U", widget="landbet", prereq=(3, 5, 6, 24),
+        question="Where does the price of a house come from: the house, the land or the loan?",
+        story="The part opens on one house: the median new American house cost $354.8k in January 2021 at a 2.74% "
+              "mortgage rate and $391.3k in October 2026 at 7.33%, and the monthly payment with 10% down went from $1,301 "
+              "to $2,421, most of the rise from the rate. The viewer buys land for homes to be sold in three years, owning "
+              "the lot or optioning it: owning earns $21.1k a home on average and loses $29.7k in a bust; optioning earns "
+              "$18.2k and loses only its $10k deposit, 182% on the money tied up against 21%; above a 48% chance of a bust "
+              "it earns more even per home. D.R. Horton closed 84,202 homes in fiscal 2026 at a 20.2% gross margin and "
+              "owned only 23% of its 570,600 lots; Lennar controlled 98% of its homesites by option, paid $62.7k of "
+              "incentives a home and walked away from 15,500 homesites; NVR holds 169,250 lots on $920.1m of deposits. "
+              "Since 2000 house prices rose 3.14 times, building materials 2.27 and consumer prices 1.87: the gap is land "
+              "near jobs and the permission to build on it. The payment on the median new house took 22% of median income "
+              "in 2020 and 33% in 2025. Brokers, portals, iBuyers and lenders keep little; Home Depot sells five times "
+              "what the largest builder does. The series gives 60% that D.R. Horton closes fewer than 81,500 homes in "
+              "fiscal 2027.",
+        handoff="Part 26, property, turns to the offices, shops and warehouses that companies rent, and the investors who "
+                "own them.",
+        outside="Probability and expected value; options as the right but not the duty to buy; the annuity formula; Part "
+                "3's accounts and inventory; Part 5's moats; Part 6's cycle; Part 24's construction; Economics, Built's "
+                "city (land rent and the monocentric city) and credit chapters.",
+        objectives={
+            "U": ["Explain why what a buyer can borrow, and so the mortgage rate, sets what a buyer can pay.",
+                  "Explain why house prices have outrun building costs: land near jobs and the permission to build.",
+                  "Explain why the largest builders control most of their land by option rather than own it."],
+            "M": ["Compute the expected profit and return on capital of owning against optioning land under two futures.",
+                  "Compute a fixed-rate mortgage payment and split a change in it into the effects of price and rate.",
+                  "Compute price-to-income ratios and the payment's share of income from published series."],
+            "D": ["Read a builder's guidance against its outcome, and make and state a dated, scorable forecast."],
+            "I": ["Read a homebuilder's closings, margins, incentives and land position in its filings.",
+                  "Read a mortgage guarantor's book and forecasts, and a broker's and a lender's margins."],
+        },
+        results=[
+            ("Owning against optioning", r"E[\pi] = (1 - p)\,\pi_{\text{boom}} + p\,\pi_{\text{bust}}, \quad \pi^{\text{opt}}_{\text{bust}} = \max(\pi, -D)"),
+            ("The crossing point", r"p^{*} = \frac{\pi^{\text{own}}_{\text{boom}} - \pi^{\text{opt}}_{\text{boom}}}{(\pi^{\text{own}}_{\text{boom}} - \pi^{\text{opt}}_{\text{boom}}) + (\pi^{\text{opt}}_{\text{bust}} - \pi^{\text{own}}_{\text{bust}})}"),
+            ("A fixed-rate mortgage payment", r"M = P\,\frac{r}{1 - (1 + r)^{-n}}"),
+            ("Price over income", r"\frac{\text{median price}}{\text{median household income}}"),
+        ],
+        U=(0, 1, 2, 3, 4, 5, "s07_intermission", 6, 7), I=(8,), D=(9,),
+        also=(("The Register's rows for Part 25", "explainer/industry/data/rows_p25.py"),
+              ("The land deal and the mortgage", "explainer/industry/works/builder.py"),
+              ("The SEC and FRED extracts", "explainer/industry/data/SOURCES.md")),
+    ),
 ]

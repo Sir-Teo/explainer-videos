@@ -412,6 +412,25 @@ CALLS = [
          rule="The California High-Speed Rail Authority's own reports at the end of 2033: true if no fare-paying passenger "
               "service between Merced and Bakersfield has begun before 1 January 2034",
          due="2034-01", ours=True),
+    Call(25, "D.R. Horton", "2025-10-28",
+         "For fiscal 2026: consolidated revenues of $33.5 billion to $35.0 billion and 86,000 to 88,000 homes closed",
+         "D.R. Horton, Inc., Form 8-K of 28 October 2025",
+         outcome="Missed: 84,202 homes closed and consolidated revenues of $33.0 billion in fiscal 2026 (Form 8-K of 29 October "
+                 "2026); fiscal 2027 guided to 79,000-84,000 homes and $30-32 billion"),
+    Call(25, "Fannie Mae", "2026-02",
+         "Total single-family mortgage originations will increase from about $1.94 trillion in 2025 'by approximately 24%' "
+         "in 2026, to about $2.41 trillion, refinancings from $560 billion to $917 billion",
+         "Fannie Mae, Form 10-K for 2025",
+         outcome="Pending; the thirty-year rate averaged about 6.1% in the first quarter of 2026, then rose above 7% in October "
+                 "(Freddie Mac via FRED)"),
+    Call(25, "Industry, Built", "2026-11-27",
+         "D.R. Horton will close fewer than 81,500 homes in fiscal 2027, the year to 30 September 2027, the middle of its "
+         "own guided range. Probability: 60%.",
+         "This series, Part 25, chapter 9; reasoning: it closed 84,202 homes in fiscal 2026, below the bottom of its range; "
+         "fourth-quarter orders fell 7% to 18,619; the thirty-year rate passed 7% in October 2026; against: the range was "
+         "already cut, and it held its volume in a year it called challenging",
+         rule="D.R. Horton's fiscal 2027 results (Form 8-K, October 2027): homes closed as reported; true if fewer than 81,500",
+         due="2027-10", ours=True),
 ]
 
 

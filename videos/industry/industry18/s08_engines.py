@@ -55,7 +55,7 @@ class Engines(VoiceoverScene):
         src = source("General Electric Company (GE Aerospace), Form 10-K 2025: Commercial Engines & Services", size=12)
         beat(self,
              "Now the business. GE Aerospace, which sells engines for both Boeing's and Airbus's jets, builds its engine "
-             "for single-aisle jets, the LEAP, with France's Safran, in a fifty-fifty company called CFM. <bookmark mark='a'/> GE counts about {E['base']:,} of its commercial "
+             f"for single-aisle jets, the LEAP, with France's Safran, in a fifty-fifty company called CFM. <bookmark mark='a'/> GE counts about {E['base']:,} of its commercial "
              f"engines in service around the world. <bookmark mark='b'/> In 2025 it delivered {E['engines']:,} new ones, "
              f"{E['leap']:,} of them LEAPs. The fleet already flying is about twenty times a year's "
              f"new engines. <bookmark mark='c'/> And here is the money: {E['equipment'] / 1e3:.1f} billion dollars from "

@@ -46,7 +46,7 @@ class Few(VoiceoverScene):
              f"{H['key_us']}; in Europe, 2031, and in Japan, 2032 to 2033, so the cliff comes country by country, as "
              "Lipitor's did. Merck has also won approval in America for Keytruda Qlex, the same antibody given as an "
              "injection under the skin rather than a drip, a new form that patients may move to before the old one's date. "
-             "<bookmark mark='c'/> And Lilly took {H['lly_share']} per cent of its revenue from one molecule "
+             f"<bookmark mark='c'/> And Lilly took {H['lly_share']} per cent of its revenue from one molecule "
              "under two brand names. The biggest companies in the industry are, at any moment, a few drugs and a calendar, "
              "and investors watch the calendar as closely as the sales.",
              base=[src], steps=[[pie, lab], facts[:2], facts[2]])

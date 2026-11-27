@@ -2173,6 +2173,45 @@ CONSUMER_ITEMS = dict(AUTO_ITEMS, advertising=[("us-gaap", "AdvertisingExpense")
                                                ("us-gaap", "SellingAndMarketingExpense")])
 
 
+HOME_COMPANIES = [(882184, "DHI", "USD"), (920760, "LEN", "USD"), (822416, "PHM", "USD"), (906163, "NVR", "USD"),
+                  (794170, "TOL", "USD"), (795266, "KBH", "USD"), (833079, "MTH", "USD"), (1576940, "CCS", "USD"),
+                  (799292, "MHO", "USD"), (1825088, "DFH", "USD"), (1580670, "LGIH", "USD"), (278166, "CVCO", "USD"),
+                  (90896, "SKY", "USD"), (1316835, "BLDR", "USD"), (354950, "HD", "USD"), (60667, "LOW", "USD"),
+                  (1805284, "RKT", "USD"), (1783398, "UWMC", "USD"), (310522, "FNMA", "USD"), (1026214, "FMCC", "USD"),
+                  (1617640, "Z", "USD"), (1563190, "COMP", "USD"), (1801169, "OPEN", "USD"), (1687229, "INVH", "USD"),
+                  (1562401, "AMH", "USD")]
+
+
+def sec_homes():
+    """Annual figures of homebuilders, manufactured-home makers, a building-products distributor, the home-improvement
+    stores, mortgage lenders and the two government-sponsored enterprises, the portals and brokers, and single-family
+    landlords, from their Forms 10-K (SEC company facts), with ``sec_fashion``'s items and tags."""
+    return _write("sec_homes", ["ticker", "year_end", "currency"] + list(FASHION_ITEMS),
+                  _sec_table(HOME_COMPANIES, FASHION_ITEMS), [_sec_source(FASHION_ITEMS)])
+
+
+FRED_HOMES = {"CSUSHPINSA": "S&P CoreLogic Case-Shiller U.S. National Home Price Index (Jan 2000 = 100, NSA)",
+              "MSPNHSUS": "Median sales price of new houses sold ($, NSA; Census and HUD)",
+              "MSPUS": "Median sales price of houses sold, quarterly ($, NSA; Census and HUD)",
+              "HOUST": "Housing starts: total (thousands of units, SAAR; Census)",
+              "PERMIT": "New private housing units authorized by building permits (thousands, SAAR; Census)",
+              "HSN1F": "New one-family houses sold (thousands, SAAR; Census)",
+              "MSACSR": "Monthly supply of new houses (months' supply, SA; Census)",
+              "MORTGAGE30US": "30-year fixed-rate mortgage average (percent, weekly; Freddie Mac PMMS)",
+              "CUSR0000SEHA": "CPI-U: rent of primary residence (1982-84 = 100, SA; BLS)",
+              "RHORUSQ156N": "Homeownership rate (percent, quarterly, NSA; Census HVS)",
+              "RRVRUSQ156N": "Rental vacancy rate (percent, quarterly, NSA; Census HVS)",
+              "HHMSDODNS": "Households and nonprofits: one-to-four-family residential mortgages, liability ($ billion, quarterly; Federal Reserve Z.1)",
+              "MEHOINUSA646N": "Median household income ($, annual, current dollars; Census)",
+              "DRSFRMACBS": "Delinquency rate on single-family residential mortgages, all commercial banks (percent, quarterly, SA)",
+              "WPUIP2311001": "PPI: inputs to residential construction, goods (index, NSA; BLS)",
+              "CPIAUCNS": "CPI-U: all items (1982-84 = 100, NSA; BLS)"}
+
+
+def fred_homes():
+    return _fred_write("fred_homes", FRED_HOMES)
+
+
 CONSTRUCTION_COMPANIES = [(1124198, "FLR", "USD"), (52988, "J", "USD"), (868857, "ACM", "USD"), (1050915, "PWR", "USD"),
                           (105634, "EME", "USD"), (15615, "MTZ", "USD"), (861459, "GVA", "USD"), (77543, "TPC", "USD"),
                           (67215, "DY", "USD"), (1035983, "FIX", "USD"), (874238, "STRL", "USD"), (1357615, "KBR", "USD"),
@@ -2387,7 +2426,8 @@ def sipri_milex():
                    "estimates included as published)"])
 
 
-JOBS = {"sec_construction": sec_construction, "fred_construction": fred_construction, "bea_long": bea_long,
+JOBS = {"sec_homes": sec_homes, "fred_homes": fred_homes,
+        "sec_construction": sec_construction, "fred_construction": fred_construction, "bea_long": bea_long,
         "sec_fashion": sec_fashion, "fred_fashion": fred_fashion, "comtrade_apparel": comtrade_apparel,
         "fred_consumer": fred_consumer, "sec_consumer": sec_consumer, "sec_medtech": sec_medtech, "fred_medtech": fred_medtech, "fda_devices": fda_devices, "fda_510k_panels": fda_510k_panels,
         "sec_aero": sec_aero, "fred_aero": fred_aero, "sipri_milex": sipri_milex, "census_auto": census_auto, "sec_auto": sec_auto, "fred_auto": fred_auto, "owid_ev": owid_ev, "comtrade_cars": comtrade_cars,

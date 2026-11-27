@@ -64,7 +64,7 @@ class Split(VoiceoverScene):
         src = source("General Electric (GE Aerospace), Form 10-K 2025; 3M Company, Form 10-K 2025; Honeywell, Form 10-K 2025 "
                      "and Form 10-Q for the third quarter of 2026", size=12)
         beat(self,
-             "Three family trees. <bookmark mark='a'/> General Electric spun off its healthcare business in January {y['ge_hc']} and its power business, GE Vernova, "
+             f"Three family trees. <bookmark mark='a'/> General Electric spun off its healthcare business in January {y['ge_hc']} and its power business, GE Vernova, "
              f"in April {y['ge_v']}; what remains is GE Aerospace, Part 18's engine maker. <bookmark mark='b'/> 3M spun "
              f"off its healthcare business, Solventum, in April {y['mmm']}. <bookmark mark='c'/> And Honeywell spun off "
              f"its materials business, Solstice, in October {y['sol']}, and its aerospace business in June {y['hon']}; "
