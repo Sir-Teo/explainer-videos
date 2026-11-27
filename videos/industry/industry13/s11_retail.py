@@ -68,9 +68,9 @@ class Retail(VoiceoverScene):
             "weak finances, and never imagined prices staying high for long. <bookmark mark='d'/> By May 2022 there were "
             f"{T['s2022']:.0f}."
         ) as vo:
-            self.play(FadeIn(pa), FadeIn(src))
+            self.play(FadeIn(pa), FadeIn(src), GrowFromEdge(bars[0][0], DOWN), FadeIn(bars[0][1:]))
             vo.wait_until("a")
-            self.play(GrowFromEdge(bars[0][0], DOWN), FadeIn(bars[0][1:]))
+            self.play(Indicate(bars[0], color=UK))
             vo.wait_until("b")
             self.play(GrowFromEdge(bars[1][0], DOWN), FadeIn(bars[1][1:]), FadeIn(notes[:2]))
             vo.wait_until("c")
@@ -143,10 +143,10 @@ class Retail(VoiceoverScene):
             "<bookmark mark='d'/> A retailer with no power plants and no hedges is a bet that wholesale prices stay calm. "
             "In 2021 that bet was lost, and the customers paid."
         ) as vo:
-            tomb.set_opacity(0.25)
-            self.play(FadeIn(src), FadeIn(tomb))
+            tomb.set_opacity(0.5)
+            self.play(FadeIn(src), FadeIn(tomb), FadeIn(tl))
             vo.wait_until("a")
-            self.play(LaggedStart(*[t_.animate.set_opacity(0.9) for t_ in tomb], lag_ratio=0.04), FadeIn(tl), FadeIn(tl2), run_time=2.0)
+            self.play(LaggedStart(*[t_.animate.set_opacity(0.9) for t_ in tomb], lag_ratio=0.04), FadeIn(tl2), run_time=2.0)
             vo.wait_until("b")
             self.play(FadeIn(facts[:3]))
             vo.wait_until("c")

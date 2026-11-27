@@ -147,9 +147,11 @@ class Dispatch(VoiceoverScene):
             f"Except 2021: with the storm, the year's average was {pr[2021]:.0f} dollars, more than six times the year "
             "before, almost entirely because of a few days in February."
         ) as vo:
-            self.play(FadeIn(pa), FadeIn(xl), FadeIn(src))
+            head = tx("Texas: the price of power against the price of gas", 22, WHITE, bold=True).to_edge(UP, buff=0.35)
+            self.add(head)
+            self.play(FadeIn(pa), FadeIn(xl), FadeIn(src), LaggedStart(*[FadeIn(d_, scale=0.5) for d_ in dots], lag_ratio=0.15), run_time=2.0)
             vo.wait_until("a")
-            self.play(LaggedStart(*[FadeIn(d_, scale=0.5) for d_ in dots], lag_ratio=0.15), run_time=2.0)
+            self.play(*[Indicate(d_[0], color=GAS, scale_factor=1.5) for d_ in dots], run_time=1.2)
             vo.wait_until("b")
             self.play(Create(fit), FadeIn(notes[:5]))
             vo.wait_until("c")
