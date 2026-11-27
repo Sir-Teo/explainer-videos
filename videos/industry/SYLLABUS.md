@@ -2543,6 +2543,7 @@ scored in Part 64 and at each refresh.
 | 9 · Mining and Metals | done 2026-11-24 (93 Register rows; Ortiz on Escondida's discovery; BHP's FY2025 results; Freeport's 10-K; the USGS's Mineral Commodity Summaries 2026 and Data Series 140; the IMF's metal prices; Vale's 2010 pricing release; the miners' 20-F and 10-K accounts; Sabin on the wager) | `works/mine.py` | 17 scenes, with a world map from Natural Earth (`draw.world_map`) | silent and narrated previews reviewed | entry, lab, interactive | not started |
 | 10 · Farming and Food | done 2026-11-27 (26 Register rows; USDA's food dollar, costs and returns and farm income; FAO yields and food supply; IMF and BLS food prices; NASS farm numbers; ERS on beef packers; the ICCO; Cargill; 15 companies' 10-Ks) | `works/farm.py` | 17 scenes, with farm and animal glyphs | silent and narrated previews reviewed | entry, lab, interactive | not started |
 | 11 · Heavy Materials | done 2026-11-27 (about 150 Register rows; worldsteel's yearbooks, outlooks and climate paper; the USGS's Mineral Commodity Summaries 2026 and Data Series 140; the International Aluminium Institute; BLS producer prices and Federal Reserve output; the 1994 cement cartel decision and the EU's carbon border regulation; Bessemer's autobiography; 18 companies' 10-Ks and two 20-Fs; transcribed tables in `data/tables.py`) | `works/mill.py` | 17 scenes, with furnace, converter, kiln, potline and packaging glyphs | silent and narrated previews reviewed | entry, lab, interactive | not started |
+| 12 · Chemicals | done 2026-11-27 (55 Register rows; the Nobel Foundation on Haber and Bosch; the USGS's Mineral Commodity Summaries 2026 (nitrogen, potash) and Data Series 140; EIA's cracker yields, NGL series, Today in Energy and AEO2005; IMF, BLS and Federal Reserve series; Eurostat's chemical output; OECD plastics via Our World in Data; 17 companies' 10-Ks and ICL's 20-F; 3M's and Chemours' 8-Ks; the EPA's PFAS rule; the Supreme Court of India on Bhopal) | `works/cracker.py` | 16 scenes, with molecule, cracker, cylinder, paint-can and pellet glyphs | silent and narrated previews reviewed | entry, lab, interactive | not started |
 
 Phase 0 is done in the form Part 1 needed: the palette and kit (`style.py`, `kit.py`), the instruments (`viz.py`: the
 phone and its exploded view, the region map, the Dollar column, the margin ladder, the treemap, plain axes), the
@@ -2662,3 +2663,17 @@ October forecasts of China's demand (2022-2025) against World Steel in Figures 2
 from 2010 were not used, as the archived outlooks could not be read. The Gulf's 2026 aluminium shock comes from the
 IAI's monthly statistics and refers to Part 8 for the war. The Works' `mill.py` (two mills, the glut game, kilns and
 their markets, calcination and hydrogen) is tested.
+
+Part 12 keeps its draft's question. Its story is Haber's patent of 13 October 1908 and Bosch's plant (the Nobel
+Foundation and Erisman et al. 2008), not a company's founding. Run it is a cracker built in 2012 in Texas on ethane or in
+Europe on naphtha (the Works' `cracker.py`, with EIA's AEO2026 yields and this series' price assumptions), played with
+the IMF's prices and a world price that follows US capacity utilization; the Dollar is a tonne of ethylene, piece by
+piece. Chapters on the gas plant's take-or-pay contract (Linde's and Air Products' 10-Ks, an illustrative plant in the
+Works), Europe's energy shock (Eurostat's monthly index) and harm (the Supreme Court of India's 1989 judgment; 3M's and
+Chemours' 8-Ks; the EPA's 2024 rule) replace the draft's single lines. The sweep corrected the potash ranking (Russia,
+10 Mt of K2O, is second to Canada) and kept INEOS's Antwerp cracker as "built to run on" American ethane, since the EIA
+gives a start-up slated for the third quarter of 2026. Air Products' loss in fiscal 2025 is shown with its own account
+of the charges; DuPont is left off the landscape because its accounts are dominated by businesses sold or spun off.
+BASF, SABIC, Sinopec, Air Liquide, Yara, Nutrien and Wanhua are named but not charted (no 10-K or 20-F). *Called it?* is
+the EIA's Annual Energy Outlook of 2005 (LNG imports of 6.4 Tcf in 2025; America exported 5.5), with the series' call
+on Germany's chemical output in 2027.

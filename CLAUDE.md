@@ -100,7 +100,7 @@ Manim videos with local neural narration. See README.md for layout and build com
   that plan them (the syllabus) and cite them (the built parts); it is written by `python -m videos.economics.reading`,
   and `tests/economics/test_reading.py` fails when it is stale, so rerun it after adding a part. Chinese terms:
   `videos/economics/ECONOMICS_ZH_GUIDE.md`.
-- *Industry, Built* (`videos/industry/`): sixty-four parts planned in eleven acts (`industry1` … `industry64`), Parts 1–11
+- *Industry, Built* (`videos/industry/`): sixty-four parts planned in eleven acts (`industry1` … `industry64`), Parts 1–12
   built (English; Act I complete, Act II begun); how each industry works, for a general audience, visual first, from its unit and process to its dated landscape. The plan and the open decisions
   are `videos/industry/README.md`; the standard (the coverage checklist, the sweep, durable against dated chapters),
   the devices (the Works' model companies, the Unit, the Dollar, the Stack, the Map, the Board, the Register, the
@@ -111,7 +111,7 @@ Manim videos with local neural narration. See README.md for layout and build com
   the drawing library `draw.py` (turbines, plants, factories, planes, wafers, skylines, mines, farms and animals, furnaces, kilns and potlines, live numbers, a world map from Natural Earth's `data/world_land.json`);
   tested in `tests/industry/`): the Filing Room (`data/fetch.py`: small committed extracts of BEA's, the BLS's
   and the World Bank's tables, read with `read(name)`, refreshed with `python -m explainer.industry.data.fetch NAME`; series transcribed from yearbooks and filings in `data/tables.py`, read with `table(key)`), the Register (`register.py`, rows in `data/rows_pNN.py`, gated by
-  `tools/check_register.py industryN`), the Works (`works/`: `chain`, `firm`, `stack`, `cycle`, `diffusion`, `oil`, `mine`, `farm`, `mill`), Called it? (`calls.py`), the Inter-faced kit
+  `tools/check_register.py industryN`), the Works (`works/`: `chain`, `firm`, `stack`, `cycle`, `diffusion`, `oil`, `mine`, `farm`, `mill`, `cracker`), Called it? (`calls.py`), the Inter-faced kit
   and the instruments. It calls Agora (`explainer/economics/agora/`) for theory already built there.
 - *Psychology, Built* (`videos/psychology/`): sixty-two parts in thirteen acts (`psych1` … `psych62`: a degree,
   the graduate methods sequence, industry practice and a research tier); all sixty-two are built (Acts I to XIII and the capstone). The folders are `psychN` while

@@ -245,4 +245,74 @@
       note: "This is the film's chapter 1 game. With a short, shallow glut, running full loses least: every tonne still sells for more than its ore and coke. Make the glut longer, or let your rivals run full so the price sinks further, and banking the furnace starts to win, unless restarting is very expensive. What is best for one mill makes the glut worse for all of them.",
     });
   };
+
+  // Part 12: a steam cracker on ethane in Texas or naphtha in Europe (the Works' cracker.py, EIA's yields)
+  W.cracker = function (el) {
+    var Y = {
+      ethane: { hydrogen: 0.0591, methane: 0.0704, ethylene: 0.8091, other: 0.0194 + 0.0178 + 0.0081 + 0.0081 + 0.0008 + 0.0073 },
+      naphtha: { hydrogen: 0.0097, methane: 0.1694, ethylene: 0.3867,
+                 other: 0.1547 + 0.0476 + 0.0507 + 0.0437 + 0.0166 + 0.0224 + 0.0735 + 0.0251 },
+    };
+    var HV = { hydrogen: 141.8 / 1.05506, methane: 55.5 / 1.05506, ethane: 51.9 / 1.05506 };
+    var FEE = 60, BBL = 9, RATIO = 0.9, PREM = 1.1, ENERGY = { ethane: 17, naphtha: 25 }, OTHER = 150;
+    function parts(feed, gas, brent) {
+      var y = Y[feed], naph = brent * BBL * RATIO;
+      var fp = feed === "ethane" ? gas * HV.ethane + FEE : naph;
+      var cr = y.hydrogen * gas * HV.hydrogen + y.methane * gas * HV.methane + y.other * naph * PREM;
+      var f = fp / y.ethylene, c = cr / y.ethylene, fu = ENERGY[feed] * gas;
+      return { feed: f, credits: c, fuel: fu, other: OTHER, cost: f - c + fu + OTHER };
+    }
+    QB.widget(el, {
+      title: "Where would you build a cracker?",
+      sub: "A cracker turns ethane or naphtha into ethylene. Set the price of gas in America and in Europe, the price of oil, and how full the world's plants are, and see what a tonne of ethylene costs each plant, what the world price is, and who makes money.",
+      panels: 2, height: 300,
+      controls: [
+        { k: "us", label: "American gas (Henry Hub), $ per million Btu", min: 1.5, max: 10, step: 0.1, value: 3.1, fmt: function (x) { return "$" + x.toFixed(1); } },
+        { k: "eu", label: "European gas (TTF), $ per million Btu", min: 3, max: 40, step: 0.5, value: 17, fmt: function (x) { return "$" + x.toFixed(1); } },
+        { k: "brent", label: "Brent crude, $ a barrel", min: 30, max: 130, step: 1, value: 69, fmt: function (x) { return "$" + x; } },
+        { k: "cu", label: "How full the industry's plants are", min: 65, max: 92, step: 1, value: 75, fmt: function (x) { return x + "%"; } },
+      ],
+      draw: function (g, v, s) {
+        var T = parts("ethane", v.us, v.brent), E = parts("naphtha", v.eu, v.brent);
+        var markup = Math.max(0, (v.cu - 70) * 25), price = Math.max(T.cost, E.cost) + markup;
+        var hi = Math.max(T.feed, E.feed, price) * 1.15;
+        var a = g[0].axes({ x: [0, 11], y: [0, hi], title: "A tonne of ethylene, $: feed, less by-products, plus fuel and other costs",
+                            xticks: [], yfmt: function (y) { return "$" + Math.round(y); } });
+        function fall(x0, P, col) {
+          var lvl = 0, steps = [[P.feed, col], [-P.credits, C.gain], [P.fuel, C.p], [P.other, C.q]];
+          steps.forEach(function (st, i) {
+            var lo = Math.min(lvl, lvl + st[0]), top = Math.max(lvl, lvl + st[0]);
+            a.bars([x0 + i], [top], 0.8, { base: lo, color: st[1], alpha: st[0] < 0 ? 0.45 : 0.85 });
+            lvl += st[0];
+          });
+          a.bars([x0 + 4], [P.cost], 0.8, { color: col, alpha: 0.95 });
+          a.text(x0 + 4, P.cost, "$" + Math.round(P.cost), { dy: -10, align: "center", bold: true, color: col });
+        }
+        fall(0.6, T, C.p);
+        fall(5.9, E, C.q);
+        a.hline(price, { color: C.ink, dash: [6, 4] });
+        a.text(10.9, price, "world price $" + Math.round(price), { dy: -10, align: "right", color: C.ink, bg: true });
+        a.text(2.6, hi * 0.97, "Texas, ethane", { align: "center", color: C.p, bold: true });
+        a.text(7.9, hi * 0.97, "Europe, naphtha", { align: "center", color: C.q, bold: true });
+        var cashT = (price - T.cost) * 1.5 - 150, cashE = (price - E.cost) * 1.5 - 150;
+        var lo2 = Math.min(cashT, cashE, 0) * 1.2 - 50, hi2 = Math.max(cashT, cashE, 0) * 1.2 + 50;
+        var b = g[1].axes({ x: [0, 3], y: [lo2, hi2], title: "Cash a year, 1.5 Mt plant, after $150m of fixed costs, $m", xticks: [],
+                            yfmt: function (y) { return Math.round(y); } });
+        b.hline(0, { color: C.muted });
+        b.bars([1], [cashT], 0.8, { color: cashT >= 0 ? C.p : C.loss });
+        b.bars([2], [cashE], 0.8, { color: cashE >= 0 ? C.q : C.loss });
+        b.text(1, cashT, Math.round(cashT) + "", { dy: cashT >= 0 ? -10 : 12, align: "center", bold: true });
+        b.text(2, cashE, Math.round(cashE) + "", { dy: cashE >= 0 ? -10 : 12, align: "center", bold: true });
+        b.text(1, lo2 + (hi2 - lo2) * 0.04, "Texas", { align: "center", color: C.p, base: "bottom" });
+        b.text(2, lo2 + (hi2 - lo2) * 0.04, "Europe", { align: "center", color: C.q, base: "bottom" });
+        s.r = { t: T.cost, e: E.cost, price: price, ct: cashT, ce: cashE, payback: cashT > 0 ? 6000 / cashT : Infinity };
+      },
+      readout: function (v, s) {
+        var r = s.r;
+        return [["Texas a tonne", "$" + Math.round(r.t)], ["Europe a tonne", "$" + Math.round(r.e)], ["world price", "$" + Math.round(r.price)],
+                ["Texas pays back a $6bn plant in", isFinite(r.payback) ? r.payback.toFixed(1) + " years" : "never"]];
+      },
+      note: "This is the Works' cracker from the film (yields from the EIA; prices of ethane and naphtha tied to gas and Brent, and the fuel and other costs, are the series' assumptions). Ethane is priced like gas and naphtha like oil, so the gap between the plants is the gap between gas and oil. Cheap American gas and dear oil make Texas the winner; push American gas up towards $8 and oil down, and the advantage disappears, as it did before shale.",
+    });
+  };
 })();

@@ -202,4 +202,50 @@ PARTS = [
               ("USGS history, producer prices, the Global Carbon Budget, the companies' accounts",
                "explainer/industry/data/SOURCES.md")),
     ),
+    Part(
+        n=12, level="U", widget="cracker", prereq=(4, 6, 8),
+        question="How does a molecule of gas become a thousand products, and where in the chain is the money?",
+        story="The part opens with Fritz Haber's patent of 13 October 1908 on the synthesis of ammonia from its elements, "
+              "and Carl Bosch's plant: the world made 4.8 Mt of nitrogen as ammonia in 1950 and about 160 Mt in 2025, "
+              "while the number of people rose from 1.7 to 8 billion. The viewer builds a $6bn cracker in 2012, in Texas "
+              "on ethane or in Europe on naphtha: with real gas and oil prices Texas earns about $12bn by 2026 and pays "
+              "back by 2020, Europe barely covers its costs. A tonne of ethane yields 81% ethylene, of naphtha 39%; at "
+              "2026 prices a tonne of ethylene costs about $360 in Texas and $1,097 in Europe. Shale lifted American "
+              "ethane from about 500 to 3,361 thousand barrels a day and opened a gap of about $600 a tonne. Everyone "
+              "builds in the good years, so four commodity makers earned $15bn in 2021 and lost $5bn in 2025. Ammonia "
+              "is gas in another form (CF: 34.6 MMBtu a ton): in 2022 the gas in a ton cost $1,298 in Europe against a "
+              "$1,070 price and $225 in America, and CF closed its British plants. Industrial gas companies sign "
+              "10-20 year take-or-pay contracts and keep 17% of sales; paint makers keep 49 cents of each dollar after "
+              "costs against Dow's 6. Germany's chemical output is 23% below 2021; plastics grew from 2 to 460 Mt and "
+              "9% of waste is recycled; Bhopal (2,660 killed at once) and PFAS (3M's $10.5-12.5bn) show the bill for "
+              "harm. The EIA's 2005 outlook expected LNG imports of 6.4 Tcf in 2025; America exported 5.5. The series "
+              "calls Germany's chemical output in 2027 below 79.8 (75%).",
+        handoff="Part 13 follows gas into electricity; Part 10 used the fertilizer; Part 8 produced the oil and gas; the "
+                "medicines branch of the tree returns in the pharmaceuticals part.",
+        outside="Percentages and arithmetic; Part 4's cost curve; Part 6's cycle; Part 8's oil and gas.",
+        objectives={
+            "U": ["Explain how a cracker turns ethane or naphtha into ethylene, and why its feedstock is most of its cost.",
+                  "Explain why shale gave American crackers and ammonia plants an advantage, and what dear gas did to Europe.",
+                  "Explain why commodity chemical profits swing while industrial gases and paint earn steadily."],
+            "M": ["Compute a cracker's cash cost of a tonne of ethylene from yields, feed, by-product, fuel and other costs.",
+                  "Compute the gas cost of a ton of ammonia from gas use per ton and the gas price, and compare it with the price.",
+                  "Compute a take-or-pay plant's cash when the customer takes less, and compare it with selling by the tonne."],
+            "D": ["Score a government outlook (the EIA's AEO2005) against outcomes and say which input decided the misses.",
+                  "Turn a drinking-water limit in parts per trillion into a physical picture, and say what the arithmetic assumes."],
+            "I": ["Read a chemical company's 10-K for gas use, contracts, gross margin and write-downs.",
+                  "Place a company on the map: commodity chemicals, industrial gases, fertilizer, specialty."],
+        },
+        results=[
+            ("Haber-Bosch", r"\text{N}_2 + 3\,\text{H}_2 \rightarrow 2\,\text{NH}_3"),
+            ("Cost of a tonne of ethylene", r"c = \frac{p_{\text{feed}} - \text{credits}}{y_{\text{ethylene}}} + e\,p_{\text{gas}} + o"),
+            ("Gas in a ton of ammonia", r"c_{\text{NH}_3} = 34.6\,p_{\text{gas}}"),
+            ("Take-or-pay cash", r"F + \max(q, q_{\min})\,p - q\,c"),
+            ("Recycled share", r"\frac{\text{recycled}}{\text{all plastic waste}}"),
+        ],
+        U=(0, 1, 2, 3, 4, 5, 6, "s08_intermission", 7, 8, 9, 10, 12), I=(11,), D=(13,),
+        also=(("The Register's rows for Part 12", "explainer/industry/data/rows_p12.py"),
+              ("The cracker, the gas plant and Haber's arithmetic", "explainer/industry/works/cracker.py"),
+              ("Gas, oil and chemical prices, NGLs, Eurostat, plastics, the companies' accounts",
+               "explainer/industry/data/SOURCES.md")),
+    ),
 ]
