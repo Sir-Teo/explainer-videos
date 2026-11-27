@@ -198,6 +198,20 @@ CALLS = [
          rule="Eurostat sts_inpr_m, C20, Germany, SCA, I21: the mean of the twelve monthly values for 2027 as first "
               "published in full; true if below 79.8",
          due="2028-03", ours=True),
+    Call(13, "US Energy Information Administration, Annual Energy Outlook 2005", "2005-02",
+         "Total US electricity consumption, purchases and on-site generation, rising from 3,657 billion kWh in 2003 to "
+         "5,467 billion in 2025 (1.8% a year), led by 'rapid growth in electricity use for computers, office equipment, "
+         "and a variety of electrical appliances'.", "EIA, Annual Energy Outlook 2005 (DOE/EIA-0383(2005))",
+         outcome="US electricity end use was 4,195 billion kWh in 2025 (EIA, Monthly Energy Review, Table 7.6): growth of "
+                 "0.6% a year, and sales were flat from 2007 to 2021; growth returned from 2022, with data centres"),
+    Call(13, "Industry, Built", "2026-11-27",
+         "US retail sales of electricity in 2027 will be more than 1.5% above 2026's. Probability: 65%.",
+         "This series, Part 13, chapter 13; reasoning: sales grew 2.6% in 2024, 2.1% in 2025 and 2.0% in January-August "
+         "2026 (EIA), with data centres' use projected at 325-580 TWh by 2028 (LBNL for DOE) and utilities' capital "
+         "spending rising; against: weather, a slowdown, efficiency, delays in connecting new load",
+         rule="EIA, Monthly Energy Review, Table 7.6, total retail sales (ESTCPUS), the first annual figures for 2027 and "
+              "2026 as published together; true if 2027 exceeds 2026 by more than 1.5%",
+         due="2028-03", ours=True),
 ]
 
 
