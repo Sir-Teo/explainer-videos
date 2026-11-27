@@ -1991,6 +1991,81 @@ def _fred_write(name: str, series: dict) -> Path:
                   ["https://fred.stlouisfed.org (" + "; ".join(f"{k} {v}" for k, v in series.items()) + ")"])
 
 
+MACH_COMPANIES = [(18230, "CAT", "USD"), (315189, "DE", "USD"), (1567094, "CNH", "USD"), (880266, "AGCO", "USD"),
+                  (26172, "CMI", "USD"), (1781335, "OTIS", "USD"), (1783180, "CARR", "USD"), (1466258, "TT", "USD"),
+                  (833444, "JCI", "USD"), (1024478, "ROK", "USD"), (32604, "EMR", "USD"), (773840, "HON", "USD"),
+                  (49826, "ITW", "USD"), (76334, "PH", "USD"), (1551182, "ETN", "USD"), (29905, "DOV", "USD"),
+                  (1067701, "URI", "USD"), (97216, "TEX", "USD"), (775158, "OSK", "USD"), (66740, "MMM", "USD"),
+                  (1996810, "GEV", "USD"), (1699150, "IR", "USD"), (1524472, "XYL", "USD")]
+
+
+def sec_mach():
+    """Annual figures of machinery makers (construction, farm, engines, elevators, climate, automation, components), a
+    rental company and the conglomerates from their Forms 10-K and 20-F (SEC company facts), in US dollars (billions),
+    with the same items and tag preferences as ``sec_auto``."""
+    return _write("sec_mach", ["ticker", "year_end", "currency"] + list(AUTO_ITEMS),
+                  _sec_table(MACH_COMPANIES, AUTO_ITEMS), [_sec_source(AUTO_ITEMS)])
+
+
+FRED_MACH = {"A33SNO": "New orders: machinery ($ million a month, SA; Census M3)",
+             "A33SVS": "Shipments: machinery ($ million a month, SA; Census M3)",
+             "NEWORDER": "New orders: nondefense capital goods excluding aircraft ($ million a month, SA; Census M3)",
+             "IPG333S": "Industrial production: machinery (2017 = 100; Federal Reserve G.17)",
+             "CAPUTLG333S": "Capacity utilization: machinery (percent of capacity; Federal Reserve G.17)",
+             "PCU333111333111": "PPI: farm machinery and equipment manufacturing (1982 = 100; BLS)",
+             "PCU333120333120": "PPI: construction machinery manufacturing (Dec 1976 = 100; BLS)",
+             "CES3133300001": "All employees: machinery manufacturing (thousands, SA; BLS)",
+             "Y033RC1Q027SBEA": "Private fixed investment in equipment ($ billion, SAAR; BEA)",
+             "GDP": "Gross domestic product ($ billion, SAAR; BEA)",
+             "CPIAUCNS": "CPI-U: all items (1982-84 = 100, NSA; BLS)"}
+
+
+def fred_mach():
+    return _fred_write("fred_mach", FRED_MACH)
+
+
+OWID_ROBOTS = "https://ourworldindata.org/grapher/annual-industrial-robots-installed.csv"
+
+
+def owid_robots():
+    """New industrial robots installed per year by country (China, Germany, Japan, South Korea, the United States, the
+    world), from the International Federation of Robotics via the AI Index Report 2026, as published by Our World in
+    Data."""
+    import csv as _csv
+    rows = list(_csv.reader(io.StringIO(_get(OWID_ROBOTS).decode())))
+    out = [[r[0], int(r[2]), float(r[3])] for r in rows[1:] if r[3]]
+    return _write("owid_robots", ["entity", "year", "robots_installed"], out,
+                  [OWID_ROBOTS + " (International Federation of Robotics via AI Index Report 2026; Our World in Data; "
+                   "CC BY 4.0)"])
+
+
+COMTRADE_MACH_REPORTERS = {156: "China", 392: "Japan", 276: "Germany", 410: "South Korea", 842: "United States"}
+COMTRADE_MACH_HS = {"842952": "excavators and shovels with a 360-degree revolving superstructure",
+                    "847950": "industrial robots, not elsewhere specified (from HS 2007)"}
+
+
+def comtrade_mach(years=range(2010, 2026)):
+    """Exports of excavators (HS 842952) and industrial robots (847950) to the world by five large exporters, as each
+    reported them to UN Comtrade (annual; US dollars and units; UN Comtrade's public preview API)."""
+    import time
+
+    out = []
+    for y in years:
+        url = ("https://comtradeapi.un.org/public/v1/preview/C/A/HS?reporterCode={}&period={}&partnerCode=0&cmdCode={}"
+               "&flowCode=X").format(",".join(str(k) for k in COMTRADE_MACH_REPORTERS), y, ",".join(COMTRADE_MACH_HS))
+        j = json.loads(_get(url))
+        for r in j.get("data", []):
+            if r.get("customsCode") != "C00" or r.get("motCode") != 0 or r.get("partner2Code") != 0:
+                continue
+            out.append([y, r["cmdCode"], COMTRADE_MACH_REPORTERS[r["reporterCode"]], round(r["primaryValue"] / 1e9, 4),
+                        r.get("qty")])
+        time.sleep(1.5)
+    out.sort(key=lambda r: (r[0], r[1], r[2]))
+    return _write("comtrade_mach", ["year", "hs", "reporter", "exports_usd_bn", "qty"], out,
+                  ["https://comtradeapi.un.org/public/v1/preview/C/A/HS (UN Comtrade; exports to the world as reported "
+                   "by each country, annual; " + "; ".join(f"{k} {v}" for k, v in COMTRADE_MACH_HS.items()) + ")"])
+
+
 FRED_AERO = {"ANAPNO": "New orders: nondefense aircraft and parts ($ million a month, SA; Census M3)",
              "ANAPVS": "Shipments: nondefense aircraft and parts ($ million a month, SA; Census M3)",
              "ADAPNO": "New orders: defense aircraft and parts ($ million a month, SA; Census M3)",
@@ -2047,6 +2122,7 @@ def sipri_milex():
 
 
 JOBS = {"sec_aero": sec_aero, "fred_aero": fred_aero, "sipri_milex": sipri_milex, "census_auto": census_auto, "sec_auto": sec_auto, "fred_auto": fred_auto, "owid_ev": owid_ev, "comtrade_cars": comtrade_cars,
+        "sec_mach": sec_mach, "fred_mach": fred_mach, "owid_robots": owid_robots, "comtrade_mach": comtrade_mach,
         "eia_aeo17": eia_aeo17, "comtrade_us_m": comtrade_us_m, "bls_elec": bls_elec, "fred_elec": fred_elec, "comtrade_us": comtrade_us, "fred_chips": fred_chips, "owid_chips": owid_chips, "sec_foreign": sec_foreign, "wb_water": wb_water, "bls_water": bls_water, "fred_waste": fred_waste, "epa_msw": epa_msw, "eia_930": eia_930, "eia_mer": eia_mer, "fred_power": fred_power, "owid_elec": owid_elec, "owid_chem": owid_chem, "fred_chem": fred_chem, "eia_ngl": eia_ngl, "eurostat_chem": eurostat_chem, "usgs_heavy": usgs_heavy, "fred_heavy": fred_heavy, "owid_co2": owid_co2, "ers_food_dollar": ers_food_dollar, "ers_costs": ers_costs, "ers_farm_income": ers_farm_income, "owid_ag": owid_ag, "fred_food": fred_food, "ne_land": ne_land, "usgs_ds140": usgs_ds140, "fred_metals": fred_metals, "sec_ifrs": sec_ifrs, "eia_gas": eia_gas, "eia_petroleum": eia_petroleum, "eia_intl": eia_intl, "eia_pump": eia_pump, "fred_energy": fred_energy, "fred_market": fred_market, "owid_tech": owid_tech, "sec_quarterly": sec_quarterly, "fred_cycle": fred_cycle, "esef_maersk": esef_maersk, "damodaran_roc": damodaran_roc, "census_conc": census_conc, "eia_power": eia_power, "fred_pay": fred_pay, "bea_real": bea_real, "sec_annual": sec_annual, "fred_prices": fred_prices, "census_susb": census_susb, "bea_va": bea_va, "wb_mfg_usd": wb_mfg_usd, "bea_hist": bea_hist, "bea_io": bea_io, "fred_jobs": fred_jobs, "wb_shares": wb_shares}
 
 if __name__ == "__main__":

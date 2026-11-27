@@ -31,6 +31,8 @@ Every glyph is a ``VGroup`` with its moving parts named, so a scene can animate 
   (``.modules``), :func:`showroom` (``.car``, ``.bay``), :func:`car_carrier`, :func:`wrench`, :func:`kanban`;
 * aerospace: :func:`turbofan` (a cutaway: ``.fan``, ``.core``, ``.flame``, ``.bypass``), :func:`fan_face` (``.rotor``
   turns with :func:`spin` about ``.hub``), :func:`fighter`, :func:`missile`;
+* machinery: :func:`excavator` (``.boom`` turns about ``.pivot``), :func:`elevator` (a shaft whose ``.car`` stops at
+  ``.floor_y(k)``), :func:`gear`;
 * the city and its people: :func:`skyline` (``.windows`` light up), :func:`house`, :func:`shop`, :func:`person`,
   :func:`crowd`; :func:`sun`, :func:`moon`, :func:`sky` (a background whose colour follows the hour);
 * money: :func:`coin`, :func:`coin_stack`, :func:`note_bill`, :func:`coin_flow` (coins flying from one place to
@@ -2121,3 +2123,66 @@ def missile(length: float = 2.0, color: str = "#C9D3E0") -> VGroup:
     fins = VGroup(*[Polygon([-0.4 * L, s * 0.035 * L, 0], [-0.28 * L, s * 0.035 * L, 0], [-0.42 * L, s * 0.12 * L, 0],
                             stroke_width=0, fill_color="#E8554E", fill_opacity=1) for s in (1, -1)])
     return VGroup(body, nose, fins)
+
+
+# ---------------------------------------------------------------------------------------------------------------
+# Machinery (Part 19)
+# ---------------------------------------------------------------------------------------------------------------
+def excavator(w: float = 3.0, color: str = "#F6C453") -> VGroup:
+    """A tracked excavator facing right: ``.tracks``, ``.cab``, and the ``.boom`` (with its stick and bucket) that turns
+    about ``.pivot``."""
+    tracks = RoundedRectangle(corner_radius=0.08 * w, width=0.62 * w, height=0.14 * w, stroke_width=0, fill_color="#3A4152",
+                              fill_opacity=1).move_to([-0.12 * w, 0.07 * w, 0])
+    wheels = VGroup(*[Circle(radius=0.04 * w, stroke_width=0, fill_color="#8B95A7", fill_opacity=1).move_to([x * w, 0.07 * w, 0])
+                      for x in (-0.37, -0.26, -0.15, -0.04, 0.07)])
+    body = Polygon([-0.42 * w, 0.15 * w, 0], [0.12 * w, 0.15 * w, 0], [0.12 * w, 0.3 * w, 0], [-0.42 * w, 0.3 * w, 0],
+                   stroke_width=0, fill_color=color, fill_opacity=1)
+    cab = Polygon([-0.02 * w, 0.3 * w, 0], [0.12 * w, 0.3 * w, 0], [0.12 * w, 0.46 * w, 0], [0.0 * w, 0.46 * w, 0],
+                  stroke_width=0, fill_color=color, fill_opacity=1)
+    glass = Polygon([0.01 * w, 0.33 * w, 0], [0.1 * w, 0.33 * w, 0], [0.1 * w, 0.43 * w, 0], [0.02 * w, 0.43 * w, 0],
+                    stroke_width=0, fill_color=GLASS, fill_opacity=1)
+    pivot = np.array([0.12 * w, 0.26 * w, 0])
+    boom = Polygon(pivot + np.array([0, 0.03 * w, 0]), pivot + np.array([0.3 * w, 0.28 * w, 0]),
+                   pivot + np.array([0.33 * w, 0.24 * w, 0]), pivot + np.array([0.02 * w, -0.03 * w, 0]), stroke_width=0,
+                   fill_color=color, fill_opacity=1)
+    tip = pivot + np.array([0.32 * w, 0.26 * w, 0])
+    stick = Polygon(tip + np.array([-0.02 * w, 0, 0]), tip + np.array([0.02 * w, 0, 0]), tip + np.array([0.1 * w, -0.32 * w, 0]),
+                    tip + np.array([0.06 * w, -0.32 * w, 0]), stroke_width=0, fill_color=color, fill_opacity=0.95)
+    end = tip + np.array([0.08 * w, -0.32 * w, 0])
+    bucket = Polygon(end, end + np.array([0.1 * w, -0.02 * w, 0]), end + np.array([0.06 * w, -0.1 * w, 0]),
+                     end + np.array([-0.04 * w, -0.08 * w, 0]), stroke_width=0, fill_color="#5C6472", fill_opacity=1)
+    arm = VGroup(boom, stick, bucket)
+    g = VGroup(tracks, wheels, body, cab, glass, arm)
+    g.tracks, g.cab, g.boom = VGroup(tracks, wheels), VGroup(cab, glass), arm
+    g.pivot = Dot(pivot, radius=0.001, fill_opacity=0)
+    g.add(g.pivot)
+    return g
+
+
+def elevator(h: float = 3.0, floors: int = 6, color: str = "#7EC8F5") -> VGroup:
+    """A building's elevator shaft in section: the floors, the shaft and the ``.car`` (move it with ``.floor_y(k)``)."""
+    w = 0.42 * h
+    shaft = Rectangle(width=0.32 * w, height=h, stroke_color="#8B95A7", stroke_width=2, fill_color="#141A24", fill_opacity=1)
+    walls = Rectangle(width=w, height=h, stroke_color="#5C6472", stroke_width=2, fill_opacity=0)
+    lines = VGroup(*[Line([-w / 2, -h / 2 + k * h / floors, 0], [w / 2, -h / 2 + k * h / floors, 0], stroke_color="#3A4152",
+                          stroke_width=1.5) for k in range(1, floors)])
+    car = Rectangle(width=0.26 * w, height=0.8 * h / floors, stroke_width=0, fill_color=color, fill_opacity=1)
+    car.move_to([0, -h / 2 + 0.5 * h / floors, 0])
+    cable = Line([0, h / 2, 0], car.get_top(), stroke_color="#C9D3E0", stroke_width=1.2)
+    cable.add_updater(lambda m: m.put_start_and_end_on([car.get_x(), walls.get_top()[1], 0], car.get_top()))
+    g = VGroup(walls, lines, shaft, cable, car)
+    g.car, g.cable = car, cable
+    g.floor_y = lambda k: walls.get_bottom()[1] + (k + 0.5) * h / floors
+    return g
+
+
+def gear(r: float = 0.6, teeth: int = 12, color: str = "#8B95A7") -> VGroup:
+    """A gear wheel (turn it with ``rotate``)."""
+    pts = []
+    for k in range(teeth * 2):
+        a = k * PI / teeth
+        rr = r if k % 2 == 0 else 0.82 * r
+        pts += [[rr * np.cos(a - 0.12), rr * np.sin(a - 0.12), 0], [rr * np.cos(a + 0.12), rr * np.sin(a + 0.12), 0]]
+    body = Polygon(*pts, stroke_width=0, fill_color=color, fill_opacity=1)
+    hole = Circle(radius=0.25 * r, stroke_width=0, fill_color="#0E1117", fill_opacity=1)
+    return VGroup(body, hole)

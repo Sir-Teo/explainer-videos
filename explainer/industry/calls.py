@@ -313,6 +313,23 @@ CALLS = [
          rule="The Boeing Company, Form 10-K 2027: true if it reports one or more 777X (777-9) deliveries in 2027 or a first "
               "777-9 delivery dated in 2027",
          due="2028-02", ours=True),
+    Call(19, "International Federation of Robotics", "2022-10-13",
+         "\"global robot installations are expected to grow by 10% to almost 570,000 units in 2022 ... From 2022 to 2025, "
+         "average annual growth rates in the medium to upper single-digit range are forecast\"",
+         "IFR press release, 13 October 2022 (World Robotics 2022)",
+         outcome="552,946 robots installed in 2022 (IFR, 24 September 2024), 3% short; 'more than 600,000' in 2025 (IFR, 24 "
+                 "September 2026), below the 660,000 to 740,000 the growth range implied"),
+    Call(19, "International Federation of Robotics", "2024-09-24",
+         "\"Global robot installations are expected to level off at 541,000 units\" in 2024",
+         "IFR press release, 24 September 2024 (World Robotics 2024)",
+         outcome="About 542,000 installed in 2024 (IFR via the AI Index Report 2026): right on"),
+    Call(19, "Industry, Built", "2026-11-27",
+         "World installations of industrial robots in 2026 will come in below the IFR's forecast of 655,000. Probability: 55%.",
+         "This series, Part 19, chapter 11; reasoning: the IFR's medium-term forecast of 2022 ran high and Japan and Germany "
+         "bought fewer robots in 2025, but its one-year forecasts have been close and China's installations rose 20%",
+         rule="IFR, World Robotics press release of autumn 2027: world installations in 2026 as first published; true if "
+              "below 655,000",
+         due="2027-10", ours=True),
 ]
 
 

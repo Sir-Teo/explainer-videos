@@ -202,4 +202,51 @@ PARTS = [
               ("The programme, the engine, launch aid and the duel", "explainer/industry/works/aircraft.py"),
               ("The SEC, FRED and SIPRI extracts", "explainer/industry/data/SOURCES.md")),
     ),
+    Part(
+        n=19, level="U", widget="tender", prereq=(4, 5, 6, 18),
+        question="How do the companies that make the machines earn more from them after the sale than at it?",
+        story="The part opens on Otis, which in 2025 sold $5.0bn of new elevators at a 4.8% margin and $9.4bn of service at "
+              "25.1%, looking after about 2.5 million lifts and escalators; on Caterpillar's backlog, $30bn at the end of "
+              "2024 and $78bn by September 2026; and on the 5 million industrial robots at work. The viewer bids for a fleet "
+              "of 100 machines whose servicing is worth $0.6m each: cutting the price below cost is the better reply either "
+              "way, so both makers cut and each earns $25m instead of $45m; if only 30% of owners buy service from the maker, "
+              "holding pays, and the threshold is an 83% attach rate. Caterpillar sold $67.6bn in 2025, its largest segment "
+              "now engines and turbines; Deere $45.7bn, with $6.3bn from financing. Equipment investment swings from 7.9% of "
+              "GDP (1979) to 4.6% (2009); machinery orders fell 29% in 2009; Caterpillar's sales fell 41% from 2012 to 2016. "
+              "Otis's service is 65% of its sales and 91% of its segment profit; a model maker's service revenue falls 2% in "
+              "a year when new sales fall 44%. Caterpillar's 150 dealers serve 190 countries; Deere has 2,050 dealer "
+              "locations in North America; financing is 13.8% of Deere's revenue; United Rentals owns 1.1 million machines. "
+              "Machinery book-to-bill fell to 0.90 in 2009; Caterpillar's profit fell in a record year as prices fell and "
+              "tariffs raised costs, until the Supreme Court struck down the IEEPA tariffs in February 2026. Since 1990 "
+              "America's machinery output rose 16% while its jobs fell 23%. China installed 354,000 robots in 2025, 59% of "
+              "the world's, 55% of them made by Chinese makers; South Korea has 1,066 robots per 10,000 factory workers. "
+              "China's excavator exports rose from $1.2bn (2015) to $10.8bn (2025), passing Japan. GE, 3M and Honeywell "
+              "split themselves up between 2023 and 2026. The IFR's one-year robot forecasts were close and its medium-term "
+              "one high; the series gives 2026 installations below the IFR's 655,000 55%.",
+        handoff="Part 20, pharmaceuticals, turns to an industry where most of the cost is in the discovery.",
+        outside="Percentages and present value; Part 5's moats; Part 6's cycle; Part 18's engines sold for their "
+                "servicing; Economics, Built's game theory and Part 62 on the diversification discount.",
+        objectives={
+            "U": ["Explain why an installed base earns more, and more steadily, than new machine sales.",
+                  "Explain why capital goods swing harder than the economy.",
+                  "Explain what dealers, captive lenders and rental companies do."],
+            "M": ["Solve the tender and find the attach rate at which makers fight for the sale.",
+                  "Compute segment margins and shares of profit from a filing.",
+                  "Compute book-to-bill and read a backlog."],
+            "D": ["Score the IFR's robot forecasts against outcomes.",
+                  "Make and state a dated, scorable forecast against an industry body's own."],
+            "I": ["Read a machine maker's segments, backlog and profit bridge.",
+                  "Read the IFR's installations and density by country."],
+        },
+        results=[
+            ("A machine's value to its maker", r"v = p - c + s\,a"),
+            ("The attach threshold for cutting", r"a^* = \frac{(p_h - c)/2 - (p_c - c)}{s/2}"),
+            ("Book-to-bill", r"B = \frac{\text{orders}}{\text{shipments}}"),
+            ("Installed base", r"N_t = \sum_{k=t-L+1}^{t} q_k"),
+        ],
+        U=(0, 1, 2, 3, 4, 5, 6, "s08_intermission", 7, 8, 9), I=(10,), D=(11,),
+        also=(("The Register's rows for Part 19", "explainer/industry/data/rows_p19.py"),
+              ("The tender and the installed base", "explainer/industry/works/machine.py"),
+              ("The SEC, FRED, robot and Comtrade extracts", "explainer/industry/data/SOURCES.md")),
+    ),
 ]

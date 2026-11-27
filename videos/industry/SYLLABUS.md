@@ -2550,6 +2550,7 @@ scored in Part 64 and at each refresh.
 | 16 · Electronics | done 2026-11-27 (78 Register rows; Stan Shih's oral history; Hon Hai's audited 2025 statements; the 10-Ks of Apple, Intel, HP, Dell, Jabil and Flex and the SEC extract of nine more assemblers, brands and component makers, with Sony's, LG Display's and ASE's 20-Fs; UN Comtrade's US imports by partner; the BLS's price indexes and electronics jobs; the Section 301 notices; CBS's transcript of the Commerce Secretary) | `works/device.py` | 16 scenes, with a surface-mount line, circuit boards and a map of Hon Hai's assets | silent and narrated previews reviewed | entry, lab, interactive | not started |
 | 17 · Automobiles | done 2026-11-27 (about 150 Register rows; Ford's *My Life and Work*; Toyota's plant and TPS pages; the 10-Ks of GM, Ford, Tesla, Rivian, Lucid and AutoNation, the 20-Fs of Toyota, Honda, Stellantis and Ferrari, Tesla's 2016 and Lucid's 2026 8-Ks; Volkswagen's Annual Report 2025 and BYD's 2025 results; the 2022 Economic Census of assembly, parts and dealers; FRED's sales, capacity use, months of supply, prices, jobs and loan rates; UN Comtrade's car exports; the DOE's battery costs, the IEA's EV shares and the EIA's 2017 outlook; China's 2017 and 2020 plans and CAAM's results; the USTR and EU duties) | `works/auto.py` | 18 scenes, with Ford's line, a press, welding robots, a paint booth, pickups, battery packs, showrooms and car carriers | silent and narrated previews reviewed | entry, lab, interactive | not started |
 | 18 · Aerospace and Defence | done 2026-11-27 (about 110 Register rows; the 10-Ks of Boeing (2005, 2011, 2013, 2025), GE Aerospace, RTX, Lockheed Martin and TransDigm, Boeing's 10-Q for the third quarter of 2026 and AerCap's 20-F; Airbus's Annual Report 2025 (ESEF); the WTO's DS316 and DS353; the SEC extract of fifteen aerospace and defence companies; FRED's aircraft orders and shipments and US defence spending; SIPRI's military expenditure) | `works/aircraft.py` | 16 scenes, with a turbofan cutaway, a fan face, a fighter, airliners assembled from their sections and the `beats.py` charts | code only: every beat snapshot-checked, not rendered | entry, lab, interactive | not started |
+| 19 · Machinery | done 2026-11-27 (about 90 Register rows; the 10-Ks of Otis, Caterpillar, United Rentals, Honeywell and 3M (2025) and Deere (fiscal 2025), the third-quarter 2026 10-Qs of Caterpillar and Honeywell; the SEC extract of twenty-three machinery companies; FRED's machinery orders, shipments, output, capacity, jobs and prices and the BEA's equipment investment; the IFR's press releases of 2022, 2024 and 2026 and its installations via the AI Index and Our World in Data; UN Comtrade's excavator and robot exports) | `works/machine.py` | 14 scenes, with an excavator whose arm digs, an elevator whose car rides, gears and robot arms | code only: every beat snapshot-checked, not rendered | entry, lab, interactive | not started |
 
 Phase 0 is done in the form Part 1 needed: the palette and kit (`style.py`, `kit.py`), the instruments (`viz.py`: the
 phone and its exploded view, the region map, the Dollar column, the margin ladder, the treemap, plain axes), the
@@ -2763,3 +2764,17 @@ series' call on the first 777-9 by the end of 2027 (55%). The defence chapters r
 Pentagon's budget pages refused automated requests). COMAC, Safran, Rolls-Royce, BAE Systems, Leonardo and Thales appear
 on the map by name only. The part was written as code only: its beats were checked from snapshots of every beat's final
 frame, and it has not been rendered.
+
+Part 19 departs from its draft's story: McCormick's reapers sold on credit in the 1850s are not used, since no primary
+source was read; the hook is Otis instead, whose 2025 accounts show the idea in one pair of numbers (new equipment at a
+4.8% margin, service at 25.1%, service 91% of segment profit), with Caterpillar's backlog ($30bn to $78bn in under two
+years, much of it power for data centres) and the IFR's 5 million robots. Run it is the draft's tender, made a game: when
+the servicing is worth enough, cutting the price is the better reply either way and the makers hand the servicing's value
+to the customer; at a low attach rate holding pays, with the threshold at 83%. The installed base is Otis's segments and
+the Works' maker (`works/machine.py`). GE's own targets of 2000 were not read, so *Called it?* scores the IFR's robot
+forecasts (2022 and 2024) and Caterpillar's own 2026 outlook, raised from about 7% to the mid-to-high teens, with the
+series' call that 2026's installations will come in below the IFR's 655,000. The conglomerates' chapter uses the
+separations as the filings date them (GE HealthCare and GE Vernova, Solventum, Solstice and Honeywell Aerospace, completed
+on 29 June 2026). Komatsu, Sany, XCMG, Volvo, Siemens, ABB, Fanuc, Yaskawa, Keyence, Schneider, Schindler, Kone, Daikin,
+Atlas Copco, SKF, Hitachi, Ashtead and Herc appear on the map by name only. Written as code only and checked from
+snapshots; not rendered.

@@ -211,6 +211,69 @@
     });
   };
 
+  // Part 19: the tender (the Works' Tender in explainer/industry/works/machine.py)
+  W.tender = function (el) {
+    var FLEET = 100, COST = 1.0;
+    function value(v, price) { return price - COST + v.service * v.attach; }
+    function payoff(v, me, them) {
+      var p = { hold: v.hold, cut: v.cut };
+      var share = p[me] < p[them] ? 1 : (p[me] > p[them] ? 0 : 0.5);
+      return share * FLEET * value(v, p[me]);
+    }
+    function table(v) {
+      var t = {};
+      ["hold", "cut"].forEach(function (a) { ["hold", "cut"].forEach(function (b) { t[a + "|" + b] = payoff(v, a, b); }); });
+      return t;
+    }
+    QB.widget(el, {
+      title: "The tender",
+      sub: "You and a rival bid for a customer's fleet of 100 machines that cost $1.0m each to build. Each of you bids high or cuts; the lower bid wins the whole fleet and a tie splits it. Whoever sells the machines also sells their parts and service, on the share of owners who stay with the maker: the attach rate. Set the bids, the value of the servicing and the attach rate.",
+      panels: 2, height: 300, weights: [3, 2],
+      controls: [
+        { k: "hold", label: "The high bid, $m a machine", min: 1.0, max: 2.0, step: 0.05, value: 1.3, fmt: function (x) { return "$" + x.toFixed(2) + "m"; } },
+        { k: "cut", label: "The low bid, $m a machine", min: 0.5, max: 1.2, step: 0.05, value: 0.9, fmt: function (x) { return "$" + x.toFixed(2) + "m"; } },
+        { k: "service", label: "Value of a machine's servicing today, $m", min: 0, max: 1.5, step: 0.05, value: 0.6, fmt: function (x) { return "$" + x.toFixed(2) + "m"; } },
+        { k: "attach", label: "Attach rate (owners who buy service from the maker)", min: 0, max: 1, step: 0.05, value: 1.0, fmt: function (x) { return Math.round(100 * x) + "%"; } },
+      ],
+      draw: function (g, v, s) {
+        if (v.cut >= v.hold) v.cut = v.hold - 0.05;
+        var xs = [], gain = [], i;
+        for (i = 0; i <= 20; i++) {
+          var a = i / 20; xs.push(a);
+          var w = { hold: v.hold, cut: v.cut, service: v.service, attach: a };
+          gain.push(payoff(w, "cut", "hold") - payoff(w, "hold", "hold"));
+        }
+        var lo = Math.min(Math.min.apply(null, gain), -5), hi = Math.max(Math.max.apply(null, gain), 5);
+        var ax = g[0].axes({ x: [0, 1], y: [lo * 1.1, hi * 1.15], title: "What cutting adds against a rival who holds, $m, by attach rate",
+                             xticks: [0, 0.25, 0.5, 0.75, 1], xfmt: function (x) { return Math.round(100 * x) + "%"; }, yfmt: function (y) { return Math.round(y); } });
+        ax.hline(0, { color: C.muted });
+        ax.line(xs, gain, { color: C.p, width: 2.4 });
+        ax.vline(v.attach, { color: C.spot, dash: [5, 4], width: 1.4 });
+        var t = table(v);
+        var keys = ["hold|hold", "cut|hold", "hold|cut", "cut|cut"], vals = keys.map(function (k) { return t[k]; });
+        var top = Math.max.apply(null, vals.map(Math.abs).concat([1])) * 1.2;
+        var bx = g[1].axes({ x: [-0.7, 3.7], y: [-top, top], title: "Your value, $m: you / rival",
+                             xticks: [0, 1, 2, 3], xfmt: function (x) { return ["H/H", "C/H", "H/C", "C/C"][x]; }, yfmt: function (y) { return Math.round(y); } });
+        for (i = 0; i < 4; i++) bx.bars([i], [vals[i]], 0.6, { color: vals[i] < 0 ? C.loss : C.p });
+        var eq = [];
+        ["hold", "cut"].forEach(function (a) { ["hold", "cut"].forEach(function (b) {
+          var oa = a === "hold" ? "cut" : "hold", ob = b === "hold" ? "cut" : "hold";
+          if (t[a + "|" + b] >= t[oa + "|" + b] && t[b + "|" + a] >= t[ob + "|" + a]) eq.push(a + "/" + b);
+        }); });
+        var thr = ((v.hold - COST) / 2 - (v.cut - COST)) / (v.service / 2 || 1e-9);
+        s.r = { t: t, eq: eq, thr: thr };
+      },
+      readout: function (v, s) {
+        var r = s.r, t = r.t;
+        return [["equilibrium (you/rival)", r.eq.length ? r.eq.join(", ") : "none in pure moves"],
+                ["both hold / both cut", "$" + Math.round(t["hold|hold"]) + "m / $" + Math.round(t["cut|cut"]) + "m each"],
+                ["cutting beats holding against a holder above", v.service > 0 ? (r.thr > 1 ? "never (above 100%)" : Math.max(0, Math.round(100 * r.thr)) + "% attach") : "never"],
+                ["the floor price (cost less servicing)", "$" + (COST - v.service * v.attach).toFixed(2) + "m"]];
+      },
+      note: "The Works' tender, as in the film: with bids of $1.3m and $0.9m, servicing worth $0.6m a machine and every owner staying with the maker, cutting is the better reply whatever the rival does, so both cut and each is worth $25m instead of $45m. Lower the attach rate, as when independent workshops take the servicing, and holding the price starts to pay. Otis, which keeps most of the maintenance of the lifts it installs, earned 4.8 cents on a dollar of new equipment and 25.1 on a dollar of service in 2025.",
+    });
+  };
+
   // Part 18: build an airliner programme (the Works' Programme in explainer/industry/works/aircraft.py)
   W.airframer = function (el) {
     var FIRST = 450, DEV_YEARS = 6, RAMP = [0.15, 0.4, 0.7, 1.0], YEARS = 25, R = 0.08;
