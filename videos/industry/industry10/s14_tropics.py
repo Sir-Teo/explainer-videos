@@ -13,20 +13,20 @@ class Tropics(VoiceoverScene):
 
     def cocoa(self):
         C = R["cocoa"]
-        wm = draw.world_map(9.0, lon=(-25, 60), lat=(-30, 40)).move_to([-2.6, 0.1, 0])
+        wm = draw.world_map(7.0, lon=(-18, 12), lat=(-2, 18)).move_to([-3.0, -0.1, 0])
         civ, gha = wm.p(-5.5, 7.5), wm.p(-1.2, 7.8)
-        bub = VGroup(Circle(0.035 * np.sqrt(C["civ"]), stroke_color=COCOA, stroke_width=2, fill_color=COCOA, fill_opacity=0.6
+        bub = VGroup(Circle(0.013 * np.sqrt(C["civ"]), stroke_color=COCOA, stroke_width=2, fill_color=COCOA, fill_opacity=0.6
                             ).move_to(civ),
-                     Circle(0.035 * np.sqrt(C["gha"]), stroke_color=COCOA, stroke_width=2, fill_color=COCOA, fill_opacity=0.6
+                     Circle(0.013 * np.sqrt(C["gha"]), stroke_color=COCOA, stroke_width=2, fill_color=COCOA, fill_opacity=0.6
                             ).move_to(gha))
         labs = VGroup(VGroup(tx("Côte d'Ivoire", 15, WHITE, bold=True), tx(f"{C['civ']:,.0f} kt", 14, COCOA)).arrange(
             DOWN, buff=0.02).next_to(bub[0], LEFT, buff=0.1),
                       VGroup(tx("Ghana", 15, WHITE, bold=True), tx(f"{C['gha']:,.0f} kt", 14, COCOA)).arrange(
             DOWN, buff=0.02).next_to(bub[1], RIGHT, buff=0.1))
-        pods = VGroup(*[draw.cocoa_pod(0.5) for _ in range(5)]).arrange(RIGHT, buff=0.15).move_to([-2.6, -2.6, 0])
+        pods = VGroup(*[draw.cocoa_pod(0.45) for _ in range(5)]).arrange(RIGHT, buff=0.15).move_to([-3.0, -3.1, 0])
         share = VGroup(tx(f"{100 * C['share']:.0f}% of the world's cocoa beans, 2022/23", 18, COCOA, bold=True),
                        tx(f"next season: world crop -{100 * (1 - C['world24'] / C['world']):.0f}%", 16, STATE)).arrange(
-            DOWN, buff=0.05).next_to(pods, UP, buff=0.15)
+            DOWN, buff=0.05).move_to([-3.0, 2.85, 0])
         ms = C["months"]
         sel = [(m, v) for m, v in zip(ms, C["price"]) if m >= "2015-01"]
         pa = viz.plot_axes([2015, 2027], [0, 12000], x_length=4.6, y_length=3.4, xticks=[2015, 2020, 2025],

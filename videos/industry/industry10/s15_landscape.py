@@ -29,7 +29,9 @@ class Landscape(VoiceoverScene):
             p = pa.ax.c2p(np.log10(c["revenue"]), c["margin5"])
             d = VGroup(Circle(0.07 * np.sqrt(c["revenue"]) ** 0.75, stroke_color=col, stroke_width=2, fill_color=col,
                               fill_opacity=0.4).move_to(p), tx(c["name"], 13, WHITE, bold=True))
-            d[1].next_to(d[0], UP, buff=0.04)
+            side = {"ADM": DOWN, "BG": RIGHT, "TSN": LEFT, "KR": RIGHT, "PPC": LEFT, "HRL": LEFT, "KHC": DOWN,
+                    "MOS": LEFT, "CTVA": RIGHT}.get(t, UP)
+            d[1].next_to(d[0], side, buff=0.04)
             bub.add(d)
         order = ["inputs", "traders", "meat", "brands", "shops"]
         key = VGroup(*[VGroup(Dot(radius=0.09, color={"inputs": COST, "traders": TRADE, "meat": MEAT, "brands": BRAND,
