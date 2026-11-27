@@ -335,7 +335,10 @@ SEC_COMPANIES = [(789019, "MSFT"), (909832, "COST"), (19617, "JPM"), (753308, "N
                  (73309, "NUE"), (1022671, "STLD"), (764065, "CLF"), (1163302, "X"), (22444, "CMC"),
                  (849395, "CRH"), (2035989, "AMRZ"), (1396009, "VMC"), (916076, "MLM"), (918646, "EXP"),
                  (1675149, "AA"), (949157, "CENX"), (51434, "IP"), (2005951, "SW"), (75677, "PKG"), (9389, "BALL"),
-                 (1219601, "CCK"), (812074, "OI")]
+                 (1219601, "CCK"), (812074, "OI"),
+                 (1751788, "DOW"), (1489393, "LYB"), (1262823, "WLK"), (1707925, "LIN"), (2969, "APD"), (89800, "SHW"),
+                 (31462, "ECL"), (79879, "PPG"), (915389, "EMN"), (1306830, "CE"), (1666700, "DD"), (1307954, "HUN"),
+                 (74303, "OLN"), (51253, "IFF"), (1627223, "CC")]
 
 
 # where a company's first-choice tag means something else: Mastercard tagged its gross revenue, before rebates and
@@ -370,7 +373,13 @@ SEC_OVERRIDES = {"MA": {"revenue": ["Revenues", "SalesRevenueNet",
                           "net_income": ["NetIncomeLoss", "NetIncomeLossAvailableToCommonStockholdersBasic"]},
                  "OI": {"revenue": ["RevenueFromContractWithCustomerIncludingAssessedTax", "Revenues",
                                     "SalesRevenueGoodsNet"]},
-                 "STLD": {"net_income": ["NetIncomeLoss", "NetIncomeLossAvailableToCommonStockholdersBasic"]}}
+                 "STLD": {"net_income": ["NetIncomeLoss", "NetIncomeLossAvailableToCommonStockholdersBasic"]},
+                 # Dow, Ecolab and IFF tag profit to common shareholders in the years they do not tag NetIncomeLoss;
+                 # LyondellBasell tags only ProfitLoss (with its small non-controlling interests) after 2019
+                 "DOW": {"net_income": ["NetIncomeLoss", "NetIncomeLossAvailableToCommonStockholdersBasic"]},
+                 "ECL": {"net_income": ["NetIncomeLoss", "NetIncomeLossAvailableToCommonStockholdersBasic"]},
+                 "IFF": {"net_income": ["NetIncomeLoss", "NetIncomeLossAvailableToCommonStockholdersBasic"]},
+                 "LYB": {"net_income": ["NetIncomeLoss", "ProfitLoss"]}}
 
 
 def sec_annual():
@@ -887,7 +896,7 @@ def fred_metals():
                    "; ".join(f"{k} {v}" for k, v in FRED_METALS.items()) + ")"])
 
 
-IFRS_COMPANIES = [(811809, "BHP"), (863064, "RIO"), (917851, "VALE"), (1243429, "MT"), (1076378, "CX")]
+IFRS_COMPANIES = [(811809, "BHP"), (863064, "RIO"), (917851, "VALE"), (1243429, "MT"), (1076378, "CX"), (941221, "ICL")]
 # ArcelorMittal tags revenue as revenue from contracts with customers since 2018, and its capital spending with
 # intangibles and other non-current assets
 IFRS_OVERRIDES = {"MT": {"revenue": ["Revenue", "RevenueFromContractsWithCustomers"],
@@ -900,8 +909,9 @@ IFRS_ITEMS = {"revenue": ["Revenue"], "profit": ["ProfitLossAttributableToOwners
 
 
 def sec_ifrs():
-    """Annual figures of the three big diversified miners (Part 9), ArcelorMittal and Cemex (Part 11) from their Forms
-    20-F (SEC company facts, IFRS tags, US dollars): BHP's fiscal years end in June, the others' in December."""
+    """Annual figures of the three big diversified miners (Part 9), ArcelorMittal and Cemex (Part 11) and ICL (Part 12)
+    from their Forms 20-F (SEC company facts, IFRS tags, US dollars): BHP's fiscal years end in June, the others' in
+    December."""
     import time
 
     out = []
@@ -1100,7 +1110,7 @@ def fred_food():
 
 DS140_HEAVY = {"cement": "ds140-cement-2021", "steel": "ds140-iron-steel-2021", "scrap": "ds140-iron-steel-scrap-2021",
                "aluminum": "ds140-aluminum-2021", "crushed_stone": "ds140-crushed_stone-2022",
-               "sand_gravel": "ds140-construction_sand_and%20gravel_2022"}
+               "sand_gravel": "ds140-construction_sand_and%20gravel_2022", "nitrogen": "ds140-nitrogen-2022"}
 DS140_COLS = {"production": ("production", "raw steel production", "primary production"),
               "consumption": ("apparent consumption", "reported consumption"),
               "unit_value": ("unit value ($/t)",), "unit_value_98": ("unit value (98$/t)",),
@@ -1188,7 +1198,98 @@ def owid_co2():
                   ["Global Carbon Budget (2025), Friedlingstein et al.; cement: Andrew (2019)"])
 
 
-JOBS = {"usgs_heavy": usgs_heavy, "fred_heavy": fred_heavy, "owid_co2": owid_co2, "ers_food_dollar": ers_food_dollar, "ers_costs": ers_costs, "ers_farm_income": ers_farm_income, "owid_ag": owid_ag, "fred_food": fred_food, "ne_land": ne_land, "usgs_ds140": usgs_ds140, "fred_metals": fred_metals, "sec_ifrs": sec_ifrs, "eia_gas": eia_gas, "eia_petroleum": eia_petroleum, "eia_intl": eia_intl, "eia_pump": eia_pump, "fred_energy": fred_energy, "fred_market": fred_market, "owid_tech": owid_tech, "sec_quarterly": sec_quarterly, "fred_cycle": fred_cycle, "esef_maersk": esef_maersk, "damodaran_roc": damodaran_roc, "census_conc": census_conc, "eia_power": eia_power, "fred_pay": fred_pay, "bea_real": bea_real, "sec_annual": sec_annual, "fred_prices": fred_prices, "census_susb": census_susb, "bea_va": bea_va, "wb_mfg_usd": wb_mfg_usd, "bea_hist": bea_hist, "bea_io": bea_io, "fred_jobs": fred_jobs, "wb_shares": wb_shares}
+
+FRED_CHEM = {"WPU06": "PPI chemicals and allied products", "PCU325110325110": "PPI petrochemical manufacturing",
+             "PCU325211325211": "PPI plastics material and resins", "PCU325120325120": "PPI industrial gases",
+             "PCU325510325510": "PPI paints and coatings", "PCU325412325412": "PPI pharmaceutical preparations",
+             "PCU325311325311": "PPI nitrogenous fertilizers", "IPG325S": "industrial production: chemicals",
+             "CAPUTLG325S": "capacity utilization: chemicals", "IPG3251S": "industrial production: basic chemicals",
+             "IPG3252S": "industrial production: resins, synthetic rubber, fibers",
+             "PNGASEUUSDM": "natural gas, Europe (IMF; $ per million Btu)",
+             "PNGASUSUSDM": "natural gas, US Henry Hub (IMF; $ per million Btu)",
+             "PNGASJPUSDM": "LNG, Asia (IMF; $ per million Btu)", "POILBREUSDM": "Brent crude (IMF; $ a barrel)",
+             "CPIAUCSL": "CPI, all items"}
+
+
+def fred_chem():
+    """Monthly series for Part 12 (via FRED): producer prices of chemicals, petrochemicals, resins, industrial gases,
+    paints, medicines and nitrogen fertilizer (BLS); industrial production and capacity utilization of chemicals
+    (Federal Reserve G.17); the IMF's gas prices in Europe, the US and Asia and the Brent price; the CPI."""
+    out = []
+    for sid in FRED_CHEM:
+        txt = _get(f"https://fred.stlouisfed.org/graph/fredgraph.csv?id={sid}").decode()
+        for line in txt.splitlines()[1:]:
+            d, v = line.split(",")
+            if v not in (".", ""):
+                out.append([sid, d[:7], float(v)])
+    return _write("fred_chem", ["series", "month", "value"], out,
+                  ["https://fred.stlouisfed.org (" + "; ".join(f"{k} {v}" for k, v in FRED_CHEM.items()) + ")"])
+
+
+EIA_NGL = {"PET.M_EPLLEA_FPF_NUS_MBBLD.M": "US field production of ethane (thousand barrels a day)",
+           "PET.M_EPLLPA_FPF_NUS_MBBLD.M": "US field production of propane (thousand barrels a day)",
+           "PET.M_EPL2_FPF_NUS_MBBLD.M": "US field production of natural gas liquids (thousand barrels a day)",
+           "PET.M_EPLLEA_EEX_NUS-Z00_2.M": "US exports of ethane (thousand barrels a day)",
+           "PET.MPAEX_NUS-Z00_2.M": "US exports of propane (thousand barrels a day)",
+           "PET.EER_EPLLPA_PF4_Y44MB_DPG.M": "Mont Belvieu propane spot price (dollars a gallon)"}
+
+
+def eia_ngl():
+    """US natural gas liquids from EIA's petroleum bulk file: field production of ethane, propane and all NGLs,
+    exports of ethane and propane, and the Mont Belvieu propane price, month by month."""
+    got = _eia_bulk("PET", lambda sid: sid in EIA_NGL)
+    rows = []
+    for sid in EIA_NGL:
+        for per, v in sorted(got[sid]["data"]):
+            if v is not None:
+                rows.append([sid, f"{per[:4]}-{per[4:6]}", float(v)])
+    return _write("eia_ngl", ["series", "month", "value"], rows,
+                  ["https://api.eia.gov/bulk/PET.zip (" + "; ".join(f"{k} {v}" for k, v in EIA_NGL.items()) + ")"])
+
+
+def eurostat_chem():
+    """Eurostat's monthly index of production in the chemical industry (NACE C20), seasonally and calendar adjusted,
+    2021 = 100, for Germany and the EU (dataset sts_inpr_m)."""
+    url = ("https://ec.europa.eu/eurostat/api/dissemination/statistics/1.0/data/sts_inpr_m?geo=DE&geo=EU27_2020"
+           "&nace_r2=C20&s_adj=SCA&unit=I21&format=JSON&lang=EN")
+    d = json.loads(_get(url))
+    t = d["dimension"]["time"]["category"]["index"]
+    g = d["dimension"]["geo"]["category"]["index"]
+    nt = len(t)
+    rows = []
+    for geo, gi in g.items():
+        for month, ti in sorted(t.items(), key=lambda kv: kv[1]):
+            v = d["value"].get(str(gi * nt + ti))
+            if v is not None:
+                rows.append([geo, month, float(v)])
+    return _write("eurostat_chem", ["geo", "month", "value"], rows, [url + " (Eurostat, CC BY 4.0)"])
+
+
+
+OWID_CHEM = ["global-plastics-production", "plastic-fate", "population",
+             "nitrogen-fertilizer-application-per-hectare-of-cropland"]
+
+
+def owid_chem():
+    """Our World in Data, for Part 12: world plastics production since 1950 and what became of 2000-2019's plastic
+    waste (OECD, Global Plastics Outlook), the world's population, and nitrogen fertilizer per hectare of cropland
+    (FAO).  World only (CC BY 4.0)."""
+    out = []
+    for slug in OWID_CHEM:
+        txt = _get(f"https://ourworldindata.org/grapher/{slug}.csv?v=1&csvType=full&useColumnShortNames=true").decode()
+        rows = list(csv.reader(io.StringIO(txt)))
+        head = rows[0]
+        for r in rows[1:]:
+            if r[0] == "World" and int(r[2]) >= 1800:
+                for j in range(3, len(head)):
+                    if r[j] not in ("", None):
+                        out.append([slug, head[j], int(r[2]), float(r[j])])
+    return _write("owid_chem", ["series", "column", "year", "value"], out,
+                  ["https://ourworldindata.org/grapher/" + s for s in OWID_CHEM] +
+                  ["OECD Global Plastics Outlook (2022); HYDE and UN WPP (population); FAO (fertilizer)"])
+
+
+JOBS = {"owid_chem": owid_chem, "fred_chem": fred_chem, "eia_ngl": eia_ngl, "eurostat_chem": eurostat_chem, "usgs_heavy": usgs_heavy, "fred_heavy": fred_heavy, "owid_co2": owid_co2, "ers_food_dollar": ers_food_dollar, "ers_costs": ers_costs, "ers_farm_income": ers_farm_income, "owid_ag": owid_ag, "fred_food": fred_food, "ne_land": ne_land, "usgs_ds140": usgs_ds140, "fred_metals": fred_metals, "sec_ifrs": sec_ifrs, "eia_gas": eia_gas, "eia_petroleum": eia_petroleum, "eia_intl": eia_intl, "eia_pump": eia_pump, "fred_energy": fred_energy, "fred_market": fred_market, "owid_tech": owid_tech, "sec_quarterly": sec_quarterly, "fred_cycle": fred_cycle, "esef_maersk": esef_maersk, "damodaran_roc": damodaran_roc, "census_conc": census_conc, "eia_power": eia_power, "fred_pay": fred_pay, "bea_real": bea_real, "sec_annual": sec_annual, "fred_prices": fred_prices, "census_susb": census_susb, "bea_va": bea_va, "wb_mfg_usd": wb_mfg_usd, "bea_hist": bea_hist, "bea_io": bea_io, "fred_jobs": fred_jobs, "wb_shares": wb_shares}
 
 if __name__ == "__main__":
     names = list(JOBS) if "--all" in sys.argv else sys.argv[1:]

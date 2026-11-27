@@ -22,6 +22,9 @@ Every glyph is a ``VGroup`` with its moving parts named, so a scene can animate 
   :func:`coil`, :func:`ibeam`, :func:`rebar`, :func:`slab`, :func:`pile` (pellets, coal, scrap), :func:`sparks`,
   :func:`rotary_kiln` (``.tube``, ``.flame``, ``.tower``), :func:`silo`, :func:`mixer_truck` (``.drum``),
   :func:`quarry`, :func:`potline` (``.pots``, ``.bus``), :func:`can`, :func:`carton`, :func:`banana`;
+* chemicals: :func:`molecule` (ball and stick: H2, N2, NH3, CH4, C2H6, C2H4; ``.atoms``, ``.bonds``), :func:`chain`
+  (polyethylene), :func:`cracker_unit` (``.flames``, ``.towers``), :func:`cylinder`, :func:`paint_can`,
+  :func:`pellet_bag`;
 * the city and its people: :func:`skyline` (``.windows`` light up), :func:`house`, :func:`shop`, :func:`person`,
   :func:`crowd`; :func:`sun`, :func:`moon`, :func:`sky` (a background whose colour follows the hour);
 * money: :func:`coin`, :func:`coin_stack`, :func:`note_bill`, :func:`coin_flow` (coins flying from one place to
@@ -1454,3 +1457,116 @@ def banana(h: float = 0.6, color: str = "#F2D04E") -> VGroup:
     stem = Line(outer.get_end(), outer.get_end() + np.array([0.06 * h, 0.08 * h, 0]), stroke_color="#6B5A2A",
                 stroke_width=4)
     return VGroup(body, stem).move_to(ORIGIN)
+
+
+# ---------------------------------------------------------------------------------------------------------------
+# Chemicals (Part 12)
+# ---------------------------------------------------------------------------------------------------------------
+ATOM = {"H": ("#E8EAED", 0.11), "C": ("#4A505C", 0.17), "N": ("#5DA9E9", 0.16), "O": ("#E8554E", 0.16),
+        "Cl": ("#7BD88F", 0.18)}
+
+# 2-D layouts, in units of a bond length: (element, x, y), and bonds as (i, j, order)
+MOLECULES = {
+    "H2": ([("H", -0.5, 0), ("H", 0.5, 0)], [(0, 1, 1)]),
+    "N2": ([("N", -0.55, 0), ("N", 0.55, 0)], [(0, 1, 3)]),
+    "NH3": ([("N", 0, 0.1), ("H", -0.85, -0.45), ("H", 0.85, -0.45), ("H", 0, 0.95)], [(0, 1, 1), (0, 2, 1), (0, 3, 1)]),
+    "CH4": ([("C", 0, 0), ("H", -0.9, 0), ("H", 0.9, 0), ("H", 0, 0.9), ("H", 0, -0.9)],
+            [(0, 1, 1), (0, 2, 1), (0, 3, 1), (0, 4, 1)]),
+    "C2H6": ([("C", -0.5, 0), ("C", 0.5, 0), ("H", -1.2, 0.7), ("H", -1.2, -0.7), ("H", -1.4, 0), ("H", 1.2, 0.7),
+              ("H", 1.2, -0.7), ("H", 1.4, 0)],
+             [(0, 1, 1), (0, 2, 1), (0, 3, 1), (0, 4, 1), (1, 5, 1), (1, 6, 1), (1, 7, 1)]),
+    "C2H4": ([("C", -0.55, 0), ("C", 0.55, 0), ("H", -1.25, 0.7), ("H", -1.25, -0.7), ("H", 1.25, 0.7), ("H", 1.25, -0.7)],
+             [(0, 1, 2), (0, 2, 1), (0, 3, 1), (1, 4, 1), (1, 5, 1)]),
+}
+
+
+def molecule(kind: str, bond: float = 0.42, label: bool = False) -> VGroup:
+    """A ball-and-stick molecule (H2, N2, NH3, CH4, C2H6, C2H4): ``g.atoms`` and ``g.bonds``."""
+    atoms_, bonds_ = MOLECULES[kind]
+    pts = [np.array([x * bond, y * bond, 0]) for _, x, y in atoms_]
+    bonds = VGroup()
+    for i, j, order in bonds_:
+        d = pts[j] - pts[i]
+        n = np.array([-d[1], d[0], 0]) / (np.linalg.norm(d) + 1e-9)
+        for k in range(order):
+            off = (k - (order - 1) / 2) * 0.06 * n
+            bonds.add(Line(pts[i] + off, pts[j] + off, stroke_color="#C9D3E0", stroke_width=3))
+    atoms = VGroup(*[Circle(radius=ATOM[e][1] * bond / 0.42, stroke_color="#0E1117", stroke_width=1.5,
+                            fill_color=ATOM[e][0], fill_opacity=1).move_to(p) for (e, _, _), p in zip(atoms_, pts)])
+    g = VGroup(bonds, atoms)
+    if label:
+        g.add(tx(kind.replace("2", "₂"), 16, "#C9D3E0").next_to(g, DOWN, buff=0.1))
+    g.atoms, g.bonds = atoms, bonds
+    return g
+
+
+def chain(n: int = 6, bond: float = 0.3) -> VGroup:
+    """A strand of polyethylene: a zig-zag of ``n`` carbons with their hydrogens."""
+    g = VGroup()
+    cs = [np.array([k * bond * 0.9, (0.25 if k % 2 else -0.25) * bond, 0]) for k in range(n)]
+    for a, b in zip(cs, cs[1:]):
+        g.add(Line(a, b, stroke_color="#C9D3E0", stroke_width=3))
+    for k, c in enumerate(cs):
+        for s in (1, -1):
+            h = c + np.array([0, s * 0.75 * bond, 0]) + np.array([0, (0.2 if k % 2 else -0.2) * bond, 0])
+            g.add(Line(c, h, stroke_color="#C9D3E0", stroke_width=2))
+            g.add(Circle(radius=0.08 * bond / 0.3, stroke_width=0, fill_color=ATOM["H"][0], fill_opacity=1).move_to(h))
+        g.add(Circle(radius=0.12 * bond / 0.3, stroke_width=0, fill_color=ATOM["C"][0], fill_opacity=1).move_to(c))
+    return g.move_to(ORIGIN)
+
+
+def cracker_unit(w: float = 4.0) -> VGroup:
+    """A steam cracker: the furnace box with its flames (``g.flames``) and stack, a quench tower and the separation
+    columns (``g.towers``) that split the cracked gas."""
+    box = Rectangle(width=0.32 * w, height=0.42 * w, stroke_color=STEEL, stroke_width=2, fill_color="#2E3645",
+                    fill_opacity=1).move_to([-0.34 * w, 0.21 * w, 0])
+    coils = VGroup(*[Line([-0.46 * w + 0.06 * w * k, 0.05 * w, 0], [-0.46 * w + 0.06 * w * k, 0.38 * w, 0],
+                          stroke_color="#A7B0BD", stroke_width=2) for k in range(5)])
+    flames = VGroup(*[VGroup(Ellipse(width=0.05 * w, height=0.12 * w, stroke_width=0, fill_color="#FF8A3D", fill_opacity=0.9),
+                             Ellipse(width=0.025 * w, height=0.07 * w, stroke_width=0, fill_color="#FFD166", fill_opacity=1)
+                             ).move_to([-0.43 * w + 0.06 * w * k, 0.08 * w, 0]) for k in range(4)])
+    stack = Rectangle(width=0.05 * w, height=0.3 * w, stroke_width=0, fill_color="#6C7686", fill_opacity=1).move_to(
+        [-0.34 * w, 0.57 * w, 0])
+    quench = Rectangle(width=0.08 * w, height=0.38 * w, stroke_width=0, fill_color="#9AA3B2", fill_opacity=1).move_to(
+        [-0.08 * w, 0.19 * w, 0])
+    towers = VGroup(*[RoundedRectangle(corner_radius=0.02 * w, width=0.06 * w, height=h * w, stroke_width=0,
+                                       fill_color="#C9D3E0", fill_opacity=1).move_to([x * w, h * w / 2, 0])
+                      for x, h in ((0.08, 0.5), (0.2, 0.62), (0.32, 0.45), (0.44, 0.55))])
+    pipe = Line([-0.18 * w, 0.3 * w, 0], [0.46 * w, 0.3 * w, 0], stroke_color="#6C7686", stroke_width=4)
+    g = VGroup(pipe, stack, box, coils, flames, quench, towers)
+    g.flames, g.towers, g.box = flames, towers, box
+    return g
+
+
+def cylinder(h: float = 0.9, color: str = "#7EC8F5") -> VGroup:
+    """A gas cylinder with its valve."""
+    body = RoundedRectangle(corner_radius=0.12 * h, width=0.32 * h, height=0.85 * h, stroke_width=0, fill_color=color,
+                            fill_opacity=1).move_to([0, 0.43 * h, 0])
+    neck = Rectangle(width=0.1 * h, height=0.08 * h, stroke_width=0, fill_color="#8B95A7", fill_opacity=1).move_to(
+        [0, 0.89 * h, 0])
+    valve = Rectangle(width=0.2 * h, height=0.05 * h, stroke_width=0, fill_color="#C9D3E0", fill_opacity=1).move_to(
+        [0, 0.95 * h, 0])
+    return VGroup(body, neck, valve)
+
+
+def paint_can(h: float = 0.7, color: str = "#E8554E") -> VGroup:
+    """A tin of paint with a drip."""
+    body = Rectangle(width=0.8 * h, height=0.8 * h, stroke_width=0, fill_color="#C9D3E0", fill_opacity=1).move_to(
+        [0, 0.4 * h, 0])
+    lid = Ellipse(width=0.8 * h, height=0.16 * h, stroke_width=0, fill_color=color, fill_opacity=1).move_to([0, 0.8 * h, 0])
+    drip = Polygon([-0.2 * h, 0.8 * h, 0], [-0.1 * h, 0.8 * h, 0], [-0.13 * h, 0.55 * h, 0], [-0.17 * h, 0.55 * h, 0],
+                   stroke_width=0, fill_color=color, fill_opacity=1)
+    label_ = Rectangle(width=0.8 * h, height=0.28 * h, stroke_width=0, fill_color=color, fill_opacity=0.85).move_to(
+        [0, 0.38 * h, 0])
+    handle = Arc(radius=0.42 * h, start_angle=0.3, angle=PI - 0.6, stroke_color="#8B95A7", stroke_width=2).move_to(
+        [0, 0.95 * h, 0])
+    return VGroup(handle, body, label_, lid, drip)
+
+
+def pellet_bag(h: float = 0.8, color: str = "#E8EAED") -> VGroup:
+    """A sack of plastic pellets, the form in which polymer is sold."""
+    bag = RoundedRectangle(corner_radius=0.1 * h, width=0.7 * h, height=h, stroke_width=0, fill_color=color, fill_opacity=1)
+    dots = VGroup(*[Circle(radius=0.035 * h, stroke_width=0, fill_color="#7EC8F5", fill_opacity=0.9).move_to(
+        [(-0.2 + 0.1 * (k % 5)) * h, (-0.15 + 0.08 * (k // 5)) * h, 0]) for k in range(15)])
+    tag = tx("PE", 18 * h, "#0E1117", bold=True).move_to([0, 0.3 * h, 0])
+    return VGroup(bag, dots, tag)
