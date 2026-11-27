@@ -1002,7 +1002,7 @@ def wheat(h: float = 1.6, dwarf: bool = False, color: str = WHEATC) -> VGroup:
     leaves = VGroup(*[Arc(radius=0.25 * h, start_angle=a, angle=0.9, stroke_color=LEAF, stroke_width=3).move_to(
         [s_ * 0.1 * h, stem_h * f, 0]) for a, s_, f in ((PI * 0.15, 1, 0.35), (PI * 0.6, -1, 0.55))])
     n = 6 if dwarf else 5
-    size = 0.075 * h * (1.35 if dwarf else 1.0)
+    size = 0.045 * h * (1.35 if dwarf else 1.0)
     grains = VGroup()
     for k in range(n):
         for side in (-1, 1):

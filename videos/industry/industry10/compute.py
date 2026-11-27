@@ -159,6 +159,9 @@ def results() -> dict:
                           acres_1935=get("ers.acres.1935"), acres_2025=get("nass.acres.2025"))
     um = R["treadmill"]["us_maize"]
     R["treadmill"]["maize_x"] = um[max(um)] / um[1961]
+    R["treadmill"]["before"] = float(np.mean([v for y, v in um.items() if 1866 <= y <= 1935]))
+    R["treadmill"]["maize_x30"] = um[max(um)] / R["treadmill"]["before"]
+    R["treadmill"]["maize_last"] = (max(um), um[max(um)])
 
     # --- a bushel to a loaf ---------------------------------------------------------------------------------------------
     wh = F["PWHEAMTUSDM"]
@@ -217,6 +220,15 @@ def results() -> dict:
                         cargill=get("cargill.revenue.2025"))
     adm = R["traders"]["adm"]
     R["traders"]["adm_margin"] = float(np.mean([n / r for y, (r, n) in adm.items() if y >= 2016]))
+
+    # the soybean crush: what a tonne of beans is worth as meal and oil, less the beans (the exchange's standard yields)
+    sm, so, sb = F["PSMEAUSDM"], F["PSOILUSDM"], F["PSOYBUSDM"]  # meal, oil, beans
+    cm = sorted(set(sm) & set(so) & set(sb))
+    fo, fm = get("cme.crush.oil") / 60, get("cme.crush.meal") / 60
+    crush = {m: fm * sm[m] + fo * so[m] - sb[m] for m in cm}
+    R["traders"]["crush"] = dict(months=cm, margin=[crush[m] for m in cm], oil=fo, meal=fm,
+                                 avg=float(np.mean(list(crush.values()))), last=crush[cm[-1]], last_month=cm[-1],
+                                 neg=sum(1 for v in crush.values() if v < 0) / len(crush))
 
     # --- futures: maize month by month ------------------------------------------------------------------------------------
     R["futures"] = dict(months=sorted(mz), bu=[farm.per_bushel(mz[m], "corn") for m in sorted(mz)])

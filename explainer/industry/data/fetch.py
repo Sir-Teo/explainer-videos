@@ -1050,6 +1050,7 @@ FRED_FOOD = {"PWHEAMTUSDM": "wheat ($/t)", "PMAIZMTUSDM": "maize ($/t)", "PSOYBU
              "PRICENPQUSDM": "rice ($/t)", "PCOCOUSDM": "cocoa ($/t)", "PCOFFOTMUSDM": "coffee, other milds (c/lb)",
              "PBEEFUSDM": "beef (c/lb)", "PPOILUSDM": "palm oil ($/t)", "PSUGAISAUSDM": "sugar (c/lb)",
              "PCU325311325311": "PPI, nitrogenous fertilizer manufacturing (Dec 1979 = 100)",
+             "PSMEAUSDM": "soybean meal ($/t)", "PSOILUSDM": "soybean oil ($/t)",
              "APU0000702111": "white bread, a pound (US city average, $)", "APU0000703112": "ground beef, a pound ($)",
              "APU0000708111": "eggs, a dozen ($)", "CUSR0000SAF11": "CPI food at home (1982-84 = 100)",
              "CPIAUCSL": "CPI, all items (1982-84 = 100)"}

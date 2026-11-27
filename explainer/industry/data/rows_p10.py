@@ -86,6 +86,13 @@ add(
     r("kswheat.loaves", 70, "loaves", "one-pound loaves of white bread from one bushel of wheat", "Kansas Wheat, 'What does "
       "a bushel of wheat mean to me?'", KSWHEAT, "2024", "press",
       note="Kansas Wheat's (the state's wheat commission) rule of thumb, not a measured average"),
+    # --- the soybean crush ---------------------------------------------------------------------------------------------
+    r("cme.crush.oil", 11, "lb", "soybean oil from one 60-pound bushel of soybeans in the exchange's standard 'board crush' "
+      "(with 44 lb of 48%-protein meal)", "CME Group, Soybean Crush Reference Guide",
+      "https://www.cmegroup.com/trading/agricultural/files/pm374-cbot-soybeans-crush-reference-guide.pdf", "2024"),
+    r("cme.crush.meal", 44, "lb", "soybean meal from one 60-pound bushel of soybeans in the standard board crush",
+      "CME Group, Soybean Crush Reference Guide",
+      "https://www.cmegroup.com/trading/agricultural/files/pm374-cbot-soybeans-crush-reference-guide.pdf", "2024"),
     # --- the books -------------------------------------------------------------------------------------------------------
     r("cochrane.treadmill", 1958, "year", "Willard Cochrane described the treadmill of farm technology: early adopters "
       "profit, everyone follows, output rises, the price falls and the gain passes to consumers",
