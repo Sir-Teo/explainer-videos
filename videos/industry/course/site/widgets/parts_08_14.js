@@ -315,4 +315,61 @@
       note: "This is the Works' cracker from the film (yields from the EIA; prices of ethane and naphtha tied to gas and Brent, and the fuel and other costs, are the series' assumptions). Ethane is priced like gas and naphtha like oil, so the gap between the plants is the gap between gas and oil. Cheap American gas and dear oil make Texas the winner; push American gas up towards $8 and oil down, and the advantage disappears, as it did before shale.",
     });
   };
+
+  // Part 13: the merit order (the Works' power.py: an illustrative fleet; running costs from EIA's heat rates)
+  W.meritorder = function (el) {
+    QB.widget(el, {
+      title: "The merit order: who runs, and who sets the price?",
+      sub: "An illustrative Texas-sized fleet, lined up from the cheapest plant to run to the dearest. Set demand, the price of gas and how much wind and sun there is, and see which plant is on the margin, the price everyone is paid, and what each kind of plant earns on each MWh.",
+      panels: 2, height: 300, weights: [2, 1],
+      controls: [
+        { k: "dem", label: "Demand, GW", min: 30, max: 110, step: 1, value: 70, fmt: function (x) { return x + " GW"; } },
+        { k: "gas", label: "Natural gas, $ per million Btu", min: 1.5, max: 15, step: 0.25, value: 3.85, fmt: function (x) { return "$" + x.toFixed(2); } },
+        { k: "sun", label: "Solar output right now, GW", min: 0, max: 60, step: 1, value: 15, fmt: function (x) { return x + " GW"; } },
+        { k: "wind", label: "Wind output right now, GW", min: 0, max: 35, step: 1, value: 12, fmt: function (x) { return x + " GW"; } },
+      ],
+      draw: function (g, v, s) {
+        var fleet = [
+          { n: "solar", mw: v.sun, c: 0, col: C.p },
+          { n: "wind", mw: v.wind, c: 0, col: C.spot },
+          { n: "nuclear", mw: 5, c: 9.3, col: C.q },
+          { n: "coal", mw: 12, c: 24, col: C.muted },
+          { n: "combined-cycle gas", mw: 30, c: 6.2 * v.gas + 3.6, col: "#f2a65a" },
+          { n: "older gas", mw: 9, c: 9.5 * v.gas + 4, col: "#c9732f" },
+          { n: "gas peakers", mw: 6, c: 9.1 * v.gas + 4.2 + 20, col: C.loss },
+          { n: "oil and others", mw: 2, c: 150, col: "#5d6b82" },
+        ];
+        fleet.sort(function (a, b) { return a.c - b.c; });
+        var total = 0; fleet.forEach(function (u) { total += u.mw; });
+        var left = v.dem, price = 0, x = 0, marg = "none";
+        fleet.forEach(function (u) { u.x0 = x; x += u.mw; if (left > 0 && u.mw > 0) { price = u.c; marg = u.n; left -= u.mw; } });
+        var short = left > 0;
+        if (short) { price = 5000; marg = "nobody: demand exceeds supply"; }
+        var top = Math.min(Math.max(price, 60) * 1.25, 200);
+        var a = g[0].axes({ x: [0, Math.max(total, v.dem) * 1.05], y: [0, top], title: "Plants, cheapest to run first: running cost, $ a MWh",
+                            xfmt: function (x) { return Math.round(x) + " GW"; }, yfmt: function (y) { return "$" + Math.round(y); } });
+        fleet.forEach(function (u) {
+          if (u.mw <= 0) return;
+          a.bars([u.x0 + u.mw / 2], [Math.max(Math.min(u.c, top), top * 0.01)], u.mw, { color: u.col, alpha: u.x0 < v.dem ? 0.9 : 0.35, gap: 2 });
+        });
+        a.vline(v.dem, { color: C.ink, dash: [6, 4], width: 2 });
+        a.hline(Math.min(price, top), { color: C.p, dash: [4, 4] });
+        a.text(v.dem, top * 0.95, "demand", { align: "left", dx: 6, color: C.ink, bg: true });
+        var run = fleet.filter(function (u) { return u.x0 < v.dem && u.mw > 0; });
+        var b = g[1].axes({ x: [0, run.length + 1], y: [0, Math.max(price, 60) * 1.1], title: "Earned on each MWh above running cost",
+                            xticks: [], yfmt: function (y) { return "$" + Math.round(y); } });
+        run.forEach(function (u, i) {
+          var rent = Math.max(price - u.c, 0);
+          b.bars([i + 1], [Math.max(rent, 0.5)], 0.7, { color: u.col });
+          b.text(i + 1, Math.max(rent, 0.5), "$" + Math.round(rent), { dy: -9, align: "center", size: 10.5 });
+        });
+        s.r = { price: price, marg: marg, short: short, run: run.length };
+      },
+      readout: function (v, s) {
+        var r = s.r;
+        return [["price", r.short ? "the cap, $5,000" : "$" + r.price.toFixed(0) + " a MWh"], ["on the margin", r.marg]];
+      },
+      note: "This is the merit order of the film's chapter 4, with an illustrative fleet. Every plant left of the demand line runs and is paid the running cost of the last one needed; the difference is what pays back its building cost. Raise the price of gas and the price of power follows, because gas is so often on the margin. Add solar and the midday price can fall to nothing. Push demand past the whole fleet and no plant sets the price: it goes to the cap (here $5,000), and some customers go without.",
+    });
+  };
 })();

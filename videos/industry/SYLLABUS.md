@@ -2544,6 +2544,7 @@ scored in Part 64 and at each refresh.
 | 10 · Farming and Food | done 2026-11-27 (26 Register rows; USDA's food dollar, costs and returns and farm income; FAO yields and food supply; IMF and BLS food prices; NASS farm numbers; ERS on beef packers; the ICCO; Cargill; 15 companies' 10-Ks) | `works/farm.py` | 17 scenes, with farm and animal glyphs | silent and narrated previews reviewed | entry, lab, interactive | not started |
 | 11 · Heavy Materials | done 2026-11-27 (about 150 Register rows; worldsteel's yearbooks, outlooks and climate paper; the USGS's Mineral Commodity Summaries 2026 and Data Series 140; the International Aluminium Institute; BLS producer prices and Federal Reserve output; the 1994 cement cartel decision and the EU's carbon border regulation; Bessemer's autobiography; 18 companies' 10-Ks and two 20-Fs; transcribed tables in `data/tables.py`) | `works/mill.py` | 17 scenes, with furnace, converter, kiln, potline and packaging glyphs | silent and narrated previews reviewed | entry, lab, interactive | not started |
 | 12 · Chemicals | done 2026-11-27 (55 Register rows; the Nobel Foundation on Haber and Bosch; the USGS's Mineral Commodity Summaries 2026 (nitrogen, potash) and Data Series 140; EIA's cracker yields, NGL series, Today in Energy and AEO2005; IMF, BLS and Federal Reserve series; Eurostat's chemical output; OECD plastics via Our World in Data; 17 companies' 10-Ks and ICL's 20-F; 3M's and Chemours' 8-Ks; the EPA's PFAS rule; the Supreme Court of India on Bhopal) | `works/cracker.py` | 16 scenes, with molecule, cracker, cylinder, paint-can and pellet glyphs | silent and narrated previews reviewed | entry, lab, interactive | not started |
+| 13 · Electricity | done 2026-11-27 (108 Register rows; Insull's 1910 address; EIA-930, the Electric Power Annual, the Monthly Energy Review, AEO2005 and AEO2021, Today in Energy; the FERC-NERC February 2021 report; the ERCOT market monitor's 2021 and 2024 reports; Vistra's and Duke's 10-Ks and 15 more; the NAO on Britain's suppliers; DOE on LBNL's data centre report; Ember via Our World in Data) | `works/power.py` | 16 scenes | silent and narrated previews reviewed | entry, lab, interactive | not started |
 
 Phase 0 is done in the form Part 1 needed: the palette and kit (`style.py`, `kit.py`), the instruments (`viz.py`: the
 phone and its exploded view, the region map, the Dollar column, the margin ladder, the treemap, plain axes), the
@@ -2677,3 +2678,15 @@ of the charges; DuPont is left off the landscape because its accounts are domina
 BASF, SABIC, Sinopec, Air Liquide, Yara, Nutrien and Wanhua are named but not charted (no 10-K or 20-F). *Called it?* is
 the EIA's Annual Energy Outlook of 2005 (LNG imports of 6.4 Tcf in 2025; America exported 5.5), with the series' call
 on Germany's chemical output in 2027.
+
+Part 13 changes its draft's story: Samuel Insull's own address of 25 February 1910 (the Chicago block, 5.5% and 19%
+load factors) stands in for the draft's general account of his load-factor thinking, and California 2000-01 gives way to
+Texas in February 2021, told from the FERC-NERC staff report, the ERCOT market monitor and Vistra's 10-K (FERC's own site
+could not be read). Run it is a gas plant bid through a week with a cold snap, sold at spot or forward. The Stack is
+EIA-930 hour by hour (ERCOT's peak day, California's April days) beside an illustrative fleet in the Works' `power.py`;
+the screening curve uses Part 4's AEO2026 rows. The regulated utility is Duke Energy's rate-case table; retail is Britain
+2021-22 from the National Audit Office; the world is Ember via Our World in Data, so State Grid, EDF, Enel, NTPC and the
+rest are named but not charted. California's batteries appear as the operator's "other" category, which charges at noon
+and discharges at night; the EIA's Today in Energy of 16 June 2026 gives their capacity. *Called it?* is the EIA's 2005
+outlook for 2025 electricity use rather than the 1970s forecasts (no primary copy was read), with the series' call on
+2027 sales.

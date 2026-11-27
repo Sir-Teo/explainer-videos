@@ -248,4 +248,51 @@ PARTS = [
               ("Gas, oil and chemical prices, NGLs, Eurostat, plastics, the companies' accounts",
                "explainer/industry/data/SOURCES.md")),
     ),
+    Part(
+        n=13, level="U", widget="meritorder", prereq=(4, 6, 8),
+        question="How is a product that cannot be stored sold every second, and who pays for the wires?",
+        story="The part opens in Boston on 25 February 1910, where Samuel Insull described a Chicago block of 193 "
+              "apartments: its customers' own peaks added to 68.5 kW, a load factor of 5.5%, but their combined peak was "
+              "20 kW, 19%. The viewer runs a gas plant through a week with a cold snap: selling at spot it makes about "
+              "$213m; sold forward and frozen, it loses about $214m, as Vistra lost $2.2bn in February 2021. Supply must "
+              "equal demand every instant; ERCOT's 2025 peak was 83.6 GW and its load factor 67%, with the top tenth of "
+              "the peak needed for 511 hours. On EIA's costs a new combined-cycle plant makes power for about $40 a MWh "
+              "against nuclear's $109; the cheapest plants run first and the last one sets the price, so ERCOT's price "
+              "follows gas (about $5.8 a MWh for each $1). The wires are a monopoly: a kWh in 2020 was 5.8 cents of "
+              "generation, 1.4 of transmission and 3.3 of distribution, and Duke's commissions allowed returns of 9.5% to "
+              "10.3%. In February 2021 Texas shed 20,000 MW, 4.5 million people lost power and at least 210 died, while "
+              "the price sat at $9,000. Sales grew 9% a year in the 1950s and not at all from 2007 to 2021. California's "
+              "solar deepens the duck curve and its batteries charge at noon; more solar earns less, and a battery needs "
+              "bad evenings. Britain's suppliers fell from 70 to 23 as 29 failed. China makes more electricity than "
+              "America and the EU together. Data centres and utilities' capital spending are rising; the EIA's 2005 "
+              "outlook was 30% too high for 2025, and the series calls 2027's sales more than 1.5% above 2026's (65%).",
+        handoff="Part 14 follows the other networks, water and waste; the energy transition part returns to wind, sun, "
+                "storage and grids; the data centre part takes up the new load.",
+        outside="Percentages and arithmetic; Part 4's cost curve and merit order; Part 5's moats; Part 6's cycle; Part 8's gas.",
+        objectives={
+            "U": ["Explain why electricity must be made the instant it is used, and what load factor means for its cost.",
+                  "Explain the merit order: which plants run, and why the last one needed sets the price.",
+                  "Explain how a regulated utility earns, and why a market can run out of power in a storm."],
+            "M": ["Compute a load factor from energy and peak, and a diversity factor from customers' peaks.",
+                  "Compute a plant's cost a kW-year at a capacity factor, and where two technologies cross.",
+                  "Compute a utility's revenue requirement and the price of a kWh from its rate base and allowed return."],
+            "D": ["Score a government outlook (AEO2005) against outcomes and say which assumption failed.",
+                  "Price a hedge: show when selling forward is safe and when it is the most dangerous choice."],
+            "I": ["Read EIA-930 hourly data, a rate case table in a utility's 10-K and a market monitor's report.",
+                  "Place a company on the map: regulated utility, merchant generator, equipment maker."],
+        },
+        results=[
+            ("Load factor", r"\text{LF} = \frac{\text{energy}}{\text{peak} \times 8760}"),
+            ("Screening curve", r"C(f) = F + v \cdot 8.76\, f"),
+            ("Merit order", r"p = c_{\text{marginal}}"),
+            ("Revenue requirement", r"RR = O\&M + D + T + r_{\text{wacc}} \cdot RB"),
+            ("Battery arbitrage", r"\pi = \eta \sum_{\text{dear}} p_h - \sum_{\text{cheap}} p_h"),
+        ],
+        U=(0, 1, 2, 3, 4, 5, 6, "s08_intermission", 7, 8, 9, 10, 12), I=(11,), D=(13,),
+        also=(("The Register's rows for Part 13", "explainer/industry/data/rows_p13.py"),
+              ("Load factor, the screening curve, dispatch, the utility, Run it, the battery and the retailer",
+               "explainer/industry/works/power.py"),
+              ("EIA-930, the Monthly Energy Review, FRED, Our World in Data and the companies' accounts",
+               "explainer/industry/data/SOURCES.md")),
+    ),
 ]
