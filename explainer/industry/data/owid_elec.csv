@@ -1,0 +1,3178 @@
+# source: https://ourworldindata.org/grapher/electricity-generation
+# source: https://ourworldindata.org/grapher/per-capita-electricity-generation
+# source: https://ourworldindata.org/grapher/share-electricity-solar
+# source: https://ourworldindata.org/grapher/share-electricity-wind
+# source: https://ourworldindata.org/grapher/share-electricity-coal
+# source: Ember (2026); Energy Institute, Statistical Review of World Energy (2025)
+# retrieved: 2026-11-27
+series,entity,year,value
+electricity-generation,Africa,1985,258.98584
+electricity-generation,Africa,1986,270.10968
+electricity-generation,Africa,1987,280.25952
+electricity-generation,Africa,1988,295.29562
+electricity-generation,Africa,1989,306.64783
+electricity-generation,Africa,1990,318.7762
+electricity-generation,Africa,1991,324.8478
+electricity-generation,Africa,1992,327.87134
+electricity-generation,Africa,1993,339.07373
+electricity-generation,Africa,1994,351.33392
+electricity-generation,Africa,1995,362.6922
+electricity-generation,Africa,1996,382.14014
+electricity-generation,Africa,1997,400.87845
+electricity-generation,Africa,1998,406.45874
+electricity-generation,Africa,1999,418.59232
+electricity-generation,Africa,2000,441.07
+electricity-generation,Africa,2001,459.45
+electricity-generation,Africa,2002,487.7
+electricity-generation,Africa,2003,509.15
+electricity-generation,Africa,2004,540.14
+electricity-generation,Africa,2005,560.75
+electricity-generation,Africa,2006,586.8
+electricity-generation,Africa,2007,610.23
+electricity-generation,Africa,2008,621.69
+electricity-generation,Africa,2009,624.58
+electricity-generation,Africa,2010,672.41
+electricity-generation,Africa,2011,688.68
+electricity-generation,Africa,2012,725.45
+electricity-generation,Africa,2013,740.91
+electricity-generation,Africa,2014,768.06
+electricity-generation,Africa,2015,790.02997
+electricity-generation,Africa,2016,805.8
+electricity-generation,Africa,2017,825.62
+electricity-generation,Africa,2018,855.75
+electricity-generation,Africa,2019,875.96
+electricity-generation,Africa,2020,861.09
+electricity-generation,Africa,2021,905.76
+electricity-generation,Africa,2022,923.17
+electricity-generation,Africa,2023,930.89
+electricity-generation,Africa,2024,961.77
+electricity-generation,Brazil,1985,193.68224
+electricity-generation,Brazil,1986,202.1289
+electricity-generation,Brazil,1987,203.33147
+electricity-generation,Brazil,1988,214.95285
+electricity-generation,Brazil,1989,221.73901
+electricity-generation,Brazil,1990,222.82011
+electricity-generation,Brazil,1991,234.3763
+electricity-generation,Brazil,1992,241.76195
+electricity-generation,Brazil,1993,252.00313
+electricity-generation,Brazil,1994,260.04062
+electricity-generation,Brazil,1995,275.60144
+electricity-generation,Brazil,1996,291.24554
+electricity-generation,Brazil,1997,307.98077
+electricity-generation,Brazil,1998,321.74863
+electricity-generation,Brazil,1999,334.72623
+electricity-generation,Brazil,2000,348.93
+electricity-generation,Brazil,2001,328.55
+electricity-generation,Brazil,2002,345.72
+electricity-generation,Brazil,2003,364.39
+electricity-generation,Brazil,2004,387.49
+electricity-generation,Brazil,2005,403.07
+electricity-generation,Brazil,2006,419.45
+electricity-generation,Brazil,2007,445.15
+electricity-generation,Brazil,2008,463.18
+electricity-generation,Brazil,2009,466.17
+electricity-generation,Brazil,2010,515.8
+electricity-generation,Brazil,2011,531.76
+electricity-generation,Brazil,2012,552.5
+electricity-generation,Brazil,2013,570.83
+electricity-generation,Brazil,2014,590.55
+electricity-generation,Brazil,2015,581.22
+electricity-generation,Brazil,2016,578.89
+electricity-generation,Brazil,2017,589.32
+electricity-generation,Brazil,2018,601.39
+electricity-generation,Brazil,2019,633.33
+electricity-generation,Brazil,2020,628.76
+electricity-generation,Brazil,2021,656.4
+electricity-generation,Brazil,2022,677.16
+electricity-generation,Brazil,2023,708.12
+electricity-generation,Brazil,2024,745.72
+electricity-generation,Brazil,2025,750.53
+electricity-generation,China,1985,410.69
+electricity-generation,China,1986,449.53
+electricity-generation,China,1987,497.267
+electricity-generation,China,1988,545.21
+electricity-generation,China,1989,584.81
+electricity-generation,China,1990,621.2
+electricity-generation,China,1991,677.55
+electricity-generation,China,1992,753.94
+electricity-generation,China,1993,811.59
+electricity-generation,China,1994,927.8
+electricity-generation,China,1995,1007.03
+electricity-generation,China,1996,1081.31
+electricity-generation,China,1997,1135.55
+electricity-generation,China,1998,1167.0
+electricity-generation,China,1999,1239.3
+electricity-generation,China,2000,1355.6
+electricity-generation,China,2001,1480.79
+electricity-generation,China,2002,1654.01
+electricity-generation,China,2003,1910.58
+electricity-generation,China,2004,2203.31
+electricity-generation,China,2005,2500.26
+electricity-generation,China,2006,2865.72
+electricity-generation,China,2007,3281.54
+electricity-generation,China,2008,3495.76
+electricity-generation,China,2009,3714.64
+electricity-generation,China,2010,4207.16
+electricity-generation,China,2011,4713.02
+electricity-generation,China,2012,4987.54
+electricity-generation,China,2013,5431.63
+electricity-generation,China,2014,5794.45
+electricity-generation,China,2015,5814.58
+electricity-generation,China,2016,6133.16
+electricity-generation,China,2017,6604.44
+electricity-generation,China,2018,7166.14
+electricity-generation,China,2019,7503.43
+electricity-generation,China,2020,7779.07
+electricity-generation,China,2021,8534.26
+electricity-generation,China,2022,8848.71
+electricity-generation,China,2023,9456.45
+electricity-generation,China,2024,10086.88
+electricity-generation,China,2025,10583.36
+electricity-generation,European Union (27),1985,2023.1205
+electricity-generation,European Union (27),1986,2076.1255
+electricity-generation,European Union (27),1987,2148.0535
+electricity-generation,European Union (27),1988,2197.9792
+electricity-generation,European Union (27),1989,2247.1223
+electricity-generation,European Union (27),1990,2249.9
+electricity-generation,European Union (27),1991,2295.17
+electricity-generation,European Union (27),1992,2279.16
+electricity-generation,European Union (27),1993,2279.55
+electricity-generation,European Union (27),1994,2314.5
+electricity-generation,European Union (27),1995,2382.94
+electricity-generation,European Union (27),1996,2466.46
+electricity-generation,European Union (27),1997,2479.92
+electricity-generation,European Union (27),1998,2529.13
+electricity-generation,European Union (27),1999,2553.8
+electricity-generation,European Union (27),2000,2622.18
+electricity-generation,European Union (27),2001,2698.92
+electricity-generation,European Union (27),2002,2722.12
+electricity-generation,European Union (27),2003,2799.93
+electricity-generation,European Union (27),2004,2867.55
+electricity-generation,European Union (27),2005,2884.3901
+electricity-generation,European Union (27),2006,2932.31
+electricity-generation,European Union (27),2007,2947.71
+electricity-generation,European Union (27),2008,2959.78
+electricity-generation,European Union (27),2009,2808.34
+electricity-generation,European Union (27),2010,2945.54
+electricity-generation,European Union (27),2011,2908.68
+electricity-generation,European Union (27),2012,2903.46
+electricity-generation,European Union (27),2013,2883.69
+electricity-generation,European Union (27),2014,2823.91
+electricity-generation,European Union (27),2015,2870.37
+electricity-generation,European Union (27),2016,2891.4001
+electricity-generation,European Union (27),2017,2922.98
+electricity-generation,European Union (27),2018,2908.62
+electricity-generation,European Union (27),2019,2874.5
+electricity-generation,European Union (27),2020,2753.09
+electricity-generation,European Union (27),2021,2874.99
+electricity-generation,European Union (27),2022,2777.49
+electricity-generation,European Union (27),2023,2710.2
+electricity-generation,European Union (27),2024,2773.21
+electricity-generation,European Union (27),2025,2797.09
+electricity-generation,France,1985,344.46542
+electricity-generation,France,1986,362.9955
+electricity-generation,France,1987,378.48633
+electricity-generation,France,1988,392.08722
+electricity-generation,France,1989,404.85004
+electricity-generation,France,1990,416.04
+electricity-generation,France,1991,450.34
+electricity-generation,France,1992,458.54
+electricity-generation,France,1993,468.07
+electricity-generation,France,1994,472.84
+electricity-generation,France,1995,489.41
+electricity-generation,France,1996,507.79
+electricity-generation,France,1997,499.31
+electricity-generation,France,1998,505.93
+electricity-generation,France,1999,519.54
+electricity-generation,France,2000,532.56
+electricity-generation,France,2001,542.6
+electricity-generation,France,2002,551.24
+electricity-generation,France,2003,559.13
+electricity-generation,France,2004,566.3
+electricity-generation,France,2005,569.14
+electricity-generation,France,2006,567.3
+electricity-generation,France,2007,561.84
+electricity-generation,France,2008,566.98
+electricity-generation,France,2009,528.87
+electricity-generation,France,2010,562.36
+electricity-generation,France,2011,567.65
+electricity-generation,France,2012,567.58
+electricity-generation,France,2013,576.75
+electricity-generation,France,2014,566.31
+electricity-generation,France,2015,574.14
+electricity-generation,France,2016,558.84
+electricity-generation,France,2017,555.74
+electricity-generation,France,2018,576.24
+electricity-generation,France,2019,565.52
+electricity-generation,France,2020,527.25
+electricity-generation,France,2021,550.31
+electricity-generation,France,2022,468.45
+electricity-generation,France,2023,518.75
+electricity-generation,France,2024,561.78
+electricity-generation,France,2025,569.98
+electricity-generation,Germany,1985,522.534
+electricity-generation,Germany,1986,523.557
+electricity-generation,Germany,1987,532.442
+electricity-generation,Germany,1988,549.492
+electricity-generation,Germany,1989,559.873
+electricity-generation,Germany,1990,542.26
+electricity-generation,Germany,1991,536.02
+electricity-generation,Germany,1992,533.77
+electricity-generation,Germany,1993,520.72
+electricity-generation,Germany,1994,521.05
+electricity-generation,Germany,1995,530.72
+electricity-generation,Germany,1996,548.23
+electricity-generation,Germany,1997,546.37
+electricity-generation,Germany,1998,549.26
+electricity-generation,Germany,1999,549.27
+electricity-generation,Germany,2000,568.95
+electricity-generation,Germany,2001,578.94
+electricity-generation,Germany,2002,583.76
+electricity-generation,Germany,2003,602.03
+electricity-generation,Germany,2004,609.6
+electricity-generation,Germany,2005,613.34
+electricity-generation,Germany,2006,630.2
+electricity-generation,Germany,2007,631.1
+electricity-generation,Germany,2008,632.29
+electricity-generation,Germany,2009,587.96
+electricity-generation,Germany,2010,624.21
+electricity-generation,Germany,2011,605.0
+electricity-generation,Germany,2012,619.81
+electricity-generation,Germany,2013,629.69
+electricity-generation,Germany,2014,618.75
+electricity-generation,Germany,2015,639.17
+electricity-generation,Germany,2016,641.52
+electricity-generation,Germany,2017,644.46
+electricity-generation,Germany,2018,632.28
+electricity-generation,Germany,2019,600.09
+electricity-generation,Germany,2020,566.75
+electricity-generation,Germany,2021,578.83
+electricity-generation,Germany,2022,566.88
+electricity-generation,Germany,2023,506.72
+electricity-generation,Germany,2024,495.99
+electricity-generation,Germany,2025,500.47
+electricity-generation,India,1985,186.38583
+electricity-generation,India,1986,202.6772
+electricity-generation,India,1987,223.6695
+electricity-generation,India,1988,241.30463
+electricity-generation,India,1989,272.44644
+electricity-generation,India,1990,287.76282
+electricity-generation,India,1991,320.45764
+electricity-generation,India,1992,337.15332
+electricity-generation,India,1993,362.17624
+electricity-generation,India,1994,387.96698
+electricity-generation,India,1995,427.14877
+electricity-generation,India,1996,443.2054
+electricity-generation,India,1997,469.15353
+electricity-generation,India,1998,505.07843
+electricity-generation,India,1999,547.3625
+electricity-generation,India,2000,571.39
+electricity-generation,India,2001,586.09
+electricity-generation,India,2002,609.64
+electricity-generation,India,2003,638.13
+electricity-generation,India,2004,698.32
+electricity-generation,India,2005,704.52
+electricity-generation,India,2006,744.43
+electricity-generation,India,2007,796.26
+electricity-generation,India,2008,828.41
+electricity-generation,India,2009,878.63
+electricity-generation,India,2010,936.39
+electricity-generation,India,2011,1032.32
+electricity-generation,India,2012,1088.42
+electricity-generation,India,2013,1141.23
+electricity-generation,India,2014,1258.68
+electricity-generation,India,2015,1310.56
+electricity-generation,India,2016,1394.93
+electricity-generation,India,2017,1462.39
+electricity-generation,India,2018,1571.65
+electricity-generation,India,2019,1600.98
+electricity-generation,India,2020,1563.43
+electricity-generation,India,2021,1678.72
+electricity-generation,India,2022,1804.61
+electricity-generation,India,2023,1918.26
+electricity-generation,India,2024,2036.52
+electricity-generation,India,2025,2081.6
+electricity-generation,Japan,1985,671.953
+electricity-generation,Japan,1986,676.363
+electricity-generation,Japan,1987,719.085
+electricity-generation,Japan,1988,753.728
+electricity-generation,Japan,1989,799.769
+electricity-generation,Japan,1990,881.5
+electricity-generation,Japan,1991,911.303
+electricity-generation,Japan,1992,916.787
+electricity-generation,Japan,1993,926.103
+electricity-generation,Japan,1994,984.493
+electricity-generation,Japan,1995,1010.88
+electricity-generation,Japan,1996,1029.857
+electricity-generation,Japan,1997,1054.864
+electricity-generation,Japan,1998,1059.663
+electricity-generation,Japan,1999,1079.142
+electricity-generation,Japan,2000,1099.67
+electricity-generation,Japan,2001,1083.14
+electricity-generation,Japan,2002,1103.07
+electricity-generation,Japan,2003,1092.59
+electricity-generation,Japan,2004,1121.19
+electricity-generation,Japan,2005,1153.07
+electricity-generation,Japan,2006,1164.35
+electricity-generation,Japan,2007,1180.11
+electricity-generation,Japan,2008,1183.7
+electricity-generation,Japan,2009,1114.02
+electricity-generation,Japan,2010,1156.04
+electricity-generation,Japan,2011,1104.2
+electricity-generation,Japan,2012,1106.88
+electricity-generation,Japan,2013,1087.76
+electricity-generation,Japan,2014,1062.72
+electricity-generation,Japan,2015,1030.12
+electricity-generation,Japan,2016,1063.7
+electricity-generation,Japan,2017,1076.86
+electricity-generation,Japan,2018,1082.93
+electricity-generation,Japan,2019,1047.4
+electricity-generation,Japan,2020,1011.03
+electricity-generation,Japan,2021,1034.67
+electricity-generation,Japan,2022,1040.57
+electricity-generation,Japan,2023,1006.73
+electricity-generation,Japan,2024,1016.39
+electricity-generation,Japan,2025,1029.86
+electricity-generation,Russia,1985,962.0
+electricity-generation,Russia,1986,1001.4
+electricity-generation,Russia,1987,1047.3
+electricity-generation,Russia,1988,1065.5
+electricity-generation,Russia,1989,1076.5
+electricity-generation,Russia,1990,1082.2
+electricity-generation,Russia,1991,1068.1633
+electricity-generation,Russia,1992,1008.45
+electricity-generation,Russia,1993,956.587
+electricity-generation,Russia,1994,875.914
+electricity-generation,Russia,1995,860.027
+electricity-generation,Russia,1996,847.183
+electricity-generation,Russia,1997,834.131
+electricity-generation,Russia,1998,827.158
+electricity-generation,Russia,1999,846.225
+electricity-generation,Russia,2000,877.76
+electricity-generation,Russia,2001,891.27
+electricity-generation,Russia,2002,891.28
+electricity-generation,Russia,2003,916.29
+electricity-generation,Russia,2004,931.91
+electricity-generation,Russia,2005,954.11
+electricity-generation,Russia,2006,992.12
+electricity-generation,Russia,2007,1018.7
+electricity-generation,Russia,2008,1040.0
+electricity-generation,Russia,2009,993.1
+electricity-generation,Russia,2010,1038.02
+electricity-generation,Russia,2011,1054.86
+electricity-generation,Russia,2012,1069.27
+electricity-generation,Russia,2013,1059.08
+electricity-generation,Russia,2014,1064.2
+electricity-generation,Russia,2015,1067.55
+electricity-generation,Russia,2016,1090.97
+electricity-generation,Russia,2017,1091.17
+electricity-generation,Russia,2018,1109.19
+electricity-generation,Russia,2019,1118.16
+electricity-generation,Russia,2020,1085.42
+electricity-generation,Russia,2021,1157.07
+electricity-generation,Russia,2022,1166.94
+electricity-generation,Russia,2023,1178.25
+electricity-generation,Russia,2024,1209.31
+electricity-generation,Russia,2025,1192.79
+electricity-generation,United Kingdom,1920,3.89
+electricity-generation,United Kingdom,1921,4.541
+electricity-generation,United Kingdom,1922,5.289
+electricity-generation,United Kingdom,1923,6.022
+electricity-generation,United Kingdom,1924,6.619
+electricity-generation,United Kingdom,1925,6.992
+electricity-generation,United Kingdom,1926,8.452
+electricity-generation,United Kingdom,1927,9.324
+electricity-generation,United Kingdom,1928,10.401
+electricity-generation,United Kingdom,1929,10.917
+electricity-generation,United Kingdom,1930,11.417
+electricity-generation,United Kingdom,1931,12.248
+electricity-generation,United Kingdom,1932,13.558
+electricity-generation,United Kingdom,1933,15.462
+electricity-generation,United Kingdom,1934,17.569
+electricity-generation,United Kingdom,1935,20.222
+electricity-generation,United Kingdom,1936,22.905
+electricity-generation,United Kingdom,1937,24.372
+electricity-generation,United Kingdom,1938,26.409
+electricity-generation,United Kingdom,1939,28.773
+electricity-generation,United Kingdom,1940,32.36
+electricity-generation,United Kingdom,1941,35.654
+electricity-generation,United Kingdom,1942,36.951
+electricity-generation,United Kingdom,1943,38.363
+electricity-generation,United Kingdom,1944,37.284
+electricity-generation,United Kingdom,1945,41.253
+electricity-generation,United Kingdom,1946,42.58
+electricity-generation,United Kingdom,1947,46.029
+electricity-generation,United Kingdom,1948,48.605
+electricity-generation,United Kingdom,1949,54.521
+electricity-generation,United Kingdom,1950,73.491
+electricity-generation,United Kingdom,1951,75.804
+electricity-generation,United Kingdom,1952,79.727
+electricity-generation,United Kingdom,1953,86.957
+electricity-generation,United Kingdom,1954,94.695
+electricity-generation,United Kingdom,1955,101.797
+electricity-generation,United Kingdom,1956,106.262
+electricity-generation,United Kingdom,1957,113.985
+electricity-generation,United Kingdom,1958,121.963
+electricity-generation,United Kingdom,1959,137.077
+electricity-generation,United Kingdom,1960,146.1
+electricity-generation,United Kingdom,1961,160.616
+electricity-generation,United Kingdom,1962,173.832
+electricity-generation,United Kingdom,1963,182.977
+electricity-generation,United Kingdom,1964,196.18
+electricity-generation,United Kingdom,1965,202.719
+electricity-generation,United Kingdom,1966,209.527
+electricity-generation,United Kingdom,1967,223.493
+electricity-generation,United Kingdom,1968,238.781
+electricity-generation,United Kingdom,1969,248.935
+electricity-generation,United Kingdom,1970,256.342
+electricity-generation,United Kingdom,1971,263.483
+electricity-generation,United Kingdom,1972,281.797
+electricity-generation,United Kingdom,1973,272.891
+electricity-generation,United Kingdom,1974,271.744
+electricity-generation,United Kingdom,1975,276.636
+electricity-generation,United Kingdom,1976,283.016
+electricity-generation,United Kingdom,1977,287.617
+electricity-generation,United Kingdom,1978,299.793
+electricity-generation,United Kingdom,1979,284.872
+electricity-generation,United Kingdom,1980,277.676
+electricity-generation,United Kingdom,1981,272.726
+electricity-generation,United Kingdom,1982,277.417
+electricity-generation,United Kingdom,1983,282.419
+electricity-generation,United Kingdom,1984,297.499
+electricity-generation,United Kingdom,1985,298.089
+electricity-generation,United Kingdom,1986,301.071
+electricity-generation,United Kingdom,1987,302.112
+electricity-generation,United Kingdom,1988,308.825
+electricity-generation,United Kingdom,1989,314.585
+electricity-generation,United Kingdom,1990,319.75
+electricity-generation,United Kingdom,1991,322.88
+electricity-generation,United Kingdom,1992,321.04
+electricity-generation,United Kingdom,1993,323.11
+electricity-generation,United Kingdom,1994,326.56
+electricity-generation,United Kingdom,1995,337.42
+electricity-generation,United Kingdom,1996,350.87
+electricity-generation,United Kingdom,1997,350.67
+electricity-generation,United Kingdom,1998,362.71
+electricity-generation,United Kingdom,1999,368.15
+electricity-generation,United Kingdom,2000,377.06
+electricity-generation,United Kingdom,2001,384.77
+electricity-generation,United Kingdom,2002,387.24
+electricity-generation,United Kingdom,2003,398.21
+electricity-generation,United Kingdom,2004,393.92
+electricity-generation,United Kingdom,2005,398.35
+electricity-generation,United Kingdom,2006,397.27
+electricity-generation,United Kingdom,2007,396.81
+electricity-generation,United Kingdom,2008,388.96
+electricity-generation,United Kingdom,2009,376.76
+electricity-generation,United Kingdom,2010,382.06
+electricity-generation,United Kingdom,2011,367.97
+electricity-generation,United Kingdom,2012,363.87
+electricity-generation,United Kingdom,2013,358.28
+electricity-generation,United Kingdom,2014,338.08
+electricity-generation,United Kingdom,2015,338.87
+electricity-generation,United Kingdom,2016,339.18
+electricity-generation,United Kingdom,2017,338.22
+electricity-generation,United Kingdom,2018,333.76
+electricity-generation,United Kingdom,2019,327.19
+electricity-generation,United Kingdom,2020,310.3
+electricity-generation,United Kingdom,2021,307.9
+electricity-generation,United Kingdom,2022,324.58
+electricity-generation,United Kingdom,2023,292.53
+electricity-generation,United Kingdom,2024,284.16
+electricity-generation,United Kingdom,2025,292.31
+electricity-generation,United States,1985,2657.1501
+electricity-generation,United States,1986,2676.113
+electricity-generation,United States,1987,2772.2053
+electricity-generation,United States,1988,2914.4458
+electricity-generation,United States,1989,3155.4497
+electricity-generation,United States,1990,3232.7795
+electricity-generation,United States,1991,3270.7244
+electricity-generation,United States,1992,3284.39
+electricity-generation,United States,1993,3404.678
+electricity-generation,United States,1994,3458.5261
+electricity-generation,United States,1995,3567.3313
+electricity-generation,United States,1996,3663.3862
+electricity-generation,United States,1997,3716.3774
+electricity-generation,United States,1998,3855.8083
+electricity-generation,United States,1999,3936.0977
+electricity-generation,United States,2000,3802.1
+electricity-generation,United States,2001,3727.57
+electricity-generation,United States,2002,3844.23
+electricity-generation,United States,2003,3868.94
+electricity-generation,United States,2004,3951.95
+electricity-generation,United States,2005,4034.99
+electricity-generation,United States,2006,4046.94
+electricity-generation,United States,2007,4142.57
+electricity-generation,United States,2008,4107.53
+electricity-generation,United States,2009,3939.82
+electricity-generation,United States,2010,4113.94
+electricity-generation,United States,2011,4088.87
+electricity-generation,United States,2012,4040.67
+electricity-generation,United States,2013,4055.61
+electricity-generation,United States,2014,4096.01
+electricity-generation,United States,2015,4083.99
+electricity-generation,United States,2016,4087.56
+electricity-generation,United States,2017,4052.31
+electricity-generation,United States,2018,4201.55
+electricity-generation,United States,2019,4158.38
+electricity-generation,United States,2020,4043.18
+electricity-generation,United States,2021,4153.62
+electricity-generation,United States,2022,4286.89
+electricity-generation,United States,2023,4253.91
+electricity-generation,United States,2024,4391.02
+electricity-generation,United States,2025,4519.79
+electricity-generation,World,1900,6.358758
+electricity-generation,World,1901,8.3991785
+electricity-generation,World,1902,10.256392
+electricity-generation,World,1903,12.856092
+electricity-generation,World,1904,15.940759
+electricity-generation,World,1905,18.964758
+electricity-generation,World,1906,21.848438
+electricity-generation,World,1907,25.251114
+electricity-generation,World,1908,29.69279
+electricity-generation,World,1909,34.13371
+electricity-generation,World,1910,38.74839
+electricity-generation,World,1911,44.17172
+electricity-generation,World,1912,50.74901
+electricity-generation,World,1913,59.403194
+electricity-generation,World,1914,68.10502
+electricity-generation,World,1915,75.47475
+electricity-generation,World,1916,84.43337
+electricity-generation,World,1917,93.400665
+electricity-generation,World,1918,102.24633
+electricity-generation,World,1919,108.11281
+electricity-generation,World,1920,116.37793
+electricity-generation,World,1921,115.73382
+electricity-generation,World,1922,130.39427
+electricity-generation,World,1923,147.48114
+electricity-generation,World,1924,163.93613
+electricity-generation,World,1925,186.53241
+electricity-generation,World,1926,207.60957
+electricity-generation,World,1927,229.36366
+electricity-generation,World,1928,251.9252
+electricity-generation,World,1929,279.4416
+electricity-generation,World,1930,282.87253
+electricity-generation,World,1931,276.0679
+electricity-generation,World,1932,266.73203
+electricity-generation,World,1933,285.67252
+electricity-generation,World,1934,316.74774
+electricity-generation,World,1935,351.38376
+electricity-generation,World,1936,395.29156
+electricity-generation,World,1937,434.54962
+electricity-generation,World,1938,448.11383
+electricity-generation,World,1939,493.81232
+electricity-generation,World,1940,522.4176
+electricity-generation,World,1941,576.27344
+electricity-generation,World,1942,614.0008
+electricity-generation,World,1943,664.41327
+electricity-generation,World,1944,646.92926
+electricity-generation,World,1945,604.18256
+electricity-generation,World,1946,637.2188
+electricity-generation,World,1947,711.5575
+electricity-generation,World,1948,787.4916
+electricity-generation,World,1949,838.8777
+electricity-generation,World,1950,946.83624
+electricity-generation,World,1951,1066.973
+electricity-generation,World,1952,1151.9204
+electricity-generation,World,1953,1259.0646
+electricity-generation,World,1954,1361.0414
+electricity-generation,World,1955,1534.3553
+electricity-generation,World,1956,1681.6829
+electricity-generation,World,1957,1795.2428
+electricity-generation,World,1958,1901.5005
+electricity-generation,World,1959,2095.3735
+electricity-generation,World,1960,2303.6882
+electricity-generation,World,1961,2455.4465
+electricity-generation,World,1962,2664.4502
+electricity-generation,World,1963,2881.3164
+electricity-generation,World,1964,3139.3914
+electricity-generation,World,1965,3385.1018
+electricity-generation,World,1966,3648.1682
+electricity-generation,World,1967,3872.597
+electricity-generation,World,1968,4218.7705
+electricity-generation,World,1969,4586.361
+electricity-generation,World,1970,4953.663
+electricity-generation,World,1971,5257.047
+electricity-generation,World,1972,5698.606
+electricity-generation,World,1973,6131.143
+electricity-generation,World,1974,6287.499
+electricity-generation,World,1975,6518.674
+electricity-generation,World,1976,6980.704
+electricity-generation,World,1977,7305.783
+electricity-generation,World,1978,7692.44
+electricity-generation,World,1979,8024.038
+electricity-generation,World,1980,8283.485
+electricity-generation,World,1981,8453.933
+electricity-generation,World,1982,8540.153
+electricity-generation,World,1983,8899.491
+electricity-generation,World,1984,9398.993
+electricity-generation,World,1985,9886.064
+electricity-generation,World,1986,10180.79
+electricity-generation,World,1987,10670.628
+electricity-generation,World,1988,11140.627
+electricity-generation,World,1989,11657.959
+electricity-generation,World,1990,11961.414
+electricity-generation,World,1991,12222.524
+electricity-generation,World,1992,12336.403
+electricity-generation,World,1993,12599.928
+electricity-generation,World,1994,12923.577
+electricity-generation,World,1995,13381.867
+electricity-generation,World,1996,13797.155
+electricity-generation,World,1997,14128.604
+electricity-generation,World,1998,14511.013
+electricity-generation,World,1999,14926.271
+electricity-generation,World,2000,15278.78
+electricity-generation,World,2001,15500.83
+electricity-generation,World,2002,16049.89
+electricity-generation,World,2003,16628.01
+electricity-generation,World,2004,17414.99
+electricity-generation,World,2005,18134.08
+electricity-generation,World,2006,18838.99
+electricity-generation,World,2007,19713.96
+electricity-generation,World,2008,20102.64
+electricity-generation,World,2009,19943.51
+electricity-generation,World,2010,21263.75
+electricity-generation,World,2011,21972.03
+electricity-generation,World,2012,22515.66
+electricity-generation,World,2013,23155.03
+electricity-generation,World,2014,23747.07
+electricity-generation,World,2015,24002.35
+electricity-generation,World,2016,24694.51
+electricity-generation,World,2017,25441.04
+electricity-generation,World,2018,26464.49
+electricity-generation,World,2019,26832.42
+electricity-generation,World,2020,26723.37
+electricity-generation,World,2021,28259.07
+electricity-generation,World,2022,28917.76
+electricity-generation,World,2023,29665.34
+electricity-generation,World,2024,30930.23
+electricity-generation,World,2025,31772.35
+per-capita-electricity-generation,Africa,1985,462.9563
+per-capita-electricity-generation,Africa,1986,469.17203
+per-capita-electricity-generation,Africa,1987,473.1385
+per-capita-electricity-generation,Africa,1988,484.791
+per-capita-electricity-generation,Africa,1989,489.78806
+per-capita-electricity-generation,Africa,1990,495.386
+per-capita-electricity-generation,Africa,1991,491.5897
+per-capita-electricity-generation,Africa,1992,483.40277
+per-capita-electricity-generation,Africa,1993,486.96344
+per-capita-electricity-generation,Africa,1994,491.9376
+per-capita-electricity-generation,Africa,1995,495.21387
+per-capita-electricity-generation,Africa,1996,508.71506
+per-capita-electricity-generation,Africa,1997,520.5548
+per-capita-electricity-generation,Africa,1998,514.7182
+per-capita-electricity-generation,Africa,1999,516.9432
+per-capita-electricity-generation,Africa,2000,531.2647
+per-capita-electricity-generation,Africa,2001,539.6932
+per-capita-electricity-generation,Africa,2002,558.6322
+per-capita-electricity-generation,Africa,2003,568.66895
+per-capita-electricity-generation,Africa,2004,588.1551
+per-capita-electricity-generation,Africa,2005,595.20325
+per-capita-electricity-generation,Africa,2006,607.1446
+per-capita-electricity-generation,Africa,2007,615.38947
+per-capita-electricity-generation,Africa,2008,610.9178
+per-capita-electricity-generation,Africa,2009,598.0523
+per-capita-electricity-generation,Africa,2010,627.3593
+per-capita-electricity-generation,Africa,2011,626.22473
+per-capita-electricity-generation,Africa,2012,642.9034
+per-capita-electricity-generation,Africa,2013,639.65625
+per-capita-electricity-generation,Africa,2014,646.14215
+per-capita-electricity-generation,Africa,2015,647.83954
+per-capita-electricity-generation,Africa,2016,644.35583
+per-capita-electricity-generation,Africa,2017,643.9242
+per-capita-electricity-generation,Africa,2018,650.9538
+per-capita-electricity-generation,Africa,2019,650.22595
+per-capita-electricity-generation,Africa,2020,624.00555
+per-capita-electricity-generation,Africa,2021,641.10486
+per-capita-electricity-generation,Africa,2022,638.4908
+per-capita-electricity-generation,Africa,2023,629.1114
+per-capita-electricity-generation,Africa,2024,635.2374
+per-capita-electricity-generation,Brazil,1985,1429.2247
+per-capita-electricity-generation,Brazil,1986,1461.1407
+per-capita-electricity-generation,Brazil,1987,1440.9946
+per-capita-electricity-generation,Brazil,1988,1494.5303
+per-capita-electricity-generation,Brazil,1989,1513.5461
+per-capita-electricity-generation,Brazil,1990,1494.001
+per-capita-electricity-generation,Brazil,1991,1544.7517
+per-capita-electricity-generation,Brazil,1992,1567.0836
+per-capita-electricity-generation,Brazil,1993,1607.2184
+per-capita-electricity-generation,Brazil,1994,1632.7543
+per-capita-electricity-generation,Brazil,1995,1704.03
+per-capita-electricity-generation,Brazil,1996,1773.6969
+per-capita-electricity-generation,Brazil,1997,1847.9402
+per-capita-electricity-generation,Brazil,1998,1902.0413
+per-capita-electricity-generation,Brazil,1999,1950.1469
+per-capita-electricity-generation,Brazil,2000,2005.1342
+per-capita-electricity-generation,Brazil,2001,1863.572
+per-capita-electricity-generation,Brazil,2002,1936.7689
+per-capita-electricity-generation,Brazil,2003,2017.41
+per-capita-electricity-generation,Brazil,2004,2121.197
+per-capita-electricity-generation,Brazil,2005,2182.4363
+per-capita-electricity-generation,Brazil,2006,2247.217
+per-capita-electricity-generation,Brazil,2007,2360.8833
+per-capita-electricity-generation,Brazil,2008,2433.086
+per-capita-electricity-generation,Brazil,2009,2426.958
+per-capita-electricity-generation,Brazil,2010,2662.8542
+per-capita-electricity-generation,Brazil,2011,2722.9983
+per-capita-electricity-generation,Brazil,2012,2806.3333
+per-capita-electricity-generation,Brazil,2013,2876.0325
+per-capita-electricity-generation,Brazil,2014,2951.4937
+per-capita-electricity-generation,Brazil,2015,2881.9558
+per-capita-electricity-generation,Brazil,2016,2848.6143
+per-capita-electricity-generation,Brazil,2017,2878.8965
+per-capita-electricity-generation,Brazil,2018,2917.8496
+per-capita-electricity-generation,Brazil,2019,3052.8481
+per-capita-electricity-generation,Brazil,2020,3013.311
+per-capita-electricity-generation,Brazil,2021,3132.4224
+per-capita-electricity-generation,Brazil,2022,3219.8733
+per-capita-electricity-generation,Brazil,2023,3353.782
+per-capita-electricity-generation,Brazil,2024,3517.5708
+per-capita-electricity-generation,Brazil,2025,3526.7214
+per-capita-electricity-generation,China,1985,387.51364
+per-capita-electricity-generation,China,1986,417.30038
+per-capita-electricity-generation,China,1987,453.62076
+per-capita-electricity-generation,China,1988,488.87054
+per-capita-electricity-generation,China,1989,515.70953
+per-capita-electricity-generation,China,1990,538.4963
+per-capita-electricity-generation,China,1991,578.7125
+per-capita-electricity-generation,China,1992,636.46497
+per-capita-electricity-generation,China,1993,677.84534
+per-capita-electricity-generation,China,1994,767.4091
+per-capita-electricity-generation,China,1995,825.3439
+per-capita-electricity-generation,China,1996,878.4391
+per-capita-electricity-generation,China,1997,914.9253
+per-capita-electricity-generation,China,1998,932.9677
+per-capita-electricity-generation,China,1999,983.4336
+per-capita-electricity-generation,China,2000,1067.7537
+per-capita-electricity-generation,China,2001,1158.0206
+per-capita-electricity-generation,China,2002,1285.3
+per-capita-electricity-generation,China,2003,1475.9014
+per-capita-electricity-generation,China,2004,1692.12
+per-capita-electricity-generation,China,2005,1908.5559
+per-capita-electricity-generation,China,2006,2174.2053
+per-capita-electricity-generation,China,2007,2475.1143
+per-capita-electricity-generation,China,2008,2620.8613
+per-capita-electricity-generation,China,2009,2766.9102
+per-capita-electricity-generation,China,2010,3112.8145
+per-capita-electricity-generation,China,2011,3464.8174
+per-capita-electricity-generation,China,2012,3641.8137
+per-capita-electricity-generation,China,2013,3938.795
+per-capita-electricity-generation,China,2014,4174.8203
+per-capita-electricity-generation,China,2015,4164.7715
+per-capita-electricity-generation,China,2016,4368.184
+per-capita-electricity-generation,China,2017,4676.1904
+per-capita-electricity-generation,China,2018,5050.102
+per-capita-electricity-generation,China,2019,5271.038
+per-capita-electricity-generation,China,2020,5454.762
+per-capita-electricity-generation,China,2021,5982.92
+per-capita-electricity-generation,China,2022,6208.839
+per-capita-electricity-generation,China,2023,6647.371
+per-capita-electricity-generation,China,2024,7106.8335
+per-capita-electricity-generation,China,2025,7473.617
+per-capita-electricity-generation,European Union (27),1985,4895.4233
+per-capita-electricity-generation,European Union (27),1986,5009.67
+per-capita-electricity-generation,European Union (27),1987,5168.294
+per-capita-electricity-generation,European Union (27),1988,5271.496
+per-capita-electricity-generation,European Union (27),1989,5369.696
+per-capita-electricity-generation,European Union (27),1990,5356.936
+per-capita-electricity-generation,European Union (27),1991,5446.2876
+per-capita-electricity-generation,European Union (27),1992,5389.8223
+per-capita-electricity-generation,European Union (27),1993,5374.9697
+per-capita-electricity-generation,European Union (27),1994,5443.461
+per-capita-electricity-generation,European Union (27),1995,5595.7544
+per-capita-electricity-generation,European Union (27),1996,5787.3403
+per-capita-electricity-generation,European Union (27),1997,5812.5166
+per-capita-electricity-generation,European Union (27),1998,5927.8037
+per-capita-electricity-generation,European Union (27),1999,5983.169
+per-capita-electricity-generation,European Union (27),2000,6131.9272
+per-capita-electricity-generation,European Union (27),2001,6297.3784
+per-capita-electricity-generation,European Union (27),2002,6332.124
+per-capita-electricity-generation,European Union (27),2003,6489.4033
+per-capita-electricity-generation,European Union (27),2004,6621.621
+per-capita-electricity-generation,European Union (27),2005,6637.5396
+per-capita-electricity-generation,European Union (27),2006,6730.3726
+per-capita-electricity-generation,European Union (27),2007,6745.4165
+per-capita-electricity-generation,European Union (27),2008,6749.041
+per-capita-electricity-generation,European Union (27),2009,6387.079
+per-capita-electricity-generation,European Union (27),2010,6685.1567
+per-capita-electricity-generation,European Union (27),2011,6589.0625
+per-capita-electricity-generation,European Union (27),2012,6568.9253
+per-capita-electricity-generation,European Union (27),2013,6518.295
+per-capita-electricity-generation,European Union (27),2014,6375.0215
+per-capita-electricity-generation,European Union (27),2015,6466.0947
+per-capita-electricity-generation,European Union (27),2016,6498.821
+per-capita-electricity-generation,European Union (27),2017,6558.2256
+per-capita-electricity-generation,European Union (27),2018,6514.2134
+per-capita-electricity-generation,European Union (27),2019,6425.342
+per-capita-electricity-generation,European Union (27),2020,6148.3438
+per-capita-electricity-generation,European Union (27),2021,6421.6035
+per-capita-electricity-generation,European Union (27),2022,6184.384
+per-capita-electricity-generation,European Union (27),2023,6013.8784
+per-capita-electricity-generation,European Union (27),2024,6159.136
+per-capita-electricity-generation,European Union (27),2025,6229.7017
+per-capita-electricity-generation,France,1985,6210.26
+per-capita-electricity-generation,France,1986,6510.7993
+per-capita-electricity-generation,France,1987,6752.852
+per-capita-electricity-generation,France,1988,6956.607
+per-capita-electricity-generation,France,1989,7142.0913
+per-capita-electricity-generation,France,1990,7300.1978
+per-capita-electricity-generation,France,1991,7863.239
+per-capita-electricity-generation,France,1992,7967.007
+per-capita-electricity-generation,France,1993,8097.9204
+per-capita-electricity-generation,France,1994,8152.432
+per-capita-electricity-generation,France,1995,8410.232
+per-capita-electricity-generation,France,1996,8697.918
+per-capita-electricity-generation,France,1997,8525.207
+per-capita-electricity-generation,France,1998,8607.353
+per-capita-electricity-generation,France,1999,8793.212
+per-capita-electricity-generation,France,2000,8953.038
+per-capita-electricity-generation,France,2001,9057.654
+per-capita-electricity-generation,France,2002,9137.496
+per-capita-electricity-generation,France,2003,9205.132
+per-capita-electricity-generation,France,2004,9257.013
+per-capita-electricity-generation,France,2005,9235.533
+per-capita-electricity-generation,France,2006,9142.651
+per-capita-electricity-generation,France,2007,8999.169
+per-capita-electricity-generation,France,2008,9031.193
+per-capita-electricity-generation,France,2009,8380.6
+per-capita-electricity-generation,France,2010,8867.603
+per-capita-electricity-generation,France,2011,8906.581
+per-capita-electricity-generation,France,2012,8860.344
+per-capita-electricity-generation,France,2013,8957.451
+per-capita-electricity-generation,France,2014,8753.875
+per-capita-electricity-generation,France,2015,8844.307
+per-capita-electricity-generation,France,2016,8586.066
+per-capita-electricity-generation,France,2017,8512.551
+per-capita-electricity-generation,France,2018,8794.934
+per-capita-electricity-generation,France,2019,8603.753
+per-capita-electricity-generation,France,2020,8000.1187
+per-capita-electricity-generation,France,2021,8327.489
+per-capita-electricity-generation,France,2022,7068.019
+per-capita-electricity-generation,France,2023,7807.934
+per-capita-electricity-generation,France,2024,8441.659
+per-capita-electricity-generation,France,2025,8551.734
+per-capita-electricity-generation,Germany,1985,6710.9043
+per-capita-electricity-generation,Germany,1986,6718.8325
+per-capita-electricity-generation,Germany,1987,6820.73
+per-capita-electricity-generation,Germany,1988,7010.079
+per-capita-electricity-generation,Germany,1989,7086.366
+per-capita-electricity-generation,Germany,1990,6803.0845
+per-capita-electricity-generation,Germany,1991,6674.953
+per-capita-electricity-generation,Germany,1992,6595.0537
+per-capita-electricity-generation,Germany,1993,6390.2393
+per-capita-electricity-generation,Germany,1994,6371.86
+per-capita-electricity-generation,Germany,1995,6470.625
+per-capita-electricity-generation,Germany,1996,6664.341
+per-capita-electricity-generation,Germany,1997,6631.538
+per-capita-electricity-generation,Germany,1998,6697.3184
+per-capita-electricity-generation,Germany,1999,6724.7993
+per-capita-electricity-generation,Germany,2000,6955.6123
+per-capita-electricity-generation,Germany,2001,7065.9414
+per-capita-electricity-generation,Germany,2002,7113.097
+per-capita-electricity-generation,Germany,2003,7331.8496
+per-capita-electricity-generation,Germany,2004,7425.751
+per-capita-electricity-generation,Germany,2005,7475.496
+per-capita-electricity-generation,Germany,2006,7713.4004
+per-capita-electricity-generation,Germany,2007,7762.746
+per-capita-electricity-generation,Germany,2008,7795.3877
+per-capita-electricity-generation,Germany,2009,7264.5703
+per-capita-electricity-generation,Germany,2010,7722.417
+per-capita-electricity-generation,Germany,2011,7482.264
+per-capita-electricity-generation,Germany,2012,7659.882
+per-capita-electricity-generation,Germany,2013,7769.962
+per-capita-electricity-generation,Germany,2014,7603.586
+per-capita-electricity-generation,Germany,2015,7787.3916
+per-capita-electricity-generation,Germany,2016,7751.5615
+per-capita-electricity-generation,Germany,2017,7754.861
+per-capita-electricity-generation,Germany,2018,7584.159
+per-capita-electricity-generation,Germany,2019,7181.6167
+per-capita-electricity-generation,Germany,2020,6776.979
+per-capita-electricity-generation,Germany,2021,6915.773
+per-capita-electricity-generation,Germany,2022,6741.651
+per-capita-electricity-generation,Germany,2023,5993.2656
+per-capita-electricity-generation,Germany,2024,5866.078
+per-capita-electricity-generation,Germany,2025,5952.6562
+per-capita-electricity-generation,India,1985,241.23001
+per-capita-electricity-generation,India,1986,256.32953
+per-capita-electricity-generation,India,1987,276.5
+per-capita-electricity-generation,India,1988,291.66214
+per-capita-electricity-generation,India,1989,322.02567
+per-capita-electricity-generation,India,1990,332.68445
+per-capita-electricity-generation,India,1991,362.53833
+per-capita-electricity-generation,India,1992,373.38797
+per-capita-electricity-generation,India,1993,392.76544
+per-capita-electricity-generation,India,1994,412.2205
+per-capita-electricity-generation,India,1995,444.80716
+per-capita-electricity-generation,India,1996,452.39886
+per-capita-electricity-generation,India,1997,469.56027
+per-capita-electricity-generation,India,1998,495.82385
+per-capita-electricity-generation,India,1999,527.2095
+per-capita-electricity-generation,India,2000,540.10565
+per-capita-electricity-generation,India,2001,543.73395
+per-capita-electricity-generation,India,2002,555.4299
+per-capita-electricity-generation,India,2003,571.38995
+per-capita-electricity-generation,India,2004,614.7229
+per-capita-electricity-generation,India,2005,610.145
+per-capita-electricity-generation,India,2006,634.7032
+per-capita-electricity-generation,India,2007,668.74615
+per-capita-electricity-generation,India,2008,685.809
+per-capita-electricity-generation,India,2009,716.94183
+per-capita-electricity-generation,India,2010,753.03894
+per-capita-electricity-generation,India,2011,818.5058
+per-capita-electricity-generation,India,2012,851.20966
+per-capita-electricity-generation,India,2013,880.6945
+per-capita-electricity-generation,India,2014,959.15717
+per-capita-electricity-generation,India,2015,986.8493
+per-capita-electricity-generation,India,2016,1037.9374
+per-capita-electricity-generation,India,2017,1075.5577
+per-capita-electricity-generation,India,2018,1143.3016
+per-capita-electricity-generation,India,2019,1152.5883
+per-capita-electricity-generation,India,2020,1114.6516
+per-capita-electricity-generation,India,2021,1187.0424
+per-capita-electricity-generation,India,2022,1266.017
+per-capita-electricity-generation,India,2023,1333.9132
+per-capita-electricity-generation,India,2024,1403.5907
+per-capita-electricity-generation,India,2025,1421.9886
+per-capita-electricity-generation,Japan,1985,5561.0444
+per-capita-electricity-generation,Japan,1986,5572.886
+per-capita-electricity-generation,Japan,1987,5896.866
+per-capita-electricity-generation,Japan,1988,6154.0396
+per-capita-electricity-generation,Japan,1989,6504.9683
+per-capita-electricity-generation,Japan,1990,7143.4497
+per-capita-electricity-generation,Japan,1991,7355.7505
+per-capita-electricity-generation,Japan,1992,7370.6357
+per-capita-electricity-generation,Japan,1993,7418.3223
+per-capita-electricity-generation,Japan,1994,7857.9106
+per-capita-electricity-generation,Japan,1995,8043.7544
+per-capita-electricity-generation,Japan,1996,8175.071
+per-capita-electricity-generation,Japan,1997,8354.305
+per-capita-electricity-generation,Japan,1998,8373.526
+per-capita-electricity-generation,Japan,1999,8510.479
+per-capita-electricity-generation,Japan,2000,8656.925
+per-capita-electricity-generation,Japan,2001,8511.228
+per-capita-electricity-generation,Japan,2002,8652.574
+per-capita-electricity-generation,Japan,2003,8557.839
+per-capita-electricity-generation,Japan,2004,8771.922
+per-capita-electricity-generation,Japan,2005,9014.463
+per-capita-electricity-generation,Japan,2006,9096.68
+per-capita-electricity-generation,Japan,2007,9213.298
+per-capita-electricity-generation,Japan,2008,9236.399
+per-capita-electricity-generation,Japan,2009,8690.214
+per-capita-electricity-generation,Japan,2010,9018.509
+per-capita-electricity-generation,Japan,2011,8620.068
+per-capita-electricity-generation,Japan,2012,8652.348
+per-capita-electricity-generation,Japan,2013,8516.513
+per-capita-electricity-generation,Japan,2014,8335.935
+per-capita-electricity-generation,Japan,2015,8093.6
+per-capita-electricity-generation,Japan,2016,8365.055
+per-capita-electricity-generation,Japan,2017,8474.8955
+per-capita-electricity-generation,Japan,2018,8532.824
+per-capita-electricity-generation,Japan,2019,8266.81
+per-capita-electricity-generation,Japan,2020,8004.701
+per-capita-electricity-generation,Japan,2021,8232.618
+per-capita-electricity-generation,Japan,2022,8324.721
+per-capita-electricity-generation,Japan,2023,8094.575
+per-capita-electricity-generation,Japan,2024,8213.051
+per-capita-electricity-generation,Japan,2025,8365.808
+per-capita-electricity-generation,Russia,1985,6700.593
+per-capita-electricity-generation,Russia,1986,6915.3726
+per-capita-electricity-generation,Russia,1987,7166.054
+per-capita-electricity-generation,Russia,1988,7230.371
+per-capita-electricity-generation,Russia,1989,7259.8228
+per-capita-electricity-generation,Russia,1990,7264.0845
+per-capita-electricity-generation,Russia,1991,7147.3706
+per-capita-electricity-generation,Russia,1992,6771.939
+per-capita-electricity-generation,Russia,1993,6457.517
+per-capita-electricity-generation,Russia,1994,5910.322
+per-capita-electricity-generation,Russia,1995,5799.5737
+per-capita-electricity-generation,Russia,1996,5720.94
+per-capita-electricity-generation,Russia,1997,5641.594
+per-capita-electricity-generation,Russia,1998,5602.7026
+per-capita-electricity-generation,Russia,1999,5747.1724
+per-capita-electricity-generation,Russia,2000,5982.642
+per-capita-electricity-generation,Russia,2001,6099.689
+per-capita-electricity-generation,Russia,2002,6107.1885
+per-capita-electricity-generation,Russia,2003,6284.8164
+per-capita-electricity-generation,Russia,2004,6418.9927
+per-capita-electricity-generation,Russia,2005,6598.3677
+per-capita-electricity-generation,Russia,2006,6884.8003
+per-capita-electricity-generation,Russia,2007,7081.2017
+per-capita-electricity-generation,Russia,2008,7231.672
+per-capita-electricity-generation,Russia,2009,6902.8013
+per-capita-electricity-generation,Russia,2010,7211.7544
+per-capita-electricity-generation,Russia,2011,7323.1914
+per-capita-electricity-generation,Russia,2012,7410.51
+per-capita-electricity-generation,Russia,2013,7323.9966
+per-capita-electricity-generation,Russia,2014,7343.0757
+per-capita-electricity-generation,Russia,2015,7346.828
+per-capita-electricity-generation,Russia,2016,7483.742
+per-capita-electricity-generation,Russia,2017,7464.2173
+per-capita-electricity-generation,Russia,2018,7574.874
+per-capita-electricity-generation,Russia,2019,7630.7695
+per-capita-electricity-generation,Russia,2020,7415.5254
+per-capita-electricity-generation,Russia,2021,7934.0396
+per-capita-electricity-generation,Russia,2022,8015.8047
+per-capita-electricity-generation,Russia,2023,8101.251
+per-capita-electricity-generation,Russia,2024,8350.411
+per-capita-electricity-generation,Russia,2025,8283.414
+per-capita-electricity-generation,United Kingdom,1920,83.53951
+per-capita-electricity-generation,United Kingdom,1921,97.478745
+per-capita-electricity-generation,United Kingdom,1922,113.62824
+per-capita-electricity-generation,United Kingdom,1923,129.6428
+per-capita-electricity-generation,United Kingdom,1924,142.78911
+per-capita-electricity-generation,United Kingdom,1925,151.14685
+per-capita-electricity-generation,United Kingdom,1926,183.08473
+per-capita-electricity-generation,United Kingdom,1927,202.39041
+per-capita-electricity-generation,United Kingdom,1928,226.23392
+per-capita-electricity-generation,United Kingdom,1929,237.61119
+per-capita-electricity-generation,United Kingdom,1930,248.30162
+per-capita-electricity-generation,United Kingdom,1931,265.79037
+per-capita-electricity-generation,United Kingdom,1932,293.15753
+per-capita-electricity-generation,United Kingdom,1933,332.65347
+per-capita-electricity-generation,United Kingdom,1934,376.09225
+per-capita-electricity-generation,United Kingdom,1935,430.7174
+per-capita-electricity-generation,United Kingdom,1936,485.42215
+per-capita-electricity-generation,United Kingdom,1937,513.92694
+per-capita-electricity-generation,United Kingdom,1938,554.0936
+per-capita-electricity-generation,United Kingdom,1939,600.8115
+per-capita-electricity-generation,United Kingdom,1940,672.64197
+per-capita-electricity-generation,United Kingdom,1941,737.9143
+per-capita-electricity-generation,United Kingdom,1942,761.6329
+per-capita-electricity-generation,United Kingdom,1943,787.6857
+per-capita-electricity-generation,United Kingdom,1944,762.57733
+per-capita-electricity-generation,United Kingdom,1945,840.50024
+per-capita-electricity-generation,United Kingdom,1946,864.18945
+per-capita-electricity-generation,United Kingdom,1947,930.5844
+per-capita-electricity-generation,United Kingdom,1948,978.8725
+per-capita-electricity-generation,United Kingdom,1949,1093.6664
+per-capita-electricity-generation,United Kingdom,1950,1466.271
+per-capita-electricity-generation,United Kingdom,1951,1505.6362
+per-capita-electricity-generation,United Kingdom,1952,1578.8702
+per-capita-electricity-generation,United Kingdom,1953,1714.2141
+per-capita-electricity-generation,United Kingdom,1954,1858.2861
+per-capita-electricity-generation,United Kingdom,1955,1989.1259
+per-capita-electricity-generation,United Kingdom,1956,2067.3357
+per-capita-electricity-generation,United Kingdom,1957,2206.6206
+per-capita-electricity-generation,United Kingdom,1958,2348.3489
+per-capita-electricity-generation,United Kingdom,1959,2624.6653
+per-capita-electricity-generation,United Kingdom,1960,2780.8154
+per-capita-electricity-generation,United Kingdom,1961,3037.0833
+per-capita-electricity-generation,United Kingdom,1962,3263.0513
+per-capita-electricity-generation,United Kingdom,1963,3410.3818
+per-capita-electricity-generation,United Kingdom,1964,3632.3486
+per-capita-electricity-generation,United Kingdom,1965,3729.2612
+per-capita-electricity-generation,United Kingdom,1966,3832.1323
+per-capita-electricity-generation,United Kingdom,1967,4065.4558
+per-capita-electricity-generation,United Kingdom,1968,4322.5596
+per-capita-electricity-generation,United Kingdom,1969,4488.8574
+per-capita-electricity-generation,United Kingdom,1970,4605.1836
+per-capita-electricity-generation,United Kingdom,1971,4714.2827
+per-capita-electricity-generation,United Kingdom,1972,5024.979
+per-capita-electricity-generation,United Kingdom,1973,4856.6807
+per-capita-electricity-generation,United Kingdom,1974,4833.191
+per-capita-electricity-generation,United Kingdom,1975,4920.5854
+per-capita-electricity-generation,United Kingdom,1976,5035.7695
+per-capita-electricity-generation,United Kingdom,1977,5119.9424
+per-capita-electricity-generation,United Kingdom,1978,5336.7163
+per-capita-electricity-generation,United Kingdom,1979,5067.2056
+per-capita-electricity-generation,United Kingdom,1980,4933.6465
+per-capita-electricity-generation,United Kingdom,1981,4843.7617
+per-capita-electricity-generation,United Kingdom,1982,4928.1113
+per-capita-electricity-generation,United Kingdom,1983,5013.4683
+per-capita-electricity-generation,United Kingdom,1984,5270.0103
+per-capita-electricity-generation,United Kingdom,1985,5265.993
+per-capita-electricity-generation,United Kingdom,1986,5305.036
+per-capita-electricity-generation,United Kingdom,1987,5310.83
+per-capita-electricity-generation,United Kingdom,1988,5415.4614
+per-capita-electricity-generation,United Kingdom,1989,5501.4556
+per-capita-electricity-generation,United Kingdom,1990,5573.6777
+per-capita-electricity-generation,United Kingdom,1991,5609.919
+per-capita-electricity-generation,United Kingdom,1992,5562.0938
+per-capita-electricity-generation,United Kingdom,1993,5584.241
+per-capita-electricity-generation,United Kingdom,1994,5630.034
+per-capita-electricity-generation,United Kingdom,1995,5802.1177
+per-capita-electricity-generation,United Kingdom,1996,6018.5015
+per-capita-electricity-generation,United Kingdom,1997,5999.7856
+per-capita-electricity-generation,United Kingdom,1998,6186.7583
+per-capita-electricity-generation,United Kingdom,1999,6256.94
+per-capita-electricity-generation,United Kingdom,2000,6384.643
+per-capita-electricity-generation,United Kingdom,2001,6489.8354
+per-capita-electricity-generation,United Kingdom,2002,6503.7793
+per-capita-electricity-generation,United Kingdom,2003,6656.7607
+per-capita-electricity-generation,United Kingdom,2004,6546.788
+per-capita-electricity-generation,United Kingdom,2005,6573.855
+per-capita-electricity-generation,United Kingdom,2006,6507.1724
+per-capita-electricity-generation,United Kingdom,2007,6448.435
+per-capita-electricity-generation,United Kingdom,2008,6270.7866
+per-capita-electricity-generation,United Kingdom,2009,6027.56
+per-capita-electricity-generation,United Kingdom,2010,6063.8203
+per-capita-electricity-generation,United Kingdom,2011,5793.956
+per-capita-electricity-generation,United Kingdom,2012,5688.981
+per-capita-electricity-generation,United Kingdom,2013,5564.271
+per-capita-electricity-generation,United Kingdom,2014,5211.982
+per-capita-electricity-generation,United Kingdom,2015,5182.9165
+per-capita-electricity-generation,United Kingdom,2016,5147.4077
+per-capita-electricity-generation,United Kingdom,2017,5097.1694
+per-capita-electricity-generation,United Kingdom,2018,4999.965
+per-capita-electricity-generation,United Kingdom,2019,4875.359
+per-capita-electricity-generation,United Kingdom,2020,4607.148
+per-capita-electricity-generation,United Kingdom,2021,4550.1035
+per-capita-electricity-generation,United Kingdom,2022,4760.681
+per-capita-electricity-generation,United Kingdom,2023,4259.135
+per-capita-electricity-generation,United Kingdom,2024,4110.03
+per-capita-electricity-generation,United Kingdom,2025,4202.795
+per-capita-electricity-generation,United States,1985,10994.022
+per-capita-electricity-generation,United States,1986,10969.753
+per-capita-electricity-generation,United States,1987,11261.743
+per-capita-electricity-generation,United States,1988,11733.193
+per-capita-electricity-generation,United States,1989,12587.81
+per-capita-electricity-generation,United States,1990,12758.955
+per-capita-electricity-generation,United States,1991,12752.783
+per-capita-electricity-generation,United States,1992,12651.439
+per-capita-electricity-generation,United States,1993,12963.622
+per-capita-electricity-generation,United States,1994,13027.7
+per-capita-electricity-generation,United States,1995,13300.724
+per-capita-electricity-generation,United States,1996,13524.982
+per-capita-electricity-generation,United States,1997,13589.807
+per-capita-electricity-generation,United States,1998,13964.283
+per-capita-electricity-generation,United States,1999,14118.732
+per-capita-electricity-generation,United States,2000,13507.334
+per-capita-electricity-generation,United States,2001,13112.336
+per-capita-electricity-generation,United States,2002,13390.595
+per-capita-electricity-generation,United States,2003,13345.401
+per-capita-electricity-generation,United States,2004,13497.73
+per-capita-electricity-generation,United States,2005,13644.784
+per-capita-electricity-generation,United States,2006,13547.14
+per-capita-electricity-generation,United States,2007,13724.198
+per-capita-electricity-generation,United States,2008,13468.621
+per-capita-electricity-generation,United States,2009,12790.649
+per-capita-electricity-generation,United States,2010,13225.433
+per-capita-electricity-generation,United States,2011,13017.523
+per-capita-electricity-generation,United States,2012,12741.956
+per-capita-electricity-generation,United States,2013,12669.396
+per-capita-electricity-generation,United States,2014,12676.616
+per-capita-electricity-generation,United States,2015,12522.718
+per-capita-electricity-generation,United States,2016,12417.423
+per-capita-electricity-generation,United States,2017,12198.233
+per-capita-electricity-generation,United States,2018,12539.825
+per-capita-electricity-generation,United States,2019,12310.545
+per-capita-electricity-generation,United States,2020,11911.459
+per-capita-electricity-generation,United States,2021,12210.731
+per-capita-electricity-generation,United States,2022,12551.868
+per-capita-electricity-generation,United States,2023,12384.835
+per-capita-electricity-generation,United States,2024,12711.877
+per-capita-electricity-generation,United States,2025,13014.986
+per-capita-electricity-generation,World,1900,3.9076145
+per-capita-electricity-generation,World,1901,5.121803
+per-capita-electricity-generation,World,1902,6.2041445
+per-capita-electricity-generation,World,1903,7.7118144
+per-capita-electricity-generation,World,1904,9.482029
+per-capita-electricity-generation,World,1905,11.185826
+per-capita-electricity-generation,World,1906,12.777706
+per-capita-electricity-generation,World,1907,14.642076
+per-capita-electricity-generation,World,1908,17.070301
+per-capita-electricity-generation,World,1909,19.4635
+per-capita-electricity-generation,World,1910,21.923727
+per-capita-electricity-generation,World,1911,24.809687
+per-capita-electricity-generation,World,1912,28.305347
+per-capita-electricity-generation,World,1913,32.913944
+per-capita-electricity-generation,World,1914,37.4845
+per-capita-electricity-generation,World,1915,41.26326
+per-capita-electricity-generation,World,1916,45.85292
+per-capita-electricity-generation,World,1917,50.38398
+per-capita-electricity-generation,World,1918,54.771526
+per-capita-electricity-generation,World,1919,57.487705
+per-capita-electricity-generation,World,1920,61.39933
+per-capita-electricity-generation,World,1921,60.564568
+per-capita-electricity-generation,World,1922,67.65969
+per-capita-electricity-generation,World,1923,75.85632
+per-capita-electricity-generation,World,1924,83.57738
+per-capita-electricity-generation,World,1925,94.25458
+per-capita-electricity-generation,World,1926,103.97043
+per-capita-electricity-generation,World,1927,113.83667
+per-capita-electricity-generation,World,1928,123.90819
+per-capita-electricity-generation,World,1929,136.17178
+per-capita-electricity-generation,World,1930,136.53554
+per-capita-electricity-generation,World,1931,131.95361
+per-capita-electricity-generation,World,1932,126.220924
+per-capita-electricity-generation,World,1933,133.8095
+per-capita-electricity-generation,World,1934,146.85373
+per-capita-electricity-generation,World,1935,161.24876
+per-capita-electricity-generation,World,1936,179.53412
+per-capita-electricity-generation,World,1937,195.32686
+per-capita-electricity-generation,World,1938,199.3276
+per-capita-electricity-generation,World,1939,217.47379
+per-capita-electricity-generation,World,1940,227.93292
+per-capita-electricity-generation,World,1941,249.24255
+per-capita-electricity-generation,World,1942,263.3913
+per-capita-electricity-generation,World,1943,282.84766
+per-capita-electricity-generation,World,1944,273.32126
+per-capita-electricity-generation,World,1945,253.36089
+per-capita-electricity-generation,World,1946,265.25345
+per-capita-electricity-generation,World,1947,293.87515
+per-capita-electricity-generation,World,1948,322.4917
+per-capita-electricity-generation,World,1949,339.9124
+per-capita-electricity-generation,World,1950,379.78378
+per-capita-electricity-generation,World,1951,420.57693
+per-capita-electricity-generation,World,1952,445.77475
+per-capita-electricity-generation,World,1953,477.9855
+per-capita-electricity-generation,World,1954,506.73666
+per-capita-electricity-generation,World,1955,559.94
+per-capita-electricity-generation,World,1956,601.5872
+per-capita-electricity-generation,World,1957,629.3316
+per-capita-electricity-generation,World,1958,653.1561
+per-capita-electricity-generation,World,1959,706.47626
+per-capita-electricity-generation,World,1960,763.95636
+per-capita-electricity-generation,World,1961,801.15857
+per-capita-electricity-generation,World,1962,853.0679
+per-capita-electricity-generation,World,1963,902.43964
+per-capita-electricity-generation,World,1964,961.67975
+per-capita-electricity-generation,World,1965,1015.165
+per-capita-electricity-generation,World,1966,1071.7168
+per-capita-electricity-generation,World,1967,1114.9255
+per-capita-electricity-generation,World,1968,1189.9994
+per-capita-electricity-generation,World,1969,1267.1284
+per-capita-electricity-generation,World,1970,1340.7543
+per-capita-electricity-generation,World,1971,1394.4984
+per-capita-electricity-generation,World,1972,1482.1139
+per-capita-electricity-generation,World,1973,1563.746
+per-capita-electricity-generation,World,1974,1573.2844
+per-capita-electricity-generation,World,1975,1601.3505
+per-capita-electricity-generation,World,1976,1684.4327
+per-capita-electricity-generation,World,1977,1732.1051
+per-capita-electricity-generation,World,1978,1792.2333
+per-capita-electricity-generation,World,1979,1836.7782
+per-capita-electricity-generation,World,1980,1862.4592
+per-capita-electricity-generation,World,1981,1866.7141
+per-capita-electricity-generation,World,1982,1851.4541
+per-capita-electricity-generation,World,1983,1894.586
+per-capita-electricity-generation,World,1984,1965.422
+per-capita-electricity-generation,World,1985,2030.4332
+per-capita-electricity-generation,World,1986,2053.3765
+per-capita-electricity-generation,World,1987,2113.1018
+per-capita-electricity-generation,World,1988,2166.5972
+per-capita-electricity-generation,World,1989,2227.168
+per-capita-electricity-generation,World,1990,2245.093
+per-capita-electricity-generation,World,1991,2255.6045
+per-capita-electricity-generation,World,1992,2240.5422
+per-capita-electricity-generation,World,1993,2253.3894
+per-capita-electricity-generation,World,1994,2277.061
+per-capita-electricity-generation,World,1995,2323.693
+per-capita-electricity-generation,World,1996,2361.6953
+per-capita-electricity-generation,World,1997,2384.66
+per-capita-electricity-generation,World,1998,2415.657
+per-capita-electricity-generation,World,1999,2451.3477
+per-capita-electricity-generation,World,2000,2475.6182
+per-capita-electricity-generation,World,2001,2478.1755
+per-capita-electricity-generation,World,2002,2532.4348
+per-capita-electricity-generation,World,2003,2589.8867
+per-capita-electricity-generation,World,2004,2677.8376
+per-capita-electricity-generation,World,2005,2753.023
+per-capita-electricity-generation,World,2006,2823.8215
+per-capita-electricity-generation,World,2007,2917.428
+per-capita-electricity-generation,World,2008,2937.0684
+per-capita-electricity-generation,World,2009,2876.703
+per-capita-electricity-generation,World,2010,3028.277
+per-capita-electricity-generation,World,2011,3089.898
+per-capita-electricity-generation,World,2012,3126.6528
+per-capita-electricity-generation,World,2013,3175.4917
+per-capita-electricity-generation,World,2014,3217.0557
+per-capita-electricity-generation,World,2015,3212.9543
+per-capita-electricity-generation,World,2016,3267.0942
+per-capita-electricity-generation,World,2017,3327.532
+per-capita-electricity-generation,World,2018,3423.6511
+per-capita-electricity-generation,World,2019,3435.08
+per-capita-electricity-generation,World,2020,3388.28
+per-capita-electricity-generation,World,2021,3552.6123
+per-capita-electricity-generation,World,2022,3605.0732
+per-capita-electricity-generation,World,2023,3666.1284
+per-capita-electricity-generation,World,2024,3789.5535
+per-capita-electricity-generation,World,2025,3859.7964
+share-electricity-solar,Africa,1985,0.0
+share-electricity-solar,Africa,1986,0.0
+share-electricity-solar,Africa,1987,0.0
+share-electricity-solar,Africa,1988,0.0
+share-electricity-solar,Africa,1989,0.0
+share-electricity-solar,Africa,1990,0.0
+share-electricity-solar,Africa,1991,0.0
+share-electricity-solar,Africa,1992,0.0
+share-electricity-solar,Africa,1993,0.0
+share-electricity-solar,Africa,1994,0.0
+share-electricity-solar,Africa,1995,0.0
+share-electricity-solar,Africa,1996,0.0
+share-electricity-solar,Africa,1997,0.0
+share-electricity-solar,Africa,1998,0.0
+share-electricity-solar,Africa,1999,0.0
+share-electricity-solar,Africa,2000,0.0
+share-electricity-solar,Africa,2001,0.0
+share-electricity-solar,Africa,2002,0.0041008815
+share-electricity-solar,Africa,2003,0.0039281156
+share-electricity-solar,Africa,2004,0.0037027434
+share-electricity-solar,Africa,2005,0.0035666518
+share-electricity-solar,Africa,2006,0.0051124743
+share-electricity-solar,Africa,2007,0.004916179
+share-electricity-solar,Africa,2008,0.0064340746
+share-electricity-solar,Africa,2009,0.011207531
+share-electricity-solar,Africa,2010,0.031230945
+share-electricity-solar,Africa,2011,0.07405471
+share-electricity-solar,Africa,2012,0.12268247
+share-electricity-solar,Africa,2013,0.075582735
+share-electricity-solar,Africa,2014,0.24216859
+share-electricity-solar,Africa,2015,0.4113768
+share-electricity-solar,Africa,2016,0.58575326
+share-electricity-solar,Africa,2017,0.8212011
+share-electricity-solar,Africa,2018,0.9874379
+share-electricity-solar,Africa,2019,1.3185533
+share-electricity-solar,Africa,2020,1.9219824
+share-electricity-solar,Africa,2021,2.193738
+share-electricity-solar,Africa,2022,2.64415
+share-electricity-solar,Africa,2023,3.2109056
+share-electricity-solar,Africa,2024,3.706707
+share-electricity-solar,Brazil,1990,0.0
+share-electricity-solar,Brazil,1991,0.0
+share-electricity-solar,Brazil,1992,0.0
+share-electricity-solar,Brazil,1993,0.0
+share-electricity-solar,Brazil,1994,0.0
+share-electricity-solar,Brazil,1995,0.0
+share-electricity-solar,Brazil,1996,0.0
+share-electricity-solar,Brazil,1997,0.0
+share-electricity-solar,Brazil,1998,0.0
+share-electricity-solar,Brazil,1999,0.0
+share-electricity-solar,Brazil,2000,0.0
+share-electricity-solar,Brazil,2001,0.0
+share-electricity-solar,Brazil,2002,0.0
+share-electricity-solar,Brazil,2003,0.0
+share-electricity-solar,Brazil,2004,0.0
+share-electricity-solar,Brazil,2005,0.0
+share-electricity-solar,Brazil,2006,0.0
+share-electricity-solar,Brazil,2007,0.0
+share-electricity-solar,Brazil,2008,0.0
+share-electricity-solar,Brazil,2009,0.0
+share-electricity-solar,Brazil,2010,0.0
+share-electricity-solar,Brazil,2011,0.0
+share-electricity-solar,Brazil,2012,0.0
+share-electricity-solar,Brazil,2013,0.0
+share-electricity-solar,Brazil,2014,0.0033866735
+share-electricity-solar,Brazil,2015,0.010323114
+share-electricity-solar,Brazil,2016,0.015546995
+share-electricity-solar,Brazil,2017,0.14084029
+share-electricity-solar,Brazil,2018,0.5753338
+share-electricity-solar,Brazil,2019,1.0500056
+share-electricity-solar,Brazil,2020,1.7097143
+share-electricity-solar,Brazil,2021,2.5517976
+share-electricity-solar,Brazil,2022,4.4494653
+share-electricity-solar,Brazil,2023,7.149918
+share-electricity-solar,Brazil,2024,9.563911
+share-electricity-solar,Brazil,2025,11.81032
+share-electricity-solar,China,1985,0.0
+share-electricity-solar,China,1986,0.0
+share-electricity-solar,China,1987,0.0
+share-electricity-solar,China,1988,0.0
+share-electricity-solar,China,1989,0.0
+share-electricity-solar,China,1990,0.00032195752
+share-electricity-solar,China,1991,0.00029518118
+share-electricity-solar,China,1992,0.00039790964
+share-electricity-solar,China,1993,0.0004928597
+share-electricity-solar,China,1994,0.0005389092
+share-electricity-solar,China,1995,0.0006951133
+share-electricity-solar,China,1996,0.0008323237
+share-electricity-solar,China,1997,0.0009686935
+share-electricity-solar,China,1998,0.0011996573
+share-electricity-solar,China,1999,0.0013717421
+share-electricity-solar,China,2000,0.0014753614
+share-electricity-solar,China,2001,0.0020259456
+share-electricity-solar,China,2002,0.0030229564
+share-electricity-solar,China,2003,0.0031404076
+share-electricity-solar,China,2004,0.0036309005
+share-electricity-solar,China,2005,0.0031996672
+share-electricity-solar,China,2006,0.0031405722
+share-electricity-solar,China,2007,0.0033520847
+share-electricity-solar,China,2008,0.0042909128
+share-electricity-solar,China,2009,0.0075377426
+share-electricity-solar,China,2010,0.016638301
+share-electricity-solar,China,2011,0.0553785
+share-electricity-solar,China,2012,0.07197937
+share-electricity-solar,China,2013,0.1540974
+share-electricity-solar,China,2014,0.40573305
+share-electricity-solar,China,2015,0.6789828
+share-electricity-solar,China,2016,1.0847589
+share-electricity-solar,China,2017,1.7836486
+share-electricity-solar,China,2018,2.4685533
+share-electricity-solar,China,2019,2.9853013
+share-electricity-solar,China,2020,3.3564425
+share-electricity-solar,China,2021,3.8316152
+share-electricity-solar,China,2022,4.8286133
+share-electricity-solar,China,2023,6.177265
+share-electricity-solar,China,2024,8.318132
+share-electricity-solar,China,2025,11.101955
+share-electricity-solar,European Union (27),1985,0.0
+share-electricity-solar,European Union (27),1986,0.0
+share-electricity-solar,European Union (27),1987,0.0
+share-electricity-solar,European Union (27),1988,0.0
+share-electricity-solar,European Union (27),1989,0.0004045578
+share-electricity-solar,European Union (27),1990,0.0004444642
+share-electricity-solar,European Union (27),1991,0.00043569758
+share-electricity-solar,European Union (27),1992,0.0008775163
+share-electricity-solar,European Union (27),1993,0.0008773661
+share-electricity-solar,European Union (27),1994,0.0008641175
+share-electricity-solar,European Union (27),1995,0.001258949
+share-electricity-solar,European Union (27),1996,0.0016217575
+share-electricity-solar,European Union (27),1997,0.0016129552
+share-electricity-solar,European Union (27),1998,0.0019769643
+share-electricity-solar,European Union (27),1999,0.0031325866
+share-electricity-solar,European Union (27),2000,0.0019068103
+share-electricity-solar,European Union (27),2001,0.0062988163
+share-electricity-solar,European Union (27),2002,0.0102861
+share-electricity-solar,European Union (27),2003,0.014286072
+share-electricity-solar,European Union (27),2004,0.023713622
+share-electricity-solar,European Union (27),2005,0.05131067
+share-electricity-solar,European Union (27),2006,0.08593907
+share-electricity-solar,European Union (27),2007,0.12993138
+share-electricity-solar,European Union (27),2008,0.25373507
+share-electricity-solar,European Union (27),2009,0.5063489
+share-electricity-solar,European Union (27),2010,0.7974768
+share-electricity-solar,European Union (27),2011,1.640263
+share-electricity-solar,European Union (27),2012,2.4281375
+share-electricity-solar,European Union (27),2013,2.9046118
+share-electricity-solar,European Union (27),2014,3.3145533
+share-electricity-solar,European Union (27),2015,3.4908392
+share-electricity-solar,European Union (27),2016,3.4754791
+share-electricity-solar,European Union (27),2017,3.6462786
+share-electricity-solar,European Union (27),2018,3.9238536
+share-electricity-solar,European Union (27),2019,4.3270135
+share-electricity-solar,European Union (27),2020,5.256639
+share-electricity-solar,European Union (27),2021,5.6713243
+share-electricity-solar,European Union (27),2022,7.552142
+share-electricity-solar,European Union (27),2023,9.373478
+share-electricity-solar,European Union (27),2024,11.072728
+share-electricity-solar,European Union (27),2025,13.13365
+share-electricity-solar,France,1990,0.0
+share-electricity-solar,France,1991,0.0
+share-electricity-solar,France,1992,0.0
+share-electricity-solar,France,1993,0.0
+share-electricity-solar,France,1994,0.0
+share-electricity-solar,France,1995,0.0
+share-electricity-solar,France,1996,0.0
+share-electricity-solar,France,1997,0.0
+share-electricity-solar,France,1998,0.0
+share-electricity-solar,France,1999,0.0
+share-electricity-solar,France,2000,0.0018777227
+share-electricity-solar,France,2001,0.0018429783
+share-electricity-solar,France,2002,0.0018140918
+share-electricity-solar,France,2003,0.0017884928
+share-electricity-solar,France,2004,0.0017658485
+share-electricity-solar,France,2005,0.0017570369
+share-electricity-solar,France,2006,0.0017627358
+share-electricity-solar,France,2007,0.003559732
+share-electricity-solar,France,2008,0.0070549226
+share-electricity-solar,France,2009,0.032144006
+share-electricity-solar,France,2010,0.11024967
+share-electricity-solar,France,2011,0.41046417
+share-electricity-solar,France,2012,0.7805067
+share-electricity-solar,France,2013,0.89987
+share-electricity-solar,France,2014,1.1283573
+share-electricity-solar,France,2015,1.3498449
+share-electricity-solar,France,2016,1.5496384
+share-electricity-solar,France,2017,1.5960702
+share-electricity-solar,France,2018,1.9349576
+share-electricity-solar,France,2019,2.1254776
+share-electricity-solar,France,2020,2.4826932
+share-electricity-solar,France,2021,2.7766168
+share-electricity-solar,France,2022,4.128509
+share-electricity-solar,France,2023,4.3546987
+share-electricity-solar,France,2024,4.427
+share-electricity-solar,France,2025,5.582652
+share-electricity-solar,Germany,1990,0.0
+share-electricity-solar,Germany,1991,0.0
+share-electricity-solar,Germany,1992,0.0
+share-electricity-solar,Germany,1993,0.0
+share-electricity-solar,Germany,1994,0.0
+share-electricity-solar,Germany,1995,0.0
+share-electricity-solar,Germany,1996,0.001824052
+share-electricity-solar,Germany,1997,0.0018302615
+share-electricity-solar,Germany,1998,0.0018206313
+share-electricity-solar,Germany,1999,0.0036411963
+share-electricity-solar,Germany,2000,0.0
+share-electricity-solar,Germany,2001,0.017272947
+share-electricity-solar,Germany,2002,0.034260657
+share-electricity-solar,Germany,2003,0.05149245
+share-electricity-solar,Germany,2004,0.09186352
+share-electricity-solar,Germany,2005,0.21358462
+share-electricity-solar,Germany,2006,0.3602031
+share-electricity-solar,Germany,2007,0.49754402
+share-electricity-solar,Germany,2008,0.7132804
+share-electricity-solar,Germany,2009,1.1429348
+share-electricity-solar,Germany,2010,1.9160218
+share-electricity-solar,Germany,2011,3.3041322
+share-electricity-solar,Germany,2012,4.314225
+share-electricity-solar,Germany,2013,4.8627105
+share-electricity-solar,Germany,2014,5.729293
+share-electricity-solar,Germany,2015,5.957727
+share-electricity-solar,Germany,2016,5.8548446
+share-electricity-solar,Germany,2017,6.014337
+share-electricity-solar,Germany,2018,7.0095525
+share-electricity-solar,Germany,2019,7.5355363
+share-electricity-solar,Germany,2020,8.73401
+share-electricity-solar,Germany,2021,8.524092
+share-electricity-solar,Germany,2022,10.637172
+share-electricity-solar,Germany,2023,12.604594
+share-electricity-solar,Germany,2024,14.945866
+share-electricity-solar,Germany,2025,17.907167
+share-electricity-solar,India,1985,0.0
+share-electricity-solar,India,1986,0.0
+share-electricity-solar,India,1987,0.0
+share-electricity-solar,India,1988,0.0
+share-electricity-solar,India,1989,0.0
+share-electricity-solar,India,1990,0.0
+share-electricity-solar,India,1991,0.0
+share-electricity-solar,India,1992,0.0
+share-electricity-solar,India,1993,0.0
+share-electricity-solar,India,1994,0.0
+share-electricity-solar,India,1995,0.00023647523
+share-electricity-solar,India,1996,0.0013674485
+share-electricity-solar,India,1997,0.0012918172
+share-electricity-solar,India,1998,0.0011999336
+share-electricity-solar,India,1999,0.0011072381
+share-electricity-solar,India,2000,0.0017501181
+share-electricity-solar,India,2001,0.0017062224
+share-electricity-solar,India,2002,0.0016403123
+share-electricity-solar,India,2003,0.0031341575
+share-electricity-solar,India,2004,0.0028640165
+share-electricity-solar,India,2005,0.002838812
+share-electricity-solar,India,2006,0.0013433096
+share-electricity-solar,India,2007,0.007535227
+share-electricity-solar,India,2008,0.0072427904
+share-electricity-solar,India,2009,0.0091050835
+share-electricity-solar,India,2010,0.011747242
+share-electricity-solar,India,2011,0.08040143
+share-electricity-solar,India,2012,0.1929402
+share-electricity-solar,India,2013,0.30055293
+share-electricity-solar,India,2014,0.39009118
+share-electricity-solar,India,2015,0.5409901
+share-electricity-solar,India,2016,0.8745958
+share-electricity-solar,India,2017,1.5290039
+share-electricity-solar,India,2018,2.382846
+share-electricity-solar,India,2019,2.3391924
+share-electricity-solar,India,2020,3.3842256
+share-electricity-solar,India,2021,3.9071434
+share-electricity-solar,India,2022,5.3152757
+share-electricity-solar,India,2023,6.016911
+share-electricity-solar,India,2024,7.02522
+share-electricity-solar,India,2025,9.415354
+share-electricity-solar,Japan,1985,0.0
+share-electricity-solar,Japan,1986,0.0
+share-electricity-solar,Japan,1987,0.0
+share-electricity-solar,Japan,1988,0.0
+share-electricity-solar,Japan,1989,0.0
+share-electricity-solar,Japan,1990,0.000113443
+share-electricity-solar,Japan,1991,0.000109732995
+share-electricity-solar,Japan,1992,0.0011453042
+share-electricity-solar,Japan,1993,0.0024295354
+share-electricity-solar,Japan,1994,0.0029456785
+share-electricity-solar,Japan,1995,0.003907487
+share-electricity-solar,Japan,1996,0.0052919965
+share-electricity-solar,Japan,1997,0.009129409
+share-electricity-solar,Japan,1998,0.013518095
+share-electricity-solar,Japan,1999,0.020203551
+share-electricity-solar,Japan,2000,0.030918365
+share-electricity-solar,Japan,2001,0.046162084
+share-electricity-solar,Japan,2002,0.0625527
+share-electricity-solar,Japan,2003,0.08694936
+share-electricity-solar,Japan,2004,0.11327251
+share-electricity-solar,Japan,2005,0.14136176
+share-electricity-solar,Japan,2006,0.17176966
+share-electricity-solar,Japan,2007,0.19574445
+share-electricity-solar,Japan,2008,0.21880545
+share-electricity-solar,Japan,2009,0.27378324
+share-electricity-solar,Japan,2010,0.34427872
+share-electricity-solar,Japan,2011,0.4926644
+share-electricity-solar,Japan,2012,0.6658355
+share-electricity-solar,Japan,2013,1.1868427
+share-electricity-solar,Japan,2014,2.2160118
+share-electricity-solar,Japan,2015,3.3530076
+share-electricity-solar,Japan,2016,4.0735173
+share-electricity-solar,Japan,2017,5.018294
+share-electricity-solar,Japan,2018,5.6531816
+share-electricity-solar,Japan,2019,6.437846
+share-electricity-solar,Japan,2020,7.5091734
+share-electricity-solar,Japan,2021,8.135927
+share-electricity-solar,Japan,2022,8.751934
+share-electricity-solar,Japan,2023,9.571584
+share-electricity-solar,Japan,2024,9.514064
+share-electricity-solar,Japan,2025,9.812984
+share-electricity-solar,Russia,1990,0.0
+share-electricity-solar,Russia,1991,0.0
+share-electricity-solar,Russia,1992,0.0
+share-electricity-solar,Russia,1993,0.0
+share-electricity-solar,Russia,1994,0.0
+share-electricity-solar,Russia,1995,0.0
+share-electricity-solar,Russia,1996,0.0
+share-electricity-solar,Russia,1997,0.0
+share-electricity-solar,Russia,1998,0.0
+share-electricity-solar,Russia,1999,0.0
+share-electricity-solar,Russia,2000,0.0
+share-electricity-solar,Russia,2001,0.0
+share-electricity-solar,Russia,2002,0.0
+share-electricity-solar,Russia,2003,0.0
+share-electricity-solar,Russia,2004,0.0
+share-electricity-solar,Russia,2005,0.0
+share-electricity-solar,Russia,2006,0.0
+share-electricity-solar,Russia,2007,0.0
+share-electricity-solar,Russia,2008,0.0
+share-electricity-solar,Russia,2009,0.0
+share-electricity-solar,Russia,2010,0.0
+share-electricity-solar,Russia,2011,0.0
+share-electricity-solar,Russia,2012,0.0
+share-electricity-solar,Russia,2013,0.00094421575
+share-electricity-solar,Russia,2014,0.015034768
+share-electricity-solar,Russia,2015,0.031848624
+share-electricity-solar,Russia,2016,0.04308093
+share-electricity-solar,Russia,2017,0.049488164
+share-electricity-solar,Russia,2018,0.055896647
+share-electricity-solar,Russia,2019,0.08853831
+share-electricity-solar,Russia,2020,0.17136224
+share-electricity-solar,Russia,2021,0.19964221
+share-electricity-solar,Russia,2022,0.20566612
+share-electricity-solar,Russia,2023,0.2232124
+share-electricity-solar,Russia,2024,0.24146
+share-electricity-solar,Russia,2025,0.23809722
+share-electricity-solar,United Kingdom,1920,0.0
+share-electricity-solar,United Kingdom,1921,0.0
+share-electricity-solar,United Kingdom,1922,0.0
+share-electricity-solar,United Kingdom,1923,0.0
+share-electricity-solar,United Kingdom,1924,0.0
+share-electricity-solar,United Kingdom,1925,0.0
+share-electricity-solar,United Kingdom,1926,0.0
+share-electricity-solar,United Kingdom,1927,0.0
+share-electricity-solar,United Kingdom,1928,0.0
+share-electricity-solar,United Kingdom,1929,0.0
+share-electricity-solar,United Kingdom,1930,0.0
+share-electricity-solar,United Kingdom,1931,0.0
+share-electricity-solar,United Kingdom,1932,0.0
+share-electricity-solar,United Kingdom,1933,0.0
+share-electricity-solar,United Kingdom,1934,0.0
+share-electricity-solar,United Kingdom,1935,0.0
+share-electricity-solar,United Kingdom,1936,0.0
+share-electricity-solar,United Kingdom,1937,0.0
+share-electricity-solar,United Kingdom,1938,0.0
+share-electricity-solar,United Kingdom,1939,0.0
+share-electricity-solar,United Kingdom,1940,0.0
+share-electricity-solar,United Kingdom,1941,0.0
+share-electricity-solar,United Kingdom,1942,0.0
+share-electricity-solar,United Kingdom,1943,0.0
+share-electricity-solar,United Kingdom,1944,0.0
+share-electricity-solar,United Kingdom,1945,0.0
+share-electricity-solar,United Kingdom,1946,0.0
+share-electricity-solar,United Kingdom,1947,0.0
+share-electricity-solar,United Kingdom,1948,0.0
+share-electricity-solar,United Kingdom,1949,0.0
+share-electricity-solar,United Kingdom,1950,0.0
+share-electricity-solar,United Kingdom,1951,0.0
+share-electricity-solar,United Kingdom,1952,0.0
+share-electricity-solar,United Kingdom,1953,0.0
+share-electricity-solar,United Kingdom,1954,0.0
+share-electricity-solar,United Kingdom,1955,0.0
+share-electricity-solar,United Kingdom,1956,0.0
+share-electricity-solar,United Kingdom,1957,0.0
+share-electricity-solar,United Kingdom,1958,0.0
+share-electricity-solar,United Kingdom,1959,0.0
+share-electricity-solar,United Kingdom,1960,0.0
+share-electricity-solar,United Kingdom,1961,0.0
+share-electricity-solar,United Kingdom,1962,0.0
+share-electricity-solar,United Kingdom,1963,0.0
+share-electricity-solar,United Kingdom,1964,0.0
+share-electricity-solar,United Kingdom,1965,0.0
+share-electricity-solar,United Kingdom,1966,0.0
+share-electricity-solar,United Kingdom,1967,0.0
+share-electricity-solar,United Kingdom,1968,0.0
+share-electricity-solar,United Kingdom,1969,0.0
+share-electricity-solar,United Kingdom,1970,0.0
+share-electricity-solar,United Kingdom,1971,0.0
+share-electricity-solar,United Kingdom,1972,0.0
+share-electricity-solar,United Kingdom,1973,0.0
+share-electricity-solar,United Kingdom,1974,0.0
+share-electricity-solar,United Kingdom,1975,0.0
+share-electricity-solar,United Kingdom,1976,0.0
+share-electricity-solar,United Kingdom,1977,0.0
+share-electricity-solar,United Kingdom,1978,0.0
+share-electricity-solar,United Kingdom,1979,0.0
+share-electricity-solar,United Kingdom,1980,0.0
+share-electricity-solar,United Kingdom,1981,0.0
+share-electricity-solar,United Kingdom,1982,0.0
+share-electricity-solar,United Kingdom,1983,0.0
+share-electricity-solar,United Kingdom,1984,0.0003395309
+share-electricity-solar,United Kingdom,1985,0.0003388589
+share-electricity-solar,United Kingdom,1986,0.00033550258
+share-electricity-solar,United Kingdom,1987,0.0
+share-electricity-solar,United Kingdom,1988,0.00032707877
+share-electricity-solar,United Kingdom,1989,0.0
+share-electricity-solar,United Kingdom,1990,0.0
+share-electricity-solar,United Kingdom,1991,0.0
+share-electricity-solar,United Kingdom,1992,0.0
+share-electricity-solar,United Kingdom,1993,0.0
+share-electricity-solar,United Kingdom,1994,0.0
+share-electricity-solar,United Kingdom,1995,0.0
+share-electricity-solar,United Kingdom,1996,0.0
+share-electricity-solar,United Kingdom,1997,0.0
+share-electricity-solar,United Kingdom,1998,0.0
+share-electricity-solar,United Kingdom,1999,0.0
+share-electricity-solar,United Kingdom,2000,0.0
+share-electricity-solar,United Kingdom,2001,0.0
+share-electricity-solar,United Kingdom,2002,0.0
+share-electricity-solar,United Kingdom,2003,0.0
+share-electricity-solar,United Kingdom,2004,0.0
+share-electricity-solar,United Kingdom,2005,0.002510355
+share-electricity-solar,United Kingdom,2006,0.0025171798
+share-electricity-solar,United Kingdom,2007,0.0025200977
+share-electricity-solar,United Kingdom,2008,0.0051419167
+share-electricity-solar,United Kingdom,2009,0.005308419
+share-electricity-solar,United Kingdom,2010,0.01046956
+share-electricity-solar,United Kingdom,2011,0.06522271
+share-electricity-solar,United Kingdom,2012,0.37101164
+share-electricity-solar,United Kingdom,2013,0.56101376
+share-electricity-solar,United Kingdom,2014,1.1979414
+share-electricity-solar,United Kingdom,2015,2.2220912
+share-electricity-solar,United Kingdom,2016,3.069167
+share-electricity-solar,United Kingdom,2017,3.3883271
+share-electricity-solar,United Kingdom,2018,3.796141
+share-electricity-solar,United Kingdom,2019,3.7959595
+share-electricity-solar,United Kingdom,2020,4.044473
+share-electricity-solar,United Kingdom,2021,3.939591
+share-electricity-solar,United Kingdom,2022,4.1099267
+share-electricity-solar,United Kingdom,2023,4.7448125
+share-electricity-solar,United Kingdom,2024,5.204814
+share-electricity-solar,United Kingdom,2025,6.6094213
+share-electricity-solar,United States,1985,0.00040409362
+share-electricity-solar,United States,1986,0.00052963896
+share-electricity-solar,United States,1987,0.00038247637
+share-electricity-solar,United States,1988,0.00031518374
+share-electricity-solar,United States,1989,0.008022068
+share-electricity-solar,United States,1990,0.011469849
+share-electricity-solar,United States,1991,0.014622231
+share-electricity-solar,United States,1992,0.01244811
+share-electricity-solar,United States,1993,0.013956147
+share-electricity-solar,United States,1994,0.014511175
+share-electricity-solar,United States,1995,0.01442175
+share-electricity-solar,United States,1996,0.014777073
+share-electricity-solar,United States,1997,0.014333735
+share-electricity-solar,United States,1998,0.013606987
+share-electricity-solar,United States,1999,0.013168934
+share-electricity-solar,United States,2000,0.012887615
+share-electricity-solar,United States,2001,0.01448665
+share-electricity-solar,United States,2002,0.014307157
+share-electricity-solar,United States,2003,0.013698842
+share-electricity-solar,United States,2004,0.014676299
+share-electricity-solar,United States,2005,0.0136307655
+share-electricity-solar,United States,2006,0.012602114
+share-electricity-solar,United States,2007,0.01472516
+share-electricity-solar,United States,2008,0.020937158
+share-electricity-solar,United States,2009,0.022589864
+share-electricity-solar,United States,2010,0.029412195
+share-electricity-solar,United States,2011,0.044511076
+share-electricity-solar,United States,2012,0.10716045
+share-electricity-solar,United States,2013,0.2229011
+share-electricity-solar,United States,2014,0.706053
+share-electricity-solar,United States,2015,0.955683
+share-electricity-solar,United States,2016,1.3423656
+share-electricity-solar,United States,2017,1.9070604
+share-electricity-solar,United States,2018,2.2220373
+share-electricity-solar,United States,2019,2.5704722
+share-electricity-solar,United States,2020,3.2330987
+share-electricity-solar,United States,2021,3.9584746
+share-electricity-solar,United States,2022,4.783654
+share-electricity-solar,United States,2023,5.61695
+share-electricity-solar,United States,2024,6.917527
+share-electricity-solar,United States,2025,8.6026125
+share-electricity-solar,World,1900,0.0
+share-electricity-solar,World,1901,0.0
+share-electricity-solar,World,1902,0.0
+share-electricity-solar,World,1903,0.0
+share-electricity-solar,World,1904,0.0
+share-electricity-solar,World,1905,0.0
+share-electricity-solar,World,1906,0.0
+share-electricity-solar,World,1907,0.0
+share-electricity-solar,World,1908,0.0
+share-electricity-solar,World,1909,0.0
+share-electricity-solar,World,1910,0.0
+share-electricity-solar,World,1911,0.0
+share-electricity-solar,World,1912,0.0
+share-electricity-solar,World,1913,0.0
+share-electricity-solar,World,1914,0.0
+share-electricity-solar,World,1915,0.0
+share-electricity-solar,World,1916,0.0
+share-electricity-solar,World,1917,0.0
+share-electricity-solar,World,1918,0.0
+share-electricity-solar,World,1919,0.0
+share-electricity-solar,World,1920,0.0
+share-electricity-solar,World,1921,0.0
+share-electricity-solar,World,1922,0.0
+share-electricity-solar,World,1923,0.0
+share-electricity-solar,World,1924,0.0
+share-electricity-solar,World,1925,0.0
+share-electricity-solar,World,1926,0.0
+share-electricity-solar,World,1927,0.0
+share-electricity-solar,World,1928,0.0
+share-electricity-solar,World,1929,0.0
+share-electricity-solar,World,1930,0.0
+share-electricity-solar,World,1931,0.0
+share-electricity-solar,World,1932,0.0
+share-electricity-solar,World,1933,0.0
+share-electricity-solar,World,1934,0.0
+share-electricity-solar,World,1935,0.0
+share-electricity-solar,World,1936,0.0
+share-electricity-solar,World,1937,0.0
+share-electricity-solar,World,1938,0.0
+share-electricity-solar,World,1939,0.0
+share-electricity-solar,World,1940,0.0
+share-electricity-solar,World,1941,0.0
+share-electricity-solar,World,1942,0.0
+share-electricity-solar,World,1943,0.0
+share-electricity-solar,World,1944,0.0
+share-electricity-solar,World,1945,0.0
+share-electricity-solar,World,1946,0.0
+share-electricity-solar,World,1947,0.0
+share-electricity-solar,World,1948,0.0
+share-electricity-solar,World,1949,0.0
+share-electricity-solar,World,1950,0.0
+share-electricity-solar,World,1951,0.0
+share-electricity-solar,World,1952,0.0
+share-electricity-solar,World,1953,0.0
+share-electricity-solar,World,1954,0.0
+share-electricity-solar,World,1955,0.0
+share-electricity-solar,World,1956,0.0
+share-electricity-solar,World,1957,0.0
+share-electricity-solar,World,1958,0.0
+share-electricity-solar,World,1959,0.0
+share-electricity-solar,World,1960,0.0
+share-electricity-solar,World,1961,0.0
+share-electricity-solar,World,1962,0.0
+share-electricity-solar,World,1963,0.0
+share-electricity-solar,World,1964,0.0
+share-electricity-solar,World,1965,0.0
+share-electricity-solar,World,1966,0.0
+share-electricity-solar,World,1967,0.0
+share-electricity-solar,World,1968,0.0
+share-electricity-solar,World,1969,0.0
+share-electricity-solar,World,1970,0.0
+share-electricity-solar,World,1971,0.0
+share-electricity-solar,World,1972,0.0
+share-electricity-solar,World,1973,0.0
+share-electricity-solar,World,1974,0.0
+share-electricity-solar,World,1975,0.0
+share-electricity-solar,World,1976,0.0
+share-electricity-solar,World,1977,0.0
+share-electricity-solar,World,1978,0.0
+share-electricity-solar,World,1979,0.0
+share-electricity-solar,World,1980,0.0
+share-electricity-solar,World,1981,0.0
+share-electricity-solar,World,1982,0.0
+share-electricity-solar,World,1983,3.370979e-05
+share-electricity-solar,World,1984,6.714667e-05
+share-electricity-solar,World,1985,0.000118828626
+share-electricity-solar,World,1986,0.00014914204
+share-electricity-solar,World,1987,9.936651e-05
+share-electricity-solar,World,1988,9.1520524e-05
+share-electricity-solar,World,1989,0.0022493065
+share-electricity-solar,World,1990,0.0032458534
+share-electricity-solar,World,1991,0.0041335393
+share-electricity-solar,World,1992,0.0037821324
+share-electricity-solar,World,1993,0.0044181007
+share-electricity-solar,World,1994,0.0046193316
+share-electricity-solar,World,1995,0.004774242
+share-electricity-solar,World,1996,0.005067928
+share-electricity-solar,World,1997,0.005305944
+share-electricity-solar,World,1998,0.00559473
+share-electricity-solar,World,1999,0.006065064
+share-electricity-solar,World,2000,0.0066759256
+share-electricity-solar,World,2001,0.008773724
+share-electricity-solar,World,2002,0.0107165845
+share-electricity-solar,World,2003,0.012689431
+share-electricity-solar,World,2004,0.015963258
+share-electricity-solar,World,2005,0.021782191
+share-electricity-solar,World,2006,0.02877012
+share-electricity-solar,World,2007,0.03697887
+share-electricity-solar,World,2008,0.05894748
+share-electricity-solar,World,2009,0.0993807
+share-electricity-solar,World,2010,0.15147845
+share-electricity-solar,World,2011,0.28927687
+share-electricity-solar,World,2012,0.43045595
+share-electricity-solar,World,2013,0.5689909
+share-electricity-solar,World,2014,0.8326922
+share-electricity-solar,World,2015,1.0666039
+share-electricity-solar,World,2016,1.3260843
+share-electricity-solar,World,2017,1.7477666
+share-electricity-solar,World,2018,2.1733272
+share-electricity-solar,World,2019,2.6011071
+share-electricity-solar,World,2020,3.1934223
+share-electricity-solar,World,2021,3.7297404
+share-electricity-solar,World,2022,4.6100388
+share-electricity-solar,World,2023,5.6097116
+share-electricity-solar,World,2024,6.927365
+share-electricity-solar,World,2025,8.745465
+share-electricity-wind,Africa,1985,0.0
+share-electricity-wind,Africa,1986,0.0
+share-electricity-wind,Africa,1987,0.0
+share-electricity-wind,Africa,1988,0.0
+share-electricity-wind,Africa,1989,0.0
+share-electricity-wind,Africa,1990,0.0
+share-electricity-wind,Africa,1991,0.0
+share-electricity-wind,Africa,1992,0.0
+share-electricity-wind,Africa,1993,0.00058984227
+share-electricity-wind,Africa,1994,0.0015369994
+share-electricity-wind,Africa,1995,0.0017370101
+share-electricity-wind,Africa,1996,0.0018579572
+share-electricity-wind,Africa,1997,0.0017960556
+share-electricity-wind,Africa,1998,0.0018698085
+share-electricity-wind,Africa,1999,0.0047301394
+share-electricity-wind,Africa,2000,0.038542636
+share-electricity-wind,Africa,2001,0.09141364
+share-electricity-wind,Africa,2002,0.09021939
+share-electricity-wind,Africa,2003,0.10409506
+share-electricity-wind,Africa,2004,0.14070426
+share-electricity-wind,Africa,2005,0.13909942
+share-electricity-wind,Africa,2006,0.14485344
+share-electricity-wind,Africa,2007,0.16551137
+share-electricity-wind,Africa,2008,0.21071596
+share-electricity-wind,Africa,2009,0.25617212
+share-electricity-wind,Africa,2010,0.33907884
+share-electricity-wind,Africa,2011,0.34994483
+share-electricity-wind,Africa,2012,0.35701978
+share-electricity-wind,Africa,2013,0.51693195
+share-electricity-wind,Africa,2014,0.6731245
+share-electricity-wind,Africa,2015,1.1366657
+share-electricity-wind,Africa,2016,1.3911641
+share-electricity-wind,Africa,2017,1.6278675
+share-electricity-wind,Africa,2018,1.7388256
+share-electricity-wind,Africa,2019,2.2284122
+share-electricity-wind,Africa,2020,2.2216027
+share-electricity-wind,Africa,2021,2.5613847
+share-electricity-wind,Africa,2022,2.6755636
+share-electricity-wind,Africa,2023,2.9831667
+share-electricity-wind,Africa,2024,2.9435313
+share-electricity-wind,Brazil,1985,0.0
+share-electricity-wind,Brazil,1986,0.0
+share-electricity-wind,Brazil,1987,0.0
+share-electricity-wind,Brazil,1988,0.0
+share-electricity-wind,Brazil,1989,0.0
+share-electricity-wind,Brazil,1990,0.0
+share-electricity-wind,Brazil,1991,0.0
+share-electricity-wind,Brazil,1992,0.0
+share-electricity-wind,Brazil,1993,0.0
+share-electricity-wind,Brazil,1994,0.0
+share-electricity-wind,Brazil,1995,0.0
+share-electricity-wind,Brazil,1996,0.0006867058
+share-electricity-wind,Brazil,1997,0.0012987824
+share-electricity-wind,Brazil,1998,0.0015540081
+share-electricity-wind,Brazil,1999,0.00059750327
+share-electricity-wind,Brazil,2000,0.0
+share-electricity-wind,Brazil,2001,0.00913103
+share-electricity-wind,Brazil,2002,0.017355084
+share-electricity-wind,Brazil,2003,0.016465873
+share-electricity-wind,Brazil,2004,0.015484271
+share-electricity-wind,Brazil,2005,0.022328628
+share-electricity-wind,Brazil,2006,0.05721778
+share-electricity-wind,Brazil,2007,0.14826463
+share-electricity-wind,Brazil,2008,0.25476056
+share-electricity-wind,Brazil,2009,0.26599738
+share-electricity-wind,Brazil,2010,0.42264447
+share-electricity-wind,Brazil,2011,0.5077478
+share-electricity-wind,Brazil,2012,0.91402715
+share-electricity-wind,Brazil,2013,1.1527075
+share-electricity-wind,Brazil,2014,2.0675642
+share-electricity-wind,Brazil,2015,3.7214825
+share-electricity-wind,Brazil,2016,5.7852097
+share-electricity-wind,Brazil,2017,7.189642
+share-electricity-wind,Brazil,2018,8.061324
+share-electricity-wind,Brazil,2019,8.840573
+share-electricity-wind,Brazil,2020,9.073414
+share-electricity-wind,Brazil,2021,11.013102
+share-electricity-wind,Brazil,2022,12.054758
+share-electricity-wind,Brazil,2023,13.528781
+share-electricity-wind,Brazil,2024,14.548356
+share-electricity-wind,Brazil,2025,15.666262
+share-electricity-wind,China,1985,0.0
+share-electricity-wind,China,1986,0.0
+share-electricity-wind,China,1987,0.0
+share-electricity-wind,China,1988,0.0
+share-electricity-wind,China,1989,0.0
+share-electricity-wind,China,1990,0.0003252096
+share-electricity-wind,China,1991,0.0013417326
+share-electricity-wind,China,1992,0.01741692
+share-electricity-wind,China,1993,0.026136499
+share-electricity-wind,China,1994,0.041370813
+share-electricity-wind,China,1995,0.061186023
+share-electricity-wind,China,1996,0.008687554
+share-electricity-wind,China,1997,0.017434705
+share-electricity-wind,China,1998,0.030467486
+share-electricity-wind,China,1999,0.038226206
+share-electricity-wind,China,2000,0.043523163
+share-electricity-wind,China,2001,0.048622694
+share-electricity-wind,China,2002,0.050785664
+share-electricity-wind,China,2003,0.052340128
+share-electricity-wind,China,2004,0.05809441
+share-electricity-wind,China,2005,0.07799189
+share-electricity-wind,China,2006,0.12946136
+share-electricity-wind,China,2007,0.16699477
+share-electricity-wind,China,2008,0.3747397
+share-electricity-wind,China,2009,0.7432753
+share-electricity-wind,China,2010,1.1741887
+share-electricity-wind,China,2011,1.5722402
+share-electricity-wind,China,2012,2.066149
+share-electricity-wind,China,2013,2.5454605
+share-electricity-wind,China,2014,2.7571208
+share-electricity-wind,China,2015,3.191804
+share-electricity-wind,China,2016,3.927176
+share-electricity-wind,China,2017,4.612049
+share-electricity-wind,China,2018,5.104561
+share-electricity-wind,China,2019,5.4015293
+share-electricity-wind,China,2020,5.996861
+share-electricity-wind,China,2021,7.684322
+share-electricity-wind,China,2022,8.618997
+share-electricity-wind,China,2023,9.367891
+share-electricity-wind,China,2024,9.884523
+share-electricity-wind,China,2025,10.7285385
+share-electricity-wind,European Union (27),1985,0.0028372013
+share-electricity-wind,European Union (27),1986,0.0064350637
+share-electricity-wind,European Union (27),1987,0.00888246
+share-electricity-wind,European Union (27),1988,0.015000141
+share-electricity-wind,European Union (27),1989,0.022535488
+share-electricity-wind,European Union (27),1990,0.034223747
+share-electricity-wind,European Union (27),1991,0.04705534
+share-electricity-wind,European Union (27),1992,0.06669124
+share-electricity-wind,European Union (27),1993,0.09343949
+share-electricity-wind,European Union (27),1994,0.13653056
+share-electricity-wind,European Union (27),1995,0.15443109
+share-electricity-wind,European Union (27),1996,0.17758246
+share-electricity-wind,European Union (27),1997,0.26936352
+share-electricity-wind,European Union (27),1998,0.41081324
+share-electricity-wind,European Union (27),1999,0.52235883
+share-electricity-wind,European Union (27),2004,2.006591
+share-electricity-wind,European Union (27),2005,2.3609843
+share-electricity-wind,European Union (27),2006,2.685596
+share-electricity-wind,European Union (27),2007,3.3907676
+share-electricity-wind,European Union (27),2008,3.8266358
+share-electricity-wind,European Union (27),2009,4.4371405
+share-electricity-wind,European Union (27),2010,4.7488747
+share-electricity-wind,European Union (27),2011,5.6867723
+share-electricity-wind,European Union (27),2012,6.4595346
+share-electricity-wind,European Union (27),2013,7.2667313
+share-electricity-wind,European Union (27),2014,7.87773
+share-electricity-wind,European Union (27),2015,9.172337
+share-electricity-wind,European Union (27),2016,9.231168
+share-electricity-wind,European Union (27),2017,10.688749
+share-electricity-wind,European Union (27),2018,11.02791
+share-electricity-wind,European Union (27),2019,12.777527
+share-electricity-wind,European Union (27),2020,14.462295
+share-electricity-wind,European Union (27),2021,13.45883
+share-electricity-wind,European Union (27),2022,15.187453
+share-electricity-wind,European Union (27),2023,17.639288
+share-electricity-wind,European Union (27),2024,17.712688
+share-electricity-wind,European Union (27),2025,17.11779
+share-electricity-wind,France,1990,0.0
+share-electricity-wind,France,1991,0.0
+share-electricity-wind,France,1992,0.0
+share-electricity-wind,France,1993,0.0
+share-electricity-wind,France,1994,0.0
+share-electricity-wind,France,1995,0.0
+share-electricity-wind,France,1996,0.001969318
+share-electricity-wind,France,1997,0.0020027638
+share-electricity-wind,France,1998,0.003953116
+share-electricity-wind,France,1999,0.0076991185
+share-electricity-wind,France,2000,0.0093886135
+share-electricity-wind,France,2001,0.023958718
+share-electricity-wind,France,2002,0.048980482
+share-electricity-wind,France,2003,0.06975122
+share-electricity-wind,France,2004,0.10418506
+share-electricity-wind,France,2005,0.16867554
+share-electricity-wind,France,2006,0.38427642
+share-electricity-wind,France,2007,0.7244055
+share-electricity-wind,France,2008,1.0035628
+share-electricity-wind,France,2009,1.4956416
+share-electricity-wind,France,2010,1.7675511
+share-electricity-wind,France,2011,2.1791596
+share-electricity-wind,France,2012,2.6745129
+share-electricity-wind,France,2013,2.7984395
+share-electricity-wind,France,2014,3.0583956
+share-electricity-wind,France,2015,3.7307973
+share-electricity-wind,France,2016,3.8257816
+share-electricity-wind,France,2017,4.42833
+share-electricity-wind,France,2018,4.96321
+share-electricity-wind,France,2019,6.139482
+share-electricity-wind,France,2020,7.596017
+share-electricity-wind,France,2021,6.745289
+share-electricity-wind,France,2022,8.154552
+share-electricity-wind,France,2023,9.731084
+share-electricity-wind,France,2024,8.086795
+share-electricity-wind,France,2025,8.156427
+share-electricity-wind,Germany,1986,0.00019100118
+share-electricity-wind,Germany,1987,0.00037562777
+share-electricity-wind,Germany,1988,0.0014558902
+share-electricity-wind,Germany,1989,0.0046439106
+share-electricity-wind,Germany,1990,0.0129089365
+share-electricity-wind,Germany,1991,0.041043244
+share-electricity-wind,Germany,1992,0.054330513
+share-electricity-wind,Germany,1993,0.12866801
+share-electricity-wind,Germany,1994,0.27444583
+share-electricity-wind,Germany,1995,0.32220381
+share-electricity-wind,Germany,1996,0.37940282
+share-electricity-wind,Germany,1997,0.55456924
+share-electricity-wind,Germany,1998,0.8356698
+share-electricity-wind,Germany,1999,1.0067909
+share-electricity-wind,Germany,2000,1.6433781
+share-electricity-wind,Germany,2001,1.8067503
+share-electricity-wind,Germany,2002,2.7168698
+share-electricity-wind,Germany,2003,3.1709383
+share-electricity-wind,Germany,2004,4.268373
+share-electricity-wind,Germany,2005,4.527668
+share-electricity-wind,Germany,2006,4.9698505
+share-electricity-wind,Germany,2007,6.418951
+share-electricity-wind,Germany,2008,6.5444655
+share-electricity-wind,Germany,2009,6.7045374
+share-electricity-wind,Germany,2010,6.175806
+share-electricity-wind,Germany,2011,8.2413225
+share-electricity-wind,Germany,2012,8.338039
+share-electricity-wind,Germany,2013,8.37555
+share-electricity-wind,Germany,2014,9.454545
+share-electricity-wind,Germany,2015,12.613234
+share-electricity-wind,Germany,2016,12.4579115
+share-electricity-wind,Germany,2017,16.399776
+share-electricity-wind,Germany,2018,17.389446
+share-electricity-wind,Germany,2019,20.97852
+share-electricity-wind,Germany,2020,23.310102
+share-electricity-wind,Germany,2021,19.722544
+share-electricity-wind,Germany,2022,22.017004
+share-electricity-wind,Germany,2023,27.735237
+share-electricity-wind,Germany,2024,28.548964
+share-electricity-wind,Germany,2025,27.18045
+share-electricity-wind,India,1985,0.0
+share-electricity-wind,India,1986,0.0
+share-electricity-wind,India,1987,0.0
+share-electricity-wind,India,1988,0.0
+share-electricity-wind,India,1989,0.0
+share-electricity-wind,India,1990,0.0105305575
+share-electricity-wind,India,1991,0.035233986
+share-electricity-wind,India,1992,0.026240287
+share-electricity-wind,India,1993,0.026166819
+share-electricity-wind,India,1994,0.049303167
+share-electricity-wind,India,1995,0.11622883
+share-electricity-wind,India,1996,0.198188
+share-electricity-wind,India,1997,0.21059203
+share-electricity-wind,India,1998,0.21363018
+share-electricity-wind,India,1999,0.26417595
+share-electricity-wind,India,2000,0.27651867
+share-electricity-wind,India,2001,0.3566005
+share-electricity-wind,India,2002,0.34282526
+share-electricity-wind,India,2003,0.40744048
+share-electricity-wind,India,2004,0.7489403
+share-electricity-wind,India,2005,0.8502242
+share-electricity-wind,India,2006,1.2546512
+share-electricity-wind,India,2007,1.4668576
+share-electricity-wind,India,2008,1.7358555
+share-electricity-wind,India,2009,1.8517466
+share-electricity-wind,India,2010,2.078194
+share-electricity-wind,India,2011,2.3200173
+share-electricity-wind,India,2012,2.5201669
+share-electricity-wind,India,2013,2.629619
+share-electricity-wind,India,2014,2.657546
+share-electricity-wind,India,2015,2.4981687
+share-electricity-wind,India,2016,3.1148515
+share-electricity-wind,India,2017,3.5989032
+share-electricity-wind,India,2018,3.8373685
+share-electricity-wind,India,2019,3.954453
+share-electricity-wind,India,2020,3.8652194
+share-electricity-wind,India,2021,4.0560665
+share-electricity-wind,India,2022,3.8817253
+share-electricity-wind,India,2023,4.2804418
+share-electricity-wind,India,2024,4.003889
+share-electricity-wind,India,2025,4.995196
+share-electricity-wind,Japan,1985,0.0
+share-electricity-wind,Japan,1986,0.0
+share-electricity-wind,Japan,1987,0.0
+share-electricity-wind,Japan,1988,0.0
+share-electricity-wind,Japan,1989,0.0
+share-electricity-wind,Japan,1990,0.0
+share-electricity-wind,Japan,1991,0.0
+share-electricity-wind,Japan,1992,0.0
+share-electricity-wind,Japan,1993,0.00010361655
+share-electricity-wind,Japan,1994,9.7471086e-05
+share-electricity-wind,Japan,1995,9.49268e-05
+share-electricity-wind,Japan,1996,0.00018635519
+share-electricity-wind,Japan,1997,9.096869e-05
+share-electricity-wind,Japan,1998,0.00066726
+share-electricity-wind,Japan,1999,0.0033696804
+share-electricity-wind,Japan,2000,0.0100030005
+share-electricity-wind,Japan,2001,0.023081042
+share-electricity-wind,Japan,2002,0.037168995
+share-electricity-wind,Japan,2003,0.07596628
+share-electricity-wind,Japan,2004,0.12843497
+share-electricity-wind,Japan,2005,0.16564476
+share-electricity-wind,Japan,2006,0.1829347
+share-electricity-wind,Japan,2007,0.23218174
+share-electricity-wind,Japan,2008,0.24837376
+share-electricity-wind,Japan,2009,0.30789393
+share-electricity-wind,Japan,2010,0.33995363
+share-electricity-wind,Japan,2011,0.40391237
+share-electricity-wind,Japan,2012,0.42732728
+share-electricity-wind,Japan,2013,0.47161138
+share-electricity-wind,Japan,2014,0.47143182
+share-electricity-wind,Japan,2015,0.50673705
+share-electricity-wind,Japan,2016,0.5020213
+share-electricity-wind,Japan,2017,0.57760525
+share-electricity-wind,Japan,2018,0.680561
+share-electricity-wind,Japan,2019,0.7122398
+share-electricity-wind,Japan,2020,0.83182496
+share-electricity-wind,Japan,2021,0.9220331
+share-electricity-wind,Japan,2022,0.90527314
+share-electricity-wind,Japan,2023,0.98934174
+share-electricity-wind,Japan,2024,1.1353909
+share-electricity-wind,Japan,2025,1.2477424
+share-electricity-wind,Russia,1990,0.0
+share-electricity-wind,Russia,1991,0.0
+share-electricity-wind,Russia,1992,0.0
+share-electricity-wind,Russia,1993,0.0
+share-electricity-wind,Russia,1994,0.0
+share-electricity-wind,Russia,1995,0.0
+share-electricity-wind,Russia,1996,0.0
+share-electricity-wind,Russia,1997,0.0
+share-electricity-wind,Russia,1998,0.0
+share-electricity-wind,Russia,1999,0.0
+share-electricity-wind,Russia,2000,0.0
+share-electricity-wind,Russia,2001,0.0
+share-electricity-wind,Russia,2002,0.0011219818
+share-electricity-wind,Russia,2003,0.0010913576
+share-electricity-wind,Russia,2004,0.001073065
+share-electricity-wind,Russia,2005,0.0010480972
+share-electricity-wind,Russia,2006,0.0010079426
+share-electricity-wind,Russia,2007,0.0009816432
+share-electricity-wind,Russia,2008,0.00096153846
+share-electricity-wind,Russia,2009,0.0
+share-electricity-wind,Russia,2010,0.0
+share-electricity-wind,Russia,2011,0.0009479931
+share-electricity-wind,Russia,2012,0.0009352174
+share-electricity-wind,Russia,2013,0.0
+share-electricity-wind,Russia,2014,0.009396731
+share-electricity-wind,Russia,2015,0.014050864
+share-electricity-wind,Russia,2016,0.013749233
+share-electricity-wind,Russia,2017,0.012830264
+share-electricity-wind,Russia,2018,0.021637412
+share-electricity-wind,Russia,2019,0.027724117
+share-electricity-wind,Russia,2020,0.105028465
+share-electricity-wind,Russia,2021,0.22297701
+share-electricity-wind,Russia,2022,0.35991567
+share-electricity-wind,Russia,2023,0.40314025
+share-electricity-wind,Russia,2024,0.37790143
+share-electricity-wind,Russia,2025,0.30516687
+share-electricity-wind,United Kingdom,1920,0.0
+share-electricity-wind,United Kingdom,1921,0.0
+share-electricity-wind,United Kingdom,1922,0.0
+share-electricity-wind,United Kingdom,1923,0.0
+share-electricity-wind,United Kingdom,1924,0.0
+share-electricity-wind,United Kingdom,1925,0.0
+share-electricity-wind,United Kingdom,1926,0.0
+share-electricity-wind,United Kingdom,1927,0.0
+share-electricity-wind,United Kingdom,1928,0.0
+share-electricity-wind,United Kingdom,1929,0.0
+share-electricity-wind,United Kingdom,1930,0.0
+share-electricity-wind,United Kingdom,1931,0.0
+share-electricity-wind,United Kingdom,1932,0.0
+share-electricity-wind,United Kingdom,1933,0.0
+share-electricity-wind,United Kingdom,1934,0.0
+share-electricity-wind,United Kingdom,1935,0.0
+share-electricity-wind,United Kingdom,1936,0.0
+share-electricity-wind,United Kingdom,1937,0.0
+share-electricity-wind,United Kingdom,1938,0.0
+share-electricity-wind,United Kingdom,1939,0.0
+share-electricity-wind,United Kingdom,1940,0.0
+share-electricity-wind,United Kingdom,1941,0.0
+share-electricity-wind,United Kingdom,1942,0.0
+share-electricity-wind,United Kingdom,1943,0.0
+share-electricity-wind,United Kingdom,1944,0.0
+share-electricity-wind,United Kingdom,1945,0.0
+share-electricity-wind,United Kingdom,1946,0.0
+share-electricity-wind,United Kingdom,1947,0.0
+share-electricity-wind,United Kingdom,1948,0.0
+share-electricity-wind,United Kingdom,1949,0.0
+share-electricity-wind,United Kingdom,1950,0.0
+share-electricity-wind,United Kingdom,1951,0.0
+share-electricity-wind,United Kingdom,1952,0.0
+share-electricity-wind,United Kingdom,1953,0.0
+share-electricity-wind,United Kingdom,1954,0.0
+share-electricity-wind,United Kingdom,1955,0.0
+share-electricity-wind,United Kingdom,1956,0.0
+share-electricity-wind,United Kingdom,1957,0.0
+share-electricity-wind,United Kingdom,1958,0.0
+share-electricity-wind,United Kingdom,1959,0.0
+share-electricity-wind,United Kingdom,1960,0.0
+share-electricity-wind,United Kingdom,1961,0.0
+share-electricity-wind,United Kingdom,1962,0.0
+share-electricity-wind,United Kingdom,1963,0.0
+share-electricity-wind,United Kingdom,1964,0.0
+share-electricity-wind,United Kingdom,1965,0.0
+share-electricity-wind,United Kingdom,1966,0.0
+share-electricity-wind,United Kingdom,1967,0.0
+share-electricity-wind,United Kingdom,1968,0.0
+share-electricity-wind,United Kingdom,1969,0.0
+share-electricity-wind,United Kingdom,1970,0.0
+share-electricity-wind,United Kingdom,1971,0.0
+share-electricity-wind,United Kingdom,1972,0.0
+share-electricity-wind,United Kingdom,1973,0.0
+share-electricity-wind,United Kingdom,1974,0.0
+share-electricity-wind,United Kingdom,1975,0.0
+share-electricity-wind,United Kingdom,1976,0.0
+share-electricity-wind,United Kingdom,1977,0.0
+share-electricity-wind,United Kingdom,1978,0.0
+share-electricity-wind,United Kingdom,1979,0.0
+share-electricity-wind,United Kingdom,1980,0.0
+share-electricity-wind,United Kingdom,1981,0.0
+share-electricity-wind,United Kingdom,1982,0.0
+share-electricity-wind,United Kingdom,1983,0.0
+share-electricity-wind,United Kingdom,1984,0.0
+share-electricity-wind,United Kingdom,1985,0.0
+share-electricity-wind,United Kingdom,1986,0.0
+share-electricity-wind,United Kingdom,1987,0.0
+share-electricity-wind,United Kingdom,1988,0.0
+share-electricity-wind,United Kingdom,1989,0.002860912
+share-electricity-wind,United Kingdom,1990,0.0031274431
+share-electricity-wind,United Kingdom,1991,0.0030971258
+share-electricity-wind,United Kingdom,1992,0.00934463
+share-electricity-wind,United Kingdom,1993,0.06808827
+share-electricity-wind,United Kingdom,1994,0.104115635
+share-electricity-wind,United Kingdom,1995,0.11558294
+share-electricity-wind,United Kingdom,1996,0.13965286
+share-electricity-wind,United Kingdom,1997,0.19106282
+share-electricity-wind,United Kingdom,1998,0.24261807
+share-electricity-wind,United Kingdom,1999,0.23088416
+share-electricity-wind,United Kingdom,2000,0.2492972
+share-electricity-wind,United Kingdom,2001,0.24949971
+share-electricity-wind,United Kingdom,2002,0.32279724
+share-electricity-wind,United Kingdom,2003,0.32394966
+share-electricity-wind,United Kingdom,2004,0.4924858
+share-electricity-wind,United Kingdom,2005,0.728003
+share-electricity-wind,United Kingdom,2006,1.0622498
+share-electricity-wind,United Kingdom,2007,1.3280915
+share-electricity-wind,United Kingdom,2008,1.8330934
+share-electricity-wind,United Kingdom,2009,2.4631064
+share-electricity-wind,United Kingdom,2010,2.6932943
+share-electricity-wind,United Kingdom,2011,4.3373103
+share-electricity-wind,United Kingdom,2012,5.452497
+share-electricity-wind,United Kingdom,2013,7.926761
+share-electricity-wind,United Kingdom,2014,9.450426
+share-electricity-wind,United Kingdom,2015,11.883614
+share-electricity-wind,United Kingdom,2016,10.955834
+share-electricity-wind,United Kingdom,2017,14.679794
+share-electricity-wind,United Kingdom,2018,17.051174
+share-electricity-wind,United Kingdom,2019,19.511599
+share-electricity-wind,United Kingdom,2020,24.369967
+share-electricity-wind,United Kingdom,2021,21.088017
+share-electricity-wind,United Kingdom,2022,24.711937
+share-electricity-wind,United Kingdom,2023,28.08259
+share-electricity-wind,United Kingdom,2024,29.307432
+share-electricity-wind,United Kingdom,2025,29.366083
+share-electricity-wind,United States,1985,0.00021903927
+share-electricity-wind,United States,1986,0.00015811413
+share-electricity-wind,United States,1987,0.00012902248
+share-electricity-wind,United States,1988,3.018749e-05
+share-electricity-wind,United States,1989,0.06760928
+share-electricity-wind,United States,1990,0.08713145
+share-electricity-wind,United States,1991,0.09113451
+share-electricity-wind,United States,1992,0.08880462
+share-electricity-wind,United States,1993,0.089176975
+share-electricity-wind,United States,1994,0.100676656
+share-electricity-wind,United States,1995,0.089596815
+share-electricity-wind,United States,1996,0.08917259
+share-electricity-wind,United States,1997,0.089367874
+share-electricity-wind,United States,1998,0.07926376
+share-electricity-wind,United States,1999,0.11517324
+share-electricity-wind,United States,2000,0.14702402
+share-electricity-wind,United States,2001,0.18081483
+share-electricity-wind,United States,2002,0.2692347
+share-electricity-wind,United States,2003,0.2892265
+share-electricity-wind,United States,2004,0.35779807
+share-electricity-wind,United States,2005,0.44138893
+share-electricity-wind,United States,2006,0.65703964
+share-electricity-wind,United States,2007,0.8316094
+share-electricity-wind,United States,2008,1.3477687
+share-electricity-wind,United States,2009,1.8754663
+share-electricity-wind,United States,2010,2.3007143
+share-electricity-wind,United States,2011,2.9391983
+share-electricity-wind,United States,2012,3.485066
+share-electricity-wind,United States,2013,4.138465
+share-electricity-wind,United States,2014,4.434804
+share-electricity-wind,United States,2015,4.669943
+share-electricity-wind,United States,2016,5.5531907
+share-electricity-wind,United States,2017,6.275433
+share-electricity-wind,United States,2018,6.4897485
+share-electricity-wind,United States,2019,7.115271
+share-electricity-wind,United States,2020,8.358273
+share-electricity-wind,United States,2021,9.10531
+share-electricity-wind,United States,2022,10.130887
+share-electricity-wind,United States,2023,9.900068
+share-electricity-wind,United States,2024,10.291458
+share-electricity-wind,United States,2025,10.274592
+share-electricity-wind,World,1900,0.0
+share-electricity-wind,World,1901,0.0
+share-electricity-wind,World,1902,0.0
+share-electricity-wind,World,1903,0.0
+share-electricity-wind,World,1904,0.0
+share-electricity-wind,World,1905,0.0
+share-electricity-wind,World,1906,0.0
+share-electricity-wind,World,1907,0.0
+share-electricity-wind,World,1908,0.0
+share-electricity-wind,World,1909,0.0
+share-electricity-wind,World,1910,0.0
+share-electricity-wind,World,1911,0.0
+share-electricity-wind,World,1912,0.0
+share-electricity-wind,World,1913,0.0
+share-electricity-wind,World,1914,0.0
+share-electricity-wind,World,1915,0.0
+share-electricity-wind,World,1916,0.0
+share-electricity-wind,World,1917,0.0
+share-electricity-wind,World,1918,0.0
+share-electricity-wind,World,1919,0.0
+share-electricity-wind,World,1920,0.0
+share-electricity-wind,World,1921,0.0
+share-electricity-wind,World,1922,0.0
+share-electricity-wind,World,1923,0.0
+share-electricity-wind,World,1924,0.0
+share-electricity-wind,World,1925,0.0
+share-electricity-wind,World,1926,0.0
+share-electricity-wind,World,1927,0.0
+share-electricity-wind,World,1928,0.0
+share-electricity-wind,World,1929,0.0
+share-electricity-wind,World,1930,0.0
+share-electricity-wind,World,1931,0.0
+share-electricity-wind,World,1932,0.0
+share-electricity-wind,World,1933,0.0
+share-electricity-wind,World,1934,0.0
+share-electricity-wind,World,1935,0.0
+share-electricity-wind,World,1936,0.0
+share-electricity-wind,World,1937,0.0
+share-electricity-wind,World,1938,0.0
+share-electricity-wind,World,1939,0.0
+share-electricity-wind,World,1940,0.0
+share-electricity-wind,World,1941,0.0
+share-electricity-wind,World,1942,0.0
+share-electricity-wind,World,1943,0.0
+share-electricity-wind,World,1944,0.0
+share-electricity-wind,World,1945,0.0
+share-electricity-wind,World,1946,0.0
+share-electricity-wind,World,1947,0.0
+share-electricity-wind,World,1948,0.0
+share-electricity-wind,World,1949,0.0
+share-electricity-wind,World,1950,0.0
+share-electricity-wind,World,1951,0.0
+share-electricity-wind,World,1952,0.0
+share-electricity-wind,World,1953,0.0
+share-electricity-wind,World,1954,0.0
+share-electricity-wind,World,1955,0.0
+share-electricity-wind,World,1956,0.0
+share-electricity-wind,World,1957,0.0
+share-electricity-wind,World,1958,0.0
+share-electricity-wind,World,1959,0.0
+share-electricity-wind,World,1960,0.0
+share-electricity-wind,World,1961,0.0
+share-electricity-wind,World,1962,0.0
+share-electricity-wind,World,1963,0.0
+share-electricity-wind,World,1964,0.0
+share-electricity-wind,World,1965,0.0
+share-electricity-wind,World,1966,0.0
+share-electricity-wind,World,1967,0.0
+share-electricity-wind,World,1968,0.0
+share-electricity-wind,World,1969,0.0
+share-electricity-wind,World,1970,0.0
+share-electricity-wind,World,1971,0.0
+share-electricity-wind,World,1972,0.0
+share-electricity-wind,World,1973,0.0
+share-electricity-wind,World,1974,0.0
+share-electricity-wind,World,1975,0.0
+share-electricity-wind,World,1976,0.0
+share-electricity-wind,World,1977,0.0
+share-electricity-wind,World,1978,3.899933e-05
+share-electricity-wind,World,1979,7.477532e-05
+share-electricity-wind,World,1980,0.00012675824
+share-electricity-wind,World,1981,0.00012420255
+share-electricity-wind,World,1982,0.00021662375
+share-electricity-wind,World,1983,0.00036850365
+share-electricity-wind,World,1984,0.00047617394
+share-electricity-wind,World,1985,0.0006496033
+share-electricity-wind,World,1986,0.0013636595
+share-electricity-wind,World,1987,0.0018309773
+share-electricity-wind,World,1988,0.0029763118
+share-electricity-wind,World,1989,0.022729335
+share-electricity-wind,World,1990,0.030368237
+share-electricity-wind,World,1991,0.033430956
+share-electricity-wind,World,1992,0.0383646
+share-electricity-wind,World,1993,0.04527144
+share-electricity-wind,World,1994,0.05518387
+share-electricity-wind,World,1995,0.061815914
+share-electricity-wind,World,1996,0.06679349
+share-electricity-wind,World,1997,0.0851338
+share-electricity-wind,World,1998,0.10977359
+share-electricity-wind,World,1999,0.14221166
+share-electricity-wind,World,2000,0.20387752
+share-electricity-wind,World,2001,0.24637389
+share-electricity-wind,World,2002,0.3253605
+share-electricity-wind,World,2003,0.38008156
+share-electricity-wind,World,2004,0.49084154
+share-electricity-wind,World,2005,0.5757116
+share-electricity-wind,World,2006,0.70704424
+share-electricity-wind,World,2007,0.86816645
+share-electricity-wind,World,2008,1.098612
+share-electricity-wind,World,2009,1.3852125
+share-electricity-wind,World,2010,1.6271354
+share-electricity-wind,World,2011,2.002455
+share-electricity-wind,World,2012,2.3506308
+share-electricity-wind,World,2013,2.7386708
+share-electricity-wind,World,2014,2.9734194
+share-electricity-wind,World,2015,3.4564533
+share-electricity-wind,World,2016,3.8887186
+share-electricity-wind,World,2017,4.478748
+share-electricity-wind,World,2018,4.791855
+share-electricity-wind,World,2019,5.2956834
+share-electricity-wind,World,2020,5.9553494
+share-electricity-wind,World,2021,6.571129
+share-electricity-wind,World,2022,7.288462
+share-electricity-wind,World,2023,7.81781
+share-electricity-wind,World,2024,8.113421
+share-electricity-wind,World,2025,8.539311
+share-electricity-coal,Africa,1985,53.869488
+share-electricity-coal,Africa,1986,52.600204
+share-electricity-coal,Africa,1987,54.316612
+share-electricity-coal,Africa,1988,51.6258
+share-electricity-coal,Africa,1989,51.267487
+share-electricity-coal,Africa,1990,51.65804
+share-electricity-coal,Africa,1991,50.727135
+share-electricity-coal,Africa,1992,50.452843
+share-electricity-coal,Africa,1993,51.893387
+share-electricity-coal,Africa,1994,51.174583
+share-electricity-coal,Africa,1995,51.527397
+share-electricity-coal,Africa,1996,51.62797
+share-electricity-coal,Africa,1997,51.39838
+share-electricity-coal,Africa,1998,49.62315
+share-electricity-coal,Africa,1999,47.730385
+share-electricity-coal,Africa,2000,47.95611
+share-electricity-coal,Africa,2001,47.16944
+share-electricity-coal,Africa,2002,46.085705
+share-electricity-coal,Africa,2003,46.697437
+share-electricity-coal,Africa,2004,46.036213
+share-electricity-coal,Africa,2005,44.832813
+share-electricity-coal,Africa,2006,44.050785
+share-electricity-coal,Africa,2007,43.432808
+share-electricity-coal,Africa,2008,41.800575
+share-electricity-coal,Africa,2009,40.052513
+share-electricity-coal,Africa,2010,38.61632
+share-electricity-coal,Africa,2011,38.1556
+share-electricity-coal,Africa,2012,35.532425
+share-electricity-coal,Africa,2013,34.22818
+share-electricity-coal,Africa,2014,33.22397
+share-electricity-coal,Africa,2015,32.238018
+share-electricity-coal,Africa,2016,31.854057
+share-electricity-coal,Africa,2017,31.142656
+share-electricity-coal,Africa,2018,30.973999
+share-electricity-coal,Africa,2019,30.158909
+share-electricity-coal,Africa,2020,29.238523
+share-electricity-coal,Africa,2021,27.46202
+share-electricity-coal,Africa,2022,26.117617
+share-electricity-coal,Africa,2023,24.882637
+share-electricity-coal,Africa,2024,25.49778
+share-electricity-coal,Brazil,1985,2.5531232
+share-electricity-coal,Brazil,1986,3.059548
+share-electricity-coal,Brazil,1987,2.6606712
+share-electricity-coal,Brazil,1988,2.193346
+share-electricity-coal,Brazil,1989,2.4572637
+share-electricity-coal,Brazil,1990,2.0736642
+share-electricity-coal,Brazil,1991,2.3610578
+share-electricity-coal,Brazil,1992,2.071243
+share-electricity-coal,Brazil,1993,1.9478256
+share-electricity-coal,Brazil,1994,1.9114972
+share-electricity-coal,Brazil,1995,1.9747455
+share-electricity-coal,Brazil,1996,2.0689547
+share-electricity-coal,Brazil,1997,2.3736134
+share-electricity-coal,Brazil,1998,2.1674154
+share-electricity-coal,Brazil,1999,2.902364
+share-electricity-coal,Brazil,2000,3.1324337
+share-electricity-coal,Brazil,2001,3.3723938
+share-electricity-coal,Brazil,2002,2.6379728
+share-electricity-coal,Brazil,2003,2.4726255
+share-electricity-coal,Brazil,2004,2.6761982
+share-electricity-coal,Brazil,2005,2.649664
+share-electricity-coal,Brazil,2006,2.496126
+share-electricity-coal,Brazil,2007,2.2644053
+share-electricity-coal,Brazil,2008,2.5821495
+share-electricity-coal,Brazil,2009,2.1387048
+share-electricity-coal,Brazil,2010,2.188833
+share-electricity-coal,Brazil,2011,2.36949
+share-electricity-coal,Brazil,2012,2.6190045
+share-electricity-coal,Brazil,2013,3.8487813
+share-electricity-coal,Brazil,2014,4.5550756
+share-electricity-coal,Brazil,2015,4.64196
+share-electricity-coal,Brazil,2016,4.4343486
+share-electricity-coal,Brazil,2017,3.87735
+share-electricity-coal,Brazil,2018,3.458654
+share-electricity-coal,Brazil,2019,3.4231758
+share-electricity-coal,Brazil,2020,2.8230166
+share-electricity-coal,Brazil,2021,3.6928701
+share-electricity-coal,Brazil,2022,2.1265285
+share-electricity-coal,Brazil,2023,1.879625
+share-electricity-coal,Brazil,2024,2.173738
+share-electricity-coal,Brazil,2025,2.2903814
+share-electricity-coal,China,1985,63.465252
+share-electricity-coal,China,1986,66.64969
+share-electricity-coal,China,1987,68.345924
+share-electricity-coal,China,1988,68.53377
+share-electricity-coal,China,1989,69.26353
+share-electricity-coal,China,1990,71.032036
+share-electricity-coal,China,1991,73.56416
+share-electricity-coal,China,1992,75.24864
+share-electricity-coal,China,1993,72.60174
+share-electricity-coal,China,1994,74.73684
+share-electricity-coal,China,1995,73.670685
+share-electricity-coal,China,1996,76.22089
+share-electricity-coal,China,1997,76.353
+share-electricity-coal,China,1998,76.40738
+share-electricity-coal,China,1999,78.24453
+share-electricity-coal,China,2000,78.21334
+share-electricity-coal,China,2001,76.25254
+share-electricity-coal,China,2002,77.54306
+share-electricity-coal,China,2003,79.55542
+share-electricity-coal,China,2004,78.1742
+share-electricity-coal,China,2005,79.19776
+share-electricity-coal,China,2006,80.343506
+share-electricity-coal,China,2007,80.95894
+share-electricity-coal,China,2008,77.4913
+share-electricity-coal,China,2009,78.3796
+share-electricity-coal,China,2010,76.85945
+share-electricity-coal,China,2011,78.31221
+share-electricity-coal,China,2012,75.15108
+share-electricity-coal,China,2013,75.067154
+share-electricity-coal,China,2014,72.53596
+share-electricity-coal,China,2015,69.586624
+share-electricity-coal,China,2016,67.76849
+share-electricity-coal,China,2017,67.07654
+share-electricity-coal,China,2018,66.47721
+share-electricity-coal,China,2019,64.705345
+share-electricity-coal,China,2020,63.270935
+share-electricity-coal,China,2021,62.49868
+share-electricity-coal,China,2022,61.1922
+share-electricity-coal,China,2023,60.834034
+share-electricity-coal,China,2024,57.77406
+share-electricity-coal,China,2025,54.34531
+share-electricity-coal,European Union (27),1985,39.172535
+share-electricity-coal,European Union (27),1986,38.22415
+share-electricity-coal,European Union (27),1987,37.24467
+share-electricity-coal,European Union (27),1988,36.18226
+share-electricity-coal,European Union (27),1989,36.605167
+share-electricity-coal,European Union (27),1990,35.29446
+share-electricity-coal,European Union (27),1991,34.612255
+share-electricity-coal,European Union (27),1992,33.649677
+share-electricity-coal,European Union (27),1993,32.845078
+share-electricity-coal,European Union (27),1994,32.850723
+share-electricity-coal,European Union (27),1995,32.56104
+share-electricity-coal,European Union (27),1996,32.136745
+share-electricity-coal,European Union (27),1997,30.840916
+share-electricity-coal,European Union (27),1998,30.583641
+share-electricity-coal,European Union (27),1999,29.71141
+share-electricity-coal,European Union (27),2000,30.521553
+share-electricity-coal,European Union (27),2001,29.37916
+share-electricity-coal,European Union (27),2002,29.915653
+share-electricity-coal,European Union (27),2003,30.323618
+share-electricity-coal,European Union (27),2004,29.13358
+share-electricity-coal,European Union (27),2005,28.04371
+share-electricity-coal,European Union (27),2006,27.84494
+share-electricity-coal,European Union (27),2007,28.114706
+share-electricity-coal,European Union (27),2008,25.576563
+share-electricity-coal,European Union (27),2009,25.052164
+share-electricity-coal,European Union (27),2010,23.805483
+share-electricity-coal,European Union (27),2011,24.918863
+share-electricity-coal,European Union (27),2012,25.579136
+share-electricity-coal,European Union (27),2013,25.276644
+share-electricity-coal,European Union (27),2014,24.532654
+share-electricity-coal,European Union (27),2015,24.562338
+share-electricity-coal,European Union (27),2016,22.79726
+share-electricity-coal,European Union (27),2017,21.85646
+share-electricity-coal,European Union (27),2018,20.475
+share-electricity-coal,European Union (27),2019,15.68238
+share-electricity-coal,European Union (27),2020,12.797621
+share-electricity-coal,European Union (27),2021,14.573964
+share-electricity-coal,European Union (27),2022,16.145153
+share-electricity-coal,European Union (27),2023,11.755221
+share-electricity-coal,European Union (27),2024,9.770267
+share-electricity-coal,European Union (27),2025,9.180613
+share-electricity-coal,France,1985,12.031106
+share-electricity-coal,France,1986,8.580546
+share-electricity-coal,France,1987,7.26552
+share-electricity-coal,France,1988,6.3886294
+share-electricity-coal,France,1989,8.005433
+share-electricity-coal,France,1990,7.564176
+share-electricity-coal,France,1991,8.795577
+share-electricity-coal,France,1992,7.4649973
+share-electricity-coal,France,1993,4.4779625
+share-electricity-coal,France,1994,4.4200997
+share-electricity-coal,France,1995,4.940643
+share-electricity-coal,France,1996,5.521968
+share-electricity-coal,France,1997,4.44213
+share-electricity-coal,France,1998,6.627399
+share-electricity-coal,France,1999,5.635755
+share-electricity-coal,France,2000,5.0698514
+share-electricity-coal,France,2001,3.7744195
+share-electricity-coal,France,2002,4.2921414
+share-electricity-coal,France,2003,4.6965823
+share-electricity-coal,France,2004,4.303373
+share-electricity-coal,France,2005,4.8336086
+share-electricity-coal,France,2006,4.034902
+share-electricity-coal,France,2007,4.351773
+share-electricity-coal,France,2008,4.067163
+share-electricity-coal,France,2009,4.0974154
+share-electricity-coal,France,2010,4.153923
+share-electricity-coal,France,2011,3.0635073
+share-electricity-coal,France,2012,3.7809646
+share-electricity-coal,France,2013,4.133507
+share-electricity-coal,France,2014,1.9883103
+share-electricity-coal,France,2015,2.0709236
+share-electricity-coal,France,2016,1.8305775
+share-electricity-coal,France,2017,2.3050349
+share-electricity-coal,France,2018,1.4421076
+share-electricity-coal,France,2019,0.6436554
+share-electricity-coal,France,2020,0.58605975
+share-electricity-coal,France,2021,0.98853374
+share-electricity-coal,France,2022,0.88803494
+share-electricity-coal,France,2023,0.31036144
+share-electricity-coal,France,2024,0.18156573
+share-electricity-coal,France,2025,0.3052739
+share-electricity-coal,Germany,1985,59.877445
+share-electricity-coal,Germany,1986,60.224964
+share-electricity-coal,Germany,1987,57.936638
+share-electricity-coal,Germany,1988,56.48581
+share-electricity-coal,Germany,1989,55.924114
+share-electricity-coal,Germany,1990,57.175526
+share-electricity-coal,Germany,1991,57.39898
+share-electricity-coal,Germany,1992,55.392773
+share-electricity-coal,Germany,1993,56.316257
+share-electricity-coal,Germany,1994,55.712505
+share-electricity-coal,Germany,1995,54.480713
+share-electricity-coal,Germany,1996,53.990112
+share-electricity-coal,Germany,1997,52.041656
+share-electricity-coal,Germany,1998,53.209774
+share-electricity-coal,Germany,1999,51.207962
+share-electricity-coal,Germany,2000,52.145176
+share-electricity-coal,Germany,2001,50.737553
+share-electricity-coal,Germany,2002,51.32246
+share-electricity-coal,Germany,2003,50.600468
+share-electricity-coal,Germany,2004,49.010826
+share-electricity-coal,Germany,2005,46.978836
+share-electricity-coal,Germany,2006,45.847347
+share-electricity-coal,Germany,2007,47.076534
+share-electricity-coal,Germany,2008,43.525913
+share-electricity-coal,Germany,2009,43.10667
+share-electricity-coal,Germany,2010,42.115635
+share-electricity-coal,Germany,2011,43.381817
+share-electricity-coal,Germany,2012,44.566887
+share-electricity-coal,Germany,2013,45.768555
+share-electricity-coal,Germany,2014,44.34909
+share-electricity-coal,Germany,2015,42.586483
+share-electricity-coal,Germany,2016,40.801533
+share-electricity-coal,Germany,2017,37.43599
+share-electricity-coal,Germany,2018,36.085278
+share-electricity-coal,Germany,2019,28.570713
+share-electricity-coal,Germany,2020,23.749449
+share-electricity-coal,Germany,2021,28.44531
+share-electricity-coal,Germany,2022,31.740402
+share-electricity-coal,Germany,2023,24.62504
+share-electricity-coal,Germany,2024,21.437933
+share-electricity-coal,Germany,2025,20.610626
+share-electricity-coal,India,1985,62.257416
+share-electricity-coal,India,1986,64.09305
+share-electricity-coal,India,1987,68.31509
+share-electricity-coal,India,1988,68.244026
+share-electricity-coal,India,1989,67.89408
+share-electricity-coal,India,1990,66.59408
+share-electricity-coal,India,1991,66.816315
+share-electricity-coal,India,1992,68.04382
+share-electricity-coal,India,1993,69.79585
+share-electricity-coal,India,1994,68.204
+share-electricity-coal,India,1995,69.36506
+share-electricity-coal,India,1996,70.44905
+share-electricity-coal,India,1997,69.449974
+share-electricity-coal,India,1998,66.62015
+share-electricity-coal,India,1999,66.76307
+share-electricity-coal,India,2000,68.29486
+share-electricity-coal,India,2001,69.66336
+share-electricity-coal,India,2002,69.99213
+share-electricity-coal,India,2003,69.18183
+share-electricity-coal,India,2004,66.30341
+share-electricity-coal,India,2005,67.91574
+share-electricity-coal,India,2006,67.898926
+share-electricity-coal,India,2007,66.97185
+share-electricity-coal,India,2008,69.183136
+share-electricity-coal,India,2009,69.5526
+share-electricity-coal,India,2010,68.664764
+share-electricity-coal,India,2011,67.92952
+share-electricity-coal,India,2012,72.31859
+share-electricity-coal,India,2013,74.30316
+share-electricity-coal,India,2014,75.47033
+share-electricity-coal,India,2015,76.80304
+share-electricity-coal,India,2016,76.96443
+share-electricity-coal,India,2017,76.26146
+share-electricity-coal,India,2018,76.28034
+share-electricity-coal,India,2019,74.87664
+share-electricity-coal,India,2020,73.15838
+share-electricity-coal,India,2021,74.7927
+share-electricity-coal,India,2022,74.4992
+share-electricity-coal,India,2023,75.351616
+share-electricity-coal,India,2024,74.53401
+share-electricity-coal,India,2025,70.818115
+share-electricity-coal,Japan,1985,14.782898
+share-electricity-coal,Japan,1986,14.603738
+share-electricity-coal,Japan,1987,14.926356
+share-electricity-coal,Japan,1988,14.885709
+share-electricity-coal,Japan,1989,14.612524
+share-electricity-coal,Japan,1990,13.531984
+share-electricity-coal,Japan,1991,13.779386
+share-electricity-coal,Japan,1992,14.395341
+share-electricity-coal,Japan,1993,15.141976
+share-electricity-coal,Japan,1994,15.931768
+share-electricity-coal,Japan,1995,16.678617
+share-electricity-coal,Japan,1996,17.327097
+share-electricity-coal,Japan,1997,17.835005
+share-electricity-coal,Japan,1998,18.14089
+share-electricity-coal,Japan,1999,19.60937
+share-electricity-coal,Japan,2000,21.66468
+share-electricity-coal,Japan,2001,23.44203
+share-electricity-coal,Japan,2002,23.971283
+share-electricity-coal,Japan,2003,26.73098
+share-electricity-coal,Japan,2004,26.346117
+share-electricity-coal,Japan,2005,27.682623
+share-electricity-coal,Japan,2006,26.739382
+share-electricity-coal,Japan,2007,26.888172
+share-electricity-coal,Japan,2008,28.191267
+share-electricity-coal,Japan,2009,28.013859
+share-electricity-coal,Japan,2010,27.40822
+share-electricity-coal,Japan,2011,25.816883
+share-electricity-coal,Japan,2012,30.202007
+share-electricity-coal,Japan,2013,33.32996
+share-electricity-coal,Japan,2014,33.461308
+share-electricity-coal,Japan,2015,33.941677
+share-electricity-coal,Japan,2016,31.831345
+share-electricity-coal,Japan,2017,33.75276
+share-electricity-coal,Japan,2018,33.30409
+share-electricity-coal,Japan,2019,33.48959
+share-electricity-coal,Japan,2020,33.653797
+share-electricity-coal,Japan,2021,33.659042
+share-electricity-coal,Japan,2022,33.730553
+share-electricity-coal,Japan,2023,32.474445
+share-electricity-coal,Japan,2024,32.18548
+share-electricity-coal,Japan,2025,32.050957
+share-electricity-coal,Russia,1985,14.38177
+share-electricity-coal,Russia,1986,14.3837385
+share-electricity-coal,Russia,1987,14.283715
+share-electricity-coal,Russia,1988,14.218773
+share-electricity-coal,Russia,1989,14.268614
+share-electricity-coal,Russia,1990,14.494062
+share-electricity-coal,Russia,1991,14.486169
+share-electricity-coal,Russia,1992,15.282005
+share-electricity-coal,Russia,1993,15.512605
+share-electricity-coal,Russia,1994,18.550306
+share-electricity-coal,Russia,1995,18.638481
+share-electricity-coal,Russia,1996,18.960556
+share-electricity-coal,Russia,1997,18.824669
+share-electricity-coal,Russia,1998,19.702726
+share-electricity-coal,Russia,1999,19.066004
+share-electricity-coal,Russia,2000,20.007746
+share-electricity-coal,Russia,2001,18.9359
+share-electricity-coal,Russia,2002,19.114082
+share-electricity-coal,Russia,2003,18.797543
+share-electricity-coal,Russia,2004,17.260252
+share-electricity-coal,Russia,2005,17.371164
+share-electricity-coal,Russia,2006,17.918196
+share-electricity-coal,Russia,2007,16.758614
+share-electricity-coal,Russia,2008,18.907692
+share-electricity-coal,Russia,2009,16.553217
+share-electricity-coal,Russia,2010,16.00162
+share-electricity-coal,Russia,2011,15.642834
+share-electricity-coal,Russia,2012,15.820139
+share-electricity-coal,Russia,2013,15.28402
+share-electricity-coal,Russia,2014,14.912611
+share-electricity-coal,Russia,2015,14.851763
+share-electricity-coal,Russia,2016,15.715373
+share-electricity-coal,Russia,2017,15.947102
+share-electricity-coal,Russia,2018,15.922431
+share-electricity-coal,Russia,2019,16.77309
+share-electricity-coal,Russia,2020,16.119106
+share-electricity-coal,Russia,2021,16.17361
+share-electricity-coal,Russia,2022,16.449862
+share-electricity-coal,Russia,2023,17.318905
+share-electricity-coal,Russia,2024,17.79279
+share-electricity-coal,Russia,2025,18.40391
+share-electricity-coal,United Kingdom,1920,97.004135
+share-electricity-coal,United Kingdom,1921,98.47913
+share-electricity-coal,United Kingdom,1922,98.385895
+share-electricity-coal,United Kingdom,1923,98.4567
+share-electricity-coal,United Kingdom,1924,98.86882
+share-electricity-coal,United Kingdom,1925,97.536255
+share-electricity-coal,United Kingdom,1926,99.00265
+share-electricity-coal,United Kingdom,1927,98.20997
+share-electricity-coal,United Kingdom,1928,98.10591
+share-electricity-coal,United Kingdom,1929,94.97727
+share-electricity-coal,United Kingdom,1930,94.215485
+share-electricity-coal,United Kingdom,1931,94.67171
+share-electricity-coal,United Kingdom,1932,95.43827
+share-electricity-coal,United Kingdom,1933,95.32904
+share-electricity-coal,United Kingdom,1934,95.0673
+share-electricity-coal,United Kingdom,1935,95.4906
+share-electricity-coal,United Kingdom,1936,95.371086
+share-electricity-coal,United Kingdom,1937,94.81626
+share-electricity-coal,United Kingdom,1938,94.99585
+share-electricity-coal,United Kingdom,1939,95.927666
+share-electricity-coal,United Kingdom,1940,96.26881
+share-electricity-coal,United Kingdom,1941,95.72404
+share-electricity-coal,United Kingdom,1942,95.256584
+share-electricity-coal,United Kingdom,1943,95.77091
+share-electricity-coal,United Kingdom,1944,95.748085
+share-electricity-coal,United Kingdom,1945,95.95581
+share-electricity-coal,United Kingdom,1946,96.32194
+share-electricity-coal,United Kingdom,1947,96.584984
+share-electricity-coal,United Kingdom,1948,96.14677
+share-electricity-coal,United Kingdom,1949,95.70757
+share-electricity-coal,United Kingdom,1950,95.679115
+share-electricity-coal,United Kingdom,1951,95.49642
+share-electricity-coal,United Kingdom,1952,95.34385
+share-electricity-coal,United Kingdom,1953,94.46431
+share-electricity-coal,United Kingdom,1954,95.59403
+share-electricity-coal,United Kingdom,1955,94.92083
+share-electricity-coal,United Kingdom,1956,93.60405
+share-electricity-coal,United Kingdom,1957,87.526
+share-electricity-coal,United Kingdom,1958,82.33415
+share-electricity-coal,United Kingdom,1959,80.30816
+share-electricity-coal,United Kingdom,1960,81.358734
+share-electricity-coal,United Kingdom,1961,81.69256
+share-electricity-coal,United Kingdom,1962,83.32596
+share-electricity-coal,United Kingdom,1963,81.632164
+share-electricity-coal,United Kingdom,1964,77.05291
+share-electricity-coal,United Kingdom,1965,73.4707
+share-electricity-coal,United Kingdom,1966,71.65444
+share-electricity-coal,United Kingdom,1967,74.50749
+share-electricity-coal,United Kingdom,1968,72.25107
+share-electricity-coal,United Kingdom,1969,67.542336
+share-electricity-coal,United Kingdom,1970,64.101944
+share-electricity-coal,United Kingdom,1971,56.42958
+share-electricity-coal,United Kingdom,1972,63.033257
+share-electricity-coal,United Kingdom,1973,56.240475
+share-electricity-coal,United Kingdom,1974,63.399822
+share-electricity-coal,United Kingdom,1975,66.98358
+share-electricity-coal,United Kingdom,1976,66.544266
+share-electricity-coal,United Kingdom,1977,66.98041
+share-electricity-coal,United Kingdom,1978,69.69115
+share-electricity-coal,United Kingdom,1979,74.21757
+share-electricity-coal,United Kingdom,1980,76.39802
+share-electricity-coal,United Kingdom,1981,72.06325
+share-electricity-coal,United Kingdom,1982,72.39091
+share-electricity-coal,United Kingdom,1983,46.25777
+share-electricity-coal,United Kingdom,1984,61.352028
+share-electricity-coal,United Kingdom,1985,59.432922
+share-electricity-coal,United Kingdom,1986,66.88156
+share-electricity-coal,United Kingdom,1987,69.48549
+share-electricity-coal,United Kingdom,1988,65.85412
+share-electricity-coal,United Kingdom,1989,63.556118
+share-electricity-coal,United Kingdom,1990,64.56294
+share-electricity-coal,United Kingdom,1991,65.49182
+share-electricity-coal,United Kingdom,1992,60.31647
+share-electricity-coal,United Kingdom,1993,53.00053
+share-electricity-coal,United Kingdom,1994,49.40593
+share-electricity-coal,United Kingdom,1995,45.99905
+share-electricity-coal,United Kingdom,1996,41.972813
+share-electricity-coal,United Kingdom,1997,34.781986
+share-electricity-coal,United Kingdom,1998,33.90312
+share-electricity-coal,United Kingdom,1999,28.841505
+share-electricity-coal,United Kingdom,2000,31.811913
+share-electricity-coal,United Kingdom,2001,34.165867
+share-electricity-coal,United Kingdom,2002,32.093792
+share-electricity-coal,United Kingdom,2003,34.7706
+share-electricity-coal,United Kingdom,2004,33.456028
+share-electricity-coal,United Kingdom,2005,33.799423
+share-electricity-coal,United Kingdom,2006,37.468224
+share-electricity-coal,United Kingdom,2007,34.25821
+share-electricity-coal,United Kingdom,2008,31.977581
+share-electricity-coal,United Kingdom,2009,27.348974
+share-electricity-coal,United Kingdom,2010,28.160498
+share-electricity-coal,United Kingdom,2011,29.469795
+share-electricity-coal,United Kingdom,2012,39.242035
+share-electricity-coal,United Kingdom,2013,36.357037
+share-electricity-coal,United Kingdom,2014,29.649788
+share-electricity-coal,United Kingdom,2015,22.392067
+share-electricity-coal,United Kingdom,2016,9.042397
+share-electricity-coal,United Kingdom,2017,6.661345
+share-electricity-coal,United Kingdom,2018,5.0425453
+share-electricity-coal,United Kingdom,2019,2.114979
+share-electricity-coal,United Kingdom,2020,1.8369321
+share-electricity-coal,United Kingdom,2021,2.2052615
+share-electricity-coal,United Kingdom,2022,1.8300574
+share-electricity-coal,United Kingdom,2023,1.2921752
+share-electricity-coal,United Kingdom,2024,0.6686374
+share-electricity-coal,United Kingdom,2025,0.11289385
+share-electricity-coal,United States,1985,56.739914
+share-electricity-coal,United States,1986,55.68305
+share-electricity-coal,United States,1987,56.7764
+share-electricity-coal,United States,1988,56.841537
+share-electricity-coal,United States,1989,54.237675
+share-electricity-coal,United States,1990,53.364452
+share-electricity-coal,United States,1991,52.66527
+share-electricity-coal,United States,1992,53.51074
+share-electricity-coal,United States,1993,53.78514
+share-electricity-coal,United States,1994,52.978405
+share-electricity-coal,United States,1995,51.943787
+share-electricity-coal,United States,1996,53.11354
+share-electricity-coal,United States,1997,53.76858
+share-electricity-coal,United States,1998,52.622967
+share-electricity-coal,United States,1999,51.773697
+share-electricity-coal,United States,2000,51.715366
+share-electricity-coal,United States,2001,51.077778
+share-electricity-coal,United States,2002,50.286533
+share-electricity-coal,United States,2003,51.015007
+share-electricity-coal,United States,2004,50.058834
+share-electricity-coal,United States,2005,49.885376
+share-electricity-coal,United States,2006,49.18556
+share-electricity-coal,United States,2007,48.676548
+share-electricity-coal,United States,2008,48.34536
+share-electricity-coal,United States,2009,44.568027
+share-electricity-coal,United States,2010,44.903183
+share-electricity-coal,United States,2011,42.393864
+share-electricity-coal,United States,2012,37.470024
+share-electricity-coal,United States,2013,38.98575
+share-electricity-coal,United States,2014,38.615875
+share-electricity-coal,United States,2015,33.114674
+share-electricity-coal,United States,2016,30.315151
+share-electricity-coal,United States,2017,29.756853
+share-electricity-coal,United States,2018,27.358713
+share-electricity-coal,United States,2019,23.205193
+share-electricity-coal,United States,2020,19.128262
+share-electricity-coal,United States,2021,21.619696
+share-electricity-coal,United States,2022,19.396578
+share-electricity-coal,United States,2023,15.870339
+share-electricity-coal,United States,2024,14.852129
+share-electricity-coal,United States,2025,16.309387
+share-electricity-coal,World,1900,58.77555
+share-electricity-coal,World,1901,60.502605
+share-electricity-coal,World,1902,61.83132
+share-electricity-coal,World,1903,63.212917
+share-electricity-coal,World,1904,63.9167
+share-electricity-coal,World,1905,63.776672
+share-electricity-coal,World,1906,62.68396
+share-electricity-coal,World,1907,61.839375
+share-electricity-coal,World,1908,59.996044
+share-electricity-coal,World,1909,59.294735
+share-electricity-coal,World,1910,58.456444
+share-electricity-coal,World,1911,56.87719
+share-electricity-coal,World,1912,56.048466
+share-electricity-coal,World,1913,56.53314
+share-electricity-coal,World,1914,57.229965
+share-electricity-coal,World,1915,56.442654
+share-electricity-coal,World,1916,56.221256
+share-electricity-coal,World,1917,56.586807
+share-electricity-coal,World,1918,51.71965
+share-electricity-coal,World,1919,48.340744
+share-electricity-coal,World,1920,51.468754
+share-electricity-coal,World,1921,51.816048
+share-electricity-coal,World,1922,52.0274
+share-electricity-coal,World,1923,53.170017
+share-electricity-coal,World,1924,52.602077
+share-electricity-coal,World,1925,55.054092
+share-electricity-coal,World,1926,53.496212
+share-electricity-coal,World,1927,53.49526
+share-electricity-coal,World,1928,52.245827
+share-electricity-coal,World,1929,52.688168
+share-electricity-coal,World,1930,52.059776
+share-electricity-coal,World,1931,51.8996
+share-electricity-coal,World,1932,49.40598
+share-electricity-coal,World,1933,49.932785
+share-electricity-coal,World,1934,52.08027
+share-electricity-coal,World,1935,51.091713
+share-electricity-coal,World,1936,52.91707
+share-electricity-coal,World,1937,53.009727
+share-electricity-coal,World,1938,53.640896
+share-electricity-coal,World,1939,54.74735
+share-electricity-coal,World,1940,56.11834
+share-electricity-coal,World,1941,56.617588
+share-electricity-coal,World,1942,56.332085
+share-electricity-coal,World,1943,55.38597
+share-electricity-coal,World,1944,54.152702
+share-electricity-coal,World,1945,52.567284
+share-electricity-coal,World,1946,50.147583
+share-electricity-coal,World,1947,52.562447
+share-electricity-coal,World,1948,53.225445
+share-electricity-coal,World,1949,51.426163
+share-electricity-coal,World,1950,51.239185
+share-electricity-coal,World,1951,53.34242
+share-electricity-coal,World,1952,52.463364
+share-electricity-coal,World,1953,53.213417
+share-electricity-coal,World,1954,54.071087
+share-electricity-coal,World,1955,56.132164
+share-electricity-coal,World,1956,56.774426
+share-electricity-coal,World,1957,55.744755
+share-electricity-coal,World,1958,53.76605
+share-electricity-coal,World,1959,54.237026
+share-electricity-coal,World,1960,53.716267
+share-electricity-coal,World,1961,53.092922
+share-electricity-coal,World,1962,53.101646
+share-electricity-coal,World,1963,52.97882
+share-electricity-coal,World,1964,52.603477
+share-electricity-coal,World,1965,51.67784
+share-electricity-coal,World,1966,49.752213
+share-electricity-coal,World,1967,49.032963
+share-electricity-coal,World,1968,48.11179
+share-electricity-coal,World,1969,45.95063
+share-electricity-coal,World,1970,43.148273
+share-electricity-coal,World,1971,39.91905
+share-electricity-coal,World,1972,38.299786
+share-electricity-coal,World,1973,38.128864
+share-electricity-coal,World,1974,36.434963
+share-electricity-coal,World,1975,36.449726
+share-electricity-coal,World,1976,37.223167
+share-electricity-coal,World,1977,36.89061
+share-electricity-coal,World,1978,35.93783
+share-electricity-coal,World,1979,36.67777
+share-electricity-coal,World,1980,37.79062
+share-electricity-coal,World,1981,37.537037
+share-electricity-coal,World,1982,38.129562
+share-electricity-coal,World,1983,38.481033
+share-electricity-coal,World,1984,37.9771
+share-electricity-coal,World,1985,37.915844
+share-electricity-coal,World,1986,37.708366
+share-electricity-coal,World,1987,38.030346
+share-electricity-coal,World,1988,37.705906
+share-electricity-coal,World,1989,37.54501
+share-electricity-coal,World,1990,37.28858
+share-electricity-coal,World,1991,37.28417
+share-electricity-coal,World,1992,37.69178
+share-electricity-coal,World,1993,37.522236
+share-electricity-coal,World,1994,37.851097
+share-electricity-coal,World,1995,37.65334
+share-electricity-coal,World,1996,38.2651
+share-electricity-coal,World,1997,38.18943
+share-electricity-coal,World,1998,37.97951
+share-electricity-coal,World,1999,37.723225
+share-electricity-coal,World,2000,38.018806
+share-electricity-coal,World,2001,38.00229
+share-electricity-coal,World,2002,38.282505
+share-electricity-coal,World,2003,39.541412
+share-electricity-coal,World,2004,39.031315
+share-electricity-coal,World,2005,39.523426
+share-electricity-coal,World,2006,40.16654
+share-electricity-coal,World,2007,40.84329
+share-electricity-coal,World,2008,40.16482
+share-electricity-coal,World,2009,39.866455
+share-electricity-coal,World,2010,39.776615
+share-electricity-coal,World,2011,40.55629
+share-electricity-coal,World,2012,39.79577
+share-electricity-coal,World,2013,40.698933
+share-electricity-coal,World,2014,40.442207
+share-electricity-coal,World,2015,38.677925
+share-electricity-coal,World,2016,37.773415
+share-electricity-coal,World,2017,37.95069
+share-electricity-coal,World,2018,37.911293
+share-electricity-coal,World,2019,36.621334
+share-electricity-coal,World,2020,35.313847
+share-electricity-coal,World,2021,35.94064
+share-electricity-coal,World,2022,35.41229
+share-electricity-coal,World,2023,35.044064
+share-electricity-coal,World,2024,34.07327
+share-electricity-coal,World,2025,32.957996

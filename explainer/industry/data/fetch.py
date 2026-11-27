@@ -1289,7 +1289,140 @@ def owid_chem():
                   ["OECD Global Plastics Outlook (2022); HYDE and UN WPP (population); FAO (fertilizer)"])
 
 
-JOBS = {"owid_chem": owid_chem, "fred_chem": fred_chem, "eia_ngl": eia_ngl, "eurostat_chem": eurostat_chem, "usgs_heavy": usgs_heavy, "fred_heavy": fred_heavy, "owid_co2": owid_co2, "ers_food_dollar": ers_food_dollar, "ers_costs": ers_costs, "ers_farm_income": ers_farm_income, "owid_ag": owid_ag, "fred_food": fred_food, "ne_land": ne_land, "usgs_ds140": usgs_ds140, "fred_metals": fred_metals, "sec_ifrs": sec_ifrs, "eia_gas": eia_gas, "eia_petroleum": eia_petroleum, "eia_intl": eia_intl, "eia_pump": eia_pump, "fred_energy": fred_energy, "fred_market": fred_market, "owid_tech": owid_tech, "sec_quarterly": sec_quarterly, "fred_cycle": fred_cycle, "esef_maersk": esef_maersk, "damodaran_roc": damodaran_roc, "census_conc": census_conc, "eia_power": eia_power, "fred_pay": fred_pay, "bea_real": bea_real, "sec_annual": sec_annual, "fred_prices": fred_prices, "census_susb": census_susb, "bea_va": bea_va, "wb_mfg_usd": wb_mfg_usd, "bea_hist": bea_hist, "bea_io": bea_io, "fred_jobs": fred_jobs, "wb_shares": wb_shares}
+
+# Part 13 -----------------------------------------------------------------------------------------------------------
+# EIA-930 six-month balance files: (balancing authority, first date, last date exclusive) to keep from each
+EIA930 = {
+    "EIA930_BALANCE_2019_Jan_Jun": [("CISO", "2019-04-01", "2019-05-01")],
+    "EIA930_BALANCE_2021_Jan_Jun": [("ERCO", "2021-02-01", "2021-03-01")],
+    "EIA930_BALANCE_2025_Jan_Jun": [("ERCO", "2025-01-01", "2025-07-01")],
+    "EIA930_BALANCE_2025_Jul_Dec": [("ERCO", "2025-07-01", "2026-01-01")],
+    "EIA930_BALANCE_2026_Jan_Jun": [("CISO", "2026-04-01", "2026-05-01")],
+}
+# our column: the EIA-930 columns that add up to it (the "(Adjusted)" version is used where the file has one)
+EIA930_COLS = {
+    "forecast": ["Demand Forecast (MW)"],
+    "demand": ["Demand (MW)"],
+    "net_gen": ["Net Generation (MW)"],
+    "coal": ["Net Generation (MW) from Coal"],
+    "gas": ["Net Generation (MW) from Natural Gas"],
+    "nuclear": ["Net Generation (MW) from Nuclear"],
+    "oil": ["Net Generation (MW) from All Petroleum Products"],
+    "hydro": ["Net Generation (MW) from Hydropower and Pumped Storage",
+              "Net Generation (MW) from Hydropower Excluding Pumped Storage", "Net Generation (MW) from Pumped Storage"],
+    "solar": ["Net Generation (MW) from Solar", "Net Generation (MW) from Solar without Integrated Battery Storage",
+              "Net Generation (MW) from Solar with Integrated Battery Storage"],
+    "wind": ["Net Generation (MW) from Wind", "Net Generation (MW) from Wind without Integrated Battery Storage",
+             "Net Generation (MW) from Wind with Integrated Battery Storage"],
+    "battery": ["Net Generation (MW) from Battery Storage"],
+    "other": ["Net Generation (MW) from Other Fuel Sources", "Net Generation (MW) from Unknown Fuel Sources",
+              "Net Generation (MW) from Geothermal", "Net Generation (MW) from Other Energy Storage",
+              "Net Generation (MW) from Unknown Energy Storage"],
+}
+
+
+def eia_930():
+    """EIA's Hourly Electric Grid Monitor (Form EIA-930), from its six-month balance files: hourly demand, the day-ahead
+    demand forecast and net generation by source for ERCOT (February 2021 and all of 2025) and the California ISO
+    (April 2019 and April 2026).  Megawatts, each hour ending at the local time given."""
+    import datetime as _dt
+    out = []
+    for f, wants in EIA930.items():
+        txt = _get(f"https://www.eia.gov/electricity/gridmonitor/sixMonthFiles/{f}.csv").decode("utf-8", "replace")
+        rd = csv.reader(io.StringIO(txt))
+        head = [h.strip() for h in next(rd)]
+
+        def pick(name):
+            a = name + " (Adjusted)"
+            return head.index(a) if a in head else (head.index(name) if name in head else None)
+        cols = {k: [i for i in (pick(n) for n in v) if i is not None] for k, v in EIA930_COLS.items()}
+        for r in rd:
+            if not r or len(r) < len(head) - 1:
+                continue
+            for ba, lo, hi in wants:
+                if r[0] != ba:
+                    continue
+                d = _dt.datetime.strptime(r[1], "%m/%d/%Y").date().isoformat()
+                if not lo <= d < hi:
+                    continue
+                row = [ba, d, int(r[2])]
+                for k in EIA930_COLS:
+                    vals = [r[i].replace(",", "") for i in cols[k] if i < len(r) and r[i].strip() not in ("",)]
+                    row.append(sum(float(v) for v in vals) if vals else None)
+                out.append(row)
+    return _write("eia_930", ["ba", "date", "hour"] + list(EIA930_COLS), out,
+                  ["https://www.eia.gov/electricity/gridmonitor/ (six-month balance files: " + ", ".join(EIA930) + ")"])
+
+
+# Monthly Energy Review: electricity retail sales and end use (Table 7.6), average retail prices (Table 9.8)
+MER_TABLES = {"T07.06": "electricity end use", "T09.08": "average retail prices of electricity"}
+
+
+def eia_mer():
+    """EIA's Monthly Energy Review, Tables 7.6 (electricity end use, million kWh, since 1949) and 9.8 (average retail
+    prices of electricity, cents per kWh, since 1960): annual (month 13) and monthly values."""
+    out = []
+    for t in MER_TABLES:
+        txt = _get(f"https://www.eia.gov/totalenergy/data/browser/csv.php?tbl={t}").decode("utf-8", "replace")
+        for r in csv.DictReader(io.StringIO(txt)):
+            try:
+                v = float(r["Value"])
+            except (TypeError, ValueError):
+                continue
+            ym = r["YYYYMM"]
+            out.append([t, r["MSN"], r["Description"], int(ym[:4]), int(ym[4:]), v, r["Unit"]])
+    return _write("eia_mer", ["table", "msn", "description", "year", "month", "value", "unit"], out,
+                  [f"https://www.eia.gov/totalenergy/data/browser/csv.php?tbl={t} ({d})" for t, d in MER_TABLES.items()])
+
+
+FRED_POWER = {"APU000072610": "average price of electricity per kWh, US city average (BLS, dollars)",
+              "CUSR0000SEHF01": "CPI, electricity (seasonally adjusted)", "CPIAUCSL": "CPI, all items",
+              "PNGASUSUSDM": "natural gas, US Henry Hub (IMF; $ per million Btu)",
+              "PNGASEUUSDM": "natural gas, Europe (IMF; $ per million Btu)",
+              "IPG2211S": "industrial production: electric power generation, transmission and distribution",
+              "PCU221122221122": "PPI electric power distribution"}
+
+
+def fred_power():
+    """Monthly series for Part 13 (via FRED): the BLS's average price of a kWh and the CPI for electricity, the CPI,
+    the IMF's gas prices in the US and Europe, the Federal Reserve's output of electric power, and the PPI for
+    electric power distribution."""
+    out = []
+    for sid in FRED_POWER:
+        txt = _get(f"https://fred.stlouisfed.org/graph/fredgraph.csv?id={sid}").decode()
+        for line in txt.splitlines()[1:]:
+            d, v = line.split(",")
+            if v not in (".", ""):
+                out.append([sid, d[:7], float(v)])
+    return _write("fred_power", ["series", "month", "value"], out,
+                  ["https://fred.stlouisfed.org (" + "; ".join(f"{k} {v}" for k, v in FRED_POWER.items()) + ")"])
+
+
+OWID_ELEC = ["electricity-generation", "per-capita-electricity-generation", "share-electricity-solar",
+             "share-electricity-wind", "share-electricity-coal"]
+OWID_ELEC_ENTITIES = ("World", "China", "United States", "India", "European Union (27)", "Japan", "Russia", "Brazil",
+                      "Africa", "France", "Germany", "United Kingdom")
+
+
+def owid_elec():
+    """Our World in Data (Ember and the Energy Institute): electricity generation, generation per person, and the
+    shares of solar, wind and coal, for the world, the largest users and a few others (CC BY 4.0)."""
+    out = []
+    for slug in OWID_ELEC:
+        txt = _get(f"https://ourworldindata.org/grapher/{slug}.csv?v=1&csvType=full&useColumnShortNames=true").decode()
+        rows = list(csv.reader(io.StringIO(txt)))
+        head = rows[0]
+        for r in rows[1:]:
+            if r[0] in OWID_ELEC_ENTITIES:
+                for j in range(3, len(head)):
+                    if r[j] not in ("", None):
+                        out.append([slug, r[0], int(r[2]), float(r[j])])
+    return _write("owid_elec", ["series", "entity", "year", "value"], out,
+                  ["https://ourworldindata.org/grapher/" + s for s in OWID_ELEC] +
+                  ["Ember (2026); Energy Institute, Statistical Review of World Energy (2025)"])
+
+
+JOBS = {"eia_930": eia_930, "eia_mer": eia_mer, "fred_power": fred_power, "owid_elec": owid_elec, "owid_chem": owid_chem, "fred_chem": fred_chem, "eia_ngl": eia_ngl, "eurostat_chem": eurostat_chem, "usgs_heavy": usgs_heavy, "fred_heavy": fred_heavy, "owid_co2": owid_co2, "ers_food_dollar": ers_food_dollar, "ers_costs": ers_costs, "ers_farm_income": ers_farm_income, "owid_ag": owid_ag, "fred_food": fred_food, "ne_land": ne_land, "usgs_ds140": usgs_ds140, "fred_metals": fred_metals, "sec_ifrs": sec_ifrs, "eia_gas": eia_gas, "eia_petroleum": eia_petroleum, "eia_intl": eia_intl, "eia_pump": eia_pump, "fred_energy": fred_energy, "fred_market": fred_market, "owid_tech": owid_tech, "sec_quarterly": sec_quarterly, "fred_cycle": fred_cycle, "esef_maersk": esef_maersk, "damodaran_roc": damodaran_roc, "census_conc": census_conc, "eia_power": eia_power, "fred_pay": fred_pay, "bea_real": bea_real, "sec_annual": sec_annual, "fred_prices": fred_prices, "census_susb": census_susb, "bea_va": bea_va, "wb_mfg_usd": wb_mfg_usd, "bea_hist": bea_hist, "bea_io": bea_io, "fred_jobs": fred_jobs, "wb_shares": wb_shares}
 
 if __name__ == "__main__":
     names = list(JOBS) if "--all" in sys.argv else sys.argv[1:]
