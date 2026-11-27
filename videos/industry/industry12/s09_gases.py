@@ -96,10 +96,12 @@ class Gases(VoiceoverScene):
             "filings say. And because most of these gases are, in Linde's words, uneconomical to carry more than a few "
             "hundred miles, the plant nearest the customer has a large advantage."
         ) as vo:
-            self.play(FadeIn(src))
+            for c_ in cols:
+                c_.set_opacity(0.2)
+            self.play(FadeIn(src), FadeIn(cols))
             for m_, c_ in zip("abc", cols):
                 vo.wait_until(m_)
-                self.play(FadeIn(c_, shift=UP * 0.2))
+                self.play(c_.animate.set_opacity(1), Indicate(c_[0], scale_factor=1.1))
             self.play(Create(box))
             vo.wait_until("d")
             self.play(FadeIn(terms, shift=UP * 0.1))

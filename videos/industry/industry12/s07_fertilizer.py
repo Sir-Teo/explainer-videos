@@ -88,10 +88,10 @@ class Fertilizer(VoiceoverScene):
             f"{per * gas:,.0f} dollars a ton. At twelve dollars, about what Europe paid in 2025, it is about "
             f"{per * 12:,.0f}. Ammonia is, in effect, natural gas in a different form."
         ) as vo:
-            self.play(FadeIn(eq), FadeIn(src))
+            self.play(FadeIn(eq), FadeIn(src), FadeIn(n2, scale=0.6), FadeIn(plus),
+                      LaggedStart(*[FadeIn(h_, scale=0.6) for h_ in h2s], lag_ratio=0.2), run_time=1.2)
             vo.wait_until("a")
-            self.play(FadeIn(n2, scale=0.6), FadeIn(plus), LaggedStart(*[FadeIn(h_, scale=0.6) for h_ in h2s], lag_ratio=0.2),
-                      run_time=1.2)
+            self.play(Indicate(n2, color=NITRO, scale_factor=1.2), *[Indicate(h_, scale_factor=1.2) for h_ in h2s], run_time=1.0)
             vo.wait_until("b")
             self.play(GrowArrow(arr), FadeIn(cond))
             self.play(TransformFromCopy(VGroup(n2, h2s), nh3), VGroup(n2, h2s, plus).animate.set_opacity(0.4), run_time=1.6)

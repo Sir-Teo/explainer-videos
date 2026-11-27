@@ -73,9 +73,9 @@ class Harm(VoiceoverScene):
             "waterproof fabrics and firefighting foam. <bookmark mark='c'/> It is also why they barely break down. "
             "They have spread into water supplies, and they have earned a nickname: forever chemicals."
         ) as vo:
-            vo.wait_until("a")
             self.play(Create(bonds), LaggedStart(*[FadeIn(m) for m in chainc], lag_ratio=0.02), run_time=2.0)
-            self.play(FadeIn(cl))
+            vo.wait_until("a")
+            self.play(FadeIn(cl), Indicate(VGroup(bonds, chainc), color=GOOD, scale_factor=1.05))
             vo.wait_until("b")
             self.play(FadeIn(uses, shift=UP * 0.1))
             vo.wait_until("c")
@@ -110,8 +110,9 @@ class Harm(VoiceoverScene):
             self.play(FadeIn(head), FadeIn(src))
             big = VGroup(tx(f"{mcl:.0f}", 120, GOLD, bold=True), tx("parts per trillion", 30, GOLD)).arrange(DOWN, buff=0.2).move_to(
                 [0, -0.4, 0])
+            self.play(FadeIn(big, scale=1.3))
             vo.wait_until("a")
-            self.play(FadeIn(big, scale=1.3), Indicate(head, color=GOLD, scale_factor=1.03))
+            self.play(Indicate(head, color=GOLD, scale_factor=1.03), Indicate(big, color=GOLD))
             vo.wait_until("b")
             self.play(FadeOut(big, scale=0.5))
             self.play(LaggedStart(*[FadeIn(p_, scale=0.8) for p_ in pools], lag_ratio=0.05), FadeIn(tag), run_time=2.0)
@@ -154,10 +155,10 @@ class Harm(VoiceoverScene):
             "people who never bought them. That is why governments set limits, and why a chemical company's filings "
             "carry pages of lawsuits."
         ) as vo:
-            self.play(FadeIn(head), FadeIn(src))
+            self.play(FadeIn(head), FadeIn(src), *[FadeIn(b_[0]) for b_ in bars])
             for m_, b_ in zip("abc", bars):
                 vo.wait_until(m_)
-                self.play(FadeIn(b_[0]), GrowFromEdge(b_[1], LEFT), FadeIn(b_[2]), FadeIn(b_[3]), run_time=1.2)
+                self.play(GrowFromEdge(b_[1], LEFT), FadeIn(b_[2]), FadeIn(b_[3]), Indicate(b_[0]), run_time=1.2)
             vo.wait_until("d")
             self.play(FadeIn(lesson, shift=UP * 0.1))
         self.clear_scene()
