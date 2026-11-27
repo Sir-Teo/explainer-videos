@@ -493,6 +493,16 @@ def pcb(w: float = 2.0, color: str = "#2F6B4F", parts: bool = False, seed: int =
     return g
 
 
+def laptop(w: float = 1.0, color: str = "#9AA3B2", screen: str = "#7EC8F5") -> VGroup:
+    """An open laptop, front on: the screen above a keyboard deck seen in perspective."""
+    lid = RoundedRectangle(corner_radius=0.04 * w, width=0.8 * w, height=0.52 * w, stroke_width=0, fill_color=color,
+                           fill_opacity=1).move_to([0, 0.34 * w, 0])
+    glass = Rectangle(width=0.7 * w, height=0.42 * w, stroke_width=0, fill_color=screen, fill_opacity=0.85).move_to([0, 0.34 * w, 0])
+    deck = Polygon([-0.4 * w, 0.07 * w, 0], [0.4 * w, 0.07 * w, 0], [0.5 * w, -0.03 * w, 0], [-0.5 * w, -0.03 * w, 0],
+                   stroke_width=0, fill_color=color, fill_opacity=1)
+    return VGroup(lid, glass, deck)
+
+
 def ship(w: float = 3.0, boxes: int = 12) -> VGroup:
     hull = Polygon([-0.5 * w, 0.12 * w, 0], [0.5 * w, 0.12 * w, 0], [0.42 * w, 0, 0], [-0.44 * w, 0, 0],
                    stroke_width=0, fill_color="#C0392B", fill_opacity=0.95)

@@ -2547,6 +2547,7 @@ scored in Part 64 and at each refresh.
 | 13 · Electricity | done 2026-11-27 (108 Register rows; Insull's 1910 address; EIA-930, the Electric Power Annual, the Monthly Energy Review, AEO2005 and AEO2021, Today in Energy; the FERC-NERC February 2021 report; the ERCOT market monitor's 2021 and 2024 reports; Vistra's and Duke's 10-Ks and 15 more; the NAO on Britain's suppliers; DOE on LBNL's data centre report; Ember via Our World in Data) | `works/power.py` | 16 scenes | silent and narrated previews reviewed | entry, lab, interactive | not started |
 | 14 · Water and Waste | done 2026-11-27 (114 Register rows; Hansard for 1858 and 2026; the EPA's 1989 report, its 2009 Facts and Figures, the 1960-2018 series, tipping fees and its water needs surveys; 40 CFR Part 258; the BLS's price indexes; the 10-Ks of Waste Management, Republic, Clean Harbors, American Water and six more, Sabesp's 20-F and Veolia's ESEF report; the Independent Water Commission and the CMA's PR24 redeterminations; WHO/UNICEF via the World Bank) | `works/route.py`, `works/utility.py` | 16 scenes, with bin, lorry, water tower, tap, bale and landfill glyphs | silent and narrated previews reviewed | entry, lab, interactive | not started |
 | 15 · Semiconductors | done 2026-11-27 (124 Register rows; Moore's articles of 1965 and 1975; TSMC's 20-F 2025, its fab table and its third quarter 2026 results; ASML's 20-F; the 10-Ks of Nvidia, Intel, Micron and fifteen more chip companies and three foreign filers' accounts; GM's 2021 10-K; the Federal Reserve's chip output and the BLS's chip prices; Rupp's transistor counts; WSTS's forecasts and SIA's monthly sales; six BIS rules in the Federal Register) | `works/fab.py` | 16 scenes, with car, phone, chip-fab and government-building glyphs and a map of TSMC's fabs | silent and narrated previews reviewed | entry, lab, interactive | not started |
+| 16 · Electronics | done 2026-11-27 (78 Register rows; Stan Shih's oral history; Hon Hai's audited 2025 statements; the 10-Ks of Apple, Intel, HP, Dell, Jabil and Flex and the SEC extract of nine more assemblers, brands and component makers, with Sony's, LG Display's and ASE's 20-Fs; UN Comtrade's US imports by partner; the BLS's price indexes and electronics jobs; the Section 301 notices; CBS's transcript of the Commerce Secretary) | `works/device.py` | 16 scenes, with a surface-mount line, circuit boards and a map of Hon Hai's assets | silent and narrated previews reviewed | entry, lab, interactive | not started |
 
 Phase 0 is done in the form Part 1 needed: the palette and kit (`style.py`, `kit.py`), the instruments (`viz.py`: the
 phone and its exploded view, the region map, the Dollar column, the margin ladder, the treemap, plain axes), the
@@ -2719,3 +2720,16 @@ sales by region. The sweep found the year's boom: world sales of $702bn in the f
 third quarter, memory forecast to more than triple, so *Called it?* scores WSTS's own December 2025 forecast ($975bn)
 alongside Moore's, with the series' call that 2026's sales will exceed $1.8 trillion (65%). Micron's quarters are
 operating income, as in Part 6.
+
+Part 16 keeps its draft's story from Shih's own words: his oral history at the Computer History Museum (2011) dates the
+curve to 1992 and says why he drew it, to show that moving assembly abroad would not cost Taiwan value added. The campuses
+in Shenzhen and Zhengzhou and their headcounts are not used (no primary source read); Hon Hai's own statements stand in:
+its revenue by product, its unnamed largest customer ('Client E', 44% of revenue in 2025), its servers arm against the rest,
+and its non-current assets by country, which show the move out of China in its own accounts. Japan's television makers are
+not told (no primary source read); the television's price index since 1951 is. The Census Bureau's trade API now needs a
+key, so the trade figures are UN Comtrade's, as reported by the United States. The April 2025 exemption of smartphones and
+computers from the new tariffs is not shown, since the memorandum was not found in the Federal Register; Apple's 10-K gives
+the 2025 tariffs, the January 2026 Section 232 result and the Supreme Court's ruling of 20 February 2026. *Called it?* is
+the Commerce Secretary's forecast of 6 April 2025, from CBS's transcript, with the series' call on India's share of US
+smartphone imports in 2026. Servers, absent from the draft, became a chapter: US imports of processing units rose seven-fold
+from 2017 to 2025.

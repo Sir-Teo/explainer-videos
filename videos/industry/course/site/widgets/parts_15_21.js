@@ -76,4 +76,72 @@
     });
   };
 
+
+  // ---- Part 16: the order that needs a plant -----------------------------------------------------------------------
+  // The film's model (explainer/industry/works/device.py): a brand offers 20 million devices a year for three years at a
+  // fee per device, if a new plant ($800m) is ready in a year.  Each device costs $9 of labour and $3 of other costs; the
+  // plant costs $60m a year.  The first year runs at half speed.  After three years the brand renews for three more with
+  // probability p.  A plant in a new country has half the labour cost, costs 10% more and ramps 30%, 70%, 100%.
+  // Run it: building is worth -$194m if not renewed and +$420m if renewed (break-even p about 32%).
+  W.assembler = function (el) {
+    function flows(plan, v) {
+      var labour = 9, other = 3, fixed = 60, plant = v.plant, ramp = [0.5, 1, 1];
+      if (plan === "abroad") { labour = 4.5; plant = v.plant * 1.1; ramp = [0.3, 0.7, 1]; }
+      var out = [-plant];
+      for (var t = 0; t < 6; t++) out.push((t < 3 ? ramp[t] : 1) * v.units * (v.fee - labour - other) - fixed);
+      return out;
+    }
+    function parts(plan, v) {
+      var f = flows(plan, v), first = 0, rest = 0;
+      for (var t = 0; t < f.length; t++) { var d = f[t] / Math.pow(1.08, t); if (t <= 3) first += d; else rest += d; }
+      return [first, rest];
+    }
+    function value(plan, v, p) {
+      if (plan === "decline") return 0;
+      var fr = parts(plan, v);
+      return fr[0] + p * fr[1];
+    }
+    QB.widget(el, {
+      title: "The order that needs a plant",
+      sub: "You run an assembler. A brand offers you millions of devices a year for three years at a fee per device, if you build a new plant within a year. After three years it may renew, or move the work elsewhere. Set the fee, the size of the order, the plant's cost and your guess of the chance it renews.",
+      panels: 2, height: 300, weights: [3, 2],
+      controls: [
+        { k: "p", label: "Chance the brand renews", min: 0, max: 1, step: 0.05, value: 0.5, fmt: function (x) { return Math.round(100 * x) + "%"; } },
+        { k: "fee", label: "Fee per device, $", min: 15, max: 45, step: 1, value: 30, fmt: function (x) { return "$" + x; } },
+        { k: "units", label: "Devices a year, million", min: 5, max: 40, step: 1, value: 20, fmt: function (x) { return x + "m"; } },
+        { k: "plant", label: "Cost of the plant, $m", min: 200, max: 1600, step: 50, value: 800, fmt: function (x) { return "$" + x + "m"; } },
+      ],
+      draw: function (g, v, s) {
+        var ps = [], b = [], a = [], d = [], i, even = null;
+        for (i = 0; i <= 20; i++) {
+          var p = i / 20; ps.push(100 * p);
+          b.push(value("build", v, p)); a.push(value("abroad", v, p)); d.push(0);
+        }
+        var fr = parts("build", v);
+        even = fr[0] >= 0 ? 0 : (fr[1] > 0 && -fr[0] / fr[1] <= 1 ? -fr[0] / fr[1] : null);
+        var lo = Math.min(Math.min.apply(null, b), Math.min.apply(null, a), 0), hi = Math.max(Math.max.apply(null, b), Math.max.apply(null, a), 50);
+        var ax = g[0].axes({ x: [0, 100], y: [lo * 1.1, hi * 1.15], title: "Value of the plan today, $m, by chance of renewal",
+                             xticks: [0, 25, 50, 75, 100], xfmt: function (x) { return x + "%"; }, yfmt: function (y) { return "$" + Math.round(y); } });
+        ax.line(ps, d, { color: C.muted, width: 1.4, dash: [4, 4] });
+        ax.line(ps, b, { color: C.p, width: 2.4 });
+        ax.line(ps, a, { color: "#b58cff", width: 2.4 });
+        ax.vline(100 * v.p, { color: C.spot, dash: [5, 4], width: 1.4 });
+        ax.legend([["build here", C.p], ["build in a new country", "#b58cff"], ["decline", C.muted]], { pos: "tl" });
+        var f = flows("build", v);
+        var top = Math.max.apply(null, f.map(Math.abs)) * 1.2;
+        var bx = g[1].axes({ x: [-0.7, 6.7], y: [-top, top], title: "Building here: cash each year, $m", xticks: [0, 1, 2, 3, 4, 5, 6],
+                             xfmt: function (x) { return "yr " + x; }, yfmt: function (y) { return "$" + Math.round(y); } });
+        for (i = 0; i < f.length; i++) bx.bars([i], [f[i]], 0.6, { color: f[i] < 0 ? C.loss : (i > 3 ? "#7a5a30" : C.p) });
+        s.r = { build: value("build", v, v.p), abroad: value("abroad", v, v.p), even: even, margin: (v.fee - 12 - 60 / v.units) / (450 + v.fee) };
+      },
+      readout: function (v, s) {
+        var r = s.r, best = r.build >= Math.max(r.abroad, 0) ? "build here" : (r.abroad > 0 ? "build in a new country" : "decline");
+        return [["best plan", best + " ($" + Math.round(Math.max(r.build, r.abroad, 0)) + "m)"],
+                ["building pays above", r.even === null ? "never" : Math.round(100 * r.even) + "% chance of renewal"],
+                ["margin on turnkey revenue", (100 * r.margin).toFixed(1) + "%"]];
+      },
+      note: "The Works' numbers, as in the film: $9 of labour and $3 of other costs a device, $60m a year to run the plant, 8% a year to discount, and a first year at half speed. The margin shown counts revenue as the assembler books it when it buys the $450 of parts and resells them: that is why a business earning good money on its own work reports a margin of a few per cent. Lower the chance of renewal and the plant becomes a bet the assembler loses; that is the brand's power, and why assemblers ask brands to pay for tooling.",
+    });
+  };
+
 })();

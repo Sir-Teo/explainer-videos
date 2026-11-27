@@ -88,14 +88,28 @@ add(
       for k, name, v in (("cn", "China", 294.957221), ("vn", "Vietnam", 66.047497), ("us", "the USA", 55.239958),
                          ("in", "India", 64.600070), ("tw", "Taiwan", 44.633146), ("mx", "Mexico", 39.737545),
                          ("other", "Japan and other countries", 31.901721))],
+    *[hh(f"hh.loc.{k}", v, "NT$ billion", f"revenue from customers registered in {name}, 2025 (by the customer's registered "
+         "location)") for k, name, v in (("us", "the USA", 3643.566946), ("sg", "Singapore", 1800.080194),
+                                           ("ie", "Ireland", 895.059041), ("cn", "China", 370.179531), ("tw", "Taiwan", 201.014630),
+                                           ("jp", "Japan", 161.897484), ("in", "India", 147.082536),
+                                           ("other", "Vietnam, Mexico and other countries", 884.224400))],
     # the brands and the PC
     k10("aapl.gm.products", 39.3, "%", "products gross margin, FY2026 (FY2025: 36.8%; FY2024: 37.2%)", "Apple Inc.", AAPL, "FY2026"),
     k10("aapl.gm.services", 76.2, "%", "services gross margin, FY2026 (FY2025: 75.4%)", "Apple Inc.", AAPL, "FY2026"),
+    *[k10(f"aapl.gm.{k}.{y}", v, "%", f"{name} gross margin, fiscal {y}", "Apple Inc.", AAPL, f"FY{y}")
+      for k, name, y, v in (("products", "products", 2025, 36.8), ("products", "products", 2024, 37.2),
+                            ("services", "services", 2025, 75.4), ("services", "services", 2024, 73.9))],
     k10("aapl.gp.products", 139.659, "$ billion", "products gross margin in dollars, FY2026", "Apple Inc.", AAPL, "FY2026"),
     k10("aapl.gp.services", 93.943, "$ billion", "services gross margin in dollars, FY2026", "Apple Inc.", AAPL, "FY2026"),
     k10("aapl.staff", 167000, "full-time equivalent employees", "employees at 26 September 2026; 'Substantially all of the "
         "Company's hardware products are manufactured by outsourcing partners that are located primarily in China "
         "mainland, India, Japan, South Korea, Taiwan and Vietnam'", "Apple Inc.", AAPL, "2026-09-26"),
+    k10("aapl.tariffs2025", 2025, "year", "'Beginning in the second quarter of 2025, new tariffs were announced on imports to "
+        "the U.S., including additional tariffs on imports from China mainland, India, Japan, South Korea, Taiwan, Vietnam "
+        "and the European Union'", "Apple Inc.", AAPL, "2025"),
+    k10("aapl.s232", 2026, "year", "'On January 14, 2026, initial results were published' of the Section 232 investigation into "
+        "semiconductors and their derivative products; they 'did not impose any additional tariffs affecting the Company's "
+        "products'", "Apple Inc.", AAPL, "2026-01-14"),
     k10("aapl.scotus", 2026, "year", "'on February 20, 2026, the Supreme Court issued a ruling striking down certain "
         "tariffs previously imposed under the International Emergency Economic Powers Act'; Apple applied for refunds and "
         "booked them against products cost of sales", "Apple Inc.", AAPL, "2026-02-20"),
@@ -109,16 +123,26 @@ add(
           "HP Inc.", HPQ, f"FY{y}") for y, v, m in ((2025, 2.054, 5.3), (2024, 2.253, 6.2), (2023, 2.129, 6.0))],
     k10("hpq.print", 16.702, "$ billion", "Printing net revenue, fiscal 2025 (earnings from operations $3.118bn, 18.7%)",
         "HP Inc.", HPQ, "FY2025"),
+    k10("hpq.supplies", 10.916, "$ billion", "Printing: supplies (ink and toner) net revenue, fiscal 2025 (commercial printing "
+        "$4.633bn, consumer printing $1.153bn)", "HP Inc.", HPQ, "FY2025"),
     k10("hpq.print.op", 3.118, "$ billion", "Printing earnings from operations, fiscal 2025", "HP Inc.", HPQ, "FY2025"),
     *[k10(f"dell.csg.{y}", v, "$ billion", f"Client Solutions Group (PCs) net revenue, fiscal {y}", "Dell Technologies",
           DELL, f"FY{y}") for y, v in ((2026, 50.984), (2025, 48.393), (2024, 48.916))],
     *[k10(f"dell.csg.op.{y}", v, "$ billion", f"Client Solutions Group operating income, fiscal {y} ({m}% of revenue)",
           "Dell Technologies", DELL, f"FY{y}") for y, v, m in ((2026, 2.833, 5.6), (2025, 2.972, 6.1), (2024, 3.712, 7.6))],
+    *[k10(f"dell.ai.{y}", v, "$ billion", f"AI-optimized servers net revenue, fiscal {y}", "Dell Technologies", DELL, f"FY{y}")
+      for y, v in ((2026, 24.683), (2025, 9.286), (2024, 1.873))],
+    k10("dell.isg.2026", 60.826, "$ billion", "Infrastructure Solutions Group (servers, networking, storage) net revenue, fiscal "
+        "2026 (fiscal 2025: 43.593)", "Dell Technologies", DELL, "FY2026"),
+    k10("dell.isg.op.2026", 7.111, "$ billion", "Infrastructure Solutions Group operating income, fiscal 2026 (11.7% of revenue; "
+        "fiscal 2025: 5.579, 12.8%)", "Dell Technologies", DELL, "FY2026"),
     # the assemblers
     k10("jbl.custa", 20, "% of net revenue", "Jabil's largest customer ('Customer A'), fiscal 2026 (fiscal 2025: 16%); five "
         "largest customers about 37%", "Jabil Inc.", JBL, "FY2026"),
     k10("flex.staff", 149686, "employees", "Flex's workforce at 31 March 2026 (Americas 61,841; Asia 60,870; Europe 26,975), "
         "in more than 100 facilities across about 30 countries", "Flex Ltd.", FLEX, "2026-03-31"),
+    *[k10(f"flex.staff.{k}", v, "employees", f"Flex's workforce in {name} at 31 March 2026", "Flex Ltd.", FLEX, "2026-03-31")
+      for k, name, v in (("am", "the Americas", 61841), ("asia", "Asia", 60870), ("eu", "Europe", 26975))],
     k10("flex.china", 16, "% of net sales", "share of Flex's net sales made in China, fiscal 2026 (North America 44%, "
         "Europe 20%, other 20%)", "Flex Ltd.", FLEX, "FY2026"),
     # tariffs

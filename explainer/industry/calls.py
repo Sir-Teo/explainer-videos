@@ -254,6 +254,23 @@ CALLS = [
          rule="WSTS's first release of world semiconductor sales for the calendar year 2026 (its Q4 release, or SIA's "
               "annual release of WSTS data); true if above $1,800 billion",
          due="2027-03", ours=True),
+    Call(16, "Howard Lutnick, US Secretary of Commerce", "2025-04-06",
+         "\"The army of millions and millions of human beings screwing in little- little screws to make iPhones, that "
+         "kind of thing is going to come to America. It's going to be automated.\"",
+         "CBS News, transcript of Face the Nation with Margaret Brennan, 6 April 2025",
+         outcome="US imports of smartphones were $52.4bn in 2025 against $51.5bn in 2024 (UN Comtrade, HS 851713), from "
+                 "China $23.7bn (2024: $41.7bn) and from India $22.1bn (2024: $7.0bn); US employment in computer and "
+                 "electronic products manufacturing averaged 1.00 million in 2025 against 1.03 million in 2024 (BLS). "
+                 "Not so far: assembly moved to India, not to America"),
+    Call(16, "Industry, Built", "2026-11-27",
+         "India will supply more than half of the United States' smartphone imports, by value, in calendar 2026. "
+         "Probability: 55%.",
+         "This series, Part 16, chapter 13; reasoning: India supplied 58% from January to August 2026 (UN Comtrade), but "
+         "in September-December 2025 China supplied most of the launch months; if those months repeat, the year ends near "
+         "50.1%",
+         rule="UN Comtrade, reporter United States, imports, HS 851713, annual 2026: partner India over partner World, as "
+              "first published; true if above 50%",
+         due="2027-06", ours=True),
 ]
 
 

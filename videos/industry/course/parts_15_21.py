@@ -50,4 +50,51 @@ PARTS = [
               ("FRED, Our World in Data, the SEC's foreign filers and the companies' accounts",
                "explainer/industry/data/SOURCES.md")),
     ),
+    Part(
+        n=16, level="U", widget="assembler", prereq=(1, 4, 5, 15),
+        question="Why does the company that builds the device keep the least of it?",
+        story="The part opens with Stan Shih, the founder of Acer, who in 1992 drew the value added along the computer "
+              "industry and found 'a smile-shaped curve', with manufacturing at the bottom. In 2025 Hon Hai (Foxconn) took "
+              "in NT$8.1 trillion, about $260bn, and kept 2.3 cents in the dollar; Apple kept 28 cents of $479bn. The viewer "
+              "runs an assembler offered 20 million devices a year at $30 each if it builds an $800m plant: worth -$194m "
+              "if the brand moves the work after three years and +$420m if it renews, so the plant pays only above a 32% "
+              "chance of renewal. A device is assembled on a surface-mount line and by hand; Apple's hardware is made by "
+              "partners in China, India, Japan, South Korea, Taiwan and Vietnam. The Works' $900 device splits into parts, "
+              "a $30 fee and the brand's $260 of profit: the smile from arithmetic. Six contract manufacturers kept 0-5 "
+              "cents a year for fifteen years; turnkey revenue makes the margin look thin (3% against 50% on the fee), and "
+              "Hon Hai turns its assets 1.6 times a year for a 9.6% return on equity. Its servers overtook its phones in "
+              "2025, its largest customer fell from 54% to 44% of revenue, and its servers arm earned 4.7 cents against "
+              "1.4. Apple's services earn a 76% gross margin. Connector makers keep 10-20 cents; LG Display lost money in "
+              "six of ten years. Televisions' price index fell 99.4% since 1951. Intel's PC chips earned 29-35% while HP's "
+              "and Dell's PCs earned 5-8%, and HP's printing 18.7%. US server imports rose from $23bn (2017) to $165bn "
+              "(2025). Hon Hai's assets in China shrank while Vietnam's, America's, Mexico's and India's grew. Tariffs "
+              "from 2018 hardly moved phones or laptops until 2023-25; then China's share of US phone imports fell from 81% "
+              "to 45% and of laptops from 66% to 18%, and the Supreme Court struck down the emergency tariffs in February "
+              "2026. The Commerce Secretary's 2025 forecast that iPhone assembly would come to America has not come true; "
+              "the series calls India above half of US smartphone imports in 2026 (55%).",
+        handoff="Part 17, cars, turns to a product whose makers also struggle to keep much of what they sell.",
+        outside="Percentages and discounting; Part 1's phone and its dollar; Part 4's fixed costs; Part 5's moats; Part 15's chips.",
+        objectives={
+            "U": ["Explain Shih's smile: why value added is high at the parts and brand ends and low in assembly.",
+                  "Explain how a device is assembled, and who does the work for which brands.",
+                  "Explain why tariffs moved assembly slowly, and where it went."],
+            "M": ["Value a plant built for one customer's order, with and without renewal, and find the break-even chance.",
+                  "Show how turnkey revenue changes an assembler's margin without changing its profit.",
+                  "Decompose a return on equity into margin, asset turnover and leverage."],
+            "D": ["Score a forecast (the Commerce Secretary's, April 2025) against trade and employment data.",
+                  "Judge how far a quality-adjusted price index measures what buyers gained."],
+            "I": ["Read an assembler's segment, customer and geographic notes (Hon Hai's) and a brand's gross margins.",
+                  "Read customs data by partner to see where a product is assembled, and when it moved."],
+        },
+        results=[
+            ("Plant value", r"V(p) = V_{\text{order}} + p\,V_{\text{renewal}}"),
+            ("Break-even renewal", r"p^* = -V_{\text{order}} / V_{\text{renewal}}"),
+            ("Turnkey margin", r"m = \frac{\pi}{q\,(\text{parts} + \text{fee})}"),
+            ("DuPont", r"\frac{NI}{E} = \frac{NI}{S}\cdot\frac{S}{A}\cdot\frac{A}{E}"),
+        ],
+        U=(0, 1, 2, 3, 4, 5, 6, 7, "s09_intermission", 8, 9, 10, 11), I=(12,), D=(13,),
+        also=(("The Register's rows for Part 16", "explainer/industry/data/rows_p16.py"),
+              ("The device, the assembler and Run it", "explainer/industry/works/device.py"),
+              ("UN Comtrade, BLS, FRED, the SEC extracts and Hon Hai's statements", "explainer/industry/data/SOURCES.md")),
+    ),
 ]
