@@ -305,6 +305,12 @@ def results() -> dict:
                 c["group"] = g
                 land.append(c)
     R["landscape"] = dict(companies=land)
+    yrs = range(2018, 2026)
+    utils = [tk for tk in groups["regulated utilities"] if all(sec.get(tk, {}).get(y, {}).get("capex") for y in yrs)]
+    capex = {y: float(sum(sec[tk][y]["capex"] for tk in utils)) for y in yrs}
+    R["demand"]["capex"] = capex
+    R["demand"]["capex_n"] = len(utils)
+    R["demand"]["capex_who"] = utils
 
     # --- called it? ---------------------------------------------------------------------------------------------------------
     R["called"] = dict(proj=get("aeo05.elec.2025"), base=get("aeo05.elec.2003"), actual=end_use[2025], actual2003=end_use[2003],
