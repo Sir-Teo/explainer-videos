@@ -165,6 +165,21 @@ CALLS = [
          rule="USDA ERS Food Dollar Series, release covering 2026 (expected late 2027): all-food farm share, 2026 against "
               "2025 in that same release; true if 2026 is higher",
          due="2027-12", ours=True),
+    Call(11, "World Steel Association, Short Range Outlooks", "2022-10",
+         "Each October, a forecast of China's steel demand for the year ahead: flat in 2023 (October 2022), flat in 2024 "
+         "(October 2023), down 1.0% in 2025 (October 2024), down 1.0% in 2026 (October 2025).",
+         "worldsteel press releases of 19 October 2022, 17 October 2023, 14 October 2024 and 13 October 2025",
+         outcome="China's apparent steel use fell 2.3% in 2023, 5.4% in 2024 and 7.1% in 2025 (World Steel in Figures "
+                 "2026; worldsteel itself cites 'a 7.1% contraction' for 2025 in April 2026): each year-ahead forecast was "
+                 "too high, and in October 2026 the 2026 forecast was cut to -2.0%"),
+    Call(11, "Industry, Built", "2026-11-27",
+         "When worldsteel publishes China's steel demand for 2026 (its April 2027 Short Range Outlook), it will show a "
+         "fall of more than 2.0%, the figure it forecast in October 2026. Probability: 70%.",
+         "This series, Part 11, chapter 14; reasoning: the October forecasts were too high three years running, and "
+         "China's crude steel output was 2.8% lower in January-October 2026 than a year before (worldsteel, 24 November "
+         "2026); against: exports and manufacturing holding up, and revisions",
+         rule="worldsteel Short Range Outlook, April 2027: the change in China's steel demand (apparent use of finished "
+              "steel) in 2026; true if below -2.0%", due="2027-04", ours=True),
 ]
 
 

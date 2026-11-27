@@ -198,11 +198,16 @@ def results() -> dict:
                           uses=dict(transport=get("usgs.alu.us.transport"), packaging=get("usgs.alu.us.packaging")))
 
     # --- packaging -----------------------------------------------------------------------------------------------------
+    # years left out of the five-year margin because one sale dominates them: Ball sold its aerospace business and
+    # Martin Marietta its South Texas cement business in 2024 (both 10-Ks)
+    EXCLUDE = {"BALL": (2024,), "MLM": (2024,)}
+
     def comp(t, upto=2025):
         ys = [y for y in sec[t] if y <= upto and sec[t][y]["revenue"] and sec[t][y]["net_income"] is not None]
         y = max(ys)
         m5 = [sec[t][k]["net_income"] / sec[t][k]["revenue"] for k in range(y - 4, y + 1)
-              if k in sec[t] and sec[t][k]["revenue"] and sec[t][k]["net_income"] is not None]
+              if k in sec[t] and sec[t][k]["revenue"] and sec[t][k]["net_income"] is not None
+              and k not in EXCLUDE.get(t, ())]
         om = [sec[t][k]["operating_income"] / sec[t][k]["revenue"] for k in range(y - 4, y + 1)
               if k in sec[t] and sec[t][k]["revenue"] and sec[t][k]["operating_income"] is not None]
         return dict(ticker=t, year=y, revenue=sec[t][y]["revenue"], net=sec[t][y]["net_income"],
@@ -267,7 +272,7 @@ def results() -> dict:
                          margin5=float(np.mean(m5)), n5=len(m5), group="steel" if t == "MT" else "cement and aggregates"))
     comps = ("baowu", "arcelormittal", "nippon", "ansteel", "hbis", "shagang", "jianlong", "posco", "delong", "tata",
              "jsw", "shougang", "jfe", "nucor", "cliffs", "stld")
-    R["landscape"] = dict(companies=land,
+    R["landscape"] = dict(companies=land, excluded=EXCLUDE,
                           steelmakers=[(k, get(f"ws.company.{k}.2025")) for k in comps],
                           sro27=get("ws.sro.china.2027"), construction=_annual(F["TTLCONS"], need=9))
 
