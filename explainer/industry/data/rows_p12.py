@@ -70,6 +70,11 @@ add(
     usgs("usgs.potash.canada.2025", 15000, "thousand tonnes of K2O", "Canada's potash mine production, 2025", "potash"),
     usgs("usgs.potash.belarus.2025", 6000, "thousand tonnes of K2O", "Belarus's potash mine production, 2025", "potash"),
     usgs("usgs.potash.china.2025", 6300, "thousand tonnes of K2O", "China's potash mine production, 2025", "potash"),
+    usgs("usgs.potash.russia.2025", 10000, "thousand tonnes of K2O", "Russia's potash mine production, 2025 (estimated)",
+         "potash"),
+    usgs("usgs.potash.world.2025", 49000, "thousand tonnes of K2O", "World potash mine production, 2025 (rounded)",
+         "potash"),
+    usgs("usgs.potash.us.canada", 79, "% of imports", "Canada's share of US potash imports, 2021-24", "potash", "2021-2024"),
     usgs("usgs.potash.us.imports.2025", 5600, "thousand tonnes of K2O", "US imports of potash, 2025", "potash"),
     usgs("usgs.potash.us.prod.2025", 500, "thousand tonnes of K2O", "US potash production, 2025", "potash"),
     # --- EIA ------------------------------------------------------------------------------------------------------------------

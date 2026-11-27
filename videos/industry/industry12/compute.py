@@ -154,7 +154,8 @@ def results() -> dict:
                            producers={k: get(f"usgs.n.{k}.2025") for k in ("china", "india", "russia", "us")},
                            world=get("usgs.n.world.2025"), us_plants=get("usgs.n.us.plants"), fert=get("usgs.n.us.fert"),
                            gulf=get("usgs.n.us.gulf"), cf_gascost=get("cf.gascost.2025"),
-                           potash={k: get(f"usgs.potash.{k}.2025") for k in ("canada", "belarus", "china")},
+                           potash={k: get(f"usgs.potash.{k}.2025") for k in ("canada", "russia", "china", "belarus")},
+                           potash_world=get("usgs.potash.world.2025"), potash_canada=get("usgs.potash.us.canada"),
                            potash_imports=get("usgs.potash.us.imports.2025"), potash_us=get("usgs.potash.us.prod.2025"),
                            us_n=U["nitrogen"]["production"], cf_uk=get("cf.uk"), ppi_n=_annual(F["PCU325311325311"]))
 
