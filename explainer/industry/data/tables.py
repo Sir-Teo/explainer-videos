@@ -147,3 +147,26 @@ add(
            "2026-01": 499, "2026-02": 469, "2026-03": 465, "2026-04": 274, "2026-05": 281, "2026-06": 276,
            "2026-07": 305, "2026-08": 318, "2026-09": 325, "2026-10": 352}, parts=P11),
 )
+
+
+# ---------------------------------------------------------------------------------------------------------- Part 15
+P15 = (15,)
+TSM20F = "https://www.sec.gov/Archives/edgar/data/1046179/000162828026025362/tsm-20251231.htm"
+TSM_FABS = "TSMC, Form 20-F 2025 (Item 4, 'Semiconductor Manufacturing Capacity and Technology': fabs in operation as of 28 February 2026)"
+
+add(
+    Table("tsm.fabs.nm", "nanometres", "Most advanced technology in volume production at each of TSMC's fabs and its "
+          "subsidiaries' fabs in operation, by location (as of the end of 2025), keyed by fab number",
+          TSM_FABS, TSM20F, C,
+          {"Hsinchu": {2: 450, 3: 150, 5: 150, 8: 110, 12: 40, 20: 2}, "Southern Taiwan": {6: 110, 14: 16, 18: 3, 22: 2},
+           "Central Taiwan": {15: 7}, "Washington, US": {11: 150}, "Shanghai, China": {10: 150},
+           "Nanjing, China": {16: 16}, "Arizona, US": {21: 5}, "Kumamoto, Japan": {23: 28}},
+          note="ESMC's Fab 24 in Dresden is under construction ('where Fab 24 and related facilities will be located').",
+          parts=P15),
+    Table("tsm.fabs.year", "year", "Year each TSMC fab began commercial production", TSM_FABS, TSM20F, C,
+          {2: 1990, 3: 1995, 5: 1997, 6: 2000, 8: 1998, 10: 2004, 11: 1998, 12: 2001, 14: 2004, 15: 2012, 16: 2018,
+           18: 2020, 20: 2025, 21: 2024, 22: 2025, 23: 2024}, parts=P15),
+    Table("tsm.fabs.wafer", "inches", "Wafer size of each TSMC fab", TSM_FABS, TSM20F, C,
+          {2: 6, 3: 8, 5: 8, 6: 8, 8: 8, 10: 8, 11: 8, 12: 12, 14: 12, 15: 12, 16: 12, 18: 12, 20: 12, 21: 12, 22: 12,
+           23: 12}, parts=P15),
+)

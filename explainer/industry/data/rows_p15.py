@@ -25,6 +25,7 @@ WSTS26 = "https://www.wsts.org/esraCMS/extension/media/f/WST/7618/WSTS_FC-Releas
 WSTS25 = "https://www.wsts.org/esraCMS/extension/media/f/WST/7310/WSTS_FC-Release-2025_11.pdf"
 WSTS23 = "https://www.wsts.org/esraCMS/extension/media/f/WST/6254/WSTS_nr-2023_11.pdf"
 WSTSQ2 = "https://www.wsts.org/76/Global-Semiconductor-Market-records-exceptional-growth-in-Q2-2026"
+WSTSQ4 = "https://www.wsts.org/76/103/Global-Semiconductor-Market-grows-26-in-2025-to-796B"
 SIA = "https://www.semiconductors.org/global-semiconductor-sales-increase-24-1-from-q2-2026-to-q3-2026/"
 FR = "https://www.federalregister.gov/d/"
 
@@ -92,6 +93,8 @@ add(
     tsm("tsm.top1", 19, "%", "share of net revenue from its largest customer (2023: 25%; 2024: 22%)"),
     tsm("tsm.top2", 17, "%", "share of net revenue from its second largest customer (2023: 11%; 2024: 12%)"),
     tsm("tsm.staff", 90557, "employees", "employees at 31 December 2025"),
+    tsm("tsm.staff.2023", 76478, "employees", "employees at 31 December 2023", fact="2023"),
+    tsm("tsm.staff.2024", 83825, "employees", "employees at 31 December 2024", fact="2024"),
     tsm("tsm.chips_grant", 6.6, "$ billion", "CHIPS Act direct funding the US Department of Commerce agreed to award TSMC "
         "Arizona (November 2024), with up to $5 billion of loans", fact="2024-11"),
     tsm("tsm.esmc_aid", 5, "€ billion", "state aid Germany agreed for ESMC, TSMC's Dresden subsidiary, under the European "
@@ -111,6 +114,17 @@ add(
       "3Q 2026", "filing"),
     r("tsm.q3.phone", 21, "% of revenue", "smartphones' share of revenue", "TSMC, 3Q26 earnings conference presentation, "
       "slide 5", TSMQ3P, "3Q 2026", "filing"),
+    *[r(f"tsm.q3.{k}", v, "% of revenue", f"{name}'s share of revenue", "TSMC, 3Q26 earnings conference presentation, "
+        "slide 5", TSMQ3P, "3Q 2026", "filing") for k, v, name in (("iot", 4, "the internet of things"), ("auto", 4, "automotive"),
+                                                                    ("dce", 1, "digital consumer electronics"), ("other", 2, "other"))],
+    *[tsm(f"tsm.plat.{k}.{y}", v, "% of revenue", f"{name}'s share of net revenue in {y} (20-F table of net revenue by "
+          "platform)", fact=str(y))
+      for k, name, vals in (("hpc", "high-performance computing", (43, 51, 58)), ("phone", "smartphones", (38, 35, 29)),
+                            ("iot", "the internet of things", (8, 6, 5)), ("auto", "automotive", (6, 5, 5)),
+                            ("dce", "digital consumer electronics", (2, 1, 1)), ("other", "other", (3, 2, 2)))
+      for y, v in zip((2023, 2024, 2025), vals)],
+    tsm("tsm.plat.hpc.twd.2023", 934.769, "NT$ billion", "net revenue from high-performance computing, 2023", fact="2023"),
+    tsm("tsm.plat.hpc.twd.2025", 2192.931, "NT$ billion", "net revenue from high-performance computing, 2025 (up 48% on 2024)"),
     # ASML
     asml("asml.rev", 32.7, "€ billion", "total net sales (2024: €28.3 billion)"),
     asml("asml.gm", 52.8, "%", "gross margin"),
@@ -174,6 +188,11 @@ add(
       "Semiconductor Industry Association, press release of 3 November 2026 (WSTS data)", SIA, "3Q 2026", "tracker"),
     r("sia.sep.2026", 172.6, "$ billion", "world semiconductor sales in September 2026 (three-month moving average, +146.8% on "
       "a year earlier)", "Semiconductor Industry Association, press release of 3 November 2026", SIA, "2026-09", "tracker"),
+    wsts("wsts.q4.2025", 238.9, "$ billion", "world semiconductor sales in the fourth quarter of 2025 (+38.4% on a year "
+         "earlier)", "4Q 2025", url=WSTSQ4, src="Q4 2025 release (6 March 2026)"),
+    r("sia.q3.growth", 24.1, "%", "growth of world sales from the second to the third quarter of 2026; 'more than 20% "
+      "quarter-to-quarter for the third consecutive quarter'", "Semiconductor Industry Association, press release of 3 "
+      "November 2026 (WSTS data)", SIA, "3Q 2026", "tracker"),
     # export controls
     fr("bis.2022", 2022, "year", "controls on advanced computing chips, computers containing them and certain chipmaking "
        "equipment for China (87 FR 62186, effective 7 October 2022)", "87 FR 62186 (13 October 2022)", "2022-21658", "2022-10-07"),
@@ -182,10 +201,28 @@ add(
     fr("bis.2026h200", 2026, "year", "licence review for the Nvidia H200 and lesser chips to China and Macau changed from a "
        "presumption of denial to case by case (91 FR 1684)", "91 FR 1684 (15 January 2026)", "2026-00789", "2026-01-15"),
     fr("bis.2026remote", 2026, "year", "rules on overseas data centres supplying compute to companies headquartered in "
-       "countries of concern (91 FR 74970)", "91 FR 74970 (19 November 2026)", "2026-23529", "2026-11-19"),
+       "countries of concern; licences for advanced chips to Indonesia, Malaysia, Singapore, Thailand and Brazil; formal "
+       "rescission of the AI Diffusion Rule, 'never enforced' (91 FR 74970)", "91 FR 74970 (19 November 2026)", "2026-23529", "2026-11-19"),
+    fr("bis.2023", 2023, "year", "updated controls on advanced computing chips and the computers that use them (88 FR 73458)",
+       "88 FR 73458 (25 October 2023)", "2023-23055", "2023-10-25"),
+    fr("bis.2024", 2024, "year", "foreign-produced direct product rule additions and refinements to controls on advanced "
+       "computing and chipmaking items (89 FR 96790)", "89 FR 96790 (5 December 2024)", "2024-28270", "2024-12-05"),
+    r("nvda.memsup", 3, "suppliers", "'We purchase memory from SK Hynix Inc., Micron Technology, Inc., and Samsung'; wafers "
+      "from foundries 'such as' TSMC and Samsung; CoWoS packaging; assembly, testing and packaging by Hon Hai, Wistron and "
+      "Fabrinet; cost of revenue covers wafer fabrication, assembly, testing and packaging, boards, memory and components",
+      "NVIDIA Corporation, Form 10-K FY2026", NVDA, "FY2026", "filing"),
+    r("nvda.h20.lic", 2025, "year", "in August 2025 the US government granted licences to ship certain H20 chips to certain "
+      "customers in China, after requiring a licence in April 2025", "NVIDIA Corporation, Form 10-K FY2026", NVDA, "2025-08",
+      "filing"),
+    *[wsts(f"wsts.reg.{k}.{y}", v, "$ billion", f"semiconductor sales to {name}", y if y == "2025" else "2026 forecast (May 2026)")
+      for k, name, vals in (("am", "the Americas", (256.476, 543.654)), ("ap", "Asia Pacific", (439.747, 823.900)),
+                            ("eu", "Europe", (54.694, 86.643)), ("jp", "Japan", (44.723, 57.050)))
+      for y, v in zip(("2025", "2026f"), vals)],
     asml("asml.nm.iline", 365, "nm", "wavelength of i-line light (mercury vapour lamps)"),
     asml("asml.nm.krf", 248, "nm", "wavelength of krypton fluoride laser light"),
     asml("asml.nm.arf", 193, "nm", "wavelength of argon fluoride laser light (deep ultraviolet)"),
     asml("asml.nm.euv", 13.5, "nm", "wavelength of extreme ultraviolet (EUV) light"),
     asml("asml.res", 100, "x", "improvement in resolution 'for over 40 years ... by two orders of magnitude'"),
+    tsm("tsm.tool_life", 5, "years", "useful life over which TSMC depreciates its machinery and equipment (buildings: "
+        "10-20 years)"),
 )

@@ -346,7 +346,10 @@ SEC_COMPANIES = [(789019, "MSFT"), (909832, "COST"), (19617, "JPM"), (753308, "N
                  (1410636, "AWK"), (78128, "WTRG"), (1056903, "AWR"), (1035201, "CWT"), (766829, "HTO"),
                  (1045810, "NVDA"), (1730168, "AVGO"), (2488, "AMD"), (804328, "QCOM"), (97476, "TXN"), (6951, "AMAT"),
                  (707549, "LRCX"), (6281, "ADI"), (319201, "KLAC"), (1835632, "MRVL"), (813672, "CDNS"), (883241, "SNPS"),
-                 (1413447, "NXPI"), (827054, "MCHP"), (1097864, "ON"), (1047127, "AMKR")]
+                 (1413447, "NXPI"), (827054, "MCHP"), (1097864, "ON"), (1047127, "AMKR"),
+                 (320193, "AAPL"), (1571996, "DELL"), (47217, "HPQ"), (866374, "FLEX"), (898293, "JBL"), (897723, "SANM"),
+                 (785786, "PLXS"), (863436, "BHE"), (1030894, "CLS"), (1375365, "SMCI"), (820313, "APH"), (24741, "GLW"),
+                 (1385157, "TEL"), (1032975, "LOGI")]
 
 
 # where a company's first-choice tag means something else: Mastercard tagged its gross revenue, before rebates and
@@ -1545,7 +1548,9 @@ def owid_chips():
 
 
 FOREIGN_CHIPS = [(1046179, "TSM", "ifrs-full", "TWD"), (1033767, "UMC", "ifrs-full", "TWD"), (1709048, "GFS", "ifrs-full", "USD"),
-                 (937966, "ASML", "us-gaap", "EUR"), (932787, "STM", "us-gaap", "USD")]
+                 (937966, "ASML", "us-gaap", "EUR"), (932787, "STM", "us-gaap", "USD"),
+                 # Part 16: electronics
+                 (313838, "SONY", "ifrs-full", "JPY"), (1290109, "LPL", "ifrs-full", "KRW"), (1122411, "ASX", "ifrs-full", "TWD")]
 FOREIGN_ITEMS = {"ifrs-full": {"revenue": ["Revenue", "RevenueFromContractsWithCustomers"],
                                "operating_income": ["ProfitLossFromOperatingActivities"],
                                "profit": ["ProfitLossAttributableToOwnersOfParent", "ProfitLoss"],
@@ -1560,9 +1565,10 @@ FOREIGN_ITEMS = {"ifrs-full": {"revenue": ["Revenue", "RevenueFromContractsWithC
 
 
 def sec_foreign():
-    """Annual figures of the foreign chip makers that file Forms 20-F with the SEC (Part 15), in their reporting
+    """Annual figures of the foreign chip and electronics makers that file Forms 20-F with the SEC, in their reporting
     currency (billions): TSMC and UMC (IFRS, NT dollars), GlobalFoundries (IFRS, US dollars), ASML (US GAAP, euros) and
-    STMicroelectronics (US GAAP, US dollars)."""
+    STMicroelectronics (US GAAP, US dollars) for Part 15; Sony (IFRS, yen), LG Display (IFRS, won) and ASE (IFRS, NT
+    dollars) for Part 16."""
     import time
 
     out = []
@@ -1613,7 +1619,114 @@ def wb_water():
                    "; WHO/UNICEF Joint Monitoring Programme, % of population)"])
 
 
-JOBS = {"fred_chips": fred_chips, "owid_chips": owid_chips, "sec_foreign": sec_foreign, "wb_water": wb_water, "bls_water": bls_water, "fred_waste": fred_waste, "epa_msw": epa_msw, "eia_930": eia_930, "eia_mer": eia_mer, "fred_power": fred_power, "owid_elec": owid_elec, "owid_chem": owid_chem, "fred_chem": fred_chem, "eia_ngl": eia_ngl, "eurostat_chem": eurostat_chem, "usgs_heavy": usgs_heavy, "fred_heavy": fred_heavy, "owid_co2": owid_co2, "ers_food_dollar": ers_food_dollar, "ers_costs": ers_costs, "ers_farm_income": ers_farm_income, "owid_ag": owid_ag, "fred_food": fred_food, "ne_land": ne_land, "usgs_ds140": usgs_ds140, "fred_metals": fred_metals, "sec_ifrs": sec_ifrs, "eia_gas": eia_gas, "eia_petroleum": eia_petroleum, "eia_intl": eia_intl, "eia_pump": eia_pump, "fred_energy": fred_energy, "fred_market": fred_market, "owid_tech": owid_tech, "sec_quarterly": sec_quarterly, "fred_cycle": fred_cycle, "esef_maersk": esef_maersk, "damodaran_roc": damodaran_roc, "census_conc": census_conc, "eia_power": eia_power, "fred_pay": fred_pay, "bea_real": bea_real, "sec_annual": sec_annual, "fred_prices": fred_prices, "census_susb": census_susb, "bea_va": bea_va, "wb_mfg_usd": wb_mfg_usd, "bea_hist": bea_hist, "bea_io": bea_io, "fred_jobs": fred_jobs, "wb_shares": wb_shares}
+# ---------------------------------------------------------------------------------------------------------- Part 16
+BLS_ELEC = {"SA0": "All items", "SERA01": "Televisions (Dec 2024 = 100)",
+            "SEEE01": "Computers, peripherals, and smart home assistants (Dec 2007 = 100)",
+            "SEEE04": "Telephone hardware, calculators, and other consumer information items (Dec 2024 = 100)",
+            "SSEE041": "Smartphones (Dec 2019 = 100)"}
+
+
+def bls_elec():
+    """Consumer price indexes for electronics, US city average, all urban consumers, not seasonally adjusted, annual
+    averages (BLS CPI flat files): televisions since 1951, computers and telephone hardware since 1998, smartphones since
+    2020, and all items.  The indexes are quality-adjusted."""
+    want = {f"CUUR0000{k}": v for k, v in BLS_ELEC.items()}
+    out = []
+    files = ("cu.data.1.AllItems", "cu.data.16.USRecreation", "cu.data.17.USEducationAndCommunication")
+    for f in files:
+        for line in _get(BLS_CU + f).decode().splitlines()[1:]:
+            p = [x.strip() for x in line.split("\t")]
+            if len(p) >= 4 and p[0] in want and p[2] == "M13":
+                out.append([p[0][8:], want[p[0]], int(p[1]), float(p[3])])
+    out.sort()
+    return _write("bls_elec", ["item", "name", "year", "value"], out,
+                  [BLS_CU + f for f in files] + ["CPI-U, US city average, not seasonally adjusted, annual average (period M13)"])
+
+
+FRED_ELEC = {"IPG3341S": "Industrial production: computers and peripheral equipment (2017 = 100)",
+             "IPG3342S": "Industrial production: communications equipment (2017 = 100)",
+             "IPG3343S": "Industrial production: audio and video equipment (2017 = 100)",
+             "CEU3133400001": "All employees, computer and electronic products manufacturing (thousands, not seasonally adjusted)",
+             "PCU334111334111": "PPI: electronic computer manufacturing (Dec 1990 = 100)",
+             "AEXTAUS": "Taiwan dollars to one US dollar, annual average (Federal Reserve H.10)",
+             "AEXJPUS": "Japanese yen to one US dollar, annual average (Federal Reserve H.10)",
+             "AEXKOUS": "South Korean won to one US dollar, annual average (Federal Reserve H.10)"}
+
+
+def fred_elec():
+    """Monthly series for Part 16 (via FRED): the Federal Reserve's output of computers, communications equipment and
+    audio and video equipment since 1972, employment in computer and electronic products manufacturing since 1990, and
+    the producer price index for computers."""
+    out = []
+    for sid in FRED_ELEC:
+        txt = _get(f"https://fred.stlouisfed.org/graph/fredgraph.csv?id={sid}").decode()
+        for line in txt.splitlines()[1:]:
+            d, v = line.split(",")
+            if v not in (".", ""):
+                out.append([sid, d[:7], float(v)])
+    return _write("fred_elec", ["series", "month", "value"], out,
+                  ["https://fred.stlouisfed.org (" + "; ".join(f"{k} {v}" for k, v in FRED_ELEC.items()) + ")"])
+
+
+COMTRADE_PARTNERS = {0: "World", 156: "China", 704: "Vietnam", 699: "India", 484: "Mexico", 490: "Taiwan",
+                     458: "Malaysia", 764: "Thailand", 410: "South Korea", 392: "Japan"}
+COMTRADE_HS = {"851712": "telephones for cellular networks (to 2021: all mobile phones; from 2022: other than smartphones)",
+               "851713": "smartphones (from 2022)", "847130": "portable computers of 10 kg or less (laptops)",
+               "847150": "processing units (servers and other computer units)", "852872": "colour television receivers"}
+
+
+def comtrade_us(years=range(2015, 2026)):
+    """US imports by partner of phones, laptops, servers and televisions, 2015-2025, as reported by the United States
+    to UN Comtrade (annual, HS six-digit, US dollars; UN Comtrade's public preview API).  Taiwan is 'Other Asia, nes'
+    (code 490) in Comtrade."""
+    import time
+
+    out = []
+    partners = ",".join(str(k) for k in COMTRADE_PARTNERS)
+    for y in years:
+        url = ("https://comtradeapi.un.org/public/v1/preview/C/A/HS?reporterCode=842&period={}&partnerCode={}&cmdCode={}"
+               "&flowCode=M").format(y, partners, ",".join(COMTRADE_HS))
+        j = json.loads(_get(url))
+        for r in j.get("data", []):
+            if r.get("customsCode") != "C00" or r.get("motCode") != 0 or r.get("partner2Code") != 0:
+                continue
+            out.append([y, r["cmdCode"], COMTRADE_PARTNERS.get(r["partnerCode"], r["partnerCode"]),
+                        round(r["primaryValue"] / 1e9, 4), r.get("qty")])
+        time.sleep(1.5)
+    out.sort(key=lambda r: (r[0], r[1], str(r[2])))
+    return _write("comtrade_us", ["year", "hs", "partner", "imports_usd_bn", "qty"], out,
+                  ["https://comtradeapi.un.org/public/v1/preview/C/A/HS (UN Comtrade, reporter United States (842), "
+                   "imports, annual; " + "; ".join(f"{k} {v}" for k, v in COMTRADE_HS.items()) + ")"])
+
+
+
+def comtrade_us_m(start="2025-01", end=None):
+    """US imports of smartphones (HS 851713) and laptops (847130) by month from the world, China, India and Vietnam,
+    as reported by the United States to UN Comtrade (public preview API), from ``start`` to the latest month published."""
+    import time
+
+    y, m = map(int, start.split("-"))
+    today = dt.date.today()
+    out = []
+    partners = {0: "World", 156: "China", 699: "India", 704: "Vietnam"}
+    while (y, m) <= (today.year, today.month):
+        per = f"{y}{m:02d}"
+        url = ("https://comtradeapi.un.org/public/v1/preview/C/M/HS?reporterCode=842&period={}&partnerCode={}"
+               "&cmdCode=851713,847130&flowCode=M").format(per, ",".join(str(k) for k in partners))
+        j = json.loads(_get(url))
+        for r in j.get("data", []):
+            if r.get("customsCode") != "C00" or r.get("motCode") != 0 or r.get("partner2Code") != 0:
+                continue
+            out.append([f"{y}-{m:02d}", r["cmdCode"], partners[r["partnerCode"]], round(r["primaryValue"] / 1e9, 4)])
+        time.sleep(1.5)
+        y, m = (y + 1, 1) if m == 12 else (y, m + 1)
+    out.sort()
+    return _write("comtrade_us_m", ["month", "hs", "partner", "imports_usd_bn"], out,
+                  ["https://comtradeapi.un.org/public/v1/preview/C/M/HS (UN Comtrade, reporter United States (842), "
+                   "imports, monthly; 851713 smartphones, 847130 laptops)"])
+
+
+JOBS = {"comtrade_us_m": comtrade_us_m, "bls_elec": bls_elec, "fred_elec": fred_elec, "comtrade_us": comtrade_us, "fred_chips": fred_chips, "owid_chips": owid_chips, "sec_foreign": sec_foreign, "wb_water": wb_water, "bls_water": bls_water, "fred_waste": fred_waste, "epa_msw": epa_msw, "eia_930": eia_930, "eia_mer": eia_mer, "fred_power": fred_power, "owid_elec": owid_elec, "owid_chem": owid_chem, "fred_chem": fred_chem, "eia_ngl": eia_ngl, "eurostat_chem": eurostat_chem, "usgs_heavy": usgs_heavy, "fred_heavy": fred_heavy, "owid_co2": owid_co2, "ers_food_dollar": ers_food_dollar, "ers_costs": ers_costs, "ers_farm_income": ers_farm_income, "owid_ag": owid_ag, "fred_food": fred_food, "ne_land": ne_land, "usgs_ds140": usgs_ds140, "fred_metals": fred_metals, "sec_ifrs": sec_ifrs, "eia_gas": eia_gas, "eia_petroleum": eia_petroleum, "eia_intl": eia_intl, "eia_pump": eia_pump, "fred_energy": fred_energy, "fred_market": fred_market, "owid_tech": owid_tech, "sec_quarterly": sec_quarterly, "fred_cycle": fred_cycle, "esef_maersk": esef_maersk, "damodaran_roc": damodaran_roc, "census_conc": census_conc, "eia_power": eia_power, "fred_pay": fred_pay, "bea_real": bea_real, "sec_annual": sec_annual, "fred_prices": fred_prices, "census_susb": census_susb, "bea_va": bea_va, "wb_mfg_usd": wb_mfg_usd, "bea_hist": bea_hist, "bea_io": bea_io, "fred_jobs": fred_jobs, "wb_shares": wb_shares}
 
 if __name__ == "__main__":
     names = list(JOBS) if "--all" in sys.argv else sys.argv[1:]

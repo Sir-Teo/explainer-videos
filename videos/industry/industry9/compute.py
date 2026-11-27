@@ -183,7 +183,7 @@ def results() -> dict:
         if r["ticker"] in ("FCX", "SCCO", "NEM", "ALB") and r["year_end"][:4] == "2025":
             last[r["ticker"]] = (r["revenue"], r["net_income"], r["year_end"])
     for r in read("sec_ifrs"):
-        if r["year_end"][:4] == "2025":
+        if r["ticker"] in ("BHP", "RIO", "VALE") and r["year_end"][:4] == "2025":   # the extract also holds later parts' filers
             last[r["ticker"]] = (r["revenue"], r["profit"], r["year_end"])
     meta = {"BHP": ("BHP", "iron ore, copper", "iron"), "RIO": ("Rio Tinto", "iron ore, aluminium, copper", "iron"),
             "VALE": ("Vale", "iron ore, nickel", "iron"), "FCX": ("Freeport-McMoRan", "copper, gold", "copper"),

@@ -721,7 +721,7 @@ Economics of Waste*; Crooks, *Giants of Garbage*.
 ## Act III · Making
 
 ### Part 15 · Semiconductors (~60)
-*Question:* why does the most valuable manufactured product on earth come from so few factories?
+*Question:* why do the most advanced chips come from so few factories?
 *Story:* Gordon Moore's four-page article, 1965: the number of components on a chip will double every year.
 Morris Chang, passed over in Texas, opens a factory in Hsinchu in 1987 that will make other people's chips and
 design none of its own. The industry splits in two, and the split decides everything after.
@@ -2546,6 +2546,7 @@ scored in Part 64 and at each refresh.
 | 12 · Chemicals | done 2026-11-27 (55 Register rows; the Nobel Foundation on Haber and Bosch; the USGS's Mineral Commodity Summaries 2026 (nitrogen, potash) and Data Series 140; EIA's cracker yields, NGL series, Today in Energy and AEO2005; IMF, BLS and Federal Reserve series; Eurostat's chemical output; OECD plastics via Our World in Data; 17 companies' 10-Ks and ICL's 20-F; 3M's and Chemours' 8-Ks; the EPA's PFAS rule; the Supreme Court of India on Bhopal) | `works/cracker.py` | 16 scenes, with molecule, cracker, cylinder, paint-can and pellet glyphs | silent and narrated previews reviewed | entry, lab, interactive | not started |
 | 13 · Electricity | done 2026-11-27 (108 Register rows; Insull's 1910 address; EIA-930, the Electric Power Annual, the Monthly Energy Review, AEO2005 and AEO2021, Today in Energy; the FERC-NERC February 2021 report; the ERCOT market monitor's 2021 and 2024 reports; Vistra's and Duke's 10-Ks and 15 more; the NAO on Britain's suppliers; DOE on LBNL's data centre report; Ember via Our World in Data) | `works/power.py` | 16 scenes | silent and narrated previews reviewed | entry, lab, interactive | not started |
 | 14 · Water and Waste | done 2026-11-27 (114 Register rows; Hansard for 1858 and 2026; the EPA's 1989 report, its 2009 Facts and Figures, the 1960-2018 series, tipping fees and its water needs surveys; 40 CFR Part 258; the BLS's price indexes; the 10-Ks of Waste Management, Republic, Clean Harbors, American Water and six more, Sabesp's 20-F and Veolia's ESEF report; the Independent Water Commission and the CMA's PR24 redeterminations; WHO/UNICEF via the World Bank) | `works/route.py`, `works/utility.py` | 16 scenes, with bin, lorry, water tower, tap, bale and landfill glyphs | silent and narrated previews reviewed | entry, lab, interactive | not started |
+| 15 · Semiconductors | done 2026-11-27 (124 Register rows; Moore's articles of 1965 and 1975; TSMC's 20-F 2025, its fab table and its third quarter 2026 results; ASML's 20-F; the 10-Ks of Nvidia, Intel, Micron and fifteen more chip companies and three foreign filers' accounts; GM's 2021 10-K; the Federal Reserve's chip output and the BLS's chip prices; Rupp's transistor counts; WSTS's forecasts and SIA's monthly sales; six BIS rules in the Federal Register) | `works/fab.py` | 16 scenes, with car, phone, chip-fab and government-building glyphs and a map of TSMC's fabs | silent and narrated previews reviewed | entry, lab, interactive | not started |
 
 Phase 0 is done in the form Part 1 needed: the palette and kit (`style.py`, `kit.py`), the instruments (`viz.py`: the
 phone and its exploded view, the region map, the Dollar column, the margin ladder, the treemap, plain axes), the
@@ -2705,3 +2706,16 @@ the EPA's 2009 Facts and Figures (its later reports stop counting), and the tipp
 chart by position. China's 2018 ban is taken from Waste Management's 2018 10-K (the WTO notification could not be read).
 *Called it?* is the EPA's 1989 forecast that a third of landfills would be full by 1991, with the series' call on the
 2027 water price index.
+
+Part 15 opens Act III and keeps its draft's story: Moore's article of 19 April 1965, read from the Computer History
+Museum's copy, and TSMC's founding in 1987 in its own words. Its question was narrowed from 'the most valuable
+manufactured product on earth', which no primary source measures, to the most advanced chips, which TSMC's fab table
+does: of sixteen fabs in operation in February 2026, the three making its 2 and 3 nm chips are all in Taiwan. Morris
+Chang's career before TSMC is not told (no primary source read). Run it is the Works' fab (`fab.py`), built or booked at
+three volumes. Market shares by country of manufacturing capacity, which come from consultancies' reports, are not
+used; the geography chapter uses TSMC's fabs, the CHIPS Act and European Chips Act agreements in its 20-F, the Federal
+Register's export rules from 2022 to November 2026 (which formally rescinded the 2025 AI Diffusion Rule) and WSTS's
+sales by region. The sweep found the year's boom: world sales of $702bn in the first half of 2026 and $517.7bn in the
+third quarter, memory forecast to more than triple, so *Called it?* scores WSTS's own December 2025 forecast ($975bn)
+alongside Moore's, with the series' call that 2026's sales will exceed $1.8 trillion (65%). Micron's quarters are
+operating income, as in Part 6.

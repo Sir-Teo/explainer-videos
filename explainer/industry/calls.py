@@ -230,6 +230,30 @@ CALLS = [
          rule="BLS, CPI-U, US city average, not seasonally adjusted, CUUR0000SEHG01: the annual average for 2027 against "
               "2026's as first published together; true if more than 4.0% higher",
          due="2028-01", ours=True),
+    Call(15, "Gordon E. Moore, Fairchild Semiconductor", "1965-04-19",
+         "\"The complexity for minimum component costs has increased at a rate of roughly a factor of two per year ... "
+         "by 1975, the number of components per integrated circuit for minimum cost will be 65,000.\"",
+         "G. E. Moore, 'Cramming more components onto integrated circuits', Electronics 38 (8), 19 April 1965",
+         outcome="In 1975 Moore plotted a 16,384-bit charge-coupled memory chip at the complexity the annual doubling "
+                 "predicted, and revised the slope to a doubling every two years ('Progress in Digital Integrated "
+                 "Electronics', IEDM 1975); transistors per microprocessor then doubled about every 2.0 years from 1971 "
+                 "to 2021 (Rupp, via Our World in Data)"),
+    Call(15, "World Semiconductor Trade Statistics (WSTS)", "2025-12",
+         "World semiconductor sales in 2026 of $975.5 billion, up 26.3% ('Global Semiconductor Market Approaches $1T in "
+         "2026'), with memory at $294.8 billion.", "WSTS, Autumn 2025 forecast (released December 2025)",
+         outcome="Sales were $702 billion in the first half of 2026 (WSTS) and $517.7 billion in the third quarter (SIA, "
+                 "3 November 2026): $1.22 trillion by September. WSTS raised its 2026 forecast to $1,511 billion in May "
+                 "and $1,655 billion in August 2026; its May forecast for memory was $803.9 billion"),
+    Call(15, "Industry, Built", "2026-11-27",
+         "World semiconductor sales in 2026, as WSTS first reports the full year, will be more than $1.8 trillion. "
+         "Probability: 65%.",
+         "This series, Part 15, chapter 13; reasoning: $1,219.7 billion was sold by September (WSTS's first half plus "
+         "SIA's third quarter), so the fourth quarter needs about $580 billion, 12% more than the third, after growth of "
+         "more than 20% a quarter for three quarters (SIA); against: memory booms end abruptly, and buyers who stocked "
+         "up early stop ordering",
+         rule="WSTS's first release of world semiconductor sales for the calendar year 2026 (its Q4 release, or SIA's "
+              "annual release of WSTS data); true if above $1,800 billion",
+         due="2027-03", ours=True),
 ]
 
 

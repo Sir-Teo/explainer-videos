@@ -408,6 +408,91 @@ def truck(w: float = 1.6, color: str = "#7EC8F5") -> VGroup:
     return VGroup(box, cab, win, wheels)
 
 
+def car(w: float = 2.4, color: str = "#7EC8F5") -> VGroup:
+    """A saloon car in side view, facing right; ``w`` is its length."""
+    body = Polygon([-0.5 * w, 0.08 * w, 0], [0.5 * w, 0.08 * w, 0], [0.5 * w, 0.19 * w, 0], [0.44 * w, 0.22 * w, 0],
+                   [0.2 * w, 0.24 * w, 0], [-0.45 * w, 0.24 * w, 0], [-0.5 * w, 0.2 * w, 0],
+                   stroke_width=0, fill_color=color, fill_opacity=0.95)
+    roof = Polygon([0.18 * w, 0.24 * w, 0], [0.06 * w, 0.36 * w, 0], [-0.26 * w, 0.36 * w, 0], [-0.4 * w, 0.24 * w, 0],
+                   stroke_width=0, fill_color=color, fill_opacity=0.95)
+    glass = VGroup(Polygon([0.15 * w, 0.245 * w, 0], [0.05 * w, 0.34 * w, 0], [-0.08 * w, 0.34 * w, 0], [-0.08 * w, 0.245 * w, 0],
+                           stroke_width=0, fill_color=GLASS, fill_opacity=1),
+                   Polygon([-0.11 * w, 0.245 * w, 0], [-0.11 * w, 0.34 * w, 0], [-0.25 * w, 0.34 * w, 0], [-0.36 * w, 0.245 * w, 0],
+                           stroke_width=0, fill_color=GLASS, fill_opacity=1))
+    lamp = VGroup(Rectangle(width=0.03 * w, height=0.03 * w, stroke_width=0, fill_color="#F6E27A", fill_opacity=1).move_to([0.485 * w, 0.17 * w, 0]),
+                  Rectangle(width=0.02 * w, height=0.03 * w, stroke_width=0, fill_color="#E8554E", fill_opacity=1).move_to([-0.49 * w, 0.19 * w, 0]))
+    wheels = VGroup()
+    for x in (-0.3, 0.3):
+        wheels.add(VGroup(Circle(radius=0.085 * w, stroke_width=0, fill_color="#20242C", fill_opacity=1),
+                          Circle(radius=0.04 * w, stroke_width=0, fill_color="#9AA3B2", fill_opacity=1)).move_to([x * w, 0.085 * w, 0]))
+    return VGroup(body, roof, glass, lamp, wheels)
+
+
+def phone(h: float = 1.2, color: str = "#2E3645", screen: str = "#7EC8F5") -> VGroup:
+    """A smartphone, front on; ``h`` is its height."""
+    body = RoundedRectangle(corner_radius=0.08 * h, width=0.5 * h, height=h, stroke_color="#C9D3E0", stroke_width=2,
+                            fill_color=color, fill_opacity=1)
+    glass = RoundedRectangle(corner_radius=0.05 * h, width=0.44 * h, height=0.9 * h, stroke_width=0, fill_color=screen,
+                             fill_opacity=0.85)
+    cam = Dot(radius=0.018 * h, color="#0E1117").move_to([0, 0.41 * h, 0])
+    return VGroup(body, glass, cam)
+
+
+def capitol(w: float = 1.6, color: str = "#C9D3E0") -> VGroup:
+    """A government building: steps, six columns and a pediment; sits on y = 0."""
+    steps = VGroup(*[Rectangle(width=w * (1.0 - 0.06 * k), height=0.04 * w, stroke_width=0, fill_color=color,
+                               fill_opacity=0.9 - 0.1 * k).move_to([0, 0.02 * w + 0.04 * w * k, 0]) for k in range(3)])
+    base = 0.12 * w
+    cols = VGroup(*[Rectangle(width=0.06 * w, height=0.38 * w, stroke_width=0, fill_color=color, fill_opacity=0.95).move_to(
+        [x * w, base + 0.19 * w, 0]) for x in np.linspace(-0.36, 0.36, 6)])
+    beam = Rectangle(width=0.86 * w, height=0.06 * w, stroke_width=0, fill_color=color, fill_opacity=1).move_to([0, base + 0.41 * w, 0])
+    ped = Polygon([-0.46 * w, base + 0.44 * w, 0], [0.46 * w, base + 0.44 * w, 0], [0, base + 0.62 * w, 0], stroke_width=0,
+                  fill_color=color, fill_opacity=1)
+    return VGroup(steps, cols, beam, ped)
+
+
+def chip_fab(w: float = 2.4, color: str = "#C9D3E0", accent: str = "#7EC8F5") -> VGroup:
+    """A chip fab: a long windowless cleanroom block with air handlers on the roof and an office wing; sits on y = 0."""
+    h = 0.3 * w
+    body = Rectangle(width=0.78 * w, height=h, stroke_width=0, fill_color=color, fill_opacity=0.95).move_to([0.11 * w, h / 2, 0])
+    band = Rectangle(width=0.78 * w, height=0.035 * w, stroke_width=0, fill_color=accent, fill_opacity=0.9).move_to(
+        [0.11 * w, 0.7 * h, 0])
+    office = Rectangle(width=0.22 * w, height=0.62 * h, stroke_width=0, fill_color="#9AA3B2", fill_opacity=0.95).move_to(
+        [-0.39 * w, 0.31 * h, 0])
+    glass = VGroup(*[Rectangle(width=0.17 * w, height=0.05 * w, stroke_width=0, fill_color=GLASS, fill_opacity=1).move_to(
+        [-0.39 * w, (0.18 + 0.22 * k) * h, 0]) for k in range(2)])
+    fans = VGroup(*[RoundedRectangle(corner_radius=0.01 * w, width=0.09 * w, height=0.05 * w, stroke_width=0, fill_color="#6B7486",
+                                     fill_opacity=1).move_to([x * w, h + 0.025 * w, 0]) for x in np.linspace(-0.18, 0.42, 6)])
+    return VGroup(body, band, office, glass, fans)
+
+
+def pcb(w: float = 2.0, color: str = "#2F6B4F", parts: bool = False, seed: int = 3) -> VGroup:
+    """A printed circuit board seen from above: the green board, copper traces and pads (``g.pads``); with ``parts``,
+    chips and passives sit on the pads (``g.parts``)."""
+    h = 0.6 * w
+    board = RoundedRectangle(corner_radius=0.04 * w, width=w, height=h, stroke_color="#1E4A36", stroke_width=2,
+                             fill_color=color, fill_opacity=1)
+    rng = np.random.default_rng(seed)
+    traces = VGroup()
+    for _ in range(9):
+        y = rng.uniform(-0.4, 0.4) * h
+        x0, x1 = sorted(rng.uniform(-0.45, 0.45, 2) * w)
+        traces.add(Line([x0, y, 0], [x1, y, 0], stroke_color="#C9A24A", stroke_width=1.5, stroke_opacity=0.7))
+    spots = [(-0.28, 0.12, 0.26, 0.26), (0.12, 0.1, 0.18, 0.18), (0.33, -0.1, 0.12, 0.2), (-0.05, -0.22, 0.2, 0.1),
+             (-0.36, -0.22, 0.08, 0.05), (0.3, 0.25, 0.08, 0.05), (0.0, 0.3, 0.06, 0.04), (-0.15, 0.32, 0.06, 0.04)]
+    pads = VGroup(*[Rectangle(width=a * w, height=b * h, stroke_width=0, fill_color="#B8B8B0", fill_opacity=0.85).move_to(
+        [x * w, y * h, 0]) for x, y, a, b in spots])
+    g = VGroup(board, traces, pads)
+    g.pads = pads
+    if parts:
+        cols = ["#20242C", "#2E3645", "#20242C", "#3A4250", "#C49A6C", "#C49A6C", "#7A5C3A", "#7A5C3A"]
+        ps = VGroup(*[Rectangle(width=pd.width * 0.9, height=pd.height * 0.9, stroke_width=0, fill_color=c, fill_opacity=1).move_to(pd)
+                      for pd, c in zip(pads, cols)])
+        g.add(ps)
+        g.parts = ps
+    return g
+
+
 def ship(w: float = 3.0, boxes: int = 12) -> VGroup:
     hull = Polygon([-0.5 * w, 0.12 * w, 0], [0.5 * w, 0.12 * w, 0], [0.42 * w, 0, 0], [-0.44 * w, 0, 0],
                    stroke_width=0, fill_color="#C0392B", fill_opacity=0.95)

@@ -1,0 +1,79 @@
+// Interactives for Act III, Making (Parts 15-21).
+(function () {
+  "use strict";
+  var C = QB.C, W = QB.W;
+
+  // ---- Part 15: build a fab or book a foundry --------------------------------------------------------------------
+  // The film's model (explainer/industry/works/fab.py): gross dies on a 300 mm wafer, Poisson yield exp(-A D), a fab
+  // that costs capex/life + fixed a year plus a variable cost per wafer, and a new process whose defect density falls
+  // from 0.5 towards 0.1 per cm2, halving the gap every 150,000 wafers.  The foundry charges a price per wafer on its
+  // mature process.  Run it: at 5,000 wafers a month the foundry earns $1.07bn a year against -$3.46bn for the fab;
+  // owning first pays at about 32,000.
+  W.fab = function (el) {
+    function dpw(a) { return Math.PI * 150 * 150 / a - Math.PI * 300 / Math.sqrt(2 * a); }
+    function good(a, d) { return dpw(a) * Math.exp(-a / 100 * d); }
+    function learning(d0, d1, w, half) { return d1 + (d0 - d1) * Math.pow(0.5, w / half); }
+    function plan(vol, own, p) {
+      var g, costWafer;
+      if (own) {
+        var wafers = vol * 12 * 5, steps = 60, sum = 0;
+        for (var k = 0; k < steps; k++) sum += good(p.die, learning(0.5, 0.1, wafers * (k + 0.5) / steps, 150000));
+        g = sum / steps;
+        var yearCost = p.capex / 5 + 1.0 + 2500 * vol * 12 / 1e9;
+        costWafer = yearCost * 1e9 / (vol * 12);
+      } else {
+        g = good(p.die, 0.1);
+        costWafer = p.price;
+      }
+      var costDie = costWafer / g;
+      return { good: g, costWafer: costWafer, costDie: costDie, profit: (p.chipPrice - costDie) * g * vol * 12 / 1e9 };
+    }
+    QB.widget(el, {
+      title: "Build a fab, or book a foundry?",
+      sub: "The Works' chip designer from the film's Run it chapter. It needs a number of 12-inch wafers a month for five years. It can build its own fab, which costs the same whether it is full or empty and starts on a new process with many defects, or it can pay a foundry by the wafer and use the foundry's mature process. Set the volume, the fab's cost, the foundry's price and the size of the chip.",
+      panels: 2, height: 300, weights: [3, 2],
+      controls: [
+        { k: "vol", label: "Wafers a month the designer needs", min: 2000, max: 50000, step: 1000, value: 20000, fmt: function (x) { return (x / 1000).toFixed(0) + "k"; } },
+        { k: "capex", label: "Cost of building the fab, $ billion", min: 5, max: 40, step: 1, value: 20, fmt: function (x) { return "$" + x + "bn"; } },
+        { k: "price", label: "Foundry's price per wafer", min: 8000, max: 30000, step: 500, value: 17000, fmt: function (x) { return "$" + (x / 1000).toFixed(1) + "k"; } },
+        { k: "die", label: "Size of the chip, mm²", min: 50, max: 600, step: 10, value: 100, fmt: function (x) { return x + " mm²"; } },
+      ],
+      draw: function (g, v, s) {
+        var p = { capex: v.capex, price: v.price, die: v.die, chipPrice: 60 * v.die / 100 };
+        var vols = [], fo = [], ow = [], even = null;
+        for (var x = 2000; x <= 50000; x += 1000) {
+          var a = plan(x, false, p).profit, b = plan(x, true, p).profit;
+          vols.push(x / 1000); fo.push(a); ow.push(b);
+          if (even === null && b > a) even = x;
+        }
+        var lo = Math.min(0, Math.min.apply(null, ow)), hi = Math.max(Math.max.apply(null, fo), Math.max.apply(null, ow));
+        var ax = g[0].axes({ x: [2, 50], y: [Math.max(lo, -15), hi * 1.1 + 0.5], title: "Profit a year, $bn, by wafers a month",
+                             xticks: [10, 20, 30, 40, 50], xfmt: function (x) { return x + "k"; }, yfmt: function (y) { return "$" + y.toFixed(0) + "bn"; } });
+        ax.line(vols, fo, { color: C.q, width: 2.4 });
+        ax.line(vols, ow, { color: C.p, width: 2.4 });
+        ax.line([2, 50], [0, 0], { color: C.muted, width: 1, dash: [3, 3] });
+        ax.vline(v.vol / 1000, { color: C.spot, dash: [5, 4], width: 1.4 });
+        if (even !== null) ax.text(even / 1000, hi * 1.05, "owning pays from " + (even / 1000).toFixed(0) + "k", { align: "left", dx: 5, color: C.p, bg: true });
+        ax.legend([["book the foundry", C.q], ["build the fab", C.p]], { pos: "tl" });
+        var f = plan(v.vol, false, p), o = plan(v.vol, true, p);
+        var top = Math.max(f.costDie, Math.min(o.costDie, f.costDie * 6)) * 1.25;
+        var b2 = g[1].axes({ x: [0, 3], y: [0, top], title: "Cost of one good chip", xticks: [], yfmt: function (y) { return "$" + Math.round(y); } });
+        b2.bars([1], [f.costDie], 0.7, { color: C.q });
+        b2.bars([2], [Math.min(o.costDie, top)], 0.7, { color: C.p });
+        b2.text(1, f.costDie, "$" + f.costDie.toFixed(0), { dy: -9, align: "center", size: 10.5 });
+        b2.text(2, Math.min(o.costDie, top), "$" + o.costDie.toFixed(0), { dy: -9, align: "center", size: 10.5 });
+        b2.text(1, 0, "foundry", { dy: 12, align: "center", size: 10 });
+        b2.text(2, 0, "own fab", { dy: 12, align: "center", size: 10 });
+        s.r = { f: f, o: o, even: even, util: v.vol / 50000 };
+      },
+      readout: function (v, s) {
+        var r = s.r, better = r.o.profit > r.f.profit ? "build the fab" : "book the foundry";
+        return [["better choice", better + " (" + (Math.max(r.o.profit, r.f.profit) >= 0 ? "$" : "-$") + Math.abs(Math.max(r.o.profit, r.f.profit)).toFixed(2) + "bn a year)"],
+                ["the fab would be", Math.round(100 * r.util) + "% full"],
+                ["owning first pays at", r.even === null ? "never, up to 50k a month" : (r.even / 1000).toFixed(0) + "k wafers a month"]];
+      },
+      note: "The Works' numbers, as in the film: the fab holds 50,000 wafers a month, its tools are written off over five years, it costs $1bn a year to staff and maintain and $2,500 a wafer in materials and power; chips sell for $60 per 100 mm² of silicon. A small designer cannot fill a fab, so every wafer carries a large share of a factory that sits idle, and a new process yields badly at first. The foundry fills its fabs with hundreds of customers and has already climbed the learning curve. Make the fab dearer and the break-even moves out of reach for all but the biggest buyers: that is why most designers no longer own fabs.",
+    });
+  };
+
+})();
