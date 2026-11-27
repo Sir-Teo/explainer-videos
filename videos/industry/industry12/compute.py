@@ -217,11 +217,14 @@ def results() -> dict:
     # --- called it? ---------------------------------------------------------------------------------------------------
     lng = {int(r["year"]): r["mmcf"] for r in read("eia_gas") if r["series"] == "N9133US2"}
     ip = _annual(F["IPG325S"])
+    ipb, ipr = _annual(F["IPG3251S"]), _annual(F["IPG3252S"])
     usn = U["nitrogen"]["production"]
     n25 = get("usgs.n.us.2025") * 1000
     R["called"] = dict(lng_proj=get("aeo05.lng.2025"), lng_2003=get("aeo05.lng.2003"), lng_exports_2025=lng[2025] / 1e6,
                        chem_proj=get("aeo05.bulkchem"), ag_proj=get("aeo05.agchem"),
                        chem_actual=100 * ((ip[2025] / ip[2003]) ** (1 / 22) - 1),
+                       basic_actual=100 * ((ipb[2025] / ipb[2003]) ** (1 / 22) - 1),
+                       resin_actual=100 * ((ipr[2025] / ipr[2003]) ** (1 / 22) - 1),
                        n_actual=100 * ((n25 / usn[2003]) ** (1 / 22) - 1), n2003=usn[2003] / 1e6, n2025=n25 / 1e6,
                        de21=de_a[2021], threshold=0.8 * de_a[2021], de25=de_a[2025], de26=de_a.get(2026),
                        de26_months=sum(1 for m in de if m.startswith("2026")), prob=0.75)

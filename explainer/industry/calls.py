@@ -180,6 +180,24 @@ CALLS = [
          "2026); against: exports and manufacturing holding up, and revisions",
          rule="worldsteel Short Range Outlook, April 2027: the change in China's steel demand (apparent use of finished "
               "steel) in 2026; true if below -2.0%", due="2027-04", ours=True),
+    Call(12, "US Energy Information Administration, Annual Energy Outlook 2005", "2005-02",
+         "Projections for 2025: US net imports of LNG rising from 0.4 trillion cubic feet (2003) to 6.4; bulk chemical "
+         "output growing 1.0% a year (1.7% in AEO2004); agricultural chemicals, nitrogen fertilizers included, 0.6% a "
+         "year (cut from 1.3%) because of 'increased competition from foreign suppliers due to relatively high U.S. "
+         "natural gas prices'.", "EIA, Annual Energy Outlook 2005 (DOE/EIA-0383(2005))",
+         outcome="America exported 5.5 trillion cubic feet of LNG in 2025 (EIA); US ammonia output grew 2.3% a year, "
+                 "2003-2025 (USGS); the Federal Reserve's index of basic chemicals 0.5% a year, plastics and resins 0.0%, "
+                 "all chemicals -0.1%: right that bulk chemicals would grow slowly, wrong about the gas that would "
+                 "bring fertilizer back"),
+    Call(12, "Industry, Built", "2026-11-27",
+         "Germany's chemical output (Eurostat, manufacture of chemicals, C20, seasonally and calendar adjusted, "
+         "2021 = 100) will average below 79.8 in 2027, at least 20% below its 2021 level. Probability: 75%.",
+         "This series, Part 12, chapter 13; reasoning: European gas at about eight times America's in September 2026, "
+         "the index at 77.0 that month and closures announced (Dow's Böhlen cracker by the end of 2027); against: "
+         "a fall in gas prices, a recovery in demand, revisions",
+         rule="Eurostat sts_inpr_m, C20, Germany, SCA, I21: the mean of the twelve monthly values for 2027 as first "
+              "published in full; true if below 79.8",
+         due="2028-03", ours=True),
 ]
 
 
