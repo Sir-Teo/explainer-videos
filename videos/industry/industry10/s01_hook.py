@@ -140,9 +140,7 @@ class Hook(VoiceoverScene):
             "acre can grow, again and again, and kept a small and shrinking slice of what we pay for food. This part is "
             "about why."
         ) as vo:
-            self.play(FadeIn(src))
-            vo.wait_until("a")
-            self.play(GrowFromCenter(coin), Write(cl))
+            self.play(FadeIn(src), GrowFromCenter(coin), Write(cl))
             vo.wait_until("b")
             self.play(FadeOut(cl), FadeOut(coin), FadeIn(rest), FadeIn(farm_sector))
             self.play(farm_sector.animate.shift((RIGHT * 0.35 + UP * 0.25)), FadeIn(right[0]), FadeIn(right[1]))

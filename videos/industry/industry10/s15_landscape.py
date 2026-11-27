@@ -97,8 +97,10 @@ class Landscape(VoiceoverScene):
             "follows the price of natural gas. <bookmark mark='f'/> And the farm share of the food dollar, which brings "
             "us to our call."
         ) as vo:
-            self.play(FadeIn(head), FadeIn(src))
+            for r_ in rows:
+                r_[0].set_opacity(0.3)
+            self.play(FadeIn(head), FadeIn(src), LaggedStart(*[FadeIn(r_[0]) for r_ in rows], lag_ratio=0.1), run_time=1.2)
             for k, m in enumerate("abcdef"):
                 vo.wait_until(m)
-                self.play(FadeIn(rows[k], shift=RIGHT * 0.2))
+                self.play(rows[k][0].animate.set_opacity(1), FadeIn(rows[k][1], shift=RIGHT * 0.2))
         self.clear_scene()
