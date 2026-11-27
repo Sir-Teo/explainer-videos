@@ -116,27 +116,41 @@ def results() -> dict:
     fuel = [r["value"] for r in rows if r["table"] == "epa_07_04" and str(r["row"]).startswith("2025")
             and "Average Cost" in r["column"]]
     gas_price = fuel[5]
+    nfuel = [r["value"] for r in rows if r["table"] == "epa_08_04" and r["column"] == "Nuclear" and str(r["row"]).startswith("2025")]
+    nuke_fuel_mwh = nfuel[2]          # operation, maintenance, fuel, total (mills per kWh = $ per MWh)
+    nuke_fuel = nuke_fuel_mwh / (get("plant.nuclear.heat") / 1000)
     techs = {}
     for key, name in (("ct_frame", "gas peaker"), ("cc2", "combined-cycle gas"), ("nuclear", "nuclear"), ("solar", "solar"),
                       ("wind", "wind")):
         t = power.Tech(name, get(f"plant.{key}.overnight"), get(f"plant.{key}.fom"), get(f"plant.{key}.vom"),
-                       get(f"plant.{key}.heat"), fuel=gas_price if key in ("ct_frame", "cc2") else (0.7 if key == "nuclear" else 0.0),
+                       get(f"plant.{key}.heat"), fuel=gas_price if key in ("ct_frame", "cc2") else (nuke_fuel if key == "nuclear" else 0.0),
                        life=40 if key == "nuclear" else 30)
         techs[key] = dict(name=name, fixed=t.fixed(), running=t.running(), overnight=t.overnight,
                           curve=[t.per_kw_year(x / 100) for x in range(0, 101, 5)])
-    R["plants"] = dict(cf=cf, gas_price=gas_price, techs=techs, rate=0.07,
-                       cross_cc_nuke=power.crossover(power.Tech("cc", get("plant.cc2.overnight"), get("plant.cc2.fom"),
-                                                                get("plant.cc2.vom"), get("plant.cc2.heat"), fuel=gas_price),
-                                                     power.Tech("n", get("plant.nuclear.overnight"), get("plant.nuclear.fom"),
-                                                                get("plant.nuclear.vom"), get("plant.nuclear.heat"), fuel=0.7,
-                                                                life=40)))
+    def cc_at(g):
+        return power.Tech("cc", get("plant.cc2.overnight"), get("plant.cc2.fom"), get("plant.cc2.vom"), get("plant.cc2.heat"), fuel=g)
+    nk = power.Tech("n", get("plant.nuclear.overnight"), get("plant.nuclear.fom"), get("plant.nuclear.vom"),
+                    get("plant.nuclear.heat"), fuel=nuke_fuel, life=40)
+    g_even = next(g / 10 for g in range(10, 400) if cc_at(g / 10).per_kw_year(0.9) >= nk.per_kw_year(0.9))
+    R["plants"] = dict(cf=cf, gas_price=gas_price, techs=techs, rate=0.07, nuke_fuel_mwh=nuke_fuel_mwh, gas_even=g_even,
+                       cc_mwh_90=cc_at(gas_price).per_mwh(0.9), nuke_mwh_90=nk.per_mwh(0.9),
+                       cross_cc_nuke=power.crossover(cc_at(gas_price), nk))
 
     # --- dispatch ---------------------------------------------------------------------------------------------------------
     day = [r for r in G["ERCO"] if r["date"] == peak_day]
     mix = {f: [max(r[f] or 0.0, 0.0) for r in day] for f in FUELS}
     pr = {y: get(f"imm.price.{y}") for y in range(2014, 2025)}
     gp = {y: get(f"imm.gas.{y}") for y in range(2014, 2022)}
-    R["dispatch"] = dict(day=peak_day, mix=mix, demand=[r["demand"] for r in day], prices=pr, gas=gp,
+    pts = [(gp[y], pr[y]) for y in range(2014, 2021)] + [(3.62, get("imm.price.2021x"))]
+    slope, icpt = np.polyfit([x for x, _ in pts], [y for _, y in pts], 1)
+    cc_run = R["plants"]["techs"]["cc2"]["running"]
+    ct_run = R["plants"]["techs"]["ct_frame"]["running"]
+    fleet = [power.Unit("wind and solar", 40000, 0.0), power.Unit("nuclear", 5000, R["plants"]["techs"]["nuclear"]["running"]),
+             power.Unit("coal", 12000, 24.0), power.Unit("combined-cycle gas", 30000, cc_run),
+             power.Unit("older gas", 9000, 45.0), power.Unit("gas peakers", 6000, ct_run + 20), power.Unit("oil and others", 2000, 150.0)]
+    R["dispatch"] = dict(day=peak_day, mix=mix, demand=[r["demand"] for r in day], prices=pr, gas=gp, slope=float(slope),
+                         icpt=float(icpt), fleet=[(u.name, u.mw, u.cost) for u in fleet],
+                         clears={d: power.dispatch(fleet, d)["price"] for d in (35000, 60000, 80000, 100000, 106000)},
                          price21x=get("imm.price.2021x"), total=[sum(mix[f][h] for f in FUELS) for h in range(len(day))])
 
     # --- utility ---------------------------------------------------------------------------------------------------------
