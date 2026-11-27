@@ -99,8 +99,18 @@ add(
     filing("linde.onsite", 15, "years", "Linde's on-site supply contracts: 'total requirement contracts with terms "
            "typically ranging from 10-20 years and containing minimum purchase requirements and price escalation "
            "provisions'", "Linde plc", LIN, lo=10, hi=20),
+    filing("linde.merchant", 5, "years", "Linde's merchant (bulk liquid) customer agreements: 'usually three to seven "
+           "year supply agreements', which 'generally do not contain minimum purchase requirements'", "Linde plc", LIN,
+           lo=3, hi=7),
     filing("apd.onsite", 17.5, "years", "Air Products' sale-of-gas arrangements for large on-site customers: 'long-term "
            "contracts ranging from 15- to 20-years'", "Air Products and Chemicals", APD, "fiscal 2026", lo=15, hi=20),
+    filing("apd.charges.2025", 3.0, "$ billion", "Air Products' after-tax charges for business and asset actions, fiscal "
+           "2025, 'primarily associated with previously announced project exit decisions'", "Air Products and Chemicals",
+           APD, "fiscal 2025"),
+    filing("apd.charges.2026", 2.4, "$ billion", "Air Products' after-tax charges for business and asset actions, fiscal 2026",
+           "Air Products and Chemicals", APD, "fiscal 2026"),
+    filing("apd.adj_oi.2026", 3.2, "$ billion", "Air Products' adjusted operating income, fiscal 2026 (up 11%; a non-GAAP "
+           "measure that leaves out the charges)", "Air Products and Chemicals", APD, "fiscal 2026"),
     filing("cf.gas.2025", 350, "million MMBtu", "Natural gas consumed by CF Industries' plants, 2025", "CF Industries",
            CF),
     filing("cf.ammonia.2025", 10120, "thousand short tons", "CF Industries' gross ammonia production, 2025",

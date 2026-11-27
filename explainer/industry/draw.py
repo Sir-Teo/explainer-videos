@@ -1463,12 +1463,14 @@ def banana(h: float = 0.6, color: str = "#F2D04E") -> VGroup:
 # Chemicals (Part 12)
 # ---------------------------------------------------------------------------------------------------------------
 ATOM = {"H": ("#E8EAED", 0.11), "C": ("#4A505C", 0.17), "N": ("#5DA9E9", 0.16), "O": ("#E8554E", 0.16),
-        "Cl": ("#7BD88F", 0.18)}
+        "Cl": ("#7BD88F", 0.18), "Ar": ("#B58CFF", 0.17)}
 
 # 2-D layouts, in units of a bond length: (element, x, y), and bonds as (i, j, order)
 MOLECULES = {
     "H2": ([("H", -0.5, 0), ("H", 0.5, 0)], [(0, 1, 1)]),
     "N2": ([("N", -0.55, 0), ("N", 0.55, 0)], [(0, 1, 3)]),
+    "O2": ([("O", -0.55, 0), ("O", 0.55, 0)], [(0, 1, 2)]),
+    "Ar": ([("Ar", 0, 0)], []),
     "NH3": ([("N", 0, 0.1), ("H", -0.85, -0.45), ("H", 0.85, -0.45), ("H", 0, 0.95)], [(0, 1, 1), (0, 2, 1), (0, 3, 1)]),
     "CH4": ([("C", 0, 0), ("H", -0.9, 0), ("H", 0.9, 0), ("H", 0, 0.9), ("H", 0, -0.9)],
             [(0, 1, 1), (0, 2, 1), (0, 3, 1), (0, 4, 1)]),
@@ -1481,7 +1483,7 @@ MOLECULES = {
 
 
 def molecule(kind: str, bond: float = 0.42, label: bool = False) -> VGroup:
-    """A ball-and-stick molecule (H2, N2, NH3, CH4, C2H6, C2H4): ``g.atoms`` and ``g.bonds``."""
+    """A ball-and-stick molecule (H2, N2, O2, Ar, NH3, CH4, C2H6, C2H4): ``g.atoms`` and ``g.bonds``."""
     atoms_, bonds_ = MOLECULES[kind]
     pts = [np.array([x * bond, y * bond, 0]) for _, x, y in atoms_]
     bonds = VGroup()
