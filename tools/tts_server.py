@@ -20,6 +20,7 @@ import re
 import sys
 import threading
 import time
+import traceback
 from http.server import BaseHTTPRequestHandler, HTTPServer
 from pathlib import Path
 
@@ -69,7 +70,17 @@ PAUSE = {"sentence": 0.38, "clause": 0.22}
 def sentences(text: str, lang: str, max_chars: int) -> list[tuple[str, str]]:
     """[(chunk, pause kind after it)]: sentences, with over-long ones split at clause boundaries."""
     if lang == "en":
-        parts = re.split(r"(?<=[.?!])\s+(?=[A-Z0-9\"'(])", text)
+        # Keep sequences of name initials and common titles attached to the
+        # following name. A note name at a sentence end (e.g. "on C.") can
+        # still be followed by an ordinary sentence break.
+        prefixes = re.finditer(r"\b(?:(?:[A-Z]\.\s*){2,}|(?:Dr|Mr|Mrs|Ms|Prof|St)\.\s+)(?=[A-Z][a-z])", text)
+        attached = {i + 1 for prefix in prefixes for i in range(prefix.start(), prefix.end()) if text[i] == "."}
+        parts, start = [], 0
+        for boundary in re.finditer(r"(?<=[.?!])\s+(?=[A-Z0-9\"'(])", text):
+            if boundary.start() not in attached:
+                parts.append(text[start:boundary.start()])
+                start = boundary.end()
+        parts.append(text[start:])
         clause = r"(?<=[;:])\s+|(?<=,)\s+(?=(?:and|but|so|which|where|because|while)\b)"
     else:
         parts = [p for p in re.split(r"(?<=[。！？])", text) if p.strip()]
@@ -244,8 +255,13 @@ class Engine:
         kw = self.voice_options(lang)
         if attempt:  # resample on retries; a slightly cooler temperature steadies a hard sentence
             kw["temperature"] = max(0.5, kw.get("temperature", 0.9) - 0.1 * attempt)
-        gen = self.model.generate(text=text, **kw)
-        return np.concatenate([np.asarray(r.audio, dtype=np.float32).reshape(-1) for r in gen])
+        chunks = [np.asarray(result.audio, dtype=np.float32).reshape(-1)
+                  for result in self.model.generate(text=text, **kw)]
+        if not chunks:
+            # Qwen can sample end-of-speech before emitting its first audio token.
+            # Return an empty take so narrate() can retry this sentence.
+            return np.empty(0, dtype=np.float32)
+        return np.concatenate(chunks)
 
 
 class TorchEngine(Engine):
@@ -357,8 +373,12 @@ def narrate(engine: Engine, checker: Checker, text: str, lang: str, max_tries: i
     for attempt in range(max_tries):
         takes = engine.takes([chunks[i][0] for i in pending], lang, attempt)
         still = []
-        for i, raw in zip(pending, takes):
+        for i, raw in zip(pending, takes, strict=True):
             chunk = chunks[i][0]
+            if not raw.size or not np.isfinite(raw).all() or not np.any(raw):
+                print(f"    take {attempt + 1}: no usable audio for {chunk!r}", flush=True)
+                still.append(i)
+                continue
             audio = trim(raw, sr)
             dur = len(audio) / sr
             per_unit = dur / max(len(L.tokens(chunk, lang)), 1)
@@ -383,15 +403,18 @@ def narrate(engine: Engine, checker: Checker, text: str, lang: str, max_tries: i
             break
     pieces, tokens, t = [np.zeros(int(0.12 * sr), np.float32)], [], 0.12
     for i, (chunk, pause) in enumerate(chunks):
+        audio = best[i]
+        if audio is None:
+            raise RuntimeError(f"No usable narration after {max_tries} takes for {chunk!r}")
         if best_score[i] < accept:
             QA_LOG.parent.mkdir(parents=True, exist_ok=True)
             with open(QA_LOG, "a") as f:
                 f.write(json.dumps({"lang": lang, "voice": prof["name"], "text": chunk, "heard": best_heard[i],
                                     "score": round(best_score[i], 3)}, ensure_ascii=False) + "\n")
-        for w, a, b in checker.align(best[i], sr, chunk, lang):
+        for w, a, b in checker.align(audio, sr, chunk, lang):
             tokens.append((w, t + a, t + b))
-        pieces.append(best[i])
-        t += len(best[i]) / sr
+        pieces.append(audio)
+        t += len(audio) / sr
         gap = np.zeros(int(PAUSE[pause] * sr), np.float32)
         pieces.append(gap)
         t += len(gap) / sr
@@ -448,6 +471,7 @@ def main():
                 try:
                     audio, tokens = narrate(engine, checker, req["text"], req["lang"])
                 except Exception as e:  # report, keep serving
+                    traceback.print_exc()
                     self.send_error(500, repr(e)[:300])
                     return
                 peak = float(np.abs(audio).max() or 1.0)
