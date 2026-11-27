@@ -249,4 +249,54 @@ PARTS = [
               ("The tender and the installed base", "explainer/industry/works/machine.py"),
               ("The SEC, FRED, robot and Comtrade extracts", "explainer/industry/data/SOURCES.md")),
     ),
+    Part(
+        n=20, level="U", widget="pipeline", prereq=(4, 5, 6, 19),
+        question="Why does a pill that costs cents to make sell for dollars, and then one day for cents?",
+        story="The part opens on Lipitor: Pfizer sold $10.7bn of it in 2010 and $3.9bn in 2012, the year after its US "
+              "exclusivity ended; on Lilly's tirzepatide, $36.5bn in 2025 and 56% of Lilly's revenue; and on Keytruda, 49% "
+              "of Merck's sales, whose main US patent ends in 2028. The viewer decides whether to pay $250m for Phase III "
+              "once Phase II has shown how big the market may be: going on is worth $2.6bn if it is big and loses $108m if it "
+              "is small, and the right to stop is worth $76m. With BIO's odds for 2011-2020, 52% of drugs pass Phase I, 29% "
+              "Phase II, 58% Phase III and 91% the FDA's review: 7.9% of candidates entering trials are approved, after 10.5 "
+              "years, and one approval needs 12.7 candidates entering Phase I. Phase II success runs from 48% in hematology "
+              "to 15% in urology; approval from 24% in hematology to 5% in oncology. With illustrative stage costs, an "
+              "approved drug costs about $1.2bn out of pocket and $2.6bn with the waiting counted; research is 41% of "
+              "Regeneron's revenue and 6% of Teva's, and $103bn across fourteen companies in 2025. A model drug that peaks "
+              "at $2bn a year earns 96% of its value before its exclusivity ends; the FDA finds generic prices 39% below "
+              "the brand's with one maker and over 95% below with six. Drug producer prices rose 8.3 times since 1982 "
+              "against 3.3 for all consumer prices; about fifty novel drugs are approved a year. Pfizer's revenue doubled "
+              "in the pandemic years and fell back; Merck bought Cidara for $9.2bn. Medicare's first ten negotiated prices "
+              "would have saved $6bn, 22%, in 2023, and took effect on 1 January 2026. Lilly spent $7.8bn on plant in "
+              "2025 and its third-quarter revenue in 2026 rose 39%; Moderna's revenue fell from $19.3bn (2022) to $1.9bn "
+              "(2025); a dollar of thirteen companies' revenue went 26 cents on making, 20 on research, 36 on everything "
+              "else and 18 to profit. Lilly beat the top of its 2025 guidance by 7%; the series gives its 2026 revenue at "
+              "least $92.0bn, the top of its raised range, 55%.",
+        handoff="Part 21, medical technology, turns to the devices, where the product is a machine and the customer is "
+                "often a surgeon.",
+        outside="Probability and present value; Part 4's cost curve; Part 5's moats; Part 6's cycle; Statistics, Built's "
+                "trials and Economics, Built's pricing and patents.",
+        objectives={
+            "U": ["Explain why each approved medicine must pay for many failures and for years of waiting.",
+                  "Explain why a protected drug's price is set by its value, not its cost of making, and what happens at "
+                  "the patent cliff.",
+                  "Explain what rebates, list and net prices, and Medicare's negotiation are."],
+            "M": ["Compute the probability of approval and the cost per approved drug from phase odds and costs.",
+                  "Value the option to stop before Phase III.",
+                  "Value a drug's life before and after its exclusivity ends."],
+            "D": ["Score a drug company's own guidance against its results.",
+                  "Make and state a dated, scorable forecast against a company's raised guidance."],
+            "I": ["Read a drug company's revenue by product, its research spending and its patent table.",
+                  "Read BIO's phase success rates and the FDA's study of generic prices."],
+        },
+        results=[
+            ("Probability of approval", r"P = \prod_{k=1}^{4} q_k"),
+            ("Cost per approved drug", r"C = \frac{1}{P} \sum_{k=1}^{4} c_k \prod_{j<k} q_j"),
+            ("Capitalized cost", r"C_{cap} = \frac{1}{P} \sum_{k} c_k \Big(\prod_{j<k} q_j\Big) (1+r)^{T - t_k}"),
+            ("The option to stop", r"V = p\,\max(V_b, 0) + (1-p)\,\max(V_s, 0) - \big(p V_b + (1-p) V_s\big)"),
+        ],
+        U=(0, 1, 2, 3, 4, 5, 6, "s08_intermission", 7, 8, 9, 10), I=(11,), D=(12,),
+        also=(("The Register's rows for Part 20", "explainer/industry/data/rows_p20.py"),
+              ("The pipeline, the drug and the option to stop", "explainer/industry/works/pharma.py"),
+              ("The SEC and FRED extracts", "explainer/industry/data/SOURCES.md")),
+    ),
 ]

@@ -2066,6 +2066,29 @@ def comtrade_mach(years=range(2010, 2026)):
                    "by each country, annual; " + "; ".join(f"{k} {v}" for k, v in COMTRADE_MACH_HS.items()) + ")"])
 
 
+PHARMA_COMPANIES = [(78003, "PFE", "USD"), (310158, "MRK", "USD"), (200406, "JNJ", "USD"), (59478, "LLY", "USD"),
+                    (1551152, "ABBV", "USD"), (14272, "BMY", "USD"), (318154, "AMGN", "USD"), (882095, "GILD", "USD"),
+                    (875320, "VRTX", "USD"), (872589, "REGN", "USD"), (875045, "BIIB", "USD"), (1682852, "MRNA", "USD"),
+                    (818686, "TEVA", "USD"), (1792044, "VTRS", "USD"), (901832, "AZN", "USD"), (1114448, "NVS", "USD")]
+
+
+def sec_pharma():
+    """Annual figures of large drug makers, biotechs and generics makers from their Forms 10-K and 20-F (SEC company
+    facts), in US dollars (billions), with the same items and tag preferences as ``sec_auto`` (research and development
+    included)."""
+    return _write("sec_pharma", ["ticker", "year_end", "currency"] + list(AUTO_ITEMS),
+                  _sec_table(PHARMA_COMPANIES, AUTO_ITEMS), [_sec_source(AUTO_ITEMS)])
+
+
+FRED_PHARMA = {"PCU325412325412": "PPI: pharmaceutical preparation manufacturing (June 1981 = 100; BLS)",
+               "IPG3254S": "Industrial production: pharmaceutical and medicine manufacturing (2017 = 100; Federal Reserve G.17)",
+               "CPIAUCNS": "CPI-U: all items (1982-84 = 100, NSA; BLS)"}
+
+
+def fred_pharma():
+    return _fred_write("fred_pharma", FRED_PHARMA)
+
+
 FRED_AERO = {"ANAPNO": "New orders: nondefense aircraft and parts ($ million a month, SA; Census M3)",
              "ANAPVS": "Shipments: nondefense aircraft and parts ($ million a month, SA; Census M3)",
              "ADAPNO": "New orders: defense aircraft and parts ($ million a month, SA; Census M3)",
@@ -2122,7 +2145,7 @@ def sipri_milex():
 
 
 JOBS = {"sec_aero": sec_aero, "fred_aero": fred_aero, "sipri_milex": sipri_milex, "census_auto": census_auto, "sec_auto": sec_auto, "fred_auto": fred_auto, "owid_ev": owid_ev, "comtrade_cars": comtrade_cars,
-        "sec_mach": sec_mach, "fred_mach": fred_mach, "owid_robots": owid_robots, "comtrade_mach": comtrade_mach,
+        "sec_pharma": sec_pharma, "fred_pharma": fred_pharma, "sec_mach": sec_mach, "fred_mach": fred_mach, "owid_robots": owid_robots, "comtrade_mach": comtrade_mach,
         "eia_aeo17": eia_aeo17, "comtrade_us_m": comtrade_us_m, "bls_elec": bls_elec, "fred_elec": fred_elec, "comtrade_us": comtrade_us, "fred_chips": fred_chips, "owid_chips": owid_chips, "sec_foreign": sec_foreign, "wb_water": wb_water, "bls_water": bls_water, "fred_waste": fred_waste, "epa_msw": epa_msw, "eia_930": eia_930, "eia_mer": eia_mer, "fred_power": fred_power, "owid_elec": owid_elec, "owid_chem": owid_chem, "fred_chem": fred_chem, "eia_ngl": eia_ngl, "eurostat_chem": eurostat_chem, "usgs_heavy": usgs_heavy, "fred_heavy": fred_heavy, "owid_co2": owid_co2, "ers_food_dollar": ers_food_dollar, "ers_costs": ers_costs, "ers_farm_income": ers_farm_income, "owid_ag": owid_ag, "fred_food": fred_food, "ne_land": ne_land, "usgs_ds140": usgs_ds140, "fred_metals": fred_metals, "sec_ifrs": sec_ifrs, "eia_gas": eia_gas, "eia_petroleum": eia_petroleum, "eia_intl": eia_intl, "eia_pump": eia_pump, "fred_energy": fred_energy, "fred_market": fred_market, "owid_tech": owid_tech, "sec_quarterly": sec_quarterly, "fred_cycle": fred_cycle, "esef_maersk": esef_maersk, "damodaran_roc": damodaran_roc, "census_conc": census_conc, "eia_power": eia_power, "fred_pay": fred_pay, "bea_real": bea_real, "sec_annual": sec_annual, "fred_prices": fred_prices, "census_susb": census_susb, "bea_va": bea_va, "wb_mfg_usd": wb_mfg_usd, "bea_hist": bea_hist, "bea_io": bea_io, "fred_jobs": fred_jobs, "wb_shares": wb_shares}
 
 if __name__ == "__main__":

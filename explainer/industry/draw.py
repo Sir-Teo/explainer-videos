@@ -33,6 +33,7 @@ Every glyph is a ``VGroup`` with its moving parts named, so a scene can animate 
   turns with :func:`spin` about ``.hub``), :func:`fighter`, :func:`missile`;
 * machinery: :func:`excavator` (``.boom`` turns about ``.pivot``), :func:`elevator` (a shaft whose ``.car`` stops at
   ``.floor_y(k)``), :func:`gear`;
+* medicines: :func:`capsule` (``.halves``), :func:`tablet`, :func:`flask` (``.liquid``, ``.bubbles``), :func:`vial`;
 * the city and its people: :func:`skyline` (``.windows`` light up), :func:`house`, :func:`shop`, :func:`person`,
   :func:`crowd`; :func:`sun`, :func:`moon`, :func:`sky` (a background whose colour follows the hour);
 * money: :func:`coin`, :func:`coin_stack`, :func:`note_bill`, :func:`coin_flow` (coins flying from one place to
@@ -2186,3 +2187,58 @@ def gear(r: float = 0.6, teeth: int = 12, color: str = "#8B95A7") -> VGroup:
     body = Polygon(*pts, stroke_width=0, fill_color=color, fill_opacity=1)
     hole = Circle(radius=0.25 * r, stroke_width=0, fill_color="#0E1117", fill_opacity=1)
     return VGroup(body, hole)
+
+
+# ---------------------------------------------------------------------------------------------------------------
+# Medicines (Part 20)
+# ---------------------------------------------------------------------------------------------------------------
+def capsule(w: float = 0.8, color: str = "#E8554E", other: str = "#F5F5F5") -> VGroup:
+    """A two-coloured capsule, lying flat (``.halves``)."""
+    h = 0.42 * w
+    left = VGroup(RoundedRectangle(corner_radius=h / 2, width=w / 2 + h / 2, height=h, stroke_width=0, fill_color=color,
+                                   fill_opacity=1).move_to([-w / 4 + h / 4 - h / 4, 0, 0]))
+    right = VGroup(RoundedRectangle(corner_radius=h / 2, width=w / 2 + h / 2, height=h, stroke_width=0, fill_color=other,
+                                    fill_opacity=1).move_to([w / 4 - h / 4 + h / 4, 0, 0]))
+    cover_l = Rectangle(width=h / 2, height=h, stroke_width=0, fill_color=color, fill_opacity=1).move_to([-h / 4, 0, 0])
+    cover_r = Rectangle(width=h / 2, height=h, stroke_width=0, fill_color=other, fill_opacity=1).move_to([h / 4, 0, 0])
+    shine = Line([-w / 3, h / 4, 0], [w / 3, h / 4, 0], stroke_color=WHITE_SOFT, stroke_width=2, stroke_opacity=0.5)
+    g = VGroup(left, right, cover_l, cover_r, shine)
+    g.halves = VGroup(VGroup(left, cover_l), VGroup(right, cover_r))
+    return g
+
+
+WHITE_SOFT = "#FFFFFF"
+
+
+def tablet(r: float = 0.3, color: str = "#F5F5F5") -> VGroup:
+    """A round tablet with a score line."""
+    disc = Circle(radius=r, stroke_color="#C9D3E0", stroke_width=2, fill_color=color, fill_opacity=1)
+    score = Line([-0.7 * r, 0, 0], [0.7 * r, 0, 0], stroke_color="#9AA3B2", stroke_width=2)
+    return VGroup(disc, score)
+
+
+def flask(h: float = 1.4, color: str = "#7BD88F") -> VGroup:
+    """A conical laboratory flask with liquid (``.liquid``) and bubbles (``.bubbles``)."""
+    neck_w, base_w = 0.22 * h, 0.8 * h
+    glass = Polygon([-neck_w / 2, h / 2, 0], [neck_w / 2, h / 2, 0], [neck_w / 2, 0.15 * h, 0], [base_w / 2, -h / 2, 0],
+                    [-base_w / 2, -h / 2, 0], [-neck_w / 2, 0.15 * h, 0], stroke_color="#C9D3E0", stroke_width=3,
+                    fill_color="#141A24", fill_opacity=1)
+    liq = Polygon([-0.27 * h, -0.12 * h, 0], [0.27 * h, -0.12 * h, 0], [base_w / 2 - 0.03 * h, -h / 2 + 0.03 * h, 0],
+                  [-base_w / 2 + 0.03 * h, -h / 2 + 0.03 * h, 0], stroke_width=0, fill_color=color, fill_opacity=0.85)
+    bubbles = VGroup(*[Circle(radius=0.03 * h, stroke_width=0, fill_color=WHITE_SOFT, fill_opacity=0.6).move_to([x * h, y * h, 0])
+                       for x, y in ((-0.1, -0.3), (0.05, -0.22), (0.12, -0.38), (-0.02, -0.4))])
+    g = VGroup(glass, liq, bubbles)
+    g.liquid, g.bubbles = liq, bubbles
+    return g
+
+
+def vial(h: float = 1.0, color: str = "#7EC8F5") -> VGroup:
+    """A small glass vial with a coloured cap and liquid (``.liquid``)."""
+    w = 0.42 * h
+    body = RoundedRectangle(corner_radius=0.08 * h, width=w, height=0.8 * h, stroke_color="#C9D3E0", stroke_width=2,
+                            fill_color="#141A24", fill_opacity=1).move_to([0, -0.1 * h, 0])
+    cap = Rectangle(width=w * 1.05, height=0.18 * h, stroke_width=0, fill_color=color, fill_opacity=1).move_to([0, 0.39 * h, 0])
+    liq = Rectangle(width=w * 0.86, height=0.45 * h, stroke_width=0, fill_color=color, fill_opacity=0.55).move_to([0, -0.25 * h, 0])
+    g = VGroup(body, liq, cap)
+    g.liquid = liq
+    return g

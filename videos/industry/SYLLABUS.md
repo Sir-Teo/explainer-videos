@@ -2551,6 +2551,7 @@ scored in Part 64 and at each refresh.
 | 17 · Automobiles | done 2026-11-27 (about 150 Register rows; Ford's *My Life and Work*; Toyota's plant and TPS pages; the 10-Ks of GM, Ford, Tesla, Rivian, Lucid and AutoNation, the 20-Fs of Toyota, Honda, Stellantis and Ferrari, Tesla's 2016 and Lucid's 2026 8-Ks; Volkswagen's Annual Report 2025 and BYD's 2025 results; the 2022 Economic Census of assembly, parts and dealers; FRED's sales, capacity use, months of supply, prices, jobs and loan rates; UN Comtrade's car exports; the DOE's battery costs, the IEA's EV shares and the EIA's 2017 outlook; China's 2017 and 2020 plans and CAAM's results; the USTR and EU duties) | `works/auto.py` | 18 scenes, with Ford's line, a press, welding robots, a paint booth, pickups, battery packs, showrooms and car carriers | silent and narrated previews reviewed | entry, lab, interactive | not started |
 | 18 · Aerospace and Defence | done 2026-11-27 (about 110 Register rows; the 10-Ks of Boeing (2005, 2011, 2013, 2025), GE Aerospace, RTX, Lockheed Martin and TransDigm, Boeing's 10-Q for the third quarter of 2026 and AerCap's 20-F; Airbus's Annual Report 2025 (ESEF); the WTO's DS316 and DS353; the SEC extract of fifteen aerospace and defence companies; FRED's aircraft orders and shipments and US defence spending; SIPRI's military expenditure) | `works/aircraft.py` | 16 scenes, with a turbofan cutaway, a fan face, a fighter, airliners assembled from their sections and the `beats.py` charts | code only: every beat snapshot-checked, not rendered | entry, lab, interactive | not started |
 | 19 · Machinery | done 2026-11-27 (about 90 Register rows; the 10-Ks of Otis, Caterpillar, United Rentals, Honeywell and 3M (2025) and Deere (fiscal 2025), the third-quarter 2026 10-Qs of Caterpillar and Honeywell; the SEC extract of twenty-three machinery companies; FRED's machinery orders, shipments, output, capacity, jobs and prices and the BEA's equipment investment; the IFR's press releases of 2022, 2024 and 2026 and its installations via the AI Index and Our World in Data; UN Comtrade's excavator and robot exports) | `works/machine.py` | 14 scenes, with an excavator whose arm digs, an elevator whose car rides, gears and robot arms | code only: every beat snapshot-checked, not rendered | entry, lab, interactive | not started |
+| 20 · Pharmaceuticals | done 2026-11-27 (about 60 Register rows; Pfizer's 10-K 2012 (Exhibit 13), the 10-Ks of Eli Lilly and Merck (2025) and Lilly's 8-Ks of February 2025, February 2026 and October 2026; BIO, Informa and QLS's success rates 2011-2020; the FDA's study of generic prices, its generic approvals and novel drug lists; CMS's fact sheet on the first negotiated prices; the SEC extract of sixteen drug, biotech and generics companies; FRED's drug producer prices and medicine output) | `works/pharma.py` | 15 scenes, with capsules, tablets, flasks and vials, a hundred candidates through the funnel and a drug's life to its cliff | code only: every beat snapshot-checked, not rendered | entry, lab, interactive | not started |
 
 Phase 0 is done in the form Part 1 needed: the palette and kit (`style.py`, `kit.py`), the instruments (`viz.py`: the
 phone and its exploded view, the region map, the Dollar column, the margin ladder, the treemap, plain axes), the
@@ -2778,3 +2779,19 @@ separations as the filings date them (GE HealthCare and GE Vernova, Solventum, S
 on 29 June 2026). Komatsu, Sany, XCMG, Volvo, Siemens, ABB, Fanuc, Yaskawa, Keyence, Schneider, Schindler, Kone, Daikin,
 Atlas Copco, SKF, Hitachi, Ashtead and Herc appear on the map by name only. Written as code only and checked from
 snapshots; not rendered.
+
+Part 20 keeps its draft's story and checks it against Pfizer's 2012 annual report: Lipitor's US exclusivity ended in
+November 2011, several generic makers entered in May 2012, and Pfizer's Lipitor revenue fell from $9.6bn (2011) to $3.9bn
+(2012); 'the best-selling drug in history' is not used, since no primary source for it was read. The hook adds Lilly's
+tirzepatide (56% of its 2025 revenue) and Keytruda (49% of Merck's sales, US patent 2028). Run it is the draft's option to
+stop made one decision, whether to pay for Phase III once Phase II has shown the market's size; the twelve-candidate budget
+game is left for the lab's tasks. The odds are BIO, Informa and QLS's for 2011-2020 (7.9% from Phase I, 10.5 years), not
+Wong, Siah and Lo; the cost of a drug is the Works' arithmetic with illustrative stage costs, labelled, since DiMasi's paper
+was not read. Biologics, selling, the NIH's part, shortages and the opioid cases are left for Part 51 and later parts: no
+primary sources for them were read in this sweep. Peak-sales forecasts at launch and the 'productivity crisis' calls were
+not read, so *Called it?* scores Lilly's own revenue guidance (2025: $58.0-61.0bn against $65.2bn; 2026: $80-83bn, raised
+to $91-92bn), with the series' call that 2026 will reach $92.0bn. The CBO's studies could not be fetched. Lilly's factories
+(capital expenditure $7.8bn in 2025, ten new sites) and a dollar of thirteen companies' revenue split four ways are added.
+Novo Nordisk, Roche, Novartis, Sanofi, GSK, Takeda, Daiichi Sankyo, Hengrui, BeiGene, Sandoz, Sun, Dr. Reddy's, Cipla,
+Lonza, Samsung Biologics and WuXi appear on the map by name only. Written as code only and checked from snapshots; not
+rendered.

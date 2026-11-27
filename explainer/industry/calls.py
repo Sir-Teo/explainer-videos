@@ -330,6 +330,22 @@ CALLS = [
          rule="IFR, World Robotics press release of autumn 2027: world installations in 2026 as first published; true if "
               "below 655,000",
          due="2027-10", ours=True),
+    Call(20, "Eli Lilly and Company", "2025-02-06",
+         "\"2025 guidance issued with revenue in the range of $58.0 billion to $61.0 billion\"",
+         "Eli Lilly and Company, Form 8-K of 6 February 2025 (Exhibit 99, fourth-quarter 2024 results)",
+         outcome="Revenue of $65.179bn in 2025 (Form 10-K 2025), 6.9% above the top of the range"),
+    Call(20, "Eli Lilly and Company", "2026-02-04",
+         "\"2026 guidance issued with revenue in the range of $80 billion to $83 billion\"",
+         "Eli Lilly and Company, Form 8-K of 4 February 2026 (Exhibit 99, fourth-quarter 2025 results)",
+         outcome="Pending; raised to $91.0 billion to $92.0 billion on 29 October 2026 (Form 8-K, Exhibit 99), after "
+                 "third-quarter revenue of $24.397bn, up 39%"),
+    Call(20, "Industry, Built", "2026-11-27",
+         "Eli Lilly's revenue for 2026 will be at least $92.0 billion, the top of its raised range. Probability: 55%.",
+         "This series, Part 20, chapter 12; reasoning: Lilly beat the top of its 2025 range by 7% and has raised its 2026 "
+         "range twice, but a raise in late October leaves one quarter to surprise and its realized US prices are falling",
+         rule="Eli Lilly and Company, Form 8-K with its fourth-quarter 2026 results or Form 10-K 2026: total revenue for 2026 "
+              "as first reported; true if $92.0 billion or more",
+         due="2027-02", ours=True),
 ]
 
 

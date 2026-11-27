@@ -274,6 +274,66 @@
     });
   };
 
+  // Part 20: the pipeline (the Works' drug company in explainer/industry/works/pharma.py)
+  W.pipeline = function (el) {
+    var YEARS = [2.3, 3.6, 3.3, 1.3], CLIFF = [0.40, 0.12, 0.06, 0.04, 0.03], RAMP = 6, MARGIN = 0.6, LIFE = 20;
+    function cost(v) {
+      var q = [0.520, v.q2, 0.578, 0.906], c = [25, 60, v.p3, 5], p = 1, spend = 0, cap = 0, t = 0, total = 0, i;
+      for (i = 0; i < 4; i++) total += YEARS[i];
+      for (i = 0; i < 4; i++) {
+        spend += c[i] * p; cap += c[i] * p * Math.pow(1 + v.rate, total - t);
+        t += YEARS[i]; p *= q[i];
+      }
+      return { p: p, spend: spend, per: spend / p, cap: cap / p, years: total };
+    }
+    function drug(v) {
+      var s = [], npv = 0, before = 0, t;
+      for (t = 0; t < LIFE; t++) {
+        var x = t < v.excl ? v.peak * Math.min(1, (t + 1) / RAMP) : v.peak * CLIFF[Math.min(t - v.excl, CLIFF.length - 1)];
+        s.push(x);
+        var d = x * MARGIN / Math.pow(1 + v.rate, t + 1);
+        npv += d; if (t < v.excl) before += d;
+      }
+      return { sales: s, npv: npv, before: before };
+    }
+    QB.widget(el, {
+      title: "The pipeline",
+      sub: "A drug company starts candidates in Phase I. With BIO's odds, 52% pass Phase I, 29% Phase II, 58% Phase III and 91% the FDA's review, over about ten and a half years; the stages cost $25m, $60m, Phase III's cost and $5m, paid only by the candidates that get there. An approved drug ramps up over six years, sells at its peak until its exclusivity ends, then falls off the cliff; 60% of its sales are left after making and selling it. Set Phase II's odds, Phase III's cost, the cost of capital, the drug's peak sales and its years of exclusivity.",
+      panels: 2, height: 300, weights: [3, 2],
+      controls: [
+        { k: "q2", label: "Phase II success rate", min: 0.10, max: 0.60, step: 0.01, value: 0.289, fmt: function (x) { return (100 * x).toFixed(0) + "%"; } },
+        { k: "p3", label: "Phase III cost, $m", min: 100, max: 600, step: 10, value: 250, fmt: function (x) { return "$" + x + "m"; } },
+        { k: "rate", label: "Cost of capital, a year", min: 0.04, max: 0.16, step: 0.005, value: 0.105, fmt: function (x) { return (100 * x).toFixed(1) + "%"; } },
+        { k: "peak", label: "The drug's peak sales, $m a year", min: 250, max: 5000, step: 50, value: 2000, fmt: function (x) { return "$" + (x / 1000).toFixed(2) + "bn"; } },
+        { k: "excl", label: "Years of exclusivity after launch", min: 4, max: 16, step: 1, value: 12, fmt: function (x) { return x + " years"; } },
+      ],
+      draw: function (g, v, s) {
+        var c = cost(v), d = drug(v), xs = [], i;
+        for (i = 0; i < LIFE; i++) xs.push(i + 1);
+        var top = Math.max(v.peak, 500) * 1.15;
+        var ax = g[0].axes({ x: [0.3, LIFE + 0.7], y: [0, top], title: "The approved drug's sales, $m a year",
+                             xticks: [1, 5, 10, 15, 20], xfmt: function (x) { return "year " + x; }, yfmt: function (y) { return Math.round(y); } });
+        ax.bars(xs, d.sales, 0.75, { color: function (k) { return k < v.excl ? C.p : C.muted; }, alpha: 0.9 });
+        ax.vline(v.excl + 0.5, { color: C.loss, dash: [5, 4], width: 1.4 });
+        var vals = [c.per, c.cap, d.npv], hi = Math.max.apply(null, vals) * 1.2;
+        var bx = g[1].axes({ x: [-0.7, 2.7], y: [0, hi], title: "Per approved drug, $m",
+                             xticks: [0, 1, 2], xfmt: function (x) { return ["cost", "with waiting", "drug's value"][x]; }, yfmt: function (y) { return Math.round(y); } });
+        bx.bars([0], [c.per], 0.6, { color: C.spot });
+        bx.bars([1], [c.cap], 0.6, { color: C.loss });
+        bx.bars([2], [d.npv], 0.6, { color: d.npv >= c.cap ? C.gain : C.muted });
+        s.r = { c: c, d: d };
+      },
+      readout: function (v, s) {
+        var c = s.r.c, d = s.r.d;
+        return [["a candidate's chance of approval", (100 * c.p).toFixed(1) + "% (1 in " + (1 / c.p).toFixed(1) + ")"],
+                ["cost per approved drug: out of pocket / with waiting", "$" + Math.round(c.per).toLocaleString() + "m / $" + Math.round(c.cap).toLocaleString() + "m"],
+                ["the drug's value at launch; share before the cliff", "$" + Math.round(d.npv).toLocaleString() + "m; " + Math.round(100 * d.before / d.npv) + "%"],
+                ["does the pipeline pay?", d.npv >= c.cap ? "yes, by $" + Math.round(d.npv - c.cap).toLocaleString() + "m" : "no, short by $" + Math.round(c.cap - d.npv).toLocaleString() + "m"]];
+      },
+      note: "The Works' drug company, as in the film: with BIO's odds one candidate in 12.7 is approved, so an approved drug costs about $1.2bn out of pocket and $2.6bn with ten and a half years of waiting at 10.5%; a drug that peaks at $2bn a year with twelve years of exclusivity is worth about $5.8bn at launch, 96% of it before the cliff. Lower Phase II's odds to 20%, or shorten exclusivity, and see how quickly the arithmetic turns. The costs and the drug are illustrations; the odds are BIO's (2011-2020).",
+    });
+  };
+
   // Part 18: build an airliner programme (the Works' Programme in explainer/industry/works/aircraft.py)
   W.airframer = function (el) {
     var FIRST = 450, DEV_YEARS = 6, RAMP = [0.15, 0.4, 0.7, 1.0], YEARS = 25, R = 0.08;
