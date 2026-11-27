@@ -2558,6 +2558,7 @@ scored in Part 64 and at each refresh.
 | 24 · Construction | done 2026-11-27 (about 70 Register rows; the Empire State Building's fact sheet; California's high-speed rail business plans of 2008 and 2026; the NAO on Carillion; Flyvbjerg (2014); Ferrovial's 20-F; the 10-Ks of Fluor, Quanta and Martin Marietta; the SEC extract of twenty-five companies; the Census's construction spending and the BLS's jobs and prices via FRED; BEA's real value added and prices since 1947) | `works/contractor.py` | 13 scenes, with a building frame rising floor by floor, tower cranes, bridges, toll roads, hard hats and blueprints | code only: every beat snapshot-checked, not rendered | entry, lab, interactive | not started |
 | 25 · Homes | done 2026-11-27 (about 55 Register rows; D.R. Horton's Forms 8-K of October 2025 and 2026 and its 10-K for fiscal 2026; the 10-Ks of Lennar, NVR, Fannie Mae, Compass and Invitation Homes; the SEC extract of twenty-five builders, factory builders, suppliers, lenders, brokers and landlords; Case-Shiller, the Census's starts, sales, prices and homeownership, Freddie Mac's rates, the BLS's rents and materials prices and the Federal Reserve's mortgage debt via FRED) | `works/builder.py` | 12 scenes, with lots, house frames rising into houses, sale signs and keys | code only: every beat snapshot-checked, not rendered | entry, lab, interactive | not started |
 | 26 · Property | done 2026-11-27 (about 80 Register rows; the 10-Ks for 2025 of Prologis, BXP, Simon, Realty Income, SL Green, Hudson Pacific, American Tower, Equinix, Blackstone and CBRE; BXP's 10-Ks since 2017 and Realty Income's since 2015; WeWork's S-1 and Chapter 11 8-K; the Fed's Financial Stability Reports of 2023 and 2026; Gupta, Mittal and Van Nieuwerburgh (2022); the SEC extract of thirty-four companies; the Fed's price index, bank loans and delinquencies, Treasury yields, construction spending, e-commerce and rents via FRED) | `works/building.py` | 13 scenes, with office towers whose windows go dark, warehouses, malls, masts and leases | code only: every beat snapshot-checked, not rendered | entry, lab, interactive | not started |
+| 27 · Shipping and Ports | done 2026-11-27 (about 70 Register rows; ZIM's 20-Fs for 2020, 2021, 2023 and 2025 and its 2026 releases, with Alphaliner's statistics as quoted; Frontline's 20-F and third-quarter 2026 report; Matson's 10-K; E2open's 10-K on the Ever Given; Greenwood and Hanson; the SEC extract of twenty-two companies and Maersk's ESEF filings; IMF PortWatch's chokepoint transits; the World Bank's port traffic; FRED's freight, oil and imports) | `works/ship.py` | 13 scenes, with containers, quay cranes, ships, tankers, a shoebox and a world map of chokepoints | code only: every beat snapshot-checked, not rendered | entry, lab, interactive | not started |
 
 Phase 0 is done in the form Part 1 needed: the palette and kit (`style.py`, `kit.py`), the instruments (`viz.py`: the
 phone and its exploded view, the region map, the Dollar column, the margin ladder, the treemap, plain axes), the
@@ -2887,3 +2888,18 @@ halls (Part 37) and towers (Part 30) are touched only as kinds of building. Hong
 commercial property and India's office parks are left to the map and later parts; *Called it?* uses WeWork's 2019
 filing and BXP's own occupancy promise in place of the office and mall forecasts of 2010 and 2020-21, which were not found
 in primary sources. Written as code only and checked from snapshots; not rendered.
+
+Part 27 follows its draft's question. The *Ideal-X*'s loading costs ($5.83 against 16 cents a ton) were not checked
+against a primary source, so the hook is a pair of trainers priced from ZIM's average freight per TEU, with a stated and
+bounded assumption for the pairs a box holds, and the Suez Canal's week in March 2021 from IMF PortWatch's transits.
+Run it is the draft's thirty years as an owner on the Works' market (`works/ship.py`: convex earnings in utilization,
+orders in proportion to profit delivered three years later, scrapping, ship prices tied to earnings, two ordering rules,
+and the cube law of fuel); chartering, second-hand purchases and a container line's network are left out. Freight is read
+from ZIM's own average rate per TEU and the BLS's deep-sea freight prices rather than from the paywalled indices; the
+fleet and orderbook from Alphaliner as quoted in ZIM's filings. Added: IMF PortWatch's chokepoints (Suez and Bab
+el-Mandeb after the Houthi attacks, the Cape, Panama, Malacca and the Strait of Hormuz's closure in 2026), Frontline's
+tanker earnings in 2026, the ship lessors against the lines, Hapag-Lloyd's agreement to buy ZIM and *Called it?* on ZIM's
+own forecasts and on that deal in place of the 2021-22 orders, which appear as the market's view at the end of 2021.
+Ports and terminal operators (PSA, Hutchison, DP World, APM) do not file with the SEC and appear by name only; flags,
+Greek and Chinese owners, yards and fuel rules are left to the map and later parts. Written as code only and checked from
+snapshots; not rendered.

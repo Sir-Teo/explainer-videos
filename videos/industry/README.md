@@ -1,6 +1,6 @@
 # Industry, Built (产业，从零搭建)
 
-**Status (2026-11-27): Parts 1-26, [*Where the Money Goes*](industry1/README.md), [*The Economy on One
+**Status (2026-11-27): Parts 1-27, [*Where the Money Goes*](industry1/README.md), [*The Economy on One
 Page*](industry2/README.md), [*The Accounts*](industry3/README.md), [*The Cost Curve*](industry4/README.md), [*The
 Moat*](industry5/README.md), [*The Cycle*](industry6/README.md), [*Sizing a Market*](industry7/README.md), [*Oil and
 Gas*](industry8/README.md), [*Mining and Metals*](industry9/README.md), [*Farming and Food*](industry10/README.md),
@@ -9,8 +9,8 @@ Waste*](industry14/README.md), [*Semiconductors*](industry15/README.md), [*Elect
 [*Automobiles*](industry17/README.md), [*Aerospace and Defence*](industry18/README.md),
 [*Machinery*](industry19/README.md), [*Pharmaceuticals*](industry20/README.md), [*Medical
 Technology*](industry21/README.md), [*Consumer Goods*](industry22/README.md), [*Fashion and
-Luxury*](industry23/README.md), [*Construction*](industry24/README.md), [*Homes*](industry25/README.md) and [*Property*](industry26/README.md), are built, in English, with their labs and
-interactives: Acts I to III are complete and Act IV has begun. Parts 25-64 are planned.** This file is the plan. The standard every part meets, the
+Luxury*](industry23/README.md), [*Construction*](industry24/README.md), [*Homes*](industry25/README.md), [*Property*](industry26/README.md) and [*Shipping and Ports*](industry27/README.md), are built, in English, with their labs and
+interactives: Acts I to IV are complete and Act V has begun. Parts 28-64 are planned.** This file is the plan. The standard every part meets, the
 devices, the data plan and all sixty-four parts chapter by chapter are in [`SYLLABUS.md`](SYLLABUS.md), with
 progress in its §9. The decisions the plan rests on, and the ones still open, are at the end of this file.
 

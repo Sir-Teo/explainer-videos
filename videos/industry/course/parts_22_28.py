@@ -222,4 +222,46 @@ PARTS = [
               ("The building, the loan and the development", "explainer/industry/works/building.py"),
               ("The SEC and FRED extracts", "explainer/industry/data/SOURCES.md")),
     ),
+    Part(
+        n=27, level="U", widget="slowsteam", prereq=(4, 6, 8),
+        question="How did moving a tonne across an ocean become nearly free, and why do the companies that do it swing between "
+                 "fortune and ruin?",
+        story="The part opens on a pair of trainers whose ocean voyage cost about 62 cents in 2025 at ZIM's average freight "
+              "of $1,551 a TEU, and on the Suez Canal, where traffic fell from about 55 ships a day to two when the Ever Given "
+              "blocked it in March 2021. The viewer owns ships for thirty years in a market where a ship earns $10k a day "
+              "when the fleet is idle and $100k when it is full, and ships ordered today arrive in three: ordering with the "
+              "market buys ships at $112m that arrive into the bust and returns 8%; ordering against it buys at $66m and "
+              "returns 136%. Fuel a day rises with the cube of speed, so ships sail slowly. The world's ports handled 913m TEU "
+              "in 2024; the fleet grew from 25m TEU to 33.3m in four years, with 11.3m more on order. ZIM's freight went "
+              "from $1,009 a TEU in 2019 to $3,240 in 2022 and $1,203 in 2023; it earned $4.6bn in 2021 and lost $2.7bn in "
+              "2023, while the lessors that rent it ships kept steady margins. Houthi attacks halved traffic through Suez "
+              "and nearly doubled it round the Cape; in 2026 the Strait of Hormuz fell from 85 ships a day to about three, "
+              "and Frontline's tankers earned $148,500 a day against a $24,100 breakeven. Forwarders keep steady thin "
+              "margins; the Jones Act protects half of Matson's ocean revenue. The series gives 60% that Hapag-Lloyd "
+              "completes its purchase of ZIM by 30 June 2027.",
+        handoff="Part 28, airlines, turns to the industry that made distance fast and has lost money over most of its history.",
+        outside="Cubes and squares; expected value; Part 4's fixed costs; Part 6's cycle; Part 8's oil; Part 24's toll roads; "
+                "Economics, Built's trade (gravity and trade costs) and its cobweb cycles.",
+        objectives={
+            "U": ["Explain why a full fleet can charge almost anything and a half-empty one almost nothing.",
+                  "Explain why ships ordered in a boom arrive into a bust, and why the boom builds the bust.",
+                  "Explain why a few canals and straits can move the whole market."],
+            "M": ["Compute a voyage's fuel and time at different speeds and find the cheapest speed.",
+                  "Simulate a freight cycle with delivery lags and compare ordering rules by their returns.",
+                  "Compute the freight cost per unit of goods from a rate per TEU."],
+            "D": ["Read a company's changing forecasts of its own year, and make and state a dated, scorable forecast."],
+            "I": ["Read a container line's freight rate, volumes and fleet, and a tanker owner's TCE and breakeven.",
+                  "Read chokepoint transit data and port traffic to track disruptions."],
+        },
+        results=[
+            ("Fuel and speed", r"\text{fuel a day} \propto v^{3}, \quad \text{fuel a mile} \propto v^{2}"),
+            ("A voyage's cost", r"C(v) = \frac{D}{24v}\left(c_{\text{ship}} + p_{\text{fuel}}\,f_{0}\left(\frac{v}{v_{0}}\right)^{3}\right)"),
+            ("Utilization", r"u = \frac{\text{cargo}}{\text{fleet}}, \quad e(u)\ \text{steep as}\ u \to 1"),
+            ("Freight per unit", r"\frac{\text{rate per TEU} \times \text{TEU per box}}{\text{units per box}}"),
+        ],
+        U=(0, 1, 2, 3, 4, 5, "s07_intermission", 6, 7, 8), I=(9,), D=(10,),
+        also=(("The Register's rows for Part 27", "explainer/industry/data/rows_p27.py"),
+              ("The shipping market and the voyage", "explainer/industry/works/ship.py"),
+              ("The SEC, IMF PortWatch, World Bank and FRED extracts", "explainer/industry/data/SOURCES.md")),
+    ),
 ]

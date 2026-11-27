@@ -46,6 +46,8 @@ Every glyph is a ``VGroup`` with its moving parts named, so a scene can animate 
   (``.deck``), :func:`toll_road` (``.gantry``, ``.cars``), :func:`hardhat`, :func:`blueprint` (``.plan``);
 * homes: :func:`house_frame` (``.studs``, ``.trusses``), :func:`plot_lot` (``.stakes``), :func:`sale_sign` (``.board``),
   :func:`house_key`;
+* shipping: :func:`container` (a box with its ribs and doors), :func:`quay_crane` (``.boom``, ``.spreader``),
+  :func:`shoebox`;
 * property: :func:`office_tower` (``.windows`` in random order, lit with :func:`light` to show occupancy),
   :func:`warehouse` (``.docks``, ``.trucks``), :func:`mall` (``.stores``, which can go dark), :func:`cell_tower`
   (``.antennas``), :func:`lease` (``.lines``, ``.signature``);
@@ -2775,3 +2777,47 @@ def lease(w: float = 1.2, color: str = "#E8EAED") -> VGroup:
     g = VGroup(page, head, lines, sig)
     g.lines, g.signature = lines, sig
     return g
+
+
+# ---------------------------------------------------------------------------------------------------------------
+# Shipping (Part 27)
+# ---------------------------------------------------------------------------------------------------------------
+def container(w: float = 2.0, color: str = "#E8554E", feet: int = 40) -> VGroup:
+    """A shipping container seen from the side: corrugated ribs, corner castings and door bars at one end; 40 or 20 feet
+    long (``feet``), 8.5 feet high."""
+    h = w * 8.5 / feet
+    body = Rectangle(width=w, height=h, stroke_color="#0E1117", stroke_width=1.5, fill_color=color, fill_opacity=1)
+    n = max(6, int(feet / 2))
+    ribs = VGroup(*[Line([-w / 2 + w * (k + 0.5) / n, -0.42 * h, 0], [-w / 2 + w * (k + 0.5) / n, 0.42 * h, 0],
+                         stroke_color="#0E1117", stroke_width=0.8, stroke_opacity=0.45) for k in range(n)])
+    corners = VGroup(*[Square(side_length=0.12 * h, stroke_width=0, fill_color="#2E3645", fill_opacity=1).move_to(
+        [sx * (w / 2 - 0.06 * h), sy * (h / 2 - 0.06 * h), 0]) for sx in (-1, 1) for sy in (-1, 1)])
+    bars = VGroup(*[Line([w / 2 - k * 0.07 * h, -0.4 * h, 0], [w / 2 - k * 0.07 * h, 0.4 * h, 0], stroke_color="#E8EAED",
+                         stroke_width=1.5) for k in (1.6, 2.6)])
+    return VGroup(body, ribs, corners, bars)
+
+
+def quay_crane(h: float = 3.0, color: str = "#F2A65A") -> VGroup:
+    """A ship-to-shore container crane: two A-frame legs, a boom reaching out over the water (``g.boom``) and a spreader
+    hanging from its trolley (``g.spreader``)."""
+    legs = VGroup(Line([-0.25 * h, 0, 0], [-0.18 * h, 0.62 * h, 0], stroke_color=color, stroke_width=5),
+                  Line([0.12 * h, 0, 0], [0.05 * h, 0.62 * h, 0], stroke_color=color, stroke_width=5),
+                  Line([-0.22 * h, 0.3 * h, 0], [0.09 * h, 0.3 * h, 0], stroke_color=color, stroke_width=3))
+    boom = Line([-0.45 * h, 0.62 * h, 0], [0.75 * h, 0.62 * h, 0], stroke_color=color, stroke_width=6)
+    apex = VGroup(Line([-0.12 * h, 0.62 * h, 0], [-0.06 * h, 0.9 * h, 0], stroke_color=color, stroke_width=3),
+                  Line([-0.06 * h, 0.9 * h, 0], [0.62 * h, 0.64 * h, 0], stroke_color=color, stroke_width=1.5),
+                  Line([-0.06 * h, 0.9 * h, 0], [-0.42 * h, 0.64 * h, 0], stroke_color=color, stroke_width=1.5))
+    cab = Rectangle(width=0.07 * h, height=0.05 * h, stroke_width=0, fill_color="#E8EAED", fill_opacity=1).move_to([0.45 * h, 0.585 * h, 0])
+    rope = Line([0.45 * h, 0.56 * h, 0], [0.45 * h, 0.32 * h, 0], stroke_color="#C9D3E0", stroke_width=1.2)
+    spreader = Rectangle(width=0.16 * h, height=0.02 * h, stroke_width=0, fill_color="#F6C453", fill_opacity=1).move_to([0.45 * h, 0.31 * h, 0])
+    g = VGroup(legs, boom, apex, cab, rope, spreader)
+    g.boom, g.spreader = boom, VGroup(rope, spreader)
+    return g
+
+
+def shoebox(w: float = 1.0, color: str = "#F2A65A") -> VGroup:
+    """A shoebox with a lid and a trainer printed on the side."""
+    box = Rectangle(width=w, height=0.42 * w, stroke_width=0, fill_color=color, fill_opacity=1).move_to([0, 0.21 * w, 0])
+    lid = Rectangle(width=1.04 * w, height=0.1 * w, stroke_width=0, fill_color="#E8EAED", fill_opacity=1).move_to([0, 0.44 * w, 0])
+    shoe = sneaker(0.5 * w).move_to([0, 0.2 * w, 0])
+    return VGroup(box, lid, shoe)

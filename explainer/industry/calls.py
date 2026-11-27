@@ -451,6 +451,27 @@ CALLS = [
          rule="BXP's results for 2027 (Form 8-K or 10-K, early 2028): total (in-service) portfolio occupancy at 31 December "
               "2027 as reported; true if 91.0% or more",
          due="2028-01", ours=True),
+    Call(27, "ZIM Integrated Shipping Services", "2026-08-19",
+         "Full-year 2026 Adjusted EBITDA between $2.0 billion and $2.4 billion (no guidance had been given in March because of "
+         "the proposed sale to Hapag-Lloyd)",
+         "ZIM, second-quarter 2026 results (Form 6-K of 19 August 2026)",
+         outcome="Raised to $2.7-3.0 billion on 6 October and $3.3-3.5 billion on 18 November 2026 (Forms 6-K); the year's "
+                 "outcome comes with ZIM's or Hapag-Lloyd's results for 2026"),
+    Call(27, "Alphaliner, as quoted by ZIM", "2021-12-31",
+         "Container shipping demand 'projected to increase by 6.7%' against fleet growth of 4.5% in 2021, 'therefore the "
+         "increase in ship capacity is expected to be less than the increase in demand for container shipping for a second "
+         "consecutive year'",
+         "ZIM Integrated Shipping Services, Form 20-F for 2021",
+         outcome="The boom's orders arrived: fleet growth of 10.3% in 2024 and 7.3% in 2025 against demand growth of 3.5% in "
+                 "2025 (Alphaliner via ZIM's Form 20-F for 2025); ZIM's average freight fell from $3,240 a TEU in 2022 to "
+                 "$1,203 in 2023"),
+    Call(27, "Industry, Built", "2026-11-27",
+         "Hapag-Lloyd's purchase of ZIM will be completed by 30 June 2027. Probability: 60%.",
+         "This series, Part 27, chapter 10; reasoning: agreed on 16 February 2026, approved by ZIM's shareholders on 30 April "
+         "and targeted to close in the first quarter of 2027, leaving a quarter to spare; against: the State of Israel's "
+         "Special State Share, the termination of the original application and the need to file a new one",
+         rule="Hapag-Lloyd's or ZIM's announcements: true if the acquisition is completed on or before 30 June 2027",
+         due="2027-07", ours=True),
 ]
 
 

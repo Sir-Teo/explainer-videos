@@ -2212,6 +2212,87 @@ def fred_homes():
     return _fred_write("fred_homes", FRED_HOMES)
 
 
+SHIP_COMPANIES = [(1654126, "ZIM", "USD"), (3453, "MATX", "USD"), (56047, "KEX", "USD"), (913290, "FRO", "USD"),
+                  (1386716, "SBLK", "USD"), (1369241, "DAC", "USD"), (1430725, "GSL", "USD"), (1503584, "CMRE", "USD"),
+                  (1483934, "STNG", "USD"), (1679049, "INSW", "USD"), (1326200, "GNK", "USD"), (1419945, "TNK", "USD"),
+                  (1331284, "DHT", "USD"), (1772253, "FLNG", "USD"), (746515, "EXPD", "USD"), (1043277, "CHRW", "USD"),
+                  (1604481, "CMBT", "USD"), (1000177, "NAT", "USD"), (1655891, "TRMD", "USD"), (1289877, "SFL", "USD"),
+                  (1318885, "DSX", "USD"), (1415921, "NMM", "USD")]
+
+
+def sec_ship():
+    """Annual figures of container lines, shipowners (containerships let to the lines, crude and product tankers, dry
+    bulk carriers, gas carriers), a barge operator and two freight forwarders, from their Forms 10-K and 20-F (SEC company
+    facts), in US dollars (billions), with ``sec_fashion``'s items and tags (IFRS first, then US GAAP)."""
+    return _write("sec_ship", ["ticker", "year_end", "currency"] + list(FASHION_ITEMS),
+                  _sec_table(SHIP_COMPANIES, FASHION_ITEMS), [_sec_source(FASHION_ITEMS)])
+
+
+FRED_SHIP = {"PCU483111483111": "PPI by industry: deep sea freight transportation (June 1988 = 100, NSA; BLS)",
+             "PCU483483": "PPI by industry: water transportation (Dec 2003 = 100, NSA; BLS)",
+             "MCOILBRENTEU": "Brent crude oil, Europe ($ a barrel, monthly average; EIA)",
+             "BOPTIMP": "US imports of goods, balance of payments basis ($ million, monthly, SA; Census Bureau and BEA)",
+             "CPIAUCNS": "CPI-U: all items (1982-84 = 100, NSA; BLS)"}
+
+
+def fred_ship():
+    return _fred_write("fred_ship", FRED_SHIP)
+
+
+PORTWATCH = ("https://services9.arcgis.com/weJ1QsnbMYJlCHdG/arcgis/rest/services/Daily_Chokepoints_Data/FeatureServer/0/"
+             "query")
+CHOKEPOINTS = {"chokepoint1": "Suez Canal", "chokepoint2": "Panama Canal", "chokepoint4": "Bab el-Mandeb Strait",
+               "chokepoint5": "Malacca Strait", "chokepoint6": "Strait of Hormuz", "chokepoint7": "Cape of Good Hope"}
+
+
+def imf_portwatch():
+    """IMF PortWatch's daily transit calls through six chokepoints (from AIS ship positions), averaged by month: all ships,
+    container ships and tankers, and their capacity (deadweight tonnes); and every day for the Suez Canal from 10 March to
+    10 April 2021, the week the Ever Given blocked it."""
+    import urllib.parse
+
+    out = []
+    for pid, name in CHOKEPOINTS.items():
+        rows, off = [], 0
+        while True:
+            q = urllib.parse.urlencode({"where": f"portid='{pid}'", "outFields": "date,n_total,n_container,n_tanker,capacity",
+                                        "orderByFields": "date", "resultOffset": off, "resultRecordCount": 2000, "f": "json"})
+            d = json.loads(_get(PORTWATCH + "?" + q))
+            feats = d.get("features", [])
+            rows += [f["attributes"] for f in feats]
+            if len(feats) < 2000:
+                break
+            off += 2000
+        by: dict = {}
+        for r in rows:
+            day = str(r["date"])[:10]
+            by.setdefault(day[:7], []).append(r)
+            if pid == "chokepoint1" and "2021-03-10" <= day <= "2021-04-10":
+                for k in ("n_total", "n_container", "n_tanker"):
+                    out.append([name, day, k, r[k]])
+        for mth, rs in sorted(by.items()):
+            for k in ("n_total", "n_container", "n_tanker", "capacity"):
+                v = [r[k] for r in rs if r[k] is not None]
+                if v:
+                    out.append([name, mth, k + "_mean", round(sum(v) / len(v), 3)])
+            out.append([name, mth, "days", len(rs)])
+    return _write("imf_portwatch", ["chokepoint", "period", "measure", "value"], out,
+                  ["https://portwatch.imf.org (IMF PortWatch, Daily Chokepoint Transit Calls; ArcGIS service "
+                   "Daily_Chokepoints_Data; monthly means of daily values, daily values for the Suez Canal 10 March-10 April "
+                   "2021; capacity in deadweight tonnes; estimates from AIS data)"])
+
+
+def wb_ports():
+    """Container port traffic (TEU: 20-foot equivalent units) for the world and selected countries, World Development
+    Indicators IS.SHP.GOOD.TU (Lloyd's List Intelligence via the World Bank)."""
+    url = ("https://api.worldbank.org/v2/country/WLD;CHN;USA;SGP;KOR;MYS;NLD;ARE;DEU;JPN;VNM;IND;BEL;ESP;GBR;EGY/indicator/"
+           "IS.SHP.GOOD.TU?format=json&per_page=2000&date=2000:2025")
+    d = json.loads(_get(url))
+    out = [[r["country"]["value"], int(r["date"]), r["value"]] for r in d[1] if r["value"] is not None]
+    return _write("wb_ports", ["country", "year", "teu"], sorted(out),
+                  ["https://api.worldbank.org (World Development Indicators: IS.SHP.GOOD.TU, container port traffic, TEU)"])
+
+
 PROPERTY_COMPANIES = [(1045609, "PLD", "USD"), (1571283, "REXR", "USD"), (49600, "EGP", "USD"), (1053507, "AMT", "USD"),
                       (1051470, "CCI", "USD"), (1034054, "SBAC", "USD"), (1101239, "EQIX", "USD"), (1297996, "DLR", "USD"),
                       (1063761, "SPG", "USD"), (726728, "O", "USD"), (879101, "KIM", "USD"), (910606, "REG", "USD"),
@@ -2474,7 +2555,7 @@ def sipri_milex():
                    "estimates included as published)"])
 
 
-JOBS = {"sec_property": sec_property, "fred_property": fred_property, "sec_homes": sec_homes, "fred_homes": fred_homes,
+JOBS = {"sec_ship": sec_ship, "fred_ship": fred_ship, "imf_portwatch": imf_portwatch, "wb_ports": wb_ports, "sec_property": sec_property, "fred_property": fred_property, "sec_homes": sec_homes, "fred_homes": fred_homes,
         "sec_construction": sec_construction, "fred_construction": fred_construction, "bea_long": bea_long,
         "sec_fashion": sec_fashion, "fred_fashion": fred_fashion, "comtrade_apparel": comtrade_apparel,
         "fred_consumer": fred_consumer, "sec_consumer": sec_consumer, "sec_medtech": sec_medtech, "fred_medtech": fred_medtech, "fda_devices": fda_devices, "fda_510k_panels": fda_510k_panels,

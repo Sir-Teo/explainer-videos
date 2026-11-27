@@ -339,4 +339,54 @@
     });
   };
 
+  W.slowsteam = function (el) {
+    function voyage(v, fuel, day, dist) {
+      var days = dist / (v * 24), t = 100 * Math.pow(v / 20, 3) * days;
+      return { days: days, tonnes: t, fuel: t * fuel / 1e6, ship: days * day / 1e6, total: t * fuel / 1e6 + days * day / 1e6 };
+    }
+    QB.widget(el, {
+      title: "Sail a voyage",
+      sub: "The Works' large container ship burns 100 tonnes of fuel a day at 20 knots, and fuel a day rises with the cube of speed. Choose the speed, the price of fuel, what the ship's other costs come to each day (its capital, crew, insurance and repairs) and the length of the voyage, and find the cheapest speed.",
+      panels: 2, height: 300, weights: [1, 1],
+      controls: [
+        { k: "v", label: "Speed", min: 10, max: 24, step: 0.5, value: 20, fmt: function (x) { return x.toFixed(1) + " knots"; } },
+        { k: "fuel", label: "Fuel price, $ a tonne", min: 200, max: 1200, step: 25, value: 600, fmt: function (x) { return "$" + x; } },
+        { k: "day", label: "The ship's other costs, $ a day", min: 10000, max: 120000, step: 5000, value: 40000, fmt: function (x) { return "$" + Math.round(x / 1000) + "k"; } },
+        { k: "dist", label: "Voyage length, nautical miles", min: 3000, max: 15000, step: 500, value: 11000, fmt: function (x) { return x.toLocaleString(); } },
+      ],
+      draw: function (g, v, s) {
+        var vs = [], tot = [], fu = [], sh = [], best = { v: 10, c: 1e18 }, k;
+        for (k = 0; k <= 140; k++) {
+          var sp = 10 + 0.1 * k, r = voyage(sp, v.fuel, v.day, v.dist);
+          vs.push(sp); tot.push(r.total); fu.push(r.fuel); sh.push(r.ship);
+          if (r.total < best.c) best = { v: sp, c: r.total };
+        }
+        var hi = Math.max.apply(null, tot) * 1.08;
+        var ax = g[0].axes({ x: [10, 24], y: [0, hi], title: "Cost of the voyage, $m, by speed",
+                             xticks: [10, 12, 14, 16, 18, 20, 22, 24], xfmt: function (x) { return x + " kn"; }, yfmt: function (y) { return "$" + y.toFixed(1) + "m"; } });
+        ax.line(vs, tot, { color: C.p, width: 2.6 });
+        ax.line(vs, fu, { color: C.q, width: 1.6, dash: [5, 4] });
+        ax.line(vs, sh, { color: C.muted, width: 1.6, dash: [2, 3] });
+        ax.vline(v.v, { color: C.spot, dash: [5, 4], width: 1.4 });
+        ax.vline(best.v, { color: C.gain, width: 1.2 });
+        ax.legend([["whole voyage", C.p], ["fuel", C.q], ["the ship's days", C.muted]], { pos: "tr" });
+        var ts = [], fd = [];
+        for (k = 0; k <= 28; k++) { var sp2 = 10 + 0.5 * k; ts.push(sp2); fd.push(100 * Math.pow(sp2 / 20, 3)); }
+        var bx = g[1].axes({ x: [10, 24], y: [0, 180], title: "Fuel burned a day, tonnes",
+                             xticks: [10, 12, 14, 16, 18, 20, 22, 24], xfmt: function (x) { return x + " kn"; }, yfmt: function (y) { return Math.round(y) + "t"; } });
+        bx.line(ts, fd, { color: C.q, width: 2.4 });
+        bx.vline(v.v, { color: C.spot, dash: [5, 4], width: 1.4 });
+        s.r = { mine: voyage(v.v, v.fuel, v.day, v.dist), best: best, fast: voyage(20, v.fuel, v.day, v.dist) };
+      },
+      readout: function (v, s) {
+        var r = s.r.mine, b = s.r.best, f = s.r.fast;
+        return [["days at sea at your speed", r.days.toFixed(1)],
+                ["fuel burned; its cost", Math.round(r.tonnes).toLocaleString() + " t; $" + r.fuel.toFixed(2) + "m"],
+                ["the voyage in all (at 20 knots)", "$" + r.total.toFixed(2) + "m ($" + f.total.toFixed(2) + "m)"],
+                ["the cheapest speed; its cost", b.v.toFixed(1) + " knots; $" + b.c.toFixed(2) + "m"]];
+      },
+      note: "The Works' ship, as in the film: 11,000 miles at 20 knots takes 23 days and costs $2.29m with fuel at $600 a tonne and $40,000 a day of other costs; at 16 knots, 29 days and $2.03m; the cheapest speed is about 13.9 knots. ZIM's fuel and energy were 25.7% of its operating costs in 2025. The ship is an illustration.",
+    });
+  };
+
 })();

@@ -1,0 +1,2949 @@
+# source: https://portwatch.imf.org (IMF PortWatch, Daily Chokepoint Transit Calls; ArcGIS service Daily_Chokepoints_Data; monthly means of daily values, daily values for the Suez Canal 10 March-10 April 2021; capacity in deadweight tonnes; estimates from AIS data)
+# retrieved: 2026-11-27
+chokepoint,period,measure,value
+Suez Canal,2021-03-10,n_total,61
+Suez Canal,2021-03-10,n_container,18
+Suez Canal,2021-03-10,n_tanker,24
+Suez Canal,2021-03-11,n_total,56
+Suez Canal,2021-03-11,n_container,16
+Suez Canal,2021-03-11,n_tanker,23
+Suez Canal,2021-03-12,n_total,54
+Suez Canal,2021-03-12,n_container,22
+Suez Canal,2021-03-12,n_tanker,12
+Suez Canal,2021-03-13,n_total,50
+Suez Canal,2021-03-13,n_container,16
+Suez Canal,2021-03-13,n_tanker,15
+Suez Canal,2021-03-14,n_total,58
+Suez Canal,2021-03-14,n_container,20
+Suez Canal,2021-03-14,n_tanker,16
+Suez Canal,2021-03-15,n_total,52
+Suez Canal,2021-03-15,n_container,13
+Suez Canal,2021-03-15,n_tanker,18
+Suez Canal,2021-03-16,n_total,57
+Suez Canal,2021-03-16,n_container,17
+Suez Canal,2021-03-16,n_tanker,12
+Suez Canal,2021-03-17,n_total,47
+Suez Canal,2021-03-17,n_container,15
+Suez Canal,2021-03-17,n_tanker,13
+Suez Canal,2021-03-18,n_total,51
+Suez Canal,2021-03-18,n_container,8
+Suez Canal,2021-03-18,n_tanker,19
+Suez Canal,2021-03-19,n_total,61
+Suez Canal,2021-03-19,n_container,19
+Suez Canal,2021-03-19,n_tanker,21
+Suez Canal,2021-03-20,n_total,54
+Suez Canal,2021-03-20,n_container,16
+Suez Canal,2021-03-20,n_tanker,17
+Suez Canal,2021-03-21,n_total,48
+Suez Canal,2021-03-21,n_container,14
+Suez Canal,2021-03-21,n_tanker,15
+Suez Canal,2021-03-22,n_total,59
+Suez Canal,2021-03-22,n_container,13
+Suez Canal,2021-03-22,n_tanker,22
+Suez Canal,2021-03-23,n_total,38
+Suez Canal,2021-03-23,n_container,20
+Suez Canal,2021-03-23,n_tanker,4
+Suez Canal,2021-03-24,n_total,14
+Suez Canal,2021-03-24,n_container,5
+Suez Canal,2021-03-24,n_tanker,4
+Suez Canal,2021-03-25,n_total,2
+Suez Canal,2021-03-25,n_container,2
+Suez Canal,2021-03-25,n_tanker,0
+Suez Canal,2021-03-26,n_total,9
+Suez Canal,2021-03-26,n_container,5
+Suez Canal,2021-03-26,n_tanker,2
+Suez Canal,2021-03-27,n_total,9
+Suez Canal,2021-03-27,n_container,2
+Suez Canal,2021-03-27,n_tanker,3
+Suez Canal,2021-03-28,n_total,10
+Suez Canal,2021-03-28,n_container,4
+Suez Canal,2021-03-28,n_tanker,3
+Suez Canal,2021-03-29,n_total,33
+Suez Canal,2021-03-29,n_container,4
+Suez Canal,2021-03-29,n_tanker,12
+Suez Canal,2021-03-30,n_total,65
+Suez Canal,2021-03-30,n_container,36
+Suez Canal,2021-03-30,n_tanker,16
+Suez Canal,2021-03-31,n_total,63
+Suez Canal,2021-03-31,n_container,12
+Suez Canal,2021-03-31,n_tanker,14
+Suez Canal,2021-04-01,n_total,77
+Suez Canal,2021-04-01,n_container,34
+Suez Canal,2021-04-01,n_tanker,19
+Suez Canal,2021-04-02,n_total,77
+Suez Canal,2021-04-02,n_container,22
+Suez Canal,2021-04-02,n_tanker,23
+Suez Canal,2021-04-03,n_total,88
+Suez Canal,2021-04-03,n_container,11
+Suez Canal,2021-04-03,n_tanker,30
+Suez Canal,2021-04-04,n_total,87
+Suez Canal,2021-04-04,n_container,25
+Suez Canal,2021-04-04,n_tanker,27
+Suez Canal,2021-04-05,n_total,48
+Suez Canal,2021-04-05,n_container,7
+Suez Canal,2021-04-05,n_tanker,16
+Suez Canal,2021-04-06,n_total,78
+Suez Canal,2021-04-06,n_container,32
+Suez Canal,2021-04-06,n_tanker,13
+Suez Canal,2021-04-07,n_total,69
+Suez Canal,2021-04-07,n_container,16
+Suez Canal,2021-04-07,n_tanker,26
+Suez Canal,2021-04-08,n_total,77
+Suez Canal,2021-04-08,n_container,28
+Suez Canal,2021-04-08,n_tanker,22
+Suez Canal,2021-04-09,n_total,88
+Suez Canal,2021-04-09,n_container,19
+Suez Canal,2021-04-09,n_tanker,26
+Suez Canal,2021-04-10,n_total,69
+Suez Canal,2021-04-10,n_container,12
+Suez Canal,2021-04-10,n_tanker,21
+Suez Canal,2019-01,n_total_mean,49.774
+Suez Canal,2019-01,n_container_mean,16.387
+Suez Canal,2019-01,n_tanker_mean,16.097
+Suez Canal,2019-01,capacity_mean,2264211.387
+Suez Canal,2019-01,days,31
+Suez Canal,2019-02,n_total_mean,50.571
+Suez Canal,2019-02,n_container_mean,17.714
+Suez Canal,2019-02,n_tanker_mean,15.321
+Suez Canal,2019-02,capacity_mean,2424419.0
+Suez Canal,2019-02,days,28
+Suez Canal,2019-03,n_total_mean,49.806
+Suez Canal,2019-03,n_container_mean,16.065
+Suez Canal,2019-03,n_tanker_mean,17.0
+Suez Canal,2019-03,capacity_mean,2361366.935
+Suez Canal,2019-03,days,31
+Suez Canal,2019-04,n_total_mean,52.4
+Suez Canal,2019-04,n_container_mean,17.267
+Suez Canal,2019-04,n_tanker_mean,15.9
+Suez Canal,2019-04,capacity_mean,2526578.7
+Suez Canal,2019-04,days,30
+Suez Canal,2019-05,n_total_mean,51.806
+Suez Canal,2019-05,n_container_mean,18.032
+Suez Canal,2019-05,n_tanker_mean,16.032
+Suez Canal,2019-05,capacity_mean,2449713.065
+Suez Canal,2019-05,days,31
+Suez Canal,2019-06,n_total_mean,49.767
+Suez Canal,2019-06,n_container_mean,17.167
+Suez Canal,2019-06,n_tanker_mean,15.467
+Suez Canal,2019-06,capacity_mean,2422853.267
+Suez Canal,2019-06,days,30
+Suez Canal,2019-07,n_total_mean,51.806
+Suez Canal,2019-07,n_container_mean,17.871
+Suez Canal,2019-07,n_tanker_mean,15.032
+Suez Canal,2019-07,capacity_mean,2441479.645
+Suez Canal,2019-07,days,31
+Suez Canal,2019-08,n_total_mean,55.29
+Suez Canal,2019-08,n_container_mean,18.097
+Suez Canal,2019-08,n_tanker_mean,16.161
+Suez Canal,2019-08,capacity_mean,2550195.581
+Suez Canal,2019-08,days,31
+Suez Canal,2019-09,n_total_mean,53.1
+Suez Canal,2019-09,n_container_mean,17.167
+Suez Canal,2019-09,n_tanker_mean,16.3
+Suez Canal,2019-09,capacity_mean,2452944.433
+Suez Canal,2019-09,days,30
+Suez Canal,2019-10,n_total_mean,56.903
+Suez Canal,2019-10,n_container_mean,17.097
+Suez Canal,2019-10,n_tanker_mean,17.71
+Suez Canal,2019-10,capacity_mean,2569133.645
+Suez Canal,2019-10,days,31
+Suez Canal,2019-11,n_total_mean,53.633
+Suez Canal,2019-11,n_container_mean,16.367
+Suez Canal,2019-11,n_tanker_mean,17.167
+Suez Canal,2019-11,capacity_mean,2448615.9
+Suez Canal,2019-11,days,30
+Suez Canal,2019-12,n_total_mean,54.484
+Suez Canal,2019-12,n_container_mean,16.355
+Suez Canal,2019-12,n_tanker_mean,17.742
+Suez Canal,2019-12,capacity_mean,2426972.032
+Suez Canal,2019-12,days,31
+Suez Canal,2020-01,n_total_mean,57.065
+Suez Canal,2020-01,n_container_mean,17.387
+Suez Canal,2020-01,n_tanker_mean,17.645
+Suez Canal,2020-01,capacity_mean,2498431.161
+Suez Canal,2020-01,days,31
+Suez Canal,2020-02,n_total_mean,54.69
+Suez Canal,2020-02,n_container_mean,16.69
+Suez Canal,2020-02,n_tanker_mean,16.862
+Suez Canal,2020-02,capacity_mean,2544808.31
+Suez Canal,2020-02,days,29
+Suez Canal,2020-03,n_total_mean,53.903
+Suez Canal,2020-03,n_container_mean,14.935
+Suez Canal,2020-03,n_tanker_mean,15.839
+Suez Canal,2020-03,capacity_mean,2481735.032
+Suez Canal,2020-03,days,31
+Suez Canal,2020-04,n_total_mean,57.733
+Suez Canal,2020-04,n_container_mean,14.133
+Suez Canal,2020-04,n_tanker_mean,20.233
+Suez Canal,2020-04,capacity_mean,2676787.767
+Suez Canal,2020-04,days,30
+Suez Canal,2020-05,n_total_mean,52.355
+Suez Canal,2020-05,n_container_mean,13.581
+Suez Canal,2020-05,n_tanker_mean,19.516
+Suez Canal,2020-05,capacity_mean,2502767.097
+Suez Canal,2020-05,days,31
+Suez Canal,2020-06,n_total_mean,46.633
+Suez Canal,2020-06,n_container_mean,13.4
+Suez Canal,2020-06,n_tanker_mean,15.467
+Suez Canal,2020-06,capacity_mean,2113771.3
+Suez Canal,2020-06,days,30
+Suez Canal,2020-07,n_total_mean,47.355
+Suez Canal,2020-07,n_container_mean,15.0
+Suez Canal,2020-07,n_tanker_mean,13.226
+Suez Canal,2020-07,capacity_mean,2174601.516
+Suez Canal,2020-07,days,31
+Suez Canal,2020-08,n_total_mean,50.903
+Suez Canal,2020-08,n_container_mean,16.226
+Suez Canal,2020-08,n_tanker_mean,13.258
+Suez Canal,2020-08,capacity_mean,2300731.581
+Suez Canal,2020-08,days,31
+Suez Canal,2020-09,n_total_mean,52.233
+Suez Canal,2020-09,n_container_mean,16.567
+Suez Canal,2020-09,n_tanker_mean,13.2
+Suez Canal,2020-09,capacity_mean,2368174.633
+Suez Canal,2020-09,days,30
+Suez Canal,2020-10,n_total_mean,53.548
+Suez Canal,2020-10,n_container_mean,17.065
+Suez Canal,2020-10,n_tanker_mean,13.097
+Suez Canal,2020-10,capacity_mean,2354952.774
+Suez Canal,2020-10,days,31
+Suez Canal,2020-11,n_total_mean,54.6
+Suez Canal,2020-11,n_container_mean,16.867
+Suez Canal,2020-11,n_tanker_mean,14.567
+Suez Canal,2020-11,capacity_mean,2479080.733
+Suez Canal,2020-11,days,30
+Suez Canal,2020-12,n_total_mean,52.226
+Suez Canal,2020-12,n_container_mean,15.968
+Suez Canal,2020-12,n_tanker_mean,15.677
+Suez Canal,2020-12,capacity_mean,2428052.677
+Suez Canal,2020-12,days,31
+Suez Canal,2021-01,n_total_mean,52.387
+Suez Canal,2021-01,n_container_mean,16.258
+Suez Canal,2021-01,n_tanker_mean,16.194
+Suez Canal,2021-01,capacity_mean,2324464.806
+Suez Canal,2021-01,days,31
+Suez Canal,2021-02,n_total_mean,56.25
+Suez Canal,2021-02,n_container_mean,16.643
+Suez Canal,2021-02,n_tanker_mean,16.5
+Suez Canal,2021-02,capacity_mean,2570426.0
+Suez Canal,2021-02,days,28
+Suez Canal,2021-03,n_total_mean,48.226
+Suez Canal,2021-03,n_container_mean,15.0
+Suez Canal,2021-03,n_tanker_mean,14.129
+Suez Canal,2021-03,capacity_mean,2180118.806
+Suez Canal,2021-03,days,31
+Suez Canal,2021-04,n_total_mean,60.367
+Suez Canal,2021-04,n_container_mean,17.867
+Suez Canal,2021-04,n_tanker_mean,16.467
+Suez Canal,2021-04,capacity_mean,2941607.067
+Suez Canal,2021-04,days,30
+Suez Canal,2021-05,n_total_mean,56.516
+Suez Canal,2021-05,n_container_mean,17.065
+Suez Canal,2021-05,n_tanker_mean,15.935
+Suez Canal,2021-05,capacity_mean,2657783.161
+Suez Canal,2021-05,days,31
+Suez Canal,2021-06,n_total_mean,55.333
+Suez Canal,2021-06,n_container_mean,16.5
+Suez Canal,2021-06,n_tanker_mean,15.8
+Suez Canal,2021-06,capacity_mean,2634722.767
+Suez Canal,2021-06,days,30
+Suez Canal,2021-07,n_total_mean,55.645
+Suez Canal,2021-07,n_container_mean,17.129
+Suez Canal,2021-07,n_tanker_mean,14.871
+Suez Canal,2021-07,capacity_mean,2564353.581
+Suez Canal,2021-07,days,31
+Suez Canal,2021-08,n_total_mean,62.097
+Suez Canal,2021-08,n_container_mean,17.161
+Suez Canal,2021-08,n_tanker_mean,16.581
+Suez Canal,2021-08,capacity_mean,2724135.065
+Suez Canal,2021-08,days,31
+Suez Canal,2021-09,n_total_mean,63.067
+Suez Canal,2021-09,n_container_mean,18.167
+Suez Canal,2021-09,n_tanker_mean,17.4
+Suez Canal,2021-09,capacity_mean,2885271.333
+Suez Canal,2021-09,days,30
+Suez Canal,2021-10,n_total_mean,61.194
+Suez Canal,2021-10,n_container_mean,17.613
+Suez Canal,2021-10,n_tanker_mean,16.935
+Suez Canal,2021-10,capacity_mean,2781609.806
+Suez Canal,2021-10,days,31
+Suez Canal,2021-11,n_total_mean,63.0
+Suez Canal,2021-11,n_container_mean,18.4
+Suez Canal,2021-11,n_tanker_mean,18.033
+Suez Canal,2021-11,capacity_mean,2797921.5
+Suez Canal,2021-11,days,30
+Suez Canal,2021-12,n_total_mean,58.742
+Suez Canal,2021-12,n_container_mean,17.226
+Suez Canal,2021-12,n_tanker_mean,16.968
+Suez Canal,2021-12,capacity_mean,2762415.968
+Suez Canal,2021-12,days,31
+Suez Canal,2022-01,n_total_mean,59.0
+Suez Canal,2022-01,n_container_mean,17.645
+Suez Canal,2022-01,n_tanker_mean,15.355
+Suez Canal,2022-01,capacity_mean,2558814.419
+Suez Canal,2022-01,days,31
+Suez Canal,2022-02,n_total_mean,62.857
+Suez Canal,2022-02,n_container_mean,18.464
+Suez Canal,2022-02,n_tanker_mean,15.679
+Suez Canal,2022-02,capacity_mean,2774370.071
+Suez Canal,2022-02,days,28
+Suez Canal,2022-03,n_total_mean,60.355
+Suez Canal,2022-03,n_container_mean,17.903
+Suez Canal,2022-03,n_tanker_mean,17.323
+Suez Canal,2022-03,capacity_mean,2549636.29
+Suez Canal,2022-03,days,31
+Suez Canal,2022-04,n_total_mean,64.767
+Suez Canal,2022-04,n_container_mean,19.1
+Suez Canal,2022-04,n_tanker_mean,20.633
+Suez Canal,2022-04,capacity_mean,2820173.3
+Suez Canal,2022-04,days,30
+Suez Canal,2022-05,n_total_mean,63.903
+Suez Canal,2022-05,n_container_mean,19.0
+Suez Canal,2022-05,n_tanker_mean,20.161
+Suez Canal,2022-05,capacity_mean,2843718.516
+Suez Canal,2022-05,days,31
+Suez Canal,2022-06,n_total_mean,67.733
+Suez Canal,2022-06,n_container_mean,18.8
+Suez Canal,2022-06,n_tanker_mean,22.933
+Suez Canal,2022-06,capacity_mean,3041544.2
+Suez Canal,2022-06,days,30
+Suez Canal,2022-07,n_total_mean,71.032
+Suez Canal,2022-07,n_container_mean,20.161
+Suez Canal,2022-07,n_tanker_mean,22.935
+Suez Canal,2022-07,capacity_mean,3070258.903
+Suez Canal,2022-07,days,31
+Suez Canal,2022-08,n_total_mean,71.419
+Suez Canal,2022-08,n_container_mean,20.774
+Suez Canal,2022-08,n_tanker_mean,22.484
+Suez Canal,2022-08,capacity_mean,3212372.355
+Suez Canal,2022-08,days,31
+Suez Canal,2022-09,n_total_mean,69.367
+Suez Canal,2022-09,n_container_mean,19.267
+Suez Canal,2022-09,n_tanker_mean,23.567
+Suez Canal,2022-09,capacity_mean,3038136.667
+Suez Canal,2022-09,days,30
+Suez Canal,2022-10,n_total_mean,70.806
+Suez Canal,2022-10,n_container_mean,19.677
+Suez Canal,2022-10,n_tanker_mean,21.935
+Suez Canal,2022-10,capacity_mean,3101971.29
+Suez Canal,2022-10,days,31
+Suez Canal,2022-11,n_total_mean,71.5
+Suez Canal,2022-11,n_container_mean,18.833
+Suez Canal,2022-11,n_tanker_mean,23.767
+Suez Canal,2022-11,capacity_mean,3139367.067
+Suez Canal,2022-11,days,30
+Suez Canal,2022-12,n_total_mean,72.419
+Suez Canal,2022-12,n_container_mean,18.452
+Suez Canal,2022-12,n_tanker_mean,24.419
+Suez Canal,2022-12,capacity_mean,3250501.29
+Suez Canal,2022-12,days,31
+Suez Canal,2023-01,n_total_mean,70.968
+Suez Canal,2023-01,n_container_mean,17.065
+Suez Canal,2023-01,n_tanker_mean,24.29
+Suez Canal,2023-01,capacity_mean,3162976.581
+Suez Canal,2023-01,days,31
+Suez Canal,2023-02,n_total_mean,70.071
+Suez Canal,2023-02,n_container_mean,17.5
+Suez Canal,2023-02,n_tanker_mean,25.75
+Suez Canal,2023-02,capacity_mean,3140839.25
+Suez Canal,2023-02,days,28
+Suez Canal,2023-03,n_total_mean,71.774
+Suez Canal,2023-03,n_container_mean,17.677
+Suez Canal,2023-03,n_tanker_mean,25.613
+Suez Canal,2023-03,capacity_mean,3398677.581
+Suez Canal,2023-03,days,31
+Suez Canal,2023-04,n_total_mean,77.3
+Suez Canal,2023-04,n_container_mean,19.833
+Suez Canal,2023-04,n_tanker_mean,27.433
+Suez Canal,2023-04,capacity_mean,3564832.833
+Suez Canal,2023-04,days,30
+Suez Canal,2023-05,n_total_mean,77.419
+Suez Canal,2023-05,n_container_mean,20.581
+Suez Canal,2023-05,n_tanker_mean,26.774
+Suez Canal,2023-05,capacity_mean,3538945.0
+Suez Canal,2023-05,days,31
+Suez Canal,2023-06,n_total_mean,75.267
+Suez Canal,2023-06,n_container_mean,19.867
+Suez Canal,2023-06,n_tanker_mean,26.5
+Suez Canal,2023-06,capacity_mean,3473745.1
+Suez Canal,2023-06,days,30
+Suez Canal,2023-07,n_total_mean,71.355
+Suez Canal,2023-07,n_container_mean,20.839
+Suez Canal,2023-07,n_tanker_mean,26.097
+Suez Canal,2023-07,capacity_mean,3205599.484
+Suez Canal,2023-07,days,31
+Suez Canal,2023-08,n_total_mean,71.548
+Suez Canal,2023-08,n_container_mean,20.903
+Suez Canal,2023-08,n_tanker_mean,23.452
+Suez Canal,2023-08,capacity_mean,3247588.452
+Suez Canal,2023-08,days,31
+Suez Canal,2023-09,n_total_mean,74.233
+Suez Canal,2023-09,n_container_mean,20.7
+Suez Canal,2023-09,n_tanker_mean,25.167
+Suez Canal,2023-09,capacity_mean,3448617.867
+Suez Canal,2023-09,days,30
+Suez Canal,2023-10,n_total_mean,76.226
+Suez Canal,2023-10,n_container_mean,20.452
+Suez Canal,2023-10,n_tanker_mean,24.968
+Suez Canal,2023-10,capacity_mean,3451214.613
+Suez Canal,2023-10,days,31
+Suez Canal,2023-11,n_total_mean,76.567
+Suez Canal,2023-11,n_container_mean,19.467
+Suez Canal,2023-11,n_tanker_mean,24.833
+Suez Canal,2023-11,capacity_mean,3517853.5
+Suez Canal,2023-11,days,30
+Suez Canal,2023-12,n_total_mean,71.419
+Suez Canal,2023-12,n_container_mean,14.452
+Suez Canal,2023-12,n_tanker_mean,24.645
+Suez Canal,2023-12,capacity_mean,3066660.097
+Suez Canal,2023-12,days,31
+Suez Canal,2024-01,n_total_mean,48.032
+Suez Canal,2024-01,n_container_mean,9.194
+Suez Canal,2024-01,n_tanker_mean,15.839
+Suez Canal,2024-01,capacity_mean,1852114.774
+Suez Canal,2024-01,days,31
+Suez Canal,2024-02,n_total_mean,42.379
+Suez Canal,2024-02,n_container_mean,8.793
+Suez Canal,2024-02,n_tanker_mean,13.379
+Suez Canal,2024-02,capacity_mean,1592005.759
+Suez Canal,2024-02,days,29
+Suez Canal,2024-03,n_total_mean,38.871
+Suez Canal,2024-03,n_container_mean,8.29
+Suez Canal,2024-03,n_tanker_mean,13.548
+Suez Canal,2024-03,capacity_mean,1358671.323
+Suez Canal,2024-03,days,31
+Suez Canal,2024-04,n_total_mean,40.867
+Suez Canal,2024-04,n_container_mean,8.733
+Suez Canal,2024-04,n_tanker_mean,14.367
+Suez Canal,2024-04,capacity_mean,1387490.967
+Suez Canal,2024-04,days,30
+Suez Canal,2024-05,n_total_mean,40.71
+Suez Canal,2024-05,n_container_mean,8.677
+Suez Canal,2024-05,n_tanker_mean,15.129
+Suez Canal,2024-05,capacity_mean,1349048.129
+Suez Canal,2024-05,days,31
+Suez Canal,2024-06,n_total_mean,38.967
+Suez Canal,2024-06,n_container_mean,8.7
+Suez Canal,2024-06,n_tanker_mean,14.8
+Suez Canal,2024-06,capacity_mean,1334923.167
+Suez Canal,2024-06,days,30
+Suez Canal,2024-07,n_total_mean,38.452
+Suez Canal,2024-07,n_container_mean,8.903
+Suez Canal,2024-07,n_tanker_mean,14.226
+Suez Canal,2024-07,capacity_mean,1215693.548
+Suez Canal,2024-07,days,31
+Suez Canal,2024-08,n_total_mean,40.323
+Suez Canal,2024-08,n_container_mean,8.806
+Suez Canal,2024-08,n_tanker_mean,14.968
+Suez Canal,2024-08,capacity_mean,1253227.968
+Suez Canal,2024-08,days,31
+Suez Canal,2024-09,n_total_mean,37.433
+Suez Canal,2024-09,n_container_mean,7.933
+Suez Canal,2024-09,n_tanker_mean,15.133
+Suez Canal,2024-09,capacity_mean,1222278.9
+Suez Canal,2024-09,days,30
+Suez Canal,2024-10,n_total_mean,37.548
+Suez Canal,2024-10,n_container_mean,9.0
+Suez Canal,2024-10,n_tanker_mean,14.226
+Suez Canal,2024-10,capacity_mean,1177375.0
+Suez Canal,2024-10,days,31
+Suez Canal,2024-11,n_total_mean,36.0
+Suez Canal,2024-11,n_container_mean,8.967
+Suez Canal,2024-11,n_tanker_mean,13.3
+Suez Canal,2024-11,capacity_mean,1131967.233
+Suez Canal,2024-11,days,30
+Suez Canal,2024-12,n_total_mean,35.742
+Suez Canal,2024-12,n_container_mean,8.839
+Suez Canal,2024-12,n_tanker_mean,13.194
+Suez Canal,2024-12,capacity_mean,1191345.29
+Suez Canal,2024-12,days,31
+Suez Canal,2025-01,n_total_mean,37.129
+Suez Canal,2025-01,n_container_mean,9.194
+Suez Canal,2025-01,n_tanker_mean,13.032
+Suez Canal,2025-01,capacity_mean,1243456.71
+Suez Canal,2025-01,days,31
+Suez Canal,2025-02,n_total_mean,34.143
+Suez Canal,2025-02,n_container_mean,9.393
+Suez Canal,2025-02,n_tanker_mean,12.214
+Suez Canal,2025-02,capacity_mean,1178443.286
+Suez Canal,2025-02,days,28
+Suez Canal,2025-03,n_total_mean,37.29
+Suez Canal,2025-03,n_container_mean,8.677
+Suez Canal,2025-03,n_tanker_mean,14.645
+Suez Canal,2025-03,capacity_mean,1391630.29
+Suez Canal,2025-03,days,31
+Suez Canal,2025-04,n_total_mean,37.033
+Suez Canal,2025-04,n_container_mean,9.033
+Suez Canal,2025-04,n_tanker_mean,14.367
+Suez Canal,2025-04,capacity_mean,1309007.667
+Suez Canal,2025-04,days,30
+Suez Canal,2025-05,n_total_mean,37.0
+Suez Canal,2025-05,n_container_mean,9.29
+Suez Canal,2025-05,n_tanker_mean,14.419
+Suez Canal,2025-05,capacity_mean,1338086.903
+Suez Canal,2025-05,days,31
+Suez Canal,2025-06,n_total_mean,36.667
+Suez Canal,2025-06,n_container_mean,9.2
+Suez Canal,2025-06,n_tanker_mean,14.533
+Suez Canal,2025-06,capacity_mean,1229214.767
+Suez Canal,2025-06,days,30
+Suez Canal,2025-07,n_total_mean,38.0
+Suez Canal,2025-07,n_container_mean,8.484
+Suez Canal,2025-07,n_tanker_mean,15.387
+Suez Canal,2025-07,capacity_mean,1385953.387
+Suez Canal,2025-07,days,31
+Suez Canal,2025-08,n_total_mean,38.645
+Suez Canal,2025-08,n_container_mean,9.032
+Suez Canal,2025-08,n_tanker_mean,14.839
+Suez Canal,2025-08,capacity_mean,1364988.032
+Suez Canal,2025-08,days,31
+Suez Canal,2025-09,n_total_mean,42.067
+Suez Canal,2025-09,n_container_mean,9.533
+Suez Canal,2025-09,n_tanker_mean,15.967
+Suez Canal,2025-09,capacity_mean,1510959.033
+Suez Canal,2025-09,days,30
+Suez Canal,2025-10,n_total_mean,41.323
+Suez Canal,2025-10,n_container_mean,10.032
+Suez Canal,2025-10,n_tanker_mean,15.323
+Suez Canal,2025-10,capacity_mean,1514234.258
+Suez Canal,2025-10,days,31
+Suez Canal,2025-11,n_total_mean,42.933
+Suez Canal,2025-11,n_container_mean,9.5
+Suez Canal,2025-11,n_tanker_mean,15.1
+Suez Canal,2025-11,capacity_mean,1579842.567
+Suez Canal,2025-11,days,30
+Suez Canal,2025-12,n_total_mean,40.065
+Suez Canal,2025-12,n_container_mean,8.839
+Suez Canal,2025-12,n_tanker_mean,15.452
+Suez Canal,2025-12,capacity_mean,1566167.258
+Suez Canal,2025-12,days,31
+Suez Canal,2026-01,n_total_mean,39.065
+Suez Canal,2026-01,n_container_mean,9.032
+Suez Canal,2026-01,n_tanker_mean,14.484
+Suez Canal,2026-01,capacity_mean,1350364.097
+Suez Canal,2026-01,days,31
+Suez Canal,2026-02,n_total_mean,41.357
+Suez Canal,2026-02,n_container_mean,8.714
+Suez Canal,2026-02,n_tanker_mean,17.429
+Suez Canal,2026-02,capacity_mean,1465041.143
+Suez Canal,2026-02,days,28
+Suez Canal,2026-03,n_total_mean,41.0
+Suez Canal,2026-03,n_container_mean,9.0
+Suez Canal,2026-03,n_tanker_mean,16.871
+Suez Canal,2026-03,capacity_mean,1430628.065
+Suez Canal,2026-03,days,31
+Suez Canal,2026-04,n_total_mean,42.133
+Suez Canal,2026-04,n_container_mean,8.2
+Suez Canal,2026-04,n_tanker_mean,17.8
+Suez Canal,2026-04,capacity_mean,1424888.0
+Suez Canal,2026-04,days,30
+Suez Canal,2026-05,n_total_mean,39.097
+Suez Canal,2026-05,n_container_mean,8.0
+Suez Canal,2026-05,n_tanker_mean,16.065
+Suez Canal,2026-05,capacity_mean,1499580.452
+Suez Canal,2026-05,days,31
+Suez Canal,2026-06,n_total_mean,40.4
+Suez Canal,2026-06,n_container_mean,8.4
+Suez Canal,2026-06,n_tanker_mean,15.533
+Suez Canal,2026-06,capacity_mean,1586798.967
+Suez Canal,2026-06,days,30
+Suez Canal,2026-07,n_total_mean,41.871
+Suez Canal,2026-07,n_container_mean,9.161
+Suez Canal,2026-07,n_tanker_mean,15.71
+Suez Canal,2026-07,capacity_mean,1599606.323
+Suez Canal,2026-07,days,31
+Suez Canal,2026-08,n_total_mean,41.0
+Suez Canal,2026-08,n_container_mean,9.323
+Suez Canal,2026-08,n_tanker_mean,16.29
+Suez Canal,2026-08,capacity_mean,1384079.0
+Suez Canal,2026-08,days,31
+Suez Canal,2026-09,n_total_mean,40.4
+Suez Canal,2026-09,n_container_mean,10.767
+Suez Canal,2026-09,n_tanker_mean,15.567
+Suez Canal,2026-09,capacity_mean,1565089.833
+Suez Canal,2026-09,days,30
+Suez Canal,2026-10,n_total_mean,43.065
+Suez Canal,2026-10,n_container_mean,13.194
+Suez Canal,2026-10,n_tanker_mean,16.645
+Suez Canal,2026-10,capacity_mean,1796813.581
+Suez Canal,2026-10,days,31
+Suez Canal,2026-11,n_total_mean,45.409
+Suez Canal,2026-11,n_container_mean,14.5
+Suez Canal,2026-11,n_tanker_mean,15.318
+Suez Canal,2026-11,capacity_mean,1942323.545
+Suez Canal,2026-11,days,22
+Panama Canal,2019-01,n_total_mean,31.452
+Panama Canal,2019-01,n_container_mean,7.065
+Panama Canal,2019-01,n_tanker_mean,11.871
+Panama Canal,2019-01,capacity_mean,817340.194
+Panama Canal,2019-01,days,31
+Panama Canal,2019-02,n_total_mean,31.5
+Panama Canal,2019-02,n_container_mean,6.964
+Panama Canal,2019-02,n_tanker_mean,11.75
+Panama Canal,2019-02,capacity_mean,832789.679
+Panama Canal,2019-02,days,28
+Panama Canal,2019-03,n_total_mean,31.226
+Panama Canal,2019-03,n_container_mean,6.419
+Panama Canal,2019-03,n_tanker_mean,12.355
+Panama Canal,2019-03,capacity_mean,770187.29
+Panama Canal,2019-03,days,31
+Panama Canal,2019-04,n_total_mean,30.233
+Panama Canal,2019-04,n_container_mean,6.667
+Panama Canal,2019-04,n_tanker_mean,11.733
+Panama Canal,2019-04,capacity_mean,804580.633
+Panama Canal,2019-04,days,30
+Panama Canal,2019-05,n_total_mean,31.097
+Panama Canal,2019-05,n_container_mean,6.742
+Panama Canal,2019-05,n_tanker_mean,12.226
+Panama Canal,2019-05,capacity_mean,851734.323
+Panama Canal,2019-05,days,31
+Panama Canal,2019-06,n_total_mean,30.367
+Panama Canal,2019-06,n_container_mean,6.833
+Panama Canal,2019-06,n_tanker_mean,12.233
+Panama Canal,2019-06,capacity_mean,806288.267
+Panama Canal,2019-06,days,30
+Panama Canal,2019-07,n_total_mean,30.548
+Panama Canal,2019-07,n_container_mean,7.194
+Panama Canal,2019-07,n_tanker_mean,11.226
+Panama Canal,2019-07,capacity_mean,803667.806
+Panama Canal,2019-07,days,31
+Panama Canal,2019-08,n_total_mean,34.0
+Panama Canal,2019-08,n_container_mean,7.613
+Panama Canal,2019-08,n_tanker_mean,12.129
+Panama Canal,2019-08,capacity_mean,889528.839
+Panama Canal,2019-08,days,31
+Panama Canal,2019-09,n_total_mean,31.567
+Panama Canal,2019-09,n_container_mean,7.367
+Panama Canal,2019-09,n_tanker_mean,11.6
+Panama Canal,2019-09,capacity_mean,785844.733
+Panama Canal,2019-09,days,30
+Panama Canal,2019-10,n_total_mean,33.968
+Panama Canal,2019-10,n_container_mean,7.806
+Panama Canal,2019-10,n_tanker_mean,14.097
+Panama Canal,2019-10,capacity_mean,863644.516
+Panama Canal,2019-10,days,31
+Panama Canal,2019-11,n_total_mean,34.9
+Panama Canal,2019-11,n_container_mean,7.333
+Panama Canal,2019-11,n_tanker_mean,14.2
+Panama Canal,2019-11,capacity_mean,929731.0
+Panama Canal,2019-11,days,30
+Panama Canal,2019-12,n_total_mean,33.194
+Panama Canal,2019-12,n_container_mean,7.065
+Panama Canal,2019-12,n_tanker_mean,13.645
+Panama Canal,2019-12,capacity_mean,873529.194
+Panama Canal,2019-12,days,31
+Panama Canal,2020-01,n_total_mean,43.613
+Panama Canal,2020-01,n_container_mean,9.226
+Panama Canal,2020-01,n_tanker_mean,15.871
+Panama Canal,2020-01,capacity_mean,828131.032
+Panama Canal,2020-01,days,31
+Panama Canal,2020-02,n_total_mean,35.207
+Panama Canal,2020-02,n_container_mean,7.172
+Panama Canal,2020-02,n_tanker_mean,13.931
+Panama Canal,2020-02,capacity_mean,847350.517
+Panama Canal,2020-02,days,29
+Panama Canal,2020-03,n_total_mean,31.645
+Panama Canal,2020-03,n_container_mean,5.968
+Panama Canal,2020-03,n_tanker_mean,13.645
+Panama Canal,2020-03,capacity_mean,829862.0
+Panama Canal,2020-03,days,31
+Panama Canal,2020-04,n_total_mean,29.567
+Panama Canal,2020-04,n_container_mean,6.5
+Panama Canal,2020-04,n_tanker_mean,11.767
+Panama Canal,2020-04,capacity_mean,840558.967
+Panama Canal,2020-04,days,30
+Panama Canal,2020-05,n_total_mean,26.677
+Panama Canal,2020-05,n_container_mean,6.645
+Panama Canal,2020-05,n_tanker_mean,9.968
+Panama Canal,2020-05,capacity_mean,763758.387
+Panama Canal,2020-05,days,31
+Panama Canal,2020-06,n_total_mean,26.167
+Panama Canal,2020-06,n_container_mean,6.433
+Panama Canal,2020-06,n_tanker_mean,10.567
+Panama Canal,2020-06,capacity_mean,696402.5
+Panama Canal,2020-06,days,30
+Panama Canal,2020-07,n_total_mean,28.548
+Panama Canal,2020-07,n_container_mean,6.806
+Panama Canal,2020-07,n_tanker_mean,11.452
+Panama Canal,2020-07,capacity_mean,790384.226
+Panama Canal,2020-07,days,31
+Panama Canal,2020-08,n_total_mean,30.452
+Panama Canal,2020-08,n_container_mean,7.129
+Panama Canal,2020-08,n_tanker_mean,11.871
+Panama Canal,2020-08,capacity_mean,804439.677
+Panama Canal,2020-08,days,31
+Panama Canal,2020-09,n_total_mean,29.833
+Panama Canal,2020-09,n_container_mean,7.033
+Panama Canal,2020-09,n_tanker_mean,10.633
+Panama Canal,2020-09,capacity_mean,794576.867
+Panama Canal,2020-09,days,30
+Panama Canal,2020-10,n_total_mean,33.484
+Panama Canal,2020-10,n_container_mean,7.258
+Panama Canal,2020-10,n_tanker_mean,12.323
+Panama Canal,2020-10,capacity_mean,951894.806
+Panama Canal,2020-10,days,31
+Panama Canal,2020-11,n_total_mean,32.633
+Panama Canal,2020-11,n_container_mean,7.133
+Panama Canal,2020-11,n_tanker_mean,12.667
+Panama Canal,2020-11,capacity_mean,934601.267
+Panama Canal,2020-11,days,30
+Panama Canal,2020-12,n_total_mean,33.581
+Panama Canal,2020-12,n_container_mean,7.258
+Panama Canal,2020-12,n_tanker_mean,12.645
+Panama Canal,2020-12,capacity_mean,1010291.871
+Panama Canal,2020-12,days,31
+Panama Canal,2021-01,n_total_mean,32.871
+Panama Canal,2021-01,n_container_mean,6.968
+Panama Canal,2021-01,n_tanker_mean,13.387
+Panama Canal,2021-01,capacity_mean,949170.613
+Panama Canal,2021-01,days,31
+Panama Canal,2021-02,n_total_mean,33.036
+Panama Canal,2021-02,n_container_mean,6.643
+Panama Canal,2021-02,n_tanker_mean,12.393
+Panama Canal,2021-02,capacity_mean,932903.857
+Panama Canal,2021-02,days,28
+Panama Canal,2021-03,n_total_mean,33.065
+Panama Canal,2021-03,n_container_mean,6.806
+Panama Canal,2021-03,n_tanker_mean,12.484
+Panama Canal,2021-03,capacity_mean,902350.645
+Panama Canal,2021-03,days,31
+Panama Canal,2021-04,n_total_mean,32.1
+Panama Canal,2021-04,n_container_mean,7.067
+Panama Canal,2021-04,n_tanker_mean,12.8
+Panama Canal,2021-04,capacity_mean,978743.533
+Panama Canal,2021-04,days,30
+Panama Canal,2021-05,n_total_mean,31.258
+Panama Canal,2021-05,n_container_mean,7.032
+Panama Canal,2021-05,n_tanker_mean,12.71
+Panama Canal,2021-05,capacity_mean,896038.484
+Panama Canal,2021-05,days,31
+Panama Canal,2021-06,n_total_mean,31.2
+Panama Canal,2021-06,n_container_mean,6.867
+Panama Canal,2021-06,n_tanker_mean,13.233
+Panama Canal,2021-06,capacity_mean,944412.8
+Panama Canal,2021-06,days,30
+Panama Canal,2021-07,n_total_mean,31.677
+Panama Canal,2021-07,n_container_mean,7.032
+Panama Canal,2021-07,n_tanker_mean,12.903
+Panama Canal,2021-07,capacity_mean,904127.613
+Panama Canal,2021-07,days,31
+Panama Canal,2021-08,n_total_mean,33.581
+Panama Canal,2021-08,n_container_mean,7.581
+Panama Canal,2021-08,n_tanker_mean,13.903
+Panama Canal,2021-08,capacity_mean,907402.613
+Panama Canal,2021-08,days,31
+Panama Canal,2021-09,n_total_mean,28.667
+Panama Canal,2021-09,n_container_mean,7.667
+Panama Canal,2021-09,n_tanker_mean,10.8
+Panama Canal,2021-09,capacity_mean,801779.633
+Panama Canal,2021-09,days,30
+Panama Canal,2021-10,n_total_mean,32.226
+Panama Canal,2021-10,n_container_mean,7.71
+Panama Canal,2021-10,n_tanker_mean,11.387
+Panama Canal,2021-10,capacity_mean,915005.484
+Panama Canal,2021-10,days,31
+Panama Canal,2021-11,n_total_mean,35.2
+Panama Canal,2021-11,n_container_mean,7.6
+Panama Canal,2021-11,n_tanker_mean,13.833
+Panama Canal,2021-11,capacity_mean,1039910.8
+Panama Canal,2021-11,days,30
+Panama Canal,2021-12,n_total_mean,35.387
+Panama Canal,2021-12,n_container_mean,8.0
+Panama Canal,2021-12,n_tanker_mean,13.452
+Panama Canal,2021-12,capacity_mean,975322.968
+Panama Canal,2021-12,days,31
+Panama Canal,2022-01,n_total_mean,33.161
+Panama Canal,2022-01,n_container_mean,7.742
+Panama Canal,2022-01,n_tanker_mean,12.742
+Panama Canal,2022-01,capacity_mean,924297.613
+Panama Canal,2022-01,days,31
+Panama Canal,2022-02,n_total_mean,34.5
+Panama Canal,2022-02,n_container_mean,7.821
+Panama Canal,2022-02,n_tanker_mean,12.679
+Panama Canal,2022-02,capacity_mean,956569.893
+Panama Canal,2022-02,days,28
+Panama Canal,2022-03,n_total_mean,33.0
+Panama Canal,2022-03,n_container_mean,7.645
+Panama Canal,2022-03,n_tanker_mean,12.677
+Panama Canal,2022-03,capacity_mean,910309.774
+Panama Canal,2022-03,days,31
+Panama Canal,2022-04,n_total_mean,32.8
+Panama Canal,2022-04,n_container_mean,7.167
+Panama Canal,2022-04,n_tanker_mean,13.133
+Panama Canal,2022-04,capacity_mean,923171.0
+Panama Canal,2022-04,days,30
+Panama Canal,2022-05,n_total_mean,33.258
+Panama Canal,2022-05,n_container_mean,7.774
+Panama Canal,2022-05,n_tanker_mean,14.194
+Panama Canal,2022-05,capacity_mean,950025.839
+Panama Canal,2022-05,days,31
+Panama Canal,2022-06,n_total_mean,34.833
+Panama Canal,2022-06,n_container_mean,7.567
+Panama Canal,2022-06,n_tanker_mean,14.1
+Panama Canal,2022-06,capacity_mean,1002845.8
+Panama Canal,2022-06,days,30
+Panama Canal,2022-07,n_total_mean,32.0
+Panama Canal,2022-07,n_container_mean,7.452
+Panama Canal,2022-07,n_tanker_mean,12.903
+Panama Canal,2022-07,capacity_mean,878381.613
+Panama Canal,2022-07,days,31
+Panama Canal,2022-08,n_total_mean,34.387
+Panama Canal,2022-08,n_container_mean,8.548
+Panama Canal,2022-08,n_tanker_mean,14.452
+Panama Canal,2022-08,capacity_mean,985972.968
+Panama Canal,2022-08,days,31
+Panama Canal,2022-09,n_total_mean,31.7
+Panama Canal,2022-09,n_container_mean,7.867
+Panama Canal,2022-09,n_tanker_mean,12.3
+Panama Canal,2022-09,capacity_mean,904231.733
+Panama Canal,2022-09,days,30
+Panama Canal,2022-10,n_total_mean,33.161
+Panama Canal,2022-10,n_container_mean,8.226
+Panama Canal,2022-10,n_tanker_mean,13.29
+Panama Canal,2022-10,capacity_mean,867911.871
+Panama Canal,2022-10,days,31
+Panama Canal,2022-11,n_total_mean,33.667
+Panama Canal,2022-11,n_container_mean,7.533
+Panama Canal,2022-11,n_tanker_mean,14.0
+Panama Canal,2022-11,capacity_mean,947784.167
+Panama Canal,2022-11,days,30
+Panama Canal,2022-12,n_total_mean,34.097
+Panama Canal,2022-12,n_container_mean,7.677
+Panama Canal,2022-12,n_tanker_mean,12.968
+Panama Canal,2022-12,capacity_mean,924100.548
+Panama Canal,2022-12,days,31
+Panama Canal,2023-01,n_total_mean,32.677
+Panama Canal,2023-01,n_container_mean,7.355
+Panama Canal,2023-01,n_tanker_mean,12.226
+Panama Canal,2023-01,capacity_mean,933907.032
+Panama Canal,2023-01,days,31
+Panama Canal,2023-02,n_total_mean,32.107
+Panama Canal,2023-02,n_container_mean,7.286
+Panama Canal,2023-02,n_tanker_mean,12.357
+Panama Canal,2023-02,capacity_mean,893048.964
+Panama Canal,2023-02,days,28
+Panama Canal,2023-03,n_total_mean,32.935
+Panama Canal,2023-03,n_container_mean,6.645
+Panama Canal,2023-03,n_tanker_mean,13.355
+Panama Canal,2023-03,capacity_mean,905252.323
+Panama Canal,2023-03,days,31
+Panama Canal,2023-04,n_total_mean,33.833
+Panama Canal,2023-04,n_container_mean,7.567
+Panama Canal,2023-04,n_tanker_mean,13.6
+Panama Canal,2023-04,capacity_mean,941669.2
+Panama Canal,2023-04,days,30
+Panama Canal,2023-05,n_total_mean,31.032
+Panama Canal,2023-05,n_container_mean,7.645
+Panama Canal,2023-05,n_tanker_mean,11.968
+Panama Canal,2023-05,capacity_mean,855748.161
+Panama Canal,2023-05,days,31
+Panama Canal,2023-06,n_total_mean,30.633
+Panama Canal,2023-06,n_container_mean,7.7
+Panama Canal,2023-06,n_tanker_mean,12.867
+Panama Canal,2023-06,capacity_mean,841296.433
+Panama Canal,2023-06,days,30
+Panama Canal,2023-07,n_total_mean,31.581
+Panama Canal,2023-07,n_container_mean,8.0
+Panama Canal,2023-07,n_tanker_mean,13.548
+Panama Canal,2023-07,capacity_mean,831834.548
+Panama Canal,2023-07,days,31
+Panama Canal,2023-08,n_total_mean,30.935
+Panama Canal,2023-08,n_container_mean,7.387
+Panama Canal,2023-08,n_tanker_mean,13.387
+Panama Canal,2023-08,capacity_mean,822876.484
+Panama Canal,2023-08,days,31
+Panama Canal,2023-09,n_total_mean,31.033
+Panama Canal,2023-09,n_container_mean,7.867
+Panama Canal,2023-09,n_tanker_mean,13.167
+Panama Canal,2023-09,capacity_mean,839711.267
+Panama Canal,2023-09,days,30
+Panama Canal,2023-10,n_total_mean,30.097
+Panama Canal,2023-10,n_container_mean,8.419
+Panama Canal,2023-10,n_tanker_mean,12.258
+Panama Canal,2023-10,capacity_mean,822178.484
+Panama Canal,2023-10,days,31
+Panama Canal,2023-11,n_total_mean,24.1
+Panama Canal,2023-11,n_container_mean,7.367
+Panama Canal,2023-11,n_tanker_mean,10.467
+Panama Canal,2023-11,capacity_mean,593808.233
+Panama Canal,2023-11,days,30
+Panama Canal,2023-12,n_total_mean,21.742
+Panama Canal,2023-12,n_container_mean,7.194
+Panama Canal,2023-12,n_tanker_mean,9.677
+Panama Canal,2023-12,capacity_mean,564843.935
+Panama Canal,2023-12,days,31
+Panama Canal,2024-01,n_total_mean,19.516
+Panama Canal,2024-01,n_container_mean,6.677
+Panama Canal,2024-01,n_tanker_mean,8.29
+Panama Canal,2024-01,capacity_mean,514118.903
+Panama Canal,2024-01,days,31
+Panama Canal,2024-02,n_total_mean,20.828
+Panama Canal,2024-02,n_container_mean,7.172
+Panama Canal,2024-02,n_tanker_mean,8.483
+Panama Canal,2024-02,capacity_mean,571211.931
+Panama Canal,2024-02,days,29
+Panama Canal,2024-03,n_total_mean,21.806
+Panama Canal,2024-03,n_container_mean,6.839
+Panama Canal,2024-03,n_tanker_mean,9.484
+Panama Canal,2024-03,capacity_mean,603335.677
+Panama Canal,2024-03,days,31
+Panama Canal,2024-04,n_total_mean,23.8
+Panama Canal,2024-04,n_container_mean,6.933
+Panama Canal,2024-04,n_tanker_mean,10.667
+Panama Canal,2024-04,capacity_mean,653382.5
+Panama Canal,2024-04,days,30
+Panama Canal,2024-05,n_total_mean,24.71
+Panama Canal,2024-05,n_container_mean,7.548
+Panama Canal,2024-05,n_tanker_mean,10.742
+Panama Canal,2024-05,capacity_mean,687089.29
+Panama Canal,2024-05,days,31
+Panama Canal,2024-06,n_total_mean,27.633
+Panama Canal,2024-06,n_container_mean,8.333
+Panama Canal,2024-06,n_tanker_mean,11.633
+Panama Canal,2024-06,capacity_mean,771900.2
+Panama Canal,2024-06,days,30
+Panama Canal,2024-07,n_total_mean,28.484
+Panama Canal,2024-07,n_container_mean,8.032
+Panama Canal,2024-07,n_tanker_mean,11.903
+Panama Canal,2024-07,capacity_mean,788634.29
+Panama Canal,2024-07,days,31
+Panama Canal,2024-08,n_total_mean,29.452
+Panama Canal,2024-08,n_container_mean,8.258
+Panama Canal,2024-08,n_tanker_mean,11.968
+Panama Canal,2024-08,capacity_mean,859560.484
+Panama Canal,2024-08,days,31
+Panama Canal,2024-09,n_total_mean,30.133
+Panama Canal,2024-09,n_container_mean,8.067
+Panama Canal,2024-09,n_tanker_mean,12.3
+Panama Canal,2024-09,capacity_mean,839859.167
+Panama Canal,2024-09,days,30
+Panama Canal,2024-10,n_total_mean,29.419
+Panama Canal,2024-10,n_container_mean,8.161
+Panama Canal,2024-10,n_tanker_mean,11.548
+Panama Canal,2024-10,capacity_mean,875117.161
+Panama Canal,2024-10,days,31
+Panama Canal,2024-11,n_total_mean,31.3
+Panama Canal,2024-11,n_container_mean,8.1
+Panama Canal,2024-11,n_tanker_mean,12.633
+Panama Canal,2024-11,capacity_mean,878299.267
+Panama Canal,2024-11,days,30
+Panama Canal,2024-12,n_total_mean,31.355
+Panama Canal,2024-12,n_container_mean,7.968
+Panama Canal,2024-12,n_tanker_mean,13.065
+Panama Canal,2024-12,capacity_mean,890546.387
+Panama Canal,2024-12,days,31
+Panama Canal,2025-01,n_total_mean,29.71
+Panama Canal,2025-01,n_container_mean,7.806
+Panama Canal,2025-01,n_tanker_mean,12.355
+Panama Canal,2025-01,capacity_mean,848826.935
+Panama Canal,2025-01,days,31
+Panama Canal,2025-02,n_total_mean,31.714
+Panama Canal,2025-02,n_container_mean,7.75
+Panama Canal,2025-02,n_tanker_mean,13.0
+Panama Canal,2025-02,capacity_mean,904991.786
+Panama Canal,2025-02,days,28
+Panama Canal,2025-03,n_total_mean,31.29
+Panama Canal,2025-03,n_container_mean,7.742
+Panama Canal,2025-03,n_tanker_mean,12.677
+Panama Canal,2025-03,capacity_mean,902228.484
+Panama Canal,2025-03,days,31
+Panama Canal,2025-04,n_total_mean,31.3
+Panama Canal,2025-04,n_container_mean,8.033
+Panama Canal,2025-04,n_tanker_mean,12.133
+Panama Canal,2025-04,capacity_mean,868432.6
+Panama Canal,2025-04,days,30
+Panama Canal,2025-05,n_total_mean,30.065
+Panama Canal,2025-05,n_container_mean,8.258
+Panama Canal,2025-05,n_tanker_mean,12.129
+Panama Canal,2025-05,capacity_mean,839093.903
+Panama Canal,2025-05,days,31
+Panama Canal,2025-06,n_total_mean,30.1
+Panama Canal,2025-06,n_container_mean,7.433
+Panama Canal,2025-06,n_tanker_mean,11.867
+Panama Canal,2025-06,capacity_mean,893603.967
+Panama Canal,2025-06,days,30
+Panama Canal,2025-07,n_total_mean,31.29
+Panama Canal,2025-07,n_container_mean,7.613
+Panama Canal,2025-07,n_tanker_mean,13.161
+Panama Canal,2025-07,capacity_mean,901657.935
+Panama Canal,2025-07,days,31
+Panama Canal,2025-08,n_total_mean,31.226
+Panama Canal,2025-08,n_container_mean,8.194
+Panama Canal,2025-08,n_tanker_mean,12.484
+Panama Canal,2025-08,capacity_mean,898596.839
+Panama Canal,2025-08,days,31
+Panama Canal,2025-09,n_total_mean,31.667
+Panama Canal,2025-09,n_container_mean,8.2
+Panama Canal,2025-09,n_tanker_mean,12.567
+Panama Canal,2025-09,capacity_mean,965149.4
+Panama Canal,2025-09,days,30
+Panama Canal,2025-10,n_total_mean,31.968
+Panama Canal,2025-10,n_container_mean,7.806
+Panama Canal,2025-10,n_tanker_mean,13.0
+Panama Canal,2025-10,capacity_mean,893741.387
+Panama Canal,2025-10,days,31
+Panama Canal,2025-11,n_total_mean,31.667
+Panama Canal,2025-11,n_container_mean,8.0
+Panama Canal,2025-11,n_tanker_mean,13.433
+Panama Canal,2025-11,capacity_mean,926278.633
+Panama Canal,2025-11,days,30
+Panama Canal,2025-12,n_total_mean,31.548
+Panama Canal,2025-12,n_container_mean,7.484
+Panama Canal,2025-12,n_tanker_mean,13.032
+Panama Canal,2025-12,capacity_mean,892208.323
+Panama Canal,2025-12,days,31
+Panama Canal,2026-01,n_total_mean,30.677
+Panama Canal,2026-01,n_container_mean,7.548
+Panama Canal,2026-01,n_tanker_mean,12.355
+Panama Canal,2026-01,capacity_mean,911177.355
+Panama Canal,2026-01,days,31
+Panama Canal,2026-02,n_total_mean,32.393
+Panama Canal,2026-02,n_container_mean,7.964
+Panama Canal,2026-02,n_tanker_mean,13.607
+Panama Canal,2026-02,capacity_mean,990343.214
+Panama Canal,2026-02,days,28
+Panama Canal,2026-03,n_total_mean,33.839
+Panama Canal,2026-03,n_container_mean,8.097
+Panama Canal,2026-03,n_tanker_mean,14.226
+Panama Canal,2026-03,capacity_mean,986385.871
+Panama Canal,2026-03,days,31
+Panama Canal,2026-04,n_total_mean,34.833
+Panama Canal,2026-04,n_container_mean,7.833
+Panama Canal,2026-04,n_tanker_mean,16.167
+Panama Canal,2026-04,capacity_mean,1017828.733
+Panama Canal,2026-04,days,30
+Panama Canal,2026-05,n_total_mean,34.323
+Panama Canal,2026-05,n_container_mean,8.161
+Panama Canal,2026-05,n_tanker_mean,15.613
+Panama Canal,2026-05,capacity_mean,971750.806
+Panama Canal,2026-05,days,31
+Panama Canal,2026-06,n_total_mean,29.667
+Panama Canal,2026-06,n_container_mean,7.9
+Panama Canal,2026-06,n_tanker_mean,13.967
+Panama Canal,2026-06,capacity_mean,838091.633
+Panama Canal,2026-06,days,30
+Panama Canal,2026-07,n_total_mean,32.194
+Panama Canal,2026-07,n_container_mean,8.355
+Panama Canal,2026-07,n_tanker_mean,14.129
+Panama Canal,2026-07,capacity_mean,959723.71
+Panama Canal,2026-07,days,31
+Panama Canal,2026-08,n_total_mean,28.968
+Panama Canal,2026-08,n_container_mean,7.935
+Panama Canal,2026-08,n_tanker_mean,13.129
+Panama Canal,2026-08,capacity_mean,811439.419
+Panama Canal,2026-08,days,31
+Panama Canal,2026-09,n_total_mean,28.133
+Panama Canal,2026-09,n_container_mean,7.467
+Panama Canal,2026-09,n_tanker_mean,12.467
+Panama Canal,2026-09,capacity_mean,814975.733
+Panama Canal,2026-09,days,30
+Panama Canal,2026-10,n_total_mean,27.323
+Panama Canal,2026-10,n_container_mean,7.806
+Panama Canal,2026-10,n_tanker_mean,11.774
+Panama Canal,2026-10,capacity_mean,795158.419
+Panama Canal,2026-10,days,31
+Panama Canal,2026-11,n_total_mean,27.682
+Panama Canal,2026-11,n_container_mean,7.955
+Panama Canal,2026-11,n_tanker_mean,12.545
+Panama Canal,2026-11,capacity_mean,783340.864
+Panama Canal,2026-11,days,22
+Bab el-Mandeb Strait,2019-01,n_total_mean,51.871
+Bab el-Mandeb Strait,2019-01,n_container_mean,17.0
+Bab el-Mandeb Strait,2019-01,n_tanker_mean,17.419
+Bab el-Mandeb Strait,2019-01,capacity_mean,2335755.548
+Bab el-Mandeb Strait,2019-01,days,31
+Bab el-Mandeb Strait,2019-02,n_total_mean,53.179
+Bab el-Mandeb Strait,2019-02,n_container_mean,17.786
+Bab el-Mandeb Strait,2019-02,n_tanker_mean,17.107
+Bab el-Mandeb Strait,2019-02,capacity_mean,2473411.143
+Bab el-Mandeb Strait,2019-02,days,28
+Bab el-Mandeb Strait,2019-03,n_total_mean,52.226
+Bab el-Mandeb Strait,2019-03,n_container_mean,16.645
+Bab el-Mandeb Strait,2019-03,n_tanker_mean,18.419
+Bab el-Mandeb Strait,2019-03,capacity_mean,2349222.677
+Bab el-Mandeb Strait,2019-03,days,31
+Bab el-Mandeb Strait,2019-04,n_total_mean,55.267
+Bab el-Mandeb Strait,2019-04,n_container_mean,17.233
+Bab el-Mandeb Strait,2019-04,n_tanker_mean,17.833
+Bab el-Mandeb Strait,2019-04,capacity_mean,2609197.533
+Bab el-Mandeb Strait,2019-04,days,30
+Bab el-Mandeb Strait,2019-05,n_total_mean,51.968
+Bab el-Mandeb Strait,2019-05,n_container_mean,16.839
+Bab el-Mandeb Strait,2019-05,n_tanker_mean,17.452
+Bab el-Mandeb Strait,2019-05,capacity_mean,2481149.548
+Bab el-Mandeb Strait,2019-05,days,31
+Bab el-Mandeb Strait,2019-06,n_total_mean,51.2
+Bab el-Mandeb Strait,2019-06,n_container_mean,17.0
+Bab el-Mandeb Strait,2019-06,n_tanker_mean,16.867
+Bab el-Mandeb Strait,2019-06,capacity_mean,2457535.9
+Bab el-Mandeb Strait,2019-06,days,30
+Bab el-Mandeb Strait,2019-07,n_total_mean,53.581
+Bab el-Mandeb Strait,2019-07,n_container_mean,17.129
+Bab el-Mandeb Strait,2019-07,n_tanker_mean,16.484
+Bab el-Mandeb Strait,2019-07,capacity_mean,2451261.774
+Bab el-Mandeb Strait,2019-07,days,31
+Bab el-Mandeb Strait,2019-08,n_total_mean,54.613
+Bab el-Mandeb Strait,2019-08,n_container_mean,17.258
+Bab el-Mandeb Strait,2019-08,n_tanker_mean,16.645
+Bab el-Mandeb Strait,2019-08,capacity_mean,2546770.548
+Bab el-Mandeb Strait,2019-08,days,31
+Bab el-Mandeb Strait,2019-09,n_total_mean,53.967
+Bab el-Mandeb Strait,2019-09,n_container_mean,16.833
+Bab el-Mandeb Strait,2019-09,n_tanker_mean,17.333
+Bab el-Mandeb Strait,2019-09,capacity_mean,2473889.7
+Bab el-Mandeb Strait,2019-09,days,30
+Bab el-Mandeb Strait,2019-10,n_total_mean,54.935
+Bab el-Mandeb Strait,2019-10,n_container_mean,16.032
+Bab el-Mandeb Strait,2019-10,n_tanker_mean,18.871
+Bab el-Mandeb Strait,2019-10,capacity_mean,2569176.419
+Bab el-Mandeb Strait,2019-10,days,31
+Bab el-Mandeb Strait,2019-11,n_total_mean,54.233
+Bab el-Mandeb Strait,2019-11,n_container_mean,16.3
+Bab el-Mandeb Strait,2019-11,n_tanker_mean,18.8
+Bab el-Mandeb Strait,2019-11,capacity_mean,2553734.0
+Bab el-Mandeb Strait,2019-11,days,30
+Bab el-Mandeb Strait,2019-12,n_total_mean,54.419
+Bab el-Mandeb Strait,2019-12,n_container_mean,15.419
+Bab el-Mandeb Strait,2019-12,n_tanker_mean,19.161
+Bab el-Mandeb Strait,2019-12,capacity_mean,2481676.065
+Bab el-Mandeb Strait,2019-12,days,31
+Bab el-Mandeb Strait,2020-01,n_total_mean,57.29
+Bab el-Mandeb Strait,2020-01,n_container_mean,16.871
+Bab el-Mandeb Strait,2020-01,n_tanker_mean,18.258
+Bab el-Mandeb Strait,2020-01,capacity_mean,2510186.0
+Bab el-Mandeb Strait,2020-01,days,31
+Bab el-Mandeb Strait,2020-02,n_total_mean,54.828
+Bab el-Mandeb Strait,2020-02,n_container_mean,16.241
+Bab el-Mandeb Strait,2020-02,n_tanker_mean,17.931
+Bab el-Mandeb Strait,2020-02,capacity_mean,2466919.621
+Bab el-Mandeb Strait,2020-02,days,29
+Bab el-Mandeb Strait,2020-03,n_total_mean,53.645
+Bab el-Mandeb Strait,2020-03,n_container_mean,14.645
+Bab el-Mandeb Strait,2020-03,n_tanker_mean,17.742
+Bab el-Mandeb Strait,2020-03,capacity_mean,2567810.419
+Bab el-Mandeb Strait,2020-03,days,31
+Bab el-Mandeb Strait,2020-04,n_total_mean,56.9
+Bab el-Mandeb Strait,2020-04,n_container_mean,13.467
+Bab el-Mandeb Strait,2020-04,n_tanker_mean,20.467
+Bab el-Mandeb Strait,2020-04,capacity_mean,2674409.733
+Bab el-Mandeb Strait,2020-04,days,30
+Bab el-Mandeb Strait,2020-05,n_total_mean,53.613
+Bab el-Mandeb Strait,2020-05,n_container_mean,13.484
+Bab el-Mandeb Strait,2020-05,n_tanker_mean,20.29
+Bab el-Mandeb Strait,2020-05,capacity_mean,2580778.645
+Bab el-Mandeb Strait,2020-05,days,31
+Bab el-Mandeb Strait,2020-06,n_total_mean,48.567
+Bab el-Mandeb Strait,2020-06,n_container_mean,13.633
+Bab el-Mandeb Strait,2020-06,n_tanker_mean,16.967
+Bab el-Mandeb Strait,2020-06,capacity_mean,2213407.6
+Bab el-Mandeb Strait,2020-06,days,30
+Bab el-Mandeb Strait,2020-07,n_total_mean,52.968
+Bab el-Mandeb Strait,2020-07,n_container_mean,14.548
+Bab el-Mandeb Strait,2020-07,n_tanker_mean,17.484
+Bab el-Mandeb Strait,2020-07,capacity_mean,2338577.065
+Bab el-Mandeb Strait,2020-07,days,31
+Bab el-Mandeb Strait,2020-08,n_total_mean,53.839
+Bab el-Mandeb Strait,2020-08,n_container_mean,16.161
+Bab el-Mandeb Strait,2020-08,n_tanker_mean,16.419
+Bab el-Mandeb Strait,2020-08,capacity_mean,2393250.935
+Bab el-Mandeb Strait,2020-08,days,31
+Bab el-Mandeb Strait,2020-09,n_total_mean,55.5
+Bab el-Mandeb Strait,2020-09,n_container_mean,16.367
+Bab el-Mandeb Strait,2020-09,n_tanker_mean,16.933
+Bab el-Mandeb Strait,2020-09,capacity_mean,2444307.367
+Bab el-Mandeb Strait,2020-09,days,30
+Bab el-Mandeb Strait,2020-10,n_total_mean,54.871
+Bab el-Mandeb Strait,2020-10,n_container_mean,16.097
+Bab el-Mandeb Strait,2020-10,n_tanker_mean,16.032
+Bab el-Mandeb Strait,2020-10,capacity_mean,2390717.742
+Bab el-Mandeb Strait,2020-10,days,31
+Bab el-Mandeb Strait,2020-11,n_total_mean,56.167
+Bab el-Mandeb Strait,2020-11,n_container_mean,16.5
+Bab el-Mandeb Strait,2020-11,n_tanker_mean,17.067
+Bab el-Mandeb Strait,2020-11,capacity_mean,2461049.7
+Bab el-Mandeb Strait,2020-11,days,30
+Bab el-Mandeb Strait,2020-12,n_total_mean,55.484
+Bab el-Mandeb Strait,2020-12,n_container_mean,16.0
+Bab el-Mandeb Strait,2020-12,n_tanker_mean,17.419
+Bab el-Mandeb Strait,2020-12,capacity_mean,2495567.71
+Bab el-Mandeb Strait,2020-12,days,31
+Bab el-Mandeb Strait,2021-01,n_total_mean,57.645
+Bab el-Mandeb Strait,2021-01,n_container_mean,16.387
+Bab el-Mandeb Strait,2021-01,n_tanker_mean,19.742
+Bab el-Mandeb Strait,2021-01,capacity_mean,2475274.742
+Bab el-Mandeb Strait,2021-01,days,31
+Bab el-Mandeb Strait,2021-02,n_total_mean,58.821
+Bab el-Mandeb Strait,2021-02,n_container_mean,16.786
+Bab el-Mandeb Strait,2021-02,n_tanker_mean,19.5
+Bab el-Mandeb Strait,2021-02,capacity_mean,2560940.607
+Bab el-Mandeb Strait,2021-02,days,28
+Bab el-Mandeb Strait,2021-03,n_total_mean,53.806
+Bab el-Mandeb Strait,2021-03,n_container_mean,15.29
+Bab el-Mandeb Strait,2021-03,n_tanker_mean,17.581
+Bab el-Mandeb Strait,2021-03,capacity_mean,2425896.774
+Bab el-Mandeb Strait,2021-03,days,31
+Bab el-Mandeb Strait,2021-04,n_total_mean,59.167
+Bab el-Mandeb Strait,2021-04,n_container_mean,17.733
+Bab el-Mandeb Strait,2021-04,n_tanker_mean,17.9
+Bab el-Mandeb Strait,2021-04,capacity_mean,2865094.367
+Bab el-Mandeb Strait,2021-04,days,30
+Bab el-Mandeb Strait,2021-05,n_total_mean,56.194
+Bab el-Mandeb Strait,2021-05,n_container_mean,16.323
+Bab el-Mandeb Strait,2021-05,n_tanker_mean,17.29
+Bab el-Mandeb Strait,2021-05,capacity_mean,2662267.419
+Bab el-Mandeb Strait,2021-05,days,31
+Bab el-Mandeb Strait,2021-06,n_total_mean,58.633
+Bab el-Mandeb Strait,2021-06,n_container_mean,17.167
+Bab el-Mandeb Strait,2021-06,n_tanker_mean,17.533
+Bab el-Mandeb Strait,2021-06,capacity_mean,2770226.8
+Bab el-Mandeb Strait,2021-06,days,30
+Bab el-Mandeb Strait,2021-07,n_total_mean,58.645
+Bab el-Mandeb Strait,2021-07,n_container_mean,17.032
+Bab el-Mandeb Strait,2021-07,n_tanker_mean,16.903
+Bab el-Mandeb Strait,2021-07,capacity_mean,2678333.968
+Bab el-Mandeb Strait,2021-07,days,31
+Bab el-Mandeb Strait,2021-08,n_total_mean,60.226
+Bab el-Mandeb Strait,2021-08,n_container_mean,17.677
+Bab el-Mandeb Strait,2021-08,n_tanker_mean,17.161
+Bab el-Mandeb Strait,2021-08,capacity_mean,2663940.742
+Bab el-Mandeb Strait,2021-08,days,31
+Bab el-Mandeb Strait,2021-09,n_total_mean,61.3
+Bab el-Mandeb Strait,2021-09,n_container_mean,16.833
+Bab el-Mandeb Strait,2021-09,n_tanker_mean,18.9
+Bab el-Mandeb Strait,2021-09,capacity_mean,2858839.267
+Bab el-Mandeb Strait,2021-09,days,30
+Bab el-Mandeb Strait,2021-10,n_total_mean,58.935
+Bab el-Mandeb Strait,2021-10,n_container_mean,17.0
+Bab el-Mandeb Strait,2021-10,n_tanker_mean,17.71
+Bab el-Mandeb Strait,2021-10,capacity_mean,2698387.613
+Bab el-Mandeb Strait,2021-10,days,31
+Bab el-Mandeb Strait,2021-11,n_total_mean,62.0
+Bab el-Mandeb Strait,2021-11,n_container_mean,17.567
+Bab el-Mandeb Strait,2021-11,n_tanker_mean,19.233
+Bab el-Mandeb Strait,2021-11,capacity_mean,2702250.2
+Bab el-Mandeb Strait,2021-11,days,30
+Bab el-Mandeb Strait,2021-12,n_total_mean,60.71
+Bab el-Mandeb Strait,2021-12,n_container_mean,17.387
+Bab el-Mandeb Strait,2021-12,n_tanker_mean,17.194
+Bab el-Mandeb Strait,2021-12,capacity_mean,2826880.323
+Bab el-Mandeb Strait,2021-12,days,31
+Bab el-Mandeb Strait,2022-01,n_total_mean,61.129
+Bab el-Mandeb Strait,2022-01,n_container_mean,17.0
+Bab el-Mandeb Strait,2022-01,n_tanker_mean,17.516
+Bab el-Mandeb Strait,2022-01,capacity_mean,2652372.806
+Bab el-Mandeb Strait,2022-01,days,31
+Bab el-Mandeb Strait,2022-02,n_total_mean,63.214
+Bab el-Mandeb Strait,2022-02,n_container_mean,18.071
+Bab el-Mandeb Strait,2022-02,n_tanker_mean,18.0
+Bab el-Mandeb Strait,2022-02,capacity_mean,2869235.5
+Bab el-Mandeb Strait,2022-02,days,28
+Bab el-Mandeb Strait,2022-03,n_total_mean,61.806
+Bab el-Mandeb Strait,2022-03,n_container_mean,17.452
+Bab el-Mandeb Strait,2022-03,n_tanker_mean,18.355
+Bab el-Mandeb Strait,2022-03,capacity_mean,2735777.129
+Bab el-Mandeb Strait,2022-03,days,31
+Bab el-Mandeb Strait,2022-04,n_total_mean,64.3
+Bab el-Mandeb Strait,2022-04,n_container_mean,17.767
+Bab el-Mandeb Strait,2022-04,n_tanker_mean,21.2
+Bab el-Mandeb Strait,2022-04,capacity_mean,2854323.133
+Bab el-Mandeb Strait,2022-04,days,30
+Bab el-Mandeb Strait,2022-05,n_total_mean,64.065
+Bab el-Mandeb Strait,2022-05,n_container_mean,17.645
+Bab el-Mandeb Strait,2022-05,n_tanker_mean,21.097
+Bab el-Mandeb Strait,2022-05,capacity_mean,2945670.194
+Bab el-Mandeb Strait,2022-05,days,31
+Bab el-Mandeb Strait,2022-06,n_total_mean,66.6
+Bab el-Mandeb Strait,2022-06,n_container_mean,17.567
+Bab el-Mandeb Strait,2022-06,n_tanker_mean,22.6
+Bab el-Mandeb Strait,2022-06,capacity_mean,3064927.367
+Bab el-Mandeb Strait,2022-06,days,30
+Bab el-Mandeb Strait,2022-07,n_total_mean,68.258
+Bab el-Mandeb Strait,2022-07,n_container_mean,18.323
+Bab el-Mandeb Strait,2022-07,n_tanker_mean,23.613
+Bab el-Mandeb Strait,2022-07,capacity_mean,3158098.935
+Bab el-Mandeb Strait,2022-07,days,31
+Bab el-Mandeb Strait,2022-08,n_total_mean,69.935
+Bab el-Mandeb Strait,2022-08,n_container_mean,19.355
+Bab el-Mandeb Strait,2022-08,n_tanker_mean,23.71
+Bab el-Mandeb Strait,2022-08,capacity_mean,3208153.613
+Bab el-Mandeb Strait,2022-08,days,31
+Bab el-Mandeb Strait,2022-09,n_total_mean,70.6
+Bab el-Mandeb Strait,2022-09,n_container_mean,17.867
+Bab el-Mandeb Strait,2022-09,n_tanker_mean,24.533
+Bab el-Mandeb Strait,2022-09,capacity_mean,3163787.2
+Bab el-Mandeb Strait,2022-09,days,30
+Bab el-Mandeb Strait,2022-10,n_total_mean,70.677
+Bab el-Mandeb Strait,2022-10,n_container_mean,17.968
+Bab el-Mandeb Strait,2022-10,n_tanker_mean,24.452
+Bab el-Mandeb Strait,2022-10,capacity_mean,3147218.806
+Bab el-Mandeb Strait,2022-10,days,31
+Bab el-Mandeb Strait,2022-11,n_total_mean,73.267
+Bab el-Mandeb Strait,2022-11,n_container_mean,18.767
+Bab el-Mandeb Strait,2022-11,n_tanker_mean,24.867
+Bab el-Mandeb Strait,2022-11,capacity_mean,3290313.467
+Bab el-Mandeb Strait,2022-11,days,30
+Bab el-Mandeb Strait,2022-12,n_total_mean,71.29
+Bab el-Mandeb Strait,2022-12,n_container_mean,17.065
+Bab el-Mandeb Strait,2022-12,n_tanker_mean,25.387
+Bab el-Mandeb Strait,2022-12,capacity_mean,3245907.548
+Bab el-Mandeb Strait,2022-12,days,31
+Bab el-Mandeb Strait,2023-01,n_total_mean,71.581
+Bab el-Mandeb Strait,2023-01,n_container_mean,17.258
+Bab el-Mandeb Strait,2023-01,n_tanker_mean,25.226
+Bab el-Mandeb Strait,2023-01,capacity_mean,3216158.129
+Bab el-Mandeb Strait,2023-01,days,31
+Bab el-Mandeb Strait,2023-02,n_total_mean,70.536
+Bab el-Mandeb Strait,2023-02,n_container_mean,17.25
+Bab el-Mandeb Strait,2023-02,n_tanker_mean,25.071
+Bab el-Mandeb Strait,2023-02,capacity_mean,3187029.786
+Bab el-Mandeb Strait,2023-02,days,28
+Bab el-Mandeb Strait,2023-03,n_total_mean,73.387
+Bab el-Mandeb Strait,2023-03,n_container_mean,18.129
+Bab el-Mandeb Strait,2023-03,n_tanker_mean,26.226
+Bab el-Mandeb Strait,2023-03,capacity_mean,3424849.548
+Bab el-Mandeb Strait,2023-03,days,31
+Bab el-Mandeb Strait,2023-04,n_total_mean,74.767
+Bab el-Mandeb Strait,2023-04,n_container_mean,18.533
+Bab el-Mandeb Strait,2023-04,n_tanker_mean,26.633
+Bab el-Mandeb Strait,2023-04,capacity_mean,3560435.567
+Bab el-Mandeb Strait,2023-04,days,30
+Bab el-Mandeb Strait,2023-05,n_total_mean,77.581
+Bab el-Mandeb Strait,2023-05,n_container_mean,20.226
+Bab el-Mandeb Strait,2023-05,n_tanker_mean,26.71
+Bab el-Mandeb Strait,2023-05,capacity_mean,3626998.0
+Bab el-Mandeb Strait,2023-05,days,31
+Bab el-Mandeb Strait,2023-06,n_total_mean,76.533
+Bab el-Mandeb Strait,2023-06,n_container_mean,19.8
+Bab el-Mandeb Strait,2023-06,n_tanker_mean,26.633
+Bab el-Mandeb Strait,2023-06,capacity_mean,3608040.267
+Bab el-Mandeb Strait,2023-06,days,30
+Bab el-Mandeb Strait,2023-07,n_total_mean,74.097
+Bab el-Mandeb Strait,2023-07,n_container_mean,20.613
+Bab el-Mandeb Strait,2023-07,n_tanker_mean,27.097
+Bab el-Mandeb Strait,2023-07,capacity_mean,3317175.71
+Bab el-Mandeb Strait,2023-07,days,31
+Bab el-Mandeb Strait,2023-08,n_total_mean,73.0
+Bab el-Mandeb Strait,2023-08,n_container_mean,21.0
+Bab el-Mandeb Strait,2023-08,n_tanker_mean,24.581
+Bab el-Mandeb Strait,2023-08,capacity_mean,3283000.806
+Bab el-Mandeb Strait,2023-08,days,31
+Bab el-Mandeb Strait,2023-09,n_total_mean,75.433
+Bab el-Mandeb Strait,2023-09,n_container_mean,20.367
+Bab el-Mandeb Strait,2023-09,n_tanker_mean,26.4
+Bab el-Mandeb Strait,2023-09,capacity_mean,3399086.2
+Bab el-Mandeb Strait,2023-09,days,30
+Bab el-Mandeb Strait,2023-10,n_total_mean,78.645
+Bab el-Mandeb Strait,2023-10,n_container_mean,19.548
+Bab el-Mandeb Strait,2023-10,n_tanker_mean,26.903
+Bab el-Mandeb Strait,2023-10,capacity_mean,3540616.129
+Bab el-Mandeb Strait,2023-10,days,31
+Bab el-Mandeb Strait,2023-11,n_total_mean,77.333
+Bab el-Mandeb Strait,2023-11,n_container_mean,18.733
+Bab el-Mandeb Strait,2023-11,n_tanker_mean,26.3
+Bab el-Mandeb Strait,2023-11,capacity_mean,3476779.667
+Bab el-Mandeb Strait,2023-11,days,30
+Bab el-Mandeb Strait,2023-12,n_total_mean,65.194
+Bab el-Mandeb Strait,2023-12,n_container_mean,10.097
+Bab el-Mandeb Strait,2023-12,n_tanker_mean,25.161
+Bab el-Mandeb Strait,2023-12,capacity_mean,2786425.258
+Bab el-Mandeb Strait,2023-12,days,31
+Bab el-Mandeb Strait,2024-01,n_total_mean,39.419
+Bab el-Mandeb Strait,2024-01,n_container_mean,4.0
+Bab el-Mandeb Strait,2024-01,n_tanker_mean,13.645
+Bab el-Mandeb Strait,2024-01,capacity_mean,1618374.419
+Bab el-Mandeb Strait,2024-01,days,31
+Bab el-Mandeb Strait,2024-02,n_total_mean,34.931
+Bab el-Mandeb Strait,2024-02,n_container_mean,4.552
+Bab el-Mandeb Strait,2024-02,n_tanker_mean,12.241
+Bab el-Mandeb Strait,2024-02,capacity_mean,1386680.207
+Bab el-Mandeb Strait,2024-02,days,29
+Bab el-Mandeb Strait,2024-03,n_total_mean,32.613
+Bab el-Mandeb Strait,2024-03,n_container_mean,4.484
+Bab el-Mandeb Strait,2024-03,n_tanker_mean,12.452
+Bab el-Mandeb Strait,2024-03,capacity_mean,1264092.935
+Bab el-Mandeb Strait,2024-03,days,31
+Bab el-Mandeb Strait,2024-04,n_total_mean,32.367
+Bab el-Mandeb Strait,2024-04,n_container_mean,5.067
+Bab el-Mandeb Strait,2024-04,n_tanker_mean,12.0
+Bab el-Mandeb Strait,2024-04,capacity_mean,1160364.633
+Bab el-Mandeb Strait,2024-04,days,30
+Bab el-Mandeb Strait,2024-05,n_total_mean,32.032
+Bab el-Mandeb Strait,2024-05,n_container_mean,4.71
+Bab el-Mandeb Strait,2024-05,n_tanker_mean,11.645
+Bab el-Mandeb Strait,2024-05,capacity_mean,1160251.903
+Bab el-Mandeb Strait,2024-05,days,31
+Bab el-Mandeb Strait,2024-06,n_total_mean,31.367
+Bab el-Mandeb Strait,2024-06,n_container_mean,5.3
+Bab el-Mandeb Strait,2024-06,n_tanker_mean,11.6
+Bab el-Mandeb Strait,2024-06,capacity_mean,1154205.067
+Bab el-Mandeb Strait,2024-06,days,30
+Bab el-Mandeb Strait,2024-07,n_total_mean,28.903
+Bab el-Mandeb Strait,2024-07,n_container_mean,5.226
+Bab el-Mandeb Strait,2024-07,n_tanker_mean,11.258
+Bab el-Mandeb Strait,2024-07,capacity_mean,1031819.129
+Bab el-Mandeb Strait,2024-07,days,31
+Bab el-Mandeb Strait,2024-08,n_total_mean,31.29
+Bab el-Mandeb Strait,2024-08,n_container_mean,5.935
+Bab el-Mandeb Strait,2024-08,n_tanker_mean,10.742
+Bab el-Mandeb Strait,2024-08,capacity_mean,1036448.484
+Bab el-Mandeb Strait,2024-08,days,31
+Bab el-Mandeb Strait,2024-09,n_total_mean,30.567
+Bab el-Mandeb Strait,2024-09,n_container_mean,5.5
+Bab el-Mandeb Strait,2024-09,n_tanker_mean,10.6
+Bab el-Mandeb Strait,2024-09,capacity_mean,1042149.033
+Bab el-Mandeb Strait,2024-09,days,30
+Bab el-Mandeb Strait,2024-10,n_total_mean,31.548
+Bab el-Mandeb Strait,2024-10,n_container_mean,6.226
+Bab el-Mandeb Strait,2024-10,n_tanker_mean,10.387
+Bab el-Mandeb Strait,2024-10,capacity_mean,1017107.032
+Bab el-Mandeb Strait,2024-10,days,31
+Bab el-Mandeb Strait,2024-11,n_total_mean,33.2
+Bab el-Mandeb Strait,2024-11,n_container_mean,7.233
+Bab el-Mandeb Strait,2024-11,n_tanker_mean,11.367
+Bab el-Mandeb Strait,2024-11,capacity_mean,1027122.567
+Bab el-Mandeb Strait,2024-11,days,30
+Bab el-Mandeb Strait,2024-12,n_total_mean,32.0
+Bab el-Mandeb Strait,2024-12,n_container_mean,6.226
+Bab el-Mandeb Strait,2024-12,n_tanker_mean,11.355
+Bab el-Mandeb Strait,2024-12,capacity_mean,1051870.806
+Bab el-Mandeb Strait,2024-12,days,31
+Bab el-Mandeb Strait,2025-01,n_total_mean,32.226
+Bab el-Mandeb Strait,2025-01,n_container_mean,7.419
+Bab el-Mandeb Strait,2025-01,n_tanker_mean,10.581
+Bab el-Mandeb Strait,2025-01,capacity_mean,1068126.903
+Bab el-Mandeb Strait,2025-01,days,31
+Bab el-Mandeb Strait,2025-02,n_total_mean,32.0
+Bab el-Mandeb Strait,2025-02,n_container_mean,7.286
+Bab el-Mandeb Strait,2025-02,n_tanker_mean,10.571
+Bab el-Mandeb Strait,2025-02,capacity_mean,1069279.0
+Bab el-Mandeb Strait,2025-02,days,28
+Bab el-Mandeb Strait,2025-03,n_total_mean,32.935
+Bab el-Mandeb Strait,2025-03,n_container_mean,7.226
+Bab el-Mandeb Strait,2025-03,n_tanker_mean,11.839
+Bab el-Mandeb Strait,2025-03,capacity_mean,1236705.387
+Bab el-Mandeb Strait,2025-03,days,31
+Bab el-Mandeb Strait,2025-04,n_total_mean,32.833
+Bab el-Mandeb Strait,2025-04,n_container_mean,6.5
+Bab el-Mandeb Strait,2025-04,n_tanker_mean,11.733
+Bab el-Mandeb Strait,2025-04,capacity_mean,1223149.1
+Bab el-Mandeb Strait,2025-04,days,30
+Bab el-Mandeb Strait,2025-05,n_total_mean,33.129
+Bab el-Mandeb Strait,2025-05,n_container_mean,6.677
+Bab el-Mandeb Strait,2025-05,n_tanker_mean,11.29
+Bab el-Mandeb Strait,2025-05,capacity_mean,1160095.581
+Bab el-Mandeb Strait,2025-05,days,31
+Bab el-Mandeb Strait,2025-06,n_total_mean,31.733
+Bab el-Mandeb Strait,2025-06,n_container_mean,6.5
+Bab el-Mandeb Strait,2025-06,n_tanker_mean,11.567
+Bab el-Mandeb Strait,2025-06,capacity_mean,1116341.8
+Bab el-Mandeb Strait,2025-06,days,30
+Bab el-Mandeb Strait,2025-07,n_total_mean,31.226
+Bab el-Mandeb Strait,2025-07,n_container_mean,6.71
+Bab el-Mandeb Strait,2025-07,n_tanker_mean,10.774
+Bab el-Mandeb Strait,2025-07,capacity_mean,1127988.484
+Bab el-Mandeb Strait,2025-07,days,31
+Bab el-Mandeb Strait,2025-08,n_total_mean,35.032
+Bab el-Mandeb Strait,2025-08,n_container_mean,6.871
+Bab el-Mandeb Strait,2025-08,n_tanker_mean,11.419
+Bab el-Mandeb Strait,2025-08,capacity_mean,1191308.71
+Bab el-Mandeb Strait,2025-08,days,31
+Bab el-Mandeb Strait,2025-09,n_total_mean,33.933
+Bab el-Mandeb Strait,2025-09,n_container_mean,6.2
+Bab el-Mandeb Strait,2025-09,n_tanker_mean,10.967
+Bab el-Mandeb Strait,2025-09,capacity_mean,1244417.967
+Bab el-Mandeb Strait,2025-09,days,30
+Bab el-Mandeb Strait,2025-10,n_total_mean,36.097
+Bab el-Mandeb Strait,2025-10,n_container_mean,6.774
+Bab el-Mandeb Strait,2025-10,n_tanker_mean,12.419
+Bab el-Mandeb Strait,2025-10,capacity_mean,1360733.065
+Bab el-Mandeb Strait,2025-10,days,31
+Bab el-Mandeb Strait,2025-11,n_total_mean,37.767
+Bab el-Mandeb Strait,2025-11,n_container_mean,6.267
+Bab el-Mandeb Strait,2025-11,n_tanker_mean,12.8
+Bab el-Mandeb Strait,2025-11,capacity_mean,1407410.567
+Bab el-Mandeb Strait,2025-11,days,30
+Bab el-Mandeb Strait,2025-12,n_total_mean,32.71
+Bab el-Mandeb Strait,2025-12,n_container_mean,5.968
+Bab el-Mandeb Strait,2025-12,n_tanker_mean,11.581
+Bab el-Mandeb Strait,2025-12,capacity_mean,1236684.226
+Bab el-Mandeb Strait,2025-12,days,31
+Bab el-Mandeb Strait,2026-01,n_total_mean,33.516
+Bab el-Mandeb Strait,2026-01,n_container_mean,6.097
+Bab el-Mandeb Strait,2026-01,n_tanker_mean,11.452
+Bab el-Mandeb Strait,2026-01,capacity_mean,1168829.935
+Bab el-Mandeb Strait,2026-01,days,31
+Bab el-Mandeb Strait,2026-02,n_total_mean,36.786
+Bab el-Mandeb Strait,2026-02,n_container_mean,5.821
+Bab el-Mandeb Strait,2026-02,n_tanker_mean,13.75
+Bab el-Mandeb Strait,2026-02,capacity_mean,1332146.429
+Bab el-Mandeb Strait,2026-02,days,28
+Bab el-Mandeb Strait,2026-03,n_total_mean,35.548
+Bab el-Mandeb Strait,2026-03,n_container_mean,5.226
+Bab el-Mandeb Strait,2026-03,n_tanker_mean,14.968
+Bab el-Mandeb Strait,2026-03,capacity_mean,1315464.806
+Bab el-Mandeb Strait,2026-03,days,31
+Bab el-Mandeb Strait,2026-04,n_total_mean,36.733
+Bab el-Mandeb Strait,2026-04,n_container_mean,5.867
+Bab el-Mandeb Strait,2026-04,n_tanker_mean,14.633
+Bab el-Mandeb Strait,2026-04,capacity_mean,1399616.5
+Bab el-Mandeb Strait,2026-04,days,30
+Bab el-Mandeb Strait,2026-05,n_total_mean,36.097
+Bab el-Mandeb Strait,2026-05,n_container_mean,5.935
+Bab el-Mandeb Strait,2026-05,n_tanker_mean,13.903
+Bab el-Mandeb Strait,2026-05,capacity_mean,1353753.194
+Bab el-Mandeb Strait,2026-05,days,31
+Bab el-Mandeb Strait,2026-06,n_total_mean,36.633
+Bab el-Mandeb Strait,2026-06,n_container_mean,5.533
+Bab el-Mandeb Strait,2026-06,n_tanker_mean,13.767
+Bab el-Mandeb Strait,2026-06,capacity_mean,1414715.3
+Bab el-Mandeb Strait,2026-06,days,30
+Bab el-Mandeb Strait,2026-07,n_total_mean,33.645
+Bab el-Mandeb Strait,2026-07,n_container_mean,5.323
+Bab el-Mandeb Strait,2026-07,n_tanker_mean,11.645
+Bab el-Mandeb Strait,2026-07,capacity_mean,1297705.935
+Bab el-Mandeb Strait,2026-07,days,31
+Bab el-Mandeb Strait,2026-08,n_total_mean,27.355
+Bab el-Mandeb Strait,2026-08,n_container_mean,4.516
+Bab el-Mandeb Strait,2026-08,n_tanker_mean,8.484
+Bab el-Mandeb Strait,2026-08,capacity_mean,864270.419
+Bab el-Mandeb Strait,2026-08,days,31
+Bab el-Mandeb Strait,2026-09,n_total_mean,26.567
+Bab el-Mandeb Strait,2026-09,n_container_mean,5.1
+Bab el-Mandeb Strait,2026-09,n_tanker_mean,8.033
+Bab el-Mandeb Strait,2026-09,capacity_mean,937683.733
+Bab el-Mandeb Strait,2026-09,days,30
+Bab el-Mandeb Strait,2026-10,n_total_mean,27.871
+Bab el-Mandeb Strait,2026-10,n_container_mean,6.0
+Bab el-Mandeb Strait,2026-10,n_tanker_mean,8.968
+Bab el-Mandeb Strait,2026-10,capacity_mean,969833.484
+Bab el-Mandeb Strait,2026-10,days,31
+Bab el-Mandeb Strait,2026-11,n_total_mean,26.455
+Bab el-Mandeb Strait,2026-11,n_container_mean,4.955
+Bab el-Mandeb Strait,2026-11,n_tanker_mean,8.273
+Bab el-Mandeb Strait,2026-11,capacity_mean,958329.818
+Bab el-Mandeb Strait,2026-11,days,22
+Malacca Strait,2019-01,n_total_mean,170.806
+Malacca Strait,2019-01,n_container_mean,43.032
+Malacca Strait,2019-01,n_tanker_mean,68.032
+Malacca Strait,2019-01,capacity_mean,6679730.065
+Malacca Strait,2019-01,days,31
+Malacca Strait,2019-02,n_total_mean,173.75
+Malacca Strait,2019-02,n_container_mean,42.786
+Malacca Strait,2019-02,n_tanker_mean,70.571
+Malacca Strait,2019-02,capacity_mean,6619666.857
+Malacca Strait,2019-02,days,28
+Malacca Strait,2019-03,n_total_mean,166.806
+Malacca Strait,2019-03,n_container_mean,41.806
+Malacca Strait,2019-03,n_tanker_mean,64.194
+Malacca Strait,2019-03,capacity_mean,6474566.129
+Malacca Strait,2019-03,days,31
+Malacca Strait,2019-04,n_total_mean,174.2
+Malacca Strait,2019-04,n_container_mean,45.533
+Malacca Strait,2019-04,n_tanker_mean,66.767
+Malacca Strait,2019-04,capacity_mean,6872308.133
+Malacca Strait,2019-04,days,30
+Malacca Strait,2019-05,n_total_mean,168.935
+Malacca Strait,2019-05,n_container_mean,42.774
+Malacca Strait,2019-05,n_tanker_mean,68.323
+Malacca Strait,2019-05,capacity_mean,6383255.742
+Malacca Strait,2019-05,days,31
+Malacca Strait,2019-06,n_total_mean,163.5
+Malacca Strait,2019-06,n_container_mean,42.133
+Malacca Strait,2019-06,n_tanker_mean,65.967
+Malacca Strait,2019-06,capacity_mean,6079115.5
+Malacca Strait,2019-06,days,30
+Malacca Strait,2019-07,n_total_mean,167.194
+Malacca Strait,2019-07,n_container_mean,42.226
+Malacca Strait,2019-07,n_tanker_mean,64.871
+Malacca Strait,2019-07,capacity_mean,6357496.419
+Malacca Strait,2019-07,days,31
+Malacca Strait,2019-08,n_total_mean,165.968
+Malacca Strait,2019-08,n_container_mean,41.903
+Malacca Strait,2019-08,n_tanker_mean,64.806
+Malacca Strait,2019-08,capacity_mean,6398375.516
+Malacca Strait,2019-08,days,31
+Malacca Strait,2019-09,n_total_mean,172.867
+Malacca Strait,2019-09,n_container_mean,43.167
+Malacca Strait,2019-09,n_tanker_mean,66.0
+Malacca Strait,2019-09,capacity_mean,6688256.867
+Malacca Strait,2019-09,days,30
+Malacca Strait,2019-10,n_total_mean,171.484
+Malacca Strait,2019-10,n_container_mean,41.032
+Malacca Strait,2019-10,n_tanker_mean,68.484
+Malacca Strait,2019-10,capacity_mean,6786694.097
+Malacca Strait,2019-10,days,31
+Malacca Strait,2019-11,n_total_mean,173.6
+Malacca Strait,2019-11,n_container_mean,42.633
+Malacca Strait,2019-11,n_tanker_mean,71.0
+Malacca Strait,2019-11,capacity_mean,6730637.433
+Malacca Strait,2019-11,days,30
+Malacca Strait,2019-12,n_total_mean,173.194
+Malacca Strait,2019-12,n_container_mean,41.129
+Malacca Strait,2019-12,n_tanker_mean,71.032
+Malacca Strait,2019-12,capacity_mean,6581593.871
+Malacca Strait,2019-12,days,31
+Malacca Strait,2020-01,n_total_mean,181.194
+Malacca Strait,2020-01,n_container_mean,43.323
+Malacca Strait,2020-01,n_tanker_mean,72.935
+Malacca Strait,2020-01,capacity_mean,6662861.613
+Malacca Strait,2020-01,days,31
+Malacca Strait,2020-02,n_total_mean,161.862
+Malacca Strait,2020-02,n_container_mean,40.897
+Malacca Strait,2020-02,n_tanker_mean,67.448
+Malacca Strait,2020-02,capacity_mean,6011713.897
+Malacca Strait,2020-02,days,29
+Malacca Strait,2020-03,n_total_mean,161.387
+Malacca Strait,2020-03,n_container_mean,38.032
+Malacca Strait,2020-03,n_tanker_mean,67.129
+Malacca Strait,2020-03,capacity_mean,6313700.323
+Malacca Strait,2020-03,days,31
+Malacca Strait,2020-04,n_total_mean,154.967
+Malacca Strait,2020-04,n_container_mean,38.333
+Malacca Strait,2020-04,n_tanker_mean,63.133
+Malacca Strait,2020-04,capacity_mean,6243029.533
+Malacca Strait,2020-04,days,30
+Malacca Strait,2020-05,n_total_mean,155.194
+Malacca Strait,2020-05,n_container_mean,35.129
+Malacca Strait,2020-05,n_tanker_mean,65.129
+Malacca Strait,2020-05,capacity_mean,6444540.839
+Malacca Strait,2020-05,days,31
+Malacca Strait,2020-06,n_total_mean,157.467
+Malacca Strait,2020-06,n_container_mean,36.833
+Malacca Strait,2020-06,n_tanker_mean,66.067
+Malacca Strait,2020-06,capacity_mean,6214432.5
+Malacca Strait,2020-06,days,30
+Malacca Strait,2020-07,n_total_mean,162.774
+Malacca Strait,2020-07,n_container_mean,35.323
+Malacca Strait,2020-07,n_tanker_mean,65.065
+Malacca Strait,2020-07,capacity_mean,6648781.355
+Malacca Strait,2020-07,days,31
+Malacca Strait,2020-08,n_total_mean,157.742
+Malacca Strait,2020-08,n_container_mean,38.29
+Malacca Strait,2020-08,n_tanker_mean,62.806
+Malacca Strait,2020-08,capacity_mean,6400023.968
+Malacca Strait,2020-08,days,31
+Malacca Strait,2020-09,n_total_mean,159.267
+Malacca Strait,2020-09,n_container_mean,39.7
+Malacca Strait,2020-09,n_tanker_mean,63.6
+Malacca Strait,2020-09,capacity_mean,6301644.8
+Malacca Strait,2020-09,days,30
+Malacca Strait,2020-10,n_total_mean,157.742
+Malacca Strait,2020-10,n_container_mean,40.097
+Malacca Strait,2020-10,n_tanker_mean,61.065
+Malacca Strait,2020-10,capacity_mean,6243756.871
+Malacca Strait,2020-10,days,31
+Malacca Strait,2020-11,n_total_mean,163.233
+Malacca Strait,2020-11,n_container_mean,41.067
+Malacca Strait,2020-11,n_tanker_mean,68.067
+Malacca Strait,2020-11,capacity_mean,6320813.5
+Malacca Strait,2020-11,days,30
+Malacca Strait,2020-12,n_total_mean,161.032
+Malacca Strait,2020-12,n_container_mean,42.129
+Malacca Strait,2020-12,n_tanker_mean,66.097
+Malacca Strait,2020-12,capacity_mean,6108908.677
+Malacca Strait,2020-12,days,31
+Malacca Strait,2021-01,n_total_mean,166.548
+Malacca Strait,2021-01,n_container_mean,41.613
+Malacca Strait,2021-01,n_tanker_mean,69.032
+Malacca Strait,2021-01,capacity_mean,6302842.516
+Malacca Strait,2021-01,days,31
+Malacca Strait,2021-02,n_total_mean,164.5
+Malacca Strait,2021-02,n_container_mean,41.214
+Malacca Strait,2021-02,n_tanker_mean,68.357
+Malacca Strait,2021-02,capacity_mean,6182716.0
+Malacca Strait,2021-02,days,28
+Malacca Strait,2021-03,n_total_mean,157.71
+Malacca Strait,2021-03,n_container_mean,42.0
+Malacca Strait,2021-03,n_tanker_mean,62.258
+Malacca Strait,2021-03,capacity_mean,6107545.968
+Malacca Strait,2021-03,days,31
+Malacca Strait,2021-04,n_total_mean,166.867
+Malacca Strait,2021-04,n_container_mean,40.933
+Malacca Strait,2021-04,n_tanker_mean,66.7
+Malacca Strait,2021-04,capacity_mean,6600224.067
+Malacca Strait,2021-04,days,30
+Malacca Strait,2021-05,n_total_mean,158.129
+Malacca Strait,2021-05,n_container_mean,39.645
+Malacca Strait,2021-05,n_tanker_mean,64.935
+Malacca Strait,2021-05,capacity_mean,6382051.065
+Malacca Strait,2021-05,days,31
+Malacca Strait,2021-06,n_total_mean,145.3
+Malacca Strait,2021-06,n_container_mean,37.1
+Malacca Strait,2021-06,n_tanker_mean,58.233
+Malacca Strait,2021-06,capacity_mean,5737094.367
+Malacca Strait,2021-06,days,30
+Malacca Strait,2021-07,n_total_mean,141.129
+Malacca Strait,2021-07,n_container_mean,34.645
+Malacca Strait,2021-07,n_tanker_mean,57.032
+Malacca Strait,2021-07,capacity_mean,5796422.355
+Malacca Strait,2021-07,days,31
+Malacca Strait,2021-08,n_total_mean,150.387
+Malacca Strait,2021-08,n_container_mean,37.968
+Malacca Strait,2021-08,n_tanker_mean,61.355
+Malacca Strait,2021-08,capacity_mean,6022234.548
+Malacca Strait,2021-08,days,31
+Malacca Strait,2021-09,n_total_mean,144.267
+Malacca Strait,2021-09,n_container_mean,36.3
+Malacca Strait,2021-09,n_tanker_mean,58.6
+Malacca Strait,2021-09,capacity_mean,5806025.5
+Malacca Strait,2021-09,days,30
+Malacca Strait,2021-10,n_total_mean,147.129
+Malacca Strait,2021-10,n_container_mean,36.29
+Malacca Strait,2021-10,n_tanker_mean,59.161
+Malacca Strait,2021-10,capacity_mean,5920491.645
+Malacca Strait,2021-10,days,31
+Malacca Strait,2021-11,n_total_mean,192.333
+Malacca Strait,2021-11,n_container_mean,49.467
+Malacca Strait,2021-11,n_tanker_mean,76.467
+Malacca Strait,2021-11,capacity_mean,7128702.333
+Malacca Strait,2021-11,days,30
+Malacca Strait,2021-12,n_total_mean,201.516
+Malacca Strait,2021-12,n_container_mean,51.806
+Malacca Strait,2021-12,n_tanker_mean,82.387
+Malacca Strait,2021-12,capacity_mean,7312860.935
+Malacca Strait,2021-12,days,31
+Malacca Strait,2022-01,n_total_mean,207.645
+Malacca Strait,2022-01,n_container_mean,52.484
+Malacca Strait,2022-01,n_tanker_mean,85.194
+Malacca Strait,2022-01,capacity_mean,7495175.903
+Malacca Strait,2022-01,days,31
+Malacca Strait,2022-02,n_total_mean,203.429
+Malacca Strait,2022-02,n_container_mean,50.786
+Malacca Strait,2022-02,n_tanker_mean,83.143
+Malacca Strait,2022-02,capacity_mean,7135607.25
+Malacca Strait,2022-02,days,28
+Malacca Strait,2022-03,n_total_mean,202.161
+Malacca Strait,2022-03,n_container_mean,48.581
+Malacca Strait,2022-03,n_tanker_mean,81.194
+Malacca Strait,2022-03,capacity_mean,7486757.0
+Malacca Strait,2022-03,days,31
+Malacca Strait,2022-04,n_total_mean,204.467
+Malacca Strait,2022-04,n_container_mean,49.9
+Malacca Strait,2022-04,n_tanker_mean,82.0
+Malacca Strait,2022-04,capacity_mean,7390221.933
+Malacca Strait,2022-04,days,30
+Malacca Strait,2022-05,n_total_mean,198.871
+Malacca Strait,2022-05,n_container_mean,48.065
+Malacca Strait,2022-05,n_tanker_mean,78.258
+Malacca Strait,2022-05,capacity_mean,7451272.065
+Malacca Strait,2022-05,days,31
+Malacca Strait,2022-06,n_total_mean,206.733
+Malacca Strait,2022-06,n_container_mean,53.167
+Malacca Strait,2022-06,n_tanker_mean,81.2
+Malacca Strait,2022-06,capacity_mean,7685483.133
+Malacca Strait,2022-06,days,30
+Malacca Strait,2022-07,n_total_mean,204.742
+Malacca Strait,2022-07,n_container_mean,51.871
+Malacca Strait,2022-07,n_tanker_mean,80.065
+Malacca Strait,2022-07,capacity_mean,7464424.839
+Malacca Strait,2022-07,days,31
+Malacca Strait,2022-08,n_total_mean,211.516
+Malacca Strait,2022-08,n_container_mean,55.097
+Malacca Strait,2022-08,n_tanker_mean,84.29
+Malacca Strait,2022-08,capacity_mean,7566163.645
+Malacca Strait,2022-08,days,31
+Malacca Strait,2022-09,n_total_mean,209.8
+Malacca Strait,2022-09,n_container_mean,52.5
+Malacca Strait,2022-09,n_tanker_mean,84.3
+Malacca Strait,2022-09,capacity_mean,7579798.433
+Malacca Strait,2022-09,days,30
+Malacca Strait,2022-10,n_total_mean,215.387
+Malacca Strait,2022-10,n_container_mean,53.032
+Malacca Strait,2022-10,n_tanker_mean,84.29
+Malacca Strait,2022-10,capacity_mean,7754399.161
+Malacca Strait,2022-10,days,31
+Malacca Strait,2022-11,n_total_mean,212.367
+Malacca Strait,2022-11,n_container_mean,51.6
+Malacca Strait,2022-11,n_tanker_mean,86.0
+Malacca Strait,2022-11,capacity_mean,7917723.933
+Malacca Strait,2022-11,days,30
+Malacca Strait,2022-12,n_total_mean,208.065
+Malacca Strait,2022-12,n_container_mean,51.935
+Malacca Strait,2022-12,n_tanker_mean,84.484
+Malacca Strait,2022-12,capacity_mean,7817549.452
+Malacca Strait,2022-12,days,31
+Malacca Strait,2023-01,n_total_mean,212.516
+Malacca Strait,2023-01,n_container_mean,53.29
+Malacca Strait,2023-01,n_tanker_mean,84.29
+Malacca Strait,2023-01,capacity_mean,7687759.645
+Malacca Strait,2023-01,days,31
+Malacca Strait,2023-02,n_total_mean,207.429
+Malacca Strait,2023-02,n_container_mean,51.464
+Malacca Strait,2023-02,n_tanker_mean,80.714
+Malacca Strait,2023-02,capacity_mean,7590961.821
+Malacca Strait,2023-02,days,28
+Malacca Strait,2023-03,n_total_mean,217.613
+Malacca Strait,2023-03,n_container_mean,55.548
+Malacca Strait,2023-03,n_tanker_mean,85.355
+Malacca Strait,2023-03,capacity_mean,8025293.871
+Malacca Strait,2023-03,days,31
+Malacca Strait,2023-04,n_total_mean,221.133
+Malacca Strait,2023-04,n_container_mean,54.7
+Malacca Strait,2023-04,n_tanker_mean,84.9
+Malacca Strait,2023-04,capacity_mean,8578990.033
+Malacca Strait,2023-04,days,30
+Malacca Strait,2023-05,n_total_mean,221.581
+Malacca Strait,2023-05,n_container_mean,57.742
+Malacca Strait,2023-05,n_tanker_mean,83.0
+Malacca Strait,2023-05,capacity_mean,8471606.323
+Malacca Strait,2023-05,days,31
+Malacca Strait,2023-06,n_total_mean,218.567
+Malacca Strait,2023-06,n_container_mean,56.9
+Malacca Strait,2023-06,n_tanker_mean,83.4
+Malacca Strait,2023-06,capacity_mean,8204548.6
+Malacca Strait,2023-06,days,30
+Malacca Strait,2023-07,n_total_mean,225.774
+Malacca Strait,2023-07,n_container_mean,57.806
+Malacca Strait,2023-07,n_tanker_mean,85.935
+Malacca Strait,2023-07,capacity_mean,8309398.871
+Malacca Strait,2023-07,days,31
+Malacca Strait,2023-08,n_total_mean,222.065
+Malacca Strait,2023-08,n_container_mean,57.097
+Malacca Strait,2023-08,n_tanker_mean,83.0
+Malacca Strait,2023-08,capacity_mean,8408575.0
+Malacca Strait,2023-08,days,31
+Malacca Strait,2023-09,n_total_mean,219.7
+Malacca Strait,2023-09,n_container_mean,57.4
+Malacca Strait,2023-09,n_tanker_mean,81.6
+Malacca Strait,2023-09,capacity_mean,8244442.233
+Malacca Strait,2023-09,days,30
+Malacca Strait,2023-10,n_total_mean,222.452
+Malacca Strait,2023-10,n_container_mean,54.355
+Malacca Strait,2023-10,n_tanker_mean,82.097
+Malacca Strait,2023-10,capacity_mean,8616175.839
+Malacca Strait,2023-10,days,31
+Malacca Strait,2023-11,n_total_mean,226.8
+Malacca Strait,2023-11,n_container_mean,56.033
+Malacca Strait,2023-11,n_tanker_mean,85.633
+Malacca Strait,2023-11,capacity_mean,8777135.6
+Malacca Strait,2023-11,days,30
+Malacca Strait,2023-12,n_total_mean,224.935
+Malacca Strait,2023-12,n_container_mean,56.226
+Malacca Strait,2023-12,n_tanker_mean,84.839
+Malacca Strait,2023-12,capacity_mean,8867614.129
+Malacca Strait,2023-12,days,31
+Malacca Strait,2024-01,n_total_mean,224.516
+Malacca Strait,2024-01,n_container_mean,54.194
+Malacca Strait,2024-01,n_tanker_mean,83.484
+Malacca Strait,2024-01,capacity_mean,8576698.806
+Malacca Strait,2024-01,days,31
+Malacca Strait,2024-02,n_total_mean,221.379
+Malacca Strait,2024-02,n_container_mean,54.276
+Malacca Strait,2024-02,n_tanker_mean,82.828
+Malacca Strait,2024-02,capacity_mean,8261766.897
+Malacca Strait,2024-02,days,29
+Malacca Strait,2024-03,n_total_mean,219.226
+Malacca Strait,2024-03,n_container_mean,53.839
+Malacca Strait,2024-03,n_tanker_mean,83.129
+Malacca Strait,2024-03,capacity_mean,8515680.839
+Malacca Strait,2024-03,days,31
+Malacca Strait,2024-04,n_total_mean,221.933
+Malacca Strait,2024-04,n_container_mean,55.133
+Malacca Strait,2024-04,n_tanker_mean,82.1
+Malacca Strait,2024-04,capacity_mean,8577295.333
+Malacca Strait,2024-04,days,30
+Malacca Strait,2024-05,n_total_mean,224.452
+Malacca Strait,2024-05,n_container_mean,56.774
+Malacca Strait,2024-05,n_tanker_mean,82.387
+Malacca Strait,2024-05,capacity_mean,8608908.452
+Malacca Strait,2024-05,days,31
+Malacca Strait,2024-06,n_total_mean,222.333
+Malacca Strait,2024-06,n_container_mean,57.567
+Malacca Strait,2024-06,n_tanker_mean,81.967
+Malacca Strait,2024-06,capacity_mean,8339243.933
+Malacca Strait,2024-06,days,30
+Malacca Strait,2024-07,n_total_mean,226.355
+Malacca Strait,2024-07,n_container_mean,60.516
+Malacca Strait,2024-07,n_tanker_mean,80.419
+Malacca Strait,2024-07,capacity_mean,8655956.935
+Malacca Strait,2024-07,days,31
+Malacca Strait,2024-08,n_total_mean,224.903
+Malacca Strait,2024-08,n_container_mean,59.774
+Malacca Strait,2024-08,n_tanker_mean,80.355
+Malacca Strait,2024-08,capacity_mean,8515499.613
+Malacca Strait,2024-08,days,31
+Malacca Strait,2024-09,n_total_mean,221.167
+Malacca Strait,2024-09,n_container_mean,58.2
+Malacca Strait,2024-09,n_tanker_mean,79.9
+Malacca Strait,2024-09,capacity_mean,8318599.967
+Malacca Strait,2024-09,days,30
+Malacca Strait,2024-10,n_total_mean,227.032
+Malacca Strait,2024-10,n_container_mean,59.194
+Malacca Strait,2024-10,n_tanker_mean,82.29
+Malacca Strait,2024-10,capacity_mean,8776045.677
+Malacca Strait,2024-10,days,31
+Malacca Strait,2024-11,n_total_mean,220.4
+Malacca Strait,2024-11,n_container_mean,58.567
+Malacca Strait,2024-11,n_tanker_mean,80.367
+Malacca Strait,2024-11,capacity_mean,8200959.533
+Malacca Strait,2024-11,days,30
+Malacca Strait,2024-12,n_total_mean,227.194
+Malacca Strait,2024-12,n_container_mean,60.935
+Malacca Strait,2024-12,n_tanker_mean,81.0
+Malacca Strait,2024-12,capacity_mean,8670699.419
+Malacca Strait,2024-12,days,31
+Malacca Strait,2025-01,n_total_mean,228.032
+Malacca Strait,2025-01,n_container_mean,60.516
+Malacca Strait,2025-01,n_tanker_mean,80.29
+Malacca Strait,2025-01,capacity_mean,8342434.968
+Malacca Strait,2025-01,days,31
+Malacca Strait,2025-02,n_total_mean,221.5
+Malacca Strait,2025-02,n_container_mean,60.214
+Malacca Strait,2025-02,n_tanker_mean,77.786
+Malacca Strait,2025-02,capacity_mean,8396023.536
+Malacca Strait,2025-02,days,28
+Malacca Strait,2025-03,n_total_mean,225.742
+Malacca Strait,2025-03,n_container_mean,58.581
+Malacca Strait,2025-03,n_tanker_mean,80.613
+Malacca Strait,2025-03,capacity_mean,8646838.581
+Malacca Strait,2025-03,days,31
+Malacca Strait,2025-04,n_total_mean,231.5
+Malacca Strait,2025-04,n_container_mean,61.067
+Malacca Strait,2025-04,n_tanker_mean,79.533
+Malacca Strait,2025-04,capacity_mean,9180676.467
+Malacca Strait,2025-04,days,30
+Malacca Strait,2025-05,n_total_mean,236.065
+Malacca Strait,2025-05,n_container_mean,63.258
+Malacca Strait,2025-05,n_tanker_mean,82.935
+Malacca Strait,2025-05,capacity_mean,9210761.452
+Malacca Strait,2025-05,days,31
+Malacca Strait,2025-06,n_total_mean,232.8
+Malacca Strait,2025-06,n_container_mean,62.167
+Malacca Strait,2025-06,n_tanker_mean,84.233
+Malacca Strait,2025-06,capacity_mean,8952251.233
+Malacca Strait,2025-06,days,30
+Malacca Strait,2025-07,n_total_mean,236.839
+Malacca Strait,2025-07,n_container_mean,61.516
+Malacca Strait,2025-07,n_tanker_mean,83.548
+Malacca Strait,2025-07,capacity_mean,9145464.161
+Malacca Strait,2025-07,days,31
+Malacca Strait,2025-08,n_total_mean,237.387
+Malacca Strait,2025-08,n_container_mean,63.194
+Malacca Strait,2025-08,n_tanker_mean,82.226
+Malacca Strait,2025-08,capacity_mean,9057161.935
+Malacca Strait,2025-08,days,31
+Malacca Strait,2025-09,n_total_mean,241.133
+Malacca Strait,2025-09,n_container_mean,61.2
+Malacca Strait,2025-09,n_tanker_mean,84.5
+Malacca Strait,2025-09,capacity_mean,9247023.5
+Malacca Strait,2025-09,days,30
+Malacca Strait,2025-10,n_total_mean,242.129
+Malacca Strait,2025-10,n_container_mean,62.355
+Malacca Strait,2025-10,n_tanker_mean,83.161
+Malacca Strait,2025-10,capacity_mean,9511146.484
+Malacca Strait,2025-10,days,31
+Malacca Strait,2025-11,n_total_mean,237.767
+Malacca Strait,2025-11,n_container_mean,61.8
+Malacca Strait,2025-11,n_tanker_mean,83.633
+Malacca Strait,2025-11,capacity_mean,9491794.5
+Malacca Strait,2025-11,days,30
+Malacca Strait,2025-12,n_total_mean,241.806
+Malacca Strait,2025-12,n_container_mean,61.161
+Malacca Strait,2025-12,n_tanker_mean,86.516
+Malacca Strait,2025-12,capacity_mean,9554756.226
+Malacca Strait,2025-12,days,31
+Malacca Strait,2026-01,n_total_mean,243.935
+Malacca Strait,2026-01,n_container_mean,65.032
+Malacca Strait,2026-01,n_tanker_mean,84.839
+Malacca Strait,2026-01,capacity_mean,9373809.645
+Malacca Strait,2026-01,days,31
+Malacca Strait,2026-02,n_total_mean,238.464
+Malacca Strait,2026-02,n_container_mean,60.107
+Malacca Strait,2026-02,n_tanker_mean,85.643
+Malacca Strait,2026-02,capacity_mean,8971603.393
+Malacca Strait,2026-02,days,28
+Malacca Strait,2026-03,n_total_mean,220.516
+Malacca Strait,2026-03,n_container_mean,59.774
+Malacca Strait,2026-03,n_tanker_mean,76.032
+Malacca Strait,2026-03,capacity_mean,7859680.226
+Malacca Strait,2026-03,days,31
+Malacca Strait,2026-04,n_total_mean,221.267
+Malacca Strait,2026-04,n_container_mean,59.6
+Malacca Strait,2026-04,n_tanker_mean,72.867
+Malacca Strait,2026-04,capacity_mean,7914266.333
+Malacca Strait,2026-04,days,30
+Malacca Strait,2026-05,n_total_mean,217.774
+Malacca Strait,2026-05,n_container_mean,60.097
+Malacca Strait,2026-05,n_tanker_mean,70.161
+Malacca Strait,2026-05,capacity_mean,7862004.839
+Malacca Strait,2026-05,days,31
+Malacca Strait,2026-06,n_total_mean,221.367
+Malacca Strait,2026-06,n_container_mean,60.533
+Malacca Strait,2026-06,n_tanker_mean,69.667
+Malacca Strait,2026-06,capacity_mean,8180207.967
+Malacca Strait,2026-06,days,30
+Malacca Strait,2026-07,n_total_mean,224.935
+Malacca Strait,2026-07,n_container_mean,60.065
+Malacca Strait,2026-07,n_tanker_mean,76.032
+Malacca Strait,2026-07,capacity_mean,8559921.774
+Malacca Strait,2026-07,days,31
+Malacca Strait,2026-08,n_total_mean,211.548
+Malacca Strait,2026-08,n_container_mean,56.258
+Malacca Strait,2026-08,n_tanker_mean,69.226
+Malacca Strait,2026-08,capacity_mean,7360678.129
+Malacca Strait,2026-08,days,31
+Malacca Strait,2026-09,n_total_mean,219.367
+Malacca Strait,2026-09,n_container_mean,59.067
+Malacca Strait,2026-09,n_tanker_mean,70.367
+Malacca Strait,2026-09,capacity_mean,8133504.767
+Malacca Strait,2026-09,days,30
+Malacca Strait,2026-10,n_total_mean,222.065
+Malacca Strait,2026-10,n_container_mean,60.581
+Malacca Strait,2026-10,n_tanker_mean,73.065
+Malacca Strait,2026-10,capacity_mean,8334772.903
+Malacca Strait,2026-10,days,31
+Malacca Strait,2026-11,n_total_mean,226.682
+Malacca Strait,2026-11,n_container_mean,59.636
+Malacca Strait,2026-11,n_tanker_mean,79.045
+Malacca Strait,2026-11,capacity_mean,8466383.591
+Malacca Strait,2026-11,days,22
+Strait of Hormuz,2019-01,n_total_mean,55.645
+Strait of Hormuz,2019-01,n_container_mean,7.677
+Strait of Hormuz,2019-01,n_tanker_mean,34.774
+Strait of Hormuz,2019-01,capacity_mean,2199497.613
+Strait of Hormuz,2019-01,days,31
+Strait of Hormuz,2019-02,n_total_mean,59.321
+Strait of Hormuz,2019-02,n_container_mean,7.964
+Strait of Hormuz,2019-02,n_tanker_mean,35.75
+Strait of Hormuz,2019-02,capacity_mean,1956705.107
+Strait of Hormuz,2019-02,days,28
+Strait of Hormuz,2019-03,n_total_mean,61.677
+Strait of Hormuz,2019-03,n_container_mean,8.71
+Strait of Hormuz,2019-03,n_tanker_mean,38.29
+Strait of Hormuz,2019-03,capacity_mean,2247114.452
+Strait of Hormuz,2019-03,days,31
+Strait of Hormuz,2019-04,n_total_mean,68.533
+Strait of Hormuz,2019-04,n_container_mean,10.033
+Strait of Hormuz,2019-04,n_tanker_mean,41.033
+Strait of Hormuz,2019-04,capacity_mean,2649401.2
+Strait of Hormuz,2019-04,days,30
+Strait of Hormuz,2019-05,n_total_mean,75.452
+Strait of Hormuz,2019-05,n_container_mean,11.323
+Strait of Hormuz,2019-05,n_tanker_mean,45.903
+Strait of Hormuz,2019-05,capacity_mean,3114935.935
+Strait of Hormuz,2019-05,days,31
+Strait of Hormuz,2019-06,n_total_mean,81.4
+Strait of Hormuz,2019-06,n_container_mean,12.067
+Strait of Hormuz,2019-06,n_tanker_mean,49.7
+Strait of Hormuz,2019-06,capacity_mean,3395010.667
+Strait of Hormuz,2019-06,days,30
+Strait of Hormuz,2019-07,n_total_mean,82.161
+Strait of Hormuz,2019-07,n_container_mean,13.323
+Strait of Hormuz,2019-07,n_tanker_mean,48.032
+Strait of Hormuz,2019-07,capacity_mean,3297832.032
+Strait of Hormuz,2019-07,days,31
+Strait of Hormuz,2019-08,n_total_mean,79.097
+Strait of Hormuz,2019-08,n_container_mean,12.548
+Strait of Hormuz,2019-08,n_tanker_mean,48.097
+Strait of Hormuz,2019-08,capacity_mean,3293435.161
+Strait of Hormuz,2019-08,days,31
+Strait of Hormuz,2019-09,n_total_mean,78.133
+Strait of Hormuz,2019-09,n_container_mean,12.833
+Strait of Hormuz,2019-09,n_tanker_mean,46.167
+Strait of Hormuz,2019-09,capacity_mean,3173307.867
+Strait of Hormuz,2019-09,days,30
+Strait of Hormuz,2019-10,n_total_mean,73.484
+Strait of Hormuz,2019-10,n_container_mean,11.484
+Strait of Hormuz,2019-10,n_tanker_mean,45.032
+Strait of Hormuz,2019-10,capacity_mean,3062631.161
+Strait of Hormuz,2019-10,days,31
+Strait of Hormuz,2019-11,n_total_mean,56.433
+Strait of Hormuz,2019-11,n_container_mean,7.833
+Strait of Hormuz,2019-11,n_tanker_mean,35.133
+Strait of Hormuz,2019-11,capacity_mean,1950673.367
+Strait of Hormuz,2019-11,days,30
+Strait of Hormuz,2019-12,n_total_mean,57.129
+Strait of Hormuz,2019-12,n_container_mean,7.645
+Strait of Hormuz,2019-12,n_tanker_mean,35.452
+Strait of Hormuz,2019-12,capacity_mean,1866661.032
+Strait of Hormuz,2019-12,days,31
+Strait of Hormuz,2020-01,n_total_mean,60.355
+Strait of Hormuz,2020-01,n_container_mean,9.548
+Strait of Hormuz,2020-01,n_tanker_mean,35.871
+Strait of Hormuz,2020-01,capacity_mean,1850352.258
+Strait of Hormuz,2020-01,days,31
+Strait of Hormuz,2020-02,n_total_mean,61.034
+Strait of Hormuz,2020-02,n_container_mean,8.931
+Strait of Hormuz,2020-02,n_tanker_mean,36.586
+Strait of Hormuz,2020-02,capacity_mean,2244695.966
+Strait of Hormuz,2020-02,days,29
+Strait of Hormuz,2020-03,n_total_mean,57.581
+Strait of Hormuz,2020-03,n_container_mean,8.032
+Strait of Hormuz,2020-03,n_tanker_mean,36.194
+Strait of Hormuz,2020-03,capacity_mean,2288890.968
+Strait of Hormuz,2020-03,days,31
+Strait of Hormuz,2020-04,n_total_mean,70.333
+Strait of Hormuz,2020-04,n_container_mean,10.033
+Strait of Hormuz,2020-04,n_tanker_mean,44.067
+Strait of Hormuz,2020-04,capacity_mean,3092449.067
+Strait of Hormuz,2020-04,days,30
+Strait of Hormuz,2020-05,n_total_mean,80.194
+Strait of Hormuz,2020-05,n_container_mean,12.419
+Strait of Hormuz,2020-05,n_tanker_mean,48.742
+Strait of Hormuz,2020-05,capacity_mean,3498778.452
+Strait of Hormuz,2020-05,days,31
+Strait of Hormuz,2020-06,n_total_mean,85.733
+Strait of Hormuz,2020-06,n_container_mean,14.033
+Strait of Hormuz,2020-06,n_tanker_mean,52.4
+Strait of Hormuz,2020-06,capacity_mean,3319908.0
+Strait of Hormuz,2020-06,days,30
+Strait of Hormuz,2020-07,n_total_mean,83.516
+Strait of Hormuz,2020-07,n_container_mean,12.871
+Strait of Hormuz,2020-07,n_tanker_mean,52.0
+Strait of Hormuz,2020-07,capacity_mean,3339615.484
+Strait of Hormuz,2020-07,days,31
+Strait of Hormuz,2020-08,n_total_mean,83.839
+Strait of Hormuz,2020-08,n_container_mean,12.774
+Strait of Hormuz,2020-08,n_tanker_mean,51.742
+Strait of Hormuz,2020-08,capacity_mean,3357569.29
+Strait of Hormuz,2020-08,days,31
+Strait of Hormuz,2020-09,n_total_mean,88.967
+Strait of Hormuz,2020-09,n_container_mean,15.533
+Strait of Hormuz,2020-09,n_tanker_mean,51.1
+Strait of Hormuz,2020-09,capacity_mean,3405155.867
+Strait of Hormuz,2020-09,days,30
+Strait of Hormuz,2020-10,n_total_mean,86.29
+Strait of Hormuz,2020-10,n_container_mean,13.0
+Strait of Hormuz,2020-10,n_tanker_mean,52.065
+Strait of Hormuz,2020-10,capacity_mean,3282320.097
+Strait of Hormuz,2020-10,days,31
+Strait of Hormuz,2020-11,n_total_mean,64.867
+Strait of Hormuz,2020-11,n_container_mean,9.433
+Strait of Hormuz,2020-11,n_tanker_mean,40.3
+Strait of Hormuz,2020-11,capacity_mean,2219863.433
+Strait of Hormuz,2020-11,days,30
+Strait of Hormuz,2020-12,n_total_mean,60.129
+Strait of Hormuz,2020-12,n_container_mean,8.774
+Strait of Hormuz,2020-12,n_tanker_mean,38.323
+Strait of Hormuz,2020-12,capacity_mean,1990433.452
+Strait of Hormuz,2020-12,days,31
+Strait of Hormuz,2021-01,n_total_mean,66.258
+Strait of Hormuz,2021-01,n_container_mean,9.258
+Strait of Hormuz,2021-01,n_tanker_mean,41.355
+Strait of Hormuz,2021-01,capacity_mean,2324942.548
+Strait of Hormuz,2021-01,days,31
+Strait of Hormuz,2021-02,n_total_mean,68.357
+Strait of Hormuz,2021-02,n_container_mean,10.821
+Strait of Hormuz,2021-02,n_tanker_mean,42.821
+Strait of Hormuz,2021-02,capacity_mean,2681538.464
+Strait of Hormuz,2021-02,days,28
+Strait of Hormuz,2021-03,n_total_mean,72.387
+Strait of Hormuz,2021-03,n_container_mean,11.71
+Strait of Hormuz,2021-03,n_tanker_mean,44.355
+Strait of Hormuz,2021-03,capacity_mean,2825997.387
+Strait of Hormuz,2021-03,days,31
+Strait of Hormuz,2021-04,n_total_mean,86.2
+Strait of Hormuz,2021-04,n_container_mean,13.5
+Strait of Hormuz,2021-04,n_tanker_mean,52.067
+Strait of Hormuz,2021-04,capacity_mean,3497452.333
+Strait of Hormuz,2021-04,days,30
+Strait of Hormuz,2021-05,n_total_mean,84.871
+Strait of Hormuz,2021-05,n_container_mean,12.71
+Strait of Hormuz,2021-05,n_tanker_mean,52.452
+Strait of Hormuz,2021-05,capacity_mean,3484975.516
+Strait of Hormuz,2021-05,days,31
+Strait of Hormuz,2021-06,n_total_mean,91.4
+Strait of Hormuz,2021-06,n_container_mean,15.067
+Strait of Hormuz,2021-06,n_tanker_mean,55.9
+Strait of Hormuz,2021-06,capacity_mean,3794320.433
+Strait of Hormuz,2021-06,days,30
+Strait of Hormuz,2021-07,n_total_mean,85.903
+Strait of Hormuz,2021-07,n_container_mean,13.645
+Strait of Hormuz,2021-07,n_tanker_mean,54.613
+Strait of Hormuz,2021-07,capacity_mean,3500820.0
+Strait of Hormuz,2021-07,days,31
+Strait of Hormuz,2021-08,n_total_mean,84.129
+Strait of Hormuz,2021-08,n_container_mean,12.581
+Strait of Hormuz,2021-08,n_tanker_mean,51.065
+Strait of Hormuz,2021-08,capacity_mean,3476111.258
+Strait of Hormuz,2021-08,days,31
+Strait of Hormuz,2021-09,n_total_mean,86.633
+Strait of Hormuz,2021-09,n_container_mean,13.9
+Strait of Hormuz,2021-09,n_tanker_mean,53.033
+Strait of Hormuz,2021-09,capacity_mean,3623752.1
+Strait of Hormuz,2021-09,days,30
+Strait of Hormuz,2021-10,n_total_mean,80.774
+Strait of Hormuz,2021-10,n_container_mean,12.0
+Strait of Hormuz,2021-10,n_tanker_mean,50.226
+Strait of Hormuz,2021-10,capacity_mean,3380219.452
+Strait of Hormuz,2021-10,days,31
+Strait of Hormuz,2021-11,n_total_mean,83.9
+Strait of Hormuz,2021-11,n_container_mean,12.067
+Strait of Hormuz,2021-11,n_tanker_mean,51.033
+Strait of Hormuz,2021-11,capacity_mean,3464110.9
+Strait of Hormuz,2021-11,days,30
+Strait of Hormuz,2021-12,n_total_mean,78.516
+Strait of Hormuz,2021-12,n_container_mean,10.29
+Strait of Hormuz,2021-12,n_tanker_mean,50.097
+Strait of Hormuz,2021-12,capacity_mean,3482366.419
+Strait of Hormuz,2021-12,days,31
+Strait of Hormuz,2022-01,n_total_mean,80.0
+Strait of Hormuz,2022-01,n_container_mean,11.226
+Strait of Hormuz,2022-01,n_tanker_mean,51.194
+Strait of Hormuz,2022-01,capacity_mean,3613192.161
+Strait of Hormuz,2022-01,days,31
+Strait of Hormuz,2022-02,n_total_mean,94.071
+Strait of Hormuz,2022-02,n_container_mean,14.036
+Strait of Hormuz,2022-02,n_tanker_mean,58.143
+Strait of Hormuz,2022-02,capacity_mean,3928988.643
+Strait of Hormuz,2022-02,days,28
+Strait of Hormuz,2022-03,n_total_mean,93.419
+Strait of Hormuz,2022-03,n_container_mean,13.129
+Strait of Hormuz,2022-03,n_tanker_mean,57.645
+Strait of Hormuz,2022-03,capacity_mean,3986945.968
+Strait of Hormuz,2022-03,days,31
+Strait of Hormuz,2022-04,n_total_mean,100.5
+Strait of Hormuz,2022-04,n_container_mean,15.7
+Strait of Hormuz,2022-04,n_tanker_mean,62.833
+Strait of Hormuz,2022-04,capacity_mean,4211449.3
+Strait of Hormuz,2022-04,days,30
+Strait of Hormuz,2022-05,n_total_mean,95.742
+Strait of Hormuz,2022-05,n_container_mean,15.161
+Strait of Hormuz,2022-05,n_tanker_mean,59.484
+Strait of Hormuz,2022-05,capacity_mean,3836484.161
+Strait of Hormuz,2022-05,days,31
+Strait of Hormuz,2022-06,n_total_mean,98.867
+Strait of Hormuz,2022-06,n_container_mean,16.533
+Strait of Hormuz,2022-06,n_tanker_mean,60.967
+Strait of Hormuz,2022-06,capacity_mean,4067186.2
+Strait of Hormuz,2022-06,days,30
+Strait of Hormuz,2022-07,n_total_mean,93.194
+Strait of Hormuz,2022-07,n_container_mean,14.258
+Strait of Hormuz,2022-07,n_tanker_mean,59.194
+Strait of Hormuz,2022-07,capacity_mean,3994720.097
+Strait of Hormuz,2022-07,days,31
+Strait of Hormuz,2022-08,n_total_mean,103.323
+Strait of Hormuz,2022-08,n_container_mean,16.968
+Strait of Hormuz,2022-08,n_tanker_mean,61.935
+Strait of Hormuz,2022-08,capacity_mean,4241686.806
+Strait of Hormuz,2022-08,days,31
+Strait of Hormuz,2022-09,n_total_mean,98.6
+Strait of Hormuz,2022-09,n_container_mean,15.533
+Strait of Hormuz,2022-09,n_tanker_mean,60.3
+Strait of Hormuz,2022-09,capacity_mean,4049523.233
+Strait of Hormuz,2022-09,days,30
+Strait of Hormuz,2022-10,n_total_mean,101.097
+Strait of Hormuz,2022-10,n_container_mean,15.968
+Strait of Hormuz,2022-10,n_tanker_mean,61.71
+Strait of Hormuz,2022-10,capacity_mean,4068890.774
+Strait of Hormuz,2022-10,days,31
+Strait of Hormuz,2022-11,n_total_mean,84.8
+Strait of Hormuz,2022-11,n_container_mean,13.933
+Strait of Hormuz,2022-11,n_tanker_mean,51.367
+Strait of Hormuz,2022-11,capacity_mean,3604616.5
+Strait of Hormuz,2022-11,days,30
+Strait of Hormuz,2022-12,n_total_mean,79.065
+Strait of Hormuz,2022-12,n_container_mean,12.516
+Strait of Hormuz,2022-12,n_tanker_mean,48.129
+Strait of Hormuz,2022-12,capacity_mean,3295190.968
+Strait of Hormuz,2022-12,days,31
+Strait of Hormuz,2023-01,n_total_mean,76.032
+Strait of Hormuz,2023-01,n_container_mean,13.129
+Strait of Hormuz,2023-01,n_tanker_mean,45.903
+Strait of Hormuz,2023-01,capacity_mean,3263106.032
+Strait of Hormuz,2023-01,days,31
+Strait of Hormuz,2023-02,n_total_mean,87.75
+Strait of Hormuz,2023-02,n_container_mean,14.214
+Strait of Hormuz,2023-02,n_tanker_mean,52.571
+Strait of Hormuz,2023-02,capacity_mean,3594461.357
+Strait of Hormuz,2023-02,days,28
+Strait of Hormuz,2023-03,n_total_mean,86.742
+Strait of Hormuz,2023-03,n_container_mean,15.032
+Strait of Hormuz,2023-03,n_tanker_mean,51.806
+Strait of Hormuz,2023-03,capacity_mean,3537675.419
+Strait of Hormuz,2023-03,days,31
+Strait of Hormuz,2023-04,n_total_mean,97.2
+Strait of Hormuz,2023-04,n_container_mean,17.0
+Strait of Hormuz,2023-04,n_tanker_mean,58.3
+Strait of Hormuz,2023-04,capacity_mean,3880908.933
+Strait of Hormuz,2023-04,days,30
+Strait of Hormuz,2023-05,n_total_mean,103.516
+Strait of Hormuz,2023-05,n_container_mean,18.452
+Strait of Hormuz,2023-05,n_tanker_mean,62.226
+Strait of Hormuz,2023-05,capacity_mean,4113917.484
+Strait of Hormuz,2023-05,days,31
+Strait of Hormuz,2023-06,n_total_mean,102.033
+Strait of Hormuz,2023-06,n_container_mean,17.833
+Strait of Hormuz,2023-06,n_tanker_mean,60.367
+Strait of Hormuz,2023-06,capacity_mean,4237990.7
+Strait of Hormuz,2023-06,days,30
+Strait of Hormuz,2023-07,n_total_mean,100.677
+Strait of Hormuz,2023-07,n_container_mean,16.71
+Strait of Hormuz,2023-07,n_tanker_mean,61.935
+Strait of Hormuz,2023-07,capacity_mean,4069404.258
+Strait of Hormuz,2023-07,days,31
+Strait of Hormuz,2023-08,n_total_mean,104.419
+Strait of Hormuz,2023-08,n_container_mean,19.032
+Strait of Hormuz,2023-08,n_tanker_mean,62.387
+Strait of Hormuz,2023-08,capacity_mean,3982577.645
+Strait of Hormuz,2023-08,days,31
+Strait of Hormuz,2023-09,n_total_mean,102.4
+Strait of Hormuz,2023-09,n_container_mean,17.533
+Strait of Hormuz,2023-09,n_tanker_mean,61.0
+Strait of Hormuz,2023-09,capacity_mean,3930349.167
+Strait of Hormuz,2023-09,days,30
+Strait of Hormuz,2023-10,n_total_mean,95.194
+Strait of Hormuz,2023-10,n_container_mean,15.71
+Strait of Hormuz,2023-10,n_tanker_mean,57.065
+Strait of Hormuz,2023-10,capacity_mean,3717637.065
+Strait of Hormuz,2023-10,days,31
+Strait of Hormuz,2023-11,n_total_mean,76.867
+Strait of Hormuz,2023-11,n_container_mean,11.733
+Strait of Hormuz,2023-11,n_tanker_mean,47.1
+Strait of Hormuz,2023-11,capacity_mean,3028652.567
+Strait of Hormuz,2023-11,days,30
+Strait of Hormuz,2023-12,n_total_mean,74.935
+Strait of Hormuz,2023-12,n_container_mean,12.29
+Strait of Hormuz,2023-12,n_tanker_mean,44.935
+Strait of Hormuz,2023-12,capacity_mean,2964827.097
+Strait of Hormuz,2023-12,days,31
+Strait of Hormuz,2024-01,n_total_mean,72.839
+Strait of Hormuz,2024-01,n_container_mean,11.129
+Strait of Hormuz,2024-01,n_tanker_mean,44.129
+Strait of Hormuz,2024-01,capacity_mean,2980321.548
+Strait of Hormuz,2024-01,days,31
+Strait of Hormuz,2024-02,n_total_mean,71.966
+Strait of Hormuz,2024-02,n_container_mean,12.931
+Strait of Hormuz,2024-02,n_tanker_mean,42.138
+Strait of Hormuz,2024-02,capacity_mean,2868934.241
+Strait of Hormuz,2024-02,days,29
+Strait of Hormuz,2024-03,n_total_mean,94.323
+Strait of Hormuz,2024-03,n_container_mean,15.806
+Strait of Hormuz,2024-03,n_tanker_mean,55.774
+Strait of Hormuz,2024-03,capacity_mean,3810687.871
+Strait of Hormuz,2024-03,days,31
+Strait of Hormuz,2024-04,n_total_mean,100.367
+Strait of Hormuz,2024-04,n_container_mean,16.667
+Strait of Hormuz,2024-04,n_tanker_mean,59.967
+Strait of Hormuz,2024-04,capacity_mean,3859415.567
+Strait of Hormuz,2024-04,days,30
+Strait of Hormuz,2024-05,n_total_mean,105.065
+Strait of Hormuz,2024-05,n_container_mean,17.871
+Strait of Hormuz,2024-05,n_tanker_mean,61.935
+Strait of Hormuz,2024-05,capacity_mean,4066861.194
+Strait of Hormuz,2024-05,days,31
+Strait of Hormuz,2024-06,n_total_mean,104.867
+Strait of Hormuz,2024-06,n_container_mean,18.333
+Strait of Hormuz,2024-06,n_tanker_mean,61.733
+Strait of Hormuz,2024-06,capacity_mean,3963339.0
+Strait of Hormuz,2024-06,days,30
+Strait of Hormuz,2024-07,n_total_mean,103.097
+Strait of Hormuz,2024-07,n_container_mean,18.645
+Strait of Hormuz,2024-07,n_tanker_mean,61.581
+Strait of Hormuz,2024-07,capacity_mean,3892671.0
+Strait of Hormuz,2024-07,days,31
+Strait of Hormuz,2024-08,n_total_mean,92.581
+Strait of Hormuz,2024-08,n_container_mean,16.742
+Strait of Hormuz,2024-08,n_tanker_mean,54.613
+Strait of Hormuz,2024-08,capacity_mean,3561107.29
+Strait of Hormuz,2024-08,days,31
+Strait of Hormuz,2024-09,n_total_mean,103.967
+Strait of Hormuz,2024-09,n_container_mean,19.3
+Strait of Hormuz,2024-09,n_tanker_mean,59.667
+Strait of Hormuz,2024-09,capacity_mean,3872408.567
+Strait of Hormuz,2024-09,days,30
+Strait of Hormuz,2024-10,n_total_mean,90.032
+Strait of Hormuz,2024-10,n_container_mean,18.194
+Strait of Hormuz,2024-10,n_tanker_mean,50.355
+Strait of Hormuz,2024-10,capacity_mean,3287058.677
+Strait of Hormuz,2024-10,days,31
+Strait of Hormuz,2024-11,n_total_mean,83.2
+Strait of Hormuz,2024-11,n_container_mean,16.167
+Strait of Hormuz,2024-11,n_tanker_mean,46.833
+Strait of Hormuz,2024-11,capacity_mean,3269179.367
+Strait of Hormuz,2024-11,days,30
+Strait of Hormuz,2024-12,n_total_mean,70.645
+Strait of Hormuz,2024-12,n_container_mean,13.613
+Strait of Hormuz,2024-12,n_tanker_mean,39.677
+Strait of Hormuz,2024-12,capacity_mean,2557780.71
+Strait of Hormuz,2024-12,days,31
+Strait of Hormuz,2025-01,n_total_mean,70.548
+Strait of Hormuz,2025-01,n_container_mean,14.355
+Strait of Hormuz,2025-01,n_tanker_mean,39.839
+Strait of Hormuz,2025-01,capacity_mean,2615994.903
+Strait of Hormuz,2025-01,days,31
+Strait of Hormuz,2025-02,n_total_mean,73.893
+Strait of Hormuz,2025-02,n_container_mean,14.786
+Strait of Hormuz,2025-02,n_tanker_mean,41.25
+Strait of Hormuz,2025-02,capacity_mean,2653593.143
+Strait of Hormuz,2025-02,days,28
+Strait of Hormuz,2025-03,n_total_mean,83.774
+Strait of Hormuz,2025-03,n_container_mean,16.355
+Strait of Hormuz,2025-03,n_tanker_mean,48.129
+Strait of Hormuz,2025-03,capacity_mean,3218932.548
+Strait of Hormuz,2025-03,days,31
+Strait of Hormuz,2025-04,n_total_mean,102.367
+Strait of Hormuz,2025-04,n_container_mean,20.533
+Strait of Hormuz,2025-04,n_tanker_mean,57.633
+Strait of Hormuz,2025-04,capacity_mean,3831665.033
+Strait of Hormuz,2025-04,days,30
+Strait of Hormuz,2025-05,n_total_mean,102.968
+Strait of Hormuz,2025-05,n_container_mean,20.613
+Strait of Hormuz,2025-05,n_tanker_mean,57.968
+Strait of Hormuz,2025-05,capacity_mean,3762261.774
+Strait of Hormuz,2025-05,days,31
+Strait of Hormuz,2025-06,n_total_mean,102.233
+Strait of Hormuz,2025-06,n_container_mean,20.533
+Strait of Hormuz,2025-06,n_tanker_mean,57.5
+Strait of Hormuz,2025-06,capacity_mean,3833280.433
+Strait of Hormuz,2025-06,days,30
+Strait of Hormuz,2025-07,n_total_mean,95.226
+Strait of Hormuz,2025-07,n_container_mean,18.355
+Strait of Hormuz,2025-07,n_tanker_mean,54.226
+Strait of Hormuz,2025-07,capacity_mean,3619320.871
+Strait of Hormuz,2025-07,days,31
+Strait of Hormuz,2025-08,n_total_mean,94.548
+Strait of Hormuz,2025-08,n_container_mean,17.613
+Strait of Hormuz,2025-08,n_tanker_mean,53.129
+Strait of Hormuz,2025-08,capacity_mean,3615509.097
+Strait of Hormuz,2025-08,days,31
+Strait of Hormuz,2025-09,n_total_mean,87.933
+Strait of Hormuz,2025-09,n_container_mean,16.9
+Strait of Hormuz,2025-09,n_tanker_mean,49.833
+Strait of Hormuz,2025-09,capacity_mean,3163027.233
+Strait of Hormuz,2025-09,days,30
+Strait of Hormuz,2025-10,n_total_mean,89.419
+Strait of Hormuz,2025-10,n_container_mean,17.516
+Strait of Hormuz,2025-10,n_tanker_mean,49.484
+Strait of Hormuz,2025-10,capacity_mean,3458149.194
+Strait of Hormuz,2025-10,days,31
+Strait of Hormuz,2025-11,n_total_mean,67.367
+Strait of Hormuz,2025-11,n_container_mean,11.567
+Strait of Hormuz,2025-11,n_tanker_mean,38.4
+Strait of Hormuz,2025-11,capacity_mean,2565088.433
+Strait of Hormuz,2025-11,days,30
+Strait of Hormuz,2025-12,n_total_mean,55.548
+Strait of Hormuz,2025-12,n_container_mean,9.29
+Strait of Hormuz,2025-12,n_tanker_mean,30.419
+Strait of Hormuz,2025-12,capacity_mean,2244235.161
+Strait of Hormuz,2025-12,days,31
+Strait of Hormuz,2026-01,n_total_mean,58.452
+Strait of Hormuz,2026-01,n_container_mean,10.581
+Strait of Hormuz,2026-01,n_tanker_mean,31.129
+Strait of Hormuz,2026-01,capacity_mean,2226130.129
+Strait of Hormuz,2026-01,days,31
+Strait of Hormuz,2026-02,n_total_mean,78.25
+Strait of Hormuz,2026-02,n_container_mean,13.214
+Strait of Hormuz,2026-02,n_tanker_mean,43.464
+Strait of Hormuz,2026-02,capacity_mean,2913184.464
+Strait of Hormuz,2026-02,days,28
+Strait of Hormuz,2026-03,n_total_mean,3.194
+Strait of Hormuz,2026-03,n_container_mean,0.387
+Strait of Hormuz,2026-03,n_tanker_mean,0.935
+Strait of Hormuz,2026-03,capacity_mean,75905.29
+Strait of Hormuz,2026-03,days,31
+Strait of Hormuz,2026-04,n_total_mean,7.133
+Strait of Hormuz,2026-04,n_container_mean,0.767
+Strait of Hormuz,2026-04,n_tanker_mean,3.167
+Strait of Hormuz,2026-04,capacity_mean,175518.033
+Strait of Hormuz,2026-04,days,30
+Strait of Hormuz,2026-05,n_total_mean,3.935
+Strait of Hormuz,2026-05,n_container_mean,0.29
+Strait of Hormuz,2026-05,n_tanker_mean,1.29
+Strait of Hormuz,2026-05,capacity_mean,112035.71
+Strait of Hormuz,2026-05,days,31
+Strait of Hormuz,2026-06,n_total_mean,12.933
+Strait of Hormuz,2026-06,n_container_mean,1.333
+Strait of Hormuz,2026-06,n_tanker_mean,5.4
+Strait of Hormuz,2026-06,capacity_mean,441498.8
+Strait of Hormuz,2026-06,days,30
+Strait of Hormuz,2026-07,n_total_mean,10.194
+Strait of Hormuz,2026-07,n_container_mean,0.968
+Strait of Hormuz,2026-07,n_tanker_mean,4.774
+Strait of Hormuz,2026-07,capacity_mean,373462.71
+Strait of Hormuz,2026-07,days,31
+Strait of Hormuz,2026-08,n_total_mean,4.71
+Strait of Hormuz,2026-08,n_container_mean,0.258
+Strait of Hormuz,2026-08,n_tanker_mean,1.871
+Strait of Hormuz,2026-08,capacity_mean,90973.677
+Strait of Hormuz,2026-08,days,31
+Strait of Hormuz,2026-09,n_total_mean,3.633
+Strait of Hormuz,2026-09,n_container_mean,0.3
+Strait of Hormuz,2026-09,n_tanker_mean,1.133
+Strait of Hormuz,2026-09,capacity_mean,77689.8
+Strait of Hormuz,2026-09,days,30
+Strait of Hormuz,2026-10,n_total_mean,3.839
+Strait of Hormuz,2026-10,n_container_mean,0.323
+Strait of Hormuz,2026-10,n_tanker_mean,0.742
+Strait of Hormuz,2026-10,capacity_mean,87079.032
+Strait of Hormuz,2026-10,days,31
+Strait of Hormuz,2026-11,n_total_mean,2.864
+Strait of Hormuz,2026-11,n_container_mean,0.273
+Strait of Hormuz,2026-11,n_tanker_mean,0.591
+Strait of Hormuz,2026-11,capacity_mean,55761.591
+Strait of Hormuz,2026-11,days,22
+Cape of Good Hope,2019-01,n_total_mean,47.516
+Cape of Good Hope,2019-01,n_container_mean,6.194
+Cape of Good Hope,2019-01,n_tanker_mean,12.065
+Cape of Good Hope,2019-01,capacity_mean,2506423.355
+Cape of Good Hope,2019-01,days,31
+Cape of Good Hope,2019-02,n_total_mean,49.893
+Cape of Good Hope,2019-02,n_container_mean,6.321
+Cape of Good Hope,2019-02,n_tanker_mean,12.357
+Cape of Good Hope,2019-02,capacity_mean,2505680.929
+Cape of Good Hope,2019-02,days,28
+Cape of Good Hope,2019-03,n_total_mean,44.29
+Cape of Good Hope,2019-03,n_container_mean,5.0
+Cape of Good Hope,2019-03,n_tanker_mean,12.71
+Cape of Good Hope,2019-03,capacity_mean,2474850.355
+Cape of Good Hope,2019-03,days,31
+Cape of Good Hope,2019-04,n_total_mean,45.967
+Cape of Good Hope,2019-04,n_container_mean,5.367
+Cape of Good Hope,2019-04,n_tanker_mean,11.033
+Cape of Good Hope,2019-04,capacity_mean,2537234.033
+Cape of Good Hope,2019-04,days,30
+Cape of Good Hope,2019-05,n_total_mean,46.161
+Cape of Good Hope,2019-05,n_container_mean,5.548
+Cape of Good Hope,2019-05,n_tanker_mean,11.194
+Cape of Good Hope,2019-05,capacity_mean,2712784.065
+Cape of Good Hope,2019-05,days,31
+Cape of Good Hope,2019-06,n_total_mean,50.367
+Cape of Good Hope,2019-06,n_container_mean,5.4
+Cape of Good Hope,2019-06,n_tanker_mean,11.833
+Cape of Good Hope,2019-06,capacity_mean,3213576.0
+Cape of Good Hope,2019-06,days,30
+Cape of Good Hope,2019-07,n_total_mean,50.516
+Cape of Good Hope,2019-07,n_container_mean,5.839
+Cape of Good Hope,2019-07,n_tanker_mean,11.516
+Cape of Good Hope,2019-07,capacity_mean,3269040.387
+Cape of Good Hope,2019-07,days,31
+Cape of Good Hope,2019-08,n_total_mean,51.161
+Cape of Good Hope,2019-08,n_container_mean,5.871
+Cape of Good Hope,2019-08,n_tanker_mean,11.161
+Cape of Good Hope,2019-08,capacity_mean,3131441.097
+Cape of Good Hope,2019-08,days,31
+Cape of Good Hope,2019-09,n_total_mean,52.367
+Cape of Good Hope,2019-09,n_container_mean,5.933
+Cape of Good Hope,2019-09,n_tanker_mean,12.067
+Cape of Good Hope,2019-09,capacity_mean,3149862.867
+Cape of Good Hope,2019-09,days,30
+Cape of Good Hope,2019-10,n_total_mean,51.097
+Cape of Good Hope,2019-10,n_container_mean,5.774
+Cape of Good Hope,2019-10,n_tanker_mean,12.129
+Cape of Good Hope,2019-10,capacity_mean,2933735.935
+Cape of Good Hope,2019-10,days,31
+Cape of Good Hope,2019-11,n_total_mean,47.067
+Cape of Good Hope,2019-11,n_container_mean,5.6
+Cape of Good Hope,2019-11,n_tanker_mean,12.4
+Cape of Good Hope,2019-11,capacity_mean,2792628.333
+Cape of Good Hope,2019-11,days,30
+Cape of Good Hope,2019-12,n_total_mean,41.419
+Cape of Good Hope,2019-12,n_container_mean,5.29
+Cape of Good Hope,2019-12,n_tanker_mean,10.387
+Cape of Good Hope,2019-12,capacity_mean,2470092.323
+Cape of Good Hope,2019-12,days,31
+Cape of Good Hope,2020-01,n_total_mean,65.806
+Cape of Good Hope,2020-01,n_container_mean,9.613
+Cape of Good Hope,2020-01,n_tanker_mean,17.484
+Cape of Good Hope,2020-01,capacity_mean,2022977.516
+Cape of Good Hope,2020-01,days,31
+Cape of Good Hope,2020-02,n_total_mean,51.862
+Cape of Good Hope,2020-02,n_container_mean,6.31
+Cape of Good Hope,2020-02,n_tanker_mean,13.138
+Cape of Good Hope,2020-02,capacity_mean,2241192.345
+Cape of Good Hope,2020-02,days,29
+Cape of Good Hope,2020-03,n_total_mean,44.194
+Cape of Good Hope,2020-03,n_container_mean,4.387
+Cape of Good Hope,2020-03,n_tanker_mean,10.29
+Cape of Good Hope,2020-03,capacity_mean,2274815.774
+Cape of Good Hope,2020-03,days,31
+Cape of Good Hope,2020-04,n_total_mean,50.767
+Cape of Good Hope,2020-04,n_container_mean,4.567
+Cape of Good Hope,2020-04,n_tanker_mean,13.067
+Cape of Good Hope,2020-04,capacity_mean,3008384.7
+Cape of Good Hope,2020-04,days,30
+Cape of Good Hope,2020-05,n_total_mean,55.613
+Cape of Good Hope,2020-05,n_container_mean,5.581
+Cape of Good Hope,2020-05,n_tanker_mean,12.774
+Cape of Good Hope,2020-05,capacity_mean,3355898.29
+Cape of Good Hope,2020-05,days,31
+Cape of Good Hope,2020-06,n_total_mean,52.167
+Cape of Good Hope,2020-06,n_container_mean,5.4
+Cape of Good Hope,2020-06,n_tanker_mean,12.733
+Cape of Good Hope,2020-06,capacity_mean,3262506.633
+Cape of Good Hope,2020-06,days,30
+Cape of Good Hope,2020-07,n_total_mean,61.419
+Cape of Good Hope,2020-07,n_container_mean,5.968
+Cape of Good Hope,2020-07,n_tanker_mean,14.161
+Cape of Good Hope,2020-07,capacity_mean,3704934.516
+Cape of Good Hope,2020-07,days,31
+Cape of Good Hope,2020-08,n_total_mean,55.226
+Cape of Good Hope,2020-08,n_container_mean,6.484
+Cape of Good Hope,2020-08,n_tanker_mean,12.548
+Cape of Good Hope,2020-08,capacity_mean,3403512.645
+Cape of Good Hope,2020-08,days,31
+Cape of Good Hope,2020-09,n_total_mean,54.733
+Cape of Good Hope,2020-09,n_container_mean,5.9
+Cape of Good Hope,2020-09,n_tanker_mean,13.367
+Cape of Good Hope,2020-09,capacity_mean,3372376.1
+Cape of Good Hope,2020-09,days,30
+Cape of Good Hope,2020-10,n_total_mean,49.71
+Cape of Good Hope,2020-10,n_container_mean,5.742
+Cape of Good Hope,2020-10,n_tanker_mean,11.935
+Cape of Good Hope,2020-10,capacity_mean,3060274.387
+Cape of Good Hope,2020-10,days,31
+Cape of Good Hope,2020-11,n_total_mean,48.367
+Cape of Good Hope,2020-11,n_container_mean,5.433
+Cape of Good Hope,2020-11,n_tanker_mean,11.633
+Cape of Good Hope,2020-11,capacity_mean,2739535.8
+Cape of Good Hope,2020-11,days,30
+Cape of Good Hope,2020-12,n_total_mean,42.935
+Cape of Good Hope,2020-12,n_container_mean,5.032
+Cape of Good Hope,2020-12,n_tanker_mean,12.032
+Cape of Good Hope,2020-12,capacity_mean,2534322.677
+Cape of Good Hope,2020-12,days,31
+Cape of Good Hope,2021-01,n_total_mean,42.806
+Cape of Good Hope,2021-01,n_container_mean,4.806
+Cape of Good Hope,2021-01,n_tanker_mean,10.968
+Cape of Good Hope,2021-01,capacity_mean,2571054.065
+Cape of Good Hope,2021-01,days,31
+Cape of Good Hope,2021-02,n_total_mean,46.679
+Cape of Good Hope,2021-02,n_container_mean,5.143
+Cape of Good Hope,2021-02,n_tanker_mean,12.25
+Cape of Good Hope,2021-02,capacity_mean,2610369.286
+Cape of Good Hope,2021-02,days,28
+Cape of Good Hope,2021-03,n_total_mean,48.323
+Cape of Good Hope,2021-03,n_container_mean,5.29
+Cape of Good Hope,2021-03,n_tanker_mean,12.032
+Cape of Good Hope,2021-03,capacity_mean,2517275.71
+Cape of Good Hope,2021-03,days,31
+Cape of Good Hope,2021-04,n_total_mean,52.2
+Cape of Good Hope,2021-04,n_container_mean,6.333
+Cape of Good Hope,2021-04,n_tanker_mean,13.5
+Cape of Good Hope,2021-04,capacity_mean,3000952.767
+Cape of Good Hope,2021-04,days,30
+Cape of Good Hope,2021-05,n_total_mean,49.935
+Cape of Good Hope,2021-05,n_container_mean,5.065
+Cape of Good Hope,2021-05,n_tanker_mean,13.387
+Cape of Good Hope,2021-05,capacity_mean,3011252.516
+Cape of Good Hope,2021-05,days,31
+Cape of Good Hope,2021-06,n_total_mean,50.3
+Cape of Good Hope,2021-06,n_container_mean,5.933
+Cape of Good Hope,2021-06,n_tanker_mean,11.833
+Cape of Good Hope,2021-06,capacity_mean,3142654.967
+Cape of Good Hope,2021-06,days,30
+Cape of Good Hope,2021-07,n_total_mean,51.419
+Cape of Good Hope,2021-07,n_container_mean,4.839
+Cape of Good Hope,2021-07,n_tanker_mean,11.839
+Cape of Good Hope,2021-07,capacity_mean,3334179.032
+Cape of Good Hope,2021-07,days,31
+Cape of Good Hope,2021-08,n_total_mean,46.226
+Cape of Good Hope,2021-08,n_container_mean,5.516
+Cape of Good Hope,2021-08,n_tanker_mean,11.677
+Cape of Good Hope,2021-08,capacity_mean,3095109.968
+Cape of Good Hope,2021-08,days,31
+Cape of Good Hope,2021-09,n_total_mean,49.467
+Cape of Good Hope,2021-09,n_container_mean,5.6
+Cape of Good Hope,2021-09,n_tanker_mean,12.167
+Cape of Good Hope,2021-09,capacity_mean,3110393.133
+Cape of Good Hope,2021-09,days,30
+Cape of Good Hope,2021-10,n_total_mean,41.806
+Cape of Good Hope,2021-10,n_container_mean,4.935
+Cape of Good Hope,2021-10,n_tanker_mean,11.452
+Cape of Good Hope,2021-10,capacity_mean,2862099.677
+Cape of Good Hope,2021-10,days,31
+Cape of Good Hope,2021-11,n_total_mean,41.533
+Cape of Good Hope,2021-11,n_container_mean,5.2
+Cape of Good Hope,2021-11,n_tanker_mean,10.367
+Cape of Good Hope,2021-11,capacity_mean,2445743.867
+Cape of Good Hope,2021-11,days,30
+Cape of Good Hope,2021-12,n_total_mean,42.677
+Cape of Good Hope,2021-12,n_container_mean,4.871
+Cape of Good Hope,2021-12,n_tanker_mean,11.581
+Cape of Good Hope,2021-12,capacity_mean,2494335.387
+Cape of Good Hope,2021-12,days,31
+Cape of Good Hope,2022-01,n_total_mean,41.452
+Cape of Good Hope,2022-01,n_container_mean,4.903
+Cape of Good Hope,2022-01,n_tanker_mean,10.484
+Cape of Good Hope,2022-01,capacity_mean,2374172.935
+Cape of Good Hope,2022-01,days,31
+Cape of Good Hope,2022-02,n_total_mean,42.357
+Cape of Good Hope,2022-02,n_container_mean,5.214
+Cape of Good Hope,2022-02,n_tanker_mean,9.786
+Cape of Good Hope,2022-02,capacity_mean,2315631.714
+Cape of Good Hope,2022-02,days,28
+Cape of Good Hope,2022-03,n_total_mean,40.548
+Cape of Good Hope,2022-03,n_container_mean,4.806
+Cape of Good Hope,2022-03,n_tanker_mean,9.387
+Cape of Good Hope,2022-03,capacity_mean,2426203.677
+Cape of Good Hope,2022-03,days,31
+Cape of Good Hope,2022-04,n_total_mean,41.433
+Cape of Good Hope,2022-04,n_container_mean,5.033
+Cape of Good Hope,2022-04,n_tanker_mean,10.033
+Cape of Good Hope,2022-04,capacity_mean,2556863.767
+Cape of Good Hope,2022-04,days,30
+Cape of Good Hope,2022-05,n_total_mean,45.226
+Cape of Good Hope,2022-05,n_container_mean,5.129
+Cape of Good Hope,2022-05,n_tanker_mean,10.581
+Cape of Good Hope,2022-05,capacity_mean,2909805.0
+Cape of Good Hope,2022-05,days,31
+Cape of Good Hope,2022-06,n_total_mean,47.8
+Cape of Good Hope,2022-06,n_container_mean,5.233
+Cape of Good Hope,2022-06,n_tanker_mean,10.2
+Cape of Good Hope,2022-06,capacity_mean,2889716.7
+Cape of Good Hope,2022-06,days,30
+Cape of Good Hope,2022-07,n_total_mean,47.0
+Cape of Good Hope,2022-07,n_container_mean,5.613
+Cape of Good Hope,2022-07,n_tanker_mean,9.129
+Cape of Good Hope,2022-07,capacity_mean,3010128.032
+Cape of Good Hope,2022-07,days,31
+Cape of Good Hope,2022-08,n_total_mean,47.194
+Cape of Good Hope,2022-08,n_container_mean,5.645
+Cape of Good Hope,2022-08,n_tanker_mean,8.774
+Cape of Good Hope,2022-08,capacity_mean,3069830.581
+Cape of Good Hope,2022-08,days,31
+Cape of Good Hope,2022-09,n_total_mean,47.367
+Cape of Good Hope,2022-09,n_container_mean,5.467
+Cape of Good Hope,2022-09,n_tanker_mean,9.967
+Cape of Good Hope,2022-09,capacity_mean,3349567.4
+Cape of Good Hope,2022-09,days,30
+Cape of Good Hope,2022-10,n_total_mean,42.871
+Cape of Good Hope,2022-10,n_container_mean,4.903
+Cape of Good Hope,2022-10,n_tanker_mean,8.677
+Cape of Good Hope,2022-10,capacity_mean,2876424.742
+Cape of Good Hope,2022-10,days,31
+Cape of Good Hope,2022-11,n_total_mean,41.7
+Cape of Good Hope,2022-11,n_container_mean,5.1
+Cape of Good Hope,2022-11,n_tanker_mean,8.4
+Cape of Good Hope,2022-11,capacity_mean,2628486.667
+Cape of Good Hope,2022-11,days,30
+Cape of Good Hope,2022-12,n_total_mean,40.387
+Cape of Good Hope,2022-12,n_container_mean,5.355
+Cape of Good Hope,2022-12,n_tanker_mean,9.065
+Cape of Good Hope,2022-12,capacity_mean,2390763.258
+Cape of Good Hope,2022-12,days,31
+Cape of Good Hope,2023-01,n_total_mean,42.29
+Cape of Good Hope,2023-01,n_container_mean,5.742
+Cape of Good Hope,2023-01,n_tanker_mean,8.871
+Cape of Good Hope,2023-01,capacity_mean,2454599.677
+Cape of Good Hope,2023-01,days,31
+Cape of Good Hope,2023-02,n_total_mean,41.964
+Cape of Good Hope,2023-02,n_container_mean,5.607
+Cape of Good Hope,2023-02,n_tanker_mean,8.286
+Cape of Good Hope,2023-02,capacity_mean,2266408.0
+Cape of Good Hope,2023-02,days,28
+Cape of Good Hope,2023-03,n_total_mean,43.161
+Cape of Good Hope,2023-03,n_container_mean,5.226
+Cape of Good Hope,2023-03,n_tanker_mean,8.581
+Cape of Good Hope,2023-03,capacity_mean,2496427.065
+Cape of Good Hope,2023-03,days,31
+Cape of Good Hope,2023-04,n_total_mean,45.133
+Cape of Good Hope,2023-04,n_container_mean,5.933
+Cape of Good Hope,2023-04,n_tanker_mean,9.0
+Cape of Good Hope,2023-04,capacity_mean,2811638.533
+Cape of Good Hope,2023-04,days,30
+Cape of Good Hope,2023-05,n_total_mean,49.161
+Cape of Good Hope,2023-05,n_container_mean,5.742
+Cape of Good Hope,2023-05,n_tanker_mean,8.774
+Cape of Good Hope,2023-05,capacity_mean,3219490.065
+Cape of Good Hope,2023-05,days,31
+Cape of Good Hope,2023-06,n_total_mean,51.567
+Cape of Good Hope,2023-06,n_container_mean,5.767
+Cape of Good Hope,2023-06,n_tanker_mean,9.033
+Cape of Good Hope,2023-06,capacity_mean,3335574.833
+Cape of Good Hope,2023-06,days,30
+Cape of Good Hope,2023-07,n_total_mean,52.258
+Cape of Good Hope,2023-07,n_container_mean,6.226
+Cape of Good Hope,2023-07,n_tanker_mean,9.645
+Cape of Good Hope,2023-07,capacity_mean,3412144.129
+Cape of Good Hope,2023-07,days,31
+Cape of Good Hope,2023-08,n_total_mean,56.516
+Cape of Good Hope,2023-08,n_container_mean,6.032
+Cape of Good Hope,2023-08,n_tanker_mean,9.613
+Cape of Good Hope,2023-08,capacity_mean,3472838.968
+Cape of Good Hope,2023-08,days,31
+Cape of Good Hope,2023-09,n_total_mean,55.767
+Cape of Good Hope,2023-09,n_container_mean,6.433
+Cape of Good Hope,2023-09,n_tanker_mean,8.767
+Cape of Good Hope,2023-09,capacity_mean,3574423.7
+Cape of Good Hope,2023-09,days,30
+Cape of Good Hope,2023-10,n_total_mean,50.355
+Cape of Good Hope,2023-10,n_container_mean,6.226
+Cape of Good Hope,2023-10,n_tanker_mean,10.0
+Cape of Good Hope,2023-10,capacity_mean,3148714.742
+Cape of Good Hope,2023-10,days,31
+Cape of Good Hope,2023-11,n_total_mean,49.267
+Cape of Good Hope,2023-11,n_container_mean,5.633
+Cape of Good Hope,2023-11,n_tanker_mean,9.933
+Cape of Good Hope,2023-11,capacity_mean,3005548.767
+Cape of Good Hope,2023-11,days,30
+Cape of Good Hope,2023-12,n_total_mean,51.387
+Cape of Good Hope,2023-12,n_container_mean,9.29
+Cape of Good Hope,2023-12,n_tanker_mean,10.548
+Cape of Good Hope,2023-12,capacity_mean,3084674.29
+Cape of Good Hope,2023-12,days,31
+Cape of Good Hope,2024-01,n_total_mean,72.194
+Cape of Good Hope,2024-01,n_container_mean,17.0
+Cape of Good Hope,2024-01,n_tanker_mean,15.903
+Cape of Good Hope,2024-01,capacity_mean,3991943.806
+Cape of Good Hope,2024-01,days,31
+Cape of Good Hope,2024-02,n_total_mean,85.759
+Cape of Good Hope,2024-02,n_container_mean,17.793
+Cape of Good Hope,2024-02,n_tanker_mean,19.759
+Cape of Good Hope,2024-02,capacity_mean,4464547.517
+Cape of Good Hope,2024-02,days,29
+Cape of Good Hope,2024-03,n_total_mean,85.935
+Cape of Good Hope,2024-03,n_container_mean,18.258
+Cape of Good Hope,2024-03,n_tanker_mean,18.806
+Cape of Good Hope,2024-03,capacity_mean,5138723.806
+Cape of Good Hope,2024-03,days,31
+Cape of Good Hope,2024-04,n_total_mean,87.667
+Cape of Good Hope,2024-04,n_container_mean,18.2
+Cape of Good Hope,2024-04,n_tanker_mean,18.967
+Cape of Good Hope,2024-04,capacity_mean,5259746.733
+Cape of Good Hope,2024-04,days,30
+Cape of Good Hope,2024-05,n_total_mean,91.581
+Cape of Good Hope,2024-05,n_container_mean,19.226
+Cape of Good Hope,2024-05,n_tanker_mean,20.613
+Cape of Good Hope,2024-05,capacity_mean,5392579.742
+Cape of Good Hope,2024-05,days,31
+Cape of Good Hope,2024-06,n_total_mean,95.5
+Cape of Good Hope,2024-06,n_container_mean,19.867
+Cape of Good Hope,2024-06,n_tanker_mean,22.6
+Cape of Good Hope,2024-06,capacity_mean,5793328.933
+Cape of Good Hope,2024-06,days,30
+Cape of Good Hope,2024-07,n_total_mean,91.742
+Cape of Good Hope,2024-07,n_container_mean,19.871
+Cape of Good Hope,2024-07,n_tanker_mean,19.871
+Cape of Good Hope,2024-07,capacity_mean,5835519.935
+Cape of Good Hope,2024-07,days,31
+Cape of Good Hope,2024-08,n_total_mean,93.677
+Cape of Good Hope,2024-08,n_container_mean,20.194
+Cape of Good Hope,2024-08,n_tanker_mean,18.194
+Cape of Good Hope,2024-08,capacity_mean,5618311.484
+Cape of Good Hope,2024-08,days,31
+Cape of Good Hope,2024-09,n_total_mean,86.5
+Cape of Good Hope,2024-09,n_container_mean,19.233
+Cape of Good Hope,2024-09,n_tanker_mean,18.033
+Cape of Good Hope,2024-09,capacity_mean,5533312.067
+Cape of Good Hope,2024-09,days,30
+Cape of Good Hope,2024-10,n_total_mean,88.968
+Cape of Good Hope,2024-10,n_container_mean,20.452
+Cape of Good Hope,2024-10,n_tanker_mean,20.29
+Cape of Good Hope,2024-10,capacity_mean,5618927.355
+Cape of Good Hope,2024-10,days,31
+Cape of Good Hope,2024-11,n_total_mean,83.667
+Cape of Good Hope,2024-11,n_container_mean,19.133
+Cape of Good Hope,2024-11,n_tanker_mean,17.0
+Cape of Good Hope,2024-11,capacity_mean,5013339.1
+Cape of Good Hope,2024-11,days,30
+Cape of Good Hope,2024-12,n_total_mean,81.032
+Cape of Good Hope,2024-12,n_container_mean,18.935
+Cape of Good Hope,2024-12,n_tanker_mean,16.871
+Cape of Good Hope,2024-12,capacity_mean,5098266.387
+Cape of Good Hope,2024-12,days,31
+Cape of Good Hope,2025-01,n_total_mean,84.387
+Cape of Good Hope,2025-01,n_container_mean,19.903
+Cape of Good Hope,2025-01,n_tanker_mean,15.516
+Cape of Good Hope,2025-01,capacity_mean,4989357.387
+Cape of Good Hope,2025-01,days,31
+Cape of Good Hope,2025-02,n_total_mean,87.893
+Cape of Good Hope,2025-02,n_container_mean,20.036
+Cape of Good Hope,2025-02,n_tanker_mean,15.857
+Cape of Good Hope,2025-02,capacity_mean,5052672.357
+Cape of Good Hope,2025-02,days,28
+Cape of Good Hope,2025-03,n_total_mean,80.71
+Cape of Good Hope,2025-03,n_container_mean,19.258
+Cape of Good Hope,2025-03,n_tanker_mean,14.806
+Cape of Good Hope,2025-03,capacity_mean,5080172.806
+Cape of Good Hope,2025-03,days,31
+Cape of Good Hope,2025-04,n_total_mean,84.133
+Cape of Good Hope,2025-04,n_container_mean,19.233
+Cape of Good Hope,2025-04,n_tanker_mean,17.1
+Cape of Good Hope,2025-04,capacity_mean,5507059.0
+Cape of Good Hope,2025-04,days,30
+Cape of Good Hope,2025-05,n_total_mean,89.419
+Cape of Good Hope,2025-05,n_container_mean,19.903
+Cape of Good Hope,2025-05,n_tanker_mean,17.323
+Cape of Good Hope,2025-05,capacity_mean,5796229.935
+Cape of Good Hope,2025-05,days,31
+Cape of Good Hope,2025-06,n_total_mean,91.867
+Cape of Good Hope,2025-06,n_container_mean,22.0
+Cape of Good Hope,2025-06,n_tanker_mean,16.633
+Cape of Good Hope,2025-06,capacity_mean,5978613.4
+Cape of Good Hope,2025-06,days,30
+Cape of Good Hope,2025-07,n_total_mean,96.419
+Cape of Good Hope,2025-07,n_container_mean,20.806
+Cape of Good Hope,2025-07,n_tanker_mean,17.129
+Cape of Good Hope,2025-07,capacity_mean,6171620.839
+Cape of Good Hope,2025-07,days,31
+Cape of Good Hope,2025-08,n_total_mean,98.129
+Cape of Good Hope,2025-08,n_container_mean,21.29
+Cape of Good Hope,2025-08,n_tanker_mean,18.645
+Cape of Good Hope,2025-08,capacity_mean,6310984.323
+Cape of Good Hope,2025-08,days,31
+Cape of Good Hope,2025-09,n_total_mean,94.433
+Cape of Good Hope,2025-09,n_container_mean,21.033
+Cape of Good Hope,2025-09,n_tanker_mean,18.5
+Cape of Good Hope,2025-09,capacity_mean,6163493.2
+Cape of Good Hope,2025-09,days,30
+Cape of Good Hope,2025-10,n_total_mean,94.065
+Cape of Good Hope,2025-10,n_container_mean,20.613
+Cape of Good Hope,2025-10,n_tanker_mean,18.452
+Cape of Good Hope,2025-10,capacity_mean,6094768.161
+Cape of Good Hope,2025-10,days,31
+Cape of Good Hope,2025-11,n_total_mean,87.167
+Cape of Good Hope,2025-11,n_container_mean,19.167
+Cape of Good Hope,2025-11,n_tanker_mean,16.733
+Cape of Good Hope,2025-11,capacity_mean,5601061.0
+Cape of Good Hope,2025-11,days,30
+Cape of Good Hope,2025-12,n_total_mean,84.742
+Cape of Good Hope,2025-12,n_container_mean,19.613
+Cape of Good Hope,2025-12,n_tanker_mean,15.935
+Cape of Good Hope,2025-12,capacity_mean,5371551.032
+Cape of Good Hope,2025-12,days,31
+Cape of Good Hope,2026-01,n_total_mean,87.71
+Cape of Good Hope,2026-01,n_container_mean,20.419
+Cape of Good Hope,2026-01,n_tanker_mean,16.419
+Cape of Good Hope,2026-01,capacity_mean,5162581.516
+Cape of Good Hope,2026-01,days,31
+Cape of Good Hope,2026-02,n_total_mean,87.036
+Cape of Good Hope,2026-02,n_container_mean,19.75
+Cape of Good Hope,2026-02,n_tanker_mean,13.5
+Cape of Good Hope,2026-02,capacity_mean,5050478.571
+Cape of Good Hope,2026-02,days,28
+Cape of Good Hope,2026-03,n_total_mean,91.258
+Cape of Good Hope,2026-03,n_container_mean,20.161
+Cape of Good Hope,2026-03,n_tanker_mean,17.71
+Cape of Good Hope,2026-03,capacity_mean,5179672.645
+Cape of Good Hope,2026-03,days,31
+Cape of Good Hope,2026-04,n_total_mean,92.8
+Cape of Good Hope,2026-04,n_container_mean,20.667
+Cape of Good Hope,2026-04,n_tanker_mean,23.0
+Cape of Good Hope,2026-04,capacity_mean,5641528.067
+Cape of Good Hope,2026-04,days,30
+Cape of Good Hope,2026-05,n_total_mean,96.935
+Cape of Good Hope,2026-05,n_container_mean,20.774
+Cape of Good Hope,2026-05,n_tanker_mean,21.226
+Cape of Good Hope,2026-05,capacity_mean,6206157.355
+Cape of Good Hope,2026-05,days,31
+Cape of Good Hope,2026-06,n_total_mean,92.8
+Cape of Good Hope,2026-06,n_container_mean,20.8
+Cape of Good Hope,2026-06,n_tanker_mean,20.133
+Cape of Good Hope,2026-06,capacity_mean,5941933.867
+Cape of Good Hope,2026-06,days,30
+Cape of Good Hope,2026-07,n_total_mean,91.548
+Cape of Good Hope,2026-07,n_container_mean,20.29
+Cape of Good Hope,2026-07,n_tanker_mean,17.355
+Cape of Good Hope,2026-07,capacity_mean,5758804.968
+Cape of Good Hope,2026-07,days,31
+Cape of Good Hope,2026-08,n_total_mean,90.323
+Cape of Good Hope,2026-08,n_container_mean,18.387
+Cape of Good Hope,2026-08,n_tanker_mean,20.226
+Cape of Good Hope,2026-08,capacity_mean,5390922.419
+Cape of Good Hope,2026-08,days,31
+Cape of Good Hope,2026-09,n_total_mean,86.133
+Cape of Good Hope,2026-09,n_container_mean,15.7
+Cape of Good Hope,2026-09,n_tanker_mean,17.833
+Cape of Good Hope,2026-09,capacity_mean,5495840.433
+Cape of Good Hope,2026-09,days,30
+Cape of Good Hope,2026-10,n_total_mean,87.774
+Cape of Good Hope,2026-10,n_container_mean,15.032
+Cape of Good Hope,2026-10,n_tanker_mean,19.355
+Cape of Good Hope,2026-10,capacity_mean,5381816.29
+Cape of Good Hope,2026-10,days,31
+Cape of Good Hope,2026-11,n_total_mean,74.545
+Cape of Good Hope,2026-11,n_container_mean,11.545
+Cape of Good Hope,2026-11,n_tanker_mean,17.182
+Cape of Good Hope,2026-11,capacity_mean,4632154.0
+Cape of Good Hope,2026-11,days,22
