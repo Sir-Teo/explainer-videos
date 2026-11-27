@@ -338,12 +338,20 @@ SEC_COMPANIES = [(789019, "MSFT"), (909832, "COST"), (19617, "JPM"), (753308, "N
                  (1219601, "CCK"), (812074, "OI"),
                  (1751788, "DOW"), (1489393, "LYB"), (1262823, "WLK"), (1707925, "LIN"), (2969, "APD"), (89800, "SHW"),
                  (31462, "ECL"), (79879, "PPG"), (915389, "EMN"), (1306830, "CE"), (1666700, "DD"), (1307954, "HUN"),
-                 (74303, "OLN"), (51253, "IFF"), (1627223, "CC")]
+                 (74303, "OLN"), (51253, "IFF"), (1627223, "CC"),
+                 (1326160, "DUK"), (92122, "SO"), (4904, "AEP"), (715957, "D"), (1109357, "EXC"), (72903, "XEL"),
+                 (1047862, "ED"), (1004980, "PCG"), (1032208, "SRE"), (65984, "ETR"), (1692819, "VST"), (1868275, "CEG"),
+                 (1013871, "NRG"), (874761, "AES"), (1996810, "GEV")]
 
 
 # where a company's first-choice tag means something else: Mastercard tagged its gross revenue, before rebates and
 # incentives to customers, as revenue from contracts in 2018-2021; its net revenue is "Revenues"
-SEC_OVERRIDES = {"MA": {"revenue": ["Revenues", "SalesRevenueNet",
+_UTIL = {"revenue": ["Revenues", "RevenueFromContractWithCustomerExcludingAssessedTax", "RegulatedAndUnregulatedOperatingRevenue"],
+         "net_income": ["NetIncomeLoss", "NetIncomeLossAvailableToCommonStockholdersBasic"]}
+SEC_OVERRIDES = {**{t: _UTIL for t in ("DUK", "SO", "AEP", "D", "EXC", "XEL", "ED", "PCG", "SRE", "ETR")},
+                 # utilities: total revenue (Revenues) includes alternative revenue programmes; several tag profit to
+                 # common shareholders rather than NetIncomeLoss in recent years
+                 "MA": {"revenue": ["Revenues", "SalesRevenueNet",
                                   "RevenueFromContractWithCustomerExcludingAssessedTax"]},
                  # Valero and Halliburton tag revenue including excise taxes they collect; Occidental reports profit
                  # including its non-controlling interests as ProfitLoss when it has no NetIncomeLoss for the year
