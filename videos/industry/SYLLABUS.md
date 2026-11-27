@@ -2541,6 +2541,7 @@ scored in Part 64 and at each refresh.
 | 7 · Sizing a Market | done 2026-11-24 (28 Register rows; Uber's and WeWork's prospectuses, Primo's 10-K, the Census's bottled water, home centers, nail salons, e-commerce and households, BLS price indexes, Our World in Data's adoption curves) | `works/diffusion.py` | 17 scenes | silent previews reviewed | entry, lab, interactive | not started |
 | 8 · Oil and Gas | done 2026-11-24 (56 Register rows; EIA's bulk files, gasoline components and gas data; the CFTC on April 2020; EIA on 2026; Aramco's Annual Report 2025; the Dallas Fed survey; ExxonMobil's 10-Ks; Hubbert 1956) | `works/oil.py` | 19 scenes | silent and narrated previews reviewed | entry, lab, interactive | not started |
 | 9 · Mining and Metals | done 2026-11-24 (93 Register rows; Ortiz on Escondida's discovery; BHP's FY2025 results; Freeport's 10-K; the USGS's Mineral Commodity Summaries 2026 and Data Series 140; the IMF's metal prices; Vale's 2010 pricing release; the miners' 20-F and 10-K accounts; Sabin on the wager) | `works/mine.py` | 17 scenes, with a world map from Natural Earth (`draw.world_map`) | silent and narrated previews reviewed | entry, lab, interactive | not started |
+| 10 · Farming and Food | done 2026-11-27 (26 Register rows; USDA's food dollar, costs and returns and farm income; FAO yields and food supply; IMF and BLS food prices; NASS farm numbers; ERS on beef packers; the ICCO; Cargill; 15 companies' 10-Ks) | `works/farm.py` | 17 scenes, with farm and animal glyphs | silent and narrated previews reviewed | entry, lab, interactive | not started |
 
 Phase 0 is done in the form Part 1 needed: the palette and kit (`style.py`, `kit.py`), the instruments (`viz.py`: the
 phone and its exploded view, the region map, the Dollar column, the margin ladder, the treemap, plain axes), the
@@ -2634,3 +2635,15 @@ prices were found in the sweep. *Called it?* is the Simon-Ehrlich wager, recompu
 re-run for every ten-year window since 1900 (Ehrlich would have won 61% of them), with the series' call on Escondida's
 output in the year to June 2027. The Works' `mine.py` (rock per tonne, the model mine's cash flows and break-even, the
 option to wait, the cost curve, the wager's windows) is tested, and `draw.py` gained mining glyphs and a world map.
+
+Part 10 follows its draft's question with different cases. The story is Borlaug's dwarf wheat (the Nobel Foundation's
+account) set against the 12.6 cents of a 2025 food dollar that reached farms, from USDA's new food dollar model
+(released November 2026, not comparable with the older series). The Run it game is three real corn seasons (2012, 2014,
+2020) built from USDA's costs and returns, not a model farm; the Dollar is USDA's thirteen industry groups and a loaf of
+bread. The grain trade adds the soybean crush on the IMF's world prices; meat uses USDA's four-firm share of fed cattle
+and Tyson's accounts. A chapter on land (returns from farming against returns from land values, Ricardo's rent) answers
+the part's question, and cocoa stands in for the plantation crops. Corn's share going to ethanol, feed conversion
+ratios and India's share of rice exports were left out for want of a primary figure. *Called it?* is Ehrlich's
+*Population Bomb* (quoted only in its first sentence, which every edition shares) against FAO's food supply per person,
+with the series' call on the 2026 farm share; USDA's baseline projections were not scored. The Works' `farm.py` (the
+acre, the forward sale, the treadmill, the margin ladder) is tested.

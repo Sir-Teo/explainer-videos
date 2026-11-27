@@ -130,4 +130,49 @@
       note: "This is the film's model mine. At its default grade of 0.5% it needs $3.61 a pound to pay its way; Escondida milled ore at 1.02% in 2025 and expects about 0.85% in 2026. Real mines differ in size, depth, power, water and by-products, and gold or molybdenum in the ore can pay much of the cost.",
     });
   };
+  // ---- Part 10: Cochrane's treadmill ------------------------------------------------------------------------------
+  // The film's model (explainer/industry/works/farm.py, treadmill): a method that grows `gain` more on the same costs
+  // spreads along a logistic curve; demand has constant elasticity, so the price is output^(1/elasticity), starting
+  // 15% above the cost of a unit.  An adopter's margin is price x (1 + gain) - cost; a laggard's, price - cost.
+  W.treadmill = function (el) {
+    QB.widget(el, {
+      title: "Cochrane's treadmill: who keeps the gain from a better seed?",
+      sub: "A new method lets farmers grow more on the same costs. The first to adopt it profit; as everyone copies them, output rises and the price falls. Set how big the gain is, how much more people buy when food gets cheaper, and how fast farmers adopt, and see who ends up with the gain.",
+      panels: 2, height: 300,
+      controls: [
+        { k: "gain", label: "Extra output from the new method", min: 0.02, max: 0.4, step: 0.01, value: 0.12, fmt: function (x) { return "+" + Math.round(100 * x) + "%"; } },
+        { k: "el", label: "Demand elasticity (% more bought for 1% lower price)", min: 0.1, max: 2.0, step: 0.05, value: 0.4, fmt: function (x) { return "-" + x.toFixed(2); } },
+        { k: "speed", label: "How fast farmers adopt", min: 0.15, max: 1.2, step: 0.05, value: 0.45, fmt: function (x) { return x.toFixed(2); } },
+      ],
+      draw: function (g, v, s) {
+        var n = 30, t, share = [], price = [], ad = [], lag = [], yrs = [];
+        for (t = 0; t < n; t++) {
+          var sh = 1 / (1 + Math.exp(-v.speed * (t - 10))), q = 1 + v.gain * sh, p = Math.pow(q, -1 / v.el) * 1.15;
+          yrs.push(t); share.push(sh); price.push(p); ad.push(p * (1 + v.gain) - 1); lag.push(p - 1);
+        }
+        var a = g[0].axes({ x: [0, n - 1], y: [0, 1.25], title: "Price (1 = the cost of a unit) and share adopted",
+                            xticks: [0, 10, 20, 29], xfmt: function (x) { return "yr " + x; }, yfmt: function (y) { return y.toFixed(1); } });
+        a.line(yrs, price, { color: C.p, width: 2.2 });
+        a.line(yrs, share, { color: C.muted, width: 1.4, dash: [4, 4] });
+        a.hline(1, { color: C.loss });
+        a.legend([["price", C.p], ["share adopted", C.muted], ["cost", C.loss]], { pos: "bl" });
+        var lo = Math.min(-0.3, Math.min.apply(null, lag) * 1.1), hi = Math.max(0.4, Math.max.apply(null, ad) * 1.1);
+        var b = g[1].axes({ x: [0, n - 1], y: [lo, hi], title: "Margin over cost: early adopter and laggard",
+                            xticks: [0, 10, 20, 29], xfmt: function (x) { return "yr " + x; }, yfmt: function (y) { return Math.round(100 * y) + "%"; } });
+        b.hline(0, { color: C.muted });
+        b.line(yrs, ad, { color: C.gain, width: 2.2 });
+        b.line(yrs, lag, { color: C.loss, width: 2.2 });
+        b.legend([["adopter", C.gain], ["laggard", C.loss]], { pos: "tr" });
+        s.r = { p: price[n - 1] / price[0], a0: ad[0], a1: ad[n - 1], l1: lag[n - 1] };
+      },
+      readout: function (v, s) {
+        var r = s.r;
+        return [["price at the end", (r.p >= 1 ? "+" : "") + Math.round(100 * (r.p - 1)) + "%"],
+                ["early adopter's margin, year 0", "+" + Math.round(100 * r.a0) + "%"],
+                ["adopter's margin at the end", (r.a1 >= 0 ? "+" : "") + Math.round(100 * r.a1) + "%"],
+                ["laggard's margin at the end", (r.l1 >= 0 ? "+" : "") + Math.round(100 * r.l1) + "%"]];
+      },
+      note: "This is the film's chapter 4 model. Food has inelastic demand (people do not eat much more when it is cheap), so a better seed lowers the price a long way and the gain passes to the people who eat. Try a high elasticity, like a product people buy more of when it is cheaper: the price falls less and the adopters keep more.",
+    });
+  };
 })();

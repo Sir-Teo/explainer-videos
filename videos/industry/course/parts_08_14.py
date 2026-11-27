@@ -103,4 +103,51 @@ PARTS = [
               ("The USGS's historical prices, the IMF's metal prices and the miners' 20-F accounts",
                "explainer/industry/data/SOURCES.md")),
     ),
+    Part(
+        n=10, level="U", widget="treadmill", prereq=(4, 5, 6),
+        question="Why do farmers grow ever more, and keep so little of what we pay?",
+        story="The part opens on Norman Borlaug's dwarf wheat: Mexico self-sufficient by 1956, India and Pakistan from the "
+              "mid-1960s, the Nobel Peace Prize in 1970, and wheat yields up 3.4 to 4.2 times since 1961; yet farms got "
+              "12.6 cents of an American food dollar in 2025. The viewer farms 296 acres of corn through three real "
+              "seasons (2012, 2014, 2020), choosing how much to sell ahead and whether to store, and finds that no rule "
+              "wins every year. USDA's costs and returns show a 2025 acre bringing in $782 and costing $901, with "
+              "break-evens of $2.30 (cash) and $4.55 (all costs) against a $3.93 price, and corn below its full costs in "
+              "19 of 30 years. The food dollar splits into thirteen industries (restaurants 35.5 cents, processing 17.2, "
+              "farms' own work about 6); the wheat in a loaf is about 5% of its price. Cochrane's treadmill turns better "
+              "seed into lower prices: US corn yields x7 since before 1935, farms from 6.81 to 1.87 million. The input "
+              "makers (CF's profit x10 in 2022), the grain traders (ADM's 2.7% margin; the soybean crush), futures, the "
+              "beef packers (four firms buy 85% of fed cattle) and the brand owners form a margin 'smile' from field to "
+              "shop. After a century of farm income, the state's payments ($57bn in 2020, $47bn forecast for 2026) and "
+              "India's rice export ban, the land is shown to keep the gains (returns since 1990: 2.5% from farming, 4.6% "
+              "from land values; Ricardo's rent). Cocoa's 2024 spike and the world's food supply per person (2,180 to "
+              "3,010 kilocalories since 1961) lead to the landscape; Ehrlich's 1968 Population Bomb is scored, and the "
+              "series calls the 2026 farm share above 2025's.",
+        handoff="Part 11 follows the heavy materials, steel and cement; Part 12 the chemicals, fertilizer among them; Part 22 "
+                "returns to processed food and brands, and the retail parts to the supermarket.",
+        outside="Percentages and arithmetic; Part 4's cost curve; Part 5's moats; Part 6's cycle.",
+        objectives={
+            "U": ["Explain why a farmer is a price taker, and why better methods lower the price rather than raise incomes.",
+                  "Explain where a US food dollar goes, and why the farm share is small and smaller still in restaurants.",
+                  "Explain why the companies around the farm keep more of each dollar than the farm does."],
+            "M": ["Compute an acre's cash and full break-even prices from its costs and yield.",
+                  "Compute the revenue from a forward sale and from storage, and why a hedge in a drought becomes a bet.",
+                  "Compute the price change from a supply increase under a given demand elasticity."],
+            "D": ["Score a famous forecast of famine (Ehrlich, 1968) against the record of food supply, and say what it "
+                  "left out.",
+                  "State a falsifiable forecast for the farm share with a probability and the evidence for and against."],
+            "I": ["Read USDA's costs and returns, the food dollar and farm income statistics.",
+                  "Place a company on the chain: inputs, traders, packers, brand owners, retailers."],
+        },
+        results=[
+            ("Break-even price", r"p^{*} = \frac{\text{costs per acre}}{\text{bushels per acre}}"),
+            ("A forward sale", r"h\,\bar{q}\,p_0 + (q - h\,\bar{q})\,p_1"),
+            ("The treadmill", r"\frac{p_1}{p_0} = \left(\frac{Q_1}{Q_0}\right)^{1/\varepsilon}"),
+            ("The crush margin", r"\tfrac{44}{60}\,p_{\text{meal}} + \tfrac{11}{60}\,p_{\text{oil}} - p_{\text{beans}}"),
+            ("Ricardo's rent", r"\text{rent} = p\,q - \text{all other costs}"),
+        ],
+        U=(0, 1, 2, 3, 4, 5, 6, 8, "s10_intermission", 9, 10, 11, 12, 13), I=(7,), D=(14,),
+        also=(("The Register's rows for Part 10", "explainer/industry/data/rows_p10.py"),
+              ("The acre, the forward sale, the treadmill and the margin ladder", "explainer/industry/works/farm.py"),
+              ("USDA's food dollar, costs and returns and farm income; FAO yields; food prices", "explainer/industry/data/SOURCES.md")),
+    ),
 ]
