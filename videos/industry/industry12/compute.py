@@ -111,6 +111,17 @@ def results() -> dict:
                     cost_e={y: hist["Europe, naphtha"]["cost"][y] for y in run_years},
                     cap13=get("eia.ethylene.cap.2013"), cap20=get("eia.ethylene.cap.2020"), ineos=get("eia.ineos.antwerp"))
 
+    # --- the tree: US chemical sales by segment, 2022 Economic Census ---------------------------------------------------
+    seg = {"3251": "basic chemicals", "3252": "plastics, rubber and fibres", "3253": "fertilizers and farm chemicals",
+           "3254": "medicines", "3255": "paints and adhesives", "3256": "soaps, cleaners and cosmetics", "3259": "other"}
+    sales: dict = collections.defaultdict(float)
+    for r in read("census_conc_2022"):
+        code = str(r["code"])
+        if len(code) == 6 and code[:4] in seg:
+            sales[seg[code[:4]]] += r["sales_k"] / 1e6
+    R["tree"] = dict(sales=dict(sales), total=sum(sales.values()), petro=next(r["sales_k"] / 1e6 for r in read("census_conc_2022")
+                                                                             if str(r["code"]) == "325110"))
+
     # --- the cracker ----------------------------------------------------------------------------------------------------
     y_last = years[-1]
     R["cracker"] = dict(yields=cracker.YIELDS, year=y_last,
